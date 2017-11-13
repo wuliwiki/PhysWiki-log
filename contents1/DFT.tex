@@ -1,0 +1,65 @@
+% 离散傅里叶变换（DFT）
+
+\subsection{结论}
+\pentry{幺正矩阵，傅里叶变换（指数函数）\upref{FT}} % 链接未完成
+
+对两组有序数列 $f_0,f_1,\dots,f_{N-1}$ 和 $g_0,g_2,\dots,g_{N-1}$，正变换和逆变换分别为\footnote{工程上的定义常常是正变换没有 $1/\sqrt{N}$ 因子，逆变换的 $1/\sqrt{N}$ 因子变为 $1/N$． 这样的好处是节省运算量．本书中使用的定义好处是变换为幺正变换，有保持归一化的特点．}
+\begin{align}
+g_p &= \frac{1}{\sqrt{N}}\sum\limits_{q=0}^{N-1} \exp\left(-\frac{2\pi\I}{N} p q \right) f_q \\
+f_q &= \frac{1}{\sqrt{N}}\sum\limits_{p=0}^{N-1} \exp\left(\frac{2\pi\I}{N} p q\right) g_p
+\end{align}
+
+\textbf{离散傅里叶变换（Discrete Fourier Transform）（DFT）}是一个复数域的正交变换．%链接未完成
+\textbf{快速傅里叶变换（FFT）}的结果与离散傅里叶变换一样，只是优化了算法使程序运行更高效．
+
+\subsection{矩阵表示}
+把变换和逆变换用幺正矩阵 $\mat F$ 和 $\mat F^{-1}$ 来表示，令列矢量 $\vec f = (f_0,f_1,\dots,f_N)\Tr$，$\vec g = (g_1,g_2,\dots,g_N)\Tr$， 变换和逆变换分别为
+\begin{equation}
+\vec g = \mat F \vec f \qquad
+\vec f = \mat F^{-1} \vec g
+\end{equation}
+其中
+\begin{equation}
+F_{pq} = \frac{1}{\sqrt{N}} \exp\left(-\frac{2\pi\I}{N} p q \right) \qquad
+\mat F^{-1} = \mat F^\dag
+\end{equation}
+% 未完成：正交矩阵的逆矩阵
+% 未完成：凡是证明以前，真的至少应该说明一下这玩意有什么用，从哪来吧！任何词条都是啊！
+
+\subsection{证明 $\mat F$ 的正交性}
+根据正交矩阵的定义，我们需要证明
+\begin{equation}
+\sum\limits_{p=0}^{N-1} F^*_{pq_1}F_{pq_2} = 0 \quad (q_1 \ne q_2)
+\end{equation}
+而
+\begin{equation}\label{DFT_eq1}
+\sum\limits_{p=0}^{N-1} F^*_{pq_1}F_{pq_2}
+= \sum\limits_{p=0}^{N-1} \exp\left[\frac{2\pi\I}{N} (q_2-q_1) p \right]
+\end{equation}
+注意到求和的每一项在复平面上都对应模长为1，幅角为 $(q_2-q_1)p/N$ 个圆周的矢量，% 未完成：这个几何意义要在复数的加法以及指数函数（复数）中介绍！
+而 $N$ 条矢量恰好向不同方向均匀分布，所以相加为 $0$．证毕．
+
+\subsection{逆矩阵}
+先来看矩阵各列的模长平方，即式 \eqref{DFT_eq1} 中 $q_1=q_2$ 的情况，易得任何一列的模长平方都为 $N$．所以矩阵 $\mat F$ 是一个幺正矩阵 $\mat U$ 乘以 $\sqrt{N}$．考虑到幺正矩阵的逆矩阵是其厄米共轭， %链接未完成
+有
+\begin{equation}
+\mat F^\dag \mat F = \sqrt{N}^2 \mat U^\dag \mat U = N \mat U^{-1} \mat U = N
+\end{equation}
+两边除以 $N$，可得 $\mat F^{-1} = \mat F^\dag /N$． 证毕．
+% 未完成：在逆矩阵的介绍中应该说明用常数表示常数乘以单位矩阵
+
+有时为了对称起见，把矩阵元定义为
+\begin{equation}
+F_{pq} = \frac{1}{\sqrt{N}}\exp\left(-\frac{2\pi\I}{N} p q \right)
+\end{equation}
+这样，$\mat F$ 的每一列模长为1，使 $\mat F$ 本身就是幺正矩阵，其逆矩阵等于厄米共轭．
+
+\subsection{用离散傅里叶变换近似傅里叶变换}
+在数值计算傅里叶变换 %未完成：链接
+时，不可能计算连续的频谱 $g(k)$，只能用数值积分计算离散值 $g(k_i)$
+\begin{equation}
+g(k_i) = \frac{1}{\sqrt{2\pi}} \int_{-\infty}^{+\infty} f(x)e^{-\I kx} \D x
+\end{equation}
+为了节省计算量，我们假设
+% 未完成：艾玛，这个过程要推出来真的好麻烦啊！！
+
