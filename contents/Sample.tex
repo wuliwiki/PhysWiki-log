@@ -1,0 +1,136 @@
+% 本书格式规范
+\pentry{本书格式规范\upref{Sample}}
+
+\subsection{蓝色的小标题}
+
+本书使用 TeXLive2016 软件中的 XeLaTeX 进行编译．如果 Windows 中编译卡在 eu1lmr.fd 上的时间较长，说明 font config 有问题，在 Windows 的控制行运行“fc-cache -fv”，重启 TeXLive，多试几次即可．TeXWork 编辑器中 Ctrl+T 编译，Ctrl+单击跳转到对应的 pdf 或代码，在 pdf 中 Alt+左箭头返回上一个位置． 代码中\textbackslash beq+Tab 生成公式环境，\textbackslash sub+Tab 生成 subsection．Ctrl+F 进行查找，Ctrl+G 查找下一个．菜单中的 Edit>Preference 设置默认字体为 Microsoft YaHei UI（11pt）， 默认编译器为 XeLaTeX，编码选择 UTF-8．
+
+搜索文件夹内所有文档的内容用 FileSeek 软件，搜索空格用“\textbackslash 空格”，搜索“\$”用“\textbackslash \$”，以此类推．对比两个文档或文件夹用 WinMerge 软件．
+
+画图用 Adobe Illustrator 和 Autodesk Graphics，用 MathType 在图中添加公式，希腊字母粗体正体矢量用从 Symbol 字体中插入，更简单的方法是，先输入希腊字母，选中，然后在 Style 里面选 Vector-Matrix．
+
+\subsubsection{黑色的小标题}
+
+词条标签必须限制在 6 个字符内，必须记录在“词条标签对照表”中，如果不是超纲词条，在主文件中用 entry 命令，否则用 Entry 命令．词条的文件名和标签名相同．词条文件的首行必须注释词条的中文名，非超纲词条放在 contents 文件夹，超纲词条放在 contents1 文件夹．引用词条用 upref 命令，“预备知识”用 pentry 命令，“应用实例”用 eentry 命令，拓展阅读用 rentry 命令．总文件 PhysWiki.tex 编译较慢，可以先使用 debug.tex 编译，然后再把 entry 或 Entry 指令复制到 PhysWiki.tex 中．
+
+正文必须使用中文的括号，逗号，引号，冒号，分号，问号，感叹号，以及全角实心的句号．所有的标点符号前面不能有空格，后面要有空格． 行内公式用单个美元符号，且两边要有空格，例如 $a^2+b^2=c^2$， 后面有标点符号的除外．方便的办法是先全部使用中文标点，最后再把所有空心句号替换成全角实心句号．
+
+公式的 label 必须要按照“词条标签\_eq编号”的格式，只有需要引用的公式才加标签，编号尽量与显示的编号一致，但原则上不重复即可．图表的标签分别把 eq 改成 fig 和 tab 即可，例题用 ex．但凡是有 caption 命令的，label 需要紧接其后．
+\begin{equation}\label{Sample_eq1}
+(a+b)^n = \sum_{i=0}^n C_n^i a^i b^{n-i} \quad (n\text{为整数})
+\end{equation}
+引用公式和图表都统一使用 autoref 命令，注意前面不加空格后面要加空格，例如\autoref{Sample_eq1}． 如果要引用其他词条中的公式，可以引用“其他词条\upref{Sample}”的\autoref{Sample_eq1} 也可以用“\autoref{Sample_eq1}\upref{Sample}”， 为了方便在纸质书上使用， 词条页码是不能忽略的．
+
+公式中的空格从小到大如 $a\, b\; c\quad d\qquad e$， 微分符号如 $\D x$， 自然对数底如 $\E$， 双重极限如
+\begin{equation}
+\lim_{\substack{\Delta x_i\to 0\\ \Delta y_i\to 0}} \sum_{i, j} f(x_i,y_i) \Delta x_i \Delta y_j
+\end{equation}
+导数和偏导尽量用 Physics 宏包里面的
+\begin{equation}
+\dv{x} \quad \dv{f}{x} \quad \dv[2]{f}{x} \quad \dv*[2]{f}{x} \quad
+\pdv{x} \quad \pdv{f}{x} \quad \pdv[2]{f}{x} \quad \pdv*[2]{f}{x}
+\end{equation}
+复数如 $u+\I v$，复共轭如 $a\Cj$，  行内公式如 $a/b$， 不允许行内用立体分式．公式中的绝对值如 $\abs{a}$， 矢量如 $\vec a$，单位矢量如 $\uvec a$， 矢量点乘如 $\vec A \vdot \vec B$ （不可省略），矢量叉乘如 $\vec A\cross\vec B$． 量子力学算符如 $\Q a$， 狄拉克符号如 $\bra{a}, \ket{b}, \bra{a}\ket{b}$．梯度散度旋度拉普拉斯如 $\vec\nabla V$，$\vec\nabla\vdot\vec A$，$\vec\nabla\cross\vec A$，  $\nabla^2 V$， 但最好用 $\grad V$，$\div\vec A$，$\curl\vec A$，  $\laplacian V$． 单独一个粗体的 $\nabla$ 用 $\Nabla$． 行列式，矩阵 $\mat A$，转置 $\mat A \Tr$，厄米共轭 $\mat A \Her$ 如
+\begin{equation}
+\vmat{1&2\\3&4} \qquad 
+\pmat{1&2\\3&4} \qquad 
+\pmat{1&2\\3&4}\Tr \qquad
+\pmat{1&2\\3&4}\Her
+\end{equation}
+行内的列矢量用行矢量的转置表示，如 $(1,2,3)\Tr$． 
+
+
+
+行间公式换行及对齐用 aligned 环境， 或用自定义的 ali 命令
+\begin{equation}\begin{aligned}
+(a-b)^2 &= a^2+b^2 - 2ab \\
+& = a^2+b^2+2ab-4ab\\
+& = (a+b)^2-4ab
+\end{aligned}\end{equation}
+\begin{equation}
+\ali{d+e+f&=g\\a+b&=c}
+\end{equation}
+左大括号用自定义的 leftgroup 命令， 里面相当于 aligned 环境
+\begin{equation}
+\leftgroup{
+d+e+f&=g\\
+a+b&=c}
+\end{equation}
+
+希腊字母如下
+\begin{equation}\begin{aligned}
+&\alpha (a), \beta (b), \chi (c), \delta (d), \epsilon/\varepsilon (e), \phi (f), \gamma (g),
+\eta (h), \iota (i), \varphi (j), \kappa (k), \lambda (l), \mu (m),\\
+& \nu (n), o (o), \pi (p), \theta (q), \rho (r), \sigma (s), \tau (t), \upsilon (u), \varpi (v), \omega (w), \xi (x), \psi (y), \zeta (z)
+\end{aligned}\end{equation}
+以下是 script 字母，只有大写有效．所谓大写 $\epsilon$ 其实是花体的 $E$． 
+\begin{equation}
+\mathcal{A, B, C, D, E, F, G, H, I, J, K, L, M, N, O, P, Q, R, S, T, U, V, W, X, Y, Z}
+\end{equation}
+另外，电介质常数一律用 $\epsilon$ 而不是 $\varepsilon$． 
+
+% 由于产生各种混乱，以后一律不用文字环绕图片
+%\begin{wrapfigure}{r}{0.36\textwidth}
+%\vskip-10pt
+%\centering
+%\includegraphics[width=0.35\textwidth]{./figures/Sample.pdf}
+%\caption{A gull}
+%\vspace{-15pt}
+%\end{wrapfigure}
+
+现在来引用一张图片，图片必须以 eps 以及 pdf 两种格式放在 figures 文件夹中，代码中使用 pdf 图片．图片宽度一律用 cm 为单位．
+\begin{figure}[h]
+\centering
+\includegraphics[width=5cm]{./figures/Sample.pdf}
+\caption{例图} \label{Sample_fig1}
+\end{figure}
+在\autoref{Sample_fig1} 中，label 只能放在 caption 的后面，否则编号会出错．由于图片是浮动的，避免使用“上图”，“下图”等词．
+
+再来看一个表格，如\autoref{E_tb1}． 注意标签要放在 caption 后面，使用 tb 命名．
+\begin{table}[ht]
+\centering
+\caption{极限 $\E$ 数值验证}\label{E_tb1}
+\begin{tabular}{|c|c|c|c|c|c|c|}
+\hline
+$x$ & ${10^{ - 1}}$ & ${10^{ - 2}}$ & ${10^{ - 3}}$ & ${10^{ - 4}}$ & ${10^{ - 5}}$ & ${10^{ - 6}}$ \\
+\hline
+${\left( {1 + x} \right)^{1/x}}$ & 2.59374 & 2.70481 & 2.71692 & 2.71815 & 2.71827 & 2.71828 \\
+\hline
+\end{tabular}
+\end{table}
+
+下面我们举一个例子并引用
+
+\begin{exam}{名称}\label{Sample_ex1}
+在例子中，我们的字体可以自定义，包括公式的字号会保持与内容一致．
+\begin{equation}
+(a+b)^n = \sum_{i=0}^n C_n^i a^i b^{n-i}(n\text{为整数})
+\end{equation}
+\end{exam}
+引用例子同样使用 autoref， 如\autoref{Sample_ex1}． 
+
+
+以下给出一段 Matlab 代码，代码必须有“.m”和“.tex”两个版本，放在 codes 文件夹中．
+
+\subsection{Matlab 代码}
+
+\noindent\textbf{显示  Command Window 中的代码}
+
+\begin{Command}
+>> 1.2/3.4 + (5.6+7.8)*9 -1 \\
+ans = 119.9529 \\
+>> 1/exp(1) \\
+ans = 0.3679 \\
+>> exp(-1i*pi)+1 \\
+ans = 0
+\end{Command}
+
+\noindent\textbf{显示 m 文件中的代码}
+
+%\lstinputlisting{./codes/BiNorR.m} %用于从 Matlab 的 m 程序中读取代码
+代码必须以  .tex 文件格式放在 code 文件夹中的中， 并用 input 命令导入正文。 .tex 代码文件的命名与图片命名相同。 禁止在正文中直接写代码。
+\input{./codes/sample}
+
+
+\eentry{本书格式规范\upref{Sample}}
+\rentry{本书格式规范\upref{Sample}}

@@ -1,0 +1,222 @@
+﻿% 数学格式
+
+%表示角度的圆圈直接用° （搜狗打du即可）
+%\newcommand{\abs}[1]{\left\lvert#1 \right\rvert} %定义绝对值 % physics 宏包已有
+\newcommand{\D}{\,\mathrm{d}} %微分算符正体
+\newcommand{\I}{\mathrm{i}} %虚数单位正体
+\newcommand{\E}{\mathrm{e}} %自然对数底整体
+\renewcommand{\vec}[1]{\boldsymbol{\mathbf{#1}}}%矢量用正体加粗字母, 大写也可以(电场) %只用 mathbf 对希腊字母没用
+\newcommand{\mat}[1]{\boldsymbol{\mathbf{#1}}}   %矩阵用正体加粗字母, 小写也可以(泡力矩阵)
+\newcommand{\Nabla}{\vec\nabla}
+\renewcommand{\Tr}{^{\textup{T}}} %矩阵转置 % 覆盖 physics 宏包的 Trace
+\newcommand{\uvec}[1]{\hat{\boldsymbol{\mathbf{#1}}}} %单位矢量为黑体加 hat
+\renewcommand{\pmat}[1]{\begin{pmatrix}#1\end{pmatrix}} % 矩阵圆括号, 覆盖 physics 宏包 (pauli matrix)
+\newcommand{\ali}[1]{\begin{aligned}#1\end{aligned}}
+\newcommand{\leftgroup}[1]{\left\{\begin{aligned}#1\end{aligned}\right.}
+\newcommand{\vmat}[1]{\begin{vmatrix}#1\end{vmatrix}} % 行列式
+\newcommand{\Cj}{^*} % 复共轭
+\newcommand{\dfracH}{\rule[-0.5cm]{0pt}{1.3cm}} % 全尺寸分数 dfrac 在表格中的高度
+\newcommand{\Her}{^\dag} %厄米共轭
+\newcommand{\Q}[1]{\hat #1}
+\newcommand{\sinc}{\mathrm{sinc}} % sinc 函数
+
+% 设置 Matlab 格式，用于MatlabStyle.tex
+\usepackage{color} %red, green, blue, yellow, cyan, magenta, black, white
+\definecolor{mygreen}{RGB}{28,172,0}
+\definecolor{mylilas}{RGB}{170,55,241}
+
+
+% 其他
+\newcommand{\entry}[2]{\section{#1}\label{#2}\input{./contents/#2}}% 主程序中使用，从 contents 文件夹加入词条
+\newcommand{\Entry}[2]{\section{#1}\label{#2}\input{./contents1/#2}}% 从 contents1 中加入词条（contents1 里面用于存放超出力学分册的内容）
+\newcommand{\pentry}[1]{\begin{mdframed}\textbf{预备知识\ } #1 \end{mdframed}}%预备知识的格式
+\newcommand{\rentry}[1]{\begin{mdframed}\textbf{拓展阅读\ } #1 \end{mdframed}}%拓展阅读的格式
+\newcommand{\eentry}[1]{\begin{mdframed}\textbf{应用举例\ } #1 \end{mdframed}}%应用举例的格式
+
+% 图片的格式
+%\newcommand{\fig}[3]{\begin{figure}[ht]\centering\includegraphics[width= #2]{./figures/#1.pdf}\caption{#3}\end{figure}}
+% 控制行代码环境（注意不能用于段落最后！）
+% zihao 命令，小N号用 -N，大N号用 +N
+\newenvironment{Command}{\vspace{0.2cm}　\\ \ttfamily\zihao{5}}{\vspace{0.2cm}\\}
+
+% 淘宝模板其他设置
+\mdfsetup{%
+frametitlealignment=\noindent\raggedright,
+middlelinecolor=gray,
+middlelinewidth=.3pt,
+backgroundcolor=white,
+roundcorner=6pt}
+\input{./others/material.tex}
+\usepackage{xeCJK}
+\usepackage[papersize={185mm,260mm},hmargin=2.1cm,vmargin=1in]{geometry}
+%%%%%%%%%%%%% 有需要可以自行调用字体
+\setCJKmainfont
+  [ItalicFont=KaiTi,
+  BoldFont=SimHei]
+  {SimSun}
+\setCJKsansfont{SimHei}
+\renewcommand{\heiti}
+  {\CJKfontspec{SimHei}}
+\renewcommand{\kaishu}
+  {\CJKfontspec{KaiTi}}
+\renewcommand{\youyuan}
+  % {\CJKfontspec{YouYuan}}
+% \renewcommand{\fangsong}
+  % {\CJKfontspec{FangSong}}
+
+\setmainfont{Times New Roman}
+\setsansfont{Arial}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\usepackage{titletoc}
+\usepackage{titlesec}
+\titleformat{\section}[display]% 词条格式 (section)
+{\zihao{4}\color{deep-orange-A700}\filright\kaishu\sf}
+{}{.5em}{}[\color{orange-A700}\vspace*{-1.2em}\rule{\textwidth}{2pt}] %在节上显示*号
+
+\definecolor{myblue}{RGB}{10,10,180} % 用于 subtitle
+\titleformat{\subsection}[hang] % 小标题格式 (subsection)
+{\normalsize\color{myblue}\heiti\filright} % 颜色和字体
+{} % label
+{0.5cm} % 小标题下方空白
+{\vspace*{-0.2cm}\\} % 小标题前的命令
+%[]  % 小标题下方文字结束后下方的命令
+
+\titlespacing*{\section}
+{0em}{1.5ex plus .1ex minus .2ex}{.5ex minus .1ex}
+%\contentsmargin{0pt}
+\titlecontents{part}[3.5em]{\vspace{1.25\baselineskip}\centering\heiti\zihao{3}}{\contentslabel{3.6em}}{\hspace*{-3.6em}}
+        {\hfill}
+\titlecontents{chapter}[5em]{\vspace{0.55\baselineskip}\fontsize{13.05pt}{16pt}\selectfont\heiti}{\contentslabel{4.5em}}{\hspace*{-4.5em}}
+        {\hspace{.5em}}[\titlerule]
+\titlecontents*{section}[0pc]
+  {\addvspace{3pt}\zihao{-4}}
+  {}
+  {}
+  {\,\textsuperscript{\color{blue-A700}[\thecontentspage]}}[\quad]
+
+\titlecontents*{subsection}[1.8pc]
+  {\zihao{5}}
+  {\thecontentslabel. }
+  {}
+  {, \thecontentspage}
+  [.---][.]
+\titlespacing*{\subsection} {0pt}{1.25ex plus 1ex minus .2ex}{.5ex plus .2ex}
+
+\usepackage{tikz}
+\usepackage{multicol}
+
+
+\newtheoremstyle{mystyle}{8pt}{8pt}{}{}{\bfseries}{}{\newline}
+{\thmname{#1}\thmnumber{ #2}\thmnote{\bf #3}\indent}  % 新增：最后一个{}
+\theoremstyle{mystyle}
+\newtheorem{example}{\normalsize{例}}
+\newtheorem{Thm}{\normalsize{{定理}}}
+\newtheorem*{slove}{\normalsize{{【解】}}} % * 表示不编号！
+
+
+\usepackage{indentfirst}
+\usepackage[pdfstartview=FitH,
+            CJKbookmarks=true,
+            bookmarksnumbered=false,
+            bookmarksopen=true,
+            linktocpage=true,
+            colorlinks, %注释掉此项则交叉引用为彩色边框(将colorlinks和pdfborder同时注释掉)
+            pdfborder=001,   %注释掉此项则交叉引用为彩色边框
+            linkcolor=blue-A700,
+            anchorcolor=blue-A700,
+            citecolor=blue-A700]{hyperref}
+\setlength{\abovecaptionskip}{0pt}
+\setlength{\belowcaptionskip}{3pt}
+
+\newcommand\upref[1]{\textsuperscript{[\pageref{#1}]}}
+\renewcommand\sectionmark[1]{%
+\markright{\leftmark}}
+\renewcommand{\textfraction}{0.05}
+\renewcommand{\topfraction}{0.95}
+\renewcommand{\bottomfraction}{0.65}
+\renewcommand{\floatpagefraction}{0.60}
+\makeatletter
+\setlength{\@fptop}{5pt}
+\setlength{\floatsep}{10pt \@plus3pt \@minus1pt}
+\setlength{\intextsep}{12pt \@plus3pt \@minus2pt}
+\setlength{\textfloatsep}{10pt \@plus3pt \@minus2pt}
+\def\@makechapterhead#1{%
+  \null\vskip3.8cm\@tempskipa = \glueexpr \CTEX@chapter@beforeskip \relax
+  \ifodd \CTEX@chapter@fixbeforeskip
+    \CTEX@fixbeforeskip
+  \fi
+  \vspace*{\@tempskipa}%
+  {\normalfont \parindent \dimexpr \CTEX@chapter@indent \relax
+   \CTEX@chapter@format\centering
+   \ifnum \c@secnumdepth >\m@ne
+     \if@mainmatter
+       \ifodd \CTEX@chapter@numbering
+         \CTEX@chaptername \CTEX@chapter@aftername
+       \fi
+     \fi
+   \fi
+   \par\vskip18pt%
+   \CTEX@chapter@titleformat{#1}%
+   \CTEX@chapter@aftertitle
+   \nobreak
+   \vfill\vskip \glueexpr \CTEX@chapter@afterskip \relax
+   \newpage
+  }}
+\def\@makeschapterhead#1{%
+  \null\vskip-2.8cm\@tempskipa = \glueexpr \CTEX@chapter@beforeskip \relax
+  \ifodd \CTEX@chapter@fixbeforeskip
+    \CTEX@fixbeforeskip
+  \fi
+  \vspace*{\@tempskipa}%
+  {\normalfont \parindent \dimexpr \CTEX@chapter@indent \relax
+   \CTEX@chapter@format
+   \interlinepenalty\@M
+   \CTEX@chapter@titleformat{#1}
+   \CTEX@chapter@aftertitle
+   \nobreak
+   \null\vskip-2cm
+   \vskip \glueexpr \CTEX@chapter@afterskip \relax
+  }}
+\makeatother
+
+% 新增：以下命令为新加
+\makeatletter
+\def\HyRef@autopageref#1{%
+ \hyperref[{#1}]{[\pageref*{#1}]}%
+}
+\makeatother
+
+\renewcommand{\equationautorefname}{式}
+\renewcommand{\figureautorefname}{图}
+\renewcommand{\tableautorefname}{表}
+\newcommand{\Exaautorefname}{例}
+\newcommand{\exampleautorefname}{例}
+
+\makeatletter
+\def\thmt@amsthmlistbreakhack{%
+  \leavevmode
+  \vspace{-\baselineskip}%
+  \par
+  \everypar{\setbox\z@\lastbox\everypar{}}%
+}
+\makeatother
+
+%\let\eqref\autoref
+\newcommand{\exref}[1]{\autoref{#1}}
+\renewcommand\upref[1]{\textsuperscript{\autopageref{#1}}}
+
+%\AtBeginEnvironment{example}{\normalsize} % 调整 example 环境字号（标题也会受影响！不能用！），不能调整字体！ 以下定义 exam 环境，以后一律使用 exam 环境！
+\newenvironment{exam}[1]{\begin{example}[\;\; #1]\kaishu\hspace*{1.7em}}{\end{example}} % 调整字体字号
+
+% 新增结束
+
+% 编号在每个 section 内从 1 开始
+\numberwithin{equation}{section}
+\renewcommand\theequation{\arabic{equation}}
+\numberwithin{example}{section}
+\renewcommand\theexample{\arabic{example}}
+\numberwithin{figure}{section}
+\renewcommand\thefigure{\arabic{figure}}
+\numberwithin{table}{section}
+\renewcommand\thetable{\arabic{table}}
+\numberwithin{chapter}{part}

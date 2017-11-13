@@ -1,0 +1,26 @@
+\begin{lstlisting}[language=Matlab]
+%预赋值
+x=nan(step,1); x1=x; y=x; y1=x; x2=x; y2=x;
+
+%常数及初值
+GM=1; %万有引力乘以质量
+x(1)=1; y(1)=0; x1(1)=0; y1(1)=1; %初值 
+x2(1)=-GM*x/(x(1)^2+y(1)^2)^(3/2); %代入方程得到x''(0)
+y2(1)=-GM*y/(x(1)^2+y(1)^2)^(3/2); %代入方程得到y''(0)
+dt=0.001; step=1000;
+
+%迭代循环
+for ii=2:step
+    x(ii)=x(ii-1)+x1(ii-1)*dt; %x的微分
+    y(ii)=y(ii-1)+y1(ii-1)*dt; %y的微分
+    
+x1(ii)=x1(ii-1)+x2(ii-1)*dt; %x' 的微分
+y1(ii)=y1(ii-1)+y2(ii-1)*dt; %y' 的微分
+
+x2(ii)=-GM*x(ii)/(x(ii)^2+y(ii)^2)^(3/2); %代入微分方程求出x''
+y2(ii)=-GM*y(ii)/(x(ii)^2+y(ii)^2)^(3/2); %代入微分方程求出y''
+end
+ 
+%画图
+plot(x,y);
+\end{lstlisting}

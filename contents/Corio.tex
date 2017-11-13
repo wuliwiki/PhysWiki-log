@@ -1,0 +1,84 @@
+\pentry{惯性力\upref{Iner}，离心力\upref{Centri}，平面旋转矩阵，矢量的叉乘\upref{Cross}}
+
+\subsection{结论}
+\textbf{科里奥利力（Coriolis Force）}是匀速旋转的参考系中的由相对速度产生的惯性力．
+\begin{equation}
+{\vec F_{cori}} = 2m{\vec v_{abc}} \cross \vec \omega
+\end{equation}
+其中 $\vec v_{abc}$ 是质点相对于旋转系的瞬时速度， $\vec\omega$ 是旋转系的恒定角速度矢量．%未完成: 考虑使用脚注或链接
+在匀速转动参考系（属于非惯性系）中，若质点保持相对静止，则惯性力只有离心力．然而当质点与转动参考系有相对速度时，惯性力中还会增加一个与速度垂直的力，这就是科里奥利力．地理中的地转偏向力就是科里奥利力，可用上式计算．其中 是地球的自转角速度．
+
+\subsection{推导}
+这里的主要思路是按照惯性力\upref{Iner}中的坐标法．设空间中存在一个惯性系 $xyz$ 和一个非惯性系 $abc$ 相对于 $xyz$ 绕 $z$ 轴以角速度 $\omega$ 逆时针匀速旋转（右手定则）．%链接未完成
+由于 $z$ 轴和 $c$ 轴始终重合（ $z=c$）， 只需要考虑 $x,y$ 坐标和 $a,b$ 坐标之间的关系即可．
+
+令平面旋转矩阵为% 未完成：链接
+\begin{equation}
+\mat R(\theta) \equiv \begin{pmatrix}
+{\cos \theta }&{ - \sin \theta }\\
+{\sin \theta }&{\cos \theta }
+\end{pmatrix}
+\end{equation}
+其意义是把坐标逆时针旋转 角 $\theta$．
+则其逆矩阵等于转置矩阵
+\begin{equation}
+\mat R(- \theta) = \mat R (\theta)\Tr =  \begin{pmatrix}
+{\cos \theta }&{\sin \theta }\\
+{ - \sin \theta }&{\cos \theta }
+\end{pmatrix}
+\end{equation}
+意义是顺时针旋转 $\theta$ 角．所以两坐标系之间的坐标变换为
+% 未完成： 为什么矢量的括号那么粗？
+\begin{equation}
+\pmat{a\\b} = \mat R(\omega t)\Tr \pmat{x\\y}
+\qquad
+\pmat{x\\y} = \mat R(\omega t) \pmat{a\\b}
+\end{equation}
+为了得到质点在惯性系中的加速度，对上式的 $(x,y)\Tr$ 求二阶全导数得\footnote{本词条中，某个量上方加一点表示对时间的一阶导数，两点表示对时间的二阶导数．}
+\begin{equation}\label{Corio_eq1}
+\pmat{\ddot x \\ \ddot y} = 
+\ddot{\mat R}(\omega t) \pmat{a\\b} + 2\dot{\mat R} (\omega t) \pmat{\dot a \\ \dot b} + \mat R\left( {\omega t} \right)\pmat{\ddot a \\ \ddot b}
+\end{equation}
+其中\footnote{\autoref{Corio_eq2} 和\autoref{Corio_eq3} 相当于用矩阵推导了圆周运动的速度和加速度公式\upref{CMVG}\upref{CMAG}．}
+\begin{equation}\label{Corio_eq2}
+\dot{\mat R}(\omega t) = \omega \begin{pmatrix}
+{\cos \left( {\omega t + \pi /2} \right)}&{ - \sin \left( {\omega t + \pi /2} \right)}\\
+{\sin \left( {\omega t + \pi /2} \right)}&{\cos \left( {\omega t + \pi /2} \right)}
+\end{pmatrix} = \omega \mat R\left( {\omega t + \pi /2} \right)
+\end{equation}
+\begin{equation}\label{Corio_eq3}
+\ddot{\mat R} (\omega t)  =  - {\omega ^2}\mat R (\omega t)
+\end{equation}
+ 代入\autoref{Corio_eq1} 得
+\begin{equation}
+\pmat{\ddot x \\ \ddot y} =
+- {\omega ^2}\mat R(\omega t)\pmat{a\\b} + 2\omega \mat R(\omega t + \pi /2)\pmat{\dot a \\ \dot b} + \mat R(\omega t)\pmat{\ddot a \\ \ddot b}
+\end{equation}
+上式中的每一项都是 $xyz$ 参考系中的坐标．所有坐标顺时针旋转 $\omega t$， 得到 $abc$ 参考系中的坐标．首先由旋转矩阵的几何意义得 $\mat R(\theta_1)\mat R(\theta_2) = \mat R(\theta_1 + \theta_2)$
+\begin{equation}
+\pmat{\ddot x \\ \ddot y}_{abc} =
+\mat R(-\omega t ) \pmat{\ddot x \\ \ddot y} =
+- {\omega^2} \pmat{a\\b} + 2\omega \mat R(\pi /2)\pmat{\dot a\\ \dot b} + \pmat{\ddot a\\ \ddot b}
+\end{equation}
+所以旋转参考系中的总惯性力（\autoref{Iner_eq9} \upref{Iner}）为（用 $abc$ 系中的坐标表示）
+\begin{equation}\label{Corio_eq10}
+\vec f = m({\vec a}_{abc} - {\vec a}_{xyz})
+= \pmat{\ddot a\\ \ddot b} - \pmat{\ddot x \\ \ddot y}_{abc} = m{\omega ^2}\pmat{a\\b} - 2m\omega \mat R(\pi /2)\pmat{\dot a\\ \dot b}
+\end{equation}
+其中第一项是已知的离心力\upref{Centri}
+\begin{equation}
+m{\omega ^2} \begin{pmatrix} a\\b \end{pmatrix} = m{\omega ^2}\vec r
+\end{equation}
+我们将第二项定义为\textbf{科里奥利力}．由叉乘的几何意义\upref{Cross}，科里奥利力可以用叉乘记为
+\begin{equation}
+- 2m\omega \mat R(\pi /2)\pmat{\dot a\\ \dot b} = 2m{\vec v_{abc}} \cross \vec \omega
+\end{equation}
+其中 $\vec\omega$ 是 $abc$ 系旋转的角速度矢量， $\vec v_{abc}$ 是质点相对于 $abc$ 系的速度．最后，矢量形式的\autoref{Corio_eq10} 为
+\begin{equation}
+\vec f = m{\omega ^2}\vec r + 2m{\vec v_{abc}} \cross \vec \omega 
+\end{equation}
+ 
+
+
+
+
