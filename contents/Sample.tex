@@ -1,7 +1,8 @@
-% 本书格式规范
-\pentry{本书格式规范\upref{Sample}}
+% 本书编写规范
 
-\subsection{蓝色的小标题}
+\pentry{本书编写规范\upref{Sample}}
+
+\subsection{软件使用规范}
 
 本书使用 TeXLive2016 软件中的 XeLaTeX 进行编译．如果 Windows 中编译卡在 eu1lmr.fd 上的时间较长，说明 font config 有问题，在 Windows 的控制行运行“fc-cache -fv”，重启 TeXLive，多试几次即可．TeXWork 编辑器中 Ctrl+T 编译，Ctrl+单击跳转到对应的 pdf 或代码，在 pdf 中 Alt+左箭头返回上一个位置． 代码中\textbackslash beq+Tab 生成公式环境，\textbackslash sub+Tab 生成 subsection．Ctrl+F 进行查找，Ctrl+G 查找下一个．菜单中的 Edit>Preference 设置默认字体为 Microsoft YaHei UI（11pt）， 默认编译器为 XeLaTeX，编码选择 UTF-8．
 
@@ -9,18 +10,39 @@
 
 画图用 Adobe Illustrator 和 Autodesk Graphics，用 MathType 在图中添加公式，希腊字母粗体正体矢量用从 Symbol 字体中插入，更简单的方法是，先输入希腊字母，选中，然后在 Style 里面选 Vector-Matrix．
 
-\subsubsection{黑色的小标题}
+\subsection{文件版本管理}
+使用 GitHub Desktop， 用 PhysWiki repository管理所有文件， 每次 commit 需要做的事情如下
+\begin{itemize}
+\item 用 FileSeek 替换所有文档中的空心句号．
+\item 确保所有文档可以顺利编译．
+\item 清除编译产生的中间文件， 包括 content 文件夹中的非 tex 文件．
+\item 把 ManicTime 记录的写作时间记录到“计时.txt”．
+\item 检查变化的内容．
+\end{itemize}
+每次 commit 的标题必须是下列之一
+\begin{itemize}
+\item 常规更新：包括完善词条，新词条等．
+\item 词条统计：统计文件夹，对照表，和书中的词条，查看不一致或缺失．
+\item 模板更新：模板有更新．
+\end{itemize}
+词条统计的方法： 首先把 contents 文件夹中的所有文件名按顺序排列， 复制到表格中， 然后把词条对照表中的所有标签在表格中找到对应项， 做标记， 并把对照表中的词条名粘贴到表格中． 最后到 PhysWiki.tex 中逐个把标签在表格中找到对应项， 做标记， 对照词条名， 并对照词条文件中第一行的词条名．
 
-词条标签必须限制在 6 个字符内，必须记录在“词条标签对照表”中，如果不是超纲词条，在主文件中用 entry 命令，否则用 Entry 命令．词条的文件名和标签名相同．词条文件的首行必须注释词条的中文名，非超纲词条放在 contents 文件夹，超纲词条放在 contents1 文件夹．引用词条用 upref 命令，“预备知识”用 pentry 命令，“应用实例”用 eentry 命令，拓展阅读用 rentry 命令．总文件 PhysWiki.tex 编译较慢，可以先使用 debug.tex 编译，然后再把 entry 或 Entry 指令复制到 PhysWiki.tex 中． 注意 PhysWiki.tex 中 entry 命令的后面可以用 newpage 命令强制换页， 但为了排版紧凑不推荐这么做．
+\subsection{词条编写规范}
+
+词条标签必须限制在 6 个字符内，必须在 PhysWiki.tex， 词条标签对照表和词条文件名中一致． 词条的中文名必须在 PhysWiki.tex， 词条标签对照表和词条文件的第一行注释中一致． 如果不是超纲词条，在主文件中用 \textbackslash entry 命令，否则用 \textbackslash Entry 命令． 非超纲词条放在 contents 文件夹，超纲词条放在 contents1 文件夹．引用词条用 \textbackslash upref 命令，“预备知识”用 \textbackslash pentry 命令，“应用实例”用 \textbackslash eentry 命令，拓展阅读用 \textbackslash rentry 命令．总文件 PhysWiki.tex 编译较慢，可以先使用 debug.tex 编译，然后再把 \textbackslash entry 或 \textbackslash Entry 指令复制到 PhysWiki.tex 中． 注意 PhysWiki.tex 中 \textbackslash entry 命令的后面可以用 \textbackslash newpage 命令强制换页， 但为了排版紧凑不推荐这么做．
+
+\subsubsection{黑色的小标题}
 
 正文必须使用中文的括号，逗号，引号，冒号，分号，问号，感叹号，以及全角实心的句号．所有的标点符号前面不能有空格，后面要有空格． 行内公式用单个美元符号，且两边要有空格，例如 $a^2+b^2=c^2$， 后面有标点符号的除外．方便的办法是先全部使用中文标点，最后再把所有空心句号替换成全角实心句号．
 
-公式的 label 必须要按照“词条标签\_eq编号”的格式，只有需要引用的公式才加标签，编号尽量与显示的编号一致，但原则上不重复即可．图表的标签分别把 eq 改成 fig 和 tab 即可，例题用 ex．但凡是有 caption 命令的，label 需要紧接其后．
+公式的 label 必须要按照“词条标签\_eq编号”的格式，只有需要引用的公式才加标签，编号尽量与显示的编号一致，但原则上不重复即可．图表的标签分别把 eq 改成 fig 和 tab 即可，例题用 ex．但凡是有 \textbackslash caption 命令的，\textbackslash label 需要紧接其后．
 \begin{equation}\label{Sample_eq1}
 (a+b)^n = \sum_{i=0}^n C_n^i a^i b^{n-i} \quad (n\text{为整数})
 \end{equation}
-引用公式和图表都统一使用 autoref 命令，注意前面不加空格后面要加空格，例如\autoref{Sample_eq1}． 如果要引用其他词条中的公式，可以引用“其他词条\upref{Sample}”的\autoref{Sample_eq1} 也可以用“\autoref{Sample_eq1}\upref{Sample}”， 为了方便在纸质书上使用， 词条页码是不能忽略的．
+引用公式和图表都统一使用 \textbackslash autoref 命令，注意前面不加空格后面要加空格，例如\autoref{Sample_eq1}． 如果要引用其他词条中的公式，可以引用“其他词条\upref{Sample}”的\autoref{Sample_eq1} 也可以用“\autoref{Sample_eq1}\upref{Sample}”， 为了方便在纸质书上使用， 词条页码是不能忽略的．
 
+
+\subsection{公式规范}
 公式中的空格从小到大如 $a\, b\; c\quad d\qquad e$， 微分符号如 $\D x$， 自然对数底如 $\E$， 双重极限如
 \begin{equation}
 \lim_{\substack{\Delta x_i\to 0\\ \Delta y_i\to 0}} \sum_{i, j} f(x_i,y_i) \Delta x_i \Delta y_j
@@ -41,7 +63,7 @@
 
 
 
-行间公式换行及对齐用 aligned 环境， 或用自定义的 ali 命令
+行间公式换行及对齐用 aligned 环境， 或用自定义的 \textbackslash ali 命令
 \begin{equation}\begin{aligned}
 (a-b)^2 &= a^2+b^2 - 2ab \\
 & = a^2+b^2+2ab-4ab\\
@@ -50,13 +72,16 @@
 \begin{equation}
 \ali{d+e+f&=g\\a+b&=c}
 \end{equation}
-左大括号用自定义的 leftgroup 命令， 里面相当于 aligned 环境
+左大括号用自定义的 \textbackslash leftgroup 命令， 里面相当于 aligned 环境
 \begin{equation}
 \leftgroup{
 d+e+f&=g\\
 a+b&=c}
 \end{equation}
-
+可变化尺寸的斜分数线如下
+\begin{equation}
+\left. \dv[2]{X}{x} \middle/ X + \dv[2]{Y}{y} \middle/ Y + \dv[2]{Z}{z} \middle/ Z  = \frac{1}{c^2}  \dv[2]{T}{t} \middle/ T\right.
+\end{equation}
 希腊字母如下
 \begin{equation}\begin{aligned}
 &\alpha (a), \beta (b), \chi (c), \delta (d), \epsilon/\varepsilon (e), \phi (f), \gamma (g),
@@ -67,7 +92,9 @@ a+b&=c}
 \begin{equation}
 \mathcal{A, B, C, D, E, F, G, H, I, J, K, L, M, N, O, P, Q, R, S, T, U, V, W, X, Y, Z}
 \end{equation}
-另外，电介质常数一律用 $\epsilon$ 而不是 $\varepsilon$． 
+另外，电介质常数一律用 $\epsilon$ 而不是 $\varepsilon$．
+
+写单位， 用 \textbackslash si， 如 $a = 100\Si{m/s^{2}}$．
 
 % 由于产生各种混乱，以后一律不用文字环绕图片
 %\begin{wrapfigure}{r}{0.36\textwidth}
@@ -77,6 +104,8 @@ a+b&=c}
 %\caption{A gull}
 %\vspace{-15pt}
 %\end{wrapfigure}
+
+\subsection{图表}
 
 现在来引用一张图片，图片必须以 eps 以及 pdf 两种格式放在 figures 文件夹中，代码中使用 pdf 图片．图片宽度一律用 cm 为单位．
 \begin{figure}[h]
@@ -107,14 +136,14 @@ ${\left( {1 + x} \right)^{1/x}}$ & 2.59374 & 2.70481 & 2.71692 & 2.71815 & 2.718
 (a+b)^n = \sum_{i=0}^n C_n^i a^i b^{n-i}(n\text{为整数})
 \end{equation}
 \end{exam}
-引用例子同样使用 autoref， 如\autoref{Sample_ex1}． 
+引用例子同样使用 \textbackslash autoref， 如\autoref{Sample_ex1}． 
 
 
 以下给出一段 Matlab 代码，代码必须有“.m”和“.tex”两个版本，放在 codes 文件夹中．
 
 \subsection{Matlab 代码}
 
-\noindent\textbf{显示  Command Window 中的代码}
+\subsubsection{显示  Command Window 中的代码}
 
 \begin{Command}
 >> 1.2/3.4 + (5.6+7.8)*9 -1 \\
@@ -125,10 +154,10 @@ ans = 0.3679 \\
 ans = 0
 \end{Command}
 
-\noindent\textbf{显示 m 文件中的代码}
+\subsubsection{显示 m 文件中的代码}
 
 %\lstinputlisting{./codes/BiNorR.m} %用于从 Matlab 的 m 程序中读取代码
-代码必须以  .tex 文件格式放在 code 文件夹中的中， 并用 input 命令导入正文． .tex 代码文件的命名与图片命名相同． 禁止在正文中直接写代码．
+代码必须以  .tex 文件格式放在 code 文件夹中的中， 并用 \textbackslash input 命令导入正文． .tex 代码文件的命名与图片命名相同． 禁止在正文中直接写代码．
 \input{./codes/sample}
 
 
