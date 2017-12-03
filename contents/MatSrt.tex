@@ -1,0 +1,149 @@
+% Matlab 的文件， 程序结构和函数
+
+\pentry{Matlab 的变量与矩阵\upref{MatVar}}
+
+\subsection{脚本文件}
+在讲解更复杂的程序结构前，我们先来看脚本文件．\textbf{脚本（script）文件} 是包含若干个指令的文件，文件后缀名为 “.m”．脚本文件可以单独执行，也在其他文件或 Command Window 中被调用（注意需要将所在文件夹添加到搜索路径）． 后者当于把被调用脚本的代码直接插入到调用指令处，调用指令就是脚本文件的文件名．脚本中的每条命令后面应该加分号以隐藏输出结果，若需要输出，用 \texttt{disp} 函数．
+\begin{Command}
+>> disp('good'); a = 3; disp(['a = ',num2str(a)]) \\
+good \\
+a = 3
+\end{Command}
+
+在脚本文件中，可以在行首或命令后用百分号 \texttt{\%} 进行\textbf{注释（comment）}\footnote{截止到 Matlab 2017b， 在英文版 Matlab IDE 中， 任何中文注释都会在 Matlab 重启后变为乱码． 若要使用中文注释， 建议使用中文操作系统和中文 Matlab．}．注释是程序的说明，使程序更易读，但在执行程序时会被忽略（\autoref{Matlab_fig1}）．
+
+\subsection{判断结构}
+现在来看一段代码（脚本文件）
+\begin{lstlisting}[language=Matlab]
+a = rand(1,1); b = 0.5;
+if a > b
+    disp('a is larger');
+else
+    disp('b is larger');
+end
+\end{lstlisting}
+这段程序随用 \texttt{rand} 函数随机生成一个从 0 到 1 的数，如果随机数大于 0.5 则输出第一段文字，否则输出第二段文字． 不难猜测出这里的 \texttt{if} 用于判断，如果条件满足，则只执行 \texttt{if} 和 \texttt{else} 之间的指令．如果条件不满足，则只执行 \texttt{else} 到 \texttt{end} 的指令． 注意 \texttt{else} 语句可以不在判断结构中出现， 若不出现， 当判断条件不满足时程序将直接执行 \texttt{end} 后面的代码．
+
+\texttt{elseif} 语句可用于在判断结构中产生多个分支， 如
+\begin{lstlisting}[language=Matlab]
+a = rand(1,1);
+if a > 0.9
+    disp('a in (0.9, 1]');
+elseif a > 0.6
+    disp('a in (0.6, 0.9]');
+elseif a > 0.3
+    disp('a in (0.3, 0.6]');
+else
+    disp('a in [0, 0.3]');
+end
+\end{lstlisting}
+这个程序用于判断随机数 \texttt{a} 的区间． 若 \texttt{if} 的条件判断成功， 判断结构就只执行 \texttt{if} 到第一个 \texttt{elseif} 之间的命令． 若 \texttt{if} 判断失败， 程序就继续判断第一个 \texttt{elseif} 中的条件， 若判断成功， 就只执行第一个 \texttt{elseif} 到第二个 \texttt{elseif} 之间的命令， 以此类推． 如果 \texttt{if} 和所有的 \texttt{elseif} 条件都判断失败， 则执行 \texttt{else} 后面的命令．
+
+\subsection{循环结构}
+用 \texttt{for} 表示循环
+\begin{lstlisting}[language=Matlab]
+for ii = 1:3
+    disp(['ii^2 = ' num2str(ii^2)]);
+end
+\end{lstlisting}
+运行结果为
+\begin{Command}
+ii\^{}2 = 1 \\
+ii\^{}2 = 4 \\
+ii\^{}2 = 9 
+\end{Command}
+容易看出这段代码被执行了 3 次，\textbf{循环变量} \texttt{ii} 按顺序取 \texttt{1:3} 中的一个矩阵元．注意选取 \texttt{ii} 作为变量名是为了与虚数单位区分，当然也可以选择其他变量名．再来看一个稍复杂的循环
+\begin{lstlisting}[language=Matlab]
+Nx = 5;
+x = zeros(1,Nx); 
+x(1) = 2;
+for ii = 2:numel(x)
+    x(ii) = x(ii-1)^2;
+end
+disp(['x = ' num2str(x)])
+\end{lstlisting}
+在循环开始前 \texttt{x(1)} 被赋值为 2，在循环中，第 \texttt{ii} 个矩阵元 依次被赋值为第 \texttt{ii-1} 个矩阵元的平方．运行结果为
+\begin{Command}
+x = 2\ \ 4\ \ 16\ \ 256\ \ 65536
+\end{Command}
+注意在循环前用 \texttt{zero} 对矩阵进行了\textbf{预赋值（preallocation）}．预赋值不是必须的，但如果不进行预赋值，每次循环矩阵的尺寸都要改变，会导致程序运行变慢．另外注意循环中不允许给循环变量赋值．
+% 未完成，嵌套循环
+
+\subsection{函数文件}
+
+我们已经学了一些函数，现在来看如何自定义函数． Matlab 中定义了函数的文件叫做\textbf{函数文件}． 函数文件同样以“.m” 作为后缀名， 文件中的第一个命令必须是 \texttt{function}，用于定义主函数．文件名必须与主函数同名．文件中其他函数都是子函数．主函数可以调用子函数，子函数可以调用同文件中的其他子函数，但不能调用主函数，主函数和子函数都可以调用 Matlab 的内部函数或搜索路径下其他函数文件中的主函数．若函数文件在搜索路径下，其他 m 文件或 Command Window 中可以直接调用它的主函数．注意函数文件中的子函数不能从文件外被调用．
+
+函数的 workspace 是独立的，即函数在执行的过程中， 只能读写输入变量， 函数内部定义的定量， 以及全局变量（见下文），% 未完成
+% 未完成，链接到函数的具体说明
+而不能读取调用该函数的代码中的变量． 相比之下， 调用脚本相当于把脚本的代码直接插入到调用命令处， 所以脚本中可以获取调用脚本的代码中的变量． 注意函数只能通过函数文件定义，不能在脚本文件或控制行中定义．
+
+\subsection{函数句柄}
+\textbf{函数句柄（function handle）} 是一种特殊的变量类型，可用于定义一个临时的函数，也可传递到其他函数中．首先，对于已经存在的函数（包括函数文件定义的），可直接在函数名前面加 \texttt{@} 生成函数句柄
+\begin{Command}
+>> f = @sin \\
+>> f(pi/2) \\
+ans = 1;
+\end{Command}
+若句柄函数的变量个数少于表达式中的变量个数，要在 \texttt{@} 后面用小括号指定函数句柄的变量
+\begin{Command}
+>> A = 3; w = 5; phi = pi/2; \\
+>> f1 = @(x) A*sin(w*x+phi) + (2*x/pi).\^{}2; \\
+>> f1([0,pi/2]) \\
+ans = \par
+3.0000\ \ 1.0000; \\
+>> f2 = @(x,phi) A*sin(w*x+phi) + (2*x/pi).\^{}2; \\
+>> f2([0,pi/2],pi/2) \\
+ans = \par
+3.0000\ \ 1.0000;
+\end{Command}
+以上的句柄函数在定义时用了逐个元素的幂运算 “\texttt{.\^{}}”， 使句柄函数支持矩阵输入． 其中 \texttt{f1} 的变量仅为 \texttt{x}， \texttt{f2} 的变量为 \texttt{x} 和 \texttt{phi}． 注意如果在句柄函数定义后改变定义表达式中的变量， 句柄函数不变．
+\begin{Command}
+>> A = 5; f1(0)\\
+ans = 3.0000
+\end{Command}
+
+\subsection{自定义函数（function）}
+自定义函数的格式为\\
+\texttt{[<输出1>,<输出2>,...] = function <函数名>(<变量1>,<变量2>...)}\\
+\texttt{<函数体>}\\
+\texttt{end}
+
+其中 \texttt{<函数名>} 是字母，数字和下划线的组合，例如 \texttt{MyFun\_123}，第一个字符不能是数字或下划线．若函数无变量，则小括号可省略．若函数无输出，则等号及方括号可省略， 若只有一个输出， 方括号也可省略． 在一些情况下， 如果 \texttt{函数体} 中没有使用某些输入变量， 就可以把这些变量用 “\;\,\texttt{\~}” 符号代替．
+
+函数的调用格式为\\
+\texttt{[<输出变量1>,<输出变量2>,...] = <函数名>(<输入变量1>,<输入变量2>...)}\\
+调用函数时， 如果输出变量个数少于函数定义中的输出变量个数， 则函数仅输出前几个变量． 若调用函数时不需要前面的某几个变量， 也可用 “\;\,\texttt{\~}” 符号代替．
+
+调用函数时， 输入变量的个数也可以少于函数定义中的输入变量， 但是函数体内部必须要做出相应的措施以防止函数体使用未生成的变量． 我们来看下面一个函数
+\begin{lstlisting}[language=Matlab]
+function y =  myfun(x, A, phi, y0)
+if nargin < 4
+    y0 = 0;
+    if nargin < 3
+        phi = 0;
+        if nargin < 2
+            A = 1;
+        end
+    end
+end
+y = A*cos(x + phi) + y0;
+end
+\end{lstlisting}
+注意函数体中使用了一个特殊的变量 \texttt{nargin}， 每当函数被调用时， 这个变量的值将会等于输入变量的个数（同理， \texttt{nargout} 将等于输出变量的个数）． 以上定义的函数允许 1-4 个输入变量， 函数体中的 2-10 行根据 \texttt{nargin} 的值对没有输入的几个变量依次赋值． 例如在控制行中调用该函数
+\begin{Command}
+>> myfun([0, pi/2])\\
+ans = 1.0000    0.0000\\
+>> myfun(0, 1, pi/2)\\
+ans = 0.0000
+\end{Command}
+
+
+
+
+
+
+
+
+
+
+% 未完成： 如何忽略输入变量和输出变量，如何判断变量输入的个数等．
