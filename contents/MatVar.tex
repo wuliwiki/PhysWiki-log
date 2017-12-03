@@ -1,0 +1,261 @@
+% Matlab 的变量与矩阵
+
+\pentry{Matlab 简介\upref{Matlab}}
+
+\subsection{变量与矩阵}
+\textbf{变量（variable)}可用于传递数据．变量名可以用含有多个字母，数字和下划线，注意变量名区分大小写，且首字符只能是字母．用等号对变量赋值，变量必须在等号左边，等号右边的运算结果会储存在变量中，直到再次被赋值．
+\begin{Command}
+>> a = 1.2/3.4 + (5.6+7.8)*9 -1 \\
+a = 119.9529 \\
+>> b = atan(a + 1) \\
+b = 1.5625
+\end{Command}
+如果新的变量第一次被赋值，它会自动出现在 Workspace 窗口中．注意 Workspace 中的一个特殊的变量 \texttt{ans}，如果命令的输出结果没有赋值给变量，就会自动赋值给 \texttt{ans}．注意一般不要对 \texttt{ans} 赋值． 另外两个特殊的变量是 \texttt{pi} （圆周率）和 \texttt{i} （虚数单位）， 一般也不要对他们赋值．
+
+另外，如果在命令后面加分号（semicolon）“\,\texttt{;}”，则命令执行后不输出结果．也可以用分号把多个命令写到一行．
+\begin{Command}
+>> 1 + 1; a = ans\^{}2 \\
+a = 4
+\end{Command}
+用 Editor 编写程序时，每个命令后面都需要加分号， 需要在 Command Window 输出时， 用 \texttt{disp} 函数．
+\begin{Command}
+>> disp('something'); disp(10);\\
+something\\
+10
+\end{Command}
+
+\texttt{clear} 命令可以清空 Workspace 中的所有变量，用 \texttt{clear <var1>,<var2> ...} 清除指定的变量（\texttt{<var1>,<var2>}是变量名）．用 \texttt{clc} 命令可以清空 Command Window （按上箭头仍然可以查看历史命令）．
+
+本书只涉及到 3 种\textbf{变量类型（class）}：\textbf{双精度（double）}，\textbf{字符（char）} 和 \textbf{逻辑（logical）．}
+
+双精度变量用于储存数值，有效数字约为 16 位（如果是复数，实部和虚部各 16 位），取值范围约为 $10^{-308}$ 到 $10^{308}$． 如无变量类型声明，所有命令中出现的常数及储存数值的变量都为 double．
+
+Matlab 中的所有变量都可以理解为\textbf{矩阵}，单值变量（标量，scalar）可以理解为 $1\times 1$ 的矩阵，只有一行或一列的矩阵叫做\textbf{行矢量（row vector）}和\textbf{列矢量（column vector）}．一些简单的矩阵操作如下
+\begin{Command}
+>> a = [1,2,3] \\
+a = 1\ \ 2\ \ 3
+\end{Command}
+用方括号创建矩阵，用逗号分隔每行的矩阵元，行矢量中逗号可省略
+\begin{Command}
+>> a = [1 2 3] \\
+a = 1\ \ 2\ \ 3
+\end{Command}
+用分号分隔行
+\begin{Command}
+>> b = [1;2;3] \\
+b = \par
+1 \par
+2 \par
+3 \\
+>> c = [1 2 3; 2 3 4; 3 4 5]\\
+c = \par
+1\ \ 2\ \ 3 \par
+2\ \ 3\ \ 4 \par
+3\ \ 4\ \ 5
+\end{Command}
+方括号还可以用来合并矩阵（注意矩阵尺寸必须合适）
+\begin{Command}
+>> d = [a;a] \\
+d = \par
+1\ \ 2\ \ 3 \par
+1\ \ 2\ \ 3 \\
+>> e = [a a] \\
+e = \par
+1\ \ 2\ \ 3\ \ 1\ \ 2\ \ 3
+\end{Command}
+用 \texttt{size} 函数获取矩阵尺寸，用 \texttt{numel} 函数获取矩阵元个数
+\begin{Command}
+>> size(d) \\
+ans = 2\ \ 3 \\
+>> size(d,1) \\
+ans = 2 \\
+>> numel(d) \\
+ans = 6
+\end{Command}
+用 \texttt{zeros} 函数生成全零矩阵
+\begin{Command}
+>> zeros(2,3) \\
+ans = \par
+0\ \ 0\ \ 0 \par
+0\ \ 0\ \ 0
+\end{Command}
+用 \texttt{zeros([2,3])} 和 \texttt{zeros(size(d))} 结果也相同．用 \texttt{ones} 可以生成全 1 矩阵，也可以乘以任意常数
+\begin{Command}
+>> ones(2,3)*5 \\
+ans = \par
+5\ \ 5\ \ 5 \par
+5\ \ 5\ \ 5
+\end{Command}
+用 \texttt{eye(N)} 生成 $N\times N$ 的单位矩阵，用 \texttt{rand(M,N)} 生成随机矩阵，矩阵元从 0 到 1 均匀分布．用 \texttt{M:step:N} 生成等差数列（行矢量），例如
+\begin{Command}
+>> 1:2:10 \\
+ans = 1\ \ 3\ \ 5\ \ 7\ \ 9 \\
+>> 0:pi/3:pi*2 \\
+ans = 0\ \ 1.0472\ \ 2.0944\ \ 3.1416\ \ 4.1888\ \ 5.2360\ \ 6.2832 \\
+>> 10:-2:1 \\
+ans = 10\ \ 8\ \ 6\ \ 4\ \ 2
+\end{Command}
+如果只用一个冒号， 那么间隔默认为 1
+\begin{Command}
+>> 1:3 \\
+ans = 1\ \ 2\ \ 3
+\end{Command}
+用 \texttt{linspace(x1,x2,Nx)} 生成指定首项尾项和项数的等差数列（行矢量）
+\begin{Command}
+>> linspace(0,pi,4) \\
+ans = 0\ \ 1.0472\ \ 1.2566\ \ 2.0944\ \ 3.1416
+\end{Command}
+
+下面介绍矩阵运算．同规格的尺寸可以进行 \texttt{+} 和 \texttt{-} 运算，矩阵和标量也可以， 结果是把每个矩阵元加（减）标量；矩阵乘法\texttt{*} 既可以把常数与矩阵相乘，也可以进行数学上的矩阵乘法；矩阵的幂“\texttt{\^{}}”相当于矩阵与自己多次相乘；“\texttt{/}”可以把矩阵除以一个常数．
+\begin{Command}
+>> a = [1 2; 3 4]; b = [1 -1; 2 -2]; \\
+>> a + b \\
+ans = \par
+2\ \ 1 \par
+5\ \ 2\\
+>> a * b \\
+ans = \par
+5\ \ -5 \par
+11\ \ -11
+\end{Command}
+若要两个尺寸相同，可进行\textbf{逐个元素运算}，如
+\begin{Command}
+>> a .* b \\
+ans = \par
+1\ \ -2 \par
+6\ \ -8\\
+>> a.\^{}2 \\
+ans = \par
+1\ \ 4 \par
+9\ \ 16 \\
+>> a ./ b \\
+ans = \par
+1.0000\ \ -2.0000 \par
+1.5000\ \ -2.0000
+\end{Command}
+单引号“\texttt{'}”可以使实数矩阵转置，或使复矩阵取厄米共轭．若需要对复矩阵转置，用“\texttt{.'}”即可．
+\begin{Command}
+>> c = a + 1i*b \\
+c = \par
+1.0000 + 1.0000i\ \ 2.0000 - 1.0000i \par
+3.0000 + 2.0000i\ \ 4.0000 - 2.0000i \\
+>> c' \\
+ans = \par
+1.0000 - 1.0000i\ \ 3.0000 - 2.0000i \par
+2.0000 + 1.0000i\ \ 4.0000 + 2.0000i \\
+>> c.' \\
+ans = \par
+1.0000 + 1.0000i\ \ 3.0000 + 2.0000i \par
+2.0000 - 1.0000i\ \ 4.0000 - 2.0000i
+\end{Command}
+Matlab 自带的数学函数一般支持矩阵自变量，结果是该函数对每个矩阵元分别运算
+\begin{Command}
+>> cos(0:pi/4:pi)\\
+ans = \par
+1.0000\ \ 0.7071\ \ 0.0000\ \ -0.7071\ \ -1.0000
+\end{Command}
+用矢量运算可以使代码简短易懂，且提高计算效率．
+
+字符型变量一般用于控制行输出结果或对生成的图片进行标注．把 \texttt{N} 个字符放在一对单引号内，可生成 \texttt{1 $\times$ N} 的字符类型数组．
+\begin{Command}
+>> str1 = '\!这是一个字符串'; str2 = 'this is a string' \\
+>> [str1, ',', str2] \\
+ans = \par
+这是一个字符串, this is a string \\
+>> numel(str) \\
+ans = 24
+\end{Command}
+把双精度变类型变为字符串用 \texttt{num2str} 函数（注意“2”的读音与“to”相同，“num”代表“number”，“str”代表字符串“string”），通常用于与其他字符矩阵合并，如
+\begin{Command}
+>> number = 3; str = ['The number is ', num2str(number), '.'] \\
+str = \par
+The number is 3.
+\end{Command}
+若要在字符串中加入英文单引号，可用两个英文单引号表示．
+
+逻辑变量只能具有 \texttt{0} 或 \texttt{1} 两个值，分别代表\textbf{假（false）}和\textbf{真（true）}．最常用的地方是判断语句 \texttt{if} 的后面以及获取矩阵元．逻辑算符有
+\begin{Command}
+>，>=（大于等于），<，<=，==（等于）
+\end{Command}
+可用于比较双精度数组，返回逻辑型数组
+\begin{Command}
+>> L = 1 + 1 > 3 \\
+L = 0
+\end{Command}
+逻辑“与”，“或”，“非”算符分别为（仅用于逻辑标量）\texttt{\&\&，||，\texttilde}．例如
+\begin{Command}
+>> 1 > 0 \&\& 2 > 1 \\
+ans = 1 \\
+>> 1 > 0 || 2 < 1 \\
+ans = 1
+>> ~ (1 > 0)
+\end{Command}
+只有两边都为真时，与运算才能为真．至少有一边为真，或运算就为真．非运算把真假互换，注意必须要加括号．
+
+\textbf{矩阵索引} 用于表示矩阵部分矩阵元，例如
+\begin{Command}
+>> a = [1 2 3; 4 5 6; 7 8 9]; \\
+ans = \par
+1\ \ 2\ \ 3 \par
+4\ \ 5\ \ 6 \par
+7\ \ 8\ \ 9 \\
+>> a(1,2) \\
+ans = 2 \\
+>> a(2:3,1) \\
+ans = \par
+4 \par
+7 \\
+>> a(2:3,1:2) \\
+ans = \par
+4\ \ 5 \par
+7\ \ 8 \\
+>> a([2,3],[1,2]) \\
+ans = \par
+4\ \ 5 \par
+7\ \ 8 \\
+>> a(:,2) \\
+ans = \par
+2 \par
+5 \par
+8 \\
+>> a(1:end-1,2:3) \\
+ans = \par
+2\ \ 3 \par
+5\ \ 6
+\end{Command}
+其中 \texttt{end} 表示某维度的最大索引（仅在索引中有效）．以上的格式可以归结为“在小括号中用逗号把行矢量隔开”．注意索引不仅可以用来取值，还可以放在等号左边赋值．
+\begin{Command}
+>> b = a; b(1:3) = a(2:4) \\
+b = \par
+4\ \ 2\ \ 3 \par
+7\ \ 5\ \ 6 \par
+2\ \ 8\ \ 9
+\end{Command}
+要求左边的矩阵元个数等于右边．唯一的例外是当右边为标量
+\begin{Command}
+b(1:3) = 0 \\
+b = \par
+0\ \ 2\ \ 3 \par
+0\ \ 5\ \ 6 \par
+0\ \ 8\ \ 9 
+\end{Command}
+我们还可以用单个索引
+\begin{Command}
+>> a(2:5)\\
+ans = 4\ \ 7\ \ 2\ \ 5 \\
+>> a(7:end)\\
+ans = 3\ \ 6\ \ 9
+\end{Command}
+注意单个索引的顺序是先增加第一个维度（行标），再增加第二个维度（列标）．
+
+我们还可以用相同大小逻辑数组索引
+\begin{Command}
+>> mark = logical([1 0 0; 0 0 1; 1 0 0]); a(mark) \\
+ans = \par 1 \par 7 \par 6
+\end{Command}
+逻辑索引常见的例子如
+\begin{Command}
+>> a(a-3 <= 1) \\
+ans = \par 1 \par 4 \par 2 \par 3
+\end{Command}
+注意逻辑索引中不能使用双精度类型代替逻辑类型．
