@@ -3,14 +3,14 @@
 \pentry{Matlab 简介\upref{Matlab}}
 
 \subsection{变量与矩阵}
-\textbf{变量（variable)}可用于传递数据．变量名可以用含有多个字母，数字和下划线，注意变量名区分大小写，且首字符只能是字母．用等号对变量赋值，变量必须在等号左边，等号右边的运算结果会储存在变量中，直到再次被赋值．
+\textbf{变量（variable)}可用于储存数据并通过变量名获取变量值．变量名可以由多个字母，数字和下划线组成． 注意变量名区分大小写，且首字符只能是字母． 用等号可以对变量赋值， 被赋值的变量放在等号左边， 等号右边表达式的运算结果会储存在被赋值的变量中， 直到再次被赋值．
 \begin{Command}
 >> a = 1.2/3.4 + (5.6+7.8)*9 -1 \\
 a = 119.9529 \\
 >> b = atan(a + 1) \\
 b = 1.5625
 \end{Command}
-如果新的变量第一次被赋值，它会自动出现在 Workspace 窗口中．注意 Workspace 中的一个特殊的变量 \texttt{ans}，如果命令的输出结果没有赋值给变量，就会自动赋值给 \texttt{ans}．注意一般不要对 \texttt{ans} 赋值． 另外两个特殊的变量是 \texttt{pi} （圆周率）和 \texttt{i} （虚数单位）， 一般也不要对他们赋值．
+如果新的变量第一次被赋值，它会自动出现在 Workspace 窗口中．注意 Workspace 中的一个特殊的变量 \texttt{ans}，如果命令的输出结果没有赋值给变量，就会自动赋值给 \texttt{ans}．注意一般不要对 \texttt{ans} 赋值． 另外两个特殊的变量是 \texttt{pi} （圆周率）和 \texttt{i} （虚数单位）， 一般也不要对他们赋值． 自然对数底没有对应的变量， 若要使用自然对数底， 用 \texttt{exp(1)} 即可．
 
 另外，如果在命令后面加分号（semicolon）“\,\texttt{;}”，则命令执行后不输出结果．也可以用分号把多个命令写到一行．
 \begin{Command}
@@ -19,7 +19,7 @@ a = 4
 \end{Command}
 用 Editor 编写程序时，每个命令后面都需要加分号， 需要在 Command Window 输出时， 用 \texttt{disp} 函数．
 \begin{Command}
->> disp('something'); disp(10);\\
+>> disp({\color{string}'something'}); disp(10);\\
 something\\
 10
 \end{Command}
@@ -28,9 +28,11 @@ something\\
 
 本书只涉及到 3 种\textbf{变量类型（class）}：\textbf{双精度（double）}，\textbf{字符（char）} 和 \textbf{逻辑（logical）．}
 
-双精度变量用于储存数值，有效数字约为 16 位（如果是复数，实部和虚部各 16 位），取值范围约为 $10^{-308}$ 到 $10^{308}$． 如无变量类型声明，所有命令中出现的常数及储存数值的变量都为 double．
+\subsection{双精度变量}
 
-Matlab 中的所有变量都可以理解为\textbf{矩阵}，单值变量（标量，scalar）可以理解为 $1\times 1$ 的矩阵，只有一行或一列的矩阵叫做\textbf{行矢量（row vector）}和\textbf{列矢量（column vector）}．一些简单的矩阵操作如下
+双精度变量用于储存数值，有效数字约为 16 位（如果是复数，实部和虚部各 16 位），取值范围约为 $10^{-308}$ 到 $10^{308}$． 如无变量类型声明，所有命令中出现的常数及储存数值的变量都为 \texttt{double}．
+
+Matlab 中的所有变量都可以理解为\textbf{矩阵}，单值变量（\texttt{标量}，scalar）可以理解为 \texttt{1×1} 的矩阵，只有一行或一列的矩阵叫做\textbf{行矢量（row vector）}和\textbf{列矢量（column vector）}．一些简单的矩阵操作如下
 \begin{Command}
 >> a = [1,2,3] \\
 a = 1\ \ 2\ \ 3
@@ -148,6 +150,18 @@ ans = \par
 1.0000 + 1.0000i\ \ 3.0000 + 2.0000i \par
 2.0000 - 1.0000i\ \ 4.0000 - 2.0000i
 \end{Command}
+使用 \texttt{fliplr} 和 \texttt{flipud} 函数可以分别把矩阵左右翻转和上下翻转， 例如
+\begin{Command}
+>> fliplr(a)\\
+ans = \par
+2\ \ 1\par
+4\ \ 3\\
+>> flipud(a)\\
+ans = \par
+3\ \ 4\par
+1\ \ 2
+\end{Command}
+
 Matlab 自带的数学函数一般支持矩阵自变量，结果是该函数对每个矩阵元分别运算
 \begin{Command}
 >> cos(0:pi/4:pi)\\
@@ -156,41 +170,17 @@ ans = \par
 \end{Command}
 用矢量运算可以使代码简短易懂，且提高计算效率．
 
-字符型变量一般用于控制行输出结果或对生成的图片进行标注．把 \texttt{N} 个字符放在一对单引号内，可生成 \texttt{1 $\times$ N} 的字符类型数组．
+用 \texttt{sum} 函数可以分别求矩阵每列或每行的和． 当矩阵为行矢量或列矢量时， \texttt{sum} 对所有矩阵元求和． 其他情况下， \texttt{sum} 默认对每列求和， 若想对每行求和， 可以在第二个输入变量中输入 \texttt{2} （行是矩阵的第二个维度）． 例如
 \begin{Command}
->> str1 = '\!这是一个字符串'; str2 = 'this is a string' \\
->> [str1, ',', str2] \\
-ans = \par
-这是一个字符串, this is a string \\
->> numel(str) \\
-ans = 24
+>> a = [1,2; 3,4];\\
+>> sum(a)\\
+ans = 4\ \ 6\\
+>> sum(a,2)\\
+ans =\par 3\par 7
 \end{Command}
-把双精度变类型变为字符串用 \texttt{num2str} 函数（注意“2”的读音与“to”相同，“num”代表“number”，“str”代表字符串“string”），通常用于与其他字符矩阵合并，如
-\begin{Command}
->> number = 3; str = ['The number is ', num2str(number), '.'] \\
-str = \par
-The number is 3.
-\end{Command}
-若要在字符串中加入英文单引号，可用两个英文单引号表示．
+用 \texttt{mean} 函数可以求平均值， 使用格式与 \texttt{sum} 相同．
 
-逻辑变量只能具有 \texttt{0} 或 \texttt{1} 两个值，分别代表\textbf{假（false）}和\textbf{真（true）}．最常用的地方是判断语句 \texttt{if} 的后面以及获取矩阵元．逻辑算符有
-\begin{Command}
->，>=（大于等于），<，<=，==（等于）
-\end{Command}
-可用于比较双精度数组，返回逻辑型数组
-\begin{Command}
->> L = 1 + 1 > 3 \\
-L = 0
-\end{Command}
-逻辑“与”，“或”，“非”算符分别为（仅用于逻辑标量）\texttt{\&\&，||，\texttilde}．例如
-\begin{Command}
->> 1 > 0 \&\& 2 > 1 \\
-ans = 1 \\
->> 1 > 0 || 2 < 1 \\
-ans = 1
->> ~ (1 > 0)
-\end{Command}
-只有两边都为真时，与运算才能为真．至少有一边为真，或运算就为真．非运算把真假互换，注意必须要加括号．
+\subsection{矩阵索引}
 
 \textbf{矩阵索引} 用于表示矩阵部分矩阵元，例如
 \begin{Command}
@@ -223,7 +213,7 @@ ans = \par
 2\ \ 3 \par
 5\ \ 6
 \end{Command}
-其中 \texttt{end} 表示某维度的最大索引（仅在索引中有效）．以上的格式可以归结为“在小括号中用逗号把行矢量隔开”．注意索引不仅可以用来取值，还可以放在等号左边赋值．
+其中 \texttt{end} 表示某维度的最大索引． 以上的格式可以归结为“在小括号中用逗号把行矢量隔开”．注意索引不仅可以用来取值，还可以放在等号左边赋值．
 \begin{Command}
 >> b = a; b(1:3) = a(2:4) \\
 b = \par
@@ -246,16 +236,90 @@ ans = 4\ \ 7\ \ 2\ \ 5 \\
 >> a(7:end)\\
 ans = 3\ \ 6\ \ 9
 \end{Command}
-注意单个索引的顺序是先增加第一个维度（行标），再增加第二个维度（列标）．
+注意单个索引的顺序是先增加第一个维度（行标），再增加第二个维度（列标）． 虽然上面都是以双精度矩阵为例， 但这些索引方法适用于任何数据类型的矩阵．
 
-我们还可以用相同大小逻辑数组索引
+\subsection{字符变量}
+
+字符型变量一般用于控制行输出结果或对生成的图片进行标注．把 \texttt{N} 个字符放在一对单引号内，可生成 \texttt{1×N} 的字符类型数组．
 \begin{Command}
+>> str1 = {\color{string}'\!这是一个字符串'}; str2 = {\color{string}'this is a string'};\\
+>> [str1, {\color{string}','}, str2] \\
+ans = '\!这是一个字符串, this is a string'\\
+>> numel(str) \\
+ans = 24
+\end{Command}
+把双精度变类型变为字符串可以用 \texttt{num2str} 函数（注意 \texttt{2} 的英文读音与“to”相同， \texttt{num} 代表“number”， \texttt{str} 代表字符串“string”），通常用于与其他字符矩阵合并，如
+\begin{Command}
+>> number = 3; str = [{\color{string}'The number is'}, num2str(number), {\color{string}'.'}] \\
+str = 'The number is 3.'
+\end{Command}
+若要在字符串中加入英文单引号，可用两个英文单引号表示．
+
+\subsection{逻辑变量}
+
+逻辑变量只能具有 \texttt{0} 或 \texttt{1} 两个值，分别代表\textbf{假（false）}和\textbf{真（true）}．最常用的地方是判断语句 \texttt{if} 的后面以及获取矩阵元．逻辑算符有
+\begin{Command}
+>，>=（大于等于），<，<=，==（等于）
+\end{Command}
+可用于比较双精度数组，返回逻辑型数组
+\begin{Command}
+>> L = 1 + 1 > 3 \\
+L = {\color{blue}\underline{logical}} 0
+\end{Command}
+在控制行中， 输出的 \texttt{\color{blue}\underline{logical}} 与 \texttt{0} 各占一行， 这里为了节约空间将其写成一行． 逻辑“与”，“或”，“非”算符分别为（仅用于逻辑标量）\texttt{\&\&，||，\texttilde}． 当算符两边都为真时，与运算才能为真， 若至少有一边为真，或运算就为真． 非运算用于把真假互换． 例如
+\begin{Command}
+>> 1 > 0 \&\& 2 > 1 \\
+ans = {\color{blue}\underline{logical}} 1\\
+>> 1 > 0 || 2 < 1 \\
+ans = {\color{blue}\underline{logical}} 1\\
+>> \~ {}(1 > 0)\\
+ans = {\color{blue}\underline{logical}} 0
+\end{Command}
+注意由于非运算的优先级比 \texttt{>} 运算要高， 所以最后一条命令必须要加括号．
+
+在需要的时候， 双精度变量可以自动转换为逻辑变量， 规则是只有双精度的 0 转换为逻辑 0， 其他双精度值一律转换为逻辑 1． 如
+\begin{Command}
+>> 1.3 \&\& -0.8 \\
+ans = {\color{blue}\underline{logical}} 1
+\end{Command}
+
+除了上文中介绍的索引方法外， 我们还可以用相同大小逻辑数组索引任意矩阵． 注意逻辑索引的输出结果是一个列矢量， 以下为了节约空间我们将输出结果改为行矢量．
+\begin{Command}
+>> a = [1 2 3; 4 5 6; 7 8 9]; \\
 >> mark = logical([1 0 0; 0 0 1; 1 0 0]); a(mark) \\
-ans = \par 1 \par 7 \par 6
+ans = 1\ \ 7\ \ 6
 \end{Command}
 逻辑索引常见的例子如
 \begin{Command}
 >> a(a-3 <= 1) \\
-ans = \par 1 \par 4 \par 2 \par 3
+ans = 1\ \ 4\ \ 2\ \ 3
 \end{Command}
 注意逻辑索引中不能使用双精度类型代替逻辑类型．
+
+\texttt{find} 函数可以用于寻找逻辑矩阵中所有值为 1 的矩阵元的位置． 如果只用一个输出变量（或不提供输出变量）， 函数返回单索引， 如果提供两个输出变量， 函数返回行标和列标索引． 注意输出变量仍然是列矢量， 为了节约空间以下记为行矢量． 例如
+\begin{Command}
+>> a = [1, 0; 0, 1]\\
+a =\par
+1\ \ 0\par
+0\ \ 1\\
+>> find(a)\\
+ans = 1\ \ 4\\
+>> [c, r] = find(a)\\
+c = 1\ \ 2\\
+r = 1\ \ 2
+\end{Command}
+注意以上的双精度矩阵 \texttt{a} 被自动转换为逻辑矩阵． 
+
+\texttt{any} 函数用于判断逻辑矩阵中的每一列是否存在任何值为“真” 的矩阵元， 若有， 则返回真， 否则返回假． \texttt{all} 函数用于判断逻辑矩阵中的每一列是否所有矩阵元都为“真”， 若是， 返回真， 否则返回假． 这两个函数的使用格式与 \texttt{sum} 和 \texttt{mean} 类似， 当第二个输入变量为 \texttt{2} 时， 对每行进行操作．
+\begin{Command}
+>> a = [1 6 7; 2 7 1; 3 8 9];\\
+>> all(a > 5)\\
+ans = 1×3 {\color{blue}\underline{logical}} array\par
+0\ \ 1\ \ 0\\
+>> any(a > 7, 2)\\
+ans = 3×1 {\color{blue}\underline{logical}} array\par
+0\par 0\par 1\\
+>> all(a(:) < 10)\\
+ans = {\color{blue}\underline{logical}} 1
+\end{Command}
+
