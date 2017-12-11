@@ -175,6 +175,53 @@ int FindEnv(vector<int>& ind, const CString& str, CString env)
 	}
 }
 
+// find inline equations using $$
+// indices of every $ appended to ind.
+// return number of $$ environments found
+int FindInline0(vector<int>& ind, const CString& str, int begin, int end)
+{
+	int i, N{};
+	TCHAR c, c0 = ' ';
+	for (i = begin; i <= end; ++i)
+	{
+		c = str.GetAt(i);
+		if (c == '$' && c0 != '\\')
+		{
+			ind.push_back(i);
+			++N;
+		}
+		c0 = c;
+	}
+	if (N % 2 != 0)
+		return -1;
+	return N/2;
+}
+
+// find inline equations using $$
+// need the result from equation environment
+// return the number of $$ environments found.
+int FindInline(vector<int>& ind, const CString& str, vector<int>& indEq)
+{
+	ind.resize(0);
+	int N{}; // number of $$
+	int Neq = indEq.size() / 2; // number of equation environments
+	if (Neq == 0)
+	{
+		N = FindInline0(ind, str, 0, str.GetLength() - 1);
+		if ( N < 0)
+		{ cout << "error!"; return -1; }
+	}
+	else
+	{
+		N = FindInline0(ind, str, 0, indEq[0]);
+		for (int i = 1; i < Neq*2 - 1; i += 2)
+			N += FindInline0(ind, str, indEq[i], indEq[i+1]);
+		N += FindInline0(ind, str, indEq.back(), str.GetLength() - 1);
+	}
+	return N;
+}
+
+
 // match braces
 // return -1 means failure, otherwise return number of {} paired
 // output ind_left, ind_right, ind_RmatchL
@@ -245,43 +292,75 @@ int RemoveBraces(vector<int>& ind_left, vector<int>& ind_right,
 	return N;
 }
 
-// process one file and rewrite
+// remove extra {} from equation environment and rewrite file
 // return total {} deleted
-int OneFile(CString path)
+int OneFile1(CString path)
 {
 	CString str = ReadUTF8(path); // read file
 
-								  // get all the equation environment scopes
+	// get all the equation environment scopes
+
 	vector<int> eqscope;
 	if (FindEnv(eqscope, str, _T("equation")) < 0)
 	{
 		cout << "error!"; return 0;
 	}
-
 	// match  and remove braces
 	vector<int> ind_left, ind_right, ind_RmatchL;
 	int N{}; // total {} removed
 	for (int i = eqscope.size() - 1; i > 0; i -= 2)
 	{
-		int ret = MatchBraces(ind_left, ind_right, ind_RmatchL, 
+		int Npair = MatchBraces(ind_left, ind_right, ind_RmatchL, 
 			str, eqscope[i - 1], eqscope[i]);
-		N += RemoveBraces(ind_left, ind_right, ind_RmatchL, str);
+		if (Npair > 0)
+			N += RemoveBraces(ind_left, ind_right, ind_RmatchL, str);
 	}
-
 	if (N > 0)
 		WriteUTF8(str, path); // write file
 	return N;
 }
 
+// remove extra {} from $$ environment and rewrite file
+// return total number of {} pairs removed
+int OneFile2(CString path)
+{
+	CString str = ReadUTF8(path); // read file
+
+	// get all the equation environment scopes
+	vector<int> indEq;
+	if (FindEnv(indEq, str, _T("equation")) < 0)
+	{ cout << "error!"; return 0; }
+	vector<int> ind; // indices for all the $.
+	if (FindInline(ind, str, indEq) == 0)
+		return 0;
+
+	// match  and remove braces
+	vector<int> ind_left, ind_right, ind_RmatchL;
+	int Npair{}; // total {} pairs found
+	int N{}; // total {} removed
+	for (int i = ind.size() - 1; i > 0; i -= 2)
+	{
+		int Npair = MatchBraces(ind_left, ind_right, ind_RmatchL,
+			str, ind[i - 1], ind[i]);
+		if (Npair > 0)
+			N += RemoveBraces(ind_left, ind_right, ind_RmatchL, str);
+	}
+	// write file
+	if (N > 0)
+		WriteUTF8(str, path);
+	return N;
+}
+
 void main()
 {
-	CString path0 = _T("C:\\Users\\addis\\Documents\\GitHub\\PhysWiki\\contents\\");
+	CString path0 = _T("C:\\Users\\addis\\Desktop\\");
+		//_T("C:\\Users\\addis\\Documents\\GitHub\\PhysWiki\\contents\\");
 	vector<CString> names = GetFileNames(path0, _T("tex"));
 	int N;
 	for (int i{}; i < names.size(); ++i)
 	{
 		wcout << names[i].GetString() << _T("...");
-		N = OneFile(path0 + names[i]);
+		N = OneFile2(path0 + names[i]);
 		cout << N << endl;
 	}
 }
