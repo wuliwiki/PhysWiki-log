@@ -17,7 +17,6 @@
 \item 确保所有文档可以顺利编译．
 \item 解决编译产生的 warning．
 \item 检查变化的内容．
-\item 清除编译产生的中间文件， 包括 content 文件夹中的非 tex 文件．
 \item 把 ManicTime 记录的写作时间记录到“计时.txt”．
 \end{itemize}
 每次 commit 的标题必须是下列之一
@@ -25,7 +24,10 @@
 \item 常规更新：包括完善词条，新词条等．
 \item 词条统计：统计文件夹，对照表，和书中的词条，查看不一致或缺失．
 \item 模板更新：模板有更新．
+\item 多个文件：在多个文件中修改某一格式规范， 这种修改比较危险， 需要谨慎．
 \end{itemize}
+Repository 中创建 “.gitignore” 文件，忽略所有以下后缀名的文件：*.toc， *.aux， *.log， *.out， *synctex.gz．
+
 词条统计的方法： 首先把 contents 文件夹中的所有文件名按顺序排列， 复制到表格中， 然后把词条对照表中的所有标签在表格中找到对应项， 做标记， 并把对照表中的词条名粘贴到表格中． 最后到 PhysWiki.tex 中逐个把标签在表格中找到对应项， 做标记， 对照词条名， 并对照词条文件中第一行的词条名．
 
 \subsection{词条编写规范}
@@ -34,7 +36,7 @@
 
 \subsubsection{黑色的小标题}
 
-正文必须使用中文的括号，逗号，引号，冒号，分号，问号，感叹号，以及全角实心的句号． 如 “牛顿—莱布尼兹公式” 中的横线必须用中文但破折号． 所有的标点符号前面不能有空格，后面要有空格． 行内公式用单个美元符号，且两边要有空格，例如 $a^2+b^2=c^2$， 后面有标点符号的除外．方便的办法是先全部使用中文标点，最后再把所有空心句号替换成全角实心句号．
+正文必须使用中文的括号，逗号，引号，冒号，分号，问号，感叹号，以及全角实心的句号． 如 “牛顿—莱布尼兹公式” 中的横线必须用中文单破折号． 所有的标点符号前面不能有空格，后面要有空格． 行内公式用单个美元符号，且两边要有空格，例如 $a^2+b^2=c^2$， 后面有标点符号的除外．方便的办法是先全部使用中文标点，最后再把所有空心句号替换成全角实心句号．
 
 公式的 label 必须要按照“词条标签\_eq编号”的格式，只有需要引用的公式才加标签，编号尽量与显示的编号一致，但原则上不重复即可．图表的标签分别把 eq 改成 fig 和 tab 即可，例题用 ex．但凡是有 \textbackslash caption 命令的，\textbackslash label 需要紧接其后．
 \begin{equation}\label{Sample_eq1}
@@ -54,7 +56,7 @@
 \begin{equation}
 \qty(\frac ab)^2 \qquad \qty[\frac ab]^2 \qquad \qty{ \frac ab}
 \end{equation}
-另外， 常用三角函数和自然指数对数和函数后面的小括号会自动改变尺寸（Physics 宏包功能），若要给他们加幂，用中括号
+另外， 常用三角函数和自然指数对数函数后面的小括号会自动改变尺寸（Physics 宏包功能），若要给他们加幂，用中括号
 \begin{equation}
 \sin[2](\frac ab) \qquad \log[2](\frac ab)
 \end{equation}
@@ -84,7 +86,7 @@
 k_1 &= f(y_n, t_n) 
 & k_2 &= f \qty(y_n + h\frac{k_1}{2}, t_n + \frac h2 )\\
 k_3 &= f \qty( y_n + h\frac{k_2}{2}, t_n + \frac h2 ) \qquad
-&k_4 &= f(y_n + hk_3, t_n + h)
+& k_4 &= f(y_n + hk_3, t_n + h)
 }\end{equation}
 左大括号用自定义的 \textbackslash leftgroup 命令， 里面相当于 aligned 环境
 \begin{equation}
@@ -129,10 +131,10 @@ a+b&=c}
 \end{figure}
 在\autoref{Sample_fig1} 中，label 只能放在 caption 的后面，否则编号会出错．由于图片是浮动的，避免使用“上图”，“下图”等词．
 
-再来看一个表格，如\autoref{E_tb1}． 注意标签要放在 caption 后面，使用 tb 命名．
+再来看一个表格，如\autoref{E_tb1}． 注意标签要放在 caption 后面．
 \begin{table}[ht]
 \centering
-\caption{极限 $\E$ 数值验证}\label{E_tb1}
+\caption{极限 $\E$ 数值验证}\label{E_tab1}
 \begin{tabular}{|c|c|c|c|c|c|c|}
 \hline
 $x$ & ${10^{ - 1}}$ & ${10^{ - 2}}$ & ${10^{ - 3}}$ & ${10^{ - 4}}$ & ${10^{ - 5}}$ & ${10^{ - 6}}$ \\
@@ -147,13 +149,10 @@ $(1 + x)^{1/x}$ & 2.59374 & 2.70481 & 2.71692 & 2.71815 & 2.71827 & 2.71828 \\
 \begin{exam}{名称}\label{Sample_ex1}
 在例子中，我们的字体可以自定义，包括公式的字号会保持与内容一致．
 \begin{equation}
-(a+b)^n = \sum_{i=0}^n C_n^i a^i b^{n-i}(n\text{为整数})
+(a+b)^n = \sum_{i=0}^n C_n^i a^i b^{n-i} \quad (n\text{为整数})
 \end{equation}
 \end{exam}
 引用例子同样使用 \textbackslash autoref， 如\autoref{Sample_ex1}． 
-
-
-以下给出一段 Matlab 代码，代码必须有“.m”和“.tex”两个版本，放在 codes 文件夹中．
 
 \subsection{Matlab 代码}
 
