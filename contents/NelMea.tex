@@ -1,0 +1,30 @@
+% Nelder-Mead 算法
+
+\pentry{Matlab}% 未完成
+
+Nelder-Mead 算法是一种求多元函数最小值的算法， 其优点是不需要函数可导。 介绍 blablabla
+
+Matlab 自带的 \texttt{fminsearch} 函数就是使用该算法。 这里进行介绍。需要提供一个初始点。
+
+对于 $N$ 元函数 $f(\vec x)$， 把初始点记为 $\vec x_1$， 然后根据初始点另外生成 $N$ 个点 $\vec x_2\dots\vec x_{N + 1}$， 使 $\vec x_{1 + i}$ 在第的第 $i$ 个分量比 $\vec x_1$ 的大 5\%， 其他分量保持相同。 如果 $\vec x_1$ 的第 $i$ 个分量为零， 那么 $\vec x_{1 + i}$ 的第 $i$ 个分量设为 $0.00025$。
+
+先给这些点按照 $f(x_i)$ 从小到大的顺序重新排序并重命名， 使 $i$ 越大 $f(x_i)$ 越大。
+
+计算前 $N$ 个点的平均位置为
+\begin{equation}
+\vec m = \frac 1N \sum_{i=1}^N \vec x_i
+\end{equation}
+
+
+计算 $\vec x_{N + 1}$ 关于点 $\vec m$ 的反射点为
+\begin{equation}
+\vec r = 2\vec m - \vec x_{N + 1}
+\end{equation}
+
+如果 $f(\vec x_1) \le f(\vec r) < f(\vec x_N)$， 令 $\vec x_{N+1} = \vec r$， 并进入下一个循环。
+
+如果 $f(\vec r) < f(\vec x_1)$， 计算拓展点为
+\begin{equation}
+\vec s = \vec m + 2(\vec m - \vec x_{N+1})
+\end{equation}
+如果 $f(\vec s) < f(\vec r)$， 令 $\vec x_{N+1} = \vec s$ 并进入下一个循环。
