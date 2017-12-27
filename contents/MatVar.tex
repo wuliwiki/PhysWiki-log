@@ -88,7 +88,7 @@ ans = \par
 5\ \ 5\ \ 5 \par
 5\ \ 5\ \ 5
 \end{Command}
-用 \x{eye(N)} 生成 \x{N×N} 的单位矩阵，用 \x{rand(M,N)} 生成随机矩阵，矩阵元从 0 到 1 均匀分布．用 \x{M:step:N} 生成等差数列（行矢量），例如
+用 \x{eye(N)} 生成 \x{N×N} 的单位矩阵． 用 \x{rand(M,N)} 生成随机矩阵，矩阵元从 0 到 1 均匀分布， 如果不提供输入变量， \x{rand} 相当于 \x{rand(1,1)}． 用 \x{M:step:N} 生成等差数列（行矢量），例如
 \begin{Command}
 >> 1:2:10 \\
 ans = 1\ \ 3\ \ 5\ \ 7\ \ 9 \\
@@ -165,14 +165,6 @@ ans = \par
 1\ \ 2
 \end{Command}
 
-Matlab 自带的数学函数一般支持矩阵自变量，结果是该函数对每个矩阵元分别运算． 这样的函数叫做\textbf{矢量化（vectorized）}的函数．
-\begin{Command}
->> cos(0:pi/4:pi)\\
-ans = \par
-1.0000\ \ 0.7071\ \ 0.0000\ \ -0.7071\ \ -1.0000
-\end{Command}
-用矢量化的运算可以使代码简短易懂，且提高计算效率（因为只需要进行一次函数调用）．
-
 用 \x{sum} 函数可以分别求矩阵每列或每行的和． 当矩阵为行矢量或列矢量时， \x{sum} 对所有矩阵元求和． 其他情况下， \x{sum} 默认对每列求和， 若想对每行求和， 可以在第二个输入变量中输入 \x{2} （行是矩阵的第二个维度）． 例如
 \begin{Command}
 >> a = [1,2; 3,4];\\
@@ -182,6 +174,29 @@ ans = 4\ \ 6\\
 ans =\par 3\par 7
 \end{Command}
 用 \x{mean} 函数可以求平均值， 使用格式与 \x{sum} 相同．
+
+给 \x{norm} 函数输入一个行矢量或列矢量时， 得到该矢量的模长（即各矢量元的平方和再开根号）． 
+
+用 \x{det} 函数可以求方阵的行列式\upref{Deter}， 用 “\x{\textbackslash}” 算符可以解线性方程组% 链接未完成
+$\mat A \vec x = \vec b$． 如\footnote{若 \x{det(\mat A) = 0}， 即方程组存在无数个解的时候， \x{\textbackslash} 算符只能得到一个特解． }
+\begin{Command}
+>> A = [1,2; 3,4]; det(A)\\
+ans = -2\\
+>> x = [-1; 1]; b = A*x\\
+b =\par 1\par 1\\
+>> A\textbackslash b\\
+ans = \par 1\par -1
+\end{Command}
+
+
+Matlab 自带的数学函数一般支持矩阵自变量，结果是该函数对每个矩阵元分别运算． 这样的函数叫做\textbf{矢量化（vectorized）}的函数．
+\begin{Command}
+>> cos(0:pi/4:pi)\\
+ans = \par
+1.0000\ \ 0.7071\ \ 0.0000\ \ -0.7071\ \ -1.0000
+\end{Command}
+用矢量化的运算可以使代码简短易懂，且提高计算效率（因为只需要进行一次函数调用）．
+
 
 \subsection{矩阵索引}
 
