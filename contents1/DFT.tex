@@ -3,10 +3,10 @@
 \subsection{结论}
 \pentry{幺正矩阵，傅里叶变换（指数函数）\upref{FT}} % 链接未完成
 
-对两组有序数列 $f_0,f_1,\dots,f_{N-1}$ 和 $g_0,g_2,\dots,g_{N-1}$，正变换和逆变换分别为\footnote{工程上的定义常常是正变换没有 $1/\sqrt{N}$ 因子，逆变换的 $1/\sqrt{N}$ 因子变为 $1/N$． 这样的好处是节省运算量．本书中使用的定义好处是变换为幺正变换，有保持归一化的特点．}
+对两组有序数列 $f_0,f_1,\dots,f_{N-1}$ 和 $g_0,g_2,\dots, g_{N-1}$，正变换和逆变换分别为\footnote{工程上的定义常常是正变换没有 $1/\sqrt{N}$ 因子，逆变换的 $1/\sqrt{N}$ 因子变为 $1/N$． 这样的好处是节省运算量．本书中使用的定义好处是变换为幺正变换，有保持归一化的特点．}
 \begin{align}
-g_p &= \frac{1}{\sqrt{N}}\sum\limits_{q=0}^{N-1} \exp\left(-\frac{2\pi\I}{N} p q \right) f_q \\
-f_q &= \frac{1}{\sqrt{N}}\sum\limits_{p=0}^{N-1} \exp\left(\frac{2\pi\I}{N} p q\right) g_p
+g_p &= \frac{1}{\sqrt{N}}\sum_{q=0}^{N-1} \exp(-\frac{2\pi\I}{N} p q ) f_q \\
+f_q &= \frac{1}{\sqrt{N}}\sum_{p=0}^{N-1} \exp(\frac{2\pi\I}{N} p q) g_p
 \end{align}
 
 \bb{离散傅里叶变换（Discrete Fourier Transform）（DFT）}是一个复数域的正交变换．%链接未完成
@@ -20,7 +20,7 @@ f_q &= \frac{1}{\sqrt{N}}\sum\limits_{p=0}^{N-1} \exp\left(\frac{2\pi\I}{N} p q\
 \end{equation}
 其中
 \begin{equation}
-F_{pq} = \frac{1}{\sqrt{N}} \exp\left(-\frac{2\pi\I}{N} p q \right) \qquad
+F_{pq} = \frac{1}{\sqrt{N}} \exp(-\frac{2\pi\I}{N} p q) \qquad
 \mat F^{-1} = \mat F^\dag
 \end{equation}
 % 未完成：正交矩阵的逆矩阵
@@ -29,12 +29,12 @@ F_{pq} = \frac{1}{\sqrt{N}} \exp\left(-\frac{2\pi\I}{N} p q \right) \qquad
 \subsection{证明 $\mat F$ 的正交性}
 根据正交矩阵的定义，我们需要证明
 \begin{equation}
-\sum\limits_{p=0}^{N-1} F^*_{pq_1}F_{pq_2} = 0 \quad (q_1 \ne q_2)
+\sum_{p=0}^{N-1} F^*_{pq_1} F_{pq_2} = 0 \quad (q_1 \ne q_2)
 \end{equation}
 而
 \begin{equation}\label{DFT_eq1}
-\sum\limits_{p=0}^{N-1} F^*_{pq_1}F_{pq_2}
-= \sum\limits_{p=0}^{N-1} \exp\left[\frac{2\pi\I}{N} (q_2-q_1) p \right]
+\sum_{p=0}^{N-1} F^*_{pq_1}F_{pq_2}
+= \sum_{p=0}^{N-1} \exp[\frac{2\pi\I}{N} (q_2-q_1) p]
 \end{equation}
 注意到求和的每一项在复平面上都对应模长为1，幅角为 $(q_2-q_1)p/N$ 个圆周的矢量，% 未完成：这个几何意义要在复数的加法以及指数函数（复数）中介绍！
 而 $N$ 条矢量恰好向不同方向均匀分布，所以相加为 $0$．证毕．
@@ -50,7 +50,7 @@ F_{pq} = \frac{1}{\sqrt{N}} \exp\left(-\frac{2\pi\I}{N} p q \right) \qquad
 
 有时为了对称起见，把矩阵元定义为
 \begin{equation}
-F_{pq} = \frac{1}{\sqrt{N}}\exp\left(-\frac{2\pi\I}{N} p q \right)
+F_{pq} = \frac{1}{\sqrt{N}}\exp(-\frac{2\pi\I}{N} p q)
 \end{equation}
 这样，$\mat F$ 的每一列模长为1，使 $\mat F$ 本身就是幺正矩阵，其逆矩阵等于厄米共轭．
 
