@@ -11,7 +11,7 @@ u_n^j(x_{n'}^j) = \delta_{n,n'}
 \end{equation}
 这样，根据 $N$ 阶 Gauss-Lobatto 数值积分公式
 \begin{equation}
-\bra{u_n^j}\ket{u_{n'}^j} = \int_{x_j}^{x_{j+1}} u_n^j(x) u_{n'}^j(x) \D x = \frac{x_{j+1}-x_j}{2} \sum_{i=1}^{N} w_i u_n^j(x_i) u_{n'}^j (x_i)
+\bra{u_n^j}\ket{u_{n'}^j} = \int_{x_j}^{x_{j+1}} u_n^j(x) u_{n'}^j(x) \dd{x} = \frac{x_{j+1}-x_j}{2} \sum_{i=1}^{N} w_i u_n^j(x_i) u_{n'}^j (x_i)
 \end{equation}
 如果 $u_n^j$ 的阶数都小于等于 $N-1$， 则上式精确成立．把\autoref{FEDVR_eq1} 代入，可得正交关系
 \begin{equation}
@@ -31,11 +31,10 @@ u_n^j(x) = u_n(y) \qquad y\in[-1,1]
 \end{equation}
 把剩下的基底 $u_N^j(x)$ 定义为
 \begin{equation}
-u_N^j(x) = \left\{\begin{aligned}
-&u_N(y) \quad &&x\in[x_j,x_{j+1}] \\
-&u_1(y)  &&x\in[x_{j+1},x_{j+2}]
-\end{aligned}\right.
-\end{equation}
+u_N^j(x) = \leftgroup{
+&u_N(y) \quad & &x\in[x_j,x_{j+1}] \\
+&u_1(y)  & & x\in[x_{j+1},x_{j+2}]
+}\end{equation}
 现在只要找到 $N$ 个多项式 $u_n(y)$， 就可以找到所有 $u_n^j(x)$ 基底．给 $u_n(y)$ 加上\autoref{FEDVR_eq1} 的条件得
 \begin{equation}\label{FEDVR_eq8}
 u_n(y_i) = \delta_{n,i}
@@ -51,7 +50,7 @@ u_n(y) &= \prod_{i=1}^{n-1} \frac{y-y_i}{y_n-y_i} \prod_{i=n+1}^{N} \frac{y-y_i}
 \end{equation}
 然而，\autoref{FEDVR_eq8} 要求 $u_n(y_n)=1$， 所以我们将\autoref{FEDVR_eq10} 除以它自己在 $y_n$ 处的切线，在 $y=y_n$ 处形成极限类型 $0/0=1$ 即可得到 阶多项式 $u_n(y)$． 
 \begin{equation}\label{FEDVR_eq11}
-u_n(y) = \frac{(1-y^2)P'_{N-1}(y)}{\left[(1-y^2)P'_{N-1}(y)\right]'_y=y_n (y-y_n)}
+u_n(y) = \frac{(1-y^2)P'_{N-1}(y)}{[(1-y^2)P'_{N-1}(y)]'_y} = y_n (y-y_n)
 \end{equation}
 该式与式\autoref{FEDVR_eq9} 事实上是完全相同的多项式，因为所有具有 $N-1$ 个零点的 $N-1$ 阶多项式都可以因式分解成\autoref{FEDVR_eq9} 的形式乘以一个待定常数．用\autoref{FEDVR_eq11} 便于快速地展开多项式（因为勒让德多项式的系数可以直接通过公式计算）．
 
@@ -61,7 +60,7 @@ u_n(y) = \frac{(1-y^2)P'_{N-1}(y)}{\left[(1-y^2)P'_{N-1}(y)\right]'_y=y_n (y-y_n
 \end{equation}
 可以用一个 $N_eN-N_e=1$ 维的列矢量描述波函数
 \begin{equation}
-\vec\psi = {(c_2^1,\dots,c_N^1,\dots,c_2^2,\dots,c_N^2,\dots,c_{N-1}{N_e})}\Her
+\vec\psi = (c_2^1,\dots,c_N^1,\dots,c_2^2,\dots,c_N^2,\dots,c_{N-1}{N_e})\Her
 \end{equation}
 建立全局下标 $\alpha$ , $\beta$， 例如 $\psi_\alpha=c_n^j$ 中 $\alpha=(j-1)(N-1)+(n-1)$． 
 
@@ -69,12 +68,12 @@ u_n(y) = \frac{(1-y^2)P'_{N-1}(y)}{\left[(1-y^2)P'_{N-1}(y)\right]'_y=y_n (y-y_n
 现在讨论在该基底中如何把哈密顿算符转换成矩阵．
  \begin{equation}\begin{aligned}
 H_{\alpha\beta} &= K_{\alpha\beta}+V_{\alpha\beta} \\
-&= -\frac{\hbar^2}{2m} \int_{x_1}^{x_{N_e+1}} u_n^j(x)\vdot u_{n'}^{j'}(x)'' \D x
-+ \int_{x_1}^{x_{N_e+1}} u_n^j(x) u_{n'}^{j'}(x) V(x) \D x
+&= -\frac{\hbar^2}{2m} \int_{x_1}^{x_{N_e+1}} u_n^j(x)\vdot u_{n'}^{j'}(x)'' \dd{x}
++ \int_{x_1}^{x_{N_e+1}} u_n^j(x) u_{n'}^{j'}(x) V(x) \dd{x}
 \end{aligned}\end{equation}
 其中
- \begin{equation}
-V_{\alpha\beta} = \int_{x_1}^{x_{N_e+1}} u_n^j (x) u_{n'}^{j'} (x) V(x) \D x = % 未完成
+\begin{equation}
+V_{\alpha\beta} = \int_{x_1}^{x_{N_e+1}} u_n^j (x) u_{n'}^{j'} (x) V(x) \dd{x} = % 未完成
 \end{equation}
 
 
