@@ -4,34 +4,34 @@
 
 在计算含时薛定谔方程时，若已知某时刻 $t$ 的波函数 $\Psi(\vec r,t)$，要求 $\Psi(\vec r,t+\Delta t)$，通常使用传播算符 % 链接未完成
  \begin{equation}
-U(\Delta t) = \exp(-\frac{\I}{\hbar} \int_{t}^{t+\Delta t} \dd{t} \vdot \Q H(t))
-\approx \exp(-\I\Q H(t+\Delta t/2) \Delta t)
+U(\Delta t) = \exp(-\frac{\I}{\hbar} \int_{t}^{t+\Delta t} \dd{t} \vdot H(t))
+\approx \exp(-\I H(t+\Delta t/2) \Delta t)
 \end{equation}
-其中 $\Q H$ 为哈密顿算符．若 $\Q H$ 不含时，约等号变为等号
+其中 $H$ 为哈密顿算符．若 $H$ 不含时，约等号变为等号
 \begin{equation}
-\Psi(\vec r, t+\Delta t) = \exp(-\I\Q H\Delta t/\hbar)\Psi(\vec r, t)
+\Psi(\vec r, t+\Delta t) = \exp(-\I H\Delta t/\hbar)\Psi(\vec r, t)
 \end{equation}
-通常情况下，用有限个正交归一基底 $\Psi_0,\dots\Psi_{K-1}$ 近似展开 $\Psi(\vec r, t+\Delta t)$，这时，$\Q H$ 可以表示成矩阵的形式．
+通常情况下，用有限个正交归一基底 $\Psi_0,\dots\Psi_{K-1}$ 近似展开 $\Psi(\vec r, t+\Delta t)$，这时，$H$ 可以表示成矩阵的形式．
 \begin{equation}
-H_{ij} = \bra{\Psi_i} \Q H \ket{\Psi_j}
+H_{ij} = \bra{\Psi_i} H \ket{\Psi_j}
 \end{equation}
-这样，幺正算符 $\exp(-\I\Q H\Delta t/\hbar)$ 也可以表示成矩阵．根据定义 % 链接未完成
+这样，幺正算符 $\exp(-\I H\Delta t/\hbar)$ 也可以表示成矩阵．根据定义 % 链接未完成
 \begin{equation}
-\exp(-\I\Q H\Delta t/\hbar) = 1+ (-\I\Q H\Delta t/\hbar) = 1+ (-\I\Q H\Delta t/\hbar) + \frac{1}{2!} (-\I\Q H\Delta t/\hbar)^2\dots
+\exp(-\I H\Delta t/\hbar) = 1+ (-\I H\Delta t/\hbar) = 1+ (-\I H\Delta t/\hbar) + \frac{1}{2!} (-\I H\Delta t/\hbar)^2\dots
 \end{equation}
-此时若把 $\Q H$ 对角化（求解本征方程），得到本征矢列矩阵 $\mat P$ （单位正交阵）以及本征值矩阵 $\mat \Lambda$ （对角矩阵），则可进行基底变换变到 $\Q H$ 矩阵的本征空间求解上式 %（矩阵指数的对角化化简，未完成）
+此时若把 $H$ 对角化（求解本征方程），得到本征矢列矩阵 $\mat P$ （单位正交阵）以及本征值矩阵 $\mat \Lambda$ （对角矩阵），则可进行基底变换变到 $H$ 矩阵的本征空间求解上式 %（矩阵指数的对角化化简，未完成）
 \begin{equation}\ali{
-\exp(-\I\Q H\Delta t/\hbar) &= P\times \rm{diag}(\E^{-\I E_1 t/\hbar},\E^{-\I E_2 t/\hbar}\dots \E^{-\I E_N t/\hbar})\times P_{jk}^{-1}\\
+\exp(-\I H\Delta t/\hbar) &= P\times \rm{diag}(\E^{-\I E_1 t/\hbar},\E^{-\I E_2 t/\hbar}\dots \E^{-\I E_N t/\hbar})\times P_{jk}^{-1}\\
 &= \sum_{j=0}^{K-1} P_{ij} \E^{-\I E_j t/\hbar} P_{jk}^{-1}
 = \sum_{j=0}^{K-1} P_{ij}P_{kj} \E^{-\I E_j t/\hbar} 
 }\end{equation}
-要说明的是，这种算法的误差（除数值计算误差）来源于两个方面，第一是用 $\exp(\I\Q H\Delta t/\hbar)$ 代替 $\exp( -\frac{\I}{\hbar} \int_{t}^{t+\Delta t} \dd{t} \vdot \Q H(t) )$， 但如果 不含时就没有该误差，第二是有限数量的基底不具有完备性，这个误差可以随着基底数量增加而减小．
+要说明的是，这种算法的误差（除数值计算误差）来源于两个方面，第一是用 $\exp(\I H\Delta t/\hbar)$ 代替 $\exp( -\frac{\I}{\hbar} \int_{t}^{t+\Delta t} \dd{t} \cdot H(t) )$， 但如果 不含时就没有该误差，第二是有限数量的基底不具有完备性，这个误差可以随着基底数量增加而减小．
 
 \subsection{Lanczos算法}
 在以上的算法中，选取施密特正交归一化 %(链接未完成)
 的 Krilov 基底作为基底．令 $\Psi_0 \equiv \Psi(\vec r, t)$，  $K$ 阶的 Krilov 基底为
  \begin{equation}
-\qty{ \ket{\Psi_0}, \Q H \ket{\Psi_0}, \Q H^2 \ket{\Psi_0} \dots \Q H^{K-1} \ket{\Psi_0}}
+\qty{ \ket{\Psi_0}, H \ket{\Psi_0}, H^2 \ket{\Psi_0} \dots H^{K-1} \ket{\Psi_0}}
 \end{equation}
 我们把正交归一化后的基底记为
 \begin{equation}
@@ -39,7 +39,7 @@ H_{ij} = \bra{\Psi_i} \Q H \ket{\Psi_j}
 \end{equation}
 这样，用其展开哈密顿算符
 \begin{equation}
-H_{ij}=\mel{\Psi_i}{\Q H}{\Psi_j}
+H_{ij}=\mel{\Psi_i}{H}{\Psi_j}
 \end{equation}
 在算法上，本来我们可以按部就班地按照以上步骤做，然而由于 Krilov 基底的性质，可以通过一些定理（见词条最后）大大减少计算量．正交归一化步骤如下
 
@@ -52,37 +52,37 @@ H_{ij}=\mel{\Psi_i}{\Q H}{\Psi_j}
 \subsubsection{定理1}
 对以上定义的基底
 \begin{equation}
-\qty(1 + \ket{\Psi_j} \bra{\Psi_j} + \ket{\Psi_{j - 1}} \bra{\Psi_{j - 1}} + \ldots + \ket{\Psi_0} \bra{\Psi_0}) \Q H^{j + 1} \ket{\Psi_0}
+\qty(1 + \ket{\Psi_j} \bra{\Psi_j} + \ket{\Psi_{j - 1}} \bra{\Psi_{j - 1}} + \ldots + \ket{\Psi_0} \bra{\Psi_0}) H^{j + 1} \ket{\Psi_0}
 \end{equation}
 与
 \begin{equation}
-\qty( 1 + \ket{\Psi_j}\bra{\Psi_j} + \ket{\Psi_{j - 1}}\bra{\Psi_{j - 1}} + \ldots + \ket{\Psi_0}\bra{\Psi_0}) \Q H \ket{\Psi_j}
+\qty( 1 + \ket{\Psi_j}\bra{\Psi_j} + \ket{\Psi_{j - 1}}\bra{\Psi_{j - 1}} + \ldots + \ket{\Psi_0}\bra{\Psi_0}) H \ket{\Psi_j}
 \end{equation}
 共线．故现在起采用后者进行正交化．
 
 \subsubsection{定理 2}
 \begin{equation}
-\bra{\Psi_{j-1}} \Q H \ket{\Psi_j}  = \sqrt{\braket*{\tilde\Psi_j}} = \beta_j
+\bra{\Psi_{j-1}} H \ket{\Psi_j}  = \sqrt{\braket*{\tilde\Psi_j}} = \beta_j
 \end{equation}
 
 \begin{enumerate}[resume]
-\item 把 $\Q H^2 \ket{\Psi_0}$ 进行施密特正交化，根据两个定理，正交化结果也可以写成
+\item 把 $H^2 \ket{\Psi_0}$ 进行施密特正交化，根据两个定理，正交化结果也可以写成
 \begin{equation}\ali{
-\ket*{\tilde\Psi_2}  &= \qty(1 -\ket{\Psi_1}\bra {\Psi_1}  - \ket{\Psi_0}\bra{\Psi_0}) \Q H \ket{\Psi_1}\\
-&= \Q H \ket{\Psi_1} - \alpha_1 \ket{\Psi_1} - \beta_1 \ket{\Psi_0} \\ 
+\ket*{\tilde\Psi_2}  &= \qty(1 -\ket{\Psi_1}\bra {\Psi_1}  - \ket{\Psi_0}\bra{\Psi_0}) H \ket{\Psi_1}\\
+&= H \ket{\Psi_1} - \alpha_1 \ket{\Psi_1} - \beta_1 \ket{\Psi_0} \\ 
 }\end{equation}
 \item 再次归一化  $\ket{\Psi_2} = \ket*{\tilde\Psi_2} / \braket*{\tilde\Psi_2} = \ket*{\tilde\Psi_2}/\beta_2$
 \end{enumerate}
 
 \subsubsection{定理 3}
 \begin{equation}\ali{
-\ket*{\tilde\Psi_{j+1}} &= \qty(1 - \ket{\Psi_j}\bra{\Psi_j} - \ldots - \ket{\Psi_0}\bra{\Psi_0})\Q H \ket{\Psi_j}\\
-&= \qty(1 - \ket{\Psi_j}\bra{\Psi_j} - \ket{\Psi_{j-1}}\bra{\Psi_{j-1}}) \Q H \ket{\Psi_j} \\
-&= \Q H \ket{\Psi_j} - \alpha_j \ket{\Psi_j} - \beta_j \ket{\Psi_j}
+\ket*{\tilde\Psi_{j+1}} &= \qty(1 - \ket{\Psi_j}\bra{\Psi_j} - \ldots - \ket{\Psi_0}\bra{\Psi_0}) H \ket{\Psi_j}\\
+&= \qty(1 - \ket{\Psi_j}\bra{\Psi_j} - \ket{\Psi_{j-1}}\bra{\Psi_{j-1}}) H \ket{\Psi_j} \\
+&= H \ket{\Psi_j} - \alpha_j \ket{\Psi_j} - \beta_j \ket{\Psi_j}
 }\end{equation}
 这就是最简洁的正交化公式．比起最原始的正交化
 \begin{equation}
-\ket*{\tilde\Psi_{j+1}} = \qty(1 - \ket{\Psi_j}\bra{\Psi_j}  - \ldots - \ket{\Psi_0}\bra{\Psi_0}) \Q H^{j+1} \ket{\Psi_0}
+\ket*{\tilde\Psi_{j+1}} = \qty(1 - \ket{\Psi_j}\bra{\Psi_j}  - \ldots - \ket{\Psi_0}\bra{\Psi_0}) H^{j+1} \ket{\Psi_0}
 \end{equation}
 定理 3 只用到了一个矩阵-矢量乘法，两个矢量数乘和两个矢量减法．
 
@@ -105,55 +105,55 @@ H_{ij}=\mel{\Psi_i}{\Q H}{\Psi_j}
 
 \subsection{定理1证明}
 
-根据施密特正交化的性质，Krilov 基底的前 $j$ 项的与 $\ket{\Psi_0}\dots\ket{\Psi_j}$ 展开同一空间．所以 $\Q H^j\ket{\Psi_0} = c_j\ket{\Psi_j} +\ldots + c_0 \ket{\Psi_0}$，所以（以下所有系数 只是用来表示线性组合，具体值不重要）
+根据施密特正交化的性质，Krilov 基底的前 $j$ 项的与 $\ket{\Psi_0}\dots\ket{\Psi_j}$ 展开同一空间．所以 $H^j\ket{\Psi_0} = c_j\ket{\Psi_j} +\ldots + c_0 \ket{\Psi_0}$，所以（以下所有系数 只是用来表示线性组合，具体值不重要）
 \begin{equation}\ali{
-H^{j+1} \ket{\Psi_0} &= c_j \Q H \ket{\Psi_j} + \Q H \qty(c_{j-1} \ket{\Psi_{j-1}} \dots + c_0 \ket{\Psi_0}) \\
-& = c_j \Q H \ket{\Psi_j} + \Q H \qty(c'_{j-1} H^{j-1} \ket{\Psi_0} + c'_{j-2} \Q H^{j - 2} \ket{\Psi_0} \dots + c'_0 \ket{\Psi_0})  \\
-&= c_j \Q H \ket{\Psi_j} + \qty(c'_{j-1} \Q H^j \ket{\Psi_0} + c'_{j-2} \Q H^{j-1} \ket{\Psi_0} \dots + c'_0 \ket{\Psi_0})  \\
-&= c_j \Q H \ket{\Psi_j} + \qty(c''_{j-1} \ket{\Psi_j} + c''_{j-2} \ket{\Psi_{j-1}}+ \ldots + c''_0 \ket{\Psi_0}) \\ 
+H^{j+1} \ket{\Psi_0} &= c_j H \ket{\Psi_j} + H \qty(c_{j-1} \ket{\Psi_{j-1}} \dots + c_0 \ket{\Psi_0}) \\
+& = c_j H \ket{\Psi_j} + H \qty(c'_{j-1} H^{j-1} \ket{\Psi_0} + c'_{j-2} H^{j - 2} \ket{\Psi_0} \dots + c'_0 \ket{\Psi_0})  \\
+&= c_j H \ket{\Psi_j} + \qty(c'_{j-1} H^j \ket{\Psi_0} + c'_{j-2} H^{j-1} \ket{\Psi_0} \dots + c'_0 \ket{\Psi_0})  \\
+&= c_j H \ket{\Psi_j} + \qty(c''_{j-1} \ket{\Psi_j} + c''_{j-2} \ket{\Psi_{j-1}}+ \ldots + c''_0 \ket{\Psi_0}) \\ 
 }\end{equation}
-把 $\Q H^{j+1}\ket{\Psi_0}$ 施密特正交归一化
+把 $H^{j+1}\ket{\Psi_0}$ 施密特正交归一化
 \begin{equation}\ali{
-&\phantom{=} \qty(1 - \ket{\Psi_j}\bra{\Psi_j} - \ldots - \ket{\Psi_0}\bra{\Psi_0}) \Q H^{j+1} \ket{\Psi_0} \\
-&= c_j \qty(1 - \ket{\Psi_j}\bra{\Psi_j} - \ldots - \ket{\Psi_0}\bra{\Psi_0}) \Q H \ket{\Psi_j}\\
+&\phantom{=} \qty(1 - \ket{\Psi_j}\bra{\Psi_j} - \ldots - \ket{\Psi_0}\bra{\Psi_0}) H^{j+1} \ket{\Psi_0} \\
+&= c_j \qty(1 - \ket{\Psi_j}\bra{\Psi_j} - \ldots - \ket{\Psi_0}\bra{\Psi_0}) H \ket{\Psi_j}\\
 &\phantom{=} + \qty(1 - \ket{\Psi_j} \bra{\Psi_j} - \ldots - \ket{\Psi_0} \bra{\Psi_0}) \qty(c''_{j-1} \ket{\Psi_j} + c''_{j - 2} \ket{\Psi_{j - 1}} + \ldots + c''_0 \ket{\Psi_0}) \\
-&= c_j \qty(1 - \ket{\Psi_j}\bra{\Psi_j} - \ldots - \ket{\Psi_0}\bra{\Psi_0}) \Q H \ket{\Psi_j}
+&= c_j \qty(1 - \ket{\Psi_j}\bra{\Psi_j} - \ldots - \ket{\Psi_0}\bra{\Psi_0}) H \ket{\Psi_j}
 }\end{equation}
 
 \subsection{定理 2 证明}
-要证 $\bra{\Psi_{j-1}} \Q H \ket{\Psi_j}  = \sqrt{\braket*{\tilde\Psi_j}}$， 即证 $\mel*{\Psi_{j - 1}}{\Q H}{\tilde \Psi_j} = \braket*{\tilde\Psi_j}$， 即证$\braket*{\tilde\Psi_j} = \braket*{\tilde\Psi_j}{\Q H\Psi_{j-1}}$ 而
+要证 $\bra{\Psi_{j-1}} H \ket{\Psi_j}  = \sqrt{\braket*{\tilde\Psi_j}}$， 即证 $\mel*{\Psi_{j - 1}}{H}{\tilde \Psi_j} = \braket*{\tilde\Psi_j}$， 即证$\braket*{\tilde\Psi_j} = \braket*{\tilde\Psi_j}{H\Psi_{j-1}}$ 而
 \begin{equation}
-\braket*{\tilde\Psi_j} = \mel*{\tilde\Psi_j}{\qty(1-\ket{\Psi_{j-1}}\bra{\Psi_{j-1}} - \ldots - \ket{\Psi_0}\bra{\Psi_0}) \Q H}{\Psi_{j-1}}
+\braket*{\tilde\Psi_j} = \mel*{\tilde\Psi_j}{\qty(1-\ket{\Psi_{j-1}}\bra{\Psi_{j-1}} - \ldots - \ket{\Psi_0}\bra{\Psi_0}) H}{\Psi_{j-1}}
 \end{equation}
 由于上式中 $\bra*{{\tilde \Psi }_j} \qty(\ket{\Psi_{j - 1}} \bra{\Psi_{j - 1}} - \ldots - \ket{\Psi_0} \bra{\Psi_0}) = 0$
 \begin{equation}
-\braket*{\tilde\Psi_j} = \mel*{\tilde\Psi_j}{\Q H}{\Psi_{j-1}}
+\braket*{\tilde\Psi_j} = \mel*{\tilde\Psi_j}{H}{\Psi_{j-1}}
 \end{equation}
 
 \subsection{定理 3 证明}
 
-要证明定理 3，即证，对 $n \leqslant j - 2$， 有 $\bra{\Psi_n} \Q H \ket{\Psi_j} = 0$， $\Q H$ 为厄米算符时即证 $\bra{\Psi_j} \Q H \ket{\Psi_n} = 0$，即证对 $m \geqslant j + 2$，  $\bra{\Psi_m} \Q H \ket{\Psi_j} = 0$． 在定理 1 的证明类似，我们知道
+要证明定理 3，即证，对 $n \leqslant j - 2$， 有 $\bra{\Psi_n} H \ket{\Psi_j} = 0$， $H$ 为厄米算符时即证 $\bra{\Psi_j} H \ket{\Psi_n} = 0$，即证对 $m \geqslant j + 2$，  $\bra{\Psi_m} H \ket{\Psi_j} = 0$． 在定理 1 的证明类似，我们知道
 \begin{equation}\ali{
-\Q H \ket{\Psi_j}  &= \Q H \qty(c_j \Q H^j \ket{\Psi_0} + \ldots + c_0 \ket{\Psi_0}) = c_j \Q H^{j+1} \ket{\Psi_0} + \ldots + c_0 \Q H \ket{\Psi_0}\\
+H \ket{\Psi_j}  &= H \qty(c_j H^j \ket{\Psi_0} + \ldots + c_0 \ket{\Psi_0}) = c_j H^{j+1} \ket{\Psi_0} + \ldots + c_0 H \ket{\Psi_0}\\
 &= c'_j \ket{\Psi_{j+1}} + \ldots + c'_0 \ket{\Psi_0}\\ 
 }\end{equation}
 所以对 $m \geqslant j + 2$ 有
 \begin{equation}
-\bra{\Psi_m} \Q H \ket{\Psi_j} = \bra{\Psi_m} \qty(c'_j \ket{\Psi_{j+1}} + \ldots + c'_0 \ket{\Psi_0}) = 0
+\bra{\Psi_m} H \ket{\Psi_j} = \bra{\Psi_m} \qty(c'_j \ket{\Psi_{j+1}} + \ldots + c'_0 \ket{\Psi_0}) = 0
 \end{equation}
 
 \subsection{定理 4 证明}
 
-首先证明 $\mat H$ 是三对角矩阵．即证 $m \geqslant j + 2$ 或 $m \leqslant j - 2$ 时 $\bra{\Psi_m} \Q H \ket{\Psi_j} = 0$．
-$m \geqslant j + 2$ 的情况在证明3中已经证明，只需证明另一种情况． 对厄米矩阵， $\braket*{\Q H\Psi_m}{\Psi_j} = \mel{\Psi_m}{\Q H}{\Psi_j} = 0$， 取复共轭，即 $\mel{\Psi_j}{\Q H}{\Psi_m} = 0$． 可见左边的角标的确小于等于右边的角标减 2，证毕．
+首先证明 $\mat H$ 是三对角矩阵．即证 $m \geqslant j + 2$ 或 $m \leqslant j - 2$ 时 $\bra{\Psi_m} H \ket{\Psi_j} = 0$．
+$m \geqslant j + 2$ 的情况在证明3中已经证明，只需证明另一种情况． 对厄米矩阵， $\braket*{H\Psi_m}{\Psi_j} = \mel{\Psi_m}{H}{\Psi_j} = 0$， 取复共轭，即 $\mel{\Psi_j}{H}{\Psi_m} = 0$． 可见左边的角标的确小于等于右边的角标减 2，证毕．
 
 然后证明 $\mat H$ 是实矩阵，考虑到厄米矩阵 $H_{mn} = H_{nm}^* $ 的性质，只需要证明 $H_{j, j+1}$ 是实数．对任意 $j = 2 \dots K-1$
 \begin{equation}\ali{
-\Q H_{j, j+1} &= \mel{\Psi_j}{\Q H}{\Psi_{j+1}} = \bra{\Psi_j} \Q H \qty(\Q H \ket{\Psi_j} - \alpha_j \ket{\Psi_j} - \beta_j \ket{\Psi_{j-1}}) \\
-&= \mel{\Psi_j}{\Q H^2}{\Psi_j} - \alpha_j \bra{\Psi_j} \Q H \ket{\Psi_j} - \beta_j \bra{\Psi_j}  \Q H \ket{\Psi_{j-1}}
+H_{j, j+1} &= \mel{\Psi_j}{H}{\Psi_{j+1}} = \bra{\Psi_j} H \qty(H \ket{\Psi_j} - \alpha_j \ket{\Psi_j} - \beta_j \ket{\Psi_{j-1}}) \\
+&= \mel{\Psi_j}{H^2}{\Psi_j} - \alpha_j \bra{\Psi_j} H \ket{\Psi_j} - \beta_j \bra{\Psi_j}  H \ket{\Psi_{j-1}}
 }\end{equation}
-易证 $\expval{\Q H^2}{\Psi_j}$， $\alpha_j$ 及 $\beta_j$ 是实数，只需要证明 $\mel{\Psi_j} {\Q H}{\Psi_{j-1}}$ 是实数即可，即证 $\mel{\Psi_{j-1}}{\Q H}{\Psi_j}$ 是实数，重复上述论证，即证 $\mel{\Psi_{j-2}}{\Q H}{\Psi_{j - 1}}$ 是实数\ldots，即证 $\mel{\Psi_1}{\Q H}{\Psi_0}$ 是实数，即证 $\mel{\Psi_0}{\Q H}{\Psi_1}$ 是实数，即证 $\mel*{\Psi_0}{\Q H}{\tilde\Psi_1}$ 是实数．而
+易证 $\ev{H^2}{\Psi_j}$， $\alpha_j$ 及 $\beta_j$ 是实数，只需要证明 $\mel{\Psi_j}{H}{\Psi_{j-1}}$ 是实数即可，即证 $\mel{\Psi_{j-1}}{H}{\Psi_j}$ 是实数，重复上述论证，即证 $\mel{\Psi_{j-2}}{H}{\Psi_{j - 1}}$ 是实数\ldots，即证 $\mel{\Psi_1}{H}{\Psi_0}$ 是实数，即证 $\mel{\Psi_0}{H}{\Psi_1}$ 是实数，即证 $\mel*{\Psi_0}{H}{\tilde\Psi_1}$ 是实数．而
 \begin{equation}
-\mel*{\Psi_0}{\Q H}{\tilde\Psi_1} = \bra{\Psi_0} \Q H \qty(\Q H \ket{\Psi_0} - \alpha_0 \ket{\Psi_0}) = \expval{\Q H^2}{\Psi_0} - \alpha_0 \expval{\Q H}{\Psi_0} 
+\mel*{\Psi_0}{H}{\tilde\Psi_1} = \bra{\Psi_0} H \qty(H \ket{\Psi_0} - \alpha_0 \ket{\Psi_0}) = \ev{H^2}{\Psi_0} - \alpha_0 \ev{H}{\Psi_0} 
 \end{equation}
 显然是实数．以上的思路是数学归纳法的逆过程．
