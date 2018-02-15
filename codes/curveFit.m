@@ -1,39 +1,39 @@
-ï»¿function curveFit
+function curveFit
 close all;
-% éšæœºç”Ÿæˆç®€è°æ›²çº¿
+% Ëæ»úÉú³É¼òĞ³ÇúÏß
 N = 20;
 x0 = linspace(0, 2*pi, N);
 y0 = 5*rand * sin(x0 + 2*pi * rand) + 10 * rand;
-y0 = y0 + 2*rand(1,20); % äº§ç”Ÿéšæœºè¯¯å·®
-scatter(x0, y0, '+'); % ç”»å‡ºæ•£ç‚¹
+y0 = y0 + 2*rand(1,20); % ²úÉúËæ»úÎó²î
+scatter(x0, y0, '+'); % »­³öÉ¢µã
 hold on;
 
-% Nelder-Mead æ±‚æ–¹å·®æœ€å°å€¼ç‚¹
+% Nelder-Mead Çó·½²î×îĞ¡Öµµã
 f = @(x) norm( x(1)*sin(x0 + x(2)) + x(3) - y0 );
 c = NelderMead(f, [5, 1, 5], 1e-7);
-% ç”»æ‹Ÿåˆç»“æœ
+% »­ÄâºÏ½á¹û
 x = linspace(0, 2*pi, 50);
 y1 = c(1) * sin(x + c(2)) + c(3);
 plot(x, y1);
 
-% è§£çº¿æ€§æ–¹ç¨‹ç»„æ±‚æ–¹å·®æœ€å°å€¼ç‚¹
+% ½âÏßĞÔ·½³Ì×éÇó·½²î×îĞ¡Öµµã
 c = sinfit(x0, y0);
-% ç”»æ‹Ÿåˆç»“æœ
+% »­ÄâºÏ½á¹û
 y2 = c(1)*cos(x) + c(2)*sin(x) + c(3);
 plot(x, y2, '.');
 end
 
-% æ‹Ÿåˆç®€è°æ›²çº¿
+% ÄâºÏ¼òĞ³ÇúÏß
 % y = C(1)*cos(x) + C(2)*sin(x) + C(3)
 function C = sinfit(x, y)
 N = numel(x);
 cosx = cos(x); sinx = sin(x);
 sc = sum(sinx.*cosx);
 s = sum(sinx); c = sum(cosx);
-% ç³»æ•°çŸ©é˜µ
+% ÏµÊı¾ØÕó
 M = [sum(cosx.^2), sc          , c;
                sc, sum(sinx.^2), s;
                 c,            s, N];
 b = [sum(y.*cosx); sum(y.*sinx); sum(y)];
-C = M\b; % è§£çº¿æ€§æ–¹ç¨‹ç»„
+C = M\b; % ½âÏßĞÔ·½³Ì×é
 end

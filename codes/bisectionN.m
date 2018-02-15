@@ -1,12 +1,12 @@
-ï»¿function roots = bisectionN(f, int, N)
-x = linspace(int(1), int(2), N); % åˆ’åˆ†åŒºé—´
-y = arrayfun(f, x); % æ±‚æ‰€æœ‰ f(x(ii))
-figure; plot(x, y, '.-') % ç”»å›¾
+function roots = bisectionN(f, int, N)
+x = linspace(int(1), int(2), N); % »®·ÖÇø¼ä
+y = arrayfun(f, x); % ÇóËùÓÐ f(x(ii))
+figure; plot(x, y, '.-') % »­Í¼
 title('f(x)')
 Sign = sign(y);
-ind = find(Sign(1:end-1) .* Sign(2:end) <= 0); % æ‰¾ç¬¦åˆæ¡ä»¶çš„åŒºé—´åºå·
+ind = find(Sign(1:end-1) .* Sign(2:end) <= 0); % ÕÒ·ûºÏÌõ¼þµÄÇø¼äÐòºÅ
 Nroot = numel(ind);
-roots = zeros(1, Nroot); % é¢„èµ‹å€¼
+roots = zeros(1, Nroot); % Ô¤¸³Öµ
 for ii = 1:Nroot
     roots(ii) = fzero(fun, [x(ind(ii)),x(ind(ii)+1)]);  
 end

@@ -1,30 +1,30 @@
-ï»¿% è®¾ç½®å‚æ•°
+% ÉèÖÃ²ÎÊı
 N = 6;
 h = 0.5;
-t = linspace(0, (N-1)*h, N); % è‡ªå˜é‡
-t0 = linspace(0, (N-1)*h, 100); % ç”¨äºç”»å›¾
+t = linspace(0, (N-1)*h, N); % ×Ô±äÁ¿
+t0 = linspace(0, (N-1)*h, 100); % ÓÃÓÚ»­Í¼
 
-% æ¬§æ‹‰æ³•
-y = zeros(1,N); % é¢„èµ‹å€¼
-y(1) = 1; % åˆå€¼
+% Å·À­·¨
+y = zeros(1,N); % Ô¤¸³Öµ
+y(1) = 1; % ³õÖµ
 for ii = 1:N-1
     y(ii+1) = y(ii) + h*y(ii);
 end
 
-% ç”»å›¾
+% »­Í¼
 figure;
 plot(x,y,'+-');
 hold on;
 plot(t0, exp(t0));
 
-%ä¸­ç‚¹æ³•
+%ÖĞµã·¨
 y = zeros(1,N);
 y(1) = 1;
 for ii = 1:N-1
     y(ii+1) = y(ii) + h*(y(ii) + 0.5*h*y(ii));
 end
 
-% ç”»å›¾
+% »­Í¼
 figure;
 plot(x,y,'+-');
 hold on;
