@@ -30,7 +30,7 @@ Repository 中创建 “.gitignore” 文件，忽略所有以下后缀名的文
 
 \subsection{词条编写规范}
 
-每个词条文件必须有一个独一无二的标签， 词条标签必须限制在 6 个字符内，必须在 PhysWiki.tex， 词条标签对照表和词条文件名中一致． 词条的中文名必须在主文件， 词条标签对照表和词条文件的第一行注释中一致． 如果不是超纲词条， 就把词条放在 contents 目录下， 并在主文件中用 \textbackslash entry \{\}\{\} 命令输入中文名和标签。 超纲词条放在 contents1 目录下并用 \textbackslash Entry \{\}\{\} 命令． 主文件有 Debug.tex， PhysWiki1.tex， 和 PhysWiki.tex 三个， 他们共用一个模板（others 目录）。 新词条必须现在 Debug.tex 中编辑， 完成后再从中删除并将 entry/Entry 插入到 PhysWiki.tex（超纲词条） 或 PhysWiki1.tex 中（力学分册）。 Debug.tex 中的 entry/Entry 命令的后面可以用 \textbackslash newpage 命令强制换页， 但不允许在 PhysWiki.tex/PhysWiki1.tex 中这么做．
+每个词条文件必须有一个独一无二的标签， 词条标签必须限制在 6 个字符内，必须在 PhysWiki.tex， 词条标签对照表和词条文件名中一致． 词条的中文名必须在主文件， 词条标签对照表和词条文件的第一行注释中一致． 如果不是超纲词条， 就把词条放在 contents 目录下， 并在主文件中用 \textbackslash entry \{\}\{\} 命令输入中文名和标签． 超纲词条放在 contents1 目录下并用 \textbackslash Entry \{\}\{\} 命令． 主文件有 Debug.tex， PhysWiki1.tex， 和 PhysWiki.tex 三个， 他们共用一个模板（others 目录）． 新词条必须现在 Debug.tex 中编辑， 完成后再从中删除并将 entry/Entry 插入到 PhysWiki.tex（超纲词条） 或 PhysWiki1.tex 中（力学分册）． Debug.tex 中的 entry/Entry 命令的后面可以用 \textbackslash newpage 命令强制换页， 但不允许在 PhysWiki.tex/PhysWiki1.tex 中这么做．
 
 引用词条用 \textbackslash upref 命令，“预备知识”用 \textbackslash pentry 命令，“应用实例”用 \textbackslash eentry 命令，拓展阅读用 \textbackslash rentry 命令．
 
@@ -60,7 +60,7 @@ Repository 中创建 “.gitignore” 文件，忽略所有以下后缀名的文
 \end{equation}
 对易算符如 $\comm{\Q A}{\Q B}$ 或 $\comm*{\Q A}{\Q B}$， 前者自动尺寸， 后者强制小尺寸． 泊松括号如 $\pb{\frac12}{B}$ 和 $\pb*{\frac12}{B}$．
 
-如果要强制分式立体显示， 用 \textbackslash dfrac 命令， 如果 \textbackslash frac 后面只有两个字符的代码，最好写成如 $\frac12, \frac ab, \frac1a$ 等。 斜分数线后面若多于一个变量需要加括号， 如 $ab/(cd)$． 另外， 常用三角函数和自然指数对数函数后面的小括号会自动改变尺寸（Physics 宏包功能），若要给他们加幂，用中括号
+如果要强制分式立体显示， 用 \textbackslash dfrac 命令， 如果 \textbackslash frac 后面只有两个字符的代码，最好写成如 $\frac12, \frac ab, \frac1a$ 等． 斜分数线后面若多于一个变量需要加括号， 如 $ab/(cd)$． 另外， 常用三角函数和自然指数对数函数后面的小括号会自动改变尺寸（Physics 宏包功能），若要给他们加幂，用中括号
 \begin{equation}
 \sin(\frac ab) \qquad \sin[2](\frac ab)
 \end{equation}
@@ -181,6 +181,12 @@ ans = 0
 代码必须以  .tex 文件格式放在 code 文件夹中的中， 并用 \textbackslash Code（含文件名）或  \textbackslash code （不含文件名）命令导入正文． 较长的 .tex 代码文件必须含文件名， 文件名需要反映代码的内容而不是与词条 label 同名． 对每个 \textbackslash Code 的 .tex 文件， 需要生成同名的 .m 文件（使用 ANSI 编码）． 代码修改测试以 .tex 文件为准， 把变化后的内容粘贴到 .m 文件中． 这些 .m 文件用于上传到网站上提供下载， 以及用于转换成网页． \textbackslash code 导入的文件命名规则与图片命名相同．
 
 \Code{sample}
+
+\subsection{文献引用}
+每个词条若有参考文献需要生成与词条文件同名的 bib 文件并放在 bibliography 文件夹中． 文献引用的格式如\cite{PhysWiki}， 在引用了文献的词条最后加上以下两条命令即可生成“ 参考文献” 章节． 如果参考文献有改动， 需要先编译一次 XeLaTeX， 编译一次 BibTeX， 再编译两次 XeLaTeX 即可． 如果文献没有改动则不用编译 BibTeX．
+
+\bibliography{./bibliography/Sample}
+\bibliographystyle{plain}
 
 \eentry{本书格式规范\upref{Sample}}
 \rentry{本书格式规范\upref{Sample}}
