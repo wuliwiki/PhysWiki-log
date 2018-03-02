@@ -1,0 +1,138 @@
+% BEC 超流
+
+首先，我们回顾一下理想玻色气体的BEC． 假设这种玻色子的色散是 $\epsilon_{\bf k} = \hbar^2{\bf k}^2/2m$ （实际上长什么样在我们这里一般的分析中并没有什么关系）． 我们可以看到， $n_{\bf k}=1/(\E^{\beta(\epsilon_{\bf k}-\mu)}-1)$． 那么，在热力学极限下可以发现如果 $\mu<0$，换句话说温度处于 $T_c$， $N\to\infty$， $n_{\bf k}/N\to 0$． 而相变的时候 $T_c: \mu=0$，这时候物理图像是de Brogilie波长 $\approx$ 粒子间距． 在 $<T_c$ 时，
+\begin{equation}
+N=N_0+\frac{V}{2\pi^3}\int \text{d}^3{\bf k}\frac{1}{\E^{\beta\epsilon_{\bf k}}-1},\quad N_0/N\neq0
+\end{equation}
+呈现宏观占据． 看得出来我们虽然很熟悉什么是理想玻色气体的BEC，但是对于一般的情况，如何规定它是否是处于凝聚的态呢？
+
+首先，我们可以写出某个多体（$N$ 体）波函数 $\Psi({\bf r}_1,{\bf r}_2,\cdots,{\bf r}_N)$ 密度矩阵 $\rho$． 它的矩阵元有 $2N$ 个指标， $\langle x_1,\cdots,x_N|\rho|y_1,\cdots,y_N\rangle$． 把它trace掉 $N-1$ 个指标，得到
+\begin{equation}
+\rho({\bf r},{\bf r'}) = N\int\sum_s p_s\psi^*({\bf r},{\bf r}_2,\cdots,{\bf r}_N)p_s\psi({\bf r'},{\bf r}_2,\cdots,{\bf r}_N)\text{d}^3{\bf r}_2\cdots\text{d}^3{\bf r}_N
+\end{equation}
+二参数函数可以按照某一个基展开，
+\begin{equation}
+\rho({\bf r},{\bf r'}) = \sum_i N_i \varphi_i^*({\bf r})\varphi_i({\bf r'})
+\end{equation}
+对于 $N_i$，如果所有 $N_i/N=0$， 那么就称这个态是normal phase． 如果有一个不等于 $0$ 的，那就是一般的BEC，如果有多个 $N_i\neq0$ 叫 fragment BEC． 后两者称之存在非对角长程序（off-diagonal long-range order，ODLRO）．
+
+对于正常的BEC的情况， $\exists N_0\gg N_{i\neq0}$，如果我们忽略两体相互作用的细节，我们就可以写出
+\begin{equation}
+\rho({\bf r,r'}) \approx N_0\varphi^*({\bf r})\varphi({\bf r'})
+\end{equation}
+其中，满足要求的系统的态是
+\begin{equation}\label{BECSup_eq5}
+\Psi({\bf r}_1,{\bf r}_2,\cdots,{\bf r}_N) = \prod_{\otimes}\varphi({\bf r}_i)
+\end{equation}
+
+我们考虑系统的Hamiltonian． 利用赝势，我们写出
+\begin{equation}
+\hat{H} = \sum_i^N \left(\frac{\nabla_i^2}{2m}+V({\bf r}_i)\right)\sum_{\langle i,j\rangle}\frac{4\pi\hbar^2 a_s}{m}\delta^3({\bf r}_{ij})\frac{\partial}{\partial r_{ij}}r_{ij}
+\end{equation}
+
+显然，我们的波函数\autoref{BECSup_eq5} 在这里面并不存在我们上一章讨论的 $r_i\to r_j$ 的那种发散行为，因为我们实际上忽略了两体相互作用的细节． 当然，这种情况下我们很容易发现，没有奇异性的时候，赝势仅仅就是一个 $\delta$ 而已，因为其形如 $r_{ij}\partial_{r_{ij}}$ 的成分在 $\delta^3({\bf r}_{ij})$ 下不作任何贡献：
+\begin{equation}
+\delta^3({\bf r}_{ij})\frac{\partial}{\partial r_{ij}}r_{ij} = \delta^3({\bf r}_{ij})
+\end{equation}
+
+我们可以通过对 $\langle \varphi|H+\mu N|\varphi\rangle$ 取极值得到本征值方程．
+\begin{equation}
+\varepsilon = N\int \text{d}^3{\bf r}\varphi^*({\bf r})\left(-\frac{\hbar^2\nabla^2}{2m}+V({\bf r})\right)\varphi({\bf r})+\frac{N(N-1)}{2}\int \text{d}^3{\bf r}\frac{4\pi\hbar^2a_s}{m}|\varphi({\bf r})|^4
+\end{equation}
+以 $\varphi^*$ 作为变量， $N\to\infty$ 而且 $\phi = \sqrt{N}\varphi, U\equiv \dfrac{4\pi\hbar^2a_s}{m}$， 我们有
+\begin{equation}
+\Rightarrow \left(-\frac{\hbar^2\nabla^2}{2m}+V({\bf r})\right)\phi + U|\phi|^2\phi = \mu\phi
+\end{equation}
+这就是著名的\bb{不含时 Gross-Pitaevskii 方程}．
+
+如果我们考虑的不是一个定态问题，而是 $\phi = \phi({\bf r},t)$， 那么我们的这个方程实际上要稍作改动． 符合直觉的我们可以得到 \bb{含时 Gross-Pitaevskii 方程}
+\begin{equation}\label{BECSup_eq10}
+\I\hbar\frac{\partial\phi}{\partial t} = \left(-\frac{\hbar^2\nabla^2}{2m}+V({\bf r})\right)\phi + U|\phi|^2\phi
+\end{equation}
+
+接下来我们做两个魔法操作． 首先将 $\phi^*\times$ \autoref{BECSup_eq10} 减去它的共轭，显然其左手边为
+\begin{equation}
+\I\hbar\phi^*\frac{\partial\phi}{\partial t} + \I\hbar\phi\frac{\partial\phi^*}{\partial t} = \I\hbar\frac{\partial\phi^*\phi}{\partial t} = \I\hbar\frac{\partial|\phi|^2}{\partial t}
+\end{equation}
+而右手边则为
+\begin{equation}
+\begin{split}
+&\left(\phi^* \left(-\frac{\hbar^2\nabla^2}{2m}+V({\bf r})\right)\phi + U|\phi|^4\right) -\left(\phi \left(-\frac{\hbar^2\nabla^2}{2m}+V({\bf r})\right)\phi^* + U|\phi|^4\right) \\
+=& \frac{\hbar^2}{2m}\nabla\cdot\left(\phi\nabla\phi^* - \phi^*\nabla\phi\right)
+\end{split}
+\end{equation}
+于是，就得到
+\[\I\hbar\frac{\partial|\phi|^2}{\partial t} = \frac{\hbar^2}{2m}\nabla\cdot\left(\phi\nabla\phi^* - \phi^*\nabla\phi\right) \]
+定义 $\phi({\bf r}) = \sqrt{\rho}\E^{\I\theta}$， 其中 $\rho = \rho({\bf r}),\theta = \theta({\bf r})$．
+我们从而有
+\begin{equation}\frac{\partial\rho}{\partial t} + \nabla\cdot(\rho{\bf v}),\quad {\bf v}\overset{\text{def}}{\equiv}\frac{\hbar}{m}\frac{\partial\theta}{\partial t} \end{equation}
+这就得到了连续性方程． 当然，还得补充一个无旋方程
+\begin{equation}
+\nabla\times{\bf v}=0
+\end{equation}
+另一个魔法是将 $\phi^*\times$ \autoref{BECSup_eq10}% 未完成：这里应该有一个动词
+它的共轭． 左手边为
+\begin{equation}
+\I\hbar\phi^*\frac{\partial\phi}{\partial t} - \I\hbar\phi\frac{\partial\phi^*}{\partial t} = \I\hbar\phi^{*2}\frac{\partial \phi/\phi^*}{\partial t} = -2\hbar\rho\frac{\partial\theta}{\partial t}
+\end{equation}
+而右边就有点复杂了，下面的最后一项会很复杂：
+\begin{equation}
+\begin{split}
+&\left(\phi^* \left(-\frac{\hbar^2\nabla^2}{2m}+V({\bf r})\right)\phi + U|\phi|^4\right) + \left(\phi \left(-\frac{\hbar^2\nabla^2}{2m}+V({\bf r})\right)\phi^* + U|\phi|^4\right) \\
+=& 2V\rho + 2U\rho^2 - \frac{\hbar^2}{2m}\left(\phi^*\nabla^2\phi + \phi\nabla^2\phi^*\right)
+\end{split}
+\end{equation}
+
+我们显然希望能够提取出来一个 $\rho$，所以我们给出详细的计算过程：
+\begin{equation}
+\begin{split}
+\nabla^2\phi &= \nabla^2\left(\sqrt\rho \E^{\I\theta}\right)\\
+&=\nabla\cdot\left(\frac{\E^{\I\theta}}{2\sqrt\rho}\nabla\rho+i\sqrt{\rho} \E^{\I\theta}\nabla\theta\right)\\
+&=\frac{\E^{\I\theta}}{2\sqrt\rho}\nabla^2\rho+\frac{\I \E^{\I\theta}}{\sqrt\rho}\nabla\theta\nabla\rho - \frac{\E^{\I\theta}}{4\rho^{3/2}}(\nabla\rho)^2-\sqrt\rho \E^{\I\theta}(\nabla\theta)^2+i\sqrt\rho \E^{\I\theta}\nabla^2\theta
+\end{split}
+\end{equation}
+类似有
+\begin{equation}
+\begin{split}
+\nabla^2\phi^* &= \nabla^2\left(\sqrt\rho \E^{-\I\theta}\right)\\
+&=\nabla\cdot\left(\frac{\E^{-\I\theta}}{2\sqrt\rho}\nabla\rho-i\sqrt{\rho} \E^{-\I\theta}\nabla\theta\right)\\
+&=\frac{\E^{-\I\theta}}{2\sqrt\rho}\nabla^2\rho-\frac{\I \E^{-\I\theta}}{\sqrt\rho}\nabla\theta\nabla\rho - \frac{\E^{-\I\theta}}{4\rho^{3/2}}(\nabla\rho)^2-\sqrt\rho \E^{-\I\theta}(\nabla\theta)^2-i\sqrt\rho \E^{-\I\theta}\nabla^2\theta
+\end{split}
+\end{equation}
+从而有
+\begin{equation}
+\phi^*\nabla^2\phi+\phi\nabla^2\phi^* = \nabla^2\rho - \frac{1}{2\rho}(\nabla\rho)^2-2\rho(\nabla\theta)^2 = 2\sqrt\rho \nabla^2\sqrt\rho - 2\rho(\nabla\theta)^2
+\end{equation}
+从而我们得到原本的式子右边等于
+\begin{equation}
+-\frac{\hbar^2}{2m}\frac{1}{\sqrt\rho}+\frac{\hbar^2}{2m}(\nabla\theta)^2+V+U\rho
+\end{equation}
+将 $\nabla$ 作用到等式两边，得到
+\begin{equation}
+m\frac{\partial\bf v}{\partial t} = -\nabla\cdot\left[-\frac{\hbar^2}{2m}\frac{1}{\sqrt\rho}\nabla^2\sqrt\rho + \frac{1}{2}m{\bf v}^2+V+U\rho\right]
+\end{equation}
+
+以上的推导都是零温情况，只包含超流成分；有限温的问题可以加入正常流体的成分，从而变成二流体模型． 考虑一个均匀系统 $V(\bf r) = 0$，基态有均匀的密度 $\rho_0$，且 ${\bf v} = 0$． 我们可以对非基态的态的密度函数作展开： $\rho = \rho_0+\delta\rho$． 只取 $\delta\rho,{\bf v}$ 和 $k$ 的领头阶，我们可以简化刚刚得到的方程：
+\begin{equation}
+m\frac{\partial\bf v}{\partial t} = -U\nabla\cdot\delta\rho,\quad \frac{\partial\rho}{\partial t} = -\nabla(\rho{\bf v}) \approx-\rho_0\nabla\bf v
+\end{equation}
+联合起来就得到
+\begin{equation}
+\frac{\partial^2\delta\rho}{\partial t^2} = \frac{U\rho_0}{m}\nabla^2\delta\rho
+\end{equation}
+即得到了声子色散
+\begin{equation}
+\omega = \sqrt{\frac{U\rho_0}{m}}k
+\end{equation}
+声速得到为 $c=\sqrt{\dfrac{U\rho_0}{m}}$，是一个低能的线性 gapless 激发（从而无色散）． 这与 $\text{U}(1)$ 对称性是联系起来的．
+
+最后我们来说一下超流与临界速度． 这个临界速度就和我们BCS里面的临界磁场有点像：超过这个速度，超流就不再是超流了．
+考虑一个质量为 $m_0$，速度 ${\bf v}_i$ 的杂质，在与某处于BEC态的物体相互作用． 如果有摩擦，也就是说，这个杂质被散射到某一速度 ${\bf v}_f$ 了，我们可以在初始BEC质心系写能动量守恒
+\begin{equation}
+m_0{\bf v}_i + {\bf q} = m_0{\bf v}_f,\quad \frac{m_0{\bf v}_i^2}{2} = \frac{m_0{\bf v}_i^2}{2} + c|{\bf q}|
+\end{equation}
+得到
+\begin{equation}
+{\bf v}_i\cdot{\bf q}-c|{\bf q}| = \frac{{\bf q}^2}{2m}
+\end{equation}
+可见右边等式大于 $0$，如果 ${\bf v}_i<c$，则左边无法满足也为正，即无法发生散射，也就是真正意义的“超流”（不会产生摩擦作用），这个临界速度也就是声速 $c$．
