@@ -1,0 +1,92 @@
+% 旋度 斯托克斯定理
+
+\pentry{圆周运动的速度\upref{CMVD}， 散度\upref{Divgnc}， 线积分\upref{IntL}， 流密度}%未完成
+我们在矢量场中取一个闭合回路 $\mathcal L$ 并规定一个正方向， 并定义该回路的\bb{环流量}为矢量场在回路上的线积分
+\begin{equation}
+\oint_{\mathcal L} \vec F(\vec r) \vdot \dd{\vec r}
+\end{equation}
+下面我们来定义\bb{旋度}， 旋度是一个矢量， 记为 $\vec G = \curl \vec F$． 在空间某点 $(x,y,z)$ 处选取一个小面元 $\vec S$（模长为面元的面积， 方向为面元的一个法向量）， 令面元边界构成的回路为 $\mathcal L$， 正方向由右手定则\upref{RHRul} 判断． 要定义其 $x$ 方向的分量， 就取 $\vec S$ 与 $\uvec x$ 同向， 则
+\begin{equation}
+G_x = \lim_{S\to 0} \frac 1S \oint_{\mathcal L} \vec F(\vec r) \vdot \dd{\vec r}
+\end{equation}
+旋度的 $y, z$ 分量定义类似．
+
+若矢量场分布连续且光滑， 则旋度处处存在且与回路的形状和坐标系的选取无关\footnote{本书不作证明}． 所以选取任意方向的面元 $\vec S$， 都有
+\begin{equation}
+\vec G\vdot \uvec S = \lim_{S\to 0} \frac 1S \oint_{\mathcal L} \vec F(\vec r) \vdot \dd{\vec r}
+\end{equation}
+
+\subsection{直角坐标系中的散度}
+在直角坐标系中给出矢量场
+\begin{equation}
+\vec F(x,y,z) = F_x(x,y,z)\uvec x + F_y(x,y,z)\uvec y + F_z(x,y,z)\uvec z
+\end{equation}
+在点 $(x,y,z)$ 附近， 我们可以对场使用微分近似
+\begin{equation}
+F_i(x+x', y+y', z+z') = F_i(x,y,z) + \pdv{F_i}{x}x' + \pdv{F_i}{y}y' + \pdv{F_i}{z}z'
+\end{equation}
+
+\begin{figure}[ht]
+\centering
+\includegraphics[width=5cm]{./figures/Curl1.pdf}
+\caption{直角坐标系中旋度的 $z$ 分量} \label{Curl_fig1}
+\end{figure}
+
+要求 $z$ 方向的旋度， 令闭合回路为正方形 [x,y,z]-[x+h, y+h, z]（\autoref{Curl_fig1}）， 延 $x$ 方向的两条边的线积分仅由 $F_x$ 贡献， 延 $y$ 方向的两条边的线积分仅由 $F_y$ 贡献， 所以整个环路的线积分为
+\begin{equation}\ali{
+\oint_{\mathcal L} \vec F \vdot \dd{\vec r}
+&= \int_0^h \qty(F_x + \pdv{F_x}{x}x') \dd{x'} - \int_0^h \qty(F_x + \pdv{F_x}{x}x' + \pdv{F_x}{y}h) \dd{x'}\\
+&\quad +\int_0^h \qty(F_y + \pdv{F_y}{x}h + \pdv{F_y}{y}y')\dd{y'} - \int_0^h  \qty(F_y + \pdv{F_y}{y}y') \dd{y'}\\
+&= h^2 \qty(\pdv{F_y}{x} - \pdv{F_x}{y})
+}\end{equation}
+所以旋度的 $z$ 分量为
+\begin{equation}\label{Curl_eq7}
+G_z = \lim_{h^2\to 0} \frac{1}{h^2} \oint_{\mathcal L} \vec F \vdot \dd{\vec r} = \pdv{F_y}{x} - \pdv{F_x}{y}
+\end{equation}
+类似地， 我们可得 $x, y$ 分量
+\begin{equation}
+G_x = \pdv{F_z}{y} - \pdv{F_y}{z} \qquad G_y = \pdv{F_x}{z} - \pdv{F_z}{x}
+\end{equation}
+所以类似叉乘的行列式表示（\autoref{Cross_eq13}\upref{Cross}）， 我们可以将旋度记为
+\begin{equation}\label{Curl_eq9}
+\curl \vec F = \vmat{\uvec x & \uvec y & \uvec z\\ \pdv*{x}&\pdv*{y}&\pdv*{z}\\ F_x&F_y&F_z}
+\end{equation}
+现在我们知道为什么旋度要记为 $\curl \vec F$ 了， 类比散度， 旋度可以从形式上理解为矢量算符 $\grad$ 与矢量场 $\vec F$ 的叉乘．
+
+与梯度和散度不同的是， 以上定义的旋度运算只能对三维空间的矢量场作用．
+
+\begin{exam}{旋转体速度场的旋度}
+一个物体绕 $z$ 轴旋转， 角速度矢量为 $\vec\omega = \omega\uvec z$， 物体上任意一点的位矢为 $\vec r$， 则速度关于位置的函数 $\vec v(\vec r)$ 构成一个矢量场（\autoref{CMVD_eq5}\upref{CMVD}） 
+\begin{equation}
+\vec v(\vec r) = \vec\omega \cross \vec r = \omega\uvec z \cross (x\uvec x + y\uvec y)
+= -\omega y\uvec x + \omega x\uvec y
+\end{equation}
+使用\autoref{Curl_eq9} 计算 $\vec v(\vec r)$ 的散度， 得
+\begin{equation}
+\curl \vec v = \vmat{\uvec x&\uvec y&\uvec z\\ \pdv*{x}&\pdv*{y}&\pdv*{z}\\-\omega y&\omega x& 0} = 2\omega \uvec z
+\end{equation}
+可见该场的旋度是一个 $\uvec \omega$ 方向的常矢量． 从这个例子也可以看出， 如果一个（三维）矢量场在某个方向没有分量（即平面场）， 则其旋度必然延该方向（即平面的法向量）．
+\end{exam}
+
+\begin{exam}{无旋度的旋转场}
+现在我们来看另一个旋转场 $\vec F(\vec r) = \uvec z\cross\uvec r /r$， 写成分量的形式就是
+\begin{equation}
+\vec F(\vec r) = \uvec z \cross \qty(\frac{x}{x^2 + y^2}\uvec x + \frac{y}{x^2 + y^2}\uvec y) = -\frac{y}{x^2 + y^2} \uvec x + \frac{x}{x^2 + y^2}\uvec y
+\end{equation}
+由于这个场也是一个 $xy$ 平面场， 旋度 $\uvec z$ 共线， 可以直接使用\autoref{Curl_eq7} 计算
+\begin{equation}
+\curl\vec F = \qty(\pdv{F_y}{x} - \pdv{F_x}{y})\uvec z = \qty(\frac{1}{r^2} - \frac{2x^2}{r^4} + \frac{1}{r^2} - \frac{2y^2}{r^4})\uvec z = \vec 0
+\end{equation}
+要注意的是， 在原点处由于矢量场不连续（而是出现了无限大的奇点）， 以上计算并不成立． 
+% 未完成：以后会在XXX详细讨论原点处的旋度如何表示．
+\end{exam}
+
+\subsection{旋度定理}
+
+\begin{figure}[ht]
+\centering
+\includegraphics[width=6cm]{./figures/Curl2.pdf}
+\caption{旋度定理} \label{Curl_fig2}
+\end{figure}
+
+如\autoref{Curl_fig2}
