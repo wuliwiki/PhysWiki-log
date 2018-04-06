@@ -1,22 +1,22 @@
 % 旋度 斯托克斯定理
 
-\pentry{圆周运动的速度\upref{CMVD}， 散度\upref{Divgnc}， 线积分\upref{IntL}， 流密度}%未完成
+\pentry{圆周运动的速度\upref{CMVD}， 散度\upref{Divgnc}， 线积分\upref{IntL}， 流密度， 通量}%未完成
 我们在矢量场中取一个闭合回路 $\mathcal L$ 并规定一个正方向， 并定义该回路的\bb{环流量}为矢量场在回路上的线积分
 \begin{equation}
 \oint_{\mathcal L} \vec F(\vec r) \vdot \dd{\vec r}
 \end{equation}
-下面我们来定义\bb{旋度}， 旋度是一个矢量， 记为 $\vec G = \curl \vec F$． 在空间某点 $(x,y,z)$ 处选取一个小面元 $\vec S$（模长为面元的面积， 方向为面元的一个法向量）， 令面元边界构成的回路为 $\mathcal L$， 正方向由右手定则\upref{RHRul} 判断． 要定义其 $x$ 方向的分量， 就取 $\vec S$ 与 $\uvec x$ 同向， 则
+下面我们来定义\bb{旋度}， 旋度是一个矢量， 记为 $\curl \vec F$． 在空间某点 $(x,y,z)$ 处选取一个小面元 $\vec S$（模长为面元的面积， 方向为面元的一个法向量）， 令面元边界构成的回路为 $\mathcal L$， 正方向由右手定则\upref{RHRul} 判断． 要定义其 $x$ 方向的分量， 就取 $\vec S$ 与 $\uvec x$ 同向， 即
 \begin{equation}
-G_x = \lim_{S\to 0} \frac 1S \oint_{\mathcal L} \vec F(\vec r) \vdot \dd{\vec r}
+(\curl\vec F)_x = \lim_{S\to 0} \frac 1S \oint_{\mathcal L} \vec F(\vec r) \vdot \dd{\vec r}
 \end{equation}
 旋度的 $y, z$ 分量定义类似．
 
 若矢量场分布连续且光滑， 则旋度处处存在且与回路的形状和坐标系的选取无关\footnote{本书不作证明}． 所以选取任意方向的面元 $\vec S$， 都有
-\begin{equation}
-\vec G\vdot \uvec S = \lim_{S\to 0} \frac 1S \oint_{\mathcal L} \vec F(\vec r) \vdot \dd{\vec r}
+\begin{equation}\label{Curl_eq3}
+\curl\vec F \vdot \uvec S = \lim_{S\to 0} \frac 1S \oint_{\mathcal L} \vec F(\vec r) \vdot \dd{\vec r}
 \end{equation}
 
-\subsection{直角坐标系中的散度}
+\subsection{直角坐标系中的旋度}
 在直角坐标系中给出矢量场
 \begin{equation}
 \vec F(x,y,z) = F_x(x,y,z)\uvec x + F_y(x,y,z)\uvec y + F_z(x,y,z)\uvec z
@@ -81,12 +81,22 @@ G_x = \pdv{F_z}{y} - \pdv{F_y}{z} \qquad G_y = \pdv{F_x}{z} - \pdv{F_z}{x}
 % 未完成：以后会在XXX详细讨论原点处的旋度如何表示．
 \end{exam}
 
-\subsection{旋度定理}
+\subsection{斯托克斯定理}
 
 \begin{figure}[ht]
 \centering
 \includegraphics[width=6cm]{./figures/Curl2.pdf}
-\caption{旋度定理} \label{Curl_fig2}
+\caption{斯托克斯定理} \label{Curl_fig2}
 \end{figure}
 
-如\autoref{Curl_fig2}
+如\autoref{Curl_fig2}， 我们选取一块曲面， 并规定一个正方向． 使用右手定则\upref{RHRul}， 我们也可以定义曲面边界的正方向． 空间中存在连续光滑的矢量场 $\vec F(\vec r)$， 则\bb{斯托克斯定理}可以将矢量场在曲面边界上的环流量和矢量场的旋度在曲面上通量等同起来
+\begin{equation}
+\oint \vec F(\vec r) \vdot \dd{\vec r} = \iint \curl \vec F(\vec r) \vdot \dd{\vec s}
+\end{equation}
+
+
+要证明这个定理， 我们将曲面划分为许多小面元 $\Delta \vec s_i$， 其正方向与曲面一致， 边界的正方向同样由右手定则定义． 这样， 矢量场在曲面上的通量就等于在每个小面元上的通量之和． 当面元的面积趋于零时， 我们可以认为场的旋度在面元上是常矢量 $\vec F(\vec r_i)$， $\vec r_i$ 为 $\Delta \vec s_i$ 上任意一点． 由\autoref{Curl_eq3} 可知面元的环流量为 $\curl\vec F(\vec r_i) \vdot \Delta \vec s_i$（可类比\autoref{Diff_eq2}\upref{Diff}）， 所以根据积分的思想， 所有面元的环流量之和为
+\begin{equation}
+\lim_{\Delta s_i \to 0}\sum_i \curl\vec F(\vec r_i) \vdot \Delta \vec s_i = \iint \curl\vec F(\vec r) \vdot \dd{\vec s}
+\end{equation}
+最后， 如何证明所有面元的环流量之和等于曲面边界的环流量呢？ 类比散度定理（\autoref{Divgnc_eq13}\upref{Divgnc}）的证明， 考虑任意两块相邻的小面元， 矢量场在它们共同边界的线积分对一个面元的环流量贡献为正， 而对另一个面元的环流量贡献大小相同但符号为负， 所以在上式的求和中相加为零． 所以， 求和中唯一没有被抵消的环流量来自于曲面边界处的面元， 这些面元的边界与曲面边界重合且正方向一致， 对求和的贡献恰好等于曲面边界的环流量． 证毕．
