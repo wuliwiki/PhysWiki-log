@@ -1,6 +1,6 @@
 % 曲线坐标系中的重积分
 
-\pentry{重积分\upref{IntN}， 柱坐标系\upref{Cylin}， 球坐标系\upref{Sph}}
+\pentry{重积分\upref{IntN}， 正交曲线坐标系\upref{CurCor}}
 在计算一些多重积分时， 选取合适的坐标系往往可以大大化简问题．
 
 \subsection{极坐标系中的二重积分}
@@ -34,49 +34,40 @@
 如果使用直角坐标系计算该积分， 过程将会变得十分复杂．
 \end{exam}
 
-% 未完成， 曲线坐标系应该在 柱坐标和球坐标的偏导 中完成
 \subsection{曲线坐标系中的体积分}
-我们接下来要讨论的曲线坐标系准确来说应该是\bb{正交曲线坐标系}， 假设三个坐标为 $x_1, x_2, x_3$， “正交” 指的是这种坐标系必须满足位置矢量对三个坐标的偏导数 $\pdv*{\vec r}{x_i} \,\, (i = 1,2,3)$ 必须两两垂直． 例如在柱坐标系中（位矢为 $\vec r = r\uvec r + z\uvec z$） 有
-%未完成， 这个式子哪里冒出来的
-\begin{equation}
-\dd{\vec r} = \dd{r} \uvec r + r\dd{\theta} \uvec\theta + \dd{z}\uvec z
-\end{equation}
-三个偏微分分别为
-\begin{equation}
-\pdv{\vec r}{r} = \uvec r \qquad 
-\pdv{\vec r}{\theta} = r \uvec \theta \qquad 
-\pdv{\vec r}{z} = \uvec z
-\end{equation}
-满足两两垂直． 在球坐标系（位矢为 $\vec r = r\uvec r$）中有
-\begin{equation}
-\dd{\vec r} = \dd{r} \uvec r + r\dd{\theta} \uvec\theta + r\sin\theta\dd{\phi}\uvec\phi
-\end{equation}
-所以柱坐标和球坐标系的三个偏微分
-
-可见三个偏导的方向就是三个单位矢量的方向，%未完成：矢量全微分和偏导的关系没讲．
-满足两两垂直．
-
-所以球坐标系和柱坐标系都是正交曲线坐标系． 另外我们熟知的直角坐标系也属于正交曲线坐标系． 以后我们会将“正交” 两字略去．
-
 在曲线坐标系中， 令
-\begin{equation}
+\begin{equation}\label{CrInt_eq7}
 \pdv{\vec r}{x_i} \equiv f_i(\vec r)\uvec x_i \quad (i = 1,2,3)
 \end{equation}
-则空间中的一个体积元（每个 $x_i$ 都分别增加 $\dd{x_i}$ 所围成的长方体）可以表示为
+则位矢的全微分为
+\begin{equation}\label{CrInt_eq8}
+\dd{\vec r} = \sum_{i = 1}^3 f_i(\vec r)\dd{x_i}\uvec x_i
+\end{equation}
+所以空间中的一个体积元（每个 $x_i$ 都分别增加 $\dd{x_i}$ 所围成的长方体）可以表示为
 \begin{equation}
 \dd{V} = f_1(\vec r)f_2(\vec r)f_3(\vec r)\dd{x_1}\dd{x_2}\dd{x_3}
 \end{equation}
-为了方便书写我们以后将 $\dd{x_1}\dd{x_2}\dd{x_3}$ 记为 $\dd[3]{x}$ 或 $\dd[3]{r}$．
-
+这是因为根据\autoref{CrInt_eq8}， 单独将坐标 $x_i$ 增加 $\dd{x_i}$ 会导致 $\vec r$ 在 $\uvec x_i$ 方向增加 $f_i(\vec r)\dd{x_i}$， 这相当于长方体在 $\uvec x_i$ 方向的边长， 而长方体的体积等于三条边长之积． 为了方便书写我们以后将 $\dd{x_1}\dd{x_2}\dd{x_3}$ 记为 $\dd[3]{x}$ 或 $\dd[3]{r}$．
 \begin{figure}[ht]
 \centering
 \includegraphics[width=9.5cm]{./figures/CrIntN2.pdf}
 \caption{柱坐标（左）和球坐标（右）中的体积元} \label{CrIntN_fig2}
 \end{figure}
 
-我们已知直角坐标系中 $f_i(\vec r) = 1$， 体积元为 $\dd[3]{x}$． 现在我们还可以写出柱坐标系和球坐标系的体积元分别为
-\begin{align}
-\dd{V} &= r \dd{r}\dd{\theta}\dd{z}\\
-\dd{V} &= r^2\sin\theta \dd{r}\dd{\theta}\dd{\phi}
-\end{align}
-柱坐标系和球坐标系中的体积元如\autoref{CrIntN_fig2} 所示
+我们已知直角坐标系中 $\pdv*{\vec r}{x_i} = 1$， 所以体积元为 $\dd[3]{r} = \dd{x}\dd{y}\dd{z}$． 对于柱坐标系（\autoref{CrIntN_fig2} 左）， 由\autoref{CurCor_eq5}\upref{CurCor} 得体积元为
+\begin{equation}
+\dd{V} = \dd{r}\cdot r\dd{\theta} \cdot \dd{z} = r\dd{r}\dd{\theta}\dd{z}
+\end{equation}
+类似地， 对于球坐标系（\autoref{CrIntN_fig2} 右）， 由\autoref{CurCor_eq11}\upref{CurCor} 得体积元为
+\begin{equation}
+\dd{V} = \dd{r} \cdot r\dd{\theta} \cdot r\sin\theta\dd{\phi} = r^2\sin\theta\dd{r}\dd{\theta}\dd{\phi}
+\end{equation}
+
+\begin{exam}{球体的体积}
+在\autoref{DefInt_ex4}\upref{DefInt} 中我们用一元函数的定积分得到了球体的体积， 现在我们也可以直接在球坐标中做由体积分得到．
+\begin{equation}\ali{
+V &= \int 1 \dd[3]{r} = \int_0^{2\pi} \int_0^\pi \int_0^R   r^2\sin\theta \dd{r} \dd{\theta} \dd{\phi}\\
+&= \int_0^{2\pi} \dd{\phi} \int_0^\pi \sin\theta \dd{\theta} \int_0^R   r^2 \dd{r}\\
+&= 2\pi \cdot 2 \cdot \frac 13 R^3 = \frac 43 \pi R^3
+}\end{equation}
+\end{exam}
