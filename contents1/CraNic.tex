@@ -1,0 +1,15 @@
+% Crank-Nicolson 算法（一维）
+
+\subsection{薛定谔方程}
+\begin{equation}
+\ali{
+\psi_i^{n+1} - \psi_i^n &= \frac{\I\Delta t}{4\Delta x^2} (\psi_{i-1}^n - 2\psi_i^n + \psi_{i+1}^n + \psi_{i-1}^{n+1} - 2\psi_i^{n+1} + \psi_{i+1}^{n+1})\\
+&\qquad\qquad - \frac{\I\Delta t}{2}(V_i^n\psi_i^n + V_i^{n+1}\psi_i^{n+1})
+}\end{equation}
+令 $\alpha = \I\Delta t/(4\Delta x^2), \beta = \I\Delta t/2$， 整理可得
+\begin{equation}\label{CraNic_eq2}
+-\alpha\psi_{i-1}^{n+1} + (1+2\alpha + \beta V_i^{n+1})\psi_i^{n+1} - \alpha \psi_{i+1}^{n+1} = \alpha\psi_{i-1}^n + (1 - 2\alpha - \beta V_i^n)\psi_i^n + \alpha \psi_{i+1}^n
+\end{equation}
+其中 $\psi_i^n = \psi(x_i, t_n)$， $V_i^n = V(x_i, t_n)$。
+
+我们把一个区间划分成 $N_x - 1$ 段等长的区间， 并令 $N_x$ 个格点为 $x_1\dots x_{N_x}$。 最简单的边界条件是取 $\psi(x_1) = \psi(x_{N_x}) = 0$。 这样\autoref{CraNic_eq2} 中的 $i$ 可以取 $i = 2\dots N_x - 1$， 得到 $N_x - 2$ 条式子， 其中只有 $\psi_2^{n+1}\dots \psi_{N_x-1}^{n+1}$ 这 $N_x - 2$ 个未知量， 每条式子最多包含连续 3 个未知量。 将线性方程用矩阵表示， 就可以得到一个三对角矩阵（第一行和最后一行只有两个系数）。
