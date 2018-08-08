@@ -1,19 +1,19 @@
 % 无量纲的物理公式
 \pentry{牛顿第二定律\upref{New3}， 万有引力\upref{Gravty}}
 
-与数学公式不同，物理公式中的物理量通常既包含数值又包含量纲，如 $x = 10\Si{cm}$。但有时候（例如数值计算时）我们需要将含有量纲的公式转换为不含量纲的物理公式（因为程序中的变量不含量纲），且公式中的常量（如万有引力常数 $G$）越少越好以尽可能减少计算量。我们通过几个例子来说明转换过程。
+与数学公式不同，物理公式中的物理量通常既包含数值又包含量纲，如 $x = 10\Si{cm}$。但有时候（例如数值计算时）我们需要将含有量纲的公式转换为不含量纲的物理公式（因为计算机程序中的变量不含量纲），且公式中的常量（如万有引力常数 $G$）越少越好以尽可能减少计算量。我们通过几个例子来说明转换过程。
 
 \begin{exam}{牛顿第二定律}\label{NoUnit_ex1}
-国际单位制（S.I）下的牛顿第二定律公式为
+国际单位制下的牛顿第二定律公式为
 \begin{equation}
 F = ma
 \end{equation}
-我们先定义几个含量纲的常量例如 $\beta_{F} = 1\Si{N}$，$\beta_{m} = 1\Si{kg}$，$\beta_{a} = 1\Si{m/s^2}$。把不含量纲的的力，质量和加速度分别为 $F_a, m_a, a_a$， 则有 $F = \beta_F F_a$， $m = \beta_{m} m_a$， $a = \beta_{a} m_a$。 代入上式得
+我们先定义几个含量纲的常量例如 $\beta_{F} = 1\Si{N}$，$\beta_{m} = 1\Si{kg}$，$\beta_{a} = 1\Si{m/s^2}$。把不含量纲的的力，质量和加速度分别为 $F_a, m_a, a_a$， 则有 $F = F_a \beta_F$， $m = m_a \beta_{m}$， $a = m_a \beta_{a}$。 代入上式得
 \begin{equation}
 F_a = \frac{\beta_m \beta_a}{\beta_F} m_a  a_a
 \end{equation}
 由于国际单位定义 $1\Si{N} = 1\Si{kg}\cdot\Si{m/s^2}$， 上式中 $\beta_m \beta_a/\beta_F = 1$， 所以不含量纲的牛顿第二定律为
-\begin{equation}
+\begin{equation}\label{NoUnit_eq3}
 F_a = m_a a_a
 \end{equation}
 以上的做法看起来似乎并没有什么意义， 这是因为我们把每个常量 $\beta$ 都定义为一个相应的国际单位。事实上，只要保证 $\beta_m \beta_a/\beta_F = 1$， 这三个常量是可以任取的。例如令 $\beta_m = 1\Si{g}$， $\beta_a = 1\Si{cm/s^2}$， $\beta_F = 10^{-5}\Si{N}$，上式仍然成立。
@@ -28,10 +28,16 @@ F = G\frac{Mm}{r^2}
 \begin{equation}
 F_a = \frac{G\beta_m^2}{\beta_F \beta_x^2} \frac{M_a m_a}{r_a^2}
 \end{equation}
-我们若想让新的不含量纲的万有引力公式不含 $G$ 以减少计算量，即
+我们若想让新的不含量纲的万有引力公式也不含 $G$ 以减少计算量，即
 \begin{equation}\label{NoUnit_eq6}
 F_a = \frac{M_a m_a}{r_a^2}
 \end{equation}
 只需令所有的 $\beta$ 满足 $G\beta_m^2/(\beta_F\beta_x^2) = 1$， 例如 $\beta_x = 1\Si{m}$， $\beta_m = 1.224\times 10^5 \Si{kg}$， $\beta_F = 1\Si{N}$。
 \end{exam}
+
+注意无量纲的物理公式和有量纲的物理公式（无论用什么量纲）存在本质的不同， 例如在\autoref{NoUnit_eq3} 中， 如果受力物体的质量恰好等于 $\beta_m$， 那么公式可以直接写为
+\begin{equation}\label{NoUnit_eq7}
+F_a = a_a
+\end{equation}
+而这中写法对含量纲的公式来说是错误的， 因为量纲不同的两个物理量不可以相等（或相加）。
 
