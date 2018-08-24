@@ -63,3 +63,54 @@ g(k_i) = \frac{1}{\sqrt{2\pi}} \int_{-\infty}^{+\infty} f(x)\E^{-\I kx} \dd{x}
 为了节省计算量，我们假设
 % 未完成：艾玛，这个过程要推出来真的好麻烦啊！！
 
+
+
+。。。
+
+总之结论就是
+\begin{equation}
+N\Delta x \Delta k = L_x \Delta k = L_k \Delta x = 2\pi
+\end{equation}
+所以离散傅里叶变换只有两个自由度， 即， 只要决定 $N, L_x, \Delta x, L_k, \Delta k$ 中的任意两个， 就可以完全决定变换矩阵。 另外注意 $x$ 的长度决定 $k$ 的密度， $k$ 的长度决定 $x$ 的密度。
+
+
+\subsection{采样定理（Sampling Theorem）}
+以上的离散傅里叶变换看似只是一种近似， 且有种种限制， 例如我们想既规定 $L_x$， 又减小 $\Delta k$。 使我们不禁想定义更广义的离散傅里叶变换为
+\begin{equation}\ali{
+g(k_j) = \frac{1}{\sqrt{2\pi}}\sum_i f(x_i) \E^{-\I k_j x_i}\Delta x\\
+f(x_i) = \frac{1}{\sqrt{2\pi}}\sum_j g(k_j) \E^{\I k_j x_i}\Delta k
+}\end{equation}
+（其中相邻的 $x_i$ 间距为 $\Delta x$， 相邻的 $k_j$ 间距为 $\Delta_k$。 但事实上， 这样的定义并不比离散傅里叶变换好， 不仅更慢， 而且更不精确（即使 $\Delta$ 非常小）。
+
+接下来我们要介绍非常强大的\bb{采样定理}， 并得出一个惊人的结论， 即只要 $f(x)$ 和 $g(k)$ 不超出 $L_x$ 和 $L_k$ 的范围， DFT 就是精确的傅里叶变换。
+
+采样定理说的是， 如果 $g(k)$ 不超出 $[-L_k/2, L_k/2]$， 那么我们只需要用 $\Delta x = 2\pi/L_k$ 来对  $f(x)$  采样就可以用以下插值公式精确还原出 $f(x)$\footnote{其实我并不确定是否需要 $x_0 = 0$ 或者 $x_i$ 的位置有什么其他要求， 现在姑且认为 $x_0 = 0$ 好了。}
+\begin{equation}
+f(x) = \sum_{n = -\infty}^{\infty} f(x_n)\sinc[\pi(x - x_n)/\Delta x]
+\end{equation}
+其中 $\sinc x = \sin x/x$ （且定义 $\sinc 0 = 1$）。
+
+现在我们将插值公式代入傅里叶变换得
+\begin{equation}
+g(k) =  \frac{1}{\sqrt{2\pi}} \sum_{n = -\infty}^{\infty} f(x_n) \int_{-\infty}^{+\infty}\sinc[\pi(x - x_n)/\Delta x] \E^{-\I k x} \dd{x}
+\end{equation}
+结果是
+\begin{equation}
+g(k) = \frac{1}{\sqrt{2\pi}} \sum_{n = -\infty}^{\infty} f(x_n) \E^{-\I kx_n} \Delta x
+\end{equation}
+注意 $g(k)$ 是完全精确的。 另外， 既然傅里叶变化和反傅里叶变换是对称的， 我们同样可得频率步长只需取 $\Delta k = 2\pi/ L_x$。 而 DFT 恰好符合这两个条件。 最后， $g(k)$ 的插值公式同样为
+
+\begin{equation}
+g(k) = \sum_{n = -\infty}^{\infty} g(k_n)\sinc[\pi(k - k_n)/\Delta k]
+\end{equation}
+
+其实单纯的无损 DFT 效率还不是最高的，例如有时候 $k_{max}-k_{min}$ 很窄， 但 $L_k$ 却很大， 这时用 $\Delta x = 2\pi/L_k$ 的效率就很低。 同理， 如果 $x_{max} - x_{min} < L_x$ 时效率也会变低。 所以与其直接对 $f(x)$ 和 $g(k)$ 使用 DFT 不如先定义
+\begin{equation}
+x_0 = (x_{min} + x_{max})/2 \qquad k_0 = (k_{min} + k_{max})/2
+\end{equation}
+然后进行以下傅里叶变换
+\begin{equation}
+f(x+x_0)\E^{-\I k_0 x} \Leftrightarrow g(k+k_0)\E^{\I k x_0}
+\end{equation}
+完了再除以指数因子及平移。
+
