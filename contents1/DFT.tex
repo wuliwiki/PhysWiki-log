@@ -1,19 +1,19 @@
 % 离散傅里叶变换
 
 \subsection{结论}
-\pentry{幺正矩阵，傅里叶变换（指数函数）\upref{FTExp}} % 链接未完成
+\pentry{幺正矩阵， 傅里叶变换（指数函数）\upref{FTExp}} % 链接未完成
 
-对两组有序数列 $f_0,f_1,\dots,f_{N-1}$ 和 $g_0,g_2,\dots, g_{N-1}$，正变换和逆变换分别为\footnote{工程上的定义常常是正变换没有 $1/\sqrt{N}$ 因子，逆变换的 $1/\sqrt{N}$ 因子变为 $1/N$． 这样的好处是节省运算量．本书中使用的定义好处是变换为幺正变换，有保持归一化的特点．}
+\bb{离散傅里叶变换（Discrete Fourier Transform）（DFT）}是一个复数域的线性变换\upref{LTrans}． 对两组有序数列 $f_0, f_1, \dots, f_{N-1}$ 和 $g_0,g_2,\dots, g_{N-1}$，正变换和逆变换分别为\footnote{工程上的定义常常是正变换没有 $1/\sqrt{N}$ 因子，逆变换的 $1/\sqrt{N}$ 因子变为 $1/N$． 这样的好处是节省运算量．本书中使用的定义好处是变换为幺正变换，有保持归一化的特点．}
 \begin{align}
 g_p &= \frac{1}{\sqrt{N}}\sum_{q=0}^{N-1} \exp(-\frac{2\pi\I}{N} p q ) f_q \\
 f_q &= \frac{1}{\sqrt{N}}\sum_{p=0}^{N-1} \exp(\frac{2\pi\I}{N} p q) g_p
 \end{align}
 
-\bb{离散傅里叶变换（Discrete Fourier Transform）（DFT）}是一个复数域的正交变换．%链接未完成
-\bb{快速傅里叶变换（FFT）}的结果与离散傅里叶变换一样，只是优化了算法使程序运行更高效．
+一个更常见的名词是\bb{快速傅里叶变换（FFT）}， 其定义与离散傅里叶变换一样，只是优化了算法使程序运行更快\footnote{参考 Numerical Recipes 3ed}．
 
-\subsection{矩阵表示}
-把变换和逆变换用幺正矩阵 $\mat F$ 和 $\mat F^{-1}$ 来表示，令列矢量 $\vec f = (f_0,f_1,\dots,f_N)\Tr$，$\vec g = (g_1,g_2,\dots,g_N)\Tr$， 变换和逆变换分别为
+\subsection{变换矩阵}
+把 DFT 和逆变换用矩阵% 幺正矩阵链接未完成
+ $\mat F$ 和 $\mat F^{-1}$ 来表示， 令列矢量 $\vec f = (f_0,f_1,\dots,f_N)\Tr$， $\vec g = (g_1,g_2,\dots,g_N)\Tr$， 变换和逆变换分别记为
 \begin{equation}
 \vec g = \mat F \vec f \qquad
 \vec f = \mat F^{-1} \vec g
@@ -23,6 +23,7 @@ f_q &= \frac{1}{\sqrt{N}}\sum_{p=0}^{N-1} \exp(\frac{2\pi\I}{N} p q) g_p
 F_{pq} = \frac{1}{\sqrt{N}} \exp(-\frac{2\pi\I}{N} p q) \qquad
 \mat F^{-1} = \mat F\Her
 \end{equation}
+可以证明， $\mat F$ 是一个幺正矩阵， 所以有
 % 未完成：正交矩阵的逆矩阵
 % 未完成：凡是证明以前，真的至少应该说明一下这玩意有什么用，从哪来吧！任何词条都是啊！
 
@@ -36,11 +37,11 @@ F_{pq} = \frac{1}{\sqrt{N}} \exp(-\frac{2\pi\I}{N} p q) \qquad
 \sum_{p=0}^{N-1} F^*_{pq_1}F_{pq_2}
 = \sum_{p=0}^{N-1} \exp[\frac{2\pi\I}{N} (q_2-q_1) p]
 \end{equation}
-注意到求和的每一项在复平面上都对应模长为1，幅角为 $(q_2-q_1)p/N$ 个圆周的矢量，% 未完成：这个几何意义要在复数的加法以及指数函数（复数）中介绍！
+注意到求和的每一项在复平面上都对应模长为 1， 幅角为 $(q_2-q_1)p/N$ 个圆周的矢量，% 未完成：这个几何意义要在复数的加法以及指数函数（复数）中介绍！
 而 $N$ 条矢量恰好向不同方向均匀分布，所以相加为 $0$．证毕．
 
 \subsection{逆矩阵}
-先来看矩阵各列的模长平方，即\autoref{DFT_eq1} 中 $q_1=q_2$ 的情况，易得任何一列的模长平方都为 $N$．所以矩阵 $\mat F$ 是一个幺正矩阵 $\mat U$ 乘以 $\sqrt{N}$．考虑到幺正矩阵的逆矩阵是其厄米共轭， %链接未完成
+先来看矩阵各列的模长平方，即\autoref{DFT_eq1} 中 $q_1 = q_2$ 的情况，易得任何一列的模长平方都为 $N$．所以矩阵 $\mat F$ 是一个幺正矩阵 $\mat U$ 乘以 $\sqrt{N}$．考虑到幺正矩阵的逆矩阵是其厄米共轭， %链接未完成
 有
 \begin{equation}
 \mat F\Her \mat F = \sqrt{N}^2 \mat U\Her \mat U = N \mat U^{-1} \mat U = N
