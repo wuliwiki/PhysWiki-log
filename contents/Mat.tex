@@ -100,10 +100,15 @@ x_{n1} & \cdots & x_{nl}
 \begin{equation}
 Y_{ij} = \sum_{k = 1}^n A_{ik} X_{kj}
 \end{equation}
-再次注意两个相乘的矩阵，左边矩阵的列数必须等于右边矩阵的行数．
-% 未完成：用图快速记忆矩阵的乘法．
+再次注意两个相乘的矩阵，左边矩阵的列数必须等于右边矩阵的行数． 我们可以用\autoref{Mat_fig1} 来记忆矩阵乘法．
 
-根据定义，容易证明矩阵乘法\bb{满足分配律} $\mat A(\mat B+\mat C) = \mat A\mat B+\mat A\mat C$， 但一般\bb{不满足交换律}，举一个反例：
+\begin{figure}[ht]
+\centering
+\includegraphics[width=7cm]{./figures/Mat1.pdf}
+\caption{矩阵乘法的示意图： $\mat C$ 的 $(i, j)$ 矩阵元等于 $\mat A$ 的第 $i$ 行和 $\mat B$ 的第 $j$ 列逐个元素相乘再相加} \label{Mat_fig1}
+\end{figure}
+
+矩阵乘法一般不满足交换律，举一个反例：
 \begin{equation}
 \pmat{ 1 & 1\\ 0 & 0 }
 \pmat{ 1 & 0\\ 1 & 0 } =
@@ -114,7 +119,7 @@ Y_{ij} = \sum_{k = 1}^n A_{ik} X_{kj}
 \end{equation}
 
 \subsection{矩阵的乘法分配律}
-下面证明矩阵的乘法分配律
+矩阵的乘法满足分配律
 \begin{equation}\label{Mat_eq13}
 \mat A (\mat B + \mat C) = \mat A \mat B + \mat A \mat C
 \end{equation}
@@ -130,6 +135,12 @@ D_{ij} = \sum_k A_{ik} (B_{kj} + C_{kj})
 D_{ij} = \sum_k A_{ik}B_{kj} + \sum_k A_{ik}C_{kj}
 \end{equation}
 而这恰好是 $\mat A \mat B + \mat A \mat C$ 的矩阵元． 证毕．\autoref{Mat_eq14} 的证明类似．
+
+现在我们可以得出线性变换（\autoref{Mat_eq5}）的一个重要性质。 对若干同长度的列矢量 $\vec v_1, \vec v_2, \dots$
+\begin{equation}
+\mat A \qty(\sum_i c_i \vec v_i) = \sum_i c_i \mat A \vec v_i
+\end{equation}
+也就是说若干列矢量的线性组合的线性变换等于每个列矢量分别进行线性变换再进行同样的线性组合。
 
 \subsection{矩阵乘法的结合律}
 现在来看三个矩阵相乘，令
@@ -165,4 +176,26 @@ I_{ij} = \delta_{ij}
 \end{equation} 
 任何矩阵左乘或右乘单位矩阵， 仍然得到矩阵本身． 单位矩阵的转置仍为单位矩阵．
 
+\subsection{逆矩阵}
+% 这里并不详细讲逆矩阵， 了解基本概念即可．
+记方阵 $\mat M$ 的\bb{逆矩阵}为 $\mat M^{-1}$， 且满足
+\begin{equation}
+\mat M^{-1} \mat M = \mat I
+\end{equation}
+其中 $\mat I$ 是单位矩阵． 也就是说， 任意一个矩阵（或列矢量） $\mat A$ 乘以矩阵 $\mat M$ 再乘以其逆矩阵 $\mat M^{-1}$ 仍然得到 $\mat A$ 本身．
 
+虽然矩阵乘法一般不满足交换律， 但矩阵和对应的逆矩阵满足\footnote{这个定理暂时不证}， 即
+\begin{equation}
+\mat M\mat M^{-1} = \mat M^{-1} \mat M = \mat I
+\end{equation}
+
+逆矩阵 $\mat M^{-1}$ 所代表的线性变换就是 $\mat M$ 代表的线性变换的逆变换， 令 $\vec x$ 和 $\vec y$ 为列矢量， 如果有
+\begin{equation}\label{Mat_eq25}
+\vec y = \mat M \vec x
+\end{equation}
+那么我们在等式两边左乘 $\mat M^{-1}$ 再把等式左右互换， 则上式变为
+\begin{equation}\label{Mat_eq26}
+\vec x = \mat M^{-1} \vec y
+\end{equation}
+
+要求逆矩阵， 一种简单直接但低效的方法就是先令 $\vec y = (1, 0, \dots)\Tr$， 代入\autoref{InvMat_eq25} 解线性方程组得 $\vec x$， 将 $\vec x, \vec y$ 代入\autoref{InvMat_eq26} 可知 $\vec x$ 就是 $\mat M$ 的第一列， 再令 $\vec y = (0, 1, 0, \dots)\Tr$， 解线性方程组可得 $\mat M$ 的第二列， 以此类推就可以得到完整的 $\mat M$。
