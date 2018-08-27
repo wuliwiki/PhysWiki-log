@@ -2,26 +2,26 @@
 
 \bb{离散傅里叶变换（Discrete Fourier Transform）（DFT）}是一个复数域的线性变换\upref{LTrans}． 对两组有序数列 $f_0, f_1, \dots, f_{N-1}$ 和 $g_0,g_2,\dots, g_{N-1}$，正变换和逆变换分别为\footnote{工程上的定义常常是正变换没有 $1/\sqrt{N}$ 因子，逆变换的 $1/\sqrt{N}$ 因子变为 $1/N$． 这样的好处是节省运算量．本书中使用的定义好处是变换为幺正变换，有保持归一化的特点．}
 \begin{align}
-g_p &= \frac{1}{\sqrt{N}}\sum_{q=0}^{N-1} \exp(-\frac{2\pi\I}{N} p q ) f_q \\
-f_q &= \frac{1}{\sqrt{N}}\sum_{p=0}^{N-1} \exp(\frac{2\pi\I}{N} p q) g_p
+g_p &= \frac{1}{\sqrt{N}}\sum_{q=0}^{N-1} \exp(-\frac{2\pi\I}{N} p q ) f_q\label{DFT_eq1} \\
+f_q &= \frac{1}{\sqrt{N}}\sum_{p=0}^{N-1} \exp(\frac{2\pi\I}{N} p q) g_p\label{DFT_eq2}
 \end{align}
 
 一个更常见的名词是\bb{快速傅里叶变换（FFT）}， 其定义与离散傅里叶变换一样，只是优化了算法使程序运行更快\footnote{参考 Numerical Recipes 3ed}．
 
 \subsection{离散傅里叶变换与傅里叶变换}
 \pentry{傅里叶变换（指数函数）\upref{FTExp}}
-在详细分析离散不理也变换的性质之前， 我们先看看它与解析的傅里叶变换如何对应。 函数 $f(x)$ 和 $g(k)$ 间的傅里叶变换为
+在详细分析离散不理也变换的性质之前， 我们先看看它与解析的傅里叶变换如何对应． 函数 $f(x)$ 和 $g(k)$ 间的傅里叶变换为
 \begin{align}
 g(k) &= \frac{1}{\sqrt{2\pi}} \int_{-\infty}^{+\infty} f(x)\E^{-\I kx} \dd{x}\label{DFT_eq3}\\
 f(x) &= \frac{1}{\sqrt{2\pi}} \int_{-\infty}^{+\infty} g(k)\E^{\I kx} \dd{k}\label{DFT_eq4}
 \end{align}
-如果 $f(x)$ 和 $g(k)$ 分别只在区间 $[-L_x/2, L_x, 2]$ 和 $[-L_k/2, L_k/2]$ 内不为零， 积分就可以只在这两个区间内进行。 我们再给两个区间划出 $N$ 个等间距的格点 $\dots, x_{-1}, x_0, x_1,\dots$ 和 $\dots, k_{-1}, k_0, k_1,\dots$ （$x_0 = k_0 = 0$）， 并规定相邻格点的间距为
-\begin{equation}
+如果 $f(x)$ 和 $g(k)$ 分别只在区间 $[-L_x/2, L_x, 2]$ 和 $[-L_k/2, L_k/2]$ 内不为零， 积分就可以只在这两个区间内进行． 我们再给两个区间划出 $N$ 个等间距的格点 $\dots, x_{-1}, x_0, x_1,\dots$ 和 $\dots, k_{-1}, k_0, k_1,\dots$ （$x_0 = k_0 = 0$）， 并规定相邻格点的间距为
+\begin{equation}\label{DFT_eq5}
 \Delta x = L_x/N \qquad \Delta k = L_k/N
 \end{equation}
-注意 $x$ 和 $k$ 的首尾格点分别相距 $L_x(N-1)/N$ 和 $L_k(N-1)/N$。 若 $N$ 是奇数， 我们令中间的格点为 $x_0$ 和 $k_0$， 如果 $N$ 是偶数， 我们令中间靠右的格点为 $x_0$ 和 $k_0$。
+注意 $x$ 和 $k$ 的首尾格点分别相距 $L_x(N-1)/N$ 和 $L_k(N-1)/N$． 若 $N$ 是奇数， 我们令中间的格点为 $x_0$ 和 $k_0$， 如果 $N$ 是偶数， 我们令中间靠右的格点为 $x_0$ 和 $k_0$．
 
-现在我们用求和近似\autoref{DFT_eq3} 的积分得\footnote{事实上， 学习了下文的采样定理会发现这里用求和代替积分是完全精确的。}
+现在我们用求和近似\autoref{DFT_eq3} 的积分得\footnote{事实上， 学习了下文的采样定理会发现这里用求和代替积分是没有任何误差的．}
 \begin{align}
 g(k_p) &= \frac{1}{\sqrt{2\pi}} \sum_q f(x_q) \E^{-\I k_p x_q} \Delta x\label{DFT_eq6}\\
 f(x_q) &= \frac{1}{\sqrt{2\pi}} \sum_p g(k_p) \E^{\I k_p x_q} \Delta k\label{DFT_eq7}
@@ -30,76 +30,56 @@ f(x_q) &= \frac{1}{\sqrt{2\pi}} \sum_p g(k_p) \E^{\I k_p x_q} \Delta k\label{DFT
 \begin{equation}\label{DFT_eq8}
 \Delta x\Delta k = \frac{2\pi}{N}
 \end{equation}
-但我们会发现这里的 $p, q$ 可以是负整数， 而 DFT 中的 $p, q$ 都是非负整数。 但稍加计算就会发现当 $p$ 或 $q$ 是负值时， 把它们加上 $N$， 指数项并不改变， 例如 $k_{p+N} x_q = k_p x_q + 2\pi$， 并不影响指数项。 所以， 我们只要将所有小于零的格点编号加上 $N$ 并重新排列即可。 例如 $N = 4$ 时， $x$ 格点为 $x_{-2}, x_{-1}, x_0, x_1$， 令 $x_2 = x_{-2}, x_3 = x_{-1}$， 这四个格点的名字就变为 $x_0, x_1, x_2, x_3$。 现在再来对比 DFT 和 \autoref{DFT_eq6} \autoref{DFT_eq7}， 就只是相差两个常数因子而已了。
+但我们会发现这里的 $p, q$ 可以是负整数， 而 DFT 中的 $p, q$ 都是非负整数． 但稍加计算就会发现当 $p$ 或 $q$ 是负值时， 把它们加上 $N$， 指数项并不改变， 例如 $k_{p+N} x_q = k_p x_q + 2\pi$， 并不影响指数项． 所以， 我们只要将所有小于零的格点编号加上 $N$ 并重新排列即可． 例如 $N = 4$ 时， $x$ 格点为 $x_{-2}, x_{-1}, x_0, x_1$， 令 $x_2 = x_{-2}, x_3 = x_{-1}$， 这四个格点的名字就变为 $x_0, x_1, x_2, x_3$． 现在再来对比 DFT 和 \autoref{DFT_eq6} \autoref{DFT_eq7}， 就只是相差两个常数因子而已了．
 
-\autoref{DFT_eq8} 是 DFT 一个重要的性质。 稍加变换得
-\begin{equation}
+\autoref{DFT_eq8} 是 DFT 一个重要的性质． 结合\autoref{DFT_eq5} 得
+\begin{equation}\label{DFT_eq9}
 N\Delta x \Delta k = L_x \Delta k = L_k \Delta x = \frac{L_x L_k}{N} = 2\pi
 \end{equation}
-所以离散傅里叶变换只有两个自由度， 只要决定 $N, L_x, \Delta x, L_k, \Delta k$ 中的任意两个， 就可以完全决定变换公式。 注意 $L_x$ 与 $\Delta k$ 成反比， $L_k$ 与 $\Delta x$ 成反比。
+离散傅里叶变换只有两个自由度， 只要决定 $N, L_x, \Delta x, L_k, \Delta k$ 中的任意两个， 就可以完全决定变换公式． 注意 $L_x$ 与 $\Delta k$ 成反比， $L_k$ 与 $\Delta x$ 成反比．
 
-总结起来， 要用 DFT 数值求解一个函数 $f(x)$ 的傅里叶变换， 就先用上述方法生成的格点将该函数等间距采样， 然后左半和右半调换得到 $f_i$， 代入 DFT 公式得到 $g_i$ 再左半和右半调换得到 $g(k)$ 的离散点。 反傅里叶变换同理。
+总结起来， 要用 DFT 数值求解一个函数 $f(x)$ 的傅里叶变换， 就先用上述方法生成的格点将该函数等间距采样， 然后左半和右半调换得到 $f_i$， 代入 DFT 公式得到 $g_i$ 再左半和右半调换得到 $g(k)$ 的离散点． 反傅里叶变换同理．
 
 \subsection{变换矩阵}
 \pentry{酋矩阵}% 链接未完成
-DFT 显然是一个线性变换， 我们来看变换矩阵的性质。 把变换和逆变换的系数矩阵用% 幺正矩阵链接未完成
- $\mat F$ 和 $\mat F^{-1}$ 来表示， 令列矢量 $\vec f = (f_0,f_1,\dots,f_N)\Tr$， $\vec g = (g_1,g_2,\dots,g_N)\Tr$， 变换和逆变换分别记为
+DFT 显然是一个线性变换， 我们来看变换矩阵的性质． 把变换和逆变换的系数矩阵用
+ $\mat F$ 和 $\mat F^{-1}$ 来表示， 令列矢量 $\vec f = (f_0,f_1,\dots,f_{N-1})\Tr$， $\vec g = (g_0,g_1,\dots,g_{N-1})\Tr$， 变换和逆变换分别记为
 \begin{equation}
 \vec g = \mat F \vec f \qquad
 \vec f = \mat F^{-1} \vec g
 \end{equation}
 其中
 \begin{equation}
-F_{pq} = \frac{1}{\sqrt{N}} \exp(-\frac{2\pi\I}{N} p q) \qquad
+F_{pq} = \frac{1}{\sqrt{N}} \exp(-\frac{2\pi\I}{N} p q)
+\end{equation}
+下面证明， $\mat F$ 是一个酋矩阵， 所以逆变换矩阵就是 $\mat F$ 的厄米共轭．
+\begin{equation}
 \mat F^{-1} = \mat F\Her
 \end{equation}
-可以证明， $\mat F$ 是一个幺正矩阵， 所以有
-% 未完成：正交矩阵的逆矩阵
-% 未完成：凡是证明以前，真的至少应该说明一下这玩意有什么用，从哪来吧！任何词条都是啊！
+不难验证\autoref{DFT_eq2} 的变换矩阵的确等于 $\mat F\Her$．
 
-\subsection{证明 $\mat F$ 的正交性}
-根据正交矩阵的定义，我们需要证明
+根据酋矩阵的定义，我们需要证明
 \begin{equation}
 \sum_{p=0}^{N-1} F^*_{pq_1} F_{pq_2} = 0 \quad (q_1 \ne q_2)
 \end{equation}
 而
-\begin{equation}\label{DFT_eq1}
+\begin{equation}\label{DFT_eq14}
 \sum_{p=0}^{N-1} F^*_{pq_1}F_{pq_2}
-= \sum_{p=0}^{N-1} \exp[\frac{2\pi\I}{N} (q_2-q_1) p]
+= \frac1N \sum_{p=0}^{N-1} \exp[\frac{2\pi\I}{N} (q_2-q_1) p]
 \end{equation}
-注意到求和的每一项在复平面上都对应模长为 1， 幅角为 $(q_2-q_1)p/N$ 个圆周的矢量，% 未完成：这个几何意义要在复数的加法以及指数函数（复数）中介绍！
+注意到求和的每一项在复平面上都对应模长为 $1/N$， 幅角为 $(q_2-q_1)p/N$ 个圆周的矢量，
 而 $N$ 条矢量恰好向不同方向均匀分布，所以相加为 $0$．证毕．
 
-\subsection{逆矩阵}
-先来看矩阵各列的模长平方，即\autoref{DFT_eq1} 中 $q_1 = q_2$ 的情况，易得任何一列的模长平方都为 $N$．所以矩阵 $\mat F$ 是一个幺正矩阵 $\mat U$ 乘以 $\sqrt{N}$．考虑到幺正矩阵的逆矩阵是其厄米共轭， %链接未完成
-有
-\begin{equation}
-\mat F\Her \mat F = \sqrt{N}^2 \mat U\Her \mat U = N \mat U^{-1} \mat U = N
-\end{equation}
-两边除以 $N$，可得 $\mat F^{-1} = \mat F\Her /N$． 证毕．
-% 未完成：在逆矩阵的介绍中应该说明用常数表示常数乘以单位矩阵
-
-有时为了对称起见，把矩阵元定义为
-\begin{equation}
-F_{pq} = \frac{1}{\sqrt{N}}\exp(-\frac{2\pi\I}{N} p q)
-\end{equation}
-这样，$\mat F$ 的每一列模长为1，使 $\mat F$ 本身就是幺正矩阵，其逆矩阵等于厄米共轭．
-
 \subsection{采样定理（Sampling Theorem）}
-以上的离散傅里叶变换看似只是一种近似， 且有种种限制， 例如我们想既规定 $L_x$， 又减小 $\Delta k$。 使我们不禁想定义更广义的离散傅里叶变换为
-\begin{equation}\ali{
-g(k_j) = \frac{1}{\sqrt{2\pi}}\sum_i f(x_i) \E^{-\I k_j x_i}\Delta x\\
-f(x_i) = \frac{1}{\sqrt{2\pi}}\sum_j g(k_j) \E^{\I k_j x_i}\Delta k
-}\end{equation}
-（其中相邻的 $x_i$ 间距为 $\Delta x$， 相邻的 $k_j$ 间距为 $\Delta k$）。 但事实上， 这样的定义并不比离散傅里叶变换好， 不仅不能用 FFT 提高运算速度， 而且可能更不精确。
+从以上的分析中， DFT 似乎只是一种近似， 且有种种限制， 例如我们只能取关于原点对称的区间， 又例如变换只有两个自由度． 我们不禁想定义更广义的离散傅里叶变换， 使\autoref{DFT_eq6} 和\autoref{DFT_eq7} 中 $x_i$ 和 $k_j$ 可以去任意区间的任意多个等间距格点． 但事实上， 这样的定义并不比离散傅里叶变换好， 不仅不能用 FFT 提高运算速度， 而且可能更不精确（因为\autoref{DFT_eq7} 的系数矩阵不一定是\autoref{DFT_eq6} 的逆矩阵．
 
-接下来我们要介绍非常强大的\bb{采样定理}， 并得出一个惊人的结论， 即只要 $f(x)$ 和 $g(k)$ 不超出 $L_x$ 和 $L_k$ 的范围， DFT 就是精确的傅里叶变换。
+这里给出傅里叶变换的\bb{采样定理}， 并得出一个强大结论： 只要 $f(x)$ 和 $g(k)$ 不超出 $L_x$ 和 $L_k$ 的范围， DFT 就是精确的傅里叶变换．
 
-采样定理说的是， 如果 $g(k)$ 不超出 $[-L_k/2, L_k/2]$， 那么我们只需要用 $\Delta x = 2\pi/L_k$ 来对  $f(x)$  采样就可以用以下插值公式精确还原出 $f(x)$\footnote{其实我并不确定是否需要 $x_0 = 0$ 或者 $x_i$ 的位置有什么其他要求， 现在姑且认为 $x_0 = 0$ 好了。}
+采样定理说的是， 如果 $g(k)$ 不超出 $[-L_k/2, L_k/2]$， 那么我们只需要用 $\Delta x = 2\pi/L_k$ （ DFT 恰好满足这个条件）来对  $f(x)$  采样就可以用以下插值公式精确还原出 $f(x)$\footnote{其实我并不确定是否需要 $x_0 = 0$ 或者 $x_i$ 的位置有什么其他要求， 现在姑且认为 $x_0 = 0$ 好了．}
 \begin{equation}
 f(x) = \sum_{n = -\infty}^{\infty} f(x_n)\sinc[\pi(x - x_n)/\Delta x]
 \end{equation}
-其中 $\sinc x = \sin x/x$ （且定义 $\sinc 0 = 1$）。
+其中 $\sinc x = \sin x/x$ （且定义 $\sinc 0 = 1$）．
 
 现在我们将插值公式代入傅里叶变换得
 \begin{equation}
@@ -109,19 +89,23 @@ g(k) =  \frac{1}{\sqrt{2\pi}} \sum_{n = -\infty}^{\infty} f(x_n) \int_{-\infty}^
 \begin{equation}
 g(k) = \frac{1}{\sqrt{2\pi}} \sum_{n = -\infty}^{\infty} f(x_n) \E^{-\I kx_n} \Delta x
 \end{equation}
-注意 $g(k)$ 是完全精确的。 另外， 既然傅里叶变化和反傅里叶变换是对称的， 我们同样可得频率步长只需取 $\Delta k = 2\pi/ L_x$。 而 DFT 恰好符合这两个条件。 最后， $g(k)$ 的插值公式同样为
+而这正是\autoref{DFT_eq6}， 所以这里用求和代替积分是没有误差的．
 
+由于傅里叶变化和反变换是对称的， 所以同理可得反变换也是精确的， 且插值公式为
 \begin{equation}
 g(k) = \sum_{n = -\infty}^{\infty} g(k_n)\sinc[\pi(k - k_n)/\Delta k]
 \end{equation}
 
-其实单纯的无损 DFT 效率还不是最高的，例如有时候 $k_{max}-k_{min}$ 很窄， 但 $L_k$ 却很大， 这时用 $\Delta x = 2\pi/L_k$ 的效率就很低。 同理， 如果 $x_{max} - x_{min} < L_x$ 时效率也会变低。 所以与其直接对 $f(x)$ 和 $g(k)$ 使用 DFT 不如先定义
+其实单纯的无损 DFT 效率还不是最高的，例如有时候 $k$ 所需的区间很窄但却远离原点， 则 $L_k$ 仍需取较大的值， 这时 DFT 就没有发挥最大效率， 因为大部分 $k_i$ 都是 0． 同理， 如果 $x$ 的区间也可能有类似的特点． 所以这种情况下与其直接对 $f(x)$ 和 $g(k)$ 使用 DFT 不如先定义
 \begin{equation}
 x_0 = (x_{min} + x_{max})/2 \qquad k_0 = (k_{min} + k_{max})/2
 \end{equation}
-然后进行以下傅里叶变换
-\begin{equation}
-f(x+x_0)\E^{-\I k_0 x} \Leftrightarrow g(k+k_0)\E^{\I k x_0}
-\end{equation}
-完了再除以指数因子及平移。
+然后根据傅里叶变换的平移性质，%链接未完成！
+使用以下公式中的一个做 DFT 即可（箭头代表傅里叶变换）
+\begin{align}
+f(x)\E^{-\I k_0 x} &\Leftrightarrow g(k+k_0)\\
+f(x+x_0) &\Leftrightarrow g(k)\E^{\I k x_0}\\
+f(x+x_0)\E^{-\I k_0 x} &\Leftrightarrow g(k+k_0)\E^{\I k x_0}
+\end{align}
+这样就能取尽量小区间长度， 使 $N$ 尽量小， 从而达到最大效率．
 
