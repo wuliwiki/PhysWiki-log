@@ -1,0 +1,40 @@
+% 离散正弦变换
+
+由正弦级数（$n = 1, 2, 3\dots$）
+\begin{equation}
+f(x) = \sum_n C_n \sin(\frac{n\pi}{l}x)
+\end{equation}
+\begin{equation}
+C_n =  \frac2l \int_0^l f(x) \sin(\frac{n\pi}{l}x) \dd{x}
+\end{equation}
+不难推出正弦变换
+\begin{equation}
+g(k) = \sqrt{\frac{2}{\pi}} \int_0^{\infty} f(x) \sin(kx) \dd{x}
+\end{equation}
+\begin{equation}
+f(x) = \sqrt{\frac{2}{\pi}} \int_0^{\infty} g(k) \sin(kx) \dd{k}
+\end{equation}
+注意这是一个正半轴的变换， 且正反变换相同．
+
+正弦变换同样有采样定理， 即若 $g(k)$ 的区间为 $[0, L_k]$， 那么只需要取 $\Delta x = \pi/L_k$ 对 $f(x)$ 采样即可用以下插值公式精确还原 $f(x)$
+\begin{equation}
+f(x) = \sum_{n=1}^\infty f(x_n)\frac{2x_n}{x+x_n}\sinc[\pi(x-x_n)/\Delta x]
+\end{equation} 
+
+\subsection{离散正弦变换}
+把插值公式做正弦变换， 得
+\begin{equation}
+g(k) = \sqrt{\frac{2}{\pi}} \sum_{n=1}^\infty f(x_n) \sin(k x_n) \Delta x
+\end{equation}
+现在假设 $f(x)$ 和 $g(k)$ 都只在 $[0, L_x]$ 和 $[0, L_k]$ 内， 所以有
+\begin{equation}
+\Delta x L_k = \Delta k L_x = N\Delta x\Delta k = \frac{L_xL_k}{N} = \pi
+\end{equation}
+可得无损的离散正弦变换为
+\begin{equation}
+g_q = \sum_{p = 1}^{N-1} f_p \sin(\pi pq/N)
+\end{equation}
+\begin{equation}
+f_p = \sum_{q = 1}^{N-1} g_q \sin(\pi pq/N)
+\end{equation}
+可以证明变换矩阵是对称的单位正交矩阵， 所以逆矩阵就是矩阵本身．
