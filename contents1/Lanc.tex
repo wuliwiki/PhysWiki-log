@@ -17,11 +17,11 @@ H_{ij} = \bra{\Psi_i} H \ket{\Psi_j}
 \end{equation}
 这样，幺正算符 $\exp(-\I H\Delta t/\hbar)$ 也可以表示成矩阵．根据定义 % 链接未完成
 \begin{equation}
-\exp(-\I H\Delta t/\hbar) = 1+ (-\I H\Delta t/\hbar) = 1+ (-\I H\Delta t/\hbar) + \frac{1}{2!} (-\I H\Delta t/\hbar)^2\dots
+\exp(-\I H\Delta t/\hbar) = 1+ (-\I H\Delta t/\hbar) + \frac{1}{2!} (-\I H\Delta t/\hbar)^2\dots
 \end{equation}
 此时若把 $H$ 对角化（求解本征方程），得到本征矢列矩阵 $\mat P$ （单位正交阵）以及本征值矩阵 $\mat \Lambda$ （对角矩阵），则可进行基底变换变到 $H$ 矩阵的本征空间求解上式 %（矩阵指数的对角化化简，未完成）
 \begin{equation}\ali{
-\exp(-\I H\Delta t/\hbar) &= P\times \rm{diag}(\E^{-\I E_1 t/\hbar},\E^{-\I E_2 t/\hbar}\dots \E^{-\I E_N t/\hbar})\times P_{jk}^{-1}\\
+\exp(-\I H\Delta t/\hbar) &= \mat P\times \rm{diag}(\E^{-\I E_1 t/\hbar},\E^{-\I E_2 t/\hbar}\dots \E^{-\I E_N t/\hbar})\times \mat P^{-1}\\
 &= \sum_{j=0}^{K-1} P_{ij} \E^{-\I E_j t/\hbar} P_{jk}^{-1}
 = \sum_{j=0}^{K-1} P_{ij}P_{kj} \E^{-\I E_j t/\hbar} 
 }\end{equation}
@@ -45,18 +45,24 @@ H_{ij}=\mel{\Psi_i}{H}{\Psi_j}
 
 \begin{enumerate}
 \item 如果 $\Psi(\vec r,t)$ 没有归一化，将其进行归一化 $\ket{\Psi_0}=\Psi(\vec r,t)/\braket{\Psi(\vec r,t)}$．
-\item 把 $\Psi_1$ 进行施密特正交化， $\ket{\Psi_1}=\ket{\Psi_1}/\braket{\Psi(\vec r,t)}$．  % 未完成
+\item 把 $\Psi_1$ 进行施密特正交化， 令
+\begin{equation}
+\ket*{\tilde\Psi_1} = (1 - \ket{\Psi_0}\bra{\Psi_0})\ket{\Psi_1}
+\qquad
+\ket{\Psi_1}=\ket*{\tilde\Psi_1}/\braket*{\tilde\Psi_1}
+\end{equation}
+% 未完成
 \item 现在起我们令 $\beta_j = \braket*{\tilde\Psi_j}$． % 未完成
 \end{enumerate}
 
 \subsubsection{定理1}
 对以上定义的基底
 \begin{equation}
-\qty(1 + \ket{\Psi_j} \bra{\Psi_j} + \ket{\Psi_{j - 1}} \bra{\Psi_{j - 1}} + \ldots + \ket{\Psi_0} \bra{\Psi_0}) H^{j + 1} \ket{\Psi_0}
+\qty(1 - \ket{\Psi_j} \bra{\Psi_j} - \ket{\Psi_{j - 1}} \bra{\Psi_{j - 1}} - \ldots - \ket{\Psi_0} \bra{\Psi_0}) H^{j + 1} \ket{\Psi_0}
 \end{equation}
 与
 \begin{equation}
-\qty( 1 + \ket{\Psi_j}\bra{\Psi_j} + \ket{\Psi_{j - 1}}\bra{\Psi_{j - 1}} + \ldots + \ket{\Psi_0}\bra{\Psi_0}) H \ket{\Psi_j}
+\qty( 1 - \ket{\Psi_j}\bra{\Psi_j} - \ket{\Psi_{j - 1}}\bra{\Psi_{j - 1}} - \ldots - \ket{\Psi_0}\bra{\Psi_0}) H \ket{\Psi_j}
 \end{equation}
 共线．故现在起采用后者进行正交化．
 
@@ -78,7 +84,7 @@ H_{ij}=\mel{\Psi_i}{H}{\Psi_j}
 \begin{equation}\ali{
 \ket*{\tilde\Psi_{j+1}} &= \qty(1 - \ket{\Psi_j}\bra{\Psi_j} - \ldots - \ket{\Psi_0}\bra{\Psi_0}) H \ket{\Psi_j}\\
 &= \qty(1 - \ket{\Psi_j}\bra{\Psi_j} - \ket{\Psi_{j-1}}\bra{\Psi_{j-1}}) H \ket{\Psi_j} \\
-&= H \ket{\Psi_j} - \alpha_j \ket{\Psi_j} - \beta_j \ket{\Psi_j}
+&= H \ket{\Psi_j} - \alpha_j \ket{\Psi_j} - \beta_j \ket{\Psi_{j-1}}
 }\end{equation}
 这就是最简洁的正交化公式．比起最原始的正交化
 \begin{equation}
