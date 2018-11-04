@@ -2,13 +2,31 @@
 
 \pentry{球谐函数\upref{SphHar}}
 
-复数形式的平面波可以展开为\footnote{由 $Y_{l,m}^* = (-1)^m Y_{l,-m}$ 易证这里的复共轭可以加在任意一个球谐函数上．}
-\begin{equation}
-\E^{\I \vec k \vdot \vec r} = 4\pi \sum_{l=0}^{\infty} \sum_{m=-l}^l \I^l j_l(kr) Y_{lm}(\uvec k) Y_{lm}^*(\uvec r)
+复数形式的平面波可以展开为\footnote{由 $Y_{l,m}^* = (-1)^m Y_{l,-m}$ 易证这里的复共轭可以加在任意一个球谐函数上．}\footnote{由 $Y_{l,m}(-\uvec k) = (-1)^l Y_{l,m}(\uvec k)$ 易得 $\bra{\vec k}$．}
+\begin{equation}\label{Pl2Ylm_eq1}
+\ket{\vec k} = \frac{1}{(2\pi)^{3/2}}\E^{\I \vec k \vdot \vec r} = \sum_{l=0}^{\infty} \sum_{m=-l}^l \I^l Y_{lm}^*(\uvec k) \sqrt{\frac{2}{\pi}} j_l(kr) Y_{lm}(\uvec r)
 \end{equation}
+其中\bb{球面波}为
 \begin{equation}
-\E^{-\I \vec k \vdot \vec r} = 4\pi \sum_{l=0}^{\infty} \sum_{m=-l}^l \I^{-l} j_l(kr) Y_{lm}(\uvec k) Y_{lm}^*(\uvec r)
+\ket{s_{l,m}(k)} = s_{l,m}(k,\vec r) = \sqrt{\frac{2}{\pi}} j_l(kr) Y_{lm}(\uvec r)
 \end{equation}
+也是一组完备的正交归一基底， 且有
+\begin{equation}
+\braket{s_{l,m}(k)}{\vec k} = \I^l Y_{lm}^*(\uvec k)
+\end{equation}
+所以\autoref{Pl2Ylm_eq1} 可以表示为
+\begin{equation}
+\ket{\vec k} = \sum_{l,m}\ket{s_{l,m}(k)}\braket{s_{l,m}(k)}{\vec k} 
+\end{equation}
+事实上 $\sum_{l,m} \ket{s_{l,m}(k)}\bra{s_{l,m}(k)}$ 只是一个二维子空间的单位算符， 三维空间的单位算符应该是
+\begin{equation}
+\int_0^\infty \dd{k} \sum_{l,m} \ket{s_{l,m}(k)}\bra{s_{l,m}(k)}
+\end{equation}
+就像一维傅里叶变换可以表示为% 未完成： 应该在哪里介绍一下
+\begin{equation}
+\ket{f} = \int_{-\infty}^{\infty} \dd{k} \ket{k}\braket{k}{f}
+\end{equation}
+其中 $\ket{k} = \exp(\I kx)/\sqrt{2\pi}$．
 
 \subsection{球谐展开函数的傅里叶变换}
 
@@ -21,6 +39,18 @@ f(\vec r) = \sum_{l,m} R_{lm}(r) Y_l^m(\uvec r)
 g(\vec k) &= \frac{1}{(2\pi)^{3/2}} \int f(\vec r) \E^{-\I \vec k \vec r} \dd[3]{r}\\
 &= \sqrt{\frac{2}{\pi}} \sum_{l,m} \I^{-l} Y_l^m(\uvec k) \int_0^{+\infty} R_{lm}(r) j_l(kr) r^2 \dd{r}
 }\end{equation}
+其中
+\begin{equation}
+\braket{s_{l,m}(k)}{f} = \sqrt{\frac{2}{\pi}} \int_0^{+\infty} R_{lm}(r) j_l(kr) r^2 \dd{r}
+\end{equation}
+\begin{equation}
+\braket{\vec k}{s_{l,m}(k)} = \I^{-l} Y_l^m(\uvec k)
+\end{equation}
+所以上式可以记为
+\begin{equation}
+\braket{\vec k}{f} = \sum_{l,m} \braket{\vec k}{s_{l,m}(k)}\braket{s_{l,m}(k)}{f}
+\end{equation}
+当于将函数在球面波基底上的坐标幺正变换到平面波基底上的坐标． 幺正变换是在二维 $k$ 空间中进行．
 
 \subsection{氢原子基态的动量谱}
 氢原子基态的波函数（原子单位）为
