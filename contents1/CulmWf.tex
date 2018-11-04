@@ -1,0 +1,58 @@
+% 库伦波函数
+
+\pentry{薛定谔径向方程\upref{RadSE}}
+本词条使用原子单位。 参考资料一个是 Wikipedia， 另一个是 “F Morales et al 2016 J. Phys. B: At. Mol. Opt. Phys. 49 245001” 的附录。 据说 Merzbacher 的量子力学也有。
+
+库伦波函数常用的边界条件有两种， 分别对应以 $\vec k$ 平面波入射和出射的散射态， 记为 $\psi_{\vec k}^{(+)}(\vec r)$ 和 $\psi_{\vec k}^{(-)}(\vec r)$。 两种边界条件分别为
+\begin{equation}
+\psi_{\vec k}^{(\pm)}(\vec r) \to \frac{1}{(2\pi)^{3/2}} \E^{\I\vec k\vdot\vec r}
+\qquad
+(\vec r\vdot \vec k \to \mp\infty)
+\end{equation}
+两种波函数为
+\begin{equation}
+\psi_{\vec k}^{\pm}(\vec r) = \frac{1}{(2\pi)^{3/2}} \Gamma(1\pm \I\eta)\E^{-\pi\eta/2} \E^{\I\vec k\vdot\vec r} {_1F_1}(\mp\I\eta; 1; \pm\I kr - \I \vec k\vdot \vec r))
+\end{equation}
+且有
+\begin{equation}
+\psi_{\vec k}^{(+)}(\vec r) = \psi_{-\vec k}^{(-)*}
+\end{equation}
+\begin{equation}
+\braket*{\psi_{\vec k}^{(\pm)}}{\psi_{\vec k'}^{(\pm)}} = \delta(\vec k - \vec k')
+\end{equation}
+
+\subsection{球坐标}
+库伦势的薛定谔径向方程为
+\begin{equation}
+-\frac12 \dv[2]{u}{r} + \qty[\frac{Z}{r} + \frac12 \frac{l(l+1)}{r^2}]u = \frac{k^2}{2}u
+\end{equation}
+其中 $u(r)$ 是 Scaled 波函数， $k$ 是能量为 $E = k^2/2$ 的平面波的波矢， $Z$ 是原子核和电子的电荷之积， $l$ 是角量子数。
+
+令 $\rho = kr$， $\eta = Z/k$， 则上式变为
+\begin{equation}
+\dv[2]{u}{\rho} + \qty[1 - \frac{2\eta}{\rho} - \frac{l(l+1)}{\rho^2}]u = 0
+\end{equation}
+两个线性无关解为\bb{第一类库伦函数} $F_{l,\eta}(\rho)$ 和 \bb{第二类库伦函数} $G_{l,\eta}(\rho)$
+\begin{equation}
+F_{l,\eta}(\rho) = \frac{2^l \E^{-\pi\eta/2} \abs{\Gamma(l+1+\I\eta)}}{(2l+1)!}
+\rho^{l+1} \E^{-\I\rho} {_1F_1}(l+1-\I\eta; 2l+2; 2\I\rho)
+\end{equation}
+其中 $_p F_q(a_1,\dots,a_p; b_1,\dots,b_q; x)$ 是\bb{广义超几何函数（generalized hypergeometric function）}， 特殊地， $_1 F_1(a;b;z)$ 是 \bb{confluent hypergeometric function of the first kind}。 第二类库伦函数貌似在原点会 blow up， 所以被排除．
+
+$F_{l,\eta}(\rho)$ 是一个实函数， 类似球贝赛尔函数乘 $r$， 渐进形式是
+\begin{equation}
+\lim_{r\to \infty} F_{l,\eta}(\rho) = \sin[\rho - \eta\ln(2\rho) - \pi l/2 + \phi_l]
+\end{equation}
+其中
+\begin{equation}
+\phi_l = \arg[\Gamma(l+1+\I\eta)]
+\end{equation}
+
+现在就可以将库伦波函数表示为
+\begin{equation}
+\psi_{\vec k}^{(+)}(\vec r) = \frac{1}{r} \sum_{l,m} a_{k,l,m} F_{l,\eta}(kr) Y_{l,m}(\uvec r)
+\end{equation}
+其中
+\begin{equation}
+a_{k,l,m} = \sqrt{\frac{2}{\pi}} \frac{\I^l}{k} \exp(\I\phi_l) Y_{l,m}^* (\uvec k)
+\end{equation}
