@@ -11,11 +11,11 @@
 \end{equation}
 两种波函数为
 \begin{equation}
-\psi_{\vec k}^{\pm}(\vec r) = \frac{1}{(2\pi)^{3/2}} \Gamma(1\pm \I\eta)\E^{-\pi\eta/2} \E^{\I\vec k\vdot\vec r} {_1F_1}(\mp\I\eta; 1; \pm\I kr - \I \vec k\vdot \vec r))
+\psi_{\vec k}^{\pm}(\vec r) = \frac{1}{(2\pi)^{3/2}} \Gamma(1\pm \I\eta)\E^{-\pi\eta/2} \E^{\I\vec k\vdot\vec r} {_1F_1}(\mp\I\eta; 1; \pm\I kr - \I \vec k\vdot \vec r)
 \end{equation}
 且有
 \begin{equation}
-\psi_{\vec k}^{(+)}(\vec r) = \psi_{-\vec k}^{(-)*}
+\psi_{\vec k}^{(+)}(\vec r) = \psi_{-\vec k}^{(-)}(r)^*
 \end{equation}
 \begin{equation}
 \braket*{\psi_{\vec k}^{(\pm)}}{\psi_{\vec k'}^{(\pm)}} = \delta(\vec k - \vec k')
@@ -34,21 +34,21 @@
 \end{equation}
 两个线性无关解为\bb{第一类库伦函数} $F_l(\eta, \rho)$ 和 \bb{第二类库伦函数} $G_l(\eta, \rho)$
 \begin{equation}
-F_{l,\eta}(\rho) = \frac{2^l \E^{-\pi\eta/2} \abs{\Gamma(l+1+\I\eta)}}{(2l+1)!}
+F_l(\eta; \rho) = \frac{2^l \E^{-\pi\eta/2} \abs{\Gamma(l+1+\I\eta)}}{(2l+1)!}
 \rho^{l+1} \E^{-\I\rho} {_1F_1}(l+1-\I\eta; 2l+2; 2\I\rho)
 \end{equation}
 其中 $_p F_q(a_1,\dots,a_p; b_1,\dots,b_q; x)$ 是\bb{广义超几何函数（generalized hypergeometric function）}， 特殊地， $_1 F_1(a;b;z)$ 是 \bb{confluent hypergeometric function of the first kind}． 第二类库伦函数貌似在原点会 blow up， 所以被排除．
 
-$F_{l,\eta}(\rho)$ 是一个实函数， 类似球贝赛尔函数乘 $r$， 渐进形式是
+$F_l(\eta; \rho)$ 是一个实函数， 类似球贝赛尔函数乘 $r$， 渐进形式是
 \begin{equation}
-\lim_{\rho\to \infty} F_{l,\eta}(\rho) = \sin[\rho - \eta\ln(2\rho) - \pi l/2 + \phi_l]
+\lim_{\rho\to \infty} F_l(\eta; \rho) = \sin[\rho - \eta\ln(2\rho) - \pi l/2 + \phi_l]
 \end{equation}
 其中
 \begin{equation}
 \phi_l = \arg[\Gamma(l+1+\I\eta)]
 \end{equation}
 
-我们以后将第一类库伦函数记为更直观的形式 $F_l(Z, k, r)$， 对于氢原子（$Z = -1$）， 可以简写为 $F_l(k, r)$． 由渐进形式可得径向归一化积分\footnote{积分时可忽略 $\sin$ 中的额外相位， 但我不会证．} 与球贝赛尔函数的一样
+我们以后将第一类库伦函数记为更直观的形式 $F_l(Z, k, r)$， 对于氢原子（$Z = -1$）， 我们简写为 $F_l(k, r)$． 由渐进形式可得径向归一化积分\footnote{积分时可忽略 $\sin$ 中的额外相位， 但我不会证．}与球贝赛尔函数的一样
 \begin{equation}
 \int_0^\infty F_l(Z, k', r)F_l(Z, k, r) \dd{r} = \int_0^\infty \sin(k'r)\sin(kr) \dd{r} = \frac{\pi}{2}
 \end{equation}
@@ -62,9 +62,27 @@ $F_{l,\eta}(\rho)$ 是一个实函数， 类似球贝赛尔函数乘 $r$， 渐�
 \end{equation}
 现在可以将库伦波函数展开为
 \begin{equation}
-\psi_{\vec k}^{(+)}(\vec r) =  \sum_{l,m} a_{l,m}(k) \ket{C_{l,m}(Z,k)}
+\psi_{\vec k}^{(\pm)}(\vec r) =  \sum_{l,m} a_{l,m}^{(\pm)}(k) \ket{C_{l,m}(Z,k)}
 \end{equation}
 其中
-\begin{equation}
-a_{l,m}(k) =  \braket*{C_{l,m}(Z,k)}{\psi_{\vec k}^{(+)}} = \frac{\I^l}{k} \exp(\I\phi_l) Y_{l,m}^* (\uvec k)
+\begin{equation}% (-) 有待验证
+a_{l,m}^{(\pm)}(k) =  \braket*{C_{l,m}(Z,k)}{\psi_{\vec k}^{(\pm)}} = \frac{\I^l}{k} \exp(\pm\I\phi_l) Y_{l,m}^* (\uvec k)
 \end{equation}
+
+与平面波的情况（傅里叶变换）类似， 要将一个球谐展开的波函数投影到库伦波函数上， 就先投影到库伦球面波上， 然后进行幺正变换
+\begin{equation}
+\braket*{\psi_{\vec k}^{(\pm)}}{f} = \sum_{l,m} \braket*{\psi_{\vec k}^{(\pm)}}{C_{l,m}(Z,k)} \braket{C_{l,m}(Z,k)}{f}
+\end{equation}
+
+将波函数做傅里叶变换和投影到库伦波函数有什么区别呢？ 例如做氢原子电离的 TDSE， 若想求 $t = +\infty$ 时的动量分布， 理论上只要在 $t$ 足够大时做傅里叶变换即可， 但如果 $t$ 不够大（电场已消失）， 电离波包所受的库仑力还不可忽略， 那么虽然得到了瞬时的动量分布， 但却与 $t = +\infty$ 的不同． 这时因为动量算符与哈密顿算符不对易， 动量不守恒． 但若在电场消失的时候， 投影到 $\psi_{\vec k}^{(-)}$ 上， 由于它是哈密顿的本征函数， 投影的模方（概率）不会随时间改变．
+
+最后的问题就是， 当 $t = +\infty$ 时， 投影到平面波和库伦波是否相同呢？ 要验证这一点， 只需验证
+\begin{equation}
+\braket*{\psi_{\vec k}^{(-)}}{\vec k'} = \delta(\vec k - \vec k')
+\end{equation}
+我们还是用球谐展开来验证
+\begin{equation}\ali{
+\braket*{\psi_{\vec k}^{(\pm)}}{\vec k'} &= \sum_{l,m} \braket*{\psi_{\vec k}^{(\pm)}}{C_{l,m}(Z,k)}\ket{C_{l,m}(Z,k)} \sum_{l',m'} \bra{s_{l',m'}(k')}\braket{s_{l',m'}(k')}{\vec k'} \\
+&= \sum_{l,m} \braket*{\psi_{\vec k}^{(\pm)}}{C_{l,m}(Z,k)}\braket{C_{l,m}(Z,k)}{s_{l,m}(k')}\braket{s_{l,m}(k')}{\vec k'}
+}\end{equation}
+但是径向积分貌似不会做…… 就当是对的吧．
