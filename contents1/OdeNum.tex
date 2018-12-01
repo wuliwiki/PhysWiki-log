@@ -1,0 +1,58 @@
+% 常微分方程（组）的数值解
+
+\pentry{弹簧振子受迫运动的简单数值计算\upref{SHOFN}， 天体运动的简单数值计算\upref{KPNum0}}
+
+数值解微分方程或微分方程组时， 一般需要先把微分方程（组）化成一阶微分方程组． 例如在“弹簧振子受迫运动的简单数值计算\upref{SHOFN}” 中列出的微分方程为
+\begin{equation}
+m y'' = \alpha y' - ky + f(t)
+\end{equation}
+新增变量， 令 $v = y'$， 则可变为一阶微分方程组
+\begin{equation}\leftgroup{
+v' &= [-\alpha u - ky + f(t)]/m\\
+y' &= v
+}\end{equation}
+方程组中， $t$ 是自变量， $y$ 和 $u$ 是因变量． 给出某时刻的 $y(t), u(t), t$ 就可以通过方程组求出 $u'(t)$ 和 $y'(t)$ 的数值．
+
+又例如在“天体运动的简单数值计算\upref{KPNum0}”中， 列出的二阶微分方程组为
+\begin{equation}
+\leftgroup{
+x'' &= -\frac{GM}{(x^2+y^2)^{3/2}}x\\
+y'' &= -\frac{GM}{(x^2+y^2)^{3/2}}y
+}\end{equation}
+
+新增变量， 令 $v_x = x'$， $v_y = y'$， 上式也可变为一阶微分方程组
+\begin{equation}\label{OdeNum_eq4}
+\leftgroup{
+x' &= v_x\\
+v'_x &= -GMx/(x^2 + y^2)^{3/2}\\
+y' &= v_y\\
+v'_y &= -GMy/(x^2 + y^2)^{3/2}
+}\end{equation}
+该式中同样 $t$ 是自变量， 其他都是因变量， 给出某时刻的 $x, y, v_x, v_y, t$ 就可以由该方程组求出因变量的一阶导数．
+
+在以上两个词条中， 我们使用了一种较为原始的方法（微分近似）． 这种方法相当于把某时刻 $t$ 的各因变量代入一阶微分方程组， 得到 $t$ 时刻各因变量的一阶导数， 再通过微分近似由这些一阶导数来计算其 $[t, t + \Delta t]$ 时间内的增量， 得到 $t +\Delta t$ 时刻的各因变量， 再代入一阶方程组得到 $t +\Delta t$ 时刻各因变量的一阶导数， 如此一直循环， 得到各因变量每隔 $\Delta t$ 时间的值． 这种方法叫做\bb{欧拉法}． 对一阶常微分方程 $y'(t) = f(y, t)$， 令 $h = \Delta t$， $t_n = t_0 + nh$， $y_n = y(t_n)$ 欧拉法可以表示为
+\begin{equation}\label{OdeNum_eq5}
+y_{n+1} = y_n + h f(y_n, t_n)
+\end{equation}
+%未完成： 应该在这里就介绍矢量表达式！
+
+以下介绍三种更精确的算法， 在步长（$\Delta t$） 相同时它们的精确度递增． 注意虽然大多数问题中自变量是时间， 但这些方法适用于大多数单个自变量的微分方程（组）．
+
+%链接未完成
+\begin{itemize}
+\item 中点法\upref{OdeMid}
+\item 四阶龙格库塔法\upref{OdeRK4}
+\item Matlab 中的 Ode45 算法
+\end{itemize}
+
+
+
+
+
+
+
+
+
+
+
+

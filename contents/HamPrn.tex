@@ -1,0 +1,37 @@
+% 哈密顿原理
+
+\pentry{拉格朗日方程\upref{Lagrng}}
+
+若系统某时刻由 $N$ 个独立的广义坐标 $q_1\dots q_N$ 描述（以下把 $q_1\dots q_N$ 记为 $\{q_i\}$），那么可以把 $\{q_i\}$ 看做是 $N$ 维空间中的一点，这个空间叫做\bb{位形空间（configuration space）}．系统变化的过程可以看做位形空间中的一点随时间变化而走出的轨迹．若该轨迹 $\{ {{q_i}(t)} \}$ 已知，可定义 $t_1$ 与 $t_2$ 之间系统的\bb{作用量（action）}为
+\begin{equation}\label{HamPrn_eq1}
+S[\{q_i(t)\}] = \int_{t_1}^{t_2} L[\{q_i(t)\}, \{\dot q_i(t)\}, t] \dd{t}
+\end{equation}
+哈密顿原理可表述为：若系统在 $t_1$ 和 $t_2$ 时刻的坐标分别为 $\{q_i(t_1)\}$ 和 $\{q_i(t_2)\}$，那么在这段时间内所有链接这两点的轨迹中，真实的轨迹可使作用量取极值．注意\autoref{HamPrn_eq1} 中的 $S$ 事实上是 $N$ 个函数的函数，函数的函数叫做\bb{泛函}．类比一元函数的极值，泛函的极值是指当作为自变量的函数发生微小改变时泛函的因变量不变（或变化小于一阶无穷小）．哈密顿原理也被称为\bb{最小作用量}原理\footnote{“最小” 只是习惯的叫法，极值可以是极小值，极大值或鞍点．}．% 链接未完成
+
+\subsection{由哈密顿原理导出拉格朗日方程}
+
+假设满足哈密顿原理的轨迹为 $\{q'_i(t)\}$，为了让轨迹发生微小改变，现取一个变量 $\alpha$ 及任意 $N$ 个函数 $\{\eta_i(t)\}$，令 $q_i(t,\alpha ) = q'_i(t) + \alpha \eta_i(t)$．由于 $\alpha$ 变化的过程中仍然要保持初末时刻的 $q_i$ 不变，$\eta_i(t)$ 必须满足 $\eta_i(t_1) = \eta_i(t_2) = 0$．现在拉格朗日量最终是 $t$ 和 $\alpha$ 的函数，而作用量则完全是 $\alpha$ 的函数．
+ 
+根据哈密顿原理，在 $\alpha = 0$ 处有 $\dv*{S}{\alpha} = 0$．为书写方便，以下所有对 $\alpha$ 的（偏）导数都默认在 $\alpha=0$ 时求得．注意 $\alpha$ 在时间积分中只是参数，可以置换求导和积分的顺序．
+\begin{equation}
+\dv{S}{\alpha} = \int_{t_1}^{t_2} \pdv{\alpha} L[\{q_i(t,\alpha )\}, \{\dot q_i(t,\alpha)\}, t] \dd{t}
+\end{equation}
+这里使用偏导是为了强调求导时保持 $t$ 不变．使用偏导的链式法则有
+\begin{equation}\label{HamPrn_eq3}
+\ali{
+\dv{S}{\alpha} =
+\sum_i \int_{t_1}^{t_2} \qty[\pdv{L}{q_i} \pdv{q_i}{\alpha} + \pdv{L}{\dot q_i}\pdv{q_i}{\alpha}{t}] \dd{t}
+}\end{equation}
+对第二项使用分部积分\upref{IntBP} 得
+\begin{equation}
+\int_{t_1}^{t_2} \pdv{L}{\dot q_i} \pdv{q_i}{\alpha}{t} \dd{t}  = \eval{\pdv{L}{\dot q_i}\pdv{q_i}{\alpha}}_{t = t_1}^{t = t_2} - \int_{t_1}^{t_2} \dv{t} \qty(\pdv{L}{\dot q_i})\pdv{q_i}{\alpha} \dd{t}
+\end{equation}
+其中 $\pdv*{q_i}{\alpha}  = \eta_i$，在 $t_1, t_2$ 时刻都为 0，第一项消失．代入\autoref{HamPrn_eq3} 得
+\begin{equation}
+\sum_i \int_{t_1}^{t_2} \qty[\pdv{L}{q_i} - \dv{t} \qty(\pdv{L}{\dot q_i})] \eta_i(t) \dd{t} = 0
+\end{equation}
+由于 $\eta_i(t)$ 可以任取，方括号内为零．要证明这点只需取 $\eta_i(t) = \delta_{ij}\delta(t - t')$ 代入即可．于是我们得到拉格朗日方程组
+\begin{equation}
+\dv{t} \qty(\pdv{L}{\dot q_i}) = \pdv{L}{q_i} \qquad
+(i = 1\dots N)
+\end{equation}

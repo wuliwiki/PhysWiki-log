@@ -1,0 +1,127 @@
+% 电磁场的动量守恒 动量流密度张量
+
+\pentry{能流密度，%未完成
+ 张量，%未完成
+张量的散度%未完成
+}
+\subsection{结论}
+
+假设电磁场动量守恒，则动量流密度张量为
+\begin{equation}
+T_{ij} = \epsilon_0 \qty(\frac12 \vec E^2 \delta_{ij} - E_i E_j) + \frac{1}{\mu_0} \qty(\frac12 \vec B^2 \delta_{ij} - B_i B_j)
+\end{equation} 
+该张量也成为\bb{麦克斯韦应力张量（Maxwell Stress Tensor）}
+
+\subsection{推导}	
+
+能量是标量，所以能流密度就是矢量．但动量本身就是矢量，要如何表示动量流密度呢？ 
+我们可以分析动量在某方向分量的流密度．根据张量的散度%未完成：引用
+\begin{equation}
+(\div \ten T)_j = \sum_i \pdv{x_i} T_{ji}
+\end{equation}
+假设电磁场满足动量守恒，在闭合空间中，有 “转换速率+流出速率+增加速率= 0”（类比电磁场的能量守恒公式）．则电磁场的动量守恒会有
+\begin{equation}\label{EBP_eq1}
+\vec f + \div \ten T + \mu_0 \epsilon_0 \pdv{\vec s}{t} = \vec 0
+\end{equation} 
+由广义洛伦兹力%未完成：引用
+计算电荷的受力密度 $\vec f$ %未完成：引用
+\begin{equation}
+\vec f = \rho (\vec E + \vec v \cross \vec B) = \rho \vec E + \vec j \cross \vec B
+\qquad (\vec j = \rho \vec v)
+\end{equation} 
+由于\autoref{EBP_eq1} 的后两项是电磁场的量，不能含有关于电荷的量，所以接下来要通过麦克斯韦方程组 %未完成：引用
+把电荷密度 $\rho$ 和电流密度 $\vec j$ 替换成电磁场．
+\begin{equation}
+\rho  = \epsilon_0 \div \vec E \qquad
+\qty(\div \vec E = \frac{\rho}{\epsilon_0})
+\end{equation}
+\begin{equation}
+\vec j = \frac{1}{\mu_0} \curl \vec B - \epsilon_0 \pdv{\vec E}{t}
+\qquad \qty(\curl \vec B = \mu_0 \vec j + \epsilon_0 \mu_0 \pdv{\vec E}{t})
+\end{equation}
+代入上式，得
+\begin{equation}
+\vec f = \epsilon_0 (\div \vec E) \vec E + \frac{1}{\mu_0} (\curl \vec B) \cross \vec B - \epsilon_0 \pdv{\vec E}{t} \cross \vec B
+\end{equation} 
+其中 
+\begin{equation}\ali{
+\pdv{\vec E}{t} \cross \vec B &= \pdv{t} (\vec E \cross \vec B) - \vec E \cross \pdv{\vec B}{t}\\ 
+&= \pdv{t} (\vec E \cross \vec B) - (\curl \vec E) \cross \vec E
+\qquad \qty(\curl \vec E =  - \pdv{\vec B}{t})
+}\end{equation} 
+代入上式得
+\begin{equation}\ali{
+\vec f &= \epsilon_0 (\div \vec E) \vec E + \frac{1}{\mu_0} (\curl \vec B) \cross \vec B + \epsilon_0 (\curl \vec E) \cross \vec E - \epsilon_0 \pdv{t} (\vec E \cross \vec B)\\
+&= \epsilon_0 [ (\div \vec E)\vec E + (\curl \vec E) \cross \vec E ] + \frac{1}{\mu_0} (\curl \vec B) \cross \vec B - \epsilon_0 \mu_0 \pdv{\vec s}{t}
+} \end{equation} 
+为了使式中电磁场的公式更加对称，不妨加上一项
+\begin{equation}
+\frac{1}{\mu_0} (\div \vec B)\vec B = \vec 0
+\qquad (\div \vec B = 0)
+\end{equation} 
+得
+\begin{equation}
+\vec f = \epsilon_0 [(\div \vec E)\vec E + (\curl \vec E) \cross \vec E] + \frac{1}{\mu_0} [ (\div \vec B)\vec B + (\curl \vec B) \cross \vec B] - \epsilon_0 \mu_0 \pdv{\vec s}{t}
+\end{equation}  
+一般来说，凡是出现两个连续的叉乘要尽量化成点乘，下面计算 $(\curl \vec E) \cross \vec E$． 
+由吉布斯算子（劈形算符）的相关公式
+\begin{equation}
+\grad (\vec A \vdot \vec B) = \vec A \cross (\curl \vec B) + \vec B \cross (\curl \vec A) + (\vec A\vdot\vec\nabla )\vec B + (\vec B\vdot\vec\nabla)\vec A
+\end{equation} 
+令 $\vec A = \vec B = \vec E$，得
+\begin{equation}
+\grad (\vec E^2) = 2\vec E \cross (\curl \vec E) + 2(\vec E\vdot\vec\nabla )\vec E
+\end{equation} 
+即 $(\curl \vec E) \cross \vec E = (\vec E\vdot\vec\nabla)\vec E - \grad (\vec E^2)/2$
+同理得
+\begin{equation}
+(\curl \vec B) \cross \vec B = (\vec B\vdot\vec\nabla )\vec B - \frac12 \grad (\vec B^2)
+\end{equation} 
+代入得
+\begin{equation}\ali{
+\vec f = &\epsilon_0 [ (\curl E)\vec E + (\vec E\vdot\vec\nabla)\vec E - \frac12 \grad ( \vec E^2) ]\\
+&+ \frac{1}{\mu_0} [ (\div \vec B)\vec B + (\vec B\vdot\vec\nabla)\vec B - \frac12 \grad (\vec B^2) ] - \epsilon_0 \mu_0 \pdv{\vec s}{t}
+}\end{equation} 
+
+与\autoref{EBP_eq1} 对比，可以看出动量流密度张量的散度为
+\begin{equation}\ali{
+\div \ten T =  &-\epsilon_0 [ ( \div \vec E )\vec E + (\vec E\vdot\vec\nabla )\vec E - \frac12 \grad (\vec E^2)]\\
+&-\frac{1}{\mu_0} [(\div \vec B)\vec B + (\vec B\vdot\vec\nabla)\vec B - \frac12 \grad (\vec B^2)]
+}\end{equation} 
+接下来由二阶张量的散度计算公式，通过对比系数，就可以求出动量流密度张量 $\ten T$ （三阶矩阵）．
+
+下面把等式右边的部分用求和符号表示（求和符号是张量分析中最常见的符号，只有熟练运用才能学好张量分析）．下面推导用到了克罗内克 $\delta$ 函数 %未完成：引用
+，且定义任意矢量加上下标 表示第 个分量，例如
+\begin{equation}
+\vec A_j = \leftgroup{A_x\quad (j = 1)\\ A_y\quad (j = 2)\\ A_z\quad (j = 3)} \qquad
+x_j = \leftgroup{x\quad (j = 1)\\ y\quad (j = 2)\\ z\quad (j = 3)}
+\end{equation} 
+$(\div \vec E)\vec E + (\vec E\vdot\vec\nabla)\vec E - \frac12 \grad (\vec E^2)$ 是一个矢量，它的第 $j$ 个分量为
+\begin{equation}\ali{
+&\phantom{={}} [(\div \vec E)\vec E + (\vec E\vdot\vec\nabla)\vec E - \frac12 \grad (\vec E^2)]_j\\
+&= \sum_i \pdv{E_i}{x_i} E_j + \sum_i E_i\pdv{E_j}{x_i} - \frac12 \sum_i \pdv{\vec E^2}{x_i} \delta_{ij} \\
+&= \sum_i \qty(\pdv{E_i}{x_i} E_j + {E_i} \pdv{E_j}{x_i} - \frac12 \pdv{\vec E^2}{x_i} \delta_{ij}) \\
+&= \sum_i \qty(\pdv{x_i} (E_i E_j) - \frac12 \pdv{\vec E^2}{x_i}\delta_{ij} ) \\
+&= \sum_i \pdv{x_i} \qty( E_i E_j - \frac12 \vec E^2 \delta_{ij})
+}\end{equation} 
+同理
+\begin{equation}
+\qty[(\div \vec B)\vec B + (\vec B\vdot\vec\nabla)\vec B - \frac12 \grad (\vec B^2)]_j = \sum_i \pdv{x_i} \qty(B_i B_j - \frac12 \vec B^2 \delta_{ij}) 
+\end{equation} 
+所以
+\begin{equation}
+(\div \ten T)_j = \sum_i \pdv{x_i} \qty[\epsilon_0 \qty(\frac12 \vec E^2 \delta_{ij} - E_i E_j) + \frac{1}{\mu_0} \qty(\frac12 \vec B^2 \delta_{ij} - B_i B_j)]
+\end{equation} 
+而由张量散度的定义
+\begin{equation}
+(\div \ten T)_j = \sum_i \pdv{x_i} T_{ij}
+\end{equation} 
+得到动量流密度张量为
+\begin{equation}
+T_{ij} = \epsilon_0 \qty(\frac12 \vec E^2 \delta_{ij} - E_i E_j) + \frac{1}{\mu_0} \qty(\frac12 \vec B^2 \delta_{ij} - B_i B_j)
+\end{equation} 
+
+理论上，在 $\ten T$ 上面加上任意一个满足 $\div \ten T'  = \vec 0$ 的张量场，均可以使电磁场动量守恒，但是若规定无穷远处动量流密度为零，则可以证明 ${T'_{ij}} = 0$． 
+ 
+ 
+ 

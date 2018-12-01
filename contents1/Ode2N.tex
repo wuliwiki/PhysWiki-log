@@ -1,0 +1,99 @@
+%二阶常系数非齐次微分方程
+
+\pentry{二阶常系数齐次微分方程\upref{Ode2}}
+
+% 未完成：公式 ref
+\subsection{结论}
+
+在二阶常系数齐次微分方程的右端加上一个函数 $f(x)$， 就得到了二阶常系数非齐次微分方程
+\begin{equation}\label{Ode2N_eq1}
+y'' + by' + cy = f(x)
+\end{equation}
+这就是\bb{二阶常系数非齐次微分方程}．其解为
+\begin{equation}
+y(x) = C_1 y_1 + C_2 y_2 - y_1\int \frac{y_2 f}{W} \dd{x} + y_2\int \frac{y_1 f}{W} \dd{x}
+\end{equation}
+其中 $W$ 可以写成二阶行列式
+\begin{equation}
+W = 
+\begin{vmatrix}
+y_1 & y_2\\
+y'_1 & y'_2
+\end{vmatrix} = y_1 y'_2 - y'_1 y_2
+\end{equation}
+其中 $y_1, y_2, W, f$ 都是 $x$ 的函数，后面的括号和自变量被省略．$y_1(x)$ 和 $y_2(x)$ 是对应齐次方程 
+\begin{equation}\label{Ode2N_eq4}
+y'' + by' + cy = 0
+\end{equation}
+的两个线性无关的解．
+
+\subsection{应用} % 未完成
+
+\subsection{推导}
+
+下面介绍的方法叫常数变易法，其主要思想可参考一阶线性非齐次微分方程的通解%未完成
+
+设通解的形式为
+\begin{equation}\label{Ode2N_eq5}
+y = v_1 y_1 + v_2 y_2
+\end{equation}
+其中，$v_i$ 也是关于 $x$ 的函数． 对该式两边求导，得
+\begin{equation}\label{Ode2N_eq6}
+y' = v'_1 y_1 + v'_2 y_2 + v_1 y'_1 + v_2 y'_2
+\end{equation}
+为了接下来计算方便，我们规定 $v_1$， $v_2$ 满足关系\footnote{这么规定会不会丢失一部分解呢？或许会，但是由于我们已经有了\autoref{Ode2N_eq1} 对应的齐次解 $y_1$ 和 $y_2$， 根据\emph{线性微分方程解的结构}（见同济大学的《高等数学》），只需要找到\autoref{Ode2N_eq1} 的任意一个解，就可以找到它的通解．}
+\begin{equation}\label{Ode2N_eq7}
+v'_1 y_1 + v'_2 y_2 = 0
+\end{equation}
+把\autoref{Ode2N_eq7} 代入\autoref{Ode2N_eq6}， 得到
+\begin{equation}\label{Ode2N_eq8}
+y' = v_1 y'_1 + v_2 y'_2
+\end{equation}
+继续对求导，得到
+\begin{equation}\label{Ode2N_eq9}
+y'' = v'_1 y'_1 + v'_2 y'_2 + v_1 y''_1 + v_2 y''_2
+\end{equation}
+把\autoref{Ode2N_eq5} \autoref{Ode2N_eq8} \autoref{Ode2N_eq9} 代回原方程\autoref{Ode2N_eq1} 得
+\begin{equation}
+(v'_1 y'_1 + v'_2 y'_2 + v_1 y''_1 + v_2 y''_2) + b (v_1 y'_1 + v_2 y'_2) + c(v_1 y_1 + v_2 y_2) = f
+\end{equation}
+化简，得
+\begin{equation}
+(v'_1 y'_1 + v'_2 y'_2) + v_1 (a y''_1 + b y'_1 + c y_1) + v_2 (a y''_2 + b y'_2 + c y_2) = f \end{equation}
+由于 $y_1$ 和 $y_2$ 都是\autoref{Ode2N_eq4} 的解，式（9）化为 % 未完成：公式编号有问题
+\begin{equation} v'_1 y'_1 + v'_2 y'_2 = f
+\end{equation}
+总结一下，刚刚的推导说明，和在（5）的假设条件下，只要满足（10）即可满足（1）式．联立（5）和（10）式，得到关于 $v_1'$ 和 $v_2'$ 的方程组
+\begin{equation}
+\leftgroup{
+y_1 v'_1 + y_2 v'_2 = 0\\
+y'_1 v'_1 + y'_2 v'_2 = f
+}\end{equation}
+解得
+\begin{equation}
+\leftgroup{v_1' &= -y_2f/W\\
+v_2' &= y_1 f/W}
+\end{equation}
+其中
+\begin{equation}
+W = y_1 y'_2 - y_2 y'_1 = 
+\begin{vmatrix}
+y_1 & y_2\\
+y'_1 & y'_2
+\end{vmatrix}
+\end{equation}
+对（13）% 未完成，公式链接
+的两条式子积分，即可得到
+\begin{equation}
+v_1 =  - \int \frac{y_2 f}{W} \dd{x}  + C_1
+\end{equation}
+\begin{equation}
+v_2 = \int \frac{y_1 f}{W} \dd{x}  + C_2
+\end{equation}
+（15）（16）代入（5）式，得到方程（1）的解为 %未完成，公式链接．
+\begin{equation}
+y(x) = C_1 y_1 + C_2 y_2 - y_1 \int \frac{y_2 f}{W} \dd{x} + y_2 \int \frac{y_1 f}{W} \dd{x}
+\end{equation}
+由于上式满足线性微分方程解的结构，所这已经是通解了．但是必须注意，根据常数变易法，我们只能在没有零点的区间内找到方程\autoref{Ode2N_eq1} 的通解．
+
+\rentry{一阶线性非齐次微分方程的通解}

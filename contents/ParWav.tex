@@ -1,0 +1,60 @@
+% 量子散射 分波展开
+
+散射截面 $\sigma$ 等于一定时间内被散射的粒子数除以单位截面入射的粒子数．那么从经典力学的角度，如果想象入射粒子流密度是均匀的， $\sigma$ 可以看做是一个障碍物（无远程作用）的最大横截面面积，微分截面 $\dv*{\sigma}{\Omega}$ 可以理解为单位立体角的散射截面．量子力学中，如果考虑单粒子以平面波入射，那么 $\sigma$ 等于被散射的概率流（概率/时间）除以入射的概率流密度（概率/时间/面积）．概率流定义为
+\begin{equation}
+\vec j = \frac{\I\hbar }{2m}(\psi \grad \psi^* - \psi^* \grad \psi )
+\end{equation}
+\begin{equation}\label{ParWav_eq3}
+\sigma  = \lim_{r \to \infty} \int \frac{(\vec j_{sc} \vdot \hat r)}{\abs{{\vec j}_{inc}}} r^2\dd{\Omega} 
+\qquad
+\dv{\sigma}{\Omega} = \lim_{r\to\infty} \frac{(\vec j_{sc} \vdot \hat r) r^2}{\abs{\vec j_{inc}}}
+\end{equation}
+在球坐标中解定态薛定谔方程，能量和角动量的本征基底为
+\begin{equation}
+\psi_{k,l,m}(\vec r) = R_{k,l}(r) Y_l^m(\theta, \phi )
+\end{equation}
+其中径向波函数满足径向方程
+\begin{equation}\label{ParWav_eq4}
+-\frac{\hbar^2}{2m} \dv[2]{r} (rR_{k,l}) + \qty[V(r) + \frac{\hbar^2}{2m} \frac{l(l + 1)}{r^2}](r R_{k,l}) = E(rR_{k,l})
+\end{equation}
+原则上我们只需要把初始波包在这个基底上展开，加上时间因子即可得到 $t =  + \infty$ 时概率的分布．现在我们假设势能没有角分布（ $m = 0$ ），且无穷远处势能为0，则基底化简为
+\begin{equation}
+\psi_{k,l}(\vec r) = R_{k,l}(r) Y_l^0(\theta ) = \sqrt{\frac{2l + 1}{4\pi }} R_{k,l}(r) P_l(\cos\theta)
+\end{equation}
+\begin{equation}\begin{aligned}\label{ParWav_eq6}
+R_{k,l}(r \to + \infty) &= A_l j_l(kr) + B_l n_l(kr) \\
+&= [A_l\sin(kr - l\pi /2) - B_l\cos(kr - l\pi /2)]/r \\
+&= \sin [kr - l\pi /2 + \delta_l(k)]/r
+\end{aligned}\end{equation}
+其中 $\delta_l(k) = \arctan(- B_l/A_l)$． 注意径向函数只能是实数，否则将会有概率流持续流入或流出原点．
+
+然而我们也可以选择能量和无穷远处的线性动量 $\vec k$ 作为本征值（由对称性，令 $\vec k=k\uvec z$），求出本征基底，这样如果初始波包有很窄的动量分布（近似为平面波），我们仅从本征基底的角分布就可求出微分截面而无需分解波包．令该基底为
+\begin{equation}\label{ParWav_eq7}
+\psi_k(\vec r) = \E^{\I kz} + \sum_l \rho_{k,l}(r) P_l(\cos \theta)
+\end{equation}
+由于在无穷远处，平面波就是定态薛定谔方程的解，所以剩下的项也应该是．且由于散射只有向外的概率流，令
+\begin{equation}\label{ParWav_eq8}
+{\rho_{k,l}}(r \to {\text{ + }}\infty ) = (2l + 1){a_l}(k)\frac{\E^{\I kr}}{r}
+\end{equation}
+其中 $(2l + 1)$ 是为了以下计算方便，球面波的相位包含在 ${a_l}(k)$ 中．该基底在无穷远处也可记为
+\begin{equation}\label{ParWav_eq9}
+\psi_k(\vec r) = \E^{\I kz} + f(k,\theta )\frac{\E^{\I kr}}{r}
+\end{equation}
+其中 $f(k,\theta) = \sum_l (2l + 1) a_l(k) P_l(\cos \theta)$．注意\autoref{ParWav_eq9} 在无穷远处是精确成立的．若从波包的角度考虑，入射波包可以看做仅由第一项展开得到，出射波包的 $\theta  \ne 0$ 部分仅由第二项展开得到，所以可以仅用第一项计算 $\vec j_{inc}$， 第二项计算 $\vec j_{sc}$，代入\autoref{ParWav_eq3} 得
+\begin{equation}
+\dv{\sigma }{\Omega} = \abs{f(k,\theta)}^2
+\end{equation}
+假设我们已经在球坐标中解出了 $\psi_{k,l}$，即径向波函数 $R_{k,l}(r)$ 与相移， 如何获得 $f(k,\theta )$，即系数 $a_l(k)$ 呢？ 把 $\psi_k$ 用 $\psi_{k,l}$ 基底展开，即对 $P_l$ 展开，再逐项对比系数即可．首先展开平面波
+\begin{equation}
+\E^{\I kz} = \sum_{l = 0}^\infty  \I^l (2l + 1) j_l(kr) P_l(\cos \theta)
+\end{equation}
+无穷远处
+\begin{equation}\label{ParWav_eq12}
+\E^{\I kz} = \sum_{l=0}^\infty  (2l + 1)\frac{\E^{\I kr} - \E^{-\I(kr - l\pi)}}{2\I kr} P_l(\cos \theta)
+\end{equation}
+将\autoref{ParWav_eq12} 与\autoref{ParWav_eq8} 代入\autoref{ParWav_eq7}，再逐项与\autoref{ParWav_eq6} 对比，得
+\begin{equation}
+a_l(k) = \frac{\E^{2\I \delta_l(k)} - 1}{2\I k}
+\end{equation}
+总结起来，轴对称的有心力的散射问题只需通过径向方程\autoref{ParWav_eq4} 获得 $\delta_l (k)$，求出 $a_l(k)$ 和 $f(k, \theta)$ 即可．
+

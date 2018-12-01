@@ -1,0 +1,38 @@
+% Crank-Nicolson 算法（一维）
+
+薛定谔方程为
+\begin{equation}
+-\frac12 \pdv[2]{\psi}{x} + V\psi = \I \pdv{\psi}{t}
+\end{equation}
+用 Crank-Nicolson 或 Caley scheme\footnote{二者是一回事， 见 Numerical Recipes 19.2} 得到的结果是
+\begin{equation}\label{CraNic_eq2}
+\qty(1+\frac{\I}{2}\mat H\Delta t)\psi^{n+1} = \qty(1-\frac{\I}{2}\mat H\Delta t)\psi^n
+\end{equation}
+其中二阶导数用三点差分计算， 得
+\begin{equation}
+\ali{
+\psi_i^{n+1} - \psi_i^n &= \frac{\I\Delta t}{4\Delta x^2} (\psi_{i-1}^n - 2\psi_i^n + \psi_{i+1}^n + \psi_{i-1}^{n+1} - 2\psi_i^{n+1} + \psi_{i+1}^{n+1})\\
+&\qquad\qquad - \frac{\I\Delta t}{2}(V_i^n\psi_i^n + V_i^{n+1}\psi_i^{n+1})
+}\end{equation}
+令 $\alpha = \I\Delta t/(4\Delta x^2), \beta = \I\Delta t/2$， 整理可得
+\begin{equation}\label{CraNic_eq2}
+-\alpha\psi_{i-1}^{n+1} + (1+2\alpha + \beta V_i^{n+1})\psi_i^{n+1} - \alpha \psi_{i+1}^{n+1} = \alpha\psi_{i-1}^n + (1 - 2\alpha - \beta V_i^n)\psi_i^n + \alpha \psi_{i+1}^n
+\end{equation}
+其中 $\psi_i^n = \psi(x_i, t_n)$， $V_i^n = V(x_i, t_n)$．
+
+我们把一个区间划分成 $N_x - 1$ 段等长的区间， 并令 $N_x$ 个格点为 $x_1\dots x_{N_x}$． 最简单的边界条件是取 $\psi(x_1) = \psi(x_{N_x}) = 0$． 这样\autoref{CraNic_eq2} 中的 $i$ 可以取 $i = 2\dots N_x - 1$， 得到 $N_x - 2$ 条式子， 其中只有 $\psi_2^{n+1}\dots \psi_{N_x-1}^{n+1}$ 这 $N_x - 2$ 个未知量， 每条式子最多包含连续 3 个未知量． 将线性方程用矩阵表示， 就可以得到一个三对角矩阵（第一行和最后一行只有两个系数）．
+
+但事实上， 还可以继续减少计算量． 将\autoref{CraNic_eq2} 整理后得
+\begin{equation}\label{CraNic_eq5}
+\qty(\frac12 + \frac{\I}{4}\mat H\Delta t)\qty(\psi^{n+1}+\psi^n) = \psi^n
+\end{equation}
+解这个方程， 再减去 $\psi^n$ 即可．
+
+\subsection{虚时间}
+使用虚时间后， \autoref{CraNic_eq2} 和\autoref{CraNic_eq5} 分别变为
+\begin{equation}
+\qty(1+\frac12\mat H\Delta t)\psi^{n+1} = \qty(1-\frac12\mat H\Delta t)\psi^n
+\end{equation}
+\begin{equation}
+\qty(\frac12 + \frac14\mat H\Delta t)\qty(\psi^{n+1}+\psi^n) = \psi^n
+\end{equation}

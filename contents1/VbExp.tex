@@ -1,0 +1,49 @@
+%振动的指数形式
+
+\pentry{简谐振子\upref{SHO}， 二阶常系数齐次微分方程\upref{Ode2}}
+
+简谐振子的微分方程
+\begin{equation}\label{VbExp_eq1}
+m\ddot x =  - kx
+\end{equation}
+是一个二阶常系数齐次微分方程． 其复数域的通解可以表示为
+\begin{equation}
+x(t) = C_1 \E^{\I \omega t} + C_2 \E^{-\I \omega t}
+\end{equation}
+其中 $C_1, C_2$ 是任意复常数． 由于指数函数的运算往往比三角函数方便， 物理或工程中常常用指数函数表示振动， 即把\autoref{VbExp_eq1} 的通解记为\footnote{\autoref{VbExp_eq3} 中 $\E^{-\I \omega t}$ 里的负号是一种习惯， 有些教材中也会使用正号． 无论使用哪一种， 必须在计算中保持一致．}
+\begin{equation}\label{VbExp_eq3}
+\tilde x(t) = \tilde A \E^{-\I \omega t}
+\end{equation}
+其中 $\tilde A$ 是一个复数\footnote{在变量上方加波浪线通常为了强调该变量是一个复数， 但为了书写方便有时候也会省略， 需要从语境中判断．}， 称为\bb{复振幅}， $\tilde A$ 的模长 $A = |\tilde A|$ 就是振幅， $\tilde A$ 幅角的相反数 $\varphi_0 = -\arg(\tilde A)$ 就是初相位\footnote{如果\autoref{VbExp_eq3} 中没有负号， 则初相位定义为 $\varphi_0 = \arg(\tilde A)$}． 当我们用\autoref{VbExp_eq3} 表示振动时， 其实部表示质点的坐标， 虚部没有物理意义．
+
+为了验证\autoref{VbExp_eq3} 的确包含了实数域的通解， 我们可以先把复振幅表示为 $\tilde A = A\E^{-\I \varphi_0}$%未完成：检查之前是否有提过
+， 代入\autoref{VbExp_eq3}， 再取实部得
+\begin{equation}
+x(t) = \Re[\tilde x(t)] = A\Re \qty[\E^{-\I (\omega t + \varphi_0)}] = A \cos(\omega t + \varphi_0)
+\end{equation}
+
+\subsection{振动的叠加}
+这里举一个例子说明使用指数函数比三角函数方便． 假设有若干个频率相同但振幅和初相位各不相同的振动 $x_i(t) = A_i \cos(\omega t + \varphi_{0i})$， 现在我们来计算它们叠加的结果， 即 $\sum_i x_i(t)$． 若用两角和公式直接计算， 得
+\begin{equation}\ali{
+\sum_i x_i(t) &= \sum_i [ A_i \cos\varphi_{0i}\cos(\omega t) - A_i\sin\varphi_{0i}\sin(\omega t)]\\
+&= \sum_i (A_i \cos\varphi_{0i})\cos(\omega t) - \sum_i(A_i\sin\varphi_{0i})\sin(\omega t)
+}\end{equation}
+分别令 $C = \sum_i A_i \cos\varphi_{0i}$， $D = \sum_i A_i \sin\varphi_{0i}$， 且令 $A = \sqrt{C^2 + D^2}$， 以及令 $\varphi_0$ 满足 $\cos\varphi_0 = C/A$， $\sin\varphi_0 = D/A$， 则上式变为
+\begin{equation}\label{VbExp_eq6}
+\sum_i x_i(t) = A [\cos\varphi_0\cos(\omega t) - \sin\varphi_0\sin(\omega t)]
+= A\cos(\omega t + \varphi_0)
+\end{equation}
+可见任意多个相同频率的简谐波叠加仍然是该频率的一个简谐波．
+
+若我们用指数形式的振动来进行同样的计算， 第 $i$ 个振动可表示为 $\tilde x_i(t) = \tilde A_i \E^{-\I\omega t}$， 其中 $\tilde A_i = A_i\E^{-\I\omega\varphi_{0i}}$． 求和得
+\begin{equation}
+\sum_i \tilde x_i(t) = \qty(\sum_i \tilde A_i ) \E^{-\I\omega t}
+\end{equation}
+令 $\tilde A = \sum_i \tilde A_i$， $A = |\tilde A|$， $\varphi_0 = -\arg(\tilde A)$， 则最后结果为
+\begin{equation}
+\sum_i \tilde x_i(t) = \tilde A \E^{-\I\omega t}
+\end{equation}
+\begin{equation}
+\sum_i x_i(t) = \Re \qty[\tilde A \E^{-\I\omega t}] = A \cos(\omega t + \varphi_0)
+\end{equation}
+不难证明上式的 $A$ 和 $\varphi_0$ 与\autoref{VbExp_eq6} 得到的 $A$ 和 $\varphi_0$ 相同， 但是这里的推导的过程却更为简洁．

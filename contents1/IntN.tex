@@ -1,0 +1,85 @@
+% 重积分
+
+\pentry{定积分\upref{DefInt}}
+\subsection{面积分}
+\bb{面积分} 也叫\bb{二重积分}， 可以看做一元函数定积分\upref{DefInt} 的一种拓展． 从几何上来理解， 如果后者是计算一定区间内被积函数曲线与坐标轴之间的面积， 那么前者就是计算一定二维区域内被积函数曲面与坐标轴平面之间的体积．
+
+\begin{exam}{曲面下的体积}\label{IntN_ex1}
+二元函数 $f(x,y) = x^2 + y^2$， 可以在直角坐标系 $xyz$ 代表一个抛物面． 现在我们指定一个二维区域， 是由 $y_1(x) = -x$， $y_2(x) = x$ 以及 $x = 1$ 所围成的三角形． 现在我们以这个三角形为底取一个无限高的三棱柱， 求三棱柱被 $f(x,y)$ 截去的有限部分的体积 $V$．
+% 图未完成
+
+与定积分的思想一样， 我们可以把三角形区域划分成许多更小的区域， 每一个区域都对应一个被曲面截取的小柱体， 由于我们使用直角坐标系，我们不妨沿 $x$ 和 $y$ 方向划分出许多小矩形， 用 $(i,j)$ 给它们编号， 每个矩形的面积分别为 $\Delta x_i \Delta y_j$， 小柱体的体积近似用底乘以高计算得 $\Delta V_{ij} = f(x_i,y_i) \Delta x_i \Delta y_j$， 其中 $x_i, y_i$ 分别为区间 $\Delta x_i, \Delta y_i$ 内任意一点． 所以总体积就可以用极限表示为
+\begin{equation}\label{IntN_eq1}
+V = \lim_{\substack{\Delta x_i\to 0\\ \Delta y_j\to 0}} \sum_{i, j} f(x_i,y_j) \Delta x_i \Delta y_j
+\end{equation}
+这是一个\bb{双重极限}， 类比定积分的定义， 用面积分简写上式记为
+\begin{equation}
+V = \iint_{\mathcal{S}} f(x,y) \dd{x}\dd{y}
+\end{equation}
+其中 $\mathcal{S}$ 代表以上定义的三角形积分区域． 
+
+那如何计算这个积分呢？ 我们可以先计算任意 $x$ 处的横截面积 $S(x)$． 这个横截面与曲面相交的曲线方程为 $f(x,y)$ （把 $x$ 看做常数， $y$ 看做变量）， 横截面积为
+\begin{equation}\label{IntN_eq3}
+S(x) = \int_{y_1(x)}^{y_2(x)} f(x,y) \dd{y} = \frac13 [y_2^3(x) - y_1^3(x)] + x^2[y_2(x) - y_1(x)] = \frac83 x^3
+\end{equation}
+现在根据一元函数定积分的定义， 体积等于横截面积 $S(x)$ 在 $x$ 方向的定积分
+\begin{equation}\label{IntN_eq4}
+V = \lim_{\Delta x_i\to 0} \sum_{i} S(x_i) \Delta x_i = \int_0^1 S(x) \dd{x} = \frac23 (1^4 -0^4) = \frac23
+\end{equation}
+要从定义上证明这种方法可行， 我们可以把\autoref{IntN_eq1} 写成
+\begin{equation}
+V = \lim_{\Delta x_i\to 0} \sum_{i} \qty[\lim_{\Delta y_j\to 0}\sum_{j} f(x_i,y_j) \Delta y_j ] \Delta x_i
+\end{equation}
+可见中括号内的极限就是定积分\autoref{IntN_eq3}，外面的极限就是定积分\autoref{IntN_eq4}． 把上式记为一条积分式就是
+\begin{equation}
+V = \int_0^1 \qty[\int_{y_1(x)}^{y_2(x)} f(x,y) \dd{y}] \dd{x}
+\end{equation}
+另一种等效的书写方式是， 把 $\int \dd{x}, \int \dd{y}$ 看成像 $\dv*{x}, \dv*{y}$ 一样的整体算符， 写在被积函数前面， 使公式看起来更为简洁
+\begin{equation}\label{IntN_eq7}
+V = \int_0^1 \dd{x} \int_{y_1(x)}^{y_2(x)} \dd{y} f(x,y)
+\end{equation}
+\end{exam}
+
+总结起来， 要在直角坐标系中计算二重积分， 就先选取一个变量 $y$（也可以是 $x$） 进行定积分， 积分的上下限分别是二重积分区域 $\mathcal{S}$ 的两条边界线 $y_1(x)$ 和 $y_2(x)$． 积分的结果中只含有 $x$， 这时再对 $x$ 进行定积分即可．
+
+\subsection{体积分}
+\bb{体积分}也叫\bb{三重积分}， 类比面积分不难理解其概念
+
+\begin{exam}{不均匀物体的质量}
+一个几何体由 $x = 0, y = 0, z = 0$ 三个平面和 $x + y + z = 1$ 平面包围而成， 其密度为 $f(x,y,z) = x + y + z$， 求几何体的总质量 $M$．
+
+用定积分的思想， 我们可以延三个方向把几何体划分成许多小块 $(i,j,k)$， 每个小块的长宽高分别为 $\Delta x_i, \Delta y_j, \Delta z_k$． $x_i, y_j, z_k$ 分别为区间 $\Delta x_i, \Delta y_j, \Delta z_k$ 中的任意一点． 物体的总质量可以用极限表示为
+\begin{equation}\label{IntN_eq8}
+V = \lim_{\substack{\Delta x_i\to 0\\ \Delta y_j\to 0\\ \Delta z_k\to 0}} \sum_{i, j, k} f(x_i,y_j,z_k) \Delta x_i \Delta y_j \Delta z_k
+\end{equation}
+用三重积分可以把这个\bb{三重极限}表示为
+\begin{equation}
+V = \iiint_{\mathcal{V}} f(x,y,z) \dd{x}\dd{y}\dd{z}
+\end{equation}
+其中 $\mathcal{V}$ 表示几何体所占的空间． 我们先把密度函数 $f(x,y,z)$ 沿 $z$ 方向积分得到“面密度” $\sigma(x,y)$（可以想象把几何体在 $z$ 方向压成一个薄板后所具有的面密度关于 $x,y$ 的函数）， 积分上下限分别为 $z_2(x,y) = 1 -x - y$ 和 $z_1(x,y) = 0$
+\begin{equation}\ali{
+\sigma(x,y) &= \int_{0}^{1-x-y} (x+y+z) \dd{z} \\
+&= (x + y)[z_2(x,y) - z_1(x,y)] + \frac12 [z_2^2(x,y) - z_1^2(x,y)]\\
+&= (x + y)(1-x-y) + \frac12 (1-x-y)^2\\
+&= \frac12 (1 - x^2 - y^2) - xy
+}\end{equation}
+再沿 $y$ 方向积分得到“线密度” $\lambda(x)$（可以想象把薄板沿 $y$ 方向压缩成一条线后所具有的线密度关于 $x$ 的函数）， 积分的上下限分别为 $y_2(x) = 1-x$ 和 $y_1(x) = 0$
+\begin{equation}\ali{
+\lambda(x) &= \int_{0}^{1-x} \sigma(x,y) \dd{y} \\
+&= \frac12 (1-x^2) (1-x) - \frac16 (1-x)^3 - \frac12 x(1-x)^2\\
+&= \frac{x^3}{6} - \frac{x}{2} + \frac13
+}\end{equation}
+最后把线密度从 $1$ 和 $0$ 积分得到总质量
+\begin{equation}\ali{
+M &= \int_{0}^{1} \lambda(x) \dd{x} = \qty[\frac{1}{24} x^4 - \frac14 x^2 + \frac13 x]_0^1 = \frac18
+}\end{equation}
+与二重积分类似， 要从定义上来证明这种算法可行， 就把\autoref{IntN_eq8} 改写成
+\begin{equation}
+M = \lim_{\Delta x_i\to 0} \sum_{i} \qty[\lim_{\Delta y_j\to 0}\sum_{j} \qty( \lim_{\Delta z_k\to 0} \sum_{k} f(x_i,y_j,z_k) \Delta z_k )\Delta y_j ] \Delta x_i
+\end{equation}
+\end{exam}
+可见从内到外的三个极限分别为三个变量的一元定积分， 即
+\begin{equation}
+M = \int_{0}^{1} \dd{x} \int_{0}^{1-x} \dd{y}  \int_{0}^{1-x-y} \dd{z} f(x,y,z)
+\end{equation}
+

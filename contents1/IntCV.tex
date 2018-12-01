@@ -1,0 +1,75 @@
+% 换元积分法
+
+% 其实我非常想说明两种换元积分法其实是一种，第一种如果把 x 看成 x（u），d（x（u））=x'（u）du，而 x'（u）*u'（x）=1． 就好了． 但是数学从简原则，略去吧
+\pentry{不定积分\upref{Int}}
+\subsection{第一类换元积分法}
+由复合函数的求导法则%未完成：链接
+，若令 $F'(x) = f(x)$， 则
+\begin{equation}
+\dv{x}	F[u(x)] = f[u(x)]u'(x)
+\end{equation}
+由于求导的逆运算是积分，有
+\begin{equation}\label{IntCV_eq2}
+\int f[u(x)]u'(x) \dd{x}  = F[u(x)] + C
+\end{equation}
+所以如果某个积分可以看成 $\int f[u(x)]u'(x) \dd{x}$ 的形式，且 $F(x)$ 较容易求出，即可根据\autoref{IntCV_eq2} 写出结果．这种方法叫做\bb{第一类换元积分法}．这类换元积分法的技巧就在于如何看出被积函数的的结构是 $\int f[u(x)]u'(x) \dd{x}$， 只有多练习才能熟能生巧． 
+
+\begin{exam}{}
+计算
+\begin{equation}
+\int a\sin(ax + b) \dd{x}
+\end{equation}
+令 $f(x) = \sin(x)$， $u(x) = ax + b$， 则上式刚好是 $\int f[u(x)]u'(x) \dd{x}$ 的形式．从基本初等函数积分表 %未完成
+已知 $\sin x$ 的一个原函数是 $F(x) = -\cos x$， 那么答案就是
+\begin{equation}
+F[u(x)] + C =  - \cos(ax + b) + C
+\end{equation}
+\end{exam}
+
+总结到更一般的情况，根据换元积分法，若已知 $\int f(x) \dd{x}  = F(x) + C$， 则对于任意常数 $a$ 和 $b$， 必有 $\int a \,f(ax + b) \dd{x} = F(ax + b)$． 根据积分的基本性质，%未完成
+两边同除 $a$， 得
+\begin{equation}\label{IntCV_eq5}
+\int f(ax + b) \dd{x} = \frac{1}{a} F(ax + b) + C
+\end{equation}
+该式使用频率很高，需要熟练掌握．类似例子还有
+\begin{equation}
+\int \frac{1}{ax+b} \dd{x} = \frac{1}{a}\ln (ax + b)+C  \qquad
+\int \E^{ax + b} \dd{x} = \frac{1}{a} \E^{ax + b}+C
+\end{equation}
+等等．
+
+\subsection{积分变量替换}
+
+换元积分法的过程在形式上可以记为 （见微分\upref{Diff}）
+\begin{equation}\label{IntCV_eq1}
+\ali{
+\int f[u(x)]u'(x) \dd{x} &= \int f[u(x)] \dd{[u(x)]} = \int f(u) \dd{u} = F(u)+C\\
+&= F[u(x)]+C
+}\end{equation}
+该式把积分变量由 $x$ 换成了 $u$， 故称为\bb{换元积分法}．
+
+\subsection{第二类换元积分法}
+第二类换元积分法从某种意义上和第一类换元积分相反．若要对一个函数积分，先把它的自变量看做另一个变量的函数，再逆向使用\autoref{IntCV_eq1}， 即可化简积分．
+\begin{equation}\label{IntCV_eq6}
+\int f(x) \dd{x} = \int f[x(t)] \dd{[x(t)]} = \int f[x(t)]x'(t) \dd{t}
+\end{equation}
+这个积分看似复杂了，但是如果 $x(t)$ 选取适当，反而可以使计算化简．
+
+\begin{exam}{}
+计算
+\begin{equation}
+\int \frac{\dd{x}}{\sqrt{1-x^2}}
+\end{equation}
+显然 $x \in ( - 1,1)$， 选取 $x(t)=\sin t$． 替换后的定义域为 $t \in ( -\pi/2,\pi/2)$， 函数单调递增 \footnote{注意任何积分换元法中的两个变量必须有一一对应的关系，即相互的函数关系在定义域内都为单调．}．上面积分变为
+\begin{equation}
+\int \frac{\dd{x}}{\sqrt{1-x^2}}  = \int \frac{\dd{\sin t}}{\sqrt{1-\sin^2 t}} = \int \frac{\cos t\dd{t}}{\cos t}  = \int 1\dd{t}  = t + C = \arcsin x + C
+\end{equation}
+验证： 根据反函数求导法则\upref{InvDer}
+\begin{equation}
+\arcsin'x = \frac{1}{\cos(\arcsin x)} = \frac{1}{\sqrt {1 - {x^2}} }
+\end{equation}
+\end{exam}
+
+
+
+

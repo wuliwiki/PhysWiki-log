@@ -1,0 +1,39 @@
+% Exact Frog-Crab 算法
+
+这是我原创的一个算法， 如果已知 $E_{IR}(t)$ 和 Frog-Crab trace， 就可以精确解出
+\begin{equation}
+a(\vec v, \tau) = -\I\int_{-\infty}^{\infty} \dd{t} \E^{\I\phi(\vec v, t)} \vec d_{\vec v(t)} \vec E_{XUV}(t-\tau) \E^{\I(W+I_p)t}
+\end{equation}
+\begin{equation}
+\phi(\vec v, t) = -\int_t^{+\infty} \dd{t'} [\vec v\vdot \vec A(t') + \vec A^2(t')/2]
+\end{equation}
+而不需要任何近似．
+
+首先我们把问题写为更简单的数学形式
+\begin{equation}\label{EFrgCr_eq3}
+S_{i, j} = \int_{-L_t/2}^{L_t/2} \dd{t} f(t) g_i(t+\tau_j)\E^{\I\omega_i t}
+\end{equation}
+其中 $i$ 取 $N_E$ 个值， $L_t$ 必须要比 $f(t)$ 的范围大， $L_t$ 决定 trace 中必要的 $\Delta E$， 即\footnote{但 $\omega_i = E_i + I_p$ 却不必是 $\Delta \omega$ 的整数倍．} $\Delta \omega$． 如果已知 $E_{IR}(t)$， 就知道了 $g_i(t)$． 所以上式就是一个类似傅里叶变换的变换， 同样是丢失了变换后的 phase 信息．
+
+如果能找到反变换， 那我们的思路就和 PCGPA 差不多， 甚至更简单． 只需要用一个 $f(t)$ 的 guess， 代入公式得到含相位的 $a$， 然后把模长替换成正确的模长， 反变换得到 $f(t)$， 然后再变换得到 $a$， 如此循环即可．
+
+现在假设 $g_i(t + \tau_j)$ 在 $[-L_t/2, L_t/2]$ 上可以近似展开为傅里叶级数
+\begin{equation}\label{EFrgCr_eq4}
+g_i(t + \tau_j) = \sum_{k=-\infty}^{\infty} c_{ijk} \E^{\I \Delta \omega kt}
+\end{equation}
+这样\autoref{EFrgCr_eq3}就变为
+\begin{equation}\label{EFrgCr_eq5}
+S_{i, j} = \sum_k c_{ijk} \int_{-L_t/2}^{L_t/2} \dd{t} f(t) \E^{\I \omega_{i+k} t}
+= \sum_k c_{ijk} F_{i+k} = \sum_l c_{i,j,l-i} F_l
+\end{equation}
+其中 $F$ 是 $f$ 的反傅里叶变换， $F_i$ 对应 $\omega_i$， 所以\autoref{EFrgCr_eq4} 中的 $k$ 也最多只需要 $2N_E$ 个值． 所以 注意 trace 的带宽只需比 $f(t)$ 的大即可．
+
+\autoref{EFrgCr_eq5} 是 $F$ 的 $N_E N_\tau$ 条超定方程， 解超定方程用最小二乘法% 链接未完成
+．
+\begin{equation}
+\vec S = \mat C \vec F
+\end{equation}
+但事实上我们只知道矢量 $\vec S$ 的每个矩阵元的模长， 我们同样可以用所谓的模长替换法迭代得到正确的 $\vec F$， 然后做一个傅里叶变换再取实部得 $f(t)$．
+
+\subsection{Phase Retrieval}
+与真正的 Frog-Crab 一样， 这种幼稚的方法收敛得非常慢． 这类只知道模长的线性方程组已经有相当多成熟的算法． GitHub 上找到一个包叫做 PhasePack 里面有很多算法而且统一接口． 目前测试了 10 来种算法， 其中最好用的是 Amplitude Flow， Wirt Flow 也不错， 但是貌似初始 guess 不如用上面的模长替代法循环 100 次左右， 用自带的初始 guess generator 反而不好． 收敛的时间从半分钟到几分钟不等， 有时候甚至会停止收敛．

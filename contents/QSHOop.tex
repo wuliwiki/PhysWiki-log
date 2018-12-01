@@ -1,0 +1,129 @@
+% 简谐振子（升降算符）
+
+%未完成
+%(首先要参考”升降算符”这篇, 根据里面的定义证明a+a-就是H的升降算符, 然后就好办了).
+\pentry{升降算符}%未完成链接
+
+\subsection{结论}
+\begin{equation}
+a_\pm = \frac{1}{\sqrt{2m\omega\hbar}} (m\omega x \mp \I p) \quad
+a_+ \psi_n = \sqrt{n + 1} \psi_{n+1}
+\quad
+a_- \psi_n = \sqrt n \psi_{n-1}
+\end{equation}
+\begin{equation}
+E_n = \qty(n+\frac12)\omega \hbar \qquad
+\Q n = a_+ a_ - \qquad
+H = \omega\hbar \qty(\Q n + \frac12)
+\end{equation}
+
+\begin{equation}
+\psi_0 (x) = \frac{1}{\pi^{1/4} \beta^{1/2}} \E^{-(x/\beta)^2/2}  \qquad \beta  = \sqrt{\frac{\hbar}{m\omega}}
+\end{equation}
+
+\subsection{推导}
+在经典的简谐振子模型中，若质点沿 $x$ 轴方向振动，且在 $x = 0$ 处平衡，则势能函数 $V(x) = k x^2/2$． 由于自由振动的频率为 $\omega = \sqrt{k/m}$， 所以势能可记为
+\begin{equation}
+V(x) = \frac12 m \omega^2 x^2
+\end{equation}
+在量子力学中，这个模型要用薛定谔方程来求解． 该模型的哈密顿算符为
+\begin{equation}
+H = \frac{p^2}{2m} + V = \frac{p^2}{2m} + \frac12 m\omega^2 x^2 = \frac{1}{2m} [p^2 + (m\omega x)^2]
+\end{equation}
+定态薛定谔方程（能量的本征方程）为
+\begin{equation}\label{QSHOop_eq6}
+H\psi  = E\psi
+\end{equation}
+由于这个方程需要使用幂级数%链接未完成
+，但作为一种巧妙的方法，先利用升降算符%未完成链接
+来得到能量的本征值，再求本征函数．这里直接给出 $H$ 的升降算符，它们分别可以把本征值升降 $\omega\hbar$ （证明见下文）
+\begin{equation}
+a_\pm = \frac{1}{\sqrt{2m\omega\hbar}} (m\omega x \mp \I p)
+\qquad
+\Delta E = \omega \hbar
+\end{equation}
+
+根据升降算符的结论，%未完成
+对任意一个 $H$ 的本征函数 $\psi_n$， 有
+\begin{equation}
+H(a_\pm\psi_n) = (E_n\pm\hbar\omega) (a_ \pm \psi_n)
+\end{equation}
+这也就是说，简谐振子的定态薛定谔方程的解中，本征值 $E_n$ 取离散值，且相邻两个能级相差 $\Delta E = \hbar \omega$ ．
+
+类似于无限深势垒% 链接未完成
+，谐振子也应该有一个最低能级 $E_0$ 和对应的 $\psi_0(x)$． 所以 $a_-$ 必然对 $\psi_0$ 无效，即得到的波函数没有物理意义，所以不妨猜测 $a_- \psi_0 = 0$ 
+即
+\begin{equation}
+(m\omega x + \I p)\psi_0 = 0
+\quad \Rightarrow \quad
+\dv{x} \psi_0 =  - \frac{m\omega x}{\hbar } \psi_0
+\end{equation}
+%（可以根据这个，解出最低能级为 $\frac12 \hbar \omega $， 于是乎，就有了猫猫爬梯梯的图片了）.
+这是一阶齐次线性微分方程，%通解
+通解为
+\begin{equation}
+\psi_0(x) = \frac{1}{\pi^{1/4}\sqrt\beta} \E^{-(x/\beta)^2/2}
+\end{equation}
+其中 $\beta = \sqrt{\hbar /m\omega}$ 具有长度量纲．不难验证上式是定态薛定谔方程\autoref{QSHOop_eq6} 的解，本征值为 $E_0=\omega\hbar/2$．
+
+\subsection{归一化条件}
+
+证明 $\psi_{n+1} = a_+\psi_n/\sqrt{n+1}$，  $\psi_{n-1} = a_- \psi_n/\sqrt n$ 
+\begin{equation}\ali{
+A^2 & = \int (a_+ \psi_n)^* (a_+ \psi_n) \dd{x}
+= \int (a_+^* a_+ \psi_n)^* (\psi_n) \dd{x}\\
+&= \int (a_- a_+ \psi_n)^* (\psi_n) \dd{x}
+}\end{equation}
+而 $a_- a_+ \psi_n = H\psi_n/(\omega\hbar) + \psi_n/2 = (n + 1)\psi_n$． 所以
+\begin{equation}
+A^2 = (n + 1)\int \psi_n^*{\psi_n} \dd{x}  = n + 1\qquad
+A = \sqrt{n+1}
+\end{equation}
+所以 $\psi_{n+1} = a_+ \psi_n/\sqrt{n+1}$
+
+\subsection{波函数}
+现在只需要对基态波函数不断使用升算符和归一化系数%公式链接
+就可以得到任意激发态波函数（已归一化）
+\begin{equation}
+\psi_n = \frac{a_+}{\sqrt {n!}} \psi_0
+\end{equation}
+
+\subsection{升降算符的证明}
+
+根据升降算符的定义， 要证明 $a_\pm$是升降算符只需证明对易关系
+
+\begin{equation}
+\comm{H}{a_\pm} =  \pm \omega\hbar a_\pm
+\end{equation}
+根据升降算符定义
+\begin{equation}
+\comm{H}{a_\pm} = \frac{1}{2m\sqrt{2m\hbar \omega}} \comm{(m\omega x)^2 + p^2}{m\omega x \mp \I p}
+\end{equation}
+不难证明
+\begin{equation}
+\comm{\Q A + \Q B}{\Q C + \Q D} = \comm{\Q A}{\Q C} + \comm{\Q A}{\Q D} + \comm{\Q B}{\Q C} + \comm{\Q B}{\Q D}
+\end{equation}
+和
+\begin{equation}
+\comm{x^2}{x} = \comm{p^2}{p} = 0
+\end{equation}
+将两式代入后，只剩下两个交叉项
+\begin{equation}
+\comm{H}{a_\pm} = \frac{\omega}{2\sqrt{2m\hbar \omega}} \qty(\mp \I \comm{x^2}{p} + \comm{p^2}{x})
+\end{equation}
+同样可以证明
+\begin{equation}
+\comm{\Q A\Q B}{\Q C} = \Q A \comm{\Q B}{\Q C} + \comm{\Q A}{\Q C}\Q B
+\end{equation}
+所以
+\begin{equation}
+\comm{x^2}{p} = x\comm{x}{p} + \comm{x}{p} x = 2\I\hbar  x
+\end{equation}
+\begin{equation}
+\comm{p^2}{x} =  -  p\comm{x}{p} - \comm{x}{p} p =  - 2\I\hbar  p
+\end{equation}
+代入得
+\begin{equation}
+\comm{H}{a_\pm} = \frac{\pm\omega\hbar}{\sqrt{2m\hbar\omega}} (x \mp \I p) =  \pm \omega\hbar a_ \pm
+\end{equation}
+证毕．

@@ -1,0 +1,164 @@
+%Hartree-Fork 方法
+
+Hartree 方法的精髓是假设多粒子波函数 $\Psi(\vec r_1, \vec r_2\dots \vec r_N)$ 等于每个单粒子波函数（包括自旋）的乘积 $u_1(q_1) u_2(q_2)\dots u_N(q_N)$ （Hartree 函数）， 其中不同的单粒子波函数要求正交归一． 然后找到最优的单粒子波函数 $u_1, u_2,\dots u_N$ 使总哈密顿的平均值最小． 所以该方法属于变分法． 得到的能级大于精确能级．
+
+注意 Hartree 函数并不满足全同粒子的对易关系， 既不是对称也不是反对称． 对于全同费米子， 方法是令多粒子函数为单粒子函数（包括自旋）的 Slater 行列式．
+\begin{equation}
+\Psi(q_1, q_2\dots) = \frac{1}{\sqrt {N!}} \vmat{
+u_1(q_1) & u_2(q_1) & \cdots  \\ 
+u_1(q_2) & u_2(q_2) & \cdots  \\ 
+\vdots & \vdots & \ddots  
+} \end{equation}
+变分法的拉格朗日乘数函数为
+\begin{equation}
+L = \bra{\Psi}\Q H\ket{\Psi} - \sum_{ij} \varepsilon_{ij} \braket{u_i}{u_j}
+\end{equation}
+为了化简第二项， 令原基底为另一组基底的幺正变换
+\begin{equation}
+\pmat{u_1\\ {u_2} \\ \vdots }
+= \Q U\pmat{ u'_1 \\ u'_2\\  \vdots}
+\end{equation}
+可以证明第一项不变． 因为
+\begin{equation}\ali{
+\Psi(q_1, q_2\dots) & = \frac{1}{\sqrt {N!}}
+\vmat{
+u_1(q_1) & u_2(q_1) & \cdots  \\ 
+u_1(q_2) & u_2(q_2) & \cdots  \\ 
+\vdots & \vdots & \ddots}
+= \frac{1}{\sqrt {N!}}
+\vmat{\mat U
+\pmat{u'_1(q_1) & u'_1(q_2) & \cdots  \\ 
+u'_2(q_1) & u'_2(q_2) & \cdots  \\ 
+\vdots & \vdots & \ddots}}\\
+& = \frac{\abs{\mat U}}{\sqrt {N!}}
+\vmat{
+u'_1(q_1) & u'_2(q_1) & \cdots  \\ 
+u'_1(q_2) & u'_2(q_2) & \cdots  \\ 
+\vdots & \vdots & \ddots}
+= \frac{\E^{\I \theta }}{\sqrt {N!}}
+\vmat{
+u'_1(q_1) & u'_2(q_1) & \cdots  \\ 
+u'_1(q_2) & u'_2(q_2) & \cdots  \\ 
+\vdots & \vdots & \ddots}
+}\end{equation}
+注意这里用到了 $\abs{\mat A\mat B} = \abs{\mat A}\abs{\mat B}$ 和 $\abs{\mat U}= {\E^{\I \theta}}$．  这是说， 平均能量关于 $u$ 的公式不受幺正变换的影响． 对第二项，
+\begin{equation}
+\sum_{ij}  \varepsilon_{ij} \braket{u_i}{u_j}
+= \int (u'_1{}^* ,u'_2{}^* \dots) \mat U\Her \varepsilon \mat U
+\pmat{ u_1' \\ u_2' \\ \vdots} \dd{q}
+\end{equation}
+
+若我们选择幺正变换， 使得 ${\mat U\Her }\mat \varepsilon \mat U = {E_i}{\delta_{ij}}$， %未完成: 这里表达不规范
+即把矩阵 $\mat \varepsilon$ 对角化（下文可知 $\mat\varepsilon$ 为对称矩阵）， 得
+\begin{equation}
+\sum_{ij} \varepsilon_{ij} \braket{u_i}{u_j}
+= \sum_i {E_i}  \braket{u_i}{u_j}
+\end{equation}
+现在把所有的撇号省略， 拉格朗日函数为
+\begin{equation}
+L =\bra{\Psi}\Q H \ket{\Psi}  - \sum_i E_i \braket{u_i}{u_i}
+\end{equation}
+即约束条件只需要归一化， 正交会自动完成． 现在来化简第一项． 首先把总波函数中的行列式记为求和的形式
+\begin{equation}
+\Psi  = \frac{1}{\sqrt {N!}} \sum_{N!} (-1)^p \Q P{\Psi_H}  \equiv \sqrt{N!} \Q A \Psi_H
+\end{equation}
+
+其中 $\Psi_H = u_1(q_1) u_2(q_2)\dots$ 是 Hartree 函数，  $\Q P$ 是置换算符， 相当于做 $p$ 次双粒子置换（ $p$ 是逆序数）， 行列式展开后共有 $N!$ 项．  $\Q A$ 为反对称化算符， 由于 $\Q H$ 和 $\Q A$ 存在一组共同本征矢， $\comm*{\Q H}{\Q A} = 0$，  另外可以证明， $\Q A^2 = \Q A$ （意义是反对称化只需要一次）（可先证明 $N = 2,3$，  高阶行列式同理）．
+\begin{equation}
+\begin{aligned}
+\bra{\Psi}\Q H\ket{\Psi}  &= N!\bra{\Psi_H} \Q A\Q H\Q A \ket{\Psi_H} = N!\bra{\Psi_H}\Q H \Q A^2\ket{\Psi_H} \\
+&= N!\bra{\Psi_H} \Q H\Q A\ket{\Psi_H}   = \sum_{N!} (-1)^p \bra{\Psi_H}\Q H\Q P\ket{\Psi_H}\\ 
+\end{aligned}
+\end{equation}
+我们现在考虑多电子原子（离子）问题
+\begin{equation}
+\Q H = \sum_i \Q h_i + \sum_{i < j} \frac{1}{r_{ij}} \qquad
+\Q h_i =  - \frac12 \laplacian + \frac{Z}{r_i}
+\end{equation}
+\begin{equation}
+\begin{aligned}
+\bra{\Psi}\sum_i \Q h_i \ket{\Psi} & = \sum_i \sum_{N!} ( - 1)^p \bra{\Psi_H}{\Q h_i}\Q P \ket{\Psi_H} = \sum_i \bra{\Psi_H} \Q h_i \ket{\Psi_H}\\
+&= \sum_i \bra{u_i} \Q h_i \ket{u_i}
+\end{aligned}
+\end{equation}
+ 
+这是因为只有当 $\Q P$ 为 $1$ 时（行列式的对角项， 逆序数 $p = 0$ ）积分才不为零． 同理， $\Q H$ 剩下的部分为
+\begin{equation}
+\bra{\Psi}\sum_{i < j} \frac{1}{r_{ij}} \ket{\Psi}  = \sum_{i < j} \sum_{N!} {(-1)^p}\bra{\Psi_H}\frac{1}{r_{ij}} \Q P \ket{\Psi_H}
+\end{equation}
+现在 $P = 1$ 或者 $P = P_{ij}$ （ $p=1$ ）时积分都可能不为零． 所以
+\begin{equation}
+\begin{aligned}
+\bra{\Psi}\sum_{i < j} \frac{1}{r_{ij}} \ket{\Psi} & = \sum_{i < j} \bra{\Psi_H}\frac{1}{r_{ij}}(1 - P_{ij}) \ket{\Psi_H} \\
+&= \sum_{i < j} \bra{u_i u_j}\frac{1}{r_{ij}}\ket{u_i u_j}  - \sum_{i < j} \bra{u_i u_j} \frac{1}{r_{ij}} \ket{u_j u_i}\\
+& \equiv \sum_{i < j} J_{ij} - \sum_{i < j} K_{ij}\\ 
+\end{aligned}
+\end{equation}
+注意这里 $\ket{u_i u_j}\Her$ 记为 $\bra{u_i u_j}$ 而不是 $\bra{u_j u_i}$．  另外易证 $J_{ij} = J_{ji}$， $K_{ij} = K_{ji}$ （交换积分变量即可） 所以
+\begin{equation}
+L = \sum_i \bra{u_i} \Q h_i \ket{u_i}  + \sum_{i< j} \bra{u_i u_j}\frac{1}{r_{ij}} \bra{u_i u_j}  - \sum_{i < j} \bra{u_i u_j} \frac{1}{r_{ij}} \ket{u_j u_i}   - \sum_i E_i \braket{u_i}{u_j}
+\end{equation}
+现在， 类似于变分法中的过程， 把任意一个 $\bra{u_k}$ 变为 $\bra{u_k + \delta u_k}$，  减去上式， 令为 $0$，得
+ \begin{equation}
+\bra{\delta u_k}{h_k}\ket{u_k}  + \sum_j^{(j \ne k)} \bra{\delta u_k u_j} \frac{1}{r_{jk}} \ket{u_k u_j}  - \sum_j^{(j \ne k)} \bra{\delta u_k u_j}\frac{1}{r_{ij}}\ket{u_j u_k} - E_k \braket{\delta u_k}{u_k}  = 0
+\end{equation}
+即
+ \begin{equation}
+\bra{\delta u_k} \qty[h_k \ket{u_k}  + \sum_j^{(j \ne k)} \bra{u_j} \frac{1}{r_{jk}} \ket{u_j} \ket{u_k}  - \sum_j^{(j \ne k)} \bra{u_j}\frac{1}{r_{ij}}\ket{u_k}\ket{u_j}  - E_k\ket{u_k}] = 0
+\end{equation}
+最后， 由于 $\bra{\delta u_k}$ 可以取任意微小函数， 与之相乘的ket必须为零
+\begin{equation}
+h_k \ket{u_k}  + \qty[\sum_j^{(j \ne k)} \bra{u_j}\frac{1}{r_{jk}} \ket{u_j}] \ket{u_k}  - \sum_j^{(j \ne k)} \qty[\bra{u_j}\frac{1}{r_{ij}} \ket{u_k}] \ket{u_j} = E_k\ket{u_k} 
+\end{equation}
+这是所谓的， 非线性耦合微分积分本征方程组．
+
+注意虽然现在 trial 波函数满足全同费米子的反对称， 一般却不是总自旋角动量的本征函数（其实也不是总轨道角动量的本征函数， 除非把无穷个不同的 $\Psi_H$ 求和）． 为了实现这点， 可以先指定总自旋角动量 $\ket{S,M}$，  然后通过对行列式线性组合构建自旋部分为 $\ket{S,M} $ 的 trial 波函数．
+
+\begin{exam}{氦原子}
+对于 He 原子的 singlet 自旋态 $(\uparrow\downarrow  -  \downarrow\uparrow )/\sqrt 2 $，  可以用一个行列式构建trial波函数． 由于自旋为反对称， 轨道波函数必须为对称， 对于基态， 这意味着两个轨道波函数相同
+\begin{equation}
+\Psi  = \frac{1}{\sqrt 2 }\vmat{
+\phi(\vec r_1)\uparrow & \phi(\vec r_1)\downarrow \\ 
+\phi(\vec r_2) \uparrow & \phi(\vec r_2) \downarrow}
+= \phi(\vec r_1) \phi(\vec r_2) (\uparrow\downarrow  -  \downarrow\uparrow )/\sqrt 2 
+\end{equation}
+把 $u_1 = \phi\uparrow$， $u_2 = \phi\downarrow$ 代入本征方程组得单个轨道波函数的本征方程
+\begin{equation}
+\Q h\ket{\phi}  + \bra{\phi}\frac{1}{r_{12}} \ket{\phi} \ket{\phi}  = E \ket{\phi} 
+\end{equation}
+当然也可以直接把 $\Psi  = \phi(\vec r_1)\phi(\vec r_2)(\uparrow\downarrow  -  \downarrow\uparrow)/\sqrt 2 $ 代入能量平均值公式， 用分母 $\braket{\phi}{\phi}$ 归一化或者用拉格朗日乘数法做， 得到的方程与上式一样
+\begin{equation}\ali{
+L &= 2\bra{\phi \phi} \Q h \ket{\phi \phi }  + \bra{\phi \phi }\frac{1}{r_{12}}  \ket{\phi \phi }  - \lambda [\braket{\phi}{\phi} - 1]  \\
+&= 2\bra{\phi}\Q h \ket{\phi}  + \bra{\phi \phi }\frac{1}{r_{12}}  \ket{\phi \phi }  - \lambda [\braket{\phi}{\phi} - 1]
+}\end{equation}
+注意拉格朗日乘数法中的优化函数可以使用限制条件化简． 令增量为 0
+\begin{equation}
+2\bra{\delta \phi} h \ket{\phi}  + 2\bra{\delta \phi \phi} \frac{1}{r_{12}} \ket{\phi \phi }  - \lambda \braket{\delta\phi}{\phi} = 0
+\end{equation}
+其中使用了 $\delta \bra{\phi \phi} = \bra{\delta \phi\phi} + \bra{\phi \delta \phi}$． 
+\begin{equation}
+\Q h \ket{\phi}  + \bra{\phi}\frac{1}{r_{12}} \ket{\phi} \ket{\phi}  = \frac{\lambda }{2}  \ket{\phi} 
+\end{equation}
+\end{exam}
+
+对于其他的自旋态， 往往需要行列式的线性组合才能构造总自旋本征态， 这个比较复杂， 先来看另一种方法． 我们可以直接指定总自旋态， 如果要求轨道波函数反对称， 可把 $u_i(q_i) = \phi_i(\vec r_i)$ 直接代入本征方程组即可， 而当要求轨道波函数对称时， 可以把以上的反对称化算符 $\Q A$ 中的 $(-1)^p$ 去掉改成对称化算符 $\Q B$ 
+\begin{equation}
+\Q B \ket{\Psi_H}  = \frac{1}{N!} \sum_{N!} \Q P\ket{\Psi_H}
+\end{equation}
+$\Q B$ 同样满足 $\comm*{\Q H}{\Q B} = 0$，  $\Q B^2 = \Q B$．  以上推导全部有效（所有负号改成正号即可）， 新的本征方程组变为
+\begin{equation}
+h_k \ket{u_k} + \qty[\sum_j^{(j \ne k)} \bra{u_j} \frac{1}{r_{jk}} \ket{u_j}] \ket{u_k} + \sum_j^{(j \ne k)} \qty[\bra{u_j} \frac{1}{r_{ij}} \ket{u_k}] \ket{u_j} = E_k \ket{u_k}
+\end{equation}
+
+\begin{exam}{氦原子}
+考虑 $He$ 的 $1s2s$，  $^1S$ 态， 即自旋为 singlet $\ket{0,0}  = (\uparrow\downarrow  -  \uparrow\downarrow)/\sqrt 2 $．  两个空间波函数不相同． 直接把 $u_1 = \phi_{1s}$， $u_2 = \phi_{2s}$ 代入上面的对称本征方程组， 得
+\begin{equation}
+\Q h_1 \ket{\phi_{1s}} + \bra{\phi_{2s}} \frac{1}{r_{12}} \ket{\phi_{2s}} \ket{\phi_{1s}} + \bra{\phi_{2s}} \frac{1}{r_{12}} \ket{\phi_{1s}} \ket{\phi_{2s}} = E_1\ket{\phi_{1s}}
+\end{equation}
+\begin{equation}
+\Q h_2 \ket{\phi_{2s}} + \bra{\phi_{1s}} \frac{1}{r_{12}} \ket{\phi_{1s}} \ket{\phi_{2s}} + \bra{\phi_{1s}} \frac{1}{r_{12}} \ket{\phi_{2s}} \ket{\phi_{1s}} = E_2 \ket{\phi_{2s}} 
+\end{equation}
+
+如果直接用 $\ket{\Psi} = (\phi_1 \phi_2 + \phi_2\phi_1)/\sqrt 2$，  结果相同．
+\end{exam}
+ 

@@ -1,0 +1,219 @@
+% 拉格朗日方程
+% eq: 5,7,8,9,10,11,12
+
+\pentry{牛顿第二定律\upref{New3}，偏导数，矢量偏导，点乘的求导法则} %未完成，必须保证能支持以下内容！
+
+若系统的状态可以由几个独立的\bb{广义坐标（generalized coordinates）} $q_i(t)$ $(i=1,2\dots)$ 和时间 $t$ 的函数描述，则广义坐标关于时间的函数可通过\bb{拉格朗日方程（Lagrange equation）}\footnote{也叫\bb{欧拉-拉格朗日方程（Euler-Lagrange Equation）}}解出．
+
+\begin{equation}\label{Lagrng_eq1}
+\dv{t} \pdv{L}{\dot q_i} = \pdv{L}{q_i}
+\quad (i=1,2\dots)
+\end{equation}
+其中 $L$ 是系统的\bb{拉格朗日量（lagrangian）}，等于系统动能减势能（我们先假设势能不是 $\dot q_i$ 的函数）
+\begin{equation}\label{Lagrng_eq2}
+L(q_1,q_2\dots,\dot q_1,\dot q_2\dots,t) = T(q_1,q_2\dots,\dot q_1,\dot q_2\dots,t) - V(q_1,q_2\dots, t)
+\end{equation}
+
+% 未完成: 作用量留到以后说
+% 拉格朗日方程的解可以使作用量取最小值
+% \begin{equation}
+% S(q) = \int_{t_1}^{t_2} {L(q,\dot q) \dd{t}} 
+% \end{equation}
+
+拉格朗日力学与牛顿力学完全等效，其优势在于，第一，只需写出拉格朗日量，就可由简单求导得到完整的动力学微分方程而无需进行受力分析．第二，方程的形式不随广义坐标的选取而改变．第三，无需解方程即可以得到一些守恒量．
+
+\begin{exam}{单个质点}\label{Lagrng_ex1}
+若把一个质点作为系统，其直角坐标 $x,y,z$ 就可以看做一组广义坐标，把它们看做时间的函数 $x(t), y(t), z(t)$，则三个函数完整地描述了每个时刻质点的位置．三个函数对时间的导数（即速度的三个分量）记为 $\dot x, \dot y, \dot z$， 则质点的动能为 $T=m(\dot x^2+\dot y^2+\dot z^2)/2$． 令质点的势能为 $V(x,y,z,t)$， 拉格朗日量为
+\begin{equation}
+L(x,y,z, \dot x, \dot y, \dot z, t) = T-V = \frac12 m(\dot x^2+\dot y^2+\dot z^2) - V(x,y,z,t)
+\end{equation}
+现在列出 $x$ 坐标的拉格朗日方程，把上式对 $\dot x$ 求偏导（$y,z, \dot x, \dot y, \dot z, t$ 看做常数，对 $\dot x$ 求导），再对时间求导得
+\begin{equation}
+\pdv{L}{\dot x} = m\dot x
+\qquad
+\dv{t} \pdv{L}{\dot x} = m\ddot x
+\end{equation}
+再把拉格朗日量对 $x$ 求偏导得
+\begin{equation}
+\pdv{L}{x} = -\pdv{V}{x}
+\end{equation}
+以上两式代入拉格朗日方程，使用 $x$ 方向分力与势能的关系 $F_x = -\pdv*{V}{x}$， 得到 $x$ 分量上的牛顿第二定律
+\begin{equation}
+m\ddot x = F_x
+\end{equation}
+$y$ 和 $z$ 坐标的拉格朗日方程也可以得到对应的牛顿第二定律．三个分量的牛顿第二定律结合初始时刻的位置和速度就可以解出函数 $x(t), y(t), z(t)$． 
+\end{exam}
+
+\begin{exam}{中心力场问题}
+仍然以一个质点作为系统，假设质点在一个平面内运动，使用极坐标 $r, \theta$ 为广义坐标，假设势能只是 $r$ 的函数 $V(r)$， 极坐标系中质点的速度为%链接未完成
+\begin{equation}\label{Lagrng_eq7}
+\vec v = \dot r\uvec r + r\dot \theta \uvec \theta
+\end{equation}
+动能等于
+\begin{equation}
+T = \frac12 m\vec v^2 = \frac12 m(\dot r^2 + r^2 \dot \theta^2)
+\end{equation}
+类似于\autoref{Lagrng_ex1}， 两个广义坐标对应的拉格朗日方程分别为
+\begin{equation}\label{Lagrng_eq10}
+m\ddot r = mr \dot \theta^2 - \pdv{V}{r}
+\end{equation}
+\begin{equation}\label{Lagrng_eq11}
+\dv{t} (m r^2\dot \theta)  = 0
+\end{equation}
+这是一个常微分方程组，直接求解较为复杂．但注意第二条方程等号右边为零，可以先对两边不定积分得
+\begin{equation}\label{Lagrng_eq12}
+mr^2\dot\theta = L
+\end{equation}
+其中 $L$ 为任意常数．根据角动量的定义\upref{AngMom}，结合\autoref{Lagrng_eq7} 不难发现 $L$ 就是质点的角动量，所以\autoref{Lagrng_eq11} 就是角动量守恒．
+
+守恒量通常可以简化问题，若已知初始条件 $r(0), \theta (0), \dot r(0), \dot\theta (0)$， 可先算出角动量 $L$，再把\autoref{Lagrng_eq12} 代入\autoref{Lagrng_eq10} 消去 $\dot\theta$ 得到关于 $r$ 的单变量微分方程，进而解出 $r(t), \theta (t)$．
+\end{exam}
+
+在该例中出现了一个\bb{守恒量（conserved quantity）} $\pdv*{L}{\dot\theta}$， 原因是 $\theta$ 对应的拉格朗日方程右边为零
+\begin{equation}
+\dv{t}\pdv{L}{\dot\theta} = \pdv{L}{\theta} = 0
+\end{equation}
+即拉格朗日量与 $\theta$ 无关（或者表述成“不含$\theta$”）．
+
+一般地， \bb{若拉格朗日量与某个广义坐标 $q_i$ 无关，则该坐标对应的广义动量 $p_i$ 是一个守恒量}， 我们把这样的坐标叫做\bb{循环坐标}． \bb{广义动量}（也叫\bb{共轭动量}）被定义为
+\begin{equation}\label{Lagrng_eq13}
+p_i = \pdv{L}{\dot q_i}
+\end{equation}
+
+\begin{exam}{耦合弹簧振子}
+如图，%未完成
+三个弹性系数为 $k$ 的弹簧（忽略质量）将两个质量为 $m$ 的质点串联在两个固定点之间，令一个广义坐标为中间弹簧的伸长距离 $x$，另一个广义坐标为两质点的质心与其平衡位置的距离 $X$， 则两质点相对平衡位置的位移分别为
+\begin{equation}
+x_1=X-x/2 \qquad x_2 = X+x/2
+\end{equation}
+动能为
+\begin{equation}
+T=\frac12 m\dot x_1^2 + \frac12 m\dot x_2^2 = m \qty(\dot X^2 + \frac14 \dot x^2)
+\end{equation}
+势能为
+\begin{equation}
+V = \frac12 k x^2 + \frac12 kx_1^2 + \frac12 k x_2^2 = k\qty(X^2 + \frac34 x^2)
+\end{equation}
+可求得拉格朗日方程组为
+\begin{equation}
+m\ddot x =  - 3kx \qquad m\ddot X =  - kX
+\end{equation}
+可见该问题中使用这种广义坐标的好处就是两个微分方程都只含有一个变量，易于求解．由“简谐振子\upref{SHO}” 中的结论可得 $x(t)$ 和 $X(t)$ 的通解为
+\begin{equation}
+x(t) = x_0 \cos(\sqrt{\frac{3k}{m}} t + \phi_x)
+\qquad
+X(t) = X_0 \cos(\sqrt{\frac{k}{m}} t + \phi_X)
+\end{equation}
+若用 $x_1, x_2$ 坐标结合受力分析列出微分方程，则会得到两条各含两个变量的微分方程．在振动系统中，这种能使方程分离变量的广义坐标叫做\bb{简正坐标}．%未完成，用矩阵专门讨论如何获得简正坐标
+\end{exam}
+\phantom{=}
+
+以上几个例子中，每个质点的坐标都是独立的，在没有约束时，$D$ 维空间中的 $N$ 质点有 $D\times N$ 个独立的广义坐标． 在一些问题中，我们往往会遇到不同形式的\bb{约束}，例如当两个质点之间由轻棍连接时，约束方程为 $(x_1-x_2)^2+(y_1-x_2)^2+(z_1-z_2)^2=L^2$ 这时两个质点的自由度就由 6 个变为 5 个．约束可以是时间的函数，例如细棍的长度可以是关于时间的函数 $L(t)$．这里我们只讨论\bb{完整约束}，即可以表示成以下形式
+\begin{equation}
+f_i(q_1,q_2,\dots ,q_N,t) = 0 \qquad (i = 1,2,\dots,M)
+\end{equation}
+若给 $N$ 个自由度的系统施加 $M<N$ 个完整约束，系统的自由度就变为 $N-M$ 个自由度，并可以用 $N-M$ 个广义坐标描述．
+
+\begin{exam}{不含时约束}
+两个质量为 $m$ 的质点分别被限制在 $x$ 轴和 $y$ 轴上移动， 且他们之间由长度为 $l$ 的轻杆相连． $x$ 轴的质点另与一平行于 $x$ 轴的弹簧相连， 平衡位置为 $x_0$， 恢复系数为 $k$， 求该系统的运动方程．% 图未完成
+
+该系统只有一个自由度， 我们可以把 $x$ 轴质点的 $x$ 坐标作为广义坐标， 则由约束方程 $x^2 + y^2 = l^2$ 可得 $y$ 轴质点的速度为
+\begin{equation}
+\dot y = -\frac{x\dot x}{\sqrt{l^2 - x^2}}
+\end{equation}
+所以系统的拉格朗日量为
+\begin{equation}
+L = \frac12 m \dot x^2\qty(1 + \frac{x^2}{l^2 - x^2}) + \frac12 k (x-x_0)^2
+\end{equation}
+代入拉格朗日方程即可．
+\end{exam}
+
+\begin{exam}{含时约束}
+一个无穷长的细杆被固定在原点的转轴上，并在水平面上以角速度 $\omega$ 转动．一个质点可以沿细杆无摩擦运动，求质点的运动方程．
+
+首先给细杆定义一个正方向，并取质点的离原点的距离为 $x$． 质点速度%链接未完成
+为 $\vec v = \dot r \uvec r + r\omega \uvec\theta$， 势能为 0． 系统的拉格朗日量为
+\begin{equation}
+L = T - V = \frac12 m(\dot x^2 + x^2 \omega^2)
+\end{equation}
+代入拉格朗日方程，得到运动方程
+\begin{equation}
+\ddot x = \omega^2 x
+\end{equation}
+该函数的通解为% 链接未完成
+\begin{equation}
+x(t) = C_1 \E^{\omega t} + C_2 \E^{-\omega t}
+\end{equation}
+\end{exam}
+
+\subsection{非保守力的拉格朗日方程}
+% 未完成
+
+
+% 首先可以用牛顿定律来推导，然后再用最小作用量推导
+\subsection{由牛顿第二定律证明拉格朗日方程}
+注意以下所有的函数偏导都是把 $q_1, q_2\dots q_N, \dot q_1, \dot q_2\dots \dot q_N, t$ 作为变量，即对一个变量求导数而把其他变量看做常数．另外，势能 $V$ 和位矢 $\vec r_j$ 与 $\dot q_i$ 无关，偏导为 0．
+
+系统动能为
+\begin{equation}
+T = \frac12 \sum_j m_j \vec v_j^2 = \frac12 \sum_j m_j \dot{\vec r}_j \vdot \dot{\vec r}_j
+\end{equation}
+由矢量点乘的求导法则
+\begin{equation}\label{Lagrng_eq5}
+\pdv{T}{\dot q_i} = \sum_j m_j \dot{\vec r}_j \vdot \pdv{\dot{\vec r}_j}{\dot q_i}
+\end{equation}
+其中质点 $j$ 的速度可以用全导数\upref{TotDer} 公式
+\begin{equation}
+\dot{\vec r}_j = \sum_k \pdv{\vec r_j}{q_k} \dot q_k  + \pdv{\vec r_j}{t}
+\end{equation}
+对 $\dot q_i$ 求偏导，注意位矢与$\dot q_i$ 无关，所以求偏导时 $\pdv*{r_j}{q_k}$ 与 $\pdv*{r_j}{t}$ 可看做常数．
+\begin{equation}\label{Lagrng_eq27}
+\pdv{\dot{\vec r}_j}{\dot q_i} = \pdv{\vec r_j}{q_i}
+\end{equation}
+代入\autoref{Lagrng_eq5} 并对时间求导得到拉格朗日方程的左边（我们暂时只讨论 $\pdv*{V}{\dot q_i} = 0$ 的情况）
+\begin{equation}\label{Lagrng_eq8}
+\dv{t} \pdv{T}{\dot q_i} = \sum_j m_j \ddot{\vec r}_j \vdot \pdv{\vec r_j}{q_i}  + \sum_j m_j \dot{\vec r}_j \vdot \dv{t} \pdv{\vec r_j}{q_i}
+\end{equation}
+拉格朗日方程的右边为
+\begin{equation}\label{Lagrng_eq9}
+\pdv{L}{q_i} = \pdv{T}{q_i} - \pdv{V}{q_i}
+\end{equation}
+其中第一项为
+\begin{equation}\label{Lagrng_eq28}
+\pdv{T}{q_i} = \sum_j m_j \dot{\vec r}_j \vdot \pdv{\dot{\vec r}_j}{q_i} = \sum_j m_j \dot{\vec r}_j \vdot \pdv{q_i} \dv{\vec r_j}{t}
+\end{equation}
+第二项被定义为\bb{广义力}
+\begin{equation}\label{Lagrng_eq29}
+Q_i = - \pdv{V}{q_i} = \sum_j \qty(-\pdv{V}{x_j} \pdv{x_j}{q_i} - \pdv{V}{y_j}\pdv{y_j}{q_i} - \pdv{V}{z_j} \pdv{z_j}{q_i}) = \sum_j \vec F_j^{(a)} \vdot \pdv{\vec r_j}{q_i}
+\end{equation}
+其中 $\vec F_j^{(a)} = - \grad_j V$ 被称为\bb{非约束力}．%未完成，最好以上的例子中能说明非约束力
+所以要证明拉格朗日方程，即证明\autoref{Lagrng_eq8} 等于\autoref{Lagrng_eq28} 加\autoref{Lagrng_eq29}， 首先需要证明
+\begin{equation}
+\dv{t} \pdv{\vec r_j}{q_i} = \pdv{q_i} \dv{\vec r_j}{t}
+\end{equation}
+也就是证明全导数和偏导数运算可对易．使用全导数\upref{TotDer} 的定义，以及混合偏导\upref{ParDer} 的性质，有
+\begin{equation}
+\dv{t} \pdv{\vec r_j}{q_i} = \sum_k \pdv{q_k} \pdv{\vec r_i}{q_i} \dot q_k  + \pdv{t} \pdv{\vec r_j}{q_i} = \sum_k \pdv{q_i} \pdv{\vec r_i}{q_k} \dot q_k + \pdv{q_i} \pdv{\vec r_j}{t} = \pdv{q_i} \dv{\vec r_j}{t}
+\end{equation}
+然后我们需要证明
+\begin{equation}
+\sum_j \qty(\vec F_j^{(a)} - m\ddot{\vec r}_j) \vdot \pdv{\vec r_j}{q_i}  = 0
+\qquad (i = 1\dots N)
+\end{equation}
+即可证明拉格朗日方程．该式被称为\bb{达朗贝尔定理}．注意由于这里的 $\vec F_j^{(a)}$ 为质点 $j$ 所受的非约束力而不是合力，所以求和项的小括号一般不为 0．
+
+\subsection{达朗贝尔定理证明}
+令第 $j$ 个质点所受和力为 $\vec F_j = \vec F_j^{(a)} + \vec F_j^{(c)}$， 两项分别为非约束力和约束力．由牛顿第二定律 $\vec F_j - m\ddot{\vec r}_j = 0$， 所以
+\begin{equation}
+\sum_j \qty(\vec F_j^{(a)}+\vec F_j^{(c)} - m\ddot{\vec r}_j) \vdot \pdv{\vec r_j}{q_i} = 0
+\qquad (i = 1\dots N)
+\end{equation}
+现在我们只需证明
+\begin{equation}
+\sum_j  \vec F_j^{(c)} \vdot \pdv{\vec r_j}{q_i}  = 0
+\qquad (i = 1\dots N)
+\end{equation}
+由于以上偏微分中时间保持不变，约束力不做功，该求和为零，证毕．%未完成: 这样的解释连我都不明白... 真的要结合有约束的例题来解释了
+
+
+% 未完成：使用最小作用量证明

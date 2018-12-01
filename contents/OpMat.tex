@@ -1,0 +1,101 @@
+%算符的矩阵表示
+
+%未完成
+%（一定要强调一下计算矩阵元的方法 \[{Q_{ij}} = \left\langle {{\psi_i}} \right|\Q Q\left| {{\psi_j}} \right\rangle \]）
+
+考虑一个比较基本的问题， 算符的“功能”是什么呢？ 算符就是对函数的一种操作方法．给出一个波函数， 经过算符作用， 可以得到一个新的波函数．以下给出量子力学中算符的两个重要性质
+\begin{enumerate}
+\item 算符都是线性的， 即对任意 $n$ 个波函数 $\psi_1, \psi_2 \dots \psi_n$，  算符 $\Q Q$ 满足
+\begin{equation}
+\Q Q (c_1 \psi_1 + c_2 \psi_2 \dots c_n \psi_n) = c_1\Q Q \psi_1 + c_2 \Q Q \psi_2 \dots c_n \Q Q \psi_n
+\end{equation}
+\item 算符的本征方程的本征值都是实数．因为根据测量理论， 本征值就是可能出现的测量结果， 所以本征值一定是实数．
+\end{enumerate}
+
+我们已经知道， 波函数可以用列向量表示%链接未完成,词条在哪里？
+．既然算符都是线性的， 而矩阵可以表示列向量的线性变换， 是否可以用矩阵代替算符， 从而作用于列向量呢？根据性质 $1$，  若 是算符 $\Q Q$ 的本征函数， $\lambda_1 \dots \lambda_n$ 是对应的本征值（实数）， 则
+\begin{equation}\leftgroup{
+\Q Q  \psi & = \Q Q(c_1 \psi_1 + \dots + c_n \psi_n)\\
+& = c_1 \Q Q \psi_1 + \dots + c_n \Q Q \psi_n\\
+& = \lambda_1 c_1 \psi_1 + \dots + \lambda_n c_n \psi_n
+}\end{equation}
+若把上面的波函数表示成列矢量，就相当于在算符 $\Q Q$ 的作用下任意一个列矢量 $\ket{\psi}  = (c_1, \dots, c_n)\Tr$ 总是会变成 $(\lambda_1 c_1, \dots, \lambda_n c_n)\Tr$． 这个变换可以用矩阵
+\begin{equation}
+\mat Q = \pmat{
+\lambda_1 &  & \\
+ & \ddots & \\
+& & \lambda_n}
+\end{equation}
+来表示，即
+\begin{equation}
+\pmat{\lambda_1 & & \\ & \ddots & \\  & & \lambda_n}
+\pmat{c_1\\ \vdots \\c_n} 
+= \pmat{\lambda_1 c_1\\  \vdots \\ \lambda_n c_n}
+\end{equation}
+所以矩阵 $\mat Q$ 就是算符 $\Q Q$ 的矩阵形式， 把算符作用在波函数上得到新的波函数， 等效于把算符对应的矩阵作用在波函数对应的列矢量上， 得到新的波函数对应的列矢量．\\
+用矩阵和列向量表示的本征方程如下
+\begin{equation}
+\mat Q \ket{\psi}  = \lambda \ket{\psi} 
+\end{equation}
+解得 $\lambda  = \lambda_i$ 时， $\ket{\psi} = \ket{\psi_1}  = (0, \dots, 1, \dots, 0)\Tr$ （只有第 $i$ 个分量等于 1，其余分量等于 0），而 $\ket{\psi_i}$ 正是波函数 $\psi_i$ 对应的列向量．
+
+\subsection{在任意基底中的矩阵}
+上面的讨论中用矩阵 $\mat Q$ 表示算符 $\Q Q$， 其局限性在于，只能使用 $\Q Q$ 的本征函数 $\psi_1 \dots \psi_n$ 作为基底．现在若用其他基底（正交归一的） $\phi_1 \dots \phi_n$， 能否求出算符 $\Q Q$ 对应的矩阵 $\mat Q_1$ 呢？\\
+下面讨论中， 为了避免混淆， 用 $\ket{f}_\phi$ 表示波函数 $f$ 以 $\phi_1 \dots \phi_n$ 为基底的列矢量， $\ket{f}_\psi$ 表示波函数 $f$ 以 $\psi_1 \dots \psi_n$ 为基底的列矢量．
+
+现取任意一波函数 $f$，  $\ket{f}_\psi = (c_1\dots c_n)\Tr$， $\ket{f}_\phi = (d_1\dots d_n)\Tr$． 虽然它们表示同一个波函数 $f$，  但是由于选取的基底不同， 列向量也不同．下面讨论它们之间的变换关系．
+
+若把 $f$ 按 $\phi_i$ 展开， 有
+\begin{equation}\ali{
+\int \phi_i^*f \dd{x} & = \int \phi_i^* ( d_1 \phi_1 + \ldots + d_n \phi_n) \dd{x} = \sum_{j = 1}^n d_j \int \phi_i^*{\phi_j} \dd{x}\\
+&= \sum_{j=1}^n d_j \delta_{ij} = d_i
+}\end{equation}
+若把 $f$ 按 $\psi_i$ 展开， 有
+\begin{equation}
+d_i = \int \phi_i^*f \dd{x} = \int \phi_i^* (c_1 \psi_1 + \dots + c_n \psi_n)   \dd{x} = \sum_{j = 1}^n c_j \int \phi_i^*{\psi_j} \dd{x}
+\end{equation}
+上式用矩阵和列矢量表示， 即 $(d_1 \dots d_n)\Tr = \mat P (c_1 \dots c_n)\Tr$，  即 ${\left| f \right\rangle_\phi } = P{\left| f \right\rangle_\psi }$．\\
+其中 $P$ 矩阵的矩阵元 ${P_{ij}} = \int {\phi_i^*{\psi_j}dx} $．  $\mat P$ 叫做基底变换矩阵（或表象变换矩阵）．
+
+若令 $\Q Q f = g$，  根据前面的内容， $Q \ket{f}_\psi = \ket{g}_\psi$ 其中 $Q = \rm{diag}(\lambda_1\dots\lambda_n)$． % 未完成，确保介绍了 diag 符号
+
+下面应用基底变换矩阵， 有 $\ket{f}_\psi = P^{-1} \ket{f}_\phi$ ; $\ket{g}_\psi = P^{-1} \ket{g}_\phi$． 代入上式得
+\begin{equation}
+Q P^{-1} \ket{f}_\phi = P^{-1} \ket{g}_\phi
+\end{equation}
+两边左乘 $P$ 得
+\begin{equation}
+PQ P^{-1} \ket{f}_\phi = \ket{g}_\phi
+\end{equation}
+令 $\mat Q_1 = \mat P\mat Q \mat P^{-1}$，  得
+\begin{equation}
+Q_1 \ket{f}_\phi = \ket{g}_\phi
+\end{equation}
+所以 $\mat Q_1$ 就是要求的矩阵．
+
+下面证明 $\mat Q_1$ 是厄米矩阵．
+
+我们先学习所谓幺正矩阵．这里给出幺正矩阵的一种定义： 若把矩阵 $\mat P$ 的每一列划分成一个列向量， 从左到右分别为$\ket{p_1} \dots\ket{p_n}$，  若满足 $\braket{p_i}{p_j}=\delta_{ij}$ 则矩阵 $\mat P$ 叫做幺正矩阵．
+
+容易证明式 $*$ 中的 $P$ 就是幺正矩阵（证明略）．
+
+性质 $1$ ： 幺正矩阵一个很重要的性质就是其厄米共轭等于其逆矩阵， $\mat P^* = \mat P^{- 1}$
+
+证明： 要证明 $\mat P^* = \mat P^{-1}$，  只需证明 $\mat P^* \mat P$ 是单位矩阵即可． 根据矩阵乘法的定义，
+\begin{equation}
+(P^* P)_{ij} = \sum_{k=1}^n (P^*)_{ik}P_{kj}
+\end{equation}
+根据厄米共轭的定义，
+\begin{equation}
+\sum_{k=1}^n (P^*)_{ik}P_{kj}  = \sum_{k=1}^n (P_{ki})^* P_{kj}  = \braket{p_i}{p_j} \delta_{ij}
+\end{equation}
+所以 $\mat P^* \mat P$ 是 $n$ 阶的单位矩阵．  证毕．
+
+在上文中， $\mat Q$ 是所谓的实数元的对角矩阵， 所以 $\mat Q^* = \mat Q$
+
+另外容易证明， $(\mat A\mat B)^* = \mat B^* \mat A^*$．  所以
+\begin{equation}
+\mat Q_1^* = (\mat P\mat Q\mat P^{-1})^* = (\mat P^{-1})^* (\mat P\mat Q)^* = \mat P(\mat Q^* \mat P^*) = \mat P\mat Q\mat P^{-1} = \mat Q_1
+\end{equation}
+所以 $\mat Q_1$ 是厄米矩阵．
+

@@ -1,0 +1,41 @@
+%平均值的不确定度
+
+例题： 比如说有一个概率分布 $y = f(x)$．  它的
+
+平均值（数学期望）为 $\bar x = \int_{-\infty}^{+\infty} xf(x) \dd{x}$，  
+
+方差为  $\sigma_x^2 = \int_{-\infty}^{+\infty} (x - \bar x)^2 f(x) \dd{x} = \qty(\int_{-\infty}^{+\infty} x^2 f(x) \dd{x} ) - \bar x^2 = \overline{x^2}  - \bar x^2$ 
+
+标准差为 $\sigma_x = \sqrt{\int_{-\infty}^{+\infty} (x - \bar x)^2 f(x) \dd{x}} $．  
+
+如果测量一个数据， 这三个值就可以用来衡量这个数据的特征．
+
+但如果测量 $n$ 次平均值， 那显然平均值显然要比一次测量更可靠， ${\sigma_{\bar x}} < {\sigma_x}$．   各种教科书上都会给出 ${\sigma_{\bar x}} = \frac{1}{\sqrt n }{\sigma_x}$ 或者 $\sigma_{\bar x}^2 = \frac{1}{n}\sigma_x^2$．  那么这个公式到底怎么来的呢？
+
+其实在上式中， $\sigma_{\bar x}^2$  的定义是
+\begin{equation}
+\sigma_{\bar x}^2 = \int_{-\infty}^{+\infty} \qty( \frac{1}{n}\sum_{i=1}^n x_i - \bar x)^2 f(x_1) f(x_2)\dots f(x_n) \dd{x_1}\dots \dd{x_n}
+\end{equation}
+下面就从这个定义证明 $\sigma_{\bar x}^2 = \frac{1}{n}\sigma_x^2$． 
+
+先考虑两次测量， 即 $n = 2$ 的情况． 先后得到 $x_1, x_2$ 的概率密度是 $f_2(x_1, x_2) = f(x_1) f(x_2)$ ． 不难证明归一化：
+\begin{equation}
+\iint f(x_1) f(x_2) \dd{x_1} \dd{x_2} = \int f(x_1) \dd{x_1} \int f(x_2) \dd{x_2}  = 1 \times 1 = 1 
+\end{equation}
+
+先看 $(x_1 + x_2)/2$ 的平均值， 令 $y = (x_1 + x_2)/2$． 
+\begin{equation}\ali{
+\bar y &= \iint \frac{x_1+x_2}{2} f(x_1) f(x_2) \dd{x_1} \dd{x_2}  \\
+& = \frac12 \int {{x_1} f(x_1) \dd{x_1}} \int f(x_2) \dd{x_2}  + \frac12 \int f(x_1) \dd{x_1} \int x_2 f(x_2) \dd{x_2}\\
+&= \frac{\bar x}{2} + \frac{\bar x}{2} = \bar x
+}\end{equation}
+结论是， 进行两次测量取平均值， 数学期望就是测量一次的数学期望． 这个结论是符合常识的．
+
+根据同样的方法， 可以测量方差．
+\begin{equation}\ali{
+\sigma_{\bar x}^2 &= \iint \qty(\frac{x_1+x_2}{2} - \bar x)^2 f(x_1) f(x_2) \dd{x_1}\dd{x_2}\\
+&= \frac12 \qty(\overline{x^2}  - \bar x^2) = \frac12 \sigma_x^2
+}\end{equation}
+所以 $\sigma_{\bar x}^2 = \frac12 \sigma_x^2$，  且  $\sigma_{\bar x} = \frac{1}{\sqrt 2 }\sigma_x$ 
+
+对于 $n > 2$ 的情况， 利用求和符号和积分运算法则， 也很容易证明  $\sigma_{\bar x} = \frac{1}{\sqrt n} \sigma_x$ 

@@ -1,0 +1,53 @@
+% 波恩近似（散射）
+
+我们还是要解出连续态的不含时波函数，且无穷远处的动量为 $\vec k_i$ （入射平面波的动量）．
+\begin{gather}
+-\frac{\hbar^2}{2m} \laplacian\psi  + V\psi  = E\psi \\
+(\laplacian + k^2)\psi  = \frac{2m}{\hbar^2} V\psi  \equiv U(\vec r)\psi
+\end{gather}
+这是非齐次亥姆霍兹方程，其格林函数% 未完成: 格林函数 亥姆霍兹方程的格林函数
+为（球面波）
+\begin{equation}
+G(R) =  -\frac{\E^{\I kR}}{4\pi R}
+\end{equation}
+满足
+\begin{equation}
+(\laplacian + k^2)G(\vec r) = \delta^3(\vec r)
+\end{equation}
+\bb{薛定谔方程的积分形式}为
+\begin{equation}\label{BornSc_eq5}
+\psi(\vec r) = \psi_0(\vec r) + \int G(\abs{\vec r - \vec r'})U(\vec r')\psi (\vec r') \dd[3]{r'}
+\end{equation}
+$\psi_0$ 是自由粒子波函数，由于无穷远处积分项消失（$1/r$）， $\psi_0(\vec r\to\infty)$ 要求具有动量 $\vec k_i$，唯一的选择是平面波
+\begin{equation}
+\psi_0(\vec r) = A\E^{\I\vec k_i \vdot \vec r}
+\end{equation}
+由于微分截面定义在无穷远处，我们把格林函数取无穷远处的极限（远场），注意这个极限在定义中，所以并不算是一个近似．这是关于 $\vec r'$ 的平面波
+\begin{gather}
+\abs{\vec r - \vec r'} \approx r - \hat r \vdot \vec r' \approx r\\
+G(\vec r, \vec r') =  - \frac{\E^{\I k \abs{\vec r - \vec r'}}}{4\pi\abs{\vec r - \vec r'}} \to  - \frac{\E^{\I kr}}{4\pi r} \E^{-\I \vec k_f \vdot \vec r'}
+\end{gather}
+其中 $\vec k_f = k\uvec r$ 是出射的方向，注意 $\abs{\vec k_i} = \abs{\vec k_f}$ 意味着弹性散射．
+
+积分方程求近似解的一般方法是先把一个近似解代入积分内，积分得到一阶修正后的解，再次代入，得到二阶修正后的解，以此类推迭代．波恩近似中，假设势能相对于入射动能较弱，积分项相当于微扰，所以令初始（零阶）波函数为 $\psi_0(\vec r)$．代入\autoref{BornSc_eq5} 得一阶修正的波函数，叫做\bb{第一波恩近似}
+\begin{equation}
+\psi ^{(1)}(\vec r) = A\E^{\I\vec k_i \vdot \vec r} - A \frac{m}{2\pi\hbar^2} \frac{\E^{\I kr}}{r}\int \E^{\I (\vec k_i - \vec k_f) \vdot \vec r'} V(\vec r') \dd[3]{r'}
+\end{equation}
+根据定义，散射幅为
+\begin{equation}
+f(k, \hat r) =  - \frac{m}{2\pi\hbar^2} \int \E^{\I (\vec k_i - \vec k_f) \vdot \vec r'} V(\vec r') \dd[3]{r'}
+\end{equation}
+这相当于势能函数的空间傅里叶变换．
+
+\subsection{高阶波恩近似}
+把\autoref{BornSc_eq5} 多次代入\autoref{BornSc_eq5} 的积分中，得到精确解的“积分级数”形式
+\begin{equation}\ali{
+\psi(\vec r) &= \psi_0(\vec r) + \int \dd[3]{r'} G(k,\vec r,\vec r')U(\vec r')\psi_0(\vec r')  \\
+&+ \int \dd[3]{r'} G(k,\vec r,\vec r')U(\vec r') \int \dd[3]{r''} G(k,\vec r',\vec r'')U(\vec r'')\psi_0(\vec r'') \\
+&+ \int \dd[3]{r'} G(k,\vec r,\vec r')U(\vec r')\times\\
+&\int \dd[3]{r''}G(k,\vec r',\vec r'')U(\vec r'')\int \dd[3]{r'''}G(k,\vec r'',\vec r''')U(\vec r''') \psi_0(\vec r''')
+  ... 
+}\end{equation}
+若只计算是指包含前 $n$ 行，就叫第 $n$ 波恩近似．具体计算时，偶尔会用到二阶，基本不会用到三阶或以上．
+
+非常有趣的是，即使我们不假设零阶波函数是平面波，波函数展开成上式时取前 $n$ 行的结果仍然是相同的．

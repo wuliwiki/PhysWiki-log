@@ -1,0 +1,56 @@
+% 复合函数的偏导 链式法则
+
+\pentry{复合函数的偏导\ 链式法则\upref{PChain}}
+
+若已知二元函数 $z = f(u,v)$，$z$ 是 $u, v$ 的函数，但若 $u$ 和 $v$ 都又是 $x$ 和 $y$ 的函数，则 $z$ 最终是 $x$ 和 $y$ 的函数，即
+\begin{equation}
+z(x,y) = f[u(x,y),v(x,y)]
+\end{equation}
+那如何求 $z$ 对 $x$ 和 $y$ 的偏微分呢？我们先来看全微分关系．首先
+\begin{equation}
+\dd{z} = \pdv{f}{u} \dd{u} + \pdv{f}{v} \dd{v}
+\end{equation}
+而 $u$ 和 $v$ 的微小变化又都是由 $x$ 和 $y$ 的微小变化引起的
+\begin{equation}
+\dd{u} = \pdv{u}{x} \dd{x} + \pdv{u}{y} \dd{y}
+\quad
+\dd{v} = \pdv{v}{x} \dd{x} + \pdv{v}{y} \dd{y}
+\end{equation}
+所以
+\begin{equation}\ali{
+\dd{z} &= \pdv{f}{u} \qty( \pdv{u}{x} \dd{x} + \pdv{u}{y} \dd{y} ) + \pdv{f}{v} \qty( \pdv{v}{x}\dd{x} + \pdv{v}{y} \dd{y} ) \\
+   &= \qty( \pdv{f}{u}\pdv{u}{x} + \pdv{f}{v}\pdv{v}{x} )\dd{x} + \qty( \pdv{f}{u}\pdv{u}{y} + \pdv{f}{v}\pdv{v}{y} ) \dd{y}
+}\end{equation}
+这就是 $z$ 关于 $x$ 和 $y$ 的全微分关系．根据定义
+\begin{equation}
+\pdv{f}{x} = \pdv{f}{u}\pdv{u}{x} + \pdv{f}{v}\pdv{v}{x}
+\end{equation}
+\begin{equation}
+\pdv{f}{y} = \pdv{f}{u}\pdv{u}{y} + \pdv{f}{v}\pdv{v}{y}
+\end{equation}
+这也叫偏导的\bb{链式法则}．
+
+\subsection{通用函数名}
+物理中常常会出现一种容易混淆的情况\footnote{“通用函数名”是我的叫法}，就是当一个因变量可以有几套自变量（例如上面的 $z(u,v)$ 和 $z(x,y)$）时，通常直接用因变量（$z$）作为函数名而另外不定义函数名（$f$）．然而 $z(u,v)$ 与 $z(x,y)$ 中的 $z$ 并不是同一个函数．以下举例说明
+
+\begin{exam}{}\label{PChain_ex1}
+在二维直角坐标系中，定义势能函数为
+\begin{equation}\label{PChain_eq7}
+V=f(x,y)=x^2+y^2+2x
+\end{equation}
+而若用极坐标描述该势能， 则函数变为
+\begin{equation}\label{PChain_eq8}
+V = g(r,\theta) = f(r\cos \theta , r\sin \theta ) = r^2 + 2r\cos \theta
+\end{equation}
+但许多物理书为了表述方便并不用 $f$ 和 $g$ 区分两个不同的函数， 而是使用 $V(x,y)$ 表示\autoref{PChain_eq7} 和 $V(r,\theta)$ 表示\autoref{PChain_eq8}．这样后者就有可能被误解为
+\begin{equation}
+V(r,\theta) = r^2+\theta^2+2r \quad \text{(错)}
+\end{equation}
+这就需要从语境中判断是否使用了通用函数名．
+
+使用通用函数名时，要注意判断偏导数使用的是哪一套变量，例如 $\pdv*{V}{x}$ 默认使用 $V(x,y)$ 求偏导， $\pdv*{V}{r}$ 默认使用 $V(r,\theta)$ 求偏导．一种更复杂的情况如 $(\pdv*{V}{x})_\theta$． 按照定义\footnote{见偏导数\upref{ParDer}中的\autoref{ParDer_eq1}}，应该是仅用 $x$ 和 $\theta$ 表示 $V$，然后求偏导．考虑极坐标的定义，$\theta$ 不变意味着 $y$ 与 $x$ 成正比即 $y=x\tan\theta$，代入\autoref{PChain_eq7} 得
+\begin{equation}
+V(x,\theta)=x^2(1+\tan^2 \theta) + 2x
+\end{equation}
+现在再对 $x$ 求偏导即可（略）．
+\end{exam}

@@ -1,0 +1,65 @@
+% Frog-Crab
+
+Frog-Crab 的论文是 Y. Mairesse 和 F. Quere 2005 年的 Frequency-resolved optical gating for complete reconstruction of attosecond bursts. 以下的公式全部使用原子单位．
+
+\subsection{Strong Field Approximation}
+
+主要参考文献是 Lewenstein 1994 的 HHG 论文（见 Carlos Research）， 但这里另外做了修改．
+
+令 $\vec E_{XUV}$ 为 XUV 的电场， 而 IR 电场用矢势来表示 $\vec E_{IR} = -\pdv*{\vec A}{t}$． 令末态波函数为
+\begin{equation}
+\ket{\Psi(t, \tau)} = \E^{\I I_p t} \qty(\ket{0} + \int a(\vec v, \tau) \ket{\vec v} \dd[3]{\vec v})
+\end{equation}
+强场近似下， $a(\vec v, \tau)$ 的解为\footnote{我故意将论文中的 $\vec d_{\vec p(t)}$ 写成 $\vec d_{\vec v(t)}$， 只是符号不同， 计算是一样的．}
+
+\begin{equation}
+a(\vec v, \tau) = -\I\int_{-\infty}^{\infty} \dd{t} \E^{\I\phi(\vec v, t)} \vec d_{\vec v(t)} \vec E_{XUV}(t-\tau) \E^{\I(W+I_p)t}
+\end{equation}
+\begin{equation}
+\phi(\vec v, t) = -\int_t^{+\infty} \dd{t'} [\vec v\vdot \vec A(t') + \vec A^2(t')/2]
+\end{equation}
+其中 $\vec d_{\vec v} = \mel{\vec v}{\vec r}{0}$， $\ket{\vec v}$ 为速度为 $\vec v$ 的平面波， 由于经典力学中 $\vec p = \vec v - \vec A$ 是一个守恒量\footnote{我实在不明白为什么许多论文上都写 $\vec p = \vec v + \vec A$！}，
+\begin{equation}
+\vec v(t) = \vec v(\infty) - \vec A(\infty) + \vec A(t) = \vec v + \vec A(t)
+\end{equation}
+
+下面来算 $\vec d_{\vec k}$，已知氢原子基态为 $\ket{0} = \E^{-r}/\sqrt{\pi}$， $\ket{\vec k} = \exp(\I \vec k \vdot \vec x)/(2\pi)^{3/2}$． 由于氢原子基态球对称， 不失一般性， 可以将 $\vec k$ 的方向设为极轴的方向（$z$）， 同样由对称性可得 $\vec d_{\vec k}$ 只有 $z$ 分量不为零． 
+
+\begin{equation}
+\vec d_{\vec k} =  \mel{\vec k}{\vec r}{0} =  \frac{ \uvec k}{\sqrt2\pi} \int_0^{+\infty} \int_0^\pi \E^{-r} \E^{-\I k r \cos\theta} r \cos\theta \cdot r^2 \sin\theta \dd{\theta} \dd{r}
+\end{equation}
+换元， 令 $u = \cos\theta$， 得
+\begin{equation}\ali{
+\vec d_{\vec k} &= \frac{\uvec k}{\sqrt{2\pi}}  \int_0^{+\infty} r^3 \E^{-r} \int_{-1}^1 \E^{-\I k r u} u  \dd{u} \cdot \dd{r}\\
+&=  \I\frac{\sqrt2 \uvec k}{\pi k}  \int_0^{+\infty} r^2 \E^{-r} \qty[\cos(kr) - \frac{1}{kr}\sin(kr)] \dd{r}\\
+&= -\I \frac{8\sqrt2}{\pi} \frac{\vec k}{(k^2+1)^3}
+}\end{equation}
+这与 Lewenstein 1994 的论文中给出的多了一个负号（不过我应该是对的）．
+
+用 Matlab 根据上面的公式计算了一下 Frog-Crab trace， 但我的是对称的， 而论文上不对称， 师兄说这是论文上的 XUV pulse 有 chirp， 一看果然是． 想了一下 Phase Gate 是什么原理， 发现 $\E^{\I\phi(t)}$ 的确随 $\vec v$ 变化较小（见“phi change.png”）， 但还有一项 $\vec d_{\vec p}$ 似乎随时间变化还是比较明显的， 魏晖的意思是也当成常数就行了， 不过他还给了我另一篇文章专门讨论 dipole 变化的， 存在 ipad 相册里面． 至于最后一项 $\E^{\I(W+I_p)t}$， 说明这是傅里叶变换到能量表象．然而既然到能量表象了， 就不能直接使用 $\abs{a(v, t)}^2$ 了， 而是需要做一个换元， 导致 $a(v)$ 需要除以 $\sqrt{v}$．
+
+至于 dipole 随 $v$ 的变化， 观察了一下发现基本上可以认为
+\begin{equation}
+d(v, t) \approx -\I \frac{8\sqrt2}{\pi} \frac{v}{(v^2+1)^3} g(t);
+\end{equation}
+其中 $g(t)$ 可看做一个不随 $v$ 变化的时间函数， 其值约等于 $C_0 + \gamma A(t)$， $\gamma$ 是一个较小的常数（见“g(t) change.png”）． 这样一来， 我们只需要将能量谱（先除以 $\sqrt{v}$）除以上式中的 $v$ 因子， 再用 PCGPA 就可以得到 pulse 和 gate， 而得到的 gate 将会是 $g(t)\exp[\phi(t)]$．
+
+到此为止， Frog-Crab 基本上已经被我吃透了， 写出程序只是时间问题．
+
+新的困难： 实验中产生的 trace 的时候只有 $E + I_p > 0$ 的部分， 然而完整的傅里叶变换  $\exp[\I (E + I_p) t]$ 显示 $-(E + I_p)$ 处也有一条类似的 trace， 而且并不是完全对称的（因为被积函数既不是实函数也不是偶函数）． 在论文上这点完全没有被提及． 试了一种方法就是在 PCGPA 保留负 efrog 不变， 而只把正 efrog 的模长换成正 trace 的模长， 但是几乎看不出有 converge． 从傅里叶变换的性质来看， pulse 是是函数， gate 是复函数， 相乘就是复函数， 所以傅里叶变换以后正频谱和负频谱理论上并没有直接的关系． 如果被傅里叶变换的函数是实函数， 那么我们只需要正频谱就可以做反傅里叶变换， 方法是用正频谱做反傅里叶变换乘以 2 然后取实部． 但是不管了， 反正是近似， 就姑且这么做试试， 结果效果还非常不错！这可能是因为 gate 的频率远小于 pulse 的频率吧！ 注意在每个循环中 SVD/power 后一定要把 pulse 的虚部归零．
+
+另一个困难：由于 XUV+IR 至少需要 10000 个格点，Matlab 跑起来已经非常吃力了，现在一是要在 C++ 中实现，二是要进行优化． Numerical Recipes 中已经有 FFT 和 SVD 的算法了，然而 NR3 的 SVD 却不支持复数！然而没关系， 我弄明白了 SVD 的 Principal Component 为什么可以用矩阵乘法代替， 就是所谓的 power method， 见 PCGPA 论文．
+
+至于优化， 首先算 SVD/power 的时候输入矩阵只有中间的一横条不为零，完全可以只对这部分做 SVD/power． 另外 FFT 虽然比 DFT 要快， 但如果用 DFT，就可以只对不为零的部分积分，且只算不为零部分的能谱 ，这样说不定会更快， 另外还可以 openMP 并行． 这些现在已经实现了， 如果还要进一步优化， 就是让 tau 的格点数（即 trace 的横向格点数）少于 gate 的格点数（实际试验中也肯定是这样的）， 但这样 outer product 矩阵会有很多零（见 sparce.png)， 就不知道 power method 还能不能用了， 有待探索． 不过感觉目前的速度已经够快了, 弄两百个 iteration 不成问题．
+
+现在来做实验， 首先我根据 Frog-Crab 论文上的数据生成了 pulse 和 gate （并加入了 chirp）， 然后直接用 Frog 的方法生成 trace （而不是套用 SFA 公式）． 结果非常理想， 最多 100 多个循环就可以 converge 得非常完美， 但这只是普通的 pcgpa， 并没有近似（除了负频谱缺失）．
+
+接下来可以试试用 SFA 公式了．
+
+
+
+
+
+
+
+

@@ -1,0 +1,61 @@
+% Nelder-Mead 算法
+
+\pentry{Matlab}% 未完成
+
+Nelder-Mead 算法是一种求多元函数局部最小值的算法， 其优点是不需要函数可导并能较快收敛到局部最小值． Matlab 自带的 \x{fminsearch} 函数就是使用该算法． 对 $N$ 元函数 $f(\vec x)$ （这里把函数自变量用 $N$ 维矢量来表示）， 该算法需要提供函数自变量空间中的一个初始点， $\vec x_1$， 算法从该点出发寻找局部最小值． 以下讲解具体算法．
+
+我们先根据初始点另外生成 $N$ 个初始点 $\vec x_2\dots\vec x_{N + 1}$， 使 $\vec x_{1 + i}$ 在第 $i$ 个分量比 $\vec x_1$ 的大 5\%， 其他分量保持相同． 如果 $\vec x_1$ 的第 $i$ 个分量为零， 那么 $\vec x_{1 + i}$ 的第 $i$ 个分量设为 $0.00025$． 得到 $N+1$ 个初始点后， 开始按照以下步骤进行循环， 直到满足特定的精度条件时退出循环．
+
+\begin{enumerate}
+\item 先给这些点按照 $f(\vec x_i)$ 从小到大的顺序重新排序并重命名， 使 $i$ 越大 $f(\vec x_i)$ 越大．
+
+\item 计算前 $N$ 个点的平均位置为
+\begin{equation}
+\vec m = \frac1N \sum_{i=1}^N \vec x_i
+\end{equation}
+
+\item 计算 $\vec x_{N + 1}$ 关于点 $\vec m$ 的\bb{反射点}为
+\begin{equation}
+\vec r = 2\vec m - \vec x_{N + 1}
+\end{equation}
+
+\item 如果 $f(\vec x_1) \les f(\vec r) < f(\vec x_N)$， 令 $\vec x_{N+1} = \vec r$， 并进入下一个循环．
+
+\item 如果 $f(\vec r) < f(\vec x_1)$， 计算\bb{拓展点}为
+\begin{equation}
+\vec s = \vec m + 2(\vec m - \vec x_{N+1})
+\end{equation}
+如果 $f(\vec s) < f(\vec r)$， 令 $\vec x_{N+1} = \vec s$ 并进入下一个循环， 否则令 $\vec x_{N+1} = \vec r$． 并进入下一循环．
+
+\item 如果 $f(\vec x_N) \les f(\vec r) < f(\vec x_{N+1})$， 令
+\begin{equation}
+\vec c_1 = \vec m + (\vec r - \vec m)/2
+\end{equation}
+如果 $f(\vec c_1) < f(\vec r)$， 令 $\vec x_{N + 1} = \vec c_1$ 并进入下一循环， 否则执行最后一步．
+
+\item 如果 $f(\vec x_{N+1}) \les f(\vec r)$ 令
+\begin{equation}
+\vec c_2 = \vec m + (\vec x_{N+1} - \vec m)/2
+\end{equation}
+如果 $f(\vec c_2) < f(\vec x_{N+1})$， 令 $\vec x_{N+1}  = \vec c_2$ 并进入下一循环， 否则执行最后一步．
+
+\item 令
+\begin{equation}
+\vec v_i = \vec x_1 + (\vec x_i - \vec x_1)/2 \qquad (i = 2\dots N+1)
+\end{equation}
+并用 $\vec v_i$ 赋值给 $\vec x_i$， 进入下一循环．
+\end{enumerate}
+
+观察以上步骤可知， 当局部最小值的位置在 $N+1$ 个围成的图形以外时， 图形倾向于变大且加速向最小值移动． 当最小值的位置在图形内部时， 图形倾向于缩小． 随着循环次数增加， 这 $N+1$ 个点最终将向局部最小值聚拢． 
+
+我们可以在每个循环的第一步之后计算 $\vec x_1$ 和 $\vec x_{N+1}$ 的距离来估算自变量的误差， 如果该误差小于某个值， 即可结束循环并使用 $\vec x_1$ 作为最终结果． 作为另一种方法， 我们也可以在每个循环的第一步之后计算 $f(\vec x_{N+1}) - f(\vec x_1)$ 来估算最小值的误差．
+
+以下是该算法的 Matlab 代码．
+
+\Code{NelderMead}
+
+该程序中有几个需要注意的地方． 首先， 主循环并没有用 \x{while 1}， 而是用 \x{for} 循环指定一个最大循环次数． 这是为了避免少数情况下可能发生的死循环（例如 $f(\vec x)$ 在某个区域中的值处处相等时）． 第二， 4-7 步中对 $f(\vec r)$ 的判断有且仅有一个成立， 所以我们可以用 \x{if, elseif, else} 结构来选择． 最后， 4-5 步的情况下程序必定会执行 \x{continue} 语句而跳过第 8 步， 只有 6-7 步中的 \x{if} 判断失败程序才会执行第 8 步．
+
+% 未完成：需要举一个应用的例子．
+
+

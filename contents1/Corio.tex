@@ -1,0 +1,121 @@
+%科里奥利力
+
+\pentry{惯性力\upref{Iner}，离心力\upref{Centri}，平面旋转矩阵，矢量的叉乘\upref{Cross}}%未完成
+\bb{科里奥利力（Coriolis Force）}是匀速旋转的参考系中由质点运动产生的惯性力．
+\begin{equation}
+\vec F_c = 2m \vec v_{abc} \cross \vec \omega
+\end{equation}
+其中 $\vec v_{abc}$ 是质点相对于旋转参考系 $abc$ 的瞬时速度， $\vec\omega$ 是旋转系相对于某惯性系 $xyz$ 转动的角速度矢量．%未完成： 考虑使用脚注或链接
+在匀速转动参考系（属于非惯性系）中，若质点保持相对静止，则惯性力只有离心力．然而当质点与转动参考系有相对速度时，惯性力中还会增加一个与速度垂直的力，这就是科里奥利力．地理中的地转偏向力就是科里奥利力，可用上式计算（见“地球表面的科里奥利力\upref{ErthCf}”）．
+
+\subsection{推导（矢量法）}
+\pentry{连续叉乘的化简\upref{TriCro}}
+
+这里首先给出一个较符合直觉的结论（暂时不证）． 若 $abc$ 系相对 $xyz$ 系以角速度 $\vec\omega$ 旋转， 对任意一个随时间变化的矢量（假设一阶导数存在）， 我们把它在 $xyz$ 和 $abc$ 系中的时间导数分别记为 $(\dv*{\vec A}{t})_{xyz}$ 和 $(\dv*{\vec A}{t})_{abc}$， 则有
+% 未完成： 确定之前提过 \vec v = \vec \omega \cross \vec r
+\begin{equation}\label{Corio_eq4}
+\qty(\dv{\vec A}{t})_{xyz} = \qty(\dv{\vec A}{t})_{abc} + \vec\omega\cross\vec A
+\end{equation}
+
+\begin{exam}{}
+令 $abc$ 系 $t = 0$ 时与 $xyz$ 系重合并绕 $z$ 轴逆时针匀速转动， 又令 $\vec A(t) = \alpha t \uvec a$， 验证 $\vec A(t)$ 满足\autoref{Corio_eq4}．
+
+首先将 $\vec A(t)$ 用 $\uvec x, \uvec y$ 基底表示为 $\vec A(t) = \alpha t (\cos\omega t\, \uvec x + \sin\omega t\, \uvec y)$， 对其求导得
+\begin{equation}
+\qty(\dv{\vec A}{t})_{xyz} = \alpha (\cos\omega t \,\uvec x + \sin\omega t \,\uvec y)
++ \alpha\omega t (-\sin\omega t \,\uvec x + \cos\omega t \,\uvec y)
+\end{equation}
+而在 $abc$ 系中求导为
+\begin{equation}
+\qty(\dv{\vec A}{t})_{abc} = \alpha \uvec a = \alpha (\cos\omega t\, \uvec x + \sin\omega t \,\uvec y)
+\end{equation}
+最后，
+\begin{equation}
+\vec\omega \cross \vec A = (\omega \uvec c) \cross (\alpha t \uvec a) = \alpha\omega t \uvec c\cross\uvec a = \alpha\omega t \uvec b = \alpha\omega t(-\sin \omega t \,\uvec x + \cos\omega t \,\uvec y)
+\end{equation}
+将以上三式代入\autoref{Corio_eq4} 可验证\autoref{Corio_eq4} 成立． 注意以上我们将所有的矢量用 $\uvec x, \uvec y$ 基底表示， 类似地， 我们也可以将所有矢量用 $\uvec a, \uvec b$ 表示， 等式同样成立．
+\end{exam}
+
+我们先令 $\vec A$ 为质点的位矢 $\vec r$， 得参考系中质点的速度关系为
+\begin{equation}\label{Corio_eq5}
+\vec v_{xyz} = \vec v_{abc} + \vec\omega\cross\vec r
+\end{equation}
+两边在 $xyz$ 系中对时间求导得
+\begin{equation}\label{Corio_eq6}
+\vec a_{xyz} = \qty(\dv{\vec v_{abc}}{t})_{xyz} + \vec\omega\cross\vec v_{xyz}
+\end{equation}
+注意 $abc$ 系中的加速度 $\vec a_{abc}$ 并不是上式右边第一项， 而是 $(\dv*{\vec v_{abc}}{t})_{abc}$． 令\autoref{Corio_eq4} 中的 $\vec A = \vec v_{abc}$， 得
+\begin{equation}\label{Corio_eq7}
+\qty(\dv{\vec v_{abc}}{t})_{xyz} = \vec a_{abc} + \vec\omega\cross\vec v_{abc}
+\end{equation}
+将\autoref{Corio_eq5} 和\autoref{Corio_eq7} 代入\autoref{Corio_eq6}， 得
+\begin{equation}
+\vec a_{xyz} = \vec a_{abc} + 2\vec\omega\cross\vec v_{abc} + \vec\omega\cross(\vec\omega\cross\vec r)
+\end{equation}
+所以旋转参考系中的总惯性力（\autoref{Iner_eq1}\upref{Iner}）为
+\begin{equation}
+\vec f = m(\vec a_{abc} - \vec a_{xyz}) = -2m\vec\omega\cross\vec v_{abc} - m\vec\omega\cross(\vec\omega\cross\vec r)
+\end{equation}
+其中第二项为离心力（\autoref{Centri_eq5}\upref{Centri}）， 而第一项被称为科里奥利力．
+
+% 未完成：需要引用矩阵相乘的求导法则
+\subsection{推导（旋转矩阵法）}
+设空间中存在一个惯性系 $xyz$ 和一个非惯性系 $abc$ 相对于惯性系 $xyz$ 绕 $z$ 轴以角速度 $\omega$ 逆时针匀速旋转（右手定则\upref{RHRul}）． 由于 $z$ 轴和 $c$ 轴始终重合（ $z=c$）， 只需要考虑 $x,y$ 坐标和 $a,b$ 坐标之间的关系即可．
+
+令平面旋转矩阵为% 未完成：链接
+\begin{equation}
+\mat R(\theta) \equiv \begin{pmatrix}
+\cos \theta & - \sin \theta \\
+\sin \theta & \cos \theta
+\end{pmatrix}
+\end{equation}
+其意义是把坐标逆时针旋转角 $\theta$． 两坐标系之间的坐标变换为
+\begin{equation}
+\pmat{x\\y}_{xyz} = \mat R(\omega t) \pmat{a\\b}_{abc}
+\qquad
+\pmat{a\\b}_{abc} = \mat R(-\omega t) \pmat{x\\y}_{xyz}
+\end{equation}
+为了得到质点在惯性系中的加速度，对上面左式的 $(x,y)\Tr$ 求二阶时间导数得\footnote{某个量上方加一点表示对时间的一阶导数，两点表示对时间的二阶导数．} $xyz$ 系中的加速度（以 $\uvec x, \uvec y$ 为基底）
+\begin{equation}\label{Corio_eq1}
+\vec a_{xyz} = \pmat{\ddot x \\ \ddot y}_{xyz} = 
+\ddot{\mat R}(\omega t) \pmat{a\\b} + 2\dot{\mat R} (\omega t) \pmat{\dot a \\ \dot b} + \mat R(\omega t)\pmat{\ddot a \\ \ddot b}
+\end{equation}
+其中\footnote{\autoref{Corio_eq2} 和\autoref{Corio_eq3} 相当于用矩阵推导了匀速圆周运动的速度和加速度公式\upref{CMVD}\upref{CMAD}．}
+\begin{equation}\label{Corio_eq2}
+\dot{\mat R}(\omega t) = \omega \begin{pmatrix}
+\cos(\omega t + \pi /2) &  - \sin(\omega t + \pi /2)\\
+\sin(\omega t + \pi /2) & \cos(\omega t + \pi /2)
+\end{pmatrix}
+= \omega \mat R(\omega t + \pi /2)
+\end{equation}
+\begin{equation}\label{Corio_eq3}
+\ddot{\mat R} (\omega t)  =  - \omega ^2 \mat R (\omega t)
+\end{equation}
+ 代入\autoref{Corio_eq1} 得
+\begin{equation}
+\vec a_{xyz} =
+- \omega ^2 \mat R(\omega t)\pmat{a\\b} + 2\omega \mat R(\omega t + \pi /2)\pmat{\dot a \\ \dot b} + \mat R(\omega t)\pmat{\ddot a \\ \ddot b}
+\end{equation}
+上式中的每一项都是以 $\uvec x, \uvec y, \uvec z$ 为基底的坐标．所有坐标乘以 $\mat R(-\omega t)$， 得到以 $\uvec a, \uvec b, \uvec c$ 为基底的坐标
+\begin{equation}
+\vec a_{xyz} =
+- \omega^2 \pmat{a\\b}_{abc} + 2\omega \mat R(\pi /2)\pmat{\dot a\\ \dot b}_{abc} + \pmat{\ddot a\\ \ddot b}_{abc}
+\end{equation}
+所以旋转参考系中的总惯性力（\autoref{Iner_eq1}\upref{Iner}）为（以 $\uvec a, \uvec b, \uvec c$ 为基底）
+\begin{equation}\label{Corio_eq10}
+\vec f = m(\vec a_{abc} - \vec a_{xyz})
+=  m \omega ^2 \pmat{a\\b}_{abc} - 2m\omega \mat R(\pi /2)\pmat{\dot a\\ \dot b}_{abc}
+\end{equation}
+其中第一项是已知的离心力\upref{Centri}， 我们将第二项定义为科里奥利力 $\vec F_c$． 科里奥利力可以用叉乘记为
+\begin{equation}
+\vec F_c = 2m \vec v_{abc} \cross \vec \omega
+\end{equation}
+其中 $\vec\omega$ 是 $abc$ 系旋转的角速度矢量， $\vec v_{abc}$ 是质点相对于 $abc$ 系的速度．最后， 我们可以写出\autoref{Corio_eq10} 的矢量形式
+\begin{equation}
+\vec f = m \omega ^2 \vec r + 2m \vec v_{abc} \cross \vec \omega 
+\end{equation}
+ 
+
+
+
+
