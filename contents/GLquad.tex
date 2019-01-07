@@ -1,0 +1,48 @@
+% Gauss-Lobatto 积分
+
+Gauss-Lobatto 积分中令采样点（包括两个端点）的个数为 $N$， 如果被积函数是 $2N-3$ 阶多项式（$f(x) = x^{2n-3} + \dots$）， 则积分没有误差。
+
+注意 Gauss-Lobatto 积分是对称的
+\begin{equation}
+x_j = -x_{N-j+1} \qquad w_{0j} = w_{0,N-j+1}
+\end{equation}
+
+\subsection{正交归一基底}
+每个基底都是 $N-1$ 阶多项式， 由于阶数和零点数一样， 多项式可以唯一确定， 即拉格朗日插值多项式
+\begin{equation}\ali{
+p_n(x) &= \prod_{i=1}^{n-1} \frac{x-x_i}{x_n-x_i} \prod_{i=n+1}^{N} \frac{x-x_i}{x_n-x_i}\\
+&= \frac{x-x_1}{x_n-x_1} \times\dots\times\frac{x-x_{n-1}}{x_n-x_{n-1}}\frac{x-x-{n+1}}{x_n-x_{n+1}} \dots \frac{x-x_N}{x_n-x_N}
+}\end{equation}
+
+由于任意两个基底乘积只是 $2N-2$ 阶的多项式， 所以可以用求和精确代替其积分。
+\begin{equation}
+\int_{-1}^1 p_i(x) p_j(x) \dd{x} = \sum_k w_k p_i(k) p_j(k) = w_i \delta_{ij}
+\end{equation}
+
+所以 $N$ 个正交归一基底就是
+\begin{equation}\label{GLquad_eq3}
+f_n(x) = \frac{1}{\sqrt{w_n}} p_n(x)
+\end{equation}
+满足
+\begin{equation}\label{GLquad_eq3}
+f_i(x_j) = \frac{1}{\sqrt{w_i}} \delta_{ij}
+\end{equation}
+
+
+
+另一种等效的表示方法是利用 $N$ 阶 Gauss-Lobatto 数值积分对应的多项式， $N-1$ 阶勒让德多项式的导数， $P'_{N-1}(y)$，  来构建满足条件的多项式．根据定义，其 $N-2$ 个零点分别为 $y_2, y_3\dots y_{N-1}$， 为了加入 $y_1=-1$ 与 $y_n=1$ 这两个零点，将其变为 $N$ 阶多项式
+\begin{equation}\label{FEDVR_eq10}
+(1-y^2)P'_{N-1}(y)
+\end{equation}
+然而，\autoref{FEDVR_eq8} 要求 $u_n(y_n)=1$， 所以我们将\autoref{FEDVR_eq10} 除以它自己在 $y_n$ 处的切线，在 $y=y_n$ 处形成极限类型 $0/0=1$ 即可得到 阶多项式 $u_n(y)$． 
+\begin{equation}\label{FEDVR_eq11}
+u_n(y) = \frac{(1-y^2)P'_{N-1}(y)}{[(1-y^2)P'_{N-1}(y)]'_y} = y_n (y-y_n)
+\end{equation}
+该式与式\autoref{FEDVR_eq9} 事实上是完全相同的多项式，因为所有具有 $N-1$ 个零点的 $N-1$ 阶多项式都可以因式分解成\autoref{FEDVR_eq9} 的形式乘以一个待定常数．用\autoref{FEDVR_eq11} 便于快速地展开多项式（因为勒让德多项式的系数可以直接通过公式计算）．
+
+
+
+
+
+
+

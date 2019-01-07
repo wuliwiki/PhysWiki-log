@@ -1,84 +1,115 @@
 % FEDVR 算法
 
-\pentry{高斯积分（Gauss-Lobatto）} % 链接未完成
+\pentry{高斯积分（Gauss-Lobatto）\upref{GLquad}}
 
 \subsection{FEDVR基底}
 
-现在以一维 FEDVR 为例，把整个区间划分成 $N_e$ 个有限元，第 $j$ 个有限元的区间为 $[x_j,x_{j+1}]$．每个有限元内进一步加入格点，令 $x_n^j$ 为第 $j$ 区间的 $N$ 阶 Gauss-Lobatto 数值积分 %链接未完成
-的 $N$ 个采样点．这样，$x_1^j=x_j$，  $x_N^j=x_{j+1}$． 把每个有限元的区间作为定义域建立 $N$ 个多项式作为函数基底，第 $j$ 个有限元内的第 $n$ 个基底记为 $u_n^j$， 要求满足
-\begin{equation}\label{FEDVR_eq1}
-u_n^j(x_{n'}^j) = \delta_{n,n'}
-\end{equation}
-这样，根据 $N$ 阶 Gauss-Lobatto 数值积分公式
+现在以一维 FEDVR 为例，把整个区间划分成 $N_e$ 个\bb{有限元}，第 $i$ 个有限元的区间为 $[x_i,x_{i+1}]$．每个有限元内进一步加入格点，令 $x_{ij}\ (j = 1\dots N)$ 为第 $i$ 有限元的 $N$ 阶 Gauss-Lobatto 数值积分 %链接未完成
+的 $N$ 个采样点．这样，$x_{j1}=x_j$，  $x_{jN}=x_{j+1}$． 
+
+现在来定义 FEDVR 基底 $u_{ij}(x)$。 令 $a_i$ 是第 $i$ 个 FE 长度的一半， $b_i$ 是第 $i$ 个 FE 的终点坐标， 把\autoref{GLquad_eq3}\upref{GLquad} 中的 $f_n(x)$ （$x$ 超出 $[-1,1]$ 时令 $f_n(x) = 0$） 记为 $f_n(t)$， 并把 $t \in [-1,1]$ 线性依次映射到每个有限元的区间 $x \in [x_i, x_{i+1}]$ 上， 有
 \begin{equation}
-\braket{u_n^j}{u_{n'}^j} = \int_{x_j}^{x_{j+1}} u_n^j(x) u_{n'}^j(x) \dd{x} = \frac{x_{j+1}-x_j}{2} \sum_{i=1}^{N} w_i u_n^j(x_i) u_{n'}^j (x_i)
+x_{ij} = a_i t_j + b_i
 \end{equation}
-如果 $u_n^j$ 的阶数都小于等于 $N-1$， 则上式精确成立．把\autoref{FEDVR_eq1} 代入，可得正交关系
 \begin{equation}
-\braket{u_n^j}{u_{n'}^j} = \delta_{n,n'} \frac{x_{j+1}-x_j}{2} w_n
+x = a_i t + b_i \qquad (x_{i1} \les x \les x_{iN})
 \end{equation}
-在边界 $x_j$ 处，我们要求函数连续但不要求导数连续，于是可以把定义域为 $[x_j,x_{j+1}]$ 的 $u_N^j$  与定义域为 $[x_{j+1},x_{j+2}]$ 的 $u_1^{j+1}$ 合并为一个函数，重新记为 $u_N^j$，放弃符号 $u_1^j$． 另外，对于两个端点 $x_1$ 和 $x_{N_e+1}$， 令边界条件为函数值等于 0， 所以我们放弃 $u_1^1(x)$ 和 $u_N^{N_e}(x)$ 两个基底．这样，我们最终共有 $N_eN-(N_e-1)-2$ 个基底．最广义的正交关系为
+则基底的定义为
 \begin{equation}
-\braket{u_n^j}{u_{n'}^{j'}} = \delta_{j,j'}\delta{n,n'} \frac{x_{j+1}-x_j}{2}w_n
+u_{ij}(x) = \leftgroup{
+&\frac{1}{\sqrt{a_i}} f_j\qty(\frac{x-b_i}{a_i})  \qquad &&( 1 < j < N) \\
+& \frac{1}{\sqrt{a_i+a_{i+1}}}\times\leftgroup{
+& f_N\qty(\frac{x-b_i}{a_i}) \quad &&(x \les  x_{iN})\\
+& f_1\qty(\frac{x-b_{i+1}}{a_{i+1}}) \quad &&(x \ges x_{iN})
+}  \quad &&(j = N) 
+} \end{equation}
+易证正交归一关系
+\begin{equation}
+\int_{x_1}^{x_{N_e+1}} u_{ij}(x) u_{i'j'}(x) \dd{x} = \delta_{ii'} \delta_{jj'}
 \end{equation}
-这个积分范围可以是 $[x_1, x_{N_e+1}]$． 以下为了方便描述，把每个有限元 $j$ 的区间 $ x\in[x_j,x_{j+1}]$ 均匀映射到 $y\in[-1,1]$ 上
+在总区间的两端我们一般采用函数值为零的边界条件， 所以不定义 $u_{11}(x)$ 和 $u_{N_e, N}(x)$。 这样，我们最终共有 $N_e(N-1)-1$ 个节点 $x_{ij}$ 和对应的基底 $u_{ij}(x)$． 令 $w_{0i}$ 为\autoref{GLquad_eq3}\upref{GLquad} 中的 $w_i$， 则每个基底在每个节点处的函数值为
 \begin{equation}
-y = \frac{x_{j+1}-x_j}{2} x + \frac{x_j+x_{j+1}}{2}
-\end{equation}
-且定义 $y_i$ 由 $x=x_i^j$ 代入该式得到．我们在所有的有限元中都使用同样的基底，换言之，对于每个 $j$， 每个 $n=2,3\dots N-1$， 在 $x\in[x_j,x_{j+1}]$， 令
-\begin{equation}
-u_n^j(x) = u_n(y) \qquad y\in[-1,1]
-\end{equation}
-把剩下的基底 $u_N^j(x)$ 定义为
-\begin{equation}
-u_N^j(x) = \leftgroup{
-&u_N(y) \quad & &x\in[x_j,x_{j+1}] \\
-&u_1(y)  & & x\in[x_{j+1},x_{j+2}]
+u_{ij}(x_{i'j'}) = \delta_{ii'}\delta_{jj'}\times \leftgroup{
+&\frac{1}{\sqrt{a_i w_{0j}}} \qquad  &&( 1 < j < N) \\
+& \frac{1}{\sqrt{(a_i+a_{i+1}) w_{0N}}} \qquad &&(j = N) 
 }\end{equation}
-现在只要找到 $N$ 个多项式 $u_n(y)$， 就可以找到所有 $u_n^j(x)$ 基底．给 $u_n(y)$ 加上\autoref{FEDVR_eq1} 的条件得
-\begin{equation}\label{FEDVR_eq8}
-u_n(y_i) = \delta_{n,i}
-\end{equation}
-满足该式的 $N-1$ 阶多项式可以选用拉格朗日插值公式，即
-\begin{equation}\label{FEDVR_eq9}\begin{aligned}
-u_n(y) &= \prod_{i=1}^{n-1} \frac{y-y_i}{y_n-y_i} \prod_{i=n+1}^{N} \frac{y-y_i}{y_n-y_i}\\
-&= \frac{y-y_1}{y_n-y_1} \times\dots\times\frac{y-y_{n-1}}{y_n-y_{n-1}}\frac{y-y-{n+1}}{y_n-y_{n+1}} \dots \frac{y-y_N}{y_n-y_N}
-\end{aligned}\end{equation}
-另一种等效的表示方法是利用 $N$ 阶 Gauss-Lobatto 数值积分对应的多项式， $N-1$ 阶勒让德多项式的导数， $P'_{N-1}(y)$，  来构建满足条件的多项式．根据定义，其 $N-2$ 个零点分别为 $y_2, y_3\dots y_{N-1}$， 为了加入 $y_1=-1$ 与 $y_n=1$ 这两个零点，将其变为 $N$ 阶多项式
-\begin{equation}\label{FEDVR_eq10}
-(1-y^2)P'_{N-1}(y)
-\end{equation}
-然而，\autoref{FEDVR_eq8} 要求 $u_n(y_n)=1$， 所以我们将\autoref{FEDVR_eq10} 除以它自己在 $y_n$ 处的切线，在 $y=y_n$ 处形成极限类型 $0/0=1$ 即可得到 阶多项式 $u_n(y)$． 
-\begin{equation}\label{FEDVR_eq11}
-u_n(y) = \frac{(1-y^2)P'_{N-1}(y)}{[(1-y^2)P'_{N-1}(y)]'_y} = y_n (y-y_n)
-\end{equation}
-该式与式\autoref{FEDVR_eq9} 事实上是完全相同的多项式，因为所有具有 $N-1$ 个零点的 $N-1$ 阶多项式都可以因式分解成\autoref{FEDVR_eq9} 的形式乘以一个待定常数．用\autoref{FEDVR_eq11} 便于快速地展开多项式（因为勒让德多项式的系数可以直接通过公式计算）．
 
-现在知道了所有基底，任意时刻的波函数便可近似展开为
+易证， 若要对整个区间积分， 所需权重为
 \begin{equation}
-\Psi(x,t) = \sum_{j=1}^{N_e-1}\sum_{n=2}^{N} c_n^j(t) u_n^j(x) + \sum_{n=2}^{N-1} c_n^{N_e}(t) u_n^{N_e}(x)
-\end{equation}
-可以用一个 $N_eN-N_e=1$ 维的列矢量描述波函数
-\begin{equation}
-\vec\psi = (c_2^1,\dots,c_N^1,\dots,c_2^2,\dots,c_N^2,\dots,c_{N-1}{N_e})\Her
-\end{equation}
-建立全局下标 $\alpha$， $\beta$， 例如 $\psi_\alpha=c_n^j$ 中 $\alpha=(j-1)(N-1)+(n-1)$． 
+w_{ij} = \frac{1}{u_{ij}^2(x_{ij})} = \leftgroup{
+&a_i w_{0j} \quad &&( 1 < j < N) \\
+&(a_i + a_{i+1}) w_{0N} \quad &&( j = N)\\
+} \end{equation}
 
-\subsection{哈密顿算符}
-现在讨论在该基底中如何把哈密顿算符转换成矩阵．
- \begin{equation}\begin{aligned}
-H_{\alpha\beta} &= K_{\alpha\beta}+V_{\alpha\beta} \\
-&= -\frac{\hbar^2}{2m} \int_{x_1}^{x_{N_e+1}} u_n^j(x)\vdot u_{n'}^{j'}(x)'' \dd{x}
-+ \int_{x_1}^{x_{N_e+1}} u_n^j(x) u_{n'}^{j'}(x) V(x) \dd{x}
-\end{aligned}\end{equation}
-其中
+一个函数 $f(x)$ 用基底展开为
+\begin{equation}
+\braket{u_{ij}(x)}{f(x)} = \int_{x_1}^{x_{N_e+1}} u_{ij}(x) f(x) \dd{x} \approx \sqrt{w_{ij}} f(x_{ij})
+\end{equation}
+把所有基底按对应的 $x_{ij}$ 从小到大排序。 $f(x)$ 的展开系数就可以记为一个列矢量。
+
+\subsection{动能算符}
+
+使用分部积分可以把动能矩阵元表示为两个基底的导函数的内积
+\begin{equation}\ali{
+K_{ij} &= -\frac12\mel{u_i}{\dv[2]{x}}{u_j}% 未完成： 线性代数需要说一下这个怎么来的， 必须要用正交归一基底
+= -\frac12 \int u_i(x) u_j''(x) \dd{x}\\
+&= -\frac12 \eval{u_i(x) u'_j(x)}_{x_1}^{x_2} + \frac12 \int u'_i(x) u_j'(x) \dd{x}\\
+&= \frac12 \braket{u'_i(x)}{u_j'(x)}
+}\end{equation}
+可以看出 $\mat K$ 是实对称矩阵。 这个积分可以精确地用求和表示， 而且只有同一个 FE 里面的 $u_i(x), u_j(x)$ 才能使积分不为零（bridge function 属于两个 FE）， 所以就得到了几乎是 block diagonallized 的矩阵， 只是每一个 block 左上角和右下角的一个矩阵元与其他 block 重叠。
+
+那如何计算基底函数的导数呢？ 可以通过计算勒让德插值多项式的导数得到
+\begin{equation}\ali{
+&f_i'(t_j) =\frac{1}{\sqrt{w_{0i}}} \times\\
+&\leftgroup{
+&\frac{t_j-t_1}{t_i-t_1} \frac{t_j-t_2}{t_i-t_2} \dots \frac{1}{t_i-t_j} \dots \frac{t_j-t_{i-1}}{t_i-t_{i-1}}\frac{t_j-t_{i+1}}{t_i-t_{i+1}} \dots \frac{t_j-t_N}{t_i-t_N} \qquad &&(i \ne j) \\
+& \frac{1}{t_i-t_1} + \dots + \frac{1}{t_i-t_{i-1}} + \frac{1}{t_i-t_{i+1}} + \dots \frac{1}{t_i-t_N} \quad &&(i = j)
+}} \end{equation}
+代入得
+\begin{equation}
+u'_{ij}(x_{ij'}) = \frac{1}{a_i^{3/2}} f'_j\qty(t_{j'})  \qquad ( 1 < j < N)
+\end{equation}
+\begin{equation}
+u'_{iN}(x_{i j'}) = \frac{1}{a_i\sqrt{a_i+a_{i+1}}} f'_N\qty(t_{j'})
+\end{equation}
+\begin{equation}
+u'_{iN}(x_{i+1, j'}) = \frac{1}{a_{i+1}\sqrt{a_i+a_{i+1}}} f'_1\qty(t_{j'})
+\end{equation}
+注意 $u'_{iN}$ 在 $x_{iN}$ 处的左右导数不相等。
+
+现在就可以求动能矩阵的矩阵元了（由于是对称矩阵， 我们只列出半边）， 先看不含 bridge function 的矩阵元
+\begin{equation} \ali{
+K_{(im), (in)} &=  \frac12 \int_{x_{i1}}^{x_{iN}} u'_{im}(x) u'_{in}(x) \dd{x} \\
+&= \frac12 \sum_k  a_i w_{0k} u'_{im}(x_{ik}) u'_{in}(x_{ik}) \\
+&= \frac{1}{2a_i^2} \sum_k w_{0k} f'_m(t_k) f'_n(t_k)
+\qquad (1 < m \les n < N)
+} \end{equation}
+再看含 bridge function 的矩阵元
+\begin{equation} \ali{
+K_{(im), (iN)} &= \frac12 \int_{x_{i1}}^{x_{iN}} u'_{im}(x) u'_{iN}(x) \dd{x} \\
+&= \frac{1}{2a_i^{3/2} \sqrt{a_i + a_{i+1}}} \sum_k w_{0k} f'_m(t_k) f'_N(t_k)
+\qquad (1< m < N)
+} \end{equation}
+
+\begin{equation} \ali{
+K_{(iN), (iN)} &= \frac12 \int_{x_{i1}}^{x_{iN}} u'_{iN}(x)^2 \dd{x} + \frac12 \int_{x_{i+1,1}}^{x_{i+1,N}} u'_{i+1,1}(x)^2 \dd{x}\\
+&= \frac{1}{2(a_i + a_{i+1})} \sum_k w_{0k} \qty[\frac{1}{a_i} f'_N(t_k)^2 + \frac{1}{a_{i+1}} f'_1(t_k)^2]
+} \end{equation}
+
+\begin{equation} \ali{
+K_{(iN), (i+1,n)} &= \frac12 \int_{x_{i+1,1}}^{x_{i+1,N}} u'_{i,N}(x) u'_{i+1,n}(x) \dd{x}\\
+&= \frac{1}{2 a_{i+1}^{3/2} \sqrt{a_i + a_{i+1}}} \sum_k w_{0k} f'_1(t_k) f'_n(t_k)
+\qquad (1< n < N)
+} \end{equation}
+
+\begin{equation} \ali{
+K_{(iN), (i+1,N)} &= \frac12 \int_{x_{i+1,1}}^{x_{i+1,N}} u'_{i,N}(x) u'_{i+1,N}(x) \dd{x}\\
+&= \frac{1}{2a_{i+1}\sqrt{(a_i + a_{i+1})(a_{i+1}+a_{i+2})}} \sum_k w_{0k} f'_1(t_k) f'_N(t_k)
+} \end{equation}
+
+
+\subsection{势能矩阵}
 \begin{equation}
 V_{\alpha\beta} = \int_{x_1}^{x_{N_e+1}} u_n^j (x) u_{n'}^{j'} (x) V(x) \dd{x} = % 未完成
 \end{equation}
-
-
-
-
-
-
 
