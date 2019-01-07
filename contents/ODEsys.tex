@@ -32,7 +32,9 @@
 \begin{equation}
 \vec v(t) = \Q {\mathcal T} \exp(\int_0^ t \mat A(t')\dd t') \vec v(0)
 \end{equation}
-然而这么做对于数值计算并没有太大意义． Expokit 是一个数学包可以用于计算矩阵的指数函数（Fortran 和 Matlab）．
+然而这么做对于数值计算并没有太大意义．
+
+Expokit 是一个数学包可以用于计算矩阵的指数函数（Fortran 和 Matlab）．
 
 \subsection{数值计算}
 如果矩阵 $\vec M$ 是厄米矩阵， 则可以先做对角化 $\mat M = \mat U \mat \Lambda \mat U\Her$， 其中 $\mat \Lambda$ 是对角矩阵， $\mat U$ 是酋矩阵． 这样就有
@@ -56,3 +58,20 @@
 \end{equation}
 
 在此基础上使用 Lanczos 算法\upref{Lanc}可以进一步提高效率．
+
+
+\subsection{Split Operator}
+有时候我们希望可以在上述计算中把 $\mat A$ 写成几个矩阵的和的形式（以两个为例） $\mat A = \mat B + \mat C$． 当 $\mat B$ 和 $\mat C$ 对易时显然有
+\begin{equation}
+\exp(\mat At) = \exp(\mat Bt)\exp(\mat Ct)
+\end{equation}
+在程序中这么做可能可以进一步提高速度\footnote{例如二维波函数的动能算符 $T = T_x + T_y$}． 如果 $\mat B$ 和 $\mat C$ 不对易， 严格来说上式不成立， 但可以证明 $t \to 0$ 时近似成立
+\begin{equation}\ali{
+& \quad \exp(\mat Bt)\exp(\mat Ct) \\
+& = \qty(1+\mat Bt+\frac{1}{2!}\mat B^2t^2 + \dots)\qty(1+\mat Ct+\frac{1}{2!}\mat C^2t^2 + \dots)\\
+& = 1 + (\mat B+\mat C)t + \frac{1}{2!}\qty(\mat B^2 + \mat C^2 + 2\mat B\mat C) t^2 + \dots\\
+& = \exp(\mat At) + \order{t^2}
+}\end{equation}
+这里的 $\order{t^2}$ 是由于第二个等号后面是 $2\mat B\mat C$ 而不是 $\mat B\mat C + \mat C\mat B$．
+
+% 未完成： 但我一直不明白为什么 $exp(-iH_0t/2)exp(-iH_It)exp(-iH_0t/2)$ 可以达到 $\order(t^3)$ 的精度。
