@@ -18,10 +18,8 @@ x = a_i t + b_i \qquad (x_{i1} \les x \les x_{iN})
 \begin{equation}
 u_{ij}(x) = \leftgroup{
 &\frac{1}{\sqrt{a_i}} f_j\qty(\frac{x-b_i}{a_i})  \qquad &&( 1 < j < N) \\
-& \frac{1}{\sqrt{a_i+a_{i+1}}}\times\leftgroup{
-& f_N\qty(\frac{x-b_i}{a_i}) \quad &&(x \les  x_{iN})\\
-& f_1\qty(\frac{x-b_{i+1}}{a_{i+1}}) \quad &&(x \ges x_{iN})
-}  \quad &&(j = N) 
+& \frac{1}{\sqrt{a_i+a_{i+1}}} \qty[ f_N\qty(\frac{x-b_i}{a_i}) + f_1\qty(\frac{x-b_{i+1}}{a_{i+1}})]
+\quad &&(j = N) 
 } \end{equation}
 易证正交归一关系
 \begin{equation}
@@ -40,6 +38,7 @@ w_{ij} = \frac{1}{u_{ij}^2(x_{ij})} = \leftgroup{
 &a_i w_{0j} \quad &&( 1 < j < N) \\
 &(a_i + a_{i+1}) w_{0N} \quad &&( j = N)\\
 } \end{equation}
+但如果只需要在某个 FE 区间内做积分， 只需用 $w_{ij} = a_i w_{0j}$ 即可。
 
 一个函数 $f(x)$ 用基底展开为
 \begin{equation}
@@ -49,14 +48,14 @@ w_{ij} = \frac{1}{u_{ij}^2(x_{ij})} = \leftgroup{
 
 \subsection{动能算符}
 
-使用分部积分可以把动能矩阵元表示为两个基底的导函数的内积
+使用分部积分可以把动能矩阵元表示为两个基底的导函数的内积\footnote{未完成：这么说不严谨！ 因为并不是所有基底都是光滑的， 分部积分的常数项也未必能消掉。}
 \begin{equation}\ali{
 K_{ij} &= -\frac12\mel{u_i}{\dv[2]{x}}{u_j}% 未完成： 线性代数需要说一下这个怎么来的， 必须要用正交归一基底
 = -\frac12 \int u_i(x) u_j''(x) \dd{x}\\
 &= -\frac12 \eval{u_i(x) u'_j(x)}_{x_1}^{x_2} + \frac12 \int u'_i(x) u_j'(x) \dd{x}\\
 &= \frac12 \braket{u'_i(x)}{u_j'(x)}
 }\end{equation}
-可以看出 $\mat K$ 是实对称矩阵。 这个积分可以精确地用求和表示， 而且只有同一个 FE 里面的 $u_i(x), u_j(x)$ 才能使积分不为零（bridge function 属于两个 FE）， 所以就得到了几乎是 block diagonallized 的矩阵， 只是每一个 block 左上角和右下角的一个矩阵元与其他 block 重叠。
+可以看出 $\mat K$ 是实对称矩阵。 这个积分可以精确地用求和表示， 而且只有同一个 FE 里面的 $u_i(x), u_j(x)$ 才能使积分不为零（bridge function 属于两个 FE）， 所以就得到了几乎是 block diagonalized 的矩阵， 只是每一个 block 左上角和右下角的一个矩阵元与其他 block 重叠。
 
 那如何计算基底函数的导数呢？ 可以通过计算勒让德插值多项式的导数得到
 \begin{equation}\ali{
