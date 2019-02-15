@@ -1,12 +1,11 @@
 % 库仑函数
-% 参考 https://dlmf.nist.gov/33.2\#E11．
 
-在球坐标系中解库仑势场中的薛定谔方程， %链接未完成
+\footnote{参考 \href{https://dlmf.nist.gov/33.2}{\color{blue}NIST} 官网}在球坐标系中解库仑势场中的薛定谔方程， %链接未完成
 会得到径向方程
 \begin{equation}
 \dv[2]{u}{\rho} + \qty[1 - \frac{2\eta}{\rho} - \frac{l(l+1)}{\rho^2}]u = 0
 \end{equation}
-其解为\bb{第一类库仑函数} $F_l(\eta, \rho)$ 和\bb{第二类库仑函数} $G_l(\eta, \rho)$。 第一类库仑函数的解析式为\footnote{这里的两套正负号是等效的}
+其解为\bb{第一类库仑函数} $F_l(\eta, \rho)$ 和\bb{第二类库仑函数} $G_l(\eta, \rho)$。 第一类库仑函数的解析式为\footnote{这里的两套正负号是等效的。}
 \begin{equation}
 F_l(\eta, \rho) = A_l(\eta) \rho^{l+1} \E^{\mp\I\rho} M(l+1\mp\I\eta, 2l+2, \pm 2\I\rho)
 \end{equation}
@@ -16,7 +15,7 @@ A_l(\eta) = \frac{2^l \E^{-\pi\eta/2} \abs{\Gamma(l+1+\I\eta)}}{(2l+1)!}
 \end{equation}
 $M(a, b, z)$ 是\bb{库默尔（Kummer） M 函数}， 也叫第一类合流超几何函数\upref{HypGeo}， 记为 $_1 F_1(a;b;z)$． 库仑函数也可以用\bb{惠特克（Whittaker） M 函数}来表示得更紧凑
 \begin{equation}
-F_l(\eta, \rho) = \qty(\frac{\mp\I 1}{2})^{l+1} A_l(\eta) M_{\pm\I\eta, l+\frac12}\qty(\pm 2\I\rho)
+F_l(\eta, \rho) = \qty(\frac{\mp\I}{2})^{l+1} A_l(\eta) M_{\pm\I\eta, l+\frac12}\qty(\pm 2\I\rho)
 \end{equation}
 其中惠特克 M 函数与库默尔 M 函数的关系为
 \begin{equation}
@@ -28,7 +27,7 @@ F_l(\eta, 0) = 0 \qquad \eval{\dv{F_l(\eta, \rho)}{\rho}}_0 =
 \leftgroup{&A_0(\eta) &\qquad &(l = 0)\\ & 0 &\qquad &(l > 0)}
 \end{equation}
 且渐进形式为
-\begin{equation}
+\begin{equation}\label{CulmF_eq7}
 \lim_{\rho\to \infty} F_l(\eta, \rho) = \sin[\rho - \pi l/2 - \eta\ln(2\rho) + \sigma_l(\eta)]
 \end{equation}
 其中 $\sigma_l(\eta)$ 是\bb{库仑相移（Coulomb phase shift）}
@@ -54,15 +53,42 @@ U(a, b, z) = \frac{\Gamma(1 - b)}{\Gamma(a + 1 - b)} M(a, b, z) + \frac{\Gamma(b
 \end{equation}
 \autoref{CulmF_eq11} 代入\autoref{CulmF_eq10} 得
 \begin{equation}
-%未完成：这个公式是 NIST 上的，我验算是对的，但是这么表示反而更复杂， 应该把 (\mp 2\I\rho)^{l + 1 \pm\I\eta} 变成 (\mp 2\I\rho)^{l + 1}
 H_l^\pm(\eta, \rho) = \E^{\pm\I\theta_l(\eta, \rho)}(\mp 2\I\rho)^{l + 1 \pm\I\eta} U(l + 1 \pm \I\eta, 2l + 2, \mp2\I\rho)
 \end{equation}
 其中
 \begin{equation}
 \theta_l(\eta, \rho) = \rho - \eta\ln(2\rho) - \frac12 l\pi + \sigma_l(\eta)
 \end{equation}
+是\autoref{CulmF_eq7} 中的渐进相位。
 
-由渐进形式可得径向归一化积分\footnote{积分时可忽略 $\sin$ 中的额外相位， 但我不会证．}与球贝赛尔函数的一样
+$G_l(\eta,\rho)$ 的渐进形式为
+\begin{equation}
+\lim_{\rho\to \infty} G_l(\eta, \rho) = \cos\theta_l(\eta, \rho)
+\end{equation}
+
+库仑函数的导数可以由惠特克函数的导数\footnote{可以使用 Wolfram Alpha 或 Mathematica}得到。
+\begin{equation}
+\pdv{z} [M_{a, b}(z)] = \qty(\frac12 - \frac{a}{z}) M_{a, b}(z) + \frac{1}{x} \qty(a + b + \frac12) M_{a+1, b}(z)
+\end{equation}
+\begin{equation}
+\pdv{z} [W_{a, b}(z)] = \frac{1}{2z} \qty[(z - 2a) W_{a, b}(z) - 2W_{a+1, b}(z)]
+\end{equation}
+可见程序中求导数大概要比求函数值多用一倍时间（因为要求两次惠特克函数）， 但同时也顺便求出了函数值。 如果同时需要两类库仑函数及它们的导数， 只需求 $H^+$ 函数的导数， 这就顺便求出了 $H^+$， 再分别取实部虚部即可。 另外只需要把 $H^+$ 做复共轭即可得到 $H^-$。
+
+一种验证函数值是否正确的方法是使用以下性质
+\begin{equation}
+\mathcal{W}\{G, F\} = \mathcal{W}\{H^\pm, F\} = 1
+\end{equation}
+其中 $\mathcal{W}\{f_1(x), f_2(x)\}$ 是二阶\bb{朗斯基行列式（Wronskian determinant）}
+\begin{equation}
+\mathcal{W}\{f_1(x), f_2(x)\} = \begin{vmatrix}
+f_1(x)  & f_2(x) \\
+f_1'(x) & f_2'(x)
+\end{vmatrix} = f_1(x) f_2'(x) - f_2(x) f_1'(x)
+\end{equation}
+
+
+由渐进形式可得径向归一化积分\footnote{积分时可忽略 $\sin$ 中的额外相位， 但我不会证．}与球贝赛尔函数的相同
 \begin{equation}
 \int_0^\infty F_l(Z/k', k' r)F_l(Z/k, kr) \dd{r} = \int_0^\infty \sin(k'r)\sin(kr) \dd{r} = \frac{\pi}{2}\delta(k - k')
 \end{equation}
