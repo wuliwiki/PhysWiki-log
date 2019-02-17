@@ -1,6 +1,6 @@
 % 球面波的归一化
 
-\pentry{平面波的归一化}% 未完成
+\pentry{球贝赛尔函数， 平面波的归一化}% 未完成
 
 令一组 scaled 径向函数基底为 $u_{l,m}(k, r) = rR_{l,m}(k, r)$， 若满足
 \begin{equation}
@@ -44,10 +44,50 @@ g_{l,m}(r) = \int_0^\infty c_{l,m}(k) u_{l,m}(k, r) \dd{k}
 c_{l,m}(k) = \int_0^\infty u_{l,m}^*(k, r) g_{l,m}(r) \dd{r}
 \end{equation}
 
+\subsection{计算归一化积分}
+要计算归一化积分， 我们来看从负无穷到正无穷的归一化积分。 从零到正无穷的积分只需要除以 2 即可。 由傅里叶变换已知
+\begin{equation}
+\braket{k'}{k} = \delta(k - k')
+\end{equation}
+所以
+\begin{equation}
+\int_{-\infty}^{\infty} \E^{-\I k' x} \E^{\I k x} \dd{x} = 2\pi\braket{k'}{k} = 2\pi\delta(k - k')
+\end{equation}
+\begin{equation}
+\int_{-\infty}^{\infty} \sin(\I k' x) \sin(\I k x) \dd{x}
+= \qty|-\I\sqrt{\frac{\pi}{2}}\ket{k} + \I \sqrt{\frac{\pi}{2}}\ket{-k}|^2 = \pi\delta(k - k')
+\end{equation}
+\begin{equation}
+\int_{-\infty}^{\infty} \cos(\I k' x) \cos(\I k x) \dd{x}
+= \qty|\sqrt{\frac{\pi}{2}}\ket{k} + \sqrt{\frac{\pi}{2}}\ket{-k}|^2 = \pi\delta(k - k')
+\end{equation}
+要证明 $\sin(kx)$ 和 $\cos(kx)$ 正交，
+\begin{equation}\ali{
+&\quad \int_{-\infty}^{\infty} \sin(k'x)^*\cos(kx) \dd{x}\\
+& = \int_{-\infty}^{\infty}\qty[\I\sqrt{\frac{\pi}{2}}\bra{k} - \I \sqrt{\frac{\pi}{2}}\bra{-k}] \qty[\sqrt{\frac{\pi}{2}}\ket{k} + \sqrt{\frac{\pi}{2}}\ket{-k}] \dd{x} = 0
+}\end{equation}
+所以零到正无穷区间中完备正交归一的实波函数分别是
+\begin{equation}
+\sqrt{\frac{2}{\pi}} \cos(kx) \qquad
+\sqrt{\frac{2}{\pi}} \sin(kx) \qquad (k \ges 0)
+\end{equation}
+
+现在再来看波函数中有相位 $\phi(k)$ 的情况， 例如
+\begin{equation}
+\int_{0}^{\infty} \sqrt{\frac{\pi}{2}}\sin[k' x + \phi(k')] \sqrt{\frac{\pi}{2}}\sin[k x + \phi(k)] \dd{x}
+\end{equation}
+结果会不会仍然等于 $\delta(k - k')$ 呢？ 我们利用 $\sin(a + b) = \sin a\cos b + \cos a\sin b$ 和已知的归一化积分得到结果为 $\cos[\phi(k) - \phi(k')] \delta(k - k')$。 如果我们假设 $\phi(k)$ 是连续的， 那么结果就是 $\delta(k - k')$。
+
+同理可得， 以上所有基底中给波函数添加相移 $\phi(k)$ （连续函数）， 归一化积分不变。
+
 \subsection{归一化的球贝赛尔函数}
 由于 $\E^{\I kx}$ 从负无穷到正无穷的归一化积分为 $2\pi\delta(k-k')$， 易得 $\sin(kx)$ 的积分为 $\pi\delta(k-k')$ （先表示成指数形式）， 从 0 到正无穷的积分为 $\pi\delta(k-k')/2$．
 
 注意归一化只需要渐进表达式即可（因为局部的不同相对于无穷积分来说可以忽略）． 球贝赛尔函数的渐进形式为 $j_l(kr) \to \sin(kr - l\pi/2)/(kr)$， 所以 $kr j_l(kr)$ 从 0 到正无穷的归一化积分同样是 $\pi\delta(k-k')/2$． 所以归一化的球贝赛尔函数为
 \begin{equation}
 u_{l,m}(k, r) = \sqrt{\frac{2}{\pi}} kr j_l(kr)
+\end{equation}
+渐进形式为
+\begin{equation}
+u_{l,m}(k, r) \to  \sqrt{\frac{2}{\pi}} \sin(kr - l\pi/2)
 \end{equation}

@@ -1,0 +1,59 @@
+% 球面散射态与平面散射态的转换
+
+\pentry{平面波的球谐展开\upref{Pl2Ylm}}
+
+我们已经知道没有势能时， 每个正能量（即每个 $k$ 值）的本征态存在无穷维的简并， 我们既可以取无穷多离散的球面波作为简并空间的基底， 也可以取无穷多不同方向的平面波作为简并空间的基底， 两组基底展开同一个本征值为 $E = k^2/2$ 的子空间。
+
+现在我们来讨论存在短程有心力的情况， 令短程力的势能函数为 $V(r)$ 且满足短程条件
+\begin{equation}
+\lim_{r\to\infty} r^2V(r) = 0
+\end{equation}
+
+之所以这么定义短程力， 是因为当 $r$ 很大时， $V(r)$ 相比与径向方程中的离心势能项可以忽略不计。
+
+这时如果要求解球面波的散射态， 可以取一个较大的 $r_0$ 把 $r$ 分成两部分， $r < r_0$ 的部分一般没有解析解， 我们可以用数值方法求解。 $r > r_0$ 部分的通解是两类球贝赛尔函数的线性组合， 即 $A kr n_l(kr) + B kr j_l(kr)$。 解出第一部分以后， 可以在 $r_0$ 将两部分波函数匹配， 使函数值和一阶导数连续， 解得 $A, B$ 系数。 然后求出相移 $\delta_l(k)$， 使\footnote{我们在第二类贝赛尔函数 $y_l(kr)$ 前面加上负号使其渐进式具有 $\cos(kr - l\pi/2)$ 的形式}
+\begin{equation}
+A kr j_l(kr) - B kr y_l(kr) \to C kr j_l [kr + \delta_l(k)]
+\end{equation}
+即
+\begin{equation}
+\delta_l(k) = \arctan\frac{B}{A}
+\end{equation}
+
+要归一化， 我们只需令 $C = \sqrt{2/\pi}$。 要证明带有相移的径向波函数满足归一化条件， 我们只需证明微小相移不影响归一化积分的结果
+\begin{equation}\ali{
+&\quad \int_0^{\infty} \sin(kr)\sin[k'r + \delta'(k)(k'-k)] \dd{r} \\
+&= \int_0^{\infty} \sin(kr)\sin(k'r)\cos[\delta'(k)\dd{k}]\dd{r} \\
+&=  \int_0^{\infty} \sin(kr)\sin(k'r)\dd{r} = \frac{\pi}{2} \delta(k - k')
+}\end{equation}
+归一化以后， 我们就得到了球面波形式的散射态。
+
+我们希望能找到平面波对应的非束缚本征态， 即当 $r \to \infty$  的时候我们仍然希望看到平面波（想象平面水波遇到一个石头， 只会产生局部的扰动）。
+
+%未完成
+（说明未完成， 没时间了， 直接上公式吧）
+
+边界条件为\footnote{满足该边界条件的波函数貌似也满足归一化条件 $\delta(\vec k - \vec k')$。}
+\begin{equation}
+\psi_{\vec k}(\vec r) \to \frac{1}{(2\pi)^{3/2}} \qty[\E^{\vec k \vdot \vec r} + f(\uvec r) \frac{\E^{\I kr}}{r}]
+\end{equation}
+其中 $f(\uvec r)$ 是一个只与方向有关的函数， 叫做\bb{散射幅}。 散射幅的模方就是微分截面
+\begin{equation}
+\pdv{\sigma}{\Omega} = \frac{\abs{\vec j_{out}(\vec r)}r^2}{\abs{\vec j_{in}(\vec r)}}
+= \abs{f(\uvec r)}^2
+\end{equation}
+将各项球谐展开， 令
+\begin{equation}
+f(\uvec r) = \sum_{l, m} B_{l,m} Y_{l,m}(\uvec r)
+\end{equation}
+对比每个球谐项的径向波函数得
+\begin{equation}
+C_{l,m} \sqrt{\frac{2}{\pi}} \sin[kr -l\pi/2 + \delta_l(k)] = A_{l,m}  \sqrt{\frac{2}{\pi}} \sin(kr - l \pi/2) + B_{lm} \frac{1}{(2\pi)^{3/2}} \E^{\I kr}
+\end{equation}
+其中 $A_{l,m}$ 是已知的平面波的球谐展开系数（\autoref{Pl2Ylm_eq3}\upref{Pl2Ylm}）， 解得另外两个系数为（分别对比 $\exp(\I kr)$ 和 $\exp(-\I kr)$ 分量的系数）
+\begin{equation}
+C_{l,m} = \E^{\I\delta_l(k)} A_{l, m} = \frac{\I^l}{k} \E^{\I\delta_l(k)} Y_{lm}^*(\uvec k)
+\end{equation}
+\begin{equation}
+B_{l,m} =4\pi \sin\delta_l(k) \E^{-\I l\pi/2} C_{l,m}
+\end{equation}
