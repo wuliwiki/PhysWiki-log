@@ -7,7 +7,7 @@
 现在以一维 FEDVR 为例，把整个区间划分成 $N_e$ 个\bb{有限元}，第 $i$ 个有限元的区间为 $[x_i,x_{i+1}]$．每个有限元内进一步加入格点，令 $x_{ij}\ (j = 1\dots N)$ 为第 $i$ 有限元的 $N$ 阶 Gauss-Lobatto 数值积分 %链接未完成
 的 $N$ 个采样点．这样，$x_{j1}=x_j$，  $x_{jN}=x_{j+1}$． 
 
-现在来定义 FEDVR 基底 $u_{ij}(x)$。 令 $a_i$ 是第 $i$ 个 FE 长度的一半， $b_i$ 是第 $i$ 个 FE 的终点坐标， 把\autoref{GLquad_eq3}\upref{GLquad} 中的 $f_n(x)$ （$x$ 超出 $[-1,1]$ 时令 $f_n(x) = 0$） 记为 $f_n(t)$， 并把 $t \in [-1,1]$ 线性依次映射到每个有限元的区间 $x \in [x_i, x_{i+1}]$ 上， 有
+现在来定义 FEDVR 基底 $u_{ij}(x)$． 令 $a_i$ 是第 $i$ 个 FE 长度的一半， $b_i$ 是第 $i$ 个 FE 的终点坐标， 把\autoref{GLquad_eq3}\upref{GLquad} 中的 $f_n(x)$ （$x$ 超出 $[-1,1]$ 时令 $f_n(x) = 0$） 记为 $f_n(t)$， 并把 $t \in [-1,1]$ 线性依次映射到每个有限元的区间 $x \in [x_i, x_{i+1}]$ 上， 有
 \begin{equation}
 x_{ij} = a_i t_j + b_i
 \end{equation}
@@ -25,7 +25,7 @@ u_{ij}(x) = \leftgroup{
 \begin{equation}
 \int_{x_1}^{x_{N_e+1}} u_{ij}(x) u_{i'j'}(x) \dd{x} = \delta_{ii'} \delta_{jj'}
 \end{equation}
-在总区间的两端我们一般采用函数值为零的边界条件， 所以不定义 $u_{11}(x)$ 和 $u_{N_e, N}(x)$。 这样，我们最终共有 $N_e(N-1)-1$ 个节点 $x_{ij}$ 和对应的基底 $u_{ij}(x)$． 令 $w_{0i}$ 为\autoref{GLquad_eq3}\upref{GLquad} 中的 $w_i$， 则每个基底在每个节点处的函数值为
+在总区间的两端我们一般采用函数值为零的边界条件， 所以不定义 $u_{11}(x)$ 和 $u_{N_e, N}(x)$． 这样，我们最终共有 $N_e(N-1)-1$ 个节点 $x_{ij}$ 和对应的基底 $u_{ij}(x)$． 令 $w_{0i}$ 为\autoref{GLquad_eq3}\upref{GLquad} 中的 $w_i$， 则每个基底在每个节点处的函数值为
 \begin{equation}
 u_{ij}(x_{i'j'}) = \delta_{ii'}\delta_{jj'}\times \leftgroup{
 &\frac{1}{\sqrt{a_i w_{0j}}} \qquad  &&( 1 < j < N) \\
@@ -38,24 +38,24 @@ w_{ij} = \frac{1}{u_{ij}^2(x_{ij})} = \leftgroup{
 &a_i w_{0j} \quad &&( 1 < j < N) \\
 &(a_i + a_{i+1}) w_{0N} \quad &&( j = N)\\
 } \end{equation}
-但如果只需要在某个 FE 区间内做积分， 只需用 $w_{ij} = a_i w_{0j}$ 即可。
+但如果只需要在某个 FE 区间内做积分， 只需用 $w_{ij} = a_i w_{0j}$ 即可．
 
 一个函数 $f(x)$ 用基底展开为
 \begin{equation}
 \braket{u_{ij}(x)}{f(x)} = \int_{x_1}^{x_{N_e+1}} u_{ij}(x) f(x) \dd{x} \approx \sqrt{w_{ij}} f(x_{ij})
 \end{equation}
-把所有基底按对应的 $x_{ij}$ 从小到大排序。 $f(x)$ 的展开系数就可以记为一个列矢量。
+把所有基底按对应的 $x_{ij}$ 从小到大排序． $f(x)$ 的展开系数就可以记为一个列矢量．
 
 \subsection{动能算符}
 
-使用分部积分可以把动能矩阵元表示为两个基底的导函数的内积\footnote{未完成：这么说不严谨！ 因为并不是所有基底都是光滑的， 分部积分的常数项也未必能消掉。}
+使用分部积分可以把动能矩阵元表示为两个基底的导函数的内积\footnote{未完成：这么说不严谨！ 因为并不是所有基底都是光滑的， 分部积分的常数项也未必能消掉．}
 \begin{equation}\ali{
 K_{ij} &= -\frac12\mel{u_i}{\dv[2]{x}}{u_j}% 未完成： 线性代数需要说一下这个怎么来的， 必须要用正交归一基底
 = -\frac12 \int u_i(x) u_j''(x) \dd{x}\\
 &= -\frac12 \eval{u_i(x) u'_j(x)}_{x_1}^{x_2} + \frac12 \int u'_i(x) u_j'(x) \dd{x}\\
 &= \frac12 \braket{u'_i(x)}{u_j'(x)}
 }\end{equation}
-可以看出 $\mat K$ 是实对称矩阵。 这个积分可以精确地用求和表示， 而且只有同一个 FE 里面的 $u_i(x), u_j(x)$ 才能使积分不为零（bridge function 属于两个 FE）， 所以就得到了几乎是 block diagonalized 的矩阵， 只是每一个 block 左上角和右下角的一个矩阵元与其他 block 重叠。
+可以看出 $\mat K$ 是实对称矩阵． 这个积分可以精确地用求和表示， 而且只有同一个 FE 里面的 $u_i(x), u_j(x)$ 才能使积分不为零（bridge function 属于两个 FE）， 所以就得到了几乎是 block diagonalized 的矩阵， 只是每一个 block 左上角和右下角的一个矩阵元与其他 block 重叠．
 
 那如何计算基底函数的导数呢？ 可以通过计算勒让德插值多项式的导数得到
 \begin{equation}\ali{
@@ -74,7 +74,7 @@ u'_{iN}(x_{i j'}) = \frac{1}{a_i\sqrt{a_i+a_{i+1}}} f'_N\qty(t_{j'})
 \begin{equation}
 u'_{iN}(x_{i+1, j'}) = \frac{1}{a_{i+1}\sqrt{a_i+a_{i+1}}} f'_1\qty(t_{j'})
 \end{equation}
-注意 $u'_{iN}$ 在 $x_{iN}$ 处的左右导数不相等。
+注意 $u'_{iN}$ 在 $x_{iN}$ 处的左右导数不相等．
 
 现在就可以求动能矩阵的矩阵元了（由于是对称矩阵， 我们只列出半边）， 先看不含 bridge function 的矩阵元
 \begin{equation} \ali{

@@ -1,5 +1,66 @@
-% 勒让德多项式的生成函数
+% 勒让德多项式
 
+%未完成： 预备知识
+
+\bb{勒让德方程}为
+\begin{equation}\label{Legen_eq1}
+\dv{x} \qty[(1-x^2)\dv{x} P_l(x)] + l(l-1)P_l(x) = 0
+\end{equation}
+
+我们仅在区间 $x \in [-1,1]$ 上考虑 $l$ 为非负整数的情况． 方程的解 $P_l(x)$ 是关于 $x$ 的 $l$ 阶多项式
+\begin{equation}\label{Legen_eq2}
+P_l(x) = \frac{1}{2^l}\sum_{s=0}^{[l/2]} \frac{(-1)^s (2l-2s)!}{s!(l-s)!(l-2s)!} x^{l-2s}
+\end{equation}
+其中 $[x]$ 是向下取整函数． 当 $x$ 是整数， $[x] = x$， 当 $x$ 是非整数， $[x]$ 是小于 $x$ 的最大整数． % 链接未完成
+
+这里列出前几个多项式
+\begin{equation}\ali{
+&P_0(x) = 1  && P_3(x) = \frac12 (5x^3 - 3x) \\
+&P_1(x) = x  && P_4(x) = \frac18 (35x^4 - 30x^2 + 3) \\
+&P_2(x) = \frac12 (3x^2 - 1) \qquad && P_5(x) = \frac18 (63x^5 - 70x^3 + 15x)
+}\end{equation}
+
+勒让德多项式也可以用\bb{罗德里格斯}公式表示
+\begin{equation}
+P_l(x) = \frac{1}{2^l l!} \dv[l]{x} (x^2 - 1)^l
+\end{equation}
+由于求导会改变函数的奇偶性， % 链接未完成
+由上式可以证明当 $l$ 为偶（奇）数时 $P_l(x)$ 是偶（奇）函数， 所以只有 $x$ 的偶（奇）次方项．
+
+\subsection{正交归一性质}
+归一化系数为
+\begin{equation}
+A_l = \sqrt{\frac{2l + 1}{2}}
+\end{equation}
+满足正交归一化条件
+\begin{equation}
+\int_{-1}^1  A_{l'} P_{l'}(x) \cdot A_l P_l(x) \dd{x} = \delta_{l,l'}
+\end{equation}
+
+\subsection{其他性质}
+% 未完成： 说好的两个线性无关解呢？ 怎么只有一个？
+\begin{equation}
+P_l(1) = 1 \qquad P_l(-1) = (-1)^l
+\end{equation}
+
+\subsection{勒让德方程的级数解}
+令
+\begin{equation}
+P_l(x) = \sum_{n = 0}^\infty c_n x^n
+\end{equation}
+代入方程， 对比系数得到递推公式
+\begin{equation}
+c_{n+2} = \frac{n(n+1)-l(l+1)}{(n+2)(n+1)}c_n = \frac{(n-l)(n+1+l)}{(n+2)(n+1)}c_n
+\end{equation}
+可见偶数项系数可用 $c_0$ 表示， 奇数项系数可用 $c_1$ 表示． 所以 $c_0$ 和 $c_1$ 可以看做是二阶微分方程的两个任意常数．
+
+当 $l$ 为整数时， 可以证明 $n > l$ 以上的系数都为 0， 令最高次项系数为
+\begin{equation}
+c_l = \frac{(2l)!}{2^l (l!)^2}
+\end{equation}
+就得到了\autoref{Legen_eq2}．
+
+\subsection{生成函数}
 勒让德多项式可以表示为以下函数对 $r$ 的泰勒展开的系数
 \begin{equation}
 \frac{1}{\sqrt{1 + r^2 - 2rx}} = \sum_{l = 0}^\infty P_l(x) r^l

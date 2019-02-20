@@ -1,12 +1,15 @@
 %球谐函数
 
-\pentry{连带勒让德方程}%未完成链接
+\pentry{球坐标的拉普拉斯方程\upref{SphLap}}
 
-在球坐标的拉普拉斯方程分离变量后， 连带勒让德方程的解为 $g(\theta) = P_l^m(\cos\theta)$， 方向角函数的解 $h(\phi) = \E^{\I m\phi}$． 为了方便起见， 定义\footnote{有时也将球谐函数记为 $Y_{lm}$}
+在球坐标的拉普拉斯方程分离变量后， 关于极角 $\theta$ 的函数为连带勒让德多项式 $P_l^m(\cos\theta)$， 方向角函数为 $\E^{\I m\phi}$． 我们定义\footnote{有时也将球谐函数记为 $Y_{lm}$}
 \begin{equation}
-Y_l^m = A \cdot P_l^m(\cos \theta) \E^{\I m\theta}
+Y_l^m(\uvec r) = Y_l^m(\theta, \phi) = A_{l,m} P_l^m(\cos \theta) \E^{\I m\phi}
 \end{equation}
-$A$ 是归一化系数， 使得 $\abs{Y_l^m (x)}^2$ 在单位球面上的面积分等于 1．
+$A_{l,m}$ 是归一化系数， 使得 $\abs{Y_l^m (\uvec r)}^2$ 在单位球面上的面积分等于 1\footnote{\autoref{SphHar_eq2} 是 Mathematica 中的定义， 也有一种定义在前面加 $(-1)^m$， 同样满足归一化条件．}．
+\begin{equation}\label{SphHar_eq2}
+A_{l,m} =  \sqrt{\frac{2l + 1}{4\pi }\frac{(l - m)!}{(l + m)!}}
+\end{equation}
 
 球谐函数满足
 \begin{equation}
@@ -14,26 +17,22 @@ $A$ 是归一化系数， 使得 $\abs{Y_l^m (x)}^2$ 在单位球面上的面积
 \end{equation}
 中括号中的算符是球坐标系拉普拉斯算子 $\laplacian$ 中的角向部分（记为 $\laplacian_\theta$）乘以 $r^2$．
 
-由归一化条件确定归一化系数 $A$， 得到\footnote{这是 Mathematica 中的定义， 也有一种定义在前面加 $(-1)^m$．}
-\begin{equation}
-Y_l^m (\theta ,\phi) = \sqrt{\frac{2l + 1}{4\pi }\frac{(l - m)!}{(l + m)!}} P_l^m (\cos\theta) \E^{\I m\theta}
-\end{equation}
-
-在球坐标中， 半径为 $R$ 的球的面元为$R \dd{\theta} R\sin\theta \dd{\phi} = R^2 \sin\theta \dd{\theta} \dd{\phi}$，  积分为
-\begin{equation}
-1 = A^2\int_0^{2\pi } \int_0^\pi  P_l^m \dd{(\cos \theta)^2} \E^{\I m\theta} \E^{-\I m\theta}\sin\theta \dd{\theta} \dd{\phi}
-\end{equation}
-两个指数项相乘为 $1$，  且对 $\theta$ 进行换元 $u = \cos\theta $， 得
-\begin{equation}
-1 = A^2 \int_0^{2\pi} \int_{-1}^1 P_l^m {{(x)}^2} \dd{x} \dd{\phi} = 2\pi A^2 \int_{-1}^1 P_l^m (x)^2 \dd{x} 
-\end{equation}
-由连带勒让德方程的归一化系数， % 未完成
+\subsection{归一化系数}
+由球谐函数的归一化条件， % 未完成：哪里讲解一下立体角是单位球面上的面积元， 以及极坐标中的表达式． % 链接未完成
+\begin{equation}\ali{
+1 &= \int \abs{Y_l^m(\uvec r)}^2 \dd{\Omega} = \int_0^\pi  \int_0^{2\pi}  \abs{Y_l^m(\theta, \phi)}^2 \sin\theta\dd{\theta}\dd{\phi} \\
+&= \abs{A_{l,m}}^2 \int_{-1}^1  \abs{P_l^m(\cos\theta)}^2 \dd{(\cos \theta)} \int_0^{2\pi } \abs{\E^{\I m\theta}}^2  \dd{\phi}\\
+&= \frac{2\pi}{\abs{A_{l,m}'}^2} \abs{A_{l,m}}^2
+}\end{equation}
+其中 $A_{l,m}'$ 是 $P_l^m(x)$ 的归一化系数（见\autoref{AsLgdr_eq3}\upref{AsLgdr}）， 代入后可得 $A_{l,m}$．
 
 %未完成 列出一些球谐函数!
 
-\subsection{正交归一条件}
+\subsection{正交归一性}
+由勒让德函数的正交归一性（\autoref{AsLgdr_eq4}\upref{AsLgdr}）以及 $\E^{\I m \phi}$  的正交归一性，% 未完成： 引用复数傅里叶级数中的公式
+ 不难证明球谐函数的正交归一性
 \begin{equation}
-\int Y_{l'}^{m'} Y_l^m \dd{\Omega} = \delta_{ll'}\delta_{mm'}
+\int Y_{l'}^{m'}(\uvec r) Y_l^m(\uvec r) \dd{\Omega} = \delta_{ll'}\delta_{mm'}
 \end{equation}
 
 \subsection{其他性质}
