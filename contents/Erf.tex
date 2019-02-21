@@ -1,0 +1,74 @@
+% 误差函数
+\pentry{定积分\upref{DefInt}， 高斯积分\upref{GsInt}}
+
+\bb{误差函数}的定义为%未完成：函数图像如图N， 误差函数是一个奇函数。
+\begin{equation}\label{Erf_eq1}
+\erf(x) = \frac{1}{\sqrt{\pi}} \int_{-x}^x \E^{-t^2} \dd{t}
+= \frac{2}{\sqrt{\pi}} \int_{0}^x \E^{-t^2} \dd{t}
+\end{equation}
+
+由高斯积分中的结论可得
+\begin{equation}
+\int_{-\infty}^\infty \E^{-t^2} \dd{t} = \sqrt{\pi}
+\end{equation}
+所以有
+\begin{equation}
+\erf(\pm\infty) = \pm 1
+\end{equation}
+
+由\autoref{NLeib_eq10}\upref{NLeib}， 误差函数的导数为
+\begin{equation}
+\dv{x} \erf(x) = \frac{2}{\sqrt{\pi}} \E^{-x^2}
+\end{equation}
+即 $\E^{-x^2}$ 的不定积分（原函数）为
+\begin{equation}\label{Erf_eq5}
+\int \E^{-x^2} \dd{x} = \frac{\sqrt{\pi}}{2} \erf(x) + C
+\end{equation}
+
+\subsection{级数展开}
+\pentry{泰勒级数\upref{Taylor}}
+由指数函数的级数展%链接未完成
+开得
+\begin{equation}
+\E^{-x^2} = \sum_{n=0}^\infty \frac{1}{n!} (-x^2)^n = \sum_n \frac{(-1)^n}{n!} x^{2n}
+\end{equation}
+对各项做不定积分代入\autoref{Erf_eq5} 可得误差函数的级数展开为
+\begin{equation}
+\erf(x) = \frac{2}{\sqrt{\pi}} \sum_{n=0}^\infty \frac{(-1)^n}{(2n+1)n!} x^{2n+1}
+= \frac{2}{\sqrt{\pi}}\qty(x - \frac{x^3}{3} + \frac{x^5}{10} - \frac{x^7}{42} + \frac{x^9}{216} \dots)
+\end{equation}
+
+\begin{exam}{}\label{Erf_ex1}
+令 $a$ 为实数且 $a > 0$， 计算不定积分
+\begin{equation}
+\int \exp(-ax^2 + bx) \dd{x}
+\end{equation}
+
+我们可以先将指数部分凑平方得
+\begin{equation}
+-ax^2 + bx = -t^2 + \frac{b^2}{4a}
+\end{equation}
+其中
+\begin{equation}
+t = \sqrt{a} x - \frac{b}{2\sqrt{a}} \qquad
+\end{equation}
+使用上式进行换元积分得
+\begin{equation}
+\int \exp(-ax^2 + bx) \dd{x} = \frac{1}{\sqrt{a}} \E^{\frac{b^2}{4a}} \int \E^{-t^2} \dd{t}
+= \frac12 \sqrt{\frac{\pi}{a}} \E^{\frac{b^2}{4a}} \erf\qty(\sqrt{a} x - \frac{b}{2\sqrt{a}})
+\end{equation}
+\end{exam}
+
+\begin{exam}{}
+计算无穷积分
+\begin{equation}
+g(k) = \int_{-\infty}^{+\infty} \E^{-a x^2} \E^{-\I kx} \dd{x}
+\end{equation}
+令 $b = -\I k$， 使用\autoref{Erf_ex1} 的结论有
+\begin{equation}
+g(k) = \frac12 \sqrt{\frac{\pi}{a}} \E^{-\frac{k^2}{4a}} \eval{\erf\qty(\sqrt{a} x + \frac{\I k}{2\sqrt{a}})}_{-\infty}^{+\infty} = \sqrt{\frac{\pi}{a}} \E^{-\frac{k^2}{4a}}
+\end{equation}
+
+该积分在高斯波包的傅里叶变换%未完成
+中需要使用。
+\end{exam}
