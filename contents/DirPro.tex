@@ -1,7 +1,117 @@
 %直积空间
 
-\subsubsection{1}
-两个矢量空间的直积空间就是两个空间所有可能的基底组合． 整个直积空间中任意矢量可以表示为 $\ket{\psi} = \sum\limits_{i = 1}^m  \sum\limits_{j = 1}^n c_{ij}\ket{u_i}\ket{v_j} $，  从而可以把所有系数写成一个列矢量表示． 然而顺序非常重要， 计算中要保持一致．这里规定顺序为 $\{ \ket{u_1 v_1}, \ket{u_1 v_2}\dots \ket{u_2 v_1}, \ket{u_2 v_2}\dots \}$． 在以下讨论中， 我们假设所有的基底都是正交归一的． 一个直积空间可以用两种方法分成子空间， 一种是根据 $\ket{u_i v_i}$ 中 $u_i$  的不同来划分， 另一种根据 $\ket{v_i}$ 不同来划分． 姑且分别叫做 $\ket{u_i}$ 子空间和 $\ket{v_i}$ 子空间．
+\pentry{傅里叶级数与矢量空间， 二维傅里叶级数}
+
+\subsection{定义}
+
+我们以二维傅里叶级数来引入直积的概念。 我们已知一维函数的傅里叶级数展开可以看做是一个矢量在一组正交归一基底上的展开， 自然地， 我们也希望能从矢量的空间的角度理解二维傅里叶级数展开。 为了讨论方便， 我们只讨论可以用有限项傅里叶级数展开的函数。
+
+如果 $x$ 和 $y$ 方向分别取 $N_x$ 和 $N_y$ 个函数基底， 那么二维傅里叶级数中就有 $N_xN_y$ 个基底， 即被展开的函数是一个 $N_xN_y$ 维空间中的矢量。
+
+观察二维傅里叶级数中的函数基底可以发现， 每一个基底都是一个 $N_x$ 维空间中的 $x$ 基底和一个 $N_y$ 维空间中的 $y$ 基底的乘积。 从矢量的角度来看， 这是一种以前没有见过的矢量乘法， 它既不是数乘%链接未完成
+（得到同维度的矢量）也不是内积%链接未完成
+（得到标量）， 而是将两个不同矢量空间中的矢量相乘得到一个更高维空间中的矢量， 使新矢量的维度等于前两个矢量各自的维度相乘。 我们把这样的矢量乘法叫做\bb{直积}， 记为
+\begin{equation}
+\ket{v} = \ket{x} \otimes \ket{y}
+\end{equation}
+我们把直积得到的矢量所在的空间叫做\bb{直积空间}。 为了书写方便我们时常省略直积号记为 $\ket{x}\ket{y}$， 或者将直积的结果记为一个整体 $\ket{v} = \ket{x, y}$。 为了让读者熟悉， 下文会随机使用这两种符号。
+
+我们定义直积满足\bb{交换律}， 正如我们认为 $f_x(x)f_y(y) = f_y(y)f_x(x)$\footnote{虽然从概念上交换律成立， 但是为了避免混淆我们还是应该规定一个书写顺序， 比统一用 $x$ 空间的矢量直积 $y$ 空间的矢量。}。
+
+我们将两个一维傅里叶变换空间中的基底分别为 $\{\ket{x_i}\}$ 和 $\{\ket{y_j}\}$， 那么我们定义直积空间为基底 $\{\ket{x_i}\ket{y_j}\}$ 张成的空间， 里面的任意矢量都可以用基底展开。
+\begin{equation}
+\ket{v} = \sum_{i,j} C_{ij}\ket{x_i, y_j}
+\end{equation}
+
+定义直积满足\bb{结合律}， 即两个低维空间中任意各选一个矢量 $\ket{x}$ 和 $\ket{y}$， 它们都可以在各自空间的基底中展开， 则它们的直积为
+\begin{equation}\label{DirPro_eq2}
+\ket{x}\ket{y} = \sum_i a_i\ket{x_i} \sum_j b_j\ket{y_j}
+= \sum_{i,j} a_i b_j \ket{x_i, y_j}
+\end{equation}
+
+注意直积空间的的任意一个矢量不一定可以分解为两个矢量的直积。 例如 $\ket{x_1}\ket{y_1} + 2\ket{x_2}\ket{y_3}$ 就不能由直积得到。 也可类比函数的情况， $f_x(x)f_y(y)$ 可以记为 $f(x, y)$， 但 $f(x, y)$ 不一定能记为 $f_x(x)f_y(y)$。
+
+任何矢量空间的基底都需要有固定的顺序， 排序可以是任意的， 但是一旦确定在所有的计算中都不能改变。 %未完成：这句话应该放到更早的词条。
+直积基底通常按照以下两种方式排序\footnote{由于这里每个基底都有两个角标， 使初学者有把基底排成长方形的冲动， 这是错误的。}
+\begin{equation}
+\qty{\ket{x_1, y_1}, \ket{x_1, y_2}\dots  \ket{x_2, y_1}, \ket{x_2, y_2}\dots }
+\end{equation}
+\begin{equation}
+\qty{\ket{x_1, y_1}, \ket{x_2, y_1}\dots  \ket{x_1, y_2}, \ket{x_2, y_2}\dots }
+\end{equation}
+排序以后， 我们就可以用单下标来区分不同的基底， 令
+\begin{equation}
+\ket{x, y}_\alpha = \ket{x_i, y_j}
+\end{equation}
+对应两种排序， 分别有
+\begin{equation}
+\alpha = N_y (i-1) + j
+\quad \text{或} \quad
+\alpha = i + N_x (j-1)
+\qquad 
+(1 \les \alpha \les N_xN_y)
+\end{equation}
+
+\subsection{矢量的内积}
+
+若我们需要在直积空间中讨论模长和正交这样的概念就必须先定义\bb{内积}： 直积空间中两矢量（先假设它们可以分解为直积， 比如两个基底矢量）的内积等于把每个低维空间中对应矢量分别做内积再相乘。 即 $\ket{c}\ket{d}$ 和 $\ket{a}\ket{b}$ 的内积为
+\begin{equation}
+\qty(\bra{d}\bra{c})\qty(\ket{a}\ket{b})
+= \bra{d}\braket{c}{a}\ket{b}
+= \braket{c}{a}\braket{d}{b}
+\end{equation}
+注意 $\ket{c}\ket{d}$ 的厄米共轭%未完成
+记为 $\bra{d}\bra{c}$ 而不是 $\bra{c}\bra{d}$。 这样就可以很容易看出需要把 $\braket{c}{a}$ 组合做内积而不是 $\braket{d}{a}$。 但如果把两矢量记为 $\ket{a, b}$ 和 $\ket{c, d}$， 那么内积记为\footnote{在整体的 bra 记号中， 里面的参数顺序和 ket 中的相同， 标量也不需要取复共轭。}
+\begin{equation}
+\bra{c, d}\ket{a, b} = \braket{c}{a}\braket{d}{b}
+\end{equation}
+
+直积空间中的内积是否满足交换律取决于两个低维空间中的内积是否满足交换律。 一般情况下， $\braket{u}{v} = \braket{v}{u}^*$， 所以直积空间中的也有
+\begin{equation}
+\bra{a, b}\ket{c, d} = \braket{a}{c}\braket{b}{d}
+= \braket{c}{a}^*\braket{d}{b}^* = \bra{c, d}\ket{a, b}^*
+\end{equation}
+
+如果两个低维空间中的基底都是正交归一的， 那么直积空间中的基底也是正交归一的
+\begin{equation}
+\bra{x_{i'}, y_{j'}}\ket{x_i, y_j} = \braket{x_{i'}}{x_i}\braket{y_{j'}}{y_j}
+= \delta_{i,i'}\delta_{j,j'}
+\end{equation}
+以后我们一般讨论正交归一基底。
+
+知道了直积空间基底之间的内积后， 要计算直积空间中任意两个矢量的内积， 只需先将它们分解到基底上， 再按照内积的分配律和正交归一化条件即可得到熟悉的内积公式
+\begin{equation}\ali{
+\braket{x}{y} &= \qty(\sum_{i',j'} C'^*_{i',j'}\bra{y_{j'}}\bra{x_{i'}}) \qty( \sum_{i,j} C_{i,j} \ket{x_{i'}}\ket{y_{j'}}) \\
+&= \sum_{i',j'} \sum_{i,j} C'^*_{i',j'} C_{i,j} \delta_{i,i'}\delta_{j,j'}
+= \sum_{i,j} C'^*_{i,j} C_{i,j}
+}\end{equation}
+
+正交归一基底的\bb{完备性}%未完成引用矢量空间的对应公式
+仍然可以记为
+\begin{equation}\label{DirPro_eq13}
+\sum_{i,j} \ket{y_j}\ket{x_i} \bra{x_i}\bra{y_j} = \mat I
+\end{equation}
+其中 $\mat I$ 是直积空间的单位算符。
+
+我们现在从直积空间的角度来看二维傅里叶级数， 将被展开的函数记为矢量 $\ket{f}$， 则
+\begin{equation}\label{DirPro_eq14}
+\ket{f} = \sum_\alpha C_{i,j}\ket{x, y}_\alpha = \sum_{i,j} C_{i,j}\ket{x_i}\ket{y_j}
+\end{equation}
+其中
+\begin{equation}\label{DirPro_eq15}
+C_{i,j} = \int_{-\infty}^{+\infty} \int_{-\infty}^{+\infty} f_{x,i}(x) f_{y,j}(y) f(x, y) \dd{x}\dd{y}
+= \braket{x_i, y_j}{f}
+\end{equation}
+我们可以验证基底的完备性（\autoref{DirPro_eq13}）， 将\autoref{DirPro_eq15} 代入\autoref{DirPro_eq14} 得
+\begin{equation}
+\ket{f} = \sum_\alpha \ket{x_i, y_j}\braket{x_i, y_i}{f}
+= \qty(\sum_\alpha \ket{x_i, y_j}\bra{x_i, y_i})\ket{f}
+\end{equation}
+这就证明了
+
+
+\subsubsection{直积空间的子空间}
+直积空间可以用两种方法分成子空间， 一种是根据 $\ket{u_i}\ket{v_i}$ 中 $u_i$  的不同来划分， 另一种根据 $\ket{v_i}$ 不同来划分． 姑且分别叫做 $\ket{u_i}$ 子空间和 $\ket{v_i}$ 子空间．
 
 \subsubsection{2}
 两个矢量（分别来自两空间）的直积定义为： 先把它们分别在各自的基底上展开， 然后用乘法分配律进行相乘． 两空间的基底相乘得到直积空间中新的基底． 直积空间中， 只有一些矢量可以表示成两个空间中的矢量的一次直积运算． 这种矢量的特征是， 若投影到不同子空间， 则对应分量成正比．
@@ -20,18 +130,6 @@
 (\Q A \otimes \Q I)(\Q I \otimes \Q B)(\ket{u_i} \otimes \ket{v_j}) = (\Q I \otimes \Q B)(\Q A \otimes \Q I)(\ket{u_i} \otimes \ket{v_j}) = (\Q A \ket{u}) \otimes (\Q B \ket{v})
 \end{equation}
 即两算符对易且等于 $(\Q A \otimes \Q B)$． 
-
-\subsubsection{矢量的内积}
-
-定义两个直积矢量的内积分别为每个空间中对应矢量的内积的乘积．
-\begin{equation}
-(\bra{u'}\otimes\bra{v'})(\ket{u}\otimes\ket{v}) = \braket{u}{u'}\vdot \braket{v}{v'}
-\end{equation}
-计算任意两个矢量的内积， 只需分解成直积空间基底之间的内积再运用以上定律即可． 如果要求直积空间的基底正交归一， 任意两基底必须满足
-\begin{equation}
-(\bra{u_{i'}} \otimes \bra{v_{j'}})(\ket{u_i} \otimes \ket{v_j}) = \braket{u_{i'}}{u_i} \braket{v_{i'}}{v_i} = \delta_{i,i'}\delta_{j,j'}
-\end{equation}
-这就等效于要求 $\{\ket{u_i}\}$ 和 $\{\ket{v_i}\}$  分别都是正交归一基底．
 
 \subsubsection{矩阵元的计算}
 若直积空间中的基底正交归一， 求矩阵元只需用
