@@ -33,10 +33,10 @@
 
 任何矢量空间的基底都需要有固定的顺序， 排序可以是任意的， 但是一旦确定在所有的计算中都不能改变。 %未完成：这句话应该放到更早的词条。
 直积基底通常按照以下两种方式排序\footnote{由于这里每个基底都有两个角标， 使初学者有把基底排成长方形的冲动， 这是错误的。}
-\begin{equation}
+\begin{equation}\label{DirPro_eq4}
 \qty{\ket{x_1, y_1}, \ket{x_1, y_2}\dots  \ket{x_2, y_1}, \ket{x_2, y_2}\dots }
 \end{equation}
-\begin{equation}
+\begin{equation}\label{DirPro_eq5}
 \qty{\ket{x_1, y_1}, \ket{x_2, y_1}\dots  \ket{x_1, y_2}, \ket{x_2, y_2}\dots }
 \end{equation}
 排序以后， 我们就可以用单下标来区分不同的基底， 令
@@ -61,7 +61,7 @@
 = \braket{c}{a}\braket{d}{b}
 \end{equation}
 注意 $\ket{c}\ket{d}$ 的厄米共轭%未完成
-记为 $\bra{d}\bra{c}$ 而不是 $\bra{c}\bra{d}$。 这样就可以很容易看出需要把 $\braket{c}{a}$ 组合做内积而不是 $\braket{d}{a}$。 但如果把两矢量记为 $\ket{a, b}$ 和 $\ket{c, d}$， 那么内积记为\footnote{在整体的 bra 记号中， 里面的参数顺序和 ket 中的相同， 标量也不需要取复共轭。}
+记为 $\bra{d}\bra{c}$ 而不是 $\bra{c}\bra{d}$。 这样就可以很容易看出需要把 $\braket{c}{a}$ 组合做内积而不是 $\braket{d}{a}$。 但如果把两矢量记为 $\ket{a, b}$ 和 $\ket{c, d}$， 那么内积记为\footnote{书写习惯上，ket 和对应的 bra 中的记号应保持相同。所以 $\ket{c, d}$ 的厄米共轭记为 $\bra{c, d}$ 而不是 $\bra{d, c}$。}
 \begin{equation}
 \bra{c, d}\ket{a, b} = \braket{c}{a}\braket{d}{b}
 \end{equation}
@@ -89,13 +89,13 @@
 正交归一基底的\bb{完备性}%未完成引用矢量空间的对应公式
 仍然可以记为
 \begin{equation}\label{DirPro_eq13}
-\sum_{i,j} \ket{y_j}\ket{x_i} \bra{x_i}\bra{y_j} = \mat I
+\sum_{i,j} \ket{x_i, y_j} \bra{x_i, y_j} = \mat I
 \end{equation}
 其中 $\mat I$ 是直积空间的单位算符。
 
 我们现在从直积空间的角度来看二维傅里叶级数， 将被展开的函数记为矢量 $\ket{f}$， 则
 \begin{equation}\label{DirPro_eq14}
-\ket{f} = \sum_\alpha C_{i,j}\ket{x, y}_\alpha = \sum_{i,j} C_{i,j}\ket{x_i}\ket{y_j}
+\ket{f} = \sum_\alpha C_{i,j}\ket{x, y}_\alpha = \sum_{i,j} C_{i,j}\ket{x_i, y_j}
 \end{equation}
 其中
 \begin{equation}\label{DirPro_eq15}
@@ -104,53 +104,63 @@ C_{i,j} = \int_{-\infty}^{+\infty} \int_{-\infty}^{+\infty} f_{x,i}(x) f_{y,j}(y
 \end{equation}
 我们可以验证基底的完备性（\autoref{DirPro_eq13}）， 将\autoref{DirPro_eq15} 代入\autoref{DirPro_eq14} 得
 \begin{equation}
-\ket{f} = \sum_\alpha \ket{x_i, y_j}\braket{x_i, y_i}{f}
-= \qty(\sum_\alpha \ket{x_i, y_j}\bra{x_i, y_i})\ket{f}
+\ket{f} = \sum_{i,j} \ket{x_i, y_j}\braket{x_i, y_i}{f}
+= \qty(\sum_{i,j} \ket{x_i, y_j}\bra{x_i, y_i})\ket{f}
 \end{equation}
-这就证明了
+由于 $\ket{f}$ 是任意的， 这就间接证明了
+\begin{equation}\label{DirPro_eq14}
+\sum_\alpha \ket{x_i, y_j}\bra{x_i, y_i} = \mat I
+\end{equation}
 
+若直积空间中一个矢量可以表示为两个低维空间矢量的直积  $\ket{u}\ket{v}$， 则其基底展开为
+\begin{equation}
+\ket{u}\ket{v} = \qty(\sum_i a_i\ket{u_i}) \otimes \qty(\sum_j b_j \ket{u_j})
+= \sum_{i,j} a_i b_j \ket{u_i, u_j}
+\end{equation}
 
 \subsubsection{直积空间的子空间}
-直积空间可以用两种方法分成子空间， 一种是根据 $\ket{u_i}\ket{v_i}$ 中 $u_i$  的不同来划分， 另一种根据 $\ket{v_i}$ 不同来划分． 姑且分别叫做 $\ket{u_i}$ 子空间和 $\ket{v_i}$ 子空间．
+令 $\ket{u_i}$ 和 $\ket{v_j}$ 分别为两个低维空间的基底， 则直积空间中存在两种“天然”的子空间。 % 未完成：线性代数介绍子空间
+一种将直积基底根据 $i$ 的分成许多组， 每组张成一个子空间。 同理， 也可以根据 $j$ 来划分子空间． 我们姑且分别称它们为 $u$ 子空间和 $v$ 子空间．
 
-\subsubsection{2}
-两个矢量（分别来自两空间）的直积定义为： 先把它们分别在各自的基底上展开， 然后用乘法分配律进行相乘． 两空间的基底相乘得到直积空间中新的基底． 直积空间中， 只有一些矢量可以表示成两个空间中的矢量的一次直积运算． 这种矢量的特征是， 若投影到不同子空间， 则对应分量成正比．
+\subsubsection{算符}
+两个低维空间的线性算符 $\Q A$ 和 $ \Q B$ 做直积可以得到直积空间中的算符 $\Q A \otimes \Q B$。 我们定义 $\Q A \otimes \Q B$ 为线性算符， 该算符对任意基底的作用结果为
+\begin{equation}
+\Q A \otimes \Q B \ket{u_i, v_j} = (\Q A \ket{u_i}) \otimes (\Q B \ket{v_j})
+\end{equation}
+要对任意矢量作用， 只需将矢量记为直积基底的线性组合， 然后再分别对直积基底作用即可．
 
-\subsubsection{3}
-两个算符的直积变成的（线性）算符可以作用在直积空间中的任意矢量． 先定义作用在任意直积矢量上的结果为
+特殊地， 可以用 $\Q A \otimes \Q I$ 运算将 $\{\ket{u_i}\}$  空间中的 $\Q A$ 拓展到直积空间中来
 \begin{equation}
-(\Q A \otimes \Q B) (\ket{u} \otimes \ket{v}) = (\Q A \ket{u}) \otimes (\Q B \ket{v})
+\Q A \otimes \Q I \ket{u_i, v_j} = (\Q A \ket{u_i}) \otimes \ket{v_j}
 \end{equation}
-要对任意矢量作用， 只需将其拆成直积基底的线性组合， 然后再分别对直积基底作用即可． 特殊地， 可以用 $\Q A \otimes \Q I$ 运算将 $\{\ket{u_i}\}$  空间中的 $\Q A$ 拓展到直积空间中来
+这说明算符 $\Q A \otimes \Q I$ 在每个 $v$ 子空间中都是闭合的． 所以， 算符 $\Q A \otimes \Q I$ 作用在直积空间的任意矢量上， 相当于 $\Q A \otimes \Q I$ 对该矢量在各个子空间中的分量分别作用． $\Q B$ 也同理，不再赘述。 根据定义， 不难证明
 \begin{equation}
-(\Q A \otimes \Q I)(\ket{u_i} \otimes \ket{v_j}) = (\Q A \ket{u_i}) \otimes \ket{v_j} 
+(\Q A \otimes \Q I)(\Q I \otimes \Q B) = (\Q I \otimes \Q B)(\Q A \otimes \Q I) = \Q A \otimes \Q B
 \end{equation}
-等式右边的矢量仍然落在 $\ket{v_i}$ 子空间中． 所以， 算符 $\Q A \otimes \Q I$ 作用在直积空间的任意矢量上， 相当于 $\Q A \otimes \Q I$ 对各个子空间中的分量作用． $\Q I \otimes \Q B$ 的作用类似． 根据定义， 不难证明
-\begin{equation}
-(\Q A \otimes \Q I)(\Q I \otimes \Q B)(\ket{u_i} \otimes \ket{v_j}) = (\Q I \otimes \Q B)(\Q A \otimes \Q I)(\ket{u_i} \otimes \ket{v_j}) = (\Q A \ket{u}) \otimes (\Q B \ket{v})
-\end{equation}
-即两算符对易且等于 $(\Q A \otimes \Q B)$． 
 
 \subsubsection{矩阵元的计算}
-若直积空间中的基底正交归一， 求矩阵元只需用
+若直积空间中的基底正交归一， 则直积算符矩阵元为
+\begin{equation}\ali{
+(\Q A \otimes \Q B)_{\alpha_1, \alpha2} &= \bra{u_{i'} v_{j'}} \Q A \otimes \Q B \ket{u_i v_j} = \bra{u_{i'} v_{j'}} (\Q A \ket{u_i} \otimes \Q B \ket{v_j}) \\
+&= \bra{u_{i'}} \Q A \ket{u_i} \bra{v_{j'}} \Q B \ket{v_j}
+}\end{equation}
+
+注意矩阵元的计算与基底的排序有关， 如果按照\autoref{DirPro_eq4} 排序， 则每个 $u$ 子空间的基底都在一起。 现在用分块矩阵的概念， 若把矢量根据 $u$ 子空间分成一段段， 每一段是 $u$ 子空间中分量的系数， 矩阵也会分成一些正方形的小块， 第 $(m, n)$ 小块中为
 \begin{equation}
-\bra{u_{i'} v_{j'}} (\Q A \otimes \Q B) \ket{u_i v_j} = \bra{u_{i'} v_{j'}} (\Q A \ket{u_i} \otimes \Q B \ket{v_j}) = \bra{u_{i'}} \Q A \ket{u_i} \bra{v_{j'}} \Q B \ket{v_j}
+A_{mn} \mat B
 \end{equation}
-现在用分块矩阵的概念， 若把矢量分成一段段， 每一段是 $u$ 子空间中的系数， 矩阵也会分成一些小块． 在 $(m, n)$ 小块中， 根据式， 这个分块中的矩阵元为
-\begin{equation}
-A_{mn} \vdot B
-\end{equation}
-所以， $\Q A \otimes \Q B$ 的矩阵是把 $\mat A$ 的每个矩阵元 $A_{mn}$ 拓展成矩阵分块 $A_{mn} \mat B$．  注意这是以 $u$ 空间来划分列矩阵． 反之， 如果是根据 $v$ 空间来划分列矩阵， 那么就是把 $\mat B$ 的每个矩阵元 $B_{mn}$ 拓展成矩阵分块 $B_{mn} \mat A$． 
+所以， $\Q A \otimes \Q B$ 的矩阵是把 $\mat A$ 的每个矩阵元 $A_{mn}$ 拓展成矩阵分块 $A_{mn} \mat B$．
+
+同理， 若基底以\autoref{DirPro_eq5} 排序， 即每个 $v$ 子空间的基底都在一起， 则  $(\Q A \otimes \Q B)$ 的矩阵就是把 $\mat B$ 的每个矩阵元 $B_{mn}$ 拓展成矩阵分块 $B_{mn} \mat A$． 
 
 \subsection{关于本征问题的定理}%（证明未完成）
 	
-＊如果考虑直积空间中的本征问题， $A_1$  的本征矢 $\ket{eig_i}$ 具有 $n$ 重简并， 简并空间的基底分别为 $\ket{eig_i}\ket{v_1}, \ket{eig_i}\ket{v_2}\dots$． 
+＊如果考虑直积空间中的本征问题， $\Q A$  的本征矢 $\ket{eig_i}$ 具有 $n$ 重简并， 简并空间的基底分别为 $\ket{eig_i}\ket{v_1}, \ket{eig_i}\ket{v_2}\dots$． 
 
-＊ $A_1 \otimes B_2$ 的本征值共有 $m \times n$ 个， $m$ 和 $n$ 分别是 $A$ 和 $B$ 的维度， 若 $a_1, a_2,\dots, a_m$ 和 $b_1, b_2, \dots, b_n$ 分别是 $A$ 和 $B$ 的本征值， 那么 $A \otimes B$ 的本征值分别为 $a_1 b_1, a_1 b_2, \dots, a_2 b_1, a_2 b_2, \dots, a_m b_{n-1}, a_m b_n$．  本征矢为 $\ket{u_i} \otimes \ket{v_j}$ 
+＊ $\Q A \otimes \Q B$ 的本征值共有 $m \times n$ 个， $m$ 和 $n$ 分别是 $A$ 和 $B$ 的维度， 若 $a_1, a_2,\dots, a_m$ 和 $b_1, b_2, \dots, b_n$ 分别是 $A$ 和 $B$ 的本征值， 那么 $A \otimes B$ 的本征值和本征矢分别为 $a_i b_j$ 和 $\ket{u_i, v_j}$ （$0 \les i \les m,  0 \les j \les n$）。
 
-＊ $A \otimes I + I \otimes B$ 的本征值分别为 $a_i + b_j$，  本征矢同样为 $\ket{u_i} \otimes \ket{v_j}$． 
+＊ $A \otimes I + I \otimes B$ 的本征值和本征矢分别为 $a_i + b_j$ 和 $\ket{u_i, v_j}$． 
 
-＊单个空间的厄米矩阵拓展到直积空间仍然是厄米矩阵． 两个空间分别的厄米矩阵直积仍然是厄米矩阵． 
+＊ 两个厄米矩阵直积仍然是厄米矩阵．
 
-＊厄米矩阵加厄米矩阵仍然是厄米矩阵．
-
+＊l两个厄米矩阵相加仍然是厄米矩阵．
