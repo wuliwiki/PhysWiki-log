@@ -1,29 +1,31 @@
 % 足球顶点坐标的计算
 
+% 未完成，给出一下空间旋转变换的链接。
+
 \pentry{解三棱锥的两个重要公式} % 未完成
 
 % 未完成， 这个也需要矢量图，matlab 的 3d 图不能生成矢量图， 所以可以把足球进行旋转然后投影到 xy 平面．
 \begin{figure}[ht]
 \centering
-\includegraphics[width=5cm]{./figures/FootBl1.png}
+\includegraphics[width=5cm]{./figures/FootBl1.pdf}
 \caption{足球透视图} \label{FootBl_fig1}
 \end{figure}
 
 足球的各种常用数据都可以由一个条件推出， 那就是它有 60 个顶点． 考虑到个顶点都有 3 条同样长度的棱， 棱的个数为
 \begin{equation}
-[\text{60 顶点}] \times [\text{3 条棱}] / [\text{每条棱有 2 个顶点}] = 90
+(\text{60 个顶点}) \times (\text{3 条棱}) / (\text{每条棱有 2 个顶点}) = 90
 \end{equation}
 另外每个顶点都由一个正五边形和两个正六边形共用，所以五边形的个数为
 \begin{equation}
-[\text{60 顶点}] \times [\text{每个顶点 1 个五边形}] / [\text{每个五边形有 5 个顶点}] = 12
+(\text{60 个顶点}) \times (\text{每个顶点 1 个五边形}) / (\text{每个五边形有 5 个顶点}) = 12
 \end{equation}
 同理, 六边形的个数为
 \begin{equation}
-[\text{60 顶点}] \times [\text{每个顶点 2 个六边形}] / [\text{每个六边形有 6 个顶点}] = 20
+(\text{60 个顶点}) \times (\text{每个顶点 2 个六边形}) / (\text{每个六边形有 6 个顶点}) = 20
 \end{equation}
 
 \subsection{坐标计算}
-以下所用到的方法不仅适用于足球， 还适用于其他多面体如正十二面体， 正二十面体等． 以足球的一个五边形作为底面， 得到足球的侧视图和俯视图如下（分别是左图与右图）． 为了方便讨论， 我们根据这两个视图把足球的顶点按高度分为 A-H 这 8 层．并且逆时针给出相应的数字编号，详见侧视图和俯视图中的标注．
+以下所用到的方法不仅适用于足球， 还适用于其他多面体如正十二面体， 正二十面体等． 以足球的一个五边形作为底面， 得到足球的侧视图和俯视图如\autoref{FootBl_fig2}． 为了方便讨论， 我们根据这两个视图把足球的顶点按高度分为 A 到 H 共 8 层．并且逆时针给出相应的数字编号．
 
 \begin{figure}[ht]
 \centering
@@ -34,7 +36,7 @@
 由于足球由正六边形和正五边形拼成， 足球的每一条棱都相等． 在以下计算中， 不妨设棱长为 1． 通过以下几个步骤， 就可以求解足球的各点的直角坐标．
 
 \subsubsection{求出 $A_1$ 到 $A_5$ 的坐标}
-直角坐标系中，令A层的五边形与XY平面重合，如下图．为了表示方便，令
+直角坐标系中，令A层的五边形与 $xy$ 平面重合，如下图．为了表示方便，令
 \begin{equation}
 S = \sin\frac{2\pi}{5} \qquad
 C = \cos\frac{2\pi}{5} \qquad
@@ -50,50 +52,87 @@ c = \cos\frac{\pi}{5}
 \qty(\frac{S}{2s}, \frac{C}{2s}, 0)
 \end{equation}
 
-\subsection{求出 $B_1$ 的坐标}
-由解三棱锥的两个重要公式中的例2的方法, 可得线段 $B_2 A_2$ 与面 $A_1A_2A_3$ 的线面角（注意这里 $\gamma$ 的定义与 例2 中的 $\gamma$ 定义不同）
+\subsection{三个重要的角}
+由三棱锥的第一个重要公式%未完成
+可以得到以下角的大小（以下每个角都是锐角）．
+
+两个六边形之间的面面角满足
 \begin{equation}
-\gamma \approx 0.5536
+\sin\phi_{66} = \frac{2}{3}
+\end{equation}
+五边形与六边形之间的面面角满足
+\begin{equation}
+\sin\phi_{56} = \frac{4s}{\sqrt{15}}
+\end{equation}
+五边形与相邻棱的线面角满足（见“三棱锥公式”例2 ）%未完成
+\begin{equation}
+\sin\gamma = \frac{2s}{\sqrt5}
 \end{equation}
 
 \begin{figure}[ht]
 \centering
 \includegraphics[width=10cm]{./figures/FootBl4.png}
-\caption{求线段 $A_2 B_2$ 与底层五边形的线面角} \label{FootBl_fig4}
+\caption{求线段 $A_1 B_1$ 与底面的线面角} \label{FootBl_fig4}
+% 未完成：图中 B2 改成 B1，用矢量图
 \end{figure}
 
-若把从 $A_1$ 指向 $A_2$ 的矢量记为 $\vec v_1$)， $A_3$ 指向 $A_2$ 的矢量记为 $\vec v_2$， 将 $A_2$ 指向 $B_2$ 的矢量记为 $\vec u$， 可得
+\subsection{求出 $B_1$ 的坐标}
+
+若把从 $A_5$ 指向 $A_1$ 的矢量记为 $\vec v_1$， $A_2$ 指向 $A_1$ 的矢量记为 $\vec v_2$， $A_1$ 指向 $B_1$ 的矢量记为 $\vec u$， 可得
 \begin{equation}
 \vec u = \frac{\vec v_1 + \vec v_2}{\abs{\vec v_1 + \vec v_2}} \cos\gamma
-+ \frac{\vec v_1 + \vec v_2}{\abs{\vec v_1 + \vec v_2}} \sin\gamma
-= \frac{\sqrt{1 - 3S^2/4}}{2s} (\vec v_1 + \vec v_2) + \frac{\sqrt{3}}{2} (\vec v_2 + \vec v_1)
++ \frac{\vec v_2 \cross \vec v_1}{\abs{\vec v_2 \cross \vec v_1}} \sin\gamma
+= \frac{\sqrt{1 - 3S^2/4}}{2s} (\vec v_1 + \vec v_2) + \frac{\sqrt{3}}{2} (\vec v_2 \cross \vec v_1)
 \end{equation}
 
-由\autoref{FootBl_eq5} 得 $\vec v_1 = (-S, C-1, 0)/(2s)$， $\vec v_2 = (-S+s, C+c, 0)/(2s)$， 代入可得 $\vec u$ （结果略）． 加上 $A_2$ 的坐标，可得 $B_2$ 的坐标． 接下来我们并不需要求出 B 层的其它坐标， 因为我们可以通过两个相当简单的公式依次求出剩下所有顶点的坐标．
+由\autoref{FootBl_eq5} 得
+\begin{equation}
+\vec v_1 = \frac{-S \uvec x + (C-1)\uvec y}{2s} \qquad
+\vec v_2 = \frac{(-S+s)\uvec x + (C+c)\uvec y}{2s}
+\end{equation}
+代入可得 $\vec u$ （略）， 加上 $A_1$ 的坐标可得 $B_1$ 的坐标． 接下来我们并不需要用同样的方法求出 B 层的其它坐标， 因为我们可以通过一个简单的矢量公式依次求出剩下所有顶点的坐标．
 
-\subsection{剩下所有顶点的坐标}
-已知空间中多边形任意连续三点的坐标， 就可以求出第四个点的坐标．如果可以找到这种公式， 根据上文已求出的足球顶点就可以算出足球剩下的所有顶点的坐标．
+\subsection{求剩下的坐标}
+已知空间中正 $N$ 边形任意连续 3 点的坐标， 求第 3 点的坐标， 可以用以下矢量公式来计算
+\begin{equation}\label{FootBl_eq9}
+\vec r_4 = \vec r_1 - \vec r_2 + \vec r_3 + 2\sin(\frac{N-4}{2N}\pi) \cdot (\vec r_3  - \vec r_2)
+\end{equation}
+其中 $\vec r_i$ 是第 $i$ 点的位置矢量\upref{Disp}．
 
-例如（见\autoref{FootBl_fig2}）根据已知的 $A_2, A_1, B_1$ 三个点，利用六边形公式可以算出 $C_1, C_2, B_2$． 根据 $A_2, A_3, B_2$ 又可以算出 $C_2, C_3, B_3$． 当 C 层完成后，又可以同理算出其他层． 下面推导这两个公式
+根据已知的 $A_2, A_1, B_1$ 三个点，该式可以算出 $C_1$ 的坐标， 再把 $A_1, B_1, C_1$ 的坐标代入得到 $C_2$， 再由 $B_1, C_1, C_2$ 得到 $B_2$， 以此类推． 当 $C$ 层完成后，又可以同理算出其它层的所有顶点．下面我们来推导这个公式．
 
 \begin{figure}[ht]
 \centering
 \includegraphics[width=8.3cm]{./figures/FootBl3.pdf}
-\caption{由 $N$ 边形的 3 个顶点坐标求第 4 个顶点坐标． 图中以五边形为例（$N = 5$），但图中的公式适用于任意正 $N$ 边形} \label{FootBl_fig3}
+\caption{由正 $N$ 边形的 3 个顶点坐标求第 4 个顶点坐标． 图中以五边形为例，但图中的公式适用于任意的 $N > 2$} \label{FootBl_fig3}
 \end{figure}
 
-在正 $N$ 边形中， 记任意连续 4 点的位置矢量（从坐标原点指向某点的矢量\upref{Disp}）为 $\vec r_1, \vec r_2, \vec r_3, \vec r_4$， 我们希望能用 $\vec r_1, \vec r_2, \vec r_3$ 表示 $\vec r_4$． 令 $\vec v_i = \vec r_{i+1} - \vec r_i$， 从\autoref{FootBl_fig3} 中不难发现
+在正 $N$ 边形中， 记任意连续 4 点的位置矢量\upref{Disp} 为 $\vec r_1, \vec r_2, \vec r_3, \vec r_4$， 我们希望能用 $\vec r_1, \vec r_2, \vec r_3$ 表示 $\vec r_4$． 令 $\vec v_i = \vec r_{i+1} - \vec r_i$， 从\autoref{FootBl_fig3} 中不难发现
 \begin{equation}
 \vec v_1 + \vec v_3 = 2\sin(\frac{N-4}{2N}\pi) \cdot \vec v_2
 \end{equation}
-即
+将 $\vec r_i$ 代入即可得到\autoref{FootBl_eq9}．
+
+% 未完成：推导
+\subsection{足球的高度和中点坐标}
+我们从底部的五边形出发，沿着任意一条外接棱的方向前进，依次会经过棱，五边形，六边形，六边形，顶部的五边形．如果从反方向出发，路线恰好相反．这两条路线恰好可以绕足球一整圈．
+%图未完成，把图二左绕 z 轴旋转一下，使轮廓变为路线
+
+按照第一种路线到达顶部，转过的角度依次是 $\gamma, \gamma, \phi_{56}, \phi_{66}, \phi_{56}$． 可以验证，它们相加等于 $\pi$．%未完成：可以解析验证吗？
+
+考虑到经过的五边形（边长为 1）的中轴线长度是 $(1+c)/(2s)$， 经过的六边形的中轴线长度是 $\sqrt{3}$，经过的棱长为 1，底部五边形到顶部五边形的高度为\footnote{事实上这个式子很难化简，结果来自 Wikipedia 查找并通过验证．}
+\begin{equation}\ali{
+h &= \sin\gamma + \frac{1+c}{2s} \sin(2\gamma) + \sqrt{3} \sin(2\gamma + \phi_{56}) + \sqrt{3} \sin(2\gamma + \phi_{56} + \phi_{66})\\
+&= \sqrt{\frac{41}{10}\sqrt 5 + \frac{25}{2}}
+}\end{equation}
+球心到底面和顶面的距离为 $h/2$．
+
+由勾股定理可以得到中心点到任意顶点的距离为
 \begin{equation}
-\vec r_4 = \vec r_1 - \vec r_2 + \vec r_3 + 2\sin(\frac{N-4}{2N}\pi) \cdot (\vec r_3  - \vec r_2)
+R = \sqrt{\qty(\frac{h}{2})^2 + \qty(\frac{1}{2s})^2} = \frac14 \sqrt{18\sqrt{5} + 58}
 \end{equation}
 
+%可以列出每个顶点坐标的解析式，再说明如何用旋转矩阵进行旋转
 
-
-
-
-
+% 未完成：使用球坐标会不会方便一点？
 
