@@ -6,31 +6,37 @@
 
 搜索文件夹内所有文档的内容用 FileSeek 软件，搜索空格用“\textbackslash 空格”，搜索“\$”用“\textbackslash \$”，以此类推．
 
-画图用 Adobe Illustrator， 用知乎的公式编辑器在图中添加公式（把编辑器中的公式另存为 svg 然后在 Illustrator 中打开）\footnote{不推荐的老方法是使用 MathType 添加公式，希腊字母粗体正体矢量用从 Symbol 字体中插入（勾选 bold），更简单的方法是，先输入希腊字母，选中，然后在 Style 里面选 Vector-Matrix}． 图片中的文字必须是 12 号， 如果字太小， 就把图片缩小而不是字放大． 图片中的线条尽量用 1pt 粗细． 图片插入书中后， 图中的字体应比书中的略小． 要画箭头， 先画一条直线， 然后选画笔图标， 在左下角的菜单中选 Arrows>Arrow\_Standard， 选 1.23 号箭头， 再把直线改成 0.3155pt （相当于 1pt 粗的直线）．
+画图用 Adobe Illustrator， 用知乎的公式编辑器在图中添加公式（把编辑器中的公式另存为 svg 然后在 Illustrator 中打开）\footnote{不推荐的老方法是使用 MathType 添加公式，希腊字母粗体正体矢量用从 Symbol 字体中插入（勾选 bold），更简单的方法是，先输入希腊字母，选中，然后在 Style 里面选 Vector-Matrix}． 图片中的文字必须是 12 号， 如果字太小， 就把图片缩小而不是字放大． 图片中的线条尽量用 1pt 粗细． 图片插入书中后， 图中的字体应比书中的略小． 要画箭头， 先画一条直线， 然后选画笔图标， 在左下角的菜单中选 Arrows>Arrow\_Standard， 选 1.23 号箭头， 再把粗细改成 0.3155pt （相当于 1pt 粗的直线）．
 
 \subsection{文件版本管理}
-使用 GitHub Desktop， 用 MacroUniverse/PhysWiki 项目管理所有文件， 每次 commit 尽量先完成以下检查．
+使用 GitHub Desktop， 用 MacroUniverse/PhysWiki 项目管理所有文件， 每次 commit 必须完成以下步骤．
 \begin{itemize}
-\item 确保所有文档可以顺利编译．
-\item 用 FileSeek 查找所有文档中的空心句号并替换．
-\item 解决编译产生的 warning．
-\item 检查变化的内容．
-\item 把 ManicTime 记录的写作时间记录到“timer.xls”．
+\item 与 GitHub 同步（fetch/pull）
+\item 检查变化的内容
+\item 用 FileSeek 查找所有文档中的空心句号并替换
+\item 确保所有文档可以顺利编译
+\item commit 以后检查 history 无误后 push 到 GitHub
 \end{itemize}
-每次 commit 的标题必须是下列之一
+每次 commit 的标题尽量使用下列之一
 \begin{itemize}
 \item 常规更新：包括完善词条，新词条等．
 \item 模板更新：模板有更新．
 \item 批量修改：在多个文件中修改某一格式规范， 这种修改比较危险， 需要谨慎．
 \item 词条统计：统计文件夹，对照表，和书中的词条，查看不一致或缺失．
 \end{itemize}
-Repository 中创建 “.gitignore” 文件，忽略所有以下后缀名的文件：*.toc， *.aux， *.log， *.out， *synctex.gz．
+定期检查的内容
+\begin{itemize}
+\item 解决编译产生的 warning
+\item 把 ManicTime 记录的写作时间记录到“timer.xls”
+\end{itemize}
+
+GitHub 会忽略 “.gitignore” 文件指定的文件类型： *.toc， *.aux， *.log， *.out， *synctex.gz．
 
 词条统计的方法： 首先把 contents 文件夹中的所有文件名按顺序排列， 复制到表格中， 然后把词条对照表中的所有标签在表格中找到对应项， 做标记， 并把对照表中的词条名粘贴到表格中． 最后到 PhysWiki.tex 中逐个把标签在表格中找到对应项， 做标记， 对照词条名， 并对照词条文件中第一行的词条名．
 
 \subsection{词条编写规范}
 
-每个词条文件必须有一个独一无二的标签（即使在不同文件夹中）， 词条标签必须限制在 6 个字符内，必须在 PhysWiki.tex， 词条标签对照表和词条文件名中一致． 词条的中文名必须在主文件， 词条标签对照表和词条文件的第一行注释中一致． 如果不是超纲词条， 就把词条放在 contents 目录下， 并在主文件中用 \textbackslash entry \{\}\{\} 命令输入中文名和标签． 超纲词条放在 contents1 目录下并用 \textbackslash Entry \{\}\{\} 命令． 主文件有 Debug.tex， PhysWiki1.tex， 和 PhysWiki.tex 三个， 他们共用一个模板（others 目录）． 新词条必须现在 Debug.tex 中编辑， 完成后再从中删除并将 entry/Entry 插入到 PhysWiki1.tex （力学分册）或 PhysWiki.tex（汇总）或 PhysWikiNote.tex （小时物理笔记） 中． Debug.tex 中的 entry/Entry 命令的后面可以用 \textbackslash newpage 命令强制换页， 但不允许在 PhysWiki.tex/PhysWiki1.tex 中这么做．
+每个词条文件必须有一个独一无二的标签（即使在不同文件夹中）， 词条标签必须限制在 6 个字符内，必须在 PhysWiki.tex， 词条标签对照表和词条文件名中一致． 词条的中文名必须在主文件， 词条标签对照表和词条文件的第一行注释中一致． 词条文件一般放在 contents 目录下， 并在主文件中用 \textbackslash entry \{\}\{\} 命令输入中文名和标签． 主文件有 Debug.tex， PhysWiki.tex 和 PhysWikiNote.tex 三个， 它们共用一个模板（others 目录）． 新词条必须现在 Debug.tex 中编辑， 完成后再从中删除并将 entry 插入到 PhysWiki.tex （小时物理百科）或 PhysWikiNote.tex （小时物理笔记） 中． Debug.tex 中的 entry/Entry 命令的后面可以用 \textbackslash newpage 命令强制换页， 但不允许在其它文件中这么做．
 
 PhysWiki.tex 中与 PhysWiki1.tex 重复的部分不能修改， 只能从 PhysWiki1.tex 中复制． PhysWiki.tex 中与 PhysWikiNotes.tex 中重复的部分也不能修改， 只能从 PhysWikiNotes.tex 中复制．
 
