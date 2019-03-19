@@ -1,0 +1,235 @@
+% 线性方程组高斯消元法
+
+\pentry{矩阵\upref{Mat}}
+
+线性方程组
+\begin{equation}\label{GAUSS_eq1}
+\leftgroup{
+&a_{1,1}x_1 + a_{1,2}x_2 + \dots + a_{1,n}x_n&=\quad &y_1\\
+&a_{2,1}x_1 + a_{2,2}x_2 + \dots + a_{2,n}x_n&=\quad &y_2\\
+&\qquad \qquad \dots  \qquad \dots \qquad  \dots\\
+&a_{m,1}x_1 + a_{m,2}x_2 + \dots + a_{m,n}x_n&=\quad &y_m}\\
+\end{equation}
+可以转写成矩阵和向量的形式
+\begin{equation}\label{GAUSS_eq2}
+\mat A \vec x = \vec y
+\end{equation}
+其中 $\mat A$ 是维度 $m \times n$ 的矩阵，称为“系数矩阵”．
+\begin{equation}
+\mat A={
+	\left[ \begin{matrix}
+	a_{1,1} &a_{1,2} &\cdots &a_{1,n} \\
+	a_{2,1} &a_{2,2} &\cdots &a_{2,n} \\
+	\vdots  &\vdots  &\ddots &\vdots  \\
+	a_{m,1} &a_{m,2} &\cdots &a_{m,n} \\
+	\end{matrix} 
+	\right ]}
+\end{equation}
+$\vec x$ 是 $n$ 维列矢量，$\vec x=[x_1,x_2,\dots,x_m,\dots,x_n]\Tr$．
+$\vec y$ 是 $m$ 维列矢量，称为“常数列”．$\vec y=[y_1,y_2,\dots,y_m]\Tr$．
+$\mat A$ 和 $\vec y$ 是已知的，而 $\vec x$ 是未知的， 即方程组待求的解\footnote{以下仅讨论 $m \les n$ 的情况}．
+
+\subsection{最简形式}
+若系数矩阵 $\mat A$ 是一个阶梯形的矩阵，即线性方程组有如下形式：
+\begin{equation}\label{GAUSS_eq4}
+{
+	\left[ \begin{matrix}
+	a_{1,1} &a_{1,2} &a_{1,3} &\cdots &a_{1,n} \\
+	        &a_{2,2} &a_{2,3} &\cdots &a_{2,n} \\
+	        &        &a_{3,3} &\cdots &a_{3,n} \\
+             &        &        &\ddots &\vdots  \\
+	        &        &        &       &a_{n,n} \\
+	\end{matrix} 
+	\right ]}
+{
+	\left[ \begin{matrix}
+	x_1 \\
+	x_2 \\
+     x_3 \\
+     \vdots \\
+	x_n \\
+	\end{matrix} 
+	\right ]}=
+{
+	\left[ \begin{matrix}
+	y_1 \\
+	y_2 \\
+     y_3 \\
+     \vdots \\
+	y_n \\
+	\end{matrix} 
+	\right ]}
+\end{equation}
+当 $a_{k,k}\neq 0 \quad (k=1,2,\dots,n)$ 时，显然方程组具有唯一的一组解：
+\begin{equation}\label{GAUSS_eq5}
+\leftgroup{
+x_n &=\frac{y_n}{a_{n,n}} \\
+x_k &=\frac{1}{a_{k,k}} \qty(y_k - \sum_{i=k+1}^n a_{k,i} x_i ) \quad (k=1,2,\dots,n-1) }\\
+\end{equation}
+特别的，若 $a_{k,k} = 1 \quad (k=1,2,\dots,n)$，则称之为线性方程组的“最简形式”．
+
+那么，对于\autoref{GAUSS_eq1} 这样一般形式的线性方程组，能否转化为\autoref{GAUSS_eq4} 这样的最简形式，进而求解呢？回答是肯定的．
+
+\subsection{Gauss消元法}
+
+\subsubsection{增广矩阵}
+线性方程组的系数矩阵 $\mat A$ 和常数列 $\vec y$ 可以包含在一个矩阵 $\mat B$ 中，称这个矩阵为“增广矩阵”．
+\begin{equation}
+\mat B=[\mat A ,\vec y]={
+	\left[ \begin{array}{cccc|c}
+	a_{1,1} &a_{1,2} &\cdots &a_{1,n} &y_1 \\
+	a_{2,1} &a_{2,2} &\cdots &a_{2,n} &y_2 \\
+	\vdots  &\vdots  &\ddots &\vdots  &\vdots \\
+	a_{m,1} &a_{m,2} &\cdots &a_{m,n} &y_m \\
+	\end{array} 
+	\right ]}
+\end{equation}
+
+\subsubsection{矩阵初等行变换}
+定义以下三种矩阵变换为“初等行变换”：
+
+（a）对调矩阵中的任意两行（记作 $\vec r_i \leftrightarrow \vec r_j$，$i$，$j$ 表示行号）；
+
+（b）将矩阵中任意一行的所有元素乘以一个非零数 $k$（记作 $\vec r_i \times k$）；
+
+（c）把矩阵中某一行所有元素乘以数 $k$ 后加到另一行的对应元素上（记作 $\vec r_i + \vec r_j \times k$）．
+
+对增广矩阵进行有限次初等行变换，不改变方程组的解，这在直观上是容易理解的．
+
+\subsubsection{消元法的一般步骤}
+任何非零矩阵，经过有限次初等行变换，总可以转化为阶梯形矩阵．
+
+增广矩阵 $\mat B$化为阶梯形矩阵的一般步骤是：
+
+第1步，将第1行所有元素乘以 $p_{1,i}$，加到第二至最后一行，使矩阵 $\mat B$ 的第一列元素除第一行外以全为零；
+\begin{equation}\begin{aligned}
+\vec r_i^{(1)} &= \vec r_i + \vec r_1 \times p_{1,i} \quad (i=2,3,\dots,m) \\
+p_{1,i} &= - \frac{a_{i,1}}{a_{1,1}} \\
+\end{aligned}\end{equation}
+得到新的增广矩阵 $\mat B^{(1)}$
+\begin{equation}
+\mat B^{(1)}={
+	\left[ \begin{array}{cccc|c}
+	a_{1,1} &a_{1,2}       &\cdots &a_{1,n}       &y_1 \\
+	0       &a_{2,2}^{(1)} &\cdots &a_{2,n}^{(1)} &y_2^{(1)} \\
+	\vdots  &\vdots        &\ddots &\vdots        &\vdots \\
+	0       &a_{m,2}^{(1)} &\cdots &a_{m,n}^{(1)} &y_m^{(1)} \\
+	\end{array} 
+	\right ]}
+\end{equation}
+
+第 $k$ 步，将第 $k$ 行所有元素乘以 $p_{k,i}$，加到第 $k+1$ 至最后一行，使矩阵 $\mat B$ 的第 $k$ 列元素除第1行至第 $k$ 行以外全为零；
+\begin{equation}\begin{aligned}
+\vec r_i^{(k)} &= \vec r_i^{(k-1)} + \vec r_k^{(k-1)} \times p_{k,i} \quad (i=k+1,k+2,\dots,m) \\
+p_{k,i} &= - \frac{a_{i,k}^{(k-1)}}{a_{k,k}^{(k-1)}} \\
+\end{aligned}\end{equation}
+得到新的增广矩阵 $\mat B^{(k)}$
+\begin{equation}
+\mat B^{(k)}={
+	\left[ \begin{array}{ccccccc|c}
+	a_{1,1} &a_{1,2}       &\cdots &a_{1,k}         &a_{1,k+1}         &\cdots &a_{1,n}         &y_1 \\
+	0       &a_{2,2}^{(1)} &\cdots &a_{2,k}^{(1)}   &a_{2,k+1}^{(1)}   &\cdots &a_{2,n}^{(1)}   &y_2^{(1)} \\
+	\vdots  &\vdots        &\ddots &\vdots          &\vdots            &\ddots &\vdots          &\vdots \\
+	0       &0             &\cdots &a_{k,k}^{(k-1)} &a_{k,k+1}^{(k-1)} &\cdots &a_{k,n}^{(k-1)} &y_k^{(k-1)} \\
+     0       &0             &\cdots &0               &a_{k+1,k+1}^{(k)} &\cdots &a_{k+1,n}^{(k)} &y_{k+1}^{(k)} \\
+     \vdots  &\vdots        &\ddots &\vdots          &\vdots            &\ddots &\vdots          &\vdots \\
+     0       &0             &\cdots &0               &a_{m,k+1}^{(k)}   &\cdots &a_{m,n}^{(k)}   &y_m^{(k)} \\
+	\end{array} 
+	\right ]}
+\end{equation}
+
+至多进行 $m-1$ 步初等行变换的迭代，最终将增广矩阵化为阶梯形．
+\begin{equation}
+\mat B^{(m-1)}={
+	\left[ \begin{array}{cccc|c}
+	a_{1,1} &a_{1,2}       &\cdots &a_{1,n}         &y_1 \\
+	0       &a_{2,2}^{(1)} &\cdots &a_{2,n}^{(1)}   &y_2^{(1)} \\
+	        &              &\ddots &\vdots          &\vdots \\
+	        &              &       &a_{m,n}^{(m-1)} &y_m^{(m-1)} \\
+	\end{array} 
+	\right ]}
+\end{equation}
+
+观察最终简化的每个具体问题的增广矩阵，很容易判断线性方程组解的情况（无解、有唯一解或有无穷多组解）．若矩阵 $\mat B^{(m-1)}$ 满足 $m=n$ 且 $a_{k,k}\neq 0 \quad (k=1,2,\dots,n)$，则线性方程组 $\mat A \vec x = \vec y$ 有唯一解．利用\autoref{GAUSS_eq5} 就可以回代出这个解．
+
+\subsubsection{特殊情况}
+在进行第 $k$ 步消元的时候，可能会遇到 $a_{k,k}^{(k-1)}=0$ 的情况，顺序迭代就无法继续下去，但是这个时候并不能直接判定方程组无解或有无穷多组解．可以从第 $k$ 行往下寻找 $a_{i,k}^{(k-1)} \neq 0$ 的一行，将其与第 $k$ 行调换，使迭代继续进行．
+
+如果从第 $k$ 行往下所有的 $a_{i,k}^{(k-1)}$ 都等于零，则在矩阵待简化的这部分中，依次向下一列检索不为零的元素（假设这个元素为 $a_{s,t}^{(k-1)}$)，将它所在的行与当前的第 $k$ 行调换．此时再令
+\begin{equation}
+p_{k,i} = - \frac{a_{i,t}^{(k-1)}}{a_{k,t}^{(k-1)}}
+\end{equation}
+其余表达式不变，继续迭代．如果检索不到符合条件的 $a_{s,t}^{(k-1)}$，即 $a_{s,t}^{(k-1)} \equiv 0 \quad(s=k,k+1,\dots,m;\;t=k,k+1,n+1)$，那么矩阵已经最简化，消元过程终止．
+
+\begin{exam}{高斯消元法解线性方程组}\label{GAUSS_ex1}
+\begin{equation}
+\leftgroup{
+&2x_1 + 3x_2 + 4x_3 + 5x_4&=\quad &6\\
+&4x_1 + 6x_2 + 5x_3 + 6x_4&=\quad &8\\
+&6x_1 + 9x_2 + 2x_3 + 3x_4&=\quad &5\\
+&2x_1 + 3x_2 + 5x_3 + 4x_4&=\quad &9}\\
+\end{equation}
+解：
+
+将该方程组写成增广矩阵形式
+\begin{equation}
+\mat B={
+	\left[ \begin{array}{cccc|c}
+	2 &3 &4 &5 &6 \\
+	4 &6 &8 &6 &8 \\
+	6 &9 &9 &8 &9 \\
+	2 &3 &5 &4 &9 \\
+	\end{array} 
+	\right ]}
+\end{equation}
+开始消元
+\begin{equation}
+\begin{aligned}
+\vec r_2 - 2 &\vec r_1 \\
+\vec r_3 - 3 &\vec r_1 \\
+\vec r_4 -   &\vec r_1 \\
+\end{aligned}
+\quad \Longrightarrow \quad
+\mat B={
+	\left[ \begin{array}{cccc|c}
+	2 &3 &4  &5  &6  \\
+	0 &0 &0  &-4 &-4 \\
+	0 &0 &-3 &-7 &9  \\
+	0 &0 &1  &-1 &3  \\
+	\end{array} 
+	\right ]}
+\end{equation}
+
+发现此时，矩阵第二列自第二行以下全为零，所以需要依次向下一列寻找不为零的元素．找到第四行第三列元素 $1$ 是符合条件．继续消元
+\begin{equation}
+\begin{aligned}
+\vec r_2 \leftrightarrow &\vec r_4 \\
+\vec r_3 + 3 &\vec r_2 \\
+\vec r_4 - 0 &\vec r_2 \\
+\end{aligned}
+\quad \Longrightarrow \quad
+\mat B={
+	\left[ \begin{array}{cccc|c}
+	2 &3 &4  &5   &6  \\
+	0 &0 &1  &-1  &3  \\
+	0 &0 &0  &-10 &18 \\
+	0 &0 &0  &-4 &-4  \\
+	\end{array} 
+	\right ]}
+\end{equation}
+\begin{equation}
+\vec r_4 - 0.4 \vec r_3
+\quad \Longrightarrow \quad
+\mat B={
+	\left[ \begin{array}{cccc|c}
+	2 &3 &4  &5   &6  \\
+	0 &0 &1  &-1  &3  \\
+	0 &0 &0  &-10 &18 \\
+	0 &0 &0  &0   &-11.2  \\
+	\end{array} 
+	\right ]}
+\end{equation}
+
+显然，本例中方程组无解．
+\end{exam}
+
