@@ -1,10 +1,8 @@
 % 线性方程组高斯消元法
 
-% 未完成：如果有无穷多种解， 该如何表示它们呢？ 什么是特解，什么是通解。
-
 \pentry{矩阵\upref{Mat}}
 
-线性方程组
+线性方程组（有 $x_1$ 到 $x_n$ 这 $n$ 个未知量， 所以也叫 \bb{$n$ 元一次方程组}）
 \begin{equation}\label{GAUSS_eq1}
 \leftgroup{
 &a_{1,1}x_1 + a_{1,2}x_2 + \dots + a_{1,n}x_n&=\quad &y_1\\
@@ -12,145 +10,104 @@
 &\qquad \qquad \dots  \qquad \dots \qquad  \dots\\
 &a_{m,1}x_1 + a_{m,2}x_2 + \dots + a_{m,n}x_n&=\quad &y_m}\\
 \end{equation}
-可以写成矩阵和向量的形式
+可以写成矩阵和列矢量相乘的形式
 \begin{equation}\label{GAUSS_eq2}
 \mat A \vec x = \vec y
 \end{equation}
 其中 $\mat A$ 是维度 $m \times n$ 的矩阵，称为\bb{系数矩阵}．
 \begin{equation}
-\mat A={
-	\left[ \begin{matrix}
-	a_{1,1} &a_{1,2} &\cdots &a_{1,n} \\
-	a_{2,1} &a_{2,2} &\cdots &a_{2,n} \\
-	\vdots  &\vdots  &\ddots &\vdots  \\
-	a_{m,1} &a_{m,2} &\cdots &a_{m,n} \\
-	\end{matrix} 
-	\right ]}
+\mat A=
+\begin{pmatrix}
+a_{1,1} &a_{1,2} &\cdots &a_{1,n} \\
+a_{2,1} &a_{2,2} &\cdots &a_{2,n} \\
+\vdots  &\vdots  &\ddots &\vdots  \\
+a_{m,1} &a_{m,2} &\cdots &a_{m,n} \\
+\end{pmatrix} 
 \end{equation}
-$\vec x$ 是 $n$ 维列矢量，$\vec x=[x_1,x_2,\dots,x_m,\dots,x_n]\Tr$．
-$\vec y$ 是 $m$ 维列矢量，称为“常数列”．$\vec y=[y_1,y_2,\dots,y_m]\Tr$．
-$\mat A$ 和 $\vec y$ 是已知的，而 $\vec x$ 是未知的， 即方程组待求的解\footnote{以下仅讨论 $m \les n$ 的情况}．
+$\vec x$ 是 $n$ 维列矢量 $(x_1,x_2,\dots,x_m,\dots,x_n)\Tr$．
+$\vec y$ 是 $m$ 维列矢量 $(y_1,y_2,\dots,y_m)\Tr$，称为\bb{常数列}． $\mat A$ 和 $\vec y$ 通常看做已知的，而 $\vec x$ 看做未知的， 即方程组待求的\bb{解}． 下面我们介绍一种解线性方程组的简单的方法， \bb{高斯消元法（Gauss elimination）}． 先来看一个简单的例子．
 
-\subsection{最简形式}
-若系数矩阵 $\mat A$ 是一个阶梯形的矩阵，即线性方程组有如下形式：
+\begin{exam}{}\label{GAUSS_ex1}
+我们先回顾一下初中阶段如何解线性方程组， 例如
 \begin{equation}\label{GAUSS_eq4}
-{
-	\left[ \begin{matrix}
-	a_{1,1} &a_{1,2} &a_{1,3} &\cdots &a_{1,n} \\
-	        &a_{2,2} &a_{2,3} &\cdots &a_{2,n} \\
-	        &        &a_{3,3} &\cdots &a_{3,n} \\
-             &        &        &\ddots &\vdots  \\
-	        &        &        &       &a_{n,n} \\
-	\end{matrix} 
-	\right ]}
-{
-	\left[ \begin{matrix}
-	x_1 \\
-	x_2 \\
-     x_3 \\
-     \vdots \\
-	x_n \\
-	\end{matrix} 
-	\right ]}=
-{
-	\left[ \begin{matrix}
-	y_1 \\
-	y_2 \\
-     y_3 \\
-     \vdots \\
-	y_n \\
-	\end{matrix} 
-	\right ]}
-\end{equation}
-当 $a_{k,k}\neq 0 \quad (k=1,2,\dots,n)$ 时，显然方程组具有唯一的一组解
-\begin{equation}\label{GAUSS_eq5}
 \leftgroup{
-x_n &=\frac{y_n}{a_{n,n}} \\
-x_k &=\frac{1}{a_{k,k}} \qty(y_k - \sum_{i=k+1}^n a_{k,i} x_i ) \quad (k=1,2,\dots,n-1) }\\
-\end{equation}
-特别的，若 $a_{k,k} = 1 \quad (k=1,2,\dots,n)$，则称之为线性方程组的\bb{最简形式}．
-
-那么，对于\autoref{GAUSS_eq1} 这样一般形式的线性方程组，能否转化为\autoref{GAUSS_eq4} 这样的形式，进而求解呢？回答是肯定的． % 未完成：GAUSS_eq4 是三角形矩阵，未必所有方程组都能化为三角形，而是梯形。
-
-\subsection{Gauss消元法}
-
-\subsubsection{增广矩阵}
-线性方程组的系数矩阵 $\mat A$ 和常数列 $\vec y$ 可以包含在一个矩阵 $\mat B$ 中，称这个矩阵为“增广矩阵”．
+&2x + 3y = 21\\
+&5x - 2y = 5
+}\end{equation}
+一种方法是将第一条等式两边除以 2 再移项得到
 \begin{equation}
-\mat B=[\mat A ,\vec y]={
-	\left[ \begin{array}{cccc|c}
+x = - \frac32 y + \frac{21}{2}
+\end{equation}
+再代入第二个条式消去 $x$ 得
+\begin{equation}
+-\frac{19}{2} y + \frac{105}{2} = 5
+\end{equation}
+解得 $y = 5$， 再代入第一条等式得 $x = 3$．
+
+另一种更方便的解法是， 将第一条等式（两边）乘以 $-5/2$， 加到第二条上消去 $x$ 得
+\begin{equation}
+-\frac{19}{2} y = -\frac{95}{2}
+\end{equation}
+解得 $y = 5$， 再代入第一条等式得 $x = 3$． 为什么可以这么做？ 因为如果两条等式都成立， 将它们两边相加得到的新的等式同样成立． 下面我们来详细讲解第二种方法．
+
+为了书写简单， 我们可以用所谓的\bb{增广矩阵（augmented matrix）}来表示矩阵和常数列， 即把\autoref{GAUSS_eq4} 记为
+\begin{equation}
+\qty( \begin{array}{cc|c}
+	2 & 3 & 21 \\
+	5 & -2 & 5
+	\end{array} 
+)\end{equation}
+同样把第一行乘以 $-5/2$， 加到第二行上得
+\begin{equation}
+\qty( \begin{array}{cc|c}
+	2 & 3 & 21 \\
+	0 & -19/2 & -95/2
+	\end{array} 
+)\end{equation}
+
+如果这个方程有多个未知数， 且方程的数量和未知数相同（系数矩阵为方阵）， 我们可以用第一行消去所有 $i > 1$ 行的第一个系数， 再用第二行消去所有 $i > 2$ 的第二个系数， 以此类推， 最后得到一个三角形系数矩阵． 三角形系数矩阵的最后一行只有最后一个变量的系数不为零， 我们求出这个变量后， 再代入倒数第二行（只有两个未知量）求出另一个未知量， 最后就可以得到所有未知量的值．
+
+注意这只是一种理想的情况， 如果在处理第 $i$ 行的时候发现 $a_{i,i} = 0$， 则该步骤无法进行下去． 为此我们需要稍微复杂一些的方法．
+\end{exam}
+
+\subsection{一般步骤}
+
+我们将\autoref{GAUSS_eq1} 形式的方程组用增广矩阵表示为
+\begin{equation}
+\mat B=(\mat A ,\vec y)={
+	\qty( \begin{array}{cccc|c}
 	a_{1,1} &a_{1,2} &\cdots &a_{1,n} &y_1 \\
 	a_{2,1} &a_{2,2} &\cdots &a_{2,n} &y_2 \\
 	\vdots  &\vdots  &\ddots &\vdots  &\vdots \\
 	a_{m,1} &a_{m,2} &\cdots &a_{m,n} &y_m \\
 	\end{array} 
-	\right ]}
+	)}
 \end{equation}
 
-\subsubsection{矩阵初等行变换}
-定义以下三种矩阵变换为“初等行变换”：
+定义以下三种矩阵（或增广矩阵）变换为\bb{初等行变换}． 使用\autoref{GAUSS_ex1} 中的类似分析可知， 初等行变换不改变方程组的解．
+\begin{enumerate}
+\item 对调矩阵中的第 $i$ 行与第 $j$ 行， 记作 $\vec r_i \leftrightarrow \vec r_j$
 
-（a）对调矩阵中的任意两行（记作 $\vec r_i \leftrightarrow \vec r_j$，$i$，$j$ 表示行号）；
+\item 将矩阵第 $i$ 行的所有元素乘以一个非零数 $k$， 记作 $\vec r_i \times k$
 
-（b）将矩阵中任意一行的所有元素乘以一个非零数 $k$（记作 $\vec r_i \times k$）；
+\item 把矩阵第 $i$ 行的所有元素乘以数 $k$ 后加到第 $j$ 行上， 记作 $\vec r_i + \vec r_j \times k$
+\end{enumerate}
 
-（c）把矩阵中某一行所有元素乘以数 $k$ 后加到另一行的对应元素上（记作 $\vec r_i + \vec r_j \times k$）．
+任何非零矩阵（或增广矩阵）经过有限次初等行变换后总可以转化为\bb{梯形矩阵（echelon form）}． 我们把梯形矩阵定义为满足该条件的矩阵： 第 $i$ 行的第一个非零系数 $a_{i,q(i)}$ 的列标 $q(i)$ 总是大于第 $i-1$ 行的第一个非零元 $a_{i-1, q(i-1)}$ 的列标 $q(i-1)$． 与\autoref{GAUSS_ex1} 不同的是， 当系数矩阵经过行变换化为梯形矩阵后， 最后若干行有可能都为零， 最后一行也未必只有一个非零元．
 
-对增广矩阵进行有限次初等行变换，不改变方程组的解，这在直观上是容易理解的．
+增广矩阵 $\mat B$ 化为梯形矩阵的一般步骤如下：
+\begin{itemize}
+\item 先处理第 $i = 1$ 行， 如果 $a_{1,1} = 0$ 但某 $i' > 1$ 的行有 $a_{i', 1} \ne 0$， 就先进行行变换\footnote{如果 $a_{1,1} \ne 0$ 则不需要} $\vec r_i \leftrightarrow \vec r_{i'}$． 如果第一列全为 0， 我们就无视第  1 列， 从第 2 列重新开始， 以此类推． 记此时第 1 行第一个不为 0 的列标为 $q(1)$． 接下来做若干次行变换 $\vec r_{i'} + \vec r_1 \times k$ 使第 $i' > 1$ 行的 $a_{i', p(1)}$ 都为 0．
 
-\subsubsection{消元法的一般步骤}
-任何非零矩阵，经过有限次初等行变换，总可以转化为阶梯形矩阵．
+\item 接下来依次处理第 $i = 2\dots m-1$ 行． 要处理第 $i$ 行， 令 $q(i) = q(i-1)+1$， 如果此时矩阵元 $a_{i, q(i)} = 0$， 但某 $i' > i$ 的行有 $a_{i', q(i)} \ne 0$， 就进行行变换 $\vec r_i \leftrightarrow \vec r_{i'}$． 若不存在这样的 $i'$， 我们就改令 $q(i) = q(i-1) + 2$ 并重新开始该步骤， 以此类推． 接下来做若干次行变换 $\vec r_{i'} + \vec r_i \times k$ 使第 $i' > i$ 行的 $a_{i', p(i)}$ 都为 0．
+\end{itemize}
+完成后， 系数矩阵就会变为梯形矩阵．
 
-增广矩阵 $\mat B$化为阶梯形矩阵的一般步骤是：
+% 未完成：需要一个例子， 最好能包含上面的所有情况，但第一列不全为零
+% 未完成： 以下还没有修改
 
-第1步，将第1行所有元素乘以 $p_{1,i}$，加到第二至最后一行，使矩阵 $\mat B$ 的第一列元素除第一行外以全为零；
-\begin{equation}\begin{aligned}
-\vec r_i^{(1)} &= \vec r_i + \vec r_1 \times p_{1,i} \quad (i=2,3,\dots,m) \\
-p_{1,i} &= - \frac{a_{i,1}}{a_{1,1}} \\
-\end{aligned}\end{equation}
-得到新的增广矩阵 $\mat B^{(1)}$
-\begin{equation}
-\mat B^{(1)}={
-	\left[ \begin{array}{cccc|c}
-	a_{1,1} &a_{1,2}       &\cdots &a_{1,n}       &y_1 \\
-	0       &a_{2,2}^{(1)} &\cdots &a_{2,n}^{(1)} &y_2^{(1)} \\
-	\vdots  &\vdots        &\ddots &\vdots        &\vdots \\
-	0       &a_{m,2}^{(1)} &\cdots &a_{m,n}^{(1)} &y_m^{(1)} \\
-	\end{array} 
-	\right ]}
-\end{equation}
-
-第 $k$ 步，将第 $k$ 行所有元素乘以 $p_{k,i}$，加到第 $k+1$ 至最后一行，使矩阵 $\mat B$ 的第 $k$ 列元素除第1行至第 $k$ 行以外全为零；
-\begin{equation}\begin{aligned}
-\vec r_i^{(k)} &= \vec r_i^{(k-1)} + \vec r_k^{(k-1)} \times p_{k,i} \quad (i=k+1,k+2,\dots,m) \\
-p_{k,i} &= - \frac{a_{i,k}^{(k-1)}}{a_{k,k}^{(k-1)}} \\
-\end{aligned}\end{equation}
-得到新的增广矩阵 $\mat B^{(k)}$
-\begin{equation}
-\mat B^{(k)}={
-	\left[ \begin{array}{ccccccc|c}
-	a_{1,1} &a_{1,2}       &\cdots &a_{1,k}         &a_{1,k+1}         &\cdots &a_{1,n}         &y_1 \\
-	0       &a_{2,2}^{(1)} &\cdots &a_{2,k}^{(1)}   &a_{2,k+1}^{(1)}   &\cdots &a_{2,n}^{(1)}   &y_2^{(1)} \\
-	\vdots  &\vdots        &\ddots &\vdots          &\vdots            &\ddots &\vdots          &\vdots \\
-	0       &0             &\cdots &a_{k,k}^{(k-1)} &a_{k,k+1}^{(k-1)} &\cdots &a_{k,n}^{(k-1)} &y_k^{(k-1)} \\
-     0       &0             &\cdots &0               &a_{k+1,k+1}^{(k)} &\cdots &a_{k+1,n}^{(k)} &y_{k+1}^{(k)} \\
-     \vdots  &\vdots        &\ddots &\vdots          &\vdots            &\ddots &\vdots          &\vdots \\
-     0       &0             &\cdots &0               &a_{m,k+1}^{(k)}   &\cdots &a_{m,n}^{(k)}   &y_m^{(k)} \\
-	\end{array} 
-	\right ]}
-\end{equation}
-
-至多进行 $m-1$ 步初等行变换的迭代，最终将增广矩阵化为阶梯形．
-\begin{equation}
-\mat B^{(m-1)}={
-	\left[ \begin{array}{cccc|c}
-	a_{1,1} &a_{1,2}       &\cdots &a_{1,n}         &y_1 \\
-	0       &a_{2,2}^{(1)} &\cdots &a_{2,n}^{(1)}   &y_2^{(1)} \\
-	        &              &\ddots &\vdots          &\vdots \\
-	        &              &       &a_{m,n}^{(m-1)} &y_m^{(m-1)} \\
-	\end{array} 
-	\right ]}
-\end{equation}
+\subsection{解的分类}
+% 未完成：如果有无穷多种解， 该如何表示它们呢？ 什么是特解，什么是通解．
 
 观察最终简化的每个具体问题的增广矩阵，很容易判断线性方程组解的情况（无解、有唯一解或有无穷多组解）．若矩阵 $\mat B^{(m-1)}$ 满足 $m=n$ 且 $a_{k,k}\neq 0 \quad (k=1,2,\dots,n)$，则线性方程组 $\mat A \vec x = \vec y$ 有唯一解．利用\autoref{GAUSS_eq5} 就可以回代出这个解．
 
@@ -235,3 +192,46 @@ p_{k,i} = - \frac{a_{i,t}^{(k-1)}}{a_{k,t}^{(k-1)}}
 显然，本例中方程组无解．
 \end{exam}
 
+
+%%%%%%%%%%%%%
+
+
+若系数矩阵 $\mat A$ 是一个阶梯形的矩阵，即线性方程组有如下形式：
+\begin{equation}\label{GAUSS_eq17}
+{
+	\left[ \begin{matrix}
+	a_{1,1} &a_{1,2} &a_{1,3} &\cdots &a_{1,n} \\
+	        &a_{2,2} &a_{2,3} &\cdots &a_{2,n} \\
+	        &        &a_{3,3} &\cdots &a_{3,n} \\
+             &        &        &\ddots &\vdots  \\
+	        &        &        &       &a_{n,n} \\
+	\end{matrix} 
+	\right ]}
+{
+	\left[ \begin{matrix}
+	x_1 \\
+	x_2 \\
+     x_3 \\
+     \vdots \\
+	x_n \\
+	\end{matrix} 
+	\right ]}=
+{
+	\left[ \begin{matrix}
+	y_1 \\
+	y_2 \\
+     y_3 \\
+     \vdots \\
+	y_n \\
+	\end{matrix} 
+	\right ]}
+\end{equation}
+当 $a_{k,k}\neq 0 \quad (k=1,2,\dots,n)$ 时，显然方程组具有唯一的一组解
+\begin{equation}\label{GAUSS_eq5}
+\leftgroup{
+x_n &=\frac{y_n}{a_{n,n}} \\
+x_k &=\frac{1}{a_{k,k}} \qty(y_k - \sum_{i=k+1}^n a_{k,i} x_i ) \quad (k=1,2,\dots,n-1) }\\
+\end{equation}
+特别的，若 $a_{k,k} = 1 \quad (k=1,2,\dots,n)$，则称之为线性方程组的\bb{最简形式}．
+
+那么，对于\autoref{GAUSS_eq1} 这样一般形式的线性方程组，能否转化为\autoref{GAUSS_eq4} 这样的形式，进而求解呢？回答是肯定的． % 未完成：GAUSS_eq4 是三角形矩阵，未必所有方程组都能化为三角形，而是梯形．
