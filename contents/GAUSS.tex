@@ -65,7 +65,7 @@ x = - \frac32 y + \frac{21}{2}
 	\end{array} 
 )\end{equation}
 
-如果这个方程有多个未知数， 且方程的数量和未知数相同（系数矩阵为方阵）， 理想情况下我们可以用第一行消去所有 $i > 1$ 行的第一个系数， 再用第二行消去所有 $i > 2$ 的第二个系数， 以此类推， 最后得到一个三角形系数矩阵． 三角形系数矩阵的最后一行只有最后一个变量的系数不为零， 我们求出这个变量后， 再代入倒数第二行（只有两个未知量）求出另一个未知量， 最后就可以得到所有未知量的值．
+如果这个方程有多个未知数， 且方程的数量和未知数相同（系数矩阵为方阵）， 理想情况下我们可以用第一行消去所有 $i > 1$ 行的第一个系数， 再用第二行消去所有 $i > 2$ 的第二个系数， 以此类推， 最后得到一个三角形系数矩阵． 三角形系数矩阵的最后一行只有最后一个变量的系数不为零， 我们求出这个变量后， 再代入倒数第二行（只有两个未知量）求出另一个未知量， 最后就可以得到所有未知量的值． 这个过程叫做\bb{反向迭代（backward substitution）}。% 未完成：为什么例子这里的中文没有粗体啊
 
 注意这只是一种理想的情况， 如果在处理第 $i$ 行的时候发现 $a_{i,i} = 0$， 则该方法无法进行下去． 为此我们需要稍微复杂一些的方法， 也就是高斯消元法的一般步骤．
 \end{exam}
@@ -104,7 +104,7 @@ x = - \frac32 y + \frac{21}{2}
 完成后， 系数矩阵就会变为梯形矩阵．
 
 \begin{exam}{解线性方程组}\label{GAUSS_ex2}
-\begin{equation} % 11
+\begin{equation}
 \leftgroup{
 &x_1  &+ &x_2 &- &x_3 &+ &x_4&=\quad &3\\
 &2x_1 &+ &2x_2 &- &2x_3 &+ &x_4&=\quad &7\\
@@ -114,7 +114,7 @@ x = - \frac32 y + \frac{21}{2}
 解：
 
 将该方程组写成增广矩阵形式
-\begin{equation} % 12
+\begin{equation}
 \mat B={
 	\qty( \begin{array}{cccc|c}
 	1 &1 &-1 &1 &3 \\
@@ -125,7 +125,7 @@ x = - \frac32 y + \frac{21}{2}
 	)}
 \end{equation}
 开始消元
-\begin{equation} % 13
+\begin{equation}
 \begin{aligned}
 \vec r_2 - 2 &\vec r_1 \\
 \vec r_3 - 1 &\vec r_1 \\
@@ -143,7 +143,7 @@ x = - \frac32 y + \frac{21}{2}
 \end{equation}
 
 发现此时，矩阵第二列自第二行以下全为零，所以需要依次向下一列寻找不为零的元素．继续消元
-\begin{equation} % 14
+\begin{equation}
 \begin{aligned}
 \vec r_2 \leftrightarrow &\vec r_4 \\
 \vec r_3 - 1 &\vec r_2 \\
@@ -159,7 +159,7 @@ x = - \frac32 y + \frac{21}{2}
 	\end{array} 
 	)}
 \end{equation}
-\begin{equation} % 15
+\begin{equation}
 \vec r_4 - 0.5 \vec r_3
 \quad \Longrightarrow \quad
 \mat B={
@@ -171,75 +171,43 @@ x = - \frac32 y + \frac{21}{2}
 	\end{array} 
 	)}
 \end{equation}
-该方程组有无穷多组解
-\begin{equation} % 16
-\leftgroup{
-&x_1 &=\quad &5-x_2\\
-&x_3 &=\quad &1\\
-&x_4 &=\quad &-1}
-\qquad
-\begin{aligned}
-&x_2 := c \\
-&\Longrightarrow \\
-\end{aligned}
-\qquad
+我们按照上面的方法用第 3 行求 $x_4$， 代入第 2 行求得 $x_3$． 然而当我们想用第 1 行求 $x_1$ 的时候却出发现我们还没求出 $x_2$． 解决办法是， 我们令 $x_2 = c$ 且假设 $c$ 可以取任意值， 则解可以表示为
+\begin{equation}
 \leftgroup{
 &x_1 &=\quad &5-c\\
 &x_2 &=\quad &c \\
 &x_3 &=\quad &1\\
 &x_4 &=\quad &-1}
 \end{equation}
+或者写成矢量的形式
+\begin{equation}
+\vec x = c \pmat{-1\\ 1\\ 0\\ 0} + \pmat{5\\ 0\\ 1\\ -1}
+\end{equation}
+将该式代入方程组， 可以验证 $c$ 取任意值时方程组都成立．
+
+如果多个 $x_i$ 的值都未知， 我们就分别假设它们等于不同的任意常数即可．
 \end{exam}
 
-% 未完成： 以下还没有修改
-
 \subsection{解的分类}
-% 未完成：如果有无穷多种解， 该如何表示它们呢？ 什么是特解，什么是通解．
 
-观察最终简化的每个具体问题的增广矩阵，很容易判断线性方程组解的情况（无解、有唯一解或有无穷多组解）．若矩阵 $\mat B^{(m-1)}$ 满足 $m=n$ 且 $a_{k,k}\neq 0 \quad (k=1,2,\dots,n)$，则线性方程组 $\mat A \vec x = \vec y$ 有唯一解．利用\autoref{GAUSS_eq5} 就可以回代出这个解．
+当系数矩阵变为梯形矩阵后， 可以用以下步骤判断解的情况：% 未完成：这些步骤是我想的，有待查证
+\begin{enumerate}
+\item 若存在系数都为零的行 $i$， 但是对应的常数 $y_i$ 却不为零， 则方程组无解， 否则有解．
+\item 若系数矩阵可以化为三角矩阵（且系数矩阵第一列不全为零）， 则方程有唯一解， 否则有无穷多个解．
+\end{enumerate}
 
-
-
-%%%%%%%%%%%%%
-
-
-若系数矩阵 $\mat A$ 是一个阶梯形的矩阵，即线性方程组有如下形式：
-\begin{equation}\label{GAUSS_eq17}
-{
-	\left[ \begin{matrix}
-	a_{1,1} &a_{1,2} &a_{1,3} &\cdots &a_{1,n} \\
-	        &a_{2,2} &a_{2,3} &\cdots &a_{2,n} \\
-	        &        &a_{3,3} &\cdots &a_{3,n} \\
-             &        &        &\ddots &\vdots  \\
-	        &        &        &       &a_{n,n} \\
-	\end{matrix} 
-	\right ]}
-{
-	\left[ \begin{matrix}
-	x_1 \\
-	x_2 \\
-     x_3 \\
-     \vdots \\
-	x_n \\
-	\end{matrix} 
-	\right ]}=
-{
-	\left[ \begin{matrix}
-	y_1 \\
-	y_2 \\
-     y_3 \\
-     \vdots \\
-	y_n \\
-	\end{matrix} 
-	\right ]}
+\subsection{解的表示}
+按照\autoref{GAUSS_ex2} 中的方法， 如果方程有解， 我们总可以将解表示为一些常矢量的线性组合加上一个常矢量．
+\begin{equation}\label{GAUSS_eq18}
+\vec x = \sum_{i=1}^{N} c_i \vec x_i + \vec x_0
 \end{equation}
-当 $a_{k,k}\neq 0 \quad (k=1,2,\dots,n)$ 时，显然方程组具有唯一的一组解
-\begin{equation}\label{GAUSS_eq5}
-\leftgroup{
-x_n &=\frac{y_n}{a_{n,n}} \\
-x_k &=\frac{1}{a_{k,k}} \qty(y_k - \sum_{i=k+1}^n a_{k,i} x_i ) \quad (k=1,2,\dots,n-1) }\\
+其中 $c_i$ 是 $N$ 个任意常数（当方程有唯一解时 $N = 0$）， 无论这些常数取什么值， $\vec x$ 都是方程的解． 另一方面， 给出方程的任意一个解， 总能找到一些常数 $c_i$ 与之对应． \autoref{GAUSS_eq18} 叫做方程的\bb{通解}， 通解中的任意一个就做方程的\bb{特解}（例如上式中所有的 $\vec x_i$ 都是特解）．
+
+特殊地， 如果 $\vec y = \vec 0$ （粗体的 $\vec 0$ 表示零矢量， 即每个元都是 0），%未完成：这个符号应该在”几何矢量“中提到
+则方程组是\bb{齐次}的． 齐次方程一个显然的特解是 $\vec x = \vec 0$， 根据高斯消元法， 我们可知， 若齐次方程组存在无穷个解， 它们可以表示为
+\begin{equation}\label{GAUSS_eq19}
+\vec x = \sum_{i=1}^{N} c_i \vec x_i
 \end{equation}
-特别的，若 $a_{k,k} = 1 \quad (k=1,2,\dots,n)$，则称之为线性方程组的\bb{最简形式}．
+即 $\vec x0 = \vec 0$．
 
-那么，对于\autoref{GAUSS_eq1} 这样一般形式的线性方程组，能否转化为\autoref{GAUSS_eq4} 这样的形式，进而求解呢？回答是肯定的． % 未完成：GAUSS_eq4 是三角形矩阵，未必所有方程组都能化为三角形，而是梯形．
-
+所以， 对于任意有解的\bb{非齐次}方程组 $\mat A \vec x = \vec y$， 我们可以将通解（\autoref{GAUSS_eq18}） 从形式上理解为齐次方程组 （$\mat A \vec x = \vec 0$） 的通解与非齐次方程组的任意一个特解相加．
