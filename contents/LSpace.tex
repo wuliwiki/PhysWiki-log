@@ -1,19 +1,18 @@
 % 矢量空间
-% 到底应不应该讲矢量空间呢？ 真的应该让他们知道坐标和矢量本身不是一回事．
-% 但是，力学分册涉及到的无非就是旋转矩阵，傅里叶级数（说不定都不用）
-% 所以，按照数学从简的原则，就不要了！ 估计量子力学里面才一定要讲．
 
-\bb{矢量空间}（向量空间，线性空间）是一种特殊的\bb{集合}，该集合内的元素都称为\bb{矢量}．这里的矢量是广义的矢量，我们熟悉的几何矢量只是其中的一种．
+\pentry{几何矢量\upref{GVec}}
+
+\bb{矢量空间}（也叫\bb{向量空间}，\bb{线性空间}）是一类满足特定条件的\bb{集合}， 集合内的元素都称为\bb{矢量}．这里的“矢量” 是一个广义的概念， 不一定具有长度和方向。 高中所学的几何矢量是这些广义矢量的一个特例。
 
 \subsection{定义}
-矢量空间内有矢量的\bb{加法}（用“+”表示）和\bb{数乘}（省略乘号）两种的\bb{闭合运算}，可作用于集合内任意矢量，结果也是矢量．“闭合”是指\bb{运算得到的矢量也属于同一个矢量空间}．两种运算的性质如下（ $a,b$ 为任意两个实数，$\vec u,\vec v,\vec w$ 为空间中任意三个矢量）
+任意矢量空间内必须定义矢量的\bb{加法}（用“+”表示）和\bb{数乘} 两种运算，可作用于空间中（集合内）的任意矢量， 得到的结果也必须在同一空间中． 我们把这样的运算叫做\bb{闭合}运算。 两种运算的必须满足如下性质（ $a,b$ 为任意两个实数，$\vec u,\vec v,\vec w$ 为空间中任意三个矢量）
 \begin{enumerate}
 \item 加法运算
 \begin{enumerate}
 \item 满足加法交换律 $\vec u + \vec v = \vec v + \vec u$．
 \item 满足加法结合律 $(\vec u + \vec v) + \vec w = \vec u + (\vec v + \vec w)$．
 \item 存在零矢量，使得 $\vec v + \vec 0 = \vec v$．
-\item 存在逆元素 $\tilde{\vec v}$，使得 $\vec v + \tilde{\vec v} = \vec 0$．
+\item 空间中任何矢量 $\vec v$ 存在逆矢量 $-\vec v$，使得 $\vec v + (-\vec v) = \vec 0$．
 \end{enumerate}
 
 \item 数乘运算
@@ -24,34 +23,57 @@
 \end{enumerate}
 \end{enumerate}
 
-\subsection{例1}
-所有不大于 $n$ 阶的多项式 $c_n x^n + c_{n-1} x^{n-1} + \dots + c_1 x + c_0$ 可以构成一个矢量空间．加法定义为代数加法运算，数乘定义为“多项式乘以常数”运算． 
+\begin{exam}{多项式}
+所有不大于 $n$ 阶的多项式 $c_n x^n + c_{n-1} x^{n-1} + \dots + c_1 x + c_0$ 可以构成一个矢量空间．定义矢量加法为两多项式相加， 满足
+\begin{itemize}
+\item 闭合性：两个不大于 $n$ 阶的多项式相加仍然为不大于 $n$ 阶的多项式。
+\item 交换律：多项式相加显然满足交换律。
+\item 零矢量：常数 0 可以看做 0 阶多项式， 任何多项式与之相加都不改变。
+\item 逆矢量：把任意多项式乘以 $-1$ 就得到它的逆矢量， 任意多项式与其逆矢量相加等于 0。
+\end{itemize}
+定义矢量数乘为多项式乘以常数， 显然也满足数乘的各项要求， 不再赘述。
+\end{exam}
 
-\subsection{例2}
-三维空间中所有具有方向和长度的量的几何矢量成一个矢量空间\footnote{注意这个定义中并没有涉及任何坐标系的选取}（只有起点不同的矢量视为同一个矢量）．加法用矢量的三角形法则或平行四边形法则定义，任意几何矢量的数乘就是把该矢量的长度乘以一个常数，方向保持不变．证明略．
+\begin{exer}{几何矢量}
+证明 1,2,3 维空间中的所有几何矢量各自构成一个矢量空间。
+\end{exer}
+
+我们可以把“几何矢量\upref{GVec}” 中的所有不涉及\bb{内积}（点乘）的概念都拓展到矢量空间中。
+
+\subsection{线性相关和线性无关}
+如果存在至少一组不全为零系数 $c_i$ 使几个矢量的线性组合等于零， 这些矢量就被称为\bb{线性相关}的
+\begin{equation}
+\sum_i^N c_i \vec v_i = \vec 0
+\end{equation}
+对于任何一个不为零的项 $j$， 矢量 $\vec v_j$ 都可以表示为其他矢量的线性组合． 只需把上式除以 $c_j$ 即可
+\begin{equation}
+\vec v_j = \sum_{i \ne j}\frac{c_i}{c_j} \vec v_i
+\end{equation}
+如果不存在这样的系数， 这些矢量就是\bb{线性无关}的． 
+
+\subsection{基底和维数}
+如果一个矢量空间中存在 $N$ 个线性无关的非零矢量 $\vec \beta_1, \vec \beta_2 \dots \vec \beta_N$（记为 $\{\vec \beta_i\}$），使得空间中的任意矢量都可以用它们的线性组合表示（系数可以为零），那么 $\{\vec \beta_i\}$ 就是这个空间的一组\bb{基底}， 且这个空间是一个 $\boldsymbol{N}$ \bb{维空间}．
+
+可以证明， $N$ 维矢量空间中任意 $N$ 个线性无关的矢量都可以构成一组基底， 且空间中的任意矢量都能唯一地在基底上展开（见\autoref{GVec_eq5}\upref{GVec}）
+\begin{equation}
+\vec v = \sum_{i=1}^N c_i \vec \beta_i
+\end{equation}
+
+有了坐标的概念， 矢量的加法和数乘运算就都可以对应到坐标的运算。 对于 $N$ 维矢量空间（类比\autoref{GVec_eq8}\upref{GVec} 和 \autoref{GVec_eq9}\upref{GVec}）。
+\begin{equation}
+\vec u + \vec v = \pmat{u_1\\u_2\\ \vdots\\u_N}_{\{\vec\beta_i\}} + \quad \pmat{v_1\\v_2\\ \vdots \\v_N}_{\{\vec\beta_i\}} = \quad \pmat{u_1 + v_1\\u_2 + v_2\\ \vdots \\ u_N + v_N}_{\{\vec\beta_i\}}
+\end{equation}
+\begin{equation}
+\lambda \vec v = \lambda\pmat{v_1\\v_2\\ \vdots \\v_N}_{\{\vec\beta_i\}} = \pmat{\lambda v_1 \\ \lambda v_2\\ \vdots \\ \lambda v_N}_{\{\vec\beta_i\}}
+\end{equation}
+
+\begin{exer}{复数行矢量}
+我们把 $N$ 个复数 $c_1, \dots, c_N$ 按顺序排成一行（或一列）， 叫做\bb{行矢量}（或\bb{列矢量}）。 给它们定义恰当的加法和数乘运算， 使所有行矢量（或列矢量）可以构成一个 $N$ 维矢量空间， 并给出该空间的一组基底。
+
+注意由于我们使用了复数， 即使 $N \les 3$ 时我们也无法将这些代数矢量与几何矢量对应起来。
+\end{exer}
 
 \subsection{点乘}
 原则上点乘运算不是矢量空间所必须的，但物理中的矢量空间几乎都定义了点乘运算．不同的空间有不同的定义两个矢量点乘
+% 未完成
 
-\subsection{证明}
-两个不大于 $n$ 阶的多项式相加还是不大于 $n$ 阶的多项式（加法闭合性），多项式相加满足交换律和结合律（1a，1b），零向量取 0 阶多项式 0，任何多项式加 0 不会改变（1c），每个多项式取相反数就可得到其逆矢量，且与原多项式相加为零（1d）．多项式的数乘不改变阶数，仍在集合内（数乘的闭合性），显然满足两种乘法分配律和乘法结合律（性质2a，2b，2c）．点乘运算按照点乘的几何定义%未完成
-矢量空间的证明略．
-
-\subsection{推论}
-矢量空间中必须包含无穷多的矢量，否则不可能在数乘
-由于加法运算和数乘运算都具有闭合性，线性组合 $c_1\vec v_1+\ldots +\c_n\vec v_n$ 也具有闭合性．
-
-\subsection{线性相关和线性无关}
-
-如果矢量空间内的一个矢量 能表示成空间内其他几个矢量 $\vec v_1, \vec v_2 \dots \vec v_n$ 的线性组合，
-\begin{equation}
-\vec u = c_1 \vec v_1 + c_2 \vec v_2 + \ldots + c_n \vec v_n \qquad (c_i \ne 0)
-\end{equation} 
-就说 $\vec u$ 与 $\vec v_1, \vec v_2 \dots \vec v_n$ 线性相关．但事实上，上式中 $\vec u$ 并不特殊，因为只要上式成立， $\vec v_i$ 中的任何一个也都能表示成其他几个矢量的线性组合．所以线性相关的概念可以变为： 对 $\vec v_1, \vec v_2 \dots \vec v_n$， 如果能找到不为零的系数 $c_i$使
-\begin{equation}
-c_1 \vec v_1 + c_2 \vec v_2+ \ldots + c_n \vec v_n = \vec 0
-\end{equation} 
-那么这 $\vec v_1, \vec v_2 \dots \vec v_n$ 线性相关．如果不存在非零的 $c_1, c_2 \dots c_n$，那么 $\vec v_1, \vec v_2 \dots \vec v_n$ 线性无关，即任何一个 $\vec v_i$ 都不能用其他几个矢量的线性组合表示．
-
-\subsection{基底和维数}
-如果一个矢量空间中存在 $N$ 个线性无关的非零矢量 $\vec x_1, \vec x_2 \dots \vec x_N$，使得空间中的任何矢量都可以用 $\vec x_1, \vec x_2 \dots \vec x_N$ 的线性组合表示（系数可以为零），那么 $\vec x_1, \vec x_2 \dots \vec x_N$ 就是这个空间的一组基底，且这个空间是一个 $\mathbf{N}$ \bb{维空间}．这个定义并没有歧义，因为可以证明，一个空间只要存在一组基底是 $N$ 个线性无关的矢量，那么该空间的任何基底都只能是 $N$ 个线性无关的矢量（证明略）．
