@@ -4,24 +4,24 @@
 
 平面旋转变换\upref{Rot2DT}属于线性变换，可以用矩阵 $\mat R_2$ 表示．虽然我们可以直接把变换写成矩阵乘以列矢量的形式，但这里我们用另一种方法推导一次， 能更好地帮助理解和记忆．
 
-已知单位矢量 $\uvec x, \uvec y$ 逆时针旋转 $\theta$ 为
+已知单位矢量 $\uvec x = (1, 0)\Tr, \uvec y = (0, 1)\Tr$ 逆时针旋转 $\theta$ 为
 \begin{equation}
 \mat R_2\pmat{1\\0} = \pmat{\cos \theta \\ \sin \theta}
 \qquad
 \mat R_2\pmat{0\\1} = \pmat{-\sin\theta \\ \cos\theta}
 \end{equation}
-而任何矢量 $\pmat{x_1\\x_2}$ 都可以表示成 $\uvec x$ 和 $\uvec y$ 的线性组合 $x_1\pmat{1\\0} + x_2\pmat{0\\1}$， 所以
+要求任意矢量 $\vec v = (v_1, v_2)\Tr$ 的旋转矩阵， 可以将 $\vec v$ 表示成 $\uvec x$ 和 $\uvec y$ 的线性组合 $\vec v = v_1\uvec x + v_2\uvec y$． 由\autoref{Mat_eq17}\upref{Mat}， 该线性组合的旋转变换等于 $\uvec x, \uvec y$ 分别做旋转变换再做同样的线性组合， 即
 \begin{equation}
 \ali{
-\mat R_2 \qty[x_1 \pmat{1\\0} + x_2 \pmat{0\\1} ] 
-&= x_1 \mat R_2\pmat{1\\0} + x_2 \mat R_2\pmat{0\\1}\\
-&= x_1\pmat{\cos \theta \\ \sin \theta} 
-  + x_2 \pmat{-\sin\theta \\ \cos\theta} \\
+\mat R_2 \qty(v_1 \uvec x + v_2 \uvec y)
+&= v_1 \mat R_2\uvec x + v_2 \mat R_2\uvec y\\
+&= v_1\pmat{\cos \theta \\ \sin \theta} 
+  + v_2 \pmat{-\sin\theta \\ \cos\theta} \\
 &= \pmat{\cos \theta & - \sin \theta \\ \sin \theta & \cos \theta }
-\pmat{x_1 \\x_2}
+\pmat{v_1 \\v_2}
 }\end{equation}
 所以旋转矩阵为
-\begin{equation}
+\begin{equation}\label{Rot2D_eq3}
 \mat R_2 = \begin{pmatrix}
 \cos\theta & - \sin\theta\\
 \sin\theta &\cos\theta
@@ -29,9 +29,22 @@
 \end{equation}
 这与平面旋转变换\upref{Rot2DT}得出的结果一致．
 
-\subsection{主动和被动理解}
-% 未完成
+把这个推导推广到一般情况， 就是如果已知每个基底 $\vec \beta_i$ 的线性变换（记变换矩阵为 $\mat A$）结果为 $\vec \alpha_i = \mat A \vec \beta_i$， 那么变换矩阵的第 $i$ 列就是第 $i$ 个列矢量 $\vec \alpha_i$．
 
+\subsection{主动和被动理解}
+我们将任意矢量 $\vec v$ 的旋转变换记为 $\vec u = \mat R_2 \vec v$， 我们把 $\vec v$ 看做是二维空间中某矢量关于基底 $\uvec x, \uvec y$ 的坐标． 若我们把 $\vec u$ 看做是另一矢量关于 $\uvec x, \uvec y$ 的坐标， 那么 $\uvec u$ 就等于 $\uvec v$ 逆时针旋转 $\theta$ 角． 旋转矩阵的这种理解被称为\bb{主动}的．
+
+另一种可能的理解是， $\vec u$ 和 $\vec v$ 代表二维空间中的同一矢量关于不同基底的展开． 我们把 $\vec u$ 使用的基底记为 $\uvec u_1, \uvec u_2$， $\vec v$ 使用的基底记为 $\uvec v_1, \uvec v_2$． 我们有
+\begin{equation}
+u_1 \uvec u_1 + u_2 \uvec u_2 = v_1 \uvec v_1 + v_2 \uvec v_2
+\end{equation}
+将 $\mat R_2$ 的矩阵元记为 $R_{ij}$， 不证明两组基底之间的关系为
+\begin{equation}
+\leftgroup{
+\uvec v_1 = R_{11} \uvec u_1 + R_{21} \uvec u_2 \\
+\uvec v_2 = R_{12} \uvec u_1 + R_{22} \uvec u_2
+}\end{equation}
+将矩阵元代入可知， 基底 $\uvec u_1, \uvec u_2$ 分别是基底 $\uvec v_1, \uvec v_2$ 顺时针旋转 $\theta$ 角所得． 我们把这种理解叫做\bb{被动}的， 即旋转矩阵表示同一个矢量的\bb{基底变换}．
 
 \subsection{逆矩阵}
 我们既可以使用平面旋转变换\upref{Rot2DT}中求逆变换的方法把 $\theta$ 变为 $-\theta$ 再化简求出 $\mat R_2$ 的逆矩阵，也可以通过解方程求逆矩阵（\autoref{Mat_eq25}）． 但最方便的是，由于 $\mat R_2$ 是一个单位正交阵% 链接未完成： \upref{UniMat}？
