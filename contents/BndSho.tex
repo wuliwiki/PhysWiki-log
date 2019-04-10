@@ -7,6 +7,8 @@ TISE 化为一阶微分方程组用于 ODE 解算器（如 Matlab 的 ode45）
 \psi'(x) &= v(x)\\
 v'(x) &= 2m[V(x) - E]\psi(x)
 }\end{equation}
+
+\subsection{初始条件}
 若某个小区间 $V(x)$ 看做常数， 解为
 \begin{equation}
 \psi(x) = \leftgroup{
@@ -18,8 +20,6 @@ v'(x) &= 2m[V(x) - E]\psi(x)
 k = \sqrt{2m(E - V)} \qquad
 \kappa = \sqrt{2m(V - E)}
 \end{equation}
-
-\subsection{初始条件}
 所以 ODE  初始条件选择
 \begin{equation}
 (\psi(x_0), \psi'(x_0)) = \leftgroup{
@@ -39,7 +39,7 @@ k = \sqrt{2m(E - V)} \qquad
 \end{equation}
 用多区间二分法即可得到定态能量．
 
-但是这么做有两个缺点， 一是 $\psi(x_M)$ 为零或很小的时候， err 有可能不稳定， 二是用多区间二分法解 $\text{err}(E) = 0$ 有可能出现不收敛的解， 因为该函数存在断点（想象 $\sin(k x_M)$ 的 log derivative 随 k 变化的情况）．
+但是这么做有两个缺点， 一是 $\psi(x_M)$ 为零或很小的时候， err 有可能不稳定， 二是用多区间二分法解 $\text{err}(E) = 0$ 有可能出现不收敛的解， 因为该函数存在断点（想象 $\sin(k x_M)$ 的 log derivative 随 $k$ 变化的情况）．
 
 为了解决这个问题， 我们可以用“瞬时相位” 来构建误差函数（即 $\psi(x) = \cos(kx)$ 中的 $kx$， 用 $\psi, \psi'$ 来表示）
 \begin{equation}
@@ -51,3 +51,10 @@ k = \sqrt{2m(E - V)} \qquad
 构建误差函数 $\text{err}(\theta)$ 满足一些条件： 1. $\theta = N\pi$ 为零点， 2. 零点两侧异号， 3. 函数连续， 4.周期为 $2\pi$． 一个显然的误差函数是满足这些条件的三角波．
 
 现在再用多区间二分法就可以解出所有正确的束缚态能量了．
+
+\subsection{一个想法}
+突然想到在 $E > V(x)$ 的区间， 似乎可以直接用积分得到相位变化（这让我想到 WKB 近似， 二者有什么联系？）
+\begin{equation}
+\Delta \theta = \int_a^b k(x) \dd{x}
+\end{equation}
+而其他区间（指数函数）则不能这么做． 考虑到解定态能量只需要 match 相位， 而积分比 ODE 要便宜得多， 这种方法应该是有前途的． 如果在 $E < V(x)$ 区间也能这么做就好了．

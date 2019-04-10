@@ -2,7 +2,11 @@
 
 \pentry{绕轴旋转矩阵\upref{RotA}}
 
-我们可以用四元数 $[s, \vec v]$ 来表示绕轴旋转矩阵， 其中 $s = \cos(\theta/2)$， 令 $v = \abs{\vec v} = \sin(\theta/2)\uvec A$， 则绕轴旋转矩阵可以表示为
+我们可以用四元数 $\vec q = [s, \vec v]$ 来表示绕轴旋转矩阵， 其中
+\begin{equation}
+s = \cos(\theta/2) \qquad v = \abs{\vec v} = \sin(\theta/2)\uvec A
+\end{equation}
+则绕轴旋转矩阵可以表示为
 \begin{equation}
 \mat R_\theta =
 \begin{pmatrix}
@@ -11,3 +15,27 @@
 2v_x v_z - 2s v_y & 2v_y v_z + 2s v_x & 1 - 2v_x^2 - 2v_y^2
 \end{pmatrix}
 \end{equation}
+
+四元数的乘法运算可以表示两个旋转矩阵相乘
+\begin{equation}
+[s_1, \vec v_1] [s_2, \vec v_2] = [s_1 s_2 - \vec v_1 \vdot \vec v_2, s_1 \vec v_2 + s_2 \vec v_1 + \vec v_1 \cross \vec v_2]
+\end{equation}
+% 推导未完成
+
+若从坐标系 B 到坐标系 A 的基底变换矩阵为 $\mat R$， 当 B 绕原点以角速度 $\vec \omega$ 旋转时有
+\begin{equation}
+\dv{\mat R}{t} = \mat \Omega \mat R
+\end{equation}
+其中 $\mat\Omega$ 乘以任意位置矢量 $\vec r$ 等于 $\vec \omega \cross \vec r$
+\begin{equation}
+\mat \Omega = \pmat{
+0 & -\omega_z & \omega_y\\
+\omega_z & 0 & -\omega_x\\
+-\omega_y & \omega_x & 0
+}\end{equation}
+若旋转矩阵 $\mat R$ 对应的四元数为 $\vec q$， 则
+\begin{equation}
+\dot {\vec q}(t) = \frac12 [0, \vec \omega(t)] \vec q(t)
+\end{equation}
+
+% 推导大概就是旋转微小角度然后取极限
