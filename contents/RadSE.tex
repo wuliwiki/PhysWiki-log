@@ -1,33 +1,55 @@
-%球坐标和柱坐标中的径向方程
+%球坐标和柱坐标中的薛定谔方程
+
+\pentry{球坐标中的拉普拉斯方程\upref{SphLap}}
 
 \subsection{球坐标}
 
-在球坐标中， 我们可以把径向波函数乘以 $r$  定义为定义 Scaled Wave Function 已获得更简单的径向微分方程
+使用球坐标的拉普拉斯算子\autoref{SphNab_eq4} 可以将单粒子的哈密顿算符表示为
 \begin{equation}
-u(r) = rR(r)
+H = -\frac{\hbar^2}{2m} \laplacian + V(\vec r) =  K_r + \frac{L^2}{2mr^2} + V(\vec r)
 \end{equation}
-哈密顿算符为
+其中径向动量算符为
 \begin{equation}
-H = K_r + \frac{L^2}{2mr^2} + V
+K_r =-\frac{\hbar^2}{2m} \laplacian_r =  - \frac{\hbar^2}{2m} \qty(\pdv[2]{r} + \frac2r \pdv{r}) = -\frac{\hbar^2}{2m}\frac{1}{r^2} \dv{r} \qty(r^2\pdv{r})
 \end{equation}
-其中径向动能为
+角动量平方算符为%未完成： 在 wikipedia 上， \vec L 也是有极坐标的表达式的． 研究一下． https://en.wikipedia.org/wiki/Angular_momentum_operator
+\begin{equation}
+L^2 = -\hbar^2 r^2 \laplacian_\Omega = -\hbar^2 \qty[ \frac{1}{\sin\theta} \pdv{\theta} \qty(\sin \theta \pdv{u}{\theta}) + \frac{1}{\sin^2 \theta} \pdv[2]{u}{\phi}]
+\end{equation}
+注意角动量算符不含 $r$．
+
+定态薛定谔方程为
+\begin{equation}
+\qty(K_r + \frac{L^2}{2mr^2} + V - E)\Psi(\vec r) = 0
+\end{equation}
+我们假设势能函数只与粒子到原点的距离有关， 即 $V = V(r)$． 两边乘以 $r^2$ 可以将 $r$ 与角向变量 $\theta, \phi$ （简写为 $\uvec r$）分离， 令 $\Psi = R(r)Y(\uvec r)$．
+
+解得 $Y(\uvec r)$ 为球谐函数 $Y_{l,m}(\uvec r)$ 满足
+\begin{equation}
+L^2 Y_{l,m}(\uvec r) = \hbar^2 l(l+1) Y_{l,m}(\uvec r)
+\end{equation}
+分离变量后 $R(r)$ 满足的方程一般被称为\bb{径向薛定谔方程}
+\begin{equation}\label{RadSE_eq6}
+K_r R_l(r) + \qty[V(r) + \frac{\hbar^2 l(l+1)}{2mr^2} ]R_l(r) = ER(r)
+\end{equation}
+我们可以通过变量替换将其化为更简洁的形式．
+
+定义 \bb{Scaled Radial Wave Function} 为
+\begin{equation}
+u_l(r) = r R_l(r)
+\end{equation}
+代入\autoref{RadSE_eq6}， 第一项变为
 \begin{equation}
 K_r R =  - \frac{\hbar^2}{2m} \qty(\dv[2]{R}{r} + \frac2r \dv{R}{r}) = -\frac{\hbar^2}{2m}\frac{1}{r^2} \dv{r} \qty(r^2\dv{R}{r}) =  - \frac{\hbar^2}{2m}\frac1r \dv[2]{u}{r}
 \end{equation}
-把 $L^2 \psi  = l(l + 1)\hbar^2 \psi$  代入薛定谔方程， 角向动能变为离心势能项
-\begin{equation}
-K_{\theta, \phi} \psi  = \frac{\hbar^2 l(l + 1)}{2m r^2}\psi
-\end{equation}
-所以径向方程为（注意只有有心力才能分离变量）
-\begin{equation}
--\frac{\hbar^2}{2m} \qty(\dv[2]{R}{r} + \frac2r \dv{R}{r}) + \qty[V(r) + \frac{\hbar^2}{2m}\frac{l(l + 1)}{r^2}]R = ER
-\end{equation}
+所以\autoref{RadSE_eq6} 化简为
 \begin{equation}
 -\frac{\hbar^2}{2m} \dv[2]{u}{r} + \qty[V(r) + \frac{\hbar^2}{2m}\frac{l(l + 1)}{r^2}]u = Eu
 \end{equation}
-注意只有第一项不同．
+该方程的解取决于 $V(r)$ 的具体形式．
 
-\subsection{归一化条件}
+% 未完成， 讨论一下束缚态和连续态
+% 令束缚态的解为 $u_{n,l}(r)$， 对应能量（本征值）为 $E_n$
 
 总波函数体积分要求
 \begin{equation}
