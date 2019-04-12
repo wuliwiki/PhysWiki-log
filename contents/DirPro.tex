@@ -153,7 +153,9 @@ A_{mn} \mat B
 
 同理， 若基底以\autoref{DirPro_eq5} 排序， 即每个 $v$ 子空间的基底都在一起， 则  $(\Q A \otimes \Q B)$ 的矩阵就是把 $\mat B$ 的每个矩阵元 $B_{mn}$ 拓展成矩阵分块 $B_{mn} \mat A$． 
 
-\subsection{关于本征问题的定理}%（证明未完成）
+\subsection{其他笔记}
+
+\subsubsection{关于本征问题的定理}%（证明未完成）
 	
 ＊如果考虑张量积空间中的本征问题， $\Q A$  的本征矢 $\ket{eig_i}$ 具有 $n$ 重简并， 简并空间的基底分别为 $\ket{eig_i}\ket{v_1}, \ket{eig_i}\ket{v_2}\dots$． 
 
@@ -164,3 +166,45 @@ A_{mn} \mat B
 ＊ 两个厄米矩阵张量积仍然是厄米矩阵．
 
 ＊l两个厄米矩阵相加仍然是厄米矩阵．
+
+\subsubsection{算符的展开}
+另外， 量子力学中的算符（我见过的）都可以表示为两个小空间中的算符的张量积的线性组合
+\begin{equation}
+\Omega = \sum_k A_k \otimes B_k
+\end{equation}
+例如中心力场中的单电子哈密顿算符
+\begin{equation}
+H = K_r + \frac{L^2}{2mr^2} + V(r) - q\vec{\mathcal{E}} \vdot \vec r
+\end{equation}
+其中 $K_r, V(r)$ 就是 $R$ 空间的算符与 $Y$ 空间的单位算符的张量积， $L^2$ 算符（\autoref{RadSE_eq3}） 是 $R$ 空间中的单位算符与 $Y$ 空间中算符的张量积． 而最后一项没有微分算符， 只是一个函数， 这个行数同样也可以展开为张量积空间中的基底的线性组合， 即两空间中的算符的张量积的线性组合．
+
+一种简单的证明方法是，例如 2 乘 2 的矩阵 $\mat A$ 与 2 乘 2 的矩阵 $\mat B$ 直积， 就是把 $\mat A$ 的每个矩阵元乘以 $\mat B$ 变为一个 4 乘 4 的矩阵． 要得分解任意 4 乘 4 的矩阵， 我们只需要取 $\mat A_i$ 分别为一组矩阵基底 $[1, 0; 0, 0]$， $[0, 1; 0, 0]$， $[0, 0; 1, 0]$， $[0, 0; 0, 1]$， 然后再令 $\mat B_i$ 为每个子矩阵即可．
+
+\subsubsection{单空间的基底展开}
+张量积空间中的任意矢量可以只在一个小空间的基底上展开， 例如波函数可以看做径向波函数空间和角向波函数空间的张量积． 波函数可以只在角向波函数空间中的基底——球谐函数上展开
+\begin{equation}
+\ket{\Psi} = \sum_j \ket{R_j}\ket{Y_j}
+\end{equation}
+其中 $j$ 代表 $l, m$ 组合的某种排序．
+
+如果我们在一个小空间中使用基底， 而另一个空间中不用． 例如 $Y$ 空间中我们用球谐函数作为基底， 可以得到一个“算符矩阵”， 即每个矩阵元为 R 空间的算符． 例如薛定谔方程
+\begin{equation}
+H \ket{\Psi} = \I \pdv{t}  \ket{\Psi}
+\end{equation}
+使用了 $Y$ 空间的基底后可以表示为
+\begin{equation}
+H \sum_j \ket{R_j}\ket{Y_j} =  \I  \sum_j\pdv{t}  \ket{R_j}\ket{Y_j}
+\end{equation}
+左乘 $\bra{Y_i}$ 变为
+\begin{equation}
+\sum_j \mel{Y_i}{H}{Y_j} \ket{R_j} =  \I  \pdv{t}  \ket{R_i}
+\quad\Rightarrow\quad
+\sum_j H_{ij} \ket{R_j} =  \I  \pdv{t}  \ket{R_i}
+\end{equation}
+其中每个 $H_{ij}$ 都是 $R$ 空间的算符．
+
+从这里我们总结出， 张量积空间中的矢量可以展开为一个小空间中的 $N$ 个矢量分别与另一个小空间中的 $N$ 个基底的张量积． 所谓的“坐标” 就是第一个小空间中的 $N$ 个矢量排成的“列矢量”． 张量积空间中的矢量左乘一个小空间中的矢量可以得到另一个小空间中的矢量． 张量积空间的算符分别左乘右乘一个小空间中的正交归一基底可以得到另一个小空间中的算符．
+
+另一个例子是多通道散射问题（见小时物理笔记）． 就是将总波函数看做是某个变量 $R$ （例如某个电子和质心的距离） 的空间与剩下所有自由度的空间的张量积． 每个 channel 就对应剩下所有自由与的空间中的一个基底， 系数就是 $R$ 空间中的一个径向波函数 $\psi_i$． 如果有 $N$ 个通道， 就可以得到 $N$ 个 $\psi_i$ 的 coupled equation， 其实就是矩阵形式的薛定谔方程．
+
+另外， 参考一下 wikipedia 的 tensor product 页面吧．
