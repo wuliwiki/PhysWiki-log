@@ -9,12 +9,21 @@
 H = H_0 + V_F(t) = K_r\otimes I + \frac{1}{2r^2}\otimes L^2 + V(r) \otimes I + V_F(t)
 \end{equation}
 耦合方程组为
-\begin{equation}
+\begin{equation}\label{HTDSE_eq3}
 \sum_{\lambda'} \mel{\lambda}{H}{\lambda'} \psi_{\lambda'}(r, t) = -\I\pdv{t} \psi_\lambda (r, t)
 \end{equation}
 其中每个矩阵元 $ \mel{\lambda}{H}{\lambda'}$ 都是一个关于 $r$ 空间的算符（张量空间的算符如果关于一个小空间的基底求矩阵元， 那么每个矩阵元都会是另一个小空间中的算符）．
 
 无外场的哈密顿算符的 $\mel{\lambda}{H_0}{\lambda'}$ 将会是对角的， 即每个 $\psi_{\lambda}(r, t)$ 都会独立传播， 传播子为 $\exp(-\I \mel{\lambda}{H}{\lambda} \Delta t)$．
+
+\subsection{算符拆分（split operators）}
+无论用什么传播算法， 传播子总可以记为 $\exp(-\I H \Delta t)$， 这里近似 $\Delta t$ 内 $H$ 不随时间变化． 如果 $H$ 可以拆分为几个算符之和（\autoref{HTDSE_eq2}）， $\exp(-\I H \Delta t)$ 不一定能拆分成几个传播子的乘积（因为这些项不互相对易）， 但 $\Delta t$ 很小时会近似成立．
+
+一种精度比较高的拆分方法是将不含外场（field free）的 $H_0$ 和含外场的 $V_F$ 分开传播
+\begin{equation}
+\exp(-\I H\Delta t) = \exp(-\I H_0\frac{\Delta t}{2})\exp(-\I V_F\Delta t) \exp(-\I H_0\frac{\Delta t}{2}) + \order{\Delta t^3}
+\end{equation}
+由于 $\mel{\lambda}{H_0}{\lambda'}$ 都是对角的， 根据\autoref{HTDSE_eq3}， $\exp(-\I H_0 \Delta t/2)$ 作用在总波函数上其实就相当于 $\exp(-\I\mel{\lambda}{H_0}{\lambda} \Delta t)$ 分别作用在每个 $\psi_{\lambda}(r)$ 上．
 
 \subsection{线偏振外场}
 在 length gauge 下， 如果有只延 $z$ 方向的外场， 那么
@@ -23,21 +32,10 @@ V_F(t) = \vec E(t) \vdot \vec r =  E(t) z = E(t) r \otimes Y_{10}(\uvec r)
 \end{equation}
 所以矩阵元为
 \begin{equation}
-\ali{
-\mel{l', m'}{V_F(t)}{l, m} &=  E(t) r \otimes \mel{l', m'}{Y_{10}}{l, m}\\
-&= E(t) r \otimes \delta_{m,m'}\mel{l', m}{Y_{10}}{l, m}
-}\end{equation}
-
-\subsection{算符拆分（split operators）}
-无论用什么传播算法， 传播子总可以记为 $\exp(-\I H \Delta t)$， 这里近似 $\Delta t$ 内 $H$ 不随时间变化． 如果 $H$ 可以拆分为几个算符之和（\autoref{HTDSE_eq2}）， $\exp(-\I H \Delta t)$ 不一定能拆分成几个传播子的乘积（因为这些项不互相对易）．
-
-一种精度比较高的拆分方法是将不含外场（field free）的 $H_0$ 和含外场的 $V_F$ 分开传播
-\begin{equation}
-\exp(-\I H\Delta t) = \exp(-\I H_0\frac{\Delta t}{2})\exp(-\I V_F\Delta t) \exp(-\I H_0\frac{\Delta t}{2}) + \order{\Delta t^3}
+\mel{\lambda}{V_F(t)}{\lambda'} =  E(t) r \mel{\lambda}{Y_{10}}{\lambda'}
 \end{equation}
-其中 $\mel{\lambda}{H_0}{\lambda'}$ 都是对角的， 所以 $\exp(-\I H_0 \Delta t/2)$ 作用在总波函数上其实就相当于 $\exp(-\I\mel{\lambda}{H_0}{\lambda} \Delta t)$ 分别作用在每个 $\psi_{\lambda}(r)$ 上．
 
-如果我们在 $r$ 空间中取类似 $\delta(r - r_i)$ 的基底（例如等间距基底或 FEDVR 基底）， $V_F$ 也有一个很好的性质就是它们可以表示为 $r$ 空间的对角矩阵（矩阵元为 $r_i$）和角向空间中的一个算符（矩阵）的张量积． 
+如果我们在 $r$ 空间中取类似 $\delta(r - r_i)$ 的基底 $\ket{r_i}$（例如等间距基底或 FEDVR 基底）， 那么 $V_F$ 也会有一个很好的性质就是它们可以表示为 $r$ 空间的对角矩阵（矩阵元为 $r_i$）和角向空间中的一个算符（矩阵）的张量积． 
 
 与\autoref{HTDSE_eq1} 相反， 将总波函以不同径向基底拆分成若干个角向波函数
 \begin{equation}

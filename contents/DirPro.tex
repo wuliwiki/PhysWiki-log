@@ -120,7 +120,35 @@ C_{i,j} = \int_{-\infty}^{+\infty} \int_{-\infty}^{+\infty} f_{x,i}(x) f_{y,j}(y
 
 \subsubsection{张量积空间的子空间}
 令 $\ket{u_i}$ 和 $\ket{v_j}$ 分别为两个低维空间的基底， 则张量积空间中存在两种“天然”的子空间． % 未完成：线性代数介绍子空间
-一种将张量积基底根据 $i$ 的分成许多组， 每组张成一个子空间． 同理， 也可以根据 $j$ 来划分子空间． 我们姑且分别称它们为 $u$ 子空间和 $v$ 子空间．
+一种将张量积基底根据 $i$ 的值分成许多组， 每组张成一个子空间． 同理， 也可以根据 $j$ 来划分子空间． 我们姑且分别称它们为 $u$ 子空间和 $v$ 子空间．
+
+任意一个张量空间中的矢量可以看做是每个子空间中的一个矢量的线性组合
+\begin{equation}
+\ali{
+\sum_{i,j} C_{ij}\ket{u_i}\ket{v_j} &= \sum_j \qty(\sum_i C_{ij}\ket{u_i}) \otimes \ket{v_j} = \sum_j \ket{a_j}\ket{v_j}\\
+&= \sum_i \ket{u_i} \otimes \qty(\sum_j C_{ij}\ket{v_j})   = \sum_i \ket{u_i}\ket{b_i}
+}\end{equation}
+上式中的 $\ket{a_j}$ 可以理解为矢量在每个 $\ket{v_j}$ 子空间的\bb{分量}（$u$ 空间的矢量）， $\ket{b_i}$ 理解为矢量在每个 $\ket{u_i}$ 子空间中的\bb{分量}（$v$ 空间的矢量）．
+
+\subsection{部分内积}
+\footnote{这个运算并不是标准运算而是本书的一个定义}如果我们定义两矢量的张量积与 $u$ 空间中的矢量的\bb{部分内积}运算为
+\begin{equation}
+\bra{u_1}(\ket{u}\ket{v}) = \braket{u_1}{u}\ket{v}
+\end{equation}
+且该运算是线性的， 那么 $u$ 空间中的任意矢量乘以任意张量的运算为
+\begin{equation}
+\ali{
+\qty(\sum_k x_k \bra{u_k})\qty(\sum_{i,j} C_{ij}\ket{u_i}\ket{v_j})
+&= \sum_{i,j} C_{ij} \qty(\sum_k  x_k \braket{u_k}{u_i})\ket{v_j}\\
+&=\sum_j \qty(\sum_i x_i C_{ij}) \ket{v_j}
+}\end{equation}
+即对每个 $\ket{v_j}$ 子空间中的分量分别做内积， 得到 $v$ 空间的矢量．
+
+同理， 也可以定义 $v$ 空间的部分内积
+\begin{equation}
+\bra{v_1}(\ket{u}\ket{v}) = \ket{u}\braket{v_1}{v}
+\end{equation}
+那么 $v$ 空间中的任意左矢 $\bra{v_1}$ 乘以任意张量等于将每个 $\ket{u_j}$ 子空间中的分量分别与 $\bra{v_1}$ 内积， 得到 $u$ 空间的矢量．
 
 \subsubsection{算符}
 两个低维空间的线性算符 $\Q A$ 和 $ \Q B$ 做张量积可以得到张量积空间中的算符 $\Q A \otimes \Q B$． 我们定义 $\Q A \otimes \Q B$ 为线性算符， 该算符对任意基底的作用结果为
@@ -152,6 +180,20 @@ A_{mn} \mat B
 所以， $\Q A \otimes \Q B$ 的矩阵是把 $\mat A$ 的每个矩阵元 $A_{mn}$ 拓展成矩阵分块 $A_{mn} \mat B$．
 
 同理， 若基底以\autoref{DirPro_eq5} 排序， 即每个 $v$ 子空间的基底都在一起， 则  $(\Q A \otimes \Q B)$ 的矩阵就是把 $\mat B$ 的每个矩阵元 $B_{mn}$ 拓展成矩阵分块 $B_{mn} \mat A$． 
+
+将直积空间基底排序的做法丧失了两个空间基底的对称性． 我们可以将张量积空间中的列矢量坐标 $C_{i,j}$ 写成矩阵的形式（注意概念上这仍然是一个矢量而不表示线性映射）．矩阵的第 $i$ 行就是 $\ket{u_i}$ 子空间分量的坐标， 第 $j$ 列就是 $\ket{v_j}$ 子空间分量的坐标．
+
+$\Q A \otimes \Q B$ 作用在该矩阵上， 就相当于用矩阵 $\mat A$ 处理每一列（矩阵 $\mat C$ 的行变换）， 再用矩阵 $\mat B$ 处理每一行（矩阵 $\mat C$ 的列变换）， 也可以是先列变换再行变换．
+\begin{equation}
+\sum_{j'} B_{jj'} \qty(\sum_{i'} A_{ii'} C_{i'j'})
+= \sum_{i'} A_{ii'} \qty(\sum_{j'}B_{jj'} C_{i'j'})
+\end{equation}
+如果 $\mat A$ 或 $\mat B$ 是对角的， 那么分别只需要把矩阵的每一行或每一列的系数乘以对角元， 再分别使用矩阵 $\mat B$ 或 $\mat A$ 作用即可． 这就相当于对每个子空间中的分量独立作用．
+
+\subsection{部分矩阵元}
+每个部分矩阵元 $\mel{b_i}{\Q A \otimes \Q B}{b_j} = \mel{b_i}{\Q B}{b_j} \Q A$ 是 $a$ 空间的算符． 所以 $\Q A \otimes \Q B$ 作用在任意张量上， 就相当于先把 $\Q A$ 作用在每个 $\ket{b_j}$ 子空间的分量上， 再将这些子空间根据矩阵 $\mel{b_i}{\Q B}{b_j}$ 进行线性变换． 特殊地， 如果 $\mel{b_i}{\Q B}{b_j}$ 是对角矩阵， 那么只需要把 $\Q A$ 作用在每个 $\ket{b_j}$ 子空间的分量上再乘以对角矩阵元 $\mel{b_j}{\Q B}{b_j}$ 即可．
+
+$\mel{a_i}{\Q A \otimes \Q B}{a_j} = \mel{a_i}{\Q A}{a_j} \Q B$ 的讨论同理．
 
 \subsection{其他笔记}
 
