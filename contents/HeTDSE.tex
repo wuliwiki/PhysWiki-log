@@ -33,12 +33,21 @@ H_i = K_{ri} + \frac{L_i^2}{2m r_i^2} - \frac{2}{r_i}
 存在 coupling 的项自然是两电子之间的库仑势能 $V_{12}$
 \begin{equation}
 \ali{
-V_{12} = \frac{1}{\abs{\vec r_2 - \vec r_1}} &= 4\pi \sum_{l,m} \frac{1}{2l+1} \frac{r_<^l}{r_>^{l+1}} Y_{l,m}^*(\uvec r_1) Y_{l,m}(\uvec r_2)\\
-&= 4\pi \sum_l \frac{(-1)^l}{\sqrt{2l + 1}} \frac{r_<^l}{r_>^{l+1}} \mathcal{Y}_{l,l}^{0,0} (\uvec r_1, \uvec r_2)
+V_{12} = \frac{1}{\abs{\vec r_2 - \vec r_1}} &= 4\pi \sum_{l=0}^{\infty} \frac{1}{2l+1} \frac{r_<^l}{r_>^{l+1}} \sum_{m = -l}^l Y_{l,m}^*(\uvec r_1) Y_{l,m}(\uvec r_2)\\
+&= 4\pi \sum_{l=0}^{\infty} \frac{(-1)^l}{\sqrt{2l + 1}} \frac{r_<^l}{r_>^{l+1}} \mathcal{Y}_{l,l}^{0,0} (\uvec r_1, \uvec r_2)
 }\end{equation}
+第二步使用了
+\begin{equation}
+\bmat{l & l & 0 \\ -m & m & 0} = \frac{(-1)^{l+m}}{\sqrt{2l+1}}
+\end{equation}
+即
+\begin{equation}
+\mathcal{Y}_{l,l}^{0,0} (\uvec r_1, \uvec r_2) = \frac{(-1)^l}{\sqrt{2l+1}} \sum_{m = -l}^l Y_{lm}^*(\uvec r_1) Y_{lm}(\uvec r_2)
+\end{equation}
+
 要计算矩阵元 $\mel{\mathcal Y_\lambda}{V_{12}}{\mathcal Y_{\lambda'}}$， 就要对六个球谐函数的乘积的线性组合做两次角向积分． 使用\autoref{SphCup_eq1}\upref{SphCup} 可以将上式表示为六个 CG 系数相乘的线性组合（二重求和）．
 
-\begin{equation}
+\begin{equation}\label{HeTDSE_eq10}
 \ali{
 &\quad\mel{y_{l_1 l_2}^{LM}}{Y_{lm}^*(\uvec r_1)Y_{lm}(\uvec r_2)}{y_{l_1' l_2'}^{L'M'}}\\
 &= \sum_{m_1',m_2'}\sum_{m_1,m_2} \bmat{l_1 & l_2 & L\\ m_1 & m_2 & M}\bmat{l_1' & l_2' & L'\\ m_1' & m_2' & M'} \times\\
@@ -51,3 +60,19 @@ V_{12} = \frac{1}{\abs{\vec r_2 - \vec r_1}} &= 4\pi \sum_{l,m} \frac{1}{2l+1} \
 }\end{equation}
 
 根据 parity CG coefficients， 当 $l_1' + l + l_1$ 或 $l_2' + l + l_2$ 为奇数时， 上式等于 0．
+
+由于 CG 系数都是实数， 这必定是一个实数矩阵．
+
+由于$Y_{l,-m}^*(\uvec r_1)Y_{l,-m}(\uvec r_2) = [Y_{lm}^*(\uvec r_1)Y_{lm}(\uvec r_2)]^*$， 矩阵 $\mel{y_{l_1 l_2}^{LM}}{Y_{lm}^*(\uvec r_1)Y_{lm}(\uvec r_2)}{y_{l_1' l_2'}^{L'M'}}$ 中将 $m$ 变为 $-m$ 会使矩阵取厄米共轭，在这里就是转置． 所以这是一个对称实矩阵， 且我们只需要求 $m \ges 0$ 的项即可．
+
+在爱华的毕业论文中， 当 $M = M' = 0$ 时，
+\begin{equation}
+\ali{
+\mel{y_{l_1 l_2}^{LM}}{y_{ll}^{00}}{y_{l_1' l_2'}^{L'M'}}
+= &\frac{2l+1}{4\pi} \sqrt{(2l_1'+1)(2l_2'+1)(2L'+1)}\times\\
+&\bmat{l & l_1' & l_1\\ 0 & 0 & 0}
+\bmat{l & l_2' & l_2\\ 0 & 0 & 0}
+\bmat{0 & L' & L\\ 0 & 0 & 0}
+\pmat{l & l_1' & l_1\\ l & l_2' & l_2\\ 0 & L' & L}
+}\end{equation}
+最后一个因子是 9-j 符号． 我的目标就是把这条式子拓展到 $M$ 和 $M'$ 不等于零的情况． 可以先用这个式子数值验证\autoref{HeTDSE_eq10}， 如果吻合， 就直接用\autoref{HeTDSE_eq10} 就得到拓展公式了（虽然没有 9-j 符号那么简洁）．
