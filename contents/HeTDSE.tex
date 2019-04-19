@@ -1,10 +1,7 @@
 % 氦原子数值解 TDSE
+\pentry{广义球谐函数\upref{GenYlm}}
 
-使用角向基底为两个电子总轨道角动量和 $z$ 分量的本征态\upref{AMAdd}
-\begin{equation}
-\mathcal{Y}_{l_1,l_2}^{L,M} = \sum_{m_1, m_2} C_{l_1 m_1 l_2 m_2}^{L,M} Y_{l_1 m_1}(\uvec r_1) Y_{l_2 m_2} (\uvec r_2)
-\end{equation}
-系数为 C-G 系数， $m_1 + m_2 \ne M$ 的 C-G 系数全为零．
+使用角向基底为两个电子总轨道角动量和 $z$ 分量的本征态\upref{AMAdd}， 即广义球谐函数 $\mathcal{Y}_{l_1,l_2}^{L,M}(\uvec r_1, \uvec r_2)$．
 
 总波函数所在的空间可以看做角向空间和径向空间的张量积空间． 现在有了角向空间的基底， 总波函数就可以在该基底上展开
 \begin{equation}
@@ -59,22 +56,23 @@ V_{12} = \frac{1}{\abs{\vec r_2 - \vec r_1}} &= 4\pi \sum_{l=0}^{\infty} \frac{1
 &\qquad\bmat{l_1 & l_2 & L\\ m_1 & m_2 & M}\bmat{l_1' & l_2' & L'\\ m_1' & m_2' & M'}
 }\end{equation}
 
-根据总角动量守恒（$1/r_{12}$ 算符与 $L, L_z$ 算符对易）， $L \ne L'$ 或 $M \ne M'$ 时， 矩阵元为零。
+根据总角动量守恒（$1/r_{12}$ 算符与 $L, L_z$ 算符对易）， $L \ne L'$ 或 $M \ne M'$ 时， 矩阵元为零．
 
 根据 parity CG coefficients， 当 $l_1' + l + l_1$ 或 $l_2' + l + l_2$ 为奇数时， 上式等于 0．
+
+根据 $\Pi y = (-1)^{l_1 + l_2} y$， 考虑到 $1/r_{12}$ 具有偶宇称， 所以 $l_1 + l_2$ 与 $l_1' + l_2'$ 的奇偶性必须不同．
 
 由于 CG 系数都是实数， 这必定是一个实数矩阵．
 
 由于$Y_{l,-m}^*(\uvec r_1)Y_{l,-m}(\uvec r_2) = [Y_{lm}^*(\uvec r_1)Y_{lm}(\uvec r_2)]^*$， 矩阵 $\mel{y_{l_1 l_2}^{LM}}{Y_{lm}^*(\uvec r_1)Y_{lm}(\uvec r_2)}{y_{l_1' l_2'}^{L'M'}}$ 中将 $m$ 变为 $-m$ 会使矩阵取厄米共轭，在这里就是转置． 所以这是一个对称实矩阵， 且我们只需要求 $m \ges 0$ 的项即可．
 
-在爱华的毕业论文中， 当 $M = M' = 0$ 时，
+爱华的论文中将\autoref{HeTDSE_eq10} 用 9j 符号表示， 但仅限于 $M \ne M'$， 经过数值验证， 我发现应该可以将爱华的公式拓展为
 \begin{equation}
 \ali{
 \mel{y_{l_1 l_2}^{LM}}{y_{ll}^{00}}{y_{l_1' l_2'}^{L'M'}}
-= &\frac{2l+1}{4\pi} \sqrt{(2l_1'+1)(2l_2'+1)(2L'+1)}\times\\
+= &\frac{2l+1}{4\pi} \delta_{L,L'}\delta_{M,M'} \sqrt{(2l_1'+1)(2l_2'+1)(2L+1)}\times\\
 &\bmat{l & l_1' & l_1\\ 0 & 0 & 0}
 \bmat{l & l_2' & l_2\\ 0 & 0 & 0}
-\bmat{0 & L' & L\\ 0 & 0 & 0}
-\pmat{l & l_1' & l_1\\ l & l_2' & l_2\\ 0 & L' & L}
+\pmat{l & l_1' & l_1\\ l & l_2' & l_2\\ 0 & L & L}
 }\end{equation}
-最后一个因子是 9-j 符号． 我的目标就是把这条式子拓展到 $M$ 和 $M'$ 不等于零的情况． 可以先用这个式子数值验证\autoref{HeTDSE_eq10}， 如果吻合， 就直接用\autoref{HeTDSE_eq10} 就得到拓展公式了（虽然没有 9-j 符号那么简洁）．
+注意当 $M = M'$ 时， 结果与 $M$ 无关．
