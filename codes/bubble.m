@@ -1,13 +1,13 @@
-% Ã°Åİ·¨ÅÅĞò
+% å†’æ³¡æ³•æ’åº
 function [x, order] = bubble(x, option)
-N = numel(x); % ÊıÁĞ¸öÊı
-order = 1:N; % Ë÷Òı
-changed = 1; % ÊÇ·ñÓĞÖÃ»»
+N = numel(x); % æ•°åˆ—ä¸ªæ•°
+order = 1:N; % ç´¢å¼•
+changed = 1; % æ˜¯å¦æœ‰ç½®æ¢
 while(changed == 1)
     changed = 0;
     for ii = 1:N-1
         if x(ii) > x(ii + 1)
-            % ÖÃ»»
+            % ç½®æ¢
             changed = 1;
             temp = x(ii);
             x(ii) = x(ii + 1);
@@ -18,7 +18,7 @@ while(changed == 1)
         end
     end
 end
-% ÊÇ·ñÊÇ½µĞòÅÅÁĞ
+% æ˜¯å¦æ˜¯é™åºæ’åˆ—
 if nargin > 1 && option(1) == 'd'
     x(:) = flipud(x(:));
     order = fliplr(order);

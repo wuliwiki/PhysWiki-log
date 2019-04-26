@@ -1,6 +1,6 @@
 a = rand(1,1); b = 0.5;
-if a > b % a 较大
+if a > b % a 杈冨ぇ
     disp('a is larger');
-else % b 较大
+else % b 杈冨ぇ
     disp('b is larger');
 end

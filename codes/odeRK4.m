@@ -1,8 +1,8 @@
 function [Y, t] = odeRK4(f, tspan, Y0, Nt)
-Nvar = numel(Y0);  % Òò±äÁ¿µÄ¸öÊı
-dt = (tspan(2) - tspan(1)) / (Nt-1); % ¼ÆËã²½³¤
-Y = zeros(Nvar, Nt); % Ô¤¸³Öµ
-Y(:, 1) = Y0(:); % ³õÖµ
+Nvar = numel(Y0);  % å› å˜é‡çš„ä¸ªæ•°
+dt = (tspan(2) - tspan(1)) / (Nt-1); % è®¡ç®—æ­¥é•¿
+Y = zeros(Nvar, Nt); % é¢„èµ‹å€¼
+Y(:, 1) = Y0(:); % åˆå€¼
 t = linspace(tspan(1), tspan(2), Nt);
 
 for ii=1:Nt-1

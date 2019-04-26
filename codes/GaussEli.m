@@ -1,12 +1,12 @@
-% ¸ßË¹ÏûÔª·¨µÃµ½ÌİĞÎÏµÊı¾ØÕó
-% ÏÔÊ¾Ã¿¸öĞĞ±ä»»µÄ²Ù×÷ºÍ½á¹û
-% A ÎªÈÎÒâ³ß´çµÄ¾ØÕó
-% Èç¹û A ÊÇÔö¹ã¾ØÕó£¬ ÊäÈë augmented = true£¬ Èç¹û A ÊÇÏµÊı¾ØÕó£¬ augmented = false
-% Êä³öµÄ A ÊÇÌİĞÎ¾ØÕó£¬ q ÊÇÒ»¸öĞĞÊ¸Á¿£¬ q(ii) ÊÇµÚ ii ĞĞµÚÒ»¸ö²»ÎªÁãµÄÁĞ±ê
-% Èç¹ûµÚ ii ĞĞÈ«ÎªÁã£¬ Ôò q(ii) = 0
+% é«˜æ–¯æ¶ˆå…ƒæ³•å¾—åˆ°æ¢¯å½¢ç³»æ•°çŸ©é˜µ
+% æ˜¾ç¤ºæ¯ä¸ªè¡Œå˜æ¢çš„æ“ä½œå’Œç»“æœ
+% A ä¸ºä»»æ„å°ºå¯¸çš„çŸ©é˜µ
+% å¦‚æœ A æ˜¯å¢å¹¿çŸ©é˜µï¼Œ è¾“å…¥ augmented = trueï¼Œ å¦‚æœ A æ˜¯ç³»æ•°çŸ©é˜µï¼Œ augmented = false
+% è¾“å‡ºçš„ A æ˜¯æ¢¯å½¢çŸ©é˜µï¼Œ q æ˜¯ä¸€ä¸ªè¡ŒçŸ¢é‡ï¼Œ q(ii) æ˜¯ç¬¬ ii è¡Œç¬¬ä¸€ä¸ªä¸ä¸ºé›¶çš„åˆ—æ ‡
+% å¦‚æœç¬¬ ii è¡Œå…¨ä¸ºé›¶ï¼Œ åˆ™ q(ii) = 0
 
 function [A, q] = GaussEli(A, augmented)
-% ÏµÊı¾ØÕóµÄĞĞÊı Nr ºÍÁĞÊı Nc
+% ç³»æ•°çŸ©é˜µçš„è¡Œæ•° Nr å’Œåˆ—æ•° Nc
 [Nr, Nc] = size(A);
 if (augmented)
 	Nc = Nc - 1;
@@ -14,18 +14,18 @@ end
 q = zeros(1,Nr); q(1) = 1;
 disp(A);
 for ii = 1:Nr-1
-	% ´¦ÀíµÚ ii ĞĞ
+	% å¤„ç†ç¬¬ ii è¡Œ
 	if (ii > 1)
 		q(ii) = q(ii - 1) + 1;
 	end
 	for jj = q(ii) : Nc
-		% ¼ì²éµÚ jj ÁĞ
+		% æ£€æŸ¥ç¬¬ jj åˆ—
 		if (max(abs(A(ii:end, q(ii)))) > 0)
-			% ÏûÔªÊ¹ A(ii+1:end, q(ii)) È«Îª 0
+			% æ¶ˆå…ƒä½¿ A(ii+1:end, q(ii)) å…¨ä¸º 0
             A = eli1(A, ii, q(ii));
             break;
 		else
-			% ²»ĞèÒªÏûÔª£¬¼ì²éÏÂÒ»ÁĞ
+			% ä¸éœ€è¦æ¶ˆå…ƒï¼Œæ£€æŸ¥ä¸‹ä¸€åˆ—
             if (q(ii) < Nc)
                 q(ii) = q(ii) + 1;
             else
@@ -36,27 +36,27 @@ for ii = 1:Nr-1
 end
 end
 
-% ×öĞĞ±ä»»Ê¹ A(ii+1:end, q) È«Îª 0
-% A(ii:end,q) ²»ÄÜÈ«Îª 0
+% åšè¡Œå˜æ¢ä½¿ A(ii+1:end, q) å…¨ä¸º 0
+% A(ii:end,q) ä¸èƒ½å…¨ä¸º 0
 function A = eli1(A, ii, q)
-% ½»»»Á½ĞĞ£¬Ê¹ A(ii,q) ÔÚ A(ii:end, q) ÖĞ×î´ó
+% äº¤æ¢ä¸¤è¡Œï¼Œä½¿ A(ii,q) åœ¨ A(ii:end, q) ä¸­æœ€å¤§
 [~, iimax] = max(abs(A(ii:end, q)));
 iimax = ii + iimax - 1;
 if (iimax > ii)
-    disp(['½»»»: r_', num2str(ii), ' <-> r_', num2str(iimax)]);
+    disp(['äº¤æ¢: r_', num2str(ii), ' <-> r_', num2str(iimax)]);
     temp = A(ii,:);
     A(ii,:) = A(iimax,:);
     A(iimax,:) = temp;
     disp(A);
 end
 
-% ÓÃµÚ ii ĞĞÏûÈ¥ËùÓĞ A(ii+1:end, q)
+% ç”¨ç¬¬ ii è¡Œæ¶ˆå»æ‰€æœ‰ A(ii+1:end, q)
 for jj = ii+1 : size(A,1)
     if (A(jj,q) == 0)
         continue;
     end
     k = -A(jj,q)/A(ii,q);
-    disp(['ÏûÔª: ', num2str(k), ' * r_', num2str(ii), ' + r_', num2str(jj)]);
+    disp(['æ¶ˆå…ƒ: ', num2str(k), ' * r_', num2str(ii), ' + r_', num2str(jj)]);
     A(jj,:) = A(ii,:) * k + A(jj,:);
     disp(A);
 end

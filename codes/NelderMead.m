@@ -1,10 +1,10 @@
-% f ÊÇº¯Êı¾ä±ú£¬Ö»½ÓÊÜÒ»¸ö N Î¬ĞĞÊ¸Á¿×÷ÎªÊäÈë±äÁ¿£¬ ²¢·µ»ØÒ»¸öº¯ÊıÖµ
-% x0 ÊÇ N Î¬ĞĞÊ¸Á¿£¬ xerr ÊÇÒ»¸ö±êÁ¿
+% f æ˜¯å‡½æ•°å¥æŸ„ï¼Œåªæ¥å—ä¸€ä¸ª N ç»´è¡ŒçŸ¢é‡ä½œä¸ºè¾“å…¥å˜é‡ï¼Œ å¹¶è¿”å›ä¸€ä¸ªå‡½æ•°å€¼
+% x0 æ˜¯ N ç»´è¡ŒçŸ¢é‡ï¼Œ xerr æ˜¯ä¸€ä¸ªæ ‡é‡
 function [xmin, fmin] = NelderMead(f, x0, xerr)
-N = numel(x0); % f ÊÇ N Ôªº¯Êı
-x = zeros(N+1,N); % Ô¤¸³Öµ
+N = numel(x0); % f æ˜¯ N å…ƒå‡½æ•°
+x = zeros(N+1,N); % é¢„èµ‹å€¼
 y = zeros(1,N+1);
-% ¼ÆËã N+1 ¸ö³õÊ¼µã
+% è®¡ç®— N+1 ä¸ªåˆå§‹ç‚¹
 x(1,:) = x0;
 for ii = 1:N
     x(ii+1,:) = x(1,:);
@@ -14,23 +14,23 @@ for ii = 1:N
         x(ii+1,ii) = 1.05 * x(1,ii);
     end
 end
-% Ö÷Ñ­»·
+% ä¸»å¾ªç¯
 for kk = 1:10000
-    % ÇóÖµ²¢ÅÅĞò
+    % æ±‚å€¼å¹¶æ’åº
     for ii = 1 : N + 1
         y(ii) = f(x(ii,:));
     end
     [y, order] = sort(y);
     x = x(order,:);
-    if norm(x(N+1,:) - x(1,:)) < xerr % ÅĞ¶ÏÎó²î
+    if norm(x(N+1,:) - x(1,:)) < xerr % åˆ¤æ–­è¯¯å·®
         break;
     end
-    m = mean(x(1:N,:)); % Æ½¾ùÎ»ÖÃ
-    r = 2*m - x(N+1,:); % ·´Éäµã
+    m = mean(x(1:N,:)); % å¹³å‡ä½ç½®
+    r = 2*m - x(N+1,:); % åå°„ç‚¹
     f_r = f(r);
-    if y(1) <= f_r && f_r < y(N) % µÚ 4 ²½
+    if y(1) <= f_r && f_r < y(N) % ç¬¬ 4 æ­¥
         x(N+1,:) = r; continue;
-    elseif f_r < y(1) % µÚ 5 ²½
+    elseif f_r < y(1) % ç¬¬ 5 æ­¥
         s = m + 2*(m - x(N+1,:));
         if f(s) < f_r
             x(N+1,:) = s;
@@ -38,22 +38,22 @@ for kk = 1:10000
             x(N+1,:) = r;
         end
         continue;
-    elseif f_r < y(N+1) % µÚ 6 ²½
+    elseif f_r < y(N+1) % ç¬¬ 6 æ­¥
         c1 = m + (r - m)*0.5;
         if f(c1) < f_r
             x(N+1,:) = c1; continue;
         end
-    else % µÚ 7 ²½
+    else % ç¬¬ 7 æ­¥
         c2 = m + (x(N+1,:) - m)*0.5;
         if f(c2) < y(N+1)
             x(N+1,:) = c2; continue;
         end
     end
-    for jj = 2:N+1 % µÚ 8 ²½
+    for jj = 2:N+1 % ç¬¬ 8 æ­¥
         x(jj,:) = x(1,:) + (x(jj,:) - x(1,:))*0.5;
     end
 end
-% Êä³ö±äÁ¿
+% è¾“å‡ºå˜é‡
 xmin = x(1,:);
 fmin = f(xmin);
 end

@@ -1,17 +1,17 @@
-% ¶ş·Ö·¨Çóº¯ÊıµÄ¸ù
+% äºŒåˆ†æ³•æ±‚å‡½æ•°çš„æ ¹
 function x = bisection(f, int, err)
 fl = f(int(1)); fr = f(int(2));
-% Á½¶ËµãÊÇ·ñÎª 0
+% ä¸¤ç«¯ç‚¹æ˜¯å¦ä¸º 0
 if fl == 0
     x = int(1); return;
 elseif fr == 0
     x = int(2); return;
 end
-% Á½¶ËµãÊÇ·ñÍ¬ºÅ
+% ä¸¤ç«¯ç‚¹æ˜¯å¦åŒå·
 if fl * fr > 0
-    error('Á½¶ËµãÍ¬ºÅ');
+    error('ä¸¤ç«¯ç‚¹åŒå·');
 end
-% Ö÷Ñ­»·
+% ä¸»å¾ªç¯
 while(int(2) - int(1) > err)
     mid = 0.5*(int(1) + int(2));
     fm = f(mid);
