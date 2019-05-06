@@ -19,7 +19,7 @@
 
 总哈密顿可以表示为
 \begin{equation}
-H = H_1 + H_2 + V_{12} + V_{int}
+H = H_1 + H_2 + V_{12} + V_F
 \end{equation}
 其中 $H_i \ \ (i = 1, 2)$ 是单个电子的哈密顿算符， 对应对角矩阵．
 \begin{equation}
@@ -85,7 +85,23 @@ m_1 + m_2 = m_1' + m_2' = M \qquad
 注意当 $M = M'$ 时， 结果与 $M$ 无关．
 
 \subsection{波函数演化}
-弄清是不是可以像氢原子演化那样分别传播每个空间基底 $\ket{r_i}\ket{r_j}$ 的子空间．
+传播同样使用 split operator 
+\begin{equation}
+\exp(-\I H\Delta t) = \exp(-\I H_0\frac{\Delta t}{2})\exp(-\I H_{int}\Delta t) \exp(-\I H_0\frac{\Delta t}{2}) + \order{\Delta t^3}
+\end{equation}
+只是这里的 $H_{int} = V_{12} + V_F$ 是所有 $\mel{\mathcal{Y}}{\ }{\mathcal{Y}}$ 作用后为非对角（算符）矩阵的项， 即电子的相互作用和电场对每个电子的作用．
+
+$H_0 = H_1 + H_2$ 由于 $H_1$ 和 $H_2$ 对易， 我们可以将它们独立传播
+\begin{equation}
+\exp(-\I H_0 \frac{\Delta t}{2}) = \exp(-\I H_1 \frac{\Delta t}{2}) \exp(-\I H_2 \frac{\Delta t}{2})
+\end{equation}
+也就是对每个 partial wave 的二维网格， 用类似氢原子的方法传播每一列在传播每一行．
+
+在传播 $\exp(-\I H_{int}\Delta t)$ 的时候， 爱华的做法是进一步 split 成三个 operators
+\begin{equation}
+\exp(-\I H_{int}\Delta t) = \exp(-\I V_F\frac{\Delta t}{2})   \exp(-\I V_{12} \Delta t) \exp(-\I V_F\frac{\Delta t}{2})
+\end{equation}
+所以总哈密顿一共是 split 成 5 个算符．
 
 \subsection{束缚态}
 氦原子的初始态用的是 singlet 自旋的的基态， 通过虚时间演化得到， 占用了 $L = 0, M = 0$ 的所有 partial waves．
