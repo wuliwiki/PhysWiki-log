@@ -10,9 +10,9 @@ for ii = 1:N
     % 将 x^(ii-1) 项累加到求和结果上
     result = result + Coeff * x^ii; 
 end
+format long % 显示全部小数位
 disp('求和结果为')
 disp(result)
-format short % 恢复默认显示
 disp('精确结果为')
-format long % 显示全部小数位
 disp((1+x)^u)
+format short % 恢复默认显示
