@@ -1,0 +1,116 @@
+% C++ 中的 SFINAE 技巧
+
+\subsection{限制模板范围}
+例如我们有一个函数模板将两个对象 \lstinline{v1}， \lstinline{v2} 相加得到 \lstinline{v}
+\begin{lstlisting}[language=cpp]
+template <class T, class T1, class T2>
+void Plus(T &v, const T1 &v1, const T2 &v2)
+{...}
+\end{lstlisting}
+如果我们想要对不同类型的 T，T1，T2 执行不同的代码， 我强烈推荐下面要介绍的 SFINAE 技巧来实现．
+
+我们先来定义一个宏函数 \lstinline{MY_IF()}（至于为什么要这么定义先不介绍），其中使用了 \lstinline{type_traits} 头文件中的 \lstinline{enable_if}． 这个宏用于输入一个 \lstinline{constexpr} 的 \lstinline{bool} 表达式， 由于表达式中有可能出现一个或多个逗号，所以形式上我们用了任意变量的宏函数．
+\begin{lstlisting}[language=cpp]
+#define MY_IF0(...) typename std::enable_if<(bool)(__VA_ARGS__), Int>::type
+#define MY_IF(...) MY_IF0(__VA_ARGS__) = 0
+\end{lstlisting}
+这里先定义了 \lstinline{MY_IF0()}，看起来多此一举，但实际上在一些情况下我们也需要单独使用 \lstinline{MY_IF0()}．
+
+另外， 我们假设存在一些函数模板用于判断 \lstinline{T, T1, T2} 的类型（具体怎么定义先不介绍）， 例如如果 T 是一个矩阵，\lstinline{is_matrix<T>()} 就返回 \lstinline{true}， 而 \lstinline{is_scalar<T>()} 和 \lstinline{is_vector<T>()} 都返回 \lstinline{false}．
+\begin{lstlisting}[language=cpp]
+template <class T> bool is_scalar();
+template <class T> bool is_vector();
+template <class T> bool is_matrix();
+\end{lstlisting}
+
+现在我们用 \lstinline{MY_IF} 来区分不同版本的 Plus 函数． 标量相加的函数如下
+\begin{lstlisting}[language=cpp]
+template <class T, class T1, class T2,
+MY_IF(is_scalar<T>() && is_scalar<T1>() && is_scalar<T2>())>
+void Plus(T &v, const T1 &v1, const T2 &v2)
+{ v = v1 + v2; }
+\end{lstlisting}
+
+注意在我们通过 \lstinline{MY_IF} 声明了这个模板什么时候有定义（只有 \lstinline{T, T1, T2} 为标量时有定义， 例如 \lstinline{int, double, complex} 等）．
+
+同样， 我们可以再写一个版本的 Plus 定义矢量相加
+\begin{lstlisting}[language=cpp]
+template <class T, class T1, class T2,
+MY_IF(is_vector<T>() && is_vector<T1>() && is_vector<T2>())>
+void Plus(T &v, const T1 &v1, const T2 &v2)
+{
+    for (int i = 0; i < v.size(); ++i) {
+        v[i] = v1[i] + v2[i];
+    }
+}
+\end{lstlisting}
+
+我们还可以再定义矩阵相加，矩阵与标量相加，矢量与标量相加等等．
+
+如果我们的函数需要先 declare 再 define（例如 class 的成员函数在 class 定义中 declare，然后在别的地方 define），那就需要在 declaration 中使用 \lstinline{MY_IF()}，而在 definition 中使用 \lstinline{MY_IF0()}，其它内容都一样．
+
+使用 SFINAE 的好处是， 我们可以限制函数模板 instantiate 的条件， 使得一些不合法的使用变得没有定义（比如说我想要用 Plus 把矩阵和矢量相加，又比如复数矩阵相加得到实数矩阵）． 另一个好处是无论我们定义多少个版本的 Plus， 只要 \lstinline{MY_IF} 中的条件总在唯一一个版本中为 \lstinline{true}， 编译器就不会抱怨无法判断使用哪个版本的 Plus 函数．
+
+\subsection{类型判断}
+我们下面来介绍这些函数如何实现．
+
+首先， 它们必须是 constexpr 函数， 也就是说它们必须要能在编译阶段（而不是运行阶段）被调用并返回结果． 其次， 它们是模板函数， 因为类型 T 不可能作为函数参数， 而只能作为模板参数．
+
+我们首先定义 \lstinline{is_same<T1, T2>()} 函数模板来判断 \lstinline{T1,  T2} 两个类型是否相同（这里用到了 标准库的 \lstinline{type_traits} 头文件）
+\begin{lstlisting}[language=cpp]
+template <class T1, class T2>
+constexpr bool is_same()
+{ return std::is_same<T1, T2>::value; }
+\end{lstlisting}
+
+注意在 \lstinline{type_traits} 中， \lstinline{is_} 开头的函数都是类模板而不是函数模板， 理论上我们可以直接拿 \lstinline{std::is_same} 来用， 但为了概念和使用上更简单， 我们重新定义了同名的函数模板．
+
+有了 \lstinline{is_same}， 我们就可以很容易地实现 \lstinline{is_int<T>()}, \lstinline{is_double<T>()}, 等．
+\begin{lstlisting}[language=cpp]
+template <class T>
+constexpr bool is_int()
+{ return is_same<T, int>(); }
+
+template <class T>
+constexpr bool is_double()
+{ return is_same<T, double>(); }
+\end{lstlisting}
+
+\lstinline{is_complex<T>()} 有所不同， 因为 \lstinline{std::complex} 本身也是一个类模板， 可以有不同的类． 这里为了简单， 姑且就假设我们只使用 \lstinline{std::complex<double>}． 如果需要支持任意类型的 \lstinline{std::complex<>}， 需要使用下文中定义 \lstinline{is_vector} 的方法．
+\begin{lstlisting}[language=cpp]
+template <class T>
+constexpr bool is_complex()
+{ return is_same<T, std::complex<double>>(); }
+\end{lstlisting}
+
+为了简单起见， 我们假设“标量”只包括 \lstinline{int, double, std::complex<double>} 三种， 于是可以定义用于判断标量的函数
+\begin{lstlisting}[language=cpp]
+template <class T>
+constexpr bool is_scalar()
+{ return is_int<T>() || is_double<T>() || is_complex<T>(); }
+\end{lstlisting}
+
+现在我们再来看如何定义 \lstinline{is_vector<T>()}． 对于矢量， 我们既可以使用 \lstinline{std::vector<>}， 也可以自己定义一个矢量类型． 我们通过 template specialization 来实现 \lstinline{is_vector<>}
+\begin{lstlisting}[language=cpp]
+template <class T> struct is_vector_imp : std::false_type {};
+template <class T> struct is_vector_imp<vector<T>> : std::true_type {};
+template<class T>
+constexpr bool is_vector()
+{
+	return is_vector_imp<T>();
+}
+\end{lstlisting}
+
+首先我们对一般的类型 \lstinline{T} 定义的 \lstinline{is_vector_imp}（imp 这里表示 implementation）， 继承 \lstinline{std::false_type} （你只需要知道 \lstinline{falst_type} 是一个类， 它的对象可以自动转换为 false， \lstinline{true_type} 类的对象可以自动转换为 \lstinline{true}）． 然后对凡是符合 \lstinline{is_vector_imp<vector<T>>} 格式的类进行不同的定义： 即继承 \lstinline{true_type}． 最后， 我们再把 \lstinline{is_vector_imp} 已经实现的功能封装成函数模板 \lstinline{is_vector<T>()}， 就大功告成了．
+
+用于判断矩阵类型的 \lstinline{is_matrix<T>()} 也可以如法炮制
+\begin{lstlisting}[language=cpp]
+template <class T> struct is_matrix_imp : std::false_type {};
+template <class T> struct is_matrix_imp<Matrix<T>> : std::true_type {};
+template<class T>
+constexpr bool is_matrix()
+{
+	return is_vector_imp<T>();
+}
+\end{lstlisting}
+然而注意标准库中没有矩阵类型（据说其实有一个，后来烂尾了，几乎没人用）， 所以我们一般自己定义矩阵类型 \lstinline{Matrix<T>}．
