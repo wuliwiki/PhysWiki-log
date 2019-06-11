@@ -1,0 +1,36 @@
+% 简单的矢量和矩阵类
+
+虽然我们可以直接使用 std::vector， 但是通过创建一个简单的矢量类我们可以了解写一个类的基本思路， 在这之后就可以按照同样的思路创建各种容器了．
+
+\begin{lstlisting}[language=cpp]
+// Base Class for vector/matrix
+template <class T>
+class Vector
+{
+protected:
+	T *m_p; // pointer to the first element
+	Long m_N; // number of elements
+public:
+	// constructors
+	Vector();
+	explicit Vector(Long_I N);
+	Vector(const Vector<T> &rhs); // copy constructor
+
+	// member functions
+	T* ptr(); // get pointer
+	const T* ptr() const;
+	Long size() const;
+	void resize(Long_I N);
+	T & operator[](Long_I i);
+	const T & operator[](Long_I i) const;
+	T& end(Long_I i = 1); // i = 1 for the last, i = 2 for the second last...
+	const T& end(Long_I i = 1) const;
+	Vector & operator=(const Vector &rhs);
+	Vector & operator=(const T &rhs); // for scalar
+	~Vector();
+};
+\end{lstlisting}
+
+首先这是一个类模板， 而不是类本身， 例如如果用户声明了一个变量如\lstinline{Vector<Doub>}， 那么编译器会根据模板生成一个定义， 将模板中的所有 \lstinline{T} 替换为 $Doub$． 如果声明了多种类型的 \lstinline{Vector<T>}， 那么编译器也会相应生成多个不同版本的 $Vector$ 的定义．
+
+注意 Vector 只有两个很简单的数据成员， 分别是类型 \lstinline{T} 的指针以及矢量的长度． 事实上矩阵元数据并不在 Vector 内部， 而是在 constructor 或 \lstinline{resize()} 函数中通过 \lstinline{new} 命令来动态分配的， 所以如果我们在程序中用 \lstinline{sizeof(Vector<Doub>)} 来测试占用内存， 得到的字节数将会是 \lstinline{m_p} 和 \lstinline{m_N} 的字节数相加， 而不包括矩阵元占用的空间． 如果在程序中直接用 \lstinline{Vector<Doub> a} 来声明变量， \lstinline{m_p} 和 \lstinline{m_N} 将会储存在 stack 中， 而矩阵元（以后如果有的话）将会在储存在 heap 中．
