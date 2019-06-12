@@ -22,6 +22,8 @@ L(q_1,q_2\dots,\dot q_1,\dot q_2\dots,t) = T(q_1,q_2\dots,\dot q_1,\dot q_2\dots
 
 拉格朗日力学与牛顿力学完全等效，其优势在于，第一，只需写出拉格朗日量，就可由简单求导得到完整的动力学微分方程而无需进行受力分析．第二，方程的形式不随广义坐标的选取而改变．第三，无需解方程即可以得到一些守恒量．
 
+我们以下先通过一些例子来学习如何使用拉格朗日方程， 而把方程的证明或推导留到 ”达朗贝尔定理\upref{dAlbt}“ 以及 ”哈密顿原理\upref{HamPrn}“。
+
 \begin{exam}{单个质点}\label{Lagrng_ex1}
 若把一个质点作为系统，其直角坐标 $x,y,z$ 就可以看做一组广义坐标，把它们看做时间的函数 $x(t), y(t), z(t)$，则三个函数完整地描述了每个时刻质点的位置．三个函数对时间的导数（即速度的三个分量）记为 $\dot x, \dot y, \dot z$， 则质点的动能为 $T=m(\dot x^2+\dot y^2+\dot z^2)/2$． 令质点的势能为 $V(x,y,z,t)$， 拉格朗日量为
 \begin{equation}
@@ -142,6 +144,43 @@ L = T - V = \frac12 m(\dot r^2 + r^2 \omega^2)
 \begin{equation}
 r(t) = C_1 \E^{\omega t} + C_2 \E^{-\omega t}
 \end{equation}
+\end{exam}
+
+\begin{exam}{综合例题（包括解方程）}
+% 未完成： 验算 + Matlab 画图
+一根无限长杆在竖直平面绕杆上某点以角速度 $\omega$ 匀速转动， 一质点可以延杆做无摩擦运动， 质点与转轴由弹簧相连， 弹性系数为 $k$， 原长为 $r_0$， 求质点的运动轨迹。
+
+令质点离转轴的距离为 $r$ （正方向任意选取）， 令 $\omega_0^2 = \omega^2 + k/m$
+拉格朗日量为
+\begin{equation}
+L = T - V = \frac12 m(\dot r^2 + r^2\omega^2) + mgr\sin(\omega t) + \frac12 k (r - r_0)^2
+\end{equation}
+由拉格朗日方程得质点的轨道方程
+\begin{equation}
+\ddot r - \omega_0^2 r = -g \sin(\omega t) - \frac{k}{m} r_0
+\end{equation}
+这是一个二阶常系数非齐次微分方程\upref{Ode2N}， 直接套公式即可\footnote{也可以用\link{Wolfram Alpha}{https://www.wolframalpha.com}， 例如输入 \lstinline{y'' - a^2*y = -g*sin(w*x) - b}}。 齐次解为
+\begin{equation}
+r(t) = C_1 r_1(t) + C_2 r_2(t) = C_1 \E^{\omega_0 t} + C_2 \E^{-\omega_0 t}
+\end{equation}
+要求非齐次解， 先求朗斯基行列式
+\begin{equation}
+W(t) = \vmat{r_1 & r_2\\ r'_1 & r'_2} = -2\omega_0
+\end{equation}
+
+\begin{equation}
+\int \frac{r_1 f(t)}{W} \dd{t} = \frac{g}{2\omega_0} \frac{\E^{\omega_0 t} [\omega_0 \sin(\omega t) - \omega \cos(\omega t)]}{\omega^2 + \omega_0^2} + \frac{k r_0}{2 m\omega_0^2} \E^{\omega_0 t}
+\end{equation}
+
+\begin{equation}
+\int \frac{r_2 f(t)}{W} \dd{t} = -\frac{g}{2\omega_0} \frac{\E^{-\omega_0 t} [\omega_0 \sin(\omega t) + \omega \cos(\omega t)]}{\omega^2 + \omega_0^2} - \frac{k r_0}{2 m\omega_0^2} \E^{-\omega_0 t}
+\end{equation}
+
+通解为
+\begin{equation}\ali{
+r(t) =  &C_1 r_1 + C_2 r_2 - r_1 \int \frac{r_2 f(t)}{W} \dd{t} + r_2 \int \frac{r_1 f(t)}{W} \dd{t}\\
+= &C_1 \E^{\omega_0 t} + C_2 \E^{-\omega_0 t} + \frac{g \sin(\omega t)}{\omega_0^2 + \omega^2} + \frac{k r_0}{m \omega_0^2}
+}\end{equation}
 \end{exam}
 
 \subsection{非保守力的拉格朗日方程}
