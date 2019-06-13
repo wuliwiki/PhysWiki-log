@@ -1,3 +1,68 @@
 % 达朗贝尔定理
 
 以下使用牛顿第二定律证明拉格朗日方程， 其中会使用到一个关于约束的定理叫做达朗贝尔定理
+
+% 首先可以用牛顿定律来推导，然后再用最小作用量推导
+\subsection{由牛顿第二定律证明拉格朗日方程}
+注意以下所有的函数偏导都是把 $q_1, q_2\dots q_N, \dot q_1, \dot q_2\dots \dot q_N, t$ 作为变量，即对一个变量求导数而把其他变量看做常数．另外，势能 $V$ 和位矢 $\vec r_j$ 与 $\dot q_i$ 无关，偏导为 0．
+
+系统动能为
+\begin{equation}
+T = \frac12 \sum_j m_j \vec v_j^2 = \frac12 \sum_j m_j \dot{\vec r}_j \vdot \dot{\vec r}_j
+\end{equation}
+由矢量点乘的求导法则
+\begin{equation}\label{Lagrng_eq5}
+\pdv{T}{\dot q_i} = \sum_j m_j \dot{\vec r}_j \vdot \pdv{\dot{\vec r}_j}{\dot q_i}
+\end{equation}
+其中质点 $j$ 的速度可以用全导数\upref{TotDer} 公式
+\begin{equation}
+\dot{\vec r}_j = \sum_k \pdv{\vec r_j}{q_k} \dot q_k  + \pdv{\vec r_j}{t}
+\end{equation}
+对 $\dot q_i$ 求偏导，注意位矢与$\dot q_i$ 无关，所以求偏导时 $\pdv*{r_j}{q_k}$ 与 $\pdv*{r_j}{t}$ 可看做常数．
+\begin{equation}\label{Lagrng_eq27}
+\pdv{\dot{\vec r}_j}{\dot q_i} = \pdv{\vec r_j}{q_i}
+\end{equation}
+代入\autoref{Lagrng_eq5} 并对时间求导得到拉格朗日方程的左边（我们暂时只讨论 $\pdv*{V}{\dot q_i} = 0$ 的情况）
+\begin{equation}\label{Lagrng_eq8}
+\dv{t} \pdv{T}{\dot q_i} = \sum_j m_j \ddot{\vec r}_j \vdot \pdv{\vec r_j}{q_i}  + \sum_j m_j \dot{\vec r}_j \vdot \dv{t} \pdv{\vec r_j}{q_i}
+\end{equation}
+拉格朗日方程的右边为
+\begin{equation}\label{Lagrng_eq9}
+\pdv{L}{q_i} = \pdv{T}{q_i} - \pdv{V}{q_i}
+\end{equation}
+其中第一项为
+\begin{equation}\label{Lagrng_eq28}
+\pdv{T}{q_i} = \sum_j m_j \dot{\vec r}_j \vdot \pdv{\dot{\vec r}_j}{q_i} = \sum_j m_j \dot{\vec r}_j \vdot \pdv{q_i} \dv{\vec r_j}{t}
+\end{equation}
+第二项被定义为\bb{广义力}
+\begin{equation}\label{Lagrng_eq29}
+Q_i = - \pdv{V}{q_i} = \sum_j \qty(-\pdv{V}{x_j} \pdv{x_j}{q_i} - \pdv{V}{y_j}\pdv{y_j}{q_i} - \pdv{V}{z_j} \pdv{z_j}{q_i}) = \sum_j \vec F_j^{(a)} \vdot \pdv{\vec r_j}{q_i}
+\end{equation}
+其中 $\vec F_j^{(a)} = - \grad_j V$ 被称为\bb{非约束力}．%未完成，最好以上的例子中能说明非约束力
+所以要证明拉格朗日方程，即证明\autoref{Lagrng_eq8} 等于\autoref{Lagrng_eq28} 加\autoref{Lagrng_eq29}， 首先需要证明
+\begin{equation}
+\dv{t} \pdv{\vec r_j}{q_i} = \pdv{q_i} \dv{\vec r_j}{t}
+\end{equation}
+也就是证明全导数和偏导数运算可对易．使用全导数\upref{TotDer} 的定义，以及混合偏导\upref{ParDer} 的性质，有
+\begin{equation}
+\dv{t} \pdv{\vec r_j}{q_i} = \sum_k \pdv{q_k} \pdv{\vec r_i}{q_i} \dot q_k  + \pdv{t} \pdv{\vec r_j}{q_i} = \sum_k \pdv{q_i} \pdv{\vec r_i}{q_k} \dot q_k + \pdv{q_i} \pdv{\vec r_j}{t} = \pdv{q_i} \dv{\vec r_j}{t}
+\end{equation}
+然后我们需要证明
+\begin{equation}
+\sum_j \qty(\vec F_j^{(a)} - m\ddot{\vec r}_j) \vdot \pdv{\vec r_j}{q_i}  = 0
+\qquad (i = 1\dots N)
+\end{equation}
+即可证明拉格朗日方程．该式被称为\bb{达朗贝尔定理}．注意由于这里的 $\vec F_j^{(a)}$ 为质点 $j$ 所受的非约束力而不是合力，所以求和项的小括号一般不为 0．
+
+\subsection{达朗贝尔定理证明}
+令第 $j$ 个质点所受和力为 $\vec F_j = \vec F_j^{(a)} + \vec F_j^{(c)}$， 两项分别为非约束力和约束力．由牛顿第二定律 $\vec F_j - m\ddot{\vec r}_j = 0$， 所以
+\begin{equation}
+\sum_j \qty(\vec F_j^{(a)}+\vec F_j^{(c)} - m\ddot{\vec r}_j) \vdot \pdv{\vec r_j}{q_i} = 0
+\qquad (i = 1\dots N)
+\end{equation}
+现在我们只需证明
+\begin{equation}
+\sum_j  \vec F_j^{(c)} \vdot \pdv{\vec r_j}{q_i}  = 0
+\qquad (i = 1\dots N)
+\end{equation}
+由于以上偏微分中时间保持不变，约束力不做功，该求和为零，证毕．%未完成: 这样的解释连我都不明白... 真的要结合有约束的例题来解释了
