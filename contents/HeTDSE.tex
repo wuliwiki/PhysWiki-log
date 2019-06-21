@@ -19,15 +19,15 @@
 
 总哈密顿可以表示为
 \begin{equation}
-H = H_1 + H_2 + V_{12} + V_F
+H = H_1 + H_2 + V_{12} + V_{F1} + V_{F2}
 \end{equation}
 其中 $H_i \ \ (i = 1, 2)$ 是单个电子的哈密顿算符， 对应对角矩阵．
 \begin{equation}
 H_i = K_{ri} + \frac{L_i^2}{2m r_i^2} - \frac{2}{r_i}
 \end{equation}
-其中第二项是对角矩阵是因为 $\mathcal Y$ 基底是 $L_i^2$ 的本征函数．
+其中第二项是对角矩阵是因为 $\mathcal Y$ 基底是 $L_i^2$ 的本征函数． $V_{12}$ 是两电子之间的库仑势能， $V_F$ 是电场对每个电子的作用势能。
 
-存在 coupling 的项自然是两电子之间的库仑势能 $V_{12}$
+\subsection{电子相互作用项}
 \begin{equation}
 \ali{
 V_{12} = \frac{1}{\abs{\vec r_2 - \vec r_1}} &= 4\pi \sum_{l=0}^{\infty} \frac{1}{2l+1} \frac{r_<^l}{r_>^{l+1}} \sum_{m = -l}^l Y_{l,m}^*(\uvec r_1) Y_{l,m}(\uvec r_2)\\
@@ -83,6 +83,37 @@ m_1 + m_2 = m_1' + m_2' = M \qquad
 \Bmat{l & l_1' & l_1\\ l & l_2' & l_2\\ 0 & L & L}
 }\end{equation}
 注意当 $M = M'$ 时， 结果与 $M$ 无关．
+
+\subsection{电场作用项}
+对每个电子，
+\begin{equation}
+V_F = \vec E \vdot \vec r = E_x x + E_y y + E_z z
+\end{equation}
+与氢原子的情况相同， 有
+\begin{equation}
+x = r\sqrt{\frac{2\pi}{3}} r (Y_{1,-1} - Y_{1,1}) \qquad
+y = \I \sqrt{\frac{2\pi}{3}} r (Y_{1,-1}+Y_{1,1}) \qquad
+z =2\sqrt{\frac{\pi}{3}} rY_{1,0}
+\end{equation}
+对线偏振电场我们只需要最后一项， 以第一个电子为例，
+% 未完成: 验证是否和爱华 thesis 上的一样
+\begin{equation}\ali{
+&\mel{\mathcal{Y}_{l_1 l_2}^{LM}}{z_1}{\mathcal{Y}_{l_1' l_2'}^{L'M'}}
+= 2\sqrt{\frac{\pi}{3}} r \sum_{m_1',m_2'}\sum_{m_1,m_2} \bmat{l_1 & l_2 & L\\ m_1 & m_2 & M}\bmat{l_1' & l_2' & L'\\ m_1' & m_2' & M'} \times\\
+&\qquad  \iint Y_{l_1m_1}^*(\uvec r_1)Y_{l_2m_2}^*(\uvec r_2)Y_{10}(\uvec r_1)Y_{l_1' m_1'}(\uvec r_1)Y_{l_2' m_2'}(\uvec r_2) \dd{\Omega_1}\dd{\Omega_2}\\
+&= 2 \sqrt{\frac{\pi}{3}} \delta_{l_2, l_2'} r \sum_{m_1,m_2, m_1'} \bmat{l_1 & l_2 & L\\ m_1 & m_2 & M}\bmat{l_1' & l_2' & L'\\ m_1' & m_2 & M'} \times\\
+&\qquad  \iint Y_{l_1m_1}^*(\uvec r_1)Y_{l_2m_2}^*(\uvec r_2)Y_{10}(\uvec r_1)Y_{l_1' m_1'}(\uvec r_1)Y_{l_2 m_2}(\uvec r_2) \dd{\Omega_1}\dd{\Omega_2}\\
+&= \delta_{l_2, l_2'} \sqrt{(2l_1 + 1)(2l_1'+1)} r \sum_{m_1,m_2, m_1'} \bmat{l_1 & l_2 & L\\ m_1 & m_2 & M} \bmat{l_1' & l_2 & L'\\ m_1' & m_2 & M'} \times\\
+&\qquad  \pmat{l_1 & 1 & l_1'\\ 0 & 0 & 0} \pmat{l_1 & 1 & l_1'\\ m_1 & 0 & m_1'}
+}\end{equation}
+同理， 对第二个电子有
+\begin{equation}\ali{
+% 未完成: 验证是否和爱华 thesis 上的一样
+&\mel{\mathcal{Y}_{l_1 l_2}^{LM}}{z_2}{\mathcal{Y}_{l_1' l_2'}^{L'M'}}\\
+&= \delta_{l_1, l_1'} \sqrt{(2l_2 + 1)(2l_2'+1)} r \sum_{m_1,m_2, m_2'} \bmat{l_1 & l_2 & L\\ m_1 & m_2 & M} \bmat{l_1 & l_2' & L'\\ m_1 & m_2' & M'} \times\\
+&\qquad  \pmat{l_2 & 1 & l_2'\\ 0 & 0 & 0} \pmat{l_2 & 1 & l_2'\\ m_2 & 0 & m_2'}
+}\end{equation}
+
 
 \subsection{波函数演化}
 传播同样使用 split operator 
