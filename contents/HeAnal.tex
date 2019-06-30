@@ -6,37 +6,44 @@
 用于基态能量估计
 
 \subsection{动量谱（6 维）}
-氢原子的非束缚态是库仑波函数\upref{CulmWf}， 而氦原子的（双电子）非束缚态没有解析解， 于是就假设时间足够大时， 两电子间没有相互作用， 就可以直接把两个库仑波函数做张量积再对称/反对称化即可。 而这样一来， 非束缚态和束缚态之间显然就不正交了， 所以分析时需要将所有束缚态去掉。 爱华的方法是直接减去基态的投影， 然而这样一来激发态的分量就仍然存在了。 我认为如果电离波包和未电离的波包已经分离的话， 可以像做氢原子那样直接把一定半径内的波函数直接挖掉。
+氢原子的散射态是库仑波函数\upref{CulmWf}， 而氦原子的（双电子）散射态没有解析解， 于是就假设时间足够大时， 两电子间没有相互作用， 就可以直接把两个库仑波函数做张量积再对称/反对称化即可。 而这样一来， 散射态和束缚态之间显然就不正交了， 所以分析时需要将所有束缚态去掉。 爱华的方法是直接减去基态的投影， 然而这样一来激发态的分量就仍然存在了。 我认为如果电离波包和未电离的波包已经分离的话， 可以像做氢原子那样直接把一定半径内的波函数直接挖掉。
 
-库仑波函数（我们只需要平面波出射）为
+库仑波函数（我们只需要平面波出射）为（$\eta = Z/k$， $Z = -2$）
 \begin{equation}
 \psi_{\vec k}(\vec r) = \sqrt{\frac{2}{\pi}}\sum_{l, m} \frac{\I^l}{r k} \E^{-\I \sigma_l(\eta)} F_l (\eta, kr) Y_{l, m}^* (\uvec k) Y_{l, m}(\uvec r)
 \end{equation}
-对称化后的非束缚态为\footnote{注意对称化的时候选择交换 $\vec r$ 还是交换 $\vec k$ 会导致结果看起来不同（实际上是等效的）， 为了稍后积分方便， 我们选择交换 $\vec k$}
+对称化后的散射态为\footnote{注意对称化的时候选择交换 $\vec r$ 还是交换 $\vec k$ 会导致结果看起来不同（实际上是等效的）， 为了稍后积分方便， 我们选择交换 $\vec k$}
 \begin{equation}\ali{
 & \qquad \psi_{\vec k_1, \vec k_2}(\vec r_1, \vec r_2) = \frac{1}{\sqrt 2} [\psi_{\vec k_1} (\vec r_1) \psi_{\vec k_2} (\vec r_2) + \psi_{\vec k_2} (\vec r_1) \psi_{\vec k_1} (\vec r_2)]\\
 &= \frac{\sqrt 2}{\pi} \sum_{l_1, m_1} \sum_{l_2, m_2} \frac{\I^{l_1 + l_2}}{r_1 r_2 k_1 k_2} \times\\
-&\qquad [(\E^{\I [\sigma_{l_1}(\eta_1) + \sigma_{l_2} (\eta_2)]} F_{l_1} (\eta_1, k_1 r_1) F_{l_2}(\eta_2, k_2 r_2) Y_{l_1, m_1}^* (\uvec k_1) Y_{l_2, m_2}^* (\uvec k_2)) +\\
-& \qquad (\E^{\I [\sigma_{l_1}(\eta_2) + \sigma_{l_2} (\eta_1)]} F_{l_1} (\eta_2, k_2 r_1) F_{l_2}(\eta_1, k_1 r_2) Y_{l_1, m_1}^* (\uvec k_2) Y_{l_2, m_2}^* (\uvec k_1))]\times\\
+&\qquad [(\E^{-\I [\sigma_{l_1}(\eta_1) + \sigma_{l_2} (\eta_2)]} F_{l_1} (\eta_1, k_1 r_1) F_{l_2}(\eta_2, k_2 r_2) Y_{l_1, m_1}^* (\uvec k_1) Y_{l_2, m_2}^* (\uvec k_2)) +\\
+& \qquad (\E^{-\I [\sigma_{l_1}(\eta_2) + \sigma_{l_2} (\eta_1)]} F_{l_1} (\eta_2, k_2 r_1) F_{l_2}(\eta_1, k_1 r_2) Y_{l_1, m_1}^* (\uvec k_2) Y_{l_2, m_2}^* (\uvec k_1))]\times\\
 & \qquad Y_{l_1, m_1} (\uvec r_1) Y_{l_2, m_2} (\uvec r_2)
 }\end{equation}
 
 TDSE 的波函数（假设已经满足交换对称）为
 \begin{equation}\ali{
 &\Psi(\vec r_1, \vec r_2) = \sum_{L, M, l_1, l_2}  \frac{1}{r_1 r_2} \psi_{l_1, l_2}^{L, M}(r_1, r_2)\mathcal{Y}_{l_1, l_2}^{L, M}(\uvec r_1, \uvec r_2)\\
-& \quad = \sum_{L, M, l_1, l_2} \sum_{m_1, m_2} \bmat{l_1 & l_2 & L\\ m_1 & m_2 & M} \frac{1}{r_1 r_2} \psi_{l_1, l_2}^{L, M}(r_1, r_2) Y_{l_1, m_1} (\uvec r_1) Y_{l_2, m_2} (\uvec r_2)
+& \quad = \sum_{L, M, l_1, l_2} \frac{1}{r_1 r_2} \psi_{l_1, l_2}^{L, M}(r_1, r_2) \sum_{m_1, m_2} \bmat{l_1 & l_2 & L\\ m_1 & m_2 & M} Y_{l_1, m_1} (\uvec r_1) Y_{l_2, m_2} (\uvec r_2)
 }\end{equation}
-
-投影得（过程略， 令两个径向积分的结果分别为 $I_{l_1, l_2}^{L, M}(k_1, k_2)$ 和 $I_{l_1, l_2}^{L, M}(k_2, k_1)$， 注意两个 $Y_{l_1, m_1} (\uvec r_1) Y_{l_2, m_2} (\uvec r_2)$ 项积分会产生两个 $\delta$ 函数）
+投影得（过程略， 注意两个 $Y_{l_1, m_1} (\uvec r_1) Y_{l_2, m_2} (\uvec r_2)$ 项积分会产生两个 $\delta$ 函数）
 % 未完成： 未验证， 且与爱华的代码不同
 \begin{equation}\ali{
-\braket{\psi_{\vec k_1, \vec k_2}}{\Psi} &= \sum_{L, M} \frac{\sqrt 2}{\pi} \frac{\I^{l_1 + l_2}}{k_1 k_2} \sum_{l_1, l_2}\\
-&[\E^{-\I [\sigma_{l_1}(\eta_1) + \sigma_{l_2} (\eta_2)} I_{l_1, l_2}^{L, M}(k_1, k_2) \mathcal{Y}_{l_1, l_2}^{L, M}(\uvec k_1, \uvec k_2) + \\
-&\E^{-\I [\sigma_{l_1}(\eta_2) + \sigma_{l_2} (\eta_1)} I_{l_1, l_2}^{L, M}(k_2, k_1) \mathcal{Y}_{l_1, l_2}^{L, M}(\uvec k_2, \uvec k_1)]
+\braket{\psi_{\vec k_1, \vec k_2}}{\Psi} &= \frac{\sqrt 2}{\pi k_1 k_2} \sum_{L, M, l_1, l_2} \I^{l_1 + l_2} \times \\
+&[\E^{\I [\sigma_{l_1}(\eta_1) + \sigma_{l_2} (\eta_2)]} I_{l_1, l_2}^{L, M}(k_1, k_2) \mathcal{Y}_{l_1, l_2}^{L, M}(\uvec k_1, \uvec k_2) + \\
+&\E^{\I [\sigma_{l_1}(\eta_2) + \sigma_{l_2} (\eta_1)]} I_{l_1, l_2}^{L, M}(k_2, k_1) \mathcal{Y}_{l_1, l_2}^{L, M}(\uvec k_2, \uvec k_1)]
 }\end{equation}
+其中
+\begin{equation}
+I_{l_1, l_2}^{L, M}(k_1, k_2) = \int_0^\infty \int_0^\infty F_{l_1} (\eta_1, k_1 r_1) F_{l_2}(\eta_2, k_2 r_2)  \psi_{l_1, l_2}^{L, M}(r_1, r_2) \dd{r_1} \dd{r_2}
+\end{equation}
+
 投影的平方就是概率分布
 \begin{equation}
 P(\vec k_1, \vec k_2) = \abs{\braket{\psi_{\vec k_1, \vec k_2}}{\Psi}}^2
 \end{equation}
 
 \subsection{JAD（joint angular distribution）}
+\begin{equation}
+\int_0^\infty \int_0^\infty P(\vec k_1, \vec k_2) k_1^2 k_2^2 \delta(k_1 - k_2) \dd{k_1} \dd{k_2}
+\end{equation}
