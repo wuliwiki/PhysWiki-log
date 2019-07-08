@@ -1,0 +1,34 @@
+% Makefile 笔记
+
+% 摘自我的 GitHub/Notes/Programming/Fortran/makefile_笔记2.md
+
+\begin{itemize}
+\item 要系统地学习 make， 参考资料是 \link{GNU Make 文档}{https://www.gnu.org/software/make/manual/}， 提供网页版和 pdf 下载。
+\item make 程序广义上是声明如何更新一系列文件， 以及他们的 dependencies。 当某个文件改变后， 任何依赖于它的文件都需要通过指定的规则 （rule） 来更新
+\item 突然发现， rule 的 “:” 前面不可以有空格 ？
+\item rule 的第一行用于声明什么文件取决于什么文件， 剩下的行声明用什么命令去更新。
+\item 可以根据所有 rule 中的 target 和 dependency 画一个树状图， 如果某个点的文件不存在， 那么就会先运行生成它的 rule， 如果图中的任何一点更新了， 从这点到顶点的所有文件都要更新. 具体的规则是， 如果一个 target 的任何一个 dependency 比它要新， 那么 target 就要重新编译.
+\item “goal :” 可以声明 make 的终极目标， 如
+\begin{lstlisting}
+goal: file1 file2 ...
+	command1
+	command2
+\end{lstlisting}
+\item 如果没有 goal 的话， default goal 就是第一个开头不为 “.” 的 target。 剩下的 rule 的顺序应该可以随意
+任何一个被依赖的文件改变了， 或者它们依赖的文件改变了， 就会执行 command。 make 并不知道 command 的含义。 只是把它传给 shell 来执行。
+\item implicit rules 大概就是可以仅声明 “A: B”, 由自定义的命令或者 make 默认的命令来生成 “A”。 implicit rule 中的 dependency 是至少有这些 dependency， 而不是只能有这些 dependency。
+\item “MAKEFLAGS = -r” 大概是用来取消默认 implicit rules, 包括所有后缀名识别
+\item 老的 suffix rule 和 implicit rules 的功能差不多， 现在已经过时了， 应该用 implicit rule。 一个例子如
+\begin{lstlisting}
+  .f90.o:
+	gfortran -c $<
+\end{lstlisting}
+其中 “\$<” 是 auto variable 中的一个 (见 10.5.3 Automatic Variables), 在执行的时候被替换成 “:” 右边的第一个 dependency. 现在如果有
+\begin{lstlisting}
+file1.o: file1.f90 file2.o file3.o
+\end{lstlisting}
+那么应该会执行 “gfortran -c file1.f90”. 另外, 如果 “file2.o” 或 “file3.o” 被更新了, 这条命令应该也会再执行一次。
+\item “\$\^” 列出所有的 prerequisites (“:” 右边的内容)
+\item “\$(shell ...)” 可以执行 shell 命令, 如 “\$(shell echo *.f90)” 可以在当前位置列出所有 “.f90” 文件.
+\item “\$\@” 大概就是 target file (如果 “:” 左边只有一个文件的话)
+\end{itemize}
