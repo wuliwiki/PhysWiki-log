@@ -8,7 +8,7 @@
 \subsection{动量谱（6 维）}
 氢原子的散射态是库仑波函数\upref{CulmWf}， 而氦原子的（双电子）散射态没有解析解， 于是就假设时间足够大时， 两电子间没有相互作用， 就可以直接把两个库仑波函数做张量积再对称/反对称化即可． 而这样一来， 散射态和束缚态之间显然就不正交了， 所以分析时需要将所有束缚态去掉． 爱华的方法是直接减去基态的投影， 然而这样一来激发态的分量就仍然存在了． 我认为如果电离波包和未电离的波包已经分离的话， 可以像做氢原子那样直接把一定半径内的波函数直接挖掉．
 
-库仑波函数（我们只需要平面波出射）为（$\eta = Z/k$， $Z = -2$）
+库仑波函数（见\autoref{CulmWf_eq9}\upref{CulmWf}， 我们只需要平面波出射）为（$\eta = Z/k$， $Z = -2$）
 \begin{equation}
 \psi_{\vec k}(\vec r) = \sqrt{\frac{2}{\pi}}\sum_{l, m} \frac{\I^l}{r k} \E^{-\I \sigma_l(\eta)} F_l (\eta, kr) Y_{l, m}^* (\uvec k) Y_{l, m}(\uvec r)
 \end{equation}
@@ -35,22 +35,23 @@ TDSE 的波函数（假设已经满足交换对称）为
 &\E^{\I [\sigma_{l_1}(\eta_1) + \sigma_{l_2} (\eta_2)]} I_{l_1, l_2}^{L, M}(k_1, k_2) \mathcal{Y}_{l_1, l_2}^{L, M}(\uvec k_1, \uvec k_2) + \\
 &\E^{\I [\sigma_{l_1}(\eta_2) + \sigma_{l_2} (\eta_1)]} I_{l_1, l_2}^{L, M}(k_2, k_1) \mathcal{Y}_{l_1, l_2}^{L, M}(\uvec k_2, \uvec k_1)}]
 }\end{equation}
-其中
+其中（定义 $\eta_i = Z/k_i$）
 \begin{equation}
-I_{l_1, l_2}^{L, M}(k_1, k_2) = \int_0^\infty \int_0^\infty F_{l_1} (\eta_1, k_1 r_1) F_{l_2}(\eta_2, k_2 r_2)  \psi_{l_1, l_2}^{L, M}(r_1, r_2) \dd{r_1} \dd{r_2}
+I_{l_i, l_j}^{L, M}(k_m, k_n) = \int_0^\infty \int_0^\infty F_{l_i} (\eta_m, k_m r_1) F_{l_j}(\eta_n, k_n r_2)  \psi_{l_i, l_j}^{L, M}(r_1, r_2) \dd{r_1} \dd{r_2}
 \end{equation}
-\begin{equation}
-I_{l_1, l_2}^{L, M}(k_2, k_1) = \int_0^\infty \int_0^\infty F_{l_1} (\eta_2, k_2 r_1) F_{l_2}(\eta_1, k_1 r_2)  \psi_{l_1, l_2}^{L, M}(r_1, r_2) \dd{r_1} \dd{r_2}
-\end{equation}
+
 把\autoref{HeAnal_eq4} 中的求和拆成两项， 第二项的求和中 $l_1, l_2$ 交换得
 \begin{equation}
 \ali{
 \braket{\psi_{\vec k_1, \vec k_2}}{\Psi} &= \frac{\sqrt 2}{\pi k_1 k_2} \sum_{L, M, l_1, l_2} \I^{l_1 + l_2} \E^{\I [\sigma_{l_1}(\eta_1) + \sigma_{l_2} (\eta_2)]} \times \\
-&\qty[\ali{
-& I_{l_1, l_2}^{L, M}(k_1, k_2) \mathcal{Y}_{l_1, l_2}^{L, M}(\uvec k_1, \uvec k_2) + \\
-& I_{l_2, l_1}^{L, M}(k_2, k_1) \mathcal{Y}_{l_2, l_1}^{L, M}(\uvec k_2, \uvec k_1)}]
+&\qty[
+I_{l_1, l_2}^{L, M}(k_1, k_2) \mathcal{Y}_{l_1, l_2}^{L, M}(\uvec k_1, \uvec k_2) + 
+ I_{l_2, l_1}^{L, M}(k_2, k_1) \mathcal{Y}_{l_2, l_1}^{L, M}(\uvec k_2, \uvec k_1)]
 }\end{equation}
-
+当 $\Psi$ 满足粒子交换对称时， 可以证明 $I_{l_1, l_2}^{L, M}(k_1, k_2) = I_{l_2, l_1}^{L, M}(k_2, k_1)$． 当 $l_1 + l_2 + L$ 为偶数时， 又有 $\mathcal{Y}_{l_1, l_2}^{L, M}(\uvec k_1, \uvec k_2) = \mathcal{Y}_{l_2, l_1}^{L, M}(\uvec k_2, \uvec k_1)$（\autoref{GenYlm_eq5}）． 此时方括号中的两项相等
+\begin{equation}
+\braket{\psi_{\vec k_1, \vec k_2}}{\Psi} = \frac{2\sqrt 2}{\pi k_1 k_2} \sum_{L, M, l_1, l_2} \I^{l_1 + l_2} \E^{\I [\sigma_{l_1}(\eta_1) + \sigma_{l_2} (\eta_2)]}  I_{l_1, l_2}^{L, M}(k_1, k_2) \mathcal{Y}_{l_1, l_2}^{L, M}(\uvec k_1, \uvec k_2)
+\end{equation}
 
 投影的平方就是概率分布
 \begin{equation}
@@ -58,6 +59,8 @@ P(\vec k_1, \vec k_2) = \abs{\braket{\psi_{\vec k_1, \vec k_2}}{\Psi}}^2
 \end{equation}
 
 \subsection{JAD（joint angular distribution）}
+这里的 JAD 并不是总的方向分布， 而是某中能量分割的方向分布， 即 $k_2 - k_1 = \Delta k$， 所以积分中要有一个 delta 函数．
 \begin{equation}
-\int_0^\infty \int_0^\infty P(\vec k_1, \vec k_2) k_1^2 k_2^2 \delta(k_1 - k_2) \dd{k_1} \dd{k_2}
+P_{JAD}(\uvec k_1, \uvec k_2) = \int_0^\infty \int_0^\infty P(\vec k_1, \vec k_2) k_1^2 k_2^2 \delta(k_1 - k_2 + \Delta k) \dd{k_1} \dd{k_2}
 \end{equation}
+一般在同一平面上取 $\uvec k_1$ 和 $\uvec k_2$ （$\phi_1 = \phi_2$ 为常数， 例如 0）， 这样就可以画一个横纵坐标分别为 $\theta_1$ 和 $\theta_2$ 的二维分布图 $P_{JAD}(\theta_1, \theta_2)$．
