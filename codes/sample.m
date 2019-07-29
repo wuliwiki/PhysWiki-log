@@ -16,4 +16,6 @@ disp(result)
 format short % 恢复默认显示
 
 % 测试函数颜色（必须是黑色）
-tan; cot; asin; acos; atan; arg; real; imag; sum; mean; diff; floor; ceil; mod; sinh; cosh; round; tanh; zeros; ones; rand; randn; eye; magic;
+tan; cot; asin; acos; atan; arg; real; imag; sum;
+mean; diff; floor; ceil; mod; sinh; cosh; round;
+tanh; zeros; ones; rand; randn; eye; magic;
