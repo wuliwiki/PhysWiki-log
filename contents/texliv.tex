@@ -1,0 +1,67 @@
+% 使用 TeXlive 编译百科
+
+\subsection{编辑器}
+
+\subsubsection{TeXworks}
+
+\bb{设置}： 菜单中的 Edit > Preference 设置默认字体为 Microsoft YaHei UI（11pt）， 默认编译器为 XeLaTeX，编码选择 UTF-8．
+
+\bb{快捷键}：
+编辑器中 Ctrl+T 编译， 
+Ctrl+单击跳转到对应的 pdf 或代码， 
+在 pdf 中 Alt+左箭头返回上一个位置， 
+代码中 \lstinline|\beq|+Tab 生成公式环境，\lstinline|\sub|+Tab 生成 subsection， Ctrl+G 查找下一个．
+
+\subsubsection{TeXstudio}
+\bb{设置}： 安装 texlive 再安装 texstudio 即可使用， 无需任何配置．
+general 中设置界面字体为 9．
+build 中设置默认编译器为 XeLaTeX．
+editor 中设置字体为 Microsoft YaHei， 大小 11．
+Inline Checking 关掉．
+
+\bb{快捷键}：
+F5 编译并预览 pdf， 若没有 pdf 预览， 或者右键 go to pdf 即可显示 pdf， Ctrl + 单击可以跳转到 pdf 或者代码．
+
+\subsection{其他软件使用规范}
+本书使用 TeXLive2017 软件中的 XeLaTeX 进行编译（暂不兼容更高版本）．如果 Windows 中编译卡在 eu1lmr.fd 上的时间较长，说明 font config 有问题，在 Windows 的控制行运行“fc-cache -fv”，重启 TeXLive，多试几次即可．
+
+搜索文件夹内所有文档的内容用 FileSeek 软件，搜索空格用“\lstinline|\ 空格|”，搜索“\$”用“\lstinline|\$|”，以此类推．
+
+画图用 Adobe Illustrator， 用知乎的公式编辑器在图中添加公式（把编辑器中的公式另存为 svg 然后在 Illustrator 中打开）\footnote{不推荐的老方法是使用 MathType 添加公式，希腊字母粗体正体矢量用从 Symbol 字体中插入（勾选 bold），更简单的方法是，先输入希腊字母，选中，然后在 Style 里面选 Vector-Matrix}． 图片中的文字必须是 12 号， 如果字太小， 就把图片缩小而不是字放大． 图片中的线条尽量用 1pt 粗细． 图片插入书中后， 图中的字体应比书中的略小． 要画箭头， 先画一条直线， 然后选画笔图标， 在左下角的菜单中选 Arrows > Arrow\_Standard， 选 1.23 号箭头， 再把粗细改成 0.3155pt （相当于 1pt 粗的直线）．
+
+\subsection{文件版本管理}
+使用 GitHub Desktop， 用 MacroUniverse/PhysWiki 项目管理所有文件， 每次 commit 必须完成以下步骤．
+\begin{itemize}
+\item 与 GitHub 同步（fetch/pull）
+\item 检查变化的内容
+\item 用 FileSeek 查找所有文档中的空心句号并替换
+\item 确保所有文档可以顺利编译
+\item 用 PhysWikiScan 更新 littleshi.cn
+\item commit 以后检查 history 无误后 push 到 GitHub
+\end{itemize}
+每次 commit 的标题尽量使用下列之一
+\begin{itemize}
+\item 常规更新：包括完善词条，新词条等．
+\item 模板更新：模板有更新．
+\item 批量修改：在多个文件中修改某一格式规范， 这种修改比较危险， 需要谨慎．
+\item 词条统计：统计文件夹，对照表，和书中的词条，查看不一致或缺失．
+\end{itemize}
+定期检查的内容
+\begin{itemize}
+\item 解决编译产生的 warning
+\item 把 ManicTime 记录的写作时间记录到“timer.xls”
+\end{itemize}
+
+GitHub 会忽略 “.gitignore” 文件指定的文件类型： *.toc， *.aux， *.log， *.out， *synctex.gz．
+
+词条统计的方法： 首先把 contents 文件夹中的所有文件名按顺序排列， 复制到表格中， 然后把词条对照表中的所有标签在表格中找到对应项， 做标记， 并把对照表中的词条名粘贴到表格中． 最后到 PhysWiki.tex 中逐个把标签在表格中找到对应项， 做标记， 对照词条名， 并对照词条文件中第一行的词条名．
+
+\subsection{词条编写规范}
+
+每个词条文件必须有一个独一无二的标签（即使在不同文件夹中）， 词条标签必须限制在 6 个字符内，必须在 PhysWiki.tex， 词条标签对照表和词条文件名中一致． 词条的中文名必须在主文件， 词条标签对照表和词条文件的第一行注释中一致． 中文名中空格用 “\textbackslash 空格” 实现， 不能出现公式环境（尽量用英文单词代替比如 gamma 代替 $\Gamma$）． 词条文件一般放在 contents 目录下， 并在主文件中用 \lstinline|\entry{}{}| 命令输入中文名和标签． 主文件有 Debug.tex， PhysWiki.tex 和 PhysWikiNote.tex 三个， 它们共用一个模板（others 目录）． 新词条必须现在 Debug.tex 中编辑， 完成后再从中删除并将 entry 插入到 PhysWiki.tex （小时物理百科）或 PhysWikiNote.tex （小时物理笔记） 中． Debug.tex 中的 entry/Entry 命令的后面可以用 \lstinline|\newpage| 命令强制换页， 但不允许在其他文件中这么做．
+
+PhysWiki.tex 中与 PhysWiki1.tex 重复的部分不能修改， 只能从 PhysWiki1.tex 中复制． PhysWiki.tex 中与 PhysWikiNotes.tex 中重复的部分也不能修改， 只能从 PhysWikiNotes.tex 中复制．
+
+PhysWiki.tex 中已有的词条只允许放在 Debug.tex 的“修改审阅中” 部分， 否则必须放在“创作中” 部分．
+
+引用词条用 \lstinline|\upref| 命令，“预备知识”用 \lstinline|\pentry| 命令，“应用实例”用 \lstinline|\eentry| 命令．
