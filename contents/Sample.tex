@@ -2,72 +2,41 @@
 
 \pentry{本书编写规范\upref{Sample}}
 
+\textbf{本词条需要与 LaTeX 源码对照阅读}
+
 \subsection{蓝色的小标题}
+通过 \lstinline|\subsection{}| 实现．
 \subsubsection{黑色的小小标题}
+通过 \lstinline|\subsubsection{}| 实现．
 
-正文必须使用中文的括号，逗号，引号，冒号，分号，问号，感叹号，以及英文的全角实心的句号． 如 “牛顿—莱布尼兹公式” 中的横线必须用中文单破折号． 所有的标点符号前面不能有空格，后面尽量有空格． 正文\bb{粗体}用 \lstinline|\bb|， 等效于 \lstinline|\textbf|． 行内公式用单个美元符号，且两边要有空格，例如 $a^2+b^2=c^2$， 后面有标点符号的除外．方便的办法是先全部使用中文标点，最后再把所有空心句号替换成全角实心句号． 正文中禁止使用 \lstinline|\\| 换行， 以及 \lstinline|\noindent|， \lstinline|\phantom| 等命令强制修改格式．
+\subsection{正文}
 
-公式的 label 必须要按照 “词条标签\_eq编号” 的格式，只有需要引用的公式才加标签，不重复即可． 图表的标签分别把 eq 改成 fig 和 tab 即可，例题用 ex， 习题用 exe．但凡是有 \lstinline|\caption| 命令的，\lstinline|\label| 需要紧接其后． 公式严禁使用 MathType 自动生成， 必须手打．
+正文必须使用中文的括号，逗号，引号，冒号，分号，问号，感叹号，以及全角实心句号． 严谨使用英文标点． 像“牛顿—莱布尼兹公式” 中的横线必须用中文单破折号． 所有的标点符号前面不能有空格，后面尽量有空格． 正文\textbf{粗体}用 \lstinline|\textbf|． 方便的办法是先全部使用中文标点，最后再把所有空心句号替换成全角实心句号． 正文中禁止使用 \lstinline|\\| 换行， 以及 \lstinline|\noindent|， \lstinline|\phantom| 等命令强制修改格式．
+
+\subsection{公式}
+行内公式用单个美元符号，且两边要有空格，例如 $a^2+b^2=c^2$， 后面有标点符号的除外．
+
+独立公式的 label 必须要按照 “词条标签\_eq编号” 的格式，只有需要引用的公式才加标签， 标签编号无需和编译后的编号相同， 保证标签不重复即可． 图表的标签分别把 \lstinline|eq| 改成 \lstinline|fig| 和 \lstinline|tab| 即可，例题用 \lstinline|ex|， 习题用 \lstinline|exe|．但凡是有 \lstinline|\caption| 命令的，\lstinline|\label| 需要紧接其后． 公式严禁使用 MathType 等软件自动生成， 必须手打．
 \begin{equation}\label{Sample_eq1}
 (a+b)^n = \sum_{i=0}^n C_n^i a^i b^{n-i} \quad (n\text{为整数})
 \end{equation}
-引用公式和图表都统一使用 \lstinline|\autoref| 命令，注意前面不加空格后面要加空格（后面是标点符号除外）， 例如\autoref{Sample_eq1}． 如果要引用其他词条中的公式，可以引用“其他词条\upref{Sample}”的\autoref{Sample_eq1} 也可以用“\autoref{Sample_eq1}\upref{Sample}”， 为了方便在纸质书上使用， 词条页码是不能忽略的．
 
-\subsection{错别字替换}
-“一下”（以下）， 可以时常搜索替换．
-
-\subsection{公式规范}
-公式中的空格从小到大如 $a\, b\; c\quad d\qquad e$， 微分符号如 $\dd{x}$， 注意大括号不可省略． 三点省略号用 $\dots$， 如果要强制在下方， 用 $\ldots$． 大于等于或小于等于必须用 $\les, \ges$ 而不是 $\le, \ge$． 自然对数底如 $\E$， 双重极限如
+公式中的空格从小到大如 $a\, b\; c\quad d\qquad e$， 注意大括号不可省略． 公式中三点省略号用 $\dots$， 如果要强制在下方， 用 $\ldots$． 实部和虚部如 $\Re[z], \Im[z]$． 双重极限如
 \begin{equation}
 \lim_{\substack{\Delta x_i\to 0\\ \Delta y_i\to 0}} \sum_{i, j} f(x_i,y_i) \Delta x_i \Delta y_j
 \end{equation}
 注意行内公式的 \lstinline|\lim| 和 \lstinline|\sum| 如果要在正上方或正下方写东西， 需要加 \lstinline|\limits|， 如 $\lim\limits_{x\to 0}$．
 
-可变尺寸的小中大括号一律用 Physics 宏包里面的 \lstinline|\qty|， 如
-\begin{equation}
-\qty(\frac ab)^2 \qquad \qty[\frac ab]^2 \qquad \qty{ \frac ab}
-\end{equation}
-对易算符如 $\comm{\Q A}{\Q B}$ 或 $\comm*{\Q A}{\Q B}$， 前者自动尺寸， 后者强制小尺寸． 泊松括号如 $\pb{\frac12}{B}$ 和 $\pb*{\frac12}{B}$．
+如果要强制分式正常大小显示， 用 \lstinline|\dfrac| 命令， 如果 \lstinline|\frac| 后面只有两个字符的代码，可以写成如 \lstinline|\frac12|， \lstinline|\frac ab|， \lstinline|\frac1a| 等． 斜分数线后面若多于一个变量需要加括号， 如 $ab/(cd)$．
 
-如果要强制分式正常大小显示， 用 \lstinline|\dfrac| 命令， 表格中若用 dfrac， 需要在行首加上 \lstinline|\dfracH| 命令， 如果 \lstinline|\frac| 后面只有两个字符的代码，可以写成如 \lstinline|\frac12|， \lstinline|\frac ab|， \lstinline|\frac1a| 等． 斜分数线后面若多于一个变量需要加括号， 如 $ab/(cd)$． 另外， 常用三角函数和自然指数对数函数后面的小括号（中括号不可以！）会自动改变尺寸（Physics 宏包功能），若要给他们加幂，用中括号
-\begin{equation}
-\sin(\frac ab) \qquad \sin[2](\frac ab)
-\end{equation}
-另外可以用自定义的 \lstinline|\sinc| 函数如 $\sinc x, \sinc(x), \sinc^2(x+y)$，但后面的括号没有自动尺寸．
+行内分式如 $a/b$， 不允许行内用立体分式． 矢量如 $\vec a$（被重新定义为黑体和正体）， 手写矢量如 $\overrightarrow{a}$． 
 
-导数和偏导用 Physics 宏包里面的
-\begin{equation}
-\dv{x} \quad \dv{f}{x} \quad \dv[2]{f}{x} \quad \dv*[2]{f}{x} \quad
-\pdv{x} \quad \pdv{f}{x} \quad \pdv[2]{f}{x} \quad \pdv{f}{x}{y} \quad \pdv*[2]{f}{x}
-\end{equation}
-复数如 $u+\I v$ 虚数单位不能用 $i$，复共轭如 $z\Cj$ 实部和虚部如 $\Re[z], \Im[z]$，  行内分式如 $a/b$， 不允许行内用立体分式．公式中的绝对值如 $\abs{a}$， 定积分求值如 $\eval{x^2}_0^1$ （自动尺寸）， 矢量如 $\vec a$， 手写矢量如 $\overrightarrow{a}$， 单位矢量如 $\uvec a$， 矢量点乘如 $\vec A \vdot \vec B$ （不可省略），矢量叉乘如 $\vec A\cross\vec B$． 量子力学算符如 $\Q a$（一般可以不加， 只有必要的时候加）， 矢量量子算符如 $\Qv p$． 狄拉克符号（加 * 号强制小尺寸）如 $\bra{a}, \ket{b}, \braket{a}, \braket{a}{b}, \mel{a}{\Q Q}{b}$． 平均值（加 * 号强制小尺寸）如 $\ev*{\Q Q}, \ev{\Q Q}{\psi}$． 梯度散度旋度拉普拉斯如 $\vec\nabla V$，$\vec\nabla\vdot\vec A$，$\vec\nabla\cross\vec A$，  $\nabla^2 V$， 但最好用 $\grad V$，$\div\vec A$，$\curl\vec A$，  $\laplacian V$． 单独一个粗体的 $\nabla$ 用 $\Nabla$． 行列式，矩阵 $\mat A$，转置 $\mat A \Tr$，厄米共轭 $\mat A \Her$ 如
-\begin{equation}
-\pmat{1&2\\3&4} \qquad
-\vmat{1&2\\3&4} \qquad 
-\bmat{1&2\\3&4} \qquad
-\pmat{1&2\\3&4}\Tr \qquad
-\pmat{1&2\\3&4}\Her
-\end{equation}
-行内的列矢量用行矢量的转置表示，如 $(1,2,3)\Tr$． 张量如 $\ten T$．
-
-行间公式换行及对齐用 aligned 环境， 或用自定义的 \lstinline|\ali| 命令， 注意该环境可嵌套．
+行间公式换行及对齐用 aligned 环境， 注意该环境可嵌套．
 \begin{equation}\begin{aligned}
 (a-b)^2 &= a^2+b^2 - 2ab \\
 & = a^2+b^2+2ab-4ab\\
 & = (a+b)^2-4ab
 \end{aligned}\end{equation}
-\begin{equation}\ali{
-k_1 &= f(y_n, t_n) 
-& k_2 &= f \qty(y_n + h\frac{k_1}{2}, t_n + \frac h2 )\\
-k_3 &= f \qty( y_n + h\frac{k_2}{2}, t_n + \frac h2 ) \qquad
-& k_4 &= f(y_n + hk_3, t_n + h)
-}\end{equation}
-左大括号用自定义的 \lstinline|\leftgroup{}| 命令， 里面相当于 aligned 环境
-\begin{equation}
-\leftgroup{
-d+e+f&=g\\
-a+b&=c}
-\end{equation}
 
 用 \lstinline|\begin{enumerate}[resume]|  来继续上一个 enumerate 的编号
 
@@ -89,7 +58,77 @@ a+b&=c}
 &\mathcal{N, O, P, Q, R, S, T, U, V, W, X, Y, Z}
 }\end{equation}
 
-写单位用 \lstinline|\Si{}| 命令， 如 $a = 100\Si{m/s^2}$， 这个命令只能出现在公式环境内（否则 PhysWikiScan 会出 Bug）．
+\subsection{使用 physics 宏包}
+绝对值如 $\abs{a}$， 微分符号如 $\dd{x}$， 
+
+可变尺寸的小中大括号可以用 \lstinline|\qty|， 如
+\begin{equation}
+\qty(\frac ab)^2 \qquad \qty[\frac ab]^2 \qquad \qty{ \frac ab}
+\end{equation}
+矢量点乘如 $\vec A \vdot \vec B$ （不可省略），矢量叉乘如 $\vec A\cross\vec B$．
+
+常用三角函数和自然指数对数函数后面的小括号（中括号不可以！）会自动改变尺寸，若要给他们加幂，用中括号
+\begin{equation}
+\sin(\frac ab) \qquad \sin[2](\frac ab)
+\end{equation}
+
+导数和偏导可以用
+\begin{equation}
+\dv{x} \quad \dv{f}{x} \quad \dv[2]{f}{x} \quad \dv*[2]{f}{x} \quad
+\pdv{x} \quad \pdv{f}{x} \quad \pdv[2]{f}{x} \quad \pdv{f}{x}{y} \quad \pdv*[2]{f}{x}
+\end{equation}
+
+定积分求值如 $\eval{x^2}_0^1$ （自动尺寸）．
+
+对易算符如 $\comm{\Q A}{\Q B}$ 或 $\comm*{\Q A}{\Q B}$， 前者自动尺寸， 后者强制小尺寸． 泊松括号如 $\pb{\frac12}{B}$ 和 $\pb*{\frac12}{B}$．
+
+狄拉克符号（加 * 号强制小尺寸）如 $\bra{a}, \ket{b}, \braket{a}, \braket{a}{b}, \mel{a}{Q}{b}$． 平均值（加 * 号强制小尺寸）如 $\ev*{Q}, \ev{Q}{\psi}$．
+
+\subsection{自定义的命令}
+本模板自定义的命令如下， 如果不使用， 要保证编译后效果相同．
+
+引用公式和图表都统一使用 \lstinline|\autoref| 命令， 注意前面不加空格后面要加空格（后面是标点符号除外）， 例如\autoref{Sample_eq1}． 如果要引用其他词条中的公式，可以引用“其他词条\upref{Sample}”的\autoref{Sample_eq1} 也可以用“\autoref{Sample_eq1}\upref{Sample}”， 为了方便在纸质书上使用， 词条页码是不能忽略的．
+
+单位矢量如 $\uvec a$．
+
+写量纲用 \lstinline|\Si{}| 命令， 如 $a = 100\Si{m/s^2}$， 这个命令只能出现在公式环境内（否则 PhysWikiScan 会出 Bug）．
+
+ \lstinline|\sinc| 函数如 $\sinc x, \sinc(x), \sinc^2(x+y)$，但后面的括号没有自动尺寸．
+ 
+ 大于等于或小于等于必须用 $\les, \ges$ 而不是 $\le, \ge$． 自然对数底如 $\E$， 复数如 $u+\I v$ 虚数单位不能用 $i$，复共轭如 $z\Cj$．
+ 
+ 矩阵 $\mat A$，转置 $\mat A \Tr$，厄米共轭用 $\mat A \Her$． 常见的几种矩阵括号如
+\begin{equation}
+\pmat{1&2\\3&4} \qquad
+\vmat{1&2\\3&4} \qquad 
+\bmat{1&2\\3&4} \qquad
+\Bmat{1&2\\3&4} \qquad
+\pmat{1&2\\3&4}\Tr \qquad
+\pmat{1&2\\3&4}\Her
+\end{equation}
+行内的列矢量用行矢量的转置表示，如 $(1,2,3)\Tr$． 张量如 $\ten T$．
+
+梯度散度旋度拉普拉斯如 $\grad V$，$\div\vec A$，$\curl\vec A$，  $\laplacian V$． 单独一个粗体的 $\nabla$ 用 $\Nabla$．
+
+\lstinline|\ali{}| 命令与 aligned 环境等效， 如
+\begin{equation}\ali{
+k_1 &= f(y_n, t_n) 
+& k_2 &= f \qty(y_n + h\frac{k_1}{2}, t_n + \frac h2 )\\
+k_3 &= f \qty( y_n + h\frac{k_2}{2}, t_n + \frac h2 ) \qquad
+& k_4 &= f(y_n + hk_3, t_n + h)
+}\end{equation}
+
+左大括号用 \lstinline|\leftgroup{}| 命令， 里面相当于 aligned 环境
+\begin{equation}
+\leftgroup{
+d+e+f&=g\\
+a+b&=c}
+\end{equation}
+
+表格中若用 dfrac， 需要在行首加上 \lstinline|\dfracH| 命令．% 未完成： 为什么？
+
+量子力学算符如 $\Q a$（一般可以不加， 只有必要的时候加）， 矢量量子算符如 $\Qv p$．
+
 
 \subsection{图表}
 
