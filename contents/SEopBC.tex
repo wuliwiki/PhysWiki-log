@@ -1,0 +1,27 @@
+% TDSE Open Boundary Condition
+
+\subsection{Open boundary condition}
+
+Open boundary condition, or radiation boundary condition\footnote{I saw it on \link{this website}{http://hplgit.github.io/num-methods-for-PDEs/doc/pub/wave/sphinx/._main_wave003.html#problem-11-implement-open-boundary-conditions}.} is a B.C. that lets wave propagate through the boundary without having any reflection (except for numerical error).
+
+It has been successfully implemented for mechanical waves in 1D, 2D and 3D. For 1D case, the condition is
+\begin{equation}
+\pdv{y}{t} + c\pdv{y}{x} = 0
+\end{equation}
+where $c$ is the constant wave velocity. To verify this, we can plug in any plane wave
+\begin{equation}
+\sin(kx - ckt + \phi)
+\end{equation}
+and easily see that the B.C. is satisfied.
+
+I think this idea might also work for quantum mechanics. In QM, any plane wave has the form
+\begin{equation}
+\exp(\I kx - \I \frac{k^2}{2}t + \phi)
+\end{equation}
+So the proper open B.C. will be
+\begin{equation}
+-\frac12 \qty(\pdv{\Psi}{x})^2 = \I \pdv{\Psi}{t}
+\end{equation}
+
+Comparing to virtual absorbers we are using, this B.C. can be implemented using just 1 extra grid point, and it might have even less reflection (because there is only numerical error).
+
