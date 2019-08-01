@@ -1,9 +1,8 @@
 % 绕轴旋转矩阵
 % 线性代数|矩阵|矢量|数乘|点乘|叉乘|空间旋转矩阵|绕轴旋转矩阵|匀速圆周运动|线速度
 
-\pentry{空间旋转矩阵\upref{Rot3D}，绕轴旋转的线速度 %未完成：引用
-}
-\subsection{结论}
+\pentry{空间旋转矩阵\upref{Rot3D}，圆周运动的速度\upref{CMVD}}
+
 直角坐标系中，某点 $\vec r=(x,y,z)\Tr$ 以单位矢量 $\uvec A=(A_x, A_y, A_z)\Tr$ 为轴按右手定则%未完成 链接
 转动 $\theta$ 角的得到的点 $\vec r'=(x',y',z')\Tr$ 可用矩阵乘法计算
 \begin{equation}
@@ -21,16 +20,17 @@ a A_z A_x - s A_y & a A_z A_y + s A_x & a A_z^2 + c
 \begin{equation}
 c = \cos\theta \qquad s = \sin\theta \qquad a = 1 - \cos\theta
 \end{equation}
+事实上， 数学上更规范的做法是用四元数\upref{QuatN}表示该矩阵．
 
 \subsection{推导}
-推导的思路是用 $\uvec A$ , $\vec r$ 和 $\theta $ 三个已知量经过数乘，点乘\upref{Dot}和叉乘\upref{Cross}三种运算，表示出旋转后的矢量 $\vec r'$，再拆成三个分量，即可得到线性变换，进而写出矩阵. 注意该思路与推导平面旋转矩阵\upref{Rot2D} 的思路不一样.
+推导的思路是用 $\uvec A$ , $\vec r$ 和 $\theta $ 三个已知量经过数乘，点乘\upref{Dot}和叉乘\upref{Cross}三种运算，表示出旋转后的矢量 $\vec r'$，再拆成三个分量，即可得到线性变换，进而写出矩阵． 注意该思路与推导平面旋转矩阵\upref{Rot2D} 的思路不一样．
 \begin{figure}[ht]
 \centering
 \includegraphics[width=5.5cm]{./figures/RotA1.pdf}
 \caption{绕轴旋转矩阵的推导}
 \end{figure} 
 
-如图， $\vec r$ 绕单位矢量 $\uvec A$ 旋转后得到 $\vec r'$ .  $\vec r$ 在 $\uvec A$ 方向的分量为   
+如图， $\vec r$ 绕单位矢量 $\uvec A$ 旋转后得到 $\vec r'$．  $\vec r$ 在 $\uvec A$ 方向的分量为   
 \begin{equation}\label{RotA_eq4}
 \vec r_3 = (\uvec A \vdot \vec r)\uvec A
 \end{equation}
@@ -42,7 +42,7 @@ c = \cos\theta \qquad s = \sin\theta \qquad a = 1 - \cos\theta
 \begin{equation}\label{RotA_eq6}
 \vec r_2 = \uvec A \cross \vec r_1
 \end{equation}
-则 $\vec r_2$ 相当于 $\vec r_1$ 绕 $\uvec A$ 旋转 90°. 现在有了正交的 $\vec r_1$ , $\vec r_2$  就可以表示出 $\vec r_1$ 绕 $\uvec A$ 旋转 $\theta$ 角后的结果
+则 $\vec r_2$ 相当于 $\vec r_1$ 绕 $\uvec A$ 旋转 90°． 现在有了正交的 $\vec r_1$ , $\vec r_2$  就可以表示出 $\vec r_1$ 绕 $\uvec A$ 旋转 $\theta$ 角后的结果
 \begin{equation}
 \vec r' - \vec r_3 = \vec r_1\cos \theta  + \vec r_2\sin \theta
 \end{equation}
@@ -50,14 +50,13 @@ c = \cos\theta \qquad s = \sin\theta \qquad a = 1 - \cos\theta
 \begin{equation}\label{RotA_eq8}
 \vec r' = \vec r_1\cos \theta  + \vec r_2\sin \theta  + \vec r_3
 \end{equation} 
-将\autoref{RotA_eq4} \autoref{RotA_eq5} \autoref{RotA_eq6} 代入\autoref{RotA_eq8}， 即可求出 $\vec r'$ 关于 $\uvec A$ , $\vec r$ 和 $\theta $ 的矢量表达式. 把结果写成分量的形式，化简可得到 $x',y',z'$ 关于 $x,y,z$ 的线性变换与系数矩阵\upref{Mat}.
+将\autoref{RotA_eq4} \autoref{RotA_eq5} \autoref{RotA_eq6} 代入\autoref{RotA_eq8}， 即可求出 $\vec r'$ 关于 $\uvec A$ , $\vec r$ 和 $\theta $ 的矢量表达式． 把结果写成分量的形式，化简可得到 $x',y',z'$ 关于 $x,y,z$ 的线性变换与系数矩阵\upref{Mat}．
 
 \subsection{由旋转矩阵推导出匀速圆周运动的线速度} 
 
-虽然这个公式有更简单的几何方法（见绕轴旋转的线速度%未完成：词条 引用
-），但是这种方法更偏数学一些，也验证了旋转矩阵的正确性.
+我们可以用旋转矩阵得到 $\vec v = \vec \omega  \cross \vec r$ （\autoref{CMVD_eq5}\upref{CMVD}）， 这也验证了旋转矩阵的正确性．
 
-在无穷小的时间 $t$ 内，点 $P$ 绕轴转过 $\theta $ 角，则 $\theta  = \omega t \to 0$， 此时有 $\sin\theta  \to \theta $ 和 $\cos\theta  \to 1$ . 旋转矩阵变为
+在无穷小的时间 $t$ 内，点 $P$ 绕轴转过 $\theta $ 角，则 $\theta  = \omega t \to 0$， 此时有 $\sin\theta  \to \theta $ 和 $\cos\theta  \to 1$． 旋转矩阵变为
 \begin{equation}
 \mat R_\theta =
 \begin{pmatrix}
@@ -75,5 +74,4 @@ A_z \theta & 1 & -A_x \theta\\
 &= \theta\uvec A\cross\vec r
 = \qty(\vec \omega t) \cross \vec r
 }\end{equation} 
-两边除以 $t$，得 $\vec v = \vec \omega  \cross \vec r$ 这与绕轴转动的线速度% 未完成
-中得出的结论一致.
+两边除以 $t$，得 $\vec v = \vec \omega  \cross \vec r$． 
