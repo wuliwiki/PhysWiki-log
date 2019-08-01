@@ -8,7 +8,7 @@ close all;
 c = 1; % 波速
 xmin = -4; xmax = 6; Nx = 1200; % 空间格点
 tmin = 0; tmax = 12; Nt = 2401; % 时间格点
-k = 6; Ncyc = 5; % 初始波包的
+k = 6; Ncyc = 5; % 初始波包的波数和周期数
 bc = 'd'; % 边界条件: [d] Dirichlet, [n] Neumann, [o] Open
 % ================
 
