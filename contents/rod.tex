@@ -6,19 +6,30 @@
 
 \subsection{不可伸长条件}
 \subsubsection{速度约束}
-我们来思考 “不可伸长” 这一条件会对杆两端的速度和加速度带来什么约束． 令杆的两端点的位置矢量分别为 $\vec r_1$ 和 $\vec r_2$， 则杆的长度平方为 $(\vec r_2 - \vec r_1)^2$． 所以长度不随时间变化的条件可以表示为
+我们来思考 “不可伸长” 这一条件会对杆两端的速度和加速度带来什么约束． 令杆的长度为 $L$， 两端点的位置矢量分别为 $\vec r_1$ 和 $\vec r_2$， 则杆的长度平方为 $L^2 = (\vec r_2 - \vec r_1)^2$． 另外记端点的速度为 $\vec v_1, \vec v_2$．
+
+如果我们将 $\vec r_1$ 指向 $\vec r_2$ 的单位矢量记为 $\uvec r$
+\begin{equation}
+\uvec r = \frac{\abs{\vec r_2 - \vec r_2}}{L}
+\end{equation}
+
+长度平方随时间的变化的率为\footnote{为什么我们要用长度的平方而不是直接对 $\abs{\vec r_2 - \vec r_1}$ 求导？ 我们的确可以这么做并得到同样的结果， 但是使用平方会使计算更方便．}
 \begin{equation}\label{rod_eq2}
-\dv{t} (\vec r_2 - \vec r_1)^2 = \vec 0
+\dv{t} L^2 = \dv{t} (\vec r_2 - \vec r_1)^2
 \end{equation}
 由矢量求导法则
 \begin{equation}\label{rod_eq1}
-(\vec r_2 - \vec r_1) \vdot (\vec v_2 - \vec v_1) = \vec 0
+\dv{t} L^2 = 2L \dv{L}{t} = 2 (\vec r_2 - \vec r_1) \vdot (\vec v_2 - \vec v_1) = 2L (\vec v_2 - \vec v_1) \vdot \uvec r
 \end{equation}
-其中 $\vec v$ 是端点的速度． 如果我们将 $\vec r_1$ 指向 $\vec r_2$ 的单位矢量记为 $\uvec r$， 则上式变为
+即
+\begin{equation}\label{rod_eq6}
+\dv{L}{t} = \vec v_2 \vdot \uvec r - \vec v_1 \vdot \uvec r
+\end{equation}
+所以要满足长度恒定不变， 只需要满足（充分必要条件）
 \begin{equation}\label{rod_eq3}
 \vec v_2 \vdot \uvec r = \vec v_1 \vdot \uvec r
 \end{equation}
-由于上述过程可逆， 保持长度不变的充分必要条件是， 两个端点的速度延杆的分量需要在任意时刻都相等．
+该式的意思是， 两个端点的速度延杆的分量在任意时刻都相等．
 
 \begin{exam}{}\label{rod_ex1}
 \begin{figure}[ht]
@@ -38,6 +49,24 @@ v_2 = v_1 \tan\theta
 \end{equation}
 \end{exam}
 
+\begin{exam}{人拉船模型}
+\begin{figure}[ht]
+\centering
+\includegraphics[width=5.3cm]{./figures/rod3.png}
+\caption{人拉船模型} \label{rod_fig3}
+\end{figure}
+如\autoref{rod_fig3}， 人在岸上通过一小滑轮用绳子以速度 $v$ 拉船， 绳子与水平面的夹角为 $\theta$， 求船的速度 $u$．
+
+解： 我们可以把从滑轮到船的这段绳子的长度缩短的速度用\autoref{rod_eq6} 来计算， 这个速度也就是人的速度
+\begin{equation}
+v = -\dv{L}{t} = u \cos\theta
+\end{equation}
+所以
+\begin{equation}
+u = \frac{v}{\cos\theta}
+\end{equation}
+\end{exam}
+
 \subsubsection{角速度}
 若已知两端点的速度， 如何求出角速度呢？
 
@@ -49,7 +78,7 @@ v_2 = v_1 \tan\theta
 \subsubsection{加速度约束}
 若我们想知道对加速度的约束， 只需对\autoref{rod_eq1} 两边再求一次时间导数， 即\autoref{rod_eq2} 的二阶时间导数．
 \begin{equation}
-\dv[2]{t} (\vec r_2 - \vec r_1)^2 = (\vec v_2 - \vec v_1)^2 + (\vec r_2 - \vec r_1) \vdot (\vec a_2 - \vec a_1) = \vec 0
+\dv[2]{t} (\vec r_2 - \vec r_1)^2 = (\vec v_2 - \vec v_1)^2 + (\vec r_2 - \vec r_1) \vdot (\vec a_2 - \vec a_1) = 0
 \end{equation}
 
 结论（过程未完成）：
