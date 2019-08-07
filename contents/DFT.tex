@@ -45,10 +45,10 @@ N\Delta x \Delta k = L_x \Delta k = L_k \Delta x = \frac{L_x L_k}{N} = 2\pi
 \subsection{变换矩阵}
 \pentry{酋矩阵}% 链接未完成
 DFT 显然是一个线性变换， 我们来看变换矩阵的性质． 把变换和逆变换的系数矩阵用
- $\mat F$ 和 $\mat F^{-1}$ 来表示， 令列矢量 $\vec f = (f_0,f_1,\dots,f_{N-1})\Tr$， $\vec g = (g_0,g_1,\dots,g_{N-1})\Tr$， 变换和逆变换分别记为
+ $\mat F$ 和 $\mat F^{-1}$ 来表示， 令列矢量 $\bvec f = (f_0,f_1,\dots,f_{N-1})\Tr$， $\bvec g = (g_0,g_1,\dots,g_{N-1})\Tr$， 变换和逆变换分别记为
 \begin{equation}
-\vec g = \mat F \vec f \qquad
-\vec f = \mat F^{-1} \vec g
+\bvec g = \mat F \bvec f \qquad
+\bvec f = \mat F^{-1} \bvec g
 \end{equation}
 其中
 \begin{equation}
@@ -134,7 +134,7 @@ f_1(x) = f(x + x_0)\E^{-\I k_0 x} \qquad g_1(k) = g(k + k_0)\E^{\I (k+k_0) x_0}
 其中 $x_0 = (x_a + x_b)/2$，  $k_0 = (k_a + k_b)/2$． 另外定义 $L'_x = x_b - x_a$， $L'_k = k_b-k_a$， $\Delta x' = 2\pi/L'_k$， $\Delta k' = 2\pi/L'_x$． 根据傅里叶变换的平移性质\footnote{容易证明， DFT 也精确满足这个性质．}，%链接未完成！
 $f_1(x)$ 的傅里叶变换就是 $g_1(k)$． 注意 $f_1(x)$ 和 $g_1(k)$ 的 DFT 区间 $[-L_x/2, L_x/2]$ 和 $[-L_k/2, L_k/2]$ 分别关于原点对称． 现在我们只需要做 $f_1(x)$ 和 $g_1(k)$ 间的  DFT， 就能得到 $f(x)$ 和 $g(k)$ 间的离散变换， 不妨称为\bb{广义 DFT}．
 
-经过简单的推导可以发现广义 DFT 仍然可以用\autoref{DFT_eq6} 和\autoref{DFT_eq7} 表示， 只是 $x$ 和 $k$ 的 $N$ 个格点分别落在 $[x_a, x_b]$ 和 $[k_a, k_b]$ 内\footnote{同样， 如果 $N$ 是奇数， $x_0, k_0$ 是中间格点， 否则就是中间靠右格点．}． 但在程序中， 最高效的做法还是先将 $\vec f$ 先变为 $\vec f_1$， 做 FFT 得到 $\vec g_1$ 再变为 $\vec g$．
+经过简单的推导可以发现广义 DFT 仍然可以用\autoref{DFT_eq6} 和\autoref{DFT_eq7} 表示， 只是 $x$ 和 $k$ 的 $N$ 个格点分别落在 $[x_a, x_b]$ 和 $[k_a, k_b]$ 内\footnote{同样， 如果 $N$ 是奇数， $x_0, k_0$ 是中间格点， 否则就是中间靠右格点．}． 但在程序中， 最高效的做法还是先将 $\bvec f$ 先变为 $\bvec f_1$， 做 FFT 得到 $\bvec g_1$ 再变为 $\bvec g$．
 
 由采样定理易证， 如果 $g(k)$ 只在 $[k_a, k_b]$ 不为零， 那么只需用 $\Delta x' = 2\pi/L'_k$ 对 $f(x)$ 采样就可以用以下插值公式精确还原出\footnote{对离散的 $f_1(x)$ 使用之前的插值公式， 再由 $f_1(x)$ 求 $f(x)$ 就可以推导出\autoref{DFT_eq21}．} $f(x)$．
 \begin{equation}\label{DFT_eq21}

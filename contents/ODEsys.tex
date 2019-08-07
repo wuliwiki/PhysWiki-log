@@ -4,11 +4,11 @@
 \subsection{解析解}
 形式为
 \begin{equation}\label{ODEsys_eq1}
-\dv{\vec v}{t} = \mat A \vec v
+\dv{\bvec v}{t} = \mat A \bvec v
 \end{equation}
 的一阶偏微分方程组的解析解（先假设 $\mat A$ 为常矩阵）为
 \begin{equation}\label{ODEsys_eq2}
-\vec v(t) = \exp(\mat At) \vec v(0)
+\bvec v(t) = \exp(\mat At) \bvec v(0)
 \end{equation}
 其中矩阵的指数函数由泰勒级数定义
 \begin{equation}
@@ -19,7 +19,7 @@
 \subsection{形式解}
 当\autoref{ODEsys_eq1} 中的 $\mat A$ 是 $t$ 的函数 $\mat A(t)$ 时， 我们可以取微小时间步长 $\Delta t$， 在每个 $\Delta t$ 内近似认为 $\mat A(t_i)$ 为常数， 再取极限
 \begin{equation}
-\vec v(t) = \lim_{\Delta t \to 0} \prod \exp[\mat A(t_i)\Delta t] \vec v(0)
+\bvec v(t) = \lim_{\Delta t \to 0} \prod \exp[\mat A(t_i)\Delta t] \bvec v(0)
 \end{equation}
 如果两个矩阵 $\mat P, \mat Q$ 对易， 就有
 \begin{equation}
@@ -31,31 +31,31 @@
 \end{equation}
 这样通解在形式上就可以记为
 \begin{equation}
-\vec v(t) = \Q {\mathcal T} \exp(\int_0^ t \mat A(t')\dd t') \vec v(0)
+\bvec v(t) = \Q {\mathcal T} \exp(\int_0^ t \mat A(t')\dd t') \bvec v(0)
 \end{equation}
 然而这么做对于数值计算并没有太大意义．
 
 Expokit 是一个数学包可以用于计算矩阵的指数函数（Fortran 和 Matlab）．
 
 \subsection{数值计算}
-如果矩阵 $\vec M$ 是厄米矩阵， 则可以先做对角化 $\mat M = \mat U \mat \Lambda \mat U\Her$， 其中 $\mat \Lambda$ 是对角矩阵， $\mat U$ 是酋矩阵． 这样就有
+如果矩阵 $\bvec M$ 是厄米矩阵， 则可以先做对角化 $\mat M = \mat U \mat \Lambda \mat U\Her$， 其中 $\mat \Lambda$ 是对角矩阵， $\mat U$ 是酋矩阵． 这样就有
 \begin{equation}
 \exp(\mat M) = \mat U \mat U\Her + \mat U\mat \Lambda\mat U\Her + \mat U\frac1{2!} \mat \Lambda^2 \mat U\Her + \dots = \mat U \exp(\mat \Lambda) \mat U\Her
 \end{equation}
 由于对角矩阵相乘等于每个对角元分别相乘， 把 $\mat\Lambda$ 的每个矩阵元求指数函数就可以得到 $\exp(\mat \Lambda)$． 这样做可以减少计算量．
 
-事实上， 以上做法相当于分离变量， 当 $\mat A$ 是厄米矩阵时， 令 $\vec v(t) = f(t)\vec u$， 代入方程得 
+事实上， 以上做法相当于分离变量， 当 $\mat A$ 是厄米矩阵时， 令 $\bvec v(t) = f(t)\bvec u$， 代入方程得 
 \begin{equation}
-\frac{f'(t)}{f(t)} \vec u = \mat A \vec u
+\frac{f'(t)}{f(t)} \bvec u = \mat A \bvec u
 \end{equation}
-由于 $\mat A$ 和 $\vec u$ 都不含时， 所以可以令
+由于 $\mat A$ 和 $\bvec u$ 都不含时， 所以可以令
 \begin{equation}\ali{
-&\mat A \vec u = \lambda \vec u \\
+&\mat A \bvec u = \lambda \bvec u \\
 & f(t)' = \lambda f(t)
 }\end{equation}
-其中第一个方程是 $\mat A$ 的本征方程， 解为 $N$ 个本征矢 $\vec u_i$ （即 $\mat U$ 的第 $i$ 列） 和 $N$ 个本征值 $\lambda_i$ （即 $\mat \Lambda$ 的第 $i$ 个对角元）． 第二条方程的解为 $f(t) = \exp(\lambda t)$． 所以方程的通解为
+其中第一个方程是 $\mat A$ 的本征方程， 解为 $N$ 个本征矢 $\bvec u_i$ （即 $\mat U$ 的第 $i$ 列） 和 $N$ 个本征值 $\lambda_i$ （即 $\mat \Lambda$ 的第 $i$ 个对角元）． 第二条方程的解为 $f(t) = \exp(\lambda t)$． 所以方程的通解为
 \begin{equation}
-\vec v(t) = \sum_{i = 1}^N c_i f_i(t) \vec u_i = \sum_{i = 1}^N \mat u_i\Her  \vec v(0) \exp(\lambda_i t) \vec u_i = \mat U \exp(\Lambda t) \mat U\Her \vec v(0)
+\bvec v(t) = \sum_{i = 1}^N c_i f_i(t) \bvec u_i = \sum_{i = 1}^N \mat u_i\Her  \bvec v(0) \exp(\lambda_i t) \bvec u_i = \mat U \exp(\Lambda t) \mat U\Her \bvec v(0)
 \end{equation}
 
 在此基础上使用 Lanczos 算法\upref{Lanc}可以进一步提高效率．

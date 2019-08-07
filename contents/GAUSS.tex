@@ -13,7 +13,7 @@
 \end{equation}
 可以写成矩阵和列矢量相乘的形式
 \begin{equation}\label{GAUSS_eq2}
-\mat A \vec x = \vec y
+\mat A \bvec x = \bvec y
 \end{equation}
 其中 $\mat A$ 是维度 $m \times n$ 的矩阵，称为\bb{系数矩阵}．
 \begin{equation}
@@ -25,8 +25,8 @@ a_{2,1} &a_{2,2} &\cdots &a_{2,n} \\
 a_{m,1} &a_{m,2} &\cdots &a_{m,n} \\
 \end{pmatrix} 
 \end{equation}
-$\vec x$ 是 $n$ 维列矢量 $(x_1,x_2,\dots,x_m,\dots,x_n)\Tr$．
-$\vec y$ 是 $m$ 维列矢量 $(y_1,y_2,\dots,y_m)\Tr$，称为\bb{常数列}． $\mat A$ 和 $\vec y$ 通常看做已知的，而 $\vec x$ 看做未知的， 即方程组待求的\bb{解}． 下面我们介绍一种解线性方程组的简单的方法， \bb{高斯消元法（Gauss elimination）．} 先来看一个简单的例子．
+$\bvec x$ 是 $n$ 维列矢量 $(x_1,x_2,\dots,x_m,\dots,x_n)\Tr$．
+$\bvec y$ 是 $m$ 维列矢量 $(y_1,y_2,\dots,y_m)\Tr$，称为\bb{常数列}． $\mat A$ 和 $\bvec y$ 通常看做已知的，而 $\bvec x$ 看做未知的， 即方程组待求的\bb{解}． 下面我们介绍一种解线性方程组的简单的方法， \bb{高斯消元法（Gauss elimination）．} 先来看一个简单的例子．
 
 \begin{exam}{}\label{GAUSS_ex1}
 我们先回顾一下初中阶段如何解线性方程组， 例如
@@ -75,7 +75,7 @@ x = - \frac32 y + \frac{21}{2}
 
 我们将\autoref{GAUSS_eq1} 形式的方程组用增广矩阵表示为
 \begin{equation}
-\mat B=(\mat A ,\vec y)={
+\mat B=(\mat A ,\bvec y)={
 	\qty( \begin{array}{cccc|c}
 	a_{1,1} &a_{1,2} &\cdots &a_{1,n} &y_1 \\
 	a_{2,1} &a_{2,2} &\cdots &a_{2,n} &y_2 \\
@@ -87,20 +87,20 @@ x = - \frac32 y + \frac{21}{2}
 
 定义以下三种矩阵（或增广矩阵）变换为\bb{初等行变换}． 初等行变换不改变方程组的解\footnote{这点我们留到以后证明}．% 未完成：讲线性方程组与矢量空间的时候说明初等行变换可以看做 y 空间的子空间的基底变换， 不影响矢量本身的映射， 所以解不变．
 \begin{enumerate}
-\item 对调矩阵中的第 $i$ 行与第 $j$ 行， 记作 $\vec r_i \leftrightarrow \vec r_j$
+\item 对调矩阵中的第 $i$ 行与第 $j$ 行， 记作 $\bvec r_i \leftrightarrow \bvec r_j$
 
-\item 将矩阵第 $i$ 行的所有元素乘以一个非零数 $k$， 记作 $\vec r_i \times k$
+\item 将矩阵第 $i$ 行的所有元素乘以一个非零数 $k$， 记作 $\bvec r_i \times k$
 
-\item 把矩阵第 $i$ 行的所有元素乘以数 $k$ 后加到第 $j$ 行上， 记作 $\vec r_i + \vec r_j \times k$
+\item 把矩阵第 $i$ 行的所有元素乘以数 $k$ 后加到第 $j$ 行上， 记作 $\bvec r_i + \bvec r_j \times k$
 \end{enumerate}
 
 任何非零矩阵（或增广矩阵）经过有限次初等行变换后总可以使系数矩阵 $\mat A$ 转化为\bb{梯形矩阵（echelon form）}． 我们把梯形矩阵定义为满足该条件的矩阵： 第 $i$ 行的第一个非零系数\footnote{为了书写简单， 我们将每次变换后的系数矩阵元仍然用 $a_{i,j}$ 来表示， 虽然它的值可能已经发生变化． 若需要区分， 可以将第 $n$ 次变换后的矩阵元用 $a_{i,j}^{(n)}$ 表示．} $a_{i,q(i)}$ 的列标 $q(i)$ 总是大于第 $i-1$ 行的第一个非零元 $a_{i-1, q(i-1)}$ 的列标 $q(i-1)$． 与\autoref{GAUSS_ex1} 不同的是， 当系数矩阵经过行变换化为梯形矩阵后， 最后若干行有可能都为零， 最后一个非零行也未必只有一个非零元．
 
 高斯消元法的一般步骤如下：
 \begin{itemize}
-\item 先处理第 $i = 1$ 行， 如果 $a_{1,1} = 0$ 但某 $i' > 1$ 的行有 $a_{i', 1} \ne 0$， 就先进行行变换\footnote{如果 $a_{1,1} \ne 0$ 则不需要} $\vec r_i \leftrightarrow \vec r_{i'}$． 如果第一列全为 0， 我们就无视第  1 列， 从第 2 列重新开始， 以此类推． 记此时第 1 行第一个非零元的列标为 $q(1)$． 接下来做若干次行变换 $\vec r_{i'} + \vec r_1 \times k$ 使所有第 $i' > 1$ 行的 $a_{i', p(1)}$ 都为 0．
+\item 先处理第 $i = 1$ 行， 如果 $a_{1,1} = 0$ 但某 $i' > 1$ 的行有 $a_{i', 1} \ne 0$， 就先进行行变换\footnote{如果 $a_{1,1} \ne 0$ 则不需要} $\bvec r_i \leftrightarrow \bvec r_{i'}$． 如果第一列全为 0， 我们就无视第  1 列， 从第 2 列重新开始， 以此类推． 记此时第 1 行第一个非零元的列标为 $q(1)$． 接下来做若干次行变换 $\bvec r_{i'} + \bvec r_1 \times k$ 使所有第 $i' > 1$ 行的 $a_{i', p(1)}$ 都为 0．
 
-\item 依次处理第 $i = 2\dots m-1$ 行\footnote{如果在处理 $i = m-1$ 之前就得到了梯形矩阵， 则可提前终止．}． 要处理第 $i$ 行， 先令 $q(i) = q(i-1)+1$， 如果此时矩阵元 $a_{i, q(i)} = 0$， 但某 $i' > i$ 的行有 $a_{i', q(i)} \ne 0$， 就先进行行变换 $\vec r_i \leftrightarrow \vec r_{i'}$． 若不存在这样的 $i'$， 我们就改令 $q(i) = q(i-1) + 2$ 并重新开始该步骤， 以此类推． 接下来做若干次行变换 $\vec r_{i'} + \vec r_i \times k$ 使所有第 $i' > i$ 行的 $a_{i', p(i)}$ 都为 0．
+\item 依次处理第 $i = 2\dots m-1$ 行\footnote{如果在处理 $i = m-1$ 之前就得到了梯形矩阵， 则可提前终止．}． 要处理第 $i$ 行， 先令 $q(i) = q(i-1)+1$， 如果此时矩阵元 $a_{i, q(i)} = 0$， 但某 $i' > i$ 的行有 $a_{i', q(i)} \ne 0$， 就先进行行变换 $\bvec r_i \leftrightarrow \bvec r_{i'}$． 若不存在这样的 $i'$， 我们就改令 $q(i) = q(i-1) + 2$ 并重新开始该步骤， 以此类推． 接下来做若干次行变换 $\bvec r_{i'} + \bvec r_i \times k$ 使所有第 $i' > i$ 行的 $a_{i', p(i)}$ 都为 0．
 \end{itemize}
 完成后， 系数矩阵就会变为梯形矩阵．
 
@@ -128,9 +128,9 @@ x = - \frac32 y + \frac{21}{2}
 开始消元
 \begin{equation}
 \begin{aligned}
-\vec r_2 - 2 &\vec r_1 \\
-\vec r_3 - 1 &\vec r_1 \\
-\vec r_4 - 2 &\vec r_1 \\
+\bvec r_2 - 2 &\bvec r_1 \\
+\bvec r_3 - 1 &\bvec r_1 \\
+\bvec r_4 - 2 &\bvec r_1 \\
 \end{aligned}
 \quad \Longrightarrow \quad
 \mat B={
@@ -146,9 +146,9 @@ x = - \frac32 y + \frac{21}{2}
 发现此时，矩阵第二列自第二行以下全为零，所以需要依次向下一列寻找不为零的元素．继续消元
 \begin{equation}
 \begin{aligned}
-\vec r_2 \leftrightarrow &\vec r_4 \\
-\vec r_3 - 1 &\vec r_2 \\
-\vec r_4 - 0 &\vec r_2 \\
+\bvec r_2 \leftrightarrow &\bvec r_4 \\
+\bvec r_3 - 1 &\bvec r_2 \\
+\bvec r_4 - 0 &\bvec r_2 \\
 \end{aligned}
 \quad \Longrightarrow \quad
 \mat B={
@@ -161,7 +161,7 @@ x = - \frac32 y + \frac{21}{2}
 	)}
 \end{equation}
 \begin{equation}
-\vec r_4 - 0.5 \vec r_3
+\bvec r_4 - 0.5 \bvec r_3
 \quad \Longrightarrow \quad
 \mat B={
 	\qty(\begin{array}{cccc|c}
@@ -182,7 +182,7 @@ x = - \frac32 y + \frac{21}{2}
 \end{equation}
 或者写成矢量的形式
 \begin{equation}
-\vec x = c \pmat{-1\\ 1\\ 0\\ 0} + \pmat{5\\ 0\\ 1\\ -1}
+\bvec x = c \pmat{-1\\ 1\\ 0\\ 0} + \pmat{5\\ 0\\ 1\\ -1}
 \end{equation}
 将该式代入方程组， 可以验证 $c$ 取任意值时方程组都成立．
 
@@ -200,15 +200,15 @@ x = - \frac32 y + \frac{21}{2}
 \subsection{解的表示}
 按照\autoref{GAUSS_ex2} 中的方法， 如果方程有解， 我们总可以将解表示为一些常矢量的线性组合加上一个常矢量．
 \begin{equation}\label{GAUSS_eq18}
-\vec x = \sum_{i=1}^{N} c_i \vec x_i + \vec x_0
+\bvec x = \sum_{i=1}^{N} c_i \bvec x_i + \bvec x_0
 \end{equation}
-其中 $c_i$ 是 $N$ 个任意常数（当方程有唯一解时 $N = 0$）， 无论这些常数取什么值， $\vec x$ 都是方程的解． 另一方面， 给出方程的任意一个解， 总能找到一些常数 $c_i$ 与之对应． \autoref{GAUSS_eq18} 叫做方程的\bb{通解}， 通解中的任意一个就做方程的\bb{特解}（例如上式中所有的 $\vec x_i$ 都是特解）．
+其中 $c_i$ 是 $N$ 个任意常数（当方程有唯一解时 $N = 0$）， 无论这些常数取什么值， $\bvec x$ 都是方程的解． 另一方面， 给出方程的任意一个解， 总能找到一些常数 $c_i$ 与之对应． \autoref{GAUSS_eq18} 叫做方程的\bb{通解}， 通解中的任意一个就做方程的\bb{特解}（例如上式中所有的 $\bvec x_i$ 都是特解）．
 
-特殊地， 如果 $\vec y = \vec 0$ （粗体的 $\vec 0$ 表示零矢量， 即每个元都是 0），%未完成：这个符号应该在”几何矢量“中提到
-则方程组是\bb{齐次}的． 齐次方程一个显然的特解是 $\vec x = \vec 0$， 根据高斯消元法， 我们可知， 若齐次方程组存在无穷个解， 它们可以表示为
+特殊地， 如果 $\bvec y = \bvec 0$ （粗体的 $\bvec 0$ 表示零矢量， 即每个元都是 0），%未完成：这个符号应该在”几何矢量“中提到
+则方程组是\bb{齐次}的． 齐次方程一个显然的特解是 $\bvec x = \bvec 0$， 根据高斯消元法， 我们可知， 若齐次方程组存在无穷个解， 它们可以表示为
 \begin{equation}\label{GAUSS_eq19}
-\vec x = \sum_{i=1}^{N} c_i \vec x_i
+\bvec x = \sum_{i=1}^{N} c_i \bvec x_i
 \end{equation}
-即 $\vec x_0 = \vec 0$．
+即 $\bvec x_0 = \bvec 0$．
 
-所以， 对于任意有解的\bb{非齐次}方程组 $\mat A \vec x = \vec y$， 我们可以将通解（\autoref{GAUSS_eq18}） 从形式上理解为齐次方程组 （$\mat A \vec x = \vec 0$） 的通解与非齐次方程组的任意一个特解相加．
+所以， 对于任意有解的\bb{非齐次}方程组 $\mat A \bvec x = \bvec y$， 我们可以将通解（\autoref{GAUSS_eq18}） 从形式上理解为齐次方程组 （$\mat A \bvec x = \bvec 0$） 的通解与非齐次方程组的任意一个特解相加．
