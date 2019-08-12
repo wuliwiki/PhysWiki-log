@@ -18,3 +18,4 @@
 * 完成词条中的 `未完成`
 * `littleshi.cn/apps` 中的每个 app 需要在对应的词条中引用， 如果没有就补充
 * 在需要的地方 `\pentry` 一下 `高阶导数` 词条
+* 更新 chinese_template 和 english_template

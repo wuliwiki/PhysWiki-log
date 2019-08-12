@@ -1,12 +1,12 @@
 % 离散傅里叶变换
 
-\bb{离散傅里叶变换（Discrete Fourier Transform）（DFT）}是一个复数域的线性变换\upref{LTrans}． 对两组有序数列 $f_0, f_1, \dots, f_{N-1}$ 和 $g_0,g_2,\dots, g_{N-1}$，正变换和逆变换分别为\footnote{工程上的定义常常是正变换没有 $1/\sqrt{N}$ 因子，逆变换的 $1/\sqrt{N}$ 因子变为 $1/N$． 这样的好处是节省运算量．本书中使用的定义好处是变换为幺正变换，有保持归一化的特点．}
+\textbf{离散傅里叶变换（Discrete Fourier Transform）（DFT）}是一个复数域的线性变换\upref{LTrans}． 对两组有序数列 $f_0, f_1, \dots, f_{N-1}$ 和 $g_0,g_2,\dots, g_{N-1}$，正变换和逆变换分别为\footnote{工程上的定义常常是正变换没有 $1/\sqrt{N}$ 因子，逆变换的 $1/\sqrt{N}$ 因子变为 $1/N$． 这样的好处是节省运算量．本书中使用的定义好处是变换为幺正变换，有保持归一化的特点．}
 \begin{align}
 g_p &= \frac{1}{\sqrt{N}}\sum_{q=0}^{N-1} \exp(-\frac{2\pi\I}{N} p q ) f_q\label{DFT_eq1} \\
 f_q &= \frac{1}{\sqrt{N}}\sum_{p=0}^{N-1} \exp(\frac{2\pi\I}{N} p q) g_p\label{DFT_eq2}
 \end{align}
 
-一个更常见的名词是\bb{快速傅里叶变换（Fast Fourier Transform）（FFT）}， 其定义与离散傅里叶变换一样，只是优化了算法使程序运行更快\footnote{参考 Numerical Recipes 3ed}．
+一个更常见的名词是\textbf{快速傅里叶变换（Fast Fourier Transform）（FFT）}， 其定义与离散傅里叶变换一样，只是优化了算法使程序运行更快\footnote{参考 Numerical Recipes 3ed}．
 
 \subsection{离散傅里叶变换与傅里叶变换}
 \pentry{傅里叶变换（指数函数）\upref{FTExp}}
@@ -75,7 +75,7 @@ F_{pq} = \frac{1}{\sqrt{N}} \exp(-\frac{2\pi\I}{N} p q)
 \subsection{采样定理（Sampling Theorem）}
 从以上的分析中， DFT 似乎只是一种近似， 且有种种限制， 例如我们只能取关于原点对称的区间， 又例如变换只有两个自由度． 我们不禁想定义更广义的离散傅里叶变换， 使\autoref{DFT_eq6} 和\autoref{DFT_eq7} 中 $x_i$ 和 $k_j$ 可以取任意区间的任意多个等间距格点． 但事实上， 这样的定义并不比 DFT 更精确， 而且不能用 FFT 算法提高运算速度．
 
-这里给出傅里叶变换的\bb{采样定理}， 采样定理的详细表述是： 如果 $g(k)$ 不超出 $[-L_k/2, L_k/2]$（即 $f(x)$ 是\bb{有限带宽的}）， 那么我们只需要用 $\Delta x = 2\pi/L_k$ （ DFT 恰好满足这个条件）来对  $f(x)$  采样就可以用以下插值公式精确还原出 $f(x)$\footnote{其实我并不确定是否需要 $x_0 = 0$ 或者 $x_i$ 的位置有什么其他要求， 现在姑且认为 $x_0 = 0$ 好了．}
+这里给出傅里叶变换的\textbf{采样定理}， 采样定理的详细表述是： 如果 $g(k)$ 不超出 $[-L_k/2, L_k/2]$（即 $f(x)$ 是\textbf{有限带宽的}）， 那么我们只需要用 $\Delta x = 2\pi/L_k$ （ DFT 恰好满足这个条件）来对  $f(x)$  采样就可以用以下插值公式精确还原出 $f(x)$\footnote{其实我并不确定是否需要 $x_0 = 0$ 或者 $x_i$ 的位置有什么其他要求， 现在姑且认为 $x_0 = 0$ 好了．}
 \begin{equation}\label{DFT_eq15}
 f(x) = \sum_{n = -\infty}^{\infty} f(x_n)\sinc[\pi(x - x_n)/\Delta x]
 \end{equation}
@@ -116,7 +116,7 @@ g(k) = \leftgroup{
 \subsection{插值与添零}
 % 未完成： 把 “DFT1.m” 的内容作为一个例子
 
-上面我们看到， 如果 $f(x)$ 是有限带宽的， 就可以使用\autoref{DFT_eq15} 进行插值， 称为\bb{sinc 插值}\footnote{注意实现的时候只能对有限项求和．}． 然而在实践中， 由于直接用 sinc 插值计算量太大， 我们往往用下面介绍的\bb{添零法} 代替．
+上面我们看到， 如果 $f(x)$ 是有限带宽的， 就可以使用\autoref{DFT_eq15} 进行插值， 称为\textbf{sinc 插值}\footnote{注意实现的时候只能对有限项求和．}． 然而在实践中， 由于直接用 sinc 插值计算量太大， 我们往往用下面介绍的\textbf{添零法} 代替．
 
 假设我们要对 $N$ 个散点 $f(x_i)$ 插值， 可以先做 DFT 得到 $N$ 个 $g(k_j)$， 由\autoref{DFT_eq9} 可知， 要缩小 $\Delta x$ 而保持 $L_x$ 不变， 就要保持 $\Delta k$ 不变且增加 $L_k$ 和 $N$． 所以我们可以在 $g(k_j)$ 数列的两边添加相同数量的 0， 然后再做反 DFT 变换即可\footnote{不难证明如果新的长度是 $N$ 的整数倍， 反变换后在老格点处仍能得到同样的 $f(x_i)$．}．
 
@@ -132,7 +132,7 @@ g(k) = \leftgroup{
 f_1(x) = f(x + x_0)\E^{-\I k_0 x} \qquad g_1(k) = g(k + k_0)\E^{\I (k+k_0) x_0}
 \end{equation}
 其中 $x_0 = (x_a + x_b)/2$，  $k_0 = (k_a + k_b)/2$． 另外定义 $L'_x = x_b - x_a$， $L'_k = k_b-k_a$， $\Delta x' = 2\pi/L'_k$， $\Delta k' = 2\pi/L'_x$． 根据傅里叶变换的平移性质\footnote{容易证明， DFT 也精确满足这个性质．}，%链接未完成！
-$f_1(x)$ 的傅里叶变换就是 $g_1(k)$． 注意 $f_1(x)$ 和 $g_1(k)$ 的 DFT 区间 $[-L_x/2, L_x/2]$ 和 $[-L_k/2, L_k/2]$ 分别关于原点对称． 现在我们只需要做 $f_1(x)$ 和 $g_1(k)$ 间的  DFT， 就能得到 $f(x)$ 和 $g(k)$ 间的离散变换， 不妨称为\bb{广义 DFT}．
+$f_1(x)$ 的傅里叶变换就是 $g_1(k)$． 注意 $f_1(x)$ 和 $g_1(k)$ 的 DFT 区间 $[-L_x/2, L_x/2]$ 和 $[-L_k/2, L_k/2]$ 分别关于原点对称． 现在我们只需要做 $f_1(x)$ 和 $g_1(k)$ 间的  DFT， 就能得到 $f(x)$ 和 $g(k)$ 间的离散变换， 不妨称为\textbf{广义 DFT}．
 
 经过简单的推导可以发现广义 DFT 仍然可以用\autoref{DFT_eq6} 和\autoref{DFT_eq7} 表示， 只是 $x$ 和 $k$ 的 $N$ 个格点分别落在 $[x_a, x_b]$ 和 $[k_a, k_b]$ 内\footnote{同样， 如果 $N$ 是奇数， $x_0, k_0$ 是中间格点， 否则就是中间靠右格点．}． 但在程序中， 最高效的做法还是先将 $\bvec f$ 先变为 $\bvec f_1$， 做 FFT 得到 $\bvec g_1$ 再变为 $\bvec g$．
 
