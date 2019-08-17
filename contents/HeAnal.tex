@@ -2,8 +2,11 @@
 
 \pentry{氦原子数值解 TDSE\upref{HeTDSE}， 库仑波函数\upref{CulmWf}}
 
-\subsection{平均能量}
-用于基态能量估计
+\subsection{能量}
+用虚时间法得到基态了以后， 我们可以用平均能量来计算基态能量
+\begin{equation}
+E = \mel{\Psi}{H_0}{\Psi}
+\end{equation}
 
 \subsection{动量谱（6 维）}
 氢原子的散射态是库仑波函数\upref{CulmWf}， 而氦原子的（双电子）散射态没有解析解， 于是就假设时间足够大时， 两电子间没有相互作用， 就可以直接把两个库仑波函数做张量积再对称/反对称化即可． 而这样一来， 散射态和束缚态之间显然就不正交了， 所以分析时需要将所有束缚态去掉． 爱华的方法是直接减去基态的投影， 然而这样一来激发态的分量就仍然存在了． 我认为如果电离波包和未电离的波包已经分离的话， 可以像做氢原子那样直接把一定半径内的波函数直接挖掉．
@@ -79,3 +82,19 @@ P(r_1, r_2) = \abs{\psi_\lambda(r_1, r_2)}^2
 P_{JAD}(\uvec k_1, \uvec k_2) = \int_0^\infty \int_0^\infty P(\bvec k_1, \bvec k_2) k_1^2 k_2^2 \delta(k_1 - k_2 + \Delta k) \dd{k_1} \dd{k_2}
 \end{equation}
 一般在同一平面上取 $\uvec k_1$ 和 $\uvec k_2$ （$\phi_1 = \phi_2$ 为常数， 例如 0）， 这样就可以画一个横纵坐标分别为 $\theta_1$ 和 $\theta_2$ 的二维分布图 $P_{JAD}(\theta_1, \theta_2)$．
+
+\subsection{单光子吸收}
+
+类比氢原子吸收一个光子（一阶微扰）后有 $\Delta l = \pm 1$ （可以想象成光子带有角动量量子数 1）， 氦原子从基态吸收一个光子后总角动量也会增加 1． 所以要考虑单电子吸收， 我们可以只观察 $L = 1$ 的所有分波， 甚至在传播时可以用所谓的 “weak field TDSE” \footnote{参考 Colgan 2001, J Phys. B: 34 (2001) L457-L466}
+
+\begin{equation}
+\I \pdv{\Psi^{^1P}}{t} = H_0 \Psi^{^1P} + H_E \Psi^{^1S} \E^{-\I E_0 t}
+\end{equation}
+其中 $H_0$ 是无场的哈密顿， $H_E = E(t) (z_1 + z_2)$ 是电场的哈密顿．
+\begin{equation}
+\Psi^{^1P}(\bvec r_1, \bvec r_2, t) = \sum_{l_1, l_2} \frac{1}{r_1 r_2} \psi_{l_1, l_2}^{1, 0} (r_1, r_2, t) \mathcal Y_{l_1, l_2}^{1, 0} (\uvec r_1, \uvec r_2)
+\end{equation}
+
+吸收一个光子的概率就是对 $L = 1$ 所有分波进行模方积分求和． 然而如果做 Streaking 的话， 通常会吸收多个红外光子， 所以还是需要许多分波．
+
+
