@@ -9,7 +9,7 @@ E = \mel{\Psi}{H_0}{\Psi}
 \end{equation}
 
 \subsection{动量谱（6 维）}
-氢原子的散射态是库仑波函数\upref{CulmWf}， 而氦原子的（双电子）散射态没有解析解， 于是就假设时间足够大时， 两电子间没有相互作用， 就可以直接把两个库仑波函数做张量积再对称/反对称化即可． 而这样一来， 散射态和束缚态之间显然就不正交了， 所以分析时需要将所有束缚态去掉． 爱华的方法是直接减去基态的投影， 然而这样一来激发态的分量就仍然存在了． 我认为如果电离波包和未电离的波包已经分离的话， 可以像做氢原子那样直接把一定半径内的波函数直接挖掉．
+这里考虑的是双电离， 因为我们将要把两个电子都投影到连续态， 如果任何一个电子处于基态， 那么投影将为 0． 氢原子的散射态是库仑波函数\upref{CulmWf}， 而氦原子的（双电子）散射态没有解析解， 于是就假设时间足够大时， 两电子间没有相互作用， 就可以直接把两个库仑波函数做张量积再对称/反对称化即可． 而这样一来， 散射态和束缚态之间显然就不正交了， 所以分析时需要将所有束缚态去掉\footnote{理论上束缚态不去掉也没关系， 因为单电子的库仑球波函数和束缚态本来就是正交的． 这么做可能是考虑到数值误差？}． 爱华的方法是直接减去基态的投影， 然而这样一来激发态的分量就仍然存在了． 我认为如果电离波包和未电离的波包已经分离的话， 可以像做氢原子那样直接把一定半径内的波函数直接挖掉．
 
 库仑波函数（见\autoref{CulmWf_eq9}\upref{CulmWf}， 我们只需要平面波出射）为（$\eta = Z/k$， $Z = -2$）
 \begin{equation}
@@ -29,7 +29,7 @@ TDSE 的波函数（假设已经满足交换对称）为
 &\Psi(\bvec r_1, \bvec r_2) = \sum_{L, M, l_1, l_2}  \frac{1}{r_1 r_2} \psi_{l_1, l_2}^{L, M}(r_1, r_2)\mathcal{Y}_{l_1, l_2}^{L, M}(\uvec r_1, \uvec r_2)\\
 & \quad = \sum_{L, M, l_1, l_2} \frac{1}{r_1 r_2} \psi_{l_1, l_2}^{L, M}(r_1, r_2) \sum_{m_1, m_2} \bmat{l_1 & l_2 & L\\ m_1 & m_2 & M} Y_{l_1, m_1} (\uvec r_1) Y_{l_2, m_2} (\uvec r_2)
 }\end{equation}
-投影得（过程略， 注意两个 $Y_{l_1, m_1} (\uvec r_1) Y_{l_2, m_2} (\uvec r_2)$ 项积分会产生两个 $\delta$ 函数）
+投影得（过程略， 注意两个 $Y_{l_1, m_1} (\uvec r_1) Y_{l_2, m_2} (\uvec r_2)$ 项积分会产生 4 个 $\delta$ 函数）\footnote{下面花了不少功夫证明方括号中两项相等． 事实上对任何对称的 $\Psi(\bvec r_1, \bvec r_2)$ 都容易证明 $\braket{\phi_1(\bvec r_1)\phi_2(\bvec r_2)}{\Psi(\bvec r_1, \bvec r_2)} = \braket{\phi_2(\bvec r_1)\phi_1(\bvec r_2)}{\Psi(\bvec r_1, \bvec r_2)}$． 另外如果 $\Psi$ 是反对称， 两项就是相反数．}
 % 未完成： 未验证， 且与爱华的代码不同
 \begin{equation}\label{HeAnal_eq4}
 \ali{
@@ -44,40 +44,62 @@ I_{l_i, l_j}^{L, M}(k_m, k_n) = \int_0^\infty \int_0^\infty F_{l_i} (\eta_m, k_m
 \end{equation}
 
 把\autoref{HeAnal_eq4} 中的求和拆成两项， 第二项的求和中 $l_1, l_2$ 交换得
-\begin{equation}
+\begin{equation}\label{HeAnal_eq1}
 \ali{
 \braket{\psi_{\bvec k_1, \bvec k_2}}{\Psi} &= \frac{\sqrt 2}{\pi k_1 k_2} \sum_{L, M, l_1, l_2} \I^{l_1 + l_2} \E^{\I [\sigma_{l_1}(\eta_1) + \sigma_{l_2} (\eta_2)]} \times \\
 &\qty[
 I_{l_1, l_2}^{L, M}(k_1, k_2) \mathcal{Y}_{l_1, l_2}^{L, M}(\uvec k_1, \uvec k_2) + 
  I_{l_2, l_1}^{L, M}(k_2, k_1) \mathcal{Y}_{l_2, l_1}^{L, M}(\uvec k_2, \uvec k_1)]
 }\end{equation}
-当 $\Psi$ 满足粒子交换对称时， 可以证明 $I_{l_1, l_2}^{L, M}(k_1, k_2) = I_{l_2, l_1}^{L, M}(k_2, k_1)$． 当 $l_1 + l_2 + L$ 为偶数时， 又有 $\mathcal{Y}_{l_1, l_2}^{L, M}(\uvec k_1, \uvec k_2) = \mathcal{Y}_{l_2, l_1}^{L, M}(\uvec k_2, \uvec k_1)$（\autoref{GenYlm_eq5}）． 此时方括号中的两项相等
+当 $\Psi$ 满足粒子交换对称时， 使用\autoref{HeTDSE_eq1}\upref{HeTDSE} 可以证明
 \begin{equation}
+I_{l_1, l_2}^{L, M}(k_1, k_2) = (-1)^{l_1 + l_2 - L} I_{l_2, l_1}^{L, M}(k_2, k_1)
+\end{equation}
+另外由\autoref{GenYlm_eq5}\upref{GenYlm} 得\autoref{HeAnal_eq1} 方括号中的两项相等
+\begin{equation}\label{HeAnal_eq2}
 \braket{\psi_{\bvec k_1, \bvec k_2}}{\Psi} = \frac{2\sqrt 2}{\pi k_1 k_2} \sum_{L, M, l_1, l_2} \I^{l_1 + l_2} \E^{\I [\sigma_{l_1}(\eta_1) + \sigma_{l_2} (\eta_2)]}  I_{l_1, l_2}^{L, M}(k_1, k_2) \mathcal{Y}_{l_1, l_2}^{L, M}(\uvec k_1, \uvec k_2)
 \end{equation}
 
 投影的平方就是概率分布
-\begin{equation}
+\begin{equation}\label{HeAnal_eq3}
 P(\bvec k_1, \bvec k_2) = \abs{\braket{\psi_{\bvec k_1, \bvec k_2}}{\Psi}}^2
 \end{equation}
+
+\subsection{能量分布}
+先继续考虑双电离， \autoref{HeAnal_eq3} 中的概率归一化为
+\begin{equation}
+\int P(\bvec k_1, \bvec k_2) \dd{\Omega_{k1}} \dd{\Omega_{k2}} k_1^2 \dd{k_1} k_2^2 \dd{k_2}
+\end{equation}
+所以动量绝对值的分布函数为
+\begin{equation}\label{HeAnal_eq5}
+P(k_1, k_2) = k_1^2 k_2^2 \int P(\bvec k_1, \bvec k_2) \dd{\Omega_{k1}} \dd{\Omega_{k2}}
+\end{equation}
+能量分布函数为
+\begin{equation}
+P(E_1, E_2) = \frac{1}{k_1 k_2} P(k_1, k_2)
+\end{equation}
+所以只需要将\autoref{HeAnal_eq3} 代入\autoref{HeAnal_eq5} 得\footnote{为了能使 $\int P(k_1, k_2) \dd{k_1}\dd{k_2}$， 我们还是不对 $\psi_{\bvec k_1, \bvec k_2}$ 进行对称化， $P(k_1, k_2)$ 就是上面定义的 $1/2$．}
+\begin{equation}
+P(k_1, k_2) = \frac{4}{\pi^2} \sum_{L, M, l_1, l_2} \abs{I_{l_1, l_2}^{L, M} (k_1, k_2)}^2
+\end{equation}
+其实该式的推导大可直接用球面波而不是投影到平面波再做角向积分， 过程类比\upref{Hanaly}．
 
 \subsection{径向概率分布}
 类比氢原子的情况（\autoref{HWF_eq4}\upref{HWF}）
 \begin{equation}
 \ali{
-P(r_1, r_2) &= \iint \iint \abs{\frac{1}{r_1 r_2} \sum_\lambda \psi_\lambda(r_1, r_2) \mathcal{Y}_\lambda (\uvec r_1, \uvec r_2)}^2 \dd{\Omega_1}\dd{\Omega_2} r_1^2 r_2^2 \dd{r_1}\dd{r_2}\\
-&= \iint \abs{\psi_\lambda(r_1, r_2)}^2 \dd{r_1} \dd{r_2}
+& \quad \iint P(r_1, r_2) \dd{r_1} \dd{r_2}\\
+&= \iint \iint \abs{\frac{1}{r_1 r_2} \sum_\lambda \psi_\lambda(r_1, r_2) \mathcal{Y}_\lambda (\uvec r_1, \uvec r_2)}^2 \dd{\Omega_1}\dd{\Omega_2} r_1^2 r_2^2 \dd{r_1}\dd{r_2}\\
+&= \iint \sum_\lambda\abs{\psi_\lambda(r_1, r_2)}^2 \dd{r_1} \dd{r_2} = 1
 }\end{equation}
 所以
 \begin{equation}
-P(r_1, r_2) = \abs{\psi_\lambda(r_1, r_2)}^2
+P(r_1, r_2) = \sum_\lambda\abs{\psi_\lambda(r_1, r_2)}^2
 \end{equation}
-
-\subsection{单电子概率分布}
-氦原子的波函数在六维空间中． 但我们只需要四个空间的张量积， 分别是 $r_1$， $r_2$ （一维）， $\uvec r_1$， $\uvec r_2$ （二维）．
+这就是 $(r_1, r_2)$ 子空间中的总模长， 等于子空间中每个基底的系数的模方和．
 
 \subsection{JAD（joint angular distribution）}
-这里的 JAD 并不是总的方向分布， 而是某中能量分割的方向分布， 即 $k_2 - k_1 = \Delta k$， 所以积分中要有一个 delta 函数．
+这里的 JAD 并不是总的方向分布， 而是某种能量分割的方向分布， 即 $k_2 - k_1 = \Delta k$， 所以积分中要有一个 delta 函数．
 \begin{equation}
 P_{JAD}(\uvec k_1, \uvec k_2) = \int_0^\infty \int_0^\infty P(\bvec k_1, \bvec k_2) k_1^2 k_2^2 \delta(k_1 - k_2 + \Delta k) \dd{k_1} \dd{k_2}
 \end{equation}
@@ -97,4 +119,53 @@ P_{JAD}(\uvec k_1, \uvec k_2) = \int_0^\infty \int_0^\infty P(\bvec k_1, \bvec k
 
 吸收一个光子的概率就是对 $L = 1$ 所有分波进行模方积分求和． 然而如果做 Streaking 的话， 通常会吸收多个红外光子， 所以还是需要许多分波．
 
+\subsection{角向基底变换}
+除了使用广义球谐函数作为角向基底外， 另一个自然的选择就是两个球谐函数的乘积． 如果令总波函数为
+\begin{equation}\label{HeAnal_eq6}
+\Psi(\bvec r_1, \bvec r_2) = \frac{1}{r_1 r_2} \sum_{l_1, m_1, l_2, m_2} \psi_{l_1, l_2}^{m_1, m_2}(r_1, r_2) Y_{l_1, m_1}(\uvec r_1) Y_{l_2, m_2} (\uvec r_2)
+\end{equation}
+那么由\autoref{HeTDSE_eq2}\upref{HeTDSE} 和\autoref{GenYlm_eq1}\upref{GenYlm} 得
+\begin{equation}\label{HeAnal_eq7}
+\psi_{l_1, l_2}^{m_1, m_2}(r_1, r_2) = \sum_{L,M} \bmat{l_1 & l_2 & L\\ m_1 & m_2 & M} \psi_{l_1, l_2}^{L,M}(r_1, r_2)
+\end{equation}
+
+\subsection{单电子概率分布}
+（挺想画出来看看是啥样的）
+
+先不考虑粒子交换对称\footnote{如果考虑的话， 投影乘以 $\sqrt{2}$ 或者概率乘以 2 即可}， 要求第一个电子出现在位置 $\bvec r_1$ 的概率， 就把总波函数投影到 $\bvec r_1$ 子空间中， 再求该子空间中（关于 $\bvec r_2$ 的）波函数的概率即可．
+\begin{equation}
+P(\bvec r_1) = \int \abs{\Psi(\bvec r_1, \bvec r_2)}^2 \dd[3]{r_2}
+\end{equation}
+若使用\autoref{HeAnal_eq6} 形式的波函数\footnote{在程序中不一定需要先这么做， 只需要将\autoref{HeAnal_eq7} 带入以下各式， 在将 $L, M, l_1, l_2$ 的求和提到最外面即可}， 这个积分的形式就变得相当简单， 先令 $\bvec r_1$ 为常数， 计算关于 $r_2$ 的径向波函数
+\begin{equation}
+\ali{
+\psi_{l_2, m_2}(r_2) &= \frac{1}{r_1} \sum_{l_1, m_1} \psi_{l_1, l_2}^{m_1, m_2}(r_1, r_2) Y_{l_1, m_1}(\uvec r_1)\\
+&= \frac{1}{r_1} \sum_{L,M,l_1} \bmat{l_1 & l_2 & L\\ M - m_2 & m_2 & M} \psi_{l_1, l_2}^{L,M}(r_1, r_2) Y_{l_1, m_1}(\uvec r_1)
+}\end{equation}
+这样\autoref{HeAnal_eq6} 就变为
+\begin{equation}
+\Psi(\bvec r_2) = \frac{1}{r_2} \sum_{l_2, m_2} \psi_{l_2, m_2}(r_2) Y_{l_2, m_2} (\uvec r_2)
+\end{equation}
+现在计算每个分波的概率并求和即可．
+
+\subsection{Shakeup 电离}
+
+Shakeup 就是说总波函数中一个电子处于某个基态， 另一个电子处于散射态的部分． 令归一化的基态为
+\begin{equation}
+\phi_{n_1, l_1, m_1}(\bvec r_1) = R_{n_1,l_1}(r_1)Y_{l_1,m_1}(\uvec r_1)
+\end{equation}
+归一化的散射态为
+\begin{equation}
+C_{l_2}(k_2, \bvec r_2) = \sqrt{\frac{2}{\pi}} F_{l_2}(k_2, r_2) Y_{l_2, m_2} (\uvec r_2)
+\end{equation}
+以下的计算和单电子概率分布很类似， 我们同样不需要太在意粒子交换对称的问题， 把内积乘以 $\sqrt{2}$， 概率乘以 2 即可． 同样先把总波函数转换为\autoref{HeAnal_eq6} 的形式， 投影得到
+\begin{equation}
+\ali{
+&\bra{\phi_{n_1, l_1, m_1}}\braket{C_{l_2}(k_2)}{\Psi} = \sqrt{\frac{2}{\pi}} \iint r_1 R_{n_1,l_1}(r_1) F_{l_2}(k_2, r_2) \psi_{l_1, l_2}^{m_1, m_2}(r_1, r_2) \dd{r_1} \dd{r_2}\\
+& = \sqrt{\frac{2}{\pi}} \sum_{L,M} \bmat{l_1 & l_2 & L\\ m_1 & M - m_1 & M} \iint r_1 R_{n_1,l_1}(r_1) F_{l_2}(k_2, r_2) \psi_{l_1, l_2}^{L,M}(r_1, r_2) \dd{r_1} \dd{r_2}
+}\end{equation}
+\begin{equation}
+P(n_1, l_1, m_1, k_2) = \sum_{l_2, m_2}\abs{\bra{\phi_{n_1, l_1, m_1}}\braket{C_{l_2}(k_2)}{\Psi}}^2
+\end{equation}
+注意这里对 $m_2$ 求和其实没有必要， 因为上式只有 $m_2 = M - m_1$ 时才不为零．
 
