@@ -148,24 +148,63 @@ P(\bvec r_1) = \int \abs{\Psi(\bvec r_1, \bvec r_2)}^2 \dd[3]{r_2}
 \end{equation}
 现在计算每个分波的概率并求和即可．
 
-\subsection{Shakeup 电离}
+\subsection{Shakeup 电离 1}
+Shakeup 就是说总波函数中一个电子处于某个基态， 另一个电子处于散射态的部分． 如果不需要区分 $m_1$， 只求概率分布 $P(n_1, l_1, k_2)$， 公式将会比较简单． 子空间的基底为（$n_1, l_1, k_2$ 为常数）
+\begin{equation}
+\ket{n_1, l_1, k_2, l_2, L, M} = R_{n_1,l_1}(r_1) \frac{1}{r_2}\sqrt{\frac{2}{\pi}} F_{l_2}(k_2, r_2) \mathcal{Y}_{l_1, l_2}^{L, M}(\uvec r_1, \uvec r_2)
+\end{equation}
+投影为
+\begin{equation}
+\braket{n_1, l_1, k_2, l_2, L, M}{\Psi} = \sqrt{\frac{2}{\pi}} \iint r_1 R_{n_1,l_1}(r_1) F_{l_2}(k_2, r_2) \psi_{l_1, l_2}^{L, M}(r_1, r_2) \dd{r_1} \dd{r_2}
+\end{equation}
+概率分布为
+\begin{equation}
+\begin{aligned}
+P(n_1, l_1, k_2) &= \sum_{l_2, L, M} \abs{\braket{n_1, l_1, k_2, l_2, L, M}{\Psi}}^2
+\end{aligned}
+\end{equation}
 
-Shakeup 就是说总波函数中一个电子处于某个基态， 另一个电子处于散射态的部分． 令归一化的基态为
+为了调试程序， 一个更简单的分布是 $P(n_1, l_1, m_1, r_2)$ 或者 $P(n_1, l_1, r_2)$， 后者基底为
+\begin{equation}
+\ket{n_1, l_1, r_2', l_2, L, M} = R_{n_1,l_1}(r_1) \frac{1}{r_2}\delta(r_2 - r_2') \mathcal{Y}_{l_1, l_2}^{L, M}(\uvec r_1, \uvec r_2)
+\end{equation}
+投影为
+\begin{equation}
+\braket{n_1, l_1, r_2', l_2, L, M}{\Psi} = \int r_1 R_{n_1,l_1}(r_1) \psi_{l_1, l_2}^{L, M}(r_1, r_2') \dd{r_1}
+\end{equation}
+概率分布为
+\begin{equation}
+\begin{aligned}
+P(n_1, l_1, r_2') &= \sum_{l_2, L, M} \abs{\braket{n_1, l_1, r_2', l_2, L, M}{\Psi}}^2
+\end{aligned}
+\end{equation}
+
+\subsection{Shakeup 电离 2}
+
+ 令归一化的基态为
 \begin{equation}
 \phi_{n_1, l_1, m_1}(\bvec r_1) = R_{n_1,l_1}(r_1)Y_{l_1,m_1}(\uvec r_1)
 \end{equation}
 归一化的散射态为
 \begin{equation}
-C_{l_2}(k_2, \bvec r_2) = \sqrt{\frac{2}{\pi}} F_{l_2}(k_2, r_2) Y_{l_2, m_2} (\uvec r_2)
+C_{l_2, m_2}(k_2, \bvec r_2) = \frac{1}{r_2}\sqrt{\frac{2}{\pi}} F_{l_2}(k_2, r_2) Y_{l_2, m_2} (\uvec r_2)
 \end{equation}
 以下的计算和单电子概率分布很类似， 我们同样不需要太在意粒子交换对称的问题， 把内积乘以 $\sqrt{2}$， 概率乘以 2 即可． 同样先把总波函数转换为\autoref{HeAnal_eq6} 的形式， 投影得到
 \begin{equation}
 \ali{
-&\bra{\phi_{n_1, l_1, m_1}}\braket{C_{l_2}(k_2)}{\Psi} = \sqrt{\frac{2}{\pi}} \iint r_1 R_{n_1,l_1}(r_1) F_{l_2}(k_2, r_2) \psi_{l_1, l_2}^{m_1, m_2}(r_1, r_2) \dd{r_1} \dd{r_2}\\
-& = \sqrt{\frac{2}{\pi}} \sum_{L,M} \bmat{l_1 & l_2 & L\\ m_1 & M - m_1 & M} \iint r_1 R_{n_1,l_1}(r_1) F_{l_2}(k_2, r_2) \psi_{l_1, l_2}^{L,M}(r_1, r_2) \dd{r_1} \dd{r_2}
+&\bra{\phi_{n_1, l_1, m_1}}\braket{C_{l_2, m_2}(k_2)}{\Psi} = \sqrt{\frac{2}{\pi}} \iint r_1 R_{n_1,l_1}(r_1) F_{l_2}(k_2, r_2) \psi_{l_1, l_2}^{m_1, m_2}(r_1, r_2) \dd{r_1} \dd{r_2}\\
+& = \sqrt{\frac{2}{\pi}} \sum_{L,M} \bmat{l_1 & l_2 & L\\ m_1 & m_2 & M} \iint r_1 R_{n_1,l_1}(r_1) F_{l_2}(k_2, r_2) \psi_{l_1, l_2}^{L,M}(r_1, r_2) \dd{r_1} \dd{r_2}
 }\end{equation}
 \begin{equation}
-P(n_1, l_1, m_1, k_2) = \sum_{l_2, m_2}\abs{\bra{\phi_{n_1, l_1, m_1}}\braket{C_{l_2}(k_2)}{\Psi}}^2
+P(n_1, l_1, m_1, k_2) = \sum_{l_2, m_2}\abs{\bra{\phi_{n_1, l_1, m_1}}\braket{C_{l_2, m_2}(k_2)}{\Psi}}^2
 \end{equation}
-注意这里对 $m_2$ 求和其实没有必要， 因为上式只有 $m_2 = M - m_1$ 时才不为零．
+当 $M \equiv 0$ 时这里对 $m_2$ 求和其实只有一项就是 $m_2 = - m_1$， 也是一个常数．
+
+可以验证（？）% 未完成： 在程序中验证
+\begin{equation}
+P(n_1, l_1, k_2) = \sum_{m_1} P(n_1, l_1, m_1, k_2)
+\end{equation}
+
+然而这个公式调试起来不好办， 最好的办法其实是先计算 $\psi_{l_1, l_2}^{m_1, m_2}$． 这就需要也搞一个 $(l_1, m_1, l_2, m_2)$ 的列表， 计算酋变换的矩阵． 而由于 $l_1, m_1, m_2$ 都是常数， 只需要每个 $l_2$ 一个分波即可．
+
 
