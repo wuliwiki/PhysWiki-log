@@ -1,18 +1,13 @@
 % 傅里叶级数（三角）
 % 微积分|傅里叶级数|几何矢量|定积分|狄利克雷条件|三角函数|函数基底
 
-% 未完成： 感觉函数基底需要一些图．
-% 如果只考虑某个区间的展开， 不需要使用周期性， 也可以只用 sin 展开， 例如无限深势阱． 现在在考虑要不要先介绍这个呢？？ 毕竟量子力学中使用得非常多．
-% 仍然用几何矢量来推导！因为怎么可能不会几何矢量就来学高数！
-% 注意给出的函数基底正交并不归一！不要改成归一，尽量和《高数》课本一致吧！
-% 提一下，我们也可以先把基底正交归一化，最后就不用除以模长了．
-
-% 未完成，应该提一提 delta 符号
+% 未完成： 感觉函数基底需要一些图．% 现在在考虑要不要先介绍这个呢？？ 毕竟量子力学中使用得非常多．
+% 未完成： 没有学过狄拉克符号！ 应该早早地专门开词条介绍
 
 \pentry{几何矢量，定积分\upref{DefInt}}% 链接未完成
 
 \subsection{结论}
-满足\textbf{狄利克雷条件}的周期函数 $f(x)$ （周期为 $2l$ ）可以使用以下三角函数展开
+满足\textbf{狄利克雷条件}\footnote{函数值有限，存在有限个间断点和有限个极值点． 如无特殊说明， 本书中做傅里叶级数的展开的函数都满足狄利克雷条件}的周期函数 $f(x)$ （周期为 $2l$ ）可以使用以下三角函数展开
 \begin{equation}\label{FSTri_eq1}
 f( x ) = \frac{a_0}{2} + \sum_{n = 1}^\infty a_n \cos (\frac{n\pi}{l}x) + \sum_{n = 1}^\infty b_n \sin (\frac{n\pi}{l}x)
 \end{equation}
@@ -23,10 +18,9 @@ a_n = \frac{1}{l} \int_{ - l}^l f( x )\cos(\frac{n\pi}{l}x) \dd{x}
 \begin{equation}\label{FSTri_eq3}
 b_n = \frac{1}{l} \int_{ - l}^l f( x )\sin(\frac{n\pi}{l}x) \dd{x}
 \end{equation}
-狄利克雷条件：函数值有限，存在有限个间断点和有限个极值点．
 
 \subsection{说明}
-注意\autoref{FSTri_eq1} 的所有 $a_n$ 项为偶函数项，所有 $b_n$ 项为奇函数项．若 $f(x)$ 是偶函数，所有 $b_n$ 项为零，若是奇函数，则所有 $a_n$ 项为零\footnote{证明：如果 $f(x)$ 是偶函数，那么 \autoref{FSTri_eq3} 中的被积函数就是奇函数，所以在区间 $[-l,l]$ 的积分为零．奇函数的证明类似．}． 如果 $f(x)$ 不具有奇偶性，可以表示为偶函数和奇函数之和，分别对应所有 $a_n$ 项和所有 $b_n$ 项
+注意\autoref{FSTri_eq1} 的所有 $a_n$ 项为偶函数项，所有 $b_n$ 项为奇函数项．若 $f(x)$ 是偶函数，所有 $b_n$ 项为零，若是奇函数，则所有 $a_n$ 项为零\footnote{证明：如果 $f(x)$ 是偶函数，那么\autoref{FSTri_eq3} 中的被积函数就是奇函数， 所以在区间 $[-l,l]$ 的积分为零．奇函数的证明类似．}． 如果 $f(x)$ 不具有奇偶性，可以表示为偶函数和奇函数之和，分别对应所有 $a_n$ 项和所有 $b_n$ 项
 \begin{equation}
 f(x) = \frac12 [f(x)+f(-x)] + \frac12 [f(x)-f(-x)]
 \end{equation}
@@ -34,11 +28,7 @@ f(x) = \frac12 [f(x)+f(-x)] + \frac12 [f(x)-f(-x)]
 $f(x)$ 的函数值既可以是实数也可以是复数．实函数的展开系数 $a_n, b_n$ 也必须取实数，复函数的展开系一定不全是实数．
 
 \subsection{完备性}
-傅里叶级数最奇妙的地方大概就是它能展开任意满足狄利克雷条件的函数，这个性质叫做\textbf{完备性}．一般高等数学教材中不证明完备性，这里只给出几个例子说明随着求和项数增加，三角函数如何逼近不连续或不光滑的函数．
-
-% 未完成：怎样能实现例子的 environment 呢？
-% 1．要求标题左对齐，加粗
-% 2．要求环境内用不同的字体，包括公式，稍小
+傅里叶级数最奇妙的地方大概就是它能展开任意满足狄利克雷条件的函数，这个性质叫做\textbf{完备性}．我们先不证明完备性，只给出几个例子说明随着求和项数增加，三角函数如何逼近不连续或不光滑的函数．
 
 \begin{example}{方波}
 
@@ -49,8 +39,8 @@ f(x) = \leftgroup{
 - 1& &&   (2k - 1)\pi < x \les 2k\pi 
 }\end{equation}
 注意 $f(x)$ 在 $x=k\pi$ 处存在间断点．进行傅里叶级数展开得
-\begin{equation}
-f(x) = \sum_{k = 0}^{+\infty} \frac{4}{\pi (2k + 1)}\sin (2k + 1)x
+\begin{equation}\label{FSTri_eq5}
+f(x) = \sum_{k = 0}^\infty \frac{4}{\pi (2k + 1)}\sin (2k + 1)x
 \end{equation}
 注意由于 $f(x)$ 是奇函数，求和只有正弦项．取级数的前 $m$ 项求和并画图如\autoref{FSTri_fig1}．
 
@@ -64,7 +54,7 @@ f(x) = \sum_{k = 0}^{+\infty} \frac{4}{\pi (2k + 1)}\sin (2k + 1)x
 \begin{example}{正弦函数的绝对值} % 未完成：图
 
 偶函数 $f(x) = \abs{\sin x}$ 存在不光滑的点，展开成傅里叶级数为
-\begin{equation}
+\begin{equation}\label{FSTri_eq6}
 f(x) = \abs{\sin x} = \frac{2}{\pi } - \frac{4}{\pi }\sum_{k = 1}^{+\infty} \frac{1}{4 k^2 - 1}\cos 2k x
 \end{equation}
 前 $m$ 项和画图如\autoref{FSTri_fig2}．
@@ -75,50 +65,59 @@ f(x) = \abs{\sin x} = \frac{2}{\pi } - \frac{4}{\pi }\sum_{k = 1}^{+\infty} \fra
 \end{figure}
 \end{example}
 
+\begin{exercise}{}
+根据傅里叶级数的定义用定积分计算\autoref{FSTri_eq5} 和\autoref{FSTri_eq6}．
+\end{exercise}
+
 
 \subsection{系数公式推导}
-% 还是用矢量公式比较好
+\pentry{正交归一基底\upref{OrNrB}}
 
 在泰勒级数\upref{Taylor}中，% 链接未完成
-我们通过求 $n$ 阶导数的方式来“过滤”出第 $n$ 阶系数．这里我们用积分的方式来“ 过滤” 系数．这里我们通过一个重要的类比来讲解，即几何矢量在正交（不归一）基底上的展开．% 链接未完成
+我们通过求 $n$ 阶导数的方式来“过滤”出第 $n$ 阶系数．这里我们用积分的方式来“ 过滤” 系数．我们在推导中还要介绍一个重要的类比来讲解，即把级数中的 $\sin$ 和 $\cos$ 的性质对比几何矢量在正交（不归一）基底上的展开（\autoref{OrNrB_eq1}\upref{OrNrB}）．
 
 % 感觉先上图最容易懂． 还是先说 sin&cos 基底再介绍单独的 sin 基底 （注意包括 “1”）（cos 基底提一下就好）， 用于某个区间内的函数，不需要拓展成周期函数的情况．
 % 
 
 给出一组无穷多个函数
 \begin{equation}\label{FSTri_eq4}
-\frac12,\;   \sin\frac{\pi}{l} x,\;   \cos\frac{\pi}{l} x,\;   \sin\frac{2\pi}{l} x,\;   \cos\frac{2\pi}{l} x,\;   \dots\;\sin\frac{n\pi}{l} x,\;   \cos\frac{n\pi}{l} x\;   \dots
-\end{equation}
+\begin{aligned}
+&\frac12,\;   \sin(\frac{\pi}{l} x),\;   \cos(\frac{\pi}{l} x),\;   \sin(\frac{2\pi}{l} x),\;   \cos(\frac{2\pi}{l} x),\;   \dots\\
+&\sin(\frac{n\pi}{l} x),\;   \cos(\frac{n\pi}{l} x)\;   \dots
+\end{aligned}\end{equation}
 其中 $n$ 是正整数．我们把任意满足狄利克雷条件的函数（以下简称任意函数）比作几何矢量，把上面这组函数（\autoref{FSTri_eq4}）比作矢量基底（称为\textbf{函数基底}）
-，任意函数都可以表示成这组基底的线性组合（\autoref{FSTri_eq1}）．现在把两个任意函数（矢量） $f(x)$ 和 $g(x)$ 的\textbf{内积}定义为它们的乘积在 $[-l,l]$ 内积分
+，任意函数都可以表示成这组基底的线性组合（即\autoref{FSTri_eq1}）．现在把两个任意函数（矢量） $f(x)$ 和 $g(x)$ 的\textbf{内积}定义为它们的乘积在 $[-l,l]$ 内积分
 \begin{equation}
 \braket{f}{g} = \int_{-l}^{l} f(x)g(x) \dd{x}
 \end{equation}
-可以证明这组基底\textbf{正交}（即任意两个不同的基底内积为 0，证明见词条最后）但不\textbf{归一}（某矢量与自身内积等于 1）．与“几何矢量在正交但不归一的基底上展开”一样，我们只要把函数分别与各个基底内积，再除以基底的模长平方（模方）
+可以证明这组基底\textbf{正交}（即任意两个不同的基底内积为 0，证明见下文）但不\textbf{归一}\footnote{归一化的矢量也叫单位矢量， 与自身内积等于 1， 详见 “矢量内积”\upref{Dot}}．与 “几何矢量在正交但不归一的基底上展开” 一样，我们只要把函数分别与各个基底内积，再除以基底的模长平方（模方）
 即可获得线性组合的系数 $a_n$ 和 $b_n$． 可以证明所有基底的模方为 $l$， 这样我们就得到了系数公式（\autoref{FSTri_eq2} \autoref{FSTri_eq3}）．
 
 
 \subsection{正弦基底}
-若我们只需要在一个区间 $[0,l]$ 上展开函数 $f(x)$ 而不在意其他地方，那么我们可以假想 $f(x)$ 是以 $2l$ 为周期的奇函数，这样，我们只需要用正弦基底展开 $f(x)$ 即可\footnote{显然我们也可以假想 $f(x)$ 是以 $2l$ 为周期的偶函数，用余弦基底展开 $f(x)$．但更常见的是使用正弦基底，经常在量子力学中使用，因为无限深势阱要求波函数在区间两端消失．}． 于是我们可以说，\autoref{FSTri_eq4} 中给出的所有正弦基底在区间 $[0,l]$ 具有完备性．
+若我们只需要在一个区间 $[0,l]$ 上展开函数 $f(x)$ 而不在意其他地方，那么我们可以假想 $f(x)$ 是以 $2l$ 为周期的奇函数，这样，我们只需要用正弦基底展开 $f(x)$ 即可\footnote{显然我们也可以假想 $f(x)$ 是以 $2l$ 为周期的偶函数，用余弦基底展开 $f(x)$．选择正弦或余弦还应该考虑到函数在该区间的边界条件： 正弦可以保证两端函数值为 0， 余弦可以保证区间的导数值为 0．}． 于是我们可以说，\autoref{FSTri_eq4} 中给出的所有正弦基底在区间 $[0,l]$ 具有完备性．
 
 \begin{example}{用正弦基底展开闭区间内的函数}
 
-定义区间 $[0,a]$ 内的一个三角形函数如下，先把函数归一化，再用正弦基底做傅里叶展开．
+\begin{figure}[ht]
+\centering
+\includegraphics[width=4cm]{./figures/FSTri3.pdf}
+\caption{三角形函数} \label{FSTri_fig3}
+\end{figure}
+
+定义区间 $[0,a]$ 内的一个三角形函数如下（\autoref{FSTri_fig3}），先把函数归一化，再用正弦基底做傅里叶展开．
 \begin{equation}
 f(x) = \leftgroup{
 &\frac2a x &\quad (0 \les x \les \frac a2)\\
 &2 -\frac2a x &\quad (\frac a2 < x \les a)
 }\end{equation}
-% 未完成：分段函数图
 
 首先假想 $f(x)$ 为奇函数，原则上可以直接使用\autoref{FSTri_eq3} 计算展开系数，但由于被积函数 $f(x)\sin(x)$ 为偶函数， 可以先把\autoref{FSTri_eq3} 化简为%未完成：介绍定积分的时候也讲讲偶函数奇函数的化简呗
 \begin{equation}
 {b_n} = \frac{2}{a}\int_{0}^a f( x )\sin (\frac{n\pi}{a}x) \dd{x}
 \end{equation}
 
-% 未完成： 对称性图，同时画出函数和基底
-
-又注意 $f(x)$ 关于区间中点的对称性，我们可以进一步判断出（如图*） $n$ 为偶数时 $b_n$ 项都为零， 而 $n$ 为奇数项的 $b_n$ 在 $[0,a/2]$ 的积分等于在 $[a/2,a]$ 的积分， 所以
+又注意 $f(x)$ 关于区间中点的对称性，我们可以进一步判断出 $n$ 为偶数时 $b_n$ 项都为零， 而 $n$ 为奇数项的 $b_n$ 在 $[0, a/2]$ 的积分等于在 $[a/2, a]$ 的积分， 所以
 \begin{equation}
 \ali{
 {b_n} &= \frac{4}{a}\int_{0}^{a/2} f( x )\sin (\frac{n\pi}{a}x) \dd{x}\\
@@ -128,7 +127,7 @@ f(x) = \leftgroup{
 ，也可以用 Wolfram Alpha 或 Mathematica 完成．%未完成：链接
 结果是
 \begin{equation}
-b_n = (-1)^{\frac{n-1}{2}} \frac{8}{\pi^2 n^2} \quad (n\text{为奇数})
+b_n = (-1)^{\frac{n-1}{2}} \frac{8}{\pi^2 n^2} \quad (\text{$n$ 为奇数})
 \end{equation}
 
 \end{example}
@@ -138,13 +137,9 @@ b_n = (-1)^{\frac{n-1}{2}} \frac{8}{\pi^2 n^2} \quad (n\text{为奇数})
 \sin\frac{\pi}{l} (x-x_0),\;   \sin\frac{2\pi}{l} (x-x_0),\;    \dots\;\sin\frac{n\pi}{l} (x-x_0) \dots
 \end{equation}
 
-% \subsection{使用归一化的基底}
-% 未完成：我们也可以把基底归一化，这样的好处就是，系数模方之和会等于被展开函数的模方．这个“归一化不变”的特点可以拓展到傅里叶变换中，直接导致了归一化系数 sqrt（2pi）的出现．
-
 \subsection{证明函数基底正交}
-% 未完成：需要拓展到 2l 区间！
 
-现在证明任意两个不同的基底内积等于 0．当 $m \ne n$ 时，有
+现在证明\autoref{FSTri_eq4} 中任意两个不同的基底内积等于 0．当 $m \ne n$ 时，有
 \begin{equation}\ali{
 &\int_{ - \pi }^\pi  \sin(mx) \sin(nx) \dd{x} \\
  = &\frac12 \int_{-\pi}^\pi  \cos [(m - n)x] \dd{x}  - \frac12\int_{-\pi}^\pi  \cos [(m + n)x] \dd{x}  = 0
@@ -177,4 +172,51 @@ b_n = (-1)^{\frac{n-1}{2}} \frac{8}{\pi^2 n^2} \quad (n\text{为奇数})
 \begin{equation}
 \int_{-\pi}^\pi 1^2 \dd{x} = 2\pi
 \end{equation}
+
+\subsection{使用归一化的基底}
+
+我们也可以将\autoref{FSTri_eq4} 的每个基底乘以一个常数进行归一化， 即让每个基底的模长为 1． 我们将归一化后的正弦项和余弦项分别记为 $\ket{S_n}$， $\ket{C_n}$ （$n = 1, 2,\dots$）， 将常数项记为 $\ket{C_0}$．
+\begin{equation}
+\braket{S_n}{S_n} = \int_{-l}^l \qty[B_n \sin(\frac{n\pi}{l}x)]^2 \dd{x} = 1
+\end{equation}
+\begin{equation}
+\braket{C_n}{C_n} = \int_{-l}^l \qty[A_n \cos(\frac{n\pi}{l}x)]^2 \dd{x} = 1
+\end{equation}
+解得 $A_n = B_n = 1/\sqrt{l\ }$． 最后将常数项归一化变为 $1/\sqrt{2l}$ 即可． 所以正交归一得傅里叶级数基底为
+\begin{equation}
+\frac{1}{\sqrt{2l}},\;   \frac{1}{\sqrt{l\ }}\sin(\frac{\pi}{l} x),\;   \frac{1}{\sqrt{l\ }}\cos(\frac{\pi}{l} x),\;   \dots\;  \frac{1}{\sqrt{l\ }}\sin(\frac{n\pi}{l} x),\;   \frac{1}{\sqrt{l\ }}\cos(\frac{n\pi}{l} x)\;   \dots
+\end{equation}
+易证将基底乘以常数不影响它们的正交性， 我们可以将正交归一基底的性质用克罗内克 $\delta$ 函数（\autoref{OrNrB_eq2}\upref{OrNrB}）表示（常数基底可以记为 $\ket{C_0}$）
+\begin{equation}
+\braket{S_m}{S_n} = \delta_{m,n}
+\qquad
+\braket{C_m}{C_n} = \delta_{m, n}
+\qquad
+\braket{S_m}{C_n} = 0
+\end{equation}
+
+如果将任意函数 $f(x)$ 记为 $\ket{f}$， 傅里叶级数的公式可以记为（下面默认 $\ket{C_n}$ 求和时 $n = 0, 1, \dots$， 对 $\ket{S_n}$ 求和时 $n = 1, 2, \dots$）
+\begin{equation}
+\ket{f} = \sum_n \qty(a_n \ket{C_n} + b_n \ket{S_n})
+\end{equation}
+\begin{equation}
+a_n = \braket{f}{C_n}
+\qquad
+b_n = \braket{f}{S_n}
+\end{equation}
+这比上文的定义要更简洁． 我们还可以证明两函数 $f(x)$ 和 $g(x)$ 的内积为
+\begin{equation}
+\begin{aligned}
+\braket{f}{g} &= \sum_m \qty(a_m \bra{C_m} + b_m \bra{S_m}) \sum_n \qty(c_n \ket{C_n} + d_n \ket{S_n})\\
+&= \sum_{m, n} a_m c_n \delta_{m, n} + b_m d_n \delta_{m, n}\\
+&= \sum_n (a_n c_n + b_n d_n)
+\end{aligned}
+\end{equation}
+该式可以类比几何矢量的坐标计算（\autoref{Dot_eq4}\upref{Dot}）， 即把两个函数在所有基底上的展开系数分别相乘再相加．
+
+特殊地， 一个任意函数的模方为
+\begin{equation}
+\braket{f} = \sum_n (a_n^2 + b_n^2)
+\end{equation}
+即将所有展开系数分别平方再相加． 这与几何矢量模方公式也相同．
 
