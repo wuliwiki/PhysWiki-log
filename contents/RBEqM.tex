@@ -18,4 +18,36 @@ M\bvec a_c = \sum_i \bvec F_i
 （未完成！）
 
 \subsection{运动方程}
+我们仍然可以用角动量定理来推导刚体的运动方程， 但这里的角动量要用惯性张量来表示（\autoref{ITensr_eq3}\upref{ITensr} 和\autoref{ITensr_eq4}\upref{ITensr}）
+\begin{equation}
+\bvec L = \mat I \bvec \omega = \mat R \mat I_0 \mat R\Tr \bvec \omega
+\end{equation}
+其中 $\mat I_0$ 不随时间变化， $\bvec L$， $\bvec \omega$ 和 $\bvec R$ 都是时间的函数． 带入角动量定理得（\autoref{AMLaw_eq1}\upref{AMLaw}）
+\begin{equation}\label{RBEqM_eq3}
+\bvec \tau = \dv{\bvec L}{t} = \dv{t} (\bvec R\mat I_0 \mat R\Tr) \bvec \omega + \mat R \mat I_0 \mat R\Tr \dv{\bvec \omega}{t}
+\end{equation}
+注意这里对矩阵求导就是对每个元分别求导．
 
+我们把力矩 $\bvec \tau$ 看作是一个已知函数， 把旋转矩阵 $\mat R$ 和角速度 $\bvec \omega$ 看做未知的（微分方程的解）． $\mat R$ 和 $\bvec \omega$ 完整描述了刚体绕固定点转动的\bb{状态}， 就像位置和动量可以完整描述了一个质点运动的状态．
+
+另外， $\bvec \omega$ 和 $\bvec R$ 之间的关系就像位移和速度的关系， 假设体坐标系中固定在刚体上的任意一点为 $\bvec r$， 变换到实验室坐标系中为 $\mat R \bvec r$． 对时间求导得该点得速度为
+\begin{equation}\label{RBEqM_eq1}
+\bvec v = \dv{\mat R}{t} \bvec r
+\end{equation}
+而角速度和速度之间有 $\bvec v = \bvec \omega \cross \bvec r$（\autoref{CMVD_eq5}\upref{CMVD}）． 我们可以把叉乘用矩阵乘法表示为 % 未完成： 再叉乘词条里面提及这点
+\begin{equation}\label{RBEqM_eq2}
+\bvec v = \mat\Omega \bvec r
+\qquad
+\mat\Omega = \pmat{0 & -\omega_z & \omega_y \\ \omega_z & 0 & -\omega_x\\ -\omega_y & \omega_x & 0}
+\end{equation}
+由于 $\bvec r$ 是任意的， 对比\autoref{RBEqM_eq1} 和\autoref{RBEqM_eq2} 得
+\begin{equation}\label{RBEqM_eq4}
+\dv{\mat R}{t} = \mat\Omega
+\end{equation}
+将\autoref{RBEqM_eq3} 整理得（注意 $\mat R \mat I_0 \mat R\Tr$ 得逆矩阵是 $\mat R \mat I_0^{-1} \mat R\Tr$）% 链接未完成
+\begin{equation}\label{RBEqM_eq5}
+\dv{\bvec \omega}{t} = \mat R \mat I_0^{-1} \mat R\Tr \qty[\bvec \tau  - \dv{t} (\bvec R\mat I_0 \mat R\Tr) \bvec \omega]
+\end{equation}
+\autoref{RBEqM_eq4} 和\autoref{RBEqM_eq5} 就是完整的运动方程． 这是一个一阶常微分方程组\upref{ODEsys}， 写成标量的形式共有 12 条， 未知数分别为 $\omega_x, \omega_y, \omega_z$， $R_{i,j}$ 共 12 个．
+
+事实上旋转矩阵 $\mat R$ 其实只有三个独立的自由度， 如果我们能用三个变量表示 $\mat R$， 就可以得到只含 6 个未知数的 6 个方程． 一种方法是使用欧拉角， 但列出来后式子会比较复杂． 另一种方法是用 4 元数， 即用 4 个变量表示 $\mat R$， 可以得到形式相对简单的方程（见\upref{RBEMQt}）．
