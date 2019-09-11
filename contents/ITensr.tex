@@ -2,7 +2,7 @@
 % 刚体|惯性张量|坐标系基底变换
 % 所有连接未完成
 
-\pentry{转动惯量\upref{RigRot}}
+\pentry{常见几何体的转动惯量\upref{ExMI}}
 
 \subsection{瞬时转轴}
 当刚体绕某点做任意转动时， 我们在每个时刻仍然能找到一个经过该点的\textbf{瞬时转轴} 以及延转轴的瞬时角速度（矢量） $\bvec \omega$．
@@ -29,9 +29,64 @@ I_{zx}& I_{zy}& I_{zz}
 \end{pmatrix}
 \end{equation}
 如果将 $x, y, z$ 分别记为 $x_1, x_2, x_3$， 则 $\mat I$ 的矩阵元为
-\begin{equation}
+\begin{equation}\label{ITensr_eq1}
 I_{ij} = \delta_{i, j} \int r^2 \rho(\bvec r)\dd{V} - \int x_i x_j \rho(\bvec r)\dd{V} \qquad (i, j = 1, 2, 3)
 \end{equation}
+其中 $r = \abs{\bvec r}$． 也可以表示成矩阵积分的形式（每个矩阵元分别积分）
+\begin{equation}\label{ITensr_eq2}
+\mat I = \int \rho
+\begin{pmatrix}
+y^2 + z^2 & -xy & -xz\\
+-yx & x^2 + z^2 & -yz\\
+-zx & -zy & x^2 + y^2
+\end{pmatrix}
+\dd{V}
+\end{equation}
+
+\begin{example}{长方体的惯性张量}
+令重心在原点， 密度为常数， 质量为 $M$ 的长方体延 $x, y, z$ 方向的长度分别为 $a, b, c$， 那么有
+\begin{equation}
+\begin{aligned}
+&\iiint xy \dd{x}\dd{y}\dd{z} = \iiint yz \dd{x}\dd{y}\dd{z} = \iiint zx \dd{x}\dd{y}\dd{z} = 0\\
+&\iiint x^2 \dd{x}\dd{y}\dd{z} = \frac{1}{12} a^3 bc\\
+&\iiint y^2 \dd{x}\dd{y}\dd{z} = \frac{1}{12} ab^3 c\\
+&\iiint z^2 \dd{x}\dd{y}\dd{z} = \frac{1}{12} ab c^3
+\end{aligned}
+\end{equation}
+所以
+\begin{equation}
+\begin{aligned}
+\mat I &= \frac{1}{12} \rho abc
+\pmat{
+   b^2 + c^2 & 0 & 0\\
+   0 & a^2 + c^2 & 0\\
+   0 & 0 & a^2 + b^2
+}\\
+&= \frac{1}{12} M
+\pmat{
+   b^2 + c^2 & 0 & 0\\
+   0 & a^2 + c^2 & 0\\
+   0 & 0 & a^2 + b^2
+}
+\end{aligned}
+\end{equation}
+可以发现这个是一个对角矩阵． 这就意味着， 如果长方体分别绕 $x, y, z$ 轴转动， 它的角动量也分别延 $x, y, z$ 轴． 由\autoref{ExMI_eq1}\upref{ExMI} 可以验证三个方向的转动惯量是对的． 当转轴与坐标轴不重合时， 可见转动惯量的方向与转动方向一般不同．
+
+特殊地， 当 $a = b = c$ （正方体）时， 惯性张量变为单位矩阵乘以常数
+\begin{equation}
+\mat I = \frac{1}{6} Ma^2
+\pmat{
+   1 & 0 & 0\\
+   0 & 1 & 0\\
+   0 & 0 & 1
+}
+\end{equation}
+由于单位矩阵乘以任何矢量都得到相同的矢量， 正方体延任意转轴转动时都有
+\begin{equation}
+\bvec L = \mat I \bvec \omega = \frac{1}{6} Ma^2 \bvec \omega
+\end{equation}
+\end{example}
+
 
 \subsection{推导}
 \begin{equation}
@@ -39,21 +94,32 @@ I_{ij} = \delta_{i, j} \int r^2 \rho(\bvec r)\dd{V} - \int x_i x_j \rho(\bvec r)
 \end{equation}
 写成分量的形式， 并将求和表示为密度 $\rho$ 的积分得
 \begin{equation}
-\pmat{L_x\\ L_y\\ L_z} = \int \rho r^2 \pmat{\omega_x\\ \omega_y\\ \omega_z} \dd{V} - \int \rho
+\begin{aligned}
+\pmat{L_x\\ L_y\\ L_z} &= \int \rho r^2 \pmat{\omega_x\\ \omega_y\\ \omega_z} \dd{V} - \int \rho
 \begin{pmatrix}
 xx & xy & xz\\
 yx & yy & yz\\
 zx & zy & zz
 \end{pmatrix}
-\pmat{\omega_x\\ \omega_y\\ \omega_z} \dd{V}
+\pmat{\omega_x\\ \omega_y\\ \omega_z} \dd{V}\\
+
+&= \qty[\int \rho
+\begin{pmatrix}
+r^2 -xx & -xy & -xz\\
+-yx & r^2 -yy & -yz\\
+-zx & -zy & r^2 -zz
+\end{pmatrix}
+\dd{V}]
+\pmat{\omega_x\\ \omega_y\\ \omega_z}
+\end{aligned}
 \end{equation}
+其中方括号中的积分就是惯性张量 $\mat I$（\autoref{ITensr_eq2}）．
 
 \subsection{坐标系变换}
-注意惯性张量矩阵与坐标系的选取有关， 我们先建立一个与刚体相对静止的参考系叫做\textbf{体坐标系（body frame）}， 一般我们选择体坐标系的原点在刚体质心处， 但刚体做任意转动时， 体坐标系并不是一个惯性系， 所以我们还要选一个\textbf{实验室坐标系（lab frame）}． 令体坐标系的矢量到实验室系的基底变换矩阵\upref{Rot3D}为 $R$， 记体坐标系和实验室系中的惯性张量分别为 $\mat I_0$ 和 $\mat I$， 则实验室系中的惯性张量等于
+注意惯性张量矩阵与坐标系的选取有关， 具体来说使跟 我们先建立一个与刚体相对静止的参考系叫做\textbf{体坐标系（body frame）}， 一般我们选择体坐标系的原点在刚体质心处， 但刚体做任意转动时， 体坐标系并不是一个惯性系， 所以我们还要选一个\textbf{实验室坐标系（lab frame）}． 令体坐标系的矢量到实验室系的矢量的变换矩阵\upref{Rot3D}为 $\mat R$， 记体坐标系和实验室系中的惯性张量分别为 $\mat I_0$ 和 $\mat I$， 则实验室系中的惯性张量等于
 \begin{equation}
 \mat I = \mat R \mat I_0 \mat R\Tr
 \end{equation}
 
 % 例子未完成， 一根细杆与转轴成一定倾角转动（计算杆需要提供的力矩）
 % 例子未完成， 球体的惯性张量是对角的
-% 例子未完成， 一个长方体的惯性张量
