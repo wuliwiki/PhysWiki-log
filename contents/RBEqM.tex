@@ -1,6 +1,6 @@
 % 刚体的运动方程
 
-\pentry{刚体的平面运动方程\upref{RBEM}}
+\pentry{刚体的平面运动方程\upref{RBEM}， 惯性张量\upref{ITensr}}
 
 一般情况下下刚体的运动方程要比平面运动复杂得多， 但我们仍然可以将运动分解为质心的运动以及刚体绕质心的旋转， 前者由合力决定， 所以仍然有（\autoref{RBEM_eq1}\upref{RBEM}）
 \begin{equation}
@@ -11,11 +11,6 @@ M\bvec a_c = \sum_i \bvec F_i
 % 未完成： 这个话题我真的不熟啊． 瞬时转轴， 
 % 能否先用的思想来说明？ 就是把时间分成许多 \Delta t， 每个 dt 假设某些量为常数， 等等
 % 陀螺问题： 之前的假设是转动惯量很大， 但事实上陀螺是除了进动还会张动的．
-
-\subsection{平动动能与转动动能}
-\pentry{柯尼希定理\upref{Konig}}
-由柯尼希定理， 刚体的动能可以分为\textbf{平动动能}和\textbf{转动动能}两部分． 下面来证明一段时间内， 平动动能的增加等于合外力关于质心位移的做功， 而转动动能的增加等于质心系中合外力矩的做功．
-（未完成！）
 
 \subsection{运动方程}
 我们仍然可以用角动量定理来推导刚体的运动方程， 但这里的角动量要用惯性张量来表示（\autoref{ITensr_eq3}\upref{ITensr} 和\autoref{ITensr_eq4}\upref{ITensr}）
@@ -34,20 +29,28 @@ M\bvec a_c = \sum_i \bvec F_i
 \begin{equation}\label{RBEqM_eq1}
 \bvec v = \dv{\mat R}{t} \bvec r
 \end{equation}
-而角速度和速度之间有 $\bvec v = \bvec \omega \cross \bvec r$（\autoref{CMVD_eq5}\upref{CMVD}）． 我们可以把叉乘用矩阵乘法表示为 % 未完成： 再叉乘词条里面提及这点
+而角速度和速度之间有 $\bvec v = \bvec \omega \cross (\mat R \bvec) r$（\autoref{CMVD_eq5}\upref{CMVD}）． 我们可以把叉乘用矩阵乘法表示为 % 未完成： 再叉乘词条里面提及这点
 \begin{equation}\label{RBEqM_eq2}
-\bvec v = \mat\Omega \bvec r
+\bvec v = \mat\Omega \mat R \bvec r
 \qquad
 \mat\Omega = \pmat{0 & -\omega_z & \omega_y \\ \omega_z & 0 & -\omega_x\\ -\omega_y & \omega_x & 0}
 \end{equation}
 由于 $\bvec r$ 是任意的， 对比\autoref{RBEqM_eq1} 和\autoref{RBEqM_eq2} 得
 \begin{equation}\label{RBEqM_eq4}
-\dv{\mat R}{t} = \mat\Omega
+\dv{\mat R}{t} = \mat\Omega \mat R
 \end{equation}
-将\autoref{RBEqM_eq3} 整理得（注意 $\mat R \mat I_0 \mat R\Tr$ 得逆矩阵是 $\mat R \mat I_0^{-1} \mat R\Tr$）% 链接未完成
+将\autoref{RBEqM_eq3} 整理得（注意 $\mat R \mat I_0 \mat R\Tr$ 得逆矩阵是 $\mat R \mat I_0^{-1} \mat R\Tr$， $\mat I_0^{-1}$ 是 $\mat I_0$ 的逆矩阵）% 链接未完成
 \begin{equation}\label{RBEqM_eq5}
 \dv{\bvec \omega}{t} = \mat R \mat I_0^{-1} \mat R\Tr \qty[\bvec \tau  - \dv{t} (\bvec R\mat I_0 \mat R\Tr) \bvec \omega]
 \end{equation}
-\autoref{RBEqM_eq4} 和\autoref{RBEqM_eq5} 就是完整的运动方程． 这是一个一阶常微分方程组\upref{ODEsys}， 写成标量的形式共有 12 条， 未知数分别为 $\omega_x, \omega_y, \omega_z$， $R_{i,j}$ 共 12 个．
+其中（根据链式法则和\autoref{RBEqM_eq4}）
+\begin{equation}
+\dv{t}(\mat R \mat I_0 \mat R\Tr) = \dv{\mat R}{t} \mat I_0 \mat R\Tr + \mat R \mat I_0 \qty(\dv{\mat R}{t})\Tr = \mat \Omega \mat R \mat I_0 \mat R\Tr + \mat R \mat I_0 \mat R\Tr \mat \Omega\Tr
+\end{equation}
+带入\autoref{RBEqM_eq5} 得
+\begin{equation}\label{RBEqM_eq6}
+\dv{\bvec \omega}{t} = \mat R \mat I_0^{-1} \mat R\Tr \qty[\bvec \tau  - \qty(\mat \Omega \mat R \mat I_0 \mat R\Tr + \mat R \mat I_0 \mat R\Tr \mat \Omega\Tr) \bvec \omega]
+\end{equation}
+\autoref{RBEqM_eq4} 和\autoref{RBEqM_eq6} 就是完整的运动方程． 这是一个一阶常微分方程组\upref{ODEsys}， 写成标量的形式共有 12 条， 未知数分别为 $\omega_x, \omega_y, \omega_z$， $R_{i,j}$ 共 12 个．
 
 事实上旋转矩阵 $\mat R$ 其实只有三个独立的自由度， 如果我们能用三个变量表示 $\mat R$， 就可以得到只含 6 个未知数的 6 个方程． 一种方法是使用欧拉角， 但列出来后式子会比较复杂． 另一种方法是用 4 元数， 即用 4 个变量表示 $\mat R$， 可以得到形式相对简单的方程（见\upref{RBEMQt}）．
