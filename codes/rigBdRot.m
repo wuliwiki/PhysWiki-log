@@ -39,10 +39,7 @@ q = q / norm(q);
 wx = w(1); wy = w(2); wz = w(3);
 R = q2rot(q);
 RT = R';
-Omg = [0 -wz wy;
-        wz 0 -wx;
-        -wy wx 0];
-dw = R*invI0*RT*(tau(t) - (Omg*R*I0*RT + R*I0*RT*Omg')*w);
+dw = R*invI0*RT*(tau(t) - cross(w, R*I0*RT*w));
 dq = 0.5*quat_mul([0; w], q);
 dY = [dq; dw];
 end
