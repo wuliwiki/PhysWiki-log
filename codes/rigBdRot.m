@@ -31,7 +31,7 @@ for it = 1:Nt
     axis([-0.3, 0.3, -0.3, 0.3, -0.3, 0.3]);
     plot_cube(R, a, b, c);
     title(['t = ' num2str(t(it), '%.3f')]);
-	drawnow();
+    drawnow();
     % 取消注释可将每一帧保存为 png 图片（当前目录下）
     % saveas(gcf, [num2str(it) '.png']);
 end
@@ -86,7 +86,8 @@ end
 L0 = zeros(3, Nt); % 力矩积分的角动量
 L0(:, 1) = L(:, 1);
 for it = 2:Nt
-    L0(:, it) = L0(:, it-1) + integral(tau, t(it-1), t(it), 'ArrayValued', true);
+    L0(:, it) = L0(:, it-1) + ...
+        integral(tau, t(it-1), t(it), 'ArrayValued', true);
 end
 
 figure;
