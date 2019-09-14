@@ -1,5 +1,7 @@
 % 一维势能束缚态数值解（试射法）
 
+% 未完成： 把 “数值解一维薛定谔方程（试射法）\upref{NSES} ” 合并过来
+
 \subsection{ODE 函数}
 TISE 化为一阶微分方程组用于 ODE 解算器（如 Matlab 的 ode45）
 \begin{equation}
@@ -31,30 +33,38 @@ k = \sqrt{2m(E - V)} \qquad
 从两端射完并 match 以后， $\psi(x)$ 有可能具有很大的值， 可以归一化使其最大值等于 1． 归一化以后再检验两端是否满足 $\psi(x_0) \ll 1$（取决于精度）．
 
 \subsection{中点匹配}
-理论上， 我们可以用所谓的“甩尾法”，从波函数的一端射到另一端， 判断另一端是否为零． 但从数值误差来说，从指数末端出射误差远远大于从指数末端入射． 所以更好的办法是从两端 $x_L, x_R$ 分别入射后在某个中点 $x_M$ 处匹配．
+理论上， 我们可以用所谓的 “甩尾法”，从波函数的一端射到另一端， 判断另一端是否为零． 但从数值误差来说，从指数末端出射误差远远大于从指数末端入射． 所以更好的办法是从两端 $x_L, x_R$ 分别入射后在某个中点 $x_M$ 处匹配．
 
 简单的匹配可以采用对数导数（log derivative） 来计算匹配误差， 即
 \begin{equation}
-\text{err}(E) = \psi'_L(x_M)/\psi_L(x_M) - \psi'_R(x_M)/\psi_R(x_M)
+\text{err}(E) = \frac{\psi'_L(x_M)}{\psi_L(x_M)} - \frac{\psi'_R(x_M)}{\psi_R(x_M)}
 \end{equation}
 用多区间二分法即可得到定态能量．
 
 但是这么做有两个缺点， 一是 $\psi(x_M)$ 为零或很小的时候， err 有可能不稳定， 二是用多区间二分法解 $\text{err}(E) = 0$ 有可能出现不收敛的解， 因为该函数存在断点（想象 $\sin(k x_M)$ 的 log derivative 随 $k$ 变化的情况）．
 
-为了解决这个问题， 我们可以用“瞬时相位” 来构建误差函数（即 $\psi(x) = \cos(kx)$ 中的 $kx$， 用 $\psi, \psi'$ 来表示）
+为了解决这个问题， 我们可以构造一个性质更好的函数来代替 log derivative， 即用 $\theta$ 表示函数 $\sin x$ 在 $x = \theta$ 处的 log derivative
 \begin{equation}
-\theta_i = \text{atan2}(-\psi'_i, k\psi_i) \qquad (i = 1, 2 \quad \theta_i \in [-\pi, \pi])
+\theta = \Arctan(y, y')
 \end{equation}
+注意 log derivative 是关于 $\theta$ 的周期函数， 周期为 $\pi$． 只要保证两个 $\theta$ 相同或相差 $n\pi$ 就可以保证 log derivative 相同．
+
+要构造关于 $\theta$ 的误差函数， 我们可以先计算两个 $\theta$ 之差
 \begin{equation}
 \theta = \theta_2 - \theta_1 \qquad (\theta \in [-2\pi, 2\pi])
 \end{equation}
-构建误差函数 $\text{err}(\theta)$ 满足一些条件： 1. $\theta = N\pi$ 为零点， 2. 零点两侧异号， 3. 函数连续， 4.周期为 $2\pi$． 一个显然的误差函数是满足这些条件的三角波．
+误差函数 $\opn{err}(\theta)$ 满足一些条件：
+\begin{enumerate}
+\item $\theta = n\pi$ 为零点（误差函数为零当且仅当 log derivative 相等）
+\item 零点两侧异号（便于用二分法或类似算法求根）
+\item 函数连续 （连续性自然是好的）
+\item 周期为 $2\pi$ （$\Arctan$ 函数会使 $\theta$ 在 0 到 $2\pi$ 之间突变， 这样可以保证误差函数连续）
+\end{enumerate}
 
-现在再用多区间二分法就可以解出所有正确的束缚态能量了．
+一个显然的误差函数是满足这些条件的三角波（也可以用正弦函数， 但是三角波计算量要小得多）．
 
-\subsection{一个想法}
-突然想到在 $E > V(x)$ 的区间， 似乎可以直接用积分得到相位变化（这让我想到 WKB 近似， 二者有什么联系？）
-\begin{equation}
-\Delta \theta = \int_a^b k(x) \dd{x}
-\end{equation}
-而其他区间（指数函数）则不能这么做． 考虑到解定态能量只需要 match 相位， 而积分比 ODE 要便宜得多， 这种方法应该是有前途的． 如果在 $E < V(x)$ 区间也能这么做就好了．
+现在再用多区间二分法\upref{MBisec}就可以解出所有正确的束缚态能量了．
+
+% 未完成： 给出代码 MyMatlabLibrary: bound_shooting_demo.m
+
+ 这种方法应该是有前途的． 如果在 $E < V(x)$ 区间也能这么做就好了．
