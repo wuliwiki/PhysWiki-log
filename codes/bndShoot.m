@@ -3,7 +3,7 @@
 % varargin 是 ode45 解算器的选项
 % Eng(i) 是第 i 个能级的能量
 % psi(:,i) 是第 i 个能级的波函数
-function [Eng, X, Psi] = bnd_shoot(V, xmin, xmid, xmax, mass, ...
+function [Eng, X, Psi] = bndShoot(V, xmin, xmid, xmax, mass, ...
     Espan, EResolution, odeOpt, plot_flag)
 
 % 多区间二分法解出能级和波函数
