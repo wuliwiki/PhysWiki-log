@@ -27,3 +27,4 @@
 * 更新 chinese_template 和 english_template
 * 取消 \Code{}, \code{}, \cpp{}, \Cpp{} 的定义
 * 取消 \link{}{} 的定义， 因为网址中的 `#` 等符号会出错（直接用 `href` 就没有这个问题）
+* 更新中文和英文模板
