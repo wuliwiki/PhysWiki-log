@@ -4,7 +4,7 @@ PhysWiki:
 	xelatex PhysWiki.tex
 
 debug:
-	xelatex Debut.tex
+	xelatex Debug.tex
 
 clean:
 	rm -f *.toc *.aux *.log *.gz *.out
