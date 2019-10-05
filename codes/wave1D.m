@@ -1,5 +1,5 @@
 % 一维波动方程数值解
-% 参考 http://littleshi.cn/online/W1dNum.html
+% 参考 http://wuli.wiki/online/W1dNum.html
 
 function wave1D
 close all;
