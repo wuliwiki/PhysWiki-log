@@ -43,7 +43,14 @@ ans =
 \end{lstlisting}
 这样做相当于以下代码
 
-\code{MatFun1}
+\begin{lstlisting}[language=MyMatlab]
+f = @(x) x^2 + 1/x;
+x = [1,2; 3,4];
+ans = zeros(size(x));
+for ii = 1:numel(x)
+    ans(ii) = f(x(ii));
+end
+\end{lstlisting}
 
 \subsection{自定义函数（function）}
 自定义函数的格式为
@@ -61,7 +68,20 @@ end
 
 调用函数时， 输入变量的个数也可以少于函数定义中的输入变量， 但是函数体内部必须要做出相应的措施以防止函数体使用未生成的变量． 我们来看下面一个函数
 
-\code{MatFun2}
+\begin{lstlisting}[language=MyMatlab]
+function y =  myfun(x, A, phi, y0)
+if nargin < 4
+    y0 = 0;
+    if nargin < 3
+        phi = 0;
+        if nargin < 2
+            A = 1;
+        end
+    end
+end
+y = A*cos(x + phi) + y0;
+end
+\end{lstlisting}
 
 注意函数体中使用了一个特殊的变量 \x{nargin}， 每当函数被调用时， 这个变量的值将会等于输入变量的个数（同理， \x{nargout} 将等于输出变量的个数）． 以上定义的函数允许 1-4 个输入变量， 函数体中的 2-10 行根据 \x{nargin} 的值对没有输入的几个变量依次赋值． 例如在控制行中调用该函数
 \begin{lstlisting}[language=MatlabCom]

@@ -15,7 +15,14 @@ a = 3
 \subsection{判断结构}
 现在来看一段代码（脚本文件）． 要生成新的脚本文件， 可以在 Editor 菜单（\autoref{Matlab_fig1}\upref{Matlab}） 的左边单击 New， 然后选 Script， 或者用快捷键 Ctrl+N． 在生成的 Editor 中输入以下代码
 
-\code{MIfFor1}
+\begin{lstlisting}[language=MyMatlab]
+a = rand(1,1); b = 0.5;
+if a > b % a 较大
+    disp('a is larger');
+else % b 较大
+    disp('b is larger');
+end
+\end{lstlisting}
 
 这段程序用 \x{rand} 函数随机生成一个从 \x{0} 到 \x{1} 的数，如果随机数大于 \x{0.5} 则输出第一段文字，否则输出第二段文字． 不难猜测出这里的 \x{if} 用于判断，如果条件满足，则只执行 \x{if} 和 \x{else} 之间的指令．如果条件不满足，则只执行 \x{else} 到 \x{end} 的指令． 注意 \x{else} 语句可以不在判断结构中出现， 若不出现， 当判断条件不满足时程序将直接执行 \x{end} 后面的代码．
 
@@ -23,14 +30,29 @@ a = 3
 
 \x{elseif} 语句可用于在判断结构中产生多个分支， 如
 
-\code{MIfFor2}
+\begin{lstlisting}[language=MyMatlab]
+a = rand(1,1);
+if a > 0.9
+    disp('a in (0.9, 1]');
+elseif a > 0.6
+    disp('a in (0.6, 0.9]');
+elseif a > 0.3
+    disp('a in (0.3, 0.6]');
+else
+    disp('a in [0, 0.3]');
+end
+\end{lstlisting}
 
 这个程序用于判断随机数 \x{a} 的区间． 若 \x{if} 的条件判断成功， 判断结构就只执行 \x{if} 到第一个 \x{elseif} 之间的命令． 若 \x{if} 判断失败， 程序就继续判断第一个 \x{elseif} 中的条件， 若判断成功， 就只执行第一个 \x{elseif} 到第二个 \x{elseif} 之间的命令， 以此类推． 如果 \x{if} 和所有的 \x{elseif} 条件都判断失败， 则执行 \x{else} 后面的命令．
 
 \subsection{循环结构}
 我们先来看 \x{for} 循环
 
-\code{MIfFor3}
+\begin{lstlisting}[language=MyMatlab]
+for ii = 1:3
+    disp(['ii^2 = ' num2str(ii^2)]);
+end
+\end{lstlisting}
 
 运行结果为
 \begin{lstlisting}[language=MatlabCom]
@@ -40,7 +62,15 @@ ii^2 = 9
 \end{lstlisting}
 容易看出这段代码被执行了 3 次，\textbf{循环变量} \x{ii} 按顺序取 \x{1:3} 中的一个矩阵元．注意选取 \x{ii} 作为变量名是为了与虚数单位区分，当然也可以选择其他变量名．再来看一个稍复杂的循环
 
-\code{MIfFor4}
+\begin{lstlisting}[language=MyMatlab]
+Nx = 5;
+x = zeros(1,Nx);  % 预赋值
+x(1) = 2;
+for ii = 2:numel(x)
+    x(ii) = x(ii-1)^2;
+end
+disp(['x = ' num2str(x)])
+\end{lstlisting}
 
 在循环开始前 \x{x(1)} 被赋值为 2，在循环中，第 \x{ii} 个矩阵元 依次被赋值为第 \x{ii-1} 个矩阵元的平方．运行结果为
 \begin{lstlisting}[language=MatlabCom]
