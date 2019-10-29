@@ -1,35 +1,88 @@
 % 傅里叶变换与矢量空间
 
 \pentry{傅里叶变换\upref{FTExp}}
+% 未完成： 需要狄拉克 delta 符号， 去哪里找？ 最好在讲几何矢量的时候就讲一下
+% 未完成： 预备知识中是否有傅里叶级数的矢量空间理解？
 
-\subsection{傅里叶变换与矢量空间}
-类比傅里叶级数， 我们仍然可以将傅里叶变换看作是矢量空间中两组正交归一基底之间的变换， 我们分别把他们叫做 $x$ 基底和 $k$ 基底． 每个实数 $x_0$ 对应一个基底 $\uvec x_0$， 所有的 $\uvec x_0$ 构成 $x$ 基底． 每个实数 $k_0$ 对应一个基底 $\uvec k_0$， 所有的 $\uvec k_0$ 构成 $k$ 基底． 就像有限维空间中用 $(0, \dots , 1, \dots , 0)$ 表示一组基底的第 $i$ 个关于这组基底的系数， 可以用 $\delta (x - x_0)$ 表示 $\uvec x_0$ 关于所有 $x$ 基底的系数， 用 $\delta (k - k_0)$ 表示 $\uvec k_0$ 关于所有 $k$ 基底的系数．
+我们知道傅里叶级数\upref{FSExp} 可以从矢量空间的角度理解， 而傅里叶变换可以看作傅里叶级数区间维无穷大时的极限， 所以我们以下使用一种 “幼稚” 的观点， 从矢量空间的角度来理解傅里叶变换．
 
-现在， 函数 $f(x)$ 可以看作是 $x$ 基底的坐标， 而 $g(k)$ 可以看作是 $k$ 基底的坐标． 例如
+类比傅里叶级数， 我们仍然可以将傅里叶变换看作是矢量空间中两组\textbf{正交归一基底}之间的变换， 我们分别把他们叫做 $x$ 基底和 $k$ 基底． 若使用 $x$ 基底， 就说在 $x$ \textbf{表象}下， 若用 $k$ 基底就说在 $k$ 表象下． 每个实数 $x_0$ 对应一个基底 $\ket {x_0}$， 所有的 $\ket{x_0}$ 构成 $x$ 基底． 每个实数 $k_0$ 对应一个基底 $\ket {k_0}$， 所有的 $\ket {k_0}$ 构成 $k$ 基底． 就像有限维空间中用 $(0, \dots , 1, \dots , 0)$ 表示一组基底的第 $i$ 个关于这组基底的坐标， 可以用 $\delta (x - x_0)$ 表示 $\ket {x_0}$ 关于所有 $x$ 基底的坐标， 用 $\delta (k - k_0)$ 表示 $\ket {k_0}$ 关于所有 $k$ 基底的坐标．
+
+现在， 函数 $f(x)$ 可以看作是某个矢量 $\ket{v}$ 关于 $x$ 基底的坐标（有限维空间中的求和在无穷维空间中变为积分）, 而 $g(k)$ 可以看作是 $k$ 基底的坐标\footnote{从该式可以看出\textbf{表象}这个词的由来， 同一个矢量， 使用不同基底后， 其坐标（即函数） $f(x)$ 和 $g(x)$ 表面上看起来不同．}．
 \begin{equation}
-\ket{f} = \int f(x_0) \uvec x_0 \dd{x_0}
-\end{equation}
-可以验证坐标为
-\begin{equation}
-\int f(x_0) \delta (x - x_0) \dd{x_0} = f(x)
+\ket{v} = \int f(x_0) \ket {x_0} \dd{x_0} = \int g(k_0) \ket {k_0} \dd{k_0}
 \end{equation}
 
-若使用 $x$ 基底， 就说在 $x$ 表象下， 若用 $k$ 基底就说在 $k$ 表象下． 傅里叶变换可以看成一个无穷维的酋矩阵． 两组基底之间的变换关系为： $x_0$ 基底在 $k$ 表象下的坐标为 $\E^{-\I k x_0}/\sqrt{2\pi }$， $k_0$ 基底在 $x$ 表象下的坐标为 $\E^{\I k_0 x}/\sqrt{2\pi }$．
-
-$x$ 表象下， $x$ 基底的正交归一化可以记为
-\begin{equation}
-\uvec x_0 \vdot \uvec x_0' = \int \delta (x - x_0) \delta (x - x_0') \dd{x} = \delta (x_0 - x_0')
-\end{equation}
-$k$ 表象下， $x$ 基底的正交归一化可以记为
-\begin{equation}
-\uvec x_0 \vdot \uvec x_0' = \int \frac{\E^{\I k x_0}}{\sqrt{2\pi }} \frac{\E^{-\I k x_0'}}{\sqrt{2\pi }} \dd{k} = \delta (x_0 - x_0')
-\end{equation}
-注意这只是一种形式上的写法， 不要过度理解．
-
-于是， 我们可以 “证明” $f(x)$ 经过傅里叶变换和反变换后， 仍然可以得到 $f(x)$
+矢量空间中两个矢量的内积， 在 $x$ 表象下为
 \begin{equation}
 \begin{aligned}
-\int g(k) \frac{\E^{\I k x}}{\sqrt{2\pi }} \dd{k} &= \int \qty(\int f(x') \frac{\E^{-\I k x'}}{\sqrt{2\pi }} \dd{x'}) \frac{\E^{\I k x}}{\sqrt{2\pi }} \dd{k}\\
+&\braket{v_1}{v_2} = \qty(\int f_1(x_1) \ket{x_1} \dd{x_1})\Her  \int f_2(x_2) \ket{x_2} \dd{x_2}\\
+&=\iint f_1(x_1)^* f_2(x_2) \delta (x_2 - x_1) \dd{x_1}\dd{x_2}\\
+&=\int f_1(x)^* f_2(x) \dd{x}
+\end{aligned}
+\end{equation}
+$k$ 表象同理．
+
+将某矢量 $\ket{v}$ 投影到基底 $\ket{x_0}$ 上， 可以验证其系数为
+\begin{equation}
+\int f(x) \delta (x - x_0) \dd{x} = f(x_0)
+\end{equation}
+$x$ 表象下， 可以验证 $x$ 基底的正交归一化% 连接未完成， 另开词条说明该式
+\begin{equation}
+\braket{x_1}{x_2} = \int \delta (x - x_1) \delta (x - x_2) \dd{x} = \delta (x_2 - x_1)
+\end{equation}
+$k$ 表象同理．
+
+\subsection{基底变换}
+
+傅里叶变换可以看成一个无穷维且连续的\textbf{酋矩阵}， 将同一个矢量从 $x$ 表象坐标变换到 $k$ 表象坐标． 反变换从 $k$ 表象变回 $x$ 表象． 傅里叶变换和反变换并不改变矢量 $\ket{v}$ 本身， $\mathcal F$ 是一个单位算符， 即 $\mathcal F \ket{v} = \ket{v}$．
+
+令 $\ket{k_0}$ 基底在 $x$ 表象下的函数（即坐标）为 $\E^{\I k_0 x}/\sqrt{2\pi }$， 即
+\begin{equation}
+\ket{k_0} = \int \frac{\E^{\I k_0 x_0}}{\sqrt{2\pi }} \ket{x_0} \dd{x_0}
+\end{equation}
+则该矩阵的 “矩阵元” 为
+\begin{equation}
+\begin{aligned}
+\braket{x_0}{k_0} &= \bra{x_0}\int \frac{\E^{\I k_0 x_1}}{\sqrt{2\pi }} \ket{x_1} \dd{x_1}\\
+&= \int \frac{\E^{\I k_0 x_1}}{\sqrt{2\pi }} \delta (x_1 - x_0) \dd{x_1}
+= \frac{\E^{\I k_0 x_0}}{\sqrt{2\pi }}
+\end{aligned}
+\end{equation}
+我们将矩阵元记为 $F^*(x_0, k_0)$， 也叫做\textbf{核（kernel）}． 两个变量就相当于矩阵的两个角标．
+
+该矩阵乘以 $k$ 表象的坐标， 就是 $x$ 表象的坐标， 矩阵的求和同样需要写成积分的形式
+\begin{equation}
+f(x_0) = \int F^*(x_0, k_0) g(k_0) \dd{k_0} = \int \frac{\E^{\I k_0 x_0}}{\sqrt{2\pi }} g(k_0) \dd{k_0}
+\end{equation}
+这就是反傅里叶变换．
+
+由于酋矩阵的厄米共轭就是它的逆矩阵， 所以逆矩阵的矩阵元为
+\begin{equation}
+\braket{k_0}{x_0} = \braket{x_0}{k_0} = \frac{\E^{-\I k_0 x_0}}{\sqrt{2\pi }}
+\end{equation}
+核为 $F(k_0, x_0)$． 该矩阵乘以 $k$ 表象的坐标， 就是 $x$ 表象的坐标
+\begin{equation}
+g(k_0) = \int F(k_0, x_0) f(x_0) \dd{x_0} = \int \frac{\E^{-\I k_0 x_0}}{\sqrt{2\pi }} f(x_0) \dd{x_0}
+\end{equation}
+这就是傅里叶变换．
+
+$x$ 表象下， $k$ 基底的正交归一化可以记为
+\begin{equation}\label{FTvec_eq1}
+\braket{k_1}{k_2} = \int \frac{\E^{-\I k_1 x}}{\sqrt{2\pi }} \frac{\E^{-\I k_2 x}}{\sqrt{2\pi }} \dd{x} = \delta (k_2 - k_1)
+\end{equation}
+$k$ 的基底在两种表象下的正交归一也同理． 之所以说这时一种 “幼稚” 的做法， 是因为 \autoref{FTvec_eq1} 的积分（从 $-\infty $ 到 $\infty$）并不收敛， $\delta $ 函数也不是一个严格意义上的函数．
+
+
+将傅里叶变换对应的算符记为 $\mathcal F$， 反变换记为 $\mathcal F^{-1}$． 我们就可以用以下过程在 $x$ 表象下简洁地 “证明” $f(x)$ 依次经过傅里叶变换和反变换后， 仍然可以得到 $f(x)$． 证明的矢量形式为
+\begin{equation}
+\ket{v} = \int \ket{k}\braket{k}{v} \dd{k}
+\end{equation}
+将各个矢量表示为 $x$ 表象的坐标， 得
+
+\begin{equation}
+\begin{aligned}
+\mathcal F^{-1} [\mathcal F f(x)] &= \int \frac{\E^{\I k x}}{\sqrt{2\pi }} \qty(\int \frac{\E^{-\I k x'}}{\sqrt{2\pi }} f(x') \dd{x'}) \dd{k}\\
 &= \int f(x') \qty(\int \frac{\E^{-\I k x'}}{\sqrt{2\pi }}\frac{\E^{\I k x}}{\sqrt{2\pi }}\dd{k}) \dd{x'}\\
 &= \int f(x') \delta (x - x') \dd{x'}\\
 &= f(x)
