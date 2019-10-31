@@ -1,9 +1,9 @@
 % 类氢原子的波函数
 % 氢原子|波函数|束缚态|薛定谔方程
 
-\pentry{玻尔原子模型\upref{BohrMd}} % 预备知识未完成
+\pentry{玻尔原子模型\upref{BohrMd}， 薛定谔方程} % 预备知识未完成
 
-\textbf{类氢原子} 被定义为原子核有 $Z$ 个质子（电荷为 $+Ze$， 有一个核外电子的原子/离子， 例如氢原子和失去一个电子的氦原子， 失去两个电子的锂离子． % 这个定义应该放在玻尔模型里面
+\textbf{类氢原子}被定义为原子核有 $Z$ 个质子（电荷为 $+Ze$， 有一个核外电子的原子/离子， 例如氢原子和失去一个电子的氦原子， 失去两个电子的锂离子． % 这个定义应该放在玻尔模型里面
 
 类氢原子的定态薛定谔方程为
 \begin{equation}\label{HWF_eq1}
@@ -11,7 +11,7 @@
 \end{equation}
 类氢原子是唯一存在解析解的原子（离子）．
 
-我们这里只讨论束缚态， 即 $E < 0$ 的解．  从数学上， $E$ 取小于零的任意值时我们都能找到解， 但只有当 $E$ 取特定离散值的时候这些波函数才能归一化． 由于类氢原子具有球对称性， 球坐标下的波函数具有最简单的形式． 波函数的表达式为
+我们这里只讨论束缚态， 即 $E < 0$ 的解．  从数学上， $E$ 取小于零的任意值时我们都能找到解， 但只有当 $E$ 取特定离散值的时候这些波函数才能归一化（否则没有物理意义）． 由于类氢原子具有球对称性， 球坐标下的波函数具有最简单的形式． 波函数的表达式为
 \begin{equation}\label{HWF_eq3}
 \psi_{nlm} (r,\theta ,\phi) = R_{nl}(r) Y_{l,m}(\theta, \phi)
 \end{equation}
@@ -25,9 +25,9 @@
 \begin{equation}\label{HWF_eq2}
 R_{nl}(r) = \sqrt{\qty(\frac{2 Z}{na})^3 \frac{(n - l - 1)!}{2n (n + l)!}} \E^{-Zr/(na)} \qty(\frac{2Zr}{na})^l  L_{n-l-1}^{2l+1}\qty(\frac{2Zr}{na})
 \end{equation}
-其中 $L_n^l(x)$ 是\textbf{连带拉盖尔多项式（associated Laguerre polynomial）}． 以下给出前几个径向波函数
+其中 $L_n^l(x)$ 是\textbf{连带拉盖尔多项式（associated Laguerre polynomial）}． 以下给出前几个径向以下给出前几个径向波函数， 注意所有径向波函数的值都是实数．
 
-\begin{equation}
+\begin{equation} % 已数值验证归一化和正交性
 n = 1 \qquad
 R_{10}(r) = 2\qty(\frac{Z}{a})^{3/2}\exp(-Zr/a)
 \end{equation}
@@ -45,9 +45,32 @@ R_{31}(r) &= \frac{8}{27\sqrt 6} \qty(\frac{Z}{a})^{3/2} \qty(1 - \frac16 \frac 
 R_{32}(r) &= \frac{4}{81\sqrt {30}} \qty(\frac{Z}{a})^{3/2} \frac{Z^2r^2}{a^2} \exp(-\frac{Zr}{3a})}
 \end{equation}
 
-\subsection{径向概率分布}
+\subsection{性质}
+我们要求氢原子每个束缚态满足归一化条件
+\begin{equation}
+\int \abs{\Psi_{n,l,m}(\bvec r)} \dd[3]{r} = \int \int_0^\infty \abs{R_{n,l}(r) Y_{l,m}(\uvec r)}^2 r^2 \dd{r}\dd{\Omega} = 1
+\end{equation}
+先做角向积分， 球谐函数已经满足归一化条件% 链接未完成
+\begin{equation}
+\int \abs{Y_{l,m}(\uvec r)}^2 \dd{\Omega} = 1
+\end{equation}
+得到径向波函数的归一化条件为
+\begin{equation}
+\int R_{n,l}^2(r) r^2 \dd{r} = 1
+\end{equation}
 
-我们来求径向概率分布 $P(r)$． $P(r)$ 的定义为： 发现 $r \in [a, b]$ 区间的概率为 $\int_a^b P(r) \dd{r}$． 由于波函数的模长平方就是三维的概率密度， 由
+再来看正交性， 我们知道哈密顿算符的本征态之间两两正交（式中 $n',l',m'$ 至少有一个与 $n, l, m$ 不同）
+\begin{equation}
+\int \Psi_{n,l,m}^*(\bvec r) \Psi_{n',l',m'}(\bvec r) \dd[3]{r}
+= \int \int_0^\infty R_{n,l}(r) R_{n',l'}(r) Y_{l,m}^*(\uvec r)  Y_{l',m'}(\uvec r) r^2 \dd{r}\dd{\Omega} = 0
+\end{equation}
+同样可以先对角向做积分， 若 $l',m'$ 至少有一个与 $l, m$ 不同， 那么积分直接为零， 径向波函数不需要任何正交条件（也的确不满足）． 但若两个球谐函数相同， 即 $l' = l$， $m' = m$， $n' \ne n$， 那么角向积分等于 1， 径向波函数满足
+\begin{equation}
+\int \int_0^\infty R_{n,l}(r) R_{n',l}(r) r^2 \dd{r} = 0
+\end{equation}
+
+\subsection{径向概率分布}
+我们来求径向概率分布 $P(r)$． $P(r)$ 的定义为： 发现粒子在 $r \in [a, b]$ （厚球壳）内的概率为 $\int_a^b P(r) \dd{r}$． 由于波函数的模长平方就是三维的概率密度， 有
 \begin{equation}
 \int_a^b P(r) \dd{r} = \int_a^b \int \abs{\frac1r \psi_{l,m}(r) Y_{l,m}(\uvec r)}^2 \dd{\Omega} r^2 \dd r
 = \int_a^b \abs{\psi_{l,m}(r)}^2 \dd{r}
