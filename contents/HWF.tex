@@ -17,13 +17,12 @@
 \end{equation}
 其中 $n$ 是\textbf{主量子数}（$n = 1, 2, \dots$）， $l$ 是\textbf{角量子数}（$l = 0, 1, \dots, n - 1$）， $m$ 是\textbf{磁量子数}（$m = -l, -l+1, \dots, l$）． $R_{nl}(r)$ 是归一化的\textbf{径向波函数}， $Y_{l,m}(\theta, \phi)$ 是归一化的\textbf{球谐函数}（见“球谐函数列表\upref{YlmTab}”）．
 
-如果忽略原子核的运动， 以下的 $a$ 是玻尔半径， 如果不忽略， $a$ 就是约化玻尔半径．% 两个链接未完成  
-
 \subsubsection{径向波函数 $R_{nl}(r)$}
 
+如果忽略原子核的运动， 以下的 $a$ 是玻尔半径， 如果不忽略， $a$ 就是约化玻尔半径．% 两个链接未完成
 注意 $Z$ 和 $a$ 的作用是把径向波函数关于原点收缩 $Z/a$ 倍（并保持波函数归一化）．
 \begin{equation}\label{HWF_eq2}
-R_{nl}(r) = \sqrt{\qty(\frac{2 Z}{na})^3 \frac{(n - l - 1)!}{2n (n + l)!}} \E^{-Zr/(na)} \qty(\frac{2Zr}{na})^l  L_{n-l-1}^{2l+1}\qty(\frac{2Zr}{na})
+R_{nl}(r) = \sqrt{\qty(\frac{2 Z}{na})^3 \frac{(n - l - 1)!}{2n (n + l)!}} \qty(\frac{2Zr}{na})^l  L_{n-l-1}^{2l+1}\qty(\frac{2Zr}{na}) \E^{-Zr/(na)}
 \end{equation}
 其中 $L_n^l(x)$ 是\textbf{连带拉盖尔多项式（associated Laguerre polynomial）}． 以下给出前几个径向以下给出前几个径向波函数， 注意所有径向波函数的值都是实数．
 
@@ -35,15 +34,28 @@ R_{10}(r) = 2\qty(\frac{Z}{a})^{3/2}\exp(-Zr/a)
 n = 2 \qquad
 \leftgroup{
 R_{20}(r) &= \frac{1}{\sqrt 2} \qty(\frac{Z}{a})^{3/2} \qty(1 - \frac12 \frac{Zr}{a}) \exp(-\frac{Zr}{2a})\\
-R_{21}(r) &= \frac{1}{\sqrt{24}} \qty(\frac{Z}{a})^{3/2} \frac{Zr}{a} \exp(-\frac{Zr}{2a})
+R_{21}(r) &= \frac{1}{2\sqrt{6}} \qty(\frac{Z}{a})^{3/2} \frac{Zr}{a} \exp(-\frac{Zr}{2a})
 }\end{equation}
 \begin{equation}
 n = 3 \qquad
 \leftgroup{
-R_{30}(r) &= \frac{2}{\sqrt {27}} \qty(\frac{Z}{a})^{3/2} \qty(1 - \frac23 \frac{Zr}{a} + \frac{2}{27} \frac{Z^2r^2}{a^2}) \exp(-\frac{Zr}{3a})\\
+R_{30}(r) &= \frac{2}{3\sqrt {3}} \qty(\frac{Z}{a})^{3/2} \qty(1 - \frac23 \frac{Zr}{a} + \frac{2}{27} \frac{Z^2r^2}{a^2}) \exp(-\frac{Zr}{3a})\\
 R_{31}(r) &= \frac{8}{27\sqrt 6} \qty(\frac{Z}{a})^{3/2} \qty(1 - \frac16 \frac {Zr}{a}) \frac {Zr}{a} \exp(-\frac{Zr}{3a})\\
 R_{32}(r) &= \frac{4}{81\sqrt {30}} \qty(\frac{Z}{a})^{3/2} \frac{Z^2r^2}{a^2} \exp(-\frac{Zr}{3a})}
 \end{equation}
+更多 $R_{n,l}$ 可以用 Mathematica 或者 Wolfram Alpha 生成， 如
+\begin{lstlisting}[language=Mathematica]
+n = 4; l = 1;
+Sqrt[(2*Z/(n*a))^3 * Factorial[n-l-1]/(2*n*Factorial[n+l])]
+*(2*Z*r/(n*a))^l*LaguerreL[n-l-1, 2l+1, 2Z*r/(n*a)] * Exp[-Z*r/(n*a)]
+\end{lstlisting}
+
+$Z = 1$ 时 $r R_{l,m}(r)$ 的\footnote{我们以后会看到 $r R_{l,m}(r)$ 比 $R_{l,m}(r)$ 更常用}\footnote{我们以后会看到 $r R_{l,m}(r)$ 比 $R_{l,m}(r)$ 更常用}函数图如\autoref{HWF_fig1}
+\begin{figure}[ht]
+\centering
+\includegraphics[width=12cm]{./figures/HWF1.pdf}
+\caption{径向波函数函数图} \label{HWF_fig1}
+\end{figure}
 
 \subsection{性质}
 我们要求氢原子每个束缚态满足归一化条件
@@ -56,7 +68,7 @@ R_{32}(r) &= \frac{4}{81\sqrt {30}} \qty(\frac{Z}{a})^{3/2} \frac{Z^2r^2}{a^2} \
 \end{equation}
 得到径向波函数的归一化条件为
 \begin{equation}
-\int R_{n,l}^2(r) r^2 \dd{r} = 1
+\int [rR_{n,l}(r)]^2 \dd{r} = 1
 \end{equation}
 
 再来看正交性， 我们知道哈密顿算符的本征态之间两两正交（式中 $n',l',m'$ 至少有一个与 $n, l, m$ 不同）
