@@ -1,0 +1,57 @@
+% 泛函分析笔记
+
+% 泛函分析笔记
+
+参考书： Applied Functional Analysis application to mathematical physics (Zeidler)
+
+\subsection{Banach 空间}
+
+\begin{itemize}
+\item $\mathbb R$ 和 $\mathbb C$ 分别表示实数域和复数域复数域， $\mathbb K$ 表示二者中的一个
+\item $\mathbb K^N$ 表示 $N$ 元 \textbf{tuple} $(\xi_1, \xi_2, \dots, \xi_N)$
+\item 某区间上的连续函数 $u:[a, b] \to \mathbb{R}$ 可以表示为 $C[a, b]$
+\item $\mathbb{K}$ \textbf{上（over $\mathbb K$）}的矢量空间（linear space 就是 vector space) 表示只能以 $\mathbb K$ 的元乘以某个矢量
+\item $C[a, b]$ 是无穷维矢量空间
+\item 用 $\norm{u} > 0$ 表示\textbf{范数（norm）}
+\item 定义了范数的空间就叫\textbf{赋范空间（normed space）}， 满足 (1) $\norm{u} \geqslant 0$， (2) $\norm{u} = 0$ iff $u = 0$， (3) $\norm{\alpha u} = \abs \alpha \norm{u}$， (4) $\norm{u + v} \leqslant \norm{u} + \norm{v}$
+
+\item 定义两个矢量之间的 \textbf{distance} 为 $\norm{u - v}$
+\item 模可以用于定义极限 $\lim_{n\to\infty} u_n = u$ 为 $\lim_{n\to\infty} \norm{u_n - u} = 0$， 即 $u_n$ 收敛到 $u$
+\item 上一条中， (1) $u$ 是唯一的， (2) $u_n$ 是有界的（bounded）， (3) $\norm{u_n} \to \norm{u}$， (4) $u_n + v_n \to u + v$， (5) $\alpha_n u_n \to \alpha u$
+\item 柯西序列（Cauchy sequence）： 对任意 $\varepsilon > 0$， 存在 $N$， 当 $n, m \geqslant N$ 就有 $\norm{u_n - u_m} < \varepsilon$
+\item 在赋范空间中， 每个收敛序列都是柯西序列
+\item 赋范空间 $X$ 是 Banach 空间当且仅当每个柯西数列都收敛
+\item 在 Banach 空间中， 收敛序列都是柯西序列
+\item 空间 $X := C[a, b]$ 是实数 Banach 空间， 定义模长为 $\norm u := \max_{a \leqslant x \leqslant b} \abs{u(x)}$． $u_n \to u$ 意味着 $\norm{u_n - u} = \max_{a \leqslant x \leqslant b}  \abs{u_n(x) - u(x)} \to 0$． 也就是 $u_n(x)$ 一致收敛到 $u$
+\item 如果柯西序列 $u_n$ 的子序列 $u_{n'} \to u$， 那么 $u_n \to u$
+\item 若 $\sum_{j=1}^\infty \norm{u_{j+1} - u_j} < \infty$， 那么 $u_n$ 是柯西序列
+\item 集合 $U_\varepsilon (u_0) := \{u \in X: \norm{u - u_0} < \varepsilon\}$ 叫做 $u_0$ 的 $\varepsilon$-\textbf{邻域 （neighborhood）}
+\item $X$ 的子集 $M$ 是\textbf{开集} 当且仅当对任意 $u \in M$ 都存在属于 $M$ 的邻域
+\item $X$ 的子集 $M$ 是\textbf{闭集} 当且仅当每个序列的极限都属于 $M$
+\item $X$ 的子集 $M$ 是 closed 当且仅当 $X - M$ 是开的
+\item $M$ 和 $Y$ 是集合， $u \in M, v \in Y$ 算符 $A: M \to Y$ 代表映射 $v = Au$， 其中 $M$ 是\textbf{定义域（domain of definition）}， 也记为 $D(A)$． 值域（range） 是 $A(M) := \{v \in Y: v = Au, u \in M\}$， 也记为 $R(A)$
+\item $A$ 叫 \textbf{surjective} 当且仅当 $A(M) = Y$， 叫做 \textbf{injective} 当且仅当 $Au = Av$ 意味着 $u = v$， \textbf{bijective} 如果前两者都符合
+\item 如果 $A$ 是 bijective， 存在逆算符 $A^{-1}: Y \to M$， 定义为 $A^{-1} v = u$ 当且仅当 $Au = v$
+\item 算符也叫函数
+\item $A: M \subseteq X \to Y$ 表示 $A: M \to Y$ 且 $M \subseteq X$， 当 $Y = \mathbb K$， 就把 $A$ 叫做\textbf{泛函（functional）}
+\end{itemize}
+
+\subsection{1.20 Linear Operators}
+
+\begin{itemize}
+\item \textbf{线性算符} $A: L \subseteq X\to Y$ 是线性的当且仅当 $A (\alpha u + \beta v) = \alpha Au + \beta Av$
+\item 算符\textbf{null space} 为 $N(A) := \qty{u \in X: Au = 0}$
+\item 线性算符 $A$ 是连续的， 当且仅当存在 $c > 0$ 使 $\norm{Au} \leqslant c\norm{u}$ 对所有 $u$ 都成立
+\item 线性算符是 injective 的当且仅当 $N(A) = {0}$
+\item 定义线性连续算符 $A: X \to Y$ 的\textbf{算符范数（operator norm）} 为 $\norm{A} := \sup_{\norm v \leqslant 1} \norm{A v}$
+\item 当 $X \ne {0}$， 有 $\norm{A} := \sup_{\norm v = 1} \norm{A v}$
+\item 有限维矢量空间中的线性算符可以表示为矩阵， 所有这些算符都是连续的
+\item 用 $L(X, Y)$ 表示线性连续算符 $A: X \to Y$， $X$ 是 $\mathbb K$ 上的赋范空间， $Y$ 是 $\mathbb K$ 上的 Banach 空间． $L(X, Y)$ 是 $\mathbb K$ 上的 Banach 空间， 范数就是算符的范数
+\end{itemize}
+
+\subsection{The Dual Space}
+
+\begin{itemize}
+\item 令 $X$ 为 $\mathbb K$ 上的一个赋范空间， 一个线性的连续算符 $f: X \to \mathbb K$ 称为\textbf{线性连续泛函（linear continuous functional）}
+\item 所有 $X$ 上的线性连续泛函叫做 $X$ 的\textbf{对偶空间} $X^*$
+\end{itemize}
