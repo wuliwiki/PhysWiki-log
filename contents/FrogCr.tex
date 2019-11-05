@@ -24,17 +24,10 @@ a(\bvec v, \tau) = -\I\int_{-\infty}^{\infty} \dd{t} \E^{\I\phi(\bvec v, t)} \bv
 \bvec v(t) = \bvec v(\infty) - \bvec A(\infty) + \bvec A(t) = \bvec v + \bvec A(t)
 \end{equation}
 
-下面来算 $\bvec d_{\bvec k}$，已知氢原子基态为 $\ket{0} = \E^{-r}/\sqrt{\pi}$， $\ket{\bvec k} = \exp(\I \bvec k \vdot \bvec x)/(2\pi)^{3/2}$． 由于氢原子基态球对称， 不失一般性， 可以将 $\bvec k$ 的方向设为极轴的方向（$z$）， 同样由对称性可得 $\bvec d_{\bvec k}$ 只有 $z$ 分量不为零． 
-
+下面来算 $\bvec d_{\bvec k}$，已知氢原子基态为 $\ket{0} = \E^{-r}/\sqrt{\pi}$， $\ket{\bvec k} = \exp(\I \bvec k \vdot \bvec x)/(2\pi)^{3/2}$． 由于氢原子基态球对称， 不失一般性， 可以将 $\bvec k$ 的方向设为极轴的方向（$z$）， 同样由对称性可得 $\bvec d_{\bvec k}$ 只有 $z$ 分量不为零\upref{HionCr}．
 \begin{equation}
-\bvec d_{\bvec k} =  \mel{\bvec k}{\bvec r}{0} =  \frac{ \uvec k}{\sqrt2\pi} \int_0^{+\infty} \int_0^\pi \E^{-r} \E^{-\I k r \cos\theta} r \cos\theta \cdot r^2 \sin\theta \dd{\theta} \dd{r}
+\bvec d_{\bvec k} = -\I \frac{8\sqrt2}{\pi} \frac{\bvec k}{(k^2+1)^3}
 \end{equation}
-换元， 令 $u = \cos\theta$， 得
-\begin{equation}\ali{
-\bvec d_{\bvec k} &= \frac{\uvec k}{\sqrt{2\pi}}  \int_0^{+\infty} r^3 \E^{-r} \int_{-1}^1 \E^{-\I k r u} u  \dd{u} \cdot \dd{r}\\
-&=  \I\frac{\sqrt2 \uvec k}{\pi k}  \int_0^{+\infty} r^2 \E^{-r} \qty[\cos(kr) - \frac{1}{kr}\sin(kr)] \dd{r}\\
-&= -\I \frac{8\sqrt2}{\pi} \frac{\bvec k}{(k^2+1)^3}
-}\end{equation}
 这与 Lewenstein 1994 的论文中给出的多了一个负号（不过我应该是对的）．
 
 用 Matlab 根据上面的公式计算了一下 Frog-Crab trace， 但我的是对称的， 而论文上不对称， 师兄说这是论文上的 XUV pulse 有 chirp， 一看果然是． 想了一下 Phase Gate 是什么原理， 发现 $\E^{\I\phi(t)}$ 的确随 $\bvec v$ 变化较小（见“phi change.png”）， 但还有一项 $\bvec d_{\bvec p}$ 似乎随时间变化还是比较明显的， 魏晖的意思是也当成常数就行了， 不过他还给了我另一篇文章专门讨论 dipole 变化的， 存在 ipad 相册里面． 至于最后一项 $\E^{\I(W+I_p)t}$， 说明这是傅里叶变换到能量表象．然而既然到能量表象了， 就不能直接使用 $\abs{a(v, t)}^2$ 了， 而是需要做一个换元， 导致 $a(v)$ 需要除以 $\sqrt{v}$．
