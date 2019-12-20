@@ -1,0 +1,59 @@
+% 带对角矩阵
+
+在 CBLAS 中， 我们可以用一种紧凑的数据结构来表示矩阵， 减少不必要的零元素计算．
+
+要把一个 dense matrix 转换成 column major band matrix， 就把每个对角线都排成一行， 保持每个元素的列标不变． 同理， 要转换成 row major band matrix， 就把每个对角线都排成一列， 保持每个元素的行标不变．
+
+举一个例子， dense matrix 如\autoref{BanDmt_tab1}， column major band matrix 如\autoref{BanDmt_tab2}， row major band matrix 如\autoref{BanDmt_tab3}．
+
+\begin{table}[ht]
+\centering
+\caption{dense matrix}\label{BanDmt_tab1}
+\begin{tabular}{|c|c|c|c|c|c|}
+\hline
+01  & 04  &    &    &    &   \\
+\hline
+02  & 05  & 08  &    &    &   \\
+\hline
+03  & 06  & 09  & 12  &    &   \\
+\hline
+   & 07  & 10 &  13  & 15  &   \\
+\hline
+   &    & 11 &  14  & 16  & 17 \\
+\hline
+\end{tabular}
+\end{table}
+
+\begin{table}[ht]
+\centering
+\caption{column major band matrix}\label{BanDmt_tab2}
+\begin{tabular}{|c|c|c|c|c|c|}
+\hline
+   & 04  & 08  & 12 &  15 &  17 \\
+\hline
+01  & 05  & 09  & 13 &  16 &    \\
+\hline
+02  & 06  & 10 & 14 &     &    \\
+\hline
+03  & 07  & 11 &    &     &    \\
+\hline
+\end{tabular}
+\end{table}
+
+\begin{table}[ht]
+\centering
+\caption{column major band matrix}\label{BanDmt_tab3}
+\begin{tabular}{|c|c|c|c|c|c|}
+\hline
+   &     &  01  &  04 \\
+\hline
+   &  02  &  05  &  08 \\
+\hline
+03  &  06  &  09  &  12 \\
+\hline
+07  &  10 &  13 &  15 \\
+\hline
+11 &  14 &  16 &  17 \\
+\hline
+\end{tabular}
+\end{table}

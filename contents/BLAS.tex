@@ -1,0 +1,96 @@
+% BLAS 简介
+
+\pentry{C 语言基础} % 未完成
+
+\textbf{BLAS（basic linear algebra subroutine）} 是一系列基本\textbf{线性代数运算}函数\footnote{编程中的函数， 不是数学上的函数， 在一些编程语言（如 Fortran）中也叫\textbf{子程序（subroutine）}．}的\textbf{接口（interface）}标准．  这里的线性代数运算是指例如矢量的线性组合， 矩阵乘以矢量， 矩阵乘以矩阵等． 接口在这里指的是诸如哪个函数名实现什么功能， 有几个输入和输出变量， 分别是什么．
+
+BLAS 被广泛用于科学计算和工业界， 已成为业界标准． 在更高级的语言和库中， 即使我们不直接使用 BLAS 接口， 它们也是通过调用 BLAS 来实现的（如 Matlab 中的各种矩阵运算）．
+
+BLAS 原本是用 Fortran 语言写的， 但后来也产生了 C 语言的版本 cBLAS， 接口与 Fortran 的略有不同（例如使用指针传递数组）， 但大同小异．
+
+注意 BLAS 是一个接口的标准而不是某种具体\textbf{实现（implementation）}． 简单来说， 就是不同的作者可以各自写出不同版本的 BLAS 库， 实现同样的接口和功能， 但每个函数内部的算法可以不同．  这些不同导致了不同版本的 BLAS 在不同机器上运行的速度也不同．
+
+BLAS 的官网是 \href{http://www.netlib.org/blas/}{NIST}， 可以浏览完整的说明文档以及下载源代码． 这个版本的 BLAS 被称为 reference BLAS， 运行速度较慢， 通常被其他版本用于衡量性能． 对于 Intel CPU 的计算机， 性能最高的是 Intel 的 \href{https://software.intel.com/en-us/mkl}{MKL （Math Kernel Library）} 中提供的 \href{https://software.intel.com/en-us/mkl-developer-reference-c-blas-and-sparse-blas-routines}{BLAS}． MKL 虽然不是一个开源软件， 但目前可以免费下载使用． 如果想要免费开源的版本， 可以尝试 \href{https://www.openblas.net/}{OpenBlas} 或者 \href{https://sourceforge.net/projects/math-atlas/}{ATLAS}\footnote{至于安装， 在 Windows 系统上作者推荐在 Visual Studio 的基础上安装 MKL 或者 Parallel Studio， 这些软件都比较大， 可能需要较长时间下载安装． 在 Linux 系统上， 可以直接用 apt-get 等安装开源版本， 也可以下载 intel MKL 的 deb 安装包按照提示安装．}． 另外， 无论是否使用 MKL， BLAS 的文档都推荐看 MKL 的\href{https://software.intel.com/en-us/mkl-developer-reference-c-blas-and-sparse-blas-routines}{相关页面}．
+% 未完成： 要不要写安装教程？
+
+\subsection{使用 cBLAS}
+\pentry{矩阵的储存\upref{MatSto}}
+
+我们这里介绍一个 cBLAS 的例子\footnote{要在 Linux 上编译， 见 “在 Linux 上编译第一个 C++ 程序\upref{linCpp}”}． 我们来测试以下矩阵和矢量的乘法函数 \lstinline|gemv|， 参考文档见\href{https://software.intel.com/en-us/node/834919#88940C4E-0889-46C3-B6CF-F8B6EA6CF4BC}{这里}．
+
+BLAS 有一套系统的命名规则， 我们需要的函数名格式为 \lstinline|cblas_?gemv|， 其中 \lstinline|cblas_| 是固定前缀， 问号表示 \lstinline|s|, \lstinline|d|, \lstinline|c|, \lstinline|z|, 中的一个， 分别代表单精度（\lstinline|float|）， 双精度（\lstinline|double|）， 单精度复数和双精度复数\footnote{注意 C 语言中内置的复数类型和 C++ 中的 \lstinline|std::complex<>| 不同， 但由于 cBLAS 用指针 \lstinline|void *| 传递复数（任何指针都可以自动转换）， 所以只要内存中用两个连续的 \lstinline|float| 或 \lstinline|double| 表示一个复数即可}． \lstinline|ge| 表示输入的矩阵是一个一般的矩阵\footnote{而不是对称矩阵或者厄米矩阵等， 后者可以使用专门的函数使性能提升， 例如 \href{https://software.intel.com/en-us/node/834934}{cblas_?symv}}， 以行主序或者列主序\upref{MatSto}线性储存．
+
+我们接下来以 \lstinline|cblas_zgemv| 为例， 先来看函数声明．
+\begin{lstlisting}[language=cpp]
+void cblas_zgemv (const CBLAS_LAYOUT Layout, const CBLAS_TRANSPOSE trans,
+const MKL_INT m, const MKL_INT n, const void *alpha, const void *a,
+const MKL_INT lda, const void *x, const MKL_INT incx, const void *beta,
+void *y, const MKL_INT incy);
+\end{lstlisting}
+
+BLAS 接口给人的第一感觉就是冗长， 为什么实现一个简单的功能需要这么多变量？ 因为这个接口具有相当大的灵活性． 例如可以使用一个列主序（行主序）矩阵的子矩阵作为矩阵， 又例如可以使用一个列主序（行主序）矩阵的某一行（列）作为矢量； 例如可以在做乘法以前对矩阵进行转置\footnote{其实这个转置操作实现起来并不需要额外的运算， 在函数的代码中只需要把列主序（行主序）矩阵看作是行主序（列主序）的即可． 所以这么做比事先在内存中将矩阵元调换的方法快许多}； 又例如可以把相乘的结果累加到输出矢量已有的值上， 而不是直接覆盖．
+
+作为一个最简单的例子， 我们可以用以下测试函数， 在这个例子中， 我们只需要关心几个变量， 即 \lstinline|Layout| （一个 \lstinline|enum| 类型）指定行主序（\lstinline|CblasRowMajor|）还是列主序（\lstinline|CblasColMajor|）， \lstinline|m| 和 \lstinline|n| 分别指定矩阵的行数和列数， \lstinline|a, x, y| 分别是矩阵第一个元的指针．
+\begin{lstlisting}[language=cpp]
+// 计算矩阵—矢量乘法 y = a * x
+#include <iostream>
+#include <complex>
+#include <cblas.h>
+int main() {
+    using namespace std;
+    typedef complex<double> Comp; // 定义复数类型
+    int Nr = 2, Nc = 3; // 矩阵行数和列数
+    // 矩阵和矢量分配内存
+    Comp *a = new Comp [Nr*Nc];
+    Comp *x = new Comp [Nc];
+    Comp *y = new Comp [Nr];
+    Comp alpha(1, 0), beta(0, 0);
+    // x 矢量赋值
+    for (int i = 0; i < Nc; ++i) {
+        x[i] = Comp(i+1., i+2.);
+    }
+    // a 矩阵赋值
+    for (int i = 0; i < Nr*Nc; ++i) {
+        a[i] = Comp(i+1., i+2.);
+    }
+    // 做乘法
+    cblas_zgemv(CblasColMajor, CblasNoTrans, Nr, Nc, &alpha, a,
+        Nr, x, 1, &beta, y, 1);
+        
+    // 控制行分别输出 x, a, y
+    for (int i = 0; i < Nc; ++i) {
+        cout << x[i] << "  ";
+    }
+    cout << "\n" << endl;
+    for (int i = 0; i < Nr; ++i) {
+        for (int j = 0; j < Nc; ++j) {
+            cout << a[i + Nr*j] << "  ";
+        }
+        cout << endl;
+    }
+    cout << "\n" << endl;
+    for (int i = 0; i < Nr; ++i) {
+        cout << y[i] << "  ";
+    }
+}
+\end{lstlisting}
+
+编译与运行结果
+\begin{lstlisting}[language=bash]
+$ g++ test_cblas.cpp -lblas
+$ ./a.out
+(1,2)  (2,3)  (3,4)
+
+(1,2)  (3,4)  (5,6)
+(2,3)  (4,5)  (6,7)
+
+(-18,59)  (-21,74)
+\end{lstlisting}
+
+\subsubsection{其他参数}
+\begin{itemize}
+\item \lstinline|trans| （也是 \lstinline|enum|）指定预先转置矩阵（\lstinline|CblasTrans|）或不转置（\lstinline|CblasNoTrans|）
+\item \lstinline|alpha, beta| 用于计算 \lstinline|y = alpha * a * x + beta y|， 上例中我们使用了 \lstinline|alpha = 1, beta = 0|
+\item \lstinline|lda| 叫做 leading dimension， 在列主元的情况下用于指定从某一列第 $i$ 个元的索引（index）减去上一列第 $i$ 元的索引． 在上例中 \lstinline|lda| 就是行数． 但如果我们需要在一个更大的列（行）主元矩阵中截取一个小矩阵进行计算， 那么 \lstinline|lda| 就是大矩阵的行（列）数．
+\item \lstinline|incx| 和 \lstinline|incy| 用于指定两个矢量的步长（increment）， 由于上例中两矢量在内存中是连续的， 所以步长为 1． 但若某个矢量是行（列）主元矩阵中的一列（行）， 那么步长就是矩阵的列（行）数．
+\end{itemize}

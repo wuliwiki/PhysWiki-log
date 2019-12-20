@@ -1,15 +1,28 @@
 % C/C++ 多文件编译笔记
 % 多文件编译|头文件|inline
 
+以下规则对 c 和 c++ 语言都适用．
+
+\subsection{单个 translation unit}
 \begin{itemize}
-\item include 头文件相当于直接把头文件的内容插入源文件（.c 或 .cpp）中， 头文件可以没有或者有任意后缀名（包括 .c 和 .cpp）． 所以下文我们说 “源文件中” 也包括源文件 include 的头文件中．
-\item 一个源文件编译成一个 object 文件（.o）， 最后将所有 object 文件 link 起来就成了可执行程序．
-\item 一个源文件中定义的函数要在另一个源文件调用前要先声明（declare）．
-\item 每个源文件可以单独编译成 object 文件， 即使调用了其他源文件中定义的函数， 编译的时候也不需要有其他源文件存在．
-\item 只有在 link 阶段编译器才会检查一个 o 文件中调用的函数是否能在另一个 o 文件中找到．
-\item 某个源文件中定义的宏只在这一个源文件中有效， 即从定义开始到文件底部（或者到 undef）．
-\item ODR （one definition rule） 要求一个函数不能在同一个或不同源文件中有重复的定义（definition） 不是声明（declaration）．
-\item inline 的函数/变量需要在使用到它的每个源文件中都有一样的定义（所以一般放到头文件中）．
-\item class 的声明也需要在使用到它的每个源文件中都有一样的定义（所以一般放到头文件中）．
-\item inline 的含义已经与是否真的 inline 几乎无关了， 只是为了避免 ODR 错误的一种手段．
+\item \lstinline|#include| 头文件（.h）相当于直接把头文件的内容插入到当前位置．
+\item 原则上头文件可以没有或者有任意后缀名（例如标准库的头文件就没有后缀名）．
+\item 每个 .cpp （也可以用 .cxx）文件叫做一个 translation unit ． 可以单独编译成一个 object 文件（.o）
+\item 某个 translation unit 中定义的宏只在这一个 translation unit 中有效， 即从定义开始到文件底部（或者到 \lstinline|#undef|）．
+\item 头文件开始用 \lstinline|#pragma once| 可以防止同一个头文件被多次插入同一个 translation unit． 例如 \lstinline|b.h| 和 \lstinline|c.h| 中都 include 了 \lstinline|a.h|， 如果 cpp 文件中同时 include 了 \lstinline|b.h| 和 \lstinline|c.h|， \lstinline|a.h| 就不会被插入两次．
+\end{itemize}
+
+\subsection{多个  translation unit}
+\begin{itemize}
+\item 若有多个 translation unit， 可以分别编译， 然后将所有 object 文件 link 起来就成了可执行程序．
+\item 一个 translation unit 中定义的函数要在另一个 translation unit 调用前要先声明（declare）．
+\item 每个 translation unit 编译的时候也不需要有其他 translation unit 存在， 即使调用了其他 translation unit 中定义的函数．
+\item 只有在 link 阶段编译器才会检查一个 o 文件中调用的函数是否能在另一个 o 文件中有定义， 如果没有， link 就会失败．
+\item ODR （one definition rule） 要求一个函数不能在同一个或不同 translation unit 中有重复的定义（definition）． 但重复的声明（declaration） 是允许的．
+\item inline 函数或变量需要在使用到它的每个 translation unit 中都有一样的定义（所以一般放到头文件中）． 否则即使预先 declare 也会出错．
+\item class 的声明也需要在使用到它的每个 translation unit 中都有一样的定义（所以一般放到头文件中）．
+\item 任何函数或类的 template 的定义同样也需要在使用到它的每个 translation unit 中都有一样的定义（所以一般放到头文件中）．
+\item \lstinline|inline| 的含义已经与是否真的 \lstinline|inline| 几乎无关了， 只是为了避免 ODR 错误的一种手段．
+\item 即使使用了 \lstinline|inline|， 同一个 translation unit 中也不可以出现两个同样的定义．
+\item 如果一个函数调用的函数在它之后定义， 则需要将 declaration 放在它前面．
 \end{itemize}

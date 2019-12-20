@@ -13,7 +13,7 @@
 \subsection{公式}
 行内公式用单个美元符号，且两边要有空格，例如 $a^2+b^2=c^2$， 后面有标点符号的除外．
 
-独立公式的 label 必须要按照 “词条标签\_eq编号” 的格式，只有需要引用的公式才加标签， 标签编号无需和编译后的编号相同， 保证标签不重复即可． 图表的标签分别把 \lstinline|eq| 改成 \lstinline|fig| 和 \lstinline|tab| 即可，例题用 \lstinline|ex|， 习题用 \lstinline|exe|．但凡是有 \lstinline|\caption| 命令的，\lstinline|\label| 需要紧接其后． 公式严禁使用 MathType 等软件自动生成， 必须手打．
+独立公式的 label 必须要按照 “词条标签\_eq编号” 的格式， 只有需要引用的公式才加标签， 标签编号无需和编译后的编号相同， 保证标签不重复即可． 图表的标签分别把 \lstinline|eq| 改成 \lstinline|fig| 和 \lstinline|tab| 即可，例题用 \lstinline|ex|， 习题用 \lstinline|exe|．但凡是有 \lstinline|\caption| 命令的，\lstinline|\label| 需要紧接其后． 公式严禁使用 MathType 等软件自动生成， 必须手打．
 \begin{equation}\label{Sample_eq1}
 (a+b)^n = \sum_{i=0}^n C_n^i a^i b^{n-i} \quad (\text{$n$ 为整数})
 \end{equation}
@@ -29,11 +29,13 @@
 行内分式如 $a/b$， 不允许行内用立体分式． 矢量如 $\bvec a$（被重新定义为黑体和正体）， 尽量不要使用带箭头的矢量如 $\vec a$． 
 
 行间公式换行及对齐用 aligned 环境， 注意该环境可嵌套．
-\begin{equation}\begin{aligned}
+\begin{equation}
+\begin{aligned}
 (a-b)^2 &= a^2+b^2 - 2ab \\
 & = a^2+b^2+2ab-4ab\\
 & = (a+b)^2-4ab
-\end{aligned}\end{equation}
+\end{aligned}
+\end{equation}
 
 用 \lstinline|\begin{enumerate}[resume]|  来继续上一个 enumerate 的编号
 
@@ -42,21 +44,33 @@
 \left. \dv[2]{X}{x} \middle/ X + \dv[2]{Y}{y} \middle/ Y + \dv[2]{Z}{z} \middle/ Z  = \frac{1}{c^2}  \dv[2]{T}{t} \middle/ T\right.
 \end{equation}
 希腊字母如下
-\begin{equation}\ali{
+\begin{equation}
+\begin{aligned}
 &\alpha (a), \beta (b), \chi (c), \delta (d), \epsilon/\varepsilon (e), \phi (f), \gamma (g),
 \eta (h), \iota (i), \varphi (j), \kappa (k), \lambda (l), \mu (m),\\
 & \nu (n), o (o), \pi (p), \theta (q), \rho (r), \sigma (s), \tau (t), \upsilon (u), \varpi (v), \omega (w), \xi (x), \psi (y), \zeta (z)
-}\end{equation}
+\end{aligned}
+\end{equation}
 电介质常数一律用 $\epsilon$ 而不是 $\varepsilon$．
 
 以下是 script 字母，只有大写有效．所谓大写 $\varepsilon$ 其实是花体的 $E$． 
-\begin{equation}\ali{
+\begin{equation}
+\begin{aligned}
 &\mathcal{A, B, C, D, E, F, G, H, I, J, K, L, M,}\\
 &\mathcal{N, O, P, Q, R, S, T, U, V, W, X, Y, Z}
-}\end{equation}
+\end{aligned}
+\end{equation}
+以下是双线字母， 只有大写有效
+\begin{equation}
+\begin{aligned}
+&\mathbb{A, B, C, D, E, F, G, H, I, J, K, L, M,}\\
+&\mathbb{N, O, P, Q, R, S, T, U, V, W, X, Y, Z}
+\end{aligned}
+\end{equation}
+
 
 \subsection{使用 physics 宏包}
-目前 Physics 宏包紧支持以下命令： 绝对值如 $\abs{a}$， 微分符号如 $\dd{x}$，
+目前仅支持 Physics 宏包的以下命令： 绝对值如 $\abs{a}$， 微分符号如 $\dd{x}$，
 
 可变尺寸的小中大括号可以用 \lstinline|\qty|， 如
 \begin{equation}
@@ -78,6 +92,8 @@
 定积分求值如 $\eval{x^2}_0^1$ （自动尺寸）．
 
 对易算符如 $\comm{\Q A}{\Q B}$ 或 $\comm*{\Q A}{\Q B}$， 前者自动尺寸， 后者强制小尺寸． 泊松括号如 $\pb{\frac12}{B}$ 和 $\pb*{\frac12}{B}$．
+
+梯度散度旋度拉普拉斯如 $\grad V$，$\div\bvec A$， $\curl\bvec A$， $\laplacian V$．
 
 狄拉克符号（加 * 号强制小尺寸）如 $\bra{a}, \ket{b}, \braket{a}, \braket{a}{b}, \mel{a}{Q}{b}$． 平均值（加 * 号强制小尺寸）如 $\ev*{Q}, \ev{Q}{\psi}$．
 
@@ -105,15 +121,16 @@
 \end{equation}
 行内的列矢量用行矢量的转置表示，如 $(1,2,3)\Tr$． 张量如 $\ten T$．
 
-梯度散度旋度拉普拉斯如 $\grad V$，$\div\bvec A$，$\curl\bvec A$，  $\laplacian V$． 单独一个粗体的 $\nabla$ 用 $\Nabla$．
+单独一个粗体的 $\nabla$ 用 $\Nabla$．
 
-\lstinline|\ali{}| 命令与 aligned 环境等效， 如
-\begin{equation}\ali{
+\begin{equation}
+\begin{aligned}
 k_1 &= f(y_n, t_n) 
 & k_2 &= f \qty(y_n + h\frac{k_1}{2}, t_n + \frac h2 )\\
 k_3 &= f \qty( y_n + h\frac{k_2}{2}, t_n + \frac h2 ) \qquad
 & k_4 &= f(y_n + hk_3, t_n + h)
-}\end{equation}
+\end{aligned}
+\end{equation}
 
 左大括号用 \lstinline|\leftgroup{}| 命令， 里面相当于 aligned 环境
 \begin{equation}
@@ -122,14 +139,14 @@ d+e+f&=g\\
 a+b&=c}
 \end{equation}
 
-表格中若用 dfrac， 需要在行首加上 \lstinline|\dfracH| 命令．% 未完成： 为什么？
+表格中若用 \lstinline|\dfrac|， 需要在行首加上 \lstinline|dfracH| 命令．% 未完成： 为什么？
 
 量子力学算符如 $\Q a$（一般可以不加， 只有必要的时候加）， 矢量量子算符如 $\Qv p$．
 
 
 \subsection{图表}
 
-现在来引用一张图片，矢量图必须以 pdf 格式放在 figures 文件夹中， 并生成 svg 格式放在 wuli.wiki/root/online 文件夹中． 位图必须使用 png 格式． 文件名是词条 label 加图片序号， 即使只有一张图片也要加上 1． 生成 svg 时， 字体一律用 outline， 更多选项中保留 7 位小数， 如果矢量图中包含位图， 要把 Image Location 选成 embed． 代码中使用 pdf 图片．图片宽度一律用 cm 为单位．
+现在来引用一张图片，矢量图必须以 pdf 格式放在 figures 文件夹中， 并生成 svg 格式（用于网页）放在 wuli.wiki/root/online 文件夹中． 位图必须使用 png 格式． 文件名是词条 label 加图片序号， 即使只有一张图片也要加上 1． 生成 svg 时， 字体一律用 outline， 更多选项中保留 7 位小数， 如果矢量图中包含位图， 要把 Image Location 选成 embed． 代码中使用 pdf 图片．图片宽度一律用 cm 为单位．
 \begin{figure}[ht]
 \centering
 \includegraphics[width=7cm]{./figures/Sample1.pdf}
