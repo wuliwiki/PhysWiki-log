@@ -3,11 +3,11 @@
 
 \subsection{简介}
 \begin{itemize}
-\item 编辑器可从网站首页的链接进入． 如果不想注册， 可以使用测试网址 \href{http://wuli.wiki/editor}{wuli.wiki/editor}
+\item 编辑器可从网站首页的链接进入． 如果不想注册， 可以使用测试网址 \href{http://wuli.wiki/editor}{wuli.wiki/editor}， 用户名为 test1 到 test100， 密码 6 个 8．
+\item 注意这并不是一个通用的 LaTeX 编辑器， 新建或打开的每个词条文件并不是一个可独立编译的 tex 文件而是一个 \lstinline|\section|， 详见下文．
+\item 正文只支持非常有限的 LaTeX 命令（工具栏有一些常用的）．
+\item 该编辑器可直接将 LaTeX 代码转换为 html 网页而不是 pdf． 我们以后也可能开发在线编译 pdf 并下载的功能
 \item 为保证代码安全， 建议编辑过程中自行使用下载按钮备份
-\item 该编辑器可直接将 LaTeX 代码转换为 html 网页而不是 pdf
-\item 我们以后也会开发在线编译 pdf 并下载的功能
-\item 该编辑器除公式外只支持有限的 LaTeX 命令（工具栏有一些常用的）
 \item 我们在模板中加入了许多自定义命令， 但不会覆盖原有的 LaTeX 命令
 \item 正文中支持的所有命令见 “词条示例\upref{Sample}”
 \item 正文中请使用中文标点， 编辑器会自动把空心句号替换为全角实心句号
@@ -18,26 +18,27 @@
 \item 公式环境支持大部分 LaTeX 命令， 严格来说是所有 \href{https://www.mathjax.org/}{MathJax} 支持的命令\footnote{MathJax 项目用于在网页上显示 LaTeX 公式}
 \item 一个简单的公式编辑器见\href{https://www.codecogs.com/latex/eqneditor.php}{这里}
 \item 一个简单的 TeX/LaTeX 入门教程见\href{https://chaoli.club/index.php/211}{超理论坛}
-\item 支持部分\href{http://mirrors.ibiblio.org/CTAN/macros/latex/contrib/physics/physics.pdf}{Physics 宏包}中的命令
-\item 行内公式只能用美元符号
+\item 支持部分 \href{http://mirrors.ibiblio.org/CTAN/macros/latex/contrib/physics/physics.pdf}{Physics 宏包}中的命令
+\item 行内公式只能用美元符号而不是反斜杠加括号
 \item 独立公式只能用 equation 环境， align 环境或者 gather 环境
 \item 公式中所有常用的和自定义的命令见 “词条示例\upref{Sample}”
-\item 为增加可读性， 编辑器中一些命令会显示为对应的符号（如希腊字母， 求和符号， 不等号等）， 注意这不会影响源码（复制时得到的也是命令而不是符号）． 以后会增加一个开关选择是否关闭该功能．
+\item 为增加代码可读性， 编辑器中一些命令会显示为对应的符号（如希腊字母， 求和符号， 不等号等）， 注意这不会影响源码（复制时得到的也是命令而不是符号）． 以后会增加一个开关选择是否关闭该功能．
 \end{itemize}
 
-\subsection{百科的结构}
-
-百科的所有词条是 LaTeX 的一个 document 环境， 每个部分是一个 \lstinline|\part|， 每章是一个 \lstinline|\chapter|， 词条是 \lstinline|\section|， 蓝色的小标题是 \lstinline|\subsubsection|， 黑色的小标题是 \lstinline|\subsubsection|． 编辑器打开的一个词条文件就是一个 section． 用 texlive 编译 pdf 的时候所有 section 都会通过 \lstinline|\input| 插入到主文件 PhysWiki.tex 中．
-
-网页版的词条目录（\href{http://wuli.wiki/online/}{wuli.wiki/online/}）由 PhysWiki.tex 生成， 所以发布词条后必须修改该文件并发布才能在目录中显示．
-
-每个注册用户默认有编辑词条的权限， 但却不能直接发布词条， 而是需要由发布权限的用户审核后发布． 所有编辑中的词条页面都在 \href{http://wuli.wiki/changed/}{wuli.wiki/changed/} 目录下． 若要查看所有编辑中词条的目录， 可以用 \href{http://wuli.wiki/changed/changed.html}{wuli.wiki/changed/changed.html}（见\autoref{editor_fig1}）．
+\subsection{用户权限}
+每个注册用户默认有编辑词条的权限， 但却不能直接发布词条， 而是需要由发布权限的用户审核后发布． 若一个词条处于 “编辑中” 的状态， 则其他用户无法修改该词条， 只能以只读模式打开． 新建或修改的词条只有通过审核并被发布后才可以被其他用户重新编辑． 所有编辑中的词条页面都在临时页面 \href{http://wuli.wiki/changed/changed.html}{wuli.wiki/changed/changed.html}（\autoref{editor_fig1}）． 括号中会显示修改该词条的用户．
 
 \begin{figure}[ht]
 \centering
 \includegraphics[width=9cm]{./figures/editor1.png}
 \caption{从 \href{http://wuli.wiki/online}{wuli.wiki/online} 查看编辑中的词条} \label{editor_fig1}
 \end{figure}
+
+\subsection{文件结构}
+
+百科的所有词条是 LaTeX 的一个 \lstinline|document| 环境， 目录中每个 “部分” 是一个 \lstinline|\part|， 每个 “章” 是一个 \lstinline|\chapter|， 每个词条是一个 \lstinline|\section|， 词条中蓝色的小标题是 \lstinline|\subsubsection|， 黑色的小标题是 \lstinline|\subsubsection|． 编辑器打开的一个词条文件就是一个 section 的内容（不需要 \lstinline|\section{}| 命令）． 用 TeXlive 编译 pdf 的时候所有词条文件都会通过 \lstinline|\input| 插入到主文件 PhysWiki.tex 中．
+
+网页版的词条目录（\href{http://wuli.wiki/online/}{wuli.wiki/online/}）由 PhysWiki.tex 文件生成， 所以必须修改该文件并发布才能更新目录．
 
 每个词条文件（后缀名为 tex）都有一个独一无二的文件名， 可以将通过将光标停留在编辑器中的 tab 上查看．
 
@@ -64,7 +65,12 @@
 \item 如果自动补全带括号， 例如 \lstinline|\frac{}{}|， 补全后光标会自动进入第一个大括号， 再次按 tab 光标会跳到第二个括号， 再按 tab 光标会跳到第二个大括号外．
 
 \item 打 \lstinline|\beg| 按 tab 会自动出现 \lstinline|\begin{}...\end{}|， 在 \lstinline|begin| 中输入环境名时， \lstinline|end| 中的环境名也会同步． 输完以后按 tab， 光标会跳到环境内
+
+\item 打 \lstinline|\beq| 按 tab 会自动出现 \lstinline|\begin{equation}...\end{equation}|
+
+\item 打 \lstinline|\bit| 按 tab 会自动出现 \lstinline|\begin{itemize}...\end{itemize}|
 \end{itemize}
+
 
 \subsubsection{快捷键}
 
@@ -89,7 +95,3 @@
 \hline
 \end{tabular}
 \end{table}
-
-\subsection{accounts}
-
-若一个词条处于 “编辑中” 的状态（未通过审核）， 则其他用户无法修改该词条， 只能以只读模式打开． 词条通过审核并被发布后， 才可以被有权限的用户编辑
