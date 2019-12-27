@@ -1,0 +1,90 @@
+% Make 简介
+% Makefile | Linux | 自动编译 | make
+\pentry{Linux 基础\upref{Linux}}
+
+Make 通常被用于自动编译程序． 当程序由许多文件构成或使用许多其他的程序库时， 编译的命令往往会变得非常复杂， 如果每次编译都手动输入这些命令会非常麻烦且容易出错． 如果每次输入的编译命令都相同， 一个简单的解决方法是直接把这些命令写进一个 shell script， 每次编译调用即可．
+
+但这样做会遇到另一个问题， 当程序文件（如 .cpp 文件）较多时， 如果在上次编译以后只修改了某些文件， 我们会希望只将这些文件重新编译（生成对应的 .o 文件）并再次 link， 这样可以大大节约编译时间．
+
+Linux 系统中， \lstinline|make| 就是为了解决这个问题产生的． \lstinline|make| 并不是为某个编程语言而设计的， 也不会去分析任何文件的内容． 用户需要写一个名为 \lstinline|Makefile| 的文件告诉 \lstinline|make| 该怎么做． \lstinline|Makefile| 中主要描述了两件事情， 第一是每个文件需要依赖哪些文件才能开始生成， 第二就是每个文件需要用哪些命令生成． 下面举例说明， 为了方便， 这个例子只使用 Linux 常用命令而不涉及任何编程语言．
+
+
+\subsection{简单的例子}
+我们先在某个目录创建一个简单的 \lstinline|Makefile| 文件， 内容如下
+\begin{lstlisting}
+a :
+	echo "file a" > a
+
+b : a
+	echo "text in a {" > b
+	cat a >> b
+	echo "}" >> b
+\end{lstlisting}
+这个 Makefile 指定了两个要生成的文本文件 \lstinline|a| 和 \lstinline|b|． 先来看含有冒号的两行， 冒号表示依赖关系， 左边是需要生成的文件名， 右边是依赖的文件名． 可见 \lstinline|a| 没有任何依赖， 可以直接生成， 而文件 \lstinline|b| 依赖于 \lstinline|a|， 需要等 \lstinline|a| 生成后才能开始生成．
+
+在每个含有冒号的行后， 可以添加若干行命令， 当 \lstinline|make| 决定生成某个文件时， 就执行这些命令． 注意每个命令前必须有一个制表符（用键盘的 \lstinline|tab| 键插入）． 所以生成 \lstinline|a| 文件的命令就是 \lstinline|echo "file a" > a|， 即新建文件， 内容为 \lstinline|file a|． 同理， 生成 \lstinline|b| 的命令就是新建文件， 内容为 \lstinline|text in a {...}| 其中 \lstinline|...| 为 \lstinline|a| 中的文本． 如果 \lstinline|a| 文件不存在， 第 6 行命令就无法执行， 所以必须指定 \lstinline|a| 为 \lstinline|b| 的依赖．
+
+每个含有冒号的行以及接下来的所有命令构成一个 \textbf{规则（rule）}． 冒号左边的文件叫做 \textbf{目标（target）}， 右边的文件叫做 \textbf{依赖（dependency）}． 如果有多个依赖文件， 用空格隔开即可．
+
+现在可以在命令行先 \lstinline|cd| 到 \lstinline|Makefile| 所在的目录， 然后执行 \lstinline|make| 命令． 如果一切正常， 程序将会在命令行依次输出执行的命令（\lstinline|Makefile| 中第 2 行）以生成 \lstinline|a|
+\begin{lstlisting}
+echo "file a" > a
+\end{lstlisting}
+生成文件 \lstinline|a| 的内容为 \lstinline|file a|．
+
+但为什么不生成 \lstinline|b| 呢？ 因为 \lstinline|make| 默认情况下只生成第一个出现的目标． 如果想指定生成 \lstinline|b|， 执行 \lstinline|make b| 即可． 执行过程中命令行显示 \lstinline|Makefile| 的 5-7 行被执行了． 但注意第 2 行没有被执行． 这是因为 \lstinline|a| 文件已经存在了且上一次 \lstinline|make| 后没有被修改过， 所以就不需要再重复生成一次了． \lstinline|b| 中的内容如下
+\begin{lstlisting}
+text in a {
+file a
+}
+\end{lstlisting}
+
+现在两个文件都生成了， 且没有被修改， 所以若再次执行 \lstinline|make b|， 则会显示
+\begin{lstlisting}
+make: 'b' is up to date.
+\end{lstlisting}
+执行 \lstinline|make| 或 \lstinline|make a| 结果类似．
+
+接下来我们把 \lstinline|a|, \lstinline|b| 两个文件都删除， 执行一次 \lstinline|make b|， 会发现第 2 行和 5-7 行都被执行了， 因为当 \lstinline|make| 要生成 \lstinline|b| 时发现它的依赖文件 \lstinline|a| 并不存在， 所以就会先生成 \lstinline|a|． 两文件中内容与之前相同．
+
+我们来手动把 \lstinline|a| 中的内容修改为 \lstinline|modified file a|， 再次运行 \lstinline|make b|， 发现 \lstinline|Makefile| 的 5-7 行被执行， 且 \lstinline|b| 中的内容变为
+\begin{lstlisting}
+text in a {
+modified file a
+}
+\end{lstlisting}
+这是因为， \lstinline|make| 在生成 \lstinline|b| 前， 不但要检查它的所有依赖都存在还要检查他们在上次 \lstinline|make| 后是否有更新． 如果任何依赖有更新， \lstinline|b| 将会被重新生成．
+
+\subsection{伪目标}
+注意 rule 的目标除了是具体的文件， 也可以是\textbf{伪目标（phony tarket）}， 伪目标可以有任意名字． 伪目标的 rule 中可以有命令也可以没有．
+
+一个特殊的伪目标是 \lstinline|goal|． 在上面的 \lstinline|Makefile| 中如果我们想让 \lstinline|make| 默认生成 \lstinline|b|， 可以在文件开始插入 \lstinline|goal| 作为第一个目标
+\begin{lstlisting}
+goal : b
+
+a :
+	echo "file a" > a
+
+b : a
+	echo "text in a {" > b
+	cat a >> b
+	echo "}" >> b
+\end{lstlisting}
+现在执行 \lstinline|make| 或者 \lstinline|make goal| 就相当于 \lstinline|make b| 了．
+
+另一个常用的伪目标是 \lstinline|clean|， 通常用于清除所有被生成的文件． 修改 \lstinline|Makefile| 如下
+\begin{lstlisting}
+goal : b
+
+a :
+	echo "file a" > a
+
+b : a
+	echo "text in a {" > b
+	cat a >> b
+	echo "}" >> b
+    
+clean :
+	rm -f a b
+\end{lstlisting}
+现在执行 \lstinline|make clean| 就可以清除两个生成的文件． 使用 \lstinline|-f| 选项的好处是， 即使某些被删除的文件不存在， \lstinline|rm| 也不会警告．
