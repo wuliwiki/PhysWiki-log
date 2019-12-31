@@ -24,7 +24,7 @@
 \end{lstlisting}
 求余
 \begin{lstlisting}[language=python]
-4 % 3 # 使得 a = a // b + a % b 恒成立
+4 % 3 # 使得 a == a // b + a % b 恒成立
 \end{lstlisting}
 使用括号
 \begin{lstlisting}[language=python]
@@ -80,14 +80,68 @@ degrees(pi/2)
 \end{lstlisting}
 
 \subsection{变量}
-要计算一个长方体的面积， 我们直接把三个数字相乘， 也可以先把这三个数字赋值给三个\textbf{变量}然后相乘
+Python 中的\textbf{变量（variable）} 和数学上的不同， Python 的变量可以理解为一个储存数值的容器， 我们可以用等号把一个数值储存在一个变量中． 例如要计算一个长方体的面积， 我们直接把三个数字相乘， 也可以先把这三个数字赋值给三个\textbf{变量}然后相乘
 \begin{lstlisting}[language=python]
 a = 1
 b = 2
 c = 3
-area = a*b*c
+volumn = a*b*c
 \end{lstlisting}
 在 Jupyter Notebook 执行这四行发现并没有输出， 无论是一次性执行还是分开执行． 这是因为赋值命令默认不输出结果． 要强制输出结果可以用
 \begin{lstlisting}[language=python]
-print(area)
+print(volumn)
+\end{lstlisting}
+要强调的是， 这里的等号并不是数学上的等于， 而是\textbf{赋值}， 即把等号右边得到的数值储存在左边的变量中． 在第 4 行执行时， 计算机会先计算等号右边表达式的结果 6， 然后将 6 储存在变量 volumn 中． volumn 这个变量中并不会包含 “\lstinline|a*b*c|” 这个信息， 只储存 6 这个数值．
+
+如果要让长方形的某个边长增加 1， 我们可以执行
+\begin{lstlisting}[language=python]
+a = a + 1
+\end{lstlisting}
+如果将等号理解为数学上的等于， 这个式子显然是错的． 但正确的理解是， 先把 \lstinline|a| 当前的值（1）加上 1 得到 2， 然后把 2 赋值给 \lstinline|a|． 由于我们没有给 \lstinline|volumn| 重新赋值， 它仍然是 6， 要更新 \lstinline|volumn|， 只需要重新执行
+\begin{lstlisting}[language=python]
+volumn = a*b*c
+\end{lstlisting}
+并用 \lstinline|print(volumn)| 显示新的值．
+
+\subsection{函数}
+Python 中的函数与数学中的函数不完全一样， 函数可以有若干个输入变量和输出变量（也可以没有）． 下面我们定义一个简单的函数来计算长方形的面积
+\begin{lstlisting}[language=python]
+def f(a, b, c):
+    volumn = a*b*c
+    return volumn
+\end{lstlisting}
+这段代码用到了两个 Python 的\textbf{关键字（keyword）} \lstinline|def| 和 \lstinline|return|． 关键字是指在程序中有特殊含义的， 不能作为变量名和函数名的名称． 其中 \lstinline|def| 用于定义函数， \lstinline|f| 是函数名， \lstinline|a|， \lstinline|b| 和 \lstinline|c| 分别是函数的\textbf{输入变量（argument）}． 冒号以后是\textbf{函数体}， 可以有若干行命令． 注意这些命令前面必须有\textbf{缩进（indentation）}．  在以上代码中， 函数体的第一行计算面积， 第二行将用关键字 \lstinline|return| 将计算的结果作为因变量输出并退出函数．
+
+现在我们可以使用这个函数， 使用方法和 \lstinline|sin|， \lstinline|sqrt| 等数学函数一样， 只是不同输入变量要用逗号隔开．
+\begin{lstlisting}[language=python]
+f(1.2, 3.4, 6)
+\end{lstlisting}
+
+\subsection{数组}
+我们这里使用 \lstinline|numpy| 模块中的数组． \lstinline|numpy| 是数值计算中一个常用的模块， 主要用于处理各种数组（或矩阵）． 这里介绍另一种 import 的方式
+\begin{lstlisting}[language=python]
+import numpy as np
+\end{lstlisting}
+这相当于给 \lstinline|numpy.| 指定一个更简单的名字 \lstinline|np.|， 方便了使用． 你也可以把 \lstinline|np| 替换成其他名字． 上文使用 \lstinline|math| 模块时也可以使用
+\begin{lstlisting}[language=python]
+import numpy as m
+\end{lstlisting}
+
+要创建一个一维数组（或者叫做行矢量）， 如
+\begin{lstlisting}[language=python]
+a = np.array([1, 2, 3])
+\end{lstlisting}
+这个数组有三个元素， 每个元素相当于一个独立的变量． 要获取第 \lstinline|i| 个元素的值， 用 \lstinline|a[i]|， 如
+\begin{lstlisting}[language=python]
+a[0]
+\end{lstlisting}
+注意索引 \lstinline|i| 从 0 开始而不是 1． 所以第一个元素索引为 0， 第二个索引为 1 等等．
+
+显示整个数组
+\begin{lstlisting}[language=python]
+print(a)
+\end{lstlisting}
+要获取数组的一部分
+\begin{lstlisting}[language=python]
+a[1:2]
 \end{lstlisting}
