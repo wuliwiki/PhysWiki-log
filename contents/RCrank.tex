@@ -1,0 +1,49 @@
+% 证明矩阵行秩等于列秩
+% 线性无关|列秩|行秩|零空间|解空间|正交归一|基底
+
+\pentry{矩阵与矢量空间\upref{MatLS}， 直和\upref{DirSum}}
+
+我们从矢量空间的角度\upref{MatLS} 证明\footnote{本文思路来自\href{https://chaoli.club/index.php/4821}{超理论坛}．}， 假设矩阵 $A$ 的尺寸为 $N_y \times N_x$， 也分别是 $Y$ 空间和 $X$ 空间的维数．
+
+定义 $X$ 空间中满足 $A |x\rangle = 0$ 的子空间为 $X$ 的\textbf{零空间}， 记为 $X_0$． $Y$ 空间中满足 $A\Her |y\rangle = 0$ 的子空间为 $Y$ 的零空间， 记为 $Y_0$． 定义整个 $X$ 空间通过 $A$ 映射后得到 $Y$ 的另一个子空间叫 $R$ 空间， 即 $A(X) = R$， 同理定义 $A\Her(Y) = D$． % 未完成： 矩阵与矢量空间中添加空间的映射及对应符号
+
+可以证明（见下文） $X_0$ 与 $D$ 正交且 $Y_0$ 与 $R$ 正交\upref{SubSpc}， 且
+\begin{equation}\label{RCrank_eq1}
+X_0 \oplus D = X
+\qquad
+Y_0 \oplus R = Y
+\end{equation}
+于是我们可以在 $X$ 和 $Y$ 空间中分别找到一套正交归一基底， 每套又根据两个子空间分为两组． 计算 $A(X)$ 时， $X_0$ 中的基底映射后还是零， 所以其中的基底可以去掉， 只剩下 $D$ 中基底做映射， $A\Her(Y)$ 也同理．
+\begin{equation}
+A(D) = R
+\qquad
+A\Her(R) = D
+\end{equation}
+线性映射后的空间维度总是小于等于映射前的维度， 所以如果两个方向都存在映射， 就只能是等于． 所以 $R$ 和 $D$ 的维度相同， 即 $R$ 和 $R\Her$ 线性无关的列数相同， 即 $R$ 线性无关的行数和列数相同． 证毕．
+
+\subsection{补充证明}
+先证明 $R$ 和 $Y_0$ 正交以及\autoref{RCrank_eq1}． 我们先在 $R$ 中找到一套 $N_R$ 个正交归一基底 $\ket{r_i}$， 再在 $Y$ 空间中找到剩下 $N_Y - N_R$ 个正交归一基底 $\ket{y_i}$． 对任意 $\ket{x} \in X$ 和， 有 $A \ket{x} \in R$， 所以
+\begin{equation}
+\mel{y_i}{A}{x} = 0
+\end{equation}
+对两边做厄米共轭得% 未完成： 狄拉克符号里面需要介绍
+\begin{equation}
+\mel{x}{A\Her}{y_i} = 0
+\end{equation}
+对任意 $\ket{x}$ 都成立， 所以
+\begin{equation}
+A\Her\ket{y_i} = 0
+\end{equation}
+所以 $\ket{y_i} \in Y_0$． 然而对于任意 $\ket{r} \in R$， 必存在一些矢量 $\ket{x}$ 使
+\begin{equation}
+\mel{r}{A}{x} \ne 0
+\iff
+\mel{x}{A\Her}{r} \ne 0
+\end{equation}
+所以
+\begin{equation}
+A\Her\ket{r} \ne 0
+\end{equation}
+即 $\ket{r} \notin Y_0$． 所以 $\ket{y_i}$ 就是 $Y_0$ 的（完备）正交归一基底， 且与 $\ket{r_i}$ 组成 $Y$ 的（完备）正交归一基底． 证毕．
+
+$X$ 空间的证明同理可得．
