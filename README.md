@@ -1,5 +1,5 @@
 # 小时物理百科
-项目官网为 [wuli.wiki](http://wuli.wiki)。 目前使用 TeXlive 2017 中的 XeLaTex 编译。 编译好的 PDF 可以在  下载。
+项目官网为 [wuli.wiki](http://wuli.wiki)。 目前使用 TeXlive 2019 中的 XeLaTex 编译。 编译好的 PDF 可以在  下载。
  
 ## 版权声明
 1. 本仓库仅限于个人学习使用， 任何其他用方式的使用请联系我们。
