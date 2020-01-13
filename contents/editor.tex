@@ -3,29 +3,35 @@
 
 \subsection{简介}
 \begin{itemize}
-\item 编辑器可从网站首页的链接进入． 如果不想注册， 可以使用测试网址 \href{http://wuli.wiki/editor}{wuli.wiki/editor}， 用户名为 test1 到 test100， 密码 6 个 8． 注意测试文件会被定期删除， 可以自行使用下载按钮备份．
+\item 编辑器可从网站首页的链接进入（必须是登录状态）． 如果不想注册， 可以使用测试网址 \href{http://wuli.wiki/editor}{wuli.wiki/editor}， 用户名为 test1 到 test100， 密码 6 个 8． 注意测试文件会被定期删除， 可以自行使用下载按钮备份．
+\item 进入编辑器初始页面后， 点 “新建词条” 图标（红色加号）可以新建文件， 点 “打开词条” 图标可以编辑已有文件． 新建或修改的内容不会立即更新到网站， 而是要审核通过才会发布（有发布权限的用户可以自行发布）． 可以在\href{http://wuli.wiki/changed/changed.html}{这里}查看新建或修改中的词条．
+\item 编辑过程中用快捷键 Ctrl+S 可以保存并刷新预览． 也可以用工具栏的保存图标．
 \item 编辑器会将有改动的词条每隔 5 分钟备份一次， 可以用 “恢复” 按钮恢复历史版本．
-\item 注意这并不是一个通用的 LaTeX 编辑器， 新建或打开的每个词条文件并不是一个可独立编译的 tex 文件而是一个 \lstinline|\section|， 详见下文．
-\item 正文只支持非常有限的 LaTeX 命令． 工具栏有一些常用命令， 所有命令见 “词条示例\upref{Sample}”．
+\item 注意这并不是一个通用的 LaTeX 编辑器， 只实现了一小部分命令． 工具栏有大部分常用命令， 所有命令见 “词条示例\upref{Sample}”．
+\item 新建或打开的每个词条文件并不是一个可独立编译的 .tex 文件而是一个 \lstinline|\section|， 详见下文．
 \item 该编辑器可直接将 LaTeX 代码转换为 html 网页而不是 pdf． 我们以后也可能开发在线编译 pdf 并下载的功能．
-\item 我们在模板中用 \lstinline|\newcommand| 加入了许多自定义命令， 但不会覆盖原有的 LaTeX 命令．
+\item 我们在模板中用 \lstinline|\newcommand| 加入了一些自定义命令， 但不会覆盖原有的 LaTeX 命令．
 \item 正文中请使用中文标点， 编辑器会自动把空心句号替换为全角实心句号
 \end{itemize}
 
 \subsection{公式}
 \begin{itemize}
-\item 公式环境支持大部分 LaTeX 命令， 严格来说是所有 \href{https://www.mathjax.org/}{MathJax} 支持的命令\footnote{MathJax 项目用于在网页上显示 LaTeX 公式}
+\item 公式环境支持大部分 LaTeX 命令， 严格来说是所有 \href{https://www.mathjax.org/}{MathJax} 支持的命令\footnote{MathJax 项目用于在网页上显示 LaTeX 公式， 知乎的公式也使用 MathJax．}．
 \item 一个简单的公式编辑器见\href{https://www.codecogs.com/latex/eqneditor.php}{这里}
 \item 一个简单的 TeX/LaTeX 入门教程见\href{https://chaoli.club/index.php/211}{超理论坛}
 \item 支持部分 \href{http://mirrors.ibiblio.org/CTAN/macros/latex/contrib/physics/physics.pdf}{Physics 宏包}中的命令
-\item 行内公式只能用美元符号而不是反斜杠加括号
-\item 独立公式只能用 equation 环境， align 环境或者 gather 环境
+\item 行内公式插入到两个美元符号之间， 如 \lstinline|$a^2+b^2=c^2$| 显示为 $a^2 + b^2 = c^2$．
+\item 独立公式只能用 equation 环境（推荐）， align 环境或者 gather 环境． equation 环境可以通过工具栏的公式图标插入， 也可以打 \lstinline|\beq| 然后按 Tab 键或者回车插入， 如
+\begin{equation}\label{editor_eq1}
+a^2 + b^2 = c^2
+\end{equation}
 \item 公式中所有常用的和自定义的命令见 “词条示例\upref{Sample}”
 \item 为增加代码可读性， 编辑器中一些命令会显示为对应的符号（如希腊字母， 求和符号， 不等号等）， 注意这不会影响源码（复制时得到的也是命令而不是符号）． 以后会增加一个开关选择是否关闭该功能．
+\item 工具栏中的 “内部引用” 按钮可以引用同一页面的公式并生成链接（图片表格等同理）， 如\autoref{editor_eq1}． “外部引用” 按钮可以引用其他词条的公式或图表．
 \end{itemize}
 
 \subsection{用户权限}
-每个注册用户默认有编辑词条的权限， 但却不能直接发布词条， 而是需要由发布权限的用户审核后发布． 若一个词条处于 “编辑中” 的状态， 则其他用户无法修改该词条， 只能以只读模式打开． 新建或修改的词条只有通过审核并被发布后才可以被其他用户重新编辑． 所有编辑中的词条页面都在临时页面 \href{http://wuli.wiki/changed/changed.html}{wuli.wiki/changed/changed.html}（\autoref{editor_fig1}）． 括号中会显示修改该词条的用户．
+每个注册用户默认有编辑词条的权限， 但却不能直接发布词条， 而是需要由发布权限的用户审核后发布． 若一个词条处于 “编辑中” 的状态， 则其他用户无法修改该词条， 只能以只读模式打开． 新建或修改的词条只有通过审核并被发布后才可以被其他用户重新编辑． 所有编辑中的词条页面都可以在\href{http://wuli.wiki/changed/changed.html}{临时页面}（\autoref{editor_fig1}）查看． 括号中会显示修改该词条的用户．
 
 \begin{figure}[ht]
 \centering
