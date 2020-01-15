@@ -4,7 +4,7 @@
 \subsection{背景介绍}
 
 在计算含时薛定谔方程时，若已知某时刻 $t$ 的波函数 $\Psi(\bvec r,t)$，要求 $\Psi(\bvec r,t+\Delta t)$，通常使用传播算符 % 链接未完成
- \begin{equation}
+\begin{equation}
 U(\Delta t) = \exp(-\frac{\I}{\hbar} \int_{t}^{t+\Delta t} \dd{t} \vdot H(t))
 \approx \exp(-\I H(t+\Delta t/2) \Delta t)
 \end{equation}
@@ -45,15 +45,15 @@ H_{ij}=\mel{\Psi_i}{H}{\Psi_j}
 在算法上，本来我们可以按部就班地按照以上步骤做，然而由于 Krilov 基底的性质，可以通过一些定理（见词条最后）大大减少计算量．正交归一化步骤如下
 
 \begin{enumerate}
-\item 如果 $\Psi(\bvec r,t)$ 没有归一化，将其进行归一化 $\ket{\Psi_0}=\Psi(\bvec r,t)/\braket{\Psi(\bvec r,t)}$．
+\item 如果 $\Psi(\bvec r,t)$ 没有归一化，将其进行归一化 $\ket{\Psi_0}=\Psi(\bvec r,t)/\sqrt{\braket{\Psi(\bvec r,t)}}$．
 \item 把 $\Psi_1$ 进行施密特正交化， 令
 \begin{equation}
-\ket*{\tilde\Psi_1} = (1 - \ket{\Psi_0}\bra{\Psi_0})\ket{\Psi_1}
+\ket*{\tilde\Psi_1} = (1 - \ket{\Psi_0}\bra{\Psi_0})H \ket{\Psi_0}
 \qquad
-\ket{\Psi_1}=\ket*{\tilde\Psi_1}/\braket*{\tilde\Psi_1}
+\ket{\Psi_1}=\ket*{\tilde\Psi_1}/\sqrt{\braket*{\tilde\Psi_1}}
 \end{equation}
 % 未完成
-\item 现在起我们令 $\beta_j = \braket*{\tilde\Psi_j}$． % 未完成
+\item 现在起我们令 $\beta_j = \sqrt{\braket*{\tilde\Psi_j}}$． % 未完成
 \end{enumerate}
 
 \subsubsection{定理1}
@@ -73,12 +73,16 @@ H_{ij}=\mel{\Psi_i}{H}{\Psi_j}
 \end{equation}
 
 \begin{enumerate}[resume]
-\item 把 $H^2 \ket{\Psi_0}$ 进行施密特正交化， 令 $\alpha_i = \mel{\Psi_i}{H}{\Psi_i}$， 根据两个定理，正交化结果也可以写成
+\item 把 $H^2 \ket{\Psi_0}$ 进行施密特正交化， 令
+\begin{equation}
+\alpha_i = \mel{\Psi_i}{H}{\Psi_i}
+\end{equation}
+根据两个定理，正交化结果也可以写成
 \begin{equation}\ali{
 \ket*{\tilde\Psi_2}  &= \qty(1 -\ket{\Psi_1}\bra {\Psi_1}  - \ket{\Psi_0}\bra{\Psi_0}) H \ket{\Psi_1}\\
 &= H \ket{\Psi_1} - \alpha_1 \ket{\Psi_1} - \beta_1 \ket{\Psi_0} \\ 
 }\end{equation}
-\item 再次归一化  $\ket{\Psi_2} = \ket*{\tilde\Psi_2} / \braket*{\tilde\Psi_2} = \ket*{\tilde\Psi_2}/\beta_2$
+\item 再次归一化  $\ket{\Psi_2} = \ket*{\tilde\Psi_2} / \sqrt{\braket*{\tilde\Psi_2}} = \ket*{\tilde\Psi_2}/\beta_2$
 \end{enumerate}
 
 \subsubsection{定理 3}
@@ -159,7 +163,7 @@ $m \geqslant j + 2$ 的情况在证明3中已经证明，只需证明另一种�
 H_{j, j+1} &= \mel{\Psi_j}{H}{\Psi_{j+1}} = \bra{\Psi_j} H \qty(H \ket{\Psi_j} - \alpha_j \ket{\Psi_j} - \beta_j \ket{\Psi_{j-1}}) \\
 &= \mel{\Psi_j}{H^2}{\Psi_j} - \alpha_j \bra{\Psi_j} H \ket{\Psi_j} - \beta_j \bra{\Psi_j}  H \ket{\Psi_{j-1}}
 }\end{equation}
-易证 $\ev{H^2}{\Psi_j}$， $\alpha_j$ 及 $\beta_j$ 是实数，只需要证明 $\mel{\Psi_j}{H}{\Psi_{j-1}}$ 是实数即可，即证 $\mel{\Psi_{j-1}}{H}{\Psi_j}$ 是实数，重复上述论证，即证 $\mel{\Psi_{j-2}}{H}{\Psi_{j - 1}}$ 是实数，……，即证 $\mel{\Psi_1}{H}{\Psi_0}$ 是实数，即证 $\mel{\Psi_0}{H}{\Psi_1}$ 是实数，即证 $\mel*{\Psi_0}{H}{\tilde\Psi_1}$ 是实数．而
+易证 $\ev{H^2}{\Psi_j}$， $\alpha_j$ 及 $\beta_j$ 是实数，只需要证明 $\mel{\Psi_j}{H}{\Psi_{j-1}}$ 是实数即可，即证 $\mel{\Psi_{j-1}}{H}{\Psi_j}$ 是实数，重复上述论证，即证 $\mel{\Psi_{j-2}}{H}{\Psi_{j - 1}}$ 是实数，\dots\dots，即证 $\mel{\Psi_1}{H}{\Psi_0}$ 是实数，即证 $\mel{\Psi_0}{H}{\Psi_1}$ 是实数，即证 $\mel*{\Psi_0}{H}{\tilde\Psi_1}$ 是实数．而
 \begin{equation}
 \mel*{\Psi_0}{H}{\tilde\Psi_1} = \bra{\Psi_0} H \qty(H \ket{\Psi_0} - \alpha_0 \ket{\Psi_0}) = \ev{H^2}{\Psi_0} - \alpha_0 \ev{H}{\Psi_0} 
 \end{equation}
