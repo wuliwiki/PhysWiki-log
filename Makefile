@@ -1,7 +1,7 @@
 compiler = xelatex
 
 PhysWiki:
-	xelatex PhysWiki.tex
+	xelatex main.tex
 
 debug:
 	xelatex Debug.tex
