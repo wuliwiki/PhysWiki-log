@@ -39,16 +39,20 @@ $H'(t) = 0$ 的情况下含时薛定谔方程的通解：先解出对应的定�
 \end{equation}
 两边左乘 $\bra{\phi_m(t)} = \E^{\I E_m t/\hbar}\bra{\psi_m}$ 得\footnote{这样做的物理意义是要求每个基底上的分量相等} % 链接未完成
 \begin{equation}\label{TDPT_eq2}
-\sum_n H'_{mn} c_n(t)
+\sum_n A_{mn} c_n(t)
 = \I\hbar \dv{t} c_m(t)
 \end{equation}
 其中
 \begin{equation}\label{TDPT_eq7}
-H'_{mn} = \bra{\phi_m(t)} H'(t) \ket{\phi_n(t)} = \bra{\psi_m} H'(t) \ket{\psi_n} \E^{\I(E_m-E_n)t/\hbar}
+A_{mn} = \bra{\phi_m(t)} H'(t) \ket{\phi_n(t)} = \bra{\psi_m} H'(t) \ket{\psi_n} \E^{\I(E_m-E_n)t/\hbar}
+\end{equation}
+定义\textbf{跃迁偶极子（Transition Dipole）} 为
+\begin{equation}
+H'_{mn} = \bra{\psi_m} H'(t)\ket{\psi_n}
 \end{equation}
 把\autoref{TDPT_eq2} 写成矩阵形式为（对矢量求导即对每个分量分别求导\upref{DerV}）
 \begin{equation}\label{TDPT_eq3}
-\mat {H'} \bvec c = \I\hbar \dv{t} \bvec c
+\mat {A} \bvec c = \I\hbar \dv{t} \bvec c
 \end{equation}
 到此为止我们还没有做任何近似，上式和\autoref{TDPT_eq1} 完全等效．
 
@@ -64,27 +68,24 @@ H = H_0 + \lambda H'(t)
 代入\autoref{TDPT_eq3}，根据 $\lambda = 1$ 的阶数分离方程，得
 \begin{align}
 &\dv{t} \bvec c^{(0)}(t) = \bvec 0 &&\text{（0 阶近似）}\label{TDPT_eq4}\\
-&\dv{t} \bvec c^{(1)}(t) = \frac{1}{\I\hbar} \mat H'(t) \bvec c^{(0)}(t) &&\text{（1 阶近似）} \label{TDPT_eq5}\\
+&\dv{t} \bvec c^{(1)}(t) = \frac{1}{\I\hbar} \mat A(t) \bvec c^{(0)}(t) &&\text{（1 阶近似）} \label{TDPT_eq5}\\
 %\vdots\notag \\
-&\dv{t} \bvec c^{(n)}(t) = \frac{1}{\I\hbar} \mat H'(t) \bvec c^{(n-1)}(t) &&\text{（$n$ 阶近似）} \label{TDPT_eq6}
+&\dv{t} \bvec c^{(n)}(t) = \frac{1}{\I\hbar} \mat A(t) \bvec c^{(n-1)}(t) &&\text{（$n$ 阶近似）} \label{TDPT_eq6}
 \end{align}
 
 为了求解各阶近似，我们假设 $t=0$ 时只有 0 阶系数 $\bvec c^{(0)}(0)$ 不为零．若给出初始波函数 $\ket{\psi(0)}$，可用 $\ket{\phi_n(0)} = \ket{\psi_n}$ 展开得到 $\bvec c^{(0)}(0)$．\autoref{TDPT_eq4} 说明零阶系数矢量为常数，所以零阶近似解就是 $\bvec c^{(0)}(t) = \bvec c^{(0)}(0)$．继续把 $\bvec c^{(0)}(t)$ 代入\autoref{TDPT_eq5}，两边对时间从 0 到 $t$ 定积分（矢量的积分即对每个分量分别积分）得
 \begin{equation}
-\bvec c^{(1)}(t) - \bvec c^{(1)}(0) = \frac{1}{\I\hbar} \int_{0}^{t}  \mat H'(t) \bvec c^{(0)}(t) \dd{t}
+\bvec c^{(1)}(t) - \bvec c^{(1)}(0) = \frac{1}{\I\hbar} \int_{0}^{t}  \mat A(t) \bvec c^{(0)}(t) \dd{t}
 \end{equation}
 代入 $\bvec c^{(1)}(0) = 0$，$\bvec c^{(0)}(t) = \bvec c^{(0)}(0)$，得一阶近似解为
 \begin{equation}\label{TDPT_eq9}
-\bvec c^{(1)}(t) = \frac{1}{\I\hbar} \int_{0}^{t}  \mat H'(t)\bvec c^{(0)}(0) \dd{t}
+\bvec c^{(1)}(t) = \frac{1}{\I\hbar} \int_{0}^{t}  \mat A(t)\bvec c^{(0)}(0) \dd{t}
 \end{equation}
 类似地，对\autoref{TDPT_eq6} 积分，若已知 $\bvec c^{(n-1)}(t)$， 有
 \begin{equation}\label{TDPT_eq8}
-\bvec c^{(n)}(t) = \frac{1}{\I\hbar} \int_{0}^{t}  \mat H'(t) \bvec c^{(n-1)}(t) \dd{t}
+\bvec c^{(n)}(t) = \frac{1}{\I\hbar} \int_{0}^{t}  \mat A(t) \bvec c^{(n-1)}(t) \dd{t}
 \end{equation}
-所以要想得到 $n$ 阶近似解，积分 $n$ 次即可．要注意的是，许多教材中不使用\autoref{TDPT_eq7} 定义矩阵 $\mat H'$，而是定义其矩阵元为\textbf{跃迁偶极子（Transition Dipole）} \begin{equation}
-H'_{mn} = \bra{\psi_m} H'(t)\ket{\psi_n}
-\end{equation}
-为了明确起见，\autoref{TDPT_eq8} 的分量表达式为
+所以要想得到 $n$ 阶近似解，积分 $n$ 次即可． 为了明确起见，\autoref{TDPT_eq8} 的分量表达式为
 \begin{equation}
 c_i^{(n)}(t) = \frac{1}{\I\hbar} \int_{0}^{t}  \sum_j \bra{\psi_i} H'(t)\ket{\psi_j} \E^{\I(E_i-E_j)t/\hbar} c_j^{(n-1)}(t) \dd{t}
 \end{equation}
