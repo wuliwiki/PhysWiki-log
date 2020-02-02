@@ -1,0 +1,91 @@
+% 中心势能散射（量子）
+% 散射|概率流|薛定谔|截面|微分截面|相移|S 矩阵|K 矩阵
+
+\pentry{散射\upref{Scater}， 概率流密度\upref{PrbJ}， 球坐标中的薛定谔方程\upref{RYTDSE}}
+
+\footnote{本文参考 Physics of Atoms and Molecules, Bransden}我们讨论一个粒子在\textbf{中心势能} $V(r)$ 下的散射． 核心思路： 我们需要 $E > 0$ 的所有本征波函数（也叫散射态）， 入射的初始波包可以由这些散射态叠加而成， 之后的时间演化就是这些散射态分别乘以 $\exp(-\I E t)$ 再叠加．
+
+\subsection{散射截面}
+在三维情况下， 每个能量 $E$ 都是无穷维简并的． 且根据不同的边界条件我们可以获得不同的正交归一基底． 常见的边界条件如平面波入射． 这是一种物理意义较强的选择， 因为如果一个无穷远处的入射波包具有很窄的能量带宽， 我们就可以把它近似看作是平面波．
+\begin{equation}\label{QMscat_eq1}
+\lim_{r \to \infty} \psi_{\bvec k}^{(+)}(\bvec r) = (2\pi)^{-3/2} \exp(\I \bvec k \vdot \bvec r) + f(k, \uvec r) \frac{\exp(\I k r)}{r}
+\end{equation}
+$f(k, \bvec r)$ 是\textbf{散射幅}．
+
+正交归一条件为
+\begin{equation}
+\int \psi_{\bvec k'}^{(+)}(\bvec r)^* \psi_{\bvec k}^{(+)}(\bvec r) \dd[3]{r} = \delta(\bvec k - \bvec k')
+\end{equation}
+
+
+\textbf{微分截面（differential cross section）}是能量的函数， 与概率流密度的关系
+\begin{equation}
+\dv{\sigma}{\Omega} = \lim_{r\to\infty}\frac{\bvec j_{out} r^2}{\bvec j_{in}}
+\end{equation}
+总\textbf{散射截面（scattering cross section）}可以形象理解为挡住概率流密度 $\bvec j$ 的面积
+\begin{equation}
+\sigma = \int\dv{\sigma}{\Omega} \dd{\Omega}
+\end{equation}
+
+\begin{equation}
+\bvec j = \frac{\hbar}{2m\I}\qty[\psi^*(\grad \psi) - (\grad \psi*)\psi]
+\end{equation}
+径向概率流密度
+\begin{equation}
+\bvec j \vdot \uvec r = \frac{\hbar}{2m\I} \qty(\psi^*\pdv{\psi}{r} - \pdv{\psi*}{r} \psi)
+\end{equation}
+可得微分截面与散射幅的关系为
+\begin{equation}
+\dv{\sigma}{\Omega} = \abs{f(k, \uvec r)}^2
+\end{equation}
+注意只有\autoref{QMscat_eq1} 中的第一项， 即入射平面波对散射截面没有贡献．
+
+由概率守恒对散射幅的约束， 可以得出\textbf{光学定理（Optical Theorem）}
+\begin{equation}
+\sigma = \frac{4\pi}{k} \Im[f(k, \uvec k)]
+\end{equation}
+理解： 球面波往其他方向发射出去的总概率流等于在 $\uvec k$ 方向抵消的概率流．
+
+\subsection{分波展开}
+除了\autoref{QMscat_eq1} 的边界条件外， 我们也可以找到符合另一种常用边界条件的正交归一散射态， 每个能量同样由无穷维简并
+\begin{equation}
+\lim_{r\to 0} \psi(\bvec r) = 0
+\end{equation}
+球坐标中的解具有形式
+\begin{equation}
+\psi(\bvec r) = \frac{1}{r} \sum_l u_l(r) Y_{l,0}(\uvec r)
+\end{equation}
+其中每一项就是一个分波， 满足上述边界条件． 在实际计算中我们一般使用球坐标． 因为在中心势能 $V(r)$ 下， 薛定谔方程可以在球坐标中分离变量， 使解偏微分方程变为解常微分方程， 即径向方程
+\begin{equation}
+-\frac{\hbar^2}{2m} \dv[2]{\psi_{l,m}}{r} + \qty[V(r) + \frac{\hbar^2}{2m}\frac{l(l + 1)}{r^2}]\psi_{l,m} = \I \pdv{t} \psi_{l,m}
+\end{equation}
+
+\subsection{相移}
+如果 $V(r)$ 在 $r\to\infty$ 时可以忽略， $u_l(r)$ 得渐进表达式就完全可以由\textbf{相移（phase shift）} $\delta_l(k)$ 来描述． 由于微分截面也是在无穷远处定义的， 我们可以直接由相移计算微分截面．
+
+我们定义相移满足
+\begin{equation}
+u_l(k, r) \to \sin[kr - \frac{l\pi}{2} + \delta_l(k)]
+\end{equation}
+为什么这么定义呢？ 因为相移是相对的， 需要一个基准径向函数． 而我们把自由粒子， 即把 $V(r) \equiv 0$ 时的相位作为基准
+\begin{equation}
+u_l(k, r) = kr j_r(kr) \to \sin[kr - \frac{l\pi}{2}]
+\end{equation}
+可以证明总微分截面为
+\begin{equation}
+\sigma(k) = \sum_{l=0}^\infty \sigma_l(k) = \frac{4\pi}{k^2} \sum_{l=0}^\infty (2l + 1) \sin^2 \delta_l(k)
+\end{equation}
+
+\subsection{散射矩阵}
+定义 $S$ 矩阵（虽然叫矩阵， 其实是一系列函数）为
+\begin{equation}
+S_l(k) = \exp[2\I\delta_l(k)]
+\end{equation}
+定义 $K$ 矩阵为
+\begin{equation}
+K_l(k) = \tan \delta_l(k)
+\end{equation}
+二者关系为
+\begin{equation}
+S_l(k) = \frac{1 + \I K_l(k)}{1 - \I K_l(k)}
+\end{equation}
