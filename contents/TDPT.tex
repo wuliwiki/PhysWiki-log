@@ -1,62 +1,76 @@
 % 含时微扰理论
 % 微扰理论|量子力学|薛定谔方程|近似
-% 未完成：是否考虑把系数 C 换成 c 以区分矢量和矩阵
+% 未完成：考虑把第一节的内容开新词条
 
+\pentry{薛定谔方程\upref{TDSE}}
+
+\subsection{薛定谔方程的矩阵形式}
 在讲微扰理论之前，我们先来看如何把含时薛定谔方程写为矩阵的形式．含时薛定谔方程的一般形式为
 \begin{equation}\label{TDPT_eq1}
 H \ket{\psi(t)} = \I\hbar \pdv{t} \ket{\psi(t)}
 \end{equation}
-我们把哈密顿算符分为含时部分和不含时部分
+我们把哈密顿算符分为不含时部分 $H_0$ 和含时部分 $H'(t)$
 \begin{equation}
-H = H_U + H'(t)
+H = H_0 + H'(t)
 \end{equation}
 我们已经知道 % 链接未完成
-$H'(t) = 0$ 的情况下含时薛定谔方程的通解：先解出对应的定态薛定谔方程的波函数 $\ket{\psi_n}$ 和能级 $E_n$，通解可表示为
+$H'(t) = 0$ 的情况下含时薛定谔方程的通解：先解出对应的定态薛定谔方程的波函数 $\ket{\psi_n}$ 和能级 $E_n$，通解可表示为（为简单起见我们暂时假设 $H_0$ 只有离散的束缚， 例如简谐振子\upref{QSHOop}）
 \begin{equation}
-\ket{\psi_U(t)} = \sum_n c_n \ket{\psi_n} \E^{-\I E_n t/\hbar}
+\ket{\psi_0(t)} = \sum_n c_n \ket{\psi_n} \E^{-\I E_n t/\hbar}
 \end{equation}
-注意其中 $c_n$ 为常数，由初始波函数决定．我们可以定义一组含时基底
+注意其中 $c_n$ 为常数，由初始波函数决定．我们可以定义一组\textbf{含时}基底
 \begin{equation}
-\ket{\phi_n(t)} = \ket{\psi_n} \E^{-\I E_n t/\hbar}
+\ket{\phi_n(t)} = \ket{\psi_n} \E^{-\I E_n t/\hbar} \qquad (n = 1, 2, \dots)
 \end{equation}
 用于展开\autoref{TDPT_eq1} 中的含时波函数．注意任何时刻这组基底都正交归一．
 \begin{equation}
 \ket{\psi(t)} = \sum_n c_n(t) \ket{\phi_n(t)} = \sum_n c_n(t) \ket{\psi_n} \E^{-\I E_n t/\hbar}
 \end{equation}
-由于基底并不是总哈密顿算符的本征矢，系数需由常数拓展为时间的函数．
+由于基底并不是总哈密顿算符 $H$ 的本征矢，系数需由常数拓展为时间的函数 $c_n(t)$．
 
 选择了基底后，就可以把薛定谔方程表示为矩阵的形式． % 链接未完成
 把上式代入薛定谔方程（\autoref{TDPT_eq1}）得
-\begin{equation}\begin{aligned}
+\begin{equation}
+\begin{aligned}
 &\sum_n c_n(t) H_0 \ket{\phi_n(t)} + \sum_n c_n(t) H'(t) \ket{\phi_n(t)} \\ 
 ={} &\I\hbar \sum_n \dv{t} c_n(t) \ket{\phi_n(t)}
 + \I\hbar \sum_n c_n(t) \dv{t} \ket{\phi_n(t)}
-\end{aligned}\end{equation}
-考虑到上式左边的 $H_0\ket{\phi_n(t)} = E_n\ket{\phi_n(t)}$ 和右边的 $\I\hbar \dv*{\ket{\phi_n(t)}}{t} = E_n\ket{\phi_n(t)}$ 相等，可化简为
+\end{aligned}
+\end{equation}
+考虑到
+\begin{equation}
+H_0\ket{\phi_n(t)} = \I\hbar \dv{t} \ket{\phi_n(t)}
+\end{equation}
+% 引用公式未完成
+可化简为
 \begin{equation}
 \sum_n c_n(t) H'(t) \ket{\phi_n(t)}
 = \I\hbar \sum_n \dv{t} c_n(t) \ket{\phi_n(t)}
 \end{equation}
-两边左乘 $\bra{\phi_m(t)} = \E^{\I E_m t/\hbar}\bra{\psi_m}$ 得\footnote{这样做的物理意义是要求每个基底上的分量相等} % 链接未完成
+两边左乘 $\bra{\phi_m(t)} = \E^{\I E_m t/\hbar}\bra{\psi_m}$ （即要求每个分量相等） 得
 \begin{equation}\label{TDPT_eq2}
-\sum_n A_{mn} c_n(t)
+\sum_n A_{mn}(t) c_n(t)
 = \I\hbar \dv{t} c_m(t)
 \end{equation}
-其中
-\begin{equation}\label{TDPT_eq7}
-A_{mn} = \bra{\phi_m(t)} H'(t) \ket{\phi_n(t)} = \bra{\psi_m} H'(t) \ket{\psi_n} \E^{\I(E_m-E_n)t/\hbar}
-\end{equation}
-定义\textbf{跃迁偶极子（Transition Dipole）} 为
+其中令
 \begin{equation}
-H'_{mn} = \bra{\psi_m} H'(t)\ket{\psi_n}
+\omega_{mn} = \frac{E_m-E_n}{\hbar}
 \end{equation}
+\begin{equation}
+H'_{mn}(t) = \bra{\psi_m} H'(t)\ket{\psi_n}
+\end{equation}
+\begin{equation}\label{TDPT_eq7}
+A_{mn}(t) = \bra{\phi_m(t)} H'(t) \ket{\phi_n(t)} = H'_{mn} \E^{\I\omega_{mn}t/\hbar}
+\end{equation}
+
 把\autoref{TDPT_eq2} 写成矩阵形式为（对矢量求导即对每个分量分别求导\upref{DerV}）
 \begin{equation}\label{TDPT_eq3}
 \mat {A} \bvec c = \I\hbar \dv{t} \bvec c
 \end{equation}
-到此为止我们还没有做任何近似，上式和\autoref{TDPT_eq1} 完全等效．
+到此为止我们还没有做任何近似，该式和\autoref{TDPT_eq1} 完全等效．
 
-若哈密顿算符中的势能包含时间，只有极少数情况下存在解析解．这时我们可以用\textbf{含时微扰理论}来近似求解．类比不含时微扰理论，我们引入一个常数 $\lambda$ 来分离不同阶数的近似，最后只需令 $\lambda = 1$ 即可．理论上当阶数足够高时，近似解将会逼近精确解．% 未完成：真的吗？？
+\subsection{含时微扰理论}
+若哈密顿算符中的势能包含时间，只有极少数情况下存在解析解．这时我们可以用\textbf{含时微扰理论}来近似求解．类比不含时微扰理论，我们引入一个常数 $\lambda$ 来分离不同阶数的近似，最后只需令 $\lambda = 1$ 即可．理论上当阶数足够高时，近似解将会收敛到精确解．% 未完成：真的吗？？
 
 令哈密顿算符，系数矢量分别为
 \begin{equation}
@@ -87,14 +101,24 @@ H = H_0 + \lambda H'(t)
 \end{equation}
 所以要想得到 $n$ 阶近似解，积分 $n$ 次即可． 为了明确起见，\autoref{TDPT_eq8} 的分量表达式为
 \begin{equation}
-c_i^{(n)}(t) = \frac{1}{\I\hbar} \int_{0}^{t}  \sum_j \bra{\psi_i} H'(t)\ket{\psi_j} \E^{\I(E_i-E_j)t/\hbar} c_j^{(n-1)}(t) \dd{t}
+c_i^{(n)}(t) = \frac{1}{\I\hbar} \int_{0}^{t}  \sum_j H'_{ij}(t) \E^{\I\omega_{ij}t} c_j^{(n-1)}(t) \dd{t}
 \end{equation}
 
-大多数情况下我们只使用一阶近似，一种较简单的情况是，若初始波函数为某一个 $\ket{\psi_i}$， 且 $\bra{j}\Q H'\ket{i} = W_{ji}f(t)$，$W_{ji}$ 为常数，此时\autoref{TDPT_eq9} 变为 $f(t)$ 关于角频率 $\omega_{ji} = (E_j-E_i)/\hbar$ 的反傅里叶变换．
+\subsection{简单的一阶微扰}
+大多数情况下我们只使用一阶近似，一种简单且常见的情况是，若初态为 $H_0$ 的某个本征态 $\ket{\psi_j}$， 且 $H'(t)$ 中的时间函数可以分离出来
 \begin{equation}
-c_j^{(1)}(t) = \frac{W_{ji}}{\I\hbar} \int_0^t f(t)\E^{\I\omega_{ji} t} \dd{t}
+H'(t) = W f(t)
 \end{equation}
-所以在一阶近似中，波函数在 $[0,t]$ 时间段内由 $\ket{\psi_i}$ 跃迁到 $\ket{\psi_j}$ 的概率约为
+其中 $W$ 是一个不含时的算符． 令 $W_{ij} = \mel{\psi_i}{W}{\psi_j}$， 有
 \begin{equation}
-P_{ji}(t) = \abs{c_j^{(1)}(t)}^2
+H'_{ij}(t) = \mel{\psi_i}{H'}{\psi_j} = W_{ij}f(t)
 \end{equation}
+此时一阶微扰公式（\autoref{TDPT_eq9}） 变为 $f(t)$ 的反傅里叶变换\upref{FTExp}． 末态 $\ket{\psi_i}$ （$i \neq j$）的系数为
+\begin{equation}
+c_i^{(1)}(t) = \frac{W_{ij}}{\I\hbar} \int_0^t f(t)\E^{\I\omega_{ij} t} \dd{t}
+\end{equation}
+所以在一阶近似中，波函数在 $t$ 时刻出现在 $\ket{\psi_i}$ 的概率约为
+\begin{equation}
+P_{ij}(t) = \abs{c_i^{(1)}(t)}^2
+\end{equation}
+注意一阶微扰仅当 $P_{ij} \ll 1$ 时有效．
