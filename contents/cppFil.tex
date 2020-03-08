@@ -5,11 +5,11 @@
 
 \subsection{单个 translation unit}
 \begin{itemize}
-\item \lstinline|#include| 头文件（.h）相当于直接把头文件的内容插入到当前位置．
+\item \verb|#include| 头文件（.h）相当于直接把头文件的内容插入到当前位置．
 \item 原则上头文件可以没有或者有任意后缀名（例如标准库的头文件就没有后缀名）．
 \item 每个 .cpp （也可以用 .cxx）文件叫做一个 translation unit ． 可以单独编译成一个 object 文件（.o）
-\item 某个 translation unit 中定义的宏只在这一个 translation unit 中有效， 即从定义开始到文件底部（或者到 \lstinline|#undef|）．
-\item 头文件开始用 \lstinline|#pragma once| 可以防止同一个头文件被多次插入同一个 translation unit． 例如 \lstinline|b.h| 和 \lstinline|c.h| 中都 include 了 \lstinline|a.h|， 如果 cpp 文件中同时 include 了 \lstinline|b.h| 和 \lstinline|c.h|， \lstinline|a.h| 就不会被插入两次．
+\item 某个 translation unit 中定义的宏只在这一个 translation unit 中有效， 即从定义开始到文件底部（或者到 \verb|#undef|）．
+\item 头文件开始用 \verb|#pragma once| 可以防止同一个头文件被多次插入同一个 translation unit． 例如 \verb|b.h| 和 \verb|c.h| 中都 include 了 \verb|a.h|， 如果 cpp 文件中同时 include 了 \verb|b.h| 和 \verb|c.h|， \verb|a.h| 就不会被插入两次．
 \end{itemize}
 
 \subsection{多个  translation unit}
@@ -22,7 +22,7 @@
 \item inline 函数或变量需要在使用到它的每个 translation unit 中都有一样的定义（所以一般放到头文件中）． 否则即使预先 declare 也会出错．
 \item class 的声明也需要在使用到它的每个 translation unit 中都有一样的定义（所以一般放到头文件中）．
 \item 任何函数或类的 template 的定义同样也需要在使用到它的每个 translation unit 中都有一样的定义（所以一般放到头文件中）．
-\item \lstinline|inline| 的含义已经与是否真的 \lstinline|inline| 几乎无关了， 只是为了避免 ODR 错误的一种手段．
-\item 即使使用了 \lstinline|inline|， 同一个 translation unit 中也不可以出现两个同样的定义．
+\item \verb|inline| 的含义已经与是否真的 \verb|inline| 几乎无关了， 只是为了避免 ODR 错误的一种手段．
+\item 即使使用了 \verb|inline|， 同一个 translation unit 中也不可以出现两个同样的定义．
 \item 如果一个函数调用的函数在它之后定义， 则需要将 declaration 放在它前面．
 \end{itemize}

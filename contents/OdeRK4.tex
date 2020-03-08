@@ -53,7 +53,7 @@ end
 end
 \end{lstlisting}
 
-我们先来看第 1 行的函数声明， 输入变量中，\lstinline|f| 是\autoref{OdeRK4_eq4} 中 $\bvec f(\bvec y, t)$ 的函数句柄\upref{MatFun}， \lstinline|tspan| 是一个 \lstinline|2×1| 的列矢量， \lstinline|tspan(1)| 是初始时间， \lstinline|tspan(2)| 是终止时间， \lstinline|Y0| 是一个列矢量， \lstinline|Y0(ii)| 是第 \lstinline|ii| 个因变量的初始值， \lstinline|Nt| 是 $t_n$ 的个数， \lstinline|tspan| 定义的时间区间被等分为 \lstinline|Nt - 1| 个小区间． 因变量中， \lstinline|Y| 的行数是因变量的个数， 列数是 \lstinline|Nt|， \lstinline|t| 是一个行矢量， 由第 6 行定义， \lstinline|Y(ii, jj)| 就是第 \lstinline|ii| 个变量在 \lstinline|t(jj)| 时刻的值． 第 5 行把初值 \lstinline|Y0| 赋给 \lstinline|Y| 的第 1 列， 第 8-14 行的循环根据\autoref{OdeRK4_eq1} 和\autoref{OdeRK4_eq2} 的矢量形式由 \lstinline|Y| 的第 \lstinline|ii| 列（$\bvec y_i$）求第 \lstinline|ii+1| 列（$\bvec y_{i+1}$）．
+我们先来看第 1 行的函数声明， 输入变量中，\verb|f| 是\autoref{OdeRK4_eq4} 中 $\bvec f(\bvec y, t)$ 的函数句柄\upref{MatFun}， \verb|tspan| 是一个 \verb|2×1| 的列矢量， \verb|tspan(1)| 是初始时间， \verb|tspan(2)| 是终止时间， \verb|Y0| 是一个列矢量， \verb|Y0(ii)| 是第 \verb|ii| 个因变量的初始值， \verb|Nt| 是 $t_n$ 的个数， \verb|tspan| 定义的时间区间被等分为 \verb|Nt - 1| 个小区间． 因变量中， \verb|Y| 的行数是因变量的个数， 列数是 \verb|Nt|， \verb|t| 是一个行矢量， 由第 6 行定义， \verb|Y(ii, jj)| 就是第 \verb|ii| 个变量在 \verb|t(jj)| 时刻的值． 第 5 行把初值 \verb|Y0| 赋给 \verb|Y| 的第 1 列， 第 8-14 行的循环根据\autoref{OdeRK4_eq1} 和\autoref{OdeRK4_eq2} 的矢量形式由 \verb|Y| 的第 \verb|ii| 列（$\bvec y_i$）求第 \verb|ii+1| 列（$\bvec y_{i+1}$）．
 
 我们先来用这个函数来计算“天体运动的简单数值计算\upref{KPNum0}” 中的问题． 我们令因变量 $\bvec y$ 的四个分量依次为一阶方程组（\autoref{OdeNum_eq4}\upref{OdeNum}）
 \begin{equation}\label{OdeRK4_eq5}
@@ -108,8 +108,8 @@ end
 \caption{运行结果} \label{OdeRK4_fig1}
 \end{figure}
 
-我们先来看函数 \lstinline|fun| （20 行）， 这个函数就相当于\autoref{OdeRK4_eq5}． 第一个输入变量 \lstinline|Y| 是一个列矢量， 是 $\bvec y_n$ 的值， 第二个输入变量是 $t$， 但由于\autoref{OdeRK4_eq5} 中没有出现 $t$， 我们用波浪线代替． 第三个输入变量是参数 $GM$， 即万有引力常数和中心天体质量之积． 输出变量 \lstinline|Y1| 是一个列矢量， 是 $\bvec y'_n$ 的值．
+我们先来看函数 \verb|fun| （20 行）， 这个函数就相当于\autoref{OdeRK4_eq5}． 第一个输入变量 \verb|Y| 是一个列矢量， 是 $\bvec y_n$ 的值， 第二个输入变量是 $t$， 但由于\autoref{OdeRK4_eq5} 中没有出现 $t$， 我们用波浪线代替． 第三个输入变量是参数 $GM$， 即万有引力常数和中心天体质量之积． 输出变量 \verb|Y1| 是一个列矢量， 是 $\bvec y'_n$ 的值．
 
-再来看主函数 \lstinline|KeplerRK4| （第 1 行）， 参数设定中除了步数从 4000 变为了 100， 其他都和“天体运动的简单数值计算\upref{KPNum0}” 中的程序一样， 然而这里运行结果却精确得多（曲线几乎闭合）， 可见这种算法的优越性．
+再来看主函数 \verb|KeplerRK4| （第 1 行）， 参数设定中除了步数从 4000 变为了 100， 其他都和“天体运动的简单数值计算\upref{KPNum0}” 中的程序一样， 然而这里运行结果却精确得多（曲线几乎闭合）， 可见这种算法的优越性．
 
-主函数第 10 行中将 \lstinline|fun(Y, t, GM)| 变为函数句柄 \lstinline|f(Y, t)|， 这样 \lstinline|GM| 就可以在“参数设定” 中设置， 而不用在 \lstinline|fun| 函数内部设置． 第 11 行调用了上文中的 \lstinline|odeRK4| 函数解方程组， 由于我们在画图时不需要用 \lstinline|t|， 所以把第二个输出变量改为波浪线．
+主函数第 10 行中将 \verb|fun(Y, t, GM)| 变为函数句柄 \verb|f(Y, t)|， 这样 \verb|GM| 就可以在“参数设定” 中设置， 而不用在 \verb|fun| 函数内部设置． 第 11 行调用了上文中的 \verb|odeRK4| 函数解方程组， 由于我们在画图时不需要用 \verb|t|， 所以把第二个输出变量改为波浪线．
