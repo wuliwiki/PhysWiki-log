@@ -11,12 +11,12 @@
 
 \subsection{函数句柄}
 \textbf{函数句柄（function handle）} 是一种特殊的变量类型，可用于定义一个临时的函数，也可传递到其他函数中．首先，对于已经存在的函数（包括函数文件定义的），可直接在函数名前面加 \lstinline|@| 生成函数句柄
-\begin{lstlisting}[language=MatlabCom]
+\begin{lstlisting}[language=matlabC]
 >> f = @sin; f(pi/2)
 ans = 1;
 \end{lstlisting}
 若要将一个含有变量的表达式变为函数句柄， 要在 \lstinline|@| 后面用小括号指定函数句柄的变量
-\begin{lstlisting}[language=MatlabCom]
+\begin{lstlisting}[language=matlabC]
 >> A = 3; w = 5; phi = pi/2;
 >> f1 = @(x) A*sin(w*x+phi) + (2*x/pi).^2;
 >> f1([0,pi/2])
@@ -28,13 +28,13 @@ ans =
     3.0000  1.0000;
 \end{lstlisting}
 以上的函数句柄在定义时用了逐个元素的幂运算 “\lstinline|.^|”， 使函数句柄支持矩阵输入． 其中 \lstinline|f1| 的变量仅为 \lstinline|x|， \lstinline|f2| 的变量为 \lstinline|x| 和 \lstinline|phi|． 注意如果在函数句柄定义后改变定义表达式中的变量， 函数句柄不变．
-\begin{lstlisting}[language=MatlabCom]
+\begin{lstlisting}[language=matlabC]
 >> A = 5; f1(0)
 ans = 3.0000
 \end{lstlisting}
 
 有时候一些函数并不支持矢量运算， 这时可以通过 \lstinline|arrayfun| 函数来进行矢量运算， 例如
-\begin{lstlisting}[language=MatlabCom]
+\begin{lstlisting}[language=matlabC]
 >> f = @(x) x^2 + 1/x;
 >> arrayfun(f, [1,2;3,4])
 ans =
@@ -43,7 +43,7 @@ ans =
 \end{lstlisting}
 这样做相当于以下代码
 
-\begin{lstlisting}[language=MyMatlab]
+\begin{lstlisting}[language=matlab]
 f = @(x) x^2 + 1/x;
 x = [1,2; 3,4];
 ans = zeros(size(x));
@@ -54,7 +54,7 @@ end
 
 \subsection{自定义函数（function）}
 自定义函数的格式为
-\begin{lstlisting}[language=MatlabCom]
+\begin{lstlisting}[language=matlabC]
 [输出1, 输出2, ...] = function 函数名(变量1, 变量2, ...)
 函数体
 end
@@ -63,14 +63,14 @@ end
 其中 \lstinline|函数名| 是字母， 数字和下划线的组合， 例如 \lstinline|MyFun_123|，第一个字符不能是数字或下划线．若函数无变量，则小括号可省略．若函数无输出，则等号及方括号可省略， 若只有一个输出， 方括号也可省略． 在一些情况下， 如果 \lstinline|函数体| 中没有使用某些输入变量， 就可以把这些变量用 “\lstinline|~|” 符号代替．
 
 函数的调用格式为
-\begin{lstlisting}[language=MatlabCom]
+\begin{lstlisting}[language=matlabC]
 [输出1, 输出2, ...] = 函数名(变量1, 变量2,...)
 \end{lstlisting}
 调用函数时， 如果输出变量个数少于函数定义中的输出变量个数， 则函数仅输出前几个变量． 若调用函数时不需要前面的某几个变量， 也可用 “\lstinline|~|” 符号代替．
 
 调用函数时， 输入变量的个数也可以少于函数定义中的输入变量， 但是函数体内部必须要做出相应的措施以防止函数体使用未生成的变量． 我们来看下面一个函数
 
-\begin{lstlisting}[language=MyMatlab]
+\begin{lstlisting}[language=matlab]
 function y =  myfun(x, A, phi, y0)
 if nargin < 4
     y0 = 0;
@@ -86,7 +86,7 @@ end
 \end{lstlisting}
 
 注意函数体中使用了一个特殊的变量 \lstinline|nargin|， 每当函数被调用时， 这个变量的值将会等于输入变量的个数（同理， \lstinline|nargout| 将等于输出变量的个数）． 以上定义的函数允许 1-4 个输入变量， 函数体中的 2-10 行根据 \lstinline|nargin| 的值对没有输入的几个变量依次赋值． 例如在控制行中调用该函数
-\begin{lstlisting}[language=MatlabCom]
+\begin{lstlisting}[language=matlabC]
 >> myfun([0, pi/2])
 ans = 1.0000    0.0000
 >> myfun(0, 1, pi/2)
@@ -94,11 +94,11 @@ ans = 0.0000
 \end{lstlisting}
 
 调用函数时的一种特殊格式是， 如果被调用的函数的输入变量是若干个没有空格的字符串， 则可以省略括号， 逗号和双引号． 例如我们之前见过的 \lstinline|format| 函数
-\begin{lstlisting}[language=MatlabCom]
+\begin{lstlisting}[language=matlabC]
 >> format long;
 \end{lstlisting}
 和将在“Matlab 画图\upref{MatPlt}” 中见到的
-\begin{lstlisting}[language=MatlabCom]
+\begin{lstlisting}[language=matlabC]
 >> hold on; axis equal; xlabel x;
 \end{lstlisting}
 
