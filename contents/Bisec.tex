@@ -11,6 +11,35 @@ ans = 1
 \end{lstlisting}
 \lstinline|fzero| 的默认精度是 \lstinline|2.2e-16|． 注意要把一个函数作为其他函数的输入变量， 必须使用函数句柄． 下面我们给出一个二分法的 Matlab 程序．
 
-\Code{bisection}
+\subsubsection{bisection.m}
+\begin{lstlisting}[language=matlab]
+% 二分法求函数的根
+function x = bisection(f, int, err)
+fl = f(int(1)); fr = f(int(2));
+% 两端点是否为 0
+if fl == 0
+    x = int(1); return;
+elseif fr == 0
+    x = int(2); return;
+end
+% 两端点是否同号
+if fl * fr > 0
+    error('两端点同号');
+end
+% 主循环
+while(int(2) - int(1) > err)
+    mid = 0.5*(int(1) + int(2));
+    fm = f(mid);
+    if fm * fl > 0
+        int(1) = mid;
+    elseif fm * fr > 0
+        int(2) = mid;
+    else % fm = 0
+        break;
+    end
+end
+x = mid;
+end
+\end{lstlisting}
 
 我们先来看函数的自变量， 与 \lstinline|fzero| 类似， 该函数的前两个输入变量分别是函数句柄和求根区间， 第三个变量是误差值， 当区间的长度小于 \lstinline|err| 时， 函数将输出区间中点作为输出． 函数的第 3-13 行做了一些必要的检查， 确保区间两端的函数值为异号． 第 15 行开始主循环， 每循环一次， 函数的区间长度减半， 直到区间中点处的函数值为 0 或区间长度小于 \lstinline|err| 时跳出循环， 最后返回区间中点的函数值．

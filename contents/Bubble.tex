@@ -16,6 +16,34 @@ name1 = 'acedb'
 
 冒泡法是一种简单的排序算法， 但由于效率较低， 一般仅作为教学演示用． 在实际使用时还是建议用 \lstinline|sort|． 冒泡法的算法为： 以升序排列为例， 给出一个数列， 先把第一个数与第二个进行比较， 若第一个数较大， 就置换二者的位置（具体操作是， 把第一个数的值赋给一个临时变量， 再把第二个数的值赋给第一个， 最后把临时变量的值赋给第二个）， 再把第二个数与第三个进行比较， 若第二个较大， 就置换二者的位置， 这样一直进行到最后两个数， 完成第一轮． 然后再进行第二轮， 第三轮， 直到某一轮没有出现置换操作， 即可确定排序完成． 至于输出变量 \lstinline|order|， 我们可以先令 \lstinline|order = 1:N|， 每置换数列的两个数， 就把 \lstinline|order| 中对应的两个数也置换即可． 这样， 数列与其原来的索引将始终一一对应． 
 
-\Code{bubble}
+\subsubsection{bubble.m}
+\begin{lstlisting}[language=matlab]
+% 冒泡法排序
+function [x, order] = bubble(x, option)
+N = numel(x); % 数列个数
+order = 1:N; % 索引
+changed = 1; % 是否有置换
+while(changed == 1)
+    changed = 0;
+    for ii = 1:N-1
+        if x(ii) > x(ii + 1)
+            % 置换
+            changed = 1;
+            temp = x(ii);
+            x(ii) = x(ii + 1);
+            x(ii + 1) = temp;
+            temp = order(ii);
+            order(ii) = order(ii + 1);
+            order(ii + 1) = temp;
+        end
+    end
+end
+% 是否是降序排列
+if nargin > 1 && option(1) == 'd'
+    x(:) = flipud(x(:));
+    order = fliplr(order);
+end
+end
+\end{lstlisting}
 
 第 6 行的循环每循环一次， 数列将从头到尾被扫描一遍． 每个循环开始时 \lstinline|changed| 的值被设为 0， 若有任何置换， \lstinline|changed| 则变为 1（第 11 行）， 使 \lstinline|while| 的判断条件成立， 循环继续． 为了使第一个循环发生， 在循环前必须把 \lstinline|changed| 设为 1． 再来看第 9-18 行的判断结构． 如果前一个数大于后一个数， 则置换发生． 注意要置换数列中的两个数， 必须要设一个临时变量（\lstinline|temp|）． 函数的最后， 判断输入变量的个数， 如果只有一个变量， 则默认按照前面的代码升序排列， 若第二个变量为 \lstinline|'descend'|， 则把 \lstinline|x| 和 \lstinline|order| 翻转一下即可．

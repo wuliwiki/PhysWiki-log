@@ -42,7 +42,44 @@ y(\Delta t) \approx \dot y(0)\Delta t + y(0)
 
 3．把 $x(\Delta t), y(\Delta t)$ 再次代入\autoref{KPNum0_eq3}， 得到 $x''(\Delta t), y''(\Delta t)$， 再次利用微分近似求出 $x(2\Delta t), y(2\Delta t), x'(2\Delta t), y'(2\Delta t) \dots$ 如此循环下去就可以得到每隔 $\Delta t$ 的数值解．
 
-\Code{kepler}
+\subsubsection{kepler.m}
+\begin{lstlisting}[language=matlab]
+% 参数设定
+GM = 1; % 万有引力常数乘以中心天体质量
+x0 = 1; y0 = 0; % 初始位置
+vx0 = 0; vy0 = 0.7; % 初始速度
+T = 4; Nstep = 4000; % 总时间和步数
+dt = T/Nstep; % 步长
+
+% 矩阵预赋值
+x = nan(Nstep,1); y = x;
+x1 = x;  y1 = x;
+x2 = x; y2 = x;
+
+% 初始位置，速度，加速度
+x(1) = x0; y(1) = y0; % 初位置
+x1(1) = vx0; y1(1) = vy0; % 初速度
+x2(1) = -GM*x(1)/(x(1)^2+y(1)^2)^(3/2); % 代入方程得到 x''(0)
+y2(1) = -GM*y(1)/(x(1)^2+y(1)^2)^(3/2); % 代入方程得到 y''(0)
+
+% 迭代循环
+for ii = 2:Nstep
+    x(ii) = x(ii-1)+x1(ii-1)*dt; % x的微分
+    y(ii) = y(ii-1)+y1(ii-1)*dt; % y的微分
+    
+    x1(ii) = x1(ii-1)+x2(ii-1)*dt; % x' 的微分
+    y1(ii) = y1(ii-1)+y2(ii-1)*dt; % y' 的微分
+
+    x2(ii) = -GM*x(ii)/(x(ii)^2+y(ii)^2)^(3/2); % 代入微分方程求出 x''
+    y2(ii) = -GM*y(ii)/(x(ii)^2+y(ii)^2)^(3/2); % 代入微分方程求出 y''
+end
+
+% 画图
+plot(x,y); % 画行星轨道
+axis equal; % xy坐标长度一致
+hold on; % 继续画图
+scatter(0,0); % 标出中心天体
+\end{lstlisting}
 
 程序运行结果如\autoref{KPNum0_fig1} 所示． 注意行星轨道并不是一个闭合的椭圆， 这是由于这种算法误差较大， 为了减小误差， 可以增加程序中\lstinline|Nstep| 的值．
 \begin{figure}[ht]

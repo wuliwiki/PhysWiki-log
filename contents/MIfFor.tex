@@ -80,7 +80,18 @@ x = 2  4  16  256  65536
 
 再来看另一种循环叫做 \lstinline|while| 循环． 下面来看一个例程， 输出 100 以内的斐波那契数列（$a_1 = 1, a_2 = 1, a_{n+1} = a_{n} + a_{n-1}$）．
 
-\Code{fibonacci}
+\subsubsection{fibonacci.m}
+\begin{lstlisting}[language=matlab]
+a1 = 1; disp(a1); 
+a2 = 1; disp(a2);
+a3 = a1 + a2;
+while a3 <= 100
+    disp(a3);
+    a1 = a2;
+    a2 = a3;
+    a3 = a1 + a2;
+end
+\end{lstlisting}
 
 \lstinline|while| 结构在每个循环开始会判断 \lstinline|while| 后面的条件， 如果条件成立， 则进行一次循环， 否则退出循环． 以上的程序中由于我们事先并不知道我们要进行几次循环， 所以选用 \lstinline|while|， 当最后一项大于 100 时， 循环终止． 运行结果为（每个数占一行）：
 \begin{lstlisting}[language=matlabC]
@@ -89,7 +100,23 @@ x = 2  4  16  256  65536
 
 在 \lstinline|for| 循环或 \lstinline|while| 循环的内部， 使用 \lstinline|continue| 命令可以直接进入下一个循环（\lstinline|while| 的仍然要先判断条件）， 使用 \lstinline|break| 命令可以跳出循环． 以下例程计算 100 以内的斐波那契数列的所有奇数项
 
-\Code{fibonacciOdd}
+\subsubsection{fibonacciOdd.m}
+\begin{lstlisting}[language=matlab]
+a1 = 1; a2 = 1;
+disp(a1); disp(a2);
+a3 = a1 + a2;
+while 1
+    a1 = a2;
+    a2 = a3;
+    a3 = a1 + a2;
+    if a3 > 100
+        break;
+    elseif mod(a3, 2) == 0
+        continue;
+    end
+    disp(a3);
+end
+\end{lstlisting}
 
 先来看第 4 行， \lstinline|double| 类型的非零数在这里会自动转换为 \lstinline|logical| 类型的 1 （\lstinline|true|）， 只有 \lstinline|double| 类型的 0 才会转换为 \lstinline|logical| 类型的 0 （\lstinline|false|）． 乍看之下， \lstinline|while| 循环将永远执行下去（称为\textbf{死循环}）， 然而第 9 行的 \lstinline|break| 在 \lstinline|a3 > 100| 时就会使程序跳出循环． 如果 \lstinline|a3 <= 100| 且为偶数， 则第 10 行的 \lstinline|elseif| 判断为真， \lstinline|continue| 命令被执行， 程序将直接跳过之后的 \lstinline|disp| 函数直接进入下一个循环， 所以数列的偶数项都不会被输出． 程序的运行结果为（每个数占一行）
 \begin{lstlisting}[language=matlabC]

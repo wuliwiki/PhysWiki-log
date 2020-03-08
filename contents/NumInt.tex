@@ -20,7 +20,20 @@ $[f(x_{i+1}) + f(x_i)]h/2$． 定积分约等于所有梯形面积
 显然， 当 $N$ 取越大时， 右边的求和就越接近定积分．
 
 这里给出 Matlab 代码
-\Code{trapezoidInt}
+
+\subsubsection{trapezoidInt.m}
+\begin{lstlisting}[language=matlab]
+% 梯形法数值积分
+% f 是被积函数的函数句柄
+% [a, b] 为积分区间
+% N 为子区间个数
+function I = trapezoidInt(f, a, b, N)
+x = linspace(a, b, N+1);
+y = arrayfun(f, x); % 求所有 y(i) = f(x(i))
+h = (b - a)/N;
+I = h*(0.5*y(1) + 0.5*y(N+1) + sum(y(2:N)));
+end
+\end{lstlisting}
 
 下面来看两个例子， 由算法可知， 当被积函数具有 $c_1 x + c_2$ 的形式时， 函数曲线围成的面积可由梯形精确解算， 所以即使 \lstinline|N| 取很小也可以精确到 \lstinline|double| 类型的精度（16 位左右）．
 \begin{lstlisting}[language=matlabC]
