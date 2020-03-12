@@ -55,6 +55,7 @@
 
 \item 如果 $A$ 是 bijective， 存在逆算符 $A^{-1}: Y \to M$， 定义为 $A^{-1} v = u$ 当且仅当 $Au = v$
 
+
 \item 算符也叫函数
 
 \item $A: M \subseteq X \to Y$ 表示 $A: M \to Y$ 且 $M \subseteq X$， 当 $Y = \mathbb K$， 就把 $A$ 叫做\textbf{泛函（functional）}
@@ -97,7 +98,7 @@
 
 \item 如果 $u_0, \dots, u_N$  满足 $u_1 - u_0, u_2 - u_0,\dots, u_N - u_0$， 那么就说它们在 \textbf{一般位置（general position）}． 这个性质与 $u_0, \dots, u_N$ 的顺序无关．
 
-\item $N$-单纯形（$N$-simplex） 是 $\mathcal S := \opn{co}\qty{u_0, \dots, u_N}$ （$\opn{co}$ is complex hull）， 其中 $u_0, \dots, u_N$ 在一般位置． $0$-单纯形是一个点.
+\item $N$-单纯形（$N$-simplex） 是 $\mathcal S := \opn{co}\qty{u_0, \dots, u_N}$ （$\opn{co}$ is convex hull）， 其中 $u_0, \dots, u_N$ 在一般位置． $0$-单纯形是一个点.
 
 \item 单纯形的 \textbf{barycenter} 是 $b := \sum_{j=0}^N u_j / (N+1)$
 
@@ -241,6 +242,55 @@
 \item 令 $G$ 为 $\mathbb R^N$ 中的一个非空开集， $N \geqslant 1$． 那么 (i) $C_0^\infty(G)$ 和 $C(\bar G)$ 在 $L_2(G)$ 中稠密．
 
 \item $C_0^\infty(G)_{\mathbb C}$ 和 $C(\bar G)_{\mathbb C}$  在 $L_2^{\mathbb C}(G)$ 中稠密
+
+\item 分部积分的高拓展： $\int_G (\partial_j u) v\dd{x} = \int_{\partial G} uvn_j \dd{O} - \int_G u \partial_j v\dd{x}$． 其中 $x = (\xi_1, \dots, \xi_N)$， $\partial_j u := \partial u/\partial\xi_j$， $n_j$ 是边界 $\partial G$ 的法向量 $n = (n_1, \dots, n_N)$． $\int\dd{O}$ 代表边界上的积分， 二维情况下 $\int\dd{O}$ 是逆时针的环积分． （推导可以参考 “浮力\upref{Buoy}”）． 当 $u$ 或 $v$ 在 $\partial G$ 上为零时， 边界积分为零．
+
+\item 上一条的分部积分公式对所有 $u, v \in C^1(\bar G)$ 成立， $G$ 是 $\mathbb R^N$ 中的有界非空开集， 边界足够光滑． 没有边界积分的分部积分对所有 $u \in C^1(G)$ 和 $v \in C_0^\infty(G)$ 成立． $G$ 是 $\mathbb R^N$ 中的一个非空开集．
+
+\item 微积分基本定理 $\int_a^b w' \dd{x} = \eval{w}_a^b$ 在高维中拓展为\textbf{高斯定理（Gauss theorem）} $\int_G \partial_j w \dd{x} = \int_{\partial G} wn_j\dd{O}$． 令 $w = uv$， 可得分部积分．
+\end{itemize}
+
+\subsection{2.3 Bilinear Forms}
+\begin{itemize}
+\item 赋范空间 $X$ 上的 \textbf{bounded bilinear form} 是一个函数 $a: X\times X\to\mathbb K$ 且具有性质 (1) 双线性（bilinear）： 对所有 $u, v, w\in X$ 以及 $\alpha, \beta \in \mathbb K$， $a(\alpha u + \beta v, w) = \alpha a(u, w) + \beta a(v, w)$ 以及 $a(w, \alpha u + \beta v) = \alpha a(w, u) + \beta a(w, v)$， (2) \textbf{有界性（Boundedness）} 存在常数 $d > 0$ 使得 $\abs{a(u, v)} \le d\norm{u}\norm{v}$ 对所有 $u, v\in X$ 成立
+
+\item 双线性函数 $a(\cdot,\cdot)$ 叫做对称的当且仅当 $a(u, v) = a(v, u)$ 对任意 $u, v\in X$ 成立， 叫做 \textbf{positive} 当且仅当 $0\le a(u,u)$ 对所有 $u\in X$ 成立． 叫做 \textbf{strongly positive} 当且仅当存在常数 $c > 0$ 使 $c\norm{u}^2 \le a(u, u)$ 对所有 $u\in X$ 成立．
+\end{itemize}
+
+\subsection{2.4 The Main Theorem on Quadratic Variational Problems}
+\begin{itemize}
+\item 令 $a: X\times X\to\mathbb R$ 是实希尔伯特空间 $X$ 上的 symmetric, bounded, strongly positive, bilinear form， $b: X\to\mathbb R$ 是一个 $X$ 上的线性连续函数． 那么 variational problem $a(u, u)/2 - b(u) = \min!$ （$u\in X$） 有唯一解， 且该式等效于 variational equation $a(u, v) = b(v)$ 对所有 $v\in X$ 成立． （想一想哈密顿原理\upref{HamPrn}如何推出欧拉—拉格朗日方程\upref{Lagrng}）
+\end{itemize}
+
+\subsection{2.5 The Functional Analytic Justification of the Dirichlet Principle}
+\begin{itemize}
+\item \textbf{广义导数}： 分部积分 $\int_G u\partial_j v\dd{x} = -\int_G (\partial_j u)v\dd{x}$ 对所有 $v \in C_0^\infty(G)$ 和 $u \in C^1(G)$ 成立． 若 $w, u\in L_2(G)$ 能使所有 $\int_G u\partial_j v\dd{x} = -\int_G wv\dd{x}$ 对所有 $v \in C_0^\infty(G)$ 成立， 那么 $w$ 就是 $u$ 的广义导数（$G$ 是 $\mathbb R^N$ 中的非空开集）． 同样记 $w = \partial_j u$
+
+\item 广义导数 $w = \partial_j u$ 能在一个 $N$ 维零测度集外被唯一确定．
+
+\item \textbf{Sobolev 空间 $W_2^1(G)$}： $G$ 是 $\mathbb R^N$ 中的非空开集， $u, \partial_ju \in L_2(G)$． 定义内积为 $(u|v)_{1,2} := \int_G(uv + \sum_j \partial_j u\partial_j v) \dd{x}$
+
+\item $W_2^1(G)$ 是一个希尔伯特空间， 如果我们认为两个在大多数地方相等的函数是同一个函数．
+
+\item 定义 $\mathring {W_2^1}(G)$ 为 $C_0^\infty(G)$ 在 $W_2^1(G)$ 上的闭包
+
+\item $\mathring {W_2^1}(G)$ 是 $W_2^1(G)$ 的（实的）子希尔伯特空间．
+
+\item 从广义的角度理解， $\mathring {W_2^1}(G)$ 中函数的边界值为 0．
+\end{itemize}
+
+\subsection{2.9 Orthogonal Projection}
+\begin{itemize}
+\item \textbf{orthogonal complement}： $M^\bot := {w \in X: (w|v) = 0\ \ \forall\ \ v\in M}$
+
+\item 令 $M$ 为希尔伯特空间 $X$ 上闭合的线性子空间． 对于给定的 $u\in X$， $\norm{u - v} = \min!$ 存在唯一的解 $v$， 且 $u - v\in M^\bot$
+
+\item \textbf{orthogonality decomposition}：如果给定 $u \in M$， 要求 $w \in M^\bot$， 那么 $u = v + w$ 是唯一的．
+\end{itemize}
+
+\subsection{2.1 Linear Functionals and the Riesz Theorem}
+\begin{itemize}
+\item 
 \end{itemize}
 
 \subsection{5.1 Extensions and Embeddings}
@@ -257,7 +307,7 @@
 
 \subsection{5.2 Self-Adjoint Operators}
 \begin{itemize}
-\item 令线性算符 $A: D(A) \subseteq X \to X$ 的定义域 $D(A)$ 在 $X$ 上稠密． 定义 $v \in D(A^*)$ 当且仅当存在 $w\in X$ 使 $(v|Au) = (w|u)$ 对任意 $u\in D(A)$ 都成立． 令 $A^*v := w$， 就得到了\textbf{伴随（adjoint）}算符 $A^*: D(A^*) \subseteq X \to X$
+\item 令线性算符 $A: D(A) \subseteq X \to X$ 的定义域 $D(A)$ 在希尔伯特空间 $X$ 上稠密． 定义 $v \in D(A^*)$ 当且仅当存在 $w\in X$ 使 $(v|Au) = (w|u)$ 对任意 $u\in D(A)$ 都成立． 令 $A^*v := w$， 就得到了\textbf{伴随（adjoint）}算符 $A^*: D(A^*) \subseteq X \to X$． 所以 $D(A^*)$ 是满足定义的最大集合．
 
 \item 自伴算符： (1) 是线性的 (2) $(\alpha A)^* = \bar \alpha A^*$ (3) $A \subseteq B$ 意味着 $B^* \subseteq A^*$
 
