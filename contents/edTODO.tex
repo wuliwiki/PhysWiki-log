@@ -2,18 +2,15 @@
 
 \subsection{Editor BUG}
 
-\subsection{自动引用问题}
-自动引用（例如引用本文公式）时会出现 “PhysWikiScan 正在处理， 请稍后……” 会一直转圈．
-
-\subsection{复制符号时会插入不必要的空格}
-例如复制 $\Delta t$ 再粘贴以后（或者关闭词条再打开时）中间插入了一个不必要的空格（代码中的确应该确保有空格， 但看起来不需要有）．
+\subsubsection{自动引用问题}
+【完成】自动引用（例如引用本文公式）时会出现 “PhysWikiScan 正在处理， 请稍后\dots\dots” 会一直转圈．
 
 \subsubsection{itemize 环境中的美元符号补全}
 \begin{itemize}
 \item 【完成】打第一个美元符号不会出现一对美元符号 $abc^2$
+
 \item 【完成】手动打第二个美元符号时会出现两个 $1 + x (x \in X)$
 \end{itemize}
-其他环境中（如 enumerate， table）是否也存在同样问题？
 
 \subsubsection{表格以后的正文高亮}
 【完成】 “原子单位\upref{AU}” 的表格中和表格结束以后所有字体都变成了橙色
@@ -21,9 +18,11 @@
 \subsection{Editor TODO}
 
 \begin{itemize}
-\item 增加一个脚注按钮， 插入 \verb|\footnote{脚注}|， 并自动选中 “脚注”
+\item 设置菜单中 “恢复默认设置” 时， 恢复到 note-template 中的设置
 
-\item 增加一个代码按钮， 图标为 \verb|</>|， 按下以后弹出输入框 “请指定语言（不指定则没有高亮）” \verb|"\\begin{lstlisting}[language=输入的语言]\n${1}\n\\end{lstlisting}"|
+\item 【完成】增加一个脚注按钮， 插入 \lstinline|\footnote{脚注}|， 并自动选中 “脚注”
+
+\item 【完成】增加一个代码按钮， 图标为 \lstinline|</>|， 按下以后弹出输入框 “请指定语言（不指定则没有高亮）” \lstinline|"\\begin{lstlisting}[language=输入的语言]\n${1}\n\\end{lstlisting}"|
 
 \item 【完成】“插入词条引用按钮” 同时也插入词条的中文名， 且自动选中中文名以便修改． 例如 “词条示例\upref{Sample}”
 
@@ -37,11 +36,29 @@
 
 \item iOS 的 Safari 中键盘有时候无法弹出（即使外接键盘）
 
-\item 【完成】选中一段文字后点击链接按钮， 插入 \verb|\href{http://www.example.com}{被选中的文字}|， 自动选中网址
+\item 【完成】选中一段文字后点击链接按钮， 插入 \lstinline|\href{http://www.example.com}{被选中的文字}|， 自动选中网址
+\end{itemize}
 
-\item 【如果麻烦就算了系列】在菜单上增加某种 GUI 公式编辑器， 例如\href{http://latex.codecogs.com/eqneditor/editor.php}{这个}． 把插入公式按钮也做成像图片按钮那样， 可以选择两种不同模式．
+\subsubsection{公式编辑器相关}
+\begin{itemize}
+\item 已使用 \href{http://www.wiris.net/client/editor/resources/help.html?v=7.9.0.6564}{MathType Web} 作为公式编辑器插件（比上面那个 codecogs 颜值高多了）．初次使用该功能时将动态加载插件，国内测试加载时间约为 10-12s，此后使用可直接打开无需再加载．
+目前公式编辑器仅在 Chrome 上测试正常，其他平台未知．已知的 bug 如下：
 
-\item 上一条中的那个编辑器貌似价格不菲， 但是\href{https://www.codecogs.com/latex/eqneditor.php?lang=zh-cn}{试用版}是免费的， 所以也可以点击按钮直接跳到这个页面， 编辑完后再把代码复制回来（不知道国内加载速度怎么样）
+\item 由于站点问题，编辑器加载有时会失败（提示 Connection Reset），需要支持自动重新加载
+
+\item 因为是基于 CSS 排版且用的不是数学专用字体（Times New Roman），编辑中的公式显示会和 MathJax 显示的存在样式和位置上的出入（TODO：字体看看有没有办法引用 MathJax 的字体）
+
+\item Edge 下点击 “确定” 按钮不能正常插入公式
+
+\item 移动端下不能显示 “确定” 和 “取消” 按钮
+
+\item TODO：对公式编辑器支持插入的符号进行完善，已经按照百科词条加了一些常用符号，看还有什么需求（是否需要一个复制 LaTeX 而不关闭编辑器的按钮？）
+
+\item TODO：编辑器的布局改进，显示位置调整，等等
+
+\item GUI 公式编辑器插入公式
+
+\item 【暂时不需要】TODO：因该插件不支持 physics 宏包，选中大多数词条中现有公式的 LaTeX 打开编辑器，是无法正确显示的（如 $I = \int \bvec j \vdot \dd{\bvec S}$ 选中这段打开编辑器），并且由编辑器生成的 LaTeX 也不符合百科的命令规范（但显示效果基本一致），需编写 processor 对命令进一步转换，如将$\frac{\partial^{n}{\cdot}}{\partial{\cdot}^{n}}$ 转换成 $\pdv[n]{\cdot}{\cdot}$，$\left\langle{\cdot}\vert{\cdot}\right\rangle$ 转换成 $\braket{\cdot}{\cdot}$ etc.
 \end{itemize}
 
 \subsection{PhysWikiScan BUG}
@@ -80,8 +97,10 @@
 \subsubsection{【完成】改用 MathJax2}
 MathJax3 在 iOS 的 Safari 上显示有时候公式上半部分消失． 注意当前的 MathJax3 文件夹复制一个备份
 
-\subsection{不要使用 MathJax 的 newcommand}
-而是直接进行命令替换， 从而增加公式代码在其他网站的兼容性
+\subsubsection{不要使用 MathJax 的 newcommand}
+\begin{itemize}
+\item 【完成】而是直接进行命令替换， 从而增加公式代码在其他网站的兼容性
+\end{itemize}
 
 \subsubsection{脚注加上返回链接}
 参考维基百科和知乎． 或者是否可以做成点了以后直接弹出一个子窗口而不是跳到底部？ 如何实现？
