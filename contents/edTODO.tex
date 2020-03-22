@@ -3,13 +3,32 @@
 \subsection{Editor BUG}
 
 \begin{itemize}
-\item 自动补全设置里面的顺序不能决定候选的顺序
+\item 自动引用一条没有 label 的公式时候只会添加 label 不会添加 \lstinline|\autoref| 命令（是否表格，图片等也有类似问题？）（在关闭符号替换模式发现的， 不确定是否和这个有关）
 
-\item 符号替换的目标不能为 "*" （还有什么符号不能作为目标？）
+\item 打开词条有一定概率提示 “PhysWikiScan” 无响应
+
+\item 已经注册的用户（如 admin）使用编辑器时不应该出现 “修改密码” 按钮
+
+\item 【完成】自动补全设置里面的顺序不能决定候选的顺序
+
+\item 【完成】符号替换的目标不能为 "*" （还有什么符号不能作为目标？）
+\end{itemize}
+
+\subsection{符号替换模式下的 bug}
+\begin{itemize}
+\item 有点担心符号替换会出现循环 bug， 就是修好了 A 出现 B 修好了 B 出现 C， 修好了 C 出现 A。 是否要考虑一下系统的解决方法（但愿是我多虑了）．
+
+\item 选中一段公式代码， 按 【对齐】按钮， 公式中带紫色框的符号消失
+
+\item 删除一个带紫色框的符号再撤销， 紫色框消失
+
+\item 代码中空心句号被替换为实心句号后， 预览中仍然是空心句号（如 “。”）
+
+\item 使用替换功能时， 若替换的内容中的命令被替换成符号， 替换后不会出现紫色框
 \end{itemize}
 
 \subsubsection{自动引用问题}
-【完成】自动引用（例如引用本文公式）时会出现 “PhysWikiScan 正在处理， 请稍后\dots\dots” 会一直转圈．
+【完成】自动引用（例如引用本文公式）时会出现 “PhysWikiScan 正在处理， 请稍后……” 会一直转圈．
 
 \subsubsection{itemize 环境中的美元符号补全}
 \begin{itemize}
@@ -24,6 +43,14 @@
 \subsection{Editor TODO}
 
 \begin{itemize}
+\item 在管理员和用户笔记的界面中添加 “重新编译所有内容及目录树” 按钮， 按下后调用 \lstinline|PhysWikiScan . --path...|  命令。
+
+\item 删除 main.tex 时提示 “该文件不能被删除”
+
+\item 禁止创建文件名为 \lstinline|index.tex| 的文件
+
+\item 打开词条页面的 “i” 图标和后面的提示可以删掉， 然后把搜索框里面的英文改成 “搜索标题或文件名……”
+
 \item 【完成】设置菜单中 “恢复默认设置” 时， 恢复到 note-template 中的设置
 
 \item 【完成】增加一个脚注按钮， 插入 \lstinline|\footnote{脚注}|， 并自动选中 “脚注”
@@ -64,7 +91,7 @@
 
 \item GUI 公式编辑器插入公式
 
-\item 【暂时不需要】TODO：因该插件不支持 physics 宏包，选中大多数词条中现有公式的 LaTeX 打开编辑器，是无法正确显示的（如 $I = \int \bvec j \vdot \dd{\bvec S}$ 选中这段打开编辑器），并且由编辑器生成的 LaTeX 也不符合百科的命令规范（但显示效果基本一致），需编写 processor 对命令进一步转换，如将$\frac{\partial^{n}{\cdot}}{\partial{\cdot}^{n}}$ 转换成 $\pdv[n]{\cdot}{\cdot}$，$\left\langle{\cdot}\vert{\cdot}\right\rangle$ 转换成 $\braket{\cdot}{\cdot}$ etc.
+\item 【暂时不需要】TODO：因该插件不支持 physics 宏包，选中大多数词条中现有公式的 LaTeX 打开编辑器，是无法正确显示的（如 $I = \int\bvec j \vdot \dd{\bvec S}$ 选中这段打开编辑器），并且由编辑器生成的 LaTeX 也不符合百科的命令规范（但显示效果基本一致），需编写 processor 对命令进一步转换，如将$\frac{\partial^{n}{\cdot}}{\partial{\cdot}^{n}}$ 转换成 $\pdv[n]{\cdot}{\cdot}$，$\left\langle{\cdot}\vert{\cdot}\right\rangle$ 转换成 $\braket{\cdot}{\cdot}$ etc.
 \end{itemize}
 
 \subsection{PhysWikiScan BUG}
@@ -81,6 +108,9 @@
 【完成】第二个表格会具有第一个表格的标题
 
 \subsection{PhysWikiScan TODO}
+\begin{itemize}
+\item 在每个词条底部加上目录树的链接
+\end{itemize}
 
 \subsubsection{改用 MathJax2}
 【完成】MathJax3 在 iOS 的 Safari 上显示有时候公式上半部分消失． 注意当前的 MathJax3 文件夹复制一个备份
