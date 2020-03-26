@@ -153,7 +153,10 @@ P(\bvec r_1) = 2\int \abs{\Psi(\bvec r_1, \bvec r_2)}^2 \dd[3]{r_2}
 \end{equation}
 单电子概率为
 \begin{equation}
-P(\bvec r_1) = 2\sum_{l_2, m_2} \int \abs{\psi_{l_2, m_2}(r_2)}^2 \dd{r_2} = \frac{2}{r_1^2} \sum_{l_2, m_2} \int \abs{\sum_{l_1, m_1} \psi_{l_1, l_2}^{m_1, m_2}(r_1, r_2) Y_{l_1,m_1}(\uvec r_1)}^2 \dd{r_2}
+\begin{aligned}
+P(\bvec r_1) &= 2\sum_{l_2, m_2} \int \abs{\psi_{l_2, m_2}(\bvec r_1, r_2)}^2 \dd{r_2}\\
+& = \frac{2}{r_1^2} \sum_{l_2, m_2} \int \abs{\sum_{l_1, m_1} \psi_{l_1, l_2}^{m_1, m_2}(r_1, r_2) Y_{l_1,m_1}(\uvec r_1)}^2 \dd{r_2}
+\end{aligned}
 \end{equation}
 
 \subsection{Shakeup 电离 1}
@@ -215,4 +218,16 @@ P(n_1, l_1, k_2) = \sum_{m_1} P(n_1, l_1, m_1, k_2)
 
 然而这个公式调试起来不好办， 最好的办法其实是先计算 $\psi_{l_1, l_2}^{m_1, m_2}$． 这就需要也搞一个 $(l_1, m_1, l_2, m_2)$ 的列表， 计算酋变换的矩阵． 而由于 $l_1, m_1, m_2$ 都是常数， 只需要每个 $l_2$ 一个分波即可．
 
+\subsection{单电离的相对延迟分析}
 
+Osiander/Pazourek 对延迟的分析的解释是： 单电离的瞬间， 氦离子存在 electric dipole （几乎不随时间变化）， 对电离的电子产生了吸引力的作用． 但似乎并没有解释如何从波函数画出这个 dipole．
+
+显然， 这不能用上述的单电子概率分布来画， 因为在当前计算中电离率只有 1e-6 到 1e-5 的数量级． 这说明总波函数主要还处于束缚态． 我认为正确的方法是计算位置分布 $P(\bvec r_1) = P(\bvec r_1, \bvec r_2)$， 其中 $\bvec r_2$ 可以取电离波包的平均位置或者对电离波包的所有位置积分
+\begin{equation}
+P(\bvec r_1) = \int P(\bvec r_1, \bvec r_2) \dd[3]{r_2}
+\end{equation}
+或者， 也可以计算 $P(\bvec r_1) = P(\bvec r_1, \bvec k_2)$， 其中 $\bvec k_2$ 取电离波包的中心动量或者对波包的所有动量积分（要确保只包含电离波包）
+\begin{equation}
+P(\bvec r_1) = \int P(\bvec r_1, \bvec k_2) \dd[3]{k_2}
+\end{equation}
+我个人还是倾向于第一种做法， 也可以对比两种做法的结果．
