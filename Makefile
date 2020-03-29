@@ -7,4 +7,4 @@ debug:
 	#xelatex Debug.tex
 
 clean:
-	rm -f *.toc *.aux *.log *.gz *.out contents/*.log *.dvi *.fdb_latexmk *.fls *.pdf
+	rm -f *.toc *.aux *.log *.gz *.out contents/*.log *.dvi *.fdb_latexmk *.fls main.pdf Debug.pdf
