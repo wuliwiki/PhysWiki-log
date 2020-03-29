@@ -1,11 +1,10 @@
-compiler = xelatex
-
 PhysWiki:
-	xelatex main.tex
+	latexmk -xelatex main.tex
+	#xelatex main.tex
 
 debug:
-	xelatex Debug.tex
+	latexmk -xelatex Debug.tex
+	#xelatex Debug.tex
 
 clean:
-	rm -f *.toc *.aux *.log *.gz *.out
-
+	rm -f *.toc *.aux *.log *.gz *.out contents/*.log *.dvi *.fdb_latexmk *.fls *.pdf
