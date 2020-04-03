@@ -1,0 +1,58 @@
+% 氢原子薛定谔方程数值解
+
+\pentry{薛定谔方程\upref{TDSE}， 原子单位\upref{AU}， 类氢原子的定态波函数\upref{HWF}}
+
+虽然最直观的方法是使用直角坐标， 但计算效率很低． 实际中一般使用球坐标系， 用球谐函数展开波函数． 如果 Hamiltonian 是轴对称的， 那么只需要 $m = 0$ 的球谐函数， 即勒让德多项式．
+
+\begin{equation}
+\Psi(\bvec r, t) = \frac{1}{r}\sum_{l',m'} \psi_{l',m'}(r) Y_{l',m'}(\bvec r)
+\end{equation}
+其中 $\psi_{l,m}(r)$ 是 （scaled）径向波函数．
+
+在薛定谔方程中， 我们往往使用经典的电场， 即令
+\begin{equation}
+V(\bvec r) = -\frac{Z}{r} - q\bvec E(t) \bvec r
+\end{equation}
+这叫做长度规范．% 引用未完成
+此外我们还可以使用速度规范， 也是等效的．% 引用未完成
+
+\subsection{线性极化场}
+若我们取电场极化方向为 $\uvec z$， 则角动量 $L_z$ 是一个守恒量． 假设初始波函数关于 $\uvec z$ 轴对称， 那么在波函数的整个演化过程中， 我们只需要 $m=0$ 的球谐函数展开波函数， 即
+\begin{equation}
+\Psi(\bvec r, t) = \frac{1}{r}\sum_{l'} \psi_{l'}(r) Y_{l', 0}(\uvec r)
+\end{equation}
+带入薛定谔方程， 并左乘 $\bra{Y_{l,0}}$ 得
+\begin{equation}\label{HyTDSE_eq4}
+H_0 \psi_{l}(r) + \sum_{l'} E(t)rF_{l, l'} \psi_{l'}(r) = \I \pdv{\psi_{l}}{t}
+\end{equation}
+其中
+\begin{equation}
+H_0 = -\frac{1}{2m} \pdv[2]{r} -\frac{Z}{r} + \frac{l(l+1)}{2mr^2}
+\end{equation}
+是无场哈密顿算符． 矩阵 $\mat F$ 的计算参考\autoref{SphHar_eq3}\upref{SphHar}．
+\begin{equation}
+\begin{aligned}
+F_{l,l'} &= ∫ Y_{l,0}^*(\uvec r) Y_{1,0}(\uvec r) Y_{l',0} \dd{\Omega}\\
+&= \sqrt{\frac{3}{4π} (2l+1)(2l'+1)} \pmat{l & 1 & l'\\ 0 & 0 & 0}\pmat{l & 1 & l'\\ 0 & 0 & 0}
+\end{aligned}
+\end{equation}
+可见， 当没有外场的时候每一个项（即每一个分波）都可以独立传播， 而电场将不同的分波耦合起来．
+
+\subsection{算符拆分}
+在实际的程序中， 我们可以把传播子 $\exp(-\I H \Delta t)$拆成两项． 虽然这么做会引入一定的误差， 但是却大大提高了效率
+\begin{equation}
+\exp(-\I H \Delta t) = \exp(-\I H_0 \Delta t)\exp(-\I F \Delta t) + \order{\Delta t^3}
+\end{equation}
+也就是说， 在每个时间步长 $\Delta t$ 中， 我们可以把波函数根据\autoref{HyTDSE_eq4} 的演化近似为先根据
+\begin{equation}
+H_0 \psi_{l}(r) = \I \pdv{\psi_{l}}{t}
+\end{equation}
+演化 $\Delta t$， 再根据
+\begin{equation}
+\sum_{l'} E(t)rF_{l, l'} \psi_{l'}(r) = \I \pdv{\psi_{l}}{t}
+\end{equation}
+演化 $\Delta t$． 且 $\Delta t$ 越小， 这个近似就越精确．
+
+\subsection{网格和演化算法}
+\pentry{Crank-Nicolson 算法（一维）\upref{CraNic}}
+一个简单使用的算法就是在对径向波函数使用等间距网格， 并使用 Crank-Nicolson 算法演化．
