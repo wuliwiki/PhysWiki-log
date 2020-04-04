@@ -1,0 +1,29 @@
+% 球谐函数数值计算
+
+\pentry{球谐函数\upref{SphHar}}
+目前 Matlab 并不直接提供球谐函数， 而只提供连带勒让德多项式（ \lstinline|legendre|）． 以下给出 Matlab 中计算球谐函数的程序．
+
+\begin{lstlisting}[language=matlab]
+% 计算球谐函数 Y_{lm}
+% 使用 Condon–Shortley 相位（和 Mathematica 相同）
+% l, m 必须是整数标量
+% 角度 Th 和 Ph 可以是任意实数
+% Th 和 Ph 可以是矩阵， 尺寸必须相同， 输出 Y_lm 的尺寸也相同
+function Y_lm = SphHarm(l,m,Th,Ph)
+mark = mod(Th,2*pi) > pi;
+Ph(mark) = Ph(mark) + pi;
+Sign = sign(m);
+m = abs(m);
+P_lm = legendre(l,cos(Th(:)));
+P_lm = P_lm(m+1,:);
+
+% 归一化因子
+Y_lm = zeros(size(Th));
+N_lm = sqrt((2*l+1)*factorial(l-m)./(4*pi*factorial(l+m)));
+if Sign >= 0
+    Y_lm(:) = N_lm * P_lm' .* exp(1i*m*Ph(:));
+else
+    Y_lm(:) = (-1)^m * N_lm * P_lm' .* exp(-1i*m*Ph(:));
+end
+end
+\end{lstlisting}

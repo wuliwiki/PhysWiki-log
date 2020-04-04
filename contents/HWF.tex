@@ -20,7 +20,7 @@
 \begin{figure}[ht]
 \centering
 \includegraphics[width=13cm]{./figures/HWF_2.png}
-\caption{氢原子波函数的概率密度 $\abs{\psi_{nlm}(\bvec r)}^2$ 的纵截面， 每个图中的三个数字分别是 $n, l, m$ 角量子数（来自维基百科）} \label{HWF_fig2}
+\caption{氢原子波函数的概率密度 $\abs{\psi_{nlm}(\bvec r)}^2$ 的 $x$-$z$ 截面， 每个图中的三个数字分别是 $n, l, m$ 角量子数（来自维基百科）} \label{HWF_fig2}
 \end{figure}
 
 \subsubsection{径向波函数 $R_{nl}(r)$}
@@ -30,8 +30,16 @@
 \begin{equation}\label{HWF_eq2}
 R_{nl}(r) = \sqrt{\qty(\frac{2 Z}{na})^3 \frac{(n - l - 1)!}{2n (n + l)!}} \qty(\frac{2Zr}{na})^l  L_{n-l-1}^{2l+1}\qty(\frac{2Zr}{na}) \E^{-Zr/(na)}
 \end{equation}
-其中 $L_n^l(x)$ 是\textbf{连带拉盖尔多项式（associated Laguerre polynomial）}． 以下给出前几个径向以下给出前几个径向波函数， 注意所有径向波函数的值都是实数．
+其中 $L_n^l(x)$ 是\textbf{连带拉盖尔多项式（associated Laguerre polynomial）}．
 
+$Z = 1$ 时 $r R_{l,m}(r)$ 的函数图\footnote{我们以后会看到 $r R_{l,m}(r)$ 比 $R_{l,m}(r)$ 更常用}如\autoref{HWF_fig1}
+\begin{figure}[ht]
+\centering
+\includegraphics[width=12cm]{./figures/HWF_1.pdf}
+\caption{径向波函数函数图（使用原子单位\upref{AU}， $a = 1$）} \label{HWF_fig1}
+\end{figure}
+
+以下给出前几个径向波函数， 注意所有径向波函数的值都是实数．
 \begin{equation} % 已数值验证归一化和正交性
 n = 1 \qquad
 R_{10}(r) = 2\qty(\frac{Z}{a})^{3/2}\exp(-Zr/a)
@@ -49,19 +57,18 @@ R_{30}(r) &= \frac{2}{3\sqrt {3}} \qty(\frac{Z}{a})^{3/2} \qty(1 - \frac23 \frac
 R_{31}(r) &= \frac{8}{27\sqrt 6} \qty(\frac{Z}{a})^{3/2} \qty(1 - \frac16 \frac {Zr}{a}) \frac {Zr}{a} \exp(-\frac{Zr}{3a})\\
 R_{32}(r) &= \frac{4}{81\sqrt {30}} \qty(\frac{Z}{a})^{3/2} \frac{Z^2r^2}{a^2} \exp(-\frac{Zr}{3a})}
 \end{equation}
-更多 $R_{n,l}$ 可以用 Mathematica 或者 Wolfram Alpha 生成， 如
+更多 $R_{n,l}$ 可以用 Mathematica% 相关词条未完成
+或者 \href{https://www.wolframalpha.com/}{Wolfram Alpha} 生成， 命令如
 \begin{lstlisting}[language=Mathematica]
 n = 4; l = 1;
 Sqrt[(2*Z/(n*a))^3 * Factorial[n-l-1]/(2*n*Factorial[n+l])]
 *(2*Z*r/(n*a))^l*LaguerreL[n-l-1, 2l+1, 2Z*r/(n*a)] * Exp[-Z*r/(n*a)]
 \end{lstlisting}
-
-$Z = 1$ 时 $r R_{l,m}(r)$ 的\footnote{我们以后会看到 $r R_{l,m}(r)$ 比 $R_{l,m}(r)$ 更常用}\footnote{我们以后会看到 $r R_{l,m}(r)$ 比 $R_{l,m}(r)$ 更常用}函数图如\autoref{HWF_fig1}
-\begin{figure}[ht]
-\centering
-\includegraphics[width=12cm]{./figures/HWF_1.pdf}
-\caption{径向波函数函数图} \label{HWF_fig1}
-\end{figure}
+或者用 Matlab 进行数值计算
+\begin{lstlisting}[language=matlab]
+Rnl = @(Z,n,l,r)sqrt((2*Z/n)^3*factorial(n-l-1)/(2*n*factorial(n+l))) *...
+        (2*Z*r/n).^l .* laguerreL(n-l-1, 2*l+1, 2*Z*r/n) .* exp(-Z*r/n);
+\end{lstlisting}
 
 \subsection{性质}
 我们要求氢原子每个束缚态满足归一化条件
