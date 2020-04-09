@@ -9,25 +9,38 @@
 \begin{equation}
 \bvec F(\bvec r) = q \bvec E(\bvec r)
 \end{equation}
-这样我们就得到了一个由电场力构成的力场， 注意该力场与电场成正比． 
+这样我们就得到了一个由电场力构成的力场， 与电场处处成正比． 
 
 从某点 $\bvec r_1$ 沿着某个路径移动到另一点 $\bvec r_2$， 电场对它做功为
 \begin{equation}\label{QEng_eq4}
-W = q \int_{\bvec r_1}^{\bvec r_2} \bvec E(\bvec r) \vdot \dd{\bvec r}
+W = \int_{\bvec r_1}^{\bvec r_2} \bvec F(\bvec r) \dd{\bvec r} = q \int_{\bvec r_1}^{\bvec r_2} \bvec E(\bvec r) \vdot \dd{\bvec r}
 \end{equation}
 
-要讨论势能的概念， 我们首先需要确保这个力场是一个保守场， 即只有上式的结果只于初末位置有关而与路径无关时才可能存在一个势能函数． 以后我们会看到， 当空间中没有随时间变化的磁场时， 电场必定是一个保守场， % 链接未完成
-所以我们接下来只讨论这种情况．
+要讨论势能的概念， 我们首先需要确保这个力场是一个保守场， 即只有上式的结果只与初末位置有关而与路径无关时才可能存在一个势能函数． 以后我们会看到电场可以分为两类： 由净电荷产生的电场是无旋的， 即保守场， 而由变化磁场产生的电场是有旋的， 即非保守场（见 “力场 势能\upref{V}”， “旋度 斯托克斯定理\upref{Curl}”）．
 
-记有了势能函数（关于位置的标量函数）为 $E_p(\bvec r)$， 就有 “力场对物体做功等于势能减少”， 或者 “势能增加等于力场做的负功” 即
+这个问题有两种解决方法， 第一是要求净电荷分布不随时间变化， 且电流保持恒定\footnote{注意有电流就意味着有电荷在移动， 所以我们强调的是 “净” 电荷保持静止}， 这类问题称为\textbf{静电学（electrostatics）}． 在静电学问题中， 空间中没有变化的磁场， 所以所有的电场都是由净电荷产生的无旋．
+
+第二种方法是， 在非静电学的情况下， 我们将电场中的保守场， 即净电荷产生的电场分离出来定义电势能， 即在\autoref{QEng_eq4} 的积分中， $\bvec E(\bvec r)$ 并不取总电场， 而是其中的无旋部分． 例如电路中的电荷的电势能电压\upref{Voltag}就是通过这种方法定义的． 因为一般来说电路不满足静电学的条件， 例如电路中的线圈的电磁感应．
+
+记势能函数（关于位置的标量函数）为 $E_p(\bvec r)$， 就有 “力场对物体做功等于势能减少”， 或者 “势能增加等于力场做的负功” 即
 \begin{equation}\label{QEng_eq5}
 E_p(\bvec r_2) - E_p(\bvec r_1) = -W = -q \int_{\bvec r_1}^{\bvec r_2} \bvec E(\bvec r) \vdot \dd{\bvec r}
 \end{equation}
 
-根据上式， 我们只能判断两点之间的势能差， 完全确定势能函数， 还需要指定\textbf{零势点}的位置 $\bvec r_0$ 使得 $E_p(\bvec r_0) = 0$ （类比万有引力势能\upref{Gravty}）． 于是任意一点的势能为
+根据上式， 我们只能判断两点之间的势能差， 若要完全确定势能函数， 还需要指定\textbf{零势点}的位置 $\bvec r_0$ （可以取无穷远）使得 $E_p(\bvec r_0) = 0$ （类比万有引力势能\upref{Gravty}）． 于是任意一点的势能为
 \begin{equation}\label{QEng_eq3}
-E_p(\bvec r) = -q \int_{\bvec r_0}^{\bvec r} \bvec E(\bvec r) \vdot \dd{\bvec r}
+E_p(\bvec r) = -q \int_{\bvec r_0}^{\bvec r} \bvec E(\bvec r') \vdot \dd{\bvec r'}
 \end{equation}
+
+\begin{example}{匀强电场}
+假设空间中存在匀强电场 $\bvec E = E_x \uvec x + E_y \uvec y + E_z \uvec z$， 即电场矢量与位置无关． 以原点为零势点 $\bvec r_0$， 求点电荷 $q$ 在空间中任意一点 $\bvec r$ 的电势能．
+
+根据\autoref{QEng_eq3}， 取积分路径为原点到 $\bvec r$ 的线段， 则
+\begin{equation}
+E_p(\bvec r) = -q \bvec E \int_{\bvec 0}^{\bvec r} \dd{\bvec r'} = -q \bvec E \vdot \bvec r
+\end{equation}
+当 $\bvec r$ 和 $\bvec E$ 同方向时， 就得到了高中所学的 $-qEr$．
+\end{example}
 
 \subsection{电势}
 注意以上公式中， 无论是做功还是势能都与电荷量 $q$ 有关（成正比）． 为了更直接地描述电场本身的性质， 我们可以把这些公式两边都除以 $q$． 若定义\textbf{电势} $V(\bvec r)$ 满足
@@ -35,15 +48,13 @@ E_p(\bvec r) = -q \int_{\bvec r_0}^{\bvec r} \bvec E(\bvec r) \vdot \dd{\bvec r}
 E_p(\bvec r) = q V(\bvec r)
 \end{equation}
 则\autoref{QEng_eq5} 和\autoref{QEng_eq3}就变为
-\begin{equation}
+\begin{equation}\label{QEng_eq1}
 V(\bvec r_2) - V(\bvec r_1) = - \int_{\bvec r_1}^{\bvec r_2} \bvec E(\bvec r) \vdot \dd{\bvec r}
 \end{equation}
 \begin{equation}
 V(\bvec r) = -\int_{\bvec r_0}^{\bvec r} \bvec E(\bvec r) \vdot \dd{\bvec r}
 \end{equation}
 同样， 该积分只与初末位置有关而与路径无关． 这样一来， 电势就只是电场的属性而与电荷量无关了．
-
-% 未完成： 例题： 匀强电场的电势， 点电荷的电势．
 
 \subsection{点电荷的电势和电势能}
 假设空间中有两个点电荷， $q_1$ 产生的电场可以根据\autoref{Efield_eq3}\upref{Efield} 计算， 现在考虑 $q_2$ 在该场中的势能， 取无穷远处为零势点， 使用\autoref{QEng_eq3} 可以计算 $q_2$ 的势能为（这个过程可以类比万有引力势能\upref{Gravty}的推导过程）
@@ -56,8 +67,6 @@ E_{p2} = -q_2 \int_{\infty}^{\bvec r_1} \frac{1}{4\pi\epsilon_0} \frac{q_1}{r_{1
 E_p(r) = \frac{1}{4\pi\epsilon_0} \frac{q_1 q_2}{r_{12}}
 \end{equation}
 注意当两电荷异号时， $q_1 q_2$ 为负数， 此时与万有引力一样， 距离越近， 势能越小． 两电荷同号时 $q_1 q_2$ 为正， 距离越远势能越小．
-
-
 
 \begin{example}{}
 两个电荷量为 $Q$ 的电荷分别被固定在 $(-c, 0)$ 和 $(c, 0)$ 两点处， 另一质量为 $m$ 电荷量为 $q$ 的点电荷从 $(0, a)$ 延直线移动到 $(0, b)$， 试问它的动能增加了多少？
@@ -91,10 +100,10 @@ E_p = \frac{1}{8\pi\epsilon_0} \sum_{i, j}^{(j\neq i)} \frac{q_i q_j}{\abs{\bvec
 \begin{equation}\label{QEng_eq7}
 E_p = \frac12 \sum_i q_i V_i(\bvec r_i)
 \end{equation}
-这个公式也提供了一种不同的理解．
+这个公式给电势能提供了一种等效的定义．
 
 \subsection{连续电荷分布的情况}
-将\autoref{QEng_eq6} 用拓展到连续电荷分布的情况， 令电荷密度分布为 $\rho(\bvec r)$， 则某点的电势可以通过对整个空间积分得到
+将\autoref{QEng_eq6} 拓展到连续电荷分布的情况， 令电荷密度分布为 $\rho(\bvec r)$， 则某点的电势可以通过对整个空间积分得到
 \begin{equation}
 V(\bvec r) = \frac{1}{4\pi\epsilon_0} \int \frac{\rho(\bvec r)}{\abs{\bvec r - \bvec r'}} \dd[3]{r'}
 \end{equation}
