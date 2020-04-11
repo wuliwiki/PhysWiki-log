@@ -47,7 +47,7 @@
 \Psi(\bvec r_1, \bvec r_2) = \sum_{L, M, l_1, l_2}  \frac{1}{r_1 r_2} \psi_{l_1, l_2}^{L, M}(r_1, r_2)\mathcal{Y}_{l_1, l_2}^{L, M}(\uvec r_1, \uvec r_2)
 \end{equation}
 
-由张量积空间\upref{DirPro}中的结论， 我们可以求哈密顿算符 $H$ 关于角向基底的“矩阵元” $H_{\lambda, \lambda'}$， 每个矩阵元是径向空间中的一个算符． 列出薛定谔方程的“矩阵形式”， 就得到了一组 couple 的径向波函数的薛定谔方程
+由张量积空间\upref{DirPro}中的结论， 我们可以求哈密顿算符 $H$ 关于角向基底的 “矩阵元” $H_{\lambda, \lambda'}$， 每个矩阵元是径向空间中的一个算符． 列出薛定谔方程的 “矩阵形式”， 就得到了一组 couple 的径向波函数的薛定谔方程
 \begin{equation}
 \sum_{\lambda'} H_{\lambda, \lambda'} \ket{R_{\lambda'}} = \I \pdv{t} \ket{R_{\lambda'}}
 \end{equation}
@@ -76,7 +76,7 @@ H_i = K_{ri} + \frac{L_i^2}{2m r_i^2} - \frac{2}{r_i}
 V_{12} = \frac{1}{\abs{\bvec r_2 - \bvec r_1}} &= 4\pi \sum_{l=0}^{\infty} \frac{1}{2l+1} \frac{r_<^l}{r_>^{l+1}} \sum_{m = -l}^l Y_{l,m}^*(\uvec r_1) Y_{l,m}(\uvec r_2)\\
 &= 4\pi \sum_{l=0}^{\infty} \frac{(-1)^l}{\sqrt{2l + 1}} \frac{r_<^l}{r_>^{l+1}} \mathcal{Y}_{l,l}^{0,0} (\uvec r_1, \uvec r_2)
 }\end{equation}
-这就相当于将张量积空间中的矢量拆到了角向空间基底的各个子空间中． 第二步使用了\autoref{SphCup_eq9}\upref{SphCup}， 即
+这就相当于将张量积空间中的线性算符分解成径向和角向算符的张量积之和． 第二步使用了\autoref{SphCup_eq9}\upref{SphCup}， 即
 \begin{equation}
 \mathcal{Y}_{l,l}^{0,0} (\uvec r_1, \uvec r_2) = \frac{(-1)^l}{\sqrt{2l+1}} \sum_{m = -l}^l Y_{lm}^*(\uvec r_1) Y_{lm}(\uvec r_2)
 \end{equation}
@@ -126,6 +126,24 @@ m_1 + m_2 = m_1' + m_2' = M \qquad
 \Bmat{l & l_1' & l_1\\ l & l_2' & l_2\\ 0 & L & L}
 }\end{equation}
 注意当 $M = M'$ 时， 结果与 $M$ 无关．
+
+\subsubsection{泊松积分}
+按照 FEDVR 基底的思路， 我们会自然地想把 $V_{12}$ 算符展开后的 $\mel{r_i r_j}{r_<^l/r_>^l}{r_{i'} r_{j'}}$ 用播送积分来计算， 然而这么做并不精确， 因为 $r_<^l/r_>^l$ 用有限阶多项式展开会有误差． 使用泊松积分法可以减小计算误差， 且仍然保持对角矩阵的形式， 即
+\begin{equation}
+\mel*{r_i r_j}{\frac{r_<^l}{r_>^{l+1}}}{r_{i'} r_{j'}} \propto \delta_{i,i'} \delta_{j,j'}
+\end{equation}
+根据我的猜测（有空验证一下！）， 泊松积分积分的结果应该和直接用数值积分的结果是一样的．
+\begin{equation}\label{HeTDSE_eq3}
+\mel*{r_i r_j}{\frac{r_<^l}{r_>^{l+1}}}{r_{i'} r_{j'}} = \delta_{i,i'} \delta_{j,j'} \qty[\frac{2l+1}{r_i r_j \sqrt{\omega_i \omega_j}} (2\mat T_l)^{-1}_{i,j} + \frac{r_i^l r_j^l}{r_{max}^{2l+1}}]
+\end{equation}
+推导参考 McCurdy, Solving the three-body Coulomb breakup problem using exterior complex scaling 式 68． 其中 $\mat T_l$ 是单电子动能算符的矩阵
+\begin{equation}
+\begin{aligned}
+(T_l)_{ij} &= \mel*{\phi_i}{\qty[-\frac{1}{2m}\dv[2]{r} + \frac{l(l+1)}{2mr}]}{\phi_j}\\
+&= -\frac{1}{2m} \mel*{\phi_i}{\dv[2]{r}}{\phi_j} + \delta_{i,j}\frac{l(l+1)}{2mr_i^2}
+\end{aligned}
+\end{equation}
+其中 $\phi_i$ 是一维 FEDVR 格点在 $r_i$ 处的正交归一基底\upref{FEDVR}， $r_{max}$ 是计算 $T_l$ 时最后一个 FE 的边界． 虽然\autoref{HeTDSE_eq3} 中含有 $r_{max}$， 但结果却与 $r_{max}$ 无关， 原因是 $T_l$ 也和 $r_{max}$ 相关， 两项中的 $r_{max}$ 抵消了．
 
 \subsection{电场作用项}
 对每个电子，
@@ -193,28 +211,32 @@ z =2\sqrt{\frac{\pi}{3}} rY_{1,0}
 }\end{equation}
 
 \subsection{波函数演化}
-传播同样使用 split operator 
+演化同样使用 split operator 
 \begin{equation}
 \exp(-\I H\Delta t) = \exp(-\I H_0\frac{\Delta t}{2})\exp(-\I H_{int}\Delta t) \exp(-\I H_0\frac{\Delta t}{2}) + \order{\Delta t^3}
 \end{equation}
 只是这里的 $H_{int} = V_{12} + V_F$ 是所有 $\mel{\mathcal{Y}}{\ }{\mathcal{Y}}$ 作用后为非对角（算符）矩阵的项， 即电子的相互作用和电场对每个电子的作用．
 
-$H_0 = H_1 + H_2$ 由于 $H_1$ 和 $H_2$ 对易， 我们可以将它们独立传播
+$H_0 = H_1 + H_2$ 由于 $H_1$ 和 $H_2$ 对易， 我们可以将它们独立演化
 \begin{equation}
 \exp(-\I H_0 \frac{\Delta t}{2}) = \exp(-\I H_1 \frac{\Delta t}{2}) \exp(-\I H_2 \frac{\Delta t}{2})
 \end{equation}
-也就是对每个 partial wave 的二维网格， 用类似氢原子的方法传播每一列在传播每一行．
+也就是对每个 partial wave 的二维网格， 用类似氢原子的方法演化每一列再演化每一行．
 
-在传播 $\exp(-\I H_{int}\Delta t)$ 的时候， 爱华的做法是进一步 split 成三个 operators
+根据以上的推导可以看出 $H_{int}$ 在展开成径向算符与角向算符的张量积的线性组合后， 径向算符都是关于 $r$ 的函数， 这对 FEDVR 基底来说都是对角矩阵（即使使用泊松积分）． 所以在演化 $\exp(-\I H_{int}\Delta t)$ 时， 每个二维 FEDVR 格点都可以独立进行， 给大量并行提供了可能性． 总结起来， 程序中的三维波函数矩阵的每个方向的演化都可以每列独立进行．
+
+在演化 $\exp(-\I H_{int}\Delta t)$ 的时候， 爱华的做法是进一步 split 成三个 operators
 \begin{equation}
 \exp(-\I H_{int}\Delta t) = \exp(-\I V_F\frac{\Delta t}{2})   \exp(-\I V_{12} \Delta t) \exp(-\I V_F\frac{\Delta t}{2})
 \end{equation}
-所以总哈密顿一共是 split 成 5 个算符．
+这是因为 $V_F = V_{F1} + V_{F2}$ 是含时的， 和电场分量 $E_z$ 成正比．
+
+爱华进一步分割的原因是， 他的代码中预先储存了 $V_F$ 和 $V_{12}$ 对角化后的本征值和本征矢矩阵， 如果直接对 $H_{int}$ 对角化， 那么就需要每一步都重新对角化一次． 预先储存所需的内存和分波数的平方成正比， 然而当我们需要很多分波的时候， 内存就远远不够了． 为了解决内存问题， 我径向和角向都使用 Crank-Nicolson 演化， 而且每个时间步长对每个格点重新生成 $V_F + V_{12}$ 矩阵并一次演化不需要分成三次． 对于波函数绝对值低于某个阈值的格点， 我们甚至可以忽略不演化．
 
 另外一点， 如果只关心 single ionization， 可以用一个长方形网格（见 Ossiander 2017 Nat. Phys.）． 但要注意在短边加入 absorber 防止反射．）
 
 \subsection{束缚态}
 理论上可以数值解总哈密顿矩阵的本征值， 但实际上这个矩阵大到几乎不可能解出（事实上我们从来不会把总哈密顿矩阵直接储存， 而是储存 split operator）． 我们使用虚时间演化（imaginary time propagation）\upref{ImgT}．
 
-虚时演化的初始态我用的是两个 He+ 的基态相乘（实数波函数）， 和爱华略有不同， 不过这影响不大． 由于我们的 split operator 都是实数矩阵， 使用虚时间后其指数函数也是实数矩阵， 所以虚时间传播得到的基态波函数也一定会是纯实数．
+虚时演化的初始态我用的是两个 He+ 的基态相乘（实数波函数）， 和爱华略有不同， 不过这影响不大． 由于我们的 split operator 都是实数矩阵， 使用虚时间后其指数函数也是实数矩阵， 所以虚时间演化得到的基态波函数也一定会是纯实数．
 我们只需用 $L = 0, M = 0$ 的所有 partial waves 即可．
