@@ -1,37 +1,34 @@
-% 球面波的归一化
-% 球面波|归一化|球贝赛尔函数
+% 球谐波的归一化
+% 球谐波|球面波|归一化|球贝赛尔函数
 
-\pentry{球贝赛尔函数， 平面波的归一化}% 未完成
+\pentry{球贝赛尔函数\upref{SphBsl}， 平面波的正交归一\upref{PwOrNr}}
 
-令一组 scaled 径向函数基底为 $u_{l,m}(k, r) = rR_{l,m}(k, r)$， 若满足
+若一组径向函数基底 $u_{l,m}(k, r)$ 满足归一化条件
 \begin{equation}
 \int_0^\infty u^*_{l,m}(k',r) u_{l,m}(k, r) \dd{r} = \delta(k - k')
 \end{equation}
-则一组完备正交归一的球面波基底为
-\begin{equation}
-s_{l,m}(k, \bvec r) = \frac{1}{r} u_{l,m}(k, r) Y_{l,m}(\uvec r)
+则球坐标中一组完备正交归一的函数基底为
+\begin{equation}\label{FrNorm_eq1}
+\ket{s_{l,m}(k)} = \frac{1}{r} u_{l,m}(k, r) Y_{l,m}(\uvec r)
 \end{equation}
-正交归一条件为
+满足正交归一条件
 \begin{equation}\ali{
-&\quad \braket{s_{l,m}(k, \bvec r)}{s_{l',m'}(k', \bvec r)}\\
+&\quad \braket{s_{l,m}(k)}{s_{l',m'}(k')}\\
 &= \int_0^\infty \frac{1}{r} u_{l,m}^*(k, r)  \frac{1}{r} u_{l',m'}(k', r)  r^2 \dd{r} \int Y_{l,m}^*(\uvec r) Y_{l',m'}(\uvec r) \dd{\Omega}\\
 &= \delta_{l,l'}\delta_{m,m'}\delta(k-k')
 }\end{equation}
 
-\subsection{函数的球面波展开}
-
-空间中任意复函数可以用球面波展开为
+空间中任意复函数可以用\autoref{FrNorm_eq1} 中的基底展开为
 \begin{equation}\ali{
-f(\bvec r) &= \sum_{l,m} \int_0^\infty c_{l,m}(k) \ket{s_{l,m}(k, \bvec r)} \dd{k}\\
+f(\bvec r) &= \sum_{l,m} \int_0^\infty c_{l,m}(k) \ket{s_{l,m}(k)} \dd{k}\\
 &= \frac{1}{r}\sum_{l,m} \qty(\int_0^\infty c_{l,m}(k) u_{l,m}(k, r) \dd{k}) Y_{l,m}(\uvec r)
 }\end{equation}
 函数在任意基底上的投影为
 \begin{equation}\ali{
-\braket{s_{l,m}(k, \bvec r)}{f(\bvec r)} &= \sum_{l',m'} \int_0^\infty \dd{k'} c_{l',m'}(k') \braket{s_{l,m}(k, \bvec r)}{s_{l',m'}(k', \bvec r)}\\
+\braket{s_{l,m}(k)}{f(\bvec r)} &= \sum_{l',m'} \int_0^\infty \dd{k'} c_{l',m'}(k') \braket{s_{l,m}(k)}{s_{l',m'}(k')}\\
 & = \sum_{l',m'} \int_0^\infty \dd{k'} c_{l',m'}(k') \delta_{l,l'}\delta_{m,m'}\delta(k-k')\\
 & = c_{l,m}(k)
 }\end{equation}
-
 令 $\ket{f}$ 的分波展开形式为
 \begin{equation}
 f(\bvec r) = 
@@ -44,42 +41,6 @@ g_{l,m}(r) = \int_0^\infty c_{l,m}(k) u_{l,m}(k, r) \dd{k}
 \begin{equation}
 c_{l,m}(k) = \int_0^\infty u_{l,m}^*(k, r) g_{l,m}(r) \dd{r}
 \end{equation}
-
-\subsection{计算归一化积分}
-要计算归一化积分， 我们来看从负无穷到正无穷的归一化积分． 从零到正无穷的积分只需要除以 2 即可． 由傅里叶变换已知
-\begin{equation}
-\braket{k'}{k} = \delta(k - k')
-\end{equation}
-所以
-\begin{equation}
-\int_{-\infty}^{\infty} \E^{-\I k' x} \E^{\I k x} \dd{x} = 2\pi\braket{k'}{k} = 2\pi\delta(k - k')
-\end{equation}
-\begin{equation}
-\int_{-\infty}^{\infty} \sin(\I k' x) \sin(\I k x) \dd{x}
-= \abs{-\I\sqrt{\frac{\pi}{2}}\ket{k} + \I \sqrt{\frac{\pi}{2}}\ket{-k}}^2 = \pi\delta(k - k')
-\end{equation}
-\begin{equation}
-\int_{-\infty}^{\infty} \cos(\I k' x) \cos(\I k x) \dd{x}
-= \abs{\sqrt{\frac{\pi}{2}}\ket{k} + \sqrt{\frac{\pi}{2}}\ket{-k}}^2 = \pi\delta(k - k')
-\end{equation}
-要证明 $\sin(kx)$ 和 $\cos(kx)$ 正交，
-\begin{equation}\ali{
-&\quad \int_{-\infty}^{\infty} \sin(k'x)^*\cos(kx) \dd{x}\\
-& = \int_{-\infty}^{\infty}\qty[\I\sqrt{\frac{\pi}{2}}\bra{k} - \I \sqrt{\frac{\pi}{2}}\bra{-k}] \qty[\sqrt{\frac{\pi}{2}}\ket{k} + \sqrt{\frac{\pi}{2}}\ket{-k}] \dd{x} = 0
-}\end{equation}
-所以零到正无穷区间中完备正交归一的实波函数分别是
-\begin{equation}
-\sqrt{\frac{2}{\pi}} \cos(kx) \qquad
-\sqrt{\frac{2}{\pi}} \sin(kx) \qquad (k \geqslant 0)
-\end{equation}
-
-现在再来看波函数中有相位 $\phi(k)$ 的情况， 例如
-\begin{equation}
-\int_{0}^{\infty} \sqrt{\frac{\pi}{2}}\sin[k' x + \phi(k')] \sqrt{\frac{\pi}{2}}\sin[k x + \phi(k)] \dd{x}
-\end{equation}
-结果会不会仍然等于 $\delta(k - k')$ 呢？ 我们利用 $\sin(a + b) = \sin a\cos b + \cos a\sin b$ 和已知的归一化积分得到结果为 $\cos[\phi(k) - \phi(k')] \delta(k - k')$． 如果我们假设 $\phi(k)$ 是连续的， 那么结果就是 $\delta(k - k')$．
-
-同理可得， 以上所有基底中给波函数添加相移 $\phi(k)$ （连续函数）， 归一化积分不变．
 
 \subsection{归一化的球贝赛尔函数}
 由于 $\E^{\I kx}$ 从负无穷到正无穷的归一化积分为 $2\pi\delta(k-k')$， 易得 $\sin(kx)$ 的积分为 $\pi\delta(k-k')$ （先表示成指数形式）， 从 0 到正无穷的积分为 $\pi\delta(k-k')/2$．
