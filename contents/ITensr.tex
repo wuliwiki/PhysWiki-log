@@ -7,7 +7,7 @@
 我们已经初步学习了刚体绕固定轴的转动， 现在我们做一个更一般的讨论， 也就是刚体绕某个固定点的转动． 刚体绕固定轴转动只有一个自由度 $\theta$， 而绕固定点转动却可以有 3 个自由度（见 “刚体\upref{RigBd}”）．
 
 \subsection{惯性张量}
-刚体的角动量等于\textbf{惯性张量} $\mat I$ 乘以瞬时角速度矢量 $\bvec \omega$
+刚体绕固定点旋转的角动量等于\textbf{惯性张量} $\mat I$ 乘以瞬时角速度矢量 $\bvec \omega$
 \begin{equation}\label{ITensr_eq3}
 \bvec L = \mat I \bvec \omega
 \end{equation}
@@ -19,13 +19,13 @@ I_{yx}& I_{yy}& I_{yz} \\
 I_{zx}& I_{zy}& I_{zz}
 \end{pmatrix}
 \end{equation}
-我们现在假设刚体\textbf{绕坐标原点旋转}， 如果将 $x, y, z$ 分别记为 $x_1, x_2, x_3$， 则 $\mat I$ 的矩阵元为
+我们现在假设刚体绕坐标原点旋转， 如果将 $x, y, z$ 分别记为 $x_1, x_2, x_3$， 则 $\mat I$ 的矩阵元可以通过体积分计算
 \begin{equation}\label{ITensr_eq1}
 I_{ij} = \delta_{i, j} \int r^2 \rho(\bvec r)\dd{V} - \int x_i x_j \rho(\bvec r)\dd{V} \qquad (i, j = 1, 2, 3)
 \end{equation}
-其中 $r = \abs{\bvec r}$． 也可以表示成矩阵积分的形式（每个矩阵元分别积分）
+其中 $\bvec r$ 是刚体上某点的位置矢量\upref{Disp}， $r = \abs{\bvec r}$． 也可以表示成矩阵积分的形式， 即对每个矩阵元分别积分
 \begin{equation}\label{ITensr_eq2}
-\mat I = \int \rho
+\mat I = \int \rho(\bvec r)
 \begin{pmatrix}
 y^2 + z^2 & -xy & -xz\\
 -yx & x^2 + z^2 & -yz\\
@@ -73,7 +73,7 @@ y^2 + z^2 & -xy & -xz\\
    0 & 0 & 1
 }
 \end{equation}
-由于单位矩阵乘以任何矢量都得到相同的矢量， 正方体延任意转轴转动时都有
+由于单位矩阵乘以任何矢量都得到相同的矢量， 正方体延任意转轴转动时， 角动量都和角速度矢量成正比
 \begin{equation}
 \bvec L = \mat I \bvec \omega = \frac{1}{6} Ma^2 \bvec \omega
 \end{equation}
@@ -84,26 +84,23 @@ y^2 + z^2 & -xy & -xz\\
 \begin{equation}\label{ITensr_eq5}
 \mat I = \frac{1}{12} M \pmat{0 & 0 & 0\\ 0 & L^2 & 0\\ 0 & 0 & L^2}
 \end{equation}
-可以看到， 如果转轴延 $x$ 方向（$\bvec\omega = (\omega, 0, 0)\Tr$）， 角动量为零， 如果延 $y, z$ 方向， 则角动量大小都等于
+可以看到， 如果转轴延 $x$ 方向， 即 $\bvec\omega = (\omega, 0, 0)\Tr$， 角动量为零， 如果延 $y, z$ 方向， 则角动量大小都等于
 \begin{equation}
 L = \frac{1}{12} M L^2 \omega
 \end{equation}
 对应的转动惯量为 $I = ML^2/12$， 这与\autoref{ExMI_eq2}\upref{ExMI} 一致．
-
-我们再来看更有意思的情况， 如果转轴和轻杆法线的夹角为 $\theta$， （未完成）
 \end{example}
 
 \begin{exercise}{}\label{ITensr_exe1}
 直接使用积分计算细杆的角动量（\autoref{ITensr_eq5}）．
 \end{exercise}
 
-
 \subsection{推导}
-根据角动量的定义\autoref{AngMom_eq1}\upref{AngMom}
+我们把刚体看作质点系刚体\upref{RigBd}， 刚体绕固定点转动时， 刚体上的每个点都在做瞬时圆周运动． 根据角动量的定义\autoref{AngMom_eq1}\upref{AngMom} 以及圆周运动的速度\autoref{CMVD_eq5}\upref{CMVD}
 \begin{equation}
 \bvec L = \sum_i m_i \bvec r_i \bvec v_i = \sum_i m_i \bvec r_i \cross (\bvec \omega \cross \bvec r_i) = \sum_i m_i r_i^2 \bvec \omega - \sum_i m_i (\bvec \omega \vdot \bvec r_i) \bvec r_i
 \end{equation}
-写成分量的形式， 并将求和表示为密度 $\rho$ 的积分得
+其中使用了 “连续叉乘的化简\upref{TriCro}” 中的\autoref{TriCro_eq1}． 将上式右边写成分量的形式， 并将求和表示为刚体密度 $\rho(\bvec r)$ 的积分得
 \begin{equation}
 \begin{aligned}
 \pmat{L_x\\ L_y\\ L_z} &= \int \rho r^2 \pmat{\omega_x\\ \omega_y\\ \omega_z} \dd{V} - \int \rho
@@ -126,15 +123,19 @@ r^2 -xx & -xy & -xz\\
 对比\autoref{ITensr_eq3} 可知， 方括号中的积分就是惯性张量 $\mat I$（\autoref{ITensr_eq2}）．
 
 \subsection{坐标旋转变换}
-上文中提到惯性张量矩阵与坐标系的选取有关， 我们先来讨论如果惯性张量在两个原点相同朝向不同的坐标系之间如何变换， 这叫做惯性张量的\textbf{旋转变换}． 先建立一个与刚体相对静止的参考系叫做\textbf{体坐标系（body frame）}， 一般我们选择体坐标系的原点在刚体质心处， 但刚体做任意转动时， 体坐标系并不是一个惯性系， 所以我们还要选一个\textbf{实验室坐标系（lab frame）}． 令体坐标系的矢量到实验室系的矢量的变换矩阵\upref{Rot3D}为 $\mat R$， 记体坐标系和实验室系中的惯性张量分别为 $\mat I_0$ 和 $\mat I$， 则实验室系中的惯性张量等于
+\pentry{空间旋转矩阵\upref{Rot3D}}
+
+上文中提到惯性张量矩阵与坐标系的选取有关， 我们先来讨论如果惯性张量在两个原点相同朝向不同的坐标系之间如何变换， 这叫做惯性张量的\textbf{旋转变换}． 先建立一个与刚体相对静止的参考系叫做\textbf{体坐标系（body frame）}， 一般我们选择体坐标系的原点在刚体质心处， 但刚体做任意转动时， 体坐标系并不是一个惯性系， 所以我们还要选一个惯性系， 即\textbf{实验室坐标系（lab frame）}． 令体坐标系的矢量到实验室系的矢量的变换矩阵\upref{Rot3D}为 $\mat R$， 记体坐标系和实验室系中的惯性张量分别为 $\mat I_0$ 和 $\mat I$， 则实验室系中的惯性张量等于
 \begin{equation}
 \mat I = \mat R \mat I_0 \mat R\Tr
 \end{equation}
 % 未完成： 要如何证明？
 
+\begin{example}{}
+如果转轴和轻杆法线的夹角为 $\theta$， （未完成）
+\end{example}
+
 \subsection{坐标平移变换}
-
-
 
 
 % 例子未完成， 球体的惯性张量是对角的
