@@ -1,0 +1,139 @@
+% python函数
+\pentry{Python 入门\upref{Python}}
+
+函数是组织好的，可重复使用的，用来实现相关功能的代码段．它能提高代码的重复利用率．Python提供了许多\textbf{内建函数}，比如 \verb|print()|．我们也可以自己创建函数，这被叫做\textbf{自定义函数}． 需要在程序中多次执行同一项任务时， 你无需反复编写完成该任务的代码， 而只需调用执行该任务的函数， 让Python运行其中的代码． 你将发现， 通过使用函数，程序的编写、阅读、测试和修复都将更容易．
+
+\subsection{函数的定义与调用}
+我们通过一个简单的例子开始介绍：
+\begin{lstlisting}[language=python]
+def  func1():
+    # 定义一个函数，函数名为func1
+     print('hello python')
+func1()
+\end{lstlisting}
+这个示例演示了最简单的函数结构． 第一行的代码行使用关键字\verb|def| 来告诉Python我们要定义一个函数．然后向Python指出了函数名, 还可能在括号内指出函数为完成其任务需要什么样的信息． 在这里, 函数名为\verb|func1|, 它不需要任何信息就能完成其工作, 因此括号是空的(括号必不可少);最后，定义以\textbf{冒号}结尾, 后面的所有\textbf{缩进行}构成了函数体． 第二行处的文本是\textbf{函数注释},以\verb|#|开始，通常用来描述了函数是做什么的．
+第三行\verb|print('hello  python')| 是函数体内的唯一一行代码.
+\textbf{函数调用}让Python执行函数的代码． 要调用函数，可依次指定函数名以及用括号括起的必要信息, 由于这个函数不需要任何信息， 因
+此调用它时只需输入\verb|func1()| 即可．
+\subsection{向函数传递信息}
+只需对上面函数稍作修改, 就可以让函数\verb|func1()| 不仅向用户显示 \verb|hello python|, 还将可以打印其他信息. 在函数定义\verb|def func1()| 的括号内添加信息． 通过在这里添加信息, 就可让函数接受你给定的任何值．
+\begin{lstlisting}[language=python]
+def  func2(str):
+    '''
+     改进第一个函数，使得它可以输出更多信息
+     输入：字符串
+    '''
+     print('hello'+str)
+func2('C++')
+func2('Tom')
+\end{lstlisting}
+输出
+\begin{lstlisting}[language=python]
+hello C++
+hello Tom
+\end{lstlisting}
+上述代码在第一行函数定义处多了一个信息，函数功能变得更加丰富．同时我们注意到第二个用三个\textbf{单引号}开头，不再是\verb|#|. 三个单引号是用来进行多行注释的．另外注意到Python中字符串可以通过\verb|+|来连接．
+
+\subsection{实参和形参}
+前面定义函数\verb|func2|时, 要求函数定义括号里面指定一个信息．调用这个函数并提供这种信息．实际上这个所谓的信息是一个\textbf{形参}, 而在函数调用过程中，如\verb|func2('C++')|， 值 \verb|C++| 是一个\textbf{实参}. 实参是调用函数时传递给函数的信息． 我们调用函数时， 将要让函数使用的信息放在括号内． 通俗的说，将函数定义中的变量称为形参，将函数调用中的变量称为实参.
+
+\subsection{传递参数}
+函数定义中可能包含多个形参, 因此函数调用中也可能包含多个实参. 向函数传递实参的方式很多, 可使用\textbf{位置实参}, 这要求实参的顺序与形参的顺序相同; 也可使用\textbf{关键字实参}, 其中每个实参都由变量名和值组成.
+\subsubsection{位置实参}
+在调用函数时, Python必须将函数调用中的每个实参都关联到函数定义中的一个形参. 为此, 最简单的关联方式是\textbf{基于实参的顺序}, 这种关联方式被称为位置实参. 如
+一个用来展示个人基本信息的函数定义如下：
+\begin{lstlisting}[language=python]
+def ShowInfo(name,age,ID):
+    '''
+    定义一个函数，来展示个人信息
+    name: 姓名
+    age: 年龄
+    ID： 学号
+    '''
+    print("my name is "+name+",my age is "+str(age)," and my ID  is"+ID)
+\end{lstlisting}
+\begin{lstlisting}[language=python]
+ShowInfo('XiaoMin', 16,'123456')
+\end{lstlisting}
+输出\verb|my name is XiaoMin,my age is 16  and my ID  is123456|.这个函数有三个参数，\verb|name|, \verb|age|, \verb|ID|, 调用函数时候也需要指定三个参数，否则会报错，这三个参数的顺序与定义函数顺序一致，这就是位置参数．
+\subsubsection{关键字实参}
+关键字实参是传递给函数的\textbf{名称-值}对. 在实参中将名称和值关联起来, 因此向函数传递实参时不会混淆. 关键字实参无需考虑函数调用中的实参顺序.
+
+函数 \verb|ShowInfo()|还是原来那样, 但调用这个函数时, 我们向Python明确地指出了各个实参对应的形参． 如：
+\begin{lstlisting}[language=python]
+ShowInfo(name='XiaoMin',ID='123456',age=16)
+\end{lstlisting}
+输出结果与之前一样，这时候不需要考虑参数的顺序．
+
+\subsection{参数默认值}
+编写函数时, 可给每个形参指定默认值. 在调用函数中给形参提供了实参时， Python将使用指定的实参值; 否则, 将使用形参的默认值. 因此, 给形参指定默认值后, 可在函数
+调用中省略相应的实参. 使用默认值可简化函数调用, 还可清楚地指出函数的典型用法.我们再次以展示个人信息为例：
+\begin{lstlisting}[language=python]
+def ShowInfo2(name,age=16,ID):
+    '''
+    定义一个函数，来展示个人信息
+    name: 姓名
+    age: 年龄
+    ID： 学号
+    '''
+    print("my name is "+name+",my age is "+str(age)," and my ID  is"+ID)
+\end{lstlisting}
+调用函数
+\begin{lstlisting}[language=python]
+ShowInfo(name='XiaoMin',ID='123456')
+ShowInfo(name='XiaoLi',ID='10086')
+\end{lstlisting}
+这里我们只给定了两个实参, 而\verb|age|使用了默认值, 结果就会使用默认值．
+
+\subsection{函数返回值}
+函数并非总是直接显示输出, 相反, 它可以处理一些数据, 并返回一个或一组值. 函数返回的值被称为\textbf{返回值}. 在Python函数中, 可使用\verb|return|语句将值返回到调用函数的代码行. 返回值让你能够将程序的大部分繁重工作移到函数中去完成, 从而简化主程序.
+
+下面我们定义一个函数，通过给定分数来返回对应的成绩登记．
+\begin{lstlisting}[language=python]
+def score(num):
+    '''
+    打分
+    :param num:
+    :return: 等级
+    '''
+    num = float(num)
+    if num>100 or num<0:
+        print('输入有误！')
+    if num>90:
+        return 'A'
+    elif num>80:
+        return 'B'
+    elif num>60:
+        return 'C'
+    else:
+        return 'D'
+state =score(89)
+print("state",state)
+\end{lstlisting}
+通函数\verb|score|, 返回成绩等级.
+
+\subsection{传递列表}
+向函数传递列表很有用, 这种列表包含的可能是名字、 数字或更复杂的对象. 将列表传递给函数后, 函数就能直接访问其内容. 下面使用函数来提高处理列表的效率．假设有一个用户列表, 我们要问候其中的每位用户.下面的示例将一个名字列表传递给一个名为\verb|greet_users()| 的函数, 这个函数问候列表中的每个人.
+\begin{lstlisting}[language=python]
+def greet_users(names):
+"""向列表中的每位用户都发出简单的问候"""
+for name in names:
+msg = "Hello, " + name.title() + "!"
+print(msg)
+usernames = ['xiaomin', 'toy', 'mar']
+greet_users(usernames)
+\end{lstlisting}
+将列表传递给函数后, 函数就可对其进行修改. 在函数中对这个列表所做的任何修改都是\textbf{永久性}的, 即他可以改变原始列表.
+
+\subsection{传递任意数量的实参}
+有时候, 我们预先不知道函数需要接受多少个实参, 好在Python允许函数从调用语句中收集任意数量的实参. 为了达到这个目的，在使用形参前加\verb|*para| 但不管调用语句提供了多少实参, 这个形参都将它们包括进去. 例如求和
+\begin{lstlisting}[language=python]
+def sum(*num):
+    s=0
+    for i in num:
+        s = s+i
+    return s
+print(sum(1,2,3))
+print(sum(1,2,3,4))
+\end{lstlisting}
+两次调用函数分别传递了三个, 四个参数．
