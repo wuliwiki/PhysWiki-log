@@ -1,0 +1,99 @@
+% 拉普拉斯变换
+
+拉普拉斯变换常用于微分方程的初始值问题，即已知某个物理量在初始时刻$t=0$的值$f(0)$，而求解它在初始时刻之后的变化情况$f(t)$．至于它在初始时刻之前的值，我们就让它都等于$0$，也就是说
+\begin{equation}
+f(t)=0 \quad(t<0)
+\end{equation}
+为了获得较宽的变换条件，构造一个函数$g(t)$，
+\begin{equation}
+g(t)=\mathrm{e}^{-\sigma t} f(t)
+\end{equation}
+这里$e^{-\sigma t}$为收敛因子．我们需要选一个充分大的正实数$\sigma$，用来保证$g(t) $在区间$(-\infty,+\infty)$上绝对可积．于是，可以对$g(t) $做傅里叶变换：
+\begin{equation}
+G(\omega)=\frac{1}{2 \pi} \int_{-\infty}^{\infty} g(t) \mathrm{e}^{-\omega t} \mathrm{d} t=\frac{1}{2 \pi} \int_{0}^{\infty} f(t) \mathrm{e}^{-(\sigma+\mathrm{i} \omega) t} \mathrm{d} t
+\end{equation}
+将$\sigma+i \omega$记作$p$，并将$G(\omega)$改记作$\bar f(p) / 2 \pi$则
+\begin{equation} \label{LapTra_eq1}
+\bar{f}(p)=\int_{0}^{\infty} f(t) \mathrm{e}^{-p t} \mathrm{d} t
+\end{equation}
+其中积分
+\begin{equation}
+\int_{0}^{\infty} f(t) \mathrm{e}^{-p t} \mathrm{d} t
+\end{equation}
+称为\textbf{拉普拉斯积分}．$\bar f(p)$称为$f(t)$的\textbf{拉普拉斯函数}．\autoref{LapTra_eq1}称为\textbf{拉普拉斯变换}（简称\textbf{拉氏变换}），$\mathrm e^{-pt}$是拉普拉斯变换的\textbf{核}．
+
+$G(\omega)$的傅里叶逆变换是：
+\begin{equation}
+g(t)=\int_{-\infty}^{\infty} G(\omega) \mathrm{e}^{\mathrm{i} \omega t} \mathrm{d} \omega=\frac{1}{2 \pi} \int_{-\infty}^{\infty} \bar{f}(\sigma+\mathrm{i} \omega) \mathrm{e}^{\mathrm{i} \omega t} \mathrm{d} \omega
+\end{equation}
+即
+\begin{equation}
+f(t)=\frac{1}{2 \pi} \int_{-\infty}^{\infty} \bar{f}(\sigma+\mathrm{i} \omega) \mathrm{e}^{(\sigma+\mathrm{i} \omega)} \mathrm{d} \omega
+\end{equation}
+由于$\sigma+\mathrm i\omega=p$，可得$\mathrm d\omega = 1/\mathrm i\mathrm dp$．所以有
+\begin{equation}
+f(t)=\frac{1}{2 \pi \mathrm{i}} \int_{\sigma-\mathrm{i} \infty}^{\sigma+\mathrm{i} \infty} \bar{f}(p) \mathrm{e}^{\mathrm{i} p} \mathrm{d} p
+\end{equation}
+
+$\bar f(p)$又称为\textbf{像函数}，而$f(t)$称为\textbf{原函数}．它们之间的关系通常简单地用记号表示为：
+\begin{equation}
+\begin{array}{l}\bar{f}(p)=\mathscr{S}[f(t)] \\ f(t)=\mathscr{L}^{-1}[\bar{f}(p)]\end{array}
+\end{equation}
+
+我们来看几个例题熟悉一下它的运算．
+
+\begin{example}{}
+求$\mathscr L[1]$．
+
+在$\Re p>0$（即$\sigma>0$）的半平面上，
+\begin{equation}
+\int_{0}^{\infty} 1 \cdot e^{-p t} d t=\frac{1}{p}
+\end{equation}
+所以
+\begin{equation}
+\mathscr{L}[1]=\frac{1}{p} \quad(\operatorname{Re} p>0)
+\end{equation}
+\end{example}
+
+\begin{example}{}
+求$\mathscr L[t]$．
+
+在$\Re p>0$的半平面上
+\begin{equation}
+\begin{aligned} \int_{0}^{\infty} t \mathrm{e}^{-p t} \mathrm{d} t &=-\frac{1}{p} \int_{0}^{\infty} t \mathrm{d}\left(\mathrm{e}^{-p t}\right) \\ &=-\frac{1}{p}\left[t \mathrm{e}^{-p t}\right]_{0}^{\infty}+\frac{1}{p} \int_{0}^{\infty} \mathrm{e}^{-p t} \mathrm{d} t \\ &=\frac{1}{p} \int_{0}^{\infty} \mathrm{e}^{-p t} \mathrm{d} t=\frac{1}{p^{2}} \end{aligned}
+\end{equation}
+所以
+\begin{equation}
+\mathscr{L}[t]=\frac{1}{p^{2}} \quad(\operatorname{Re} p>0)
+\end{equation}
+\end{example}
+
+\begin{example}{}
+求$\mathscr L[\mathrm e^{st}]$，$s$为常数．
+
+在$\operatorname{Re} p>\operatorname{Re} s$的半平面上，
+\begin{equation}
+\begin{aligned} \int_{0}^{\infty} \mathrm{e}^{s t} \mathrm{e}^{-p t} \mathrm{d} t &=\int_{0}^{\infty} \mathrm{e}^{-(p-s) t} \mathrm{d} t=-\frac{1}{p-s}\left[\mathrm{e}^{-(p-s) t}\right]_{0}^{\infty} \\ &=\frac{1}{p-s} \end{aligned}
+\end{equation}
+所以
+\begin{equation}
+\mathscr{L}\left[\mathrm{e}^{st}\right]=\frac{1}{p-s} \quad(\operatorname{Re} p>\operatorname{Re} s)
+\end{equation}
+\end{example}
+
+\begin{example}{}
+求$\mathscr L[t\mathrm e^{st}]$，$s$为常数．
+
+在$\operatorname{Re} p>\operatorname{Re} s$的半平面上，
+\begin{equation}
+\begin{aligned} \int_{0}^{\infty} t \mathrm{e}^{s t} \mathrm{e}^{-p t} \mathrm{d} t &=-\frac{1}{p-s} \int_{0}^{\infty} t \mathrm{d}\left[\mathrm{e}^{-(p-s) t}\right] \\ &=-\frac{1}{p-s}\left\{\left[t \mathrm{e}^{-(p-s) t}\right]_{0}^{\infty}-\int_{0}^{\infty} \mathrm{e}^{-(p-s) t} \mathrm{d} t\right\} \\ &=\frac{1}{(p-s)^{2}} \end{aligned}
+\end{equation}
+所以
+\begin{equation}
+\mathscr{S}\left[t \mathrm{e}^{s t}\right]=\frac{1}{(p-s)^{2}} \quad(\operatorname{Re} p>\operatorname{Re} s)
+\end{equation}
+同理
+\begin{equation}
+\mathscr{L}\left[t^{n} \mathrm{e}^{n}\right]=\frac{n !}{(p-s)^{n+1}}
+\end{equation}
+\end{example}
