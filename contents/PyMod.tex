@@ -1,0 +1,96 @@
+% Python模块
+\pentry{Python 入门\upref{Python}}
+
+模块是包含一组\textbf{函数}的文件, 希望在应用程序中引用.
+\subsection{创建模块}
+如需创建模块，只需将所需函数代码保存在文件扩展名为 \verb|.py| 的文件中. 例如
+在名为 \verb|mymodule.py| 的文件中保存代码：
+\begin{lstlisting}[language=python]
+def greeting(name):
+    print("Hello, " + name)
+
+def saying():
+    print("Hello! ")
+\end{lstlisting}
+在该模块中写了两个简单的函数．
+
+\subsection{使用模块}
+现在，我们就可以用 \verb|import| 语句来使用我们刚刚创建的模块.
+
+导入名为 \verb|mymodule| 的模块，并调用 \verb|greeting| 函数与\verb|saying|函数.
+\begin{lstlisting}[language=python]
+import mymodule
+mymodule.greeting("Bill")
+mymodule.saying()
+\end{lstlisting}
+注释：如果使用模块中的函数时，请使用以下语法：\verb|模块名.函数名|.
+
+\subsection{为模块命名}
+可以随意对模块文件命名，但是文件扩展名必须是 \verb|.py|．
+
+\subsection{重命名模块}
+有时候模块名比较长，为了方便使用，可以在导入模块时使用 \verb|as| 关键字创建别名.
+\begin{lstlisting}[language=python]
+import mymodule as mx
+mx.saying()
+\end{lstlisting}
+
+\subsection{内建模块}
+Python 中有几个内建模块，可以随时导入．
+\subsubsection{time模块}
+在Python中，通常有这几种方式来表示时间：
+
+时间戳(timestamp) ：通常来说，时间戳表示的是从1970年1月1日00:00:00开始按秒计算的偏移量．我们运行“type(time.time())”，返回的是float类型．
+
+格式化的时间字符串
+
+元组(struct_time)   ：struct_time元组共有9个元素共九个元素:(年，月，日，时，分，秒，一年中第几周，一年中第几天，夏令时)
+
+\subsubsection{random模块}
+随机生成内容.
+\begin{lstlisting}[language=python]
+import random
+# 0,1之间时间生成的浮点数  float
+print(random.random())
+# 随机生成传入参数范围内的数字 即 1，2，3
+print(random.randint(1, 3))
+# 随机生成传入参数范围内的数字，range顾头不顾尾
+print(random.randrange(1, 3))
+# 随机选择任意一个数字
+print(random.choice([1, '23', [4, 5]]))
+\end{lstlisting}
+
+\subsubsection{sys模块}
+\begin{lstlisting}[language=python]
+import sys
+# 命令行参数List，第一个元素是程序本身路径
+print(sys.argv)
+# 结果['D:/Pycharm Community/python内置函数/sysTest.py']
+# 获取Python解释程序的版本信息
+print(sys.version)
+\end{lstlisting}
+
+\subsubsection{os模块}
+\verb|os| 模块是与操作系统交互的一个接口.
+\begin{lstlisting}[language=python]
+os.getcwd() # 获取当前工作目录，即当前python脚本工作的目录路径
+os.chdir("dirname")  # 改变当前脚本工作目录；相当于shell下cd
+os.curdir  # 返回当前目录: ('.')
+os.makedirs('dirname1/dirname2')    # 可生成多层递归目录
+# 若目录为空，则删除，并递归到上一级目录，如若也为空，则删除，依此类推
+os.removedirs('dirname1')
+os.mkdir('dirname')    # 生成单级目录
+os.rmdir('dirname')    # 删除单级空目录，若目录不为空则无法删除，报错；
+# 列出指定目录下的所有文件和子目录，包括隐藏文件，并以列表方式打印
+os.listdir('dirname')
+os.remove()  # 删除一个文件
+os.rename("oldname","newname")  # 重命名文件/目录
+os.stat('path/filename')  # 获取文件/目录信息
+os.path.abspath(path)  # 返回path规范化的绝对路径
+os.path.split(path)  # 将path分割成目录和文件名二元组返回
+os.path.exists(path) #  如果path存在，返回True；如果path不存在，返回False
+os.path.isabs(path)  # 如果path是绝对路径，返回True
+os.path.isfile(path)  # 如果path是一个存在的文件，返回True．否则返回False
+os.path.isdir(path) # 如果path是一个存在的目录，则返回True．否则返回False
+os.path.join(path1[, path2[, ...]])  将多个路径组合后返回
+\end{lstlisting}
