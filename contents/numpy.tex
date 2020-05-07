@@ -1,0 +1,194 @@
+% Numpy 库
+
+\subsection{数组}
+我们这里使用 \verb|numpy| 模块中的数组． \verb|numpy| 是数值计算中一个常用的模块， 主要用于处理各种数组（或矩阵）． \verb|numpy| 提供的是ndarray对象，即n维数组对象. 这里介绍另一种 import 的方式
+\begin{lstlisting}[language=python]
+import numpy as np
+\end{lstlisting}
+这相当于给 \verb|numpy.| 指定一个更简单的名字 \verb|np.|， 方便了使用． 你也可以把 \verb|np| 替换成其他名字． 上文使用 \verb|math| 模块时也可以使用
+\begin{lstlisting}[language=python]
+import numpy as m
+\end{lstlisting}
+
+要创建一个一维数组（或者叫做行矢量）， 如
+\begin{lstlisting}[language=python]
+a = np.array([1, 2, 3])
+\end{lstlisting}
+这个数组有三个元素， 每个元素相当于一个独立的变量． 要获取第 \verb|i| 个元素的值， 用 \verb|a[i]|， 如
+\begin{lstlisting}[language=python]
+a[0]
+\end{lstlisting}
+注意索引 \verb|i| 从 0 开始而不是 1． 所以第一个元素索引为 0， 第二个索引为 1 等等．
+
+显示整个数组
+\begin{lstlisting}[language=python]
+print(a)
+\end{lstlisting}
+要获取数组的一部分
+\begin{lstlisting}[language=python]
+a[1:2]
+\end{lstlisting}
+注意：python对数组部分索引获取的时候，不会获取索引范围的最后一个索引值， 即上面这个命令只会得到 \verb|a[1]| 的值为2， 而没有 \verb|a[2]| 的值．
+
+要间隔一个步长获取数组的一部分，可以使用
+\begin{lstlisting}[language=python]
+a = np.array([1,2,3,4,5,6,7,8])
+a[1:6:2]
+\end{lstlisting}
+括号中的第三个参数表示步长，2表示隔一个元素取一个元素，上述代码取出 \verb|a| 中第 1 个（注意不是第 0 个），第  3 个，第 5 个值， 返回结果为 2,4,6．
+
+创建一个二维数组，如
+\begin{lstlisting}[language=python]
+b = np.array([[1, 2, 3, 4],[4, 5, 6, 7], [7, 8, 9, 10]])
+\end{lstlisting}
+数组的大小可以通过其 \verb|shape| 属性获得． 例如获取 \verb|a| 和 \verb|b| 的数组大小，
+\begin{lstlisting}[language=python]
+a.shape
+b.shape
+\end{lstlisting}
+最终会得到返回值为
+\begin{lstlisting}[language=python]
+(8,)
+(3, 4)
+\end{lstlisting}
+注意到返回值都有一个小括号，说明返回值类型为一个\textbf{元组类型}． 数组 \verb|a| 的shape只有一个元素，因此它是一维数组．而数组 \verb|c| 的shape有两个元素，因此它是二维数组，其中第0轴的长度为3，第1轴的长度为4．
+
+
+修改数组的shape属性，在保持数组元素个数不变的情况下，改变数组每个轴的长度．下面的例子将数组 \verb|c| 的shape改为 \verb|(4,3)|，注意从 \verb|(3,4)| 改为 \verb|(4,3)| 并\textbf{不是对数组进行转置\upref{Mat}}，而只是改变每个轴的大小，数组元素在内存中的位置并没有改变：
+\begin{lstlisting}
+b.shape = 4,3
+print(b)
+\end{lstlisting}
+返回
+\begin{lstlisting}
+array([[ 1, 2, 3],
+[ 4, 4, 5],
+[ 6, 7, 7],
+[ 8, 9, 10]])
+\end{lstlisting}
+这种操作会永久的改变原数组的shape． 当某个轴的元素为-1时，将根据数组元素的个数自动计算此轴的长度，因此下面的程序将数组 \verb|b| 的shape改为 \verb|(4,3)|：
+\begin{lstlisting}[language=python]
+c.shape = 4，-1
+\end{lstlisting}
+另外，通过reshape方法，可以创建一个改变了尺寸的新数组，原数组的shape保持不变．例如
+\begin{lstlisting}[language=python]
+d = b.reshape((4,3))
+print(b)
+print(d)
+\end{lstlisting}
+返回
+\begin{lstlisting}[language=python]
+array([[1, 2, 3, 4],
+[4, 5, 6, 7],
+[7, 8, 9, 10]])
+
+array([[ 1, 2, 3],
+[ 4, 4, 5],
+[ 6, 7, 7],
+[ 8, 9, 10]])
+\end{lstlisting}
+其实数组 \verb|b| 和 \verb|d| 其实共享数据存储内存区域，因此修改其中任意一个数组的元素也会同时修改另外一个数组的内容. 例如,
+\begin{lstlisting}[language=python]
+b[0]=999
+print(b)
+print(d)
+\end{lstlisting}
+输出
+\begin{lstlisting}[language=python]
+array([[999, 2, 3, 4],
+[4, 5, 6, 7],
+[7, 8, 9, 10]])
+
+array([[ 999, 2, 3],
+[ 4, 4, 5],
+[ 6, 7, 7],
+[ 8, 9, 10]])
+\end{lstlisting}
+
+
+\subsubsection{一些常用的创建数组的 numpy 函数}
+\verb|arange| 函数通过指定开始值、终值和步长来创建一维数组，注意数组\textbf{不包括}终值:
+\begin{lstlisting}[language=python]
+np.arange(0,10,1)
+array([ 0,1, 2, 3, 4, 5, 6, 7, 8, 9])
+\end{lstlisting}
+
+\verb|linspace| 函数通过指定开始值、终值和元素个数来创建一维数组，可以通过 \verb|endpoint| 关键字指定是否包括终值，默认是包括终值:
+ \begin{lstlisting}[language=python]
+np.linspace(0,1,10)
+array([0.        , 0.11111111, 0.22222222, 0.33333333, 0.44444444,
+       0.55555556, 0.66666667, 0.77777778, 0.88888889, 1.        ])
+ \end{lstlisting}
+
+\verb|zeros| 创建全0数组
+\begin{lstlisting}[language=python]
+np.zeros(3)
+array([0., 0., 0.])
+np.zeros((3,5))
+array([[0., 0., 0., 0., 0.],
+       [0., 0., 0., 0., 0.],
+       [0., 0., 0., 0., 0.]])
+\end{lstlisting} 
+另外, \verb|ones|, \verb|eye|创建全1数组，对角元为1的数组，用法与\verb|zeros|类似．
+
+
+\subsubsection{矩阵的操作}
+下面分别介绍对矩阵\upref{Mat}进行一些常见的操作处理，包括转置，拼接，翻转，内积\upref{Dot}，外积，计算本征值\upref{MatEig}，行列式\upref{Deter}，逆矩阵\upref{InvMat}，等等在python中的实现．
+\begin{lstlisting}[language=python]
+A = [1, 2, 3]
+B = [[2, 1, 4],[2, 2, 3],[1, 1, 3]]
+C = [4, 5, 6]
+\end{lstlisting}
+转置
+\begin{lstlisting}[language=python]
+np.transpose(B)
+\end{lstlisting}
+拼接
+\begin{lstlisting}[language=python]
+D = np.concatenate((A,C)) # Concatenate vectors
+print(D)
+[1 2 3 4 5 6]
+\end{lstlisting}
+左右或者上下翻转矩阵， 字母 \verb|u, d, l, r| 分别是 up， down，  left， 和  right的缩写.
+\begin{lstlisting}[language=python]
+D = np.flipud(A) 
+print(D)
+E = np.fliplr(B) 
+print(E)
+\end{lstlisting}
+输出
+\begin{lstlisting}[language=python]
+[3 2 1]
+array([[4, 1, 2],
+       [3, 2, 2],
+       [3, 1, 1]])
+\end{lstlisting}
+内积（也叫点乘）\upref{Dot}，外积（也叫张量积）
+\begin{lstlisting}[language=python]
+D = np.dot(A,C) 
+print(D)
+D = np.outer(A,C) # Outer product
+print(D)
+\end{lstlisting}
+输出
+\begin{lstlisting}[language=python]
+32
+[[ 4  5  6]
+ [ 8 10 12]
+ [12 15 18]]
+\end{lstlisting}
+计算本征值\upref{MatEig}，逆矩阵\upref{InvMat}，行列式\upref{Deter}
+\begin{lstlisting}[language=python]
+D = np.linalg.eigvals(B) 
+print(D)
+D = np.linalg.inv(B)
+print(D)
+D = np.linalg.det(B)
+print(D)
+\end{lstlisting}
+随机数，例如产生0-1之间的随机数
+\begin{lstlisting}[language=python]
+D = np.random.rand(3,5) 
+print(D)
+\end{lstlisting}
+创建其他随机数方法类似，例如正态分布随机数用 \verb|np.random.randn| 函数．
