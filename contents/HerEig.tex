@@ -2,40 +2,54 @@
 % 线性代数|厄米矩阵|本征值|正交归一|本征矢|本征方程
 % 未完成： 先把这个词条完成， 然后复制粘贴到对称矩阵词条里面， 符号替换一下就行
 
-\pentry{厄米矩阵\upref{HerMat}， 矩阵的本征方程\upref{MatEig}}
+\pentry{厄米矩阵\upref{HerMat}， 矩阵的本征方程\upref{MatEig}， 正交子空间\upref{OrthSp}}
 
-本词条将 “对称矩阵的本征值问题\upref{SymEig}” 拓展到厄米矩阵， 结论和过程都相似． 我们来证明 $N$ 维厄米矩阵 $\mat A$ 存在 $N$ 个两两正交归一的本征矢 $\bvec v_1, \dots, \bvec v_N$．
+本词条将 “对称矩阵的本征值问题\upref{SymEig}” 拓展到厄米矩阵， 结论和过程都相似． 我们来证明 $N$ 维厄米矩阵 $\mat H$ 存在 $N$ 个两两正交归一的本征矢 $\bvec v_1, \dots, \bvec v_N$．
 
 % 未完成： 举例最重要
 
-\subsection{证明本征值为实数}
+\subsection{本征值为实数}
 本征方程为
 \begin{equation}
-\mat A \bvec v_i = \bvec v_i
+\mat H \bvec v_i = \bvec v_i
 \end{equation}
 将本征方程左边乘以 $\bvec v_i$ 得
 \begin{equation}
-\bvec v_i\Her \mat A \bvec v_i = \lambda_i \bvec v_i\Her \bvec v_i
+\bvec v_i\Her \mat H \bvec v_i = \lambda_i \bvec v_i\Her \bvec v_i
 \end{equation}
 将等式两边取厄米共轭（注意矢量也可以看成矩阵）， 由\autoref{HerMat_eq2}\upref{HerMat} 和\autoref{HerMat_eq1}\upref{HerMat} 可得
 \begin{equation}
-\bvec v_i\Her \mat A\Her \bvec v_i = \bvec v_i\Her \mat A \bvec v_i = \lambda_i^* \bvec v_i\Her \bvec v_i
+\bvec v_i\Her \mat H\Her \bvec v_i = \bvec v_i\Her \mat H \bvec v_i = \lambda_i^* \bvec v_i\Her \bvec v_i
 \end{equation}
 对比两式， 得 $\lambda_i = \lambda_i^*$， 所以 $\lambda_i$ 必为实数．
 
-\subsection{证明本征矢的正交性}
-简并空间内， 我们可以认为地指定正交归一基底， 所以只需要证明不同本征值对应的本征矢正交即可．
+\subsection{本征矢的正交性}
+下面来证明不同本征值对应的本征矢正交， 即
+\begin{equation}\label{HerEig_eq1}
+\bvec v_i\Her \bvec v_j = 0 \qquad (a_i \ne a_j)
+\end{equation}
+首先令
 \begin{equation}
-s = \bvec v_1\Her (\mat A \bvec v_2) = \bvec v_1\Her (\lambda_2 \bvec v_2) = \lambda_2 \bvec v_1\Her \bvec v_2
+s = \bvec v_i\Her (\mat H \bvec v_j) = \bvec v_i\Her (\lambda_j \bvec v_j) = \lambda_j \bvec v_i\Her \bvec v_j
 \end{equation}
 使用矩阵乘法结合律\autoref{Mat_eq1}\upref{Mat} 以及\autoref{HerMat_eq2}\upref{HerMat} 得
 \begin{equation}
-s = (\mat A \bvec v_1)\Her \bvec v_2 = \lambda_1^* \bvec v_1\Her \bvec v_2 = \lambda_1 \bvec v_1\Her \bvec v_2
+s = (\mat H \bvec v_i)\Her \bvec v_j = \lambda_i^* \bvec v_i\Her \bvec v_j = \lambda_i \bvec v_i\Her \bvec v_j
 \end{equation}
-以上两矢相等， 因为 $\lambda_1 \ne \lambda_2$， 所以 $\bvec v_1\Her \bvec v_2 = 0$．
-
-事实上， 厄米矩阵也可以定义为满足
+以上两式相减得 % 简并空间内， 我们可以认为地指定正交归一基底， 所以只需要
 \begin{equation}
-\bvec v_1\Her (\mat A \bvec v_2) = (\mat A \bvec v_1)\Her \bvec v_2
+(\lambda_j - \lambda_i)\bvec v_i\Her \bvec v_j = 0
 \end{equation}
-的矩阵．
+因为 $\lambda_i \ne \lambda_j$， 所以 $\bvec v_i\Her \bvec v_j = 0$．
+
+\subsection{简并}
+在 “矩阵的本征方程\upref{MatEig}” 中， 我们定义若令 $\lambda_i$ 的本征矢空间的维度是 $n_i$， 当 $n_i = 1$， 我们说 $\lambda_i$ 是\textbf{非简并}的， 当 $n_i > 1$ 就说 $\lambda_i$ 是 $n_i$ 重\textbf{简并}的， 把 $n_i$ 叫做\textbf{简并数}．
+
+根据\autoref{HerEig_eq1}， 对于厄米矩阵， 所有不同的 $\lambda_i$ 对应的本征矢子空间是两两正交的， 且 $\sum_i n_i = N$， 所以所有这些子空间的直和就是 $\mat A$ 的定义域空间．
+
+\subsection{基底}
+对任意的 $N$ 维厄米矩阵 $\mat H$ 都能得到由本征矢构成的 $N$ 个正交归一基底．
+\begin{itemize}
+\item 如果不存在简并， 这组基底是唯一的， 且它们的本征值各不相同．
+\item 如果存在简并， 每个子空间中可以选出 $n_i$ 个正交归一基底， 将他们放在一起就得到总空间中的 $N$ 个正交归一基底． 注意每个简并子空间中的正交归一基底的选取都是任意的．
+\end{itemize}
