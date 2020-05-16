@@ -14,23 +14,51 @@ z = r\cos \theta
 \begin{equation}\label{SphCar_eq2}
 \leftgroup{
 r &= \sqrt {x^2 + y^2 + z^2} \\
-\theta  &= \Arctan\qty(z, \sqrt{x^2 + y^2})\\
+\theta  &= \arccos\qty(z/\sqrt{x^2 + y^2 + z^2})\\
 \phi  &= \Arctan(y, x)
 }\end{equation}
-其中 $\Arctan$ 函数的定义见\autoref{Arctan_eq1}\upref{Arctan}． 以及两组基底之间的变换关系
+其中 $\Arctan$ 函数的定义见\autoref{Arctan_eq1}\upref{Arctan}． 注意
+
+\subsection{矢量的变换}
+两组基底之间的变换关系为
 \begin{equation}\label{SphCar_eq3}
 \begin{cases}
-\uvec r = \sin\theta\cos\phi\,\uvec x + \sin\theta\sin\phi\,\uvec y + \cos\theta\,\uvec z\\
-\uvec \theta = \cos\theta\cos\phi\,\uvec x + \cos\theta\sin\phi\,\uvec y - \sin\theta\,\uvec z\\
-\uvec \phi =  - \sin\phi\,\uvec x + \cos\phi\,\uvec y
+\uvec r = R_{11}\uvec x + R_{12}\uvec y + R_{13}\uvec z\\
+\uvec \theta = R_{21}\uvec x + R_{22}\uvec y + R_{23}\uvec z\\
+\uvec \phi = R_{31}\uvec x + R_{32}\uvec y + R_{33}\uvec z
 \end{cases}
 \end{equation}
 \begin{equation}\label{SphCar_eq4}
 \begin{cases}
-\uvec x = \sin \theta \cos \phi \,\uvec r + \cos \theta \cos \phi \,\uvec \theta  - \sin \phi \,\uvec \phi \\
-\uvec y = \sin \theta \sin \phi \,\uvec r + \cos \theta \sin \phi \,\uvec \theta  + \cos \phi \,\uvec \phi \\
-\uvec z = \cos \theta \,\uvec r - \sin \theta \,\uvec \theta
+\uvec x = R_{11} \uvec r + R_{21} \uvec \theta  + R_{31} \uvec \phi \\
+\uvec y = R_{12} \uvec r + R_{22} \uvec \theta  + R_{32} \uvec \phi \\
+\uvec z = R_{13} \uvec r + R_{23} \uvec \theta  + R_{33} \uvec \phi
 \end{cases}
+\end{equation}
+其中 $\mat R$ 是三维旋转矩阵\upref{Rot3D}
+\begin{equation}\label{SphCar_eq5}
+\mat R = \pmat{
+    \sin\theta\cos\phi & \sin\theta\sin\phi & \cos\theta\\
+    \cos\theta\cos\phi & \cos\theta\sin\phi & -\sin\theta\\
+    -\sin\phi & \cos\phi & 0
+}
+\end{equation}
+
+若任意矢量 $\bvec v$ 在直角坐标系和球坐标系中分别表示为
+\begin{equation}\label{SphCar_eq7}
+\bvec v = v_x \uvec x + v_y \uvec y + v_z \uvec z
+\end{equation}
+\begin{equation}\label{SphCar_eq6}
+\bvec v = v_r \uvec r + v_\theta \uvec \theta + v_\phi \uvec \phi
+\end{equation}
+则坐标变换关系可以用矩阵乘法表示
+\begin{equation}\label{SphCar_eq9}
+\pmat{v_r \\ v_\theta \\ v_\phi}
+= \mat R \pmat{v_x \\ v_y \\ v_z}
+\end{equation}
+\begin{equation}\label{SphCar_eq8}
+\pmat{v_x \\ v_y \\ v_z}
+= \mat R\Tr \pmat{v_r \\ v_\theta \\ v_\phi}
 \end{equation}
 
 \subsection{推导}
@@ -53,8 +81,4 @@ r &= \sqrt {x^2 + y^2 + z^2} \\
 \begin{equation}
 \uvec \theta  = \cos \theta \cos \phi \,\uvec x + \cos \theta \sin \phi \,\uvec y - \sin \theta \,\uvec z
 \end{equation}
-同理，在同一点 $(r, \theta, \phi)$ 处， $\uvec \phi $ 的球坐标为 $(1, \pi /2, \phi + \pi /2)$，  得到第三条式子．
-
-下面推导变换\autoref{SphCar_eq4}． 由于已经知道了变换\autoref{SphCar_eq3}， 且直角坐标系和球坐标系中的基底都是单位正交基，所以直接把变换\autoref{SphCar_eq3} 中的系数写成 $3 \times 3$ 的矩阵形式，再转置 % 未完成： 矩阵转置
-即可得到变换\autoref{SphCar_eq4} 中的系数矩阵．% 未完成： 正交基底变换，正交矩阵 等
-
+同理可得\autoref{SphCar_eq5}． 将基底变换\autoref{SphCar_eq3} 和\autoref{SphCar_eq4} 分别带入\autoref{SphCar_eq6} 和\autoref{SphCar_eq7} 得坐标变换\autoref{SphCar_eq8} 和\autoref{SphCar_eq9}．
