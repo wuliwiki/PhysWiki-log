@@ -7,7 +7,9 @@
 
 给定一个群$G$，我们任意拿出一个元素$a\in G$，用$a$去左乘$G$中的所有元素（包括$a$自己），那么我们可以把$a$看成一种$G$到自身上的映射：$f_a:G\rightarrow G$，使得对于任意$x\in G$，$f_a(x)=ax$．
 
-群$G$中的每一个元素都可以像这样生成一个映射，把这些映射全部放在一起，我们也可以整体上看成一个映射$f:G\times G\rightarrow G$，满足：对于任意的$a, x\in G$，有$f(a,x)=f_a(x)=ax$．这样的$G\times G$到$G$上的映射，被称为一个\textbf{群作用（group operation）}．
+群$G$中的每一个元素都可以像这样生成一个映射，把这些映射全部放在一起，我们也可以整体上看成一个映射$f:G\times G\rightarrow G$，满足：对于任意的$a, x\in G$，有$f(a,x)=f_a(x)=ax$．这样的$G\times G$到$G$上的映射，被称为一个\textbf{群作用（group action）}．
+
+按照上述定义得到的作用，通常称为\textbf{左平移}作用；相应地，我们也可以让元素$a$对$x$的作用是$g_a(x)=xa$；这样的作用被称为\textbf{右平移}．
 
 \subsection{群作用}
 
@@ -20,6 +22,71 @@
 \item \textbf{单位元是恒等映射}：$G$的单位元$e$将任何$x\in X$映射到自身：$e\cdot x=x$．
 \end{itemize}
 
-那么我们称群$G$ \textbf{作用（operate）}于集合$X$上．
+那么我们称群$G$ \textbf{作用（acts）}于集合$X$上．
 
 \end{definition}
+
+群作用可以像定义里一样记为$g\cdot x$，也可以记为$X$到$X$的若干映射$f_g(x)=g\cdot x$，还可以整体上看成$G\times X$到$X$的一个映射$f(g, x)=g\cdot x$．
+
+\subsection{群作用的例子}
+
+\begin{example}{平移作用}\label{Group3_ex1}
+本条开头定义的左平移和右平移，就是群在自身集合上的作用．
+\end{example}
+
+\begin{example}{伴随作用}\label{Group3_ex2}
+对于任意$a\in G$，令$f_a: G\rightarrow G$满足$\forall x\in G, f_a(x)=axa^{-1}$，则这些映射定义了一个群$G$在集合$G$上的作用，称为\textbf{伴随作用}．
+\end{example}
+
+\begin{example}{线性变换}\label{Group3_ex3}
+参考线性变换\upref{LTrans}．我们已经知道，$n$阶非奇异矩阵配上乘法可以构成一个群；相应地，满秩线性变换（可逆线性变换）配上映射的复合运算构成一个群．非奇异矩阵乘法是给定了基向量以后，满秩线性变换的复合的表示．
+
+取$n$维实数向量空间$X$，那么$X$是向量的集合；$GL(n,\mathbb{R})$是$X$上可逆线性变换的群，显然$GL(n,\mathbb{R})$按照通常的线性变换定义，构成了在$X$上的一个作用．
+\end{example}
+
+\subsection{群作用的性质}
+
+当我们讨论群$G$在集合$X$上的作用时，一共有两个集合要关心．
+
+如果我们固定$X$中的一个元素$x$，那么每个$G$中元素$g$都把$x$映射到某个$f_g(x)\in X$上．所有能这样被映射到的元素$f_g(x)$构成了$X$的一个子集，称为元素$x$的\textbf{轨道（orbit）}．我们也可以找出所有不移动$x$的群元素$g$，即满足$f_g(x)=x$的$g\in G$，那么所有这样的$g$构成了$G$的一个子群$F_x$，称为$x$的\textbf{迷向子群（isotropy subgroup）}或者\textbf{稳定子群（stablizer subgroup）}．
+
+\begin{exercise}{迷向子群}\label{Group3_exe1}
+证明$F_x$构成群．\footnote{见\autoref{GroupP_ex2}．}
+\end{exercise}
+
+如果对于任何$x\in X$，都有$x$的轨道是整个$X$，那么我们称这个作用是\textbf{可递的}，此时$X$就是$G$的\textbf{齐性空间}．如果对于任何$x\in X$，$x$的轨道只是$\{x\}$，那么这个作用就是\textbf{平凡（trivial）}的．
+
+如果对于任何$x\in X$，任何$g\in G-\{e\}$，都使得$g\cdot x\not=x$，那么我们说这个作用是\textbf{有效的}．有效性等价于说任何$x\in X$的迷向子群都是$\{e\}$．
+
+在之前的例子中，平移作用既是可递的，又是有效的．但是伴随作用不能保证有效性和可递性，具体情况要看群的结构性质．全体可逆线性变换构成的群作用在非零向量空间上，这个作用是可递的，也是有效的——注意一定得是非零向量空间，把零向量排除在外．
+
+\begin{theorem}{}\label{Group3_the1}
+设群$G$作用在$X$上，在$X$上定义关系$\sim$如下：$\forall x, y\in X, x\sim y \iff \exists g\in G, g\cdot x=y$，或者说，$x\sim y$当且仅当$y$在$x$的轨道里．那么，$\sim$是一个等价关系．
+\end{theorem}
+
+由群$G$的封闭性和逆元存在性分别可以证明\autoref{Group3_the1}中关系$\sim$的传递性和对称性．这个定理说明，轨道划分是一种等价类划分．
+
+\begin{definition}{}
+设群$G$按照伴随作用，作用在自身上．
+\begin{itemize}
+\item 对于$g\in G$，记$C_g$为$g$在伴随作用下的轨道，称$C_g$为$g$的\textbf{共轭类（conjugate class）}，每一个$h\in C_g$都称为$g$的\textbf{共轭元素（conjugate）}．
+
+\item 对于$g\in G$，记$C_G(g)$是$g$在伴随作用下的迷向子群， 称$C_G(g)$为$g$在$G$中的\textbf{中心化子（centralizer）}．
+
+\item 记$C(G)=\bigcap_{g\in G} C_G(g)$，称为群$G$的\textbf{中心（center）}．
+\end{itemize}
+\end{definition}
+
+群的中心还有另一个定义：所有可以和$G$中一切元素交换的元素构成的集合，就是$C(G)$．
+
+\begin{theorem}{轨道-迷向子群定理}\label{Group3_the2}
+设群$G$作用在集合$X$上．固定一个$x\in X$，那么对于$g, h\in G$，我们有$g\cdot x=h\cdot x\iff g^{-1}h\cdot x=x\iff g^{-1}h\in F_x\iff h\in gF_x$．也就是说，如果两个群元素$g, h$能够把$x$映射到同一个元素上，那么$g$和$h$在迷向子群$F_x$的同一个左陪集上．
+\end{theorem}
+
+\begin{corollary}{}\label{Group3_cor1}
+由\autoref{Group3_the2}，$|G|/|F_x|=|O_x|$，其中$O_x$是$x$的轨道．
+\end{corollary}
+
+\begin{exercise}{Burnside引理}\label{Group3_exe2}
+设群$G$作用在集合$X$上．对于给定的$g\in G$，记$X^g=\{x\in X|g\cdot x=x\}$，$O_x$是$x\in X$的轨道，那么$|\{O_x|x\in X\}|=\frac{1}{|G|}\sum_{g\in G}|X^g|$．就是说，$X$上轨道的数目，等于每个$g\in G$作用后不产生效果的元素数量之平均值．证明此引理\footnote{见\autoref{GroupP_ex3}}．
+\end{exercise}
