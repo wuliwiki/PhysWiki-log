@@ -2,6 +2,7 @@
 \pentry{拓扑空间\upref{Topol}}
 拓扑空间定义了什么样的集合算开集，而开集的补集被称为闭集．除此之外，还有一些集合是既不开也不闭的．比如说，在$\mathcal{R}$上定义的度量拓扑中，开区间都是开集，闭区间和孤立点都是闭集，但是半开半闭区间两者都不属于．
 
+\subsection{基本概念}
 \begin{definition}{}
 给定拓扑空间$(X, \mathcal{T})$以及它的一个子集$A$．
 \begin{itemize}
@@ -12,7 +13,7 @@
 \item 全体内点构成的集合，称为$A$的\textbf{内部（interior）}，记为$A^\circ$．
 \item 全体外点构成的集合，称为$A$的\textbf{外部(exterior)}．
 \item 全体边界点构成的集合，称为$A$的\textbf{边界(boarder)}．
-\item 如果包含点$x\in X$的任何开集$U_x$都和$A$相交：$U_x\cap A\not=\varnothing$，那么我们说$x$是$A$的一个\textbf{聚点}或者\textbf{极限点（limit point）}．
+\item 如果包含点$x\in X$的任何开集$U_x$，都含有和$x$不相同的、$A$的元素：$(U_x-\{x\})\cap A\not=\varnothing$，那么我们说$x$是$A$的一个\textbf{聚点}或者\textbf{极限点（limit point）}．
 \end{itemize}
 \end{definition}
 
@@ -30,8 +31,44 @@
 
 由定义，对于任何拓扑空间的子集$A$，外点都不是聚点，但边界点和内点都是聚点；内点都是$A$的点，但边界点不一定是．这么一来，计算边界点的方法，就是求出所有聚点，再减去所有内点即可．
 
-对于$A$，它的聚点构成的集合被称为$A$的\textbf{导出集（induced set）}或者\textbf{导集}．
+对于$A$，它的聚点构成的集合被称为$A$的\textbf{导出集（induced set）}或者\textbf{导集}，在本书中记为$A'$\footnote{有的教材中，$A'$代表的是补集，但在本书中我们使用$A^C$表示补集了，于是$A'$可以腾出来表示导集．}．
+
+\begin{example}{}
+\begin{itemize}
+\item 令$A=\{\frac{1}{n}|n\in\mathbb{Z}^+\}$，那么$A'=\{0\}$．
+\item 令$A=(0,1)\cup(1,2)$，那么$A'=[0,2]$
+\end{itemize}
+\end{example}
 
 \begin{exercise}{}
 证明：任何集合的导集都是闭集．
 \end{exercise}
+
+\subsection{闭包}
+
+给定任意拓扑空间$X$的任意子集$A$，那么$A^\circ$是$A$所包含的最大的开集．对称地，包含$A$的最小的闭集被称为$A$的\textbf{闭包（closure）}，记为$\bar{A}$．闭包很容易得到：
+
+\begin{theorem}{}
+给定任意拓扑空间$X$的任意子集$A$，则有$\bar{A}=A\cup A'$．
+\end{theorem}
+\begin{corollary}{}\label{Topo0_cor1}
+考虑到$A'-A^\circ$是$A$的边界，故$\bar{A}$等于$A$和$A$的边界的并．
+\end{corollary}
+
+以区间作为例子：如果$A=(0,1)$，那么$A'=[0,1]$，$\bar{A}=[0,1]$．
+
+以圆盘作为例子：如果$D=\{(x,y)\in\mathbb{R}^2|x^2+y^2<1\}$，那么$D'=\bar{D}=\{(x,y)\in\mathbb{R}^2|x^2+y^2\leq1\}$．尝试在$x^2+y^2=1$的圆盘上添加部分点进$D$，得到的$D$还是具有相同的闭包．这是因为这些添加的点都是在最初的$D$的边界上的．
+
+\subsection{稀疏和稠密}
+\pentry{集合的极限\upref{SetLim}}
+给定任意拓扑空间$X$的任意子集$A$，如果$A^\circ=\varnothing$，即$A$没有内点，那么称$A$是\textbf{稀疏（sparse）}的；如果$\bar{A}=B\subset X$，也就是说$B$是$A$和$A$的边界的并，那么称$A$在$B$中是\textbf{稠密（dense）}的．
+
+无论取什么开集，它都不可能被稀疏的集合完全包含，总有遗漏的点，所以有了“稀疏”的名称．而当$A$在$B$中稠密时，不可能找一个开集来圈出$B$中完全和$A$不相交的一块区域，所以有了“稠密”的名称．
+
+全体有理数的集合$\mathbb{Q}$在$\mathbb{R}$中既稠密，又稀疏．
+
+\begin{example}{Cantor集}\label{Topo0_ex2}
+令$A_0=[0,1]$，也就是说，$A_0$是一段长度为$1$的线段．把这条线段的中间挖去$1/3$，得到$A_1=[0,1/3]\cup[2/3,1]$．现在$A_1$有了两段长为$1/3$的线段，同样地，分别挖去它们中间的$1/3$，得到$A_2$．以此类推，$A_n$有$2^n$条长度为$1/3^n$的线段，把每条线段的中间挖掉$1/3$，就可以得到$A_{n+1}$．取这一列集合的极限$C=\lim_{n\rightarrow\infty}A_n$，所得到的$C$被称为\textbf{Cantor集}，这是一个非常重要的集合，常用来作特例来阐释各种集合的性质．
+
+这是一个稀疏集，同时又是一个\textbf{完备集（perfect set）}\footnote{导集还是自身的集合，称为完备集或者完美集．}另外，在测度论中，这个集合的测度是0. 
+\end{example}
