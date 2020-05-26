@@ -6,18 +6,6 @@
 \begin{itemize}
 \item 有人正在写然后提示只读， 但是没有其他人在编辑， changed.txt 里面是他修改的内容， 但 authors.txt 是空白的．
 
-\item 如果用户 A 编辑以后没有关闭页面， 那么用户 B （如 admin）再去编辑， 用户 A 似乎还是会持续备份（但内容的确是 B 新修改的内容）． 建议解决办法： 同一个词条如果同时被第二个电脑打开（包括 A 使用两个浏览器的情况）， 第一个浏览器中自动变为只读模式并且停止备份．
-
-\item 在一些桌面浏览器上会出现动画一直转， 编辑器加载不出来的情况（如 IE）．
-
-\item 符号替换设置打开时， json 编辑窗自动格式太慢， 是否考虑直接使用正确的格式保存文件， 而不是打开后再格式化？
-
-\item 为什么\href{https://docs.julialang.org/en/v1/manual/unicode-input/}{这个 Julia 文档页面}中的 \lstinline|\varphi| 和 \lstinline|\phi| 粘贴到浏览器（包括符号替换规则窗口）中之后显示出来是调换的？
-
-\item 搜索框中的 \lstinline|\phi| 和 \lstinline|\varphi| 的符号替换调换了， 但搜索的内容是正确的． 应该也按照 \lstinline|config.json| 中的规则替换（这应该和上一个 bug 有关）
-
-\item 创建词条或者保存词条时， PhysWikiScan 偶尔会提示 “changed.txt 和 authors.txt 行数不同”， 但多试一次就没问题了． （已经暂时将这个 error 改成 warning）
-
 \item 自动引用公式后再连续撤销， 符号替换的紫色下划线会全部消失， 如果这时保存， tex 文件中的代码也会替换成符号
 
 \item 上传图片等待的时候提示 “PhysWikiScan 没有响应， 请稍后再试”， 过一段时间后， 图片上传成功． 期间如果重复点击上传图片， 上传成功后也会重复插入嵌套的图片环境（需要禁止上传完成前重复上传）
@@ -25,6 +13,14 @@
 \item 搜索框中不能搜索 \lstinline|\subseteq|， 因为打了 \lstinline|\subset| 以后就会直接替换成符号． 任何两个前面部分相同的命令都有这个问题
 
 \item “重新编译并发布” 按钮没有成功调用 scan 程序， 也没有显示命令行的结果（应该指定 online 路径重新运行， 而不是直接把 changed 路径中的 html 复制过去， 因为用的是绝对 url）
+
+\item 如果用户 A 编辑以后没有关闭页面， 那么用户 B （如 admin）再去编辑， 用户 A 似乎还是会持续备份（但内容的确是 B 新修改的内容）． 建议解决办法： 同一个词条如果同时被第二个电脑打开（包括 A 使用两个浏览器的情况）， 第一个浏览器中自动变为只读模式并且停止备份．
+
+\item 为什么\href{https://docs.julialang.org/en/v1/manual/unicode-input/}{这个 Julia 文档页面}中的 \lstinline|\varphi| 和 \lstinline|\phi| 粘贴到浏览器（包括符号替换规则窗口）中之后显示出来是调换的？
+
+\item 搜索框中的 \lstinline|\phi| 和 \lstinline|\varphi| 的符号替换调换了， 但搜索的内容是正确的． 应该也按照 \lstinline|config.json| 中的规则替换（这应该和上一个 bug 有关）
+
+\item 创建词条或者保存词条时， PhysWikiScan 偶尔会提示 “changed.txt 和 authors.txt 行数不同”， 但多试一次就没问题了． （scan 已经暂时将这个 error 改成 warning， 并将 authors.txt 中多余的行删掉）
 
 \item 【完成】自动备份对 FnalNt.tex 停止了．
 
@@ -73,19 +69,25 @@
 \subsection{Editor TODO}
 
 \begin{itemize}
-\item 上传图片后不需要提示 “该图片已存在， 是否替换”
+\item 符号替换设置打开时， json 编辑窗自动排版格式太慢， 是否考虑直接使用正确的格式保存文件， 而不是打开后再排版？
 
-\item 历史版本列表中显示所有用户的备份以及用户名
+\item 在加载页面显示 “建议使用 Chrome 或 Chromium 内核的浏览器”
+
+\item 替换模式下上传图片后不需要再提示 “该图片已存在， 是否替换？”
+
+\item 历史版本列表中显示所有用户的备份以及用户名， 目前好像仅显示当前用户的
 
 \item 如果 A 用户编辑了词条， B 用户打开了但没有内容改变， 则不应该备份（发现相邻的 \verb|202003031532_addiszx_AMLaw1.tex| 和 \verb|202005011412_admin_AMLaw1.tex| 内容是一样的）
 
-\item 如果 A 用户正在编辑， admin 改变了词条， 
+\item 如果 A 用户正在编辑， admin 改变了词条， 则立即停止 A 用户对该词条的编辑和自动备份， admin publish 以后也不需要自动恢复．
 
 \item 创建词条的窗口在文件名下方添加一个选填栏 “关键词”，在上方的说明改为 \lstinline+请输入标题（如“角动量守恒”），文件名（如"AngMom"）和关键词．文件名不能超过 6 个字符，只能含有字母或数字，不能以数字开头； 关键词格式如 “关键词1|关键词2|关键词3”， 建议填写以方便检索．+
 
-\item 创建词条后， 在文件第二行注释关键词， 如 \lstinline+% 关键词1|关键词2|关键词3+． 如果没有填写， 则第二行为空， 光标停在第三行
+\item 创建词条后， 在文件第二行注释关键词， 如 \lstinline+% 关键词1|关键词2|关键词3+， 光标停留在第四行． 如果没有填写， 则第二行为空， 光标停在第三行
 
 \item 删除一个文件时， 图片也要一并删除
+
+\item 每五分钟的备份也要包括图片（figures 文件夹中的 png, svg, pdf）， 规则和 tex 文档一样．
 
 \item 【完成】预览窗口中的 css 使用 PhysWikiScan 输出文件夹中的 css （不同用户可能不一样）
 
