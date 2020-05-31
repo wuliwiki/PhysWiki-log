@@ -1,43 +1,40 @@
 % Python 模块
+% python|module|模块
+
 \pentry{Python 入门\upref{Python}}
 
-模块是包含一组\textbf{函数}的文件, 希望在应用程序中引用.
-\subsection{创建模块}
-如需创建模块，只需将所需函数代码保存在文件扩展名为 \verb|.py| 的文件中. 例如
-在名为 \verb|mymodule.py| 的文件中保存代码：
-\begin{lstlisting}[language=python]
-def greeting(name):
-    print("Hello, " + name)
+在 “Python 入门\upref{Python}” 中， 我们示范了如何从 \verb|math| 模块中引入一些变量和函数（如 \verb|pi| 和 \verb|sin|）． 现在我们来学习 Python 模块的原理．
 
-def saying():
-    print("Hello! ")
+事实上， Python 的模块可以是任意一个普通的 \verb|.py| 拓展名的文件． 这个文件中可以定义全局变量， 函数， 类， 甚至是可执行的命令． 当我们要在其他 \verb|.py| 文件中使用这个文件中的函数或全局变量， 只需要声明把前者作为模块使用即可．
+
+例如创建模块文件 \verb|mymodule.py| 如下
+\begin{lstlisting}[language=python]
+# 函数
+def plus1(num):
+    return num + 1
+# 全局变量
+num = 3.5
+num2 = plus1(num)
 \end{lstlisting}
-在该模块中写了两个简单的函数．
+在该模块中定义了一个函数和两个全局变量． 注意在定义第二个变量时执行了函数 \verb|plus1|， 这个命令会在模块被调用时执行．
 
 \subsection{使用模块}
-现在，我们就可以用 \verb|import| 语句来使用我们刚刚创建的模块.
-
-导入名为 \verb|mymodule| 的模块，并调用 \verb|greeting| 函数与\verb|saying|函数.
+现在，我们我们在同一文件夹中新建如下 \verb|test.py|， 就可以用 \verb|import| 语句来使用我们刚刚创建的模块.
 \begin{lstlisting}[language=python]
 import mymodule
-mymodule.greeting("Bill")
-mymodule.saying()
+print('num = ', mymodule.num)
+print('num2 = ', mymodule.num2)
+print('num2 + 1 = ', mymodule.plus1(mymodule.num2))
 \end{lstlisting}
-注释：如果使用模块中的函数时，请使用以下语法：\verb|模块名.函数名|.
+在 “Python 入门\upref{Python}” 中我们还介绍了模块的不同导入方法， 这里不再赘述．
 
-\subsection{为模块命名}
-可以随意对模块文件命名，但是文件扩展名必须是 \verb|.py|．
+\subsection{Python 内建模块}
+Python 中有几个\textbf{内建模块（built-in module）}，可以随时导入．
 
-\subsection{重命名模块}
-有时候模块名比较长，为了方便使用，可以在导入模块时使用 \verb|as| 关键字创建别名.
-\begin{lstlisting}[language=python]
-import mymodule as mx
-mx.saying()
-\end{lstlisting}
+\subsubsection{math 模块}
+（未完成）
 
-\subsection{内建模块}
-Python 中有几个内建模块，可以随时导入．
-\subsubsection{time模块}
+\subsubsection{time 模块}
 在Python中，通常有这几种方式来表示时间：
 
 时间戳(timestamp) ：通常来说，时间戳表示的是从1970年1月1日00:00:00开始按秒计算的偏移量．我们运行“type(time.time())”，返回的是float类型．
@@ -46,7 +43,7 @@ Python 中有几个内建模块，可以随时导入．
 
 元组(\verb|struct_time|)   ：\verb|struct_time| 元组共有9个元素共九个元素:(年，月，日，时，分，秒，一年中第几周，一年中第几天，夏令时)
 
-\subsubsection{random模块}
+\subsubsection{random 模块}
 随机生成内容.
 \begin{lstlisting}[language=python]
 import random
@@ -54,13 +51,13 @@ import random
 print(random.random())
 # 随机生成传入参数范围内的数字 即 1，2，3
 print(random.randint(1, 3))
-# 随机生成传入参数范围内的数字，range顾头不顾尾
+# 随机生成传入参数范围内的数字，range 顾头不顾尾
 print(random.randrange(1, 3))
 # 随机选择任意一个数字
 print(random.choice([1, '23', [4, 5]]))
 \end{lstlisting}
 
-\subsubsection{sys模块}
+\subsubsection{sys 模块}
 \begin{lstlisting}[language=python]
 import sys
 # 命令行参数List，第一个元素是程序本身路径
@@ -70,7 +67,7 @@ print(sys.argv)
 print(sys.version)
 \end{lstlisting}
 
-\subsubsection{os模块}
+\subsubsection{os 模块}
 \verb|os| 模块是与操作系统交互的一个接口.
 \begin{lstlisting}[language=python]
 os.getcwd() # 获取当前工作目录，即当前python脚本工作的目录路径

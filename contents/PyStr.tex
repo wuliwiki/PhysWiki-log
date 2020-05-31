@@ -3,127 +3,57 @@
 \pentry{Python 简介\upref{Python}}
 
 \subsection{字符串处理}
-字符串的处理个人认为在网络数据挖掘中使用非常广泛，比如网络爬虫. 对于字符串 \verb|'python String function'|, 生成字符串变量
+\textbf{字符串（string）}可以想i想由字符构成的特殊数组， 一般用于储存一段文字． 一个字符串变量如
 \begin{lstlisting}[language=python]
-str='python String function'
+s = 'python String 字符串'
 \end{lstlisting}
-字符串长度获取：\verb|len(str)|
+注意也可以使用双引号 \verb|"..."|． 用 \verb|type(s)| 查看类型得到 \verb|str|， 即 string 的缩写．
+
+\verb|len(s)| 用于获取字符串长度
 \begin{lstlisting}[language=python]
-print('%s length=%d' % (str,len(str)))
+print('s = ', s, '; length = ', len(s))
+\end{lstlisting}
+也可以用三个单引号或双引号表示多行字符串， 如
+\begin{lstlisting}[language=python]
+s = '''这是第一行
+这是第二行
+这是第三行'''
+\end{lstlisting}
+注意如果第一个 \verb|'''| 后面必须紧接第一个字符， 第二个 \verb|'''| 必须紧跟最后一个字符．
+
+\subsubsection{转义符}
+如果在字符串中要表示一些特殊的字符， 我们可以使用 \verb|\| 开头的\textbf{转义符（escape character）}， 例如 \verb|\n| 表示换行， \verb|\'| 表示单引号， \verb|\"| 表示双引号． 如果字符串两边用了双引号， 内部的单引号不需要转义， 反之亦然．
+\begin{lstlisting}[language=python]
+print('it's good') # 错误， python 会把 'it' 理解为一个字符串
+print("it's good") # 正确
+print('it\'s good') # 正确
 \end{lstlisting}
 
-
-\subsubsection{字母处理}
-全部大写：\verb|str.upper()|
-
-全部小写：\verb|str.lower()|
-
-大小写互换：\verb|str.swapcase()|
-
-首字母大写，其余小写：\verb|str.capitalize()|
-
-首字母大写：\verb|str.title()|
-
+\subsubsection{截取字符串}
+字符串的截取与数组的截取相同
 \begin{lstlisting}[language=python]
-str='python String function'
-print('%s lower=%s' % (str,str.lower()))
-print('%s upper=%s' % (str,str.upper()))
-print('%s swapcase=%s' % (str,str.swapcase()))
-print('%s capitalize=%s' % (str,str.capitalize()))
-print('%s title=%s' % (str,str.title()))
+s = '0123456789'
+print(s[0:3]) # 截取第一位到第三位的字符
+print(s[:]) # 截取字符串的全部字符
+print(s[6:]) # 截取第七个字符到结尾
+print(s[:-3]) # 截取从头开始到倒数第三个字符之前
+print(s[2]) # 截取第三个字符
+print(s[-1]) # 截取倒数第一个字符
+print(s[::-1]) # 创造一个与原字符串顺序相反的字符串
+print(s[-3:-1]) # 截取倒数第三位与倒数第一位之前的字符
+print(s[-3:]) # 截取倒数第三位到结尾
+\end{lstlisting}
 输出：
-python String function lower=python string function
-python String function upper=PYTHON STRING FUNCTION
-python String function swapcase=PYTHON sTRING FUNCTION
-python String function capitalize=Python string function
-python String function title=Python String Function
-\end{lstlisting}
-\subsubsection{格式化相关}
-获取固定长度，右对齐，左边不够用空格补齐：\verb|str.ljust(width)|
-
-获取固定长度，左对齐，右边不够用空格补齐：\verb|str.ljust(width)|
-
-获取固定长度，中间对齐，两边不够用空格补齐：\verb|str.ljust(width)|
-
-获取固定长度，右对齐，左边不足用0补齐
-
-\begin{lstlisting}[language=python]
-str='python String'
-print('%s ljust=%s' % (str,str.ljust(20)))
-print('%s rjust=%s' % (str,str.rjust(20)))
-print('%s center=%s' % (str,str.center(20)))
-print('%s zfill=%s' % (str,str.zfill(20)))
-输出：
-python String ljust=python String       
-python String rjust=       python String
-python String center=   python String    
-python String zfill=0000000python String
-
-\end{lstlisting}
-
-\subsubsection{字符串搜索相关}
-搜索指定字符串，没有返回-1：\verb|str.find('t')|
-
-指定起始位置搜索：\verb|str.find('t',start)|
-
-指定起始及结束位置搜索：\verb|str.find('t',start,end)|
-
-从右边开始查找：\verb|str.find('t')|
-
-搜索到多少个指定字符串：\verb|str.count('t')|
-
-\begin{lstlisting}[language=python]
-str='python String function'
-print('%s find nono=%d' % (str,str.find('nono')))
-print('%s find t=%d' % (str,str.find('t')))
-print('%s find t from %d=%d' % (str,1,str.find('t',1)))
-print('%s find t from %d to %d=%d' % (str,1,2,str.find('t',1,2)))
-print('%s rfind t=%d' % (str,str.rfind('t')))
-print('%s count t=%d' % (str,str.count('t')))
-输出：
-python String function find nono=-1
-python String function find t=2
-python String function find t from 1=2
-python String function find t from 1 to 2=-1
-python String function rfind t=18
-python String function count t=3
-\end{lstlisting}
-
-\subsubsection{字符串替换相关}
-
-替换old为new：\verb|str.replace('old','new')|
-
-替换指定次数的old为new：\verb|str.replace('old','new',maxReplaceTimes)|
-
-
-\subsubsection{字符串去空格及去指定字符}
-
-去两边空格：\verb|str.strip()|
-
-去左空格：\verb|str.lstrip()|
-
-去右空格：\verb|str.rstrip()|
-
-去两边字符串：\verb|str.strip('d')|，相应的也有\verb|lstrip，rstrip|
-
-按指定字符分割字符串为数组：\verb|str.split(' ')|
-
-\begin{lstlisting}[language=python]
-str=' python String function '
-print('%s strip=%s' % (str,str.strip()))
-str='python String function'
-print('%s strip=%s' % (str,str.strip('d')))
-\end{lstlisting}
-
-
-
-\subsubsection{翻转字符串}
-\begin{lstlisting}[language=python]
-sStr1 = 'abcdefg'
-sStr1 = sStr1[::-1]
-print(sStr1)
-输出
-gfedcba
+\begin{lstlisting}
+012
+0123456789
+6789
+0123456
+2
+9
+9876543210
+78
+789
 \end{lstlisting}
 
 \subsubsection{连接字符串}
@@ -137,29 +67,119 @@ Brazil,Russia,India,China
 abcdef
 \end{lstlisting}
 
-\subsubsection{截取字符串}
+\subsubsection{字符串搜索}
+\begin{itemize}
+\item 搜索指定字符串： \verb|s.find('t')|，搜不到返回 \verb|-1|
+\item 指定起始位置搜索：\verb|s.find('t', start)|
+\item 指定起始及结束位置搜索：\verb|s.find('t', start, end)|
+\item 从右边开始查找：\verb|s.find('t')|
+\item 搜索到多少个指定字符串：\verb|s.count('t')|
+\end{itemize}
+
 \begin{lstlisting}[language=python]
-str='0123456789'
-print(str[0:3]) #截取第一位到第三位的字符
-print(str[:]) #截取字符串的全部字符
-print(str[6:]) #截取第七个字符到结尾
-print(str[:-3]) #截取从头开始到倒数第三个字符之前
-print(str[2]) #截取第三个字符
-print(str[-1]) #截取倒数第一个字符
-print(str[::-1]) #创造一个与原字符串顺序相反的字符串
-print(str[-3:-1]) #截取倒数第三位与倒数第一位之前的字符
-print(str[-3:]) #截取倒数第三位到结尾
+s='python String function'
+print('%s find nono=%d' % (s,s.find('nono')))
+print('%s find t=%d' % (s,s.find('t')))
+print('%s find t from %d=%d' % (s,1,s.find('t',1)))
+print('%s find t from %d to %d=%d' % (s,1,2,s.find('t',1,2)))
+print('%s rfind t=%d' % (s,s.rfind('t')))
+print('%s count t=%d' % (s,s.count('t')))
+\end{lstlisting}
 输出：
-012
-0123456789
-6789
-0123456
-2
-9
-9876543210
-78
-789
+\begin{lstlisting}
+python String function find nono=-1
+python String function find t=2
+python String function find t from 1=2
+python String function find t from 1 to 2=-1
+python String function rfind t=18
+python String function count t=3
 \end{lstlisting}
 
+\subsubsection{字符串替换}
+
+替换old为new：\verb|s.replace('old','new')|
+
+替换指定次数的old为new：\verb|s.replace('old','new',maxReplaceTimes)|
+
+
+\subsubsection{字母处理}
+\begin{itemize}
+\item 全部变为大写：\verb|s.upper()|
+\item 全部变为小写：\verb|s.lower()|
+\item 大小写互换：\verb|s.swapcase()|
+\item 首字母大写，其余小写：\verb|s.capitalize()|
+\item 首字母大写：\verb|s.title()|
+\end{itemize}
+
+\begin{lstlisting}[language=python]
+s = 'python String 字符串'
+print('s =          ', s);
+print('lower =      ', s.lower()); # 全部变为小写：
+print('upper =      ', s.upper()); # 全部变为大写：
+print('swapcase =   ', s.swapcase()); # 大小写互换
+print('capitalize = ', s.capitalize()); # 首字母大写，其余小写
+print('title =      ', s.title()); # 首字母大写
+\end{lstlisting}
+输出：
+\begin{lstlisting}
+s =           python String 字符串
+lower =       python string 字符串
+upper =       PYTHON STRING 字符串
+swapcase =    PYTHON sTRING 字符串
+capitalize =  Python string 字符串
+title =       Python String 字符串
+\end{lstlisting}
+
+\subsubsection{格式化相关}
+获取固定长度，右对齐，左边不够用空格补齐：\verb|s.ljust(width)|
+
+获取固定长度，左对齐，右边不够用空格补齐：\verb|s.ljust(width)|
+
+获取固定长度，中间对齐，两边不够用空格补齐：\verb|s.ljust(width)|
+
+获取固定长度，右对齐，左边不足用0补齐
+
+\begin{lstlisting}[language=python]
+s='python String'
+print('%s ljust = %s' % (s,s.ljust(20)))
+print('%s rjust = %s' % (s,s.rjust(20)))
+print('%s center = %s' % (s,s.center(20)))
+print('%s zfill = %s' % (s,s.zfill(20)))
+输出：
+python String ljust = python String       
+python String rjust =        python String
+python String center =    python String    
+python String zfill = 0000000python String
+\end{lstlisting}
+
+\subsubsection{字符串去空格及去指定字符}
+
+去两边空格：\verb|s.strip()|
+
+去左空格：\verb|s.lstrip()|
+
+去右空格：\verb|s.rstrip()|
+
+去两边字符串：\verb|s.strip('d')|，相应的也有\verb|lstrip，rstrip|
+
+按指定字符分割字符串为数组：\verb|s.split(' ')|
+
+\begin{lstlisting}[language=python]
+s = ' python String function '
+print('%s strip=%s' % (s,s.strip()))
+s = 'python String function'
+print('%s strip=%s' % (s,s.strip('d')))
+\end{lstlisting}
+
+
+
+\subsubsection{翻转字符串}
+\begin{lstlisting}[language=python]
+sStr1 = 'abcdefg'
+sStr1 = sStr1[::-1]
+print(sStr1)
+输出
+gfedcba
+\end{lstlisting}
 
 关于更多高效的字符串处理方法，感兴趣的读者可以查阅正则表达式的使用方法．
