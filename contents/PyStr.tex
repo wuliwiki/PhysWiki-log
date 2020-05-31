@@ -1,0 +1,165 @@
+% Python 字符串处理
+
+\pentry{Python 简介\upref{Python}}
+
+\subsection{字符串处理}
+字符串的处理个人认为在网络数据挖掘中使用非常广泛，比如网络爬虫. 对于字符串 \verb|'python String function'|, 生成字符串变量
+\begin{lstlisting}[language=python]
+str='python String function'
+\end{lstlisting}
+字符串长度获取：\verb|len(str)|
+\begin{lstlisting}[language=python]
+print('%s length=%d' % (str,len(str)))
+\end{lstlisting}
+
+
+\subsubsection{字母处理}
+全部大写：\verb|str.upper()|
+
+全部小写：\verb|str.lower()|
+
+大小写互换：\verb|str.swapcase()|
+
+首字母大写，其余小写：\verb|str.capitalize()|
+
+首字母大写：\verb|str.title()|
+
+\begin{lstlisting}[language=python]
+str='python String function'
+print('%s lower=%s' % (str,str.lower()))
+print('%s upper=%s' % (str,str.upper()))
+print('%s swapcase=%s' % (str,str.swapcase()))
+print('%s capitalize=%s' % (str,str.capitalize()))
+print('%s title=%s' % (str,str.title()))
+输出：
+python String function lower=python string function
+python String function upper=PYTHON STRING FUNCTION
+python String function swapcase=PYTHON sTRING FUNCTION
+python String function capitalize=Python string function
+python String function title=Python String Function
+\end{lstlisting}
+\subsubsection{格式化相关}
+获取固定长度，右对齐，左边不够用空格补齐：\verb|str.ljust(width)|
+
+获取固定长度，左对齐，右边不够用空格补齐：\verb|str.ljust(width)|
+
+获取固定长度，中间对齐，两边不够用空格补齐：\verb|str.ljust(width)|
+
+获取固定长度，右对齐，左边不足用0补齐
+
+\begin{lstlisting}[language=python]
+str='python String'
+print('%s ljust=%s' % (str,str.ljust(20)))
+print('%s rjust=%s' % (str,str.rjust(20)))
+print('%s center=%s' % (str,str.center(20)))
+print('%s zfill=%s' % (str,str.zfill(20)))
+输出：
+python String ljust=python String       
+python String rjust=       python String
+python String center=   python String    
+python String zfill=0000000python String
+
+\end{lstlisting}
+
+\subsubsection{字符串搜索相关}
+搜索指定字符串，没有返回-1：\verb|str.find('t')|
+
+指定起始位置搜索：\verb|str.find('t',start)|
+
+指定起始及结束位置搜索：\verb|str.find('t',start,end)|
+
+从右边开始查找：\verb|str.find('t')|
+
+搜索到多少个指定字符串：\verb|str.count('t')|
+
+\begin{lstlisting}[language=python]
+str='python String function'
+print('%s find nono=%d' % (str,str.find('nono')))
+print('%s find t=%d' % (str,str.find('t')))
+print('%s find t from %d=%d' % (str,1,str.find('t',1)))
+print('%s find t from %d to %d=%d' % (str,1,2,str.find('t',1,2)))
+print('%s rfind t=%d' % (str,str.rfind('t')))
+print('%s count t=%d' % (str,str.count('t')))
+输出：
+python String function find nono=-1
+python String function find t=2
+python String function find t from 1=2
+python String function find t from 1 to 2=-1
+python String function rfind t=18
+python String function count t=3
+\end{lstlisting}
+
+\subsubsection{字符串替换相关}
+
+替换old为new：\verb|str.replace('old','new')|
+
+替换指定次数的old为new：\verb|str.replace('old','new',maxReplaceTimes)|
+
+
+\subsubsection{字符串去空格及去指定字符}
+
+去两边空格：\verb|str.strip()|
+
+去左空格：\verb|str.lstrip()|
+
+去右空格：\verb|str.rstrip()|
+
+去两边字符串：\verb|str.strip('d')|，相应的也有\verb|lstrip，rstrip|
+
+按指定字符分割字符串为数组：\verb|str.split(' ')|
+
+\begin{lstlisting}[language=python]
+str=' python String function '
+print('%s strip=%s' % (str,str.strip()))
+str='python String function'
+print('%s strip=%s' % (str,str.strip('d')))
+\end{lstlisting}
+
+
+
+\subsubsection{翻转字符串}
+\begin{lstlisting}[language=python]
+sStr1 = 'abcdefg'
+sStr1 = sStr1[::-1]
+print(sStr1)
+输出
+gfedcba
+\end{lstlisting}
+
+\subsubsection{连接字符串}
+\begin{lstlisting}[language=python]
+delimiter = ','
+mylist = ['Brazil', 'Russia', 'India', 'China']
+print (delimiter.join(mylist))
+print('abc'+'def')
+输出
+Brazil,Russia,India,China
+abcdef
+\end{lstlisting}
+
+\subsubsection{截取字符串}
+\begin{lstlisting}[language=python]
+str='0123456789'
+print(str[0:3]) #截取第一位到第三位的字符
+print(str[:]) #截取字符串的全部字符
+print(str[6:]) #截取第七个字符到结尾
+print(str[:-3]) #截取从头开始到倒数第三个字符之前
+print(str[2]) #截取第三个字符
+print(str[-1]) #截取倒数第一个字符
+print(str[::-1]) #创造一个与原字符串顺序相反的字符串
+print(str[-3:-1]) #截取倒数第三位与倒数第一位之前的字符
+print(str[-3:]) #截取倒数第三位到结尾
+输出：
+012
+0123456789
+6789
+0123456
+2
+9
+9876543210
+78
+789
+\end{lstlisting}
+
+
+关于更多高效的字符串处理方法，感兴趣的读者可以查阅正则表达式的使用方法．
