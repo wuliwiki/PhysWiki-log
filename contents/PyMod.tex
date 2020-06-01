@@ -28,6 +28,25 @@ print('num2 + 1 = ', mymodule.plus1(mymodule.num2))
 \end{lstlisting}
 在 “Python 入门\upref{Python}” 中我们还介绍了模块的不同导入方法， 这里不再赘述．
 
+除了内建模块外， Python 默认只会在当前文件夹（即路径）下搜索模块文件． 若要添加其他搜索路径， 可以在 \verb|import| 命令之前使用
+\begin{lstlisting}[language=python]
+import sys
+sys.path.insert(1, 路径)
+\end{lstlisting}
+其中 \verb|路径| 既可以是绝对路径也可以是绝对路径． % 未完成：介绍当前路径
+例如要指定当前路径的子文件夹 \verb|modules|， 则使用 \verb|'modules/'| 即可； 如果是上层文件夹中的子文件夹， 可用 \verb|'../modules/'|．
+
+\subsection{模块嵌套}
+在上面的例子中， 如果在 \verb|mymodule.py| 文件中使用了 \verb|import| 语句导入其他模块中的函数和变量等， 那么在其 \verb|test.py| 中也可以使用这些函数和变量． 例如在 \verb|mymodule.py| 第一行插入
+\begin{lstlisting}[language=python]
+from math import pi
+\end{lstlisting}
+那么在 \verb|test.py| 中就可以使用 \verb|mymodule.pi| 获取这个变量． 但如果把这行改为
+\begin{lstlisting}[language=python]
+import math
+\end{lstlisting}
+那么在 \verb|test.py| 中要使用 \verb|mymodule.math.pi| 才能获取这个变量．
+
 \subsection{Python 内建模块}
 Python 中有几个\textbf{内建模块（built-in module）}，可以随时导入．
 
