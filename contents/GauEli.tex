@@ -19,23 +19,23 @@ function [A, q] = GaussEli(A, augmented)
 % 系数矩阵的行数 Nr 和列数 Nc
 [Nr, Nc] = size(A);
 if (augmented)
-	Nc = Nc - 1;
+    Nc = Nc - 1;
 end
 q = zeros(1,Nr); q(1) = 1;
 disp(A);
 for ii = 1:Nr-1
-	% 处理第 ii 行
-	if (ii > 1)
-		q(ii) = q(ii - 1) + 1;
-	end
-	for jj = q(ii) : Nc
-		% 检查第 jj 列
-		if (max(abs(A(ii:end, q(ii)))) > 0)
-			% 消元使 A(ii+1:end, q(ii)) 全为 0
+    % 处理第 ii 行
+    if (ii > 1)
+        q(ii) = q(ii - 1) + 1;
+    end
+    for jj = q(ii) : Nc
+        % 检查第 jj 列
+        if (max(abs(A(ii:end, q(ii)))) > 0)
+            % 消元使 A(ii+1:end, q(ii)) 全为 0
             A = eli1(A, ii, q(ii));
             break;
-		else
-			% 不需要消元，检查下一列
+        else
+            % 不需要消元，检查下一列
             if (q(ii) < Nc)
                 q(ii) = q(ii) + 1;
             else
