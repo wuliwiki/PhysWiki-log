@@ -1,4 +1,4 @@
-% Make 简介
+% Makefile 简介
 % Makefile | Linux | 自动编译 | make
 \pentry{Linux 基础\upref{Linux}}
 
@@ -11,7 +11,7 @@ Linux 系统中， \verb|make| 就是为了解决这个问题产生的． \verb|
 
 \subsection{简单的例子}
 我们先在某个目录创建一个简单的 \verb|Makefile| 文件， 内容如下
-\begin{lstlisting}
+\begin{lstlisting}[language=makefile]
 a :
 	echo "file a" > a
 
@@ -27,7 +27,7 @@ b : a
 每个含有冒号的行以及接下来的所有命令构成一个 \textbf{规则（rule）}． 冒号左边的文件叫做 \textbf{目标（target）}， 右边的文件叫做 \textbf{依赖（dependency）}． 如果有多个依赖文件， 用空格隔开即可．
 
 现在可以在命令行先 \verb|cd| 到 \verb|Makefile| 所在的目录， 然后执行 \verb|make| 命令． 如果一切正常， 程序将会在命令行依次输出执行的命令（\verb|Makefile| 中第 2 行）以生成 \verb|a|
-\begin{lstlisting}
+\begin{lstlisting}[language=bash]
 echo "file a" > a
 \end{lstlisting}
 生成文件 \verb|a| 的内容为 \verb|file a|．
@@ -59,7 +59,7 @@ modified file a
 注意 rule 的目标除了是具体的文件， 也可以是\textbf{伪目标（phony tarket）}， 伪目标可以有任意名字． 伪目标的 rule 中可以有命令也可以没有．
 
 一个特殊的伪目标是 \verb|goal|． 在上面的 \verb|Makefile| 中如果我们想让 \verb|make| 默认生成 \verb|b|， 可以在文件开始插入 \verb|goal| 作为第一个目标
-\begin{lstlisting}
+\begin{lstlisting}[language=makefile]
 goal : b
 
 a :
@@ -73,7 +73,7 @@ b : a
 现在执行 \verb|make| 或者 \verb|make goal| 就相当于 \verb|make b| 了．
 
 另一个常用的伪目标是 \verb|clean|， 通常用于清除所有被生成的文件． 修改 \verb|Makefile| 如下
-\begin{lstlisting}
+\begin{lstlisting}[language=makefile]
 goal : b
 
 a :
