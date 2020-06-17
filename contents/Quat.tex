@@ -1,0 +1,140 @@
+% 四元数
+\pentry{复数\upref{CplxNo}，域的概念}
+
+%在“域”的词条出现时需要在预备知识里补充相关链接
+%基本完成
+\subsection{四元数的由来}
+
+复数可以定义为具有特定乘法有序实数对，也可以看成是在实数域上添加一个新的元素$  \I$所得到的扩域．
+
+复数应用极为广泛，因为它具有非常良好的代数性质和分析性质，同时可以用来表示二维向量空间，极大地方便了许多几何运算．John Derbyshire在他的科普作品Unknown Quantity: Real and Imaginary History of Algebra中写道，“如果从一维的实数到二维的复数的变更会给我们带来这样巨大的力量和见识，那么为什么要止步呢？难道就没有正等待着被发现的其他种类的数，比如说超复数，它们本身就是三维的吗？还有，难道哪些数就不能让我们进一步认识数学吗？”
+
+19世纪初的爱尔兰数学家William Hamilton就曾试图寻找一种具有特定乘法的三元数组，期望能和三维空间的坐标一一对应．然而他努力多年却未能找到可以满足结合律、分配律等的三元数乘法．事实上，这样的三元数乘法是不存在的，但Hamilton当时不知道．
+
+1843年10月16日，Hamilton在和妻子一同前往爱尔兰皇家学会议会的路上，突然灵光一现，意识到了问题的本质．他“很不理智”地拿出刀来，在布鲁姆桥的一块石头上刻下了以下公式：$$\I^2=\mathrm{j}^2=\mathrm{k}^2=\I\mathrm{j}\mathrm{k}=-1$$这一公式包含了一个四元数的良好的乘法定义．
+
+\subsection{四元数的定义}
+
+现代四元数的定义是把每一个四元数看成一个实数和一个三维实向量的组合：$(a_0, \vec{a})$．在这个语境下，$\I$，$\mathrm{j}$，$\mathrm{k}$被看成是一个标准正交基中的向量，为了避免将来的混淆，把这三个基向量重新表示成$1, \hat{\I}, \hat{\mathrm{j}}$和$\hat{\mathrm{k}}$后，四元数的运算可以定义如下：
+
+\begin{definition}{四元数的四则运算}
+记四元数集合为$\mathbb{H}=\{(a_0, \vec{a})|a_0\in\mathbb{R}, \vec{a}\in\mathbb{R}^3\}$，则其运算为：
+\begin{itemize}
+\item $\forall(a_0, \vec{a}), (b_0, \vec{b})\in\mathbb{H}$，有$(a_0, \vec{a})+ (b_0, \vec{b})=(a_0+b_0, \vec{a}+\vec{b})$．
+\item $\forall(a_0, \vec{a}), (b_0, \vec{b})\in\mathbb{H}$，有$(a_0, \vec{a})\times (b_0, \vec{b})=(a_0b_0-\vec{a}\cdot\vec{b}, a_0\vec{b}+b_0\vec{a}+\vec{a}\times\vec{b})$．
+
+\end{itemize}
+
+\end{definition}
+
+注意，由于一般来说向量的叉积不可交换，因此一般来说四元数不具有交换律．只有$\vec{a}\parallel\vec{b}$的时候，才会有$\vec{a}\times\vec{b}=\vec{0}=\vec{b}\times\vec{a}$，这个时候两个四元数交换．
+
+四元数$A=(a_0, \vec{a})$的实数部分$a_0$被称为\textbf{标部}，矢量部分$\vec{a}$称为\textbf{矢部}．为了方便，有时候也把这个四元数记为$a_0+\vec{a}$，类比复数的表示法$(a, b)=a+b\I$．有时也可以把四元数看成一个四维向量，就像复数既可以看成一个实数配上一个一维向量，也可以看成一个二维向量一样．
+
+和复数一样，四元数也有共轭和模的概念．
+
+\begin{definition}{共轭、模方和模}
+
+令四元数为$A=a_0+\vec{a}$，记$\widetilde{A}=a_0-\vec{a}$，称为$A$的\textbf{共轭}．
+
+记$||A||=||\widetilde{A}||=A\widetilde{A}=\widetilde{A}A=a_0^2+\vec{a}^2$，称为$A$的\textbf{模方}．
+
+记$|A|=\sqrt{||A||}$，称为$A$的\textbf{模}．
+
+\end{definition}
+
+\subsection{四元数的指数表示}
+
+记$\mathrm{e}$是自然对数的底数，那么对于任意实数$x$，有$\mathrm{e}^x=\sum^\infty\limits_{n=0}\frac{x^n}{n}$．如果把实数$x$替换为其它能够进行乘方的对象，比如说矩阵、复数等，那么还可以把指数的概念拓展到更多的对象上，构造出复数的指数、矩阵的指数等．
+
+四元数也可以乘方，因此可以定义四元数的指数：
+
+\begin{definition}{四元数的指数表示}
+
+令四元数为$A=a_0+\vec{a}$，则根据四元数的乘法定义（和向量的叉乘、点乘不一样），定义$$\mathrm{e}^A=\mathrm{e}^{a_0}\mathrm{e}^{\vec{a}}=\mathrm{e}^{a_0}\sum^\infty\limits_{n=0}\frac{\vec{a}^n}{n}=\mathrm{e}^{a_0}\sum^\infty\limits_{n=0}\frac{(a\vec{e})^n}{n}=\mathrm{e}^{a_0}(\cos{a}+\sin{a}\vec{e})$$其中$\vec{e}$是和$\vec{a}$同方向的矢量，$a$是$\vec{a}$作为四元数的模或者作为三维实向量的模．注意$\vec{e}^2=-1，\vec{e}^3=-\vec{e}$．
+
+\end{definition}
+
+\begin{exercise}{与复数的类比}
+
+比较复数和四元数的指数表示，说明为什么可以将复数看成矢部限制在一个方向上的四元数．
+
+\end{exercise}
+
+由于四元数的加法满足交换律，而乘法一般不满足，因此一般情况下四元数的乘法并不能用指数的加法来简化．因此，四元数的指数表示法在计算中其实用得不多．
+
+\subsection{四元数的拓展}
+
+我们以上定义的四元数，可以看成四个基向量$1, \hat{\I}, \hat{\mathrm{j}}$和$\hat{\mathrm{k}}$的线性组合的集合，而这些线性组合的系数取自实数域．如果系数还可以取自复数域，定义出来的数被称为\textbf{双四元数}，或\textbf{复四元数}，相当于一个复数和一个复数域上的三维向量的组合．
+
+对于一个双四元数$A=a_0+a_1\hat{\I}+a_2\hat{\mathrm{j}}+a_3\hat{\mathrm{k}}$，共轭的概念就被细分了：
+
+\begin{definition}{双四元数的共轭}
+\begin{itemize}
+
+\item 四元共轭：$\widetilde{A}=a_0-a_1\hat{\I}-a_2\hat{\mathrm{j}}-a_3\hat{\mathrm{k}}$；
+\item 反共轭：$A^C=a_0*+a_1*\hat{\I}+a_2*\hat{\mathrm{j}}+a_3*\hat{\mathrm{k}}$
+\item 转置：$A^T=a_0+a_1\hat{\I}-a_2\hat{\mathrm{j}}+a_3\hat{\mathrm{k}}$
+\item 复共轭：$A*=a_0*-a_1*\hat{\I}+a_2*\hat{\mathrm{j}}-a_3*\hat{\mathrm{k}}$
+\item 厄密（hermitian）共轭：$A^\dagger=a_0*-a_1*\hat{\I}-a_2*\hat{\mathrm{j}}-a_3*\hat{\mathrm{k}}$
+
+\end{itemize}
+\end{definition}
+
+双四元数的模方是用四元共轭定义的：$||A||=A\widetilde{A}=\widetilde{A}A=\sum^{3}_{n=0}a^2_n$．但是和四元数不同的是，双四元数的模方并不总是非负实数，而是有可能取任何复数．
+
+\begin{exercise}{双四元数共轭模方的关系}
+
+证明：$||A||=||\widetilde{A}||=||A^T||=||A^C||^*=||A^*||^*=||A^\dagger||^*$．
+
+\end{exercise}
+
+\begin{exercise}{双四元数共轭的乘法规律}
+设$A$和$B$是两个双四元数，证明：
+\begin{equation}
+\leftgroup{
+&A^CB^C=(AB)^C\\
+&A^*B^*=(AB)^*\\
+&\widetilde{A}\widetilde{B}=\widetilde{BA}\\
+&A^TB^T=(BA)^T\\
+&A^\dagger B^\dagger=(BA)^\dagger
+}
+\end{equation}
+
+\end{exercise}
+
+和普通四元数不同的是，双四元数中有可能存在非零但模为0的数，比如下面\autoref{Quat_ex1}所举例的$u$和$v$．
+
+类似地，让四元数的系数取值为四元数，所得到的数被称为\textbf{二级四元数}．一般地，让四元数的系数取值为$n$\textbf{级四元数}，则能得到$n+1$\textbf{级四元数}．但是由于四元数不再是一个域，也没有交换律，用其做系数的效果远远不如复数系数，应用范围相对有限，在此不作详细介绍．
+
+
+\subsection{四元数的矩阵表示}
+
+如果将四元数的四个基$1, \hat{\I}, \hat{\mathrm{j}}$和$\hat{\mathrm{k}}$分别对应到以下四个矩阵
+
+\begin{equation}
+
+1=\left[\begin{matrix}1&0\\0&1\end{matrix} \right], \hat{\I}=\left[\begin{matrix}\I&0\\0&-\I\end{matrix} \right], \hat{\mathrm{j}}=\left[\begin{matrix}0&1\\-1&0\end{matrix} \right], \hat{\mathrm{k}}=\left[\begin{matrix}0&\I\\\I&0\end{matrix} \right]
+
+\end{equation}
+那么一个任意的四元数或双四元数$A=a_0+\vec{a}$可以用矩阵表示为$\left[\begin{matrix}a_0+\I a_1&a_2+\I a_3\\-a_2+\I a_3&a_0-\I a_1 \end{matrix} \right]$．
+
+\begin{example}{矩阵表示的例子}\label{Quat_ex1}
+\begin{itemize}
+\item $1+\left(\begin{matrix}1\\0\\\I\end{matrix} \right)=1+1\hat{\I}+\I\hat{\mathrm{j}}=\left[\begin{matrix}1+\I&-1\\-1&1-\I\end{matrix} \right]$
+\item $u=\frac{1}{2}(1-\I\hat{\I})=\left[\begin{matrix}1&0\\0&0\end{matrix} \right]$
+\item $v=-\frac{1}{2}(\hat{\mathrm{j}}+\I\hat{\mathrm{k}})=\left[\begin{matrix}0&0\\1&0\end{matrix} \right]$
+
+\end{itemize}
+
+
+\end{example}
+
+容易验证，四元数的加法和乘法运算，与把基分别换成这四个矩阵以后的矩阵加法和乘法运算是同构的．
+
+在矩阵表示中，$A$的转置共轭就是矩阵$A$的转置，复共轭就是$A$的各矩阵元取复共轭，厄密共轭就是$A$的厄密共轭矩阵（矩阵转置后再取各矩阵元的复共轭），而四元数的模方就是其矩阵表示的行列式：$||A||=\opn{det}A$．因此，模方不为零的（双）四元数对应的矩阵是可逆的，其逆矩阵所表示的就是该四元数的逆．
+
+
+
+
+
