@@ -52,7 +52,7 @@ void *y, const MKL_INT incy);
 BLAS 接口给人的第一感觉就是冗长， 为什么实现一个简单的功能需要这么多变量？ 因为这个接口具有相当大的灵活性． 例如可以使用一个列主序（行主序）矩阵的子矩阵作为矩阵， 又例如可以使用一个列主序（行主序）矩阵的某一行（列）作为矢量； 例如可以在做乘法以前对矩阵进行转置\footnote{其实这个转置操作实现起来并不需要额外的运算， 在函数的代码中只需要把列主序（行主序）矩阵看作是行主序（列主序）的即可． 所以这么做比事先在内存中将矩阵元调换的方法快许多}； 又例如可以把相乘的结果累加到输出矢量已有的值上， 而不是直接覆盖．
 
 作为一个最简单的例子， 我们可以用以下测试函数， 在这个例子中， 我们只需要关心几个变量， 即 \verb|Layout| （一个 \verb|enum| 类型）指定行主序（\verb|CblasRowMajor|）还是列主序（\verb|CblasColMajor|）， \verb|m| 和 \verb|n| 分别指定矩阵的行数和列数， \verb|a, x, y| 分别是矩阵第一个元的指针．
-\begin{lstlisting}[language=cpp]
+\begin{lstlisting}[language=cpp, caption=blas\_demo.cpp]
 // 计算矩阵—矢量乘法 y = a * x
 #include <iostream>
 #include <complex>
