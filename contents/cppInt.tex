@@ -1,0 +1,51 @@
+% c++ 的整数
+
+本文的\textbf{模（modulo）}运算都是指 $M$ 加或减整数个 $N$ 后使结果范围在 $0$ 到 $N-1$ 之间， $N$ 只能是正整数． 以下我们假设整数用 $n$ 位二进制表示．
+
+\subsection{无符号整数}
+\begin{itemize}
+\item 取值范围为 $0$ 到 $2^n-1$
+\item 如果溢出就把二进制的高位截去， 也就是模 $2^n$
+\end{itemize}
+
+\subsection{有符号整数}
+\begin{itemize}
+\item 取值范围为 $-2^{n-1}$ 到 $2^{n-1}-1$
+\item 运算 overflow 的结果无定义
+\end{itemize}
+
+\subsection{转换规则}
+整数之间的转换规则：
+\begin{itemize}
+\item 超出范围的值转换为无符号整型， 将其模 $2^n$ （$n$ 是目标类型的比特数）， 例如 $n = 8$ 时 -1 转换为 255
+\item 超出范围的值转换为有符号整型， 结果无定义
+\end{itemize}
+其他基本类型转换规则：
+\begin{itemize}
+\item 其他类型转换为 \verb|bool|： 0 变为 \verb|false|， 否则变为 \verb|true|
+\item \verb|bool| 转换为其他类型： \verb|true| 变为 1， \verb|false| 变为 0
+\item 浮点类型转换为整数类型： 向 0 取整
+\item 整型转为浮点： 如果位数太多会不精确
+\end{itemize}
+
+\subsection{2 的补}
+有符号整数类型的负数在内存中的二进制表示常采用 \textbf{2 的补（2's complement）}． 若采用 2 的补， 以下几点成立
+\begin{itemize}
+\item 一个整数和它的相反数相加等于 $2^n$
+\item 范围内最大的整数加上 1 等于范围内最小的整数， 即加 1 后取相反数（如 $n = 8$ 时 $127 + 1 = -128$）
+\item 若保持 bit 不变， 无符号类型变为有符号类型只需减去 $2^n$， 反之则加上 $2^n$． 例如 $n = 8$ 时无符号 156 和有符号 -100 的各个 bit 相同．
+\end{itemize}
+
+也有其他表示负数的方法， 例如最左边的 bit 表示符号， 剩余表示大小．
+
+数学上， 可以将无符号的整数类型及其加法构成一个 $2^n$ 元循环群（见\autoref{Group_ex2}\upref{Group}）． 若采用 2 的补， 由于群元素可以用任何符号， 有符号整数类型可以看作将无符号整数类型的后一半元素减去 $2^n$， 而群运算保持不变．
+
+\subsection{Integer Literal}
+\footnote{参考\href{https://en.cppreference.com/w/cpp/language/integer_literal}{cppreference}}这里讨论 c++11 标准． literal 中的字母不区分大小写， \verb|0| 开头表示 8 进制，  \verb|0x| 开头表示 16 进制， 数字后面可以加 \verb|u|， 以及 \verb|l| 或 \verb|ll| 的一个． literal 的类型会根据数值的大小而变化．
+
+\begin{itemize}
+\item 最小是 \verb|int|， 最大是 \verb|long long int| 每一种前面都可以加 unsigned
+\item 有后缀 \verb|u| 必定是 unsigned
+\item 没有 \verb|u| 的十进制必定是 signed， 其他进制可以是 signed 或 unsigned （首选 signed）
+\item 后缀 \verb|l| 和 \verb|ll| 分别规定类型至少为 \verb|long| 和 \verb|long long|， 如果数值超出就不断升级
+\end{itemize}
