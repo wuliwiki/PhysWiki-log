@@ -1,0 +1,109 @@
+% 张量
+\pentry{线性映射，映射\upref{map}}
+
+%线性映射词条需要从抽象角度重新创作；线性映射词条大概率会引用映射词条，到时候要在预备知识中删除映射词条这一项
+
+\subsection{线性函数和其表达}
+\subsubsection{线性函数用向量表达}
+\begin{definition}{线性函数}
+给定域$\mathbb{F}$上的$n$维线性空间$V$，称$f:V\rightarrow \mathbb{F}$为$V$到域$\mathbb{F}$上的一个\textbf{线性函数}，如果$f$满足以下线性性：对于任意的$\bvec{v}_1, \bvec{v}_2\in V$和$a_1, a_2\in\mathbb{F}$，都有$a_1f(\bvec{v}_1)+a_2f(\bvec{v}_2)=f(a_1\bvec{v}_1+a_2\bvec{v}_2)$．
+\end{definition}
+
+如果把域$\mathbb{F}$本身看成一个一维的线性空间，那么线性函数就是$V$到这个一维空间上的线性映射．因此，我们只需要任取一个$V$的基，研究基向量被$f$映射到哪里，就可以计算出任意的$\bvec{v}\in V$被映射到哪里了．
+
+设$V$有基$\{\bvec{e}_i\}_{i=1}^n$．如果基向量$\bvec{e}_i$被映射为$f(\bvec{e}_i)=m_i\in\mathbb{F}$，那么对于任意的向量$\bvec{v}=a_1\bvec{e}_1+a_2\bvec{e}_2+\cdots+a_n\bvec{e}_n$，都有：
+\begin{equation}
+\begin{aligned}
+f(a_1\bvec{e}_1+a_2\bvec{e}_2+\cdots+a_n\bvec{e}_n)&=f(a_1\bvec{e}_1)+f(a_2\bvec{e}_2)+\cdots+f(a_n\bvec{e}_n)\\&=m_1a_1+m_2a_2+\cdots+m_na_n
+\end{aligned}
+\end{equation}
+
+$m_1a_1+m_2a_2+\cdots+m_na_n$可以看成是向量$\bvec{m}$点乘$\bvec{v}$所得到的，其中$\bvec{m}=m_1\bvec{e}_1+m_2\bvec{e}_2+\cdots+m_n\bvec{e}_n$．
+
+也就是说，每个线性函数$f$对应一个向量$m$，使得$f(\bvec{v})=\bvec{m}\cdot\bvec{v}$．
+
+\subsubsection{$2$-线性函数用矩阵表达}
+
+继续使用上述给定的$n$维线性空间$V$，但是我们现在拿出$2$个$V$来构造映射$f:V\times V\rightarrow\mathbb{F}$．
+
+\begin{definition}{$2$-线性函数}
+称$f:V\times V\rightarrow\mathbb{F}$为一个$2-$线性映射，如果对于任意固定的$\bvec{v}_0$，$f(\bvec{v}_0, \bvec{v})$和$f(\bvec{v}, \bvec{v}_0)$都是$\bvec{v}$的线性函数，那么称$f$是一个$V^2$上的$2-$\textbf{线性函数}或\textbf{双线性函数}．
+\end{definition}
+
+双线性函数的另一种表达方法，是
+\begin{equation}
+\begin{aligned}
+f(a_1\bvec{v}_1+a_2\bvec{v}_2, b_1\bvec{u}_1+b_2\bvec{u}_2)&=a_1f(\bvec{v}_1, b_1\bvec{u}_1+b_2\bvec{u}_2)+a_2f(\bvec{v}_2, b_1\bvec{u}_1+b_2\bvec{u}_2)\\&=a_1b_1f(\bvec{v}_1, \bvec{u}_1)+a_2b_1f(\bvec{v}_2, \bvec{u}_1)+a_1b_2f(\bvec{v}_1, \bvec{u}_2)+a_2b_2f(\bvec{v}_2, \bvec{u}_2)
+\end{aligned}
+\end{equation}
+
+因此，给定了$V$的基$\{\bvec{e}_i\}_{i=1}^n$以后，可以把向量都表示成其坐标构成的列向量，把双线性函数表示成一个矩阵（以$2$维的$V$为例）：
+\begin{equation}
+\begin{aligned}
+&\bvec{v}=a_1\bvec{e}_1+a_2\bvec{e}_2\rightarrow c_v=\pmat{a_1\\a_2}\\
+&\bvec{u}=b_1\bvec{e}_1+b_2\bvec{e}_2\rightarrow c_u=\pmat{b_1\\b_2}\\
+&f\rightarrow \bvec{M}=\pmat{f(\bvec{e}_1, \bvec{e}_1)&f(\bvec{e}_1, \bvec{e}_2)\\f(\bvec{e}_2, \bvec{e}_1)&f(\bvec{e}_2, \bvec{e}_2)}\\
+\end{aligned}
+\end{equation}
+
+这样，我们就有$f(\bvec{v}, \bvec{u})=c_v^T\bvec{M}c_u$．注意这里$c_v^T$表示$c_v$作为矩阵的转置\footnote{如果使用其它的基，那么向量$\bvec{v}$、$\bvec{u}$的坐标和映射$f$的矩阵会有不同表示，但是计算出来的$c_v^T\bvec{M}c_u$仍然是一致的．特别要注意的是，两个$V$中的基必须选择相同的向量，按相同的顺序排列，否则$f$无法表示成矩阵．}．
+
+\begin{exercise}{}
+把列向量看成矩阵，根据矩阵的运算法则，验证$f(\bvec{v}, \bvec{u})=c_v^T\bvec{M}c_u$．
+\end{exercise}
+
+\begin{example}{$2$-线性函数的例子}
+\begin{itemize}
+\item 发
+\item 电极化强度\footnote{直接用线性函数的概念来描述电极化强度其实非常难以理解，在这里只是给出相关概念．读完本词条以后可以很方便地用$k$阶张量来理解电极化强度．}．考虑二维情况，在一个晶体中，每个点的电极化强度$\bvec{p}$是由该点的电场$\bvec{E}$引起的，是一个向量．各点电极化强度在某个向量$\bvec{r}$方向上的分量大小，就是$\bvec{p}\cdot\bvec{r}/\abs{\bvec{r}}$．其中，$\bvec{p}\cdot\bvec{r}$就是一个关于$\bvec{E}, \bvec{r}$的双线性函数．通过单位换算把电场强度和长度联系起来，然后给定一个空间的基$\bvec{r_x}，\bvec{r_y}$（也就给定了电场强度的基$E_x$，$\bvec{E_y}$），那么这个线性函数就可以表示为一个矩阵．事实上，由于矩阵总可以通过相似变换变成一个对角矩阵，而相似变换相当于更换基的坐标变换，所以一定存在两个方向，使得这两个方向上的电场强度和所引起的极化强度是平行的．特别地，各向同性的晶体中，这个双线性函数的任何矩阵表示，都是单位矩阵乘以某个数字．
+\end{itemize}
+\end{example}
+
+\subsubsection{矩阵的运算回顾}
+
+矩阵只是一种运算的表达方式．虽然我们常见的矩阵元素都是实数或者复数，但是只要是可以相加和相乘的元素都可以当作矩阵元素．
+
+\begin{example}{矩阵运算的例子}
+
+\begin{itemize}
+%
+\item 向量可以和数字相乘．如果$\bvec{v}_i$表示向量，$a_i$表示数字，那么$\pmat{\bvec{v}_1&\bvec{v}_2&\bvec{v}_3}$是三个向量排成的矩阵，$\pmat{a_1\\a_2\\a_3}$是三个数字排成的矩阵，按照向量的数乘来进行矩阵乘法，$\pmat{\bvec{v}_1&\bvec{v}_2&\bvec{v}_3}\pmat{a_1\\a_2\\a_3}=(a_1\bvec{v}_1+a_2\bvec{v}_2+a_3\bvec{v}_3)$就是一个向量，$\pmat{a_1\\a_2\\a_3}\pmat{\bvec{v}_1&\bvec{v}_2&\bvec{v}_3}=\pmat{a_1\bvec{v_1}&a_1\bvec{v_2}&a_1\bvec{v_3}\\a_2\bvec{v_1}&a_2\bvec{v_2}&a_2\bvec{v_3}\\a_3\bvec{v_1}&a_3\bvec{v_2}&a_3\bvec{v_3}}$是$9$个向量排成的矩阵．
+\item 向量之间可以有点乘．因此$\pmat{\bvec{v}_1&\bvec{v}_2\\\bvec{v}_3&\bvec{v}_4}\cdot\pmat{\bvec{v}_5\\\bvec{v}_6}=\pmat{\bvec{v}_1\cdot\bvec{v}_5+\bvec{v}_2\cdot\bvec{v}_6\\\bvec{v}_3\cdot\bvec{v}_5+\bvec{v}_4\cdot\bvec{v}_6}$是两个数字排成的矩阵．
+\item 3维向量之间可以有叉乘．因此$\pmat{\bvec{v}_1&\bvec{v}_2\\\bvec{v}_3&\bvec{v}_4}\times\pmat{\bvec{v}_5\\\bvec{v}_6}=\pmat{\bvec{v}_1\times\bvec{v}_5+\bvec{v}_2\times\bvec{v}_6\\\bvec{v}_3\times\bvec{v}_5+\bvec{v}_4\times\bvec{v}_6}$是两个向量排成的矩阵．
+%
+\end{itemize}
+\end{example}
+
+\subsubsection{$2$-线性函数的向量矩阵表达}
+
+设一个$2-$线性函数$f:V^2\rightarrow\mathbb{F}$在某个基下的矩阵表达是$$\pmat{m_{ij}}=\pmat{m_{11}&m_{12}&\cdots&m_{1n}\newline m_{21}&m_{22}&\cdots&m_{2n}\newline \vdots&\vdots&\ddots&\vdots\newline m_{n1}&m_{n2}&\cdots&m_{nn}} $$
+则把每一行当成一个行向量，记为$\bvec{m}_i^T=\pmat{m_{i1}&m_{i2}&\cdots&m_{in}}$，那么$f$可以表达为行向量的行矩阵：$$\bvec{M}=\pmat{\bvec{m}_1^T&\bvec{m}_2^T&\cdots&\bvec{m}_n^T}$$
+对于任意向量$\bvec{v}, \bvec{u}\in V$，$\bvec{M}\bvec{v}$是一个行向量，$\bvec{M}\bvec{v}\bvec{u}$是一个$\mathbb{F}$中的数\footnote{此处把向量$\bvec{m}_1^T$看成$\bvec{M}$的元素，向量$\bvec{v}, \bvec{u}$看成列矩阵，进行矩阵乘法，应用数乘来乘以每一个数和向量$\bvec{m}_1^T$．}．
+
+因此，$\bvec{M}$可以表示双线性函数$f$，规则是：$f(\bvec{v}, \bvec{u})=\bvec{M}\bvec{v}\bvec{u}$．
+
+\subsubsection{$k$-线性函数}
+
+把$2$-线性函数的定义推广，就得到$k$-线性函数的定义．
+
+\begin{exercise}{}
+请尝试给出$k$-线性函数的定义．答案就在题目下方．
+\end{exercise}
+
+\begin{definition}{$k$-线性函数}
+
+给定域$\mathbb{F}$上的$n$维线性空间$V$，称$f:V^k\rightarrow \mathbb{F}$为$V$到域$\mathbb{F}$上的一个\textbf{$k$-线性函数}，如果$f$对于每一个自变量都是线性的；或者说，当$k$个自变量中只有一个在变化，其它分量不变，那么$f$对于那个变化的自变量是线性函数．特别地，线性函数又被称为$1$-线性函数．
+
+\end{definition}
+
+由$2$-线性函数的向量矩阵表达可以看出，由于每个线性函数$f_1$都可以表示为一个向量$\bvec{m}$，映射规则就是用$\bvec{m}$作为向量去点乘自变量向量$\bvec{v}\in V$，也可以看成是$\bvec{m}$作为行矩阵，自变量$\bvec{v}$作为列矩阵，二者进行矩阵乘法$\bvec{m}\bvec{v}$；而$2$-线性函数$f_2$就可以表示为行向量$\bvec{m}_i$构成的行矩阵$\bvec{M}$，每一个行向量都是一个线性函数．对于自变量$\bvec{v}, \bvec{u}\in V$，我们注意到$\bvec{M}\bvec{v}$相当于$n$个向量$\bvec{m}_i$分别点乘$\bvec{v}$，得到的结果再排成一个行向量．
+
+也就是说，一个$1$-线性函数，可以表示为一个向量，也即数字构成的行矩阵；一个$2$-线性函数，可以表示为线性函数构成的行矩阵．那么类似地，我们也可以定义$k$-线性函数为$(k-1)$-线性函数构成的行矩阵．如果要把向量、矩阵等拆开成数字，那么一个$k$-线性映射就被表示为一个由$n^k$个数字构成的$k$维阵列．一维阵列就是一个行向量，二维阵列就是一个$n\times n$矩阵，三维阵列就是一个$n\times n\times n$的立方体，以此类推．
+
+\subsection{$k$阶张量}
+
+一个$k$阶张量就是
+
+%需要给出2-线性函数的例子
+
+%%待完成，笔者先睡觉去了
