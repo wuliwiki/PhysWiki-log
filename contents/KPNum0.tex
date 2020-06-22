@@ -3,6 +3,8 @@
 
 \pentry{万有引力\upref{Gravty}， 弹簧振子受迫运动的简单数值计算\upref{SHOFN}}
 
+下面我们来用一种极其简单的算法对单个天体在中心天体的万有引力作用下的运动进行数值计算． 事实上该问题存在解析解（见开普勒三定律\upref{Keple}）， 所以以下的算法只是用于演示数值解常微分方程的大致原理． 这种方法可以轻易地拓展到多个天体的情况， 而多体情况没有一般的解析解． 一种效率更高的常见常微分方程数值算法可参考 “四阶龙格库塔法\upref{OdeRK4}”．
+
 直角坐标系中， 设中心天体质量为 $M$， 固定在原点不动．根据牛顿万有引力定律，质量为 $m$ 的行星受到中心天体的力为
 \begin{equation}
 \bvec F = -G \frac{Mm}{r^2}\uvec r = -G\frac{Mm}{r^3} \bvec r
@@ -11,13 +13,13 @@
 \begin{equation}
 \bvec a = \frac{\bvec F}{m} = -G\frac{M}{r^3} \bvec r
 \end{equation}
-用 $r = \sqrt{x^2+y^2}$ 以及 $\bvec r = x\uvec x + y\uvec y$， 其中 $x,y$ 看成 $t$ 的函数． 考虑到 $a_x = \dv*[2]{x}{t}$， $a_y = \dv*[2]{y}{t}$， 可以列出二阶微分方程组
+用 $r = \sqrt{x^2+y^2}$ 以及 $\bvec r = x\uvec x + y\uvec y$， 其中 $x,y$ 看成 $t$ 的函数． 考虑到 $a_x = \ddot x$， $a_y = \ddot y$， 可以列出二阶微分方程组（变量上方两点表示关于时间的二阶导数）
 \begin{equation}\label{KPNum0_eq3}
 \leftgroup{
-\dv[2]{x}{t} = -\frac{GM}{(x^2+y^2)^{3/2}}x\\
-\dv[2]{y}{t} = -\frac{GM}{(x^2+y^2)^{3/2}}y
+\ddot{x} = -\frac{GM}{(x^2+y^2)^{3/2}}x\\
+\ddot{y} = -\frac{GM}{(x^2+y^2)^{3/2}}y
 }\end{equation}
-假设已知初值条件 $x(0) = x_0$， $y(0) = y_0$， $\dot x(0) = v_{x0}$， $\dot y(0) = v_{y0}$． 下面用“弹簧振子受迫振动的简单数值计算\upref{SHOFN}” 中类似的方法求接下来行星的运动轨迹．
+假设已知初值条件 $x(0) = x_0$， $y(0) = y_0$， $\dot x(0) = v_{x0}$， $\dot y(0) = v_{y0}$． 下面用 “弹簧振子受迫振动的简单数值计算\upref{SHOFN}” 中类似的方法求接下来行星的运动轨迹．
 
 1．将初始条件代入\autoref{KPNum0_eq3}，得到初始加速度
 \begin{equation}
