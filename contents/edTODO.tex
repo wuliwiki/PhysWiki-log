@@ -4,13 +4,14 @@
 \subsection{符号替换模式下的 bug}
 按重要性排序
 \begin{itemize}
-\item 自动引用公式后再连续撤销， 符号替换的紫色下划线会全部消失， 如果这时保存， tex 文件中的代码也会替换成符号
 
 \item 为什么\href{https://docs.julialang.org/en/v1/manual/unicode-input/}{这个 Julia 文档页面}中的 \lstinline|\varphi| 和 \lstinline|\phi| 粘贴到浏览器（包括符号替换规则窗口）中之后显示出来是调换的？
 
 \item 搜索框中的 \lstinline|\phi| 和 \lstinline|\varphi| 的符号替换调换了， 但搜索的内容是正确的． 应该也按照 \lstinline|config.json| 中的规则替换（这应该和上一个 bug 有关）
 
-\item 搜索框中不能搜索 \lstinline|\subseteq|， 因为打了 \lstinline|\subset| 以后就会直接替换成符号． 任何两个前面部分相同的命令都有这个问题
+\item 【完成】搜索框中不能搜索 \lstinline|\subseteq|， 因为打了 \lstinline|\subset| 以后就会直接替换成符号． 任何两个前面部分相同的命令都有这个问题
+
+\item 【完成】自动引用公式后再连续撤销， 符号替换的紫色下划线会全部消失， 如果这时保存， tex 文件中的代码也会替换成符号
 
 \item 【完成】有点担心符号替换会出现循环 bug， 就是修好了 A 出现 B 修好了 B 出现 C， 修好了 C 出现 A． 是否要考虑一下系统的解决方法（但愿是我多虑了）．
 
@@ -30,17 +31,17 @@
 
 \item 创建词条或者保存词条时， PhysWikiScan 偶尔会提示 “changed.txt 和 authors.txt 行数不同”， 但多试一次就没问题了． （scan 已经暂时将这个 error 改成 warning， 并将 authors.txt 中多余的行删掉）
 
-\item “重新编译并发布” 按钮没有成功调用 scan 程序， 也没有显示命令行的结果（应该指定 online 路径重新运行， 而不是直接把 changed 路径中的 html 复制过去， 因为用的是绝对 url）
+\item “重新编译并发布” 按钮没有成功调用 scan 程序， 也没有显示命令行的结果（应该指定 online 路径重新运行 \verb|./PhysWikiScan .|， 而不是直接把 changed 路径中的 html 复制过去， 因为用的是绝对 url）
 
-\item 如果没有打开词条，自动备份也会运行而且 “正在提交，请稍后…” 会一直转圈．
-
-\item 上传图片等待的时候提示 “PhysWikiScan 没有响应， 请稍后再试”， 过一段时间后， 图片上传成功． 期间如果重复点击上传图片， 上传成功后也会重复插入嵌套的图片环境（需要禁止上传完成前重复上传）． 最好上传过程中给一个等待的转圈动画或者进度条．
+\item 上传图片等待的时候提示 “PhysWikiScan 没有响应， 请稍后再试”， 过一段时间后， 图片上传成功． 期间如果重复点击上传图片， 上传成功后也会重复插入嵌套的图片环境（需要禁止上传完成前重复上传或者改变源代码或移动光标）． 最好上传过程中给一个等待的转圈动画或者进度条．
 
 \item 如果用户 A 编辑以后没有关闭页面， 那么用户 B （如 admin）再去编辑， 用户 A 似乎还是会持续备份（但内容的确是 B 新修改的内容）． 建议解决办法： 同一个词条如果同时被第二个电脑打开（包括 A 使用两个浏览器的情况）， 第一个浏览器中自动变为只读模式并且停止备份（不需要恢复）．
 
 \item 普通用户（如 test5）使用 “下载变更文件” 按钮时出错： “下载已更改文件失败：Error in api "/editor/api/download-files": findLines is not defined”
 
 \item 预览窗口有时候会把词条显示两次（\autoref{edTODO_fig1}）， 关闭后再打开可解决
+
+\item 如果没有打开词条，自动备份也会运行而且 “正在提交，请稍后…” 会一直转圈．
 
 \item 【完成】自动备份对 FnalNt.tex 停止了．
 
@@ -82,7 +83,9 @@
 \subsection{Editor TODO}
 
 \begin{itemize}
-\item 删除词条时同时删除 changed/ 和 online/ 中对应的 html 和图片文件 （图片名格式为 \verb|词条名_编号.拓展名|）
+\item 在编辑百科时， 禁止关闭 “自动替换空心句号为实心” 功能（把开关锁定）
+
+\item 删除词条时同时删除 \verb|changed/| 和 \verb|online/| 目录中对应的 html 和图片文件 （图片名格式为 \verb|词条名_编号.拓展名|）
 
 \item 保存按钮的 tip 改为 \verb|保存(Ctrl+S)|
 
