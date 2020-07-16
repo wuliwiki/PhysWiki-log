@@ -5,9 +5,9 @@
 按重要性排序
 \begin{itemize}
 
-\item 为什么\href{https://docs.julialang.org/en/v1/manual/unicode-input/}{这个 Julia 文档页面}中的 \lstinline|\varphi| 和 \lstinline|\phi| 粘贴到浏览器（包括符号替换规则窗口）中之后显示出来是调换的？
+\item 【完成】为什么\href{https://docs.julialang.org/en/v1/manual/unicode-input/}{这个 Julia 文档页面}中的 \lstinline|\varphi| 和 \lstinline|\phi| 粘贴到浏览器（包括符号替换规则窗口）中之后显示出来是调换的？
 
-\item 搜索框中的 \lstinline|\phi| 和 \lstinline|\varphi| 的符号替换调换了， 但搜索的内容是正确的． 应该也按照 \lstinline|config.json| 中的规则替换（这应该和上一个 bug 有关）
+\item 【完成】搜索框中的 \lstinline|\phi| 和 \lstinline|\varphi| 的符号替换调换了， 但搜索的内容是正确的． 应该也按照 \lstinline|config.json| 中的规则替换（这应该和上一个 bug 有关）
 
 \item 【完成】搜索框中不能搜索 \lstinline|\subseteq|， 因为打了 \lstinline|\subset| 以后就会直接替换成符号． 任何两个前面部分相同的命令都有这个问题
 
@@ -27,21 +27,15 @@
 \subsection{Editor BUG}
 按重要性排序
 \begin{itemize}
-\item 有人正在写然后提示只读， 但是没有其他人在编辑， changed.txt 里面是他修改的内容， 但 authors.txt 是空白的．
+\item “重新编译并发布” 按钮没有成功调用 scan 程序， 也没有显示命令行的结果（应该指定 online 路径重新运行 \verb|./PhysWikiScan .|）
 
-\item 创建词条或者保存词条时， PhysWikiScan 偶尔会提示 “changed.txt 和 authors.txt 行数不同”， 但多试一次就没问题了． （scan 已经暂时将这个 error 改成 warning， 并将 authors.txt 中多余的行删掉）
+\item 上传图片等待的时候提示 “PhysWikiScan 没有响应， 请稍后再试”， 过一段时间后， 图片上传成功．
 
-\item “重新编译并发布” 按钮没有成功调用 scan 程序， 也没有显示命令行的结果（应该指定 online 路径重新运行 \verb|./PhysWikiScan .|， 而不是直接把 changed 路径中的 html 复制过去， 因为用的是绝对 url）
+\item 上传图片时如果进行其他操作会出问题（移动光标或者再次上传图片）． 点击上传图片按钮后， 先在当前光标处插入代码然后再开始上传． 上传图片时在左下角显示等待的转圈动画或者进度条， 可以点 X 终止． 如果终止或其他原因上传失败， 则提示 “上传图片失败， 请手动删除图片环境”．
 
-\item 上传图片等待的时候提示 “PhysWikiScan 没有响应， 请稍后再试”， 过一段时间后， 图片上传成功． 期间如果重复点击上传图片， 上传成功后也会重复插入嵌套的图片环境（需要禁止上传完成前重复上传或者改变源代码或移动光标）． 最好上传过程中给一个等待的转圈动画或者进度条．
-
-\item 如果用户 A 编辑以后没有关闭页面， 那么用户 B （如 admin）再去编辑， 用户 A 似乎还是会持续备份（但内容的确是 B 新修改的内容）． 建议解决办法： 同一个词条如果同时被第二个电脑打开（包括 A 使用两个浏览器的情况）， 第一个浏览器中自动变为只读模式并且停止备份（不需要恢复）．
-
-\item 普通用户（如 test5）使用 “下载变更文件” 按钮时出错： “下载已更改文件失败：Error in api "/editor/api/download-files": findLines is not defined”
+\item 普通用户（如 test5）使用 “下载变更文件” 按钮时出错： \verb|下载已更改文件失败：Error in api "/editor/api/download-files": findLines is not defined|
 
 \item 预览窗口有时候会把词条显示两次（\autoref{edTODO_fig1}）， 关闭后再打开可解决
-
-\item 如果没有打开词条，自动备份也会运行而且 “正在提交，请稍后…” 会一直转圈．
 
 \item 【完成】自动备份对 FnalNt.tex 停止了．
 
@@ -87,35 +81,31 @@
 
 \item 删除词条时同时删除 \verb|changed/| 和 \verb|online/| 目录中对应的 html 和图片文件 （图片名格式为 \verb|词条名_编号.拓展名|）
 
-\item 保存按钮的 tip 改为 \verb|保存(Ctrl+S)|
+\item 保存按钮的 tip 改为 \verb|保存并编译(Ctrl+S)|
 
 \item 插入 \verb|\autoref{}| 的时候在后面多加一个空格（前面不需要）．
 
 \item 增加一个注释按钮， 图标为 \verb|%|， 下拉菜单有两个按钮， 一个是 “注释选中内容”（默认）， 另一个 “取消注释选中内容”． 注释时， 每个插入的 \verb|%| 后面需要再插入一个空格． 如果选中的内容不是从行首开始， 那么在选中内容之前加上 \verb|%| 和空格． 如果选中内容的最后不是一整行， 那么注释以后在选中内容后面换一行． 总之确保有且仅有被选中内容被注释． 注意考虑只选中一行中某部分的情况． 取消注释时， 删除选中内容中行首的 \verb|%| 以及后面的空格（如果有）． 如果选中内容第一个字符是 \verb|%| （无论是不是行首）， 也将它和后面的空格（如果有）删掉．
 
-\item code 按钮支持新语言： python, pythonC（python 命令行）, julia, markdown, bash, makefile, json, git, cmake, regex, latex
+\item 【完成】code 按钮支持新语言： python, pythonC（python 命令行）, julia, markdown, bash, makefile, json, git, cmake, regex, latex
 
-\item 符号替换设置打开时， json 编辑窗自动排版格式太慢， 是否考虑直接使用正确的格式保存文件， 而不是打开后再排版？
+\item 【完成】符号替换设置打开时， json 编辑窗自动排版格式太慢， 是否考虑关闭时自动排版并保存排版后的文件？
 
-\item 在加载页面（有转圈动画的那个）显示 “建议使用 Chrome 或 Chromium 内核的浏览器”
+\item 【完成】在编辑器加载页面（有转圈动画的那个）用小字显示 “建议使用 Chrome 或 Chromium 内核的浏览器”
 
-\item 替换模式下上传图片后不需要再提示 “该图片已存在， 是否替换？”
+\item 【完成】替换模式下上传图片后不需要再提示 “该图片已存在， 是否替换？”
 
 \item 上传图片的时候允许额外上传一个其他格式的文件（例如源码文件）， 重命名为和图片文件相同．
 
-\item 历史版本列表中显示所有用户的备份以及用户名， 目前好像仅显示当前用户的
-
-\item 如果 A 用户编辑了词条， B 用户打开了但没有内容改变， 则不应该备份（发现相邻的 \verb|202003031532_addiszx_AMLaw1.tex| 和 \verb|202005011412_admin_AMLaw1.tex| 内容是一样的）
-
-\item 如果 A 用户正在编辑， admin 改变了词条， 则立即停止 A 用户对该词条的编辑和自动备份， admin publish 以后也不需要自动恢复．
+\item 历史版本列表中应该显示所有用户的备份以及用户名， 目前好像仅显示当前用户的， 在 i 图标后面的文字改为 \verb|请选择要恢复的版本（使用北京时间）|， “search backup name”  改为 “搜索”
 
 \item 创建词条的窗口在文件名下方添加一个选填栏 “关键词”，在上方的说明改为 \lstinline+请输入标题（如“角动量守恒”），文件名（如"AngMom"）和关键词．文件名不能超过 6 个字符，只能含有字母或数字，不能以数字开头； 关键词格式如 “关键词1|关键词2|关键词3”， 建议填写以方便检索．+
 
-\item 创建词条后， 在文件第二行注释关键词， 如 \lstinline+% 关键词1|关键词2|关键词3+， 光标停留在第四行． 如果没有填写， 则第二行为空， 光标停在第三行
+\item 创建词条后， 在文件第二行注释关键词， 如 \lstinline+% 关键词1|关键词2|关键词3+， 光标停留在第四行． 如果创建时没有填写关键词， 则第二行为空， 光标停在第三行
 
-\item 删除一个文件时， 图片也要一并删除
+\item 删除一个文件时， 图片和源文件也要一并删除（包括 figures 中所有格式为 \verb|词条名_数字.任意拓展名| 的文件, online, changed 中对应的 svg 和 png 文件．
 
-\item 每五分钟的备份也要包括图片（figures 文件夹中的 png, svg, pdf）， 规则和 tex 文档一样．
+\item 每五分钟的备份也要包括图片和源文件（即 figures 文件夹中所有格式为 \verb|词条名_数字.任意拓展名| 的文件）， 命名规则和 tex 文档一样． 只有图片文件内容被改变时才备份（可以通过 hash 判断或者逐字节对比）．
 
 \item 【先不要做】考虑用 Electron 做一个离线版的 wuli.wiki/note． 不需要网络连接（但 mathtype 应该需要网络才能用）， 功能完全一样， 除了： 添加一个按钮可以设置用户名， 如果没有用户名， 则弹出提示框输入用户名 “请输入任意用户名， 以后可以在菜单栏修改”． 不需要任何密码． 另外增加一个按钮设置输入输出路径， 相当于 \verb|littleshi.cn/root/user/|． 默认路径为 \verb|Desktop/wuli.wiki-note/|
 
