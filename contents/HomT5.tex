@@ -1,6 +1,7 @@
 % 基本群的计算
-\pentry{基本群\upref{HomT3}，群的自由积\upref{FrePrd}}
+\pentry{基本群\upref{HomT3}，可缩空间\upref{HomT2}，群的自由积\upref{FrePrd}}
 
+%基本完成
 
 虽然把各阶同伦群都考虑进去以后可以很详细地刻画空间的伦型，但是高阶同伦群大多极其难计算．本节简单介绍一阶同伦群，即基本群的计算方法．
 
@@ -23,6 +24,16 @@ Seifert-van Kampen定理难以简洁表达，不过如果能充分理解\textbf{
 设拓扑空间$X$可以被它的两个开集$U_1$和$U_2$覆盖，并且$U_1\cap U_2$是单连通（\autoref{HomT3_ex1}~\upref{HomT3}）的，那么有$\pi_1(X)=\pi_1(U_1)*\pi_1(U_2)$．
 \end{theorem}
 
+除此之外，我们在\textbf{可缩空间}\upref{HomT2}中提到的形变收缩也能用于大大简化基本群的计算．
+
+\begin{theorem}{形变收缩核的同伦}\label{HomT5_the1}
+给定拓扑空间$X$．如果$f:X\rightarrow A\in X$是一个形变收缩，且$A$是其收缩核，那么$X\cong A$．
+\end{theorem}
+
+证明很简单，由形变收缩的定义可知，$f:X\rightarrow A$和$1_X:A\rightarrow X$是彼此的同伦逆；$1_X$是$X$到自身的恒等映射，由于此处将其限制在$A$上，也可以记为$1_A=1_X|_A$．
+
+\autoref{HomT5_the1} 很好地展示了同胚和同伦的区别：如果存在一个形变收缩，把拓扑空间压成更低维度的情况，比如将烟卷压成圆环，那么收缩前后的空间是同伦的，但它们由于维度不同，就不会同胚．
+
 \begin{theorem}{锥空间的基本群}
 设$X$是任意非空的拓扑空间，则$\pi_1(\widetilde{C}X)=\{e\}$，即为只有一个元素的平凡群．
 \end{theorem}
@@ -35,7 +46,9 @@ Seifert-van Kampen定理难以简洁表达，不过如果能充分理解\textbf{
 
 \pentry{复数\upref{CplxNo}，覆叠空间\upref{CovTop}}
 
-\begin{example}{$S^1$的基本群}
+$S^1$是用于构建许多拓扑空间的伦型的原料，因此严格证明$S^1$的基本群非常重要．\autoref{HomT5_ex2} 提供了严格证明的大体思路，限于篇幅，只能由有兴趣的读者自行补充细节了．
+
+\begin{example}{$S^1$的基本群}\label{HomT5_ex2}
 将$S^1$看成复平面上的单位圆$\{\E^{2\pi\I t}\in\mathbb{C}|t\in\mathbb{R}\}=\{x+y\I\in\mathbb{C}|x=\cos{2\pi t}, y=\sin{2\pi t}\}$．取通常的实度量空间$\mathbb{R}$，建立映射$p:\mathbb{R}\rightarrow S^1$，其中$p(t)=\E^{2\pi\I t}$，则$p$是一个覆叠映射．
 
 把$S^1$看成$\mathbb{R}$的商拓扑空间，其中等价关系$\sim$为：$x\sim y\iff \abs{x-y}\in\mathbb{Z}$，即把实数轴绕到圆上．对于圆周上任意一个点$\E^{2\pi\I t_0}$，可以取典范邻域$U_{t_0}=\{\E^{2\pi\I t}|t\in(t_0-1/4, t_0+1/4)\}$．这个典范邻域中$1/4$的选择是任意的，换成任何小于$1/2$的正数也可以，我们只需要用该典范邻域来说明接下来定义的提升映射$\tilde{f}$是唯一的．
@@ -73,9 +86,29 @@ Seifert-van Kampen定理难以简洁表达，不过如果能充分理解\textbf{
 
 \end{example}
 
-\begin{example}{莫比乌斯带的基本群}
+\begin{example}{莫比乌斯带的基本群}\label{HomT5_ex1}
+莫比乌斯带$M$可以通过强形变收缩（\autoref{HomT2_def1}~\upref{HomT2}）来同伦于其中轴线$S^1$，因此莫比乌斯带的基本群和$S^1$一样，都是$\mathbb{Z}$．
 
+理解莫比乌斯带基本群的难点是看出中轴线是其强形变收缩核，为了方便描述如何构造对应的强形变收缩，我们把莫比乌斯带看成射影平面挖去中心的结果，如\autoref{HomT5_fig9} 所示．
+
+\begin{figure}[ht]
+\centering
+\includegraphics[width=10cm]{./figures/Topo7_9.pdf}
+\caption{从射影平面中间挖去一个洞得到莫比乌斯带示意图．详见\textbf{商拓扑}\upref{Topo7}词条．} \label{HomT5_fig9}
+\end{figure}
+
+由于射影平面本身可以看成一个圆盘$B^2$的商拓扑空间，我们同样可以把$M$看成圆盘$B^2$挖去中心后再取商拓扑，也就是看成圆环的商拓扑空间．不失一般性地，把这个圆环看成半径为$2$的圆和半径为$1$的圆之间的部分．取映射$f:M\times I\rightarrow M$，其中对于任意$(x, y)\in M, t\in I$，都有$f((x, y), t)= (1+t/(1-\sqrt{x^2+y^2}))(x, y)$，则$f$是一个强形变收缩，其收缩核就是圆环的外边缘；取商拓扑可见，这个外边缘正是莫比乌斯带的中轴线．
 \end{example}
+
+\begin{exercise}{莫比乌斯带的强形变收缩}
+验证\autoref{HomT5_ex1} 中的$f$是同伦，进而证明它确实是强形变收缩．提示：先考虑未将圆环外边缘的对径点粘合时的情况，再对比考虑粘合后的效果．
+\end{exercise}
+
+\begin{exercise}{}
+将莫比乌斯带看成一个圆环将外边缘粘合所得的商空间．如果将沿着外边缘走了半圈的回路类\footnote{走了半圈就回到了起点，因为对径点粘在一起了．}记为$a\in\pi_1(M)$，那么绕着中心缺口顺时针旋转一周的回路类是$\pi_1(M)$中的哪个元素？
+
+答案是$a^2$．
+\end{exercise}
 
 
 
