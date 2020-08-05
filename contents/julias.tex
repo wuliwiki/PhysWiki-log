@@ -1,0 +1,34 @@
+% Julia 分形
+
+\footnote{参考 Wikipedia \href{https://en.wikipedia.org/wiki/Julia_set#Quadratic_polynomials}{相关页面}} 这里给出一个 Julia 分形的演示程序，运行结果如\autoref{julias_fig1}．
+
+（说明未完成）
+
+\begin{figure}[ht]
+\centering
+\includegraphics[width=9cm]{./figures/julias_1.png}
+\caption{运行结果} \label{julias_fig1}
+\end{figure}
+
+\begin{lstlisting}[language=matlab]
+function julia_set
+close all;
+N = 1000;
+scale = 1.5;
+x = linspace(-1, 1, N); y = x;
+[X, Y] = ndgrid(x, y);
+I = julia2(X*scale, Y*scale);
+I(I > 1000) = 1000;
+surfCart(x, x, I);
+caxis([0, 500]);
+end
+
+function I = julia2(X, Y)
+    c = -0.8 + 0.15745i;
+    Z = X + 1i*Y;
+    for i=1:80
+        Z = Z .* Z + c;
+    end
+    I = abs(Z); % I = I/max(I(:));
+end
+\end{lstlisting}
