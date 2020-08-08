@@ -4,7 +4,7 @@
 \subsection{如果你已经会 LaTeX}
 我们必须强调这个编辑器只是在 \href{https://www.mathjax.org/}{MathJax}（仅支持公式） 的基础上做了一个非常简单的拓展， 所以如果你直接把自己的 LaTeX 代码复制进来多半会遇到严重的问题． 我们在 MathJax 的基础上另外实现了一些基本命令如 \verb|\subsection{}|， \verb|\textbf{}|， 常用环境的简单格式以及对他们的引用． 这些功能绝大部分可以在工具栏上找到． 最后， 编辑器只支持百科的模板， 整个百科是一个 \verb|document| 环境， 除了 main.tex 外其他所有 tex 文件都将作为一个 \verb|section| 插入 main.tex 中，不需要手动添加 \verb|\section{}| 命令．
 
-以下大部分不是 LaTeX 的教程而是编辑器的教程， 所以同样建议你大致看一下．
+以下大部分不是 LaTeX 的教程而是编辑器的教程， 所以同样建议你大致看一下． 可能大大提高编辑效率的功能有： 引用按钮（自动添加 \verb|\label| 和 \verb|\autoref|）， 自动补全和符号替换（在设置按钮里面）， 以及各种快捷键．
 
 \subsection{零基础视频教程}
 \begin{enumerate}
@@ -52,13 +52,7 @@ a^2 + b^2 = c^2
 \end{itemize}
 
 \subsection{用户权限}
-每个注册用户默认有编辑词条的权限， 但却不能直接发布词条， 而是需要由发布权限的用户审核后发布． 若一个词条处于 “编辑中” 的状态， 则其他用户无法修改该词条（除非有 “介入编辑” 权限）， 只能以只读模式打开． 新建或修改的词条只有通过审核并被发布后才可以被其他用户重新编辑． 所有编辑中的词条页面都可以在\href{http://wuli.wiki/changed/changed.html}{临时页面}（\autoref{editor_fig1}）查看， 也会显示对应的编辑者．
-
-\begin{figure}[ht]
-\centering
-\includegraphics[width=9cm]{./figures/editor_1.png}
-\caption{从 \href{http://wuli.wiki/online}{wuli.wiki/online} 查看编辑中的词条} \label{editor_fig1}
-\end{figure}
+每个注册用户默认有编辑词条的权限， 但却不能直接发布词条， 而是需要由发布权限的用户审核后发布． 若一个词条处于 “编辑中” 的状态， 则其他用户无法修改该词条（除非有 “介入编辑” 权限）， 只能以只读模式打开． 新建或修改的词条只有通过审核并被发布后才可以被其他用户重新编辑．
 
 \subsection{文件结构}
 
@@ -83,14 +77,12 @@ a^2 + b^2 = c^2
 \item 编辑器会将有改动的词条每隔 5 分钟备份一次， 可以用 “恢复” 按钮恢复历史版本
 \item 编辑器支持各种自动引用（被引用对象没有 label 时会自动插入 label）， 工具栏上的\textbf{内部引用}按钮可以引用同一词条的公式， 图表， 例题等环境． \textbf{外部引用}按钮可以引用其他词条的各种环境
 \item 如果要在网页预览和 LaTex 代码之间跳转到对应位置， 可以通过搜索关键词实现． 例如在预览窗口复制一段文字， 在编辑窗口搜索就可以跳转到对应内容
-\item 任何时候打出反斜杠会自动提示， 用 tab 键自动补全， 用上下键选择． 候选词未必是从最左边开始匹配， 例如打 \verb|\bf| 按 tab 就会得到 \verb|\textbf{}|
-\item 如果自动补全带括号， 例如 \verb|\frac{}{}|， 补全后光标会自动进入第一个大括号， 再次按 tab 光标会跳到第二个括号， 再按 tab 光标会跳到第二个大括号外．
-\item 打 \verb|\beg| 按 tab 会自动出现 \verb|\begin{}...\end{}|， 在 \verb|begin| 中输入环境名时， \verb|end| 中的环境名也会同步． 输完以后按 tab， 光标会跳到环境内
-\item 打 \verb|\beq| 按 tab 会自动出现 \verb|\begin{equation}...\end{equation}|
-\item 打 \verb|\bit| 按 tab 会自动出现 \verb|\begin{itemize}...\end{itemize}|
+\item 任何时候打出反斜杠会自动提示可以自动补全的命令， 用上下键选择， 用 Tab 键或回车确认． 候选词未必是从最左边开始匹配， 例如打 \verb|\bf| 按 tab 就会得到 \verb|\textbf{}|
+\item 如果自动补全带括号， 例如 \verb|\frac{}{}|， 补全后光标会自动进入第一个大括号， 再次按 Tab 光标会跳到第二个括号， 再按 Tab 光标会跳到第二个大括号外．
+\item 打 \verb|\beq| 按 Tab 会自动出现 \verb|\begin{equation}...\end{equation}|， 其他环境也同理．
 \item 用光标选中一串字符后按下加粗按钮， 这串字符会自动插入 \verb|\textbf{}| 中． 同样， 选中字符串后输入 \verb|(| 等括号， 这个字符串会自动插入 \verb|()| 中． 表示行内公式的 \verb|$$| 也支持该操作．
 \item 编辑器在生成网页时会将编辑器中的 LaTex 代码转换为通用的 LaTex 代码（网页中右键点击公式获得）， 即不需要自定义命令和额外宏包， 可以在任何支持 LaTeX 公式的环境使用（如知乎的公式编辑器）．
-\item 编辑器支持一键转载到知乎（有少量不兼容， 例如表格）， 使用菜单栏的 “导出 Markdown 文件” 按钮， 然后将导出的文件上传到知乎即可． 该功能只能在编辑个人笔记时使用， 未经允许请勿转载百科内容．
+\item 编辑器支持一键转载到知乎（有少量不兼容， 例如表格和代码）， 使用菜单栏的 “导出 Markdown 文件” 按钮， 然后将导出的文件上传到知乎即可． 该功能只能在编辑个人笔记时使用， 未经允许请勿转载百科内容．
 \end{itemize}
 
 \subsubsection{快捷键}
