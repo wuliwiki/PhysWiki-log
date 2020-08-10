@@ -2,19 +2,27 @@
 % 多元微积分|矢量场|散度|线积分|通量|环流量|旋度|斯托克斯定理
 
 \pentry{圆周运动的速度\upref{CMVD}， 散度\upref{Divgnc}， 线积分\upref{IntL}， 流密度， 通量}%未完成
-我们在矢量场中取一个闭合回路 $\mathcal L$ 并规定一个正方向， 并定义该回路的\textbf{环流量}为矢量场在回路上的线积分
+我们在三维空间的矢量场 $\bvec F(\bvec r)$ 中取一个闭合回路 $\mathcal L$ 并规定一个正方向， 并定义该回路的\textbf{环流量}为矢量场在回路上的线积分
 \begin{equation}
 \oint_{\mathcal L} \bvec F(\bvec r) \vdot \dd{\bvec r}
 \end{equation}
-下面我们来定义\textbf{旋度}， 旋度是一个矢量， 记为 $\curl \bvec F$． 在空间某点 $(x,y,z)$ 处选取一个小面元 $\bvec S$（模长为面元的面积， 方向为面元的一个法向量）， 令面元边界构成的回路为 $\mathcal L$， 正方向由右手定则\upref{RHRul} 判断． 要定义其 $x$ 方向的分量， 就取 $\bvec S$ 与 $\uvec x$ 同向， 即
-\begin{equation}
-(\curl\bvec F)_x = \lim_{S\to 0} \frac 1S \oint_{\mathcal L} \bvec F(\bvec r) \vdot \dd{\bvec r}
-\end{equation}
-旋度的 $y, z$ 分量定义类似．
+以下假设这个矢量场在某个区域内具有处处具有一阶偏导数．
 
-若矢量场分布连续且光滑， 则旋度处处存在且与回路的形状和坐标系的选取无关\footnote{本书不作证明}． 所以选取任意方向的面元 $\bvec S$， 都有
+\begin{figure}[ht]
+\centering
+\includegraphics[width=4cm]{./figures/Curl_3.pdf}
+\caption{面元， 法向量为 $\bvec S$， 面积为 $\abs{\bvec S}$}\label{Curl_fig3}
+\end{figure}
+
+现在来定义该矢量场的\textbf{旋度（curl）}． 旋度是一个矢量， 记为 $\curl \bvec F$． 如\autoref{Curl_fig3} ， 在空间某点 $(x,y,z)$ 处选取一个小面元 $\bvec S$（模长为面元的面积， 方向为面元的一个法向量）， 令面元边界构成的回路为 $\mathcal L$， 正方向由右手定则\upref{RHRul} 判断． 要定义旋度 $\curl \bvec F$ 在 $x$ 方向的分量， 就取 $\bvec S$ 与 $x$ 轴单位矢量 $\uvec x$ 同向， 再计算换流量除以面积的极限， 即
+\begin{equation}
+\uvec x \vdot (\curl\bvec F) = \lim_{S\to 0} \frac 1S \oint_{\mathcal L} \bvec F(\bvec r) \vdot \dd{\bvec r}
+\end{equation}
+同理， 要计算旋度的 $y, z$ 分量就把 $\bvec S$ 分别指向单位矢量 $\uvec y, \uvec z$ 的方向， 再讲上式的 $\uvec x$ 分别替换为 $\uvec y, \uvec z$． 这种定义方法叫做 “积分—比—极限”．
+
+可以证明， 旋度处处存在且与回路的形状选取无关\footnote{本书不作证明}． 所以选取任意方向的面元 $\bvec S$， 都有
 \begin{equation}\label{Curl_eq3}
-\curl\bvec F \vdot \uvec S = \lim_{S\to 0} \frac 1S \oint_{\mathcal L} \bvec F(\bvec r) \vdot \dd{\bvec r}
+(\curl\bvec F) \vdot \uvec S = \lim_{S\to 0} \frac 1S \oint_{\mathcal L} \bvec F(\bvec r) \vdot \dd{\bvec r}
 \end{equation}
 
 \subsection{直角坐标系中的旋度}
@@ -22,7 +30,7 @@
 \begin{equation}
 \bvec F(x,y,z) = F_x(x,y,z)\uvec x + F_y(x,y,z)\uvec y + F_z(x,y,z)\uvec z
 \end{equation}
-在点 $(x,y,z)$ 附近， 我们可以对场使用微分近似
+在点 $(x,y,z)$ 附近， 我们可以对场使用微分近似（\autoref{TDiff_eq6}~\upref{TDiff}）
 \begin{equation}
 F_i(x+x', y+y', z+z') = F_i(x,y,z) + \pdv{F_i}{x}x' + \pdv{F_i}{y}y' + \pdv{F_i}{z}z'
 \end{equation}
@@ -33,7 +41,7 @@ F_i(x+x', y+y', z+z') = F_i(x,y,z) + \pdv{F_i}{x}x' + \pdv{F_i}{y}y' + \pdv{F_i}
 \caption{直角坐标系中旋度的 $z$ 分量} \label{Curl_fig1}
 \end{figure}
 
-要求 $z$ 方向的旋度， 令闭合回路为正方形 $[x,y,z]$-$[x+h, y+h, z]$（\autoref{Curl_fig1}）， 延 $x$ 方向的两条边的线积分仅由 $F_x$ 贡献， 延 $y$ 方向的两条边的线积分仅由 $F_y$ 贡献， 所以整个环路的线积分为
+要求 $z$ 方向的旋度， 令闭合回路为\autoref{Curl_fig1}所示的正方形， 延 $x$ 方向的两条边的线积分仅由 $F_x$ 贡献， 延 $y$ 方向的两条边的线积分仅由 $F_y$ 贡献， 所以整个环路的线积分为
 \begin{equation}\ali{
 \oint_{\mathcal L} \bvec F \vdot \dd{\bvec r}
 &= \int_0^h \qty(F_x + \pdv{F_x}{x}x') \dd{x'} - \int_0^h \qty(F_x + \pdv{F_x}{x}x' + \pdv{F_x}{y}h) \dd{x'}\\
@@ -81,23 +89,3 @@ G_x = \pdv{F_z}{y} - \pdv{F_y}{z} \qquad G_y = \pdv{F_x}{z} - \pdv{F_z}{x}
 要注意的是， 在原点处由于矢量场不连续（而是出现了无限大的奇点）， 以上计算在原点处并不成立． 
 % 未完成：以后会在XXX详细讨论原点处的旋度如何表示．
 \end{example}
-
-\subsection{斯托克斯定理}
-
-\begin{figure}[ht]
-\centering
-\includegraphics[width=6cm]{./figures/Curl_2.pdf}
-\caption{斯托克斯定理} \label{Curl_fig2}
-\end{figure}
-
-如\autoref{Curl_fig2}， 我们选取一块曲面， 并规定一个正方向． 使用右手定则\upref{RHRul}， 我们也可以定义曲面边界的正方向． 空间中存在连续光滑的矢量场 $\bvec F(\bvec r)$， 则\textbf{斯托克斯定理}可以将矢量场在曲面边界上的环流量和矢量场的旋度在曲面上通量等同起来
-\begin{equation}
-\oint \bvec F(\bvec r) \vdot \dd{\bvec r} = \iint \curl \bvec F(\bvec r) \vdot \dd{\bvec s}
-\end{equation}
-
-
-要证明这个定理， 我们将曲面划分为许多小面元 $\Delta \bvec s_i$， 其正方向与曲面一致， 边界的正方向同样由右手定则定义． 这样， 矢量场在曲面上的通量就等于在每个小面元上的通量之和． 当面元的面积趋于零时， 我们可以认为场的旋度在面元上是常矢量 $\bvec F(\bvec r_i)$， $\bvec r_i$ 为 $\Delta \bvec s_i$ 上任意一点． 由\autoref{Curl_eq3} 可知面元的环流量为 $\curl\bvec F(\bvec r_i) \vdot \Delta \bvec s_i$（可类比\autoref{Diff_eq2}~\upref{Diff}）， 所以根据积分的思想， 所有面元的环流量之和为
-\begin{equation}
-\lim_{\Delta s_i \to 0}\sum_i \curl\bvec F(\bvec r_i) \vdot \Delta \bvec s_i = \iint \curl\bvec F(\bvec r) \vdot \dd{\bvec s}
-\end{equation}
-最后， 如何证明所有面元的环流量之和等于曲面边界的环流量呢？ 类比散度定理（\autoref{Divgnc_eq13}~\upref{Divgnc}）的证明， 考虑任意两块相邻的小面元， 矢量场在它们共同边界的线积分对一个面元的环流量贡献为正， 而对另一个面元的环流量贡献大小相同但符号为负， 所以在上式的求和中相加为零． 所以， 求和中唯一没有被抵消的环流量来自于曲面边界处的面元， 这些面元的边界与曲面边界重合且正方向一致， 对求和的贡献恰好等于曲面边界的环流量． 证毕．
