@@ -1,0 +1,74 @@
+% 曲率 曲率半径
+% 曲率|密切圆|曲率半径|极限|直角坐标|极坐标|切线|导数
+
+\pentry{切线\upref{TanL}}
+
+\footnote{参考 Wikipedia \href{https://en.wikipedia.org/wiki/Curvature}{相关页面}}我们来看一个平面上的一个光滑曲线（即处处存在切线）， 我们如何描述它某点处的弯曲程度呢？ 一种常用方法是在这点附近取曲线的一小段， 然后做一个尽量与它吻合的圆， 当这小段的长度趋近于 0 时， 这个圆可以唯一确定． 我们把这个圆叫做\textbf{密切圆（osculating circle）}， 把密切圆的半径叫做曲线在该点的\textbf{曲率半径（radius of curvature）}， 曲率半径的倒数叫做\textbf{曲率（curvature）}．
+
+我们先来看一个半径为 $R$ 的圆的一小段圆弧， 令其长度为 $\Delta l$． 作这段圆弧两端的切线， 令它们的夹角为 $\Delta \theta$， 那么显然满足 $R \Delta\theta = \Delta l$． 同理， 对于任意光滑曲线上长度为 $\Delta l$ 的一段， 我们也可以做相同的处理， 但需要令 $\Delta l \to 0$
+\begin{equation}\label{curvat_eq3}
+R = \lim_{\Delta l \to 0} \frac{\Delta l}{\Delta \theta}
+\end{equation}
+曲率的具体的计算公式取决于使用什么方式定义曲线， 最常见描述方式就是在直角坐标系中通过函数 $y(x)$ 来定义， 点 $(x, y)$ 处的曲率半径为（$\dot y, \ddot y$ 分别表示导数和二阶导数）
+\begin{equation}
+R = \frac{(1 + \dot y^2)^{3/2}}{\ddot y}
+\end{equation}
+如果通过极坐标系函数 $r(\theta)$ 定义， 则点 $(r, \theta)$ 处的曲率半径为
+\begin{equation}
+R = \frac{(r^2 + \dot r^2)^{3/2}}{r^2 + 2\dot r^2 - r\ddot r}
+\end{equation}
+
+\subsection{直角坐标系的推导}
+\pentry{高阶导数\upref{HigDer}， 一元函数的微分\upref{Diff}}
+
+平面上曲线的最常见描述方式就是通过定义函数 $y(x)$． 我们可以通过导数\upref{Der}计算曲线上某点切线关于 $x$ 轴的夹角 $\theta$．
+\begin{equation}\label{curvat_eq1}
+\dot y = \dv{y}{x} = \tan \theta
+\end{equation}
+曲线长度的微分为
+\begin{equation}
+\dd{l} = \frac{\dd{x}}{\cos\theta}
+\end{equation}
+其中
+\begin{equation}\label{curvat_eq2}
+\cos\theta = \frac{1}{\sqrt{1 + \tan^2\theta}} = \frac{1}{\sqrt{1 + \dot y^2}}
+\end{equation}
+为了得到 $\dd{\theta}$， 我们对\autoref{curvat_eq1} 两边做微分得
+\begin{equation}
+\ddot y \dd{x} = \frac{1}{\cos^2\theta} \dd{\theta}
+\end{equation}
+所以曲率半径为
+\begin{equation}
+R = \dv{l}{\theta} = \frac{1}{\ddot y\cos^3\theta} = \frac{(1 + \dot y^2)^{3/2}}{\ddot y}
+\end{equation}
+
+\subsection{极坐标系的推导}
+极坐标系中， 同样可以用函数 $r(\theta)$ 描述曲线．
+令
+\begin{equation}
+\frac{\dd{r}}{r \dd{\theta}} = \tan\alpha
+\end{equation}
+即
+\begin{equation}\label{curvat_eq5}
+\dot r = r\tan\alpha
+\end{equation}
+长度微分为
+\begin{equation}
+\dd{l} = \frac{r\dd{\theta}}{\cos\alpha}
+\end{equation}
+微分
+\begin{equation}
+\ddot r\dd{\theta} = \dot r\tan\alpha\dd{\theta} + \frac{r}{\cos^2\alpha}\dd{\alpha}
+\end{equation}
+即
+\begin{equation}\label{curvat_eq4}
+\dv{\alpha}{\theta} = (\ddot r - \dot r \tan\alpha) \frac{\cos^2\alpha}{r} = \frac{\ddot r - \dot r\tan\alpha}{r(t + \tan^2\alpha)}
+\end{equation}
+注意切线方向的微分是 $\dd{\theta} - \dd{\alpha}$． 所以
+\begin{equation}
+R = \frac{\dd{l}}{\dd{\theta} - \dd{\alpha}} = \frac{\dd{l}/\dd{\theta}}{1 - \dd{\alpha}/\dd{\theta}}
+\end{equation}
+把\autoref{curvat_eq3} 和\autoref{curvat_eq4} 代入， 再使用\autoref{curvat_eq5} 消去 $\alpha$ 得
+\begin{equation}
+R = \frac{(r^2 + \dot r^2)^{3/2}}{r^2 + 2\dot r^2 - r\ddot r}
+\end{equation}
