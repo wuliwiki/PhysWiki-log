@@ -1,0 +1,61 @@
+% 流形上的切空间
+\pentry{流形\upref{Manif}，切空间（欧几里得空间）\upref{tgSpaE}}
+
+对于流形$N$，如果能将它嵌入到某个$\mathbb{R}^k$中，嵌入映射为$i:N\rightarrow\mathbb{R}^k$，那么根据\textbf{切空间（欧几里得空间）}\upref{tgSpaE}中关于曲面$S$的讨论，我们可以使用道路或者导子来算出特定嵌入$i$下流形$N$的切空间和切丛．但是和测试电荷、测试函数类似，特定嵌入也只是一个测试函数，我们讨论流形本身时不依赖特定的嵌入，这就体现出道路和导子定义的好处了．
+
+和大多数教材不同的是，本书中使用道路的等价类来定义流形上的切向量，这样比起导子要更加容易可视化．
+
+\subsection{流形上切空间的定义}
+
+\begin{definition}{切向量}
+给定流形$N$，则在其上一点$p\in N$处的一个\textbf{切向量}就是从$p$出发的一条道路$r$所在的\textbf{等价类}$[r]$．其中，两道路$r_1$和$r_2$等价当且仅当存在$p$处的一个图$(U, \varphi)$，使得道路$\varphi\circ r_1$和$\varphi\circ r_2$都收敛于$\varphi(U)$中的同一个切向量．
+\end{definition}
+
+切向量的定义只要求两条道路在某一个图中对应的欧几里得空间里的切向量等价．这种定义方法是合理的，这由以下定理保证：
+
+\begin{theorem}{}\label{tgSpa_the1}
+给定流形$N$，其上一点$p\in N$处有两个图$(U, \varphi)$和$(V, \phi)$．$p$出发的两条道路$r_1$和$r_2$，它们$\varphi\circ r_1$和$\varphi\circ r_2$收敛于同一个切向量，当且仅当$\phi\circ r_1$和$\phi\circ r_2$也收敛于同一个切向量．
+\end{theorem}
+
+\textbf{证明：}
+为方便计，将$\phi\circ\varphi^{-1}$记为$f$．
+
+由于$f:\mathbb{R}^n\rightarrow\mathbb{R}^n$是一个双向光滑双射，即$f$和$f^{-1}$都是双射且光滑，于是它的Jacobi矩阵$\partial f/\partial \bvec{v}$是非奇异的；换句话说，如果把向量值函数$f$的第$i$个分量函数记为$f_i:\mathbb{R}^n\rightarrow\mathbb{R}$，那么$f_i$的梯度$\Nabla f_i$处处存在且不为零．类似地，$f^{-1}$的分量函数的梯度也处处存在且不为零．在以下证明中，为了方便，我将直接使用Jacobi矩阵的表示方法．
+
+$\varphi\circ r_1$对应的向量是$\dd(\varphi\circ r_1)/\dd t=(\partial\varphi/\partial\bvec{v})\cdot(\dd r_1/\dd t)$，其中$\bvec{v}$表示$\mathbb{R}^n$中的向量，$\partial\varphi/\partial\bvec{v}$取在点$\varphi(p)$处的值．相应地，$\varphi\circ r)_2$表示的向量是$(\partial\varphi/\partial\bvec{v})\cdot(\dd r_2/\dd t)$．由于这两个向量是同一个，故$(\partial\varphi/\partial\bvec{v})\cdot(\dd r_1/\dd t)=(\partial\varphi/\partial\bvec{v})\cdot(\dd r_2/\dd t)$．
+
+现在直接计算$\phi\circ r_1$和$\phi\circ r_2$对应的向量：$\dd(\phi\circ r_1)/\dd t=\dd(\phi\circ\varphi^{-1}\circ\varphi\circ r_1)/\dd t=\dd(f\circ\varphi\circ r_1)/\dd t=(\partial f/\partial\bvec{v})(\partial\varphi/\partial\bvec{v})(\dd r_1/\dd t)$．类似地，$\phi\circ r_2$对应的向量是$(\partial f/\partial\bvec{v})(\partial\varphi/\partial\bvec{v})(\dd r_2/\dd t)$．由于$(\partial\varphi/\partial\bvec{v})\cdot(\dd r_1/\dd t)=(\partial\varphi/\partial\bvec{v})\cdot(\dd r_2/\dd t)$，故$(\partial f/\partial\bvec{v})(\partial\varphi/\partial\bvec{v})(\dd r_1/\dd t)(\partial f/\partial\bvec{v})(\partial\varphi/\partial\bvec{v})(\dd r_2/\dd t)$，这就证明了必要性；而充分性则是由于$\partial f/\partial\bvec{v}$非奇异，故非零的$(\partial\varphi/\partial\bvec{v})(\dd r_1/\dd t)$不会映射到零向量上，进而两个向量之差如果不为零则其在$f$下的映射也不为零．
+
+
+\textbf{证毕．}
+
+\autoref{tgSpa_the1} 意味着流形$N$上的道路，在一个图里的等价划分，和在任何其它图里的等价划分是一致的，这就使得我们可以摆脱对特定图的依赖，直接定义两条道路等价当且仅当它们在任意一个图里等价．类似地，我们也可以摆脱对特定图的依赖来定义道路等价类的加法．
+
+\begin{definition}{切向量的加法}\label{tgSpa_def1}
+
+给定流形$N$，其上一点$p\in N$．$p$出发的两个道路等价类$[r_1]$和$[r_2]$的和定义为，任取$p$附近一图$(U, \varphi)$，令$[r_1]+[r_2]=[\varphi^{-1}(\varphi(r_1)+\varphi(r_2))]$．
+
+\end{definition}
+
+\begin{theorem}{}
+给定流形$N$，其上一点$p\in N$处有两个图$(U, \varphi)$和$(V, \phi)$．对$p$出发的两条道路$r_1$和$r_2$，按以上定义所得的和（注意，这个和是$N$上的一个道路等价类），在两个图中的计算结果一致．
+\end{theorem}
+
+\textbf{证明：}
+
+为方便计，记$f=\phi\circ\varphi^{-1}$．
+
+根据\autoref{tgSpa_the1} 的证明，我们知道$f$的各分量$f_i$都处处有非零梯度．设$r_1$和$r_2$的起点都是$p\in N$，那么用$(U, \varphi)$计算可得：$r_1+r_2=\varphi^{-1}(\varphi\circ r_1+\varphi\circ r_2)$；而用$(V, \phi)$计算可得：$r_1+r_2=\phi^{-1}(\phi\circ r_1+\phi\circ r_2)=\phi^{-1}(f\circ\varphi\circ r_1+f\circ\varphi\circ r_2)$．我们希望这样计算出来的两个$r_1+r_2$是等价的（一般不相等）．
+
+将以上计算出来的两个$r_1+r_2$都放到$(U, \varphi)$中进行比较，它们等价当且仅当对$t$求导的结果一样．用$(U, \varphi)$本身算出来的$r_1+r_2$当然是$\varphi r_1+\varphi r_2$；而在$(V, \phi)$中算出来的$r_1+r_2$则是$\varphi\phi^{-1}(f\varphi r_1+f\varphi r_2)=f^{-1}(f\varphi r_1+f\varphi r_2)$．直接计算得，$\dd/\dd t(\varphi r_1+\varphi r_2)=\dd/\dd t(\varphi r_1)+\dd/\dd t(\varphi r_2)$，而$\dd/\dd t(f^{-1}(f\varphi r_1+f\varphi r_2)=\partial f^{-1}/\partial\bvec{v}(\partial f/\partial\bvec{v}(\dd/\dd t(\varphi r_1)+\dd/\dd t(\varphi r_2)))$．考虑到$\partial f/\partial\bvec{v}$和$\partial f^{-1}/\partial\bvec{v}$都是非奇异的，故它们的乘积是单位矩阵，于是以上两个求导的结果是一致的，因此两种方式计算出来的$r_1+r_2$是等价的．
+
+\textbf{证毕．}
+
+这个定理保证了\autoref{tgSpa_def1} 的合理性，即无论用哪个图去计算切向量（道路等价类）的和，结果仍然是同一个等价类．定理成立的关键在于，两个图相容使得$f=\phi\circ\varphi^{-1}$是一个双向光滑的双射，因此$\partial f/\partial\bvec{v}$和$\partial f^{-1}/\partial\bvec{v}$都存在且非奇异，这就使得计算过程中可以把$f$变换的影响消除．
+
+\subsection{微分}
+
+
+
+
+
