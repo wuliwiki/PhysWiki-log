@@ -1,10 +1,5 @@
 % BRST 量子化
 
-\begin{issues}
-\issueNeedCite
-\issueMissDepend
-\end{issues}
-
 弦理论的量子化方案有三种：协变量子化，光锥量子化和BRST量子化．三种方案的优劣比较如下：
 \begin{itemize}
 \item 协变量子化：洛伦兹不变能明显表现出来．有鬼．时空维数是26维难以证明．
@@ -21,7 +16,7 @@
 f_{ij}{}^m f_{mk}{}^i + f_{jk}{}^m f_{mi}{}^l+f_{ki}{}^m f_{mj}{}^l = 0 ~. 
 \end{equation}
 现在我们引入两个鬼场，记作$b_i$和$c_j$,它们满足反对易关系
-\begin{equation}
+\begin{equation}\label{BRST_eq5}
 \{ c^i, b_j \} = \delta^i_j~.
 \end{equation}
 我们现在回忆一下，一个场$\phi(z,\bar z)$在共形变换$z\rightarrow w(z)$下具有如下变换的时候
@@ -95,10 +90,151 @@ K_i|\Psi\rangle = 0~.
 T_{zz}(z) = \sum_{m=-\infty}^{\infty} \frac{L_{m}}{z^{m+2}}~.
 \end{equation}
 $T_{zz}(z)T_{ww}(w)$的算子积展开如下
-\begin{equation}
+\begin{equation}\label{BRST_eq3}
 T_{zz}(z)T_{ww}(w) = \frac{D/2}{(z-w)^4} - \frac{2T_{ww}(w)}{(z-w)^2} - \frac{\partial_wT_{ww}(w)}{z-w}~.
 \end{equation}
-为了简便起见，我们省略了因子$l_s^2$．
+为了简便起见，我们省略了因子$l_s^2$．我们对鬼场进行如下定义
+\begin{equation}
+b(z)c(w) = \frac{1}{z-w},\quad \bar b (\bar z) \bar c (\bar w) = \frac{1}{\bar z- \bar w} ~.
+\end{equation} 
+接下来我们写下鬼场的能量动量张量$T_{\rm gh}(z)$.它的表达式如下
+\begin{equation}
+T_{\rm gh} = -2 b(z) \partial_z c(z) - \partial_z b(z) c(z)~.
+\end{equation}
+利用鬼场的能量动量张量以及弦的能量动量张量，我们推出了如下的BRST流
+\begin{equation}
+j(z) = c(z) \bigg( T_{zz} (z) + \frac{1}{2} T_{\rm gh}(z) \bigg) = c(z) T_{zz} (z) + c(z) \partial_z c(z) b(z)~.
+\end{equation}
+BRST荷由下式给定
+\begin{equation}
+Q = \int \frac{dz}{2\pi i} j(z)~.
+\end{equation}
+中心荷来自算子积展开\autoref{BRST_eq3} 的第一项，也就是
+\begin{equation}
+\frac{D/2}{(z-w)^4}~.
+\end{equation}
+这一项也叫做共形反常，因为它让代数不闭合．所以我们想要去掉这一项．我们考虑总的能量动量张量，它是弦的能量动量张量和鬼的能量动量张量之和．
+\begin{equation}
+T = T_{zz} (z) + T_{\rm gh} (z)~.
+\end{equation}
+鬼的能量动量张量如下
+\begin{equation}\label{BRST_eq4}
+T_{\rm gh}(z) T_{\rm gh} (w) = \frac{-13}{(z-w)^4} - \frac{2T_{\rm gh} (w) }{(z-w)^2} - \frac{\partial_w T_{\rm gh}(w)}{z-w}
+\end{equation}
+如果时空维度是26维，那么鬼场的能量动量张量的算子积展开\autoref{BRST_eq4} 的第一项能够把共形反常给消掉．这一结论是直接由BRST荷的$Q^2=0$推导出来的．
+
+\subsubsection{BRST变换}
+我们在光锥坐标系下，定义鬼场$c$和反鬼场$b$. 其中$c$由$c^+$,$c^-$两部分组成．$b$由$b_{++}$,$b_{--}$两部分组成.我们引入鬼场的能量动量张量$T^{\rm gh}_{\pm\pm}$
+\begin{equation}
+\begin{aligned}
+T^{\rm gh}_{++} &  = i (2 b_{++}\partial_+ c^+ +\partial_+ b_{++}c^+)~. \\
+T^{\rm gh}_{--} &  = i (2 b_{--}\partial_- c^- +\partial_- b_{--}c^-)~.
+\end{aligned}
+\end{equation}
+BRST变换归纳如下
+\begin{equation}
+\begin{aligned}
+\delta X^\mu & = i \epsilon (c^+\partial_+ + c^- \partial_- ) X^\mu~. \\
+\delta c^{\pm} & = \pm i \epsilon (c^+\partial_++c^-\partial_-) c^{\pm} ~. \\
+\delta b_{\pm\pm} & = \pm i \epsilon (T_{\pm\pm} +T^{\rm gh}_{\pm\pm})~. 
+\end{aligned}
+\end{equation}
+鬼场的作用量是
+\begin{equation}
+S_{\rm gh} = \int d^2\sigma (b_{++} \partial_- c^+ + b_{--} \partial_+ c^- ) ~.
+\end{equation}
+从作用量出发我们可以推出如下运动方程
+\begin{equation}
+\partial_- b_{++} = \partial_+ b_{--} = \partial_- c^+  = \partial_+ c^- = 0~.
+\end{equation}
+接下来我们写下鬼场的模式展开
+\begin{equation}
+\begin{aligned}
+& c^+ = \sum_n \bar c_n e^{-i n (\tau+\sigma)} ~, \quad c^- = \sum_n c_n e^{-in(\tau-\sigma)} ~, \\
+& b_{++} = \sum_n \bar b_n e^{-i n (\tau+\sigma)}~, \quad b_{--} = \sum_n b_n e^{-in(\tau-\sigma)}
+\end{aligned}
+\end{equation}
+这些模式满足如下的反对易关系
+\begin{equation}
+\{b_m,c_n\} = \delta_{m+n,0}~.
+\end{equation}
+并且$\{b_m,b_n\}=\{c_m,c_n\}=0$.鬼场的Virasoro算符是用这些模式定义出来的．使用正规序展开，它们是
+\begin{equation}
+L_m^{\rm gh} = \sum_n (m-n):b_{m+n}c_{-n}:~, \quad \bar L_m^{\rm gh} = \sum_n (m-n) :\bar b_{m+n}\bar c_{-n}:~. 
+\end{equation}
+总的Virasoro算符定义如下
+\begin{equation}
+L^{\rm tot} = L_m + L^{\rm gh}_m - a \delta_{m,0}~.
+\end{equation}
+我们可以证明，总的Virasoro算符满足下面的对易关系
+\begin{equation}
+[L^{\rm tot}_m,L^{\rm tot}_n] = (m-n) L^{\rm tot}_{m+n} + A(m) \delta_{m+n,0}~. 
+\end{equation}
+右边的$A(m)$项是Anormaly．它的表达式如下
+\begin{equation}
+A(m) = \frac{D}{12} m (m^2-1) + \frac{1}{6} (m-13 m^3) + 2 a m~. 
+\end{equation}
+为了让反常消失，我们取$D=26,a=1$. BRST流由下式给出
+\begin{equation}
+j = c T+ \frac{1}{2} : c T^{\rm gh} : + \frac{3}{2} \partial^2 c~.
+\end{equation}
+BRST荷由下面的模式展开给出
+\begin{equation}
+Q = \sum_n c_n L_{-n} + \frac{1}{2} \sum_{m,n} (m-n) :c_m c_n b_{-m-n}: -c_0~.
+\end{equation}
+我们可以计算$Q^2$,结果如下
+\begin{equation}
+\begin{aligned}
+Q^2&  = \frac{1}{2} \sum ( [L^{\rm tot}_m,L^{\rm tot}_n] - (m-n) L^{\rm tot}_{m+n} ) c_{-m} c_{-n} \\
+& \simeq \frac{1}{12} (D-26)~.
+\end{aligned}
+\end{equation}
+$Q^2=0$要求时空维数必须是26维（$D=26$）．回到原始的BRST方法，使用经典的Virasoro代数
+\begin{equation}
+[L_m,L_n]=(m-n)L_{m-n}~.
+\end{equation}
+我们可以得到结构常数的表达式如下
+\begin{equation}
+f^k_{mn} = (m-n) \delta_{m+n,k}~.
+\end{equation}
+现在我们来看弦理论里面物理的谱是如何构造出来的．我们先看开弦的例子．这些态是用鬼真空态构造出来的．我们把鬼真空态称作$|\chi\rangle$.这个态被所有的正的鬼模湮灭．如果$n>0$我们有
+\begin{equation}
+b_n|\chi\rangle = c_n|\chi\rangle = 0~.
+\end{equation}
+鬼场的零模是一个特殊情况．它们可以用来构造理论的物理态．使用对易关系，我们可以推出零模满足如下方程
+\begin{equation}
+\{b_0,c_0\} = 1~.
+\end{equation}
+由\autoref{BRST_eq5} 我们可知$b_0^2=c_0^2=0$.我们也要求对于物理态$|\Psi\rangle$，我们有$b_0|\Psi\rangle = 0$．现在，我们可以从鬼态的零模出发，构造一个两态的系统．这两个基矢被记作$|\uparrow\rangle$和$|\downarrow\rangle$．它们满足
+\begin{equation}
+\begin{aligned}
+& b_0|\downarrow\rangle = c_0 |\uparrow\rangle = 0 \\
+& b_0|\uparrow\rangle = |\downarrow\rangle~,\quad c_0|\downarrow\rangle = |\uparrow\rangle~.
+\end{aligned} 
+\end{equation}
+我们选取$|\downarrow\rangle$作为鬼真空态．我们可以把这个态与动量态$|k\rangle$做张量积,可以得到$|\downarrow,k\rangle$. 为了得到物理的态，我们把BRST荷$Q$作用在上面．我们可以证明
+\begin{equation}
+Q|\downarrow,k\rangle = (L_0-1)c_0|\downarrow,k\rangle~.
+\end{equation}
+$Q|\downarrow,k\rangle=0$的要求给出了在壳条件$L_0-1=0$.这个是快子态．第一激发态如下
+\begin{equation}
+|\Psi\rangle = (\varsigma\cdot\alpha_{-1}+\xi_1c_{-1}+\xi_2b_{-1})|\downarrow,k\rangle~.
+\end{equation}
+$\xi_1$和$\xi_2$是常数，$\varsigma_\mu$是一个有26个分量的矢量．因为第一激发态是无质量的．所以它有24个独立的分量．为了去掉多余的自由度，我们创造一个满足$Q|\psi\rangle = 0$的物理态．我们可以证明
+\begin{equation}
+Q|\psi\rangle = 2 (p^2 c_0+(p\cdot \varsigma) c_{-1} + \xi_2 p\cdot \alpha_{-1} ) | \downarrow, k\rangle~.
+\end{equation}
+$Q|\psi\rangle = 0$对参数进行了一些限制．有26个正模的态和2个负模的态．我们可以引入一些约束来去掉负模的态．第一个约束是取$p\cdot\varsigma = 0$以及$\xi_1=0$.这可以把负模的态去掉．同时$p^2=0$,这告诉我们这是一个无质量的态．我们有量纲零模的态
+\begin{equation}
+k_\mu\alpha^\mu_{-1}|\downarrow,k\rangle~,\quad c_{-1} |\downarrow,k\rangle~.
+\end{equation}
+这些态跟物理的态是正交的．去掉它们给了我们一个24自由度的态．
+
+\subsubsection{无鬼定理}
+无鬼定理的叙述如下：
+如果时空维数是$D=26$,那么负模的态会被自动消去．
+
+
 
 
 
