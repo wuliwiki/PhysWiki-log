@@ -1,0 +1,51 @@
+% 幂级数
+\pentry{泰勒展开\upref{Taylor}}
+
+在复数域上, 形如
+\begin{equation}\label{anal_eq1}
+\sum_{n=0}^\infty c_n(z-a)^n
+\end{equation}
+的级数称为\textbf{幂级数 (power series)}, 这里$c_n$皆为复数, 未定元$z$一般也视为复数. 
+
+\subsection{幂级数的收敛域}
+\begin{theorem}{}
+如果由\autoref{anal_eq1}给出的幂级数在某点$z_0\neq a$处收敛, 那么它一定在开圆盘$|z-a|<|z_0-a|$上绝对收敛且内闭一致收敛.
+\end{theorem}
+
+证明很简单: 如果$\sum_{n=0}^\infty c_n(z-a)^n$在$z=z_0$时收敛, 那么$c_n(z_0-a)^n\to0$, 从而有一$M$使得$|c_n(z_0-a)^n|\leq M$对任何$n$都成立. 故对于任何固定的$0<q<1$, 当$|z-a|<q|z_0-a|$时就有
+$$
+\begin{aligned}
+\sum_{n=0}^\infty |c_n(z-a)^n|
+&=\sum_{n=0}^\infty |c_n(z_0-a)^n|\frac{|z-a|^n}{|z_0-a|^n}\\
+&<\sum_{n=0}^\infty Mq^n.
+\end{aligned}
+$$
+于是幂级数诸项绝对值由收敛的几何级数控制.
+
+由此可见, \autoref{anal_eq1}给出的幂级数的收敛域或者只是一个点$a$, 或者至少包含某个以$a$为圆心的开圆盘. 这样的开圆盘中最大者叫做幂级数的\textbf{收敛圆 (disk of convergence)}, 其半径称为\textbf{收敛半径 (radius of convergence)}. 幂级数的收敛半径由柯西-阿达玛公式\upref{CHF}给出. 在收敛圆的边界上, 无法作出幂级数是否收敛的一般论断, 例如幂级数$\sum_{n=0}^\infty z^n$在点$z=\pm1$处皆发散, 但其和函数$1/(1-z)$在$z=1$时为奇异, 在$z=-1$时表现正常.
+
+\subsection{幂级数的运算}
+幂级数的四则运算与一般级数的四则运算无异.
+
+\begin{theorem}{幂级数的微分与积分}
+幂级数在进行逐项微分与逐项积分后, 其收敛圆不变. 因此, 幂级数的和函数可以逐项微分, 也可以逐项积分.
+\end{theorem}
+这是柯西-阿达玛公式\upref{CHF}的直接推论. 
+
+\subsection{解析函数}
+由收敛幂级数表示的复变函数称为\textbf{解析函数 (analytic function)}. 它与用复可微性定义的\textbf{全纯函数 (holomorphic function)}\upref{CauRie} 是等价的对象, 尽管这个事实的证明并不平凡 (需要用到柯西积分公式). 如果限制自变量取实数, 那么得到的是\textbf{实解析函数 (real analytic function)}. 等价地, 实解析函数是泰勒级数收敛到其自身的函数. 有如下定理:
+
+\begin{theorem}{}
+开区间$I$上的实函数$f$为解析函数, 当且仅当对于$I$的任何闭子区间$K$, 都有常数$M_K$使得
+$$
+\max_{x\in K}|f^{(n)}(x)|\leq n!M_K^n.
+$$
+\end{theorem}
+
+证明是直接的计算: 如果$f$满足此条件, 那么可以估算出其泰勒展开式的余项趋于零; 反过来, 如果$f$由收敛幂级数表征, 那么可以估计其逐项微分得到的幂级数的上界而得到$f$的高阶导数所满足的条件.
+
+这个定理说明: 实解析函数的高阶导数随着其阶数的提升不能增长得太快. 举例来说, 函数$f(x)=e^{-1/x^2}$在任何不包含原点的开区间上是解析函数; 在原点处它的各阶导数都是零, 但是对于任何正数$M$ (不管有多么大), 都可以找到趋于零的序列$x_n$, 使得
+$$
+|f^{(n)}(x_n)|>n!M^n.
+$$
+因此, 泰勒展开式收敛到其自身的函数是非常特殊的.
