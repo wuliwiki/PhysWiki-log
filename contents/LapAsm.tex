@@ -1,2 +1,122 @@
 % 拉普拉斯方法
 
+\pentry{极值\upref{DerMax}, 积分换元\upref{IntCV}, 高斯积分\upref{GsInt}, 渐近展开\upref{Asympt},  Gamma函数\upref{Gamma}}
+
+在分析数学中, 拉普拉斯方法是一种计算含参数积分的渐近展开式的办法. 所考察的积分一般具有如下形式:
+\begin{equation}\label{LapAsm_eq1}
+I(t)=\int_a^b \phi(x)\E^{t f(x)}dx,
+\end{equation}
+其中$\lambda$是正的实参数. 要考察当$t\to+\infty$时积分的行为. 拉普拉斯方法背后的想法很简单: 如果函数$f$在某点处达到极大值, 那么当$t$很大时, 只有极大值点附近的贡献才比较可观, 其余部分相比起来都要小得多.
+
+\subsection{Watson 引理}
+拉普拉斯方法基于 Watson 引理. 它本身也是很有用的.
+
+\begin{lemma}{Watson 引理}
+设$\alpha>0$, 函数$\phi(x)$在区间$[0,b]$上连续, 而且$x\to0$时有渐近展开
+$$
+\phi(x)\simeq c_0+c_1x+c_2x^2+...
+$$
+则当$t\to+\infty$时, 含参数的积分
+$$
+I(t)=\int_0^b \phi(x)\E^{-t x^\alpha}dx
+$$
+有渐近展开式
+$$
+I(t)\simeq\sum_{n=0}^\infty \frac{c_n}{\alpha}\Gamma\left(\frac{n+1}{\alpha}\right)t^{-(n+1)/\alpha}.
+$$
+\end{lemma}
+
+证明是直接的计算. 固定一个$n$. 按照渐近展开的定义, 存在$\delta>0$使得$0\leq x<\delta$时$\phi(x)-(c_0+...+c_nx^n)=O(x^{n+1})$. 远离$0$的$x$对积分的贡献是可以忽略的:
+$$
+\left|\int_\delta^b\phi(x)\E^{-tx^\alpha}dx\right|
+\leq\max_{x\in[0,b]}|\phi(x)|\E^{-t\delta^\alpha}.
+$$
+而在区间$[0,\delta]$上, 通过换元可得
+$$
+\begin{aligned}
+\int_0^\delta x^k\E^{-tx^\alpha}dx
+&=\frac{t^{-(k+1)/\alpha}}{\alpha}\int_0^{t\delta^\alpha}y^{-(k+1)/\alpha-1}\E^{-y}dy\\
+&=\frac{t^{-(k+1)/\alpha}}{\alpha}\Gamma\left(\frac{k+1}{\alpha}\right)+O(\E^{-t\delta^\alpha/2}).
+\end{aligned}
+$$
+于是就有
+$$
+\begin{aligned}
+I(t)
+&=\int_0^\delta\phi(x)\E^{-tx^\alpha}dx+O(\E^{-t\delta^\alpha})\\
+&=\sum_{k=0}^n\frac{c_n}{\alpha}\Gamma\left(\frac{k+1}{\alpha}\right)t^{-(k+1)/\alpha}+O(t^{-(n+2)/\alpha}).
+\end{aligned}
+$$
+这就是所求的结果.
+
+\subsection{拉普拉斯方法}
+拉普拉斯方法是将 Watson 引理用于\autoref{LapAsm_eq1}得到的. 作出如下假设:
+
+\begin{enumerate}
+\item 函数$f,\phi$都是光滑函数.
+
+\item 函数$f(x)$在积分区间内部仅有一个严格的极大值点$x_0\in(a,b)$ (如果有多个, 则只需要适当划分积分区间使得每个小区间上只有一个即可). 
+
+\item \autoref{LapAsm_eq1}对于$t=t_0$绝对收敛.
+\end{enumerate}
+
+于是$f'(x_0)=0$. 不妨设$f''(x_0)<0$. 从泰勒公式知道, 有一$\delta>0$使得在区间$(x_0-\delta,x_0+\delta)$上, 
+$$
+f(x)=f(x_0)+\frac{1}{2}f''(x_0)(x-x_0)^2+(x-x_0)^3h(x),
+$$
+其中函数$h$有界. 当$t$很大时, 区间$(x_0-\delta,x_0+\delta)$之外的积分的贡献都比$t$的任何负幂衰减得都快: 根据假定 2., 当$|x-x_0|>\delta$时有一$c>0$使得$f(x)<f(x_0)-c$, 从而区间$(x_0-\delta,x_0+\delta)$之外的积分估计为
+$$
+\begin{aligned}
+\left|\int_{|x-x_0|>\delta}\phi(x)\E^{tf(x)}dx\right|
+&\leq \E^{-c(t-t_0)}\int_a^b|\phi(x)|\E^{t_0f(x)}dx\\
+&=O(\E^{-ct}).
+\end{aligned}
+$$
+而在区间$(x_0-\delta,x_0+\delta)$上, 可作如下换元: $y^2=f(x_0)-f(x)$, 即
+$$
+y=\sqrt{\frac{-f''(x_0)}{2}}(x-x_0)\left(1-\frac{2}{f''(x_0)}(x-x_0)h(x)\right)^{1/2}.
+$$
+命$\beta_{\pm}=\pm\sqrt{f(x_0)-f(x_0\pm\delta)}$, 又设有泰勒展开
+\begin{equation}\label{LapAsm_eq2}
+\psi(y):=\phi(x(y))x'(y)\simeq c_0+c_1y+...,y\to 0
+\end{equation}
+(这里显然有$c_0=\phi(x_0)\sqrt{-2/f''(x_0)}$), 则
+$$
+\int_{x_0-\delta}^{x_0+\delta}\phi(x)\E^{tf(x)}dx
+=\E^{tf(x_0)}\int_{\beta_{-}}^{\beta_+}\psi(y)\E^{ty^2}dy
+\simeq\E^{tf(x_0)}\int_{0}^{c}[\psi(y)+\psi(-y)]\E^{ty^2}.dy
+$$
+应用 Watson 引理, 最后终于得到\autoref{LapAsm_eq1}的渐近展开:
+\begin{equation}\label{LapAsm_eq3}
+I(t)\simeq \E^{tf(x_0)}\sum_{n=0}^\infty c_{2n}\Gamma\left(n+\frac{1}{2}\right)t^{-n-1/2},
+\end{equation}
+其中$c_n$由\autoref{LapAsm_eq2}给出. 特别地, 由于$\Gamma(1/2)=\sqrt{\pi}$, \autoref{LapAsm_eq1}渐近公式的首项是
+$$
+I(t)=\E^{tf(x_0)}\left(\phi(x_0)\sqrt{-\frac{2\pi}{tf''(x_0)}}+O(t^{-3/2})\right).
+$$
+
+\subsection{斯特林公式}
+拉普拉斯方法最基本的应用就是导出$\Gamma$函数的\textbf{斯特林公式 (Stirling formula)}. 按照定义,
+$$
+\Gamma(t+1)
+=\int_0^\infty \E^{-x}x^tdx
+=t^{t+1}\int_0^\infty \E^{-t(x-\log x)}dx.
+$$
+最后一步用到换元$x\to tx$. 最后这个积分刚好符合上一小节所要求的三条假设, 因此代入\autoref{LapAsm_eq3}, 就得到渐近公式
+$$
+\Gamma(t+1)\simeq\sqrt{2\pi t}\left(\frac{t}{\E}\right)^t.
+$$
+\autoref{LapAsm_eq3}还给出了更精细的渐近级数:
+$$
+  \Gamma(t+1)
+  =\sqrt{2\pi t}\left({t\over \E}\right)^t
+  \left(
+   1
+   +{1\over12t}
+   +{1\over288t^2}
+   -{139\over51840t^3}
+   -{571\over2488320t^4}
+   + \cdots
+  \right).
+$$
+毫无疑问这是一个可以对大的$n$来近似计算$n!$的公式.

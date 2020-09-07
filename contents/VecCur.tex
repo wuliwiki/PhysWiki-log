@@ -1,0 +1,86 @@
+% 曲率 (向量丛)
+
+\pentry{联络 (向量丛)\upref{VecCon}}
+
+本节采用爱因斯坦求和约定.
+
+设$M$是$n$维微分流形, $E$是其上秩为$k$的光滑向量丛. 设给定了$E$上的联络$D$.
+
+\subsection{定义}
+
+给定截面$s\in\Gamma(E)$和切向量场$X,Y$, 联络$D$的沿着$X,Y$作用在$s$上的\textbf{曲率算子 (curvature operator)} 定义为
+$$
+R(X,Y)s=-D_XD_Ys+D_YD_Xs+D_{[X,Y]}s.
+$$
+直观来说, 曲率算子是量度导数算子的可对易性的: 如果取$X,Y$为坐标向量$\partial_i,\partial_j$, 那么$[X,Y]=0$, 从而$R(\partial_i,\partial_j)s$就是沿着坐标方向的二阶导数之差.
+
+\subsection{曲率方阵}
+为计算$R(X,Y)s$, 设$\{s_\alpha\}_{\alpha=1}^k$是$E$的局部标架, $s=\xi^\alpha s_\alpha$为$s$在此标价下的局部表达式, $\omega$是此标架下的联络1-形式矩阵. 从而
+$$
+\begin{aligned}
+D_Xs=X(\xi^\alpha)s_\alpha+\xi^\beta\omega_\beta^\alpha(X) s_\alpha,
+\end{aligned}
+$$
+$$
+\begin{aligned}
+D_YD_Xs&=Y[X(\xi^\alpha)]s_\alpha+Y[\xi^\beta\omega_\beta^\alpha(X)] s_\alpha
++[X(\xi^\beta)+\xi^\gamma\omega_\gamma^\beta(X)]\omega_\beta^\alpha(Y) s_\alpha \\
+&=Y[X(\xi^\alpha)]s_\alpha+Y(\xi^\beta)\omega_\beta^\alpha(X)s_\alpha+\xi^\beta Y[\omega_\beta^\alpha(X)]s_\alpha\\
+&\quad+[X(\xi^\beta)+\xi^\gamma\omega_\gamma^\beta(X)]\omega_\beta^\alpha(Y) s_\alpha ,
+\end{aligned}
+$$
+于是
+$$
+\begin{aligned}
+(-&D_XD_Y+D_YD_X)s\\
+&=[Y,X](\xi^\alpha)s_\alpha
++[Y(\xi^\beta)\omega_\beta^\alpha(X)-X(\xi^\beta)\omega_\beta^\alpha(Y)]s_\alpha+\left(\xi^\beta Y[\omega_\beta^\alpha(X)]-\xi^\beta X[\omega_\beta^\alpha(Y)]\right)s_\alpha\\
+&\quad+\left(X(\xi^\beta)\omega_\beta^\alpha(Y)-Y(\xi^\beta)\omega_\beta^\alpha(X)+\xi^\gamma\omega_\gamma^\beta(X)\omega_\beta^\alpha(Y)-\xi^\gamma\omega_\gamma^\beta(Y)\omega_\beta^\alpha(X) \right)s_\alpha\\
+&=[Y,X](\xi^\alpha)s_\alpha+\left(\xi^\beta Y[\omega_\beta^\alpha(X)]-\xi^\beta X[\omega_\beta^\alpha(Y)]\right)s_\alpha\\
+&\quad+\left(\xi^\gamma\omega_\gamma^\beta(X)\omega_\beta^\alpha(Y)-\xi^\gamma\omega_\gamma^\beta(Y)\omega_\beta^\alpha(X) \right)s_\alpha\\
+&=\left([Y,X](\xi^\alpha)+\xi^\beta\omega_\beta^\alpha[Y,X]\right)s_\alpha
++\left(\xi^\beta Y[\omega_\beta^\alpha(X)]-\xi^\beta X[\omega_\beta^\alpha(Y)]-\xi^\beta\omega_\beta^\alpha[Y,X]\right)s_\alpha\\
+&\quad+\left(\xi^\gamma\omega_\gamma^\beta(X)\omega_\beta^\alpha(Y)-\xi^\gamma\omega_\gamma^\beta(Y)\omega_\beta^\alpha(X) \right)s_\alpha\\
+&=D_{[Y,X]}s-(d\omega_\beta^\alpha-\omega_\beta^\gamma\wedge\omega_\gamma^\alpha)(X,Y)\xi^\beta s_\alpha.
+\end{aligned}
+$$
+故
+$$
+R(X,Y)s=-(d\omega_\beta^\alpha-\omega_\beta^\gamma\wedge\omega_\gamma^\alpha)(X,Y)s.
+$$
+由
+$$
+\Omega_\beta^\alpha=d\omega_\beta^\alpha-\omega_\beta^\gamma\wedge\omega_\gamma^\alpha
+$$
+给出的1-形式的矩阵$\Omega=(\Omega_\beta^\alpha)$称为联络$D$的\textbf{曲率方阵 (curvature matrix)}. 
+
+\subsection{张量运算}
+对于任何截面, $s\in\Gamma(E)$, 都有
+$$
+R(X,Y)s=-\Omega(X,Y)s.
+$$
+容易验证在新的局部标架$\{s_\alpha'\}$之下, 如果它与原来的标架之间的转换公式为$s_\alpha=b_\alpha^\beta s_\beta$, 则有
+$$
+\Omega'=b\cdot\Omega \cdot b^{-1},
+$$
+因此$(X,Y,s)\to R(X,Y)s$是张量运算: 它对于$X,Y,s$都是线性的, 而且只依赖于它们在某一点处的值. 
+
+给定切丛的局部标架$\{e_i\}_{i=1}^n$后, 可写$R(X,Y)s=R^\alpha_{ij\beta}X^iY^js_\alpha$. 这个张量运算对于$X,Y$是反对称的, 而且可写 (注意负号!)
+$$
+\Omega_\beta^\alpha=-\frac{1}{2}R^\alpha_{ij\beta}\theta^i\wedge\theta^j.
+$$
+这里$\{\theta^i\}_{i=1}^n$是同$\{e_i\}_{i=1}^n$对偶的局部标架.
+
+有些文献中$R(X,Y)s$的定义比上文定义多一个负号, 这样在曲率方阵的定义中就不必出现负号.
+
+\subsection{第二毕安基恒等式}
+将等式$\Omega_\beta^\alpha=d\omega_\beta^\alpha-\omega_\beta^\gamma\wedge\omega_\gamma^\alpha$微分, 得到
+$$
+\begin{aligned}
+d\Omega_\beta^\alpha&=-d\omega_\beta^\gamma\wedge\omega_\gamma^\alpha+\omega_\beta^\gamma\wedge d\omega_\gamma^\alpha\\
+&=-(\Omega_\beta^\gamma+\omega_\beta^\lambda\wedge\omega_\lambda^\gamma)\wedge\omega_\gamma^\alpha
++\omega_\beta^\gamma\wedge(\Omega_\gamma^\alpha+\omega_\gamma^\lambda\wedge\omega_\lambda^\alpha)\\
+&=\omega_\beta^\gamma\wedge\Omega_\gamma^\alpha-\Omega_\beta^\gamma\wedge\omega_\gamma^\alpha.
+\end{aligned}
+$$
+这称为\textbf{第二毕安基恒等式 (second Bianchi identity)}.

@@ -1,0 +1,102 @@
+% 联络 (向量丛)
+\pentry{流形\upref{Manif}, 向量场, 向量丛}
+
+本节采用爱因斯坦求和约定.
+
+设$M$是$n$维微分流形, $E$是其上秩为$k$的光滑向量丛. 
+
+\subsection{定义}
+向量丛$E$上的一个\textbf{联络 (connection) }是指一个映射$D:\Gamma(E)\otimes TM\to\Gamma(E)$, 或者等价地$D:\Gamma(E)\to T^*M\otimes\Gamma(E)$, 满足如下条件:
+
+\begin{enumerate}
+\item 对于截面$\xi\in\Gamma(E)$和任何切向量场$X$, $X\to D_X\xi$是$C^\infty(M)$-线性的, $\xi\to D_X\xi$是实线性的, 即
+$$
+D_{fX_1+fX_2}\xi=fD_{X_1}\xi+gD_{X_2}\xi,\,f,g\in C^\infty(M).
+$$
+\item 对于截面$\xi\in\Gamma(E)$和任何切向量场$X$, $\xi\to D_X\xi$是实线性的, 即对于实数$c_1,c_2$有
+$$
+D_X(c_1\xi_1+c_2\xi_2)=c_1D_X\xi_1+c_2D_X\xi_2.
+$$
+\item 对于任何$f\in C^\infty(M)$, 都有莱布尼兹律:
+$$
+D_X(f\xi)=X(f)\xi+fD_X\xi.
+$$
+\end{enumerate}
+
+直观上说, 在向量丛上给定联络, 就是给定一个"符合张量规律的导数运算". 
+
+\subsection{联络形式}
+设$D$是向量丛$E$上的联络. 设$\{e_i\}_{i=1}^n,\{\theta^i\}_{i=1}^n,\{s_\alpha\}_{\alpha=1}^k$分别是$TM,T^*M,\Gamma(E)$的局部光滑标架, 其中$\{e_i\}$和$\{\theta^i\}$是对偶标架. 在这些局部光滑标架之下, 按照联络的定义, 有
+$$
+D_X\xi=X_i\cdot\left[e_i(\xi^\alpha)s_\alpha+\xi^\alpha D_{e_i}s_\alpha\right].
+$$
+若命$D_{e_i}s_\alpha=\Gamma_{\alpha i}^\beta s_\beta$ (有时称系数$\Gamma^\alpha_{\beta i}$为克氏符, Christoffel symbol), 则有
+$$
+D_X\xi=X_i\cdot\left[e_i(\xi^\alpha)+\Gamma_{\beta i}^\alpha\xi^\beta \right]s_\alpha.
+$$
+于是就得到1-形式的$k\times k$矩阵
+$$
+\omega=(\omega_\beta^\alpha)=(\Gamma_{\beta i}^\alpha\theta^i).
+$$
+它们称为联络$D$在局部的\textbf{联络1-形式矩阵 (matrix of connection 1-forms)}. 从而可写
+$$
+D\xi=(d\xi^\beta+\omega_\alpha^\beta\xi^\alpha)\otimes s_\beta.
+$$
+
+注意, 克氏符和联络1-形式都只能局部定义. 若$\{s'_\beta\}$是$E$的另一个局部标架, 同$\{s_\alpha\}$之间的转换公式为$s_\beta=b_\beta^\alpha s_\alpha$, 则
+$$
+b_\alpha^\gamma{\omega'}_{\beta}^{\alpha}\otimes s_\gamma={\omega'}_{\beta}^{\alpha}s'_\alpha=Ds'_\beta=(db_\beta^\gamma+b_\beta^\alpha\omega_\alpha^\gamma)\otimes s_\gamma.
+$$
+从而新标架下的联络1-形式矩阵$\omega'$同原标架下的$\omega$之间的转换关系是
+\begin{equation}\label{VecCon_eq1}
+\omega'=db\cdot b^{-1}+b\cdot\omega\cdot b^{-1}.
+\end{equation}
+这是联络1-形式在向量丛的局部标架变换下的转换公式, 由此可见联络1-形式矩阵的定义依赖标架的选取, 从而并非全局定义的张量场.
+
+\subsection{存在定理}
+由转换公式\autoref{VecCon_eq1}此可得联络的存在定理, 或者说, 只要给出了满足转换公式\autoref{VecCon_eq1}的1-形式矩阵, 就等于给出了联络:
+\begin{theorem}{}
+设$\mathfrak{U}$是流形$M$的开覆盖, 使得在每一个开集$U\in\mathfrak{U}$上都给定了切丛的局部标架$\{e^U_i\}$, $E$的局部标架$\{s^U_\alpha\}$以及1-形式的$k\times k$方阵$\omega^U$. 若对于任意两个相交的$U,V\in\mathfrak{U}$, 在$U\cap V$总成立
+$$
+\omega^V=db^V_U\cdot \{b_V^U\}^{-1}+b^V_U\cdot\omega^U\cdot \{b^V_U\}^{-1},
+$$
+其中$b^V_U$是从$\{s^U_\alpha\}$到$\{s^V_\alpha\}$的转换矩阵, 则存在唯一一个$E$上的联络, 使得其在局部标架$\{s^U_\alpha\}$之下的联络1-形式矩阵是$\{\omega^U\}$.
+\end{theorem}
+
+还可以适当选取$E$的标架, 使得联络1-形式矩阵在指定的点处有简单的形式:
+\begin{theorem}{}
+给定任何一点$p\in M$以及一个$E$上的联络$D$, 都存在$E$在$p$附近的局部标架, 使得这标架下的联络1-形式矩阵$\omega(p)=0$.
+\end{theorem}
+\textbf{证明大意} 先取一个$E$的标架$\{s_\alpha\}$, 并设
+$$
+\omega^\beta_\alpha=\Gamma_{\alpha i}^\beta dx^i.
+$$
+命$\{x^i\}$为$p$附近的坐标系, 使得$x^i(p)=0$. 则命
+$$
+b_\alpha^\beta=\delta_\alpha^\beta-\Gamma_{\alpha i}^\beta x^i,
+$$
+并定义$E$的新的局部标架$s'_\alpha=b_\alpha^\beta s_\beta$. 则从$db(p)=-\omega(p)$和转换公式\autoref{VecCon_eq1}就得到新标架下$\omega'(p)=0$.
+
+\subsection{对偶联络; 联络的和与积}
+$E$上的联络$D$自然诱导出对偶丛$E^*$上的联络$D^*$: 如果$s\in\Gamma(E),s^*\in\Gamma(E^*)$, 则
+$$
+d\langle s^*,s\rangle=\langle D^*s^*,s\rangle+\langle s^*,Ds\rangle.
+$$
+如果$\{s_\alpha\}$是$E$的局部标架而$\{s^{*\gamma}\}$是对偶标架, 那么$D^*$的联络1-形式矩阵在此标架下为
+$$
+\omega^{*\beta}_\alpha
+=\langle D^*s^{*\beta},s_\alpha\rangle
+=-\langle s^{*\beta},Ds_\alpha\rangle
+=-\omega^\beta_\alpha,
+$$
+或者可简写为$D^*s^{*\beta}=-\omega^\beta_\alpha s^{*\alpha}$. 若截面$s^*\in\Gamma(E^*)$有局部表达式$s^*=\eta_\beta s^{*\beta}$, 则
+$$
+D^*s^*=(d\eta_\beta-\omega_\beta^\alpha\eta_\alpha)\otimes s^{*\beta}.
+$$
+
+如果$D_1,D_2$分别是向量丛$E_1,E_2$上的联络, 则在直和$E_1\oplus E_2$和张量积$E_1\otimes E_2$上的和与积分别为
+$$
+D(s_1\oplus s_2)=Ds_1\oplus Ds_2,
+\,
+D(s_1\otimes s_2)=Ds_1\otimes s_2+s_1\otimes Ds_2.
+$$
