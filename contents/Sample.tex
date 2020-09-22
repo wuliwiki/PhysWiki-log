@@ -17,9 +17,8 @@
 \subsection{蓝色的小节标题}
 这是正文．
 \subsubsection{黑色的子节标题}
-这是正文
-\addTODO{这里可以填写未完成提示}
 正文的任何地方可以用 \verb|addTODO{}| 命令插入未完成提示
+\addTODO{这里可以填写未完成提示}
 
 \subsection{正文}
 正文必须使用中文的括号，逗号，引号，冒号，分号，问号，感叹号，以及全角实心句号\footnote{科技文献中常用实心句号， 参考中华人民共和国国家标准标点符号用法 GB\_T15834\_1995}． 禁止使用英文标点． 像 “牛顿—莱布尼兹公式” 中的横线必须用中文单破折号． 所有的标点符号前面不能有空格， 后面尽量有空格． 正文粗体如\textbf{粗体}． 正文中禁止使用 \verb|\\| 换行， 以及 \verb|\noindent|， \verb|\phantom| 等命令强制修改格式．
@@ -99,9 +98,13 @@ Physics 宏包的文档见\href{http://mirrors.ibiblio.org/CTAN/macros/latex/con
 \end{equation}
 矢量内积如 $\bvec A \vdot \bvec B$ （\verb|\vdot| 不可省略），矢量叉乘如 $\bvec A\cross\bvec B$．
 
-常用三角函数和自然指数对数函数后面的小括号会自动改变尺寸（中括号不可以），若要给他们加幂，用中括号
+常用三角函数和对数函数后面的小括号会自动改变尺寸（中括号不可以），若要给他们加幂，用中括号
 \begin{equation}
 \sin(\frac ab) \qquad \sin[2](\frac ab)
+\end{equation}
+自然指数后面的小括号和中括号都可以自动尺寸
+\begin{equation}
+\exp(\frac12) \qquad \exp[\frac12]
 \end{equation}
 
 导数和偏导可以用
@@ -113,7 +116,7 @@ Physics 宏包的文档见\href{http://mirrors.ibiblio.org/CTAN/macros/latex/con
 
 定积分求值如 $\eval{x^2}_0^1$ （自动尺寸）．
 
-对易算符如 $\comm{\Q A}{\Q B}$ 或 $\comm*{\Q A}{\Q B}$， 前者自动尺寸， 后者强制小尺寸． 泊松括号如 $\pb{\frac12}{B}$ 和 $\pb*{\frac12}{B}$．
+对易算符如 $\comm{\Q A}{\Q B}$ 或 $\comm*{\Q A}{\Q B}$， 前者自动尺寸， 后者强制小尺寸． 泊松括号同理： $\pb{\frac12}{B}$， $\pb*{\frac12}{B}$．
 
 梯度散度旋度拉普拉斯如 $\grad V$，$\div\bvec A$， $\curl\bvec A$， $\laplacian V$．
 
@@ -184,15 +187,15 @@ a+b = c &(b > 0)
 
 \subsection{图表}
 
-现在来引用一张图片， 位图必须使用 png 格式， 矢量图（推荐）必须以 pdf 和 svg 格式\footnote{pdf 格式用于 pdf 版的百科， svg 用于网页显示}放在 figures 文件夹中． 文件名是词条 label 加下划线以及图片序号， 即使只有一张图片也要加上 \verb|_1|． 生成 svg 时， 字体一律用 outline， 更多选项中保留 7 位小数， 如果矢量图中包含位图， 要把 Image Location 选成 embed． 代码中使用 pdf 图片．图片宽度一律用 cm 为单位． 注意当前图片最大尺寸只能是 14.25cm， 对应 33 个汉字． 这个比例在 pdf 和 html 中都必须保持一致， 否则图中的文字大小可能会不协调． 由于 pdf 每行字数只有 33 个， 所以 html 中的图片不可能把页面占满．
+位图必须使用 png 格式， 矢量图（推荐）必须以 pdf 和 svg 格式\footnote{pdf 格式用于 pdf 版的百科， svg 用于网页显示}放在 figures 文件夹中． 文件名是词条 label 加下划线以及图片序号， 如 \verb|Sample_1.pdf|． 即使只有一张图片也要加上 \verb|_1|． 生成 svg 时， 字体一律用 outline， 更多选项中保留 7 位小数， 如果矢量图中包含位图， 要把 Image Location 选成 embed． pdf 图片用于 latex 的 figure 环境， svg 图片用于 html 网页．图片宽度一律用 cm 为单位． 注意当前图片最大尺寸只能是 14.25cm， 对应 33 个汉字． 这个比例在 pdf 和 html 中都必须保持一致， 否则图中的文字大小可能会不协调． 由于 pdf 每行字数只有 33 个， 所以 html 中的图片不可能把页面占满．
 \begin{figure}[ht]
 \centering
 \includegraphics[width=14.25cm]{./figures/Sample_1.pdf}
 \caption{一二三四五六七八九十一二三四五六七八九十一二三四五六七八九十一二三四五六} \label{Sample_fig1}
 \end{figure}
-在\autoref{Sample_fig1} 中，label 只能放在 caption 的后面，否则编号会出错．由于图片是浮动的，避免使用“上图”，“下图”等词．
+引用图片如\autoref{Sample_fig1}． 在 \verb|figure| 环境中， 必须用 \verb|\caption{}| 指定标题， \verb|\label{}| 只能放在 caption 的后面，否则编号会出错．由于在 pdf 中图片是浮动的，避免使用“上图”，“下图”等词．
 
-再来看一个表格，如\autoref{Sample_tab1}． 注意标签要放在 caption 后面．
+再来看一个表格，如\autoref{Sample_tab1}． 注意 \verb|\label| 同样要放在 \verb|\caption| 后面．
 \begin{table}[ht]
 \centering
 \caption{极限 $\E$ 数值验证}\label{Sample_tab1}
@@ -207,7 +210,7 @@ $(1 + x)^{1/x}$ & 2.59374 & 2.70481 & 2.71692 & 2.71815 & 2.71827 & 2.71828 \\
 
 定义如\autoref{Sample_def1}．
 \begin{definition}{名称（可省略）}\label{Sample_def1}
- 定义导数为
+定义导数为
 \begin{equation}
 f'(x) = \lim_{h \to 0} \frac{f(x + h) - f(x)}{h}
 \end{equation}
@@ -257,7 +260,9 @@ A =
 matlabCTestKeyWord;
 \end{lstlisting}
 
-如果 lstlisting 标明了文件名（下划线用 \verb|\_|）， 代码文件夹中就会自动生成该文件． 较长的代码文件必须含文件名， 文件名需要反映代码的内容而不是与词条 label 同名．
+如果 lstlisting 标明了文件名（下划线需要用 \verb|\_| 转义）， 代码文件夹中就会自动生成该文件． 较长的代码文件必须含文件名， 文件名需要反映代码的内容而不是与词条 label 同名．
+\addTODO{未完成： 后台处理 lstlisting 的 caption 时不应该在 html 显示 \verb|\|}
+\addTODO{未完成： 后台是否还不支持 lstlisting 环境的 label 以及引用．}
 
 \begin{lstlisting}[language=matlab, caption=sample\_code.m]
 % 验证二项式定理(非整数幂)
@@ -306,6 +311,7 @@ Sin[Pi]
 \end{lstlisting}
 
 \subsection{文献引用}
-每章都有一个独立的参考文献列表的词条， 需要在主文件中每章最后一个 \verb|\entry| 后面加入 \verb|\bibentry| 命令插入（见本词条后面）． bibentry 的参数是 bibliographies 文件夹中的文件名， 每个文件与章节导航的 label 同名． 注意全书的词条标签不能有重复． 词条中引用文献格式如 \cite{PhysWiki}， 引用缺失如 “地球是圆的\needCite”． 但是由于 PhysWikiScan 还为实现该命令， 目前还是应该使用脚注．
+目前整个百科公用一个参考文献列表的词条． 词条中引用文献格式如 \cite{PhysWiki}， 引用缺失如 “地球是圆的\needCite”． 但是由于 PhysWikiScan 还为实现该命令， 目前还是应该使用脚注．
+\addTODO{\verb|\needCite| 还不能正常在 html 中显示}
 
 网址的超链接如\href{http://wuli.wiki}{本书网站}．

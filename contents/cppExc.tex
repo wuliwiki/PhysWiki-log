@@ -1,0 +1,35 @@
+% C++ 异常处理
+
+\begin{issues}
+\issueMissDepend
+\end{issues}
+
+在初学编程时， 遇到错误我们往往就直接用 \verb|exit()| 终止程序． 但有时候我们不希望程序终止， 而是希望程序自行对错误进行一定的处理． C 语言的常见办法是把函数的返回值（通常是整型）作为错误代码， \verb|0| 代表成功， 其他值对应不同类型的错误． 然而函数调用是重重嵌套的， 将错误代码层层传递是一件很麻烦的事情， 另外， 把错误处理和函数调用的语法分离开也可以使代码的结构更明显．
+
+在 C++ 中有专门的异常处理机制， 一般使用 \verb|throw|（抛出某种类型的错误）, \verb|try|（检测某段代码的运行） 和 \verb|catch|（处理某种类型的错误） 三个关键词完成． 来看一个简单的例子．
+
+\begin{lstlisting}[language=cpp]
+#include <iostream>
+#include <string>
+using namespace std;
+
+struct err_info { string where, what;};
+
+void fun2()
+{
+	err_info e;
+	e.where = "fun2()"; e.what = "something wrong!";
+	throw e;
+}
+
+void fun1() { fun2(); }
+
+int main () {
+	try { fun1(); }
+	catch (err_info e) {
+		cout << "where: " << e.where << endl;
+		cout << "what: " << e.what << endl; 
+	}
+}
+\end{lstlisting}
+程序中 \verb|main()| 调用 \verb|fun1()|， \verb|fun1()| 接着调用 \verb|fun2()|， 而 \verb|fun2()| 必然会出现一个异常， 抛出了一个类型为 \verb|err_info| 的对象 \verb|e|． 这时无论 \verb|fun2()| 是否运行完成都会终止， 并把 \verb|e| 传给 \verb|fun1()|， 而 \verb|fun1()| 并没有处理这个异常的代码， 所以 \verb|fun1()| 同样也终止运行， 并把 \verb|e| 回传给 \verb|main()|． 由于 \verb|main()| 中存在处理 \verb|err_info| 类型错误的代码（\verb|catch (err_info e)|）， 所以就会执行相应的错误处理．
