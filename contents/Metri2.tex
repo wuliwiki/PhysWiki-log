@@ -1,0 +1,70 @@
+% 度量空间中的概念
+
+\pentry{度量空间\upref{Metric}}
+度量空间与一般集合的最大区别就是元素之间有了距离的概念． 利用距离函数我们可以定义许多度量空间特有的基本概念．
+
+\begin{definition}{邻域}
+给定一个半径 $r > 0$， 度量空间 $X$ 中的一点 $x$ 周围所有满足 $d(x, y) < r$ 的点 $y \in X$（包括 $x$ 自己）就是 $x$ 在 $X$ 中的一个\textbf{邻域（neighborhood）} $N_r$． 如果将邻域去掉 $x$ 本身， 就叫做\textbf{去心邻域（deleted/punctured neighbourhood）}．
+\end{definition}
+注意邻域取决于所讨论的度量空间， 例如即使当 $x$ 和 $r$ 不变， 当 $X$ 分别取有理数集和实数集时， 邻域 $N_r$ 也是不同的． 以下许多概念也与讨论的空间有关， 所以在讨论时我们需要明确使用哪个空间．
+
+\begin{definition}{内点}\label{Metri2_def2}
+给定度量空间 $X$ 的一个子集 $A$． 如果某点 $x\in A$ 在 $X$ 中的某邻域是 $A$ 的子集， 那么 $x$ 就是集合 $A$ 的\textbf{内点（interior point）}．
+
+换言之： 给定度量空间 $X$ 的一个子集 $A$ 以及 $x \in A$， 如果存在 $r > 0$ 使所有 $X$ 中所有与 $x$ 距离小于 $r$ 的点都属于 $A$， 那么 $x$ 就是 $A$ 的内点．
+\end{definition}
+
+\begin{example}{}\label{Metri2_ex1}
+一个点是否是 $A$ 的内点取决于 $X$ 的定义． 例如令 $A$ 为 $(-1, 1)$ 中的有理数， $X$ 为有理数集， 则 $A$ 中的任意点都是内点． 但如果令 $X$ 为实数集， 那么 $A$ 中的任意点都不是内点， 因为可以证明任意两个有理数之间都存在实数．% 链接未完成
+若令 $X = A$， 那么任何点都是内点．
+\end{example}
+
+\begin{definition}{极限点，离散点}
+给定度量空间 $X$ 中的一点 $x$， 如果对任意的 $r > 0$， $x$ 的去心邻域都不为空， 那么 $x$ 就是集合 $X$ 的一个\textbf{极限点（limit point）}． 如果一个点不是极限点， 它就是\textbf{离散点（discrete point）}．
+\end{definition}
+例如有理数（作为 $\mathbb R$ 的一个子集）的极限点却不一定是有理数， 例如 $\sqrt{2}$ 的任意邻域中都有无穷个有理数， 所以是有理数集的一个极限点， 但 $\sqrt{2}$ 却是无理数．
+
+\begin{corollary}{}
+度量空间 $X$ 中的点 $x$ 是极限点的充分必要条件是， $x$ 的任意去心邻域都有无穷多个点．
+\end{corollary}
+证明： 是用反证法． 如果 $x$ 的某个去心领域只有有限个点， 那么必定能找到离 $x$ 最近的一点 $y$， 那么对于任意的 $r < d(x, y)$， $x$ 的去心邻域为空， 与定义矛盾．证毕．
+
+\begin{example}{}\label{Metri2_ex2}
+有理数集或实数集（$\mathbb R$） 构成的度量空间中任意一点都是极限点（证明显然）．
+\end{example}
+
+\begin{definition}{序列的极限}\label{Metri2_def1}
+给定度量空间 $X$ 中的无穷个点组成的\textbf{序列（sequence）} $x_1, x_2, \dots$ 以及一点 $x$， 若对任意给定的 $\epsilon > 0$， 总存在 $N$ 使得当 $n > N$ 时就有 $d(x_n, x) < \epsilon$， 那么 $x$ 就是该序列的\textbf{极限（limit）}．
+\end{definition}
+需要注意：
+\begin{itemize}
+\item 度量空间中序列的极限未必是极限点， 例如整数集 $\mathbb Z$ 中的序列 $1, 2, 3, 3, 3, \dots$ 的极限是 $3$， 但 $\mathbb Z$ 中任意一点都不是（$\mathbb Z$ 的）极限点．
+\item 序列的极限是否存在可能与 $X$ 有关． 例如令 $X$ 为正实数集， 则序列 $1, 1/2, 1/3, \dots$ 不存在极限， 但若 $X$ 改为实数集， 那么该序列就存在极限． 若问题中存在两个集合 $A \subsetneq X$ 时， 我们需要指定哪个集合中的极限．
+\end{itemize}
+
+% \begin{definition}{集合的极限点}
+%（错！）若 $A$ 是度量空间 $X$ 的一个子集， 且 $X$ 的一个极限点 $x$ 的某个去心邻域是 $A$ 的子集， 那么 $x$ 就是子集 $A$ 的一个极限点， 无论 $x$ 是否属于 $A$．
+% \end{definition}
+
+\subsection{开集和闭集}
+我们初高中所学的开区间就是实数集 $\mathbb R$ 的开集． 任意开区间的并和有限开区间的交也是 $\mathbb R$ 的开集． 下面我们对任意度量空间通过距离的概念给出开集的定义．
+
+\begin{definition}{度量空间的开集}
+若度量空间 $X$ 的子集 $A$ 中的任意一点都是内点（\autoref{Metri2_def2} ）， 那么 $A$ 就是一个\textbf{开集（open set）}．
+
+换言之： 给定度量空间 $X$ 的一个子集 $A$， 若对于任意 $x \in A$ 都存在 $r > 0$ 使得 $X$ 中与 $x$ 距离小于 $r$ 的所有点都属于 $A$， 那么 $A$ 就是一个开集．
+
+如果 $A$ 不是开集， 就说它是\textbf{非开的（not open）}．
+\end{definition}
+由于 $A$ 中的点是否为内点取决于 $X$， 所以 $A$ 是否为开集也是相对于 $X$ 而言的． \autoref{Metri2_ex2} 中的三种情况下 $A$ 分别是开集、非开集、开集．
+
+\begin{definition}{度量空间的闭集}
+若度量空间 $X$ 的子集 $A$ 是开集， 那么 $A$ 关于 $X$ 的补集就是\textbf{闭集（closed set）}．
+\end{definition}
+根据这个定义， 显然闭集的补集都是开集．
+
+\begin{theorem}{}
+度量空间 $X$ 的子集 $A$ 是闭集的充分必要条件是： $A$ 在 $X$ 中的所有极限点都属于 $A$．
+\end{theorem}
+
+注意即使不是度量空间， 我们也可以通过更广义的方式定义开集， 见 “拓扑空间\upref{Topol}”． 度量空间是拓扑空间的一种， 可以证明上述定义的开集同样满足拓扑空间中对开集的要求， 即 “有限交任意并” 也都是开集．
