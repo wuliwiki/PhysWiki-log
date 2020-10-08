@@ -8,15 +8,60 @@
 
 \pentry{常微分方程\upref{ODE}}
 
-具有以下形式的微分方程叫做\textbf{一阶线性微分方程}
+\footnote{本文参考 Wikipedia \href{https://en.wikipedia.org/wiki/Ordinary_differential_equation}{相关页面}和 \cite{同济高}}具有以下形式的微分方程叫做\textbf{一阶线性微分方程（first order linear differential equation）}
 \begin{equation}\label{ODE1_eq1}
 \dv{y}{x} + p(x)y = f(x)
 \end{equation}
-一般地， 未知函数及其各阶导数都各占一项时， 方程就是\textbf{线性}的． 另外，如果 $f(x)$ 项不出现， 方程就是\textbf{齐次}的， 否则就是\textbf{非齐次}的． 我们先来看以上方程对应的齐次方程
+其中函数 $p(x)$ 和 $f(x)$ 是已知的， 函数 $y(x)$ 是未知的， 称为方程的解． 这三个函数的自变量都是实数， 函数值可以是实数或者复数． 若 $f(x) \equiv 0$， 则称方程为\textbf{齐次的（homogeneous）}， 否则就是\textbf{非齐次的（inhomogeneous）}． 所以 $f(x)$ 叫做方程的\textbf{非齐次项（inhomogeneous term）}．
+
+\subsection{线性}
+若干函数 $y_1(x), y_2(x), \dots$ 的线性组合\footnote{线性组合是线性代数中的概念， 线性代数中， 线性空间都可以做线性组合， 例如几何矢量（\autoref{GVecOp_eq1}~\upref{GVecOp}）． 特定函数的集合可以看作线性空间（\autoref{LSpace_ex2}~\upref{LSpace}）．}定义为他们分别乘以一个常数再相加
+\begin{equation}
+c_1 y_1(x) + c_2 y_2(x) + \dots
+\end{equation}
+由于求导操作是线性（\autoref{DerRul_eq1}~\upref{DerRul}）的， 容易证明若 $y_i(x)$ （$i = 1, 2,\dots$）都是其次方程的解， 那么它们的线性组合也必定是齐次方程的解． 微分方程的这种性质就叫做\textbf{线性（linear）}．
+
+\subsection{一阶常系数线性微分方程}
+当\autoref{ODE1_eq1} 中的 $p(x) \equiv b$ 是常数时， 我们说\autoref{ODE1_eq1} 的方程是常系数的． 先来看齐次的情况， 方程为
+\begin{equation}\label{ODE1_eq3}
+\dv{y}{x} + by = 0
+\end{equation}
+也就是说我们想要求一个函数 $y(x)$， 使得它的导数和 $y(x)$ 自己成正比． 一个最显然的解就是 $y(x) \equiv 0$， 但它太简单了没什么意义， 我们说这个解是\textbf{平凡的（trivial）}． 对于非零解， 一个直接的猜测就是自然指数函数 $y(x) = \E^{ax}$ 其中 $a$ 为常数． 把它代入\autoref{ODE1_eq3} 得
+\begin{equation}
+ay(x) + by(x) = 0
+\end{equation}
+所以消去 $y(x)$ 得 $b = -a$． 再考虑到方程的线性， 所以我们把这个解乘以任意常数 $C$ 同样是方程的解， 所以\autoref{ODE1_eq3} 的通解为
+\begin{equation}
+y(x) = C\E^{-bx}
+\end{equation}
+
+\begin{example}{稀释酒精}
+一个容器中装有质量为 $M$ （千克）的酒精， 从某时刻开始以速率 $I$ （千克每秒）加水， 并以同样的速率从底部排水， 保持容器中液体的总质量不变． 假设容器中有某种快速搅拌装置， 使两种液体时刻保持充分混合， 求容器中酒精浓度 $x$（酒精质量比总质量）随时间的变化关系．
+
+解：令容器中酒精的质量为 $m_1$， 水的质量为 $M - m_1$． 流出容器的液体速率可以分为两部分： 流出酒精的速率为 $xI$， 流出水的速率为 $I - xI$． 所以容器中酒精质量的变化率为
+\begin{equation}
+m'_1 = -xI
+\end{equation}
+酒精浓度定义为 $x = m_1/M$， $M$ 是常数， 所以
+\begin{equation}
+x' = \qty(\frac{m_1}{M})' = \frac{m'_1}{M} = -\frac{I}{M}x
+\end{equation}
+该微分方程符合\autoref{ODE1_eq3} 的结构， 可以直接写出方程的解为
+\begin{equation}
+x(t) = C\E^{-It/M}
+\end{equation}
+但这里的 $C$ 到底是什么呢？ 如果我们令开始的时间为 $t = 0$， 那么根据题目条件必须满足 $x(0) = 1$， 代入得 $C = 1$．
+\end{example}
+
+\addTODO{非齐次}
+
+\subsection{一般情况}
+我们先来看\autoref{ODE1_eq1} 对应的齐次方程
 \begin{equation}\label{ODE1_eq2}
 \dv{y}{x} + p(x)y = 0
 \end{equation}
-这是一个可分离变量的方程， 分离变量得
+这是一个可分离变量的方程% 未完成：什么是分离变量？
+， 分离变量得
 \begin{equation}
 \frac{\dd{y}}{y} = -p(x) \dd{x}
 \end{equation}
