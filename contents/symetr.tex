@@ -1,0 +1,76 @@
+% 对称化与反对称化
+
+\pentry{粒子交换算符\upref{ExchOp}}
+
+如果给定一个多粒子波函数处于对称或反对称子空间之外， 特定情况下我们可以将其\textbf{对称化（symmetrize）}或\textbf{反对称化（antisymmetrize）}． 先用粒子交换算符表示\autoref{IdPar_ex1}~\upref{IdPar}的过程．
+
+\begin{example}{}\label{symetr_ex2}
+假设单个粒子态空间的一组单位正交基底是 $\qty{\ket{i}}$， 两个粒子某时刻的态矢可以用单个张量积表示 $\ket{i}\ket{j}$ 且 ． 若 $i = j$， 则显然这个态已经是对称的．  若 $i \ne j$， 则态矢是不对称的， 我们可以通过乘以 $(1 \pm P_{12})/\sqrt{2}$ 来对称或反对称化（分别取正号和负号）
+\begin{equation}\label{symetr_eq5}
+\frac{1}{\sqrt{2}}(1 \pm P_{12})\ket{i}\ket{j} = \frac{1}{\sqrt{2}}(\ket{i}\ket{j} \pm \ket{j}\ket{i})
+\end{equation}
+由于等式中的两项也是正交归一的， 我们需要另乘归一化系数 $1/\sqrt 2$． 可以验证， 该式就是 $P_{1,2}$ 的本征矢， 本征值分别为 $\pm 1$． 这种方法利用了交换算符的性质\autoref{ExchOp_eq7}~\upref{ExchOp}．
+
+更一般地， 我们也可以不要求 $\ket{i}\ket{j}$ 正交， 但这样\autoref{symetr_eq5} 中的两项也变得不正交， 我们就要重新计算归一化系数了．
+\end{example}
+
+在该例中， 我们把 $(1 \pm P_{12})/\sqrt{2}$ 称为\textbf{对称化算符（symmetrizer）}或\textbf{反对称化算符（antisymmetrizer）}．
+
+\subsection{多粒子对称化}
+若将\autoref{symetr_ex2} 中的两个粒子改为 $N$ 个粒子， 如何将状态 $\ket{i_1}\ket{i_2}\dots\ket{i_N}$ （反）对称化呢？ 稍加思考会发现， 若要对称化， 我们只需要将 $\ket{i_1},\ket{i_2},\dots,\ket{i_N}$ 的所有不同的排列相加再归一化即可． 如果这 $N$ 个单粒子态都是不同的， 那么一共有 $N!$ 种排列． 我们用 $p_n(i)$ 来表示， 例如
+\begin{table}[ht]
+\centering
+\caption{$N = 3$ 的 6 种排列}\label{symetr_tab2}
+\begin{tabular}{|c|c|c|c|c|c|c|}
+\hline
+  & $p_1(i)$ & $p_2(i)$ & $p_3(i)$ & $p_4(i)$ & $p_5(i)$ & $p_6(i)$ \\
+\hline
+$i=1$ & 1 & 1 & 2 & 2 & 3 & 3 \\
+\hline
+$i=2$ & 2 & 3 & 1 & 3 & 1 & 2 \\
+\hline
+$i=3$ & 3 & 2 & 3 & 1 & 2 & 1 \\
+\hline
+\end{tabular}
+\end{table}
+则正交化的结果为
+\begin{equation}\label{symetr_eq1}
+\frac{1}{\sqrt{N!}}\sum_{n = 0}^{N!} \ket{p_n(1)}\ket{p_n(2)}\dots\ket{p_n(N)}
+\end{equation}
+为了验证这时一个对称态， 我们可以用例如 $P_{i,j}$ 作用在上面， 这相当于把\autoref{symetr_tab2} 中的第 $i,j$ 行调换， 容易得出这不会改变\autoref{symetr_eq1}．
+
+如果 $\ket{i_1},\dots,\ket{i_N}$ 中出现重复， 情况就要更复杂一些． 令其中只有 $M < N$ 种不同的单粒子态， 重复的次数分别是 $n_1, \dots, n_M$， 有 $\sum_i n_i = N$． 这样一来不同的组合减少至 $N!/(n_1! n_2! \dots n_M!)$ 种，% 未完成： 链接到排列例题
+ 我们仍然可以写出类似\autoref{symetr_eq1} 的表达式， 但求和只有 $N!/(n_1! n_2! \dots n_M!)$ 个正交归一的项， 所以归一化系数也变为 $\sqrt{n_1! n_2! \dots n_M!/N!}$．
+
+\subsubsection{对称化算符}
+要把对称化用算符表示出来也不难， 我们可以对每一种不同的排列 $p_n(1), p_n(2), \dots$ 都定义一个对称化算符 $P_n$． 定义反对称化算符为（求和的项数同样取决于是否出现重复）
+\begin{equation}\label{symetr_eq2}
+\mathcal S = 1 + \sum_n P_n
+\end{equation}
+这样对称化就可以优雅地表示为 $\mathcal S \ket{i_1}\dots\ket{i_N}$．
+
+\subsection{多粒子反对称化}
+我们同样也可以使用排列算符对 $N$ 粒子态 $\ket{i_1}\ket{i_2}\dots\ket{i_N}$ 进行反对称化， 但前提是我们必须要求其中 $N$ 个单粒子态都是不同的． 这时因为如果 $\ket{j} = \ket{k}$， 那么无论如何排列， 得到的态关于交换算符 $P_{j,k}$ 都是对称的． 这就是泡利不相容原理\upref{PauliE}．
+
+由\autoref{symetr_eq5} 的启发， 我们可以尝试改变\autoref{symetr_eq1} 或\autoref{symetr_eq2} 中一些项的正负号来达到反对称化． 事实上行列式的定义\upref{Deter}中已经给出了我们需要规则， 即使用逆序数的奇偶性来决定正负号． 对称化的结果可以用行列式记为
+\begin{equation}\label{symetr_eq3}
+\vmat{
+\ket{i_1} & \ket{i_2} & \dots & \ket{i_N}\\
+\ket{i_1} & \ket{i_2} & \dots & \ket{i_N}\\
+\dots & \dots  & \dots & \dots \\
+\ket{i_1} & \ket{i_2} & \dots & \ket{i_N}
+}
+\end{equation}
+这个行列式被称为\textbf{斯莱特行列式（Slater determinant）}．
+
+要证明反对称性很简单， 任意交换算符 $P_{i,j}$ 作用在\autoref{symetr_eq3} , 相当于把行列式的两行置换， 而根据行列式的性质（\autoref{DetPro_the6}~\upref{DetPro}）， 这会使结果取相反数． 证毕．
+
+通过在\autoref{symetr_eq2} 中根据 $P_n$ 的逆序数在其前面适当添加正负号 $S_n$（见\autoref{Deter_eq4}~\upref{Deter}）， 我们也可以定义反对称化算符
+\begin{equation}
+\mathcal A = 1 + \sum_n S_n P_n
+\end{equation}
+
+\subsection{子空间的维度}
+先来看有限维的情况， 假设单个粒子态所在空间是 $M$ 维的（例如只考虑自旋空间， $M = 2s+1$）， 那么只有当粒子数 $N \le M$ 时， 才能允许全同费米子的态矢． 通过基底的不同组合\upref{combin}以及对称化， 我们一共可以找到 $C_M^N$ 种不同的反对称基底， 所以\footnote{这不是证明只是对结论的一个简单描述．}反对称子空间是 $C_M^N$ 维的． 要得到这 $C_M^N$ 个基底， 我们只需要从 $M$ 个单粒子基底中无顺序不重复地选出 $N$ 个（$\ket{i_1}, \dots, \ket{i_N}$）． 每选一次就可以得到一个对称基底 $\mathcal A \ket{i_1}\dots\ket{i_N}$， 它们张成整个反对称子空间． 物理上， 这意味着 $N$ 个全同费米子占据 $M$ 个状态， 每种可能就是一个基底．
+
+对于玻色子， 我们不要求 $N \le M$， 因为多个玻色子可以处于同一个单粒子态． 可以证明对称子空间的维数等于 “从 $M$ 个态中无序地选 $N$ 个， 允许重复” 的个数， 但遗憾的是我们不能把这个数写成一个简洁的公式． 对称子空间基底的构建也同理， 每次选取出 $N$ 个态后都可以构建一个基底 $\mathcal S \ket{i_1}\dots\ket{i_N}$．
