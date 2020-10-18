@@ -3,15 +3,10 @@
 
 \pentry{gamma 函数\upref{Gamma}}
 半径为 $R$ 的 $n$ 维欧几里得空间中的球体的体积可以用 $\Gamma$ 函数表示为
-\begin{equation}
-V_n = \leftgroup{
-& \frac{R^n}{(n/2)!} \pi^{(n - 1)/2} && (n = 2n-1)\\
-&\frac{R^n}{(n/2)!} \pi^{n/2} && (n = 2n)
-} = \frac{\pi^{n/2} R^n}{\Gamma (1 + n/2)}
+\begin{equation}\label{NSphV_eq8}
+V_n = \frac{\pi^{n/2}}{\Gamma (n/2+1)} R^n = \frac{\pi^{n/2}}{(n/2)!} R^n
 \end{equation}
- 
-\subsection{说明}
-若定义 $n$ 维球体的表面满足方程 $\sum_{i=1}^n x_i^2 = R_n^2$， 其中 $x_i$ 为 $n$ 维直角坐标系中第 $i$ 个坐标．所有满足 $\sum_{i=1}^n x_i^2 \leqslant R_n^2$ 的坐标点都定义为球内的点，且定义 $n$ 维直角坐标系中的体积为 $V_n = \int \dd{x_1}\dd{x_2}\dots\dd{x_n}$， 积分是对所有球内的点积分．
+其中阶乘和 Gamma 函数的关系见\autoref{Gamma_eq1}~\upref{Gamma}． 若定义 $n$ 维球体的表面满足方程 $\sum_{i=1}^n x_i^2 = R_n^2$， 其中 $x_i$ 为 $n$ 维直角坐标系中第 $i$ 个坐标．所有满足 $\sum_{i=1}^n x_i^2 \leqslant R_n^2$ 的坐标点都定义为球内的点，且定义 $n$ 维直角坐标系中的体积为 $V_n = \int \dd{x_1}\dd{x_2}\dots\dd{x_n}$， 积分是对所有球内的点积分．
 
 如果这些定义看起来很抽象，不妨代入到三维空间中考虑．三维直角坐标系中， $x_1, x_2, x_3$ 分别是 $x,y,z$，  $R_3$ 是球的半径，球表面上任意一点都满足 $x^2 + y^2 + z^2 = R_3^2$， 且球的体积分为 $\int \dd{x}\dd{y}\dd{z}$ 是对球内部的所有点积分． 另外，若把上述定义代入到 1 维和 2 维， 不难发现所谓的“1 维球”和“2 维球”分别是半径为 $R_1$ 的线段和半径为 $R_2$ 的圆．
 
@@ -54,32 +49,27 @@ V_2 (x_3) = \pi R_2^2 = \pi (R_3^2 - x_3^2)
 V_3 = \int V_2(x_3) \dd{x_3} = \int \pi (R_3^2 - x_3^2)\dd{x_3}  = \frac43 \pi R^3
 \end{equation}
 \subsection{ $n$ 维球}
-由以上两个推导，可以在代数上总结出递推的规律．把 $n$ 维球在 $n+1$ 维积分，得（可使用  Mathematica 软件计算积分，见 Mathematica 积分）%未完成:链接
-\begin{gather}
-V_4 = \int_{-R}^R \frac43 \pi (R_4^2 - x_4^2)^{3/2} \dd{x_4}  = \frac12 \pi^2 R^4\\
-V_5 = \int_{-R}^R \frac12 \pi^2 (R_5^2 - x_5^2)^{4/2} \dd{x_5}  = \frac{8}{15} \pi^2 R^5\\
-V_6 = \int_{-R}^R \frac{8}{15} \pi ^2 (R_6^2 - x_6^2)^{5/2} \dd{x_6} = \frac16 \pi^3 R^6\\
-V_7 = \int_{-R}^R \frac16 \pi^3 (R_7^2 - x_7^2)^{6/2} \dd{x_6} = \frac{16}{105} \pi^3 R^7
-\end{gather}
-对奇数项和偶数项分别总结规律，不难发现
+由以上两个推导，可以在代数上总结出递推的规律．把 $n$ 维球在 $n+1$ 维积分，得\footnote{可使用  Mathematica 软件计算积分，见 Mathematica 积分}%未完成:链接
 \begin{equation}
-V_n = \leftgroup{
-&\frac{R^n}{(n/2)!} \pi ^{(n - 1)/2} && (n= 2n - 1)\\
-&\frac{R^n}{(n/2)!} \pi ^{n/2} && (n=2n)
-}\end{equation}
-半整数的阶乘的定义\upref{Gamma} 为
-\begin{equation}
-\frac{n}{2}! = \frac{n}{2} \vdot \qty(\frac{n}{2}-1) \dots \frac12 \sqrt{\pi}
+V_4 = \int_{-R}^R \frac43 \pi (R_4^2 - x_4^2)^{3/2} \dd{x_4}  = \frac12 \pi^2 R^4
 \end{equation}
-若用 $\Gamma $ 函数\upref{Gamma} 表示以上结果，就是
+令 $n$ 维球体体积维 $C_n R^n$， 那么可以总结出递推公式为
 \begin{equation}
-V_n = \frac{\pi^{n/2}{R^n}}{\Gamma (1 + n/2)}
+V_{n+1} = \int_{-R}^R C_n (R^2 - x^2)^{n/2}\dd{x}
 \end{equation}
-
-
-
-
-
-
-
-
+使用换元积分法\upref{IntCV}， 令 $x = R\sin\theta$， 有
+\begin{equation}
+\begin{aligned}
+\int_{-R}^R (R^2 - x^2)^{n/2}\dd{x} &= R^{n+1} \int_{-\pi/2}^{\pi/2} \cos^{n+1}\theta \dd{\theta}\\
+&= \sqrt{\pi} \frac{\Gamma(n/2+1)}{\Gamma[(n+1)/2+1]} R^{n+1}
+\end{aligned}
+\end{equation}
+用阶乘表示递归公式（\autoref{Gamma_eq1}~\upref{Gamma}）， 就是
+\begin{equation}
+C_{n+1} = C_n \frac{\sqrt{\pi}(n/2)!}{[(n+1)/2]!}
+\end{equation}
+已知 $C_1 = 2$， 易得
+\begin{equation}
+C_n = \frac{\pi^{n/2}}{(n/2)!}
+\end{equation}
+这样就得到了\autoref{NSphV_eq8}．
