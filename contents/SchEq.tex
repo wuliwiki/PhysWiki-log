@@ -1,30 +1,56 @@
 % 定态薛定谔方程
 % 量子力学|波函数|薛定谔方程|哈密顿|束缚态
 
+\begin{issues}
+\issueTODO
+\issueAbstract
+\end{issues}
+
 \pentry{量子力学基本假设\upref{QMPos}， 矢量算符\upref{VecOp}}
 
 \subsection{定态薛定谔方程}
-用于求能量的本征态
+定态薛定谔方程就是哈密顿算符的本征方程， 本征值就是能量 $E$．
 \begin{equation}
-H \ket{\Psi} = E \ket{\Psi}
+H \psi(\bvec r) = E \psi(\bvec r)
 \end{equation}
-
-% 引用一些词条作为例子
 
 单个粒子问题中， 哈密顿算符对应粒子的总能量， 总能量算符可以表示为动能算符和势能算符之和
 \begin{equation}
 H = T + V
 \end{equation}
 
+\subsection{一维定态薛定谔方程}
 一维运动的单个质点， 波函数是坐标 $x$ 的函数 $\Psi(x)$
 \begin{equation}
-T = -\frac{\hbar^2}{2m} \pdv[2]{x} \qquad V = V(x)
+T = -\frac{\hbar^2}{2m} \dv[2]{x} \qquad V = V(x)
 \end{equation}
 所以定态薛定谔方程为
-\begin{equation}
--\frac{\hbar^2}{2m} \pdv[2]{\Psi}{x} + V(x)\Psi = E \Psi
+\begin{equation}\label{SchEq_eq1}
+-\frac{\hbar^2}{2m} \dv[2]{\Psi}{x} + V(x)\Psi = E \Psi
 \end{equation}
 
+\subsubsection{束缚态}
+这是一个二阶线性常微分方程． 数学上来看无论 $E$ 是多少， 必有两个线性无关的解， 它们的线性组合也是解（二维解空间）． 然而物理上可能存在的波函数必须要可归一化： 即随着 $\abs{x} \to \infty$，  $\abs{\psi}^2$ 在极限 $\abs{x}\to\infty$ 的过程中下降得比 $1/x$ 要快． 可以证明只有对于某些离散的 $E$ 我们才能解出这些波函数． 我们把每个 $E_i$ 叫做\textbf{能级（energy level）}， 对应的波函数叫做\textbf{束缚态（bound state）}．
+
+所有的能级都处于能量区间
+\begin{equation}\label{SchEq_eq2}
+\min V(x) < E_i < \min V(\pm\infty)
+\end{equation}
+其中 $\min V(x)$ 是函数 $V(x)$ 的最小值（可以是负无穷）， $\min V(\pm\infty)$ 表示 $V(x)$ 的正无穷极限和负无穷极限中较小的一个． 因为当 $E$ 太小时， 波函数必定会在无穷远处爆炸（无穷大）， 而当 $E$ 太大时， 波函数虽然不会爆炸但也不会趋于零． \autoref{SchEq_eq2}， 要求势能函数 $V(x)$ 中存在某种形状的凹陷， 又称为\textbf{势阱（potential well）}．
+
+例子： 无限深势阱\upref{ISW}，有限深势阱\upref{FSW}， 简谐振子（升降算符）\upref{QSHOop}．
+
+\subsubsection{散射态}
+当 $E > \min V(\pm\infty)$ 时， 虽然波函数不满足归一化， 但它们仍然有重要的应用． 我们把它们叫做\textbf{散射态（scattering states）}． 计算散射态时， 通常我们要求两个极限 $V(\pm \infty)$ 都存在． 这样在满足无穷远处 $E > V$ 的方向， 波函数在无穷远处将会是简谐波． 最直接的例子是平面波函数． % 链接未完成
+
+虽然散射态本身不能归一化， 但是它们的线性组合却可以． 例如 $V(x) \equiv 0$ 势能中的高斯波包\upref{GausPk} 就可以看作由平面波线性叠加而来， 即反傅里叶变换．
+
+某种意义上， 给定一个势能函数， 所有的束缚态和散射态可以构成一组正交归一的函数基底， 用于展开所有可归一化的波函数．
+
+\subsubsection{简并}
+简并是指一个能量本征值 $E$ 对应多个线性无关的归一化波函数的情况． 可以证明一维束缚态不存在简并， 散射态存在双重简并．
+
+\subsection{多维定态薛定谔方程}
 二维或三维的情况下， 波函数是位置矢量\upref{Disp}的函数 $\Psi(\bvec r)$
 \begin{equation}
 T = -\frac{\hbar^2}{2m} \laplacian \qquad V = V(\bvec r)
@@ -33,3 +59,10 @@ T = -\frac{\hbar^2}{2m} \laplacian \qquad V = V(\bvec r)
 \begin{equation}
 -\frac{\hbar^2}{2m} \laplacian {\Psi} + V(\bvec r)\Psi = E \Psi
 \end{equation}
+例子： 三维简谐振子（球坐标）\upref{SHOSph}．
+
+\addTODO{为什么束缚态必须是实函数（或者乘以一个相位因子）？ 为什么实函数的平均动量必须等于 0（实函数的傅里叶变换对对称函数）？ 物理上意味着什么？ 如果势能是偶函数，那么波函数为什么一定是基函数或者偶函数？这可以通过哈密顿算符和宇称算符的对易性来解释．}
+
+\subsection{波函数的对称性}
+\pentry{宇称算符\upref{Parity}}
+若哈密顿算符和宇称算符对易， 则它们具有一组共同的本征波函数， 其中每个都具有奇宇称或者偶宇称．
