@@ -1,0 +1,81 @@
+% 旋度的逆运算
+% 散度|旋度
+
+\begin{issues}
+\issueTODO
+\end{issues}
+
+\pentry{亥姆霍兹定理\upref{HelmTh}}
+
+\begin{theorem}{}\label{HlmPr2_the1}
+\footnote{参考 \cite{GriffE} 相关章节．}令 $\bvec F$ 为无散场， 即
+\begin{equation}
+\div \bvec F = 0
+\end{equation}
+则 $\bvec F(\bvec r)$ 总能表示为另一个矢量场 $\bvec G(\bvec r)$ 的旋度， 即
+\begin{equation}\label{HlmPr2_eq4}
+\bvec F = \curl \bvec G
+\end{equation}
+且 $\bvec G(\bvec r)$ 可以通过以下公式计算：
+\begin{equation}\label{HlmPr2_eq1}
+\bvec G(\bvec r) = \frac{1}{4\pi}\int \bvec F(\bvec r') \cross \frac{\bvec R}{R^3} \dd{V'}
+\end{equation}
+其中 $\bvec r, \bvec r'$ 分别是坐标原点指向三维直角坐标 $(x, y, z)$ 和 $(x', y', z')$ 的位置矢量， $\bvec R = \bvec r' - \bvec r$， $R = \abs{\bvec R}$， 体积分 $\int\dd{V'} = \int\dd{x'}\dd{y'}\dd{z'}$ 的区域是空间中 $\bvec F$ 不为零的区域， $\cross$ 表示矢量叉乘\upref{Cross}．
+\end{theorem}
+
+该定理在电动力学中有两个重要的应用： 一个是证明比奥萨法尔定律满足安培环路定理\upref{AmpLaw}， 另一个是证明磁矢势\upref{BvecA} $\bvec A$ 必定存在（因为磁场是无旋场\upref{MagGau}）．
+
+\begin{corollary}{}\label{HlmPr2_cor1}
+在\autoref{HlmPr2_the1} 中， 给 $\bvec G(\bvec r)$ 加上任意一个无旋场 $\bvec H(\bvec r)$ （满足 $\curl \bvec H = \bvec 0$）， 也能使\autoref{HlmPr2_eq4} 成立． 通过这种方法可以得到\autoref{HlmPr2_eq4} 中所有可能的 $\bvec G(\bvec r)$．
+\end{corollary}
+注意 $\bvec H$ 也可以表示为任意标量函数 $V(\bvec r)$ 的梯度 $\grad V$（引用未完成）．
+
+我们可以认为\autoref{HlmPr2_eq1} 是旋度运算的逆运算， 这可以类比不定积分\upref{Int}是求导的逆运算． 而无旋场 $\bvec H(\bvec r)$ 可以类比不定积分中的任意常数．
+
+\begin{theorem}{}
+令 $\bvec F(\bvec r)$ 为无散场， 则\autoref{HlmPr2_eq1} 得到的 $\bvec G(\bvec r)$ 仍然是一个无散场．
+\end{theorem}
+显然， 给 $\bvec G(\bvec r)$ 加上一个任意的无散场 $\bvec H(\bvec r)$ 后仍然是一个无散场． 若需要满足\autoref{HlmPr2_eq4}， 则 $\bvec H(\bvec r)$ 必须也是无旋的， 即 $\bvec H(\bvec r)$ 是调和场．
+
+\subsection{证明定理 1}
+我们只需要证明\autoref{HlmPr2_eq1} 右边第一项求旋度等于 $\bvec F$：
+\begin{equation}\label{HlmPr2_eq3}
+\begin{aligned}
+\curl \bvec G &= \frac{1}{4\pi}\int \curl \qty(\bvec F \cross \frac{\bvec R}{R^3}) \dd{V'}\\
+&= \frac{1}{4\pi}\int\bvec F \qty(\div \frac{\bvec R}{R^3}) \dd{V'} -  \frac{1}{4\pi}\int(\bvec F \vdot \grad) \frac{\bvec R}{R^3} \dd{V'}
+\end{aligned}
+\end{equation}
+其中第一个等号是因为 “对一个变量积分” 再 “对另一个变量求导” 这两个操作可以交换． % 链接未完成
+
+先来证明上式第二项为零： 被积函数中的 $x$ 分量为（$\grad'$ 意味着对 $x', y', z'$ 求偏导， 另外注意 $\bvec F$ 是 $\bvec r'$ 的函数）
+\begin{equation}\label{HlmPr2_eq2}
+\begin{aligned}
+(\bvec F \vdot \grad) \frac{x' - x}{\abs{x'-x}^3} &= \bvec F \vdot \grad \frac{x' - x}{\abs{x'-x}^3} = -\bvec F \vdot \grad' \frac{x' - x}{\abs{x'-x}^3}\\
+&= - \grad'\qty(\bvec F \frac{x' - x}{\abs{x'-x}^3}) + (\grad'\bvec F) \frac{x' - x}{\abs{x'-x}^3}
+\end{aligned}
+\end{equation}
+这里使用了\autoref{VopEq_eq1}~\upref{VopEq}． 由于 $\bvec F(\bvec r')$ 是无散场， 最后一项为零． $y, z$ 分量同理． 对上式做体积分得（使用散度定理\autoref{Divgnc_eq13}~\upref{Divgnc}）
+\begin{equation}
+- \int \grad'\qty(\bvec F \frac{x' - x}{\abs{x'-x}^3})\dd{V'} = -\oint \bvec F \frac{x' - x}{\abs{x'-x}^3} \dd{\bvec s}
+\end{equation}
+积分曲面是体积分区域的边界曲面． 由于我们假设 $\bvec F$ 只有在体积分内部（不包括边界）不为零， 所以该式为零．
+
+再来看\autoref{HlmPr2_eq3} 右边第一项， 有（引用未完成）
+\begin{equation}
+\div \frac{\bvec R}{R^3} = 4\pi \delta^3(\bvec R)
+\end{equation}
+代入得
+\begin{equation}
+\curl \bvec G = \int \bvec F(\bvec r') \delta^3(\bvec r - \bvec r') \dd{V'} = \bvec F(\bvec r)
+\end{equation}
+证毕．
+
+\subsection{证明定理 2}
+使用\autoref{VecOp_eq1}~\upref{VecOp}， 有
+\begin{equation}
+\begin{aligned}
+&\div \bvec F = \frac{1}{4\pi} \int \div \qty(\bvec F \cross \frac{\bvec R}{R^3}) \dd{V'}\\
+&= \frac{1}{4\pi} \int \frac{\bvec R}{R^3} \vdot (\curl \bvec F)\dd{V'} - \frac{1}{4\pi} \int \bvec F \vdot \qty(\curl \frac{\bvec R}{R^3})\dd{V'}
+\end{aligned}
+\end{equation}
+注意 $\bvec F$ 是 $\bvec r'$ 的函数而不是 $\bvec r$ 的函数， 所以第一项中 $\curl \bvec F = \bvec 0$． 另外由于 $\curl(\bvec R/R^3) = \bvec 0$ （引用未完成） ， 上式恒为零． 证毕．
