@@ -1,35 +1,61 @@
-% 亥姆霍兹定理
+% 亥姆霍兹分解
 % 散度|旋度|调和场|亥姆霍兹
 
 \begin{issues}
-\issueDraft
+\issueTODO
 \end{issues}
 
-参考 \cite{GriffE}
+\pentry{散度的逆运算\upref{DivInv}， 旋度的逆运算\upref{HlmPr2}}
 
-任何矢量场都可以分解为一个无旋场 $\bvec F_{div}$ 和一个无散场 $\bvec F_{curl}$， 也可以选择性地添加一个调和场 $\bvec h$．% 链接未完成
-\begin{equation}
-\bvec F(\bvec r) = \bvec F_{d}(\bvec r) + \bvec F_{c}(\bvec r) + \bvec h(\bvec r)
+\footnote{参考 \cite{GriffE} 相关章节．}任何矢量场都可以分解为一个无旋场 $\bvec F_{d}(\bvec r)$， 一个无散场 $\bvec F_{c}(\bvec r)$， 和一个调和场（链接未完成） $\bvec H(\bvec r)$．
+\begin{equation}\label{HelmTh_eq3}
+\bvec F(\bvec r) = \bvec F_{d}(\bvec r) + \bvec F_{c}(\bvec r) + \bvec H(\bvec r)
 \end{equation}
-一种分解的计算方法是
+一种分解的计算方法是， 令
+\begin{equation}
+f(\bvec r) \equiv \div \bvec F(\bvec r) \qquad
+\bvec G(\bvec r) \equiv \curl \bvec F(\bvec r)
+\end{equation}
+定义
 \begin{equation}\label{HelmTh_eq1}
-\bvec F_{d} = \frac{1}{4\pi}\int \frac{(\div \bvec F)\bvec R}{R^3} \dd{V'}
+\bvec F_{d}(\bvec r) \equiv \frac{1}{4\pi}\int \frac{f(\bvec r') \bvec R}{R^3} \dd{V'}
+\end{equation}
+\begin{equation}\label{HelmTh_eq2}
+\bvec F_{c}(\bvec r) \equiv \frac{1}{4\pi}\int \frac{\bvec G(\bvec r')\cross \bvec R}{R^3} \dd{V'}
+\end{equation}
+\begin{equation}\label{HelmTh_eq4}
+\bvec H(\bvec r) \equiv \bvec F(\bvec r) - \bvec F_{d}(\bvec r) - \bvec F_{c}(\bvec r)
+\end{equation}
+其中 $\bvec r, \bvec r'$ 分别是坐标原点指向三维直角坐标 $(x, y, z)$ 和 $(x', y', z')$ 的位置矢量， $\bvec R = \bvec r' - \bvec r$， $R = \abs{\bvec R}$， 体积分 $\int\dd{V'} = \int\dd{x'}\dd{y'}\dd{z'}$ 的区域是整个三维空间或者其中 $\bvec F$ 不为零的区域， $\cross$ 表示矢量叉乘\upref{Cross}．
+
+注意\autoref{HelmTh_eq3} 的分解不是唯一的， 我们也可以给\autoref{HelmTh_eq1} 和\autoref{HelmTh_eq2} 右边分别加上一个任意调和场， 分解依然成立． 可以证明如此定义的 $\bvec F_{d}$， $\bvec F_{c}$ 和 $\bvec H$ 分别是无旋场，无散场和调和场．
+
+\autoref{HelmTh_eq1} 和\autoref{HelmTh_eq2} 可以分别类比静电学中的库伦定律（\autoref{Efield_eq9}~\upref{Efield}）和静磁学中的比奥萨法尔定律（\autoref{BioSav_eq3}~\upref{BioSav}）： 把 $\bvec F_c$ 看作静电场， 满足高斯定理（\autoref{EGauss_eq1}~\upref{EGauss}）； 把 $\bvec F_c$ 看作静磁场， 满足安培环路定理（\autoref{AmpLaw_eq2}~\upref{AmpLaw}）．
+
+\subsubsection{证明}
+根据\autoref{DivInv_the1}~\upref{DivInv}以及\autoref{HlmPr2_the2}~\upref{HlmPr2}， \autoref{HelmTh_eq1} 和\autoref{HelmTh_eq2} 中定义的 $\bvec F_{d}(\bvec r)$ 和 $\bvec F_{c}(\bvec r)$ 分别是无旋场和无散场， 且满足
+\begin{equation}
+\div \bvec F_d(\bvec r) = f(\bvec r) = \div \bvec F(\bvec r)
 \end{equation}
 \begin{equation}
-\bvec F_{c} = \frac{1}{4\pi}\int \frac{(\curl \bvec F)\cross \bvec R}{R^3} \dd{V'}
+\curl \bvec F_c(\bvec r) = \bvec G(\bvec r) = \curl \bvec F(\bvec r)
 \end{equation}
-以上两式可以分别类比静电学中的库伦定律（\autoref{Efield_eq9}~\upref{Efield}）和静磁学中的比奥萨法尔定律（\autoref{BioSav_eq3}~\upref{BioSav}）： 把 $\bvec F_c$ 看作电场， 满足高斯定理（\autoref{EGauss_eq1}~\upref{EGauss}）； 把 $\bvec F_c$ 看作磁场， 满足安培环路定理（\autoref{AmpLaw_eq2}~\upref{AmpLaw}）．
-
-他们显然满足无散无旋的条件． 但是还需要证明 $\bvec F - \bvec F_{div} - \bvec F_{curl}$ 是一个调和场．
-（未完成）
-
-无旋场总能表示为某个标量函数 $V(\bvec r)$ 的梯度（证明见势能\upref{V}）， 而无散场总能表示为另一个矢量场 $\bvec G$ 的旋度\upref{HlmPr2}， 所以
+容易证明 $\bvec H(\bvec r)$ 必定是调和场（无散且无旋）：
 \begin{equation}
-\bvec F_{d} = \grad V\qquad \bvec F_{c} = \curl \bvec G
+\div \bvec H = \div (\bvec F - \bvec F_d) = 0
 \end{equation}
-调和场 $\bvec h(\bvec r)$ 既没有散度也没有旋度， 所以可以合并到前两项中任意一个中． 所以亥姆霍兹分解可以记为
 \begin{equation}
-\bvec F = \grad V + \curl \bvec A
+\curl \bvec H = \curl (\bvec F - \bvec F_d) = \bvec 0
 \end{equation}
+证毕．
 
-
+\subsection{另一种表示}
+上述分解采用的是积分的方法， 我们也可以用微分来描述． 无旋场总能表示为某个标量函数 $V(\bvec r)$ 的梯度（证明见势能\upref{V}）， 而无散场总能表示为另一个矢量场 $\bvec A$ 的旋度\upref{HlmPr2}， 所以
+\begin{equation}
+\bvec F_{d} = \grad V\qquad \bvec F_{c} = \curl \bvec A
+\end{equation}
+所以亥姆霍兹分解也可以记为
+\begin{equation}
+\bvec F = \grad V + \curl \bvec A + \bvec H
+\end{equation}
+但是求解 $V(\bvec r)$ 和 $\bvec A$ 并不那么直接， 一般还是需要先用上一节中的办法进行分解才能求得．

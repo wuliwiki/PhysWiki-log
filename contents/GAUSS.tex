@@ -125,7 +125,7 @@ x = - \frac32 y + \frac{21}{2}
 	\end{array} 
 	)}
 \end{equation}
-开始消元
+对第一列
 \begin{equation}
 \begin{aligned}
 \bvec r_2 - 2 &\bvec r_1 \\
@@ -172,43 +172,47 @@ x = - \frac32 y + \frac{21}{2}
 	\end{array} 
 	)}
 \end{equation}
-我们按照上面的方法用第 3 行求 $x_4$， 代入第 2 行求得 $x_3$． 然而当我们想用第 1 行求 $x_1$ 的时候却出发现我们还没求出 $x_2$． 解决办法是， 我们令 $x_2 = c$ 且假设 $c$ 可以取任意值， 则解可以表示为
+我们按照上面的方法用第 3 行求 $x_4$， 代入第 2 行求得 $x_3$． 然而当我们想用第 1 行求 $x_1$ 的时候却出发现我们还没求出 $x_2$． 解决办法是， 我们令 $x_2 = c$ 且假设 $c$ 可以取任意值， 再把 $x_1$ 用 $c$ 表示． 方程的解可以表示为
 \begin{equation}
 \leftgroup{
-&x_1 &=\quad &5-c\\
-&x_2 &=\quad &c \\
-&x_3 &=\quad &1\\
-&x_4 &=\quad &-1}
+x_1 &= 5-c\\
+x_2 &= c \\
+x_3 &= 1\\
+x_4 &= -1}
 \end{equation}
-或者写成矢量的形式
+或者写成列矢量的形式
 \begin{equation}
 \bvec x = c \pmat{-1\\ 1\\ 0\\ 0} + \pmat{5\\ 0\\ 1\\ -1}
 \end{equation}
 将该式代入方程组， 可以验证 $c$ 取任意值时方程组都成立．
 
-如果多个 $x_i$ 的值都未知， 我们就分别假设它们等于不同的任意常数即可．
+如果多个 $x_i$ 的值都未知， 我们就分别假设它们等于不同的任意常数 $c_i$ 即可．
 \end{example}
 
-\subsection{解的分类}
-
-当系数矩阵变为梯形矩阵后， 可以用以下步骤判断解的情况：% 未完成：这些步骤是我想的，有待查证
+\subsection{解的数量}
+根据以上步骤， 当系数矩阵变为梯形矩阵后， 可以用以下步骤判断解的数量：
 \begin{enumerate}
-\item 若存在系数都为零的行 $i$， 但是对应的常数 $y_i$ 却不为零， 则方程组无解， 否则有解．
-\item 若系数矩阵可以化为三角矩阵（且系数矩阵第一列不全为零）， 则方程有唯一解， 否则有无穷多个解．
+\item 若存在系数 $a_{i,j}$ 全为零的行 $i$， 但是对应的常数 $y_i$ 却不为零， 则方程组无解．
+\item 若存在 $d$ 个系数 $a_{i,j}$ 全为零的行 $i$， 且对应的所有 $y_i$ 也都为零， 则方程有无穷个解， 且需要 $d$ 个任意常数来表示所有可能的解．
+\item 若不存在系数 $a_{i,j}$ 全为零的行， 则系数矩阵可以化为三角矩阵， 使对角线上的元素全不为零． 此时方程有唯一解．
 \end{enumerate}
 
-\subsection{解的表示}
-按照\autoref{GAUSS_ex2} 中的方法， 如果方程有解， 我们总可以将解表示为一些常矢量的线性组合加上一个常矢量．
+\subsection{解的结构}
+按照高斯消元法的一般步骤， 如果方程有解， 我们总可以将解表示为一些常矢量的线性组合加上一个常矢量．
 \begin{equation}\label{GAUSS_eq18}
-\bvec x = \sum_{i=1}^{N} c_i \bvec x_i + \bvec x_0
+\bvec x = \sum_{i=1}^{d} c_i \bvec x_i + \bvec x_0
 \end{equation}
-其中 $c_i$ 是 $N$ 个任意常数（当方程有唯一解时 $N = 0$）， 无论这些常数取什么值， $\bvec x$ 都是方程的解． 另一方面， 给出方程的任意一个解， 总能找到一些常数 $c_i$ 与之对应． \autoref{GAUSS_eq18} 叫做方程的\textbf{通解}， 通解中的任意一个就做方程的\textbf{特解}（例如上式中所有的 $\bvec x_i$ 都是特解）．
+其中 $c_i$ 是 $d$ 个任意常数（当方程有唯一解时 $d = 0$）， 无论这些常数取什么值， $\bvec x$ 都是方程的解． 另一方面， 给出方程的任意一个解， 总能找到一些常数 $c_i$ 与之对应． \autoref{GAUSS_eq18} 叫做方程的\textbf{通解（general solution）}， 通解中的任意一个就做方程的\textbf{特解（special solution）}．
 
-特殊地， 如果 $\bvec y = \bvec 0$ （粗体的 $\bvec 0$ 表示零矢量， 即每个元都是 0），%未完成：这个符号应该在”几何矢量“中提到
-则方程组是\textbf{齐次}的． 齐次方程一个显然的特解是 $\bvec x = \bvec 0$， 根据高斯消元法， 我们可知， 若齐次方程组存在无穷个解， 它们可以表示为
-\begin{equation}\label{GAUSS_eq19}
-\bvec x = \sum_{i=1}^{N} c_i \bvec x_i
+将\autoref{GAUSS_eq18} 代入方程组， 使用矩阵乘法分配律（\autoref{Mat_eq13}~\upref{Mat}）得到
+\begin{equation}
+\mat A \sum_{i=1}^{d} c_i \bvec x_i + \mat A \bvec x_0 = \bvec y
 \end{equation}
-即 $\bvec x_0 = \bvec 0$．
+由于 $\bvec x_0$ 是方程的一个特解， 有 $\mat A \bvec x_0 = \bvec y$． 所以
+\begin{equation}
+\mat A \sum_{i=1}^{d} c_i \bvec x_i = \bvec 0
+\end{equation}
+线性方程组 $\mat A \bvec x = \bvec y$ 中， 如果 $\bvec y = \bvec 0$ （粗体的 $\bvec 0$ 表示零矢量， 即每个元都是 $0$），%未完成：这个符号应该在”几何矢量“中提到
+则方程组被称为是\textbf{齐次（homogeneous）}的． 上式说明 $\sum_{i} c_i \bvec x_i$ 就是齐次方程组 $\mat A \bvec x = \bvec 0$ 的通解．
 
-所以， 对于任意有解的\textbf{非齐次}方程组 $\mat A \bvec x = \bvec y$， 我们可以将通解（\autoref{GAUSS_eq18}） 从形式上理解为齐次方程组 （$\mat A \bvec x = \bvec 0$） 的通解与非齐次方程组的任意一个特解相加．
+综上所述， 对于任意有解的\textbf{非齐次（inhomogeneous）}方程组 $\mat A \bvec x = \bvec y$， 我们可以将通解（\autoref{GAUSS_eq18}） 从形式上理解为齐次方程组 $\mat A \bvec x = \bvec 0$ 的通解与非齐次方程组的任一特解相加．

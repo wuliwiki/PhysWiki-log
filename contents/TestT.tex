@@ -1,0 +1,270 @@
+% Tensor
+
+\pentry{Matrix\upref{Mat}}
+
+The word "tensor" was first translated in Structural Mechanics, used to describe the properties of stress, therefore translated as “张力”. The term continues in use today, except the translation now becomes “张量”. Today we realize that the stress tensor is only a particular case for a more general mathematical object, tenosr. This object appears everywhere in physics frequently. We will define the concept of tensor from the fundamental sense, which is the contemporary perspective. We will also demonstrate how a tensor is represented by a matrix or a high dimensional matrix. 
+
+This section is a step-by-step guiding textbook, rather than a list of concepts and theorems. To better understand this section, it is recommended that the reader have solid understanding of linear algebra. 
+
+The definition we use in this section is the most fundamental version. No additional structures or constraints are put onto it; also, Einstein's Summation Convention is not applied yet, so as to be friendly for beginners. For the further concepts like covariant or contravariant tensors, please continue to the subsequent sections. 
+
+
+
+\subsection{Introduction}
+
+Students in physics often ask a question: "what is a tensor?" Usually the students are actually asking "why the moment of intertia, the mass, the stress, the electrical polarization are tensors? What do they have in common? " To understand the essential common property of all these seemingly different quantaties, we have to clarify the very fundamental definition of a tensor. That is, to answer the real question, we have to answer the literal question. So let's take some time to focus on the mathematical term itself, before we natrually demonstrate why those physical quantities are all tensors. 
+
+A tensor is a multi-linear map. Particularly, a second-order tensor can be interpreted as a map from two vectors to a scalor, or a map from a vector to another vector. The scalor here refers to an element in the field that defines the vector space; in physics, the field is usually the set of real numbers or complex numbers. 
+
+Many physical quantities can be interpreted as linear maps. As an example, mass is a second-order tensor, which maps a force vector to an acceleration vector; the moment of inertia is a second-order tensor, which maps an angular velocity vector to an angular momentum vector. Tensors of different orders may behave differently, but they all share one property: the linearity. When you encounter tensors in the future, I suggest you take some time and think "what quantities does this tensor map from and to"; it helps a deeper understanding. 
+
+
+
+\subsection{1-linear function, 2-linear function and their representation}
+
+It is known that given 2 vector spaces $V$ and $W$, we can define a linear map from $V$ to $W$. In this case, we have only 1 independent and 1 dependent variables. A multi-linear map, say, a $k$-linear map, maps a series of vector spaces $V_1, V_2, \cdots, V_k$ to $W$, so that if only the element in one $V_i$ varies, the map varies in the way a linear map does. 
+
+The simplest case is when $W$ is a 1-dimensional space. In this case, the vector space $W$ is also the field (the real numbers). If the image of a map is some set of numbers, then we have a particular term for such a map, \textbf{function}. This is the same function that you may have seen in high school, as the maps involved in high school are mostly from real numbers to real numbers. Now, since we make $W$ the set of real numbers, we just call the map from $V_1, V_2, \cdots, V_k$ to $W$ a \textbf{linear function}. Now, we are going to introduce the concepts of multi-linear maps, tensors and their representations, step by step, starting with linear functions. 
+
+\subsubsection{Representing linear functions with vectors}
+
+\begin{definition}{Linear functions}
+Given the $n$-dimensional vector space $V$ on $\mathbb{R}$, we call $f:V\rightarrow \mathbb{R}$ a \textbf{linear function} from $V$ to $\mathbb{R}$, if and only if $f$ satisfies the linearity: for any vectors $\bvec{v}_1, \bvec{v}_2\in V$ and scalors $a_1, a_2\in\mathbb{R}$, we have: $a_1f(\bvec{v}_1)+a_2f(\bvec{v}_2)=f(a_1\bvec{v}_1+a_2\bvec{v}_2)$．
+
+\end{definition}
+
+
+If we think of $\mathbb{R}$ as a 1-dimensional vector space, then $f$ is a linear map from $V$ onto this vector space. Therefore, if we take any basis of $V$ and determine what real numbers $f$ maps the basis vectors to, then we can calculate $f(\bvec{v})$ for any vector $\bvec{v}\in V$. 
+
+Now suppose a basis of $V$ is $\{\bvec{e}_i\}^n_{i=1}$. If the basis vector $\bvec{e}_i$ is mapped to $f(\bvec{e}_i)=m_i\in\mathbb{R}$, then for any vector $\bvec{v}=a_1\bvec{e}_1+a_2\bvec{e}_2+\cdots+a_n\bvec{e}_n$, we can calculate by linearity: 
+
+\begin{equation}
+\begin{aligned}
+f(a_1\bvec{e}_1+a_2\bvec{e}_2+\cdots+a_n\bvec{e}_n)&=f(a_1\bvec{e}_1)+f(a_2\bvec{e}_2)+\cdots+f(a_n\bvec{e}_n)\\&=m_1a_1+m_2a_2+\cdots+m_na_n
+\end{aligned}
+\end{equation}
+
+
+$m_1a_1+m_2a_2+\cdots+m_na_n$can be interpreted as the inner product of $\bvec{m}$ and $\bvec{v}$, where$\bvec{m}=m_1\bvec{e}_1+m_2\bvec{e}_2+\cdots+m_n\bvec{e}_n$．
+
+That is, every linear function $f$ corresponds to a vector $\bvec{m}$, so that $f(\bvec{v})=\bvec{m}\cdot\bvec{v}$．The coordinate of the vector $\bvec{m}$, in the basis $\{\bvec{e}_i\}_{i=1}^n$, is $(m_1, m_2, \cdots, m_n)^T$. If we define another basis, the coordinate usually changes, but the vector is still the same. 
+
+Since a linear function is a map from a vector space to real numbers, we also call it a 1-linear function. It is to distinguish it from other multi-linear functions, like the 2-linear function we are going to focus on now. 
+
+\subsubsection{Representing 2-linear funcions with matrices}
+
+Let's stick to the $n$-dimensional vector space $V$, except now we take 2 copies of $V$ to construct the map $f:V\times V\rightarrow\mathbb{R}$．
+
+\begin{definition}{2-linear function}
+We call $f:V\times V\rightarrow\mathbb{R}$ a 2-linear function, if and only if for any fixed vector $\bvec{v}_0$, both $f(\bvec{v}_0, \bvec{v})$ and $f(\bvec{v}, \bvec{v}_0)$ are 1-linear functions for $\bvec{v}$. In particular, we call $f$ a 2-linear function from $(V, V)$ onto $\mathbb{R}$. 
+\end{definition}
+
+An explicit expression for a 2-linear function is as follows: 
+
+\begin{equation}\label{TestT_eq2}
+\begin{aligned}
+f(a_1\bvec{v}_1+a_2\bvec{v}_2, b_1\bvec{u}_1+b_2\bvec{u}_2)&=a_1f(\bvec{v}_1, b_1\bvec{u}_1+b_2\bvec{u}_2)+a_2f(\bvec{v}_2, b_1\bvec{u}_1+b_2\bvec{u}_2)\\&=a_1b_1f(\bvec{v}_1, \bvec{u}_1)+a_2b_1f(\bvec{v}_2, \bvec{u}_1)+a_1b_2f(\bvec{v}_1, \bvec{u}_2)+a_2b_2f(\bvec{v}_2, \bvec{u}_2)
+\end{aligned}
+\end{equation}
+
+
+In order to represent this map, we have to determine the basis for the two copies of $V$. They don't have to be the same basis. Let's assume the basis for the first $V$ is $\{\bvec{e}_i\}^n_{i=1}$, and for the second is $\{\bvec{e}_i'\}^n_{i=1}$. Now vectors in the two vector spaces can be represented by column matrices, and the 2-linear function by a square matrix: (example with a 2-dimesional $V$)
+\begin{equation}\label{TestT_eq1}
+\begin{aligned}
+&\bvec{v}=a_1\bvec{e}_1+a_2\bvec{e}_2\rightarrow  \bvec c_v=\pmat{a_1\\a_2}\\
+&\bvec{u}=b_1\bvec{e}'_1+b_2\bvec{e}'_2\rightarrow  \bvec c_u=\pmat{b_1\\b_2}\\
+&f\rightarrow \bvec{M}=\pmat{f(\bvec{e}_1, \bvec{e}'_1)&f(\bvec{e}_1, \bvec{e}'_2)\\f(\bvec{e}_2, \bvec{e}'_1)&f(\bvec{e}_2, \bvec{e}'_2)}\\
+\end{aligned}
+\end{equation}
+
+
+That way, we have $f(\bvec{v}, \bvec{u})= \bvec c_v^T\bvec{M} \bvec c_u$．Note that $\bvec c_v^T$ means the transpose of the matrix $\bvec c_v$\footnote{If we use other basis, then the representations of $\bvec{v}$, $\bvec{u}$ and $f$ may be different matrices, but the calculation of $\bvec c_v^T\bvec{M} \bvec c_u$ doesn't change}．
+
+\begin{exercise}{}
+Think of the coordinate of a vector as a column matrix, then use to the laws of matrix calculation and substitute \autoref{TestT_eq1} into \autoref{TestT_eq2} to verify that $f(\bvec{v}, \bvec{u})= \bvec c_v^T\bvec{M} \bvec c_u$．
+\end{exercise}
+
+
+The example we just talked about is for 2-dimensional $V$. For $n$-dimensional $V$, $\bvec{M}$ becomes a $n\times n$ matrix, where the element in the ith row and jth column is $m_{ij}=f(\bvec{e}_i, \bvec{e}'_j)$．
+
+Let's take a look at a simple 2-linear function. 
+
+\begin{example}{Power}
+The possible forces exerted on a point mass in the 3-dimensional space, make a 3-dimensional real vector space $V$. The possible velocities of this point mass alsk make a $V$\footnote{Recall: 2 vector spaces are isomorphic (equivalent) if and only if they are defined over a same field and have the same dimensions. }．Represent the force on the point by $\bvec{F}$, the velocity of the point by $\bvec{v}$, then the power of the force on the point is $P$, a 2-linear function: $P=\bvec{F}\cdot\bvec{v}$．If we determine the basis for the force space and the velocity space, we can also represent $\bvec{F}$ and $\bvec{v}$ as column matrices $c_F$ and $c_v$, respectively. Then, there is a matrix $\bvec{P}$ so that $P=c^T_F\bvec{P}c_v$. Here, $\bvec{P}$ is a 2-linear function that maps a force and a velocity to a power. If we choose the basis in the way: the basis forces are along the positive directions of $x$, $y$ and $z$ with magnitude $1N$, and the basis velocities are along the positive directions of $x$, $y$ and $z$ with magnitude $1\opn{m/s}$, then for these two basis, $\bvec{P}=\pmat{1&0&0\\0&1&0\\0&0&1}$；If we choose the basis forces to be along the positive directions of $y$, $x$ and $z$, then $\bvec{P}$ becomes $\pmat{0&1&0\\1&0&0\\0&0&1}$. If, \textbf{again}, we change the basis velocities to be along the positive directions of $x$, $z$ and $y$, then $\bvec{P}$ becomes $\pmat{0&0&1\\1&0&0\\0&1&0}$．
+\end{example}
+
+
+
+We can see that functiuon of power, $P$, maps the two vectors, force and velocity, to a real number, power. If we choose different basis for the space of forces and the space of velocities, the matrix representation of $P$ also differs. These matrices all represent the properties of $P$ in corresponding basis. Compare this fact to the linear map that you learned from linear algebra. The matrix representation of the same linear map may vary as the basis for the vector spaces vary; similarly, the tensor $P$ doesn't change as the basis change, but the matrix representation of it does. 
+
+\subsubsection{Review on matrix calculations}
+
+In order to conveniently generalize the concept of 2-linear functions, we require the concept of matrix whose elements are vectors. We will briefly review the matrix calculations before proceeding with vector matrices. 
+
+Matrix calculation is just an arrangement of addition and multiplication. Although we usually deal with matrices whose elements are numbers, we can apply the same arrangement to any set whose elements can "add" and "multiply". 
+
+\begin{example}{Examples for vector matrices}
+
+\begin{itemize}
+%
+\item We can multiply a vector with a number (the scalor product). If $\bvec{v}_i$ is a vector, $a_i$ is a number, then $\pmat{\bvec{v}_1&\bvec{v}_2&\bvec{v}_3}$ is a row matrix of 3 vectors，$\pmat{a_1\\a_2\\a_3}$ is a column matrix of 3 numbers. Use the scalor product as the multiplication, we have: $\pmat{\bvec{v}_1&\bvec{v}_2&\bvec{v}_3}\pmat{a_1\\a_2\\a_3}=(a_1\bvec{v}_1+a_2\bvec{v}_2+a_3\bvec{v}_3)$ is a vector, and $\pmat{a_1\\a_2\\a_3}\pmat{\bvec{v}_1&\bvec{v}_2&\bvec{v}_3}=\pmat{a_1\bvec{v_1}&a_1\bvec{v_2}&a_1\bvec{v_3}\\a_2\bvec{v_1}&a_2\bvec{v_2}&a_2\bvec{v_3}\\a_3\bvec{v_1}&a_3\bvec{v_2}&a_3\bvec{v_3}}$ is a square matrix of 9 vectors. 
+\item We can multiply two vectors with inner product. Using this multiplication, $\pmat{\bvec{v}_1&\bvec{v}_2\\\bvec{v}_3&\bvec{v}_4}\cdot\pmat{\bvec{v}_5\\\bvec{v}_6}=\pmat{\bvec{v}_1\cdot\bvec{v}_5+\bvec{v}_2\cdot\bvec{v}_6\\\bvec{v}_3\cdot\bvec{v}_5+\bvec{v}_4\cdot\bvec{v}_6}$ is a column matrix of 2 numbers. 
+\item We can multiply 3-dimensional vectors with cross product. Using this multiplication, $\pmat{\bvec{v}_1&\bvec{v}_2\\\bvec{v}_3&\bvec{v}_4}\times\pmat{\bvec{v}_5\\\bvec{v}_6}=\pmat{\bvec{v}_1\times\bvec{v}_5+\bvec{v}_2\times\bvec{v}_6\\\bvec{v}_3\times\bvec{v}_5+\bvec{v}_4\times\bvec{v}_6}$ is a column matrix of 2 vectors. 
+%
+\end{itemize}
+\end{example}
+
+\subsubsection{Representing 2-linear functions with vector matrices}
+
+Suppose we have a 2-linear function $f:V^2\rightarrow\mathbb{R}$. It has a matrix representation under the basis $\{\bvec{e}_i\}_{i=1}^n$: (for convenience, suppose the 2 copies of $V$ share this basis)
+\begin{equation}
+\pmat{m_{ij}}=\pmat{m_{11}&m_{12}&\cdots&m_{1n}\\ m_{21}&m_{22}&\cdots&m_{2n}\\ \vdots&\vdots&\ddots&\vdots\\ m_{n1}&m_{n2}&\cdots&m_{nn}}
+\end{equation}
+If we take every row as a row matrix, namely $\bvec{m}_i^T=\pmat{m_{i1}&m_{i2}&\cdots&m_{in}}$, then $f$ can also be expressed as "a row matrix of row matrices"" 
+
+\begin{equation}
+\bvec{M}=\pmat{\bvec{m}_1^T&\bvec{m}_2^T&\cdots&\bvec{m}_n^T}
+\end{equation}
+
+For any vectors $\bvec{v}, \bvec{u}\in V$ if their coordinates under the basis are $c_v$ and $c_u$, then $\bvec{M}c_v$ is a row matrix, and $\bvec{M}c_vc_u$ is a number in $\mathbb{R}$. 
+
+Hence, the row matrix of row matrices, $\bvec{M}$, represents the 2-linear function $f$. We can express this representation explicitly: $f(\bvec{v}, \bvec{u})=\bvec{M}\bvec{v}\bvec{u}$\footnote{Here, we treat $\bvec{m}_1^T$ as an element from $\bvec{M}$，and vector $\bvec{v}, \bvec{u}$ as column matrices, then apply the matrix multiplication defined by scalor product. }．
+
+You may have noticed that the expression starts to look complicated. Good news is that in subsequent sections we will introduce Einstein's Summation Convention, which simplifies the expressions by a lot. 
+
+\subsection{Tensors are linear functions}
+
+A 2-linear function is also named a \textbf{second-order tensor}. Similarly, a 1-linear function is a \textbf{first-order tensor}. Further more, a real number (or anything from the field) is a \textbf{zero-order tensor}. This is one of the definition of tensors in modern mathematics: a tensor of order $k$ is a $k$-linear function. 
+
+But a tensor does NOT only map things to numbers; that is, tensors are more than linear functions; they are linear maps, as we are discussing as follows. 
+
+\subsection{Reflections on 2-linear functions}
+Let's observe a 2-linear function once again. We define a 2-linear function as a map from 2 vectors to 1 number, but in the example of "representing a 2-linear function with a vector matrix", we also realize that a 2-linear function can also map 1 vector to 1 linear function. In the case of the example, $f$ maps $c_v$ onto $\bvec{M}c_v$上; if we think of $\bvec{M}c_v$ as a whole, we notice that it is a 1-linear function of $c_u$. Now that a 1-linear funtion is interpreted as a vector, we can also interpret a 2-linear function as a map from 1 vector to 1 vector. 
+
+To wrap up, a 2-linear function is a map \textbf{from 2 vectors to 1 number}, \textbf{from 1 vector to a 1-linear function}, or \textbf{from 1 vector to 1 vector}. Does the last interpretation look familiar? Yes, in this context, a 2-linear function is a "linear transformation" or a "linear map from one vector space to another", as we have studied a lot in linear algebra. 
+
+With the new interpretations, it is possible to make more examples for 2-linear maps. 
+
+\begin{example}{Moment of inertia}
+
+
+The angular velocity is defined as a vector, with the angular speed as its magnitude and the direction defined with the right-hand-rule. Given a reference point, the angular momentum of a particle is defined as $\bvec{r}\times m\bvec{v}$, where $\bvec{r}$ is the displacement vector from the reference point to the location of the particle, $m$ is the mass of the particle, and $\bvec{v}$ is the velocity of the particle. Note that the net angular momentum of a point system is the sum of the angular momentum of every particle. 
+
+For a sphere whose mass distributes uniformly, it is highly symmetric. Now if it has angular velocity $\bvec{\omega}$, then its angular momentum is also along the direction of $\bvec{\omega}$. As result we have: $\bvec{L}=I\bvec{\omega}$, where $\bvec{L}$ is the angular momentum of the sphere, and the \textbf{number} $I$ is called the moment of inertia. 
+
+But things are different for objects that are NOT so symmetric. For a simple example, let's consider a rigid body consisting of 2 points on the $x$ axis, symmetric regarding the origin, both of mass $m$ and distance from the origin $r$. When this rigid body has an angular velocity on the $z$ direction, it has non-zero angular momentum whose direction is also on the $z$ direction; but if the angular velocity is on the $x$ direction, its angular momentum is then a zero vector. It tells us that we need a 2-linear function to represent the moment of inertia. Specifically, in this example, for the given coordinate system, the moment of inertia is represented by the matrix: 
+
+\begin{equation}
+\pmat{mr^2&0&0\\ 0&0&0\\ 0&0&0}
+\end{equation}
+
+Another example requires that you take your phone, which is approximately a cuboid. Consider the coordinate such that the $x$, $y$ and $z$ axises are perpendicular to the front, the side and the top faces of your phone respectively, then its moment of inertia is represented by: 
+
+\begin{equation}
+\pmat{a&0&0\\ 0&b&0\\ 0&0&c}
+\end{equation}
+
+Usually, $a>b>c$. If we choose other coordinate systems, the matrix representations are usually different, but always similar matrices to each other. 
+
+Strictly speaking, all moment of inertias are 2-linear functions, even for the highly symmetric sphere that we mentioned. The moment of inertia for the sphere is actually: 
+\begin{equation}
+\pmat{I&0&0\\ 0&I&0\\ 0&0&I}
+\end{equation}
+\end{example}
+
+The following example is also a frequently used 2nd-order tensor. 
+
+\begin{example}{Electric polarization}
+First we will briefly introduce the concept of electric polarization. If you're already familiar with this concept, you can skip this part (after \autoref{TestT_fig1} ); if you would like to learn more than this introduction, please refer to the \textbf{electrodynamics} sections. 
+
+An electric dipole is a microsystem consisting of 2 charges, whose net charge is 0. The dipole has a property, namely dipole moment, which is a vector. For electric dipoles, if the 2 charges are relatively $\pm q$, and the displacement vector from the negative charge to the positive is $\bvec{r}$, then we define the electric dipole moment to be $\bvec{p}=q\bvec{r}$. For simplicity in theoretical study, we assume the 2 charges are actually at the same location, but the system still has a dipole moment $\bvec{p}$; it is the so-called "ideal dipole". 
+
+Mathematically speaking, charge is a property of a particle, which is a number; dipole is also a property of a particle \footnote{we regard the pair of particles as one particle, if they are at the same location}, which is a vector. 
+
+Examples of electric dipoles include some asymmetrical molecules, whose centers of negative and positive charge don't coincide (we only treat them as ideal dipoles in macro level). Now if we add up all the dipole moments in a certain volume, and divide the resultant moment by the volume, we have the density of the electric dipole moment in this volume. If we take the limit of this density as the volume limits to 0, we can calculate the dipole moment density at a point. Note that this density is a vector, and the "point" is in the sense of experiments; experimental points are not mathematical points, because they still contain large numbers of particles and dipoles. 
+
+Usually a matter doesn't show electrical properties even with the existance of a great amount of electric dipoles, because the dipoles cancel each other. It makes the density of electric dipoles \footnote{In electrodynamics, the density of electric dipoles are called electric polarization. } vanish everywhere. But if the matter is in some electric field, things can be different. Positive and negative charges tend to move in opposite directions, and the dipoles tend to align with the electric field. Additionally, the length of the dipoles may change as well, which can affect the dipole moment, but such a change is significantly small compare to the change by rotations of the dipoles\footnote{However, for molecules that do NOT have dipole moments when there is no field, say, single atoms, then the rotation does not affect their dipole moment. For such molecules, we have to take the effect of stretching the dipole into account. }. When random dipoles point at the same direction, a non-zero charge distribution emerges. 
+
+
+
+
+\begin{figure}[ht]
+\centering
+\includegraphics[width=10cm]{./figures/TestT_1.pdf}
+\caption{Schematic diagram showing how a uniform electric field causes the polarity to change. On the left, the dipoles distributes uniformly randomly, and the charge vanishes everywhere in a macro level. On the right, there is an electric field towards the right, which forces the dipoles to point towards the right as well, and the polarity becomes non-zero; in a macro level, there is a non-zero distribution of charges (the bound charges). } \label{TestT_fig1}
+\end{figure}
+
+
+
+
+With non-zero polarities, there are non-zero bound charges in matters. But the physics details is not our concern for the moment; we care about how the polarity is affected by the elecric field. 
+
+For electric dipoles that move freely, say, water molecules, the rule is symple: let $\bvec{P}$ be the polarity at a point, $\bvec{E}$ be the electric field at the same point, then we have $\bvec{P}=\epsilon\bvec{E}$, where $\epsilon$ is a number. That is, $\bvec{P}$ and $\bvec{E}$ are always parallel. Now we say that at this point, there is a polarity tensor $\bvec{M}$ for water, which maps electric fields to polarities: $\bvec{P}=\bvec{M}\bvec{E}$. If we use SI units and choose the basis of the spaces of electric fields and polarities to be the same unit orthogonal basis, then the polarity tensor of water everywhere is: 
+\begin{equation}
+\pmat{\epsilon&0&0\\ 0&\epsilon&0\\ 0&0&\epsilon}
+\end{equation}
+It is \textbf{the $\epsilon$ multiple of the unit matrix}. 
+
+But polarity tensors are not always that simple. Suppose in a crystal, all dipoles are forced to align to the right, but initially the dipoles pointing to the left and cancel each other so there is no bound charges. When there is an electric field $\bvec{E}$ towards the right, the dipoles towards right are stretched, those towards left are compressed, hence there is a polarity density to the right: $\bvec{P}=\epsilon\bvec{E}$. If the electric field does not align with horizontal direction, then the field and the polarity density may not be parallel because the density must be at a horizontal direction. Using SI units and choosing the basis of the spaces of electric fields and polarities to be the same unit orthogonal basis, then the polarity tensor becomes: 
+\begin{equation}
+\pmat{\epsilon&0&0\\ 0&0&0\\ 0&0&0}
+\end{equation}
+It is \textbf{NOT the $\epsilon$ multiple of the unit matrix}. 
+
+In reality, if the crystal lattices resist the movement of charges differently in different directions, then the polarity tensor is not the multiple of the unit matrix. However, if the matrix of the polarity tensor is diagonalizable, then we can always find a basis such taht the tensor is represented by a diagonalized matrix; in other words, the electric field along the directions of the basis vectors are still parallel to the polarity density it arises, but of different multiples. 
+
+\end{example}
+
+
+\subsection{$k$th-order tensors}
+
+\subsubsection{$k$-linear function}
+
+Generalize the definition of 2-linear functions, and we have the definition of $k$-linear functions. 
+
+\begin{exercise}{}
+Please try and define the $k$-linear functions on your own, before checking the following definition. 
+\end{exercise}
+
+\begin{definition}{$k$-linear function}
+
+Given an $n$-dimensional vector space $V$ over the field $\mathbb{R}$, call $f:V^k\rightarrow \mathbb{R}$ a \textbf{$k$-linear} function from $V$ to $\mathbb{R}$, if $f$ is linear for each variable. That is, if only one of the $k$ variables changes, then $f$ is linear for the changing variable. Specifically, linear functions are called 1-linear functions. 
+\end{definition}
+
+With the concept of $k$-linear functions, we can define the kth-order tensors. 
+
+\begin{definition}{Tensor}
+A $k$-linear function is also called a tensor of order $k$. 
+\end{definition}
+
+
+\subsection{The order of a tensor}
+
+
+From previous discussions, we can see that a second-order tensor can also be interpreted as a map from a vector to a vector; a vector corresponds to a first-order tensor. So a second-order tensor can also be a map from a first-order tensor to a first-order tensor. Similarly, a third-order tensor maps 2 linear functions to 1 first-order tensor. 
+
+
+As a matter of fact, a $k$th-order tensor $f(\bvec{v}_1, \bvec{v}_2, \cdots,\bvec{v}_k)$ is a $k$-linear function. If we fix some of the variables, say from $\bvec{v}_1$ to $\bvec{v}_m$, then the funcion can be interpreted as the $k-m$-linear function of the rest $(k-m)$ variables. That is, $f$ maps the first $m$ vectors to a $k-m$-linear function. In other words, a $k$th-order tensor maps $m$ vectors to $(k-m)$ vectors. 
+
+This observation suggests a simple way to determine the order of a tensor: \textbf{the order is just the number of vector spaces involved}. For example, if a tensor maps 3 vectors to 2 vectors, then its order is 5; if a tensor maps 2 vectors to a number, then its order is 2. 
+
+
+\subsection{Summary and a little more}
+
+A tensor of order $k$ and dimension $n$, can be represented by a $k$-dimensional cubic matrix, each side of which has $n$ numbers. 
+
+
+Previously we define vector spaces over the field $\mathbb{R}$, and the linear functions as maps to the real numbers. In fact we can generalize the situations to any field $\mathbb{F}$. 
+
+The fields that we use in modern and contemporary physics are usually the real numbers $\mathbb{R}$ and the complex numbers $\mathbb{C}$. 
+
+
+Why are some physical quantities, say moment of inertia, linear maps? This is because physical quantities do NOT exist independently; they have to interact with other quantities and change one another. Examples include mass, which maps acclerations to forces. Therefore, some of the quantities are defined to represent the interactions; in many theories we can describe such representations linearly, hence such quantities are linear maps. 
+
+
+
+
+
+
+
+

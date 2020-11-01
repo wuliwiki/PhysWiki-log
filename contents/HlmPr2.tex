@@ -5,7 +5,7 @@
 \issueTODO
 \end{issues}
 
-\pentry{亥姆霍兹定理\upref{HelmTh}}
+\pentry{矢量算符运算法则\upref{VopEq}}
 
 \begin{theorem}{}\label{HlmPr2_the1}
 \footnote{参考 \cite{GriffE} 相关章节．}令 $\bvec F$ 为无散场， 即
@@ -30,12 +30,14 @@
 \end{corollary}
 注意 $\bvec H$ 也可以表示为任意标量函数 $V(\bvec r)$ 的梯度 $\grad V$（引用未完成）．
 
-我们可以认为\autoref{HlmPr2_eq1} 是旋度运算的逆运算， 这可以类比不定积分\upref{Int}是求导的逆运算． 而无旋场 $\bvec H(\bvec r)$ 可以类比不定积分中的任意常数．
+我们可以认为\autoref{HlmPr2_eq1} 是旋度运算的逆运算， 这可以类比不定积分\upref{Int}是求导的逆运算． 而无旋场 $\bvec H(\bvec r)$ 可以类比不定积分中的任意常数． 散度也有类似的逆运算\upref{DivInv}．
 
-\begin{theorem}{}
+\begin{theorem}{}\label{HlmPr2_the2}
 令 $\bvec F(\bvec r)$ 为无散场， 则\autoref{HlmPr2_eq1} 得到的 $\bvec G(\bvec r)$ 仍然是一个无散场．
 \end{theorem}
 显然， 给 $\bvec G(\bvec r)$ 加上一个任意的无散场 $\bvec H(\bvec r)$ 后仍然是一个无散场． 若需要满足\autoref{HlmPr2_eq4}， 则 $\bvec H(\bvec r)$ 必须也是无旋的， 即 $\bvec H(\bvec r)$ 是调和场．
+
+我们已经知道一个矢量场无论求几次旋度， 都一直是无散场． 而这个定理告诉我们任意无散场无论求几次 “逆旋度” 也都可以是无散场．
 
 \subsection{证明定理 1}
 我们只需要证明\autoref{HlmPr2_eq1} 右边第一项求旋度等于 $\bvec F$：
@@ -50,13 +52,13 @@
 先来证明上式第二项为零： 被积函数中的 $x$ 分量为（$\grad'$ 意味着对 $x', y', z'$ 求偏导， 另外注意 $\bvec F$ 是 $\bvec r'$ 的函数）
 \begin{equation}\label{HlmPr2_eq2}
 \begin{aligned}
-(\bvec F \vdot \grad) \frac{x' - x}{\abs{x'-x}^3} &= \bvec F \vdot \grad \frac{x' - x}{\abs{x'-x}^3} = -\bvec F \vdot \grad' \frac{x' - x}{\abs{x'-x}^3}\\
-&= - \grad'\qty(\bvec F \frac{x' - x}{\abs{x'-x}^3}) + (\grad'\bvec F) \frac{x' - x}{\abs{x'-x}^3}
+(\bvec F \vdot \grad) \frac{x' - x}{\abs{x'-x}^3} &= \bvec F \vdot \qty(\grad \frac{x' - x}{\abs{x'-x}^3}) = -\bvec F \vdot \qty(\grad' \frac{x' - x}{\abs{x'-x}^3})\\
+&= - \grad' \vdot \qty(\bvec F \frac{x' - x}{\abs{x'-x}^3}) + (\grad' \vdot \bvec F) \frac{x' - x}{\abs{x'-x}^3}
 \end{aligned}
 \end{equation}
 这里使用了\autoref{VopEq_eq1}~\upref{VopEq}． 由于 $\bvec F(\bvec r')$ 是无散场， 最后一项为零． $y, z$ 分量同理． 对上式做体积分得（使用散度定理\autoref{Divgnc_eq13}~\upref{Divgnc}）
 \begin{equation}
-- \int \grad'\qty(\bvec F \frac{x' - x}{\abs{x'-x}^3})\dd{V'} = -\oint \bvec F \frac{x' - x}{\abs{x'-x}^3} \dd{\bvec s}
+- \int \grad' \vdot \qty(\bvec F \frac{x' - x}{\abs{x'-x}^3})\dd{V'} = -\oint \bvec F \frac{x' - x}{\abs{x'-x}^3} \dd{\bvec s}
 \end{equation}
 积分曲面是体积分区域的边界曲面． 由于我们假设 $\bvec F$ 只有在体积分内部（不包括边界）不为零， 所以该式为零．
 
@@ -71,7 +73,7 @@
 证毕．
 
 \subsection{证明定理 2}
-使用\autoref{VecOp_eq1}~\upref{VecOp}， 有
+使用\autoref{VopEq_eq4}~\upref{VopEq}， 有
 \begin{equation}
 \begin{aligned}
 &\div \bvec F = \frac{1}{4\pi} \int \div \qty(\bvec F \cross \frac{\bvec R}{R^3}) \dd{V'}\\
