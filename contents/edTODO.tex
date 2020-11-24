@@ -2,7 +2,7 @@
 % BUG|编辑器|LaTeX
 
 \subsection{符号替换模式下的 bug}
-按重要性排序
+按优先级排序
 \begin{itemize}
 
 \item 【完成】为什么\href{https://docs.julialang.org/en/v1/manual/unicode-input/}{这个 Julia 文档页面}中的 \lstinline|\varphi| 和 \lstinline|\phi| 粘贴到浏览器（包括符号替换规则窗口）中之后显示出来是调换的？
@@ -25,13 +25,15 @@
 \end{itemize}
 
 \subsection{Editor BUG}
-按重要性排序
+按优先级排序
 \begin{itemize}
-\item 有时候网速慢时保存以后代码中的光标会卡住， 直到预览刷新了以后还要过几秒种才能恢复
+\item 【完成】有时候网速慢时保存以后代码中的光标会卡住， 直到预览刷新了以后还要过几秒种才能恢复
 
-\item 有时候切换 tab 时左边的预览不会切换， 需要 save 才会更新
+\item 本文件中还是有一些 verb 和 lstinline 高亮错误
 
-\item  本文件中还是有一些 verb 和 lstinline 高亮错误
+\item 在一对大括号 \verb|{}| 中打左大括号， 不会自动补全右大括号
+
+\item 【完成】有时候切换 tab 时左边的预览不会切换， 需要 save 才会更新
 
 \item 【完成】初始页面下， 帮助按钮按不动
 
@@ -91,11 +93,21 @@
 \end{itemize}
 
 \subsection{Editor TODO}
-按重要性排序
+按优先级排序
 \begin{itemize}
+\item 编辑百科按保存时， \verb|PhysWikiScan| 命令使用 \verb|PhysWikiScan --entry xxx --path 1|， 发布时使用 \verb|PhysWikiScan --entry xxx|
+
+\item 用户笔记按保存时， \verb|PhysWikiScan| 命令中的 url 设为空， 发布时 url 不变
+
+\item 在代码按钮旁边添加一个按钮， 插入 \verb|\verb{}| 命令
+
+\item “改进意见” 按钮的 tip 改为 “标记词条： xxx”
+
 \item 删除一个文件时， 图片和源文件也要一并删除（包括 figures 中所有格式为 \verb|词条名_数字.任意拓展名| 的文件， online, changed 中对应的 svg 和 png 文件．
 
 \item 百分号图标有点太大了跟周围的图标不协调， 适当调小一点．
+
+\item 红色和蓝色按钮的尺寸适当调小（保持里面的图标尺寸不变）
 
 \item 删除词条时同时删除 \verb|changed/| 和 \verb|online/| 目录中对应的 html 和图片文件 （图片名格式为 \verb|词条名_编号.拓展名|）
 
@@ -118,6 +130,22 @@
 \item 设置每个词条第一行为只读（除了 \verb|main.tex| 以及 \verb|bibliography.tex|）， 如果试图直接修改， 就提示 “请使用重命名按钮修改标题”．
 
 \item 当编辑器提示 PhysWikiScan 输出的 cerr 时， 文字需要可以复制， 如果 chrome 本身的弹窗不支持， 就用自己的弹窗．
+
+\item “切换布局” 按钮增加一种模式， 即编辑窗口在左边预览在右边． 分隔栏的位置同样需要保留记忆．
+
+\item 把 “查看历史版本” 改为 “历史版本”
+
+\item “历史版本” 界面上方加入一个选项（默认不选） “只显示每次编辑的最后一个备份”． 规则：任意一串作者相同且相邻间隔小于 30 分钟的备份， 只在列表中显示最后一个．
+
+\item 在 “历史版本” 界面的每个版本右边显示 \verb|git diff| 返回的增减数， 如 \verb|+6 -7|． 如果选中上一条中的按钮， 就把隐藏的增减数合并到最后显示的那条中．
+
+\item 在 “历史版本” 界面每个版本左边显示 radio button， 当选中一个时， 可以通过界面下方的 “恢复” 按钮恢复， 当选中两个时， 可以通过下方的 “版本对比” 跳转到对比页面， 使用 \verb|diff2html| 对比两个版本．
+
+\item 关于对比页面： 网址使用 \verb|wuli.wiki/diff/|， 注意页面上需要可以选择 \verb|diff2html| 程序的 \verb|diffStyle| （char, word, line 等， 其中 char 非常重要， 否则连续的中文字符都会被看成一个 word）．
+
+\item 做一个历史版本页面， 网址使用 \verb|wuli.wiki/history/|， 可以通过参数查看任意词条的任意历史（html 通过 scan 程序临时生成）．
+
+\item 在 “历史版本” 界面上方添加说明： \verb|请选中要恢复的历史版本， 或选中两个历史版本以进行对比|．
 
 \item 【先不要做】考虑用 Electron 做一个离线版的 wuli.wiki/note． 不需要网络连接（但 mathtype 应该需要网络才能用）， 功能完全一样， 除了： 添加一个按钮可以设置用户名， 如果没有用户名， 则弹出提示框输入用户名 “请输入任意用户名， 以后可以在菜单栏修改”． 不需要任何密码． 另外增加一个按钮设置输入输出路径， 相当于 \verb|littleshi.cn/root/user/|． 默认路径为 \verb|Desktop/wuli.wiki-note/|
 
@@ -235,7 +263,7 @@
 \begin{itemize}
 \item 深度兼容 \lstinline|\(\)|， 和 \lstinline|$$| 完全一样对待
 
-\item 在每个词条底部加上目录树的链接
+\item 【完成】在每个词条底部加上目录树的链接
 \end{itemize}
 
 \subsubsection{改用 MathJax2}
@@ -247,4 +275,4 @@
 \end{itemize}
 
 \subsubsection{脚注加上返回链接}
-参考维基百科和知乎． 或者是否可以做成点了以后直接弹出一个子窗口而不是跳到底部？ 如何实现？
+【完成】参考维基百科和知乎． 或者是否可以做成点了以后直接弹出一个子窗口而不是跳到底部？ 如何实现？

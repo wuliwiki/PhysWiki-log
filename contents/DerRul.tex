@@ -2,31 +2,38 @@
 % 微积分|导数|求导法则|线性运算
 
 \pentry{基本初等函数的导数\upref{FunDer}}
-\subsection{结论}
+
 如果需要求导的函数可以看做若干个已知导函数的函数（如基本初等函数）经过四则运算或复合得到的， 那么我们可以直接使用一系列求导法则对其求导
 \subsubsection{四则运算}
-\begin{equation}
+\begin{equation}\label{DerRul_eq5}
 [ f(x) \pm g(x) ]' = f'(x) \pm g'(x)
 \end{equation}
-\begin{equation}
+\begin{equation}\label{DerRul_eq6}
 [ f(x)g(x) ]' = f'(x)g(x) + f(x)g'(x) 
 \end{equation}
-\begin{equation}
+\begin{equation}\label{DerRul_eq3}
 \qty[ \frac{f(x)}{g(x)} ]'  = \frac{f'(x)g(x) - g'(x)f(x)}{g(x)^2}
 \end{equation}
 \subsubsection{复合函数}
-\begin{equation}
-f[g(x)] = f'[g(x)]g'(x)
+\begin{equation}\label{DerRul_eq4}
+f[g(x)]' = f'[g(x)]g'(x)
 \end{equation}
-详细见“一元复合函数求导（链式法则）\upref{ChainR}”
+详见“一元复合函数求导（链式法则）\upref{ChainR}”
+
+\subsubsection{反函数}
+\begin{equation}
+[f^{-1}(x)]' = \frac{1}{f'[f^{-1}(x)]} 
+\end{equation}
+详见“反函数求导\upref{InvDer}”．
 
 \subsection{线性}
-对求导而言， \textbf{线性}是指若干\textbf{函数线性组合}（即把若干个函数分别乘以常数再相加）\footnote{线性组合是线性代数中的概念， 线性代数中， 线性空间都可以做线性组合， 例如几何矢量（\autoref{GVecOp_eq1}~\upref{GVecOp}）． 特定函数的集合可以看作线性空间（\autoref{LSpace_ex2}~\upref{LSpace}）．}的求导等于对这些函数先分别求导再进行同样的线性组合． 由于函数加减法属于函数线性组合的两种简单情况， 这里只需要证明求导运算是线性的， 即求导是一种\textbf{线性运算} 即可．  令若干常数为 $c_i$， 若干可导函数为 $f_i(x)$， 根据导数的定义， 这些函数线性组合的导数为
+我们先来证明\autoref{DerRul_eq5}． 对求导而言， \textbf{线性}是指若干\textbf{函数线性组合}（即把若干个函数分别乘以常数再相加）\footnote{线性组合是线性代数中的概念， 线性代数中， 线性空间都可以做线性组合， 例如几何矢量（\autoref{GVecOp_eq1}~\upref{GVecOp}）． 特定函数的集合可以看作线性空间（\autoref{LSpace_ex2}~\upref{LSpace}）．}的求导等于对这些函数先分别求导再进行同样的线性组合． 由于函数加减法属于函数线性组合的两种简单情况， 这里只需要证明求导是一种\textbf{线性运算} 即可．  令若干常数为 $c_i$， 若干可导函数为 $f_i(x)$， 根据导数的定义， 这些函数线性组合的导数为
 \begin{equation}\label{DerRul_eq1}\ali{
 \dv{x}\sum_i c_i f_i(x) &= \lim_{h\to 0} \qty[\sum_i c_i f_i(x+h) - \sum_i c_i f_i(x) ]/h\\
 & =  \sum_i c_i \lim_{h\to 0} [f_i(x+h) - f_i(x)]/h\\
 & = \sum_i c_i f_i'(x)
 }\end{equation}
+证毕．
 
 \begin{example}{对函数 $f(x) = 5\sin x + 3x^2$ 求导}
 这里的 $f(x)$ 可以看做三角函数 $\sin x$ 函数和幂函数 $x^2$ 的线性组合， 二者都是基本初等函数， 导数分别为 $\cos x$ 和 $2x$， 由于求导是线性运算， 我们只需要对两个函数各自的导函数进行同样的线性组合即可
@@ -35,10 +42,38 @@ f'(x) = 5 \sin' x + 3(x^2)' = 5 \cos x + 3(2x) = 5\cos x + 6x
 \end{equation}
 \end{example}
 
-\subsection{两函数相乘的导数}
-令两函数分别为 $f(x)$ 和 $g(x)$， 现在求 $f(x) g(x)$ 的导函数． 由导数的定义\autoref{Der_eq2}~\upref{Der} 得
-\begin{equation}
-[f(x)g(x)]' = \lim_{h\to 0} [f(x+h)g(x+h) - f(x)g(x)]/h
+\subsection{乘积法则}
+现在证明\autoref{DerRul_eq6}， 令两函数分别为 $f(x)$ 和 $g(x)$， 现在求 $f(x) g(x)$ 的导函数． 由导数的定义\autoref{Der_eq2}~\upref{Der} 得
+\begin{equation}\label{DerRul_eq2}
+[f(x)g(x)]' = \lim_{h\to 0} \frac{f(x+h)g(x+h) - f(x)g(x)}{h}
 \end{equation}
-从几何上来看， 我们可以把 $f(x)g(x)$ 看做一个矩形的面积（未完成）
-% 图未完成
+
+\begin{figure}[ht]
+\centering
+\includegraphics[width=6.0cm]{./figures/DerRul_1.pdf}
+\caption{乘积法则的几何理解} \label{DerRul_fig1}
+\end{figure}
+
+从几何上来看（\autoref{DerRul_fig1} ）， 我们可以把 $f(x), g(x)$ 看做一个矩形的两条边长， 它们的乘积 $f(x)g(x)$ 就是矩形的面积， 而 $f(x+h)g(x+h)$ 不妨看做是另一个矩形的面积． 当 $x$ 增加 $h$ 后， 令 $f$ 和 $g$ 分别增加 $\Delta f$ 和 $\Delta g$ （图中假设他们大于零，其他情况同理）， 那么矩形面积的增量可以分解为三部分
+\begin{equation}
+f(x+h)g(x+h) - f(x)g(x) = \Delta f g + f \Delta g + \Delta f\Delta g
+\end{equation}
+代入\autoref{DerRul_eq2} 得
+\begin{equation}
+[f(x)g(x)]' = \lim_{h\to 0} \frac{\Delta f}{h} g + f \lim_{h\to 0} \frac{\Delta g}{h} + \lim_{h\to 0}\frac{\Delta f\Delta g}{h}
+\end{equation}
+容易看出前两项中的两个极限分别是 $f,g$ 的导数， 而第三个极限中， 两个增量的乘积变小的速度远比前两个极限中要快（我们把它叫做二阶无穷小）， 所以第三个极限为零． 从几何上来看， 这是因为随着 $h$ 变小， 右上角小矩形的面积 $\Delta f\Delta g$ 比起两条长矩形的面积可以忽略不计．
+
+\subsection{商法则}
+要证明\autoref{DerRul_eq3}， 我们可以把 $f(x)/g(x)$ 看成 $f(x)$ 乘以 $1/g(x)$， 这样就可以直接使用乘积法则了． 但是如何对 $1/g(x)$ 求导呢？ 我们可以将其看做 $h(x) = 1/x$ 和 $g(x)$ 的复合函数 $h[g(x)]$． 其中 $h'(x) = -1/x^2$（\autoref{FunDer_eq3}~\upref{FunDer}）． 根据\autoref{DerRul_eq4}， 有
+\begin{equation}
+\qty[\frac{1}{g(x)}]' = h'[g(x)]g'(x) = -\frac{g'(x)}{g^2(x)}
+\end{equation}
+最后使用乘积法则
+\begin{equation}
+\begin{aligned}
+\qty[f(x) \frac{1}{g(x)}]' &= f'(x) \frac{1}{g(x)} - f(x) \frac{g'(x)}{g^2(x)}\\
+&= \qty[ \frac{f(x)}{g(x)} ]'  = \frac{f'(x)g(x) - g'(x)f(x)}{g(x)^2}
+\end{aligned}
+\end{equation}
+证毕．

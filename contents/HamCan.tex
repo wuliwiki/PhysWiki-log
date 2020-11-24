@@ -1,41 +1,43 @@
 % 哈密顿正则方程
-% 哈密顿量|拉格朗日变换|哈密顿正则方程
+% 哈密顿量|拉格朗日变换|哈密顿正则方程|广义动量|共轭动量
 
 \pentry{拉格朗日方程\upref{Lagrng}， 勒让德变换\upref{TrLgdr}}
 
 \subsection{哈密顿量}
-拉格朗日量使用广义坐标和广义速度来描述力学系统的状态．如果给拉格朗日量中的广义速度都替换为广义动量，就可以把拉格朗日函数$L$通过\textbf{勒让德变换}变为哈密顿函数$H$，后者同样可以描述同一个力学系统的状态．
-
-根据勒让德变换的\autoref{TrLgdr_eq1}~\upref{TrLgdr}，可知\textbf{哈密顿量}为
-\begin{equation}\label{HamCan_eq1}
-H = \sum_i \dot q_i p_i - L
+拉格朗日力学中使用 $N$ 个广义坐标 $q_1,\dots,q_N$ 和 $N$ 个广义速度 $\dot q_1,\dots,\dot q_N$ 来描述力学系统的状态， 我们分别简记为 $q$ 和 $\dot q$． 而在哈密顿力学中， 系统的状态由广义坐标和对应的 $N$ \textbf{广义动量（generalized momentum）} $p_1, \dots, p_N$， 来描述， 简记为 $p$． 我们定义广义动量为（\autoref{Lagrng_eq13}~\upref{Lagrng}）
+\begin{equation}
+p_i = \pdv{L}{\dot q_i}
 \end{equation}
-其中 $L$ 为拉格朗日量， $p_i$ 为广义坐标 $q_i$ 的共轭动量（见\autoref{Lagrng_eq13}~\upref{Lagrng}）．
+$p$ 也可以叫做\textbf{正则动量（canonical momentum）}或者\textbf{共轭动量（conjugate momentum）}．
 
-牛顿力学中，$L$ 等于系统动能减势能， 由此可得哈密顿量等于系统能量． 证明如下： 将系统看做质点系， 由于 $L = T - V$ 且 $V$ 与 $\dot q$ 无关， 有
+定义系统的\textbf{哈密顿量（Hamiltonian）}为
+\begin{equation}\label{HamCan_eq1}
+H(q,p,t) = \sum_i \dot q_i p_i - L
+\end{equation}
+其中 $L$ 为拉格朗日量（\autoref{Lagrng_eq1}~\upref{Lagrng}）． 我们在能量积分（\autoref{motint_eq2}~\upref{motint}）中见到过， 但在哈密顿力学中， 我们必须要把等式右边的所有 $\dot q$ 用 $p$ 来表示， 使哈密顿量是 $(q,p,t)$ 的函数．
+
+从拉格朗日函数 $L$ 变为哈密顿量 $H$ 的这种变换， 叫做\textbf{勒让德变换（Legendre transformation）}\upref{TrLgdr}．
+
+\subsection{哈密顿量与能量}
+当拉格朗日量 $L$ 等于系统动能减势能时， 哈密顿量等于系统能量． 所以当我们在构建一个系统的拉格朗日量时， 往往不需要做勒让德变换， 而是直接用广义坐标和广义动量写出系统能量． 另外， 
+
+\subsubsection{证明}
+将系统看做质点系， 由于 $L = T - V$ 且 $V$ 与 $\dot q$ 无关， 有
 \begin{equation}
 p_i = \pdv{L}{\dot q_i} = \pdv{\dot q_i} \sum_j \frac12 m_j \dot{\bvec r}_j^2
 = \sum_j m_j \dot{\bvec r}_j \pdv{\dot{\bvec r}_j}{\dot q_i}
 = \sum_j m_j \dot{\bvec r}_j  \pdv{\bvec r_j}{q_i}
 \end{equation}
-其中最后一步利用了\autoref{dAlbt_eq27}~\upref{dAlbt}． 所以\autoref{HamCan_eq1} 中的求和项为
+其中最后一步利用了\autoref{dAlbt_eq27}~\upref{dAlbt}． 所以
 \begin{equation}
  \sum_i \dot q_i p_i = \sum_j m_j \dot{\bvec r}_j \sum_i \pdv{\bvec r_j}{q_i}\dv{q_i}{t}
 = \sum_j m_j \dot{\bvec r}_j^2 = 2T
 \end{equation}
-其中第二步用到了 $r(q_1(t), q_2(t) \dots)$ 的全微分\upref{TDiff}， 注意该函数不能显含 $t$．% 未完成：在哪里解释一下“显含”？
- 上式代回\autoref{HamCan_eq1}， 可证明 $H = T + V$ 等于系统总能量． 证毕．
+其中第二步用到了 $\bvec r_j(q_1,\dots,q_N)$ 的全微分\upref{TDiff}， 注意该函数不能显含 $t$．% 未完成：在哪里解释一下“显含”？
+上式代回\autoref{HamCan_eq1}， 有 $H = 2T - (T - V) = T + V$ 即系统总能量． 证毕．
 
-从拉格朗日函数 $L$ 变为哈密顿量 $H$ 的这种变换， 叫做\textbf{勒让德变换（Legendre transformation）}．
-
-\subsection{哈密顿正则方程}
-\textbf{哈密顿正则方程}是一组关于 $N$ 个广义坐标 $q_i$ 和 $N$ 个共轭动量（\autoref{Lagrng_eq13}~\upref{Lagrng}） 作为变量的微分方程组， 共有 $2N$ 条方程． 与拉格朗日方程相比， 虽然方程的个数多了一倍， 但是方程却由二阶变为了一阶．
-
-如果把系统的哈密顿量写成广义坐标和广义动量的函数
-\begin{equation}
-H(q_1,\dots, q_N, p_1,\dots, p_N)
-\end{equation}
-（注意函数中不能出现 $\dot q_i$）则哈密顿正则方程为
+\subsection{哈密顿方程}
+\textbf{哈密顿方程（Hamilton's equations）}也叫\textbf{哈密顿正则方程（Hamilton's canonical equations）}是一组关于广义坐标和广义动量的微分方程组， 共有 $2N$ 条方程：
 \begin{equation}\label{HamCan_eq2}
 \dot q_i = \pdv{H}{p_i}
 \qquad
@@ -43,12 +45,12 @@ H(q_1,\dots, q_N, p_1,\dots, p_N)
 \qquad
 (i = 1\dots N)
 \end{equation}
-可见在方程中， $q_i$ 和 $p_i$ 是对称的， 具有同样的地位．
+与拉格朗日方程相比， 虽然方程的个数多了一倍， 但是方程却由二阶变为了一阶． 可见在方程中， $q$ 和 $p$ 是对称的， 具有同样的地位．
 
 \begin{example}{直角坐标系中的质点运动}
-直角坐标系中一个质点的拉格朗日量为 $L = m(\dot x^2 + \dot y^2 + \dot z^2)/2 - V$， 共轭动量就是通常定义的动量（用 $x_1,x_2,x_3$ 表示 $x, y, z$）
+直角坐标系中一个质点的拉格朗日量为 $L = m(\dot x^2 + \dot y^2 + \dot z^2)/2 - V$， 易得共轭动量就是通常定义的动量（用 $x_1,x_2,x_3$ 表示 $x, y, z$）
 \begin{equation}
-p_{x_i} = \pdv{L}{\dot x_i} = m\dot x_i
+p_{x_i} = \pdv{L}{\dot x_i} = m\dot x_i \qquad \text{(i = 1,2,3)}
 \end{equation}
 哈密顿量等于总能量（注意要写成 $x_i$ 和 $p_{x_i}$ 的函数， 不能含有 $\dot x_i$）为
 \begin{equation}
@@ -62,6 +64,18 @@ H = \sum_i \frac{p_{x_i}^2}{2m} + V
 \qquad (i = 1,2,3)
 \end{equation}
 显然上式的第一条是（普通）动量与速度的关系， 第二条则是牛顿第二定律．
+\end{example}
+
+\begin{example}{中心力场问题}
+在\autoref{Lagrng_eq2}~\upref{Lagrng}的基础上， 广义坐标 $p_r = r, \theta$ 的广义动量分别为 $m\dot r$ 和 $L = mr^2\dot \theta$． 可以写出质点的哈密顿量（即能量）为
+\begin{equation}
+H = T + V = \frac12 m(\dot r^2 + r^2 \dot \theta^2) + V(r) = \frac{p_r^2}{2m} + \frac{L^2}{2mr^2} + V(r)
+\end{equation}
+代入哈密顿方程得
+\begin{equation}
+m\ddot r = mr \dot \theta^2 - \pdv{V}{r}
+\end{equation}
+以及角动量守恒 $\dot L = 0$．
 \end{example}
 
 \subsection{哈密顿正则方程的推导}

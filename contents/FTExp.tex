@@ -10,7 +10,7 @@
 用三角傅里叶变换 \upref{FTTri} 中同样的方法可把指数傅里叶级数拓展为指数傅里叶变换
 \begin{align}
 g(k) &= \frac{1}{\sqrt{2\pi }} \int_{-\infty }^{+\infty } f(x)\E^{-\I kx} \dd{x} \\
-f(x) &= \frac{1}{\sqrt{2\pi }} \int_{-\infty }^{+\infty } g(k)\E^{\I kx} \dd{x} \label{FTExp_eq1}
+f(x) &= \frac{1}{\sqrt{2\pi }} \int_{-\infty }^{+\infty } g(k)\E^{\I kx} \dd{k} \label{FTExp_eq1}
 \end{align}
 特殊地，当 $f(x)$ 为实函数时，$g(k)$ 的实部是偶函数，虚部是奇函数．
 
@@ -25,28 +25,48 @@ f(x) &= \frac{1}{\sqrt{2\pi }} \int_0^\infty [g(k)\E^{\I kx} + g(-k)\E^{-\I kx}]
 从傅里叶变换（三角函数）% 链接未完成
 我们已知对实数函数，方括号项都必须为实函数，即上式第一个方括号中的虚部为零，第二个方括号中的实部为零，即
 \begin{equation}\begin{aligned}
-g_{Im}(-k) &= -g_{Im}(k) \\
-g_{Re}(-k) &= g_{Re}(k)
+g_{Re}(-k) &= g_{Re}(k)\\
+g_{Im}(-k) &= -g_{Im}(k)
 \end{aligned}\end{equation}
-所以结论是，当 $f(x)$ 为实函数时，$g(k)$ 的实部是偶函数，虚部是奇函数．由此可得另一个结论
-\begin{equation}
-\abs{g(-k)}=\sqrt{g_{Re}^2(-k)+g_{Im}^2(-k)}=\sqrt{g_{Re}^2(k)+g_{Im}^2(k)} = \abs{g(k)}
+所以结论是，当 $f(x)$ 为实函数时，$g(k)$ 的实部是偶函数，虚部是奇函数． 或用共轭记为
+\begin{equation}\label{FTExp_eq5}
+g(-k) = g(k)^*
 \end{equation}
-即频谱是偶函数．所以对于实数函数，我们只需要 $k>0$ 的频谱．这与三角傅里叶变换的情况一致．
+所以 $\abs{g(-k)} = \abs{g(k)}$ 即频谱是偶函数．所以对于实数函数，我们只需要 $k>0$ 的频谱．这与三角傅里叶变换的情况一致．
 
 % 举例未完成
 
 \subsection{性质}
 为了书写方便我们用\textbf{算符} $\mathcal F$ 和 $\mathcal F^{-1}$ 表示傅里叶变换和反变换， 即 $\mathcal F f = g$ 以及 $\mathcal F^{-1} g = f$． 算符在这里可以看作 “函数的函数”， 即自变量和函数值都是函数．
-\begin{equation}
+\begin{equation}\label{FTExp_eq4}
 \mathcal F [f(x) \E^{\I k_0 x}] = g(k - k_0)
 \end{equation}
 \begin{equation}
 \mathcal F^{-1} [g(k) \E^{-\I k x_0}] = f(x - x_0)
 \end{equation}
-也就是说， 给函数乘以 $\E^{\I k_0 x}$ 因子再做傅里叶变换， 等于先对函数做傅里叶变换， 再向右平移 $k_0$． 给函数乘以 $\E^{-\I k x_0}$ 因子再做反傅里叶变换， 等于先对函数做反傅里叶变换， 再向右平移 $x_0$．
+也就是说， 给函数乘以 $\E^{\I k_0 x}$ 因子再做傅里叶变换， 等于先对函数做傅里叶变换， 再向右平移 $k_0$． 给函数乘以 $\E^{-\I k x_0}$ 因子再做反傅里叶变换， 等于先对函数做反傅里叶变换， 再向右平移 $x_0$． 证明显然， 留做习题．
 
 变换前后模长不变
 \begin{equation}\label{FTExp_eq2}
 \int g(k)^* g(k) \dd{k} = \int f(x)^* f(x) \dd{x}
 \end{equation}
+
+导数的傅里叶变换
+\begin{equation}\label{FTExp_eq3}
+\mathcal F [f'(x)] = \I k \mathcal F[f(x)]
+\end{equation}
+
+\subsection{性质的证明}
+
+\textbf{证明}\autoref{FTExp_eq2} ： 把傅里叶变换看成傅里叶级数在 $l \to \infty$ 时的极限， 使用\autoref{FSExp_eq5}~\upref{FSExp}， 右边的求和在极限下变为积分即可证明． 详细过程留做习题．
+
+\textbf{证明}\autoref{FTExp_eq3} ： 对\autoref{FTExp_eq1} 关于 $x$ 求导得
+\begin{equation}
+f'(x) = \frac{1}{\sqrt{2\pi }} \int_{-\infty }^{+\infty } [\I kg(k)]\E^{\I kx} \dd{k}
+\end{equation}
+把方括号看作一整个 $k$ 的函数， 那么上式对应的反变换为
+\begin{equation}
+\I kg(k) = \frac{1}{\sqrt{2\pi }} \int_{-\infty }^{+\infty } f'(x) \E^{-\I kx} \dd{x} = \mathcal F [f'(x)]
+\end{equation}
+其中 $g(k) = F [f(x)]$， 证毕．
+\addTODO{证明其他性质}

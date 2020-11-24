@@ -1,0 +1,119 @@
+% 李代数
+% 李代数|结合代数|李代数的表示|线性群|一般线性群|特殊线性群|结构常数|李代数的结构常数|爱因斯坦求和约定|叉积|外积|叉乘|向量积|Jacobi恒等式|Jacobi结合性|交换李代数|阿贝尔李代数
+\pentry{域上的代数\upref{AlgFie}， 爱因斯坦求和约定\upref{EinSum}}
+
+\subsection{概念}
+
+李代数是对域上的代数\upref{AlgFie}进行的一种推广．域上的代数是指域上的线性空间配合了一个矢量乘法，使得这个线性空间在矢量乘法下也能构成一个环．李代数也是域上线性空间配合了一个矢量乘法，这个矢量乘法和构成环的乘法几乎一样，但是有一点显著不同：将环乘法的结合律替代为Jacobi结合性．
+
+\begin{definition}{李代数}
+给定域$\mathbb{F}$上的一个线性空间$V$．在$V$上定义一个“乘法”运算：对于任意$\bvec{v}_1, \bvec{v}_2\in V$，将它们的运算结果记为$[\bvec{v}_1, \bvec{v}_2]$．称这个结构$(V, [*, *])$为一个\textbf{李代数}，如果它满足以下性质：
+\begin{itemize}
+\item \textbf{封闭性} 对于任意$\bvec{v}_1, \bvec{v}_2\in V$,$[\bvec{v}_1, \bvec{v}_2]\in V$．
+\item \textbf{双线性性} 对于任意$k_i, c_i\in \mathbb{F}$和任意$\bvec{v}_i, \bvec{u}_i\in V$，都有$[k_1\bvec{v}_1+k_2\bvec{v}_2, c_1\bvec{u}_1, c_2\bvec{u}_2]=k_1c_1[\bvec{v}_1, \bvec{u}_1]+k_1c_2[\bvec{v}_1, \bvec{u}_2]+k_2c_1[\bvec{v}_2, \bvec{u}_1]+k_2c_2[\bvec{v}_2, \bvec{u}_2]$．
+\item \textbf{反对称性} 对于任意$\bvec{v}, \bvec{u}\in V$，有$[\bvec{v}, \bvec{u}]=-[\bvec{u}, \bvec{v}]$．
+\item \textbf{Jacobi结合性} 对于任意$\bvec{x}, \bvec{y}, \bvec{z}\in V$，有$[\bvec{x}, ([\bvec{y}, \bvec{z}])]+[\bvec{z}, ([\bvec{x}, \bvec{y}])]+[\bvec{y}, ([\bvec{z}, \bvec{x}])]=0$．
+\end{itemize}
+
+由于这个乘法用括号$[*, *]$表示，因此有时也称之为“括积”．
+\end{definition}
+
+李代数是对李群的性质进行进一步的抽象，是对李群的一些核心性质的代数刻画．
+
+李代数定义中的双线性性可以通过反对称性和单对称性\footnote{即对于参与运算的双方中某一方线性就可以，比如对后面的线性：$[\bvec{v},a\bvec{x}+b\bvec{y}]=a[\bvec{v}, \bvec{x}]+b[\bvec{v}, \bvec{y}]$．}推出，所以和本书中群的定义一样，是有冗余的定义．如果用爱因斯坦求和约定\upref{EinSum}来表达，双线性性还可以写为$[a_i\bvec{v}_i, b_j\bvec{u}_j]=a_ib_j[\bvec{v}_i, \bvec{u}_j]$．
+
+\begin{definition}{交换李代数}
+设$\mathfrak{g}$为域$\mathbb{F}$上的$n$维李代数，那么如果对于任意的$\bvec{x},\bvec{y}\in\mathfrak{g}$，都有$[\bvec{x}, \bvec{y}]=0$，则称这是一个\textbf{交换李代数（commutative Lie algebra）}或\textbf{阿贝尔李代数（abelian Lie algebra）}．
+\end{definition}
+
+交换李代数之所以要求括积为零，是因为反对称性和交换性结合必然得到括积为零．
+
+李代数和结合代数的关系极为紧密．事实上，每个结合代数都可以唯一地导出一个李代数，这由以下定理决定：
+
+\begin{theorem}{结合代数导出李代数}
+设$\mathfrak{A}$是域$\mathbb{F}$上的一个结合代数，即$\mathfrak{A}$是$\mathbb{F}$上的线性空间，且定义了一个乘法$\times$使得它还成为一个环，那么如果定义$\forall \bvec{x}, \bvec{y}\in\mathfrak{A}, [\bvec{x}, \bvec{y}]=\bvec{x}\times \bvec{y}-\bvec{y}\times \bvec{x}$，则这个括号$[*, *]$配上$\mathfrak{A}$构成一个李代数．
+\end{theorem}
+
+\textbf{证明}：
+
+封闭性是显然的，因为$\times$是封闭的．
+
+由这个括积的定义，反对称性也是显然的，因为$\bvec{x}\times \bvec{y}-\bvec{y}\times \bvec{x}=-(\bvec{y}\times \bvec{x}-\bvec{x}\times \bvec{y})$恒成立．
+
+由反对称性，我们只需要证明单线性性即可：$\forall \bvec{x}, \bvec{y}, \bvec{z}\in\frak{A}$和$a, b\in\mathbb{F}$，有：
+
+最后是Jacobi结合性：
+
+\begin{equation}\label{LieAlg_eq1}
+[\bvec{x}, a\bvec{y}+b\bvec{z}]=a\bvec{x}\bvec{y}+b\bvec{x}\bvec{z}-a\bvec{y}\bvec{x}-b\bvec{z}\bvec{x}=a\bvec{x}\bvec{y}+b\bvec{x}\bvec{z}-a\bvec{y}\bvec{x}-b\bvec{z}\bvec{x}
+\end{equation}
+
+这里省略了乘法符号，以显示紧凑．
+
+由\autoref{LieAlg_eq1} ，轮换$\bvec{x}, \bvec{y}$和$\bvec{z}$的顺序后把得到的三个式子相加，即可以得到Jacobi结合性．
+
+\textbf{证毕}．
+
+知道了每个结合代数可以对应一个李代数后，我们自然会好奇，每个李代数是不是也能对应一个结合代数？答案是肯定的，见\footnote{尚未创作到相关词条}．
+
+
+\subsection{例子}
+
+结合代数对应李代数这一事实，使得我们很容易联想到一个常见的结合代数：矩阵代数．在本文中，将域$\mathbb{F}$上的$n$阶可逆方阵的集合记为$\opn{gl}(n, \mathbb{F})$，那么这个集合自然构成$\mathbb{F}$上的一个线性空间（以矩阵加法为向量加法），而矩阵乘法则使之构成一个环，因此这是一个结合代数．
+
+\begin{example}{一般线性李代数}
+域$\mathbb{F}$上的$\opn{gl}(n, \mathbb{F})$是一个结合代数．由这个结合代数可以导出李代数，其中对于矩阵$\bvec{A}$和$\bvec{B}$，括积的定义为$[\bvec{A}, \bvec{B}]=\bvec{A}\bvec{B}-\bvec{B}\bvec{A}$．该李代数被称为一般线性李代数，名称和一般线性群$\opn{gl}(n, \mathbb{F})$对应．
+\end{example}
+
+\begin{example}{特殊线性李代数}
+对于域$\mathbb{F}$和正整数$n$，记$\opn{sl}(n, \mathbb{F})$为$\opn{gl}(n, \mathbb{F})$中迹为$0$的矩阵构成的结合代数，则它可以导出一个特殊线性李代数，名称也和特殊线性群$\opn{sl}(n, \mathbb{F})$对应．
+\end{example}
+
+\begin{example}{三维向量叉积}
+域$\mathbb{R}$上的三维线性空间$\mathbb{R}^3$中，将括积定义为叉积：$\forall \bvec{v}, \bvec{u}\in \mathbb{R}^3$，有$[\bvec{v}, \bvec{u}]=\bvec{v}\times\bvec{u}$．那么这个线性空间配上叉积可以得到一个李代数．
+\end{example}
+
+\subsection{结构常数}\pentry{张量的坐标变换\upref{TrTnsr}}
+
+李代数的括积的作用是把两个向量映射为一个向量，而且还要求具有双线性性，因此括积实际上是一个三阶张量．如果设$\mathfrak{g}$为域$\mathbb{F}$上的$n$维李代数，而$\{\bvec{x}^i\}$为它的一组基，那么对于任意的$\bvec{x}^i$和$\bvec{x}^j$，存在$C_k^{ij}\in\mathbb{F}$，使得$[\bvec{x}^i, \bvec{x}^j]=C_k^{ij}\bvec{x}^k$．这样的$C_k^{ij}$就是括积张量的三维矩阵表示．
+
+显然，括积张量的三维矩阵表示依赖于基的选取，和所有其它张量一样．当选定基以后，所得到的矩阵称为$\mathfrak{g}$关于基$\{\bvec{x}_i\}$的\textbf{结构常数}．
+
+\begin{theorem}{}\label{LieAlg_the1}
+设$\mathfrak{g}$为域$\mathbb{F}$上的$n$维李代数，它在基$\{\bvec{x}^i\}$下的\textbf{结构常数}为$C_k^{ij}$，那么有：
+\begin{itemize}
+\item $C_k^{ij}=-C^k_{ji}$．
+\item $C^l_{ij}C^m_{lk}+C^l_{jk}C^m_{li}+C^l_{ki}C^m_{lj}=0$\footnote{注意使用爱因斯坦求和约定．}．
+\end{itemize}
+\end{theorem}
+
+定理的证明留给读者，这是直接从李代数的反对称性和Jacobi结合性得来的．
+
+结构常数唯一地对应李代数，也就是说，我们也可以任取一个线性空间，然后通过定义满足\autoref{LieAlg_the1} 的结构常数来定义括积，从而得到一个李代数．
+
+\begin{theorem}{结构常数的变换}
+设$\mathfrak{g}$为域$\mathbb{F}$上的$n$维李代数，它在基$\{\bvec{x}^i\}$下的\textbf{结构常数}为$C_k^{ij}$，在基$\{\bvec{y}^i\}$下的\textbf{结构常数}为$D_k^{ij}$，而且有过渡矩阵\upref{TransM}$a^i_j$使得$\bvec{y}^i=a^i_j\bvec{x}^j$，那么有变换法则：
+\begin{equation}
+D^{ij}_ka^k_j=a^i_ma^j_nC_j^{mn}
+\end{equation}
+
+\end{theorem}
+
+\textbf{证明}：
+
+\begin{equation}\label{LieAlg_eq2}
+[\bvec{y}^i, \bvec{y}^j]=D^{ij}_k\bvec{y}^k=D^{ij}_ka^k_j\bvec{x}^j
+\end{equation}
+
+\begin{equation}\label{LieAlg_eq3}
+[\bvec{y}^i, \bvec{y}^j]=[a^i_m\bvec{x}^m, a^j_n\bvec{x}^n]=a^i_ma^j_n[\bvec{x}^m, \bvec{x}^n]=a^i_ma^j_nC_j^{mn}\bvec{x}^j
+\end{equation}
+
+比较\autoref{LieAlg_eq2} 和\autoref{LieAlg_eq3} ，消去$\bvec{x}^j$即可得$D^{ij}_ka^k_j=a^i_ma^j_nC_j^{mn}$．
+
+\textbf{证毕}．
+
+回顾张量的坐标变换\upref{TrTnsr}词条，我们发现这就是三阶张量的坐标变换式．
+
+
+

@@ -10,7 +10,13 @@
 \begin{equation}
 P = \int_{y_1}^{y_2} \int_{x_1}^{x_2} f(x, y) \dd{x} \dd{y}
 \end{equation}
-从几何上理解， $f(x, y)$ 可以看作一张三维空间中的曲面， 而这个二重积分则表示曲面和 $x$-$y$ 平面之间的一个体积\upref{IntN}．
+从几何上理解， $f(x, y)$ 可以看作一张三维空间中的曲面， 而这个二重积分则表示曲面和 $x$-$y$ 平面之间的一个体积（\autoref{MulPdf_fig1}）．
+
+\begin{figure}[ht]
+\centering
+\includegraphics[width=7cm]{./figures/MulPdf_1.png}
+\caption{$f(x, y)$ 曲面下的体积} \label{MulPdf_fig1}
+\end{figure}
 
 类比一维情况， 概率归一化条件为
 \begin{equation}
@@ -18,43 +24,49 @@ P = \int_{y_1}^{y_2} \int_{x_1}^{x_2} f(x, y) \dd{x} \dd{y}
 \end{equation}
 由于概率的量纲是 1， $f(x, y)$ 的国际单位量纲就是 $\Si{m^{-2}}$， 即面积的倒数．
 
-位置矢量的 $x$ 和 $y$ 分量平均值分别为
+\subsection{平均值}
+类比\autoref{RandF_eq3}~\upref{RandF}， 离散情况下， 令 $P_i$ 是 $(x_i, y_i)$ 出现的概率， 函数 $g(x,y)$ 的平均值为
+\begin{equation}
+\ev{g} = \sum_{i=1}^N g(x_i, y_i) P_i
+\end{equation}
+拓展到连续的情况， 类比\autoref{RandF_eq2}~\upref{RandF}， $g(x, y)$ 的平均值可以定义为
+\begin{equation}
+\ev{g} =  \int_{-\infty}^{+\infty} \int_{-\infty}^{+\infty} g(x, y) f(x, y) \dd{x} \dd{y}
+\end{equation}
+例如位置矢量的 $x$ 和 $y$ 分量平均值分别为
 \begin{equation}\label{MulPdf_eq2}
 \ev{x} = \iint x f(x, y) \dd{x}\dd{y}
 \end{equation}
 \begin{equation}
 \ev{y} = \iint y f(x, y) \dd{x}\dd{y}
 \end{equation}
-
-位置矢量模长的平均值
+以上两式也可以用位置矢量 $\bvec r$ 表示为（这时 $\bvec g$ 的函数值是矢量）
+\begin{equation}\label{MulPdf_eq6}
+\ev{\bvec r} = \iint \bvec r f(x, y) \dd{x}\dd{y}
+\end{equation}
+点 $(x,y)$ 到原点距离的距离 $r$ 的平均值
 \begin{equation}
 \ev{r} = \iint \sqrt{x^2 + y^2} f(x, y) \dd{x}\dd{y}
 \end{equation}
+注意区分该式和\autoref{MulPdf_eq6} 式的意义， 平均位置和平均距离是两个不同的概念： 如果 $f(x, y)$ 是关于原点中心对称的函数， 则平均位置为零， 而平均距离不为零．
 
-位置矢量模长平方的平均值
-\begin{equation}
+距离平方 $r^2$ 的平均值
+\begin{equation}\label{MulPdf_eq7}
 \ev{r^2} = \iint (x^2 + y^2) f(x, y) \dd{x}\dd{y}
 \end{equation}
-
-当射击次数 $N \to \infty$ 时， 这些量也可以表示为求和的形式， 例如
-\begin{equation}
-\ev{r^2} = \frac{1}{N}\sum_{i=1}^N (x_i^2 + y_i^2)
-\end{equation}
-
-% 习题未完成
 
 \subsection{概率分布的极坐标表示}
 \pentry{极坐标系\upref{Polar}}
 
-除了直角坐标系外， 我们也可以使用极坐标\upref{Polar} 表示分布函数， 记为\footnote{在数学上， 该式两边是两个不同的二元函数， 应该使用不同的函数名如 $g(r, \theta) = f(x, y)$， 但在物理上， 我们有时为了方便不以区分}
-\begin{equation}
-f(r, \theta) \equiv f(x, y)
-\end{equation}
-那么归一化条件变为
+除了直角坐标系外， 我们也可以使用极坐标\upref{Polar} 表示分布函数， 记为\footnote{在数学上， 该式两边是两个不同的二元函数， 应该使用不同的函数名如 $g(r, \theta) = f(x, y)$， 但在一些物理教材中， 我们有时为了方便不区分函数名， 直接把 $g(r, \theta)$ 写成 $f(r, \theta)$．} $f(r, \theta)$， 那么概率归一化条件变为
 \begin{equation}\label{MulPdf_eq1}
 \int_0^\infty \int_{0}^{2\pi} f(r, \theta)\,\, r\dd{\theta}\dd{r} = 1
 \end{equation}
-以上的平均值也容易变为极坐标中的积分， 例如
+函数 $g(r, \theta)$ 的平均值变为
+\begin{equation}
+\ev{g} = \int_0^\infty \int_{0}^{2\pi} g(r, \theta) f(r, \theta)\,\, r\dd{\theta}\dd{r}
+\end{equation}
+例如\autoref{MulPdf_eq7} 变为
 \begin{equation}\label{MulPdf_eq3}
 \ev{r^2} = \int_0^\infty \int_{0}^{2\pi} r^2 f(r, \theta)\,\, r\dd{\theta}\dd{r}
 = \int_0^\infty \int_{0}^{2\pi} r^3 f(r, \theta) \dd{\theta}\dd{r}
@@ -63,12 +75,12 @@ f(r, \theta) \equiv f(x, y)
 % 习题未完成
 
 \subsection{圆对称分布}
-继续打靶的例子， 我们接下来讨论圆对称的概率分布（在三维情况下叫做球对称）， 即 $f(r, \theta)$ 的值只和 $r$ 有关而与 $\theta$ 无关． 为了书写方便可记 $f(r) \equiv f(r, \theta)$． 归一化条件\autoref{MulPdf_eq1} 化简为（先完成关于 $\theta$ 积分）
+继续打靶的例子， 我们接下来讨论圆对称的概率分布（在三维情况下叫做球对称）， 即 $f(r, \theta)$ 的值只和 $r$ 有关而与 $\theta$ 无关的情况． 为了书写方便可记 $f(r) \equiv f(r, \theta)$． 归一化条件\autoref{MulPdf_eq1} 化简为（先完成关于 $\theta$ 积分得 $2\pi$）
 \begin{equation}
 2\pi \int_0^\infty r f(r) \dd{r} = 1
 \end{equation}
 
-一个容易混淆的概念是， $f(r)$ 并不是变量 $r$ 的概率分布函数． 也就是说 $\int_a^b f(r) \dd{r}$ 并不是子弹落在圆环 $r \in [a, b]$ 内的概率． 若将 $r$ 的概率分布函数后者记为 $F(r)$， 这个概率应该是
+一个容易混淆的概念是， $f(r)$ 并不是变量 $r$ 的概率分布函数． 也就是说 $\int_a^b f(r) \dd{r}$ 并不是子弹落在圆环 $r \in [a, b]$ 内的概率． 若将 $r$ 的概率分布函数记为 $F(r)$， 子弹落在圆环中的概率应该是
 \begin{equation}\label{MulPdf_eq4}
 P_{ab} = \int_a^b F(r) \dd{r} = \int_a^b 2\pi r f(r) \dd{r}
 \end{equation}
@@ -76,7 +88,6 @@ P_{ab} = \int_a^b F(r) \dd{r} = \int_a^b 2\pi r f(r) \dd{r}
 \begin{equation}\label{MulPdf_eq5}
 F(r) = 2\pi r f(r)
 \end{equation}
-
 这时以上的平均值也可以得到进一步化简， 例如\autoref{MulPdf_eq3} 变为
 \begin{equation}
 \ev{r^2} = \int_0^\infty r^2 F(r) \dd{r}

@@ -1,25 +1,105 @@
-% 氢原子电离截面
-% 一阶微扰理论|氢原子|偶极子
+% 跃迁概率（含时微扰）
+% 一阶微扰理论
 
 \begin{issues}
 \issueDraft
-\issueMissDepend
 \end{issues}
 
 \pentry{类氢原子的波函数\upref{HWF}}
 
-一阶微扰理论就是单光子电离．
+本文使用原子单位制\upref{AU}．一阶微扰理论就是单光子电离．
 
-基态与平面波的积分
-
-\begin{equation}
-\bvec d_{\bvec k} =  \mel{\bvec k}{\bvec r}{0} =  \frac{ \uvec k}{\sqrt2\pi} \int_0^{+\infty} \int_0^\pi \E^{-r} \E^{-\I k r \cos\theta} r \cos\theta \cdot r^2 \sin\theta \dd{\theta} \dd{r}
+\subsection{长度规范下的微扰跃迁理论}
+含时微扰理论（\autoref{TDPT_eq10}~\upref{TDPT}） 为
+\begin{equation}\label{HionCr_eq1}
+c_i(t) = -\I \int_0^t \mel{i}{H'(t)}{j} \E^{\I\omega_{ij} t} \dd{t}
 \end{equation}
-换元， 令 $u = \cos\theta$， 得
-\begin{equation}\ali{% 已检查多次
-\bvec d_{\bvec k} &= \frac{\uvec k}{\sqrt{2}\pi}  \int_0^{+\infty} r^3 \E^{-r} \int_{-1}^1 \E^{-\I k r u} u  \dd{u} \cdot \dd{r}\\
-&=  \I\frac{\sqrt2 \uvec k}{\pi k}  \int_0^{+\infty} r^2 \E^{-r} \qty[\cos(kr) - \frac{1}{kr}\sin(kr)] \dd{r}\\
-&= -\I \frac{8\sqrt2}{\pi} \frac{\bvec k}{(k^2+1)^3}
-}\end{equation}
+长度规范\upref{LenGau}中，
+\begin{equation}
+H'(t) = -q\bvec {\mathcal E} \vdot \bvec r
+\end{equation}
+$\bvec {\mathcal E}$ 只是 $t$ 的函数， 可以分离
+\begin{equation}
+\mel{i}{H'(t)}{j} = -q\bvec {\mathcal E} \vdot \mel{i}{\bvec r}{j}
+\end{equation}
+令
+\begin{equation}
+\tilde {\bvec {\mathcal E}}(\omega) = \frac{1}{\sqrt{2\pi}} \int \bvec {\mathcal E}(t) \E^{-\I\omega t} \dd{t}
+\end{equation}
+代入\autoref{HionCr_eq1} 得
+\begin{equation}\label{HionCr_eq7}
+c_i(t) = \I q \mel{i}{\bvec r}{j} \vdot \int_0^t \bvec {\mathcal E(t)} \E^{\I\omega_{ij} t} \dd{t} = \I \sqrt{2\pi} q \mel{i}{\bvec r}{j} \vdot \tilde {\bvec {\mathcal E}}(-\omega_{ij})
+\end{equation}
+令 $\tilde {\bvec {\mathcal E}}(\omega) = \tilde {{\mathcal E}}(\omega)\uvec e$， 跃迁概率为
+\begin{equation}\label{HionCr_eq2}
+P_{j\to i} = \abs{c_i(t)}^2 = 2\pi q^2 \abs{\mel{i}{\uvec e \vdot \bvec r}{j}}^2 \abs{\tilde {{\mathcal E}}(\omega_{ij})}^2
+\end{equation}
+结合\autoref{WpEng_eq3}~\upref{WpEng}
+\begin{equation}
+s(\omega) = 2c\epsilon_0 \abs{\tilde {{\mathcal E}}(\omega)}^2
+\end{equation}
+得
+\begin{equation}\label{HionCr_eq6}
+P_{j\to i} = \frac{\pi q^2}{c\epsilon_0} \abs{\mel{i}{\uvec e \vdot\bvec r}{j}}^2 s(\omega_{ij})
+\end{equation}
 
-严格来说， 需要把平面波替换为库仑函数．
+\subsection{速度规范下的微扰跃迁理论}
+\footnote{参考\cite{Merzbacher} 含时微扰相关章节．}速度规范\upref{LVgaug}中，
+\begin{equation}
+H'(t) = -\frac{q}{m}\bvec A \vdot \bvec p = \frac{\I q}{m}\bvec A \vdot \grad
+\end{equation}
+$\bvec A$ 只是 $t$ 的函数， 可以分离
+\begin{equation}
+\mel{i}{H'(t)}{j} = -\frac{q}{m}\bvec A(t) \vdot \mel{i}{\bvec p}{j}
+\end{equation}
+令
+\begin{equation}
+\tilde {\bvec A}(\omega) = \frac{1}{\sqrt{2\pi}} \int \bvec A(t) \E^{-\I\omega t} \dd{t}
+\end{equation}
+代入\autoref{HionCr_eq1} 得
+\begin{equation}\label{HionCr_eq4}
+c_i(t) = \frac{\I q}{m} \mel{i}{\bvec p}{j} \vdot \int_0^t  \bvec A(t) \E^{\I\omega_{ij} t} \dd{t} = \I\sqrt{2\pi}\frac{q}{m} \mel{i}{\bvec p}{j} \vdot \tilde {\bvec A}(-\omega_{ij})
+\end{equation}
+令 $\tilde {\bvec A}(\omega) = \tilde {A}(\omega)\uvec e$， 则跃迁概率为
+\begin{equation}\label{HionCr_eq3}
+P_{j\to i} = \abs{c_i(t)}^2 = \frac{2\pi q^2}{m^2} \abs{\mel{i}{\uvec e \vdot\bvec p}{j}}^2 \abs{\tilde {A}(\omega_{ij})}^2
+\end{equation}
+结合波包的频谱公式（\autoref{WpEng_eq5}~\upref{WpEng}）
+\begin{equation}
+s(\omega) = 2c\epsilon_0 \omega^2 \abs{\tilde {A}(\omega_{ij})}^2
+\end{equation}
+\begin{equation}\label{HionCr_eq5}
+P_{j\to i} = \frac{\pi q^2}{c\epsilon_0 m^2 \omega_{ij}^2} \abs{\mel{i}{\uvec e \vdot \bvec p}{j}}^2 s(\omega_{ij})
+\end{equation}
+
+\subsubsection{两种规范比较}
+注意 $\ket{i}, \ket{j}$ 是没有电磁场时的能量本征态， 波函数与规范无关． 把\autoref{DipEle_eq3}~\upref{DipEle} 和\autoref{WpEng_eq4}~\upref{WpEng} 带入\autoref{HionCr_eq4} 可以证明两种规范等效（\autoref{HionCr_eq7}  等于\autoref{HionCr_eq4}）． 但是如果例如 $\ket{i}$ 是平面波， 则不同规范结果不同．
+
+\subsection{电离截面}
+截面可以想象成是电磁波传播方向垂直放置的一块面积为 $\sigma$ 的面元， 使得原子从电磁波中吸收的功率恰好等于电磁波经过该面元的功率． 对于波包， 单位频率下原子吸收的能量为
+\begin{equation}
+\dv{E}{\omega} = \dv{\sigma}{\omega} s(\omega)
+\end{equation}
+其中 $\dv*{\sigma}{\omega}$ 为单位频率的散射截面． 如果再对立体角微分得
+\begin{equation}
+\pdv{E}{\omega}{\Omega} = \pdv{\sigma}{\omega}{\Omega} s(\omega)
+\end{equation}
+对于束缚态 $\ket{i}$， $P_{j\to i}$ 是概率， 而对于连续态的 $\ket{i}$ （如原子电离）， $P_{j\to i}$ 是概率 $\ket{i}$ 的 $\ket{\bvec k}$ 的三维概率密度\upref{PTCont}． 当波包经过以后， $\bvec A = 0$， 有 $\omega_{ij} = mk^2/2 + I_0$， $-I_0$ 是束缚态 $\ket{j}$ 的能量．
+\begin{equation}
+E = \int \pdv{\sigma}{\omega}{\Omega} s(\omega) \dd{\frac{k^2}{2m}}\dd{\Omega}
+\end{equation}
+\begin{equation}
+E = \int \omega P_{j\to i}(\bvec k) k^2\dd{\Omega}\dd{k}
+\end{equation}
+其中乘以 $\omega$ 是光子能量． 对比得
+\begin{equation}
+\pdv{\sigma}{\omega}{\Omega} = \frac{km \omega}{s(\omega)} P_{j\to i}(\bvec k)
+\end{equation}
+长度规范下有（\autoref{HionCr_eq6} ）
+\begin{equation}
+\pdv{\sigma}{\omega}{\Omega} = \frac{\pi m\omega k q^2}{c\epsilon_0} \abs{\mel{i}{\uvec e \vdot\bvec r}{j}}^2
+\end{equation}
+速度规范下有（\autoref{HionCr_eq5} ）
+\begin{equation} % 已验证与 Merzbaucher eq 19.86 相同
+\pdv{\sigma}{\omega}{\Omega} = \frac{\pi k q^2}{c\epsilon_0 m \omega} \abs{\mel{i}{\uvec e \vdot \bvec p}{j}}^2
+\end{equation}

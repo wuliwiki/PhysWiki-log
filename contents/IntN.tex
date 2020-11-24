@@ -3,21 +3,26 @@
 
 \pentry{定积分\upref{DefInt}}
 \subsection{面积分}
-\textbf{面积分} 也叫\textbf{二重积分}， 可以看做一元函数定积分\upref{DefInt} 的一种拓展． 从几何上来理解， 如果后者是计算一定区间内被积函数曲线与坐标轴之间的面积， 那么前者就是计算一定二维区域内被积函数曲面与坐标轴平面之间的体积．
+\textbf{面积分}也叫\textbf{二重积分}， 可以看做一元函数定积分\upref{DefInt} 的一种拓展． 从几何上来理解， 如果一元函数的定积分是计算一定区间内被积函数曲线与坐标轴之间的面积， 那么二重积分就是计算一定二维区域内被积函数曲面与坐标轴平面之间的体积（\autoref{IntN_eq1} ）．
 
-\begin{example}{曲面下的体积}\label{IntN_ex1}
-二元函数 $f(x,y) = x^2 + y^2$， 可以在直角坐标系 $xyz$ 代表一个抛物面． 现在我们指定一个二维区域， 是由 $y_1(x) = -x$， $y_2(x) = x$ 以及 $x = 1$ 所围成的三角形． 现在我们以这个三角形为底取一个无限高的三棱柱， 求三棱柱被 $f(x,y)$ 截去的有限部分的体积 $V$．
-% 图未完成
+\begin{figure}[ht]
+\centering
+\includegraphics[width=7cm]{./figures/IntN_1.png}
+\caption{$f(x, y)$ 曲面下的体积} \label{IntN_fig1}
+\end{figure}
 
-与定积分的思想一样， 我们可以把三角形区域划分成许多更小的区域， 每一个区域都对应一个被曲面截取的小柱体， 由于我们使用直角坐标系，我们不妨沿 $x$ 和 $y$ 方向划分出许多小矩形， 用 $(i,j)$ 给它们编号， 每个矩形的面积分别为 $\Delta x_i \Delta y_j$， 小柱体的体积近似用底乘以高计算得 $\Delta V_{ij} = f(x_i,y_i) \Delta x_i \Delta y_j$， 其中 $x_i, y_i$ 分别为区间 $\Delta x_i, \Delta y_i$ 内任意一点． 所以总体积就可以用极限表示为
+对一元函数的定积分， 我们需要指定积分的下限和上限， 那么对于面积分， 我们需要指定 $x$-$y$ 平面上的一块定积分的区域 $\mathcal S$． 例如\autoref{IntN_eq1} 表示的面积分的区域就是一个正方形． 与一元函数的情况相同， 我们把积分区域划分成许多小长方形， 每个小长方形的面积为 $\Delta x_i \Delta y_j$． 把二重积分对应的体积用一个个柱体来近似， 每个柱体的体积为 $\Delta x_i \Delta y_j f(x_i, y_i)$ 其中 $(x_i, y_i)$ 是长方形中任意一点． 当这些小长方形趋近无穷小时， 就得到了精确的体积． 用双重极限表示为 % 未完成：双重极限，引用
 \begin{equation}\label{IntN_eq1}
 V = \lim_{\substack{\Delta x_i\to 0\\ \Delta y_j\to 0}} \sum_{i, j} f(x_i,y_j) \Delta x_i \Delta y_j
 \end{equation}
-这是一个\textbf{双重极限}， 类比定积分的定义， 用面积分简写上式记为
+用积分符号可以把上式简记为
 \begin{equation}
 V = \iint_{\mathcal{S}} f(x,y) \dd{x}\dd{y}
 \end{equation}
-其中 $\mathcal{S}$ 代表以上定义的三角形积分区域． 
+注意积分区域 $\mathcal S$ 可以是任何形状的． 我们通过一个例子来说明具体如何计算面积分
+
+\begin{example}{抛物线下的体积}\label{IntN_ex1}
+二元函数 $f(x,y) = x^2 + y^2$， 可以在直角坐标系 $xyz$ 代表一个抛物面． 现在我们指定一个二维区域， 是由 $y_1(x) = -x$， $y_2(x) = x$ 以及 $x = 1$ 所围成的三角形． 现在我们以这个三角形为底取一个无限高的三棱柱， 求三棱柱被 $f(x,y)$ 截去的有限部分的体积 $V$． % 图未完成
 
 那如何计算这个积分呢？ 我们可以先计算任意 $x$ 处的横截面积 $S(x)$． 这个横截面与曲面相交的曲线方程为 $f(x,y)$ （把 $x$ 看做常数， $y$ 看做变量）， 横截面积为
 \begin{equation}\label{IntN_eq3}
@@ -35,7 +40,7 @@ V = \lim_{\Delta x_i\to 0} \sum_{i} \qty[\lim_{\Delta y_j\to 0}\sum_{j} f(x_i,y_
 \begin{equation}
 V = \int_0^1 \qty[\int_{y_1(x)}^{y_2(x)} f(x,y) \dd{y}] \dd{x}
 \end{equation}
-另一种等效的书写方式是， 把 $\int \dd{x}, \int \dd{y}$ 看成像 $\dv*{x}, \dv*{y}$ 一样的整体算符， 写在被积函数前面， 使公式看起来更为简洁
+另一种等效的书写方法是， 把 $\int \dd{x}, \int \dd{y}$ 看成像 $\dv*{x}, \dv*{y}$ 一样的整体算符， 写在被积函数前面， 使公式看起来更为简洁
 \begin{equation}\label{IntN_eq7}
 V = \int_0^1 \dd{x} \int_{y_1(x)}^{y_2(x)} \dd{y} f(x,y)
 \end{equation}
