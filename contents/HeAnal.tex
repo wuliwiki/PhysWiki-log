@@ -32,10 +32,10 @@ E = \mel{\Psi}{H_0}{\Psi}
 &\Psi(\bvec r_1, \bvec r_2) = \sum_{L, M, l_1, l_2}  \frac{1}{r_1 r_2} \psi_{l_1, l_2}^{L, M}(r_1, r_2)\mathcal{Y}_{l_1, l_2}^{L, M}(\uvec r_1, \uvec r_2)\\
 & \quad = \sum_{L, M, l_1, l_2} \frac{1}{r_1 r_2} \psi_{l_1, l_2}^{L, M}(r_1, r_2) \sum_{m_1, m_2} \bmat{l_1 & l_2 & L\\ m_1 & m_2 & M} Y_{l_1, m_1} (\uvec r_1) Y_{l_2, m_2} (\uvec r_2)
 }\end{equation}
-投影得（过程略， 对称化算符变为 $\sqrt{2}$， 两个 $Y_{l_1, m_1} (\uvec r_1) Y_{l_2, m_2} (\uvec r_2)$ 项积分会产生 4 个 $\delta$ 函数）
+投影得（过程略， 对称化算符变为 $\sqrt{2}$， 两个 $Y_{l_1, m_1} (\uvec r_1) Y_{l_2, m_2} (\uvec r_2)$ 项积分会产生 2 个 $\delta$ 函数）
 % 未完成： 未验证， 且与爱华的代码不同
 \begin{equation}\label{HeAnal_eq2}
-\braket{\psi_{\bvec k_1, \bvec k_2}}{\Psi} = \frac{2\sqrt 2}{\pi k_1 k_2} \sum_{L, M, l_1, l_2} \I^{l_1 + l_2} \E^{\I [\sigma_{l_1}(\eta_1) + \sigma_{l_2} (\eta_2)]}  I_{l_1, l_2}^{L, M}(k_1, k_2) \mathcal{Y}_{l_1, l_2}^{L, M}(\uvec k_1, \uvec k_2)
+\braket{\psi_{\bvec k_1, \bvec k_2}}{\Psi} = \frac{2\sqrt 2}{\pi k_1 k_2} \sum_{L, M, l_1, l_2} (-\I)^{l_1 + l_2} \E^{\I [\sigma_{l_1}(\eta_1) + \sigma_{l_2} (\eta_2)]}  I_{l_1, l_2}^{L, M}(k_1, k_2) \mathcal{Y}_{l_1, l_2}^{L, M}(\uvec k_1, \uvec k_2)
 \end{equation}
 其中
 \begin{equation}
@@ -49,7 +49,7 @@ P(\bvec k_1, \bvec k_2) = \abs{\braket{\psi_{\bvec k_1, \bvec k_2}}{\Psi}}^2
 \subsection{能量分布}
 先继续考虑双电离， \autoref{HeAnal_eq3} 中的概率归一化为（因为对全空间积分重复计算了）
 \begin{equation}
-\int P(\bvec k_1, \bvec k_2) \dd{\Omega_{k1}} \dd{\Omega_{k2}} k_1^2 \dd{k_1} k_2^2 \dd{k_2} = 2
+\int P(\bvec k_1, \bvec k_2) \cdot k_1^2 \dd{\Omega_{k1}}\dd{k_1} \cdot k_2^2 \dd{\Omega_{k2}}\dd{k_2} = 2
 \end{equation}
 所以动量绝对值的分布函数为
 \begin{equation}\label{HeAnal_eq5}
@@ -60,7 +60,7 @@ P(k_1, k_2) = k_1^2 k_2^2 \int P(\bvec k_1, \bvec k_2) \dd{\Omega_{k1}} \dd{\Ome
 P(E_1, E_2) = \frac{1}{k_1 k_2} P(k_1, k_2)
 \end{equation}
 所以只需要将\autoref{HeAnal_eq3} 代入\autoref{HeAnal_eq5} 得
-\begin{equation}
+\begin{equation}\label{HeAnal_eq8}
 P(k_1, k_2) = \frac{8}{\pi^2} \sum_{L, M, l_1, l_2} \abs{I_{l_1, l_2}^{L, M} (k_1, k_2)}^2
 \end{equation}
 其实该式的推导大可直接用球面波而不是投影到平面波再做角向积分， 过程类比氢原子\upref{Hanaly}．
@@ -85,14 +85,27 @@ P(r_1, r_2) = 2\sum_\lambda\abs{\psi_\lambda(r_1, r_2)}^2
 \subsection{JAD（joint angular distribution）}
 这里的 JAD 并不是总的方向分布， 而是某种能量分割的方向分布， 即 $k_2 - k_1 = \Delta k$， 所以积分中要有一个 delta 函数．
 \begin{equation}
-P_{JAD}(\uvec k_1, \uvec k_2) = \int_0^\infty \int_0^\infty P(\bvec k_1, \bvec k_2) k_1^2 k_2^2 \delta(k_1 - k_2 + \Delta k) \dd{k_1} \dd{k_2}
+\begin{aligned}
+P_{JAD}(\uvec k_1, \uvec k_2) &= \int_0^\infty \int_0^\infty P(\bvec k_1, \bvec k_2) k_1^2 k_2^2 \delta(k_1 - k_2 + \Delta k) \dd{k_1} \dd{k_2}\\
+&= \frac{8}{\pi^2}\int_0^\infty \int_0^\infty \abs{f(k_1, k_2, \uvec k_1, \uvec k_2)}^2 \delta(k_1 - k_2 + \Delta k) \dd{k_1} \dd{k_2}\\
+&= \frac{8}{\pi^2} \int_0^\infty \abs{f(k_1, k_1 + \Delta k, \uvec k_1, \uvec k_2)}^2 \dd{k_1}
+\end{aligned}
 \end{equation}
+其中 $f$ 就是\autoref{HeAnal_eq2} 中的求和
+\begin{equation}
+f(k_1, k_2, \uvec k_1, \uvec k_2) = \sum_{L, M, l_1, l_2} (-\I)^{l_1 + l_2} \E^{\I [\sigma_{l_1}(\eta_1) + \sigma_{l_2} (\eta_2)]}  I_{l_1, l_2}^{L, M}(k_1, k_2) \mathcal{Y}_{l_1, l_2}^{L, M}(\uvec k_1, \uvec k_2)
+\end{equation}
+
 一般在同一平面上取 $\uvec k_1$ 和 $\uvec k_2$ （$\phi_1 = \phi_2$ 为常数， 例如 0）， 这样就可以画一个横纵坐标分别为 $\theta_1$ 和 $\theta_2$ 的二维分布图 $P_{JAD}(\theta_1, \theta_2)$．
 
 论文中常用一个参数 $\varepsilon$ 来衡量能量分割， 定义为较小的光电子末动能与总末动能之比
 \begin{equation}
 \varepsilon = \frac{\min\qty{E_1, E_2}}{E_1 + E_2} \qquad (0 \leqslant \varepsilon \leqslant 0.5)
 \end{equation}
+从光子的角度理解 JAD： 总能量 $E = k_1^2/2 + k_2^2/2$， 再加上 $k_2 - k_1 = \Delta k$ 就把两个光子的能量确定了， 剩下的自由度只有角度． 但实际上从 $P(k_1, k_2)$ 的图中可以看出， $E = k_1^2/2 + k_2^2/2$ 所表示的圆弧是有宽度的， 所以相当于对这个宽度平均了一下．
+
+\subsection{双电离动量分布}
+这时我做 phase meter 的时候自己发明的一个量
 
 \subsection{双电离概率和截面}
 令整个波包中平均单位面积入射的光子数为 $n$， 双电离总截面 $\sigma$ 的定义是（$\sigma n$ 等于双电离总概率）
@@ -214,6 +227,16 @@ P(n_1, l_1, m_1, k_2) = \sum_{l_2, m_2}\abs{\bra{\phi_{n_1, l_1, m_1}}\braket{C_
 当 $M \equiv 0$ 时这里对 $m_2$ 求和其实只有一项就是 $m_2 = - m_1$， 也是一个常数．
 
 然而 streaking trace 需要的不是上式的概率而是某个方向的概率． 我们只需稍作修改， 把\autoref{HeAnal_eq36} 结合\autoref{CulmWf_eq3}~\upref{CulmWf} 即可．
+
+\subsubsection{考虑探测器的立体角}
+$P(n_1, l_1, m_1, \bvec k_2)$ 中， 探测器实际捕获的是一个立体角为 $\Omega$ 的圆锥中的光电子， 如果假设 $\Omega \to 0$， 总概率为
+\begin{equation}
+\int P(n_1, l_1, m_1, \bvec k_2) k_2^2 \Omega \dd{k_2}
+\end{equation}
+所以实际测到的光电子动量谱应该是
+\begin{equation}
+\Omega k_2^2 P(n_1, l_1, m_1, k_2)
+\end{equation}
 
 \subsection{单电离的相对延迟分析}
 
