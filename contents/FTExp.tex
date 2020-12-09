@@ -3,6 +3,7 @@
 
 \begin{issues}
 \issueAbstract
+\issueTODO
 \end{issues}
 
 \pentry{傅里叶级数（指数）\upref{FSExp}，傅里叶变换（三角）\upref{FTTri}}
@@ -28,13 +29,38 @@ f(x) &= \frac{1}{\sqrt{2\pi }} \int_0^\infty [g(k)\E^{\I kx} + g(-k)\E^{-\I kx}]
 g_{Re}(-k) &= g_{Re}(k)\\
 g_{Im}(-k) &= -g_{Im}(k)
 \end{aligned}\end{equation}
-所以结论是，当 $f(x)$ 为实函数时，$g(k)$ 的实部是偶函数，虚部是奇函数． 或用共轭记为
+所以结论是，当 $f(x)$ 为实函数时，$g(k)$ 的实部是偶函数，虚部是奇函数． 或用复共轭记为
 \begin{equation}\label{FTExp_eq5}
 g(-k) = g(k)^*
 \end{equation}
-所以 $\abs{g(-k)} = \abs{g(k)}$ 即频谱是偶函数．所以对于实数函数，我们只需要 $k>0$ 的频谱．这与三角傅里叶变换的情况一致．
+所以对于实数函数的傅里叶变换， 往往只需要 $k$ 的正半轴．
 
-% 举例未完成
+\begin{example}{高斯分布的傅里叶变换}
+要计算高斯函数
+\begin{equation}
+f(x) = \exp(-ax^2) \quad (a > 0)
+\end{equation}
+的傅里叶变换， 代入\autoref{FTExp_eq6} 并使用\autoref{Erf_ex2}~\upref{Erf}有
+\begin{equation}
+g(k) = \sqrt{\frac{\pi}{a}} \exp(-\frac{k^2}{4a})
+\end{equation}
+一个方便的记忆法是 $x^2$ 前的系数乘以 $k^2$ 前的系数相乘等于 $1/4$．
+\end{example}
+
+\subsection{证明}
+我们把\autoref{FTExp_eq1} 看作定义， 用狄拉克 $\delta$ 函数\upref{Delta}来证明\autoref{FTExp_eq6}， 反之同理． 把\autoref{FTExp_eq1} 代入\autoref{FTExp_eq6} 得
+\begin{equation}
+g(k) = \frac{1}{2\pi} \int \qty[ \int g(k') \E^{\I k' x} \dd{k'}] \E^{-\I k x} \dd{x}
+\end{equation}
+交换积分顺序， 先对 $x$ 积分得
+\begin{equation}
+g(k) = \frac{1}{2\pi} \int \qty[ \int  \E^{\I (k'-k) x} \dd{x}]  g(k')\dd{k'}
+\end{equation}
+由\autoref{Delta_ex1}~\upref{Delta}， 里面的积分变为 $2\pi\delta(k'-k)$， 现在只需证明
+\begin{equation}
+g(k) = \int \delta(k'-k)  g(k')\dd{k'}
+\end{equation}
+而这就是\autoref{Delta_eq7}~\upref{Delta}． 证毕．
 
 \subsection{性质}
 为了书写方便我们用\textbf{算符} $\mathcal F$ 和 $\mathcal F^{-1}$ 表示傅里叶变换和反变换， 即 $\mathcal F f = g$ 以及 $\mathcal F^{-1} g = f$． 算符在这里可以看作 “函数的函数”， 即自变量和函数值都是函数．

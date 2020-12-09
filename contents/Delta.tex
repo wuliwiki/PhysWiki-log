@@ -1,10 +1,16 @@
 % 狄拉克 delta 函数
 % 微积分|定积分|狄拉克 delta 函数|\delta 函数
 
+\begin{issues}
+\issueTODO
+\end{issues}
+
 \pentry{定积分\upref{DefInt}}
-在物理中我们经常会遇到一些模型， 如质点和点电荷等， 这类模型使用了极限的思想（如令体积趋于无穷小）． 如果考察质点的密度或点电荷的电荷密度， 将得到无穷大， 然而将其密度（电荷密度）在空间中积分却又能得到有限的质量与电荷． 为了描述这样的密度（电荷密度）分布， 我们引入狄拉克 $\delta$ 函数．
+在物理中我们经常会遇到一些模型， 如质点和点电荷等， 这类模型使用了极限的思想（如令体积趋于无穷小）． 如果考察质点的密度或点电荷的电荷密度， 将得到无穷大， 然而将其密度（电荷密度）在空间中积分却又能得到有限的质量与电荷． 为了描述这样的密度（电荷密度）分布， 我们引入\textbf{狄拉克 $\delta$ 函数（Dirac delta function）}．
 
 \subsection{一维情况}
+
+$\delta(x)$ 在泛函分析中并不是数学中一个严格意义上的函数， 而是被称为\textbf{广义函数（generalized function）}或\textbf{分布（distribution）}， 详见泛函分析教材如\cite{Zeidler}． 但本文中我们给出另一个严谨的定义： 把 $\delta$ 函数看作是满足一定条件的\textbf{函数序列}， 即无穷个函数按一定顺序排列．
 
 \begin{figure}[ht]
 \centering
@@ -13,8 +19,8 @@
 \end{figure}
 
 我们来考虑一个函数（\autoref{Delta_fig1} 左）
-\begin{equation}
-f(x) =
+\begin{equation}\label{Delta_eq6}
+f_h(x) =
 \begin{cases}
 h & \qty( \abs{x - x_0} \leqslant \frac{1}{2h} )\\
 0 & \qty( \abs{x - x_0} > \frac{1}{2h} )
@@ -22,7 +28,24 @@ h & \qty( \abs{x - x_0} \leqslant \frac{1}{2h} )\\
 \end{equation}
 其中 $h, x_0$ 是常数． 由函数图像易得函数曲线下面的面积为 $\int_{-\infty}^{+\infty} f(x) \dd{x} = 1$． 现在我们令 $h \to \infty$， 长方形的高将趋于无穷大， 宽将趋于零， 而定积分结果不变．
 
-我们定义\textbf{狄拉克 $\delta$ 函数} $\delta(x)$ 为满足以下两个性质的函数\footnote{事实上，$\delta(x)$ 并不是数学中一个严格意义上的函数， 而是被称为\textbf{广义函数（generalized function）}或\textbf{分布（distribution）， 详见泛函分析}．} % 链接未完成
+这样， 上面的 $f(x)$ 就可以表示为 $\delta(x - x_0)$． 当然， 我们还可以选取其他含有参数的 $f(x)$ 来逼近 $\delta$ 函数， 如\autoref{Delta_fig1} 中的另外两种情况．
+
+\begin{definition}{狄拉克 $\delta$ 函数}\label{Delta_def1}
+令 $\delta_\alpha(x)$ 为一个含参数 $\alpha$ 的一元实函数． 如果 $\alpha$ 是离散的， 我们可以将其看作一个由无穷多个函数组成的函数序列 $\delta_1(x), \delta_2(x), \dots$ 若 $\delta_\alpha(x)$ 满足以下两个条件， 那么我们把该函数列称为狄拉克 $\delta$ 函数：
+\begin{equation}\label{Delta_eq4}
+\lim_{\alpha\to+\infty} \delta_\alpha(x) = 0 \qquad (x \ne 0)
+\end{equation}
+且（注意极限和积分不可交换）
+\begin{equation}\label{Delta_eq5}
+\lim_{\alpha\to+\infty} \int_{-\infty}^{\infty} \delta_\alpha(x) \dd{x} = 1
+\end{equation}
+
+另外， 形式上我们可以记
+\begin{equation}\label{Delta_eq1}
+\lim_{\alpha\to+\infty} \delta_\alpha(x) = \delta(x)
+\end{equation}
+\end{definition}
+注意\autoref{Delta_eq1} 中的等号并不是通常意义的两函数相等， 而是隐含了\autoref{Delta_eq4} 和\autoref{Delta_eq5} 两个条件． 另外在一些教材会把 $\delta(x)$ 的性质简单记为
 \begin{equation}\label{Delta_eq2}
 \delta(x) =
 \begin{cases}
@@ -33,19 +56,37 @@ h & \qty( \abs{x - x_0} \leqslant \frac{1}{2h} )\\
 \begin{equation}\label{Delta_eq3}
 \int_{-\infty}^{+\infty} \delta(x) \dd{x} = 1
 \end{equation}
+这些表达式都需要按照\autoref{Delta_def1} 来严格理解．
 
-这样， 上面的 $f(x)$ 就可以表示为 $\delta(x - x_0)$． 当然， 我们还可以选取其他含有参数的 $f(x)$ 来逼近 $\delta$ 函数， 如\autoref{Delta_fig1} 中的另外两种函数．
+\begin{exercise}{高斯函数}
+证明高斯分布函数\upref{GausPD}满足
+\begin{equation}
+\lim_{\alpha\to\infty}\frac{1}{\alpha \sqrt{2\pi }} \exp(-\frac{x^2}{2\alpha ^2}) = \delta(x)
+\end{equation}
+\end{exercise}
+\begin{exercise}{sinc 函数}\label{Delta_exe1}
+证明 $\sinc$ 函数\upref{sinc}满足（提示： \autoref{sinc_eq1}~\upref{sinc}）．
+\begin{equation}
+\lim_{\alpha\to\infty}\frac{\alpha}{\pi}\sinc(\alpha x) = \lim_{\alpha\to\infty}\frac{\alpha}{\pi}\sinc^2(\alpha x) = \delta(x)
+\end{equation}
+\end{exercise}
 
-\begin{example}{高斯波包}
+\subsubsection{多元 delta 函数}
 \addTODO{……}
-\end{example}
 
 \subsection{性质}
-对任意连续函数 $f(x)$， 有
-\begin{equation}
+若一个等式中出现了 $\delta$ 函数， 那么其意义是先将 $\delta(x)$ 替换为\autoref{Delta_def1} 中的 $\delta_\alpha(x)$． 该\textbf{等式在 $\alpha\to+\infty$ 的极限时成立}．
+
+例如 $\delta(x)$ 一个重要的性质是： 对任意在 $x = x_0$ 处连续函数 $f(x)$， 有
+\begin{equation}\label{Delta_eq7}
 \int_{-\infty}^{+\infty} f(x) \delta(x - x_0) \dd{x}= f(x_0)
 \end{equation}
-要证明这个性质， 我们可以把积分上下限变为 $x_0 \pm \epsilon$， 这样并不会改变积分结果， 因为在区间 $[x_0+\epsilon, +\infty)$ 和 $(-\infty, x_0 - \epsilon]$ 中， $\delta(x-x_0) = 0$． 然后我们令 $\epsilon\to 0$， 这样 $f(x)$ 在 $[x_0 - \epsilon, x_0 + \epsilon]$ 区间内的值就趋近于常数 $f(x_0)$． 所以有
+使用\autoref{Delta_def1} 中的 $\delta_\alpha(x)$ 表示， 该等式的严格意义是（再次注意极限和积分不可交换， 且极限必须在最外面）
+\begin{equation}
+\lim_{\alpha\to+\infty}\int_{-\infty}^{+\infty} f(x) \delta_\alpha(x - x_0) \dd{x}= f(x_0)
+\end{equation}
+
+我们来不严谨地证明\autoref{Delta_eq7} ： 首先把积分上下限变为 $x_0 \pm \epsilon$， 这样并不会改变积分结果， 因为在 $[x_0 - \epsilon, x_0 + \epsilon]$ 之外 $\delta(x-x_0) = 0$． 然后令 $\epsilon\to 0$， 这样 $f(x)$ 在 $[x_0 - \epsilon, x_0 + \epsilon]$ 内的值就趋近于常数 $f(x_0)$． 所以有
 \begin{equation}\ali{
 \int_{-\infty}^{+\infty} f(x) \delta(x - x_0) \dd{x} &= \int_{x_0-\epsilon}^{x_0+\epsilon} f(x) \delta(x - x_0)\dd{x} \\
 &= f(x_0)\int_{x_0-\epsilon}^{x_0+\epsilon} \delta(x - x_0)\dd{x} = f(x_0)
@@ -54,9 +95,35 @@ h & \qty( \abs{x - x_0} \leqslant \frac{1}{2h} )\\
 
 $\delta$ 函数的另一个性质是
 \begin{equation}
-\delta(ax) = \frac{1}{\abs{a}} \delta(x)
+\delta[f(x)] = \delta[f'(0)x] = \frac{1}{\abs{f'(0)}} \delta(x)
 \end{equation}
-我们不妨从几何上来证明这个性质， 与 $\delta(x)$ 相比较， $\delta(ax)$ 的图像在 $x$ 方向缩小了 $\abs{a}$ 倍（当 $a < 0$ 时， 还另需要关于 $y$ 轴翻转）， 所以 $\delta(ax)$ 下的面积是 $1/\abs{a}$（注意翻转并不影响面积）， 故 $\abs{a}\delta(ax)$ 下的面积是 $1$， 且满足\autoref{Delta_eq2} 和\autoref{Delta_eq3}， 所以有 $\abs{a}\delta(ax) = \delta(x)$． 证毕．
+我们不妨从几何上来（不严谨地）证明这个性质： 首先在原点附近的无穷小区间内， 有 $f(x) = f'(0)x$， 第一个等号成立． 与 $\delta(x)$ 相比较， $\delta[f'(0)x]$ 的图像在 $x$ 方向变窄了 $\abs{f'(0)}$ 倍， 所以函数曲线下的面积变为原来的 $1/\abs{f'(0)}$ 倍， 故 $\abs{f'(0)}\delta[f(x)]$ 下的面积是 $1$， 所以有 $\abs{f'(0)}\delta[f(x)] = \delta(x)$． 证毕．
 
-\subsection{三维情况}
-\addTODO{……}
+\subsection{其他应用}
+再次强调我们不能 “按字面意思” 理解任何含有 $\delta$ 函数的等式．
+\begin{example}{}\label{Delta_ex1}
+在傅里叶分析中， 时常会看到
+\begin{equation}\label{Delta_eq8}
+\int_{-\infty}^{+\infty} \E^{\I kx}\dd{x} = 2\pi \delta(k)
+\end{equation}
+然而严格来说， 左边的积分并不收敛， 所以不能 “按字面意思” 理解该式． 要严格证明， 先令
+\begin{equation}
+\delta_\alpha(k) = \frac{1}{2\pi}\int_{-\alpha}^{\alpha} \E^{\I kx}\dd{x} = \frac{\sin(\alpha k)}{\pi k} = \frac{\alpha}{\pi} \sinc(\alpha k)
+\end{equation}
+由\autoref{Delta_exe1} 中的结论得
+\begin{equation}
+\lim_{\alpha\to+\infty} \delta_\alpha(k) = \delta(k)
+\end{equation}
+证毕．
+\end{example}
+
+\begin{exercise}{}
+证明
+\begin{equation}
+\begin{aligned}
+&\int_{-\infty}^{+\infty} \sin(k'x) \sin(kx) \dd{x} = \int_{-\infty}^{+\infty} \cos(k'x) \cos(kx) \dd{x}\\
+&= \pi\delta(k' - k) - \pi\delta(k' + k)
+\end{aligned}
+\end{equation}
+提示：使用\autoref{CTrig_eq1}~\upref{CTrig}，\autoref{CTrig_eq2}~\upref{CTrig} 和\autoref{Delta_eq8} ．
+\end{exercise}

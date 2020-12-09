@@ -1,21 +1,27 @@
-% 大气密度
+% 大气密度和压强
 % 大气|积分方程|理想气体|气压|摩尔质量
 
-\pentry{一阶线性微分方程\upref{ODE1}， 理想气体分压定律\upref{PartiP}}
+\pentry{一阶线性微分方程\upref{ODE1}， 理想气体分压定律\upref{PartiP}， 积分方程} % 未完成
 
-假设大气是理想气体， 密度随高度变化为 $\rho(z)$． 所以高度 $z$ 处压强为
+\begin{figure}[ht]
+\centering
+\includegraphics[width=10cm]{./figures/atmDen_1.png}
+\caption{根据\autoref{atmDen_eq4}  以及分压定律得到的大气压强随高度变化图， 假设大气中没有水蒸气且温度恒定（来自维基百科）}\label{atmDen_fig1}
+\end{figure}
+
+\footnote{参考 Wikipedia \href{https://en.wikipedia.org/wiki/Atmospheric_pressure}{相关页面}．}假设大气是理想气体， 密度随高度变化为 $\rho(z)$． 所以高度 $z$ 处压强为
 \begin{equation}\label{atmDen_eq1}
 P(z) = \int_{z}^\infty \rho(z') g \dd{z'}
 \end{equation}
-而根据理想气体状态方程\upref{PVnRT}，
+其中由于大气厚度远小于地球半径， 我们取 $g$ 为常数． 根据理想气体状态方程\upref{PVnRT}，
 \begin{equation}
 PV = n R T
 \end{equation}
 先假设大气只是由一种分子构成， 摩尔质量为 $\mu$， 即 $m = n\mu$， 代入有
-\begin{equation}
+\begin{equation}\label{atmDen_eq3}
 P = \frac{m}{\mu V} RT = \frac{R}{\mu} \rho T
 \end{equation}
-其中 $P, T, \rho$ 都是高度的函数． 代入\autoref{atmDen_eq1} 得关于 $\rho(z)$ 的积分方程
+其中 $P, T, \rho$ 都是高度的函数． 代入\autoref{atmDen_eq1} 得关于 $\rho(z)$ 的积分方程 % 链接未完成
 \begin{equation}
 \frac{R}{\mu} \rho(z) T(z) = \int_{z}^\infty \rho(z') g \dd{z'}
 \end{equation}
@@ -23,7 +29,7 @@ P = \frac{m}{\mu V} RT = \frac{R}{\mu} \rho T
 \begin{equation}
 \rho'(z)  +  \frac{1}{T(z)}\qty[T'(z) + \frac{\mu g}{R}]\rho(z) = 0
 \end{equation}
-这是一个一阶线性微分方程， 可以直接用公式求解\upref{ODE1}．
+这是一个一阶线性微分方程， 可以直接用公式求解\upref{ODE1}． 把解出的 $\rho(z)$ 代入\autoref{atmDen_eq3} 即可求出对应的压强 $P(z)$．
 
 作为一种简单情况， 假设温度不随高度变化， 那么方程变为常系数的
 \begin{equation}
@@ -31,8 +37,12 @@ P = \frac{m}{\mu V} RT = \frac{R}{\mu} \rho T
 \end{equation}
 容易解得
 \begin{equation}\label{atmDen_eq2}
-\rho(z) = P_0\exp(-\frac{\mu g}{RT} z)
+\rho(z) = \rho_0\exp(-\frac{\mu g}{RT} z)
 \end{equation}
-其中 $P_0$ 是某个高度 $z_0$ 处的气压． 这说明恒温条件下气压随海拔升高呈指数下降， 且温度越低下降越快．
+或者
+\begin{equation}\label{atmDen_eq4}
+P(z) = P_0\exp(-\frac{\mu g}{RT} z)
+\end{equation}
+其中 $\rho_0, P_0$ 是某个高度 $z_0$ 处的大气密度和气压． 这说明恒温条件下气压随海拔升高呈指数下降， 且温度越低下降越快．
 
-当大气中有多种气体时， 可以对每种气体分别使用\autoref{atmDen_eq2}， 把 $P_0$ 替换为改气体在 $z_0$ 处的分压\upref{PartiP}． 总密度就是每种气体的密度之和．
+当大气中有多种气体时， 可以对每种气体分别求解， 把 $P_0$ 替换为改气体在 $z_0$ 处的分压\upref{PartiP}． 总密度就是每种气体的密度之和． 大气中的水蒸气同样也可能随着高度变化．
