@@ -5,8 +5,48 @@
 \issueDraft
 \end{issues}
 
-\pentry{柱坐标系\upref{Cylin}， 球坐标系\upref{Sph}， 矢量内积\upref{Dot}， 矢量的导数\ 求导法则\upref{DerV}}
+\pentry{梯度\upref{Grad}， 旋度\upref{Curl}}
 
+如果 $u, v, w$ 是正交曲线坐标系的三个坐标， 空间任意一点的位置矢量\upref{Disp} $\bvec r$ 都是它们的函数 $\bvec r(u, v, w)$． 那么定义任意一点处三个单位矢量为
+\begin{equation}
+\uvec u = \frac{\pdv*{\bvec r}{u}}{\abs{\pdv*{\bvec r}{u}}}\qquad
+\uvec v = \frac{\pdv*{\bvec r}{v}}{\abs{\pdv*{\bvec r}{v}}}\qquad
+\uvec w = \frac{\pdv*{\bvec r}{w}}{\abs{\pdv*{\bvec r}{w}}}
+\end{equation}
+令其中三个分母为 $f(u,v,w), g(u,v,w), h(u,v,w)$， 则
+\begin{equation}\label{CurCor_eq4}
+\begin{aligned}
+\dd{\bvec r} &= \pdv{\bvec r}{u}\dd{u} + \pdv{\bvec r}{v}\dd{v} + \pdv{\bvec r}{w}\dd{w}\\
+&= f\uvec u\dd{u} + g\uvec v\dd{v} + h\uvec w\dd{w}
+\end{aligned}
+\end{equation}
+
+令 $s(u, v, w)$ 为标量函数， $\bvec A(u, v, w)$ 为矢量函数， 且
+\begin{equation}
+\bvec A(u, v, w) = A_x(u, v, w)\uvec u + A_y(u, v, w)\uvec v + A_z(u, v, w)\uvec w
+\end{equation}
+那么该坐标系中的梯度\upref{Grad}， 散度\upref{Divgnc}， 旋度\upref{Curl}算符分别为
+\begin{equation}
+\grad s = \frac{1}{f} \pdv{s}{u}\uvec u + \frac{1}{g}\pdv{s}{v} \uvec v + \frac{1}{h} \pdv{s}{w}\uvec w
+\end{equation}
+\begin{equation}
+\div \bvec A = \frac{1}{fgh}\qty[\pdv{u}(ghA_u) + \pdv{v}(fhA_v) + \pdv{w}(fgA_w)]
+\end{equation}
+\begin{equation}
+\begin{aligned}
+&\curl \bvec A = \frac{1}{gh}\qty[\pdv{v}(hA_w) - \pdv{w}(gA_v)]\uvec u\\
+&\quad + \frac{1}{fh}\qty[\pdv{w}(fA_u) - \pdv{u}(hA_w)]\uvec v
++ \frac{1}{fg}\qty[\pdv{u}(gA_v) - \pdv{v}(fA_u)]\uvec w
+\end{aligned}
+\end{equation}
+\begin{equation}\label{CurCor_eq6}
+\laplacian s = \frac{1}{fgh}\qty[\pdv{u}\qty(\frac{gh}{f}\pdv{s}{u}) + \pdv{v}\qty(\frac{fh}{g}\pdv{s}{v}) + \pdv{w}\qty(\frac{fg}{h}\pdv{s}{w})]
+\end{equation}
+
+
+\addTODO{推导参考 \cite{GriffE} 附录．}
+
+\addTODO{以下内容合并到相关词条}
 \subsection{柱坐标系}
 我们先来分析柱坐标系\footnote{由于极坐标系可以看做柱坐标系 $z = 0$ 的情况， 我们不单独讨论}， 位置矢量 $\uvec r$ 在直角坐标系中展开为
 \begin{equation}\label{CurCor_eq1}
@@ -52,37 +92,3 @@
 \begin{equation}\label{CurCor_eq7}
 \dd{\bvec r} = \pdv{\bvec r}{r}\dd{r} + \pdv{\bvec r}{\theta}\dd{\theta} + \pdv{\bvec r}{z}\dd{z} = \dd{r}\uvec r + r\dd{\theta} \uvec \theta + \dd{z} \uvec z
 \end{equation}
-
-\subsection{球坐标系}
-球坐标系中， 位置矢量可以表示为
-\begin{equation}
-\bvec r = r \uvec r = r\sin\theta\cos\phi\,\uvec x + r\sin\theta\sin\phi\,\uvec y + r\cos\theta\uvec z
-\end{equation}
-同样， 球坐标系的三个单位矢量由三个坐标增加的方向确定
-\begin{equation}\label{CurCor_eq9}
-\leftgroup{
-\pdv{\bvec r}{r} &= \sin\theta\cos\phi\,\uvec x + \sin\theta\sin\phi\,\uvec y + \cos\theta\,\uvec z\\
-\pdv{\bvec r}{\theta} &= r\cos\theta\cos\phi\,\uvec x + r\cos\theta\sin\phi\,\uvec y - r\sin\theta\,\uvec z\\
-\pdv{\bvec r}{\phi} &= -r\sin\theta\sin\phi\,\uvec x + r\sin\theta\cos\phi\,\uvec y
-}\end{equation}
-归一化得三个单位矢量为
-\begin{equation}\label{CurCor_eq10}
-\begin{cases}
-\uvec r = \sin\theta\cos\phi\,\uvec x + \sin\theta\sin\phi\,\uvec y + \cos\theta\,\uvec z\\
-\uvec \theta = \cos\theta\cos\phi\,\uvec x + \cos\theta\sin\phi\,\uvec y - \sin\theta\,\uvec z\\
-\uvec\phi = -\sin\phi\,\uvec x + \cos\phi\,\uvec y
-\end{cases}
-\end{equation}
-不难验证这三个单位矢量两两间内积为零， 即两两垂直， 所以球坐标系也属于正交曲线坐标系． 对比\autoref{CurCor_eq9} 与\autoref{CurCor_eq10}， 有
-\begin{equation}\label{CurCor_eq11}
-\pdv{\bvec r}{r} = \uvec r \qquad
-\pdv{\bvec r}{\theta} = r\uvec \theta \qquad
-\pdv{\bvec r}{\phi} = r\sin\theta\,\uvec\phi
-\end{equation}
-所以位置矢量的微分可以表示为
-\begin{equation}\label{CurCor_eq12}
-\dd{\bvec r} = \dd{r}\uvec r + r\dd{\theta} \uvec \theta + r\sin\theta\dd{\phi}\uvec \phi
-\end{equation}
-
-\subsection{正交曲线坐标系}
-（未完成）

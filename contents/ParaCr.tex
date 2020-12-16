@@ -1,0 +1,91 @@
+% 抛物线坐标系
+
+\pentry{抛物线的三种定义\upref{Para3}}
+
+\footnote{本文参考 Wikipedia \href{https://en.wikipedia.org/wiki/Parabolic_coordinates}{相关页面}．}抛物线的极坐标方程为（\autoref{Para3_eq1}~\upref{Para3}）
+\begin{equation}\label{ParaCr_eq1}
+r = \frac{\xi}{1 - \cos \theta }
+\end{equation}
+若选用不同的半通径 $\xi$ （$\xi > 0$）， 将得到一系列缩放的抛物线（\autoref{ParaCr_fig1} 中的绿色）． 我们也可以把这些抛物线旋转 180 度， 得到
+\begin{equation}
+r = \frac{\eta}{1 + \cos \theta }
+\end{equation}
+这时我们把半通径记为 $\eta$ （$\eta > 0$）， 当它取不同的值也得到一系列抛物线（\autoref{ParaCr_fig1} 中的红色）． 这样， 通过 $\xi, \eta$ 两个坐标， 我们就能确定平面上的唯一一点．
+
+\begin{figure}[ht]
+\centering
+\includegraphics[width=10cm]{./figures/ParaCr_1.pdf}
+\caption{抛物线坐标系， 极轴向上（来自 Wikipedia）} \label{ParaCr_fig1}
+\end{figure}
+
+若把这些曲线绕极轴旋转一周变为一系列曲面， 那么我们只需要再指定一个方位角 $\phi$ 就可以用坐标 $\xi, \eta, \phi$ 确定空间中的任意一点．
+
+\subsection{与直角坐标和球坐标的转换}
+一般令极轴与直角坐标的 $z$ 轴重合， 则根据定义有
+\begin{equation}
+\xi = r(1 + \cos\theta) = \sqrt{x^2 + y^2 + z^2} + z
+\end{equation}
+\begin{equation}
+\eta = r(1 - \cos\theta) = \sqrt{x^2 + y^2 + z^2} - z
+\end{equation}
+\begin{equation}
+\phi = \Arctan(y, x)
+\end{equation}
+其中 $\Arctan$ 见 “四象限 Arctan 函数\upref{Arctan}”． 可以解得
+\begin{equation}\label{ParaCr_eq2}
+z = \frac{\xi - \eta}{2}
+\end{equation}
+\begin{equation}\label{ParaCr_eq3}
+x = \sqrt{\xi\eta}\cos\phi \qquad
+y = \sqrt{\xi\eta}\sin\phi
+\end{equation}
+
+\subsection{正交曲线坐标系}
+可以证明抛物线坐标系是一个正交曲线坐标系， 即\autoref{ParaCr_fig1} 中过任意一点的两条坐标曲线都垂直：
+
+在某点 $\bvec r$， 延 $\eta$ 曲线的切线方向为 $\pdv*{\bvec r}{\xi}$， 延 $\xi$ 曲线的切线方向为 $\pdv*{\bvec r}{\eta}$
+\begin{equation}
+\dd{x} = \sqrt{\frac{\eta}{\xi}}\frac{\cos\phi}{2}\dd{\xi} + \sqrt{\frac{\xi}{\eta}}\frac{\cos\phi}{2\sqrt{\xi}}\dd{\eta} - \sqrt{\xi\eta}\sin\phi\dd{\phi}
+\end{equation}
+\begin{equation}
+\dd{y} = \sqrt{\frac{\eta}{\xi}}\frac{\sin\phi}{2}\dd{\xi} + \sqrt{\frac{\xi}{\eta}}\frac{\sin\phi}{2}\dd{\eta} + \sqrt{\xi\eta}\cos\phi\dd{\phi}
+\end{equation}
+\begin{equation}
+\dd{z} = \frac{1}{2}\dd{\xi} - \frac{1}{2}\dd{\eta}
+\end{equation}
+所以三个归一化单位矢量分别为（上式的每一列归一化）
+\begin{equation}
+\uvec \xi = \sqrt{\frac{\eta}{\xi+\eta}}\cos\phi\,\uvec x + \sqrt{\frac{\eta}{\xi+\eta}}\sin\phi\,\uvec y + \sqrt{\frac{\xi}{\xi+\eta}}\,\uvec z
+\end{equation}
+\begin{equation}
+\uvec \eta = \sqrt{\frac{\xi}{\xi+\eta}}\cos\phi\,\uvec x + \sqrt{\frac{\xi}{\xi+\eta}}\sin\phi\,\uvec y + \sqrt{\frac{\eta}{\xi+\eta}}\,\uvec z
+\end{equation}
+\begin{equation}
+\uvec \phi = -\sin\phi \,\uvec x + \cos\phi \,\uvec y
+\end{equation}
+容易证明它们两两正交．另外有
+\begin{equation}\label{ParaCr_eq4}
+\dd{\bvec r} = \frac{1}{2}\sqrt{\frac{\xi + \eta}{\xi}} \uvec \xi \dd{\xi}
++ \frac{1}{2}\sqrt{\frac{\xi + \eta}{\eta}} \uvec \eta \dd{\eta}
++ \sqrt{\xi\eta}\, \uvec \phi \dd{\phi}
+\end{equation}
+
+\subsection{矢量算符}
+\pentry{正交曲线坐标系\upref{CurCor}}
+结合\autoref{ParaCr_eq4} 和\autoref{CurCor_eq4}~\upref{CurCor}到\autoref{CurCor_eq6}~\upref{CurCor}得
+\begin{equation}
+\grad u = 2\sqrt{\frac{\xi}{\xi + \eta}}\pdv{u}{\xi} + 2\sqrt{\frac{\eta}{\xi + \eta}}\pdv{u}{\eta} + \frac{1}{\sqrt{\xi\eta}}\pdv{u}{\phi}
+\end{equation}
+\begin{equation}
+\div \bvec A = \frac{2}{\xi + \eta}\qty[\pdv{\xi}\qty(\sqrt{\xi(\xi+\eta)}A_\xi) + \pdv{\eta}\qty(\sqrt{\eta(\xi+\eta)}A_\eta)] + \frac{1}{\sqrt{\xi\eta}} \pdv{A_\phi}{\phi}
+\end{equation}
+\begin{equation}
+\begin{aligned}
+\curl \bvec A = &\qty[\frac{2}{\sqrt{\xi+\eta}}\pdv{\eta} (\sqrt{\eta}A_\phi) - \frac{1}{\sqrt{\xi\eta}}\pdv{A_\eta}{\phi}]\uvec \xi\\
+&+\qty[\frac{1}{\sqrt{\xi\eta}}\pdv{A_\xi}{\phi} - \frac{2}{\sqrt{\xi+\eta}}\pdv{\xi}(\sqrt{\xi}A_\phi)]\uvec\eta\\
+&+\qty[\frac{2\sqrt{\xi}}{\xi+\eta}\pdv{\xi}(\sqrt{\xi+\eta}A_\eta) - \frac{2\sqrt{\eta}}{\xi+\eta}\pdv{\eta}(\sqrt{\xi+\eta}A_\xi)]\uvec\phi
+\end{aligned}
+\end{equation}
+\begin{equation}
+\laplacian u = \frac{4}{\xi + \eta} \qty[\pdv{u}{\xi}\qty(\xi\pdv{\xi}) + \pdv{u}{\eta}\qty(\eta\pdv{\eta})] + \frac{1}{\xi\eta}\pdv[2]{u}{\phi}
+\end{equation}
