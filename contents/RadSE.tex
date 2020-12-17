@@ -1,21 +1,27 @@
 % 球坐标和柱坐标中的定态薛定谔方程
 % 球坐标|柱坐标|定态薛定谔方程|拉普拉斯算子|径向动量
 
-\pentry{定态薛定谔方程\upref{SchEq}， 球坐标中的拉普拉斯方程\upref{SphLap}}
+\pentry{定态薛定谔方程\upref{SchEq}， 球坐标系中的亥姆霍兹方程\upref{SphHHz}}
 
 \subsection{球坐标}
 
-使用球坐标的拉普拉斯算子\autoref{SphNab_eq4}~\upref{SphNab} 可以将单粒子的哈密顿算符表示为
+本文使用原子单位制\upref{AU}． 我们希望在球坐标和柱坐标中求解定态薛定谔方程
 \begin{equation}
-H = -\frac{\hbar^2}{2m} \laplacian + V(\bvec r) =  K_r + \frac{L^2}{2mr^2} + V(\bvec r)
+-\frac{1}{2m}\laplacian \psi(\bvec r) + V(\bvec r)\psi(\bvec r) = E\psi(\bvec r)
+\end{equation}
+当势能 $V(\bvec r)$ 处处为零时， 这就变成了球坐标系中的亥姆霍兹方程\upref{SphHHz}． 以下考虑一般情况， 但过程也和求解亥姆霍兹方程类似．
+
+使用球坐标的拉普拉斯算子（\autoref{SphNab_eq4}~\upref{SphNab}） 可以将哈密顿算符表示为
+\begin{equation}
+H = -\frac{1}{2m} \laplacian + V(\bvec r) =  K_r + \frac{L^2}{2mr^2} + V(\bvec r)
 \end{equation}
 其中径向动量算符为
 \begin{equation}
-K_r =-\frac{\hbar^2}{2m} \laplacian_r =  - \frac{\hbar^2}{2m} \qty(\pdv[2]{r} + \frac2r \pdv{r}) = -\frac{\hbar^2}{2m}\frac{1}{r^2} \dv{r} \qty(r^2\pdv{r})
+K_r =-\frac{1}{2m} \laplacian_r =  - \frac{1}{2m} \qty(\pdv[2]{r} + \frac2r \pdv{r}) = -\frac{1}{2mr^2} \dv{r} \qty(r^2\pdv{r})
 \end{equation}
 角动量平方算符为%未完成： 在 wikipedia 上， \bvec L 也是有极坐标的表达式的． 研究一下． https://en.wikipedia.org/wiki/Angular_momentum_operator
 \begin{equation}\label{RadSE_eq3}
-L^2 = -\hbar^2 r^2 \laplacian_\Omega = -\hbar^2 \qty[ \frac{1}{\sin\theta} \pdv{\theta} \qty(\sin \theta \pdv{u}{\theta}) + \frac{1}{\sin^2 \theta} \pdv[2]{u}{\phi}]
+L^2 = -r^2 \laplacian_\Omega = -\qty[ \frac{1}{\sin\theta} \pdv{\theta} \qty(\sin \theta \pdv{u}{\theta}) + \frac{1}{\sin^2 \theta} \pdv[2]{u}{\phi}]
 \end{equation}
 注意角动量算符不含 $r$．
 
@@ -27,11 +33,11 @@ L^2 = -\hbar^2 r^2 \laplacian_\Omega = -\hbar^2 \qty[ \frac{1}{\sin\theta} \pdv{
 
 解得 $Y(\uvec r)$ 为球谐函数 $Y_{l,m}(\uvec r)$ 满足
 \begin{equation}
-L^2 Y_{l,m}(\uvec r) = \hbar^2 l(l+1) Y_{l,m}(\uvec r)
+L^2 Y_{l,m}(\uvec r) = l(l+1) Y_{l,m}(\uvec r)
 \end{equation}
 分离变量后 $R(r)$ 满足的方程一般被称为\textbf{径向薛定谔方程}
 \begin{equation}\label{RadSE_eq6}
-K_r R_l(r) + \qty[V(r) + \frac{\hbar^2 l(l+1)}{2mr^2} ]R_l(r) = ER(r)
+K_r R_l(r) + \qty[V(r) + \frac{l(l+1)}{2mr^2} ]R_l(r) = ER(r)
 \end{equation}
 我们可以通过变量替换将其化为更简洁的形式．
 
@@ -41,11 +47,11 @@ u_l(r) = r R_l(r)
 \end{equation}
 代入\autoref{RadSE_eq6}， 第一项变为
 \begin{equation}
-K_r R =  - \frac{\hbar^2}{2m} \qty(\dv[2]{R}{r} + \frac2r \dv{R}{r}) = -\frac{\hbar^2}{2m}\frac{1}{r^2} \dv{r} \qty(r^2\dv{R}{r}) =  - \frac{\hbar^2}{2m}\frac1r \dv[2]{u}{r}
+K_r R_l =  - \frac{1}{2m} \qty(\dv[2]{R_l}{r} + \frac2r \dv{R_l}{r}) = -\frac{1}{2mr^2} \dv{r} \qty(r^2\dv{R_l}{r}) =  -\frac{1}{2mr} \dv[2]{u_l}{r}
 \end{equation}
 所以\autoref{RadSE_eq6} 化简为
 \begin{equation}\label{RadSE_eq1}
--\frac{\hbar^2}{2m} \dv[2]{u}{r} + \qty[V(r) + \frac{\hbar^2}{2m}\frac{l(l + 1)}{r^2}]u = Eu
+-\frac{1}{2m} \dv[2]{u_l}{r} + \qty[V(r) + \frac{1}{2m}\frac{l(l + 1)}{r^2}]u_l = Eu_l
 \end{equation}
 这就是径向方程， 方括号中可以看作\textbf{一维等效势能}（类比经典力学的情况\autoref{CenFrc_eq6}~\upref{CenFrc}）． 该方程的解取决于 $V(r)$ 的具体形式．
 
@@ -73,13 +79,12 @@ u(r) = \sqrt r R(r)
  H = K_r + \frac{L_z^2}{2m r^2}
 \end{equation}
 \begin{equation}
-K_r R = -\frac{\hbar^2}{2m} \frac1r \dv{r} \qty(r \dv{R}{r}) =  - \frac{\hbar^2}{2m} \frac{1}{\sqrt r} \qty(\dv[2]{u}{r} + \frac{u}{4 r^2})
+K_r R = -\frac{1}{2m} \frac1r \dv{r} \qty(r \dv{R}{r}) =  - \frac{1}{2m} \frac{1}{\sqrt r} \qty(\dv[2]{u}{r} + \frac{u}{4 r^2})
 \end{equation}
 \begin{equation}
-\frac{L_z^2}{2m r^2}\psi  = \frac{\hbar^2}{2m} \frac{m_z^2}{r^2}\psi 
+\frac{L_z^2}{2m r^2}\psi  = \frac{1}{2m} \frac{m_z^2}{r^2}\psi 
 \end{equation}
 所以径向方程为
 \begin{equation}
-- \frac{\hbar^2}{2m} \dv[2]{u}{r} + \qty[V(r) + \frac{\hbar^2}{2m} \qty(\frac{m_z^2}{r^2} - \frac{1}{4 r^2})]u = Eu
+- \frac{1}{2m} \dv[2]{u}{r} + \qty[V(r) + \frac{1}{2m} \qty(\frac{m_z^2}{r^2} - \frac{1}{4 r^2})]u = Eu
 \end{equation}
-
