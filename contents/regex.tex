@@ -6,7 +6,7 @@
 
 \pentry{文本文件与字符编码\upref{encode}}
 
-在文本文件中搜索内容的时候， 有时候想要的是某种格式而不是某些具体的字符， 例如要搜索 “*月*日 消费 ** 元”， 找到匹配项后需要选中这几个字（以便进行替换等操作）， 又或者仅选中 “元” 前面的数值（以便进行统计等）． 理论上我们可以通过编程解决这个问题， 但更简单地， 可以用一种广为使用的表达式来达到同样的效果， 就是下面要介绍的\textbf{正则表达式（regular expresion）}．
+\footnote{参考 Matlab 文档\href{https://www.mathworks.com/help/matlab/ref/regexp.html}{相关页面}．}在文本文件中搜索内容的时候， 有时候想要的是某种格式而不是某些具体的字符， 例如要搜索 “*月*日 消费 ** 元”， 找到匹配项后需要选中这几个字（以便进行替换等操作）， 又或者仅选中 “元” 前面的数值（以便进行统计等）． 理论上我们可以通过编程解决这个问题， 但更简单地， 可以用一种广为使用的表达式来达到同样的效果， 就是下面要介绍的\textbf{正则表达式（regular expresion）}．
 
 正则表达式在许多软件中都被支持， 例如在常用的文本编辑器（如 VScode）， 搜索软件（如 Fileseek）， 和大部分编程语言（如 C++， python， Matlab）中都有很好的支持．
 
@@ -39,6 +39,36 @@
 \end{tabular}
 \end{table}
 
+\begin{itemize}
+\item \verb`\a` Alarm (beep)
+\item \verb`\b` Backspace
+\item \verb`\f` Form feed
+\item \verb`\n` New line
+\item \verb`\r` Carriage return
+\item \verb`\t` Horizontal tab
+\item \verb`\v` Vertical tab
+\item \verb`\特殊字符` 例如 \verb`\?` 表示问号， \verb`\*` 表示星号， \verb`\\` 表示反斜杠
+\item \verb`\oN` 或 \verb`\o{N}`， 用 8 进制指定字符
+\item \verb`\xN` 或 \verb`\x{N}`， 用 16 进制指定字符
+\end{itemize}
 
-（未完成）
+\subsubsection{重复匹配}
+在\autoref{regex_tab1} 的命令后面可以加上如下 quantifier
+\begin{itemize}
+\item \verb|?| 表示 0 或 1 次重复
+\item \verb|+| 表示 1 或者若干次重复
+\item \verb|*| 表示 0 或者若干次重复
+\item \verb|{n}| 表示 n 次重复
+\item \verb|{m,n}| 表示 m 到 n 次重复
+\item \verb|{m,}| 表示 m 次或以上重复
+\item 以上 quantifier 后面加 \verb|?| 可以匹配尽量少， 例如 \verb|abc.+?def|
+\end{itemize}
+
+\subsubsection{Group}
+\begin{itemize}
+\item \verb|(?:expr)| 可以把表达式 group 到一起， 例如 \verb|(?:abc){2}| 搜索 "abcabc"
+\item \verb|(expr)| 可以把表达式 group 到一起并 match， 例如 \verb|abc(\d+)def| 寻找 \verb|abc\d+def| 并且 match \verb|\d+| 部分
+\item \verb`(expr1|expr2)` 匹配其中一个
+\end{itemize}
+
 在 VScode 中， 用小括号 group 起来的部分， 在替换的时候可以用 \verb|$1|， \verb|$2| 等来表示．

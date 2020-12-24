@@ -1,0 +1,44 @@
+% 氢原子波函数画图程序
+
+\begin{issues}
+\issueDraft
+\end{issues}
+
+运行结果见\autoref{HWF_eq1}~\upref{HWF}． 需要 “球谐函数数值计算\upref{YlmNum}” 中的 \verb|SphHarm| 函数． 以及 \verb|surfSph| 函数．
+
+\begin{lstlisting}[language=matlab]
+Z = 1;
+Rnl = @(Z,n,l,r)sqrt((2*Z/n)^3*factorial(n-l-1)/(2*n*factorial(n+l))) *...
+        (2*Z*r/n).^l .* laguerreL(n-l-1, 2*l+1, 2*Z*r/n) .* exp(-Z*r/n);
+
+r = linspace(0, 40, 1000);
+th = linspace(0, 2*pi, 361);
+ph = zeros(size(th));
+thresh = [0.3183 7.28e-4 1e-4 1e-5 1e-6];
+for n = 4
+    for l = 0:n-1
+        for m = 0 : l
+            figure; set(gcf, 'units','normalized', ...
+                'outerposition',[0 0 0.5 1]);
+            set(gca, 'color', 'k');
+            grid off; hold on;
+            r2R2 = @(r) r.^2 .* abs(Rnl(Z,n,l,r)).^2;
+            trial = @(rmax) integral(r2R2, 0, rmax) - 0.95;
+            r_cut = fzero(trial, [0.1, 100]);
+            tmp = linspace(0, 2*pi, 500);
+            plot3(r_cut*cos(tmp), -3*ones(size(tmp)), ...
+                r_cut*sin(tmp), 'w');
+            prob_cut = abs(Rnl(Z,n,l,r_cut))^2 * 5;
+            
+            prob = abs(Rnl(Z,n,l,r).' .* SphHarm(l,m,th,ph)).^2;
+            surfSph(r, th, 0, prob); view(0, 0);
+            caxis([0, prob_cut]);
+            title([num2str(n) ', ' num2str(l) ', ' num2str(m)]);
+            disp([num2str(n) ', ' num2str(l) ', ' num2str(m)]);
+            % 未完成： colormap_hydrogen， 使用默认 colormap
+            % rgb = colormap_hydrogen(linspace(0,1,100));
+            % colormap(rgb);
+       end
+    end
+end
+\end{lstlisting}
