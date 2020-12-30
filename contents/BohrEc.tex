@@ -13,12 +13,32 @@ Sommerfeld 模型中量子化条件为（$T$ 表示轨道的一个周期）
 \end{equation}
 即
 \begin{equation}\label{BohrEc_eq1}
-\int_T \sqrt{2m\qty(E - \frac{k}{r} - \frac{L^2}{2mr^2})} \dd{r} = kh
+2\int_{a-c}^{a+c} \sqrt{2m\qty(E - \frac{k}{r} - \frac{L^2}{2mr^2})} \dd{r} = kh
 \end{equation}
-若取 $L = l$ 可证明 $n = l + k$． 开普勒问题
+若取 $L = l$ 可证明
+\begin{equation}\label{BohrEc_eq2}
+n = l + k
+\end{equation}
+开普勒问题
 \begin{equation}
 e = \sqrt{1 + \frac{2EL^2}{mk^2}}
 \end{equation}
 \begin{equation}
 a = \frac{k}{2\abs{E}}
 \end{equation}
+
+\subsubsection{Matlab 数值积分}
+以下程序用于数值验证\autoref{BohrEc_eq2}． 注意原子单位中 $h = 2\pi$．
+\begin{lstlisting}[language=matlab]
+n = 2; l = 1;
+Z = 1; k = -Z;
+E = -Z^2/(2*n^2);
+L = l;
+me = 1;
+a = abs(k)/(2*abs(E)); b = L/sqrt(2*me*abs(E));
+c = sqrt(a^2 - b^2);
+f = @(r)real(sqrt(2*me*(E - k./r - L^2./(2*me*r.^2))));
+r = linspace(a-c, a+c, 500); figure; plot(r, f(r));
+I = 2*integral(f, a - c, a + c);
+disp(I/(2*pi))
+\end{lstlisting}

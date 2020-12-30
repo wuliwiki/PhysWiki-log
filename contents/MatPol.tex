@@ -1,0 +1,80 @@
+% Matlab 球坐标中的分布图
+
+\begin{issues}
+\issueMissDepend
+\issueDraft
+\end{issues}
+
+\begin{figure}[ht]
+\centering
+\includegraphics[width=7cm]{./figures/MatPol_1.png}
+\caption{示例 1} \label{MatPol_fig1}
+\end{figure}
+\begin{figure}[ht]
+\centering
+\includegraphics[width=9cm]{./figures/MatPol_2.png}
+\caption{示例 2} \label{MatPol_fig2}
+\end{figure}
+
+我们可以用 Matlab 内建的 \verb|surf(X,Y,Z,Val)| 函数在空间中画出任意曲面． 其中 \verb|X,Y,Z,Val| 是尺寸相同的 2 维矩阵， 分别代表曲面上每个网格的各点．
+\begin{lstlisting}[language=matlab]
+% surf() in spherical coordinate
+% usage 1. R,Th,Ph,Val are 2D matrices in same shape
+% usage 2. R,Th,Ph are vector,vector,scalar
+% usage 3. R,Th,Ph are vector,scalar,vector
+function h = surfSph(R,Th,Ph,Val,varargin)
+% resize
+if isvector(R) && isvector(Th)
+    [R,Th] = ndgrid(R, Th);
+end
+if isvector(R) && isvector(Ph)
+    [R,Ph] = ndgrid(R,Ph);
+end
+if isscalar(Th)
+    Th = Th*ones(size(R));
+end
+if isscalar(Ph)
+    Ph = Ph*ones(size(R));
+end
+if (size(R) ~= size(Th) || size(Th) ~= size(Ph)...
+        || size(Ph) ~= size(Val))
+    error('wrong shape for Th, Ph, Val');
+end
+% plot
+[X,Y,Z] = sph2cart(Ph,pi/2-Th,R);
+h = surf(X,Y,Z,varargin{:});
+shading flat; axis equal;
+xlabel x; ylabel y; zlabel z;
+cameratoolbar;
+end
+\end{lstlisting}
+
+\subsubsection{示例 1}
+\begin{lstlisting}[language=matlab]
+Nr = 200; Nth = 150;
+R = linspace(0, 10, Nr);
+Th = linspace(0, 2*pi, Nth);
+[R, Th] = ndgrid(R, Th);
+Ph = 0;
+Val = cos(R) .* cos(Th).^2;
+figure; surfSph(R,Th,Ph,Val);
+title('cos(r)cos^2(\theta)');
+view(0, 0);
+\end{lstlisting}
+运行结果如\autoref{MatPol_fig1} ．
+
+\subsubsection{示例 2}
+\begin{lstlisting}[language=matlab]
+Nr = 200; Nth = 150;
+R = linspace(0, 10, Nr);
+Ph = linspace(0, 2*pi, Nth);
+[R, Ph] = ndgrid(R, Ph);
+Val = cos(R) .* cos(Ph).^2;
+figure; surfSph(R,pi/6,Ph,Val);
+hold on; surfSph(R,pi/3,Ph,Val);
+surfSph(R,pi/2,Ph,Val);
+xlabel x; ylabel y; zlabel z;
+title('cos(r)cos^2(\phi)');
+view(30, 16);
+\end{lstlisting}
+运行结果如\autoref{MatPol_fig2} ．

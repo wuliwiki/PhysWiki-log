@@ -18,11 +18,16 @@
 \sigma = \int \dv{\sigma}{\Omega} \dd{\Omega} 
 \end{equation}
 
+\subsection{短程势的边界条件}
 在三维情况下， 每个能量 $E$ 的本征函数都是无穷维简并的． 且根据不同的边界条件我们可以获得不同的正交归一基底． 常见的边界条件如平面波入射． 这是一种物理意义较强的选择， 因为如果一个无穷远处的入射波包具有很窄的能量带宽， 我们就可以把它近似看作是平面波\footnote{如果不是， 那么入射波包可以由这些散射态叠加而成， 之后的时间演化就是这些散射态分别乘以 $\exp(-\I E t)$ 再叠加． 但由于这时能量没有精确的定义， 我们不能讨论微分截面关于能量的函数．}． 平面波经过散射后， 会向各个方向发射球面波． 于是规定波函数的边界条件为（以下用箭头表示 $r\to\infty$ 时函数的渐进形式）
 \begin{equation}\label{ParWav_eq1}
 \psi_{\bvec k}^{(+)}(\bvec r) \rightarrow (2\pi)^{-3/2} \qty[\exp(\I \bvec k \vdot \bvec r) + f(k, \uvec r) \frac{\exp(\I k r)}{r}]
 \end{equation}
-$f(k, \uvec r)$ 是\textbf{散射幅}． 满足该边界条件的波函数也会满足正交归一条件
+$f(k, \uvec r)$ 是\textbf{散射幅}． 注意该边界条件只能对短程势能使用， 即满足
+\begin{equation}
+\lim_{r\to\infty} r V(r) = 0
+\end{equation}
+的势能， 原因见下文． 显然库仑势能不属于短程势， 我们将在 “库仑散射\upref{CulmWf}” 讨论． 满足边界条件\autoref{ParWav_eq1} 的波函数也会满足正交归一条件
 \begin{equation}
 \int \psi_{\bvec k'}^{(+)}(\bvec r)^* \psi_{\bvec k}^{(+)}(\bvec r) \dd[3]{r} = \delta(\bvec k - \bvec k')
 \end{equation}
@@ -42,11 +47,9 @@ $f(k, \uvec r)$ 是\textbf{散射幅}． 满足该边界条件的波函数也会
 \subsection{分波展开}
 \pentry{球坐标中的薛定谔方程\upref{RYTDSE}}
 
-除了\autoref{ParWav_eq1} 的边界条件外， 我们也可以找到符合另一种常用边界条件的正交归一散射态， 每个能量同样有无穷维简并．
-\begin{equation}
-\psi(\bvec r) \rightarrow 0
-\end{equation}
-我们在球坐标中解方程． 先讨论简单的情况， 即势能为中心势能 $V(r)$， 薛定谔方程可以在球坐标中分离变量， 使波函数表示为 %链接未完成
+除了\autoref{ParWav_eq1} 的边界条件外， 我们也可以找到符合另一种常用边界条件的正交归一散射态， 即要求每个散射态同时是能量和角动量 $L^2, L_z$ 的本征态． 这与 “氢原子的定态波函数\upref{HWF}” 类似， 只是我们要求能量 $E > 0$．
+
+这时每个能量同样有无穷维简并． 我们在球坐标中解方程． 先讨论简单的情况， 即势能为中心势能 $V(r)$， 薛定谔方程可以在球坐标中分离变量， 使波函数表示为 %链接未完成
 \begin{equation}
 \psi(\bvec r) = \frac{1}{r} \sum_l c_l \psi_{l,m}(r) Y_{l,m}(\uvec r)
 \end{equation}
@@ -57,11 +60,11 @@ $f(k, \uvec r)$ 是\textbf{散射幅}． 满足该边界条件的波函数也会
 \addTODO{这一段讲解有点问题， 要说明我们只需要 $m = 0$}
 
 \subsection{相移}
-如果 $V(r)$ 比库仑势能下降得快， 即
+对于短程势能 $V(r)$， 即
 \begin{equation}
 \lim_{r\to\infty} r V(r) = 0
 \end{equation}
-那么把 $V(r)$ 称为\textbf{短程势能}． 可以证明\footnote{不严谨的证明： 无穷远处相位的变化约等于 $\int_0^\infty [V(r) - l(l+1)/(2mr^2)]\dd{r}$， 只要满足 $rV(r) \to 0$ 这个积分就收敛．}短程势能在无穷远处对相位的影响可以忽略． $\psi_l(r)$ 的渐进表达式就完全可以由\textbf{相移（phase shift）} $\delta_l$ 来描述． 由于微分截面也是在无穷远处定义的， 我们可以直接由相移计算微分截面．
+可以证明\footnote{不严谨的证明： 无穷远处相位的变化约等于 $\int_0^\infty [V(r) - l(l+1)/(2mr^2)]\dd{r}$， 只要满足 $rV(r) \to 0$ 这个积分就收敛．}短程势能在无穷远处对相位的影响可以忽略． $\psi_l(r)$ 的渐进表达式就完全可以由\textbf{相移（phase shift）} $\delta_l$ 来描述． 由于微分截面也是在无穷远处定义的， 我们可以直接由相移计算微分截面．
 
 我们定义相移 $\delta_l$ 满足
 \begin{equation}
@@ -100,6 +103,7 @@ K_l(k) = \tan \delta_l
 \begin{equation}
 S_l(k) = \frac{1 + \I K_l(k)}{1 - \I K_l(k)}
 \end{equation}
+称为矩阵的原因是， 在多通道散射（未完成）中， 需要考虑从第不同通道入射和出射的情况， 这些量就成为了矩阵， 每个矩阵元都是一个函数．
 
 \subsection{推导散射截面和相位的关系}
 \pentry{平面波的球谐展开\upref{Pl2Ylm}}
