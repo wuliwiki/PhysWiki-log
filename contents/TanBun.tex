@@ -1,8 +1,66 @@
-% 切丛
-
+% 向量丛和切丛
+% 向量丛|切向量|截面|光滑截面
 \begin{issues}
 \issueDraft
 \end{issues}
+\addTODO{创建“环上的模”词条后，应将其引用为本词条的预备知识}
 
-\pentry{向量丛\upref{VecBun}}
+\pentry{纤维丛\upref{Fibre}}
+
+“切丛”是“切向量丛”的简称．顾名思义，它是切向量构成的向量丛，而这里的切向量是在流形上定义的，因此切丛的底空间是流形．
+
+\begin{definition}{切丛}
+给定流形$M$，以$M$为底空间，把各$p\in M$上的$T_pM$视为该点处的一根纤维，得到的纤维丛就称为流形$M$上的\textbf{切丛（tangent bundle）}．
+\end{definition}
+
+一个切向量场可以视为切丛的一种特殊的子集，称为“\textbf{截面（section）}”．使用这个术语是为了强调这种子集的特殊性，它在每一根纤维上都取且仅取一个点，看起来就像是纤维丛的一个截面．同样地，一个光滑切向量场有时也被称作切丛上的一个\textbf{光滑截面}．
+
+局部来看，流形$M$上切丛的每根纤维是一个线性空间；整体来看，每个切向量场本身都可以看成一个向量，构成一个线性空间，记为$\mathfrak{X}(M)$．$\mathfrak{X}(M)$作为线性空间的\textbf{基域}和$M$是一致的，具体来说，实流形$M$上的$\mathfrak{X}(M)$，其数乘时使用的“数字”就是实数．但是我们常研究另一种情况，即把对$\mathfrak{X}(M)$进行数乘时的“数字”取为$M$上的一个光滑函数．这个时候，$\mathfrak{X}(M)$不再能被看成一个线性空间，而应该是一个环$C^\infty(M)$上的模．这里$C^\infty(M)$是$M$上全体光滑函数的集合，它只是一个环，不满足乘法逆元存在性．
+
+从流形整体来看，一个1-形式，或者说余切向量场，本身也可以看成是模$\mathfrak{X}(M)$上的一个线性映射．
+
+流形$M$上也可以定义切丛之外的向量丛，同样有截面的概念，只不过此时的截面不再是切向量场了．向量丛$E$上全体光滑截面的集合，记为$\Gamma(E)$．由上所述，光滑向量场的集合$\mathfrak{X}(M)$是$\Gamma(E)$的特例，正如切丛是向量丛的特例．
+
+向量丛之间有两类比较重要的映射：
+
+\begin{definition}{点算子}
+设$E$和$F$是同一个底空间$M$上的两个\textbf{向量丛}，称丛映射$\varphi:E\rightarrow F$是一个\textbf{点算子（point operator）}，如果对于任意的光滑截面$s\in\Gamma(E)$和点$p\in M$，当$s(p)=0$时必有$\varphi(s)(p)=0$．
+
+换句话说，如果称$Z_s\{p\in M|s(p)=0\}$为$s$的\textbf{零化子（null set）}，那么$\varphi$是一个点算子当且仅当$Z_s\subseteq Z_{\varphi{s}}$．
+\end{definition}
+
+\begin{definition}{局部算子}
+设$E$和$F$是同一个底空间$M$上的两个\textbf{向量丛}，称丛映射$\varphi:E\rightarrow F$是一个\textbf{局部算子（local operator）}，如果对于任意的光滑截面$s\in\Gamma(E)$，\textbf{开集}$U\subseteq E$和点$p\in M$，当$s(U)=\{0\}$时必有$\varphi(s)(U)=\{0\}$．
+
+换句话说，如果记$Z_s$的\textbf{内部}\footnote{见\textbf{点集的内部、外部和边界}\upref{Topo0}词条．}为$Z_s^\circ$，那么$\varphi$是一个局部算子当且仅当$Z_s^\circ\subseteq Z_{\varphi{s}}^\circ$．
+\end{definition}
+
+局部算子等价于模$\mathfrak{X}(M)$上的一个线性映射，我把这一点表述为如下定理：
+
+\begin{theorem}{}\label{TanBun_the1}
+给定流形$M$上的两个向量丛$E$和$F$．如果$\varphi:\Gamma(E)\rightarrow\Gamma(F)$是$C^\infty(M)$-线性的\footnote{即$\forall s\in\Gamma(E)$和$\forall f\in C^\infty(M)$，都有$\varphi(fs)=f\varphi(s)$．}，那么$\varphi$必为一个局部算子．
+\end{theorem}
+
+\begin{exercise}{}
+证明\autoref{TanBun_the1} ．思路之一可以是利用bump function来构造一个使得$fs=s$的函数$f$，然后讨论$s, fs$和$\varphi{s}$的零化子的内部之间的关系．
+\end{exercise}
+
+\begin{exercise}{\autoref{TanBun_the1} 的反思}
+在把$\mathfrak{X}(M)$整体视为一个环$C^\infty(M)$上的模的时候，局部算子的性质有什么几何意义吗？
+\end{exercise}
+
+最后，我们再介绍一个概念，\textbf{参考系}．时空都是流形，而在时空理论中我们常讨论不同参考系下的物理定律，因此有必要定义一下流形上的参考系是什么．
+
+\begin{definition}{参考系}
+给定流形$M$上的一个$r$维向量丛$E$．设$E$上一个光滑截面的集合$Fr=\{\bvec{e}_1, \bvec{e}_2, \cdots, \bvec{e}_r\}$满足：对于任意$p\in M$，$\{\bvec{e}_1(p), \bvec{e}_2(p), \cdots, \bvec{e}_r(p)\}$构成纤维$E_p$的一组基，那么称$Fr$是$E$上的一个\textbf{参考系（frame）}．
+\end{definition}
+
+
+
+
+
+
+
+
+
 

@@ -1,0 +1,105 @@
+% 外导数
+% 外代数|外导数|外微分|叉乘|梯度|散度|旋度
+
+\pentry{微分形式\upref{Forms}}
+
+\subsection{外导数的定义}
+
+外导数是一种流形上的\textbf{微分形式外代数}\footnote{即流形上的余切向量场集合作为线性空间所生成的外代数．}上的映射，其术语分为两部分，“外”和“导数”．“外”，指的是它把各$\Omega^k(M)$中的元素映射到$\Omega^k(M)$\textbf{之外}；“导数”，指的是它具有和求导类似的性质．实际上，矢量分析中的求导就是外导数的一个特例——你可能会问，求导并不具有“外”的特点，怎么就是特例了呢？我们会在本节中解释这一点．
+
+\begin{definition}{外导数}\label{ExtDer_def1}
+给定流形$M$，其外微分代数是$\Omega (M)$．定义映射$\dd:\Omega (M)\rightarrow\Omega (M)$，满足：
+\begin{itemize}
+\item $\forall \omega\in\Omega^k(M)$，有$\dd \omega\in\Omega^{k+1}(M)$．
+\item 对于光滑函数$f\in C^\infty(M)$，$\dd f$就是$f$的方向导数（1-形式）．
+\item \textbf{线性性}：任取$a, b\in \mathbb{R}$和$\omega, \mu\in\Omega(M)$，有$\dd(a\omega+b\mu)=a\dd\omega+b\dd\mu$．
+\item \textbf{Leibniz性}：任取$\omega, \mu\in\Omega^1(M)$，有$\dd(\omega\wedge\mu)=\omega\wedge\dd\mu+\dd\omega\wedge\mu$\footnote{注意$\omega, \mu$都特指1-形式．}．
+\item \textbf{幂零性}：任取$\omega\in\Omega(M)$，都有$\dd(\dd\omega)=0$．
+\end{itemize}
+称这个映射为$\Omega (M)$或者说$M$上的一个\textbf{外导数}，又称\textbf{外微分}．
+\end{definition}
+
+定义中的Leibniz性要特别注意．考虑到外积的\textbf{反对称性}，我们也完全可以把这一条写成$\dd(\omega\wedge\mu)=\omega\wedge\dd\mu+\mu\wedge\dd\omega$．写成定义中减号的形式，是为了更方便计算出诸如$\dd(\dd\omega\wedge\mu\wedge\dd\nu)=-\dd\omega\wedge\dd\mu\wedge\dd\nu$的结果．
+
+Leibniz性的另一个形式，可能更方便用于计算：对于$\omega\in\Omega^k(M), \mu\in\Omega^1(M)$，我们有$\dd(\omega\wedge\mu)=\omega\wedge\dd\mu+(-1)^k\mu\wedge\dd\omega$．
+
+\subsection{三维欧几里得空间}
+
+在\textbf{外代数}\upref{ExtAlg}中我们提到过，$\mathbb{R}^3$和$\bigwedge^2\mathbb{R}^3$同构．在流形$\mathbb{R}^3$上，2-形式构成的线性空间$\Omega^1(\mathbb{R}^3)\cong\mathbb{R}^3$，因为是由基$\{\dd x, \dd y, \dd z\}$张成的．这样，我们也可以定义$\Omega^2(\mathbb{R}^3$到$\Omega^1(\mathbb{R}^3)$之间的同构．这个同构的存在，意味着我们可以把\textbf{旋度}和\textbf{散度}视为外导数的特例．我们观察以下例子来说明这一点：
+
+\subsubsection{旋度}
+
+考虑$\mathbb{R}^3$中任意的1-形式$\omega_x\dd x+\omega_y\dd y+\omega_z\dd z$，其中各$\omega_i$是0-形式，即光滑函数．考虑到外导数对于光滑函数就是方向导数，我们可以得知，对于任意的$a\in\{x,y,z\}$，有$\dd\omega_a=\partial_x\omega_a\dd x+\partial_y\omega_a\dd y+\partial_z\omega_a\dd z$．这样，我们就可以计算出：
+\begin{equation}\label{ExtDer_eq1}
+\begin{aligned}
+&\dd(\omega_x\dd x+\omega_y\dd y+\omega_z\dd z)\\=&(\partial_y\omega_z-\partial_z\omega_y)\dd y\wedge\dd z+\\&(\partial_z\omega_x-\partial_x\omega_z)\dd z\wedge\dd x+\\&(\partial_x\omega_y-\partial_y\omega_x)\dd x\wedge\dd y
+\end{aligned}
+\end{equation}
+
+如果我们把$\dd y\wedge\dd z$看成$\dd x$、把$\dd z\wedge\dd x$看成$\dd y$、把$\dd x\wedge\dd y$看成$\dd z$，那么\autoref{ExtDer_eq1} 右边各向系数刚好对应余切向量场形式$\omega_x\dd x+\omega_y\dd y+\omega_z\dd z$的旋度．因此，我们把三维欧几里得空间中的旋度，看成是$\Omega^1(\mathbb{R}^3)\rightarrow\Omega^2(\mathbb{R}^3)$的外导数．
+
+\subsubsection{散度}
+
+考虑$\mathbb{R}^3$中任意的2-形式$\omega_x\dd y\wedge\dd z+\omega_y\dd z\wedge\dd x+\omega_z\dd x\wedge\dd y$．同样，考虑到$\dd\omega_a=\partial_x\omega_a\dd x+\partial_y\omega_a\dd y+\partial_z\omega_a\dd z$，我们可以计算得：
+\begin{equation}\label{ExtDer_eq2}
+\begin{aligned}
+&\dd(\omega_x\dd y\wedge\dd z+\omega_y\dd z\wedge\dd x+\omega_z\dd x\wedge\dd y)\\=&(\partial_x\omega_x+\partial_y\omega_y+\partial_z\omega_z)\dd x\wedge\dd y\wedge\dd z
+\end{aligned}
+\end{equation}
+
+观察结果的系数可见，2-形式的外导数实际上就是其散度．因此，我们把三维欧几里得空间中的散度，看成是$\Omega^2(\mathbb{R}^3)\rightarrow\Omega^3(\mathbb{R}^3)$的外导数．
+
+\begin{exercise}{旋度和散度}
+利用外导数的定义，证明\autoref{ExtDer_eq1} 和\autoref{ExtDer_eq2} .
+\end{exercise}
+
+\subsubsection{梯度}
+
+由\autoref{ExtDer_def1} 的第二条，三维欧几里得空间中的梯度，是$\Omega^0(\mathbb{R}^3)\rightarrow\Omega^1(\mathbb{R}^3)$的外导数．
+
+自此，三维空间中的梯度、旋度和散度都可以统一为一个概念了：外导数．值得注意的是，矢量分析中的定理“梯度的旋度为零”和“旋度的散度为零”，可以统一理解为外导数的\textbf{幂零性}：$\mathrm{d}^2=0$．
+
+\subsubsection{三维空间的特殊性}
+
+尝试求解下列代数方程：
+
+\begin{equation}\label{ExtDer_eq5}
+\frac{n(n-1)}{2}=n
+\end{equation}
+
+答案是$0$和$3$，对吧？非零解只有$3$，这就是三维空间的特殊之处，也是三维向量分析如此丰富的原因．只有在三维空间中，我们才能用以上外导数的概念来导出散度、旋度等概念．
+
+\autoref{ExtDer_eq5} 究竟是什么呢？$n$代表的是一个线性空间$V$的维度，而$n(n-1)/2$代表的是$\bigwedge^2 V$的维度．\autoref{ExtDer_eq5} 想求解的是，什么情况下$V$会和$\bigwedge^2 V$同构，而“非零解只有$3$”意味着唯一的情况就是，“$V$是一个三维空间”．
+
+向量叉乘的“右手定则”，实际上就是一个同构$f:\bigwedge^2 V\to V$，其中$V$是$M$上各点的微分形式空间，或者说“余切向量空间”，而$f(\dd y\wedge \dd z)=\dd x, f(\dd z\wedge \dd x)=\dd y, f(\dd x\wedge \dd y)=\dd z$．我们当然可以定义其它的同构，比如$f(\dd y\wedge \dd z)=-\dd x, f(\dd z\wedge \dd x)=-\dd y, f(\dd x\wedge \dd y)=-\dd z$的同构，此时导出的向量叉乘遵循的就是“左手定则”了．
+
+
+
+\subsection{麦克斯韦方程组的外微分形式}
+
+\addTODO{百科中尚未创建“规范场论”部分．使用引用\cite{KnotsVol4}．}
+
+
+在$\mathbb{R}^3$中考虑电磁场，三个空间轴分别为$x, y, z$轴．
+
+考虑麦克斯韦方程组中的两个方程，$\nabla\cdot\bvec{B}=0$和$\nabla\times\bvec{E}=\partial_t\bvec{B}$．为了尝试用外代数来表达这两个式子，我们就要把$\bvec{B}$
+表示成一个2-形式$B=B_z\dd x\wedge\dd y+B_x\dd y\wedge\dd z+B_y\dd z\wedge\dd x$，把$\bvec{E}$表示成一个1-形式$E=E_x\dd x+E_y\dd y+E_z\dd z$，这样以上两个方程的左边就都可以写成外导数的形式，从而有：
+
+\begin{equation}\label{ExtDer_eq3}
+\dd B=0
+\end{equation}
+和
+\begin{equation}\label{ExtDer_eq4}
+\dd E=\partial_tB
+\end{equation}
+
+其中$\mathbb{R}^4$可以写成三维空间和一维时间的乘积：$\mathbb{R}^3\times\mathbb{R}$．这个四维欧几里得空间中的时间轴记为$x^0$轴，空间轴则记为$x^1, x^2, x^3$轴．要注意在这种表示下，$\partial_tB$就成了$\partial_0B$．
+
+此时，如果我们用一个统一的2-形式$F=B+E\wedge\dd x^0$来表示电磁场\footnote{电场外积一个$\dd x^0$是为了凑成合适的2-形式．}，那么\autoref{ExtDer_eq3} 和\autoref{ExtDer_eq4} 就可以统一用一个式子来表达：
+\begin{equation}
+\dd F=0
+\end{equation}
+
+证明过程此处略去，留给规范场论部分中相关章节来处理．麦克斯韦方程组的剩下两个方程的表示，需要引入新的概念，因此本节也暂且不表．
+
+
