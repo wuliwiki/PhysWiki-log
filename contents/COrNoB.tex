@@ -1,4 +1,4 @@
-% 傅里叶变换与连续正交归一基底
+% 连续正交归一基底与傅里叶变换
 % 正交归一|delta 函数|内积
 
 \pentry{傅里叶变换（指数）\upref{FTExp}}
@@ -16,14 +16,19 @@
 \begin{equation}\label{COrNoB_eq2}
 \braket{x_i}{x_j} = \delta_{i,j}
 \end{equation}
-若这组正交归一基底是完备的， 那么任何函数都可以分解为它们的线性组合： 令
+若这组正交归一基底是完备的， 那么任何函数都可以分解为它们的线性组合：
+\begin{equation}\label{COrNoB_eq6}
+\ket{f} = \sum_j c_j\ket{x_j}
+\end{equation}
+两边左乘 $\bra{x_i}$， 则有
+\begin{equation}\label{COrNoB_eq10}
+\braket{x_i}{f} = \sum_j c_j\braket{x_i}{x_j} = \sum_j c_j \delta_{i,j} = c_i
+\end{equation}
+即
 \begin{equation}\label{COrNoB_eq5}
 c_i = \braket{x_i}{f}
 \end{equation}
-那么
-\begin{equation}\label{COrNoB_eq6}
-\ket{f} = \sum_i c_i\ket{x_i} = \sum_i \ket{x_i}\braket{x_i}{f}
-\end{equation}
+\autoref{COrNoB_eq10} 的过程相当于用正交归一性把 $\ket{x_i}$ 项从\autoref{COrNoB_eq6} 的求和中筛选了出来． 我们得到几何矢量中一个熟悉的结论： 一个矢量关于一组正交归一基底的坐标等于它在每个基底上的投影．
 
 \subsection{连续的函数基底}
 我们接下来用类似的方法来理解傅里叶变换（\autoref{FTExp_eq6}~\upref{FTExp}）．
@@ -37,34 +42,37 @@ g(k) &= \frac{1}{\sqrt{2\pi }} \int_{-\infty }^{+\infty } f(x)\E^{-\I kx} \dd{x}
 \end{equation}
 严格来说， $X$ 空间的函数必须要满足 $\braket{x}{x}$ 为有限值， 而\autoref{COrNoB_eq1} 中的函数显然不满足这点， 所以它们并不属于 $X$ 空间， 而是一个包含 $X$ 的更大的空间， 所以这个 “基底” 只是一个形象的说法， 需要加上引号．
 
-显然， \autoref{COrNoB_eq1} 中的任意两个 “基底” 的内积都不收敛， 而且 $k$ 的取值是连续的， 所以我们不可能用\autoref{COrNoB_eq2} 表示它们的正交归一关系． 通过（\autoref{Delta_eq8}~\upref{Delta}）
+显然， \autoref{COrNoB_eq1} 中的任意两个 “基底” 的内积都不收敛， 而且 $k$ 的取值是\textbf{连续}的， 所以我们不可能用\autoref{COrNoB_eq2} 表示它们的正交归一关系． 但通过（\autoref{Delta_eq8}~\upref{Delta}）
 \begin{equation}
 \int_{-\infty}^{+\infty} \E^{\I kx}\dd{x} = 2\pi \delta(k)
 \end{equation}
 可以得到一个和\autoref{COrNoB_eq2} 类似的关系
 \begin{equation}
-\braket{k'}{k} = \int_{-\infty}^{+\infty} \frac{\E^{-\I k'x}}{\sqrt{2\pi}} \frac{\E^{\I kx}}{\sqrt{2\pi}}\dd{x}
-= \frac{1}{2\pi}\int_{-\infty}^{+\infty} \E^{\I (k'-k)x}\dd{x}
+\begin{aligned}
+\braket{k'}{k} &= \int_{-\infty}^{+\infty} \frac{\E^{-\I k'x}}{\sqrt{2\pi}} \frac{\E^{\I kx}}{\sqrt{2\pi}}\dd{x}\\
+&= \frac{1}{2\pi}\int_{-\infty}^{+\infty} \E^{\I (k'-k)x}\dd{x}
 = \delta(k' - k)
+\end{aligned}
 \end{equation}
 即
-\begin{equation}
+\begin{equation}\label{COrNoB_eq8}
 \braket{k'}{k} = \delta(k' - k)
 \end{equation}
 这可以看作是\textbf{连续基底的正交归一条件}．
 
-现在， \autoref{COrNoB_eq4} 和\autoref{COrNoB_eq3} 可以分别对应到\autoref{COrNoB_eq5} 和\autoref{COrNoB_eq6}， 用狄拉克符号记为
-\begin{align}
+现在， 把\autoref{COrNoB_eq4}  和\autoref{COrNoB_eq3} 用狄拉克符号表示为
+\begin{align}\label{COrNoB_eq9}
 &g(k) = \braket{k}{f}\\
-\label{COrNoB_eq7}&f(x) = \int_{-\infty}^{+\infty} g(k) \ket{k} \dd{k} = \int_{-\infty}^{+\infty} \ket{k}\braket{k}{f} \dd{k}
+\label{COrNoB_eq7}&f(x) = \int_{-\infty}^{+\infty} g(k') \ket{k'} \dd{k'}
 \end{align}
-要证明\autoref{COrNoB_eq7}， 只需要使用狄拉克 $\delta$ 的性质（\autoref{Delta_eq7}~\upref{Delta}） $\int \delta(x - x_0) f(x) \dd{x} = f(x_0)$， 以及多重积分可以交换积分顺序：
+它们可以分别看作是把\autoref{COrNoB_eq5} 和 \autoref{COrNoB_eq6} 拓展到连续基底的情况． 根据定义， 任何能做傅里叶（反）变换的 $f(x)$ 必定能展开成\autoref{COrNoB_eq7} 的形式． 再来证明\autoref{COrNoB_eq9}， 过程和\autoref{COrNoB_eq10} 类似： \autoref{COrNoB_eq7} 两边左乘 $\bra{k}$， 使用 $\delta$ 函数的性质\autoref{Delta_eq7}~\upref{Delta} 把积分中 $\ket{k}$ 基底的系数 “筛选” 出来
 \begin{equation}
 \begin{aligned}
-\int \ket{k}\braket{k}{f} \dd{k} &= \int \frac{\E^{\I kx}}{\sqrt{2\pi }} \qty(\int \frac{\E^{-\I k x'}}{\sqrt{2\pi }} f(x') \dd{x'}) \dd{k}\\
-&= \int f(x') \qty(\int \frac{\E^{-\I x' k}}{\sqrt{2\pi }}\frac{\E^{\I x k}}{\sqrt{2\pi }}\dd{k}) \dd{x'}\\
-&= \int f(x') \delta (x - x') \dd{x'}\\
-&= f(x)
+\braket{k}{f} &= \int_{-\infty}^{+\infty} g(k) \braket{k}{k'} \dd{k}\\
+&= \int_{-\infty}^{+\infty} g(k) \delta(k-k') \dd{k'}
+= g(k)
 \end{aligned}
 \end{equation}
-这样就证明了傅里叶变换．
+证毕．
+
+注意该证明并不仅限于傅里叶变换一种情况， 任何连续的基底 $\ket{k}$ 只要满足正交归一条件\autoref{COrNoB_eq8} ， 且可以展开某函数 $f(x)$， 就都能使\autoref{COrNoB_eq9} 成立．

@@ -1,4 +1,79 @@
 % 欧几里得环
-% Euclid Ring|Euclid环|整环|多项式|因式分解
+% Euclid Ring|Euclid环|整环|多项式|因式分解|欧几里得整环|Euclid Domain
 
-\pentry{真因子树\upref{FctTre}}
+\pentry{主理想整环\upref{PID}}
+
+\begin{definition}{欧几里得环}
+给定整环$R$，如果存在映射$\delta:R\to\mathbb{Z}^+\cup\{0\}$\footnote{即给每一个环中元素赋予一个非负整数．}，使得对于任意$a, b\in R$且$b\not=0$，都存在$q, r\in R$使得$a=qb+r$，且$\delta(r)<\delta(b)$，则称$R$为一个\textbf{欧几里得环（Euclid Ring）}，或者\textbf{欧几里得整环（Euclid Domain）}．
+\end{definition}
+
+
+
+直观来说，欧几里得环就是“可以做辗转相除法的环”．这从定义就可以看出来：任取$a$，再用任意的$b$去尝试除以它，总能得到$qb+r$的形式，其中$r$相当于除法的余数．虽然任意环中的元素都可以这么做分解，而欧几里得环就特殊在它还关系到一个非负整数赋值，使得余数的赋值总是小于非零除数$b$的，这样就使得我们可以多次分解，也就是进行辗转相除．
+
+为了严格证明以上说法成立，我们还需要讨论欧几里得环的一个性质：
+
+\begin{theorem}{}\label{EuRing_the1}
+设$R$是一个欧几里得环，那么对于$r\in R$，有：
+
+$r=0\iff \delta(r)=0$．
+\end{theorem}
+
+\textbf{证明}：
+
+任选$a\in R$且$a\not=0$，那么$a=1a+0$，故由欧几里得环的定义可推知，对于任意$a\in R-\{0\}$，必有$\delta(0)<\delta(a)$，由此得证．
+
+\textbf{证毕}．
+
+有了\autoref{EuRing_the1} ， 我们还可以补上定义中没有说明的一点：当$\delta(a)\leq\delta(b)$的时候，我们可以取$q=0$而$r=a$来满足$a=qb+r$且符合欧几里得环的性质．因此，一般只讨论$\delta(a)>\delta(b)$的情形．
+
+我们来看几个典型的欧几里得环．
+
+\begin{example}{整数环}
+对于$n\in\mathbb{Z}$，令$\delta(n)=n$，则容易看出$\mathbb{Z}$是一个欧几里得环．
+\end{example}
+
+\begin{example}{多项式环}
+任给域$\mathbb{K}$，其多项式环$\mathbb{K}[x]$是一个欧几里得环．取$\delta(f(x))=2^{\opn{deg}(f)}$即可．
+\end{example}
+
+$\opn(deg)(f)$是$f$的次数，也就是系数非零的最高项的幂次．这里$\delta$要取$2$的指数是因为$\opn{deg}(0)=-\infty$，而我们希望$\delta(0)=0$．
+
+\begin{example}{高斯整数环}
+高斯整数环是复平面上的全体坐标为整数的点的集合$\mathbb{Z}[\I]$构成的环，并且是一个欧几里得环．证明见下．
+\end{example}
+
+\textbf{证明}：
+
+对于任意$z\in\mathbb{Z}[\I]$，令$\delta(z)=\abs{z}^2$．
+
+任给$a, b\in\mathbb{Z}[\I]$，不妨设$\delta(a)>\delta(b)$．于是必有$u, v\in\mathbb{Q}$，使得$\frac{a}{b}=(u+v\I)$．
+
+于是必有$c, d\in\mathbb{Z}$，使得$\abs{c-u}\leq\frac{1}{2}$和$\abs{d-v}\leq\frac{1}{2}$．
+
+令$q=c+d\I$，$r=(c+d\I)b-(u+v\I)b=(c+d\I)b-a$，即可满足$a=qb+r$且$\delta(r)<\delta(b)$．
+
+\textbf{证毕}．
+
+\begin{theorem}{}
+欧几里得环都是主理想整环．
+\end{theorem}
+
+\textbf{证明}：
+
+设$R$是一个欧几里得环，令$I$为$R$的一个理想．不妨设$I\not=\{0\}$．
+
+由于$\delta(I)=\{\delta(i)|i\in I\}\subseteq\mathbb{Z}^+\cup\{0\}$，故在\textbf{非零}的$\delta(i)$中存在最小值$\delta(b)$，其中$b\in I$．
+
+任取$a\in I$，则存在$q, r\in R$且$\delta(r)<\delta(b)$，使得$a-qb=r$．
+
+由于$a, b\in I$且$I$有吸收律\footnote{见\textbf{环的理想和商环}\upref{Ideal}，这意味着$qb\in I$．}，故$r\in I$．由于$\delta(b)$是$\delta(I)$中的最小非负值，因此必有$\delta(r)=0$．由\autoref{EuRing_the1} ，$r=0$．
+
+因此，$b|a$对任意$a\in I$成立．
+
+故$I=\langle b \rangle$，从而得证．
+
+\textbf{证毕}．
+
+
+
