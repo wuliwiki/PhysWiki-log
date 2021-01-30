@@ -1,0 +1,55 @@
+% 一维散射态的归一化
+
+\pentry{一维散射（量子）\upref{Sca1D}}
+写作参考\href{https://chaoli.club/index.php/4541/last}{这篇帖子}． 类似于平面波， 一维散射态也有不同的归一化方式， 但情况要更为复杂． 
+
+为了方便先假设 $V(x)$ 关于原点对称， 且 $V(x)$ 只在区间 $[-L,L]$ 内不为零． 由于 $V(x)$ 的对称性， 我们必定能找到实值的奇函数和偶函数两种解． 令 $k = \sqrt{2mE} > 0$， 在区间 $[-L,L]$ 外， 波函数就是正弦函数加上一个相移
+\begin{equation}\label{ScaNrm_eq3}
+\psi_k(x) = A\sin(kx + \phi) \qquad (x > L)
+\end{equation}
+其中$\phi$ 是 $k$ 的函数， 称为\textbf{相移（phase shift）}． 为方便书写下文把 $\phi(k),\phi(k')$ 分别记为 $\phi, \phi'$．
+
+令对称和反对称散射态分别为实函数 $\psi_{k,e}(x)$ 和 $\psi_{k,o}(x)$ 我们希望通过添加适当的归一化系数后， 波函数能满足归一化条件（\autoref{EngNor_eq3}~\upref{EngNor}）% 链接未完成
+\begin{equation}\label{ScaNrm_eq1}
+\int_{-\infty}^{+\infty} \psi_{k',i'}(x)^* \psi_{k,i}(x) \dd{x} = \delta_{i',i}\delta(k' - k) \qquad (k > 0, i = e, o)
+\end{equation}
+
+\begin{theorem}{}
+\autoref{ScaNrm_eq1} 对所有性质良好的 $V(x)$ 都成立， 且\autoref{ScaNrm_eq3} 中\textbf{归一化系数和简谐波相同}， 即 $A = 1/\sqrt{\pi}$（\autoref{EngNor_eq5}~\upref{EngNor}）．
+\end{theorem}
+
+我们以下给出部分证明： 对于奇偶性不同的两个函数， 他们显然式正交的． 首先已知
+\begin{equation}
+\int_{0}^{+\infty} \sin(k'x)\sin(kx)\dd{x} = \frac{\pi}{2}\delta(k'-k)
+\end{equation}
+现在添加相位 $\phi(k)$ 后， 有不定积分
+\begin{equation}
+\int \sin(k'x+\phi')\sin(kx+\phi) \dd{x} = \frac{\sin[(k'-k)x + (\phi'-\phi)]}{2(k'-k)}
+- \frac{\sin[(k'+k)x+(\phi'+\phi)]}{2(k'+k)}
+\end{equation}
+在 $(0,n)$ 做定积分取极限 $n\to\infty$ 后发现比 $\delta(x)$ 多了两项
+\begin{equation}
+\int_{0}^{+\infty} \sin(k'x+\phi')\sin(kx+\phi) \dd{x} = \frac{\pi}{2}\delta(k'-k)
++ \frac{\sin(\phi'+\phi)}{2(k'+k)} - \frac{\sin(\phi'-\phi)}{2(k'-k)}
+\end{equation}
+所以在区间 $[0, +\infty)$ 上 $\sin(kx+\phi)$ 一般并不正交．
+
+使用归一化系数 $1/\sqrt{2}$， \autoref{ScaNrm_eq1} 的积分为（利用波函数的奇偶性）
+\begin{equation}\label{ScaNrm_eq2}
+\begin{aligned}
+\braket{\psi_{k'}}{\psi_k} &= 2\int_{0}^{+\infty} \frac{1}{\sqrt{\pi}}\sin(k'x+\phi')\frac{1}{\sqrt{\pi}}\sin(kx+\phi) \dd{x} + 2I(k,k')\\
+&= \delta(k'-k) + \frac{\sin(\phi'+\phi)}{\pi(k'+k)} - \frac{\sin(\phi'-\phi)}{\pi(k'-k)} + 2I(k,k')
+\end{aligned}
+\end{equation}
+其中 $2I(k,k')$ 修正了 $[-L,L]$ 区间实际波函数和 $\sin(kx+\phi)$ 的不同
+\begin{equation}
+I(k,k') = \int_0^L \psi_{k'}(x)^* \psi_k(x) \dd{x}
+-\int_{0}^{L} \frac{1}{\sqrt{\pi}}\sin(k'x+\phi') \frac{1}{\sqrt{\pi}}\sin(kx+\phi) \dd{x}
+\end{equation}
+如果能证明对于任意 $V(x)$， \autoref{ScaNrm_eq2} 的最后的三项之和都为零， 那么我们就证明了\autoref{ScaNrm_eq1} 的正交归一关系． 读者可以尝试用一些具体的例子证明， 如方势垒\upref{SqrPot}．
+
+\subsection{不对称势能}
+\addTODO{如果 $V(x)$ 不对称怎么办？ 分开两半来算归一化系数？}
+
+\subsection{行波的归一化}
+\addTODO{通过 2 乘 2 的酋矩阵变换即可．}

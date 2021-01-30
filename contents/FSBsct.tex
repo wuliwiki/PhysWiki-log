@@ -1,0 +1,74 @@
+% 方势垒散射数值计算
+
+\begin{issues}
+\issueDraft
+\issueOther{需要改进程序， 计算波函数随时间的变化． （给系数加上 $\exp(-\I E t)$ 即可）}
+\end{issues}
+
+\pentry{一维散射态的正交归一化\upref{EngNor}}
+已完美还原高斯波包， 参考\href{https://chaoli.club/index.php/4541/}{超理论坛的讨论}．
+
+\begin{figure}[ht]
+\centering
+\includegraphics[width=10cm]{./figures/FSBsct_1.png}
+\caption{运行结果} \label{FSBsct_fig1}
+\end{figure}
+
+\begin{lstlisting}[language=matlab, caption=FSBsct.m]
+clear; close all;
+
+% === params ====
+k0 = 4; a = 1/6;
+Nk = 300; kmax = k0 + 12*a; kmin = max(kmax/Nk, k0 - 12*a);
+x0 = 0;
+Nx = 2000; xmin = x0-6/a; xmax = x0+6/a;
+psi = @(x)exp(1i*k0*x).*exp(-(a*(x-x0)).^2);
+L = 3; V0 = 1; m = 1;
+% ==============
+
+% plot FSB
+x = linspace(xmin, xmax, Nx); dx = x(2)-x(1);
+figure; plot(x, real(psi(x)));
+E = 0.9;
+[psi_e,A_e,C_e,D_e] = FSB(x,E,L,m,V0,0);
+hold on; plot(x, psi_e);
+[psi_o,A_o,C_o,D_o] = FSB(x,E,L,m,V0,1);
+plot(x, psi_o);
+xlabel x; title '\psi(x) and \psi_k(x)'
+
+% verify orthogonality
+E1 = 1.5; E2 = 1.6; k1 = sqrt(2*m*E1); k2 = sqrt(2*m*E2);
+[~,A1,C1,D1] = FSB(0,E1,L,m,V0,0);
+[~,A2,C2,D2] = FSB(0,E2,L,m,V0,0);
+ph1 = atan2(C1,D1); ph2 = atan2(C2,D2);
+I = integral(@(x)FSB(x,E1,L,m,V0,0).*FSB(x,E2,L,m,V0,0)...
+    -sin(k2*x+ph2).*sin(k1*x+ph1)/pi, 0, L);
+I_expect = sin(ph2-ph1)/(k2-k1)/2/pi - sin(ph1+ph2)/(k1+k2)/2/pi;
+disp([I, I_expect]);
+
+% plot FFT
+k = linspace(kmin, kmax, Nk); dk = k(2)-k(1);
+[g1, k1] = FFT(fftresize(psi(x),Nx*2), dx);
+g = interp1(k1, g1, k);
+figure; plot(k, abs(g), '.');
+axis([kmin, kmax, 0, max(abs(g))*1.1]);
+xlabel k; title 'FFT of \psi(x)';
+
+A = zeros(1,Nk); B = A;
+E = k.^2/(2*m);
+A0 = 0; %integral(@(x)psi(x), xmin, xmax);
+psi1 = A0*ones(size(x));
+for i = 1:Nk
+    A(i) = integral(@(x)psi(x).*FSB(x,E(i),L,m,V0,0), ...
+            xmin, xmax, 'RelTol', 1e-16);
+    B(i) = integral(@(x)psi(x).*FSB(x,E(i),L,m,V0,1), ...
+            xmin, xmax, 'RelTol', 1e-16);
+    psi1 = psi1 + dk*A(i)*FSB(x,E(i),L,m,V0,0) ...
+                + dk*B(i)*FSB(x,E(i),L,m,V0,1);
+end
+figure; plot(x, real(psi(x)));
+hold on; plot(x, real(psi1), '--');
+plot([xmin, -L,-L, L, L, xmax], [0, 0, 0.5, 0.5, 0, 0], 'b');
+axis([xmin,xmax,-1,1]);
+title 'reconstruction of \psi(x)'
+\end{lstlisting}

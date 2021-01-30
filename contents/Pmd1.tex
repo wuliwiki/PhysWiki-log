@@ -1,0 +1,41 @@
+% 解三棱锥 1 （Matlab）
+
+\begin{issues}
+\issueDraft
+\end{issues}
+
+\addTODO{给出公式}
+若已知 4 个点的坐标为 $\bvec P_i = (x_i,y_i,z_i)$， 且某点 $\bvec P = (x,y,z)$ 到它们的距离 $r_i$， 那么可以唯一地解出 $\bvec P$．
+\begin{equation}
+(x-x_i)^2 + (y-y_i)^2 + (z-z_i)^2 = r_i^2 \qquad (i = 1,2,3,4)
+\end{equation}
+以下给出 Matlab 代码．
+
+\addTODO{该程序输入只有三个点， 按照右手定则来选取． 应该再写一个程序输入 4 个点， 输出唯一的解．}
+\begin{lstlisting}[language=matlab]
+% 已知三棱锥底面的三个点坐标 P1,P2,P3, 和三条棱 L1,L2,L3, 求顶点坐标
+function P = pmdL32P(L1,L2,L3,P1,P2,P3)
+
+P12 = P2-P1; mag = norm(P12);
+C1 = (L1^2+mag^2-L2^2)/(2*L1*mag);% C1 = cos<P1P,P1P2>
+P12 = P12/mag;
+
+P13 = P3-P1; mag = norm(P13);
+C2 = (L1^2+mag^2-L3^2)/(2*L1*mag);% C2 = cos<P1P,P1P3>
+P13 = P13/norm(P13);
+
+% P12和P13的法向量
+vn = cross(P12,P13); vn = vn/norm(vn);
+
+% 求单位投影矢量
+M33 = [P12; P13; vn]; % 方程组: xs,ys,zs的点是单位P1P在P1P2,P1P3平面上的投影矢量(单位矢量)
+C = [C1; C2; 0];      % 第一条: 矢量在P1P2方向的投影 = C1
+Pproj = (M33\C)';     % 第二条: 矢量在P1P3方向的投影 = C2
+                      % 第三条: 矢量在(nx,ny,nz)方向的投影 = 0
+% 还原
+a = sqrt(1-norm(Pproj)^2);
+P = L1*(a*vn+Pproj)+P1;
+end
+\end{lstlisting}
+
+\addTODO{demo}

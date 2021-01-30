@@ -5,17 +5,15 @@
 \issueTODO
 \end{issues}
 
-\pentry{定积分\upref{DefInt}}
-在物理中我们经常会遇到一些模型， 如质点和点电荷等， 这类模型使用了极限的思想（如令体积趋于无穷小）． 如果考察质点的密度或点电荷的电荷密度， 将得到无穷大， 然而将其密度（电荷密度）在空间中积分却又能得到有限的质量与电荷． 为了描述这样的密度（电荷密度）分布， 我们引入\textbf{狄拉克 $\delta$ 函数（Dirac delta function）}．
+\pentry{定积分\upref{DefInt}， sinc 函数\upref{sinc}}
+\footnote{参考 \cite{Arfken} 相关内容．}在物理中我们经常会遇到一些模型， 如质点和点电荷等， 这类模型使用了极限的思想（如令体积趋于无穷小）． 如果考察质点的密度或点电荷的电荷密度， 将得到无穷大， 然而将其密度（电荷密度）在空间中积分却又能得到有限的质量与电荷． 为了描述这样的密度（电荷密度）分布， 我们引入\textbf{狄拉克 $\delta$ 函数（Dirac delta function）}．
 
-\subsection{一维情况}
-
-$\delta(x)$ 在泛函分析中并不是数学中一个严格意义上的函数， 而是被称为\textbf{广义函数（generalized function）}或\textbf{分布（distribution）}， 详见泛函分析教材如\cite{Zeidler}． 但本文中我们给出另一个严谨的定义： 把 $\delta$ 函数看作是满足一定条件的\textbf{函数序列}， 即无穷个函数按一定顺序排列．
+$\delta(x)$ 在泛函分析中并不是数学中一个严格意义上的函数， 而是被称为\textbf{广义函数（generalized function）}或\textbf{分布（distribution）}， 详见泛函分析教材如\cite{Zeidler}．
 
 \begin{figure}[ht]
 \centering
 \includegraphics[width=11cm]{./figures/Delta_1.pdf}
-\caption{$\delta(x - x_0)$ 的几个例子} \label{Delta_fig1}
+\caption{$\delta(x - x_0)$ 函数列的几个例子} \label{Delta_fig1}
 \end{figure}
 
 我们来考虑一个函数（\autoref{Delta_fig1} 左）
@@ -30,22 +28,31 @@ h & \qty( \abs{x - x_0} \leqslant \frac{1}{2h} )\\
 
 这样， 上面的 $f(x)$ 就可以表示为 $\delta(x - x_0)$． 当然， 我们还可以选取其他含有参数的 $f(x)$ 来逼近 $\delta$ 函数， 如\autoref{Delta_fig1} 中的另外两种情况．
 
-\begin{definition}{狄拉克 $\delta$ 函数}\label{Delta_def1}
-令 $\delta_\alpha(x)$ 为一个含参数 $\alpha$ 的一元实函数． 如果 $\alpha$ 是离散的， 我们可以将其看作一个由无穷多个函数组成的函数序列 $\delta_1(x), \delta_2(x), \dots$ 若 $\delta_\alpha(x)$ 满足以下两个条件， 那么我们把该函数列称为狄拉克 $\delta$ 函数：
-\begin{equation}\label{Delta_eq4}
-\lim_{\alpha\to+\infty} \delta_\alpha(x) = 0 \qquad (x \ne 0)
-\end{equation}
-且（注意极限和积分不可交换）
-\begin{equation}\label{Delta_eq5}
-\lim_{\alpha\to+\infty} \int_{-\infty}^{\infty} \delta_\alpha(x) \dd{x} = 1
-\end{equation}
+\subsection{用函数列严格定义}
 
-另外， 形式上我们可以记
-\begin{equation}\label{Delta_eq1}
-\lim_{\alpha\to+\infty} \delta_\alpha(x) = \delta(x)
+本文中我们给出另一个严谨的定义： 把 $\delta$ 函数看作是满足一定条件的\textbf{函数序列}， 即无穷个函数按一定顺序排列．
+\begin{definition}{狄拉克 $\delta$ 函数}\label{Delta_def1}
+令 $\delta_1(x), \delta_2(x), \dots$ 为一个连续实函数的序列． 若 $\delta_n(x)$ 满足以下两个条件， 那么我们把该函数列称为狄拉克 $\delta$ 函数（列）：
+\begin{equation}\label{Delta_eq5}
+\lim_{n\to\infty}\int_{-\infty}^{+\infty} \delta_n(x) \dd{x} = 1
+\end{equation}
+对任意给定的不包含 0 的区间 $(a,b)$（$a,b \ne 0$， 可取 $\pm\infty$）， 有
+\begin{equation}\label{Delta_eq4}
+\lim_{n\to\infty} \int_{a}^{b} \delta_n(x) \dd{x} = 0
 \end{equation}
 \end{definition}
-注意\autoref{Delta_eq1} 中的等号并不是通常意义的两函数相等， 而是隐含了\autoref{Delta_eq4} 和\autoref{Delta_eq5} 两个条件． 另外在一些教材会把 $\delta(x)$ 的性质简单记为
+事实上， 教材上（如\cite{Arfken}）常使用以下定义， 但笔者认为这两种定义是等价的\footnote{容易证明\autoref{Delta_def1} 是\autoref{Delta_def2} 的必要条件（只需要令\autoref{Delta_def2} 中的 $f(x) = 1$； 再令 $f(x)$ 在区间 $(a,b)$ 为 1， 否则为 0）． 充分条件笔者不会证明，欢迎指正．如果有误以\autoref{Delta_def2} 为准．}， 且前者更容易理解
+
+\begin{definition}{狄拉克 $\delta$ 函数 2}\label{Delta_def2}
+令 $\delta_1(x), \delta_2(x), \dots$ 为一个连续实函数的序列． 若 $\delta_n(x)$ 满足以下两个条件， 那么我们把该函数列称为狄拉克 $\delta$ 函数（列）：
+
+对所有性质良好（例如在 $x = 0$ 连续）的 $f(x)$， 都有
+\begin{equation}
+\lim_{n\to\infty}\int_{-\infty}^{+\infty} \delta_n(x)f(x) \dd{x} = f(0)
+\end{equation}
+\end{definition}
+
+一些物理教材会把 $\delta(x)$ 的性质简单记为
 \begin{equation}\label{Delta_eq2}
 \delta(x) =
 \begin{cases}
@@ -56,63 +63,85 @@ h & \qty( \abs{x - x_0} \leqslant \frac{1}{2h} )\\
 \begin{equation}\label{Delta_eq3}
 \int_{-\infty}^{+\infty} \delta(x) \dd{x} = 1
 \end{equation}
-这些表达式都需要按照\autoref{Delta_def1} 来严格理解．
+这是十分不严谨的， $\delta(x)$ 不是函数， 更不可积， $x \ne 0$ 时极限 $\lim_{n\to \infty}\delta_n(x)$ 也未必存在（\autoref{Delta_ex2} ）．
 
-\begin{exercise}{高斯函数}
-证明高斯分布函数\upref{GausPD}满足
+\begin{exercise}{高斯函数}\label{Delta_exe2}
+证明高斯分布函数\upref{GausPD} 可以构成以下 $\delta$ 函数列
 \begin{equation}
-\lim_{\alpha\to\infty}\frac{1}{\alpha \sqrt{2\pi }} \exp(-\frac{x^2}{2\alpha ^2}) = \delta(x)
+\delta_n(x) = \frac{n}{\sqrt{\pi}} \E^{-{n ^2}x^2} \qquad (n = 1, 2, \dots)
 \end{equation}
 \end{exercise}
 \begin{exercise}{sinc 函数}\label{Delta_exe1}
-证明 $\sinc$ 函数\upref{sinc}满足（提示： \autoref{sinc_eq1}~\upref{sinc}）．
+证明 $\sinc$ 函数\upref{sinc}可以构成以下 $\delta$ 函数列（提示： \autoref{sinc_eq1}~\upref{sinc}）．
 \begin{equation}
-\lim_{\alpha\to\infty}\frac{\alpha}{\pi}\sinc(\alpha x) = \lim_{\alpha\to\infty}\frac{\alpha}{\pi}\sinc^2(\alpha x) = \delta(x)
+\delta_n(x) = \frac{n}{\pi}\sinc^2(n x) \qquad (n = 1, 2, \dots)
 \end{equation}
 \end{exercise}
+
+\begin{example}{sinc 函数}\label{Delta_ex2}
+证明 $\sinc$ 函数\upref{sinc}可以构成以下 $\delta$ 函数列
+\begin{equation}\label{Delta_eq10}
+\delta_n(x) = \frac{n}{\pi}\sinc(n x) \qquad (n = 1, 2, \dots)
+\end{equation}
+该式在傅里叶分析和量子力学中有重要应用\cite{Arfken}， 但证明起来比较困难只好从略（参考\autoref{sinc_eq2}~\upref{sinc}）． 注意即使对于 $x \ne 0$ 上式也不存在 $n\to\infty$ 的极限， 可见\autoref{Delta_eq2} 是十分不严谨的．
+\end{example}
+\begin{figure}[ht]
+\centering
+\includegraphics[width=14.25cm]{./figures/Delta_2.pdf}
+\caption{\autoref{Delta_ex2} 中的 $n\sinc(n x)$} \label{Delta_fig2}
+\end{figure}
 
 \subsubsection{多元 delta 函数}
 \addTODO{……}
 
-\subsection{性质}
-若一个等式中出现了 $\delta$ 函数， 那么其意义是先将 $\delta(x)$ 替换为\autoref{Delta_def1} 中的 $\delta_\alpha(x)$． 该\textbf{等式在 $\alpha\to+\infty$ 的极限时成立}．
+\subsection{常见性质}
+\subsubsection{性质 1}
+若一个等式中出现了所谓的 $\delta$ 函数 $\delta(x)$， 那么其严格的定义是先将 $\delta(x)$ 替换为符合\autoref{Delta_def1} 的任意函数列 $\delta_n(x)$， 令\textbf{等式在 $n\to\infty$ 的极限时成立}．
 
 例如 $\delta(x)$ 一个重要的性质是： 对任意在 $x = x_0$ 处连续函数 $f(x)$， 有
 \begin{equation}\label{Delta_eq7}
 \int_{-\infty}^{+\infty} f(x) \delta(x - x_0) \dd{x}= f(x_0)
 \end{equation}
-使用\autoref{Delta_def1} 中的 $\delta_\alpha(x)$ 表示， 该等式的严格意义是（再次注意极限和积分不可交换， 且极限必须在最外面）
-\begin{equation}
-\lim_{\alpha\to+\infty}\int_{-\infty}^{+\infty} f(x) \delta_\alpha(x - x_0) \dd{x}= f(x_0)
+使用\autoref{Delta_def1} 中的 $\delta_n(x)$ 表示， 该等式的严格意义是（注意极限和积分不可交换， 且极限必须在最外面）
+\begin{equation}\label{Delta_eq11}
+\lim_{n\to\infty}\int_{-\infty}^{+\infty} f(x) \delta_n(x - x_0) \dd{x}= f(x_0)
 \end{equation}
+由于我们假设\autoref{Delta_def1} 和\autoref{Delta_def2} 等效， 这是成立的．
 
-我们来不严谨地证明\autoref{Delta_eq7} ： 首先把积分上下限变为 $x_0 \pm \epsilon$， 这样并不会改变积分结果， 因为在 $[x_0 - \epsilon, x_0 + \epsilon]$ 之外 $\delta(x-x_0) = 0$． 然后令 $\epsilon\to 0$， 这样 $f(x)$ 在 $[x_0 - \epsilon, x_0 + \epsilon]$ 内的值就趋近于常数 $f(x_0)$． 所以有
-\begin{equation}\ali{
-\int_{-\infty}^{+\infty} f(x) \delta(x - x_0) \dd{x} &= \int_{x_0-\epsilon}^{x_0+\epsilon} f(x) \delta(x - x_0)\dd{x} \\
-&= f(x_0)\int_{x_0-\epsilon}^{x_0+\epsilon} \delta(x - x_0)\dd{x} = f(x_0)
-}\end{equation}
-证毕．
-
-$\delta$ 函数的另一个性质是
-\begin{equation}
-\delta[f(x)] = \delta[f'(0)x] = \frac{1}{\abs{f'(0)}} \delta(x)
+\subsubsection{性质 2}
+\begin{equation}\label{Delta_eq1}
+\delta(ax) = \frac{1}{\abs{a}} \delta(x)
 \end{equation}
-我们不妨从几何上来（不严谨地）证明这个性质： 首先在原点附近的无穷小区间内， 有 $f(x) = f'(0)x$， 第一个等号成立． 与 $\delta(x)$ 相比较， $\delta[f'(0)x]$ 的图像在 $x$ 方向变窄了 $\abs{f'(0)}$ 倍， 所以函数曲线下的面积变为原来的 $1/\abs{f'(0)}$ 倍， 故 $\abs{f'(0)}\delta[f(x)]$ 下的面积是 $1$， 所以有 $\abs{f'(0)}\delta[f(x)] = \delta(x)$． 证毕．
+我们从\autoref{Delta_eq6} 的几何上来不严谨地证明这个性质： 与 $\delta(x)$ 相比较， $\delta(ax)$ 的图像在 $x$ 方向变窄了 $\abs{a}$ 倍， 所以函数曲线下的面积变为原来的 $1/\abs{a}$ 倍， 故 $\abs{a}\delta(ax)$ 下的面积是 $1$， 证毕．
+
+\subsubsection{性质 3}
+作为\autoref{Delta_eq1} 的拓展， 令 $f(x)$ 的根为 $x_1, x_2, \dots$， 在这些根处的导数为 $f'(x_i)$， 那么
+\begin{equation}\label{Delta_eq12}
+\delta[f(x)] = \sum_i \frac{1}{\abs{f'(x_i)}} \delta(x - x_i)
+\end{equation}
+证明和\autoref{Delta_eq1} 类似．
+
+\subsubsection{性质 4}
+对性质良好的函数 $g(x)$ 有
+\begin{equation}
+g(x)\delta(x) = g(0)\delta(x)
+\end{equation}
+证明： 对于性质良好的 $f(x)$， $\int f(x) g(x)\delta(x) \dd{x} = f(0)g(0) = \int f(x)g(0)\delta(x) \dd{x}$． 证毕．
 
 \subsection{其他应用}
-再次强调我们不能 “按字面意思” 理解任何含有 $\delta$ 函数的等式．
+再次强调我们不能 “按字面意思” 理解任何含有 $\delta(x)$ 的等式．
 \begin{example}{}\label{Delta_ex1}
 在傅里叶分析中， 时常会看到
 \begin{equation}\label{Delta_eq8}
 \int_{-\infty}^{+\infty} \E^{\I kx}\dd{x} = 2\pi \delta(k)
 \end{equation}
-然而严格来说， 左边的积分并不收敛， 所以不能 “按字面意思” 理解该式． 要严格证明， 上式两边除以 $2\pi$， 令有限区间 $[-\alpha,\alpha]$ 内的积分为
+然而严格来说， 左边的积分并不收敛， 所以不能 “按字面意思” 理解该式． 要严格证明， 上式两边除以 $2\pi$， 令有限区间 $[-n,n]$ 内的积分为
 \begin{equation}
-\delta_\alpha(k) = \frac{1}{2\pi}\int_{-\alpha}^{\alpha} \E^{\I kx}\dd{x} = \frac{\sin(\alpha k)}{\pi k} = \frac{\alpha}{\pi} \sinc(\alpha k)
+\delta_n(k) = \frac{1}{2\pi}\int_{-n}^{n} \E^{\I kx}\dd{x} = \frac{\sin(n k)}{\pi k} = \frac{n}{\pi} \sinc(n k)
 \end{equation}
 由\autoref{Delta_exe1} 中的结论得
 \begin{equation}
-\lim_{\alpha\to+\infty} \delta_\alpha(k) = \delta(k)
+\lim_{n\to\infty} \delta_n(k) = \delta(k)
 \end{equation}
 证毕．
 \end{example}
@@ -120,7 +149,7 @@ $\delta$ 函数的另一个性质是
 \begin{exercise}{}
 证明
 \begin{equation}\label{Delta_eq9}
-\begin{aligned}
+\begin{aligned}% 已验证
 &\int_{-\infty}^{+\infty} \sin(k'x) \sin(kx) \dd{x} = \int_{-\infty}^{+\infty} \cos(k'x) \cos(kx) \dd{x}\\
 &= \pi\delta(k' - k) - \pi\delta(k' + k)
 \end{aligned}
@@ -135,21 +164,22 @@ $\delta$ 函数的另一个性质是
 \end{equation}
 注意由此可得积分 $\int_{-\infty}^{+\infty}\delta(x)^2 \dd{x} = +\infty$， 即不收敛．
 
-证明： 考虑和上文一样的含参函数 $\delta_\alpha(x)$， 令 $I_\alpha = \int_{-\infty}^{+\infty} \delta_\alpha(x) \dd{x}$， 有 $\lim_{\alpha\to\infty} I_\alpha = 1$． 再令
+证明： 考虑和上文一样的含参函数 $\delta_n(x)$， 令 $I_n = \int_{-\infty}^{+\infty} \delta_n(x) \dd{x}$， 有 $\lim_{n\to\infty} I_n = 1$． 再令
 \begin{equation}
-f_\alpha(x_1, x_2) = \int_{-\infty}^{+\infty} \delta_\alpha(x-x_1) \delta_\alpha(x-x_2) \dd{x}
+f_n(x_1, x_2) = \int_{-\infty}^{+\infty} \delta_n(x-x_1) \delta_n(x-x_2) \dd{x}
 \end{equation}
-我们希望证明 $\lim_{\alpha\to\infty }f_\alpha(x_1, x_2) = \delta(x_1 - x_2)$． 首先对于给定的 $x_1 \ne x_2$ 显然有 $\lim_{\alpha\to\infty }f_\alpha(x_1, x_2) = 0$． 所以只需证明
+\addTODO{以下证明是错的， 待更正}
+我们希望证明 $\lim_{n\to\infty }f_n(x_1, x_2) = \delta(x_1 - x_2)$． 首先对于给定的 $x_1 \ne x_2$ 显然有 $\lim_{n\to\infty }f_n(x_1, x_2) = 0$． 所以只需证明
 \begin{equation}
-\lim_{\alpha\to\infty }\int_{-\infty}^{+\infty} f_\alpha(x_1, x_2) \dd{x_2} = 1
+\lim_{n\to\infty }\int_{-\infty}^{+\infty} f_n(x_1, x_2) \dd{x_2} = 1
 \end{equation}
 交换积分顺序得
 \begin{equation}
 \begin{aligned}
-&\lim_{\alpha\to\infty }\int_{-\infty}^{+\infty}\int_{-\infty}^{+\infty} \delta_\alpha(x-x_1) \delta_\alpha(x-x_2) \dd{x}\dd{x_2}\\
-&= \lim_{\alpha\to\infty }\int_{-\infty}^{+\infty} \delta_\alpha(x-x_1) \int_{-\infty}^{+\infty} \delta_\alpha(x-x_2)\dd{x_2} \dd{x}\\
-&= \lim_{\alpha\to\infty } I_\alpha \int_{-\infty}^{+\infty} \delta_\alpha(x-x_1)\dd{x}\\
-&= \lim_{\alpha\to\infty } I_\alpha^2 = 1
+&\lim_{n\to\infty }\int_{-\infty}^{+\infty}\int_{-\infty}^{+\infty} \delta_n(x-x_1) \delta_n(x-x_2) \dd{x}\dd{x_2}\\
+&= \lim_{n\to\infty }\int_{-\infty}^{+\infty} \delta_n(x-x_1) \int_{-\infty}^{+\infty} \delta_n(x-x_2)\dd{x_2} \dd{x}\\
+&= \lim_{n\to\infty } I_n \int_{-\infty}^{+\infty} \delta_n(x-x_1)\dd{x}\\
+&= \lim_{n\to\infty } I_n^2 = 1
 \end{aligned}
 \end{equation}
 证毕．
