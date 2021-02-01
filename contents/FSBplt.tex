@@ -1,15 +1,11 @@
 % 方势垒定态波函数程序
 
-\begin{issues}
-\issueDraft
-\end{issues}
-
 \pentry{方势垒\upref{SqrPot}}
 
 \begin{figure}[ht]
 \centering
 \includegraphics[width=14.25cm]{./figures/FSBplt_1.pdf}
-\caption{画图结果} \label{FSBplt_fig1}
+\caption{FSB.m 画图结果} \label{FSBplt_fig1}
 \end{figure}
 
 \begin{lstlisting}[language=matlab, caption=FSB.m]
@@ -19,7 +15,8 @@
 function [psi,A,C,D] = FSB(x, E,L,m,V0,odd)
 k = sqrt(2*m*E);
 psi = zeros(size(x));
-mark1 = (x < -L); mark2 = (abs(x) <= L); mark3 = (x > L);
+m1 = (x < -L); m2 = (abs(x) <= L); m3 = (x > L);
+if (E == V0), E = V0 + eps; end
 
 if E >= V0
     b = sqrt(2*m*(E - V0));
@@ -28,17 +25,17 @@ if E >= V0
         C1 = A1*(cos(k*L)*cos(b*L) + b/k*sin(k*L)*sin(b*L));
         D1 = A1*(-b/k*cos(k*L)*sin(b*L) + sin(k*L)*cos(b*L));
         A = A1; C = C1; D = D1;
-        psi(mark1) = C1*cos(k*x(mark1)) - D1*sin(k*x(mark1));
-        psi(mark2) = A1*cos(b*x(mark2));
-        psi(mark3) = C1*cos(k*x(mark3)) + D1*sin(k*x(mark3));
+        psi(m1) = C1*cos(k*x(m1)) - D1*sin(k*x(m1));
+        psi(m2) = A1*cos(b*x(m2));
+        psi(m3) = C1*cos(k*x(m3)) + D1*sin(k*x(m3));
     else
         B2 = 1/sqrt(pi*(sin(b*L)^2+b^2*cos(b*L)^2/k^2));
         C2 = B2*(cos(k*L)*sin(b*L) - b/k*sin(k*L)*cos(b*L));
         D2 = B2*(b/k*cos(k*L)*cos(b*L) + sin(k*L) * sin(b*L));
         A = B2; C = C2; D = D2;
-        psi(mark1) =-C2*cos(k*x(mark1)) + D2*sin(k*x(mark1));
-        psi(mark2) = B2*sin(b*x(mark2));
-        psi(mark3) = C2*cos(k*x(mark3)) + D2*sin(k*x(mark3));
+        psi(m1) =-C2*cos(k*x(m1)) + D2*sin(k*x(m1));
+        psi(m2) = B2*sin(b*x(m2));
+        psi(m3) = C2*cos(k*x(m3)) + D2*sin(k*x(m3));
     end
 else
     ka = sqrt(2*m*(V0-E));
@@ -47,17 +44,17 @@ else
         C1 = A1*(cosh(ka*L)*cos(k*L) - ka/k*sinh(ka*L)*sin(k*L));
         D1 = A1*(cosh(ka*L)*sin(k*L) + ka/k*sinh(ka*L)*cos(k*L));
         A = A1; C = C1; D = D1;
-        psi(mark1) = C1*cos(k*x(mark1)) - D1*sin(k*x(mark1));
-        psi(mark2) = A1*cosh(ka*x(mark2));
-        psi(mark3) = C1*cos(k*x(mark3)) + D1*sin(k*x(mark3));
+        psi(m1) = C1*cos(k*x(m1)) - D1*sin(k*x(m1));
+        psi(m2) = A1*cosh(ka*x(m2));
+        psi(m3) = C1*cos(k*x(m3)) + D1*sin(k*x(m3));
     else
         B2 = 1/sqrt(pi*(cosh(ka*L)^2+(ka/k)^2*sinh(k*L)^2));
         C2 = B2*(sinh(ka*L)*cos(k*L) - ka/k*cosh(ka*L)*sin(k*L));
         D2 = B2*(sinh(ka*L)*sin(k*L) + ka/k*cosh(ka*L)*cos(k*L));
         A = B2; C = C2; D = D2;
-        psi(mark1) =-C2*cos(k*x(mark1)) + D2*sin(k*x(mark1));
-        psi(mark2) = B2*sinh(ka*x(mark2));
-        psi(mark3) = C2*cos(k*x(mark3)) + D2*sin(k*x(mark3));
+        psi(m1) =-C2*cos(k*x(m1)) + D2*sin(k*x(m1));
+        psi(m2) = B2*sinh(ka*x(m2));
+        psi(m3) = C2*cos(k*x(m3)) + D2*sin(k*x(m3));
     end
 end
 end
@@ -68,9 +65,72 @@ end
 % === 设置参数 =====
 m = 1; V0 = 1; E = 2; L = 2;
 % =================
+x = linspace(-5, 5, 1000);
 psi_e = FSB(x, E, L, m, V0, 0);
 psi_o = FSB(x, E, L, m, V0, 1);
-figure; plot(x, psi_e); hold on; plot(x, psi_o);
+figure; plot(x, real(psi_e)); hold on; plot(x, real(psi_o));
 xlabel x; legend('\psi_{even}', '\psi_{odd}');
 \end{lstlisting}
 结果如\autoref{FSBplt_fig1}．
+
+\subsection{行波}
+
+\begin{lstlisting}[language=matlab, caption=FSB2.m]
+% m 质量，V0 势垒，E 能量， L 势垒半宽， odd 奇函数 true 偶函数 false
+% A,B 左区间系数， C,D 中区间系数， E,F 右区间
+% pm = 1: 从左入射; pm = -1: 从右边入射
+function [psi, A,B,C,D,E,F] = FSB2(x, E, L, m, V0, pm)
+k = sqrt(2*m*E);
+psi = zeros(size(x));
+m1 = (x < -L); m2 = (abs(x) <= L); m3 = (x > L);
+if (E == V0), E = V0 + eps; end
+if E >= V0
+    b = sqrt(2*m*(E-V0));
+    N = ((k^2+b^2)*sin(2*b*L)-2i*k*b*cos(2*b*L))*exp(-1i*k*L)...
+         /sqrt(2*pi)/((k^2-b^2)^2*sin(2*b*L)^2 + 4*k^2*b^2);
+    A = 1/sqrt(2*pi);
+    B = N*(k^2-b^2)*sin(2*b*L)*exp(-1i*k*L);
+    C = N*1i*k*(b+k)*exp(-1i*b*L);
+    D = N*1i*k*(b-k)*exp(1i*b*L);
+    E = N*2i*k*b*exp(-1i*k*L);
+    F = 0;
+    if pm < 0
+        tmp = A; A = F; F = tmp;
+        tmp = B; B = E; E = tmp;
+        tmp = C; C = D; D = tmp;
+    end
+    psi(m1) = A*exp(1i*k*x(m1)) + B*exp(-1i*k*x(m1));
+    psi(m2) = C*exp(1i*b*x(m2)) + D*exp(-1i*b*x(m2));
+    psi(m3) = E*exp(1i*k*x(m3)) + F*exp(-1i*b*x(m3));
+else
+    ka = sqrt(2*m*(V0-E));
+    N = ((k^2-ka^2)*sinh(2*ka*L)-2i*k*ka*cosh(2*ka*L))*exp(-1i*k*L)...
+         /sqrt(2*pi)/((k^2+ka^2)^2*sinh(2*ka*L)^2 + 4*k^2*ka^2);
+    A = 1/sqrt(2*pi);
+    B = N*(k^2+ka^2)*sinh(2*ka*L)*exp(-1i*k*L);
+    C = N*k*(1i*ka-k)*exp(-ka*L);
+    D = N*k*(1i*ka+k)*exp(ka*L);
+    E = N*2i*k*ka*exp(-1i*k*L);
+    F = 0;
+    if pm < 0
+        tmp = A; A = F; F = tmp;
+        tmp = B; B = E; E = tmp;
+        tmp = C; C = D; D = tmp;
+    end
+    psi(m1) = A*exp(1i*k*x(m1)) + B*exp(-1i*k*x(m1));
+    psi(m2) = C*exp(ka*x(m2)) + D*exp(-ka*x(m2));
+    psi(m3) = E*exp(1i*k*x(m3)) + F*exp(-1i*b*x(m3));
+end
+end
+\end{lstlisting}
+
+画图
+\begin{lstlisting}[language=matlab]
+% === 设置参数 =====
+m = 1; V0 = 0.9; E = 1.1; L = 2;
+% =================
+x = linspace(-5, 5, 1000);
+psi = FSB2(x, E, L, m, V0, 1);
+figure; plot(x, real(psi)); hold on; plot(x, imag(psi));
+xlabel x;
+\end{lstlisting}

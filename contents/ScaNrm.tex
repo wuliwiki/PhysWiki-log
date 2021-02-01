@@ -1,7 +1,7 @@
-% 一维散射态的归一化
+% 一维散射态的正交归一化
 
 \pentry{一维散射（量子）\upref{Sca1D}}
-写作参考\href{https://chaoli.club/index.php/4541/last}{这篇帖子}． 类似于平面波， 一维散射态也有不同的归一化方式， 但情况要更为复杂． 
+本文使用原子单位制\upref{AU}．\footnote{写作参考\href{https://chaoli.club/index.php/4541/last}{这篇帖子}．}类似于平面波的归一化\upref{EngNor}， 一维散射态也有不同的归一化方式， 但情况要更为复杂． 
 
 为了方便先假设 $V(x)$ 关于原点对称， 且 $V(x)$ 只在区间 $[-L,L]$ 内不为零． 由于 $V(x)$ 的对称性， 我们必定能找到实值的奇函数和偶函数两种解． 令 $k = \sqrt{2mE} > 0$， 在区间 $[-L,L]$ 外， 波函数就是正弦函数加上一个相移
 \begin{equation}\label{ScaNrm_eq3}
@@ -9,16 +9,17 @@
 \end{equation}
 其中$\phi$ 是 $k$ 的函数， 称为\textbf{相移（phase shift）}． 为方便书写下文把 $\phi(k),\phi(k')$ 分别记为 $\phi, \phi'$．
 
-令对称和反对称散射态分别为实函数 $\psi_{k,e}(x)$ 和 $\psi_{k,o}(x)$ 我们希望通过添加适当的归一化系数后， 波函数能满足归一化条件（\autoref{EngNor_eq3}~\upref{EngNor}）% 链接未完成
+令奇函数和偶函数散射态分别为实函数 $\psi_{k,1}(x)$ 和 $\psi_{k,2}(x)$ 我们希望通过添加适当的归一化系数后， 波函数能满足归一化条件（\autoref{EngNor_eq3}~\upref{EngNor}）
 \begin{equation}\label{ScaNrm_eq1}
-\int_{-\infty}^{+\infty} \psi_{k',i'}(x)^* \psi_{k,i}(x) \dd{x} = \delta_{i',i}\delta(k' - k) \qquad (k > 0, i = e, o)
+\int_{-\infty}^{+\infty} \psi_{k',i}(x)^* \psi_{k,i}(x) \dd{x} = \delta(k' - k) \qquad (k > 0, i = 1, 2)
 \end{equation}
 
 \begin{theorem}{}
 \autoref{ScaNrm_eq1} 对所有性质良好的 $V(x)$ 都成立， 且\autoref{ScaNrm_eq3} 中\textbf{归一化系数和简谐波相同}， 即 $A = 1/\sqrt{\pi}$（\autoref{EngNor_eq5}~\upref{EngNor}）．
 \end{theorem}
 
-我们以下给出部分证明： 对于奇偶性不同的两个函数， 他们显然式正交的． 首先已知
+\subsubsection{部分证明}
+对于奇偶性不同的两个函数， 他们显然式正交的． 首先已知
 \begin{equation}
 \int_{0}^{+\infty} \sin(k'x)\sin(kx)\dd{x} = \frac{\pi}{2}\delta(k'-k)
 \end{equation}
@@ -32,7 +33,7 @@
 \int_{0}^{+\infty} \sin(k'x+\phi')\sin(kx+\phi) \dd{x} = \frac{\pi}{2}\delta(k'-k)
 + \frac{\sin(\phi'+\phi)}{2(k'+k)} - \frac{\sin(\phi'-\phi)}{2(k'-k)}
 \end{equation}
-所以在区间 $[0, +\infty)$ 上 $\sin(kx+\phi)$ 一般并不正交．
+所以在区间 $[0, +\infty)$ 上 $\sin(kx+\phi)$ 并不正交\footnote{但在 $(-\infty,\infty)$ 上却正交}．
 
 使用归一化系数 $1/\sqrt{2}$， \autoref{ScaNrm_eq1} 的积分为（利用波函数的奇偶性）
 \begin{equation}\label{ScaNrm_eq2}
@@ -49,7 +50,140 @@ I(k,k') = \int_0^L \psi_{k'}(x)^* \psi_k(x) \dd{x}
 如果能证明对于任意 $V(x)$， \autoref{ScaNrm_eq2} 的最后的三项之和都为零， 那么我们就证明了\autoref{ScaNrm_eq1} 的正交归一关系． 读者可以尝试用一些具体的例子证明， 如方势垒\upref{SqrPot}．
 
 \subsection{不对称势能}
-\addTODO{如果 $V(x)$ 不对称怎么办？ 分开两半来算归一化系数？}
+\subsubsection{归一化}
+由于势能 $V(x)$ 不对称， 我们无法保证上文的 $\psi_{k,1},\psi_{k,2}$ 的奇偶性． 但通过适当的操作仍然能使\autoref{ScaNrm_eq1} 成立． 先给出结论： 令区间 $[-L,L]$ 外的波函数为
+\begin{equation}\label{ScaNrm_eq9}
+\psi_{k,i}(x) = \leftgroup{
+    &A_{+,i} \sin(kx + \phi_{+,i}) &\quad &(x > L)\\
+    &A_{-,i} \sin(kx - \phi_{-,i}) &&(x < -L)
+} \quad (i = 1,2)
+\end{equation}
+那么， 归一化系数需要满足
+\begin{equation}\label{ScaNrm_eq4}
+\frac{1}{2}\qty(\abs{A_-}^2 + \abs{A_+}^2) = \frac{1}{\pi}
+\end{equation}
+当 $A_+ = A_-$ 时就有上文的归一化系数 $1/\sqrt{\pi}$．
+
+\textbf{部分证明}： 把正交化积分划分为正负半轴两部分进行（$\psi_{k}$ 取 $\psi_{k,1}, \psi_{k,2}$ 中一个）
+\begin{equation}
+\begin{aligned}
+\braket{\psi_{k'}}{\psi_{k}} &= \abs{A_-}^2\int_{-\infty}^0 \sin(kx + \phi_{+})\sin(kx + \phi_{+}) \dd{x} + I_-(k,k')\\
+&\qquad+ \abs{A_+}^2\int_0^{+\infty} \sin(kx + \phi_{+})\sin(kx + \phi_{+}) \dd{x}   + I_+(k,k')\\
+&= \abs{A_-}^2\frac{\pi}{2}\delta(k'-k) + \abs{A_+}^2 \frac{\pi}{2} \delta(k'-k)
+\end{aligned}
+\end{equation}
+把\autoref{ScaNrm_eq4} 代入有 $\braket{\psi_{k'}}{\psi_{k}} = \delta(k'-k)$．
+
+\subsubsection{正交化}
+和上文类似， 我们可以保证 $i = i'$ 时\autoref{ScaNrm_eq1} 成立． 但由于我们缺失了函数的奇偶性， 一般无法保证 $i \ne i'$ 时也成立． 可以证明定态薛定谔方程必定存在一对满足以下正交条件的 $\psi_{k,1}, \psi_{k,2}$
+\begin{equation}\label{ScaNrm_eq7}
+\lim_{n\to\infty}\frac{1}{n}\int_{-n}^{+n} \psi_{k,1}(x)^* \psi_{k,2}(x) \dd{x} = 0
+\end{equation}
+显然上文的奇函数和偶函数根据该定义是正交的． 注意把 $\psi_{k,1}, \psi_{k,2}$ 分别乘以不同的相位因子同样满足上式以及\autoref{ScaNrm_eq1}．
+
+若我们得到两个不正交的线性无关解 $\psi_{k,1}, \psi'_{k,2}$， 这时我们可以使用一个类似于施密特正交化\upref{SmdtOt}的操作． 先把 $\psi_{k,1}$ 按照\autoref{ScaNrm_eq4} 归一化， 那么
+\begin{equation}
+\psi_{k,2}(x) = \psi_{k,2}'(x) - \alpha \psi_{k,1}(x)
+\end{equation}
+\begin{equation}\label{ScaNrm_eq5}
+\begin{aligned}
+\alpha &= \lim_{n\to\infty} \frac{\pi}{n} \int_{-n}^n \psi_{k,1}(x)^* \psi'_{k,2}(x) \dd{x}\\
+&= \frac{\pi}{2} \qty[A_{-,1}A_{-,2}\cos(\phi_{-,1}-\phi_{-,2}) + A_{+,1}A_{+,2}\cos(\phi_{+,1}-\phi_{+,2})]
+\end{aligned}
+\end{equation}
+这相当于把 $\psi'_{k,2}$ 中与 $\psi_{k,1}$ 不正交的部分减去． 最后再对 $\psi_{k,2}$ 归一化使其满足\autoref{ScaNrm_eq4} 即可使 $\psi_{k,1}, \psi_{k,2}$ 正交归一．
+
+\textbf{部分证明}： 假设对于任意给定 $k$ 必定存在满足\autoref{ScaNrm_eq1} 和\autoref{ScaNrm_eq7} 的一对正交归一解 $\psi_{k,1}, \psi_{k,2}$． 它们是 2 维解空间的一组基底， 那么 $\psi'_{k,2}$ 必定可以表示为
+\begin{equation}
+\psi'_{k,2} = \alpha\psi_{k,1} + \beta\psi_{k,2}
+\end{equation}
+所以
+\begin{equation}\label{ScaNrm_eq8}
+\begin{aligned}
+&\lim_{n\to\infty}\frac{1}{n}\int_{-n}^{+n} \psi_{k,1}(x)^*\psi'_{k,2}(x)\dd{x}
+=\\
+&\alpha\lim_{n\to\infty}\frac{1}{n}\int_{-n}^{+n} \psi_{k,1}(x)^*\psi_{k,1}(x)\dd{x}
++ \beta\lim_{n\to\infty}\frac{1}{n}\int_{-n}^{+n} \psi_{k,1}(x)^*\psi_{k,2}(x)\dd{x}
+\end{aligned}
+\end{equation}
+其中由\autoref{ScaNrm_eq4} 得（$[-L,L]$ 的积分在极限中消失）
+\begin{equation}\label{ScaNrm_eq6}
+\lim_{n\to\infty}\frac{1}{n}\int_{-n}^{+n} \psi_{k,1}(x)^*\psi_{k,1}(x)\dd{x} = \frac{1}{2}\qty(\abs{A_-}^2 + \abs{A_+}^2) = \frac{1}{\pi}
+\end{equation}
+把\autoref{ScaNrm_eq6} 和\autoref{ScaNrm_eq7} 代入\autoref{ScaNrm_eq8} 得\autoref{ScaNrm_eq5}． 证毕．
 
 \subsection{行波的归一化}
-\addTODO{通过 2 乘 2 的酋矩阵变换即可．}
+
+\begin{equation}
+\psi_{k,i} = \leftgroup{
+    &A_i\exp(\I kx) + B_i\exp(-\I kx) &\quad& (x < -L)\\
+    &C_i\exp(\I kx) + D_i\exp(-\I kx) && (x > L)
+}
+\end{equation}
+和上文类似的方法得归一化条件为
+\begin{equation}
+\abs{A_i}^2 + \abs{B_i}^2 + \abs{C_i}^2 + \abs{D_i}^2= \frac{1}{\pi}
+\end{equation}
+对于平面波， 显然有 $A = C = 1/\sqrt{2\pi}$， $B = D = 0$． 和 “平面波的的正交归一化\upref{EngNor}” 中结论相同．
+
+一种常用的行波边界条件为 $D_1 = 0$， 它的物理意义是粒子从左边入射， 发生反射和投射． 我们令 $\psi_1$ 满足该条件， 然后通过施密特正交化得到与之正交归一的 $\psi_2$． 我们先令不一定正交的 $\psi'_2$ 满足边界条件 $A_2 = 0$， 即粒子从右边入射， 投影得
+\begin{equation}
+\alpha = \pi (B_1^* B_2 + C_1^*C_2)
+\end{equation}
+于是（未归一化的） $\psi_2$ 为
+\begin{equation}
+\psi_2 = \psi'_2 - \alpha \psi_1
+\end{equation}
+
+\subsubsection{变换矩阵}
+\begin{equation}
+\psi_{k,i}(x) = \leftgroup{
+    &A_{+,i} \sin(kx + \phi_{+,i}) &\quad &(x > L)\\
+    &A_{-,i} \sin(kx - \phi_{-,i}) &&(x < -L)
+} \quad (i = 1,2)
+\end{equation}
+令变换矩阵为 $\pmat{C_{1} & C_{2}\\ C_{2}^* & -C_{1}^*}$， 满足 $\abs{C_1}^2 + \abs{C_2}^2 = 1$， 有
+\begin{equation}
+\psi_{k,a}(x) = C_1\psi_{k,1}(x) + C_2\psi_{k,2}(x)
+\end{equation}
+\begin{equation}
+\psi_{k,b}(x) = C_{2}^*\psi_{k,1}(x) - C_{1}^*\psi_{k,2}(x)
+\end{equation}
+令 $\psi_{k,a}$ 满足
+\begin{equation}
+\psi_{k,a}(x) \propto \exp(\I kx) \qquad (x > L)
+\end{equation}
+得到条件
+\begin{equation}
+C_{1}A_{+,1}\E^{-\I\phi_{+,1}} + C_{2}A_{+,2}\E^{-\I\phi_{+,2}} = 0
+\end{equation}
+这就可以求出 $C_1, C_2$ （乘以一个不确定的相位因子\footnote{要规定这个因子， 只需要令入射波 $\exp{\I kx}$ 的系数为实数即可}）， 以及 $\psi_{k,a}, \psi_{k,b}$．
+
+可以证明如果 $V(x)$ 是对称的， 那么 $\psi_b$ 就满足右入射的边界条件， 即
+\begin{equation}
+\psi_{k,b}(x) \propto \exp(-\I kx) \qquad (x < -L)
+\end{equation}
+事实上由对称性可知两个正交解是完全镜像对称的（\autoref{ScaNrm_fig1} ）
+\begin{equation}
+\psi_{k,b}(x) = \psi_{k,a}(-x)
+\end{equation}
+
+\begin{figure}[ht]
+\centering
+\includegraphics[width=10cm]{./figures/ScaNrm_1.pdf}
+\caption{对称且正交的行波解． 左： $\psi_{k,a}$， 右： $\psi_{k,b}$} \label{ScaNrm_fig1}
+\end{figure}
+代入正交条件得
+\begin{equation}\label{ScaNrm_eq11}
+\Re[B^*C] = 0 \Longleftrightarrow \cos(\arg{B} - \arg{C}) = 0
+\end{equation}
+即 $B,C$ 的幅角总是相差 $\pi/2$． 已知两组解正交， 所以这必然成立．
+
+满足归一化条件（链接未完成）
+\begin{equation}
+\abs{A}^2 + \abs{B}^2 + \abs{C}^2 = \frac{1}{\pi}
+\end{equation}
+又根据概率流\upref{PrbJ}守恒得 $\abs{A}^2 = \abs{B}^2 + \abs{C}^2$， 得 $\abs{A} = 1/\sqrt{2\pi}$ 为了方便我们一般直接规定
+\begin{equation}\label{ScaNrm_eq10}
+A = \frac{1}{\sqrt{2\pi}}
+\end{equation}
