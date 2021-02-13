@@ -1,63 +1,64 @@
 % 复变函数的导数 柯西—黎曼条件
 % 柯西|黎曼|导数
 
+\begin{issues}
+\issueTODO
+\end{issues}
+
 \pentry{复变函数\upref{Cplx}， 全微分\upref{TDiff}}
 
-类似实函数， 定义复变函数 $z = f(w)$ （$z, w$ 都是复数）的导数为
+\begin{definition}{}
+类似实函数的导数\upref{Der}， 定义复变函数 $w = f(z)$ （$f:\mathbb C\to \mathbb C$）的导数为
 \begin{equation}\label{CauRie_eq4}
-\dv{z}{w} = \lim_{h\to 0} \frac{z(w + h) - z(w)}{h}
+f'(z) = \lim_{h\to 0} \frac{f(z + h) - f(z)}{h}
 \end{equation}
-其中 $h$ 也是一个复数． 注意极限条件 $\abs{h}\to 0$ 中， $h$ 可以以任意方式趋近于 $0$， 例如在复平面上从任意方向趋近原点．
+其中 $h$ 也是一个复数． 极限 $h \to 0$ 在这里是指 $h$ 可以在复平面上以任意方式趋近于 $0$ 都得到同一个极限值， 否则极限不存在．
+\end{definition}
 
-复平面上， 看作两个实函数， 令
+对于实变量的函数， 只有正负两个方向趋于零， 所以复变函数可导的条件更复杂．
+
+\begin{theorem}{柯西—黎曼条件}
+令 $z = x + y\I$ 且
 \begin{equation}
-w = x + y\I
+f(z) = u(x, y) + \I v(x, y)
 \end{equation}
-\begin{equation}
-z(w) = u(x, y) + \I v(x, y)
-\end{equation}
-要使\autoref{CauRie_eq4} 的导数存在， 除了要求 $u, v$ 函数在一定区域内处处存在偏导， 还要满足\textbf{柯西—黎曼条件（Cauchy-Riemann condition）}， 即
+那么 $f(z)$ 在该点可导的充分必要条件是： 实函数 $u,v$ 在复平面的某点 $z$ 可微， 且
 \begin{equation}\label{CauRie_eq1}
 \pdv{u}{x} = \pdv{v}{y} \qquad
 \pdv{u}{y} = - \pdv{v}{x}
 \end{equation}
+该式被称为\textbf{柯西—黎曼条件（Cauchy-Riemann condition）}．
+\end{theorem}
+可见若柯西—黎曼条件成立， 函数 $u,v$ 的四个偏导数中只有两个是独立的．
+
+在复平面的一个开集（链接未完成） $D$ 上， 如果函数 $f(z)$ 处处复可微， 那么它就是一个\textbf{全纯函数（holomorphic function）}也叫做\textbf{解析函数（analytical function）}； 如果除了一些孤立点外处处复可微， 就叫\textbf{亚纯函数（meromorphic function）}．
 
 \subsubsection{推导}
 根据全微分\upref{TDiff}
 \begin{equation}\label{CauRie_eq2}
-\dd{z} = \dd{u} + \I \dd{v}
+\dd{w} = \dd{u} + \I \dd{v} = \qty(\pdv{u}{x} \dd{x} + \pdv{u}{y} \dd{y}) + \qty(\pdv{v}{x} \dd{x} + \pdv{v}{y} \dd{y})\I
 \end{equation}
-其中
-\begin{equation}\label{CauRie_eq3}
-\dd{u} = \pdv{u}{x} \dd{x} + \pdv{u}{y} \dd{y} \qquad
-\dd{v} = \pdv{v}{x} \dd{x} + \pdv{u}{y} \dd{y}
-\end{equation}
-如果直接将该式代入 $\dv*{z}{w} = (\dd{u} + \I \dd{v})/(\dd{x} + \I \dd{y})$ 会发现结果和 $\dd{y}/\dd{x}$ 有关， 即与\autoref{CauRie_eq4} 中 $h$ 趋近于零点的方向有关． 所以我们换一种方式． 令
+如果直接由此计算 $\dv*{w}{z} = (\dd{u} + \I \dd{v})/(\dd{x} + \I \dd{y})$ 会发现结果和 $\dd{y}/\dd{x}$ 有关， 即与\autoref{CauRie_eq4} 中 $h$ 趋近于零点的方向有关． 所以我们换一种思路， 直接令导数为
 \begin{equation}
-c = \dv{z}{w} = a + b\I
+f'(z) = a(z) + b(z)\I
 \end{equation}
 写成微分形式
 \begin{equation}
-\dd{z} = c\dd{w}
+\dd{w} = f'(z)\dd{z}
 \end{equation}
+即
 \begin{equation}
 \dd{u} + \I \dd{v} = (a + b\I)(\dd{x} + \I\dd{y}) = (a \dd{x} - b\dd{y}) + \I (b \dd{x} + a\dd{y})
 \end{equation}
-该式对比\autoref{CauRie_eq2} 和\autoref{CauRie_eq3}， 得
+该式对比\autoref{CauRie_eq2} 得
 \begin{equation}
 a = \pdv{u}{x} = \pdv{v}{y} \qquad
 b = -\pdv{u}{y} = \pdv{v}{x}
 \end{equation}
-这样， 不仅得到了柯西—黎曼条件， 也得到了导数的表达式．
-
-% 未完成， 举例子， 例如 exp, z^2, sin 等都满足柯西—黎曼
-
-\subsection{调和场}
-\pentry{调和场\upref{HarmF}}
-
-柯西—黎曼条件的充分必要条件是， $(u, -v)$ 是二维调和场（散度和旋度都为零）， 所以存在势函数 $f$， 使
+这样， 不仅得到了柯西—黎曼条件， 也得到了导数的表达式
 \begin{equation}
-u = \pdv{f}{x} \qquad -v = \pdv{f}{y}
+f'(z) = \pdv{u}{x} -\pdv{u}{y} \I = \pdv{v}{y} + \pdv{v}{x}\I
 \end{equation}
+可见我们仅需要 $u, v$ 中的一个就可以求出导数， 因为它们并不是独立的．
 
-（未完成）
+\addTODO{举例子， 例如 $\exp$, $z^a$ 等都满足柯西—黎曼}

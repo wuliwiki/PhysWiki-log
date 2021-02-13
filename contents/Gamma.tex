@@ -3,23 +3,29 @@
 
 \pentry{定积分\upref{DefInt}}
 
-当 $x$ 取实数且 $x>-1$ 时，可以定义阶乘函数为
+\footnote{参考 Wikipedia \href{https://en.wikipedia.org/wiki/Gamma_function}{相关页面} 以及 \cite{Arfken} 相关章节．}$\Gamma$ 函数\textbf{（gamma function）}可以看成是阶乘在实数或复数域的拓展， 该函数有多种定义方法， 这里先讨论实数域上的定积分定义． 该方法可以定义 $(-1, \infty)$ 区间的阶乘
 \begin{equation}\label{Gamma_eq1}
-x! \equiv \Gamma (x + 1) = \int_0^{+\infty} t^x \E^{-t} \dd{t}
+x! \equiv \Gamma (x + 1) = \int_0^{+\infty} t^x \E^{-t} \dd{t} \qquad (x > -1)
 \end{equation}
-递推关系仍为
+即 $\Gamma$ 函数在区间 $(0,\infty)$ 被定义为
+\begin{equation}\label{Gamma_eq3}
+\Gamma(x) \equiv \int_0^{+\infty} t^{x-1} \E^{-t} \dd{t} \qquad (x > 0)
+\end{equation}
+可以证明新定义的阶乘的递推关系仍为
 \begin{equation}\label{Gamma_eq2}
-x!=x(x-1)! \qquad (x>0)
+(x+1)!=(x+1)x! \qquad (x>-1)
 \end{equation}
-且 $(-1/2)!=\sqrt{\pi}$，  $0! = 1$．
+且 $0! = 1$． 所以当 $x$ 取正整数 $N$ 时， \autoref{Gamma_eq1} 的结果仍然是熟悉的 $N! = N(N-1)\dots, 1$．
+
+另外能证明 $(-1/2)!=\sqrt{\pi}$， 由此我们可以直接写出半整数的阶乘为
+\begin{equation}
+\frac{N}{2}! = \frac{N}{2} \qty(\frac{N}{2}-1) \dots \frac12 \sqrt{\pi} \qquad (N > 0)
+\end{equation}
 
 \subsection{推导}
 \pentry{分部积分法\upref{IntBP}}
 
-首先定义 $\Gamma$ \textbf{（Gamma）} 函数为
-\begin{equation}
-\Gamma(x) = \int_0^{+\infty} t^{x-1} \E^{-t} \dd{t}
-\end{equation}
+首先
 当 $x \leqslant 0$ 时该积分在 $x=0$ 处不收敛，以下仅讨论 $x$ 为正实数的情况\footnote{事实上，自变量为负实数（非整数）时，$\Gamma$ 函数有另一种定义，这里不讨论．}．
 
 我们现在验证当 $x$ 取正整数时，新定义的阶乘 $x! = \Gamma(x+1)$ 与原来的定义 $x! = x(x-1)\dots 1$ 相同．首先
@@ -43,11 +49,6 @@ n! = n(n-1)! = n(n-1)(n-2)!... = n(n-1)...1
 \qty(-\frac12) ! = \int_0^{+\infty} \frac{\E^{-x}}{\sqrt x}\dd{x} = 2\int_0^{+\infty} \E^{-t^2} \dd{t} = \int_{-\infty}^{+\infty} \E^{-t^2} \dd{t} = \sqrt{\pi}
 \end{equation}
 其中使用了换元法令 $x = t^2$ 将定积分变为高斯积分\upref{GsInt}．
-
-对任意大于零的半整数 $n/2$，有
-\begin{equation}
-\frac{n}{2}! = \frac{n}{2} \qty(\frac{n}{2}-1)! = \frac{n}{2} \qty(\frac{n}{2}-1) \dots \frac12 \qty(-\frac12) ! = \frac{n}{2} \qty(\frac{n}{2}-1) \dots \frac12 \sqrt{\pi}
-\end{equation}
 
 \subsection{渐近公式}
 对于大的$x$, 有\textbf{斯特林公式（Stirling formula）}：

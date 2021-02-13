@@ -1,50 +1,42 @@
-% 证明矩阵行秩等于列秩
+% 厄米共轭算符的映射结构
 % 线性无关|列秩|行秩|零空间|解空间|正交归一|基底
 
-\pentry{矩阵与矢量空间\upref{MatLS}， 正交子空间\upref{OrthSp}}
+\pentry{矩阵与矢量空间\upref{MatLS}， 正交子空间\upref{OrthSp}， 线性映射的结构\upref{MatLS2}， 厄米共轭\upref{HerMat}}
 
-我们从矢量空间的角度\upref{MatLS} 证明， 令 $\mat A$ 为 $N_Y$ 行 $N_X$ 列的矩阵， 对应的线性算符为 $A: X\to Y$． $X, Y$ 空间的维数分别为 $N_X, N_Y$． $\mat A$ 的厄米共轭\upref{HerMat}记为\footnote{如果矩阵是实数的， 那么厄米共轭就是转置 $\mat A\Tr$．} $\mat A\Her$， 对应算符记为 $A\Her$．
+\begin{figure}[ht]
+\centering
+\includegraphics[width=10cm]{./figures/RCrank_1.pdf}
+\caption{\autoref{RCrank_the1} 中的韦恩图， 三角形表示线性空间， $X_0\cap X_1$ 和 $Y_0\cap  Y_1$ 都是零向量．} \label{RCrank_fig1}
+\end{figure}
 
-我们前面讲过 $X$ 空间中满足 $A {x} = \bvec 0$ 的所有 ${x}$ 构成的空间为 $A$ 的零空间（链接未完成）， 记为 $X_0$． $Y$ 空间中满足 $A\Her |y\rangle = 0$ 的子空间为 $Y$ 的零空间， 记为 $Y_0$． 定义整个 $X$ 空间通过 $A$ 映射后得到 $Y$ 的另一个子空间为 $Y_1$ 空间， 即 $A(X) = Y_1$， 同理定义 $A\Her(Y) = X_1$． % 未完成： 矩阵与矢量空间中添加空间的映射及对应符号
+\begin{theorem}{}\label{RCrank_the1}
+令 $X, Y$ 为有限维线性空间， 线性算符 $A:X \to Y$ 的零空间（\autoref{LinMap_def2}~\upref{LinMap}）为 $X_0$， 其厄米共轭\upref{HerMat}（也叫自伴算符） $A\Her: Y \to X$ 的零空间为 $Y_0$； 令 $Y_1 = A(X)$， $X_1 = A\Her(Y)$． 那么 $X_0, X_1$ 是 $X$ 中的正交补（\autoref{OrthSp_def1}~\upref{OrthSp}）， $Y_0, Y_1$ 是 $Y$ 中的正交补． 即
+\begin{equation}
+X = X_0 \oplus X_1 \qquad X_0 \perp X_1
+\end{equation}
+\begin{equation}
+Y = Y_0 \oplus Y_1 \qquad Y_0 \perp Y_1
+\end{equation}
+其中 $\oplus$ 表示直和\upref{DirSum}， $\perp$ 表示两空间正交\upref{OrthSp}．
+\end{theorem}
+证明见下文． 根据\autoref{MatLS2_the1}~\upref{MatLS2}， \autoref{RCrank_the1} 中 $X_1, Y_1$ 有一一对应关系（见\autoref{RCrank_fig1} ）：
+\begin{equation}\label{RCrank_eq3}
+A(X_1) = Y_1 \qquad A\Her (Y_1) = X_1
+\end{equation}
 
-可以证明（见下文） $X_0$ 与 $X_1$ 互为正交补； $Y_0$ 与 $Y_1$ 互为正交补（\autoref{OrthSp_def1}~\upref{OrthSp}）， 所以
+
+\begin{corollary}{}
+矩阵的行秩等于列秩．
+\end{corollary}
+证明： 令矩阵 $\mat A$ 的算符为 $A$， 该矩阵的行秩就是 $Y_1$ 的维数． 而矩阵的列秩等于 $\mat A\Her$ 的行秩， 也就是 $X_1$ 的维数． 由于 $X_1, Y_1$ 有一一对应关系（\autoref{RCrank_eq3}）， 所以维数相同． 证毕．
+
+\subsection{证明}
+以下证明\autoref{RCrank_the1} 中 $Y_1$ 的正交补就是 $Y_0$ （$X_0, X_1$ 的证明同理）． 令 $Y_1$ 的正交补为 $Y'_0$， 那么 $y \in Y'_0$ 的充分必要条件是 $y$ 和 $Y_1$ 中所有矢量都正交， 即
 \begin{equation}\label{RCrank_eq1}
-X_0 \oplus X_1 = X
-\qquad
-Y_0 \oplus Y_1 = Y
+\braket{Ax}{y} = 0 \qquad (\forall x \in X)
 \end{equation}
-于是我们可以在 $X$ 和 $Y$ 空间中分别找到一套正交归一基底， 使得这些基底分为两组， 分别张成两个正交子空间． 计算 $A(X)$ 时， $X_0$ 中的基底映射后还是零， 所以其中的基底可以去掉， 只剩下 $X_1$ 中的基底做映射， $A\Her(Y)$ 也同理：
-\begin{equation}
-\begin{aligned}
-&A(X_1) = A(X) = Y_1\\
-&A\Her(Y_1) = A\Her(Y) = X_1
-\end{aligned}
+而根据零空间的定义（\autoref{LinMap_def2}~\upref{LinMap}） $y \in Y_0$ 的充分必要条件是 $A\Her y = 0$， 即
+\begin{equation}\label{RCrank_eq2}
+\braket*{x}{A\Her y} = 0 \qquad (\forall x \in X)
 \end{equation}
-线性映射后的空间维度总是小于等于映射前的维度， 所以如果两个方向都存在映射， 维度只能相等， 即都是一一映射． 所以 $X_1$ 和 $Y_1$ 的维度相同， 即 $\mat A$ 和 $\mat A\Her$ 线性无关的列数相同\footnote{矩阵线性无关的列数等于值域的维度（链接未完成）．}， 即 $\mat A$ 线性无关的行数和列数相同， 即行秩等于列秩． 证毕．
-
-\subsection{补充证明}
-以下证明 $Y_0$ 和 $Y_1$ 正交以及\autoref{RCrank_eq1} 中的第二条． 第一条同理可得．
-
-我们先在 $Y_1$ 中找到一套 $N_{Y1}$ 个正交归一基底 ${y_{1i}}$， 再在 $Y$ 空间中找到剩下 $N_Y - N_{Y1}$ 个正交归一基底 ${y_i}$． 对任意 ${x} \in X$， 有 $A {x} \in Y_1$， 所以
-\begin{equation}
-\mel{y_i}{A}{x} = 0
-\end{equation}
-对两边做厄米共轭得% 未完成： 狄拉克符号里面需要介绍
-\begin{equation}
-\mel{x}{A\Her}{y_i} = 0
-\end{equation}
-对任意 ${x}\in X$ 都成立， 所以
-\begin{equation}
-A\Her{y_i} = 0
-\end{equation}
-所以 ${y_i} \in Y_0$． 然而对于任意 ${y_1} \in Y_1$， 必存在一些矢量 ${x}$ 使
-\begin{equation}
-\mel{y_1}{A}{x} \ne 0
-\iff
-\mel{x}{A\Her}{y_1} \ne 0
-\end{equation}
-所以
-\begin{equation}
-A\Her{y_1} \ne 0
-\end{equation}
-即 ${y_1} \notin Y_0$． 所以 ${y_i}$ 就是 $Y_0$ 的（完备）正交归一基底， 且与 ${y_{1i}}$ 组成 $Y$ 的完备正交归一基底． 证毕．
+而根据（链接未完成）\autoref{RCrank_eq1} 和\autoref{RCrank_eq2} 等效． 所以 $Y'_0 = Y_0$． 证毕．

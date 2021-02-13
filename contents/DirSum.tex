@@ -1,13 +1,21 @@
 % 直和 补空间
 % 矢量空间|子空间|直和空间|直和
 
+\begin{issues}
+\issueTODO
+\end{issues}
+
 \pentry{子空间\upref{SubSpc}}
 \begin{definition}{直和}\label{DirSum_def1}
-令矢量空间 $V_1$ 和 $V_2$ 为 $V$ 的两个子空间， 且任意 ${v} \in V$ 都能表示为 $V_1$ 和 $V_2$ 中矢量的线性组合， 即
+令域 $\mathbb F$ 上的矢量空间 $V_1$ 和 $V_2$ 为 $V$ 的两个子空间\upref{SubSpc}， 满足
+\begin{equation}
+V_1 \cap V_2 = \qty{0}
+\end{equation}
+且任意 ${v} \in V$ 都能表示为 $V_1$ 和 $V_2$ 中矢量的线性组合， 即
 \begin{equation}
 {v} = c_1 {v_1} + c_2 {v_2}
 \qquad
-{v_1} \in V_1,\ {v_2} \in V_2
+({v_1} \in V_1,\ {v_2} \in V_2,\ c_1, c_2 \in \mathbb F)
 \end{equation}
 那么空间 $V$ 就是 $V_1$ 和 $V_2$ 的\textbf{直和空间}， 用\textbf{直和（direct sum）}运算记为
 \begin{equation}
@@ -19,13 +27,28 @@ V = V_1 \oplus V_2
 直和空间 $V_1 \oplus V_2$ 中的所有矢量可以分为三组， 分别是 $V_1$ 中的矢量， $V_2$ 的矢量， 以及只能表示为 $V_1$ 和 $V_2$ 中矢量的线性组合的矢量．
 
 \subsection{直和空间的基底}
-从基底的角度来看， 若 $V_1$ 和 $V_2$ 中分别有一组基底 ${\alpha_i}$ $(i = 1, \dots, N_1)$ 和 ${\beta_i}$ $(i = 1, \dots, N_2)$， 那么直和空间中的任意矢量可以表示为（系数可以部分或全部为零）
-\begin{equation}
-{v} = \sum_i a_i {\alpha_i} + \sum_j b_j {\beta_j}
+从基底的角度来看， 若 $V_1$ 和 $V_2$ 中分别有一组基底 ${\alpha_i}$ $(i = 1, \dots, N_1)$ 和 ${\beta_i}$ $(i = 1, \dots, N_2)$， 那么直和空间中 $V$ 的任意矢量可以表示为
+\begin{equation}\label{DirSum_eq1}
+{v} = \sum_i a_i {\alpha_i} + \sum_j b_j {\beta_j} \qquad (v\in V, a_i, b_i \in \mathbb F)
 \end{equation}
-也就是说直和空间就是两个子空间的基底合并后张成的空间． 注意合并后的 $N_1 + N_2$ 个矢量之间不一定线性无关， 所以不一定能构成直和空间中的一组基底． 虽然某个 ${\alpha_i}$ 不能表示为其他 ${\alpha_i}$ 的线性组合， 但却可能可以表示为一些 ${\beta_i}$ 的线性组合， ${\beta_i}$ 亦然．
+\begin{theorem}{}\label{DirSum_the1}
+$\alpha_1, \dots, \alpha_{N_1}, \beta_1, \dots, \beta_{N_2}$ 是 $V$ 的一组基底．
+\end{theorem}
 
-如果把这些 “多余” 的矢量全部剔除， 使任意 ${\alpha_i}$ 不能用 ${\beta_i}$ 的线性组合表示， 且任意 ${\beta_i}$ 不能用 ${\alpha_i}$ 的线性组合表示， 那么我们就得到了直和空间中的一组基底， 其维数小于或等于 $N_1 + N_2$， 且大于或等于 $N_1$ 和 $N_2$．
+证明： 由于已经有\autoref{DirSum_eq1}， 我们只需要证明 $\alpha_1, \dots, \alpha_{N_1}, \beta_1, \dots, \beta_{N_2}$ 是线性无关的． 使用反证法， 若有不全为零的系数使
+\begin{equation}
+\sum_i a_i {\alpha_i} + \sum_j b_j {\beta_j} = 0
+\end{equation}
+令
+\begin{equation}
+u = \sum_i a_i {\alpha_i} = -\sum_j b_j {\beta_j}
+\end{equation}
+那么 $u \ne 0$ 且 $u \in V_1$ 且 $u \in V_2$． 这违反了\autoref{DirSum_def1}． 证毕．
+
+\begin{corollary}{}
+直和空间 $V = V_1 \oplus V_2$ 的维数等于 $V_1, V_2$ 的维数相加．
+\end{corollary}
+证明： \autoref{DirSum_the1} 中的基底有 $N_1 + N_2$ 个． 证毕．
 
 \begin{example}{}\label{DirSum_ex1}
 若三维空间中有两个不共线的几何矢量 ${v_1}, {v_2}$， 它们张成一个平面， 或二维子空间． 另有一个矢量 ${v_3}$， 独自张成一条直线， 即一维空间．
@@ -35,8 +58,5 @@ V = V_1 \oplus V_2
 若 ${v_3}$ 落在平面外， 则三个矢量将会张成整个三维空间， 所以直和就是三维空间． 此时两个子空间在该三维空间中互补．
 \end{example}
 
-\begin{example}{}\label{DirSum_ex2}
-若三维空间中有两个不共线的几何矢量 ${v_1}, {v_2}$， 它们张成一个平面（二维子空间） $V_{12}$． 另有 $V_{12}$ 平面外的两个不共线且与的几何矢量 ${v_3}$ 和 ${v_4}$， 张成另一个二维子空间 $V_{34}$． 然而四个矢量中只有三个是线性无关的（容易证明任意三个都线性无关）， 所以 $V = V_{12} \oplus V_{34}$ 是三维而不是四维几何矢量空间， 四个矢量中的任意三个都可以作为 $V$ 空间的基底．
-\end{example}
 \addTODO{补是不唯一的（\autoref{DirSum_ex1}）}
 \addTODO{给出一个空间和子空间， 如何求一个补空间？}
