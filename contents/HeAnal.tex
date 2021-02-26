@@ -172,40 +172,27 @@ P(\bvec r_1) &= 2\sum_{l_2, m_2} \int \abs{\psi_{l_2, m_2}(\bvec r_1, r_2)}^2 \d
 \end{aligned}
 \end{equation}
 
-\subsection{Shakeup 电离 1}
-（不使用）
-
-Shakeup 就是说总波函数中一个电子处于某个束缚态， 另一个电子处于散射态的部分． 如果不需要区分 $m_1$， 只求概率分布 $P(n_1, l_1, k_2)$， 公式将会比较简单． 子空间的基底为（$n_1, l_1, k_2$ 为常数）
-\begin{equation}
-\ket{n_1, l_1, k_2, l_2, L, M} = R_{n_1,l_1}(r_1) \frac{1}{r_2}\sqrt{\frac{2}{\pi}} F_{l_2}(\eta_2, k_2 r_2) \mathcal{Y}_{l_1, l_2}^{L, M}(\uvec r_1, \uvec r_2)
+\subsection{单电离动量谱}
+在 $P(r_1, r_2)$ 分布中， 单电离一般是可以与双电离区分开的， 只需要取一个 box 即可： $r_1 < r_{1,max}$ ， $r_2 > r_{2,min}$
+\begin{equation}\label{HeAnal_eq9}
+\bra{\delta_{\bvec r_1}}\braket{C_{l_2,m_2}(k_2)}{\Psi} = \frac{1}{r_1} \sum_{l_1, m_1} \psi_{l_1,m_1}(r_1) \cdot Y_{l_1, m_1}(\uvec r_1)
 \end{equation}
-投影为
 \begin{equation}
-\braket{n_1, l_1, k_2, l_2, L, M}{\Psi} = \sqrt{\frac{2}{\pi}} \iint r_1 R_{n_1,l_1}(r_1) F_{l_2}(\eta_2, k_2 r_2) \psi_{l_1, l_2}^{L, M}(r_1, r_2) \dd{r_1} \dd{r_2}
+\psi_{l_1,m_1}(r_1) = \int_{r_{2,min}}^{+\infty} \sqrt{\frac{2}{\pi}}F_{l_2}(\eta_2, k_2 r_2)\psi_{l_1, l_2}^{m_1, m_2}(r_1, r_2)\dd{r_2}
 \end{equation}
-概率分布为
-\begin{equation}
+然而 streaking trace 需要的不是上式的概率而是某个方向的概率． 我们使用\autoref{CulmWf_eq6}~\upref{CulmWf} 做线性组合即可
+\begin{equation}\label{HeAnal_eq12}
+\bra{\delta_{\bvec r_1}}\braket*{\psi_{\bvec k_2}^{(-)}}{\Psi} = \sum_{l_2,m_2} \frac{\I^{-l_2}}{k_2} \E^{\I\sigma_{l_2}}Y_{l_2,m_2}(\uvec k_2) \bra{\delta_{\bvec r_1}}\braket{C_{l_2,m_2}(k_2)}{\Psi}
+\end{equation}
+所以（\autoref{HeAnal_eq9} 代入\autoref{HeAnal_eq12}， 整理成 $1/r_1\sum \dots Y_{l_1,m_1}(\bvec r_1)$ 形式）
+\begin{equation}\label{HeAnal_eq11}
 \begin{aligned}
-P(n_1, l_1, k_2) &= \sum_{l_2, L, M} \abs{\braket{n_1, l_1, k_2, l_2, L, M}{\Psi}}^2
+P(\bvec k_2) &= \int_0^{r_{1,max}} \abs{\bra{\delta_{\bvec r_1}}\braket*{\psi_{\bvec k_2}^{(-)}}{\Psi}}^2 \dd[3]{r_1}\\
+&= \sum_{l_1,m_1} \int_0^{r_{1,max}} \abs{\sum_{l_2,m_2} \frac{\I^{-l_2}}{k_2} \E^{-\I \sigma_{l_2}} Y_{l_2,m_2}(\uvec k_2) \cdot \psi_{l_1,m_1}(r_1)}^2 \dd{r_1}
 \end{aligned}
 \end{equation}
 
-为了调试程序， 一个更简单的分布是 $P(n_1, l_1, m_1, r_2)$ 或者 $P(n_1, l_1, r_2)$， 后者基底为
-\begin{equation}
-\ket{n_1, l_1, r_2', l_2, L, M} = R_{n_1,l_1}(r_1) \frac{1}{r_2}\delta(r_2 - r_2') \mathcal{Y}_{l_1, l_2}^{L, M}(\uvec r_1, \uvec r_2)
-\end{equation}
-投影为
-\begin{equation}
-\braket{n_1, l_1, r_2', l_2, L, M}{\Psi} = \int r_1 R_{n_1,l_1}(r_1) \psi_{l_1, l_2}^{L, M}(r_1, r_2') \dd{r_1}
-\end{equation}
-概率分布为
-\begin{equation}
-\begin{aligned}
-P(n_1, l_1, r_2') &= \sum_{l_2, L, M} \abs{\braket{n_1, l_1, r_2', l_2, L, M}{\Psi}}^2
-\end{aligned}
-\end{equation}
-
-\subsection{Shakeup 电离 2}
+\subsection{Shakeup 电离}
 
 令归一化的基态为
 \begin{equation}
@@ -219,12 +206,16 @@ C_{l_2, m_2}(k_2, \bvec r_2) = \frac{1}{r_2}\sqrt{\frac{2}{\pi}} F_{l_2}(\eta_2,
 \begin{equation}\label{HeAnal_eq36}
 \bra{\phi_{n_1, l_1, m_1}}\braket{C_{l_2, m_2}(k_2)}{\Psi} = \sqrt{\frac{2}{\pi}} \iint r_1 R_{n_1,l_1}(r_1) F_{l_2}(\eta_2, k_2 r_2) \psi_{l_1, l_2}^{m_1, m_2}(r_1, r_2) \dd{r_1} \dd{r_2}
 \end{equation}
+然而， streaking trace 需要的不是上式的概率而是某个方向的概率． 我们只需使用\autoref{CulmWf_eq6}~\upref{CulmWf} 做线性组合即可
 \begin{equation}
-P(n_1, l_1, m_1, k_2) = \sum_{l_2, m_2}\abs{\bra{\phi_{n_1, l_1, m_1}}\braket{C_{l_2, m_2}(k_2)}{\Psi}}^2
+\bra{\phi_{n_1, l_1, m_1}}\braket*{\psi_{\bvec k_2}^{(-)}}{\Psi} = \sum_{l_2,m_2} \frac{\I^{-l_2}}{k_2} \E^{\I\sigma_{l_2}} Y_{l_2,m_2}(\uvec k_2) \bra{\phi_{n_1, l_1, m_1}}\braket{C_{l_2, m_2}(k_2)}{\Psi} 
 \end{equation}
-当 $M \equiv 0$ 时这里对 $m_2$ 求和其实只有一项就是 $m_2 = - m_1$， 也是一个常数．
+\begin{equation}\label{HeAnal_eq10}
+P(n_1, l_1, m_1, \bvec k_2) = \abs{\bra{\phi_{n_1, l_1, m_1}}\braket*{\psi_{\bvec k_2}^{(-)}}{\Psi}}^2
+\end{equation}
 
-然而 streaking trace 需要的不是上式的概率而是某个方向的概率． 我们只需稍作修改， 把\autoref{HeAnal_eq36} 结合\autoref{CulmWf_eq3}~\upref{CulmWf} 即可．
+当 $M \equiv 0$ 时这里对 $m_2$ 求和其实只有一项就是 $m_2 = - m_1$， 也是一个常数． 理论上， 如果把\autoref{HeAnal_eq10} 对所有 $n_1, l_1, m_1$ 求和， 应该和\autoref{HeAnal_eq11} 相等．
+
 
 \subsubsection{考虑探测器的立体角}
 $P(n_1, l_1, m_1, \bvec k_2)$ 中， 探测器实际捕获的是一个立体角为 $\Omega$ 的圆锥中的光电子， 如果假设 $\Omega \to 0$， 总概率为

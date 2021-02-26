@@ -67,8 +67,9 @@ H_i = K_{ri} + \frac{L_i^2}{2m r_i^2} - \frac{2}{r_i} \qquad (i = 1,2)
 \begin{equation}\label{HeTDSE_eq1}
 \psi_{l_1, l_2}^{L, M}(r_1, r_2) = (-1)^{l_1 + l_2 - L} \psi_{l_2, l_1}^{L, M}(r_2, r_1)
 \end{equation}
-以后我们会看到 $l_1 + l_2 - L$ 只能为偶数． % 未完成： 事实上我并不知道怎么得出的
-注意该式并不能说明每个分波分别都是对称或反对称的．
+理论上用该式可以在程序中减少一半重复的分波， 并且分波的 coupling 演化也可以得到精简， 但由于编程麻烦暂时没有实现．
+
+另外可以证明（其实是数值计算发现的） $l_1 + l_2 - L$ 为奇数的分波（奇分波）和 $l_1 + l_2 - L$ 为偶数的分波（偶分波）在线偏振电场中是独立演化的， 也就是 $V_{12}$ 和 $z_1, z_2$ 不会把奇偶性不同的分波耦合起来． 所以如果氦原子从基态（只包含偶分波：$l_1 = l_2, L = 0$）开始在线偏振电场中演化， 那么奇数分波的项将始终为零， 可以在程序中去除．
 
 \subsection{电子相互作用项}
 \begin{equation}
@@ -81,7 +82,7 @@ V_{12} = \frac{1}{\abs{\bvec r_2 - \bvec r_1}} &= 4\pi \sum_{l=0}^{\infty} \frac
 \mathcal{Y}_{l,l}^{0,0} (\uvec r_1, \uvec r_2) = \frac{(-1)^l}{\sqrt{2l+1}} \sum_{m = -l}^l Y_{lm}^*(\uvec r_1) Y_{lm}(\uvec r_2)
 \end{equation}
 
-要计算矩阵元 $\mel{\mathcal Y_\lambda}{V_{12}}{\mathcal Y_{\lambda'}}$， 就要对六个球谐函数的乘积的线性组合做两次角向积分． 使用\autoref{SphCup_eq1}~\upref{SphCup} 可以将上式表示为六个 CG 系数相乘的线性组合（二重求和）．
+要计算矩阵元 $\mel{\mathcal Y_\lambda}{V_{12}}{\mathcal Y_{\lambda'}}$， 就要对 6 个球谐函数的乘积的线性组合做两次角向积分． 使用\autoref{SphCup_eq1}~\upref{SphCup} 可以将上式表示为六个 CG 系数相乘的线性组合（二重求和）．
 \begin{equation}\label{HeTDSE_eq10}
 \ali{
 &\quad\mel{\mathcal{Y}_{l_1 l_2}^{LM}}{Y_{lm}^*(\uvec r_1)Y_{lm}(\uvec r_2)}{\mathcal{Y}_{l_1' l_2'}^{L'M'}}\\
@@ -163,13 +164,13 @@ z =2\sqrt{\frac{\pi}{3}} rY_{1,0}
 = 2\sqrt{\frac{\pi}{3}} r \sum_{m_1',m_2'}\sum_{m_1,m_2} \bmat{l_1 & l_2 & L\\ m_1 & m_2 & M}\bmat{l_1' & l_2 & L'\\ m_1' & m_2' & M'} \times\\
 &\qquad  \iint Y_{l_1m_1}^*(\uvec r_1)Y_{l_2m_2}^*(\uvec r_2)Y_{10}(\uvec r_1)Y_{l_1' m_1'}(\uvec r_1)Y_{l_2' m_2'}(\uvec r_2) \dd{\Omega_1}\dd{\Omega_2}\\
 &= 2 \sqrt{\frac{\pi}{3}} \delta_{l_2, l_2'} r \sum_{m_1,m_2, m_1'} \bmat{l_1 & l_2 & L\\ m_1 & m_2 & M}\bmat{l_1' & l_2' & L'\\ m_1' & m_2 & M'} \times\\
-&\qquad  \iint Y_{l_1m_1}^*(\uvec r_1)Y_{l_2m_2}^*(\uvec r_2)Y_{10}(\uvec r_1)Y_{l_1' m_1'}(\uvec r_1)Y_{l_2 m_2}(\uvec r_2) \dd{\Omega_1}\dd{\Omega_2}\\
+&\qquad  \iint Y_{l_1m_1}^*(\uvec r_1) Y_{10}(\uvec r_1)Y_{l_1' m_1'}(\uvec r_1)\dd{\Omega_1}\\
 &= \delta_{l_2, l_2'} \sqrt{(2l_1 + 1)(2l_1'+1)} r \sum_{m_1,m_2, m_1'} (-1)^{m_1} \times\\
 &\qquad  \bmat{l_1 & l_2 & L\\ m_1 & m_2 & M} \bmat{l_1' & l_2 & L'\\ m_1' & m_2 & M'} \pmat{l_1 & 1 & l_1'\\ 0 & 0 & 0} \pmat{l_1 & 1 & l_1'\\ -m_1 & 0 & m_1'}\\
 &= \delta_{l_2, l_2'} \delta_{M, M'} \sqrt{(2l_1 + 1)(2l_1'+1)} r \sum_{m_1,m_2} (-1)^{m_1} \times\\
 &\qquad  \bmat{l_1 & l_2 & L\\ m_1 & m_2 & M} \bmat{l_1' & l_2 & L'\\ m_1 & m_2 & M}  \pmat{l_1 & 1 & l_1'\\ 0 & 0 & 0} \pmat{l_1 & 1 & l_1'\\ -m_1 & 0 & m_1}
 }\end{equation}
-最后一步使用了 3j 符号中 $m_1 + m_2 + m_3 = 0$， 以及 CG 系数中 $m_1 + m_2 = M$ 的性质． 两个 delta 函数验证了对第一个电子作用的 $z$ 方向电场不会影响第二个电子的角动量以及总角动量的 $z$ 分量． 推导中还陆续得出了 $m_1' = m_1, m_2' = m_2$ 的结论， 即该电场同样不会影响每个电子的角动量 $z$ 分量（所以对 $m_1', m_2'$ 的求和消去了）．
+最后一步使用了 3j 符号中 $m_1 + m_2 + m_3 = 0$， 以及 CG 系数中 $m_1 + m_2 = M$ 的性质． 两个 delta 函数验证了对第一个电子作用的 $z$ 方向电场不会影响第二个电子的角动量以及总角动量的 $z$ 分量． 推导中还陆续得出了 $m_1' = m_1, m_2' = m_2$ 的结论， 即该电场同样不会影响每个电子的角动量 $z$ 分量（所以对 $m_1', m_2'$ 的求和消去了）． 最后对 $m_1,m_2$ 的求和中， 要求 $m_1+m_2=M$， 且 $\abs{m_1} < \min\qty{l_1, l'_1}$．
 
 同理， 对第二个电子有
 % 已验证： M = M' = 0 时和爱华的程序一样
@@ -178,6 +179,22 @@ z =2\sqrt{\frac{\pi}{3}} rY_{1,0}
 = \delta_{l_1, l_1'} \delta_{M, M'} \sqrt{(2l_2 + 1)(2l_2'+1)} r \sum_{m_1,m_2} (-1)^{m_2} \times\\
 &\qquad  \bmat{l_1 & l_2 & L\\ m_1 & m_2 & M} \bmat{l_1 & l_2' & L'\\ m_1 & m_2 & M}  \pmat{l_2 & 1 & l_2'\\ 0 & 0 & 0} \pmat{l_2 & 1 & l_2'\\ -m_2 & 0 & m_2}
 }\end{equation}
+
+在爱华的论文中， $M = M' = 0$ 时用 9j 符号表示为（数值验证相同）
+\begin{equation}
+\begin{aligned}
+&\mel{\mathcal{Y}_{l_1 l_2}^{LM}}{z_1}{\mathcal{Y}_{l_1' l_2'}^{L'M'}}=
+r\sqrt{9(2l'_1+1)(2l'_2+1)(2L'+1)/(4\pi)^2}\\
+&\times\bmat{1 & l'_1 & l_1\\ 0 & 0 & 0} \bmat{0 & l'_2 & l_2\\ 0 & 0 & 0} \bmat{1 & L' & L\\ 0 & 0 & 0}\Bmat{1 & l'_1 & l_1\\ 0 & l'_2 & l_2\\ 1 & L' & L}
+\end{aligned}
+\end{equation}
+\begin{equation}
+\begin{aligned}
+&\mel{\mathcal{Y}_{l_1 l_2}^{LM}}{z_2}{\mathcal{Y}_{l_1' l_2'}^{L'M'}}=
+r\sqrt{9(2l'_1+1)(2l'_2+1)(2L'+1)/(4\pi)^2}\\
+&\times\bmat{0 & l'_1 & l_1\\ 0 & 0 & 0} \bmat{1 & l'_2 & l_2\\ 0 & 0 & 0} \bmat{1 & L' & L\\ 0 & 0 & 0}\Bmat{0 & l'_1 & l_1\\ 1 & l'_2 & l_2\\ 1 & L' & L}
+\end{aligned}
+\end{equation}
 
 \subsection{非线性偏振电场}
 对非线性偏振电场， \autoref{HeTDSE_eq12} 的前两项不为零， 但只和 $z$ 分量的结果大同小异（只有最后一个 3j 系数变为两项， 再除以 $\sqrt{2}$ 以归一化）
@@ -193,7 +210,7 @@ z =2\sqrt{\frac{\pi}{3}} rY_{1,0}
 &\mel{\mathcal{Y}_{l_1 l_2}^{LM}}{y_1}{\mathcal{Y}_{l_1' l_2'}^{L'M'}}
 = \frac{\I \delta_{l_2, l_2'} \delta_{M, M'}}{\sqrt2} \sqrt{(2l_1 + 1)(2l_1'+1)} r \times \\
 & \qquad \sum_{m_1,m_2} (-1)^{m_1} \bmat{l_1 & l_2 & L\\ m_1 & m_2 & M} \bmat{l_1' & l_2 & L'\\ m_1 & m_2 & M} \times\\
-&\qquad  \pmat{l_1 & 1 & l_1'\\ 0 & 0 & 0}\qty[\pmat{l_1 & 1 & l_1'\\ -m_1 & -1 & m_1} + \pmat{l_1 & 1 & l_1'\\ -m_1 & 1 & m_1}]
+&\qquad  \pmat{l_1 & 1 & l_1'\\ 0 & 0 & 0}\qty[\pmat{l_1 & 1 & l_1'\\ -m_1 & -1 & m_1} + \pmat{l_1 & 1 & l_1'\\ -m_1 & 1 & m_1}] 
 }\end{equation}
 
 \begin{equation}\ali{
