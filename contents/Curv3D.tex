@@ -1,0 +1,131 @@
+% 三维欧几里得空间中的曲线
+% 曲线|微分几何|曲率|curvature|扭率|第二曲率|torsion|活动坐标架|活动标架
+
+\pentry{矢量的导数\upref{DerV}，张成空间\upref{VecSpn}}
+
+三维欧几里得空间是我们最为熟悉的空间，其性质也非常好，易于研究．本节讨论的是三维空间中的曲线的性质，引入曲率、挠率等概念，介绍了Frenet向量组以及该组中向量之间的关系．
+
+\subsection{一般欧几里得空间中曲线的概念}
+
+\begin{definition}{曲线}
+令$I$是实数轴$\mathbb{R}$上的一个区间，则称\textbf{连续函数}$f:I\to \mathbb{R}^n$为$\mathbb{R}^n$中的一条\textbf{曲线（curve）}，按拓扑学的习惯也称\textbf{道路（path）}．此处连续是指函数的$n$个分量都是$\mathbb{R}\to\mathbb{R}$的连续函数．
+\end{definition}
+
+我们可以任意取定一个坐标系，把向量值函数$f$分为$n$个标量值函数，简称为$f$的分量，由此来理解连续的含义．你可能自然会想确认，$f$的分量的连续性，和取定坐标系的方式是否有关？答案是无关的．这是因为我们可以用另一种方式来理解此处的“连续”，那就是取集合$I$与$\mathbb{R}^3$，配上通常的拓扑——即$I$取$\mathbb{R}$的子拓扑，$\mathbb{R}^3$取$\mathbb{R}$的乘积拓扑——所得到的拓扑空间，那么$f$就是拓扑空间之间的映射，其连续性取决于拓扑意义上的连续性，和具体坐标系的选择就无关了．
+
+要强调的一点是，即便两条曲线的轨迹一样，它们也不一定是同一条曲线．比如说，取$f, g:\mathbb{R}\to\mathbb{R}^2$这两个函数，定义为$f(t)=\pmat{\cos t\\\sin t}$和$g(t)=\pmat{\cos 2t\\\sin 2t}$，那么尽管它们的轨迹都是平面上的单位圆，但由于两条曲线的“速度”不一样，我们依然把它们认为是不同的曲线．
+
+\begin{definition}{可微曲线}
+如果曲线$f:I\to\mathbb{R}^n$对于任意分量都是可微的，那么称$f$是一个\textbf{可微曲线（differentiable curve）}或\textbf{可微道路（differentiable path）}，有时也记为$C^1$的曲线．
+\end{definition}
+
+同样地，$f$本身的可微性，和具体坐标系的选择有关系吗？由于“微分”这一概念是实数空间特有的，我们没法像前面一样直接用拓扑的概念绕过坐标系的选择；但答案是一样的，\textbf{无关}．证明这一点的思路也可以应用到之前对一般曲线的讨论上去：考虑变换坐标系后各点的变换，会发现变换后的分量就是过渡矩阵乘以原先的函数列矩阵，也就是说，变换坐标后新的函数分量，是旧分量的某种线性组合．这样一来，变换前可微当且仅当变换后也可微，从而可知和变换无关．
+
+\begin{definition}{光滑曲线}
+如果曲线$f:I\to\mathbb{R}^n$对于任意分量都是光滑的，那么称$f$是一个\textbf{光滑曲线（smooth curve）}或\textbf{光滑道路（smooth path）}，有时也记为$C^\infty$的曲线．
+\end{definition}
+
+和上述坐标变换的讨论类似，可证明光滑曲线的光滑性不依赖于坐标系的选择．
+
+\begin{definition}{正则曲线}
+
+\end{definition}
+
+\subsection{Frenet向量组}
+
+\begin{figure}[ht]
+\centering
+\includegraphics[width=4cm]{./figures/Curv3D_1.pdf}
+\caption{Frenet向量组示意图．途中三个蓝色向量就是红色曲线在某一点处的Frenet向量组，分别是单位切向量$T$、单位主法向量$N$和单位副法向量$B$．} \label{Curv3D_fig1}
+\end{figure}
+
+Frenet向量组是\textbf{三维}欧几里得空间$\mathbb{R}^3$中特有的概念，是刻画\textbf{可微曲线}性质的优良工具．
+
+Frenet向量组中的第一个向量，是\textbf{单位切向量}．关于$t$对曲线$f(t)$求导就能得到切向量，如果把$t$看作时间，那么切向量$\frac{\dd}{\dd t}f(t)$也可以看成是曲线上一点的切速度．单位切向量就是方向与切速度相同，但长度为$1$的向量．
+
+为了得到单位切向量，我们可以用切速度除以切速度的大小来获得：$\frac{\dd}{\dd t}f(t)/\abs{\frac{\dd}{\dd t}f(t)}$．但更简单的方法是，令切速度的大小恒为$1$，或者说只讨论切速度大小恒为$1$的\textbf{可微曲线}．当切速度恒为$1$的时候，曲线走过的弧长就恒等于经过的时间，于是我们说这时是用\textbf{弧长}来作曲线的参数．弧长参数通常用字母$s$表示．
+
+\begin{definition}{单位切向量}\label{Curv3D_def1}
+使用弧长参数来描述可微曲线$f(s)$，记$T(s)=\frac{\dd}{\dd s}f(s)$，称为曲线在参数为$s$处的\textbf{单位切向量（unit tangent vector）}．
+\end{definition}
+
+Frenet向量组中的第二个向量，是\textbf{单位主法向量}．对于处处可微的曲线，切向量总是存在的，但是主法向量不一定存在．主法向量的定义如下：
+
+\begin{definition}{主法向量}\label{Curv3D_def2}
+使用弧长参数来描述可微曲线$f(s)$，其单位切向量为$T(s)$．如果$\frac{\dd}{\dd s}T(s)$不为零，则称$\kappa(s) N(s)=\frac{\dd}{\dd s}T(s)$为曲线在$s$处的\textbf{主法向量（normal vector）}．其中$N(s)$是单位\textbf{向量}，$\kappa$是一个\textbf{正数}，称作曲线在这一点处的\textbf{曲率（curvature）}．
+\end{definition}
+
+由于使用弧长参数以后，单位切向量的大小不变，因此$N(s)$恒与$T(s)$垂直．$N(s)$就是那第二个成员，单位主法向量．
+
+Frenet向量组中的最后一个成员，是\textbf{单位副法向量}，是用前两个向量叉乘而来的．
+
+\begin{definition}{副法向量}
+条件设定如\autoref{Curv3D_def1} 和\autoref{Curv3D_def2} ，称$B(s)=T(s)\times N(s)$为曲线在$s$处的\textbf{单位副法向量（unit binormal vector）}．
+\end{definition}
+
+以上定义的副法向量必然是单位向量，因为$T$和$N$都是单位向量且正交．
+
+Frenet向量组可以用于构成所谓的\textbf{Frenet坐标架}，也称\textbf{活动坐标架}．相比预先规定的自然坐标系，活动坐标架忽略了曲线在空间中的具体位置，更简洁和方便地表示了曲线本身的局部性质．
+
+\begin{definition}{密切平面}
+条件设定如\autoref{Curv3D_def1} 和\autoref{Curv3D_def2} ，由$T(s)$和$N(s)$两向量在点$f(s)$处所张成的二维空间，称为曲线在这一点处的\textbf{密切平面（osculating plane）}．
+\end{definition}
+
+对于\textbf{平面曲线}，即整体都在一个平面上的曲线，其所在的平面就是每个点的密切平面．
+
+\subsection{曲率和扭率}
+
+曲率已经在\autoref{Curv3D_def2} 中定义清楚了，是表征单位切向量旋转速率的数字．要说明的是，如果单位切向量在某点处不变化，那么主法向量的概念就不复存在，也就没有 Frenet 向量组的后两位成员了．在这种情况下，我们说曲线在这一点处的曲率为 ．更一致的曲率定义方法如下：
+\begin{definition}{曲率}
+使用弧长参数来描述可微曲线$f(s)$，其单位切向量为$T(s)$．称$\kappa(s)=\abs{\frac{\dd}{\dd s}T(s)}$为曲线在$s$处的\textbf{曲率（curvature）}．
+\end{definition}
+
+当Frenet向量组存在时，还有一个重要的概念叫\textbf{扭率}或\textbf{挠率}，在有的文献中也会被称为\textbf{第二曲率}．
+
+在定义扭率之前，我们要先讨论副法向量的一个性质：$\frac{\dd}{\dd s}B(s)$和$N(s)$平行．首先，因为单位副法向量的长度不变，故有$\frac{\dd}{\dd s}B(s)$和$B(s)$垂直．由于$B=T\times N$，故$\frac{\dd}{\dd s}B(s)=[\frac{\dd}{\dd s}T(s)]\times N(s)+T(s)\times\frac{\dd}{\dd s}B(s)=T(s)\times\frac{\dd}{\dd s}B(s)$，进而可知$\frac{\dd}{\dd s}B(s)$垂直于$T(s)$．因此，$\frac{\dd}{\dd s}B(s)$垂直于$T$和$B$，必然和$N$在一条线上了．
+
+\begin{definition}{扭率}
+使用弧长参数来描述可微曲线$f(s)$，令其Frenet向量组为$T(s), N(s), B(S)$．令实数$\tau$满足$\frac{\dd}{\dd s}B(s)=-\tau N(s)$，那么称实数$\tau$为曲线在$s$处的\textbf{扭率（torsion）}．
+\end{definition}
+
+曲率描述了曲线单位切向量方向变化的速率，越快则曲线弯曲程度越强．扭率则描述了曲线偏离平面曲线的程度，也就是其扭曲程度；也可以理解为，扭率描述了密切平面旋转的速率．
+
+\subsection{Frenet-Serret公式}
+
+三维欧几里得空间中的可微曲线$f(s)$，如果处处有非零曲率$\kappa(s)$，且其扭率为$\tau(s)$（可以为零），则它一定有Frenet向量组．$T$，$N$和$B$具有如下关系：
+
+\begin{theorem}{Frenet-Serret公式}
+对于曲线的Frenet向量组$\{T(s), N(s), B(s)\}$，我们有如下关系：
+\begin{equation}\label{Curv3D_eq1}
+\frac{\dd}{\dd s}T(s)=\kappa N(s)
+\end{equation}
+\begin{equation}\label{Curv3D_eq2}
+\frac{\dd}{\dd s}N(s)=-\kappa(s) T(s)+\tau(s) B(s)
+\end{equation}
+\begin{equation}\label{Curv3D_eq3}
+\frac{\dd}{\dd s}B(s)=-\tau(s) N(s)
+\end{equation}
+
+用矩阵的形式可以更简洁地表示为
+
+\begin{equation}
+\pmat{T'\\N'\\B'}=\pmat{0&\kappa&0\\-\kappa&0&\tau\\0&-\tau&0}\pmat{T\\N\\B}
+\end{equation}
+
+矩阵表示也更好记忆．
+\end{theorem}
+
+\textbf{证明}：
+
+\begin{enumerate}
+\item 根据$N$的定义，直接可得\autoref{Curv3D_eq1}．
+\item 根据扭率的定义，直接可得\autoref{Curv3D_eq3}．
+\item 考虑到三个向量的方向关系，以及它们都是单位向量的事实，我们可以得到$N=B\times T$．因此，$\frac{\dd}{\dd s}N=\frac{\dd B}{\dd s}\times T+B\times\frac{\dd T}{\dd s}=-\tau N\times T+B\times\kappa N=\tau B-\kappa T$．
+\end{enumerate}
+
+\textbf{证毕}．
+
+
+
+
+

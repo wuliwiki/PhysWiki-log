@@ -1,12 +1,10 @@
-% 球坐标和柱坐标中的定态薛定谔方程
+% 球坐标系中的定态薛定谔方程
 % 球坐标|柱坐标|定态薛定谔方程|拉普拉斯算子|径向动量
 
-\pentry{定态薛定谔方程\upref{SchEq}， 球坐标系中的亥姆霍兹方程\upref{SphHHz}}
+\pentry{定态薛定谔方程\upref{SchEq}， 球坐标系中的亥姆霍兹方程\upref{SphHHz}， 球坐标系中的角动量算符\upref{SphAM}}
 
-\subsection{球坐标}
-
-本文使用原子单位制\upref{AU}． 我们希望在球坐标和柱坐标中求解定态薛定谔方程
-\begin{equation}
+本文使用原子单位制\upref{AU}． 我们希望在球坐标中求解定态薛定谔方程
+\begin{equation}\label{RadSE_eq2}
 -\frac{1}{2m}\laplacian \psi(\bvec r) + V(\bvec r)\psi(\bvec r) = E\psi(\bvec r)
 \end{equation}
 当势能 $V(\bvec r)$ 处处为零时， 这就变成了球坐标系中的亥姆霍兹方程\upref{SphHHz}． 以下考虑一般情况， 但过程也和求解亥姆霍兹方程类似．
@@ -15,17 +13,16 @@
 \begin{equation}
 H = -\frac{1}{2m} \laplacian + V(\bvec r) =  K_r + \frac{L^2}{2mr^2} + V(\bvec r)
 \end{equation}
-其中径向动量算符为
+其中径向动量算符和角动量平方算符为（\autoref{SphAM_eq1}~\upref{SphAM}）分别为
 \begin{equation}
 K_r =-\frac{1}{2m} \laplacian_r =  - \frac{1}{2m} \qty(\pdv[2]{r} + \frac2r \pdv{r}) = -\frac{1}{2mr^2} \dv{r} \qty(r^2\pdv{r})
 \end{equation}
-角动量平方算符为%未完成： 在 wikipedia 上， \bvec L 也是有极坐标的表达式的． 研究一下． https://en.wikipedia.org/wiki/Angular_momentum_operator
 \begin{equation}\label{RadSE_eq3}
-L^2 = -r^2 \laplacian_\Omega = -\qty[ \frac{1}{\sin\theta} \pdv{\theta} \qty(\sin \theta \pdv{u}{\theta}) + \frac{1}{\sin^2 \theta} \pdv[2]{u}{\phi}]
+L^2 = -\laplacian_\Omega = -\qty[ \frac{1}{\sin\theta} \pdv{\theta} \qty(\sin \theta \pdv{u}{\theta}) + \frac{1}{\sin^2 \theta} \pdv[2]{u}{\phi}]
 \end{equation}
 注意角动量算符不含 $r$．
 
-定态薛定谔方程为
+定态薛定谔方程\autoref{RadSE_eq2} 变为
 \begin{equation}
 \qty(K_r + \frac{L^2}{2mr^2} + V - E)\Psi(\bvec r) = 0
 \end{equation}
@@ -39,21 +36,21 @@ L^2 Y_{l,m}(\uvec r) = l(l+1) Y_{l,m}(\uvec r)
 \begin{equation}\label{RadSE_eq6}
 K_r R_l(r) + \qty[V(r) + \frac{l(l+1)}{2mr^2} ]R_l(r) = ER(r)
 \end{equation}
-我们可以通过变量替换将其化为更简洁的形式．
+我们可以通过变量替换将其化为更简洁的形式． 实际上是不同 $l$ 的一系列方程．
 
-定义 \textbf{Scaled Radial Wave Function} 为
+定义（\textbf{约化径向波函数（scaled radial wave function）}为
 \begin{equation}
-u_l(r) = r R_l(r)
+\psi_l(r) = r R_l(r)
 \end{equation}
 代入\autoref{RadSE_eq6}， 第一项变为
 \begin{equation}
-K_r R_l =  - \frac{1}{2m} \qty(\dv[2]{R_l}{r} + \frac2r \dv{R_l}{r}) = -\frac{1}{2mr^2} \dv{r} \qty(r^2\dv{R_l}{r}) =  -\frac{1}{2mr} \dv[2]{u_l}{r}
+K_r R_l =  - \frac{1}{2m} \qty(\dv[2]{R_l}{r} + \frac2r \dv{R_l}{r}) = -\frac{1}{2mr^2} \dv{r} \qty(r^2\dv{R_l}{r}) =  -\frac{1}{2mr} \dv[2]{\psi_l}{r}
 \end{equation}
-所以\autoref{RadSE_eq6} 化简为
+所以\autoref{RadSE_eq6} 两边乘 $r$ 后化简为
 \begin{equation}\label{RadSE_eq1}
--\frac{1}{2m} \dv[2]{u_l}{r} + \qty[V(r) + \frac{1}{2m}\frac{l(l + 1)}{r^2}]u_l = Eu_l
+-\frac{1}{2m} \dv[2]{\psi_l}{r} + \qty[V(r) + \frac{l(l + 1)}{2mr^2}]\psi_l = E\psi_l
 \end{equation}
-这就是径向方程， 方括号中可以看作\textbf{一维等效势能}（类比经典力学的情况\autoref{CenFrc_eq6}~\upref{CenFrc}）． 该方程的解取决于 $V(r)$ 的具体形式．
+这是径向薛定谔方程更常见的形式， 方括号中可以看作\textbf{一维等效势能}（类比经典力学的情况\autoref{CenFrc_eq6}~\upref{CenFrc}）． 该方程的解取决于 $V(r)$ 的具体形式． 一般来说， 对于每个较小的 $l$， 可能找到有限个束缚态， 我们把它用一个整数 $n$ 编号， 叫做\textbf{主量子数（principal quantum number）}， 而 $l$ 叫做\textbf{角量子数（angular quantum number）}， 束缚态能量 $E_{n,l}$ 由这两个量子数共同决定． 随着 $l$ 不断增加， 方括号中的等效势能越来越浅， 最终有可能导致径向方程不存在束缚态解． 氢原子是一个显著的例外， 由于 $1/r$ 势能的特殊性， 它不但有无穷个束缚态， 而且束缚态能量和 $l$ 无关， 这在一般情况下是不成立的． 显然，对于有限深的势能函数 $V(r)$ 只存在有限个束缚态．
 
 % 未完成， 讨论一下束缚态和连续态
 % 令束缚态的解为 $u_{n,l}(r)$， 对应能量（本征值）为 $E_n$
@@ -66,25 +63,7 @@ K_r R_l =  - \frac{1}{2m} \qty(\dv[2]{R_l}{r} + \frac2r \dv{R_l}{r}) = -\frac{1}
 \begin{equation}
 \int \abs{R}^2 r^2 \dd{r}  = 1
 \end{equation}
-正交条件类似． 根据定义
+即
 \begin{equation}
-\int \abs{u}^2 \dd{r}  = 1
-\end{equation}
-
-\subsection{柱坐标}
-\begin{equation}
-u(r) = \sqrt r R(r)
-\end{equation}
-\begin{equation}
- H = K_r + \frac{L_z^2}{2m r^2}
-\end{equation}
-\begin{equation}
-K_r R = -\frac{1}{2m} \frac1r \dv{r} \qty(r \dv{R}{r}) =  - \frac{1}{2m} \frac{1}{\sqrt r} \qty(\dv[2]{u}{r} + \frac{u}{4 r^2})
-\end{equation}
-\begin{equation}
-\frac{L_z^2}{2m r^2}\psi  = \frac{1}{2m} \frac{m_z^2}{r^2}\psi 
-\end{equation}
-所以径向方程为
-\begin{equation}
-- \frac{1}{2m} \dv[2]{u}{r} + \qty[V(r) + \frac{1}{2m} \qty(\frac{m_z^2}{r^2} - \frac{1}{4 r^2})]u = Eu
+\int \abs{\psi_l(r)}^2 \dd{r}  = 1
 \end{equation}

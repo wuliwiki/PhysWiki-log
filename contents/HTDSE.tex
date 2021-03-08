@@ -1,9 +1,17 @@
-% 氢原子球坐标数值解 TDSE
+% 氢原子球坐标数值解 TDSE 2
 % 氢原子|球坐标|薛定谔方程|TDSE|分波|径向方程
+
+\begin{issues}
+\issueDraft
+\end{issues}
+
+\pentry{电磁场中氢原子薛定谔方程数值解\upref{HyTDSE}， 张量积空间\upref{DirPro}}
+
+相比于 “电磁场中氢原子薛定谔方程数值解\upref{HyTDSE}”， 这里的描述更数学．
 
 总波函数在球谐基底上展开（我们把 $(l,m)$ 按一定顺序排序后的序号记为 $\lambda$）
 \begin{equation}\label{HTDSE_eq1}
-\Psi(\bvec r, t) = \sum_\lambda \psi_\lambda(r, t) \otimes Y_\lambda(\uvec r)
+\Psi(\bvec r, t) = \sum_\lambda \ket{\psi_\lambda(t)} \otimes \ket{Y_\lambda(\uvec r)}
 \end{equation}
 哈密顿算符为
 \begin{equation}\label{HTDSE_eq2}
@@ -11,7 +19,7 @@ H = H_0 + V_F(t) = K_r\otimes I + \frac{1}{2r^2}\otimes L^2 + V(r) \otimes I + V
 \end{equation}
 耦合方程组为
 \begin{equation}\label{HTDSE_eq3}
-\sum_{\lambda'} \mel{\lambda}{H}{\lambda'} \psi_{\lambda'}(r, t) = -\I\pdv{t} \psi_\lambda (r, t)
+\sum_{\lambda'} \mel{\lambda}{H}{\lambda'} \ket{\psi_{\lambda'}(t)} = -\I\pdv{t} \ket{\psi_\lambda(t)}
 \end{equation}
 其中每个矩阵元 $ \mel{\lambda}{H}{\lambda'}$ 都是一个关于 $r$ 空间的算符（张量空间的算符如果关于一个小空间的基底求矩阵元， 那么每个矩阵元都会是另一个小空间中的算符）．
 
@@ -54,9 +62,6 @@ V_F(t) = \bvec E(t) \vdot \bvec r =  E(t) z = E(t) r \otimes Y_{10}(\uvec r)
 \begin{equation}
 \exp(\sum_i  \Q A_i \otimes \ket{i}\bra{i}) = \prod_i  \E^{\Q B_i} \otimes \ket{i}\bra{i}
 \end{equation}
-
-\subsection{非线性偏振场}
-我们可以某时刻任何场矢量分解为 $x, y, z$ 方向． $z$ 方向上面已经讨论过， 我们也可以将算符 $x$ 和 $y$ 写成 $r$ 乘以某些球谐函数的形式， 然后讨论同上．
 
 \subsection{选择定则起到的作用}
 在对每个 $f_i(\uvec r)$ 使用传播子 $\exp[-\I (r_i Y_{10}) \Delta t]$ 的时候， 由于 expokit 只需要用户提供矩阵 $\mel{\lambda}{Y_{10}}{\lambda'}$ 与列矢量相乘的 implementation． 如果知道选择定则， 即那些矩阵元为 0， 我们就可以使用 sparse matrix 与列矢量的乘法从而提高计算效率．

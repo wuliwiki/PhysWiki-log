@@ -5,6 +5,7 @@
 
 \subsection{解析解}
 形式为
+\addTODO{一般一阶线性微分方程组如何化成该形式？}
 \begin{equation}\label{ODEsys_eq1}
 \dv{\bvec v}{t} = \mat A \bvec v
 \end{equation}
@@ -12,9 +13,9 @@
 \begin{equation}\label{ODEsys_eq2}
 \bvec v(t) = \exp(\mat At) \bvec v(0)
 \end{equation}
-其中矩阵的指数函数由泰勒级数定义
-\begin{equation}
-\exp(\mat M) = 1 + \mat M + \frac1{2!} \mat M^2 + \dots
+其中矩阵的指数函数由矩阵的泰勒级数\upref{Taylor}定义
+\begin{equation}\label{ODEsys_eq4}
+\exp(\mat A) = 1 + \mat A + \frac1{2!} \mat A^2 + \dots
 \end{equation}
 将\autoref{ODEsys_eq2} 写成矩阵级数的形式即可验证\autoref{ODEsys_eq1}．
 
@@ -37,7 +38,14 @@
 \end{equation}
 然而这么做对于数值计算并没有太大意义．
 
-Expokit 是一个数学包可以用于计算矩阵的指数函数（Fortran 和 Matlab）．
+\subsection{厄米矩阵}
+如果 $\mat H$ 是厄米矩阵， 那么 $\E^{\I \mat H t}$ （$t\in \mathbb R$）是一个酉矩阵（幺正矩阵）\upref{UniMat}． 所以 $\bvec v(t)$ 的模 $\abs{\bvec v(t)} = \sum \abs{v_i}^2$ 将不随时间变化．
+
+证明： 把\autoref{ODEsys_eq4} 两边取厄米共轭得
+\begin{equation}
+(\E^{\I \mat H t})\Her = \E^{-\I \mat H\Her t} = \E^{-\I \mat H t}
+\end{equation}
+由于 $[H,H] = 0$， 有 $(\E^{\I \mat H t})\Her \E^{\I \mat H t} = \E^{-\I \mat H t}\E^{\I \mat H t} = \mat I$．证毕．
 
 \subsection{数值计算}
 如果矩阵 $\bvec M$ 是厄米矩阵， 则可以先做对角化 $\mat M = \mat U \mat \Lambda \mat U\Her$， 其中 $\mat \Lambda$ 是对角矩阵， $\mat U$ 是酉矩阵． 这样就有
@@ -63,7 +71,7 @@ Expokit 是一个数学包可以用于计算矩阵的指数函数（Fortran 和 
 在此基础上使用 Lanczos 算法\upref{Lanc}可以进一步提高效率．
 
 
-\subsection{Split Operator}
+\subsection{算符拆分}
 有时候我们希望可以在上述计算中把 $\mat A$ 写成几个矩阵的和的形式（以两个为例） $\mat A = \mat B + \mat C$． 当 $\mat B$ 和 $\mat C$ 对易时显然有
 \begin{equation}
 \exp(\mat At) = \exp(\mat Bt)\exp(\mat Ct)
