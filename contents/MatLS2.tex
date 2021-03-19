@@ -1,8 +1,9 @@
 % 线性映射的结构
+% 线性变换|线性映射|补空间|线性空间|零空间|值空间
 
-\pentry{补空间\upref{DirSum}， 矩阵的秩\upref{MatRnk}}
+\pentry{补空间\upref{DirSum}}
 
-如果线性映射是一一对应（双射）\upref{map}的， 那么它的结构简单明了， 没有太多值得讨论的． 我们现在来看一个揭示多对一线性映射的结构的重要定理． 考虑线性映射 $A:X\to Y$， 线性空间 $X$ 的零空间（\autoref{LinMap_the1}~\upref{LinMap}） $X_0$ 中的每个矢量都被 $A$ 映射到 $Y$ 空间中的零矢量， 即 $A(X_0) = \qty{0}$．
+如果线性映射是单射\upref{map}的（即定义域空间到值域空间\upref{LinMap}是双射的）， 那么它的结构简单明了， 没有太多值得讨论的． 我们现在来看一个揭示多对一线性映射的结构的重要定理． 考虑线性映射 $A:X\to Y$， 线性空间 $X$ 的零空间（\autoref{LinMap_the1}~\upref{LinMap}） $X_0$ 中的每个矢量都被 $A$ 映射到 $Y$ 空间中的零矢量， 即 $A(X_0) = \qty{0}$．
 
 \begin{figure}[ht]
 \centering
@@ -11,15 +12,16 @@
 \end{figure}
 
 \begin{theorem}{}\label{MatLS2_the1}
-令 $A:X \to Y$ 的零空间为 $X_0$， $X_1$ 为 $X_0$ 在 $X$ 中的一个补空间（$X_0\oplus X_1 = X$， \autoref{DirSum_def1}~\upref{DirSum}）， 令 $Y_1 = A(X)$， 那么映射 $A:X_1\to Y_1$ 是一一对应的．
+令 $A:X \to Y$ 的零空间为 $X_0$， $X_1$ 为 $X_0$ 在 $X$ 中任意一个补空间（即 $X_0\oplus X_1 = X$， \autoref{DirSum_def1}~\upref{DirSum}）， 令值空间 $Y_1 = A(X)$， 那么映射 $A:X_1\to Y_1$ 是一一对应的（即双射）．
 \end{theorem}
 证明见下文． 我们可以形象地把\autoref{MatLS2_the1} 用\autoref{MatLS2_fig1} 表示， 图中每个三角形代表一个矢量空间， 由于 $X_0, X_1$ 是互补的， 它们只相交于零矢量． 注意对于给定的映射 $A$， $X_0$ 和 $Y_1$ 是确定的， 而 $X_0$ 的补空间 $X_1$ 可以随意选取．
 
-特殊地， 若 $A$ 是一对一映射， 则定理中 $X_0 = \qty{0}$ 是零维空间， 补空间 $X_1 = X$． 此时可以把\autoref{MatLS2_fig1} 中表示 $X_0$ 的三角形去掉．
+特殊地， 若 $X_0$ 是零维空间即 $X_0 = \qty{0}$， 则补空间 $X_1 = X$． 此时可以把\autoref{MatLS2_fig1} 中表示 $X_0$ 的三角形去掉．
 
-由这个定理可得多对一线性映射的一个重要性质
+该定理可以更好地帮助我们理解线性方程组解的结构\upref{LinEq}： 当 $\mat A \bvec x = \bvec b$ 的解集等于一个特解加齐次解集， 齐次解． $\bvec b$ 是 $Y_1$ 中的某向量， 特解是 $X_1$ 中映射到 $\bvec b$ 的向量， 而齐次解就是零空间 $X_0$．
+
 \begin{corollary}{}
-令线性映射为 $A:X\to Y$ 对应的矩阵为 $\mat A$． $X$ 是 $N_X$ 维矢量空间， $A$ 的零空间为 $X_0$， 是 $X$ 的子空间． 令 $\mat A$ 的列秩（$Y_1$ 的维数）为 $R$， 那么
+令\autoref{MatLS2_the1} 中 $X, X_0, Y_1$ 的维数分别为 $N_X, N_0, R$， 那么
 \begin{equation}\label{MatLS2_eq1}
 N_X = N_0 + R
 \end{equation}
@@ -27,13 +29,20 @@ N_X = N_0 + R
 证明： 见\autoref{MatLS2_eq1}， 由于 $X_1$ 与 $Y_1$ 一一对应， $X_1$ 的维数也是 $R$， 又因为 $X_0\oplus X_1 = X$， $X$ 的维数等于 $X_0, X_1$ 维数之和（\autoref{DirSum_cor1}~\upref{DirSum}）． 证毕．
 
 \begin{corollary}{}
-线性映射 $A:X\to Y$ 是双射当且仅当 $A(X) = Y$ 且 $X,Y$ 维数相同．
+线性映射 $A:X\to Y$ 中值空间 $A(X) \subseteq Y$ 的维数小于或等于定义域空间 $X$ 的维数．
 \end{corollary}
-证明： 前者证明后者显然． 后者证明前者： 令\autoref{MatLS2_the1} 中的 $A:X \to Y_1$ 满足 $N_X = R$， 即 $N_0 = 0$， 即令零空间只有零矢量一个元素， 所以 $X = X_1$， 与 $Y_1$ 一一对应． 证毕．
+证明： \autoref{MatLS2_eq1} 中 $N_X, N_0, R > 0$， 所以有 $R \leqslant N_X$．
+
+\begin{corollary}{}
+线性映射 $A:X\to Y$ 是单射（即 $A:X\to A(X)$ 是双射）当且仅当零空间 $X_0$ 中只有零向量．
+\end{corollary}
+说明：零空间 $X_0$ 只有零矢量一个元素当且仅当\autoref{MatLS2_eq1} 中 $N_X = R$ 或 $N_0 = 0$．
+
+证明： 前者证明后者： 使用\autoref{LinMap_cor1}~\upref{LinMap} 以及单射的定义， 可得 $0\in X$ 是零空间中的唯一向量． 后者证明前者： $N_0 = 0$ 即\autoref{MatLS2_the1} 中的 $X = X_1$， 与值空间 $Y_1 = A(X)$ 有一一对应关系． 证毕．
 
 \subsection{证明}
-要证明\autoref{MatLS2_the1}， 首先证明 $A(X_1) = A(X)$． 任意 $x\in X$ 可以表示为 $x = x_0 + x_1$， 其中 $x_0\in X_0$， $x_1\in X_1$． $Ax = A x_0 + A x_1 = A x_1$． 这说明 $Y_1 = A(X)$ 中任意元素都能找到 $A(x_1) \in Y_1$， 所以 $A(X_1) = Y_1$．
+要证明\autoref{MatLS2_the1}， 首先证明 $A(X_1) = A(X)$． 任意 $x\in X$ 可以表示为 $x = x_0 + x_1$， 其中 $x_0\in X_0$， $x_1\in X_1$． $Ax = A x_0 + A x_1 = A x_1$． 这说明任意 $y_1 \in Y_1 = A(X)$ 都能找到 $x_1$ 使 $A x_1 = y_1$， 所以 $A(X_1) = Y_1$．
 
-现在证明 $X_1$ 和 $Y_1$ 一一对应： 令 $u, v \in X_1$， 我们要证明如果 $Au = Av$ 那么 $u = v$． 算符 $A$ 是线性的， 所以 $A(u-v) = 0$， 所以 $u - v \in X_0$． 由封闭性， $u - v \in X_1$． 由于补空间满足 $X_0 \cap X_1 = \qty{0}$， 所以 $u - v = 0$， 即 $u = v$． 证毕．
+现在证明 $X_1$ 和 $Y_1$ 一一对应： 令 $u, v \in X_1$， 我们要证明如果 $Au = Av$ 那么 $u = v$． 算符 $A$ 是线性的， 所以 $A(u-v) = 0$， 所以 $u - v \in X_0$． 由封闭性， $u - v \in X_1$． 由于补空间只交于零矢量 $X_0 \cap X_1 = \qty{0}$， 所以 $u - v = 0$， 即 $u = v$． 证毕．
 
 \addTODO{线性方程组词条\upref{LinEq}中说明： 线性方程组的解空间就是 $X_1$ 中的特解加上齐次解 $X_0$．}
