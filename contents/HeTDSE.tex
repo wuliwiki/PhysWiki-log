@@ -3,34 +3,6 @@
 
 \pentry{广义球谐函数\upref{GenYlm}} % 已包含 “张量积空间”
 
-\subsection{氦原子基本数据}
-
-\begin{itemize}
-\item \textbf{parahelium}: singlet spin, 对称波函数， 存在 1s 基态（我们使用的）． \textbf{orthohelium}: triplet spin, 反对称波函数， 不存在 1s 基态， 但其他束缚态的能量相对较低．
-
-\item \textbf{基态能量}（数值计算）： -2.9037244au （-79.014366 eV）
-
-\item \textbf{氦离子}基态能量： -2au （-54.422772eV） 第一激发态 -0.5au （-13.605693eV） 第二激发态 -2/9=-0.22...au（-6.0469747eV）
-
-\item \textbf{direct} （n=1） 单电离 threshold： 0.9037244au （24.591594eV）
-
-\item \textbf{shakeup} （n=2）单电离 threshold： 2.4037244au （65.408673eV）
-
-\item \textbf{shakeup} （n=3）单电离 threshold： 2.68150218au （72.967391eV）
-\end{itemize}
-
-\subsubsection{90eV XUV 电离}
-\begin{itemize}
-\item 90eV 的 xuv 光子能量为 3.3074390au
-
-\item 90eV xuv 的 direct （n=1）电离后电子的末动能为 2.4037146au（65.408405eV）， 末动量为 2.1925850au
-
-\item 90eV xuv 的 shakeup （n=2）电离后电子末动能为 0.9037146au （24.591326eV）， 末动量为 1.3444066au
-
-\item 90eV xuv 的 shakeup （n=3）电离后电子末动能为 0.62593682au （17.032608eV）， 末动量为 1.1188716au
-\end{itemize}
-
-
 \subsection{波函数展开}
 使用角向基底为两个电子总轨道角动量和 $z$ 分量的本征态\upref{AMAdd}， 即广义球谐函数 $\mathcal{Y}_{l_1,l_2}^{L,M}(\uvec r_1, \uvec r_2)$．
 
@@ -227,7 +199,11 @@ r\sqrt{9(2l'_1+1)(2l'_2+1)(2L'+1)/(4\pi)^2}\\
 &\qquad  \pmat{l_2 & 1 & l_2'\\ 0 & 0 & 0} \qty[\pmat{l_2 & 1 & l_2'\\ -m_2 & -1 & m_2} + \pmat{l_2 & 1 & l_2'\\ -m_2 & 0 & m_1}]
 }\end{equation}
 
+\subsection{束缚态}
+能量较低的束缚态可以轻易用虚时间演化得到， 即把 $\exp(-\I H \Delta t)$ 替换为 $\exp(- H \Delta t)$， 这相当于把 $\Delta t$ 变为虚数 $-\I \Delta t$， 因此得名． 氦原子基态只包含 $L = 0$ 的分波， 这要求 $l_1 = l_2 = 0, 1, 2, \dots$（参考\autoref{AMAdd_fig2}~\upref{AMAdd}）．
+
 \subsection{波函数演化}
+
 演化（propagation）同样使用 split operator 
 \begin{equation}
 \exp(-\I H\Delta t) = \exp(-\I H_0\frac{\Delta t}{2})\exp(-\I H_{int}\Delta t) \exp(-\I H_0\frac{\Delta t}{2}) + \order{\Delta t^3}
@@ -251,6 +227,14 @@ $H_0 = H_1 + H_2$ 由于 $H_1$ 和 $H_2$ 对易， 我们可以将它们独立�
 爱华进一步分割的原因是， 他的代码中预先储存了 $V_F$ 和 $V_{12}$ 对角化后的本征值和本征矢矩阵， 如果直接对 $H_{int}$ 对角化， 那么就需要每一步都重新对角化一次． 预先储存所需的内存和分波数的平方成正比， 然而当我们需要很多分波的时候， 内存就远远不够了． 为了解决内存问题， 我径向和角向都使用 Crank-Nicolson 演化， 而且每个时间步长对每个格点重新生成 $V_F + V_{12}$ 矩阵并一次演化不需要分成三次． 对于波函数绝对值低于某个阈值的格点， 我们甚至可以忽略不演化．
 
 另外一点， 如果只关心 single ionization， 可以用一个长方形网格（见 Ossiander 2017 Nat. Phys.）． 但要注意在短边加入 absorber 防止反射．）
+
+\subsection{分波收敛分析}
+使用 $l_{1,max}, l_{2,max}, L_{max}$ 来生成分波列表有时候会有较大的浪费， 会出现许多概率极小的分波． 最好的办法是把各个分波的概率画成图， 从图中可以轻易看出分波是否收敛以及是否有浪费．
+\begin{figure}[ht]
+\centering
+\includegraphics[width=10cm]{./figures/HeTDSE_2.png}
+\caption{$l_{1,max}, l_{2,max}, L_{max} = 5$， 可以看出 $L$ 较小时需要更大 $l_1, l_2$， 而 $L$ 较大时浪费严重． 理想情况是每个 $L$ 中最小概率的分波都差不多．} \label{HeTDSE_fig2}
+\end{figure}
 
 \subsection{分波误差分析（原创）}
 我们截取有限个分波时， 在分波演化（\autoref{HeTDSE_eq4}） 的过程中， 会引入新的误差． 截取以后， $V_F, V_{12}$ 仍然是厄米矩阵， 所以他们的传播子同样是幺正的， 所以不能用波函数的模长来估计误差． 所以可以用另一种方法来估计误差． 误差可以每隔几步估算一次， 令 $\mat V'_F, \mat V'_{12}$ 为两倍基底数量的矩阵， 那么可以计算 $\mat (\I V'_F\Delta t) \bvec v$ 比基底多出来的几个分波， 每个分波的绝对值进行求和．
