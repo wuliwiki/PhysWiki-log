@@ -1,0 +1,95 @@
+% SLISC 的 matt/matb 文件格式
+
+\begin{issues}
+\issueTODO
+\end{issues}
+
+\pentry{SLISC 简介}
+
+SLISC 库提供了两种特殊的文件格式用于储存各种变量和矩阵， 保存时可以保存变量名， 读取时可以指定要读取的变量名． 两种文件分别使用拓展名 \verb|.matt| 和 \verb|.matb|． 其中 mat 表示 matrix， t 表示 text， t 表示 binary． 顾名思义， 第一种是文本文件， 第二种是二进制文件． 二进制文件具有占用硬盘空间少， 读写速度快的优点． 文本文件可以方便使用其他语言读取．
+
+以下给一个 matb 文件的读写例子， 也可以把例子中的 matb 换成 matt．
+\addTODO{matt 的模式目前使用字符串， 应该统一一下代码}
+
+\begin{lstlisting}[language=cpp]
+#include "SLISC/matb.h"
+using namespace slisc;
+
+int main()
+{
+    // 随便初始化一些变量， 目前支持 SLISC 库中的绝大部分标量和密矩阵
+    Int i = 1; Doub d = 3.1; Comp c(1, 2);
+    VecInt v(3); linspace(3, 1, 3); CmatInt a(2,2); linspace(a);
+
+    Matb matb("test.matb", 'w'); // 打开 matb 文件， 使用写入模式
+    // 相当于 Matb matb; matb.open("test.matb", 'w');
+    save(i, "i", matb); // 保存变量， 指定变量名, 可以是任意字符串
+    save(d, "d", matb); // 注意同个文件中保存的变量名不能重复
+    save(c, "c", matb);
+    save(v, "c", matb);
+    save(a, "a", matb);
+    matb.close(); // 关闭文件．
+    // 在 destructor 中会自动调用， open() 时也会自动调用
+
+    Int i1; Doub d1; Comp c1; VecInt v1(3); CmatInt a1;
+    matb.open("test.matb", 'w'); // 重新用读取模式打开文件
+    // 读取变量， 可以按照任何顺序， 不需要全部读取
+    // 矩阵会被自动 resize()
+    load(i1, "i", matb); 
+    load(d1, "d", matb);
+    load(c1, "c", matb);
+    load(v1, "c", matb);
+    load(a1, "a", matb);
+    matb.close();
+
+    // 此时可以对比读取的变量是否和保存的变量一致
+}
+\end{lstlisting}
+
+\subsection{文件格式}
+我们先介绍二进制格式 matb． matb 文件使用 little endian 储存（链接未完成）， 每个变量的前 8 个字节是变量名的长度 \verb|Nname|， 所有整数都用 \verb|long long| 储存（下同）， 然后是 \verb|Nname| 字节的变量名， 紧接着是 8 个字节的矩阵元类型编号（对照表未完成）， 8 个字节的矩阵维度 \verb|Ndim| （标量的维数是 0， 向量维度是 1） 接着 \verb|8*Ndim| 字节记录每个维度的长度（标量不需要）． 最后， 再记录 \verb|N * sizeof(元素类型)|， 其中 \verb|N| 是元素个数， 等于各个维度的长度相乘．
+
+在文件的最后， 若一共有 \verb|Nvar| 个变量， 那么就用 \verb|Nvar*8| 字节记录下每个变量的第一个字节在文件中的字节数（第一个变量总是从第 0 个字节开始）（未完成：目前是倒序的，这似乎没什么必要）， 然后再用 8 字节记录下 \verb|Nvar|， 这是为了读取时查找方便． 最后为了验证文件的完整性， 用 16 字节写入字符串 \verb|"Matb_End_of_File"|． 该字符串用于读取时验证文件的完整性， 若不存在则说明文件被损坏．
+
+对于文本格式 matt， 每个整数或浮点数直接转换成字符串写入文本， 每两个数之间使用空格隔开， 复数则写成两个相邻的数（未完成：现在代码并不是这么做的， 而是类似 \verb|1+2i|）．
+
+\subsection{Matb 类}
+\begin{lstlisting}[language=cpp]
+// all non-data intergers in file are Llong
+class Matb {
+public:
+    Matb();
+    Matb(Str_I fname, Char_I rw);
+    Char m_rw; // 模式
+    ifstream m_in;
+    ofstream m_out;
+    Llong m_filesize; // 文件大小
+    Str m_fname; // 文件名
+    vecStr m_name; // 变量名
+    vecLlong m_type; // 变量类型
+    vector<vecLlong> m_size; // 矩阵尺寸
+    vecStr m_data; // 矩阵元二进制数据（仅 'm' 模式使用）
+    vecLlong m_ind; // 变量位置
+
+    void open(Str_I fname, Char_I rw); // 打开文件
+    Bool isopen(); // 文件是否打开
+
+    // 内部函数
+    void read_data(); // 读取到 m_data
+    void write_data(Str_I fname); // 写入到 m_data
+    Long size() const; // 变量个数
+    Long data_size(Long_I i) const; // 第 i 个变量的 m_data 长度
+    void get_profile(); // 读取变量信息
+    Long data_pos(Long_I var_ind) const; // 第 i 个变量在文件中的位置
+    Long search(Str_I name); // 搜索变量编号， 如果不存在返回 -1
+    ~Matb();
+};
+\end{lstlisting}
+
+\subsection{修改模式}
+打开 matb 的模式除了 \verb|'r', 'w'| 外还可以是 \verb|'m'|， 表示 modify． 在该模式下， 打开文件后可以对变量进行增加， 删除， 修改等操作． 该功能尚未完善．
+
+\subsection{其他工具}
+可执行文件 \verb|SLISC/util/matbinfo| 可以显示 matb 文件中的所有变量信息， 用法是 \verb|matbinfo 文件名.matb|．
+
+可执行文件 \verb|SLISC/util/matt2matb| 和 \verb|matb2matt| 可以把 matt 文件和 matb 文件互相转换， 例如 \verb|matb2matt -d -r 文件名.matb| 会生成 \verb|文件名.matt|． 其中 \verb|-d| 选项在转换后把原文件删除， 如果 \verb|文件名.matt| 已经存在， \verb|-r| 选项会重新转换并将其替换．

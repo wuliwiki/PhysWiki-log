@@ -3,7 +3,7 @@
 
 \pentry{阶乘\upref{factor}， 高阶导数\upref{HigDer}， 分部积分法\upref{IntBP}}
 
-若函数 $f$ 在开区间 $I$ 内可以求任意阶的导数（例如幂函数，三角函数，指数函数，对数函数等），那么这个函数可以用多项式近似，且在某种意义下， 总项数 $N$ 越多，近似得越精确． 确切地说， 对于任何 $x_0\in I$, 存在唯一一个数列 $\{c_n\}$, 使得对于任何正整数 $N$, 皆有
+若函数 $f$ 在开区间 $I$ 内可以求任意阶的导数（例如多项式， 幂函数，三角函数，指数函数，对数函数等），那么这个函数可以用多项式近似， 且在某种意义下， 总项数 $N$ 越多，近似得越精确． 确切地说， 对于任何 $x_0\in I$, 存在唯一一个数列 $\{c_n\}$, 使得对于任何正整数 $N$, 皆有（其中 $(x-x_0)^0$ 始终视为 $1$， 即使 $x = x_0$）
 \begin{equation}\label{Taylor_eq1}
 f(x) -\sum_{n = 0}^N  c_n (x - x_0)^n=\order{|x-x_0|^{N+1}}.
 \end{equation}
@@ -26,6 +26,41 @@ c_n = \frac{1}{n!} f^{(n)}(x_0);
 \caption{$\sin x$ 在原点处的泰勒展开的前 $N$ 项求和．容易看出，求和的项数越多，多项式（橙）与 $\sin x$ （蓝）吻合得越好．}\label{Taylor_fig1}
 \end{figure}
 \end{example}
+
+\begin{exercise}{一些常见函数关于原点的泰勒展开}
+关于原点的泰勒展开又叫麦克劳林展开， 请验证以下的麦克劳林展开：
+\begin{equation}
+\sin x = x - \frac{1}{3!} x^3 + \frac{1}{5!} x^5 - \frac{1}{7!} x^7 \ldots
+\qquad (x \in \mathbb R)
+\end{equation}
+\begin{equation}
+\cos x = 1 - \frac{1}{2!} x^2 + \frac{1}{4!} x^4 -\frac{1}{6!} x^6 \ldots
+\qquad (x \in \mathbb R)
+\end{equation}
+\begin{equation}\label{Taylor_eq11}
+\E^x =1 + x + \frac{1}{2!} x^2 + \frac{1}{3!} x^3  \ldots
+\qquad (x \in \mathbb R)
+\end{equation}
+\begin{equation}\label{Taylor_eq4}
+\ln (1+x) = x - \frac12 x^2 + \frac13 x^3 - \frac14 x^4 \ldots
+\qquad (-1 < x < 1)
+\end{equation}
+\begin{equation}\label{Taylor_eq6}
+\frac{1}{1 \pm x} = 1 \mp x + x^2 \mp x^3 + x^4 \ldots
+\qquad (-1 < x < 1)
+\end{equation}
+\begin{equation}\label{Taylor_eq8}
+\sqrt{1\pm x} = 1 \pm \frac12 x - \frac18 x^2 \pm \frac{1}{16} x^3 - \frac{5}{128}x^4 \ldots
+\qquad (-1 < x < 1)
+\end{equation}
+\end{exercise}
+
+\subsection{收敛半径}
+我们把形如 $\sum_{n=0}^\infty c_n (x-x_0)^n$ 的表达式叫做\textbf{幂级数（power series）}\upref{powerS}． 泰勒展开就是在用幂级数表示函数． 如果某幂级数收敛的点不止 $x_0$ 一点， 那么必定存在一个\textbf{收敛半径（radius of convergence）} $0 < r < 1$， 使得当 $\abs{x-x_0} < r$ 时级数必定收敛， 而 $\abs{x-x_0} > r$ 是必定发散（不收敛）．
+
+所以在进行泰勒展开时， 如果函数在除了若干发散点\footnote{如\autoref{Taylor_eq4} 中的 $x = -1$， \autoref{Taylor_eq6} 和\autoref{Taylor_eq8} 中的 $x = \mp 1$}外都无穷阶可导， 令离 $x_0$ 最近的发散点为 $a$， 那么 $f(x)$ 关于 $x_0$ 泰勒展开后， 幂级数的收敛半径就是 $r = \abs{a - x_0}$．
+
+例如在\autoref{Taylor_eq4} 到\autoref{Taylor_eq8} 中， 函数的发散点距离原点都是 1， 所以幂级数收敛半径为 1， 所以即使在 $x_0$ 的另一侧 $f(x)$ 处处无穷可导， 仍然不能取 $\abs{x} > 1$．
 
 \subsection{幼稚的推导}
 这里给出一个比较直观的对比系数推导方法， 可能对初学者有一定启发或者帮助记忆． 但以后会看到这是不严谨的．
@@ -53,17 +88,17 @@ f^{(m)}(x_0) = m! c_m + \eval{ \sum_{n = m + 1}^\infty  \frac{n!}{(n - m)!} c_n 
 
 泰勒展开的存在说明了一些函数（下文的\textbf{解析函数}）具有这样的性质：任何一点的性质都能决定完整的函数曲线，这可以类比生物中用一个细胞克隆出一个完整生物体．
 
-\subsection{公式的推导}
+\subsection{推导}
 如果假设函数 $f$ 在开区间 $I$ 上无穷次可微， 那么可以利用分部积分公式\upref{IntBP}：
 \begin{equation}
 \begin{aligned}
 f(x)
-&=f(x_0)+\int_{x_0}^{x}f'(t)dt\\
-&=f(x_0)-\int_{x_0}^{x}f'(t)\frac{d}{dt}(x-t)dt\\
-&=f(x_0)+f'(x_0)(x-x_0)+\int_{x_0}^{x}f''(t)(x-t)dt.
+&=f(x_0)+\int_{x_0}^{x}f'(t)\dd{t}\\
+&=f(x_0)-\int_{x_0}^{x}f'(t)\dv{t}(x-t) \dd{t}\\
+&=f(x_0)+f'(x_0)(x-x_0)+\int_{x_0}^{x}f''(t)(x-t) \dd{t}.
 \end{aligned}
 \end{equation}
-由于 $(x-t)=-\frac{d}{dt}(x-t)^2/2!$, 故可以再次分部积分， 得到
+由于 $(x-t)=-\dv{t} (x-t)^2/2!$, 故可以再次分部积分， 得到
 \begin{equation}
 \begin{aligned}
 f(x)
@@ -76,35 +111,13 @@ f(x)
 \begin{aligned}
 f(x)
 &=f(x_0)+f'(x_0)(x-x_0)+\frac{f''(x_0)}{2!}(x-x_0)^2+...+\frac{f^{(N)}(x_0)}{N!}(x-x_0)^N\\
-&\quad+\frac{1}{N!}\int_{x_0}^{x}f^{(N+1)}(t)(x-t)^{N}dt.
+&\quad+\frac{1}{N!}\int_{x_0}^{x}f^{(N+1)}(t)(x-t)^{N} \dd{t}.
 \end{aligned}
 \end{equation}
 最后的误差可利用定积分估值估计为
 \begin{equation}\label{Taylor_eq7}
-\left|\frac{1}{N!}\int_{x_0}^{x}f^{(N+1)}(t)(x-t)^{N}dt\right|
+\left|\frac{1}{N!}\int_{x_0}^{x}f^{(N+1)}(t)(x-t)^{N} \dd{t} \right|
 \leq\frac{\sup_{t\in I}|f^{(N+1)}(t)|}{N!}|x-x_0|^{N+1}.
 \end{equation}
 显然， 这就给出了唯一一个满足开头要求的多项式近似．
-
-\subsection{一些常见函数关于原点的泰勒展开}
-作为练习，请验证以下泰勒展开式：
-
-\begin{equation}
-\sin x = x - \frac{1}{3!} x^3 + \frac{1}{5!} x^5 - \frac{1}{7!} x^7 \ldots
-\end{equation}
-\begin{equation}
-\cos x = 1 - \frac{1}{2!} x^2 + \frac{1}{4!} x^4 -\frac{1}{6!} x^6 \ldots
-\end{equation}
-\begin{equation}\label{Taylor_eq11}
-\E^x =1 + x + \frac{1}{2!} x^2 + \frac{1}{3!} x^3  \ldots
-\end{equation}
-\begin{equation}
-\ln (1+x) = x - \frac12 x^2 + \frac13 x^3 - \frac14 x^4 \ldots
-\end{equation}
-\begin{equation}
-\frac{1}{1+x} = 1 - x + x^2 - x^3 \ldots
-\end{equation}
-\begin{equation}
-\sqrt{1+x} = 1 + \frac12 x - \frac18 x^2 + \frac{1}{16} x^3 \ldots
-\end{equation}
 
