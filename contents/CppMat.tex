@@ -1,0 +1,96 @@
+% C++ 中矩阵类的实现方式
+
+\pentry{C++ 中类的定义和继承}
+
+\addTODO{本文代码还没验证过}
+
+容器指的就是像 \verb|std::vector| 这样的可以储存多个元素的对象， 下面介绍的矢量，矩阵，高维数组等都是容器．
+
+C/C++ 的数组是储存于内存的 stack （栈）中的， 而 stack 一般只有几个 Mb， 一旦数组太大就会产生 stack overflow 错误． 第二是 stack 中的数据的大小都只能在编译时确定（即 constant expression， 例如 literal 或者宏定义）， 所以我们不能在运行是确定数组的长度（例如从文件中读取， 或通过运行时的计算得到）．
+\begin{lstlisting}[language=cpp]
+// 用 C/C++ array 的嵌套定义矩阵
+#define N1 5
+#define N2 5
+double a[N1][N2]; // 定义并在栈中分配内存
+// 全部元素赋值为 0
+for (long i = 0; i < N1; ++i)
+    for (long j = 0; j < N2; ++j)
+        a[i][j] = 0;
+\end{lstlisting}
+
+所以在一般来说容器都会 allocate （分配）到内存的 heap （堆）中． 在 C++ 中， 在 heap 中分配内存用 \verb|new|， 释放则用 \verb|delete|．
+
+\verb|std::vector| 可以说是使用最广的矢量容器， 理论上我们可以用 \verb|vector| 的 \verb|vector| 定义一个 heap 中的矩阵．
+\begin{lstlisting}[language=cpp]
+// 用 std::vector 的嵌套定义矩阵
+vector<vector<double>> a;
+// 分配内存
+long N1 = 10, N2 = 10;
+a.resize(N1);
+for (long i = 0; i < N1; ++i)
+    a[i].resize(N2);
+// 全部元素赋值为 0
+for (long i = 0; i < N1; ++i)
+    for (long j = 0; j < N2; ++j)
+        a[i][j] = 0;
+\end{lstlisting}
+注意由于用了多次 \verb|new|， 数据在内存中不一定是连续的， 甚至不一定按 \verb|i| 的顺序排列． 这样不是很好， 为了性能和语法上的考虑， 一般需要给每个容器分配一块连续的内存（例如我们会想要用单个连续索引来获得矩阵元）．
+
+最后一种方法就是本书 SLISC 库\upref{SliMat}中的底层实现方法， 即在堆中分配一段连续的内存， 并把双索引转换乘单索引来获取矩阵元．
+\begin{lstlisting}[language=cpp]
+Long N1 = 10, N2 = 10;
+double *a;
+new double a[N1*N2];
+// 全部元素赋值为 0
+for (long i = 0; i < N1; ++i)
+    for (long j = 0; j < N2; ++j)
+        a[N2*i + j] = 0; // 行主序
+        // a[i + N1*j] = 0; // 列主序
+// 或者直接使用单索引赋值更快
+for (long i = 0; i < N1*N2; ++i)
+    a[i] = 1;
+delete a[];
+\end{lstlisting}
+前面两个例子中双索引都是行主序\upref{MatSto}的， 即第二个索引增加 1， 内存地址也增加 1． 而这个例子中我们既可以使用行主序也可以使用列主序（第一个索引增加 1， 内存地址增加 1）， 还可以使用单索引． 可见这种方式要灵活得多．
+
+注意这只是一个底层的原理， 我们需要把这个功能封装到一个矩阵类 \verb|Mat| 中， 在使用的时候可以达到例如以下效果
+\begin{lstlisting}[language=cpp]
+MatDoub a(10, 10); // constructor 会执行 new
+// 全部元素赋值为 0
+for (long i = 0; i < a.n1(); ++i) // n1() n2() 用于获取行数列数
+    for (long j = 0; j < a.n2(); ++j)
+        a(i, j) = 0;
+// 使用单索引
+for (long i = 0; i < a.size(); ++i) // size() 用于获取总长度
+    a[i] = 1;
+
+// 改变尺寸， 先用 delete 再用 new 重新分配， 数据丢失
+a.resize(20, 20);
+\end{lstlisting}
+为了区分行主序和列主序， 我们可以设计两个类似的矩阵类 \verb|CmatDoub| 是列主序矩阵， \verb|MatDoub| 是行主序矩阵．
+
+我们来看一个简化版的 \verb|CmatDoub| 定义， 不考虑使用 \verb|const CmatDoub|．
+\begin{lstlisting}[language=cpp]
+class CmatDoub
+{
+protected:
+    int m_N1, m_N2;
+    double *p;
+public:
+    CmatDoub(): m_N1(0), m_N2(0) {}
+    CmatDoub(int N1, int N2): m_N1(N1), m_N2(N2) { new double m_p[N1*N2]; }
+    Doub& operator()(int i, int j) { return p[m_N2*i + j]}
+    int n1() { return m_N1; }
+    int n2() { return m_N2; }
+    int size() { return m_N1 * m_N2; }
+    void resize(int N1, int N2)
+    {
+        m_N1 = N1; m_N2 = N2;
+        if (N1 * N2 != m_N1 * m_N2) {
+            delete p[]; new p [N1*N2];
+        }
+    }
+    ~CmatDoub() { delete p[]; }
+};
+\end{lstlisting}
+用这个矩阵类就可以实现上例中的使用方式．

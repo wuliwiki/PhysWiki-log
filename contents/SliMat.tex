@@ -1,0 +1,103 @@
+% SLISC 的矢量和矩阵
+
+\begin{issues}
+\issueDraft
+\end{issues}
+
+\pentry{SLISC 库简介\upref{SLISC}， C++ 类的定义和继承}
+
+我们先以双精度类型 \verb|Doub| （即 \verb|double|）来举例介绍 SLISC 中的\textbf{容器（container）}．
+
+\subsection{Vbase 类}
+所有容器都继承于 \verb|VbaseDoub|， \verb|VbaseDoub| 不直接使用， 仅用于继承．
+\begin{lstlisting}[language=cpp]
+class VbaseDoub
+{
+protected:
+    Doub *m_p;
+    Long m_N;
+public:
+    typedef Doub value_type;
+    VbaseDoub();
+    explicit VbaseDoub(Long_I N);
+    VbaseDoub(const VbaseDoub &rhs);
+
+    Doub* p();
+    const Doub* p() const;
+    Long size() const;
+    void resize(Long_I N);
+    Doub &operator[](Long_I i);
+    const Doub &operator[](Long_I i) const;
+    Doub& end();
+    const Doub& end() const;
+    Doub& end(Long_I i);
+    const Doub& end(Long_I i) const;
+    void operator<<(VbaseDoub &rhs);
+    ~VbaseDoub();
+};
+\end{lstlisting}
+
+简单来说， \verb|VbaseDoub| 就是一个简单的 \verb|std::vector|， 负责内存管理， 用方括号 \verb|[i]| 获取第 \verb|i| 个矩阵元， 用 \verb|end()| 获取最后一个元， \verb|end(i)| 获取第 \verb|N-i| 个元． 用 \verb|.size()| 获取元素长度， \verb|.resize(N)| 释放内存并重新分配 \verb|N| 个元素的新内存． \verb|<<| 用于把一个对象所分配的内存转移到另一个对象中． 所有继承 \verb|VbaseDoub| 的容器都具有这些功能， 除了\verb|resize()| 会根据矩阵的维度重新定义．
+
+\subsection{Vec 容器}
+为了避免歧义， 任何两个容器之间禁止使用等号．
+\begin{lstlisting}[language=cpp]
+class VecDoub : public VbaseDoub
+{
+public:
+    typedef VbaseDoub Base;
+    VecDoub() = default;
+    explicit VecDoub(Long_I N);
+    VecDoub(const VecDoub &rhs);
+    VecDoub &operator=(const VecDoub &rhs) = delete;
+    void operator<<(VecDoub &rhs);
+};
+\end{lstlisting}
+
+\subsection{Cmat 容器}
+\begin{lstlisting}[language=cpp]
+class CmatDoub : public VbaseDoub
+{
+protected:
+    typedef VbaseDoub Base;
+    Long m_N1, m_N2;
+public:
+    CmatDoub(): m_N1(0), m_N2(0) {};
+    CmatDoub(Long_I N1, Long_I N2);
+    CmatDoub(const CmatDoub &rhs);
+    CmatDoub &operator=(const CmatDoub &rhs) = delete;
+    void operator<<(CmatDoub &rhs);
+    Doub& operator()(Long_I i, Long_I j);
+    const Doub& operator()(Long_I i, Long_I j) const;
+    Long n1() const;
+    Long n2() const;
+    void resize(Long_I N1, Long_I N2);
+    void reshape(Long_I N1, Long_I N2);
+};
+\end{lstlisting}
+
+\subsection{Cmat3 容器}
+\begin{lstlisting}[language=cpp]
+class Cmat3Doub : public VbaseDoub
+{
+protected:
+    typedef VbaseDoub Base;
+    Long m_N1, m_N2, m_N3;
+public:
+    typedef Doub value_type;
+    Cmat3Doub(): m_N1(0), m_N2(0), m_N3(0) {};
+    Cmat3Doub(Long_I N1, Long_I N2, Long_I N3);
+    Cmat3Doub(const Cmat3Doub &rhs);
+    Cmat3Doub &operator=(const Cmat3Doub &rhs) = delete;
+    void operator<<(Cmat3Doub &rhs);
+    void resize(Long_I N1, Long_I N2, Long_I N3);
+    void reshape(Long_I N1, Long_I N2, Long_I N3);
+    Doub &operator()(Long_I i, Long_I j, Long_I k);
+    const Doub &operator()(Long_I i, Long_I j, Long_I k) const;
+    Long n1() const;
+    Long n2() const;
+    Long n3() const;
+};
+\end{lstlisting}
+
+\addTODO{列出其他容器}

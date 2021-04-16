@@ -1,0 +1,73 @@
+% SLISC 的文件读写
+
+\begin{issues}
+\issueDraft
+\end{issues}
+
+\verb|Bool file_exist(Str_I fname, Bool_I case_sens = true)| 判断指定文件是否存在
+
+\verb|Bool dir_exist(Str_I path)| 判断路径是否存在
+
+\verb|Long file_size(Str_I fname)| 获取文件大小（字节数）， \verb|fname| 是文件名．
+
+\verb|Str path2dir(Str_I fname)| 从 “路径+文件” 字符串中提取 “路径” 部分
+
+\verb|void mkdir(Str_I path)| 创建路径
+
+\verb|void rmdir(Str_I path)| 删除路径
+
+\verb|void ensure_dir(Str_I dir_or_file)| 如果路径不存在， 创建该路径（可以任意多层）
+
+\verb|void file_list(vecStr_O fnames, Str_I path, Bool_I append = false)| 列出指定路径中所有文件， \verb|append = true| 则 \verb|fnames| 原有的元素不被清空．
+
+\verb|void file_list_full(vecStr_O fnames, Str_I path, Bool_I append = false)| 和 \verb|file_list()| 相同， 只是文件名包含路径．
+
+\verb|void folder_list(vecStr_O folders, Str_I path, Bool_I append = false)| 列出指定路径中所有文件夹
+
+\verb|void folder_list_full(vecStr_O folders, Str_I path, Bool_I append = false)| 和 \verb|folder_list()| 相同， 但包含路径．
+
+\verb|void file_list_r(vecStr_O fnames, Str_I path, Bool_I append = false)| 列出指定路径中所有文件， 包括所有子文件夹中的．
+
+\verb|void file_ext(vecStr_O fnames_ext, vecStr_I fnames, Str_I ext, Bool_I keep_ext = true, Bool_I append = false)| 在文件列表中选出所有具有某个拓展名的文件
+
+\verb|void file_list_ext(vecStr_O fnames, Str_I path, Str_I ext, Bool_I keep_ext = true, Bool_I append = false)| 在某个路径中寻找所有具有某个拓展名的文件
+
+\verb|void file_copy(Str_I fname_out, Str_I fname_in, Bool_I replace = false)| 复制文件 \verb|replace| 用于替换目标的同名文件， 否则会一直提示， 需要手动删除程序才能继续．
+
+\verb|void file_copy(Str_I fname_out, Str_I fname_in, Str_IO buffer, Bool_I replace = false)| 用户提供缓存 \verb|buffer| 的 \verb|file_copy|， 提高速度．
+
+\verb|void file_move(Str_I fname_out, Str_I fname_in, Bool_I replace = false)| 移动文件．
+
+\verb|void file_move(Str_I fname_out, Str_I fname_in, Str_IO buffer, Bool_I replace = false)| 带用户缓存的版本．
+
+\verb|void open_bin(ofstream &fout, Str_I fname)| 打开二进制文件写入
+
+\verb|void open_bin(ifstream &fin, Str_I fname)| 打开二进制文件读取
+
+\verb|void write(const Char *data, Long_I Nbyte, Str_I fname)| 把字符串写入二进制文件
+
+\verb|Long read(Char *data, Long_I Nbyte, Str_I fname)| 读取二进制文件到字符串， 返回实际上读取到的字节数．
+
+\verb|void write(Str_I str, Str_I fname)| 把字符串写入二进制文件
+
+\verb|void write_vec_str(vecStr_I vec_str, Str_I fname)| 把每个字符串写入文件中的一列
+
+\verb|void read_vec_str(vecStr_O vec_str, Str_I fname)|
+
+\verb|void read(Str_O str, Str_I fname)| 读取二进制文件到字符串
+
+\verb|void write(ofstream &fout, Char_I s)| 把一个 \verb|Char| 写入二进制文件， 也可以是 \verb|Int|, \verb|Llong|, \verb|Doub|, \verb|Comp|， \verb|Str|．
+
+\verb|void read(ifstream &fin, Char_I s)| 和 \verb|write| 同理．
+
+\verb|void read(CmatInt_O mat, Str_I file, Long_I skip_lines = 0)| 从一个文件中读取密矩阵， 矩阵会被 \verb|.resize| 成需要的形状． \verb|CmatInt| 也可以是 \verb|CmatLlong| 或 \verb|CmatDoub|
+
+\verb|void read(VecDoub_O v, Str_I file, Long_I skip_lines = 0)| 从文件中读取单列矢量．
+
+\verb|void last_modified(Str_O yymmddhhmmss, Str_I fname)| 获取文件的最后修改时间．
+
+\verb|void set_buff(ofstream &fout, Str_IO buffer)| 缓存越大， 速度越快．
+
+\verb|Bool little_endian()| 操作系统是否是 \verb|little_endian| 的．
+
+\verb|void change_endian(Char *data, Long_I elm_size, Long_I Nelm)| 把一个字符串中每个长度为 \verb|elm_size| 的单元前后翻折．
