@@ -1,0 +1,46 @@
+% SLISC 的 band 类
+
+\begin{issues}
+\issueDraft
+\end{issues}
+
+\pentry{数据结构：带对角矩阵\upref{BanDmt}， SLISC 的密矩阵类\upref{SliMat}}
+
+SLISC 把 BLAS\upref{BLAS} 中的带对角矩阵封装成了 \verb|Cband| 类（列主序． 行主序暂时没有实现）． 其中矩阵元储存于 \verb|m_a| 中， \verb|m_N0| 是行数， \verb|m_a.n1()| 是列数． \verb|m_Nup, m_Nlow| 分别是对角线上方和下方非零副对角线的条数， \verb|m_a| 的第 \verb|m_idiag| 行则是对角线所在的行．
+\begin{lstlisting}[language=cpp]
+class CbandDoub
+{
+public:
+    Long m_N0;
+    Long m_Nup;
+    Long m_Nlow;
+    Long m_idiag;
+    CmatDoub m_a;
+
+    CbandDoub();
+    CbandDoub(Long_I N0, Long_I N1, Long_I Nup, Long_I Nlow,
+              Long_I lda = -1, Long_I idiag = -1);
+    Doub * p();
+    const Doub * p() const;
+    Doub operator()(Long_I i, Long_I j) const;
+    Doub &ref(Long_I i, Long_I j);
+    Long n0() const;
+    Long n1() const;
+    Long size() const;
+    Long nup() const;
+    Long nlow() const;
+    Long lda() const;
+    Long idiag() const;
+    CmatDoub &cmat();
+    const CmatDoub &cmat() const;
+    DcmatDoub band();
+    DcmatDoub_c band() const;
+    DvecDoub diag();
+    DvecDoub_c diag() const;
+    void resize(Long_I lda, Long_I N1);
+    void resize(Long_I N0, Long_I N1, Long_I Nup,
+                Long_I Nlow, Long_I lda = -1, Long_I idiag = -1);
+    void reshape(Long_I N0, Long_I Nup, Long_I Nlow, Long_I idiag = -1);
+    void shift(Long_I idiag);
+};
+\end{lstlisting}

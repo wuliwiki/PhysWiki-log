@@ -1,0 +1,89 @@
+% SLISC 密矩阵的切割
+
+\begin{issues}
+\issueDraft
+\end{issues}
+
+\pentry{SLISC 的矢量和矩阵\upref{SliMat}}
+
+如果我们想把矩阵的一部分（例如一行）输入到某个函数中怎么办呢？ 如果我们不使用任何容器而是用指针， 函数的输入输出也使用指针， 那么可以通过 \verb|step| 参数实现：
+\begin{lstlisting}[language=cpp]
+Doub sum(Doub_I *x, Long_I N, Long_I step)
+{
+    Doub s = 0;
+    for (Long i = 0; i < N; ++i)
+        s += x[step*i];
+    return s;
+}
+\end{lstlisting}
+
+\begin{lstlisting}[language=cpp]
+Long N0 = 10, N1 = 10; row = 3;
+Doub *a; // 列主序矩阵
+new Doub a[N0*N1];
+for (Long i = 0; i < N0*N1; ++i)
+    a[i] = i;
+// 对第 3 行求和
+cout << "sum a(3,all) = " << sum(a+3, N1, N0) << endl;
+// 对第 3 列求和
+cout << "sum a(all,3) = " << sum(a+3*N0, N0, 1) << endl;
+// 对第 3 列的前 3 个元求和
+cout << "sum(0-2,3) = " << sum(a+3*N0, 3, 1) << endl;
+delete a[];
+\end{lstlisting}
+再看一个例子， 如何对子矩阵求和呢？ 我们需要一个参数叫 leading dimension， 该参数表示列标（行主序时：行标）增加 1 时单索引增加的数量．
+\begin{lstlisting}[language=cpp]
+// N0, N1 时子矩阵的尺寸， lda 是原矩阵的行数
+Doub sum(Doub_I *a, Long_I N0, Long_I N1, Long_I lda)
+{
+    Doub s = 0;
+    for (Long j = 0; i < N1; ++i) {
+        for (Long i = 0; i < N0; ++i)
+            s += a[i];
+        a += lda;
+    }
+    return s;
+}
+\end{lstlisting}
+使用方法：
+\begin{lstlisting}[language=cpp]
+Long N0 = 10, N1 = 10;
+Doub *a;
+new Doub a[N0*N1]; // 列主序
+for (Long i = 0; i < N0*N1; ++i)
+    a[i] = i;
+// 对 3-5 行， 4-6 列的子矩阵求和
+cout << "sum(3-5,4-6) = " << sum(a+4*N0+3, 3, 3, N0) << endl;
+\end{lstlisting}
+可见直接使用裸指针给函数传递数组是非常灵活的， 在 C 语言中这也是很常见的做法， 见 BLAS\upref{BLAS} 和 LAPACK． 然而这么做的缺点是容易出错， 例如索引超出分配的内存， 或者忘记用 \verb|delete| 释放内存． 这样的错误调试起来会非常困难．
+
+\subsection{view 类型}
+在 SLISC 库中， 函数的输入或输出除了各种容器外， 也可以是 view 类型的一种． 例如上面的 \verb|sum| 函数也可以定义为
+\begin{lstlisting}[language=cpp]
+Doub sum(DvecDoub_I x)
+{
+    Doub s = x[0];
+    for (Long i = 1; i < x.size(); ++i)
+        s += x[x.step()*i];
+    return s;
+}
+\end{lstlisting}
+其中 \verb|DvecDoub| 是 view 类型的一种， 它包含一个指针 \verb|Doub *m_p|， 一个长度 \verb|Long *m_N| 以及一个步长 \verb|Long *m_step|． 它生成和毁灭时不会分配或释放内存， 它只用于表示另一个容器的一部分数据， 所以叫做 view， 也叫 slicing．
+
+SLISC 提供一系列开头为 \verb|cut| 的函数， 可以从容器中截取一部分然后返回 view 类型的一种． 例如以上 \verb|sum| 函数可以这样使用
+\begin{lstlisting}[language=cpp]
+CmatDoub a(10, 10);
+// 对第 3 行求和
+cout << "sum row 3 = " << sum(cut1(a, 3)) << endl;
+\end{lstlisting}
+其中 \verb|cut1(a, 3)| 从矩阵 \verb|a| 中切下第 3 行（\verb|1| 表示第 1 个维度， 即 “行”）， 然后返回一个临时的 \verb|const DvecDoub &| 类型传给 \verb|sum| 函数．
+
+类似地， \verb|cut0(a, 3)| 从矩阵 \verb|a| 中切下第 3 列（\verb|0| 表示第 0 个维度， 即 “列”）， 然后返回一个临时的 \verb|const SvecDoub &| 类型． \verb|SvecDoub| 是一个密矢量的 view， 没有 \verb|m_step| 成员， 所有元素在内存中都是相邻的． 在 view 类型命名中， \verb|S| 代表 smooth， \verb|D| 代表 dash．
+
+同理， 如果要切割一个子矩阵， 用 \verb|cut(a, i, N0, j, N1)| 可以切出一个 \verb|DcmatDoub| 类型， 它的成员包括一个起始指针 \verb|Doub *m_p|， 子矩阵尺寸 \verb|Long *m_N0, *m_N1|， 总长度 \verb|Long m_N|， 以及 leading dimension \verb|m_lda|．
+
+view 类型和指针一样， 也分为 low level const 和 high level const， \verb|const SvecDoub| 代表 high level const， 也就是它一旦初始化后数据成员就都是 const， 其中 \verb|m_p| 是 high level， 即\verb|const Doub *|． view 的 low level const 则有专门的类型如 \verb|SvecDoub_c|， 它的成员可以随意改变， 但所代表的数据不能被修改．
+
+在函数参数中， \verb|SvecDoub_I| 的定义是 \verb|const SvecDoub_c &| 用于输入； \verb|SvecDoub_O, SvecDoub_IO| 的定义是 \verb|const SvecDoub &|， 用于输出．
+
+\addTODO{具体介绍一下所有类型}

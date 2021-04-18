@@ -1,0 +1,49 @@
+% SLISC 的 Mcoo 矩阵类
+
+\begin{issues}
+\issueDraft
+\end{issues}
+
+\pentry{SLISC 的密矩阵类\upref{SliMat}}
+
+当一个矩阵对象中有大量 0 元的时候， 用密矩阵数据结构会浪费内存和计算量． COO 是一种常用的稀疏矩阵， 它的数据结构是把所有的非零元存放在一个矢量中， 并用另外两个矢量分别记录这些非零元的行标和列标．
+
+在本书的 SLISC 库中， 我们根据这种数据结构定义了 \verb|McooDoub, McooComp| 等矩阵类， 它和密矩阵一样继承一个 \verb|Vbase| 类来储存非零矩阵元， 另外 \verb|m_N0, m_N1| 用于储存矩阵尺寸， \verb|m_Nnz| 储存非零元的长度， 该长度未必是 \verb|Vbase| 的长度， 后者通过 \verb|reserve(Long_I)| 成员函数来调整尺寸． 声明如下：
+\begin{lstlisting}[language=cpp]
+class McooDoub : public VbaseDoub
+{
+private:
+    typedef VbaseDoub Base;
+    using Base::m_p;
+    using Base::m_N;
+    Long m_N0, m_N1, m_Nnz;
+    VecLong m_row, m_col;
+public:
+    using Base::p;
+    McooDoub(): m_N0(0), m_N1(0), m_Nnz(0) {};
+    McooDoub(Long_I N0, Long_I N1);
+    McooDoub(Long_I N0, Long_I N1, Long_I Ncap);
+    Long *row_p();
+    const Long *row_p() const;
+    Long *col_p();
+    const Long *col_p() const;
+    void push(Doub_I s, Long_I i, Long_I j);
+    void set(Doub_I s, Long_I i, Long_I j);
+    Long n0() const;
+    Long n1() const;
+    Long size() const;
+    Long nnz() const;
+    Long capacity() const;
+    Long find(Long_I i, Long_I j) const;
+    Doub &ref(Long_I i, Long_I j);
+    Doub operator()(Long_I i, Long_I j) const;
+    Doub &operator[](Long_I ind);
+    Doub operator[](Long_I ind) const;
+    Long row(Long_I ind) const;
+    Long col(Long_I ind) const;
+    void trim(Long_I Nnz);
+    void resize(Long_I N);
+    void reserve(Long_I N);
+    void reshape(Long_I N0, Long_I N1);
+};
+\end{lstlisting}

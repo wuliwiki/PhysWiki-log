@@ -1,15 +1,15 @@
-% SLISC 的矢量和矩阵
+% SLISC 的密矩阵类
 
 \begin{issues}
 \issueDraft
 \end{issues}
 
-\pentry{SLISC 库简介\upref{SLISC}， C++ 类的定义和继承}
+\pentry{SLISC 库简介\upref{SLISC}， 数据结构：密矩阵\upref{MatSto}， C++ 类的定义和继承}
 
-我们先以双精度类型 \verb|Doub| （即 \verb|double|）来举例介绍 SLISC 中的\textbf{容器（container）}．
+我们先以双精度类型 \verb|Doub| （即 \verb|double|）来举例介绍 SLISC 中的密矩阵． 我们习惯上也把 1 维的矩阵称为矢量．
 
 \subsection{Vbase 类}
-所有容器都继承于 \verb|VbaseDoub|， \verb|VbaseDoub| 不直接使用， 仅用于继承．
+所有密矩阵都继承于 \verb|VbaseDoub|， \verb|VbaseDoub| 不直接使用， 仅用于继承． 这里使用继承主要是为了避免在每个密矩阵中都重复定义这些基础功能．
 \begin{lstlisting}[language=cpp]
 class VbaseDoub
 {
@@ -37,10 +37,10 @@ public:
 };
 \end{lstlisting}
 
-简单来说， \verb|VbaseDoub| 就是一个简单的 \verb|std::vector|， 负责内存管理， 用方括号 \verb|[i]| 获取第 \verb|i| 个矩阵元， 用 \verb|end()| 获取最后一个元， \verb|end(i)| 获取第 \verb|N-i| 个元． 用 \verb|.size()| 获取元素长度， \verb|.resize(N)| 释放内存并重新分配 \verb|N| 个元素的新内存． \verb|<<| 用于把一个对象所分配的内存转移到另一个对象中． 所有继承 \verb|VbaseDoub| 的容器都具有这些功能， 除了\verb|resize()| 会根据矩阵的维度重新定义．
+简单来说， \verb|VbaseDoub| 就是一个简单的 \verb|std::vector|， 负责内存管理， 用方括号 \verb|[i]| 获取第 \verb|i| 个矩阵元， 用 \verb|end()| 获取最后一个元， \verb|end(i)| 获取第 \verb|N-i| 个元． 用 \verb|.size()| 获取元素长度， \verb|.resize(N)| 释放内存并重新分配 \verb|N| 个元素的新内存． \verb|<<| 用于把一个对象所分配的内存转移到另一个对象中． 所有继承 \verb|VbaseDoub| 的米矩阵都具有这些功能， 除了\verb|resize()| 会根据矩阵的维度重新定义．
 
-\subsection{Vec 容器}
-为了避免歧义， 任何两个容器之间禁止使用等号．
+\subsection{Vec 矢量}
+为了避免歧义， 任何两个矩阵之间禁止使用等号． 如果要复制使用 \verb|copy()| 函数．
 \begin{lstlisting}[language=cpp]
 class VecDoub : public VbaseDoub
 {
@@ -54,38 +54,38 @@ public:
 };
 \end{lstlisting}
 
-\subsection{Cmat 容器}
+\subsection{Cmat 矩阵}
 \begin{lstlisting}[language=cpp]
 class CmatDoub : public VbaseDoub
 {
 protected:
     typedef VbaseDoub Base;
-    Long m_N1, m_N2;
+    Long m_N0, m_N1;
 public:
-    CmatDoub(): m_N1(0), m_N2(0) {};
+    CmatDoub(): m_N0(0), m_N1(0) {};
     CmatDoub(Long_I N1, Long_I N2);
     CmatDoub(const CmatDoub &rhs);
     CmatDoub &operator=(const CmatDoub &rhs) = delete;
     void operator<<(CmatDoub &rhs);
     Doub& operator()(Long_I i, Long_I j);
     const Doub& operator()(Long_I i, Long_I j) const;
+    Long n0() const;
     Long n1() const;
-    Long n2() const;
     void resize(Long_I N1, Long_I N2);
     void reshape(Long_I N1, Long_I N2);
 };
 \end{lstlisting}
 
-\subsection{Cmat3 容器}
+\subsection{Cmat3 三维数组}
 \begin{lstlisting}[language=cpp]
 class Cmat3Doub : public VbaseDoub
 {
 protected:
     typedef VbaseDoub Base;
-    Long m_N1, m_N2, m_N3;
+    Long m_N0, m_N1, m_N2;
 public:
     typedef Doub value_type;
-    Cmat3Doub(): m_N1(0), m_N2(0), m_N3(0) {};
+    Cmat3Doub(): m_N0(0), m_N1(0), m_N2(0) {};
     Cmat3Doub(Long_I N1, Long_I N2, Long_I N3);
     Cmat3Doub(const Cmat3Doub &rhs);
     Cmat3Doub &operator=(const Cmat3Doub &rhs) = delete;
@@ -94,10 +94,10 @@ public:
     void reshape(Long_I N1, Long_I N2, Long_I N3);
     Doub &operator()(Long_I i, Long_I j, Long_I k);
     const Doub &operator()(Long_I i, Long_I j, Long_I k) const;
+    Long n0() const;
     Long n1() const;
     Long n2() const;
-    Long n3() const;
 };
 \end{lstlisting}
 
-\addTODO{列出其他容器}
+\addTODO{列出其他矩阵}
