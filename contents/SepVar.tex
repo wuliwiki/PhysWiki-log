@@ -5,12 +5,95 @@
 \issueDraft
 \end{issues}
 
-\pentry{多元函数的傅里叶级数\upref{NdFuri}} % 未完成
-
 在求解各种物理问题中的偏微分方程时， 我们经常使用\textbf{分离变量法}． 在分离变量法中， 我们假设微分方程的解可以表示为
-\begin{equation}
+\begin{equation}\label{SepVar_eq2}
 f(x_1, \dots , x_N) = \sum_{i_1, \dots, i_N} c_{i_1, \dots, i_N} f_{i_1}(x_1) f_{i_2}(x_2) \dots f_{i_N}(x_N)
 \end{equation}
 即每个变量都具有一组一元函数， 这些一元函数的乘积的线性组合可以表示方程的解． 若将该式代入偏微分方程， 可以分别得到关于每个变量 $x_i$ 的常微分方程， 我们就说这个偏微分方程式\textbf{可分离变量}的．
 
-% 参考 docx 版的百科
+% ======= 回收 ======
+
+% 以二元偏微分方程为例，要解该方程，先假设…乘积，
+% 由于等号左边只含有 ，右边只含有y，所以两边只能等于一个常数．原因如下：
+
+% 若 是方程的一个解，则在定义域中任意改变 $x, y$ 上式都成立．现在令 不变(等号左边为常数)，当y在定义域内任意变化时，由于等式必须成立，等式右边必须是同一常数．现在，当x变化是，等号左边也是同一常数．
+
+
+% 这样，一个偏微分方程就变成了两个常微分方程．解这两个方程，得到偏微分方程的一个特解．
+
+% 在大部分情况下，所有特解的线性组合就是通解…．
+
+% ==================
+
+
+\subsection{例子： 弦上的驻波}
+
+\pentry{多元函数的傅里叶级数\upref{NdFuri}}
+
+不夸张地说， 分离变量法在解各种物理学的偏微分方程是最重要最常用的方法．
+
+
+一维的波动方程为
+\begin{equation}
+\pdv[2]{x} f(x, t) - \frac{1}{v^2} \pdv[2]{t}f(x, t) = 0
+\end{equation}
+假设弦长为 $a$， 两端固定， 则边界条件为
+\begin{equation}\label{SepVar_eq3}
+f(0, t) = f(a, t) = 0
+\end{equation}
+显然， $f(x, t) \equiv 0$ 是方程的一个解， 代表一根静止的弦， 但这对我们并没有什么用． 那么有那些非零的解呢？ 我们现在只会解一些常微分方程， 而 $f(x, t)$ 是一个二元函数， 让人有点无从下手， 所以我们可以先猜测某个解具有
+\begin{equation}\label{SepVar_eq1}
+f(x, t) = X(x) T(t)
+\end{equation}
+的形式， 即分别含有两个变量的两个一元函数相乘． 把\autoref{SepVar_eq1} 代入原方程\autoref{SepVar_eq2} ， 得
+\begin{equation}
+\pdv[2]{x}[X(x)T(t)] - \frac{1}{v^2}\pdv[2]{t} [X(x) T(t)] = 0
+\end{equation}
+但考虑到偏微分的计算法则， 有
+\begin{equation}
+\pdv[2]{XT}{x} = T \dv[2]{X}{x}
+\end{equation}
+\begin{equation}
+\pdv[2]{XT}{t} = X \dv[2]{T}{t}
+\end{equation}
+所以方程变为
+\begin{equation}
+T\dv[2]{X}{x} = \frac{X}{v^2} \dv[2]{T}{t}
+\end{equation}
+现在把方程两边同时除以 $f_n$， 即同时除以 $X_n T_n$， 使等式左边只是 $x$ 的函数， 右边只是 $t$ 的函数
+\begin{equation}
+\frac{1}{X}\dv[2]{X}{x} = \frac{1}{v^2 T} \dv[2]{T}{t}
+\end{equation}
+但为什么要这么做呢？ 因为真的存在一个 这样的解， 在某个时刻 $t$， $X(x)$ 必定会随 $x$ 变化(因为我们要找的是非零解， 弦不可能是一条直线)． 反之， 如果保持 $x$ 不变(观察弦上某个点的运动情况)， $T(t)$ 也必须随 $t$ 改变(因为弦上的任意一点一般会做某种运动， 例如振动， 不可能都静止)． 把这样的推理用到上式， 就会得出， 唯一可能让等式成立的方法是方程两边分别等于一个常数， 因为 $x$ 不变时方程左边是常数，  $t$ 不变时方程右边是常数． 若设这个常数为（一个任意实数， 这么表示是为了下文书写方便）， 得
+\begin{equation}
+\frac{1}{X}\dv[2]{X}{x} = \pm k^2
+\qquad
+\frac{1}{v^2 T}\dv[2]{T}{t} = \pm k^2
+\end{equation}
+或
+\begin{equation}
+\dv[2]{X}{x} mk^2 X = 0
+\qquad
+\dv[2]{T_n}{t} mv^2k^2 T = 0
+\end{equation}
+这两条都是一维齐次亥姆霍兹方程， 常数为 时， 方程的解为指数函数
+\begin{align}
+X &= C_1 \E^{kx} + C_2 \E^{-kx}\\
+T &= D_1 \E^{kvt} + D_2 \E^{-kvt}
+\end{align}
+$f = XT$ 不可能满足边界条件\autoref{SepVar_eq3}  （但有可能满足其他边界条件）． 当常数为 $-k^2$ 时， 方程的解为
+\begin{align}\label{SepVar_eq4}
+X &= C_1 \cos(kx) + C_2 \sin(kx)\\
+\label{SepVar_eq5}T &= D_1 \cos(kvt) + D_2 \sin(kvt)
+\end{align}
+要使 $t$ 取任何值时 $f = XT$ 都满足边界条件， 只能令 $X$ 满足 $X(0) = 0$ 且 $X(a) = 0$． 前者代入\autoref{SepVar_eq4} 得 $C_1 = 0$， 所以 $X = C_2\sin(kx)$． 再代入后者得 $C_2\sin(ka) = 0$． 为了获得非零解， 我们不可能让 $C_1, C_2$ 都为零， 所以只能令 $\sin(ka) = 0$， 解出常数 $k_n = n\pi/a$ 只能取离散的值， $n$ 为任意正整数．
+
+现在， 我们可以令整数 $n$ 取任意值， 得到无穷多个方程的解
+\begin{equation}
+f_n(x, t) = X_n T_n = C_{1n} \sin(\frac{n\pi}{a}x)\cos(\frac{n\pi}{a} vt) + C_{2n}\sin(\frac{n\pi}{a}x)\sin(\frac{n\pi}{a}vt)
+\end{equation}
+\autoref{SepVar_eq5} 也可以记为 $D\cos(kvt+\phi_0)$， 所以上式也可记为
+\begin{equation}
+f(x, t) = XT = C_n\sin(\frac{n\pi}{a}x)\cos(\frac{n\pi}{a}vt + \phi_0)
+\end{equation}
+

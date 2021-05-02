@@ -1,0 +1,174 @@
+% Visual C++ 的简单画图库 MatPlot
+% VC++|MatPlot|Matlab|画图
+
+\begin{figure}[ht]
+\centering
+\includegraphics[width=3cm]{./figures/MtPlot_1.png}
+\caption{MatPlot 图标} \label{MtPlot_fig1}
+\end{figure}
+
+MatPlot 是笔者写的一个轻量的 C++ 科学绘图函数库， 可以在 Windows 系统下使用， 尤其是 Visual Studio Code． 其函数与 Matlab 中的画图函数相似，目前主要提供的函数有例如 \verb|figure()|，\verb|close()|，\verb|plot()|，\verb|scatter()|，\verb|clf()|，\verb|axis()| 等，暂时不支持 3D 画图． GitHub 页面点\href{https://github.com/MacroUniverse/MatPlot}{这里}．
+
+我们先介绍用法， 安装说明见最后．
+
+\subsection{例 1：最简单的例子}
+
+\begin{figure}[ht]
+\centering
+\includegraphics[width=8cm]{./figures/MtPlot_2.png}
+\caption{最简单的例子（控制台程序）} \label{MtPlot_fig2}
+\end{figure}
+
+\begin{figure}[ht]
+\centering
+\includegraphics[width=12cm]{./figures/MtPlot_3.png}
+\caption{结果 1} \label{MtPlot_fig3}
+\end{figure}
+
+注意 MatPlot 的所有函数都具有 \verb|namespace MatPlot|．\verb|MatPlotInit()| 和 \verb|MatPlotClose()| 分别是初始化和退出 MatPlot 的命令，在程序中分别只能使用一次．所有画图函数必须在调用 \verb|MatPlotInit()| 之后调用 \verb|MatPlotClose()| 之前使用．为了让程序不立即终止，可以用 \verb|Sleep()| 函数暂停程序，输入的数字是暂停的毫秒数．
+
+\verb|plot()| 函数的完整格式为
+\verb|plot(double *px, double *py, int N, char color = 'a');|
+其中 \verb|px| 和 \verb|py| 既可以是数组也可以是指针，\verb|N| 是 \verb|px| 和 \verb|py| 的长度，\verb|color| 是颜色，默认值 \verb|'a'| 代表自动颜色，这种模式下每使用一次 \verb|plot()| （或 \verb|scatter|），颜色就会改变一次． \verb|color| 可选
+\verb|'r'|（red），
+\verb|'g'|（green），
+\verb|'b'|（blue），
+\verb|'y'|（yellow），
+\verb|'m'|（magenta），
+\verb|'c'|（cyan），
+\verb|'k'|（black），
+\verb|'w'|（white）．
+\verb|plot()| 默认在“当前画图框”（见下文）上绘制，如果没有画图框，则自动生成画图框 figure1．
+
+\verb|scatter()| 函数用于画散点图，使用格式与 \verb|plot()| 完全相同．如果在例 1 中的 \verb|plot()| 下面加上代码
+\verb|scatter(x, y, N);|
+运行结果如下
+
+\begin{figure}[ht]
+\centering
+\includegraphics[width=10cm]{./figures/MtPlot_4.png}
+\caption{结果 2} \label{MtPlot_fig4}
+\end{figure}
+
+注意散点的颜色变成了橙色．
+
+\verb|figure()| 函数用于生成新的画图框，其的格式为
+\verb|figure(int FigNo = -1);|
+默认值 \verb|-1| 的情况下 \verb|figure()| 按照顺序给画图框编号．如果输入 \verb|FigNo|，则生成编号为 \verb|FigNo| 的画图框． \verb|figure()| 函数的另一个功能是指定当前画图框（Current Figure）为 \verb|FigNo|． \verb|plot()|， \verb|scatter()| 以及其他许多函数都是对当前画图框进行操作．
+
+\verb|close()| 函数用于关闭画图框，其格式为
+\verb|close(int FigNo = -1);|
+默认值 \verb|-1| 的情况下， \verb|close()| 关闭当前画图框， 指定 \verb|FigNo| 时关闭指定的画图框．如果 \verb|close()| 关闭的是当前画图框（无论指定 \verb|FigNo| 与否）， 则当前画图框自动变为下一个编号更大的画图框， 如果不存在，则自动变为下一个编号更小的画图框． 另外，单击画图框右上角的 \verb|x| 按钮与使用 \verb|close()| 效果相同．
+
+\verb|close_all()| 函数用于关闭所有画图框．
+
+\verb|clf()| 函数（clean figure）用于清空当前画图框，并把坐标范围设为 0 到 1．
+
+\verb|axis()| 函数用于调整坐标范围，格式为
+\verb|axis(double xmin, double xmax, double ymin, double ymax);|
+其中 \verb|xmin|， \verb|xmax| 分别为 x 轴的最小和最大值， \verb|ymin| 和 \verb|ymax| 分别为 y 轴的最小和最大值．
+
+\verb|axis_auto()| 用于设置坐标轴为自动调节（新生成的画图框默认为自动调节），如果 \verb|plot()| 或者 \verb|scatter()| 函数的数据点超出当前的坐标范围，坐标轴会自动调整以包含所有数据点．
+
+\verb|axis_manual()| 用于设置坐标范围固定不变．
+
+\verb|xticks()| 和 \verb|yticks()| 函数用于设置 x 轴和 y 轴的坐标点，格式都为
+\verb|xticks(double tickmin, double tickmax, int Nticks = 26, int txtstart = 0, int txtspace = 5, int Ndigits = 2);|
+其中 \verb|tickmin| 是和 \verb|tickmax| 分别是最小和最大坐标点的坐标， \verb|Nticks| 是坐标点的个数， \verb|txtspace| 是每几个坐标点下方显示坐标， \verb|txtstart| 是从第几个坐标点开始显示坐标，\verb|Ndigits| 是显示的小数位数（目前还不支持科学计数法）．
+
+\subsection{例 2： 设置坐标}
+
+目前坐标点和坐标显示的规划功能并不像 Matlab 中的那么完善．先来看一段画正弦函数的代码
+
+\begin{figure}[ht]
+\centering
+\includegraphics[width=9cm]{./figures/MtPlot_5.png}
+\caption{例 2} \label{MtPlot_fig5}
+\end{figure}
+
+\begin{figure}[ht]
+\centering
+\includegraphics[width=10cm]{./figures/MtPlot_6.png}
+\caption{运行结果为} \label{MtPlot_fig6}
+\end{figure}
+
+可以发现 x 轴的坐标点安排不合理．我们可以用 \verb|xticks()| 函数重新设置．在 \verb|plot()| 函数下方插入
+\verb|xticks(0, 6.2, 32, 0, 5, 1);|
+即设置最小的坐标点为 0，最大的为 6.2，共有 32 个坐标点，从第一个开始，每隔五个打印一个坐标，并保留 1 位小数．运行结果变为
+
+\begin{figure}[ht]
+\centering
+\includegraphics[width=10cm]{./figures/MtPlot_7.png}
+\caption{运行结果 2} \label{MtPlot_fig7}
+\end{figure}
+
+为提供更友好的用户界面， MatPlot 在初始化的时候生成并隐藏了控制面板，可以用于临时调用 MatPlot 的常用函数．用 \verb|show_control()| 函数可以显示控制面板．用 \verb|hide_control()| 可以将其再次隐藏． 为了使用控制面板，可以在程序中用 \verb|Sleep()| 函数．
+
+\begin{figure}[ht]
+\centering
+\includegraphics[width=10cm]{./figures/MtPlot_8.png}
+\caption{控制面板} \label{MtPlot_fig8}
+\end{figure}
+
+控制面板中标有函数名的按钮用于调用对应的函数，按钮旁的文本框用于输入对应函数的参数．其中 \verb|plot(...)| 和 \verb|scatter(...)| 按钮分别绘制 \verb|DataNo*sin(x)| 的函数图和散点图．选择或取消 \verb|autoaxis(...)| 选项相当于调用 \verb|axis_auto()| 和 \verb|axis_manual()| 函数． \verb|CurrentFig| 显示当前画图框的编号（注意 0 代表 figure1， 1 代表 figure2）按 OK 或 Cancel 退出 MatPlot．
+
+
+\subsection{安装说明}
+这里介绍如何在 Visual Studio 2017 中“安装” MatPlot. MatPlot 下载点这里， MatPlot 的使用说明见这里．本文使用的工程文件夹下载点这里．
+
+首先用 Desktop Wizard 新建一个控制台工程
+\begin{figure}[ht]
+\centering
+\includegraphics[width=10cm]{./figures/MtPlot_9.png}
+\caption{} \label{MtPlot_fig9}
+\end{figure}
+
+在 Wizard 中取消预编译（Precompiled Header）选项, 选择空项目（Empty Project）按确定生成控制台程序（Console Application）．
+
+\begin{figure}[ht]
+\centering
+\includegraphics[width=10cm]{./figures/MtPlot_10.png}
+\caption{} \label{MtPlot_fig10}
+\end{figure}
+
+生成工程以后, 我们把 MatPlot.h, MatPlot.lib 和 MatPlot.dll （注意这些文件有 32bit 和 64bit 两个版本）复制到工程文件夹 （...\MatPlotTest\MatPlotTest）中．然后在菜单栏打开工程，属性
+
+\begin{figure}[ht]
+\centering
+\includegraphics[width=10cm]{./figures/MtPlot_11.png}
+\caption{} \label{MtPlot_fig11}
+\end{figure}
+
+在属性对话框中的 Linker，Input，Additional Dependencies 的右边按下拉按钮
+
+\begin{figure}[ht]
+\centering
+\includegraphics[width=10cm]{./figures/MtPlot_12.png}
+\caption{} \label{MtPlot_fig12}
+\end{figure}
+
+编辑，添加 MatPlot.lib; 确定．
+
+\begin{figure}[ht]
+\centering
+\includegraphics[width=10cm]{./figures/MtPlot_13.png}
+\caption{} \label{MtPlot_fig13}
+\end{figure}
+
+在 Solution Explorer 中对“头文件”文件夹按右键添加已存在项目
+
+\begin{figure}[ht]
+\centering
+\includegraphics[width=10cm]{./figures/MtPlot_14.png}
+\caption{} \label{MtPlot_fig14}
+\end{figure}
+
+选择刚才复制的 MatPlot.h 头文件．我们再在“源文件”文件夹中添加一个新项目， 在弹出的对话框中选择 .cpp，输入文件名为 MatPlotTest.cpp
+
+\begin{figure}[ht]
+\centering
+\includegraphics[width=10cm]{./figures/MtPlot_15.png}
+\caption{} \label{MtPlot_fig15}
+\end{figure}
+
+现在就可以在 cpp 文件中输入上文的例程代码并编译运行了．注意使用 MatPlot 的源文件中必须添加 \verb|Windows.h| 和 \verb|MatPlot.h| 头文件．
