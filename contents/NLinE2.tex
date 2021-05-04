@@ -1,0 +1,62 @@
+% 数值解线性方程组（进阶）
+
+\pentry{数值解线性方程组（入门）\upref{NLinEq}}
+
+上一节我们介绍了求解线性方程组的基本方法：高斯消元法和 LU 分解． 然而，由于篇幅原因，我故意遗留了一个很关键的点，这一节我们就来仔细讨论一下．首先， 看下面的例子：
+
+\subsubsection{例子 1}
+
+求解线性方程组  $Ax=b$  ，其中  $A=\begin{bmatrix} \epsilon & 1\\ 1 & 1 \end{bmatrix}$  ，  $b=\begin{bmatrix}  1\\  2 \end{bmatrix}$  ．很简单的可以求出解为：  $x_1=\frac{1}{1-\epsilon}$， $x_2=\frac{1-2\epsilon}{1-\epsilon}$．
+
+如果按照上一节中高斯消元的求解步骤，并考虑一个特殊情况  $\epsilon=10^{-17}$  
+
+\begin{enumerate}
+\item 对  $A$  进行 LU 分解，可以得到  $L=\begin{bmatrix} 1& 0\\ \frac{1}{\epsilon} & 1 \end{bmatrix}$  ，  $U=\begin{bmatrix} \epsilon & 1\\ 0 & 1-\frac{1}{\epsilon} \end{bmatrix}$．
+\item  求解  $Ly=b$  ，即  $\begin{bmatrix} 1& 0\\ \frac{1}{\epsilon} & 1 \end{bmatrix} \begin{bmatrix} y_1\\ y_2 \end{bmatrix}= \begin{bmatrix} 1\\ 2 \end{bmatrix}$  ，依次得到  $y_1=1$   $y_2=2-\frac{1}{\epsilon}$  ．但是，由于	\textbf{机器精度}的原因，计算机在这个浮点运算过程中会得到  $y_2=-10^{17}$  ．关于机器精度，可以参考 “计算机算数\upref{CmArit}”． 当然，这个结果和  $y_2$  的精确解差距不大，还是可以接受的．
+\item 求解  $Ux=y$  ，即  $\begin{bmatrix} \epsilon& 1\\ 0 &1-\frac{1}{\epsilon}  \end{bmatrix} \begin{bmatrix} x_1\\ x_2 \end{bmatrix}= \begin{bmatrix} 1\\ 2-\frac{1}{\epsilon} \end{bmatrix}$  ，可以得到  $x_2=\frac{2-\frac{1}{\epsilon}}{1-\frac{1}{\epsilon}}$  ．即使我们不使用上面一步得到的  $y_2=-10^{17}$  ，这里也会继续因为机器误差解得  $x_2=1$  ．有兴趣的小伙伴，可以尝试直接用计算机验证这个浮点运算的结果．代入求解  $x_1$  ，即  $\epsilon x_1+1=1$  ．那么，最终的解为  $x_1=0$ ！ 而如果我们用计算机直接运算之前的解析解表达式，可以得到  $x_1=1$  ．显然，这才是机器误差允许范围内的正确解．
+\end{enumerate}
+
+当然，如果你是用 Matlab 或者 Python 自带的线性方程组求解器来求解上面的问题，并不会得到  $x_1=0$  这样的错误解．
+
+\subsubsection{解释}
+
+事实上，问题出在了我们的高斯消元算法上，这个算法目前还并不完整．我们在前一节讨论的整个算法都是基于解析过程，也就是说，假设所有的运算过程都是精确完成的，没有任何误差．但是，在浮点数运算中，这个条件并不能完全满足，机器误差会伴随着每一步运算．而且，随着问题的复杂度增加，运算量加大，机器误差会不断积累． \textbf{因此，科学计算中一个重要的研究内容就是如何控制误差，使其始终保持在一个相对较小的范围．}
+
+\subsubsection{改进}
+
+那么，如何完善我们的LU分解算法呢？我们不妨尝试在分解之前，将  $A$  的两行对调，同样，为了结果的一致性，  $b $  的两行也要对换．这样得到的新的LU分解结果也和之前的有所变化：  $\bar{L}=\begin{bmatrix} 1& 0\\ {\epsilon} & 1 \end{bmatrix}$  ，  $\bar{U}=\begin{bmatrix} 1& 1\\ 0 & 1-{\epsilon} \end{bmatrix}$  ．继续按照前面例子中的求解过程，可以得到  $\begin{bmatrix} 1& 1\\ 0 &1-{\epsilon}  \end{bmatrix} \begin{bmatrix} x_1\\ x_2 \end{bmatrix}= \begin{bmatrix} 2\\ 1-2{\epsilon} \end{bmatrix}$  ，（有兴趣的同学可以按照上面例子的三步，自己算一遍．）这样，当  $\epsilon=10^{-17}$  时，  $x_1=1$  ，  $x_2=1$  ，非常接近解析解．
+
+\subsubsection{分析}
+
+我们将这个对调两行的过程用矩阵乘法的形式表示，即  $PAx=Pb$  ，其中  $P=\begin{bmatrix} 0&1\\\ 1&0 \end{bmatrix}$  ．因此，我们改进后得到的LU分解事实上就是  $\bar{L}\bar{U}=PA$  ．
+
+那为何这样的对调之后，运算误差就被有效的控制住了呢？为此，我们要回到高斯消元的基础思路：
+
+\begin{lstlisting}[language=python]
+for k=1:n-1
+    if a(k,k) not 0
+        for i=k+1:n
+            L(i,k) = a(i,k)/a(k,k)
+        end
+        for j=k+1:n
+            for i=k+1:n
+                a(i,j) = a(i,j)-L(i,k)*a(k,j)
+            end
+        end
+    end
+end
+\end{lstlisting}
+
+对于第  $k$  步，将 $A$  的第  $k$  行乘以一个系数使其可以正好消去下面各行（$i=k+1,...,n$）的第 $k$ 列的元素，这个系数应为  $\frac{a_{i,k}}{a_{k,k}}$  ，注意这个系数在消元的过程中会乘以  $A$  的第  $k $  行中每一个元素．如果这个系数大于1，则第  $k $  行中元素的机器误差会被放大，反之则会被缩小．前面的例子1正是因为消元系数  $\frac{a_{2,1}}{a_{1,1}}=\frac{1}{\epsilon}=10^{17}$  ，因此将机器误差放大．
+
+\subsubsection{解决}
+
+那么，如果我们可以在每一步消元时，都让这个系数  $\frac{a_{i,k}}{a_{k,k}}$ 小于1，那么就可以保证机器误差至少不会由于上面的原因被放大．这也正是	\textbf{改进}办法可以成功的根本原因．因此交换了两行，使得这个消元系数由原来的  $10^{17}$  变成了  $10^{-17}$  ．这类方法被称作Pivoting（中文翻译似乎叫寻找主元法）．
+
+当然，Pivoting 的策略有很多，包括完全 Pivoting 和部分 Pivoting．
+
+\textbf{完全 Pivoting}，就是在第  $k$ 步开始以前，找到第  $k$  到  $n$  行第  $k$  到  $n$  列元素中最大的那一个，通过一次行交换和一次列交换将它和  $a_{k,k}$  互换，然后进行消元．
+
+\textbf{部分 Pivoting}， 仅仅在第 $k$ 列或者第 $k$ 行中寻找最大的元素．
+
+事实上，这些方法已被广泛应用到了几乎所有软件包的 LU 分解中，有兴趣的同学可以去查看 Matlab 的 \verb|lu| 函数（\href{https://ww2.mathworks.cn/help/matlab/ref/lu.html}{文档}）和 scipy 的\verb|linalg.lu| 函数（\href{https://docs.scipy.org/doc/scipy/reference/generated/scipy.linalg.lu.html}{文档}）．它们不仅会求出 $L$ 和 $U$， 还会给出相应的 $P$ 矩阵．

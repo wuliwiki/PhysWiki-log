@@ -1,0 +1,218 @@
+% 计算机算数
+
+\pentry{数值计算的误差\upref{NumErr}}
+
+要了解科学计算，首先要知道数据是如何在计算机中存储和表达的．在计算机基础中我们知道，所有的数据在计算机内存中都是以二进制数的形式存储的，但对于不同的数据类型，二进制数所代表的意义也不尽相同．下面我们来看两种最常见的数据类型：整数和浮点数．
+
+\subsection{整数}
+
+很自然的，对于一个给定的十进制整数，可以将它转换为二进制数，从而在计算机中表示． 下图中的8位（8 bits）二进制数 \verb|0 1 0 1 1 1 0 1| 表示
+
+\begin{equation}
+(01011101)2=0\cdot2^7+1\cdot2^6+0\cdot2^5+1\cdot2^4+1\cdot2^3+1\cdot2^2+0\cdot2^1+1\cdot2^0=(93)_{10}
+\end{equation}
+
+从 Python3.0 起，可以表示的整数的最大值上限被\href{https://docs.python.org/3.1/whatsnew/3.0.html#integers}{移除}， 这就意味着我们可以精确表示任何整数，也就是说只要将给定的整数转换为二进制数，然后占用相应长度的内存空间即可．理论上 16G 的内存可以存储的最大整数约为  $10^{5.17\times10^9}$  ．
+
+另外，由于两个不同整数之间的最小间隔为1（整数的机器精度），因此，与整数有关的加、减和乘法都可以被精确计算，并且没有任何舍入误差．
+
+\subsubsection{例子 1 ： 大整数及其运算}
+
+\textbf{注1}： 普通除法运算  \verb|/|  在Python中会默认转换为浮点数，因此并不能保证完全精确．
+
+\textbf{注2}： 整数除法 \verb|//| 可以保证精确，但是结果只有商，余数可以用 \verb|%|  求得．
+
+\begin{lstlisting}[language=python]
+a = 135791113151719
+b = 246810
+print(f'a={a}, b={b}')
+print(f'a+b={a+b}')
+print(f'a-b={a-b}')
+print(f'axb={a*b}')
+print(f'a÷b={a//b}......{a%b}')
+\end{lstlisting}
+输出：
+\begin{lstlisting}[language=python]
+a=135791113151719, b=246810 
+a+b=135791113398529 
+a-b=135791112904909 
+axb=33514604636975766390 
+a÷b=550184810......195619
+\end{lstlisting}
+
+
+\subsection{浮点数}
+
+不同于整数，实数是连续的，这就意味着两个不相同的实数之间的最小距离可以无限接近于0． 前文中对于整数的存储方式显然不再适用，我们并不能把所有实数都在计算机中表示出来． 甚至我们都不能把0到1之间的所有实数表达出来．
+
+这就要求计算机对实数运算进行一定的近似，使得给定任意一个实数，我们都能找到一个与它接近的计算机浮点数表达．同时，计算机浮点数系统需要保证\textbf{运算精度}和\textbf{速度}．这就要求计算机浮点数系统需要尽可能满足下面的条件：
+
+\begin{enumerate}
+\item 每个浮点数占用的内存空间一致．
+\item 覆盖的范围尽可能大
+\item 舍入误差或机器精度尽可能的小．关于舍入误差，参见 “数值计算的误差\upref{NumErr}”．
+\end{enumerate}
+
+下面我们会一步一步的设计一个8位（8 bits）的浮点数系统，也就是用8位的256个二进制数字来表达浮点数，并逐步满足上述条件． 从而探究一下真正的IEEE浮点数标准是如何设计和指定的．
+
+\subsubsection{简单的二进制表达浮点数}
+
+类似二进制以 \verb|2| 为基的方式，我们也可以用 $1/2$ 为基，那么 8 位二进制数 \verb|0 1 0 1 1 1 0 1| 就表示
+
+\begin{equation}
+\begin{aligned}
+(01011101)_2 &= 0\cdot2^{-1}+1\cdot2^{-2}+0\cdot2^{-3}+1\cdot2^{-4}\\
+ &\quad +1\cdot2^{-5}+1\cdot2^{-6}+0\cdot2^{-7}+1\cdot2^{-8}\\
+ &= 0.36328125
+\end{aligned}
+\end{equation}
+
+事实上，这个8位二进制数和前面整数一章用到的是同一个二进制数，但他们因为数据类型不同，代表的含义也就不同了．
+
+由此，我们的8位浮点数系统可以表示 256 个在 0 到  $1-\frac{1}{2^8}=0.99609375$  之间的实数，它们的机器精度为  $\frac{1}{2^8}=0.00390625$．
+
+\textbf{小结}： 此方法的机器精度是8位系统可达到的最小值，但覆盖范围仅为 0 到 1
+
+\subsubsection{扩大范围}
+
+想要表达更大的数，可以从上面的方式出发，将得到的 0 到 1 之间的数都乘以一个固定的值，例如乘以 8． 这样，我们的浮点数系统的覆盖范围扩大到了 $0$ 到 $7.96875$． 但是这个操作也会将机器精度乘以相应的值，使其下降为了  $\frac{1}{2^5}=0.03125$．
+
+\textbf{小结}： 等比例的扩大范围会大幅降低机器精度．
+
+\subsubsection{标准化}
+
+延续上面的思路，我们可以用乘以多个不同的倍数的方法来控制所扩大的范围． 也就是说，从8位二进制中拿出2位（下面的例子中用的是最后两位，但也可以是前面两位），用来记录扩大的倍数，而前面的 6 位同之前一样用作表达0到1之间的实数，这6位被称作尾数位（mantissa）． 
+
+为了进一步扩大范围，取出的2位从二进制转化为十进制后，被放在以 \verb|2| 为基（basis）的指数位置上形成放大的倍数，因此这2位在这个系统中被称为\textbf{指数位（exponent）}．
+
+如下图，我们继续使用同样的8位二进制数，在经过标准化过程后，表达的数为
+
+\begin{figure}[ht]
+\centering
+\includegraphics[width=10cm]{./figures/CmArit_1.png}
+\caption{请添加图片描述} \label{CmArit_fig1}
+\end{figure}
+
+对于我们的 8 位浮点数系统而言，相当于将所有表达在 $0$ 到 $7.875$ 之间浮点数标准化，机器精度随着浮点数增大而等比例增大． 即在任意取值情况下，相对的机器精度都保持在 $\frac{1}{2^6}=0.015625$
+
+\textbf{小结}：此方法在保持了与上一小节相似的范围的同时，将机器精度提升了一倍． \textbf{但是}，我们注意到，这个方法有一个严重的问题在于\textbf{重复}，例如 01011101 和 10111000 都表示了同一个数．
+
+\subsubsection{去掉重复}
+
+去掉重复数字的方法很巧妙，这个方法并不改变上一小节中的标准化方式，只是在对尾数位求和过程中加上一个常数 1，即
+\begin{equation}
+\begin{aligned}
+(01011101)_2 &=({\color{red}{1}}+0\cdot2^{-1}+1\cdot2^{-2}+0\cdot2^{-3}+1\cdot2^{-4}+1\cdot2^{-5}+1\cdot2^{-6})\times2^1\\
+&= 2.71875
+\end{aligned}
+\end{equation}
+
+使用这种改进方法，我们可以表达 1 至 15.875 之间的 256 个不同的实数， 我们把这些浮点数画在数轴上， 如下图
+
+\begin{figure}[ht]
+\centering
+\includegraphics[width=14cm]{./figures/CmArit_2.png}
+\caption{数轴上的浮点数} \label{CmArit_fig2}
+\end{figure}
+
+可以发现，这样表达的浮点数保持了各处一致的相对机器精度，这个相对值约为 $2^{-6}\approx 0.015625$．
+
+\textbf{注}：数轴上小于1的范围称为下溢（underflow），而超过15.875的范围称为上溢（overflow）．
+
+\subsubsection{更多的}
+
+下面的几个步骤可以进一步完善我们的浮点数系统：
+\begin{itemize}
+\item 为了表达负数，我们需要从尾数位（mantissa）中取出一位，作为\textbf{符号位}． 
+\item 为了将下溢降低，我们将指数位表达的十进制数（0,1,2,3）向负数平移，变成（-1,0,1,2）．
+\end{itemize}
+
+\subsection{IEEE 浮点数标准}
+
+现在的计算机系统采用的是 \href{https://ieeexplore.ieee.org/document/8766229}{IEEE 浮点数标准}． 每一个浮点数（Python 中的 \verb|float| 类型）占用 64 位．如下图所示，其中第 1 位为符号位，下面 11 位为\textbf{指数位}，最后 52 位为\textbf{尾数位（mantissa）}．
+
+\begin{figure}[ht]
+\centering
+\includegraphics[width=14cm]{./figures/CmArit_3.png}
+\caption{IEEE 浮点数标准} \label{CmArit_fig3}
+\end{figure}
+
+可知 $f= {i}/{2^{52}}$， $i=0,1,2,...,2^{52}-1$． 指数位  $e$  的标准范围定为  $-1022\le e\le 1023$  ，把  $e=1024$  作为特殊位，并把  $e=-1023$  作为保留位（我们放在最后分析）．
+
+由此，我们可以求得：
+
+\begin{itemize}
+\item 机器精度 \verb|eps| 为  $\frac{1}{2^{52}}\approx 2.220446049250313\times10^{-16}$．
+\item 最小的正浮点数 \verb|realmin| 为  $2^{-1022}\approx2.2251\times10^{-308}$  ，在python中可以通过 \verb|numpy.finfo(float).tiny| 获得．
+\item 最大的浮点数 \verb|realmax| 为 $(2-2^{-52})\times2^{1023}\approx1.7977\times10^{308}$  ，在python中可以通过 \verb|numpy.finfo(float).max| 获得．
+\item 令  $e=1024$  和  $f=0$  ，表示无穷大  $\infty$  ，即任何大于 \verb|realmax| 的数，在python中可以通过 \verb|numpy.inf| 得到．
+\item 令  $e=1024$  且  $f\neq0$  ，则表示这不是一个数（NaN，Not a Number）．通常出作为 \verb|0/0| 或者 \verb|numpy.inf-numpy.inf| 的结果．我们也可以通过 \verb|numpy.nan| 表达它．
+\end{itemize}
+
+\subsubsection{例子 2： numpy 中查看浮点数标准}
+
+\begin{lstlisting}[language=python]
+print(f'minimal positive normal float: {np.finfo(float).tiny}')
+print(f'maximal float: {np.finfo(float).max}')
+print(f'machine epsilon: {np.finfo(float).eps}')
+print(f'infinity: {np.inf}')
+print(f'not a number: {np.nan}')
+\end{lstlisting}
+
+输出
+\begin{lstlisting}[language=pythonC]
+minimal positive normal float: 2.2250738585072014e-308 
+maximal float: 1.7976931348623157e+308 
+machine epsilon: 2.220446049250313e-16 
+infinity: inf 
+not a number: nan
+\end{lstlisting}
+
+\subsubsection{亚标准（subnormal）}
+
+在很多计算系统中，除了上面的标准浮点数以外，还存在着\textbf{亚标准浮点数（subnormal floating point numbers）}． 
+
+它们是比最小的标准浮点数 \verb|realmin|（  $2.2251\times10^{-308}$  ）还要小的正实数．
+
+我们先来看一下下面这个例子：
+
+\begin{lstlisting}[language=python]
+import numpy as np
+
+realmin = np.finfo(float).tiny
+for i in range(17):
+    print(f'realmin x 10^{-(i+1)} = {realmin*(10**(-i-1))}')
+\end{lstlisting}
+
+输出
+
+\begin{lstlisting}[language=pythonC]
+realmin x 10^-1 = 2.225073858507203e-309
+realmin x 10^-2 = 2.2250738585072e-310
+realmin x 10^-3 = 2.225073858507e-311
+realmin x 10^-4 = 2.225073858507e-312
+realmin x 10^-5 = 2.2250738585e-313
+realmin x 10^-6 = 2.2250738583e-314
+realmin x 10^-7 = 2.22507386e-315
+realmin x 10^-8 = 2.22507384e-316
+realmin x 10^-9 = 2.225074e-317
+realmin x 10^-10 = 2.225074e-318
+realmin x 10^-11 = 2.22507e-319
+realmin x 10^-12 = 2.2253e-320
+realmin x 10^-13 = 2.223e-321
+realmin x 10^-14 = 2.2e-322
+realmin x 10^-15 = 2.5e-323
+realmin x 10^-16 = 0.0
+realmin x 10^-17 = 0.0
+\end{lstlisting}
+
+可以看到
+
+\begin{itemize}
+\item 我们能够表示比最小标准数 \verb|realmin| 更小的一些正实数；
+\item 它们的精度随着我们远离 \verb|realmin| 而降低；
+\item 最终，当这个数与 \verb|realmin| 的比小于约  $10^{-16}$  时，它变成了0．
+\end{itemize}
+这是因为，我们是用保留位  $e=-1023$  来表示这类亚标准浮点数，它们范围为 \verb|realmin|   $\times$   \verb|eps| 到realmin（eps为机器精度）．也就是说，我们能表示的最最小的正实数为  $2^{-(1022+52)}\approx 0.494\times10^{-323}$  ，但这个数的精度非常低．
+
+\textbf{注}：这里尽管  $e=-1023$  ，但我们并不是用标准浮点数的转换规则进行运算的，同时在尾数前面加的1也并没有在这出现．

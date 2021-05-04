@@ -1,0 +1,166 @@
+% 电磁场张量
+% 场张量|相对论|电磁场|张量变换|麦克斯韦张量|法拉第张量|麦克斯韦双矢量
+
+
+\pentry{张量的分类\upref{CatTns}， 电动力学， 闵可夫斯基空间\upref{MinSpa}}
+我们继续使用自然单位制，令$\mu_0=\epsilon_0=c=1$来简化表达．依照习惯，上下标使用希腊字母如$\mu, \nu$时，取值范围为$\{0, 1, 2, 3\}$；使用拉丁字母如$i, j$时，取值范围为$\{1, 2, 3\}$．
+
+一个参考系中的电磁场需要用六个实函数数来刻画，三个用来刻画电场，三个用来刻画磁场．六个实数太过复杂，我们希望寻求一种简单的方式来简化表达．把六个实数合成一个对象的方法，最直接的当然是使用一个六维向量——不过这样并不能带来实质上的简化．实践中我们使用的其实是一个反对称张量场，用它来表示电磁场．
+
+在狭义相对论里，时空是一个线性空间，事件的时空坐标随着基的不同而不同，而不同的基就代表不同的观察者，事件的坐标分量就是观察者的测量值．
+
+和向量一样，任何张量只有给定了空间的基，才有“坐标分量”的概念．换句话说，只有有了观察者，才有观察者的测量值．张量本身不随基的选择而改变，改变的只是坐标分量．对于电磁场张量来说，其坐标分量，或称观察者的测量值，就是电场强度和磁场强度的空间分量，一共六个实函数．
+
+%电磁场张量的推导暂缺．建议用常规推导，同时考虑编写外导数推导的相关词条后引用．
+\subsection{电磁场张量的定义}
+
+定义描述了电磁场张量的坐标分量与坐标系对应的电磁场分量观测值的联系．
+
+\begin{definition}{电磁场张量}
+一个伪黎曼流形上的电磁场是一个二阶\textbf{反对称}张量$F^{\mu\nu}$\footnote{“反对称”意味着$F^{\mu\nu}=-F^{\nu\mu}$．}．若在某基下其分量为$F^{01}=E_x, F^{02}=E_y, F^{03}=E_z, F^{23}=B_x, F^{31}=B_y, F^{12}=B_z$，那么在这个基对应的观察者所观察到的电场就是$\pmat{E_x, E_y, E_z}\Tr$，磁场就是$\pmat{B_x, B_y, B_z}\Tr$．
+\end{definition}
+
+按照本书的规范，电磁场张量作为一个双上标张量，应该表示为“列矩阵的列矩阵”这一嵌套样式——不过直接写列矩阵套列矩阵会很占篇幅，所以借助转置符号来简化表达：
+\begin{equation}
+F^{\mu\nu}=\pmat{
+\pmat{F^{00}, F^{10}, F^{20}, F^{30}}\Tr\\
+\pmat{F^{01}, F^{11}, F^{21}, F^{31}}\Tr\\
+\pmat{F^{02}, F^{12}, F^{22}, F^{32}}\Tr\\
+\pmat{F^{03}, F^{13}, F^{23}, F^{33}}\Tr
+}
+=
+\pmat{
+\pmat{0, -E_x, -E_y, -E_z}\Tr\\
+\pmat{E_x, 0, -B_z, B_y}\Tr\\
+\pmat{E_y, B_z, 0, -B_x}\Tr\\
+\pmat{E_z, -B_y, B_x, 0}\Tr
+}
+\end{equation}
+
+注意，这种表示方式是因为我们把$F^{\mu\nu}$看成是$F^{\mu}$这一类分量纵向排列的结果．这和一些课本中的方式看起来可能会不一样，比如Griffiths的《电动力学导论》中将$F^{\mu\nu}$写成一个二阶矩阵（而非列矩阵套列矩阵），看起来就和我们的规范表达中每一项的表达式正好是相反数：
+\begin{equation}
+F^{\mu\nu}=\pmat{
+0, E_x, E_y, E_z\\
+-E_x, 0, B_z, -B_y\\
+-E_y, -B_z, 0, B_x\\
+-E_z, B_y, -B_x, 0
+}
+\end{equation}
+其原因是Griffiths将第一个坐标解释为行数，第二个坐标解释为列数．当然，我们规范表达中是将$F^{\mu}$进行了转置，如果换一种转置思路就能得到类似的表达式了：
+
+\begin{equation}\label{EMFT_eq1}
+\begin{aligned}
+F^{\mu\nu}=&\pmat{
+\pmat{F^{00}\\ F^{10}\\ F^{20}\\ F^{30}}, 
+\pmat{F^{01}\\ F^{11}\\ F^{21}\\ F^{31}}, 
+\pmat{F^{02}\\ F^{12}\\ F^{22}\\ F^{32}}, 
+\pmat{F^{03}\\ F^{13}\\ F^{23}\\ F^{33}}
+}\Tr
+\\=&
+\pmat{
+\pmat{0\\ -E_x\\ -E_y\\ -E_z}, 
+\pmat{E_x\\ 0\\ -B_z\\ B_y}, 
+\pmat{E_y\\ B_z\\ 0\\ -B_x}, 
+\pmat{E_z\\ -B_y\\ B_x\\ 0}
+}\Tr
+\end{aligned}
+\end{equation}
+
+从这个例子也可以看出，嵌套矩阵和二阶矩阵并不是可以混为一谈的概念．为了方便，借用二阶矩阵来表示电磁张量当然没问题，但是要记住，这是一个不规范的表达．
+
+用反对称张量来表示电磁场的方式不止一种，还可以使用以下定义的对偶张量．
+
+\begin{definition}{电磁张量的对偶张量}
+电磁场张量$F^{\mu\nu}$的\textbf{对偶张量}，记为$G^{\mu\nu}$．如果$F^{\mu\nu}$在某基下的分量为$F^{01}=E_x, F^{02}=E_y, F^{03}=E_z, F^{23}=B_x, F^{31}=B_y, F^{12}=B_z$，那么有$G^{01}=B_x, G^{02}=B_y, G^{03}=B_z, G^{23}=-E_x, G^{31}=-E_y, G^{12}=-E_z$．
+\end{definition}
+
+对偶张量，用类似\autoref{EMFT_eq1} 的方式写出来，就是
+
+\begin{equation}
+\begin{aligned}
+G^{\mu\nu}=
+\pmat{
+\pmat{0\\ -B_x\\ -B_y\\ -B_z}, 
+\pmat{B_x\\ 0\\ E_z\\ -E_y}, 
+\pmat{B_y\\ -E_z\\ 0\\ E_x}, 
+\pmat{B_z\\ E_y\\ -E_x\\ 0}
+}\Tr
+\end{aligned}
+\end{equation}
+
+
+\subsection{电磁场张量的参考系变换}
+
+
+\subsection{闵可夫斯基时空中的电动力学}
+
+\subsubsection{场源的描述}
+
+\begin{definition}{电流密度4-矢量}
+在闵可夫斯基空间中，电流密度被表示为一个4-矢量$J^\mu$．如果在某观察者看来，电荷密度的分布是$\rho$，而电流密度的分布是$\pmat{J_x, J_y, J_z}\Tr$，那么在这个观察者的坐标系下，电流密度4-矢量的坐标就是$\pmat{\rho, J_x, J_y, J_z}\Tr$．
+\end{definition}
+
+由电流密度的定义，我们知道
+\begin{equation}
+\nabla\cdot\bvec{J}=-\frac{\partial\rho}{\partial t}
+\end{equation}
+即
+\begin{equation}
+\frac{\partial}{\partial x^i}J^i+\frac{\partial}{\partial t}\rho=0
+\end{equation}
+故得
+\begin{equation}
+\frac{\partial}{\partial x^\mu}J^\mu=0
+\end{equation}
+
+这就是电流密度的定义对电流密度4-矢量的限制条件．
+
+
+\subsubsection{四维形式的麦克斯韦方程组}
+
+利用四维形式的电磁场张量和电流密度4-矢量，我们可以将麦克斯韦方程组表示为以下两个方程
+\begin{equation}\label{EMFT_eq2}
+\leftgroup{
+    &\frac{\partial}{\partial x^\nu}F^{\mu\nu}=J^\mu\\
+    &\frac{\partial}{\partial x^\nu}G^{\mu\nu}=0
+}
+\end{equation}
+
+注意\autoref{EMFT_eq2} 中的真指标是$\mu$，赝指标是$\nu$．
+
+\autoref{EMFT_eq2} 的第一个方程是一个四维矢量方程，可以拆成一个标量方程和一个三维矢量方程，其中标量方程就是$\nabla\cdot\bvec{E}=\rho$，而矢量方程就是$\nabla\times\bvec{B}=\bvec{J}+\partial\bvec{E}/\partial t$． 
+
+类似地，\autoref{EMFT_eq2} 的第二个方程分别代表了$\nabla\cdot\bvec{B}=0$和$\nabla\times\bvec{E}=-\partial\bvec{B}/\partial t$．
+
+\subsubsection{电荷受力}
+
+对于一个带电荷$q$的粒子，如果它在某参考系下的4-速度为$U^\mu$，那么在电磁场$F^{\mu\nu}$中，该电荷受到的闵可夫斯基力为
+\begin{equation}\label{EMFT_eq3}
+K^{\mu}=qU_\mu F^{\mu\nu}
+\end{equation}
+注意，其中$U_\mu=U^ag_{a\mu}$，而$g_{ij}$是闵可夫斯基度规．换句话说，如果粒子在该参考系下的3-速度为$\pmat{v_x, v_y, v_z}\Tr$，那么有$U_\mu=\gamma\pmat{1, -v_x, -v_y, -v_z}$．
+
+同样，我们把\autoref{EMFT_eq3} 分为一个标量方程和一个三维向量方程．
+
+标量方程展开来就是
+\begin{equation}
+\begin{aligned}
+&\frac{\dd}{\dd\tau}(\gamma m)=\gamma \bvec{v}\cdot q\bvec{E}
+\end{aligned}
+\end{equation}
+它对应经典物理中的功能原理：$\dd E/\dd t=\bvec{v}\cdot\bvec{F}$．
+
+向量方程展开则得到的是
+\begin{equation}
+\begin{aligned}
+&\bvec{K}=q\gamma(\bvec{E}+\bvec{v}\times\bvec{B})\\
+\Rightarrow &\bvec{F}=q(\bvec{e}+\bvec{v}\times\bvec{B})
+\end{aligned}
+\end{equation}
+它对应经典物理中的动量原理，其中力是洛伦兹力．
+
+
+
+
+
+
