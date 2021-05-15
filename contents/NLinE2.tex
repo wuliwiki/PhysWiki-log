@@ -1,4 +1,5 @@
 % 数值解线性方程组（进阶）
+% 解线性方程组|python|LU 分解|pivoting|矩阵|误差
 
 \pentry{数值解线性方程组（入门）\upref{NLinEq}}
 
@@ -51,12 +52,12 @@ end
 
 \subsubsection{解决}
 
-那么，如果我们可以在每一步消元时，都让这个系数  $\frac{a_{i,k}}{a_{k,k}}$ 小于1，那么就可以保证机器误差至少不会由于上面的原因被放大．这也正是	\textbf{改进}办法可以成功的根本原因．因此交换了两行，使得这个消元系数由原来的  $10^{17}$  变成了  $10^{-17}$  ．这类方法被称作Pivoting（中文翻译似乎叫寻找主元法）．
+那么，如果我们可以在每一步消元时，都让这个系数  $\frac{a_{i,k}}{a_{k,k}}$ 小于1，那么就可以保证机器误差至少不会由于上面的原因被放大．这也正是	\textbf{改进}办法可以成功的根本原因．因此交换了两行，使得这个消元系数由原来的  $10^{17}$  变成了  $10^{-17}$  ．这类方法被称作 pivoting （中文翻译似乎叫寻找主元法）．
 
-当然，Pivoting 的策略有很多，包括完全 Pivoting 和部分 Pivoting．
+当然，pivoting 的策略有很多，包括完全 pivoting 和部分 pivoting
 
-\textbf{完全 Pivoting}，就是在第  $k$ 步开始以前，找到第  $k$  到  $n$  行第  $k$  到  $n$  列元素中最大的那一个，通过一次行交换和一次列交换将它和  $a_{k,k}$  互换，然后进行消元．
+\textbf{完全 pivoting}，就是在第  $k$ 步开始以前，找到第  $k$  到  $n$  行第  $k$  到  $n$  列元素中最大的那一个，通过一次行交换和一次列交换将它和  $a_{k,k}$  互换，然后进行消元．
 
-\textbf{部分 Pivoting}， 仅仅在第 $k$ 列或者第 $k$ 行中寻找最大的元素．
+\textbf{部分 pivoting}， 仅仅在第 $k$ 列或者第 $k$ 行中寻找最大的元素．
 
 事实上，这些方法已被广泛应用到了几乎所有软件包的 LU 分解中，有兴趣的同学可以去查看 Matlab 的 \verb|lu| 函数（\href{https://ww2.mathworks.cn/help/matlab/ref/lu.html}{文档}）和 scipy 的\verb|linalg.lu| 函数（\href{https://docs.scipy.org/doc/scipy/reference/generated/scipy.linalg.lu.html}{文档}）．它们不仅会求出 $L$ 和 $U$， 还会给出相应的 $P$ 矩阵．
