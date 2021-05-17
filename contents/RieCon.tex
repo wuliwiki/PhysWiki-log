@@ -1,0 +1,144 @@
+% 黎曼联络
+% 仿射联络|Riemannian connection|联络|挠率|度量|黎曼度量|Riemannian metric|流形|manifold
+
+\pentry{仿射联络\upref{affcon}，线性代数}
+
+\subsection{黎曼流形}
+
+\textbf{黎曼度量与伪黎曼度量}\upref{RiMetr}词条中包含了黎曼度量的概念，但其中使用了高度凝练的术语，对初学者并不友好，因此我们在这里顺便给出更通俗的定义．
+
+\begin{definition}{黎曼度量}
+给定一个实流形$M$，定义其上一个映射$g$，它将$M$上任意点处的两个切向量映射为一个数字．如果$g$满足对于任意向量$\bvec{x}, \bvec{y}, \bvec{z}$，都有：
+\begin{enumerate}
+\item \textbf{线性性}：$g(a\bvec{x}+b\bvec{z}, \bvec{y})=a\cdot g(\bvec{x}, \bvec{y})+b\cdot g(\bvec{z}, \bvec{y})$，其中$a, b$为任意实数；
+\item \textbf{对称性}：$g(\bvec{x}, \bvec{y})=g(\bvec{y}, \bvec{x})$；
+\item \textbf{正定性}：$g(\bvec{x}, \bvec{y})\geq 0$，且仅在$\bvec{x}=0$时有$g(\bvec{x}, \bvec{x})=0$．
+\end{enumerate}
+则称$g$是$M$上的一个\textbf{黎曼度量（Riemannian metric）}．
+\end{definition}
+
+从定义可知，黎曼度量实际上就是规定了“如何做内积”，进而得到“切向量的长度”、“切向量之间的角度”等概念．注意，黎曼度量只对同一个切空间中的向量有用，不同切空间的向量之间无法定义黎曼度量．
+
+如果在某个切点附近给定一个图（chart），那么黎曼度量可以表达为这个图中的一个矩阵$g_{ab}$，而该切点处两个切向量${x}^a, {y}^b$的内积就是$g_{ab}{x}^a{y}^b$．
+
+\textbf{对称性}意味着$g_{ab}\equiv g_{ba}$．如果将$g_{ab}$写成方阵\footnote{注意，按照我们的规范表达，$g_{ab}$应为“行矩阵的行矩阵”，所以这里说的方阵实际上是指把第$a$行$b$列的元素定义为$g_{ab}$．当然，反过来把第$b$行$a$列的元素定义为$g_{ab}$也行．}，那么它就是线性代数中讨论的\textbf{正定矩阵}．这就是\textbf{黎曼度量与伪黎曼度量}\upref{RiMetr}词条中“对称”与“正定”二词的含义．“截面”实际上就是指这是一个映射\footnote{“截面”一词，详见\textbf{向量丛和切丛}\upref{TanBun}词条．\textbf{黎曼度量与伪黎曼度量}\upref{RiMetr}词条中称黎曼度量为两个余切丛的张量积，每个余切向量场就是一个切向量场到实数域的映射，因此这个余切丛张量积中的每一个截面都是两个切向量场到实数域的映射．}．
+
+
+\begin{definition}{黎曼流形}
+给定实流形$M$．若在$M$上处处定义一个黎曼度量$g$，且在任意图中$g$的坐标都是光滑函数，则称$(M, g)$为一个\textbf{黎曼流形（Riemannian manifold）}．
+\end{definition}
+
+
+
+
+
+\subsection{黎曼联络}
+
+\begin{definition}{黎曼联络}
+给定黎曼流形$(M, g)$，如果$M$上有一个仿射联络$\nabla$，满足以下条件：
+\begin{enumerate}
+\item \textbf{挠率为零（无挠）}：对于任意光滑向量场$X, Y\in\mathfrak{X}(M)$，都有$\nabla_XY-\nabla_YX={[X, Y]}$；
+\item \textbf{与黎曼度量相容}：对于任意光滑向量场$X, Y, Z\in\mathfrak{X}(M)$，都有$Zg(X, Y)=g(\nabla_ZX, Y)+g(X, \nabla_ZY)$．
+\end{enumerate}
+则称$\nabla$是$(M, g)$上的一个\textbf{黎曼联络（Riemannian connection）}．
+\end{definition}
+
+黎曼联络中的“相容”条件，实际上就是方向导数对内积的Leibniz律．注意$g(X, Y)$是$M$上的一个光滑函数，而$Zg(X, Y)$就是对这个函数沿着$Z$的方向求方向导数的结果．我们已经知道，光滑函数的求导不依赖于图的选择，因此$Zg(X, Y)$不必表达成$\nabla_Zg(X, Y)$的形式．
+
+同一个流形上可能有多个不同的仿射联络，但是一旦确定了黎曼度量，则也就唯一确定了一个黎曼联络．我们通过一系列命题来讨论这件事．
+
+
+
+
+
+
+
+\begin{lemma}{}\label{RieCon_lem1}
+给定一个黎曼流形$(M, g)$，如果对于任意光滑向量场$Z$，都能计算出$g(X, Z)$，那么$X$唯一确定．
+\end{lemma}
+
+\textbf{证明}：
+
+假设存在向量场$X, Y$使得对于任意$Z$都有$g(X, Z)=g(Y, Z)$，那么由黎曼度量的\textbf{线性性}知，$g(X-Y, Z)\equiv 0$．
+
+由$Z$的\textbf{任意性}，取$Z=X-Y$，知$g(X-Y, X-Y)\equiv 0$．
+
+由黎曼度量的\textbf{正定性}，$X-Y\equiv 0$．
+
+\textbf{证毕}．
+
+
+
+
+
+
+\begin{theorem}{}\label{RieCon_the1}
+给定一个黎曼流形$(M, g)$，其上有一个仿射联络$\nabla$．如果有对于任意光滑切向量场$X, Y, Z\in\mathfrak{X}(M)$，有：
+\begin{enumerate}
+\item $\nabla_XY-\nabla_YX-[X, Y]=T$，其中$T\in \mathfrak{X}(M)$是一确定的光滑向量场；
+\item $Zg(X, Y)=g(\nabla_ZX, Y)+g(X, \nabla_ZY)$．
+\end{enumerate}
+则$\nabla$存在且唯一确定．
+\end{theorem}
+
+\textbf{证明}：
+
+只需要证明，根据已知条件，我们可以用黎曼度量$g$计算出$\nabla$即可．
+
+首先列出\textbf{两组}条件：
+
+\begin{equation}\label{RieCon_eq1}
+\nabla_XY-\nabla_YX-[X, Y]=T
+\end{equation}
+和
+\begin{equation}\label{RieCon_eq2}
+Xg(Y, Z)=g(\nabla_XY, Z)+g(Y, \nabla_XZ)
+\end{equation}
+
+\begin{equation}\label{RieCon_eq3}
+Yg(Z, X)=g(\nabla_YZ, X)+g(Z, \nabla_YX)
+\end{equation}
+
+\begin{equation}\label{RieCon_eq4}
+Zg(X, Y)=g(\nabla_ZX, Y)+g(X, \nabla_ZY)
+\end{equation}
+
+
+其中\autoref{RieCon_eq1} 是“给定挠率”条件，\autoref{RieCon_eq2} 、\autoref{RieCon_eq3} 和\autoref{RieCon_eq4} 是定理条件中的第二条，也就是“和黎曼度量相容”条件．
+
+将\autoref{RieCon_eq1} 代入\autoref{RieCon_eq3} ，可以得到
+\begin{equation}\label{RieCon_eq5}
+Yg(Z, X)=g(\nabla_YZ, X)+g(Z, \nabla_XY)-g(Z, [X, Y])
+\end{equation}
+
+计算（\autoref{RieCon_eq2} $-$ \autoref{RieCon_eq4} $+$ \autoref{RieCon_eq5} ）可得：
+\begin{equation}
+\begin{aligned}
+2g(\nabla_XY, Z)=&Xg(Y, Z)+Yg(X, Z)-Zg(X, Y)\\&-g(X, [Y, Z])+g(Y, [Z, X])+g(Z, [X, Y])\\&-g(T, Z)
+\end{aligned}
+\end{equation}
+
+由于$Z$的任意性，根据\autoref{RieCon_lem1} 可唯一确定$\nabla_XY$的值，也就相当于计算出了$\nabla_XY$了．
+
+\textbf{证毕}．
+
+\begin{corollary}{黎曼度量的存在与唯一性}
+从\autoref{RieCon_the1} 中取$T=0$，立刻得：黎曼流形上有且仅有一个黎曼联络．
+\end{corollary}
+
+\subsection{例子}
+
+\begin{example}{}
+欧几里得空间$\mathbb{R}^n$中，向量场的方向导数是一个黎曼联络．
+\end{example}
+
+
+\begin{exercise}{}
+设$S$是欧几里得空间$\mathbb{R}^n$中一个正则曲面，直接取$\mathbb{R}^n$中的内积作为$S$上的黎曼度量．定义$S$上的仿射联络$\nabla$为$\mathbb{R}^n$中求方向导数后投影到各$T_pS$上．证明$\nabla$是一个黎曼联络．
+\end{exercise}
+
+
+
+
+
+

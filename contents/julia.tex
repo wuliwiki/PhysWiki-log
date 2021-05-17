@@ -1,0 +1,116 @@
+% Julia 简介
+
+\begin{issues}
+\issueDraft
+\end{issues}
+
+许多语法和 Matlab 很像， 另一些和 C/C++ 很像， 如果你两种语言都已经会了， 那么 Julia 是十分简单的．
+
+安装方法
+\begin{lstlisting}[language=bash]
+sudo snap install Julia --classic
+\end{lstlisting}
+
+另外 Jupyter Notebook 也支持 Julia．
+
+\subsection{命令行}
+\begin{itemize}
+\item 为了区分， 系统的命令行叫做 terminal， 而 Julia 的命令行叫做 \textbf{REPL (read-eval-print-loop)}
+\item \verb|Ctrl + D| 退出或者 \verb|exit()| 退出
+\item \verb|ans| 变量和 Matlab 一样
+\item 用分号可以在一行中运行多个命令．
+\item 要情况 workspace 的变量只能重启
+\end{itemize}
+
+\begin{lstlisting}[language=Julia]
+println("hello world")
+\end{lstlisting}
+
+\subsection{计算器}
+\begin{itemize}
+\item \verb|b = 2a| 和 \verb|c = 2(b+3)| 都可以省略乘号
+\item \verb|2/3| 返回 \verb|Float64| 而不是整数
+\item \verb|2//3| 返回 \verb|Rational{Int64}|， 相当于用两个 \verb|Int64| 来表示分数， 分数之间的运算没有误差．
+\item 表示复数如 \verb|1 + 2im|， 相当于 \verb|ComplexF64(0,1)|．
+\end{itemize}
+
+\subsection{变量}
+\begin{itemize}
+\item 用 \verb|typeof()| 查看某个变量的类型
+\item 类型完全是动态的， 但可以在表达式或者函数定义后面加上 \verb|::类型| 限制变量类型
+\item 字符串用双引号， 单个字符用单引号
+\item 查看类型的最大和最小值如 \verb|typemax(Int64)|， \verb|typemin(Int64)|
+\item 标准库提供任意精度类型 \verb|BigInt| 和 \verb|BigFloat| （底层是 GMP）
+\item 变量名可以用 UTF-8， 在一些编辑器中可以用反斜杠 latex 命令打出对应的字符
+\item 注意和 C++ 不同， Julia 中的变量名只是 object 的标签
+\item \verb|//| 可以让整数除法返回 \verb|Rational| 类型， 例如 \verb|1//2 + (3//4)im| 的类型是 \verb|Complex{Rational{Int64}}|
+\end{itemize}
+
+\subsection{矩阵}
+\begin{itemize}
+\item 索引从 1 开始， 和 Matlab 一样
+\item 矩阵使用列主元排序， 和 Matlab 一样
+\item \verb|Array{T, 1}| 不区分行和列， 但是 \verb|Array{T, 2}| 可以区分行向量和列向量
+\item 矩阵切割如 \verb|Psi[:, j, :]|
+\item 矩阵尺寸 \verb|size(Psi, 维度)|
+\item 零向量矩阵 \verb|zeros(整数)| 或 \verb|zeros(整数, 整数)| 分别返回 \verb|Array{Float64,1}| 和 \verb|Array{Float64,2}|
+\item 64 位机器上， 整数 literal 的类型默认是 \verb|Int64|
+\item \verb|a = [1 2; 3 4]| 得到 \verb|Array{Float64,2}|
+\item \verb|a[:, 1]| 仍然得到 \verb|Array{Float64,2}|
+\item \verb|a[:, 1] = [3; 4]| 可以修改 \verb|a| 的值
+\item \verb|b = a[:, 1]| 却是复制数据．
+\item \verb|a| 作为参数传给函数是 pass by reference
+\item \verb|a[:, 1]| 作为参数传给函数是 pass by value， 如果需要 by reference， 使用 \verb|SubArray| 类
+\item \verb|view(a, :, 1)| 得到的类型是 \verb|SubArray|， 具体是…… \verb|SubArray{Int64,1,Array{Int64,2},Tuple{Base.Slice{Base.OneTo{Int64}},Int64},true}|
+\item \verb|SubArray| 不存数据， 可以用来给函数参数 pass by reference
+\item \verb|SubArray <: AbstractArray{T,Ndim} <: Any|
+\item \verb|Array{T,Ndim} <: DenseArray{T,Ndim} <: AbstractArray{T,Ndim} <: Any|
+\item 所以只要函数参数接受 \verb|AbstractArray|， 就可以同时接受 \verb|Array, SubArray|．
+\end{itemize}
+
+\verb|SubArray| 的结构
+\begin{lstlisting}[language=julia]
+struct SubArray{T,N,P,I,L} <: AbstractArray{T,N}
+    parent::P
+    indices::I
+    offset1::Int  # for linear indexing and pointer, only valid when L==true
+    stride1::Int  # used only for linear indexing
+    ...
+end
+\end{lstlisting}
+
+
+随机矩阵
+\begin{lstlisting}[language=Julia]
+rand(ComplexF64, Nr1, Nr2, Npw)
+\end{lstlisting}
+
+\subsection{脚本}
+\begin{itemize}
+\item 在系统命令行用 \verb|Julia <file>| 运行脚本， 用 \verb|Julia <file> <arg1> <arg2>| 给出 arguments
+\item 在 REPL 中运行脚本如 \verb|include("/Users/addis/Desktop/main.jl")|（路径不区分大小写）， 也支持反斜杠， 但要转义成 \verb|\\|
+\item 在文件中， 如果要确定当前文件是不是主文件， 用 \verb|abspath(PROGRAM_FILE) == @__FILE__|
+\end{itemize}
+
+\subsection{画图}
+第三方画图包 \verb|Plots|， 无需安装！
+\begin{lstlisting}[language=Julia]
+using Plots
+x = 1:10; y = rand(10); # These are the plotting data
+plot(x,y)
+\end{lstlisting}
+
+\subsection{常用函数}
+函数定义
+\begin{lstlisting}[language=Julia]
+function sphere_vol(r)
+    return 4/3*pi*r^3
+end
+\end{lstlisting}
+
+hash （把结果的 hash 输出可以保证计算过程不被优化掉）
+\begin{lstlisting}[language=Julia]
+hash(矩阵)
+\end{lstlisting}
+
+当前时间 \verb|time()|

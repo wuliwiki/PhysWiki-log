@@ -1,0 +1,252 @@
+% Julia 的数据类型
+
+\begin{issues}
+\issueDraft
+\end{issues}
+
+\subsection{变量类型}
+
+参考 \href{https://docs.julialang.org/en/v1/manual/types/#man-declared-types}{Julia 文档}．
+\begin{itemize}
+\item Julia 是动态类型的语言． 具体类型不能互相作为子类， 只能作为抽象类的子类．
+\item Julia 中所有的值都是对象． C++ 中 float, double 等不是对象， 只有 struct, class 定义的才是对象． Julia 中的对象没有成员函数．
+\item 可以在 literal、 变量、 表达式、 函数定义后面加上 \verb|::变量类型| 用于确认它具有该类型， 如果类型不符会产生异常． 如果 \verb|变量类型| 是抽象的， 那么表达式只需要是它的一个 sub type．
+\item 只有 “值” 有类型， 而不是变量具有类型． 变量只是个名字而已
+\item 抽象和具体的类都可以使用其他类作为参数
+\end{itemize}
+
+常见类型
+\verb|Int8|, \verb|UInt8|, \verb|Int16|, \verb|UInt16|, \verb|Int32|, \verb|UInt32|, \verb|Int64|, \verb|UInt64|, \verb|Int128|, \verb|UInt128|, \verb|Float16|, \verb|Float32|, \verb|Float64|, \verb|ComplexF16|, \verb|ComplexF32| 和 \verb|ComplexF64|
+
+\verb|BigInt| 是任意大小的整数， \verb|BigFloat| 是任意精度浮点数．
+
+\begin{lstlisting}[language=julia]
+julia> BigFloat(2.1) # 2.1 here is a Float64
+2.100000000000000088817...
+
+julia> BigFloat("2.1") # the closest BigFloat to 2.1
+2.099999999999999999999999999...99999999999999999999986
+
+julia> BigFloat("2.1", RoundUp)
+2.100000000000000000000000000...00000000000000000000021
+
+julia> BigFloat("2.1", RoundUp, precision=128)
+2.100000000...00000000000007
+\end{lstlisting}
+
+使用 \verb|typeof(var)| 来询问变量类型， 用 \verb|isa(var, type)| 来确定类型．
+
+\subsection{抽象类型}
+声明抽象类型
+\begin{lstlisting}[language=julia]
+abstract type 子类名 <: 母类名 end
+\end{lstlisting}
+例子
+\begin{lstlisting}[language=julia]
+abstract type Number end
+abstract type Real     <: Number end
+abstract type AbstractFloat <: Real end
+abstract type Integer  <: Real end
+abstract type Signed   <: Integer end
+abstract type Unsigned <: Integer end
+\end{lstlisting}
+最高级的抽象类是 \verb|Any|， 这里的 \verb|Number| 就是 \verb|Any| 的子类．
+
+\begin{figure}[ht]
+\centering
+\includegraphics[width=13cm]{./figures/JuType_1.png}
+\caption{Julia 自带类型结构} \label{JuType_fig1}
+\end{figure}
+以及
+\begin{lstlisting}[language=julia]
+Complex{T<:Real} <: Number
+Rational{T<:Integer} <: Real
+Irrational{sym} <: AbstractIrrational
+\end{lstlisting}
+
+
+\subsection{原始类型}
+\textbf{原始类型（primitive type）}是有 bit 组成的具体类型． Julia 可以自定义原始类型． 定义原始类型的格式为
+\begin{lstlisting}[language=julia]
+primitive type 类名 比特数 end
+primitive type 类名 <: 父类名 比特数 end
+\end{lstlisting}
+例如
+\begin{lstlisting}[language=julia]
+primitive type Float16 <: AbstractFloat 16 end
+primitive type Float32 <: AbstractFloat 32 end
+primitive type Float64 <: AbstractFloat 64 end
+
+primitive type Bool <: Integer 8 end
+primitive type Char <: AbstractChar 32 end
+
+primitive type Int8    <: Signed   8 end
+primitive type UInt8   <: Unsigned 8 end
+primitive type Int16   <: Signed   16 end
+primitive type UInt16  <: Unsigned 16 end
+primitive type Int32   <: Signed   32 end
+primitive type UInt32  <: Unsigned 32 end
+primitive type Int64   <: Signed   64 end
+primitive type UInt64  <: Unsigned 64 end
+primitive type Int128  <: Signed   128 end
+primitive type UInt128 <: Unsigned 128 end
+\end{lstlisting}
+
+\subsection{复合类型}
+\textbf{复合类型（composite）} 类似于 C++ 中的 \verb|struct|
+\begin{lstlisting}[language=julia]
+struct Foo
+           bar # 抽象类型是 Any
+           baz::Int
+           qux::Float64
+       end
+\end{lstlisting}
+创建该类型的对象
+\begin{lstlisting}[language=julia]
+foo = Foo("Hello, world.", 23, 1.5) # 叫做 constructor
+\end{lstlisting}
+查看成员名称用 \verb|fieldnames(Foo)|
+
+要获取成员的值， 用 \verb|foo.bar|, \verb|foo.baz|, \verb|foo.qux| 等． 用 \verb|struct| 声明的复合类型值在生成后就不能被改变． 如果 struct 里面有矩阵等， 那么矩阵元仍然是 mutable 的（没有 lower level const）．
+
+如果要支持成员改变， 那么用 \verb|mutable struct| 来声明即可． mutable struct 通常存在 heap 中而不是在 stack 中．
+
+\subsection{Type Unions}
+\begin{lstlisting}[language=julia]
+IntOrString = Union{Int,AbstractString}
+1 :: IntOrString
+"Hello!" :: IntOrString
+1.0 :: IntOrString # 异常
+\end{lstlisting}
+但是， 这和使用 \verb|<:| 有什么区别？ 一个类只可能有一个非 Union 的母类， 如果一个函数的参数想要支持两个母类不同的类怎么办？ 那就用 Union 即可．
+
+另外一个应用的例子是 \verb|Union{T, Nothing}| 作为函数参数， 这样这个参数就可以忽略了．
+
+\subsection{含参类型}
+
+复数类型 \verb|ComplexF16|, \verb|ComplexF32| 和 \verb|ComplexF64| 是 \verb|Complex{Float16}|, \verb|Complex{Float32}| 和 \verb|Complex{Float64}| 的别名． \verb|Complex| 就是一个\textbf{含参类型（parametric type）}
+
+例如
+\begin{lstlisting}[language=julia]
+julia> struct Point{T}
+           x::T
+           y::T
+       end
+\end{lstlisting}
+那么 \verb|Point{Float64}| 等都是合法的具体类型．
+
+\verb|Point| 本身是一个抽象类， 是其具体类的母类
+\begin{lstlisting}[language=julia]
+julia> Point{Float64} <: Point
+true
+julia> Point{AbstractString} <: Point
+true
+\end{lstlisting}
+\verb|<:| 相当于一个二元算符， 输出 \verb|Bool|．
+
+例子：
+\begin{lstlisting}[language=julia]
+function norm(p::Point{Real})
+    sqrt(p.x^2 + p.y^2)
+end
+\end{lstlisting}
+constructor
+\begin{lstlisting}[language=julia]
+p = Point{Float64}(1.0, 2.0)
+\end{lstlisting}
+
+\subsection{含参抽象类型}
+\textbf{含参抽象类型（Parametric Abstract Types）}
+例如
+\begin{lstlisting}[language=julia]
+abstract type Pointy{T} end
+struct Point{T} <: Pointy{T}
+           x::T
+           y::T
+       end
+\end{lstlisting}
+
+\subsection{Tuple Types}
+Tuple 是函数参数列表的抽象． 例如两个元素的 tuple type 类似于如下的含参 struct 类型
+\begin{lstlisting}[language=julia]
+struct Tuple2{A,B}
+    a::A
+    b::B
+end
+\end{lstlisting}
+例子
+\begin{lstlisting}[language=julia]
+julia> typeof((1,"foo",2.5))
+Tuple{Int64, String, Float64}
+\end{lstlisting}
+\begin{lstlisting}[language=julia]
+julia> Tuple{Int,AbstractString} <: Tuple{Real,Any}
+true
+
+julia> Tuple{Int,AbstractString} <: Tuple{Real,Real}
+false
+\end{lstlisting}
+
+\subsection{Vararg Tuple Types}
+
+\subsection{Named Tuple Types}
+
+\subsection{Parametric Primitive Types}
+
+\subsection{UnionAll Types}
+
+\subsection{Singleton types}
+
+\subsection{Type{T} type selectors}
+
+\subsection{Type Aliases}
+使用等号． 例如
+\begin{lstlisting}[language=julia]
+# 32-bit system:
+julia> UInt
+UInt32
+
+# 64-bit system:
+julia> UInt
+UInt64
+\end{lstlisting}
+实现方法
+\begin{lstlisting}[language=julia]
+This is accomplished via the following code in base/boot.jl:
+
+if Int === Int64
+    const UInt = UInt64
+else
+    const UInt = UInt32
+end
+\end{lstlisting}
+
+\subsection{Operations on Types}
+\begin{lstlisting}[language=julia]
+julia> isa(1, Int)
+true
+
+julia> typeof(Rational{Int})
+DataType
+
+julia> typeof(Union{Real,String})
+Union
+
+julia> typeof(DataType)
+DataType
+
+julia> typeof(Union)
+DataType
+
+julia> supertype(Float64)
+AbstractFloat
+
+julia> supertype(Number)
+Any
+
+julia> supertype(AbstractString)
+Any
+
+julia> supertype(Any)
+Any
+\end{lstlisting}

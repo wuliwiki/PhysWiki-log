@@ -26,7 +26,7 @@
 引用 subsection 如\autoref{Sample_sub16}， 又如\autoref{BiNor_sub5}~\upref{BiNor}．
 
 \subsection{公式}
-行内公式用单个美元符号， 两边最好有空格， 例如 $a^2+b^2=c^2$， 后面有标点符号的除外．
+行内公式用单个美元符号， 两边需要有空格， 例如 $a^2+b^2=c^2$， 后面有标点符号的除外．
 
 独立公式的 label 必须要按照 “词条标签\_eq编号” 的格式， 只有需要引用的公式才加标签， 标签编号无需和编译后的编号相同， 保证标签不重复即可． 图表的标签分别把 \verb|eq| 改成 \verb|fig| 和 \verb|tab| 即可，例题用 \verb|ex|， 习题用 \verb|exe|．但凡是有 \verb|\caption| 命令的，\verb|\label| 需要紧接其后． 事实上标签不建议手动添加， 可以用菜单栏上的按钮在引用时同时自动插入 \verb|\label| 和 \verb|\autoref|， 详见编辑器使用说明\upref{editor}．
 \begin{equation}\label{Sample_eq1}
@@ -58,6 +58,15 @@
 \begin{equation}
 \left. \pdv[2]{X}{x} \middle/ X + \pdv[2]{Y}{y} \middle/ Y + \pdv[2]{Z}{z} \middle/ Z  = \frac{1}{c^2}  \pdv[2]{T}{t} \middle/ T\right.
 \end{equation}
+左大括号用 \verb|cases| 环境， 如
+\begin{equation}
+\begin{cases}
+d+e+f = \int \frac{a}{b} \dd{x} &(a > 0)\\
+a+b = c &(b > 0)
+\end{cases}
+\end{equation}
+但是注意 \verb|cases| 环境里面的符号都是小尺寸的（与行内公式相同）， 且每行只能用一次 \verb|&|． 若需要全尺寸公式可以用下文定义的 \verb|\leftgroup| 命令．
+
 希腊字母如下
 \begin{equation}
 \begin{aligned}
@@ -124,14 +133,6 @@ MathJax 本身不支持 physics 宏包， 我们进行了一定的改进\footnot
 
 狄拉克符号（加 \verb|*| 号强制小尺寸）如 $\bra{a}, \ket{b}, \braket{a}, \braket{a}{b}, \mel{a}{Q}{b}$． 平均值（加 \verb|*| 号强制小尺寸）如 $\ev*{Q}, \ev{Q}{\psi}$．
 
-左大括号用 \verb|cases| 环境， 如
-\begin{equation}
-\begin{cases}
-d+e+f = \int \frac{a}{b} \dd{x} &(a > 0)\\
-a+b = c &(b > 0)
-\end{cases}
-\end{equation}
-
 \subsection{自定义的命令}
 本模板自定义的命令如下， 如果不使用， 要保证编译后效果相同．
 
@@ -167,7 +168,7 @@ k_3 &= f \qty( y_n + h\frac{k_2}{2}, t_n + \frac h2 ) \qquad
 \end{aligned}
 \end{equation}
 
-但是注意 \verb|cases| 环境里面的符号都是小尺寸的（与行内公式相同）， 且只能用一次 \verb|&|． 如果需要使用大尺寸， 可以用自定义的 \verb|\leftgroup{}| 命令
+自定义的 \verb|\leftgroup{}| 命令
 \begin{equation}
 \leftgroup{
 &d+e+f = \int \frac{a}{b} \dd{x} &&(a > 0)\\

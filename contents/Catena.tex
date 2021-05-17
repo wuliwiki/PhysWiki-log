@@ -1,6 +1,7 @@
 % 悬链线
+% 微分方程|受力分析|绳子|悬链线|力学|微积分
 
-\pentry{双曲函数\upref{TrigH}}
+\pentry{双曲函数\upref{TrigH}， 常微分方程\upref{ODE}}
 
 \footnote{参考 Wikipedia \href{https://en.wikipedia.org/wiki/Catenary}{相关页面}．}\textbf{悬链线（catenary）}在物理上是指一条粗细不计的、 质量均匀分布的柔软绳子两端悬挂在相同高度的两个点后（\autoref{Catena_fig1} ）当绳子在重力作用下达到平衡后形成的曲线．
 
@@ -9,15 +10,23 @@
 \includegraphics[width=7cm]{./figures/Catena_1.pdf}
 \caption{悬链线} \label{Catena_fig1}
 \end{figure}
+
 以绳子的最低点作为原点建立坐标系， 水平向右为 $x$ 轴， 竖直向上为 $y$ 轴． 那么悬链线可以用函数 $y(x)$ 来表示为
-\begin{equation}
+\begin{equation}\label{Catena_eq3}
 y(x) = \frac{1}{k}\cosh(kx)
 \end{equation}
-其中 $\cosh$ 是双曲余弦函数双曲函数\upref{TrigH}， 常数 $k$ 满足
+其中 $\cosh$ 是双曲余弦函数\upref{TrigH}， 常数 $k$ 满足
 \begin{equation}
-\sinh(\frac{ka}{2}) = \frac{L}{2}
+2\sinh(\frac{ka}{2}) = L
 \end{equation}
 其中 $a$ 是两个悬挂点之间的距离， $L$ 是绳子的总长度．
+
+\subsubsection{高度不相等的情况}
+\addTODO{图： 仿照图 1， 标记出 $a', h', L'$， 用虚线画出延长部分， 标记 $a$}
+假设悬挂点左低右高， 相距为 $a'$， 高度差为 $h' > 0$， 绳长为 $L'$． 悬链线仍然具有\autoref{Catena_eq3} 的形式， 我们希望根据 $a', h', L'$ 求出 $k$． 若假设如果把左边的悬链线补全到和右边一样的高度后， 绳两端相距为 $a$， 那么 $k$ 满足
+\begin{equation}\label{Catena_eq6}
+\qty(1-\E^{ka'})\qty(1-\E^{-ka'}) = k^2(h'^2 - L'^2)
+\end{equation}
 
 \subsection{推导}
 \pentry{曲线的长度\upref{CurLen}， 常微分方程\upref{ODE}}
@@ -54,3 +63,24 @@ y(x) = \frac{1}{k}\cosh(kx)
 \sinh(\frac{ka}{2}) = \frac{L}{2}
 \end{equation}
 这样就可以解出 $k$， 进而求出 $T$．
+
+\subsubsection{高度不相等的情况}
+根据高度差 $h'$ 的定义可得
+\begin{equation}\label{Catena_eq4}
+\frac{1}{k}\cosh(k\frac{a}{2}) - \frac{1}{k}\cosh\qty[k\qty(\frac{a}{2}-a')] = h'
+\end{equation}
+由绳长的约束得
+\begin{equation}
+L' = \int_{a/2-a'}^{a/2} \sqrt{1 + \dot y(x')^2} \dd{x'}
+\end{equation}
+把\autoref{Catena_eq3} 代入该式后化简得
+\begin{equation}\label{Catena_eq5}
+\frac{1}{k}\sinh(k\frac{a}{2}) - \frac{1}{k}\sinh\qty[k\qty(\frac{a}{2}-a')] = L'
+\end{equation}
+分别把 \autoref{Catena_eq4} 和\autoref{Catena_eq5} 相加和相减得
+\begin{equation}
+a = \frac{2}{k} \ln\frac{k(h'+L')}{1 - \E^{-ka'}}
+\qquad
+a = -\frac{2}{k} \ln\frac{k(h'-L')}{1 - \E^{ka'}}
+\end{equation}
+令两式右边相等得\autoref{Catena_eq6}．
