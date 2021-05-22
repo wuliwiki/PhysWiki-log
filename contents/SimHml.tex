@@ -1,0 +1,101 @@
+% 复形的单纯同调群
+% 同调|homology|复形|complex|单形|simplex|单纯形|复合形|边缘算子|链|链群|chain group|单纯同调
+
+
+\pentry{单纯剖分（三角剖分）\upref{Traglt}，自由群\upref{FreGrp}}
+
+
+\subsection{复形上的链}
+
+\begin{definition}{可定向单形}
+一个单形$[a_0, a_1, \cdots, a_n]$，根据下标是奇排列还是偶排列，可以分为两类．称这样划分出来的两个等价类，是单形的\textbf{有向单形（oriented simplex）}．
+
+偶排列的有向单形记为$a_0a_1a_2a_3\cdots a_n=a_1a_2a_0a_3\cdots a_n=\cdots$，奇排列的有向单形为$a_1a_0a_2a_3\cdots a_n=a_0a_2a_1a_3\cdots a_n=\cdots$．也就是说，有向单形的表示就是去掉单形表示的中括号．
+\end{definition}
+
+\begin{definition}{链群}
+有向单形作为字母，可以构造自由生成阿贝尔群．其中同一个单形的两个有向单形，互为彼此的逆元．
+
+称这样的自由生成阿贝尔群为一个\textbf{链群（chain group）}，它的元素被称为\textbf{链（chain）}．
+
+链群的运算用加法表示，于是也可以使用$\sum$符号．$n$个相同的有向单形$s^q$相加，记为$ns^q$．
+\end{definition}
+
+链群的名称很直观．考虑$1$-单形$[a_0, a_1]$的有向单形$a_0a_1$和$a_1a_0$，前者可以视为从点$a_0$到点$a_1$的一个箭头，后者可以视为点$a_1$到点$a_0$的一个箭头，而$[a_0, a_1]$就视为两点之间的线段，没有方向区分．这样一来，一维有向单形的链就是箭头的组合，其中首尾相连的部分就像链条一样，所以被称为链．也就是说，链群的群运算，就是链之间的“连接”运算，自然是交换的，因此链群被定义为有向单形的自由生成阿贝尔群．
+
+\begin{definition}{复形上的链群}
+给复形$K$的每一个单形都指定一个定向为正定向，则全体正定向的有向单形被称为$K$的\textbf{有向单形基本组}．另一定向的有向单形们，被表示为对应正定向单形的\textbf{相反数}，也就是前面加一个负号．
+
+$K$的全体$q$维有向单形的链群，称为$K$的$q$维链群，记为$C_q(K)$，其元素被称为$K$的$q$维链，简称$q$-链．
+\end{definition}
+
+以一维单形为例，如果$a_0a_1$被指定为正向单形，那么我们从此都把$a_1a_0$表示为$-a_0a_1$，方便计算和讨论．
+
+根据定义，复形上的每一条$q$-链，都可以表示为$\sum n_is^q_i$的形式，其中$s^q_i$是一个$q$维有向单形，$n_i$是整数．
+
+\subsection{边缘链和闭链}
+
+\begin{definition}{有向单形的顺向面和逆向面}
+给定有向单形$s^q=a_0a_1a_2a_3\cdots a_q$，用$\hat{a_i}$表示\textbf{缺失了}$a_i$，即$a_0\hat{a_1}a_2\cdots a_q=a_0a_2\cdots a_q$．
+
+那么称$t^{q-1}=(-1)^ia_0a_1\cdots\hat{a_i}\cdots a_q$为$s^q$的\textbf{顺向面}；相应地，$-t^{q-1}$为\textbf{逆向面}．
+\end{definition}
+
+我们举一个例子：考虑有向单形$a_0a_1a_2$，如\autoref{SimHml_fig1} 所示，我们可以把它看成一个“顺时针方向的三角形”．它的面都是箭头，其中$a_0a_1$，$a_1a_2$和$a_2a_0$是顺向面，$a_0a_2$，$a_2a_1$和$a_1a_0$是逆向面．
+
+\begin{figure}[ht]
+\centering
+\includegraphics[width=5cm]{./figures/SimHml_1.pdf}
+\caption{顺向面和逆向面的示意图．} \label{SimHml_fig1}
+\end{figure}
+
+有了顺向面和逆向面的概念之后，我们就可以比较方便地引入一个重要的映射，边缘算子．
+
+\begin{definition}{边缘算子}
+考虑复形$K$上的$q$维和$q-1$维链．
+
+单个有向单形$s^q$的所有顺向面之和，称为$s^q$的\textbf{边缘（border）}，记为$\partial_q S^q$．
+
+链$\sum n_is^q_i$的边缘，定义为$\partial_q \sum n_is^q_i=\sum n_i\partial_qs^q_i$．
+
+这样一来，$\partial_q$即为$C_q(K)\to C_{q-1}(K)$的一个\textbf{群同态}．
+\end{definition}
+
+边缘算子的一个核心性质由下面的\autoref{SimHml_lem1} 给出．这一点和\textbf{外导数}\upref{ExtDer}定义中的\textbf{幂零性}进行比较．
+
+\begin{lemma}{}\label{SimHml_lem1}
+任意复形$K$上，$\partial_q\circ\partial_{q+1}:C_{q+1}(K)\to C_{q-1}(K)\equiv 0$，即“边缘的边缘一定为空”．
+\end{lemma}
+
+\autoref{SimHml_lem1} 的证明留做习题．该引理成立的本质，是因为从一个$q+1$维有向单形中拿走两个点的先后顺序不同，会造成结果的正负号不同，导致互相抵消．这就是反对称性的威力．
+
+
+\subsection{复形上的单纯同调群}
+
+
+\begin{definition}{边缘链}
+在复形$K$上，如果一个$q-$链是一个$q+1$维链条的边缘，则称该$q-$链为一\textbf{边缘链（border chain）}，记为$B_q(K)$．
+\end{definition}
+
+由于边缘链就是边缘算子映射的结果，我们也可以把$q$维边缘链记为$\opn{Im}\partial_{q+1}$，即$\partial_{q+1}$的\textbf{像}．
+
+\begin{definition}{闭链}
+在复形$K$上，如果一个$q-$链$\sum n_is^q_i$满足$\partial_q\sum n_is^q_i=0$，其中$0$就是\textbf{空字}，那么称$\sum n_is^q_i$为一条\textbf{闭链（closed chain）}，记为$Z_q(K)$．
+\end{definition}
+
+\begin{example}{闭链的例子}
+如\autoref{SimHml_fig1} 所示，$a_0a_1+a_1a_2+a_2a_0$就是一条闭链，其边缘为$(a_1-a_0)+(a_2-a_1)+(a_0-a_2)=0$．
+\end{example}
+
+由\autoref{SimHml_lem1} ，边缘链一定是闭链，但闭链不一定是边缘链．反例可以考虑进行三角剖分后的环面上\textbf{并没有把环面分成两个不相交的区域}的闭链，它就不可能是任何链的边缘．
+
+容易证明，边缘链和闭链的集合都构成群，再考虑到链群是阿贝尔群，于是可知$B_q(K)\triangleleft Z_q(K)\triangleleft C_q(K)$．于是我们可以求商群\textbf{闭链群}$/$\textbf{边缘链群}，那就是复形上的单纯同调群．
+
+
+\begin{definition}{复形上的单纯同调群}
+给定复形$K$，则商群$H_q=\frac{Z_q(K)}{B_q(K)}$称为$K$上的$q$维\textbf{单纯同调群}．
+\end{definition}
+
+
+
+

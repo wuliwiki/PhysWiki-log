@@ -1,0 +1,95 @@
+% 单纯形与复形
+% 单纯形|simplex|复形|complex|几何|单纯剖分|三角剖分
+
+\pentry{连通性\upref{Topo3}}
+
+\subsection{单纯形}
+
+单纯形可以被认为是欧几里得空间中的一种子集，最初的概念来源于对拓扑空间的三角剖分，而单纯形就是剖分出来的每个“三角形”．这里之所以要打引号，是因为单纯形不仅仅指二维的三角形，也包括三维的锥形，以及从零维到任意维的拓展．
+
+\begin{definition}{几何无关点集}
+给定欧几里得空间中$n$个点构成的集合$\{\bvec{r}_i\}|_{i=0}^{n-1}$．任取一个$\bvec{r}_k$，我们以它为起点构造出若干向量$\bvec{v}_i=\bvec{r}_i-\bvec{r}_k$．
+
+如果集合$\{\bvec{v}_i\}_{i\not= k}$是一个\textbf{线性无关}向量组，那么我们说$\{\bvec{r}_i\}|_{i=0}^{n-1}$是一个\textbf{几何无关（geometrically independent）}点集．
+\end{definition}
+
+注意几何无关点集和线性无关向量组有一点点区别，那就是几何无关点集里多了一个“起点”的位置．这个起点没法简单地排除在外，因为任意一个点都可以做起点，没必要确定谁更特殊．
+
+\begin{definition}{单纯形}
+给定欧几里得空间中一个几何无关点集$A=\{\bvec{r}_i\}$．
+
+记$[\bvec{r}_0, \bvec{r}_1, \bvec{r}_2, \cdots, \bvec{r}_q]$为集合$\{\bvec{r}=\sum\lambda_i\bvec{r}_i|\lambda_i\geq 1, \sum\lambda_i=1\}$，称这个集合为由$A$张成的$q$维\textbf{单纯形（simplex）}，简称$q$-单形．
+
+\end{definition}
+
+比如说，三维空间里$3$个几何无关点$\bvec{r}_0, \bvec{r}_1, \bvec{r}_2$可以张成一个$2$-单形，就是以这三个点为顶点的平面三角形．类似地，一个$3$-单形就是一个三棱锥．一个$0$-单形就是一个单点集，即$[\bvec{r}]=\{\bvec{r}\}=\bvec{r}$．
+
+
+\begin{definition}{标准单纯形}
+由欧几里得空间中的原点和各坐标轴上距离原点为$1$的点构成的单纯形，称为\textbf{标准单纯形}．
+\end{definition}
+
+
+
+\begin{definition}{面}
+
+令$L$为单形$[\bvec{r}_0, \cdots, \bvec{r}_q]$，则对于$r\leq q$，$L$的一个$r$维面就是$\{\bvec{r}_0, \cdots, \bvec{r}_q\}$的一个$r$阶子集所张成的单形．
+
+\end{definition}
+
+
+\begin{definition}{规则相处}
+对于两个单形$A$和$B$，如果$A\cap B$既是$A$的面，也是$B$的面，那么称$A$和$B$是\textbf{规则相处}的．
+\end{definition}
+
+
+从上面的表述可以看出，尽管我们一开始引入单纯形概念的时候依赖于欧几里得空间的性质，是一种高度几何化的语言，但是表示时我们其实只关心是哪些顶点在构成一个单纯形．这就使得我们可以将单纯形的概念抽象化，将$[\bvec{r}_0, \cdots, \bvec{r}_q]$视作这$q+1$个元素的一个组合，忽视掉几何特征，从而可能代数地描述这些结构．从这个角度来说，单形的面就是其子集，而脱去了几何概念之后我们完全可以认为任何单形都是规则相处的——这也是几何语言里要强调规则相处的意义．
+
+\subsection{复合形}
+
+\begin{definition}{复合形}
+一个\textbf{复合形（complex）}，简称\textbf{复形}，是一个单纯形的集合，其中\textbf{各单形规则相处}，且每个单形的面也都是该复形的一个元素．
+
+一个复形中维度最大的单形的维度，称为该复形的维度．
+\end{definition}
+
+\begin{figure}[ht]
+\centering
+\includegraphics[width=4cm]{./figures/SimCom_1.pdf}
+\caption{复形的例子．这个复形是由一个三角形、四条线段和四个点构成的．} \label{SimCom_fig1}
+\end{figure}
+
+\begin{figure}[ht]
+\centering
+\includegraphics[width=5cm]{./figures/SimCom_2.pdf}
+\caption{复形的例子．这个复形是由一个三角形、四条线段和五个点构成的} \label{SimCom_fig2}
+\end{figure}
+
+
+\begin{example}{复形的例子}
+\begin{enumerate}
+\item 三维欧几里得空间中，集合$\{(x, 0)|x\in[0,1]\}, \{(0, y)|y\in[0, 1]\}, \{(0, 0)\}, \{(1, 0)\}, \{(0, 1)\}$所构成的集合，是一个复形．这个复形中一共有五个元素，分别是两条线段和三个点．
+\item 如图\autoref{SimCom_fig1} 所示，四个点$a, b, c, d$几何无关，并且构成了复形$\{[a], [b], [c], [d], [a, b], [a, c], [b, c], [a, d], [a, b, c]\}$．
+\item 如图\autoref{SimCom_fig2} 所示，五个点构成了复形$\{[a], [b], [c], [d], [e], [a, b], [a, c], [b, c], [d, e], [a, b, c]\}$．和上一个例子相比，这个复形是有两个连通分支的．
+\item \textbf{闭包复形} 一个单形$L$的全体面的集合，构成一个复形，称为$L$的\textbf{闭包复形}，记为$\opn{Cl} L$．
+\item \textbf{边缘复形} 一个单形$L$的全体真面\footnote{即作为真子集的面．}的集合，构成一个复形，称为$L$的\textbf{边缘复形}，记为$\opn{Bd} L$．
+\end{enumerate}
+\end{example}
+
+\begin{definition}{子复形}
+一个复形$K$的子集$J$如果还是一个复形，那么称$J$是$K$的\textbf{子复形}．
+\end{definition}
+
+\begin{definition}{骨架}
+$q$维复形$K$的全体维度\textbf{小于等于}$r$的单形之集合，称为$K$的$r$维骨架，记为$K^r$．
+\end{definition}
+
+
+
+
+
+
+
+
+
+
