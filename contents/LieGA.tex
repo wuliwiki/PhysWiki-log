@@ -1,0 +1,108 @@
+% 李群的李代数
+% 李群|李代数|Lie group|Lie algebra|切空间|tangent space|向量场|vector field|李括号|Lie bracket
+
+\pentry{李群\upref{LieGrp}，李代数\upref{LieAlg}}
+
+\subsection{光滑向量场}
+
+我们先回顾光滑向量场的两条性质．
+
+\begin{lemma}{提升映射与向量场的交换性}\label{LieGA_lem1}
+设$F:M\to N$是一个\textbf{微分同胚}，那么对于任意光滑函数$f\in C^{\infty}(M)$和光滑向量场$X\in\mathfrak{X}(M)$，都有：
+\begin{equation}
+(Xf)\circ F^{-1}=F_*(X)(f\circ F^{-1})
+\end{equation}
+其中$F_*:TM\to TN$是$F$的微分．
+\end{lemma}
+
+\autoref{LieGA_lem1} 根据“向量场对光滑函数作用”的定义就可以证出．
+
+\begin{lemma}{微分和李括号的交换性}\label{LieGA_lem2}
+设$F:M\to N$是一个\textbf{微分同胚}，那么对于任意光滑向量场$X, Y\in\mathfrak{X}(M)$，有$F_*([X, Y])=[F_*(X), F_*([X, Y])]$．
+\end{lemma}
+
+\textbf{证明}：
+
+我们只需要证明$F_*(XY)(f\circ F^{-1})=F_*(X)F_*(Y)(f\circ F^{-1})$对于任意$f\in C^{\infty}(M)$成立即可．
+
+由\autoref{LieGA_lem1} ，
+\begin{equation}
+\begin{aligned}
+F_*(XY)(f\circ F^{-1})&=(XYf)\circ F^{-1}\\
+&=F_*(X)(Yf\circ F^{-1})\\
+&=F_*(X)(F_*(Y)(f\circ F^{-1}))\\
+&=F_*(X)F_*(Y)(f\circ F^{-1})
+\end{aligned}
+\end{equation}
+
+\textbf{证毕}．
+
+\subsection{李群上的左不变向量场}
+
+\begin{definition}{左不变向量场}\label{LieGA_def1}
+给定李群$G$，对于任意$g\in G$，定义映射$l_g:G\to G$为\textbf{左平移映射}，即对于任意$p\in G$，都有$l_g(p)=gp$．
+
+根据李群的定义，$l_g$是一个光滑映射，因此可以求其微分$l_{g*}:TG\to TG$，该微分把一个$p\in G$处的切向量映射为$gp$处的切向量．
+
+如果存在$G$上的切向量场$X$\footnote{注意，只要求是切向量场，没有要求连续性，更没有要求光滑性．但是稍后我们会看到，所谓的左不变向量场必然是光滑的．}，使得对于\textbf{任意}$g\in G$，都有$l_g(X)=X$；换句话说，就是$l_{g*}(X_p)=X_g$，那么称$X$为$G$上的一个\textbf{左不变切向量场（left-invariant tangent vector field）}．
+\end{definition}
+
+\autoref{LieGA_def1} 已经直白地说明了，一个左不变向量场$X$唯一地由其在单位元处的取值$X_e$决定的，即$X_p=l_{p*}(X_e)$．同时，任意给定$X_e$，都能由此生成唯一的左不变向量场$X$．这样，左不变向量场的性质被其在单位元处的取值完全决定，单位元就好像存储了全息信息一样，局部就可以描述整体．
+
+\begin{theorem}{}
+左不变切向量场必为光滑向量场．
+\end{theorem}
+
+\textbf{证明}：
+
+考虑李群$G$上的左不变切向量场$X$．
+
+只需要证明对于任意$f\in C^{\infty}(G)$，$Xf$都是光滑函数即可．
+
+$Xf$在$p\in G$处的取值可以如下计算，其中取\textbf{光滑}道路$c:I\to G$使得$\frac{\dd}{\dd t}c(t)|_{t=0}=X_e$，$c(0)=e$，而$e$是$G$的单位元：
+\begin{equation}
+Xf|_p=X_pf=(l_{p*}eX_e)f=\frac{\dd}{\dd t}f(pc(t))|{t=0}
+\end{equation}
+
+我们只需要证明$\frac{\dd}{\dd t}f(pc(t))|{t=0}=\frac{\dd}{\dd t}f\circ l_{p*}\circ c|_{t=0}$作为一个$G\to \mathbb{R}$的函数是光滑的即可．注意，这是指$f(pc(t))$的自变量为$p$和$t$，限制在$t=0$处时$t$不再是自变量．
+
+为了证明上面这段话，我们又只需要证明$f\circ l_{p*}\circ c$是一个$G\times I\to \mathbb{R}$的光滑函数即可．
+
+由于$f, l_{p*}, c$都是光滑函数，其组合自然也是光滑函数，由此得证．
+
+\textbf{证毕}．
+
+接下来这条性质是引入李代数的关键．
+
+\begin{exercise}{}
+如果$X, Y$是左不变切向量场，那么$[X, Y]=XY-YX$也是．
+
+利用\autoref{LieGA_lem2} ，取左平移映射为所用的微分同胚，证明这一点．
+\end{exercise}
+
+
+\subsection{李群上的李代数}
+
+前两节的结论让我们知道了如下事实：李群$G$上全体左不变切向量场的集合，$L(G)$，构成了光滑向量场$\mathfrak{X}(G)$的一个子线性空间．同时，由于左不变切向量场可以被局部描述，我们可以通过单位元上的切空间$T_eG$来描述$L(G)$；换句话说，$T_eG$和$L(G)$是同构的．
+
+\begin{definition}{}
+如果$X, Y\in L(G)$是李群$G$上的两个左不变向量场，那么定义$X_e, Y_e\in T_eG$的李括号为
+\begin{equation}
+[X_e, Y_e]=[X, Y]_e
+\end{equation}
+\end{definition}
+
+%是否需要讨论矩阵李群上的李代数呢？恰好就是矩阵乘法的李代数．
+
+
+
+
+
+
+
+
+
+
+
+
+
