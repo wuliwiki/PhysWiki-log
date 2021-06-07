@@ -1,0 +1,159 @@
+% 联络形式与结构定理
+% 微分形式|联络|仿射联络|曲率|曲率形式|联络形式|connection form|differential form|1-form|curvature form|affine connection|1-形式
+
+\pentry{仿射联络（流形）\upref{affcon}， 爱因斯坦求和约定\upref{EinSum}， 微分形式\upref{Forms}}
+
+
+
+仿射联络的定义是高度抽象的，并不涉及具体的运算．我们在本节所介绍的是将来进行计算时非常关键的理论基础．计算的实例请参见\textbf{庞加莱半平面（微分几何计算实例）}\upref{PoiHP}．
+
+本词条中默认$(M, \nabla)$为一个带仿射联络的实流形．
+
+\subsection{联络形式}
+
+对于任意$p\in M$，取$p$的一个邻域$U\subseteq M$，使得存在一组光滑向量场$\{\uvec{e}_i\}$构成$C^{\infty}(U)$上的一组基．这就是说，$U$上的每个光滑向量场都可以表示为$f^i\uvec{e}_i$的形式，其中各$f^i$是$U$上的光滑函数．
+
+对于任意$X\in\mathfrak{X}(U)$，我们知道$\nabla_X\uvec{e}_i$也是一个光滑向量场，因此存在一组\textbf{光滑函数}$\omega^j_i(X)$，使得$\nabla_x\uvec{e}_i=\omega^j_i(X)\uvec{e}_j$．
+
+每个光滑函数$\omega^j_i(X)$都由$X$唯一确定，而且由$\nabla$的性质知，对于任意光滑函数$f$和$g$，光滑向量场$X, Y$，都有$\omega^j_i(fX+gY)=f\omega^j_i(X)+g\omega^j_i(Y)$．也就是说，$\omega^j_i$本身是$X$的\textbf{线性函数}，也就是$U$上的一个$1$-形式．
+
+我们将以上讨论所得出的$\omega^j_i$称为$\nabla$的\textbf{联络形式（connection form）}，$\omega^j_i$构成的方阵称为$\nabla$的\textbf{联络形式矩阵（metric of connection forms）}．
+
+\subsubsection{联络形式作为坐标分量}
+
+在线性代数中我们知道，一个向量（或者任何非零阶的张量）不能简单地理解为一组坐标数字，因为它的坐标具体取值取决于基的选择．而以上讨论的$\omega^j_i$虽然不是数字，却也有类似的性质，即“$\omega^j_i$具体是哪个$1$-形式，取决于选择哪一组$\{\uvec{e}_i\}$作为$\mathfrak{X}(M)$的基”．换句话说，$\omega^j_i(X)$具体是哪个函数，不仅取决于$X$，也取决于$\{\uvec{e}_i\}$的选择．
+
+因此，尽管$\omega_i^j$是微分形式，我们也把它看成一种坐标分量，即联络$\nabla$在基$\{\uvec{e}_i\}$下的\textbf{局部}坐标分量．之所以强调“局部”，是因为我们只能保证在$\mathfrak{X}(U)$中能找到一组基，而在整个$\mathfrak{X}(M)$中则不一定存在基\footnote{比如考虑$M=S^2$，即球面，那么球面上任何一个连续向量场总存在零点，因此对于任意\textbf{两个}光滑向量场$\{\uvec{e}_i\}$，在$\uvec{e}_1$的零点$p$处，仅靠$\uvec{e}_2$是无法张成整个切空间$T_pM$的，因此只要一个光滑向量场在$p$点的值和$\uvec{e}_2$不平行，这个场就没法被$\{\uvec{e}_i\}$表示出来．}．
+
+\subsubsection{联络的计算}
+
+如果我们知道了一个基下具体的联络形式，就可以计算出联络了．
+
+\begin{theorem}{}
+设$\{\uvec{e}_i\}$是$(M, \nabla)$上，某邻域$U$上的一组基．对于任意$S=a^i\uvec{e}_i, X\in\mathfrak{X}(U)$，可以计算出：
+\begin{equation}
+\nabla_XS=(Xa^j+a^i\omega^j_i(X))\uvec{e}_j
+\end{equation}
+\end{theorem}
+
+\textbf{证明}：
+
+\begin{equation}
+\begin{aligned}
+\nabla_XS&=\nabla_X(a^i\uvec{e}_i)\\
+&=(Xa^i)\uvec{e}_i+a^i\nabla_X\uvec{e}_i\\
+&=(Xa^j)\uvec{e}_j+a^i\nabla_X\uvec{e}_i\\
+&=(Xa^j)\uvec{e}_j+a^i\omega^j_i(X)\uvec{e}_j\\
+&=(Xa^j+a^i\omega^j_i(X))\uvec{e}_j
+\end{aligned}
+\end{equation}
+
+\textbf{证毕}．
+
+实际上，联络和联络形式并不一定是只能定义在流形的切丛上，它也可以定义在流形上的任何向量丛上．具体拓展请参见\textbf{联络（向量丛）}\upref{VecCon}词条．
+
+\subsection{曲率形式}
+
+曲率算子的定义为$R(X, Y)=\nabla_X\nabla_Y-\nabla_Y\nabla_X-\nabla_{[X, Y]}$．同样地，我们在$U\subseteq M$局部取$\{\uvec{e}_i\}$作为光滑向量场的基，定义出一组光滑函数$\Omega^j_i(X, Y)$，满足：
+\begin{equation}
+R(X, Y)\uvec{e}_i=\Omega^j_i(X, Y)\uvec{e}_j
+\end{equation}
+
+类似地，我们也可以证明$\Omega^j_i(X, Y)$是关于$X$和$Y$的一个线性函数，因此$\Omega^j_i$本身是一个$U$上的$2$-形式，称为$\nabla$的\textbf{曲率形式（curvature form）}．$\Omega^j_i$构成的方阵称为$\nabla$的\textbf{曲率形式矩阵（matrix of curvature forms）}．
+
+\begin{exercise}{}
+证明对于$U$上的任意光滑函数$a^i, b$和光滑向量场$X_i, Y$，有$R(a^iX_i, bY)=a^ibR(X_i, Y)$，再由$R$的反对称性，推论出$\Omega^j_i$本身是一个$2$-形式．
+\end{exercise}
+
+\subsection{挠率形式}
+
+
+类似联络形式和曲率形式，我们有挠率形式的定义：
+
+\begin{equation}
+T(X, Y)=\nabla_XY-\nabla_YX-[X, Y]:=\tau^i(X, Y)\uvec{e}_i
+\end{equation}
+
+此处各$\tau^i(X, Y)$依然是光滑函数，$\tau^i$则是$2$-形式，故同样可得\textbf{挠率形式（torsion form）}和\textbf{挠率形式矩阵（matrix of torsion forms）}的概念．
+
+
+
+
+
+\subsection{结构定理}
+
+进行和联络相关的计算时的关键工具包括接下来将介绍的\textbf{反对称定理}和\textbf{结构定理}．在介绍这两个定理前，我们还有最后一点铺垫，一个定义和一个定理．
+
+
+\begin{definition}{对偶基}
+设$\{\uvec{e}_i\}$是流形$M$上某邻域$U$上光滑向量场的基．定义一组$1$-形式$\{\theta^i\}$，使得$\uvec{e}_j\theta^i=\delta^i_j$处处成立，那么$\{\theta^i\}$构成$U$上全体$1$-形式的一组基，称为$\uvec{e}_i$的\textbf{对偶基（dual basis）}．
+\end{definition}
+
+
+
+\begin{theorem}{Schmidt标准化}
+$U$上的任何基都可以Schmidt标准化．
+\end{theorem}
+
+标准化的意思就是说，$<\uvec{e}_i, \uvec{e}_j>=\delta_{ij}$处处成立，也就是说在每一个点处$\{\uvec{e}_i\}$都构成一个标准正交基．Schmidt标准化的方法是线性空间中Schmidt标准化的直接推广，若不熟悉请见\textbf{施密特正交归一化}\upref{SmdtOt}词条．
+
+接下来，我们就可以摆出最为关键的两个定理了．
+
+\begin{theorem}{反对称定理}\label{ConFom_the1}
+若$\{\uvec{e}_i\}$是$\mathfrak{X}(U)$上的\textbf{标准正交基}，那么联络形式矩阵$\omega^j_i$必\textbf{反对称}，即$\omega^j_i=-\omega^i_j$．
+\end{theorem}
+
+\textbf{证明}：
+
+由于$<\uvec{e}_i, \uvec{e}_j>=\delta_{ij}$，且$\nabla_X\uvec{e}_i=\omega^j_i(X)\uvec{e}_j$，故
+
+\begin{equation}
+\begin{aligned}
+0=X<\uvec{e}_i, \uvec{e}_j>&=<\omega^k_i(X)\uvec{e}_k, \uvec{e}_j>+<\uvec{e}_i, \omega^k_j(X)\uvec{e}_k>\\
+&=\omega^k_i(X)\delta_{kj}+\delta_{ik}\omega^k_j(X)\\
+&=\omega^k_i(X)\delta_{k}^j+\delta_{i}^k\omega^k_j(X)\\
+&=\omega^j_i(X)+\omega^i_j(X)
+\end{aligned}
+\end{equation}
+
+\textbf{证毕}．
+
+
+
+\begin{theorem}{联络形式的结构定理\footnote{见\cite{GTM275}第85页的定理11.7．}}\label{ConFom_the2}
+\begin{enumerate}
+\item 曲率形式满足：$\Omega^i_j=\dd \omega^i_j+\omega^i_k\wedge\omega^k_j$；
+\item 挠率形式满足：$\tau^i=\dd\theta^i+\omega^i_j\wedge\theta^j$．
+\end{enumerate}
+
+其中对于$1-$形式$\alpha, \beta$，有
+\begin{equation}
+\alpha\wedge \beta(X, Y)=\alpha(X)\beta(Y)-\alpha(Y)\beta(X)
+\end{equation}
+和
+\begin{equation}
+\dd \alpha(X, Y)=X\alpha(Y)-Y\alpha(X)-\alpha([X, Y])
+\end{equation}
+
+我们还可以将微分形式局部表示为指标形式，比如在$U\subseteq M$上给定基$\{\uvec{e}_i\}$后，设$X=x^i\uvec{e}_i$和$Y=y^i\uvec{e}_i$，则将$\alpha$表示为$a_i$、$\beta$表示为$b_i$后有$\alpha(X)=a_ix^i$．此时还可以将$1$-形式的楔积和外微分表示为
+\begin{equation}
+a_i\wedge b_j=a_ib_j-a_jb_i
+\end{equation}
+和
+\begin{equation}
+(\dd \alpha)_{ij}=\nabla_{i}a_j-\nabla_{j}a_i
+\end{equation}
+\end{theorem}
+
+
+\addTODO{证明有些长，待补充．}
+
+
+
+
+
+
+
+
+
+

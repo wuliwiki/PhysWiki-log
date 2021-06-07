@@ -1,0 +1,165 @@
+% 庞加莱半平面（微分几何计算实例）
+% 微分几何|联络|Poincare Half-plane|度量|黎曼联络|黎曼度量|Riemannian connection|Riemannian metric
+
+庞加莱半平面是历史上非常重要的一个模型．众所周知，欧几里得几何学中有五条公理，其中第五条“过直线外一点有且仅有一条直线与已知直线垂直”非常冗长而且绕口，因此历史上一直有不少数学家致力于通过其它四条来推出第五条，也就是将第五公理变成一个定理．在GTM 275\cite{GTM275}中将这种尝试评价为“英雄式”的（heroic）．这是出于早期数学家们的一种朴素的直觉，即几何就应该是欧几里得空间那样子的，所以第五公理必须成立，哪怕只是作为定理．后来的人们逐渐意识到第五公理并不能被前四条所证明，并逐渐发展出了符合前四条但违反第五条的几何学，也就是所谓的\textbf{非欧几何学}．庞加莱半平面就是一个典型的例子，在本节的\textbf{测地线}小节我们会简单讨论这一点．
+
+本节的主要目的是以庞加莱半平面为例，演示如何进行具体的计算．
+
+\subsection{庞加莱半平面的定义}
+
+\begin{definition}{庞加莱半平面}
+设$\mathbb{H}^2=\{(x, y)\in \mathbb{R}^2|y>0\}$，即二维实平面的上半平面（不包含$x$轴）．在$\mathbb{H}^2$上定义\textbf{黎曼度量}$<*,*>$为，对于任意点$(x, y)\in \mathbb{H}^2$处的\textbf{切向量}$(a_i, b_i)\in T_{(x, y)}\mathbb{H}^2$，有
+\begin{equation}
+<(a_1, b_1), (a_2, b_2)>=\frac{a_1a_2+b_1b_2}{y^2}
+\end{equation}
+则$\mathbb{H}^2$配合该度量所得到的\textbf{黎曼流形}称为\textbf{庞加莱半平面（Poincaré half-plane）}．
+\end{definition}
+
+对于庞加莱半平面度量的描述，更简洁的表达是：$\frac{\dd x\otimes \dd x+ \dd x\otimes\dd x}{y^2}$．这里的$\dd x$是指$\mathbb{H}^2$上的函数$f(x, y)=x$的微分$\dd f$，同样地$\dd y$是$g(x, y)=y$的微分$\dd g$，它们都是$\mathbb{H}^2$上的$1$-形式，而$\otimes$是它们的张量积．
+
+如果用通常的$(x, y)\in \mathbb{R}^2$作为坐标来描述$\mathbb{H}^2$，那么在$\mathbb{R}^2$中的两个点，在保持$x$坐标不变时同步向$y$的正方向移动，那么它们的距离会缩短，并在$y$坐标趋于正无穷时距离趋于零．反过来，如果两个点的$y$坐标始终相同，$x$坐标不变，那么它们同步趋近于$x$轴时，彼此距离会趋近于正无穷．
+
+\subsection{联络形式}
+
+\pentry{联络形式与结构定理\upref{ConFom}}
+
+本小节先计算$\mathbb{H}^2$上的一个\textbf{黎曼}联络形式．
+
+由\textbf{反对称定理}\autoref{ConFom_the1}~\upref{ConFom}，计算联络形式时选标准正交基来进行计算最为方便，因为$\mathbb{H}^2$是二维的，标准正交基下的联络形式矩阵是一个反对称的$2$阶方阵，也就是说可以被一个分量唯一确定．
+
+第一步，选择标准正交基：
+\begin{equation}
+\begin{aligned}
+\uvec{e}_1=y\frac{\partial}{\partial x}\\
+\uvec{e}_2=y\frac{\partial}{\partial y}
+\end{aligned}
+\end{equation}
+
+第二步，计算对偶基：
+
+由于$\dd x\cdot \frac{\partial }{\partial x}=\dd y\cdot \frac{\partial}{\partial y}=1$，$\dd x\cdot \frac{\partial }{\partial y}=\dd y\cdot \frac{\partial}{\partial x}=0$，我们可以得到对应的对偶基：
+
+\begin{equation}\label{PoiHP_eq1}
+\begin{aligned}
+\theta^1=\frac{1}{y}\dd x\\
+\theta^2=\frac{1}{y}\dd y
+\end{aligned}
+\end{equation}
+
+因此我们可以计算出\footnote{注意外微分的幂零性，即$\mathrm{d}^2=0$．}：
+\begin{equation}\label{PoiHP_eq2}
+\begin{aligned}
+\dd\theta^1&=-\frac{1}{y^2}\dd y\wedge\dd x=\frac{1}{y^2}\dd x\wedge \dd y\\
+\dd\theta^2&=0
+\end{aligned}
+\end{equation}
+
+第三步，\textbf{设挠率}为$0$，应用\textbf{结构定理}（\autoref{ConFom_the2}~\upref{ConFom}）和\textbf{反对称定理}（\autoref{ConFom_the1}~\upref{ConFom}）得：
+
+\begin{equation}\label{PoiHP_eq3}
+\begin{aligned}
+&\dd\theta^1=-\omega^1_2\wedge\theta^2\\
+&\dd\theta^2=-\omega^2_1\wedge\theta^1=\omega^1_2\wedge\theta^1
+\end{aligned}
+\end{equation}
+
+
+
+最后，联立\autoref{PoiHP_eq1} 、\autoref{PoiHP_eq2} 和\autoref{PoiHP_eq3} ，得到：
+
+\begin{equation}
+\begin{aligned}
+-\omega^1_2\wedge\theta^2&=\theta^1\wedge\theta^2\\
+\omega^1_2\wedge\theta^1&=0
+\end{aligned}
+\end{equation}
+
+因此易得$\omega^1_2=-\theta^1=-\frac{1}{y}\dd x$．
+
+
+
+\subsection{高斯曲率}
+
+\pentry{高斯绝妙定理\upref{Egreg}}
+
+由\textbf{高斯绝妙定理}\upref{Egreg}，如果要计算$\mathbb{H}^2$的高斯曲率，我们就要去计算某个基下的曲率形式$\Omega^i_j$，从而有$K=\Omega^1_2(\uvec{e}_1, \uvec{e}_2)$．
+
+由上一小节计算出来的联络形式，结合\textbf{结构定理}\autoref{ConFom_the2}~\upref{ConFom}，注意$\omega^1_1=\omega^2_2=0$，我们有：
+\begin{equation}
+\begin{aligned}
+\Omega^1_2&=\dd \omega^1_2+\omega^1_k\wedge\omega^k_2\\
+&=\dd(-\frac{1}{y}\dd x)+\omega^1_1\wedge\omega^1_2+\omega^1_2\wedge\omega^2_2\\
+&=\frac{1}{y^2}\dd y\wedge\dd x\\
+&=-\frac{1}{y^2}\dd x\wedge \dd y
+\end{aligned}
+\end{equation}
+
+于是
+\begin{equation}
+\begin{aligned}
+K&=\Omega^1_2(y\frac{\partial}{\partial x}, y\frac{\partial}{\partial y})\\
+&=-\frac{1}{y^2}\dd x\wedge \dd y(y\frac{\partial}{\partial x}, y\frac{\partial}{\partial y})\\
+&=-\dd x\wedge \dd y(\frac{\partial}{\partial x}, \frac{\partial}{\partial y})\\
+&=-(\dd x\cdot \frac{\partial}{\partial x})(\dd y\cdot \frac{\partial}{\partial y})+(\dd y\cdot \frac{\partial}{\partial x})(\dd x\cdot \frac{\partial}{\partial y})\\
+&=-1+0\\
+&=-1
+\end{aligned}
+\end{equation}
+
+因此庞加莱半平面的高斯曲率处处为$-1$，是典型的罗巴切夫斯基几何．
+
+
+
+
+\subsection{Christoffel符号}
+\pentry{Christoffel符号\upref{CrstfS}}
+
+我们计算$\mathbb{H}^2$在通常的$(x, y)\in\mathbb{R}^2$坐标下的Christoffel符号．为方便计，将导子$\frac{\partial}{\partial_a}$简记为$\partial_a$．注意对于任何只依赖于$y$的函数$f(y)$，有$\uvec{e}_1f(y)=y\frac{\partial}{\partial x}f(y)=0$，因此$\nabla_{\uvec{e}_1}f(y)X=f(y)\nabla_{\uvec{e}_1}X$．
+
+\begin{equation}\label{PoiHP_eq5}
+\begin{aligned}
+\nabla_{\partial_x}\partial_x&=\nabla_{\frac{1}{y}\uvec{e}_1}\frac{1}{y}\uvec{e}_1\\
+&=\frac{1}{y^2}\nabla_{\uvec{e}_1}\uvec{e}_1\\
+&=\frac{1}{y^2}\omega^k_1(\uvec{e}_1)\uvec{e}_k\\
+&=\frac{1}{y^2}\omega^2_1(\uvec{e}_1)\uvec{e}_2\\
+&=\frac{1}{y^2}(\frac{1}{y}\dd x\cdot y\partial_x)\uvec{e}_2\\
+&=\frac{1}{y^2}\uvec{e}_2\\
+&=\frac{1}{y}\partial_y
+\end{aligned}
+\end{equation}
+
+类似地，可以计算出
+\begin{equation}
+\nabla_{\partial_x}\partial_y=-\frac{1}{y}\partial_x
+\end{equation}
+和
+\begin{equation}\label{PoiHP_eq4}
+\nabla_{\partial_y}\partial_y=-\frac{1}{y}\partial_x
+\end{equation}
+
+注意，在计算\autoref{PoiHP_eq4} 的时候会多出一项$\frac{1}{y}(\uvec{e}_2\frac{1}{y})\uvec{e}_2$，这是因为$\uvec{e}_2\frac{1}{y}$不为零，因此不能像\autoref{PoiHP_eq5} 一样直接略去．
+
+最后，由于我们假设挠率为零，故有$\Gamma^k_{ij}=\Gamma^k_{ji}$，因此无需重复计算$\nabla_{\partial_y}\partial_x$．
+
+由Christoffel符号的定义，$\nabla_{\partial_i}\partial_j=\Gamma^k_{ij}\partial_k$，就得到了Christoffel符号的每一个分量，列举如下表格：
+\begin{table}[ht]
+\centering
+\caption{庞加莱半平面在通常的$\mathbb{R}^2$坐标系中的Christoffel符号}\label{PoiHP_tab1}
+\begin{tabular}{|l|c|c|c|}
+\hline
+ & 1 & 2 \\
+\hline
+11 & 0 & $\frac{1}{y}$ \\
+\hline
+12 & $-\frac{1}{y}$ & 0 \\
+\hline
+21 & $-\frac{1}{y}$ & 0 \\
+\hline
+22 & 0 & $-\frac{1}{y}$ \\
+\hline
+\end{tabular}
+\end{table}
+
+
+
+
