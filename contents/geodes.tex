@@ -1,0 +1,96 @@
+% 测地线
+% geodesic|联络|直线|匀速直线运动|相对论|流形|manifold|connection|Christoffel 符号|测地线方程
+
+\pentry{Christoffel符号\upref{CrstfS}}
+
+\subsection{基本概念}
+
+测地线是欧几里得空间中匀速直线运动的推广，而不仅仅是直线的推广．
+
+在欧几里得空间中，如何确定一个匀速直线运动呢？当然是速度向量保持不变的运动．什么叫速度向量保持不变呢？那当然是速度随时间求导的结果为零咯．由于速度是一种切向量，而随时间求导就是沿着运动轨迹的协变导数，因此我们自然可以将匀速直线运动的概念推广到任意带仿射联络的流形上．
+
+\begin{definition}{测地线}
+令$(M, \nabla)$是一个带仿射联络的流形．对于参数曲线$c:I\to M$，它每个点上的切向量$T(t)=\frac{\dd}{\dd t}c(t)$构成一个沿$c$的切向量场．如果协变导数$\frac{D}{\dd t}T(t)$处处为零，那么我们说这条参数曲线$c$是一条\textbf{测地线（geodesic）}．
+\end{definition}
+
+\begin{theorem}{匀速性}\label{geodes_the1}
+如果$(M, \nabla, <*, *>)$是一个带黎曼度量的黎曼流形，$c:I\to M$是其上一条测地线，那么$\sqrt{<c'(t), c'(t)>}$是一个常数．
+
+定义$\abs{c'(t)}=\sqrt{<c'(t), c'(t)>}$为该测地线的\textbf{速率（speed）}．
+\end{theorem}
+
+\autoref{geodes_the1} 的证明很简单，只需要应用协变导数对黎曼度量的Leibniz律（相容性）和测地线的定义即可．
+
+
+
+如果$c:I\to M$是一个测地线，而$u:I\to I$是一个光滑函数，那么$c(u(t))=c\circ u$就被称作$c(t)=c$的一个\textbf{重新参数化（reparametrization）}．如果已知$c$是一个测地线，那么什么情况下重新参数化的$c\circ u$是一个测地线呢？答案很简单，$u$必须是一个线性函数，即存在实数$a, b$使得$u(t)=at+b$．证明需要用到测地线的定义和协变导数的链式法则，我们留作习题．
+
+\begin{exercise}{测地线的重新参数化}
+令$c:I\to M$是一个测地线，而$u:I\to I$是一个光滑函数，证明$c\circ u$是一个测地线\textbf{当且仅当}存在实数$a, b$使得$u(t)=at+b$．
+\end{exercise}
+
+\subsection{测地线方程}
+
+实践中，比如广义相对论中，我们更关心的是在具体的图中，该如何计算测地线．
+
+考虑一个带仿射联络的流形$(M, \nabla)$，和它的一个图$(U, \varphi)$．令$c:I\to U$是$M$上的一条曲线，那么$\varphi\circ c$就是欧几里得空间$\varphi(U)$上的一条曲线．由于是欧几里得空间，我们可以用坐标来表示这个曲线：$\varphi(c(t))=y^i(t)$，其中各$y^i$是区间$I$上的实函数．
+
+
+这样一来，在$M$上就有$c$的切向量：
+\begin{equation}
+\begin{aligned}
+T(t)=c'(t)&=\frac{D}{\dd t}c(t)=\varphi^{-1}(\frac{\dd}{\dd t}\varphi(c(t)))\\
+&=\varphi^{-1}(\dot{y}^i(t))\\
+&=\dot{y}^i\partial_i|_{c(t)}
+\end{aligned}
+\end{equation}
+
+因此可以求出
+\begin{equation}
+\begin{aligned}
+\frac{D}{\dd t}T(t)&=\frac{D}{\dd t}(\dot{y}^i(t)\partial_i)\\
+&=\ddot{y}^i(t)\partial_i+\dot{y}^i\nabla_{c'(t)}\partial_i\\
+&=\ddot{y}^i\partial_i+\dot{y}^i\nabla_{c'(t)}\partial_i\\
+&=\ddot{y}^i\partial_i+\dot{y}^i\nabla_{\dot{y}^j\partial_j}\partial_i\\
+&=\ddot{y}^i\partial_i+\dot{y}^i\dot{y}^j\nabla_{\partial_j}\partial_i\\
+&=\ddot{y}^k\partial_k+\dot{y}^i\dot{y}^j\Gamma^k_{ji}\partial_k\\
+&=0
+\end{aligned}
+\end{equation}
+
+计算中要注意，$y^i(t)$是实数区间上的函数，不是流形上的函数，因此对它求协变导数就是关于$t$求导．$\dot{y}^i$同理．
+
+由于各$\partial_k$的独立性，我们就得到测地线必须满足的性质：
+\begin{equation}\label{geodes_eq1}
+\ddot{y}^k+\dot{y}^i\dot{y}^j\Gamma^k_{ji}=0
+\end{equation}
+
+\autoref{geodes_eq1} 就是给定图中的\textbf{测地线方程}
+
+
+\subsection{测地线的存在性}
+
+\autoref{geodes_eq1} 是一个欧几里得空间中的常微分方程．由常微分方程中解的存在与唯一性定理可得如下定理．
+
+\begin{theorem}{测地线的存在与唯一性}
+令$(M, \nabla)$是一个带仿射联络的流形．对于任意一点$p\in M$，任意给定一个切向量$\bvec{v}_p\in T_pM$，则存在唯一一条测地线$c:I\to M$，使得$c(0)=p$且$c'(0)=\bvec{v}_p$．
+\end{theorem}
+
+定理中任意给定一个切向量，其实是确定了测地线的两个初始条件，即方向与速率．这里的“速率”并非具体的速率，除非再在$M$上定义了与$\nabla$相容的黎曼度量．
+
+保联络微分同胚将一个流形上的联络结构都不变地移动到另一个流形上，因此我们很自然地就有
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
