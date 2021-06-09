@@ -1,0 +1,101 @@
+% 柱坐标与直角坐标的转换
+% 柱坐标|直角坐标|转换
+
+
+\pentry{柱坐标系\upref{Cylin}}
+当我们讨论柱坐标和直角坐标的转换时， 通常令两个原点和 $z$ 轴重合， $\theta = 0$， $z = 0$ 为 $x$ 轴的正方向， $\theta = \pi/2$， $z = 0$ 为 $y$ 轴的正方向． 这时两种坐标之间的变换关系为．
+\begin{equation}\label{CyCar_eq1}
+\begin{cases}
+x = r\cos \theta \\
+y = r\sin \theta  \\
+z = z 
+\end{cases}
+\end{equation}
+
+\begin{equation}\label{CyCar_eq2}
+\begin{cases}
+r = \sqrt{x^2+y^2} \\
+\theta = \Arctan(y,x)  \\
+z = z 
+\end{cases}
+\end{equation}
+其中 $\opn{Arctan}$ 是四象限反正切函数\upref{Arctan}， 也记为 $\opn{atan2}$． 注意根据\autoref{CyCar_eq1} ， 同一个直角坐标可以对应不同的极坐标， 例如将 $\theta$ 增加 $2\pi$ 的整数倍， 直角坐标不变． 但根据\autoref{CyCar_eq2} ， 我们可以找到两种坐标间的一一对应\upref{Set}关系．
+
+
+\subsection{矢量变换}
+两组基底之间的变换关系为
+\begin{equation}\label{CyCar_eq3}
+\begin{cases}
+\uvec r = R_{11}\uvec x + R_{12}\uvec y + R_{13}\uvec z\\
+\uvec \theta = R_{21}\uvec x + R_{22}\uvec y + R_{23}\uvec z\\
+\uvec z = R_{31}\uvec x + R_{32}\uvec y + R_{33}\uvec z
+\end{cases}
+\end{equation}
+\begin{equation}\label{CyCar_eq4}
+\begin{cases}
+\uvec x = R_{11} \uvec r + R_{21} \uvec \theta  + R_{31} \uvec z \\
+\uvec y = R_{12} \uvec r + R_{22} \uvec \theta  + R_{32} \uvec z \\
+\uvec z = R_{13} \uvec r + R_{23} \uvec \theta  + R_{33} \uvec z
+\end{cases}
+\end{equation}
+其中 $\mat R$ 是关于角度 $\theta$ 的三维旋转矩阵\upref{Rot3D}
+\begin{equation}
+\mat R = \pmat{
+    \cos\theta & \sin\theta & 0\\
+    -\sin\theta & \cos\theta & 0\\
+    0 & 0 & 1
+}
+\end{equation}
+
+若任意矢量 $\bvec v$ 在直角坐标系和球坐标系中分别表示为
+\begin{equation}\label{CyCar_eq6}
+\bvec v = v_x \uvec x + v_y \uvec y + v_z \uvec z
+\end{equation}
+\begin{equation}\label{CyCar_eq5}
+\bvec v = v_r \uvec r + v_\theta \uvec \theta + v_z \uvec z
+\end{equation}
+则坐标变换关系可以用矩阵乘法表示
+\begin{equation}\label{CyCar_eq8}
+\pmat{v_r \\ v_\theta \\ v_z}
+= \mat R \pmat{v_x \\ v_y \\ v_z}
+\end{equation}
+\begin{equation}\label{CyCar_eq7}
+\pmat{v_x \\ v_y \\ v_z}
+= \mat R\Tr \pmat{v_r \\ v_\theta \\ v_z}
+\end{equation}
+\subsection{推导}
+空间中一点 $P$ 的位矢在 $xy$ 平面的分量为 $r$． 其可以进而分解成 $x$ 分量 和 $y$ 分量  $x = r\cos \theta$，  $y = r\sin \theta$， 而点 $P$ 垂直分量即为 $z$ ，这就得到了\autoref{CyCar_eq1} ．有了\autoref{CyCar_eq1} 中的三条关系，就可以很容易解出\autoref{CyCar_eq2} 中的三条关系．
+
+现在推导变换关系\autoref{CyCar_eq3} ．由于 $\uvec r,\uvec \theta ,\uvec z $ 都是关于 $(r, \theta, z)$ 的函数，所以在考察一点 $(r, \theta, z)$ 时， $\uvec r$ 的柱坐标是 $(1, \theta, 0)$，  根据\autoref{CyCar_eq1} 变换到直角坐标为
+\begin{equation}
+(\cos \theta,\,\sin \theta,\,0)
+\end{equation}
+写成矢量的形式，就是
+ \begin{equation}
+\uvec r = \cos \theta \,\uvec x + \sin \theta \,\uvec y 
+\end{equation}
+至于\autoref{CyCar_eq3} 的第二条式子，在同一个柱坐标 $(r,\theta ,z)$ 处， $\uvec \theta $ 的柱坐标为 $(1, \theta + \pi /2, 0)$， 根据\autoref{CyCar_eq1} 变换到直角坐标再化简就得到直角坐标和对应的矢量形式为
+\begin{equation}
+(-\sin \theta ,\,\cos \theta , \,0)
+\end{equation}
+\begin{equation}
+\uvec \theta  = -\sin \theta  \,\uvec x + \cos \theta \,\uvec y
+\end{equation}
+对于 $\uvec z$ ，容易看出
+\begin{equation}
+\uvec z = \uvec z
+\end{equation}
+将基底变换\autoref{CyCar_eq3}  和\autoref{CyCar_eq4} 分别代入\autoref{CyCar_eq5}  和\autoref{CyCar_eq6} 得坐标变换\autoref{CyCar_eq7} 和\autoref{CyCar_eq8} ．
+\subsection{两方向的夹角}
+\pentry{内积\upref{Dot}}
+若已知柱坐标系中两个方向分别为 $(\sqrt{1-z_1^2}, \theta_1, z_1)$ 和 $(\sqrt{1-z_2^2}, \theta_2, z_2)$， 如何求它们之间的夹角 $\alpha$ 呢？ 我们可以先计算两个单位矢量的直角坐标， 然后对它们进行内积即可得到两矢量夹角的余弦值． 由\autoref{CyCar_eq1}， 两矢量的直角坐标分别为
+\begin{equation}
+(\sqrt{1-z_1^2}\cos\theta_1,\ \sqrt{1-z_1^2}\sin\theta_1,\ z_1)
+\qquad
+(\sqrt{1-z_2^2}\cos\theta_2,\ \sqrt{1-z_2^2}\sin\theta_2,\ z_2)
+\end{equation}
+利用三角恒等式（\autoref{TriEqv_eq2}~\upref{TriEqv}）， 得
+\begin{equation}\ali{
+\cos\alpha &= \sqrt{1-z_1^2}\sqrt{1-z_2^2}\cos\theta_1\cos\theta_2 +  \sqrt{1-z_1^2}\sqrt{1-z_2^2}\sin\theta_1\sin\theta_2 + z_1z_2\\
+&=\sqrt{(1-z_1^2)(1-z_2^2)}\cos\theta_1\cos\theta_2 +  \sqrt{(1-z_1^2)(1-z_2^2)}\sin\theta_1\sin\theta_2 + z_1z_2
+}\end{equation}
