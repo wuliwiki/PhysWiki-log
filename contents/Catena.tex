@@ -13,11 +13,11 @@
 
 以绳子的最低点作为原点建立坐标系， 水平向右为 $x$ 轴， 竖直向上为 $y$ 轴． 那么悬链线可以用函数 $y(x)$ 来表示为
 \begin{equation}\label{Catena_eq3}
-y(x) = \frac{1}{k}\cosh(kx)
+y(x) = \frac{1}{k}[\cosh(kx)-1]
 \end{equation}
 其中 $\cosh$ 是双曲余弦函数\upref{TrigH}， 常数 $k$ 满足
 \begin{equation}
-2\sinh(\frac{ka}{2}) = L
+\frac{2}{k}\sinh(\frac{ka}{2}) = L
 \end{equation}
 其中 $a$ 是两个悬挂点之间的距离， $L$ 是绳子的总长度．
 
@@ -34,10 +34,95 @@ y(x) = \frac{1}{k}\cosh(kx)
 注意左边的悬挂点未必需要在最低点的左边． 另外根据\autoref{Catena_eq6} 可以验证当 $L' = h'$ 时， $a' = 0$．
 
 \subsection{推导}
-\pentry{曲线的长度\upref{CurLen}， 常微分方程\upref{ODE}}
+\pentry{曲线的长度\upref{CurLen}， 常微分方程\upref{ODE}，最小作用量 哈密顿原理\upref{HamPrn}}
 
-\addTODO{是否可以用欧拉—拉格朗日方程推出？}
+\subsubsection{欧拉-拉格朗日方程法}
+在该问题中，悬挂点是固定的两个点，绳子可看成经过这两个点的总长为 $L$ 的曲线，由能量最低原理，我们知道绳子对应曲线的形状将使得绳子的质心最低，曲线可用一个函数表示，那么问题就变成求这样一个函数，使得绳子质心最低，这显然是一个极值问题，更明确的说，是一个求泛函极值的问题．求解这样的问题的普遍方法为变分法．
 
+我们以地面水平方向为 $x$ 轴， 两悬挂点水平方向中垂线为 $y$ 轴，则两悬挂点 $x$ 坐标分别为 $-\frac{a}{2}$ 和 $\frac{a}{2}$，绳子对应的曲线函数为 $y(x)$，绳长 $L$，质量为 $m$，则其质心的 $y$ 坐标为
+\begin{equation}
+y_C=\frac{\int_{0}^{L}y(\frac{m}{L}\dd s)}{m}=\int_{-\frac{a}{2}}^{\frac{a}{2}} \frac{y\sqrt{1+y'^2}}{L}\dd x
+\end{equation}
+现在，问题就转化为求 $y(x)$，使得 $y_C$最小．这个问题可用欧拉-拉格朗日方程\autoref{Lagrng_eq1}~\upref{Lagrng}求解．
+
+注意，上式的被积函数是 $y,y'$ 的函数，而与 $x$ 无关，直接用拉格朗日方程不好求解．这时候我们要先对被积函数变一下形．以$F(y,y')$表示被积函数： 
+\begin{equation}\label{Catena_eq05}
+F(y,y')=\frac{y\sqrt{1+y'^2}}{L}
+\end{equation}
+我们将自变数$x$更换为$y$，则 $x$ 是 $y$ 的函数．于是我们的问题就变成求积分
+\begin{equation}
+y_C=\int_{-\frac{a}{2}}^{\frac{a}{2}} F(y,\frac{1}{\dv {x}{y} })\dv{x}{y}\dd y
+\end{equation}
+的极值曲线，令 
+\begin{equation}\label{Catena_eq9}
+x'=\dv{x}{y},\quad \phi(y,x')=x'F(y,\frac{1}{x'})
+\end{equation}
+则
+\begin{equation}
+y_C=\int_{-\frac{a}{2}}^{\frac{a}{2}} \phi(y,x')\dd y
+\end{equation}
+
+现在，函数 $\phi(y,x')$ 包含自变量 $y$，我们就可以使用拉格朗日方程求解．回想拉格朗日方程的推导，不难看出，$\phi(y,x')$代表拉格朗日函数$L(t,q,q')$, $y$代表拉格朗日方程中的 $t$，而$x,x'$ 分别代表 $q,q'$．代入拉格朗日方程\autoref{Lagrng_eq1}~\upref{Lagrng}，由于 $\phi(y,x')$ 不显含 $x$，有
+\begin{equation}
+\pdv{\phi}{x'}=C
+\end{equation}
+其中 $C$ 为常数．代入\autoref{Catena_eq9} 
+\begin{equation}
+F(y,y')-y'F_{y'}(y,y')=C
+\end{equation}
+代入\autoref{Catena_eq05}，得
+\begin{equation}
+\frac{y\sqrt{1+y'^2}}{L}-\frac{yy'^2}{L\sqrt{1+y'^2}}=C
+\end{equation}
+整理得
+\begin{equation}
+y'=\frac{\sqrt{y^2-(CL)^2}}{CL}
+\end{equation}
+即
+\begin{equation}
+\frac{\dd y}{\sqrt{y^2-(CL)^2}}=\frac{\dd x}{CL}
+\end{equation}
+两边积分，右边为
+\begin{equation}
+\frac{x}{CL}+C'
+\end{equation}
+其中 $C'$为常数．
+左边，令 $y=CL\cosh t $，易得左边为
+\begin{equation}
+t+C''
+\end{equation}
+其中，$C''$为常数．于是
+\begin{equation}
+t+C''=\frac{x}{CL}+C'\Rightarrow t=\frac{x}{CL}+C_0
+\end{equation}
+其中，$C_0=C'-C''$为常数．
+
+由于 $t=f^{-1}(y)$ 是$y=f(t)=CL\cosh t$的反函数，代入上式
+\begin{equation}\label{Catena_eq13}
+y=f(\frac{x}{CL}+C_0)=CL\cosh \frac{x}{CL}+C_0
+\end{equation}
+代入 $x=0$，得到最低点的 $y$ 值
+\begin{equation}
+y(0)=CL+C_0
+\end{equation}
+若以最低点为原点，坐标轴$x,y$方向不变，那么 \autoref{Catena_eq13} 变为
+\begin{equation}
+y=CL(\cosh \frac{x}{CL}-1)
+\end{equation}
+令$k=\frac{1}{CL}$，则
+\begin{equation}\label{Catena_eq8}
+y=\frac{1}{k}[\cosh (kx)-1]
+\end{equation}
+约束条件为绳长为 $L$，即满足
+\begin{equation}
+L = \int_{-\frac{a}{2}}^{\frac{a}{2}} \sqrt{1 + \dot y^2} \dd{x}
+\end{equation}
+上式代入\autoref{Catena_eq8} ，解得
+\begin{equation}
+\frac{2}{k}\sinh(\frac{ka}{2}) = L
+\end{equation}
+
+\subsubsection{受力分析法}
 \begin{figure}[ht]
 \centering
 \includegraphics[width=9cm]{./figures/Catena_2.pdf}
@@ -58,16 +143,21 @@ L(x) = \int_0^x \sqrt{1 + \dot y(x')^2} \dd{x'}
 \end{equation}
 其中令 $k = g\lambda/T$． 注意这是一个非线性二阶常微分方程， 我们还没学过如何求解． 但可以证明它的通解为
 \begin{equation}\label{Catena_eq2}
-y(x) = \frac{1}{k}\cosh(kx)
+y(x) = \frac{1}{k}\cosh(kx+C_0)+C_1
+\end{equation}
+其中，$C_0,C_1$为常数．
+考虑到整个系统的对称性， $y(x)$ 是偶函数，这意味着 $C_0=0$，又 $y(0)=0$，所以 $C_1=-\frac{1}{k}$，我们有
+\begin{equation}\label{Catena_eq7}
+y(x)=\frac{1}{k}[\cosh(kx)-1]
 \end{equation}
 
 那么， 如果已知两个悬挂点之间距离为 $a$， 绳子总长度为 $L$， 以及 $\lambda, g$． 如何求出 $k$ 或拉力 $T$ 呢？ 根据\autoref{Catena_eq1} 有限制条件
 \begin{equation}
-\frac{L}{2} = \int_0^{a/2} \sqrt{1 + \dot y^2} \dd{x'}
+\frac{L}{2} = \int_{0}^{\frac{a}{2}} \sqrt{1 + \dot y^2} \dd{x'}
 \end{equation}
-把\autoref{Catena_eq2} 代入有
+把\autoref{Catena_eq7} 代入有
 \begin{equation}
-\sinh(\frac{ka}{2}) = \frac{L}{2}
+\frac{2}{k}\sinh(\frac{ka}{2}) = L
 \end{equation}
 这样就可以解出 $k$， 进而求出 $T$．
 

@@ -1,0 +1,104 @@
+% Mathematica 基础
+
+\begin{issues}
+\issueDraft
+\end{issues}
+
+\pentry{复数\upref{CplxNo}}
+
+\begin{itemize}
+\item 调整字体大小 \verb|Ctrl + 鼠标滚轮|．
+\item 快捷键 \verb|Shift + Enter| 执行选中的行．
+\item 一行输入多个表达式用分号， 分号也可以用于抑制输出． \verb|a = 3; b = 5; a b|
+\item 函数 \verb|N[表达式, 有效位数]| 把表达式的结果变为数值， 四舍五入到指定的有效数字， 第二个参数可省略． 例如 \verb|N[Pi]| 计算圆周率的前 5 位， \verb|N[Pi, 1000]| 计算 1000 位．
+\item 也可以用小数点产生数值解， 例如 \verb|Sqrt[2.]|．
+\item 用 \verb|(*注释*)| 写注释． 注释不会被执行． 也可以选中后按 \verb|Alt + /|．
+\item 空格表示乘号， 相当于 \verb|*|． 数字和字母间相乘可以不需要空格或 \verb|*|．
+\item 科学计数法如 \verb|2.3*^70| 表示 $2.3\e{7}$．
+\item 快捷键 \verb|Ctrl+L| 可以调用最近的输入或输出．
+\item 定义函数 \verb|f[x_, y_] := x^2 + y^2|． 左边的自变量需要用下划线．
+\item 中断执行 \verb|Alt + ,| （笔记本界面） 或者 \verb|Ctrl + C| （文本界面）．
+\end{itemize}
+
+常数都以大写字母开头．
+\begin{lstlisting}[language=Mathematica]
+Pi (*圆周率*)
+E (*自然对数*)
+Degree (* 1° 角的弧度*)
+I (*虚数单位*)
+Infinity (*无穷*)
+\end{lstlisting}
+
+\begin{itemize}
+\item 输入符号用 \verb|Esc| 键搜索， 例如搜索 \verb|pi| 按回车可以插入 \verb|𝜋|， 相当于 \verb|Pi| 又例如搜索 \verb|inf| 按回车可以插入 \verb|∞|， 相当于 \verb|Infinity|． 如果你知道 TeX， 也可以搜索 tex 命令， 例如 \verb|\varphi| 插入 \verb|φ|．
+\item 快捷键 \verb|Ctrl+_| 输入下标． 相当于 \verb|Subscript[x, y]|．
+\item 快捷键 \verb|Ctrl+/| 输入分式， 相当于 \verb|x / y|．
+\item 快捷键 \verb|@| 输入根式， 相当于 \verb|Sqrt[x]|．
+\end{itemize}
+
+\subsection{变量}
+\begin{itemize}
+\item \verb|?变量| 显示某个变量的定义
+\item \verb|Clear[变量名]| 清除某个变量的定义．
+\item 数组 \verb|data = {a, 2, c, d}|， \verb|T = {{1, 2}, {3, 4}}|
+\item \verb|Tableform[T]| 用于显示矩阵（没有括号）．
+\item \verb|MatrixForm[T]| 用于显示矩阵（有圆括号）．
+\end{itemize}
+
+\subsection{算符}
+\begin{itemize}
+\item \verb|=| 立即赋值（赋值时理科计算右边， 最终结果赋给左边）
+\item \verb|:=| 延迟赋值（每次需要左边时都替换为右边）
+\item \verb|!=|
+\item 连接字符串 \verb|"abc" <> "defg" <> "hij"|．
+\item 单变量的函数 \verb|f[...]| 也可以用后缀形式写成 \verb|... // f|．
+\item \verb|/.| \verb|ReplaceAll[]| 的简写形式． （什么意思？？）
+\item \verb|Sin'[x]| 相当于 \verb|D[Sin[x], x]|
+\item \verb|x =.| 清除符号 \verb|x| 的定义．
+\item \verb|Remove[x]| 完全清除符号．
+\end{itemize}
+
+\subsection{常用函数}
+\begin{itemize}
+\item \verb|Print["a = ", a, " b = ", b]|．
+\item 函数参数中， 下标在上标之前给出， 例如勒让德多项式 $P_n^m(x)$ 为 \verb|LegendreP[n, m, x]|．
+\item \verb|a + I b| 表示复数．
+\item \verb|Re[z]， Im[z]| 计算复数的实部和虚部．
+\item \verb|Conjugate[z]| 复共轭
+\item \verb|Abs[z]| 复数的绝对值
+\item \verb|Arg[z]| 复数的幅角
+\item \verb|Factor[x^25-1]| 因式分解
+\item \verb|Expand[(a+b)^3]| 多项式展开
+\item \verb|DSolve[{y''[x] + b y'[x] == 0, y[0] == 0, y'[0] == 1}, y[x], x]| 解常微分方程．
+\item \verb|Piecewise[{{x^2, x < 0}, {x, x > 0}}]| 分段函数．
+\item \verb|Table[i^2, {i,3}]| 输出 \verb|{1, 4, 9}|．
+\item \verb|FullSimplify[表达式]| 简化表达式．
+\item \verb|Clear["Global`*"]| 清除当前进程中的所有定义．
+\item \verb|Range[5]|， \verb|Range[2, 5]| 输出 \verb|{1,2,3,4,5}|， \verb|{2,3,4,5}|．
+\item \verb|Map[f, Range[3]]| 输出 \verb|{f[1], f[2], f[3]}|．
+\item \verb|/@| 是 \verb|Map| 的简写形式 \verb|f /@ Range[3]|．
+\item 分段函数 \verb|f[x_] := 0 /; x < -1| 以及 \verb|f[x_] := 1 /; x > -1 && x < 1| 等．
+\item Listable 的函数可以直接 \verb|Sin[Range[3]]|． \verb|Atributes[Sin]|
+\end{itemize}
+
+\subsubsection{微积分}
+\begin{itemize}
+\item 求和 \verb|Sum[f, {i, imin, imax}]|
+\item \verb|Solve[左边==右边, x]| 求解关于 $x$ 的方程．
+\item \verb|Limit[f, x->x0]| 极限 $\lim_{x\to x_0} f$．
+\item \verb|Minimize[f, x]|， \verb|Maximize[f, x]| 求函数 $f(x)$ 的最小值/最大值．
+\item \verb|Series[f, {x, x0, order}]| 把函数展开成泰勒级数．
+\item \verb|D[Sin[x]]|， \verb|D[Sin[x+y],x]|， 导数和偏导数．
+\item \verb|Integrate[1/(x^3-1),x]| 不定积分， \verb|Integrate[f,{x, xmin, xmax}]| 定积分, \verb|Integrate[f, {x, xmin, xmax},{y, ymin, ymax},...]| 重积分．
+\item \verb|FourierSeries[函数, 自变量, 项数]|．
+\item \verb|FourierTransform[Exp[-x^2], x, k]| 傅里叶变换．
+\item \verb|Plot[y[x], {x, -5, 5}]| 简单的画图．
+\item \verb|Plot3D[Sin[y+Sin[3x]], {x,-3,3}, {y,-3,3}]| 简单的画图．
+\end{itemize}
+
+\subsubsection{数值运算}
+\begin{itemize}
+\item \verb|NIntegrate[f, {x, xmin, xmax}]| 数值积分．
+\item \verb|NSolve[左边==右边, x]| 求解关于 $x$ 的方程．
+\item \verb|NMinimize[f, x]|， \verb|NMaximize[f, x]| 求函数 $f(x)$ 的最小值/最大值．
+\end{itemize}
