@@ -9,7 +9,7 @@
 参考 \href{https://docs.julialang.org/en/v1/manual/types/#man-declared-types}{Julia 文档}．
 \begin{itemize}
 \item Julia 是动态类型的语言． 具体类型不能互相作为子类， 只能作为抽象类的子类．
-\item Julia 中所有的值都是对象． C++ 中 float, double 等不是对象， 只有 struct, class 定义的才是对象． Julia 中的对象没有成员函数．
+\item Julia 中所有的值都是对象． C++ 中 \verb|float|, \verb|double| 等不是对象， 只有 \verb|struct|, \verb|class| 定义的才是对象． Julia 中的对象没有成员函数．
 \item 可以在 literal、 变量、 表达式、 函数定义后面加上 \verb|::变量类型| 用于确认它具有该类型， 如果类型不符会产生异常． 如果 \verb|变量类型| 是抽象的， 那么表达式只需要是它的一个 sub type．
 \item 只有 “值” 有类型， 而不是变量具有类型． 变量只是个名字而已
 \item 抽象和具体的类都可以使用其他类作为参数
@@ -96,10 +96,10 @@ primitive type UInt128 <: Unsigned 128 end
 \textbf{复合类型（composite）} 类似于 C++ 中的 \verb|struct|
 \begin{lstlisting}[language=julia]
 struct Foo
-           bar # 抽象类型是 Any
-           baz::Int
-           qux::Float64
-       end
+    bar # 抽象类型是 Any
+    baz::Int
+    qux::Float64
+end
 \end{lstlisting}
 创建该类型的对象
 \begin{lstlisting}[language=julia]
@@ -113,7 +113,7 @@ foo = Foo("Hello, world.", 23, 1.5) # 叫做 constructor
 
 \subsection{Type Unions}
 \begin{lstlisting}[language=julia]
-IntOrString = Union{Int,AbstractString}
+IntOrString = Union{Int, AbstractString}
 1 :: IntOrString
 "Hello!" :: IntOrString
 1.0 :: IntOrString # 异常
@@ -128,10 +128,10 @@ IntOrString = Union{Int,AbstractString}
 
 例如
 \begin{lstlisting}[language=julia]
-julia> struct Point{T}
-           x::T
-           y::T
-       end
+struct Point{T}
+    x::T
+    y::T
+end
 \end{lstlisting}
 那么 \verb|Point{Float64}| 等都是合法的具体类型．
 
@@ -161,9 +161,9 @@ p = Point{Float64}(1.0, 2.0)
 \begin{lstlisting}[language=julia]
 abstract type Pointy{T} end
 struct Point{T} <: Pointy{T}
-           x::T
-           y::T
-       end
+    x::T
+    y::T
+end
 \end{lstlisting}
 
 \subsection{Tuple Types}
