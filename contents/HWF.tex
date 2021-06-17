@@ -20,7 +20,7 @@
 \begin{figure}[ht]
 \centering
 \includegraphics[width=14.25cm]{./figures/HWF_2.png}
-\caption{氢原子波函数的概率密度 $\abs{\psi_{nlm}(\bvec r)}^2$ 的 $x$-$z$ 截面， 大小成比例． 每个图中的三个数字分别是量子数 $n, l, m$， 电子出现在白色圆圈内部的概率为 0.95． 色条对应的数值是线性的， 每个子图中的色条取值范围不相同． 另见 Matlab 画图程序\upref{Hplot}．} \label{HWF_fig2}
+\caption{氢原子波函数的概率密度 $\abs{\psi_{nlm}(\bvec r)}^2$ 的 $x$-$z$ 截面， 大小成比例． 每个图中的三个数字分别是量子数 $n, l, m$， 电子出现在白色圆圈内部的概率为 0.95． 色条对应的数值是线性的， 每个子图中的色条取值范围不相同． 源码见 “氢原子波函数画图程序（Matlab）\upref{Hplot}”．} \label{HWF_fig2}
 \end{figure}
 
 \subsubsection{径向波函数 $R_{nl}(r)$}
@@ -57,17 +57,19 @@ R_{30}(r) &= \frac{2}{3\sqrt {3}} \qty(\frac{Z}{a})^{3/2} \qty(1 - \frac23 \frac
 R_{31}(r) &= \frac{8}{27\sqrt 6} \qty(\frac{Z}{a})^{3/2} \qty(1 - \frac16 \frac {Zr}{a}) \frac {Zr}{a} \exp(-\frac{Zr}{3a})\\
 R_{32}(r) &= \frac{4}{81\sqrt {30}} \qty(\frac{Z}{a})^{3/2} \frac{Z^2r^2}{a^2} \exp(-\frac{Zr}{3a})}
 \end{equation}
-更多 $R_{n,l}$ 可以用 Mathematica% 相关词条未完成
-或者 \href{https://www.wolframalpha.com/}{Wolfram Alpha} 生成， 命令如
+更多 $R_{n,l}$ 表达式可以用 Mathematica\upref{Mma} 或者 \href{https://www.wolframalpha.com/}{Wolfram Alpha} 生成， 命令如
 \begin{lstlisting}[language=Mathematica]
 n = 4; l = 1;
-Sqrt[(2*Z/(n*a))^3 * Factorial[n-l-1]/(2*n*Factorial[n+l])]
-*(2*Z*r/(n*a))^l*LaguerreL[n-l-1, 2l+1, 2Z*r/(n*a)] * Exp[-Z*r/(n*a)]
+Sqrt[(2*Z/(n*a))^3*
+   Factorial[n - l - 1]/(2*n*Factorial[n + l])] (2*Z*r/(n*a))^l*
+ LaguerreL[n - l - 1, 2 l + 1, 2 Z*r/(n*a)]*Exp[-Z*r/(n*a)]
 \end{lstlisting}
 或者用 Matlab 进行数值计算
-\begin{lstlisting}[language=matlab]
-Rnl = @(Z,n,l,r)sqrt((2*Z/n)^3*factorial(n-l-1)/(2*n*factorial(n+l))) *...
+\begin{lstlisting}[language=matlab, caption=R_nl.m]
+function ret = R_nl(Z,n,l,r)
+sqrt((2*Z/n)^3*factorial(n-l-1)/(2*n*factorial(n+l))) *...
         (2*Z*r/n).^l .* laguerreL(n-l-1, 2*l+1, 2*Z*r/n) .* exp(-Z*r/n);
+end
 \end{lstlisting}
 
 \subsection{性质}
@@ -75,24 +77,11 @@ Rnl = @(Z,n,l,r)sqrt((2*Z/n)^3*factorial(n-l-1)/(2*n*factorial(n+l))) *...
 \begin{equation}
 \int \abs{\Psi_{n,l,m}(\bvec r)} \dd[3]{r} = \int \int_0^\infty \abs{R_{n,l}(r) Y_{l,m}(\uvec r)}^2 r^2 \dd{r}\dd{\Omega} = 1
 \end{equation}
-先做角向积分， 球谐函数已经满足归一化条件% 链接未完成
+根据\autoref{RadSE_eq5}~\upref{RadSE} 和\autoref{RadSE_eq7}~\upref{RadSE} 有
 \begin{equation}
-\int \abs{Y_{l,m}(\uvec r)}^2 \dd{\Omega} = 1
+\int_0^\infty R_{n', l}\Cj(r) R_{n,l}(r) r^2 \dd{r} = \delta_{n,n'}
 \end{equation}
-得到径向波函数的归一化条件为
-\begin{equation}
-\int [rR_{n,l}(r)]^2 \dd{r} = 1
-\end{equation}
-
-再来看正交性， 我们知道哈密顿算符的本征态之间两两正交（式中 $n',l',m'$ 至少有一个与 $n, l, m$ 不同）
-\begin{equation}
-\int \Psi_{n,l,m}^*(\bvec r) \Psi_{n',l',m'}(\bvec r) \dd[3]{r}
-= \int \int_0^\infty R_{n,l}(r) R_{n',l'}(r) Y_{l,m}^*(\uvec r)  Y_{l',m'}(\uvec r) r^2 \dd{r}\dd{\Omega} = 0
-\end{equation}
-同样可以先对角向做积分， 若 $l',m'$ 至少有一个与 $l, m$ 不同， 那么积分直接为零， 径向波函数不需要任何正交条件（也的确不满足）． 但若两个球谐函数相同， 即 $l' = l$， $m' = m$， $n' \ne n$， 那么角向积分等于 1， 径向波函数满足
-\begin{equation}
-\int \int_0^\infty R_{n,l}(r) R_{n',l}(r) r^2 \dd{r} = 0
-\end{equation}
+注意对不同的 $l$， 径向波函数并不正交．
 
 \subsection{径向概率分布}
 我们来求径向概率分布 $P(r)$． $P(r)$ 的定义为： 发现粒子在 $r \in [a, b]$ （厚球壳）内的概率为 $\int_a^b P(r) \dd{r}$． 由于波函数的模长平方就是三维的概率密度， 有

@@ -1,0 +1,143 @@
+% Ricci曲率
+% 里奇曲率|曲率|测地线|广义相对论|引力|爱因斯坦场方程|relativity|gravity|Einstein Field Equation|geodesic|curvature|differential geometry|manifold|流形|联络|connection
+
+\pentry{仿射联络（切丛）\upref{affcon}}
+
+本节中默认$(M, \nabla)$是一个配备了仿射联络$\nabla$的流形$M$．
+
+\subsection{再论曲率映射}
+
+我们在这里重新誊写一遍\textbf{仿射联络（切丛）}\upref{affcon}中定义的\textbf{曲率}映射．
+
+\begin{definition}{曲率}
+定义$R:\mathfrak{X}(M)\times\mathfrak{X}(M)\to\opn{End}(\mathfrak{X}(M))$为：对于任意$X, Y\in\mathfrak{X}(M)$，有$R(X, Y)=\nabla_X\nabla_Y-\nabla_Y\nabla_X-\nabla_{[X, Y]}$，称该映射为$(M, \nabla)$的\textbf{曲率（curvature）}．
+\end{definition}
+
+整体来看，曲率就是把两个光滑向量场映射为一个光滑向量场．一个自然的问题就是，这个映射，是$C^{\infty}$线性的吗？答案是肯定的，这一点由以下定理描述．
+
+\begin{theorem}{曲率的线性性}\label{RicciC_the1}
+令$f, g, h$为$M$上的光滑函数，$X, Y, Z$为$M$上的光滑向量场．则我们有：$R(fX, gY)hZ=fgh\cdot R(X, Y)Z$．
+\end{theorem}
+
+\textbf{证明}：
+
+由于$\nabla_{fX}=f\nabla_X$，且$[fX, gY]=fg[X, Y]+f(Xg)Y-g(Yf)X$
+
+故有
+\begin{equation}
+\begin{aligned}
+&\nabla_{fX}\nabla_{gY}-\nabla_{gY}\nabla_{fX}-\nabla_{[fX, gY]}\\=&f\nabla_X(g\nabla_Y)-g\nabla_Y(f\nabla_X)-fg\nabla_{[X, Y]}-\nabla_{f(Xg)Y-g(Yf)X}\\
+\\=&fg\nabla_X\nabla_Y+f(Xg)\nabla_Y-gf\nabla_Y\nabla_X-g(Yf)\nabla_X\\&-fg\nabla_{[X, Y]}-f(Xg)\nabla_Y+g(Yf)\nabla_X\\
+=&fg\nabla_X\nabla_Y-gf\nabla_Y\nabla_X-fg\nabla_{[X, Y]}\\
+=&fg(\nabla_X\nabla_Y-\nabla_Y\nabla_X-\nabla_{[X, Y]})
+\end{aligned}
+\end{equation}
+这就证明了$R(fX, gY)=fgR(X, Y)$．接下来证明$R(X, Y)hZ=hR(X, Y)Z$．
+
+考虑到
+\begin{equation}
+\begin{aligned}
+\nabla_X\nabla_Y(hZ)&=\nabla_X(h\nabla_YZ+(Yh)Z)\\
+&=h\nabla_X\nabla_YZ+(Xh)\nabla_YZ+(Yh)\nabla_XZ+(XYh)Z
+\end{aligned}
+\end{equation}
+
+故
+\begin{equation}
+\begin{aligned}
+(\nabla_X\nabla_Y-\nabla_Y\nabla_X)hZ=& h\nabla_X\nabla_YZ-h\nabla_Y\nabla_XZ+\\&(Xh)\nabla_YZ-(Yh)\nabla_XZ+\\&(Yh)\nabla_XZ-(Xh)\nabla_YZ+\\&(XYh)z-(YXh)z\\
+=& h(\nabla_X\nabla_Y-\nabla_Y\nabla_X)Z+([X, Y]h)Z
+\end{aligned}
+\end{equation}
+
+于是最后有
+\begin{equation}
+\begin{aligned}
+&(\nabla_X\nabla_Y-\nabla_Y\nabla_X-\nabla_{[X, Y]})hZ\\
+&=h(\nabla_X\nabla_Y-\nabla_Y\nabla_X)Z+([X, Y]h)Z-h\nabla_{[X, Y]}Z-([X, Y]h)Z\\
+&=h(\nabla_X\nabla_Y-\nabla_Y\nabla_X-\nabla_{[X, Y]})Z
+\end{aligned}
+\end{equation}
+
+从而得证$R(X, Y)hZ=hR(X, Y)Z$．
+
+\textbf{证毕}．
+
+\autoref{RicciC_the1} 意味着，曲率是一个$M$上光滑向量场的线性映射，也就是说，是一个张量场．又因为曲率将三个向量场映射为一个向量场，我们可以在给定图中将曲率映射表示为一组光滑函数$R^r_{ijk}$，使得$R(f^i\uvec{e}_i, g^j\uvec{e}_j)h^k\uvec{e}_k=(R^r_{ijk}f^ig^jh^k)\uvec{e}_r$．
+
+如果用抽象指标，将$X, Y, Z$分别表示为$x^i, y^j, z^k$，那么$R(X, Y)Z=R^r_{ijk}x^iy^jz^k$．
+
+
+\subsubsection{曲率张量场的坐标}
+
+在给定图中，联络$\nabla$由Christoffel符号$\Gamma^k_{ij}$完全刻画，那么我们应该也能用Christoffel符号计算出曲率张量场的坐标．记住，$\Gamma$中每个元素的类型是$M$上的光滑向量场．
+
+\begin{equation}
+\begin{aligned}
+\nabla_{\partial_i}\nabla_{\partial_j}\partial_k&=\nabla_{\partial_i}(\Gamma^s_{jk}\partial_s)\\
+&=(\partial_i\Gamma^s_{jk})\partial_s+\Gamma^s_{jk}\Gamma^r_{is}\partial_r\\
+&=(\partial_i\Gamma^r_{jk}+\Gamma^s_{jk}\Gamma^r_{is})\partial_r
+\end{aligned}
+\end{equation}
+
+
+考虑到偏微分的交换性，$[\partial_i, \partial_j]=0$，因此
+\begin{equation}
+\begin{aligned}
+&(\nabla_{\partial_i}\nabla_{\partial_j}-\nabla_{\partial_j}\nabla_{\partial_i})\partial_k\\
+=&(\partial_i\Gamma^r_{jk}-\partial_j\Gamma^{r}_{ik}+\Gamma^s_{jk}\Gamma^r_{is}-\Gamma^s_{ik}\Gamma^r_{js})\partial_r
+\end{aligned}
+\end{equation}
+
+由定义，$R(f^i\partial_i, g^j\partial_j)h^k\partial_k=(R^r_{ijk}f^ig^jh^k)\partial_r$，故有
+\begin{equation}
+R^r_{ijk}=\partial_i\Gamma^r_{jk}-\partial_j\Gamma^{r}_{ik}+\Gamma^s_{jk}\Gamma^r_{is}-\Gamma^s_{ik}\Gamma^r_{js}
+\end{equation}
+
+
+\subsection{Ricci张量场}
+
+如果我们固定$Y, Z$，那么$R(X, Y)Z$可以看成是$X$的一个$C^{\infty}$-线性映射；更准确地说，对于任意$p\in M$，$R(X, Y)Z$都是$X_p$的一个$\mathbb{R}$-线性映射．为了方便，我们记$T_{Y, Z}$是这样的线性映射：$T_{Y, Z}(X)=R(X, Y)Z$．那么$\opn{trace}T_{Y, Z}$就是$M$上的一个光滑函数．这样一来，我们又相当于得到了一个将$Y$和$Z$映射为一个光滑函数的张量场．
+
+用抽象指标，将$X, Y, Z$分别表示为$x^i, y^j, z^k$，那么$T_{Y, Z}(X)=R^r_{ijk}y^jz^kx^i$，因此$T_{Y, Z}=R^r_{ijk}y^jz^k$．于是，$\opn{trace}T_{Y, Z}=R^i_{ijk}y^jz^k$\footnote{注意，就是把上指标$r$换成了$i$，因为对于矩阵（或者抽象指标表示的线性变换）$a^i_j$，其\textbf{迹}的定义就是$\opn{trace}a^i_j=a^i_j$．}
+
+而因为我们想把$\opn{trace}T_{Y, Z}$看成是$Y, Z$的映射，因此最终得到一个张量场$R^i_{ijk}$，它把两个光滑向量场映射为一个光滑函数．这个张量场，就是所谓的\textbf{Ricci曲率}．
+
+\begin{definition}{Ricci曲率}
+已知曲率张量场$R^r_{ijk}$，则定义张量场$R_{jk}=R^i_{ijk}$，称之为\textbf{Ricci曲率（Ricci curvature）}或者\textbf{Ricci张量场（Ricci tensor field）}．
+\end{definition}
+
+黎曼曲率张量$R^r_{ijk}$涉及的向量场太多，而Ricci场通过对其进行缩并，得到了一个更简单的张量场，它同样可以很好地描绘流形的性质，同时是\textbf{爱因斯坦场方程}的核心结构．
+
+我们上面已经计算过了黎曼曲率$R^r_{ijk}$的坐标表达，只需要进行指标替换就可以得到Ricci张量场的坐标：
+\begin{equation}
+R_{jk}=\partial_i\Gamma^i_{jk}-\partial_j\Gamma^{i}_{ik}+\Gamma^s_{jk}\Gamma^i_{is}-\Gamma^s_{ik}\Gamma^i_{js}
+\end{equation}
+
+结合\autoref{CrstfS_eq3}~\upref{CrstfS}：
+\begin{equation}
+\Gamma^{r}_{ij}=\frac{1}{2}g^{kr}(\partial_ig_{jk}+\partial_jg_{ki}-\partial_kg_{ij})
+\end{equation}
+还可以根据度量场$g_ij$计算出Ricci曲率场，写起来非常长，在此从略．
+
+\subsubsection{Ricci张量场的性质}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
