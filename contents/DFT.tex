@@ -2,20 +2,23 @@
 % DFT|FFT|快速傅里叶变换|离散傅里叶变换
 
 \textbf{离散傅里叶变换（Discrete Fourier Transform）（DFT）}是一个复数域的线性变换\upref{LTrans}． 对两组有序数列 $f_0, f_1, \dots, f_{N-1}$ 和 $g_0,g_2,\dots, g_{N-1}$，正变换和逆变换分别为\footnote{工程上的定义常常是正变换没有 $1/\sqrt{N}$ 因子，逆变换的 $1/\sqrt{N}$ 因子变为 $1/N$． 这样的好处是节省运算量．本书中使用的定义好处是变换为幺正变换，有保持归一化的特点．}
-\begin{align}
-g_p &= \frac{1}{\sqrt{N}}\sum_{q=0}^{N-1} \exp(-\frac{2\pi\I}{N} p q ) f_q\label{DFT_eq1} \\
-f_q &= \frac{1}{\sqrt{N}}\sum_{p=0}^{N-1} \exp(\frac{2\pi\I}{N} p q) g_p\label{DFT_eq2}
-\end{align}
-
-一个更常见的名词是\textbf{快速傅里叶变换（Fast Fourier Transform）（FFT）}， 其定义与离散傅里叶变换一样，只是优化了算法使程序运行更快\footnote{参考 Numerical Recipes 3ed}．
+\begin{equation}\label{DFT_eq1}
+g_p = \frac{1}{\sqrt{N}}\sum_{q=0}^{N-1} \exp(-\frac{2\pi\I}{N} p q ) f_q
+\end{equation}
+\begin{equation}\label{DFT_eq2}
+f_q = \frac{1}{\sqrt{N}}\sum_{p=0}^{N-1} \exp(\frac{2\pi\I}{N} p q) g_p
+\end{equation}
+一个更常见的名词是\textbf{快速傅里叶变换（Fast Fourier Transform）（FFT）}， 其数学定义与离散傅里叶变换一样，只是优化了算法使程序运行更快\footnote{参考 Numerical Recipes 3ed}．
 
 \subsection{离散傅里叶变换与傅里叶变换}
 \pentry{傅里叶变换（指数函数）\upref{FTExp}}
 在详细分析 DFT 的性质之前， 我们先看看它与解析的傅里叶变换如何对应． 函数 $f(x)$ 和 $g(k)$ 间的傅里叶变换为
-\begin{align}
-g(k) &= \frac{1}{\sqrt{2\pi}} \int_{-\infty}^{+\infty} f(x)\E^{-\I kx} \dd{x}\label{DFT_eq3}\\
-f(x) &= \frac{1}{\sqrt{2\pi}} \int_{-\infty}^{+\infty} g(k)\E^{\I kx} \dd{k}\label{DFT_eq4}
-\end{align}
+\begin{equation}\label{DFT_eq3}
+g(k) = \frac{1}{\sqrt{2\pi}} \int_{-\infty}^{+\infty} f(x)\E^{-\I kx} \dd{x}
+\end{equation}
+\begin{equation}\label{DFT_eq4}
+f(x) = \frac{1}{\sqrt{2\pi}} \int_{-\infty}^{+\infty} g(k)\E^{\I kx} \dd{k}
+\end{equation}
 如果 $f(x)$ 和 $g(k)$ 分别只在区间 $[-L_x/2, L_x, 2]$ 和 $[-L_k/2, L_k/2]$ 内不为零， 积分就可以只在这两个区间内进行． 我们再给两个区间划出 $N$ 个等间距的格点 $\dots, x_{-1}, x_0, x_1,\dots$ 和 $\dots, k_{-1}, k_0, k_1,\dots$ （$x_0 = k_0 = 0$）， 并规定相邻格点的间距为
 \begin{equation}\label{DFT_eq5}
 \Delta x = L_x/N \qquad \Delta k = L_k/N
@@ -23,10 +26,12 @@ f(x) &= \frac{1}{\sqrt{2\pi}} \int_{-\infty}^{+\infty} g(k)\E^{\I kx} \dd{k}\lab
 注意 $x$ 和 $k$ 的首尾格点分别相距 $L_x(N-1)/N$ 和 $L_k(N-1)/N$． 若 $N$ 是奇数， 我们令中间的格点为 $x_0$ 和 $k_0$， 如果 $N$ 是偶数， 我们令中间靠右的格点为 $x_0$ 和 $k_0$．
 
 现在我们用求和近似上面的积分得\footnote{事实上， 学习了下文的采样定理会发现这里用求和代替积分是没有任何误差的．}
-\begin{align}
-g(k_p) &= \frac{1}{\sqrt{2\pi}} \sum_q f(x_q) \E^{-\I k_p x_q} \Delta x\label{DFT_eq6}\\
-f(x_q) &= \frac{1}{\sqrt{2\pi}} \sum_p g(k_p) \E^{\I k_p x_q} \Delta k\label{DFT_eq7}
-\end{align}
+\begin{equation}\label{DFT_eq6}
+g(k_p) = \frac{1}{\sqrt{2\pi}} \sum_q f(x_q) \E^{-\I k_p x_q} \Delta x
+\end{equation}
+\begin{equation}\label{DFT_eq7}
+f(x_q) = \frac{1}{\sqrt{2\pi}} \sum_p g(k_p) \E^{\I k_p x_q} \Delta k
+\end{equation}
 式中 $k_p x_q = (\Delta x \Delta k)pq$， 对比 DFT 中的指数项， 得
 \begin{equation}\label{DFT_eq8}
 \Delta x\Delta k = \frac{2\pi}{N}
