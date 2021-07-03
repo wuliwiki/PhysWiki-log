@@ -1,18 +1,22 @@
 % 库仑函数
 % 薛定谔方程|库仑函数|库默尔函数|惠特克函数|库仑相移|朗斯基行列式
 
-\begin{issues}
-\issueMissDepend
-\issueAbstract
-\end{issues}
+\pentry{二阶常系数齐次微分方程\upref{Ode2}， Gamma 函数\upref{Gamma}， 库仑散射（量子）\upref{CulmWf}}
 
-\pentry{常微分方程\upref{ODE}， Gamma 函数\upref{Gamma}}
-
-\footnote{参考 \href{https://dlmf.nist.gov/33.2}{NIST 相关页面}}在球坐标系中解库仑势场中的定态薛定谔方程\upref{SchEq}， 会得到径向方程（\autoref{CulmWf_eq5}~\upref{CulmWf}）
+\subsection{定义}
+\footnote{参考 \href{https://dlmf.nist.gov/33.2}{NIST 相关页面}．}在球坐标系中解库仑势场中的定态薛定谔方程\upref{SchEq}， 当能量 $E > 0$ 时\footnote{当能量 $E < 0$ 时将得到束缚态， 见 “类氢原子的定态波函数\upref{HWF}”}， 会得到径向方程（\autoref{CulmWf_eq5}~\upref{CulmWf}）
 \begin{equation}
 \dv[2]{u}{\rho} + \qty[1 - \frac{2\eta}{\rho} - \frac{l(l+1)}{\rho^2}]u = 0
 \end{equation}
-其解为\textbf{第一类库仑函数} $F_l(\eta, \rho)$ 和\textbf{第二类库仑函数} $G_l(\eta, \rho)$． 第一类库仑函数的解析式为\footnote{这里的两套正负号是等效的．}
+这时一个二阶线性齐次常微分方程， 其两个线性无关解为\textbf{第一类库仑函数} $F_l(\eta, \rho)$ 和\textbf{第二类库仑函数} $G_l(\eta, \rho)$． 当方程的系数为实数时， 第一类和第二类库仑函数也是实函数．
+
+\begin{figure}[ht]
+\centering
+\includegraphics[width=14cm]{./figures/CulmF_1.pdf}
+\caption{第一类库仑函数} \label{CulmF_fig1}
+\end{figure}
+
+第一类库仑函数（\autoref{CulmF_fig1}）的解析式为\footnote{这里的两套正负号是等效的．}
 \begin{equation}
 F_l(\eta, \rho) = A_l(\eta) \rho^{l+1} \E^{\mp\I\rho} M(l+1\mp\I\eta, 2l+2, \pm 2\I\rho)
 \end{equation}
@@ -28,6 +32,18 @@ F_l(\eta, \rho) = \qty(\frac{\mp\I}{2})^{l+1} A_l(\eta) M_{\pm\I\eta, l+\frac12}
 \begin{equation}
 M_{\kappa, \mu}(z) = \E^{-z/2} z^{\mu + 1/2} M(\mu - \kappa + 1/2, 1 + 2\mu, z)
 \end{equation}
+
+可以在 Mathematica 中定义该函数
+\begin{lstlisting}[language=Mathematica]
+CoulombF[l_, \[Eta]_, \[Rho]_] := 
+ 2^l E^(-\[Pi] \[Eta]/2) Abs[
+    Gamma[l + 1 + I \[Eta]]]/(2 l + 1)! \[Rho]^(l + 
+     1) E^(-I \[Rho]) Hypergeometric1F1[l + 1 - I \[Eta], 2 l + 2, 
+   2 I \[Rho]]
+\end{lstlisting}
+% Matlab 的定义见 coulomb1_sym.m
+
+\subsubsection{库仑相移}
 $F_l(\eta, \rho)$ 是一个实函数， 类似 $\rho$ 乘以第一类球贝塞尔函数\footnote{当 $\eta = 0$ 时二者相等．}$j_l(\rho)$， 有
 \begin{equation}
 F_l(\eta, 0) = 0 \qquad \eval{\dv{F_l(\eta, \rho)}{\rho}}_{\rho=0} = 
@@ -46,7 +62,9 @@ F_l(\eta, \rho) \overset{\rho\to \infty}{\longrightarrow} \sin(\rho - \frac{\pi 
 \end{equation}
 其中 $\arg$ 函数是复数的幅角（\autoref{CplxNo_eq5}~\upref{CplxNo}）．
 
-第二类库仑函数 $G_l(\eta, \rho)$ 可以由 $H_l^\pm(\eta, \rho)$ 得到， 后者是两类库仑函数的线性组合\footnote{类比 $\exp(\I x) = \cos x + \I\sin x$}
+\subsection{其他类型的库仑函数}
+
+第二类库仑函数 $G_l(\eta, \rho)$ 可以由 $H_l^\pm(\eta, \rho)$ 得到， 后者是两类库仑函数的线性组合\footnote{类比 $\exp(\I x) = \cos x + \I\sin x$．}
 \begin{equation}
 H_l^\pm(\eta, \rho) = G_l(\eta, \rho) \pm \I F_l(\eta, \rho)
 \end{equation}	
@@ -68,16 +86,17 @@ H_l^\pm(\eta, \rho) = \E^{\pm\I\theta_l(\eta, \rho)}(\mp 2\I\rho)^{l + 1 \pm\I\e
 \end{equation}
 其中
 \begin{equation}
-\theta_l(\eta, \rho) = \rho - \eta\ln(2\rho) - \frac{l\pi}{2} + \sigma_l(\eta)
+\theta_l(\eta, \rho) = \rho - \frac{l\pi}{2} - \eta\ln(2\rho) + \sigma_l(\eta)
 \end{equation}
 是\autoref{CulmF_eq7} 中的渐进相位．
 
+\subsubsection{性质}
 $G_l(\eta,\rho)$ 的渐进形式为
 \begin{equation}
 \lim_{\rho\to \infty} G_l(\eta, \rho) = \cos\theta_l(\eta, \rho)
 \end{equation}
 
-库仑函数的导数可以由惠特克函数的导数\footnote{可以使用 Wolfram Alpha 或 Mathematica}得到．
+库仑函数的导数可以由惠特克函数的导数得到．
 \begin{equation}
 \pdv{z} [M_{a, b}(z)] = \qty(\frac12 - \frac{a}{z}) M_{a, b}(z) + \frac{1}{x} \qty(a + b + \frac12) M_{a+1, b}(z)
 \end{equation}
@@ -101,5 +120,5 @@ f_1'(x) & f_2'(x)
 
 由渐进形式可得径向归一化积分\footnote{积分时可忽略 $\sin$ 中的额外相位， 但笔者不会证．}与球贝塞尔函数的相同
 \begin{equation}
-\int_0^\infty F_l(Z/k', k' r)F_l(Z/k, kr) \dd{r} = \int_0^\infty \sin(k'r)\sin(kr) \dd{r} = \frac{\pi}{2}[\delta(k - k') - \delta(k + k')]
+\int_0^\infty F_l(Z/k', k' r)F_l(Z/k, kr) \dd{r} = \int_0^\infty \sin(k'r)\sin(kr) \dd{r} = \frac{\pi}{2}\delta(k - k') \qquad (k, k' > 0)
 \end{equation}

@@ -14,7 +14,7 @@
 \item 用 \verb|(*注释*)| 写注释． 注释不会被执行． 也可以选中后按 \verb|Alt + /|．
 \item 可以用小数点产生数值解， 例如 \verb|Sqrt[2.]|．
 \item 空格表示乘号， 相当于 \verb|*|． 数字和字母间相乘可以不需要空格或 \verb|*|．
-\item 科学计数法如 \verb|2.3*^70| 表示 $2.3\e{7}$．
+\item 科学计数法如 \verb|2.3*^-70| 表示 $2.3\e{-70}$．
 \item 中断执行 \verb|Alt + ,| （笔记本界面） 或者 \verb|Ctrl + C| （文本界面）．
 \end{itemize}
 
@@ -54,11 +54,23 @@
 
 \subsection{变量}
 \begin{itemize}
+\item \verb|Head[...]| 可用于判断一个对象的类型， 如 \verb|Head[1]| 是 \verb|Integer|， \verb|Head[Pi]| 是 \verb|Symbol|， \verb|Head[1/5]| 是 \verb|Rational|， \verb|Head[0.2]| 是 \verb|Real|， \verb|Head[I]| 是 \verb|Complex\verb|， \verb|Sin[1]|  是 \verb|Sin|， \verb|Head[2 Pi/3]| 是 \verb|Times|．
+\item \verb|Real| 和 \verb|Complex| 用于浮点运算，有误差． 例如计算 \verb|SetPrecision[1.3, 30]| 最后记为不为零． 如果要精确表示 \verb|1.23456789|， 就用 \verb|123456789*^-8|．
+\item \verb|SetPrecision[表达式， N]| 会把表达式中可以求出数值的部分都变为 \verb|N| 位有效数字， 例如常数 \verb|Pi|， \verb|E|， 又如 \verb|Sin[1]|． 又如 \verb|SetPrecision[2/3 x + 2 y, 20]|．
 \item \verb|?变量| 显示某个变量的定义
 \item \verb|Clear[变量名]| 清除某个变量的定义．
-\item 数组 \verb|data = {a, 2, c, d}|， \verb|T = {{1, 2}, {3, 4}}|
+\item 数组在 Mathematica 中叫做 \verb|List|， 如 \verb|data = {a, 2, c, d}|， 每个元素可以是任意类型的对象．
+\item \verb|T = {{1, 2}, {3, 4, 5}}|， 是列表的列表．
 \item \verb|Tableform[T]| 用于显示矩阵（没有括号）．
 \item \verb|MatrixForm[T]| 用于显示矩阵（有圆括号）．
+\item 高维数组就是一维数组的一维数组的…… 每个维度的长度未必需要相等， 例如 \verb|T = {{1,2}, {3,4,5}}|．
+\item 数组索引从 1 开始
+\item \verb|a[[i]]| 获取一维数组元素， 或者二维数组的第 $i$ 行．
+\item \verb|a[[i, j]]| 获取二维数组元素的元素， 或者三维数组的第三维的一行．
+\item \verb|a[[All, j]]| 获取一列， \verb|a[[i, All]]| 获取一行．
+\item \verb|a[[2;;4]]| 获取第 2,3,4 个元素．
+\item \verb|a[[2;;]]| 获取第 2 个到最后一个元素， \verb|a[[;;4]]| 获取第一个到第 4 个元素
+\item \verb|a[[2;;9;;3]]| 获取元素 2, 5, 8． \verb|a[[2;; ;;3]]| 获取元素 $2, 5, 8, \dots$ 直到最后．
 \end{itemize}
 
 \subsection{算符}
@@ -67,7 +79,7 @@
 \item \verb|:=| 延迟赋值（每次需要左边时都替换为右边）
 \item \verb|!=| 不等号
 \item 连接字符串 \verb|"abc" <> "defg" <> "hij"|．
-\item 单变量的函数 \verb|f[...]| 也可以用后缀形式写成 \verb|... // f|．
+\item 单变量的函数 \verb|f[...]| 也可以用后缀形式记为 \verb|... // f| 或者用前缀形式记为 \verb|f @ ...|．
 \item \verb|/.| \verb|ReplaceAll[]| 的简写形式． （什么意思？？）
 \item \verb|Sin'[x]| 相当于 \verb|D[Sin[x], x]|
 \item \verb|x =.| 清除符号 \verb|x| 的定义．
@@ -98,18 +110,25 @@
 \item Listable 的函数可以直接 \verb|Sin[Range[3]]|． \verb|Atributes[Sin]|
 \end{itemize}
 
+\begin{itemize}
+\item \verb|+, -, *, ^| 把两个矩阵进行逐个元素的运算．
+\item \verb|Dot| 点乘， 也可以用 \verb|.|． 例如 \verb|{1, 2}.{3, 4}|．
+\item \verb|LinearSolve[{{1, 2}, {3, 4}}, {5, 6}]| 解线性方程组．
+\item \verb|Eigenvectors[{{1,2},{3,4}}]|， \verb|Eigenvalues[{{1,2},{3,4}}]| 计算矩阵本征值．
+\item \verb|MatrixExp| 计算矩阵的指数．
+\end{itemize}
+
 \subsubsection{微积分}
 \begin{itemize}
 \item 求和 \verb|Sum[f, {i, imin, imax}]|
 \item \verb|Solve[左边==右边, x]| 求解关于 $x$ 的方程．
+\item \verb|Roots[左边==右边, x]| 和 \verb|Solve| 相同， 但结果的格式不同．
 \item \verb|Limit[f, x->x0]| 极限 $\lim_{x\to x_0} f$．
 \item \verb|Minimize[f, x]|， \verb|Maximize[f, x]| 求函数 $f(x)$ 的最小值/最大值．
 \item \verb|Series[f, {x, x0, order}]| 把函数展开成泰勒级数．
 \item \verb|D[Sin[x]]|， \verb|D[Sin[x+y],x]|， 导数和偏导数．
 \item \verb|Integrate[1/(x^3-1),x]| 不定积分， \verb|Integrate[f,{x, xmin, xmax}]| 定积分, \verb|Integrate[f, {x, xmin, xmax},{y, ymin, ymax},...]| 重积分．
-\item \verb|Integrate[(f[x])\[Conjugate] f[
-   x], {x, -\[Infinity], \[Infinity]}, 
- Assumptions -> {\[Sigma] > 0, Subscript[k, 0] > 0, x0 > 0}]| 中使用限制一些常数的范围， 这会大大缩短计算时间， 如果不规定范围， 则默认是任意复数．
+\item \verb|Integrate[(f[x])\[Conjugate] f[x], {x, -\[Infinity], \[Infinity]}, Assumptions -> {\[Sigma] > 0, Subscript[k, 0] > 0, x0 > 0}]| 中使用限制一些常数的范围， 这会大大缩短计算时间， 如果不规定范围， 则默认是任意复数．
 \item \verb|FourierSeries[函数, 自变量, 项数]|．
 \item \verb|FourierTransform[Exp[-x^2], x, k]| 傅里叶变换．
 \item \verb|Plot[y[x], {x, -5, 5}]| 简单的画图．

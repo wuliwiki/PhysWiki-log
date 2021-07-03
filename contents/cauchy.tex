@@ -15,18 +15,36 @@
 \end{definition}
 
 \begin{theorem}{}
-如果度量空间 $X$ 中的序列存在极限（\autoref{Metri2_def1}~\upref{Metri2}）， 则它是一个柯西序列．
+如果度量空间 $X$ 中的某个序列存在极限（\autoref{Metri2_def1}~\upref{Metri2}）， 则它是一个柯西序列．
 \end{theorem}
 证明留做习题．
 
 \begin{theorem}{}\label{cauchy_the1}
-度量空间 $X$ 中的柯西序列 $\qty{x_n}$ 若在 $X$ 中不存在极限． 则可以定义一个新的元素 $x \notin X$， 并定义它和任意 $y\in X$ 的距离为
+度量空间 $X$ 中的柯西序列 $\qty{x_n}$ 若在 $X$ 中不存在极限． 则可以定义一个新的元素 $x \notin X$， 并定义它和任意 $y\in X$ 的距离为（可以证明该极限存在）
 \begin{equation}
 d(x, y) = \lim_{n\to\infty} d(x_n, y)
 \end{equation}
-（可以证明该极限存在）把 $x$ 添加进 $X$ 后， 构成新的度量空间 $X'$． 在 $X'$ 中 $x$ 是序列 $\qty{x_i}$ 的极限．
+把 $x$ 添加进 $X$ 后， 构成新的度量空间 $X'$． 在 $X'$ 中 $x$ 是序列 $\qty{x_i}$ 的极限．
 \end{theorem}
-\addTODO{证明}
+%\addTODO{证明}
+证明：由度量空间中的三角不等式，我们有
+\begin{equation}
+d(x_n,y)-d(x_m,y)\leq d(x_n,x_m)
+\end{equation}
+由于序列$\qty{x_i}$为柯西序列，故 $\forall\varepsilon>0$，$\exists N$，当 $n,m>N$时，就有 $d(x_n,x_m)<\varepsilon$．这意味着若令 $y_i=d(x_i,y)$，则 $\qty{y_i}$ 为柯西序列．又 $d(x_i,y)\in \mathbb R$，所以 ${y_i}$ 为实数域上的柯西序列．对实数域上的柯西序列，有柯西收敛原理，即实数域上的柯西序列恒有有限极限存在．所以 $\qty{y_i}$极限存在．若令此极限为 $d(x,y)$，即
+\begin{equation}
+d(x, y) = \lim_{n\to\infty} d(x_n, y)
+\end{equation}
+则$\forall\varepsilon>0$，$\exists N$，当 $n>N$时，就有 
+\begin{equation}
+|d(x,y)-d(x_n,y)|<\varepsilon
+\end{equation}
+注意 $y$任意，令 $y=x_n$，就有
+\begin{equation}
+d(x,x_n)<\varepsilon
+\end{equation}
+即对 $x$加入 $X$后构成的度量空间 $X'$，在 $X'$中 $x$是序列 $\qty{x_i}$的极限．
+
 注意一些教材中对 “收敛” 的定义更为严格， 即只把上述定义中 $x \in X$ 的情况称为收敛． 在这种定义下， 一些柯西数列既不收敛也不发散（\autoref{cauchy_the1} 中 $x\notin X$ 的情况）．
 
 % 证明： 根据三角不等式（\autoref{Metric_def2}~\upref{Metric}）， 对任意 $n$ 都有 $\abs{d(x,y) - d(x_n, y)}\le d(x, x_n)$． 根据柯西序列定义， （未完成）
@@ -36,12 +54,12 @@ d(x, y) = \lim_{n\to\infty} d(x_n, y)
 % \end{theorem}
 
 
-实数域 $\mathbb R$ 上的柯西序列必定是收敛的， 这是我们可以通过判断数列是否为柯西序列从而判断该序列是否收敛． 但如果我们从 $\mathbb R$ 中把收敛的那点挖走， 那么这个柯西序列在这个集合中就不收敛． 所以柯西序列是否收敛取决于它所属于的集合． % 我想表达的意思很明确， 只是说法可能不够严谨
+实数域 $\mathbb R$ 上的柯西序列必定是收敛的， 这使我们可以通过判断数列是否为柯西序列从而判断该序列是否收敛． 但如果我们从 $\mathbb R$ 中把收敛的那点挖走， 那么这个柯西序列在这个集合中就不收敛． 所以柯西序列是否收敛取决于它所属于的集合． % 我想表达的意思很明确， 只是说法可能不够严谨
 
 \subsection{度量空间的完备性}
 
 \begin{definition}{完备空间}
-如果度量空间 $X$ 中任意柯西序列都收敛到 $x\in X$（即存在极限）， 那么该赋范空间就是\textbf{完备（complete）}的．
+如果度量空间 $X$ 中任意柯西序列都收敛到 $x\in X$（即存在极限）， 那么该度量空间就是\textbf{完备（complete）}的．
 \end{definition}
 
 在\autoref{cauchy_the1} 中我们介绍了一种方法， 可以给不完备度量空间 $X$ 不断加入新的元素． 如果我们不断重复这一过程， 就可以在 $X$ 的基础上得到一个最小的完备空间， 叫做 $A$ 的\textbf{完备化空间（complete metric space）}．

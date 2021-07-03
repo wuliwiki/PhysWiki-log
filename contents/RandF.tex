@@ -18,7 +18,7 @@
 
 现在， 我们令区间数 $n\to \infty$ 且每个区间长度 $\Delta x_i \to 0$， 则离散的 $y_i$ 值就可以表示为函数 $y = f(x)$． 我们可以用定积分来表示 “所有长方形的面积之和为 1” ， 即\footnote{注意积分上下限是 $x$ 取值的区间， 以下为了方便表示， 我们取整个实数域， 可以理解为超出区间的部分概率分部函数为 0．}
 \begin{equation}\label{RandF_eq1}
-\int_{-\infty}^{+\infty} f(x) = 1
+\int_{-\infty}^{+\infty} f(x)\dd x = 1
 \end{equation}
 该式叫做概率分布函数的\textbf{归一化}． 满足归一化意味着， 所有情况发生的概率总和为 1．
 
@@ -41,7 +41,7 @@
 \ev{x} \approx \sum_{i=0}^n x_i P_i = \sum_{i=1}^n x_i f(x_i) \Delta x_i
 \end{equation}
 用定积分\upref{DefInt}的思想， 当子区间无限多且取无限小时， 上式变为
-\begin{equation}
+\begin{equation}\label{RandF_eq7}
 \ev{x} = \int_{-\infty}^{+\infty} x f(x) \dd{x}
 \end{equation}
 
@@ -51,7 +51,7 @@
 \sigma_x^2 \approx \sum_{i=0}^n (x_i - \bar x)^2 P_i
 \end{equation}
 与计算平均值的思路类似， 将方差拓展到连续变量的情况得
-\begin{equation}
+\begin{equation}\label{RandF_eq6}
 \sigma_x^2 = \int_{-\infty}^{+\infty} \qty(x-\bar x)^2 f(x) \dd{x}
 \end{equation}
 
@@ -78,7 +78,7 @@ U(t) = U_0 + \varepsilon \sin(\omega t)
 \begin{example}{分子的平均动能}
 某气体中含有大量分子（阿伏伽德罗常数数量级： $10^{23}$）， 若假设某时刻它们的速度大小 $v$ 的分布函数为
 \begin{equation}
-f(v) = A \sin[2](\frac{\pi v}{v_{max}}) \qquad (v \in [0, v_{max}])
+f(v) = A \sin[2](\frac{\pi v}{v_{m}}) \qquad (v \in [0, v_{m}])
 \end{equation}
 其中 $A$ 为常数． 请分别计算：
 \begin{enumerate}
@@ -88,4 +88,81 @@ f(v) = A \sin[2](\frac{\pi v}{v_{max}}) \qquad (v \in [0, v_{max}])
 \item 分子动能 $E_k = mv^2/2$ 的平均值
 \item 分子动能的方差
 \end{enumerate}
+
+解：
+
+1. 将 $f(v)$ 代入分布函数的归一化条件\autoref{RandF_eq1} 
+\begin{equation}\label{RandF_eq5}
+A\int_{0}^{v_{m}} \sin[2](\frac{\pi v}{v_{m}})\dd v= 1
+\end{equation}
+而由
+\begin{equation}
+\int \sin^2 x\dd x = \int\frac{(1-\cos 2x)}{2}\dd x = \frac{1}{2}x-\frac{1}{4}\sin 2x+C
+\end{equation}
+知
+\begin{equation}\label{RandF_eq4}
+\begin{aligned}
+&\int_{0}^{v_{m}} \sin[2](\frac{\pi v}{v_{m}})\dd v=\frac{v_{m}}{\pi}\int_{0}^{v_{m}} \sin[2](\frac{\pi v}{v_{m}})\dd (\frac{\pi v}{v_{m}})\\
+&=\frac{v_{m}}{\pi}\qty (\frac{1}{2}\frac{\pi v}{v_{m}}-\frac{1}{4}\sin \frac{2\pi v}{v_{m}})\Bigg|_{0}^{v_{m}}=\frac{v_{m}}{\pi}\qty(\frac{\pi}{2}-0)=\frac{v_{m}}{2}
+\end{aligned}
+\end{equation}
+\autoref{RandF_eq4} 代入\autoref{RandF_eq5} ，得 
+\begin{equation}
+A=\frac{2}{v_{m}}
+\end{equation}
+
+2.由\autoref{RandF_eq2} 
+\begin{equation}\label{RandF_eq8}
+\begin{aligned}
+\ev{v}&=A\int_{0}^{v_{m}} v\sin[2](\frac{\pi v}{v_{m}})\dd v=\frac{A}{2}\int_0^{v_m}v\qty[1-\cos\qty(\frac{2\pi v}{v_{m}})]\dd v\\
+&=\frac{A}{2}\qty{\frac{v^2}{2}-\qty[\sin(\frac{2\pi v}{v_{m}})\cdot\frac{v}{\frac{2\pi}{v_m}}+\cos(\frac{2\pi v}{v_{m}})\cdot\frac{1}{\qty(\frac{2\pi}{v_m})^2}]}\Bigg|_{0}^{v_{m}}\\
+&=\frac{A}{2}\qty(\frac{v_{m}^2}{2}-\frac{v_{m}^2}{4\pi^2}+\frac{v_{m}^2}{4\pi^2})=\frac{v_{m}}{2}
+\end{aligned}
+\end{equation}
+
+3.由方差的定义\autoref{RandF_eq6} 和平均值的定义\autoref{RandF_eq7} ，我们可将方差写为
+\begin{equation}
+\sigma_x^2=\ev{(x-\ev{x})^2}=\ev{x^2-2x\ev{x}+\ev{x}^2}=\ev{x^2}-\ev{x}^2
+\end{equation}
+那么
+\begin{equation}\label{RandF_eq10}
+\sigma_v^2=\ev{v^2}-\ev{v}^2
+\end{equation}
+\begin{equation}\label{RandF_eq9}
+\begin{aligned}
+\ev{v^2}&=A\int_{0}^{v_{m}} v^2\sin[2](\frac{\pi v}{v_{m}})\dd v=\frac{A}{2}\int_{0}^{v_{m}}v^2\qty[1-\cos\qty(\frac{2\pi v}{v_{m}})]\dd v\\
+&=\frac{A}{2}\qty{\frac{v^3}{3}-\qty{\sin(\frac{2\pi v}{v_{m}})\qty[\frac{v^2}{\frac{2\pi }{v_{m}}}-\frac{2}{\qty(\frac{2\pi }{v_{m}})^3}]+\cos(\frac{2\pi v}{v_{m}})\cdot\frac{2v}{\qty(\frac{2\pi}{v_{m}})^2}}}\Bigg|_0^{v_{m}}\\
+&=\frac{A}{2}\qty(\frac{v_m^3}{3}-\frac{v_{m}^3}{2\pi^2}+\frac{v_{m}^3}{2\pi^2})=\frac{v_{m}^2}{3}
+\end{aligned}
+\end{equation}
+\autoref{RandF_eq8} 和\autoref{RandF_eq9} 代入\autoref{RandF_eq10}， 方差为
+\begin{equation}
+\sigma_v^2=\frac{v_{m}^2}{3}-\frac{v_{m}^2}{4}=\frac{v_m^2}{12}
+\end{equation}
+
+4.
+\begin{equation}\label{RandF_eq11}
+\ev{E_k}=\ev{\frac{mv^2}{2}}=\frac{m}{2}\ev{v^2}=\frac{mv_{m}^2}{6}
+\end{equation}
+
+5.
+\begin{equation}\label{RandF_eq12}
+\sigma_{E_k}=\ev{E_k^2}-\ev{E_k}^2
+\end{equation}
+而
+\begin{equation}\label{RandF_eq13}
+\ev{E_k^2}=\frac{m^2}{4}\ev{v^4}
+\end{equation}
+\begin{equation}
+\begin{aligned}
+\ev{v^4}&=A\int_0^{v_{m}}v^4\sin[2](\frac{\pi v}{v_{m}})\dd v =\frac{A}{2}\int_0^{v_{m}}v^4\qty[1-\cos\qty(\frac{2\pi v}{v_{m}})]\dd v\\
+&=\frac{A}{2}\cdot\frac{v^5}{5}\bigg|_0^{v_{m}}=\frac{v_m^4}{5}
+\end{aligned}
+\end{equation}
+联立 \autoref{RandF_eq11}  、\autoref{RandF_eq12} 、 和\autoref{RandF_eq13} 
+\begin{equation}
+\begin{aligned}
+\sigma_{E_k}&=\frac{m^2v_m^4}{20}-\frac{m^2v_m^4}{36}=\frac{m^2v_m^4}{45}
+\end{aligned}
+\end{equation}
 \end{example}

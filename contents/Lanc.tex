@@ -112,7 +112,28 @@ H_{ij}=\mel{\Psi_i}{H}{\Psi_j}
 & & \ddots& \ddots & \beta_{K-1} \\
 &&&\beta_{K-1} & \alpha_{K-1}
 \end{pmatrix}\end{equation}
-该矩阵具有维数小，易求本征问题的优势．
+该矩阵具有维数小，易求本征问题的优势． 令
+\begin{equation}
+\mat H = \mat P\mat\Lambda \mat P^{-1}
+\end{equation}
+那么
+\begin{equation}
+\E^{-\I \mat H \Delta t} = \mat P \exp(-\I \mat \Lambda \Delta t) \mat P\Her
+\end{equation}
+注意在 $\ket{\Psi_i}$ 基底下， $\Psi(\bvec r, t)$ 就是 $(1, 0, 0, \dots)$． 所以在该基底下
+\begin{equation}\label{Lanc_eq1}
+\E^{-\I \mat H \Delta t} \Psi(\bvec r, t) = \mat P \exp(-\I \mat \Lambda \Delta t) (\mat P\Her)_{\text{第1列}} = \mat P \exp(-\I \mat \Lambda \Delta t) (\mat P_{\text{第1行}})\Her
+\end{equation}
+
+
+\subsection{误差分析}
+要判断 $K$ 是否足够， 只需要计算\autoref{Lanc_eq1} 中的矢量 $\bvec a \equiv \exp(-\I \mat \Lambda \Delta t) (\mat P_{\text{第1行}})\Her$ 的最后几个矩阵元的平方和是否可以忽略不计， 如果可以就说明 $K$ 是足够的．
+
+第一个被截去的系数 $a_{K+1}$ 的模长可以用下式估计（Feist 论文 4.51）
+\begin{equation}
+\abs{a_{K+1}} \approx \frac{\Delta t^K}{K!} \prod_i \beta_i
+\end{equation}
+可以做个实验把该式和直接计算的结果进行对比． 对于固定的 $K$， 该式可以用于薛定谔方程的变步长演化． Feist 用的 Sort Iterative Lanczos 就是使用 $K$ 等于 "a few"， 以及较小的 $\Delta t$．
 
 \subsection{定理1证明}
 

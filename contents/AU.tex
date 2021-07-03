@@ -7,27 +7,36 @@
 
 若声明使用原子单位， 物理量的数值后面就不需要标记单位， 例如 “氢原子基态能量为 $E \approx -0.5$”． 有时候为了强调我们使用原子单位， 我们会在数值后面加上 “a.u.”， 如 “$E \approx 0.5 \Si{a.u.}$”． 这里的 “a.u.” 可等效为 “单位 1”， 类似弧度单位 “Rad”\footnote{例如在扇形面积公式 $S = \theta R^2/2$ 中的 $\theta$ 可以看作具有单位 “Rad”， 但面积的单位却只是 “$\Si{m^2}$” 而无需记为 “$\Si{Rad\cdot m^2}$”．}．
 
-\subsection{无单位的薛定谔方程}
+\subsection{推导}
 \pentry{薛定谔方程\upref{TDSE}}
+原子单位下的物理量和公式都可以看作是无量纲的数字． 沿用 “无单位的物理公式\upref{NoUnit}” 中的记号， 长度、质量、时间、能量、一维波函数的转换常数分别记为 $\beta_x$， $\beta_m$， $\beta_t$， $\beta_E$， $\beta_\Psi$．
+
+在量子力学中， 由于普朗克常数 $\hbar$ 大量出现， 我们希望它在原子单位下等于 $1$， 即 $\beta_L = \hbar$． 注意 $\hbar$ 具有角动量量纲． 令角动量公式 $\bvec L = m \bvec r \cross \bvec v$ 在原子单位下依然成立， 那么 $\beta_L = \hbar = {\beta_m \beta_x^2}/{\beta_t}$， 即
+\begin{equation}\label{AU_eq6}
+\beta_t = \frac{\beta_m \beta_x^2}{\hbar}
+\end{equation}
+令动能公式 $E_k = mv^2/2$ 在原子单位中成立， 那么
+\begin{equation}\label{AU_eq7}
+\beta_E = \frac{\beta_m \beta_x^2}{\beta_t^2} = \frac{\hbar}{\beta_t}
+\end{equation}
+这样， 量子力学中所有公式中的 $\hbar$ 都可以看作是一个角动量常数并用数字 $1$ 代替了．
+
+\begin{example}{无单位的薛定谔方程}
 国际单位下的一维含时薛定谔方程为
 \begin{equation}\label{AU_eq1}
 -\frac{\hbar^2}{2m} \pdv[2]{\Psi}{x} + V\Psi= \I\hbar \pdv{\Psi}{t}
 \end{equation}
-与“无单位的物理公式\upref{NoUnit}” 中的方法类似， 我们需要给公式中出现的每个单位定义一个常数， 分别记为 $\beta_x$， $\beta_m$， $\beta_t$， $\beta_E$， $\beta_\Psi$， 且令 $x = x_a\beta_x$， $m = m_a\beta_m$， $t = t_a\beta_t$， $V = V_a\beta_E$， $\Psi = \Psi_a \beta_\Psi$ （注意 $x_a, m_a$ 等都是不带单位的）．
+令 $x = x_a\beta_x$， $m = m_a\beta_m$， $t = t_a\beta_t$， $V = V_a\beta_E$， $\Psi = \Psi_a \beta_\Psi$ （注意 $x_a, m_a$ 等都是不带单位的）．
 代入\autoref{AU_eq1}， 各项同除 $\beta_E\beta_\Psi$， 得\footnote{根据偏微分的定义， 常数可以移到偏微分算符外， 如 $\pdv*[2]{(\beta_x x_a)} = (1/\beta_x^2) \pdv*[2]{x_a}$}
 \begin{equation}\label{AU_eq3}
 -\qty(\frac{\hbar^2}{\beta_m\beta_x^2\beta_E})\frac{1}{2m_a} \pdv[2]{\Psi_a}{x_a} + V_a\Psi_a= \I\qty(\frac{\hbar}{\beta_E\beta_t})\pdv{\Psi_a}{t_a}
 \end{equation}
-为了让公式尽可能简洁， 我们令两个括号都为 1， 得
-\begin{equation}\label{AU_eq6}
-\beta_E = \frac{\hbar^2}{\beta_m\beta_x^2}
-\qquad
-\beta_t = \frac{\beta_m\beta_x^2}{\hbar}
-\end{equation}
-于是无单位的薛定谔方程为
+使用\autoref{AU_eq6} 和\autoref{AU_eq7}， 发现两个括号中的常数都是 1， 于是无单位的薛定谔方程为
 \begin{equation}\label{AU_eq4}
 -\frac{1}{2m_a} \pdv[2]{\Psi_a}{x_a} + V_a\Psi_a= \I\pdv{\Psi_a}{t_a}
 \end{equation}
+这个过程也可以简单认为是把\autoref{AU_eq1} 中的 $\hbar$ 替换为数字 1．
+
 我们再看波函数的归一化公式
 \begin{equation}
 1 = \int \abs{\Psi}^2 \dd{x} = \beta_\Psi^2 \beta_x \int \abs{\Psi_a}^2 \dd{x_a}
@@ -37,7 +46,9 @@
 \beta_\Psi = \beta_x^{-1/2}
 \end{equation}
 同理， 对 $N$ 维波函数有 $\beta_\Psi = \beta_x^{-N/2}$．
-由\autoref{AU_eq5} 和\autoref{AU_eq6} 可知我们只剩下两个自由的转换常数， 例如只要确定 $\beta_x$ 和 $\beta_m$， 剩下的 $\beta$ 也就确定了．
+\end{example}
+
+由以上约束条件， 上面出现的所有转换常数中只剩下两个自由的， 例如只要确定 $\beta_x$ 和 $\beta_m$， 剩下的 $\beta$ 也就确定了．
 
 我们来看光子的能量公式
 \begin{equation}
@@ -47,10 +58,9 @@ E = \hbar \omega \Longrightarrow E_a = \frac{\hbar\beta_\omega}{\beta_E}\omega_a
 \begin{equation}\label{AU_eq2}
 E_a = \omega_a
 \end{equation}
-我们以后会发现， 使用原子单位后所有公式中的普朗克常数 $\hbar$ 都恰好被消去了， 所以一些文献中直接说 “原子单位中 $\hbar = 1$”． 这句话的一种理解方式是把 $\hbar$ 看成一个角动量常量， 而原子单位制中角动量的转换常数恰好为 $\beta_L = \hbar$ （见\autoref{AU_eq1}）， 所以转换后该角动量常数等于 1a.u．
 
 \subsection{原子单位}
-最常见的情况下， 原子单位定义 $\beta_m$ 等于电子的质量， $\beta_x$ 等于玻尔半径， 再由\autoref{AU_eq6} 和\autoref{AU_eq5} 确定 $\beta_E, \beta_t, \beta_\Psi$， 如\autoref{AU_tab1} 所示\footnote{为了区别能量与电场，以下用 $E$ 表示能量，用 $\mathcal{E}$ 表示电场．} ． 注意许多常数都与氢原子的玻尔模型\upref{BohrMd}（原子核不动）的基态（表中简称基态）有关．
+原子单位最常见的版本是 Hartree 原子单位， 定义 $\beta_m$ 等于电子的质量， $\beta_x$ 等于玻尔半径， 再由\autoref{AU_eq6} 和\autoref{AU_eq5} 确定 $\beta_E, \beta_t, \beta_\Psi$， 如\autoref{AU_tab1} 所示\footnote{为了区别能量与电场，以下用 $E$ 表示能量，用 $\mathcal{E}$ 表示电场．} ． 注意许多常数都与氢原子的玻尔模型\upref{BohrMd}（原子核不动）的基态（表中简称基态）有关． 表中还定义了一些其他的物理量的转换常数， 它们的定义可以使以下无单位公式成立（以后我们在不至于混淆的情况下省略角标 $a$）
 
 \begin{table}[ht]
 \caption{原子单位转换常数表}\label{AU_tab1}
@@ -70,7 +80,7 @@ E_a = \omega_a
 \hline
 \dfracH 能量 $E$ & $\dfrac{\hbar^2}{m_e a_0^2} = \dfrac{e^2}{4\pi \epsilon_0 a_0}$ & 基态电子势能大小 & $4.3597446499\e{-18}$ \\
 \hline
-角动量 $L$ & $m_e v_0 a_0 = \hbar$ & 长度乘以动量 & $1.054571800\e{-34}$ \\
+角动量 $L$ & $m_e v_0 a_0 = \hbar$ & 长度乘以动量 & $1.0545718176\e{-34}$ \\
 \hline
 电荷 $q$ & $e$ 或 $q_e$ & 电子电荷 & $1.6021766208\e{-19}$\\
 \hline
@@ -83,7 +93,6 @@ E_a = \omega_a
 \end{tabular}
 \end{table}
 
-表中还定义了一些其他的物理量的转换常数， 它们的定义可以使以下无单位公式成立（以后我们在不至于混淆的情况下省略角标 $a$）
 \begin{equation}
 \omega = \frac{2\pi}{T}
 \end{equation}
@@ -114,10 +123,8 @@ V = qU = -q\mathcal{E} x \qquad \text{（匀强电场电势能）}
 \begin{equation}
 \bvec B = \curl \bvec A \qquad \text{（标势和矢势）}
 \end{equation}
-
-薛定谔方程为
 \begin{equation}\label{AU_eq12}
--\frac{1}{2m} \pdv[2]{\Psi}{x} + V\Psi= \I\pdv{\Psi}{t}
+-\frac{1}{2m} \pdv[2]{\Psi}{x} + V\Psi= \I\pdv{\Psi}{t} \qquad \text{（薛定谔方程为）}
 \end{equation}
 注意当考察对象为电子时， 式中 $m = 1$， 可省略．
 
@@ -166,9 +173,11 @@ E_n = \frac12 + n \qquad (n = 0, 1, 2\dots)
 \psi_0(x) = \pi^{-1/4} \E^{-x^2/2}
 \end{equation}
 
+\subsection{转换为国际单位}
+使用 “无量纲的物理公式\upref{NoUnit}” 中的方法， 容易把原子单位的物理量和公式换回到国际单位， 前提是要明确每个物理量的量纲．
 
-\begin{example}{转换为含单位的公式}
-现在我们按照“无单位的物理公式\upref{NoUnit}” 中介绍的方法将\autoref{AU_eq18} 转换为含单位的公式． 即先把所有无单位的物理量替换成有单位的物理量除以对应的 $\beta$ 常数， 得（两边已同乘 $\beta_\Psi$）
+\begin{example}{薛定谔方程}
+要将薛定谔方程\autoref{AU_eq18} 转换为国际单位的公式． 即先把所有无单位的物理量替换成有单位的物理量除以对应的 $\beta$ 常数， 得（两边已同乘 $\beta_\Psi$）
 \begin{equation}
 -\beta_x^2\frac12 \pdv[2]{\Psi}{x} + \frac{1}{\beta_x^2}\frac12 x^2 \Psi= \beta_t\I\pdv{\Psi}{t}
 \end{equation}
