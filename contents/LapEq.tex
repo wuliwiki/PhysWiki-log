@@ -8,11 +8,129 @@
 \pentry{梯度\upref{Grad}， 散度\upref{Divgnc}， 分离变量法解偏微分方程\upref{SepVar}}
 
 设$\Omega\subset\mathbb{R}^n$是区域, $u$是$\Omega$上的实值函数. 如下偏微分方程称为\textbf{拉普拉斯方程（laplacian equation）}:
-\begin{equation}
+\begin{equation}\label{LapEq_eq6}
 \Delta u = 0,
 \end{equation}
 这里$\Delta=\Nabla\vdot\Nabla=\partial_{x^1}^2+...+\partial_{x^n}^2$是梯度的散度, 也就是所谓的\textbf{拉普拉斯算子(Laplacian)}. 根据定义， 有分配律 $\Nabla \vdot (\Nabla u) = (\Nabla \vdot \Nabla) u$． 满足拉普拉斯方程的函数叫做\textbf{调和函数（harmonic function）}．
 
 从物理上看， 二元函数的拉普拉斯方程可以理解为一片静止的， 不受外力的薄膜\upref{Wv2D}所满足的方程． 要得到方程的解， 我们需要规定一些边界条件． 常见的条件是给定一个区域， 然后给出 $u(\bvec r)$ 在边界上的函数值．
 
-\addTODO{使用分离变量法求解一些简单例题， 参考\cite{GriffE}． 1. 当边界值为常数时， $u$ 是常函数． 2. 长方形边界三边是 $c_1$， 一边是 $c_2$ 的解．}
+\begin{example}{}
+在静电学问题中， 电势能满足泊松方程， 在没有电荷分布的区域， 泊松方程变为拉普拉斯方程
+\addTODO{未完成： 引用相关【物理】词条}
+\begin{equation}
+\Delta V=0
+\end{equation}
+我们来计算$V$仅依赖于$r$（$r$为到原点的距离）的情况．采用球坐标，拉普拉斯方程使用\autoref{SphLap_eq5}~\upref{SphLap} 写为
+\begin{equation}
+\frac{1}{r^2}\dv{}{r}\qty(r^2\dv{V}{r})=0
+\end{equation}
+则
+\begin{equation}
+r^2\dv{V}{r}=c\Rightarrow \dv{V}{r}=\frac{c}{r^2}
+\Rightarrow V(r)=-\frac{c}{r}+c'
+\end{equation}
+其中，$c$、 $c'$为常数．
+\end{example}
+%\addTODO{使用分离变量法求解一些简单例题， 参考\cite{GriffE}． 1. 当边界值为常数时， $u$ 是常函数． 2. 长方形边界三边是 $c_1$， 一边是 $c_2$ 的解．}
+\begin{example}{二维长方形边界问题}
+\addTODO{图}
+如图，二维平面上有一长方形区域，尺寸为 $a\times b$，该区域存在一标量场 $u(x,y)$，且满足
+\begin{equation}\label{LapEq_eq1}
+\pdv[2]{u}{x}+\pdv[2]{u}{y}=0
+\end{equation}
+边界条件为
+\begin{equation}
+u(0,y)=u(a,y)=u(x,0)=0,\quad u(x,b)=c
+\end{equation}
+求 $u(x,y)$
+
+解：设 $u(x,y)=X(x)Y(y)$，代入\autoref{LapEq_eq1} ，得
+\begin{equation}\label{LapEq_eq2}
+\frac{X''}{X}+\frac{Y''}{Y}=0
+\end{equation}
+式中， $X''=\dv[2]{X}{x},Y''=\dv[2]{Y}{y}$．
+\autoref{LapEq_eq2} 左边两项各为 $x$ 和 $y$ 的函数，而其和为常数0，这说明这两项只能是常数，令
+\begin{equation}
+\frac{X''}{X}=-k_x^2,\quad \frac{Y''}{Y}=-k_y^2
+\end{equation}
+由\autoref{LapEq_eq2} 
+\begin{equation}\label{LapEq_eq3}
+k_x^2+k_y^2=0
+\end{equation}
+首先解 $X(x)$
+\begin{equation}
+X''+k_x^2X=0
+\end{equation}
+其通解为
+\begin{equation}
+X(x)=a_1\sin k_x x+b_1\cos k_x x
+\end{equation}
+边界条件 $u(0,y)=u(a,y)=0$相当于 $X(0)=X(a)=0$，代入上式，得
+\begin{equation}
+b_1=0,\quad k_x=\frac{n\pi}{a} \qquad (n\in \mathbb{Z})
+\end{equation}
+所以
+\begin{equation}
+X_n(x)=a_1\sin\frac{n\pi x}{a} \qquad (n\in \mathbb{Z})
+\end{equation}
+再解 $Y(y)$
+\begin{equation}
+Y''+k_y^2Y=0
+\end{equation}
+同样，其通解为
+\begin{equation}
+Y(y)=a_2\sin k_y y+b_2\cos k_y y
+\end{equation}
+由\autoref{LapEq_eq3} ，$k_y=\I k_x$，代入上式，并由\autoref{CTrig_eq5}~\upref{CTrig} 和\autoref{CTrig_eq6}~\upref{CTrig}，得
+\begin{equation}
+Y(y)=\I a_2\sinh k_x y+b_2\cosh k_x y
+\end{equation}
+同样，边界条件 $u(x,0)=0$ 相当于 $Y(0)=0$，代入上式，得
+\begin{equation}
+Y_n(y)=\I a_2\sinh\frac{n\pi y}{a} \qquad (n\in \mathbb{Z})
+\end{equation}
+所以
+\begin{equation}
+\begin{aligned}
+u_n(x,y)&=X_n(x)Y_n(y)=\I a_1a_2\sin\frac{n\pi x}{a}\sinh\frac{n\pi y}{a}\\
+&=C'_n\sin\frac{n\pi x}{a}\sinh\frac{n\pi y}{a} \qquad (n\in\mathbb{Z})
+\end{aligned}
+\end{equation}
+由于 $k_x=0$ 的解没有意义（它意味着 $u(x,y)=0$），而且负数解不会给出新的解，因为 $\sin(-x)=-\sin x$，而负号可以合并到常数项去，所以可区分的解要求 $n\in\mathbb{Z^+}$.
+
+由线性叠加原理
+\begin{equation}\label{LapEq_eq5}
+u(x,y)=\sum_n C''_n u_n(x,y)=\sum_n C_n\sin\frac{n\pi x}{a}\sinh\frac{n\pi y}{a} \qquad  (n\in\mathbb{Z^+})
+\end{equation}
+现在，我们还差边界条件 $u(x,b)=c$ 未用，代入上式
+\begin{equation}
+c=\sum_n C_n\sin\frac{n\pi x}{a}\sinh\frac{n\pi b}{a}=\sum_n B_n\sin\frac{n\pi x}{a} \qquad (n\in\mathbb{Z^+})
+\end{equation}
+其中，$B_n=C_n\sinh \frac{n\pi b}{a}$．
+利用三角函数的正交性
+\begin{equation}
+\int_0^a\sin\frac{n\pi x}{a}\sin\frac{m\pi x}{a}\dd x=\left\{\begin{aligned}
+\frac{a}{2},\quad  n=m\\
+0,\quad n\neq m
+\end{aligned}\right.
+\end{equation}
+得
+\begin{equation}
+\begin{aligned}
+B_n&=\frac{2c}{a}\int_0^a\sin\frac{n\pi x}{a}\dd x=\frac{2c}{n\pi}(1+(-1)^{n+1})\\
+&=\left\{\begin{aligned}
+0,&\quad n=2,4,\cdots\\
+\frac{4c}{n\pi},&\quad n=1,3,5,\cdots
+\end{aligned}\right.
+\end{aligned}
+\end{equation}
+所以
+\begin{equation}\label{LapEq_eq4}
+C_n=\frac{B_n}{\sinh \frac{n\pi b}{a}}=\frac{4c}{n\pi\sinh \frac{n\pi b}{a}}(n=1,3,5,\cdots)
+\end{equation}
+\autoref{LapEq_eq4} 代入\autoref{LapEq_eq5} ，得到
+\begin{equation}
+u(x,y)=\frac{4c}{\pi}\sum_{n=1,3,5,\cdots} \frac{1}{n\sinh \frac{n\pi b}{a}}\sin\frac{n\pi x}{a}\sinh\frac{n\pi y}{a}
+\end{equation}
+\end{example}

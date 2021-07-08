@@ -10,6 +10,7 @@
 \begin{equation}\label{E_eq2}
 \E \equiv \sum_{n=0}^\infty \frac{1}{n!} = 1 + 1 + \frac{1}{2} + \frac{1}{6} + \dots
 \end{equation}
+我们把以 $\E$ 为底的对数函数 $\log_e x$ 叫做\textbf{自然对数函数}， 记为 $\ln(x)$．
 \addTODO{证明两种定义等效}
 令 $k$ 为常数， 可以把\autoref{E_eq1} 拓展得
 \begin{equation}\label{E_eq4}
@@ -46,7 +47,7 @@ $(1 + x)^{1/x}$ & $2.59374$ & $2.70481$ & $2.71692$ & $2.71815$ & $2.71827$ & $2
 为什么说自然对数底是 “自然” 的呢？ 我们来看两个例子．
 
 \begin{example}{银行利滚利}
-如果一笔数量为 $x$ 的钱存入某银行后， 银行的年利率是 $\lambda$， 那么一年后取出来连本带利共得 $(1+\lambda)x$． 如果银行规定， 在 $y$ 年时（$y$ 取任意正实数） 取出来， 则利率按照 $\lambda y$ 来计算． 例如半年取出得到 $(1+\lambda/2)x$， 若取出立刻存入， 再过半年连本带利为
+如果一笔数量为 $x$ 的钱存入某银行后， 银行的年利率是 $\lambda$， 那么一年后取出来连本带利共得 $(1+\lambda)x$． 假设银行规定， 在 $y$ 年时（$y$ 取任意正实数） 取出来， 则利率按照 $\lambda y$ 来计算． 例如半年取出共得 $(1+\lambda/2)x$， 若取出立刻存入， 再过半年连本带利为
 \begin{equation}
 (1+\lambda/2)^2 x = (1 + \lambda + \lambda^2/4)x > (1 + \lambda) x
 \end{equation}
@@ -68,7 +69,7 @@ x_t = \lim_{y\to 0}(1 + \lambda y)^{t/y} x
 \end{example}
 
 \begin{example}{彩票中奖概率分布}
-假设某种彩票从 $t = 0$ 开始每 $\Delta t$ 开奖一次， 开奖时每张彩票有 $\Delta P$ 的概率中奖， 每张彩票可以参加任意多次抽奖\footnote{也可以假设每张彩票只能抽一次， 但每次抽奖后就立即购买一张新彩票．}． 令 $\lambda = {\Delta P}/{\Delta t}$， 对每种彩票， $\lambda$ 是一个常数． 为了让问题更连续， 考虑极限 $\Delta t\to 0$ 的情况， 求第一次中奖时间概率分布\upref{RandF} $f(t)$ 以及数学期望值．
+假设某种彩票从 $t = 0$ 开始每隔 $\Delta t$ 开奖一次， 开奖时每张彩票有 $\Delta P$ 的概率中奖， 每张彩票可以参加任意多次抽奖\footnote{也可以假设每张彩票只能抽一次， 但每次抽奖后就立即购买一张新彩票．}． 令 $\lambda = {\Delta P}/{\Delta t}$， 对每种彩票， $\lambda$ 是一个常数． 为了让问题更连续， 考虑极限 $\Delta t\to 0$ 的情况， 若持有一张彩票， 求第一次中奖时间概率分布\upref{RandF} $f(t)$ 以及数学期望值．
 
 先考虑离散情况， 画出概率树， 在第 $N$ 次开奖时第一次中奖的概率为（注意要保证前 $N-1$ 次未中奖）
 \addTODO{概率树图}
@@ -80,13 +81,9 @@ P(N) &= (1-\Delta P)^{N-1} \Delta P\\
 \end{aligned}
 \end{equation}
 
-接下来， 我们假设该彩票开奖的时间越来越短， 但始终保持 $\lambda$ 不变． 那么根据\autoref{E_eq3}， 在极限 $\Delta t\to 0$ 下， 上式中方括号等于 $1/\E$， 而右边的分式变为 $\lambda \Delta t$．
+接下来， 我们假设该彩票开奖的时间越来越短， 但始终保持 $\lambda$ 不变． 那么根据\autoref{E_eq3}， 在极限 $\Delta t\to 0$ 下， 上式中方括号等于 $1/\E$， 所以第一次中奖时间的概率分布为
 \begin{equation}
-P(N) = \lambda\E^{-\lambda t}\Delta t
-\end{equation}
-所以第一次中奖时间的概率分布为
-\begin{equation}
-f(t) = \lim_{\Delta t\to 0} \frac{P(N)}{\Delta t} = \lambda\E^{-\lambda t}
+f(t) = \lim_{\Delta t\to 0} \frac{P(N)}{\Delta t} = \lambda\E^{-\lambda t}\lim_{\Delta t\to 0} \frac{1}{1-\lambda\Delta t} = \lambda\E^{-\lambda t}
 \end{equation}
 \addTODO{画图}
 可以验证归一化条件

@@ -1,0 +1,52 @@
+% 巴拿赫不动点定理
+
+\pentry{完备度量空间\upref{cauchy}}
+
+\textbf{巴拿赫不动点定理 (Banach fixed point theorem)} 又称作\textbf{压缩映像原理 (contraction mapping principle)}. 它是完备度量空间理论中的基本定理, 在分析数学的诸多分支中均有应用.
+
+\subsection{两个著名例子}
+\subsubsection{落在地面上的地图}
+这是数学科普中常见的命题: \textbf{将一座公园的地图铺开在公园地面上, 则地面上恰有唯一一点与地图上对应的点重合.} 借助一点线性代数知识, 这个命题是不难验证的.
+
+\subsubsection{函数的迭代}
+这是一个常见的数学实验: 在计算器中任意输入一个数, 而后不停地计算它的余弦值 (弧度制), 会得到什么结果? 
+
+\begin{figure}[ht]
+\centering
+\includegraphics[width=9cm]{./figures/ConMap_1.png}
+\caption{余弦函数的迭代} \label{ConMap_fig1}
+\end{figure}
+
+上图给出了一个结果; 迭代的结果越来越逼近对角线$y=x$与余弦曲线$y=\cos x$的唯一交点. 验算若干数值, 不难作出如下猜测: \textbf{不论实数的迭代序列
+$$
+x_{n+1}=\cos x_n
+$$
+开始于哪一个数, 它最后都会收敛到方程$x=\cos x$的唯一实数解$x=0.739085...$.}
+
+这个结论也不难严格证明. 不论起点$x_1$是何数, 都有$|x_2|=|\cos x_1|\leq 1$, 从而$\cos 1\leq x_3\leq 1$. 这样一来, 从$x_3$开始, 所有点都落在区间$[\cos 1,1]$内. 于是可以作出如下估计:
+$$
+\begin{aligned}
+|x_{n+2}-x_{n+1}|
+=\left|\int_{x_{n}}^{x_{n+1}}\sin tdt\right|
+\leq (\sin 1)|x_{n+1}-x_n|.
+\end{aligned}
+$$
+由于$|\sin1|<1$, 这表示序列$\{x_n\}$是柯西序列, 从而收敛到某个点$x_*$. 对等式$x_{n+1}=\cos x_n$取极限即看出这个极限点正是方程$x=\cos x$的解.
+
+
+\subsection{定理的表述与辨析}
+\begin{theorem}{巴拿赫不动点定理}
+设$(X,d)$是完备度量空间\upref{cauchy}, $T:X\to X$是连续映射. 如果存在一个数$q\in(0,1)$使得$d(Tx,Ty)\leq qd(x,y)$对于任意的$x,y\in X$都成立, 那么映射$T$有唯一的不动点, 即满足$x=Tx$的点. 而且, 对于任意$x_0\in X$, 点列$\{T^nx_0\}_{n\in\mathbb{N}}$都收敛到这个不动点.
+\end{theorem}
+证明是直接的计算: 根据度量空间中的三角不等式, 显然有
+$$
+\begin{aligned}
+d(T^nx_0,T^{n+k}x_0)
+&\leq \sum_{j=1}^k d(T^{n+j-1}x_0,T^{n+j}x_0)\\
+&\leq \sum_{j=1}^k q^{n+j-1}d(x_0,Tx_0)\\
+&\leq \frac{q^n}{1-q}d(x_0,Tx_0).
+\end{aligned}
+$$
+于是点列$\{T^nx_0\}_{n\in\mathbb{N}}$是柯西序列, 在完备度量空间$X$之中自然收敛到某个$x_*\in X$. 在公式$T^{n+1}x_0=T(T^nx_0)$中令$n\to\infty$就立刻看出$x_*=Tx_*$. 不动点的唯一性则由$d(Tx,Ty)\leq qd(x,y)$立刻得到. \textbf{证毕.}
+
+从许多个意义上来说, 巴拿赫不动点定理都是最优的, 因为取消任何一条假设都能够让定理不成立. 
