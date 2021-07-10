@@ -1,28 +1,50 @@
 % 电多极展开
 % 偶极子|多极子|球谐函数|电势
 
-\pentry{球谐函数\upref{SphHar}}
+\pentry{球谐函数\upref{SphHar}， 电偶极子\upref{eleDpl}}
 
 若空间中的一个球内（$r < a$） 存在静止的电荷分布 $\rho(\bvec r)$， 那么球外的电势 $V(\bvec r)$（$r > a$）可以展开为径向函数和球谐函数之积的形式
 \begin{equation}\label{EMulPo_eq2}
-V(\bvec r) = \sum_{l = 0}^\infty \sum_{m = -l}^l \frac{C_{l,m}}{r^{l+1}} Y_{l,m}(\uvec r)
+V(\bvec r) = \sum_{l = 0}^\infty \frac{1}{r^{l+1}}\sum_{m = -l}^l C_{l,m} Y_{l,m}(\uvec r) \qquad (r \geqslant a)
 \end{equation}
-其中常数 $C_{l,m}$ 为
+其中常数 $C_{l,m}$ 为（证明见下文）
 \begin{equation}
-C_{l,m} = \frac{1}{(2l+1)\epsilon_0} \int \rho(\bvec r) r^l Y_{l,m}^*(\uvec r) \dd[3]{r}
+C_{l,m} = \frac{1}{(2l+1)\epsilon_0} \int_{r\leqslant a} r^l \rho(\bvec r) Y_{l,m}^*(\uvec r) \dd[3]{r}
 \end{equation}
 
-当 $m = 0$ 时， $l = 1$ 的项就是电单极子（各向同性）， $l = 2$ 的项就是电偶极子\upref{eleDP2}（$\propto\cos \theta$）， $l = N$ 的项叫做电 $N$ 极子．
+$l = 0$ 的项就是\textbf{电单极子（electric monopole）} 具有球对称的电荷分布和势能分布， $l = 1$ 的项就是\textbf{电偶极子（dipole）}\upref{eleDP2}（$\propto\cos \theta$）， $l = 2$ 的项是\textbf{电四极子（quadrupole）}……  $l = N$ 的项叫做电 $2^N$ 极子．
 
-\subsection{推导}
-首先我们给出单个点电荷势能的展开公式
+为什么这么叫呢？ 因为电 $2^N$ 极子产生的势能项可以用 $2^{N-1}$ 个电荷为 $q$ 的点电荷以及 $2^{N-1}$ 个电荷为 $-q$ 的点电荷按照一定空间位置摆放后， 取 $r \to \infty$ 得到． 用数学归纳法的思想， 我们可以认为若电 $2^{N-1}$ 极子是一个点， 渐进势能为 $\sim 1/r^l$， 那么把两个电荷相反的 $2^{N-1}$ 极子放在一根短棍的两端组成电 $2^N$ 极子， 那么渐进势能就必须是更高阶无穷小， 即 $\sim 1/r^{l+2}$．
+
+电多极展开的优势在于只需要预先算出系数 $C_{l,m}$ 就可以无需积分得到球外任意位置的电势分布． 而如果用常规的方法， 则计算每个位置的电势都需要重新做一次积分（\autoref{EMulPo_eq5}）． 而它的缺点在于实际计算中必须取\autoref{EMulPo_eq2} 中的有限项， 会产生截断误差． 另一点是无法计算球内的电势分布．
+
+\subsubsection{内展开}
+相反， 若电荷分布 $\rho(\bvec r)$ 只存在于 $r \geqslant a$ 的球外空间， 那么可以把球内部任意点的电势 $V(\bvec r)$ 展开为
+\begin{equation}\label{EMulPo_eq4}
+V(\bvec r) = \sum_{l = 0}^\infty r^l \sum_{m = -l}^l D_{l,m} Y_{l,m}(\uvec r) \qquad (r \leqslant a)
+\end{equation}
+其中
+\begin{equation}\label{EMulPo_eq3}
+D_{l,m} = \frac{1}{(2l+1)\epsilon_0} \int_{r\geqslant a} \frac{1}{r^{l+1}} \rho(\bvec r) Y_{l,m}^*(\uvec r) \dd[3]{r}
+\end{equation}
+
+\subsubsection{一般展开}
+要求任意给定点 $\bvec r$ 的电势， 可取过该点的球面 $a = r$， 并把\autoref{EMulPo_eq2} 和\autoref{EMulPo_eq4} 合并就可以得到 $r$ 取任意值的展开
+\begin{equation}
+V(\bvec r) = \sum_{l = 0}^\infty\sum_{m = -l}^l \qty[\frac{1}{r^{l+1}} C_{l,m}(r) + r^l D_{l,m}(r)] Y_{l,m}(\uvec r)
+\end{equation}
+但这计算起来比较麻烦， 因为现在 $C_{l,m}, D_{l,m}$ 成了 $r$ 的函数， 对每个在 $\rho(r)\ne 0$ 范围的 $r$ 都需要计算一次积分， 当 $r$ 大于 $\rho(r)$ 的最大半径（如果存在）， $C_{l,m}$ 重新变为常数， $D_{l,m}= 0$， 就回到\autoref{EMulPo_eq2}． 当 $r$ 小于 $\rho(r)$ 的最小半径（如果不为零）， $D_{l,m}$ 重新变为常数， $C_{l,m} = 0$， 就回到\autoref{EMulPo_eq4}．
+
+\subsection{证明}
+首先我们给出单个点电荷势能的球谐展开公式（链接未完成）
 \begin{equation}\label{EMulPo_eq1}
-\frac{1}{\abs{\bvec r_2 - \bvec r_1}} = 4\pi \sum_{l=0}^{\infty} \frac{1}{2l+1} \frac{r_<^l}{r_>^{l+1}} \sum_{m = -l}^l Y_{l,m}^*(\uvec r_1) Y_{l,m}(\uvec r_2)
+\frac{1}{\abs{\bvec r - \bvec r'}} = 4\pi \sum_{l=0}^{\infty} \frac{1}{2l+1} \frac{r_<^l}{r_>^{l+1}} \sum_{m = -l}^l Y_{l,m}^*(\uvec r') Y_{l,m}(\uvec r)
 \end{equation}
-其中 $r_< := \min\qty{r_1, r_2}$， $r_> := \max\qty{r_1, r_2}$． 这就是为什么我们要求电荷必须在 $r < a$ 的球内而 $V(\bvec r)$ 必须在球外计算．
-
-然后根据库仑势能有
-\begin{equation}
+其中 $r_< = \min\qty{r, r'}$， $r_> = \max\qty{r, r'}$． 另外连续电荷分布的库仑势能公式为（\autoref{QEng_eq14}~\upref{QEng}）
+\begin{equation}\label{EMulPo_eq5}
 V(\bvec r) = \frac{1}{4\pi\epsilon_0}\int \frac{\rho(\bvec r')}{\abs{\bvec r - \bvec r'}} \dd[3]{r'}
 \end{equation}
-令\autoref{EMulPo_eq1} 中 $r_< = r'$， $r_> = r$， 可得\autoref{EMulPo_eq2}．
+
+若我们要求电荷必须在球内（$r' < a$）而 $V(\bvec r)$ 中的 $\bvec r$ 必须在球外（$r > a$）， 那么始终有 $r_> = r, r_< = r'$， 代入\autoref{EMulPo_eq1} 再代入\autoref{EMulPo_eq5} 可得\autoref{EMulPo_eq2}．
+
+反之， 若电荷分布 $r' > a$， 场点 $r < a$， 那么始终有 $r_> = r', r_< = r$． 代入\autoref{EMulPo_eq1} 再代入\autoref{EMulPo_eq5} 得\autoref{EMulPo_eq4}．

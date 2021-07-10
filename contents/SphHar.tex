@@ -3,11 +3,11 @@
 
 \pentry{球坐标的拉普拉斯方程\upref{SphLap}， 连带勒让德多项式\upref{AsLgdr}}
 
-当球坐标中的拉普拉斯方程\upref{SphLap}分离变量后， 关于极角 $\theta$ 的函数为连带勒让德多项式 $P_l^m(\cos\theta)$， 方向角函数为 $\E^{\I m\phi}$． 我们定义\textbf{球谐函数（spherical harmonics）}为\footnote{有些教材也将球谐函数记为 $Y_l^m$}\footnote{特殊地， $Y_{l,0}(\uvec r) = \sqrt{(2l + 1)/(4\pi)}P_l(\cos\theta)$， $P_l$ 是勒让德多项式\upref{Legen}．}
+\footnote{参考 Wikipedia \href{https://en.wikipedia.org/wiki/Spherical_harmonics}{相关页面}．}当球坐标中的拉普拉斯方程\upref{SphLap}分离变量后， 关于极角 $\theta$ 的函数为连带勒让德多项式 $P_l^m(\cos\theta)$， 方向角函数为 $\E^{\I m\phi}$． 我们定义\textbf{球谐函数（spherical harmonics）}为\footnote{有些教材也将球谐函数记为 $Y_l^m$}\footnote{特殊地， $Y_{l,0}(\uvec r) = \sqrt{(2l + 1)/(4\pi)}P_l(\cos\theta)$， $P_l$ 是勒让德多项式\upref{Legen}．}
 \begin{equation}\label{SphHar_eq1}
 Y_{l, m} (\uvec r) = Y_{l, m}(\theta, \phi) = A_{l,m} P_l^m(\cos \theta) \E^{\I m\phi}
 \end{equation}
-其中 $l, m$ 为整数， $l \ge 0$， $-l \le m \le -l$． $A_{l,m}$ 是归一化系数， 使得 $\abs{Y_{l, m} (\uvec r)}^2$ 在单位球面上的面积分等于 1．
+其中 $\uvec r$ 表示一个单位矢量\upref{GVec}， 指向球坐标中的点 $(1, \theta, \phi)$， $l, m$ 为整数， $l \geqslant 0$， $-l \leqslant m \leqslant -l$． $A_{l,m}$ 是归一化系数， 使得 $\abs{Y_{l, m} (\uvec r)}^2$ 在单位球面上的面积分等于 1．
 \begin{equation}\label{SphHar_eq2}
 A_{l,m} =  \sqrt{\frac{2l + 1}{4\pi }\frac{(l - m)!}{(l + m)!}}
 \end{equation}
@@ -21,13 +21,10 @@ A_{l,m} =  \sqrt{\frac{2l + 1}{4\pi }\frac{(l - m)!}{(l + m)!}}
 
 \subsection{偏微分方程}
 球谐函数同时满足偏微分方程
-\begin{equation}
-\laplacian_\Omega Y_{lm} = -l(l+1)Y_{lm}
-\end{equation}
-和
-\begin{equation}
-\pdv{\phi} Y_{lm} = \I m Y_{lm}
-\end{equation}
+\begin{align}
+\laplacian_\Omega Y_{lm} &= -l(l+1)Y_{lm}\\
+\pdv{\phi} Y_{lm} &= \I m Y_{lm}
+\end{align}
 其中
 \begin{equation}
 \laplacian_\Omega Y_{lm} = \frac{1}{\sin\theta}\pdv{\theta} \qty(\sin \theta \pdv{\theta}) + \frac{1}{\sin^2 \theta} \qty(\pdv[2]{\phi})
@@ -35,7 +32,8 @@ A_{l,m} =  \sqrt{\frac{2l + 1}{4\pi }\frac{(l - m)!}{(l + m)!}}
 中括号中的算符是球坐标系拉普拉斯算子（\autoref{SphNab_eq4}~\upref{SphNab}） $\laplacian$ 中与 $r$ 无关的部分．
 
 \subsection{归一化系数}
-由球谐函数的归一化条件， % 未完成：哪里讲解一下立体角是单位球面上的面积元， 以及极坐标中的表达式． % 链接未完成
+由球谐函数的归一化条件，
+\addTODO{链接未完成：哪里讲了立体角是单位球面上的面积元， 以及极坐标中的表达式？}
 \begin{equation}\ali{
 1 &= \int \abs{Y_{l, m}(\uvec r)}^2 \dd{\Omega} = \int_0^\pi  \int_0^{2\pi}  \abs{Y_{l, m}(\theta, \phi)}^2 \sin\theta\dd{\theta}\dd{\phi} \\
 &= \abs{A_{l,m}}^2 \int_{-1}^1  \abs{P_l^m(\cos\theta)}^2 \dd{(\cos \theta)} \int_0^{2\pi } \abs{\E^{\I m\phi}}^2  \dd{\phi}\\
@@ -43,13 +41,36 @@ A_{l,m} =  \sqrt{\frac{2l + 1}{4\pi }\frac{(l - m)!}{(l + m)!}}
 }\end{equation}
 其中 $A_{l,m}'$ 是 $P_l^m(x)$ 的归一化系数（见\autoref{AsLgdr_eq3}~\upref{AsLgdr}）， 代入后可得 $A_{l,m}$．
 
-\subsection{Condon–Shortley 相位}
-与连带勒让德多项式相同， 在定义球谐函数时我们也可以选择是否包含 \textbf{Condon–Shortley 相位} $(-1)^m$（物理中一般选择包含）． 如果包含， 我们可以选择将其包含在连带勒让德多项式中（如\autoref{AsLgdr_eq1}~\upref{AsLgdr}）， 或者包含在球谐函数的定义中． 如果不包含， 该相位在两个定义中都不出现．
+\subsection{Condon–Shortley 相位}\label{SphHar_sub1}
+与连带勒让德多项式相同， 在定义球谐函数时我们也可以选择是否包含 \textbf{Condon–Shortley 相位} $(-1)^m$． 物理中一般选择包含， 包括本书． 如果包含， 我们可以选择将其包含在连带勒让德多项式中（如\autoref{AsLgdr_eq1}~\upref{AsLgdr}）， 或者包含在球谐函数的定义中． 如果不包含， 该相位在两个定义中都不出现．
 
 \subsection{正交归一性}
 由勒让德函数的正交归一性（\autoref{AsLgdr_eq4}~\upref{AsLgdr}）以及 $\E^{\I m \phi}$  的正交归一性（\autoref{FSExp_eq4}~\upref{FSExp}）， 不难证明球谐函数的正交归一性
 \begin{equation}
-\int Y_{l', m'}^*(\uvec r) Y_{l, m} (\uvec r) \dd{\Omega} = \delta_{ll'}\delta_{mm'}
+\int Y_{l', m'}^*(\uvec r) Y_{l, m} (\uvec r) \dd{\Omega} = \delta_{l,l'}\delta_{m,m'}
+\end{equation}
+其中 $\delta_{i,j}$ 是克罗内克 delta 函数\upref{Kronec}． 与多元函数的傅里叶级数\upref{NdFuri}类似， 球谐函数可以展开所有性质良好的二元函数：
+\begin{equation}
+f(\uvec r) = f(\theta, \phi) = \sum_{l = 0}^\infty\sum_{m=-l}^l C_{l,m}Y_{l,m}(\theta, \phi) \quad (\theta \in [0, \pi], \phi \in [2, 2\pi])
+\end{equation}
+\begin{equation}
+C_{l,m} = \int Y^*_{l,m}(\uvec r) f(\uvec r) \dd{\Omega}
+\end{equation}
+由\autoref{SphHar_eq6} 可得： 若 $f(\uvec r)$ 是实函数， 那么
+\begin{equation}
+C_{l,-m} = (-1)^m C_{l,m}
+\end{equation}
+
+性质良好的三维函数 $f(\bvec r)$ 也可以展开为径向函数 $f_{l,m}(r)$ 和球谐函数的乘积
+\begin{equation}
+f(\bvec r) = f(r, \theta, \phi) = \sum_{l = 0}^\infty\sum_{m=-l}^l f_{l,m}(r) Y_{l,m}(\theta, \phi)
+\end{equation}
+\begin{equation}
+f_{l,m}(r) = \int Y^*_{l,m}(\uvec r) f(\bvec r) \dd{\Omega}
+\end{equation}
+若 $f(\bvec r)$ 是实函数， 那么
+\begin{equation}
+f_{l,-m}(r) = (-1)^m f_{l,m}(r)
 \end{equation}
 
 \subsection{其他性质}
