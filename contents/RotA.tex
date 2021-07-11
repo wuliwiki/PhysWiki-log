@@ -1,14 +1,17 @@
-% 绕轴旋转矩阵
+% 罗德里格旋转公式
 % 线性代数|矩阵|矢量|数乘|内积|叉乘|空间旋转矩阵|绕轴旋转矩阵|匀速圆周运动|线速度
 
-\pentry{空间旋转矩阵\upref{Rot3D}，圆周运动的速度\upref{CMVD}}
+\pentry{三维旋转矩阵\upref{Rot3D}，圆周运动的速度\upref{CMVD}， 几何矢量的内积\upref{Dot}， 矢量叉乘\upref{Cross}}
 
-直角坐标系中，某点 $\bvec r=(x,y,z)\Tr$ 以单位矢量 $\uvec A=(A_x, A_y, A_z)\Tr$ 为轴按右手定则%未完成 链接
-转动 $\theta$ 角的得到的点 $\bvec r'=(x',y',z')\Tr$ 可用矩阵乘法计算
-\begin{equation}
+\footnote{参考 Wikipedia \href{https://en.wikipedia.org/wiki/Rodrigues'_rotation_formula}{相关页面}．}三维空间中，某点 $\bvec r=(x,y,z)\Tr$ 以单位矢量 $\uvec A=(A_x, A_y, A_z)\Tr$ 为轴按右手定则\upref{RHRul}转动 $\theta$ 角的得到的点 $\bvec r'=(x',y',z')\Tr$ 可用\textbf{罗德里格斯旋转公式（Rodrigues' rotation formula）}计算：
+\begin{equation}\label{RotA_eq1}
+\bvec r' = \bvec r \cos\theta + \uvec A \cross \bvec r \sin\theta + \uvec A (\uvec A \vdot \bvec r) (1 - \cos\theta)
+\end{equation}
+令该旋转的三维旋转矩阵\upref{Rot3D} $\mat R_\theta$， 则
+\begin{equation}\label{RotA_eq2}
 \bvec r' = \mat R_\theta \bvec r
 \end{equation}
-其中 $\mat R_\theta$ 为\textbf{绕轴旋转矩阵}
+从\autoref{RotA_eq1} 可得
 \begin{equation}
 \mat R_\theta =
 \begin{pmatrix}
@@ -20,7 +23,7 @@ a A_z A_x - s A_y & a A_z A_y + s A_x & a A_z^2 + c
 \begin{equation}
 c = \cos\theta \qquad s = \sin\theta \qquad a = 1 - \cos\theta
 \end{equation}
-事实上， 数学上更规范的做法是用四元数\upref{QuatN}表示该矩阵．
+另外也可以用四元数\upref{QuatN}表示该矩阵．
 
 \subsection{推导}
 推导的思路是用 $\uvec A$ , $\bvec r$ 和 $\theta $ 三个已知量经过数乘，内积\upref{Dot}和叉乘\upref{Cross}三种运算，表示出旋转后的矢量 $\bvec r'$，再拆成三个分量，即可得到线性变换，进而写出矩阵． 注意该思路与推导平面旋转矩阵\upref{Rot2D} 的思路不一样．
@@ -50,7 +53,7 @@ c = \cos\theta \qquad s = \sin\theta \qquad a = 1 - \cos\theta
 \begin{equation}\label{RotA_eq8}
 \bvec r' = \bvec r_1\cos \theta  + \bvec r_2\sin \theta  + \bvec r_3
 \end{equation} 
-将\autoref{RotA_eq4} \autoref{RotA_eq5} \autoref{RotA_eq6} 代入\autoref{RotA_eq8}， 即可求出 $\bvec r'$ 关于 $\uvec A$ , $\bvec r$ 和 $\theta $ 的矢量表达式． 把结果写成分量的形式，化简可得到 $x',y',z'$ 关于 $x,y,z$ 的线性变换与系数矩阵\upref{Mat}．
+将\autoref{RotA_eq4} \autoref{RotA_eq5} \autoref{RotA_eq6} 代入\autoref{RotA_eq8}， 即可求出\autoref{RotA_eq1}． 把结果写成分量的形式，化简可得到\autoref{RotA_eq2}．
 
 \subsection{由旋转矩阵推导出匀速圆周运动的线速度} 
 
