@@ -1,15 +1,11 @@
 % 平面波的球谐展开
 % 复数|平面波|球谐波|归一化|球谐展开函数|傅里叶变换
 
-\begin{issues}
-\issueAbstract
-\end{issues}
-
 \pentry{球谐函数\upref{SphHar}， 球贝塞尔函数\upref{SphBsl}}
 
-复数形式的平面波可以展开为\autoref{SphHar_eq9}~\upref{SphHar} 的形式：
+\footnote{参考 Wikipedia \href{https://en.wikipedia.org/wiki/Plane_wave_expansion}{相关页面} 及参考文献．}复数形式的归一化平面波可以展开为\autoref{SphHar_eq9}~\upref{SphHar} 的形式：
 \begin{equation}\label{Pl2Ylm_eq1}
-\ket{\bvec k} = \frac{1}{(2\pi)^{3/2}}\E^{\I \bvec k \vdot \bvec r} = \sum_{l=0}^{\infty} \sum_{m=-l}^l \I^l Y_{l,m}^*(\uvec k) \sqrt{\frac{2}{\pi}} j_l(kr) Y_{l,m}(\uvec r)
+\ket{\bvec k} = \frac{1}{(2\pi)^{3/2}}\E^{\I \bvec k \vdot \bvec r} = \sqrt{\frac{2}{\pi}} \sum_{l=0}^{\infty} \I^l  j_l(kr) \sum_{m=-l}^l Y_{l,m}^*(\uvec k) Y_{l,m}(\uvec r)
 \end{equation}
 推导见下文． 由 $Y_{l,m}^* = (-1)^m Y_{l,-m}$ 易证这里的复共轭可以加在任意一个球谐函数上． 另外由 $Y_{l,m}(-\uvec k) = (-1)^l Y_{l,m}(\uvec k)$ 易得 $\ket{\bvec k}\Cj = \ket{-\bvec k}$．
 
@@ -22,19 +18,20 @@
 \ket{\bvec k} = \sum_{l,m}\frac{\I^l}{k} Y_{l,m}^*(\uvec k)\ket{s_{l,m}(k)} 
 \end{equation}
 
-特殊地， 如果平面波的方向指向极轴（$\theta = 0$）， 由对称性， 我们只需要 $m = 0$ 的球谐波即可组成平面波． 将 $\theta = 0$ 代入\autoref{Pl2Ylm_eq1} 得
-\begin{equation}
-\E^{\I kz} = \sum_{l=0}^\infty (2l+1) \I^l j_l(kr) P_l(\cos\theta)
+\subsubsection{其他形式}
+根据\autoref{SphHar_eq10}~\upref{SphHar}， 令 $\alpha$ 为 $\uvec k, \uvec r$ 的夹角， \autoref{Pl2Ylm_eq1} 也可以记为
+\begin{equation}\label{Pl2Ylm_eq2}
+\ket{\bvec k} = \frac{1}{(2\pi)^{3/2}} \sum_{l=0}^{\infty} \I^l (2l+1) j_l(kr) P_l(\cos\alpha)
 \end{equation}
 
 \subsection{球谐展开函数的傅里叶变换}
+\pentry{多元傅里叶变换\upref{NFTran}}
 
 若三维函数具有球谐展开的形式
 \begin{equation}
 f(\bvec r) = \frac{1}{r}\sum_{l,m} u_{l,m}(r) Y_{l,m}(\uvec r)
 \end{equation}
 要做三维傅里叶变换
-\addTODO{多维傅里叶变换， 链接}
 \begin{equation}
 g(\bvec k) = \braket{\bvec k}{f} =  \frac{1}{(2\pi)^{3/2}} \int f(\bvec r) \E^{-\I \bvec k \bvec r} \dd[3]{r}
 \end{equation}
@@ -75,14 +72,22 @@ g(\bvec k) = \qty(\frac{2}{Z})^{3/2} \frac{1}{\pi(k^2/Z^2 + 1)^2}
 \begin{equation}
 \begin{aligned}
 &\quad \int Y_{l,m}^*(\uvec r)\E^{\I \bvec k \vdot \bvec r} \dd[3]{r}\\
-&= A_{l,m}\int_0^\pi \dd{\theta} \int_0^{2\pi} \dd{\phi} \,\,P_l^m(\cos\theta) \E^{-\I m \phi}\\
+&= A_{l,m}\int_0^\pi \sin\theta\dd{\theta} \int_0^{2\pi} \dd{\phi} \,\,P_l^m(\cos\theta) \E^{-\I m \phi}\\
 &\times \exp[\I (k_x r \sin\theta\cos\phi + k_y r \sin\theta\sin\phi + k_z r \cos\theta)]
 \end{aligned}
 \end{equation}
-另一种积分的方法是把球坐标进行旋转， 使 $\bvec k$ 延 $\uvec z$ 方向， 而球谐函数通过 Wigner D 矩阵\upref{WigDmt}进行旋转．
+但从\autoref{Pl2Ylm_eq2} 可以知道我们只需要证明 $\bvec k$ 延 $\uvec z$ 方向的情况， 令 $\theta = \alpha$ 即可， 也就是上式中 $k_x = 0, k_y = 0, k_z = k$， 此时
+\begin{equation}
+\begin{aligned}
+\int Y_{l,m}^*(\uvec r)\E^{\I \bvec k \vdot \bvec r} \dd[3]{r}
+&= 2\pi A_{l,m}\int_0^\pi P_l(\cos\theta) \exp[\I (k r \cos\theta)] \sin\theta\dd{\theta}\\
+&= 2\pi A_{l,m}\int_{-1}^1 P_l(x) \exp[\I (k r x)] \dd{x}
+\end{aligned}
+\end{equation}
 
-但是更简单的方法是把平面波看作亥姆霍兹方程
-\addTODO{三维直角坐标的亥姆霍兹方程}
+
+但是更简单的方法是把平面波看作三维亥姆霍兹方程的解
+\addTODO{引用三维直角坐标的亥姆霍兹方程}
 \begin{equation}
 \laplacian \psi_{\bvec k}(\bvec r) + k^2 \psi_{\bvec k}(\bvec r) = 0
 \end{equation}
