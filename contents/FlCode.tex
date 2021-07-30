@@ -1,0 +1,33 @@
+% 库仑函数程序（Matlab 和 Mathematica）
+
+\pentry{库仑函数\upref{CulmF}}
+
+\addTODO{$G_l$ 没有定义．}
+
+在 Mathematica 中定义库仑函数 $F_l(\eta, \rho)$ 为（\autoref{CulmF_eq1}~\upref{CulmF}） % 已验证
+\begin{lstlisting}[language=Mathematica]
+CoulombF[l_, η_, ρ_] := 2^l E^(-π η/2) \
+    Abs[Gamma[l + 1 + I η]]/(2 l + 1)! ρ^(l + 1) E^(-I ρ) \
+    Hypergeometric1F1[l + 1 - I η, 2 l + 2, 2 I ρ]
+\end{lstlisting}
+或者使用\autoref{CulmF_eq2}~\upref{CulmF} % 已验证
+\begin{lstlisting}[language=Mathematica]
+CoulombF[l_, η_, ρ_] := (-I/2)^(l + 1) \
+   2^l E^(-π η/2) Abs[Gamma[l + 1 + I η]]/(2 l + 1)! \
+   WhittakerM[I η, l + 1/2, 2 I ρ]
+\end{lstlisting}
+
+在 Matlab 中定义（\autoref{CulmF_eq2}~\upref{CulmF}）为， 需要使用符号计算工具箱 % 已验证
+\begin{lstlisting}[language=matlab]
+% rho 支持数组
+function ret = coulombF_sym(l, eta, rho)
+syms L Eta Rho;
+F = (-0.5i)^(L+1)*2^L*exp(-sym(pi)*Eta/2)....
+    *abs(gamma(L+1+1i*Eta))/factorial(2*L+1)....
+    *whittakerM(1i*Eta, L+1/2, 2i*Rho);
+
+F = subs(F, L, vpa(l,17));
+F = subs(F, Eta, vpa(eta,17));
+ret = real(double(subs(F, Rho, vpa(rho,17))));
+end
+\end{lstlisting}

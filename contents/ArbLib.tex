@@ -1,0 +1,134 @@
+% Arb 任意精度计算库
+
+\pentry{C++ 基础\upref{Cpp0}}
+
+Arb 是一款支持任意精度计算的 C/C++ 程序， 支持对计算进行严谨的误差估计， 即每个任意精度浮点数 $z$ 都会伴随一个误差半径 $r$， 使得精确结果必定落在复平面上以 $z$ 为圆心半径为 $r$ 的圆盘中． 通过增加浮点数的精度， 就可以用数值方法无限逼近理论值． Arb 还提供了许多特殊函数的计算， 例如 $\Gamma$ 函数\upref{Gamma}， 超几何函数\upref{HypGeo} 等， 以及常用的线性代数功能和离散傅里叶变换\upref{DFT}等． 官方主页 \href{https://arblib.org/}{arblib.org} 包含详细的文档．
+
+\subsection{安装}
+以 Ubuntu 为例， 最方便的安装方式就是使用 \verb|apt| 安装． 首先安装 dependency
+\begin{lstlisting}[language=bash]
+sudo apt install libmpfr-dev libflint-dev
+\end{lstlisting}
+其中 \verb|MPFR| 和 \verb|flint| 两个包分别用于任意精度浮点数以及数论． 然后安装 Arb
+\begin{lstlisting}[language=bash]
+sudo apt install libflint-arb-dev libflint-arb2
+\end{lstlisting}
+
+但目前这并不是 Arb 的最新版本（例如没有实现库仑函数\upref{CulmF}）． 要获得最新版本， 可以直接从 \href{https://github.com/fredrik-johansson/arb/}{GitHub} 下载源码编译即可（默认使用 gcc 编译器）． 目前笔者使用的版本是 release 2.19.0．
+
+可以用 \verb|./configure --help| 查看编译选项， 若所有的包都安装在默认目录则不需要编译选项．
+\begin{lstlisting}[language=bash]
+./configure [编译选项];
+make -j4;
+sudo make install;
+\end{lstlisting}
+其中 \verb|-j4| 是使用 4 线程进行编译， 也可以改成其他数字．
+
+\subsection{编译}
+在 Ubuntu 中如果你使用 \verb|apt| 安装， 在编译程序是需要加 \verb|-lflint-arb| 选项． 如果你直接从源码编译， 则需要加 \verb|-larb| 选项．
+
+一个 C++ 例程：
+\begin{lstlisting}[language=cpp, caption=test.cpp]
+#include "arb_hypgeom.h"
+#include "acb_hypgeom.h"
+#include <complex>
+#include <iostream>
+
+using namespace std;
+
+typedef double Doub, Doub_O;
+typedef const double Doub_I;
+typedef complex<double> Comp, Comp_O;
+typedef complex<double> Comp_I;
+typedef int Int;
+typedef const int Int_I;
+typedef int & Int_O, Int_IO;
+
+// 1F1 hypdergeometric function with real arguments
+Doub hypergeom1F1(Doub_I a, Doub_I b, Doub_I z)
+{
+	slong prec = 64; // set precision bit (log10/log2 = 3.322)
+	Doub res;
+	arb_t a1, b1, z1, res1;
+	arb_init(a1); arb_init(b1); arb_init(z1); arb_init(res1);
+	arb_set_d(a1, a); arb_set_d(b1, b);	arb_set_d(z1, z);
+	arb_hypgeom_1f1(res1, a1, b1, z1, 0, prec);
+	// arb_printn(res1, 100, 0); printf("\n");  // print result
+	int digits = arb_rel_accuracy_bits(res1)/3.321928;
+	if (digits < 15) {
+		cout << "warning: hypergeom1F1 error too large" << endl;
+	}
+	res = arf_get_d(arb_midref(res1), ARF_RND_NEAR);
+	arb_clear(a1); arb_clear(b1); arb_clear(z1); arb_clear(res1);
+	return res;
+}
+
+// 1F1 hypdergeometric function with complex arguments
+Comp hypergeom1F1(Comp_I a, Comp_I b, Comp_I z)
+{
+	slong prec = 64; // set precision bit (log10/log2 = 3.322)
+	Comp res;
+	arb_t temp1;
+	arb_init(temp1);
+	acb_t a1, b1, z1, res1;
+	acb_init(a1); acb_init(b1); acb_init(z1); acb_init(res1);
+	acb_set_d_d(a1, real(a), imag(a));
+	acb_set_d_d(b1, real(b), imag(b));
+	acb_set_d_d(z1, real(z), imag(z));
+	acb_hypgeom_1f1(res1, a1, b1, z1, 0, prec);
+	// acb_printn(res1, 100, 0); printf("\n"); // print result
+	int digits = acb_rel_accuracy_bits(res1)/3.321928;
+	if (digits < 15) {
+		cout << "warning: hypergeom1F1 error too large" << endl;
+	}
+	acb_get_real(temp1, res1);
+	res.real(arf_get_d(arb_midref(temp1), ARF_RND_NEAR));
+	acb_get_imag(temp1, res1);
+	res.imag(arf_get_d(arb_midref(temp1), ARF_RND_NEAR));
+	acb_clear(a1); acb_clear(b1); acb_clear(z1);
+    acb_clear(res1); arb_clear(temp1);
+	return res;
+}
+
+// Coulomb function F
+Doub coulombF(Doub_I l, Doub_I eta, Doub_I x)
+{
+	slong prec = 64; // set precision bit (log10/log2 = 3.322)
+	Doub F;
+	arb_t l1, eta1, x1, F1;
+	arb_init(l1); arb_init(eta1); arb_init(x1); arb_init(F1);
+	arb_set_d(l1, l); arb_set_d(eta1, eta);
+	arb_set_d(x1, x); arb_set_d(F1, F);
+
+	arb_hypgeom_coulomb(F1, NULL, l1, eta1, x1, prec);
+	
+	Int digits = arb_rel_accuracy_bits(F1)/3.321928;
+	if (digits < 15) {
+		cout << "warning: hypergeom1F1 error too large" << endl;
+	}
+	F = arf_get_d(arb_midref(F1), ARF_RND_NEAR);
+	arb_clear(l1); arb_clear(eta1); arb_clear(x1); arb_clear(F1);
+	return F;
+}
+
+int main()
+{
+	cout.precision(16);
+    cout << "hypergeom1F1(1.23,1.23,1.23) = " << endl;
+	cout << hypergeom1F1(1.23,1.23,1.23) << endl;
+	printf("Mathematica: 3.421229536289674\n");
+
+	cout << "hypergeom1F1(1.23+1.23I, 1.23+1.23I, 1.23+1.23I) = " << endl;
+	cout << hypergeom1F1(Comp(1.23,1.23),Comp(1.23,1.23),Comp(1.23,1.23))
+    cout << endl;
+	printf("Mathematica: 1.143503984180676 + 3.224470526790991i\n");
+
+	cout << "coulombF(203, -0.1, 6) = " << endl;
+	cout << coulombF(203, -0.1, 6) << endl;
+	printf("Mathematica: 4.5882301380287637784e-286\n");
+}
+\end{lstlisting}
+编译：
+\begin{lstlisting}[language=makefile]
+g++ -o test.x test.cpp -larb -lflint
+\end{lstlisting}

@@ -1,0 +1,59 @@
+% 有界算子的谱
+\pentry{巴拿赫定理\upref{BanThm}} 
+\textbf{线性算子的谱 (spectrum)} 推广了矩阵的本征值\upref{MatEig}这一概念. 它对于了解线性算子如何作用于线性空间有着重要意义. 在这一章中, 我们主要讨论复巴拿赫空间上有界线性算子的谱. 无界算子的谱将留待后续章节讨论.
+
+由于实巴拿赫空间都可以复化成为复巴拿赫空间, 所以在这一章中将一直考虑复巴拿赫空间.
+
+\subsection{定义}
+\begin{definition}{有界算子的谱}
+设$X$是复巴拿赫空间, $T:X\to X$是有界线性算子. 复数$\lambda\in\mathbb{C}$称为算子$T$的一个\textbf{谱点 (spectral point)}, 如果$\lambda-T$不是可逆映射. $T$的全体谱点的集合记为$\sigma(T)$, 称为\textbf{谱集 (spectrum)}, 而补集$\mathbb{C}\setminus\sigma(T)$称作\textbf{预解集 (resolvent set)}, 有时记为$\rho(T)$.
+\end{definition}
+
+既然$T-\lambda$是有界算子, 根据开映像原理, 如果逆映射$(T-\lambda)^{-1}$存在, 那么它也必然是连续的. 因此$T$的谱集可以等价地定义为使得$(\lambda-T)^{-1}$不是有界线性算子的那些$\lambda$的集合.
+
+有界算子$T$的谱集$\sigma(T)$可以分成三个互不相交的部分 (可能有某个部分是空集, 但按照下节的基本定理, 谱集本身一定非空):
+
+\begin{enumerate}
+\item \textbf{点谱$\sigma_p(T)$ (point spectrum)}, 定义为使得$\text{Ker}(\lambda-T)$为非平凡子空间的那些谱点$\lambda$的集合, 也即$T$的特征值的集合.
+
+\item \textbf{连续谱$\sigma_c(T)$ (continuous spectrum)}, 定义为使得$\text{Ker}(\lambda-T)=\{0\}$, 且$\text{Ran}(\lambda-T)$在空间$X$中\textbf{稠密}的那些谱点$\lambda$的集合.
+
+\item \textbf{剩余谱$\sigma_r(T)$ (remaining spectrum)}, 定义为使得$\text{Ker}(\lambda-T)=\{0\}$, 且$\text{Ran}(\lambda-T)$在空间$X$中\textbf{不稠密}的那些谱点$\lambda$的集合.
+\end{enumerate}
+
+接下来马上就能看到, 对于无穷维巴拿赫空间上的算子, 定义连续谱和剩余谱是十分必要的. 在讨论无界算子 (尤其是量子力学中常见的算子) 时更能看出这些概念的用处.
+
+\subsection{一些例子}
+\begin{example}{矩阵的本征值}
+设$A$是$n\times n$复矩阵. 可以把它等价地看成$\mathbb{C}^n$到自己的线性算子. 如果$\lambda I_n-A$不可逆, 那么它的行列式必定为零. 按照线性方程组的性质, 必然存在一个非零向量$v\in \mathbb{C}^n$使得$\lambda v-Av=0$, 也就是说$\lambda$是$A$的特征值. 这样看来, \textbf{对于有限维空间上的线性算子, 谱的概念和特征值是等价的.}
+\end{example}
+
+然而对于无穷维巴拿赫空间, 谱点不一定是特征值.
+
+\begin{example}{卷积算子}
+考虑$L^2(\mathbb{R})$上的卷积算子
+$$
+(Tf)(x):=\int_{\mathbb{R}}f(y)e^{-(x-y)^2}dy.
+$$
+如果取傅里叶变换, 可看出它实际上是一个傅里叶乘子, 即$Tf$的傅里叶变换是
+$$
+\hat f(\xi)e^{-\xi^2}.
+$$
+这个算子在$L^2(\mathbb{R})$上显然不可逆: 例如, 假若$Tf$的傅里叶变换是$(1+\xi^2)^{-1}$, 那么就必须有$\hat f(\xi)=e^{\xi^2}(1+\xi^2)^{-1}$, 这显然不能是任何$L^2$函数的傅里叶变换. 但$T$的像却也是稠密的: 如果$\hat f$具有紧支集, 那么$T^{-1}f$的傅里叶变换也具有紧支集, 而傅里叶变换具有紧支集的那些$L^2$函数组成$L^2(\mathbb{R})$的稠密子空间. 因此$\lambda=0$是$T$的连续谱点.
+
+通过类似的推理, 不难看出$\sigma(T)=[0,1]$, 也就是函数$e^{-\xi^2}$的值域. 这里的所有谱点都是连续谱点.
+\end{example}
+
+\begin{example}{推移算子}
+考虑序列空间$l^2$上的推移算子:
+$$
+S:(x_1,x_2,x_3,...)\to(0,x_1,x_2,...).
+$$
+于是$S$的像是余维数为1的闭子空间, 可见$S$不是可逆算子. 另一方面, $Sx=0$当且仅当$x=0$, 于是$\lambda=0$并非$S$的特征值. 可见$\lambda=0$是$S$的剩余谱点.
+
+通过求解方程$(S-\lambda)x=y$, 最终可以证明$\sigma_c(S)=\{\lambda:|\lambda|=1\}$, $\sigma_r(S)=\{\lambda:|\lambda|<1\}$, 而$S$没有特征值.
+\end{example}
+
+不过, 对于经典数学物理问题中常见的一大类算子 (称为紧算子), 真正使人感兴趣的谱点都是特征值. 紧算子的性质与有限维矩阵是很像的.
+
+然而, 在量子力学中, 连续谱和剩余谱都有鲜明的物理意义. 一般的量子力学教材将算子的谱统称为本征值; 尽管使用这样的术语并非完全不确切, 但也可能会引起一些不必要的误会.

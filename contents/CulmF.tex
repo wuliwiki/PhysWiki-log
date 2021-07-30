@@ -8,7 +8,7 @@
 \begin{equation}
 \dv[2]{u}{\rho} + \qty[1 - \frac{2\eta}{\rho} - \frac{l(l+1)}{\rho^2}]u = 0
 \end{equation}
-这时一个二阶线性齐次常微分方程， 其两个线性无关解为\textbf{第一类库仑函数} $F_l(\eta, \rho)$ 和\textbf{第二类库仑函数} $G_l(\eta, \rho)$． 当方程的系数为实数时， 第一类和第二类库仑函数也是实函数．
+这时一个二阶线性齐次常微分方程， 其两个线性无关解为\textbf{第一类库仑函数（Coulomb function of the first kind）} $F_l(\eta, \rho)$ 和\textbf{第二类库仑函数} $G_l(\eta, \rho)$． 当方程的系数为实数时， 第一类和第二类库仑函数也是实函数．
 
 \begin{figure}[ht]
 \centering
@@ -17,7 +17,7 @@
 \end{figure}
 
 第一类库仑函数（\autoref{CulmF_fig1}）的解析式为\footnote{这里的两套正负号是等效的．}
-\begin{equation}
+\begin{equation}\label{CulmF_eq1}
 F_l(\eta, \rho) = A_l(\eta) \rho^{l+1} \E^{\mp\I\rho} M(l+1\mp\I\eta, 2l+2, \pm 2\I\rho)
 \end{equation}
 其中
@@ -25,32 +25,17 @@ F_l(\eta, \rho) = A_l(\eta) \rho^{l+1} \E^{\mp\I\rho} M(l+1\mp\I\eta, 2l+2, \pm 
 A_l(\eta) = \frac{2^l \E^{-\pi\eta/2} \abs{\Gamma(l+1+\I\eta)}}{(2l+1)!}
 \end{equation}
 $M(a, b, z)$ 是\textbf{库默尔（Kummer） M 函数}， 也叫第一类合流超几何函数\upref{HypGeo}， 记为 $_1 F_1(a;b;z)$． 库仑函数也可以用\textbf{惠特克（Whittaker） M 函数}来表示得更紧凑
-\begin{equation}
+\begin{equation}\label{CulmF_eq2}
 F_l(\eta, \rho) = \qty(\frac{\mp\I}{2})^{l+1} A_l(\eta) M_{\pm\I\eta, l+\frac12}\qty(\pm 2\I\rho)
 \end{equation}
 其中惠特克 $M$ 函数与库默尔 $M$ 函数的关系为
 \begin{equation}
 M_{\kappa, \mu}(z) = \E^{-z/2} z^{\mu + 1/2} M(\mu - \kappa + 1/2, 1 + 2\mu, z)
 \end{equation}
-
-可以在 Mathematica 中定义该函数
-\begin{lstlisting}[language=Mathematica]
-CoulombF[l_, η_, ρ_] := 2^l E^(-π η/2) \
-    Abs[Gamma[l + 1 + I η]]/(2 l + 1)! ρ^(l + 1) E^(-I ρ) \
-    Hypergeometric1F1[l + 1 - I η, 2 l + 2, 2 I ρ]
-\end{lstlisting}
-% Matlab 的定义见 coulomb1_sym.m
+另见 “库仑函数程序（Matlab 和 Mathematica）\upref{FlCode}”．
 
 \subsubsection{库仑相移}
-$F_l(\eta, \rho)$ 是一个实函数， 类似 $\rho$ 乘以第一类球贝塞尔函数\footnote{当 $\eta = 0$ 时二者相等．}$j_l(\rho)$， 有
-\begin{equation}
-F_l(\eta, 0) = 0 \qquad \eval{\dv{F_l(\eta, \rho)}{\rho}}_{\rho=0} = 
-\begin{cases}
-A_0(\eta) &(l = 0)\\
-0     &(l > 0)
-\end{cases}
-\end{equation}
-且渐进形式为
+$F_l(\eta, \rho)$ 是一个实函数， 且渐进形式为
 \begin{equation}\label{CulmF_eq7}
 F_l(\eta, \rho) \overset{\rho\to \infty}{\longrightarrow} \sin\qty[\rho - \frac{\pi l}{2} - \eta\ln(2\rho) + \sigma_l]
 \end{equation}
@@ -59,6 +44,21 @@ F_l(\eta, \rho) \overset{\rho\to \infty}{\longrightarrow} \sin\qty[\rho - \frac{
 \sigma_l(\eta) = \arg[\Gamma(l+1+\I\eta)]
 \end{equation}
 其中 $\arg$ 函数是复数的幅角（\autoref{CplxNo_eq5}~\upref{CplxNo}）．
+
+\subsection{渐进形式}
+类似 $\rho$ 乘以第一类球贝塞尔函数\footnote{当 $\eta = 0$ 时 $F_l(\eta, \rho)=\rho j_l(\rho)$．} $j_l(\rho)$， 有
+\begin{equation}
+F_l(\eta, 0) = 0 \qquad \eval{\dv{F_l(\eta, \rho)}{\rho}}_{\rho=0} = 
+\begin{cases}
+A_0(\eta) &(l = 0)\\
+0     &(l > 0)
+\end{cases}
+\end{equation}
+更一般地， 当 $r\to 0$ 时有
+\begin{equation} % mathematica 已验证
+F_l(\eta, \rho) \rightarrow A_l(\eta) r^{l+1} + \order{r^{l+1}}
+\end{equation}
+由此可见当 $r\to 0$ 时只有 $l = 0$ 时 $F_l(\eta, \rho)/r \to A_0(\eta)$ 不为零．
 
 \subsection{其他类型的库仑函数}
 
@@ -116,7 +116,7 @@ f_1'(x) & f_2'(x)
 \end{equation}
 
 
-由渐进形式可得径向归一化积分\footnote{积分时可忽略 $\sin$ 中的额外相位， 但笔者不会证．}与球贝塞尔函数的相同
+由渐进形式可得径向归一化积分\footnote{积分时可忽略 $\sin$ 中的额外相位， 但笔者不会证．}与球贝塞尔函数乘以 $kr$ 的相同（\autoref{SphBsl_eq4}~\upref{SphBsl}）
 \begin{equation}
 \int_0^\infty F_l(Z/k', k' r)F_l(Z/k, kr) \dd{r} = \int_0^\infty \sin(k'r)\sin(kr) \dd{r} = \frac{\pi}{2}\delta(k - k') \qquad (k, k' > 0)
 \end{equation}

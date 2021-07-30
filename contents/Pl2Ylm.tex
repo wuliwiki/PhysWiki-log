@@ -3,7 +3,7 @@
 
 \pentry{球谐函数\upref{SphHar}， 球贝塞尔函数\upref{SphBsl}}
 
-\footnote{参考 Wikipedia \href{https://en.wikipedia.org/wiki/Plane_wave_expansion}{相关页面} 及参考文献．}复数形式的归一化平面波可以展开为\autoref{SphHar_eq9}~\upref{SphHar} 的形式：
+\footnote{参考 Wikipedia \href{https://en.wikipedia.org/wiki/Plane_wave_expansion}{相关页面}及参考文献．}复数形式的归一化平面波可以展开为\autoref{SphHar_eq9}~\upref{SphHar} 的形式：
 \begin{equation}\label{Pl2Ylm_eq1}
 \ket{\bvec k} = \frac{1}{(2\pi)^{3/2}}\E^{\I \bvec k \vdot \bvec r} = \sqrt{\frac{2}{\pi}} \sum_{l=0}^{\infty} \I^l  j_l(kr) \sum_{m=-l}^l Y_{l,m}^*(\uvec k) Y_{l,m}(\uvec r)
 \end{equation}
@@ -71,22 +71,34 @@ g(\bvec k) = \qty(\frac{2}{Z})^{3/2} \frac{1}{\pi(k^2/Z^2 + 1)^2}
 理论上， \autoref{Pl2Ylm_eq1} 可以通过计算\autoref{SphHar_eq7}~\upref{SphHar} 得到， 但这个积分较为复杂， 可能需要借助 Mathematica 等工具\footnote{其实 Mathematica 也只能算给定的 $l, m$．}
 \begin{equation}
 \begin{aligned}
-&\quad \int Y_{l,m}^*(\uvec r)\E^{\I \bvec k \vdot \bvec r} \dd[3]{r}\\
+&\quad \int Y_{l,m}^*(\uvec r)\E^{\I \bvec k \vdot \bvec r} \dd{\Omega}\\
 &= A_{l,m}\int_0^\pi \sin\theta\dd{\theta} \int_0^{2\pi} \dd{\phi} \,\,P_l^m(\cos\theta) \E^{-\I m \phi}\\
 &\times \exp[\I (k_x r \sin\theta\cos\phi + k_y r \sin\theta\sin\phi + k_z r \cos\theta)]
 \end{aligned}
 \end{equation}
-但从\autoref{Pl2Ylm_eq2} 可以知道我们只需要证明 $\bvec k$ 延 $\uvec z$ 方向的情况， 令 $\theta = \alpha$ 即可， 也就是上式中 $k_x = 0, k_y = 0, k_z = k$， 此时
+但从\autoref{Pl2Ylm_eq2} 可以知道我们只需要证明 $\bvec k$ 延 $\uvec z$ 方向的情况， 令 $\theta = \alpha$ 即可， 也就是上式中 $k_x = 0, k_y = 0, k_z = k$． 由对称性， $m \ne 0$ 时积分都是 0， 所以
 \begin{equation}
 \begin{aligned}
-\int Y_{l,m}^*(\uvec r)\E^{\I \bvec k \vdot \bvec r} \dd[3]{r}
+\int Y_{l,0}^*(\uvec r)\E^{\I \bvec k \vdot \bvec r} \dd{\Omega}
 &= 2\pi A_{l,m}\int_0^\pi P_l(\cos\theta) \exp[\I (k r \cos\theta)] \sin\theta\dd{\theta}\\
 &= 2\pi A_{l,m}\int_{-1}^1 P_l(x) \exp[\I (k r x)] \dd{x}
 \end{aligned}
 \end{equation}
+由\autoref{Legen_eq3}~\upref{Legen} 得
+\begin{equation}
+\int Y_{l,0}^*(\uvec r)\E^{\I \bvec k \vdot \bvec r} \dd{\Omega}
+= 4\pi A_{l,m} \I^l j_l(\rho)
+= \sqrt{4\pi (2l + 1)}\ \I^l j_l(\rho)
+\end{equation}
+所以
+\begin{equation}
+\E^{\I \bvec k \vdot \bvec r} = \sum_{l,m} \sqrt{4\pi (2l + 1)}\ \I^l j_l(\rho) Y_{l,m}(\uvec r)
+=\sum_{l,m} (2l + 1) \I^l j_l(\rho) P_l(\cos\alpha)
+\end{equation}
+证毕．
 
-
-但是更简单的方法是把平面波看作三维亥姆霍兹方程的解
+\subsection{推导 2}
+另一种方法是把平面波看作三维亥姆霍兹方程的解
 \addTODO{引用三维直角坐标的亥姆霍兹方程}
 \begin{equation}
 \laplacian \psi_{\bvec k}(\bvec r) + k^2 \psi_{\bvec k}(\bvec r) = 0

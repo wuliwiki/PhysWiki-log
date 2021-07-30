@@ -5,25 +5,36 @@
 
 若空间中的一个球内（$r < a$） 存在静止的电荷分布 $\rho(\bvec r)$， 那么球外的电势 $V(\bvec r)$（$r > a$）可以展开为径向函数和球谐函数之积的形式
 \begin{equation}\label{EMulPo_eq2}
-V(\bvec r) = \sum_{l = 0}^\infty \frac{1}{r^{l+1}}\sum_{m = -l}^l C_{l,m} Y_{l,m}(\uvec r) \qquad (r \geqslant a)
+V(\bvec r) = \frac{1}{4\pi\epsilon_0}\sum_{l = 0}^\infty \frac{1}{r^{l+1}}\sum_{m = -l}^l C_{l,m} Y_{l,m}(\uvec r) \qquad (r \geqslant a)
 \end{equation}
 其中常数 $C_{l,m}$ 为（证明见下文）
 \begin{equation}
-C_{l,m} = \frac{1}{(2l+1)\epsilon_0} \int_{r\leqslant a} r^l \rho(\bvec r) Y_{l,m}^*(\uvec r) \dd[3]{r}
+C_{l,m} = \frac{4\pi}{2l+1} \int_{r\leqslant a} r^l \rho(\bvec r) Y_{l,m}^*(\uvec r) \dd[3]{r}
 \end{equation}
 
 $l = 0$ 的项就是\textbf{电单极子（electric monopole）} 具有球对称的电荷分布和势能分布， $l = 1$ 的项就是\textbf{电偶极子（dipole）}\upref{eleDP2}（$\propto\cos \theta$）， $l = 2$ 的项是\textbf{电四极子（quadrupole）}……  $l = N$ 的项叫做电 $2^N$ 极子．
 
-为什么这么叫呢？ 因为电 $2^N$ 极子产生的势能项可以用 $2^{N-1}$ 个电荷为 $q$ 的点电荷以及 $2^{N-1}$ 个电荷为 $-q$ 的点电荷按照一定空间位置摆放后， 取 $r \to \infty$ 得到． 用数学归纳法的思想， 我们可以认为若电 $2^{N-1}$ 极子是一个点， 渐进势能为 $\sim 1/r^l$， 那么把两个电荷相反的 $2^{N-1}$ 极子放在一根短棍的两端组成电 $2^N$ 极子， 那么渐进势能就必须是更高阶无穷小， 即 $\sim 1/r^{l+2}$．
+为什么这么叫呢？ 因为电 $2^N$ 极子产生的势能项可以用 $2^{N-1}$ 个电荷为 $q$ 的点电荷以及 $2^{N-1}$ 个电荷为 $-q$ 的点电荷按照一定空间位置摆放后， 取 $r \to \infty$ 得到． 用数学归纳法的思想， 我们可以认为若电 $2^{N-1}$ 极子是一个点， 渐进势能为 $\sim 1/r^N$， 那么把两个电荷相反的 $2^{N-1}$ 极子放在一根短棍的两端组成电 $2^N$ 极子， 那么渐进势能就必须是更高阶无穷小， 即 $\sim 1/r^{N+1}$．
 
 电多极展开的优势在于只需要预先算出系数 $C_{l,m}$ 就可以无需积分得到球外任意位置的电势分布． 而如果用常规的方法， 则计算每个位置的电势都需要重新做一次积分（\autoref{EMulPo_eq5}）． 而它的缺点在于实际计算中必须取\autoref{EMulPo_eq2} 中的有限项， 会产生截断误差． 另一点是无法计算球内的电势分布．
+
+\subsection{电场}
+对\autoref{EMulPo_eq2} 求负梯度即可得到球外的电场分布
+\begin{equation}
+\bvec E(\bvec r) = \grad V(\bvec r)
+\end{equation}
+使用球坐标中的梯度算符（\autoref{SphNab_eq1}~\upref{SphNab}）
+\begin{equation}
+\grad V = \pdv{V}{r}\uvec r + \frac{1}{r} \pdv{V}{\theta}\uvec \theta  + \frac{1}{r\sin \theta }\pdv{V}{\phi}\uvec \phi
+\end{equation}
+\addTODO{引用勒让德多项式求导性质}
 
 \subsubsection{内展开}
 相反， 若电荷分布 $\rho(\bvec r)$ 只存在于 $r \geqslant a$ 的球外空间， 那么可以把球内部任意点的电势 $V(\bvec r)$ 展开为
 \begin{equation}\label{EMulPo_eq4}
 V(\bvec r) = \sum_{l = 0}^\infty r^l \sum_{m = -l}^l D_{l,m} Y_{l,m}(\uvec r) \qquad (r \leqslant a)
 \end{equation}
-其中
+其中（证明见下文）
 \begin{equation}\label{EMulPo_eq3}
 D_{l,m} = \frac{1}{(2l+1)\epsilon_0} \int_{r\geqslant a} \frac{1}{r^{l+1}} \rho(\bvec r) Y_{l,m}^*(\uvec r) \dd[3]{r}
 \end{equation}
@@ -45,6 +56,6 @@ V(\bvec r) = \sum_{l = 0}^\infty\sum_{m = -l}^l \qty[\frac{1}{r^{l+1}} C_{l,m}(r
 V(\bvec r) = \frac{1}{4\pi\epsilon_0}\int \frac{\rho(\bvec r')}{\abs{\bvec r - \bvec r'}} \dd[3]{r'}
 \end{equation}
 
-若我们要求电荷必须在球内（$r' < a$）而 $V(\bvec r)$ 中的 $\bvec r$ 必须在球外（$r > a$）， 那么始终有 $r_> = r, r_< = r'$， 代入\autoref{EMulPo_eq1} 再代入\autoref{EMulPo_eq5} 可得\autoref{EMulPo_eq2}．
+若我们要求电荷必须在球内（$r' \leqslant a$）而 $V(\bvec r)$ 中的 $\bvec r$ 必须在球外（$r \geqslant a$）， 那么始终有 $r_> = r, r_< = r'$， 代入\autoref{EMulPo_eq1} 再代入\autoref{EMulPo_eq5} 可得\autoref{EMulPo_eq2}．
 
-反之， 若电荷分布 $r' > a$， 场点 $r < a$， 那么始终有 $r_> = r', r_< = r$． 代入\autoref{EMulPo_eq1} 再代入\autoref{EMulPo_eq5} 得\autoref{EMulPo_eq4}．
+反之， 若电荷分布 $r' \geqslant a$， 场点 $r \leqslant a$， 那么始终有 $r_> = r', r_< = r$． 代入\autoref{EMulPo_eq1} 再代入\autoref{EMulPo_eq5} 得\autoref{EMulPo_eq4}．

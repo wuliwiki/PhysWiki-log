@@ -3,7 +3,7 @@
 
 \pentry{对偶空间\upref{DualSp}， 内积\upref{InerPd}}
 
-在物理中， 尤其是量子力学中， 我们经常会见到\textbf{狄拉克符号（Dirac notation）}． 矢量空间 $X$ 中， 如果使用狄拉克符号， 那么其中的元素（矢量） $x\in X$ 可以记为 $\ket{x}$， 我们把它叫做\textbf{右矢（ket）}． 对应地， 我们把 $X$ 的对偶空间 $X^*$ 中的矢量叫做\textbf{左矢（bra）}\footnote{bra 和 ket 这两个单词是由英文单词 bracket 拆分而来的． braket 在这里指 $\braket{\cdot}{\cdot}$．}， 记为 $\bra{x}$． 一般来说\footnote{严格来说， 这要求空间 $X$ 是\textbf{完备}% 链接未完成
+在物理中， 尤其是量子力学中， 我们经常会见到\textbf{狄拉克符号（Dirac notation）}． 矢量空间 $X$ 中， 如果使用狄拉克符号， 那么其中的元素（矢量） $x\in X$ 可以记为 $\ket{x}$， 我们把它叫做\textbf{右矢（ket）}． 对应地， 我们把 $X$ 的对偶空间\upref{DualSp} $X^*$ 中的矢量叫做\textbf{左矢（bra）}\footnote{bra 和 ket 这两个单词是由英文单词 bracket 拆分而来的． braket 在这里指 $\braket{\cdot}{\cdot}$．}， 记为 $\bra{x}$． 一般来说\footnote{严格来说， 这要求空间 $X$ 是\textbf{完备}% 链接未完成
 的， 完备的内积空间又叫\textbf{希尔伯特空间\upref{Hilber}（Hilbert space）}， 是量子力学中主要讨论的矢量空间． 一般来说我们只在希尔伯特空间中使用狄拉克符号．}， 每个 $X^*$ 中的每个左矢和 $X$ 中的右矢是一一对应\upref{map}． 我们说任意 $\ket{x}$ 和对应的 $\bra{x}$ 互为\textbf{对偶}．
 
 两矢量的加减法记为 $\ket{x} \pm \ket{y}$， $\ket{x}$ 与标量 $\lambda$ 的数乘可以记为 $\lambda\ket{x}$ 或 $\ket{\lambda x}$．
@@ -16,3 +16,38 @@
 如果这个矢量空间中定义了内积， 那么 $X$ 中任意两个矢量 $\ket{x}, \ket{y}$ 的内积用狄拉克符号记为 $\braket{x}{y}$． 我们也可以理解为内积是左矢空间中 $\bra{x}$ 和右矢空间中 $\ket{y}$ 的二元运算．
 
 算符（映射） $A:X\to X$ 作用在 $\ket{x}$ 上同样可以记为 $A\ket{x}$ 或 $\ket{Ax}$． $\ket{Ax}$ 的对偶记为 $\bra{Ax}$ 而不是 $A\bra{x}$ 或 $\bra{xA}$， 详见 “伴随算符\upref{adjoin}”．
+
+\subsection{线性算符}
+令 $N$ 维线性空间 $X$ 到 $M$ 维线性空间 $Y$ 的一组\textbf{正交归一基底}分别为 $\{\xi_i\}$ 和 $\{\eta_i\}$． 若线性映射\upref{LinMap}（线性算符） $A:X\to Y$ 表示成矩阵后， 矩阵元为 $A_{i,j}$， 那么该算符也可以用狄拉克符号表示为
+\begin{equation}\label{braket_eq1}
+A = \sum_{i,j} A_{i,j} \ket{\eta_i}\bra{\xi_j}
+\end{equation}
+这是因为： 若把 $A$ 作用在任意矢量 $\ket{x} = \sum_k x_k\ket{\xi_k}$ 上， 有
+\begin{equation}\label{braket_eq2}
+\begin{aligned}
+\ket{y} &= A\ket{x} = \sum_{i,j} A_{i,j} \ket{\eta_i}\bra{\xi_j} \sum_k x_k\ket{\xi_k}\\
+&= \sum_{i,j, k} A_{i,j} \ket{\eta_i} x_k \delta_{j,k}
+= \sum_{i,j} A_{i,j} x_j \ket{\eta_i}
+\end{aligned}
+\end{equation}
+这样就得到了矩阵乘法公式（\autoref{Mat_eq6}~\upref{Mat}） $y_i = \sum_{i,j} A_{i,j} x_j$． 要特别注意\autoref{braket_eq1} 中的基必须是正交归一的， 否则在\autoref{braket_eq2} 中就不可能得到克罗内克 delta 函数\upref{Kronec}．
+
+特殊地， 如果 $A$ 是自映射， 即 $A:X\to X$， 那么只需把以上的 $Y$ 替换为 $X$， $\ket{\eta_i}$ 替换为 $\ket{\xi_i}$ 即可． 下同．
+
+\subsection{矩阵元}
+\autoref{braket_eq1} 中线性算符 $A$ 的矩阵元可以表示为
+\begin{equation}\label{braket_eq3}
+A_{i,j} = \mel{\eta_i}{A}{\xi_j}
+\end{equation}
+证明： 把\autoref{braket_eq1} 代入即可：
+\begin{equation}
+\begin{aligned}
+\mel{\eta_i}{A}{\xi_j} &= \mel*{\eta_i}{\qty(\sum_{i',j'} A_{i',j'} \ket{\eta_{i'}}\bra{\xi_{j'}})}{\xi_j}
+= \sum_{i',j'} A_{i',j'} \braket{\eta_i}{\eta_{i'}}\braket{\xi_{j'}}{\xi_j}\\
+&= \sum_{i',j'} A_{i',j'} \delta_{i,i'}\delta_{j,j'}
+= A_{i,j}
+\end{aligned}
+\end{equation}
+证毕．
+
+同样， 只有正交基底下的矩阵元才能用\autoref{braket_eq3} 表示．

@@ -1,0 +1,55 @@
+% Matlab 符号计算和变精度计算
+
+\pentry{Matlab 的程序调试及其他功能\upref{MatOtr}}
+
+Matlab 的符号计算需要符号计算工具箱， 取决于你的证书类型， 可能需要额外购买． 另外需要提醒的是， 虽然 Matlab 和 Python 都有符号计算功能， 但在符号计算领域 Mathemtica\upref{Mma} 才更为主流， 其默认界面也更适合符号计算．
+
+\subsection{符号变量和符号表达式}
+\begin{itemize}
+\item Matlab 中用于储存符号计算表达式的变量类型为 \verb|sym|． 可以用 \verb|syms 变量1 变量2 ...| 声明变量类型为 \verb|sym|． 例如 \verb|syms x y z;|． Matlab 的大部分自带算符和函数支持 \verb|sym| 类型的变量， 例如 \verb|x^2| 就是 \verb|sym| 类型的表达式 $x^2$， $x$ 并不是一个数值而是符号． 若此时令 \verb|expr = x^2|， 那么用 \verb|class(expr)| 可以验证 \verb|expr| 的类型也是 \verb|sym|．
+
+\item 除了使用 \verb|syms| 一次声明几个符号变量， 也可以使用 \verb|sym(字符串)|． 例如 \verb|syms x; expr = x^2;| 得到的 \verb|expr| 和 \verb|expr = sym('x')^2;| 得到的 \verb|expr| 是等效的．
+
+\item  对表达式求导如 \verb|diff(sym('x')^2)|． 若要求偏导， \verb|diff(sym('x')^2 * sym('y')^3)| 默认对 \verb|x| 求偏导， 结果是 $2x y^3$． 也可以声明对 \verb|y| 求偏导， 如 \verb|diff(sym('x')^2 * sym('y')^3)， sym('y')|， 或者更简洁地， \verb|diff(sym('x')^2 * sym('y')^3)， 'y'|． 这时因为， 如果函数的一个参数需要符号表达式， 但如果输入时使用了字符串或者数值， 那么 Matlab 就会自动将其用 \verb|sym()| 函数进行转换． 建议总是声明对哪个变量求偏导．
+
+\item  要把一个数字作为符号， 可以使用例如 \verb|sym('2')| 或 \verb|sym('7/3')|， 但这仅限于分式， 不允许诸如 \verb|sym('sqrt(2)')| 这样的用法．
+
+\item 另一种方法是使用 \verb|sym(数值)|． 例如 \verb|sqrt(sym(2))| 的结果是表达式 $\sqrt 2$， 而不同于数值计算中的 \verb|sqrt(2) = 1.414...|． 由于符号计算是精确无误差的， 无理数 $\sqrt{2}$ 并不会被自动转换为小数形式． 另一个例子， \verb|d = 3.1; sqrt(sym(d))| 得到的是表达式 $961/100$． \verb|sym(数值)| 会自动猜测 \verb|数值| 所代表的根式， 例如 \verb|sym(0.866025403784439)| 的结果是表达式 $\sqrt{3}/2$， 又例如 \verb|sym(pi)| 的结果是圆周率 $\pi$． 注意在较新版的 Matlab 中， \verb|sym('pi')| 将得到名为 \verb|pi| 的普通变量， 而不是圆周率．
+
+\item 若 \verb|sym(...)| 作用在一个数组上（可以是任何上述类型）， 那么则逐个元素作用， 并生成 \verb|sym| 类型的数组．
+
+\item 一个 \verb|sym| 类型和一个 double 类型进行 \verb|+, -, *, /, ^| 等运算时， \verb|double| 类型的数会自动被 \verb|sym()| 函数转换为 \verb|sym| 类型． 例如 \verb|sym(1)/3| 和 \verb|sym(1)/sym(3)| 是等效的． 这样可以让输入更简洁．
+\end{itemize}
+
+\subsubsection{符号替换}
+\begin{itemize}
+\item \verb|subs(符号表达式，符号变量， 新表达式)| 可以把表达式中的所有 \verb|符号变量| 替换为 \verb|新表达式|． 例如 \verb|subs(sin(sym('x')), 'x', 'y')| 相当于 \verb|subs(sin(sym('x')), sym('x'), sym('y'))|， 结果是 $\sin y$． 又例如 \verb|subs(sin(sym('x')), 'x', pi/4)| 的结果是 $\sqrt 2/2$．
+\item 若 \verb|新表达式| 是一个数组， 则依次对每个元素进行替换， 输入一个 \verb|sym| 类型的数组．
+\item 如果要对一个符号表达式求数值近似， 那么用 \verb|double()|， 例如 \verb|double(sqrt(sym(2)))| 结果是 \verb|1.414...|， 是一个双精度数值， 误差就是双精度类型的相对误差， 约为 $2\e{-16}$．
+\end{itemize}
+
+\subsection{变精度计算}
+注意变精度计算功能往往和符号计算一同使用， 但该功能本身却可以独立使用． 变精度计算本质上还是数值浮点计算， 计算过程存在数值误差． 只不过我们可以规定每个变量的有效数字为任意多， 而不是统一使用双精度类型的 15-16 位有效数字．
+
+\begin{itemize}
+\item 相比于 \verb|double()| 返回双精度结果， \verb|vpa()| 可以计算符号表达式的任意位有效数字结果， 例如 \verb|vpa(sqrt(sym('2')), 50)| 计算 $\sqrt{2}$ 的 50 位有效数字， 并能保证四舍五入后最后一位有效数字正确． 返回的值是一个 \verb|'sym'| 类型的对象而不是 \verb|'double'| 类型．
+
+\item 虽然 \verb|vpa| 返回的类型也是 \verb|'sym'|， 但它是有误差的． 我们姑且把这种有误差的 \verb|sym| 数字称为\textbf{变精度浮点数}． 我们可以把变精度浮点数当作 \verb|double| 类型的拓展． \verb|double| 在十进制下只有约 15-16 位有效数字， 而变精度浮点数的有效数字位数可以任意指定．
+
+\item 要检查一个 \verb|sym| 类型的对象 \verb|x| 是否有误差， 只需要在命令行中把它显示出来（可以使用 \verb|disp()| 函数， 也可以直接运行 \verb|x| 不加分号）． 如果显示中出现了小数点， 那么他就是变精度浮点数．
+
+\item 除了 \verb|vpa()| 函数会输出变精度浮点数， 另一种方法如 \verb|sym('12.3')| 或者 \verb|sym('1.23e1')|， 运行后显示结果为 \verb|12.3|， 存在小数点， 所以是变精度浮点数． 相比之下， \verb|sym('123/10')| 结果显示为 $123/10$ 该数无论参与任何计算都是绝对精确的．
+
+\item 和双精度变量一样， 若把变精度浮点数进行运算， 则其本身的误差会在运算中传递， 且在计算中会产生新的截断误差． 举例： \verb|1 + sym('1e-40') - 1| 的结果显示为 \verb|0.0|， 而 \verb|1 + sym(10)^(-40) - 1| 的结果显示 \verb|1/10000....|（40 个 0）．
+
+\item 变精度浮点数的运算的默认位数可以用 \verb|digits(整数)| 设置， 如果不设置， 则默认是 32 位． 也可以使用不含自变量的 \verb|digits()| 查看当前设置的位数．
+
+\item 无论参与变精度运算的数有多少个有效数字， 运算结果取当前的默认位数． 例如设置 \verb|digits(32)| 后， \verb|vpa(sym(pi)/2, 50) + vpa(sym(pi)/2, 100)| 的结果仍然是 32 位有效数字．
+
+\item 例子： 若运行 \verb|digits(50)|， 再运行 \verb|1 + sym('1e-40') - 1| 就会得到 \verb|0.000...000999...99938892...|， 这就比默认的 32 位有效数字计算精确多了， 但还是存在误差．
+
+\item 变精度浮点数可以和解析表达式混合使用， 例如 \verb|sym('1.2')*sqrt(2*sym('x'))|， 结果是 $1.2 \sqrt{2x}$， 其中 $1.2$ 是变精度浮点数． 相比之下， \verb|sym(12/10)*sqrt(2*sym('x'))| 得到精确的 $6\sqrt{2x}/5$．
+\end{itemize}
+
+\subsection{特殊函数}
+由于一些特殊函数若用双精度计算，往往在一些区间产生较大误差． 所以 Matlab 决定只使用任意精度来计算． 以复数域的 $\Gamma$ 函数\upref{Gamma} 为例， 若直接输入 \verb|gamma(1+1i)| 则会出错， 因为 Matlab 中非符号计算版本的 \verb|gamma| 函数只支持 \verb|double| 类型的实数输入． 所以要调用符号计算工具箱提供的 \verb|gamma()|， 就输入一个 \verb|sym| 类型的变量即可． 例如 \verb|gamma(vpa(1+1i))| 返回 \verb|0.49801... - 0.15494...i|， 又例如 \verb|gamma(sym(1+1i))| 返回表达式 \verb|gamma(1 + 1i)|． 这是因为 \verb|vpa(1+1i)| 是变精度浮点数， 可以显示为小数， 而 \verb|sym(1+1i)| 不存在误差， 不能显示为小数． 当然， 我们也可以用例如 \verb|vpa(gamma(sym(1+1i)), 50)| 来求任意位有效数字． 相比之下即使使用 \verb|gamma(vpa(1+1i, 50))| 结果也只有 \verb|digits()| 位有效数字．

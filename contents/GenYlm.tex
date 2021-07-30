@@ -6,7 +6,18 @@
 \begin{equation}\label{GenYlm_eq1}
 \mathcal{Y}_{l_1,l_2}^{L,M}(\uvec r_1, \uvec r_2) = \sum_{m_1, m_2} \bmat{l_1 & l_2 & L\\ m_1 & m_2 & M} Y_{l_1 m_1}(\uvec r_1) Y_{l_2 m_2} (\uvec r_2)
 \end{equation}
-由于只有 $m_1 + m_2 = M$ 时 CG 系数才不为零， 求和就由双重求和变为了单个求和． 上下限
+由于只有 $m_1 + m_2 = M$ 时 CG 系数才不为零， 公式中令 $m_2 = M - m_1$， 求和就由双重求和变为了单个求和， 而且只有有限项． $m_1$ 的上下限满足 $-l_1 \leqslant m_1 \leqslant l_1$， $-l_2 \leqslant M-m_1 \leqslant l_2$ 即
+\begin{equation}
+\max\{-l_1, M-l_2\} \leqslant m_1 \leqslant \max\{l_1, M+l_1\}
+\end{equation}
+在 Mathematica 中可以把广义球谐函数定义为\footnote{使用时出现的 “not triangular” 警告可忽略．}
+\begin{lstlisting}[language=Mathematica]
+YY[l1_, l2_, L_, M_, θ1_, ϕ1_, θ2_, ϕ2_] := 
+ Sum[ClebschGordan[{l1, m1}, {l2, M - m1}, {L, M}] SphericalHarmonicY[
+    l1, m1, θ1, ϕ1] SphericalHarmonicY[l2, 
+    M - m1, θ2, ϕ2], {m1, Max[-l1, -l2 + M], 
+   Min[l2, l2 + M]}]
+\end{lstlisting}
 
 \subsection{宇称}
 宇称（parity）算符 $\Pi$ 的作用是把所有自变量乘以 $-1$ 得到的函数． 本征函数是所有中心对称或反对车的函数， 本征值为分别为 $\pm 1$．
