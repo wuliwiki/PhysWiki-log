@@ -1,2 +1,70 @@
 % 例: 有限维方阵
 
+\pentry{
+矩阵的本征方程\upref{MatEig}
+有界算子的谱\upref{BddSpe}
+有界算子的预解式\upref{BddRsv}
+谱投影\upref{SpePrj}
+}
+
+如果将之前提到的泛函分析概念应用于有限维方阵, 则更容易看出它们的意义, 加深直观理解. 
+
+这里一直设$A$是$n\times n$复矩阵. 我们把它视为$\mathbb{C}^n$到自己的一个线性算子. 如词条 有界算子的谱\upref{BddSpe} 所说, 谱集$\sigma(A)$恰为$A$的特征值的集合, 而谱半径$r(A)$当然就是特征值的最大模. 
+
+现在设$\sigma(A)=\{\lambda_1,...,\lambda_h\}$(重数大于1的特征值算作一个谱点). 我们可以把预解式$R(z;A)=(z-A)^{-1}$视为矩阵值亚纯函数, 而显然$\sigma(A)$就是它的极点集. 我们更可以借助矩阵的若尔当分解而写出$R(z;A)$的明显表达式. 
+
+首先来回忆若尔当标准型分解定理:
+
+\begin{theorem}{若尔当分解}
+\begin{enumerate}
+\item 每个特征值$\lambda_k$都对应了$A$的一个不变子空间$V^{(k)}$, 全空间恰等于诸$V^{(k)}$的直和. $V_k$的维数$n_k$恰等于$\lambda_k$的代数重数 (即$\lambda_k$作为特征多项式$\det(z-A)$根的重数).
+\item 设$\lambda_k$的几何重数 (即线性无关的特征向量的个数) 是$m_k$. 则不变子空间$V^{(k)}$中存在一组线性无关的向量$e^{(k)}_1,...,e^{(k)}_{m_k}$, 和一组相应的正整数$d^{(k)}_1,...,d^{(k)}_{m_k}$, 使得向量组
+$$
+\begin{aligned}
+&e^{(k)}_1,\quad(A-\lambda_k)e^{(k)}_1,\quad...,\quad(A-\lambda_k)^{d^{(k)}_1-1}e^{(k)}_1\\
+&......\\
+&e^{(k)}_{m_k},\quad(A-\lambda_k)e^{(k)}_{m_k},\quad...,\quad(A-\lambda_k)^{d^{(k)}_{m_k}-1}e^{(k)}_{m_k}
+\end{aligned}
+$$
+构成$V^{(k)}$的一组基底. $\{(A-\lambda_k)^{d^{(k)}_l-1}e^{(k)}_l\}_{l=1}^{m_k}$是$A$的一组线性无关的特征向量.
+\end{enumerate}
+\end{theorem}
+
+根据这个定理, 如果取$\mathbb{C}^n$的基底为向量组
+$$
+\begin{aligned}
+&e^{(k)}_1,\quad(A-\lambda_k)e^{(k)}_1,\quad...,\quad(A-\lambda_k)^{d^{(k)}_1-1}e^{(k)}_1\\
+&......\\
+&e^{(k)}_{m_k},\quad(A-\lambda_k)e^{(k)}_{m_k},\quad...,\quad(A-\lambda_k)^{d^{(k)}_{m_k}-1}e^{(k)}_{m_k},
+\end{aligned}
+$$
+其中$k$跑遍$1,...,h$, 那么矩阵$A$在这个新的基底下就分解成了分块矩阵
+$$
+\left(
+\begin{matrix}
+&J(\lambda_1) &  & & \\
+& &J(\lambda_2) & & \\
+& & &...\\
+& & & & J(\lambda_h)
+\end{matrix}
+\right).
+$$
+在这里, 每个$J(\lambda_k)$是$n_k\times n_k$方阵, 由$m_k$个若尔当块组成:
+$$
+J_l(\lambda_k)
+=\left(
+\begin{matrix}
+&\lambda_k & 1 & & & \\
+& &\lambda_k & 1 & & \\
+& & &...\\
+& & & & \lambda_k & 1\\
+& & & & & \lambda_k
+\end{matrix}
+\right),
+$$
+每个若尔当块$J_l(\lambda_k)$是$J_l(\lambda_k)\times J_l(\lambda_k)$方阵.
+
+于是, 矩阵$A$可以重写为
+$$
+A=S\sum_{k=1}^h\left(\lambda_kI_{n_k}+\sum_{l=1}^k N_l^{(k)}\right)S^{-1}.
+$$
