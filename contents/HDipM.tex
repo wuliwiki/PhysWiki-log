@@ -1,0 +1,57 @@
+% 氢原子的跃迁偶极子矩阵元列表
+
+\pentry{氢原子的跃迁偶极子矩阵元和选择定则\upref{SelRul}}
+
+\subsection{$z$ 方向跃迁偶极子矩阵元}
+\autoref{HDipM_tab1} 给出了核电荷数 $Z=1$ 时的 $\mel{\psi_{n',l',m'}}{z}{\psi_{n,l,m}}$， 由于这是一个对称矩阵， 只给出矩阵的上半三角． 当 $Z > 1$ 时把表中每个矩阵元除以 $Z$ 即可． 这是因为 $\psi_{n,l,m}$ 与 $Z$ 成反比进行缩放（保持归一化）， 导致 $\abs{\psi_{n,l,m}}^2$ 和 $z$ 的平均值也是如此．
+\begin{table}[ht]
+\centering
+\caption{$\mel{\psi_{n',l',0}}{z}{\psi_{n,l,0}}$ 的上半三角， $Z=1$}\label{HDipM_tab1}
+\begin{tabular}{|c|c|c|c|c|c|c|c|c|c|c|}
+\hline
+$\ket{n,l,m}$ & $\ket{1,0,0}$ & $\ket{2,0,0}$ & $\ket{2,1,0}$ & $\ket{3,0,0}$ & $\ket{3,1,0}$ & $\ket{3,2,0}$ & $\ket{4,0,0}$ &  $\ket{4,1,0}$ & $\ket{4,2,0}$ & $\ket{4,3,0}$ \\
+\hline
+$\ket{1,0,0}$ & 0 & 0 & $\frac{128\sqrt 2}{243}$ & 0 & $\frac{27}{64\sqrt 2}$ & 0 & 0 & $\frac{6144}{15625 \sqrt 5}$ & 0 & 0\\
+\hline
+$\ket{2,0,0}$ &  & 0 & $-3$ & 0 & $\frac{27648}{15625}$ & 0 & 0 & $\frac{512\sqrt{10}}{2187}$ & 0 & 0 \\
+\hline
+$\ket{2,1,0}$ &  &  & 0 & $\frac{3456\sqrt 6}{15625}$ & 0 & $\frac{110592\sqrt 3}{78125}$ & $\frac{1024\sqrt 2}{6561}$ & 0 & $\frac{4096\sqrt 2}{6561}$ & 0\\
+\hline
+$\ket{3,0,0}$ &  &  &  & 0 & $-3\sqrt 6$ & 0 & 0 & $\frac{4700160 \sqrt{15}}{5764801}$ & 0 & 0\\
+\hline
+$\ket{3,1,0}$ &  &  &  & & 0 & $-3 \sqrt 3$ & $\frac{5750784 \sqrt 2}{5764801}$ & 0 & $\frac{15925248 \sqrt 2}{5764801}$ & 0\\
+\hline
+$\ket{3,2,0}$ &  &  &  &  &  & 0 & 0 & $\frac{3538944}{5764801}\sqrt{\frac 65}$ & 0 & $\frac{191102976}{40353607}\sqrt{\frac 65}$ \\
+\hline
+$\ket{4,0,0}$ &  &  &  &  &  &  & 0 & $-6\sqrt 5$ & 0 & 0 \\
+\hline
+$\ket{4,1,0}$ &  &  &  &  &  &  &  & 0 & $-\frac{24}{\sqrt 5}$ & 0\\
+\hline
+$\ket{4,2,0}$ &  &  &  &  &  &  &  &  & 0 & $-\frac{18}{\sqrt 5}$ \\
+\hline
+$\ket{4,3,0}$ &  &  &  &  &  &  &  &  &  & 0\\
+\hline
+\end{tabular}
+\end{table}
+这可以用于计算类氢原子斯塔克效应\upref{HStark}以及跃迁率（未完成）等．
+
+Mathematica 代码（请自行修改矩阵尺寸和循环范围）， \verb|HydrogenR| 函数见类氢原子的束缚态\upref{HWF}．
+\begin{lstlisting}[language=Mathematica]
+DipoleZ[Z_, n1_, l1_, m1_, n2_, l2_, 
+   m2_] := (-1)^
+    m1 Sqrt[(2 l1 + 1) (2 l2 + 1)] ThreeJSymbol[{l1, 0}, {1, 0}, {l2, 
+     0}] Integrate[
+    HydrogenR[Z, n1, l1, r]\[Conjugate] HydrogenR[Z, n2, l2, 
+      r] r^3, {r, 0, +\[Infinity]}] ThreeJSymbol[{l1, -m1}, {1, 
+     0}, {l2, m2}];
+d = ConstantArray[0, {10, 10}];
+i1 = 0; i2 = 0;
+For[n1 = 1, n1 <= 4, n1++, For[l1 = 0, l1 < n1, l1++,
+  ++i1; i2 = 0;
+  For[n2 = 1, n2 <= 4, n2++, For[l2 = 0, l2 < n2, l2++,
+    ++i2;
+    d[[i1, i2]] = DipoleZ[1, n1, l1, 0, n2, l2, 0];
+  ]]
+]];
+Print[d // MatrixForm];
+\end{lstlisting}
