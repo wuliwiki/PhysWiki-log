@@ -8,7 +8,7 @@
 
 在简谐振子受迫运动\upref{SHOfF}中，列出的二阶微分方程为
 \begin{equation}\label{SHOFN_eq1}
-m\ddot y = \alpha \dot y - ky + f(t)
+m\ddot y = -\alpha \dot y - ky + f(t)
 \end{equation}
 若已知初值条件（可代入任意具体数值） $\dot y(0) = v_0$，  $y(0) = y_0$， 且已知驱动力 $f(t)$， 此时可以把初值条件代入\autoref{SHOFN_eq1} 求出 $t = 0$ 时的加速度．
 \begin{equation}
@@ -37,21 +37,21 @@ k = 1; % 劲度系数
 a = 0.03; % 阻尼系数
 T = 20; % 停止时间
 Nstep = 10000; % 步数
-A = 2; w = 3; % f(t)=A*sin(w*t);
+A = 2; w = 3; % f(t) = A*sin(w*t) 中的参数;
 
 dt = T/Nstep; % 计算步长
-y2 = zeros(step,1); y1 = y2; y = y2; % 矩阵预赋值
+y2 = zeros(Nstep,1); y1 = y2; y = y2; % 矩阵预赋值
 y(1) = 0; y1(1) = 0; % 初值, y1 是 y 的一阶导数
 
 % 迭代循环
-for ii = 2:step
-    y2(ii) = (-a*y1(ii)-k*y(ii)+2*sin(w*(ii*dt)))/m; % 代入微分方程求出 y''.
-    y(ii) = y(ii-1) + y1(ii-1)*dt; % y 的微分近似
-    y1(ii) = y1(ii-1) + y2(ii-1)*dt; % y' 的微分近似
+for i = 1:Nstep-1
+    y(i+1) = y(i) + y1(i)*dt; % y 的微分近似
+    y2(i) = (-a*y1(i)-k*y(i)+A*sin(w*(i*dt)))/m; % 代入微分方程求出 y''.
+    y1(i+1) = y1(i) + y2(i)*dt; % y' 的微分近似
 end
 
 % 画图
-t=(0:step-1)*dt;
+t=(0:Nstep-1)*dt;
 plot(t,y);
 \end{lstlisting}
 
@@ -61,14 +61,3 @@ plot(t,y);
 \includegraphics[width=10cm]{./figures/SHOFN_1.pdf}
 \caption{运行结果}\label{SHOFN_fig1}
 \end{figure}
-
-
-
-
-
-
-
-
-
-
-

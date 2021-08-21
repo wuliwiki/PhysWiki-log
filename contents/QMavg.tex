@@ -1,9 +1,15 @@
 % 平均值（量子力学）
 % 量子力学|平均值|本征值|本征态
 
-\pentry{测量理论\upref{QMPos}}
+\begin{issues}
+\issueTODO 
+\end{issues}
 
-我们先来回顾测量理论． 假设某个物理量 $Q$ 有离散的本征态 $\ket{\phi_i}$ （$i = 1,2\dots$）， 对应的本征值为 $q_i$， 满足
+\pentry{量子力学的算符和本征问题\upref{QM1}}
+
+\subsection{离散本征态}
+
+本文使用原子单位制\upref{AU}， 使用狄拉克符号\upref{braket}． 我们先来回顾测量理论． 假设某个测量量 $q$ 对应的算符为 $Q$， 有离散的本征态 $\ket{\phi_i}$ （$i = 1,2\dots$）， 数量可以是有限或无穷多个， 对应的本征值为 $q_i$， 满足
 \begin{equation}\label{QMavg_eq3}
 Q\ket{\phi_i} = q_i \ket{\phi_i}
 \end{equation}
@@ -11,44 +17,195 @@ Q\ket{\phi_i} = q_i \ket{\phi_i}
 \begin{equation}\label{QMavg_eq4}
 \braket{\phi_i}{\phi_j} = \delta_{i,j}
 \end{equation}
-
-记粒子处于 $\ket{\psi}$ 状态， 可表示为本征态的线性组合
+记粒子处于 $\ket{\psi}$ 状态， 可表示为离散本征态的线性组合
 \begin{equation}\label{QMavg_eq2}
 \ket{\psi} = \sum_i c_i \ket{\phi_i}
 \end{equation}
+注意 $\ket{\psi}$ \textbf{必须要归一化}， 即 $\braket{\psi}{\psi} = 1$ 或者 $\sum_i \abs{c_i}^2 = 1$． 我们假设下文中的波函数都进行了归一化．
+
 对其测量 $Q$， 得到第 $q_i$ 的概率为
 \begin{equation}
 P_i = \abs{c_i}^2 = \abs{\braket{\phi_i}{\psi}}^2
 \end{equation}
-
-现在我们可以定义 $Q$ 的平均值为
+现在我们可以按习惯定义 $Q$ 的平均值为（未完成：链接到统计相关词条）
 \begin{equation}\label{QMavg_eq1}
-\ev{Q} = \sum_i P_i q_i = \abs{c_i}^2 q_i
+\ev{q} = \sum_i q_i P_i = \sum_i q_i \abs{c_i}^2
 \end{equation}
 这意味着， 如果我们取大量处于 $\ket{\psi}$ 状态的系统， 分别测量 $Q$ 再取平均， 结果就是该式．
 
+\begin{example}{一维简谐振子}
+谐振子内容详见 “量子简谐振子（升降算符法）\upref{QSHOop}”． 频率为 $\omega$ 的一维线性谐振子， 若状态为
+\begin{equation}
+\psi(x)=c_0 \psi_0(x)+c_3\psi_3(x)
+\end{equation}
+其中 $\psi_n(x)$ 为第 $n$ 个归一化的能量本征态，系数 $c_0$, $c_3$ 满足归一化条件 $\abs{c_0}^2+\abs{c_3}^2 = 1$． 求能量的平均值．
+
+解： 由\autoref{QMavg_eq1}
+\begin{equation}\label{QMavg_eq8}
+\ev{E}=\abs{c_0}^2 E_0+\abs{c_3}^2 E_3
+\end{equation}
+其中 $E_n$ 为第 $n$ 个能量本征值：$E_n=\omega(n+1/2)$，其中 $\hbar$ 已取为1．代入\autoref{QMavg_eq8} 即得该态的能量平均值．
+\end{example}
+
+\subsubsection{平均值的另一个种形式}
 平均值还有一个更常见的公式， 与\autoref{QMavg_eq1} 等效．
 \begin{equation}\label{QMavg_eq5}
-\ev{Q} = \mel{\psi}{Q}{\psi}
+\ev{q} = \mel{\psi}{Q}{\psi}
 \end{equation}
-要验证， 可以将\autoref{QMavg_eq2} 代入该式， 得
+下面我们会看到， 该式的适用范围更广， 计算起来也可能更方便． 事实上一些教科书在直接用它来定义平均值， 但笔者认为这么做不利于理解．
+
+要证明与\autoref{QMavg_eq1} 等效， 可以将\autoref{QMavg_eq2} 代入\autoref{QMavg_eq5}， 得
 \begin{equation}
 \begin{aligned}
-\ev{Q} &= \qty(\sum_i c_i^* \bra{\phi_i}) Q \qty(\sum_j c_j \ket{\phi_j})\\
+\ev{q} &= \qty(\sum_i c_i^* \bra{\phi_i}) Q \qty(\sum_j c_j \ket{\phi_j})\\
 &= \sum_{i,j} c_i^* c_j \bra{\phi_i} Q \ket{\phi_j}
 \end{aligned} 
 \end{equation}
 再代入\autoref{QMavg_eq3} 和\autoref{QMavg_eq4} 得
 \begin{equation}
-\ev{Q} = \sum_{i,j} c_i^* c_j q_i \braket{\phi_i}{\phi_j}
-= \sum_{i,j} c_i^* c_j q_i \delta_{i,j} = \sum_i \abs{c_i}^2 q_i
+\ev{q} = \sum_{i,j} c_i^* c_j q_i \braket{\phi_i}{\phi_j}
+= \sum_{i,j} q_i \abs{c_i}^2 \delta_{i,j} = \sum_i q_i \abs{c_i}^2
 \end{equation}
 证毕．
 
+\subsection{连续本征态}
+\pentry{连续正交归一基底与傅里叶变换\upref{COrNoB}}
+
+若 $Q$ 的本征态是连续的， 记为 $\ket{q}$ （$q\in [a,b]$）， 且满足广义的正交归一条件（链接未完成，引用量子力学散射态相关词条）
+\begin{equation}\label{QMavg_eq9}
+\braket{q'}{q} = \delta(q'-q)
+\end{equation}
+其中 $\delta$ 是狄拉克 delta 函数\upref{Delta}． 那么归一化波函数的展开变为
+\begin{equation}\label{QMavg_eq7}
+\ket{\psi} = \int_a^b c(q) \ket{q} \dd{q}
+\end{equation}
+其中系数 $c(q)$ 是关于 $q$ 的复值函数
+\begin{equation}\label{QMavg_eq10}
+c(q) = \braket{q}{\psi}
+\end{equation}
+而 $\abs{c(q)}^2$ 则是测得 $q$ 的概率密度\upref{RandF}（未完成：链接到测量理论相关公式）， 满足归一化条件
+\begin{equation}
+\int \abs{c(q)}^2 \dd{q} = 1
+\end{equation}
+
+这时可以定义平均值为（未完成：链接到统计相关词条）
+\begin{equation}\label{QMavg_eq11}
+\ev{q} = \int_a^b q \abs{c(q)}^2 \dd{q}
+\end{equation}
+同样容易证明等效形式为
+\begin{equation}\label{QMavg_eq12}
+\ev{q} = \mel{\psi}{Q}{\psi}
+\end{equation}
+证明： 把\autoref{QMavg_eq7} 代入， 得
+\begin{equation}
+\begin{aligned}
+\ev{q} &= \int_a^b\int_a^b \abs{c(q)}^2\mel{q'}{Q}{q} \dd{q'}\dd{q} = \int_a^b\int_a^b q\abs{c(q)}^2\braket{q'}{q} \dd{q'}\dd{q}\\
+&= \int_a^b\int_a^b q\abs{c(q)}^2\delta(q'-q) \dd{q'}\dd{q}\\
+&= \int_a^b q\abs{c(q)}^2 \dd{q}
+\end{aligned}
+\end{equation}
+证毕．
+
+\subsubsection{位置的平均值（一维）}
+在位置表象（链接未完成）下， 虽然我们往往直接认为 $\abs{\psi(x)}^2$ 就是位置分布的概率密度函数， 但这同样可以用上述过程推导出来． 位置的算符就是 $X = x$， 正交归一化的本征态矢为 $\ket{x}$ 也就是位于 $x$ 处的狄拉克 $\delta$ 函数\upref{Delta}， 满足正交归一化条件（\autoref{QMavg_eq9}）
+\begin{equation}
+\braket{x'}{x} = \delta(x'-x)
+\end{equation}
+证明见\autoref{Delta_eq13}~\upref{Delta}． 那么归一化的波函数（要求平方可积） $\ket{\psi}$ 可以展开为（\autoref{QMavg_eq7}）
+\begin{equation}
+\ket{\psi} = \int c(x) \ket{x}\dd{x}
+\end{equation}
+其中（\autoref{QMavg_eq10}）
+\begin{equation}
+c(x) = \braket{x}{\psi} = \int_{-\infty}^\infty \psi(x')\delta(x'-x)\dd{x'} = \psi(x)
+\end{equation}
+可见态矢 $\ket{\psi}$ 关于位置基底 $\ket{x}$ 展开的系数就是波函数 $\psi(x)$ 本身． 所以位置平均值为（\autoref{QMavg_eq11}， \autoref{QMavg_eq12} ）
+\begin{equation}
+\ev{x} = \int_{-\infty}^\infty x \abs{\psi(x)}^2 \dd{x} = \int_{-\infty}^\infty \psi\Cj(x)x \psi(x) \dd{x} = \mel{\psi}{x}{\psi}
+\end{equation}
+
+
+\subsubsection{动量的平均值（一维）}
+动量的算符为 $P = -\I\pdv*{x}$， 本征值记为 $k = p$， 因为在原子单位中波数等于动量（链接未完成）． 归一化的本征函数为
+\begin{equation}
+\ket{p} = \frac{\E^{\I k x}}{\sqrt{2\pi}}
+\end{equation}
+满足归一化条件（链接未完成，delta 函数相关公式）
+\begin{equation}
+\braket{p'}{p} = \int_{-\infty}^{\infty} \frac{\E^{-\I k' x}}{\sqrt{2\pi}} \frac{\E^{\I k x}}{\sqrt{2\pi}} \dd{x} = \delta(k' - k)
+\end{equation}
+若要计算函数 $\ket{\psi} = \psi(x)$ 的动量平均值， 那么可以先计算展开系数， 即傅里叶变换\upref{FTExp}
+\begin{equation}
+c(p) = \braket{p}{\psi} = \frac{1}{\sqrt{2\pi}}\int_{-\infty}^{\infty} \psi(x)\E^{-\I kx} \dd{x}
+\end{equation}
+事实上， $c(p)$ 也叫做动量表象波函数\upref{moTDSE}， 也就是 $\ket{\psi}$ 在动量基底 $\ket{p}$ 的展开系数． 计算平均值得
+\begin{equation}
+\ev{p} = \int_{-\infty}^{\infty} p \abs{c(p)}^2\dd{p}
+\end{equation}
+也可以直接计算
+\begin{equation}
+\ev{p} = \mel{\psi}{P}{\psi} = -\I\int_{-\infty}^{\infty} \psi\Cj(x) \pdv{x} \psi(x) \dd{x}
+\end{equation}
+
+
+特殊地， 若 $\psi(x)$ 是一个实函数（或者乘以一个任意相位因子 $\E^{\I \theta}$）， 那么其频谱 $\abs{c(p)}^2$ 必定是一个偶函数（链接未完成）， 可得动量平均值为零． 所以
+\begin{theorem}{}
+定态薛定谔方程\upref{SchEq}中束缚态的动量平均值必为零．
+\end{theorem}
+这在物理意义上是符合直觉的， 经典力学中， 困在势阱中来回运动的小球的平均动量（关于时间平均）也同样为零．
+
+\begin{example}{波函数的坐标、动量平均值}
+假设一粒子波函数为
+\begin{equation}
+\psi(x)=
+\begin{cases}
+C(a^2-x^2) &(-a\leqslant x\leqslant a)\\
+0 &(x<-a \ \text{或}\ x>a) 
+\end{cases}
+\end{equation}
+其中 $C$ 已归一化．求粒子的坐标、动量平均值．
+
+\begin{figure}[ht]
+\centering
+\includegraphics[width=7cm]{./figures/QMavg_2.pdf}
+\caption{粒子波函数示意图} \label{QMavg_fig2}
+\end{figure}
+
+解： 由\autoref{QMavg_eq5} 
+\begin{equation}\label{QMavg_eq6}
+\ev{x}= \int_{-a}^a C\Cj(a^2-x^2)xC(a^2-x^2)\dd{x} = 0
+\end{equation}
+同理，将\autoref{QMavg_eq6} 中的算符 $x$ 用动量算符 $p$ 替换，可以得到动量平均值
+\begin{equation}
+\begin{aligned}
+\ev{p} &= \int_{-a}^a C\Cj(a^2-x^2)(-\I\dv{x})C(a^2-x^2)\dd{x}\\
+&= -\I\abs{C}^2\int_{-a}^a (a^2-x^2)(-2x)\dd{x}\\
+&= 0
+\end{aligned}
+\end{equation}
+\end{example}
 % 未完成： 无限深势阱中的三角波包， 用两种方法求能量的平均值
 
+\subsection{离散本征态和连续本征态}
+同时具有离散和连续本征值的典型的例子就是一个有限深势阱的哈密顿算符（能量算符）$H$， 如有限深方势阱\upref{FSW}．
 
+与上面两节同理， 若算符 $Q$ 同时存在离散本征态 $\ket{q_i}$ 和连续本征态 $\ket{q}$， 且各自满足上文的正交归一化条件， 以及
+\begin{equation}
+\braket{q_i}{q} = 0
+\end{equation}
+使 $\ket{q_i}$ 和 $\ket{q}$ 共同组成一组完备正交归一基底．
 
+那么波函数可以展开为
+\begin{equation}
+\ket{\psi} = \sum_i c_i \ket{q_i} + \int_a^b c(q) \ket{q}
+\end{equation}
+那么平均值被定义为
+\begin{equation}
+\ev{q} = \sum_i q_i \abs{c_i}^2 + \int_a^b q \abs{c(q)}^2 \dd{q}
+\end{equation}
+同样有等效形式（请读者自行证明）
+\begin{equation}
+\ev{q} = \mel{\psi}{Q}{\psi}
+\end{equation}
 
-
-
+\addTODO{例子未完成}

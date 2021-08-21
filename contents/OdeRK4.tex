@@ -16,7 +16,7 @@ k_3 &= f \qty( y_n + h\frac{k_2}{2}, t_n + \frac h2 ) \qquad
 &k_4 &= f(y_n + hk_3, t_n + h)
 }\end{equation}
 由以上两式， 不难把该算法拓展到方程组的情况． 对于 $N$ 元微分方程组
-\begin{equation}
+\begin{equation}\label{OdeRK4_eq3}
 \begin{cases}
 y'_1(t) = f_1(y_1,\dots, y_N, t)\\
 y'_2(t) = f_2(y_1,\dots, y_N, t)\\
@@ -26,7 +26,7 @@ y'_N(t) = f_N(y_1,\dots, y_N, t)
 \end{equation}
 我们可以把该式记为矢量函数的形式
 \begin{equation}\label{OdeRK4_eq4}
-\bvec y'(t)\bvec y'(t) = \bvec f(\bvec y, t)
+\bvec y'(t) = \bvec f(\bvec y, t)
 \end{equation}
 其中
 \begin{equation}
@@ -34,14 +34,18 @@ y'_N(t) = f_N(y_1,\dots, y_N, t)
 \qquad
 \bvec y = \pmat{y_1\\ \vdots\\ y_N}
 \end{equation}
-
 现在我们仅需要把\autoref{OdeRK4_eq1} 和 \autoref{OdeRK4_eq2} 中的所有 $y_i$ 和 $k_i$ 都变为 $N$ 维列矢量 $\bvec y_i$ 和 $\bvec k_i$ 即可将微分方程拓展为微分方程组．
 
-\subsection{例程}
+\subsection{例程：天体运动}
 
-到目前为止， 我们每求一个微分方程的数值解都要重新写一次程序， 对于一些较为复杂的算法这样做效率较低． 我们这里不妨把四阶龙格库塔法写到一个单独的函数文件 odeRK4.m 中， 当我们要解某个特定的方程时， 只需把\autoref{OdeRK4_eq2} 中的 $f(y, t)$ 作为自变量输入即可解出 $y(t)$．
+到目前为止， 我们每求一个微分方程的数值解都要重新写一次程序， 对于一些较为复杂的算法这样做效率较低． 我们这里不妨把四阶龙格库塔法写到一个单独的函数文件 odeRK4.m 中， 当我们要解某个特定的方程时， 只需把\autoref{OdeRK4_eq2} 中的 $f(y, t)$ 作为自变量输入即可解出 $y(t)$． 这样的程序就叫做微分方程的解算器， 它可以求解用户自定义的微分方程．
 
 \begin{lstlisting}[language=matlab, caption=odeRK4.m]
+% 四阶龙格库塔定步长节微分方程
+% f(Y, t): 求导函数
+% tspan: 二元向量，起始和终止时间
+% Y0: 初值（列向量）
+% Nt: 时间节点数
 function [Y, t] = odeRK4(f, tspan, Y0, Nt)
 Nvar = numel(Y0);  % 因变量的个数
 dt = (tspan(2) - tspan(1)) / (Nt-1); % 计算步长

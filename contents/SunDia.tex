@@ -1,0 +1,50 @@
+% 日晷的计算
+
+\subsection{水平日晷}
+\pentry{解三棱锥顶角\upref{PrmSol}}
+
+常见的水平日晷如\autoref{SunDia_fig2} 和\autoref{SunDia_fig1} 所示． 把图片打印后， 把直角三角形的底边垂直固定在半圆的 12 点方向， 然后把半圆水平放于地面， 12 点方向指向正北（地轴北）即可． 此时三角形的斜边， 也就是日晷的指针与地轴平行． 太阳绕日晷指针以每小时 15° （一天 360°）的角速度匀速转动．
+
+\begin{figure}[ht]
+\centering
+\includegraphics[width=8cm]{./figures/SunDia_2.png}
+\caption{水平日晷（来自 Wikipedia）} \label{SunDia_fig2}
+\end{figure}
+该类型日晷的一个画图网页见\href{https://www.blocklayer.com/sundial.aspx}{这里}．
+\begin{figure}[ht]
+\centering
+\includegraphics[width=10cm]{./figures/SunDia_1.png}
+\caption{北纬 30° 的日晷} \label{SunDia_fig1}
+\end{figure}
+
+日晷圆盘上的刻度与所在纬度有关， 若将其放在北极或南极， 那么直角三角形的就变为一个和地面垂直的线段， 且表盘上的刻度是均匀的． 相反， 若把这种日晷放在赤道上， 那么三角形的斜边将会与 12 点的刻度共线， 此时这种日晷将失效．
+
+刻度的具体计算并不复杂， 公式为
+\begin{equation}
+\beta = \tan^{-1}(\sin\alpha \tan \theta)
+\end{equation}
+其中 $\beta$ 是表盘上某个刻度到 12 点刻度的夹角， $\theta$ 是太阳当前位置和 12 点位置关于地轴（指针）的夹角， $\alpha$ 是当地维度． 可以验证在北极点处 $\alpha = \pi/2$ 时 $\beta = \phi$．
+
+证明： 令\autoref{PrmSol_eq3}~\upref{PrmSol} 中 $\theta_2 = \pi/2$， $\theta_1 = \theta$ 即可．
+
+我们给出水平日晷的 Matlab 画图\upref{MatPlt}代码， 结果类似\autoref{SunDia_fig1}．
+\begin{lstlisting}[language=matlab, caption=sunDial.m]
+alpha = pi/6; % 纬度
+th = linspace(-pi/2, pi/2, 13);
+beta = atan(sin(alpha).*tan(th));
+th0 = linspace(-pi/2, pi/2, 1000);
+figure; plot(cos(th0),sin(th0), 'k'); hold on;
+for i = 1:13
+    plot([0,cos(beta(i))], [0,sin(beta(i))], 'k');
+end
+axis equal; view(-90, 90);
+axis([-0.1, 1.1, -1.1, 1.1]);
+\end{lstlisting}
+
+\subsection{赤道平面日晷}
+另一种在任何纬度都适用的方案是让刻度盘始终与指针保持垂直， 而指针始终指向地轴． 这种日晷的结构相对更复杂， 但表盘上的刻度始终是均匀的， 秩序调整表盘与底座之间的夹角就能适用于不同纬度．
+\begin{figure}[ht]
+\centering
+\includegraphics[width=8cm]{./figures/SunDia_3.png}
+\caption{故宫的日晷（来自 Wikipedia）} \label{SunDia_fig3}
+\end{figure}
