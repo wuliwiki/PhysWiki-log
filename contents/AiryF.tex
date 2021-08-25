@@ -1,0 +1,64 @@
+% 艾里函数
+
+\begin{issues}
+\issueDraft
+\end{issues}
+
+\footnote{参考 Wikipedia \href{https://en.wikipedia.org/wiki/Airy_function}{相关页面}．}\textbf{艾里函数（Airy function）}是微分方程
+\begin{equation}
+y'' - xy = 0
+\end{equation}
+的两个线性无关解， 分别记为 $\opn{Ai}(x)$ 和 $\opn{Bi}(x)$． 他们可以用反常积分（链接未完成）定义（未完成：推导）
+\begin{equation}
+% 已数值验证
+\opn{Ai}(x)=\frac 1\pi \int_0^\infty \cos(\frac{t^3}{3}+xt)\dd t
+\end{equation}
+\begin{equation}
+% 已数值验证
+\opn{Bi}(x)=\frac 1\pi \int_0^\infty \qty[\exp(-\frac{t^3}{3}+xt)+\sin(\frac{t^3}{3}+xt)]\dd t
+\end{equation}
+
+\begin{figure}[ht]
+\centering
+\includegraphics[width=11cm]{./figures/AiryF_1.pdf}
+\caption{艾里函数} \label{AiryF_fig1}
+\end{figure}
+
+\subsection{渐进形式}
+\footnote{参考 \cite{GriffQ} 中的 WKB 近似章节．}渐进形式为 $x \to \infty$
+\begin{align}
+% 已验证
+\opn{Ai}(x) \to \frac{1}{2\sqrt{\pi} x^{1/4}} \exp(-\frac{2}{3}x^{3/2})\\
+\opn{Bi}(x) \to \frac{1}{\sqrt{\pi} x^{1/4}} \exp(\frac{2}{3}x^{3/2})
+\end{align}
+$x \to -\infty$
+\begin{align}
+% 已验证
+\opn{Ai}(x) \to \frac{1}{\sqrt{\pi} \abs{x}^{1/4}} \sin(\frac{2}{3}\abs{x}^{3/2}+\frac{\pi}{4})\\
+\opn{Bi}(x) \to \frac{1}{\sqrt{\pi} \abs{x}^{1/4}} \cos(\frac{2}{3}\abs{x}^{3/2}+\frac{\pi}{4})
+\end{align}
+
+\begin{lstlisting}[language=Mathematica]
+Plot[{AiryAi[x], 
+  1/(Sqrt[\[Pi]] (-x)^(1/4)) Sin[2/3 (-x)^(3/2) + \[Pi]/4]}, {x, -10, 
+  1}]
+Plot[{AiryBi[x], 
+  1/(Sqrt[\[Pi]] (-x)^(1/4)) Cos[2/3 (-x)^(3/2) + \[Pi]/4]}, {x, -10, 
+  1}]
+Plot[{AiryAi[x], 
+  1/(2 Sqrt[\[Pi]] x^(1/4)) Exp[-(2/3) x^(3/2)]}, {x, -1/2, 5}]
+Plot[{AiryBi[x], 1/(Sqrt[\[Pi]] x^(1/4)) Exp[2/3 x^(3/2)]}, {x, -1/2, 
+  5}]
+\end{lstlisting}
+\addTODO{把以上 Mathematica 代码替换成图， 用田字格}
+\subsection{性质}
+\subsection{微分方程变形}
+令 $a, b\in \mathbb R$， 那么
+\begin{equation}
+y'' - (ax + b) y = 0
+\end{equation}
+的通解是
+\begin{equation}\label{AiryF_eq1}
+% 已数值验证
+y(x) = C_1\opn{Ai}\qty(\frac{ax+b}{\abs{a}^{2/3}}) + C_2 \opn{Bi}\qty(\frac{ax+b}{\abs{a}^{2/3}})
+\end{equation}

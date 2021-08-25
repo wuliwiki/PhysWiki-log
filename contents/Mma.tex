@@ -14,6 +14,7 @@
 \item 空格表示乘号， 相当于 \verb|*|． 数字和变量间相乘不需要空格或 \verb|*|．
 \item 科学计数法如 \verb|2.3*^-70| 表示 $2.3\e{-70}$．
 \item 中断执行 \verb|Alt + ,| （笔记本界面） 或者 \verb|Ctrl + C| （文本界面）．
+\item 输入 \verb|In[8]|
 \end{itemize}
 
 \subsubsection{常数}
@@ -79,11 +80,12 @@
 \item \verb|!=| 不等号
 \item 连接字符串 \verb|"abc" <> "defg" <> "hij"|．
 \item 单变量的函数 \verb|f[...]| 也可以用后缀形式记为 \verb|... // f| 或者用前缀形式记为 \verb|f @ ...|．
-\item \verb|/.| \verb|ReplaceAll[]| 的简写形式． （什么意思？？）
-\item \verb|Sin'[x]| 相当于 \verb|D[Sin[x], x]|
+\item \verb|/.| 是 \verb|ReplaceAll[]| 的简写形式， 用于替换表达式中的符号． 例如 \verb|{x, x^2, y, z} /. x -> 1| 的结果是 \verb|{1,1,y,z}|， 又例如 \verb|{x, x^2, y, z} /. {x -> y, y -> z, z -> x}|
+\item \verb|Sin'[x]| 相当于 \verb|D[Sin[x], x]|， \verb|Sin''[x]| 相当于 \verb|D[Sin[x], {x,2}]|
 \item \verb|x =.| 清除符号 \verb|x| 的定义．
 \item \verb|Remove[x]| 完全清除符号．
 \item \verb|i++| 和 \verb|++i| 和 \verb|--| 与 C 语言中用法相同．
+\item \verb|x ∈ dom| 或 \verb|x \[Element] dom| 相当于 \verb|Element[x, dom]|
 \end{itemize}
 
 \subsection{判断循环}
@@ -112,7 +114,7 @@
 \item \verb|Arg[z]| 复数的幅角
 \item \verb|Factor[x^25-1]| 因式分解
 \item \verb|Expand[(a+b)^3]| 多项式展开
-\item \verb|DSolve[{y''[x] + b y'[x] == 0, y[0] == 0, y'[0] == 1}, y[x], x]| 解常微分方程．
+\item \verb|DSolve[{y''[x] + b y'[x] == 0, y[0] == 0, y'[0] == 1}, y[x], x]| 解常微分方程． 也可以省略初始条件获得通解． 也可以在后面加上假设如 \verb|Assumptions -> {a \[Element] Reals}|
 \item \verb|Piecewise[{{x^2, x < 0}, {x, x > 0}}]| 分段函数．
 \item \verb|Table[i^2, {i,3}]| 输出 \verb|{1, 4, 9}|．
 \item \verb|FullSimplify[表达式]| 简化表达式．
@@ -143,6 +145,7 @@
 \item \verb|D[Sin[x]]|， \verb|D[Sin[x+y],x]|， 导数和偏导数．
 \item \verb|Integrate[1/(x^3-1),x]| 不定积分， \verb|Integrate[f,{x, xmin, xmax}]| 定积分, \verb|Integrate[f, {x, xmin, xmax},{y, ymin, ymax},...]| 重积分．
 \item \verb|Integrate[(f[x])\[Conjugate] f[x], {x, -\[Infinity], \[Infinity]}, Assumptions -> {\[Sigma] > 0, Subscript[k, 0] > 0, x0 > 0}]| 中使用限制一些常数的范围， 这会大大缩短计算时间， 如果不规定范围， 则默认是任意复数．
+\item 若要假设一个数为实数， 用 \verb|Assumptions -> {x \[Element] Reals}|
 \item \verb|FourierSeries[函数, 自变量, 项数]|．
 \item \verb|FourierTransform[Exp[-x^2], x, k]| 傅里叶变换．
 \item \verb|Plot[y[x], {x, -5, 5}]| 简单的画图．
