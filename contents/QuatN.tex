@@ -10,7 +10,7 @@
 
 四元数可以用来简洁地表示三维空间中的旋转，极大地减少了计算量．
 
-三维空间中的一个向量表示为标部为 $0$ 的四元数：$v=\pmat{0, \bvec{v}}$．如果我们绕着一个单位向量 $\hat{\bvec{n}}$ 把 $\bvec{v}$ 旋转一个角度 $\theta$，所得的结果应该是哪个向量呢？取四元数 $q=\pmat{\cos{\frac{\theta}{2}}, \hat{\bvec{n}}\sin{\frac{\theta}{2}}}$，那么旋转后的向量就可以表示为
+三维空间中的一个向量表示为标部为 $0$ 的四元数：$v=\pmat{0, \bvec{v}}$．如果我们绕着一个单位向量 ${\uvec{n}}$ 把 $\bvec{v}$ 旋转一个角度 $\theta$，所得的结果应该是哪个向量呢？取四元数 $q=\pmat{\cos{\frac{\theta}{2}}, {\uvec{n}}\sin{\frac{\theta}{2}}}$，那么旋转后的向量就可以表示为
 \begin{equation}
 qvq^{-1}
 \end{equation}
@@ -19,42 +19,38 @@ qvq^{-1}
 
 \subsection{证明}
 
-取四元数 $q=\pmat{\cos{\frac{\theta}{2}}, \hat{\bvec{n}}\sin{\frac{\theta}{2}}}$ 和 $v=(0, \bvec{v})$，直接计算得：
+取四元数 $q=\pmat{\cos{\frac{\theta}{2}}, {\uvec{n}}\sin{\frac{\theta}{2}}}$ 和 $v=(0, \bvec{v})$，直接计算得：
 
 \begin{equation}
 \begin{aligned}
-qvq^{-1}&=\pmat{\cos{\frac{\theta}{2}}, \hat{\bvec{n}}\sin{\frac{\theta}{2}}}\cdot (0, \bvec{v})\cdot q^{-1}\\&
-=(-\bvec{v}\cdot\hat{\bvec{n}}\sin{\frac{\theta}{2}}, \bvec{v}\cos{\frac{\theta}{2}}+\hat{\bvec{n}}\times\bvec{v}\sin{\frac{\theta}{2}})\cdot (\cos{\frac{\theta}{2}}, -\hat{\bvec{n}}\sin{\frac{\theta}{2}})\\&
-=(0, \cos^2\frac{\theta}{2}\bvec{v}+\cos\frac{\theta}{2}\sin\frac{\theta}{2}\hat{\bvec{n}}\times\bvec{v}+(\hat{\bvec{n}}\cdot\bvec{v})\sin^2\frac{\theta}{2}\hat{\bvec{n}}\\&+\cos\frac{\theta}{2}\sin\frac{\theta}{2}\hat{\bvec{n}}\times\bvec{v}-\sin^2\frac{\theta}{2}\hat{\bvec{n}}\times(\hat{\bvec{n}}\times\bvec{v}))\\&
-=(0, \cos^2\frac{\theta}{2}\bvec{v}-\sin^2\frac{\theta}{2}\hat{\bvec{n}}\times(\hat{\bvec{n}}\times\bvec{v})+\sin\theta\hat{\bvec{n}}\times\bvec{v}\\&+(\hat{\bvec{n}}\cdot\bvec{v})\sin^2\frac{\theta}{2}\hat{\bvec{n}})
+qvq^{-1}&=\pmat{\cos{\frac{\theta}{2}}, {\uvec{n}}\sin{\frac{\theta}{2}}}\cdot (0, \bvec{v})\cdot q^{-1}\\&
+=(-\bvec{v}\cdot {\uvec{n}}\sin{\frac{\theta}{2}}, \bvec{v}\cos{\frac{\theta}{2}}+ {\uvec{n}}\times\bvec{v}\sin{\frac{\theta}{2}})\cdot (\cos{\frac{\theta}{2}}, -{\uvec{n}}\sin{\frac{\theta}{2}})\\&
+=(0, \cos^2\frac{\theta}{2}\bvec{v}+\cos\frac{\theta}{2}\sin\frac{\theta}{2}{\uvec{n}}\times\bvec{v}+({\uvec{n}}\cdot\bvec{v})\sin^2\frac{\theta}{2}{\uvec{n}}\\&
+\qquad +\cos\frac{\theta}{2}\sin\frac{\theta}{2}{\uvec{n}}\times\bvec{v}+\sin^2\frac{\theta}{2}{\uvec{n}}\times({\uvec{n}}\times\bvec{v}))\\&
+=(0, \cos^2\frac{\theta}{2}\bvec{v}+\sin^2\frac{\theta}{2}{\uvec{n}}\times({\uvec{n}}\times\bvec{v})+\sin\theta{\uvec{n}}\times\bvec{v}\\&
+\qquad +({\uvec{n}}\cdot\bvec{v})\sin^2\frac{\theta}{2}{\uvec{n}})
 \end{aligned}
 \end{equation}
 
-如果取 $\bvec{v}\perp\hat{\bvec{n}}$，考虑到此时 $\hat{\bvec{n}}\times(\hat{\bvec{n}}\times\bvec{v})=-\bvec{v}$ 且 $\hat{\bvec{n}}\cdot\bvec{v}=0$，那么上式可以化简为
+如果取 $\bvec{v}\perp{\uvec{n}}$，考虑到此时 ${\uvec{n}}\times({\uvec{n}}\times\bvec{v})=-\bvec{v}$ 且 ${\uvec{n}}\cdot\bvec{v}=0$，那么上式可以化简为
 \begin{equation}
 \begin{aligned}
-qvq^{-1}&=(0, \cos\theta\bvec{v}+\sin\theta\hat{\bvec{n}}\times\bvec{v})
+qvq^{-1}&=(0, \cos\theta\bvec{v}+\sin\theta{\uvec{n}}\times\bvec{v})
 \end{aligned}
 \end{equation}
+这正是 $\bvec{v}$ 绕 ${\uvec{n}}$ 旋转 $\theta$ 的结果．
 
-这正是 $\bvec{v}$ 绕 $\hat{\bvec{n}}$ 旋转 $\theta$ 的结果．
-
-如果取 $\bvec{v}\parallel\hat{\bvec{n}}$，考虑到此时 $\hat{\bvec{n}}\times\bvec{v}=0$ 且 $(\hat{\bvec{n}}\cdot\bvec{v})\bvec{v}=\bvec{v}$，那么上式化为
+如果取 $\bvec{v}\parallel{\uvec{n}}$，考虑到此时 ${\uvec{n}}\times\bvec{v}=0$ 且 $({\uvec{n}}\cdot\bvec{v})\bvec{v}=\bvec{v}$，那么上式化为
 \begin{equation}
 \begin{aligned}
 qvq^{-1}&=(0, \cos^2\frac{\theta}{2}\bvec{v}+\sin^2\frac{\theta}{2}\bvec{v})=(0, \bvec{v})=v
 \end{aligned}
 \end{equation}
-
-这也是 $\bvec{v}$ 绕 $\hat{\bvec{n}}$ 旋转 $\theta$ 的结果．
+这也是 $\bvec{v}$ 绕 ${\uvec{n}}$ 旋转 $\theta$ 的结果．
 
 综上所述，取任意向量 $\bvec{v}$，把它分为垂直和平行于旋转轴的 $\bvec{v}_\perp$ 和 $\bvec{v}_\parallel$，分别对应四元数 $v_\perp$ 和 $v_\parallel$，那么 $q v_\perp q^{-1}$ 和 $q v_\parallel q^{-1}$ 分别对应这两个向量旋转后的结果．故取 $v=v_\perp+v_\parallel$ 为 $\bvec{v}$ 对应的四元数后可由四元数乘法分配律得到，$qvq^{-1}$ 对应 $\bvec{v}$ 旋转后的向量．
 
-一点补充：考虑到四元数限定向量方向时退化为复数（见\textbf{四元数}\upref{Quat}的讨论），故 $\bvec{v}\parallel\hat{\bvec{n}}$ 的情况其实可以直接套用复数的交换性来得到，即 $qvq^{-1}=qq^{-1}v=v$．
-
-
-
-
+一点补充：考虑到四元数限定向量方向时退化为复数（见\textbf{四元数}\upref{Quat}的讨论），故 $\bvec{v}\parallel{\uvec{n}}$ 的情况其实可以直接套用复数的交换性来得到，即 $qvq^{-1}=qq^{-1}v=v$．
 
 
 \subsection{旋转矩阵}
