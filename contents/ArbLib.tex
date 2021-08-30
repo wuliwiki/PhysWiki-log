@@ -27,7 +27,8 @@ sudo make install;
 \subsection{编译}
 在 Ubuntu 中如果你使用 \verb|apt| 安装， 在编译程序是需要加 \verb|-lflint-arb| 选项． 如果你直接从源码编译， 则需要加 \verb|-larb| 选项．
 
-一个 C++ 例程：
+一个 C++ 例程： 该程序用 80 bit 初始精度计算复参数的超几何函数\upref{HypGeo} $_1F_1$ 并于 Mathematica 的结果比较． 如果 Arb 估计的结果精度小于 15 位有效数字则显示警告． 初始精度越高， 结果的有效数字也越高， 具体取决于 $_1F_1$ 的参数． 读者可以尝试在程序内加入一个循环， 若结果有效数字不够， 则把初始精度加倍再次计算， 直到达到精度为止．
+
 \begin{lstlisting}[language=cpp, caption=test.cpp]
 #include "arb_hypgeom.h"
 #include "acb_hypgeom.h"
@@ -44,29 +45,10 @@ typedef int Int;
 typedef const int Int_I;
 typedef int & Int_O, Int_IO;
 
-// 1F1 hypdergeometric function with real arguments
-Doub hypergeom1F1(Doub_I a, Doub_I b, Doub_I z)
-{
-	slong prec = 64; // set precision bit (log10/log2 = 3.322)
-	Doub res;
-	arb_t a1, b1, z1, res1;
-	arb_init(a1); arb_init(b1); arb_init(z1); arb_init(res1);
-	arb_set_d(a1, a); arb_set_d(b1, b);	arb_set_d(z1, z);
-	arb_hypgeom_1f1(res1, a1, b1, z1, 0, prec);
-	// arb_printn(res1, 100, 0); printf("\n");  // print result
-	int digits = arb_rel_accuracy_bits(res1)/3.321928;
-	if (digits < 15) {
-		cout << "warning: hypergeom1F1 error too large" << endl;
-	}
-	res = arf_get_d(arb_midref(res1), ARF_RND_NEAR);
-	arb_clear(a1); arb_clear(b1); arb_clear(z1); arb_clear(res1);
-	return res;
-}
-
 // 1F1 hypdergeometric function with complex arguments
 Comp hypergeom1F1(Comp_I a, Comp_I b, Comp_I z)
 {
-	slong prec = 64; // set precision bit (log10/log2 = 3.322)
+	slong prec = 80; // set precision bit (log10/log2 = 3.322)
 	Comp res;
 	arb_t temp1;
 	arb_init(temp1);
@@ -90,42 +72,12 @@ Comp hypergeom1F1(Comp_I a, Comp_I b, Comp_I z)
 	return res;
 }
 
-// Coulomb function F
-Doub coulombF(Doub_I l, Doub_I eta, Doub_I x)
-{
-	slong prec = 64; // set precision bit (log10/log2 = 3.322)
-	Doub F;
-	arb_t l1, eta1, x1, F1;
-	arb_init(l1); arb_init(eta1); arb_init(x1); arb_init(F1);
-	arb_set_d(l1, l); arb_set_d(eta1, eta);
-	arb_set_d(x1, x); arb_set_d(F1, F);
-
-	arb_hypgeom_coulomb(F1, NULL, l1, eta1, x1, prec);
-	
-	Int digits = arb_rel_accuracy_bits(F1)/3.321928;
-	if (digits < 15) {
-		cout << "warning: hypergeom1F1 error too large" << endl;
-	}
-	F = arf_get_d(arb_midref(F1), ARF_RND_NEAR);
-	arb_clear(l1); arb_clear(eta1); arb_clear(x1); arb_clear(F1);
-	return F;
-}
-
 int main()
 {
-	cout.precision(16);
-    cout << "hypergeom1F1(1.23,1.23,1.23) = " << endl;
-	cout << hypergeom1F1(1.23,1.23,1.23) << endl;
-	printf("Mathematica: 3.421229536289674\n");
-
 	cout << "hypergeom1F1(1.23+1.23I, 1.23+1.23I, 1.23+1.23I) = " << endl;
 	cout << hypergeom1F1(Comp(1.23,1.23),Comp(1.23,1.23),Comp(1.23,1.23))
     cout << endl;
 	printf("Mathematica: 1.143503984180676 + 3.224470526790991i\n");
-
-	cout << "coulombF(203, -0.1, 6) = " << endl;
-	cout << coulombF(203, -0.1, 6) << endl;
-	printf("Mathematica: 4.5882301380287637784e-286\n");
 }
 \end{lstlisting}
 编译：

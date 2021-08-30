@@ -1,0 +1,52 @@
+% 利萨茹曲线
+
+\begin{issues}
+\issueDraft
+\end{issues}
+
+\pentry{简谐振子\upref{SHO}}
+
+\footnote{参考 Wikipedia \href{https://en.wikipedia.org/wiki/Lissajous_curve}{相关页面}．}\textbf{利萨茹曲线（Lissajous curve）}是平面上一点 $P$ 在两个垂直的方向 $x, y$ 分别做相简谐运动形成的轨迹， 常见于示波器上． 莉萨如曲线可以用以下参数方程表示
+\begin{equation}\label{Lissaj_eq1}
+\leftgroup{
+x &= A\sin(a t + \phi)\\
+y &= B\sin(b t)
+}\end{equation}
+通常来说， 我们讨论的是闭合的利萨茹曲线， 此时要求频率之比 $a/b$ 是一个有理数， 通常是两个较小的整数之比． 曲线的周期为两个方向周期 $2\pi/a$ 和 $2\pi/b$ 的最小公倍数． 式中 $\phi$ 被称为\textbf{相位差}， 顾名思义就是两个简谐振动的相位之差． 当曲线闭合时， 把\autoref{Lissaj_eq1} 中的 $\sin$ 都换成 $\cos$ 曲线形状也不变， 因为这相当于给 $x, y$ 同时加上 $\pi/2$ 相位． 给 $x, y$ 同时加上任意相同的相位都不会改变曲线形状．
+
+下文中，我们假设 $\phi \in (-\pi, \pi]$． 不难证明， 给 $\phi$ 取相反数同样不改变曲线的形状， 唯一的区别只是点 $P$ 的运动方向相反．
+
+\subsection{频率相同}
+当 $\phi = 0$ 时曲线是延 $y=x$ 的线段， $\phi = \pi$ 时是延 $y=-x$ 的线段． 当 $\phi = \pm\pi/2$ 时轨迹是一个椭圆， 椭圆的长短两个轴与 $x,y$ 坐标轴平行． 特殊地， 如果 $\phi = \pm\pi/2$ 且 $A = B$ 则轨迹是一个圆．
+
+当 $\phi$ 是其他值时， 曲线是一个斜置的椭圆． 当 $A = B$ 时， 椭圆长轴与 $x$ 轴的夹角为
+\addTODO{推导未完成}
+
+一般而言， 我们可以令 $t = 0$， 那么曲线与 $x$ 轴的截线长度为 $A\sin(\phi)$， 它与曲线的 $x$ 坐标最大值 $A$ 之比为 $\sin\phi$， 由此可判断相位差．
+
+\begin{figure}[ht]
+\centering
+\includegraphics[width=8cm]{./figures/Lissaj_1.pdf}
+\caption{利萨茹曲线 $A = B = a = b = 1$， $\phi = \pi n/6$（$n = 0,\dots,6$）} \label{Lissaj_fig1}
+\end{figure}
+
+画图代码如下， 读者可以试着使用参数运行．
+\addTODO{未完成， 加上 \verb|legends|}
+\begin{lstlisting}[language=matlab, caption=lissajous.m]
+% 画利萨茹曲线
+A = 1; B = 1; % 振幅
+a = 1; b = 1; % 频率
+ph = linspace(0, pi, 7);
+t = linspace(0, 2*pi, 1000);
+figure; axis equal; hold on; grid on;
+xlabel x; ylabel y;
+for i = 1:numel(ph)
+    x = A*sin(a*t+ph(i));
+    y = B*sin(b*t);
+    plot(x, y);
+end
+\end{lstlisting}
+
+\subsection{频率不同}
+\addTODO{如何从闭合曲线判断频率之比是多少？通过数一个周期内两个方向的峰值．}
+\addTODO{画图}

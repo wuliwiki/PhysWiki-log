@@ -3,7 +3,6 @@
 
 \begin{issues}
 \issueAbstract
-\issueTODO
 \end{issues}
 
 \pentry{傅里叶级数（指数）\upref{FSExp}，傅里叶变换（三角）\upref{FTTri}}
@@ -103,19 +102,25 @@ g(k) = \int_{-\infty}^{+\infty} \delta(k'-k)  g(k')\dd{k'}
 \mathcal F [f'(x)] = \I k g(k)
 \end{equation}
 同理
-\begin{equation}
+\begin{equation}\label{FTExp_eq10}
 \mathcal F^{-1} [g'(k)] = -\I x f(x)
 \end{equation}
 
 作为\autoref{FTExp_eq2} 的拓展， 有
 \begin{equation}
-\int_{-\infty}^{+\infty} f_1(x)^* f_1(x) \dd{x} = \int_{-\infty}^{+\infty} g_1(k)^* g_2(k) \dd{k}
+\int_{-\infty}^{+\infty} f_1(x)^* f_2(x) \dd{x} = \int_{-\infty}^{+\infty} g_1(k)^* g_2(k) \dd{k}
 \end{equation}
+这可以理解为傅里叶变换不改变内积， 所以是一个无穷维空间中的幺正变换\upref{Unitar}．
 
 如果 $f_1(x)$ 可以在 $x = 0$ 泰勒展开， 有
 \begin{equation}\label{FTExp_eq8}
 \mathcal{F}[f_1(x) f_2(x)] = f_1\qty(\I \pdv{k}) g_2(k)
 \end{equation}
+如果 $g_1(k)$ 可以在 $k = 0$ 泰勒展开， 有
+\begin{equation}\label{FTExp_eq9}
+\mathcal{F}^{-1}[g_1(k) g_2(k)] = g_1\qty(-\I \pdv{x}) f_2(x)
+\end{equation}
+注意\autoref{FTExp_eq3} 和\autoref{FTExp_eq10} 是该性质的特殊情况（令\autoref{FTExp_eq8} 中 $f_1(x) = x$， \autoref{FTExp_eq9} 中 $g_1(k) = k$）． 记忆方法： 在傅里叶变换外面的 $\I\pdv*{k}$ 相当于傅里叶变换里面的 $x$， 反傅里叶变换外面的 $-\I\pdv*{x}$ 相当于反傅里叶变换里面的 $k$．
 
 不确定性原理：
 \begin{equation}
@@ -127,7 +132,7 @@ g(k) = \int_{-\infty}^{+\infty} \delta(k'-k)  g(k')\dd{k'}
 
 \textbf{证明}\autoref{FTExp_eq2} ： 把傅里叶变换看成傅里叶级数在 $l \to \infty$ 时的极限， 使用\autoref{FSExp_eq5}~\upref{FSExp}， 右边的求和在极限下变为积分即可证明． 详细过程留做习题．
 
-\textbf{证明}\autoref{FTExp_eq3} ： 对\autoref{FTExp_eq1} 关于 $x$ 求导得
+\textbf{证明}\autoref{FTExp_eq3} （\autoref{FTExp_eq10} 同理）： 对\autoref{FTExp_eq1} 关于 $x$ 求导得
 \begin{equation}
 f'(x) = \frac{1}{\sqrt{2\pi }} \int_{-\infty }^{+\infty } [\I kg(k)]\E^{\I kx} \dd{k}
 \end{equation}
@@ -136,4 +141,12 @@ f'(x) = \frac{1}{\sqrt{2\pi }} \int_{-\infty }^{+\infty } [\I kg(k)]\E^{\I kx} \
 \I kg(k) = \frac{1}{\sqrt{2\pi }} \int_{-\infty }^{+\infty } f'(x) \E^{-\I kx} \dd{x} = \mathcal F [f'(x)]
 \end{equation}
 其中 $g(k) = F [f(x)]$， 证毕．
-\addTODO{证明其他性质}
+
+\textbf{证明}\autoref{FTExp_eq8} （\autoref{FTExp_eq9} 同理）： 过程和\autoref{FTExp_eq3} 类似， 等式右边为
+\begin{equation}
+\begin{aligned}
+& \quad \frac{1}{\sqrt{2\pi }} f_1\qty(\I \pdv{k}) \int_{-\infty }^{+\infty } f_2(x)\E^{-\I kx} \dd{x}\\
+&= \frac{1}{\sqrt{2\pi }} \int_{-\infty }^{+\infty } f_2(x) f_1\qty(\I \pdv{k})\E^{-\I kx} \dd{x}\\
+&= \frac{1}{\sqrt{2\pi }} \int_{-\infty }^{+\infty } f_1(x) f_2(x) \E^{-\I kx} \dd{x}
+\end{aligned}
+\end{equation}
