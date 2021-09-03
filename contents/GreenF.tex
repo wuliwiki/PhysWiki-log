@@ -1,4 +1,4 @@
-% 格林函数解非齐次偏微分方程
+% 格林函数法解非齐次（偏）微分方程
 
 \begin{issues}
 \issueDraft
@@ -6,4 +6,64 @@
 
 \pentry{狄拉克 delta 函数\upref{Delta}}
 
-（未完成）
+区间 $(a,b)$ 的非齐次线性微分方程可记为
+\begin{equation}
+\Q Q y(x) = f(x)
+\end{equation}
+其中 $\Q Q$ 是线性微分算符． 令格林函数为 $G(x', x)$ 满足
+\begin{equation}
+\Q Q G(x', x) = \delta(x - x') \qquad (a < x' < b)
+\end{equation}
+那么方程的解为
+\begin{equation}
+f(x) = \int_a^b f(x') G(x', x) \dd{x'}
+\end{equation}
+
+对偏微分方程， 把以上的 $f(x), y(x)$ 变为多元函数 $f(\bvec r), y(\bvec r)$， 算符 $\Q Q$ 变为线性偏微分算符， $\delta$ 函数变为多元狄拉克 $\delta$ 函数\upref{deltaN} $\delta(\bvec r - \bvec r')$， 积分变为重积分即可．
+
+\subsection{例子： 弦的受力平衡}
+一根两端固定的弦两端固定在 $x$ 轴上， 区间为 $[0, L]$， 张力为 $T$， 形状为 $y(x)$， 边界条件为 $y(0) = y(L) = 0$． 在弦上有 $y$ 方向的连续受力分布， 若弦的受力密度函数为 $f(x)$， 即单位长度受到的 $y$ 方向的力， 那么当 $\abs{f(x)} \ll T$ 时有方程（过程类比 “一维波动方程\upref{WEq1D}”）
+\begin{equation}\label{GreenF_eq1}
+-T y'' = f(x)
+\end{equation}
+
+虽然该方程可以直接对两边积分两次得到解（两个积分常数由边界条件确定）
+\begin{equation}
+y(x) = -\frac{1}{T}\iint f(x) \dd{x}\dd{x}
+\end{equation}
+但为了教学我们用格林函数法． 先令格林函数 $G(x', x)$ 满足
+\begin{equation}\label{GreenF_eq2}
+-T G''(x', x) = \delta(x - x') \qquad (0 < x' < L)
+\end{equation}
+方程右边是狄拉克 $\delta$ 函数\upref{Delta}． 且同样有边界条件 $G(x', a) = G(x', b) = 0$． 这相当于弦上只有一点 $x'$ 受大小为 $F = 1$ 的力．
+
+解出格林函数后， $f(x)$ 可以分解为许多不同位置的 $\delta$ 函数的线性组合（积分）
+\begin{equation}
+f(x) = \int_0^L f(x') \delta(x - x') \dd{x'}
+\end{equation}
+由于\autoref{GreenF_eq1} 的方程是线性的， 那么把 $G(x', x)$ 做同样的线性组合就是满足边界条件的解
+\begin{equation}\label{GreenF_eq3}
+y(x) = \int_0^L f(x') G(x', x) \dd{x'}
+\end{equation}
+
+现在来解\autoref{GreenF_eq2}， 事实上我们可以直接从受力分析上得出格林函数 $G(x', x)$ 是一个三角形， 顶点的位置为 $x = x'$， 令高为 $h = y(x')$ 由受力分析可得
+\begin{equation}
+T\frac{h}{x'} + T\frac{h}{L - x'} = F = 1
+\end{equation}
+\addTODO{画图}
+\addTODO{数学上的方法： 如何通过积分得到斜率在 $x'$ 处的增量？}
+
+即
+\begin{equation}
+h = \frac{x' (L - x')}{LT}
+\end{equation}
+即格林函数为
+\begin{equation}
+G(x', x) = \leftgroup{
+&? \qquad (0 < x \le x')\\
+&? \qquad (x' < x)
+}\end{equation}
+代入\autoref{GreenF_eq3} 得
+\begin{equation}
+y(x) = \int_0^x ? + \int_x^L ?
+\end{equation}

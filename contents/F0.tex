@@ -1,0 +1,111 @@
+% 零函数（列）
+
+\pentry{狄拉克 delta 函数\upref{Delta}}
+我们前面用函数列严格定义狄拉克 $\delta$ 函数， 那么类似地， 下面我们定义另一类更简单的函数列， 姑且称为\textbf{零函数列}或\textbf{零函数}． 它的性质比 $\delta$ 函数更简单
+\begin{definition}{零函数}
+对任何性质良好\footnote{例如迪利克雷条件． 也可能根据具体问题判断．}的平方可积函数 $f: \mathbb R \to \mathbb C$， 若函数列 $z_n: \mathbb R \to \mathbb C$ （$n = 1, 2, \dots$） 满足
+\begin{equation}\label{F0_eq2}
+\lim_{n\to \infty}\int_{a}^{b} z_n(x) f(x) = 0
+\end{equation}
+那么就把 $z_n(x)$ 称为区间 $(a,b)$ （可以是无穷） \textbf{零函数列}或\textbf{零函数}， 简记为 $z(x)$．
+\end{definition}
+
+\begin{example}{}\label{F0_ex1}
+在任意积分区间 $(a,b)$ 上，
+\begin{itemize}
+\item 显然 $z_n(x) = 0$ 是一个零函数．
+\item 简谐函数 $\sin(nx + \phi)$， $\exp(\I n x)$ 都是零函数．
+\item 若 $f(x)$ 是一个性质良好的函数， $f(x)\sin(nx + \phi)$ 和 $f(x)\exp(\I n x)$ 也都是零函数， 例如高斯波包\upref{GausPk} $A\E^{-ax^2}\E^{\I nx}$．
+\end{itemize}
+
+定性来说这是符合直觉的： 若一个函数 $f(x)$ 乘以一个另快速震荡的函数（震荡的平均值为零）， 这时 $\abs{f(x)}$ 就是波包的包络线， 那么震荡频率越来越快， \autoref{F0_eq2} 的积分越接近 $0$．
+\end{example}
+
+\begin{theorem}{充分必要条件}\label{F0_the1}
+一个函数列 $z_n$ 是区间 $(a, b)$ 的零函数的充分必要条件是， 对 $(a, b)$ 中的任意区间 $(p, q)$， 都有
+\begin{equation}
+\lim_{n\to\infty}\int_p^q z_n(x) \dd{x} = 0
+\end{equation}
+\end{theorem}
+读者可以用\autoref{F0_the1} 验证\autoref{F0_ex1} 的零函数．
+
+\begin{theorem}{零函数的性质}
+容易证明， 若 $z_n(x)$ 是零函数列， 那么对它进行任意平移， 拉伸， 乘以性质良好的函数 $A(x)$ 等变换后仍然是零函数列：
+\begin{equation}
+A(x) z(kx + b) = z(x)
+\end{equation}
+对于单调的可导函数 $\varphi(x)$ 若满足 $\abs{g'(x)} > 0$ 也有
+\begin{equation}\label{F0_eq5}
+z[\varphi(x)] = z(x)
+\end{equation}
+\end{theorem}
+该定理笔者同样不会证， 但同样符合直觉． \autoref{F0_eq5} 告诉我们， 零函数的震荡的频率可以随 $x$ 变化．
+
+\subsection{两组正交的函数基底}
+定义零函数有什么用呢？ 我们可以以此判断两组连续的函数基底（例如量子力学的一维散射态\upref{ScaNrm}）是否正交． 在 “$\delta$ 函数\upref{Delta}” 中， 我们知道若两个含参数的函数满足
+\begin{equation}\label{F0_eq1}
+\int_{-n}^{n} f^*(k_1, x) f(k_2, x)\dd{x} = \delta_n(k_2 - k_1)
+\end{equation}
+或者简写为 $\int_{-\infty}^{\infty} f^*(k_1, x) f(k_2, x)\dd{x} = \delta(k_2 - k_1)$． 那么它们就是正交归一的． 正交归一的好处是， 若一个平方可积函数 $g(x)$ 可以用一组 $f(k, x)$ 展开函数
+\begin{equation}
+g(x) = \int_{-\infty}^{\infty} C(k) f(k, x) \dd{k}
+\end{equation}
+那么就有系数公式
+\begin{equation}
+C(k) = \int_{-\infty}^{\infty} f^*(k, x)g(x)\dd{x}
+\end{equation}
+具体过程类见？
+\addTODO{需要在 delta 函数词条补充类似\autoref{F0_eq4} 的定理． 需要强调 $g(x)$ 是平方可积的．}
+
+但若我们有两组（多组也同理）正交归一的函数 $f_1(k, x)$ 和 $f_2(k, x)$ 组成的正交归一基底用于展开 $g(x)$
+\begin{equation}\label{F0_eq3}
+g(x) = \int_{-\infty}^{\infty} C_1(k) f_1(k, x) \dd{k} + \int_{-\infty}^{\infty} C_2(k) f_2(k, x) \dd{k}
+\end{equation}
+那么两组函数基底间满足什么样的正交归一条件才可以使以下系数公式仍然成立呢？
+\begin{equation}\label{F0_eq4}
+C_i(k) = \int_{-\infty}^{\infty} f_i^*(k, x)g(x)\dd{x} \qquad (i = 1,2)
+\end{equation}
+下面会证明： 除了要求 $f_1, f_2$ 各自正交归一（\autoref{F0_eq1}）， 还需要保证 $f_1, f_2$ 之间满足以下正交条件
+\begin{equation}
+\int_{-n}^{+n} f_1^*(k_1, x) f_2(k_2, x) \dd{x} = z_n(k_2 - k_1)
+\end{equation}
+或者简写为
+\begin{equation}
+\int_{-\infty}^{\infty} f_1^*(k_1, x) f_2(k_2, x) \dd{x} = z(k_2 - k_1)
+\end{equation}
+这是相当于\autoref{F0_eq1} 的只有正交没有归一的变形．
+
+同理，我们也可以把以上所有定积分区间变为其他， 例如 $(0, \infty)$．
+
+\begin{example}{}
+证明
+\begin{equation}
+\int_0^\infty \sin(k'x)\cos(kx) \dd{x} = z(k' - k) + \frac{1}{4k}
+\end{equation}
+证：
+\begin{equation}
+\begin{aligned}
+\int_0^n \sin(kx)\cos(kx) \dd{x} &= \frac{1}{2} \int_0^n \sin(2kx) \dd{x}\\
+&= -\frac{1}{4k}\cos(2nk) + \frac{1}{4k}
+\end{aligned}
+\end{equation}
+根据\autoref{F0_ex1} 以可判断第一项是一个零函数． 证毕．
+
+可见 $\sin(kx)$ 和 $\cos(kx)$ 在 $(0,\infty)$ 上并不是正交的． 但它们在 $(-\infty, \infty)$ 上却是正交的， 因为奇函数乘以偶函数在区间 $(-n, n)$ 的积分始终为零．
+\end{example}
+
+量子力学中的应用可以参考 “有限深方势阱\upref{FSW}” 或者其他势阱问题中的两组散射态波函数． 当两组散射态波函数归一化后， 就可以用于展开波包， 并计算波包随时间的变化．
+\addTODO{波包随时间的变化未完成}
+
+\subsubsection{证明}
+要证明系数公式\autoref{F0_eq4}， 把\autoref{F0_eq3} 代入\autoref{F0_eq4} 右边， 以 $i = 1$ 为例， 得
+\begin{equation}
+\begin{aligned}
+&\int_{-\infty}^{\infty} C_1(k') \int_{-\infty}^{\infty} f_1^*(k, x) f_1(k', x)\dd{x} \dd{k'} + \int_{-\infty}^{\infty} C_2(k') \int_{-\infty}^{\infty} f_1^*(k, x)f_2(k', x)\dd{x} \dd{k'}\\
+&= \int_{-\infty}^{\infty} C_1(k') \delta(k' - k) \dd{k'} + \int_{-\infty}^{\infty} C_2(k') z(k' - k) \dd{k'}\\
+&= C_1(k) + 0
+\end{aligned}
+\end{equation}
+$i = 2$ 同理， 证毕．
+
+这个证明过程和傅里叶变换\upref{FTExp} 的证明类似， 只是要用零函数保证第二个积分为零．

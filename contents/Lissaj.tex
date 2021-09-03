@@ -1,8 +1,5 @@
 % 利萨茹曲线
 
-\begin{issues}
-\issueDraft
-\end{issues}
 
 \pentry{简谐振子\upref{SHO}}
 
@@ -17,21 +14,51 @@ y &= B\sin(b t)
 下文中，我们假设 $\phi \in (-\pi, \pi]$． 不难证明， 给 $\phi$ 取相反数同样不改变曲线的形状， 唯一的区别只是点 $P$ 的运动方向相反．
 
 \subsection{频率相同}
-当 $\phi = 0$ 时曲线是延 $y=x$ 的线段， $\phi = \pi$ 时是延 $y=-x$ 的线段． 当 $\phi = \pm\pi/2$ 时轨迹是一个椭圆， 椭圆的长短两个轴与 $x,y$ 坐标轴平行． 特殊地， 如果 $\phi = \pm\pi/2$ 且 $A = B$ 则轨迹是一个圆．
+频率相同时，两个方向上的频率之比固定为1，故利萨茹曲线必然闭合．
+当 $\phi = 0$ 时，曲线是延 $y=(B/A)x$ 的线段； $\phi = \pi$ 时，是延 $y=-(B/A)x$ 的线段； 当 $\phi = \pm\pi/2$ 时，轨迹是一个椭圆， 椭圆的长短两个轴与 $x,y$ 坐标轴平行． 特殊地， 如果 $\phi = \pm\pi/2$ 且 $A = B$ 则轨迹是一个圆．
 
-当 $\phi$ 是其他值时， 曲线是一个斜置的椭圆． 当 $A = B$ 时， 椭圆长轴与 $x$ 轴的夹角为
-\addTODO{推导未完成}
+当 $\phi$ 是其他值时， 曲线是一个斜置的椭圆． 当 $A = B$ 时， 椭圆长轴与 $x$ 轴的夹角为 $\pm\pi/4$．
+\subsubsection{证明}
+频率相同，即$a=b$时，\autoref{Lissaj_eq1} 可以化为
+\begin{equation}\label{Lissaj_eq2}
+\frac xA-\frac yB\cos\phi-\frac{\sqrt{B^2-y^2}}{B}\sin\phi=0
+\end{equation}
+当 $\phi=0$ 时，\autoref{Lissaj_eq2} 化为 $x/A-y/B=0$，即 $y=(B/A)x$，表示一条斜率为 $B/A$ 的直线．当 $\phi=\pi$ 时，\autoref{Lissaj_eq2} 化为 $y=-(B/A)x$ ，表示斜率为 $-B/A$ 的直线．
+
+当 $\phi=\pm\pi/2$ 时，\autoref{Lissaj_eq2} 可以化为 $x/A=\pm\sqrt{B^2-y^2}/B$，两边平方即可化为\autoref{Elips3_eq3}~\upref{Elips3}，表示一个长短轴分别沿 $x$、$y$ 轴的椭圆．又若 $A=B$ ，则表示为一个圆．
+
+当 $A=B$ 时，\autoref{Lissaj_eq2} 可以化为
+\begin{equation}\label{Lissaj_eq3}
+x^2+y^2-2xy\cos\phi-A^2\sin^2\phi
+\end{equation}
+设由\autoref{Elips3_eq3}~\upref{Elips3}所表示的椭圆旋转 $\theta$ 角度后得到的椭圆方程为
+\begin{equation}
+\frac{(x\cos\theta-y\sin\theta)^2}{a^2}+\frac{(x\sin\theta+y\cos\theta)^2}{b^2}=1
+\end{equation}
+将其展开为一般形式
+\begin{equation}\label{Lissaj_eq4}
+(a^2\sin^2\theta+b^2\cos^2\theta)x^2 + (a^2\cos^2\theta+b^2\sin^2\theta)y^2+2(a^2-b^2)(
+\sin\theta\cos\theta)xy-a^2b^2=0
+\end{equation}
+对比\autoref{Lissaj_eq3} 和\autoref{Lissaj_eq4} 各项系数，可得
+\begin{equation}\label{Lissaj_eq5}
+\leftgroup{
+& a^2\sin^2\theta+b^2\cos^2\theta = 1\\
+& a^2\cos^2\theta+b^2\sin^2\theta = 1\\
+& 2(a^2-b^2)\sin\theta\cos\theta = -2\cos\phi\\
+& a^2b^2=A^2\sin^2\phi
+}\end{equation}
+将\autoref{Lissaj_eq5} 前两式相减，可得 $a^2\cos(2\theta)=b^2\cos(2\theta)$ ，这说明若 $\cos(2\theta) \neq 0$ ，则 $a^2 = b^2$．可由第三式，$\phi$取其他值时有 $a^2 \neq b^2$ ，所以必然有$\cos(2\theta) = 0$，即 $\theta = \pm\pi/4$．证毕．
 
 一般而言， 我们可以令 $t = 0$， 那么曲线与 $x$ 轴的截线长度为 $A\sin(\phi)$， 它与曲线的 $x$ 坐标最大值 $A$ 之比为 $\sin\phi$， 由此可判断相位差．
 
 \begin{figure}[ht]
 \centering
-\includegraphics[width=8cm]{./figures/Lissaj_1.pdf}
+\includegraphics[width=11cm]{./figures/Lissaj_1.pdf}
 \caption{利萨茹曲线 $A = B = a = b = 1$， $\phi = \pi n/6$（$n = 0,\dots,6$）} \label{Lissaj_fig1}
 \end{figure}
 
 画图代码如下， 读者可以试着使用参数运行．
-\addTODO{未完成， 加上 \verb|legends|}
 \begin{lstlisting}[language=matlab, caption=lissajous.m]
 % 画利萨茹曲线
 A = 1; B = 1; % 振幅
@@ -48,5 +75,11 @@ end
 \end{lstlisting}
 
 \subsection{频率不同}
-\addTODO{如何从闭合曲线判断频率之比是多少？通过数一个周期内两个方向的峰值．}
-\addTODO{画图}
+对于频率不同的情况，若频率之比为无理数，则两个方向的周期之比也为无理数，因此不存在这两个周期的最小公倍数（或最小公倍数为无穷），此时周期为无穷大，利萨茹曲线永不闭合．此时，随着时间的增加，曲线将会趋于遍布整个定义域 $-A\leqslant x \leqslant A$，$-B \leqslant y \leqslant B$ 内所有的点（或称曲线在该区域内稠密）．若频率之比为有理数，则周期之比也为有理数，此时一定存在二者的最小公倍数，即存在一个有限的周期，利萨茹曲线闭合．
+
+对于曲线闭合的情况，可以从一个完整周期内的曲线图样推知频率之比．因为在一个完整周期内，某个方向上达到极大值的次数与该方向上的频率呈正比．于是，只要数出一个周期内两个方向的峰值各出现的次数，他们的比值即为两个方向上的频率之比．
+\begin{figure}[ht]
+\centering
+\includegraphics[width=14.25cm]{./figures/Lissaj_2.pdf}
+\caption{利萨茹曲线（左：$A=B=1$，$a=2$，$b=3$，$\phi=0$；右：$A=B=1$，$a=\sqrt 2$，$b=\sqrt 3$，$\phi=0$）} \label{Lissaj_fig2}
+\end{figure}

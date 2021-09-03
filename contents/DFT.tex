@@ -19,12 +19,29 @@ g(k) = \frac{1}{\sqrt{2\pi}} \int_{-\infty}^{+\infty} f(x)\E^{-\I kx} \dd{x}
 \begin{equation}\label{DFT_eq4}
 f(x) = \frac{1}{\sqrt{2\pi}} \int_{-\infty}^{+\infty} g(k)\E^{\I kx} \dd{k}
 \end{equation}
-如果 $f(x)$ 和 $g(k)$ 分别只在区间 $[-L_x/2, L_x, 2]$ 和 $[-L_k/2, L_k/2]$ 内不为零， 积分就可以只在这两个区间内进行． 我们再给两个区间划出 $N$ 个等间距的格点 $\dots, x_{-1}, x_0, x_1,\dots$ 和 $\dots, k_{-1}, k_0, k_1,\dots$ （$x_0 = k_0 = 0$）， 并规定相邻格点的间距为
+如果 $f(x)$ 和 $g(k)$ 分别只在区间 $[-L_x/2, L_x/2]$ 和 $[-L_k/2, L_k/2]$ 内不为零， 积分就可以只在这两个区间内进行．
+
+\subsubsection{格点}
+\begin{figure}[ht]
+\centering
+\includegraphics[width=8cm]{./figures/DFT_1.pdf}
+\caption{$N = 4$ 和 $N=5$ 时的 $x$ 格点， $\Delta x = L_x/N$} \label{DFT_fig1}
+\end{figure}
+我们再给两个区间划出 $N$ 个等间距的格点（\autoref{DFT_fig1}） $\dots, x_{-1}, x_0, x_1,\dots$ 和 $\dots, k_{-1}, k_0, k_1,\dots$ 令 $x_0 = k_0 = 0$， 并规定相邻格点的间距为
 \begin{equation}\label{DFT_eq5}
 \Delta x = L_x/N \qquad \Delta k = L_k/N
 \end{equation}
-注意 $x$ 和 $k$ 的首尾格点分别相距 $L_x(N-1)/N$ 和 $L_k(N-1)/N$． 若 $N$ 是奇数， 我们令中间的格点为 $x_0$ 和 $k_0$， 如果 $N$ 是偶数， 我们令中间靠右的格点为 $x_0$ 和 $k_0$．
+注意第一个和最后一个格点未必在区间的两端， 首尾格点分别相距 $L_x(N-1)/N$ 和 $L_k(N-1)/N$． 若 $N$ 是奇数， 我们令中间的格点为 $x_0$ 和 $k_0$， 如果 $N$ 是偶数， 我们令中间靠右的格点为 $x_0$ 和 $k_0$， 即
+\begin{equation}
+\leftgroup{
+x_n = n L_x /N\\
+k_n = n L_k/N
+}\qquad n = \leftgroup{
+&-N/2 \dots N/2 - 1 &\quad &(\text{even } N)\\
+&-(N-1)/2 \dots (N-1)/2 &\quad &(\text{odd } N)
+}\end{equation}
 
+\subsubsection{求和代替积分}
 现在我们用求和近似上面的积分得\footnote{事实上， 学习了下文的采样定理会发现这里用求和代替积分是没有任何误差的．}
 \begin{equation}\label{DFT_eq6}
 g(k_p) = \frac{1}{\sqrt{2\pi}} \sum_q f(x_q) \E^{-\I k_p x_q} \Delta x
@@ -36,7 +53,7 @@ f(x_q) = \frac{1}{\sqrt{2\pi}} \sum_p g(k_p) \E^{\I k_p x_q} \Delta k
 \begin{equation}\label{DFT_eq8}
 \Delta x\Delta k = \frac{2\pi}{N}
 \end{equation}
-但我们会发现这里的 $p, q$ 可以是负整数， 而 DFT 中的 $p, q$ 都是非负整数． 但稍加计算就会发现当 $p$ 或 $q$ 是负值时， 把它们加上 $N$， 指数项并不改变， 例如 $k_{p+N} x_q = k_p x_q + 2\pi$， 并不影响指数项． 所以， 我们只要将所有小于零的格点编号加上 $N$ 并重新排列即可． 例如 $N = 4$ 时， $x$ 格点为 $x_{-2}, x_{-1}, x_0, x_1$， 令 $x_2 = x_{-2}, x_3 = x_{-1}$， 这四个格点的名字就变为 $x_0, x_1, x_2, x_3$． 现在再来对比 DFT 和\autoref{DFT_eq6} \autoref{DFT_eq7}， 就只是相差两个常数因子而已了．
+但我们会发现这里的 $p, q$ 可以是负整数， 而 DFT 中的 $p, q$ 都是非负整数． 但稍加计算就会发现当 $p$ 或 $q$ 是负值时， 把它们加上 $N$， 指数项并不改变， 例如 $k_{p+N} x_q = k_p x_q + 2\pi$， 并不影响指数项． 所以， 我们只要将所有小于零的格点编号加上 $N$ 并重新排列即可． 例如 $N = 4$ 时， $x$ 格点为 $x_{-2}, x_{-1}, x_0, x_1$， 令 $x_2 = x_{-2}, x_3 = x_{-1}$， 这四个格点的名字就变为 $x_0, x_1, x_2, x_3$， 数值不变． 现在再来对比 DFT 和\autoref{DFT_eq6} \autoref{DFT_eq7}， 就只是相差两个常数了．
 
 \autoref{DFT_eq8} 是 DFT 一个重要的性质． 结合\autoref{DFT_eq5} 得
 \begin{equation}\label{DFT_eq9}
@@ -165,6 +182,6 @@ g(k) = \frac{1}{\sqrt2}\E^{-(k-100)^2/4}
 % 未完成： 接下来说明如何使用 matlab 的 fft(), ifft() 以及 fftshift, ifftshift. 给出代码．
 \end{example}
 
-
-
-% 临时保存
+\subsection{傅里叶级数}
+要用 DFT 计算傅里叶级数\upref{FSExp} 的系数（\autoref{FSExp_eq2}~\upref{FSExp}）
+\addTODO{……}
