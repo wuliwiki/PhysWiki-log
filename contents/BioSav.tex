@@ -6,7 +6,7 @@
 若已知空间中的电流分布， \textbf{比奥萨伐尔定律（Biot–Savart law）}给出了任意一点的磁场分布． 我们先讨论一种角为简单的情况， 即一根粗细可忽略的闭合导线中的恒定电流产生的磁场\footnote{在电动力学\upref{EM0}中， 我们提到不存在瞬间作用， 电磁场的传播需要时间． 而且变化的磁场也会产生变化的电场， 这将使计算变得十分复杂， 我们将在 “推迟势\upref{RetPot}” 中介绍．}． 如果有多个这样的导线， 可以分别计算它们的磁场并叠加即可． 假设导线中电流为 $I$， 空间中任意位置 $\bvec r$ 的磁场可以用线积分表示为
 \begin{equation}\label{BioSav_eq2}
 \bvec B(\bvec r) = \frac{\mu_0}{4\pi} \oint \frac{I \dd{\bvec r'} \cross \uvec R}{R^2}
-= \frac{\mu_0}{4\pi} \oint \frac{I \dd{\bvec r'} \cross \bvec R}{R^3}
+= \frac{\mu_0}{4\pi} \oint \frac{I \dd{\bvec r'} \cross (\bvec r - \bvec r')}{\abs{\bvec r - \bvec r'}^3}
 \end{equation}
 其中积分路径是导线所在的环路， 延某个指定的正方向进行． 如果电流也是沿正方向， 那么 $I$ 大于零， 否则小于零． $\bvec r'$ 是导线上某点的位置， 矢量 $\dd{\bvec r'}$ 代表导线上的一小段的长度和方向． $\bvec R = \bvec r - \bvec r'$， $\uvec R = \bvec R/R$ 表示 $\bvec R$ 的单位矢量， $R = \abs{\bvec R}$ 是模长．
 
@@ -18,6 +18,16 @@
 \bvec B(\bvec r) = \frac{\mu_0}{4\pi} \int \frac{\bvec j(\bvec r') \cross \uvec R}{R^2} \dd{V'} = \frac{\mu_0}{4\pi} \int \frac{\bvec j(\bvec r') \cross (\bvec r - \bvec r')}{\abs{\bvec r - \bvec r'}^3} \dd{V'}
 \end{equation}
 其中 $\int \dots \dd{V'}$ 表示对 $\bvec r'$ 在整个三维空间积分（或者包含所有电流的有限空间）．
+
+\subsubsection{旋度形式}
+\autoref{BioSav_eq2} 和\autoref{BioSav_eq3} 的另一种等价形式为
+\begin{equation}\label{BioSav_eq6}
+\bvec B(\bvec r) = \frac{\mu_0}{4\pi} \curl \oint \frac{I}{\abs{\bvec r - \bvec r'}}\dd{\bvec r'}
+\end{equation}
+\begin{equation}\label{BioSav_eq5}
+\bvec B(\bvec r) = \frac{\mu_0}{4\pi} \curl \int \frac{\bvec j(\bvec r')}{\abs{\bvec r - \bvec r'}}\dd{V'}
+\end{equation}
+推导见下文， 这在一些情况下反而计算更方便． 另外， 这也可以用来推导已知电流分布产生的磁矢势\upref{BvecA}．
 
 \subsubsection{矢量积分的计算方法}
 比奥萨伐尔定律的积分中含有矢量微元的叉乘，看起来和普通的矢量积分不同，但是在常见的简单问题中，可以从叉乘的几何意义上直接转换为标量的积分（\autoref{BioSav_ex1} 和\autoref{BioSav_ex2}）． 如果是更一般的问题，则可以把叉乘分解成 3 个分量，然后变为 6 个标量积分
@@ -114,3 +124,22 @@ x - x' & y - y' & z - z'
 \bvec B(\bvec r) = \frac{\mu_0}{4\pi} \int \frac{\bvec j(\bvec r') \cross (\bvec r - \bvec r')}{\abs{\bvec r - \bvec r'}^3} \dd{V'}
 \end{equation}
 积分时 $\bvec r$ 视为常数．
+
+\subsection{旋度形式的证明}
+这里证明\autoref{BioSav_eq5} 和\autoref{BioSav_eq3} 等效， \autoref{BioSav_eq6} 的证明同理（留做习题）． 由梯度的定义易得
+\begin{equation}
+\frac{\bvec r - \bvec r'}{\abs{\bvec r - \bvec r'}^3} = -\grad \frac{1}{\abs{\bvec r - \bvec r'}}
+\end{equation}
+注意这里的 $\grad$ 算符只对 $\bvec r $ 作用． 将其代入\autoref{BioSav_eq3} 得
+\begin{equation}
+\begin{aligned}
+\bvec B(\bvec r) &= \frac{\mu_0}{4\pi} \int \frac{\bvec j(\bvec r') \cross (\bvec r - \bvec r')}{\abs{\bvec r - \bvec r'}^3} \dd{V'}\\
+&= \frac{\mu_0}{4\pi} \int \grad \frac{1}{\abs{\bvec r - \bvec r'}} \cross \bvec j(\bvec r') \dd{V'}\\
+&= \frac{\mu_0}{4\pi} \curl \int \frac{\bvec j(\bvec r')}{\abs{\bvec r - \bvec r'}} \dd{V'}
+\end{aligned}
+\end{equation}
+最后一步使用了\autoref{VopEq_eq3}~\upref{VopEq}， 当 $\bvec A$ 为常数时
+\begin{equation}
+(\grad f) \cross\bvec A = \curl(f\bvec A)
+\end{equation}
+证毕．

@@ -5,53 +5,73 @@
 \begin{lemma}{分子电流观点}
 对于物质磁性的解释，把每个宏观体积元内的分子看成完全一样的电流环，及具有同样的面积 $a$ 和取向（由面元矢量 $\bvec a$ 表示），环内具有同样的电流 $I$，而磁性由分子电流引发．故而后面\autoref{edy33_eq4} 可以把电流密度的体积分转变为电流的环路积分．
 \end{lemma}
-\subsection{矢势的多级展开}
-磁场矢势在空间中定义为 % 链接未完成
+\subsection{磁矢势的多级展开}
+类似于电多级展开\upref{EMulPo}的讨论，我们考虑一个局域在原点附近的电流密度分布 $\bvec J(\bvec x')$ 在远离电流区域的 $\bvec x$ 处所产生的磁矢势（也就是说 $|\bvec x|\gg|\bvec x'|$）．这里我们用的是库仑规范\upref{Cgauge}（实际上在静磁问题中，库仑规范和洛伦兹规范等价）．电流分布在小区域 $V$ 内．
 \begin{equation}
-\bvec A(\bvec x)=\dfrac {\mu_0}{4\pi} \int_v \dfrac{ \bvec J^{\prime}(\bvec x)\dd V^{\prime}}{R}\label{edy33_eq1}
+\bvec A(\bvec x)=\dfrac {\mu_0}{4\pi} \int_V \dfrac{ \bvec J(\bvec x^{\prime})\dd V^{\prime}}{|\bvec x - \bvec x'|}\label{edy33_eq1}
 \end{equation}
-势能零点在无穷远点，而电流分布在小区域 $V$ 内，则，可以对体积 $V$ 内的 $\bvec A(\bvec x)$ 进行多级泰勒展开（ $R$ 为 $\bvec x$ 到体积 $V$ 内的势能零点的距离）
-\begin{equation}
-\bvec A(\bvec x)=\dfrac {\mu_0}{4\pi}\int_V \bvec J^{\prime}(\bvec x)\Big[\dfrac{1}{R}-\bvec x^{\prime} \cdot\div \dfrac{1}{R}+\dfrac{1}{2!}\sum_{i,j}x_i^{\prime}x_j^{\prime}\pdv{}{x_i}{x_j}{\dfrac 1 R}+\cdots\Big]\dd \bvec V^{\prime}\label{edy33_eq2}
+为了计算远处任意一点 $\bvec x$ 处的磁矢势，我们可以做泰勒展开\upref{NDtalr}：
+\begin{equation}\label{edy33_eq2}
+\begin{aligned}
+\bvec A(\bvec x)&=\dfrac {\mu_0}{4\pi}\int_V \bvec J(\bvec x')\Big[\dfrac{1}{|\bvec x|}-\bvec x'\cdot\nabla \dfrac{1}{|\bvec x|}+\dfrac{1}{2!}\sum_{i,j}x_i^{\prime}x_j^{\prime}\pdv{}{x_i}{x_j}{\dfrac 1 {|\bvec x|}}+\cdots\Big]\dd \bvec V^{\prime}
+\\
+&=\dfrac{\mu_0}{4\pi|\bvec x|}\int_V \bvec J(\bvec x')\dd V'
+-\sum_{j}\dfrac{\mu_0 \bvec x_j}{4\pi |\bvec x|^3}\int_V \bvec J(\bvec x')\bvec x'_j + \cdots
+\end{aligned}
 \end{equation}
 \autoref{edy33_eq2} 中，第一项
 \begin{equation}
-\bvec A^{(0)}(\bvec x)=\dfrac {\mu_0}{4\pi R}\int_V \bvec RJ^{\prime}(\bvec x)\dd{ V^{\prime}}\label{edy33_eq3}
+\bvec A^{(0)}(\bvec x)=\dfrac {\mu_0}{4\pi |\bvec x|}\int_V \bvec J(\bvec x')\dd{ V^{\prime}}\label{edy33_eq3}
 \end{equation}
 由于电流的连续性，% 引用未完成
 把电流分为许多闭合的流管，对于每一个流管来说，有
 \begin{equation}
-\int_V \bvec J(\bvec x^{\prime}) \dd{V^{\prime}}=\oint_L I\dd{l}=I\oint_L \dd{l}=0\label{edy33_eq4}
+\int_V \bvec J(\bvec x^{\prime}) \dd{V^{\prime}}=\oint_L I\dd{\bvec l'}=I\oint_L \dd{\bvec l'}=0\label{edy33_eq4}
 \end{equation}
 得\begin{equation}
 \bvec A^{(0)}=0\label{edy33_eq5}
 \end{equation}
 对展开式第二项
 \begin{equation}
-\bvec A^{(1)}=-\dfrac{\mu_0 }{4\pi}\int_V \bvec J(\bvec x^{\prime})\bvec x^{\prime}\cdot\div\dfrac1 R\dd{V^{\prime}}\label{edy33_eq6}
+\bvec A^{(1)}=-\dfrac{\mu_0 }{4\pi}\int_V \bvec J(\bvec x^{\prime})\Big (\bvec x^{\prime}\cdot\nabla\dfrac{1}{|\bvec x|}\Big)\dd{V^{\prime}}\label{edy33_eq6}
 \end{equation}
 由\autoref{edy33_eq4} 得
 \begin{equation}
-\bvec A^{(1)}=-\dfrac{\mu_0 I }{4\pi}\int_l \bvec x^{\prime}\cdot\div\dfrac1 R\dd{V^{\prime}}=\dfrac{\mu_0 I }{4\pi}\int_l \bvec x^{\prime}\cdot\dfrac{\bvec R}R^3\dd l^{\prime}\label{edy33_eq7}
+\bvec A^{(1)}=-\dfrac{\mu_0 I }{4\pi}\int_L (\bvec x^{\prime}\cdot\nabla\dfrac{1}{|\bvec x|}) \dd{\bvec l'}=\dfrac{\mu_0 I }{4\pi}\int_L (\bvec x^{\prime}\cdot\dfrac{\bvec x}{|\bvec x|^3})\dd {\bvec l}^{\prime}
+=\dfrac{\mu_0 I }{4\pi|\bvec x|^3}\int_L (\bvec x^{\prime}\cdot \bvec x)\dd {\bvec x}^{\prime}
+\label{edy33_eq7}
 \end{equation}
-其中有 $\dd \bvec x^{\prime}=\dd l^{\prime}$， 因为 $ \bvec x^{\prime}$ 为闭合流管上的坐标．
-全微分绕闭合回路积分为 $0$
+其中 $\dd{\bvec x}^{\prime}=\dd{\bvec l'}$ 是因为 $ \bvec x^{\prime}$ 为闭合流管上的坐标．为了进一步计算，我们利用：
+\begin{align}
+0&=\sum_{i,j}\oint_L \dd(\bvec x_i \bvec x'_i \bvec x'_j)=\sum_{i,j}\oint_L \bvec x_i \bvec x'_i \dd {\bvec x'_j} + \bvec x_i \bvec x'_j \dd {\bvec x'_i} 
+\label{edy33_eq8_0}
+\\
+&=
+\oint_L (\bvec x^{\prime}\cdot\bvec x)\dd {\bvec x'}+\oint_L (\dd {\bvec x'}\cdot \bvec x)\bvec x^{\prime}\label{edy33_eq8}
+\end{align}
+再根据双重叉积的矢量恒等式，我们就可以推出
 \begin{equation}
-0=\oint_L \dd{(\bvec x^{\prime}\cdot \bvec R)\bvec x^{\prime}}=\oint_L (\bvec x^{\prime}\cdot\bvec R)\dd l^{\prime}+\oint_l (\dd l^{\prime}\cdot \bvec R)\bvec x^{\prime}\label{edy33_eq8}
-\end{equation}
-而
-\begin{equation}
-\oint_L (\bvec x^{\prime}\cdot \bvec R)\dd{l^{\prime}}=\dfrac1 2\oint_L (\bvec x^{\prime}\times \dd l^{\prime})\times \bvec R \label{edy33_eq9}
+\oint_L (\bvec x^{\prime}\cdot \bvec x)\dd{\bvec l'}=\dfrac1 2\oint_L (\bvec x^{\prime}\times \dd{\bvec l'})\times \bvec x \label{edy33_eq9}
 \end{equation}
 
 \begin{equation}
-\bvec A^{(1)}=\dfrac{\mu_0}{4\pi R^3}\cdot\dfrac{I}{2}\oint_L (\bvec x^{\prime}\times \dd{l^{\prime}})\times \bvec R=\dfrac{\mu_0}{4\pi}\dfrac{\bvec m \times \bvec R}{R^3}\label{edy33_eq10}
+\bvec A^{(1)}=\dfrac{\mu_0}{4\pi R^3}\cdot\dfrac{I}{2}\oint_L (\bvec x^{\prime}\times \dd{\bvec l'})\times \bvec x=\dfrac{\mu_0}{4\pi}\dfrac{\bvec m \times \bvec x}{|\bvec x|^3}\label{edy33_eq10}
 \end{equation}
-其中 $\bvec m =\dfrac{1}{2}\oint_L (\bvec x^{\prime}\times \dd{l^{\prime}})$ 被称为磁矩，而对于一个小线圈（分子电流），他所围的面元 $\Delta\bvec S$ 可以表示为
+其中 $\bvec m =\dfrac{I}{2}\oint_L (\bvec x^{\prime}\times \dd{\bvec l'})$ 被称为磁矩，而对于一个小线圈（分子电流），他所围的面元 $\Delta\bvec S$ 可以表示为
 \begin{equation}
-\Delta\bvec S=\dfrac 1 2\oint_L \bvec x^{\prime}\times \dd{\bvec l^{\prime}}
+\Delta\bvec S=\dfrac 1 2\oint_L \bvec x^{\prime}\times \dd{\bvec l'}
 \end{equation}
 故而，有等式
 \begin{equation}
 \bvec m=I\Delta \bvec S
 \end{equation}
+所以，推广到原点附近的任意电流分布，我们就可以类似地定义其磁偶极矩 $\bvec m$（或简称为磁矩）：
+\begin{equation}
+\bvec m=\frac{1}{2}\int \bvec x' \times \bvec J(\bvec x') \dd V'
+\end{equation}
+于是它在远处的磁矢势和磁场可近似为：
+\begin{equation}
+\bvec A(\bvec x)=\frac{\mu_0}{4\pi}\frac{\bvec m\times \bvec x}{|\bvec x|^3},\ \ 
+\bvec B(\bvec x)=\frac{\mu_0}{4\pi}\Big [\frac{3\bvec n(\bvec n\cdot \bvec m)-\bvec m}{|\bvec x|^3}\Big]
+\end{equation}
+其中 $\bvec n$ 为 $\bvec x$ 方向的单位矢量．这是一个磁偶极矢势，它完全类似于静电学中电偶极场的情形．

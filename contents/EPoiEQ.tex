@@ -1,0 +1,84 @@
+% 静电势的泊松方程
+% 静电学|静电势|泊松方程|电介质
+
+\pentry{球坐标系中的拉普拉斯方程\upref{SphLap}，麦克斯韦方程组（介质）\upref{MWEq1}，泊松方程 \upref{PoiEqu}}
+
+\subsection{泊松方程}
+我们首先考虑均匀、各向同性的线性电介质中的静电问题．设其电容率为 $\epsilon$（即相对介电常数 $\epsilon_r$ 乘以 $\epsilon_0$）．根据介质中的麦克斯韦方程组 \upref{MWEq1}，电场与电极化强度需要满足以下方程：
+\begin{align}
+&\nabla \cdot \bvec D=\rho,\ \ \nabla \times \bvec E=0,\\
+&\bvec D=\epsilon \bvec E
+\end{align}
+式中 $\rho$ 表示空间的自由电荷密度．由于 $\bvec E$ 无旋，我们引入静电势\upref{QEng} $\phi$：
+\begin{align}
+E=-\nabla \phi
+\end{align}
+由此可以得到泊松方程\upref{PoiEqu}：
+\begin{align}
+\nabla^2 \phi(\bvec x)=-\rho(\bvec x)/\epsilon \label{EPoiEQ_eq1}
+\end{align}
+如果所考虑的区域自由电荷密度 $\rho(\bvec x)\equiv 0$，那么静电势满足拉普拉斯方程：
+\begin{align}
+\nabla^2 \phi(\bvec x)=0
+\end{align}
+
+\subsection{泊松方程的解}
+\subsubsection{无边界情况下}
+如果求解泊松方程的问题是在没有边界的无穷大空间中，同时空间中的电荷分布为已知，那么泊松方程的解可以简单写出：
+\begin{align}
+\phi(\bvec x)=\frac{1}{4\pi \epsilon}\int \frac{\rho (\bvec x')\dd V}{|\bvec x-\bvec x'|}
+\end{align}
+这个公式实际上是按照库仑定律将空间的电荷分布在某一点产生的静电势线性叠加得到的．值得注意的是，如果泊松方程问题存在边界，那么一般会在边界面上产生额外的电荷分布，而这在解出静电势之前是未知的．因此这个公式不适用于有边界面的情况．
+\subsubsection{边值问题与唯一性定理}
+如果我们考虑的空间区域不是全空间，我们就必须考虑边界的影响．考虑一个区域 $V$，其边界为 $S=\partial V$．边值问题是指：求解区域 $V$ 内满足泊松方程（\autoref{EPoiEQ_eq1}）同时在边界 $S$ 上满足\textbf{给定条件}的静电势 $\phi$．
+
+$S$ 上要满足的边界条件有两类：一类是已知静电势本身在界面 $S$
+上的取值，这称为 \textbf{Dirichlet} 边值条件；另一类是已知静电势在边界面上法向偏微商的取值，这称为 \textbf{Neumann} 边界条件．数学上可以证明：在这两类边条件下，静电边值问题的解是唯一的．
+
+\textbf{定理：}设空间某个区域 $V$ 的边界为 $S$，那么在区域 $V$ 内满足泊松方程并且在边界 $S$ 上满足 Dirichlet 或 Neumann 边界条件的解 $\phi(\bvec x)$ 必定是唯一的．
+
+\textbf{证明：}设 $\phi_1(\bvec x)$ 和 $\phi_2(\bvec x)$ 都满足条件，那么 $\Psi(\bvec x)=\phi_1(\bvec x)-\phi_2(\bvec x)$ 就在区域 $V$ 内满足拉普拉斯方程，并且它在边界 $S$ 上要么本身等于 $0$（Dirichlet 边条件），要么它的法向偏微商等于 $0$（Neumann 边条件）．我们利用等式：
+\begin{align}
+\int_V (\nabla \Psi)^2 \dd V=\oint \Psi(\nabla \Psi)\cdot \dd \bvec S - \int_V \Psi \nabla^2\Psi \dd V,
+\end{align}
+上式成立是因为 $(\nabla \Psi)\cdot (\nabla \Psi)=\nabla\cdot (\Psi(\nabla\Psi))-\Psi\nabla^2\Psi$．观察发现上式的右方两项显然都为 $0$．那么左边的 $\nabla\Psi$ 一定为 $0$．所以函数 $\Psi(\bvec x)$ 只能是常数．如果是 Dirichlet 边条件，那么 $\Psi$ 必须为 $0$．如果是 Neumann 边界条件，本来所求得的解就可以相差一个与物理无关的常数．于是，除去一个无关常数，我们就证明了唯一性定理．
+
+这里没有陈述更为普遍的存在和唯一性定理，但不管如何其证明思想都是类似的．并且这一定理形式已经能解决大量我们通常遇到的静电学问题了．
+
+唯一性定理保证了我们通过\textbf{某种方法}（例如\textbf{静电镜像法}以及下面要介绍的展开成\textbf{球谐函数}的方法）得出的符合条件的解一定是唯一解．
+
+\begin{example}{}
+考虑一个均匀的、线性各向同性的电介质构成的球体，其半径为 $a$，介电常数为 $\epsilon_1$，它处在填满无穷空间的另一种均匀、线性各向同性的电介质中，其介电常数为 $\epsilon_2$．在第二种介质中有均匀的、沿 $z$ 方向的电场，电场强度大小为 $E_0$．我们要求解当介电球体放入后空间各点的静电势．
+
+\textbf{解：}由于空间各点不存在自由电荷分布，我们得知静电势 $\phi$ 在全空间（除了球壳上）满足拉普拉斯方程．
+我们有球坐标拉普拉斯方程的一般解形式\upref{SphLap}：
+\begin{equation}\label{EPoiEQ_eq2}
+f(r, \theta, \phi) = \sum_{l = 0}^\infty \sum_{m = -l}^l \qty(C_{l,m} r^l + \frac{C'_{l,m}}{r^{l+1}})P_l^m(\cos\theta)\E^{\I m\phi}
+\end{equation}
+因为该问题关于 $\phi$ 对称（绕 $z$ 轴对称），我们的解中将仅涉及到 $m=0$ 的球谐函数．我们将静电势写成：
+
+\begin{equation}
+\phi_{in}(\bvec x)=\sum_{l}A_lr^lP_l(\cos \theta)\ ,\ \ \phi_{out}(\bvec x)=\sum_{l}(B_lr^l+\frac{C_l}{r^{l+1}})P_l(\cos \theta)
+\end{equation}
+
+在无穷远处电介质球对电势的影响已经消失，所以在无穷远处一定有：
+
+\begin{equation}
+\phi_{out}(\bvec x)=-E_0z=-E_0r\cos\theta,\ \bvec x\rightarrow \infty
+\end{equation}
+
+由于外场只含有 $l=1$ 的勒让德函数，内场也一定仅含 $l=1$ 的分量．只有 $A_1,C_1,B_1=-E_0$ 不等于 $0$．也就是说
+
+\begin{equation}
+\phi_{in}(\bvec x)=A_1r\cos \theta,\ \
+\phi_{out}(\bvec x)=(B_1r-\frac{E_0}{r^{2}})\cos\theta
+\end{equation}
+
+根据介质中的麦克斯韦方程\upref{MWEq1}，可以知道电位移矢量的法向分量连续（$\partial\phi/\partial r$ 连续），电场强度的切向连续（$\partial\phi/\partial \theta$ 连续）．由此可以列出两个方程，解得 $A_1,C_1$．最终结果为：
+
+\begin{align}
+\phi_{in}(\bvec x)&=-\frac{3\epsilon_2}{\epsilon_1+2\epsilon_2}E_0r\cos\theta,\\
+\phi_{out}(\bvec x)&=-E_0r\cos\theta+\frac{\epsilon_1-\epsilon_2}{\epsilon_1+2\epsilon_2}E_0\frac{a^3}{r^2}\cos\theta
+\end{align}
+\end{example}
+
