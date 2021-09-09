@@ -19,13 +19,15 @@ y(x) = \int_a^b f(x') G(x', x) \dd{x'}
 对偏微分方程， 把以上的 $f(x), y(x)$ 变为多元函数 $f(\bvec r), y(\bvec r)$， 算符 $\Q Q$ 变为线性偏微分算符， $\delta$ 函数变为多元狄拉克 $\delta$ 函数\upref{deltaN} $\delta(\bvec r - \bvec r')$， 积分变为重积分即可．
 
 \subsection{例子： 弦的受力平衡}
+\pentry{分部积分法\upref{IntBP}， 方程 $y^{(N)}=f(x)$\upref{ynfx}}
+
 一根两端固定的弦两端固定在 $x$ 轴上， 区间为 $[0, L]$， 张力为 $T$， 形状为 $y(x)$， 边界条件为 $y(0) = y(L) = 0$． 在弦上有 $y$ 方向的连续受力分布， 若弦的受力密度函数为 $f(x)$， 即单位长度受到的 $y$ 方向的力， 那么当 $\abs{f(x)} \ll T$ 时有方程（推导过程类比 “一维波动方程\upref{WEq1D}”）
 \begin{equation}\label{GreenF_eq1}
 -T y'' = f(x)
 \end{equation}
 
 虽然该方程可以直接对两边积分两次得到解（两个积分常数由边界条件确定）
-\begin{equation}
+\begin{equation}\label{GreenF_eq14}
 y(x) = -\frac{1}{T}\iint f(x) \dd{x}\dd{x} + C_1 x + C_2
 \end{equation}
 但为了教学我们用格林函数法． 先令格林函数 $G(x', x)$ 满足
@@ -60,17 +62,13 @@ h = \frac{x' (L - x')}{LT}
 \begin{equation}
 G(x', x) = \leftgroup{
 &\frac{L-x'}{LT}x \qquad (0 < x \le x')\\
-&-\frac{x'}{LT}x+\frac{x'}{T} \qquad (x' < x)
+&\frac{L-x}{LT}x' \qquad (0 < x \le x') \qquad (x' < x)
 }\end{equation}
 代入\autoref{GreenF_eq3} 得
 \begin{equation}\label{GreenF_eq12}
-y(x) = \int_0^x f(x')\qty(-\frac{x'}{LT}x+\frac{x'}{T}) \dd{x'} + \int_x^L f(x')\frac{L-x'}{LT}x \dd{x'}
+y(x) = \int_0^x f(x') \frac{L-x}{LT}x'\dd{x'} + \int_x^L f(x')\frac{L-x'}{LT}x \dd{x'}
 \end{equation}
-由分部积分法\upref{IntBP} （对 $f(x')$ 积分， 剩下部分求导）可得
-\begin{equation}\label{GreenF_eq13}
-y(x) = -\frac{1}{T}\iint f(x)  \dd{x}\dd{x} + C_1 x + C_2
-\end{equation}
-分部积分留做习题， 其中 $C_1$ 和 $C_2$ 的取值需要保证边界条件 $y(0) = y(L) = 0$．
+由分部积分法\upref{IntBP} （对 $f(x')$ 积分， 剩下部分求导）可得\autoref{GreenF_eq14}． 分部积分留做习题， 其中 $C_1$ 和 $C_2$ 的取值需要保证边界条件 $y(0) = y(L) = 0$．
 
 \subsubsection{不用受力分析求解格林函数}
 对\autoref{GreenF_eq2} 在 $(0, x')$ 做两次定积分可以得到一条以 $(0,0)$ 为起点的斜线， 同理， 在 $(x', L)$ 两次定积分可以得到以 $(L, 0)$ 为终点的斜线． 而在 $(x-\epsilon, x+\epsilon)$ 积分 并取 $\epsilon\to 0$ 可以得到斜率 $y'$ 在 $x'$ 左侧到右侧的变化
@@ -80,7 +78,7 @@ y(x) = -\frac{1}{T}\iint f(x)  \dd{x}\dd{x} + C_1 x + C_2
 解三角形可得\autoref{GreenF_eq11}．
 
 \begin{exercise}{受力均匀的弦}
-若\autoref{GreenF_eq1} 中， $f(x) = 1$， 即弦均匀向上受力， 求弦的方程 $y(x)$． 分别使用\autoref{GreenF_eq12} 和\autoref{GreenF_eq13} 两种方法．
+若\autoref{GreenF_eq1} 中， $f(x) = 1$， 即弦均匀向上受力， 求弦的方程 $y(x)$． 分别使用\autoref{GreenF_eq12} 和\autoref{GreenF_eq14} 两种方法．
 
 答案： 开口向下的抛物线．
 \end{exercise}
