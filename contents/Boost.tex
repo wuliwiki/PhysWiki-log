@@ -1,0 +1,71 @@
+% C++ Boost 库笔记
+
+Boost 是一些列 C++ 库， 是 C++ 最常用的库之一．
+
+\subsubsection{安装}
+Ubuntu/Debian 可以直接 \verb|sudo apt install libboost-all-dev| 或者指定版本号如 \verb|libboost1.65-all-dev|
+
+但如果想获取最新版本可以直接\href{https://www.boost.org/users/history/version_1_76_0.html}{下载}． Boost 绝大部分库都可以是 header only 的． 用 \verb|tar -xzvf boost_1_76_0.tar.gz| 解压以后， 在解压文件夹中运行 \verb|sudo ./bootstrap.sh|， 然后 \verb|sudo ./b2 install| 即可（默认需要 \verb|gcc| 编译器， 注意编译时间可能较长）． 如果只需要头文件， 用 \verb|./b2 headers|． 然后把 \verb|boost| 文件夹复制到任何目录， 编译时 \verb|-I 目录/boost| 即可．
+
+头文件默认安装路径是 \verb|/usr/local/include/boost/|， 二进制文件在子目录 \verb|/usr/local/include/lib/| 如果没有 sudo 权限也可以指定安装目录， 详情参考\href{https://www.boost.org/doc/libs/1_76_0/more/getting_started/unix-variants.html#easy-build-and-install}{安装说明}．
+
+\subsubsection{数学物理相关}
+\begin{itemize}
+\item Safe Numerics （带有溢出检测的整数以及运算）
+\item Rational （有理数）
+\item Math Quaternion
+\item Math/Special Functions
+\item Geometry （多边形，平面几何，坐标旋转，非欧几何等）
+\item uBLAS （线性代数库，定义容器类）
+\item Units （量纲分析）
+\item Random （随机数）
+\item Multiprecision （任意精度计算）
+\item Math/Statistical Distributions （统计）
+\end{itemize}
+
+\subsubsection{其他}
+\begin{itemize}
+\item Sort （排序）
+\item Chrono （时间工具）
+\item Date Time （时间工具）
+\item Generic Image Library（读写图片，基本色彩，变形， 像素处理）
+\item Python （C++ 和 Python 之间的接口）
+\item Regex （正则表达式）
+\item Serialization （把数据类型保存文件）
+\item Stacktrace （记录函数调用顺序）
+\item MPI （多机器并行计算）
+\item JSON （读写 json 格式文件）
+\item Filesystem （文件处理）
+\item Compute （GPU 并行运算库）
+\end{itemize}
+
+
+\subsection{filesystem 3}
+一个获取文件大小的程序（同时显示 boost 版本号）
+\begin{lstlisting}[language=cpp, caption=test_filesystem3.cpp]
+#include <iostream>
+#include <boost/filesystem.hpp>
+using namespace std;
+using namespace boost::filesystem;
+
+int main(int argc, char* argv[])
+{
+	int major_ver = BOOST_VERSION / 100000,
+        minor_ver = (BOOST_VERSION / 100) % 1000,
+		sub_minor_ver = BOOST_VERSION % 100;
+	cout << "boost version: " << major_ver << "." << minor_ver << "."
+        << sub_minor_ver << endl;
+	cout << "file size: " << file_size(argv[1]) << " bytes" << endl;
+	return 0;
+}
+\end{lstlisting}
+
+编译 \verb|g++ test_filesystem3.cpp -o filesize -lboost_system -lboost_filesystem|， 运行 \verb|./filesize filesize|． 运行结果：
+\begin{lstlisting}[language=plain]
+boost version: 1.65.1
+file size: 26800 bytes
+\end{lstlisting}
+
+\begin{itemize}
+\item \verb|boost::filesystem::path|
+\end{itemize}

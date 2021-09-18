@@ -4,41 +4,76 @@
 \begin{issues}
 \issueTODO
 \end{issues}
-
+\pentry{热力学第一定律\upref{Th1Law}}
 \subsection{热容}
 一个系统在一定条件下的\textbf{热容量（heat capacity）}定义为\footnote{这个定义可以类比电容量\upref{Cpctor}}
 \begin{equation}
 C = \dv{Q}{T}
 \end{equation}
-热容可能跟温度压强等有关．
-
-定义\textbf{比热容（specific heat capacity）}为热容除以质量
+热容可能跟温度压强等有关． 定义\textbf{比热容（specific heat capacity）}为热容除以质量
 \begin{equation}
 c = \frac{C}{m}
 \end{equation}
+定义\textbf{摩尔热容}为 $1 \rm{mol}$ 物质的热容
+\begin{equation}
+C_m=\frac{C}{n}
+\end{equation}
 
-% 需要一些例子， 两杯温度不同的水混在一起
+\begin{example}{}
+两份水初始温度分别为 $300\rm{K}$ 和 $360\rm{K}$，体积分别为 $1\rm{L}$ 或 $2 \rm{L}$．将它们放入绝热容器种混合均匀，求末温度．（注：水的比热容 $c$ 随温度的变化不大，可以近似看成一个常数）
+
+设末温度为 $T$，那么第一份水吸收的热量为 $c m_1(T-300\rm{K})$，第二份水放出的热量为 $cm_2(360{\rm{K}}-T)$．由于在绝热容器中混合，且 $m_2=2m_1$，可以解得 $T=340\rm{K}$
+\end{example}
+
+我们可以定义等体热容为系统在等体过程\upref{EqVol}中的热容．根据热力学第一定律\upref{Th1Law} ，$\dd U=\delta Q-p\dd V$，可知等体过程中 $\delta Q=\dd U$（这里定义了态函数\textbf{焓} $H=U+pV$），所以
+\begin{equation}\label{ThCapa_eq1}
+C_V=\left(\frac{\partial U}{\partial T}\right)_V
+\end{equation}
+
+类似地，定义等压热容为系统在等压过程\upref{EqPre}中的热容．在等压过程中 $\delta Q=\dd U+p\dd V=\dd (U+pV)=\dd H$，所以
+\begin{equation}\label{ThCapa_eq2}
+C_p=\left(\frac{\partial H}{\partial T}\right)_p
+\end{equation}
+
+类似可以定义摩尔等体热容 $C_{V,m}=C_V/n$，摩尔等压热容 $C_{p,m}=C_P/n$．
 
 \subsection{理想气体的等压热热容与等体热容}
-\pentry{热力学第一定律\upref{Th1Law}}
-理想气体等体过程\upref{EqVol}中的热容叫做\textbf{等体热容}
-\begin{equation}\label{ThCapa_eq1}
-C_V = \frac{i}{2} n R
-\end{equation}
-而等压过程\upref{EqPre}中的热容叫做\textbf{等压热容}
-\begin{equation}\label{ThCapa_eq2}
-C_P = \frac{i+2}{2} n R
-\end{equation}
 
-\subsubsection{等体热容的推导}
-（未完成）
+根据理想气体的状态方程\upref{PVnRT}，对于一定物质的量（$n \rm{mol}$）的理想气体，内能 $U$ 只和温度有关，所以 \autoref{ThCapa_eq1} 的偏导数可以写为导数，即
 \begin{equation}
-C_V = \dv{Q}{T} = \dv{E}{T} = \frac{i}{2} nR
+C_V=\frac{\dd U}{\dd T}
 \end{equation}
 
-\subsubsection{等压热容的推导}
-（未完成）
+于是理想气体内能也可以写成积分表达式
 \begin{equation}
-C_V = \dv{Q}{T} = \dv{E}{T} + \dv{W}{T} = \frac{i}{2} nR + nR = \frac{i+2}{2} nR
+U=\int C_V\dd T + U_0
 \end{equation}
 
+我们还可以求得 $C_p$ 和 $C_V$ 的关系：
+\begin{align}
+&C_p-C_V=\frac{\dd (U+pV)}{\dd T}-\frac{\dd U}{\dd T}=\frac{\dd(pV)}{\dd T}=\frac{\dd (nRT)}{\dd T}=nR\\
+&C_{p,m}-C_{V,m}=R
+\end{align}
+
+$U$ 是 $T$ 的函数，因此 $C_V$ 和 $C_p$ 都是 $T$ 的函数．现在，用 $\gamma$ 表示 $C_p/C_V$，$\gamma$ 也是 $T$ 的函数．那么有
+
+\begin{equation}
+C_V=\frac{nR}{\gamma-1},C_p=\gamma\frac{nR}{\gamma-1}
+\end{equation}
+
+设 $i$ 为气体分子自由度数，例如单原子气体分子自由度为 $3$，而双原子分子自由度为 $5$（$3$ 个平动自由度和 $2$ 个转动自由度，我们先不考虑振动）．那么\textbf{通常情况}下，$C_V$ 约为 $inR/2$（这可以用能量均分定理\upref{EqEng} 来解释），于是 $C_p=(i+2)nR/2$，$\gamma=(i+2)/i$．从这一公式可知，单原子分子的 $\gamma=1.667$，双原子分子的 $\gamma=1.40$．然而在实验中观察到，双原子分子气体的 $\gamma$ 随温度的变化有明显的变化，而且更为合理的假设应该是 $i=7$（算上两个原子作简谐振动的自由度）．在实验的低温情况下，气体分子的这些自由度似乎被“冻结”了．这些是经典理论无法解释的．
+\addTODO{待进一步探索}
+\begin{example}{$\gamma$ 与理想气体绝热过程}
+
+理想气体在准静态绝热过程\upref{Adiab}中满足
+\begin{equation}
+pV^{\gamma}=\text{常量}
+\end{equation}
+
+这是因为在绝热过程中，$\delta{Q}=0$，$\dd{U}=\delta{W}$ 意味着 $C_V\dd{T}=-p\dd{V}$，所以
+\begin{equation}
+\dd(pV)=nR\dd{T}=C_V(\gamma-1)\dd{T}=-(\gamma-1)p\dd{V}
+\end{equation}
+
+解得 $V\dd{p}+\gamma p\dd{V} = 0$，所以 $\dd{(pV^\gamma)}=0$，即 $pV^{\gamma}$ 为常量．
+\end{example}
