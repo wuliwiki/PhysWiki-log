@@ -1,0 +1,75 @@
+% Matlab 最小二乘法拟合多项式
+
+\pentry{最小二乘法\upref{LstSqr}}
+
+事实上， Matlab 的 \verb|polyfit| 函数已经可以实现多项式拟合， 但为了教学我们重新实现一次．
+\begin{figure}[ht]
+\centering
+\includegraphics[width=8cm]{./figures/LSpoly_1.png}
+\caption{15 阶多项式拟合正弦函数（蓝点为数据点， 红线为多项式）} \label{LSpoly_fig1}
+\end{figure}
+
+\begin{figure}[ht]
+\centering
+\includegraphics[width=8cm]{./figures/LSpoly_2.png}
+\caption{20 阶多项式拟合锯齿波（蓝线为数据点， 红线为多项式）} \label{LSpoly_fig2}
+\end{figure}
+
+以下代码使用\autoref{LstSqr_eq2}~\upref{LstSqr} 解出多项式拟合的最小二乘法系数 $c_i$．
+\begin{equation}
+p(x) = c_0 + c_1 x + c_2 x^2 + \dots
+\end{equation}
+
+\begin{lstlisting}[language=matlab, caption=ls_poly.m]
+% 多项式最小二乘法拟合
+% p(x) = c(1)x^order + c_2 x^(order-1) + ... c(order+1)
+% numel(x) = numel(y)
+function c = ls_poly(x, y, order)
+Sx = zeros(1, 2*order+1);
+Sx(1) = numel(x);
+for n=1:2*order
+    Sx(n+1) = sum(x.^n);
+end
+
+Sxy = zeros(order+1, 1);
+for n=0:order
+    Sxy(n+1) = sum(y .* x.^n);
+end
+Sxy = flip(Sxy);
+
+A = zeros(order+1, order+1);
+for i = 0:order
+    for j = 0:order
+        A(order-i+1,order-j+1) = Sx(i+j+1);
+    end
+end
+c = A \ Sxy; % 解线性方程组
+end
+\end{lstlisting}
+
+使用例子： 拟合正弦函数．
+\begin{lstlisting}[language=matlab, caption=ls_poly_demo.m]
+% ls_poly_demo
+x = linspace(-10, 10, 100);
+y = sin(x);
+figure; plot(x, y);
+c = ls_poly(x, y, 15);
+y1 = polyval(c, x); % 求值
+hold on; plot(x, y1);
+axis([-10, 10, -1, 1]);
+\end{lstlisting}
+运行结果如\autoref{LSpoly_fig1}．
+
+\begin{lstlisting}[language=matlab, caption=ls_poly_demo2.m]
+% ls_poly_demo2
+x = linspace(-1, 1, 50);
+y = zeros(size(x));
+y(x > 0) = -x(x > 0);
+y(x > 0.5) = x(x > 0.5)-1;
+y(x < 0) = x(x < 0);
+y(x < -0.5) = -x(x < -0.5)-1;
+figure; plot(x, y, '.');
+c = ls_poly(x, y, 20);
+y1 = polyval(c, x);
+hold on; plot(x, y1);
+\end{lstlisting}

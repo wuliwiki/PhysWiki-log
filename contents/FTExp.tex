@@ -1,10 +1,6 @@
 % 傅里叶变换（指数）
 % 微积分|傅里叶级数|傅里叶变换|三角傅里叶变换|指数傅里叶变换
 
-\begin{issues}
-\issueAbstract
-\end{issues}
-
 \pentry{傅里叶级数（指数）\upref{FSExp}，傅里叶变换（三角）\upref{FTTri}}
 
 用三角傅里叶变换\upref{FTTri} 中同样的方法可把指数傅里叶级数\upref{FSExp}的区间长度 $l$ 取极限后拓展为指数傅里叶变换
@@ -17,29 +13,20 @@ f(x) = \frac{1}{\sqrt{2\pi }} \int_{-\infty }^{+\infty } g(k)\E^{\I kx} \dd{k}
 当 $f(x)$ 为实函数时，$g(k)$ 的实部是偶函数，虚部是奇函数．
 
 \subsection{实数函数的情况}
-
-如果实函数 $f(x)$ 的复数傅里叶变换为 $g(k)$， 即 $g(k)$ 需要满足什么条件才能使 $f(x)$ 是实数呢？我们从\autoref{FTExp_eq1} 开始入手
-\begin{equation}\begin{aligned}
-f(x) &= \frac{1}{\sqrt{2\pi }} \int_0^\infty [g(k)\E^{\I kx} + g(-k)\E^{-\I kx}] \dd{k} \\
-&= \frac{1}{\sqrt{2\pi }} \int_0^\infty [g(k)+g(-k)]\cos(kx)\dd{k}\\
-&\quad + \frac{\I}{\sqrt{2\pi }} \int_0^\infty [g(k)-g(-k)]\sin(kx) \dd{k}
-\end{aligned}\end{equation}
-从傅里叶变换（三角函数）% 链接未完成
-我们已知对实数函数，方括号项都必须为实函数，即上式第一个方括号中的虚部为零，第二个方括号中的实部为零，即
-\begin{equation}\begin{aligned}
-g_{Re}(-k) &= g_{Re}(k)\\
-g_{Im}(-k) &= -g_{Im}(k)
-\end{aligned}\end{equation}
-所以结论是，当 $f(x)$ 为实函数时，$g(k)$ 的实部是偶函数，虚部是奇函数． 或用复共轭记为
-\begin{equation}\label{FTExp_eq5}
-g(-k) = g(k)^*
+上述傅里叶变换中， $g(k)$ 需要满足什么条件才能使 $f(x)$ 是实函数呢？实函数的充要条件是 $f(x) = f^*(x)$， 代入\autoref{FTExp_eq1} 得
+\begin{equation}
+g(k) = \frac{1}{\sqrt{2\pi }} \int_{-\infty }^{+\infty } f^*(x)\E^{-\I kx} \dd{x}
 \end{equation}
-所以对于实数函数的傅里叶变换， 往往只需要 $k$ 的正半轴．
+两边取复共轭， 得
+\begin{equation}\label{FTExp_eq5}
+g^*(k) = g(-k)
+\end{equation}
+所以对于实数函数的傅里叶变换， 往往只需要 $k$ 的正半轴． 上式就是 $f(x)$ 为实函数的充要条件， 要证明充分性， 将其代入\autoref{FTExp_eq1} 可得 $f(x) = f^*(x)$．
 
 \begin{example}{高斯分布的傅里叶变换}\label{FTExp_ex1}
 要计算高斯函数
 \begin{equation}
-f(x) = \exp(-ax^2) \quad (a > 0)
+f(x) = \E^{-ax^2} \quad (a > 0)
 \end{equation}
 的傅里叶变换， 代入\autoref{FTExp_eq6} 并使用\autoref{Erf_ex2}~\upref{Erf}有
 \begin{equation}
@@ -96,6 +83,12 @@ g(k) = \int_{-\infty}^{+\infty} \delta(k'-k)  g(k')\dd{k'}
 \begin{equation}\label{FTExp_eq2}
 \int_{-\infty}^{+\infty} g(k)^* g(k) \dd{k} = \int_{-\infty}^{+\infty} f(x)^* f(x) \dd{x}
 \end{equation}
+
+函数拉伸的傅里叶变换
+\begin{equation}
+\mathcal F[f(ax)] = \frac{1}{a} g\qty(\frac{k}{a})
+\end{equation}
+也就是说把函数在 $x$ 方向压缩 $a$ 倍后， 各个频率都变大 $a$ 倍， 所以傅里叶变换会在 $k$ 方向拉伸 $a$ 倍， 另外归一化不变性易得系数 $1/a$．
 
 导数的傅里叶变换
 \begin{equation}\label{FTExp_eq3}

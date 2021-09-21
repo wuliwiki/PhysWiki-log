@@ -2,23 +2,23 @@
 
 \pentry{极值\upref{DerMax}， 积分换元\upref{IntCV}， 高斯积分\upref{GsInt}， 渐近展开\upref{Asympt}，  Gamma函数\upref{Gamma}}
 
-在分析数学中，拉普拉斯方法是一种计算含参数积分的渐近展开式的办法． 所考察的积分一般具有如下形式：
+在分析数学中，拉普拉斯渐近方法是一种计算含参数积分的渐近展开式的办法． 所考察的积分一般具有如下形式：
 \begin{equation}\label{LapAsm_eq1}
-L(s)=\int_a^b\psi(x)\E^{-s\Phi(x)}\,\dd x
+L(s)=\int_a^b\E^{-s\Phi(x)}\psi(x)\,\dd x
 \end{equation}
-其中 $s$ 是正的实参数． 要考察当 $s\to+\infty$ 时积分的变化趋势． 拉普拉斯方法背后的想法很简单： 如果函数 $\Phi$ 在某点处达到极大值， 那么当 $s$ 很大时， 只有极大值点附近的贡献才比较可观， 其余部分相比起来都要小得多．
+其中 $s$ 是正的实参数，考察当 $s\to+\infty$ 时积分的变化趋势． 拉普拉斯方法背后的想法很简单： 如果函数 $\Phi$ 在某点处达到极小值， 那么当 $s$ 充分大时， 只有极小值点附近的贡献才比较可观， 其余部分相比起来都要小得多．
 
 \subsection{Watson 引理}
 拉普拉斯方法基于 Watson 引理． 它本身也是很有用的．
 
 \begin{lemma}{Watson 引理}
 
-设函数$\phi:X\to Y$在$\mathbb{R}^+$上连续，序列$\left\{\lambda_n\right\}_0^\infty\left(\lambda_n>0\right)$单调递增，且存在$\delta$邻域$B_{+}(0,\delta)\;(0<\delta<\pi/2)$，使得
+设函数$\phi:X\to Y$在$\mathbb{R}^+$上连续，序列$\left\{\lambda_n\right\}_0^\infty\left(\lambda_n>0\right)$单调递增，且存在$\delta$右邻域$B_{+}(0,\delta)\;(0<\delta<\pi/2)$，使得
 \begin{equation}\label{LapAsm_eq2}
-  \phi\left(t\right)\sim\sum_{n=0}^{\infty}{c_nt^{\lambda_n-1}}
+  \phi\left(t\right)\sim\sum_{n=0}^{\infty}{c_nt^{\lambda_n-1}}\quad t\to0
 \end{equation}
 
-若有常数$K>0$，满足$\phi\left(t\right)=O\left(\E^{Kt}\right),t\to+\infty$，则当$s\to+\infty,z\in{\left\{z:\left|\arg{z}\right|\le\pi/2-\delta\right\}}$时，有
+若有常数$c>0$，满足$\phi\left(t\right)=O\left(\E^{ct}\right),t\to+\infty$，则当$s\to+\infty,z\in{\left\{z:\left|\arg{z}\right|\le\pi/2-\delta\right\}}$时，有
 \begin{equation}\label{LapAsm_eq3}
 \int_{\mathbb{R}^+}\E^{-zt}\phi(t)\dd t\sim\sum_{n=0}^{\infty}{c_n}\frac{\Gamma(\lambda_n)}{z^{\lambda_n}}  
 \end{equation}
@@ -27,7 +27,7 @@ L(s)=\int_a^b\psi(x)\E^{-s\Phi(x)}\,\dd x
 证：
 由Laplace的理论可知, 
 \[
-F\left(z\right)=\int_{\mathbb{R}^+}{e^{-zt}\phi\left(t\right)}\,\dd t
+F\left(z\right)=\int_{\mathbb{R}^+}{\E^{-zt}\phi\left(t\right)}\,\dd t
 \]
 若函数$\phi$满足定理中提到的三个条件，则$F(z)$变换对于$\operatorname{Re} z>c$是存在的．即：当$\operatorname{Re} z>c$时，积分收敛．注意 \autoref{LapAsm_eq2} 意味着存在正整数$N$，当$n>N$时，对一切的$t\in B_{+}(0,\delta)$，总有
 \[
@@ -35,17 +35,17 @@ F\left(z\right)=\int_{\mathbb{R}^+}{e^{-zt}\phi\left(t\right)}\,\dd t
 \]
 其中$M>0$且为常数.同时 \autoref{LapAsm_eq3} 表明当时，存在正整数$N$，当$n>N$时，对一切的$t\in B_{+}(0,\delta)$，总有
 \[
-\left|\phi\left(t\right)-\sum_{n=0}^{N-1}{c_nt^{\lambda_n-1}}\right|\le Ke^{ct}t^{\lambda_N-1}
+\left|\phi\left(t\right)-\sum_{n=0}^{N-1}{c_nt^{\lambda_n-1}}\right|\le K\E^{ct}t^{\lambda_N-1}
 \]
 其中$K>0$且为常数．于是就有
 \[
-\left|\int_{\mathbb{R}^+}{e^{-zt}\phi\left(t\right)}\,\dd t-\sum_{n=0}^{N-1}{c_n\int_{\mathbb{R}^+}{e^{-zt}t^{\lambda_n-1}}\,\dd t}\right|
+\left|\int_{\mathbb{R}^+}{\E^{-zt}\phi\left(t\right)}\,\dd t-\sum_{n=0}^{N-1}{c_n\int_{\mathbb{R}^+}{\E^{-zt}t^{\lambda_n-1}}\,\dd t}\right|
 \le K\int_{\mathbb{R}^+}\E^{[-\operatorname{Re}z-c]t}t^{\lambda_N-1}\,\dd t
 \]
 注意到当$\operatorname{Re}z>0$时
 \[
-\int_{\mathbb{R}^+}{e^{-zt}t^{\lambda_n-1}}\,\dd t
-=\frac{1}{z^{\lambda_n}}\int_{\mathbb{R}^+}{e^{-u}u^{\lambda_n-1}}\,\dd u
+\int_{\mathbb{R}^+}{\E^{-zt}t^{\lambda_n-1}}\,\dd t
+=\frac{1}{z^{\lambda_n}}\int_{\mathbb{R}^+}{\E^{-u}u^{\lambda_n-1}}\,\dd u
 =\frac{\Gamma\left(\lambda_n\right)}{z^{\lambda_n}}
 \]
 因此
@@ -53,13 +53,12 @@ F\left(z\right)=\int_{\mathbb{R}^+}{e^{-zt}\phi\left(t\right)}\,\dd t
 \left|F(z)-\sum_{n=0}^{N-1}{c_n\frac{\Gamma\left(\lambda_n\right)}{z^{\lambda_n}}}\right|\le K {\Gamma(\lambda_{N})\over \operatorname{[Re}z-c]^{\lambda_N}}
 =K{\Gamma(\lambda_{N})\over |z|^{\lambda_N}}\left(|z|\over \operatorname{Re}z-c\right)^{\lambda_N}
 \]
-由于$z\in{\left\{z:\left|\arg{z}\right|\le\pi/2-\delta\right\}}$，于是$\operatorname{Re} z\geq 1/2|z|\sin \delta$．这表明当$\left|z\right|$足够大时，$\operatorname{Re}z-c\geqslant1/2 z\sin \delta$．因此
+由于$z\in{\left\{z:\left|\arg{z}\right|\le\pi/2-\delta\right\}}$，于是$\operatorname{Re}z\geq |z|\sin \delta$．这表明当$\left|z\right|$足够大时，$\operatorname{Re}z-c\geqslant1/2|z|\sin \delta$．因此
 \[
 F\left(z\right)-\sum_{n=0}^{N-1}{c_n\frac{\Gamma\left(\lambda_n\right)}{z^{\lambda_n}}}=O\left(z^{-\lambda_N}\right)
 \]
 这就证明了Watson's 引理．
 
-这就是所求的结果．
 
 \subsection{拉普拉斯方法}
 拉普拉斯方法是将 Watson 引理用于\autoref{LapAsm_eq1} 得到的． 作出如下假设：
@@ -72,16 +71,22 @@ F\left(z\right)-\sum_{n=0}^{N-1}{c_n\frac{\Gamma\left(\lambda_n\right)}{z^{\lamb
 \item \autoref{LapAsm_eq1} 对于 $s=s_0$ 绝对收敛．
 \end{enumerate}
 
+\begin{figure}[ht]
+\centering
+\includegraphics[width=10cm]{./figures/LapAsm_1.pdf}
+\caption{函数$\Phi$示意图} \label{LapAsm_fig1}
+\end{figure}\\
+
 于是 $\Phi'(x_0)=0$． 由泰勒公式可知， 存在正数 $\delta>0$ ，使得对于任意的 $x\in B(x_0,\delta)$  
 \[
   \Phi(x)=\Phi(x_0)+\frac{1}{2}\Phi''(x_0)(x-x_0)^2+\varphi(x)(x-x_0)^3
 \]
 
-其中函数 $\varphi$ 有界． 当 $s$ 充分大时， 邻域 $B(x_0,\delta)$ 以外的积分的贡献比 $s$ 的任何负幂次衰减得都快：根据假定 2，当 $x\in I\setminus B(x_0,\delta)$ 时, 存在正数 $\varepsilon_0>0$ 使得 $f(x)<f(x_0)-\varepsilon_0$， 从而邻域 $B(x_0,\delta)$ 之外的积分估计为
+其中存在正数$M>0$，使得函数 $|\varphi|\leq M$ ． 当 $s$ 充分大时， 邻域 $B(x_0,\delta)$ 以外的积分的贡献比 $s$ 的任何负幂次衰减得都快：根据假定 2，当 $x\in I\setminus B(x_0,\delta)$ 时, 存在正数 $\varepsilon_0>0$ 使得 $\Phi(x)>\Phi(x_0)+\varepsilon_0$， 从而邻域 $B(x_0,\delta)$ 之外的积分估计为
 \[
   \left|\int_{I\setminus B(x_0,\delta)}\psi(x)\E^{-s\Phi(x)}\,\dd x\right|
   \leq \E^{-\epsilon_0(s-s_0)}\int_I|\psi(x)|\E^{-s_0\Phi(x)}\,\dd x
-  =O(\E^{-\varepsilon_0s})
+  \leq \E^{-s_0\Phi(x_0)}\E^{-\varepsilon_0s}\int_{I}|\psi(x)|\,\dd x
 \]
 而在邻域 $B(x_0,\delta)$ 内， 可作如下换元： $y^2=\Phi(x)-\Phi(x_0)$， 即
 \[

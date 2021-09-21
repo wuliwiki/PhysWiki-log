@@ -1,15 +1,117 @@
 % 一致收敛
 % 数学分析|一致收敛|极限
 
-\begin{issues}
-\issueDraft
-\end{issues}
+
+
+\addTODO{需添加预备知识，收敛或逐点收敛，以及一致连续．}
+
+\subsection{一致收敛的概念}
+
+函数列$f_n$逐点收敛到$f$，只要求对于任意固定的$x_0$，数列$\{f_n(x_0)\}$收敛到$f(x_0)$即可．接下来介绍的\textbf{一致收敛}则是一个更强的要求．
+
+阅读过程中要牢记，谈一致收敛的时候一定是限定了定义域的．同一个函数可能在一个区间里一致收敛，但是拓展一下定义域就不一致收敛了．\autoref{UniCnv_ex1} 和\autoref{UniCnv_ex2} 中的反例，如果把定义域缩小为$[1/3, 1/2]$，那么它们其实也是一致收敛的．
 
 一个函数列 $f_n(x)$ 一致收敛到 $f(x)$ 的定义是： 当对于任意 $\epsilon > 0$， 存在 $N$， 当 $n \geqslant N$ 时对任意 $x$ 都有
-\begin{equation}
+\begin{equation}\label{UniCnv_eq1}
 \abs{f_n(x) - f(x)} < \epsilon
 \end{equation}
 或者记为
 \begin{equation}
 \lim_{n\to\infty} \qty(\max \abs{f_n(x) - f(x)}) = 0
 \end{equation}
+
+一致收敛是比（逐点）收敛更强的条件．
+
+\begin{example}{逐点收敛但不一致收敛的例子}\label{UniCnv_ex1}
+在区间$(0, 1)$上考虑函数列$f_n(x)=x^n$和函数$f(x)=0$，则容易验证$f_n$逐点收敛到$f$．
+
+但是，对于任意$\epsilon>0$和任意$f_n$，总可以找到$x\in(\epsilon^{1/n}, 1)$，使得$f_n(x)>\epsilon$．因此按照定义，$f_n$\textbf{不}一致收敛到$f$．
+
+\end{example}
+
+\begin{example}{逐点收敛但不一致收敛的例子}\label{UniCnv_ex2}
+在区间$[0, 1]$上考虑函数列$f_n(x)=\sin(\pi\cdot x^n)$和函数$f(x)=0$，则容易验证$f_n$逐点收敛到$f$．
+
+但是，对于任意$\epsilon>0$和任意$f_n$，总可以找到$x=\frac{1}{2^n}$，使得$f_n(x)=1>\epsilon$．因此按照定义，$f_n$\textbf{不}一致收敛到$f$．
+
+\end{example}
+
+逐点收敛只考虑，是不是每个点都收敛．而一致收敛的威力在于，有一个统一的进度，每个点收敛的进度不得比这更慢．\autoref{UniCnv_ex1} 和\autoref{UniCnv_ex2} 里举出的反例就是如此，不管你怎么取$\epsilon$作为限定，总存在跟不上进度的点，导致这种限定不是\textbf{一致}的．
+
+如果$f_n$一致收敛到$f$，那么我们会看到，随着$n$增大，$f_n-f$的上下界越来越小，像是把函数列挤压到$x$轴的过程．但是不一致收敛的函数，由于总存在不听话的、跟不上进度的点，就没法把函数压平．
+
+一致收敛还可以从“函数之间的距离”角度来考虑．
+
+\begin{definition}{函数的距离}\label{UniCnv_def1}
+
+在同一定义域上给定两个函数$f$和$g$，定义它们之间的距离为$\opn{d}(f, g)=\opn{sup}\abs{f-g}$，即距离为函数$\abs{f-g}$的\textbf{上确界}\upref{SupInf}．
+
+有时候也记$\opn{d}(f, g)=\abs{\abs{f, g}}$．
+
+\end{definition}
+
+把每个函数看成“函数的集合”里的一个点，\autoref{UniCnv_eq1} 给出了衡量各点之间距离的方式．一致收敛的函数列，就是这个集合里一致收敛的点列．由此可见，一致收敛是一种更注重\textbf{函数整体}的性质．
+
+
+\subsection{一致收敛的性质}
+
+在研究和一致收敛相关的问题时，我们可以只考虑函数列收敛到$f(x)=0$的情况．这是因为$\{f_n(x)\}$（一致）收敛到$f(x)$，等价于说$\{f_n(x)-f(x)\}$一致收敛到$0$．
+
+\begin{theorem}{线性性}
+设给定定义域上，函数列$\{f_n\}$和$\{g_n\}$分别一致收敛到$f$和$g$，且$a, b$是任意常数，那么函数列$\{af_n+bg_n\}$一致收敛到$af+bg$上．
+\end{theorem}
+
+\begin{theorem}{有界乘积收敛}\label{UniCnv_the1}
+设给定定义域上，函数列$\{f_n\}$一致收敛到$f$上，且$g$是一个有界函数，那么$\{gf_n\}$一致收敛到$gf$上．
+\end{theorem}
+
+\autoref{UniCnv_the1} 的一个证明思路提示：由于$g$有界（设上下界绝对值中较大的为$G$），因此$gf_n$和$gf$的偏差也是“一致”的，即不会超过$Gf$．由此，对于给定的$n$，如果$\abs{f_n(x)-f(x)}<\epsilon$恒成立，那么$\abs{gf_n(x)-gf(x)}<G\epsilon$恒成立，再由$\epsilon$的任意性即可得证．
+
+如果取$g$是无界函数，那么$g$的趋于无穷的点就会让$\{gf_n\}$出现一个跟不上进度的点，导致$\{gf_n\}$不是一致收敛的，如\autoref{UniCnv_ex3} 所述．
+
+\begin{example}{}\label{UniCnv_ex3}
+在$(0, 1)$上考虑函数列$\{f_n(x)=1/n\}$，显然它一致收敛到$f(x)=0$．
+
+取$g(x)=1/x$，那么$g$没有上下界．对于任意正整数$n$和$\epsilon>0$，总有$x\in(0, \frac{1}{n\epsilon})$，使得$g(x)f_n(x)>\epsilon$，从而$\{gf_n\}$不一致收敛．
+\end{example}
+
+\begin{theorem}{双有界乘积收敛}\label{UniCnv_the2}
+设给定定义域上，函数列$\{f_n\}$和$\{g_n\}$分别一致收敛到$f$和$g$，且$f, g$都是有界函数，那么$\{f_ng_n\}$一致收敛到$fg$上．
+\end{theorem}
+
+\autoref{UniCnv_the2} 的一个证明思路提示：设$g$上下界中绝对值较大的为$G$．$g_n$一致收敛，由一致收敛的定义，任取$\epsilon>0$，存在正整数$N$，使得编号$n>N$时，所有$g_n$都共享上下界$G+\epsilon$和$-G-\epsilon$．这样一来，问题就可以归结为\autoref{UniCnv_the1} 的情况，只不过这里固定的有界函数可以取常数函数$G$．
+
+\begin{theorem}{}\label{UniCnv_the3}
+设给定定义域上，函数列$\{f_n\}$和$\{g_n\}$分别一致收敛到$f$和$g$，且$f$是有界函数，$\abs{g}$有一个下界$\delta>0$，那么$\{\frac{f_n}{g_n}\}$一致收敛到$\frac{f}{g}$．
+\end{theorem}
+
+\autoref{UniCnv_the3} 的一个证明思路提示：利用$\abs{g}$有一个非零下界，证明$1/g_n$是一个有界函数，且$1/g_n$一致收敛到$1/g$．然后问题就可以归结为\autoref{UniCnv_the2} 的情况．
+
+\begin{theorem}{链式收敛}\label{UniCnv_the4}
+设给定定义域$X$上，函数列$\{f_n\}$一致收敛到$f$上，且在区间$I$上，$h(x)$是一个\textbf{一致连续}的函数，另外对于任意$x\in X$，都有$f_n(x)\in I, f(x)\in I$．
+
+那么$h(f_n(x))$一致收敛到$h(f(x))$上．
+\end{theorem}
+
+\autoref{UniCnv_the4} 的要点是，$h$必须是一致收敛的，不可以把条件减弱成逐点收敛．
+
+\begin{theorem}{柯西收敛原理}\label{UniCnv_the6}
+函数列$\{f_n\}$在定义域上一致收敛的充要条件是，对于任意$\epsilon>0$，存在$N$，使得对于任意正整数$m, n>N$，都有$\abs{f_n(x)-f_m(x)}>\epsilon$恒成立，或者用\autoref{UniCnv_def1} 的话来说，$\abs{\abs{f_n-f_m}}>\epsilon$．
+\end{theorem}
+
+这里的柯西收敛原理，其实就是直接引用了度量空间里的柯西收敛原理．
+
+\begin{theorem}{Dini定理}\label{UniCnv_the5}
+如果\textbf{连续函数}$\{f_n\}$在\textbf{闭区间}$[a, b]$上\textbf{逐点收敛}到$f$，且对于任意固定的$x_0\in [a, b]$，数列$\{f_n(x_0)\}$都是单调的，那么$\{f_n\}$在$[a, b]$上一致收敛到$f$．
+\end{theorem}
+
+\autoref{UniCnv_the5} 的一个证明思路提示：闭区间上的连续函数必然能取到最大和最小值，因此必然有界．又由于$\{f_n(x_0)\}$都是单调的，进而$\{f_n(x_0)-f(x_0)\}$都是单调的，因此$f_n-f$的上下界也是单调函数．由于$f_n-f$收敛到$0$，因此$f_n-f$的上下界都要收敛到$0$，即$f_n$和$f$的距离要收敛到$0$，从而得证．
+
+
+
+
+
+
+
+
+
