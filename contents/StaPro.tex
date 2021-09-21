@@ -1,0 +1,54 @@
+% 状态量和过程量
+
+\pentry{力场 保守场 势能\upref{V}}
+
+系统关于时间的变化可以看作状态空间中一点经过的轨迹． 姑且把这点叫做\textbf{状态点}． 若一个物理量 $Q$ 只和状态空间的位置有关， 即可以表示为已知状态量的函数， 那么它就也是状态量， 若它和状态空间中的运动过程有关， 它就是过程量． 典型的状态量例如系统的能量， 动量， 温度， 体积， 压强等； 典型的过程量如做功， 冲量， 传热等．
+
+把一个系统的状态用矢量 $\bvec x = (x_1, x_2, \dots, x_N)$ 描述， 在一个特定的过程中， $x_i$ 都是时间的函数． 一些常见的过程量可以定义为
+\begin{equation}\label{StaPro_eq1}
+Q_{12} = \int_{\mathcal L} \sum_i f_i(x_1, \dots, x_N) \dd{x_i} = \int_{t_1}^{t_2} \sum_i f_i(x_1, \dots, x_N) \dv{x_i}{t} \dd{t}
+\end{equation}
+$\mathcal L$ 表示状态点的 “运动方程” $x_i(t)$ （$i = 1,\dots, N$） 以及起点终点 $\bvec x(t_1), \bvec x(t_2)$． 易得，积分结果只和路径的形状有关而与状态点在轨迹上运动的快慢无关． 所以这里的 $t$ 可以看作轨迹的参数随时间变化而未必是时间本身．
+
+一个具体的例子是力场对单个质点的做功， 下面会在\autoref{StaPro_ex1} 详细讨论．
+\begin{equation}
+W_{12} = \int_{\mathcal L} \bvec F(\bvec x) \vdot \dd{\bvec x} = \int_{\mathcal L} \bvec F(\bvec x(t)) \vdot \bvec v(t) \dd{t}
+\end{equation}
+
+
+从定义上来说， $Q$ 是一个过程量， 但如果在某个系统中它可以表示为某个状态量的增量， 那么\textbf{对这个系统}区分 $Q$ 是状态量和过程量将没有太大实用价值（trivial）： 任何状态量在不同时间的差都能看作一个这样的过程量， 反之这个过程量只要固定了起点也能变为一个状态量． 此时\autoref{StaPro_eq1} 积分的结果不取决于路径， 只取决于初末状态． 把该状态量记为 $V(\bvec x)$， 那么总有
+\begin{equation}
+Q_{12} = V(\bvec x(t_2)) - V(\bvec x(t_1))
+\end{equation}
+例如在二维或三维状态空间， 若令矢量函数为 $\bvec f(\bvec x) = \sum_i f_i(\bvec x) \uvec x_i$， 那么当旋度 $\curl \bvec f = \bvec 0$ 时， $\bvec f(\bvec x)$ 就是一个保守场， 必存在势函数 $V(\bvec x)$． 对于高维情况， 需要使用外导数\upref{ExtDer} 来判断保守场．
+
+但事实上远非所有情况下\autoref{StaPro_eq1} 的积分都可以表示为两个状态量之差． 此时积分的结果必须取决于路径的形状， 那么区分状态量和过程量就至关重要． 例如， 虽然我们往往写出微分关系
+\begin{equation}
+dQ = \sum_i f_i(x_1, \dots, x_N) \dd{x_i}
+\end{equation}
+但是却不可能把 $Q$ 表示为 $x_i$ 的函数， $f_i$ 也不能看作偏导 $\pdv*{Q}{x_i}$．
+
+为了防止这种误解， 一些教材中把过程量的微分\footnote{严格来说应该叫做微小增量， 因为只有函数可以做全微分\upref{TDiff}}记为 $\delta Q$ 而不是 $\dd Q$．
+
+\begin{example}{力场}\label{StaPro_ex1}
+一个具体的例子是力场对单个质点的做功． 在分析力学中， 此时状态空间是 $(\bvec x, \bvec p)$ 即位置和动量， 做功的微分为
+\begin{equation}
+\dd{W} = \sum_i F_i(\bvec x) \dd{x_i} = \bvec F(\bvec x) \vdot \dd{\bvec x}
+\end{equation}
+如果力场 $\bvec F(\bvec x)$ 是保守场， 那么做功就是势能之差； 如果是非保守场， 做功只能由具体路径决定， 此时 “功”（过程量） 和 “能”（状态量） 的区分就很重要了． 例如动能总可以表示为状态 $\bvec p$ 的函数， 但做功却不行， 因为它不是状态量．
+\end{example}
+
+\begin{example}{热力学第一定律}
+另一个例子是热力学第一定律\upref{Th1Law}往往记为
+\begin{equation}
+\dd{Q} = P\dd{V} + \dd{E}
+\end{equation}
+或者
+\begin{equation}
+Q_{12} = \int_1^2 P\dd{V} + \Delta E
+\end{equation}
+但状态空间中的环积分并不总是为零， 例如著名的卡诺热机\upref{Carnot}， 即积分取决于路径． 所以 $Q$ 不能看作 $V, E$ 的函数， 也不能记
+\begin{equation}
+\qty(\pdv{Q}{V})_E = P \qquad \qty(\pdv{Q}{E})_V = 1 \qquad \text{（错）}
+\end{equation}
+\end{example}

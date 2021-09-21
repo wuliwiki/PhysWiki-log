@@ -1,0 +1,31 @@
+% 单电子原子模型
+
+\textbf{单电子原子模型（single active electron SAE）}氦原子 SAE 势能， 是指通过给对氢原子薛定谔方程修改势能项（等效势能）， 用于模拟其他原子的行为， 尤其是单电子电离．
+
+例如 Tong-Lin 模型中， 氦原子的等效势能为
+\begin{equation}
+V(r) = -\frac{Z_c + a_1 \E^{-a_2 r} + a_3 r \E^{-a_4 r} + a_5 \E^{-a_6 r}}{r}
+\end{equation}
+对氦原子， 有
+\begin{equation}
+Z_c = 1, \ a_1 = 1.231,\ a_2 = 0.662,\ a_3 = -1.325,\ a_4 = 1.236,\ a_5 = -0.231,\ a_6 = 0.480
+\end{equation}
+满足
+\begin{align}
+&\lim_{r\to +\infty} \frac{V(r)}{-Z_c/r} = \lim_{r\to +\infty} \frac{V(r)}{-1/r} = 1\\
+&\lim_{r\to 0} \frac{V(r)}{-(Z_c + a_1 + a_5)/r} = \lim_{r\to 0} \frac{V(r)}{-2/r} = 1
+\end{align}
+
+这个势能的基态 $E_0 = -24.6$eV 就是氦原子单电离 threshold． 但激发态 $E_1 = -4.35$eV， $E_2 = -1.70$eV 并不正确．
+
+而我现在需要氦原子 shake-up 的 SAE 势能．
+
+\begin{lstlisting}[language=matlab]
+V = @(r) (-1 -1.231*exp(-0.662*r) + 1.325*r .*exp(-1.236*r) ...
+    + 0.231*exp(-0.480*r)) ./ r;
+\end{lstlisting}
+
+\subsubsection{shake-up}
+若要模拟激发态 shake-up 电离， 一种较为粗暴的做法是直接把 $V$ 乘以一个常数 $2.3632$， 使得势阱更深， 电离能更大， 基态为 $E_0 = 65.4$． 这么做的问题是 $r$ 的两端极限都不物理． 做了 streaking 以后 $n=1,2$ delay 是 $18\Si{as}$．
+
+另一种方式是， 就是重新令 $a_3 = 2.07415$． 这样极限依然正确．做了 streaking 以后 $n=1,2$ delay 是 ？

@@ -1,0 +1,213 @@
+% 一阶常微分方程解法：变量可分离方程
+% 常微分方程|ordinary differential equation|ODE|初等解法|变量分离法
+
+\pentry{常微分方程简介\upref{ODEint}}
+
+形如$\frac{\dd y}{\dd x}=f(x)g(y)$的微分方程，称作\textbf{变量可分离}方程．这类方程是最容易解的．
+
+对方程两边进行移项，得到$\frac{1}{g(y)}\dd y=f(x)\dd x$，这样就把变量分离开了．两边同时求积分，得到等式
+\begin{equation}\label{ODEa1_eq1}
+\int\frac{1}{g(y)}\dd y=\int f(x)\dd x+C
+\end{equation}
+其中$C$是积分常数．
+
+可见，\autoref{ODEa1_eq1} 的左边是$y$的函数，右边是$x$的函数，只要能把这两个积分写出来，那么微分方程也就解出来了．
+
+\begin{example}{}
+考虑方程$\frac{\dd y}{\dd x}=xy$．
+
+分离变量后有
+\begin{equation}
+\int\frac{1}{y}\dd y=\int x\dd x+C
+\end{equation}
+
+算出积分后可得
+\begin{equation}
+\ln\abs{y}=\frac{1}{2}x^2+C
+\end{equation}
+
+即
+\begin{equation}
+\abs{y}=\E^{\frac{1}{2}x^2}\cdot\E^C
+\end{equation}
+
+将$\E^C$重新记为一个新的常数$K$，那么该方程的通解最终就可以表示为
+\begin{equation}
+y=\pm K\E^{\frac{1}{2}x^2}
+\end{equation}
+\end{example}
+
+\begin{exercise}{}
+求解方程$\frac{\dd y}{\dd x}=\frac{x}{y}$．答案是$\abs{x}=\abs{y}$，也可以写成$x^2=y^2$．
+\end{exercise}
+
+\begin{exercise}{}
+求解方程$\frac{\dd v}{\dd t}=\frac{t^2}{v+b}$．答案是$3v^2+6bv=2t^3$，也可以写成$t=(\frac{3}{2}v^2+3bv)^{1/3}$.
+\end{exercise}
+
+\subsection{可化为变量可分离形式的方程}
+
+\begin{theorem}{}\label{ODEa1_the1}
+形如$\frac{\dd y}{\dd x}=g(\frac{y}{x})$的方程，可以化为变量可分离的形式．
+\end{theorem}
+
+\textbf{证明}：
+
+定义一个新的变量$u=\frac{y}{x}$，于是$y=ux$，于是$\dd y=u\dd x+x\dd u$．
+
+于是原方程可写为
+\begin{equation}
+u+x\frac{\dd u}{\dd x}=g(u)
+\end{equation}
+也就是
+\begin{equation}
+\frac{\dd u}{\dd x}=\frac{g(u)-u}{x}
+\end{equation}
+
+这是一个关于$x$和$u$的变量可分离方程．
+
+\textbf{证毕}．
+
+\begin{example}{}
+考虑方程$\frac{\dd y}{\dd x}=\frac{y}{x}+\E^{-\frac{y}{x}}$．
+
+根据\autoref{ODEa1_the1} 的证明结论，取$u=y/x$，将方程改写为4
+\begin{equation}
+\frac{\dd u}{\dd x}=\frac{1}{x\E^u}
+\end{equation}
+
+进行变量分离后，积分得
+\begin{equation}
+\E^u=\ln\abs{x}+C
+\end{equation}
+
+这就是其通解．
+
+
+\end{example}
+
+
+\begin{corollary}{}\label{ODEa1_cor1}
+形如$\frac{\dd y}{\dd x}=\frac{a_1x+b_1y+c_1}{a_2x+b_2y+c_2}$的方程，可以化为变量可分离的形式．
+\end{corollary}
+
+\textbf{证明}：
+
+当$c_1=c_2=0$的时候，方程就是$\frac{\dd y}{\dd x}=\frac{a_1x+b_1y}{a_2x+b_2y}$，右边只需要上下同时除以$x$就可以得到$\frac{\dd y}{\dd x}=\frac{a_1+b_1\frac{y}{x}}{a_2+b_2\frac{y}{x}}$，这就符合了\autoref{ODEa1_the1} 的情况．
+
+但是当$c_1$和$c_2$不全为零的时候，我们就得想办法化成相同的情况．
+
+$a_1x+b_1y+c_1=0$和$a_2x+b_2y+c_2=0$分别表示两条直线．它们的交点在原点，当且仅当$c_1=c_2=0$，也就是说现在考虑的情况是这两条直线的交点不在原点——那我们就把它挪到原点不就好了？
+
+联立$a_1x+b_1y+c_1=0$和$a_2x+b_2y+c_2=0$，求出交点$(x_0, y_0)$．作变量代换（也就是移动整个坐标系，使得原点跑到两直线交点处）：
+\begin{equation}
+\leftgroup{
+    X=x-x_0\\
+    Y=y-y_0
+}
+\end{equation}
+
+这样就有$a_1X+b_1Y=0$和$a_2X+b_2Y=0$．
+
+同时由于是平移，换句话说变量代换里$x_0$和$y_0$是常数，因此还有$\dd X=\dd x$，$\dd Y=\dd y$．
+
+于是原方程化为
+\begin{equation}
+\frac{\dd Y}{\dd X}=\frac{a_1X+b_1Y}{a_2X+b_2Y}
+\end{equation}
+
+如前所述，这可以化为变量可分离形式．
+
+\textbf{证毕}．
+
+\begin{corollary}{}
+形如$\frac{\dd y}{\dd x}=g(\frac{a_1x+b_1y+c_1}{a_2x+b_2y+c_2})$的方程，都可以化为变量可分离的形式．
+\end{corollary}
+
+\textbf{证明}：
+
+用和\autoref{ODEa1_cor1} 相同的方法作变量代换即可．
+
+\textbf{证毕}．
+
+
+
+
+
+\begin{example}{}
+考虑方程$\frac{\dd y}{\dd x}=\frac{3x+2y-4}{x+3y+1}$．
+
+直线$3x+2y-4=0$和$x+3y+1=0$的交点是$(2, -1)$，因此我们作变量代换：
+\begin{equation}
+\leftgroup{
+    X=x-2\\
+    Y=y+1
+}
+\end{equation}
+得到
+\begin{equation}\label{ODEa1_eq4}
+\frac{\dd Y}{\dd X}=\frac{3X+2Y}{X+3Y}
+\end{equation}
+将\autoref{ODEa1_eq4} 右边上下同除以$X$以后得
+\begin{equation}\label{ODEa1_eq5}
+\frac{\dd Y}{\dd X}=\frac{3+2Y/X}{1+3Y/X}
+\end{equation}
+
+按\autoref{ODEa1_the1} 的方式，令$U=Y/X$，则\autoref{ODEa1_eq5} 又化为
+\begin{equation}
+\frac{\dd U}{\dd X}=\frac{\frac{3+2U}{1+3U}-U}{X}
+\end{equation}
+
+移项，整理得
+\begin{equation}\label{ODEa1_eq6}
+\int\frac{3U+1}{-3U^2+U+3}\dd U=\int\frac{1}{X}\dd X+C
+\end{equation}
+
+两边积分后即可得解．\autoref{ODEa1_eq6} 左边的积分稍有复杂，但技巧不难．
+
+\end{example}
+
+
+
+
+
+
+
+
+\begin{example}{}
+考虑方程$\frac{\dd y}{\dd x}=(\frac{2x+2y-6}{x+3y-7})^2$．
+
+直线$2x+2y-6=0$和$x+3y-7=0$的交点是$(1, 2)$，因此我们作变量代换：
+\begin{equation}
+\leftgroup{
+    X=x-1\\
+    Y=y-2
+}
+\end{equation}
+得到
+\begin{equation}\label{ODEa1_eq2}
+\frac{\dd Y}{\dd X}=(\frac{2X+2Y}{X+3Y})^2
+\end{equation}
+
+将\autoref{ODEa1_eq2} 化为
+\begin{equation}\label{ODEa1_eq3}
+\frac{\dd Y}{\dd X}=(\frac{2+2Y/X}{1+3Y/X})^2
+\end{equation}
+
+按\autoref{ODEa1_the1} 的方式，令$U=Y/X$，则\autoref{ODEa1_eq3} 又化为
+\begin{equation}
+\frac{\dd U}{\dd X}=\frac{(\frac{2+2U}{1+3U})^2-U}{X}
+\end{equation}
+
+接下来只需要积分即可．不过说起来容易做起来难，这里关于$U$的积分非常复杂，解到这一步能看出来它可以变量分离即可．
+
+\end{example}
+
+
+
+
+
+
+
+
+

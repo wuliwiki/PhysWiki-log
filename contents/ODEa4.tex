@@ -1,0 +1,167 @@
+% 一阶隐式常微分方程
+% 隐式方程|ODE|differential euqation
+
+\pentry{一阶常微分方程解法：常数变易法\upref{ODEa2}，一阶常微分方程解法：恰当方程\upref{ODEa3}}
+
+我们之前讨论的常微分方程都是显式写出导函数表达式的，即$\frac{\dd y}{\dd x}=F(x, y)$的形式．很多时候，一阶微分方程常被写为$F(x, y, \frac{\dd y}{\dd x})=0$ 的形式，如果这样的方程可以被改写为显式的形式，那么我们就可以尝试用预备知识中介绍过的方法来解方程；但如果难以改写或者解出来的形式极为复杂，那我们也可以尝试\textbf{换元}的方法．
+
+本节介绍四种一阶隐式方程和它们的换元方法．
+
+\subsection{第一种}
+
+第一个要讨论的是形如
+\begin{equation}\label{ODEa4_eq2}
+y=f(t, \frac{\dd y}{\dd t})
+\end{equation}
+的方程．这里自变量用的是通常代表时间的$t$，为的是提示该怎么换元——如果$y$是位移，那$\dd y/\dd t$就是速度，这就是我们要的变换．
+
+令$v=\frac{\dd y}{\dd t}$，则原方程变为$y=f(t, v)$．在方程两边同时对$t$求导，得到
+\begin{equation}\label{ODEa4_eq1}
+v=\frac{\partial f(t, v)}{\partial t}+\frac{\partial f(t, v)}{\partial v}\frac{\dd v}{\dd t}
+\end{equation}
+
+\autoref{ODEa4_eq1} 就是一个关于$t, v$的一阶微分方程，用我们之前讨论过的方法就可以解出，再将解出的$v$代回\autoref{ODEa4_eq2} 即可得到原方程的通解．
+
+\begin{example}{}
+
+
+考虑方程
+\begin{equation}\label{ODEa4_eq3}
+y=\qty(\frac{\dd y}{\dd x})^2+2x\frac{\dd y}{\dd x}
+\end{equation}
+令$v=\frac{\dd y}{\dd x}$，代入\autoref{ODEa4_eq3} ，并两端对$x$求导，则\autoref{ODEa4_eq3} 化为
+\begin{equation}
+v=2v\frac{\dd v}{\dd x}+2v+2x\frac{\dd v}{\dd x}
+\end{equation}
+整理一下，得
+\begin{equation}
+v\dd x+(2v+2x)\dd v=0
+\end{equation}
+这不是一个恰当方程\footnote{$\frac{\frac{\partial (2v+2x)}{\partial x}-\frac{\partial v}{\partial v}}{v}=\frac{1}{v}$是$v$的函数，因此我们可以为它找到一个积分因子$f(v)$．}，不过我们可以给它添加一个积分因子$f(v)=\E^{\int 1/v \dd v}=v$，把它变成一个恰当方程
+\begin{equation}
+v^2\dd x+(2v^2+2xv)\dd v=0
+\end{equation}
+
+令$u(x, v)=v^2x+\frac{2}{3}v^3$，那么$\dd u=v^2\dd x+(2v^2+2xv)\dd v$．
+
+因此，\autoref{ODEa4_eq3} 的通解为$u=C$，即
+\begin{equation}
+\leftgroup{
+    \begin{aligned}
+    v^2x+\frac{2}{3}v^3&=C\\
+    v^2+2xv&=y
+    \end{aligned}
+}
+\end{equation}
+
+
+
+\end{example}
+
+
+\begin{example}{}\label{ODEa4_ex1}
+考虑方程
+\begin{equation}\label{ODEa4_eq7}
+5\qty(\frac{\dd y}{\dd x})^2+5x\frac{\dd y}{\dd x}+x^2=y
+\end{equation}
+令$v=\dd y/\dd x$，两边对$x$求导，则原方程化为
+\begin{equation}\label{ODEa4_eq8}
+10v\frac{\dd v}{\dd x}+5v+5x\frac{\dd v}{\dd x}+2x=v
+\end{equation}
+整理得
+\begin{equation}\label{ODEa4_eq4}
+10v\frac{\dd v}{\dd x}+5x\frac{\dd v}{\dd x}+4v+2x=0
+\end{equation}
+
+\autoref{ODEa4_eq4} 还可以进一步整理为
+\begin{equation}
+(\frac{5}{2}\frac{\dd v}{\dd x}+1)(4v+2x)=0
+\end{equation}
+
+由$\frac{5}{2}\frac{\dd v}{\dd x}+1=0$得通解
+\begin{equation}\label{ODEa4_eq9}
+v=-\frac{2}{5}x+C
+\end{equation}
+代入$v=\dd y/\dd x$和\autoref{ODEa4_eq7} 就得到原方程的\textbf{第一个通解}
+\begin{equation}\label{ODEa4_eq5}
+y=-\frac{1}{5}x^2+C_1x+5C_1^2
+\end{equation}
+其中$C_1$是积分常数．
+
+但这个方程\textbf{还有一个特解}：取$4v+2x=0$，再代入$v=\dd y/\dd x$和\autoref{ODEa4_eq7} ，得到
+\begin{equation}\label{ODEa4_eq6}
+y=-\frac{1}{4}x^2
+\end{equation}
+
+因此，\autoref{ODEa4_eq5} 和\autoref{ODEa4_eq6} 都是\autoref{ODEa4_eq7} 的通解．
+
+% 出题的思路草稿
+% % $(A\frac{\dd v}{\dd x}+B)(Cv+Dx)=(ACv\frac{\dd v}{\dd x}+ADx\frac{\dd v}{\dd x}+BCv+BDx)$
+
+% % \begin{equation}
+% % \leftgroup{
+% %     AC=10\\
+% %     AD=5\\
+% %     BC=4\\
+% %     BD=2\\
+% % }
+% % \end{equation}
+
+% % $\frac{2X}{Y}=\frac{Y-1}{2}$
+% 此处$X, Y$是原方程前两个的系数，$2X/Y=AC/AD=BC/BD=(Y-q)/2$
+
+\end{example}
+
+\autoref{ODEa4_ex1} 较为复杂，我们在这里做一点补充．
+
+整个\autoref{ODEa4_ex1} 的求解思路，是首先作变量代换，去解\autoref{ODEa4_eq8} ，其结果就是\autoref{ODEa4_eq9} 和$4p+2=0$．但这是\autoref{ODEa4_eq8} 的解，由于求导会把一些常数项消掉，\autoref{ODEa4_eq8} 的解会比变量代换前的\autoref{ODEa4_eq7} 多一些，我们还是得代回\autoref{ODEa4_eq7} 看看该怎么约束．
+
+实际上在解答过程中，\autoref{ODEa4_eq5} 是先写为$y=-\frac{1}{5}x^2+C_1x+C_2$的，有两个待定常数．这是\autoref{ODEa4_eq8} 的解．我们把它代回\autoref{ODEa4_eq7} ，计算后发现$C_2=5C_1^2$，因此最终写成了\autoref{ODEa4_eq5} 的形式．
+
+如果把\autoref{ODEa4_eq5} 和\autoref{ODEa4_eq6} 的图像画出来，我们会发现，\autoref{ODEa4_eq6} 内切于每一条\autoref{ODEa4_eq5} 
+．\autoref{ODEa4_eq6} 被称为一个\textbf{奇解}，其图像也被称为\textbf{包络线}．
+\addTODO{引用包络线、奇解等相关词条．}
+
+\subsection{第二种}
+
+第二个是形如
+\begin{equation}\label{ODEa4_eq10}
+x=f(y, \frac{\dd y}{\dd x})
+\end{equation}
+的方程．
+
+同样令$v=\frac{\dd y}{\dd x}$，代入\autoref{ODEa4_eq10} 并两边同时对$y$求导，得到
+\begin{equation}
+\frac{1}{v}=\frac{\partial f}{\partial y}+\frac{\partial f}{\partial v}\frac{\dd v}{\dd y}
+\end{equation}
+
+整理一下得
+\begin{equation}
+\frac{\partial f}{\partial v}\dd v +\qty(\frac{\partial f}{\partial y}-\frac{1}{v})\dd y=0
+\end{equation}
+
+我们就可以尝试用之前的办法来解．
+
+\begin{example}{}
+
+\end{example}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

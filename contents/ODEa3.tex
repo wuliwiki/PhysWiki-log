@@ -1,0 +1,209 @@
+% 一阶常微分方程解法：恰当方程
+% 恰当方程|微分方程|ODE|ordinary differential equation|exact equation|积分因子|integration factor
+
+\pentry{常微分方程简介\upref{ODEint}}
+
+\subsection{恰当方程的概念}
+
+考虑一个二元函数$u(x, y)$，其全导数为
+\begin{equation}
+\dd u=\frac{\partial u}{\partial x}\dd x+\frac{\partial u}{\partial y}\dd y
+\end{equation}
+
+由多元微积分知识可知，$\frac{\partial^2 u}{\partial x\partial y}=\frac{\partial^2 u}{\partial y\partial x}$．因此，如果一个形如
+\begin{equation}\label{ODEa3_eq1}
+M(x, y)\dd x+N(x, y)\dd y=0
+\end{equation}
+的常微分方程满足
+\begin{equation}\label{ODEa3_eq2}
+\frac{\partial M}{\partial y}=\frac{\partial N}{\partial x}
+\end{equation}
+那么就可以存在一个$u(x, y)$，使得$M=\partial u/\partial x$和$N=\partial u/\partial y$．
+
+这样一来，\autoref{ODEa3_eq1} 就相当于
+\begin{equation}
+\dd u=0
+\end{equation}
+其解就是$u=C$，$C$为积分常数．
+
+也就是说，对于这样的方程，我们只需要求出$u$就能求解．
+
+\begin{definition}{恰当方程}
+将形如\autoref{ODEa3_eq1} 且满足\autoref{ODEa3_eq2} 的方程，称为\textbf{恰当方程（exact equation）}．
+\end{definition}
+
+我们研究一个例子，看看恰当方程是怎么解的．
+
+\begin{example}{}\label{ODEa3_ex1}
+考虑方程$\frac{\dd y}{\dd x}=\frac{y}{3y^2-x}$．
+
+移项后得到$y\dd x+(x-3y^2)\dd y=0$．
+
+记$M=y$，$N=x-3y^2$，则容易验证$\partial M/\partial y= 1 =\partial N/\partial x$，因此这是一个恰当方程．
+
+我们希望找出一个$u$，使得$\partial u/\partial x=M$且$\partial u/\partial y=N$．
+
+先用$M$关于$\dd x$积分，因为这样积分出来的结果再对$x$求偏微分就能得到$M$：
+\begin{equation}\label{ODEa3_eq3}
+u=\int M\dd x=\int y\dd x=xy+C_1(y)
+\end{equation}
+其中$C_1(y)$是一个关于$x$的常数——它完全可以是一个关于$y$的非常数函数，在对$x$求偏微分的时候不影响结果．
+
+再用$N$关于$\dd y$积分，得到
+\begin{equation}\label{ODEa3_eq4}
+u=\int N\dd y=\int (x-3y^2)\dd y=xy-y^3+C_2(x)
+\end{equation}
+同样，$C_2(x)$是一个关于$y$的常数，它最多只和自变量$x$有关．
+
+比较\autoref{ODEa3_eq3} 和\autoref{ODEa3_eq4} ，可见$C_1(y)=C_2(x)-y^3$，因此$C_2(x)$必须是一个和$x$也无关的常数，记为$C$，进而有$C_1(y)=C-y^3$．
+
+代回\autoref{ODEa3_eq3} 或\autoref{ODEa3_eq4} ，得
+\begin{equation}
+u=xy-y^3+C
+\end{equation}
+
+于是方程的解就是$xy-y^3=K$，其中$K$为积分常数．
+
+当$K\not=0$时，还可以写成$x-y^2=K$．
+
+\end{example}
+
+
+\subsection{积分因子}
+
+如果给定的方程是恰当的，那按照\autoref{ODEa3_ex1} 的步骤就能很容易解出来．然而我们实际上遇到的方程往往乍一看不是恰当方程．不过，很多时候我们可以将一个非恰当方程转化为恰当方程，最常用的就是积分因子法．
+
+\begin{definition}{积分因子}
+对于\textbf{非恰当}常微分方程$M(x, y)\dd x+N(x, y)\dd y=0$，如果存在一个函数$f(x, y)$，使得
+\begin{equation}\label{ODEa3_eq5}
+f(x, y)M(x, y)\dd x+f(x, y)N(x, y)\dd y=0
+\end{equation}
+是一个恰当方程，那么称$f(x, y)$是原方程的一个\textbf{积分因子（integration factor）}．
+\end{definition}
+
+既然\autoref{ODEa3_eq5} 是一个恰当方程，那就有
+\begin{equation}
+\frac{\partial (fM)}{\partial y}=\frac{\partial (fN)}{\partial x}
+\end{equation}
+展开后有
+\begin{equation}\label{ODEa3_eq6}
+f\qty(\frac{\partial M}{\partial y}-\frac{\partial N}{\partial x})=N\frac{\partial f}{\partial x}-M\frac{\partial f}{\partial y}
+\end{equation}
+
+\autoref{ODEa3_eq6} 是一个关于未知函数$f$的\textbf{偏微分方程}．虽然如果求出$f$，我们就能得到一个恰当方程，快速解出原方程，但一般情况下$f$的求解比原方程还难．
+
+不过，在一些特殊情况下，我们确实是可以更容易地求出积分因子的．
+
+最常见的一种情况，是限定$f$是一个一元函数，从而将\autoref{ODEa3_eq6} 变成常微分方程．
+
+\subsubsection{一元积分因子}
+
+设$M(x, y)\dd x+N(x, y)\dd y=0$不是恰当方程，而$f(x)$是它的一个积分因子．由于$\partial f/\partial y=0$，\autoref{ODEa3_eq6} 就化为
+\begin{equation}
+\frac{\partial M}{\partial y}-\frac{\partial N}{\partial x}=\frac{N}{f}\frac{\dd f}{\dd x}
+\end{equation}
+其中左边是已知函数．这是一个变量可分离方程，移项后可得
+\begin{equation}
+\frac{\frac{\partial M}{\partial y}-\frac{\partial N}{\partial x}}{N}\dd x=\frac{1}{f}\dd f
+\end{equation}
+
+故
+\begin{equation}\label{ODEa3_eq7}
+f=\pm \exp(\int \frac{\frac{\partial M}{\partial y}-\frac{\partial N}{\partial x}}{N}\dd x)
+\end{equation}
+
+观察\autoref{ODEa3_eq7} 式可知，$M(x, y)\dd x+N(x, y)\dd y=0$有一个自变量只有$x$的积分因子$f(x)$的充要条件是，$\frac{\frac{\partial M}{\partial y}-\frac{\partial N}{\partial x}}{N}$是一个和$y$无关的函数．
+
+类似地，$M(x, y)\dd x+N(x, y)\dd y=0$有一个自变量只有$y$的积分因子$f(y)$的充要条件是，$\frac{\frac{\partial N}{\partial x}-\frac{\partial M}{\partial y}}{M}$是一个和$x$无关的函数．
+
+\begin{example}{}
+考虑方程$xy^2\dd x+xy\dd y=0$．令$M=xy^2$，$N=xy$，可知$\frac{\partial M}{\partial y}-\frac{\partial N}{\partial x}=2xy-y\not=0$，故它是非恰当的．
+
+但是，$\frac{\frac{\partial M}{\partial y}-\frac{\partial N}{\partial x}}{N}=\frac{2xy-y}{xy}=2-\frac{1}{x}$只有$x$一个自变量，因此我们可以求积分因子$f(x)$\footnote{接下来的计算中我们没有加入正负号、积分常数和自然对数的绝对值符号，这是因为只要找出一个积分因子就够了，不必兼顾全面性．}：
+\begin{equation}
+\begin{aligned}
+f&=\exp(\int \frac{\frac{\partial M}{\partial y}-\frac{\partial N}{\partial x}}{N}\dd x)\\
+&=\exp(\int(2-\frac{1}{x})\dd x)\\
+&=\exp(2x-\ln x)\\
+&=\frac{\E^{2x}}{x}
+\end{aligned}
+\end{equation}
+
+把$f$乘到原方程里，得到
+\begin{equation}\label{ODEa3_eq8}
+y^2\E^{2x}\dd x+y\E^{2x}\dd y=0
+\end{equation}
+
+\autoref{ODEa3_eq8} 就是一个恰当方程．仿照\autoref{ODEa3_ex1} 的方法，求出
+\begin{equation}
+u=\frac{1}{2}y^2\E^{2x}
+\end{equation}
+
+因此，原方程的解就是
+\begin{equation}
+\frac{1}{2}y^2\E^{2x}=C
+\end{equation}
+
+
+
+\end{example}
+
+
+
+
+
+\begin{example}{}
+在\textbf{一阶常微分方程解法：常数变易法}\upref{ODEa2}词条中，我们讨论了方程
+\begin{equation}
+\frac{\dd y}{\dd x}=P(x)y+Q(x)
+\end{equation}
+其中$P$和$Q$都是所考虑区间上的连续函数．
+
+现在，我们尝试用积分因子法解这个方程．
+
+首先把方程改写为
+\begin{equation}\label{ODEa3_eq9}
+(P(x)y+Q(x))\dd x-\dd y=0
+\end{equation}
+
+而
+\begin{equation}
+\frac{\frac{\partial (P(x)y+Q(x))}{\partial y}+\frac{\partial 1}{\partial y}}{1}=-P(x)
+\end{equation}
+
+因此\autoref{ODEa3_eq9} 有积分因子$f(x)=\E^{-\int P(x)\dd x}
+$．
+
+将\autoref{ODEa3_eq9} 改写为
+\begin{equation}\label{ODEa3_eq10}
+\E^{-\int P(x)\dd x}(P(x)y+Q(x))\dd x-\E^{-\int P(x)\dd x}\dd y=0
+\end{equation}
+
+对\autoref{ODEa3_eq10} 左边两项求积分，比较后得
+
+\begin{equation}
+u(x, y)=-y\E^{-\int P(x)\dd x}+\int  \E^{-\int P(x)\dd x}Q(x)  \dd x
+\end{equation}
+
+故通解为
+\begin{equation}
+-y\E^{-\int P(x)\dd x}+\int  \E^{-\int P(x)\dd x}Q(x)  \dd x=C
+\end{equation}
+
+这和\textbf{一阶常微分方程解法：常数变易法}词条中\autoref{ODEa2_eq2}~\upref{ODEa2}的结论是一样的．
+
+\end{example}
+
+
+
+
+
+
+
+
+
+
+
+
+
+

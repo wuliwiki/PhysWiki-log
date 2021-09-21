@@ -4,121 +4,136 @@
 
 在分析数学中，拉普拉斯方法是一种计算含参数积分的渐近展开式的办法． 所考察的积分一般具有如下形式：
 \begin{equation}\label{LapAsm_eq1}
-I(t)=\int_a^b \phi(x)\E^{t f(x)}dx,
+L(s)=\int_a^b\psi(x)\E^{-s\Phi(x)}\,\dd x
 \end{equation}
-其中 $\lambda$ 是正的实参数． 要考察当 $t\to+\infty$ 时积分的行为． 拉普拉斯方法背后的想法很简单： 如果函数 $f$ 在某点处达到极大值， 那么当 $t$ 很大时， 只有极大值点附近的贡献才比较可观， 其余部分相比起来都要小得多．
+其中 $s$ 是正的实参数． 要考察当 $s\to+\infty$ 时积分的变化趋势． 拉普拉斯方法背后的想法很简单： 如果函数 $\Phi$ 在某点处达到极大值， 那么当 $s$ 很大时， 只有极大值点附近的贡献才比较可观， 其余部分相比起来都要小得多．
 
 \subsection{Watson 引理}
 拉普拉斯方法基于 Watson 引理． 它本身也是很有用的．
 
 \begin{lemma}{Watson 引理}
-设 $\alpha>0$， 函数 $\phi(x)$ 在区间 $[0,b]$ 上连续， 而且 $x\to0$ 时有渐近展开
-$$
-\phi(x)\simeq c_0+c_1x+c_2x^2+...
-$$
-则当 $t\to+\infty$ 时， 含参数的积分
-$$
-I(t)=\int_0^b \phi(x)\E^{-t x^\alpha}dx
-$$
-有渐近展开式
-$$
-I(t)\simeq\sum_{n=0}^\infty \frac{c_n}{\alpha}\Gamma\left(\frac{n+1}{\alpha}\right)t^{-(n+1)/\alpha}.
-$$
+
+设函数$\phi:X\to Y$在$\mathbb{R}^+$上连续，序列$\left\{\lambda_n\right\}_0^\infty\left(\lambda_n>0\right)$单调递增，且存在$\delta$邻域$B_{+}(0,\delta)\;(0<\delta<\pi/2)$，使得
+\begin{equation}\label{LapAsm_eq2}
+  \phi\left(t\right)\sim\sum_{n=0}^{\infty}{c_nt^{\lambda_n-1}}
+\end{equation}
+
+若有常数$K>0$，满足$\phi\left(t\right)=O\left(\E^{Kt}\right),t\to+\infty$，则当$s\to+\infty,z\in{\left\{z:\left|\arg{z}\right|\le\pi/2-\delta\right\}}$时，有
+\begin{equation}\label{LapAsm_eq3}
+\int_{\mathbb{R}^+}\E^{-zt}\phi(t)\dd t\sim\sum_{n=0}^{\infty}{c_n}\frac{\Gamma(\lambda_n)}{z^{\lambda_n}}  
+\end{equation}
 \end{lemma}
 
-证明是直接的计算． 固定一个 $n$． 按照渐近展开的定义， 存在 $\delta>0$ 使得 $0\leq x<\delta$ 时 $\phi(x)-(c_0+...+c_nx^n)=O(x^{n+1})$． 远离 $0$ 的 $x$ 对积分的贡献是可以忽略的：
-$$
-\left|\int_\delta^b\phi(x)\E^{-tx^\alpha}dx\right|
-\leq\max_{x\in[0,b]}|\phi(x)|\E^{-t\delta^\alpha}.
-$$
-而在区间 $[0,\delta]$ 上， 通过换元可得
-$$
-\begin{aligned}
-\int_0^\delta x^k\E^{-tx^\alpha}dx
-&=\frac{t^{-(k+1)/\alpha}}{\alpha}\int_0^{t\delta^\alpha}y^{-(k+1)/\alpha-1}\E^{-y}dy\\
-&=\frac{t^{-(k+1)/\alpha}}{\alpha}\Gamma\left(\frac{k+1}{\alpha}\right)+O(\E^{-t\delta^\alpha/2}).
-\end{aligned}
-$$
-于是就有
-$$
-\begin{aligned}
-I(t)
-&=\int_0^\delta\phi(x)\E^{-tx^\alpha}dx+O(\E^{-t\delta^\alpha})\\
-&=\sum_{k=0}^n\frac{c_n}{\alpha}\Gamma\left(\frac{k+1}{\alpha}\right)t^{-(k+1)/\alpha}+O(t^{-(n+2)/\alpha}).
-\end{aligned}
-$$
+证：
+由Laplace的理论可知, 
+\[
+F\left(z\right)=\int_{\mathbb{R}^+}{e^{-zt}\phi\left(t\right)}\,\dd t
+\]
+若函数$\phi$满足定理中提到的三个条件，则$F(z)$变换对于$\operatorname{Re} z>c$是存在的．即：当$\operatorname{Re} z>c$时，积分收敛．注意 \autoref{LapAsm_eq2} 意味着存在正整数$N$，当$n>N$时，对一切的$t\in B_{+}(0,\delta)$，总有
+\[
+  \left|\phi\left(t\right)-\sum_{n=0}^{N-1}{c_nt^{\lambda_n-1}}\right|\le Mt^{\lambda_N-1}
+\]
+其中$M>0$且为常数.同时 \autoref{LapAsm_eq3} 表明当时，存在正整数$N$，当$n>N$时，对一切的$t\in B_{+}(0,\delta)$，总有
+\[
+\left|\phi\left(t\right)-\sum_{n=0}^{N-1}{c_nt^{\lambda_n-1}}\right|\le Ke^{ct}t^{\lambda_N-1}
+\]
+其中$K>0$且为常数．于是就有
+\[
+\left|\int_{\mathbb{R}^+}{e^{-zt}\phi\left(t\right)}\,\dd t-\sum_{n=0}^{N-1}{c_n\int_{\mathbb{R}^+}{e^{-zt}t^{\lambda_n-1}}\,\dd t}\right|
+\le K\int_{\mathbb{R}^+}\E^{[-\operatorname{Re}z-c]t}t^{\lambda_N-1}\,\dd t
+\]
+注意到当$\operatorname{Re}z>0$时
+\[
+\int_{\mathbb{R}^+}{e^{-zt}t^{\lambda_n-1}}\,\dd t
+=\frac{1}{z^{\lambda_n}}\int_{\mathbb{R}^+}{e^{-u}u^{\lambda_n-1}}\,\dd u
+=\frac{\Gamma\left(\lambda_n\right)}{z^{\lambda_n}}
+\]
+因此
+\[
+\left|F(z)-\sum_{n=0}^{N-1}{c_n\frac{\Gamma\left(\lambda_n\right)}{z^{\lambda_n}}}\right|\le K {\Gamma(\lambda_{N})\over \operatorname{[Re}z-c]^{\lambda_N}}
+=K{\Gamma(\lambda_{N})\over |z|^{\lambda_N}}\left(|z|\over \operatorname{Re}z-c\right)^{\lambda_N}
+\]
+由于$z\in{\left\{z:\left|\arg{z}\right|\le\pi/2-\delta\right\}}$，于是$\operatorname{Re} z\geq 1/2|z|\sin \delta$．这表明当$\left|z\right|$足够大时，$\operatorname{Re}z-c\geqslant1/2 z\sin \delta$．因此
+\[
+F\left(z\right)-\sum_{n=0}^{N-1}{c_n\frac{\Gamma\left(\lambda_n\right)}{z^{\lambda_n}}}=O\left(z^{-\lambda_N}\right)
+\]
+这就证明了Watson's 引理．
+
 这就是所求的结果．
 
 \subsection{拉普拉斯方法}
 拉普拉斯方法是将 Watson 引理用于\autoref{LapAsm_eq1} 得到的． 作出如下假设：
 
 \begin{enumerate}
-\item 函数 $f,\phi$ 都是光滑函数．
+\item 函数 $\Phi,\psi:X\to Y$ 都是光滑函数．
 
-\item 函数 $f(x)$ 在积分区间内部仅有一个严格的极大值点 $x_0\in(a,b)$， 而且 $x_0$ 是整个区间上的最大值点．
+\item 函数 $\Phi(x)$ 在积分区间$I=[a,b]$内部仅有一个严格的极小值点 $x_0\in(a,b)$，同时$\Phi''(x_0)>0$， 且 $x_0$ 是整个区间上的最小值点．
 
-\item \autoref{LapAsm_eq1} 对于 $t=t_0$ 绝对收敛．
+\item \autoref{LapAsm_eq1} 对于 $s=s_0$ 绝对收敛．
 \end{enumerate}
 
-于是 $f'(x_0)=0$． 不妨设 $f''(x_0)<0$． 从泰勒公式知道， 有一 $\delta>0$ 使得在区间 $(x_0-\delta,x_0+\delta)$ 上， 
-$$
-f(x)=f(x_0)+\frac{1}{2}f''(x_0)(x-x_0)^2+(x-x_0)^3h(x),
-$$
-其中函数 $h$ 有界． 当 $t$ 很大时， 区间 $(x_0-\delta,x_0+\delta)$ 之外的积分的贡献比 $t$ 的任何负幂衰减得都快：根据假定 2，当 $|x-x_0|>\delta$ 时有一 $c>0$ 使得 $f(x)<f(x_0)-c$， 从而区间 $(x_0-\delta,x_0+\delta)$ 之外的积分估计为
+于是 $\Phi'(x_0)=0$． 由泰勒公式可知， 存在正数 $\delta>0$ ，使得对于任意的 $x\in B(x_0,\delta)$  
+\[
+  \Phi(x)=\Phi(x_0)+\frac{1}{2}\Phi''(x_0)(x-x_0)^2+\varphi(x)(x-x_0)^3
+\]
+
+其中函数 $\varphi$ 有界． 当 $s$ 充分大时， 邻域 $B(x_0,\delta)$ 以外的积分的贡献比 $s$ 的任何负幂次衰减得都快：根据假定 2，当 $x\in I\setminus B(x_0,\delta)$ 时, 存在正数 $\varepsilon_0>0$ 使得 $f(x)<f(x_0)-\varepsilon_0$， 从而邻域 $B(x_0,\delta)$ 之外的积分估计为
+\[
+  \left|\int_{I\setminus B(x_0,\delta)}\psi(x)\E^{-s\Phi(x)}\,\dd x\right|
+  \leq \E^{-\epsilon_0(s-s_0)}\int_I|\psi(x)|\E^{-s_0\Phi(x)}\,\dd x
+  =O(\E^{-\varepsilon_0s})
+\]
+而在邻域 $B(x_0,\delta)$ 内， 可作如下换元： $y^2=\Phi(x)-\Phi(x_0)$， 即
+\[
+  y=\sqrt{\frac{\Phi''(x_0)}{2}}(x-x_0)\left(1+\frac{2}{\Phi''(x_0)}(x-x_0)\varphi(x)\right)^{1/2}.
+\]
+令 $\alpha<\beta$分别等于$\pm\sqrt{\Phi(x_0\pm\delta)-\Phi(x_0)}$， 又设当$y\to0$时，函数$\tilde{\psi}$有泰勒展开
+\begin{equation}\label{LapAsm_eq4}
+\tilde{\psi}(y):=\psi(x(y))\frac{\dd}{\dd x}[x(y)]\sim c_0+c_1y+\cdots \quad 
+\end{equation}
+（这里显然有 $c_0=\psi(x_0)\sqrt{2/\Phi''(x_0)}$）， 则当$s\to+\infty$
 $$
 \begin{aligned}
-\left|\int_{|x-x_0|>\delta}\phi(x)\E^{tf(x)}dx\right|
-&\leq \E^{-c(t-t_0)}\int_a^b|\phi(x)|\E^{t_0f(x)}dx\\
-&=O(\E^{-ct}).
+\int_{B(x_0,\delta)}\psi(x)\E^{-s\Phi(x)}\,\dd x
+&=\E^{-s\Phi(x_0)}\int_{\alpha}^{\beta}\tilde \psi(y)\E^{-sy^2}\,\dd y\\
+&\sim\E^{-s\Phi(x_0)}\int_{0}^{\varepsilon_0}[\tilde \psi(y)+\tilde \psi(-y)]\E^{-sy^2}\,\dd y
 \end{aligned}
 $$
-而在区间 $(x_0-\delta,x_0+\delta)$ 上， 可作如下换元： $y^2=f(x_0)-f(x)$， 即
-$$
-y=\sqrt{\frac{-f''(x_0)}{2}}(x-x_0)\left(1-\frac{2}{f''(x_0)}(x-x_0)h(x)\right)^{1/2}.
-$$
-命 $\beta_{\pm}=\pm\sqrt{f(x_0)-f(x_0\pm\delta)}$， 又设有泰勒展开
-\begin{equation}\label{LapAsm_eq2}
-\psi(y):=\phi(x(y))x'(y)\simeq c_0+c_1y+...,y\to 0
+应用 Watson 引理， 最后终于得到\autoref{LapAsm_eq1} 当$s\to+\infty$时的渐近展开：
+\begin{equation}\label{LapAsm_eq5}
+  L(s)\sim \E^{-s\Phi(x_0)}\sum_{n=0}^\infty c_{2n}\Gamma\left(n+\frac{1}{2}\right)s^{-n-1/2}
 \end{equation}
-（这里显然有 $c_0=\phi(x_0)\sqrt{-2/f''(x_0)}$）， 则
-$$
-\begin{aligned}
-\int_{x_0-\delta}^{x_0+\delta}\phi(x)\E^{tf(x)}dx
-&=\E^{tf(x_0)}\int_{\beta_{-}}^{\beta_+}\psi(y)\E^{-ty^2}dy\\
-&\simeq\E^{tf(x_0)}\int_{0}^{c}[\psi(y)+\psi(-y)]\E^{-ty^2}dy.
-\end{aligned}
-$$
-应用 Watson 引理， 最后终于得到\autoref{LapAsm_eq1} 的渐近展开：
-\begin{equation}\label{LapAsm_eq3}
-I(t)\simeq \E^{tf(x_0)}\sum_{n=0}^\infty c_{2n}\Gamma\left(n+\frac{1}{2}\right)t^{-n-1/2},
-\end{equation}
-其中 $c_n$ 由\autoref{LapAsm_eq2} 给出． 特别地， 由于 $\Gamma(1/2)=\sqrt{\pi}$， \autoref{LapAsm_eq1} 渐近公式的首项是
-$$
-I(t)=\E^{tf(x_0)}\left(\phi(x_0)\sqrt{-\frac{2\pi}{tf''(x_0)}}+O(t^{-3/2})\right).
-$$
+其中 $c_n$ 由\autoref{LapAsm_eq4} 给出． 特别地， 由于 $\Gamma(1/2)=\sqrt{\pi}$， \autoref{LapAsm_eq1} 渐近公式的首项是
+\[
+L(s)=\E^{-s\Phi(x_0)}\left(As^{-1/2}+O(s^{-1/2})\right)\quad s\to+\infty
+\]
+其中
+\[
+  A=\sqrt{2\pi}\frac{\psi(x_0)}{(\Phi''(x_0))^{1/2}}
+\]
 
 \subsection{斯特林公式}
 拉普拉斯方法最基本的应用就是导出 $\Gamma$ 函数的\textbf{斯特林公式（Stirling formula）}． 按照定义，
-$$
-\Gamma(t+1)
-=\int_0^\infty \E^{-x}x^tdx
-=t^{t+1}\int_0^\infty \E^{-t(x-\log x)}dx.
-$$
-最后一步用到换元 $x\to tx$． 最后这个积分刚好符合上一小节所要求的三条假设：这里 $\phi(x)\equiv1$，$f(x)=-(x-\log x)$． 于是 $x=1$ 是 $f(x)$ 唯一的极大值点，同时也是唯一的最大值点．代入\autoref{LapAsm_eq3}， 就得到渐近公式
-$$
-\Gamma(t+1)\simeq\sqrt{2\pi t}\left(\frac{t}{\E}\right)^t.
-$$
-\autoref{LapAsm_eq3} 还给出了更精细的渐近级数：
-$$
-  \Gamma(t+1)
-  =\sqrt{2\pi t}\left({t\over \E}\right)^t
+\[
+  \Gamma(s+1)
+  =\int_0^\infty x^s\E^{-x}\,\dd x
+  =e^{(s+1)\log s}\int_0^\infty \E^{-s(x-\log x)}\,\dd x.
+\]
+最后一步换元 $x\mapsto sx$． 最后这个积分刚好符合上一小节所要求的三条假设：这里 $\psi(x)\equiv1$，$\Phi(x)=x-\log x$．于是 $x=1$ 是 $\Phi(x)$ 唯一的极小值点，同时也是唯一的最小值点．代入\autoref{LapAsm_eq5}， 就得到渐近公式
+\[
+  \Gamma(s+1)\sim\sqrt{2\pi s}\left(\frac{s}{\E}\right)^s\quad s\to+\infty
+\]
+\autoref{LapAsm_eq5} 还给出了更精细的渐近级数：
+\[
+  \Gamma(s+1)
+  =\sqrt{2\pi s}\left({s\over \E}\right)^s
   \left(
    1
-   +{1\over12t}
-   +{1\over288t^2}
-   -{139\over51840t^3}
-   -{571\over2488320t^4}
+   +{1\over12s}
+   +{1\over288 s^2}
+   -{139\over51840 s^3}
+   -{571\over2488320 s^4}
    + \cdots
-  \right).
-$$
+  \right)\quad s\to+\infty
+\]
 毫无疑问这是一个可以对大的 $n$ 来近似计算 $n!$ 的公式．

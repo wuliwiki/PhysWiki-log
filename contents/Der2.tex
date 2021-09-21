@@ -1,0 +1,171 @@
+% 导数（数学分析）
+% derivative|微分|differential|斜率|切线|导函数|函数|function|微积分|calculus|数学分析
+
+\pentry{极限\upref{Lim}}
+
+
+
+切线的几何描述并不严谨和完整，初学者可能会有很多疑问，比如割线的两个点靠近切点的时候，如果其中一个点到切点的距离始终是另一个点到切点距离的两倍，那它们还算同时达到切点吗？
+
+实际上，在\textbf{极限}\upref{Lim}中我们强调过，极限的概念并不是简单地等同，而是趋近的性质．用割线去接近切线也是一种极限，不存在“达到切点”的情况，只能是越来越接近切点．
+
+和其它类型的极限一样，割线趋近的过程强调“任意性”．为了方便描述，我们需要把一根切线表示为数字．最直接的办法就是用切线的斜率来表示．
+
+\begin{definition}{斜率}
+对于用$f(x)=ax+b$描述的直线，定义其斜率为$a$．
+\end{definition}
+
+由于我们给定了切点，因此割线接近切线的过程中，肯定也会接近切点，相当于确定了割线的极限是要经过切点的，于是我们只需要考察割线的斜率是不是收敛就行．由于斜率是一个数字，这就使得我们又获得了一个数列，而我们对于数列的极限是很熟悉的了．
+
+\begin{definition}{导数}\label{Der2_def1}
+考虑实函数$f(x)$，给定实数$x_0$．对于\textbf{一对}数列$\{a_n\}$、$\{b_n\}$，令$\lim\limits_{n\to\infty}a_n=x_0$、$\lim\limits_{n\to\infty}b_n=x_0$，且各$a_n\not=b_n$\footnote{这一条是保证总能画出割线，因为两点确定一条直线嘛，$a_n=b_n$的话这条割线就画不出来了．}．这样，每一对点$(a_n, f(a_n))$、$ (b_n, f(b_n))$都能唯一确定一条割线，也就确定了割线的斜率$d_n$．
+
+对于\textbf{任意}的上述数列对$\{a_n\}$、$\{b_n\}$，如果其生成的$d_n$都收敛到同一个实数$A$上，那么该实数$A$就是$f(x)$在$x_0$处的\textbf{切线斜率}，也称\textbf{导数（derivative）}．
+\end{definition}
+
+我们来看几个例子，加深理解．
+
+\begin{example}{}
+考虑函数$f(x)=2x+1$．容易验证，无论怎么选一对数列，它们生成的割线斜率都是$2$．因此由定义，$f(x)$在任何一个点处的导数值都是$2$．
+\end{example}
+
+\begin{example}{}\label{Der2_ex1}
+考虑函数$f(x)=x^2$，尝试计算其在$x=2$处的导数值\footnote{$x=2$处即点$(2, 4)$．也可以说$y=4$且$x>0$处，但肯定是$x=2$处的说法更方便．}．
+
+取数列$a_n=2+g_n$和$b_n=2+h_n$，其中$g_n$和$h_n$都趋近于$0$，且各$g_n\not=h_n$．那么$a_n$和$b_n$所确定的割线就通过点$(2+g_n, 4+4g_n+g_n^2)$和点$(2+h_n, 4+4h_n+h_n^2)$，因此割线斜率是
+\begin{equation}
+\begin{aligned}
+d_n&=\frac{4+4g_n+g_n^2-4-4h_n-h_n^2}{g_n-h_n}\\
+&=\frac{4(g_n-h_n)+(g_n+h_n)(g_n-h_n)}{g_n-h_n}\\
+&=4+g_n+h_n
+\end{aligned}
+\end{equation}
+由于随着$n$的增大，$g_n$和$h_n$都趋于零，因此$d_n$趋于$4$．
+
+又由于我们没有具体约束$g_n$和$h_n$，使得上述讨论适用于一切可用于构造趋近于给定点割线的数列$a_n$和$b_n$，因此满足\textbf{任意}性，因此$f(x)=x^2$在$x=2$处的导数值就是$4$．
+\end{example}
+
+\begin{exercise}{}
+考虑函数$f(x)=\abs{x}$，画出这个函数的图像，并证明其在$x=0$处没有导数．
+\end{exercise}
+
+\begin{exercise}{}\label{Der2_exe1}
+考虑函数$f(x)=[x]$，定义为$[x]$是小于等于$x$的、最接近$x$的整数．比如，$[\pi]=3$，$[e]=2$，$[4.99]=4$， $[-4.99]=-5$．
+
+画出这个函数的图像，并证明其在横坐标为整数的点处没有导数．
+\end{exercise}
+
+
+
+
+
+
+
+
+\subsection{导函数及其计算}
+
+我们上面讨论的是对于函数$f(x)$，在给定点求其导数．但是如果我们把所有点的导数都求出来（“不存在导数”也是一种结果），那么我们就得到了一个新的函数，就叫做$f(x)$的\textbf{导函数}，记为$f'(x)$．
+
+如果我们能把导函数的表达式计算出来，那么就可以直接代值去计算各处的导数，没必要挨个像\autoref{Der2_ex1} 那样进行一番冗长的运算了．
+
+% 为了实现这个目的，我们要先研究一番几个基本的函数．
+
+% \begin{example}{多项式函数的导数}
+% 多项式是形如$f(x)=a_0+a_1x+a_2x^2+\cdots+a_nx^n$的函数．为了计算其导函数，我们首先要考虑最简单的多项式，$x^n$．
+
+% 对于任意实数$x_0$，取数列$a_n=x_0+g_n$和$b_n=x_0+h_n$，其中$g_n$和$h_n$都趋近于$0$，且各$g_n\not=h_n$．那么$a_n$和$b_n$分别确定点$(x_0+g_n, (x_0+g_n)^n)$和$(x_0+h_n, ((x_0+h_n)^n)$，割线斜率也就是$d_n=\frac{(x_0+g_n)^n-(x_0+h_n)^n}{g_n-h_n}$．
+
+% 应用二项式定理$(a+b)^n=a^n+b^n+$
+% \end{example}
+
+为了方便计算，我们要先把导数的定义简化成如下形式：
+
+\begin{definition}{导数}\label{Der2_def2}
+考虑实函数$f(x)$，给定实数$x_0$．如果对于任意趋近于$x_0$的数列$x_n$，都有数列$\frac{f(x_n)-f(x_0)}{x_n-x_0}$收敛，且所有这样的数列都收敛于实数$A$．那么$A$就是$f(x)$在$x_0$处的\textbf{导数}．
+
+换句话说，$f(x)$在$x_0$处的导数是$\lim\limits_{h\to 0}\frac{f(x_0+h)-f(x_0)}{h}$．
+\end{definition}
+
+\begin{exercise}{两个定义的等价性}
+证明\autoref{Der2_def1} 和\autoref{Der2_def2} 是等价的．
+
+提示：\autoref{Der2_def1} 显然是蕴含了\autoref{Der2_def2} 的，因为前者描述的是“所有数列对”的情况，后者则是限定了其中一个数列恒为$x_0$的特殊情况．所以你只需要证明\autoref{Der2_def2} 蕴含了\autoref{Der2_def1} ．提示：单独用$a_n$和$b_n$套进\autoref{Der2_def2} 中$x_n$的位置能得到两条割线，而$a_n$和$b_n$在\autoref{Der2_def1} 中又构成第三条割线．这三条割线是可以构成一个三角形的．根据\autoref{Der2_def2} ，前两条割线的斜率都趋于$A$，那么作为三角形第三边的第三条割线，其斜率也不得不跟着趋于$A$，这样就从\autoref{Der2_def2} 推出\autoref{Der2_def1} 了．
+\end{exercise}
+
+
+\autoref{Der2_def2} 的表述可以理解为，我们在$(x_0, f(x_0))$处出发，改变自变量的取值（正向负向的改变均可），算出由此带来的函数值改变，再计算二者的商．这个改变越接近$0$，计算出来的商就越接近导数值$f'(x_0)$．
+
+\begin{definition}{导函数}
+给定实函数$f(x)$．如果另一个函数$f'(x)$的取值范围是$f(x)$的全体可求导数的点，且在这些点上$f'$的值就是$f$的导数值，那么我们称$f'(x)$是$f(x)$的导函数．
+\end{definition}
+
+\subsubsection{Leibniz表示法}
+
+
+我们还可以用Leibniz的符号，将$f(x)$的导函数$\lim\limits_{x\to x_0}\frac{f(x)-f(x_0)}{x-x_0}$表示成$\frac{\dd f(x)}{\dd x}$．这里，$\mathrm{d}$不是一个量，而是一个符号，表示“取变化量，然后让这个变化量趋于零但不等于零”．$\dd x$的含义就是$x-x_0$，然后取一个极限过程$\lim\limits_{x-x_0\to 0}$\footnote{取极限过程就是指，取一系列这样的$x$构成一个数列$\{x-x_0\}$，且这个数列趋于$0$．$\lim\limits_{x-x_0\to 0}$等价于$\lim\limits_{x\to x_0}$．}．
+
+要注意的是，$\dd f(x_0)$是取决于$\dd x$的，即$\dd f(x_0)=f(x_0+\dd x)-f(x_0)$．也就是说，只有$x$是自由变化的，而$f(x)$变化的量是被动的．所以$\dd f(x)$可能不会跟着$\dd x$一起趋于零．一个例子就是\autoref{Der2_exe1} 中的符号函数，在$x=0$的地方，$\dd f(x)$的取值只有$\pm 1$两种（别忘了$\dd x$不等于零），导致$\dd x$趋于零的过程中，$\frac{\dd f(x)}{\dd x}$越来越趋近于无穷．
+
+
+由于$\dd x$表示的是\textbf{任意}接近$0$的数列，因此，如果两个自变量彼此独立、不相互影响，比如$x$和$y$，那么$\dd x$和$\dd y$的关系是不确定的，$\frac{\dd y}{\dd x}$也是无法定义的值．但是如果两个变量之间有关系，比如$y=f(x)$，那么$\frac{\dd y}{\dd x}$就是有意义的了．
+
+举个例子．单给出无关的$x$和$y$，那么可以让$\dd x$对应$x_n=1/2^n$，$\dd y$对应$y_n=1/3^n$，这样$\frac{\dd y}{\dd x}=\lim\limits_{n\to\infty}(\frac{2}{3})^n=0$．但是我们也可以让$\dd x$对应$x_n=1/2^n$，$\dd y$对应$y_n=1/2^n$，这样算出来的$\frac{\dd y}{\dd x}$就是$1$．到底哪个才是真正的$\frac{\dd y}{\dd x}$呢？这没法讨论了．但是呢，如果限定了二者之间的关系，比如$y=x^2$，那么$\dd y$对应的$y_n$就不能随意取了，必须用$\dd x$对应的$x_n$结合$y=x^2$计算出来，而且无论怎么取$x_n$，$\frac{\dd y}{\dd x}$在$x=x_0$处的结果都会是$2x_0$．
+
+为了方便，我们也可以把$\frac{\dd f(x)}{\dd x}$表示为$\frac{\dd}{\dd x}f(x)$．这里，我们将$\frac{\dd}{\dd x}$视为一个操作，它把$f(x)$变成其导函数$f'(x)$．更进一步，我们还可以写出$f'=\frac{\dd}{\dd x}f$．
+
+
+\subsubsection{两个重要的性质}
+
+\begin{theorem}{导数的线性性}\label{Der2_the2}
+假设$f(x)$和$g(x)$是两个\textbf{处处可导}\footnote{即每一个点上都有导数．}的函数，那么$\frac{\dd}{\dd x}(f(x)+g(x))=\frac{\dd}{\dd x}f(x)+\frac{\dd}{\dd x}g(x)$．
+\end{theorem}
+
+证明很简单，留作习题．
+
+\begin{theorem}{Leibniz律}\label{Der2_the1}
+假设$f(x)$和$g(x)$是两个\textbf{处处可导}的函数，那么$\frac{\dd}{\dd x}(f(x)g(x))=f(x)\frac{\dd}{\dd x}g(x)+g(x)\frac{\dd}{\dd x}f(x)$
+\end{theorem}
+
+\textbf{证明}：
+
+我们从\autoref{Der2_def2} 出发．
+
+\begin{equation}
+\begin{aligned}
+\frac{\dd}{\dd x}(f(x)g(x))=&\lim\limits_{h\to 0}\frac{f(x+h)g(x+h)-f(x)g(x)}{h}\\
+=&\lim\limits_{h\to 0}\frac{f(x+h)g(x+h)-f(x+h)g(x)+f(x+h)g(x)-f(x)g(x)}{h}\\
+=&\lim\limits_{h\to 0}\frac{f(x+h)g(x+h)-f(x+h)g(x)}{h}+\\&\lim\limits_{h\to 0}\frac{f(x+h)g(x)-f(x)g(x)}{h}\\
+=&\lim\limits_{h\to 0}f(x+h)\frac{\dd}{\dd x}g(x)+g(x)\frac{\dd}{\dd x}f(x)\\
+=&f(x)\frac{\dd}{\dd x}g(x)+g(x)\frac{\dd}{\dd x}f(x)
+\end{aligned}
+\end{equation}
+
+\textbf{证毕}．
+
+有了这两条性质，我们足以计算很多常见函数的导函数了．
+
+\begin{example}{多项式函数}
+多项式是形如$f(x)=a_0+a_1x+a_2x^2+\cdots+a_nx^n$的函数．为了计算其导函数，我们首先要考虑最简单的多项式，$x^n$．
+
+$f(x)=x$的导函数很容易计算，就是处处等于1．现在，把$x^2$表示为$f(x)f(x)$，那么根据\autoref{Der2_the1} ，其导函数就是$1\cdot f(x)+1\cdot f(x)=2f(x)=2x$．
+
+一般地，对于正整数$n$，$x^n$的导函数是$nx^{n-1}$．这可以通过已知$x^{n-1}$的导函数是$(n-1)x^{n-2}$一步步利用\autoref{Der2_the1} 归纳得到．
+
+结合\autoref{Der2_the2} ，即可计算出任意多项式函数的导函数了．
+\end{example}
+
+
+\subsection{链式法则}
+
+
+
+
+
+
+
+
+
+
+
+
+
