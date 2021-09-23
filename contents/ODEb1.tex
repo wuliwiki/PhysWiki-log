@@ -1,0 +1,208 @@
+% 线性微分方程的一般理论
+% 常微分方程|ODE|differential equation|常数变易法|朗斯基行列式|齐次|解的结构
+
+\pentry{一阶常微分方程解法：常数变易法\upref{ODEa2}}
+
+\begin{definition}{}
+设各$a_i(x)$和$f(t)$都是区间$[a, b]$上的连续函数，则称
+\begin{equation}\label{ODEb1_eq1}
+\qty(\frac{\mathrm{d}^n y}{\dd x^n})+a_1\qty(\frac{\mathrm{d}^{n-1} y}{\dd x^{n-1}})+a_2\qty(\frac{\mathrm{d}^{n-2} y}{\dd x^{n-2}})+\cdots+a_ny=f(x)
+\end{equation}
+为区间$[a, b]$上的\textbf{线性微分方程（linear differential equation）}．
+
+当$f(x)=0$时，称\autoref{ODEb1_eq1} 为\textbf{齐次的（homogeneous）}，否则称为\textbf{非齐次的（inhomogeneous）}．
+\end{definition}
+
+任取$x_0\in[a, b]$，如果已知该点处$y, \qty(\frac{\mathrm{d} y}{\dd x}), \qty(\frac{\mathrm{d}^{2} y}{\dd x^{2}}), \cdots, \qty(\frac{\mathrm{d}^{n-1} y}{\dd x^{n-1}})$的$n$个值，那么我们可以唯一确定\autoref{ODEb1_eq1} 满足这些初值的特解．这一解的存在与唯一性定理将在线性方程组相关章节讨论．
+
+\addTODO{引用相关的存在与唯一性定理．}
+
+\subsection{齐次线性微分方程的解的性质与结构}
+
+区间$[a, b]$上的齐次线性方程形如
+\begin{equation}\label{ODEb1_eq2}
+\qty(\frac{\mathrm{d}^n y}{\dd x^n})+a_1\qty(\frac{\mathrm{d}^{n-1} y}{\dd x^{n-1}})+a_2\qty(\frac{\mathrm{d}^{n-2} y}{\dd x^{n-2}})+\cdots+a_ny=0
+\end{equation}
+
+\begin{theorem}{解的线性叠加原理}
+如果$y_1(x), y_2(x), \cdots, y_k(x)$是\autoref{ODEb1_eq2} 的$k$个解，而$c_1, c_2, \cdots, c_k$是$k$个常数，那么$c_1y_1(x)+c_2y_2(x)+\cdots+c_ky_k(x)$也是一个解．
+\end{theorem}
+
+证明很简单，利用求导的线性性即可．
+
+线性叠加原理，就是解进行“数乘”和“加法”后仍为解，意味着\autoref{ODEb1_eq2} 的全体解构成了一个线性空间，称为\textbf{解空间}．如果我们能找到这个线性空间的一组基，也就相当于了解了整个线性空间．这样的基向量，被称为\textbf{基解}，一切解都可以表示为它们的线性组合．基解构成的集合，被称为\textbf{基本解组}．
+
+\begin{definition}{线性相关性}
+对于区间$[a, b]$上的函数$y_i(x)$，如果存在一组\textbf{不全为零}的常数$c_i$，使得$c_1y_1(x)+\cdots+c_ky_k(x)=0$，那么称$y_1, \cdots, y_k$是\textbf{线性相关}的，否则是\textbf{线性无关}的．
+\end{definition}
+
+\begin{theorem}{}\label{ODEb1_the1}
+如果$y_1(x), y_2(x), \cdots, y_n(x)$是\autoref{ODEb1_eq2} 的$n$个线性无关的解，那么它们构成了一组基解．
+\end{theorem}
+
+\autoref{ODEb1_the1} 证明思路提示：我们已经知道，\autoref{ODEb1_eq2} 的每个解由$n$个初值唯一确定．在初值点$x_0$，给定初值条件$y(x_0), \qty(\frac{\mathrm{d} y}{\dd x})(x_0), \qty(\frac{\mathrm{d}^{2} y}{\dd x^{2}})(x_0), \cdots, \qty(\frac{\mathrm{d}^{n-1} y}{\dd x^{n-1}})(x_0)$，如果$c_1y_1(x)+\cdots+c_ny_n(x)$满足全部$n$个初值条件，那么
+\begin{equation}\label{ODEb1_eq3}
+\leftgroup{
+&c_1y_1(x_0)+\cdots+c_ny_n(x_0)=y(x_0)\\
+&c_1y_1'(x_0)+\cdots+c_ny_n'(x_0)=y'(x_0)\\
+&\phantom{123456789012345678}\vdots\\
+&c_1\qty(\frac{\mathrm{d}^{n-1} y_1}{\dd x^{n-1}})(x_0)+\cdots+c_n\qty(\frac{\mathrm{d}^{n-1} y_n}{\dd x^{n-1}})(x_0)=y(x_0)
+}
+\end{equation}
+而由于$y_1(x), y_2(x), \cdots, y_n(x)$在给定区间上是线性无关的，\autoref{ODEb1_eq3} 的各方程也就彼此独立
+\footnote{\autoref{ODEb1_eq3} 是关于未知量$c_i$的代数方程组．如果$\{y_i\}$线性相关，那么至少有一个$y_i$可以表示为其它几个$y_i$的线性组合，而$y'_i, y''_i$等也可以表示为相同的线性组合，这就使得\autoref{ODEb1_eq3} 各方程中至少有一个能被其它方程表示出来，从而不独立．由于初值条件的任意性，这就会导致多数初值条件下\autoref{ODEb1_eq3} 无法解出$\{c_i\}$．反过来，$\{y_i\}$线性无关，那么\autoref{ODEb1_eq3} 各方程就彼此独立．}
+，因此能够解出唯一的常数组$\{c_i\}$．“能够解出”意味着“能够把满足初值条件的解表示成$c_1y_1(x)+\cdots+c_ny_n(x)$”．
+
+如何判断一组$y_1(x), y_2(x), \cdots, y_n(x)$在给定区间$[a, b]$上的线性相关性呢？我们需要借助以下\textbf{朗斯基行列式}．
+
+\begin{definition}{朗斯基行列式}
+对于区间$[a, b]$上存在$k-1$次导函数的$k$个函数$f_1, f_2, \cdots, f_k$，定义在$[a, b]$上的函数$W[f_1, f_2, \cdots, f_k](x)$为如下行列式：
+\begin{equation}
+W[f_1, f_2, \cdots, f_k](x)=\vmat{f_1&f_2&\cdots&f_k\\f'_1&f'_2&\cdots&f'_k\\ \vdots&\vdots&\ddots&\vdots\\f_1^{(k-1)}&f_2^{(k-1)}&\cdots&f_k^{(k-1)}} \qquad 
+\end{equation}
+\end{definition}
+
+
+朗斯基行列式，本质上就是\autoref{ODEb1_eq3} 的系数矩阵行列式．\autoref{ODEb1_eq3} 解的存在性和$\{y_i\}$的线性相关性紧密相连，因此我们有以下定理：
+
+
+
+
+\begin{theorem}{}\label{ODEb1_the2}
+对于$[a, b]$上的函数$f_i(x)$，如果它们在给定区间上线性相关，那么$W[f_1, f_2, \cdots, f_k](x)$在$[a, b]$上恒为$0$．
+\end{theorem}
+
+注意，\autoref{ODEb1_the2} 的逆定理（W恒为$0$则$\{f_i\}$线性相关）不成立．我们试举一例反例来说明：
+
+\begin{example}{}
+考虑$\mathbb{R}$上的函数：
+\begin{equation}
+f_1(x)=\leftgroup{
+    0, x<0\\
+    \E^{-\frac{1}{x}}, x\geq 0
+}
+\end{equation}
+和
+\begin{equation}
+f_2(x)=\leftgroup{
+    \E^{-\frac{1}{x}}, x<0\\
+    0, x\geq 0
+}
+\end{equation}
+
+简单计算可得$W[f_1, f_2]$在$\mathbb{R}$上恒为$0$，但$f_1, f_2$在$\mathbb{R}$上线性无关，而且它们还是无穷次可导的函数，是绝佳的反例．
+
+
+
+
+\end{example}
+
+\begin{theorem}{}\label{ODEb1_the3}
+如果$y_1(x), y_2(x), \cdots, y_n(x)$是\autoref{ODEb1_eq2} 的$n$个解且它们线性无关，那么它们的朗斯基行列式在$[a, b]$上处处不为$0$．
+\end{theorem}
+
+\autoref{ODEb1_the3} 的证明思路提示：反设存在某$x_0\in[a, b]$，使得上述朗斯基行列式为$0$，那么在$x_0$处的初值条件无法总是给出\autoref{ODEb1_eq3} 的解，这与解的存在性矛盾．
+
+
+
+
+\subsection{非齐次线性微分方程}
+
+容易验证，\textbf{非齐次}方程\autoref{ODEb1_eq1} 的解${\phi}_1(x), \phi_2(x)$和\textbf{齐次}方程\autoref{ODEb1_eq2} 的解$\overline{\phi}(x)$有如下关系：
+\begin{itemize}
+\item $\phi_1(x)+\overline{\phi}(x)$是非齐次方程\autoref{ODEb1_eq1} 的解；
+\item $\phi_1(x)-\phi_2(x)$是齐次方程\autoref{ODEb1_eq2} 的解．
+\end{itemize}
+
+因此，我们容易得到以下定理
+\begin{theorem}{非齐次方程的解集}
+设$\phi_1(x), \phi_2(x), \cdots, \phi_n(x)$为\autoref{ODEb1_eq2} 的一组基解，$\varphi(x)$为\autoref{ODEb1_eq1} 的一个特解，那么\autoref{ODEb1_eq1} 的通解可以表示为
+\begin{equation}
+c_0\varphi(x)+c_1\phi_1(x)+c_2\phi_2(x)+\cdots+c_n\phi_n(x)
+\end{equation}
+\end{theorem}
+
+知道了\autoref{ODEb1_eq2} 的基本解组以后，我们可以用\textbf{常数变易法}来解出\autoref{ODEb1_eq1} .
+
+假设$\phi_1(x), \phi_2(x), \cdots, \phi_n(x)$为\autoref{ODEb1_eq2} 的一组基解，那么\autoref{ODEb1_eq2} 的任意一个解都可以表示为$c_1\phi_1(x)+c_2\phi_2(x)+\cdots+c_n\phi_n(x)$的形式．现在我们把各常数$c_i$写成待定函数$c_i(x)$，使得
+\begin{equation}
+c_1(x)\phi_1(x)+c_2(x)\phi_2(x)+\cdots+c_n(x)\phi_n(x)
+\end{equation}
+是\autoref{ODEb1_eq1} 的解．
+
+\begin{example}{非齐次线性微分方程的常数变易法}\label{ODEb1_ex1}
+考虑方程
+\begin{equation}\label{ODEb1_eq4}
+\frac{\mathrm{d}^2 y}{\dd x^2}+y=\tan x
+\end{equation}
+且已知其齐次形式的基本解组为$\{\cos x, \sin x\}$．
+
+设\autoref{ODEb1_eq4} 的通解为
+\begin{equation}\label{ODEb1_eq5}
+y=c_1(x)\cos x+c_2(x)\sin x
+\end{equation}
+将\autoref{ODEb1_eq5} 代入\autoref{ODEb1_eq4} 得到
+\begin{equation}\label{ODEb1_eq6}
+c''_1(x)\cos x+c''_2(x)\sin x-c'_1(x)\sin x+c'_2(x)\cos x=\tan x
+\end{equation}
+
+\autoref{ODEb1_eq6} 有两个未知函数，所以没有唯一确定的解．我们可以有多种方法指定第二个约束式子，实践中当然是怎么方便计算怎么来．
+
+通常，我们令
+\begin{equation}\label{ODEb1_eq8}
+c'_1(x)\cos x+c'_2(x)\sin x=0
+\end{equation}
+这就意味着$\frac{\dd y}{\dd x}=-c_1(x)\sin x+c_2(x)\cos x$，进而
+\begin{equation}\label{ODEb1_eq7}
+\frac{\mathrm{d}^2 y}{\dd x^2}=-c_1(x)\cos x-c_2(x)\sin x-c'_1(x)\sin x+c'_2(x)\cos x
+\end{equation}
+
+重新将\autoref{ODEb1_eq7} 代回\autoref{ODEb1_eq4} 和\autoref{ODEb1_eq5} 得到
+\begin{equation}\label{ODEb1_eq9}
+-c'_1(x)\sin x+c'_2(x)\cos x=\tan x
+\end{equation}
+
+联立\autoref{ODEb1_eq8} 和\autoref{ODEb1_eq9} ，解得
+\begin{equation}
+\leftgroup{
+c'_1(x)&=\sin^2x/\cos x\\
+c'_2(x)&=\sin x
+}
+\end{equation}
+解出$c_1$和$c_2$：
+\begin{equation}
+\leftgroup{
+    c_1(x)&=C_1-\sin x+\ln(\frac{\cos\frac{x}{2}+\sin\frac{x}{2}}{\cos\frac{x}{2}-\sin\frac{x}{2}})\\
+    c_2(x)&=C_2-\cos x
+}
+\end{equation}
+其中$C_1, C_2$是积分常数．
+
+代回\autoref{ODEb1_eq5} ，整理后可得\autoref{ODEb1_eq4} 的通解为
+\begin{equation}
+y=C_1\cos x+C_2\sin x-\sin 2x+\cos x\ln(\frac{\cos\frac{x}{2}+\sin\frac{x}{2}}{\cos\frac{x}{2}-\sin\frac{x}{2}})
+\end{equation}
+
+
+
+
+\end{example}
+
+
+\autoref{ODEb1_ex1} 中关键的简化步骤是规定了$c'_1(x)\cos x+c'_2(x)\sin x=0$．事实上，同一个思路在用常数变易法解非齐次方程时很常用，因为它能避免出现$c_i(x)$的高阶导函数．
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

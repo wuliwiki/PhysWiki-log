@@ -1,0 +1,197 @@
+% Euler-Maclaurin 求和公式
+\pentry{数值积分（梯形法）\upref{NumInt} 渐近展开\upref{Asympt} 反常积分\upref{impro} 傅里叶级数（三角）\upref{FSTri} } 
+
+\subsubsection{Euler求和公式}
+\begin{theorem}{}
+设函数 $f:X\to Y$ 在区间$[0,+\infty)$上连续可微,则有如下Euler求和公式成立	
+        \begin{equation}\label{EMSum_eq1} 
+            \sum_{k=1}^{n}f(k)=\int_{0}^{n}f(x)\,\dd x
+            +\frac{f(n)-f(0)}{2}+\int_{0}^{n}\psi(x)f'(x)\dd x
+        \end{equation}
+    其中 $\psi(x)=x-\lfloor x \rfloor-1/2=\{x\}-1/2$
+\end{theorem}
+证明如下：将区间$[0,n]$划分为长度为$1$的小区间$[k-1,k](k=1,2,\cdots,n)$,则
+​\[
+    \int_{k-1}^{k}\psi(x)f'(x)\,\dd x
+    =\frac{f(k)+f(k-1)}{2}-\int_{k-1}^{k}f(x)\,\dd x
+\]
+​对$k$从1到$n$求和,于是
+​\[
+    \int_{0}^{n}\psi(x)f'(x)\,\dd x
+    =\sum_{k=1}^{n}f(k)-\frac{f(n)-f(0)}{2}-\int_{0}^{n}f(x)\,\dd x
+\]
+这样就证明了Euler求和公式．
+\\注意到\autoref{EMSum_eq1} 右端积分比较复杂，一般情况下，仅仅估计其上界便可得到较为不错的结果．设函数 $f\in{C^1[0,+\infty)}$ ,再设函数
+$\varphi(x)=\displaystyle{\int_{0}^{x}\psi(t)\,\dd t}$,
+易知该函数是周期为$1$的函数,且
+ $-1/8\leqslant\varphi(x)\leqslant 0$,因此
+\[
+    \left|\int_{0}^{n}\psi(x)f'(x)\,\dd x\right|
+    =\left|\int_{0}^{n}\varphi(x)D^2(f)\mathrm{d}x\right|
+    \leqslant\frac{|f'(n)-f'(0)|}{8}
+\]
+\begin{figure}[ht]
+\centering
+\includegraphics[width=10cm]{./figures/EMSum_1.pdf}
+\caption{函数$\varphi(x)$} \label{EMSum_fig1}
+\end{figure}
+
+在实际情况中，更为常见的是函数 $f$ 在$[1,+\infty)$ 上可微，则补充定义$ f\equiv 0,x\in[0,1)$.在 \autoref{EMSum_eq1} 式中令$n=1$,从而
+\[
+    \int_{0}^{1-\delta}\psi(x)f'(x)\mathrm{d}x
+    =\frac{f(1-\delta)+f(0)}{2}-\int_{0}^{1-\delta}f(x)\,\dd x=0
+\]
+由于令$\delta\to0+0$时，极限存在且为$0$,则对于在区间$[1,+\infty)$连续可微函数$f$就有
+\begin{equation}\label{EMSum_eq2}
+    \sum_{k=1}^{n}f(k)
+    =\int_{1}^{n}f(x)\,\dd x+\frac{f(n)+f(1)}{2}+\int_{1}^{n}\psi(x)f'(x)\,\dd x
+\end{equation}
+在 \autoref{EMSum_eq2}  式中,若积分$\displaystyle{\int_{1}^{\infty}\psi(x)f'(x)\,\dd x}$收敛,则
+\begin{equation}\label{EMSum_eq3}
+    \sum_{k=1}^{n}f(k)=\int_{1}^{n}f(x)\,\dd x
+    +\frac{f(n)}{2}-\int_{n}^{\infty}\psi(x)f'(x)\,\dd x
+    +\int_{1}^{\infty}\psi(x)f'(x)\,\dd x+\frac{f(1)}{2}
+\end{equation}
+\begin{exercise}{}
+Euler-Mascheroni常数\autoref{Masche_eq1}~\upref{Masche}由调和级数与自然对数的差值的极限所给出，利用\autoref{EMSum_eq3} 和该常数可以给出类调和级数前$n$项和较好的计算公式，即
+\begin{equation}\label{EMSum_eq4}
+    H_{n}=\sum_{k=1}^{n}\frac{1}{k}=\log n+\frac{1}{2n}+C_{2}
+    +\int_{n}^{\infty}\frac{\psi(x)}{x^2}\,\dd x
+\end{equation}
+其中
+\begin{equation}\label{EMSum_eq5}
+    C_{2}=\frac{1}{2}-\int_{1}^{\infty}\frac{\psi(x)}{x^2}\,\dd x
+\end{equation}
+由Dirichlet定理可知，\autoref{EMSum_eq5} 积分存在，因此将\autoref{EMSum_eq4} 结合
+Euler-Mascheroni常数代入\autoref{EMSum_eq3} 就有$C_{2}=\gamma$,从而
+\begin{equation}
+    H_{n}=\log n+\frac{1}{2n}+\gamma+\int_{n}^{\infty}\frac{\psi(x)}{x^2}\,\dd x
+\end{equation}
+\end{exercise}
+
+\subsection{Euler-Maclaurin求和公式}
+
+\begin{definition}{}
+设Bernoulli数为 $B:\mathbb{N}\to\mathbb{R} $,它有多种定义方式,其生成函数定义为
+    \begin{equation}{}
+        \frac{z}{e^{z}-1}=\sum_{n=0}^{\infty}B_{n}\frac{z^{n}}{n!}
+        \quad(|z|<2\pi,z\in{\mathbb C})
+    \end{equation}
+\end{definition}
+	
+依据Taylor公式和Cauchy乘积,对照系数就有
+\begin{equation}
+    \sum_{k=0}^{n}\dbinom{n+1}{k}B_{k}=0\quad(n\in{\mathbb N^{+}})
+\end{equation}
+依据式,计算前10项Bernoulli数(由生成函数定义就有$B_{0}=1$).列举如下：
+\begin{table}[ht]
+\centering
+\caption{Bernoulli数}
+\begin{tabular}{|c|c|c|c|c|c|c|c|c|c|c|}
+\hline
+$ n $ & 0 & 1 & 2 & 3 & 4 & 5 & 6 & 7 & 8 & 9\\ 
+\hline
+$ B_{n} $ & $1$ & $-\dfrac{1}{2}$ & $ \dfrac{1}{6}$ & $0$ & $-\dfrac{1}{30}$ & $0$ & $\dfrac{1}{42}$ & $0$ & $-\dfrac{1}{30}$ & $0$\\
+\hline
+\end{tabular}
+\end{table}
+
+\begin{definition}{}
+设Bernoulli多项式为 $B_{n}:X\to Y$ ,利用生成函数可定义为
+\begin{equation}{}
+    \frac{ze^{xz}}{e^{z}-1}=\sum_{n=0}^{\infty}B_{n}(x)\frac{z^{n}}{n!}
+    \quad(|z|<2\pi,z\in{\mathbb C})
+\end{equation}	
+\end{definition}
+利用Cauchy乘积,并比较系数可得
+\begin{equation}
+    B_{n}(x)=\sum_{k=0}^{n}\dbinom{n}{k}B_{k}x^{n-k}
+\end{equation}
+对式求导,故有
+\begin{equation}
+    \frac{\dd}{\dd x}(B_{n+1}(x))=\sum_{k=0}^{n}\dbinom{n+1}{k}(n-k+1)B_{k}x^{n-k}=(n+1)B_{n}(x)
+\end{equation}
+两边同时积分,因此
+\begin{equation}
+    B_{n+1}(x)-B_{n+1}=(n+1)\int_{0}^{x}B_{n}(t)\,\dd t
+\end{equation}
+不妨记$\bar{B}_{n}(x)=B_{n}(\{x\})$,注意到$\bar{B}_{n}(x)$是一个周期为1的函数,则
+\begin{equation}\label{EMSum_eq13}
+    \int_{0}^{x}\bar{B}_{n}(t)\mathrm{d}t
+    =\lfloor x\rfloor\int_{0}^{1}B_{n}(t)\mathrm{d}t+\int_{0}^{\{x\}}B_{n}(t)\mathrm{d}t
+    =\frac{\bar{B}_{n}(x)-B_{n+1}}{n+1}
+\end{equation}
+应用式,计算前5项Bernoulli多项式,列举如下:
+\begin{table}[ht]
+\centering
+\caption{请输入表格标题}
+\begin{tabular}{|c|c|c|c|c|c|}
+\hline
+$n$ & 0 & 1 & 2 & 3 & 4\\
+\hline
+$B_{n}(x)$ & $1$ & $x-\dfrac{1}{2}$ & $x^{2}-x+\dfrac{1}{6}$ & $x^{3}-\dfrac{3}{2}x^{2}+\dfrac{1}{2}x$ & $x^{4}-2x^{3}+x^{2}-\dfrac{1}{30}$\\
+\hline
+\end{tabular}
+\end{table}
+考虑在区间$[0,1]$上将$B_{2n}(x),n\in{\mathbb N^{+}}$展开为Fourier级数:
+\[
+    B_{2n}(x)=\frac{a_{0}}{2}+\sum_{m=1}^{\infty}[a_{m}\cos(2m\pi x)+b_{m}\sin(2m\pi x)]
+\]
+可求得其系数为
+\begin{equation}
+    \begin{cases}
+        a_{0}=0\\
+        a_{m}=(-1)^{n+1}\dfrac{2(2n)!}{(2m\pi)^{2n}}\\
+        b_{m}=0
+    \end{cases}
+\end{equation}
+于是就有
+\begin{equation}\label{EMSum_eq15}
+    B_{2n}(x)=2(-1)^{n+1}(2n)!\sum_{k=1}^{\infty}\frac{\cos(2m\pi x)}{(2m\pi)^{2n}},0\leqslant x\leqslant1
+\end{equation}
+令$x=1$,可推出
+\begin{equation}
+    \zeta(2n)=\frac{(-1)^{n+1}B_{2n}2^{2n-1}\pi^{2n}}{(2n)!}
+\end{equation}
+
+Euler-Maclaurin求和公式是有关定积分的一种数值计算公式,它建立了函数的积分与其导数的联系.在数值积分理论与级数求和法中,Euler-Maclaurin求和公式是一个极有用的工具.
+
+\begin{theorem}{}
+    (Euler-Maclaurin求和公式)设$f:X\to Y$在区间$[0,+\infty)$上至少$2K(K\in{\mathbb N})$阶连续可微,则
+    \begin{equation}\label{EMSum_eq17}
+        \sum_{k=1}^{n}f(k)=\int_{0}^{n}f(x)\mathrm{d}x
+        +\frac{f(n)-f(0)}{2}+\sum_{k=1}^{K}\frac{B_{2k}}{(2k)!}[f^{(2k-1)}(n)-f^{(2k-1)}(0)]
+        +R_{2K+1}(n)
+    \end{equation}
+    其中
+    \begin{equation}
+        R_{2K+1}(n)=\frac{1}{(2K+1)!}\int_{0}^{n}\bar{B}_{2K+1}(x)f^{(2k+1)}\,\dd x
+    \end{equation}
+\end{theorem}
+由\autoref{EMSum_eq13} 可知
+    \begin{equation}\label{EMSum_eq19}
+        \int_{0}^{n}\bar{B}_{k}(x)f^{(\alpha)}\,\dd x
+        =\frac{B_{k+1}}{k+1}[f^{(\alpha)}(n)-f^{(\alpha)}(0)]
+        -\frac{1}{k+1}\int_{0}^{n}\bar{B}_{k+1}(x)f^{(\alpha+1)}\,\dd x
+    \end{equation}
+\autoref{EMSum_eq19} 代入\autoref{EMSum_eq17} 即可得证.
+
+\begin{theorem}{}
+    设$f:X\to Y$在区间$[0,+\infty)$无穷阶可微且各阶导函数在其上一致有界,则
+    \begin{equation}\label{EMSum_eq20}
+        \sum_{k=1}^{n}f(k)=\int_{0}^{n}f(x)\mathrm{d}x+\frac{f(n)-f(0)}{2}
+        +\sum_{k=1}^{\infty}\frac{B_{2k}}{(2k)!}[f^{(2k-1)}(n)-f^{(2k-1)}(0)]
+    \end{equation}
+\end{theorem}
+同样地，\autoref{EMSum_eq17} 和\autoref{EMSum_eq20} 可如同\autoref{EMSum_eq2} 进行类似地改写.
+只须证明$\lim\limits_{K\to\infty}R_{2K+1}(n)=0$对于任意给定的$n\in{\mathbb N^{+}}$都成立.
+可设$|f^{(\alpha)}|\leqslant M(\alpha\in{\mathbb N})$,结合\autoref{EMSum_eq15} ,就有
+\begin{equation}
+        |R_{2K+1}(n)|<\frac{2M(n+2)}{(2\pi)^{2K+2}}
+\end{equation}
+从而
+\[
+    \lim\limits_{K\to\infty}R_{2K+1}(n)=0	
+\]	
+
+
