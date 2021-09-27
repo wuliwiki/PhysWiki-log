@@ -54,6 +54,10 @@
 \begin{equation}\label{RandF_eq6}
 \sigma_x^2 = \int_{-\infty}^{+\infty} \qty(x-\bar x)^2 f(x) \dd{x}
 \end{equation}
+容易证明
+\begin{equation}\label{RandF_eq15}
+\sigma_x^2=\ev{(x-\ev{x})^2}=\ev{x^2-2x\ev{x}+\ev{x}^2}=\ev{x^2}-\ev{x}^2
+\end{equation}
 
 \begin{exercise}{}
 某直流电源存在微小误差， 其电压随时间的函数为
@@ -76,6 +80,7 @@ U(t) = U_0 + \varepsilon \sin(\omega t)
 \end{equation}
 
 \begin{example}{分子的平均动能}
+\addTODO{把这里的积分都放到积分表中并引用}
 某气体中含有大量分子（阿伏伽德罗常数数量级： $10^{23}$）， 若假设某时刻它们的速度大小 $v$ 的概率密度函数为
 \begin{equation}
 f(v) = A \sin[2](\frac{\pi v}{v_{m}}) \qquad (v \in [0, v_{m}])
@@ -120,11 +125,7 @@ A=\frac{2}{v_{m}}
 \end{aligned}
 \end{equation}
 
-3.由方差的定义\autoref{RandF_eq6} 和平均值的定义\autoref{RandF_eq7} ，我们可将方差写为
-\begin{equation}
-\sigma_x^2=\ev{(x-\ev{x})^2}=\ev{x^2-2x\ev{x}+\ev{x}^2}=\ev{x^2}-\ev{x}^2
-\end{equation}
-那么
+3. 使用\autoref{RandF_eq15} 有
 \begin{equation}\label{RandF_eq10}
 \sigma_v^2=\ev{v^2}-\ev{v}^2
 \end{equation}
@@ -165,4 +166,55 @@ A=\frac{2}{v_{m}}
 \sigma_{E_k}&=\frac{m^2v_m^4}{20}-\frac{m^2v_m^4}{36}=\frac{m^2v_m^4}{45}
 \end{aligned}
 \end{equation}
+\end{example}
+
+\begin{example}{彩票中奖概率分布}
+假设某种彩票从 $t = 0$ 开始每隔 $\Delta t$ 开奖一次， 开奖时每张彩票有 $\Delta P$ 的概率中奖， 每张彩票可以参加任意多次抽奖\footnote{也可以假设每张彩票只能抽一次， 但每次抽奖后就立即购买一张新彩票．}． 令 $\lambda = {\Delta P}/{\Delta t}$， 对每种彩票， $\lambda$ 是一个常数． 为了让问题更连续， 考虑极限 $\Delta t\to 0$ 的情况， 若持有一张彩票， 求第一次中奖时间概率分布 $f(t)$ 以及数学期望值．
+
+先考虑离散情况， 画出概率树， 在第 $N$ 次开奖时第一次中奖的概率为（注意要保证前 $N-1$ 次未中奖）
+\begin{figure}[ht]
+\centering
+\includegraphics[width=6cm]{./figures/RandF_2.pdf}
+\caption{彩票中奖概率树} \label{RandF_fig2}
+\end{figure}
+\begin{equation}
+\begin{aligned}
+P(N) &= (1-\Delta P)^{N-1} \Delta P\\
+&= (1-\lambda\Delta t)^{\frac{t}{\Delta t}-1} \lambda\Delta t\\
+&= [(1-\lambda\Delta t)^{\frac{1}{\lambda\Delta t}}]^{\lambda t} \frac{\lambda\Delta t}{1-\lambda\Delta t}
+\end{aligned}
+\end{equation}
+
+接下来， 我们假设该彩票开奖的时间越来越短， 但始终保持 $\lambda$ 不变． 那么根据\autoref{E_eq3}~\upref{E}， 在极限 $\Delta t\to 0$ 下， 上式中方括号等于 $1/\E$， 所以第一次中奖时间的概率密度为
+\begin{equation}
+f(t) = \lim_{\Delta t\to 0} \frac{P(N)}{\Delta t} = \lambda\E^{-\lambda t}\lim_{\Delta t\to 0} \frac{1}{1-\lambda\Delta t} = \lambda\E^{-\lambda t}
+\end{equation}
+\begin{figure}[ht]
+\centering
+\includegraphics[width=7cm]{./figures/RandF_3.pdf}
+\caption{第一次中奖时间概率密度函数} \label{RandF_fig3}
+\end{figure}
+可以验证归一化条件
+\begin{equation}
+\int_0^{+\infty} f(t) \dd{t} = \int_0^{+\infty} \lambda\E^{-\lambda t} \dd{t} = 1
+\end{equation}
+进而可以计算第一次中奖时间的数学期望为
+\begin{equation}
+T = \int_0^{+\infty} t f(t) \dd{t} = \int_0^{+\infty}t \lambda\E^{-\lambda t} \dd{t} = \frac{1}{\lambda}
+\end{equation}
+也可以计算在时间 $[0, t]$ 内中奖的概率为
+\begin{equation}
+P(t) = \int_0^{t} f(t') \dd{t'} = 1 - \E^{-\lambda t}
+\end{equation}
+\begin{table}[ht]
+\centering
+\caption{中奖概率}\label{RandF_tab2}
+\begin{tabular}{|c|c|c|c|c|c|c|c|}
+\hline
+累计时间 $t$ & $T/3$  & $T/2$  & $T$     & $2T$ &     $3T$   &  $4T$   & $5T$\\
+\hline
+概率 $P(t)$ & $0.283$ & $0.393$ & $0.632$ & $0.865$ & $0.950$ & $0.982$ & $0.993$\\
+\hline
+\end{tabular}
+\end{table}
 \end{example}

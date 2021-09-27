@@ -10,15 +10,18 @@
 \begin{equation}\label{E_eq2}
 \E \equiv \sum_{n=0}^\infty \frac{1}{n!} = 1 + 1 + \frac{1}{2} + \frac{1}{6} + \frac{1}{24} +\dots
 \end{equation}
-我们把以 $\E$ 为底的对数函数 $\log_e x$ 叫做\textbf{自然对数函数}， 记为 $\ln(x)$． 可以证明两种定义是等效的．
+我们把以 $\E$ 为底的对数函数 $\log_e x$ 叫做\textbf{自然对数函数}， 记为 $\ln(x)$ 或者直接用 $\log(x)$． 以后会证明以上两种定义是等效的．
+\addTODO{链接}
 
 令 $k$ 为常数， 可以把\autoref{E_eq1} 拓展得
 \begin{equation}\label{E_eq4}
 \lim_{x \to 0} (1 + kx)^{\frac{1}{kx}} = \E
+\qquad \Longrightarrow\qquad
+\lim_{x \to 0} (1 + kx)^{\frac{1}{x}} = \E^k
 \end{equation}
-当 $k = -1$ 时易得
+当 $k = -1$ 时得
 \begin{equation}\label{E_eq3}
-\lim_{x \to 0} (1 - x)^{\frac{1}{x}} = \qty[\lim_{x \to 0} (1 - x)^{\frac{1}{-x}}]^{-1} = \frac{1}{\E} = 0.36787944117144232\dots
+\lim_{x \to 0} (1 - x)^{\frac{1}{x}} = \frac{1}{\E} = 0.36787944117144232\dots
 \end{equation}
 
 \subsection{数值验证}
@@ -42,21 +45,19 @@ $(1 + x)^{1/x}$ & $2.59374$ & $2.70481$ & $2.71692$ & $2.71815$ & $2.71827$ & $2
 \end{tabular}
 \end{table}
 
-\subsection{简单应用}
-\pentry{随机变量 概率分布函数\upref{RandF}}
-为什么说自然对数底是 “自然” 的呢？ 我们来看两个例子．
+为什么说自然对数底是 “自然” 的呢？ 我们来看一个例子：
 
 \begin{example}{银行利滚利}
-如果一笔数量为 $x$ 的钱存入某银行后， 银行的年利率是 $\lambda$， 那么一年后取出来连本带利共得 $(1+\lambda)x$． 假设银行规定， 在 $y$ 年时（$y$ 取任意正实数） 取出来， 则利率按照 $\lambda y$ 来计算． 例如半年取出共得 $(1+\lambda/2)x$， 若取出立刻存入， 再过半年连本带利为
+如果一笔数量为 $x$ 的钱存入某银行后， 银行的年利率是 $\lambda$， 那么一年后取出来连本带利共得 $(1+\lambda)x$． 假设银行规定， 在 $t$ 年时（$t$ 取任意正实数） 取出来， 则利率按照 $\lambda t$ 来计算． 例如半年取出共得 $(1+\lambda/2)x$， 若取出立刻存入， 再过半年连本带利为
 \begin{equation}
 (1+\lambda/2)^2 x = (1 + \lambda + \lambda^2/4)x > (1 + \lambda) x
 \end{equation}
 比直接存一年要多． 可以证明， 存取越频繁， 一年的总利息就越多， 简单来说这是因为充分地进行了 “利滚利”．
 
-如果不停地存取， 且每次存取间隔时间取极限 $y \to 0$， 那么 $t$ 年后（取正实数）连本带利的极限是多少呢？ 首先 $t$ 年后存取的次数为 $t/y$， 利用\autoref{E_eq4} 得
+如果不停地存取， 且每次存取间隔时间取极限 $\Delta t \to 0$， 那么 $t$ 年后连本带利的极限是多少呢（$t$ 取 $\Delta t$ 的整数倍）？ 首先 $t$ 年后存取的次数为 $t/\Delta t$， 利用\autoref{E_eq4} 得
 \begin{equation}
-x_t = \lim_{y\to 0}(1 + \lambda y)^{t/y} x
-= \qty[\lim_{y\to 0}(1 + \lambda y)^{1/(\lambda y)}]^{\lambda t} x
+x_t = \lim_{\Delta t\to 0}(1 + \lambda \Delta t)^{t/\Delta t} x
+= \qty[\lim_{\Delta t\to 0}(1 + \lambda \Delta t)^{1/(\lambda \Delta t)}]^{\lambda t} x
 = \E^{\lambda t} x
 \end{equation}
 这样自然对数底就 “自然” 地出现了．
@@ -66,55 +67,4 @@ x_t = \lim_{y\to 0}(1 + \lambda y)^{t/y} x
 \E^\lambda - 1 = \lambda + \frac{\lambda^2}{2!} + \frac{\lambda^3}{3!} + \dots
 \end{equation}
 且当 $\lambda$ 很小时， $\E^\lambda - 1 \approx \lambda$．
-\end{example}
-
-\begin{example}{彩票中奖概率分布}
-假设某种彩票从 $t = 0$ 开始每隔 $\Delta t$ 开奖一次， 开奖时每张彩票有 $\Delta P$ 的概率中奖， 每张彩票可以参加任意多次抽奖\footnote{也可以假设每张彩票只能抽一次， 但每次抽奖后就立即购买一张新彩票．}． 令 $\lambda = {\Delta P}/{\Delta t}$， 对每种彩票， $\lambda$ 是一个常数． 为了让问题更连续， 考虑极限 $\Delta t\to 0$ 的情况， 若持有一张彩票， 求第一次中奖时间概率分布\upref{RandF} $f(t)$ 以及数学期望值．
-
-先考虑离散情况， 画出概率树， 在第 $N$ 次开奖时第一次中奖的概率为（注意要保证前 $N-1$ 次未中奖）
-\begin{figure}[ht]
-\centering
-\includegraphics[width=6cm]{./figures/E_2.pdf}
-\caption{彩票中奖概率树} \label{E_fig2}
-\end{figure}
-\begin{equation}
-\begin{aligned}
-P(N) &= (1-\Delta P)^{N-1} \Delta P\\
-&= (1-\lambda\Delta t)^{\frac{t}{\Delta t}-1} \lambda\Delta t\\
-&= [(1-\lambda\Delta t)^{\frac{1}{\lambda\Delta t}}]^{\lambda t} \frac{\lambda\Delta t}{1-\lambda\Delta t}
-\end{aligned}
-\end{equation}
-
-接下来， 我们假设该彩票开奖的时间越来越短， 但始终保持 $\lambda$ 不变． 那么根据\autoref{E_eq3}， 在极限 $\Delta t\to 0$ 下， 上式中方括号等于 $1/\E$， 所以第一次中奖时间的概率密度为
-\begin{equation}
-f(t) = \lim_{\Delta t\to 0} \frac{P(N)}{\Delta t} = \lambda\E^{-\lambda t}\lim_{\Delta t\to 0} \frac{1}{1-\lambda\Delta t} = \lambda\E^{-\lambda t}
-\end{equation}
-\begin{figure}[ht]
-\centering
-\includegraphics[width=7cm]{./figures/E_3.pdf}
-\caption{第一次中奖时间概率密度函数} \label{E_fig3}
-\end{figure}
-可以验证归一化条件
-\begin{equation}
-\int_0^{+\infty} f(t) \dd{t} = \int_0^{+\infty} \lambda\E^{-\lambda t} \dd{t} = 1
-\end{equation}
-进而可以计算第一次中奖时间的数学期望为
-\begin{equation}
-T = \int_0^{+\infty} t f(t) \dd{t} = \int_0^{+\infty}t \lambda\E^{-\lambda t} \dd{t} = \frac{1}{\lambda}
-\end{equation}
-也可以计算在时间 $[0, t]$ 内中奖的概率为
-\begin{equation}
-P(t) = \int_0^{t} f(t') \dd{t'} = 1 - \E^{-\lambda t}
-\end{equation}
-\begin{table}[ht]
-\centering
-\caption{中奖概率}\label{E_tab2}
-\begin{tabular}{|c|c|c|c|c|c|c|c|}
-\hline
-累计时间 $t$ & $T/3$  & $T/2$  & $T$     & $2T$ &     $3T$   &  $4T$   & $5T$\\
-\hline
-概率 $P(t)$ & $0.283$ & $0.393$ & $0.632$ & $0.865$ & $0.950$ & $0.982$ & $0.993$\\
-\hline
-\end{tabular}
-\end{table}
 \end{example}
