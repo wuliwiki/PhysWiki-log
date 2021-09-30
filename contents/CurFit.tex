@@ -2,10 +2,10 @@
 % 最小二乘法|数值拟合|极小值
 
 \pentry{最小二乘法\upref{LstSqr}， Nelder-Mead 算法\upref{NelMea}}
-我们在 “最小二乘法\upref{LstSqr}” 见到的三个例子中， 方差函数都是待定系数的线性组合， 这种情况下我们令偏导为零后得到的是线性方程组， 便于求解%（见 Matlab 或 Mathematica）链接未完成． 
+我们在 “最小二乘法\upref{LstSqr}” 见到的三个例子中， 方差函数都是待定系数的线性组合， 这种情况下我们令偏导为零后得到的是线性方程组， 便于求解 %（见 Matlab 或 Mathematica）链接未完成． 
 ． 然而当方差不是待定系数的线性组合时， 得到的方程组往往非常复杂， 这时就需要借助数值计算． 相比用数值计算解 $N$ 元的非线性方程组， 更简单的方法是直接用数值方法寻找方差函数的极小值（如Nelder-Mead 算法） ． 实践证明， 大多数情况下极小值点仅有一个， 那就是最小值点．
 
-为了验证结果的正确性， 我们先来用数值方法拟合 $A\cos (x + \varphi_0) + C$， 并与“最小二乘法\upref{LstSqr}” 中的方法比较结果．
+为了验证结果的正确性， 我们先来用数值方法拟合 $A\cos (x + \varphi_0) + C$， 并与 “最小二乘法\upref{LstSqr}” 中的方法比较结果．
 
 \begin{figure}[ht]
 \centering
@@ -13,7 +13,8 @@
 \caption{运行结果} \label{CurFit_fig1}
 \end{figure}
 
-\begin{lstlisting}[language=matlab, caption=curveFit.m]
+Matlab 代码如下， 需要 \verb|NelderMead.m| 函数\upref{NelMea}：
+\begin{lstlisting}[language=matlab, caption=curveFit\_test.m]
 function curveFit
 close all;
 % 随机生成简谐曲线
@@ -56,3 +57,20 @@ end
 \end{lstlisting}
 
 运行结果如\autoref{CurFit_fig1} 所示， 可见两种方法拟合出的曲线一致（红色的曲线和黄色的点线）． 注意第 13 行使用了“Nelder-Mead 算法\upref{NelMea}” 中的函数 \verb|NelderMead| 求函数句柄 \verb|f| 的最小值．
+
+一般参数函数的最小二乘法拟合代码为
+\begin{lstlisting}[language=matlab, caption=curveFit.m]
+% 最小二乘法拟合一元实函数，(x0,y0) 是数据点
+% fun 是函数句柄， 格式 y = fun(x, p)， 需要支持矢量输入
+% p0 是函数初始参数， double 矢量
+% 输出最优的 p 以及（局部）最小方差 s
+% 使方差 sum(abs(fun(x0, p) - y0).^2) 最小
+% p_err 是每个 p(i) 的绝对误差
+
+function [p, s] = curveFit(x0, y0, fun, p0, p_err)
+% Nelder-Mead 求方差最小值点
+f = @(p) sum((fun(x0, p) - y0).^2);
+p = NelderMead(f, p0, p_err);
+s = fun(x0, p);
+end
+\end{lstlisting}

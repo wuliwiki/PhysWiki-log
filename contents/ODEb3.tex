@@ -1,0 +1,172 @@
+% 一阶常系数线性微分方程组（常微分方程）
+% 常微分方程|ODE|ordinary differential equation|方程组|线性变换|矩阵|矩阵指数
+
+\pentry{矩阵指数\upref{MatExp}，常系数线性微分方程\upref{ODEb2}}
+
+\subsection{齐次方程}
+
+一阶常系数\textbf{齐次}线性微分方程组形如
+\begin{equation}\label{ODEb3_eq1}
+\leftgroup{
+    \frac{\dd}{\dd t}x_1&=a_{11}x_1+a_{12}x_2+\cdots+a_{1n}x_n\\
+    \frac{\dd}{\dd t}x_2&=a_{21}x_1+a_{22}x_2+\cdots+a_{2n}x_n\\
+    &\vdots\\
+    \frac{\dd}{\dd t}x_n&=a_{n1}x_1+a_{n2}x_2+\cdots+a_{nn}x_n
+}
+\end{equation}
+其中各$x_i$是关于$t$的未知函数，各$a_{ij}$是已知常数．我们要研究的是如何解出这个方程组中的各未知函数．
+
+别看这个方程有那么多变量$x_i(t)$，实际上我们可以把它们放到一起，构成一个$n$维向量$\bvec{x}(t)=(x_1(t), x_2(t), \cdots, x_n(t))$，这样就可以理解为还是只有一个自变量，只不过自变量从标量变成向量了．
+
+以上述向量理解的方式来看，\autoref{ODEb3_eq1} 右边部分就是一个线性变换$\mat{M}\bvec{x}(t)$，其中
+\begin{equation}\label{ODEb3_eq4}
+\mat{M}=\pmat{
+    &a_{11} &a_{12} &\cdots &a_{1n}\\
+    &a_{21} &a_{22} &\cdots &a_{2n}\\
+    &\vdots &\vdots &\ddots &\vdots\\
+    &a_{n1} &a_{n2} &\cdots &a_{nn}
+    }
+\end{equation}
+是已知常数矩阵．
+
+这样，我们就还可以把\autoref{ODEb3_eq1} 写成
+\begin{equation}\label{ODEb3_eq3}
+\frac{\dd}{\dd t}\bvec{x}=\mat{M}\bvec{x}
+\end{equation}
+的形式，看起来和一元方程
+\begin{equation}\label{ODEb3_eq2}
+\frac{\dd}{\dd t}x=ax
+\end{equation}
+非常像．
+
+\subsubsection{矩阵指数解法}
+
+
+\autoref{ODEb3_eq2} 的通解是$x=C\E^{at}$，其中$C$为常数．事实上，\autoref{ODEb3_eq3} 的通解也可以类似地用\textbf{矩阵指数}\upref{MatExp}来表示：
+\begin{equation}\label{ODEb3_eq5}
+\bvec{X}=\E^{\mat Mt}
+\end{equation}
+
+\begin{definition}{基解矩阵}
+如果$n\times n$矩阵$\mat X$的每一列作为一个向量，都是\autoref{ODEb3_eq1} 或者说\autoref{ODEb3_eq3} 的线性无关解\footnote{于是有了$n$个线性无关解，根据方程组的存在与唯一性定理，任何一个解都可以用基解矩阵里的列向量线性组合得出．}，那么称$\mat X$是 \autoref{ODEb3_eq1} 或者说\autoref{ODEb3_eq4} 的\textbf{基解矩阵}．
+\end{definition}
+
+\begin{theorem}{}
+\autoref{ODEb3_eq5} 是\autoref{ODEb3_eq1} 或者说\autoref{ODEb3_eq4} 的基解矩阵．
+\end{theorem}
+
+证明思路很简单，根据\autoref{MatExp_the1}~\upref{MatExp}，直接得到$\frac{\dd}{\dd t}\mat{X}=\mat M\mat X$，又由于求导是对每个矩阵元独立进行的，因此把$\mat X$看成是列向量排列而成的行矩阵，则每个列向量都是一个解．另外，由于$\mat X|_{t=0}=\mat E$，其中$\mat E$为单位矩阵，故$\opn{tr}\mat X=n\not=0$，故根据\autoref{MatExp_the2}~\upref{MatExp}，$\abs{\mat{X}}$的行列式不为零，故各解向量线性无关．这样，线性无关的一组解就构成了基解矩阵．
+
+
+基解矩阵的地位和基本解组一样，都能用来线性组合出所有的解．我们看一个实例：
+
+\begin{example}{}
+考虑方程组
+\begin{equation}\label{ODEb3_eq6}
+\leftgroup{
+    \frac{\dd}{\dd t}x_1&=x_1+x_2\\
+    \frac{\dd}{\dd t}x_2&=x_2
+}
+\end{equation}
+且已知初值
+\begin{equation}\label{ODEb3_eq8}
+\leftgroup{
+    x_1(0)&=3\\
+    x_1(0)&=2
+}
+\end{equation}
+如何求解此方程呢？
+
+首先我们要求出其基解矩阵：
+\begin{equation}
+\begin{aligned}
+\mat X=\E^{\pmat{1&1\\0&1}t}&=\sum_{n=0}^\infty\frac{1}{n!}\pmat{1&n\\0&1}t^n\\
+&=\sum_{n=0}^\infty\frac{1}{n!}\pmat{t^n&nt^n\\0&t^n}\\
+&=\pmat{\E^t&t\E^t\\0&\E^t}
+\end{aligned}
+\end{equation}
+
+容易验证，
+\begin{equation}
+x_1=\E^t, x_2=0
+\end{equation}
+和
+\begin{equation}
+x_1=t\E^t, x_2=\E^t
+\end{equation}
+都是\autoref{ODEb3_eq6} 的解，且它们彼此在任何区间上都线性无关，因此$\mat X$确实是\autoref{ODEb3_eq6} 的基解矩阵．
+
+现在设
+\begin{equation}\label{ODEb3_eq7}
+\leftgroup{
+x_1&=A\E^t+Bt\E^t\\x_2&=B\E^t
+}
+\end{equation}
+其中$A, B$是待定常数．
+
+将\autoref{ODEb3_eq7} 代入初值条件\autoref{ODEb3_eq8} ，解出$A, B$，最终得到满足初值条件的特解
+\begin{equation}
+\leftgroup{
+    x_1&=3\E^t+2t\E^t\\
+    x_2&=2\E^t
+}
+\end{equation}
+
+
+\end{example}
+
+\subsubsection{特征向量解法}
+
+如果$n\times n$矩阵$\mat M$有$n$个线性无关的特征向量$\bvec{v}_i$，其特征值分别为$\lambda_i$，那么\autoref{ODEb3_eq5} 的另一种基解矩阵就可以写为
+\begin{equation}\label{ODEb3_eq9}
+\mat X=\pmat{\E^{\lambda_{1}t}\bvec{v}_1&\E^{\lambda_{2}t}\bvec{v}_2&\cdots&\E^{\lambda_{n}t}\bvec{v}_n}
+\end{equation}
+
+验证是很容易的：$\frac{\dd}{\dd t}\E^{\lambda_{i}t}\bvec{v}_i=\lambda_i\E^{\lambda_{i}t}\bvec{v}_i=\mat M\E^{\lambda_{i}t}\bvec{v}_i$．
+
+如果$\mat M$没那么多线性无关的特征向量（换句话来说，就是无法对角化），那么\autoref{ODEb3_eq9} 虽然仍旧是解，却不够全面，从而不是基解矩阵．我们接下来讨论这种情况下的基解矩阵求法．
+
+我们的目标是脱离无穷级数来计算矩阵指数$\E^{\mat Mt}$，这是因为无穷级数常常难以计算．虽然接下来使用的方法也常有很大计算量，但这也是没办法的事，$\mat M$无法对角化导致过程不会像\autoref{ODEb3_eq9} 那么简单了．
+
+首先注意到，如果设列向量$\uvec{e}_i$为“第$i$行为$1$，其余为$0$”，那么我们应该有
+\begin{equation}\label{ODEb3_eq12}
+\E^{\mat Mt}=\pmat{\E^{\mat Mt}\uvec{e}_1&\E^{\mat Mt}\uvec{e}_2&\cdots&\E^{\mat Mt}\uvec{e}_n}
+\end{equation}
+
+问题转化为计算$\E^{\mat Mt}\uvec{e}_i$．
+
+设$\mat E$是\textbf{单位矩阵}，那么我们有
+\begin{equation}
+\E^{\lambda_it}\E^{-\lambda_i\mat Et}=\mat E
+\end{equation}
+
+因此，
+\begin{equation}\label{ODEb3_eq10}
+\begin{aligned}
+\E^{\mat Mt}\uvec{e}_j&=\E^{\mat Mt}\mat E\uvec{e}_j\\
+&=\E^{\mat Mt}\E^{\lambda_it}\E^{-\lambda_i\mat Et}\uvec{e}_j\\
+&=\E^{\lambda_it}\E^{(\mat M-\lambda_i\mat E)t}\uvec{e}_j\\
+&=\E^{\lambda_it}\qty(\sum_{k=0}^\infty \frac{t^k}{k!}(\mat M-\lambda_i\mat E)^k)\uvec{e}_j
+\end{aligned}
+\end{equation}
+
+\autoref{ODEb3_eq10} 里仍有无穷级数．
+
+将$\uvec{e}_j$进行\textbf{特征分解}，则对于其每一个特征分量$\bvec{v}$，设其\textbf{重数}为$m$，都有
+\addTODO{引用特征向量与特征分解相关词条．}
+\begin{equation}\label{ODEb3_eq11}
+\qty(\sum_{k=0}^\infty \frac{t^k}{k!}(\mat M-\lambda_i\mat E)^k)\bvec{v}=\qty(\sum_{k=0}^n \frac{t^k}{k!}(\mat M-\lambda_i\mat E)^k)\bvec{v}
+\end{equation}
+
+这样就把无穷级数计算化为多个有限和计算了．
+
+这种计算方式规避了直接计算无穷级数，但复杂点在于要先关于$\mat M$对各$\uvec{e}_j$进行特征分解，再分别计算用特征分解计算\autoref{ODEb3_eq11} ，最后再利用\autoref{ODEb3_eq10} 、\autoref{ODEb3_eq12} 组合成整个$\E^{\mat Mt}$．
+
+
+
+
+
+
+
+
+

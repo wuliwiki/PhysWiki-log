@@ -1,0 +1,37 @@
+% 隔板法（排列组合）
+
+\pentry{组合\upref{combin}}
+
+\footnote{参考 Wikipedia \href{https://en.wikipedia.org/wiki/Stars_and_bars_(combinatorics)}{相关页面}．}在排列组合问题中， \textbf{隔板法（stars and bars）}常用解决以下问题：
+
+\begin{example}{}
+把 $n$ （$n = 1,2,\dots$）个不加区分的小球放进 $m$（$1\leqslant m\leqslant n$） 个有编号的盒子， 每个盒子至少有一个小球， 有多少种不同的方法？
+\begin{figure}[ht]
+\centering
+\includegraphics[width=8cm]{./figures/BarCom_1.pdf}
+\caption{题目示意图} \label{BarCom_fig1}
+\end{figure}
+\end{example}
+
+我们可以想象这些小球排成一列后被 $m-1$ 个隔板隔开， 每一组被隔开的小球就相当于装进一个盒子中． 小球之间一共有 $N-1$ 个空隙可以插入隔板， 一个空隙最多插一个隔板， 所以不同的情况数就是组合 $C_{N-1}^{n-1}$．
+\begin{figure}[ht]
+\centering
+\includegraphics[width=8cm]{./figures/BarCom_2.pdf}
+\caption{隔板法示意图} \label{BarCom_fig2}
+\end{figure}
+\subsection{盒子可以为空}
+\pentry{范德蒙恒等式\upref{ChExpn}}
+
+\begin{example}{}
+把 $n$ （$n=1,2\dots$）个不加区分的小球放进 $m$ （$m=1,2\dots$）个有编号的盒子， 盒子可为空， 有多少种不同的方法？
+\end{example}
+
+把所有的情况根据非空盒子的个数分类． 非空盒子个数可能为 $i=1$ 个（ $n$ 个小球都在里面）， $i=2$ 个， 一直到 $i=\min\qty{m,n}$ 个（若 $n\leqslant m$ 则每个小球都在不同的盒子）． 首先从 $m$ 个盒子里面选择 $i$ 个非空盒子会有 $C_n^i$ 种情况． 再考虑这 $i$ 个有编号盒子装 $n$ 个小球（不为空）又有几种情况： 用隔板法得到共有 $C_{n-1}^{i-1}$ 种． 所以一个 $i$ 对应 $C_m^i C_{n-1}^{i-1}$ 种情况． 最后把所有不同 $i$ 的情况数加在一起， 得出所有情况的总数为
+\begin{equation}
+\sum_{i = 1}^{\min\qty{m,n}} C_m^i C_{n-1}^{i-1} = \sum_{i=1}^{\min\qty{m,n}}  C_m^i C_{n-1}^{n-i}
+\end{equation}
+这里使用了 $C_a^b = C_a^{a-b}$ （\autoref{combin_eq4}~\upref{combin}）． 又由范德蒙恒等式\upref{ChExpn}， 有
+\begin{equation}
+\sum_{i=1}^{\min\qty{m,n}}  C_m^i C_{n-1}^{n-i} = C_{m+n-1}^n = \frac{(m+n-1)!}{n!(m - 1)!}
+\end{equation}
+这就是最后的答案．

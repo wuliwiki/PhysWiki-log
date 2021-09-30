@@ -3,7 +3,9 @@
 
 \pentry{集合\upref{Set}}
 
+\begin{definition}{映射}
 给定集合 $A$ 和 $B$，我们可以假想从 $A$ 中\textbf{每一个}元素上拉\textbf{一根}有方向的线连接到 $B$ 中的一个元素，这些线的连接方式就被称为一个从 $A$ 到 $B$ 的\textbf{映射（mapping）}， 也叫\textbf{算符（operator）}．将这个映射记为 $f$， $A$ 叫做 $f$ 的\textbf{定义域（domain）}， $B$ 叫做\textbf{到达域（codomain）}\footnote{也叫陪域、上域、目标集（target set）}， $B$ 中被线连接到的元素的集合叫做 $f$ 的\textbf{值域（range）}\footnote{值域在一些文献中指的是到达域．}或\textbf{像（image）}， 记为 $f(A)$．
+\end{definition}
 
 我们一般将 “$f$ 是从 $A$ 到 $B$ 的映射” 记为
 \begin{equation}
@@ -13,11 +15,15 @@ f:A\to B
 \begin{equation}
 f: A\subseteq S \to B \quad\text{或}\quad f: A \to B \subseteq S
 \end{equation}
-注意映射是有方向区分的， $A$ 中每个元素都\textbf{有且只有}一根线拉出去， 但是 $B$ 中的元素可以同时被一根或多根线连接， 也可以没有连接（即不在值域中）．
+注意映射是有方向区分的， $A$ 中每个元素都\textbf{有且只有}一根线拉出去， 但是 $B$ 中的元素可以同时被一根或多根线连接， 也可以没有连接（即不在值域中）． 换一种简单的说法， “一对一” 和 “多对一” 连线是允许的， 但 “一对多” 是不允许的．
+
+\begin{example}{}
+映射的典型例子是一元实函数 $y = f(x)$， 其中定义域和值域都是实数集 $R$ 的某个子集．
+\end{example}
 
 \subsection{映射的类型}
 \begin{definition}{}\label{map_def1}
-如果映射 $f:A \to B$ 中每个 $B$ 中元素只被1根或者0根线连接，那么称 $f$ 是一个\textbf{单射（injection）}． 如果 $f:A\to B$ 中每个 $B$ 中元素都被至少1根线连接， 那么称 $f$ 是一个\textbf{满射（surjection）}． 如果 $f$ 既是单射又是满射，那么称它为一个\textbf{双射（bijection）}， 或者叫\textbf{一一对应（one-to-one correspondence）}．
+如果映射 $f:A \to B$ 中每个 $B$ 中元素只被 1 根或者 0 根线连接， 那么称 $f$ 是一个\textbf{单射（injection）}． 如果 $f:A\to B$ 中每个 $B$ 中元素都被至少1根线连接， 那么称 $f$ 是一个\textbf{满射（surjection）}． 如果 $f$ 既是单射又是满射，那么称它为一个\textbf{双射（bijection）}， 或者叫\textbf{一一对应（one-to-one correspondence）}．
 \end{definition}
 
 \begin{figure}[ht]
@@ -70,7 +76,7 @@ A_1 \times \dots \times A_N \to C
 
 复合映射常见的例子是复合函数， 令 $\mathbb R$ 上的函数 $f(x) = \sin x$， $g(x) = x^2$， 则复合函数 $g\circ f: \mathbb R \to [0, 1]$ 为 $(g\circ f)(x) = g(f(x)) = \sin^2 x$．
 
-根据定义， 复合映射满足\textbf{分配律}， 令 $f, g, h$ 为映射， 则
+根据定义， 复合映射满足\textbf{结合律}， 令 $f, g, h$ 为映射， 则
 \begin{equation}
 h \circ (g \circ f) = (h \circ g) \circ f
 \end{equation}
@@ -81,8 +87,24 @@ h \circ (g \circ f) = (h \circ g) \circ f
 给定两个映射$f:A\to B$ 和 $g:C\to D$，则可以定义两个映射的\textbf{乘积（product）}为$f\times g:A\times C\to B\times D$，其中对于任意$a\in A, b\in B$有$f\times g(a, b)=(f(a), g(b))$．
 \end{definition}
 
-\subsection{映射的逆与逆映射}
-先来看简单的情况， 如果 $f: A\to B$ 是单射， 那么可以把它的逆映射记为 $f^{-1}: B' \to A'$， 其中 $B' \subseteq B$ 是 $f$ 的值域， $A'$ 可以是 $A$ 的任意父集． 就必须要求 $f$ 为单射， 否则若从 $f^{-1}$ 
+\subsection{逆映射}
+若已知一个映射 $f: A\to B$， 如何构造一个逆映射？ 注意我们要求\textbf{逆映射必须是一个映射}． 我们可以先试着把所有定义域和至于互换， 然后把所有 “连线” 的方向逆转． 但一般情况下， 我们不能保证这样得到的关系符合映射的定义： 例如若 $f$ 是多对一映射， 那么方向逆转后， 就会出现 “一对多” 的情况， 而这是不允许的． 又例如 $B$ 中有些元素没被 $f$ 射到， 那么 $B$ 就不能作为逆映射的定义域， 因为定义域要求每个元素都要射出一条线． 加上最少的限制以后， 可以定义逆映射如下：
+
+\begin{definition}{逆映射}
+如果 $f: A\subseteq A' \to B$ 是单射， $A'$ 是 $A$ 的任意父集， 令 $R \subseteq B$ 为映射的值域， 那么可以把它的逆映射记为 $f^{-1}: R \to A'$， 把任意 $y \in R$， 映射到 $x \in A$， 并满足 $f(x) = y$．
+\end{definition}
+也就是说， 只有单射存在逆映射． 对于非单射， 我们可以先通过限制它的定义域找到一个单射， 再寻找逆映射．
+
+\begin{example}{}
+如果取正弦函数 $y = \sin x$ 的值域为 $R = [-1, 1]$ 如果取定义域为 $\mathbb R$，  那么它不是一个单射， 因为每一个 $y \in R$ 都对应无穷个 $x$， 所以不存在反函数． 但如果取定义域为 $[-\pi/2, \pi/2]$， 那么它是一个单射， 存在反三角函数 $\sin^{-1}: [-1, 1] \to [-\pi/2, \pi]$．
+
+根据以上定义， $\sin^{-1} (\sin(x))$ 是定义在 $[-\pi/2, \pi/2]$ 上的恒等函数， 而 $\sin (\sin^{-1}(x))$ 是定义在 $[-1, 1]$ 上的恒等函数， 所以有 $\sin \circ \sin^{-1} \subseteq \sin^{-1} \circ \sin$．
+\end{example}
+
+\begin{corollary}{}
+若映射 $f:A \to R \subseteq B$ 存在逆映射 $f^{-1}: R \to A$， 那么复合映射 $f^{-1} \circ f: A \to A$ 是恒等映射．
+\end{corollary}
+根据定义可证．
 
 \addTODO{幂集最好另开词条， 这里只介绍单射的情况， 以及简单介绍一下逆像的概念}
 
@@ -99,9 +121,3 @@ f^{-1}(C) = \qty{x | x \in A, f(x) \in C}
 如果 $f:A\to B$ 是\textbf{单射}， 那么$f^{-1}$总是把单点集映射到单点集上，因此这时我们可以定义$f^{-1}:B\to A$，使得$\forall x\in A$ 都有$f^{-1}(f(x))=x$．特别地，此时我们将$f^{-1}$称为$f$的\textbf{逆映射（inverse map）}\footnote{注意“映射的逆”和“逆映射”的区别．映射的\textbf{逆}是子集到子集的映射，而\textbf{逆映射}是点到点的映射．任何映射都有\textbf{逆}，但是只有单射才有\textbf{逆映射}．}．
 
 对于双射 $f:A\to B$， 显然 $f\circ f^{-1}$ 和 $f^{-1}\circ f$ 都是单位算符（恒等映射）．注意两者的定义域分别为 $A$ 和 $B$， 当 $A \ne B$ 时不能写成 $f\circ f^{-1} = f^{-1}\circ f$．如果把 $A$，$B$ 到自身的恒等映射分别记为 $I_A$ 和 $I_B$，那么 $f\circ f^{-1}=I_B$，$f^{-1}\circ f=I_A$．
-
-\begin{example}{}
-如果取正弦函数 $y = \sin x$ 的值域为 $R = [-1, 1]$ 如果取定义域为 $\mathbb R$，  那么它不是一个单射， 因为每一个 $y \in R$ 都对应无穷个 $x$， 所以不存在反函数． 但如果取定义域为 $[-\pi/2, \pi/2]$， 那么它是一个单射， 存在反三角函数 $\sin^{-1}: [-1, 1] \to [-\pi/2, \pi]$．
-
-根据以上定义， $\sin^{-1} (\sin(x))$ 是定义在 $[-\pi/2, \pi/2]$ 上的恒等函数， 而 $\sin (\sin^{-1}(x))$ 是定义在 $[-1, 1]$ 上的恒等函数， 所以有 $\sin \circ \sin^{-1} \subseteq \sin^{-1} \circ \sin$．
-\end{example}

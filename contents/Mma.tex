@@ -25,7 +25,7 @@
 \item 虚数单位： \verb|I| 或 \verb|\[ImaginaryI]| 或搜索 \verb|ii|． \verb|a + I b| 表示复数， \verb|I| 不能用作其他变量名．
 \item 虚数单位： \verb|\[ImaginaryJ]| 或搜索 \verb|jj|．
 \item 1° 角的弧度： \verb|Degree| 或 \verb|\[Degree]| 或搜索 \verb|deg|．
-\item 无穷： \verb|Infinity| 或 \verb|\[Infinity]| 或收货 \verb|inf|．
+\item 无穷： \verb|Infinity| 或 \verb|\[Infinity]| 或搜索 \verb|inf|．
 \end{itemize}
 
 \begin{itemize}
@@ -54,8 +54,13 @@
 \subsection{变量}
 \begin{itemize}
 \item \verb|Head[...]| 可用于判断一个对象的类型， 如 \verb|Head[1]| 是 \verb|Integer|， \verb|Head[Pi]| 是 \verb|Symbol|， \verb|Head[1/5]| 是 \verb|Rational|， \verb|Head[0.2]| 是 \verb|Real|， \verb|Head[I]| 是 \verb|Complex\verb|， \verb|Sin[1]|  是 \verb|Sin|， \verb|Head[2 Pi/3]| 是 \verb|Times|．
-\item \verb|Real| 和 \verb|Complex| 用于浮点运算，有误差． 例如计算 \verb|SetPrecision[1.3, 30]| 最后记为不为零． 如果要精确表示 \verb|1.23456789|， 就用 \verb|123456789*^-8|．
+\item \verb|Precision[数值]| 用于查看某变精度数值的有效位数． 小数默认是双精度， 也叫 \verb|MachinePrecision|， 例如 \verb|Precision[1.]| 得 \verb|MachinePrecision|．
 \item \verb|SetPrecision[表达式， N]| 会把表达式中可以求出数值的部分都变为 \verb|N| 位有效数字， 例如常数 \verb|Pi|， \verb|E|， 又如 \verb|Sin[1]|． 又如 \verb|SetPrecision[2/3 x + 2 y, 20]|．
+\item \verb|Real| 和 \verb|Complex| 用于浮点运算，有误差． 例如计算 \verb|SetPrecision[1.3, 30]| 最后几位不为零． 如果要精确表示 \verb|1.23456789|， 就用 \verb|123456789*^-8|．
+\item 所有的变精度计算会追踪误差， 运算结果的有效数字一般比输入的有效数字要少， 但一定会精确到最后一位． 这估计和 Arb\upref{ArbLib} 的算法一样．
+\item 把浮点数变为分数如 \verb|Rationalize[3.14159265358, 0]|， 但最后一位后面可能不为零． 但至少之后的计算中就没有误差了．
+\item \verb|1.2345`10| 声明精确到 10 位有效数字， \verb|0.012345``10| 声明精确到 $1\e{-10}$．
+\item 更多精度控制的说明见\href{https://reference.wolfram.com/language/howto/ControlThePrecisionAndAccuracyOfNumericalResults.html}{这个文档}．
 \item \verb|?变量| 显示某个变量的定义
 \item \verb|Clear[变量名]| 清除某个变量的定义．
 \item 数组在 Mathematica 中叫做 \verb|List|， 如 \verb|data = {a, 2, c, d}|， 每个元素可以是任意类型的对象．
@@ -65,12 +70,17 @@
 \item 高维数组就是一维数组的一维数组的…… 每个维度的长度未必需要相等， 例如 \verb|T = {{1,2}, {3,4,5}}|．
 \item \verb|ConstantArray[c, {n1,n2,...}]| 可以生成常数元素的高维数组/矩阵．
 \item 数组索引从 1 开始
+\item \verb|Dimensions[a]| 可以获得矩阵各个维度的尺寸． 如果 \verb|list| 的每个元素长度或类型不同， 那么 \verb|Dimension[list]| 只返回第一个维度的尺寸．
 \item \verb|a[[i]]| 获取一维数组元素， 或者二维数组的第 $i$ 行．
+\item \verb|a[[-1]]| 表示最后一个元素， \verb|a[[-2]]| 倒数第二个元素．
+\item 似乎 \verb|a[[0]]| 输出 \verb|Head[a]|， 无论 \verb|a| 是不是 list．
 \item \verb|a[[i, j]]| 获取二维数组元素的元素， 或者三维数组的第三维的一行．
 \item \verb|a[[All, j]]| 获取一列， \verb|a[[i, All]]| 获取一行．
 \item \verb|a[[2;;4]]| 获取第 2,3,4 个元素．
 \item \verb|a[[2;;]]| 获取第 2 个到最后一个元素， \verb|a[[;;4]]| 获取第一个到第 4 个元素
 \item \verb|a[[2;;9;;3]]| 获取元素 2, 5, 8． \verb|a[[2;; ;;3]]| 获取元素 $2, 5, 8, \dots$ 直到最后．
+\item 合并矩阵/矢量 \verb|Join[{{1,2},{3,4}},{{5,6},{7,8}}]| 得 \verb|{{1,2},{3,4},{5,6},{7,8}}|， 在第 1 个维度上合并． 等效于 \verb|Join[{{1,2},{3,4}},{{5,6},{7,8}},1]|
+\item \verb|Join[{{1,2},{3,4}},{{5,6},{7,8}},2]| 得 \verb|{{1,2,5,6},{3,4,7,8}}|， 在在第 2 个维度上合并．
 \end{itemize}
 
 \subsection{算符}
@@ -128,6 +138,7 @@
 
 \begin{itemize}
 \item \verb|+, -, *, ^| 把两个矩阵进行逐个元素的运算．
+\item \verb|.| 矩阵乘法
 \item \verb|Dot| 点乘， 也可以用 \verb|.|． 例如 \verb|{1, 2}.{3, 4}|．
 \item \verb|LinearSolve[{{1, 2}, {3, 4}}, {5, 6}]| 解线性方程组．
 \item \verb|Eigenvectors[{{1,2},{3,4}}]|， \verb|Eigenvalues[{{1,2},{3,4}}]| 计算矩阵本征值．
@@ -148,9 +159,6 @@
 \item 若要假设一个数为实数， 用 \verb|Assumptions -> {x \[Element] Reals}|
 \item \verb|FourierSeries[函数, 自变量, 项数]|．
 \item \verb|FourierTransform[Exp[-x^2], x, k]| 傅里叶变换．
-\item \verb|Plot[y[x], {x, -5, 5}]| 简单的画图．
-\item \verb|Plot3D[Sin[y+Sin[3x]], {x,-3,3}, {y,-3,3}]| 简单的画图．
-\item 在图上拖动鼠标转动 3D 图， 按住 Ctrl 拖动鼠标放大缩小， 按住 Shift 拖动鼠标平移．
 \end{itemize}
 
 \subsubsection{数值运算}
@@ -160,7 +168,17 @@
 \item \verb|NMinimize[f, x]|， \verb|NMaximize[f, x]| 求函数 $f(x)$ 的最小值/最大值．
 \end{itemize}
 
+\subsection{画图}
+\begin{itemize}
+\item \verb|Plot[y[x], {x, -5, 5}]| 简单的画图．
+\item \verb|Plot3D[Sin[y+Sin[3x]], {x,-3,3}, {y,-3,3}]| 简单的函数画图．
+\item \verb|ListLinePlot[{{x1,y1},{x2,y2},...}]| 通过散点画折线图．
+\item 在图上拖动鼠标转动 3D 图， 按住 Ctrl 拖动鼠标放大缩小， 按住 Shift 拖动鼠标平移．
+\end{itemize}
+
 \subsection{文件读写}
 \begin{itemize}
+\item 从 \verb|csv| 表格文件读取矩阵如 \verb|A = Import["C:\\Users\\abcd\\Desktop\\data.csv", "csv"]|．
+\item Matlab 输出矩阵文件如 \verb|writematrix(m,'data.csv')|， 这样就可以用 Mathematica 读取 Matlab 的数据了．
 \item \verb|Put|，\verb|Save|， \verb|DumpSave|， \verb|Export|， \verb|Get| 可以储存和读取表达式（待研究）．
 \end{itemize}

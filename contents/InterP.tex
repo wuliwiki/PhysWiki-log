@@ -1,0 +1,25 @@
+% 多项式插值
+
+\pentry{范德蒙矩阵\ 范德蒙行列式\upref{VandDe}}
+
+若有 $n$ 个数据点 $x_1, \dots, x_n$， $y_1, \dots, y_n$（$x_i$ 互不相等）， 使用多项式
+\begin{equation}
+p_{m-1}(x) = c_0 + c_1 x + \dots, c_{m-1}x^{m-1}
+\end{equation}
+插值． 需要用 $m-1$ 阶多项式插值， 可以列出线性方程组
+\begin{equation}\label{InterP_eq1}
+\pmat{1 & x_1 & x_1^2 & \dots & x_1^{m-1}\\
+1 & x_2 & x_2^2 & \dots & x_2^{m-1}\\
+1 & x_3 & x_3^2 & \dots & x_3^{m-1}\\
+\vdots & \vdots & \vdots & \ddots & \vdots\\
+1 & x_n & x_n^2 & \dots & x_n^{m-1}}
+\pmat{c_0\\ c_1\\ c_2\\ \vdots \\ c_{m-1}}
+=
+\pmat{y_0\\ y_1\\ y_2\\ \vdots \\ y_{m-1}}
+\end{equation}
+现在来讨论什么时候该方程有唯一解． 事实上系数矩阵就是范德蒙矩阵\upref{VandDe}， 当 $x_i$ 互不相等时， 它的秩等于 $\min\qty{m, n}$． 所以当 $m > n$ 时， 存在无穷个解； 当 $n > m$ 时一般无解（见超定方程组\upref{OvrDet}）； 当 $n = m$ 时能确保有且仅有唯一解， 因为此时系数矩阵是满秩矩阵．
+
+\addTODO{例程}
+
+\subsection{龙格现象}
+\footnote{参考 Wikipedia \href{https://en.wikipedia.org/wiki/Runge's_phenomenon}{相关页面}．}若点的个数较多， 做多项式插值时会出现\textbf{龙格现象（Runge's phenomenon）}， 即多项式在两个端点处剧烈振动． 一种解决方法是使用多个低阶多项式插值（未完成： splint interp）． 另一种方法是不用插值而改为拟合， 当多项式阶数 $m-1 < 2\sqrt{n}$ 时， 就不会出现龙格现象．
