@@ -1,0 +1,75 @@
+% 用 Matlab 制作 gif 动画
+
+\pentry{Matlab 画图\upref{MatPlt}}
+
+这里给出一个 Matlab 代码 \verb|im2gif.m|， 通过选中文件夹中的多个图片来生成 gif 动画\footnote{网上也有一些开源软件可以完成该任务， 如 \href{http://www.onyxbits.de/giftedmotion}{GiftedMotion} （需要先安装 \href{https://www.java.com/download/ie_manual.jsp}{java}）．}． 运行程序后， 会弹出文本框提示用户选择多张图片． 图片会按照文件名排序． 选择以后， 为了减小 gif 的大小， 每张图片在读取之后将会把颜色划分为指定的个数 \verb|Ncolor|， 选中图片越多， 颜色数越多， gif 的文件就越大． 然后程序以指定的文件名生成 gif 文件， gif 的每一帧间隔为 \verb|dt| 秒．
+
+\begin{lstlisting}[language=matlab, caption=im2gif.m]
+function im2gif()
+% === 参数 =====
+fname = 'animation.gif'; % 文件名
+Ncolor = 64; % 颜色数（最大 256）
+dt = 0.1; % 间隔时间（秒）
+% ================
+[filename,path] = uigetfile('*.*', 'multiselect', 'on');
+cd(path);
+I = imread(filename{1});
+[X,cmap] = rgb2ind(I,Ncolor,'nodither');
+imwrite(X, cmap, fname, 'gif', 'Loopcount', inf, 'DelayTime', dt);
+figure;
+for ii = 2:numel(filename)
+    if strcmp(filename{ii}, fname)
+        continue;
+    end
+    I = imread(filename{ii});
+    [X,cmap] = rgb2ind(I,Ncolor,'nodither');
+    imshow(X, cmap); drawnow;
+    imwrite(X, cmap, fname, 'gif', 'WriteMode', ....
+            'append', 'DelayTime', dt);
+end
+end
+\end{lstlisting}
+
+要用 Matlab 制作一个完整的动画， 例如这个演示\href{https://wuli.wiki/apps/Lim0.html}{数列极限的动画}， 代码如下， 可以先写一个程序画好每一帧后用 \verb|saveas()| 函数自动保存为 \verb|1.png|， \verb|2.png|, 等， 共 60 张图， 如\autoref{MatGif_fig1}．
+\begin{figure}[ht]
+\centering
+\includegraphics[width=14cm]{./figures/MatGif_1.png}
+\caption{1.png} \label{MatGif_fig1}
+\end{figure}
+然后再手动运行上面的 \verb|im2gif.m|， 选择生成的 60 张图， 就会自动生成文件 \verb|animation.gif|．
+
+\begin{lstlisting}[language=matlab]
+% 数列极限的动画演示
+close all;
+A = 1;
+n = 1:40;
+an = (-1).^(n+6) ./(n+6).^1.2 + A;
+figure;
+set(gcf, 'units', 'pixels', 'outerposition', [200 200 800 400]);
+epsilon = linspace(0.06, 0.03, 60);
+plot(n, an);
+axis([0, n(end), -0.1+A, 0.1+A]);
+xlabel n; ylabel a_n;
+set(gca, 'FontSize', 14);
+hold on;
+k = 0;
+for eps = epsilon
+    k = k + 1;
+    hf = fill([0, 1, 1, 0]*n(end), [-1, -1, 1, 1]*eps+A, ....
+        [233,30,99]/255, 'FaceAlpha', 0.1, 'EdgeColor', 'none');
+    m1 = abs(an - A) > eps;
+    m2 = ~m1;
+    hs1 = scatter(n(m1), an(m1), 'marker', 'o', 'SizeData', 30,....
+        'MarkerEdgeColor', 'none', 'MarkerFaceColor', 'b');
+    hs2 = scatter(n(m2), an(m2), 'marker', 'o', 'SizeData', 30,....
+        'MarkerEdgeColor', 'none', 'MarkerFaceColor', 'r');
+    ht = text(find(m2,1), eps + A + 0.02, ....
+        ['n > ' num2str(find(m2,1)-1)], 'FontSize', 14);
+    ht2 = text(28, eps + A + 0.02, ....
+        ['|a_n - ' num2str(A) '| < ' num2str(eps, '%4.3f')], 'FontSize', 14);
+    % pause(0.1);
+    saveas(gcf, [num2str(k) '.png']);
+    delete(hf); delete(hs1); delete(hs2);
+    delete(ht); delete(ht2);
+end
+\end{lstlisting}

@@ -15,15 +15,15 @@
 % 未完成： 参考 docx 版本
 
 \begin{theorem}{}
-厄米矩阵的本征问题具有以下两个性质
+$N$ 为厄米矩阵的本征向量和本征值具有以下性质
 \begin{enumerate}
 \item 本征值为实数
 \item 本征值不同的本征矢正交
-\item 存在本征矢构成的正交归一基底
+\item 存在一组本征矢构成的正交归一基底
 \end{enumerate}
 \end{theorem}
 
-从正交子空间的角度来转述 2,3 条就是： 所有本征子空间 $V_1 \dots V_N$ 两两正交且互补， 即
+从正交子空间的角度来转述 2,3 条就是： 所有\textbf{本征子空间} $V_1 \dots V_N$ 互补且两两正交， 即
 \begin{equation}
 V_i\bot V_j \qquad (i, j = 1,\dots, N, i \ne j)
 \end{equation}
@@ -31,11 +31,133 @@ V_i\bot V_j \qquad (i, j = 1,\dots, N, i \ne j)
 V_1\oplus V_2 \oplus\dots \oplus V_N = V
 \end{equation}
 
+\addTODO{对角线加上常数则本征值也加上相同常数， 本征矢不变．}
+
+\begin{figure}[ht]
+\centering
+\includegraphics[width=6cm]{./figures/HerEig_1.pdf}
+\caption{厄米矩阵本征方程解集的结构： 图中箭头代表一维子特正空间（非简并）， 三角形代表多维子空间（简并）} \label{HerEig_fig1}
+\end{figure}
+
+% 该例题可作为块对角厄米矩阵本征问题中的例题
+% \begin{example}{计算对易厄米矩阵的共同本征矢}
+% 已知两个对易的厄米矩阵 $\bvec{A,B}$ 如下
+% \begin{equation}
+% \bvec{A} = \begin{pmatrix}
+% 1 & 0 & 0&0&0\\
+% 0&1&2&0&0\\
+% 0&2&1&0&0\\
+% 0&0&0&0&-\I\\
+% 0&0&0&\I&0
+% \end{pmatrix}
+% \qquad
+% \bvec{B} = \begin{pmatrix}
+% 2 & 0 & 0&0&0\\
+% 0&1&0&0&0\\
+% 0&0&1&0&0\\
+% 0&0&0&2&-\I\\
+% 0&0&0&\I&2
+% \end{pmatrix}
+% \end{equation}
+% 试计算它们的共同本征矢．
+
+% \textbf{解：}我们按照上面的具体计算步骤来演示：
+
+% 1．求 $\bvec{A}$ 的正交归一化本征列矢量：矩阵 $\bvec{A}$ 的本征方程为
+% \begin{equation}\label{Commut_eq1}
+% \vmat{\bvec{A}-\lambda}=
+% \vmat{
+% 1-\lambda & 0 & 0&0&0\\
+% 0&1-\lambda&2&0&0\\
+% 0&2&1-\lambda&0&0\\
+% 0&0&0&0-\lambda&-\I\\
+% 0&0&0&\I&0-\lambda
+% }=0
+% \end{equation}
+
+% 由于 $\bvec{A}$ 为块对角矩阵 $\bvec{A}=\pmat[\bvec{A_1},\bvec{A_2},\bvec{A_3}]$，其中
+% \begin{equation}
+% \bvec{A_1}=\pmat{1}\quad ,\bvec{A_2}=\pmat{1&2\\2&1}\quad
+% \bvec{A_3}=\pmat{0&-\I\\\I&0}
+% \end{equation}
+% 由分块矩阵的计算法则，\autoref{Commut_eq1} 可写成
+% \begin{equation}
+% \vmat{\bvec{A_1}-\lambda\bvec{E}}\cdot \vmat{\bvec{A_2}-\lambda\bvec{E}}\cdot\vmat{\bvec{A_3}-\lambda\bvec{E}}=0
+% \end{equation}
+
+
+% 解得 $\bvec{A}$ 的本征值为： $\lambda_1=\lambda_2=1,\lambda_3=\lambda_4=-1,\lambda_5=3$
+
+% a.对 $\lambda_1=\lambda_2=1$ ，解 $(\bvec{A}-2\bvec{E})\bvec{x}=\bvec{0}$，得基础解系：
+% \begin{equation}
+% \bvec{\xi_1}=\pmat{1\\0\\0\\0\\0},\quad
+% \bvec{\xi_2}=\pmat{0\\0\\0\\-\I\\1}
+% \end{equation}
+% 经正交归一化得
+% \begin{equation}
+% \bvec{\eta_1}=\frac{1}{\sqrt{2}}\pmat{\sqrt{2}\\0\\0\\0\\0},\quad
+% \bvec{\eta_2}=\frac{1}{\sqrt{2}}\pmat{0\\0\\0\\-\I\\1}
+% \end{equation}
+
+% b.对 $\lambda_3=\lambda_4=-1$ ，解 $(\bvec{A}-2\bvec{E})\bvec{x}=\bvec{0}$，得基础解系：
+% \begin{equation}
+% \bvec{\xi_3}=\pmat{0\\1\\-1\\0\\0},\quad
+% \bvec{\xi_4}=\pmat{0\\0\\0\\\I\\1}
+% \end{equation}
+% 经正交归一化得
+% \begin{equation}
+% \bvec{\eta_3}=\frac{1}{\sqrt{2}}\pmat{0\\1\\-1\\0\\0},\quad
+% \bvec{\eta_4}=\frac{1}{\sqrt{2}}\pmat{0\\0\\0\\\I\\1}
+% \end{equation}
+% c.对 $\lambda_5=3$ ，解 $(\bvec{A}-2\bvec{E})\bvec{x}=\bvec{0}$，得基础解系:
+% \begin{equation}
+% \bvec{\xi_5}=\pmat{0\\1\\1\\0\\0}
+% \end{equation}
+% 经正交归一化得
+% \begin{equation}
+% \bvec{\eta_5}=\frac{1}{\sqrt{2}}\pmat{0\\1\\1\\0\\0}
+% \end{equation}
+
+% 组成酉矩阵 $\mat P$， 把本征值相同的列放在一起:
+% \begin{equation}
+% \bvec{P}=\frac{1}{\sqrt{2}}\begin{pmatrix}
+% \sqrt{2}&0&0&0&0\\0&0&1&0&1\\0&0
+% &-1&0&1\\0&-\I&0&\I&0\\0&1&0&1&0
+% \end{pmatrix}
+% \end{equation}
+
+% 2.计算 $\mat B_1 = \mat P^{-1} \mat B\mat P$ 得块对角矩阵:
+% \begin{equation}
+% \bvec{P^{-1}}=\frac{1}{\sqrt{2}}\left(
+% \begin{array}{ccccc}
+%  \sqrt{2} & 0 & 0 & 0 & 0 \\
+%  0 & 0 & 1 & 0 & 1 \\
+%  0 & 0 & -1 & 0 & 1 \\
+%  0 & -\I & 0 & \I & 0 \\
+%  0 & 1 & 0 & 1 & 0 \\
+% \end{array}
+% \right)
+% \end{equation}
+
+% \begin{equation}
+% \mat B_1=\mat P^{-1} \mat B\mat P=\left(
+% \begin{array}{ccccc}
+%  2 & 0 & 0 & 0 & 0 \\
+%  0 & 3 & 0 & 0& 0 \\
+%  0 & 0 & 1 & 0 & 0 \\
+%  0 & 0 & 0 & 1 & 0 \\
+%  0 & 0 & 0 & 0 & 1 \\
+% \end{array}
+% \right)
+% \end{equation}
+% 显然，$\bvec{B}$ 已经由酉矩阵 $\bvec{P}$ 对角化，即 $\bvec{P}$ 的每一列是 $\bvec{A,B}$ 的共同本征矢． 
+% \end{example}
+
 \subsection{证明}
 \subsubsection{本征值为实数}
 本征方程为
 \begin{equation}
-\mat H \bvec v_i = \bvec v_i
+\mat H \bvec v_i = \lambda_i \bvec v_i
 \end{equation}
 将本征方程左边乘以 $\bvec v_i$ 得
 \begin{equation}
@@ -66,10 +188,13 @@ s = (\mat H \bvec v_i)\Her \bvec v_j = \lambda_i^* \bvec v_i\Her \bvec v_j = \la
 \end{equation}
 因为 $\lambda_i \ne \lambda_j$， 所以 $\bvec v_i\Her \bvec v_j = 0$．
 
-\subsection{简并}
+\subsection{对角化}
+\addTODO{把 MatSim 中的内容搬运过来．}
+
+\subsection{简并}\label{HerEig_sub1}
 在 “矩阵的本征方程\upref{MatEig}” 中， 我们定义若令 $\lambda_i$ 的本征矢空间的维数是 $n_i$， 当 $n_i = 1$， 我们说 $\lambda_i$ 是\textbf{非简并（non-degenerate）}的， 当 $n_i > 1$ 就说 $\lambda_i$ 是 $n_i$ 重\textbf{简并（degenerate）}的， 把 $n_i$ 叫做\textbf{简并数（degeneracy）}．
 
-根据\autoref{HerEig_eq1}， 对于厄米矩阵， 所有不同的 $\lambda_i$ 对应的本征矢子空间是两两正交的， 且 $\sum_i n_i = N$， 所以所有这些子空间的直和就是 $\mat A$ 的定义域空间， 即他们互为正交补\upref{OrthSp}．
+根据\autoref{HerEig_eq1}， 对于厄米矩阵， 所有不同的 $\lambda_i$ 对应的\textbf{本征子空间}是两两正交的， 且 $\sum_i n_i = N$， 所以所有这些子空间的直和就是 $\mat A$ 的定义域空间， 即他们互为正交补\upref{OrthSp}．
 \addTODO{如何证明 $\sum_i n_i = N$ 呢？估计要证明 $m$ 重跟可以使得行稀疏矩阵的秩为 $N-m$．}
 
 \subsection{完备正交基底}
@@ -79,3 +204,6 @@ s = (\mat H \bvec v_i)\Her \bvec v_j = \lambda_i^* \bvec v_i\Her \bvec v_j = \la
 \item 如果存在简并， 每个子空间中可以选出 $n_i$ 个正交归一基底， 将他们放在一起就得到总空间中的 $N$ 个正交归一基底． 注意每个简并子空间中的正交归一基底的选取都是任意的．
 \end{itemize}
 \addTODO{举一个综合的例子，包含简并的}
+
+\subsection{块对角厄米矩阵的本征问题}\label{HerEig_sub2}
+特殊地， 如果厄米矩阵 $\mat H$ 是一个块对角矩阵， …… 那么只需要分别求解每个块的本征矢矩阵， 再拼成块对角矩阵就是 $\mat H$ 的本征矢矩阵．

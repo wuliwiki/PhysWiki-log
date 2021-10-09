@@ -86,13 +86,12 @@ while true
     for ii = find(mask)
         y(ii) = f(x(ii,:));
     end
-    mask(:) = false;
     [y, order] = sort(y);
     x = x(order,:);
-    mask = mask(order);
     m = mean(x(1:N,:)); % 平均位置
     r = 2*m - x(N+1,:); % 反射点
     f_r = f(r);
+    mask(:) = false;
     mask(end) = true;
     if y(1) <= f_r && f_r < y(N) % 第 4 步
         x(N+1,:) = r; continue;

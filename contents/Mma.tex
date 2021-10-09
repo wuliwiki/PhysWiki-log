@@ -2,7 +2,10 @@
 
 \pentry{复数\upref{CplxNo}， 自然对数底\upref{E}}
 
-详情参考 Mathematica 的官方文档．
+Mathematica 相对于 Matlab， Python 等偏数值计算的语言最大的特点就是专注于符号计算以及变精度计算（也叫任意精度计算）． 其中变精度计算能追踪误差， 保证输出结果的最后一位小数正确．
+
+以下笔记详情参考 Mathematica 的\href{https://reference.wolfram.com/language/}{官方文档}．
+
 \subsection{常识}
 \begin{itemize}
 \item 调整字体大小 \verb|Ctrl + 鼠标滚轮|．
@@ -58,33 +61,51 @@
 \item \verb|SetPrecision[表达式， N]| 会把表达式中可以求出数值的部分都变为 \verb|N| 位有效数字， 例如常数 \verb|Pi|， \verb|E|， 又如 \verb|Sin[1]|． 又如 \verb|SetPrecision[2/3 x + 2 y, 20]|．
 \item \verb|Real| 和 \verb|Complex| 用于浮点运算，有误差． 例如计算 \verb|SetPrecision[1.3, 30]| 最后几位不为零． 如果要精确表示 \verb|1.23456789|， 就用 \verb|123456789*^-8|．
 \item 所有的变精度计算会追踪误差， 运算结果的有效数字一般比输入的有效数字要少， 但一定会精确到最后一位． 这估计和 Arb\upref{ArbLib} 的算法一样．
+\item 在开始用 \verb|WorkingPrecision -> MachinePrecision;| 可以把以后的浮点计算都变为双精度而不是变精度的． 这会导致计算结果的小数位都是 16 左右， 但并不都是对的． 这么做的好处是计算速度快．
 \item 把浮点数变为分数如 \verb|Rationalize[3.14159265358, 0]|， 但最后一位后面可能不为零． 但至少之后的计算中就没有误差了．
 \item \verb|1.2345`10| 声明精确到 10 位有效数字， \verb|0.012345``10| 声明精确到 $1\e{-10}$．
 \item 更多精度控制的说明见\href{https://reference.wolfram.com/language/howto/ControlThePrecisionAndAccuracyOfNumericalResults.html}{这个文档}．
 \item \verb|?变量| 显示某个变量的定义
 \item \verb|Clear[变量名]| 清除某个变量的定义．
-\item 数组在 Mathematica 中叫做 \verb|List|， 如 \verb|data = {a, 2, c, d}|， 每个元素可以是任意类型的对象．
+\item 数组在 Mathematica 中叫做 \verb|List|（列表）， 如 \verb|data = {a, 2, c, d}|， 每个元素可以是任意类型的对象．
 \item \verb|T = {{1, 2}, {3, 4, 5}}|， 是列表的列表．
+\end{itemize}
+
+\subsection{矩阵与线性代数}
+\begin{itemize}
+\item \verb|{1,2,3,4}| 叫做 \verb|List|（列表）， Mathematica 的矩阵就是列表的列表．
+\item 高维列表就是列表的列表的…… 每个维度的长度未必需要相等， 例如 \verb|T = {{1,2}, {3,4,5}}|． 但如果是矩阵或者高维矩阵（张量）就必须相等．
 \item \verb|Tableform[T]| 用于显示矩阵（没有括号）．
 \item \verb|MatrixForm[T]| 用于显示矩阵（有圆括号）．
-\item 高维数组就是一维数组的一维数组的…… 每个维度的长度未必需要相等， 例如 \verb|T = {{1,2}, {3,4,5}}|．
-\item \verb|ConstantArray[c, {n1,n2,...}]| 可以生成常数元素的高维数组/矩阵．
-\item 数组索引从 1 开始
+\item \verb|Tableform[T]| 和 \verb|MatrixForm[T]| 不再是列表， 所以只用它们来显示而不要用来赋值． 例如矩阵乘法 \verb|MatrixForm[A] . MatrixForm[B]| 不会返回最后结果．
+\item \verb|ConstantArray[c, {n1,n2,...}]| 可以生成常数元素的高维矩阵．
 \item \verb|Dimensions[a]| 可以获得矩阵各个维度的尺寸． 如果 \verb|list| 的每个元素长度或类型不同， 那么 \verb|Dimension[list]| 只返回第一个维度的尺寸．
-\item \verb|a[[i]]| 获取一维数组元素， 或者二维数组的第 $i$ 行．
+\item 列表的索引从 1 开始
+\item \verb|a[[i]]| 获取一维列表元素， 或者二维列表的第 $i$ 行．
 \item \verb|a[[-1]]| 表示最后一个元素， \verb|a[[-2]]| 倒数第二个元素．
-\item 似乎 \verb|a[[0]]| 输出 \verb|Head[a]|， 无论 \verb|a| 是不是 list．
-\item \verb|a[[i, j]]| 获取二维数组元素的元素， 或者三维数组的第三维的一行．
+\item \verb|a[[0]]| 输出 \verb|Head[a]|， 无论 \verb|a| 是不是列表．
+\item \verb|a[[i, j]]| 获取二维列表元素的元素， 或者三维列表的一个最内层花括号．
 \item \verb|a[[All, j]]| 获取一列， \verb|a[[i, All]]| 获取一行．
 \item \verb|a[[2;;4]]| 获取第 2,3,4 个元素．
 \item \verb|a[[2;;]]| 获取第 2 个到最后一个元素， \verb|a[[;;4]]| 获取第一个到第 4 个元素
 \item \verb|a[[2;;9;;3]]| 获取元素 2, 5, 8． \verb|a[[2;; ;;3]]| 获取元素 $2, 5, 8, \dots$ 直到最后．
 \item 合并矩阵/矢量 \verb|Join[{{1,2},{3,4}},{{5,6},{7,8}}]| 得 \verb|{{1,2},{3,4},{5,6},{7,8}}|， 在第 1 个维度上合并． 等效于 \verb|Join[{{1,2},{3,4}},{{5,6},{7,8}},1]|
 \item \verb|Join[{{1,2},{3,4}},{{5,6},{7,8}},2]| 得 \verb|{{1,2,5,6},{3,4,7,8}}|， 在在第 2 个维度上合并．
+\item Mathematica 中把若干矢量排列成矩阵都是按行排列． 例如 \verb|Eigenvector| 返回的本征矢．
+\item \verb|Dot| 点乘， 也可以用 \verb|.|． 例如 \verb|{1, 2}.{3, 4}|． 注意不会进行共轭．
+\item \verb|Transpose[]| 可以把矩阵做转置． 也可以在矩阵后面用 \verb|\[Transpose]| 或者 \verb|Esc| 键搜索 \verb|tr|．
+\item \verb|ConjugateTranspose[]| 可以把矩阵做厄米共轭． 也可以在矩阵后面用 \verb|\[HermitianConjugate]| 或者 \verb|Esc| 键搜索 \verb|hc|．
+\item \verb|LinearSolve[{{1, 2}, {3, 4}}, {5, 6}]| 解线性方程组．
+\item \verb|Eigenvectors[{{1,2},{3,4}}]|， \verb|Eigenvalues[{{1,2},{3,4}}]| 计算矩阵本征值． 或者 \verb|EigenSystem[矩阵]|， 一次返回 \verb|{本征值，本征矢}|，和分别计算是一样的． 注意返回的本征矢矩阵每行是一个本征矢而不是每列． 注意符号计算时返回的本征矢未必是归一化也未必是正交的（因为这往往需要很久）， 数值计算时返回的是正交归一本征矢．
+\item \verb|Orthogonalize[]| 可以把矢量的 list 正交归一化（如果看成矩阵， 则每行是一个矢量）．
+\item \verb|MatrixExp[A]| 计算矩阵的指数 $\E^{A}$．
 \end{itemize}
+
 
 \subsection{算符}
 \begin{itemize}
+\item \verb|+, -, *, ^| 把两个矩阵进行逐个元素的运算．
+\item \verb|.| 矩阵乘法
 \item \verb|=| 立即赋值（赋值时理科计算右边， 最终结果赋给左边）
 \item \verb|:=| 延迟赋值（每次需要左边时都替换为右边）
 \item \verb|!=| 不等号
@@ -96,6 +117,7 @@
 \item \verb|Remove[x]| 完全清除符号．
 \item \verb|i++| 和 \verb|++i| 和 \verb|--| 与 C 语言中用法相同．
 \item \verb|x ∈ dom| 或 \verb|x \[Element] dom| 相当于 \verb|Element[x, dom]|
+\item \verb|&@| 可以把右边的结果在左边用 \verb|#| 代替， 如 \verb|#.#\[Transpose] &@RandomInteger[{-5, 5}, {6, 6}]| 可以随机生成对称矩阵．
 \end{itemize}
 
 \subsection{判断循环}
@@ -110,6 +132,7 @@
 \begin{itemize}
 \item 定义函数 \verb|f[x_, y_] := x^2 + y^2|． 左边的自变量需要用下划线．
 \item 更复杂的函数也可以用 \verb|Module[]| 定义如 \verb|f[x0_] := Module[{x = x0}, While[x > 0, x = Log[x]]; x]| 注意 \verb|Module| 定义的函数不支持一些符号运算， 例如 \verb|D[f[x]]| 会得到错误的结果．
+\item 如果一个函数返回一个 list， 可以用 \verb|{a,b,..} = Fun[...]| 把每个元素分别赋给不同变量． 这是事实上不是函数的功能， \verb|{a, b, c} = {{1, 2}, 2, "c"}| 也可以对 \verb|a,b,c| 分别赋值．
 \end{itemize}
 
 \subsection{常用函数}
@@ -134,15 +157,6 @@
 \item \verb|/@| 是 \verb|Map| 的简写形式 \verb|f /@ Range[3]|．
 \item 分段函数 \verb|f[x_] := 0 /; x < -1| 以及 \verb|f[x_] := 1 /; x > -1 && x < 1| 等．
 \item Listable 的函数可以直接 \verb|Sin[Range[3]]|． \verb|Atributes[Sin]|
-\end{itemize}
-
-\begin{itemize}
-\item \verb|+, -, *, ^| 把两个矩阵进行逐个元素的运算．
-\item \verb|.| 矩阵乘法
-\item \verb|Dot| 点乘， 也可以用 \verb|.|． 例如 \verb|{1, 2}.{3, 4}|．
-\item \verb|LinearSolve[{{1, 2}, {3, 4}}, {5, 6}]| 解线性方程组．
-\item \verb|Eigenvectors[{{1,2},{3,4}}]|， \verb|Eigenvalues[{{1,2},{3,4}}]| 计算矩阵本征值．
-\item \verb|MatrixExp[A]| 计算矩阵的指数 $\E^{A}$．
 \end{itemize}
 
 \subsubsection{微积分}
@@ -172,8 +186,11 @@
 \begin{itemize}
 \item \verb|Plot[y[x], {x, -5, 5}]| 简单的画图．
 \item \verb|Plot3D[Sin[y+Sin[3x]], {x,-3,3}, {y,-3,3}]| 简单的函数画图．
-\item \verb|ListLinePlot[{{x1,y1},{x2,y2},...}]| 通过散点画折线图．
+\item 通过散点画折线图用 \verb|ListLinePlot[{{x1,y1},{x2,y2},...}]| 如果省略 \verb|x|， 那么默认 \verb|x=1,2,3,...|． 或者画多条线 \verb|ListLinePlot[{{y1,y2,...},{z1,z2...}}]|． 第二个参数用 \verb|Mesh -> All| 可以除了折线还画出数据点．
 \item 在图上拖动鼠标转动 3D 图， 按住 Ctrl 拖动鼠标放大缩小， 按住 Shift 拖动鼠标平移．
+\item 要在一张图上画多个不同内容例如 \verb|Show[Plot[2 x^2, {x, 0, 4}], 
+ ListLinePlot[{{...}, {...}}, Mesh -> All]]|
+\item \verb|Plot| 和 \verb|ListLinePlot| 的更多性质见\href{https://reference.wolfram.com/language/ref/Plot.html}{这里}．
 \end{itemize}
 
 \subsection{文件读写}

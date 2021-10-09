@@ -1,0 +1,364 @@
+% 二阶齐次变系数线性微分方程的幂级数解法
+% 幂级数|ODE|常微分方程|differential equation|二阶微分方程
+
+\pentry{幂级数\upref{powerS}，常系数线性齐次微分方程\upref{ODEb2}}
+
+\addTODO{是不是还要加上差分方程作为预备知识？}
+
+\subsection{从例子出发}
+
+从微积分学中我们知道，许多函数是可以表示为幂级数的形式：$f(x)=a_0+a_1x+a_2x^2+\cdots$．幂级数良好的性质可以用于解二阶微分方程．
+
+我们先看一个简单的实例．遵循微积分学的习惯，我们这里以$x$为自变量了．
+
+\begin{example}{}\label{ODE2P_ex1}
+考虑方程
+\begin{equation}\label{ODE2P_eq4}
+\frac{\mathrm{d}^2 y}{\dd x^2}-2x\frac{\dd y}{\dd x}-4y=0
+\end{equation}
+在初始条件
+\begin{equation}\label{ODE2P_eq1}
+\leftgroup{
+    y(0)&=0\\
+    y(1)&=1
+}
+\end{equation}
+下的\textbf{特解}．
+
+尝试设
+\begin{equation}\label{ODE2P_eq3}
+y(x)=a_0+a_1x+a_2x^2+\cdots=\sum\limits_{i=0}^\infty a_ix^i
+\end{equation}
+
+首先代入初值条件\autoref{ODE2P_eq1} ，得到$a_0=0, a_1=1$．
+
+接着，考虑到
+\begin{equation}\label{ODE2P_eq2}
+\leftgroup{
+    &\frac{\mathrm{d}^2 y}{\dd x^2}=2a_2+6a_3x+12a_4x^2+\cdots=\sum\limits_{k=0}^\infty (k+1)(k+2)a_{k+2}x^k\\
+    &2x\frac{\dd y}{\dd x}=2a_1x+4a_2x^2+6a_3x^3+\cdots=\cdots=\sum\limits_{k=1}^\infty 2ka_kx^k
+}
+\end{equation}
+
+将\autoref{ODE2P_eq2} 和\autoref{ODE2P_eq3} 代回\autoref{ODE2P_eq4} ，比较各$x^k$的系数，得到
+\begin{equation}
+(k+1)(k+2)a_{k+2}=(2k+4)a_k
+\end{equation}
+整理得
+\begin{equation}
+a_{k+2}=\frac{2}{k+1}a_k
+\end{equation}
+
+这是一个二阶\textbf{差分方程}．
+
+由于$a_0=0$，故$a_{2k}=0$对所有$k$成立．我们只需要考虑奇数项即可．
+
+令$b_k=a_{2k-1}$\footnote{反过来就是$a_k=b_{\frac{k+1}{2}}$．}，则我们有$b_1=a_1=1$和$b_{\frac{k+3}{2}}=\frac{2}{k+1}b_{\frac{k+1}{2}}$；换个写法，就是$b_{k+1}=\frac{1}{k}b_k$．
+
+因此，
+\begin{equation}
+b_k=\frac{1}{(k-1)!}
+\end{equation}
+
+进而
+\begin{equation}\label{ODE2P_eq6}
+\begin{aligned}
+y&=b_1x+b_2x^3+b_3x^5+\cdots\\
+ &=x\sum\limits_{k=1}^\infty b_kx^{2k-2}\\
+ &=x\sum\limits_{k=1}^\infty \frac{x^{(2k-2)}}{(k-1)!}\\
+ &=x\sum\limits_{k=0}^\infty \frac{x^{2k}}{k!}\\
+ &=x\E^{x^2} 
+\end{aligned}
+\end{equation}
+
+\end{example}
+
+\autoref{ODE2P_ex1} 中“假设解为$x$的幂级数，通过比较系数来求出解”的方法，被称为\textbf{幂级数解法}．
+
+
+\subsection{幂级数解法}
+
+\autoref{ODE2P_ex1} 和我们之前所解的方程不一样，\autoref{ODE2P_eq4} 中的系数$2x$不再是一个常数，而是$x$的函数，这使得我们应对\textbf{常系数}方程的方法无效了．对于二阶变系数方程，幂级数解法是很有用的．
+
+哪些方程能应用幂级数解法呢？幂级数解的收敛区间又是否能覆盖所要求解的区间呢？这些问题有完善的解答，但由于较为深入，我们在此只给出重要的结论．
+
+我们所考虑的方程是形如
+\begin{equation}\label{ODE2P_eq5}
+\qty(\frac{\mathrm{d}^2}{\dd x^2}+p(x)\frac{\dd}{\dd x}+q(x))y(x)=0
+\end{equation}
+在$x=0$处的\textbf{特解}．
+
+$x=x_0$处的特解，可以通过变量代换$t=x-x_0$，来化为$y(t)$的方程在$t=0$处的特解问题．
+
+\begin{theorem}{}\label{ODE2P_the2}
+如果\autoref{ODE2P_eq5} 中的$p(x)$和$q(x)$都可以写为$x$的幂级数形式，且它们在区间$\abs{x}<X$上收敛，那么方程有形如
+\begin{equation}
+y=\sum\limits_{k=0}^\infty a_nx^n
+\end{equation}
+的特解，且该特解也在$\abs{x}<X$上收敛．
+\end{theorem}
+
+\autoref{ODE2P_ex1} 中的系数为$-2x$和$-4$，它们都在整个实数轴上收敛，因此我们最终算出来的特解\autoref{ODE2P_eq6} 也在整个实数轴上收敛．
+
+\begin{theorem}{}\label{ODE2P_the1}
+如果$xp(x)$和$x^2q(x)$均能展成幂级数形式，并且都在$\abs{x}<X$上收敛，那么\autoref{ODE2P_eq5} 有形如
+\begin{equation}\label{ODE2P_eq7}
+y=x^\alpha\sum\limits_{k=0}^\infty a_kx^k
+\end{equation}
+的特解，其中$a_0\neq 0$，$\alpha$是一个待定常数，并且\autoref{ODE2P_eq7} 也在$\abs{x}<X$上收敛．
+
+
+\end{theorem}
+
+
+\subsection{若干例题}
+
+二阶变系数线性微分方程在工程和物理中应用广泛，因此我们在此举出一些例题，以帮助读者熟悉其解法．
+
+\begin{example}{}\label{ODE2P_ex2}
+考虑方程
+\begin{equation}\label{ODE2P_eq9}
+\qty(\frac{\mathrm{d}^2}{\dd x^2}+\frac{1}{x}\frac{\dd}{\dd x}-\frac{1}{x})y(x)=0
+\end{equation}
+在
+\begin{equation}\label{ODE2P_eq10}
+\leftgroup{
+    y(0)&= 1\\
+    y'(0)&= 1\\
+}
+\end{equation}
+下的特解．
+
+设所求特解为
+\begin{equation}\label{ODE2P_eq8}
+\sum\limits_{k=0}^\infty a_kx^k
+\end{equation}
+
+这次我们先求通解，再代入初值条件求特解．
+
+首先将\autoref{ODE2P_eq8} 代入\autoref{ODE2P_eq9} ，得到
+\begin{equation}
+\sum\limits_{k=0}^\infty (k+2)(k+1)a_{k+2}x^k+(k+2)a_{k+2}x^k-a_{k+1}x^k=0
+\end{equation}
+
+从而得到
+\begin{equation}
+a_{k+2}=\frac{a_{k+1}}{(k+2)^2}
+\end{equation}
+
+即
+\begin{equation}\label{ODE2P_eq11}
+a_k=\frac{a_{k-1}}{k^2}
+\end{equation}
+
+由初值条件\autoref{ODE2P_eq10} 得，
+\begin{equation}
+a_k=\frac{1}{(k!)^2}
+\end{equation}
+
+则
+\begin{equation}
+y=\sum\limits_{k=0}^\infty \frac{x^k}{(k!)^2}
+\end{equation}
+是所求的特解．
+
+
+\end{example}
+
+
+% 注释掉一个出得不好的题
+
+% \begin{example}{}\label{ODE2P_ex4}\label{ODE2P_ex3}
+% 考虑方程
+% \begin{equation}\label{ODE2P_eq14}
+% \qty(\frac{\mathrm{d}^2}{\dd x^2}+\frac{1}{x}\frac{\dd}{\dd x}-\frac{1}{x})y(x)=0
+% \end{equation}
+% 在
+% \begin{equation}\label{ODE2P_eq12}
+% \leftgroup{
+%     y(0)&= 0\\
+%     y'(0)&= 1\\
+% }
+% \end{equation}
+% 下的特解．
+
+% 这个例子的方程和\autoref{ODE2P_ex2} 一样， 但是初值条件不同．用\autoref{ODE2P_ex2} 的方法是求不出给定特解的，因为初值条件不满足\autoref{ODE2P_eq11} ．
+
+% 应用\autoref{ODE2P_the1} ，设所求特解为
+% \begin{equation}\label{ODE2P_eq13}
+% y=x^{-\alpha}\sum\limits^\infty_{k=0}a_kx^k=\sum\limits^\infty_{k=0}a_kx^{k+\alpha}
+% \end{equation}
+
+% 将\autoref{ODE2P_eq13} 代入\autoref{ODE2P_eq14} ，得到
+% \begin{equation}\label{ODE2P_eq15}
+% \begin{aligned}
+% \sum\limits_{k=0}^\infty (k+\alpha)(k+\alpha-1)a_kx^{k+\alpha-2}+\\
+% \sum\limits_{k=0}^\infty(k+\alpha)a_kx^{k+\alpha-2}-\\
+% \sum\limits_{k=0}^\infty a_kx^{k+\alpha-1}\\
+% =0
+% \end{aligned}
+% \end{equation}
+
+% 重新排列一下，把$x$的对应次幂放到一起，将\autoref{ODE2P_eq15} 整理成
+% \begin{equation}\label{ODE2P_eq16}
+% \sum\limits_{k=1}^\infty\qty[(k+\alpha)^2a_k-a_{k-1}]x^{k+\alpha-2}+\alpha^2a_0x^{\alpha-2}=0
+% \end{equation}
+
+% 令\autoref{ODE2P_eq16} 左边各项系数为零，得到一系列代数方程：
+% \begin{equation}\label{ODE2P_eq17}
+% \leftgroup{
+%     \alpha^2a_0&=0\\
+%     (\alpha+1)^2a_1-a_0&=0\\
+%     (\alpha+2)^2a_2-a_1&=0\\
+%     &\vdots\\
+%     (\alpha+k)^2a_k-a_{k-1}&=0\\
+%     &\vdots\\
+% }
+% \end{equation}
+
+% 初值条件决定了
+% \begin{equation}
+% \leftgroup{
+%     a_0=0\\
+%     \sum\limits_{k=0}^\infty
+% }
+% \end{equation}
+
+
+
+% \end{example}
+
+
+\begin{example}{$n$阶贝塞尔方程}\label{ODE2P_ex4}
+
+$n$阶贝塞尔方程形如
+\begin{equation}\label{ODE2P_eq18}
+x^2\frac{\mathrm{d}^2 y}{\dd x^2}+x\frac{\dd y}{\dd x}+(x^2-n^2)y=0
+\end{equation}
+其中$n$是任意\textbf{非负}常数，\textbf{不一定是整数}．
+
+首先把\autoref{ODE2P_eq18} 改写为
+\begin{equation}
+\frac{\mathrm{d}^2 y}{\dd x^2}+\frac{1}{x}\frac{\dd y}{\dd x}+(1-\frac{n^2}{x^2})y=0
+\end{equation}
+
+由\autoref{ODE2P_the1} ，它的特解形如
+\begin{equation}\label{ODE2P_eq19}
+y=\sum\limits_{k=0}^\infty a_kx^{k+\alpha}
+\end{equation}
+其中$a_k, \alpha$是待定常数，且$a_0\neq 0$\footnote{总可以通过调整$\alpha$使$a_0\neq 0$．}．
+
+将\autoref{ODE2P_eq19} 代入\autoref{ODE2P_eq18} ，可得
+\begin{equation}\label{ODE2P_eq20}
+\begin{aligned}
+&\sum\limits^\infty_{k=0}a_k(k+\alpha)(k+\alpha-1)x^{k+\alpha}\\+
+&\sum\limits^\infty_{k=0}a_k(k+\alpha)x^{k+\alpha}\\+
+&\sum\limits^\infty_{k=0}a_kx^{k+\alpha+2}\\-
+&\sum\limits^\infty_{k=0}a_kn^2x^{k+\alpha}\\
+&=0
+\end{aligned}
+\end{equation}
+
+重新整理一下\autoref{ODE2P_eq20} ，将$x$的同次幂放在一起，得到
+\begin{equation}
+\begin{aligned}
+\sum\limits^\infty_{k=0}[(k+\alpha)^2-n^2]a_kx^{k+\alpha}\\
++\sum\limits^\infty_{k=2}a_{k-2}x^{k+\alpha}=0
+\end{aligned}
+\end{equation}
+令各项系数为$0$，则得到一系列代数方程：
+\begin{equation}\label{ODE2P_eq21}
+\leftgroup{
+    (\alpha^2-n^2)a_0&=0\\
+    [(1+\alpha)^2-n^2]a_1&=0\\
+    [(2+\alpha)^2-n^2]a_2+a_0&=0\\
+    [(3+\alpha)^2-n^2]a_3+a_1&=0\\
+    &\vdots
+}
+\end{equation}
+由于$a_0\neq 0$，故$\alpha=\pm n$．
+
+将$\alpha=n$代入\autoref{ODE2P_eq21} ，可以逐个计算出$a_k$（除了$a_0$）
+\begin{equation}
+\leftgroup{
+    a_1&=0\\
+    a_k&=-\frac{a_{k-2}}{k(k+2n)}, k=2, 3,\cdots
+}
+\end{equation}
+因此对于\textbf{奇数}$k$，$a_k=0$．
+
+再把$\alpha$和$a_k$一起代入\autoref{ODE2P_eq19} ，得到一个解
+\begin{equation}\label{ODE2P_eq22}
+y_1=a_0x^n+\sum\limits^\infty_{k=2}\frac{(-1)^ka_0}{2^{2k}k!(n+1)(n+2)\cdots(n+k)}x^{n+2k}
+\end{equation}
+
+
+定义\textbf{Gamma 函数}\upref{Gamma}为：当$s>0$时，$\Gamma(s)=\int_0^{+\infty}x^{s-1}\E^{-x}\dd x$；当$s\leq 0$时，$\Gamma(s)=\frac{1}{s}\Gamma(s+1)$．
+
+Gamma函数有两个性质：对正整数$n$, $\Gamma(n+1)=n!$；$\Gamma(s+1)=s\Gamma(s)$．
+
+\autoref{ODE2P_ex4}  中的解\autoref{ODE2P_eq22} 仍有一个待定常数$a_0$．如果令$a_0=\frac{1}{2^n\Gamma(n+1)}$，那么我们就能得到：
+\begin{equation}\label{ODE2P_eq23}
+\begin{aligned}
+y_1&=\sum\limits^\infty_{k=0}\frac{(-1)^k}{k!(n+1)(n+2)\cdots(n+k)\Gamma(n+1)}\qty(\frac{x}{2})^{n+2k}\\
+ &=\sum\limits^\infty_{k=0}\frac{(-1)^k}{k!\Gamma(n+k+1)}\qty(\frac{x}{2})^{n+2k}
+\end{aligned}
+\end{equation}
+
+\autoref{ODE2P_eq23} 被称为\textbf{$n$阶贝塞尔函数}，常记作$J_n(x)$．
+
+
+\end{example}
+
+
+
+\begin{example}{}\label{ODE2P_ex5}
+依然是考虑\autoref{ODE2P_ex4} 中的贝塞尔方程．
+
+我们已经知道，对于$n$阶贝塞尔方程，总有一个特解$J_n(x)$．为了求出另一个线性无关的特解，我们考虑$\alpha=-n$的情况．
+
+类似地，通过\autoref{ODE2P_eq21} 我们能得到（$k$取遍正整数）：
+\begin{equation}
+\leftgroup{
+    &a_{2k-1}=0\\
+    &a_{2k}=\frac{(-1)^ka_0}{2^{2k}k!(-n+1)(-n+2)\cdots(-n+k)}
+}
+\end{equation}
+
+然后类似\autoref{ODE2P_ex4} ，得到特解
+\begin{equation}\label{ODE2P_eq24}
+y_2=a_0x^{-n}+\sum\limits^\infty_{k=1}\frac{(-1)^ka_0}{2^{2k}k!(-n+1)(-n+2)\cdots(-n+k)}x^{-n+2k}
+\end{equation}
+
+令$a_0=\frac{1}{2^{-n}\Gamma(-n+1)}$，代入\autoref{ODE2P_eq24} 得
+\begin{equation}\label{ODE2P_eq25}
+y_2=\sum\limits^\infty_{k=0}\frac{(-1)^k}{k!\Gamma(-n+k+1)}\qty(\frac{x}{2})^{-n+2k}
+\end{equation}
+通常把\autoref{ODE2P_eq25} 记作$J_{-n}(x)$，称为\textbf{$-n$阶贝塞尔函数}．
+
+
+
+\end{example}
+
+$J_n$和$J_{-n}$统称为\textbf{第一类贝塞尔函数}，它们线性无关，因而可以用来将贝塞尔方程\autoref{ODE2P_eq18} 的通解表示为
+\begin{equation}
+y(x)=C_1J_n(x)+C_2J_{-n}(x)
+\end{equation}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

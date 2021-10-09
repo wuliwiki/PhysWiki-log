@@ -31,3 +31,26 @@ F = subs(F, Eta, vpa(eta,17));
 ret = real(double(subs(F, Rho, vpa(rho,17))));
 end
 \end{lstlisting}
+
+\subsection{库仑平面波程序}
+以下 Maltab 程序用于计算\autoref{CulmWf_eq7}~\upref{CulmWf}．
+\begin{lstlisting}[language=matlab]
+% 直角坐标系的库仑平面波
+% Sign = 1 球面波出射, Sign = -1 球面波入射
+% 'numel(k) = 3'
+% 归一化: delta(\vec k - \vec k'),
+%     无穷远平面波振幅 1/(2*pi)^1.5
+function Psi = coulomb_plane(k,X,Y,Z,ZZ,Sign)
+if (ZZ < 0)
+    error('ZZ (nuclear charge) must be positive!');
+end
+Sign = sign(Sign);
+k0 = norm(k);
+eta = -ZZ/k0;
+k_dot_r = k(1)*X + k(2)*Y + k(3)*Z;
+kr = k0*sqrt(X.^2+Y.^2+Z.^2);
+C = 1/(2*pi)^1.5 * double(gamma(1+Sign*1i*vpa(eta))) * exp(-pi*eta*0.5);
+Psi = C * exp(1i*k_dot_r) .* hypergeom(-Sign*1i*eta, 1, ....
+    Sign*1i*kr - 1i*k_dot_r);
+end
+\end{lstlisting}

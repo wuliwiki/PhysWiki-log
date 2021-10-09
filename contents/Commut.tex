@@ -1,10 +1,10 @@
-% 对易厄米算符与共同本征矢
+% 对易厄米矩阵与共同本征矢
 % 算符|本征矢|本征矢|量子力学|对易
 
 % 和 “算符对易与共同本征函矢” 重复了！ 保留这个
 
-\pentry{厄米矩阵\upref{HerMat}，%未完成链接
-本征矢的简并}%未完成， 要引入希尔伯特子空间的概念， 说明子空间中的任意一个函数都是本征矢， n重简并的子空间是n维的， 即可以有n个线性无关的本征矢张成. 一般选取两两正交的波函数作为基底， 基底有无穷多种选法， 任何基底经过任意幺正变换以后仍然是子空间的基底. 类比一下
+\pentry{厄米矩阵的本征问题\upref{HerEig}}
+%未完成， 要引入希尔伯特子空间的概念， 说明子空间中的任意一个函数都是本征矢， n重简并的子空间是n维的， 即可以有n个线性无关的本征矢张成. 一般选取两两正交的波函数作为基底， 基底有无穷多种选法， 任何基底经过任意幺正变换以后仍然是子空间的基底. 类比一下
 
 \subsection{对易与交换子}
 本文讨论 $N = 2, \dots$ 维矢量空间 $X$ 上的任意两个厄米算符 $A: X \to X$ 和 $A: X \to X$． 当我们在 $X$ 中确定一组正交归一基底后， 它们可以分别表示为 $N \times N$ 的厄米矩阵 $\mat A$ 和 $\mat B$．
@@ -100,3 +100,169 @@ W \ket{\phi_k} = b_{ik} \ket{\phi_k}
 ）．
 
 综上所述， 对每一个 $n_i$ 重简并的 $a_i$，  都存在 $n_i$ 个两两正交的本征矢作为 $A$，  $B$ 算符的共同本征矢．证毕．
+
+\subsection{具体计算}
+若给出两个对易的厄米矩阵 $\mat A, \mat B$， 计算共同本征矢的方法如下， 注意所有步骤中的本征矢都是正交归一化的， 本征矢矩阵的每一列是一个本征矢．
+\begin{enumerate}
+\item 求 $\mat A$ 的本征值和本征矢矩阵 $\mat P$， 把本征值相同的列放在一起．
+\item 计算相似变换 $\mat B_1 = \mat P\Her \mat B\mat P$ 得块对角矩阵． 每个对角块的维数等于对应本征值的简并重数．
+\item 解 $\mat B_1$ 每一对角块 $\mat C_i$ 的本征矢矩阵 $\mat D_i$ 和对应的本征值， 用相同顺序把 $\mat D_i$ 排列成块对角矩阵 $\mat Q$ 即 $\mat B_1$ 本征矢矩阵． 把本征值按相同顺序排列得到 $\mat B_1$ 的本征值， 也是 $\mat B$ 的本征值．
+\item $\mat R = \mat P\mat Q$ 的每一列就是 $\mat A, \mat B$ 的一个共同本征矢， 本征值就是上面 1. 和 3. 求得的本征值．
+\end{enumerate}
+
+\begin{example}{计算对易厄米矩阵的共同本征矢}
+\begin{equation}
+\mat A=\pmat{3 & 0 & 0 & 0 & 0\\
+0 & -1 & 0 & 2 & -2\I\\
+0 & 0 & 6 & 0 & 0\\
+0 & 2 & 0 & -1 & -2\I\\
+0 & 2\I & 0 & 2\I & -1}
+\qquad
+\mat B=\pmat{11 & -1 & 0 & -1 & \I\\
+-1 & 9 & 0 & -1 & -\I\\
+0 & 0 & 12 & 0 & 0\\
+-1 & -1 & 0 & 11 & \I\\
+-\I & \I & 0 & -\I & 9
+}
+\end{equation}
+解得 $\mat A$ 的本征列矢量矩阵为
+\begin{equation}
+\mat P= \pmat{0 & 0 & 0 & 0 & 1\\
+0 & \I /\sqrt{2} & -1/\sqrt{6} & -\I/\sqrt{3} & 0\\
+1 & 0 & 0 & 0 & 0\\
+0 & 0 & \sqrt{2/3} & -\I/\sqrt{3} & 0\\
+0 & 1/\sqrt{2} & -\I/\sqrt{6} & 1/\sqrt{3} & 0
+}\end{equation}
+每一列对应的本征值为 $6, -3, -3, 3, 3$， 简并重数分别为 $1, 2, 2$．
+
+接下来计算块对角矩阵， 对角块的大小和简并重数相同， $\mat C_1, \mat C_2, \mat C_3$ 分别为 $1\times 1$， $2\times 2$， $2\times 2$．
+\begin{equation}
+\mat B_1 = \mat P\Her \mat B\mat P =
+\pmat{
+12 & 0 & 0 & 0 & 0\\
+0 & 8 & 0 & 0 & 0\\
+0 & 0 & 12 & 0 & 0\\
+0 & 0 & 0 & 9 & -\I\sqrt{3}\\
+0 & 0 & 0 & \I \sqrt{3} & 11
+}\end{equation}
+
+\begin{itemize}
+\item 第一块没有简并， 若看成 1 维矩阵， 本征矢 “矩阵” 为 $\mat C_1 = (1)$， 本征值为 $12$．
+\item 第二块 $\mat C_2 = \pmat{8 & 0\\ 0 & 12}$ 已经对角化了， 本征矢矩阵为单位矩阵 $\pmat{1 & 0 \\ 0 & 1}$，本征值为 $8, 12$．
+\item 第三块为 $\mat C_3 = \pmat{9 & -\I\sqrt{3}\\ \I \sqrt{3} & 11}$ 本征矢矩阵为 $\pmat{-\I/2 & \sqrt{3}\,\I/2\\ \sqrt{3}/2 & 1/2}$， 本征值为 $12, 8$．
+\end{itemize}
+
+把三个本征矢矩阵拼成块对角矩阵得
+\begin{equation}
+\mat Q = \pmat{
+  1 & 0 & 0 & 0 & 0\\
+  0 & 1 & 0 & 0 & 0\\
+  0 & 0 & 1 & 0 & 0\\
+  0 & 0 & 0 & -\I/2 & \sqrt{3}\,\I/2\\
+  0 & 0 & 0 & \sqrt{3}/2 & 1/2
+}\end{equation}
+本征值拼接后得 $\mat B$ 和 $\mat B_1$ 的本征值为 $12, 8, 12, 12, 8$．
+
+最后求得共同本征矢矩阵为
+\begin{equation}
+\mat R = \mat P\mat Q = \pmat{
+0 & 0 & 0 & \sqrt{3}/2 & 1/2 \\
+0 & \I /\sqrt{2} & -1/\sqrt{6} & -1/(2\sqrt{3}) & 1/2\\
+1 & 0 & 0 & 0 & 0\\
+0 & 0 & \sqrt{2/3} & -1/(2\sqrt{3}) & 1/2\\
+0 & 1/\sqrt{2} & -\I/\sqrt 6 & -\I /(2\sqrt{3}) & \I/2
+}\end{equation}
+\end{example}
+
+\subsubsection{推导和说明}
+我们把矩阵看成是线性变换， 矩阵 $\mat A, \mat B$ 看作算符 $A:X\to X$ 和 $B:X\to X$ 关于正交归一基底 $\qty{x_i}$ 的变换矩阵， 即矩阵元为 $\mel{x_i}{A}{x_j}$ 和 $\mel{x_i}{B}{x_j}$． $A$ 的一组正交归一本征矢记为 $\qty{p_i}$， $\mat P$ 的第 $j$ 列就是 $p_j$ 关于基底 $\qty{x_i}$ 的坐标， $\braket{x_i}{p_j}$．
+
+以上我们已经证明了算符 $A, B$ 对易就必定具有共同本征矢． 但第 1 步计算 $A$ 的一组正交归一本征矢 $\qty{p_i}$ 时， 若存在简并则 $\qty{p_i}$ 的选择有无穷多种． 因为 $A$ 的每个本征值都对应一个本征子空间， 当一个本征子空间是一维的时候（非简并）， 上文已经证明它同时是 $B$ 的本征矢， 当一个本征空间是多维时（简并）， 这个子空间中的正交归一基底可以任意选取（未完成： 链接到厄米矩阵的本征值简并问题）． 也就是说每个子空间中的正交归一基底 $\qty{p_i}$ 进行任意幺正变换． 于是问题的关键在于如何在每个子空间中选取正交归一基底或对随机选取的基底做幺正变换使得它们同样是 $B$ 的本征矢． 由于 $B$ 在每个子空间中闭合， 所以我们只需要在每个子空间中分别解出 $B$ 的正交归一本征矢 $v_i$ 就是共同本征矢．
+
+第 1 步中我们可以把 $\qty{p_i}$ 根据本征值划分为几组， 例如 $p_1, p_2$ 本征值相同， 是第一个子空间（二维）的正交归一基底； $p_3, p_4, p_5$ 本征值相同， 第二个子空间的（三维）的基底……
+
+第 2 步中 $\mat B_1$ 就是算符 $B$ 以 $\qty{p_i}$ 为基底的矩阵， 相似变换 $\mat P\Her \mat B\mat P$ 就是 $B$ 从 $\qty{x_i}$ 到 $\qty{p_i}$ 的基底变换（未完成： 链接到相似变换）． 矩阵元为 $\mel{p_i}{B}{p_j}$． 为什么它一定是块对角的呢？ 因为上文证明了 $B$ 在 $A$ 的每个本征子空间中是闭合的， 即每个子空间中的任意矢量经过 $B$ 映射仍然落在同一个子空间中． 例如如果第一个子空间的基底是 $p_1, p_2$， 那么 $B p_1$ 和 $B p_2$ 就仍然可以表示为 $p_1, p_2$ 的线性组合， 所以投影后句只有 $\mel{p_i}{B}{p_j}$（$i,j=1,2$）不为零． 每一个对角块 $\mat C_i$ 就是 $B$ 在该子空间中的矩阵， 所以自然每个 $\mat C_i$ 的维数就等于对应子空间的维数．
+
+第 3 步中解出 $\mat C_i$ 的本征矢矩阵 $\mat D_i$ 后， 把每列代表的本征矢就是 $A, B$ 的共同本征矢 $v_i$． 但要注意 $\mat B_1$、 $\mat C_i$ 和 $\mat D_i$ 使用的都是 $\qty{p_i}$ 基底而不是 $\mat A$ 和 $\mat B$ 所在的基底 $\qty{x_i}$， 所以第 4 步需要做基底变换． 把 $\mat D_i$ 排列成块对角矩阵 $\mat Q$， 就相当于在整个空间中看待 $\mat D_i$ 中的列矢量 $v_i$ 而不是在每个子空间中， 这并不改变 $v_i$． 本征值和基底无关（链接到相似变换）， 所以 $\mat C_i$ 的本征值排列后就是 $B$ 的本征值．
+
+第 4 步就是要把 $\mat Q$ 从 $\qty{p_i}$ 基底切换为原来 $A, B$ 所在的基底 $\qty{x_i}$， 幺正变换 $\mat P\mat Q$ 就是把 $\mat Q$ 的每一列从 $\qty{p_i}$ 基底的坐标变为 $\qty{x_i}$ 基底的坐标．（未完成： 链接到矢量的正交归一基底变换）．
+
+
+\subsubsection{代数证明}
+\addTODO{待审核调整}
+我们将证明下面的事实：
+
+改用 $\mat P$ 中的基底后， 算符 $A$ 变为对角矩阵 $\mat P \mat A\mat P^{-1}$， 算符 $B$ 变为块对角矩阵 $\mat B_1$． $\mat B_1$ 中每个块的维数就是对应本征子空间的维数． 使 $\mat A$ 对角化的 $\mat P$ 的选择不止一种， 对本征值相同的所有列进行幺正变换同样能使 $\mat A$ 对角化， 而 $\mat Q\mat P$ 就是一个这样的变换．
+
+\textbf{证明：}
+在具体计算1中，求得酉矩阵 $\bvec{P}$ 后，$\bvec{P}$ 将 $\bvec{A}$ 对角化．并且 $\bvec{B}$ 经过同样的变换，两个新的矩阵也是可交换的．这是因为
+\begin{equation}
+\bvec{(P^{-1}AP)(P^{-1}BP)}=\bvec{P^{-1}APP^{-1}BP}=\bvec{P^{-1}BAP}=\bvec{(P^{-1}BP)(P^{-1}AP)}
+\end{equation}
+因此不妨假定 $\bvec{A}$ 已经对角化了（此时 $\bvec{B}$ 已由 $\bvec{P}$ 变换为 $\bvec{B_1}$ ），即元素 $a_{ij}$ 适合条件
+\begin{equation}
+a_{ij}=0,\quad \mathrm{when} \quad i\neq j
+\label{Commut_eq25}
+\end{equation}
+
+以 $b_{ij}$ 表 $\bvec{B_1}$ 的元素，这两个矩阵可交换的条件可写为
+\begin{equation}
+a_{is}b_{sj}=b_{is}a_{sj}
+\end{equation}
+上式已经默认使用爱因斯坦求和标记．
+对任意 $i,j$ 利用\autoref{Commut_eq25} ，这个条件变成
+\begin{equation}
+(a_{ii}-a_{jj})b_{ij}=0
+\label{Commut_eq27}
+\end{equation}
+
+如果所有的数 $a_{ii}$ 全不同，那么由上式直接推知，$b_{ij}=0$当 $i\neq=j$ 时．这就是说，矩阵 $\bvec{B_1}$ 也是对角形式，我们的结论就证明了．
+
+现在来看一般情形，即数 $a_{ii}$ 中有相同的．为确定起见，我们假定这些数分为两组，每一组全一样：
+\begin{equation}
+a_{11}=\cdots=a_{mm};\quad a_{m+1,m+1}=\cdots=a_{nn}
+\end{equation}
+或可将 $\bvec{A}$ 写成块对角矩阵形式
+\begin{equation}
+\bvec{A}=\pmat{\bvec{A_1,A_2}}
+\end{equation}
+其中
+\begin{equation}
+\bvec{A_1}=\mathrm{diag}(a_{11},\cdots,a_{mm}),\quad
+\bvec{A_2}=\mathrm{diag}(a_{m+1,m+1},\cdots,a_{nn})
+\end{equation}
+
+由\autoref{Commut_eq27} 可以知道，元素 $b_{ij}$ 只有在 $i,j$ 同时大于 $m$ 或同时不大于 $m$ 的情形才可能不为零．因此，矩阵 $\bvec{B_1}$ 是块对角矩阵：
+\begin{equation}
+\bvec{B_1}=\pmat{\bvec{B'_1},\bvec{B'_2}}
+\end{equation}
+其中， $\bvec{B_1}$ 是一个 $m$ 阶的厄米矩阵， $\bvec{B_2}$ 是 $(n-m)$ 阶的厄米矩阵．这便是具体计算里的第2步．
+
+在不改变 $\bvec{A}$ 的对角形式之下，我们可以在由前 $m$ 个单位向量所生成的子空间中作任意一个酉变换，再由后 $n-m$ 个单位向量所生成的子空间也作一个酉变换．选酉变换 $\bvec{V_1,V_2}$ 把 $\bvec{B_1,B_2}$ 化为对角形式．总的来说，在整个 $n$ 维空间我们就有一个块对角形式的酉变换
+\begin{equation}
+\bvec{Q}=\pmat{\bvec{V_1,V_2}}
+\end{equation}
+这便是具体计算中的3.
+
+根据上面所说，在新的坐标系下，矩阵 $\bvec{A}$ 保持对角形式：
+\begin{equation}
+\begin{aligned}
+\bvec{Q^{-1}AQ}&=\pmat{\bvec{V_1,V_2}}^{-1}\pmat{\bvec{A_1,A_2}}\pmat{\bvec{V_1,V_2}}=\pmat{\bvec{V_1^{-1}A_1V_1,V_2^{-1}A_2V_2}}\\
+&=\pmat{\bvec{A_1V_1^{-1}V_1,A_2V_2^{-1}V_2}}=\pmat{\bvec{A_1,A_2}}
+\end{aligned}
+\end{equation}
+
+而矩阵 $\bvec{B_1}$ 变成了：
+\begin{equation}
+\begin{aligned}
+\bvec{Q^{-1}P^{-1}BPQ}&=\bvec{Q^{-1}B_1Q}=\pmat{\bvec{V_1,V_2}}^{-1}\pmat{\bvec{B'_1,B'_2}}\pmat{\bvec{V_1,V_2}}\\
+&=\pmat{\bvec{V_1^{-1}B'_1V_1,V_2^{-1}B'_2V_2}}\\
+\end{aligned}
+\end{equation}
+这就是说，它也成为了对角形式．由上式可知， $\bvec{PQ}$ 的每一列就是 $\bvec{A,B}$ 的一个共同本征矢．这便是具体计算里的4．这就证明了我们的命题．
+
+
+% 组成的矩阵可以排成 $\mat R$， 每个块都是酉矩阵． 此时 $\mat B$ 对角化后为
+% \begin{equation}
+% \mat R\mat P \mat B\mat P^{-1}\mat R^{-1} = (\mat R\mat P) \mat B (\mat R\mat P)^{-1}
+% \end{equation}
