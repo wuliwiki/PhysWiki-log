@@ -1,0 +1,90 @@
+% 小振动
+% 小振动
+
+\pentry{拉格朗日方程\upref{Lagrng}对称矩阵的本征值问题\upref{SymEig}}
+
+小振动主要探讨的是系统在平衡位置附近作微小运动的演变．当我们对大自然作泰勒展开，只保留其一阶线性项，忽略高阶项，我们可以提炼出简洁的运动表达式．在这个过程中注重的是线性项，因此需要线性代数的知识．
+
+\subsection{一维振动}
+一维谐振子的拉格朗日量为
+\begin{equation}
+L=\frac{1}{2}m\cdot{x}^2-\frac{1}{2}kx^2
+\end{equation}
+其运动方程为 $m\ddot {x}+kx=0$，或写作 $\ddot{x}+\omega^2 x=0$，其中 $\omega=\sqrt{k/m}$ 为该系统的固有频率．
+
+受迫振动的拉格朗日量为 
+\begin{equation}
+L=\frac{1}{2}m\dot{x}^2-\frac{1}{2}kx^2+xF(t)
+\end{equation}
+其运动方程为$m\ddot{x}+kx=F(t)$，或写作 $\ddot{x}+\omega^2 x=\frac{F(t)}{m}$．
+当 $F(t)=f\cos(\gamma t+\beta)$ 时，解为（齐次方程的通解+特解）
+\begin{equation}
+x(t)=a\cos(\omega t+\alpha)+\frac{f\cos(\gamma t+\beta)}{m(\omega^2-\gamma^2)}
+\end{equation}
+特别地，当 $\omega=\gamma$，上式不再成立，解为
+\begin{equation}
+x(t)=a \cos(\omega t+\alpha)+\frac{ft \sin(\omega t+\beta)}{2m\omega}
+\end{equation}
+特解部分的振幅随时间线性增长．这就是共振现象．在实际力学系统中会有阻尼，则有新的运动方程．
+
+\subsection{小振动体系的运动方程}
+考虑 $n$ 个质点组成的\textbf{理想、完整、稳定}约束力学体系，主动力都是\textbf{保守力}．系统的广义坐标数与自由度数相同：$s=d$．取 $s$ 个广义坐标 $q_1,\cdots,q_s$，设坐标的变换方程为
+\begin{equation}
+x_i = x_i(\bvec q),\ \ \  i=1,2,\cdots,3n
+\end{equation}
+
+设整个体系在某个\textbf{平衡位置}附近运动，并取这个平衡位置为广义坐标的零点：$\bvec q=\bvec 0$（当然，平衡位置不取为零点也可以计算分析）．
+
+由于主动力是保守力，可以用势能 $V(\bvec q)$ 描述．在平衡位置处对 $V(\bvec q)$ 作泰勒展开：
+
+\begin{equation}
+V(\bvec q)\approx V(0)+\left[\frac{\partial V}{\partial q_\alpha}\right]_\bvec {q=0} q_\alpha+\frac{1}{2}\left[\frac{\partial^2V}{\partial q_\alpha\partial q_\beta}\right]_\bvec{q=0}q_\alpha q_\beta+\cdots
+\end{equation}
+
+当体系处于平衡时，由虚功原理，$Q_\alpha=-\frac{\partial V}{\partial q_\alpha}=0$,所以 $V(\bvec q)$ 可以只保留到二阶项：
+\begin{equation}
+V(\bvec q)=\frac{1}{2}V_{\alpha\beta}q_\alpha q_\beta
+\end{equation}
+其中 $[V]_{\alpha\beta}$ 是对称矩阵．体系的动能 $T=\frac{1}{2}m_i\dot{x}_i^2=\frac{1}{2}m_i((\partial \dot{x_i} / \partial \dot{q}_\alpha) \dot{q}_\alpha)^2= \frac{1}{2}m_i((\partial x_i/\partial q_\alpha)\dot{q}_\alpha)^2$．由于系统在平衡位置附近，我们可以设常数矩阵 $T_{\alpha,\beta}=\left.m_i(\partial x_i/\partial q_\alpha)(\partial x_i/\partial q_\beta)\right|_{\bvec q=\bvec 0}$，所以有体系的动能 $T=\frac{1}{2}T_{\alpha\beta} \dot{q}_\alpha \dot{q}_\beta$．其中 $[T]_{\alpha\beta}$ 为对称矩阵，且正定（无论怎样取 $\dot{q}_\alpha$，$T_{\alpha\beta} \dot{q}_\alpha \dot{q}_\beta$ 的值都 $\ge0$）．
+
+因此体系\textbf{在平衡位置附近}的拉格朗日量为
+\begin{equation}
+L\approx\frac{1}{2}T_{\alpha\beta}\dot{q}_\alpha \dot{q}_\beta-\frac{1}{2}V_{\alpha\beta}q_\alpha q_\beta
+\end{equation}
+于是拉格朗日方程是关于 $s$ 个广义坐标的二阶齐次线性微分方程组
+\begin{equation}
+T_{\alpha\beta}\ddot{q}_\beta+V_{\alpha\beta}q_\beta=0
+\end{equation}
+
+设试探解 $q_\beta=b_\beta e^{i\omega t}$，代入可得
+\begin{equation}
+(V_{\alpha\beta} - \omega^2 T_{\alpha\beta}) b_\beta = 0
+\end{equation}
+
+这是个\textbf{广义本征值问题}．我们可以得到\textbf{久期方程}：
+\begin{equation}
+{\rm{det}}[V-\omega^2 T]_{\alpha\beta}=0 
+\end{equation}
+
+我们前面提到 $[V]_{\alpha\beta},[T]_{\alpha\beta}$ 是实对称矩阵．设 $x=\omega^2$，则该方程一共有 $s$ 个实数解（$s$ 是广义坐标的个数）．我们只考虑其中 $x>0$ 的解，设该解为 $\omega_\gamma^2=x_\gamma>0$，可求得本征方程的本征矢量 $[b]_\gamma=(b_{1\gamma},\cdots,b_{s\gamma})^T$．不同的本征矢量相互正交\upref{SymEig}，即 $[b_2]_{\beta} [b_1]_{\beta}=0$．最终小振动的解可以写为不同试探解的线性叠加：
+\begin{equation}
+q_\beta = b_{\beta\gamma}f_\gamma \cos(\omega_\gamma t + \phi_r)
+\end{equation}
+
+对于\textbf{有重根的情况}，也就是说一个 $\omega_\gamma$ 对应多个本征矢量，我们可以对这些相同本征值的本征矢量作 Gram-Schmidt 正交化．最后使得所有的本征矢量互相正交．另外需要注意的是，当 $V$ 是正定矩阵时，所有 $s$ 个实数解 $x_\gamma$ 都大于 $0$，也就是说势能函数开口向上，这样的系统是稳定的，将在平衡位置附近作稳定的小振动．
+
+\subsection{简正坐标}
+
+根据线性代数的结论，总是存在坐标变换 $q_\alpha=G_{\alpha\beta}q'_\beta$ 使得 $[T']_{\alpha\beta}=[G^T T G]_{\alpha\beta},[V']_{\alpha\beta}=[G^T V G]_{\alpha\beta} $ 都是对角矩阵（$[T]_{\alpha\beta},[V]_{\alpha\beta}$ 都是对称矩阵，且 $[V]_{\alpha\beta}$ 正定）．那么方程 $V'_{\alpha\beta}\ddot{q}'_\beta+T'_{\alpha\beta}q'_\beta=0$ 可以对每个广义坐标分离出 $s$ 个独立的运动方程．
+\begin{align}
+\begin{matrix}
+&V'_{11}\ddot{q}'_1=-T_{11}q'_1\\
+&\cdots\\
+&V'_{ss}\ddot{q}'_s=-T_{ss}q'_s
+\end{matrix}
+\end{align}
+也就是说，对于平衡位置附近的任何小振动，广义坐标 $q'_\beta$ 总是以频率 $\omega'_\beta$ 振动——我们称这样的广义坐标为\textbf{简正坐标}．容易发现，这里的变换矩阵 $[G]_{\alpha\beta}$ 就是前面关于广义坐标 $q_\beta$ 的本征方程的本征向量构成的矩阵 $[b]_{\alpha\beta}$——拥有相同的列向量集合（除去一个常数因子）．
+
+利用简正坐标，我们可以将多自由度小振动问题转换为一系列单自由度振动问题，往往可以简化问题．
+
+如果拉格朗日项增加一项 $\sum_k F_k(t)x_k$，那么就是多自由度受迫振动问题．利用坐标变换得到简正坐标，使得动能矩阵 $[T]_{\alpha\beta}$ 和势能矩阵 $[V]_{\alpha\beta}$ 都变成对角矩阵，那么前面的讨论同样适用．于是可以将多自由度小振动问题转换为一系列单自由度受迫振动问题．

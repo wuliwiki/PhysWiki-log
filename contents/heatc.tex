@@ -1,0 +1,110 @@
+% 热传导定律与传递过程
+% 热传导|传递过程|粘滞定律|菲克定律
+
+\subsection{傅里叶传导定律}
+定义热流密度 $\bvec h$：单位时间单位面积的热流量．傅里叶热传导定律说的是
+
+\begin{equation}
+\bvec h = -\kappa \bvec \nabla T
+\end{equation}
+
+其中 $\kappa$ 为系统的热导率．这意味着热量会沿温度梯度的方向传导．
+
+如果简化系统模型，设各层温度不均匀，在同一个高度上各处温度相等．那么傅里叶热传导定律可以简化为
+\begin{equation}
+H=\frac{\Delta Q}{\Delta t}=-\kappa \frac{\dd T}{\dd z}S
+\end{equation}
+
+再考虑一般的情况：\textbf{三维热传导方程}．由于单位体积内需要吸收 $c\rho \Delta T$ 的热量才能升高 $\Delta T$ 的温度，所以可以得到积分关系式
+\begin{equation}
+\int_V c\rho \frac{\partial T}{\partial t} \dd V = \int_V \frac{\partial U}{\partial t} \dd V= \oint_S \kappa \bvec \nabla T \cdot \bvec \dd S
+\end{equation}
+
+由此可以得到微分表达式 $c\rho \frac{\partial T}{\partial t} = \kappa \nabla^2 T$，即
+\begin{equation}
+\frac{\partial T}{\partial t}=k\nabla^2 T
+\end{equation}
+其中 $k=\kappa/c\rho$ 称作热扩散率．
+
+注意上面讨论的是\textbf{没有热源、热扩散系数处处相等}的情况．如果有热源，则方程右端要加上 $Q$．如果热扩散系数并不处处相等，例如两个不同的介质的交界处，往往要对此设定边界条件——例如一维杆两端与空气接触的热对流现象、开水与空气接触时逐渐散热的现象等；在这类边界上如果温度差不大，有\textbf{牛顿冷却定律}成立：热流密度 $\bvec h$ 与温度的梯度成正比，但这个比例系数将与各种复杂的因素有关．
+
+\begin{example}{平衡温度分布}
+一维杆 $0\le x\le L$，左端右端与恒温热源接触，左端温度恒为 $T_1$，右端温度为 $T_2$，中间部分绝热．求其平衡温度分布．
+
+平衡态热流处处为 $0$，所以 $\nabla^2 T=0$，即 $\partial^2 T/\partial x^2=0$，所以 $T$ 关于 $x$ 的函数是一次函数．$T=T_1+(T_2-T_1)x/L$．
+\end{example}
+
+\subsection{传递过程}
+当系统处于非平衡态时，会自发地向平衡态过度，从而产生\textbf{动量、能量、质量}等宏观的流动，这些过程统称为\textbf{耗散过程}．传递过程（也叫输运过程）在微观上就是耗散过程．例如当热学平衡条件不满足时，有温度梯度，从而有热传导方程（能量的传递）；力学平衡条件不满足时，有粘滞现象（动量的传递），从而有牛顿粘滞定律；化学平衡条件不满足时，有扩散现象（质量的传递），从而有菲克（Fick）扩散定律．我们先给出这三个定律的表达式：
+\begin{align}
+h=-\kappa \frac{\dd T}{\dd z}\\
+J_p=-\eta \frac{\dd u}{\dd z}\\
+J_M=-D\frac{\dd \rho}{\dd z}
+\end{align}
+
+其中牛顿粘滞方程的 $J_p$ 为动量流密度，菲克定律的 $J_m$ 为质量流密度．一些参考文献上将粘滞定律写作 $\tau = -\mu \frac{\dd u}{\dd z}$，其中 $\tau$ 为剪应力，该方程则表达了剪应力与流体速度场的梯度成正比．这些方程从直观上是容易想象的，虽然宏观上代表不同的现象，但其方程形式却是相同的．经过下面的分析，我们将发现这三种输运过程在\textbf{微观上的机制}本质是相同的．
+
+\subsection{气体中传递过程的微观解释}
+\textbf{注意：以下的微观解释和推导仅适用于\textbf{气体系统}，而且气体系统需要近似满足两个假设．}对于一般流体也有这三个定律，但与气态系统的传递过程有所不同，需要更复杂的微观解释．
+
+先简化模型，我们设系统的各个宏观量（例如质量密度、热运动平均能量、动量密度）在同一高度上处处相同（可写成关于 $z$ 和 $t$ 的函数）．为了精简细节，简化计算，我们对系统设定几条重要的热力学假设：
+
+\textbf{假设 1}. 微观上有大量的分子在作无规则运动，且可以运用\textbf{局部平衡假设}：每个小单元内的温度、粒子数密度、平均动量可以确定；小单元的状态量随时间与空间的变化分别为 $T(z,t),n(z,t),\bar v(z,t)$．粒子服从\textbf{麦克斯韦——玻尔兹曼分布}\upref{MxwBzm}，热运动将使得 $\Delta T$ 内穿过 $\Delta S$ 的平均分子数为 $\frac{1}{4}n\bar v \Delta S\Delta t$．\textbf{由于物理量在 $z$ 方向上分布不同，热运动将使得粒子可以把界面一侧的物理量带到界面另一侧}．
+
+设 $t$ 时刻物理量 $Q$ 的分布为 $Q(z)$，设 $q=Q/N$ 为平均意义下每个粒子携带的物理量，例如可以取 $\bar \epsilon,m,\bar v$，对应热运动能量、质量、动量．考察 $z=z_0$ 处平行于 $xy$ 面的面元 $\Delta S$，由热运动（上方的粒子到下方，下方的粒子到上方）引起的通过这一面元的物理量为
+\begin{align}
+\Delta Q_{A\rightarrow B}=(\frac{1}{4}n\bar v \Delta S\Delta t\cdot q)_A-(\frac{1}{4}n\bar v \Delta S\Delta t\cdot q)_B
+\\
+J_{A\rightarrow B}=\frac{\Delta Q_{A\rightarrow B}}{\Delta t}=\frac{1}{4}[(nq\bar v)_A-(nq\bar v)_B]\Delta S
+\end{align}
+其中 $J_{A\rightarrow B}$ 为物理量流度，当 $q=m$ 时，$J$ 就代表质量流；$q=m\bar v$ 时，$J$ 就代表动量流．由于分子从越过界面后会与“本地”分子碰撞，在一个弛豫时间内被同化，我们可以想象\textbf{当弛豫时间越短，同化得就越快}，在界面以下约 $\lambda$ 数量级的位置才会影响到该界面处的物理量流．我们将运用“平均自由程”进行分析，为此需要热力学假设：
+
+\textbf{假设 2}．气体足够稀薄，三分子碰撞概率可以忽略不计，从而理想气体状态方程近似成立，且分子平均自由程公式有效．但不能太稀薄，对每一局部平衡的小单元，平均自由程公式有效．\textbf{平均自由程公式}：$\bar \lambda = \frac{1}{\sqrt{2} \sigma n}$，$\sigma$ 为碰撞界面．
+
+不妨设粒子越过 $z_0$ 后在 $\alpha \bar \lambda$ 的路径中被同化，那么
+
+\begin{align}
+J_{A\rightarrow B} &=\frac{1}{4}[(nq\bar v)_{z=z_0-\alpha \bar \lambda}-(nq\bar v)_{z=z_0+\alpha \bar \lambda}]\Delta S\\
+&=-\frac{1}{4}\left.\frac{\dd}{\dd z}(nq\bar v)\right|_{z=z_0} 2\alpha\bar \lambda \Delta S
+\end{align}
+
+下面分析各个输运过程的系数．
+
+\subsubsection{粘滞过程}
+$q=m\bvec u$，假设系统粒子数密度（或者说$n$）、温度（或者说 $\bar v$）几乎处处相等，我们主要研究 $\dd{\bvec u}/\dd z$ 对 $J_p$ 的影响．我们关心主要物理量之间的关系，所以在推导的过程中可以忽略常数因子的误差．
+\begin{equation}
+J_p=-\frac{\alpha}{2}\left.\frac{\dd}{\dd z}(nm\bar v \bvec u)\right|_{z=z_0}\bar \lambda \Delta S
+=-\frac{\alpha}{2}\rho\bar v \bar \lambda \frac{\dd{\bvec{u}}}{\dd z}\Delta S
+\end{equation}
+
+再将平均自由程公式代入，可以得到粘滞系数 $\eta$ 的关系式
+\begin{equation}
+\eta = \frac{\alpha}{2}\rho\bar v \frac{1}{\sqrt{2}\sigma n}=\frac{\alpha}{2\sqrt{2}}\frac{m \bar v}{\sigma}
+\end{equation}
+
+而由麦克斯韦——玻尔兹曼分布，分子平均速度为 $\bar v=\sqrt{(8k_BT)/(\pi m)}$，所以
+\begin{equation}
+\eta = \frac{\alpha}{\sigma}\sqrt{\frac{mk_BT}{\pi}}
+\end{equation}
+
+\subsubsection{热传导过程}
+$q=\bar \epsilon = c_VmT$．要注意的是平均速度 $\bar v$ 也是温度 $T$ 的函数．我们有
+\begin{equation}
+h=J_E=-\frac{\alpha}{2}\left.\frac{\dd }{\dd z}(nc_VmT\bar v)\right|_{z=z_0} \bar\lambda \Delta S
+\end{equation}
+将 $\bar v$ 和 $\bar\lambda$的公式代入．如果假定粒子数密度 $n$ 处处相等，可以得到
+\begin{equation}
+\kappa=-\frac{3}{4\sqrt{2}}\frac{\alpha c_Vm\bar v}{\sigma}=-\frac{3}{2}\frac{\alpha c_V}{\sigma}\sqrt{\frac{mk_BT}{\pi}}
+\end{equation}
+
+上面的推导比较粗糙，常数因子并不准确．例如对于近似理想气体的系统，考虑它的热传导过程时，更精确的假定是压强处处相等．此时 $p=nk_BT=const$，在计算过程中将得到不同的常数因子．
+\subsubsection{扩散过程}
+$q=m$．假设系统温度（或者 $\bar v$）处处相同．计算 $J_M$：
+\begin{equation}
+J_M=-\frac{\alpha}{2}\left.\frac{\dd }{\dd z}(nm\bar v)\right|_{z=z_0}\bar\lambda \Delta S = -\frac{\alpha}{2}\bar v\bar\lambda \frac{\dd \rho}{\dd z}\Delta S
+\end{equation}
+上式就是菲克定律．将 $\bar v$ 和 $\bar\lambda$的公式代入，可以得到扩散系数
+\begin{equation}
+D=\frac{\alpha}{2}\bar v\bar \lambda = \alpha\sqrt{\frac{k_BT}{m\pi}}\frac{n}{\sigma} =  \alpha\frac{(k_B T)^{3/2}}{(m\pi)^{1/2}}\frac{1}{p\sigma}
+\end{equation}
+由上面的推导我们可以看出各输运系数和温度、粒子数密度等物理量之间的关系．我们有\textbf{重要事实}：保持温度不变时，热传导系数和粘滞系数与\textbf{粒子数密度无关}．热传导系数和粘滞系数与温度的 $1/2$ 次方成正比．而当压强保持不变时，气体系统的扩散系数与温度的 $3/2$ 次方成正比．这些结论都与实验结果相符合，我们看到了构建理想化模型与理论分析的强大力量！

@@ -30,3 +30,17 @@ Blender 是一个开源软件， 常用于制作计算机 3D 模型和视频．
 \verb|Ctrl + L| 选择所有连接当前面的面 & \verb|Shift + 选择| 多选
 \end{tabular}
 \end{table}
+
+
+\subsection{Matlab 建模导入 Blender}
+如果在 Matlab 上有一张三维网格， 坐标存入三个二维矩阵 \verb|X, Y, Z|， 那么可以用一些脚本（例如\href{https://www.mathworks.com/matlabcentral/fileexchange/4512-surf2stl}{这个}）将其转换为 stl 文件再导入到 Blender． 例如用 Matlab 生成一个抛物面， 然后导出到 \verb|parabola.stl| 文件
+\begin{lstlisting}[language=matlab]
+x = linspace(-1, 1, 50);
+y = x;
+[X, Y] = ndgrid(x, y);
+Z = X.^2 + Y.^2;
+figure; surf(X, Y, Z);
+surf2stl('parabola.stl', X, Y, Z);
+\end{lstlisting}
+\verb|stl| 是一个常用的 3D 模型文件模式．
+\addTODO{是否可以一次导出多个曲面到 stl？}
