@@ -1,0 +1,145 @@
+% 包络和奇解
+% 常微分方程
+
+\pentry{包络线\upref{Velope}，一阶隐式常微分方程\upref{ODEa4}}
+
+\subsection{包络}
+
+\begin{definition}{包络}
+
+在$x-y$平面上，定义一族曲线$\{\Phi_c\}$，其中$c$是一个连续参数．每条曲线$\Phi_c$的表达式为$f(x, y, c)=0$．
+
+如果存在一条曲线$\Phi$，它本身不是任何一条$\Phi_c$，但是在$\Phi$的每一点处都有一条$\Phi_c$和它相切，那么我们就称$\Phi$是曲线族$\{\Phi_c\}$的\textbf{包络（envolope）}．
+
+\end{definition}
+
+\begin{example}{包络的例子}
+考虑曲线族$\{\Phi_c\}$，其中$\Phi_c$的表达式为
+\begin{equation}
+-\frac{1}{5}x^2+cx+5c^2-y=0
+\end{equation}
+
+令曲线$\Phi$的表达式为
+
+\begin{equation}
+-\frac{1}{4}x^2-y=0
+\end{equation}
+
+则容易验证，$\Phi$是$\{\Phi_c\}$的包络．
+
+这个例子正是\textbf{一阶隐式常微分方程}\upref{ODEa4}中的\autoref{ODEa4_eq6}~\upref{ODEa4}和\autoref{ODEa4_eq10}~\upref{ODEa4}．
+
+\end{example}
+
+关于包络的详细讨论请参见预备知识\textbf{包络线}\upref{Velope}．
+
+
+\subsection{奇解}
+
+\begin{definition}{微分方程的奇解}
+
+如果微分方程$\frac{\dd y}{\dd x}=f(x, y)$有一个解$F(x, y)=0$，在这个解的每一个点上都至少还有另外一个不同的解，那么称$F(x, y)$是该方程的\textbf{奇解（singular solution）}．
+
+\end{definition}
+
+由定义可知，奇解对应的曲线，就是一族解的包络线．这是因为奇解的每个点上都有的那个不同的解，一定和奇解相切，因为它们都满足同一个微分方程．同时容易看到，奇解是处处不满足解的唯一性定理的．
+
+为了求微分方程的奇解，我们可以先求出其通解，把通解视为一族曲线，求出它们的包络线，则该包络线就是一个奇解．当然，如果通解曲线族没有包络线，这样的奇解就不存在．求包络线的方式参见预备知识\textbf{包络线}\upref{Velope}．
+
+\begin{example}{}
+求方程
+\begin{equation}\label{EnvSol_eq1}
+(\frac{\mathrm{d} y}{\dd x})^2+y^2-1=0
+\end{equation}
+的奇解．
+
+将\autoref{EnvSol_eq1} 化为
+\begin{equation}
+\frac{1}{\pm\sqrt{1-y^2}}\dd y=\dd x
+\end{equation}
+
+积分后解得
+\begin{equation}\label{EnvSol_eq4}
+y=\pm\sin(x+c)
+\end{equation}
+
+令$F(x, y, c)=\pm\sin(x+c)-y$，则$F_c(x, y, c)=\pm\cos(x+c)$包络线的判别方程为
+\begin{equation}\label{EnvSol_eq2}
+\leftgroup{
+    \pm\sin(x+c)-y=0\\
+    \pm\cos(x+c)=0
+}
+\end{equation}
+
+联立\autoref{EnvSol_eq2} 中两等式，得
+\begin{equation}\label{EnvSol_eq3}
+y=\pm 1
+\end{equation}
+
+则\autoref{EnvSol_eq3} 就是曲线族\autoref{EnvSol_eq4} 的包络线．
+
+将\autoref{EnvSol_eq3} 代回\autoref{EnvSol_eq1} ，发现它也是其解．这就是一个奇解．
+
+
+\end{example}
+
+另一种判别方式如下所述：对于微分方程$F(x, y, \frac{\dd y}{\dd x})=0$，写出方程组
+\begin{equation}\label{EnvSol_eq5}
+\leftgroup{
+    F(x, y, c)=0\\
+    F_c(x, y, c)=0
+}
+\end{equation}
+则从\autoref{EnvSol_eq5} 中消去$c$所得的曲线$M(x, y)=0$就\textbf{有可能}是该微分方程的奇解．至于它是不是奇解，还需要代回原方程进行验证．
+\addTODO{这个判别式是来自于一个存在与唯一性定理的，原理是违反唯一性定理要求从而存在奇解．需要有相关定理的词条．}
+
+
+\begin{example}{}
+方程
+\begin{equation}\label{EnvSol_eq7}
+\qty(\frac{\dd y}{\dd x})^2+2x\frac{\dd y}{\dd x}-y=0
+\end{equation}
+有奇解吗？
+
+如果我们解方程的话，得到其参数形式的通解\footnote{见\autoref{ODEa4_ex2}~\upref{ODEa4}．}
+\begin{equation}
+\leftgroup{
+    \begin{aligned}
+    v^2x+\frac{2}{3}v^3&=C\\
+    v^2+2xv&=y
+    \end{aligned}
+}
+\end{equation}
+很难把它表示成显式的解，从而不好求包络线．
+
+但是，我们可以用\autoref{EnvSol_eq5} ，将$F(x, y, c)=c^2+2xc-y$代进去即可得到满足判别式的曲线：
+\begin{equation}\label{EnvSol_eq6}
+y=-x^2
+\end{equation}
+
+把\autoref{EnvSol_eq6} 代回\autoref{EnvSol_eq7} 验证，发现并不是一个解，从而不是奇解．而奇解必须满足判别式，因此该方程没有奇解．
+
+\end{example}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
