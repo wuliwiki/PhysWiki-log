@@ -1,0 +1,113 @@
+% 玻尔兹曼分布（统计力学）
+% 玻尔兹曼分布|等概率原理|经典统计
+
+\pentry{麦克斯韦—玻尔兹曼分布\upref{MxwBzm}，相空间\upref{PhSpace}，理想气体单粒子能级密度\upref{IdED1}，拉格朗日乘数法\upref{LagMul}}
+
+根据等概率原理，对于平衡状态的孤立系统，每个可能的微观状态出现的概率是相等的．
+
+根据统计力学中的量子力学假设，系统中单粒子态能级为分立的：$\epsilon_1,\epsilon_2,\cdots$．其中设第 $l$ 个能级的简并数为 $\omega_l$（意味着这个能级一共有 $\omega_l$ 种线性无关的态）．设第 $l$ 个能级上共有 $a_l$ 个粒子，序列 $\{a_l\}$ 构成粒子系统的一种分布．微观状态数最多的分布出现的概率最大，称为\textbf{最概然分布}．
+
+注意等概率原理中只涉及“可能出现”的微观状态，也就是说要满足孤立系统的粒子数守恒、能量守恒条件：
+\begin{equation}\label{MBsta_eq1}
+\begin{aligned}
+\sum_l n_l=N\\
+\sum_l \epsilon_l a_l=E
+\end{aligned}
+\end{equation}
+
+我们下面要谈的是\textbf{理想气体}系统，为了方便计算尽可能快地得到有价值的结果，先忽略粒子的振动自有能和转动自由能，系统的能量完全来自粒子的平动动能．我们将通过等概率原理推出\textbf{玻尔兹曼分布}，并且我们暂时\textbf{不涉及全同粒子假设}\footnote{如果我们加上全同粒子假设，则一切粒子可根据自旋分为两类粒子：玻色子和费米子，这又会带来两类不同的统计力学结果．}，即粒子之间是可区分的．我们将得到同经典统计中一样的结果\upref{MxwBzm}．
+
+\subsection{初步推导}
+\addTODO{文字说明}
+\begin{equation}
+\Omega=\frac{N!}{\Pi_l a_l!}\omega_l^{a_l}
+\end{equation}
+
+\begin{equation}
+\ln \Omega=\ln N!-\sum_{l}a_l!+\sum_l a_l\ln \omega_l
+\end{equation}
+
+假设所有的 $a_l$ 都很大，根据近似等式 $\ln n! = n(\ln n-1)$，可以化简得到
+
+\begin{equation}
+\ln \Omega=N\ln N-\sum_l a_l\ln a_l+\sum_l a_l\ln \omega_l
+\end{equation}
+
+在约束条件\autoref{MBsta_eq1} 下，要求 $\ln \Omega$ 极大的分布 $\{a_l\}$，即 $\delta \ln \Omega =0$．由于在约束条件下 $\delta a_l$ 并非独立，需要利用拉格朗日乘数法，引入参量 $\alpha,\beta$，
+\begin{equation}
+\delta \ln \Omega -\alpha \delta N-\beta \delta E=-\sum_l [\ln a_l-\ln \omega_l+\alpha +\beta\epsilon_l]\delta a_l=0
+\end{equation}
+
+所以
+\begin{equation}
+\ln \frac{a_l}{\omega_l}+\beta\epsilon_l = 0
+\end{equation}
+求得最概然分布：
+\begin{equation}
+a_l=\omega_l e^{-\alpha -\beta \epsilon_l}
+\end{equation}
+这种分布出现的概率最大．下面我们来确定 $\alpha,\beta$ 的值．现在，我们令这种分布就是玻尔兹曼分布，并大胆地假设其他分布出现的概率为 $0$\footnote{这实际上是不正确的假设，根据等概率原理，其他可能的分布的概率总 $>0$，粒子状态分布总会有一定涨落．但当我们考虑 $N$ 很大的系统，其他分布出现的概率将远小于最概然分布出现的概率．所以这个假设是合理的．}．$\omega_l$ 是简并度，那么对于单个量子态，粒子数为 $e^{-\alpha-\beta \epsilon_l}$．现在我们列举一切能级中的一切量子态，它们的能级依次是 $\{\epsilon_s\}$．我们有
+\begin{equation}\label{MBsta_eq2}
+\begin{aligned}
+N=\sum_s e^{-\alpha-\beta \epsilon_s}\\
+E=\sum_s \epsilon_s e^{-\alpha-\beta \epsilon_s}
+\end{aligned}
+\end{equation}
+\subsection{玻尔兹曼分布}
+我们定义配分函数 $Z(\beta)=\sum_s e^{-\beta \epsilon_s}$，求和的时候 $s$ 覆盖了每一个能级的一切量子态．由 \autoref{MBsta_eq2}，可以得到 $E,N$ 和配分函数 $Z$ 的关系：
+\begin{equation}\label{MBsta_eq3}
+\begin{aligned}
+N=e^{-\alpha}Z\\
+E=-e^{-\alpha}\frac{\partial Z}{\partial \beta}
+\end{aligned}
+\end{equation}
+
+化简得
+
+\begin{equation}\label{MBsta_eq4}
+\begin{aligned}
+E=-N\frac{\partial \ln Z}{\partial \beta}
+\end{aligned}
+\end{equation}
+
+根据量子力学，体积为 $V$ 的容器中，单粒子的能级为
+
+\begin{equation}
+\varepsilon = \frac{\hbar ^2}{2m} \qty[\qty(\frac{\pi n_x}{L_x})^2 + \qty(\frac{\pi n_y}{L_y})^2 + \qty(\frac{\pi n_z}{L_z})^2] = \frac{\hbar ^2}{2m} (k_x^2 + k_y^2 + k_z^2)
+\end{equation}
+
+$n_x,n_y,n_z$ 可以取一切正整数．计算配分函数：
+\begin{equation}
+\begin{aligned}
+Z&\approx \int_{0}^\infty\int_{0}^\infty\int_{0}^\infty\dd n_x\dd n_y\dd n_z  e^{-\beta \frac{\hbar^2}{2m}[(\pi n_x/L_x)^2+(\pi n_y/L_y)^2+(\pi n_z/L_z)^2]}\\
+&=\frac{1}{8}\int_{-\infty}^{\infty}\dd n_x e^{-\beta \frac{\hbar^2}{2m}\frac{\pi^2}{L_x^2}n_x^2}\int_{-\infty}^{\infty}\dd n_y e^{-\beta \frac{\hbar^2}{2m}\frac{\pi^2}{L_y^2}n_y^2}\int_{-\infty}^{\infty}\dd n_z e^{-\beta \frac{\hbar^2}{2m}\frac{\pi^2}{L_z^2}n_z^2}
+\\
+&=\frac{1}{8}\sqrt{\frac{2m}{\pi\beta}}\frac{L_x}{\hbar}\cdot \sqrt{\frac{2m}{\pi\beta}}\frac{L_y}{\hbar} \cdot \sqrt{\frac{2m}{\pi\beta}}\frac{L_z}{\hbar}
+\\
+&=\left(\frac{m}{2\pi\beta\hbar^2}\right)^{3/2}V
+\end{aligned}
+\end{equation}
+代入\autoref{MBsta_eq4}，可得
+\begin{equation}
+E=\frac{3}{2}N\cdot \frac{1}{\beta}
+\end{equation}
+对于理想气体，$E=\frac{3}{2}N k_B T$\upref{IdgEng}，因此我们求得
+\begin{equation}
+\beta=\frac{1}{kT}
+\end{equation}
+
+代入\autoref{MBsta_eq3} 可得到 $\alpha$ 的表达式：
+\begin{aligned}
+\alpha=\ln\left[\frac{V(m k_B T/2\pi \hbar^2)^{3/2}}{N}\right]
+\end{aligned}
+
+因此我们得到了每一个量子态上的粒子分布：
+
+\begin{equation}
+a_s=\frac{N}{V}\left(\frac{2\pi \hbar^2}{m k_B T}\right)^{3/2} e^{-\frac{1}{k_B T}\epsilon_s}
+\end{equation}
+
+对于单粒子相空间\upref{PhSpace}中的一个体积元 $\dd \Omega_1=\dd x\dd y\dd z\dd p_x\dd p_y\dd p_z$ 中，量子态的个数为 $\dd V/h^3=\dd V/(2\pi \hbar)^3$，所以有速度分布律：
+\begin{equation}
+\Delta N=\frac{N}{V}\left(\frac{1}{2\pi m k_B T}\right)^{3/2}e^{-\frac{1}{2mk_B T}(p_x^2+p_y^2+p_z^2)}\Delta x\Delta y\Delta z\Delta p_x\Delta p_y\Delta p_z
+\end{equation}

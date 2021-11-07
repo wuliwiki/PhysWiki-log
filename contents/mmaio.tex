@@ -1,0 +1,142 @@
+% Mathematica 文件操作
+% Mathematica|IO|文件操作
+
+\begin{issues}
+\issueDraft
+\issueTODO
+\end{issues}
+
+\subsection{常用环境变量}
+
+除了丰富的标准文件操作外，Wolfram 语言的统一符号（\verb`Symbol`）架构，
+让我们更容易将算法和高级编程应用于许多文件和系统管理任务．此介绍主要参考官方页面：
+
+\begin{itemize}
+\item guide/FileOperations， 比较全的文件系统操作的函数列表
+\item tutorial/FilesStreamsAndExternalOperations#12068
+\end{itemize}
+
+其中的关键是：不要直接使用字符串函数硬编码 文件名/文件路径， 
+这样生成的路径依赖于操作系统， 应该使用 Mathematica 提供的文件系统接口．
+
+\begin{itemize}
+\item \verb`$OperatingSystem` : 给出正在运行的操作系统的名称．
+\item \verb`$PathnameSeparator` : 字符串，在构建路径名的时候使用， 例如 \verb|$UserBaseDirectory <> "\abcd\"|． 
+Windows 的默认值是 \verb|\|， 其他系统是 \verb|/|．
+在 Windows 中， 像 FileNameSplit 这样的函数默认同时允许 \verb|\| 和 \verb|/|．
+\end{itemize}
+
+文件后缀名使用惯例：
+
+\begin{itemize}
+\item \verb`.m`  ： Wolfram 语言源文件
+\item \verb`.nb` ： Wolfram 系统笔记本文件
+\item \verb`.ma` ： Wolfram 系统从第 $3$ 版以前的笔记本文件
+\item \verb`.mx` ： 输出所有 Wolfram 语言表达式
+\item \verb`.exe`： WSTP 可执行程序
+\item \verb`.tm` ： WSTP 模版文件
+\item \verb`.ml` ： WSTP 流文件
+\end{itemize}
+
+
+\verb`$Path`： 默认的目录列表， 用于搜索输入文件的相关目录． 
+一般来说， 全局变量 \verb`$Path` 被定义为一个字符串的列表， 每个字符串代表一个目录．
+每次你要求打开文件时， Wolfram 就暂时将这些目录中的依次变成你的当前工作目录，然后从该目录中尝试找到你要求的文件．
+在 \verb`$Path` 的典型设置中， 当前目录 \verb`．` 和你的主目录 \verb`~` 被列在第一位．
+
+\begin{itemize}
+\item \verb`DirectoryName["name",n]` ： 给出路径的父目录， n 代表上升 n 次． 
+默认情形给出父目录， 不用写 n． 可作用于文件和目录， 不检查目录是否真实存在．
+\item \verb`DirectoryName[..., OperatingSystem->"os"]` 用来给出某种操作系统风格的路径， 
+选项有 "Windows"， "MacOSX"， 和 "Unix"．
+\item \verb`ParentDirectory["dir",n]` ：给出路径的父目录， n代表上升 n 次， 
+只能作用于目录， 且要求目录真实存在．
+\end{itemize}
+
+\begin{itemize}
+\item \verb`$InitialDirectory` ：  是 Wolfram 系统启动时的初始目录．
+\item \verb`$HomeDirectory` ：  你的主目录， 如果被定义过的话
+\item \verb`$BaseDirectory` ：  是 Wolfram 系统要加载的全系统文件的基本目录．
+\item \verb`$UserBaseDirectory` ：  用于 Wolfram 系统加载的用户特定文件的基本目录
+\item \verb`$InstallationDirectory` ：  你的 Wolfram 系统安装的最高级别目录
+\end{itemize}
+
+Wolfram 系统所使用的绝大多数文件都与操作系统无关． 然而， \verb`mx` 和 \verb`.exe` 文件与系统有关．
+对于这些文件， 按照惯例， 对不同计算机系统版本的名称进行捆绑， 形式如 \verb`name/$SystemID/name`．
+
+\subsection{笔记本}
+
+\begin{itemize}
+\item \verb`NotebookFileName[]` ： 给出当前笔记本的完整路径．
+\item \verb`NotebookDirectory[]`： 笔记本父目录
+\end{itemize}
+
+\addTODO{...}
+
+\begin{itemize}
+\item \verb`NotebookOpen["name"]`：  打开已经存在的笔记本"name"， 返回笔记本对象． "name"可以是绝对路径．
+\item \verb`NotebookOpen["name"，options]`： 使用指定的选项打开笔记本．
+\item \verb`NotebookOpen[File["path"]]` 和 \verb`NotebookOpen[URL["url"]]` 也被支持．
+\item \verb`NotebookOpen` 通常会导致一个新的笔记本窗口在你的屏幕上被打开．
+如果 \verb`NotebookOpen` 打开指定的文件失败， 则返回 \verb`$Failed`．
+若给出相对路径， \verb`NotebookOpen` 搜索由前端的全局选项 \verb`NotebookPath` 指定的目录
+若使用选项 \verb`Visible->False` 设置， \verb`NotebookOpen` 将打开带有此选项的笔记本，它永远不会显示在屏幕上．
+\item \verb`NotebookOpen` 将当前 \verb`selection` 初始化设置在笔记本的第一行单元之前．
+\end{itemize}
+
+\addTODO{...}
+
+\begin{itemize}
+\item \verb`NotebookSave[notebook]`： 保存特定笔记本的当前版本．\verb`notebook` 必须是一个 \verb`NotebookObject`.
+\item \verb`NotebookSave[notebook]` 将笔记本保存在一个文件中， 文件名由笔记本对象 \verb`notebook` 给出．
+\item \verb`NotebookSave` ： 写入对应的 Wolfram 语言表达式， 以及 Wolfram 语言注释， 以便于前端再次读入笔记本．
+\item \verb`NotebookSave[notebook， "file"]`， 如果"file"存在， 则不加警告地覆盖它．
+\item \verb`NotebookSave[notebook，File["file"]]`也被支持．
+如果给定选项 \verb`Interactive->True`， 前端将提示用户为笔记本选择一个文件名．
+\item \verb`NotebookClose[notebook]`： 关闭指定的笔记本对象．
+\item \verb`NotebookClose[]` ： 关闭当前在运行的笔记本．
+\item \verb`NotebookClose` 将使笔记本从你的屏幕上消失， 并将使所有引用该笔记本的笔记本对象失效．
+如果给定了选项设置 \verb`Interactive->True`， 前端将提示用户是否关闭笔记本而不保存．
+\end{itemize}
+
+
+
+
+\subsection{操作文件和目录}
+
+\begin{itemize}
+\item tutorial/FilesStreamsAndExternalOperations#12068
+\item Manipulating Files and Directories
+\end{itemize}
+
+\begin{itemize}
+\item ExpandFileName["name"] ： 将"name"文件展开成当前系统规范的绝对路径， 给出相对于你当前目录的名称．
+它展开通常的目录指定， 如 \verb`.` 和 \verb`..`；它只是对文件名进行操作：它并不实际搜索指定的文件．
+它支持 \verb`ExpandFileName[File["name"]]`， 以及 \verb`ExpandFileName[URL["file:///path"]]`， 
+后者将基于文件的 \verb`URL` 转换为绝对文件名．
+\item \verb`AbsoluteFileName["name"]`： 给出 \verb`"name"` 文件的绝对路径． 
+与 \verb`ExpandFileName` 的区别是， 它会进入文件系统， 检查文件是否真实存在．
+同样相对于你当前目录的名称， 可以处理目录指定， 如\verb`.`， \verb`..` 和 \verb`~`．
+它也支持 `\verb`AbsoluteFileName[File["name"]]`．
+\end{itemize}
+
+\addTODO{...}
+
+\begin{itemize}
+\item \verb`FileNameTake["name"]` ： 从"name"的完整路径中提取出最后的文件名．
+\item \verb`FileBaseName["file"]` ： 给出文件的 basename， 也就是不包括拓展名．
+\item \verb`FileExtension["file"]`： 给出文件的拓展名．
+\item \verb`FileNameDepth["name"]`： 给出文件路径的深度， 文件不必真实存在．
+\end{itemize}
+
+\addTODO{...}
+
+\begin{itemize}
+\item \verb`FileNameJoin` ： 从路径列表中组合出完整的文件名
+\item \verb`FileNameSplit` ： 将文件的完整路径分割开
+\item \verb`FileNameDrop["name"，n]` ： 去掉文件"name"路径的前n个片段． 如果是 \ver`-n`， 那么去掉从末尾开始的 n 个．
+\item \verb`FileExistsQ["name"]`  ： 检查文件， 目录等等是否存在．
+\item \verb`ContextToFileName["context"]`  ： 给出 Mathematica 上下文规范对应的文件名．
+\end{itemize}
+
+

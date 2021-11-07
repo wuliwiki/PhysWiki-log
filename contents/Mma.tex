@@ -1,4 +1,4 @@
-% Mathematica 笔记
+% Mathematica 入门笔记
 
 \pentry{复数\upref{CplxNo}， 自然对数底\upref{E}}
 
@@ -20,6 +20,14 @@ Mathematica 相对于 Matlab， Python 等偏数值计算的语言最大的特�
 \item 输入 \verb|In[8]|
 \end{itemize}
 
+\subsubsection{符号输入}
+\begin{itemize}
+\item 输入符号用 \verb|Esc| 键搜索， 例如搜索 \verb|pi| 按回车可以插入 \verb|π|． 这相当于输入 \verb|Pi| 或者 \verb|\[Pi]|． 如果你用过 TeX， 也可以按 \verb|Esc| 键后搜索 tex 命令， 例如 \verb|\pi|．
+\item 可以在命令行直接粘贴 UTF-8 字符如 \verb|θ|， 注意 \verb|φ| 和 \verb|ϕ| 在一些字体中的形状会调换．
+\item 复制一个符号然后粘贴到一个 txt 文档中， 就会得到 \verb|\[...]| 形式的代码．
+\item 复制一个表达式然后粘贴到 txt 文档中， 默认会得到含有空格和换行符的 plain text 命令， 相当于选中后右键 \verb|copy as -> input text|． 如果 \verb|copy as -> plain text|， 一些空格和换行符将不会插入．
+\end{itemize}
+
 \subsubsection{常数}
 
 \begin{itemize}
@@ -29,13 +37,6 @@ Mathematica 相对于 Matlab， Python 等偏数值计算的语言最大的特�
 \item 虚数单位： \verb|\[ImaginaryJ]| 或搜索 \verb|jj|．
 \item 1° 角的弧度： \verb|Degree| 或 \verb|\[Degree]| 或搜索 \verb|deg|．
 \item 无穷： \verb|Infinity| 或 \verb|\[Infinity]| 或搜索 \verb|inf|．
-\end{itemize}
-
-\begin{itemize}
-\item 输入符号用 \verb|Esc| 键搜索， 例如搜索 \verb|pi| 按回车可以插入 \verb|π|． 这相当于输入 \verb|Pi| 或者 \verb|\[Pi]|． 如果你用过 TeX， 也可以按 \verb|Esc| 键后搜索 tex 命令， 例如 \verb|\pi|．
-\item 可以在命令行直接粘贴 UTF-8 字符如 \verb|θ|， 注意 \verb|φ| 和 \verb|ϕ| 在一些字体中的形状会调换．
-\item 复制一个符号然后粘贴到一个 txt 文档中， 就会得到 \verb|\[...]| 形式的代码．
-\item 复制一个表达式然后粘贴到 txt 文档中， 默认会得到含有空格和换行符的 plain text 命令， 相当于选中后右键 \verb|copy as -> input text|． 如果 \verb|copy as -> plain text|， 一些空格和换行符将不会插入．
 \end{itemize}
 
 \subsection{快捷键}
@@ -56,7 +57,7 @@ Mathematica 相对于 Matlab， Python 等偏数值计算的语言最大的特�
 
 \subsection{变量}
 \begin{itemize}
-\item \verb|Head[...]| 可用于判断一个对象的类型， 如 \verb|Head[1]| 是 \verb|Integer|， \verb|Head[Pi]| 是 \verb|Symbol|， \verb|Head[1/5]| 是 \verb|Rational|， \verb|Head[0.2]| 是 \verb|Real|， \verb|Head[I]| 是 \verb|Complex\verb|， \verb|Sin[1]|  是 \verb|Sin|， \verb|Head[2 Pi/3]| 是 \verb|Times|．
+\item \verb|Head[...]| 可用于判断一个对象的类型， 如 \verb|Head[1]| 是 \verb|Integer|， \verb|Head[Pi]| 是 \verb|Symbol|， \verb|Head[1/5]| 是 \verb|Rational|， \verb|Head[0.2]| 是 \verb|Real|， \verb|Head[I]| 是 \verb|Complex|， \verb|Head[Sin[1]]|  是 \verb|Sin|， \verb|Head[2 Pi/3]| 是 \verb|Times|．
 \item \verb|Precision[数值]| 用于查看某变精度数值的有效位数． 小数默认是双精度， 也叫 \verb|MachinePrecision|， 例如 \verb|Precision[1.]| 得 \verb|MachinePrecision|．
 \item \verb|SetPrecision[表达式， N]| 会把表达式中可以求出数值的部分都变为 \verb|N| 位有效数字， 例如常数 \verb|Pi|， \verb|E|， 又如 \verb|Sin[1]|． 又如 \verb|SetPrecision[2/3 x + 2 y, 20]|．
 \item \verb|Real| 和 \verb|Complex| 用于浮点运算，有误差． 例如计算 \verb|SetPrecision[1.3, 30]| 最后几位不为零． 如果要精确表示 \verb|1.23456789|， 就用 \verb|123456789*^-8|．
@@ -75,12 +76,14 @@ Mathematica 相对于 Matlab， Python 等偏数值计算的语言最大的特�
 \begin{itemize}
 \item \verb|{1,2,3,4}| 叫做 \verb|List|（列表）， Mathematica 的矩阵就是列表的列表．
 \item 高维列表就是列表的列表的…… 每个维度的长度未必需要相等， 例如 \verb|T = {{1,2}, {3,4,5}}|． 但如果是矩阵或者高维矩阵（张量）就必须相等．
-\item \verb|Tableform[T]| 用于显示矩阵（没有括号）．
+\item \verb|TableForm[T]| 用于显示矩阵（没有括号）． 这是一个单变量函数也可以写成 \verb|T // TableForm|．
 \item \verb|MatrixForm[T]| 用于显示矩阵（有圆括号）．
-\item \verb|Tableform[T]| 和 \verb|MatrixForm[T]| 不再是列表， 所以只用它们来显示而不要用来赋值． 例如矩阵乘法 \verb|MatrixForm[A] . MatrixForm[B]| 不会返回最后结果．
+\item \verb|TableForm[T]| 和 \verb|MatrixForm[T]| 不再是列表， 所以只用它们来显示而不要用来赋值． 例如矩阵乘法 \verb|MatrixForm[A] . MatrixForm[B]| 不会返回最后结果．
+\item list 的指标从 1 开始．
+\item Mathematica 的矩阵是行主序\upref{MatSto}的， 可以把三维矩阵/数组第一个指标看作列， 第二个看作行， 第三个看作指向屏幕内的方向． 元素写成一行的顺序是先增加最右边（最内层）的指标， 再增加右边第二个…… 越左边的指标是最外层的 list．
+\item \verb|MatrixForm| 显示高维数组的时候仍然把 1,2 个指标显示为矩阵， 每个元素是一个矩阵， 指标是 3,4， 以此类推．
 \item \verb|ConstantArray[c, {n1,n2,...}]| 可以生成常数元素的高维矩阵．
 \item \verb|Dimensions[a]| 可以获得矩阵各个维度的尺寸． 如果 \verb|list| 的每个元素长度或类型不同， 那么 \verb|Dimension[list]| 只返回第一个维度的尺寸．
-\item 列表的索引从 1 开始
 \item \verb|a[[i]]| 获取一维列表元素， 或者二维列表的第 $i$ 行．
 \item \verb|a[[-1]]| 表示最后一个元素， \verb|a[[-2]]| 倒数第二个元素．
 \item \verb|a[[0]]| 输出 \verb|Head[a]|， 无论 \verb|a| 是不是列表．
@@ -117,7 +120,7 @@ Mathematica 相对于 Matlab， Python 等偏数值计算的语言最大的特�
 \item \verb|Remove[x]| 完全清除符号．
 \item \verb|i++| 和 \verb|++i| 和 \verb|--| 与 C 语言中用法相同．
 \item \verb|x ∈ dom| 或 \verb|x \[Element] dom| 相当于 \verb|Element[x, dom]|
-\item \verb|&@| 可以把右边的结果在左边用 \verb|#| 代替， 如 \verb|#.#\[Transpose] &@RandomInteger[{-5, 5}, {6, 6}]| 可以随机生成对称矩阵．
+\item 匿名函数 \verb|&[...]| 可以把方括号中的内容在左边用 \verb|#| 代替， 如 \verb|#.#\[Transpose] &[RandomInteger[{-5, 5}, {6, 6}]]| 可以随机生成对称矩阵． 也可以用 \verb|@| 代替方括号．
 \end{itemize}
 
 \subsection{判断循环}
@@ -133,6 +136,8 @@ Mathematica 相对于 Matlab， Python 等偏数值计算的语言最大的特�
 \item 定义函数 \verb|f[x_, y_] := x^2 + y^2|． 左边的自变量需要用下划线．
 \item 更复杂的函数也可以用 \verb|Module[]| 定义如 \verb|f[x0_] := Module[{x = x0}, While[x > 0, x = Log[x]]; x]| 注意 \verb|Module| 定义的函数不支持一些符号运算， 例如 \verb|D[f[x]]| 会得到错误的结果．
 \item 如果一个函数返回一个 list， 可以用 \verb|{a,b,..} = Fun[...]| 把每个元素分别赋给不同变量． 这是事实上不是函数的功能， \verb|{a, b, c} = {{1, 2}, 2, "c"}| 也可以对 \verb|a,b,c| 分别赋值．
+\item 变量默认值： \verb|foo[a_, b_:2, c_:3] := bar[a, b, c]| 输入 \verb|foo[1]| 返回 \verb|bar[1,2,3]|
+\item 函数选项：先用 \verb|Options[函数名]| 定义选项的名字和默认值， 再把 \verb|OptionsPattern[]| 作为函数定义的某个参数． 例如 \verb|Options[fun] = {"a" -> 1, "b" -> 2}; fun[x_, OptionsPattern[]] := {x, OptionValue[a], OptionValue[b]};| 调用时例如 \verb|fun[0, b->3]|， 返回 \verb|{0, 1, 3}|
 \end{itemize}
 
 \subsection{常用函数}
@@ -157,11 +162,13 @@ Mathematica 相对于 Matlab， Python 等偏数值计算的语言最大的特�
 \item \verb|/@| 是 \verb|Map| 的简写形式 \verb|f /@ Range[3]|．
 \item 分段函数 \verb|f[x_] := 0 /; x < -1| 以及 \verb|f[x_] := 1 /; x > -1 && x < 1| 等．
 \item Listable 的函数可以直接 \verb|Sin[Range[3]]|． \verb|Atributes[Sin]|
+\item 求和 \verb|Sum[f, {i, imin, imax}]|
+\item 对列表求和用 \verb|Total[{1,2,3}]|． 高维矩阵默认对第一个指标求和， 把后面的指标依次向前移． \verb|Total[高维矩阵, n]| 对前 $n$ 个指标求和， 后面指标向前移． \verb|Total[高维矩阵, {n}]| 对第 $n$ 个指标求和， 后面的指标向前移．
+\item \verb|Product[x + i, {i, 2, 4}]| 输出 \verb|(2 + x)(3 + x)(4 + x)|．
 \end{itemize}
 
 \subsubsection{微积分}
 \begin{itemize}
-\item 求和 \verb|Sum[f, {i, imin, imax}]|
 \item \verb|Solve[左边==右边, x]| 求解关于 $x$ 的方程．
 \item \verb|Roots[左边==右边, x]| 和 \verb|Solve| 相同， 但结果的格式不同．
 \item \verb|Limit[f, x->x0]| 极限 $\lim_{x\to x_0} f$．
@@ -184,18 +191,48 @@ Mathematica 相对于 Matlab， Python 等偏数值计算的语言最大的特�
 
 \subsection{画图}
 \begin{itemize}
-\item \verb|Plot[y[x], {x, -5, 5}]| 简单的画图．
-\item \verb|Plot3D[Sin[y+Sin[3x]], {x,-3,3}, {y,-3,3}]| 简单的函数画图．
-\item 通过散点画折线图用 \verb|ListLinePlot[{{x1,y1},{x2,y2},...}]| 如果省略 \verb|x|， 那么默认 \verb|x=1,2,3,...|． 或者画多条线 \verb|ListLinePlot[{{y1,y2,...},{z1,z2...}}]|． 第二个参数用 \verb|Mesh -> All| 可以除了折线还画出数据点．
-\item 在图上拖动鼠标转动 3D 图， 按住 Ctrl 拖动鼠标放大缩小， 按住 Shift 拖动鼠标平移．
-\item 要在一张图上画多个不同内容例如 \verb|Show[Plot[2 x^2, {x, 0, 4}], 
- ListLinePlot[{{...}, {...}}, Mesh -> All]]|
+\item \verb|Plot[y[x], {x, -5, 5}]| 简单的画图． \verb|Plot[{y1[x],y2[x],...}, {x, -5, 5}]| 画多条曲线．
+\item 通过散点画折线图用 \verb|ListLinePlot[{{x1,y1},{x2,y2},...}]| 如果省略 \verb|x|， 那么默认 \verb|x=1,2,3,...|． 或者画多条线 \verb|ListLinePlot[{{y1,y2,...},{z1,z2...}}]|（默认 \verb|x=1,2,3,...|）． 第二个参数用 \verb|Mesh -> All| 可以除了折线还画出数据点．
+\item \verb|Plot[]| 或者 \verb|ListPlot[]| 添加图例： \verb|Plot[{x^2, 3 x}, {x, -5, 5}, PlotLegends -> {"图例1", "图例2"}]|．
 \item \verb|Plot| 和 \verb|ListLinePlot| 的更多性质见\href{https://reference.wolfram.com/language/ref/Plot.html}{这里}．
+\item 要在一张图上画多个不同内容用 \verb|Show[命令1, 命令2]|， 例如 \verb|Show[Plot[2 x^2, {x, 0, 4}], ListLinePlot[{{1,2,3}, {2,3,4}}, Mesh -> All]]|．
+\end{itemize}
+
+\subsubsection{3D 画图}
+\begin{itemize}
+\item \verb|Plot3D[Sin[y+Sin[3x]], {x,-3,3}, {y,-3,3}]| 简单的函数画图．
+\item 在 3D 图上拖动鼠标转动 ， 按住 Ctrl 拖动鼠标放大缩小， 按住 Shift 拖动鼠标平移．
+\end{itemize}
+
+\subsubsection{综合示例}
+\begin{lstlisting}[language=Mathematica]
+Show[ListPlot[{{1, 1}}],
+ Plot[{x^2, 2 x - 1}, {x, 0, 2},
+  PlotLegends -> {"function", "tangent"}],
+ Plot[x^2, {x, 0.9, 1.1}, PlotStyle -> Red, 
+  PlotLegends -> {"function at (0.9,1.1)"}]]
+\end{lstlisting}
+\begin{figure}[ht]
+\centering
+\includegraphics[width=12cm]{./figures/Mma_1.png}
+\caption{综合示例} \label{Mma_fig1}
+\end{figure}
+
+\subsection{字符串}
+\begin{itemize}
+\item 双引号表示字符串， \verb|<>| 合并两个字符串， 相当于 \verb|StringJoin["s1", "s2", ...]| 或者 \verb|StringJoin[{"s1", "s2"}, "s3", ...]|， 所有的 list 都会被无视
+\item escape 的规则和 C 语言类似， 引号是 \verb|\"|， 反斜杠是 \verb|\\|， 换行符 \verb|\n| 等．
+\item 一些系统定义的字符串以 \verb|$| 开头， 例如 \verb|$UserBaseDirectory| 表示用户路径， 更多详见“Mathematica 文件操作\upref{mmaio}”．
+\item \verb|StringLength[]| 用于检查字符串长度
 \end{itemize}
 
 \subsection{文件读写}
 \begin{itemize}
 \item 从 \verb|csv| 表格文件读取矩阵如 \verb|A = Import["C:\\Users\\abcd\\Desktop\\data.csv", "csv"]|．
 \item Matlab 输出矩阵文件如 \verb|writematrix(m,'data.csv')|， 这样就可以用 Mathematica 读取 Matlab 的数据了．
-\item \verb|Put|，\verb|Save|， \verb|DumpSave|， \verb|Export|， \verb|Get| 可以储存和读取表达式（待研究）．
+\item \verb|Directory[]| 输出当前目录， 当前目录默认是 \verb|$InitialDirectory|， Windows 中就是 Documents 文件夹
+\item \verb|SetDirectory[]| 设置当前目录．
+\item \verb|Put[表达式1, 表达式2, "文件名"]| 可以把表达式存入文件， 如果不指定目录， 则输出到当前目录
+\item \verb|Save| 和 \verb|Get| 的例子： \verb|a = "This must be saved"; fun[x_, y_] := {x, y}; Save["temp", {a, fun}]; Clear[a, fun]; Get["temp"];| 注意多次对同一个文件用 \verb|Save| 不会覆盖之前的内容， 直接把新内容添加到底部．
+\item \verb|Put|，\verb|DumpSave|， \verb|Export| 研究一下．
 \end{itemize}

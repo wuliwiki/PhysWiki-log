@@ -1,0 +1,144 @@
+% 留数定理
+% 复变函数|residue|柯西积分定理|洛朗级数|围道积分|约尔当引理|Jordan 引理|Jordan's Lemma|若尔当引理|若当引理
+
+\pentry{洛朗级数\upref{LaurSr}}
+
+留数定理是用来计算围道积分的工具，也可以借用围道积分的性质来计算实函数的积分．
+
+\subsection{定理的导出}
+
+我们首先讨论最简单的洛朗级数$f(z)=1/z$的围道积分．
+
+\begin{example}{}\label{ResThe_ex1}
+考虑$f(z)=1/z$的围道积分．
+
+令积分路径为$\Gamma(t)=\rho\E^{\I t}$，其中$\rho$是一个常数．$\Gamma$就是一个绕着一个半径为$\rho$的圆的逆时针路径．$f$沿$\Gamma$的围道积分就是：
+\begin{equation}
+\begin{aligned}
+\int_{\Gamma}\frac{1}{z}\dd z&=\int^{2\pi}_0\frac{1}{\rho\E^{\I t}}\cdot\frac{\dd\rho\E^{\I t}}{\dd t}\dd t\\
+&=\int_0^{2\pi}\frac{1}{\rho\E^{\I t}}\cdot (\I \rho \E^{\I t})\dd t\\
+&=\int_0^{2\pi}\I\dd t\\
+&=2\pi\I
+\end{aligned}
+\end{equation}
+
+对于任意逆时针环绕原点的路径$P(t)$，我们可以求$\int_{\Gamma}\frac{1}{z}\dd z-\int_{P}\frac{1}{z}\dd z$，其中$\Gamma$完全包裹在$P$中．这相当于求$\Gamma$和$P$之间区域的围道积分．这个中间区域是不包含原点的，因此由于$1/z$在原点之外处处解析，由\textbf{柯西积分定理}\upref{CauGou}知，中间区域的围道积分为$0$．从而我们可以推知，$\int_{P}\frac{1}{z}\dd z=2\pi\I$．
+
+更一般地，对于任意环绕原点的路径$P$，有$\int_{P}\frac{1}{z}\dd z=\pm 2\pi\I$，其中$P$为逆时针时取正号，反之取负号．
+
+\end{example}
+
+接着是幂次更低的洛朗级数的围道积分．
+
+\begin{example}{}\label{ResThe_ex2}
+考虑$f(z)=1/z^n$的围道积分，其中整数$n>1$．
+
+同样令积分路径为$\Gamma(t)=\rho\E^{\I t}$，其中$\rho$是一个常数．$f$沿$\Gamma$的围道积分就是：
+
+\begin{equation}
+\begin{aligned}
+\int_{\Gamma}\frac{1}{z^n}\dd z&=\int^{2\pi}_0\frac{1}{(\rho\E^{\I t})^n}\cdot\frac{\dd\rho\E^{\I t}}{\dd t}\dd t\\
+&=\int_0^{2\pi}\frac{1}{(\rho\E^{\I t})^n}\cdot (\I \rho \E^{\I t})\dd t\\
+&=\int_0^{2\pi}\frac{\I}{\rho^{n-1}}\E^{(1-n)\I t}\dd t\\
+&=\frac{1}{(1-n)\rho^{n-1}}\E^{(1-n)\I t}|^{t=2\pi}_{t=0}\\
+&=0
+\end{aligned}
+\end{equation}
+
+和\autoref{ResThe_ex1} 一样地，可以将结论推广为，对于任意积分路径$P$，都有
+\begin{equation}
+\int_P\frac{1}{z^n}\dd z=0
+\end{equation}
+
+\end{example}
+
+而洛朗级数的正则部分是一个泰勒级数，其围道积分处处为$0$．结合\autoref{ResThe_ex1} 和\autoref{ResThe_ex2} ，我们可以得到以下定理：
+
+\begin{definition}{留数}
+
+取洛朗级数$f(z)=\sum\limits_{n=-\infty}^{\infty} a_n(z-c)^n$，定义$a_{-1}$为$f$在$c$处的\textbf{留数（residue）}，记为$\opn{Res}[f, c]$，或者$\opn{Res}_cf$．
+
+\end{definition}
+
+\begin{theorem}{留数定理（单个极点）}\label{ResThe_the1}
+洛朗级数$f(z)=\sum\limits_{n=-\infty}^{\infty} a_n(z-c)^n$沿闭合路径$\Gamma$逆时针绕点$c$一周的围道积分为
+\begin{equation}
+\int_\Gamma f(z)\dd z=2a_{-1}\pi\I
+\end{equation}
+这一结果也可以表述为
+\begin{equation}
+\int_\Gamma f(z)\dd z=2\pi\I\opn{Res}_cf
+\end{equation}
+
+\end{theorem}
+
+有时候回路中会有多个极点，此时我们要做的就是把这些极点的留数求和：
+
+\begin{theorem}{留数定理}
+
+如果连续复变函数$f(z)$在闭合路径$\Gamma$中有多个极点，那么沿$\Gamma$的回路积分为
+
+\begin{equation}
+\int_\Gamma f(z)\dd z=2\pi\I\sum_{c}\opn{Res}_cf
+\end{equation}
+其中$c$遍历所有包含在$\Gamma$中的极点．
+
+
+\end{theorem}
+
+
+
+
+\subsection{留数的计算}
+
+
+
+如果能把给定函数$f$在给定点的洛朗展开写出来，我们直接就能得到对应的留数，用于计算围道积分．但那样常常是非常麻烦的，也是没有必要的，因为留数只是洛朗级数中的一个系数，通常没必要为了求这一个系数而把整个级数算出来．
+
+\begin{lemma}{}\label{ResThe_lem1}
+如果$f(z)$是一个在$c\in\mathbb{C}$处解析的函数，那么$\opn{Rez}_c\frac{f(z)}{z-c}=f(c)$．
+\end{lemma}
+
+\autoref{ResThe_lem1} 的证明很简单，将$f(z)$在$c$处泰勒展开以后再除以$z-c$即可．
+
+利用\autoref{ResThe_lem1} ，我们可以快速计算出很多常见函数的留数．
+
+\begin{example}{}
+求$\frac{1}{z(z-2)}$在$z=2$处的留数．
+
+由于$\frac{1}{z}$在$z=2$处解析，因此根据\autoref{ResThe_lem1} ，代入$f(z)=\frac{1}{z}$和$c=2$可知，
+\begin{equation}
+\opn{Rez}_2\frac{1}{z(z-2)}=\frac{1}{2}
+\end{equation}
+\end{example}
+
+用证明\autoref{ResThe_lem1} 的方法进行推广，还可以得到更一般的定理：
+
+\begin{theorem}{}\label{ResThe_the2}
+如果$f(z)$是一个在$c\in\mathbb{C}$处解析的函数，$k$是一个正整数，那么$\opn{Rez}_c\frac{f(z)}{(z-c)^k}=\frac{f^{(k-1)}(c)}{(k-1)!}$．
+\end{theorem}
+
+在很多材料中会把点$c$称为$f(z)/(z-c)^k$的$k$\textbf{级极点}，其中$f(z)$在$c$处解析．
+
+\begin{example}{}
+计算$\opn{Rez}_0 \frac{\E^{2z}}{z^2}$．
+
+在$0$处，$\frac{\E^{2z}}{z^2}$有一个二级极点．根据\autoref{ResThe_the2} ，将$k=2$、$f(z)=\E^{2z}$和$c=0$代入，可得：
+\begin{equation}
+\opn{Rez}_0\frac{\E^{2z}}{z^2}=\frac{(\E^{2z})'|_{z=0}}{1!}=2
+\end{equation}
+
+
+\end{example}
+
+
+
+
+
+
+
+
+
+
+
+
