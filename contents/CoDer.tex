@@ -1,0 +1,191 @@
+% 协变导数
+% Covariant Derivative|微分几何|differential geometry|christoffel symbol|克氏符|流形
+
+
+
+
+\pentry{仿射联络（切丛）\upref{affcon}}
+
+定义联络时，我们讲联络看成是向量场之间的映射，$\nabla_{\bvec{X}}\bvec{Y}$中的$\bvec{X}$和$\bvec{Y}$都是光滑向量场．也就是说，我们着眼于场的整体，而没有关注局部的性质，比如某个点或者某个轨迹上的切向量场如何变化．
+
+不过，在\textbf{Christoffel符号}\upref{CrstfS}词条中我们看到，在具体图中计算联络时，只用到了几个定义在欧几里得空间的函数，也就是向量场的坐标值函数和Christoffel符号．欧几里得空间上函数的求导是可以考虑局部的，也就是我们可以计算一个点上函数的导数，而不必像联络的定义那样要考虑整个场的变换．这就意味着我们有可能局部地计算联络．
+
+\subsection{协变导数的概念}
+
+考虑一个带联络的$n$维实流形$(M, \nabla)$．令$c:I\to M$是一个从区间$[0, 1]$到流形$M$上的连续映射，我们称之为一条\textbf{道路}．沿着$c(t)|_{t\in I}$定义一个光滑切向量场$\bvec{X}(t)$．也就是说，各$\bvec{X}(t)$都是$c(t)$处的切向量，但不一定是沿着$c'(t)$方向的\footnote{当然，我们可以把$\opn{Im}c(t)$本身看成一个一维的流形，那么此时$\bvec{X}$就不是其切向量．我们可以考虑在这个一维流形上的一个二维\textbf{向量丛}\upref{TanBun}，这样$\bvec{X}$就是这个丛上的一个截面．}．
+
+比如说，令$M$二维球面$S^2$，嵌入为三维欧几里得空间中圆心在原点的单位球面．取$c(t)=\pmat{\cos t&\sin t&0}\Tr$．如果令$\bvec{X}(t)=\pmat{0&0&\E^t}$，那么它处处是$S^2$上的切向量，且沿着$c(t)$的各坐标分量都是关于$t$的光滑函数，因此是沿着$c(t)$的光滑向量场，但它和$c'(t)$处处都不平行．
+
+% 现在我们尝试导出$\dd\bvec{X}(t)/\dd t$．
+
+% 任取一个图$\phi:\mathbb{R}^n\to M$，记$\Im\phi=U$，使得$\forall t\in I, c(t)\in U$．在给定图中，$\phi^{-1}(\bvec{X}(t))$表示为坐标$\pmat{x^1(t)&x^2(t)&\cdots&x^n(t)}\Tr$，点$c(t)$表示为坐标$\pmat{c^1(t)&c^2(t)&\cdots&c^n(t)}\Tr$\footnote{即$\phi\qty(\pmat{x^1(t)&x^2(t)&\cdots&x^n(t)}\Tr)=\bvec{X}(t)$，$\phi\qty(\pmat{c^1(t)&c^2(t)&\cdots&c^n(t)}\Tr)=c(t)$．}．特别地，为简化考虑，令$c(0)=\pmat{0&0&\cdots&0}\Tr$．
+
+% 记$c'(t)=\frac{\dd}{\dd t}c(t)\in T_{c(t)}M$，即$c'(t)$是道路$c(t)$所代表的切向量．于是，道路$c(t)$各处的切向量$c'(t)$就可以表示为$\pmat{\frac{\dd}{\dd t}c^1(t)&\frac{\dd}{\dd t}c^2(t)&\cdots&\frac{\dd}{\dd t}c^n(t)}\Tr$．
+
+% 根据\autoref{CrstfS_eq4}~\upref{CrstfS}，誊抄如下：
+% \begin{equation}
+% \nabla_{x^i}y^j=x^i(\partial_iy^s)+x^iy^j\Gamma^s_{ij}
+% \end{equation}
+% 我们可以写出
+% \begin{equation}\label{CoDer_eq1}
+% \nabla_{\frac{\dd}{\dd t}c^i(t)}x^j(t)=\frac{\dd}{\dd t}c^i(t)\qty(\partial_ix^s(t)+x^j(t)\Gamma^s_{ij})
+% \end{equation}
+
+% \autoref{CoDer_eq1} 右边是只有一个上标$s$的量，可以用来表示图$\phi^{-1}(U)$上的向量．问题是，它对应$M$上的切向量吗？
+
+
+% 观察下式：
+% \begin{equation}\label{CoDer_eq2}
+% \frac{\dd x^i}{\dd t}\partial_i+x^i\nabla_{c'(t)}\partial_i
+% \end{equation}
+% 其中$\partial_i$是$\phi^{-1}(U)$上的偏微分算子．由于$\paritial_i$和$\nabla_{c'(t)}\partial_i$
+
+% 考虑到$\phi^{-1}(c'(t))=\pmat{\frac{\dd}{\dd t}c^1(t)&\frac{\dd}{\dd t}c^2(t)&\cdots&\frac{\dd}{\dd t}c^n(t)}\Tr$，可知
+% \begin{equation}
+% c'(t)=\frac{\dd}{\dd t}c^1(t)\partial_1+\frac{\dd}{\dd t}c^2(t)\partial_2+\cdots+\frac{\dd}{\dd t}c^n(t)\partial_n
+% \end{equation}
+% 因此
+% \begin{equation}\label{CoDer_eq3}
+% \begin{aligned}
+% \nabla_{c'(t)}\partial_i&=\nabla_{\frac{\dd}{\dd t}c^j(t)\partial_j}\partial_i\\
+% &=\frac{\dd}{\dd t}c^j(t)\nabla_{\partial_j}\partial_i\\
+% &=\frac{\dd}{\dd t}c^j(t)\Gamma^k_{ji}\partial_k
+% \end{aligned}
+% \end{equation}
+
+% 将\autoref{CoDer_eq3} 代入\autoref{CoDer_eq2} ，可见\autoref{CoDer_eq2} 在$\phi^{-1}$上的坐标为
+
+如果$M$是\textbf{欧几里得空间}，那么我们已经知道该怎么求$\frac{\dd}{\dd t}\bvec{X}(t)$了，因为$\bvec{X}(t)$可以自然地表示成坐标形式，我们对每个坐标求导就可以了．具体来说，如果$\bvec{X}(t)=x^i(t)\partial_i$，那么$\frac{\dd}{\dd t}\bvec{X}(t)=\dot{x}^i(t)\partial_i$．
+
+欧几里得空间中，沿给定道路求导的过程满足以下性质：
+\begin{enumerate}
+\item $\frac{\dd }{\dd t}\bvec{X}$对$\bvec{X}$满足$\mathbb{R}-$线性性\footnote{即如果在道路上定义了两个向量场$\bvec{X}(t)$和$\bvec{Y}(t)$，那么任取实数$a, b$，都有$\frac{\dd}{\dd t}(\bvec{a\bvec{X}+b\bvec{Y}})=a\frac{\dd}{\dd t}\bvec{X}+b\frac{\dd}{\dd t}\bvec{Y}$．}．
+\item 任取$M=$上的光滑函数$f$，则
+\begin{equation}
+\frac{\dd}{\dd t}\qty(f\bvec{X})=f\frac{\dd}{\dd t}\bvec{X}+\bvec{X}\frac{\dd}{\dd t}f
+\end{equation}
+\item 如果$\bvec{X}$是$\mathbb{R}^n$上光滑切向量场$\tilde{\bvec{X}}$的一部分，且记$D$是$\mathbb{R}^n$上的方向导数，那么有
+\begin{equation}\label{CoDer_eq4}
+\frac{\dd}{\dd t}\bvec{X}=D_{c'(t)}\tilde{\bvec{X}}
+\end{equation}
+
+\end{enumerate}
+
+\autoref{CoDer_eq4} 很重要，它意味着至少在欧几里得空间中，沿着道路对切向量求导，可以由联络（方向导数）导出．顺着这个思想，我们可以尝试将沿道路求导的概念拓展到任意的流形$M$上． 
+
+\subsubsection{切向量场从局部拓展到整体}
+
+在$M$上局部区域定义的光滑切向量场，比如道路$c(t)$上的$\bvec{X}(t)$，能不能拓展到整个流形$M$呢？也就是说，是否存在一个$M$上的光滑切向量场$\widetilde{\bvec{X}}$，使得$\bvec{X}(t)=\widetilde{\bvec{X}}|_{c(t)}$呢？
+
+答案是肯定的．这是因为任意$n$维实流形$M$，都可以嵌入到$\mathbb{R}^{2n}$上．换句话说，存在一个$\mathbb{R}^{2n}$上的光滑函数$f$，使得$\mathbb{R}^{2n}$的子流形$\{p\in\mathbb{R}^{2n}|f(p)=0\}$，和$M$微分同胚（或者说就是$M$本身）．使用$\mathbb{R}^{2n}$天然的坐标，可以把任何切向量场表示成$\mathbb{R}^{2n}$上光滑函数的组合\footnote{比如三维欧几里得空间中的切向量场，可以表示为三个光滑函数的组合，每个光滑函数是一个坐标分量．}．我们总可以把局部的光滑函数拓展为整个$\mathbb{R}^{2n}$上的光滑函数，从而把局部的光滑切向量场拓展为整个$\mathbb{R}^{2n}$上的光滑切向量场．对这个拓展的切场取在$M$上的限制，再投影到$M$上，即得到在$M$上的拓展．
+\addTODO{投影是为了得到$M$上的切向量．}
+
+\begin{example}{切向量的整体拓展}
+令$M$为三维欧几里得空间中的单位球$M=\{\pmat{x&y&z}\Tr|x^2+y^2+z^2=0\}$．在$M$的“赤道”$\{\pmat{x&y&z}|x^2+y^2=1, z=0\}$上定义了一个光滑切向量场：
+\begin{equation}
+\bvec{V}\pmat{x&y&z}=\pmat{-y&x&0}
+\end{equation}
+
+在$\mathbb{R}^3$上定义
+\begin{equation}
+\widehat{\bvec{V}}\pmat{x&y&z}=\pmat{-y&x&0}
+\end{equation}
+
+那么显然$\bvec{V}$是$\widehat{\bvec{V}}$的限制．
+
+但是对于单位球$M$上的各点$p=\pmat{x&y&z}\Tr$，$\widehat{\bvec{V}}(p)$却不一定是$T_pM$中的切向量．这时候我们就需要投影：
+\begin{equation}
+\widetilde{\bvec{V}}=\widehat{\bvec{V}}-\widehat{\bvec{V}}\vdot\bvec{N}
+\end{equation}
+其中$\bvec{N}\pmat{x&y&z}\Tr=\pmat{x&y&z}\Tr$，是单位球在$p$处的单位法向量．
+
+这样就能保证$\widetilde{\bvec{V}}|_p$一定是$T_pM$的元素了．自此，我们就得到了$\bvec{V}$在整个$M$上的拓展：$\widetilde{\bvec{V}}|_{M}$．
+
+\end{example}
+
+\subsubsection{协变导数}
+
+继续之前的讨论，令$\bvec{X}(t)$是沿着$c(t)$的光滑切向量场．将$\bvec{X}(t)$拓展为整个$M$上的光滑切场$\widetilde{\bvec{X}}$，$c'(t)$拓展为$\bvec{T}$．
+
+$\nabla_{\bvec{T}}\widetilde{\bvec{X}}$是可以计算出来的．考虑到欧几里得空间中沿道路求导的第3条性质，也就是和方向导数（联络）的相容性，我们可以沿着$c(t)$定义一个算子$\frac{D}{\dd t}$，使得：
+\begin{equation}
+\frac{D}{\dd t}\bvec{X}(t)=\nabla_{\bvec{T}}\widetilde{\bvec{X}}|_{c(t)}
+\end{equation}
+
+我们称如上定义的$\frac{D}{\dd t}\bvec{X}(t)$为$\bvec{X}$沿着道路$c(t)$的\textbf{协变导数（covariant derivative）}．
+
+欧几里得空间上沿着$c(t)$求$\bvec{X}$的方向导数，就是协变导数的一个特例．一般的协变导数，和这个特例一样，有三个性质：
+
+\begin{enumerate}
+\item $\frac{D}{\dd t}\bvec{X}$对$\bvec{X}$满足$\mathbb{R}-$线性性\footnote{即如果在道路上定义了两个向量场$\bvec{X}(t)$和$\bvec{Y}(t)$，那么任取实数$a, b$，都有$\frac{D}{\dd t}(\bvec{a\bvec{X}+b\bvec{Y}})=a\frac{D}{\dd t}\bvec{X}+b\frac{D}{\dd t}\bvec{Y}$．}．
+\item 任取$M=$上的光滑函数$f$，则
+\begin{equation}
+\frac{D}{\dd t}\qty(f\bvec{X})=f\frac{D}{\dd t}\bvec{X}+\bvec{X}\frac{D}{\dd t}f
+\end{equation}
+\item 如果$\bvec{X}$是$\mathbb{R}^n$上光滑切向量场$\tilde{\bvec{X}}$的一部分，且记$D$是$\mathbb{R}^n$上的方向导数，那么有
+\begin{equation}
+\frac{D}{\dd t}\bvec{X}=D_{c'(t)}\tilde{\bvec{X}}
+\end{equation}
+
+\end{enumerate}
+
+在Loring W. Tu的课本\textsl{Differential Geometry: Connections, Curvature, and Characteristic Classes}\cite{GTM275}的第13.1节，导出协变导数的思路是先给出以上三个性质，然后证明存在且唯一存在满足这三条性质的算子，将其定义为$\frac{D}{\dd t}$．如果你使用GTM 275作为参考书，请注意这里思路的差别．
+
+
+
+\subsection{协变导数的计算}
+
+取$M$上的一个局部坐标系\footnote{$M$上并非总有整体坐标系，比如说单位球面上就不可能存在处处非零的光滑切向量场，进而任何一组光滑切向量场都会有零点，进而任何一组光滑切场都不可能是整体坐标系．但是局部是可以的，因为流形是局部同胚于欧几里得空间的，取欧几里得空间里的坐标系，映射回流形上就可以．}$\{\bvec{e}_1, \bvec{e}_2, \cdots, \bvec{e}_n\}$．给定沿着$c(t)$的一个光滑切向量场$\bvec{X}=x^i(t)\bvec{e}_i$，其中各$x^i(t)$是区间$I$上的光滑函数．将光滑切场$\bvec{e}_i$拓展为光滑切场$\widetilde{\bvec{e}}_i$，光滑函数$x^i$拓展为光滑函数$\widetilde{x}^i$\footnote{即将$\bvec{X}$拓展为$\widetilde{x}^i\widetilde{\bvec{e}}_i$．}．此时再将$c'(t)$拓展为整个$M$上的光滑切场$\bvec{T}=T^i\widetilde{\bvec{e}}_i$．
+
+则按定义有：
+
+\begin{equation}\label{CoDer_eq5}
+\begin{aligned}
+\frac{D}{\dd t}\bvec{X}(t)&=\nabla_\bvec{T}\qty(\widetilde{x}^i\widetilde{\bvec{e}}_i)|_{c(t)}\\
+&=\widetilde{x}^i\nabla_{T^j\widetilde{\bvec{e}}_j}\qty(\widetilde{\bvec{e}}_i)|_{c(t)}+(\bvec{T}\widetilde{x^i})\widetilde{\bvec{e}}_i|_{c(t)}\\
+&=T^j\widetilde{x}^i\nabla_{\widetilde{\bvec{e}}_j}\qty(\widetilde{\bvec{e}}_i)|_{c(t)}+\frac{\dd x^i(t)}{\dd t}\bvec{e}_i\\
+\end{aligned}
+\end{equation}
+
+按照GTM 275中式(13.1)的写法，有
+\begin{equation}
+\frac{D}{\dd t}\bvec{X}(t)=\frac{\dd x^i(t)}{\dd t}\bvec{e}_i+{x}^i(t)\nabla_\bvec{T}\bvec{e}_i
+\end{equation}
+
+和\autoref{CoDer_eq5} 是一样的．
+
+将\autoref{CoDer_eq5} 与\textbf{Christoffel符号}\upref{CrstfS}的概念结合，我们还可以进一步写出给定图中协变导数的计算公式：
+
+\begin{equation}\label{CoDer_eq6}
+\frac{D}{\dd t}\bvec{X}(t)=T^jx^i\Gamma^k_{ji}+\frac{\dd x^k(t)}{\dd t}
+\end{equation}
+注意\autoref{CoDer_eq6} 只写了坐标，省略了$\bvec{e}_i$．
+
+这样，只要知道了一个图中的Christoffel符号，就可以用\autoref{CoDer_eq6} 在这个图中计算出协变导数了．
+
+\subsection{与度量的相容性}
+
+相关概念参见\textbf{黎曼联络}\upref{RieCon}．
+
+\begin{theorem}{}
+给定\textbf{黎曼流形}$M$上的一条道路$c(t)$，沿着道路有两个光滑切场${\bvec{X}}(t)$和${\bvec{Y}}(t)$．那么内积$g({\bvec{X}}(t), {\bvec{Y}}(t))$就是$c(t)$上的光滑函数，因此可以直接对$t$求导．
+
+此时我们有：
+\begin{equation}
+\frac{\dd}{\dd t}g({\bvec{X}}(t), {\bvec{Y}}(t))=g(\frac{D}{\dd t}{\bvec{X}}(t), {\bvec{Y}}(t))+g({\bvec{X}}(t), \frac{D}{\dd t}{\bvec{Y}}(t))
+\end{equation}
+\end{theorem}
+
+
+
+这是由“度量相容性（见\autoref{RieCon_def1}~\upref{RieCon}的第二条）”推论得出的．
+
+
+
+
+
+
+
+
+
+
