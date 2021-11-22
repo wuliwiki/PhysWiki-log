@@ -1,0 +1,72 @@
+% 轴角法进行旋转 （Matlab）
+
+\begin{issues}
+\issueDraft
+\end{issues}
+
+\addTODO{给出思路}
+
+\pentry{罗德里格旋转公式、绕轴旋转矩阵\upref{RotA}}
+
+计算点$p$绕直线$\frac{x-x_0}{k_x}=\frac{y-y_0}{k_y}=\frac{z-z_0}{k_z}$（$\vec{k}$是法向单位矢量）按右手螺旋规则旋转$\theta$角得到的新点
+
+以下给出 Matlab 代码．
+
+
+\begin{lstlisting}[language=matlab]
+%main.m
+clc;
+clear all;
+close all;
+
+
+p=[2,0,0]; %旋转前的点
+r0=[1,0,0]; %直线上的一点r0
+x0=r0(1);
+y0=r0(2);
+z0=r0(3);
+param=[0,1,0,pi/3];%分别是kx,ky,kz,theta
+p_relative=p-r0;  %旋转前的点相对r0的矢量
+p_rotated=Rotation(p_relative,param)+r0 %p_rotated就是结果
+
+\end{lstlisting}
+
+
+
+\begin{lstlisting}[language=matlab]
+% Rotaion.m
+function p1=Rotation(p,param)
+[row,col]=size(param);
+if row==1&col==4 
+    ;
+else
+    warndlg('请检查Rotation函数的第二个参数param的size是否是1*4');
+end
+if norm(param(1,end-1))-1.0<1e-8
+    ;
+else
+    warndlg('请检查Rotation函数的第二个参数param的kx,ky,kz构成的向量是否模长1')
+end   
+    
+[row,col]=size(p);
+if row==1&col==3
+    ;
+else 
+    warndlg('请检查Rotation函数的第一个参数p的size是否是1*3');
+end
+
+kx=param(1);
+ky=param(2);
+kz=param(3);
+theta=param(4);
+
+K=[0 -kz ky;
+   kz 0 -kx;
+   -ky kx 0];
+R = eye(3) + sin(theta)*K + (1- cos(theta))*K*K;    %罗德里格斯公式
+p1= R*p';                           %利用罗德里格斯公式计算的旋转后的点
+p1=p1';
+end
+\end{lstlisting}
+
+\addTODO{demo}

@@ -1,39 +1,38 @@
 % Git 笔记
 % Git|GitHub
 
-\begin{issues}
-\issueDraft
-\end{issues}
-
 \pentry{GitHub Desktop 的简单使用\upref{GitHub}}
 
-一个简单美观的 GUI 客户端是 GitHub Desktop\upref{GitHub}（未必需要使用 GitHub）
+一个简单美观的 GUI 客户端是 GitHub Desktop\upref{GitHub}（未必需要使用 GitHub）， 然而许多 GUI 的功能比起命令行来还是要少得多， 例如 GitHub Desktop 不支持 \verb|stage|， 不支持把仓库或指定文件恢复到以前某个版本等． 要安装 Git 命令行程序， Windows 用户可以下载 \href{https://gitforwindows.org/}{Git for Windows}， Debian 或 Ubuntu 可以直接用 \verb|sudo apt install git| 安装．Git for Windows 的 Git Bash 相当于 linux 的命令行, 有当前路径 \verb|pwd|, 更改路径用 \verb|cd|.
 
 \subsubsection{新安装设置}
 \begin{itemize}
-\item 要设置用户名, 用 \verb|git config --global user.name "myname"|
-\item 要设置 commit 邮箱, 用 \verb|git config --global user.email "email"|  邮箱决定 commit 的作者.
-\item 用网址 clone 的话, 每次链接服务器需要输入用户名和密码（token）, 要储存账户密码, 用 \verb|git config --global credential.helper store| 如果 github 修改了密码, 再用一次该命令即可, 要测试是否需要密码, 用 \verb|git pull|
-\item 清空账号密码用 \verb|git config --global --unset credential.helper|. 如果还不行的话只好把下文的所有 config 文件删除并重装 git
-\item token 是命令行的密码， 和 GitHub 的密码是不同的， 创建 token 参考 \href{https://docs.github.com/en/github/authenticating-to-github/keeping-your-account-and-data-secure/creating-a-personal-access-token#creating-a-token}{这里}
-\item 要查看 token 登录 github 后用 https://github.com/settings/tokens/
-\item Windows 下设置 \verb|git config --global core.autocrlf true|, 这样 commit 的时候会把所有 CRLF 换行变为 LF, 而 checkout 的时候会把所有 LF 变为 CRLF. linux 下设置 \verb|git config --global core.autocrlf input|, 这样 commit 的时候会把所有 CRLF 变为 LF, 而 chekout 的时候不做任何操作. 如果这么设置了, GitHub Desktop 产生的 .gitattribute 文件就可以删掉了 (因为解决的是同一个问题).
-\item 如果中文路径显示乱码（反斜杠加数字）， 用 \verb|git config --global core.quotepath off|
+\item 要设置用户名, 用 \verb|git config --global user.name "用户名"|.
+\item 要设置 commit 邮箱, 用 \verb|git config --global user.email "邮箱"|  邮箱决定 commit 的作者.
+\item Github 的 token 是命令行使用的密码， 和 GitHub 的密码是不同的， GitHub 创建 token 参考\href{https://docs.github.com/en/github/authenticating-to-github/keeping-your-account-and-data-secure/creating-a-personal-access-token#creating-a-token}{这里}．
+\item 要查看 token 登录 github 后用 \href{https://github.com/settings/tokens/}{https://github.com/settings/tokens/}． 注意每个 token 只能查看一次， 要注意保存， 如果丢失只能新建一个．
+\item 私有仓库用网址如果 clone, 每次连接服务器需要输入用户名和 token, 包括 \verb|clone, pull| 等． 要让 Git 记住账户密码, 用 \verb|git config --global credential.helper store| 如果 github 修改了密码, 再用一次该命令即可, 要测试是否成功可用 \verb|git pull|， 如果成功则不需要密码．
+\item 清空账号密码用 \verb|git config --global --unset credential.helper|. 如果还不行的话只好把下文的所有 config 文件删除并重装 git．
+\item Windows 下设置 \verb|git config --global core.autocrlf true|, 这样 commit 的时候会把所有 CRLF 换行变为 LF, 而 checkout 的时候会把所有 LF 变为 CRLF. Linux 下设置 \verb|git config --global core.autocrlf input|, 这样 commit 的时候会把所有 CRLF 变为 LF, 而 chekout 的时候不做任何操作. 如果这么设置了, GitHub Desktop 自动产生的 .gitattribute 文件就可以删掉了 (因为解决的是同一个问题).
+\item 如果仓库中的中文路径显示乱码（反斜杠加数字）， 用 \verb|git config --global core.quotepath off|
 \item \verb|git config --global core.editor "vim"| 可以把用于 commit 的编辑器设为 vim
+\item 为了防止大文件传服务器失败， 使用例如 \verb|git config --global http.postBuffer 2000000000| （字节）
 \end{itemize}
 
-\subsubsection{快捷使用}
+\subsubsection{常用命令}
 \begin{itemize}
-\item 考虑到 \verb|git status| 和 \verb|git diff| 太常用， 可以用 \verb|ctrl+r stat| 或者 \verb|ctrl+r dif| 等． 如果不对就再按一次 \verb|ctrl+r| 即可． 任何常用命令都可以这样．
+\item \verb|git init| 可以把某个文件夹变为仓库， 也可以现在 GitHub 上新建仓库再 \verb|git clone| 到本地．
+\item \verb|git status| 用于查看仓库的当前状态， 例如有哪些新增、 改变和删除的文件.
+\item \verb|git diff [文件或路径]| 用于显示上次 \verb|commit| 之后的改变, 如果有文件被 \verb|add|, 则显示其 \verb|add| 之后的改变.
+\item \verb|git add [文件或路径]| 用于把改变的文件添加到 staging area, commit 的时候只会 commit 这些文件. 如果文件又发生了改动， 需要再次 \verb|git add|.
 \item 快速 add 并 commit 可以用 \verb|git commit -am "标题"|
+\item 考虑到 \verb|git status| 和 \verb|git diff| 太常用， 可以用 \verb|ctrl+r stat| 或者 \verb|ctrl+r dif| 等． 如果不对就再按一次 \verb|ctrl+r| 即可． 这是命令行的功能不是 Git 功能．
+安装后的设置
 \end{itemize}
 
-\subsubsection{笔记}
+\subsubsection{其他}
 \begin{itemize}
-\item Windows 的 Git Bash 相当于 linux 的命令行, 有当前路径 \verb|pwd|, 更改路径用 \verb|cd|.
-安装后的设置
-\item 为了防止大文件传输失败， 使用 \verb|git config --global http.postBuffer 2000000000| （字节）
-\item \verb|git clone| 时在后面加上 \verb|--depth N| 选项可以只下载前几次的 commit
+\item \verb|git clone| 时在后面加上 \verb|--depth N| 选项可以只下载最后 \verb|N| 次的 commit
 \item \verb|git clone <url> newname| 会把本地 repo 文件夹命名成 \verb|newname|
 \item git 会无视隐藏目录（\verb|.| 开头的）， \verb|git status| 也不显示， \verb|git clean| 也删不掉
 \item \verb|git status| 只会显示 worktree 和 index 之间的区别， 而不一定是最新 commit 之间的（对于服务器上被 push 的 repo 而言）
@@ -41,7 +40,7 @@
 \item 每个 repo 的设置文件是 \verb|.git/config|. 用户的 \verb|.gitconfig| 文件可以在 home 目录 (~) 找到 (对当前用户生效), \verb|git config --global| 的设置全部存在这里. 系统的设置文件可以在 linux 的 \verb|/etc/gitconfig| 或 Windows 的 \verb|/C/ProgramData/Git/config| 中找到 (对所有用户生效). repo 中的设置覆盖用户设置覆盖系统设置.
 \item \verb|git config --list| 可以列出当前目录的所有 config, 注意如果有设置多次出现, 后出现的为准. \verb|git config --show-origin <xxx.xxx>| 可以显示某个 config 所在的文件.
 \item \verb|.gitattributes| 文件也有用户(而不是 repo) 的版本, 可以用 \verb|~/.config/git/attributes| 文件设置.
-\item 要把某个路径变为一个 repository, 先 cd 到该路径, 然后 git init 即可. 该命令会在当前目录创建 .git 文件夹, 里面包含所有历史信息.
+\item 要把某个路径变为一个 repository, 先 cd 到该路径, 然后 \verb|git init| 即可. 该命令会在当前目录创建 .git 文件夹, 里面包含所有历史信息.
 \item 所有 config 和 attribute 文件对 GitHub Desktop 同样有效.
 \item 要从服务器 clone 一个 Repository, 先获取网址, 然后用 \verb|git clone https://...| 即可. git 会 clone 到当前目录下.
 \item 如果 clone 了以后用 \verb|git status| 发现所有的文件都改变了, 用 \verb|git config core.fileMode false| 即可 (每个 repo 都要使用)
@@ -52,7 +51,7 @@
 \item 用 \verb|git add <file>| 把变化添加到 staging area （也就是 index）. 用 \verb|git add <dir>/| 添加目录, 用 \verb|git add .| 添加所有变化.
 \item 用 \verb|git add -u| 可以只 add 修改的和删除的文件， 新文件不 add
 \item \verb|.gitignore| 的例子: \verb|folder/| 忽略整个文件夹, \verb|folder/*.txt| 忽略文件夹中的所有 txt 文件, \verb|folder/**/*.pdf| 忽略 folder 文件夹和所有子文件夹中的 pdf 文件.
-\item \verb|git diff| 用于显示文件夹和 stage area 中的区别. \verb|git diff --staged| 用于显示 stage area 和上一次 commit 的区别. git diff --name-only  可以只显示文件名.
+\item \verb|git diff| 用于显示文件夹和 stage area 中的区别. \verb|git diff --staged| 用于显示 stage area 和上一次 commit 的区别. \verb|git diff --name-only| 可以只显示文件名.
 \item \verb|git diff| 的 \verb|--word-diff| 选项可以显示行内的细微差别， 当行比较长的时候使用（如 latex 段落）． github 中有时候也不会显示具体位置. 如果还想更精确, 用 \verb|--word-diff-regex=.|
 \item \verb|git diff branchA branchB -- <filename>| 用于比较两个 branch 中同一个文件.
 \item \verb|git commit| 用于自动打开文本编辑器信息并 commit. \verb|git commit -m "message"| 直接把 message 作为 commit 信息. \verb|git commit -a| 可以自动 git add 所有变化的文件, 也可以在后面再加 \verb|-m "message"|.
@@ -72,6 +71,7 @@
 \item 【不推荐】\verb|GIT_WORK_TREE=/some/path/ git checkout ...| 可以把任何 \verb|git checkout| 的内容输出到指定文件夹， 注意这里的 \verb|GIT_WORK_TREE=/some/path/| 只有本次有效
 \item 【不推荐】（建议使用上一条） \verb|git checkout-index -a -f --prefix=/some/path/| 可以把所有最新版本的所有内容从 \verb|.git| 文件夹 checkout 到指定的文件夹， 注意最后的 \verb|/| 是必须的， \verb|-a| 表示全部文件， \verb|-f| 表示覆盖已有文件． 如果要 checkout 某个文件， 在后面用 \verb|-- 文件名| 即可， 要把 \verb|-a| 去掉． 这种方法不能 checkout 某个文件夹
 \item \verb|git mv <old_name> <new_name2>| 可以把某个文件重命名， 包括只改变大小写（windows 中也可以， 直接在文件夹中改变大小写是无效的）
+\item \verb|git grep| 可以在仓库中快速搜索关键词， \verb|grep| 则往往较慢， 可能是因为会搜索 \ver|.git|）文件夹
 \item \verb|git remote| 显示当前 repository 的 remote server shortname. 要显示网址, 用 \verb|-v|.
 \item \verb|git remote add <shortname> <url>| 添加一个 remote server (一个 repo 可以有多个 server).
 \item \verb|git fetch <shortname>| 从服务器上下载本地没有的数据.
@@ -119,6 +119,5 @@
 \item 用 \verb|gitk| 可以弹出 GUI 显示每一次 commit 的文件目录, 不需要 checkout 就可以看到.
 \item \verb|git push| 到一个 nonbare repo 一般是不允许的, 除非这个 repo 设置了 \verb|git config receive.denyCurrentBranch warn| 或者 \verb|git config receive.denyCurrentBranch ignore.| 这时如果 push, 并不会改变 remote 的 working directory. (其实这正是我增量备份 .git 需要的!)
 \item windows 文本编辑器默认是 ANSI 编码, 而 ANSI 在 git 中显示的是乱码. 而 Visual Studio Code 保存的时候默认会存成 UTF-8 编码, ANSI 编码在 Visual Studio Code 中也会是乱码, 这时千万不要保存, 否则就成了永久的乱码了.
-\item 要检查编码类型, 或转换编码类型，用 Visual Studio Code. 永远不要用 Windows 的 Notepad．
-\item ASCII 就是 UTF-8．所有的文本文件原则上都用 UTF-8．
+\item 要检查编码类型, 或转换编码类型，用 Visual Studio Code.  不要用 Windows 的 Notepad．
 \end{itemize}

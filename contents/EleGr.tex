@@ -1,0 +1,198 @@
+% 格林函数与静电边值问题
+% 格林函数|静电学|边值问题|泊松方程
+
+\pentry{静电势的泊松方程\upref{EPoiEQ}}
+
+静电学问题中有一类非常常见的边值问题，例如已知接地导体的空腔中有电荷分布，求空腔内的电势；求带电导体在空间中产生的电场等．使用格林定理可以帮助我们高效率地计算边值问题．
+
+设真空中的电荷分布为 $\rho(\bvec r)$，则空间中的静电势满足泊松方程
+\begin{equation}\label{EleGr_eq1}
+\nabla^2 \phi = -\frac{\rho}{\epsilon_0}
+\end{equation}
+
+定义函数 $\psi(\bvec r,\bvec r')$：
+\begin{equation}
+\psi(\bvec r,\bvec r')=\frac{1}{|\bvec r-\bvec r'|}
+\end{equation}
+它则满足以下泊松方程（下式中 $\nabla'^2$ 代表以 $r'$ 为自变量的拉普拉斯算子）
+\begin{equation}\label{EleGr_eq2}
+\nabla'^2 \psi(\bvec r,\bvec r')=-4\pi\delta(\bvec r-\bvec r')
+\end{equation}
+
+\begin{theorem}{格林定理}
+设 $\phi,\psi$ 为区域 $V$ 上的标量函数，则通常有
+\begin{equation}\label{EleGr_eq3}
+\int_V (\phi \nabla^2 \psi -\psi\nabla^2\phi)\dd V=\int_{\partial V}(\phi \nabla \psi-\psi\nabla\phi)\dd {\bvec S} 
+\end{equation}
+\end{theorem}
+\textbf{证明：} 由高斯定理，$\int_V \nabla\cdot \bvec F\dd V=\int_{\partial V}\bvec F \dd {\bvec S}$，
+\begin{equation}
+\begin{aligned}
+\int_{\partial V}&(\phi\nabla\psi-\psi\nabla\phi)\dd{\bvec S}=\int_V \nabla \cdot (\phi\nabla\psi-\psi\nabla\phi)\dd V\\
+&=\int_V((\nabla\phi)\cdot(\nabla\psi)+\phi\nabla^2\psi-(\nabla\psi)\cdot(\nabla\phi)-\psi\nabla^2\phi)\dd V\\
+&=\int_V(\phi\nabla^2\psi-\psi\nabla^2\phi)\dd V
+\end{aligned}
+\end{equation}
+
+下面我们用格林定理来解决静电边值问题．下面的体积分以及面积分都是以 $r'$ 为自变量作积分．将 \autoref{EleGr_eq1} \autoref{EleGr_eq2} 中的 $\phi,\psi$ 代入 \autoref{EleGr_eq3}  中，等式左边为
+\begin{equation}
+\begin{aligned}
+&\int_V(\phi(\bvec r')\nabla'^2\psi(\bvec r,\bvec r')-\psi(\bvec r,\bvec r')\nabla'^2\phi(\bvec r'))\dd V
+\\
+&=\int_V(-\phi(\bvec r')4\pi \delta(\bvec r-\bvec r')+\psi(\bvec r,\bvec r')\frac{1}{\epsilon_0}\rho(\bvec r'))\dd V\\
+&=-4\pi\phi(\bvec r)+\frac{1}{\epsilon_0}\int_V\frac{\rho(\bvec r')}{|\bvec r-\bvec r'|}\dd V
+\end{aligned}
+\end{equation}
+等式右边为
+\begin{equation}
+\begin{aligned}
+&\int_{\partial V}(\phi(\bvec r')\nabla'\psi(\bvec r')-\psi(\bvec r')\nabla'\phi(\bvec r'))\cdot \dd {\bvec S}\\
+&=\int_{\partial V}\qty(\phi(\bvec r')\nabla'\frac{1}{|\bvec r-\bvec r'|}-\frac{1}{|\bvec r-\bvec r'|}\nabla'\phi(\bvec r'))\dd {\bvec S}
+\end{aligned}
+\end{equation}
+因此有
+\begin{equation}
+\phi(\bvec r)=\frac{1}{4\pi\epsilon_0}\int_V\frac{\rho(\bvec r')}{|\bvec r-\bvec r'|}\dd V+\frac{1}{4\pi}\int_{\partial V}\qty(\frac{1}{|\bvec r-\bvec r'|}\nabla'\phi(\bvec r')-\phi(\bvec r')\nabla'\frac{1}{|\bvec r-\bvec r'|})\dd {\bvec S}
+\end{equation}
+上式中第一项描述了区域内电荷密度对电势的贡献，第二项描述了区域边界上的面电荷密度对区域内电势的贡献．
+
+不难看出，为了得到 $V$ 内部的 $\phi(\bvec r)$，我们需要同时代入 $\phi$ 和 $\partial \phi/\partial n$ 在边界上的取值．但一般情况下我们只知道其中之一，如果同时给定 $\phi$ 和 $\partial \phi/\partial n$ 在边界上的取值会因过约束而导致矛盾．根据静电势的唯一性定理（在词条\upref{EPoiEQ}中有定理的描述和证明），只要知道 $\phi$ 或 $\partial \phi/\partial n$ 其中之一在边界上的取值，就可以得出唯一的电势分布．下面我们分别对它们进行讨论．
+
+\subsection{Dirichlet边界条件下的Green函数}
+
+我们需要找到一个新的函数来替换之前的 $\psi$．定义 $G_D(\bvec r,\bvec r')$ 满足以下条件：
+\begin{equation}\label{EleGr_eq6}
+\begin{cases}
+\nabla'^2G_D(\bvec r,\bvec r')=-4\pi\delta(\bvec r-\bvec r')\\
+G_D(\bvec r,\bvec r')|_{\partial V}=0
+\end{cases}
+\end{equation}
+
+我们称 $G_D(\bvec r,\bvec r')$ 为格林函数．用 $G_D$ 代替 $\psi$ 代入格林定理，可以得到
+\begin{equation}\label{EleGr_eq4}
+\phi(\bvec r)=\frac{1}{4\pi\epsilon_0}\int_V \rho(\bvec r')G_D(\bvec r,\bvec r')\dd V-\frac{1}{4\pi}\int_{\partial V} \phi(\bvec r')\nabla'G_D(\bvec r,\bvec r')\dd {\bvec S}
+\end{equation}
+
+对于某个特定区域形状（$\partial V$ 的形状），我们可以预先求出它的格林函数 $G_D(\bvec r,\bvec r')$．在求解具体问题时，给定任意的电荷分布 $\rho(\bvec r')$ 以及 Dirichlet 边界条件 $\phi(\bvec r')|_{\partial V}$ ，都可以用\autoref{EleGr_eq4} 求出电势分布．这就是格林函数方法的高效之处\footnote{大多数情况下手算仍是极其复杂的，但用计算机可以方便求解．}．
+
+大部分情况下手动解出格林函数是极其困难的，但对于一些特殊的边界，有很漂亮的格林函数．例如下面这个例子．
+
+\begin{example}{无限大导体平面的 Dirichlet Green 函数}
+设三维空间中 $z=0$ 下方是导体，$z=0$ 上方是真空．在 $(0,0,a)(a>0)$ 处有一个电荷量为 $+q$ 的电荷．求 $z=0$ 上方空间的电势分布．\footnote{这个问题也可以用电像法来分析．}
+
+区域 $V$ 为 $z=0$ 上方空间．导体给出了边界条件 $\phi(\bvec r')|_{\partial V}=0$．用 Dirichlet 格林函数方法来求解．设 $\bvec r_+=(x,y,z),\bvec r_-=(x,y,-z)$，容易构造出以下函数
+\begin{equation}
+G_D(\bvec r_+,\bvec r')=\frac{1}{|\bvec r_+-\bvec r'|}-\frac{1}{|\bvec r_--\bvec r'|}
+\end{equation}
+它在区域 $V$ 内满足 Dirichlet 格林函数的两个条件．然后就可以利用\autoref{EleGr_eq4} 求解．设 $\bvec r_1=(0,0,a),\bvec r_2-=(0,0,-a)$，得
+\begin{equation}
+\phi(\bvec r)=\frac{1}{4\pi \epsilon_0}\frac{q}{|\bvec r-\bvec r_1|}-\frac{1}{4\pi \epsilon_0}\frac{q}{|\bvec r-\bvec r_2|}
+\end{equation}
+
+\end{example}
+\begin{example}{球形边界的 Dirichlet Green 函数}
+设空间内有两个半径为 $a$ 的金属半球壳，将它们放置成一个球体，球心位于原点．上半球（$z>0$）球面的电势为 $V$，下半球球面电势为 $-V$．求球内电势分布，并写出电势 $\phi(0,0,z)$ 的解析表达式．
+
+区域 $V$ 为以 $(0,0,0)$ 为圆心，$a$ 为半径的球．可以构造 Dirichlet 格林函数：
+\begin{equation}
+G_D(\bvec r,\bvec r')=\frac{1}{|\bvec r-\bvec r'|}-\frac{a/r'}{|\bvec r-(a^2/r'^2)\bvec r'|}
+\end{equation}
+
+容易知道 $\nabla'^2G_D(\bvec r,\bvec r')=-4\pi\delta(\bvec r-\bvec r')$．再考虑该函数在边界上的取值．$\bvec r',(a^2/r'^2)\bvec r'$ 同向，对从原点指向球的任意向量 $\bvec r^*$，设它和 $\bvec r'$ 的夹角为 $\theta$，那么可以用余弦定理化简：
+\begin{equation}
+\begin{aligned}
+&\frac{1}{|\bvec r^*-\bvec r'|}-\frac{a/r'}{|\bvec r^*-(a^2/r'^2)\bvec r'|}
+\\&=\frac{1}{\sqrt{a^2+r'^2-2ar'\cos\theta}}-\frac{a/r'}{\sqrt{a^2+a^4/r'^2-2a^3/r'\cos\theta}}
+\\&=\frac{1}{\sqrt{a^2+r'^2-2ar'\cos\theta}}-\frac{1}{\sqrt{a^2+r'^2-2ar'\cos\theta}}
+\\&=0
+\end{aligned}
+\end{equation}
+于是该函数完全满足\autoref{EleGr_eq6} 的两个条件．
+
+下面来解决原问题．利用格林函数方法，可以推导 $\phi(\bvec r)$ 的公式
+\begin{equation}
+\begin{aligned}
+\phi(\bvec r)&=-\frac{V}{4\pi}\int_{\text{上半球壳}}\nabla'G_D(\bvec r,\bvec r')\dd{\bvec S}+\frac{V}{4}\int_{\text{下半球壳}}\nabla'G_D(\bvec r,\bvec r')\dd {\bvec S}\\
+&=-\frac{Va^2}{4\pi}\int_{0}^{\pi/2}\dd \theta' \int_{0}^{2\pi}\sin\theta' \dd \phi'\frac{\partial }{\partial r'}\qty(\frac{1}{|\bvec r-\bvec r'|}-\frac{a/r'}{|\bvec r-(a^2/r'^2)\bvec r'|})\\
+&+\frac{Va^2}{4\pi}\int_{\pi/2}^{\pi}\dd \theta' \int_{0}^{2\pi}\sin\theta' \dd \phi'\frac{\partial }{\partial r'}\qty(\frac{1}{|\bvec r-\bvec r'|}-\frac{a/r'}{|\bvec r-(a^2/r'^2)\bvec r'|})
+\\
+&=\frac{Va^2}{4\pi}\int_0^{\pi/2}\dd \theta'\int_0^{2\pi}\sin\theta'\dd \phi'\qty( \frac{(a^2-r^2)/a}{(a^2+r^2-2ar\cos\gamma)^{3/2}} )
+\\& +
+\frac{Va^2}{4\pi}\int_{\pi}^{\pi/2}\dd \theta'\int_0^{2\pi}\sin\theta'\dd \phi'\qty( \frac{(a^2-r^2)/a}{(a^2+r^2-2ar\cos\gamma)^{3/2}} )
+\end{aligned}
+\end{equation}
+上式中 $\gamma$ 为 $\bvec r'$ 与 $\bvec r$ 的夹角．可以用中心对称关系将两个积分合并为一个积分（在中心对称的变换下，$\gamma$ 变为 $\pi-\gamma$，$\cos\gamma$ 反号，$\dd \theta'$ 也反号），计算得
+\begin{equation}
+\begin{aligned}
+\phi(\bvec r)=&\frac{Va(a^2-r^2)}{4\pi}\int_{0}^{\pi/2}\dd \theta'\int_0^{2\pi}\sin\theta'\dd \phi'\\
+&\qty(\frac{1}{(a^2+r^2-2ar\cos\gamma)^{3/2}}-\frac{1}{(a^2+r^2+2ar\cos\gamma)^{3/2}})
+\end{aligned}
+\end{equation}
+
+不幸的是，这个积分如此复杂，以至于我们只能借助计算软件得到数值结果．对于 $\bvec r=(0,0,z)(|z|<r)$ 的情况，$\gamma=\theta'$．我们可以推出解析解：
+\begin{equation}
+\begin{aligned}
+\phi(0,0,z)=&\frac{Va(a^2-z^2)}{2}\int_0^{\pi/2}\sin\theta'\dd \theta'\\
+&\qty(\frac{1}{(a^2+z^2-2az\cos\theta')^{3/2}}-\frac{1}{(a^2+z^2+2az\cos\theta')^{3/2}})\\
+=&\frac{Va(a^2-z^2)}{2}\cdot \frac{1}{az}\qty(\frac{1}{|a-z|}+\frac{1}{|a+z|}-\frac{2}{\sqrt{a^2+z^2}})\\
+=&V\qty(\frac{a}{z}-\frac{a^2-z^2}{z\sqrt{a^2+z^2}}),    |z|<a
+\end{aligned}
+\end{equation}
+要注意的是，如果要求球外（$|r|>a$）的电势，那么就要取球外为区域 $V$，边界 $\partial V$ 的法向量就是朝内的了．前面 $\partial G_D/\partial n'$ 的计算结果就要添上一个负号．于是当 $|z|>a$ 时，有 
+\begin{equation}
+\begin{aligned}
+\phi(0,0,z)=&\frac{Va(z^2-a^2)}{2}\cdot \frac{1}{az}\qty(\frac{1}{|a-z|}+\frac{1}{|a+z|}-\frac{2}{\sqrt{a^2+z^2}})\\
+=&V\qty(\frac{|z|}{z}-\frac{z^2-a^2}{z\sqrt{a^2+z^2}}),    |z|>a
+\end{aligned}
+\end{equation}
+\end{example}
+
+\subsection{Neumann 边界条件下的 Green 函数}
+定义 $G_N(\bvec r,\bvec r')$ 满足以下条件：
+\begin{equation}\label{EleGr_eq5}
+\begin{cases}
+\nabla'^2G_N(\bvec r,\bvec r')=-4\pi\delta(\bvec r-\bvec r')\\
+\left.\frac{\partial G_N(\bvec r,\bvec r')}{\partial n}\right|_{\partial V}=const
+\end{cases}
+\end{equation}
+第二个条件之所以写 $const$ 而不写 $0$，是因为这将违反高斯定律．我们可以根据高斯定律计算这个 $const$ 的值：
+\begin{equation}
+\begin{aligned}
+&\int_V \nabla'^2 G_N(\bvec r,\bvec r')\dd V=\int_{\partial V}\frac{\partial G_N(\bvec r,\bvec r')}{\partial n}\dd S=\int_{\partial V}const \dd S=const\cdot A\\
+&\int_V \nabla'^2 G_N(\bvec r,\bvec r')\dd V=-4\pi\\
+&\Rightarrow const=\frac{-4\pi}{A}
+\end{aligned}
+\end{equation}
+其中 $A$ 为 $\partial V$ 的表面积．所以可以把\autoref{EleGr_eq5} 改写为
+\begin{equation}
+\begin{cases}
+\nabla'^2G_N(\bvec r,\bvec r')=-4\pi\delta(\bvec r-\bvec r')\\
+\left.\frac{\partial G_N(\bvec r,\bvec r')}{\partial n}\right|_{\partial V}=-\frac{4\pi}{A}
+\end{cases}
+\end{equation}
+代入格林定理后有
+\begin{equation}
+\phi(\bvec r)=\frac{1}{4\pi\epsilon_0}\int_V \rho(\bvec r')G_N(\bvec r,\bvec r')\dd V+\frac{1}{4\pi}\int_{\partial V} G_N(r,r')\nabla'\phi(\bvec r')\dd {\bvec S}+\frac{1}{A}\int_{\partial V}\phi(\bvec r')
+\end{equation}
+
+注意，上式的最后一项只是一个常数，而静电势函数在 Neumann 边界问题中是无关紧要的（任意加减一个常数都仍然满足泊松方程和边界条件）．所以可以直接将解写为
+\begin{equation}\label{EleGr_eq7}
+\phi(\bvec r)=\frac{1}{4\pi\epsilon_0}\int_V \rho(\bvec r')G_N(\bvec r,\bvec r')\dd V+\frac{1}{4\pi}\int_{\partial V} G_N(r,r')\nabla'\phi(\bvec r')\dd {\bvec S}
+\end{equation}
+
+\begin{example}{无限大导体平面的 Neumann Green 函数}
+设三维空间中 $z=0$ 下方是导体，$z=0$ 上方是真空．在 $(0,0,a)(a>0)$ 处有一个电荷量为 $+q$ 的电荷．用 Dirichlet Green 函数、电像法都能很好地分析这个问题．这里我们试一下使用 Neumann 格林函数．
+
+设 $\bvec r_+=(x,y,z),r_-=(x,y,-z)$，构造函数 $G_N(\bvec r,\bvec r')$：
+\begin{equation}
+G_N(\bvec r^+,\bvec r')=\frac{1}{|\bvec r_+-\bvec r'|}+\frac{1}{|\bvec r_--\bvec r'|}
+\end{equation}
+容易验证该函数在边界 $z=0$ 上满足 $\partial G_N/\partial n'=0$，于是它是 Neumann 格林函数．设 $\bvec r_1=(0,0,a),\bvec r_2=(0,0,-a)$代入\autoref{EleGr_eq7} 求得电势解：
+\begin{equation}
+\begin{aligned}
+\phi(\bvec r)&=\frac{1}{4\pi\epsilon_0}\frac{q}{|\bvec r-\bvec r_1|}+\frac{1}{4\pi\epsilon_0}\frac{q}{|\bvec r-\bvec r_2|}-\frac{1}{2\pi}\qty(\frac{1}{|\bvec r-\bvec r_1|}\frac{\partial \phi(\bvec r')}{\partial z'}))\\
+&=\frac{q}{4\pi\epsilon_0}\qty(\frac{1}{|\bvec r-\bvec r_1|}+\frac{1}{|\bvec r-\bvec r_2|})+\frac{E_z(\bvec r')}{2\pi|\bvec r-\bvec r_1|}
+\end{aligned}
+\end{equation}
+
+\end{example}
