@@ -3,8 +3,6 @@
 
 \pentry{多元系热力学导引\upref{mulTh}}
 
-\addTODO{未完成}
-
 设在一组化学反应中，$i$ 组元的物质的量变动为 $\delta n_i$，它们之间满足一定的比例关系，简写为以下方程：
 \begin{equation}
 \delta n_i=\nu_i \delta n
@@ -46,7 +44,7 @@ G(T,P,n_1,\cdots,n_k)=\sum_i n_iRT[\phi_i(T)+\ln(x_iP)]
 \sum_i\nu_i[\phi_i(T)+\ln (x_iP)]=0
 \end{equation}
 定义\textbf{定压平衡常量} $K_p(T)$：
-\begin{equation}
+\begin{equation}\label{ICheEq_eq5}
 \ln K_p=-\sum_i\nu_i\phi_i(T)
 \end{equation}
 
@@ -59,14 +57,63 @@ G(T,P,n_1,\cdots,n_k)=\sum_i n_iRT[\phi_i(T)+\ln(x_iP)]
 \end{equation}
 
 \autoref{ICheEq_eq4} 就是化学反应的平衡条件．当等式不成立，那么化学反应就要进行．根据吉布斯判据，化学反应正向进行的条件是：
-\begin{equation}
+\begin{equation}\label{ICheEq_eq6}
 \begin{aligned}
 &\sum_i \nu_i\mu_i<0\\
 &\Rightarrow \prod_i x_i^{\nu_i}<P^{-\nu}K_p(T)
 \end{aligned}
 \end{equation}
 
-\addTODO{例子}
+\begin{example}{四氧化二氮的分解}\label{ICheEq_ex1}
+四氧化二氮的分解式为
+\begin{equation}
+N_2O_4\rightleftharpoons 2NO_2
+\end{equation}
+设组元 $1$ 为 $NO_2$，组元 $2$ 为 $N_2O_4$，那么
+\begin{equation}
+\begin{aligned}
+&\nu_1=2,\nu_2=-1,\\
+&2\mu_1-\mu_2=0
+\end{aligned}
+\end{equation}
+设初态有 $n_0 \rm{mol}$ 的 $N_2O_4$，反应平衡时 $N_2O_4$ 的物质的量为 $n_0(1-\epsilon) \rm{mol}$，也就是说有 $n_0 \epsilon \rm{mol}$ 的反应物分解成了生成物（\textbf{分解度}为 $\epsilon$）．生成物为 $2n_0\epsilon \rm{mol}$，因此总物质的量为 $n_0(1+\epsilon)$．各组分摩尔分数为
+\begin{equation}
+x_1=\frac{2\epsilon}{1+\epsilon},x_2=\frac{1-\epsilon}{1+\epsilon}
+\end{equation}
+代入平衡条件 \autoref{ICheEq_eq6} 可得
+\begin{equation}
+K_p(T)=\frac{4\epsilon^2}{1-\epsilon^2}p
+\end{equation}
+如果平衡常量 $K_p$ 已知，就可以求出分解度与温度压强的关系．
+\end{example}
 
-\subsection{化学反映分解度与温度压强的关系}
-\addTODO{未完成}
+
+\subsection{化学反应分解度与温度压强的关系}
+由\autoref{ICheEq_eq6} 可知，$P^{-\nu}K_p(T)$ 的增大可以促进化学反应的进行．所以当 $\nu>0$ 时，压强的减小促进反应的进行，$\nu<0$ 时，压强的增大不利于反应的进行．下面我们要探究的是温度的变化对化学反应分解度的影响（分解度是对反应程度的定量描述．分解度越大，反应平衡时的化学反应正向进行程度更大）．
+
+将\autoref{GibbsG_eq4}~\upref{GibbsG}代入\autoref{ICheEq_eq5} 可以得到平衡常量 $K_p$ 的热力学公式（式中小写字母 $h_0,c_p,s_0$ 代表摩尔焓常量、摩尔定压热容和摩尔熵常量，下标 $i$ 表示第 $i$ 个组元）：
+\begin{equation}
+\ln K_p=-\frac{\sum_i \nu_i h_{0,i}}{RT}+\frac{1}{R}\sum_i\nu_i\int \frac{\dd T}{T^2}\int c_{p,i}\dd T + \frac{\sum_i \nu_i s_{0,i}}{R}
+\end{equation}
+
+如果温度的变化范围不大，那么气体热容可以看成常量，该式可以用\autoref{GibbsG_eq5}~\upref{GibbsG}简化为
+\begin{equation}
+\begin{aligned}
+&\ln K_p=-\frac{A}{T}+C\ln T+B\\
+&A=\frac{1}{R} \sum_i \nu_i h_{0,i},B=\frac{1}{R}\sum_i \nu_i(s_{0,i}-c_{p,i}),C=\frac{1}{R}\sum_i \nu_ic_{p,i}
+\end{aligned}
+\end{equation}
+
+如果维持压强不变，改变温度会改变 $K_p$ 的大小：
+\begin{equation}
+\frac{\dd \ln K_p}{\dd T}=\frac{A}{T^2}+\frac{C}{T}=\frac{\sum_i\nu_ih_{0,i}}{RT^2}+\frac{\sum_i\nu_ic_{p,i}}{RT}
+\end{equation}
+
+第一项中 $\sum_i \nu_i h_{0,i}$ 代表的是反应后的焓减去反应前的焓，实际上就是\textbf{反应热} $\Delta H$，即经过化学反应产生的热量．对于许多化学反应过程，上式的第一项影响比第二项大．假如我们忽略第二项，则上式可以写成
+\begin{equation}\label{ICheEq_eq7}
+\frac{\dd \ln K_p}{\dd T}=\frac{\Delta H}{RT^2}
+\end{equation}
+由此可知，当反应吸热时，$\Delta H>0$，$K_p$ 随温度的升高而增大，于是温度的升高将促进反应正向进行．如果 $\Delta H<0$，则温度的降低将促进反应正向进行．
+\begin{example}{四氧化二氮的分解}
+紧接着\autoref{ICheEq_ex1} ，四氧化二氮的分解式 $\nu=\sum_i\nu_i>0$，说明总压强减小时分解度增大．实验指出，该反应是放热反应，即$\Delta H<0$．从\autoref{ICheEq_eq7} 可以知道，升高温度时平衡将向生成 $N_2O_4$ 的方向移动．$NO_2$ 是红棕色气体，而 $N_2O_4$ 无色，在改变压强温度时两者浓度将发生变化，实验上容易验证上述结论． 
+\end{example}

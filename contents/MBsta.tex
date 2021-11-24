@@ -18,18 +18,18 @@
 我们下面要谈的是\textbf{理想气体}系统，为了方便计算尽可能快地得到有价值的结果，先忽略粒子的振动自有能和转动自由能，系统的能量完全来自粒子的平动动能．我们将通过等概率原理推出\textbf{玻尔兹曼分布}，并且我们暂时\textbf{不涉及全同粒子假设}\footnote{如果我们加上全同粒子假设，则一切粒子可根据自旋分为两类粒子：玻色子和费米子，这又会带来两类不同的统计力学结果．}，即粒子之间是可区分的．我们将得到同经典统计中一样的结果\upref{MxwBzm}．
 
 \subsection{初步推导}
-\addTODO{文字说明}
+设能级 $\epsilon_l$ 的简并度为 $\omega_l$（可以想象该能级上有 $\omega_l$ 个房间，代表不同的单粒子微观状态）．如果给能级 $\omega_l$ 分配 $a_l$ 个粒子，那么由排列组合可得到 $N!/\Pi_l a_l!$ 种分配方法．随后要给每个能级上的粒子分配到确定的房间．对于玻尔兹曼分布，\textbf{不涉及全同粒子假设}，我们认为粒子之间是可以分辨的．每种粒子都可以分配到 $\omega_l$ 种房间，于是共有 $\omega_l^{a_l}$ 种分配方式．总的微观状态数为
 \begin{equation}
-\Omega=\frac{N!}{\Pi_l a_l!}\omega_l^{a_l}
+\Omega=\frac{N!}{\Pi_l a_l!}\prod_l\omega_l^{a_l}
 \end{equation}
-
+取对数可以得到
 \begin{equation}
 \ln \Omega=\ln N!-\sum_{l}a_l!+\sum_l a_l\ln \omega_l
 \end{equation}
 
-假设所有的 $a_l$ 都很大，根据近似等式 $\ln n! = n(\ln n-1)$，可以化简得到
+假设所有的 $a_l$ 都很大\footnote{我们这里先做了一个不正确的假设，因为对于真实气体模型，$a_l$ 通常并不大，不可以这样做近似．但不妨让我们先计算下去，令人惊喜的是最终结果是正确的，是与实验符合的．}，根据近似等式 $\ln n! = n(\ln n-1)$，可以化简得到
 
-\begin{equation}
+\begin{equation}\label{MBsta_eq6}
 \ln \Omega=N\ln N-\sum_l a_l\ln a_l+\sum_l a_l\ln \omega_l
 \end{equation}
 
@@ -54,7 +54,7 @@ E=\sum_s \epsilon_s e^{-\alpha-\beta \epsilon_s}
 \end{aligned}
 \end{equation}
 \subsection{玻尔兹曼分布}
-我们定义配分函数 $Z(\beta)=\sum_s e^{-\beta \epsilon_s}$，求和的时候 $s$ 覆盖了每一个能级的一切量子态．由 \autoref{MBsta_eq2}，可以得到 $E,N$ 和配分函数 $Z$ 的关系：
+我们定义\textbf{配分函数} $Z(\beta)=\sum_s e^{-\beta \epsilon_s}$，求和的时候 $s$ 覆盖了每一个能级的一切量子态．由 \autoref{MBsta_eq2}，可以得到 $E,N$ 和配分函数 $Z$ 的关系：
 \begin{equation}\label{MBsta_eq3}
 \begin{aligned}
 N=e^{-\alpha}Z\\
@@ -111,3 +111,46 @@ a_s=\frac{N}{V}\left(\frac{2\pi \hbar^2}{m k_B T}\right)^{3/2} e^{-\frac{1}{k_B 
 \begin{equation}
 \Delta N=\frac{N}{V}\left(\frac{1}{2\pi m k_B T}\right)^{3/2}e^{-\frac{1}{2mk_B T}(p_x^2+p_y^2+p_z^2)}\Delta x\Delta y\Delta z\Delta p_x\Delta p_y\Delta p_z
 \end{equation}
+
+\subsection{推广到玻色分布和费米分布}
+
+现在我们加上全同粒子假设，要对总状态数 $\Omega$ 除以 $N!$，表示任意交换两粒子的位置，得到的状态都是同一个．微观粒子可以根据自旋分为\textbf{玻色子}和\textbf{费米子}，后者满足\textbf{泡利不相容原理}——一个量子态只能容纳一个粒子．与之不同的是，一个量子态能容纳多个玻色子．
+
+假设能级 $\epsilon_l$ 上分配 $a_l$ 个粒子，那么该能级上的分配方式不再是 $\omega_l^{a_l}$（注意我们有全同粒子假设），而是 $(\omega_l+a_l-1)!/(a_l!(\omega_l-1)!)$．总的微观状态数为
+\begin{equation}
+\Omega_{B.E.}=\prod_l \frac{(\omega_l+a_l-1)!}{a_l!(\omega_l-1)!}
+\end{equation}
+
+如果在玻色系统中，任意能级 $\epsilon_l$ 上的粒子数均远小于该能级的量子态数 $\omega_l$（即简并度），那么上式就可以近似为 $\Pi_l \omega_l^{a_l}/a_l!=\Omega_{M.B.}/N!$（$\Omega_{M.B.}$ 就是前面计算的玻尔兹曼分布的微观状态数）．
+
+我们同样可以用拉格朗日乘子法计算最概然分布下的 $a_l$．推导如下：
+\begin{equation}
+\begin{aligned}
+\ln \Omega&=\sum_l[\ln (\omega+a_l-1)!-\ln a_l!-\ln (\omega_l-1)!]\\
+&=\sum_l[(\omega_l+a_l)\ln(\omega_l+a_l)-a_l\ln a_l-\omega_l\ln \omega_l
+\end{aligned}
+\end{equation}
+在极值情况下一阶微分为 $0$．由于有粒子数和总能量的约束条件，需引入拉格朗日乘子 $\alpha,\beta$．
+\begin{equation}
+\delta \ln \Omega-\alpha\delta N-\beta\delta E=\sum_l[\ln (\omega_l+a_l)-\ln a_l-\alpha-\beta\epsilon_l]\delta a_l
+\end{equation}
+每一个 $\delta a_l$ 的系数都为 $0$，因此
+\begin{equation}
+\ln(\omega_l+a_l)-\ln a_l-\alpha-\beta \epsilon_l=0
+\end{equation}
+解得\textbf{玻色-爱因斯坦分布}：
+\begin{equation}
+a_l=\frac{\omega_l}{e^{\alpha+\beta\epsilon_l}-1}
+\end{equation}
+
+同理，对于费米分布，由于泡利不相容原理，总状态数为
+\begin{equation}
+\Omega=\prod \frac{\omega_l!}{(\omega-a_l)!a_l!}
+\end{equation}
+经过拉格朗日乘子法得到\textbf{费米-迪拉克分布}：
+\begin{equation}
+a_l=\frac{\omega_l}{e^{\alpha+\beta\epsilon_l}+1}
+\end{equation}
+
+以上的推导用了诸如 $a_l\gg 1,\omega_l\gg 1$ 等条件，而实际情况下这些条件常常不能满足，所以推导过程存在严重问题．用\textbf{巨正则系综理论}可以完美地推导出粒子在其个体能级上的分布．
+
