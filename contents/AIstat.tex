@@ -1,0 +1,103 @@
+% 概率密度函数与人工智能概论
+
+\pentry{高斯分布（正态分布）\upref{GausPD}}
+
+\begin{definition}{为什么求总似然的时候，要用正态分布的概率密度函数？}
+由于中心极限定理，假设所有假设样本之间都为独立事件，并且误差变量随机产生，那样就服从正态分布！
+\end{definition}
+
+\begin{theorem}{为什么采用概率密度相乘而不是概率直接相乘？}
+由于概率并不好求，所以找到了概率密度最大的时候也就相当于找到了概率最大的时候！
+\end{theorem}
+
+\begin{equation}
+y^{\left(i\right)}=\theta^T x^{\left(i\right)} + \varepsilon^{\left(i\right)} %theta指的是W1->Wm每个W都是一个权重系数．对theta矩阵转置乘以影响因子x^i再与y^i相比较
+\end{equation}
+
+\begin{equation}
+p\left(\epsilon^{\left(i\right)}\right)=\frac{1}{\sqrt{2\pi}\sigma}exp\left(-\frac{\left(\epsilon^{\left(i\right)}\right)^2}{2\sigma^2}\right)
+\end{equation}
+
+\begin{equation}
+p\left(y^{\left(i\right)}|\; x^{\left(i\right)};\;\theta\right)=\frac{1}{\sqrt{2\pi}\sigma}exp\left(-\frac{\left(y^{\left(i\right)}-\theta^Tx^{\left(i\right)}\right)^2}{2\sigma^2}\right)
+\end{equation}
+
+\begin{equation}
+\ali{
+L\left(\theta\right)&=\prod_{i=1}^m p\left(y^{\left(i\right)} |\; x^{\left(i\right)};\;\theta\right)\\
+&=\prod_{i=1}^m \frac{1}{\sqrt{2\pi}\sigma}exp\left(-\frac{\left(\epsilon^{\left(i\right)}\right)^2}{2\sigma^2}\right)
+}
+\end{equation}
+
+\begin{definition}{取极值}
+如果想要取得总似然的最大值，最好的模拟方法不是求得连乘的最大值，而是求得连加的最大值，要想得到这样的过程，我们应该对函数极值两侧取对数．
+\end{definition}
+
+\begin{equation}
+\ali{
+\boldsymbol{l}\left(\theta\right)&=ln\;L\left(\theta\right)\\
+&=ln\frac{1}{\sqrt{2\pi}\sigma}exp\left(-\frac{\left(y^{\left(i\right)}-\theta^Tx^{\left(i\right)}\right)^2}{2\sigma^2}\right)\\
+&=\sum_{i=1}^m ln\frac{1}{\sqrt{2\pi}\sigma}exp\left(-\frac{\left(y^{\left(i\right)}-\theta^Tx^{\left(i\right)}\right)^2}{2\sigma^2}\right)\\
+&=m\,ln\frac{1}{\sqrt{2\pi}\sigma}-\frac{1}{\sigma^2}\cdot\frac{1}{2}\sum_{i=1}^m \left(y^{\left(i\right)}-\theta^Tx^{\left(i\right)}\right)^2
+}
+\end{equation}
+
+\begin{equation}
+{\color{Red}\boldsymbol{J}\left(\theta\right)=\frac{1}{2}\sum_{i=1}^m \left(h_\theta\left(x^{\left(i\right)}\right)-y^{\left(i\right)}\right)^2
+}
+\end{equation}
+
+\begin{issues}
+    加入一些我对人工智能的理解：为什么选取正态分布函数呢？或者是为什么不直接采用？
+\begin{equation}\epsilon^2=0\end{equation}其实在哔哩哔哩上已经讲过，其实最后模拟完成之后带入的函数其实是Function_sigmoid(x)【现在已经被替换成ReLU(x)】进行优化．\\
+\\
+    但是我们这个函数的表达形式是因为：我们的x^i和y^i是固定模拟且随机的，所以这样结果所带来的epsilon是属于随机误差，而又根据概率论与数理统计的定理来看，一旦是随机的，那么应该处于正态分布的中间部分，其实也就是正太分布的极值点附近．只要能保证m个正态分布概率曲线相乘取到的值最大，也就说明了这样是最符合随机分布的．\\
+\\
+    要使L(theta)最大，就要使J(theta)最小.\\
+\\
+但是，这样的模型构建也有一定的问题，比如实际生活中并非所有的变量都是没有相互关联的，而且还可能出现两个正太分布峰值的情况．还有，在没有很多训练样本的情况下，不一定最大值就满足在正太分布的峰值的情况．
+\end{issues}
+
+\begin{equation}
+\ali{
+    \boldsymbol{J}\left(\theta\right)&=\frac{1}{2}\sum_{i=1}^m \left(h_\theta\left(x^{\left(i\right)}\right)-y^{\left(i\right)}\right)^2 \\
+&=\frac{1}{2}\left(X\,\theta-y\right)^T\left(X\,\theta-y\right)\\
+&{\color{Red}=\frac{1}{2}\left(\theta^T\,X^T-y^T\right)\left(X\,\theta-y\right)}
+}
+\end{equation}
+
+再对上述式子进行展开
+
+\begin{equation}
+\ali{
+\boldsymbol{J}\left(\theta\right)&=\frac{1}{2}\left(\theta^T\,X^T\,X\,\theta-y^T\,X\,\theta-\theta^T\,X^T\,y+y^T\,y\right)\\
+&=\frac{1}{2}\left(\left(X\,\theta\right)^2-y^T\,X\,\theta-\theta^T\,X^T\,y+y^2\right)
+}
+\end{equation}
+
+现在如果求其最小值，则需要求驻点，即：
+
+\begin{equation}
+\ali{
+\frac{\partial\boldsymbol{J}\left(\theta\right)}{\partial\theta}
+&=\frac{1}{2}\left(2X^T\,X\,\theta-X^T\,y-\left(y^T\,X\right)^T\right)\\
+&=\left(X^T\,X\,\theta-X^T\,y\right)\\
+&=0
+}
+\end{equation}
+
+解出theta的值
+
+\begin{equation}
+\theta=\left(X^T\,X\right)^{-1}X^T\,y
+\end{equation}
+
+其中，由于对矩阵和行列式求导都不是很熟悉，所以我们需要补充一段行列式和矩阵求导的运算．
+
+首先介绍行列式求导：
+
+\begin{equation}
+\frac{\mathrm{d}}{\mathrm{d} x}\begin{vmatrix} x_{1,1} & \cdots & x_{1,n} \\ \vdots & \ddots & \vdots \\ x_{n,1} & \cdots & x_{n,n} \end{vmatrix}=\sum_{i=1}^n \begin{vmatrix} x_{1,1} & \cdots & x_{1,n} \\
+\vdots & \ddots & \vdots \\ \frac{\mathrm{d} x_{i,1}}{\mathrm{d} x} & \cdots & \frac{\mathrm{d} x_{i,n}}{\mathrm {d} x} \\ \vdots & \ddots & \vdots \\ x_{n,1} & \cdots & x_{n,n} \end{vmatrix}
+\end{equation}
+

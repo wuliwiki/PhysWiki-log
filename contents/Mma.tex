@@ -109,7 +109,7 @@ Mathematica 相对于 Matlab， Python 等偏数值计算的语言最大的特�
 \begin{itemize}
 \item \verb|+, -, *, ^| 把两个矩阵进行逐个元素的运算．
 \item \verb|.| 矩阵乘法
-\item \verb|=| 立即赋值（赋值时理科计算右边， 最终结果赋给左边）
+\item \verb|=| 立即赋值（赋值时立刻计算右边， 最终结果赋给左边）
 \item \verb|:=| 延迟赋值（每次需要左边时都替换为右边）
 \item \verb|!=| 不等号
 \item 连接字符串 \verb|"abc" <> "defg" <> "hij"|．
@@ -120,7 +120,7 @@ Mathematica 相对于 Matlab， Python 等偏数值计算的语言最大的特�
 \item \verb|Remove[x]| 完全清除符号．
 \item \verb|i++| 和 \verb|++i| 和 \verb|--| 与 C 语言中用法相同．
 \item \verb|x ∈ dom| 或 \verb|x \[Element] dom| 相当于 \verb|Element[x, dom]|
-\item 匿名函数 \verb|&[...]| 可以把方括号中的内容在左边用 \verb|#| 代替， 如 \verb|#.#\[Transpose] &[RandomInteger[{-5, 5}, {6, 6}]]| 可以随机生成对称矩阵． 也可以用 \verb|@| 代替方括号．
+\item \verb|2 > 1| 相当于 \verb|Greater[2, 1]|， 返回 \verb|True|． \verb|2 < 1| 相当于 \verb|Less[2, 1]|, 返回 \verb|False|．
 \end{itemize}
 
 \subsection{判断循环}
@@ -135,6 +135,7 @@ Mathematica 相对于 Matlab， Python 等偏数值计算的语言最大的特�
 \begin{itemize}
 \item 定义函数 \verb|f[x_, y_] := x^2 + y^2|． 左边的自变量需要用下划线．
 \item 更复杂的函数也可以用 \verb|Module[]| 定义如 \verb|f[x0_] := Module[{x = x0}, While[x > 0, x = Log[x]]; x]| 注意 \verb|Module| 定义的函数不支持一些符号运算， 例如 \verb|D[f[x]]| 会得到错误的结果．
+\item 匿名函数 \verb|...#...&[...]| 中 \verb|&| 之前就是函数的定义， 可以把方括号中的内容的变量在左边用 \verb|#| 代替， 如 \verb|# Sin[#] &[x]| 得到函数 \verb|x Sin[x]|． 又例如 \verb|#.#\[Transpose] &[RandomInteger[{-5, 5}, {6, 6}]]| 可以随机生成对称矩阵． 也可以用 \verb|@| 代替方括号．
 \item 如果一个函数返回一个 list， 可以用 \verb|{a,b,..} = Fun[...]| 把每个元素分别赋给不同变量． 这是事实上不是函数的功能， \verb|{a, b, c} = {{1, 2}, 2, "c"}| 也可以对 \verb|a,b,c| 分别赋值．
 \item 变量默认值： \verb|foo[a_, b_:2, c_:3] := bar[a, b, c]| 输入 \verb|foo[1]| 返回 \verb|bar[1,2,3]|
 \item 函数选项：先用 \verb|Options[函数名]| 定义选项的名字和默认值， 再把 \verb|OptionsPattern[]| 作为函数定义的某个参数． 例如 \verb|Options[fun] = {"a" -> 1, "b" -> 2}; fun[x_, OptionsPattern[]] := {x, OptionValue[a], OptionValue[b]};| 调用时例如 \verb|fun[0, b->3]|， 返回 \verb|{0, 1, 3}|
@@ -158,6 +159,9 @@ Mathematica 相对于 Matlab， Python 等偏数值计算的语言最大的特�
 \item \verb|FullSimplify[表达式]| 简化表达式．
 \item \verb|Clear["Global`*"]| 清除当前进程中的所有定义．
 \item \verb|Range[5]|， \verb|Range[2, 5]| 输出 \verb|{1,2,3,4,5}|， \verb|{2,3,4,5}|．
+\item \verb|Select[List, 条件函数]| 从 List 中选择使得条件函数返回 True 的子 List， 保持排序不变． 如 \verb|Select[{1, 2, 4, 7, 6, 2}, # > 2 &]| 输出 \verb|{4,7,6}|
+\item \verb|Cases[List, 条件]| 从 List 中选出符合条件的子 List， 如符号，整数，函数参数等
+\item \verb|Sort[{1, 3, 2, 5, 4}]| 把列表升序排序， \verb|Sort[{1, 3, 2, 5, 4}, Greater]| 降序排序． 
 \item \verb|Map[f, Range[3]]| 输出 \verb|{f[1], f[2], f[3]}|．
 \item \verb|/@| 是 \verb|Map| 的简写形式 \verb|f /@ Range[3]|．
 \item 分段函数 \verb|f[x_] := 0 /; x < -1| 以及 \verb|f[x_] := 1 /; x > -1 && x < 1| 等．
@@ -204,7 +208,7 @@ Mathematica 相对于 Matlab， Python 等偏数值计算的语言最大的特�
 \item 在 3D 图上拖动鼠标转动 ， 按住 Ctrl 拖动鼠标放大缩小， 按住 Shift 拖动鼠标平移．
 \end{itemize}
 
-\subsubsection{综合示例}
+\subsubsection{画图综合示例}
 \begin{lstlisting}[language=Mathematica]
 Show[ListPlot[{{1, 1}}],
  Plot[{x^2, 2 x - 1}, {x, 0, 2},
@@ -215,7 +219,7 @@ Show[ListPlot[{{1, 1}}],
 \begin{figure}[ht]
 \centering
 \includegraphics[width=12cm]{./figures/Mma_1.png}
-\caption{综合示例} \label{Mma_fig1}
+\caption{画图综合示例} \label{Mma_fig1}
 \end{figure}
 
 \subsection{字符串}
