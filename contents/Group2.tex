@@ -1,4 +1,4 @@
-% 群同态
+% 群的同态与同构
 % 同态|同构|商群|群同态基本定理
 
 \pentry{正规子群\upref{Group1}}
@@ -12,6 +12,15 @@
 如果我们建立一个映射 $f:\mathbb{Z}\rightarrow2\mathbb{Z}$，定义为 $f(k)=2k$，那么这个 $f$ 就是一个双射，它在两个群的元素之间一一对应地建立了联系．这样，对于任意整数 $m, n$，有 $f(m)+f(n)=f(m+n)$，也就是说“先运算再映射”和“先映射再运算”结果是相同的．
 
 类似地，对于任意的两个群 $G$ 和 $K$，如果存在一个\textbf{双射} $f:G\rightarrow K$，使得对于任意的 $x, y\in G$ 都满足 $f(x)f(y)=f(xy)$，那么这两个群的运算结构就是一模一样的．这时我们说这两个群是\textbf{同构（isomorphic）}的，而这个使得它们同构的双射就被称为 $G$ 和 $K$ 之间的\textbf{同构映射（isomorphic mapping）}，也可以简称\textbf{同构（isomorphism）}这里加粗的两个“同构”，前者是形容词，后者是名词．
+
+\begin{definition}{自同构}
+称群到自身的同构为一个\textbf{自同构（automorphism）}\footnote{这个词是用词根“auto（自身的）”和单词“isomorphism（同构）”组合而成的．}．
+
+
+群$G$的全体自同构配合映射的复合，又构成一个群，称为$G$的\textbf{自同构群}，记为$\opn{Aut}(G)$．
+
+
+\end{definition}
 
 由于同构使得两个群各方面表现一模一样，研究同构其实没有太大意义，我们甚至直接把同构的两个群看成同一个群，不管元素具体怎么命名的．有意思的结构，是以下定义的“同态映射”．
 
@@ -29,18 +38,87 @@
 
 注意，$f(G)\subset K$，$\ker(f)\subset G$．
 
-同态的两个群，运算结构很相似但又不完全一样．在以上定义的例子中，$K$ 的行为就像是一个弱化版的 $G$，可能会丢失一些细节，但保留的方面和 $G$ 是一模一样的．这么说可能不够具体，我们用习题来理解同态的“似而不同”．
+同态的两个群，运算结构很相似但又不完全一样．在以上定义的例子中，$K$ 的行为就像是一个弱化版的 $G$，可能会丢失一些细节，但保留的方面和 $G$ 是一模一样的．这么说可能不够具体，我们用\autoref{Group2_exe2} 和\autoref{Group2_exe1} 来理解同态的“似而不同”．
+
+
+\begin{exercise}{}\label{Group2_exe2}
+设两个群 $G$ 和 $K$，$f:G\rightarrow K$ 是一个同态，$x\in G$，求证$f(x^{-1})=(f(x))^{-1}$．
+\end{exercise}
+
 
 \begin{exercise}{群同态基本定理}\label{Group2_exe1}
 设两个群 $G$ 和 $K$，$f:G\rightarrow K$ 是一个同态．求证：
-\begin{itemize}
+\begin{enumerate}
 \item $\ker(f)$ 是 $G$ 的一个正规子群\footnote{这保证了群 $G/\ker(f)$ 存在．}．
 \item 对于 $x, y\in G$，如果 $x_1$ 和 $y_1$ 分别和 $x, y$ 同余，或者换句话来说，$x_1^{-1}x\in H$ 和 $y_1^{-1}y\in H$，那么 $f(x)=f(x_1)$，$f(y)=f(y_1)$．
-\item 由前两条的结论，证明可以用 $f$ 来导出一个映射 $f': G/\ker(f)\rightarrow K$ 是一个同构．
+\item 由前两条的结论，证明可以用 $f$ 来导出一个映射 $f': G/\ker(f)\rightarrow K$ ，它是一个同构．
 
-\end{itemize}
+\end{enumerate}
 \end{exercise}
 
 由\autoref{Group2_exe1}，同态的实质就是商群 $G/\ker(f)$ 和 $K$ 之间的同构．$G/\ker(f)$ 继承了 $G$ 的运算，但是由于把同余的元素全都当作同一个了，也就丢失了一部分细节．因此我们说同态的两个群也是“似而不同”的．
+
+
+
+\subsection{内自同构和外自同构}
+
+
+
+回顾线性代数中的知识：给定线性空间的基以后，线性变换和矩阵就一一对应（我们称之为给定基下用矩阵表示线性变换），而改变基以后同一个线性变换的基也会变．因此，群$(\{\text{线性变换}\}, \text{映射的复合})$与群$(\{\text{矩阵}\}, \text{矩阵乘法})$之间可以建立同构．这样的同构不是唯一的，而是依赖于基的选择．
+
+不同的矩阵可以看成同一个线性变换在不同基下的表示，也可以看成两个不同的线性变换在同一个基下的表示．因此，我们可以用一个基来将矩阵对应到线性变换上，再用另一个基将线性变换对应到另一个矩阵上，由此就得到了矩阵之间的对应，这个对应就是矩阵乘法群到自身的同构．同一个线性变换在不同基之间的矩阵表示的关系是\textbf{相似}，具体参见\textbf{过渡矩阵}\upref{TransM}小节．
+
+由上段论述可知，给定可逆矩阵$\bvec{Q}$，则矩阵到自身的映射$f$是一个自同构，其中$f(\bvec{M})=\bvec{Q}^{-1}\bvec{MQ}$．这提示我们一种构建群自同构的方法．
+
+\begin{definition}{内自同构}
+给定群$G$．取$g\in G$，定义映射$\opn{Ad}_g:G\to G$如下：对于任意$x\in G$，都有$\opn{Ad}_g(x)=gxg^{-1}$．
+
+称$\opn{Ad}_g$是$G$上的\textbf{内自同构（inner automorphism）}，或者\textbf{共轭自同构（cogredient automorphism）}．
+
+
+群$G$的全体内自同构构成$\opn{Aut}(G)$的一个子群，称为$G$的\textbf{内自同构群}， 记为$\opn{Inn}(G)$．
+
+\end{definition}
+
+\begin{theorem}{}\label{Group2_the1}
+内自同构群是自同构群的正规子群．
+\end{theorem}
+
+\textbf{证明}：
+
+给定群$G$，设$f\in \opn{Aut}(G)$．任取$g, x\in G$，则由\autoref{Group2_exe2} 可得，
+\begin{equation}\label{Group2_eq1}
+\begin{aligned}
+f^{-1}\qty(gf(x)g^{-1})&=f^{-1}\qty(g)f^{-1}\qty(f(x))f^{-1}\qty(g^{-1})\\
+&=f^{-1}\qty(g)xf^{-1}\qty(g^{-1})\\
+&=f^{-1}\qty(g)x\qty(f^{-1}\qty(g))^{-1}
+\end{aligned}
+\end{equation}
+
+由$x$的任意性，\autoref{Group2_eq1} 意味着$f\circ \opn{Ad}_g\circ f^{-1}=\opn{Ad}_{f^{-1}(g)}$．因此$f\circ\opn{Inn}(G)\circ f^{-1}\subseteq\opn{Inn}(G)$，故$\opn{Inn}(G)$是$\opn{Aut}(G)$的正规子群．
+
+\textbf{证毕}．
+
+由\autoref{Group2_the1} ，我们可以计算商群$\opn{Aut}(G)/\opn{Inn}(G)$．
+
+\begin{definition}{外自同构}
+给定群$G$，称$\opn{Aut}(G)/\opn{Inn}(G)$为$G$的\textbf{外自同构群（outer automorphism）}，记为$\opn{Out} (G)$．
+\end{definition}
+
+\begin{example}{不是内自同构的自同构}
+取整数加法群$(\mathbb{Z}, +)$，令$f:\mathbb{Z}\to\mathbb{Z}$为$f(n)=-n$．则$f$是一个自同构，但不是内自同构．
+\end{example}
+
+
+
+
+
+
+
+
+
+
+
+
 
 

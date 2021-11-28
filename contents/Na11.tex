@@ -227,14 +227,16 @@ $4$ & $6$ & $\infty$ & $\infty$ & $\infty$ & $5$ & $\infty$ & $\infty$ & $\infty
 （3）说明你所设计算法的时间复杂度和空间复杂度． \\
 
 43.（11分）假定在一个8位字长的计算机中运行如下类C程序段：
-unsigned int x = 134; \\
-unsigned int y = 246; \\
-int m = x; \\
-int n = y; \\
-unsigned int z1 = x - y; \\
-unsigned int z2 = x + y; \\
-int k1 = m - n; \\
-int k2 = m + n; \\
+\begin{lstlisting}[language=cpp]
+unsigned int x = 134;
+unsigned int y = 246;
+int m = x;
+int n = y;
+unsigned int z1 = x - y;
+unsigned int z2 = x + y;
+int k1 = m - n;
+int k2 = m + n;
+\end{lstlisting}
 若编译器时将8个8位寄存器R1～R8分别配给变量x、y、m、n、z1、z2、k1和k2．请回答下列问题（提示：带符号整数有补码表示） \\
 （1）执行上述程序段后，寄存器R1、R5和R6的内容分别是什么？（用十六进制表示） \\
 （2）执行上述程序段后，变量m和k1的值分别是多少？（用十进制表示）  \\
@@ -360,7 +362,39 @@ int k2 = m + n; \\
 在保留的两个升序序列中，重复过程1)、2)、3)，直到两个序列中只含有一个元素时为止，较小者即为所求的中位数．
 
 （2）算法的实现如下：
-（待输入……） \\
+\begin{lstlisting}[language=cpp]
+int M_Search(int A[], int B[], int n){
+    int s1=0, d1=n-1, m1, s2=1, d2=n-1, m2;
+    // 分别表示序列A和B的首位数、末位数和中位数
+    while (s1 != d1 || s2 != d2) {
+        m1 = (s1 + d1) / 2;
+        m2 = (s2 + d2) / 2;
+        if (A[m1] == B[m2])
+            return A[m1];  // 满足条件1
+        if (A[m1] < B[m2]) {  // 满足条件2
+            if ((s1 + d1) % 2 == 0) {  // 若元素个数为奇数
+                s1 = m1;   // 舍弃A中间点以前的部分且保留中间点
+                d2 = m2;   // 舍弃B中间点以后的部分且保留中间点
+            } // if
+            else {  // 若元素个数为偶数
+                s1 = m1 + 1;  // 舍弃A中间点及中间点以前部分
+                d2 = m2;      // 舍弃B中间点以后的部分且保留中间点
+            } // else
+        } // if
+        else {  // 满足条件3
+            if ((s1 + d1) % 2 == 0) {  // 若元素个数为奇数
+                    d1 = m1;  // 舍弃A中间点以后的部分且保留中间点
+                    s2 = m2;  // 舍弃B中间点以前的部分且保留中间点
+            } // if
+            else {  // 元素个数为偶数
+                d1 = m1 + 1;  // 舍弃A中间点以后部分且保留中间点
+                s2 = m2;      // 舍弃B中间点及中间点以前部分
+            }
+        } // else
+    } // while
+    return A[s1] < B[s2] ? A[s1] : B[s2];
+}
+\end{lstlisting}
 
 （3）算法的时间复杂度为$O(log_2n)$,空间复杂度为$O(1)$．
 
