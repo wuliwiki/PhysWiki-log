@@ -1,0 +1,64 @@
+% 导数的运算法则
+% 导数|导函数|数学分析|differential|calculus
+
+\pentry{函数的极限（简明微积分），\upref{FunLim}导数（简明微积分）\upref{Der}，导数（数学分析）\upref{Der2}}
+
+若函数 $f(x),g(x)$ 在 $x_0$ 处可导，那么下列各式在 $x_0$ 处成立，
+
+\begin{enumerate}
+\item 
+\begin{equation}
+(f\pm g)'(x)=f'(x)\pm g'(x)
+\end{equation}
+\item 
+\begin{equation}
+(f\cdot g)'(x)=f'(x)\cdot g(x)+f(x)\cdot g'(x)
+\end{equation}
+\item 
+\begin{equation}
+\qty(\frac{f}{g})'(x)=\frac{f'(x)g(x)-f(x)g'(x))}{g(x)^2}
+\end{equation}
+\item \textbf{复合函数求导法则}：若 $f(x)$ 在 $u_0$ 处可导，$g(x)$ 在 $x_0$ 处可导，且 $g(x_0)=u_0$．那么 
+\begin{equation}
+(f\circ g)'(x_0)=f'(g(x_0))g'(x_0)
+\end{equation}
+许多物理书喜欢将它简记为 $\frac{\dd f}{\dd x}=\frac{\dd f}{\dd g} \cdot \frac{\dd g}{\dd x}$．
+\end{enumerate}
+
+
+一些实用的求导公式（下面的一些公式需要在满足一定条件下才成立，例如 $(x^n)'=nx^{n-1}$ 中，若 $n=1/2$，则 $x$ 不能取负数．）：
+\begin{enumerate}
+\item $(x^n)'=nx^{n-1}$．
+\item $(a^x)'=a^x\ln a$．
+\item $(\ln x)'=1/x$．
+\item $(\sin x)'=\cos x,(\cos x)'=-\sin x$．\item $(\sin(\omega x+\phi))''=-\omega^2\sin(\omega x+\phi)$\footnote{这个公式就是简谐振动的运动方程．}．
+\item $(\tan x)'=1/\cos^2 x,(\cot x)'=-1/\sin^2 x$．
+\item $(\arctan x)'=1/(1+x^2)$．
+\end{enumerate}
+\begin{exercise}{}
+设函数 $f(x)$ 在 $\mathbb{R}$ 上严格单调，其反函数为 $g(y)=f^{-1}(y)$．已知 $f(x)$ 在 $\mathbb{R}$ 上二阶可导，给定它的一阶导函数和二阶导函数，且一阶导数处处不为 $0$，求 $g'(y),g''(y)$ （$x=f^{-1}(y)$ 在其定义域范围内存在）．
+
+提示：观察图像一点切线的斜率容易知道 $g'(y)=1/f'(x)$（其中 $x=f^{-1}(y)$），严格证明可以利用导数定义或函数在一点附近的一阶近似公式．但二阶导不是那么容易求，逐步推导过程如下：
+\begin{equation}
+\begin{aligned}
+\frac{\dd g'(y)}{\dd y}&=\frac{\dd}{\dd y}\left(\frac{1}{f'(x)}\right)=\frac{-1}{f'(x)^2}\frac{\dd f'(x)}{\dd y}=\frac{-1}{f'(x)^2}\frac{\dd x}{\dd y}\frac{\dd f'(x)}{\dd x}\\
+&=\frac{-1}{f'(x)^2}\frac{1}{f'(x)}\frac{\dd f'(x)}{\dd x}=-\frac{f''(x)}{f'(x)^3}
+\end{aligned}
+\end{equation}
+这个问题有一个更有启发意义的解法．如果我们写出 $f(x)$ 和 $g(y)$ 的二阶近似公式：
+\begin{equation}
+\begin{aligned}
+f(x+h)=f(x)+f'(x)h+f''(x)h^2+o(h^2)\\
+g(y+\eta)=g(y)+g'(y)\eta+g''(y)\eta^2+o(\eta^2)
+\end{aligned}
+\end{equation}
+根据 $f$ 和 $g$ 互为反函数的关系，我们有 $y=f(x),x=g(y)$．不妨令上式中 $y+\eta=f(x+h),x+h=g(y+\eta)$，则 $\eta$ 可以用 $f'(x),f''(x)$ 的表达式代替．代入整理可得：
+\begin{equation}
+\begin{aligned}
+x+h&=x+g'(y)(f'(x)h+f''(x)h^2+o(h^2))\\
+&\ +g''(y)(f'(x)h+f''(x)h^2+o(h^2))^2+o(h^2)\\
+x+h&=x+g'(y)f'(x)h + (g'(y)f''(x)+g''(y)f'(x)^2)h^2+o(h^2)
+\end{aligned}
+\end{equation}
+$h^n$ 项系数要相同，可以列出两个等式，解得 $g'(y)=1/f'(x),g''(y)=-f''(x)/f'(x)^3$．这个方法可以推广到求 $g(y)$ 的 $n$ 阶导，更重要的是它提供了一个系统的计算方法，可以编写程序设计相应的算法进行计算．
+\end{exercise}
