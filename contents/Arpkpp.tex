@@ -1,0 +1,35 @@
+% Arpack++2 大型本征方程库
+
+\pentry{C++ 基础\upref{Cpp0}， 密矩阵\upref{MatSto}， 稀疏矩阵\upref{SprMat}}
+
+\href{https://www.caam.rice.edu/software/ARPACK/}{Arpack} （ARnoldi PACKage）最初是一个 Fortran 语言编写的， 用于求解大型本征方程的程序库， 其主要算法是 Arnoldi 循环． 下面是它的一些特性：
+\begin{itemize}
+\item 可以求解广义本征问题（General） $Ax = \lambda Bx$ 或者标准本征问题（Standard） $Ax = \lambda x$．
+\item 矩阵的数据类型支持密矩阵\upref{MatSto}， 系数的 CSC 矩阵\upref{SprMat}． 也可以不需要提供矩阵本身而是提供矩阵—矢量乘法． 也就是你只需要提供一个函数 \verb|v = F(u)| 给 Arpack 即可， 其中 \verb|v| 就是矩阵乘以 \verb|u| 的结果．
+\item Regular 模式： 它可以求出本征值最小（大）的指定个数的本征矢， 或者本征值的绝对值最小（大）的指定个数的本征矢．
+\item Shift 模式： 可以求出指定值附近的若干本征值和本征矢． 但这可能需要提供矩阵的逆（见下文）．
+\end{itemize}
+
+\href{http://www.ime.unicamp.br/~chico/arpack++/}{Arpack++} 是 Arpack 的 C++ 模板库， 但实际上只是一个 C++ 接口， 仍然调用 Fortran 版的动态链接库． 官网提供的版本已经多年没有维护（最后更新于 2000 年， 版本 1.2）， 用目前的 g++ 编译器无法正常编译． 麻省理工在 GitHub 上维护了一个新版本： \href{https://github.com/m-reuter/arpackpp}{Arpack++2}． 本文使用的是当前最新的 release 2.3．
+
+\subsection{Ubuntu/Debian 安装}
+Ubuntu/Debian 中可以直接用 apt 安装， 如果没有装 gfortran 要先 \verb|apt install gfortran|． 然后安装 \verb|apt install libarpack++2-dev| （当前最新是 2.3 版）， 其实我们只需要它安装的二进制文件和 dependency． 注意 dependency 中会自动安装 OpenBlas， 如果已经装了其他版本的 Blas 如 CBLAS 可以将其手动卸载\footnote{OpenBlas 和 CBLAS 的接口不完全相同， 前者的函数使用 \lstinline|double *| 输入复数， 而后者使用 \verb|void *|， 兼容性更强． 例如本书的 SLISC0 库用 OpenBlas 就会编译出错（待更新）．}： \verb|sudo apt purge libopenblas-dev|．
+
+安装好后， 可以用 \verb|dpkg -L libarpack++2-dev| 查看安装的文件， 其中头文件和文档可以删除， 使用 github 上的头文件和文档． doc 中的 pdf 文档是重要的参考． 例如要编译 \verb|examples/areig/nonsym/simple.cc| 中的例子， 在该目录运行 \verb|make simple| 即可编译． 用 \verb|./simple| 运行．
+
+\subsection{使用}
+第三章讲解了 Classes that require user-defined matrix-vector products， 即不直接提供矩阵而是提供矩阵—矢量乘法． Real symmetric standard problems 讲解了具体怎么用 \verb|ARSymStdEig| 类． 如果要求解（数值或绝对值）最大或者最小的本征值， 那么只需要矩阵—矢量乘法即可， 但如果要算某个值 $\sigma$ 附近的本征值， 那么需要提供 $(A - \sigma)^{-1}$ 的乘法． 这有时候会大大增加难度， 甚至不可能做到．
+
+Arpack 解决的本征问题分为两种， 一种是 General 本征问题， 就是 $Ax = \lambda Bx$， 例如例程 \verb|symg...cc| 代表对称矩阵的 General 本征问题， 没有 \verb|g| 代表是 Standard 本征问题．
+
+\verb|example/product/sym| 文件夹中是通过提供矩阵—矢量乘法来解对称矩阵的方程． 其中没有 \verb|g| 的例子有两个， 分别是 \verb|symreg.cc| 和 \verb|symshft.cc|， 使用的都是 \verb|ARSymStdEig| 类． 其中 \verb|Sym| 代表对称， \verb|Std| 代表标准本征值问题． 使用方法：
+\begin{lstlisting}[language=cpp]
+#include "arssym.h"
+// 求 4 个绝对值最小的本征值的本征矢．
+ARSymStdEig<T, SymMatrixA<T> >
+    dprob(A.ncols(), 4, &A, &SymMatrixA<T>::MultMv, "SM");
+// 求 4 个最接近 1 的本征值的本征矢．
+ARSymStdEig<T, SymMatrixB<T> >
+    dprob(A.ncols(), 4, &A, &SymMatrixB<T>::MultOPv, 1.);
+\end{lstlisting}
+其中 \verb|SymMatrixB<ART>::MultMv(T* u, T* v)| 提供 $v = Au$． \verb|MultOPv(T* u, T*v)| 提供 $v = (A - \sigma)^{-1}u$， 例子中 $\sigma = 1$．

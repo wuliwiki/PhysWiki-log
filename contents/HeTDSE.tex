@@ -1,7 +1,7 @@
 % 氦原子数值解 TDSE 笔记
 % 氦原子|薛定谔方程|波函数|动量谱|光电子|电离|FEDVR|数值解
 
-\pentry{广义球谐函数\upref{GenYlm}} % 已包含 “张量积空间”
+\pentry{广义球谐函数\upref{GenYlm}， Crank-Nicolson 算法解一维含时薛定谔方程\upref{CraNic}， Lanczos 算法\upref{Lanc}， 氢原子球坐标薛定谔方程数值解\upref{HyTDSE}} % 已包含 “张量积空间”
 
 \subsection{波函数展开}
 使用角向基底为两个电子总轨道角动量和 $z$ 分量的本征态\upref{AMAdd}， 即广义球谐函数 $\mathcal{Y}_{l_1,l_2}^{L,M}(\uvec r_1, \uvec r_2)$．
@@ -202,7 +202,7 @@ r\sqrt{9(2l'_1+1)(2l'_2+1)(2L'+1)/(4\pi)^2}\\
 \subsection{束缚态}
 能量较低的束缚态可以轻易用虚时间演化得到， 即把 $\exp(-\I H \Delta t)$ 替换为 $\exp(- H \Delta t)$， 这相当于把 $\Delta t$ 变为虚数 $-\I \Delta t$， 因此得名． 氦原子基态只包含 $L = 0$ 的分波， 这要求 $l_1 = l_2 = 0, 1, 2, \dots$（参考\autoref{AMAdd_fig2}~\upref{AMAdd}）．
 
-\subsection{波函数演化}
+\subsection{Crank-Nicolson 波函数演化}
 
 演化（propagation）同样使用 split operator 
 \begin{equation}
@@ -228,6 +228,9 @@ $H_0 = H_1 + H_2$ 由于 $H_1$ 和 $H_2$ 对易， 我们可以将它们独立�
 
 另外一点， 如果只关心 single ionization， 可以用一个长方形网格（见 Ossiander 2017 Nat. Phys.）． 但要注意在短边加入 absorber 防止反射．）
 
+\subsection{Lanczos 波函数演化}
+这是 Pazourek 组用的算法， 注意他们并没有使用算符拆分． 一口气把整个哈密顿作用在波函数上． 我们的程序实现了这个， 并不困难．
+
 \subsection{分波收敛分析}
 使用 $l_{1,max}, l_{2,max}, L_{max}$ 来生成分波列表有时候会有较大的浪费， 会出现许多概率极小的分波． 最好的办法是把各个分波的概率画成图， 从图中可以轻易看出分波是否收敛以及是否有浪费．
 \begin{figure}[ht]
@@ -239,7 +242,7 @@ $H_0 = H_1 + H_2$ 由于 $H_1$ 和 $H_2$ 对易， 我们可以将它们独立�
 \subsection{时间步长误差分析以及变步长演化}
 首先要注意的是一个电磁场周期至少要有若干个步长， 可以在程序中检查．
 
-对于任何演化算法， 一个最简单的方法就是每隔一段时间， 使用 \verb|dt/N| （$N = 2$ 或 $4$） 为步长， 演化 $N$ 次然后和 \verb|dt| 一次的结果做对比， 计算 $\norm{\Delta \Psi' - \Delta \Psi}/\norm{\Delta \Psi}$ 用于衡量相对误差． 其中 $\Delta\Psi = \Psi(t+dt) - \Psi(t)$
+对于任何演化算法， 一个最简单的方法就是每隔一段时间， 使用 \verb|dt/N| （$N = 2$ 或 $4$） 为步长， 演化 $N$ 次然后和 \verb|dt| 一次的结果做对比， 计算 $\norm{\Delta \Psi' - \Delta \Psi}/\norm{\Delta \Psi}$ 用于衡量相对误差． 其中 $\Delta\Psi = \Psi(t+dt) - \Psi(t)$． 然而这对 Crank-Nicolson 似乎不准．
 
 对于 Lanzos， 有标准的误差公式， 也可以和 $\norm{\Delta \Psi' - \Delta \Psi}/\norm{\Delta \Psi}$ 对比看看哪个更准．
 
