@@ -53,7 +53,7 @@
 \subsection{矩阵表示}
 
 洛伦兹变换也可以用矩阵表示为：
-\begin{equation}
+\begin{equation}\label{SRLrtz_eq4}
 L=
 \left[\begin{matrix}
 \frac{1}{\sqrt{1-v^2/c^2}}& -\frac{v/c^2}{\sqrt{1-v^2/c^2}}& 0& 0\\
@@ -73,3 +73,99 @@ L=
 L
 \left(\begin{matrix}   t\\x\\y\\z    \end{matrix}\right)
 \end{equation}
+
+为了使洛伦兹变换矩阵更具有对称性，我们用 $ct$ 代替 $t$，这样 $ct,x,y,z$ 的量纲就是相同的了．\autoref{SRLrtz_eq1} 变成了以下形式：
+
+\begin{equation}
+\leftgroup{
+&x_2 = \frac{x_1 - vct_1/c}{\sqrt{1 - v^2/c^2}}\\
+&ct_2 = \frac{ct_1 - vx_1/c}{\sqrt{1 - v^2/c^2}}
+}
+\end{equation}
+此时变换矩阵为（设 $\gamma=1/\sqrt{1-v^2/c^2},\bvec \beta=\bvec v/c$）
+\begin{equation}\label{SRLrtz_eq5}
+\begin{aligned}
+L&=
+\left[\begin{matrix}
+\frac{1}{\sqrt{1-v^2/c^2}}& -\frac{v/c}{\sqrt{1-v^2/c^2}}& 0& 0\\
+-\frac{v/c}{\sqrt{1-v^2/c^2}}& \frac{1}{\sqrt{1-v^2/c^2}}& 0& 0\\
+0&0&1&0\\
+0&0&0&1
+\end{matrix}\right]\\
+&=
+\left[\begin{matrix}
+\gamma& -\gamma\beta& 0& 0\\
+-\gamma\beta& \gamma& 0& 0\\
+0&0&1&0\\
+0&0&0&1
+\end{matrix}\right]
+\end{aligned}
+\end{equation}
+
+如果将时空坐标写成\textbf{四矢量}：$x^{\mu}=(ct,x,y,z)$，洛伦兹变换就可以写成协变形式（为了避免指标混乱，下面记 $(ct',x',y',z')$ 为 $S'$ 系中的时空坐标，$(ct,x,y,z)$ 为 $S$ 系中的时空坐标）：
+\begin{equation}
+x'^{\mu}={L^\mu}_\nu x^\nu
+\end{equation}
+其中 ${L^\mu}_\nu$ 对应矩阵\autoref{SRLrtz_eq5} 中 $\mu$ 行 $\nu$ 列的元素．
+\subsection{任意方向的洛伦兹变换}
+设参考系 $S'$ 以速度 $\bvec v$ 相对于参考系 $S$ 运动．
+那么 $S$ 参考系中时空坐标 $(t,\bvec r)$ 在 $S'$ 参考系中的坐标为 $(t',\bvec r')$．可以将 $\bvec r$ 和 $\bvec r'$ 平行于 $\bvec v$ 的分量和垂直于 $\bvec v$ 的分量分别考虑，根据洛伦兹变换，有
+\begin{equation}
+\begin{aligned}
+&\bvec r'_{\perp}=\bvec r_{\perp}\\
+&\bvec r'_{\parallel}=\gamma(\bvec r_{\parallel}-\bvec \beta ct)\\
+&ct'=\gamma(ct-\beta r_{\parallel})
+\end{aligned}
+\end{equation}
+
+可以用点乘等矢量运算表示出 $\bvec r_\parallel$ 和 $\bvec r_\perp$：
+\begin{equation}
+\bvec r_{\parallel}=\frac{(\bvec r\cdot \bvec v)\bvec v}{v^2},\bvec r_{\perp}=\bvec r-\frac{(\bvec r\cdot \bvec v)\bvec v}{v^2}
+\end{equation}
+
+因此洛伦兹变换公式可以改写成
+\begin{equation}
+\begin{aligned}
+&\bvec r'=\bvec r-\gamma\bvec \beta ct+(\gamma-1)\frac{(\bvec r\cdot \bvec v)\bvec v}{v^2}\\
+&ct'=\gamma ct-\gamma\frac{\bvec r\cdot\bvec v}{c}=\gamma ct-\gamma \bvec r\cdot\bvec \beta
+\end{aligned}
+\end{equation}
+相应的洛伦兹矩阵为（以 $(ct,\bvec r)$ 为时空坐标）
+\begin{equation}\label{SRLrtz_eq6}
+\begin{aligned}
+{L^\mu}_\nu&=
+\left[\begin{matrix}
+\gamma& -\gamma v_1/c & -\gamma v_2/c& -\gamma v_3/c\\
+-\gamma v_1/c&1+(\gamma-1)v_1v_1/v^2& (\gamma-1)v_2v_1/v^2&(\gamma-1)v_3v_1/v^2\\
+-\gamma v_2/c &(\gamma-1)v_1v_2/v^2&1+(\gamma-1)v_2v_2/v^2&(\gamma-1)v_3v_2/v^2)\\
+-\gamma v_3/c&(\gamma-1)v_1v_3/v^2)&(\gamma-1)v_3v_2/v^2&1+(\gamma-1)v_3v_3/v^2
+\end{matrix}\right]\\
+&=\left[\begin{matrix}
+\gamma & -\gamma v_j/c \\
+-\gamma v_i/c & \delta_{ij}+(\gamma-1)v_iv_j/v^2
+\end{matrix}
+\right]\\
+&=\left[\begin{matrix}
+\gamma & -\gamma \beta_j \\
+-\gamma \beta_i & \delta_{ij}+(\gamma-1)v_iv_j/v^2
+\end{matrix}
+\right]
+\end{aligned}
+\end{equation}
+
+对于两个四矢量 $p^\mu,q^\mu$，可以构造洛伦兹不变量 $p^\mu q_\mu=\eta_{\mu,\nu}p^\mu q^\nu$，代表的意义是 $p$ 和 $q$ 的“点乘”，只不过是闵可夫斯基空间度规下的点乘．以 $x^\mu$ 为例，$\sqrt{-x^\mu x_\mu}=\sqrt{c^2t^2-x^2-y^2-z^2}$ 是洛伦兹不变量，其物理意义是原点到 $x^\mu$ 的时空距离．由于 $\eta_{\mu\nu}p^\mu q^\nu$ 在洛伦兹变换下是保持不变的，所以有
+\begin{equation}
+\begin{aligned}
+\eta_{\mu\nu}p'^\mu q'^\nu&=\eta_{\mu\nu}({L^\mu}_\rho p^\rho) ({L^\nu}_\sigma q^\sigma)\\
+&=\eta_{\mu\nu}{L^\mu}_\rho {L^\nu}_\sigma p^\rho q^\sigma
+\\
+&=\eta_{\rho\sigma} p^\rho q^\sigma
+\end{aligned}
+\end{equation}
+上式对任意的四矢量 $p^\mu,q^\mu$ 都成立，这体现了洛伦兹变换的一个性质：
+\begin{equation}\label{SRLrtz_eq7}
+\eta_{\mu\nu}{L^\mu}_\rho {L^\nu}_\sigma=\eta_{\rho\sigma}
+\end{equation}
+即洛伦兹变换是保度规的．
+
+我们上面讨论的洛伦兹变换是不含转动的，仅仅涉及到 boost \footnote{一些参考书将其译为“推促”，表示一个参考系以速度 $\bvec v$ 相对于另一参考系运动．}．可以对洛伦兹变换进行推广．一个\textbf{普通的}洛伦兹变换需要满足的唯一要求是 \autoref{SRLrtz_eq7}．这样的变换除了 boost 以外，还包括三维空间的转动（当然也包括单位元）．所有这样的变换构成一个群，我们把它称为\textbf{洛伦兹群}\upref{qed1}．
