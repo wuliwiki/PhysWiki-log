@@ -1,0 +1,67 @@
+% 一元多项式
+% 多项式|多项式环
+
+数论里有加减乘除，带余除法，（公）因子，（公）倍数，素数，辗转相除法等概念，这些都可以推广到一元多项式里面．一元多项式和 $\lambda$ -矩阵密切相关，$\lambda$ -矩阵又是所谓的 Jordan 标准形的基本概念，而 Jordan 标准形是方阵分解的特例，也为理解方阵分解提供了一个很好的样本．为掌握更高阶的知识，我们得一点点的夯实基础，而这个过程本身就是一个很具有意义的过程．当然，上面提到的概念不要求你提前掌握，若需掌握我会在文中给出链接．所以，不要害怕，我们慢慢来！
+
+讨论多项式时，我们会预先给定一个\textbf{数域} $\mathbb{F}$， 所谓数域， 简单来说是关于加减乘除都封闭的数集（运算关于集合\textbf{封闭}是指该集合中元素的运算结果还是该集合的元素）\upref{field}．
+\begin{definition}{一元多项式}
+设 $n$ 是一个非负整数，$x$ 是一个符号，$a_0,a_1,\cdots,a_n\in \mathbb{F}$ ，则表达式
+\begin{equation}
+f(x)=\sum_{i=0}^{n}a_i x^i
+\end{equation}
+称为数域 $\mathbb{F}$ 上的\textbf{一元多项式}，简称数域 $\mathbb{F}$ 上的\textbf{多项式}．其中，$a_ix^i(0\leq i\leq n)$ 称为这个多项式的\textbf{$i$次项}，$a_i$ 称为 \textbf{$i$次项系数}．特别，$a_0$ 称为多项式的\textbf{常数项}．若 $a_n\neq 0$（$n$ 为最大整数），则 $n$ 称为多项式 $f(x)$ 的\textbf{次数}，记为 $\mathrm{def}f(x)$，并把 $a_nx^n$ 称为 $f(x)$ 的\textbf{首项}，$a_n$ 称为\textbf{首项系数}．
+\end{definition}
+两个多项式 $f(x)$ 和 $g(x)$ 称为\textbf{相等}的，若它们的所有同次项的的系数都相等，并记为 $f(x)=g(x)$．
+\subsection{多项式的运算}
+设数域上的两个多项式
+\begin{align}
+f(x)=\sum_{i=0}^{n}a_ix^i\\
+g(x)=\sum_{i=0}^{m}a_ix^i
+\end{align}
+不失一般性，设 $n\geq m$
+下面定义它们的加法和乘法．
+\begin{definition}{加法}
+多项式的\textbf{和}（或\textbf{差}）为
+\begin{equation}
+f(x)\pm g(x)=\sum_{i=0}^n (a_i\pm b_i)x^i
+\label{OnePol_eq1}
+\end{equation}
+其中，约定了 $b_n=b_{n-1}=\cdots=b_{m+1}=0$．特别$f(x)+0=f(x)$．
+\end{definition}
+
+显然，两个多项式的和或差仍是多项式．\autoref{OnePol_eq1} 表明两个多项式的和的次数最多和原来次数最大的多项式一样，而系数之和可能为0，所以和的次数满足不等式
+\begin{equation}
+\mathrm{deg}(f(x)\pm g(x))\leq \max\{\mathrm{deg}f(x),\mathrm{deg}g(x)\}
+\end{equation}
+\begin{definition}{乘法}
+多项式的\textbf{乘积}为
+\begin{equation}
+f(x)\cdot g(x)=\sum_{s=0}^{m+n} c_s x^s
+\label{OnePol_eq2}
+\end{equation}
+其中，
+\begin{equation}
+c_s=\sum_{i=0}^s a_i b_{s-i}
+\end{equation}
+乘积中的 “$\cdot$” 可省略．特别的，$f(x)\cdot 0=0$．
+\end{definition}
+
+显然，两个多项式的乘积仍是多项式．\autoref{OnePol_eq2} 表明两个多项式的乘积的次数最多为原来两多项式次数的相加，而该次数最高项系数为 $c_{m+n}=a_n b_m$，不可能为0，所以乘积的次数满足等式
+\begin{equation}
+\mathrm{deg}(f(x)g(x))= \mathrm{deg}f(x)+\mathrm{deg}g(x)
+\end{equation}
+
+容易验证，多项式运算满足如下规律．
+\begin{enumerate}
+\item \textbf{加法交换律} $f(x)+g(x)=g(x)+f(x)$；
+\item \textbf{加法结合律} $\qty(f(x)+g(x))+h(x)=f(x)+(g(x)+h(x))$;
+\item \textbf{乘法交换律} $f(x)g(x)=g(x)f(x)$;
+\item \textbf{乘法结合律} $(f(x))g(x)h(x)=f(x)(g(x)h(x))$;
+\item \textbf{乘法对加法的分配律} $f(x)\qty(g(x)+h(x))=f(x)g(x)+f(x)h(x)$;
+\item \textbf{乘法消去律} 若$f(x)g(x)=f(x)h(x)$，且 $f(x)\neq0$，则 $g(x)=h(x)$.
+\end{enumerate}
+我们将系数在数域 $\mathbb{F}$ 中的一元多项式的全体，称为数域 $\mathbb{F}$ 上的\textbf{一元多项式环}，记为 $\mathbb{F}[x]$，$\mathbb{F}$ 称为 $\mathbb{F}[x]$ 的\textbf{系数域}.
+
+一个集合中元素的加法和乘法运算若满足上面6条规律且加上运算的封闭性(配上加法和乘法的单位元e,所谓集合的某个运算的\textbf{单位元}e是指，集合中任意元素x与该元素（单位元）进行运算还是等于这个任意元素x)就成这个集合为一个\textbf{环}．如果你对环有更多的兴趣，请点击\upref{field}．
+
+\textbf{小结：}本节介绍了一元多项式，并定义了一元多项式的加法和乘法，然后得到了相应的运算律．可能你会觉得“加法”和“乘法”不是很明显吗？为什么称之为“定义”？其实，这里之所以称“加法”和“乘法”为定义，是因为记号 $x$，它并不代表一个数，所以和数何来的乘法？数只有和数有乘法，因为数域已经定义好了，而数和一个符号 $x$ 是没有定义的，所以这里的“加法”和“乘法”是为数和符号 $x$ 定义一种作用（称之为“加法”和“乘法”）．只有当你让 $x\in \mathbb{F}$ 的时候，由于数域已经定义了加法和乘法，这里才不是定义．当然，这只是符号 $x$ 的一种特殊情形．当然，文中已经潜在定义了 $x\cdot x=x^2$, 以此同理．

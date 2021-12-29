@@ -1,6 +1,6 @@
 % 电磁场中粒子的拉氏量
 % 拉氏量|作用量|电磁势|拉格朗日方程
-\pentry{拉格朗日电磁势\upref{EMLagP}}
+\pentry{拉格朗日电磁势\upref{EMLagP}，电磁场张量\upref{EMFT}}
 
 我们继续使用自然单位制，令 $\mu_0=\epsilon_0=c=1$ 来简化表达．依照习惯，上下标使用希腊字母如 $\mu, \nu$ 时，取值范围为 $\{0, 1, 2, 3\}$；使用拉丁字母如 $i, j$ 时，取值范围为 $\{1, 2, 3\}$．
 
@@ -17,22 +17,63 @@ S=\int L\dd t=-m\int \dd \tau=-m\int \sqrt{-\dd x^\mu \dd x_\mu}
 \begin{equation}\label{ElecLS_eq1}
 L=-m\sqrt{1-v^2}
 \end{equation}
-如果取非相对论极限 $v\ll 1$，那么 $L=-m+\frac{1}{2}mv^2$，舍去常数项就可以得到 $L=\frac{1}{2}mv^2$，这与牛顿力学体系下自由粒子的拉格朗日量是一致的．
-\subsection{带电粒子的拉氏量}
+如果取非相对论极限 $v\ll 1$，那么 $L_{\rm{non-rel}}=-m+\frac{1}{2}mv^2$，舍去常数项就可以得到 $L=\frac{1}{2}mv^2$，这与牛顿力学体系下自由粒子的拉格朗日量是一致的．
+\subsection{电磁场中粒子的拉氏量}
 现在考虑带电粒子的拉氏量．根据拉格朗日电磁势 中 \upref{EMLagP} 的证明，带电粒子在电磁场中的广义势为 $U=q(\phi-\bvec A\cdot \bvec v)$，根据 $U=T-U$，可以给\autoref{ElecLS_eq1} 增添一项，得到带电粒子的拉氏量
-\begin{equation}
+\begin{equation}\label{ElecLS_eq2}
 L=-m\sqrt{1-v^2}-q\phi+q\bvec v\cdot \bvec A
 \end{equation}
 
 那么带电粒子的作用量为
-\begin{equation}
+\begin{equation}\label{ElecLS_eq3}
 \begin{aligned}
 S&=\int L\dd t=\int \qty(-m\sqrt{1-v^2}-q\phi +q\bvec v\cdot \bvec A)\dd t\\
 &=\int (-m-q\gamma\phi+q\gamma\bvec v\cdot \bvec A)\dd \tau\\
-&=\int (-m-qU^\mu A_\mu)\dd \tau
+&=\int (-m+qU^\mu A_\mu)\dd \tau
 \end{aligned}
 \end{equation}
 或者可以利用 $U^\mu= \frac{\dd x^\mu}{\dd \tau}$ 将它改写为
+\begin{equation}\label{ElecLS_eq4}
+S=\int -m\dd \tau+qA_\mu \dd x^\mu
+\end{equation}
+其中 $A^\mu=(\phi,A_x,A_y,A_z)=(\phi,\bvec A)$ 是4-矢量势．带电粒子的作用量具有协变形式，这也是符合我们预期的—作用量具有洛伦兹不变性．
+
+注意到 $A_\mu$ 是时空坐标 $x^\mu$ 的函数．保持时空舞台上的电磁场不变，即 $A_\mu$ 关于 $x^\mu$ 的函数不变，如果对 $x^\mu$ 作变分并保持初始和终止的时空坐标不变，根据最小作用量原理，$\delta S=0$，于是我们有
 \begin{equation}
-S=\int -m\dd \tau-qA_\mu \dd x^\mu
+\begin{aligned}
+\delta S&=\delta\qty( -m\int \sqrt{-\dd x_\mu \dd x^\mu} +q\int A_\mu \dd x^\mu)\\
+&=-m\int \frac{-\dd x_\mu \delta (\dd x^\mu)}{\sqrt{-\dd x_\mu \dd x^\mu}}+q\int \qty(\delta(A_\mu)\dd x^\mu + A_\mu \delta(\dd x^\mu))\\
+&=m\int \frac{\dd x_\mu}{\dd \tau}\dd(\delta x^\mu)+q\int\qty(\frac{\partial A_\mu}{\partial x_\nu})\dd x^\mu \delta x_\nu+q\int A_\mu \dd(\delta x^\mu)\\
+&=-m\int\dd U_\mu \delta x^\mu+q\int \partial_\nu A_\mu \dd x^\mu\delta x^\nu-q\int \dd A_\mu \delta x^\mu\\
+&=\int \qty(-m\frac{\dd U_\mu}{\dd \tau} + q\partial_\mu A_\nu \frac{\dd x^\nu}{\dd \tau}-q\partial_\nu A_\mu\frac{\dd x^\nu}{\dd \tau})\delta x^\mu\dd \tau\\
+\end{aligned}
+\end{equation}
+
+上面的推导多次用了分部积分．我们定义\textbf{电磁场张量}\upref{EMFT} $F_{\mu\nu}=\partial_{\mu}A_\nu-\partial_\nu A_\mu$，那么
+\begin{equation}
+\delta S=\int\qty(-m\frac{\dd U_\mu}{\dd \tau}+qF_{\mu\nu}U^\nu)\delta x^\mu \dd \tau=0
+\end{equation}
+所以由最小作用量原理得到了洛伦兹力公式（也可以将 $\mu$ 指标上升变成 \autoref{EMFT_eq3}~\upref{EMFT} 的形式）
+\begin{equation}
+m\frac{\dd U_\mu}{\dd \tau}=qF_{\mu\nu} U^\nu
+\end{equation}
+\subsection{电磁场中粒子的哈密顿量}
+\autoref{EMLagP_eq1}~\upref{EMLagP}描述了非相对论极限下电磁场中粒子的广义动量．在考论相对论粒子时，可以根据\autoref{ElecLS_eq2} 可以计算粒子的广义动量：
+\begin{equation}
+\bvec p=\frac{\partial L}{\partial \dot {\bvec q}}=\frac{m\bvec v}{\sqrt{1-v^2}}+q\bvec A=\bvec P+q\bvec A
+\end{equation}
+其中 $\bvec q$ 为广义坐标（取 $x,y,z$），$\bvec p$ 为与之共轭的广义动量（或者称正则动量），$\bvec P=\gamma m\bvec v$ 是粒子的相对论动量．
+
+哈密顿量为
+\begin{equation}
+\begin{aligned}
+H&=\bvec p \dot{\bvec q}-L=\frac{mv^2}{\sqrt{1-v^2}}+q\bvec v\cdot \bvec A-(-m\sqrt{1-v^2}-q\phi+q\bvec v\cdot \bvec A)\\
+&=\frac{m}{\sqrt{1-v^2}}+q\phi=\sqrt{m^2+\qty(\frac{mv}{\sqrt{1-v^2}})^2}+q\phi\\
+&=\sqrt{m^2+\bvec P^2}+q\phi\\
+&=\sqrt{m^2+(\bvec p-q\bvec A)^2}+q\phi
+\end{aligned}
+\end{equation}
+非相对论极限下 $v\ll 1$，则 $(\bvec p-q\bvec A)^2 \ll m^2$，此时哈密顿量为
+\begin{equation}
+H_{\rm{non-rel}}=\frac{1}{2m}(\bvec p-q\bvec A)^2+q\phi
 \end{equation}
