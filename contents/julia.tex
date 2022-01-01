@@ -1,4 +1,5 @@
-% Julia 简介
+% Julia 入门笔记
+% Julia 语言|科学计算|数值计算|REPL
 
 \begin{issues}
 \issueDraft
@@ -26,7 +27,7 @@ sudo snap install Julia --classic
 
 \subsection{计算器}
 \begin{itemize}
-\item \verb|b = 2a| 和 \verb|c = 2(b+3)| 都可以省略乘号
+\item \verb|b = 2a| 和 \verb|c = 2(b+3)| 都可以省略乘号． 注意 \verb|1/2a| 相当于 \verb|1/(2a)|
 \item \verb|2/3| 返回双精度类型 \verb|Float64| 而不是整数
 \item \verb|2//3| 返回 \verb|Rational{Int64}| 类型， 相当于用两个 \verb|Int64| 整数来表示分数， 分数之间的运算没有误差
 \item 表示复数如 \verb|1 + 2im|， 相当于 \verb|ComplexF64(0,2)|． 又例如 \verb|1//2 + (3//4)im| 的类型是 \verb|Complex{Rational{Int64}}|
@@ -97,6 +98,23 @@ x = 1:10; y = rand(10); # These are the plotting data
 plot(x,y)
 \end{lstlisting}
 
+\subsection{控制流}
+\begin{lstlisting}[language=Julia]
+b = 3;
+for a = 1:5
+    if a < b
+        println(a, " < ", b)
+    elseif a > b
+        println(a, " > ", b)
+    else
+        println(a, " = ", b)
+    end
+end
+\end{lstlisting}
+其中 \verb|1:5| 的类型是 \verb|UnitRange{Int64}|． 若令 \verb|a = 1:5|， 可以使用 \verb|a[i]| 获取 “元素”． 类似地， \verb|1:2:5| 的类型是 \verb|StepRange{Int64, Int64}|．
+
+for 循环也可以使用 \verb|for i in [1,4,0]|
+
 \subsection{函数}
 函数定义
 \begin{lstlisting}[language=Julia]
@@ -107,6 +125,17 @@ end
 
 \subsection{常用函数}
 \begin{itemize}
+\item 当前路径 \verb|pwd()|
+\item 更改路径 \verb|cd()|
 \item 当前时间 \verb|time()|
 \end{itemize}
 
+\subsection{储存变量}
+要把任意变量存到文件， 用 \verb|using Serialization|， 除此之外常用的还有 \verb|using JLD2|．
+\begin{lstlisting}[language=julia]
+using Serialization
+a = randn(100,100)
+f = serialize("file1.dat", a)
+a′ = deserialize("file1.dat")
+println(a == a′)
+\end{lstlisting}

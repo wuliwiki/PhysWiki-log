@@ -5,9 +5,10 @@
 \issueDraft
 \end{issues}
 
-\pentry{SLISC 库简介\upref{SLISC}， 数据结构：密矩阵\upref{MatSto}， C++ 类的定义和继承}
+\pentry{SLISC 库简介\upref{SLISC}， 数据结构：密矩阵\upref{MatSto}}
 
 我们先以双精度类型 \verb|Doub| （即 \verb|double|）来举例介绍 SLISC 中的密矩阵． 我们习惯上也把 1 维的矩阵称为矢量．
+\addTODO{给一个具体的例程}
 
 \subsection{Vbase 类}
 所有密矩阵都继承于 \verb|VbaseDoub|， \verb|VbaseDoub| 不直接使用， 仅用于继承． 这里使用继承主要是为了避免在每个密矩阵中都重复定义这些基础功能．
@@ -15,33 +16,32 @@
 class VbaseDoub
 {
 protected:
-    Doub *m_p;
-    Long m_N;
+    Doub *m_p; // 第一个元素的指针
+    Long m_N;  // 元素长度
 public:
-    typedef Doub value_type;
-    VbaseDoub();
-    explicit VbaseDoub(Long_I N);
-    VbaseDoub(const VbaseDoub &rhs);
+    VbaseDoub(); // 默认构造（不分配内存）
+    explicit VbaseDoub(Long_I N); // 构造：分配 N 个矩阵元
+    VbaseDoub(const VbaseDoub &v); // 复制构造
 
-    Doub* p();
-    const Doub* p() const;
+    Doub* p(); // 返回指针 m_p
+    const Doub* p() const; // 返回 const 指针
     Long size() const;
-    void resize(Long_I N);
-    Doub &operator[](Long_I i);
-    const Doub &operator[](Long_I i) const;
-    Doub& end();
+    void resize(Long_I N); // 销毁内存并重新分配 N 个矩阵元（若当前长度不是 N）
+    Doub &operator[](Long_I i); // 获取矩阵元 a[i]
+    const Doub &operator[](Long_I i) const; 
+    Doub& end(); // 获取最后一个矩阵元
     const Doub& end() const;
-    Doub& end(Long_I i);
+    Doub& end(Long_I i); // 获取 a[m_N-i]
     const Doub& end(Long_I i) const;
-    void operator<<(VbaseDoub &rhs);
+    void operator<<(VbaseDoub &rhs); // 从另一个对象转移数据
     ~VbaseDoub();
 };
 \end{lstlisting}
 
 简单来说， \verb|VbaseDoub| 就是一个简单的 \verb|std::vector|， 负责内存管理， 用方括号 \verb|[i]| 获取第 \verb|i| 个矩阵元， 用 \verb|end()| 获取最后一个元， \verb|end(i)| 获取第 \verb|N-i| 个元． 用 \verb|.size()| 获取元素长度， \verb|.resize(N)| 释放内存并重新分配 \verb|N| 个元素的新内存． \verb|<<| 用于把一个对象所分配的内存转移到另一个对象中． 所有继承 \verb|VbaseDoub| 的米矩阵都具有这些功能， 除了\verb|resize()| 会根据矩阵的维度重新定义．
 
-\subsection{Vec 矢量}
-为了避免歧义， 任何两个矩阵之间禁止使用等号． 如果要复制使用 \verb|copy()| 函数．
+\subsection{矢量}
+VecDoub 矢量继承 VbaseDoub， 为了避免歧义， 任何两个矩阵之间禁止使用等号． 如果要复制使用 \verb|copy(a, b)| 函数把 \verb|b| 复制给 \verb|a|．
 \begin{lstlisting}[language=cpp]
 class VecDoub : public VbaseDoub
 {
@@ -55,50 +55,49 @@ public:
 };
 \end{lstlisting}
 
-\subsection{Cmat 矩阵}
+\subsection{矩阵}
+列主序矩阵 \verb|CmatDoub| 和行主序矩阵 \verb|MatDoub| 同样继承 \verb|VbaseDoub|． 在此基础上增加一个行数 \verb|m_N0|， 列数 \verb|m_N1|， 双索引 \verb|a(i, j)|．以 \verb|CmatDoub| 定义为例：
 \begin{lstlisting}[language=cpp]
 class CmatDoub : public VbaseDoub
 {
 protected:
     typedef VbaseDoub Base;
-    Long m_N0, m_N1;
+    Long m_N0, m_N1; // 行数和列数
 public:
-    CmatDoub(): m_N0(0), m_N1(0) {};
-    CmatDoub(Long_I N1, Long_I N2);
-    CmatDoub(const CmatDoub &rhs);
-    CmatDoub &operator=(const CmatDoub &rhs) = delete;
-    void operator<<(CmatDoub &rhs);
-    Doub& operator()(Long_I i, Long_I j);
+    CmatDoub(): m_N0(0), m_N1(0) {}; // 默认构造
+    CmatDoub(Long_I N0, Long_I N1);  // 构造：分配 N0*N1 个元素
+    CmatDoub(const CmatDoub &rhs);   // 复制构造
+    CmatDoub &operator=(const CmatDoub &rhs) = delete; // 不允许等号复制
+    void operator<<(CmatDoub &rhs); // 从另一个对象转移数据
+    Doub& operator()(Long_I i, Long_I j); // 双索引
     const Doub& operator()(Long_I i, Long_I j) const;
-    Long n0() const;
-    Long n1() const;
-    void resize(Long_I N1, Long_I N2);
-    void reshape(Long_I N1, Long_I N2);
+    Long n0() const; // 获取行数
+    Long n1() const; // 获取列数
+    void resize(Long_I N0, Long_I N1); // 重新分配
 };
 \end{lstlisting}
 
-\subsection{Cmat3 三维数组}
+\subsection{高维数组}
+三维数组同样分为列主序的 \verb|Cmat3Doub| 和行主序的 \verb|Mat3Doub|， 功能和 \verb|CmatDoub| 大同小异
 \begin{lstlisting}[language=cpp]
 class Cmat3Doub : public VbaseDoub
 {
 protected:
     typedef VbaseDoub Base;
-    Long m_N0, m_N1, m_N2;
+    Long m_N0, m_N1, m_N2; // 三个维度的长度
 public:
-    typedef Doub value_type;
-    Cmat3Doub(): m_N0(0), m_N1(0), m_N2(0) {};
-    Cmat3Doub(Long_I N1, Long_I N2, Long_I N3);
-    Cmat3Doub(const Cmat3Doub &rhs);
+    Cmat3Doub(): m_N0(0), m_N1(0), m_N2(0) {}; // 默认构造
+    Cmat3Doub(Long_I N0, Long_I N1, Long_I N2; // 构造： 分配 N0*N1*N2 个元素
+    Cmat3Doub(const Cmat3Doub &rhs); // 复制构造
     Cmat3Doub &operator=(const Cmat3Doub &rhs) = delete;
-    void operator<<(Cmat3Doub &rhs);
-    void resize(Long_I N1, Long_I N2, Long_I N3);
-    void reshape(Long_I N1, Long_I N2, Long_I N3);
-    Doub &operator()(Long_I i, Long_I j, Long_I k);
+    void operator<<(Cmat3Doub &rhs); // 从 rhs 转移数据
+    void resize(Long_I N0, Long_I N1, Long_I N2); // 变形，重新分配
+    Doub &operator()(Long_I i, Long_I j, Long_I k); // 矩阵元 a(i,j,k)
     const Doub &operator()(Long_I i, Long_I j, Long_I k) const;
-    Long n0() const;
-    Long n1() const;
-    Long n2() const;
+    Long n0() const; // 第一维长度
+    Long n1() const; // 第二维长度
+    Long n2() const; // 第三位长度
 };
 \end{lstlisting}
 
-\addTODO{列出其他矩阵}
+更高维的数组的定义也大同小异．

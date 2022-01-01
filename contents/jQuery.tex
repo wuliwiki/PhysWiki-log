@@ -1,0 +1,53 @@
+% jQuery 笔记
+
+\begin{issues}
+\issueDraft
+\end{issues}
+
+\pentry{JavaScript 入门笔记\upref{JS}}
+
+\begin{itemize}
+\item jQuery 命令通常在 document ready 内部使用 \verb|$(document).ready(function(){/*jQuery 命令*/});|， 另一种等效的格式为 \verb|$(function(){/*jQuery 命令*/})|
+\item Selector: \verb|$("p")| 选择所有 \verb|<p>...</p>| 元素． 例如： \verb|$(document).ready(function(){$("button").click(function(){$("p").hide();});});| 其中 \verb|click(回调函数)| 设置按钮的回调函数， 即 \verb|$("p").hide()|， 隐藏所有段落． 相反， \verb|.show()| 重新显示．
+\item \verb|.hide(speed, callback)| 其中 \verb|speed| 是毫秒， \verb|callback| 是完成后的回调
+\item \verb|.toggle()| 或者 \verb|.toggle(speed, callback)| 让隐藏的元素显示， 显示的元素隐藏
+\item \verb|$("#id")| 选中所有指定 id 的元素
+\item \verb|$(".class")| 选中所有指定 class 的元素
+\end{itemize}
+
+事件
+\begin{itemize}
+\item \verb|$(document).ready()| 网页渲染完成
+\item \verb|.click()| 按下， \verb|.dbclick()| 双击
+\item \verb|.mouseenter()| 鼠标进入元素． 例子： \verb|$(document).ready(function(){$("#p1").mouseenter(function(){做一些事});});|
+\item \verb|.mouseleave()| 离开元素， \verb|.mousedown()| 按下鼠标左键， \verb|.mouseup()| 松开鼠标左键．
+\item \verb|.hover(fun1,fun2)| 相当于 \verb|.mouseenter(fun1); .mouseleave(fun2);|
+\item \verb|<input>| 元素有 \verb|$("input").focus()| 和 \verb|.blur()|， 分别是光标选中和离开
+\item 动画没有执行完就可以执行下面的代码（异步）
+\end{itemize}
+
+\subsection{DOM manip}
+\begin{itemize}
+\item Document Object Model (DOM)
+\item allows programs and scripts to dynamically access and update the content, structure, and style of a document
+\item \verb|attr(属性)| 获取元素的属性， 如 \verb|$("#id").attr("href")|
+\end{itemize}
+
+一个获取鼠标坐标的例程
+\begin{lstlisting}[language=js]
+<!DOCTYPE html>
+<html>
+<head>
+	<script src=
+	"https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+	<script>
+		$(document).mousemove(function(event) {
+			$("#btn1").text(event.pageX + ", " + event.pageY);
+		});
+	</script>
+</head>
+<body>
+	<button id="btn1">Show Text</button>
+</body>
+</html>
+\end{lstlisting}

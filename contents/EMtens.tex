@@ -1,20 +1,114 @@
 % 电磁场的能动张量
 % 能动张量|诺特定理|电磁场
-\pentry{经典场论基础\upref{classi}，电磁场的能量守恒、坡印廷矢量\upref{EBS}，电磁场的动量守恒、动量流密度张量\upref{EBP}}
 
-我们继续使用自然单位制，令 $\mu_0=\epsilon_0=c=1$ 来简化表达．依照习惯，上下标使用希腊字母如 $\mu, \nu$ 时，取值范围为 $\{0, 1, 2, 3\}$；使用拉丁字母如 $i, j$ 时，取值范围为 $\{1, 2, 3\}$．
+\pentry{电磁场的作用量\upref{ElecS}， 电磁场的能量守恒、坡印廷矢量\upref{EBS}，电磁场的动量守恒、动量流密度张量\upref{EBP}}
+
+我们继续使用自然单位制，令 $\mu_0=\epsilon_0=c=1$ 来简化表达．依照习惯，上下标使用希腊字母如 $\mu, \nu$ 时，取值范围为 $\{0, 1, 2, 3\}$；使用拉丁字母如 $i, j$ 时，取值范围为 $\{1, 2, 3\}$．约定闵氏时空度规为 $(-1,1,1,1)$．
 
 \subsection{电动力学的守恒量}
-根据经典场论\upref{classi} 中能动张量 ${T^\mu}_\nu$ 的定义
+根据经典场论\upref{classi} 中能动张量 ${T^\mu}_\nu$ 的定义（注意，由于这里采用的度规是 $(-1,1,1,1)$，所以和 \upref{classi} 中的定义差一个负号．）
 \begin{equation}
-T^\mu{}_\nu \equiv \frac{\partial \mathcal L}{\partial (\partial_\mu \phi)} \partial_\nu \phi - \mathcal L \delta^\mu{}_\nu
+T^\mu{}_\nu \equiv -\frac{\partial \mathcal L}{\partial (\partial_\mu \phi)} \partial_\nu \phi + \mathcal L \delta^\mu{}_\nu
 \end{equation}
 可以写出电磁场的能动张量
-\begin{equation}
-T^\mu{}_\nu =\frac{\partial \mathcal L}{\partial (\partial_\mu A^\rho)} \partial_\nu A^\rho - \mathcal L \delta^\mu{}_\nu
+\begin{equation}\label{EMtens_eq1}
+T^\mu{}_\nu =-\frac{\partial \mathcal L}{\partial (\partial_\mu A_\rho)} \partial_\nu A_\rho + \mathcal L \delta^\mu{}_\nu
 \end{equation}
 根据诺特定理，能动张量对应着四个守恒流：
 \begin{equation}
 \partial_\mu T^\mu{}_\nu=0
 \end{equation}
-其中 $T^0{}_0$ 对应着哈密顿量密度，或者说电磁场的能量密度；$T^0{}_i$ 对应着电磁场的动量密度．我们已经推导过电磁场的能量密度为 $\mathcal H=\frac{1}{8\pi}(E^2+B^2)$
+其中 $T^0{}_0$ 对应着哈密顿量密度，或者说电磁场的能量密度；$T^0{}_i$ 对应着电磁场的动量密度．我们已经推导过电磁场的能量密度为 $\mathcal H=\frac{1}{8\pi}(\bvec E^2+\bvec B^2)$ \upref{EBS}，也推导过电磁场的动量密度为 $\mathcal P=\frac{1}{4\pi} \bvec E\times \bvec B$\upref{EBP}．下面可以通过推导 \autoref{EMtens_eq1} 验证这些结论．
+
+如果先假设没有场源，即电流4-矢量 $J^\mu = 0$，\textbf{自由电磁场}的拉氏量密度为
+\begin{equation}
+\begin{aligned}
+\mathcal{L}&=-\frac{1}{16\pi}F^{\mu\nu} F_{\mu\nu}\\
+&=-\frac{1}{16\pi}(\partial^\mu A^\nu-\partial^\nu A^\mu)(\partial_\mu A_\nu-\partial_\nu A_\mu)
+\end{aligned}
+\end{equation}
+所以
+\begin{equation}
+\begin{aligned}
+T^\mu{}_\nu&=-\frac{\partial \mathcal{L}}{\partial (\partial_\mu A_\rho)}\partial_\nu A_\rho+\mathcal{L}\delta^\mu{}_\nu\\
+&=\frac{1}{4\pi}F^{\mu\rho}\partial_\nu A_\rho-\frac{1}{16\pi}\delta^\mu{}_\nu F^{\sigma\lambda}F_{\sigma\lambda}
+\end{aligned}
+\end{equation}
+或者将 $\nu$ 指标上升：
+\begin{equation}
+T^{\mu\nu}=\frac{1}{4\pi}F^{\mu\rho}\partial^\nu A_\rho - \frac{1}{16\pi} \eta^{\mu\nu}F^{\sigma\lambda}F_{\sigma\lambda}
+\end{equation}
+然而现在的 $T^{\mu\nu}$ 是不对称的．为了使 $T^{\mu\nu}$ 成为对称张量，需要增添一项 $\partial_\rho \psi^{\mu\nu\rho}$（$\psi^{\mu\nu\rho}$ 是某个三阶张量，且满足 $\psi^{\mu\nu\rho}=-\psi^{\mu\rho\nu}$，因此 $\partial_\mu T^{\mu\nu}=0$ 仍然成立），最终可以将 $T^{\mu\nu}$ 写为
+\begin{equation}
+\begin{aligned}
+T^{\mu\nu}&=\frac{1}{4\pi}F^{\mu\rho}(\partial^\nu A_\rho-\partial_\rho A^\nu) - \frac{1}{16\pi} \eta^{\mu\nu}F^{\sigma\lambda}F_{\sigma\lambda}\\
+&=\frac{1}{4\pi}F^{\mu\rho}F^\nu{}_\rho - \frac{1}{16\pi} \eta^{\mu\nu}F^{\sigma\lambda}F_{\sigma\lambda}
+\end{aligned}
+\end{equation}
+
+现在来计算 $T^{\mu\nu}$ 的每一项．
+\begin{equation}\label{EMtens_eq2}
+\begin{aligned}
+T^{00}&=\frac{1}{4\pi}\bvec E \cdot \bvec E+\frac{1}{16\pi}(2\bvec B^2-2\bvec E^2)\\
+&=\frac{1}{8\pi}(\bvec E^2+\bvec B^2)=\mathcal{H}
+\end{aligned}
+\end{equation}
+\begin{equation}\label{EMtens_eq3}
+\begin{aligned}
+T^{0i}=T^{i0}&=\frac{1}{4\pi}E^j F^i{}_j=\frac{1}{4\pi}\epsilon_{ijk}E_jB_k\\
+&=\frac{1}{4\pi}\bvec E\times \bvec B=\mathcal{P}_i
+\end{aligned}
+\end{equation}
+这些恰好对应着电磁场的能量与动量密度．
+\begin{equation}\label{EMtens_eq4}
+\begin{aligned}
+T^{ij}&=\frac{1}{4\pi}F^{i0}F^j{}_0+\frac{1}{4\pi}F^{ik}F^j{}_k-\frac{1}{16\pi}\eta^{ij}F^{\sigma\lambda}F_{\sigma\lambda}\\
+&=-\frac{1}{4\pi}E_iE_j+\frac{1}{4\pi}\epsilon_{ikl}B_l \epsilon_{jkm}B_m-\frac{1}{16\pi}\delta_{ij}(2\bvec B^2-2\bvec E^2)\\
+&=\frac{1}{4\pi}\qty(\frac{1}{2}\delta_{ij}\bvec E^2-E_iE_j)+\frac{1}{4\pi}\qty(\delta_{ij}\delta_{lm}-\delta_{im}\delta_{lj})B_lB_m-\frac{1}{8\pi}\delta_{ij}\bvec B^2\\
+&=\frac{1}{4\pi}\qty(\frac{1}{2}\delta_{ij}\bvec E^2-E_iE_j)+\frac{1}{4\pi}\qty(\frac{1}{2}\delta_{ij}\bvec B^2 - B_iB_j)
+\end{aligned}
+\end{equation}
+这与麦克斯韦应力张量 \autoref{EBP_eq2}~\upref{EBP} 的形式是一致的．
+
+最后根据方程 $\partial_\mu T^{\mu\nu}=0$ 可以得到 4 个守恒流方程：
+\begin{equation}
+\begin{aligned}
+&\frac{\partial }{\partial t}\qty(\frac{1}{8\pi}(\bvec E^2+\bvec B^2))+\nabla \cdot \qty(\frac{1}{4\pi}\bvec E\times \bvec B)=0\\
+&\frac{\partial}{\partial t}\qty(\frac{1}{4\pi}\bvec E\times \bvec B)+\partial_i T_{ij}=0
+\end{aligned}
+\end{equation}
+
+现在考虑场源的影响．根据 \autoref{ElecS_eq2}~\upref{ElecS}，作用量的完整形式为
+\begin{equation}
+S=-\sum{m\int \dd \tau}+\int \qty(-\frac{1}{16\pi}F^{\mu\nu}F_{\mu\nu}+A_\mu J^\mu ){\dd}^4 x
+\end{equation}
+所以拉格朗日量可以写为
+\begin{equation}
+\mathcal{L}=-\sum_i \frac{m_i\delta(\bvec r-\bvec r_i(t))}{\gamma}-\frac{1}{16\pi}F^{\mu\nu}F_{\mu\nu}+A_\mu J^\mu
+\end{equation}
+现在考虑单个静质量为 $m$ 的粒子对能动张量 $T^{\mu\nu}$ 的影响，设它的运动轨迹为 $\bvec r_0(t)$．设 $\epsilon=m\delta(\bvec r-\bvec r_0(t))$．根据能动张量的物理意义，$T_{\rm{part}}^{00}=\gamma \epsilon$，$T_{\rm{part}}^{0i}=T_{\rm{part}}^{i0}=\gamma m \frac{\dd x^i}{\dd t}$．由 $\gamma=\frac{\dd t}{\dd \tau}$，并根据 $F^{\mu\nu}$ 的洛伦兹协变性，可以得到单个带电粒子的能动张量的表达式：
+\begin{equation}
+T_{\rm{part}}^{\mu\nu}=\frac{\epsilon}{\gamma}\frac{\dd x^\mu}{\dd \tau}\frac{\dd x^\nu}{\dd \tau}
+\end{equation}
+
+设电磁场的能动张量为 $T_\rm{e.m.}^{\mu\nu}$，由\autoref{EMtens_eq2} \autoref{EMtens_eq3} \autoref{EMtens_eq4} 给出；而总的能动张量由电磁场和粒子的能动张量两部分组成．现在重写 $\partial_\mu T^{\mu\nu}=0$，可以得到
+\begin{equation}\label{EMtens_eq5}
+\begin{aligned}
+\partial_{\mu}T^{\mu\nu}&=\partial_\mu T_{\rm{e.m.}}^{\mu\nu}+\partial_\mu T_{\rm{part}}^{\mu\nu}\\
+&=\partial_\mu T_{\rm{e.m.}}^{\mu\nu}+\partial_\mu\qty(\frac{\epsilon}{\gamma}\frac{\dd x^\mu}{\dd \tau}\frac{\dd x^\nu}{\dd \tau})\\
+&=\partial_\mu T_{\rm{e.m.}}^{\mu\nu}+\epsilon \frac{\dd x^\mu}{\dd t}\partial_\mu\qty(\frac{\dd x^\nu}{\dd \tau})+\frac{\dd x^\nu}{\dd \tau}\partial_\mu\qty(\epsilon \frac{\dd x^\mu}{\dd t})\\
+&=\partial_\mu T_{\rm{e.m.}}^{\mu\nu}+\epsilon \frac{\dd x^\mu}{\dd t}\partial_\mu U^\nu+\frac{m}{q}U^\nu\partial_\mu J^\mu \\
+&=\partial_\mu T_{\rm{e.m.}}^{\mu\nu}+\epsilon \frac{\dd U^\nu}{\dd t}=0
+\end{aligned}
+\end{equation}
+这意味着电磁场的能量和动量会与粒子的能量动量发生交换，但\textbf{粒子与场的总能量和总动量是守恒的}．
+
+进一步，根据洛伦兹力公式\autoref{EMFT_eq3}~\upref{EMFT}，
+\begin{equation}
+\epsilon \frac{\dd U^\nu}{\dd t}=\rho F^\mu{}_\nu U^\nu \frac{\dd \tau}{\dd t}=\rho F^\mu{}_\nu\frac{\dd x^\nu}{\dd t}=F^\mu{}_\nu J^\nu 
+\end{equation}
+代入 \autoref{EMtens_eq5} 将得到
+\begin{equation}\label{EMtens_eq6}
+\partial_\mu T_{\rm{e.m.}}^{\mu\nu}=-F^{\mu\nu}J^\nu
+\end{equation}
+等式左边包含两部分：一项是场的能量动量密度随时间变化率，另一项是能量动量流的散度；等式右侧代表的是电磁场对电荷作的功．因此 \autoref{EMtens_eq6} 相当于电动力学的能量动量守恒律．

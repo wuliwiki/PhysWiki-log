@@ -1,0 +1,159 @@
+% JavaScript 入门笔记
+
+\pentry{HTML 基础}
+JavaScript 常见于网页中， 一般浏览器都可以运行． 我们以 Chrome 浏览器为例演示 \verb|Hello World| 程序．
+
+\begin{lstlisting}[language=js]
+<!DOCTYPE html>
+<html>
+	<body>
+		<div id = a></div>
+		<script>
+            console.log("hello world 1");
+            window.alert("hello world 2");
+			document.getElementById("a").innerHTML = "hello world 3";
+            document.write("hello world 4");
+		</script>
+	</body>
+</html>
+\end{lstlisting}
+把这段程序复制到一个文本文件， 并命名为 \verb|test.html|， 用 Chrome 打开即可自动运行． 按 F12 可打开调试窗口和命令行．
+
+\verb|<script>...</script>| 中的 4 行程序就是 JavaScript， 它们这里分别演示了用 4 种不同的方法显示 “hello world”：
+\begin{enumerate}
+\item 输出到命令行（需要 F12 才能看到）
+\item 弹出提示窗
+\item 插入到 \verb|<div>...</div>| 元素中
+\item 插入到 \verb|<script>| 之前
+\end{enumerate}
+
+\subsection{常识}
+\begin{itemize}
+\item \verb|<body>| 中任意位置可以包含任意多个 \verb|<script>|
+\item 用 \verb|<script src="路径/文件名.js 或者 url.js"></script>| 插入代码文件
+\item 在第一行插入 \verb|'use strict'| 后使用严格语法． 例如不声明的变量会出错， 又例如不能使用 \verb|with|．
+\item 注释和 C 语言一样用 \verb|// 注释| 或 \verb|/*注释*/|
+\item \verb|$| 在变量/函数名中相当于一个字母， 单独一个或几个 \verb|$| 可以作为变量/函数名
+\item 命令后的 \verb|;| 不是必须的， 可用于在同一行中分隔两个命令．
+\item 弹出输入框如 \verb|person = prompt("提示", "默认");|
+\item 按钮如 \verb|<button onclick="函数名()">按钮文字</button>|
+\item 输入框如 \verb|<input id="b"><br>|， 获取或更改网页上的文字用 \verb|document.getElementById('b').value|
+\end{itemize}
+
+\subsubsection{算符}
+\begin{itemize}
+\item 大部分和 C 语言一样
+\item \verb|%|， \verb|++|， \verb|--|， \verb|+=|， \verb|-=|
+\item \verb|&&|， \verb*||*, \verb|&|， \verb*|*， \verb|条件?语句1:语句2|
+\item 幂算符是 \verb|**|， 另有 \verb|**=|
+\item \verb|==| 判断值， \verb|===| 判断值和类型． 同理 \verb|!=| 和 \verb|!==|
+\end{itemize}
+
+\subsection{变量}
+\begin{itemize}
+\item 声明变量 \verb|let a = 1, b = 2| 或者用 \verb|const| 和 \verb|var|
+\item \verb|var| 是全局变量， 且可以重新声明， \verb|let| 和 \verb|const| 是局部的
+\item \verb|typeof| 获取变量类型
+\item 自带类型有 \verb|number| （不区分整数和浮点数，浮点是双精度）， \verb|string| （单引号双引号通用， 没有 char）
+\item 所有自定义的类型都叫做 \verb|object|
+\end{itemize}
+
+\subsubsection{字符串}
+\begin{itemize}
+\item \verb|str[ind]| 或 \verb|.charAt(ind)| 可以获取字符串的某个字符
+\item 合并字符串用 \verb|字符串 + 字符串|， 也可以 \verb|字符串 + 数字|
+\item \verb|num.toString()| 可以数字变字符串， \verb|num.toPrecision(有效数字)| 可以四舍五入到有效数字
+\item 可以字符串变数字如 \verb|parseInt("123")|， \verb|parseFloat("12.3e2")|
+\item \verb|Number(str)| 既可以转换整数也可以转换小数
+\item \verb|.toUpperCase()| 和 \verb|.toLowerCase()| 将所有字母变为大小写
+\end{itemize}
+
+
+\subsubsection{数组}
+\begin{itemize}
+\item 数组如 \verb|v = [1, 'a', [2, 'b']]|， \verb|typeof| 返回 \verb|object|， 可以嵌套
+\item 数组索引从 0 开始如 \verb|v[0]|， \verb|v[2][1]| 长度为 \verb|v.length|
+\item \verb|console.table()| 可以显示二维数组
+\item \verb|a.push(元素)| 在最后新增元素， \verb|a.pop()| 删除最后一个元素
+\item \verb|a.shift()| 删除第一个元素， \verb|a.unshift(元素)| 新增元素到第一个
+\item 子数组如 \verb|v.slice(i, j)|， 复制从 \verb|i| 到 \verb|j-1| 个元素， 注意没有 view
+\end{itemize}
+
+\subsection{函数}
+\begin{itemize}
+\item 判断如 \verb|if (条件) {...}|
+\item 循环如 \verb|for (var i = 0; i < N; i++) {...}|
+\item 定义函数如 \verb|function myFunction(p1, p2) {return p1 * p2;}|， 可以在定义之前调用函数． \verb|return| 可选
+\item 调用函数必须要有括号， 没有括号返回函数定义．
+\item 数组作为函数变量是 pass by reference
+\item \verb|function(){...}| 是一个（匿名）函数的定义， 可以作为另一个函数的变量， 相当于把某个函数名作为变量．
+\item \verb|(function(){...})()| 叫做 Immediately-Invoked Function Expression (IIFE)， 可以立即执行 \verb|...| 中的代码而避免污染当前范围的变量名
+\end{itemize}
+
+\subsection{常用函数}
+\begin{itemize}
+\item \verb|var d = new Date()| 用于获取当前日期和时间 object， 成员函数有 \verb|.getDay()| (获取星期几)， \verb|.getMonth()|， \verb|.getFullYear()|， \verb|.getHours()|， \verb|.getMinutes|， \verb|.getSeconds()|， \verb|.getMilliseconds|， \verb|.getTime()| （返回从 1970/01/01/0:00 到当前的时长）
+\end{itemize}
+
+\subsection{对象}
+\begin{itemize}
+\item 对象（object）如 \verb|car = {name:"a", model:"500", color:"white"};|
+\item 获取属性如 \verb|car.name|
+\item \verb|console.table()| 可以列表显示属性
+\end{itemize}
+
+定义成员函数， 可以使用关键词 \verb|this|
+\begin{lstlisting}[language=js]
+const person = {
+  firstName: "John",
+  lastName : "Doe",
+  id       : 5566,
+  fullName : function() {
+    return this.firstName + " " + this.lastName;
+  }
+};
+\end{lstlisting}
+
+Constructor 的例子（\href{https://www.w3schools.com/js/js_object_constructors.asp}{参考}）
+\begin{lstlisting}[language=js]
+function Person(first, last, age, eyecolor) {
+  this.firstName = first;
+  this.lastName = last;
+  this.age = age;
+  this.eyeColor = eyecolor;
+  this.name = function() {
+    return this.firstName + " " + this.lastName;
+  };
+}
+\end{lstlisting}
+
+
+\subsection{math.js}
+math.js 和自带的 Math 库完全兼容．
+
+在代码前面插入 \verb|<script src="math.js"></script>|， 也可以是 url 如 \verb|https://cdnjs.cloudflare.com/ajax/libs/mathjs/10.0.2/math.js|
+
+\subsubsection{常用}
+\begin{itemize}
+\item 所有的对象和函数前面要加 \verb|math.|， 也可以在非 \verb|strict mode| 下把代码放到 \verb|with (math) {...}| 中
+\item 常数 \verb|pi|， \verb|e|， 
+\item 常用函数 \verb|round|，\verb|ceil|, \verb|floor|， \verb|exp|， \verb|sin|， \verb|cos|， \verb|sqrt|， \verb|log|， \verb|atan2|， \verb|pow|
+\item \verb|random()| 生成 0 到 1 的随机数， 或者 \verb|random(min, max)|， \verb|random([Nr,Nc])| 生成 0 到 1 的随机矩阵， \verb|random([Nr, Nc], min, max)| 等．
+\end{itemize}
+
+\subsubsection{复数}
+\begin{itemize}
+\item \verb|let c = math.complex(2, 3)| 生成复数
+\item \verb|c.re| 和 \verb|c.im| 获取实部和虚部， 可以赋值 \verb|c.re = 5|． 也可以用 \verb|math.re(c)| 和 \verb|math.im(c)|， 不能赋值．
+\item 共轭 \verb|c.conjugate()| 或者 \verb|math.conj(c)|， 绝对值 \verb|math.abs(c)| 或 \verb|c.abs()|， 幅角 \verb|math.arg(c)| 或者 \verb|c.arg()|， 加法 \verb|math.add(a, b)|， 乘法 \verb|math.multiply(a, b)|， 除法 \verb|math.divide(a, b)|， 根号 \verb|math.sqrt(-4)|， 倒数 \verb|a.inverse()|．
+\end{itemize}
+
+\subsubsection{线性代数}
+\begin{itemize}
+\item 常矩阵 \verb|zeros([Nc, Nr])|， \verb|ones([Nc, Nr])|
+\item \verb|range(2, 5)|
+\item \verb|size(矩阵)| 获取矩阵尺寸， 又如 \verb|size(矩阵)[1]| 获取列数
+\item \verb|a.resize([2, 3])| 变形为零矩阵
+\item 行列式 \verb|det(矩阵)|
+\item 矩阵乘法 \verb|multiply(矩阵1, 矩阵2)|
+\end{itemize}

@@ -1,0 +1,171 @@
+% 带电粒子的辐射
+% 带电粒子的辐射|李纳维谢尔势
+
+\pentry{李纳维谢尔势\upref{LWP}}
+
+我们继续使用自然单位制，令 $\mu_0=\epsilon_0=c=1$ 来简化表达．依照习惯，上下标使用希腊字母如 $\mu, \nu$ 时，取值范围为 $\{0, 1, 2, 3\}$；使用拉丁字母如 $i, j$ 时，取值范围为 $\{1, 2, 3\}$．约定闵氏时空度规为 $(-1,1,1,1)$．
+\subsection{运动电荷产生的电磁场}
+根据李纳维谢尔势公式，运动电荷将向外辐射电磁场，从而产生能量损耗．下面我们将定量地推导由运动电荷带来的空间的电磁场分布．
+
+\begin{equation}
+\begin{aligned}
+\phi(\bvec r,t)=\frac{q}{|\bvec r-\bvec r'|-\bvec v'\cdot (\bvec r-\bvec r')}\\
+\bvec A(\bvec r,t)=\frac{q\bvec v'}{|\bvec r-\bvec r'|-\bvec v'\cdot (\bvec r-\bvec r')}
+\end{aligned}
+\end{equation}
+
+其中 $\bvec r',\bvec v'$ 是 $t'$ 时刻粒子的位置和速度，满足 $t-t'=|\bvec r-\bvec r'|$．下面将用 $\bvec R$ 来表示 $\bvec r-\bvec r'$，表示 $t'$ 处电荷位置到当前位置的位矢．那么电磁势可以写为
+\begin{equation}
+\begin{aligned}
+\phi(\bvec r,t)=\frac{q}{R-\bvec v'\cdot \bvec R}\\
+\bvec A(\bvec r,t)=\frac{q\bvec v'}{R-\bvec v'\cdot \bvec R}
+\end{aligned}
+\end{equation}
+
+现在只要利用 $\bvec E=-\nabla \phi-\frac{\partial \bvec A}{\partial t},\bvec B=\nabla\times \bvec A$ 就可以计算空间的电磁场分布了．但这里要注意的是，$\nabla$ 是对 $\bvec r$ 作空间梯度，当 $\bvec r$ 做 $\dd r$ 的变化时，相应的 $t',\bvec r',\bvec v'$ 也跟着发生变化（必须保证 $t'$ 时刻的粒子可以通过光速传播到当前时空点，即 $t-t'=|\bvec r-\bvec r'|$）．下面我们依次计算几个物理量（由于 $\phi,\bvec A$ 是关于 $\bvec r,t$ 的函数，下面公式中出现的偏微分都是在保持另一个变量不变的情况下计算偏导数）：
+\begin{equation}
+\begin{aligned}
+&R=\sqrt{(x-x')^2+(y-y')^2+(z-z')^2},\\
+&\begin{cases}
+\frac{\partial R}{\partial t}=\frac{\partial R}{\partial t'}\frac{\partial t'}{\partial t}=\frac{\bvec v'\cdot (\bvec r'-\bvec r)}{R}\frac{\partial t'}{\partial t}=\frac{-\bvec v'\cdot \bvec R}{R}\frac{\partial t'}{\partial t}\\
+\frac{\partial R}{\partial t}=\frac{\partial (t-t')}{\partial t}=1-\frac{\partial t'}{\partial t},\\
+\end{cases}
+\end{aligned}
+\end{equation}
+由此得到
+\begin{equation}
+\begin{aligned}
+&\frac{\partial R}{\partial t}=\frac{\bvec v'\cdot \bvec R}{R}\qty(\frac{\partial R}{\partial t}-1)\\
+\Rightarrow 
+&\frac{\partial R}{\partial t}=\frac{-\bvec v'\cdot \bvec R}{R-\bvec v'\cdot \bvec R},\  
+\frac{\partial t'}{\partial t}=\frac{R}{R-\bvec v'\cdot \bvec R}
+\end{aligned}
+\end{equation}
+下一步，计算 $\partial _i R=\frac{\partial R}{\partial x_i}$：
+\begin{equation}
+\begin{aligned}
+\partial_i R&=\frac{2(x_j-x_j')\partial_i(x_j-x'_j)}{2R}=\frac{1}{R} (x_j-x_j')(\delta_{ij} - \partial_i x_j')\\
+&=\frac{1}{R}(x_i-x_i'-(x_j-x_j')\partial_i x_j')\\
+&=\frac{1}{R}\qty(R_i-R_j\frac{\partial x_j'}{\partial t'}\partial_{i} t')\\
+&=\frac{1}{R}(R_i+R_jv_j'\partial_i R)\\
+\Rightarrow & \partial_i R=-\partial_i t'=\frac{R_i}{R-\bvec v'\cdot \bvec R}
+\end{aligned}
+\end{equation}
+类似地，计算 $\partial_i R_j,\partial_i v'_j$ 等公式：
+\begin{equation}
+\begin{aligned}
+&\partial_i R_j=\partial_i(x_j-x_j')=\delta_{ij}-\frac{\partial x_j'}{\partial t'}\partial_i t'=\delta_{ij}+\frac{v'_jR_i}{R-\bvec v'\cdot \bvec R}
+\\
+&\frac{\partial R_j}{\partial t}=\frac{\partial R_j}{\partial t'}\frac{\partial t'}{\partial t}=-\frac{v'_jR}{R-\bvec r'\cdot \bvec R}
+\\
+&\partial_i v'_j=a'_j\partial_i t'=-\frac{a'_jR_i}{R-\bvec v'\cdot \bvec R}\\
+&\frac{\partial v'_j}{\partial t}=a_j'\frac{\partial t'}{\partial t}=\frac{a_j'R}{R-\bvec v'\cdot \bvec R}
+\end{aligned}
+\end{equation}
+有了这些公式，就可以计算电场了：
+\begin{equation}
+\begin{aligned}
+E_i&=-\partial_i \phi - \frac{\partial A_i}{\partial t}
+\\
+&=\frac{q \partial_i (R-\bvec v'\cdot \bvec R)}{(R-\bvec v'\cdot \bvec R)^2}-\frac{q\frac{\partial v'_i}{\partial t}(R-\bvec v'\cdot \bvec R)-qv'_i\frac{\partial}{\partial t}(R-\bvec v'\cdot \bvec R)}{(R-\bvec v'\cdot \bvec R)^2}
+\\
+&=\frac{q}{(R-\bvec v'\cdot \bvec R)^3}\qty(R_i-R_j(-a_j'R_i)-v'_j(\delta_{ij}(R-\bvec v'\cdot \bvec R)+v'_jR_i))
+\\
+&\ \ \ \ -\frac{q}{(R-\bvec v'\cdot \bvec R)^3}\qty(a'_iR(R-\bvec v'\cdot \bvec R)+v'_i\bvec v'\cdot \bvec R+v'_i(-v'_jv'_jR+R_ja'_jR))
+\\
+&=\frac{q\qty((R_i-v_i'R)(1-v'_jv'_j))}{(R-\bvec v'\cdot \bvec R)^3}-\frac{q\qty(R_j(R_ja'_i-R_ia'_j)+R_jR(v'_ia'_j-v'_ja'_i))}{(R-\bvec v'\cdot \bvec R')^3}\\
+\end{aligned}
+\end{equation}
+因此
+\begin{equation}\label{chgrad_eq1}
+\begin{aligned}
+\bvec E&=\frac{q\qty((1-v'^2)(\bvec R-\bvec v'R))}{(R-\bvec v'\cdot \bvec R)^3}-\frac{q\qty(\bvec R\times (\bvec a'\times \bvec R)- \bvec R\times (\bvec a'\times \bvec v'R))}{(R-\bvec v'\cdot \bvec R)^3}\\
+&=\frac{q\qty((1-v'^2)(\bvec R-\bvec v'R))}{(R-\bvec v'\cdot \bvec R)^3}+\frac{q\qty(\bvec R\times ((\bvec R-\bvec v'R)\times \bvec a'))}{(R-\bvec v'\cdot \bvec R)^3}
+\end{aligned}
+\end{equation}
+设 $\bvec{\hat n}=\bvec R/R$，则
+\begin{equation}\label{chgrad_eq2}
+\bvec E=\frac{q}{R^2}\frac{\qty((1-v'^2)(\bvec {\hat n}-\bvec v'))}{(1-\bvec v'\cdot \bvec{\hat n})^3}+\frac{q}{R}\frac{\qty(\bvec{\hat n}\times ((\bvec{\hat n}-\bvec v')\times \bvec a'))}{(1-\bvec v'\cdot \bvec{\hat n})^3}
+\end{equation}
+
+\autoref{chgrad_eq2}  就是带电粒子产生的电场．其中第一项与 $R^2$ 成反比，与加速度无关；第二项与 $R$ 称反比，与加速度成正比．经过类似的推导，可以得出磁场的公式：
+\begin{equation}
+\bvec B=\bvec{\hat n} \times \bvec E
+\end{equation}
+\begin{example}{匀速运动电荷产生的电磁场}
+设电荷 $q$ 以 $\bvec v$ 作匀速运动．设 $t$ 时刻电荷的位置为 $\bvec r'$，空间中在某一点 $\bvec r$ 处放探测器．设 $\theta$ 为 $\bvec v$ 与 $\bvec r-\bvec r'$ 的夹角，设 $\bvec R(t^*)$ 为 $t^*$ 时刻从电荷位置指向 $\bvec r$ 的矢量．求 $t$ 时刻在 $\bvec r$ 处的电磁场（结果用 $\theta,q,v,\bvec R(t)$ 表示）．
+
+这个问题用参考系变换做起来会更加方便．这里我们作为使用\autoref{chgrad_eq2} 进行计算的例子．
+
+加速度 $\bvec a=0$，所以\autoref{chgrad_eq2} 只剩下了平方反比项．
+\begin{equation}\label{chgrad_eq7}
+\bvec E=\frac{q}{R(t')^2}\frac{(1-v'^2)(\bvec{\hat n}-\bvec v')}{(1-\bvec v'\cdot \bvec{\hat n})^3}=\frac{q(1-v'^2)(\bvec R-\bvec v'R)}{(R-\bvec v'\cdot \bvec R)^3}
+\end{equation}
+注意上式中 $\bvec R,\bvec{\hat n}$ 是在 $t'$ 时刻的物理量，而 $t'$ 时刻满足 $t-t'=|\bvec r-\bvec r'|$．由于是匀速，$\bvec v'=\bvec v$．现在我们希望用 $t$ 时刻的物理量来表示电场，要将这些物理量进行变换．
+先对分子进行变换：
+\begin{equation}\label{chgrad_eq4}
+\bvec R(t')-\bvec vR(t')=\bvec R(t')-\bvec v(t-t')=\bvec R(t)
+\end{equation}
+再对分母进行变换：
+\begin{equation}\label{chgrad_eq6}
+\begin{aligned}
+R(t')-\bvec v\cdot \bvec R(t')&=\bvec R(t')-\bvec v\cdot(\bvec R(t)+\bvec v(t-t'))\\
+&=R(t')(1-v^2)- v R(t)\cos\theta
+\end{aligned}
+\end{equation}
+对 $\bvec R(t')=\bvec R(t)+\bvec vR(t')$ 平方，可以得到
+\begin{equation}\label{chgrad_eq5}
+\begin{aligned}
+R^2(t')=R^2(t)+v^2R^2(t')+2R(t')R(t)v\cos \theta\\
+\Rightarrow R(t')=\frac{vR(t)\cos \theta+R(t)\sqrt{1-v^2\sin^2\theta}}{1-v^2}
+\end{aligned}
+\end{equation}
+将\autoref{chgrad_eq5} 代入\autoref{chgrad_eq6}  可以化简．最后代入\autoref{chgrad_eq7}，得到 $t$ 时刻 $\bvec r$ 处电场的表达式
+\begin{equation}
+\bvec E=\frac{q\bvec R(t)}{R^3(t)}\frac{1-v^2}{(1-v^2\sin^2\theta)^{3/2}}
+\end{equation}
+\end{example}
+
+\subsection{拉莫尔公式}
+当 $R\rightarrow \infty$ 时，\autoref{chgrad_eq2} 中平方反比项衰减得很快，所以我们忽略此项，而只考虑由加速度导致的电磁辐射：
+\begin{equation}
+\bvec E=\frac{q}{R}\frac{\bvec{\hat n}\times ((\bvec{\hat n}-\bvec v')\times \bvec a')}{(1-\bvec v'\cdot \bvec{\hat n})^3}
+\end{equation}
+求坡印廷矢量：
+\begin{equation}\label{chgrad_eq3}
+\begin{aligned}
+\bvec S&=\frac{1}{4\pi}\bvec E\times \bvec B=\frac{1}{4\pi}\bvec E\times (\bvec{\hat n}\times \bvec E)=\frac{1}{4\pi}(\bvec{\hat n}E^2-\bvec E(\bvec n\cdot \bvec E))\\
+&=\frac{1}{4\pi}\bvec {\hat n}E^2\\
+&=\frac{q^2\bvec{\hat n}}{4\pi R^2}\qty(\frac{\bvec{\hat n}\times ((\bvec{\hat n}-\bvec v')\times \bvec a')}{(1-\bvec v'\cdot \bvec{\hat n})^3})^2
+\end{aligned}
+\end{equation}
+如果\textbf{电流电荷分布在原点附近的一小块区域}，以原点为球心作一个半径为 $R'$ 的球．当 $R'$ 充分大的时候，对球面上的坡印廷矢量作面积分，就可以得到\textbf{球面上辐射的功率} $P$．由于电流电荷分布在原点附近，$R'\approx R$，球面的面积与 $R'^2$ 成正比，与\autoref{chgrad_eq3} 中的分母相消．可以看出，辐射的功率与加速度 $\bvec a'$的平方成正比．
+
+现在考虑\textbf{非相对论极限}的情形：$v'\ll 1$．那么坡印廷矢量为
+\begin{equation}
+\begin{aligned}
+\bvec S&=\frac{q^2\bvec{\hat n}}{4\pi R^2}\qty(\bvec{\hat n}\times (\bvec{\hat n}\times \bvec a'))^2=\frac{q^2\bvec{\hat n}}{4\pi R^2}\qty(\bvec {\hat n}(\bvec{\hat n}\cdot \bvec a')-\bvec a')^2\\
+&=\frac{q^2\bvec{\hat n}}{4\pi R^2}\qty( -(\bvec{\hat n}\cdot \bvec a')^2+a'^2 )=\frac{q^2\bvec{\hat n}}{4\pi R^2}(\bvec{\hat n}\times \bvec a')^2\\
+&=\frac{q^2\bvec{\hat n}a^2\sin^2\theta}{4\pi R^2}
+\end{aligned}
+\end{equation}
+其中 $\theta$ 为 $\bvec a'$ 与 $\bvec{\hat n}$ 的夹角．由此可得大球面上单位立体角上辐射的功率为
+\begin{equation}
+\frac{\dd P}{\dd \Omega}=R^2\bvec{\hat n}\cdot \bvec S=\frac{qa^2\sin^2\theta}{4\pi}
+\end{equation}
+球面上辐射的总功率为
+\begin{equation}\label{chgrad_eq8}
+P=\int \frac{\dd P}{\dd \Omega} \sin \theta\dd \Omega=\int_0^\pi\dd \theta\int_0^{2\pi} \dd \phi \frac{qa^2\sin^2\theta}{4\pi}=\frac{2}{3}q^2a^2
+\end{equation}
+\autoref{chgrad_eq8} 被称为\textbf{拉莫尔公式}．或者也可以将 $a$ 用动量的表达式替换：
+\begin{equation}
+P=\frac{2e^2}{3m^2}\qty(\frac{\dd p}{\dd t})^2
+\end{equation}
+
+在考虑相对论的情况下，球面上测得的辐射功率\textbf{不再等于}粒子的辐射功率\footnote{这是因为球面上不同点对应的 $t'$ 各不相同，导致粒子辐射一部分能量与能流通过球面的时间间隔不同．例如粒子在一小段时间间隔内辐射的能量可能经过很长一段时间通过球面的一块区域，则测得的功率偏低．}．这两者一定要加以区分．粒子的辐射功率是\textbf{单位时间粒子由于电磁辐射}而损耗的能量，具有\textbf{洛伦兹协变性}．可以证明，相对论带电粒子辐射功率为
+\begin{equation}
+\begin{aligned}
+P&=\frac{2e^2}{3m^2}\frac{\dd p^\mu}{\dd \tau}\frac{\dd p_\mu}{\dd \tau}\\
+&=\frac{2}{3}e^2\gamma^2(a^2-(\bvec v\times \bvec a)^2))
+\end{aligned}
+\end{equation}
