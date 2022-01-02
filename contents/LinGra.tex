@@ -11,8 +11,8 @@
 \subsection{线性引力理论}
 爱因斯坦场方程\footnote{在广义相对论中，常常采用几何单位制\upref{NatUni}，也即是$c=G=k_B=1$}如下
 
-\begin{equation}
-G_{\mu \nu} = R_{\mu \nu} - \frac{1}{2}g_{\mu\nu}R = 8\pi G T_{\mu\nu}
+\begin{equation}\label{LinGra_eq2}
+G_{\mu \nu} = R_{\mu \nu} - \frac{1}{2}g_{\mu\nu}R = 8\pi T_{\mu\nu}
 \end{equation}
 
 由于方程采用几何语言描述，十分简洁，但它包含着一系列复杂的非线性微分方程．一方面，寻求严格满足爱因斯坦场方程的解是一个漫长而艰难的过程，许多数学天才也投入其中．另一方面，我们试图简化爱因斯坦场方程，因为在大多数情况中引力场都很微弱，所以我们可以采用近似处理的方式使爱因斯坦场方程线性化，简而言之，就是要对时空进行一阶线性微扰．
@@ -31,7 +31,7 @@ g_{\mu\nu}=g^{(0)}_{\mu\nu} + \epsilon g^{(1)}_{\mu\nu} + \frac{1}{2!}\epsilon^2
 
 \subsection{闵氏时空}
 
-我们先考虑背景时空为平直的闵氏时空，线性微扰项记为$h_{\mu\nu}$. 在微扰的情景下，我们约定使用背景时空的度规进行指标升降，因此我们有
+我们先考虑背景时空为平直的闵氏时空，线性微扰项记为$h_{\mu\nu}$ (例如，对于太阳系来说，$\abs{h_{\mu\nu}} \sim 10^{-6}$). 在微扰的情景下，我们约定使用背景时空的度规进行指标升降，因此我们有
 
 \begin{equation}
 g_{\mu\nu} = \eta_{\mu\nu} + h_{\mu\nu}, \quad \abs{h_{\mu\nu}}<<1 
@@ -39,26 +39,95 @@ g_{\mu\nu} = \eta_{\mu\nu} + h_{\mu\nu}, \quad \abs{h_{\mu\nu}}<<1
 
 以及
 
-\begin{equation}
+\begin{equation}\label{LinGra_eq1}
 g^{\mu\nu} = \eta^{\mu\nu} - h^{\mu\nu} , \quad \abs{h^{\mu\nu}}<<1 
 \end{equation}
 
-
-
-例如,对于太阳系来说，$\abs{h_{\mu\nu}} \sim 10^{-6}$. 而  来自于度规需要满足$gg^{-1}=\delta$．
+\autoref{LinGra_eq1} 来自于度规定义需要满足$gg^{-1}=\delta$:
 
 \begin{equation}
 g_{\mu\nu}g^{\mu\rho} = (\eta_{\mu\nu} + h_{\mu\nu})(\eta^{\mu\rho} - h^{\mu\rho}) = \delta^{\rho}_{\nu} - \mathcal{O}(h^2)
 \end{equation}
 
-首先计算\textbf{克里斯托夫符号}(Christoffel Symbol，\autoref{CrstfS_def1}~\upref{CrstfS})
+首先计算\textbf{克里斯托夫符号}(Christoffel Symbol，\autoref{CrstfS_def1}~\upref{CrstfS})，并保留到一阶项\footnote{以下计算同样均保留到一阶项．}
+
+\begin{equation}
+\begin{aligned}
+\Gamma^{\mu}{}_{\alpha\beta}&=\frac{1}{2}g^{\mu\nu}(\partial_\alpha g_{\nu\beta} + \partial_\beta g_{\alpha\nu} - \partial_\nu g_{\alpha\beta})\\
+&=\frac{1}{2}(\eta^{\mu\nu} - h^{\mu\nu})(\partial_\alpha h_{\nu\beta} + \partial_\beta h_{\alpha\nu} - \partial_\nu h_{\alpha\beta})\\
+&=\frac{1}{2}\eta^{\mu\nu} (\partial_\alpha h_{\nu\beta} + \partial_\beta h_{\alpha\nu} - \partial_\nu h_{\alpha\beta})
+\end{aligned}
+\end{equation}
+
+
+
+再计算黎曼张量
+\begin{equation}
+R_{\alpha \mu \beta \nu}=\frac{1}{2}\left(h_{\alpha \nu, \mu \beta}+h_{\mu \beta, \nu \alpha}-h_{\mu \nu, \alpha \beta}-h_{\alpha \beta, \mu \nu}\right)
+\end{equation}
+
+
+以及里奇张量，
+\begin{equation}
+\begin{aligned}
+R_{\mu\nu} &= \Gamma^{\alpha}{}_{\mu\nu,\alpha} - \Gamma^{\alpha}_{\mu\alpha,\nu}\\
+&=\frac{1}{2}\left(h^{\alpha}{}_{\mu, \nu \alpha} + h_{\nu}{ }^{\alpha}{ }_{, \mu \alpha}-h_{\mu \nu, \alpha}{ }^{\alpha}-h_{, \mu \nu}\right)
+\end{aligned}
+\end{equation}
+
+
+其中，$h\equiv h^{\mu}{}_{\mu}=\eta^{\mu\nu}h_{\mu\nu}$.
+
+进一步计算里奇标量$R = g^{\mu\nu}R_{\mu\nu}\approx \eta^{\mu\nu}R_{\mu\nu}$，将带其入爱因斯坦场方程\autoref{LinGra_eq2}  ，便可得到线性爱因斯坦场方程．
+
+\begin{equation}
+\begin{aligned}
+h_{\mu \alpha, \nu}{ }^{\alpha} &+h_{\nu \alpha, \mu}{ }^{\alpha}-h_{\mu \nu, \alpha}{ }^{\alpha}-h_{, \mu \nu} -\eta_{\mu \nu}\left(h_{\alpha \beta}{ }^{, \alpha \beta}-h_{, \beta}{ }^{\beta}\right)= 16 \pi T_{\mu \nu} .
+\end{aligned}
+\end{equation}
+
+我们可以定义如下变量
+
+\begin{equation}
+\bar{h}_{\mu\nu} \equiv h_{\mu\nu} - \frac{1}{2}\eta_{\mu\nu}h.
+\end{equation}
+
+来化简，并且用横线代表对其它对称张量采取同样的操作，例如
+
 \begin{align}
-\Gamma^{\mu}_{\alpha\beta}&=\frac{1}{2}g^{\mu\nu}(\partial_\alpha g_{\nu\beta} + \partial_\beta g_{\alpha\nu} - \partial_\nu g_{\alpha\beta})\\
-&=\frac{1}{2}(\eta^{\mu\nu} - h^{\mu\nu})(\cdots)
+G_{\mu\nu} &= \bar{R}_{\mu\nu} = R_{\mu\nu}- \frac{1}{2}\eta_{\mu\nu}R\\
+\bar{\bar{h}}_{\mu\nu} &= \bar{h}_{\mu\nu} - \frac{1}{2}\eta_{\mu\nu}\bar{h} = \bar{h}_{\mu\nu} - \frac{1}{2}\eta_{\mu\nu} (\eta^{\alpha\beta}h_{\alpha\beta}-\frac{1}{2}\eta^{\alpha\beta}\eta_{\alpha\beta}h)= h_{\mu\nu}\\
+h_{\mu\nu} &= \bar{h}_{\mu\nu} - \frac{1}{2}\eta_{\mu\nu} \bar{h}
 \end{align}
 
+因此可以得到\textbf{线性引力场方程}为
+\begin{equation}
+-\Box{\bar{h}_{\mu \nu}}-\eta_{\mu \nu} \bar{h}_{\alpha \beta,}{ }^{\alpha \beta} + \bar{h}^{\alpha}{ }_{\mu,\alpha\nu} + \bar{h}^{\alpha}{ }_{\nu,\alpha\mu}=16 \pi T_{\mu \nu}
+\end{equation}
 
+其中，第一项为通常我们所熟知的平直时空的\textbf{达朗贝尔算符(d'Alembrtian)}
+$$
+\Box \equiv  \partial^\mu\partial_\mu =  - \partial_t^2 + \partial_x^2 +\partial_y^2 + \partial_z^2
+$$
 
+剩下的项数仅仅是为了保证方程的规范不变性，进一步我们可以选定不同的规\textbf{规范条件(gauge conditions)}，若采用洛伦兹规范(Lorentz gauge)：
+
+\begin{equation}
+\bar{h}^{\mu\alpha}{ }_{,\alpha}=0.
+\end{equation}
+
+于是场方程最终就变成了
+
+\begin{equation}
+\Box\bar{h}_{\mu\nu} = -16\pi T_{\mu\nu}
+\end{equation}
+
+与度规
+\begin{equation}
+g_{\mu\nu}= \eta_{\mu\nu} + h_{\mu\nu}=\eta_{\mu\nu} + \bar{h}_{\mu\nu} - \frac{1}{2}\eta_{\mu\nu} \bar{h}
+\end{equation}
+
+便构成了洛伦兹规范下的线性引力理论的基本方程．
 
 
 \subsection{史瓦西时空}

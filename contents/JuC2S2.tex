@@ -1,0 +1,136 @@
+% 程序包与环境配置
+% 程序包 环境配置
+
+\subsubsection{2.2 程序包与环境配置}
+
+我们已经知道，在 REPL 环境的 pkg 模式中，我们可以通过\verb|add|命令安装新的程序包．那么，这些新的程序包都被存储到哪里了呢？
+
+\textbf{2.2.1 仓库目录}
+
+说到程序包的存储，就不得不提及 Julia 的项目环境（project environment）了．在这个项目环境下，包含了一组仓库目录．这些目录的路径会被包含在全局数组\verb|DEPOT_PATH|中．比如，在我的 macOS 操作系统中，这个数组的信息如下：
+
+\begin{lstlisting}[language=julia]
+julia> DEPOT_PATH
+3-element Array{String,1}:
+ "/Users/haolin/.julia"                                                  
+ "/Applications/Julia-1.3.app/Contents/Resources/julia/local/share/julia"
+ "/Applications/Julia-1.3.app/Contents/Resources/julia/share/julia" 
+\end{lstlisting}
+
+这是一个拥有 3 个元素的一维数组．每一段由英文双引号包裹的内容都是一个\verb|String|类型的元素值．每一个元素值都表示着一个仓库目录的路径．
+
+在默认情况下，我们自己安装的包都会被存储到第一个仓库目录的\verb|packages|子目录中．在这里，该目录的路径是\verb|/Users/haolin/.julia/packages|．我们可以称之为程序包存储目录．Julia 在为我们查找程序包的时候就会进入到这里．
+
+顺便说一句，以\verb|/Applications/Julia-1.3.app|开头的仓库目录只会在 macOS 操作系统中出现．如果是在 Linux 操作系统中，这里的仓库目录应该还会有\verb|/usr/local/share/julia|和\verb|/usr/share/julia|，而且第一个仓库目录的路径也会有所不同．
+
+在程序包存储目录里，每一个程序包都会独占一个次级目录，而这些次级目录的名称会与对应程序包的名称一致．为了描述方便，我们可以称这样的次级目录为程序包目录．
+
+由于 Julia 的程序包管理器（也就是\verb|Pkg|包中的程序）允许我们安装名称相同但实则不同的多个程序包，所以在这些程序包目录中至少还会有一个再次一级的子目录．这些目录的命名看起来并没有什么规律．比如：
+
+\begin{lstlisting}[language=julia]
+$ ls ~/.julia/packages/JSON
+Hs3Dj ebvl3
+\end{lstlisting}
+
+可以看到，在程序包目录\verb|JSON|中，还有\verb|Hs3Dj|和\verb|ebvl3|这两个子目录．实际上，此类子目录的名称是 Julia 根据程序包的具体信息（如 UUID 和源码仓库地址的哈希值）计算得出的唯一识别码．官方把这种识别码叫做 slug．因此，我们可以把这些再次一级的子目录称为 slug 目录．
+
+\textbf{2.2.2 环境配置}
+
+现在，让我们再把焦点扩散开来，并考虑一个问题：我们可以直接使用仓库目录中的所有程序包吗？你可能会想，既然程序包已经在这里了，那肯定是可以的．可事实并非如此．这又涉及到 项目环境包含的另一部分——环境配置．
+
+Julia 的环境配置一般由两个配置文件代表，即：\verb|Project.toml|和\verb|Manifest.toml|．前者叫做项目文件，后者叫做清单文件．对于 Julia 的全局环境配置，这两个文件通常会被存储到\verb|~/.julia/environments|目录中．又由于不同特性版本的 Julia 都会有独立的全局环境配置，所以对于特性版本为\verb|v1.3|的 Julia 来说，它的全局环境配置文件会被保存在\verb|~/.julia/environments/v1.3|目录下．
+
+那么，什么是环境配置？全局环境配置又是什么意思呢？这里的环境配置是指，用于确定 Julia 程序的依赖关系和规则的配置．更具体地说，它会规定用户编写的 Julia 程序在当前的项目环境下可以导入（\verb|import|）或使用（\verb|using|）哪些程序包．并且，环境配置还会帮助我们记录项目中程序的完整依赖关系图．
+
+Julia 会把自身的安装环境看做是一个全局项目．显然，这个全局项目对于当前的 Julia 安装来说就是全局的．因此，针对此项目的环境配置就是我在前面所说的全局环境配置．其中配置的依赖规则主要针对于：
+
+\begin{itemize}
+\item 在 REPL 环境下输入的 Julia 代码．
+\item 不属于其他项目的独立的 Julia 程序．
+\end{itemize}
+
+举个例子．当我们在 REPL 环境中安装第一个程序包的时候，在程序包存储目录中就会出现相应的程序包目录．比如，我在 REPL 环境下第一次安装一个名叫\verb|DataFrames|的程序包：
+
+\begin{lstlisting}[language=julia]
+(v1.3) pkg> add DataFrames
+   Cloning default registries into `~/.julia`
+   Cloning registry from "https://github.com/JuliaRegistries/General.git"
+     Added registry `General` to `~/.julia/registries/General`
+ Resolving package versions...
+ # 省略一些输出，此处会显示安装了哪些程序包．
+  Updating `~/.julia/environments/v1.3/Project.toml`
+  [a93c6f00] + DataFrames v0.18.3
+  Updating `~/.julia/environments/v1.3/Manifest.toml`
+  # 省略一些输出，此处会显示清单文件的更新细节．
+\end{lstlisting}
+
+在安装完成后，我的\verb|~/.julia/packages|目录的内容是这样的：
+
+\begin{lstlisting}[language=julia]
+$ ls ~/.julia/packages
+CategoricalArrays           JSON                        Requires
+Compat                      Missings                    SortingAlgorithms
+DataFrames                  OrderedCollections          StatsBase
+DataStructures              PooledArrays                TableTraits
+IteratorInterfaceExtensions Reexport                    Tables
+\end{lstlisting}
+
+可以看到，除了\verb|DataFrames|之外，其中还包括了一些我们未曾相识的程序包目录．这些目录所代表的程序包实际上是\verb|DataFrames|包的依赖包．在当前的项目环境下，这些程序包可以被\verb|DataFrames|包使用，但却不能被我们编写的程序直接使用．为什么这么说呢？我们先来看一下当前环境中的项目文件（\verb|~/.julia/environments/v1.3/Project.toml|）的内容:
+
+\begin{lstlisting}[language=julia]
+[deps]
+DataFrames = "a93c6f00-e57d-5684-b7b6-d8193f3e46c0"
+\end{lstlisting}
+
+此项目文件的\verb|[deps]|部分会罗列我们显式安装的所有程序包的名称和 UUID．显而易见，这里只有\verb|DataFrames|包．Julia 规定，环境配置所针对的项目中的程序只能直接依赖在该配置的项目文件中出现的那些程序包．
+
+因此，当我们想在 REPL 环境下导入\verb|JSON|包的时候，就会出现如下的情况：
+
+\begin{lstlisting}[language=julia]
+julia> import JSON
+ERROR: ArgumentError: Package JSON not found in current path:
+- Run `import Pkg; Pkg.add("JSON")` to install the JSON package.
+
+Stacktrace:
+ [1] require(::Module, ::Symbol) at ./loading.jl:887
+
+julia> 
+\end{lstlisting}
+
+Julia 向我们报告了错误并提示“在当前的路径下没有找到\verb|JSON|包”，并且还告诉我们“可以通过调用\verb|Pkg|包的\verb|add|函数显式地安装这个包．这正是由于在当前环境的项目文件中并没有\verb|JSON|包的记录而导致的．
+
+顺便说一句，在 REPL 环境中，在 julia 模式下通过调用\verb|Pkg.add|函数安装程序包与在 pkg 模式下通过\verb|add|命令安装程序包是等同的．
+
+下面，我们就按照 Julia 的提示安装\verb|JSON|包：
+
+\begin{lstlisting}[language=julia]
+julia> import Pkg; Pkg.add("JSON")
+ Resolving package versions...
+  Updating `~/.julia/environments/v1.3/Project.toml`
+  [682c06a0] + JSON v0.20.0
+  Updating `~/.julia/environments/v1.3/Manifest.toml`
+ [no changes]
+
+julia> 
+\end{lstlisting}
+
+由于\verb|JSON|包已经存在于程序包存储目录中了，所以 Julia 无需再次下载．它只需要更新一下环境配置的文件即可．并且，由于这些程序包之间的依赖关系并没有改变，所以清单文件也没有任何变化．
+
+现在，项目文件中的内容变为了：
+
+\begin{lstlisting}[language=julia]
+[deps]
+DataFrames = "a93c6f00-e57d-5684-b7b6-d8193f3e46c0"
+JSON = "682c06a0-de6a-54ab-a142-c8b1cf79cde6"
+\end{lstlisting}
+
+我们此时再在 REPL 环境中直接导入\verb|JSON|包就没有任何问题了：
+
+\begin{lstlisting}[language=julia]
+julia> import JSON
+[ Info: Precompiling JSON [682c06a0-de6a-54ab-a142-c8b1cf79cde6]
+
+julia> 
+\end{lstlisting}
+
+顺便说一句，在我们第一次导入\verb|JSON|包的时候，Julia 会先对该包进行预编译．这主要是为了让代码跑得更快．

@@ -1,0 +1,188 @@
+% REPL 环境及其用法
+% REPL 环境
+
+本文授权转载自郝林的 《Julia 编程基础》． 原文链接：\href{https://github.com/hyper0x/JuliaBasics/blob/master/book/ch02.md}{第2章：编程环境}．
+
+
+\subsubsection{第2章  编程环境}
+
+\subsubsection{REPL环境及其用法}
+
+命令\verb|julia|为我们提供了一个简易但足够强大的编程环境．这就是 REPL 环境．不过
+，REPL 环境并不是 Julia 语言独有的．像 Python、Ruby 这类现代的动态编程语言大都具备 REPL 环境．
+
+Julia 的 REPL 环境非常有用，尤其是在我们进行试验性编程的时候．我们可以在其中试着执行一些代码片段，并在确认无误之后把这些片段在源码文件中组装起来，形成真正的程序．因此，REPL 环境绝对算得上一个优秀的编程学习助手．我起初就是借助这个环境来学习 Julia 编程的．
+
+\textbf{2.1.1 初探 REPL}
+
+我们已经知道，直接在命令行中输入\verb|julia|并回车就可以进入 Julia 的 REPL 环境．下面我们就来说说在进入这个环境之后都能做些什么．
+
+你还记得我们在上一章使用过的命令\verb|julia -e 'a = 5 * 8; println(a)'|吗？现在，我们就在 REPL 环境中输入其中单引号里的表达式列表，像这样：
+
+\begin{lstlisting}[language=julia]
+julia> a = 5 * 8; println(a)
+40
+
+julia>
+\end{lstlisting}
+
+可以看到，REPL 环境在对这两个表达式进行逐一求值之后就返回了．注意，如果对我们输入的最后一个表达式进行求值后可以得到显式的结果，那么这个结果也会被回显出来．这与通过前面的命令对表达式进行求值的效果是相同的．不过，它并不会返回到命令行，而是保留在当前的环境下．顺便说一句，\verb|julia>|是 Julia 的 REPL 环境下的提示符．
+
+我们还可以对这两个表达式分别求值，如：
+
+\begin{lstlisting}[language=julia]
+julia> a = 5 * 8
+40
+
+julia> println(a)
+40
+
+julia> 
+\end{lstlisting}
+
+当我们输入\verb|a = 5 * 8|并回车之后，REPL 环境会对它进行求值，并在完成后回显结果．如果你不想让它立即回显结果，那么可以在表达式的最后输入\verb|;|，就像这样：
+
+\begin{lstlisting}[language=julia]
+julia> a = 5 * 8;
+
+julia> println(a);
+40
+
+julia> 
+\end{lstlisting}
+
+注意，\verb|40|并不是表达式\verb|println(a)|的结果．所以我们在它后面添加\verb|;|并不会影响到这里的回显内容．
+
+另外，之所以\verb|println(a)|这个表达式是合法的，是因为\verb|a|在当下是一个已定义的变量．REPL 环境会暂存我们给予的所有表达式及其求值结果．所以，我们可以像写脚本程序那样在 REPL 环境里编程．
+
+在 REPL 环境中，如果我们想再看一下上一个表达式的求值结果，那么仅需要输入\verb|ans|并回车，如：
+
+\begin{lstlisting}[language=julia]
+julia> a = 5 * 8;
+
+julia> ans
+40
+
+julia> 
+\end{lstlisting}
+
+我们在 REPL 环境中按下“向上箭头”键可以翻找曾经输入过的代码．这时，“向下箭头”键也是有用的，用于向更近时间的方向翻找．当然了，这样翻找的效率并不高，尤其是在你翻找很久以前的代码的时候．
+
+如果你想在较大的时间范围内查找，我建议你去查阅一个名叫\verb|repl_history.jl|的文件．它被保存在了 Julia 的日志目录下．比如，在 macOS 操作系统中，它的存放路径就是\verb|~/.julia/logs/repl_history.jl|．
+
+\textbf{2.1.2 主要的 4 种模式}
+
+Julia 的 REPL 环境主要有 4 种可供切换的模式．当我们输入\verb|julia|命令并进入到 REPL 环境时，它会处于 julia 模式．在这种模式下，我们可以输入 Julia 语言的任何表达式，并让它帮我们计算结果．就像我们在前面做的那样．
+
+我们在 julia 模式中紧挨着提示符输入\verb|]|，就会进入到 pkg 模式．此模式是用来管理程序包的．比如，在该模式下输入\verb|add <程序包的名称>|就可以安装某个新的程序包．又比如，输入\verb|update <程序包的名称>|就可以更新某个已安装的程序包．还比如，仅输入\verb|up|并回车就可以更新所有已安装的程序包．示例如下：
+
+\begin{lstlisting}[language=julia]
+(v1.3) pkg> add DataFrames
+ Resolving package versions...
+ Installed DiffEqDiffTools ─ v0.12.0
+ Installed DataValues ────── v0.4.8
+  Updating `~/.julia/environments/v1.3/Project.toml`
+  [a93c6f00] + DataFrames v0.18.3
+  Updating `~/.julia/environments/v1.3/Manifest.toml`
+  [e7dc6d0d] ↑ DataValues v0.4.7 ⇒ v0.4.8
+  [01453d9d] ↑ DiffEqDiffTools v0.11.0 ⇒ v0.12.0
+
+(v1.3) pkg> 
+\end{lstlisting}
+
+注意，在 pkg 模式下，提示符会变为\verb|(v1.3) pkg>|．其中的\verb|v1.3|代表的是 Julia 语言的特性版本．
+
+关于 pkg 模式支持的更多命令，你可以通过在该模式下输入\verb|?|或者\verb|help|进行查询．另外，如果你想回到 julia 模式，那么可以同时按下\verb|Ctrl|和\verb|c|．
+
+Julia 的 REPL 环境还支持 shell 模式．我们在 julia 模式中紧挨着提示符输入英文分号\verb|;|，就会进入到 shell 模式．这种模式让我们可以执行普通的 Shell 命令．当我们需要时不时地操纵文件系统时，这样会很方便，省去了我们在多个命令行之间切换的工作量．与 pkg 模式不同的是，在执行完一个 shell 命令之后，REPL 环境会自动地退出 shell 模式并切换回 julia 模式．
+
+REPL 环境支持的第 4 种主要模式是 help 模式，或者说帮助模式．我们在 julia 模式中紧挨着提示符输入英文问号\verb|?|，就会进入到 help 模式．顾名思义，这种模式是用来查询 Julia 语言的帮助文档的．在该模式下，我们只要输入要查询的类型、变量、结构体、函数、宏等的名称并回车，REPL 环境就可以搜索并显示关于它的详细文档．随着搜索结果的显示，它会自动地切换回 julia 模式．
+
+记住，我们在除了 julia 模式的另外 3 种模式下都可以进行手动地退出．手动退出的方式都是紧挨着提示符按下\verb|Backspace|键或者同时按下\verb|Ctrl|和\verb|c|．
+
+\textbf{2.1.3 快捷键}
+
+除了\verb|Ctrl+c|之外，Julia 的 REPL 环境还支持不少的快捷键．在 macOS 操作系统中，最常用的快捷键有：
+
+\begin{itemize}
+\item \verb|Option+←|：将光标移动到左边最近的单词开始处．
+\item  \verb|Option+→|：将光标移动到右边最近的单词末尾处之后．
+\item  \verb|Ctrl+d|：退出 \verb|julia| 命令，回到原始的命令行．
+\item  \verb|Ctrl+e|：将光标移动到当前行的末尾处之后．
+\item  \verb|Ctrl+a|：将光标移动到当前行的开始处．
+\item  \verb|Ctrl+l|：清除当前界面中的历史命令，或称清屏．
+\item  \verb|Ctrl+r|：向后搜索历史命令．
+\item  \verb|Ctrl+s|：向前搜索历史命令．
+\end{itemize}
+
+请注意，对于不同的操作系统，这里的快捷键可能也会有所不同．比如，在 Windows 操作系统中，可以把光标移动到左边最近的单词开始处的快捷键是\verb|Alt+b|，而可以把光标移动到右边最近的单词末尾处之后的快捷键则是\verb|Alt+f|．关于更多的快捷键说明，你可以查阅 Julia 语言的\href{https://docs.julialang.org/en/v1/stdlib/REPL/#Key-bindings-1}{官方文档}．
+
+在这里，我重点说一下用于搜索历史命令的快捷键，即：\verb|Ctrl+s|和\verb|Ctrl+r|．当我们分别按下这两个快捷键之后，REPL 环境的提示符都会有所变化．当按下\verb|Ctrl+s|时，提示符的前缀会变为\verb|(forward-i-search)|；当按下\verb|Ctrl+r|时，提示符的前缀会变为\verb|(reverse-i-search)|．
+
+这两个快捷键都可以让 REPL 环境进入到搜索模式．我在前面说过，我们在 REPL 环境中输入过的 Julia 表达式或者命令都会被保存在一个名为\verb|repl_history.jl|的文件中．搜索模式实际上就是针对这个历史文件的．
+
+很显然，这两个快捷键分别用于从两个不同的方向在这个历史文件中搜索指定的内容．只要我们在这种模式下输入一些字符，它就可以实时地为我们查找相关的历史表达式或命令．此时，光标会自动地定位在匹配内容的开始处．并且，当我们再次按下\verb|Ctrl+s|或\verb|Ctrl+r|时，它还会立即为我们显示下一个或上一个匹配的内容．
+
+一旦找到想要的表达式或命令，我们就可以直接按下回车键．这样就可以让 REPL 环境在切换到对应模式的同时把相应的表达式或命令粘贴过来．
+
+举个例子．我们在 julia 模式中按下\verb|Ctrl+r|，进入到搜索模式，并随即输入\verb|add|．此时， REPL 环境的界面可能会是这样：
+
+\begin{lstlisting}[language=julia]
+(reverse-i-search)`add': add DataFrames
+\end{lstlisting}
+
+在反引号和单引号之间的就是我们刚才输入的内容，而在冒号后面的就是 REPL 环境为我们回显的第一个搜索结果．由于我们先前在 pkg 模式下安装过\verb|DataFrames|程序包，所以这里的搜索结果是\verb|add DataFrames|．
+
+假设我们要寻找的就是这个命令，那么可以直接按下回车键．此时，上面那一行内容就会变成：
+
+\begin{lstlisting}[language=julia]
+(v1.3) pkg> add DataFrames
+\end{lstlisting}
+
+REPL 环境知道对应的表达式或命令是在哪个模式下输入的．这其实并不稀奇，历史文件中就保存了此类信息．
+
+\textbf{2.1.4 代码补全}
+
+我们在编程时，尤其是还不那么熟练的时候，通常记不住那么多可用的常量、函数、类型等等．不过不用担心，Julia 语言及其标准库（即官方提供的程序包的集合）的文档非常完善．这些文档可以从各个方面帮助我们用对、用好 Julia 语言．
+
+在 REPL 环境中，我们除了可以很方便地查阅文档，还可以利用它的代码补全功能帮助我们选择要使用的程序定义（具体到这个例子中，就是函数定义），就像这样：
+
+\begin{lstlisting}[language=julia]
+julia> read[Tab]
+read          readavailable  readchomp      readline       readlink
+read!         readbytes!     readdir        readlines      readuntil
+julia> read
+\end{lstlisting}
+
+这里的\verb|read[Tab]|表示我在输入\verb|read|之后又按下了\verb|Tab|键（开始需要按两次，后续只需按一次）．这主要是为了让你更加清晰地看到输入与回显间的关系．
+
+可以看到，在我输入\verb|read[Tab]|之后，REPL 环境为我提供了很多可选的程序定义．这些都是函数，并且名称都是以\verb|read|为前缀的．也就是说，我们记不住程序定义的全名没有关系，只要知道开头的几个字母就可以了．剩下的完全可以交给代码补全这个助手．另外，我们也可以利用这一功能进行编程的学习．就像前面展示的那样，我们可以借此了解到所有与“读”有关的函数都有哪些．
+
+不仅如此，我们还可以利用代码补全功能即时地查询函数的使用方法，例如：
+
+\begin{lstlisting}[language=julia]
+julia> filter([Tab]
+filter(f, a::Array{T,1} where T) in Base at array.jl:2351
+filter(f, Bs::BitArray) in Base at bitarray.jl:1710
+filter(f, As::AbstractArray) in Base at array.jl:2312
+filter(f, d::AbstractDict) in Base at abstractdict.jl:389
+filter(pred, s::AbstractSet) in Base at abstractset.jl:332
+filter(f, s::AbstractString) in Base at strings/basic.jl:581
+julia> filter(
+\end{lstlisting}
+
+我在输入\verb|filter(|之后又按下了\verb|Tab|键，这样就可以看到\verb|filter|函数以及从它衍生出的各种方法了．回显内容中也包含了每个函数或方法所在的模块和源码文件．
+
+另外，\verb|Tab|键还可以对字符串中的文件路径进行补全，比如：
+
+\begin{lstlisting}[language=julia]
+julia> path = "/usr/[Tab]"
+bin/        lib/         libexec/     local/       sbin/        share/       
+standalone/
+julia> path = "/usr/"
+\end{lstlisting}
+
+
+以上这些只是对\verb|Tab|键的主要使用场景进行了简要的说明．这个代码补全的功能实际上比这里展示的更加强大．不过，其余的就留给你在 REPL 环境中自行探索吧．
+
+到这里，我们已经讲了很多关于 REPL 环境的使用方法，包括：基本的表达式求值、4 种主要模式、常用的快捷键、代码补全功能等．除此之外 ，REPL 环境还支持复杂代码（比如含有流程控制语句的代码）的输入和求值．有了这些，你基本上就可以玩转 Julia 的 REPL 环境了，并且可以利用它大幅提高你的编程效率．
