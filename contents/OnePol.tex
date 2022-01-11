@@ -1,7 +1,7 @@
 % 一元多项式
 % 多项式|多项式环
 
-数论里有加减乘除，带余除法，（公）因子，（公）倍数，素数，辗转相除法等概念，这些都可以推广到一元多项式里面．一元多项式和 $\lambda$ -矩阵密切相关，$\lambda$ -矩阵又是所谓的 Jordan 标准形的基本概念，而 Jordan 标准形是方阵分解的特例，也为理解方阵分解提供了一个很好的样本．为掌握更高阶的知识，我们得一点点的夯实基础，而这个过程本身就是一个很具有意义的过程．当然，上面提到的概念不要求你提前掌握，若需掌握我会在文中给出链接．所以，不要害怕，我们慢慢来！
+\footnote{吴群.矩阵分析[M].上海:同济大学出版社}数论里有加减乘除，带余除法，（公）因子，（公）倍数，素数，辗转相除法等概念，这些都可以推广到一元多项式里面．一元多项式和 $\lambda$ -矩阵密切相关，$\lambda$ -矩阵又是所谓的 Jordan 标准形的基本概念，而 Jordan 标准形是方阵分解的特例，也为理解方阵分解提供了一个很好的样本．为掌握更高阶的知识，我们得一点点的夯实基础，而这个过程本身就是一个很具有意义的过程．当然，上面提到的概念不要求你提前掌握，若需掌握我会在文中给出链接．所以，不要害怕，我们慢慢来！
 
 讨论多项式时，我们会预先给定一个\textbf{数域} $\mathbb{F}$， 所谓数域， 简单来说是关于加减乘除都封闭的数集（运算关于集合\textbf{封闭}是指该集合中元素的运算结果还是该集合的元素）\upref{field}．
 \begin{definition}{一元多项式}
@@ -9,15 +9,18 @@
 \begin{equation}
 f(x)=\sum_{i=0}^{n}a_i x^i
 \end{equation}
-称为数域 $\mathbb{F}$ 上的\textbf{一元多项式}，简称数域 $\mathbb{F}$ 上的\textbf{多项式}．其中，$a_ix^i(0\leq i\leq n)$ 称为这个多项式的\textbf{$i$次项}，$a_i$ 称为 \textbf{$i$次项系数}．特别，$a_0$ 称为多项式的\textbf{常数项}．若 $a_n\neq 0$（$n$ 为最大整数），则 $n$ 称为多项式 $f(x)$ 的\textbf{次数}，记为 $\mathrm{def}f(x)$，并把 $a_nx^n$ 称为 $f(x)$ 的\textbf{首项}，$a_n$ 称为\textbf{首项系数}．
+称为数域 $\mathbb{F}$ 上的\textbf{一元多项式}，简称数域 $\mathbb{F}$ 上的\textbf{多项式}．其中，$a_ix^i(0\leq i\leq n)$ 称为这个多项式的\textbf{$i$次项}，$a_i$ 称为 \textbf{$i$次项系数}．特别，$a_0$ 称为多项式的\textbf{常数项}．若 $a_n\neq 0$（$n$ 为最大整数），则 $n$ 称为多项式 $f(x)$ 的\textbf{次数}，记为 $\mathrm{deg}\;f(x)$，并把 $a_nx^n$ 称为 $f(x)$ 的\textbf{首项}，$a_n$ 称为\textbf{首项系数}．所有各次项系数为0的多项式称为\textbf{零次多项式}，零多项式不定义次数或次数看作 $-\infty$.
 \end{definition}
 两个多项式 $f(x)$ 和 $g(x)$ 称为\textbf{相等}的，若它们的所有同次项的的系数都相等，并记为 $f(x)=g(x)$．
 \subsection{多项式的运算}
 设数域上的两个多项式
-\begin{align}
+\begin{equation}
+\begin{aligned}
 f(x)=\sum_{i=0}^{n}a_ix^i\\
 g(x)=\sum_{i=0}^{m}a_ix^i
-\end{align}
+\end{aligned}
+\end{equation}
+
 不失一般性，设 $n\geq m$
 下面定义它们的加法和乘法．
 \begin{definition}{加法}
@@ -30,8 +33,8 @@ f(x)\pm g(x)=\sum_{i=0}^n (a_i\pm b_i)x^i
 \end{definition}
 
 显然，两个多项式的和或差仍是多项式．\autoref{OnePol_eq1} 表明两个多项式的和的次数最多和原来次数最大的多项式一样，而系数之和可能为0，所以和的次数满足不等式
-\begin{equation}
-\mathrm{deg}(f(x)\pm g(x))\leq \max\{\mathrm{deg}f(x),\mathrm{deg}g(x)\}
+\begin{equation}\label{OnePol_eq3}
+\mathrm{deg}\;(f(x)\pm g(x))\leq \max\{\mathrm{deg}\;f(x),\mathrm{deg}\;g(x)\}
 \end{equation}
 \begin{definition}{乘法}
 多项式的\textbf{乘积}为
@@ -47,8 +50,8 @@ c_s=\sum_{i=0}^s a_i b_{s-i}
 \end{definition}
 
 显然，两个多项式的乘积仍是多项式．\autoref{OnePol_eq2} 表明两个多项式的乘积的次数最多为原来两多项式次数的相加，而该次数最高项系数为 $c_{m+n}=a_n b_m$，不可能为0，所以乘积的次数满足等式
-\begin{equation}
-\mathrm{deg}(f(x)g(x))= \mathrm{deg}f(x)+\mathrm{deg}g(x)
+\begin{equation}\label{OnePol_eq4}
+\mathrm{deg}\;(f(x)g(x))= \mathrm{deg}\;f(x)+\mathrm{deg}\;g(x)
 \end{equation}
 
 容易验证，多项式运算满足如下规律．

@@ -1,0 +1,83 @@
+% 变量的命名
+% 变量 命名
+
+本文授权转载自郝林的 《Julia 编程基础》． 原文链接：\href{https://github.com/hyper0x/JuliaBasics/blob/master/book/ch03.md}{第3章：变量与常量}．
+
+
+\subsubsection{3.2 变量的命名}
+
+\textbf{3.2.1 一般规则}
+
+Julia 变量的名称是大小写敏感的．也就是说，\verb|y|和\verb|Y|并不是同一个标识符，它们可以代表不同的值．
+
+变量名必须以大写的英文字母\verb|A-Z|、小写的英文字母\verb|a-z|、下划线\verb|_|，或者代码点大于\verb|00A0|的 Unicode 字符开头．代表数字的字符不能作为变量名的首字符，但是可以被包含在名称的后续部分中．当然，变量名中肯定不能夹杂空格符，以及像制表符、换行符这样的不可打印字符．
+
+总之，大部分 Unicode 字符都可以作为变量名的一部分．即使你不知道什么是 Unicode 编码标准也没有关系．我们会在后面讨论字符和字符串的时候介绍它．
+
+由此，Julia 允许我们把数学符号当做变量名，例如：
+
+\begin{lstlisting}[language=julia]
+julia> δ = 3
+3
+
+julia> 
+\end{lstlisting}
+
+你可能会问：怎么才能输入\verb|δ|？这又涉及到了 LaTeX 符号．简单来说，LaTeX 是一个排版系统，常被用来排版学术论文．因为这种论文中经常会出现复杂表格和数学公式，所以 LaTeX 自有一套方法去表现它们．我们没必要现在就去专门学习 LaTeX．你只要知道，如果需要输入数学符号的话，那么就可以利用 LaTeX 符号．
+
+具体的做法是，先输入某个 LaTeX 符号（比如\verb|\delta|）再敲击 Tab 键，随后对应的数学符号（比如\verb|δ|）就可以显示出来了．如果你不知道一个数学符号对应的 LaTeX 符号是什么，那么可以在 REPL 环境的 help 模式下把那个数学符号复制、黏贴到提示符的后面，然后回车．比如这样：
+
+\begin{lstlisting}[language=julia]
+help?> δ
+"δ" can be typed by \delta<tab>
+
+search: δ
+
+  No documentation found.
+
+  δ is of type Int64.
+
+  Summary
+  ≡≡≡≡≡≡≡≡≡
+
+  primitive type Int64 <: Signed
+
+  Supertype Hierarchy
+  ≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡
+
+  Int64 <: Signed <: Integer <: Real <: Number <: Any
+
+julia> 
+\end{lstlisting}
+
+\textbf{3.2.2 变量名与关键字}
+
+虽然变量命名的自由度很大，但还是有一些约束的．其中最重要的是，你不能使用 Julia 已有的单一的关键字作为变量名．更广泛地说，所有程序定义的名称都不能与任何一个单一的关键字等同．Julia 中单一的关键字目前一共有 29 个．我把它们分成了 7 个类别：
+
+\begin{itemize}
+\item 表示值的关键字：\verb|false|、\verb|true|
+\item 定义程序定义的关键字：\verb|const|、\verb|global|、\verb|local|、\verb|function|、\verb|macro|、\verb|struct|
+\item 定义（无名）代码块的关键字：\verb|begin|、\verb|do|、\verb|end|、\verb|let|、\verb|quote|
+\item 定义模块的关键字：\verb|baremodule|、\verb|module|
+\item 引入或导出的关键字：\verb|import|、\verb|using|、\verb|export|
+\item 控制流程的关键字：\verb|break|、\verb|continue|、\verb|else|、\verb|elseif|、\verb|for|、\verb|if|、\verb|return|、\verb|while|
+\item 处理错误的关键字：\verb|catch|、\verb|finally|、\verb|try|
+\end{itemize}
+
+其中，程序定义指的是变量、常量、类型、有名函数、宏或者结构体．所有的程序定义都是有名称的，或者说可以由某个标识符指代．其中的有名函数和宏也可以被称为有名的代码块．
+
+所谓的无名代码块，与有名的代码块一样也是有明显边界的一段代码，但是并没有一个标识符可以指代它们．注意，我把关键字\verb|end|划分为了定义（无名）代码块的关键字．但实际上，我们在定义有名函数、宏、结构体和模块的时候也需要用到它．
+
+另外，模块也是一个有名的代码块．并且，一个 Julia 程序的主模块（即入口程序所属的那个模块）就是它的最外层代码块．在 Julia 中，并没有一个可以囊括所有代码的全局代码块．这与很多主流的编程语言都是不同的．我们可以说，Julia 程序就是由一些具有依赖关系的模块组成的．换句话讲，Julia 程序中的代码要么在主模块中，要么在主模块依赖的那些模块中．不用着急，我会在后面专门用一章来讲解模块．
+
+关于以上这些关键字的用法，我们在后面也都会讲到．所以你现在只要知道它们不能被作为变量名就可以了．
+
+\textbf{3.2.3 变量名与作用域}
+
+我们在前面说过，\verb|Int64|是一个代表了类型的标识符．又因为这个标识符的作用域相当于是全局的，所以我们设定的变量名就不能与它重复．更宽泛地讲，我们的变量名肯定不能与任何一个 Julia 预定义的类型的名称相同．
+
+什么叫作用域呢？其含义是，标识符可以被其他代码直接引用的一个区域．一旦超出这个区域，这个标识符在默认情况下就是不可见的．比如，我们在第 1 章定义过一个叫做\verb|MyArgs|的模块，并且其中有一个名叫\verb|get_parameter|的函数．当时的情况是，我们无法在这个模块之外直接使用这个函数的本名来引用它．如果你翻回去看的话，就能见到我们的引用方式是\verb|MyArgs.get_parameter|．这被称为（针对这个\verb|get_parameter|函数的）限定名．
+
+严格来讲，Julia 中没有任何一个标识符的作用域真正是全局的．但是，由于我们定义的所有模块都隐含了\verb|Core|模块，所以在该模块中直接定义的那些标识符的作用域就相当于是全局的．\verb|Int64|以及其他代表了某个类型的标识符都在其中．因此，我们设定的变量名肯定不能与\verb|Core|模块中那些基本的程序定义重名．
+
+关于作用域，还有一些内容是我们必须要知道的．Julia 中的很多代码块都会自成一个作用域，比如模块就是这样．但由于这会涉及到一些我们还未曾讲到的重要知识，所以我把它们放到了流程控制的那一部分．那里会有关于变量作用域的更多内容．

@@ -1,0 +1,158 @@
+% 变量的类型
+% 变量 类型
+
+本文授权转载自郝林的 《Julia 编程基础》． 原文链接：\href{https://github.com/hyper0x/JuliaBasics/blob/master/book/ch03.md}{第3章：变量与常量}．
+
+
+\subsubsection{3.3 变量的类型}
+
+我们都知道，一个变量的值是可变的．但你可能不知道的是，在 Julia 中，变量的类型也是可以改变的．更确切地说，我们可以为同一个变量先后赋予不同类型的值．Julia 的变量实际上是没有类型的，只有值才有类型．但为了描述方便，我们仍然会说“变量的类型”．你要记住，它真正的意思是“变量中的值的类型”．下面举一个例子：
+
+\begin{lstlisting}[language=julia]
+julia> y = 2020
+2050
+
+julia> y = "2050"
+"2050"
+
+julia> 
+\end{lstlisting}
+
+虽然我们还没有专门讲类型，但在这里可以先形成一个简单的认知．在上例中，我先把一个\verb|Int64|类型的值\verb|2020|赋给了变量\verb|y|．紧接着，我又把一个\verb|String|类型（也就是字符串类型）的值\verb|"2050"|赋给了这个变量．注意，字符串类型的值一般都是由一对双引号包裹的．
+
+显然，在第二次赋值之前和之后，变量\verb|y|的类型是不同的．虽然 Julia 允许我们随意改变一个变量的类型，但是这样做往往会对程序的性能造成不小的负面影响．所以官方在大多数情况下还是不推荐这种做法的．我们可以利用语法规则来约束对变量类型的随意变更，或者说约束赋予变量的那些值的类型．更具体地讲，我们可以在编程的时候用附加类型标识符的方式让变量的类型固定下来，比如：\verb|y::Int64|．
+
+操作符\verb|::|可以将类型标识符附加到程序中的变量和表达式之后．下面是它的两个重要用途:
+
+\begin{enumerate}
+\item 它可以用于类型标注，为编译器提供额外的类型信息，从而在某些情况下提高程序的性能．
+\item 它可以用于类型断言，判断某个值或者某个表达式的结果是否是某个类型的．
+\end{enumerate}
+
+\textbf{3.3.1 类型标注}
+
+当用于类型标注时，操作符\verb|::|及其右侧的类型标识符就意味着这个变量将永远是某个类型的．我们赋予这个变量的每一个值都将被自动地转换为定义该变量时所声明的那个类型的值．例如，我们有这样一个函数：
+
+\begin{lstlisting}[language=julia]
+function get_uint32(x)
+    y::UInt32 = x
+    y
+end
+\end{lstlisting}
+
+我先来简单地解释一下：函数的定义一般以关键字\verb|function|开头，并以关键字\verb|end|结尾，后者独占一行．在\verb|function|右侧的是函数的名称，这两者之间需要用一个空格分隔．这里的函数名称是\verb|get_uint32|．而紧挨在函数名称右侧的是由圆括号包裹的函数参数，这里唯一的函数参数是\verb|x|．
+
+在函数定义的首行和尾行之间的是函数体，可以由若干个表达式组成．并且，如果没有显式指定，那么最后一个表达式的求值结果就将是这个函数的结果．在这里，\verb|y|的值就是函数\verb|get_uint32|的结果．这个函数所做的事情就是，把由参数\verb|x|代表的那个值赋给了局部变量\verb|y|，然后把\verb|y|的值作为函数结果返回．
+
+所谓的局部变量是指，没有直接定义在模块中而是定义在了模块包含的某个代码块中的那些变量．在上例中，我们在\verb|get_uint32|函数中定义的参数\verb|x|和变量\verb|y|都属于局部变量．相对应的，全局变量就是直接定义在模块中的那些变量．更宽泛地讲，直接定义在模块中的变量、常量、类型、有名函数、宏和结构体可以被统称为全局程序定义．注意，这里的“全局”是针对模块而言的，而不是针对所有的代码．
+
+言归正传．我们没有对参数\verb|x|附加类型标注，所以原则上\verb|x|代表的可以是任何一个类型的值．但我们把变量\verb|y|的类型声明为了\verb|UInt32|．也就是说，该变量的值必须是\verb|UInt32|类型的．\verb|UInt32|类型是一个宽度为 32 个比特（bit）的无符号的整数类型．如此一来，当我们把\verb|x|的值赋给\verb|y|时，就有可能引起一个类型转换．例如：
+
+\begin{lstlisting}[language=julia]
+julia> get_uint32(2020)
+0x000007e4
+
+julia> typeof(get_uint32(2020))
+UInt32
+
+julia> 
+\end{lstlisting}
+
+我们已经知道，整数值\verb|2020|在默认情况下的类型是\verb|Int64|．因此，我在调用\verb|get_uint32|函数的时候把\verb|2020|作为参数值传入，就一定会引起相应的类型转换．这次调用得到的结果值是\verb|0x000007e4|，是一个用十六进制表示的整数值．在 Julia 中，无符号的整数值一般都是这样表示的．如果我们再把\verb|0x000007e4|转换为有符号整数值的话，就会是原先的\verb|2020|：
+
+\begin{lstlisting}[language=julia]
+julia> Int32(0x000007e4)
+2020
+
+julia> 
+\end{lstlisting}
+
+每一个整数类型都是有一个表示范围的．或者说，一个整数类型的值只能表示在一定范围之内的整数．比如，\verb|UInt32|类型的值就无法表示负数．因此，如果我们把\verb|-2020|传入\verb|get_uint32|函数，就会引发一个错误：
+
+\begin{lstlisting}[language=julia]
+julia> get_uint32(-2020)
+ERROR: InexactError: trunc(UInt32, -2020)
+# 省略了一些回显的内容．
+
+julia>  
+\end{lstlisting}
+
+从在回显内容第一行的错误信息可知，Julia 抛出了一个\verb|InexactError|类型的错误．出现这类错误就意味着 Julia 无法把源值（这里是\verb|-2020|）转换成目的类型（这里是\verb|UInt32|）的值．另外，\verb|trunc|是一个函数的名称．Julia 在这里正是使用这个函数进行类型转换的．
+
+当我们传入一个浮点数值、字符串值或者其他的\verb|UInt32|类型无法表示的值的时候，情况也会是类似的．只不过错误的类型和具体信息可能会有所不同．
+
+到了这里，你可能会疑惑：为什么我们讲变量的类型标注还需要定义一个函数呢？直接在 REPL 环境中演示不就好了吗？这实际上涉及到 Julia 语言的一个小缺陷．
+
+在 Julia 程序中，我们无法为全局变量添加类型标注．
+
+还记得吗？所谓的全局变量就是直接定义在模块中的那些变量．我们编写的任何 Julia 代码都会属于某个模块．即使我们没有显式地把它们包含在某个模块中，也会是如此．更具体地讲，我们在 REPL 环境中输入的代码默认都属于\verb|Main|模块．这与我们直接在源码文件中写入 Julia 代码是一样的．正因为如此，我们才能在这样的环境中仅通过名称就可以引用到之前写入的程序定义．
+
+由此可知，我们在 REPL 环境中直接定义附带类型标注的变量是行不通的，就像这样：
+
+\begin{lstlisting}[language=julia]
+julia> x::UInt32 = 2020
+ERROR: syntax: type declarations on global variables are not yet supported
+# 省略了一些回显的内容．
+
+julia> 
+\end{lstlisting}
+
+一个可以绕开这个缺陷的方法是，使用\verb|Ref{T}|类型的常量作为替代．“Ref”是 Reference 的缩写，可以被翻译为“引用”．\verb|Ref{T}|类型本身是一个参数化的类型，其中的那对花括号就是标志．而花括号中的\verb|T|表示的就是类型参数（type parameter），它在这里指代被引用的值的类型．我们可以在实际应用中自行设定这个类型．示例如下：
+
+\begin{lstlisting}[language=julia]
+julia> const xref = Ref{UInt32}(2020)
+Base.RefValue{UInt32}(0x000007e4)
+
+julia> 
+\end{lstlisting}
+
+我使用关键字\verb|const|定义了一个名为\verb|xref|的常量，并把一个\verb|Ref{UInt32}|类型的值赋给了它．由这个类型的字面量可知，我规定\verb|xref|引用的值必须是\verb|UInt32|类型的．另外，在最右侧的圆括号中的\verb|2020|就是\verb|xref|初始引用的值．也就是说，\verb|xref|的值中又引用了另外一个值，而后者才是我们真正需要的．
+
+由于\verb|xref|是一个常量，所以如果我们试图改变它的类型，就会引发一个错误．不过，我们仍然可以改变\verb|xref|引用的值，比如：\verb|xref[] = 2050|．这里的操作符\verb|[]|就是用来读出或写入\verb|Ref{T}|类型值所引用的值的．如此一来，我们就相当于拥有了一个具有固定类型的全局变量．关于常量的更多知识，我们到后面就会讲到．
+
+不过无论怎样，这终归只是绕开缺陷，而不是修补缺陷．Julia 语言的官方团队已经在计划对此进行修补了．预计在之后的某个 1.x 版本，我们就可以直接定义带有类型标注的全局变量了．
+
+\textbf{3.3.2 类型断言}
+
+当用于类型断言时，操作符\verb|::|可以被解读为“A 是否为 B 的一个实例”．其中 A 代表该操作符左侧的值，而 B 则代表操作符右侧的类型．例如：
+
+\begin{lstlisting}[language=julia]
+julia> "abc"::String
+"abc"
+
+julia> "abc"::Char
+ERROR: TypeError: in typeassert, expected Char, got String
+# 省略了一些回显的内容．
+
+julia> 
+\end{lstlisting}
+
+我先利用操作符\verb|::|判断值\verb|"abc"|是否为\verb|String|类型的一个实例，并得到回显\verb|"abc"|．这就说明该类型断言成功了（或者说通过了）．注意，在这种情况下，若有必要 Julia 会对\verb|::|左侧的值进行类型转换，把它转换为处于\verb|::|右侧的那个类型的值．这是通过调用\verb|convert|函数实现的．
+
+之后，我又判断\verb|"abc"|是否为\verb|Char|类型的一个实例，并使得 Julia 报错．所以此类型断言失败（或者说未通过）．只用眼睛观察，我们就可以知道\verb|"abc"|是一个字符串类型的值．而且，它并不是一个单一的字符．字符类型的值只能代表一个字符，并且需要由一对单引号包裹．
+
+注意，像\verb|String|、\verb|Char|这样的类型都属于具体类型．Julia 中还有一种类型叫做抽象类型．它们的名称很多都有着明显且一致的前缀，比如：\verb|AbstractString|和\verb|AbstractChar|．在进行类型断言的时候，如果右侧的类型是一个具体类型，那么只有左侧的值是该类型的一个实例，断言才会成功．而如果右侧的类型是一个抽象类型，那么只要左侧的值是这个抽象类型的任意一个子类型的实例就可以使断言成功．又由于 Julia 中的抽象类型都是不能被实例化的，因此这个子类型也必然是一个具体类型．下面看一个例子：
+
+\begin{lstlisting}[language=julia]
+julia> "abc"::AbstractString
+"abc"
+
+julia> "abc"::AbstractChar
+ERROR: TypeError: in typeassert, expected AbstractChar, got String
+# 省略了一些回显的内容．
+
+julia> 
+\end{lstlisting}
+
+因为\verb|String|是\verb|AbstractString|的子类型，所以第一个类型断言成功．但是，由于\verb|String|并不是\verb|AbstractChar|的子类型，因此第二个类型断言失败．
+
+我们几乎可以把类型断言用在任何地方，只要其左侧的是一个值或是一个表达式就可以．但要注意，一旦断言失败，错误就会被抛出来．程序会因此中断，除非我们合理地处理了错误．如果我们对于某个类型断言非常没有把握，而且不想在断言失败时得到一个错误，那么可以使用\verb|isa|函数作为替代．例如：
+
+\begin{lstlisting}[language=julia]
+julia> isa("abc", AbstractChar)
+false
+
+julia> 
+\end{lstlisting}
+
+不过要注意，我们调用\verb|isa|函数之后只能得到\verb|true|或\verb|false|的结果．

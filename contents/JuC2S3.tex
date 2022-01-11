@@ -1,0 +1,151 @@
+% 项目的创建与引入
+% 项目 创建 引入
+
+本文授权转载自郝林的 《Julia 编程基础》． 原文链接：\href{https://github.com/hyper0x/JuliaBasics/blob/master/book/ch02.md}{第2章：编程环境}．
+
+
+\subsubsection{2.3 项目的创建与引入}
+
+到目前为止，我们已经对 Julia 的项目环境有了一定的了解，并讨论了仓库目录、程序包存储目录和环境配置这几个重要的概念．
+
+项目的环境配置一般由项目文件\verb|Project.toml|和清单文件\verb|Manifest.toml|体现．全局环境配置针对的是 REPL 环境中的代码和独立的 Julia 程序．该环境配置的文件通常会在\verb|~/.julia/environments|目录的特性版本子目录（如\verb|v1.3|）中．
+
+我们已经学会了在全局环境中怎样安装和导入程序包．这对于编写和部署一些脚本程序来说已经足够了．不过，我们在正式开发 Julia 项目的时候往往还需要专属的环境配置文件．这样才能与全局环境区别开．这么做有 3 个好处：
+
+\begin{enumerate}
+\item 一旦有了专属的环境配置文件，我们的项目就可以独立地管理依赖包了．
+\item 针对某个 Julia 项目的程序包管理操作不会影响到全局的环境配置．反之亦然．
+\item 拥有环境配置文件的 Julia 项目可以为项目的分发（以供他人使用）做好准备．
+\end{enumerate}
+
+换句话说，我们的 Julia 项目可以因此成为独立的、可重用的以及对分发友好的项目．
+
+\textbf{2.3.1 项目的创建}
+
+创建一个 Julia 项目很容易，在 REPL 环境中就可以办到．我们先在命令行中通过输入\verb|julia|命令进入到 REPL 环境．然后，我们在它的 shell 模式中进入某个专用的目录（比如\verb|~/Projects|），就像这样：
+
+\begin{lstlisting}[language=julia]
+shell> cd ~/Projects/
+/Users/haolin/Projects
+
+julia> 
+\end{lstlisting}
+
+这时，我们可以再确认一下当前的目录：
+
+\begin{lstlisting}[language=julia]
+julia> pwd()
+"/Users/haolin/Projects"
+
+julia> 
+\end{lstlisting}
+
+这里的\verb|pwd|是 Print Working Directory 的缩写．所以，\verb|pwd|函数的含义就是打印当前的工作目录．这与在命令行中输入\verb|pwd|命令的作用是类似的．只不过调用表达式\verb|pwd()|的求值结果是一个字符串．
+
+在确认了工作目录之后，我们就可以切换到 REPL 环境的 pkg 模式，然后输入\verb|generate|命令，并后跟一个空格和项目的名称\verb|Programs|（你也可以用别的名字）：
+
+\begin{lstlisting}[language=julia]
+(v1.3) pkg> generate Programs
+Generating project Programs:
+    Programs/Project.toml
+    Programs/src/Programs.jl
+
+(v1.3) pkg> 
+\end{lstlisting}
+
+注意，我在\verb|generate|命令后面追加的参数是我们要创建的 Julia 项目的名称．随后，这个命令创建了一个名为\verb|Programs|的目录，并在该目录下生成了两个文件．一个是项目文件\verb|Project.toml|，另一个是\verb|src|目录（即源码目录）下的源码文件\verb|Programs.jl|．
+
+我们先来看项目文件，它的内容如下：
+
+\begin{lstlisting}[language=markdown]
+name = "Programs"
+uuid = "e525bb1a-bb1e-11e9-07f5-1125a61c95e2"
+authors = ["robert.hao <hypermind@outlook.com>"]
+version = "0.1.0"
+\end{lstlisting}
+
+这里有 4 个条目，分别代表项目的名称、UUID、作者信息和初始版本号．其中的 UUID 是 Julia 的程序包管理器自动生成的．而项目作者信息是从当前操作系统中的 Git 配置信息复制过来的．
+
+我们再来看源码文件\verb|Programs.jl|的内容：
+
+\begin{lstlisting}[language=julia]
+module Programs
+
+greet() = print("Hello World!")
+
+end # module
+\end{lstlisting}
+
+其中只定义了一个名为\verb|Programs|的模块．并且，该模块仅包含了一个可以向计算机的标准输出打印\verb|Hello World!|的函数\verb|greet|．这显然只是一个简单的程序模板．不过，它为我们后续的编码开了个头．
+
+注意，这个源码文件是有重要意义的：
+
+1. 该文件可以被称为\verb|Programs|项目的源码入口．或者说，它是这个项目的主源码文件．这是由于该文件的主文件名与项目的（主）名称是一致的．
+2. 该文件中定义的（最外层的）模块\verb|Programs|将会是其所属项目的主模块（或者说默认模块）．这是由于该模块的名称与项目的（主）名称是一致的．
+
+正因为有了这样的一个源码文件，使得\verb|Programs|项目可以被 Julia 视为一个程序包．更明确地讲，如果存在一个名为\verb|X|或\verb|X.jl|的 Julia 项目，只要该项目包含一个相对路径为\verb|src/X.jl|的源码文件，并且在该文件中定义的最外层模块名为\verb|X|，那么它就是一个有效的程序包．
+
+最后，一个可选的操作是，我们可以把这个项目的名称变更为\verb|Programs.jl|．如此可以让它更具 Julia 项目的特色．由前述内容可知，这样做并不会妨碍此项目成为一个有效的程序包．注意，项目\verb|Programs.jl|所代表的程序包的名称依然是\verb|Programs|，同时它的主模块的名称也依然是\verb|Programs|．
+
+\textbf{2.3.2 程序包的引入}
+
+既然\verb|Programs.jl|项目已经是一个有效的程序包了，那么我们就可以在代码中对它进行引入（更明确地说，是引入它的主模块\verb|Programs|）．具体怎么做呢？
+
+当我们试图在全局环境中导入该程序包的时候，Julia 会提示找不到这个程序包：
+
+\begin{lstlisting}[language=julia]
+julia> import Programs
+ERROR: ArgumentError: Package Programs not found in current path:
+- Run `import Pkg; Pkg.add("Programs")` to install the Programs package.
+
+Stacktrace:
+ [1] require(::Module, ::Symbol) at ./loading.jl:887
+
+julia> 
+\end{lstlisting}
+
+为了解决这个问题，我们可以先在 REPL 环境下进入到\verb|Programs.jl|项目所在的目录，然后切换到 pkg 模式，并输入命令\verb|activate .|．注意，这里的输入是\verb|activate|加一个空格" "，再加一个英文点号"\verb|.|"．示例如下：
+
+\begin{lstlisting}[language=julia]
+shell> cd ~/Projects/Programs.jl
+/Users/haolin/Projects/Programs.jl
+
+(v1.3) pkg> activate .
+
+(Programs) pkg> 
+\end{lstlisting}
+
+我们可以看到，在使用\verb|activate|命令之后，REPL 环境的提示符再次改变了，变成了当前程序包的名称\verb|Programs|，也就是在当前目录下的\verb|Project.toml|文件中记录的那个名称．命令\verb|activate .|的作用正是把程序包管理器的操作目录切换到当前项目所在的目录，即：\verb|~/Projects/Programs.jl|．还记得吗？它原先的（或者说默认的）操作目录是\verb|~/.julia/environments/v1.3|，对应于 Julia 的\verb|v1.3|版本的全局环境．顺便说一下，如果你想切换回全局环境，那么只需要再次输入命令\verb|activate|（不加任何参数）就可以了．
+
+在这之后，我们再在当前的 REPL 环境中导入\verb|Programs|就不会有问题了：
+
+\begin{lstlisting}[language=julia]
+julia> import Programs
+[ Info: Precompiling Programs [e525bb1a-bb1e-11e9-07f5-1125a61c95e2]
+
+julia> Programs.greet()
+Hello World!
+\end{lstlisting}
+
+如果我们确实需要在全局环境中引入\verb|Programs|，那么可以先把这个项目上传到一个代码托管仓库（比如 GitHub）中，然后再使用 Julia 的程序包管理器把它安装到本地的仓库目录． 
+
+比如，我们的这个\verb|Programs.jl|项目已经在 GitHub 上了，它的 git 地址是\verb|git@github.com:hyper0x/Programs.jl.git|．所以，我们现在就可以直接在 REPL 环境中进行如下操作：
+
+\begin{lstlisting}[language=julia]
+(Programs) pkg> activate
+
+(v1.3) pkg> add git@github.com:hyper0x/Programs.jl.git
+  Updating registry at `~/.julia/registries/General`
+  Updating git-repo `https://github.com/JuliaRegistries/General.git`
+   Cloning git-repo `git@github.com:hyper0x/Programs.jl.git`
+  Updating git-repo `git@github.com:hyper0x/Programs.jl.git`
+ Resolving package versions...
+  Updating `~/.julia/environments/v1.3/Project.toml`
+  [d2b7efac] + Programs v0.1.0 #master(git@github.com:hyper0x/Programs.jl.git)
+  Updating `~/.julia/environments/v1.3/Manifest.toml`
+  [d2b7efac] + Programs v0.1.0 #master(git@github.com:hyper0x/Programs.jl.git)
+
+(v1.3) pkg> 
+\end{lstlisting}
+
+一旦\verb|Programs|程序包被记录在了全局环境的项目文件中，我们在该环境下引入它也就不会有问题了．

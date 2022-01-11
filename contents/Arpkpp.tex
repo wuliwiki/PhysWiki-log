@@ -4,7 +4,7 @@
 
 \href{https://www.caam.rice.edu/software/ARPACK/}{Arpack} （ARnoldi PACKage）最初是一个 Fortran 语言编写的， 用于求解大型本征方程的程序库， 其主要算法是 Arnoldi 循环． 下面是它的一些特性：
 \begin{itemize}
-\item 可以求解广义本征问题（General） $Ax = \lambda Bx$ 或者标准本征问题（Standard） $Ax = \lambda x$．
+\item 可以求解广义本征问题（General） $\mat A\bvec x = \lambda \mat B\bvec x$ 或者标准本征问题（Standard） $\mat A\bvec x = \lambda \bvec x$．
 \item 矩阵的数据类型支持密矩阵\upref{MatSto}， 系数的 CSC 矩阵\upref{SprMat}． 也可以不需要提供矩阵本身而是提供矩阵—矢量乘法． 也就是你只需要提供一个函数 \verb|v = F(u)| 给 Arpack 即可， 其中 \verb|v| 就是矩阵乘以 \verb|u| 的结果．
 \item Regular 模式： 它可以求出本征值最小（大）的指定个数的本征矢， 或者本征值的绝对值最小（大）的指定个数的本征矢．
 \item Shift 模式： 可以求出指定值附近的若干本征值和本征矢． 但这可能需要提供矩阵的逆（见下文）．
@@ -32,4 +32,4 @@ ARSymStdEig<T, SymMatrixA<T> >
 ARSymStdEig<T, SymMatrixB<T> >
     dprob(A.ncols(), 4, &A, &SymMatrixB<T>::MultOPv, 1.);
 \end{lstlisting}
-其中 \verb|SymMatrixB<ART>::MultMv(T* u, T* v)| 提供 $v = Au$． \verb|MultOPv(T* u, T*v)| 提供 $v = (A - \sigma)^{-1}u$， 例子中 $\sigma = 1$．
+其中 \verb|SymMatrixB<ART>::MultMv(T* u, T* v)| 提供 $\bvec v = \mat A\bvec u$． \verb|MultOPv(T* u, T*v)| 提供 $\bvec v = (\mat A - \sigma)^{-1}\bvec u$， 例子中 $\sigma = 1$．

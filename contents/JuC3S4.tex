@@ -1,0 +1,142 @@
+% 常量
+% 常量
+
+本文授权转载自郝林的 《Julia 编程基础》． 原文链接：\href{https://github.com/hyper0x/JuliaBasics/blob/master/book/ch03.md}{第3章：变量与常量}．
+
+
+\subsubsection{3.4 常量}
+
+在 Julia 中，常量是一种特殊的变量．我们可以使用关键字\verb|const|来定义一个常量：
+
+\begin{lstlisting}[language=julia]
+const A = 2020
+\end{lstlisting}
+
+当需要同时定义多个常量时，我们还可以使用平行赋值法：
+
+\begin{lstlisting}[language=julia]
+const W, U, V = 2020, 2030, 2050
+\end{lstlisting}
+
+在这里，常量\verb|W|、\verb|U|和\verb|V|的值分别为\verb|2020|、\verb|2030|和\verb|2050|．
+
+我们已经知道，为全局变量附加类型标注目前是行不通的．实际上，Julia 官方现在不建议我们在程序中使用全局变量．因为全局变量总是会给程序带来不小的性能负担．这正是用于全局变量的值及其类型都是可以被随时改变的．而全局常量可以让这个问题迎刃而解．所以，我们应该使用全局常量，而不是全局变量．这也是 Julia 中很重要的一条编码建议．
+
+相反，在局部，我们应该使用局部变量，而不是局部常量．因为定义一个局部常量完全是没有必要的．Julia 一旦在局部碰到一个不变的变量就会把它优化成常量．你其实用不着专门去记这条编码建议．因为定义局部常量根本就不符合 Julia 的语法规则，例如：
+
+\begin{lstlisting}[language=julia]
+julia> function get_uint32(x)
+           const y::UInt32 = x
+           y
+       end
+ERROR: 
+    syntax: unsupported `const` declaration on local variable around REPL[1]:2
+# 省略了一些回显的内容．
+
+julia> 
+\end{lstlisting}
+
+不过，这个语法规则的制定原因我们还是应该了解的．
+
+另外，与其他的一些编程语言不同，Julia 中的常量的值不仅可以是数值和字符串，还可以是像数组这样的可变对象．也正因为如此，Julia 常量只能保证名称与值之间的绑定是不可变的，但是并不能防止值本身的变化，比如数组中的某个元素值的改变．所以，我们尽量不要把本身可变的值赋给全局常量．
+
+下面，我们来说 Julia 常量的最重要的 3 个特性．其中的一个比较反直觉的特性是：我们似乎可以改变一个常量的值．更明确地说，我们对常量的重新赋值只会引发一个警告，而不会得到一个错误．例如，我们看似可以对前面定义过的常量\verb|A|进行重新赋值：
+
+\begin{lstlisting}[language=julia]
+julia> A = 2050
+WARNING: redefining constant A
+2050
+
+julia> 
+\end{lstlisting}
+
+根据警告的内容可知，Julia 称其为对常量的重新定义．这相当于放弃了以前的常量定义，而采用了新的定义．那么，常量的重新定义与我们之前说的重新赋值到底有什么不一样呢？我们可以通过下面的示例进行理解．
+
+\begin{lstlisting}[language=julia]
+julia> const C = 2020 
+2020
+
+julia> f() = C + 30
+f (generic function with 1 method)
+
+julia> f()
+2050
+\end{lstlisting}
+
+我先定义了一个名称为\verb|C|、值为\verb|2020|的常量，紧接着又用一种简洁的方式定义了一个名称为\verb|f|的函数．这个函数的功能很简单，即：在常量\verb|C|代表的值之上再加\verb|30|并将结果返回．现在，我们重新定义常量\verb|C|：
+
+\begin{lstlisting}[language=julia]
+julia> C = 2030
+WARNING: redefining constant C
+2030
+\end{lstlisting}
+
+然后，再次调用函数\verb|f|：
+
+\begin{lstlisting}[language=julia]
+julia> f()
+2050
+
+julia> 
+\end{lstlisting}
+
+可以看到，调用\verb|f|函数后得到的结果依然为\verb|2050|．这是因为函数\verb|f|使用的仍然是在它之前定义的那个常量\verb|C|，而不是我们重新定义的常量\verb|C|．
+
+\begin{figure}[ht]
+\centering
+\includegraphics[width=12.5cm]{./figures/JuC3S4_1.png}
+\caption{常量的重新定义} \label{JuC3S4_fig1}
+\end{figure}
+
+我们可以想象，如果真有一种方法可以对常量\verb|C|进行重新赋值的话，那么再次调用\verb|f|函数肯定不会得到这样的结果．
+
+因此，在 Julia 中，我们只能对常量进行重新定义，而不能进行重新赋值．正因为常量的重新定义所带来的效果有些反直觉，所以我们最好还是不要重新定义常量．为此，我们还应该让常量的名称看起来特别一些，比如全大写，以避免之后的误操作．我们还要注意程序输出中的此类警告，并及时纠正这种不好的做法．
+
+Julia 常量的第二个重要特性是，如果我们在重新定义常量的时候试图赋予它一个不同类型的值，那么就会得到一个错误．例如：
+
+\begin{lstlisting}[language=julia]
+julia> C = "2020"
+ERROR: invalid redefinition of constant C
+# 省略了一些回显的内容．
+
+julia> 
+\end{lstlisting}
+
+注意，这里报出的错误是“对常量\verb|C|的重新定义无效”，而不是“不能改变常量\verb|C|的类型”．所以，这里的规则是，在对常量进行重新定义时只能赋予一个与前值类型相同的值．
+
+基于此，常量的第三个重要特性就比较好理解了．这个特性就是，如果在重新定义常量时赋予它相同的值，那么既不会引发警告也不会导致错误报告．比如：
+
+\begin{lstlisting}[language=julia]
+julia> const D = "2020"
+"2020"
+
+julia> D = "2020"
+"2020"
+
+julia> d = "2020"
+"2020"
+
+julia> D = d
+"2020"
+
+julia> 
+\end{lstlisting}
+
+不过，需要注意，这只是针对不可变对象（或者说本身不可变的值）而言的．对于可变对象（比如数组），即使前后两个值看起来相同，Julia 也照样会发出警告．例如：
+
+\begin{lstlisting}[language=julia]
+julia> const E = ["2020"]
+1-element Array{String,1}:
+ "2020"
+
+julia> E = ["2020"]
+WARNING: redefining constant E
+1-element Array{String,1}:
+ "2020"
+
+julia> 
+\end{lstlisting}
+
+所以，还是那句话，我们尽量不要把本身可变的值赋给常量．顺便说一下，上述代码中的字面量\verb|["2020"]|表示的是只包含了一个元素值（即\verb|"2020"|）的一维数组．倘若一个一维数组中有多个元素值，那么我们就需要用英文逗号把这些元素值分隔开，如\verb|["2020", "2050"]|．
+
+由以上特性可知，常量看似可以被当做类型固定的全局变量来使用．但实际上，对常量的重新定义会埋下隐患，而且由此引发的程序错误将会很难排查和定位．所以，我们可以使用常量来存储全局性的对象，但最好不要对它进行重新定义．另外，我们尽量不要把可变对象赋给常量．

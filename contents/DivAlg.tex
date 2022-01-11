@@ -1,0 +1,85 @@
+% 带余除法
+% 余式|商式
+
+\begin{issues}
+\issueOther{需添加例题}
+\end{issues}
+
+\pentry{一元多项式\upref{OnePol}}
+\footnote{吴群.矩阵分析[M].上海:同济大学出版社}在一元多项式\upref{OnePol}的最后提到，系数在数域 $\mathbb{F}$ 上的全体一元多项式构成一元多项式环 $\mathbb{F}[x]$．在环 $\mathbb{F}[x]$ 中，可以做加、减、乘三种运算，运算的结果还是该多项式环 $\mathbb{F}[x]$ 中的元素（一元多项式）．自然，我们会像在整数里那样，考虑除法运算．你将看到，和整数一样，在一元多项式里，任意两个多项式做除法运算的结果并不一定还是一个多项式，取而代之的是带余除法．
+\begin{theorem}{带余除法}\label{DivAlg_the1}
+设 $f(x)$ 与 $g(x)$ 为 $\mathbb{F}[x]$ 中的两个多项式，并且 $g(x)\neq 0$，则存在唯一的 $\mathbb{F}[x]$ 中的多项式 $q(x),r(x)$，使得
+\begin{equation}
+f(x)=q(x)g(x)+r(x)
+\end{equation}
+其中 $\mathrm{deg}\;r(x)<\mathrm{deg}\;g(x)$， $q(x),r(x)$ 分别称为 $g(x)$ 除 $f(x)$ 的\textbf{商式}和\textbf{除式}．并将这种算法称为\textbf{带余除法}，有时称为\textbf{长除法}．
+\end{theorem}
+\subsection{证明}
+1.首先证明 $q(x)$，$r(x)$ 的存在性．
+
+当 $\mathrm{deg}\;f(x)<\mathrm{deg}\;g(x)$ 时，取 $q(x)=0,r(x)=f(x)$ 即可；
+
+假设当 $\mathrm{deg}\;f(x)-\mathrm{deg}\;g(x)\leq k$ 时，$q(x),r(x)$ 存在，那么当 $\mathrm{deg}\;f(x)-\mathrm{deg}\;g(x)=k+1$ 时，设
+\begin{equation}
+f(x)=\sum_{i=0}^n a_i x^i\quad g(x)=\sum_{i=0}^m b_ix^i
+\end{equation}
+取
+\begin{equation}
+f_1(x)=f(x)-\frac{a_n}{b_m}x^{n-m}g(x)
+\end{equation}
+注意 $f_1(x)$ 的 $m$ 次项系数为0，由\autoref{OnePol_eq3}~\upref{OnePol}
+\begin{equation}
+\mathrm{deg}\;f_1(x)-\mathrm{deg}\;g(x)\leq f(x)-1-\mathrm{deg}\;g(x)=k
+\end{equation}
+由归纳假设知，存在 $q_1(x),r(x)$ 使得
+\begin{equation}
+f_1(x)=q_1(x)g(x)+r(x)
+\end{equation}
+其中 $\mathrm{deg}\;r(x)<\mathrm{deg}\;g(x)$，于是
+\begin{equation}
+f(x)=f_1(x)+\frac{a_n}{b_m}x^{n-m}g(x)=\qty(\frac{a_n}{b_m}x^{n-m}+q_1(x))g(x)+r(x)
+\end{equation}
+记 $q(x)=\frac{a_n}{b_m}x^{n-m}+q_1(x)$，即有 $q(x),r(x)$ 在 $\mathrm{deg}\;f(x)-\mathrm{deg}\;g(x)=k+1$ 时存在．有数学归纳法，存在性得证．
+
+2.下面证明 $q(x),r(x)$ 的唯一性．设另有多项式 $q_1(x),r_1(x)$ 使
+\begin{equation}
+f(x)=q_1(x)g(x)+r_1(x)
+\end{equation}
+其中， $\mathrm{deg}\;r_1(x)<\mathrm{deg}\;g(x)$，于是
+\begin{equation}
+q_1(x)g(x)+r_1(x)=q(x)g(x)+r(x)
+\end{equation}
+即
+\begin{equation}
+\qty(q_1(x)-q(x))g(x)=r(x)-r_1(x)
+\end{equation}
+若 $q(x)\neq q_1(x)$，又 $g(x)\neq 0$，那么 $r(x)-r_1(x)\neq 0$，由\autoref{OnePol_eq4}~\upref{OnePol}
+\begin{equation}\label{DivAlg_eq1}
+\mathrm{deg}\;(q_1(x)-q(x))+\mathrm{deg}\;g(x)=\mathrm{deg}\;\qty(r(x)-r_1(x))
+\end{equation}
+但
+\begin{equation}
+\mathrm{deg}\;g(x)>\mathrm{deg}\;\qty(r(x)-r_1(x))
+\end{equation}
+所以\autoref{DivAlg_eq1} 不能成立，这就证明了
+$q(x)=q_1(x)$，因此 $r(x)=r_1(x)$．
+\subsection{推论}
+利用\autoref{DivAlg_the1} ，立即得到下面的推论
+\begin{corollary}{余数定理}\label{DivAlg_cor1}
+设 $f(x)$ 为 $\mathbb{F}[x]$ 中的任意一个的多项式，并且 $c\in\mathbb{F}$，则存在 $\mathbb{F}[x]$ 中的多项式，使得
+\begin{equation}
+f(x)=q(x)(x-c)+f(c)
+\end{equation}
+并且 $q(x)$ 是唯一的．$f(c)$ 称为 多项式 $f(x)$ 除以 $x-c$ 的余数．
+\end{corollary}
+\begin{definition}{零点(根)}
+设 $f(x)$ 为 $\mathbb{F}[x]$ 中的多项式，$c\in\mathbb{F}$，若 $f(c)=0$，则称 $c$ 为 $f(x)$ 的\textbf{根}或\textbf{零点}．
+\end{definition}
+由\autoref{DivAlg_cor1} 很容易得到下面关于多项式根的推论．
+\begin{corollary}{}\label{DivAlg_cor2}
+设 $f(x)$ 为 $\mathbb{F}[x]$ 中的多项式，$c\in\mathbb{F}$，则 $c$ 是 $f(x)$ 的根当且仅当存在 $\mathbb{F}[x]$ 中的多项式 $q(x)$，使得
+\begin{equation}
+f(x)=q(x)(x-c)
+\end{equation}
+
+\end{corollary}
