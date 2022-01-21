@@ -8,8 +8,8 @@
 
 第一类收敛性判别法是直接将给定的级数与一个收敛级数来比较大小. 
 
-\begin{theorem}{比较原理}
-设$\{a_n\},\{b_n\}$是正数序列, 从某项开始,$a_n\leq b_n$恒成立. 那么由级数$\sum_{n=1}^\infty b_n$收敛推出级数$\sum_{n=1}^\infty a_n$收敛, 而由级数$\sum_{n=1}^\infty a_n$发散推出级数$\sum_{n=1}^\infty b_n$发散.
+\begin{theorem}{线性比较原理}
+设$\{a_n\},\{b_n\}$是正数序列, 从某项开始$a_n\leq b_n$恒成立. 那么由级数$\sum_{n=1}^\infty b_n$收敛推出级数$\sum_{n=1}^\infty a_n$收敛, 而由级数$\sum_{n=1}^\infty a_n$发散推出级数$\sum_{n=1}^\infty b_n$发散.
 \end{theorem}
 \begin{exercise}{}
 利用级数收敛的柯西判据来证明这个比较原理. 进一步证明: 如果$\{a_n\}$是复数序列, 而$\sum_{n=1}^\infty|a_n|$是收敛级数, 那么$\sum_{n=1}^\infty a_n$也是收敛级数.
@@ -20,12 +20,62 @@
 $$
 \sum_{n=1}^\infty\frac{e^{inx}}{n^p}
 $$
-都是收敛的, 因为它的各项绝对值组成的级数是收敛的$p$-级数.
-
-以后将会算出: 如果$x\neq 2k\pi$, 那么
+都是收敛的, 因为它的各项绝对值组成的级数是收敛的$p$-级数. 不过, 令人惊讶的事实是: 如果$x\neq 2k\pi$, 那么只要$p>0$, 这个级数就是收敛的. 详见 交错级数的收敛性判别\upref{AltCov}. 另外, 对于$p=1$, 以后将会算出: 如果$x\neq 2k\pi$, 那么
 $$
 \sum_{n=1}^\infty\frac{e^{inx}}{n}=\ln|1-e^{ix}|+i\arg(1-e^{ix}).
 $$
 \end{example}
 
-\subsection{收敛速度比较法}
+\begin{example}{}
+设$p>0$. 考虑级数
+$$
+\sum_{n=1}^\infty\sin\left(\frac{x}{n^p}\right).
+$$
+对于给定的实数$x$, 当$n$充分大时, 存在$c,C>0$使得
+$$
+c\frac{x}{n^p}\leq\sin\left(\frac{x}{n^p}\right)\leq C\frac{x}{n^p}.
+$$
+因此这个级数的收敛性可以与$p$-级数$\sum_{n=1}^\infty\frac{x}{n^p}$比较. 于是$0<p\leq1$时级数发散, $p>1$时级数收敛.
+\end{example}
+
+线性比较原理的一个特殊情形是所谓的根值判别法:
+
+\begin{theorem}{根值判别法}
+设有正项级数$\sum_{n=1}^\infty a_n$. 如果存在$0<q<1$使得从某项开始一直有$\sqrt[n]{a_n}<q$, 那么级数$\sum_{n=1}^\infty a_n$收敛. 如果存在$Q>1$使得有无穷多项满足$\sqrt[n]{a_n}>Q$, 那么级数$\sum_{n=1}^\infty a_n$发散.
+\end{theorem}
+实际上, 对于前者来说$a_n<q^n$, 因此可以同收敛的几何级数$\sum_{n=1}^\infty q^n$比较; 对于后者来说有无穷多项满足$a_n>Q^n$, 因此级数的一般项并不趋于零, 故而发散.
+
+根值判别法的一个简单变形就是计算幂级数收敛半径的柯西-阿达玛公式\upref{CHF}.
+
+需要注意, 根值判别法对于$\sqrt[n]{a_n}$以1为极限的情况是无法作出断言的. 这一点从$p$-级数的例子就能看出来: 不论$p$是何值, 都有$\lim_{n\to\infty}\sqrt[n]{1/n^p}=1$, 但级数$\sum_{n=1}^\infty\frac{1}{n^p}$的敛散性是随着$p$的变化而变化的.
+
+另一个比较原理是乘性的:
+\begin{theorem}{乘性比较原理}
+设$\{a_n\},\{b_n\}$是正数序列, 从某项开始$\frac{a_{n+1}}{a_n}\leq \frac{b_{n+1}}{b_n}$恒成立. 那么由级数$\sum_{n=1}^\infty b_n$收敛推出级数$\sum_{n=1}^\infty a_n$收敛, 而由级数$\sum_{n=1}^\infty a_n$发散推出级数$\sum_{n=1}^\infty b_n$发散.
+\end{theorem}
+这实际上是加性比较原理的推论: 如果$\frac{a_{n+1}}{a_n}\leq \frac{b_{n+1}}{b_n}$对于$n\geq N$一直成立, 那么将这些项连乘就得到
+$$
+a_{n+1}\leq \left(\prod_{k=1}^{N-1}\frac{a_{n+1}}{a_n}\right)b_{n+1}.
+$$
+由此即可应用加性比较原理.
+
+类似于根值判别法, 乘性比较原理的一个特殊情形是所谓的比值判别法:
+\begin{theorem}{比值判别法}
+设有正项级数$\sum_{n=1}^\infty a_n$. 如果存在$0<r<1$使得从某项开始一直有$a_{n+1}/a_n<r$, 那么级数$\sum_{n=1}^\infty a_n$收敛. 如果存在$R>1$使得从某项开始一直有$a_{n+1}/{a_n}>R$, 那么级数$\sum_{n=1}^\infty a_n$发散.
+\end{theorem}
+注意到$b_{n+1}/b_n=r$恰表示$\{b_n\}$构成公比为$r$的等比数列, 因此这实际上这还是在与几何级数进行比较. 与上面一样, 如果$\lim_{n\to\infty}a_{n+1}/a_n=1$, 那么关于级数$\sum_{n=1}^\infty a_n$的敛散性并不能下断言.
+
+\subsection{库莫尔判别法及其特殊情形}
+在根值或比值判别法都不能使用的情形, 就必须对级数进行更精细的研究了. 我们来叙述一个形式简单的一般判别法, 它属于库莫尔(Kummer):
+
+\begin{theorem}{库莫尔判别法}
+设$\{a_n\},\{c_n\}$是正数序列. 如果存在常数$k>0$使得从某项开始一直有
+$$
+c_n\frac{a_n}{a_{n+1}}-c_{n+1}\geq k,
+$$
+那么级数$\sum_{n=1}^\infty a_n$收敛 (注意这个条件比$c_n\frac{a_n}{a_{n+1}}-c_{n+1}>0$更强, 因为这不能排除它趋于零的可能). 如果从某一项开始
+$$
+c_n\frac{a_n}{a_{n+1}}-c_{n+1} \leq0,
+$$
+而且级数$\sum_{n=1}^\infty 1/c_n$发散, 那么级数$\sum_{n=1}^\infty a_n$发散.
+\end{theorem}

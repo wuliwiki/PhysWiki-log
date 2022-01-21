@@ -7,7 +7,7 @@
 
 本书中我们将大量使用自编的 \textbf{SLISC} 矩阵库， 即 \textbf{Scientific Library in Simple C++}． 代码可以从 \href{https://github.com/MacroUniverse/SLISC0}{GitHub 仓库}下载． 该库的特点是尽量不使用 C++ 的复杂语法（如模板）和复杂的类结构， 使代码便于阅读学习和修改， 同时又保持相对较高的性能． SLISC 使用兼容性较高的 C++11 标准．
 
-SLISC 库在矩阵类的基础上还实现了一些科学计算常用的功能， 如线性代数运算、 插值、 计时\upref{SliTim}、 文件和目录操作\upref{Sfile}、 矩阵文件读写\upref{matb}、 字符串处理、 特殊函数、 任意精度计算、 量子力学计算等． 当然， 一些功能基于其他开源项目如 Intel MKL， Arb\upref{ArbLib}， GSL\upref{GSL}, Eigen．
+SLISC 库在矩阵类的基础上还实现了一些科学计算常用的功能， 如线性代数运算、 插值、 计时\upref{SliTim}、 文件和目录操作\upref{Sfile}、 矩阵文件读写\upref{matb}、 字符串处理、 特殊函数、 任意精度计算、 量子力学计算等． 当然， 一些功能基于其他开源项目如 Intel MKL， Arb\upref{ArbLib}， GSL\upref{GSL}, Eigen， Arpack\upref{Arpkpp}． 在编译时可以通过宏来决定是否使用这些依赖．
 
 在 SLISC 中， 我们希望把矩阵进行一定程度的封装， 但又几乎不损失性能． 许多人使用流行的矩阵库例如 Eigen， 但是其代码复杂， 错误信息不容易懂， 代码修改起来非常困难． 例如 Eigen 的 \verb|MatrixXd| 矩阵类有 6 次继承， 一个 2x2 的矩阵在 gdb 里面调试的时候显示出来的变量信息是这样的：
 \begin{lstlisting}[language=cpp]
@@ -26,13 +26,13 @@ m_storage = {m_data = 0x855ceb0, m_rows = 2, m_cols = 2}}, <No data fields>
 
 以下列出 SLISC 的一些特性， 我们以后会详细介绍．
 \begin{itemize}
-\item 全部定义使用 \verb|namespace slisc|， 所有宏以 \verb|SLS| 开头．
+\item 全部定义使用 \verb|namespace slisc|， 所有宏以 \verb|SLS_| 开头．
 \item 完全不使用模板， 用 Matlab/Octave 生成代码． 初学用户不需要了解代码如何生成， 可以直接阅读或使用生成后的代码．
 \item 实现了密矩阵和一些稀疏矩阵．
 \item 实现了密矩阵的剪切，并用于函数接口． 这会有少量的额外运算， 但使用起来却比指针方便得多． 用户可以自行选择使用哪种接口．
 \item debug 模式实现了详尽的尺寸和指标检查， 可以及时发现指标超出长度等错误．
 \item 函数尽量首先使用和 Lapack 类似的指针接口实现， 然后再封装一层更友好的接口．
-\item 底层使用 Intel 的 Math Kernel Library (MKL) 来实现线性代数运算， 可以保证性能．
+\item 线性代数运算底层使用 Intel 的 Math Kernel Library (MKL) 来实现， 可以保证性能．
 \item 尽量不使用 \verb|unsigned| 类型．
 \item 为了保证性能， 函数内部尽量不改变矩阵尺寸， 这是因为内存的动态分配往往耗时较多．
 \end{itemize}

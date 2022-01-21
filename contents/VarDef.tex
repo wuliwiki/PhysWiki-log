@@ -1,0 +1,64 @@
+% 变分的基本定理（变分学）
+% 变分|基本定理
+
+
+\pentry{变分的变换\upref{VarCha}}
+本节给出的两个定理，将有助于引出欧拉方程．其中一个定理属于拉格朗日，另一个属于黎曼．由拉格朗日推演的欧拉方程是不精确的，这可从拉格朗日变换\upref{VarCha}的定义中看到．而由黎曼推演可精确的推出欧拉方程，并且得到在极值曲线的正规点上，$y''$存在，而这是事先并未假定的．本节将证明推演欧拉方程用到的这两个定理．
+
+\begin{theorem}{（拉格朗日）}\label{VarDef_the1}
+若对任意的属于 $C_1$ 类（\autoref{Varia_sub1}~\upref{Varia}）的函数 $\eta(x)$，并且其满足 $\eta(a)=\eta(b)=0$，属于 $C_1$ 类的函数 $M(x)$ 都有
+\begin{equation}\label{VarDef_eq1}
+\int_a^b M(x)\eta(x)\dd x=0
+\end{equation}
+则对于一切的 $a\leq x\leq b,M(x)=0$.
+\end{theorem}
+\begin{theorem}{（黎曼）}\label{VarDef_the2}
+若对任意的属于 $C_1$ 类的函数 $\eta(x)$，并且其满足 $\eta(a)=\eta(b)=0$，属于 $C_1$ 类的函数 $M(x)$ 都有
+\begin{equation}\label{VarDef_eq2}
+\int_a^b M(x)\eta'(x)\dd x=0
+\end{equation}
+则对于一切的 $a\leq x\leq b$，$M(x)$ 为常数.
+\end{theorem}
+\subsection{证明}
+以下将用反证法证明．
+\subsubsection{\autoref{VarDef_the1} 的证明}
+设在区间 $[a,b]$  上某点 $c$，$M(c)\neq0$．例如 $M(c)>0$ ，由于 $M(x)$ 的连续性，取充分大的 $n$，可以得到包含在 $[a,b]$ 内的区间 $[x_0,x_0+\frac{\pi}{n}]$ ，它包含着 $c$ 点，并且在它上面 $M(x)$ 大于某一正数 $m$．
+定义
+\begin{equation}
+\eta_0(x)=\begin{cases}
+&\sin^2[n(x-x_0)],\quad &x\in[x_0,x_0+\frac{\pi}{n}]\\
+&0,\quad &other
+\end{cases}
+\end{equation}
+则函数 $\eta_0(x)$ 是 $C_1$ 类的，且 $\eta_0(a)=\eta_0(b)=0$．因此，由\autoref{VarDef_the1} 条件，\autoref{VarDef_eq1} 成立．
+但
+\begin{equation}
+\begin{aligned}
+&\int_a^b M(x)\eta_0(x)\dd x\\
+&=\int_{x_0}^{x_0+\frac{\pi}{n}}M(x)\sin^2[n(x-x_0)]\dd x\\
+&>m\int_{x_0}^{x_0+\frac{\pi}{n}}\sin^2[n(x-x_0)]\dd x=\frac{\pi m}{2n}>0
+\end{aligned}
+\end{equation}
+这与\autoref{VarDef_eq1} 矛盾，故\autoref{VarDef_the1} 得证．
+\subsubsection{\autoref{VarDef_the2} 的证明}
+设 $M(x)$ 不是常数，则在区间 $[a,b]$ 上，至少有两点 $c_1,c_2$，使得 $M(c_1)\neq M(c_2)$ ，设 $M(c_1)>M(c_2)$．由 $M(x)$ 的连续性，存在 $d_1,d_2$，使得
+\begin{equation}
+M(c_1)>d_1>d_2>M(c_2)
+\end{equation}
+并且取充分大的 $n$，可以得到包含在 $[a,b]$ 内的一对区间 $[x_0,x_0+\frac{\pi}{n}]$ 和 $[x_1,x_1+\frac{\pi}{n}]$，它们分别包含着点 $c_1$ 和 $c_2$，并且在前一区间上面 $M(x)>d_1$，而在另一区间上， $M(x)<d_2$． 定义函数
+\begin{equation}
+\eta'(x)=\begin{cases}
+&\sin^2[n(x-x_0)],\quad &x\in[x_0,x_0+\frac{\pi}{n}]\\
+&-\sin^2[n(x-x_1)],\quad &x\in[x_1,x_1+\frac{\pi}{n}]\\
+&0,\quad &other
+\end{cases}
+\end{equation}
+显然，$\eta'(x)$ 连续，所以函数 $\eta(x)=\int_a^x\eta'(x)\dd x$ 连续且有连续微商 $\eta'(x)$，并且 $\eta(a)=\eta(b)=0$，由\autoref{VarDef_the2} 条件，\autoref{VarDef_eq2} 成立，但
+\begin{equation}
+\begin{aligned}
+&\int_a^b M(x)\eta'(x)\dd x=\\
+&\int_{x_0}^{x_0+\frac{\pi}{n}}M(x)\sin^2[n(x-x_0)]\dd x-\int_{x_1}^{x_1+\frac{\pi}{n}}M(x)\sin^2[n(x-x_1)]\dd x\\
+&>(d_1-d_2)\int_0^{\frac{\pi}{n}}\sin^2nx\dd x>0
+\end{aligned}
+\end{equation}
+这与\autoref{VarDef_eq2} 矛盾，故\autoref{VarDef_the2} 得证．

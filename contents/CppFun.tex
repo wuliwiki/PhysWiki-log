@@ -1,0 +1,83 @@
+% C++函数
+% C++语言
+
+\begin{issues}
+\issueDraft
+\end{issues}
+
+\pentry{C++基础\upref{Cpp0}}
+函数是组织好的，可重复使用的，用来实现相关功能的代码段．C++ 提供了许多\textbf{内建函数}，比如 STL 的 \verb|sort()|, \verb|cmath| 的 \verb|sqrt()|．我们也可以自己创建函数，这被叫做\textbf{自定义函数}．使用自定义函数，可以让程序变的更简洁．
+
+\subsection{函数的定义和声明}
+我们先从几个例子开始
+\begin{lstlisting}[language=cpp]
+#include <iostream>
+using namespace std;
+
+int add1(int a, int b){//声明方式1
+    return a+b;
+}
+
+int add2(int, int);//声明方式2
+
+int main(){//main函数，每个c++程序运行都是调用main函数，其他自定义函数不能调用它
+    int a, b;
+    cin>>a>>b;
+    cout<<add1(a, b)<<endl;//调用1
+    cout<<add2(a, b)<<endl;//调用2
+    return 0;
+}
+
+int add2(int a, int b){//函数2的代码
+    return a+b;
+}
+\end{lstlisting}
+这段代码简单地介绍了C++函数声明方式，现在给出函数声明的伪代码
+\begin{lstlisting}[language=cpp]
+数据类型 函数名(形参列表){
+    函数体
+    return 返回值;
+}
+\end{lstlisting}
+备注： 数据类型除了 \verb|int|， \verb|char| 这些类型外还有一个叫 \verb|void| 的类型，就相当于返回一个空类型， 这个函数不用写 \verb|return| 返回值；
+
+% 2函数的传值
+\subsection{函数的传值}
+先来看个例子
+\begin{lstlisting}[language=cpp]
+#include <iostream>
+using namespace std;
+
+void swap(int a, int b){
+    int tmp = a;
+    a = b;
+    b = tmp;
+}
+
+int main(){
+    int a, b;
+    cin >> a >> b;
+    swap(a, b);
+    cout << a << " " << b;
+    return 0;
+}
+\end{lstlisting}
+这个函数的作用是交互两个数，但是由于交换的是在 \verb|swap| 函数内部，不对 \verb|main| 函数造成影响，所以想要达到原来的目标，\verb|a b| 变量应该改为引用变量
+\begin{lstlisting}[language=cpp]
+#include <iostream>
+using namespace std;
+
+void swap(int &a, int &b){
+    int tmp = a;
+    a = b;
+    b = tmp;
+}
+
+int main(){
+    int a, b;
+    cin >> a >> b;
+    swap(a, b);
+    cout << a << " " << b;
+    return 0;
+}
+\end{lstlisting}

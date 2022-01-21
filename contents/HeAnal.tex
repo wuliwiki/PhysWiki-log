@@ -195,28 +195,55 @@ f(k_1, k_2, \uvec k_1, \uvec k_2) = \sum_{L, M, l_1, l_2} (-\I)^{l_1 + l_2} \E^{
 若我们有一个 $l_1, l_2, L, M$ 的列表和一个 $l_1, l_2, m_1, m_2$ 的列表， 该变换就可以用矩阵表示．
 
 \subsection{单电子位置分布}
-
-由\autoref{IdPar_ex1}~\upref{IdPar}， 在 $\bvec r_1$ 位置发现任意一个粒子的概率密度为
+由\autoref{IdPar_ex1}~\upref{IdPar}， 在 $\bvec r_2$ 位置发现任意一个粒子的概率密度为
 \begin{equation}
-P(\bvec r_1) = 2\int \abs{\Psi(\bvec r_1, \bvec r_2)}^2 \dd[3]{r_2}
+P(\bvec r_2) = 2\int \abs{\Psi(\bvec r_1, \bvec r_2)}^2 \dd[3]{r_1}
 \end{equation}
-若使用\autoref{HeAnal_eq6} 形式的波函数\footnote{在程序中不一定需要先这么做， 只需要将\autoref{HeAnal_eq7} 代入以下各式， 在将 $L, M, l_1, l_2$ 的求和提到最外面即可}， 这个积分的形式就变得相当简单， 先令 $\bvec r_1$ 为常数， 计算关于 $r_2$ 的径向波函数
+若使用\autoref{HeAnal_eq6} 形式的波函数\footnote{在程序中不一定需要先这么做， 只需要将\autoref{HeAnal_eq7} 代入以下各式， 在将 $L, M, l_1, l_2$ 的求和提到最外面即可}， 这个积分的形式就变得相当简单， 先令 $\bvec r_2$ 为常矢量， 计算关于 $r_1$ 的径向波函数
 \begin{equation}\label{HeAnal_eq15}
-\ali{
-\psi_{l_2, m_2}(\bvec r_1, r_2) &= \frac{1}{r_1} \sum_{l_1, m_1} \psi_{l_1, l_2}^{m_1, m_2}(r_1, r_2) Y_{l_1, m_1}(\uvec r_1)\\
-&= \frac{1}{r_1} \sum_{L,M,l_1} \bmat{l_1 & l_2 & L\\ M - m_2 & m_2 & M} \psi_{l_1, l_2}^{L,M}(r_1, r_2) Y_{l_1, m_1}(\uvec r_1)
-}\end{equation}
+\psi_{l_1, m_1}(r_1, \bvec r_2) = \frac{1}{r_2} \sum_{l_2, m_2} \psi_{l_1, l_2}^{m_1, m_2}(r_1, r_2) Y_{l_2, m_2}(\uvec r_2)
+\end{equation}
 这样\autoref{HeAnal_eq6} 就变为
 \begin{equation}
-\Psi(\bvec r_1, \bvec r_2) = \frac{1}{r_2} \sum_{l_2, m_2} \psi_{l_2, m_2}(\bvec r_1, r_2) Y_{l_2, m_2} (\uvec r_2)
+\Psi(\bvec r_1, \bvec r_2) = \frac{1}{r_1} \sum_{l_1, m_1} \psi_{l_1, m_1}(r_1, \bvec r_2) Y_{l_1, m_1} (\uvec r_1)
 \end{equation}
 单电子概率为
 \begin{equation}
 \begin{aligned}
-P(\bvec r_1) &= 2\sum_{l_2, m_2} \int \abs{\psi_{l_2, m_2}(\bvec r_1, r_2)}^2 \dd{r_2}\\
-& = \frac{2}{r_1^2} \sum_{l_2, m_2} \int \abs{\sum_{l_1, m_1} \psi_{l_1, l_2}^{m_1, m_2}(r_1, r_2) Y_{l_1,m_1}(\uvec r_1)}^2 \dd{r_2}
+P(\bvec r_2) &= 2\sum_{l_1, m_1} \int \abs{\psi_{l_1, m_1}(r_1, \bvec r_2)}^2 \dd{r_1}\\
+& = \frac{2}{r_2^2} \sum_{l_1, m_1} \int \abs{\sum_{l_2, m_2} \psi_{l_1, l_2}^{m_1, m_2}(r_1, r_2) Y_{l_2,m_2}(\uvec r_2)}^2 \dd{r_1}
 \end{aligned}
 \end{equation}
+
+\subsubsection{每个 $(n_1,l_1)$ channel 的单电子位置分布}
+把总波函数 $\Psi(\bvec r_1, \bvec r_2)$ 投影到第一个电子的束缚态上， 得
+\begin{equation}
+\begin{aligned}
+&\braket{n_1,l_1,m_1}{\Psi}(\bvec r_2)\\
+&= \int R_{n_1, l_1}(r_1) Y_{l_1, m_1}(\uvec r_1) \qty[\frac{1}{r_1 r_2} \sum_{l_1',m_1'}\sum_{l_2, m_2} \psi_{l'_1,l_2}^{m'_1,m_2}(r_1,r_2) Y_{l'_1,m'_1}(\uvec r_1)Y_{l_2,m_2}(\uvec r_2)] r_1^2\dd{\Omega_1}\dd{r_1}\\
+&= \frac{1}{r_2}\sum_{l_2,m_2} \qty[\int r_1 R_{n_1,l_1}(r_1) \psi_{l_1,l_2}^{m_1,m_2}(r_1,r_2) \dd{r_1}] Y_{l_2,m_2}(\uvec r_2)\\
+&= \frac{1}{r_2}\sum_{l_2,m_2} \psi_{l_2,m_2}^{(n_1,l_1,m_1)}(r_2) Y_{l_2,m_2}(\uvec r_2)
+\end{aligned}
+\end{equation}
+现在对给定的 $(n_1, l_1)$ channel， 
+\begin{equation}
+\Psi_{n_1,l_1}(\bvec r_1, \bvec r_2) = \sum_{m_1} \ket{n_1,l_1,m_1}(\bvec r_1) \braket{n_1,l_1,m_1}{\Psi}(\bvec r_2)
+\end{equation}
+\begin{equation}
+\begin{aligned}
+&P_{n_1,l_2}(\bvec r_2) = \int \abs{\Psi_{n_1,l_1}(\bvec r_1, \bvec r_2)}^2 \dd[3]{r_1}
+= \sum_{m_1} \abs{\braket{n_1,l_1,m_1}{\Psi}(\bvec r_2)}^2\\
+&= \frac{1}{r_2^2} \sum_{m_1} \abs{\sum_{l_2,m_2} \psi_{l_2,m_2}^{(n_1,l_1,m_1)}(r_2) Y_{l_2,m_2}(\uvec r_2)}^2
+\end{aligned}
+\end{equation}
+
+要计算给定方向 $\uvec r_2$ 一个窄圆锥中的 $r_2$ 平均值， 就是
+\begin{equation}\label{HeAnal_eq18}
+\ev{r_2}_{n_1,l_1,\uvec r_2} = \frac{\int r_2 P_{n_1,l_2}(\bvec r_2) r_2^2 \dd{r_2}}{\int P_{n_1,l_2}(\bvec r_2) r_2^2 \dd{r_2}}
+= \frac{\sum_{m_1} \int r_2\abs{\sum_{l_2,m_2} \psi_{l_2,m_2}^{(n_1,l_1,m_1)}(r_2) Y_{l_2,m_2}(\uvec r_2)}^2 \dd{r_2}}{\sum_{m_1} \int \abs{\sum_{l_2,m_2} \psi_{l_2,m_2}^{(n_1,l_1,m_1)}(r_2) Y_{l_2,m_2}(\uvec r_2)}^2\dd{r_2}}
+\end{equation}
+根据选择定则， $n_1 = 2$ 时共有 5 个分波 $(n_1,l_1,m_1,l_2,m_2) = (2, 0, 0, 1, 0)$， $(2,1,0,0,0)$， $(2,1,0,2,0)$， $(2,1,\pm 1, 2,\mp 1)$． 对于 $(n_1, l_1) = (2, 1)$ 共有 4 个分波． 若选择 $z$ 方向， $m_1 = -m_2 \ne 0$ 时 $Y_{l_2,m_2}(\uvec z) \equiv 0$， 所以求和中只有两个分波， 但算出来的延迟只是 Pazourek 用 EWS 算出的一半左右． 这很可能是因为她的圆锥取了 10° 的张角， 而不是假设细圆锥．
+
 
 \subsection{单电离动量谱}
 在 $P(r_1, r_2)$ 分布中， 单电离一般是可以与双电离区分开的， 只需要取一个 box 即可： $r_1 < r_{1,max}$ ， $r_2 > r_{2,min}$

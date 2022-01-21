@@ -1,0 +1,139 @@
+% Mathematica 脚本模式
+% Mathematica|命令行脚本|wolframscript
+
+\begin{issues}
+\issueDraft
+\issueTODO
+\end{issues}
+
+\subsection{命令行二进制程序}
+
+Mathematica 有个命令行解释程序 \verb`wolframscript`，可以用来运行用 \verb`Wolfram` 语言编写的脚本．
+可以使用\verb`bash`命令查看：
+\begin{lstlisting}[language=bash]
+file -L $(which wolframscript)
+wolframscript --help #查看使用帮助
+\end{lstlisting}
+
+\subsection{命令行选项} 
+
+\verb`wolframscript --help` 的输出如下:
+
+\subsubsection{辅助功能} 
+\begin{itemize}
+\item \verb`-v，-verbose`： 在执行过程中打印附加信息．
+\item \verb`-h，-help` ： 打印帮助文本．
+\item \verb`-version`： 打印 WolframScript 的版本．
+\end{itemize}
+
+\subsubsection{运行模式} 
+\begin{itemize}
+\item \verb`-c，-code WL`： 给出要执行的 Wolfram Language 代码．
+\item \verb`-f，-file PATH`： 给出要执行的包含 Wolfram 语言代码的文件．
+\item \verb`-a，-api URL|UUID`： 使用指定 \verb`URL` 的 \verb`API`，或来自指定 \verb`UUID` 的云或本地对象． 
+在\verb`-args`之后，以 \verb`key=value` 的形式提供参数．
+\item \verb`-fun，-function WL`： 使用函数，参数为使用 \verb`-args` 给出的 \verb`字符串`．
+并将参数解析为 \verb`-signature` 给出的类型．
+\item \verb`--，-args ARGS．．．`： 与 \verb`-api` 或 \verb`-function` 一起使用，以提供参数．
+\item \verb`-s，-signature TYPE．．．`： 与 \verb`-function` 和 \verb`-args` 一起使用，为提供的参数指定解释器类型．
+\end{itemize}
+
+\subsubsection{运行选项}
+\begin{itemize}
+\item \verb`-charset ENCODING`： 使用\verb`ENCODING`进行输出． 编码可以是 \verb`None`，用于输出原始字节,
+或是 \verb`$CharacterEncodings` 中的任何条目，除了 \verb`Unicode`． 默认情况继承终端的 \verb`语言设置` 中的值．
+\item \verb`-format TYPE`： 指定输出的格式． 可以使用 \verb`Export` 所理解的任何格式．
+\item \verb`-print [all]`： 当运行 \verb`脚本` 时，打印脚本 \verb`最后一行` 的结果． 如果给了 \verb`all` 参数，则打印 \verb`每一行`．
+\item \verb`-linewise`： 执行读取到的 \verb`标准输入` 中的每行代码．
+\item \verb`-script ARGS．．．`： 与 \verb`wolfram -script` 相对应，作用是设置 \verb`$ScriptCommandLine`．
+\end{itemize}
+
+\subsection{Wolfram内部预定义变量}
+
+\subsubsection{常用调用方式}
+
+建立后缀名为 \verb`．wl`/\verb`．wls` 的文件，然后按平常写 \verb`Mathematica` 笔记本的语法编写脚本．
+但最好用 \verb`字符串函数` 代替\verb`Box` 相关的函数，如 \verb`TableForm`．
+运行时，用 \verb`wolframscript` 唤起脚本(如 windows 为 \verb`wolframscript．exe`)．
+
+假如当前目录下有脚本 \verb`test．wl`，用类似下面的方式运行:
+\begin{lstlisting}[language=bash]
+wolframscript -script test．wl \
+--Lbd-num '0．90' --Lbd-fit '0．90'  --ord '\$ord0'
+\end{lstlisting}
+
+其中 \verb`--Lbd-num '0．90' --Lbd-fit '0．90'  --ord '\$ord0'` 将作为参数提供给脚本 \verb`test．wl`，可在脚本内部使用．
+注意 \verb`$ScriptCommandLine` 中的参数，其类型均为 \verb`String`．
+也就是命令行接收到的 \verb`参数`，会被强制转码为 \verb`字符串`．
+所以上面收到的参数列表为:
+\begin{lstlisting}[language=wolfram]
+{"．/test．wl"，"--Lbd-num"，"0．90"，"--Lbd-fit"，"0．90"，"--ord"，"$ord0"}
+\end{lstlisting}
+如果需要使用 \verb`数字`或其他类型的 \verb`值`，需要在脚本内部自行 \verb`ToExpression`．
+
+此外，如果命令行参数中包含 \verb`$`，需要用 \verb`单引号 + 反斜杠`转义(escape)．
+例如\verb`$ord` -> \verb`'\$ord0'`．
+
+在 \verb`WolframScript` 开始执行时，会预定义一些变量．
+因此在脚本内部，可以从这些 \verb`预设变量` 读取 \verb`shell` 中提供的参数．
+
+\begin{itemize}
+\item \verb`$CommandLine`： \verb`字符串列表`，给出运行 \verb`WolframKernel` 使用的 \verb`完整命令行`．
+\item \verb`$ScriptCommandLine`： 为 \verb`正运行的脚本` 准备的 \verb`命令行参数列表`．
+这些参数出现在 \verb`-option` 给出的选项之后．
+\item \verb`$ScriptInputString`： 代表在 \verb`标准输入通道` 上对 \verb`原始操作系统命令` 的输入,
+正运行的 Wolfram Language 实例即来自 \verb`此命令的调用`(invoke)
+脚本迭代一次，\verb`-linewise` 选项就把 \verb`标准输入` 的一行载入该变量．
+可在交互式脚本中使用．
+\end{itemize}
+
+
+在上面的例子中，三个变量被填充如下，不同平台可能稍有不同
+
+\begin{lstlisting}
+$CommandLine->{/usr/local/Wolfram/Mathematica/12.2/
+SystemFiles/Kernel/Binaries/Linux-x86-64/WolframKernel,
+-wlbanner,-script,test．wl,--,test．wl,
+--Lbd-num,0．90,--Lbd-fit,0．90,--ord,$ord0}
+
+$ScriptCommandLine->{test．wl,--Lbd-num,0．90,--Lbd-fit,0．90,--ord,ord0}
+
+$ScriptInputString->None
+\end{lstlisting}
+
+也可用 \verb`wolfram` 命令运行脚本，但是 \verb`wolfram` 不会设置 \verb`$ScriptCommandLine`，只会填充 \verb`$CommandLine`:
+
+\begin{lstlisting}[language=bash]
+wolfram -script test．wl  --Lbd-num '0．90' --Lbd-fit '0．90'  --ord '\$ord0'
+\end{lstlisting}
+
+\subsubsection{Unix平台} 
+
+\verb`Unix` 还可以加上 \verb`Shebang` 行． 即在脚本文件 **首行** 添加
+\begin{lstlisting}[language=bash]
+#!/usr/bin/env wolframscript [其他选项]
+\end{lstlisting}
+
+运行的时候，不需要先输入 \verb`wolframscript`，传递参数的方法和上面相同．
+
+\begin{lstlisting}[language=bash]
+．/test．wl para1 para2
+wolframscript -script ．/init．wl &>\
+~/test/log．txt & # 在后台运行，把输出重定向到日志文件 log．txt
+\end{lstlisting}
+
+经常用到的 mma 系统变量，参考
+
+\begin{itemize}
+\item \verb`guide/SystemInformation` : mma 系统信息
+\item \verb`guide/WolframSystemSetup`: 更一般的系统设置
+\item \verb`$InputFileName`: 脚本的绝对路径．
+\item \verb`$Notebooks`: 如果是用前端运行的，则为\verb`True`．
+\item \verb`$BatchInput`: 输入是否来自批处理
+\item \verb`$BatchOutput`: 如果在命令行中输出，则为\verb`True`．
+\item \verb`$CommandLine`: 唤醒环境变量所使用的命令行,
+\item \verb`$ProcessID`: 进程ID
+\item \verb`$ParentProcessID`:
+\item \verb`$Username`: 用户的登陆名
+\item \verb`Environment["var"]`: 操作系统的环境变量，如\verb`Environment["HOME"]`
+\end{itemize}
