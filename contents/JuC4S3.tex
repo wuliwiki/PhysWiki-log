@@ -1,0 +1,66 @@
+% Julia 的两个特殊类型
+% 特殊类型
+
+本文授权转载自郝林的 《Julia 编程基础》． 原文链接：\href{https://github.com/hyper0x/JuliaBasics/blob/master/book/ch04.md}{第 4 章 类型系统}．
+
+
+\subsubsection{4.3 两个特殊类型}
+
+\textbf{4.3.1 Any 类型}
+
+在Julia的类型图中，\verb|Any|是一个唯一的顶层类型．如果说超类型在上、子类型在下的话，那么它就处在类型图的最顶端．\verb|Any|类型是所有类型的直接或间接的超类型．也就是说，对于任意类型的变量\verb|x|，类型断言\verb|x::Any|都必定是成功的．
+
+还记得吗？我们在前面定义第一个\verb|sum1|函数的时候，并没有为它的两个参数指定类型．然而，在这种情况下，这两个参数实际上都会有一个缺省的类型，即：\verb|Any|类型．这也是为什么我们可以用任何类型的值作为参数值调用这个\verb|sum1|函数的原因．
+
+再比如，我们可以定义如下的原语类型（我们稍后会讲到这种类型）：
+
+\begin{lstlisting}[language=julia]
+julia> primitive type MyWord 64 end
+
+julia> 
+\end{lstlisting}
+
+注意，我们没有显式地指定它的超类型．然而，在这种情况下，\verb|MyWord|类型会有一个缺省的超类型，同样是\verb|Any|类型．也就是说，这个\verb|MyWord|类型是\verb|Any|类型的直接子类型．
+
+更宽泛地讲，\verb|Any|类型会在很多情况下担当默认类型并发挥其作用．我们在后面还会遇到类似的情形．另外，\verb|Any|类型是一个抽象类型．因此它本身是不能被实例化的．但所有的值却都是它的实例．
+
+\textbf{4.3.2 Union{} 类型}
+
+在 Julia 的类型图中，还有一个与\verb|Any|完全相对的类型．它就是\verb|Union{}|类型．由于这个类型是所有类型的子类型，所以它是一个底层类型，并且也是唯一的一个．它处在类型图的最底端．也就是说，对于任意类型的变量\verb|x|，类型断言\verb|x::Union{}|都必定是失败的．另外，与\verb|Any|一样，\verb|Union{}|也是一个抽象类型．
+
+从字面上我们就可以看出，\verb|Union{}|是一个被参数化的类型．它的源类型是\verb|Union{Types...}|类型，其中的\verb|Types...|代表任意个类型参数．如果这里有多个类型参数，那么它们之间需要用英文逗号分隔开．
+
+这个\verb|Union{Types...}|类型有着一种很特殊的用途．我们可以利用它，让一个单一的类型字面量代表多个类型．换句话说，把多个类型联合在一起形成一个类型，并让后者作为前者的统一代表．因此，我们也可以把这个类型称为联合类型．而每一个类型参数的组合都可以代表一种联合类型．示例如下：
+
+\begin{lstlisting}[language=julia]
+julia> IntOrString = Union{Integer, AbstractString} 
+Union{AbstractString, Integer}
+
+julia> 2020::IntOrString
+2020
+
+julia> "2020"::IntOrString
+"2020"
+
+julia> 
+\end{lstlisting}
+
+类型\verb|Union{Integer, AbstractString}|表示的是\verb|Integer|类型和\verb|AbstractString|类型的联合．因此，任何\verb|Integer|类型或\verb|AbstractString|类型的实例都可以被视为这个联合类型的实例．这就是类型断言\verb|2020::IntOrString|和\verb|"2020"::IntOrString|可以成功的原因．
+
+另外，由于Julia中的类型属于一类特殊的值（\verb|DataType|类型的值），所以上述的联合类型自然也就可以与标识符\verb|IntOrString|绑定在一起．这时，我们可以说\verb|IntOrString|是那个联合类型的别名（alias）．
+
+搞清楚了联合类型以及它的用途，我们就很容易理解“\verb|Union{}|类型处在类型图的最底端”的原因了．由于它的花括号中没有任何类型参数，所以这种联合类型也就代表不了任何类型，相当于一个“虚无”的类型．而任何类型都比“虚无”包含了更多的东西，所以它们都是这种联合类型的超类型．如果我们使用操作符\verb|<:|在这些类型之间做判断的话，就可以很形象地看到这种关系：
+
+\begin{lstlisting}[language=julia]
+julia> Union{} <: Integer
+true
+
+julia> Union{} <: Union{Integer}
+true
+
+julia> 
+\end{lstlisting}
+
+此示例中的两个表达式的结果值都是\verb|true|．这说明整数类型\verb|Integer|和联合类型\verb|Union{Integer}|都是“虚无”类型\verb|Union{}|的超类型．
+
+至此，我们已经较为充分地了解了Julia类型图中的两端，即：最顶端的\verb|Any|和最底端的\verb|Union{}|．下面，我们一起来看看在它们之间的类型都有哪些．

@@ -1,0 +1,171 @@
+% Julia 字符
+% 字符
+
+本文授权转载自郝林的 《Julia 编程基础》． 原文链接：\href{https://github.com/hyper0x/JuliaBasics/blob/master/book/ch06.md}{第 6 章 字符和字符串}．
+
+
+\subsubsection{6.2 字符}
+
+从表面上看，每一个字符都是一个独立且不可再分割的图形．但不要忘记，从存储的层面看，我们还可以把它们拆分成一个个代码单元，甚至一个个比特．
+
+\textbf{6.2.1 值的表示与操作}
+
+Julia 中的一个字符值只能容纳一个 Unicode 字符．并且，每个字符值都需要由一对单引号包裹．通过 REPL 环境，我们可以很方便地获知任何字符值的细节，例如：
+\begin{lstlisting}[language=julia]
+julia> 'a'
+'a': ASCII/Unicode U+0061 (category Ll: Letter, lowercase)
+
+julia> '中'
+'中': Unicode U+4e2d (category Lo: Letter, other)
+
+julia> 
+\end{lstlisting}
+
+其中，对于我们来说比较重要的是回显内容中的 Unicode 代码点．比如，字符\verb|'a'|的 Unicode 代码点是\verb|U+0061|．而\verb|ASCII/Unicode|的意思是，\verb|'a'|同时也是 ASCII 编码所支持的字符，而且 ASCII 和 UTF-8 对它编码之后产生的整数是相同的．至于括号中的代码点分类等信息，我们一般不用太关注．
+
+除了在一对单引号之间直接插入一个 Unicode 字符，我们还可以用另外两种标准的方式来表示一个字符值．一种方式是，以\verb|\u|为前缀并后跟代表了某个 Unicode 代码点的十六进制数，最多 4 个数字．另一种方式与之类似，以\verb|\U|为前缀并后跟代表了某个 Unicode 代码点的十六进制数，最多 8 个数字．注意，对于后一种方式，实际上后跟 6 个十六进制数字就足够了．如果最左边的 2 个十六进制数字不是\verb|0|，那么它肯定就超出了 Unicode 的代码空间．下面是一些示例：
+\begin{lstlisting}[language=julia]
+julia> '\u4e2d'
+'中': Unicode U+4e2d (category Lo: Letter, other)
+
+julia> '\U004e2d'
+'中': Unicode U+4e2d (category Lo: Letter, other)
+
+julia> '\U10ffff'
+'\U10ffff': Unicode U+10ffff (category Cn: Other, not assigned)
+
+julia> '\U0110ffff'
+ERROR: syntax: invalid escape sequence
+
+julia> 
+\end{lstlisting}
+
+此外，我们还可以用\verb|'\xHH'|或\verb|'\OOO'|的形式表示一个可由 ASCII 编码的字符值．其中，\verb|HH|的意思是至多 2 个十六进制的数字，而\verb|OOO|的含义是至多 3 个八进制的数字．例如：
+\begin{lstlisting}[language=julia]
+julia> '\x61'
+'a': ASCII/Unicode U+0061 (category Ll: Letter, lowercase)
+
+julia> '\141'
+'a': ASCII/Unicode U+0061 (category Ll: Letter, lowercase)
+
+julia> 
+\end{lstlisting}
+
+还有，那些经典的转义序列（escape sequence）也可以被用在这里．比如，\verb|'\t'|表示制表符，\verb|'\n'|表示换行符，等等．
+
+在某些情况下，由于一些原因（如字面量冲突、含义冲突等）我们无法在代码中直接写出需要使用的字符．这时就要用到转义，也就是用多个字符的有序组合来代表原本需要的字符．这里的多个字符的有序组合就叫做转义序列．
+
+那什么叫做经典的转义序列呢？它是指，针对于 ASCII 编码集中的那些不可打印字符的转义序列．这些转义序列最早是在 C 语言中被定义的，后来又被很多编程语言沿用．它们的字面量与原字符的编码值是无关的，但或多或少会与其含义存在一些关联．详见下表．
+\begin{table}[ht]
+\centering
+\caption{经典的转义序列}\label{JuC6S2_tab1}
+\begin{tabular}{|c|c|c|}
+\hline
+转义序列 & ASCII 编码值 & 含义 \\
+\hline
+\0 & 0 & 空字符（null） \\
+\hline
+\a & 7 & 响铃（bell） \\
+\hline
+\b & 8 & 退格（backspace） \\
+\hline
+\f & C & 换页（new page） \\
+\hline
+\n & A & 换行（new line） \\
+\hline
+\r & D & 回车（carriage return） \\
+\hline
+\t & 9 & 水平制表（horizontal tab） \\
+\hline
+\v & B & 垂直制表（vertical tab） \\
+\hline
+\end{tabular}
+\end{table}
+
+提示一下，该表中表示 ASCII 编码值的那些整数都是十六进制的．
+
+由于转义序列都是以\verb|\|为前缀的，所以当我们想表示一个反斜杠的时候就需要在它的前面再加一个反斜杠，以说明后面的反斜杠代表的并不是转义序列的前缀，如：
+\begin{lstlisting}[language=julia]
+julia> '\\'
+'\\': ASCII/Unicode U+005c (category Po: Punctuation, other)
+
+julia> 
+\end{lstlisting}
+
+回显内容中的\verb|005c|就是反斜杠的 ASCII 编码值．
+
+另外，由于字符值都需要以单引号包裹，所以如果我们想表示单引号本身的话，那么也要用反斜杠转义一下：
+\begin{lstlisting}[language=julia]
+julia> '\''
+'\'': ASCII/Unicode U+0027 (category Po: Punctuation, other)
+
+julia> 
+\end{lstlisting}
+
+回显内容中的\verb|0027|就是单引号的 ASCII 编码值．
+
+最后，顺便提一下，比较操作符是支持字符值的．这种比较也是基于 Unicode 代码点的．比如：
+\begin{lstlisting}[language=julia]
+julia> 'A' < 'a' < '中'
+true
+
+julia> 
+\end{lstlisting}
+
+另外，加法和减法也可以作用于字符值．例如，运算表达式\verb|'A' + 32|的求值结果就是\verb|'a'|．这表明字符\verb|'A'|与\verb|'a'|的 Unicode 代码点相差\verb|32|．
+
+\textbf{6.2.2 类型与转换}
+
+在 Julia 中，字符值的默认类型是\verb|Char|．\verb|Char|类型是一个宽度为 32 个比特的原语类型．显然，这个类型的值足够装下任何一个采用 UTF-8 编码的 Unicode 代码点．同时，它也是抽象类型\verb|AbstractChar|的子类型，还是 Julia 预定义的唯一的一个具体的字符类型．
+
+从存储层面看，\verb|Char|类型与\verb|UInt32|类型几乎是相同的．因此我们可以说，字符值就相当于无符号的整数．我们可以很轻易地把一个字符值转换成一个整数值，反之亦然．示例如下：
+\begin{lstlisting}[language=julia]
+julia> UInt32('中')
+0x00004e2d
+
+julia> Char(0x00004e2d)
+'中': Unicode U+4e2d (category Lo: Letter, other) 
+
+julia> Int64('中')
+20013
+
+julia> Char(20013)
+'中': Unicode U+4e2d (category Lo: Letter, other)
+
+julia> 
+\end{lstlisting}
+
+但要注意，并不是所有的\verb|UInt32|类型的值都会代表一个有效的 Unicode 代码点．比如：
+\begin{lstlisting}[language=julia]
+julia> Char(0x11ffff)
+'\U11ffff': Unicode U+11ffff (category In: Invalid, too high)
+
+julia> 
+\end{lstlisting}
+
+回显的括号中已有明确的提示，整数值\verb|0x11ffff|是一个无效的 Unicode 代码点．因为它表示的数字太大了，超出了 Unicode 编码标准所定义的代码空间．对于这种有效性的判断，我们可以使用\verb|isvalid|函数：
+\begin{lstlisting}[language=julia]
+julia> isvalid('中')
+true
+
+julia> isvalid(Char(0x00004e2d))
+true
+
+julia> isvalid(Char(0x11ffff))
+false
+
+julia> 
+\end{lstlisting}
+
+此外，我们总是可以用\verb|codepoint|函数把一个字符值转换成一个整数值：
+\begin{lstlisting}[language=julia]
+julia> codepoint('中')
+0x00004e2d
+
+julia> typeof(ans)
+UInt32
+
+julia> 
+\end{lstlisting}
+
+注意，对于用不同格式编码的字符值，\verb|codepoint|函数的结果值的类型可能会不同．但可以确定的是，它总会返回一个整数值．

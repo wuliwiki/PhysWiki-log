@@ -124,3 +124,36 @@ e^{ix}=1+ix-\frac{x^2}{2!}-i\frac{x^3}{3!}+\frac{x^4}{4!}+i\frac{x^5}{5!}-\frac{
 \begin{equation}
 (1+x)^{a}=\sum_{i=0}^{\infty}{a\choose i}x^i=\sum_{i=0}^{\infty}\frac{\Gamma(a+1)}{\Gamma(i+1)\Gamma(-i+a+1)}x^i
 \end{equation}
+
+\subsection{推导}
+如果假设函数 $f$ 在开区间 $(x_0-r,x_0+r)$ 上直到$N+1$次可微， 那么可以利用分部积分公式\upref{IntBP}：
+\begin{equation}
+\begin{aligned}
+f(x)
+&=f(x_0)+\int_{x_0}^{x}f'(t)\dd{t}\\
+&=f(x_0)-\int_{x_0}^{x}f'(t)\dv{t}(x-t) \dd{t}\\
+&=f(x_0)+f'(x_0)(x-x_0)+\int_{x_0}^{x}f''(t)(x-t) \dd{t}.
+\end{aligned}
+\end{equation}
+由于 $(x-t)=-\dv{t} (x-t)^2/2!$, 故可以再次分部积分， 得到
+\begin{equation}
+\begin{aligned}
+f(x)
+=f(x_0)+f'(x_0)(x-x_0)+\frac{f''(x_0)}{2!}(x-x_0)^2
++\frac{1}{2!}\int_{x_0}^{x}f^{(3)}(t)(x-t)^2dt.
+\end{aligned}
+\end{equation}
+如此续行， 即得到
+\begin{equation}
+\begin{aligned}
+f(x)
+&=f(x_0)+f'(x_0)(x-x_0)+\frac{f''(x_0)}{2!}(x-x_0)^2+...+\frac{f^{(N)}(x_0)}{N!}(x-x_0)^N\\
+&\quad+\frac{1}{N!}\int_{x_0}^{x}f^{(N+1)}(t)(x-t)^{N} \dd{t}.
+\end{aligned}
+\end{equation}
+最后的误差可利用定积分估值估计为
+\begin{equation}
+\left|\frac{1}{N!}\int_{x_0}^{x}f^{(N+1)}(t)(x-t)^{N} \dd{t} \right|
+\leq\frac{\sup_{t\in I}|f^{(N+1)}(t)|}{N!}|x-x_0|^{N+1}.
+\end{equation}
+显然， 这就给出了唯一一个满足开头要求的多项式近似．

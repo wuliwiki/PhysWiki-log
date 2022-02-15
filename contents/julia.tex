@@ -17,12 +17,14 @@ sudo snap install Julia --classic
 \subsection{命令行}
 \begin{itemize}
 \item 最简单的 Hello World 程序如 \verb|println("hello world")|
+
 \item 为了区分， 系统的命令行叫做 terminal， 而 Julia 的命令行叫做 \textbf{REPL (read-eval-print-loop)}
 \item 注释用 \verb|#|， 或者 \verb|#=一些注释=#|
 \item \verb|Ctrl + D| 退出或者 \verb|exit()| 退出
 \item \verb|ans| 变量和 Matlab 一样， 用于显示上一次运算的输出结果（结果赋值给变量的除外）
 \item 在一行中运行多个命令， 用分号隔开
 \item 要清空 workspace 中的变量只能重启
+\item \verb|println("$var1 some words $var2")| 中 \verb|var1, var2| 可以是数字、字符串等
 \end{itemize}
 
 \subsection{计算器}
@@ -43,25 +45,37 @@ sudo snap install Julia --classic
 \item 变量名可以用 UTF-8 字符， 在一些编辑器中可以用反斜杠 latex 命令打出对应的字符
 \item 注意和 C++ 不同， Julia 中的变量名只是 object 的标签
 \item 要释放一个变量所占的内存， 把它赋值为 \verb|nothing|， 然后运行垃圾回收 \verb|GC.gc()| 即可．
+\item 类型的名称也可以作为值来使用， \verb|typeof(Float64)| 是 \verb|DataType|．
 \end{itemize}
 
-\subsection{矩阵}
+\subsection{数组和矩阵}
 \begin{itemize}
 \item 索引从 1 开始， 和 Matlab 一样
-\item 矩阵（数组）使用列主元排序， 和 Matlab 一样
+\item 矩阵（数组）使用\textbf{列主序}， 和 Matlab 一样
 \item 一维数组 \verb|Array{T, 1}| 不区分行和列， 但是二维数组 \verb|Array{T, 2}| 可以区分行向量和列向量
-\item 矩阵切割如 \verb|Psi[:, j, :]|
-\item 矩阵尺寸 \verb|size(Psi, 维度)|
+\item \verb|Array{类型,1}| 也叫 \verb|Vector{类型}|； \verb|Array{类型,2}| 也叫 \verb|Matrix{类型}|．
+\item 矩阵切割如 \verb|a[:, j, :]|
+\item 矩阵尺寸 \verb|size(矩阵, 维度)|， 元素个数 \verb|length()|， \verb|isempty()| 检查空矩阵， \verb|reverse()| 元素倒序排序
 \item 零向量矩阵 \verb|zeros(整数)| 或 \verb|zeros(整数, 整数)| 分别返回 \verb|Array{Float64,1}| 和 \verb|Array{Float64,2}|
+\item 随机矩阵如 \verb|rand(ComplexF64, N1, N2, ...)|．
+\item 求矩阵的哈希值如 \verb|hash(矩阵)|． 把运算结果的 hash 输出可以保证计算过程不被优化掉．
+\item \verb|LinRange(初始值,中止值,个数)| 生成等间距数组
 \item 64 位机器上， 整数 literal 的类型默认是 \verb|Int64|
 \item \verb|a = [1 2; 3 4]| 得到 \verb|Array{Float64,2}|
 \item \verb|a[:, 1]| 仍然得到 \verb|Array{Float64,2}|
 \item \verb|a[:, 1] = [3; 4]| 可以修改 \verb|a| 的值
 \item \verb|b = a[:, 1]| 却是复制数据．
 \item \verb|a| 作为参数传给函数是 pass by reference， 相当于 C 语言传递指针
+\end{itemize}
+
+\subsection{子数组}
+\begin{itemize}
 \item \verb|a[:, 1]| 作为参数传给函数是 pass by value， 如果需要 by reference， 使用 \verb|view| 函数获取 \verb|SubArray| 类
 \item \verb|SubArray| 不存数据， 可以用来给函数参数 pass by reference
-\item \verb|view(a, :, 1)| 得到的类型是 \verb|SubArray|， 具体类型是 \verb|SubArray{Int64,1,Array{Int64,2}, Tuple{Base.Slice{Base.OneTo{Int64}},Int64},true}|
+\item \verb|SubArray| 类型的 5 个参数 \verb|SubArray{标量类,维数,矩阵类,Tuple{各维度索引类型},是否支持快速索引}|
+\item \verb|view(a, :, 1)| 的类型是 \verb|SubArray{Int64,1,Matrix{Int64},Tuple{Base.Slice{Base.OneTo{Int64}},Int64},true}|
+\item \verb|view(a, 1, :)| 的类型是 \verb|SubArray{Int64,1,Matrix{Int64},Tuple{Int64,Base.Slice{Base.OneTo{Int64}}},true}|
+\item \verb|view(a, 1:2, 2:3)| 的类型是 \verb|SubArray{Int64,2,Matrix{Int64},Tuple{UnitRange{Int64},UnitRange{Int64}},false}|
 \item \verb|SubArray <: AbstractArray{T,Ndim} <: Any|
 \item \verb|Array{T,Ndim} <: DenseArray{T,Ndim} <: AbstractArray{T,Ndim} <: Any|
 \item 所以只要函数参数接受 \verb|AbstractArray|， 就可以同时接受 \verb|Array, SubArray|．
@@ -78,9 +92,30 @@ struct SubArray{T,N,P,I,L} <: AbstractArray{T,N}
 end
 \end{lstlisting}
 
+\subsection{线性代数}
 \begin{itemize}
-\item 随机矩阵如 \verb|rand(ComplexF64, Nr1, Nr2, Npw)|．
-\item 求矩阵的哈希值如 \verb|hash(矩阵)|． 把运算结果的 hash 输出可以保证计算过程不被优化掉．
+\item 迹 \verb|tr(A)|， 行列式 \verb|det(A)|， 逆 \verb|inv(A)|， 本征值 \verb|eigvals(A)|， 本征矢 \verb|eigvecs(A)|， LU 分解（链接未完成） \verb|factorize(A)|
+\item 带对角矩阵没有专门的类型， 直接把每一列压缩存到普通矩阵中（列主序）\upref{BanDmt}．
+\end{itemize}
+
+\subsubsection{特殊矩阵类}
+\begin{itemize}
+\item \verb|Symmetric|， \verb|Hermitian|， \verb|UpperTriangular|， \verb|LowerTriangular|， \verb|Tridiagonal|， \verb|SymTridiagonal|， \verb|Bidiagonal|， \verb|Diagonal|
+\item 稀疏矩阵： \verb|S = sparse(行标矢量,列标矢量,非零元矢量)| 可以创建 CSC 格式\upref{SprMat}的矩阵： \verb|SparseMatrixCSC{Int64, Int64}|
+\end{itemize}
+
+\subsection{BLAS 和 Lapack}
+\begin{itemize}
+\item \href{https://docs.julialang.org/en/v1/stdlib/LinearAlgebra/}{参考文档}．
+\item 带对角矩阵的矩阵乘法 $y = Ax+b$ 如 \verb|using LinearAlgebra.BLAS;m=3;n=4;kl=1;ku=1;alpha=1.;beta=0.;A=rand(kl+ku+1,n);x=rand(Float64,n); y=zeros(Float64,m); gbmv!('N', m, kl, ku, alpha, A, x, beta, y)| 其中矩阵尺寸为 \verb|m| 乘 \verb|n|，上下子对角线数量 \verb|ku, kl|．
+\item 普通矩阵本征问题 \verb|geev!(jobvl, jobvr, A)|； 对称矩阵本征问题 \verb|syev!(jobz, uplo, A)|； 对称三对角矩阵本征问题 \verb|stev!(job, dv, ev)|
+\end{itemize}
+
+\subsection{Tuple}
+\begin{itemize}
+\item \verb|(值1, 值2, 值3, ...)| 就是 \verb|Tuple|
+\item 数组的元素类型必须相同， 而 \verb|Tuple| 的元素类型可以不同
+\item 数组的 \verb|length()|， \verb|isempty()|， \verb|reverse()| 同样适用于 \verb|Tuple|．
 \end{itemize}
 
 \subsection{脚本}
@@ -113,11 +148,14 @@ end
 \end{lstlisting}
 其中 \verb|1:5| 的类型是 \verb|UnitRange{Int64}|． 若令 \verb|a = 1:5|， 可以使用 \verb|a[i]| 获取 “元素”． 类似地， \verb|1:2:5| 的类型是 \verb|StepRange{Int64, Int64}|．
 
-for 循环也可以使用 \verb|for i in [1,4,0]|
+\begin{itemize}
+\item for 循环也可以使用 \verb|for i in [1,4,0]|
+\item if 也可以写成一行 \verb|if 条件; 命令; end|
+\end{itemize}
 
 \subsection{函数}
 函数定义
-\begin{lstlisting}[language=Julia]
+\begin{lstlisting}[language=julia]
 function sphere_vol(r)
     return 4/3*pi*r^3
 end
@@ -125,10 +163,25 @@ end
 
 \subsection{常用函数}
 \begin{itemize}
-\item 当前路径 \verb|pwd()|
-\item 更改路径 \verb|cd()|
 \item 当前时间 \verb|time()|
 \end{itemize}
+
+\subsection{异常处理}
+\begin{lstlisting}[language=julia]
+try
+    一些命令
+catch y
+    if isa(y, 错误类型 1)
+        一些命令
+    elseif isa(y, 错误类型 2)
+        一些命令
+    end
+end
+\end{lstlisting}
+\begin{itemize}
+\item 一些常见的错误类型如 \verb|DomainError|（例如 \verb|sqrt(-1)|）， \verb|BoundsError|（数组指标超出范围）．
+\end{itemize}
+
 
 \subsection{储存变量}
 要把任意变量存到文件， 用 \verb|using Serialization|， 除此之外常用的还有 \verb|using JLD2|．
@@ -136,6 +189,19 @@ end
 using Serialization
 a = randn(100,100)
 f = serialize("file1.dat", a)
-a′ = deserialize("file1.dat")
-println(a == a′)
+a1 = deserialize("file1.dat")
+println(a == a1)
 \end{lstlisting}
+
+\subsection{文件读写}
+\begin{itemize}
+\item 当前路径 \verb|pwd()|， 更改路径 \verb|cd()|
+\item \verb|readdir()| 返回当前路径或指定路径中的文件和文件夹
+\item \verb|f = open("文件名", "r")| 打开文件读取， \verb|close(f)| 关闭文件．
+\item \verb|eof(f)| 用于判断是否到达文件末尾
+\item \verb|s = readline(f)| 读取下一行
+\item \verb|s = read(f, String)| 整个文件读入字符串
+\item \verb|using DelimitedFiles; m = readdlm("文件名")| 从文本文件中读取矩阵
+\item \verb|write(file, str)| 把字符串写入文本文件
+\item \verb|using DelimitedFiles; writedlm("文件名", 矩阵)| 把矩阵写入文本文件（用空格与回车）
+\end{itemize}

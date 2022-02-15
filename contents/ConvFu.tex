@@ -1,0 +1,64 @@
+% 凸函数
+% 凸函数|凹凸性|琴生不等式|均值不等式
+
+\pentry{导数（数学分析）\upref{Der2}}
+
+设函数 $f(x)$ 在区间 $I$ 上有定义，若对任意的 $x_1,x_2\in I$，对任意 $t\in (0,1)$，都有
+\begin{equation}
+f(tx_1+(1-t)x_2)\le tf(x_1)+(1-t)f(x_2)
+\end{equation}
+那么称 $f(x)$ 为 $I$ 上的\textbf{凸函数}．如果将 $\le$ 改为 $<$，那么称 $f(x)$ 为\textbf{严格凸函数}．类似地可以定义\textbf{凹函数}和\textbf{严格凹函数}．
+\begin{theorem}{}\label{ConvFu_the1}
+设 $f(x)\in C[a,b]$．$f(x)$ 满足
+\begin{enumerate}
+\item 在 $(a,b)$ 上可导．则 $f(x)$ 是（严格）凸函数的充分必要条件是 $f'(x)$ 在 $(a,b)$ 内（严格）单调递增．
+\item 在 $(a,b)$ 上二阶可导．则 $f(x)$ 是凸函数的充分必要条件是 $f''(x)\ge 0$；$f(x)$ 是严格凸函数的充分必要条件是 $f''(x)\ge 0$ 且 $f''(x)$ 在 $(a,b)$ 的任意子区间上都不恒等于 $0$．
+\end{enumerate}
+\end{theorem}
+凸函数的以上几条充分必要条件可以从图像中直观地理解，事实上，画图常常有助于解决与凸函数性质相关的问题．
+\begin{exercise}{}
+证明两个 $I$ 上的凸函数相加仍然是 $I$ 上的凸函数．
+
+\textbf{提示：}由于给定函数在区间 $I$ 上不一定可导，所以不能用  
+\autoref{ConvFu_the1} 证明，必须回归到定义．
+\end{exercise}
+\begin{exercise}{}
+设 $f(x)$ 是区间 $(a,b)$ 上的凸函数，证明 $f(x)$ 在 $(a,b)$ 内的任意闭区间 $[\alpha,\beta]$ 上都满足 Lipschitz 条件（也就是说存在 $L>0$，对任意 $x_1,x_2\in [\alpha,\beta]$，都有 $|f(x_1)-f(x_2)|\le L|x_1-x_2|$）．
+
+\textbf{提示：}如果将 $[\alpha,\beta]$ 改为开区间，则很容易找到反例，所以在证明这个命题时要充分利用好闭区间的特性，尝试将 $L$ 的上界量化．取充分小的 $h$，使 $[\alpha-h,\beta+h]\subset (a,b)$，令 $x_3=x_2+h$，根据凸函数的定义（事实上可以从图像上很快得出）$(f(x_2)-f(x_1))/(x_2-x_1)<(f(x_3)-f(x_2))/(x_3-x_2)\le (M-m)/h$，其中 $M,m$ 是区间 $[\alpha-h,\beta+h]$ 上函数的最大、最小值（可以证明，闭区间上的凸函数一定有最大最小值）．于是可以令 $L=(M-m)/h$．
+\end{exercise}
+
+函数的凹凸性可以通过\textbf{琴生不等式}引出各种不等式，函数的凹凸性的定义是琴生不等式的 $n=2$ 版本，而事实上两者作为定义是等价的．
+\begin{theorem}{琴生不等式}
+$f(x)$ 在区间 $[a,b]$ 上是凸函数的充分必要条件为：对任意 $x_1,\cdots,x_n\in [a,b],\sum_{i=1}^n t_i=1$，以下不等式总成立
+\begin{equation}
+f(t_1x_1+t_2x_2+\cdots+t_nx_n)\le t_1f(x_1)+t_2f(x_2)+\cdots+t_nf(x_n)
+\end{equation}
+对于严格凸函数，上面的充要条件应将 $\le$ 改为 $<$，并且 $x_1,\cdots,x_n$ 不全相等．
+\end{theorem}
+利用凸函数的性质，可以推出一系列不等式，例如调和-几何-算术平均不等式、柯西不等式、赫尔德不等式等．
+\begin{exercise}{}
+证明\textbf{幂平均不等式}：设 $x_1,\cdots,x_n>0$，构造以下函数：
+\begin{equation}
+F(p)=\left\{
+\begin{aligned}
+&\left(\frac{x_1^p+x_2^p+\cdots+x_n^p}{n}\right)^{1/p}, &p\neq 0\\
+&(x_1\cdots x_n)^{1/n}, &p=0
+\end{aligned}
+\right.
+\end{equation}
+那么 $F(p)$ 是单调递增函数．
+\end{exercise}
+提示：幂平均不等式是调和-几何-算术平均不等式的自然推广，注意到 $F(-\infty)<F(-1)<F(0)<F(1)<F(\infty)$ 恰好对应着
+\begin{equation}
+\begin{aligned}
+\min\{x_1,\cdots,x_n\}&<\frac{n}{\frac{1}{x_1}+\cdots+\frac{1}{x_n}}<(x_1\cdots x_n)^{1/n}\\
+&<\frac{x_1+\cdots+x_n}{n}<\max\{x_1,\cdots,x_n\}
+\end{aligned}
+\end{equation}
+先考虑证明 $0<p<q$ 时 $F(p)<F(q)$，其他情况的证明类似．为了能利用上琴生不等式，不等式一侧 $x_i$ 的指数最好为 $1$．所以进行换元，令 $a_i=x_i^p$，可以得到
+\begin{equation}
+\left(\frac{a_1+\cdots+a_n}{n}\right)^{q/p}\le \frac{a_1^{q/p}+\cdots+a_n^{q/p}}{n}
+\end{equation}
+函数 $x^{q/p}$ 在 $(0,\infty)$ 上是凸函数，因此可以利用琴生不等式证明这个不等式．
+

@@ -2,7 +2,7 @@
 
 \pentry{C++ 基础\upref{Cpp0}， 密矩阵\upref{MatSto}， 稀疏矩阵\upref{SprMat}}
 
-\href{https://www.caam.rice.edu/software/ARPACK/}{Arpack} （ARnoldi PACKage）最初是一个 Fortran 语言编写的， 用于求解大型本征方程的程序库， 其主要算法是 Arnoldi 循环． 下面是它的一些特性：
+\href{https://www.caam.rice.edu/software/ARPACK/}{Arpack} （ARnoldi PACKage）最初是一个 Fortran 语言编写的， 用于求解大型本征方程的程序库， 其主要算法是 Arnoldi 循环． 注意如果要求密矩阵的本征问题， 那么没必要使用 Arpack， 直接使用 Lapack 即可． 下面是 Arpack 的一些特性：
 \begin{itemize}
 \item 可以求解广义本征问题（General） $\mat A\bvec x = \lambda \mat B\bvec x$ 或者标准本征问题（Standard） $\mat A\bvec x = \lambda \bvec x$．
 \item 矩阵的数据类型支持密矩阵\upref{MatSto}， 系数的 CSC 矩阵\upref{SprMat}． 也可以不需要提供矩阵本身而是提供矩阵—矢量乘法． 也就是你只需要提供一个函数 \verb|v = F(u)| 给 Arpack 即可， 其中 \verb|v| 就是矩阵乘以 \verb|u| 的结果．
@@ -33,3 +33,6 @@ ARSymStdEig<T, SymMatrixB<T> >
     dprob(A.ncols(), 4, &A, &SymMatrixB<T>::MultOPv, 1.);
 \end{lstlisting}
 其中 \verb|SymMatrixB<ART>::MultMv(T* u, T* v)| 提供 $\bvec v = \mat A\bvec u$． \verb|MultOPv(T* u, T*v)| 提供 $\bvec v = (\mat A - \sigma)^{-1}\bvec u$， 例子中 $\sigma = 1$．
+
+\subsection{量子力学应用：波函数本征态}
+根据笔者的经验， 除非是一维问题， 否则企图直接用 Arpack 在网格基底下解出一系列波函数的本征态的成功率很小， 大部分情况下很难收敛． 一种方法是使用更物理一些的基底， 例如氢原子束缚态作为基底等， 然后算出哈密顿矩阵 $\mel{i}{H}{j}$， 再用 Lapack 求解．

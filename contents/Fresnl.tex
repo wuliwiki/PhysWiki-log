@@ -1,8 +1,13 @@
-% 菲涅尔公式、布儒斯特角
+% 菲涅尔公式、布儒斯特角、临界角、内反射与外反射
 % 菲涅尔|折射|反射|偏振|布儒斯特角
+
+\begin{issues}
+\issueTODO
+\end{issues}
 
 \pentry{麦克斯韦方程组（介质）\upref{MWEq1}}
 
+\subsection{菲涅尔公式}
 \begin{figure}[ht]
 \centering
 \includegraphics[width=14cm]{./figures/Fresnl_1.pdf}
@@ -21,23 +26,75 @@
 \item 极化方向垂直于入射面（\autoref{Fresnl_fig1} 右）
 
 \begin{equation}
-\frac{E_R^{(s)}}{E_I^{(s)}} =  \frac{m_1\cos{\theta_I} - m_2\cos\theta_T}{m_1\cos\theta_I + m_2\cos\theta_T}
+\frac{E_R^{(s)}}{E_I^{(s)}} =  \frac{m_1\cos{\theta_i} - m_2\cos\theta_t}{m_1\cos\theta_i + m_2\cos\theta_t}
 \qquad
-\frac{E_T^{(s)}}{E_I^{(s)}} = \frac{2 m_1\cos\theta_I}{m_1\cos\theta_I + m_2\cos\theta_T}
+\frac{E_T^{(s)}}{E_I^{(s)}} = \frac{2 m_1\cos\theta_i}{m_1\cos\theta_i + m_2\cos\theta_t}
 \end{equation}
 
 \item 极化方向平行于入射面（\autoref{Fresnl_fig1} 左）
 \begin{equation}\label{Fresnl_eq2}
-\frac{E_R^{(p)}}{E_I^{(p)}} =  \frac{m_2\cos\theta_I - m_1\cos\theta_T}{m_2 \cos\theta_I + m_1\cos\theta_T}
+\frac{E_R^{(p)}}{E_I^{(p)}} =  \frac{m_2\cos\theta_i - m_1\cos\theta_t}{m_2 \cos\theta_i + m_1\cos\theta_t}
 \qquad
-\frac{E_T^{(p)}}{E_I^{(p)}} =  \frac{2 m_1\cos\theta_I}{m_2\cos\theta_I + m_1\cos\theta_T}
+\frac{E_T^{(p)}}{E_I^{(p)}} =  \frac{2 m_1\cos\theta_i}{m_2\cos\theta_i + m_1\cos\theta_t}
 \end{equation}
 \end{enumerate}
-其中 $m_I=n_I/\mu_I = c\sqrt{\epsilon_I/\mu_I}$， 一般情况下介质的磁导率于真空区磁导率的区别可忽略，即可以把 $m_I$ 替换为折射率 $n_I$． 另外注意菲涅尔公式包含相位信息，即以上的 $E$ 可以是复振幅．
+其中 $m_i=n_i/\mu_i = c\sqrt{\epsilon_i/\mu_i}$ （$i=1,2$）， 一般情况下介质的磁导率与真空区磁导率的区别可忽略，即可以把 $m_i$ 替换为折射率 $n_i$． 另外注意菲涅尔公式包含相位信息，即以上的 $E$ 可以是复振幅．
+
+这两个表达式是菲涅尔方程中的两个，它们是极其普遍的陈述，适用于任何线性、各向同性的均匀介质．%未完成：均匀介质的定义
+当电介质的磁导率 $\mu_1\approx\mu_2\approx\mu_0=1$ 时，$n/\mu \approx n$， 菲涅尔公式可以简化为：
+
+\begin{equation}\label{Fresnl_eq3}
+r_s \equiv \left(\frac{E_R}{E_I}\right)_s = \frac{n_1\cos{\theta_i} - n_2\cos\theta_t}{n_1\cos\theta_i + n_2\cos\theta_t}
+\end{equation}
+\begin{equation}\label{Fresnl_eq4}
+t_s \equiv \left(\frac{E_T}{E_I}\right)_p =  \frac{2 n_1\cos\theta_i}{n_1\cos\theta_i + n_2\cos\theta_t}
+\end{equation}
+其中，$r_s$表示\textbf{振幅反射系数}，$t_s$表示\textbf{振幅透射系数}．
+同理：
+\begin{equation}\label{Fresnl_eq5}
+r_p \equiv \left(\frac{E_R}{E_I}\right)_s = \frac{n_2\cos{\theta_i} - n_1\cos\theta_t}{n_1\cos\theta_t + n_2\cos\theta_i}
+\end{equation}
+\begin{equation}\label{Fresnl_eq6}
+t_p \equiv \left(\frac{E_T}{E_I}\right)_p =  \frac{2 n_1\cos\theta_i}{n_1\cos\theta_t + n_2\cos\theta_i}
+\end{equation}
+
+应用斯涅尔定律\upref{Snel}，可以进一步使记号简化．别害怕，它们只是看起来有些复杂：
+\begin{equation}\label{Fresnl_eq7}
+r_s = -\frac{\sin(\theta_i - \theta_t)}{\sin(\theta_i + \theta_t)}
+\end{equation}
+\begin{equation}\label{Fresnl_eq8}
+r_p = +\frac{tan(\theta_i - \theta_t)}{tan(\theta_i + \theta_t)}
+\end{equation}
+\begin{equation}\label{Fresnl_eq9}
+t_s = -\frac{2\sin\theta_t\cos\theta_i}{\sin(\theta_i + \theta_t)}
+\end{equation}
+\begin{equation}\label{Fresnl_eq10}
+t_p = +\frac{2\sin\theta_t\cos\theta_i}{\sin(\theta_i + \theta_t)\cos(\theta_i - \theta_t)}
+\end{equation}
+这里请大家注意，推导菲涅尔方程时，场的方向（更精确地说是相位）是相当任意地选择的．因此，为了避免混乱，必须把菲涅尔方程与导出它们的特定的场的方向联系起来．
+
+\subsection{内反射与外反射}
+\begin{definition}{外反射}
+设入射介质与出射介质的折射系数分别为 $n_1$ 和 $n_2$，若 $n_1<n_2$，则称为\textbf{外反射（external reflection）}；反之，为\textbf{内反射（internal reflection）}．
+\end{definition}
 
 \subsection{布儒斯特角}
-我们这里考虑常见的 $n_2>n_1$ 且 $\mu_1 = \mu_2$ 情况．由\autoref{Fresnl_eq2} 容易证明当入射角为\textbf{布儒斯特角（Brewster's angle）} 时反射光的平行（p）分量消失．布儒斯特角等于
+我们这里考虑常见的 $n_2>n_1$ 且 $\mu_1 = \mu_2$ 情况．由\autoref{Fresnl_eq8} 容易证明当 $\theta_i + \theta_t = \pi/2$时， $r_p = 0$, 反射光的平行分量消失，反射光为线偏振光． 此时，入射角称为\textbf{布儒斯特角（Brewster's angle）} ，记为 $\theta_B$． 代入斯涅尔公式 $n_i\sin\theta_i = n_t\sin\theta_t$可得
 \begin{equation}
 \theta_B = \arctan (n_2/n_1)
 \end{equation}
+
+\subsection{临界角}
+\begin{definition}{}
+当 $\theta_t  = \frac{\pi}{2}$ 时，此时的入射角 $\theta_i$ 称为 \textbf{临界角（critical angle）}，记为 $\theta_c$．
+\end{definition}
+
+\begin{exercise}{}
+类比 $\theta_B$ 的求法，给出 $\theta_c$ 表达式．
+\end{exercise}
+
+易知， $\theta_c = \arcsin(n_2/n_1)$
 % 未完成: 画图!
+\addTODO{线偏振光} 
+
+

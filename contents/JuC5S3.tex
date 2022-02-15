@@ -1,0 +1,296 @@
+% Julia 浮点数
+% 浮点数
+
+本文授权转载自郝林的 《Julia 编程基础》． 原文链接：\href{https://github.com/hyper0x/JuliaBasics/blob/master/book/ch05.md}{第 5 章 数值与运算}．
+
+
+\subsection{5.3 浮点数}
+
+浮点数可以用来表示小数．在抽象类型\verb|AbstractFloat|之下，有 4 个具体的浮点数类型．它们是\verb|BigFloat|、\verb|Float16|、\verb|Float32|和\verb|Float64|．
+
+我们先说后 3 个类型．
+
+\subsubsection{5.3.1 精度与换算}
+
+这 3 种通常的浮点数类型分别对应着 3 种不同精度的浮点数．详见下表．
+
+\begin{table}[ht]
+\centering
+\caption{浮点数类型及其取值}\label{JuC5S3_tab1}
+\begin{tabular}{|c|c|c|}
+\hline
+类型名 & 精度 & 其值占用的比特数 \\
+\hline
+Float16 & 半（half） & 16 \\
+\hline
+Float32 & 单（single） & 32 \\
+\hline
+Float64 & 双（double） & 64 \\
+\hline
+\end{tabular}
+\end{table}
+
+对于这 3 种精度的浮点数，最新的 IEEE 754 技术标准中都有所描述．简单来说，一个浮点数在存储时会由 3 个部分组成，即：正负号部分（sign，简称\verb|S|）、指数部分（exponent，简称\verb|E|）和尾数部分（trailing significand，简称\verb|T|）．例如，一个\verb|Float32|类型的值会占用 32 个比特，其中的正负号会使用 1 个比特，指数部分会使用 8 个比特，而尾数部分会用掉剩下的 23 个比特．
+
+在通常情况下，这 3 个部分会依照下面的公式来共同表示一个浮点数：
+\begin{lstlisting}[language=julia]
+> -1^S x 2^E-bias x (1 + 2^1-p x T)
+\end{lstlisting}
+
+这里的\verb|bias|指的是偏移量，它会是指数部分的比特序列所能表示的最大正整数．注意，指数部分本身也是有符号的．而\verb|p|代表的则是正负号部分和尾数部分共占用的比特数．
+
+下面举一个例子．\verb|Float32|类型的浮点数\verb|-0.75|如果用二进制形式来表示就是这样的：
+\begin{lstlisting}[language=julia]
+julia> bitstring(Float32(-0.75))
+"10111111010000000000000000000000"
+
+julia> 
+\end{lstlisting}
+
+在 REPL 环境回显的这个比特串中，最左边的那个\verb|1|就代表了\verb|S|．紧挨在\verb|S|右边的 8 个比特是\verb|01111110|，转换成十进制数就是\verb|126|，这就是\verb|E|．而在\verb|E|右边的 23 个比特则代表\verb|T|，即十进制数\verb|4194304|．另外，对于\verb|Float32|类型来说，\verb|bias|就是\verb|127|，而\verb|p|则是\verb|24|．把这些都代入前面的公式就可以得到：
+\begin{lstlisting}[language=julia]
+> -1^1 x 2^-1 x (1 + 0.5)
+\end{lstlisting}
+最终得出\verb|-0.75|．这就是浮点数与其底层存储之间的换算过程．
+
+对于\verb|Float16|或\verb|Float64|类型的浮点数来说，公式是一样的．只是它们存储那 3 个部分所占用的比特数都会不同．不过，对于一些特殊的浮点数（如正无穷、负无穷等），这个公式就不适用了．至于怎样换算，我们就不在此讨论了．如果你有兴趣，可以去阅读最新的 IEEE 754 技术标准．
+
+上面示例中的函数\verb|bitstring|会把一个数值中的所有比特完全平铺开，并把它们原封不动地塞到一个字符串当中．这样的字符串就叫做比特串．
+
+顺便说一下，如果我们想获取一个浮点数在底层存储上的指数部分，可以调用\verb|exponent|函数．该函数会以返回一个\verb|Int64|类型的值．相关的，\verb|significand|函数用于获取一个浮点数在底层存储上的尾数部分，其结果值的类型是\verb|Float64|．
+
+\subsubsection{5.3.2 值的表示}
+
+我们可以使用数学中的标准形式来写入一个浮点数的字面量，例如：
+\begin{lstlisting}[language=julia]
+julia> -0.75
+-0.75
+
+julia> 2.718281828
+2.718281828
+
+julia> 
+\end{lstlisting}
+
+如果浮点数的整数部分或小数部分只包含\verb|0|的话，我们还可以把这个\verb|0|省略掉：
+\begin{lstlisting}[language=julia]
+julia> -.5
+-0.5
+
+julia> 1.
+1.0
+
+julia> 
+\end{lstlisting}
+
+另外，我们还可以使用科学计数法（E-notation）来表示浮点数，如：
+\begin{lstlisting}[language=julia]
+julia> 1e8
+1.0e8
+
+julia> 0.5e-6
+5.0e-7
+
+julia> 0.25e-2
+0.0025
+
+julia> 
+\end{lstlisting}
+
+注意，这里的\verb|e|表示的是以\verb|10|为底的幂运算．紧挨在它右边的那个整数就是指数．因此，\verb|0.25e-2|就相当于$0.25\times10^{-2}$．
+
+Julia 的 REPL 环境在必要的时候也会使用科学计数法回显浮点数：
+\begin{lstlisting}[language=julia]
+julia> 0.000025
+2.5e-5
+
+julia> 2500000.0
+2.5e6
+
+julia> 
+\end{lstlisting}
+
+对于我们在上面写入的这些浮点数，Julia都会把它们识别为\verb|Float64|类型的值．如果你想把一个浮点数转换为\verb|Float32|类型的，那么有两种方式．一种方式是，使用该类型对应的构造函数．另一种方式是，把科学计数法中的\verb|e|改为\verb|f|．比如：
+\begin{lstlisting}[language=julia]
+julia> Float32(0.000025)
+2.5f-5
+
+julia> typeof(2.5f-5)
+Float32
+
+julia> 
+\end{lstlisting}
+
+注意，这里的\verb|f|表示的同样是以\verb|10|为底的幂运算．只不过由它参与生成的浮点数一定是\verb|Float32|类型的．
+
+对于\verb|Float16|类型的浮点数来说，我们使用科学计数法表示的时候会有些特殊．它由 3 个部分组成，即：一个用十六进制形式表示的整数、一个代表了以\verb|2|为底的幂运算的字母\verb|p|，以及一个代表指数的整数．示例如下：
+\begin{lstlisting}[language=julia]
+julia> 0x1p0
+1.0
+
+julia> 0x1p1
+2.0
+
+julia> 0x1p3
+8.0
+
+julia> 0x1p-2
+0.25
+
+julia> 
+\end{lstlisting}
+
+可以看到，在我们改动代表指数的那个整数时，浮点数是以\verb|2|或\verb|0.5|的倍数来改变的．显然，使用这种方式表示的浮点数在精度上会比较低．这主要是由于在\verb|p|左边的只能是整数．
+
+\verb|Float16|的这种特殊性不仅在于表示形式．它的底层实现也是比较特殊的．由于在传统的计算机硬件中并没有半精度浮点数这一概念，所以这种浮点数可能无法在硬件层面直接参与运算．Julia只能采用软实现的方式来支持\verb|Float16|，并且在运算的时候把这类值的类型转换成\verb|Float32|．
+
+\subsubsection{5.3.3 特殊的浮点数}
+
+特殊的浮点数包括正零、负零、正无穷、负无穷，以及$NaN$．
+
+正零（positive zero）和负零（negative zero）虽然在数学逻辑上是相同的，但是在底层存储上却是不同的．请看下面的代码：
+\begin{lstlisting}[language=julia]
+julia> 0.0 == -0.0 
+true
+
+julia> bitstring(0.0)
+"0000000000000000000000000000000000000000000000000000000000000000"
+
+julia> bitstring(-0.0)
+"1000000000000000000000000000000000000000000000000000000000000000"
+
+julia> 
+\end{lstlisting}
+
+在默认情况下，\verb|0.0|和\verb|-0.0|都是\verb|Float64|类型的值，但在这里并不重要．重要的是，在存储时，它们的指数部分和尾数部分都是\verb|0|．这是 IEEE 754 技术标准中针对这两个浮点数的特殊二进制表示法．在这种情况下，如果正负号部分是\verb|0|，那么它就代表\verb|0.0|，否则就代表\verb|-0.0|．
+
+与正零和负零相比，正无穷（positive infinity）、负无穷（negative infinity）和 NaN（Not a Number） 就更加特殊了．并且，它们对应于不同的浮点数类型都有着不同的标识符．请看下面这张表．
+\begin{table}[ht]
+\centering
+\caption{非常特殊的3种浮点数}\label{JuC5S3_tab2}
+\begin{tabular}{|c|c|c|c|c|}
+\hline
+Float16 & Float32 & Float64 & 含义 & 说明 \\
+\hline
+Inf16 & Inf32 & Inf & 正无穷（positive infinity），统称 Inf & 大于所有有限浮点数的值 \\
+\hline
+-Inf16 & -Inf32 & -Inf & 负无穷（negative infinity），统称-Inf & 小于所有有限浮点数的值 \\
+\hline
+NaN16 & NaN32 & NaN & 非数（not a number），统称 NaN & 不等于任何浮点数（包括它本身）的值 \\
+\hline
+\end{tabular}
+\end{table}
+
+Julia为这3种非常特殊的浮点数一共定义了9个常量．它们的名称分别在此表格最左侧的9个单元格中．由于浮点数字面量默认都是\verb|Float64|类型的，所以这些常量的名称也是以\verb|Float64|下的名称为基准的．
+
+\verb|Inf16|、\verb|Inf32|和\verb|Inf|代表的都是正无穷．它们一定都大于所有的有限浮点数．因此，我们像下面这样调用\verb|typemax|函数就可以得到对应类型的正无穷：
+\begin{lstlisting}[language=julia]
+julia> typemax(Float16), typemax(Float32), typemax(Float64)
+(Inf16, Inf32, Inf)
+
+julia> 
+\end{lstlisting}
+
+相对应的，\verb|-Inf16|、\verb|-Inf32|和\verb|-Inf|都代表负无穷．它们一定都小于所有的有限浮点数．所以：
+\begin{lstlisting}[language=julia]
+julia> typemax(Float16), typemax(Float32), typemax(Float64)
+(Inf16, Inf32, Inf)
+
+julia> 
+\end{lstlisting}
+
+而\verb|NaN16|、\verb|NaN32|和\verb|NaN|的含义都是非数（或者说不是数）．因此，一些无效操作的结果值以及无法确切定义的浮点数就都归于它们的名下了．比如：
+\begin{lstlisting}[language=julia]
+julia> 0 / 0
+NaN
+
+julia> Inf - Inf
+NaN
+
+julia> Inf16 - Inf16
+NaN16
+
+julia> -Inf - -Inf
+NaN
+
+julia> Inf / Inf
+NaN
+
+julia> Inf32 / Inf32
+NaN32
+
+julia> -Inf / Inf
+NaN
+
+julia> 0 * Inf
+NaN
+
+julia> 
+\end{lstlisting}
+
+这些运算规则都遵循了 IEEE 754 技术标准中的描述．所以我们也不用专门记忆．等到真正需要的时候再去查阅相关文档就好了．
+
+\subsubsection{5.3.4 BigFloat}
+
+\verb|BigFloat|是\verb|Base.MPFR|包中定义的一个类型．MPFR 本身是一个具有正确舍入（rounding）功能的用于多精度浮点计算（multiple-precision floating-point computations）的 C 语言程序库．而\verb|Base.MPFR|包只是对这个库再次封装．
+
+\verb|BigFloat|类型代表着任意精度的浮点数．示例如下：
+\begin{lstlisting}[language=julia]
+julia> BigFloat(-0.75^68) / 3
+-1.06425244334102499005657170926276063
+  5124796711655411248405774434407552083333339e-09
+
+julia> typeof(ans)
+BigFloat
+
+julia> 
+\end{lstlisting}
+
+与\verb|BigInt|一样，我们使用以\verb|big|为前缀的非常规字符串也可以构造出\verb|BigFloat|的值，比如：
+\begin{lstlisting}[language=julia]
+julia> big"-0.75"
+-0.75
+
+julia> typeof(ans)
+BigFloat
+
+julia> big"2.718281828"
+2.7182818280000000000000000000000000000000000000000000000
+  00000000000000000000015
+
+julia> typeof(ans)
+BigFloat
+
+julia> 
+\end{lstlisting}
+
+另外，我们都知道，通常的浮点数类型都有着固定的精度．而且，在默认情况下，Julia对浮点数的舍入模式是四舍五入（由于计算机无法精确地表示所有小数，而且浮点数的位数有限，所以舍入必然存在，舍入模式也是必须要有的）．然而，对于\verb|BigFloat|类型，我们可以自己设定它的精度和舍入模式．
+
+通过调用\verb|setprecision|和\verb|setrounding|函数，我们可以更改\verb|BigFloat|类型值在参与运算时的默认精度和舍入模式．但要注意，这种更改是全局的！也就是说，更改一旦发生，它就会影响到当前 Julia 程序中所有相关的后续操作．不过，我们可以利用\verb|do|代码块，让这种更改只在当前的代码块中有效．下面是一些示例：
+\begin{lstlisting}[language=julia]
+julia> BigFloat(1.01) + parse(BigFloat, "0.2")
+1.2100000000000000088817841970012523233890533447265625000
+  00000000000000000000007
+
+julia> setrounding(BigFloat, RoundDown)
+MPFRRoundDown::MPFRRoundingMode = 3
+
+julia> BigFloat(1.01) + parse(BigFloat, "0.2")
+1.2100000000000000088817841970012523233890533447265624999
+  9999999999999999999999
+
+julia> setprecision(35) do 
+           BigFloat(1.01) + parse(BigFloat, "0.2") 
+       end
+1.2099999999
+
+julia> BigFloat(1.01) + parse(BigFloat, "0.2") 
+1.2100000000000000088817841970012523233890533447265624999
+  9999999999999999999999
+
+julia> 
+\end{lstlisting}
+
+示例中的函数\verb|parse|可以帮助我们把一个字符串值转换成某个数值类型的值．不过，转换是否能够成功就要看字符串的具体内容了．如果不能成功转换，这个函数就会报错．
+
+至于都有哪些舍入模式，我们可以参看\verb|Base.Rounding.RoundingMode|类型的文档．我们在前面说的默认舍入模式是由常量\verb|Base.Rounding.RoundNearest|代表的．另外，我们在后面讲流程控制的时候还会对\verb|do|代码块进行说明．

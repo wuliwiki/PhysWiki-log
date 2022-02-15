@@ -1,0 +1,90 @@
+% 麦克斯韦—玻尔兹曼分布的数值模拟
+
+\begin{issues}
+\issueDraft
+\end{issues}
+
+\pentry{二体碰撞\upref{TwoCld}}
+
+最简单算法： 定时间步长， 若发现某两个小球重合，或与墙重合， 则就地完全弹性碰撞．
+
+一些变体
+\begin{itemize}
+\item 支持三维
+\item 支持重力
+\item 不同形状的容器
+\item 支持质量和大小不同的若干种小球
+\item 真随机碰撞（似乎已完成）： 随机找出一对对小球进行碰撞， 无论他们在哪里
+\end{itemize}
+
+一些优化
+\begin{itemize}
+\item （先不做）把盒子形划分成小盒子， 每一步把小球先按照小盒子分类， 然后再在每个盒子中判断两小球是否碰撞． 若一个小球出现在边角处， 则它同时属于多个小盒子．
+\item （先不做）每一步找出速度最快的小球， 确保时间步长小于某长度除以该速度．
+\end{itemize}
+
+\begin{lstlisting}[language=matlab]
+% 两个粒子的完全弹性碰撞
+% size(v1)=size(v2)=size(m1)=size(2)=[N,3];
+% A 是碰撞平面的法向量
+% 当不输入 m1, m2 的时候, 默认他们相等.
+function [v11, v22] = collision(v1, v2, A, m1, m2)
+A = A/norm(A);
+% 质心的速度
+vc = (m1*v1+m2*v2)/(m1+m2);
+% 质心系中的速度
+vr1 = v1-vc;
+vr2 = v2-vc;
+% 计算关于碰撞平面的反射
+vr11 = reflection(vr1,A);
+vr22 = reflection(vr2,A);
+% 原参考系中的速度
+v11 = vr11+vc;
+v22 = vr22+vc;
+end
+\end{lstlisting}
+
+\begin{lstlisting}[language=matlab]
+% 反射
+% A 是法向量. 
+% size(v1) = [N,3];
+% v1 是入射的方向, v2 是反射的方向
+function v2 = reflection(v1,A)
+vnorm = sqrt(v1' * v1);
+v1unit = v1 / vnorm;
+cosine = v1unit' * A;
+v2 = v1 - (2*vnorm*cosine)*A;
+end
+\end{lstlisting}
+
+\begin{lstlisting}[language=matlab]
+%麦克斯韦-波尔兹曼分布
+
+% === 参数设置 ====
+N = 100; % 总粒子数
+m = 1e-3; % 粒子质量
+R = 1e-3; % 粒子半径
+
+% 容器规格
+Size = [1,1,1];% [x长度, y长度, z长度].0<x<x长度, y...,z....
+tmax = 10; Nt = 1000; % 模拟总时间
+T = 10; % 温度
+kb = 1.380650324; % 波尔兹曼常量
+
+% 每个粒子的位置矢量
+for i = 3:-1:1
+    P(:,i) = rand(N,1)*Size(i);
+end
+% 每个粒子的速度矢量
+V = rand(N,3);
+V = vunit(V)*sqrt(3*kb*T/m); % 每个粒子都要有平均动能
+v = vmag(V); % 速度绝对值
+
+t = linspace(0, tmax, Nt); dt = t(2)-t(1);
+for it = 1:Nt
+    P = P + V*dt;
+    [P, V] = do_reflection(P, V, R, xmax, ymax);
+    [P, V] = do_collision(P, V, R);
+    figure(1); scatter(P(:,1), P(:,2), P(:,3));
+end
+\end{lstlisting}

@@ -1,0 +1,93 @@
+% Julia 数值类型的提升
+% 数值类型|提升
+
+本文授权转载自郝林的 《Julia 编程基础》． 原文链接：\href{https://github.com/hyper0x/JuliaBasics/blob/master/book/ch05.md}{第 5 章 数值与运算}．
+
+
+\subsection{5.6 数值类型的提升}
+
+Julia 中有一个辅助系统，叫做类型提升系统．它可以将数学运算符操作的多个值统一地转换为某个公共类型的值，以便运算的顺利进行．我们下面就简要地说明一下这个辅助系统的应用和作用．关于公共类型的解释也会在其中．
+
+在 Julia 中，数学运算符其实也是用函数实现的．就拿用于二元加的运算符\verb|+|来说，它的一个衍生方法的定义是这样的：
+\begin{lstlisting}[language=julia]
++(x::Float64, y::Float64) = add_float(x, y)
+\end{lstlisting}
+
+这个定义向我们揭示了两个细节．第一个细节就是我刚刚说的，数学运算符是由函数实现的．不仅如此，针对每一类可操作的数值，Julia 都定义了相应的衍生方法．第二个细节是，数学运算符操作的多个值必须是同一个类型的．你可能会有疑问，那为什么我们编写的像\verb|1 + 2.0|这样的运算依然可以顺利进行呢？实际上，这恰恰得益于 Julia 的类型提升系统．我们来看该系统中的一个定义：
+\begin{lstlisting}[language=julia]
++(x::Number, y::Number) = +(promote(x,y)...)
+\end{lstlisting}
+
+这个衍生方法的两个参数的类型都是\verb|Number|．这就意味着，只要参与二元加的操作数都是数值且它们的类型不同，该运算就会被分派到这个方法上．如果两个数值的类型相同，那么二元加运算就会被分派到像前一个定义那样的方法上．
+
+请注意，这个衍生方法的定义中有一个对\verb|promote|函数的调用．这个函数其实就代表了类型提升系统的核心算法．我们可以在 REPL 环境中输入表达式\verb|promote(1, 2.0)|并回车．其结果如下：
+\begin{lstlisting}[language=julia]
+julia> promote(1, 2.0)
+(1.0, 2.0)
+
+julia> typeof(ans)
+Tuple{Float64,Float64}
+
+julia> 
+\end{lstlisting}
+
+我们都知道，在 64 位的计算机系统中，字面量\verb|1|的类型一定是\verb|Int64|，而字面量\verb|2.0|的类型肯定是\verb|Float64|．由此，在那个调用\verb|promote|函数后得到的元组中，包含了转换自参数值\verb|1|的、\verb|Float64|类型的数值\verb|1.0|，以及保持原样的、\verb|Float64|类型的数值\verb|2.0|．这正是类型提升系统所起到的作用．它一般会先找到能够无损地表示输入值的某个公共类型，然后把这些值都转换为此公共类型的值（通常通过调用\verb|convert|函数实现），最后输出这些类型统一的值．
+
+在一般情况下，如果参数值列表中只包含了整数和有理数，那么\verb|promote|函数就会把这些参数值都转换为有理数．倘若参数值列表中存在浮点数（但不存在复数），那么这个函数就会把这些参数值都转换为适当类型的浮点数．一旦参数值列表中有复数，那该函数就一定会返回适当类型的复数的元组．另一方面，如果这些参数值的类型只是在宽度上所有不同（如\verb|Int64|和\verb|Int8|、\verb|Float16|和\verb|Float32|等等），那么\verb|promote|函数就会把它们都转换为宽度较大的那个类型的值．
+
+我们倒是不用死记硬背这些规则．因为有一个名叫\verb|promote_type|的函数，它可以接受若干个类型字面量并返回它们的公共类型．例如：
+\begin{lstlisting}[language=julia]
+julia> promote_type(Int64, Float64)
+Float64
+
+julia> promote_type(Int64, Int8)
+Int64
+
+julia> promote_type(Float16, Float32)
+Float32
+
+julia> 
+\end{lstlisting}
+
+请注意，我们一直在说的是多个类型的公共类型，而不是多个类型的共同超类型．这两者之间并没有任何关联．如果你确实想得到两个类型的共同超类型，那么可以调用\verb|typejoin|函数．例如，调用表达式\verb|typejoin(Int, Float64)|的求值结果会是\verb|Real|．
+
+好了，不论细节如何，经过前文所述的处理之后，这些数值就可以交给普通的运算符实现方法进行操作了．就像这样：
+\begin{lstlisting}[language=julia]
+julia> +(promote(1, 2.0)...)
+3.0
+
+julia> 
+\end{lstlisting}
+
+这里对\verb|+|数的调用会被分派到我们在前面展示的那个针对\verb|Float64|类型的衍生方法上．
+
+解释一下，符号\verb|...|的作用是，把紧挨在它左边的那个值中的所有元素值（如元组\verb|(1.0, 2.0)|中的\verb|1.0|和\verb|2.0|）都平铺开来，并让这些元素值都成为传入外层函数（如\verb|+|函数）的独立参数值．所以，调用表达式\verb|+((1.0, 2.0)...)|就相当于\verb|+(1.0, 2.0)|．
+
+至于什么是元组，你现在可以简单地把它理解为由圆括号包裹的、可承载若干值的容器．函数在同时返回多个值的时候通常就会用这种数据结构呈现．在后面讲参数化类型的那一章里有对元组的详细说明．
+
+除了以上讲的这些，Julia 的类型提升系统还有一个很重要的作用，那就是：让我们可以编写自己的类型提升规则，以自定义数学运算的部分行为，尤其是在操作数的类型不同的时候．例如，若我们想让整数和浮点数的运算结果变成\verb|BigFloat|类型的值，则可以这样做：
+\begin{lstlisting}[language=julia]
+julia> import Base.promote_rule
+
+julia> promote_rule(::Type{Int64}, ::Type{Float64}) = BigFloat
+promote_rule (generic function with 137 methods)
+
+julia>
+\end{lstlisting}
+
+第一行代码是一条导入语句．简单来说，我们在编写某个函数的衍生方法的时候必须先导入这个函数．第二行代码就是我编写的衍生方法．由于与之相关的一些背景知识我们还没有讲到，所以你看不太懂也没有关系．在这里，你只要关注这行代码中的\verb|Int64|、\verb|Float64|和\verb|BigFloat|就可以了．前两个都代表了操作数的类型，而后一个则代表了它们的公共类型．这正是在定义操作数类型和公共类型的对应关系．
+
+现在，我们再次执行之前的代码：
+\begin{lstlisting}[language=julia]
+julia> promote(1, 2.0)
+(1.0, 2.0)
+
+julia> typeof(ans)
+Tuple{BigFloat,BigFloat}
+
+julia> 
+\end{lstlisting}
+
+可以看到，这次调用\verb|promote|函数后得到的元组包含了两个\verb|BigFloat|类型的值．这就说明我们刚刚编写的类型提升规则已经生效了．当然，修改Julia内置的类型提升规则是比较危险的．因为这可能会改变已有代码的基本行为，并且会明显地降低程序的稳定性，所以还是要谨慎为之．但对于我们自己搭建的数值类型体系来讲，这一特性的潜力是非常可观的．
+
+总之，Julia 的类型提升系统辅助维护着数学运算的具体实现．其中有着大量的默认规则，并确保着常规运算的有效性．但同时，它也允许我们自定义类型提升的规则，以满足自己的特殊需要．
