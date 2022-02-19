@@ -1,0 +1,330 @@
+% Julia 非常规的字符串值
+% 非常规的字符串值
+
+本文授权转载自郝林的 《Julia 编程基础》． 原文链接：\href{https://github.com/hyper0x/JuliaBasics/blob/master/book/ch06.md}{第 6 章 字符和字符串}．
+
+
+\subsubsection{6.4 非常规的字符串值}
+
+如果一个字符串值不仅包含了由双引号包裹的字符串，还包含了某个特定的前缀，那么我们就说这个字符串值是非常规的．
+
+\textbf{6.4.1 原始字符串}
+
+我们为了表示字符串值而输入的内容又被称为字符串字面量．在一般情况下，字符串值的实际内容会与我们为此输入的字符串字面量保持一致．例如：
+\begin{lstlisting}[language=julia]
+julia> "Julia\n\n"
+"Julia\n\n"
+
+julia> 
+\end{lstlisting}
+
+除非其中包含了非经典的转义序列或者插值部分．注意，虽然我们输入的经典转义序列会被原样保留在字符串值中，但当该值被打印的时候这些转义序列还是会被转义．比如：
+\begin{lstlisting}[language=julia]
+julia> println("Julia\n\n")
+Julia
+
+
+
+julia> 
+\end{lstlisting}
+
+显然，当上面这个字符串值被打印时，在打印出的内容的最后有两个真正的换行．
+
+如果我们想让一个字符串值被打印出的内容与我们为它输入的字符串字面量完全相同，那么就可以使用原始字符串的形式来表示它．在这种情况下，即使字符串字面量中包含了任意的转义序列和插值部分，这种一致性也是可以得到保障的．
+
+原始字符串的形式是由前缀\verb|raw|和常规的字符串值组成的，如：\verb|raw"Julia\n\n"|．这种形式会生成常规的字符串值．但不同的是，我们输入的所有内容最终都会保持原样，包括\verb|$|和\verb|\|．示例如下：
+\begin{lstlisting}[language=julia]
+julia> raw"Julia\n\n"
+"Julia\\n\\n"
+
+julia> 
+\end{lstlisting}
+
+不要被上面回显的内容所迷惑．其中的\verb|\\n|实际上就代表了内容\verb|\n|．这是因为，在常规的字符串值中，\verb|\n|是会被转义为真正的换行的．所以Julia在它的前面又加了一个\verb|\|，以表示第二个反斜杠代表的并不是转义序列的前缀．
+
+我们把上面的字符串值打印出来看一下就清楚了：
+\begin{lstlisting}[language=julia]
+julia> println(raw"Julia\n\n")
+Julia\n\n
+
+julia> 
+\end{lstlisting}
+
+总之，原始字符串的形式会让一个字符串值的最终输出与最初输入保持一致．为此，Julia 可能会对字符串值的内容稍加修改．
+
+\textbf{6.4.2 整数和浮点数}
+
+我们在上一章讲过，一个常规的字符串值再加上一个前缀\verb|big|就可以代表任意精度的（\verb|BigInt|类型的）整数值或者（\verb|BigFloat|类型的）浮点数值．但前提是，在两个双引号之间的必须是有效的整数字面量或者浮点数字面量．例如：
+\begin{lstlisting}[language=julia]
+julia> big"1314"
+1314
+
+julia> typeof(ans)
+BigInt
+
+julia> big"3.14"
+3.1400000000000000000000000000000000000000000000
+  00000000000000000000000000000008
+
+julia> typeof(ans)
+BigFloat
+
+julia> 
+\end{lstlisting}
+
+注意，如果要用科学计数法表达浮点数，那么我们只能使用字母\verb|e|，而不能用\verb|f|或\verb|p|，否则Julia就会报错．示例如下：
+\begin{lstlisting}[language=julia]
+julia> big"3.14e-2"
+0.0314000000000000000000000000000000000000000000000
+  0000000000000000000000000000008
+
+julia> big"3.14f-2"
+ERROR: ArgumentError: invalid number format 3.14f-2 for BigInt or BigFloat
+# 省略了一些回显的内容．
+
+julia> big"3.14p-2"
+ERROR: ArgumentError: invalid number format 3.14p-2 for BigInt or BigFloat
+# 省略了一些回显的内容．
+
+julia> 
+\end{lstlisting}
+
+另外还要注意，虽然我们可以在这里使用三联双引号，但是并不建议这样做．因为这么写没有明显的好处，而且容易因失误而输入无效的字面量．比如：
+\begin{lstlisting}[language=julia]
+julia> big"""3.14e-2"""
+0.031400000000000000000000000000000000000000000000000
+  00000000000000000000000000008
+
+julia> big"""3.14
+       e-2"""
+ERROR: ArgumentError: invalid number format 3.14
+e-2 for BigInt or BigFloat
+# 省略了一些回显的内容．
+
+julia> 
+\end{lstlisting}
+
+\textbf{6.4.3 版本号}
+
+我们已经知道，Julia 的版本号遵循\href{https://semver.org}{Semantic Versioning 规范} ．其一般形式是\verb|vX.Y.Z|．其中的\verb|X|代表主版本号（或称大版本号），\verb|Y|代表次版本号（或称小版本号），而\verb|Z|则代表修订版本号．并且，它们都只能是正整数或\verb|0|．
+
+在Julia程序中，这样的版本号可以由一种非常规的字符串值表示．其形式是，以字母\verb|v|作为前缀，再加上一个内容符合上述规范的字符串字面量．比如，\verb|v"1.3.1"|，我们可以称之为版本号值．
+
+在这样的版本号值中，次版本号和修订版本号都可以被省略，并且被省略的部分将会被视为\verb|0|．因此，\verb|v"1.3"|就相当于\verb|v"1.3.0"|，而\verb|v"1"|就相当于\verb|v"1.0.0"|，等等．
+
+另一方面，我们还可以在版本号值中追加更多的信息，包括：预发布信息和构建信息．预发布信息实际上指的是那些非稳定版本的信息．比如，我们通常在正式发布稳定版本\verb|1.0.0|之前还会发布一系列用于测试或候选的非稳定版本．这些非稳定版本的信息肯定需要体现在对应的版本号中．此类信息可以是\verb|-alpha1|、\verb|-beta.2|等等．而构建信息表达的是程序构建时处于或针对的环境．它可以是程序构建的日期，也可以是程序当次构建所针对的计算平台（包括操作系统和计算架构），比如\verb|+20200101|、\verb|+win64|等等．
+
+预发布信息的格式为，一个减号\verb|-|再加一个预发布标识，且减号可以被省略．其中的预发布标识可以包含一到多个小写的英文字母、\verb|0|到\verb|9|的数字、减号\verb|-|和英文点号\verb|.|．但是，英文点号不能作为开头或结尾，且多个英文点号不能相邻．另外，当最开始的减号被省略时，预发布标识中的第一个字符还不能是数字，否则就可能会引起歧义，从而导致版本号的识别错误．例如，预发布标识为\verb|alpha|、\verb|alpha1|、\verb|alpha.1|、\verb|-alpha.1|和\verb|1a|都是可以，但\verb|.1a|和\verb|1..a|却都是不合法的．又例如，当版本号值是\verb|v"1.0.01a"|时，修订版本号会被识别为\verb|01|，而预发布信息会被识别为\verb|a|．这与我们想表达的预发布信息（即\verb|1a|）并不相符．
+
+按照一般的惯例，\verb|alpha|、\verb|beta|和\verb|rc|都常被用作预发布标识的前缀，并分别代表内部测试版、公共测试版和候选版．
+
+构建信息的格式是，一个加号\verb|+|再加一个构建标识．构建标识同样可以包含一到多个小写的英文字母、\verb|0|到\verb|9|的数字、减号\verb|-|和英文点号\verb|.|，而且对英文点号的用法限制也和预发布标识是一样的．因此，我们在这里放置某种日期时间的简化表示、哈希序列以及计算平台的代号等都是没问题的．
+
+除了上述的规范格式之外，Julia中的版本号还可以包含两个特殊的标记．其中一个标记是单独的减号\verb|-|．它的存在有个前提条件，即：版本号中不能包含预发布信息和构建信息．在此条件下，我们可以用这个标记作为版本号的后缀，以指代某个特定版本的下限．例如，\verb|v"1.0.0-"|一定会比稳定版本\verb|v"1.0.0"|以及诸如\verb|v"1.0.0-alpha"|和\verb|v"1.0.0-beta1"|这样的非稳定版本都要小．
+
+另一个特殊标记是单独的加号\verb|+|．它的存在也有一个前提条件，那就是：版本号中不能包含构建信息．在这个条件下，我们可以用这个标记作为版本号的后缀，以指代某个特定版本的上限．例如，\verb|v"1.0.0+"|一定会比v\verb|"1.0.0"|和\verb|v"1.0.0+win64"|都要大．
+
+请注意，包含了这两个特殊标记（之一）的版本号无法表示任何具体的版本．但它们对于版本号的比较操作来说还是很有用的．另外，这两个特殊标记不能出现在同一个版本号值中．
+
+**版本号的比较**
+
+常量\verb|VERSION|代表着当前Julia语言的版本号．与其他的版本号值一样，它是\verb|VersionNumber|类型的．这个类型的值是可以被比较的．我们之前讲到的所有比较操作符都可以应用在它们身上．
+
+不过，针对这类值的比较操作有些特殊．它不是单纯地按照数值顺序或字典顺序进行的．在比较此类值的时候，Julia会先以数值顺序依次地比较它们的主版本号、次版本号和修订版本号．如果这三者都两两相等，那么Julia就会去比较它们的预发布信息．在其他部分都相等的情况下，有预发布信息的版本号值一定会比没有该信息的版本号值要小．
+
+预发布信息会被其中的英文点号分割为多个单元．这些单元会以从左到右的顺序被成对地比较．对于每对单元，如果其中都只包含数字字符，那么 Julia 就会以数值顺序比较它们，如：\verb|v"1.0.0-alpha.9"|会小于\verb|v"1.0.0-alpha.11"|．否则，Julia 就会以 ASCII 编码集的顺序逐个字符地进行比较，如：\verb|v"1.0.0-alpha.a9"|会大于\verb|v"1.0.0-alpha.a11"|．一旦分辨出某对单元谁大谁小，也就可以确定两个预发布信息的大小了．但如果所有成对的单元都相等，那么就要看哪一个预发布信息拥有更少的单元了．在这时，更少的单元意味着更小的值．
+
+版本号值中的构建信息也会在最后参与比较．它的比较规则与预发布信息的比较规则基本一致．唯一不同的是，在其他部分都相等的情况下，有构建信息的版本号值一定会比没有该信息的版本号值要大．
+
+有了以上这些规则，再结合我们刚刚在前面说的那两个特殊标记，就有了下面的关系：
+\begin{lstlisting}[language=julia]
+julia> v"1.0.0-" < v"1.0.0-alpha" < v"1.0.0-alpha.9" < 
+v"1.0.0-alpha.11" < 
+v"1.0.0-alpha.a11" < v"1.0.0-alpha.a9" < 
+v"1.0.0-alpha.a9.1" < v"1.0.0-beta" < 
+v"1.0.0-beta.2" < v"1.0.0-rc.1" < v"1.0.0" < v"1.0.0+win64" < v"1.0.0+"
+true
+
+julia> 
+\end{lstlisting}
+
+\textbf{6.4.4 正则表达式}
+
+所谓的正则表达式（regular expressions），就是使用一系列的符号来表达字符串的特定模式的公式．它常常被用来检索或替换那些符合某个特定模式的字符串片段，又或是用于判断一个字符串是否符合某些特定的模式．注意，这远远要比在一个字符串中搜索某个固定的字符串片段要复杂得多．
+
+Julia 的正则表达式其实是一个舶来品，传承自 Perl 语言．Perl 是一种用于编写脚本程序的编程语言，诞生于 1987 年．该语言内置的正则表达式引擎在功能上非常的强大，而且算是一个集大成者．它也因此一度成为了业界标准．
+
+在底层，Julia 的正则表达式是由\href{https://www.pcre.org}{PCRE 库}支持的．PCRE 是 Perl Compatible Regular Expressions 的缩写．它使用了与 Perl 5 几乎相同的语法和语义来实现正则表达式的模式匹配．更确切地说，Julia 使用的是 PCRE 库的新实现，名为 PCRE2．这个新实现诞生于 2015 年，目前已经发展到了第\verb|10|个版本．
+
+实际上，Julia 在识别由字符串值代表的版本号时就用到了正则表达式．我们可以利用函数\verb|match|和代表了正则表达式的常量\verb|Base.VERSION_REGEX|来判断一个版本号的格式是否符合规范．例如：
+\begin{lstlisting}[language=julia]
+julia> match(Base.VERSION_REGEX, "1.0.0-rc1+win64")
+RegexMatch("1.0.0-rc1+win64", 1="1", 2="0", 3="0",
+ 4=nothing, 5="-rc1", 6=nothing, 7="win64")
+
+julia> match(Base.VERSION_REGEX, "1.0.0-rc1_")
+
+julia> ans == nothing
+true
+
+julia> 
+\end{lstlisting}
+
+如果符合规范，那么\verb|match|函数就会返回一个\verb|RegexMatch|类型的值，否则它就会返回\verb|nothing|．根据 REPL 环境回显的内容可知，\verb|match|函数已经识别出了版本号\verb|"1.0.0-rc1+win64"|中的各个组成部分．
+
+我在这里不想过多地介绍正则表达式的语法和用法．因为系统的介绍会占用非常大的篇幅，足以写成一本书了．实际上，目前市面上已经有不少介绍正则表达式的图书了．如果有必要，你可以挑选一本来阅读，也可以去参看 PCRE2 官方网站上的\href{https://www.pcre.org/current/doc/html/pcre2syntax.html}{语法文档}和\href{https://www.pcre.org/current/doc/html/pcre2pattern.html}{模式文档}．
+
+我下面只从非常规字符串值的角度，说一下正则表达式的一般表示形式和基本操作．
+
+这种非常规的字符串值由前缀\verb|r|和包含了正则表达式的字符串字面量组成，以下简称正则值．正则值的类型总是\verb|Regex|．比如，正则值\verb|r"^(\d+)$"|可以匹配只包含了一个或多个数字字符的单行字符串．又比如，正则值\verb|r"\+((?:[0-9a-z-]+\.)*[0-9a-z-]+)"|可用于匹配版本号中的构建信息．
+
+我们现在来简单地拆解一下上面的第二个正则表达式．首先是转义序列\verb|\+|．这是在正则表达式中特有的转义序列．它表达的含义是，这里的加号\verb|+|只是一个普通的字符，而不是用于指示匹配次数的量词（quantifier）．类似的转义序列还有\verb|\.|、\verb|\*|、\verb|\(|等等．
+
+紧随其后的是一个捕获组（capture group），即：由圆括号包裹的子表达式．它可以实现两个功能：分组和捕获．说明如下：
+
+\begin{itemize}
+\item 分组功能：可以把捕获组中的子表达式看成一个独立的整体．使它可以独立匹配字符串片段，并能成为一些符号（比如量词）的作用对象．比如，\textbf{(-|\+)?([0-9]+)+}可以匹配代表整数的字符串．其中，第1个捕获组可以独立匹配正负号，同时也是量词\verb|?|的作用对象并以此表示正负号可有可无．而第2个捕获组可以独立匹配数字字符，同时也是量词\verb|+|的作用对象并以此表示数字字符至少要有一个．
+\item 捕获功能：可以提取出捕获组中的子表达式，以便在后续引用．比如，\textbf{(-|\+)?([0-9]+)+\.(\g<2>)+}可以匹配代表小数的字符串．其中，第3个捕获组中的\verb|\g<2>|的含义就是引用第2个捕获组中的子表达式，以表示小数部分的模式与整数部分的模式相同．
+\end{itemize}
+
+我们接着拆解可以匹配构建信息的那个正则表达式．在紧随转义序列\verb|\+|的那个捕获组中，还有两个独立的子表达式．
+
+第一个子表达式是\verb|(?:[0-9a-z-]+\.)*|，是一个非捕获组（non-capture group）．非捕获组的含义是只有分组功能而没有捕获功能的组，一般以\verb|(?:|为前缀且以\verb|)|为后缀．在这个非捕获组中的\verb|[0-9a-z-]+|表示至少要有一个\verb|0|到\verb|9|的数字、小写英文字母或减号\verb|-|．而\verb|\.|则表示前者可以以英文点号\verb|.|为后缀．最后的量词\verb|*|表示这个非捕获组所表达的字符串片段可以有零个到多个．
+
+如果你理解了第一个子表达式，那么再看第二个子表达式\verb|[0-9a-z-]+|肯定就毫无阻碍了．这两个子表达式合在一起就形成了外层捕获组的子表达式．它表示了构建信息本身的模式．再加上最左侧的转移序列\verb|\+|，这个正则表达式就可以识别出合法的构建信息并提取出构建信息本身了．就像下面这样：
+\begin{lstlisting}[language=julia]
+julia> rm1 = match(r"\+((?:[0-9a-z-]+\.)*[0-9a-z-]+)", "+win64.20200101")
+RegexMatch("+win64.20200101", 1="win64.20200101")
+\end{lstlisting}
+
+在 REPL 环境的回显内容中，跟在\verb|RegexMatch|和\verb|(|后边的\verb|"+win64.20200101"|就是已被成功识别的构建信息．而\verb|1="win64.20200101"|则表示第1个捕获组匹配的字符串是\verb|"win64.20200101"|．
+
+在Julia程序中，我们可以通过访问\verb|RegexMatch|类型值的一些字段来了解匹配结果的具体细节．这些字段有：
+\begin{itemize}
+\item \verb|match|：代表匹配到的整个字符串．
+\item \verb|captures|：代表所有捕获组匹配到的字符串片段，会以字符串数组的形式表示，并以捕获组的序号为顺序．
+\item \verb|offset|：代表匹配到的整个字符串在被匹配的完整字符串中的偏移量，可以理解为前者在后者中的首个字符索引号．
+\item \verb|offsets|：代表所有捕获组匹配到的字符串片段在被匹配的完整字符串中的偏移量，会以整数数组的形式表示，并以捕获组的序号为顺序．
+\item \verb|regex|：代表匹配时所使用的正则值．
+\end{itemize}
+
+相关的示例如下：
+\begin{lstlisting}[language=julia]
+julia> rm1.match
+"+win64.20200101"
+
+julia> rm1.captures
+1-element Array{Union{Nothing, SubString{String}},1}:
+ "win64.20200101"
+
+julia> rm1.offset
+1
+
+julia> rm1.offsets
+1-element Array{Int64,1}:
+ 2
+
+julia> rm1.regex
+r"\+((?:[0-9a-z-]+\.)*[0-9a-z-]+)"
+
+julia> 
+\end{lstlisting}
+
+除了\verb|match|函数，正则值还可以作为\verb|occursin|函数的第一个参数值，以及作为\verb|replace|函数的第二个参数值．
+
+利用\verb|replace|函数和正则值，我们可以对字符串值的内容进行一些复杂的修改和替换（当然，这会生成新的字符串值，而原字符串值会保持不变）．比如：
+\begin{lstlisting}[language=julia]
+julia> replace("+win64.2020-01-01T21:01", 
+r"(.*\.)(\d{4})-(\d{2})-(\d{2})T(\d{2}):(\d{2})" => s"\1\2\3\4\5\6")
+"+win64.202001012101"
+
+julia> 
+\end{lstlisting}
+
+以\verb|s|为前缀的非常规字符串值专门用于表示替换字符串（substitution string），以下简称替换值．替换值的类型总是\verb|SubstitutionString|．在这里，我用正则值、符号\verb|=>|和替换值组成了一个替换对，以表示：把与该正则值相匹配的字符串替换为该替换值中的内容．在这个替换值中，我们可以使用\verb|\g<n>|或\verb|\n|来引用正则值中的捕获组，其中的\verb|n|代表捕获组的序号．因此，我用\verb|"\1\2\3\4\5\6"|重新组织了源字符串值中的内容．
+
+对于正则值，除了必要的前缀\verb|r|，我们还可以为它添加后缀\verb|i|、\verb|m|、\verb|s|和\verb|x|．这些后缀的含义如下：
+\begin{itemize}
+\item \verb|i|：在进行模式匹配时不区分大小写．这会依从于相应编码标准中的规则．最简单的案例是，不区分某一个英文字母的大写和小写，把两者视为同一个字符．
+\item  \verb|m|：将源字符串视为多行的字符串值．也就是说，修改原本指代字符串最前端的\verb|^|和指代字符串最后端的\verb|$|的含义，分别改为指代任何行的最前端和指代任何行的最后端．如此一来，我们就可以分别针对源字符串中的每一行做模式匹配了．
+\item  \verb|s|：将源字符串视为单行的字符串值．也就是说，将原本指代了除换行符以外的任何字符的\verb|.|的含义改为可指代所有字符．这样我们就可以针对源字符串的全范围做模式匹配了，即使它拥有多个行也是如此．
+\item  \verb|x|：允许我们在正则表达式中的某些位置上添加一些空白，甚至是换行．这可以提高正则表达式的（人类）可读性．
+\end{itemize}
+
+下面的示例有助于你理解这些后缀的含义．
+\begin{lstlisting}[language=julia]
+julia> match(r"^J\w+$", "julia") # 区分大小写的匹配．
+
+julia> match(r"^J\w+$"i, "julia") # 不区分大小写的匹配．
+RegexMatch("julia")
+
+julia> match(r"^J\w+$", "Julia\n Python\n Golang\n") # 未改变 ^ 和 $ 的含义．
+
+julia> match(r"^J\w+$"m, "Julia\n Python\n Golang\n") 
+  # 已改变 ^ 和 $ 的含义，可针对每一行做匹配．
+
+RegexMatch("Julia")
+
+julia> match(r"J.*", "Julia\n Python\n Golang\n") # 未改变 . 的含义．
+RegexMatch("Julia")
+
+julia> match(r"J.*"s, "Julia\n Python\n Golang\n") # 已改变 . 的含义，可匹配换行．
+RegexMatch("Julia\n Python\n Golang\n")
+
+julia> match(r"^ J  \w+ $", "Julia") # 正则表达式中不能有多余的空白．
+
+julia> match(r"^ J  \w+ $"x, "Julia") # 正则表达式中可以有多余的空白．
+RegexMatch("Julia")
+
+julia> 
+\end{lstlisting}
+
+最后，顺便说一下，我们可以使用三联双引号来包裹正则值中的字符串字面量．在某些情况下，这样做可以让正则表达式的内容更加清晰．比如：
+\begin{lstlisting}[language=julia]
+julia> match(r"^ \"J\w+\" $", """ "Julia" """)
+RegexMatch(" \"Julia\" ")
+
+julia> match(r"""^ "J\w+" $""", """ "Julia" """)
+RegexMatch(" \"Julia\" ")
+
+julia> 
+\end{lstlisting}
+
+可以看到，在用了三联双引号之后，我们就不需要再为正则表达式中的双引号做转义了．
+
+\textbf{6.4.5 字节数组}
+
+字节数组也可以由一种非常规的字符串值表示．但这样表示的字节数组是只读的．这种字节数组的类型是\verb|Base.CodeUnits{UInt8, String}|．例如：
+\begin{lstlisting}[language=julia]
+julia> b"abcdef"
+6-element Base.CodeUnits{UInt8,String}:
+ 0x61
+ 0x62
+ 0x63
+ 0x64
+ 0x65
+ 0x66
+
+julia>
+\end{lstlisting}
+
+我用字符串值\verb|b"abcdef"|生成了一个长度为\verb|6|的字节数组．这个字节数组中的每一个元素值都表示了\verb|"abcdef"|经编码后在对应字节上的存储内容．更确切地说，Julia会先用 UTF-8 编码格式把字符串值中的内容转换成一个个字节，然后再把这些字节按照先后顺序保存到一个字节数组当中．
+
+在这种非常规的字符串值中，我们可以使用任何有效的形式来表示一个 ASCII 编码值或者一个 Unicode 代码点．比如：
+\begin{lstlisting}[language=julia]
+julia> ba1 = b"\u4e2d\xe5\x9b\xbd"
+6-element Base.CodeUnits{UInt8,String}:
+ 0xe4
+ 0xb8
+ 0xad
+ 0xe5
+ 0x9b
+ 0xbd
+
+julia> String(ba1)
+"中国"
+
+julia>
+\end{lstlisting}
+
+关于这些表示形式的细节，我们在前面已经讨论过了．我就不在此重复了．另外，我们还没有正式讲数组和它的类型，所以我在这里并不打算展开来说．你目前只需要知道，有这样一种非常规的字符串值，它能够表示只读的字节数组．

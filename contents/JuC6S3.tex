@@ -1,0 +1,568 @@
+% Julia 字符串
+% 字符串
+
+本文授权转载自郝林的 《Julia 编程基础》． 原文链接：\href{https://github.com/hyper0x/JuliaBasics/blob/master/book/ch06.md}{第 6 章 字符和字符串}．
+
+
+\subsubsection{6.3 字符串}
+
+虽然字符串通常会由一个个字符组成，但在 Julia 中，字符串与字符却是截然不同的两个概念．
+
+\textbf{6.3.1 值的表示}
+
+一个字符串值一般由一对双引号包裹，并可以包含零到多个字符：
+\begin{lstlisting}[language=julia]
+julia> ""
+""
+
+julia> "a"
+"a"
+
+julia> "Julia"
+"Julia"
+
+julia> 
+\end{lstlisting}
+
+我们也可以用三联双引号来包裹这类值．在这种情况下，我们输入的字符串可以跨越多个行．其中的换行都会以换行符的形式保留下来，但紧跟在第一个三联双引号后面的换行会被忽略．对于回车以及回车换行的组合也是如此．下面是一个示例：
+\begin{lstlisting}[language=julia]
+julia> """
+       \u263c CN        
+       US
+       EN
+       R\125 \n\t
+       """
+"☼ CN        \nUS\nEN\nRU \n\t\n"
+
+julia> 
+\end{lstlisting}
+
+注意，我在\verb|CN|的右边用 Tab 键输入了一个制表符，所以在回显内容的对应位置上存在一段空白．回显内容中最左边的\verb|☼|是一个由 Unicode 代码点\verb|\u263c|代表的字符．而在空白的右边，针对我输入的每一个换行都存在一个换行符\verb|\n|．另外，\verb|\125|也是一个转义序列．其中的\verb|125|是一个八进制的 ASCII 编码值．这个转义序列对应于大写字母\verb|U|．
+
+你可能已经看到，我直接写入的转义序列\verb|\n|和\verb|\t|都被原封不动地保留了下来．这里的规则是，字符串值总是会原样保留那些经典的转义序列．对于我们之前提到的针对反斜杠的转义序列\verb|\\|也是如此．至于其他的转义序列，它们仍然会像以前那样被处理．
+
+另外，在前面的多行字符串中，一些用于缩进的空白（包括空格和制表符）并没有被识别为字符串的一部分．这又是为什么呢？实际上，对于由三联双引号包裹的字符串值，Julia 会以缩进最少的那一行为基准来保留每一行中的前置空白．注意，第一行以及只包含空格和制表符的行并不会被作为基准．示例如下：
+\begin{lstlisting}[language=julia]
+julia> """
+       Julia
+       Python
+       Golang
+       Java
+       """
+"Julia\nPython\nGolang\nJava\n"
+
+julia> 
+\end{lstlisting}
+
+在这个多行字符串中，从\verb|Julia|到第二个三联双引号的 5 行里，它们的缩进都是一样的．所以，回显的字符串值中不存在任何的空格．但如果我们调整一下，相应的空格就会出现：
+\begin{lstlisting}[language=julia]
+julia> """
+           Julia
+             Python
+               Golang
+                 Java
+         """
+"  Julia\n    Python\n      Golang\n        Java\n"
+
+julia> 
+\end{lstlisting}
+
+我们依然来看从\verb|Julia|到第二个三联双引号的 5 行．其中，最后一行的缩进是最少的，只有 9 个空格．所以，对于其他行的前置空格，都要被剪掉 9 个．而剩下的空格都会被原样地保留在字符串值中．下面是另一个例子：
+\begin{lstlisting}[language=julia]
+julia> """
+       Julia
+         Python
+           Golang
+             
+             Java
+         """
+"Julia\n  Python\n    Golang\n      \n      Java\n  "
+
+julia> 
+\end{lstlisting}
+
+显然，对于这个多行字符串，Julia 在考虑前置空白的保留问题时，是以\verb|Julia|那一行为基准的．
+
+最后，对于由双引号包裹的字符串值，如果我们想在其中表示双引号本身，那么就要用反斜杠进行转义．比如，字符串值\verb|"\""|的实际内容是\verb|"|．但在由三联双引号包裹的值中，表示双引号却用不着转义．
+
+\textbf{6.3.2 类型之上的设定}
+
+字符串值的默认类型是\verb|String|．\verb|String|是抽象类型\verb|AbstractString|的子类型之一．Julia 对字符串的很多设定都是基于这个抽象类型展开的．
+
+首先，一个字符串就是一个包含了若干个代码单元的序列．还记得吗？我们说过 UTF-8 的代码单元是 1 个字节．这可以通过调用\verb|codeunit|函数来验证：
+\begin{lstlisting}[language=julia]
+julia> comment1 = "codeunit 函数会返回给定字符串对象的代码单元类型"
+"codeunit 函数会返回给定字符串对象的代码单元类型"
+
+julia> codeunit(comment1)
+UInt8
+
+julia> 
+\end{lstlisting}
+
+这个函数可以接受一个\verb|AbstractString|类型的参数值，并返回它的代码单元的类型．上述字符串的代码单元类型是\verb|UInt8|，即宽度为 1 个字节的无符号整数类型．
+
+其次，既然字符串是代码单元的序列，那么就应该可以抽取出其中的代码单元．事实也确实如此．这仍然需要用到\verb|codeunit|函数．我们可以把一个字符串值和某个有效的索引号同时传给它，比如：
+\begin{lstlisting}[language=julia]
+julia> codeunit(comment1, 1)
+0x63
+
+julia> typeof(ans)
+UInt8
+
+julia> 
+\end{lstlisting}
+
+调用表达式\verb|codeunit(comment1, 1)|的含义是，从\verb|comment1|代表的字符串值中抽取出第 1 个代码单元．这时，\verb|codeunit|函数会返回一个\verb|UInt8|类型的值，即：那个与给定索引号对应的代码单元．此外，还有一个名称与之很像的函数\verb|codeunits|．它可以返回一个由字符串值中的所有代码单元组成的序列．
+
+我们都知道，字符串在底层都是由一个个字节组成的．而所谓的索引号，就是指字符串中的字节的序号．对于采用UTF-8编码的字符串来说，字节的序号就等于代码单元的序号．
+
+那什么叫做有效的索引号呢？对于一个字符串值来说，有效的索引号是从\verb|1|开始的．\verb|1|就是有效索引号的下限．这与很多其他的编程语言中的设定都不同．更宽泛地讲，Julia 中的索引号一般都必须是正整数，而不能是\verb|0|．
+
+那么，字符串值中的有效索引号的上限又是多少呢？在这里，我们可以通过调用\verb|ncodeunits|函数获取到它．例如：
+\begin{lstlisting}[language=julia]
+julia> ncodeunits(comment1)
+66
+
+julia> 
+\end{lstlisting}
+
+因此，字符串\verb|comment1|的有效索引号的范围就是\verb|[1, 66]|．一旦索引号低于相应的下限或高于相应的上限，就会立即引发一个错误：
+\begin{lstlisting}[language=julia]
+julia> codeunit(comment1, 0)
+ERROR: BoundsError: attempt to access String
+  at index [0]
+# 省略了一些回显的内容．
+
+julia> codeunit(comment1, 67)
+ERROR: BoundsError: attempt to access String
+  at index [67]
+# 省略了一些回显的内容．
+
+julia> 
+\end{lstlisting}
+
+这就是第三个设定，即：对于一个字符串值，它的有效索引号一定大于或等于\verb|1|，且小于或等于其中字节的个数．
+
+\textbf{6.3.3 操作字符串}
+
+基于 Julia 对通用字符串的三个基本设定，我们可以用很多方式来操作字符串．
+
+\textsl{6.3.3.1 获取长度}
+
+关于获取一个字符串值的长度，我们已经知道\verb|ncodeunits|函数是可用的．这个函数会获取字符串值中的代码单元的数量（代码单元长度）．这对于采用UTF-8编码的字符串来说，就相当于获取其中字节的数量．但如果为了保险起见，我们可以用\verb|sizeof|函数来获取其中的字节个数（字节长度）：
+\begin{lstlisting}[language=julia]
+julia> sizeof(comment1)
+66
+
+julia> sizeof("a")
+1
+
+julia> sizeof("中")
+3
+
+julia> 
+\end{lstlisting}
+
+另外，若想得到一个字符串值中的字符的数量（字符长度），我们可以使用\verb|length|函数．例如：
+\begin{lstlisting}[language=julia]
+julia> length(comment1)
+28
+
+julia> length("a")
+1
+
+julia> length("中")
+1
+
+julia> 
+\end{lstlisting}
+
+这个函数还可以再接受两个代表索引号的参数．此时它计算的就是某个字符串片段中的字符的个数．示例如下：
+\begin{lstlisting}[language=julia]
+julia> comment1[1:13]
+"codeunit 函数"
+
+julia> length(comment1, 1, 13)
+11
+
+julia> length(comment1, 1, 12)
+10
+
+julia> length(comment1, 1, 10)
+10
+
+julia> 
+\end{lstlisting}
+
+可以看到，\verb|length|函数并没有把字符串片段中的不完整字符（或者说无效字符）计算在内．所谓的无效字符是指，根据既定的编码格式（如 UTF-8），无法被识别和转换为一个字符的若干连续字节．它们可能只是某个字符编码的一部分，也可能根本就无关于任何字符编码．
+
+不过，如果一个字符串（片段）中只包含了无效字符的话，那么\verb|length|函数还是会把它算作一个字符的：
+\begin{lstlisting}[language=julia]
+julia> comment1[10:13]
+"函数"
+
+julia> length(comment1, 10, 13)
+2
+
+julia> length(comment1, 11, 13)
+1
+
+julia> 
+\end{lstlisting}
+
+索引号\verb|11|和\verb|12|分别对应的是字符\verb|函|的后两个代码单元，而索引号\verb|13|对应的则是字符\verb|数|的第一个代码单元．这3个代码单元合在一起并不能形成一个有效的 Unicode 代码点．但由于这个字符串片段中只包含了这3个字节，所以\verb|length|函数认为其字符长度为\verb|1|，而不是\verb|0|．
+
+这有时可能会让我们感到困惑．比如：
+\begin{lstlisting}[language=julia]
+julia> ich1, ich2, ch =  "\xe2\x88", "\x80", "\xe2\x88\x80"
+("\xe2\x88", "\x80", "∀")
+
+julia> length(ich1) + length(ich2) == length(ch)
+false
+
+julia> length(ich1), length(ich2), length(ch)
+(1, 1, 1)
+
+julia> 
+\end{lstlisting}
+
+如果我们把\verb|ich1|和\verb|ich2|拼接在一起的话，就肯定会得到\verb|ch|代表的字符串值．从直觉上讲，它们的字符长度之间应该存在“和”的关系．但事实并非如此．如果遇到这样的情况，我们可以用\verb|isvalid|函数对这些字符串做一下有效性的判断．再结合\verb|length|函数的行为特点，这通常就可以为我们解惑了．
+
+\textsl{6.3.3.2 索引}
+
+我们可以用索引表达式从一个字符串值中抽取某个代码单元．例如：
+\begin{lstlisting}[language=julia]
+julia> comment1[1]
+'c': ASCII/Unicode U+0063 (category Ll: Letter, lowercase)
+
+julia> 
+\end{lstlisting}
+
+\verb|comment1[1]|就是一个索引表达式．索引表达式通常由一个可索引对象以及一个由中括号包裹的索引号组成．这里的可索引对象和索引号都不仅限于字面量，还可以是标识符或表达式，只要最终能代表它们就可以了．显然，字符串值就是一种可索引对象．而这里的索引号的有效范围则依从于前面所述的基本设定．
+
+\verb|66|是一个有效的索引号．然而，当我们用它对\verb|comment1|进行索引时，仍然会引发一个错误：
+\begin{lstlisting}[language=julia]
+julia> comment1[66]
+ERROR: StringIndexError("codeunit 函数会返回给定字符串对象的代码单元类型", 66)
+# 省略了一些回显的内容．
+
+julia> 
+\end{lstlisting}
+
+这是为什么呢？其原因是，只有在索引到某个字符的第一个代码单元时，索引表达式才能正确地获取这个字符．因为索引表达式的求值结果会是一个\verb|Char|类型的字符值，而只拿到一个 Unicode 代码点的某个部分是毫无意义的．这与\verb|codeunit|函数的行为截然不同．
+
+还记得吗？对于 UTF-8 编码格式来说，一个中文字符需要用掉 3 个代码单元．在变量\verb|comment1|代表的字符串中，最后一个字符是\verb|型|．因此，索引号\verb|66|对应的应该是，表示该字符的那3个代码单元中的最后一个．让我们来验证一下：
+\begin{lstlisting}[language=julia]
+julia> comment1[66-2]
+'型': Unicode U+578b (category Lo: Letter, other)
+
+julia> 
+\end{lstlisting}
+
+果然，索引号\verb|64|对应的就是\verb|型|的第一个代码单元．这样的索引号也可以被称为有效字符的起始索引号，简称字符索引号．
+
+可是，对于一个外来的字符串值，我们怎么知道其中的哪些索引号是字符索引号呢？难道需要逐个试错吗？幸好不用这样．我们可以使用\verb|isvalid|函数来做这样的判断：
+\begin{lstlisting}[language=julia]
+julia> isvalid(comment1, 66), isvalid(comment1, 65), isvalid(comment1, 64)
+(false, false, true)
+
+julia> 
+\end{lstlisting}
+
+另外，还有一些函数可以帮助我们更好地索引字符串值中的字符．比如，\verb|firstindex|函数会返回字符串值中的第一个字符索引号，通常就是\verb|1|．\verb|lastindex|函数会返回字符串值中的最后一个字符索引号．对于\verb|comment1|来说，它就是\verb|64|．我们还可以使用关键字\verb|end|来指代最后一个字符索引号．它可以被直接应用于索引表达式中．例如：
+\begin{lstlisting}[language=julia]
+julia> comment1[end]
+'型': Unicode U+578b (category Lo: Letter, other)
+
+julia> comment1[end-3]
+'类': Unicode U+7c7b (category Lo: Letter, other)
+
+julia> 
+\end{lstlisting}
+
+当需要更加精确的索引时，我们可以使用\verb|thisind|函数．示例如下：
+\begin{lstlisting}[language=julia]
+julia> thisind(comment1, 10)
+10
+
+julia> thisind(comment1, 12)
+10
+
+julia> thisind(comment1, 13)
+13
+
+julia> 
+\end{lstlisting}
+
+这个函数接受两个参数．第一个参数代表被索引的字符串值，第二个参数代表索引号．如果后者对于前者来说正好是某个字符索引号（也就是说它对应于某个字符的第一个代码单元），那么该函数就会直接将这个索引号返回．如果这个索引号只是一个普通的有效索引号（不是字符索引号），那么与它对应的代码单元就肯定是某个字符（以下称当前字符）的后续部分之一．在这种情况下，\verb|thisind|函数会向前寻找到当前字符的起始索引号，并将其返回．在上例中，调用表达式\verb|thisind(comment1, 12)|就属于这种情况．但无论怎样，这个函数的结果值的类型一定会是\verb|Int64|．
+
+拥有类似功能的函数还有\verb|prevind|和\verb|nextind|．\verb|prevind|函数可以返回在当前字符之前的第\verb|n|个字符的起始索引号，而\verb|nextind|函数则可以返回在当前字符之后的第\verb|n|个字符的起始索引号．这里的\verb|n|默认是\verb|1|，并可以由函数的调用方给定．
+
+特别提醒一下，我们虽然可以通过索引表达式访问到字符串值中的某个字符，但却不可以修改其中的任何字符．其根本原因是，Julia中的字符串值都是不可修改的！
+
+\textsl{6.3.3.3 截取}
+
+我们可以通过两个索引号截取出一个字符串的某个片段：
+\begin{lstlisting}[language=julia]
+julia> comment1[1:8]
+"codeunit"
+
+julia> 
+\end{lstlisting}
+
+不过要注意，只要有一个索引号不是字符索引号，这个索引表达式就会立即引发错误．示例如下：
+\begin{lstlisting}[language=julia]
+julia> comment1[1:10]
+"codeunit 函"
+
+julia> comment1[1:11]
+ERROR: StringIndexError("codeunit 函数会返回给定字符串对象的代码单元类型", 11)
+# 省略了一些回显的内容．
+
+julia> comment1[1:13]
+"codeunit 函数"
+
+julia> 
+\end{lstlisting}
+
+这种（范围）索引表达式的求值结果会是一个\verb|String|类型的字符串值．即使结果中只包含一个字符也是如此．这与普通的（点）索引表达式有着明显的区别．
+
+另外，范围索引表达式的结果值其实是一个复本，拷贝自源字符串中的某个片段．如果被拷贝的字符过多，那么有可能会对程序的性能产生一定的影响．为了应对这种情况，我们可以基于某个字符串片段创建一个子字符串，以避免其中字符的拷贝．具体的做法是，使用\verb|SubString|类型：
+\begin{lstlisting}[language=julia]
+julia> func_name1 = SubString(comment1, 1, 8)
+"codeunit"
+
+julia> typeof(ans)
+SubString{String}
+
+julia> 
+\end{lstlisting}
+
+\verb|SubString|类型的构造函数可以接受三个参数，第一个参数代表源字符串，后两个参数都代表索引号．该函数会生成一个视图，并基于此视图创建一个子字符串的值．你可以把这里的视图理解为一个窗口．这个窗口只能看到两个给定索引号之间的那些字符．
+
+子字符串的值与字符串值看起来没有什么两样．而且，针对后者的操作也基本上都能应用于前者：
+\begin{lstlisting}[language=julia]
+julia> func_name1[1]
+'c': ASCII/Unicode U+0063 (category Ll: Letter, lowercase)
+
+julia> codeunit(func_name1, 1)
+0x63
+
+julia> ncodeunits(func_name1)
+8
+
+julia> func_name1[1:4]
+"code"
+
+julia> 
+\end{lstlisting}
+
+但是，\verb|SubString|类型的实例创建成本往往明显低于\verb|String|类型．所以，我们在截取字符串片段的时候应该优先使用它．
+
+\textsl{6.3.3.4 拼接}
+
+我们有时候需要把多个字符串拼接在一起．这时就可以使用\verb|string|函数：
+\begin{lstlisting}[language=julia]
+julia> string("\xe2\x88", "\x80", "\xe2\x88\x80")
+"∀∀"
+
+julia> 
+\end{lstlisting}
+
+此外，操作符\verb|*|也可以派上用场：
+\begin{lstlisting}[language=julia]
+julia> "\xe2\x88" * "\x80" * "\xe2\x88\x80"
+"∀∀"
+
+julia> 
+\end{lstlisting}
+
+对于字符串值来说，\verb|*|的含义就不再是“乘以”了，而是“拼接”．这个操作符被用在这里可能会让你感到有些不适应．因为很多其他的编程语言都是用操作符\verb|+|来拼接字符串的．
+
+Julia语言的缔造者们是站在抽象代数的角度来看待这一问题的．在抽象代数中，\verb|+|通常被用在那些满足交换律的运算中，而\verb|*|常常被用在不满足交换律的运算中．对于字符串拼接来说，\verb|"A"|拼接\verb|"B"|与\verb|"B"|拼接\verb|"A"|肯定不是一回事，一定会得到不同的结果．所以，操作符\verb|*|理应被用在这里．
+
+倘若你不熟悉抽象代数也没有关系．你可以这样来理解：数值相加是基于数学逻辑的运算，而字符串值的拼接则是基于空间的合并．所以它们理应使用不同的操作符号来表达．
+
+无论怎样，我们都应该记住：在Julia中，字符串拼接用的是操作符\verb|*|，而不是\verb|+|．并且，字符串拼接总会产生全新的字符串值．
+
+\textsl{6.3.3.5 插值}
+
+所谓的插值就是，在一个字符串值中动态地插入其他值．这需要把符号\verb|$|作为前缀．正因为\verb|$|在字符串中的作用特殊，所以才有了转义序列\verb|$|，以表示\verb|$|字符本身．
+
+还记得吗？我们其实在第 1 章就用过插值．那时的代码是这样的：
+\begin{lstlisting}[language=julia]
+println("Hey, $(name)!")
+\end{lstlisting}
+
+在这个字符串值中，\verb|$(name)|就是那个动态的部分，也被称为插值部分．其含义是动态插入由标识符\verb|name|代表的值．这部分可以被简写为\verb|$name|．不过，为了保证不引起歧义，我用圆括号把这个标识符包裹了起来，以明确区别于其他的静态字符．示例如下：
+\begin{lstlisting}[language=julia]
+julia> name = "Robert"
+"Robert"
+
+julia> println("Hey, $(name)!")
+Hey, Robert!
+
+julia> name = "Eric"
+"Eric"
+
+julia> println("Hey, $(name)!")
+Hey, Eric!
+
+julia> name = "everyone"
+"everyone"
+
+julia> println("Hey, $(name)!")
+Hey, everyone!
+
+julia> 
+\end{lstlisting}
+
+可以看到，随着我为变量\verb|name|绑定不同的值，\verb|println|函数打印出的内容也在动态的改变．
+
+其实，跟随\verb|$|的并不仅限于标识符，还可以是任何的表达式．例如：
+\begin{lstlisting}[language=julia]
+julia> dup_chars = "\xe2\x88" * "\x80" * "\xe2\x88\x80"
+"∀∀"
+
+julia> "Is string \$(dup_chars) valid? \$(isvalid(dup_chars) ? "Yes" : "No")"
+"Is the string ∀∀ valid? Yes"
+
+julia> 
+\end{lstlisting}
+
+解释一下，这里的\verb|?|是一个三元操作符．因此，表达式\verb|isvalid(dup_chars) ? "Yes" : "No"|的含义就是，如果\verb|dup_chars|代表的字符串值只包含有效字符，那么就使用\verb|"Yes"|作为结果值，否则就使用\verb|"No"|作为结果值．
+
+也许你已经发现了，在插值部分中，那些用于包裹字符串的双引号（比如\verb|"Yes"|中的双引号）并不需要被转义．这主要是因为，插值部分相当于镶嵌在字符串中的代码，代码中的双引号自然用不着再转义．但这有两个前提条件，一个是插值部分必须有圆括号包裹，即：形如\verb|$(...)|．另一个条件是其中的双引号必须成对的出现．
+
+另外，插值部分中的求值结果不仅可以是字符串值（如前面的\verb|"Yes"|和\verb|"No"|），还可以是其他任何类型的值．实际上，它们的值总会由\verb|string|函数（还会涉及到\verb|print|函数和\verb|show|函数）转换为字符串值，或者说对象的规范文本表示形式．这种表示形式通常会以最简单的文本展示出对象的内部状态，并尽量避免暴露过多的细节．下面是一些例子：
+\begin{lstlisting}[language=julia]
+julia> float1 = 2.1e-3; "value: $(float1)"
+"value: 0.0021"
+
+julia> complex1 = 0.1+0.02im; "value: $(complex1)"
+"value: 0.1 + 0.02im"
+
+julia> rational1 = 3//7; "value: $(rational1)"
+"value: 3//7"
+
+julia> "value: $('\u4e2d')"
+"value: 中"
+
+julia> "value: $(isvalid(Char(0x4e2d)))"
+"value: true"
+
+julia> "value: $(SubString("codeunit 函数", 1, 8))"
+"value: codeunit"
+
+julia> array1 = [2020, 2030, 2050]; "value: $(array1)"
+"value: [2020, 2030, 2050]"
+
+julia> 
+\end{lstlisting}
+
+\textsl{6.3.3.6 搜索}
+
+我们可以利用一些函数在一个字符串值中搜索指定的字符串．我们可称前者为被搜索的字符串值，并称后者为目标字符串．
+
+比如，函数\verb|findfirst|和\verb|findlast|，它们分别会以从前向后和从后向前的顺序去搜索目标字符串，并会在碰到第一个匹配的字符串时停下来，然后返回与之对应的索引号范围值，形如\verb|1:10|．在此类值中，冒号左边的正整数代表，目标字符串在被搜索的字符串值中的起始字符索引号．而冒号右边的正整数则代表，目标字符串在被搜索的字符串值中的末尾字符索引号．下面我们来看一个例子：
+\begin{lstlisting}[language=julia]
+julia> slogan1 = "Julia 编程入门很简单．"
+"Julia 编程入门很简单．"
+
+julia> findfirst("入门", slogan1)
+13:16
+
+julia> 
+\end{lstlisting}
+
+在这个调用表达式中，第二个参数值就是将要被搜索的字符串值，而第一个参数值则是我们给予的目标字符串．对于\verb|slogan1|代表的值来说，目标字符串的起始字符\verb|入|在其中的字符索引号是\verb|13|．相应的，它的末尾字符\verb|门|在其中的字符索引号是\verb|16|．所以，这里调用的结果就是\verb|13:16|．
+
+类似的，函数\verb|findprev|和\verb|findnext|都会从给定的索引号开始搜索目标字符串．不同的是，前者会向前搜索，而后者会向后搜索．示例如下：
+\begin{lstlisting}[language=julia]
+julia> slogan2 = "Julia 编程入门，跟着入门很简单．"
+"Julia 编程入门，跟着入门很简单．"
+
+julia> findprev("入门", slogan2, 19)
+13:16
+
+julia> findnext("入门", slogan2, 19)
+28:31
+
+julia> 
+\end{lstlisting}
+
+注意，在\verb|slogan2|中存在两个目标字符串．而且，我们给予这两个函数的第三个参数值都是\verb|19|，代表着中文逗号\verb|，|在\verb|slogan2|中的字符索引号．显然，在参数值完全相同的情况下，\verb|findprev|函数和\verb|findnext|函数返回的结果值是不同的．
+
+从 Julia 的 1.3 版本开始，上述 4 个函数还可以直接用于搜索指定的单个字符．它们会在找到字符后返回与之对应的字符索引号．不过，在这之前，我们也可以做到这一点，但需要多敲一些代码，传入一个用来做条件判断的函数．比如：
+\begin{lstlisting}[language=julia]
+julia> findfirst(isequal('门'),  slogan1) 
+16
+
+julia> 
+\end{lstlisting}
+
+注意，\verb|isequal('门')|原本是一个调用表达式，但在这里它代表的却是一个匿名的函数．它表示的条件是“字符必须等于\verb|'门'|”．倘若你已经在使用1.3版本了，那么就可以这样做：
+\begin{lstlisting}[language=julia]
+julia> findfirst('门',  slogan1)
+16
+
+julia> 
+\end{lstlisting}
+
+如果没有找到目标字符或字符串，那么这些函数就会返回\verb|nothing|．这个\verb|nothing|比较特殊，它是\verb|Nothing|类型的唯一实例，用于表示一个表达式没有实质的结果值，或者一个变量或字段没有值．注意，\verb|nothing|作为求值结果在 REPL 环境中是不显示的：
+\begin{lstlisting}[language=julia]
+julia> findfirst(isequal('窗'),  slogan1) 
+
+julia> findfirst(isequal('窗'),  slogan1) == nothing
+true
+
+julia> 
+\end{lstlisting}
+
+最后提一下，如果我们只想知道一个字符串值中是否存在某个字符或字符串，那么就可以使用\verb|occursin|函数．这个函数总是会返回一个\verb|Bool|类型的结果值．比如，调用表达式\verb|occursin('窗',  slogan1)|的求值结果是\verb|false|．
+
+\textsl{6.3.3.7 比较}
+
+比较操作符也可应用于字符串值．我们在上一章说过，对于这类值，比较操作符会逐个字符地进行比较，并且忽略其底层编码．对于默认的字符串值，以及任何符合 Unicode 编码标准的字符串值（不论它们采用的是哪一个编码格式），比较操作符都会基于 Unicode 代码点对它们进行比较．如果字符串中只包含英文字母，那么你也可以认为它基于的是其中每个字符的字典顺序．例如：
+\begin{lstlisting}[language=julia]
+julia> "Julia" < "Julie"
+true
+
+julia> "Julia" < "Julian" 
+true
+
+julia> 
+\end{lstlisting}
+
+字符串\verb|"Julia"|和\verb|"Julie"|的前 4 个字母都是相同的．但是，前者的最后一个字母\verb|a|在字典中比后者的最后一个字母\verb|e|更靠前．所以，前者小于后者．
+
+对于字符串\verb|"Julia"|和\verb|"Julian"|，两者的前 5 个字母都相同，且前者算是后者的一个前缀．在这种情况下，后者肯定大于前者．再来看一个例子：
+\begin{lstlisting}[language=julia]
+julia> "Michael" < "Mike"
+true
+
+julia> 
+\end{lstlisting}
+
+虽然\verb|"Michael"|比\verb|"Mike"|更长，但是它的第 3 个字母\verb|c|在字典中比\verb|"Mike"|的第 3 个字母\verb|k|更靠前，所以它是小于\verb|"Mike"|的．
+
+不过要注意，大写的英文字母总是会小于小写的英文字母．因为前者的 Unicode 代码点肯定比后者的 Unicode 代码点要小．这与它们在 ASCII 编码集中的顺序是相同的．比如，表达式\verb|"JuliA" < "Julia"|的求值结果一定是\verb|true|．
+
+我们再看中英文混合的情况：
+\begin{lstlisting}[language=julia]
+julia> "Julia 编程入门" < "Julia 编程基础"
+true
+
+julia> '入'
+'入': Unicode U+5165 (category Lo: Letter, other)
+
+julia> '基'
+'基': Unicode U+57fa (category Lo: Letter, other)
+
+julia> 
+\end{lstlisting}
+
+中文字符\verb|入|的 Unicode 代码点比\verb|基|的 Unicode 代码点要小．所以，\verb|"Julia 编程入门"|一定会小于\verb|"Julia 编程基础"|．
+
+如果你有兴趣，还可以使用\href{https://github.com/JuliaStrings/LegacyStrings.jl}{\verb|LegacyStrings.jl|程序包}中的函数来生成采用UTF-16或UTF-32编码的字符串值，然后再比较（甚至混合比较）它们．比较结果肯定同样符合上述的规则．
