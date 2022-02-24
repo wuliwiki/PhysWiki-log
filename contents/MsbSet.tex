@@ -3,9 +3,183 @@
 
 \pentry{集合的测度（实变函数）\upref{SetMet}}
 
+\subsection{可测集及其性质}
+
+在\textbf{集合的测度（实变函数）}\upref{SetMet}中我们提到，Lebesgue积分是对值域作分划．但是值域作分划以后，有可能出现\autoref{SetMet_ex1}~\upref{SetMet}那样病态的两个集合，它们互不相交，但其并集的测度小于各自测度之和．这就好比对定义域作分划的Riemann积分中，两根柱子的总面积小于单个柱子的面积之和，非常不符合直觉，而且会导致无法建立自洽的理论．
+
+因此，讨论Lebesgue积分时，我们要对集合的性质作出限制，只讨论所谓的\textbf{可测集合（measurable set）}，以及进而导出的\textbf{可测函数（measurable function）}．
+
+\begin{definition}{可测集}\label{MsbSet_def1}
+
+设$E$为$\mathbb{R}^n$的子集，满足：对于$\mathbb{R}^n$的任意子集$A$，都有
+\begin{equation}
+\opn{m^*}(A\cap E)+\opn{m^*}(A\cap E^C)=\opn{m^*}A
+\end{equation}
+那么称$E$为\textbf{Lebesgue可测集}\footnote{$E^C$表示$E$的补集．}，简称\textbf{可测集}．此时记$\opn{m^*}E=\opn{m}E$．
+
+不是可测集的集合，就称为\textbf{不可测集}．
+
+\end{definition}
+
+这个定义初看很绕口，我们在这儿多加些解释．可测集$E$可以看成一种分割，它可以把任何集合$A$都分成两部分，使得分出来的两部分的测度之和就等于$A$的测度．像\autoref{SetMet_ex1}~\upref{SetMet}中最后构造的两个集合$\bigcup_{i=1}^k S_i$和$S_{k+1}$，它们都是\textbf{不可测集}，只需要取$A=\bigcup^{k+1}_{i=1} S_i$再比较\autoref{MsbSet_def1} 即可证明这一点．
+
+看起来可测集的定义要求很严格，对$A$毫无约束，那么可测集存在吗？答案是肯定的，最简单的例子就是测度为零的集合，又叫零测集．
+
+\begin{example}{可测集的例子：零测集}
+
+如果$\opn{m^*}E=0$，那么$E$是可测的．
+
+任取$A\in\mathbb{R}^n$，那么由外测度的单调性，$\opn{m^*}(A\cap E)=0$．
+
+又由外测度的次可加性，
+\begin{equation}\label{MsbSet_eq1}
+\begin{aligned}
+\opn{m^*}(A)&=\opn{m^*}([A\cap E]\cup[A\cap E^C])\\
+&\leq \opn{m^*}(A\cap E)+\opn{m^*}(A\cap E^C)\\
+&=\opn{m^*}(A\cap E^C)
+\end{aligned}
+\end{equation}
+
+再由单调性知，\autoref{MsbSet_eq1} 中的不等号应为等号．由此得证．
+
+\end{example}
+
+零测集是可测的，这很显然，但我们毕竟是要研究积分，总要讨论非零的测度．那么有没有非零测的集合也是可测集呢？答案也是肯定的．
+
+\begin{example}{可测集的例子：区间}\label{MsbSet_ex1}
+
+任意区间$I$都是可测的．
+
+任取$A\in\mathbb{R}^n$，不失一般性\footnote{这里不失一般性是因为，就算$A$中有点在$I$的边界上，由于边界是零测集，故从$A$中挖去这些点后，其外测度依然不变．}地，设$A$中没有任何点在区间$I$的边界上．那么我们总可以从覆盖$A$的开集中挖去$I$的边界点，剩下的依然是覆盖$A$的开集．这样的开集总是被$I$分成不相交的两部分，这两部分也都是开集．由开集\textbf{体积}的完全可加性即可最终证出$\opn{m^*}(A\cap I)+\opn{m^*}(A\cap I^C)=\opn{m^*}A$．
+
+\end{example}
+
+更进一步，我们还可以通过已知的可测集来构造新的可测集，这由以下定理保证：
+
+\begin{theorem}{可测集的性质}\label{MsbSet_the1}
+
+\begin{enumerate}
+\item $E$可测，则$E^C$可测；
+\item $E_1$和$E_2$可测，则$E_1\cup E_2$和$E_1\cap E_2$可测；
+\item 如果$\{E_i\}_{i=1}^{\infty}$是一列可测集合，且\textbf{两两不相交}，那么对于任意$A\in\mathbb{R}^n$，都有：
+\begin{equation}\label{MsbSet_eq4}
+\opn{m^*}(A\cap \bigcup_{i=1}^{\infty}E_i)=\sum_{i=1}^{\infty}\opn{m^*}(A\cap E_i)
+\end{equation}
+\item 如果$\{E_i\}_{i=1}^{\infty}$是一列可测集合，那么$\bigcap_{i=1}^{\infty}E_i$和$\bigcup_{i=1}^{\infty}E_i$也都是可测的．
+\end{enumerate}
+
+\end{theorem}
+
+\textbf{证明}：
+
+
+\textbf{1.} 由\autoref{MsbSet_def1} 中$E$和$E^C$地位的对称性直接可得．注意$(E^C)^C=E$．
+
+\textbf{2.} 任取$A\in\mathbb{R}^n$，并记$A_1=A\cap E_1$，$A_2=A\cap E_2-A_1$，$A_0=A-(A_1\cup A_2)$．
+
+
+由于$E_1$可测，故$\opn{m^*}(A_1\cup A_0)=\opn{m^*}A_1+\opn{m^*}A_0$；类似地，$\opn{m^*}(A_2\cup A_0)=\opn{m^*}A_2+\opn{m^*}A_0$，$\opn{m^*}(A_1\cup A_2)=\opn{m^*}A_1+\opn{m^*}A_2$．
+
+因此
+\begin{equation}
+\begin{aligned}
+\opn{m^*}A&=\opn{m^*}A_1+\opn{m^*}(A_2\cup A_0)\\
+&=\opn{m^*}A_1+\opn{m^*}A_2+\opn{m^*}A_0\\
+&=\opn{m^*}(A_1\cup A_2)+\opn{m^*}A_0
+\end{aligned}
+\end{equation}
+即
+\begin{equation}
+\opn{m^*}A=\opn{m^*}(A\cap [E_1\cap E_2])+\opn{m^*}(A\cap [E_1\cap E_2]^C)
+\end{equation}
+故$E_1\cup E_2$是可测的．
+
+再由集合论的de Morgan公式，可知$E_1\cap E_2=(E_1^C\cup E_2^C)^C$，从而推论出$E_1\cap E_2$也是可测的．
+
+由此还可以推论，有限多个可测集进行交与并运算，结果还是可测集．
+
+\textbf{3.} 为方便计，不妨设$A\subseteq \bigcup_{i=1}^\infty E_i$\footnote{这样就有$A\cap \bigcup_{i=1}^{\infty}E_i=A$，方便书写和理解．}，且记$A_i=A\cap E_i$．
+
+由于各$E_i$可测，以及可测集的有限并还是可测集，可推知
+\begin{equation}
+\opn{m^*}(\bigcup_{i=1}^k A_i)=\sum_{i=1}^k \opn{m^*}A_i
+\end{equation}
+对任意正整数$k$成立．
+
+设$\opn{m^*}A=c_0$，$\sum_{i=1}^k \opn{m^*}A_i=\opn{m^*}(\bigcup_{i=1}^k A_i)=c_k$，则只需要证明$\lim\limits_{k\to \infty}c_k=c_0$即得证\footnote{因为$\sum_{i=1}^\infty \opn{m^*}A_i=\lim\limits_{k=1}\sum_{i=1}^k\opn{m^*}A_i$．证明$\lim_{k\to\infty}c_k=c_0$相当于证明了$\opn{m^*}(\lim\limits_{k\to\infty}\bigcup^k_{i=1}A_i)=\lim\limits_{k\to\infty}\opn{m^*}(\bigcup^k_{i=1}A_i)$．注意这里的$\opn{m^*}(\lim\limits_{k\to\infty}\bigcup^k_{i=1}A_i)$就是$\opn{m^*}(\bigcup^\infty_{i=1}A_i)$．}．而这由\autoref{SetMet_lem1}~\upref{SetMet}即可直接推得．%由外测度的单调性，可知$\{c_k\}$是单调递增的，而且$c_k\leq c_0$恒成立．那么$\lim\limits_{k\to\infty}c_k$存在且小于等于$c_0$．
+
+\textbf{4.} 由de Morgan公式，$\bigcap_{i=1}^\infty E_i=[\bigcup_{i=1}^\infty E_i^C]^C$，因此只需证明$\bigcup_{i=1}^\infty E_i$是可测集即可．
+
+我们首先证明，当$E_i$两两不交的时候，$\bigcup^\infty_{i=1}E_i$是可测的．
+
+任取$A\in\mathbb{R}^n$，记$A_i=A\cap E_i$，$c_0=\opn{m^*}A$，那么由上一条性质，
+\begin{equation}
+\begin{aligned}
+\sum^\infty_{i=1}\opn{m^*}A_i&=\opn{m^*}(\bigcup_{i=1}^\infty A_i)
+\end{aligned}
+\end{equation}
+故
+\begin{equation}\label{MsbSet_eq2}
+\sum^\infty_{i=0}\opn{m^*}A_i=\opn{m^*}A_0+\opn{m^*}(\bigcup_{i=1}^\infty A_i)
+\end{equation}
+
+
+由外测度的次可加性，得
+\begin{equation}\label{MsbSet_eq3}
+\sum_{i=0}^\infty\opn{m^*}A_i\geq \opn{m^*}(\bigcup_{i=0}^\infty A_i)=\opn{m^*}A
+\end{equation}
+
+由于各$\bigcup_{i=1}^k E_i$都是可测的，以及外测度有单调性，得
+\begin{equation}
+\sum_{i=0}^k\opn{m^*}A_i=\opn{m^*}(\bigcup_{i=0}^k A_i)\leq \opn{m^*}A
+\end{equation}
+故令$\lim_{k\to \infty}$后得
+\begin{equation}\label{MsbSet_eq5}
+\sum_{i=0}^\infty\opn{m^*}A_i\leq \opn{m^*}A
+\end{equation}
+
+联立\autoref{MsbSet_eq2} 、\autoref{MsbSet_eq3} 和\autoref{MsbSet_eq5} ，得
+\begin{equation}
+\opn{m^*}A=\opn{m^*}A_0+\opn{m^*}(\bigcup_{i=1}^\infty A_i)
+\end{equation}
+
+从而得证$\bigcup_{i=1}^\infty E_i$是可测集．
 
 
 
+
+\textbf{证毕}．
+
+
+由\autoref{MsbSet_the1} 可知，可测集进行求补集运算、可数次求并集运算和可数次求交集运算，结果仍然是可测集．由于求差集是求补集再求交集，故求差集运算的结果也是可测集．我们称这一情况为“全体可测集构成的族，对于\textbf{求补}、\textbf{求差}、\textbf{可数次求并}以及\textbf{可数次求交}运算是封闭的”．
+
+如果一族集合满足“对于\textbf{求补}、\textbf{求差}、\textbf{可数次求并}以及\textbf{可数次求交}运算是封闭的”，我们就称之为一个$\sigma$-代数．包含全体开区间（或开方块）的最小$\sigma$-代数，称为Borel族，其元素都被称作Borel集．
+
+\addTODO{需引用讨论$\sigma$-代数和Borel族的词条．}
+
+\subsection{Borel集与可测集的关系}
+
+\begin{definition}{}
+
+我们知道，可数多个开集的并还是开集，可数多个闭集的交还是闭集．
+
+可数多个开集的交不一定是开集，这样的集合我们称之为$G_\delta$型集合\cite{十一五实变函数论}．类似地，可数多个闭集的并不一定是闭集，称之为$F_\sigma$型集合．
+
+进一步，可数多个$G_\delta$型集合的并，称之为$G_{\delta\sigma}$型集合，可数多个$F_\sigma$型集合的交，称之为$F_{\sigma\delta}$型集合；以此类推．
+
+\end{definition}
+
+由于区间都是可测的，全体可测集又构成$\sigma$-代数，故\autoref{MsbSet_def1} 中提到的所有集合以及“以此类推”的集合都是可测集．
+
+\begin{theorem}{}
+对于任意$A\subseteq \mathbb{R}^n$，都存在一个$G_\delta$型集合$G$，使得$A\subseteq G$且$\opn{m^*}A=\opn{m}G$．
+\end{theorem}
+
+\textbf{证明}：
+
+
+
+\textbf{证毕}．
 
 
 
