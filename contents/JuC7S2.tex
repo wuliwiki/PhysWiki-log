@@ -1,0 +1,138 @@
+% Julia 参数化的更多知识
+% 参数化 更多知识
+
+本文授权转载自郝林的 《Julia 编程基础》． 原文链接：\href{https://github.com/hyper0x/JuliaBasics/blob/master/book/ch07.md}{第 7 章 参数化类型}．
+
+
+\subsubsection{7.2 参数化的更多知识}
+
+我们现在已经知晓了定义参数化类型的基本知识．但这还不够，我们还需要了解更多，以便做到游刃有余．
+
+\textbf{7.2.1 类型参数的值域}
+
+到目前为止，我们一直在说，参数化类型的参数值可以是任何一个类型．或者说，我们可以用任意一个类型的名称替换掉类型参数的占位符（比如\verb|T|），从而表示一种确定的参数化类型．
+
+但实际上，类型参数的值域中还包含了所有位类型的值．所谓的位类型，指的就是那些传统的数据类型．这种类型的值不可变，并且其中不包含任何对其他值的引用．位类型的值总是可以由若干个连续的比特（位）承载．并且，存储同一个位类型的任何值所用的比特个数总是相同的．你可能已经猜到了，所有的原语类型都属于位类型．
+
+我们对此不用死记硬背．如果你不确定一个类型是否属于位类型的话，那么可以使用\verb|isbitstype|函数来判断．例如：
+\begin{lstlisting}[language=julia]
+julia> isbitstype(Bool), isbitstype(Float64)
+(true, true)
+
+julia> isbitstype(Complex), isbitstype(Complex{Int64})
+(false, true)
+
+julia> isbitstype(Char), isbitstype(String)
+(true, false)
+
+julia> isbitstype(Union), isbitstype(Union{String})
+(false, false)
+
+julia> isbitstype(Ptr), isbitstype(Ptr{Char})
+(false, true)
+
+julia> 
+\end{lstlisting}
+
+此外，Julia还有提供了\verb|isbits|函数．该函数用于判断一个值是否是位类型的实例．
+
+如果要解释位类型的值是怎样应用在类型参数中的话，我觉得最好的案例莫过于我们在前面见过很多次的类型\verb|Array|．\verb|Array|是一个参数化类型，它的全名是\verb|Array{T,N}|．其中的类型参数\verb|T|用于确定数组的元素类型，而类型参数\verb|N|则用于确定数组的维数（即维度的数量）．也就是说，数组的维数与它的元素类型一样都会被写入到它的类型字面量中．原则上，\verb|N|的取值可以是任何\verb|Int64|类型的值（如果在32位的计算机系统中，那么就是任何\verb|Int32|类型的值）．但在实际应用中，\verb|N|的值肯定不能是负数．
+
+我们在自定义参数化类型的时候，如果允许类型参数的取值包含位类型的值，那么就需要仔细地考量．比如，允许哪个或哪些位类型的值、这些值是否都能够被正确地接受和处理，等等．若有必要，你可以根据实际情况使用\verb|isbitstype|函数、\verb|isbits|函数以及其他的方式帮助抉择．
+
+\textbf{7.2.2 类型的类型}
+
+我们在前面说过，Julia 中的类型的类型是\verb|DataType|．包括之前讲过的特殊类型\verb|Any|和\verb|Union|在内，所有的类型都是\verb|DataType|类型的实例．就连\verb|DataType|类型本身的类型也是\verb|DataType|．
+
+不过，对于参数化类型来说，情况就不太一样了．类型参数已确定的参数化类型（如\verb|Drawer{Jewelry}|）依然是\verb|DataType|类型的实例．但是，未确定的参数化类型（如\verb|Drawer|)的类型就不是\verb|DataType|了，而是\verb|UnionAll|．演示代码如下：
+\begin{lstlisting}[language=julia]
+julia> typeof(Drawer{Jewelry}), typeof(Drawer{Ring})
+(DataType, DataType)
+
+julia> typeof(Drawer), typeof(Drawer{})
+(UnionAll, UnionAll)
+
+julia> 
+\end{lstlisting}
+
+注意，\verb|Drawer{}|等同于\verb|Drawer|，因为前者同样没有明确类型参数的值．它们代表的都是还未完全确定的参数化类型．
+
+另外，我们需要谨记“某个类型的类型”与“某个类型的超类型”这两个概念之间的不同．虽然它们要解答的都是类型的归类问题，但不同的是：“某个类型的类型”说的是这个类型的先天归属，就像在说一个人的血统；而“某个类型的超类型”说的是一个类型的后天分类，就像在说一个人的国籍．一个值（别忘了类型也是一种值）从诞生之日起就自然会有一个类型，而一个类型继承自哪一个超类型就需要我们通过编写代码来显式地指定了．显然，这是两个不同维度的归类问题．我们可以说这两者是正交的．一个类型既会有它隶属的类型，也会有它从属的超类型（最起码有\verb|Any|），并且各自独立、互不干扰．
+
+上面这两个概念很容易被混淆，尤其对于初学现代编程语言的人来说．既然讲清楚了它们的区别，那么我们再回到“类型的类型”这个问题上来．
+
+我们已经了解了\verb|DataType|类型，但对\verb|UnionAll|这个类型还很陌生．这个类型用于描述所有未确定的参数化类型．也就是说，在这个类型下的每一个参数化类型中，至少还有一个类型参数没有明确的取值．单从字面上看，我们也可以感受到，它可以代表一个参数化类型能够包含的所有确定类型的联合．
+
+由于像\verb|Drawer|这样的参数化类型中还有一些东西没有被确定下来，所以它们不能算是正常的数据类型（从其类型不是\verb|DataType|就可以印证这一点）．因此，它们也无法被实例化．
+
+\textbf{7.2.3 值化的表示法}
+
+既然说到了\verb|UnionAll|类型，那么我们就不得不提及针对此类型的实例（也就是参数化类型）的表示法，也可以称之为参数化类型的值化表示法．这种表示法与参数化类型定义中的表现手法很相似，但前者还需要用到\verb|where|关键字．如果用这种表示法来表示\verb|Drawer|类型的话，那么就是：
+\begin{lstlisting}[language=julia]
+julia> Drawer{T} where T
+Drawer
+
+julia> 
+\end{lstlisting}
+
+\verb|Drawer{T} where T|代表了\verb|Drawer|类型所能包含的所有确定类型的联合．而且，这个类型还对它的类型参数做出了范围约束，如跟在\verb|where|后面的内容所示．只不过，这里在\verb|where|后面的只有\verb|T|，所以相当于没有约束．如果我们想为这里的\verb|T|添加约束，那么可以像下面这样写：
+\begin{lstlisting}[language=julia]
+julia> Drawer{T} where T<:Jewelry
+Drawer{T} where T<:Jewelry
+
+julia> 
+\end{lstlisting}
+
+显然，值化表示法让我们可以在参数化类型的定义之外为其类型参数制定范围约束．我们之前运用过的\verb|Drawer{<:Jewelry}|其实就是\verb|Drawer{T} where T<:Jewelry|的一种简写形式．但对于拥有多个类型参数的参数化类型来说，这种简写形式就显得不够灵活了．比如，对于\verb|Array{T,N}|类型，如果我们使用简写形式的话，就只能同时约束或确定它的所有类型参数．代码如下：
+\begin{lstlisting}[language=julia]
+julia> Array{<:Jewelry, 1}
+Array{#s11,1} where #s11<:Jewelry
+
+julia> Array{<:Jewelry, <:UInt32}
+Array{#s9,#s10} where #s10<:UInt32 where #s9<:Jewelry
+
+julia> 
+\end{lstlisting}
+
+从 REPL 环境回显的内容可知，第一行代码就相当于\verb|Array{T,1} where T<:Jewelry|，而第二行代码则相当于\verb|Array{T,N} where N<:UInt32 where T<:Jewelry|．
+
+没错，我们可以在参数化类型的全名后面追加多个\verb|where|，但是每一个\verb|where|都只能针对单个类型参数做出约束．跟在\verb|where|后边的那些类型参数也常被称为类型变量（type variable），因为它们就像变量那样可以在某个类型的定义之上进行取值．只不过，类型变量取的不是确切的值，而是值域．所以我们也可以说，\verb|where|是专门用来划定类型参数的值域的．请注意，如果基于某个类型定义的多个\verb|where|划定了同一个类型参数的值域，那么 Julia 只会认可最左边的那一个．
+
+如果我们想用前述的简写形式只对一部分类型参数划定值域，那么就会收到如下的报错：
+\begin{lstlisting}[language=julia]
+julia> Array{<:Jewelry, N}
+ERROR: UndefVarError: N not defined
+# 省略了一些回显的内容．
+
+julia> Array{T, <:UInt32}
+ERROR: UndefVarError: T not defined
+# 省略了一些回显的内容．
+
+julia>  
+\end{lstlisting}
+
+不过这解决起来相当容易，不简写就可以了：
+\begin{lstlisting}[language=julia]
+julia> Array{T,N} where T<:Jewelry where N
+Array{T,N} where T<:Jewelry where N
+
+julia> Array{T,N} where N<:UInt32 where T
+Array{T,N} where N<:UInt32 where T
+
+julia> 
+\end{lstlisting}
+
+还记得吗？如果在\verb|where|后面的只有类型参数的占位符，那么就相当于对该类型参数没做任何约束．
+
+另外还有一种等价的解法，那就是为它创建一个带有类型参数的别名（alias），如：
+\begin{lstlisting}[language=julia]
+julia> JewelryArray{N} = Array{<:Jewelry, N}
+Array{#s19,N} where #s19<:Jewelry where N
+
+julia> Vector{T} = Array{T, 1}
+Array{T,1} where T
+
+julia> 
+\end{lstlisting}
+
+总之，值化表示法使我们可以对参数化类型所能代表的确定类型的范围进行相当灵活的再定制．并且，这种再定制丝毫不会影响到参数化类型的原有定义．此外，由于这种表示法把参数化类型表达成了一种值，所以它能让参数化类型赋给某个变量或常量、在函数之间传来传去、成为其他参数化类型的参数值，等等．不过别忘了，如此表示的参数化类型仍然是一种类型，所以它依旧能够作为变量、复合类型的字段、函数的参数等等的类型．

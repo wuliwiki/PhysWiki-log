@@ -1,0 +1,72 @@
+% Lippmann-Schwinger 方程
+
+\pentry{薛定谔方程（单粒子多维）\upref{QMndim}， 亥姆霍兹方程的格林函数}
+
+\begin{equation}
+H = H_0 + V, \qquad H_0 = \frac{\bvec p^2}{2m}
+\end{equation}
+令 $H_0\ket{\phi} = E\ket{\phi}$， $(H_0+V)\ket{\psi}=E\ket{\psi}$． 那么形式上就有
+\begin{equation}
+\ket{\psi} = \frac{1}{E-H_0} V\ket{\psi} + \ket{\phi}
+\end{equation}
+但 $1/(E-H_0)$ 是奇异的， 要解决这个问题， 可以把它变得稍微复数一些（$\varepsilon$ 是无穷小）
+\begin{equation}
+\ket*{\psi^{(\pm)}} = \ket{\phi} + \frac{1}{E-H_0\pm \I\varepsilon} V \ket*{\psi^{(\pm)}}
+\end{equation}
+这就是 \textbf{Lippmann-Schwinger 方程}． 放到位置表象中就是
+\begin{equation}\label{LipSch_eq1}
+\braket*{\bvec x}{\psi^{(\pm)}} = \braket{\bvec x}{\phi} + \int \dd[3]{x'} \mel{\bvec x}{\frac{1}{E-H_0\pm \I\varepsilon}}{\bvec x'} \mel{\bvec x'}{V}{\psi^{(\pm)}}
+\end{equation}
+这是一个积分方程． 如果 $\ket{\phi}$ 是平面波．
+\begin{equation}\label{LipSch_eq2}
+G_\pm (\bvec x, \bvec x') = \frac{1}{2m} \mel{\bvec x}{\frac{1}{E-H_0\pm \I\varepsilon}}{\bvec x'}
+\end{equation}
+可以证明（见下文）
+\begin{equation}\label{LipSch_eq3}
+G_\pm (\bvec x, \bvec x') = -\frac{1}{4\pi} \frac{\E^{\pm\I k\abs{\bvec x-\bvec x'}}}{\abs{\bvec x-\bvec x'}}
+\end{equation}
+其中 $k = \sqrt{2mE}$． 这就是亥姆霍兹方程的格林函数
+\begin{equation}
+(\laplacian +k^2)G_\pm (\bvec x, \bvec x') = \delta(\bvec x-\bvec x')
+\end{equation}
+
+经过一番推导， \autoref{LipSch_eq1} 变为
+\begin{equation}
+\braket*{\bvec x}{\psi^{(\pm)}} = \braket{\bvec x}{\phi} - 2m\int \dd[3]{x'} \frac{\E^{\pm\I k\abs{\bvec x-\bvec x'}}}{4\pi\abs{\bvec x-\bvec x'}} V(\bvec x')\braket*{\bvec x'}{\psi^{(\pm)}}
+\end{equation}
+然后计算可以发现平面波散射的边界条件为
+\begin{equation}
+\braket*{\bvec x}{\psi^{(\pm)}} \overset{r\to\infty}{\longrightarrow} \frac{1}{(2\pi)^{3/2}} \qty[\E^{\I \bvec k\vdot \bvec x} + f(\bvec k', \bvec k)\frac{\E^{\I kr}}{r}]
+\end{equation}
+其中
+\begin{equation}
+f(\bvec k', \bvec k) = -4\pi^2 m \mel*{\bvec k'}{V}{\psi^{(+)}}
+\end{equation}
+
+\subsubsection{证明}
+现在来证明\autoref{LipSch_eq3}．
+\begin{equation}\label{LipSch_eq4}
+\begin{aligned}
+&\frac{1}{2m} \mel{\bvec x}{\frac{1}{E-H_0\pm \I\varepsilon}}{\bvec x'}\\
+&= \frac{1}{2m} \int \dd[3]{k'} \int \dd[3]{k''} \braket{\bvec x}{\bvec k'}\mel{\bvec k'}{\frac{1}{E-\bvec p^2/(2m)\pm \I\varepsilon}}{\bvec k''} \braket{\bvec k''}{\bvec x'}
+\end{aligned}
+\end{equation}
+易知
+\begin{equation}
+\frac{1}{E-\bvec p^2/(2m)\pm \I\varepsilon}\ket{\bvec k''} = \frac{\ket{\bvec k''}}{E- k^2/(2m)\pm \I\varepsilon}
+\end{equation}
+所以
+\begin{equation}
+\mel{\bvec k'}{\frac{1}{E-H_0\pm \I\varepsilon}}{\bvec k''} = \frac{\delta(\bvec k'-\bvec k'')}{E-k'^2/2m\pm\I\varepsilon}
+\end{equation}
+另外
+\begin{equation}
+\braket{\bvec x}{\bvec k'} = \frac{\E^{\I \bvec k'\vdot \bvec x}}{(2\pi)^{3/2}}
+\qquad
+\braket{\bvec k''}{\bvec x'} = \frac{\E^{-\I \bvec k''\vdot \bvec x'}}{(2\pi)^{3/2}}
+\end{equation}
+于是\autoref{LipSch_eq4} 右边变为
+\begin{equation}
+\frac{1}{(2\pi)^32m}\int\dd[3]{k'}  \frac{\E^{\I \bvec k'\vdot (\bvec x-\bvec x')}}{E-k'^2/2m\pm\I\varepsilon}
+\end{equation}
+在球坐标中积分， 使用留数定理\footnote{然而我也不知道具体怎么操作……}， 就得到\autoref{LipSch_eq3}． 结果与 $\varepsilon$ 无关．

@@ -1,0 +1,70 @@
+% Berkeley-ECS 方法
+
+\begin{issues}
+\issueDraft
+\end{issues}
+
+\pentry{Lippmann-Schwinger 方程\upref{LipSch}}
+
+\subsection{推导}
+\footnote{参考 Renate Pazourek Thesis Eq 3.36}要把最后的波函数 $\ket{\Psi(t_0)}$ 投影到精确散射态 $\ket{\varphi_{\alpha,E}}$ 上， 而避免计算精确散射态， 可以先解
+\begin{equation}\label{BerECS_eq1}
+(E-H)\ket{\Psi_{SC}(E)} = \ket{\Psi(t_0)}
+\end{equation}
+类比\autoref{LipSch_eq2}~\upref{LipSch}， 形式上这相当于计算
+\begin{equation}
+\ket{\Psi_{SC}(E)} = G^+(E)\ket{\Psi(t_0)}
+\end{equation}
+但这并不重要， 数值上仍然直接解非齐次线性方程组\autoref{BerECS_eq1} 即可．
+
+下一步， 把末态投影到精确散射态上得
+\begin{equation}\label{BerECS_eq2}
+\begin{aligned}
+&\quad \braket{\varphi_{\alpha,E}}{\Psi(t_0)} = \mel{\varphi_{\alpha,E}}{E-H}{\Psi_{SC}(E)}\\
+&= \mel*{\varphi_{\alpha,E}}{\frac{\laplacian}{2}}{\Psi_{SC}(E)} + \mel*{\varphi_{\alpha,E}}{E-V}{\Psi_{SC}(E)}
+\end{aligned}
+\end{equation}
+由于 $(-\laplacian/2+V)\varphi_{\alpha,E} = E\varphi_{\alpha,E}$
+\begin{equation}
+\mel*{\varphi_{\alpha,E}}{E-V}{\Psi_{SC}(E)} = -\braket*{\frac{\laplacian}{2} \varphi_{\alpha,E}}{\Psi_{SC}(E)}
+\end{equation}
+
+根据格林第二恒等式\footnote{推导： $\div(u\grad v - v\grad u) = u\laplacian v - v\laplacian u$， 再使用高斯定理}
+\begin{equation}
+\int (u\laplacian v - v\laplacian u)\dd{V} = \oint (u\grad v - v\grad u) \dd{\bvec S}
+\end{equation}
+可以把\autoref{BerECS_eq2} 写成面积分（注意 $\varphi_{\alpha,E}$ 是一个实函数）
+\begin{equation}\label{BerECS_eq3}
+\braket{\varphi_{\alpha,E}}{\Psi(t_0)} = \frac{1}{2} \oint [\varphi_{\alpha,E} \grad \Psi_{SC} - \Psi_{SC} \grad \varphi_{\alpha,E}] \dd{\bvec S}
+\end{equation}
+注意这里的矢量都是 6 维的．
+
+另外由于这个面积分距离原子核很远， 可以用 $\mathrm{He}^+$ 束缚态和库仑平面波的对称化乘积来代替． 注意 $\ket{n_1,l_1,m_1,l_2,k_2}$ 和 $\ket{n_1,l_1,m_1,\bvec k_2}$ 在无穷远处都是没有额外相位的．
+
+\subsection{高维曲面积分}
+6 维高斯定理为
+\begin{equation}
+\oint \bvec A\vdot \dd{\bvec S} = \int \div \bvec A \dd{V}
+\end{equation}
+令六维矢量场 $\bvec A$ 为
+\begin{equation}
+\bvec A = (f_{r1} \uvec r_1 + f_{\theta1}\uvec \theta_1 + f_{\phi1}\uvec \phi_1, \quad f_{r2} \uvec r_2 + f_{\theta2}\uvec \theta_2 + f_{\phi2}\uvec \phi_2)
+\end{equation}
+其中 $f$ 都是 $r_1,\theta_1,\phi_1,r_2,\theta_2,\phi_2$ 的函数．
+
+右边的体积分的区域为两个球体 $r_1<R_1$ 和 $r_2<R_2$ 的张量积． 那么左边的面积分为
+\begin{equation}
+\begin{aligned}
+\oint \bvec A\vdot \dd{\bvec S} =&\int f_{r1}\cdot  R_1^2\sin\theta_1\dd{\theta_1}\dd{\phi_1}\cdot r_2^2\sin\theta_2 \dd{r_2}\dd{\theta_2}\dd{\phi_2}\\
+&+\int f_{r2}\cdot  R_2^2\sin\theta_2\dd{\theta_2}\dd{\phi_2}\cdot r_1^2\sin\theta_1 \dd{r_1}\dd{\theta_1}\dd{\phi_1}
+\end{aligned}
+\end{equation}
+
+令两个径向波函数分别为 $\varphi_{l_1,l_2}^{L,M}$ 和 $\psi_{l_1,l_2}^{L,M}$， 那么\autoref{BerECS_eq3} 中的第一项的积分为
+\begin{equation}
+\begin{aligned}
+\oint \varphi_{\alpha,E} \grad \Psi_{SC} \dd{\bvec S} &= \sum_{l_1,l_2,L,M}\int_0^{R_2} \varphi_{l_1,l_2}^{L,M}(R_1,r_2) \pdv{r_1} \psi_{l_1,l_2}^{L,M}(R_1,r_2)\dd{r_2}\\
+&+\sum_{l_1,l_2,L,M}\int_0^{R_1} \varphi_{l_1,l_2}^{L,M}(r_1,R_2) \pdv{r_2} \psi_{l_1,l_2}^{L,M}(r_1,R_2)\dd{r_1}
+\end{aligned}
+\end{equation}
+假设 $\varphi_{l_1,l_2}^{L,M}(r_1,r_2)$ 中 $r_1$ 是束缚态， 那么上面第一个求和为零． 第二个求和中， $r_1 \ll R_2$， 所以 $\varphi_{l_1,l_2}^{L,M}(r_1,R_2)$ 可以用乘积来替代． \autoref{BerECS_eq3} 中第二项的推导类似．
