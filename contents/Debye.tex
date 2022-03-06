@@ -1,0 +1,68 @@
+% 晶格热容的德拜理论
+% 晶格振动|德拜|热容
+
+\pentry{晶格热容的爱因斯坦理论\upref{EScap}}
+
+根据量子理论，晶格的各个简谐振动模式的能量本征值都是量子化的，为
+\begin{equation}
+\qty(n_j+\frac{1}{2})\hbar \omega_j
+\end{equation}
+固体的一部分内能来自于晶格的振动，因此我们这里考虑的晶格热容就与这些简谐振动模式有关．我们需要知道晶格内能关于温度 $T$ 的函数，那么我们希望知道在特定温度下不同简谐振动模式的平均热能．根据玻尔兹曼分布\upref{MBsta}，能量本征值 $\epsilon$ 出现的概率与 $e^{-\epsilon}$ 成正比，因此我们有
+\begin{equation}
+\overline E_j(T)=\frac{1}{2}\hbar \omega_j + \frac{\sum_{n_j} n_j\hbar \omega_j e^{-n_j \hbar \omega_j / kT}}{\sum_{n_j} e^{-n_j \hbar \omega_j / kT}}
+\end{equation}
+$\overline E_j$ 代表简谐振动模式 $j$ 的平均能量．令 $\beta=1/kT$，上式可以写成
+\begin{equation}
+\overline E_j(T)=\frac{1}{2}\hbar \omega_j - \frac{\partial}{\partial \beta} \ln \sum_{n_j} e^{-n_j\beta\hbar\omega_j}=\frac{1}{2}\hbar \omega_j - \frac{\partial}{\partial \beta} \ln Z
+\end{equation}
+$Z$ 就是单个振动模式下的配分函数．上式可以进一步化简为
+\begin{equation}
+\overline E_j(T)=\frac{1}{2}\hbar \omega_j + \frac{\hbar \omega_j}{e^{\beta\hbar\omega_j}-1}
+\end{equation}
+因此对于这个振动模式下的热容为
+\begin{equation}
+\frac{\dd{} \overline E_j(T)}{\dd T}=k \qty(\frac{\hbar\omega_j}{kT})^2\frac{e^{\hbar \omega_j/kT}}{(e^{\hbar\omega_j/kT}-1)^2}
+\end{equation}
+在高温极限下这个结果趋向于 $k$，这与经典理论的能量均分定理是一致的．爱因斯坦假设了所有 $N$ 个原子的 $3N$ 个振动自由度都有 $\omega_0$ 的频率，因此得到了\autoref{EScap_eq2}~\upref{EScap}．而德拜模型考虑了振动模式的频率分布，采取了一个近似的模型，得到了一个近似的频率分布函数．
+
+\subsection{德拜热容}
+如果我们将晶格近似地看成“连续”的各向同性的介质，那么介质中有两种声波：一种是横波，另一种是纵波．而朝一个方向传播的横波有两种独立的自由度．它们的频率与波数之间满足关系：纵波 $\omega=C_l q$，横波 $\omega=C_t q$（$q$ 是波数的大小）．
+
+波数 $\bvec q$ 并不是任意的，而是要满足一定的边界条件．我们考虑形状为长方体的晶格，并采用周期性边界条件（由于原子数足够多，晶格足够大，我们在乎的是它的“体”性质，或者说它的广延量．它的表面、形状对晶格的“体”性质影响不大．那么我们可以将长方体的晶格无缝拼接成整个无限大空间，那么就容易想象周期性边界条件的合理性了）．因此 $\bvec q$ 空间中体积元 $\dd{} \bvec k=\dd k_x\dd k_y\dd k_z$ 中允许的 $\bvec q$ 值个数为
+\begin{equation}
+\frac{V}{(2\pi)^3} \dd{} \bvec k
+\end{equation}
+我们可以将允许的 $\bvec q$ 值看做是准连续的，因为它们在 $\bvec q$ 空间中十分密集．这样在后面的计算中，可以将求和用积分符号代替．利用上式可以求出频率在 $\omega$ 到 $\omega+\dd \omega$ 内的振动模式的数目
+\begin{equation}
+\begin{aligned}
+&\frac{V}{(2\pi)^3}4\pi q^2\dd q=\frac{V}{2\pi^2}\qty(\frac{1}{C_l^3}+\frac{2}{C_t^3})\omega^2\dd \omega\\
+&\Rightarrow g(\omega)= \frac{V}{2\pi^2}\qty(\frac{1}{C_l^3}+\frac{2}{C_t^3}) \omega^2=\frac{3V}{2\pi^2 \overline C ^3} \omega^2
+\end{aligned}
+\end{equation}
+晶格热容由
+\begin{equation}
+C_V(T)=k \int \qty(\frac{\hbar\omega_j}{kT})^2\frac{e^{\hbar \omega_j/kT}}{(e^{\hbar\omega_j/kT}-1)^2} g(\omega)\dd \omega
+\end{equation}
+给出．
+
+然而这还没有结束．注意到 $\int_0^\infty g(\omega)\dd \omega$ 是一个无穷大量，这代表的是振动模式的总数．之所以是无穷大，是因为我们之前假设了它是连续介质．然而我们知道晶格不是连续的介质，它有 $N$ 个原子，是 $3N$ 个广义坐标描述的体系，因而有 $3N$ 个振动自由度．这个矛盾体现了德拜理论的局限性．振动模式在宏观尺度上仍然是适用的，但当波长短到和微观尺度可比甚至更短时，振动模式的描述就不再适用了．为了解决这些矛盾，德拜采用了一个办法：他假设大于 $\omega_m$ 的短波全都不存在，而小于 $\omega_m$ 的振动模式的数量为 $3N$．即
+\begin{equation}
+\int_0^{\omega_m} g(\omega)\dd \omega = \frac{3V}{2\pi^2\overline C^3}\int_0^{\omega_m}\omega^2\dd \omega =3N
+\end{equation}
+可解得
+\begin{equation}
+\omega_m = \overline C \qty[6\pi^2 \qty(\frac{N}{V})]^{1/3}
+\end{equation}
+将热容公式的积分上限设为 $\omega_m$，就可以得到
+\begin{equation}
+\begin{aligned}
+C_V(T)&=k \int \qty(\frac{\hbar\omega_j}{kT})^2\frac{e^{\hbar \omega_j/kT}}{(e^{\hbar\omega_j/kT}-1)^2} g(\omega)\dd \omega\\
+&=9Nk\qty(\frac{kT}{\hbar\omega_m})^3 \int_0^{\hbar\omega/kT} \frac{\xi^4 e^\xi}{(e^\xi-1)^2}\dd \xi
+\end{aligned}
+\end{equation}
+定义德拜温度 $\Theta_D$ 为 $\hbar\omega_m/k$，那么德拜热容可以写成一个普适的函数
+\begin{equation}
+C_V(T/\Theta_D)=9Nk\qty(\frac{T}{\Theta_D})^3 \int_0^{\Theta_D/T}\frac{\xi^4 e^{\xi}}{(e^\xi-1)^2}\dd \xi
+\end{equation}
+
+我们可以看出，低温极限下德拜热容与 $T^3$ 成正比．这被称为德拜 T^3 定律．$T^3$ 定律一般适用于 $T<\Theta_D/30$ 的情况，然而随着低温测量技术的发展，人们发现低温情况下热容的实验测量结果与 $T^3$ 定律是有偏差的．或者说，如果保持上述模型的基本思路不变，德拜温度 $\Theta_D$ 实际上是随温度而变化的．
