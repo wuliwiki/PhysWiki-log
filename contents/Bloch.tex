@@ -7,6 +7,18 @@
 
 \pentry{定态薛定谔方程\upref{SchEq}}
 
+在固体物理中，我们研究原子按一定规则排布而成的理想晶格，研究电子在一个具有晶格周期性的等效势场 $V(\bvec r)$ 中的运动．根据定态薛定谔方程，我们有
+\begin{equation}
+H\psi=\qty[-\frac{\hbar^2}{2m}\nabla^2+V(\bvec r)] \psi = E\psi
+\end{equation}
+势场 $V(\bvec r)$ 满足周期性
+\begin{equation}
+V(\bvec r)=V(\bvec r+\bvec R_n)
+\end{equation}
+其中 $\bvec R_n$ 为任意晶格矢量．
+
+为了研究周期性势场下定态薛定谔方程的解，我们可以从最简单的一维薛定谔方程出发．
+
 \subsection{一维薛定谔方程}
 \footnote{参考\cite{GriffQ}}\textbf{布洛赫（Bloch）}理论也叫 Floquet 理论． 一维薛定谔方程中， 如果 $V(x)$ 是一个以 $a$ 为周期的函数， 那么解将满足
 \begin{equation}\label{Bloch_eq1}
@@ -34,9 +46,47 @@ K = \frac{2\pi}{a} \frac{n}{N} \qquad (n \in \mathbb Z)
 \subsection{三维薛定谔方程}
 
 （这参考的是 Brandsen?）布洛赫（Bloch）波函数定义为
-\begin{equation}
+\begin{equation}\label{Bloch_eq2}
 \phi(\bvec r) = \E^{\I \bvec k \vdot \bvec r} u(\bvec r)
 \end{equation}
-其中 $u(\bvec r)$ 是一个周期函数． $\bvec k$ 是 crystal momentum vector
+其中 $u(\bvec r)$ 具有与晶格同样的周期性．
+\begin{equation}
+u(\bvec r)=u(\bvec r+\bvec R_n)
+\end{equation}
+$\bvec R_n$ 为晶格矢量．即在任何平移 $\bvec R_n$ 的操作下势场 $V(\bvec r)$ 都是不变的．我们引入描述晶格平移对称性的算符 $T_1,T_2,T_3$，它们的定义是
+\begin{equation}
+T_\alpha u(\bvec r)= u(\bvec r+\bvec a_\alpha),\alpha=1,2,3
+\end{equation}
+其中 $\bvec a_\alpha,\alpha=1,2,3$ 是晶格的三个基矢．它们是相互对易的，而且容易证明它们和哈密顿算符 $H$ 也相互对易．下面我们要做的就是找出 $H,T_1,T_2,T_3$ 的共同本征态，用以描述晶格中的电子．设
+\begin{equation}
+\begin{aligned}
+&H\psi=E\psi,\\
+&T_\alpha \psi = \lambda_\alpha \psi, \alpha=1,2,3
+\end{aligned}
+\end{equation}
+\addTODO{需要增加原胞、布拉伐格子、倒格子相关的词条}
+设晶格在三个方向上的原胞数量分别为 $N_1,N_2,N_3$，那么可以引入晶格的周期性边界条件：
+\begin{equation}
+\psi(\bvec r)=\psi(\bvec r+N_\alpha \bvec a_\alpha),\alpha=1,2,3
+\end{equation}
+可以得出 $\lambda_\alpha$ 具有下列形式
+\begin{equation}
+\lambda_\alpha=e^{ \dfrac{2\pi i l_\alpha}{N_\alpha}}
+\end{equation}
+其中 $l_\alpha$ 为整数．
 
-the energy eigenstates for an electron in a crystal can be written as Bloch waves.
+如果引入倒格子矢量 $\bvec b_1,\bvec b_2,\bvec b_3$，满足 $\bvec a_i \cdot \bvec b_j = 2\pi \delta_{ij}$，那么
+\begin{equation}
+\begin{aligned}
+&\lambda_\alpha = e^{i \bvec k \cdot \bvec a_\alpha}\\
+&\bvec k=\sum_\alpha\frac{l_\alpha}{N_\alpha} \bvec b_\alpha
+\end{aligned}
+\end{equation}
+我们可以将 \autoref{Bloch_eq2} 三维晶格的布洛赫定理写成以下形式
+\begin{equation}
+\begin{aligned}
+\psi\qty(\bvec r+\sum_\alpha m_\alpha\bvec a_\alpha) &= T_1^{m_1} T_2^{m_2} T_3^{m_3} \psi(\bvec r)\\
+&=e^{i\bvec k\cdot \qty(\sum_\alpha m_\alpha\bvec a_\alpha)}\psi(\bvec r)
+\end{aligned}
+\end{equation}
+其中 $\bvec k$ 称为简约波矢，它对应于平移算符操作本征值的量子数 $l_1,l_2,l_3$．注意到当 $l_\alpha$ 增加 $N_\alpha$ 时 $\lambda_\alpha$ 没有发生变化，所以我们将 $l_\alpha$ 限制在 $0\cdots N_\alpha-1$ 因此得到简约波矢与量子数的一一对应．这相当于把 $\bvec k$ 限制在 $\bvec k$ 空间中由 $\bvec b_1,\bvec b_2,\bvec b_3$ 构成的原胞中，$\bvec k$ 的允许值个数为 $N_1N_2N_3$，也就是晶体的原胞总数．另一种更方便的方式，是将 $\bvec k$ 限制在 $\bvec k$空间的维格纳塞茨原胞中，这个区域被称为第一布里渊区．

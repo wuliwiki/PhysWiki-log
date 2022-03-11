@@ -1,0 +1,166 @@
+% 可测函数
+% 叶葛洛夫定理|Egoroff|Lusin|测度|Lebesgue积分|实变函数|广义实数
+
+为了引入新的积分思想，我们首先要讨论可测函数的相关概念．
+
+\subsection{广义实数}
+
+为了方便将来的讨论，我们将实数扩充为“广义实数”，即在实数集合中再添加$\pm\infty$这两个元素．
+
+$\pm\infty$的运算规则简述如下：
+
+\begin{equation}
+(\pm\infty)+( \pm \infty)=\pm \infty
+\end{equation}
+
+\begin{equation}
+(\pm\infty)(\pm\infty)=+\infty
+\end{equation}
+
+\begin{equation}
+(\pm\infty)(\mp\infty)=-\infty
+\end{equation}
+
+设$a, b, c$都是实数，且$b<0<c$，则还有：
+
+\begin{equation}
+a+(\pm\infty)=\pm\infty
+\end{equation}
+
+\begin{equation}
+b(\pm\infty)=\mp\infty
+\end{equation}
+
+\begin{equation}
+c(\pm\infty)=\pm\infty
+\end{equation}
+
+而$(\pm\infty)+(\mp\infty)$是不允许的运算，多数情况下$0\cdot(\pm\infty)$也是不允许的．
+
+最后，还要再补充一个关系：对于任意实数$a$，都有
+\begin{equation}
+-\infty<a<+\infty
+\end{equation}
+
+
+这样一来，我们就可以不再局限于实数集，而是在广义实数集上定义函数．
+
+
+
+\subsection{可测函数}
+
+可测函数是构造Lebesgue积分思想的砖块，就像“柱子的面积”是Riemann积分思想的砖块一样．
+
+\begin{definition}{可测函数}\label{MsbFun_def1}
+设$f$是$E\subseteq\mathbb{R}^n$上的函数（值域为广义实数集），其定义域$E$为一个可测集．如果对于任意实数$a$，都有$\{x\in E|f(x)\geq a\}$是可测集，那么称$f$是$E$上的\textbf{可测函数（measurable function）}，也可以说$f$在$E$上是\textbf{可测的}．
+\end{definition}
+
+
+可测函数要保持的性质是，在对值域进行分划的时候，各分划区间通过逆映射对应的“底面”是可测集，这样才能满足可加性．\autoref{MsbFun_def1} 中的限制看起来没有“任意分划得到的底面都是可测集”，但实际上定义到这个程度已经够了，这可以从下面的\autoref{MsbFun_the1} 看出：
+
+
+\begin{theorem}{}\label{MsbFun_the1}
+设$E$是$\mathbb{R}^n$上的可测集，$f$是$E$上的一个函数，则以下命题等价：
+\begin{enumerate}
+\item $f$是可测函数；
+\item 对于任意实数$a$，$\{x\in E|f(x)>a\}$是可测集；
+\item 对于任意实数$a$，$\{x\in E|f(x)\leq a\}$是可测集；
+\item 对于任意实数$a$，$\{x\in E|f(x)<a\}$是可测集．
+\end{enumerate}
+\end{theorem}
+
+\textbf{证明}：
+
+为方便讨论，记$\{x\in E|f(x)\geq a\}=E_a$．
+
+于是$\{x\in E|f(x)>a\}=\bigcup_{k=1}^\infty E_{a+1/k}$，因此它也是可测集．
+
+而$\{x\in E|f(x)<a\}=E-E_a$，故它也是可测集．
+
+最后，$\{x\in E|f(x)\leq a\}=E-\{x\in E|f(x)>a\}$，因此也是可测集．
+
+类似地，用这四句话中任意一个作为可测集的定义，都可以通过上述方式证明其它几句话所描述的也是可测集．
+
+\textbf{证毕}．
+
+
+
+
+
+\begin{corollary}{}
+设$f$为$E$上的可测函数，则$E_{+\infty}=\{x|f(x)=+\infty\}$和$E_{-\infty}=\{x|f(x)=-\infty\}$都是可测集．
+\end{corollary}
+
+
+
+\begin{definition}{几乎处处}
+“几乎处处”，指“除了一个零测集以外都”．比如说，如果说两个函数几乎处处相等，那就是说它们不相等的地方是一个零测集．
+\end{definition}
+
+注意，空集也是零测集，所以“几乎处处”也包含了“处处”的情况．
+
+根据可测集的性质，我们容易得到以下\autoref{MsbFun_the2} 和\autoref{MsbFun_the3} ，证明留作习题．
+
+\begin{theorem}{}\label{MsbFun_the2}
+设$E\subseteq\mathbb{R}^n$是可测集，$f$和$g$是在$E$上定义的函数．如果两个函数几乎处处相等，那么$f$可测当且仅当$g$可测．
+\end{theorem}
+
+
+
+\begin{theorem}{}\label{MsbFun_the3}
+如果各$E_i\subseteq\mathbb{R}^n$都是可测集，且$f$是每个$E_i$上的可测函数，那么$f$也是$\bigcup_{i=1}^\infty$上的可测函数．
+\end{theorem}
+
+根据\autoref{MsbFun_the1} ，我们只需要关注函数几乎处处的性质即可．
+
+\begin{theorem}{}
+设$f$和$g$都是可测集$E\subseteq\mathbb{R}^n$上的可测函数，且都几乎处处有意义，那么$af+bg$和$f\cdot g$也都是可测函数，其中$a, b$都是常数．
+\end{theorem}
+
+\textbf{证明}：
+
+任取实数$y_0$，则集合$\{x\in\mathbb{R}^n|af(x)+bg(x)\geq y_0\}$是全体$\{x\in\mathbb{R}^n|f(x)\geq \frac{s}{a}, g(x)\geq \frac{y_0-s}{b}\}$的集合之并，其中$s$是常数，求并时$s$遍历全体广义实数．
+
+各$\{x\in\mathbb{R}^n|f(x)\geq \frac{s}{a}, g(x)\geq \frac{y_0-s}{b}\}$是两个可测集的交，因此都是可测集，因此它们的并$\{x\in\mathbb{R}^n|af(x)+bg(x)\geq y_0\}$是可测的．由$y_0$的任意性，即得证$af+bg$是可测函数．
+
+$f\cdot g(x)=f(x)g(x)$的证明思路也是类似的，讨论$f$和$g$分别满足什么条件才能使得$fg$满足“大于等于特定常数”，故在此省略证明过程，留作习题．
+
+
+\textbf{证毕}．
+
+
+
+
+\subsection{可测函数与可测集的关系}
+
+
+
+
+\begin{definition}{正部和负部}
+给定$E\subseteq\mathbb{R}^n$上的可测函数$f$，记$f^+(x)=\max\{f(x), 0\}$，$f^-(x)=\min\{f(x), 0\}$．分别称$f^+$和$f^-$为$f$的\textbf{正部（positive part）}和\textbf{负部（negative part）}．
+\end{definition}
+
+函数的正部可以看成是把所有为负的函数值都提升到零，像是把函数图像的下半部分“削平”了；同理，函数的负部就是把上半部分削平了．根据可测函数的定义容易得到，$f$可测的充要条件是$f^+$和$f^-$都可测；另外，$f$可测还有一个必要但不充分\footnote{不充分性很显然：取$f$的定义为，在一个不可测集上取值为$1$，其它地方取值为$-1$，那么这个函数本身是不可测的，但$\abs{f}$可测．}条件为，$\abs{f}$可测．
+
+\begin{definition}{下方图形}
+
+给定可测集$E\subseteq\mathbb{R}^n$上的\textbf{非负}函数$f$，其图像可以在$\mathbb{R}^{n+1}$中表示，即$(x, f(x))$具有$n+1$个分量．
+
+在$\mathbb{R}^{n+1}$中，将集合$\{(x, y)|x\in E, y\in [0, f(x)]\}$称为$f(x)$的\textbf{下方图形}，可记为$G(E; f)$．
+
+\end{definition}
+
+下方图形的定义只针对了非负函数，但实际上由于对称性，非正函数的性质和非负函数也无本质不同，同样可以定义上方图形；加之我们可以通过把$f$分为正部和负部来讨论，所以对非负函数的下方图形的讨论已经可以展现任何实变函数的性质了．
+
+下面这个定理揭示了可测函数与可测集之间的联系：
+
+\begin{lemma}{}
+
+给定可测集$E\subseteq\mathbb{R}^n$上的\textbf{非负}函数$f$，则$f$是可测函数当且仅当$f$的下方图形是$\mathbb{R}^{n+1}$上的可测集．
+
+\end{lemma}
+
+
+
+
+
