@@ -1,0 +1,454 @@
+% Julia 访问数组元素值
+% 访问 数组 元素值
+
+本文授权转载自郝林的 《Julia 编程基础》． 原文链接：\href{https://github.com/hyper0x/JuliaBasics/blob/master/book/ch09.md}{第 9 章 容器：数组（上）}．
+
+
+\subsubsection{9.5 访问元素值}
+
+在获知了一个数组的基本要素之后，我们就可以去探查其中的元素值了．接下来，我会从最基本的访问方式讲起．
+
+\textbf{9.5.1 索引}
+
+对于数组来说，索引表达式依然是有效的．我们先看一个示例：
+
+\begin{lstlisting}[language=julia]
+julia> array2d[1]
+1
+
+julia> array2d[[1,3,5]]
+3-element Array{Int64,1}:
+ 1
+ 3
+ 5
+
+julia> array2d[1:6]
+6-element Array{Int64,1}:
+ 1
+ 2
+ 3
+ 4
+ 5
+ 6
+
+julia> 
+\end{lstlisting}
+
+可以看到，我先使用点索引表达式获取了\verb|array2d|中的第 1 个元素值，又使用点索引表达式获取了其中的第 1、3、5 个元素值．注意，在后者的中括号里的是一个包含了 3 个索引号的数组．因此，我们也可以把后者称为多点索引表达式，而把前者称为单点索引表达式．
+
+在这之后，我还使用范围索引表达式获取了\verb|array2d|中的前 6 个元素值，其结果仍然是一个一维数组．更宽泛地说，针对数组的多点索引表达式和范围索引表达式的求值结果总会是一个一维数组，无论其中的索引号横跨了几个维度都是如此．
+
+在数组的上下文中，索引号就是元素位置的序号．它总是从\verb|1|开始，且最后一个索引号总与当前数组的元素位置总数相等．还记得吗？这种索引号组成的索引也被称为线性索引．对于一维数组，这很好理解．因为其中的元素位置与索引号一样，都只有一个维度，很容易就能对应起来．
+
+对于多维数组，线性索引仍然是可用的．不过，与线性索引中的索引号不同，多维数组中的元素位置却处在一个多维度的空间中．在这种情况下，对应两者就不那么容易了，需要一点空间想象力．Julia会按照既定的顺序把索引号逐个地分配给多维数组中的每一个元素位置．更确切地说，它依照的是数组中维度的次序以及各个维度上的元素顺序．
+
+就拿\verb|array2d|来说，索引号\verb|1|至\verb|5|会被分配到这个二维数组包含的第1个一维数组．这个一维数组也就是它的第 1 列，即最左边的那一列．因此，该二维数组中的元素值\verb|1|、\verb|2|、\verb|3|、\verb|4|、\verb|5|的索引号恰好分别是\verb|1|、\verb|2|、\verb|3|、\verb|4|、\verb|5|．接下来，它的第2列中的 5 个元素值的索引号分别是\verb|6|、\verb|7|、\verb|8|、\verb|9|、\verb|10|，其第 3 列中的 5 个元素值的索引号分别是\verb|11|、\verb|12|、\verb|13|、\verb|14|和\verb|15|，等等．总之，\verb|array2d|中的每一个元素位置上的值正好就是它的索引号．这样你也可以非常直观地看到线性索引号在多维数组中的分配方式．
+
+我们再来看一个例子：
+
+\begin{lstlisting}[language=julia]
+julia> array3d = reshape(array2d, (3,5,2))
+3×5×2 Array{Int64,3}:
+[:, :, 1] =
+ 1  4  7  10  13
+ 2  5  8  11  14
+ 3  6  9  12  15
+
+[:, :, 2] =
+ 16  19  22  25  28
+ 17  20  23  26  29
+ 18  21  24  27  30
+
+julia> 
+\end{lstlisting}
+
+我使用\verb|reshape|函数改变了\verb|array2d|的复本，把它变为了一个\verb|3×5×2|的三维数组．我们重点来看\verb|array3d|代表的三维数组．虽然数组从二维变成了三维，但是其中元素值的排列顺序却没有被改变．所以，我们依然能够通过各个元素位置上的值了解到它们的索引号．
+
+使用前面的术语来讲的话就是这样的：索引号\verb|1|至\verb|15|会被分配到这个三维数组包含的第 1 个二维数组．而索引号\verb|1|至\verb|3|又会被分配到这个二维数组包含的第1个一维数据，也就是其中的最左边那一列．按照这个思路，你应该就可以解释这些索引号的每一个分配结果了．
+
+无论一个数组拥有多少个维度，我们都可以使用线性索引的索引号定位到相应的元素值．虽然线性索引的速度很快，但是有时候使用它会有些麻烦，因为这涉及到从多维到一维的换算．所以，对于多维数组，我们还经常使用更加直观的笛卡尔索引（cartesian index）．笛卡尔索引中的索引号是多维的，并且其中的索引号的数量与当前数组的维数保持一致．
+
+在 Julia 中，有一个专门代表笛卡尔索引的类型，名为\verb|CartesianIndex|．它的构造函数既可以接受一个包含了若干个索引号的元组，也可以接受若干个由英文逗号分隔的索引号．示例如下：
+
+\begin{lstlisting}[language=julia]
+julia> CartesianIndex(3, 2, 1)
+CartesianIndex(3, 2, 1)
+
+julia> ans == CartesianIndex((3, 2, 1))
+true
+
+julia> 
+\end{lstlisting}
+
+\verb|CartesianIndex|类型的每一个值都表示一个多维度的索引．在这样的索引中，索引号\verb|I|用于表示第 N 个维度上的第\verb|I|个元素．这个元素对应的可能是一个N-1维的数组，也可能是单个的元素位置．其中的N与索引号在笛卡尔索引中的（从左到右的）次序保持一致．
+
+如\verb|CartesianIndex(3, 2, 1)|，它表示的是一个针对三维数组的笛卡尔索引．其中的\verb|1|表示第三个维度上的第 1 个二维数组，\verb|2|表示此二维数组包含的第 2 个一维数组，而\verb|3|则表示此一维数组包含的第 3 个元素位置．由此，这个笛卡尔索引值就唯一地确定了一个元素位置．
+
+经过前面的反复阐释，我相信你已经对多维数组有了足够的空间想象力．笛卡尔索引其实就是基于多维空间而建立的．现在，让我们把\verb|CartesianIndex(3, 2, 1)|应用在\verb|array3d|代表的三维数组上：
+
+\begin{lstlisting}[language=julia]
+julia> array3d[CartesianIndex(3, 2, 1)]
+6
+
+julia>
+\end{lstlisting}
+
+如上所示，我们可以直接把\verb|CartesianIndex|类型的值放在索引表达式的中括号中．实际上，这个索引表达式还可以被简化为\verb|array3d[3, 2, 1]|．虽然这种简化只是把针对各个维度的索引号直接罗列在了中括号内，但它却让更加灵活的索引方式成为了可能．
+
+还记得我们之前见过的\verb|[:, :, 1]|吗？它其实表达的就是一个多维度的索引．示例如下：
+
+\begin{lstlisting}[language=julia]
+```julia
+julia> array3d[:, :, 1]
+3×5 Array{Int64,2}:
+ 1  4  7  10  13
+ 2  5  8  11  14
+ 3  6  9  12  15
+
+julia> 
+
+```
+\end{lstlisting}
+
+与之前的含义一致，这个多维索引选择的是\verb|array3d|中的第 1 个二维数组中的全部元素值．注意，上面的索引表达式的求值结果就是一个\verb|3×5|的二维数组，就像把对应的二维数组原封不动地摘出来了一样．
+
+我们再来看一个更复杂一些的例子：
+
+\begin{lstlisting}[language=julia]
+julia> array3d[:, [1,2], 1]
+3×2 Array{Int64,2}:
+ 1  4
+ 2  5
+ 3  6
+
+julia> 
+\end{lstlisting}
+
+看到了吗？在上面的中括号里还有中括号．这就意味着多维索引是可以嵌套的．在上面这个多维索引中，右边的索引号\verb|1|选择的仍然是\verb|array3d|中的第 1 个二维数组．中间的\verb|[1,2]|是一个嵌入的多维索引，它选择的是这个二维数组中的前 2 列．而左边的\verb|:|则表示选择这 2 列中的所有元素值．因此，上述索引表达式的求值结果就是一个\verb|3×2|的二维数组．
+
+当然，我们也可以选择\verb|array3d|中的所有二维数组的前 2 列：
+
+\begin{lstlisting}[language=julia]
+julia> array3d[:, [1,2], :]
+3×2×2 Array{Int64,3}:
+[:, :, 1] =
+ 1  4
+ 2  5
+ 3  6
+
+[:, :, 2] =
+ 16  19
+ 17  20
+ 18  21
+
+julia> 
+\end{lstlisting}
+
+这个求值结果是一个\verb|3×2×2|的三维数组，就好像只是把那两个二维数组的后3列都抠掉了似的．可见，通过多维索引选择出的部分数组总是会最大限度地保持原有的形状．不过，我们一定要注意下面两种不同的索引方式所带来的差异：
+
+\begin{lstlisting}[language=julia]
+julia> array3d[:, [1,2], 1]
+3×2 Array{Int64,2}:
+ 1  4
+ 2  5
+ 3  6
+
+julia> array3d[:, [1,2], [1]]
+3×2×1 Array{Int64,3}:
+[:, :, 1] =
+ 1  4
+ 2  5
+ 3  6
+
+julia> 
+\end{lstlisting}
+
+在多维索引中，如果针对某个维度的索引仅由一个索引号代表，那么与这个维度对应的数组就会被拆散，或者说我们在最终的索引结果中就看不到原本在这个维度上的数组了．相对的，如果针对某个维度的索引是一个嵌入的多维索引，那么我们在最终的索引结果中就仍然会完整或部分地看到原本在这个维度上的数组．
+
+在多维索引\verb|[:, [1,2], 1]|中，针对第三个维度的索引是索引号\verb|1|．因此，与这个维度对应的数组就会被拆散，仅留下该索引号选择的第1个二维数组．针对这个二维数组的索引是嵌入的多维索引\verb|[1,2]|，因此该二维数组的一部分就会被保留下来．针对一维数组的索引由\verb|:|占位，它等同于一个选择了所有元素的嵌入索引，因此相应的一维数组会被完整地保留．由此，最终的索引结果就是一个拥有两个维度的新数组．
+
+你可能会想到，正是因为中间的那个嵌入的多维索引选择了两个元素，对应的二维数组才会被保留下来．这样说没有错．但请记住，即使嵌入的多维索引只选择了一个元素，当前维度上的数组也会被保留．
+
+就拿上例中的第二个多维索引\verb|[:, [1,2], [1]]|来说．虽然其中针对第三个维度的索引\verb|[1]|只选择了第1个二维数组，但由于它是一个嵌入的多维索引，所以与之对应的三维数组的一部分仍然会出现在最终的索引结果中．从 REPL 环境回显的内容可知，这个索引结果是一个\verb|3×2×1|的三维数组，而不是一个二维数组．并且，其中的那个唯一的二维数组是由\verb|[:, :, 1]|指代的．这显然是展示三维数组的格式．
+
+我们再来看一组例子．这次先使用的是多维索引\verb|[:, 1, :]|：
+
+\begin{lstlisting}[language=julia]
+julia> array3d[:, 1, :]
+3×2 Array{Int64,2}:
+ 1  16
+ 2  17
+ 3  18
+
+julia> 
+\end{lstlisting}
+
+我们这次选择的是\verb|array3d|里的那两个二维数组中的第 1 列．由于针对第二个维度的索引是索引号\verb|1|，所以与之对应的两个二维数组就都被拆散了，只留下了那两个处于最左边的一维数组．把它们拼接在一起就形成了最终的索引结果，即一个\verb|3×2|的二维数组．
+
+换个角度讲，由于原来的二维数组已被拆散，导致原来的第三个维度变成了新的第二个维度，因此在最终的索引结果中就会有两个维度．又由于针对第一个维度和原第三个维度的索引都由\verb|:|占位，所以最终的索引结果就是一个\verb|3×2|的二维数组（请对比\verb|array3d|代表的\verb|3x5x2|的三维数组）．这个二维数组的内容完全由针对原第二个维度的索引号\verb|1|指定．
+
+我们接下来使用\verb|[1, :, :]|对\verb|array3d|进行索引，结果如下：
+
+\begin{lstlisting}[language=julia]
+julia> array3d[1, :, :]
+5×2 Array{Int64,2}:
+  1  16
+  4  19
+  7  22
+ 10  25
+ 13  28
+
+julia> 
+\end{lstlisting}
+
+这一次，针对第二个维度和第三个维度的索引都由\verb|:|占位，而针对第一个维度的索引却是索引号\verb|1|．一维数组当然也可以被拆散．它会被拆成一个一个的元素值．这个索引号\verb|1|会让这些一维数组中的第1个元素值都被留下来，而其他的元素值都会被抛弃．
+
+由于原来的一维数组已被拆散，导致原来的第二个维度变成了新的第一个维度，且原来的第三个维度变成了新的第二个维度．因此，最终的索引结果就是一个\verb|5×2|的二维数组．之前被留下来的那些元素值会被依次地填充到这个二维数组中的各个元素位置上，且填充的顺序会完全遵从线性索引的顺序．
+
+到这里，我们讲了针对一维数组和多维数组的线性索引，也讲了针对多维数组的笛卡尔索引（也称多维索引）．由于笛卡尔索引是可以嵌套的，因此使得它非常的灵活和强大．但这种索引的复杂度自然也就变高了．所以，我们在前面还举了很多例子，并借此详细地讨论了索引操作的主要过程．在看过了这些内容之后，你是否已经对数组的索引完全清楚了呢？
+
+顺便说一句，由于数组是可变的容器，所以我们还可以利用索引去修改其中的某个或某些元素位置上的值．
+
+\textbf{9.5.2 迭代}
+
+我们在前面说过，迭代是根据反馈重复地执行相同操作的过程．在 Julia 中，我们可以使用\verb|for|语句来实现循环，并用它来迭代通常的容器，包括数组．请看下面的示例：
+
+\begin{lstlisting}[language=julia]
+julia> for e in array2d
+           println(e)
+       end
+1
+2
+3
+4
+5
+6
+# 省略一些输出，此处会逐行地显示元素值 7 至 27．
+28
+29
+30
+
+julia> 
+\end{lstlisting}
+
+这条\verb|for|语句依次地打印出了\verb|array2d|中的每一个元素值，且每个元素值都独占了一行．直到打印出\verb|array2d|中的最后一个元素值，也就是与索引号\verb|30|对应的元素值，这个循环才完全结束．数组中的元素值会被按照线性索引的顺序依次地赋给迭代变量\verb|e|．
+
+如果我们对数组中的元素值不感兴趣，而只是想用\verb|for|语句迭代出其中所有的线性索引号的话，那么就可以使用\verb|eachindex|函数．
+
+\verb|eachindex|函数可以接受一个数组作为其参数值．这时，它会专门为这个数组中的索引创建一个可迭代的对象（或称迭代器），并将其作为结果值返回．既然这个对象是可迭代的，那么它就可以被用在\verb|for|语句中．因此，下面的代码是可行的：
+
+\begin{lstlisting}[language=julia]
+julia> for i in eachindex(array2d)
+           println("$(i): $(array2d[i])")
+       end
+1: 1
+2: 2
+3: 3
+4: 4
+5: 5
+6: 6
+# 省略一些输出，此处会逐行地显示线性索引号 7 至 27 以及与它们对应的元素值．
+28: 28
+29: 29
+30: 30
+
+julia> 
+\end{lstlisting}
+
+对于\verb|array2d|来说，使用\verb|eachindex|函数的意义好像并不大．但对于我们已经介绍过的各种可索引对象而言，这个函数提供了一种可以访问其线性索引的标准方式．另外，该函数还可以被用来访问其他类型的数组中的索引，甚至其他类型的容器中的索引．只不过，那就不一定是线性索引了，也可能是笛卡尔索引．这里所说的其他类型的数组是指，除了\verb|Array|之外且同样继承自\verb|AbstractArray|的那些类型的实例．
+
+此外，还有一种方式，它可以把数组中的各个元素值及其索引号分别包装成键值对，然后创建一个能够按照原有顺序访问这些键值对的迭代器．这就是\verb|pairs|函数所提供的功能．注意，这些键值对都会以索引号为键，并以元素值为值．请看下面的示例：
+
+\begin{lstlisting}[language=julia]
+julia> for (i, v) in pairs(array2d)
+           println("$(i): $(v)")
+       end
+CartesianIndex(1, 1): 1
+CartesianIndex(2, 1): 2
+CartesianIndex(3, 1): 3
+CartesianIndex(4, 1): 4
+CartesianIndex(5, 1): 5
+CartesianIndex(1, 2): 6
+# 省略一些输出，此处会逐行地显示中间的键值对．
+CartesianIndex(3, 6): 28
+CartesianIndex(4, 6): 29
+CartesianIndex(5, 6): 30
+
+julia> 
+\end{lstlisting}
+
+注意，这里有两个迭代变量：\verb|i|和\verb|v|．它们分别代表了键值对中的键和值．另外，我们还可以看到，上述键值对中的索引都是笛卡尔索引，因为\verb|array2d|是一个二维数组．对于多维数组，\verb|pairs|函数会把元素值的笛卡尔索引作为它们的键．而对于一维数组，\verb|pairs|函数则会把元素值的线性索引号作为它们的键．这都是在默认情况下的规则．
+
+我们也可以自己选择\verb|pairs|函数所使用的索引．在Julia中，这也被称为索引风格的选择．\verb|pairs|函数还有一个可选的参数正是用于此种选择的．它有三个选项，分别是：\verb|IndexLinear()|、\verb|IndexCartesian()|和\verb|IndexStyle(A)|．前两个选项分别是\verb|IndexLinear|类型和\verb|IndexCartesian|类型的实例．这两个类型都是\verb|IndexStyle|类型的子类型．从其名称我们就可以看出，它们分别代表了线性索引风格和笛卡尔索引风格．
+
+这个可选参数的第三个选项\verb|IndexStyle(A)|是针对\verb|pairs|函数的那个唯一的必选参数\verb|A|而言的．因此，它的含义就是遵从\verb|A|所代表的那个数组的索引风格．然而，不论是一维数组还是多维数组，只要它的类型是\verb|Array|，它默认使用的就是线性索引风格．示例如下：
+
+\begin{lstlisting}[language=julia]
+julia> pairs(IndexStyle(array2d), array2d)
+pairs(IndexLinear(), ::Array{Int64,2}) with 30 entries:
+  1 => 1
+  2 => 2
+  3 => 3
+  4 => 4
+  5 => 5
+  6 => 6
+  7 => 7
+  ⋮ => ⋮
+
+julia> 
+\end{lstlisting}
+
+至此，我们已经知悉了迭代数组的标准方式——使用\verb|for|语句．我们还了解到，可以用\verb|eachindex|函数或\verb|pairs|函数包装被迭代的数组，以达到不同的迭代效果．虽然可以实现这种包装的函数不止这两个，但是它们已经可以满足绝大多数的需求了．在这里，你应该特别记忆的是，那些相关的默认规则和定制化方式．
+
+\textbf{9.5.3 搜索}
+
+搜索指的是搜索数组中的元素值．在Julia中，这种搜索也是基于索引的．Julia的\verb|Base|模块里有不少提供了此功能的函数，我们在前面已经讲过了一些．为了方便你选用，我做了下面这张表．这样你也可以对它们有一个整体上的了解．
+
+\begin{table}[ht]
+\centering
+\caption{可在数组中搜索的函数}\label{JuC9S5_tab1}
+\begin{tabular}{|c|c|c|c|}
+\hline
+ 函数名     & 搜索的起始点             & 搜索方向     & 结果值 \\
+\hline
+ findfirst & 第一个元素位置           & 线性索引顺序 & 首个满足条件的元素值的索引号或\verb|nothing| \\
+\hline
+ findlast  & 最后一个元素位置         & 线性索引逆序 & 首个满足条件的元素值的索引号或\verb|nothing| \\
+\hline
+ findnext  & 与指定索引号对应的元素位置 & 线性索引顺序 & 首个满足条件的元素值的索引号或\verb|nothing| \\
+\hline
+ findprev  & 与指定索引号对应的元素位置 & 线性索引逆序 & 首个满足条件的元素值的索引号或\verb|nothing| \\
+\hline
+ findall   & 第一个元素位置           & 线性索引顺序 & 包含了所有满足条件元素值的索引号的向量  \\
+\hline
+ findmax   & 第一个元素位置           & 线性索引顺序 & 最大的元素值及其索引号组成的元组或\verb|NaN| \\
+\hline
+ findmin   & 第一个元素位置           & 线性索引顺序 & 最小的元素值及其索引号组成的元组或\verb|NaN| \\
+\hline
+\end{tabular}
+\end{table}
+
+我们之前讲过的函数\verb|findfirst|、\verb|findlast|、\verb|findnext|和\verb|findprev|都可以被用于搜索数组中的元素值．在一般情况下，我们传给它们的第一个参数值都应该是一个用来做条件判断的函数，而这个函数返回的结果都应该一个布尔值．下面是几个简单的例子：
+
+\begin{lstlisting}[language=julia]
+julia> findfirst(isequal(7), [1,2,3,4,5,6,7,8,9])
+7
+
+julia> findfirst(isequal(27), [1,2,3,4,5,6,7,8,9]) == nothing
+true
+
+julia> findfirst(isequal(27), array2d)
+CartesianIndex(2, 6)
+
+julia> array2d[ans]
+27
+
+julia> findnext(iseven, array2d, CartesianIndex(2, 6))
+CartesianIndex(3, 6)
+
+julia> array2d[ans]
+28
+
+julia> 
+\end{lstlisting}
+
+一定要注意，对于一维数组，前面这 4 个函数在找到满足条件的元素值之后，都会返回该值的线性索引号．而对于多维数组，它们在这时都会返回元素值的笛卡尔索引．这与\verb|pairs|函数的默认规则是相同的，但是与\verb|eachindex|函数的行为以及（\verb|Array|类型的）数组的默认索引风格却有着明显的差异．不过，这种差异只存在于对多维数组索引的选择上．
+
+相应的，我们在为\verb|findnext|函数和\verb|findprev|函数传参的时候也要注意这种差异．这两个函数都需要一个代表了搜索起始点的参数值．如果搜索的是一维数组，那么我们就必须使用线性索引号来表示这个起始点，否则就必须使用笛卡尔索引．
+
+我们再来说\verb|findall|函数．这个函数会在被搜索的数组的全范围内寻找目标元素值，然后把那些满足条件的元素值的索引号都放到一个一维数组中．即使没有找到任何满足条件的元素值，它也依然会返回这个空的一维数组，而不会像前 4 个函数那样返回\verb|nothing|．不过，在对数组索引的选择上，\verb|findall|函数总会与前 4 个函数保持一致．
+
+到目前为止，我们一直说的是前 5 个函数在一般情况下的调用方式．其实，我们也可以不传入那个用来做条件判断的函数．不过这样的话，它们对被搜索的数组就有要求了．具体的要求是，被搜索的数组的元素类型必须是\verb|Bool|．在这种情况下，这些函数拿来做判断的条件就是“元素值必须等于\verb|true|”．例如：
+
+\begin{lstlisting}[language=julia]
+julia> array2d_bool = Bool[0 0 1 0 0 1; 1 0 1 0 0 0; 0 0 0 1 0 0;
+ 1 0 0 0 1 1; 0 1 0 1 0 0]
+5×6 Array{Bool,2}:
+ 0  0  1  0  0  1
+ 1  0  1  0  0  0
+ 0  0  0  1  0  0
+ 1  0  0  0  1  1
+ 0  1  0  1  0  0
+
+julia> findlast(array2d_bool)
+CartesianIndex(4, 6)
+
+julia> findprev(array2d_bool, CartesianIndex(3, 6))
+CartesianIndex(1, 6)
+
+julia> findall(array2d_bool)
+10-element Array{CartesianIndex{2},1}:
+ CartesianIndex(2, 1)
+ CartesianIndex(4, 1)
+ CartesianIndex(5, 2)
+ CartesianIndex(1, 3)
+ ⋮                   
+ CartesianIndex(4, 5)
+ CartesianIndex(1, 6)
+ CartesianIndex(4, 6)
+
+julia> 
+\end{lstlisting}
+
+别忘了线性索引的顺序．对于二维数组来说，它是先纵向、后横向的．这与现代人写字和阅读的顺序有着明显的不同．
+
+我们接着往下看．很显然，\verb|findmax|函数和\verb|findmin|函数所依据的条件都不用我们来指定．并且，当数组中存在多个最大值或多个最小值的时候，它们只会选择线性索引号最小的那一个．另外，一旦碰到\verb|NaN|，那么它们就会直接把这个\verb|NaN|及其索引号组成的元组作为结果值返回．还有，这两个函数在对数组索引的选择方面依然如同前面那5个搜索函数．但与那些函数不同的是，对于空的被搜索数组，这两个函数都会立即抛出\verb|ArgumentError|类型的错误．示例如下：
+
+\begin{lstlisting}[language=julia]
+julia> findmin([115,65,18,2,117,-102,123,66,-93,-102])
+(-102, 6)
+
+julia> findmin([115,65,18,2,117,-102,123,66,NaN,-102])
+(NaN, 9)
+
+julia> findmin([])
+ERROR: ArgumentError: collection must be non-empty
+# 省略了一些回显的内容．
+
+julia> 
+\end{lstlisting}
+
+请注意，虽然我们在前面的例子中搜索的都是数值的数组，但你千万不要以为这些函数只能搜索这类数组．即使对于函数\verb|findmax|和\verb|findmin|来说，只要一个数组中的所有元素值之间都是可比较的，那么它们就可以对这个数组进行搜索．
+
+除此之外，\verb|findmax|和\verb|findmin|还可以帮助我们寻找多维数组在某个或某些维度中的最大值或最小值．我们以\verb|array2d|为例，代码如下：
+
+\begin{lstlisting}[language=julia]
+julia> array2d
+5×6 Array{Int64,2}:
+ 1   6  11  16  21  26
+ 2   7  12  17  22  27
+ 3   8  13  18  23  28
+ 4   9  14  19  24  29
+ 5  10  15  20  25  30
+
+julia> findmax(array2d, dims=1)
+([5 10 … 25 30], CartesianIndex{2}[CartesianIndex(5, 1)
+ CartesianIndex(5, 2) … CartesianIndex(5, 5) CartesianIndex(5, 6)])
+
+julia> typeof(ans)
+Tuple{Array{Int64,2},Array{CartesianIndex{2},2}}
+
+julia> 
+\end{lstlisting}
+
+可以看到，当我在调用\verb|findmax|函数的时候把\verb|1|赋给了它的关键字参数\verb|dims|．顺便说一下，对于关键字参数，我们必须使用\verb|<name>=<value>|的方式为其赋值，如\verb|dims=1|．此时，这个函数就会去寻找\verb|array2d|里的第一个维度（或者说各个列）中的所有最大值．它在这里返回的结果值是一个元组．这个元组先后包含了每一列中的最大值（共有6个）以及它们的笛卡尔索引．
+
+按照这个规则，如果我在这里把\verb|2|赋给这个函数的\verb|dims|参数，那么它就会去寻找\verb|array2d|里的第二个维度（或者说各个行）中的所有最大值．这时，它同样会返回一个元组，并且其中会先后包含每一行中的最大值（应该有5个）以及它们的笛卡尔索引．
+
+\verb|findmax|函数的\verb|dims|参数在含义上与我们在前面讲过的同名参数并没有什么两样．这个参数的值在这里既可以是一个代表了某个维度的整数，也可以是一个代表了多个维度的元组或数组．如果是后者，那么该函数就会把指定的多个维度合起来看，并在其中寻找最大的值．例如：
+
+\begin{lstlisting}[language=julia]
+julia> findmax(array2d, dims=(1,2))
+([30], CartesianIndex{2}[CartesianIndex(5, 6)])
+
+julia> typeof(ans)
+Tuple{Array{Int64,2},Array{CartesianIndex{2},2}}
+
+julia> 
+\end{lstlisting}
+
+我把元组\verb|(1,2)|作为了参数\verb|dims|的值，使得\verb|findmax|函数把\verb|array2d|里的第一个维度和第二个维度作为一个整体看待，并去寻找这个整体中的最大值．显然，这里的这个最大值仅有一个，即处在第5行、第6列的\verb|30|．
+
+对于\verb|findmin|函数也是一样，它同样有一个名为\verb|dims|的可选参数，只不过它寻找的是多维数组在某个或某些维度中的最小值而已．
+
+好了，只要你记住了上述 7 个函数的用法，就可以自如地在数组中搜索元素值了．

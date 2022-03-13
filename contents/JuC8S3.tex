@@ -1,0 +1,207 @@
+% Julia 集合
+% 集合
+
+本文授权转载自郝林的 《Julia 编程基础》． 原文链接：\href{https://github.com/hyper0x/JuliaBasics/blob/master/book/ch08.md}{第 8 章 容器：字典与集合}．
+
+
+\subsubsection{8.3 集合}
+
+集合也是一种容器．它与字典有些相似，但又有着明显的不同．一个字典可以保证其中的键互不相等，而一个集合也可以保证其中的元素值互不相等．并且，与字典类似，集合中的元素值都是无序存储的．
+
+不过，字典容纳的是一个个同类型的键值对，而集合容纳的却是一个个同类型的元素值．这里的不同在于，字典会区别看待和操作键值对中的键和值，而集合则只会且只能把其中的元素值都视为不可再拆分的整体．当然，我们也可以在集合中存放键值对（即`Pair`类型的值），但它依然会把那些键值对都视为元素值．
+
+正因为集合的上述特性，我们可以很轻易地使用字典来模拟集合．比如像这样构造一个字典：
+
+\begin{lstlisting}[language=julia]
+julia> mock_set = Dict{String,Nothing}()
+Dict{String,Nothing} with 0 entries
+\end{lstlisting}
+
+然后像这样判断其中是否存在某个键（即集合中的元素值）：
+
+\begin{lstlisting}[language=julia]
+julia> haskey(mock_set, "d")
+false
+
+julia> 
+\end{lstlisting}
+
+简单地解释一下，\verb|Nothing|是一个单例类型，它的唯一实例是\verb|nothing|．我把字典\verb|mock_set|的值类型设置成了\verb|Nothing|，主要是为了避免其中的键值对里的值占用过多的内存空间．因为这样的话这些值就都只会且只能代表同一个对象了，即\verb|nothing|．
+
+可是，集合本身的特性并不能完全体现出它的优势．基于集合的操作才是其最大的优势．所以，严格来讲，我们无法用字典替代集合．下面，我们就来一起看一看这是一种什么样的容器．
+
+\textbf{8.3.1 类型与实例化}
+
+在 Julia 中，代表集合的抽象类型是\verb|AbstractSet|．Julia 标准库里还有它的子类型有\verb|Set|和\verb|BitSet|．我们可以称前者为标准集合，称后者为位集合．
+
+标准集合的构造函数\verb|Set|可以在不接受任何参数值的情况下构造出一个标准集合．但它也可以接受一个可迭代对象，并以其中的元素值作为新集合最初包含的元素值．示例如下：
+
+\begin{lstlisting}[language=julia]
+julia> Set()
+Set(Any[])
+
+julia> typeof(ans)
+Set{Any}
+
+julia> Set([1,2,4])
+Set([4, 2, 1])
+
+julia> typeof(ans)
+Set{Int64}
+
+julia> Set(Dict(1=>"x", 2=>"y", 4=>"z"))
+Set(Pair{Int64,String}[2 => "y", 4 => "z", 1 => "x"])
+
+julia> typeof(ans)
+Set{Pair{Int64,String}}
+
+julia> 
+\end{lstlisting}
+
+可以看到，当我们不给它任何参数值的时候，新集合的元素类型就会是\verb|Any|．虽然这样的集合可以容纳任何类型的元素值，但是这通常都不是我们想要的．因为如此一来就基本上失去了参数化类型的好处了．因此，我们一般不这样使用这个函数．
+
+如果我们向它传递了一个可迭代对象，那么新集合的元素类型就会与这个可迭代对象的元素类型或者键值对类型相同．不过，当我们传入的是元组的时候，情况就比较特殊了．因为元组中的各个元素值可以是不同类型的，而且它们的类型还会体现在元组的类型参数中．请看下面的示例：
+
+\begin{lstlisting}[language=julia]
+julia> Set((1,2,4))
+Set([4, 2, 1])
+
+julia> typeof(ans)
+Set{Int64}
+
+julia> Set((1,2.0,"4"))
+Set(Any["4", 2.0, 1])
+
+julia> typeof(ans)
+Set{Any}
+
+julia> 
+\end{lstlisting}
+
+一旦我们传入的元组包含了不同类型的元素值，就会迫使\verb|Set|函数去寻找这些元素类型的共同超类型，并把找到的共同超类型作为新集合的元素类型．在最坏的情况下，这个共同超类型将是\verb|Any|．我们在讲数值类型提升的时候提到过共同超类型．它指的是多个类型都有继承的且距离它们最近的那个超类型．
+
+可见，由于元组的特性，它有可能会让\verb|Set|函数构造出元素类型迥异的集合，并且这样的元素类型肯定都属于抽象类型．所以在这种情况下，你就需要考虑清楚了，想好怎样应对这种变化．
+
+\textbf{8.3.2 操作集合}
+
+不知道你是否还记得当初学过的集合运算．这应该是高中教过的数学知识．集合运算包括求并集、求交集、求差集和求对称差集．对于这些运算，Julia 都提供了相应的函数．我下面就带着你快速地浏览一下这些函数．
+
+我们先来说求并集．与并集对应的函数叫做\verb|union|．它的功能是对多个集合中的元素值进行合并．示例如下：
+\begin{lstlisting}[language=julia]
+julia> union(Set([1,2]), Set([2,3]), Set([3,4,5]))
+Set([4, 2, 3, 5, 1])
+
+julia> 
+\end{lstlisting}
+
+显然，新集合中的元素值是经过去重（即去除重复）的．对于集合来说理应如此．但去重的操作是在\verb|union|函数的内部完成的，而没有让新集合自己去做．另外，\verb|union|函数还会在必要的时候提升新集合的元素类型．这与合并字典时的做法是类似的．
+
+再来说求交集．函数\verb|intersect|具有此功能．该函数可以提取出多个集合共有的元素值，并把它们都放入新的集合．下面是例子：
+
+\begin{lstlisting}[language=julia]
+julia> intersect(Set([1,2]), Set([2,3]), Set([3,4,5]))
+Set(Int64[])
+
+julia> intersect(Set([1,2,3]), Set([2,3,4]), Set([3,4,5]))
+Set([3])
+
+julia> 
+\end{lstlisting}
+
+注意，只有所有的参数值都共有的元素值，才会被\verb|intersect|函数放入到新的集合中．
+
+函数\verb|setdiff|能够求多个集合的差集．所谓的差集，就是一个集合包含的但另一些集合都未包含的元素值所组成的集合．因此，与前两个函数不同，\verb|setdiff|函数对参数值的位置是很敏感的．它尤其关注哪一个参数值在最左边的位置上．请看下面的示例：
+
+\begin{lstlisting}[language=julia]
+julia> setdiff(Set([1,2,3]), Set([2,3,4]), Set([3,4,5]))
+Set([1])
+
+julia> 
+\end{lstlisting}
+
+第一个集合中有元素值\verb|1|、\verb|2|和\verb|3|，但只有\verb|1|是后续的集合中都没有的．所以新集合只包含了\verb|1|．如果我们改变一下这几个参数值的位置，那么结果就会不同，如：
+
+\begin{lstlisting}[language=julia]
+julia> setdiff(Set([2,3,4]), Set([1,2,3]), Set([3,4,5]))
+Set(Int64[])
+
+julia> setdiff(Set([3,4,5]), Set([2,3,4]), Set([1,2,3]))
+Set([5])
+
+julia> 
+\end{lstlisting}
+
+集合\verb|Set([2, 3, 4])|中的每一个元素值都存在于后续的某个或某些集合中，所以新集合就是空的．而在集合\verb|Set([3, 4, 5])|中，只有\verb|5|是后续的集合都没有的，因此新集合就只包含了\verb|5|．
+
+函数\verb|symdiff|可用于求取多个集合的对称差集，或者说对称差分的集合．我们一定要搞清楚对称差集的定义，即：属于两个集合的并集但不属于它们的交集的元素值所组成的集合．请看示例：
+
+\begin{lstlisting}[language=julia]
+julia> symdiff(Set([1,2,3]), Set([2,3,4]))
+Set([4, 1])
+
+julia> 
+\end{lstlisting}
+
+对于上面三个作为参数值的集合，它们的并集是\verb|Set([1, 2, 3, 4])|且交集是\verb|Set([2, 3])|，所以新集合中才会包含\verb|1|和\verb|4|．
+
+如果参与的集合超过了两个，那么我们就要特别注意了．因为\verb|symdiff|函数并不会去求取所谓的所有集合的对称差集．它会依据参数值的前后位置一步一步地进行计算，并且每一步只让两个集合参与计算．示例如下：
+
+\begin{lstlisting}[language=julia]
+julia> symdiff(Set([1,2,3]), Set([2,3,4]), Set([3,4,5]))
+Set([3, 5, 1])
+
+julia> 
+\end{lstlisting}
+
+在这里，\verb|symdiff|函数会先求前两个集合的对称差集，然后再去求这个对称差集与第三个集合的对称差集．最后得到的这个对称差集才是最终的结果．如果用表达式来描述的话就是这样的：
+
+\begin{lstlisting}[language=julia]
+julia> symdiff(symdiff(Set([1,2,3]), Set([2,3,4])), Set([3,4,5]))
+Set([3, 5, 1])
+
+julia> 
+\end{lstlisting}
+
+再来看一个例子，这次会有四个集合参与计算：
+
+\begin{lstlisting}[language=julia]
+julia> symdiff(Set([1,2,3]), Set([2,3,4]), Set([3,4,5]), Set([4,5,6]))
+Set([4, 3, 6, 1])
+
+julia> 
+\end{lstlisting}
+
+你可以先在心里想象一下这个对称差集的计算步骤，然后再看下面的分解操作：
+
+\begin{lstlisting}[language=julia]
+julia> symdiff(Set([1,2,3]), Set([2,3,4]))
+Set([4, 1])
+
+julia> symdiff(ans, Set([3,4,5]))
+Set([3, 5, 1])
+
+julia> symdiff(ans, Set([4,5,6]))
+Set([4, 3, 6, 1])
+
+julia> 
+\end{lstlisting}
+
+怎么样？这样是不是就很清晰了呢？总之，数学中的对称差集只能有两个参与计算的集合．因此，当\verb|symdiff|函数接受到更多的参数值时只会一步一步地进行求解．
+
+我们上面所讲的函数\verb|union|、\verb|intersect|、\verb|setdiff|和\verb|symdiff|都有各自的孪生函数，即：\verb|union!|、intersect\verb|!|、\verb|setdiff!|和\verb|symdiff!|．我们已经知道，前四个函数都不会修改任何的参数值，而且返回的集合也是新构造出来的．然而，从名称末尾的\verb|!|我们就可以猜得出，后四个函数都会直接修改第一个参数值以体现计算的结果，而且返回的集合就是这个被修改的参数值．
+
+我们再延伸一点．前文所述的这些函数可以应用的对象其实都不只是标准集合\verb|Set|．或者说，我们一直在讲的实际上都是针对\verb|Set|类型的衍生方法．在这些函数之下，还有针对\verb|BitSet|、\verb|Array|甚至其他的可迭代对象的衍生方法．至于具体都有哪些衍生方法，我们可以通过调用\verb|methods|函数查看，比如：
+
+\begin{lstlisting}[language=julia]
+julia> methods(setdiff!)
+# 5 methods for generic function "setdiff!":
+[1] setdiff!(s1::BitSet, s2::BitSet) in Base at bitset.jl:320
+[2] setdiff!(v::AbstractArray{T,1} where T, itrs...) in Base at array.jl:2440
+[3] setdiff!(s::Set, t::Set) in Base at set.jl:78
+[4] setdiff!(s::AbstractSet, itr) in Base at abstractset.jl:173
+[5] setdiff!(s::AbstractSet, itrs...) in Base at abstractset.jl:167
+
+julia> 
+\end{lstlisting}
+
+除此之外，还有一些函数可以直接操作集合，比如用于判断一个集合是否是另一个集合的子集的\verb|issubset|，又比如用于判断两个集合是否拥有同样的元素值的\verb|issetequal|．由于这些函数使用起来都比较简单，所以我就不在这里展开讲了．接下来，我会再简述一下那些可以适用于各种容器的通用操作．

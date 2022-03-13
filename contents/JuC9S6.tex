@@ -1,0 +1,314 @@
+% Julia 修改数组元素值
+% 数组 修改元素值
+
+本文授权转载自郝林的 《Julia 编程基础》． 原文链接：\href{https://github.com/hyper0x/JuliaBasics/blob/master/book/ch09.md}{第 9 章 容器：数组（上）}．
+
+
+\subsubsection{9.6 修改元素值}
+
+\textbf{9.6.1 索引}
+
+修改一个数组最简单的方式就是使用索引表达式．无论是单点索引表达式，还是多点索引表达式，又或是范围索引表达式，都可以被用来修改数组．示例如下：
+
+\begin{lstlisting}[language=julia]
+julia> array2d_copy = copy(array2d)
+5×6 Array{Int64,2}:
+ 1   6  11  16  21  26
+ 2   7  12  17  22  27
+ 3   8  13  18  23  28
+ 4   9  14  19  24  29
+ 5  10  15  20  25  30
+
+julia> array2d_copy[5] = 50;
+
+julia> array2d_copy[[1,3]] = [10, 30];
+
+julia> array2d_copy[7:9] = [70, 80, 90];
+
+julia> array2d_copy
+5×6 Array{Int64,2}:
+ 10   6  11  16  21  26
+  2  70  12  17  22  27
+ 30  80  13  18  23  28
+  4  90  14  19  24  29
+ 50  10  15  20  25  30
+
+julia> 
+\end{lstlisting}
+
+这里有两点需要注意．第一点，当我们使用多点索引表达式或范围索引表达式的时候，在赋值符号\verb|=|右边的应该是一个一维的数组．并且，这个一维数组的长度应该与我们要替换的元素值的数量一致．第二点，不管使用哪一种索引表达式，等号右边的代表新元素的值都必须能被转换成其左边数组的元素类型的实例，否则Julia就会立即报错：
+
+\begin{lstlisting}[language=julia]
+julia> array2d_copy[[1,3]] = [10.1, 30.5]
+ERROR: InexactError: Int64(10.1)
+# 省略了一些回显的内容．
+
+julia> 
+\end{lstlisting}
+
+浮点数\verb|10.1|是\verb|Float64|类型的，它不能被转换成\verb|Int64|类型的实例，所以Julia就报错了．
+
+另外，我们也可以利用笛卡尔索引对数组进行修改．比如：
+
+\begin{lstlisting}[language=julia]
+julia> array3d_copy = copy(array3d)
+3×5×2 Array{Int64,3}:
+[:, :, 1] =
+ 1  4  7  10  13
+ 2  5  8  11  14
+ 3  6  9  12  15
+
+[:, :, 2] =
+ 16  19  22  25  28
+ 17  20  23  26  29
+ 18  21  24  27  30
+
+julia> array3d_copy[:, :, 1] = zeros(Int64, 3, 5);
+
+julia> array3d_copy[:, 3:4, 2] = ones(Int64, 3, 2);
+
+julia> array3d_copy[:, [1,5], 2] = fill(2, 3, 2);
+
+julia> array3d_copy
+3×5×2 Array{Int64,3}:
+[:, :, 1] =
+ 0  0  0  0  0
+ 0  0  0  0  0
+ 0  0  0  0  0
+
+[:, :, 2] =
+ 2  19  1  1  2
+ 2  20  1  1  2
+ 2  21  1  1  2
+
+julia> 
+\end{lstlisting}
+
+简单地解释一下，函数\verb|copy|用于浅拷贝一个值．在这里，我利用\verb|copy|函数得到了数组\verb|array3d|的复本，并把这个复本赋给了变量\verb|array3d_copy|．关于\verb|copy|函数和浅拷贝，我在下一章都会进行详细的说明．
+
+\textbf{9.6.2 视图}
+
+我们已经知道，索引表达式可以让我们获得一个数组中的某个或某些元素．如果索引表达式返回的是单个的元素值，那么这个值就是原数组中对应的那个元素值本身．如果索引表达式返回的是一个数组，那么它就相当于在一个新的数组结构中沿用了原数组中的相应元素值．这其实与\verb|copy|函数有着异曲同工之妙．然而，不论索引表达式的求值结果是什么，我们都不能通过这个结果值去替换原有数组中的元素．但是，我们通过视图（view）是可以做到这一点的．
+
+函数\verb|view|用于创建一个数组的视图．它的第一个参数就是视图基于的那个数组（或称父数组）．除了父数组以外，我们还可以为它传入一个或多个索引号．为了演示，我们先定义一个新的多维数组：
+
+\begin{lstlisting}[language=julia]
+julia> array4d = reshape(Vector(1:36), (3,3,2,2))
+3×3×2×2 Array{Int64,4}:
+[:, :, 1, 1] =
+ 1  4  7
+ 2  5  8
+ 3  6  9
+
+[:, :, 2, 1] =
+ 10  13  16
+ 11  14  17
+ 12  15  18
+
+[:, :, 1, 2] =
+ 19  22  25
+ 20  23  26
+ 21  24  27
+
+[:, :, 2, 2] =
+ 28  31  34
+ 29  32  35
+ 30  33  36
+
+julia> 
+\end{lstlisting}
+
+解释一下，\verb|Vector(1:36)|会构造出一个向量．这个向量的元素类型是\verb|Int|（具体到这里是\verb|Int64|），长度是\verb|36|，并且其中会依次地包含从\verb|1|到\verb|36|的整数值．函数\verb|reshape|会先创建一个此向量的复本，然后把该复本变成一个\verb|3×3×2×2|的四维数组．这个四维数组的元素类型和长度都与原数组保持一致，只是在维数和尺寸上有所变化．
+
+现在，我们基于四维数组\verb|array4d|创建视图：
+
+\begin{lstlisting}[language=julia]
+julia> array4d_view1 = view(array4d, 26)
+0-dimensional view(::Array{Int64,1}, 26) with eltype Int64:
+26
+
+julia> 
+\end{lstlisting}
+
+由REPL环境回显的内容可知，我们创建了一个零维的视图．什么叫零维呢？如果说二维是一个面、一维是一条线的话，那么零维就是一个点．零维的数组或视图就相当于一个标量（scalar）．所谓的标量，可以说就是不包含其他值的单一值．像数值、字符值、字符串值、符号、类型、函数，以及一些常见的单例如\verb|missing|、\verb|nothing|等都属于标量．
+
+零维数组没有任何的维度，这意味着在任何维度上它们都没有所谓的长度．因此，把\verb|size|函数用在它们身上就只会返回空的元组．不过它们却有总长度，而且这个总长度总是\verb|1|．这是因为它们终归还是数组，并且里面终归还是有一个元素值的．相关的代码如下：
+
+\begin{lstlisting}[language=julia]
+julia> size(array4d_view1)
+()
+
+julia> ndims(array4d_view1), length(array4d_view1)
+(0, 1)
+
+julia> eltype(array4d_view1)
+Int64
+
+julia> 
+\end{lstlisting}
+
+那么我们怎样才能从中取出那个唯一的元素值呢？答案是，依然使用索引表达式．不过，在针对零维视图的索引表达式中，索引号就变得可有可无了．例如：
+
+\begin{lstlisting}[language=julia]
+julia> array4d_view1[1]
+26
+
+julia> array4d_view1[]
+26
+
+julia
+\end{lstlisting}
+
+既然我们可以这样取出视图中的元素值，那么必然也可以利用这种方式替换元素值．代码如下：
+
+\begin{lstlisting}[language=julia]
+julia> array4d_view1[] = 260
+260
+
+julia> array4d_view1[]
+260
+
+julia> array4d[26]
+260
+
+julia> 
+\end{lstlisting}
+
+一定要注意，我们对视图中元素值的替换肯定会改变其父数组中的对应元素值．因此，一旦替换了视图\verb|array4d_view1|中的那个元素值，也就等于替换了数组\verb|array4d|中与线性索引号\verb|26|对应的那个元素值．
+
+我们也可以把数组中的多个元素值汇聚到同一个视图里．这时，我们需要用中括号把多个线性索引号包裹起来，并将其作为\verb|view|函数的第二个参数值．比如：
+
+\begin{lstlisting}[language=julia]
+julia> array4d_view2 = view(array4d, [1,3,5])
+3-element view(::Array{Int64,1}, [1, 3, 5]) with eltype Int64:
+ 1
+ 3
+ 5
+
+julia> array4d_view2[[1, 2, 3]]
+3-element Array{Int64,1}:
+ 1
+ 3
+ 5
+
+julia> 
+\end{lstlisting}
+
+注意，视图中的各个元素值的线性索引号，不一定就等于它们在父数组中的那个线性索引号．就拿视图\verb|array4d_view2|来说．其中有3个元素值，它们在这个视图中的线性索引号分别是\verb|1|、\verb|2|和\verb|3|．但是，后两个元素值在该视图的父数组\verb|array4d|中的线性索引号却分别是\verb|3|和\verb|5|．也就是说，视图上分配的线性索引号与它的父数组没有任何关系．它们是单独排列的，互不干扰．
+
+我们若想要通过\verb|array4d_view2|替换掉其父数组中的元素值也很容易．代码如下：
+
+\begin{lstlisting}[language=julia]
+julia> array4d_view2[[1,2,3]] = [10, 30, 50]
+3-element Array{Int64,1}:
+ 10
+ 30
+ 50
+
+julia> array4d[[1, 3, 5]]
+3-element Array{Int64,1}:
+ 10
+ 30
+ 50
+
+julia> 
+\end{lstlisting}
+
+在这里，我们需要小心的地方是，等号两边的视图或数组所包含的元素值的数量必须一致，否则替换就无法成功完成．
+
+另外，除了线性索引，我们还可以在创建视图的时候使用笛卡尔索引．不过，笛卡尔索引在这里就不需要由中括号包裹了．更确切地说，在调用\verb|view|函数的时候，笛卡尔索引中的每一个部分都需要作为一个独立的参数值．就像这样：
+
+\begin{lstlisting}[language=julia]
+julia> array4d_view3 = view(array4d, :, 1, 2, 2)
+3-element view(::Array{Int64,4}, :, 1, 2, 2) with eltype Int64:
+ 28
+ 29
+ 30
+
+julia>  
+\end{lstlisting}
+
+上面这个视图引用的是数组\verb|array4d|里的一个列向量中的所有元素值．而这个列向量就是\verb|array4d|中的第 2 个三维数组中的第 2 个二维数组中的第 1 个一维数组．下面我们来替换它引用的那些元素值：
+
+\begin{lstlisting}[language=julia]
+julia> array4d_view3[:] = [280, 290, 300]
+3-element Array{Int64,1}:
+ 280
+ 290
+ 300
+
+julia> array4d[:, 1, 2, 2]
+3-element Array{Int64,1}:
+ 280
+ 290
+ 300
+
+julia> 
+\end{lstlisting}
+
+怎么样？是不是很容易呢？只要理解了视图的本质，这就绝对算不上难事．你可以把视图想象成一个窗口．我们可以通过这个窗口看到其父数组中的一部分甚至全部的元素值．而且，更重要的是，透过这个窗口我们还可以直接存取那些看得到的元素值．
+
+顺便说一下，当我们拿到一个视图时，可以通过调用\verb|parent|函数得到它的父数组本身．如：
+\begin{lstlisting}[language=julia]
+julia> parent(array4d_view3) === array4d
+true
+
+julia> 
+\end{lstlisting}
+
+另外，我们还可以通过调用\verb|parentindices|函数获得视图里的所有元素值在其父数组中的索引号（的另一种表现形式）．如：
+
+\begin{lstlisting}[language=julia]
+julia> parentindices(array4d_view3)
+(Base.Slice(Base.OneTo(3)), 1, 2, 2)
+
+julia> CartesianIndices(ans)
+3×1×1×1 CartesianIndices{4,NTuple{4,UnitRange{Int64}}}:
+[:, :, 1, 1] =
+ CartesianIndex(1, 1, 2, 2)
+ CartesianIndex(2, 1, 2, 2)
+ CartesianIndex(3, 1, 2, 2)
+
+julia> array4d[ans]
+3×1×1×1 Array{Int64,4}:
+[:, :, 1, 1] =
+ 280
+ 290
+ 300
+
+julia> vec(ans)
+3-element Array{Int64,1}:
+ 280
+ 290
+ 300
+
+julia> array4d[:, 1, 2, 2]
+3-element Array{Int64,1}:
+ 280
+ 290
+ 300
+
+julia> 
+\end{lstlisting}
+
+可以看到，我们需要对\verb|parentindices|函数的调用结果做进一步的转换．这主要是因为，视图中的每一个元素值都会有自己的父数组索引．而这些索引无法仅由单个值来表示，甚至无法被简单地表示出来．
+
+幸好\verb|CartesianIndices|函数可以正确地识别出\verb|parentindices|函数返回的结果值，并产出一个笛卡尔索引的序列．而且，这样的序列可以被直接应用在针对数组的索引表达式中．不过，如此索引出的结果可能会与直接索引（如\verb|array4d[:, 1, 2, 2]|）得出的结果在尺寸上有所不同．如果一定要保持一致，我们可以再调用一下\verb|vec|函数．这个函数能够沿着线性索引号把一个多维数组的复本捋直，让它变成一个一维数组．
+
+总之，视图是一个基于数组的窗口．它能够让我们直接改动窗口内的元素值，同时又可以保护窗口之外的那些元素值．说它是修改数组的一把利器一点也不为过．
+
+\textbf{9.6.3 一些专用函数}
+
+除了上述的修改方式之外，Julia还为数组提供了大量的专用函数．我在这里只简要地列举一下其中比较有特点的一些函数．注意，它们的名称都是以\verb|!|结尾的．
+
+\begin{itemize}
+\item \verb|circshift!|函数：该函数可以在数组的一个或多个维度上循环式地挪动元素．我们之前说过，在某个维度上的元素指的可能是元素值，也可能是低维数组．所以在这里，在第一个维度上挪动的单元是元素值，而在更高维度上挪动的单元则是相应的低维数组．例如：数组\verb|[1, 2, 3, 4]|在按照线性索引的顺序挪动1次之后就生成了\verb|[4, 1, 2, 3]|．
+\item \verb|accumulate!|函数：该函数可以面向数组在某个维度上的元素做累积计算．例如，数组\verb|[1, 3, 5, 7]|在经过累积加法操作之后就生成了\verb|[1, 4, 9, 16]|．目的数组中的第1个元素值完全取自源数组中的第1个元素值\verb|1|．而这个元素值和源数组中的第2个元素值\verb|3|相加，就得到了目的数组的第2个元素值\verb|4|．然后，这个元素值再与源数组中的第3个元素值\verb|5|相加，就得到了目的数组的第3个元素值\verb|9|．以此类推．
+\item  \verb|cumprod!|函数：该函数可以面向数组在某个维度上的元素做累积乘法．实际上，调用表达式\verb|cumprod!(dest, src)|就相当于\verb|accumulate!(*, dest, src)|．
+\item \verb|cumsum!|函数：该函数可以面向数组在某个维度上的元素做累积加法．实际上，调用表达式\verb|cumsum!(dest, src)|就相当于\verb|accumulate!(+, dest, src)|．
+\item \verb|permute!|函数：该函数可以置换向量中的元素值．更具体地讲，它可以根据第二个参数值给定的索引号序列，重新排列第一个参数值中的元素．例如，如果变量\verb|v|的值是\verb|[15, 24, 33, 42]|，且变量\verb|p|的值为\verb|[4, 2, 3, 1]|，那么调用表达式\verb|permute!(v, p)|的执行就会让\verb|v|的值变成\verb|[42, 24, 33, 15]|．
+\item \verb|invpermute!|函数：该函数可以对向量中的元素值进行逆置换．也就是说，它的功能与\verb|permute!|函数的功能是互逆的．例如，调用表达式\verb|invpermute!(permute!(v, p), p)|会让变量\verb|v|的值最终依然为原值．
+\item reverse\verb|!|函数：该函数可以逆序排列向量中的元素值．例如，若变量\verb|v|的值是\verb|[1, 2, 3, 4]|，则表达式\verb|reverse!(v)|的求值结果就是\verb|[4, 3, 2, 1]|．
+\end{itemize}
+
+另外，Julia还提供了很多与线性代数有关的函数．比如，可以转置向量和矩阵的\verb|transpose!|函数、可以做向量标准化的\verb|normalize!|函数、可以计算矩阵与矩阵或矩阵与向量的乘积的\verb|mul!|函数、可以对数组中的元素值进行缩放的\verb|lmul!|和\verb|rmul!|函数、可以求共轭转置数组的\verb|adjoint!|函数、可以获得矩阵特征值的\verb|eigvals!|函数、可以计算奇异值分解的\verb|svd!|函数，等等．它们与其他众多不会修改原值的线性代数函数一起被定义在了\verb|LinearAlgebra|模块里．我们在做数据特征工程或者构建机器学习模型的时候很可能会直接或间接地用到它们．

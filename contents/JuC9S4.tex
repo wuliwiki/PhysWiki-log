@@ -1,0 +1,35 @@
+% Julia 数组的基本要素
+% 数组 基本要素
+
+本文授权转载自郝林的 《Julia 编程基础》． 原文链接：\href{https://github.com/hyper0x/JuliaBasics/blob/master/book/ch09.md}{第 9 章 容器：数组（上）}．
+
+
+\subsubsection{9.4 数组的基本要素}
+
+当我们拿到一个数组，首先应该去了解它的元素类型、维数和尺寸．在 Julia 中，这些信息都由专门的函数提供．函数\verb|eltype|可以获取到一个数组的元素类型，函数\verb|ndims|用于获取一个数组的维数．\verb|length|函数用于获得一个数组的元素总数量．而若要想获得数组在各个维度上的长度，我们就需要使用\verb|size|函数．
+
+\verb|size|函数有一个必选的参数\verb|A|，代表目标数组．它还有一个可选的参数\verb|dim|，代表维度的序号．在调用\verb|size|函数的时候，如果我们只为\verb|A|指定了参数值，那么该函数就会返回一个元组．这个元组会依次地包含该数组在各个维度上的长度．但倘若我们同时给定了\verb|dim|的值，那么它就只会返回对应的那个长度了．例如：
+
+\begin{lstlisting}[language=julia]
+julia> array2d = [[1,2,3,4,5] [6,7,8,9,10] [11,12,13,14,15]
+ [16,17,18,19,20] [21,22,23,24,25] [26,27,28,29,30]]
+5×6 Array{Int64,2}:
+ 1   6  11  16  21  26
+ 2   7  12  17  22  27
+ 3   8  13  18  23  28
+ 4   9  14  19  24  29
+ 5  10  15  20  25  30
+
+julia> size(array2d)
+(5, 6)
+
+julia> size(array2d, 2)
+6
+
+julia> eltype(array2d), ndims(array2d), length(array2d)
+(Int64, 2, 30)
+
+julia> 
+\end{lstlisting}
+
+我使用数组值的一般表示法创建了一个 5 行 6 列的数组\verb|array2d|．这个数组拥有两个维度，其元素类型是\verb|Int64|．之所以表达式\verb|size(array2d)|的求值结果为\verb|(5, 6)|，是因为该数组在第一个维度和第二个维度上的长度分别是\verb|5|和\verb|6|．实际上，我们用\verb|5|乘以\verb|6|就可以得到这个二维数组的元素总数量\verb|30|．
