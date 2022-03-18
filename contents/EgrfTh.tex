@@ -1,0 +1,142 @@
+% Egoroff定理
+% 叶戈洛夫定理|实变函数|一致收敛
+
+在讨论函数极限的相关问题时，我们常需要函数列具有\textbf{一致收敛}的性质．反过来，观察一个不一致收敛的函数列，比如$\{f_n(x)=x^n\}$在区间$[0, 1]$上就不一致收敛，我们会发现如果把区间挖掉长度$\epsilon$\textbf{任意}小的一部分，那么$\{f_n\}$在$[0, 1-\epsilon]$上总是一致收敛的．这提示我们研究，任意收敛函数列是否可以去掉一个小部分以后是一致收敛的？
+
+答案是肯定的，这就是本节要讨论的Egoroff定理．
+
+\subsection{Egoroff定理}
+
+为方便讨论，我们需要先证明一个引理，证明思路依赖于对集合极限的讨论．
+
+%%注释说明：此处注释掉的内容是参照江泽坚《实变函数论》的证法提供的引理，但是本文使用了其它思路，所以把这个引理给换掉了．
+
+% \begin{lemma}{}
+% 任取可测集$E$上的一列实函数$\{f_n\}$，再任取一个$E$上的实函数$f$．
+
+% 则$\lim\limits_{n\to\infty}f_n(x_0)\neq f(x_0)$，当且仅当对于\textbf{任意}一列\textbf{单调递减}到$0$的\textbf{正}数列$\{\epsilon_k\}$，必有：
+
+% \begin{equation}\label{EgrfTh_eq1}
+% x_0\in\bigcup^\infty_{k=1}\bigcap^\infty_{N=1}\bigcup^\infty_{n=N} \{x\in E|\abs{f_n(x)-f(x)}>\epsilon_k\}
+% \end{equation}
+
+% \end{lemma}
+
+% \textbf{证明}：
+
+% 该引理简单来说，就是“\autoref{EgrfTh_eq1} 为全体使$f_n$不收敛于$f$的点构成的集合”．为了证明引理，我们首先要翻译一下什么叫“$f_n(x)$不收敛于$f(x)$”．
+
+% “$f_n(x_0)$\textbf{收敛}于$f(x_0)$”等价于“对于任意$\epsilon>0$，存在$N_\epsilon\in\mathbb{Z}^+$，使得只要$n>N_\epsilon$，就有$\abs{f_n(x_0)-f(x_0)}<\epsilon$”．将该命题进行否定\footnote{回忆否定的过程，即把命题描述中的全称量词和存在量词互换，然后把最后描述的条件取反．}，即得到：
+
+% “$f_n(x_0)$\textbf{不收敛}于$f(x_0)$”等价于“存在$\epsilon>0$，使得对于任意$N\in\mathbb{Z}^+$，都存在$n>N$，使得$\abs{f_n(x_0)-f(x_0)}\geq\epsilon$”\footnote{到这里，有的读者可能已经看出来怎么证明了：“存在$\epsilon>0$”对应的就是\autoref{EgrfTh_eq1} 中的$\bigcup^\infty_{k=1}$．}．
+
+% 接下来证明\autoref{EgrfTh_eq1} 和“存在$\epsilon>0$，使得对于任意$N\in\mathbb{Z}^+$，都存在$n>N$，使得$\abs{f_n(x)-f(x)}\geq\epsilon$”是等价命题．
+
+% 为了方便，记$E_{n, k}=\{x\in E|\abs{f_n(x)-f(x)}>\epsilon_k\}$．那么$\bigcap^\infty_{N=1}\bigcup^\infty_{n=N} E_{n, k}$就是集合的\textbf{上极限}（\autoref{SetLim_def1}~\upref{SetLim}，原因见\textbf{集合的极限}\upref{SetLim}词条内容）．根据上极限的意义可知，$\bigcap^\infty_{N=1}\bigcup^\infty_{n=N} E_{n, k}$是全体“对于$\epsilon_k$和任意的$N\in\mathbb{Z}^+$，总存在$n>N$使得$\abs{f_n(x)-f(x)}\geq\epsilon$”的$x$构成的集合．
+
+% 再套上一个$\bigcup^\infty_{k=1}$来取遍所有$\epsilon_k$，得到的\autoref{EgrfTh_eq1} 就等价于“$f_n(x_0)$\textbf{不收敛}于$f(x_0)$”．
+
+% \textbf{证毕}．
+
+\begin{lemma}{}\label{EgrfTh_lem1}
+设$E$是$\mathbb{R}^n$上\textbf{有界}的可测集，$\{E_k\}$是一列集合，其中各$E_k\subseteq E$．
+
+如果$\{E_k\}$的上极限（\autoref{SetLim_def1}~\upref{SetLim}）为$\varnothing$\footnote{注意下极限必是上极限的子集，因此这意味着$\{E_k\}$的上极限等于其下极限，也就是其极限．}，那么$\lim\limits_{k\to\infty}\opn{m}E_k=0$．
+\end{lemma}
+
+\textbf{证明}：
+
+令$F_k=\bigcup_{i=k}^\infty E_i$．则$\{F_k\}$是一个单调不增的可测集列，且其极限就是$\{E_k\}$的上极限．
+
+由于能容纳$F_k$的开集必能容纳$F_{k+1}$，知$\{\opn{m}(F_k)\}$是一个单调不增的非负数列，且恒有$\opn{m}(F_k)\geq\opn{m}(E_k)$．又因为$E$有界，知$\opn{m}F_1<+\infty$．
+
+\textbf{反设}存在一个正数$\epsilon$，使得存在一个$F_N$无法被体积\textbf{小于}$\epsilon$的开集覆盖，那么对于所有$k>N$，$F_k$都不能被体积小于$\epsilon$的开集覆盖．
+
+任取一个开集$U$使得$\opn{m}U<\epsilon/1024$\footnote{小于$\epsilon$就可以，我这是在整活．}．则按照反设的情况，$U$必然不能覆盖任何一个$F_k$．考虑到$F_k$的单调性和\textbf{一致}有界性，这意味着至少存在一个点$x$，它是所有$F_k$的公共元素但并不在$U$中．这么一来$F_k$的极限至少含有$x$，和题设“$E_k$的极限是空集”矛盾．
+
+因此反设不成立，即任取$\epsilon>0$，总存在正整数$N_\epsilon$使得对于任意$k>N_\epsilon$，$\opn{m}F_k<\epsilon$．
+
+因此$\lim\limits_{k\to\infty}\opn{m}F_k=0$．
+
+因此$\lim\limits_{k\to\infty}\opn{m}E_k\leq\lim\limits_{k\to\infty}\opn{m}F_k=0$．
+
+
+\textbf{证毕}．
+
+\begin{corollary}{}\label{EgrfTh_cor1}
+设$E$是$\mathbb{R}^n$上\textbf{有界}的可测集，$\{E_k\}$是一列集合，其中各$E_k\subseteq E$．
+
+如果$\{E_k\}$的上极限是零测集，那么同样有$\lim\limits_{k\to\infty}\opn{m}E_k=0$．
+\end{corollary}
+
+\autoref{EgrfTh_cor1} 和\autoref{EgrfTh_lem1} 的区别在于，无法说明$\{E_k\}$的上下极限相等了．但是由于零测集在测度意义上相当于不存在，故推论依然成立．
+
+证明很简单，只需要把$\{E_k\}$的上极限从$E$中减掉，应用\autoref{EgrfTh_lem1} 即可．
+
+
+
+
+
+接下来，就可以讨论Egoroff定理了．
+
+
+\begin{theorem}{Egoroff定理}\label{EgrfTh_the1}
+
+设$E$是$\mathbb{R}^n$上\textbf{测度有限}的\textbf{可测集合}．如果$\{f_n\}$是$E$上的一列\textbf{可测函数}，都几乎处处取有限函数值，而存在$E$上的函数$f(x)$使得\footnote{即$f_n$几乎处处收敛于$f$，或者说不收敛点构成一个零测集．}\begin{equation}
+\lim\limits_{n\to\infty}f_n(x)=f(x)a. e. 
+\end{equation}
+
+那么对于任意正数$\delta$，必存在一个\textbf{可测集}$E_\delta$，使得$\opn{m}E_\delta<\delta$，且$f_n$在$E-E_\delta$上一致收敛于$f$．
+
+\end{theorem}
+
+\textbf{证明}：
+
+考虑$E$是有界可测集且$\{f_n\}$在$E$上\textbf{处处}收敛于$0$的情况．这个情况最简单，并且证明了这个情况也就相当于证明了$\{f_n\}$\textbf{几乎处处}收敛于\textbf{任意}$f$的情况，从而也相当于证明了$E$是任意测度有限的可测集的情况．
+
+
+
+任取一个单调递减的\textbf{正数}列$\{\epsilon_k\}$，且$\lim\limits_{k\to\infty}\epsilon_k=0$．
+
+固定$\epsilon_k$，记$\{x\in E|\abs{f_n(x)}\geq\epsilon_k\}=D_{k, n}$\footnote{$D$是取“不听话（disobey）”的首字母．}．由于$\{f_n\}$处处趋近于$0$，故$D_{k, n}$的上极限是$\varnothing$．由\autoref{EgrfTh_lem1} ，$\lim\limits_{k\to\infty}\opn{m}D_{k, n}=0$．因此，我们可以取一个正整数$N_k$，使得对于任意$i\geq N_k$，都有
+\begin{equation}\label{EgrfTh_eq2}
+\opn{m}D_{k, i}<\delta/2^k
+\end{equation}
+
+把全体$D_{k, N_k}$取并，得到$D=\bigcup_{k=1}^\infty D_{k, N_k}$．由\autoref{EgrfTh_eq2} 直接可得
+\begin{equation}
+\opn{m}D<\delta
+\end{equation}
+
+按照我们的构造规则，在$E-D$上，对于任意的$\epsilon_k$，都存在正整数$N_k$，使得对于$i\geq N_k$和$x\in E-D$恒有$\abs{f_n(x)}<\epsilon_k$．即$\{f_n\}$在$E-D$上一致收敛到$0$．
+
+\textbf{证毕}．
+
+
+\subsection{例子与反例}
+
+在本节的开头，我们已经给出了一个适用于Egoroff定理的例子了．
+
+下面给出一个反例，说明\autoref{EgrfTh_the1} 中“$E$的测度有限”是不可或缺的条件．这个例子是通过把本节开头的例子“拉伸”来得到的．
+
+
+\begin{example}{}
+
+考虑$\mathbb{R}$上的函数列$f_n(x)=\qty(\frac{2\arctan(x)}{\pi})^n$．显然它在$\mathbb{R}$上并不一致收敛，而且必须至少挖去包含$+\infty$的一个区间才能使剩下部分一致收敛，这个区间的测度自然是无穷大的．
+
+\end{example}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
