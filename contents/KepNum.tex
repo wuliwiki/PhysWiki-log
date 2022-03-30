@@ -1,0 +1,251 @@
+% 开普勒问题的数值计算（Matlab）
+
+\begin{issues}
+\issueOther{搞一个卢瑟福散射的模拟， 支持不同的入射距离， 初速度相同}
+\end{issues}
+
+\pentry{Matlab 画图\upref{MatPlt}， 开普勒问题\upref{CelBd}}
+
+本文讨论开普勒问题中， 若已知初始位置和初速度矢量， 求轨道方程和动画的算法并给出 Matlab 代码． 以下所有符号和定义沿用 “开普勒问题\upref{CelBd}”．
+\begin{figure}[ht]
+\centering
+\includegraphics[width=11cm]{./figures/KepNum_1.pdf}
+\caption{在同一位置以同一初速度不同仰角发射的质点的椭圆轨道， 具有相同的半长轴和不同的离心率， 动画见\href{https://wuli.wiki/apps/Kepler.html}{这里}． 虚线为参考圆， 例如地球表面， 可见除了水平发射的质点都会落回地面． 若初速度很小， 那么参考圆外的运动就趋近于抛体运动（足够扁的椭圆的一端趋近于抛物线）．} \label{KepNum_fig1}
+\end{figure}
+
+\begin{figure}[ht]
+\centering
+\includegraphics[width=9cm]{./figures/KepNum_2.pdf}
+\caption{在同一位置以同 $45^\circ$ 仰角和不同初速度发射的质点的轨道， 动画见\href{https://wuli.wiki/apps/Kepler2.html}{这里}． 速度最大的轨道为双曲线， 其他轨道为椭圆．} \label{KepNum_fig2}
+\end{figure}
+
+\subsection{轨道的计算}
+若 $F(r)$ 是平方反比的力（斥力为正引力为负）， 即
+\begin{equation}
+F(r) = \frac{k}{r^2}
+\end{equation}
+其中 $k$ 为非零实常数． 由于质点的运动只和初始位置、初始速度和 $k$ 有关， 与质点的质量无关， 所以我们令 $m=1$ 并不影响一般性． 令发射位置的极坐标\upref{Polar}为 $(R,\alpha)$， 初速度为 $v_0$， 发射仰角为 $\beta$ （顺时针增量为正， $\beta=0$ 时质点延逆时针方向水平发射）．
+
+所以质点机械能为动能加势能 $E = v_0^2/2 + k/R$， 角动量（逆时针为正）为 $L = v_0 R\cos\beta$． 于是离心率 $e$ 可由\autoref{CelBd_eq2}~\upref{CelBd} 计算， 半通径 $p$ 由\autoref{CelBd_eq3}~\upref{CelBd}计算． 然后代入圆锥曲线的极坐标方程（\autoref{Cone_eq5}~\upref{Cone}） 即可得到轨道方程． 然而由于发射点已经选好， 实际的轨道还需要旋转一个角度 $\theta_0$ （逆时针为正）， 即轨道方程变为
+\begin{equation}\label{KepNum_eq1}
+r(\theta)  = \frac{-s p}{1 - e\cos (\theta-\theta_0)} \qquad (r > 0)
+\end{equation}
+其中当 $k>0$ 时 $s=1$， $k<0$ 时 $s=-1$． 要求 $\theta_0$， 可以代入初始条件， 即 $r(\alpha) = R$． 得
+\begin{equation}
+\theta_0 = \alpha \pm \arccos(\frac{1+ sp/R}{e}) \qquad (e\ne 0)
+\end{equation}
+这里有两个解是因为圆锥曲线和半径为 $R$ 的圆必定有两个交点． 我们需要根据发射角度来判断哪个是发射点， 稍作分析易得当 $s\cdot\sin2\beta \geqslant 0$ 时上式取负号， 否则取正号．
+
+\subsection{运动的计算}
+
+\pentry{开普勒问题的运动方程\upref{EqMoKp}}
+
+我们使用 “开普勒问题的运动方程\upref{EqMoKp}” 给出的方法求解三种圆锥曲线的含时运动． 沿用其中的符号定义， 令 $t=0$ 时质点位于近日点，  $k<0$ 时近日点对应极角 $\theta_0 + \pi$， 令相对近日点的极角增量为 $\Delta\theta = \theta - \theta_0 - \pi$； $k>0$ 时近日点对应极角 $\theta_0$， 令 $\Delta\theta = \theta - \theta_0$． 接下来， 先计算函数 $t(\Delta\theta)$， 默认逆时针旋转， 然后数值求解反函数 $\Delta\theta(t)$ 即可． 若要考虑顺时针旋转， 函数值乘以 $-1$ 即可． 易得 $\cos\beta > 0$ 时质点绕中心天体逆时针运动， $\cos\beta < 0$ 时顺时针运动．
+
+\textbf{抛物线}： 时间 $t$ 在 $(-\infty,\infty)$ 取值， \autoref{EqMoKp_eq3}~\upref{EqMoKp}就是 $t(\Delta\theta)$．
+
+\textbf{椭圆}： 时间 $t$ 在 $[-T/2,T/2]$ 取值， 周期 $T$ 由\autoref{Keple2_eq1}~\upref{Keple2} 计算． 由于这是周期运动， 其他任意时间都可以加减整数个周期后落到 $[-T/2,T/2]$ 中． 由\autoref{EqMoKp_eq1}~\upref{EqMoKp} 和\autoref{EqMoKp_eq5}~\upref{EqMoKp} 计算 $t(\Delta\theta)$．
+
+\textbf{双曲线}： 时间 $t$ 在 $(-\infty,\infty)$ 取值， 使用\autoref{EqMoKp_eq2}~\upref{EqMoKp} 到\autoref{EqMoKp_eq6}~\upref{EqMoKp} 可得 $k<0$ 和 $k>0$ 两种情况时的 $t(\Delta\theta)$．
+
+发射质点的初始时刻为
+\begin{equation}
+t_0 = \leftgroup{&t(\alpha - \theta_0 - \pi) && (k<0)\\&t(\alpha - \theta_0) && (k>0)}
+\end{equation}
+求出 $t_0$ 后， 生成等间距时间格点 $t_i$ （$i=0,1,2,\dots$）， 用二分法解方程得到对应的 $\theta_i$ 即可．
+
+以下 Matlab 程序支持对同一发射位置画出多组不同初速度和仰角的轨道． 相比于使用解微分方程的方法（\autoref{OdeRK4_sub1}~\upref{OdeRK4}）计算轨道和运动， 该程序计算的轨道和运动都可以达到 13 位有效数字以上． 然而缺点是只能计算理想的开普勒问题， 无法拓展到非平方反比力， 也无法拓展到三体乃至多体运动．
+
+\begin{lstlisting}[language=matlab,caption=kepler.m]
+% 已知初始位置、发射速度、发射方向， 求轨道以及运动方程
+function kepler
+% === 参数设置 ===
+k = -1; % -GMm, (m=1)
+R = 1; alpha = 0; % 初始位置（极坐标）
+v0 = 1.1; % 初速度（支持行矢量或标量）
+beta = linspace(0, 4*pi/11, 6); % 发射仰角（支持行矢量或标量）
+t_max = 8.94827; Nt = 100; % 模拟时间和步数
+axis_param = 'auto'; % 坐标范围 [xmin,xmax,ymin,ymax] 或 'auto'
+% ==============
+
+% 匹配 v0 和 beta 的尺寸
+if isscalar(v0)
+    v0 = v0*ones(size(beta));
+elseif isscalar(beta)
+    beta = beta*ones(size(v0));
+elseif ~all(size(v0)==size(beta))
+    error('v0 和 beta 的尺寸必须一样，或者其中之一为标量');
+end
+
+if any(cos(beta)==0)
+    error('不支持纯径向运动！');
+end
+
+% 画参考圆
+close all; figure;
+tmp = linspace(0, 2*pi, 500);
+plot(R*cos(tmp), R*sin(tmp), 'k--'); hold on;
+scatter(0, 0); axis equal;
+xlabel x; ylabel y;
+N = numel(v0); t_cell = cell(1,N); th_cell = t_cell;
+p_list = zeros(1,N); e_list = p_list; th0_list = p_list;
+for i = 1:N
+    [p_list(i), e_list(i), th0_list(i), t_cell{i}, th_cell{i}] = ...
+        kepler1(k, R, alpha, v0(i), beta(i), t_max, Nt); hold on;
+    axis(axis_param);
+end
+
+% 生成动画
+h = nan(1,N); % point handles
+for it = 1:10000000
+    exit = true;
+    for i = 1:N
+        if it > size(th_cell{i})
+            h(i) = nan; continue;
+        end
+        exit = false;
+        th = th_cell{i}(it);
+        r = -sign(k) * p_list(i) / (1 - e_list(i)*cos(th - th0_list(i)));
+        if (~isnan(h(i))), delete(h(i)); end
+        h(i) = scatter(r*cos(th), r*sin(th), 'r^');
+    end
+    if exit
+        break;
+    end
+    title(['t = ' num2str(t_cell{1}(it) - t_cell{1}(1), '%.2f')]);
+    saveas(gcf, [num2str(it) '.png']);
+end
+end
+
+% 计算并画出一条轨道
+% 轨道方程为 r = -sign(k) * p / (1 - e*cos(th - th0));
+function [p, e, th0, t, th_t] = kepler1(k, R, alpha, v0, beta, t_max, Nt)
+E = v0^2/2 + k/R; % 轨道总机械能
+L = v0*cos(beta)*R; % 角动量
+e = sqrt(1 + 2*E*L^2/k^2); % 离心率
+p = L^2/abs(k); % 半通径
+
+% 画图
+dth = pi/1000; Nth = 500;
+if e < 1 % 椭圆
+    th = linspace(0, 2*pi, Nth);
+elseif e == 1 % 抛物线
+    th = linspace(dth, 2*pi-dth, Nth);
+else % 双曲线
+    gamma = atan(sqrt(e^2-1)); % 渐进张角 atan(b/a)
+    if k < 0
+        th = linspace(gamma+dth, 2*pi-gamma-dth, Nth);
+    else
+        th = linspace(-gamma+dth, gamma-dth, Nth);
+    end
+end
+
+% 计算圆锥曲线需要旋转的角度 th0
+if e == 0 % 圆
+    th0 = 0;
+else
+    if sin(2*beta)*sign(k) >= 0
+        th0 = alpha - acos((1 + sign(k)*p/R)/e);
+    else
+        th0 = alpha + acos((1 + sign(k)*p/R)/e);
+    end
+end
+th0 = real(mod(real(th0)+pi, 2*pi) - pi);
+scatter(R*cos(alpha), R*sin(alpha));
+th = th + th0;
+
+% 画出轨道
+r = -sign(k) * p./(1 - e*cos(th-th0));
+x = r .* cos(th); y = r .* sin(th);
+plot(x, y); axis equal;
+
+% 含时运动
+% 时间格点
+rot_dir = sign(cos(beta)); % 1: 逆时针 -1: 顺时针
+if k < 0
+    Dth0 = alpha-th0-pi;
+else
+    Dth0 = alpha-th0;
+end
+t0 = rot_dir*t_Dth(p, e, k, Dth0); % 初始时间
+t = linspace(t0, t0+t_max, Nt);
+if k < 0
+    th_t = rot_dir*Dth_t(p, e, k, dth, t) + th0 + pi;
+else
+    th_t = rot_dir*Dth_t(p, e, k, dth, t) + th0;
+end
+end
+
+% 求 t(\Delta\theta)
+% Dth 支持矢量
+% 对椭圆 Dth 支持任意实数，会自动 wrap 到 (-pi, pi]
+function t = t_Dth(p, e, k, Dth)
+if Dth ~= pi
+    Dth = mod(Dth+pi, 2*pi) - pi;
+end
+if e == 1 && k < 0 % 抛物线
+    tmp = tan(Dth/2);
+    t = L^3/(2*k^2) * (tmp + tmp.^3/3);
+elseif e < 1 && k < 0 % 椭圆
+    a = p/(1-e^2);
+    r = p./(1 + e*cos(Dth));
+    psi = sign(Dth).*real(acos((1 - r/a)/e));
+    t = sqrt(a^3/(abs(k)))*(psi - e*sin(psi));
+elseif e > 1 && k < 0 % 双曲线 (k<0)
+    a = p/(e^2-1);
+    r = p./(1 + e*cos(Dth));
+    xi = sign(Dth).*real(acosh((1 + r/a)/e));
+    t = sqrt(a^3/(abs(k)))*(e*sinh(xi) - xi);
+elseif e > 1 && k > 0 % 双曲线 (k>0)
+    % 此时 Dth = th
+    a = p/(e^2-1);
+    r = p./(1 - e*cos(Dth));
+    xi = sign(Dth).*acosh((-r/a-1)/e);
+    t = sqrt(a^3/(abs(k)))*(e*sinh(xi) + xi);
+else
+    error('参数错误或未实现!');
+end
+end
+
+% 已知时间求解 \Delta\theta
+% t 支持矢量
+% 对于椭圆， 支持 t 为任意实数
+function Dth = Dth_t(p, e, k, dth, t)
+N = numel(t); Dth = zeros(1,N);
+if e < 1 % 椭圆
+    a = p/(1-e^2);
+    T = 2*pi*a^1.5*sqrt(1/abs(k));
+    t = mod(t + T/2, T) - T/2;
+    Dth_range = [-pi, pi];
+elseif e == 1 % 抛物线
+    Dth_range = [-pi+dth, pi-dth];
+else % 双曲线
+    th1 = atan(sqrt(e^2-1)); % 渐进张角的一半
+    if k < 0
+        Dth_range = [-pi+th1+dth, pi-th1-dth];
+    else
+        Dth_range = [-th1+dth, th1-dth];
+    end
+end
+% 二分法解方程
+for i = 1:N
+    fun = @(Dth) t_Dth(p, e, k, Dth) - t(i);
+    Dth(i) = fzero(fun, Dth_range);
+end
+end
+\end{lstlisting}
+
+
+
+
+这里给出另一组参数，计算以 $45^\circ$ 仰角和不同初速度发射的情况，替换到以上代码中即可．
+\begin{lstlisting}[language=matlab]
+% === 参数设置 ===
+k = -1; % -GMm, (m=1)
+R = 1; alpha = 0; % 初始位置（极坐标）
+v0 = linspace(1, 1.5, 6); % 初速度（支持行矢量或标量）
+beta = pi/4; % 发射仰角（支持行矢量或标量）
+t_max = 4*pi; Nt = 100; % 模拟时间和步数
+axis_param = [-1.1,3.5,-1.1,4]; % 坐标范围 [xmin,xmax,ymin,ymax] 或 'auto'
+% ==============
+\end{lstlisting}

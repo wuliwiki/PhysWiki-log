@@ -2,45 +2,58 @@
 
 \pentry{开普勒问题\upref{CelBd}， 中心力场问题\upref{CenFrc}}
 
-开普勒问题中若已知轨道形状\upref{Keple1}， 我们来计算质点在轨道上的位置如何关于时间变化． 由\autoref{CenFrc_eq8}~\upref{CenFrc}得
+\footnote{参考 \cite{Goldstein} 第三章（未讨论双曲线）， 以及 Wikipedia \href{https://en.wikipedia.org/wiki/Kepler's_equation}{相关页面}． }开普勒问题中若已知轨道形状\upref{Keple1}， 我们来计算质点在轨道上的位置如何关于时间变化． 直观上我们可以使用开普勒第二定律\upref{Keple}使用扫过的面积推导出从出发点到达任意位置所需的时间． 但这里介绍对半径做定积分的方法， 二者的结果是一样的．
+
+由\autoref{CenFrc_eq8}~\upref{CenFrc}得
 \begin{equation}
 t = \sqrt{\frac{m}{2}} \int_{r_0}^r \frac{\dd{r'}}{\sqrt{E - k/r' - L^2/(2mr'^2)}}
 \end{equation}
-该式对任何圆锥曲线轨道都适用， 其中 $r_0$ 是轨道离中心最近的一点， 令质点经过该点时 $t= 0$． 把这个积分的结果 $t(r)$ 取反函数， 就可以得到 $r(t)$． 同理， 有
+该式对任何圆锥曲线轨道都适用， 其中 $r_0$ 是轨道的近日点， 在标准的圆锥曲线方程（\autoref{Cone_eq5}~\upref{Cone}）中对应 $\theta = \pi$． 令质点经过近日点时 $t= 0$． 把这个积分的结果 $t(r)$ 取反函数， 就可以得到 $r(t)$． 同理， 有
 \begin{equation}
 \dd{t} = \frac{mr^2}{L}\dd{\theta}
 \end{equation}
 将\autoref{Cone_eq5}~\upref{Cone}代入， 积分得
 \begin{equation}
-t = \frac{L^3}{mk^2} \int_{\theta_0}^\theta \frac{\dd{\theta'}}{(1 - e\cos \theta')^2 }
+t = \frac{L^3}{mk^2} \int_{\pi}^\theta \frac{\dd{\theta'}}{(1 - e\cos \theta')^2 }
+\end{equation}
+以下我们令 $\Delta\theta$ 为某位置相对于近日点的极角增量， 即 $\Delta \theta = \theta - \pi$． 显然对任何圆锥曲线 $\Delta \theta$ 和 $t$ 的取值区间关于原点对称， 且由轨道的对称性可知 $\Delta\theta(t)$ 是一个奇函数． 以下默认质点绕中心天体逆时针转动， 所以 $\Delta\theta(t)$ 单调递增， 若要考虑顺时针， 取 $-\Delta\theta(t)$ 即可．
+
+对\textbf{抛物线}（$e = 1$）， 假设逆时针运动， ， 有
+\begin{equation}\label{EqMoKp_eq3}
+t = \frac{L^3}{2mk^2} \qty(\tan\frac{\Delta\theta}{2} +  \frac{1}{3}\tan^3 \frac{\Delta\theta}{2})\quad (-\pi<\Delta\theta<\pi)
 \end{equation}
 
-对\textbf{抛物线}（$e = 1$）， 有
-\begin{equation}
-t = \frac{L^3}{2mk^2} \qty(\tan\frac{\theta}{2} +  \frac{1}{3}\tan^3 \frac{\theta}{2})
-\end{equation}
-
-对于\textbf{椭圆}（$e < 1$）， 可以用一个参数\textbf{偏近点角（eccentric anomaly）} $\psi$ 来代替 $\theta$ 会更方便． $\psi$ 的定义为
+对于\textbf{椭圆}（$e < 1$）， 可以用一个参数\textbf{偏近点角（eccentric anomaly）} $\psi$ 来代替 $\Delta\theta$ 会更方便． $\psi$ 的定义为
 \begin{equation}\label{EqMoKp_eq1}
 r = a(1-e\cos\psi)
 \end{equation}
-其中 $a$ 是半长轴． 当 $\theta$ 从 $0$ 变化到 $2\pi$ 时， $\psi$ 也从 $0$ 变化到 $2\pi$， 只是速度不一样．
-
-\begin{equation}
-t = \sqrt{\frac{ma^3}{-k}} (\psi - e \sin\psi)
+其中 $a$ 是半长轴． 当 $\Delta\theta $ 从 $-\pi$ 变化到 $\pi$ 时， $\psi$ 也从 $-\pi$ 变化到 $\pi$， $\psi(\Delta\theta)$ 是一个递增的奇函数．
+\begin{equation}\label{EqMoKp_eq5}
+t = \sqrt{\frac{ma^3}{\abs{k}}} (\psi - e \sin\psi)
 \end{equation}
 该式被称为\textbf{开普勒方程（Kepler's equation）}， 开普勒第二定律也可以由该式验证．
 
-对于\textbf{双曲线}（$k<0$）， 偏近点角使用\autoref{EqMoKp_eq2} 定义， 可取任意实数， 使得
+对于\textbf{双曲线}（$e>1, k<0$）， \textbf{双曲偏近点角（hyperbolic eccentric anomaly）} $\xi$ 使用下式定义：
 \begin{equation}\label{EqMoKp_eq2} % 已经验算正确
-r = a(e\cosh\xi - 1)
+r = a(e\cosh\xi - 1) \qquad (\xi \in \mathbb R)
 \end{equation}
-\begin{equation}
-t = \sqrt{\frac{ma^3}{-k}} (e\sinh\xi - \xi)
+$\xi$ 从 $-\infty$ 到 $\infty$ 的变化对应 $\Delta\theta$ 从 $-\pi+\gamma$ 到 $\pi-\gamma$ 变化， $\gamma$ 是双曲线渐进角（\autoref{Hypb3_eq1}~\upref{Hypb3} 中的 $\theta_0$）． $\xi(\Delta\theta)$ 是一个递增奇函数．
+\begin{equation}\label{EqMoKp_eq4} % 已经验算正确
+t = \sqrt{\frac{ma^3}{\abs{k}}} (e\sinh\xi - \xi)
 \end{equation}
 
-
-\addTODO{双曲线 $k>0$ 情况是否也相同？}
+对于\textbf{双曲线}（$e>1, k>0$）， 我们可以把圆锥曲线标准方程（\autoref{Cone_eq5}~\upref{Cone}）旋转 $180^\circ$ 得
+\begin{equation} % 已经验算正确
+r = -\frac{p}{1 - e\cos\theta} \quad (-\gamma<\theta<\gamma)
+\end{equation}
+类似地， 有\footnote{推导见\lstinline|chrome-extension://efaidnbmnnnibpcajpcglclefindmkaj/viewer.html?pdfurl=https%3A%2F%2Fcomethunter.lamost.org%2Fscwrk%2FTHECAL%2Ffkepler.pdf&clen=69977&chunk=true|}
+\begin{equation} % 已经验算正确
+r = a(e\cosh\xi + 1) \qquad (\xi \in \mathbb R)
+\end{equation}
+此时近日点变为 $\theta = 0$， 故 $\Delta\theta = \theta \in (-\gamma, \gamma)$
+\begin{equation}\label{EqMoKp_eq6} % 已经验算正确
+t = \sqrt{\frac{ma^3}{\abs{k}}} (e\sinh\xi + \xi)
+\end{equation}
 
 \subsection{推导}
 \addTODO{……}

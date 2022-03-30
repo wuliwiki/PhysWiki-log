@@ -1,0 +1,126 @@
+% 依测度收敛
+% 实变函数|测度|极限|收敛
+
+\pentry{可测函数\upref{MsbFun}}
+
+我们已经知道，函数有“逐点收敛”和“一致收敛”等不同的收敛方式．逐点收敛的概念最简单，但是性质不太好；一致收敛的性质就非常好．
+
+现在我们有了外测度的概念，就可以构造一种新的收敛方式．
+
+\subsection{依测度收敛}
+
+\begin{definition}{依测度收敛}
+
+设$E\subseteq \mathbb{R}^n$是可测集，$f$和$f_i$都是其上的\textbf{几乎处处有限的}可测函数，其中$i$取遍全体正整数．如果对于任意固定的$\epsilon>0$，有
+\begin{equation}
+\lim\limits_{i\to\infty}\opn{m}\{x\in E|\abs{f_i(x)-f(x)}\geq\epsilon\}=0
+\end{equation}
+则称函数列$\{f_i\}$\textbf{依测度收敛}到函数$f$，记为$f_i\overset{\opn{m}}\to f$（于$E$）．
+
+\end{definition}
+
+简单来说，依测度收敛就是指任取一个精度范围$\epsilon$，$f_i(x)$偏离$f(x)$超过精度范围的$x$称为“不听话”的点，那么随着$i$增大，不听话的点构成的集合的外测度趋于零．
+
+类似地，一致收敛可以简单解释为：任取一个精度范围$\epsilon$，$f_i(x)$偏离$f(x)$超过精度范围的$x$称为“不听话”的点，那么随着$i$增大，不听话的点构成的集合趋于空集．
+
+发现没？简单说法里，一致收敛和依测度收敛的简单解释，只有最后一句有差别．从这个差别可以容易看出，一致收敛能推出依测度收敛．更进一步，几乎处处一致收敛也能推出依测度收敛．
+
+我们把上述讨论总结成以下定理：
+
+
+
+\begin{theorem}{}\label{LimMs_the2}
+
+设$E\subseteq \mathbb{R}^n$是测度有限的可测集，$f$和各$f_i$都是其上的\textbf{几乎处处有限的}可测函数，其中$i$取遍全体正整数．如果$f_i$\textbf{一致收敛}到$f$a. e.  ，那么$f_i\overset{\opn{m}}\to f$．
+
+\end{theorem}
+
+
+
+在讨论依测度收敛的相关问题的时候，“几乎处处”和“处处”可以看成是等价的，因为这两个限定词在测度意义上没有任何区别．
+
+实际上，几乎处处收敛也是能推出依测度收敛的：
+
+\begin{theorem}{}\label{LimMs_the1}
+
+设$E\subseteq \mathbb{R}^n$是测度有限的可测集，$f$和各$f_i$都是其上的\textbf{几乎处处有限的}可测函数，其中$i$取遍全体正整数．如果$f_i\to f $a. e. ，那么$f_i\overset{\opn{m}}\to f$．
+
+
+
+\end{theorem}
+
+\textbf{证明}：
+
+只需讨论$f$在$E$上恒等于$0$的情况．
+
+任意固定一个$\epsilon>0$．
+
+由Egoroff定理，对于任意$\delta>0$，存在可测集$E_\delta$，使得其测度小于$\delta$且$\{f_n\}$在$E-E_\delta$上\textbf{一致收敛}到$f=0$．
+
+因此，存在正整数$N_\delta$，使得只要正整数$n>N_\delta$，就有$\abs{f_n(x)}<\epsilon$在$E-E_\delta$上处处成立．
+
+因此，只需要取$\delta_k=1/2^k$\footnote{或者任意趋于零的正数列也行．}，得到各$N_{\delta_k}$（记$N_{\delta_k}=n_k$），那么$\abs{f_{n}(x)}<\epsilon$在$E-E_{\delta_k}$上处处成立，其中$n>n_k$且$\opn{m}E_{\delta_k}<{\delta_k}$．
+
+因此，当$n>n_k$时总有$\opn{m}\{x\in E|\abs{f_n(x)}\geq\epsilon\}\leq\opn{m}E_{\delta_k}<\delta_k$．故
+\begin{equation}
+\lim\limits_{n\to 0}\opn{m}\{x\in E|\abs{f_n(x)}\geq\epsilon\}=0
+\end{equation}
+
+即得证．
+
+\textbf{证毕}．
+
+
+反过来，依测度收敛是不能推出几乎处处收敛的．
+
+\begin{example}{}\label{LimMs_ex1}
+
+考虑区间$[0, 1)$上的函数列$\{f_n\}$．为方便表述，定义一个\textbf{取小数函数}$D(x)$，即对于实数$x$，$D(x)=x-[x]$是$x$的小数部分．易见$D(x)\in [0, 1)$恒成立．
+
+将取小数函数应用到区间上，记$D([a, b])=\{D(x)|x\in[a, b]\}$．比如，$D([0.5, 1.1])=[0, 0.1]\cup[0.5, 1)$．为了方便想象，你也可以认为取小数函数就是把整个实数轴都卷成周长为$1$的一个圆环．
+
+定义数列$\{a_k\}$，其中$a_0=0$，$a_k=a_{k-1}+1/k-1/2^k$．再定义数列$\{b_k\}$，其中$b_k=a_{k+1}+1/2^{k+1}$．你可以试着写出这两个数列的前几项，看看它们都在什么位置，这有助于理解接下来的构造．
+
+取区间列$[a_k, b_k]$，则对于任意$x\in[0, 1)$，总存在无限多个$k$，使得$x\in D([a_k, b_k])$．这是因为$a_k$趋近于无穷，导致$D(a_k)$在$[0, 1)$中反复循环；而$b_k>a_{k+1}$，使得区间列$\{[a_k, b_k]\}$覆盖了所有正数，或者说在每个循环中$D([a_k, b_k])$都能覆盖整个$[0, 1)$．
+
+又因为$\opn{m}[a_k, b_k]=1/k$，知$\lim\limits_{k\to \infty}\opn{m}[a_k, b_k]=0$．
+
+现在在$[0, 1)$上定义函数列$\{f_k(x)\}$，其中当$x\in D([a_k, b_k])$时$f_k(x)=1$，其余情况均有$f_k(x)=0$．再定义$f$，其在$[0, 1)$上恒为$0$．
+
+则按照上述构造，$f_k$依测度趋近于$f$，但是它又处处\textbf{不}趋近于$f$．
+
+\end{example}
+
+当我们想到函数列的收敛时，最自然的想法就是处处收敛．现在我们知道了，依测度收敛比处处收敛还弱，\autoref{LimMs_ex1} 甚至构造了一个处处不收敛但依然依测度收敛的例子．
+
+
+\subsection{Riesz定理}
+
+
+
+但依测度收敛也不是一无是处，它依然具有以下非常有用的性质：
+
+\begin{theorem}{F. Riesz 定理}
+
+如果在可测集$E$上$f_n\overset{m}\to f$，则必存在$\{f_n\}$的子序列$\{f_{n_k}\}$，使之几乎处处收敛于$f$．
+
+\end{theorem}
+
+\textbf{证明}：
+
+取一列单调递减趋近于零的正数$\{\epsilon_k\}$．由于$f_n\overset{m}\to f$，故对于每个$\epsilon_k$，总存在一个$N_k$使得只要$n\geq N_k$，就有$\opn{m}\qty(\{x\in E|\abs{f_n-f}\geq\epsilon_k\})<1/2^k$．以这些$N_k$为编号，构建子序列$\{f_{N_k}\}$．
+
+为方便，记$\{x\in E|\abs{f_{N_k}(x)-f(x)}\geq \epsilon_k\}=S_k$．
+
+如果$x\in E$是$f_{N_k}$的不收敛点，那么按照构造规则，它必然在每一个$\bigcup^\infty_{k=1}S_k$中．而由于$\opn{m}S_k<1/2^k$，可知$\opn{m}\qty(\bigcup^\infty_{k=n}S_k)\leq \sum^{\infty}_{k=n}\opn{m}S_k<1/2^{n-1}$．
+
+因此$\{f_{N_k}\}$中\textbf{不收敛于}$f$的点构成的集合$\bigcap^\infty_{n=1}\bigcup^\infty_{k=n}S_k$是一个零测集．定理得证．
+
+
+
+\textbf{证毕}．
+
+
+
+
+
