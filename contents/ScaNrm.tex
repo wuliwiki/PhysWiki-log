@@ -2,11 +2,11 @@
 % 散射态|相移|正交|归一化|波函数
 
 \begin{issues}
-\issueOther{使用零函数的概念重写简并态的正交化}
+\issueTODO
 \end{issues}
 
 \pentry{一维散射（量子）\upref{Sca1D}， 施密特正交化\upref{SmdtOt}， 零函数（列）\upref{F0}}
-\footnote{写作参考\href{https://chaoli.club/index.php/4541/last}{这篇帖子}．}本文使用原子单位制\upref{AU}． 类似于平面波的归一化\upref{EngNor}， 一维散射态也有不同的归一化方式， 但情况要更为复杂． 
+本文使用原子单位制\upref{AU}． 类似于平面波的归一化\upref{EngNor}， 一维散射态也有不同的归一化方式， 但情况要更为复杂． 
 \subsection{对称势能}
 为简单起见先假设 $V(x)$ 关于原点对称， 且 $V(x)$ 是短程的， 即只在区间 $[-L,L]$ 内不为零． 定态薛定谔方程 $E > 0$ 的解都是散射态． 由于 $V(x)$ 的对称性， 我们必定能找到实值的奇函数和偶函数两种解． 令 $k = \sqrt{2mE}$， 在区间 $[-L,L]$ 外， 波函数就是正弦函数加上一个相移
 \begin{equation}\label{ScaNrm_eq3}
@@ -14,18 +14,21 @@
 \end{equation}
 其中$\phi$ 是 $k$ 的函数， 称为\textbf{相移（phase shift）}． 为方便书写下文把 $\phi(k),\phi(k')$ 分别记为 $\phi, \phi'$．
 
-令奇函数和偶函数散射态分别为实函数 $\psi_{k,1}(x)$ 和 $\psi_{k,2}(x)$ 我们希望通过添加适当的归一化系数后， 波函数能满足归一化条件（\autoref{EngNor_eq3}~\upref{EngNor}）
+令奇函数和偶函数散射态分别为实函数 $\psi_{k,1}(x)$ 和 $\psi_{k,2}(x)$ 我们希望通过添加适当的归一化系数后， 波函数能满足正交归一化条件（\autoref{EngNor_eq3}~\upref{EngNor}）
 \begin{equation}\label{ScaNrm_eq1}
-\int_{-\infty}^{+\infty} \psi_{k',i}^*(x) \psi_{k,i}(x) \dd{x} = \delta(k' - k) \qquad (k > 0, i = 1, 2)
+\int_{-\infty}^{+\infty} \psi_{k',i}^*(x) \psi_{k,i}(x) \dd{x} = \delta(k' - k) \qquad (k > 0,\ i = 1, 2)
 \end{equation}
-其中 $\delta$ 理解为 $\delta$ 函数列\upref{Delta} 以避免积分不收敛的问题．
+\begin{equation}\label{ScaNrm_eq6}
+\int_{-\infty}^{+\infty} \psi_{k',1}^*(x) \psi_{k,2}(x) \dd{x} = z(k' - k) \qquad (k > 0)
+\end{equation}
+其中 $\delta$ 理解为 $\delta$ 函数列\upref{Delta}， $z$ 是零函数（列）\upref{F0}， 以避免积分不收敛的问题．
 
 \begin{theorem}{}\label{ScaNrm_the1}
-\autoref{ScaNrm_eq1} 对所有性质良好的偶函数 $V(x)$ 都成立， 且\autoref{ScaNrm_eq3} 中\textbf{归一化系数和平面波相同}， 即 $A = 1/\sqrt{\pi}$（\autoref{EngNor_eq5}~\upref{EngNor}）．
+\autoref{ScaNrm_eq1} 和\autoref{ScaNrm_eq6} 对所有性质良好的偶函数 $V(x)$ 都成立， 且\autoref{ScaNrm_eq3} 中\textbf{归一化系数和平面波相同}， 即 $A = 1/\sqrt{\pi}$（\autoref{EngNor_eq5}~\upref{EngNor}）．
 \end{theorem}
 
 \subsubsection{部分证明}
-对于奇偶性不同的两个函数， 他们显然式正交的． 对奇偶性相同的， 首先（参考\autoref{Delta_exe3}~\upref{Delta}）
+对于奇偶性不同的两个函数， 他们显然式正交的（\autoref{F0_ex2}~\upref{F0}）． 对奇偶性相同的， 首先（参考\autoref{Delta_exe3}~\upref{Delta}）
 \begin{equation}\label{ScaNrm_eq5}
 \int_{0}^{+\infty} \sin(k'x)\sin(kx)\dd{x} = \frac{\pi}{2}\delta(k'-k)
 \qquad (k, k' > 0)
@@ -40,7 +43,6 @@
 \int_{0}^{+\infty} \sin(k'x+\phi')\sin(kx+\phi) \dd{x} = \frac{\pi}{2}\delta(k'-k)
 + \frac{\sin(\phi'+\phi)}{2(k'+k)} - \frac{\sin(\phi'-\phi)}{2(k'-k)}
 \end{equation}
-\addTODO{未完成： 怎么来的？}
 所以在区间 $(0, +\infty)$ 上 $\sin(kx+\phi)$ 并不一定正交\footnote{但在 $(-\infty,\infty)$ 上却正交}．
 
 使用归一化系数 $1/\sqrt{\pi}$， \autoref{ScaNrm_eq1} 的积分为（利用波函数的奇偶性）
@@ -51,49 +53,55 @@
 \end{aligned}
 \end{equation}
 其中 $2I(k,k')$ 修正了 $[-L,L]$ 区间实际波函数和 $\sin(kx+\phi)$ 的不同， 定义是
-\begin{equation}
+\begin{equation}\label{ScaNrm_eq8}
 I(k,k') = \int_0^L \psi_{k'}^*(x) \psi_k(x) \dd{x}
 -\int_{0}^{L} \frac{1}{\sqrt{\pi}}\sin(k'x+\phi') \frac{1}{\sqrt{\pi}}\sin(kx+\phi) \dd{x}
 \end{equation}
-如果能证明对于任意 $V(x)$， \autoref{ScaNrm_eq2} 的最后的三项之和都为零， 即
+如果能证明对于任意偶函数 $V(x)$， \autoref{ScaNrm_eq2} 的最后的三项之和都为零， 即
 \begin{equation}
 I(k,k') = \frac{\sin(\phi'-\phi)}{2\pi(k'-k)} - \frac{\sin(\phi'+\phi)}{2\pi(k'+k)}
 \end{equation}
 那么我们就证明了\autoref{ScaNrm_eq1} 的正交归一关系． 笔者暂时不会证， 但我们可以尝试用一些具体的例子证明， 如方势垒\upref{SqrPot}．
 
+另一种说明 $[-L,L]$ 的积分修正不影响正交归一性的方法是， 把该短程势阱装在 $[-n,n]$ 区间的无限深势阱中， 随着 $n\to\infty$， 在计算不同束缚态之间的内积时 $[-L,L]$ 部分的积分可以忽略不计．
+
 \subsection{不对称势能}
+由于势能 $V(x)$ 不对称， 我们仍然可以求出两组线性无关的实函数解 $\psi_{k,1},\psi_{k,2}$， 却无法自动保证它们的奇偶性， 所以需要额外进行正交化以满足\autoref{ScaNrm_eq6}．
 \subsubsection{归一化}
-由于势能 $V(x)$ 不对称， 我们无法保证上文的 $\psi_{k,1},\psi_{k,2}$ 的奇偶性， 但可以手动正交化． 先给出结论： 令区间 $[-L,L]$ 外的波函数为
+先给出归一化条件：
+\begin{theorem}{}
+令区间 $[-L,L]$ 外的波函数为
 \begin{equation}\label{ScaNrm_eq9}
 \psi_{k,i}(x) = \leftgroup{
-    &A_{+,i} \sin(kx + \phi_{+,i}) &\quad &(x > L)\\
+    &A_{+,i} \sin(kx + \phi_{+,i}) &&(x > L)\\
     &A_{-,i} \sin(kx - \phi_{-,i}) &&(x < -L)
-} \quad (i = 1,2)
+} \qquad (i = 1,2)
 \end{equation}
-那么归一化系数需要满足
+其中 $A$ 都是实数， 那么归一化系数需要满足
 \begin{equation}\label{ScaNrm_eq4}
-\frac{1}{2}\qty(\abs{A_-}^2 + \abs{A_+}^2) = \frac{1}{\pi}
+\frac{1}{2}\qty(\abs{A_{+,i}}^2 + \abs{A_{-,i}}^2) = \frac{1}{\pi} \qquad (i = 1,2)
 \end{equation}
-即\textbf{振幅的平均模方}为 $1/\pi$． 当 $A_+ = A_-$ 时就有上文的归一化系数 $1/\sqrt{\pi}$．
+即\textbf{振幅的平均模方}为 $1/\pi$．
+\end{theorem}
+特殊第， 当 $A_{+,i} = A_{-,i}$ 时就有\autoref{ScaNrm_the1} 中的归一化系数 $1/\sqrt{\pi}$．
 
 \textbf{部分证明}： 把正交化积分划分为正负半轴两部分进行（$\psi_{k}$ 取 $\psi_{k,1}, \psi_{k,2}$ 中一个）
 \begin{equation}
 \begin{aligned}
-\braket{\psi_{k'}}{\psi_{k}} &= \abs{A_-}^2\int_{-\infty}^0 \sin(kx + \phi_{-})\sin(kx + \phi_{-}) \dd{x} + I_-(k,k')\\
-&\qquad+ \abs{A_+}^2\int_0^{+\infty} \sin(kx + \phi_{+})\sin(kx + \phi_{+}) \dd{x}   + I_+(k,k')\\
-&= \frac{\pi}{2}\abs{A_-}^2\delta(k'-k) + \frac{\pi}{2}\abs{A_+}^2 \delta(k'-k)
+\braket{\psi_{k'}}{\psi_{k}} &=
+\abs{A_+}^2\int_0^{\infty} \sin(kx + \phi_{+})\sin(kx + \phi_{+}) \dd{x}   + I_+(k,k')\\
+&+ \abs{A_-}^2\int_{-\infty}^0 \sin(kx + \phi_{-})\sin(kx + \phi_{-}) \dd{x} + I_-(k,k')\\
+&= \frac{\pi}{2}(\abs{A_+}^2 + \abs{A_-}^2)\delta(k'-k) = \delta(k'-k)
 \end{aligned}
 \end{equation}
-把\autoref{ScaNrm_eq4} 代入有 $\braket{\psi_{k'}}{\psi_{k}} = \delta(k'-k)$．
+其中 $I_{\pm}(k,k')$ 的定义和\autoref{ScaNrm_eq8} 类似． 第二个等号的具体过程笔者同样不会．
 
 \subsubsection{正交化}
-对于非对称势能 $V(x)$ 由于我们缺失了函数的奇偶性， 需要用其他办法保证 $k$ 相同的两个线性无关解正交． 先定义内积为
-\addTODO{这里有问题！ 这个内积不能随便定义， 而是必须确保投影计算系数的时候的两项中， $i,i'$ 不同的那一项必须是零！也就是说， $\int_{-\infty}^{\infty} \psi_{k,i}\psi_{k,i'}\dd{x}$ 必须是一个 “广义的零函数”， 类似于 $\delta$ 函数用函数列来定义． 但如果这么讲，就复杂得多了…… 没有内积的概念， 那么谈何施密特正交化？ 可以说： 把下式作为经验公式．}
-
+对于非对称势能 $V(x)$， 由于我们缺失了函数的奇偶性， 需要用其他办法保证 $k$ 相同的两个线性无关解正交． 对给定的 $k$， 两个线性无关解张成二维本征矢空间， 在其中定义内积为
 \begin{equation}\label{ScaNrm_eq13}
-\braket{\psi_{k,i}}{\psi_{k,i'}} = \lim_{n\to\infty}\frac{\pi}{n}\int_{-n}^{+n} \psi_{k,i}^*(x) \psi_{k,i'}(x) \dd{x}
+\braket{\psi_{k,i}}{\psi_{k,i'}} = \lim_{n\to\infty}\frac{\pi}{n}\int_{-n}^{+n} \psi_{k,i}^*(x) \psi_{k,i'}(x) \dd{x} \qquad (i = 1,2;\ i' = 1,2)
 \end{equation}
-可以验证该定义下 $\sin(kx+\phi)/\sqrt{\pi}$ 以及 $\exp(\I kx)/\sqrt{2\pi}$ 的模长为 1． 那么的正交归一条件就是
+可以验证该定义下 $\sin(kx+\phi)/\sqrt{\pi}$ 以及 $\exp(\I kx)/\sqrt{2\pi}$ 的模长为 1． 那么该二维空间的正交归一条件就是
 \begin{equation}\label{ScaNrm_eq7}
 \braket{\psi_{k,i}}{\psi_{k,i'}} = \delta_{i,i'}
 \end{equation}
@@ -105,19 +113,37 @@ I(k,k') = \frac{\sin(\phi'-\phi)}{2\pi(k'-k)} - \frac{\sin(\phi'+\phi)}{2\pi(k'+
 \end{equation}
 
 
-若我们已经解得两个不正交的线性无关解 $\psi_{k,1}, \psi'_{k,2}$， 可以使用施密特正交化\upref{SmdtOt}： 先把 $\psi_{k,1}$ 按照\autoref{ScaNrm_eq4} 归一化， 那么
-\begin{equation}
+若我们已经解得两个不正交的线性无关解 $\psi'_{k,1}, \psi'_{k,2}$， 可以使用施密特正交化\upref{SmdtOt}： 先把 $\psi'_{k,1}$ 按照\autoref{ScaNrm_eq4} 即\autoref{ScaNrm_eq7} 归一化得 $\psi_{k,1}$， 那么
+\begin{equation}\label{ScaNrm_eq14}
 \psi_{k,2}(x) = \psi_{k,2}'(x) - \braket{\psi_{k,1}}{\psi'_{k,2}} \psi_{k,1}(x)
 \end{equation}
 这相当于把 $\psi'_{k,2}$ 中与 $\psi_{k,1}$ 不正交的部分减去． 最后再对 $\psi_{k,2}$ 归一化使其满足\autoref{ScaNrm_eq4} 即可使 $\psi_{k,1}, \psi_{k,2}$ 正交归一．
+\addTODO{如何证明这样符合零函数正交条件\autoref{ScaNrm_eq6} ？}
+
+\begin{example}{}
+令两组不正交不归一的平面波为
+\begin{equation}
+\psi'_{k,1}(x) = \sin(kx - \delta), \qquad
+\psi'_{k,2}(x) = \sin(x)
+\end{equation}
+把 $\psi'_{k,1}(x)$ 归一化易得
+\begin{equation}
+\psi_{k,1}(x) = \frac{1}{\sqrt{\pi}}\sin(kx - \delta)
+\end{equation}
+代入\autoref{ScaNrm_eq14} 后再做归一化， 可得正交归一化的 $\psi'_{k,2}(x)$ 为
+\begin{equation}
+\psi_{k,2}(x) = \frac{1}{\sqrt{\pi}}\cos(kx - \delta)
+\end{equation}
+显然 $\psi_{k,1}, \psi_{k,2}$ 是正交的， 因为它们分别是关于 $x = k/\delta$ 的奇函数和偶函数．
+\end{example}
 
 \subsection{行波的归一化}
 
 \begin{equation}
 \psi_{k,i} = \leftgroup{
-    &A_i\exp(\I kx) + B_i\exp(-\I kx) &\quad& (x < -L)\\
+    &A_i\exp(\I kx) + B_i\exp(-\I kx) && (x < -L)\\
     &C_i\exp(\I kx) + D_i\exp(-\I kx) && (x > L)
-} \quad (i = a,b)
+} \qquad (i = a,b)
 \end{equation}
 代入\autoref{ScaNrm_eq13} 得内积为
 \begin{equation}

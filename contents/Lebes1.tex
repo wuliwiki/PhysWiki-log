@@ -1,0 +1,146 @@
+% 非负函数的 Lebesgue 积分
+% 实变函数|勒贝格积分
+
+\pentry{可测函数\upref{MsbFun}}
+
+Lebesgue积分的思路是对函数的值域进行分划，以相应值域的逆映射作为“柱底”．归根到底，Lebesuge积分还是要对定义域作分划的，但相比Riemann积分的直接对定义域作分划，Lebesgue积分的分划方式更任意．对于可测函数，Lebesgue积分的分划得到的“柱底”都是可测集．
+
+我们就从将可测集划分为两两不交的可测子集入手，先研究这种分划的性质．
+
+\subsection{可测集的分划}
+
+
+
+\begin{definition}{可测分划}
+设$E\in\mathbb{R}^n$是可测集．如果有限\textbf{族}$\{E_1, E_2, \cdots, E_n\}$中各$E_i$\textbf{两两不交}、都是$E$的子集、\textbf{可测}，且$E=\bigcup^n_{i=1}E_i$，那么称集族$\{E_i\}_{i=1}^n$为可测集$E$的一个\textbf{分划}，或者\textbf{可测分划}．
+\end{definition}
+
+如果$A=\{E_i\}_{i=1}^n$和$B=\{F_i\}_{i=1}^m$都是$E$的分划，那么易证$C=\{E_i\cap F_j|E_i\in A, F_j\in B\}$也是$E$的分划．称$C$是分划$A$和$B$的\textbf{合并}．
+
+容易看到，$C$中存在每一个$E_i$的分划$\{E_i\cap F_j\}_{j=1}^m$，类似地也存在每一个$F_j$的分划，像是更细一层地进行分划．因此，如果分划$C$是$A$和另一个分划的合并，我们就称$C$是比$A$\textbf{更细}的分划，反过来$A$比$C$\textbf{更粗}．
+
+\begin{definition}{上和与下和}
+
+设$f$是$E$上的非负可测函数，$D=\{E_i\}_{i=1}^n$是$E$的一个可测分划．定义$a_i=\inf_{x\in E_i}f(x)$，$A_i=\sup_{x\in E_i}f(x)$，则称
+\begin{equation}
+s_D=\sum_{i=1}^n a_i \opn{m}E_i
+\end{equation}
+为$f$在$E$上关于分划$D$的\textbf{下和}，而称
+\begin{equation}
+S_D=\sum_{i=1}^n A_i \opn{m}E_i
+\end{equation}
+为$f$在$E$上关于分划$D$的\textbf{上和}．
+
+\end{definition}
+
+如果$A\subseteq B\subseteq E$，那么显然$f$在$A$上的上确界要小于等于在$B$上的上确界，在$A$上的下确界要大于等于在$B$上的下确界，因此容易得出以下引理：
+
+\begin{lemma}{}
+
+设$f$是可测集$E$上的可测函数，$A$和$B$是$E$的可测分划，且$A$比$B$更细．那么
+
+\begin{equation}
+s_B\leq s_A\leq S_A\leq S_B
+\end{equation}
+
+
+\end{lemma}
+
+由此可得一个有用的推论：
+
+\begin{corollary}{}
+设$f$是可测集$E$上的可测函数，$D_1$和$D_2$是$E$的可测分划．那么
+
+\begin{equation}
+s_{D_i}\leq S_{D_j}
+\end{equation}
+对任意$i, j\in\{1, 2\}$成立．
+
+\end{corollary}
+
+就是说，不管怎么求分划，任意两个分划之间，上和一定大于等于下和，不会出现一个分划的下和大于另一个分划的上和这种情况．
+
+
+
+
+
+
+\subsection{积分}
+
+有了分划和上下和的概念，我们描述起积分就方便多了．
+
+\begin{definition}{}
+
+设$f$是可测集$E$上的可测函数，$\Lambda$是$E$的一切可能的分划之集合．那么称
+\begin{equation}
+\overline{\int_E} f(x) \dd x=\inf_{D\in \lambda} \{S_D\}
+\end{equation}
+为$f$在$E$上的\textbf{上积分}，称
+\begin{equation}
+\underline{\int_E} f(x) \dd x=\sup_{D\in \lambda} \{s_D\}
+\end{equation}
+为$f$在$E$上的\textbf{下积分}，
+
+
+
+\end{definition}
+
+显然，简单函数的上积分和下积分总是相等，也就是\textbf{可测函数的结构}\upref{MsbFSt}中\autoref{MsbFSt_eq1}~\upref{MsbFSt}所定义的简单函数的Lebesgue积分．
+
+函数的上下积分有以下重要的性质：
+
+\begin{theorem}{}
+
+设$f$、$g$是可测集$E$上的可测函数，$\{E_1, E_2\}$是$E$的某个分划．
+
+\begin{enumerate}
+  \item 若$f\leq g$几乎处处成立，则有
+  \begin{equation}
+  \underline{\int_E} f(x) \dd x \leq \underline{\int_E} g(x) \dd x \leq \overline{\int_E} f(x) \dd x \leq \overline{\int_E} g(x) \dd x
+  \end{equation}
+  \item 若$\{E_1, E_2\}$是$E$的某个分划，则
+  \begin{equation}
+  \underline{\int_E} f(x) \dd x=\underline{\int_{E_1}} f(x) \dd x+\underline{\int_{E_2}} f(x) \dd x
+  \end{equation}
+  且
+  \begin{equation}
+  \overline{\int_E} f(x) \dd x=\overline{\int_{E_1}} f(x) \dd x+\overline{\int_{E_2}} f(x) \dd x
+  \end{equation}
+  \item 恒有
+  \begin{equation}
+  \underline{\int_E} \qty(f(x)+g(x)) \dd x \geq \underline{\int_E} f(x) \dd x+\underline{\int_E} g(x) \dd x
+  \end{equation}
+  和
+  \begin{equation}
+  \overline{\int_E} \qty(f(x)+g(x)) \dd x \leq \overline{\int_E} f(x) \dd x+\overline{\int_E} g(x) \dd x
+  \end{equation}
+\end{enumerate}
+
+
+
+\end{theorem}
+
+\textbf{证明}：
+
+1．太过显然，在此从略\footnote{若不是那么显然，可留言，笔者视情况补充证明细节．}．
+
+2. 
+
+\textbf{证毕}．
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

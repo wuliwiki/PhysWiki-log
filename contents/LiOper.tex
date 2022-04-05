@@ -1,10 +1,6 @@
 % 线性算子代数
 % 线性算子|算子代数
 
-\begin{issues}
-\issueTODO
-\end{issues}
-
 \subsection{线性算子}
 \pentry{多重线性映射\upref{MulMap}，矩阵与线性映射\upref{MatLS}}
 域 $\mathbb{F}$ 上所有从 $n$ 维矢量空间 $V$ 到 $m$ 维矢量空间 $W$ 的线性映射 $f:V\rightarrow W$ 的集合用符号 $\mathcal{L}(V,W)$ (或者 $\mathrm{Hom}(V,W)$) 表示，它仍是一个矢量空间\upref{MulMap}，其上的一个线性映射和一个 $m\times n$ 的矩阵一一对应\upref{MatLS}．在 $V=W$ 的情形，矢量空间 $\mathcal{L}(V,W)$ 简记为 $\mathcal{L}(V)$ （或 $\mathrm{End}(V)$），它的向量通常称为\textbf{线性算子}．
@@ -42,5 +38,68 @@ $\mathcal{A}\bvec x=\lambda\bvec x$，其中 $\lambda\in\mathbb{F}$．
 \end{equation}
 我们看到，$\mathcal{L}(V)$不仅是个矢量空间，同时也是个结合环\autoref{Ring_def2}~\upref{Ring} ，最后的关系式建立了纯量和算子之间乘法的补充定律．这样一个满足补充定律 $\lambda(ab)=(\lambda a)b=a(\lambda b)$ , 又是环又是域 $\mathbb{F}$ 上的向量空间 $K$ ，就称为域 $\mathbb{F}$ 上的\textbf{代数}，\autoref{AlgFie_def1}~\upref{AlgFie}．$K$ 作为矢量空间的维数即称为代数 $K$ 的\textbf{维数}．
 
+\begin{theorem}{}\label{LiOper_the1}
+如果
+\begin{equation}
+\mathcal{A}:\bvec e_k\mapsto \mathcal{A}\bvec e_k=\sum_i^{n}a_{ik}\bvec e_i,\quad \mathcal{B}:\bvec e_j\mapsto  \mathcal{B}\bvec e_j=\sum_{k=1}^n b_{kj}\bvec e_k
+\end{equation}
+是线性空间 $V$ 在基底 $(\bvec e_i)$ 之下以 $A=(a_{ij}), B=(b_{kj})$ 为矩阵的线性算子，那么，算子 $\mathcal{AB}$ 在同一基底下的矩阵是 $C=AB$
+\end{theorem}
+\textbf{证明：}
+\begin{equation}
+\begin{aligned}
+\sum_i c_{ij}\bvec e_i&=(\mathcal{AB})\bvec e_j=\mathcal{A}(\mathcal{B}\bvec e_j)=\mathcal{A}\qty(\sum_k b_{kj}\bvec e_k)=\sum_k b_{kj}\mathcal{A}\bvec e_k\\
+&=\sum_k b_{kj}\sum_i a_{ik}\bvec e_i=\sum_{i,k}a_{ik}b_{kj}\bvec e_i=AB\bvec e_i
+\end{aligned}
+\end{equation}
+\textbf{证毕}！
+\subsection{不同基底下线性算子对应的矩阵}
+\begin{theorem}{}\label{LiOper_the2}
+若线性算子 $\mathcal A$ 在基底 $(\bvec e_1\cdots \bvec e_n)$ 下对应矩阵为 $A$，则在另一基底  $(\bvec e'_1\cdots \bvec e'_n)$ 之下对应的矩阵 $A'$ 为
+\begin{equation}
+A'=B^{-1}AB
+\end{equation}
+其中 $B$ 为基底 $(\bvec e_i)$ 向基底 $(\bvec e_j')$ 的过渡矩阵\upref{TransM}.
+\end{theorem}
+\textbf{证明：}
+由定理条件，若设 $A=(a_{ij}), A'=(a_{kj}'),B=(b_{ij})$ ，则
+\begin{equation}
+\begin{aligned}
+&\mathcal{A}\bvec e_i=\sum_{k} a_{ki}\bvec e_k
+\\
+&\mathcal{A}\bvec e_j'=\sum_{k} a'_{kj}\bvec e'_k\\
+&\bvec e_j'=\sum_i b_{ij}\bvec e_i
+\end{aligned}
+\end{equation}
+引入算子 $\mathcal{B}$ ，它在基底 $(\bvec e_1\cdots \bvec e_n)$ 下对应的矩阵为 $B$ ，那么
+\begin{equation}
+\mathcal{B}\bvec e_j=\sum_i b_{ij}\bvec e_i=\bvec e_j'
+\end{equation}
 
+由于线性算子与矩阵之间在固定基底之下一一对应，所以可定义一算子 $\mathcal{A'}$ ，它在基底 $(\bvec e_1\cdots \bvec e_n)$ 之下对应的矩阵为 $A'$ ，即
+\begin{equation}
+A'\bvec e_j=\sum_i a'_{ij}\bvec e_i
+\end{equation}
+于是
+\begin{equation}
+\mathcal{AB}\bvec e_j=\mathcal{A}\bvec e'_j=\sum_i a'_{ij} \bvec e'_i=\sum_i a'_{ij}\mathcal{B}\bvec e_i=\mathcal{B}\qty(\sum_i a'_{ij}\bvec e_i)=\mathcal{BA'}\bvec e_j
+\end{equation}
+于是 
+\begin{equation}
+\mathcal{A'}=\mathcal{B}^{-1}\mathcal{AB}
+\end{equation}
+由\autoref{LiOper_the1} ，上式对应的矩阵的形式就为
+\begin{equation}
+A'=B^{-1}AB
+\end{equation}
+\textbf{证毕}！
+\begin{definition}{相似矩阵}
+称矩阵 $A'$ 相似于矩阵 $A$ ，如果存在非退化矩阵 $B$ ，使得
+\begin{equation}
+A'=B^{-1}AB
+\end{equation}
+并记作 $A'\sim A$ ．
+\end{definition}
+容易验证，矩阵的相似关系是一种等价关系\autoref{Relat_sub1}~\upref{Relat}.
 
+\autoref{LiOper_the2} 表明，每一个线性算子都对应一个相似矩阵类（所以相似的矩阵构成的集合），而其中每一矩阵都相当于同一线性算子在不同基底下的矩阵．

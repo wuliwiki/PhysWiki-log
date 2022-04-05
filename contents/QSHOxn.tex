@@ -7,35 +7,48 @@
 
 \pentry{简谐振子（升降算符）\upref{QSHOop}}
 
-\subsection{结论}
-
-量子力学中， 简谐振子的能级为
+量子力学中， 简谐振子的定态薛定谔方程为
+\begin{equation}
+-\frac{\hbar^2}{2m} \dv[2]{\psi}{x} + \frac12 m \omega^2 x^2\psi  = E\psi
+\end{equation}
+能级为
 \begin{equation}
 E_n = \qty(\frac12 + n)\hbar \omega 
 \end{equation}
-波函数为
-\begin{equation}
+归一化的束缚态波函数为
+\begin{equation}\label{QSHOxn_eq1}
 \psi_n (x) = \frac{1}{\sqrt{2^n n!}} \qty(\frac{\alpha^2}{\pi })^{1/4} H_n(u) \E^{-u^2/2}
 \end{equation}
 其中
 \begin{equation}
-\alpha \equiv \sqrt{\frac{m\omega}{\hbar }} \qquad
+\alpha \equiv \sqrt{\frac{m\omega}{\hbar }}, \qquad
 u \equiv \alpha x
 \end{equation}
-$H_n(u)$ 叫做 Hermite 多项式\upref{HermiP}．
+$H_n(u)$ 是 Hermite 多项式\upref{HermiP}．
+
+\begin{figure}[ht]
+\centering
+\includegraphics[width=14cm]{./figures/QSHOxn_1.pdf}
+\caption{简谐振子的前几个束缚态波函数（\autoref{QSHOxn_eq1}， $\alpha = 1$）}} \label{QSHOxn_fig1}
+\end{figure}
 
 前4个波函数分别为（注意函数的奇偶性与角标的奇偶性相同）
 \begin{equation}\ali{
-\psi_0(x) &= \qty(\frac{\alpha^2}{\pi})^{1/4} \E^{-u^2/2} &
-\psi_2(x) &= \qty(\frac{\alpha^2}{\pi })^{1/4} \frac{1}{\sqrt 2 } (2u^2 - 1)\E^{-u^2/2}\\
-\psi_1(x) &= \qty(\frac{\alpha ^2}{\pi })^{1/4} \sqrt2u \E^{-u^2/2} \quad &
-\psi_3(x) &= \qty(\frac{\alpha ^2}{\pi })^{1/4} \frac{1}{\sqrt 3} u(2u^2 - 3)\E^{-u^2/2}
+\psi_0(x) &= \qty(\frac{\alpha^2}{\pi})^{1/4} \E^{-u^2/2}, &
+\psi_2(x) &= \qty(\frac{\alpha^2}{\pi })^{1/4} \frac{1}{\sqrt 2 } (2u^2 - 1)\E^{-u^2/2},\\
+\psi_1(x) &= \qty(\frac{\alpha ^2}{\pi })^{1/4} \sqrt2u \E^{-u^2/2}, \quad &
+\psi_3(x) &= \qty(\frac{\alpha ^2}{\pi })^{1/4} \frac{1}{\sqrt 3} u(2u^2 - 3)\E^{-u^2/2}.
 }\end{equation}
 
-\subsection{推导}%未完成
+Matlab 代码如（使用原子单位制\upref{AU}）
+\begin{lstlisting}[language=matlab]
+function psi = psi_SHO(m, w, n, x)
+alpha = sqrt(m*w); u = alpha * x;
+psi = 1/sqrt(2^n*factorial(n)) *...
+    (alpha^2/pi)^0.25 * hermiteH(n, u) .* exp(-u.^2/2);
+end
+\end{lstlisting}
 
-薛定谔方程为
-\begin{equation}
--\frac{\hbar^2}{2m} \dv[2]{\psi}{x} + \frac12 m \omega^2 x^2\psi  = E\psi
-\end{equation}
-可以直接用级数解也可以用升降算符．
+\subsection{推导}
+
+\addTODO{可以直接用级数解也可以用升降算符．}

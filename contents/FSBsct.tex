@@ -1,93 +1,85 @@
-% 方势垒散射数值计算
+% 高斯波包的方势垒散射数值计算（Matlab）
 % 方势垒|散射|数值计算
 
 \begin{issues}
 \issueDraft
-\issueOther{未完成： 需要改进程序， 计算波函数随时间的变化． （给系数加上 $\exp(-\I E t)$ 即可）}
 \end{issues}
 
-\pentry{方势垒的定态波函数\upref{SqrPot}}
+\pentry{方势垒定态波函数程序\upref{FSBplt}}
 
 \begin{figure}[ht]
 \centering
-\includegraphics[width=10cm]{./figures/FSBsct_1.png}
-\caption{运行结果} \label{FSBsct_fig1}
+\includegraphics[width=14cm]{./figures/FSBsct_1.png}
+\caption{高斯波包被方势垒散射， 动画见\href{https://wuli.wiki/apps/FSBsct.html}{这里}．} \label{FSBsct_fig1}
 \end{figure}
 
+我们用\autoref{Sca1D_eq3}~\upref{Sca1D} 计算波函数的含时演化． 另外我们用离散的 $k_i$ 代替连续的 $k$， 对 $k$ 积分改为对 $i$ 求和并乘以 $\Delta{k}$．
+
+需要使用 “方势垒定态波函数程序\upref{FSBplt}” 中的 \verb|FSB.m| 和 \verb|FSB2.m|．
 \begin{lstlisting}[language=matlab, caption=FSBsct.m]
-% 使用类 sin，cos 基底
+% 方势垒散射高斯波包
 clear; close all;
 
-% === params ====
-k0 = 4; a = 1/6;
-Nk = 300; kmax = k0 + 12*a; kmin = max(kmax/Nk, k0 - 12*a);
-x0 = 0;
-Nx = 2000; xmin = x0-6/a; xmax = x0+6/a;
-psi = @(x)exp(1i*k0*x).*exp(-(a*(x-x0)).^2);
-L = 3; V0 = 1; m = 1;
+% ==== 参数 ====
+% 高斯波包
+x0 = -17; t0 = 0; m = 1;
+sig_x = 2; k0 = 4;
+% 方势垒 [-L,L], 高 V0
+L = 4; V0 = 4;
+mode = 1; % 1: 使用类 sin，cos 基底; 2： 使用类 exp 基底
+% 位置、动量、时间网格
+xmin = -50; xmax = 50; Nx = 2000;
+int_xmin = x0-6*sig_x; int_xmax = x0+6*sig_x;
+Nk = 500; kmax = k0+4/sig_x; kmin = max(kmax/Nk, k0-4/sig_x);
+tmin = 0; tmax = 20; Nt = 200;
+ax = [xmin, xmax, -0.5, 0.5];
 % ==============
 
-% plot FFT
-k = linspace(kmin, kmax, Nk); dk = k(2)-k(1);
-[g1, k1] = FFT(fftresize(psi(x),Nx*2), dx);
+psi = @(x) 1/(2*pi*sig_x^2)^0.25/sqrt(1 + 1i*t0/(2*m*sig_x^2))...
+      *exp(-(x-x0-k0*t0/m).^2/(2*sig_x)^2/(1 + 1i*t0/(2*m*sig_x^2)))...
+      .*exp(1i*k0*(x-k0*t0/(2*m)));
+
+% 画 FFT 谱
+x = linspace(int_xmin, int_xmax, Nx); dx = (int_xmax-int_xmin)/(Nx-1);
+k = linspace(kmin, kmax, Nk); dk = (kmax-kmin)/(Nk-1);
+[g1, k1] = FFT(fftresize(psi(x),Nx*2), int_xmin, dx);
 g = interp1(k1, g1, k);
 figure; plot(k, abs(g), '.');
 axis([kmin, kmax, 0, max(abs(g))*1.1]);
 xlabel k; title 'FFT of \psi(x)';
 
-A = zeros(1,Nk); B = A;
 E = k.^2/(2*m);
-psi1 = zeros(size(x));
-for i = 1:Nk
-    A(i) = integral(@(x)psi(x).*FSB(x,E(i),L,m,V0,0), ...
-            xmin, xmax, 'RelTol', 1e-16);
-    B(i) = integral(@(x)psi(x).*FSB(x,E(i),L,m,V0,1), ...
-            xmin, xmax, 'RelTol', 1e-16);
-    psi1 = psi1 + dk*A(i)*FSB(x,E(i),L,m,V0,0) ...
-                + dk*B(i)*FSB(x,E(i),L,m,V0,1);
+x = linspace(xmin, xmax, Nx);
+t = linspace(tmin, tmax, Nt);
+figure; set(gcf, 'Unit', 'Normalized', 'Position', [0.1, 0.1, 0.4, 0.3]);
+
+for it = 1:Nt
+    psi1 = zeros(size(x));
+    if mode == 1 % 使用类 sin，cos 基底
+        A = zeros(1,Nk); B = A;
+        for i = 1:Nk
+            A(i) = integral(@(x)psi(x).*FSB(x,E(i),L,m,V0,0), ...
+                    int_xmin, int_xmax, 'RelTol', 1e-16);
+            B(i) = integral(@(x)psi(x).*FSB(x,E(i),L,m,V0,1), ...
+                    int_xmin, int_xmax, 'RelTol', 1e-16);
+            psi1 = psi1 + dk*(A(i)*FSB(x,E(i),L,m,V0,0)...
+                       + B(i)*FSB(x,E(i),L,m,V0,1))*exp(-1i*E(i)*t(it));
+        end
+    else % 使用类 exp 基底
+        for i = 1:Nk
+            C1 = zeros(1,Nk); C2 = C1;
+            C1(i) = integral(@(x)psi(x).*conj(FSB2(x,E(i),L,m,V0,1)), ...
+                    xmin, xmax, 'RelTol', 1e-16);
+            C2(i) = integral(@(x)psi(x).*conj(FSB2(x,E(i),L,m,V0,-1)), ...
+                    xmin, xmax, 'RelTol', 1e-16);
+            psi1 = psi1 + dk*(C1(i)*FSB2(x,E(i),L,m,V0,1) ...
+                       + C2(i)*FSB2(x,E(i),L,m,V0,-1))*exp(-1i*E(i)*t(it));
+        end
+    end
+    clf;
+    plot(x, real(psi1)); hold on; plot(x, imag(psi1));
+    plot([xmin, -L, -L, L, L, xmax], [0, 0, 0.4, 0.4, 0, 0], 'k');
+    axis(ax); xlabel x; title(['t = ' num2str(t(it), '%.2f')]);
+    saveas(gcf, [num2str(it) '.png']);
 end
-figure; plot(x, real(psi(x)));
-hold on; plot(x, real(psi1), '--');
-plot([xmin, -L,-L, L, L, xmax], [0, 0, 0.5, 0.5, 0, 0], 'b');
-axis([xmin,xmax,-1,1]);
-title 'reconstruction of \psi(x)'
-\end{lstlisting}
-
-\begin{lstlisting}[language=matlab]
-% 使用类 exp(ikx), exp(-ikx) 基底
-clear; close all;
-
-% === params ====
-k0 = 4; a = 1/6;
-Nk = 300; kmax = k0 + 12*a; kmin = max(kmax/Nk, k0 - 12*a);
-x0 = 0;
-Nx = 2000; xmin = x0-6/a; xmax = x0+6/a;
-psi = @(x)exp(1i*k0*x).*exp(-(a*(x-x0)).^2);
-L = 3; V0 = 1; m = 1;
-% ==============
-
-% plot FFT
-k = linspace(kmin, kmax, Nk); dk = k(2)-k(1);
-[g1, k1] = FFT(fftresize(psi(x),Nx*2), dx);
-g = interp1(k1, g1, k);
-figure; plot(k, abs(g), '.');
-axis([kmin, kmax, 0, max(abs(g))*1.1]);
-xlabel k; title 'FFT of \psi(x)';
-
-C1 = zeros(1,Nk); C2 = C1;
-E = k.^2/(2*m);
-psi1 = zeros(size(x));
-for i = 1:Nk
-    C1(i) = integral(@(x)psi(x).*conj(FSB2(x,E(i),L,m,V0,1)), ...
-            xmin, xmax, 'RelTol', 1e-16);
-    C2(i) = integral(@(x)psi(x).*conj(FSB2(x,E(i),L,m,V0,-1)), ...
-            xmin, xmax, 'RelTol', 1e-16);
-    psi1 = psi1 + dk*C1(i)*FSB2(x,E(i),L,m,V0,1) ...
-                + dk*C2(i)*FSB2(x,E(i),L,m,V0,-1);
-end
-figure; plot(x, real(psi(x)));
-hold on; plot(x, real(psi1), '--');
-plot([xmin, -L,-L, L, L, xmax], [0, 0, 0.5, 0.5, 0, 0], 'b');
-axis([xmin,xmax,-1,1]);
-title 'reconstruction of \psi(x)'
 \end{lstlisting}
