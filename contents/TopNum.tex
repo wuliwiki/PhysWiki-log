@@ -1,0 +1,193 @@
+% 陀螺的数值模拟（Matlab）
+
+\begin{issues}
+\issueDraft
+\end{issues}
+
+\pentry{刚体转动数值模拟（Matlab）\upref{RBRNum}}
+
+\subsubsection{进动和章动}
+
+\begin{figure}[ht]
+\centering
+\includegraphics[width=12cm]{./figures/TopNum_1.png}
+\caption{运行结果， 动画见\href{https://wuli.wiki/apps/Top.html}{这里}． 红色线段为角速度， 浅蓝色线段为力矩． 陀螺的上下摆动称为\textbf{章动（nutation）}．} \label{TopNum_fig1}
+\end{figure}
+
+该陀螺模型的惯性张量见\autoref{ITensr_exe2}~\upref{ITensr}．
+
+\subsubsection{无章动的条件}
+
+\begin{figure}[ht]
+\centering
+\includegraphics[width=12cm]{./figures/TopNum_2.png}
+\caption{第二套参数的运行结果， 若适当给陀螺的初始角速度叠加一个绕 $z$ 轴的初始角速度， 会发现章动消失， 只剩下\textbf{进动（precession）}．} \label{TopNum_fig2}
+\end{figure}
+
+若轴对称的陀螺在 $S'$ 系中相对转轴的角速度为 $\bvec\omega_0$， 而进动角速度， 即 $S'$ 系相对于 $S$ 的角速度）为 $\bvec\omega_a$ （延 $z$ 方向)， 那么总角速度为 $\bvec\omega = \bvec\omega_0 + \bvec\omega_a$． 显然此时 $\bvec L = \mat I \bvec\omega$ 的大小不变， 处于转轴和 $z$ 轴所在的平面， 且相对 $S'$ 系静止． 所以角动量定理为
+\begin{equation}
+M\bvec r_c\cross \bvec g = \bvec\tau = \dot{\bvec L} = \bvec\omega_a\cross\bvec L = \bvec\omega_a\cross \mat I (\bvec\omega_0 + \bvec\omega_a)
+\end{equation}
+对每个给定的 $\mat I$， $\bvec\omega_0$ 和 $M, \bvec r_c$， 该式存在唯一的解 $\bvec\omega_a$． 把初始条件中的角速度设为 $\bvec\omega_0 + \bvec\omega_a$， 则不会出现章动．
+
+\subsubsection{摩擦力使章动消失}
+\addTODO{若陀螺的旋转存在摩擦力， 则章动会逐渐消失．}
+
+\begin{lstlisting}[language=matlab, caption=top_sim.m]
+% 陀螺的数值计算
+function top_sim
+close all;
+% === 参数设置 ===
+M = 1; R0 = 1; a= 2; % 陀螺半径和长度
+I0 = 2/5*M*R0^2*eye(3) + M*a^2*[1 0 0; 0 1 0; 0 0 0]; % 惯性张量
+th0 = -pi/3;
+q0 = [cos(th0/2); [1; 0; 0]*sin(th0/2)]; % 初始朝向（四元数）
+w0 = quat2mat(q0)*[0; 0; 97.86]; % 初始角速度
+g = 9.8; % 重力加速度
+tau = @(q) cross(quat2mat(q)*[0;0;a], M*g*[0,0,-1]); % 力矩函数
+tmin = 0; tmax = 12.2; Nt = 200; % 时间网格
+RelTol = 1e-6; % 微分方程精度
+% ===============
+
+% 解微分方程
+invI0 = inv(I0);
+Y0 = [q0; w0];
+f = @(t,Y)ode_fun(t, Y, I0, invI0, tau);
+options = odeset('RelTol', RelTol);
+[tt, Y] = ode45(f, [tmin,tmax], Y0, options);
+t = linspace(tmin, tmax, Nt);
+q = zeros(4, Nt); w = zeros(3, Nt);
+for i = 1:4 % 四元数
+    q(i,:) = interp1(tt, Y(:,i), t, 'spline');
+end
+for i = 1:3 % 角速度
+    w(i,:) = interp1(tt, Y(:,i+4), t, 'spline');
+end
+
+% 验证角动量定理
+verify(Y, tt, I0, tau);
+
+% 播放动画
+figure;
+P1 = zeros(3, Nt);
+for it = 1:Nt
+    % 求位置
+    R = quat2mat(q(:,it));
+    clf; hold on; grid on; axis equal; view(33, 17);
+    axis([-1, 1, -1, 1, -0.2, 1]*2*a);
+    P1(:,it) = plot_top(R, R0, a);
+    title(['t = ' num2str(t(it), '%.3f')]);
+    % 画瞬时角速度
+    plot3([0,w(1,it)],[0,w(2,it)],[0,w(3,it)], 'r');
+    % 画力矩
+    Tau = tau(q(:,it))/10;
+    plot3([0,Tau(1)],[0,Tau(2)],[0,Tau(3)], 'c');
+    % 画轨迹
+    plot3(P1(1,1:it), P1(2,1:it), P1(3,1:it), 'm');
+    xlabel x; ylabel y; zlabel z;
+    drawnow();
+
+    % 取消注释可将每一帧保存为 png 图片（当前目录下）
+    saveas(gcf, [num2str(it) '.png']);
+end
+end
+
+% 微分方程求导函数
+function dY = ode_fun(~, Y, I0, invI0, tau)
+q = Y(1:4); w = Y(5:7);
+q = q / norm(q);
+R = quat2mat(q);
+RT = R';
+Tau = tau(q); Tau = Tau(:);
+dw = R*invI0*RT*(Tau - cross(w, R*I0*RT*w));
+dq = 0.5*quat_mul([0; w], q);
+dY = [dq; dw];
+end
+
+% 两个四元数相乘
+function out = quat_mul(q1, q2)
+s1 = q1(1); v1 = q1(2:4);
+s2 = q2(1); v2 = q2(2:4);
+out = [s1*s2 - dot(v1,v2); s1*v2 + s2*v1 + cross(v1, v2)];
+end
+
+% 由四元数 q 求旋转矩阵 R
+function R = quat2mat(q)
+s = q(1); vx = q(2); vy = q(3); vz = q(4);
+R = [1 - 2*vy^2 - 2*vz^2, 2*vx*vy - 2*s*vz, 2*vx*vz + 2*s*vy;
+    2*vx*vy + 2*s*vz, 1 - 2*vx^2 - 2*vz^2, 2*vy*vz - 2*s*vx;
+    2*vx*vz - 2*s*vy, 2*vy*vz + 2*s*vx, 1 - 2*vx^2 - 2*vy^2];
+end
+
+% 画陀螺
+function P1 = plot_top(R, R0, a)
+[X,Y,Z] = sphere(10);
+X = X*R0; Y = Y*R0; Z = Z*R0; Z = Z + a;
+P = R * [X(:)'; Y(:)'; Z(:)'];
+P1 = R * [0; 0; 2*a];
+X = reshape(P(1,:), size(X));
+Y = reshape(P(2,:), size(Y));
+Z = reshape(P(3,:), size(Z));
+surf(X, Y, Z, 'FaceColor', 'w', 'EdgeColor', 'b'); hold on;
+plot3([0, P1(1)], [0, P1(2)], [0, P1(3)], 'LineWidth', 2, 'Color', 'k');
+end
+
+% 验证角动量定理
+function verify(Y, t, I0, tau)
+Nt = numel(t);
+L = zeros(3, Nt); w = L; % 解的角动量
+Ek = zeros(1, Nt); W = Ek;
+q = Y(:, 1:4);
+for it = 1:Nt
+    w(:,it) = Y(it, 5:7);
+    R = quat2mat(q(it,:));
+    L(:, it) = R*I0*R'*w(:,it);
+    Ek(it) = 0.5*dot(w(:,it), L(:, it));
+    if (it > 1)
+        W(it) = W(it-1) + dot(tau(q(it,:)), w(:,it))*(t(it)-t(it-1));
+    else
+        W(it) = Ek(it);
+    end
+end
+L0 = zeros(3, Nt); % 冲量矩
+L0(:, 1) = L(:, 1);
+for it = 2:Nt
+    L0(:, it) = L0(:, it-1) + tau(q(it,:)).' *(t(it)-t(it-1));
+end
+
+figure;
+% 动能定理
+subplot(5, 1, 1); ylabel E_k; hold on;
+plot(t, Ek, 'r'); plot(t, W, 'b--');
+% 角动量定理
+for i = 1:3
+    subplot(5, 1, 1+i);
+    plot(t, L(i, :), 'r'); hold on;
+    plot(t, L0(i, :), 'b--');
+end
+subplot(5, 1, 2); ylabel L_x;
+subplot(5, 1, 3); ylabel L_y;
+subplot(5, 1, 4); ylabel L_z;
+% 角动量
+subplot(5, 1, 5);
+plot(t, w); hold on;
+ylabel 'w_x, w_y, w_z';
+legend({'w_x','w_y','w_z'});
+xlabel t;
+end
+\end{lstlisting}
+
+把以下参数替换到程序开始即可．
+\begin{lstlisting}[language=matlab]
+% === 参数设置 ===
+M = 1; R0 = 1; a= 2; % 陀螺半径和长度
+I0 = 2/5*M*R0^2*eye(3) + M*a^2*[1 0 0; 0 1 0; 0 0 0]; % 惯性张量
+th0 = -pi/3;
+q0 = [cos(th0/2); [1; 0; 0]*sin(th0/2)]; % 初始朝向（四元数）
+w0 = quat2mat(q0)*[0; 0; 97.86] + [0; 0; 0.5]; % 初始角速度（矢量）
+g = 9.8; % 重力加速度
+tau = @(q) cross(quat2mat(q)*[0;0;a], M*g*[0,0,-1]); % 力矩函数
+tmin = 0; tmax = 12.2; Nt = 200; % 时间网格
+RelTol = 1e-6; % 微分方程精度
+% ===============
+\end{lstlisting}

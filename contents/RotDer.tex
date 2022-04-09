@@ -1,44 +1,40 @@
 % 旋转矩阵的导数
 % 矩阵|导数|瞬时转轴|圆周运动|旋转矩阵
 
-\pentry{圆周运动的速度\upref{CMVD}， 瞬时转轴\upref{InsAx}， 叉乘的矩阵形式\upref{CrosMt}， 旋转矩阵\upref{Rot3D}}
+\pentry{刚体的瞬时转轴、角速度的矢量相加\upref{InsAx}， 叉乘的矩阵形式\upref{CrosMt}}
 
-我们来证明含参数 $t$ 的旋转矩阵\footnote{$t$ 不一定表示时间， 可以是任意参数．} $\mat R(t)$ 的导数 $\dot{\mat R}$ 满足
+假设坐标系 $S'$ 中任意一不动点坐标为 $\bvec r'$ （不随时间变化）， 通过三维旋转矩阵\upref{Rot3D} $\mat R$ 变换到坐标系 $S$ 中的坐标 $\bvec r$， 即
+\begin{equation}\label{RotDer_eq2}
+\bvec r = \mat R \bvec r'
+\end{equation}
+令 $\bvec\omega = (\omega_x, \omega_y, \omega_z)$ 是 $S'$ 相对于 $S$ 的瞬时角速度． 假设 $\mat R$ 随时间 $t$ 变化， 记为函数 $\mat R(t)$． 那么它对时间求导 $\dot{\mat R}$ （即每个矩阵元对 $t$ 求导）为
 \begin{equation}\label{RotDer_eq4}
 \dot{\mat R} = \mat \Omega \mat R
 \end{equation}
 其中
-\begin{equation}
+\begin{equation}\label{RotDer_eq1}
 \mat \Omega = \pmat{
 0 & -\omega_z & \omega_y\\
 \omega_z & 0 & -\omega_x\\
 -\omega_y & \omega_x & 0
 }
 \end{equation}
-其中 $(\omega_x, \omega_y, \omega_z)$ 是旋转的瞬时转轴的坐标\footnote{如果使用主动理解， 即旋转矩阵将同一个坐标系中的一个矢量旋转后得到另一个矢量． 如果使用被动理解， 即旋转矩阵将同一个矢量在两个坐标系之间进行变换， 则矢量 $(\omega_x, \omega_y, \omega_z)$ 取反方向即可．}．% 未完成： 主动理解和被动理解哪里有提？
+
+\begin{exercise}{}\label{RotDer_exe1}
+证明绕轴旋转矩阵\autoref{RotA_eq3}~\upref{RotA}符合\autoref{RotDer_eq4}．
+\end{exercise}
 
 \subsection{证明}
-我们可以把一个任意的不随 $t$ 变化的列矢量 $\bvec r_0$ 旋转得
-\begin{equation}\label{RotDer_eq1}
-\bvec r(t) = \mat R(t) \bvec r_0
+把\autoref{RotDer_eq2} 对 $t$ 求导得该点在实验室坐标系的速度为
+\begin{equation}\label{RotDer_eq7}
+\bvec v = \dot{\mat R} \bvec r'
 \end{equation}
-关于 $t$ 求导得
-\begin{equation}\label{RotDer_eq3}
-\dot{\bvec r} = \dot{\mat R} \bvec r_0
+角速度和速度之间有 $\bvec v = \bvec \omega \cross (\mat R \bvec r')$（\autoref{CMVD_eq5}~\upref{CMVD}）． 我们可以把叉乘用矩阵乘法表示为（\autoref{CrosMt_eq3}~\upref{CrosMt}）
+\begin{equation}\label{RotDer_eq8}
+\bvec v = \mat\Omega \mat R \bvec r'
 \end{equation}
-令列矢量 $\bvec \omega = (\omega_x, \omega_y, \omega_z)\Tr$， 由\autoref{CMVD_eq5}~\upref{CMVD} 得
-\begin{equation}\label{RotDer_eq5}
-\dot{\bvec r} = \bvec\omega \cross \bvec r
-\end{equation}
-将叉乘表示为矩阵乘法（\autoref{CrosMt_eq3}~\upref{CrosMt}）得
-\begin{equation}\label{RotDer_eq2}
-\dot{\bvec r} = \mat\Omega \bvec r
-\end{equation}
-其中
+$\mat\Omega$ （\autoref{RotDer_eq1}）是一个反对称矩阵， 即
 \begin{equation}
-\mat \Omega = \pmat{
-0 & -\omega_z & \omega_y\\
-\omega_z & 0 & -\omega_x\\
--\omega_y & \omega_x & 0
-}\end{equation}
-将\autoref{RotDer_eq1} 代入\autoref{RotDer_eq2} 右边， 再对比\autoref{RotDer_eq3}， 可得\autoref{RotDer_eq4}． 证毕．
+\mat \Omega\Tr = -\mat \Omega
+\end{equation}
+由于 $\bvec r'$ 是任意的， 对比\autoref{RotDer_eq7} 和\autoref{RotDer_eq8} 得\autoref{RotDer_eq4}． 证毕．

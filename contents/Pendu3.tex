@@ -1,20 +1,140 @@
 % 双摆和三摆
 % 拉格朗日方程|混沌|三摆
 
+\begin{issues}
+\issueDraft
+\end{issues}
+
 \pentry{拉格朗日方程\upref{Lagrng}}
 
 \subsection{双摆}
- （未完成）
+\begin{figure}[ht]
+\centering
+\includegraphics[width=6cm]{./figures/Pendu3_2.pdf}
+\caption{双摆} \label{Pendu3_fig2}
+\end{figure}
+
+\subsubsection{运动方程}
+\begin{figure}[ht]
+\centering
+\includegraphics[width=10cm]{./figures/Pendu3_3.png}
+\caption{数值模拟结果， 动画见\href{https://wuli.wiki/apps/DbPend.html}{这里}， 代码见 “双摆的数值计算（Matlab）\upref{DbPend}”．} \label{Pendu3_fig3}
+\end{figure}
+
+\addTODO{文字说明}
+\begin{equation}
+\begin{aligned}
+T &= \frac{1}{2} m_1 (l_1 \omega_1)^2 + \frac{1}{2} m_2 [(l_1 \omega_1 \cos\theta_1 + l_2 \omega_2 \cos\theta_2)^2 + (l_1 \omega_1 \sin\theta_1 + l_2 \omega_2 \sin\theta_2)^2]
+\end{aligned}
+\end{equation}
+
+\begin{equation}  
+V = -m_1 g l_1 \cos \theta_1 - m_2 g (l_1\cos \theta_1 + l_2 \cos \theta_2)
+\end{equation}
+
+\begin{equation}
+L(\theta_1, \theta_2, \omega_1, \omega_2) = T(\omega_1, \omega_2) - V(\theta_1, \theta_2)
+\end{equation}
+
+\begin{equation}\label{Pendu3_eq1}
+\dv{t}\pdv{L}{\omega_i} = \pdv{L}{\theta_i} \quad (i=1,2)
+\end{equation}
+
+令 $\alpha = \theta_2-\theta_1$， 得
+\begin{equation}
+\pdv{T}{\omega_1} = (m_1 + m_2)l_1^2\omega_1 + m_2l_1l_2\cos\alpha\cdot\omega_2
+\end{equation}
+\begin{equation}
+\pdv{T}{\omega_2} = m_2l_1l_2\cos\alpha\cdot\omega_1 + m_2l_2^2\omega_2
+\end{equation}
+\begin{equation}
+\dv{t}\pdv{T}{\omega_1} = (m_1 + m_2)l_1^2\dot\omega_1 + m_2l_1l_2\cos\alpha\cdot\dot\omega_2 - m_2l_1l_2\sin\alpha(\omega_2-\omega_1)
+\end{equation}
+\begin{equation}
+\dv{t}\pdv{T}{\omega_2} = m_2l_1l_2\cos\alpha\cdot\dot\omega_1 + m_2l_2^2\dot\omega_2 -m_2l_1l_2\sin\alpha(\omega_2-\omega_1)\omega_1
+\end{equation}
+\begin{equation}
+\pdv{T}{\theta_1} = m_2l_1l_2\sin\alpha\cdot \omega_1\omega_2
+\end{equation}
+\begin{equation}
+\pdv{T}{\theta_2} = -m_2l_1l_2\sin\alpha\cdot \omega_1\omega_2
+\end{equation}
+\begin{equation}
+\pdv{V}{\theta_1} = m_1gl_1\sin\theta_1 + m_2gl_1\sin\theta_1
+\end{equation}
+\begin{equation}
+\pdv{V}{\theta_2} = m_2gl_2\sin\theta_2
+\end{equation}
+代入\autoref{Pendu3_eq1} 得
+\begin{equation}
+(m_1+m_2)l_1\dot\omega_1 + m_2l_2\cos\alpha\cdot\dot\omega_2 = m_2l_2\sin\alpha\cdot\omega_2^2 - (m_1+m_2)g\sin\theta_1
+\end{equation}
+\begin{equation}
+l_1\cos\alpha\cdot\dot\omega_1 + l_2\dot\omega_2 = l_1\sin(\theta_1-\theta_2)\omega_1^2 - g\sin\theta_2
+\end{equation}
+解得
+\begin{equation}
+\dot\omega_1 = \frac{m_2l_2\sin\alpha\cdot\omega_2^2 - (m_1+m_2)g\sin\theta_1 + m_2[l_1\sin\alpha\cdot\omega_1^2 + g\sin\theta_2] \cos\alpha}{m_1l_1 + m_2l_1\sin^2\alpha}
+\end{equation}
+\begin{equation}
+\dot\omega_2 = \frac{[(m_1+m_2)g\sin\theta_1 - m_2l_2\sin\alpha\cdot\omega_2^2]\cos\alpha - (m_1+m_2)[l_1\sin\alpha\cdot\omega_1^2 + g\sin\theta_2]}{m_1l_2 + m_2l_2\sin^2\alpha}
+\end{equation}
+
+\subsection{刚体双摆}
+
+\begin{figure}[ht]
+\centering
+\includegraphics[width=10cm]{./figures/Pendu3_4.png}
+\caption{刚体双摆的模拟结果， 动画见\href{https://wuli.wiki/apps/RigDbPend.html}{这里}， 代码见 “双摆的数值计算（Matlab）\upref{DbPend}”．} \label{Pendu3_fig4}
+\end{figure}
+若第一个质量为 $m_1$ 刚体的质心用 $l_1,\theta_1$ 描述， 关于质心的转动惯量为 $I_1$， 第二个刚体质量为 $m_2$， 转轴与第一个刚体的转轴距离 $r_1$， 与第一个刚体质心的夹角为 $\alpha$， 那么
+\begin{equation}
+\begin{aligned}
+T &= \frac{1}{2}m_1 l_1^2 \omega_1^2 + \frac{1}{2}I_1 \omega_1^2
+ + \frac{1}{2}m_2[(r_1\omega_1\cos(\theta_1 + \alpha) + l_2\omega_2\cos\theta_2)^2\\
+&\qquad \qquad \qquad+ (r_1\omega_1\sin(\theta_1+\alpha_1) + l_2\omega_2\sin\theta_2)^2] + \frac{1}{2}I_2\omega_2^2\\
+&= \frac{1}{2}(m_1l_1^2 + m_2r_1^2 + I_1)\omega_1^2 + \frac{1}{2}(m_2l_2^2 + I_2)\omega_2^2 + m_2r_1l_2\cos(\theta_1+\alpha-\theta_2)\omega_1\omega_2
+\end{aligned}
+\end{equation}
+令 $T = a\omega_1^2 + b\omega_2^2 + c\omega_1\omega_2$， 注意 $a,b$ 是常数， 而 $c$ 是时间的函数．
+
+\begin{equation}  
+V = -m_1 g l_1 \cos \theta_1 - m_2 g (r_1\cos(\theta_1 + \alpha) + l_2 \cos \theta_2)
+\end{equation}
+这样,
+\begin{equation}
+\dv{t}\pdv{T}{\omega_1} = 2a\dot\omega_1 + c\dot\omega_2 + \pdv{c}{\theta_1}\omega_1\omega_2 + \pdv{c}{\theta_2}\omega_2^2
+\end{equation}
+\begin{equation}
+\dv{t}\pdv{T}{\omega_2} = 2b\dot\omega_2 + c\dot\omega_1 + \pdv{c}{\theta_1}\omega_1^2 + \pdv{c}{\theta_2}\omega_1\omega_2
+\end{equation}
+\begin{equation}
+\pdv{T}{\theta_1} = \pdv{c}{\theta_1}\omega_1\omega_2, \qquad
+\pdv{T}{\theta_2} = \pdv{c}{\theta_2}\omega_1\omega_2
+\end{equation}
+\begin{equation}
+\pdv{V}{\theta_1} = m_1gl_1\sin\theta_1 + m_2gr_1\sin(\theta_1+\alpha), \qquad
+\pdv{V}{\theta_2} = m_2gl_2\sin\theta_2
+\end{equation}
+代入拉格朗日方程\autoref{Pendu3_eq1} 得
+\begin{equation}
+2a\dot\omega_1 + c\dot\omega_2 = -\pdv{c}{\theta_2}\omega_2^2 - \pdv{V}{\theta_1}
+\end{equation}
+\begin{equation}
+c\dot\omega_1 + 2b\dot\omega_2 = -\pdv{c}{\theta_1}\omega_1^2 - \pdv{V}{\theta_2}
+\end{equation}
+这里不具体写出 $\dot\omega_1, \dot\omega_2$ 的解， 可以直接使用克拉默法则\upref{kramer}．
 
 \subsection{三摆}
 \begin{figure}[ht]
 \centering
-\includegraphics[width=8cm]{./figures/Pendu3_1.pdf}
+\includegraphics[width=9cm]{./figures/Pendu3_1.pdf}
 \caption{三摆} \label{Pendu3_fig1}
 \end{figure}
 如\autoref{Pendu3_fig1} 所示，三根质量不计的杆长度分别为 $l_1, l_2, l_3$， 三个质点的质量分别为 $m_1, m_2, m_3$． 我们把这个模型叫做\textbf{三摆}． 三摆常用于演示物理学中的混沌现象．
+
 \subsubsection{运动方程}
- 
+\addTODO{文字说明}
 \begin{equation}
 \begin{aligned}
 T &= \frac{1}{2} m_1 (l_1 \omega_1)^2 + \frac{1}{2} m_2 [(l_1 \omega_1 \cos\theta_1 + l_2 \omega_2 \cos\theta_2)^2 +\\

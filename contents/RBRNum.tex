@@ -1,23 +1,22 @@
-% 刚体转动数值模拟
+% 刚体转动数值模拟（Matlab）
 % Matlab|数值计算|刚体转动
 
-\pentry{刚体运动方程（四元数）\upref{RBEMQt}， 四阶龙格库塔法\upref{OdeRK4}}
+\pentry{刚体运动方程（四元数）\upref{RBEMQt}， 四阶龙格库塔法\upref{OdeRK4}， Matlab 的 ode45 解算器}
 
 这里给出使用 4 阶龙格库塔法模拟刚体绕固定点转动的 Matlab 代码． 程序中给出的默认参数用于模拟一个初始静止的长方体受到一个 $(1,1,1)$ 方向的大小为 $0.05$ 的恒力矩时的加速转动．
 
-运行结果见\href{https://wuli.wiki/apps/rigBdRot.html}{互动演示}， 截图如\autoref{RBRNum_fig1}．
-
+\addTODO{应该渲染得更立体， 打个灯光}
 \begin{figure}[ht]
 \centering
 \includegraphics[width=8cm]{./figures/RBRNum_1.png}
-\caption{动画截图} \label{RBRNum_fig1}
+\caption{模拟结果， 动画见\href{https://wuli.wiki/apps/rigBdRot.html}{这里}．} \label{RBRNum_fig1}
 \end{figure}
 
-为了验证数值解的正确性， 我们在生成动画之前用 \verb|verify| 函数验证角动量定理， 也就是把力矩函数 \verb|tau(t)| 做数值积分， 再与数值解中的角动量进行对比， 结果如\autoref{RBRNum_fig2}．
+为了验证数值解的正确性， 我们在生成动画之前用 \verb|verify| 函数验证动能定理和角动量定理， 详见\autoref{RBRNum_fig2}．
 \begin{figure}[ht]
 \centering
-\includegraphics[width=12cm]{./figures/RBRNum_1.pdf}
-\caption{验证角动量定理， 三个图分别是角动量的三个分量， 蓝线是力矩积分， 红色是数值解中计算的角动量} \label{RBRNum_fig2}
+\includegraphics[width=14cm]{./figures/RBRNum_2.png}
+\caption{验证动能定理（图 1），角动量定理（图 2-4）和角速度的三个分量（图 5)． 图 1-4 中蓝线是动能和角动量， 红线是做功和冲量矩．} \label{RBRNum_fig2}
 \end{figure}
 
 \begin{lstlisting}[language=matlab, caption=rigBdRot.m]
@@ -31,30 +30,42 @@ I0 = M/12 * diag([b^2 + c^2, a^2 + c^2, a^2 + b^2]); % 惯性张量
 w0 = [0; 0; 0]; % 初始角速度
 q0 = [1; 0; 0; 0]; % 初始朝向（四元数）
 tau = @(t) 0.05*[1; 1; 1]/sqrt(3); % 力矩函数
-tmin = 0; tmax = 5; % 起始时间
-Nt = 501; % 时间步数
+tmin = 0; tmax = 5; Nt = 201; % 时间网格
+RelTol = 1e-6; % 微分方程精度
 % ================
 
 % 解微分方程
 invI0 = inv(I0);
 Y0 = [q0; w0];
-f = @(Y,t)ode_fun(Y, t, I0, invI0, tau);
-[Y, t] = odeRK4(f, [tmin, tmax], Y0, Nt);
+f = @(t,Y)ode_fun(t, Y, I0, invI0, tau);
+options = odeset('RelTol', RelTol);
+[tt, Y] = ode45(f, [tmin,tmax], Y0, options);
+t = linspace(tmin, tmax, Nt);
+q = zeros(4, Nt); w = zeros(3, Nt);
+for i = 1:4 % 四元数
+    q(i,:) = interp1(tt, Y(:,i), t, 'spline');
+end
+for i = 1:3 % 角速度
+    w(i,:) = interp1(tt, Y(:,i+4), t, 'spline');
+end
 
 % 验证角动量定理
-verify(Y, t, I0, tau);
+verify(Y, tt, I0, tau);
 
 % 播放动画
 figure; hold on; grid on; axis equal; view(23, 36);
-axis([-0.3, 0.3, -0.3, 0.3, -0.3, 0.3]);
 for it = 1:Nt
-    q = Y(1:4, it);
-    R = quat2mat(q);
+    % 求位置
+    R = quat2mat(q(:,it));
     clf; hold on; grid on; axis equal; view(23, 36);
-    axis([-0.3, 0.3, -0.3, 0.3, -0.3, 0.3]);
+    axis([-1, 1, -1, 1, -1, 1]*a);
     plot_cube(R, a, b, c);
     title(['t = ' num2str(t(it), '%.3f')]);
+    
+    % 画瞬时角速度
+    plot3([0,w(1,it)],[0,w(2,it)],[0,w(3,it)]);
     drawnow();
+    
     % 取消注释可将每一帧保存为 png 图片（当前目录下）
     % saveas(gcf, [num2str(it) '.png']);
 end
@@ -99,13 +110,19 @@ end
 % 验证角动量定理
 function verify(Y, t, I0, tau)
 Nt = numel(t);
-L = zeros(3, Nt); % 解的角动量
+L = zeros(3, Nt); w = L; % 解的角动量
+Ek = zeros(1, Nt); W = Ek;
 for it = 1:Nt
-    q = Y(1:4, it); w = Y(5:7, it);
+    q = Y(it, 1:4); w(:,it) = Y(it, 5:7);
     R = quat2mat(q);
-    L(:, it) = R*I0*R'*w;
+    L(:, it) = R*I0*R'*w(:,it);
+    Ek(it) = 0.5*dot(w(:,it), L(:, it));
+    if (it > 1)
+        W(it) = W(it-1) + dot(tau(t(it)), w(:,it))*(t(it)-t(it-1));
+    else
+        W(it) = Ek(it);
+    end
 end
-
 L0 = zeros(3, Nt); % 力矩积分的角动量
 L0(:, 1) = L(:, 1);
 for it = 2:Nt
@@ -114,30 +131,23 @@ for it = 2:Nt
 end
 
 figure;
+% 动能定理
+subplot(5, 1, 1); ylabel E_k; hold on;
+plot(t, Ek, 'r'); plot(t, W, 'b--');
+% 角动量定理
 for i = 1:3
-    subplot(3, 1, i);
+    subplot(5, 1, 1+i);
     plot(t, L(i, :), 'r'); hold on;
     plot(t, L0(i, :), 'b--');
 end
-subplot(3, 1, 1); ylabel L_x;
-subplot(3, 1, 2); ylabel L_y;
-subplot(3, 1, 3); ylabel L_z;
+subplot(5, 1, 2); ylabel L_x;
+subplot(5, 1, 3); ylabel L_y;
+subplot(5, 1, 4); ylabel L_z;
+% 角动量
+subplot(5, 1, 5);
+plot(t, w); hold on;
+ylabel 'w_x, w_y, w_z';
+legend({'w_x','w_y','w_z'});
 xlabel t;
-end
-
-% 四阶龙格库塔解微分方程 https://wuli.wiki/online/OdeRK4.html
-function [Y,t]=odeRK4(f,tspan,Y0,Nt)
-Nvar=numel(Y0);
-dt=(tspan(2)-tspan(1))/(Nt-1);
-Y=zeros(Nvar,Nt);
-Y(:,1)=Y0(:);
-t=linspace(tspan(1),tspan(2),Nt);
-for ii=1:Nt-1
-    K1=f( t(ii),        Y(:,ii)          );
-    K2=f( t(ii)+dt/2,   Y(:,ii)+K1*dt/2  );
-    K3=f( t(ii)+dt/2,   Y(:,ii)+K2*dt/2  );
-    K4=f( t(ii)+dt,     Y(:,ii)+K3*dt    );
-    Y(:,ii+1)=Y(:,ii)+dt/6*(K1+2*K2+2*K3+K4);
-end
 end
 \end{lstlisting}

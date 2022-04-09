@@ -35,7 +35,7 @@ S_D=\sum_{i=1}^n A_i \opn{m}E_i
 
 如果$A\subseteq B\subseteq E$，那么显然$f$在$A$上的上确界要小于等于在$B$上的上确界，在$A$上的下确界要大于等于在$B$上的下确界，因此容易得出以下引理：
 
-\begin{lemma}{}
+\begin{lemma}{}\label{Lebes1_lem1}
 
 设$f$是可测集$E$上的可测函数，$A$和$B$是$E$的可测分划，且$A$比$B$更细．那么
 
@@ -89,7 +89,7 @@ s_{D_i}\leq S_{D_j}
 
 函数的上下积分有以下重要的性质：
 
-\begin{theorem}{}
+\begin{theorem}{}\label{Lebes1_the1}
 
 设$f$、$g$是可测集$E$上的可测函数，$\{E_1, E_2\}$是$E$的某个分划．
 
@@ -99,19 +99,19 @@ s_{D_i}\leq S_{D_j}
   \underline{\int_E} f(x) \dd x \leq \underline{\int_E} g(x) \dd x \leq \overline{\int_E} f(x) \dd x \leq \overline{\int_E} g(x) \dd x
   \end{equation}
   \item 若$\{E_1, E_2\}$是$E$的某个分划，则
-  \begin{equation}
+  \begin{equation}\label{Lebes1_eq1}
   \underline{\int_E} f(x) \dd x=\underline{\int_{E_1}} f(x) \dd x+\underline{\int_{E_2}} f(x) \dd x
   \end{equation}
   且
-  \begin{equation}
+  \begin{equation}\label{Lebes1_eq4}
   \overline{\int_E} f(x) \dd x=\overline{\int_{E_1}} f(x) \dd x+\overline{\int_{E_2}} f(x) \dd x
   \end{equation}
   \item 恒有
-  \begin{equation}
+  \begin{equation}\label{Lebes1_eq5}
   \underline{\int_E} \qty(f(x)+g(x)) \dd x \geq \underline{\int_E} f(x) \dd x+\underline{\int_E} g(x) \dd x
   \end{equation}
   和
-  \begin{equation}
+  \begin{equation}\label{Lebes1_eq6}
   \overline{\int_E} \qty(f(x)+g(x)) \dd x \leq \overline{\int_E} f(x) \dd x+\overline{\int_E} g(x) \dd x
   \end{equation}
 \end{enumerate}
@@ -124,15 +124,51 @@ s_{D_i}\leq S_{D_j}
 
 1．太过显然，在此从略\footnote{若不是那么显然，可留言，笔者视情况补充证明细节．}．
 
-2. 
+2. 为方便，记$A$为对$E$进行任意分划后求上和的结果的集合；$A'$为先将$E$作分划$\{E_1, E_2\}$后，再分别对这两个$E_i$作分划后求上和，将两个上和相加后，所得值的集合．这样，按定义，\autoref{Lebes1_eq4} 的左边就是$A$的下确界，右边就是$A'$的下确界．
+
+\autoref{Lebes1_eq4} 左边是对$E$作分划，右边则是先将$E$作分划$\{E_1, E_2\}$后，再分别对这两个$E_i$作分划，因此可知$A'\subseteq A$，故必有\footnote{子集的下确界大于等于母集的下确界．}
+
+ \begin{equation}\label{Lebes1_eq2}
+  \underline{\int_E} f(x) \dd x \leq \underline{\int_{E_1}} f(x) \dd x+\underline{\int_{E_2}} f(x) \dd x
+  \end{equation}
+
+另一方面，由\autoref{Lebes1_lem1} ，可知任取$A$中一个数字$a$，都必有$A'$中的数字$a'$，使得$a'\leq a$．因此又有
+
+\begin{equation}\label{Lebes1_eq3}
+\underline{\int_E} f(x) \dd x \geq \underline{\int_{E_1}} f(x) \dd x+\underline{\int_{E_2}} f(x) \dd x
+\end{equation}
+
+综合\autoref{Lebes1_eq2} 和\autoref{Lebes1_eq3} 即得\autoref{Lebes1_eq4} ．
+
+由上下和与上下积分定义的对偶性，可直接推得\autoref{Lebes1_eq1} ．由此得证．
+
+3. 只需证明\autoref{Lebes1_eq5} 即可，之后可由对偶性直接推知\autoref{Lebes1_eq6} .
+
+考虑任意可测集$E_i\subseteq E$上的$f$和$g$，则由加法和下确界的定义直接可得“$f$的下确界加$g$的下确界\textbf{小于等于}$f+g$的下确界”．
+
+于是，对于$E$的任意分划$D$，总存在两个分划$D_1$和$D_2$\footnote{直接取$D_1=D_2=D$就行，更细当然更好．}，使得“$f$对于$D_1$计算出来的下和加上$g$对于$D_2$计算出来的下和”，\textbf{大于等于}“$f+g$对于$D$计算出来的下和”．因此，前者的上确界大于等于后者的下确界，也即\autoref{Lebes1_eq5} .
 
 \textbf{证毕}．
 
 
+\autoref{Lebes1_the1} 所描述的性质是非常符合直觉的．类比Riemann积分的定义过程，我们也希望上下积分相等，从而成为新的积分定义．事实上，可测函数就具有这样优良的性质．
+
+\begin{theorem}{}
+设$E\subseteq \mathbb{R}^n$是\textbf{测度有限}的可测集，$f$是其上\textbf{非负有界}函数，那么
+\begin{equation}
+\overline{\int_E} f(x) \dd x = \underline{\int_E} f(x) \dd x
+\end{equation}
+\end{theorem}
+的\textbf{充要条件}是$f$为\textbf{可测函数}．
 
 
+\textbf{证明}：
 
+充分性：
 
+设$f$是非负有界的可测函数．
+
+\textbf{证毕}．
 
 
 
