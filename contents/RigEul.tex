@@ -1,0 +1,35 @@
+% 刚体定点旋转的运动方程（欧拉角）
+
+\begin{issues}
+\issueDraft
+\end{issues}
+
+\pentry{刚体的运动方程\upref{RBEqM}， 欧拉角\upref{EulerA}}
+
+首先摆放刚体， 使得三个主轴分别与 $x,y,z$ 轴重合． 然后使用 $z$-$y$-$z$ 欧拉角描述刚体每个时刻的位置． 若已知角速度， 欧拉角的时间导数为（\autoref{EulerA_eq2}~\upref{EulerA}）
+\begin{equation}\label{RigEul_eq1}
+\dot\psi = \omega_r + \omega_\theta \cot\theta,\qquad
+\dot\theta = \omega_\phi,\qquad
+\dot\phi = -\frac{\omega_\theta}{\sin\theta}
+\end{equation}
+球坐标中三个方向构建的坐标系与刚体三个主轴 $\uvec e_1, \uvec e_2, \uvec e_3$ （$\uvec e_1 = \uvec r$）所构建的体坐标系之间还需要经过绕 $\uvec r$ 轴的 $\psi$ 角旋转变换．
+\begin{equation}\label{RigEul_eq3}
+\pmat{\omega_1\\\omega_2\\\omega_3} = \pmat{1 & 0 & 0\\ 0 & C_\psi & S_\psi\\ 0 & -S_\psi & C_\psi}\pmat{\omega_r\\\omega_\theta\\\omega_\phi}
+\end{equation}
+在体坐标系中使用（\autoref{RBEqM_eq6}~\upref{RBEqM}）得
+\begin{equation}\label{RigEul_eq2}
+\dot{\bvec \omega} = \mat I_0^{-1} (\bvec \tau  - \bvec\omega\cross \mat I_0 \bvec\omega)
+\end{equation}
+其中
+\begin{equation}
+\bvec\omega\cross \mat I_0 \bvec\omega = (I_3-I_2)\omega_3\omega_2\uvec r + (I_1-I_3)\omega_1\omega_3\uvec e_2 + (I_2-I_1)\omega_1\omega_2\uvec e_3
+\end{equation}
+特殊地， 若两个主轴转动惯量相等 $I_2 = I_2$， 那么则无需进行\autoref{RigEul_eq3} 的变换， 直接在 $\uvec r, \uvec \theta, \uvec\phi$ 系中列出\autoref{RigEul_eq2} 即可．
+
+现在， \autoref{RigEul_eq1} 和\autoref{RigEul_eq2} 就组成了一个六元一阶常微分方程组． 另外体坐标系到实验室坐标系之间的变换矩阵为（\autoref{EulerA_eq3}~\upref{EulerA}）
+\begin{equation}
+\mat R = \pmat{
+C_\phi C_\theta C_\psi-S_\phi S_\psi & -C_\phi C_\theta S_\psi - S_\phi C_\psi & C_\phi S_\theta\\
+S_\phi C_\theta C_\psi + C_\phi S_\psi & -S_\phi C_\theta S_\psi + C_\phi C_\psi & S_\phi S_\theta\\
+-S_\theta C_\psi & S_\theta S_\psi & C_\theta}
+\end{equation}

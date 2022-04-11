@@ -23,65 +23,126 @@
 
 现代四元数的定义是把每一个四元数看成一个实数和一个三维实矢量的组合：$(a_0, \bvec{a})$．在这个语境下，$\I$，$\mathrm{j}$，$\mathrm{k}$ 被看成是一个标准正交基中的矢量，为了避免将来的混淆，把这三个基矢量重新表示成 $1, \uvec i, \uvec j$ 和 $\uvec k$ 后，四元数的运算可以定义如下：
 
-\begin{definition}{四元数的四则运算}
+\begin{definition}{四元数的四则运算}\label{Quat_def1}
 记四元数集合为 $\mathbb{H}=\{(a_0, \bvec{a})|a_0\in\mathbb{R}, \bvec{a}\in\mathbb{R}^3\}$， $\forall(a_0, \bvec{a}), (b_0, \bvec{b})\in\mathbb{H}$， 加法定义为
 \begin{equation}
-(a_0, \bvec{a})+ (b_0, \bvec{b})=(a_0+b_0, \bvec{a}+\bvec{b})
+(a_0, \bvec{a})+ (b_0, \bvec{b})=(a_0+b_0,\ \ \bvec{a}+\bvec{b})
 \end{equation}
 乘法定义为（乘号可以省略或者用其他符号）
 \begin{equation}\label{Quat_eq1}
-(a_0, \bvec{a})\times (b_0, \bvec{b})=(a_0b_0-\bvec{a}\cdot\bvec{b}, a_0\bvec{b}+b_0\bvec{a}+\bvec{a}\times\bvec{b})
+(a_0, \bvec{a})\times (b_0, \bvec{b})=(a_0b_0-\bvec{a}\cdot\bvec{b},\ \ a_0\bvec{b}+b_0\bvec{a}+\bvec{a}\times\bvec{b})
 \end{equation}
 \end{definition}
 
-注意， 虽然四元数的加法显然满足交换律， 但由于一般来说矢量的叉积不可交换， 因此四元数乘法一般不具有交换律． 只有 $\bvec{a}$ 平行于 $\bvec{b}$ （包括其中之一为 $\bvec 0$）的时候， 才会有 $\bvec{a}\times\bvec{b}= \bvec{0} =\bvec{b}\times\bvec{a}$． 四元数的乘法满足分配律（\autoref{Quat_exe1}）．
+注意， 虽然四元数的加法显然满足交换律， 但由于一般来说矢量的叉积不可交换， 因此四元数乘法一般不具有交换律． 只有 $\bvec{a}$ 平行于 $\bvec{b}$ （包括其中之一为 $\bvec 0$）的时候， 才会有 $\bvec{a}\times\bvec{b}= \bvec{0} =\bvec{b}\times\bvec{a}$． 四元数的\textbf{乘法满足分配律}（\autoref{Quat_exe1}）．
 
 四元数 $A=(a_0, \bvec{a})$ 的实数部分 $a_0$ 被称为\textbf{标部}，矢量部分 $\bvec{a}$ 称为\textbf{矢部}．为了方便，有时候也把这个四元数记为 $a_0+\bvec{a}$，类比复数的表示法 $(a, b)=a+b\I$． 当标部为 $0$ 时， 可以直接将四元数记为矢量 $\bvec a$， 同理， 当矢部为零时也可以记为标量 $a_0$． 这样， $a_0 + \bvec a$ 就可以看作两个四元数相加． 和复数同理， 我们认为矢部为 $0$ 的四元数就是实数．
 
-如果我们把四元数的矢部限制在一个方向上，那么得到的运算结构实际上就是复数．你可以通过比较四元数乘法规则和复数乘法规则来看出这一点——注意在限制条件下任何矢部的向量积都是 $\bvec{0}$.
+\begin{example}{}
+两个标量相乘也可以看作是四元数相乘， 易证
+\begin{equation}
+ab = (ab, \bvec 0) = (a,\bvec 0)(b,\bvec 0) = (b,\bvec 0)(a,\bvec 0)
+\end{equation}
+类似地， 矢量的数乘（\autoref{GVecOp_sub1}~\upref{GVecOp}） $\lambda\bvec v$ 也可以认为是四元数相乘， 易证
+\begin{equation}
+\lambda\bvec v = (0, \lambda\bvec v) = (\lambda, \bvec 0)(0, \bvec v) = (0, \bvec v)(\lambda, \bvec 0)
+\end{equation}
+标量与四元数相乘也类似
+\begin{equation}
+\lambda (a_0, \bvec a) = (\lambda,\bvec 0) (a_0, \bvec a) = (a_0, \bvec a)(\lambda,\bvec 0) = (\lambda a_0, \lambda\bvec a)
+\end{equation}
+而两个矢量（的四元数）相乘却是以前没有见过的， 要区别于点乘和叉乘
+\begin{equation}
+\bvec a\bvec b = (0, \bvec a)(0, \bvec b) = (-\bvec a\vdot\bvec b,\ \bvec a\cross\bvec b)
+\end{equation}
+另外若令 $\bvec a$ 的模长为 $a$， 单位矢量 $\uvec a = \bvec a/a$， 使用四元数乘法有
+\begin{equation}
+\bvec a^{n} = (0, \bvec a)^{n} =
+\leftgroup{
+&(-1)^{n/2} a^{n} && (n = 0,2,4,\dots)\\
+&\ (-1)^{(n-1)/2} a^{n}\uvec a && (n = 1,3,5,\dots)
+}
+\end{equation}
+这里 $\bvec a^{n}$ 的记号可能会产生歧义（区分于例如 $\bvec a^2 = \bvec a\vdot\bvec a$）， 但一般不难通过语境判断． 也就是说在四元数乘法下， 矢量的偶数次方是标量， 奇数次方是矢量．
+\end{example}
+
+如果我们把四元数的矢部限制在一个方向上，那么得到的运算结构实际上就是复数．你可以通过比较四元数乘法规则和复数乘法规则来看出这一点——注意在限制条件下任何矢部的向量积都是 $\bvec{0}$．
 
 除了把四元数看成一个标量加一个三维矢量以外，我们也可以把四元数看成一个四维矢量， 就像复数既可以看成一个实数配上一个一维矢量， 也可以看成一个二维矢量一样．这种情况下，四元数实际上就是实数域上的一个四维\textbf{代数}\upref{AlgFie}\footnote{从代数角度来说，Hamilton爵士当年苦苦思索多年的问题就是“是否存在实数域上的三维代数”，今天我们已经知道，实数域上只存在一维、二维、四维和八维的“具有积性的可除代数”，分别对应实数、复数、四元数和八元数，其中四元数已经不具有交换性，而八元数连结合性都丢了．这里的“积性”是指 $\abs{a}\abs{b}=\abs{ab}$，而“可除性”就是“乘法单位元存在性”．}．
 
 和复数一样，四元数也有共轭和模的概念．
 
-\begin{definition}{共轭、模方和模}
+\begin{definition}{共轭、模方和模}\label{Quat_def2}
 \begin{itemize}
 \item 令四元数为 $A=a_0+\bvec{a}$，记 $\widetilde{A}=a_0-\bvec{a}$，称为 $A$ 的\textbf{共轭（conjugate）}．
-\item 记 $||A||=||\widetilde{A}||=A\widetilde{A}=\widetilde{A}A=a_0^2+ \abs{\bvec{a}}^2$，称为 $A$ 的\textbf{模方}．
+\item 记 $||A||=a_0^2+ \abs{\bvec{a}}^2$，称为 $A$ 的\textbf{模方}．
 \item 记 $|A|=\sqrt{||A||}$，称为 $A$ 的\textbf{模}．
 \end{itemize}
 \end{definition}
 
 \begin{exercise}{}\label{Quat_exe1}
 \begin{itemize}
+\item 证明四元数满足乘法分配律
 \item 证明四元数满足乘法结合律
-\item 证明 $||A||=||\widetilde{A}||=\widetilde{A}A=a_0^2 + \abs{\bvec{a}}^2$
-\item 若将单位矢量 $\uvec e$ 看作四元数（实部为零）， 证明 $\uvec{e}^2=-1,\ \uvec{e}^3=-\uvec{e}$
+\item 证明 $||A||=||\widetilde{A}||=\widetilde{A}A=A\widetilde{A}$ （类比复数）
+\item 证明 $\abs{AB} = \abs{A}\abs{B}$， 即 $\norm{AB} = \norm{A}\norm{B}$ （类比复数）
+\item 若将单位矢量 $\uvec e$ 看作四元数（标部为零）， 证明 $\uvec{e}^2=-1,\ \uvec{e}^3=-\uvec{e}$
 \end{itemize}
 \end{exercise}
+
+\subsection{四元数的逆}
+与复数类似， 任何四元数都可以表示为模长乘以一个模长等于 $1$ 的四元数 $A = \abs{A} q$． 而由于 $\abs{q} = q\tilde q = \tilde q q = 1$， 可见 $q$ 的共轭就是它的逆 $q^{-1} = \tilde q$． 我们把模长为零（即四个分量都是零）的四元数称为\textbf{零元}， 那么易证任意非零四元数 $A = \abs{A} q$ 的逆就是
+\begin{equation}
+A^{-1} = \frac{1}{\abs{A}} \tilde q
+\end{equation}
+在 “四元数与旋转矩阵\upref{QuatN}” 中会看到， 任意模长为 $1$ 的四元数都可以表示一个唯一的三维旋转．
+
+证明\textbf{逆元的唯一性}： 假设 $B_1, B_2$ 都是 $A$ 的逆元， 那么 $AB_1 = AB_2$， 等式两边左乘 $B_1$， 得 $B_1 = B_2$． 证毕．
+
+可见所有的非零四元数构成一个群\upref{Group}．
+
+\subsection{四元数乘法的矩阵表示}
+四元数乘法 $(a_0,\bvec a)(a_0,\bvec b) = (a_0,a_1,a_2,a_3)(b_0,b_1,b_2,b_3)$ 可以看作是一个线性变换， 用矩阵乘法表示为
+\begin{equation}
+\begin{aligned}
+(a_0,\bvec a)(a_0,\bvec b) &= \pmat{
+a_0 & -a_1 & -a_2 & -a_3\\
+a_1 & a_0 & -a_3 & a_2\\
+a_2 & a_3 & a_0 & -a_1\\
+a_3 & -a_2 & a_1 & a_0
+}\pmat{
+b_0\\b_1\\b_2\\b_3}\\
+&= \qty[\pmat{a_0& a_1 & a_2& a_3}\pmat{
+b_0 & -b_1 & -b_2 & -b_3\\
+b_1 & b_0 & -b_3 & b_2\\
+b_2 & b_3 & b_0 & -b_1\\
+b_3 & -b_2 & b_1 & b_0
+}]\Tr
+\end{aligned}
+\end{equation}
 
 \subsection{四元数的指数表示}
 
 记 $\E$ 是自然对数的底数，那么对于任意实数 $x$，有 $\E^x = \sum^\infty\limits_{n=0} x^n / n!$．如果把实数 $x$ 替换为其它能够进行乘方的对象，比如说矩阵、复数等，那么还可以把指数的概念拓展到更多的对象上，构造出复数的指数、矩阵的指数等．
 
-四元数也可以乘方，因此可以定义四元数的指数：
-
 \begin{definition}{四元数的指数表示}
 
 令四元数为 $A=a_0+\bvec{a}$，则使用四元数的乘法（\autoref{Quat_eq1}），定义（类比复数的指数函数定义\upref{CExp}）
+\begin{equation}\label{Quat_eq2}
+\E^A = \sum^\infty\limits_{n=0}\frac{A^n}{n!}
+\end{equation}
+\end{definition}
+可以证明（留做习题）
 \begin{equation}
-\E^A=\E^{a_0}\E^{\bvec{a}}=\E^{a_0}\sum^\infty\limits_{n=0}\frac{\bvec{a}^n}{n!}=\E^{a_0}\sum^\infty\limits_{n=0}\frac{(a \uvec a)^n}{n!}=\E^{a_0}[\cos{a}+\sin({a}\uvec{a})]
+\E^A = \E^{a_0}\E^{\bvec{a}}=\E^{a_0}\sum^\infty\limits_{n=0}\frac{\bvec{a}^n}{n!}=\E^{a_0}(\cos{a}+ \uvec{a}\sin a)
 \end{equation}
 其中 $\uvec{a}$ 是和 $\bvec{a}$ 同方向的单位矢量，$a$ 是 $\bvec{a}$ 作为四元数的模或者作为三维实矢量的模．
-\end{definition}
 
 \begin{exercise}{与复数的类比}
-
 比较复数和四元数的指数表示，说明为什么可以将复数看成矢部限制在一个方向上的四元数．
-
 \end{exercise}
 
-由于四元数的加法满足交换律，而乘法一般不满足，因此一般情况下四元数并不满足 $\E^{A+B} = \E^A \E^B$．因此，四元数的指数表示法在计算中其实用得不多．
+由于四元数的加法满足交换律，而乘法一般不满足，因此一般情况下四元数并不满足 $\E^{A+B} = \E^A \E^B$．因此，四元数的指数表示法在计算中其实用得不多． \autoref{Quat_eq2} 中的第一个等号成立是因为 $a_0\bvec a = \bvec a a_0$ 满足交换律．
 
 \subsection{四元数的拓展}
 

@@ -1,7 +1,7 @@
 % 非负函数的 Lebesgue 积分
 % 实变函数|勒贝格积分
 
-\pentry{可测函数\upref{MsbFun}}
+\pentry{可测函数的结构\upref{MsbFSt}}
 
 Lebesgue积分的思路是对函数的值域进行分划，以相应值域的逆映射作为“柱底”．归根到底，Lebesuge积分还是要对定义域作分划的，但相比Riemann积分的直接对定义域作分划，Lebesgue积分的分划方式更任意．对于可测函数，Lebesgue积分的分划得到的“柱底”都是可测集．
 
@@ -48,7 +48,7 @@ s_B\leq s_A\leq S_A\leq S_B
 
 由此可得一个有用的推论：
 
-\begin{corollary}{}
+\begin{corollary}{}\label{Lebes1_cor1}
 设$f$是可测集$E$上的可测函数，$D_1$和$D_2$是$E$的可测分划．那么
 
 \begin{equation}
@@ -84,6 +84,8 @@ s_{D_i}\leq S_{D_j}
 
 
 \end{definition}
+
+简而言之，上积分就是上和的下确界，下积分就是下和的上确界．
 
 显然，简单函数的上积分和下积分总是相等，也就是\textbf{可测函数的结构}\upref{MsbFSt}中\autoref{MsbFSt_eq1}~\upref{MsbFSt}所定义的简单函数的Lebesgue积分．
 
@@ -153,9 +155,9 @@ s_{D_i}\leq S_{D_j}
 
 \autoref{Lebes1_the1} 所描述的性质是非常符合直觉的．类比Riemann积分的定义过程，我们也希望上下积分相等，从而成为新的积分定义．事实上，可测函数就具有这样优良的性质．
 
-\begin{theorem}{}
+\begin{theorem}{}\label{Lebes1_the2}
 设$E\subseteq \mathbb{R}^n$是\textbf{测度有限}的可测集，$f$是其上\textbf{非负有界}函数，那么
-\begin{equation}
+\begin{equation}\label{Lebes1_eq7}
 \overline{\int_E} f(x) \dd x = \underline{\int_E} f(x) \dd x
 \end{equation}
 \end{theorem}
@@ -164,11 +166,107 @@ s_{D_i}\leq S_{D_j}
 
 \textbf{证明}：
 
-充分性：
+\textbf{充分性}：
 
-设$f$是非负有界的可测函数．
+设$f$是\textbf{非负有界}的\textbf{可测}函数．
+
+由\autoref{Lebes1_cor1} ，必有
+\begin{equation}
+\overline{\int_E} f(x) \dd x \geq \underline{\int_E} f(x) \dd x
+\end{equation}
+
+因此，接下来只需要证明：对于任意$\epsilon>0$，总存在一个分划$D$，使得$s_D\geq S_D-\epsilon$．
+
+设$\opn{m}E=c$，由题设知$c<+\infty$．又因为$f$非负有界，不妨设$f(x)\in [0, s)$．
+
+将$[0, s)$拆分为一系列区间$A_{k, i}=[\frac{i}{k}s, \frac{i+1}{k}s)$的不交并，其中$k$是任意给定的正整数，$i$是取值范围为$[0, k)$的整数．
+
+利用区间$A_{k, i}$来对$E$进行分划：$E_{k, i}=\{x\in E|f(x)\in A_{k, i}\}$．显然，固定$k$时，各$E_{k, i}$构成$E$的一组分划．
+
+对于任意固定的$k$，在每个$E_{k, i}$上，$f$的上确界和下确界之差\textbf{小于等于}$s/k$，而各$E_{k, i}$的外测度之和为$c$．因此，该固定的$k$按上述方式决定的分划下，$f$在$E$上的上和与下和之差\textbf{小于等于}$sc/k$．
+
+因此，只需要取$k>sc/\epsilon$，所得分划就是所要的$D$．
+
+\textbf{必要性}：
+
+设$f$\textbf{非负有界}，且\autoref{Lebes1_eq7} 式成立．
+
+\addTODO{笔者不明白这里为什么需要必要性．按理说只有可测函数才能定义上和与下和、进而有上下极限的概念啊？没有可测条件谈什么\autoref{Lebes1_eq7} 的存在性？更不用说成立了．}
+
+% 参考定理的位置：江泽坚《实变函数论》P122 定理2
+
 
 \textbf{证毕}．
+
+\autoref{Lebes1_the2} 告诉我们，对于测度有限的$E$上的非负可测函数$f$，其上下积分时相等的，于是我们就可以把它们统一称为“积分”，记为
+\begin{equation}
+\int_E f(x) \dd x
+\end{equation}
+进一步，由\autoref{Lebes1_eq5} 和\autoref{Lebes1_eq6} 可知，对于可测函数$f$，有
+\begin{equation}
+\int_E [f(x)+g(x)] \dd x=\int_E f(x) \dd x+\int_E g(x) \dd x
+\end{equation}
+
+然而，\autoref{Lebes1_the2} 讨论的是“有界”的可测函数，颇有限制．任意的非负函数有没有类似的性质呢？我们没法套用\autoref{Lebes1_the2} 的证明方式，因为失去了有界性就无法用同样的方法对$E$进行\textbf{有限}划分了．不过，回想一下\autoref{MsbFSt_the1}~\upref{MsbFSt}是怎么证明的，你会发现我们可以用同样的思路来从有界推广到无界．
+
+设$f$是测度有限的可测集$E$上的非负可测函数．对于任意正整数$k$，定义一个$E$上的新函数$f_k$如下：$f_k(x)=\min \{k, f(x)\}$．直观来说，$f_k$就像是用一根长棍子去“压”$f$，把$k$以上的部分全都压平到$k$的高度．这样，每个$f_k$都是非负有界的可测函数，它们都是有积分的了．于是，我们可以定义$f$的积分为：
+\begin{equation}
+\int_E f(x) \dd x = \lim\limits_{k\to\infty} \int_E f_k(x) \dd x
+\end{equation}
+
+上述非负可测函数的积分具有积分应有的性质，我们写为以下习题：
+
+\begin{exercise}{}
+设$f$、$g$都是测度有限的可测集$E$上的可测函数，$\{E_1, E_2\}$是$E$的一个分划．证明以下性质：
+\begin{enumerate}
+\item 当$f(x)\leq g(x)$时，有
+\begin{equation}
+\int_E f(x) \dd x\leq \int_E g(x) \dd x
+\end{equation}
+\item 
+\begin{equation}
+\int_E f(x) \dd x=\int_{E_1} f(x) \dd x+\int_{E_2} f(x) \dd x
+\end{equation}
+\item 
+\begin{equation}
+\int_E [f(x)+g(x)] \dd x = \int_E f(x) \dd x+\int_E g(x) \dd x
+\end{equation}
+\end{enumerate}
+
+\end{exercise}
+
+
+到此为止，我们已经讨论清楚了测度有限可测集$E$上任意非负可测函数的积分了．接下来讨论的是$\opn{m}E=+\infty$、或者说任意可测集$E$的情况．
+
+\begin{definition}{任意可测集上任意非负可测函数的积分}
+
+设$f$是可测集$E$上的非负可测函数．
+
+对于任意正整数$k$，定义$E_k=E\cap [-k, k]$．那么$f$在各$E_k$上都有上述定义的积分．于是可以定义$f$在$E$上的积分为
+\begin{equation}
+\int_E f(x) \dd x = \lim\limits_{k\to\infty}\int_{E_k} f(x) \dd x
+\end{equation}
+
+\end{definition}
+
+
+回忆\autoref{MsbFun_def2}~\upref{MsbFun}所述，$G(E; f)$是函数$f$在可测集$E$上的\textbf{下方图形}．在简明的微积分课程中，常把（Riemann）积分解释为“求函数图像下方图形的面积”．实际上，这一点也适用于我们现在讨论的Lebesgue积分．
+
+\begin{exercise}{}
+证明以下命题：
+
+\begin{enumerate}
+\item 由\autoref{MsbFSt_the1}~\upref{MsbFSt}，可测集$E$上的任意非负可测函数$f$都可以表示为一列非负简单函数$f_k$的极限，则必有
+\begin{equation}
+\int_E f(x) \dd x = \lim\limits_{k\to\infty} \int_{E} f_x(x) \dd x
+\end{equation}
+\item 
+\end{enumerate}
+\end{exercise}
+
+
+
+
 
 
 
