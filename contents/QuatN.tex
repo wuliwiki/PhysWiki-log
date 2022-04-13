@@ -1,7 +1,7 @@
 % 四元数与旋转矩阵
 % 线性代数|矩阵|绕轴旋转矩阵|旋转矩阵|四元数|基底|基底变换矩阵
 
-\pentry{罗德里格旋转公式\upref{RotA}， 旋转矩阵的导数\upref{RotDer}，四元数\upref{Quat}， 罗德里格旋转公式、绕轴旋转矩阵\upref{RotA}}
+\pentry{旋转矩阵的导数\upref{RotDer}， 四元数\upref{Quat}， 罗德里格旋转公式、绕轴旋转矩阵\upref{RotA}}
 
 四元数可以用来简洁地表示三维空间中的旋转，极大地减少了计算量． 所有模长为 $1$ 的四元数 $q$ 与所有可能的（绕原点的）三维旋转\upref{RotA}存在一一对应关系．
 
@@ -20,7 +20,7 @@ q^{-1} = \tilde q = (\cos{\frac{-\theta}{2}},\ {\uvec{n}}\sin{\frac{-\theta}{2}}
 \end{equation}
 表示绕 $\uvec n$ 旋转 $-\theta$．
 
-例如当 $\theta = 0$ 时， $q = (1,0,0,0)$ 是单位元， $q\bvec vq^{-1} = \bvec v$． 又例如取 $\bvec v = (0, 1, 0, 0)$，它代表一个 $x$ 轴上的单位向量．如果想要把它绕着 $z$ 轴上的单位向量转 $\pi/2$，那么结果向量的四元数表示应该是 $(0, 0, 1, 0)$．按照我们定义的规则，旋转表示为四元数 $q=(\sqrt{2}/2, 0, 0, \sqrt{2}/2)$，按照四元数的乘法规则易得 $q\bvec v q^{-1}=(0,0,1,0)$．
+例如当 $\theta = 0$ 时， $q = (1,0,0,0)$ 是单位元， $q\bvec vq^{-1} = \bvec v$． 又例如取 $\bvec v = (0, 1, 0, 0)$，它代表一个 $x$ 轴上的单位向量．如果想要把它绕着 $z$ 轴上的单位向量转 $\pi/2$，那么结果向量的四元数表示应该是 $(0, 0, 1, 0)$．按照我们定义的规则，旋转表示为四元数 $q=(\sqrt{2}/2, 0, 0, \sqrt{2}/2)$， $q^{-1} = \tilde q = (\sqrt{2}/2,0,0,-\sqrt{2}/2)$， 按照四元数的乘法规则易得 $q\bvec v q^{-1}=(0,0,1,0)$．
 
 \subsubsection{证明}
 直接计算\autoref{QuatN_eq4} 得（使用连续叉乘的化简\upref{TriCro} 以及三角降幂公式\upref{TriEqv}）：
@@ -46,13 +46,13 @@ q_1\bvec v \tilde q_1 = q_2\bvec v \tilde q_2
 所以必定有 $\tilde q_1q_2 = 1$， 即 $q_2 = \tilde q_1^{-1} = q_1$． 证毕．
 
 \subsection{旋转的复合}
-四元数的乘法运算（\autoref{Quat_eq1}~\upref{Quat}）可以把两次旋转合并为一次旋转． 注意 $q_1q_2$ 表示先做 $q_2$ 的旋转， 再做 $q_1$ 的旋转． 另外易证 $(q_1q_2)^{-1} = q_2^{-1} q_1^{-1} = \tilde q_2\tilde q_1$．
+四元数的乘法运算（\autoref{Quat_eq1}~\upref{Quat}）可以把两次旋转合并为一次旋转． 注意 $q_2q_1$ 表示先做 $q_1$ 的旋转， 再做 $q_2$ 的旋转． 另外易证 $(q_2q_1)^{-1} = q_1^{-1} q_2^{-1} = \tilde q_1\tilde q_2$．
 
-由于一般来说四元数乘法不满足交换律， 所以两次旋转也一般不能交换， 除非两次转动的转轴共线．
+由于一般来说四元数乘法不满足交换律， 所以两次旋转也一般不能交换， 除非两次转动的转轴（两四元数的矢部）共线．
 
-\textbf{证明}： 令 $\bvec v$ 经过 $q_2$ 旋转变为 $\bvec v'$， 再经过 $q_1$ 旋转变为 $\bvec v''$， 则
+\textbf{证明}： 令 $\bvec v$ 经过 $q_1$ 旋转变为 $\bvec v'$， 再经过 $q_2$ 旋转变为 $\bvec v''$， 则
 \begin{equation}
-\bvec v'' = q_1\bvec v'q_1^{-1} = q_1(q_2\bvec vq_2^{-1}) q_1^{-1} = (q_1q_2)\bvec v(q_2^{-1} q_1^{-1}) = (q_1q_2)\bvec v(q_1q_2)^{-1}
+\bvec v'' = q_2\bvec v'q_2^{-1} = q_2(q_1\bvec vq_1^{-1}) q_2^{-1} = (q_2q_1)\bvec v(q_1^{-1} q_2^{-1}) = (q_2q_1)\bvec v(q_2q_1)^{-1}
 \end{equation}
 证毕．
 
@@ -60,7 +60,7 @@ q_1\bvec v \tilde q_1 = q_2\bvec v \tilde q_2
 令四元数 $q = (s, \bvec v)$ 表示绕 $\uvec v$ 方向以右手定则\upref{RHRul}旋转 $\theta$ 的矩阵， 其中
 \begin{equation}
 s = \cos\frac{\theta}{2} \qquad
-v = \abs{\bvec v} = \sin\frac{\theta}{2}
+\abs{\bvec v} = \sin\frac{\theta}{2}
 \end{equation}
 则对应的三维旋转矩阵（\autoref{RotA_eq3}~\upref{RotA}）可以表示为
 \begin{equation}\label{QuatN_eq2}
@@ -85,24 +85,24 @@ v = \abs{\bvec v} = \sin\frac{\theta}{2}
 \omega_z & 0 & -\omega_x\\
 -\omega_y & \omega_x & 0
 }\end{equation}
-若旋转矩阵 $\mat R$ 对应的四元数为 $\bvec q(t)$， 则
+若旋转矩阵 $\mat R$ 对应的四元数为 $q(t)$， 则
 \begin{equation}\label{QuatN_eq1}
-\dot {\bvec q} = \frac12 (0, \bvec \omega) \bvec q
+\dot {q} = \frac12 (0, \bvec \omega) q
 \end{equation}
-这里的 $\dot{\bvec q}$ 表示对四个标量中的每个分别求导．
+这里的 $\dot{q}$ 表示对四个标量中的每个分别求导．
 
-\textbf{推导}： 把 ${\bvec q}(t+\Delta t)$ 分解为 ${\bvec q}(t)$ 和 ${\bvec q}_1(\Delta t)$ 两次旋转， 
+\textbf{推导}： 把 ${q}(t+\Delta t)$ 分解为 ${q}(t)$ 和 ${q}_1(\Delta t)$ 两次旋转， 
 \begin{equation}\label{QuatN_eq3}
-\dot {\bvec q}
-= \lim_{\Delta t\to 0}\frac{{\bvec q}(t+\Delta t) - {\bvec q}(t)}{\Delta t}
-= \lim_{\Delta t\to 0}\frac{{\bvec q}_1(\Delta t) - (1,0,0,0)}{\Delta t}\bvec q(t)
+\dot {q}
+= \lim_{\Delta t\to 0}\frac{{q}(t+\Delta t) - {q}(t)}{\Delta t}
+= \lim_{\Delta t\to 0}\frac{{q}_1(\Delta t) - (1,0,0,0)}{\Delta t}q(t)
 \end{equation}
-其中 ${\bvec q}_1(t)$ 相当于以瞬时角速度 $\bvec \omega$ 旋转时间 $t$
+其中 ${q}_1(t)$ 相当于以瞬时角速度 $\bvec \omega$ 旋转时间 $t$
 \begin{equation}
-{\bvec q_1}(t) = (\cos\frac{\omega t}{2},\ \ \uvec \omega \sin\frac{\omega t}{2})
+{q_1}(t) = (\cos\frac{\omega t}{2},\ \ \uvec \omega \sin\frac{\omega t}{2})
 \end{equation}
-注意 $\bvec q_1(0) = (1,0,0,0)$， 所以\autoref{QuatN_eq3} 中的极限就是
+注意 $q_1(0) = (1,0,0,0)$， 所以\autoref{QuatN_eq3} 中的极限就是
 \begin{equation}
-\lim_{t\to 0}\frac{{\bvec q}_1(t) - {\bvec q}_1(0)}{\Delta t} = \dot{\bvec q}_1(0) = \frac{1}{2}(0, \bvec\omega)
+\lim_{t\to 0}\frac{{q}_1(t) - {q}_1(0)}{\Delta t} = \dot{q}_1(0) = \frac{1}{2}(0, \bvec\omega)
 \end{equation}
 代入\autoref{QuatN_eq3} 得\autoref{QuatN_eq1}．

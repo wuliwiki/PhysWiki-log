@@ -1,0 +1,76 @@
+% 二维波动方程的简单数值解（Matlab）
+
+\begin{issues}
+\issueDraft
+\end{issues}
+
+\pentry{导数与差分\upref{DerDif}}
+
+\begin{figure}[ht]
+\centering
+\includegraphics[width=14cm]{./figures/wav2dN_1.png}
+\caption{波的干涉} \label{wav2dN_fig1}
+\end{figure}
+\addTODO{动画}
+
+\begin{equation}
+\laplacian u - \frac{1}{v_0^2}\pdv[2]{u}{t} = 0
+\end{equation}
+
+\begin{equation}
+\pdv[2]{u}{t} = v_0^2\laplacian u
+\end{equation}
+时间差分得
+\begin{equation}
+u(t_{i+1}) = v_0^2\Delta t^2\laplacian u(t_i) + 2u(t_{i}) - u(t_{i-1})
+\end{equation}
+其中， 空间差分得
+\begin{equation}
+\laplacian u(x_i,y_i) = \frac{u(x_{i+1}, y_i) + u(x_{i-1}, y_i) - u(x_{i}, y_i)}{\Delta x^2}
++ \frac{u(x_i, y_{i+1}) + u(x_i, y_{i-1}) - u(x_i, y_{i})}{\Delta y^2}
+\end{equation}
+
+边界条件： 反射， 行波边界条件， 
+
+\begin{lstlisting}[language=matlab, caption=wav2D.m]
+% 2D wave equation, by simple difference
+function wav2D
+close all;
+v0 = 1;
+Nplot = 10;
+tmin = 0; tmax = 8; Nt = 1001;
+xmin = -10; xmax = 10; Nx = 200;
+ymin = -10; ymax = 10; Ny = 200;
+t = linspace(tmin, tmax, Nt); dt = (tmax-tmin)/(Nt-1);
+x = linspace(xmin, xmax, Nx); dx = (xmax-xmin)/(Nx-1);
+y = linspace(ymin, ymax, Ny); dy = (ymax-ymin)/(Ny-1);
+% [X, Y] = ndgrid(x, y);
+Z = zeros(Nx, Ny, 3);
+figure;
+for it = 1:Nt
+    Z(100,80,2) = sin(5*t(it));
+    Z(100,120,2) = sin(5*t(it));
+    d2Z = laplacian(Z(:,:,2), dx, dy);
+    Z(:,:,3) = v0^2*dt^2*d2Z + 2*Z(:,:,2) - Z(:,:,1);
+    if mod(it, Nplot) == 0
+        clf; surfCart(x, y, Z(:,:,3)); caxis([-0.5,0.5]);
+        colormap jet;
+        xlabel x; ylabel y;
+        title(['t = ' num2str(t(it), '%.2f')]);
+        saveas(gcf, [num2str(it/Nplot) '.png']);
+    end
+    Z(:,:,1) = Z(:,:,2); Z(:,:,2) = Z(:,:,3);
+end
+end
+
+% laplacian of Z(ix, iy)
+% finite difference
+% boundary condition (not included in Z) is 0
+function d2Z = laplacian(Z, dx, dy)
+N1 = size(Z, 1); N2 = size(Z, 2);
+z1 = zeros(N1, 1); z2 = zeros(1, N2);
+d2Z_1 = ([Z(2:end, :); z2] + [z2; Z(1:end-1, :)] - 2*Z)/dx^2;
+d2Z_2 = ([Z(:, 2:end) z1] + [z1 Z(:, 1:end-1)] - 2*Z)/dy^2;
+d2Z = d2Z_1 + d2Z_2;
+end
+\end{lstlisting}

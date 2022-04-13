@@ -1,6 +1,6 @@
 % 简谐振子中的高斯波包（Matlab）
 
-\pentry{量子简谐振子（级数法）\upref{QSHOxn}}
+\pentry{量子简谐振子（级数法）\upref{QSHOxn}， 123}
 
 \begin{figure}[ht]
 \centering
@@ -8,9 +8,16 @@
 \caption{运行结果， 动画见\href{https://wuli.wiki/apps/SHOgs.html}{这里}．} \label{SHOgs_fig1}
 \end{figure}
 
-\addTODO{写出系数公式， 以及含时波函数公式}
+本文使用原子单位制\upref{AU}． 令无限深势阱的束缚态为 $\psi_n(x)$， 含时波函数为 $\psi(x, t)$， 已知 $\psi(x, 0)$， 那么由\autoref{TDSE_eq5}~\upref{TDSE} 得
+\begin{equation}
+\psi(x, t) = \sum_{n=1}^\infty C_n\psi_n(x)\E^{-\I E_n t}
+\end{equation}
+其中
+\begin{equation}
+C_n = \int_{-\infty}^{+\infty} \psi_n(x)\psi(x, 0) \dd{x} \qquad (n=0,1,\dots)
+\end{equation}
 
-\begin{lstlisting}[language=matlab]
+\begin{lstlisting}[language=matlab, caption=SHOqm.m]
 % 高斯波包在简谐振子势阱中运动
 
 function SHOqm
@@ -70,6 +77,7 @@ for it = 1:Nt
 end
 end
 
+% 简谐振子束缚态波函数
 function psi = psi_SHO(m, w, n, x)
 alpha = sqrt(m*w); u = alpha * x;
 psi = 1/sqrt(2^n*factorial(n)) *...

@@ -19,11 +19,11 @@
 \end{equation}
 这一公式包含了一个四元数的良好的乘法定义．
 
-\subsection{四元数的定义}
+\subsection{四元数的定义和基本运算}
 
 现代四元数的定义是把每一个四元数看成一个实数和一个三维实矢量的组合：$(a_0, \bvec{a})$．在这个语境下，$\I$，$\mathrm{j}$，$\mathrm{k}$ 被看成是一个标准正交基中的矢量，为了避免将来的混淆，把这三个基矢量重新表示成 $1, \uvec i, \uvec j$ 和 $\uvec k$ 后，四元数的运算可以定义如下：
 
-\begin{definition}{四元数的四则运算}\label{Quat_def1}
+\begin{definition}{四元数的加法和乘法}\label{Quat_def1}
 记四元数集合为 $\mathbb{H}=\{(a_0, \bvec{a})|a_0\in\mathbb{R}, \bvec{a}\in\mathbb{R}^3\}$， $\forall(a_0, \bvec{a}), (b_0, \bvec{b})\in\mathbb{H}$， 加法定义为
 \begin{equation}
 (a_0, \bvec{a})+ (b_0, \bvec{b})=(a_0+b_0,\ \ \bvec{a}+\bvec{b})
@@ -70,7 +70,11 @@ ab = (ab, \bvec 0) = (a,\bvec 0)(b,\bvec 0) = (b,\bvec 0)(a,\bvec 0)
 
 除了把四元数看成一个标量加一个三维矢量以外，我们也可以把四元数看成一个四维矢量， 就像复数既可以看成一个实数配上一个一维矢量， 也可以看成一个二维矢量一样．这种情况下，四元数实际上就是实数域上的一个四维\textbf{代数}\upref{AlgFie}\footnote{从代数角度来说，Hamilton爵士当年苦苦思索多年的问题就是“是否存在实数域上的三维代数”，今天我们已经知道，实数域上只存在一维、二维、四维和八维的“具有积性的可除代数”，分别对应实数、复数、四元数和八元数，其中四元数已经不具有交换性，而八元数连结合性都丢了．这里的“积性”是指 $\abs{a}\abs{b}=\abs{ab}$，而“可除性”就是“乘法单位元存在性”．}．
 
-和复数一样，四元数也有共轭和模的概念．
+两个复数相乘， 就是把它们的模长相乘， 幅角相加（\autoref{CplxNo_eq10}~\upref{CplxNo}）， 类似地两个四元数相乘的模长也等于各自的模长相乘（证明留做习题）
+\begin{equation}
+\abs{AB} = \abs{A}\abs{B}
+\end{equation}
+与复数类似， 任何四元数都可以表示为模长乘以一个模长等于 $1$ 的四元数： $A = \abs{A} q$． 其中 $q$ 类似于复数的 $\E^{\I\theta}$． $\E^{\I\theta}$ 可以代表一个角度为 $\theta$ 的平面旋转， 而在 “四元数与旋转矩阵\upref{QuatN}” 中会看到， 任意模长为 $1$ 的四元数 $q$ 都可以表示一个唯一的三维旋转． 
 
 \begin{definition}{共轭、模方和模}\label{Quat_def2}
 \begin{itemize}
@@ -90,18 +94,27 @@ ab = (ab, \bvec 0) = (a,\bvec 0)(b,\bvec 0) = (b,\bvec 0)(a,\bvec 0)
 \end{itemize}
 \end{exercise}
 
-\subsection{四元数的逆}
-与复数类似， 任何四元数都可以表示为模长乘以一个模长等于 $1$ 的四元数 $A = \abs{A} q$． 而由于 $\abs{q} = q\tilde q = \tilde q q = 1$， 可见 $q$ 的共轭就是它的逆 $q^{-1} = \tilde q$． 我们把模长为零（即四个分量都是零）的四元数称为\textbf{零元}， 那么易证任意非零四元数 $A = \abs{A} q$ 的逆就是
-\begin{equation}
-A^{-1} = \frac{1}{\abs{A}} \tilde q
+\subsubsection{逆}
+和复数类似， 定义非零四元数 $A$ 的逆 $A^{-1}$ 满足
+\begin{equation}\label{Quat_eq3}
+AA^{-1} = A^{-1}A = 1 \qquad (A \ne 0)
 \end{equation}
-在 “四元数与旋转矩阵\upref{QuatN}” 中会看到， 任意模长为 $1$ 的四元数都可以表示一个唯一的三维旋转．
+易得每个非零四元数都有唯一的逆
+\begin{equation}
+A^{-1} = \frac{\tilde A}{\abs{A}^2} \qquad (A \ne 0)
+\end{equation}
+代入\autoref{Quat_eq3} 即可证明． 证明\textbf{逆元的唯一性}： 假设 $B_1, B_2$ 都是 $A$ 的逆元， 那么 $AB_1 = AB_2$， 等式两边左乘 $B_1$， 得 $B_1 = B_2$． 证毕．
 
-证明\textbf{逆元的唯一性}： 假设 $B_1, B_2$ 都是 $A$ 的逆元， 那么 $AB_1 = AB_2$， 等式两边左乘 $B_1$， 得 $B_1 = B_2$． 证毕．
+另外易证
+\begin{equation}
+(AB)^{-1} = B^{-1}A^{-1}
+\end{equation}
 
-可见所有的非零四元数构成一个群\upref{Group}．
+由于四元数的乘法不可交换， 我们不定义除法， 因为除法可能有两种不同的定义 $AB^{-1}$ 和 $B^{-1}A$． 我们直接使用这两种符号即可．
 
-\subsection{四元数乘法的矩阵表示}
+根据以上讨论不难发现， 所有的非零四元数及其乘法运算构成一个\textbf{体}（\autoref{field_def1}~\upref{field}）．
+
+\subsubsection{四元数乘法的矩阵表示}
 四元数乘法 $(a_0,\bvec a)(a_0,\bvec b) = (a_0,a_1,a_2,a_3)(b_0,b_1,b_2,b_3)$ 可以看作是一个线性变换， 用矩阵乘法表示为
 \begin{equation}
 \begin{aligned}
