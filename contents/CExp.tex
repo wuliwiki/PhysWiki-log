@@ -1,10 +1,23 @@
 % 指数函数（复数）
 % 复数|指数函数|三角恒等式|欧拉公式|导数
 
+\begin{issues}
+\issueTODO
+\end{issues}
+
 %未完成
 %（计划内容： 定义，复平面上的特征，是解析函数，反函数，物理上最广的应用）．
 
 \pentry{指数函数， 复数\upref{CplxNo}， 基本初等函数的导数\upref{FunDer}}
+
+\footnote{参考 Wikipedia \href{https://en.wikipedia.org/wiki/Euler's_formula}{相关页面}．}我们来把指数函数从实数自变量拓展到复数自变量的情况． 后者有多种等效的定义方式， 我们首先来看一个较简单的定义
+
+\begin{definition}{复指数函数}
+令 $z = x + \I y$ 为任意复数， 那么复数域中的指数函数的一种定义就是
+\begin{equation}\label{CExp_eq1}
+w = \E^z = \E^{x + \I y} = \E^x(\cos y + \I\sin y)
+\end{equation}
+\end{definition}
 
 \begin{figure}[ht]
 \centering
@@ -12,45 +25,44 @@
 \caption{复数域中的指数函数} \label{CExp_fig1}
 \end{figure}
 
-\footnote{参考 Wikipedia \href{https://en.wikipedia.org/wiki/Euler's_formula}{相关页面}．}复数域中的指数函数被定义为
- \begin{equation}\label{CExp_eq1}
-w = \E^z = \E^{x + \I y} = \E^x(\cos y + \I\sin y)
-\end{equation}
 在复平面上表示这个函数，则指数的实部 $x$ 控制函数值 $w$ 的模长， 虚部 $y$ 控制 $w$ 的幅角， 如\autoref{CExp_fig1}
  \begin{equation}
 \abs{w} = \E^x \qquad \arg(w) = y
 \end{equation}
-当指数为纯虚数时，\autoref{CExp_eq1} 变为著名的\textbf{欧拉公式（Euler's formula）}
+当指数为纯虚数（令 $x = 0$， $y = \I\theta$， $\theta$ 为实数）时，\autoref{CExp_eq1} 变为著名的\textbf{欧拉公式（Euler's formula）}
 \begin{equation}\label{CExp_eq2}
-\E^{\I x} = \cos x + \I\sin x
+\E^{\I \theta} = \cos \theta + \I\sin \theta
 \end{equation}
-虽然这里的 $x$ 一般是实数（物理中应用得最多的情况），但根据复数域三角函数的定义\upref{CTrig}， 对于任何复数 $z$，同样满足欧拉公式
+虽然这里的 $\theta$ 是实数（最常见的情况），但根据复数域三角函数的定义\upref{CTrig}， 对于任何复数 $z$，同样满足欧拉公式
 \begin{equation}
 \E^{\I z} = \cos z + \I\sin z
 \end{equation}
 将“三角函数（复数）\upref{CTrig}”中的\autoref{CTrig_eq1} 和\autoref{CTrig_eq2} 代入即可证明．
 
-根据\autoref{CExp_eq1} 的定义结合两角和公式（\autoref{TriEqv_eq1}~\upref{TriEqv}）， 容易证明 $\E^z$ 同样满足
+根据\autoref{CExp_eq1} 的定义结合两角和公式（\autoref{TriEqv_eq1}~\upref{TriEqv}）， 容易证明（留做习题） $\E^z$ 同样满足恒等式
 \begin{equation}
 \E^{z_1 + z_2} = \E^{z_1}\E^{z_2}
 \end{equation}
-
-虽然我们还没有系统地学习复变函数求导的概念， 但我们可以根据\autoref{CExp_eq2} 求出一个物理中常见的导数公式
-\begin{equation}\ali{
-\dv{x} \E^{\I ax} &= -a\sin(ax) + \I a\cos(ax)\\
-&= \I a[\cos(ax) + \I \sin(ax)]\\
-&= \I a \E^{\I ax}
-}\end{equation}
-进一步拓展， 令复常数 $z = a + \I b$ 得
-\begin{equation}
-\dv{x}\E^{z x} = \dv{x} \qty(\E^{ax}\E^{\I bx}) = (a + \I b)\E^{(a+\I b)x} = z\E^{zx}
-\end{equation}
-可见 $\E^z$ 的求导与实数域的 $\E^x$ 类似（\autoref{FunDer_eq1}~\upref{FunDer}）．
 
 \subsection{和实函数的 “兼容性”}
 根据定义容易看到， 在实数轴 $x$ 上， \autoref{CExp_eq1} 中 $y = 0$， 复指数函数就还原成熟悉的实数指数函数了． 所以二者使用同一个符号不会带来歧义， 复指数函数是实指数函数在复平面上的拓展．
 
 但乍看之下， 拓展有许多方式， 为什么一定是\autoref{CExp_eq1} 呢？ 因为在复变函数中， 我们一般研究的是解析函数． 若要求 $\E^x$ 拓展到复数域后是解析函数\autoref{CExp_eq1} 是唯一的定义． 详见 “柯西—黎曼条件\upref{CauRie}”．
+
+\subsection{导数}
+虽然我们只学了实函数的导数\upref{Der}， 还没有系统地学习复变函数求导， 但我们可以根据\autoref{CExp_eq2} 求出一个常见的导数公式． 令 $a, x$ 为实数， $a$ 为常数，
+\begin{equation}\ali{
+\dv{x} \E^{\I ax} &= -a\sin(ax) + \I a\cos(ax)\\
+&= \I a[\cos(ax) + \I \sin(ax)]\\
+&= \I a \E^{\I ax}
+}\end{equation}
+进一步拓展， 令复常数 $c = a + \I b$ 得
+\begin{equation}
+\dv{x}\E^{c x} = \dv{x} \qty(\E^{ax}\E^{\I bx}) = (a + \I b)\E^{(a+\I b)x} = c\E^{cx}
+\end{equation}
+可见 $\E^z$ 的求导与实数域的 $\E^x$ 类似（\autoref{FunDer_eq1}~\upref{FunDer}）．
+
+这只是对实数 $x$ 求导的特殊情况， 一般来说， 复变函数是可以对复数求导的， 详见 “复变函数的导数、柯西—黎曼条件\upref{CauRie}”．
 
 \subsection{欧拉公式的导出}
 
@@ -80,4 +92,14 @@ w = \E^z = \E^{x + \I y} = \E^x(\cos y + \I\sin y)
 
 把\autoref{CExp_eq4} 中的实部和虚部分开，再和\autoref{CExp_eq3} 、\autoref{CExp_eq5} 对比，即得欧拉公式\autoref{CExp_eq1} ．
 
+\subsection{复指数函数的级数定义}
 同理， 用级数法也可以直接推导出\autoref{CExp_eq1}． 事实上， 这种方法叫做 “解析拓延”， 就是在保证函数解析的前提下给函数扩大定义域， 例如从实轴拓展到复平面．
+
+使用复数的加法和乘法， 可以用级数来定义复指数函数
+\begin{definition}{复指数函数}
+令复指数函数为
+\begin{equation}
+\E^z = \sum_{n=0}^\infty \frac{z^n}{n!}
+\end{equation}
+\end{definition}
+\addTODO{证明等效}

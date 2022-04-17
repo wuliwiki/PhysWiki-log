@@ -1,0 +1,287 @@
+% 傅里叶变换的数值计算（Matlab）
+
+\pentry{离散傅里叶变换\upref{DFT}， Matlab 画图\upref{MatPlt}}
+
+\subsection{直接数值积分}
+作为下文 FFT 方法的参照， 我们先实现直接用数值积分计算傅里叶变换（\autoref{FTExp_eq6}~\upref{FTExp}）． 调用时需要提供一元函数（句柄） \verb|f|， 而不是一系列离散函数值． \verb|xspan| 是对 \verb|f| 积分的区间， 而 \verb|kspan| 是输出中 \verb|k| 的区间， \verb|Nk| 是 \verb|k| 的长度． 这么做虽然直观且精确， 但计算量较大， 所以一般还是用下一节中的 FFT 方法．
+
+尤其是如果 \verb|f| 并不是通过函数给出， 而只是一系列等间距的散点， 那么与其先插值再做数值积分， FFT 方法是最适合的， 因为 FFT 已经相当于对散点进行了 sinc 插值（\autoref{DFT_sub2}~\upref{DFT}）．
+\addTODO{搞几个具体的例子， 对比数值积分和 FFT 的结果．}
+\begin{lstlisting}[language=matlab, caption=CFT.m]
+% Continuous Fourier Transform by Integration
+% f must be a function handle
+% gh is function handle, g = gh(linspace(kmin,kmax,Nk))
+% input the 7th argument to plot spectrum
+function [k,g,gh] = CFT(f,xspan,kspan,Nk,~)
+k = linspace(kspan(1),kspan(2),Nk);
+g = zeros(1,Nk);
+for ii = 1:Nk
+    integrand = @(x)  f(x).*exp(-1i*k(ii)*x);
+    g(ii) = integral(integrand,xspan(1),xspan(2), 'AbsTol',1e-8);
+end
+g = g/sqrt(2*pi);
+
+if nargin == 5
+    figure; plot(k,g);
+end
+
+if nargout == 3
+    gh = @(kq) interp1(k,g,kq,'spline');
+end
+end
+\end{lstlisting}
+同理， 可以用数值积分计算反傅里叶变换
+\begin{lstlisting}[language=matlab, caption=iCFT.m]
+% Continuous Fourier Transform by Integration
+% g must be a function handle
+% fh is function handle, f = fh(linspace(xmin,xmax,Nx))
+% input the 7th argument to plot spectrum
+
+function [x,f,fh] = iCFT(g,kspan,xspan,Nx,~)
+x = linspace(xspan(1),xspan(2),Nx);
+f = zeros(1,Nx);
+for ii = 1:Nx
+    integrand = @(k)  g(k).*exp(1i*k*x(ii));
+    f(ii) = integral(integrand,kspan(1),kspan(2), 'AbsTol',1e-8);
+end
+f = f/sqrt(2*pi);
+
+if nargin == 5
+    figure; plot(x,f);
+end
+
+if nargout == 3
+    fh = @(xq) interp1(x,f,xq,'spline');
+end
+end
+\end{lstlisting}
+
+\subsection{用 FFT 计算傅里叶变换}
+这里使用的算法见\autoref{DFT_sub1}~\upref{DFT}． 给出任意等间距的 $x$ 坐标格点 \verb|[x0, x0+dx, x0+2*dx, ...]|， 以及对应的函数值 \verb|f = [f(1), f(2), ...]|， 那么该代码可以通过 Matlab 提供的快速傅里叶变换（FFT） 计算傅里叶变换（\autoref{FTExp_eq6}~\upref{FTExp}）． 输入中 \verb|Nk| 是可选的， 若 \verb|Nk| 大于 \verb|f| 的个数， 输出中 \verb|k| 的步长将会相应变小使 \verb|k| 的长度为 \verb|Nk|， 但区间不会变． \verb|k| 的区间是由 \verb|dx| 决定的． 
+\begin{lstlisting}[language=matlab, caption=FFT.m]
+% fft approximation of the analytical fourier transform from f(x) to g(k)
+% x and k are both equally spaced, x starts from x0 equally spaced by dx
+% norm(g) = norm(f)
+% numel(g) = Nk
+
+function [g, k] = FFT(f, x0, dx, Nk, dim)
+x_mid = (2*x0 + (numel(f)-1)*dx)/2; % mid point of x grid
+if exist('Nk', 'var')
+    f = fftresize(f, Nk);
+end
+if exist('dim', 'var')
+    g = sffts(f, dim)*(dx/sqrt(2*pi));
+else
+    g = sffts(f)*(dx/sqrt(2*pi));
+end
+
+if ~exist('dim', 'var')
+    if isvector(f)
+        k = fftlinspace(2*pi/dx, numel(f));
+    else
+        k = fftlinspace(2*pi/dx, size(f,1));
+    end
+else
+    k = fftlinspace(2*pi/dx, size(f,dim));
+end
+
+if (abs(x_mid/x0) > 1e-14)
+    if (isvector(g))
+        k = reshape(k, size(g));
+        g = g .* exp(-1i*k*x_mid);
+    else
+        error('asymmetric x not implemented!');
+    end
+end
+end
+\end{lstlisting}
+对应的反傅里叶变换如下
+\begin{lstlisting}[language=matlab, caption=iFFT.m]
+% fft approximation of the analytical inverse fourier transform
+% norm(f) = norm(g)
+function [f, x] = iFFT(g, dk)
+f = siffts(g)*(numel(g)*dk/sqrt(2*pi));
+if nargout == 2
+    x = fftlinspace(2*pi/dk, numel(f));
+end
+end
+\end{lstlisting}
+
+下面是一些依赖程序
+\begin{lstlisting}[language=matlab, caption=fftresize.m]
+% resize vector/matrix length for ftt by zero padding on both ends
+function y = fftresize(x, newN)
+% === x is row vector ===
+if size(x, 1) == 1 
+    N = numel(x);
+    Ndiff = abs(newN - N);
+    if newN > N % 0-padding
+        if mod(Ndiff,2) == 0
+            Ndiff = 0.5*Ndiff;
+            y = [zeros(1, Ndiff), x, zeros(1, Ndiff)];
+        else
+            Ndiff = 0.5*(Ndiff-1);
+            if mod(N, 2) == 0
+                y = [zeros(1, Ndiff), x, zeros(1, Ndiff+1)];
+            else
+                y = [zeros(1, Ndiff+1), x, zeros(1, Ndiff)];
+            end
+        end
+    elseif newN < N % shrink
+        y = shrink(x, N, Ndiff);
+    else
+        y = x;
+    end
+
+% === x is column vector ===
+elseif size(x, 2) == 1
+    N = numel(x);
+    Ndiff = abs(newN - N);
+    if newN > N % 0-padding
+        if mod(Ndiff,2) == 0
+            Ndiff = 0.5*Ndiff;
+            y = [zeros(Ndiff, 1); x; zeros(Ndiff, 1)];
+        else
+            Ndiff = 0.5*(Ndiff-1);
+            if mod(N, 2) == 0
+                y = [zeros(Ndiff, 1); x; zeros(Ndiff+1, 1)];
+            else
+                y = [zeros(Ndiff+1, 1); x; zeros(Ndiff, 1)];
+            end
+        end
+    elseif newN < N % shrink
+        y = shrink(x, N, Ndiff);
+    else
+        y = x;
+    end
+
+% === x is matrix ===
+else
+    [N, Ncol] = size(x);
+    Ndiff = abs(newN - N);
+    if newN > N % 0-padding
+        if mod(Ndiff,2) == 0
+            Ndiff = 0.5*Ndiff;
+            y = [zeros(Ndiff, Ncol); x; zeros(Ndiff, Ncol)];
+        else
+            Ndiff = 0.5*(Ndiff-1);
+            if mod(N, 2) == 0
+                y = [zeros(Ndiff, Ncol); x; zeros(Ndiff+1, Ncol)];
+            else
+                y = [zeros(Ndiff+1, Ncol); x; zeros(Ndiff, Ncol)];
+            end
+        end
+    elseif newN < N % shrink
+        if mod(Ndiff,2) == 0
+            Ndiff = 0.5*Ndiff;
+            y = x(Ndiff+1:end-Ndiff, :);
+        else
+            Ndiff = 0.5*(Ndiff-1);
+            if mod(N, 2) == 0
+                y = x(Ndiff+2:end-Ndiff, :);
+            else
+                y = x(Ndiff+1:end-Ndiff-1, :);
+            end
+        end
+    else
+        y = x;
+    end
+end
+end
+
+
+function y = shrink(x, N, Ndiff)
+    if mod(Ndiff,2) == 0
+        Ndiff = 0.5*Ndiff;
+        y = x(Ndiff+1:end-Ndiff);
+    else
+        Ndiff = 0.5*(Ndiff-1);
+        if mod(N, 2) == 0
+            y = x(Ndiff+2:end-Ndiff);
+        else
+            y = x(Ndiff+1:end-Ndiff-1);
+        end
+    end
+end
+\end{lstlisting}
+
+\begin{lstlisting}[language=matlab, caption=sffts.m]
+% shifted fft
+function y = sffts(x, dim)
+    if nargin < 2
+        y = fftshift(fft(ifftshift(x)));
+    else
+        y = fftshift(fft(ifftshift(x, dim),[], dim), dim);
+    end
+end
+\end{lstlisting}
+
+\begin{lstlisting}[language=matlab, caption=fftlinspace.m]
+% generate N grid points from bandwidth
+% input 2 or 3 arguments
+function x = fftlinspace(L, N, x0)
+if mod(N, 2) == 0
+    Lh = 0.5*L; dx = L/N;
+    if nargin == 3
+        x = linspace(-Lh+x0, Lh-dx+x0, N);
+    else
+        x = linspace(-Lh, Lh-dx, N);
+    end
+else
+    a = (N-1)*L/(2*N);
+    if nargin == 3
+        x = linspace(-a+x0, a+x0, N);
+    else
+        x = linspace(-a, a, N);
+    end
+end
+end
+\end{lstlisting}
+
+\subsubsection{傅里叶级数}
+根据\autoref{DFT_eq10}~\upref{DFT}， 傅里叶级数与傅里叶变换值相差一个常数：
+\begin{lstlisting}[language=matlab, caption=FS.m]
+% Fourier series by FFT
+function [C, k] = FS(f, x0, dx)
+[g, k] = FFT(f, x0, dx, Nk, dim);
+C = sqrt(2*pi)/(N*dx) * g;
+end
+\end{lstlisting}
+
+\subsection{sinc 插值}
+根据采样定理， 可以使用 FFT 对函数的离散值进行 \verb|sinc| 插值， \verb|dx| 是可选的．
+\begin{lstlisting}[language=matlab, caption=fftinterp.m]
+% approximate sinc interpolation by fft
+% N is optional, used to zero-pad f
+function [f1, x1] = fftinterp(f, N1, dx, N)
+if ~exist('N','var') || isempty(N)
+    N = numel(f);
+else
+    f = fftresize(f, N);
+end
+f1 = siffts(fftresize(sffts(f), N1))*N1/N;
+if nargout == 2
+    x1 = fftlinspace(dx*N, N1);
+end
+end
+\end{lstlisting}
+
+为了对比验证， 我们也可以直接实现 \verb|sinc| 插值， 但该代码的效率较低
+\begin{lstlisting}[language=matlab, caption=sinc\_interp.m]
+% sinc_interp
+function y = sinc_interp(x, x0, y0)
+    N0 = numel(x0);
+    y = zeros(size(x));
+    dx0 = (max(x0)-min(x0))/(numel(x0)-1);
+    a = pi/dx0;
+    for ii = 1:N0
+        y = y + y0(ii).*sinc(a*(x-x0(ii)));
+    end
+end
+
+function y = sinc(x)
+    mask = (x~=0);
+    y(mask) = sin(x(mask))./x(mask);
+    y(~mask) = 1;
+end
+\end{lstlisting}

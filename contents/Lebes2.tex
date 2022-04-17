@@ -1,0 +1,140 @@
+% Lebesgue积分的一些补充性质
+% Levi定理|Lebesgue基本定理|Fatou引理
+
+\pentry{Lebesgue 积分\upref{Lebes1}，子列极限、上极限与下极限\upref{SubLim}}
+
+由描述Lebesgue积分几何意义的\autoref{Lebes1_the3}~\upref{Lebes1}，容易推得以下定理：
+
+\begin{theorem}{Levi定理}\label{Lebes2_the1}
+
+设$\{f_k\}$是可测集$E$上的一列\textbf{单调不减}的\textbf{非负可测}函数，则有
+\begin{equation}
+\int_E  \qty[\lim\limits_{k\to \infty} f_k(x)] \dd x = \lim\limits_{k\to \infty}\int_E f_k(x) \dd x
+\end{equation}
+
+\end{theorem}
+
+简单来说，Levi定理就是指单调不减的非负可测函数列具有“可极限换序”的性质．
+
+由Levi定理可以直接得到以下推论：
+
+\begin{corollary}{Lebesgue基本定理}
+
+设$\{f_k\}^\infty_{k=1}$是可测集$E$上的一列\textbf{非负可测}函数，则有
+
+\begin{equation}
+\int_E  \qty[\sum\limits_{k=1}f_k(x)] \dd x = \sum\limits_{k=1} \int_E f_k(x) \dd x
+\end{equation}
+
+\end{corollary}
+
+回忆\textbf{上极限}与\textbf{下极限}的\autoref{SubLim_def1}~\upref{SubLim}，我们可以把这个定义推广到函数列上去．为了方便阅读，我们在这里简单解释一下上下极限的含义，已熟悉的读者可直接跳过，需要更详细解释的读者请跳转到\textbf{子列极限、上极限与下极限}\upref{SubLim}．
+
+\begin{definition}{数列的上、下极限}\label{Lebes2_def2}
+给定实数列$\{a_n\}$．
+
+定义
+\begin{equation}
+\lim\limits_{n\to\infty} \sup\{a_i\}_{i=n}^\infty = \overline{\lim}\limits_{n\to\infty} a_n
+\end{equation}
+为$\{a_n\}$的\textbf{上极限（upper limit）}．
+
+类似地，定义
+\begin{equation}
+\lim\limits_{n\to\infty} \inf\{a_i\}_{i=n}^\infty = \underline{\lim}\limits_{n\to\infty} a_n
+\end{equation}
+为$\{a_n\}$的\textbf{下极限（lower limit）}．
+\end{definition}
+
+
+简单来说，数列的上极限就是“上确界的极限”，下极限就是“下确界的极限”．当然，由于上确界数列$\{\sup \{a_i\}_{i=n}^\infty\}$是单调不增的，也可以说上极限是“上确界的下确界”，类似地，下极限就是“下确界的上确界”．后面这两种解释更适用于\textbf{子列极限、上极限与下极限}\upref{SubLim}中的讨论．
+
+
+\begin{definition}{函数列的上、下极限}\label{Lebes2_def1}
+
+给定一列实函数$f_k$．定义其上、下极限函数在$x$处的值为数列$f_k(x)$的上、下极限．
+
+\end{definition}
+
+有了上下极限的概念，我们才可以描述清楚以下性质：
+
+\begin{theorem}{Fatou引理}\label{Lebes2_the2}
+
+设$f_k$是可测集$E$上的一列\textbf{非负可测}函数，则
+\begin{equation}\label{Lebes2_eq1}
+\int_E \underline{\lim}\limits_{k\to \infty} f_k(x) \dd x \leq \underline{\lim}\limits_{k\to \infty}\int_E f_k(x) \dd x
+\end{equation}
+
+\end{theorem}
+
+\textbf{证明}：
+
+为方便讨论，定义一个工具函数：
+
+\begin{equation}
+g_k(x) = \inf\limits_{i\geq 0}\{f_{k+i}(x)\}
+\end{equation}
+
+则由\autoref{Lebes2_def1} 可知，$\underline{\lim}\limits_{k\to\infty} f_k(x)=\lim\limits_{k\to\infty} g_k(x)$．另外易得，$\{g_k\}$是一列$E$上的一列\textbf{单调不减}的\textbf{非负可测}函数．
+
+由确界的性质，可知$g_k(x)\leq f_k(x)$处处成立．因此有
+\begin{equation}
+\lim_{k\to\infty} \int_E g_k(x) \dd x \leq \lim_{k\to\infty} \int_E f_k(x) \dd x
+\end{equation}
+
+于是由\autoref{Lebes2_the1} ，结合极限的性质可得：
+
+\begin{equation}
+\begin{aligned}
+\int_E \underline{\lim}\limits_{k\to\infty}f_k(x) \dd x &=
+\int_E \lim_{k\to\infty} g_k(x) \dd x \\
+&=\lim_{k\to\infty} \int_E g_k(x) \dd x\\
+&\leq \lim_{k\to\infty} \int_E f_k(x) \dd x
+\end{aligned}
+\end{equation}
+
+
+\textbf{证毕}．
+
+\autoref{Lebes2_the2} 有没有可能更强一些呢？就是说，能不能把\autoref{Lebes2_eq1} 的不等号写成等号呢？答案是否定的，用下面这个简单的例子就可以看出来：
+
+\begin{example}{}
+考虑区间$[0, 1]$上的函数列$\{f_k\}$，其定义如下：
+
+当$k$为奇数时，
+\begin{equation}
+f_k(x)=\leftgroup{
+    &1, x\in[0, 1/2)\\
+    &0, x\in[1/2, 0]
+}
+\end{equation}
+
+当$k$为偶数时，
+\begin{equation}
+f_k(x)=\leftgroup{
+    &0, x\in[0, 1/2)\\
+    &1, x\in[1/2, 0]
+}
+\end{equation}
+
+则显然$\underline{\lim}\limits_{k\to \infty}f_k(x)=0$处处成立，故
+\begin{equation}\label{Lebes2_eq2}
+\int_{[0, 1]} \underline{\lim}\limits_{k\to \infty}f_k(x) \dd x = 0
+\end{equation}
+
+但由于各$\int_{[0, 1]} f_k(x) \dd x$都等于$1/2$，故
+\begin{equation}\label{Lebes2_eq3}
+\underline{\lim}\limits_{k\to \infty}\int_{[0, 1]} f_k(x) \dd x = 1/2
+\end{equation}
+
+比较\autoref{Lebes2_eq2} 和\autoref{Lebes2_eq3} 即可知，\autoref{Lebes2_eq1} 的等号不总是成立．
+
+\end{example}
+
+
+
+
+
+
+
+

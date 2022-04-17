@@ -1,0 +1,63 @@
+% 用傅里叶级数画曲线（Matlab）
+
+\begin{issues}
+\issueDraft
+\end{issues}
+
+\pentry{用 FFT 计算傅里叶变换（Matlab）\upref{FFTft}}
+
+\begin{figure}[ht]
+\centering
+\includegraphics[width=10cm]{./figures/FFTdrw_1.png}
+\caption{运行结果， 动画见\href{https://wuli.wiki/apps/FFTplt.html}{这里}．} \label{FFTdrw_fig1}
+\end{figure}
+
+
+平面上一条任意的连续曲线， 都可以用直角坐标的参数方程 $x(t), y(t)$， 表示． 若把平面看成复平面， 参数方程可以用复值函数 $z(t) = x(t) + \I y(t)$ 代替． 把它展开为傅里叶级数\upref{FSExp}， 那么级数的每一项就代表复平面上的一个做匀速圆周运动的矢量． 把这些矢量首尾相连， 就可以制作漂亮的动画．
+
+用 FFT 代替定积分， 计算傅里叶展开系数． 然后再把系数的模长按照从大到小排序．
+
+其中的曲线数据是笔者手动提取的， 见 “用 Matlab 手动提取图片中的曲线坐标\upref{plt2xy}”． 你也可以把自己的任何曲线的坐标散点 \verb|x, y| 保存到 \verb|logo_curve.mat|． 程序中使用了 “用 FFT 计算傅里叶变换（Matlab）\upref{FFTft}” 中的 \verb|FS.m|
+
+\begin{lstlisting}[language=matlab, caption=FFTplt.m]
+% ==== 参数设置 ====
+load logo_curve.mat x y;
+Nt = 500;
+Ncirc = 50;
+% ================
+close all;
+x = x - mean(x);
+y = y - mean(y);
+N = numel(x);
+z = x + 1i*y;
+x0 = 1; dx = 1;
+[C, w] = FS(z, x0, dx); % 傅里叶级数
+C = C(:); w = w(:);
+
+t = linspace(1,N,Nt);
+z1 = sum(C.*exp(1i*w.*t), 1);
+figure; plot(x, y); hold on;
+plot(real(z1),imag(z1));
+
+th = linspace(0, 2*pi, 200);
+costh = cos(th); sinth = sin(th);
+N1 = round(N/2-1);
+[~, order] = sort(abs(C), 'descend');
+C1 = C(order);
+w1 = w(order);
+z1 = sum(C1.*exp(1i*w1.*t), 1);
+plot(real(z1),imag(z1));
+
+for it = 1:Nt
+    z1 = [0; cumsum(C1.*exp(1i*w1*t(it)), 1)];
+    clf;
+    plot(x, y); hold on; axis equal;
+    for i = 1:Ncirc
+        A = abs(z1(i+1)-z1(i)); x0 = real(z1(i)); y0 = imag(z1(i));
+        plot(x0+A*costh, y0+A*sinth, 'g');
+    end
+    plot(real(z1), imag(z1), '.-');
+    axis([-0.7, 0.7, -0.4, 0.7]);
+    saveas(gcf, [num2str(it), '.png']);
+end
+\end{lstlisting}

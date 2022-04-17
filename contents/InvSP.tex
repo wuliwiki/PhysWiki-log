@@ -1,9 +1,7 @@
 % 不变子空间
 % 不变子空间
 
-\begin{issues}
-\issueTODO
-\end{issues}
+
 
 \pentry{线性算子代数\upref{LiOper}}
 \begin{definition}{不变子空间}
@@ -20,23 +18,67 @@
 都是 $\mathcal A$ 的不变子空间．
 \end{example}
 \begin{theorem}{}
-$n$ 维矢量空间 $V$ 是算子 $\mathcal{A}$ 的 $m$ 维不变子空间 $U$ 和 $(n-m)$ 维不变子空间 $W$ 的直和，即 $V=U\oplus W$，当且仅当算子 $\mathcal{A}$ 的矩阵 $A$ 在某基底下具有分块对角形式
-\begin{equation}
+$n$ 维矢量空间 $V$ 是算子 $\mathcal{A}$ 的 $m$ 维不变子空间 $U$ 和 $(n-m)$ 维不变子空间 $W$ 的直和，当且仅当算子 $\mathcal{A}$ 的矩阵 $A$ 在某基底下具有分块对角形式
+\begin{equation}\label{InvSP_eq1}
 A=\begin{pmatrix}
 A_U&0\\
 0&A_W
 \end{pmatrix}
 \end{equation}
-其中，$A_U,A_W$ 分别是 $m$ 阶方阵和 $(n-m)$ 阶方阵．
+其中，$A_U,A_W$ 分别是 $m$ 阶方阵和 $(n-m)$ 阶方阵．即
+\begin{equation}
+V=U\oplus W,\mathcal{A}U\subset U,\mathcal{A}W\subset W\Leftrightarrow A=\begin{pmatrix}
+A_U&0\\
+0&A_W
+\end{pmatrix}
+\end{equation}
+
 \end{theorem}
 \textbf{证明：}1.$
-V=U\oplus W\Rightarrow A=\begin{pmatrix}
+V=U\oplus W,\mathcal{A}U\subset U,\mathcal{A}W\subset W\Rightarrow A=\begin{pmatrix}
 A_U&0\\
 0&A_W
 \end{pmatrix}
 $
 
-设 $U$ 的基底为 $(\bvec e_1,\cdots,\bvec e_m)$ ，由于 $\mathcal{A}\bvec u\in U, \forall \bvec u\in U$，则
-\begin{equation}
-\mathcal{A}\bvec e_j=\sum_{i}^m a_{ij}\bvec e_i
+设 $U$ 的基底为 $(\bvec e_1,\cdots,\bvec e_m)$ ，$W$ 的基底为 $((\bvec e_{m+1},\cdots,\bvec e_n))$，则由\autoref{DirSum_the1}~\upref{DirSum}，$(\bvec e_{1},\cdots,\bvec e_n)$ 是 $V$ 的基底．
+
+由于 $\mathcal{A}\bvec u\in U, \mathcal{A}\bvec w\in W,\forall \bvec u\in U,\bvec w\in W$，则
+\begin{equation}\label{InvSP_eq2}
+\begin{aligned}
+\mathcal{A}\bvec e_j&=\sum_{i=1}^m a_{ij}\bvec e_i,\quad j=1,\cdots ,m\\
+\mathcal{A}\bvec e_j&=\sum_{i=m+1}^n a_{ij}\bvec e_i,\quad j=m+1,\cdots ,n
+\end{aligned}
 \end{equation}
+由线性算子与矩阵的对应关系\autoref{LiOper_eq2}~\upref{LiOper}，知算子 $\mathcal{A}$ 的对应矩阵 $A$ 即为 
+\begin{equation}
+A=(a_{ij})=\begin{pmatrix}
+A_U&0\\
+0&A_W
+\end{pmatrix}
+\end{equation}
+
+2.$
+A=\begin{pmatrix}
+A_U&0\\
+0&A_W
+\end{pmatrix}\Rightarrow V=U\oplus W,\mathcal{A}U\subset U,\mathcal{A}W\subset W
+$
+任选 $V$ 的基底 $(\bvec e_1,\cdots,\bvec e_n)$, 由算子和矩阵对应关系\autoref{LiOper_eq2}~\upref{LiOper}，即得 $A$ 对应的算子 $\mathcal{A}$ 具有关系式\autoref{InvSP_eq2} ．而这意味着由基底 $(\bvec e_1,\cdots,\bvec e_m)$ 和 $(\bvec e_{m+1},\cdots,\bvec e_n)$ 张成的空间 $U=\langle\bvec e_1,\cdots,\bvec e_m\rangle$ 和 $W=\langle\bvec e_{m+1},\cdots,\bvec e_n\rangle$ 是算子 $\mathcal{A}$ 的不变子空间，而由基底 $(\bvec e_1,\cdots,\bvec e_n)$ 的线性无关性可知，$V=U\oplus W$．
+
+\textbf{证毕！}
+\autoref{InvSP_eq1} 中，可以把 $A_U,A_W$ 看成是算子 $\mathcal{A}$ 分别限制在 $U$ 和 $W$ 上的算子 $\mathcal{A}_U$ 和 $\mathcal{A}_W$ 对应的矩阵．
+\begin{definition}{算子的直和}
+若矢量空间 $V$ 是算子 $\mathcal{A}$ 的不变子空间 $U,W$ 的直和 $V=U\oplus W$ ，则称算子 $\mathcal{A}$ 是其限制在 $U,W$ 上的算子 $\mathcal{A}_U,\mathcal{A}_W$ 的直和，并记作
+\begin{equation}
+\mathcal{A}=\mathcal{A}_U\dot{+}\mathcal{A}_W
+\end{equation}
+此时称算子 $\mathcal{A}$ 对应的矩阵 $A$ 是 $\mathcal{A}_U,\mathcal{A}_W$ 对应矩阵 $A_U$ 和 $A_W$ 的直和，并记作
+\begin{equation}
+A=\begin{pmatrix}
+A_U&0\\
+0&A_W
+\end{pmatrix}=A_U\dot{+}A_W
+\end{equation}
+
+\end{definition}

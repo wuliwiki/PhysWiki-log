@@ -1,0 +1,37 @@
+% 拉格朗日方程的数值解
+
+\begin{issues}
+\issueDraft
+\end{issues}
+
+\pentry{哈密顿正则方程\upref{HamCan}}
+
+若程序中给出拉格朗日量拉格朗日方程\upref{Lagrng}的数值函数 $L(q, \dot q, t)$， 输入和输出均为数值（例如双精度实数）， 那么如何数值求解运动方程呢？
+
+如果可以写出系统哈密顿量的表达式， 那么数值解哈密顿正则方程是首选的做法， 因为它本身已经是一阶常微分方程， 可以直接用解算器进行数值解． 但对于较复杂的系统， 哈密顿量比拉格朗日量难算得多， 甚至可能没有解析表达式．
+
+相比之下， 拉格朗日量虽然容易写出， 但方程的数值解比哈密顿正则方程要难一些， 且如果用差分法计算微分会引入一定的数值误差．
+
+问题的关键是如何列出一个一阶常微分方程组．
+\begin{equation}
+\dv{t} \pdv{L}{\dot q_i} = \pdv{L}{q_i}
+\quad (i=1,\dots,N)
+\end{equation}
+根据全微分， 左边有
+\begin{equation}
+\dv{t} \pdv{L}{\dot q_i} = \sum_j\pdv{\dot q_j}\pdv{L}{\dot q_i}\ddot q_j + \sum_j\pdv{q_j}\pdv{L}{\dot q_i}\dot q_j + \pdv{t}\pdv{L}{\dot q_i} \quad (i,j=1,\dots,N)
+\end{equation}
+代入得
+\begin{equation}
+\sum_j\pdv{\dot q_j}\pdv{L}{\dot q_i}\ddot q_j = \pdv{L}{q_i} - \sum_j\pdv{q_j}\pdv{L}{\dot q_i}\dot q_j - \pdv{t}\pdv{L}{\dot q_i}
+\end{equation}
+这样， 二阶导数只存在于左边的 $\ddot q_j$， 其他项都只是 $q,\dot q, t$ 的函数． 该式中的偏微最好计算出解析表达式， 但也可以通过差分来计算（会引入更多误差）． 数值解线性方程\footnote{如果 $N$ 不大可以直接用克拉默法则\upref{kramer}， 甚至写出解析解．}， 就可以得到（令 $v_i = \dot q_i$）
+\begin{equation}
+\leftgroup{
+&\dot v_i = f_i(q, v_i, t)\\
+&\dot q_i = v_i
+}\qquad (i = 1,\dots,N)
+\end{equation}
+就得到了 $2N$ 条方程组成的一阶常微分方程组， 变量一共有 $2N$ 个． 可以使用四阶龙格库塔法\upref{OdeRK4} 等方法求解．
+
+\addTODO{写一个一般的 Matlab 程序， 支持解析求偏导， 也支持差分法求偏导．}
