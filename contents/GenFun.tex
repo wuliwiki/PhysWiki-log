@@ -1,0 +1,113 @@
+% 测度与广义函数
+% Lebesgue测度|广义函数|绝对连续|Lebesgue积分|狄拉克函数|狄拉克测度|Dirac函数|Dirac测度
+
+\pentry{Lebesgue 积分\upref{Lebes1}，映射\upref{map}}
+
+在\textbf{集合的测度（实变函数）}\upref{SetMet}中，我们了解了Lebesgue外测度．它是将“开集的体积”进行推广而得来的，其定义思路也有明显的物理对应：用容器去衡量被容纳物的大小．具象的概念虽然容易想象，但因其具象也束缚了概念范围，所以我们在得到一个新的概念时，总会想把它的核心特征抽离出来，抽象出一个更一般的概念，看看能不能引申出有趣的理论．
+
+Lebesgue外测度该怎么抽象呢？抛去其定义的方式不谈，它就是用来衡量“集合的体积”的，对不对？体积是一个数字，那我们就把测度看成是给各集合赋予一个数字，也就是“集合函数”\footnote{注意这个术语的意思：集合函数是指把集合映射到数字上的映射．值域是数字的映射，通常又称为函数．}．再考虑一些集合体积所具有的性质，我们可以构造出这样一个定义：
+
+\begin{definition}{非负测度}\label{GenFun_def1}
+设$S$是一个集合，$\mathcal{A}$是由$S$的子集构成的一个$\sigma$-代数\footnote{即用$\mathcal{A}$中元素进行任意多次的交、并、差、补等运算，结果仍在$\mathcal{A}$中．}．称映射$\mu:\mathcal{A}\to [0, +\infty]$是$(S, \mathcal{A})$上的一个\textbf{非负测度（non-negative measure）}，如果它满足：
+\begin{enumerate}
+\item $\mu(\varnothing)=0$；\\
+\item 对于两两不交的至多可数个$A_i\in\mathcal{A}$，有
+\begin{equation}
+\mu\qty(\bigcup_i A_i) = \sum_i \mu(A_i)
+\end{equation}
+\end{enumerate}
+
+% 通常将\textbf{非负测度}简称为\textbf{测度（measure）}．
+
+三元组$(S, \mathcal{A}, \mu)$也被称为一个\textbf{测度空间（measure space）}．
+
+\end{definition}
+
+注意，定义中测度$\mu$的值域是$[0, +\infty]$而非$[0, +\infty)$，意味着测度值也可以取广义实数$+\infty$．由于测度值非负，因此在不至于混淆的时候，也可以用$\infty$代替$+\infty$．
+
+有非负测度，意味着测度的概念还可以继续推广：
+
+\begin{definition}{复值测度}
+将非负测度的定义域从$[0, +\infty]$改为$\mathbb{C}$，即得到\textbf{复值测度}．
+\end{definition}
+
+\begin{example}{计数测度}
+设$S$为任意集合，定义$(S, 2^S)$上的一个测度$\mu$如下：
+\begin{equation}
+\mu(A)=
+\leftgroup{
+    \abs{A},\quad \abs{A}<\aleph_0\\
+    +\infty,\quad \abs{A}\geq\aleph_0
+}
+\end{equation}
+称其为$(S, 2^S)$上的\textbf{计数测度}．
+\end{example}
+
+\autoref{GenFun_def1} 比Lebesgue测度的定义抽象多了，因此有必要举一个和Lebesgue测度截然不同的例子，来体现其“更一般更抽象”的特点：
+
+\begin{example}{Dirac测度}
+令$\mathcal{B}$为$\mathbb{R}^n$中的Borel集合\footnote{即用开区间进行任意多次交、并、差、补等运算获得的集族．}．取$\mathbb{R}^n$中的一点$x_0$，定义$(\mathbb{R}^n, \mathcal{B})$上的测度$\sigma_{x_0}$为：
+\begin{equation}
+\sigma_{x_0}(A)=\leftgroup{
+    1, \quad x_0\in A\\
+    0, \quad x_0\not\in A
+}
+\end{equation}
+称之为\textbf{Dirac测度}．
+\end{example}
+
+Dirac测度显然连平移不变性都不具备，和Lebesgue外测度截然不同．你可能也注意到了，Dirac测度和Dirac函数看起来很相似——没错，Dirac函数本质上就不是一个函数，而是一个测度．但这话乍一听很奇怪，函数是给集合上每个点赋予一个数字，测度是给各子集赋予数字，两者是怎么联系起来的呢？这就需要利用Lebesgue外测度作为脚手架，来衔接二者了．
+
+
+
+
+
+\subsection{函数与测度}
+
+
+
+
+\begin{definition}{测度的绝对连续}
+设$\mu$和$\nu$都是$(S, \mathcal{A})$上的测度，且只要$\nu(A)=0$，就必有$\mu(0)$，那么称测度$\mu$关于测度$\nu$绝对连续，记为$\mu\ll\nu$．
+
+如果$\mu\ll\nu$且$\nu\ll\mu$，则称$\mu$与$\nu$等价．
+\end{definition}
+
+\addTODO{需补充或引用\textbf{Radon-Nikodym定理}相关词条．}
+
+
+Radon-Nikodym定理显示，如果$\mu\ll\nu$，且$\nu$是$\sigma$\textbf{-有限测度}\footnote{即$S$可以表示为最多可数个$B_i\in\mathcal{A}$的并集，且$\nu(B_i)<+\infty$恒成立．}，那么$\mu$就可以和一个函数$f:S\to [0, +\infty]$相联系起来：
+\begin{equation}
+\mu(A) = \int_A f \dd \nu
+\end{equation}
+
+我们可以取所研究的二元组$(S, \mathcal{A})$为$(\mathbb{R}^n, \mathcal{B})$，$\nu$为Lebesgue外测度，于是$\int_A f \dd \nu$就是$f$的Lebesgue积分．我们可以把$f$称为$\mu$的关于$\nu$的\textbf{密度（density）}．
+
+反过来，对于一个Lebesgue可积函数$f$，我们总可以定义与之相关的测度：
+\begin{equation}
+\mu(A) = \int_A f(x) \dd x
+\end{equation}
+
+如果$f$是测度$\mu$的密度，那么任意函数$\varphi$关于测度$\mu$的积分就可以写为：
+\begin{equation}
+\int_A \varphi \dd \mu = \int_A f(x)\varphi(x) \dd x
+\end{equation}
+
+于是，我们可以将测度$\mu$引申为一个泛函：
+\begin{equation}
+\mu(\varphi) = \int_{\mathbb{R}^n} f(x)\varphi(x) \dd x
+\end{equation}
+
+今后，我们将不再区分测度$\mu$及其关于Lebesgue测度的密度$f$．泛函$\mu(\varphi)$有时候也表示为$f(\varphi)$．
+
+
+
+
+
+
+
+
+
+
+
+

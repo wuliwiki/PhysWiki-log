@@ -3,9 +3,9 @@
 
 % 未完成： 感觉函数基底需要一些图．% 现在在考虑要不要先介绍这个呢？？ 毕竟量子力学中使用得非常多．
 
-\pentry{定积分\upref{DefInt}， 狄拉克符号\upref{braket}}
+\pentry{定积分\upref{DefInt}， 狄拉克符号\upref{braket}， 复数\upref{CplxNo}}
 
-满足\textbf{狄利克雷条件}\footnote{函数值有限，存在有限个间断点和有限个极值点． 如无特殊说明， 本书中做傅里叶级数的展开的函数都满足狄利克雷条件}的周期函数 $f(x)$， 令周期为 $2l$， 可以使用以下三角级数展开
+满足\textbf{狄利克雷条件}\footnote{函数值有限，存在有限个间断点和有限个极值点． 如无特殊说明， 本书中做傅里叶级数的展开的函数都满足狄利克雷条件．}的周期函数 $f(x)$， 令周期为 $2l$， 可以使用以下三角级数展开
 \begin{equation}\label{FSTri_eq1}
 f( x ) = \frac{a_0}{2} + \sum_{n = 1}^\infty a_n \cos (\frac{n\pi}{l}x) + \sum_{n = 1}^\infty b_n \sin (\frac{n\pi}{l}x)
 \end{equation}
@@ -17,18 +17,28 @@ a_n = \frac{1}{l} \int_{ - l}^l f( x )\cos(\frac{n\pi}{l}x) \dd{x}
 b_n = \frac{1}{l} \int_{ - l}^l f( x )\sin(\frac{n\pi}{l}x) \dd{x}
 \end{equation}
 
-\subsection{说明}
-注意\autoref{FSTri_eq1} 的所有 $a_n$ 项为偶函数项，所有 $b_n$ 项为奇函数项．若 $f(x)$ 是偶函数，所有 $b_n$ 项为零，若是奇函数，则所有 $a_n$ 项为零\footnote{证明：如果 $f(x)$ 是偶函数，那么\autoref{FSTri_eq3} 中的被积函数就是奇函数， 所以在区间 $[-l,l]$ 的积分为零．奇函数的证明类似．}． 如果 $f(x)$ 不具有奇偶性，可以表示为偶函数和奇函数之和，分别对应所有 $a_n$ 项和所有 $b_n$ 项
+要特别注意的是， 严格来说\autoref{FSTri_eq1} 并不能用等号． 因为若函数 $f(x)$ 在某点不连续， 在该点处等式右边的级数未必会收敛到 $f(x)$． 对此本文并不过多讨论， 且为了方便仍然使用等号．
+
+\autoref{FSTri_eq1} 的所有 $a_n$ 项为偶函数项，所有 $b_n$ 项为奇函数项．若 $f(x)$ 是偶函数，所有 $b_n$ 项为零，若是奇函数，则所有 $a_n$ 项为零\footnote{证明：如果 $f(x)$ 是偶函数，那么\autoref{FSTri_eq3} 中的被积函数就是奇函数， 所以在区间 $[-l,l]$ 的积分为零．奇函数的证明类似．}． 如果 $f(x)$ 不具有奇偶性，可以表示为偶函数和奇函数之和，分别对应所有 $a_n$ 项和所有 $b_n$ 项
 \begin{equation}
 f(x) = \frac12 [f(x)+f(-x)] + \frac12 [f(x)-f(-x)]
 \end{equation}
 
-$f(x)$ 的函数值既可以是实数也可以是复数．实函数的展开系数 $a_n, b_n$ 也必须取实数，复函数的展开系一定不全是实数．
+\subsubsection{复值函数}
+若上述傅里叶展开公式对实值函数 $f(x)$ 成立， 当 $f(x)$ 的函数值变为复数时是否仍然成立呢？ 答案是肯定的． 所以在以下的例子和推导中， 我们都只讨论实函数的情况就足够了．
+
+推导： 我们可以把复值函数拆分成实部函数和虚部函数
+\begin{equation}
+f(x) = u(x) + \I v(x)
+\end{equation}
+其中 $u(x), v(x)$ 是和 $f(x)$ 相同周期的实函数， 且都满足迪利克雷条件． 那么， 可以把它们分别做傅里叶展开． 令 $u(x)$ 的展开系数为 $a'_n, b'_n$， 而 $v(x)$ 的系数为 $a''_n, b''_n$． 分别对 $u(x), v(x)$ 列出\autoref{FSTri_eq1} 到\autoref{FSTri_eq3}， 且令 $a_n = a'_n + \I a''_n$， $b_n = b'_n + \I b''_n$， 会发现\autoref{FSTri_eq1} 到\autoref{FSTri_eq3} 同样成立．
+
+显然， 实函数的展开系数 $a_n, b_n$ 都是实数， 而复函数的展开系一定不全是实数．
 
 \subsection{完备性}
 傅里叶级数最奇妙的地方大概就是它能展开任意满足狄利克雷条件的函数，这个性质叫做\textbf{完备性}．我们先不证明完备性，只给出几个例子说明随着求和项数增加，三角函数如何逼近不连续或不光滑的函数．
 
-\begin{example}{方波}
+\begin{example}{方波}\label{FSTri_ex1}
 
 首先定义一个方波为
 \begin{equation}\label{FSTri_eq7}
@@ -49,9 +59,10 @@ f(x) = \sum_{k = 0}^\infty \frac{4}{\pi (2k + 1)}\sin (2k + 1)x
 \includegraphics[width=14.25cm]{./figures/FSTri_1.pdf}
 \caption{有限项傅里叶级数逼近方波}\label{FSTri_fig1}
 \end{figure}
+理论上虽然随着项数变多三角级数会收敛于方波， 但是容易发现在函数不连续点的附近， 收敛会比较慢， 而且会出现高频振荡． 这被称为\textbf{龙格现象}， 在多项式插值\upref{InterP}中同样会遇到．
 \end{example}
 
-\begin{example}{正弦函数的绝对值} % 未完成：图
+\begin{example}{正弦函数的绝对值}
 
 偶函数 $f(x) = \abs{\sin x}$ 存在不光滑的点，展开成傅里叶级数为
 \begin{equation}\label{FSTri_eq6}
@@ -68,7 +79,6 @@ f(x) = \abs{\sin x} = \frac{2}{\pi } - \frac{4}{\pi }\sum_{k = 1}^{+\infty} \fra
 \begin{exercise}{}
 根据傅里叶级数的定义用定积分计算\autoref{FSTri_eq5} 和\autoref{FSTri_eq6}．
 \end{exercise}
-
 
 \subsection{系数公式推导}
 \pentry{正交归一基底\upref{OrNrB}， 狄拉克符号\upref{braket}}
@@ -97,7 +107,7 @@ f(x) = \abs{\sin x} = \frac{2}{\pi } - \frac{4}{\pi }\sum_{k = 1}^{+\infty} \fra
 \subsection{正弦基底}
 若我们只需要在一个区间 $[0,l]$ 上展开函数 $f(x)$ 而不在意其他地方，那么我们可以假想 $f(x)$ 是以 $2l$ 为周期的奇函数，这样，我们只需要用正弦基底展开 $f(x)$ 即可\footnote{显然我们也可以假想 $f(x)$ 是以 $2l$ 为周期的偶函数，用余弦基底展开 $f(x)$．选择正弦或余弦还应该考虑到函数在该区间的边界条件： 正弦可以保证两端函数值为 0， 余弦可以保证区间的导数值为 0．}． 于是我们可以说，\autoref{FSTri_eq4} 中给出的所有正弦基底在区间 $[0,l]$ 具有完备性．
 
-\begin{example}{用正弦基底展开闭区间内的函数}
+\begin{example}{用正弦基底展开闭区间内的函数}\label{FSTri_ex2}
 
 \begin{figure}[ht]
 \centering
@@ -135,8 +145,38 @@ b_n = (-1)^{\frac{n-1}{2}} \frac{8}{\pi^2 n^2} \quad (\text{$n$ 为奇数})
 \sin\frac{\pi}{l} (x-x_0),\;   \sin\frac{2\pi}{l} (x-x_0),\;    \dots\;\sin\frac{n\pi}{l} (x-x_0) \dots
 \end{equation}
 
-\subsection{任意区间}
-\addTODO{也可以加入 cos？ 讨论一般情况区间 $[a, b]$， 取决于周期 $T = 2\pi/\Delta \omega$， 一般取 $T = b - a$ 或者 $T = 2(b-a)$ （正弦基底）即可．}
+\subsection{任意区间的展开}\label{FSTri_sub2}
+有时候我们希望对函数 $f(x)$ 在某个任意区间 $[a, b]$ 内做类似\autoref{FSTri_eq1} 的三角级数， 却并不关心 $f(x)$ 是否有周期性， 周期是多少， 甚至不关心 $f(x)$ 在该区间外是否有定义． 那么此时我们将有多种可能的展开方式．
+
+\textbf{第一种方法}是令 $g(x)$ 是周期为 $2l$ 的周期函数， 且在区间 $[a, b]$ 内 $g(x) = f(x)$， 然后对 $g$ 傅里叶展开． 令\autoref{FSTri_eq1} 中 $l = (b-a)/2$， 那么容易证明只需要把系数公式\autoref{FSTri_eq2} \autoref{FSTri_eq3} 的积分范围改为 $[a,b]$ 即可（留做习题）．
+
+\textbf{第二种方法}令\autoref{FSTri_eq1} 中 $l = (b-a)/2$， 把 $f(x)$ 先向左平移 $x_0 = (a+b)/2$， 也就是使原来 $[a,b]$ 的移动到 $[-l,l]$， 展开成\autoref{FSTri_eq1} 的傅里叶级数， 再向右平移 $x_0$ 即可． 这样傅里叶展开变为（$a < x < b$， 下同）
+\begin{equation}\label{FSTri_eq9}
+f(x) = \frac{a_0}{2} + \sum_{n = 1}^\infty a_n \cos [\frac{n\pi}{l}(x-x_0)] + \sum_{n = 1}^\infty b_n \sin [\frac{n\pi}{l}(x-x_0)]
+\end{equation}
+\begin{equation}
+a_n = \frac{1}{l} \int_{a}^b f(x)\cos [\frac{n\pi}{l}(x-x_0)] \dd{x} 
+\end{equation}
+\begin{equation}
+b_n = \frac{1}{l} \int_{a}^b f(x)\sin [\frac{n\pi}{l}(x-x_0)] \dd{x}
+\end{equation}
+
+\textbf{第三种方法}令 $l = b - a$， 然后只用正弦或余弦函数来展开（\autoref{FSTri_ex2}）：
+\begin{equation}\label{FSTri_eq8}
+f(x) = \sum_{n = 1}^\infty b_n \sin [\frac{n\pi}{l}(x-a)]
+\end{equation}
+\begin{equation}
+b_n = \frac{2}{l} \int_{a}^b f(x)\sin [\frac{n\pi}{l}(x-a)] \dd{x}
+\end{equation}
+把两式中的 $\sin$ 替换为 $\cos$ 也成立， 以下不再赘述． 从图像上来看， \autoref{FSTri_eq8} 中 $n=1$ 的项表示横跨 $[a,b]$ 的一个拱形（$\sin$ 的半个周期）， $n=2$ 代表两个拱形（$\sin$ 的一个周期）， 等．
+
+若令\autoref{FSTri_eq8} 的右边为 $g(x)$， 会发现在区间 $[a-l, a+l]$ 中，  $g(x)$ 是关于点 $x = a$ 的奇函数， 而在整个实轴上， $g(x)$ 是周期为 $2l$ 的函数．
+
+为什么这里只需要用 $\sin$ 基底就可以实现完备？ 这是因为若把 $g(x)$ 向左平移 $a$ 后， 在区间 $[-l, l]$ 上是一个奇函数， 而奇函数的傅里叶展开是不需要 $\cos$ 项的． 如果对比\autoref{FSTri_eq8} 的右边和\autoref{FSTri_eq9} 的右边， 它们在 $[a, b]$ 内的的部分是相同的， 而在 $[a, b]$ 外的部分却不同．
+
+在实际操作中要如何选择各种方法呢？ 前两种方法实际上是等价的， 把\autoref{FSTri_eq9} 利用两两角和公式（\autoref{TriEqv_eq1}~\upref{TriEqv}）拆开即可证明． 另一个主要的考虑因素是\autoref{FSTri_ex1} 提到的龙格效应． 若 $f(a) = f(b)$， 那么用前两种方法把 $f(x)$ 拓展为周期函数后， $[a,b]$ 的两个端点不是间断点， 这就可以避免此处的龙格效应． 特殊地， 若 $f(a) = f(b) = 0$， 那么用第三种方法中的 $\sin$ 展开也可以避免龙格效应， 若区间两端的导数 $f'(a) = f'(b) = 0$， 那么当然最好只用 $\cos$ 来展开．
+
+事实上， 使用任何 $l > (b - a)/2$ 都可以在区间 $[a,b]$ 内展开函数， 所以存在无穷多种展开的方法．
 
 \subsection{证明函数基底正交}\label{FSTri_sub1}
 
@@ -182,9 +222,9 @@ b_n = (-1)^{\frac{n-1}{2}} \frac{8}{\pi^2 n^2} \quad (\text{$n$ 为奇数})
 \end{equation}
 易证将基底乘以常数不影响它们的正交性， 我们可以将正交归一基底的性质用克罗内克 $\delta$ 函数（\autoref{OrNrB_eq2}~\upref{OrNrB}）表示（常数基底可以记为 $\ket{C_0}$）
 \begin{equation}
-\braket{S_m}{S_n} = \delta_{m,n}
+\braket{S_m}{S_n} = \delta_{m,n}~,
 \qquad
-\braket{C_m}{C_n} = \delta_{m, n}
+\braket{C_m}{C_n} = \delta_{m, n}~,
 \qquad
 \braket{S_m}{C_n} = 0
 \end{equation}
@@ -212,4 +252,4 @@ b_n = \braket{f}{S_n}
 \begin{equation}
 \braket{f} = \sum_n (a_n^2 + b_n^2)
 \end{equation}
-即将所有展开系数分别平方再相加． 这与几何矢量模方公式也相同．
+即将所有展开系数分别平方再相加． 这与几何矢量模方公式也相同． 这叫做 \textbf{Parseval 定理}．

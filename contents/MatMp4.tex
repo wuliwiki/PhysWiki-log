@@ -1,0 +1,31 @@
+% 用 Matlab 生成 mp4 视频
+
+\begin{issues}
+\issueDraft
+\end{issues}
+
+\pentry{Matlab 画图\upref{MatPlt}}
+
+参考\href{https://www.mathworks.com/help/matlab/ref/videowriter.html}{相关文档}．
+
+\begin{figure}[ht]
+\centering
+\includegraphics[width=10cm]{./figures/MatMp4_1.png}
+\caption{例程中的视频截图} \label{MatMp4_fig1}
+\end{figure}
+
+
+给出一个例程， MP4 格式的相关设置只有 \verb|FrameRate| 和 \verb|Quality| 两个．
+\begin{lstlisting}[language=matlab]
+% 写 mp4 视频
+v = VideoWriter('peaks', 'MPEG-4');
+v.FrameRate = 10; % 默认 30
+v.Quality = 100; % 默认 75
+open(v);
+for k = 1:60 
+   surf(sin(2*pi*k/20)*Z,Z)
+   frame = getframe(gcf);
+   writeVideo(v,frame);
+end
+close(v);
+\end{lstlisting}

@@ -1,0 +1,106 @@
+% SciPy 求解常微分方程组的初值问题
+% 常微分方程组|Python|数值解
+\subsection{微分方程组}
+这里我们再次以“天体运动的简单数值计算\upref{KPNum0}” 中的问题为例，利用\verb |Python|语言实现微分方程组
+\begin{equation}\label{PyIVP_eq}
+\begin{cases}
+x' = v_x\\
+y' = v_y\\
+v'_x = -GMx/(x^2 + y^2)^{3/2}\\
+v'_y = -GMy/(x^2 + y^2)^{3/2}
+\end{cases}
+\end{equation}
+的数值解，其中参数$GM=1$．
+\subsection{ \verb|solve_ivp|求解器介绍}
+在对该问题求解之前，我们先简单介绍\verb|Python|中关于微分方程数值求解库极相关函数的用法．一般，最常用的数值计算库为\verb|scipy|,而微分方程求解对应的模块为\verb|scipy.integrate.solve_ivp|.
+
+ \verb|solve_ivp|的一般格式为
+ \begin{lstlisting}[language=python]
+ solve_ivp(fun, t_span, y0, method='RK45', t_eval=None,max_step=np.inf,
+        dense_output=False, events=None, 
+        vectorized=False, args=None, **options)
+ \end{lstlisting}
+ 其中， 输入参数分别为
+\begin{itemize}
+\item \verb|fun|是微分方程(组)的右端；
+\item  \verb|t_span=(t0,tf)|代表积分区间为\verb|t0|到\verb|tf|;
+\item  \verb|y0|为初始条件；
+\item \verb|method|为数值积分方法，这里可以使用的积分方法有\verb|RK45|、\verb|RK23|、\verb|DOP853|(8阶显式龙格库塔法)、\verb|Radau|(5阶Radau IIA族的隐式Runge-Kutta方法)、\verb|BDF|(隐式多步变阶)、\verb|LSODA|(具有自动刚度检测和切换的Adams/BDF方法)等．需要主要的是显式Runge-Kutta方法(\verb|RK23、RK45、DOP853|)应用于非刚性问题，隐式方法(\verb|Radau、BDF|)应用于刚性问题.
+\item \verb|t_eval|是可选参数，需要数组类型数据．如果给定就在这些时间点进行求解，否则求解器自己选择时间点进行求解．
+\item \verb|max_step|允许的最大步长．默认为\verb|np．inf|，即步长不受约束，仅由解算器确定．如果求解不能满足需求，可以手动改变最大步长已达到精度要求．相应的还有最小步长参数\verb|min_step|.
+\item \verb|dense_output|为布尔类型,默认为假，是否计算连续解．
+\item \verb|args|为元组(\verb|tuple|)类型的参数，用于向微分方程传递必要的参数
+\item 后面还有许多可选参数，很少会使用．
+\end{itemize}
+\\
+函数返回值分别为
+\begin{itemize}
+\item  \verb|t| 返回计算的时间点数据，是一个\verb|ndarray|数据类型,长度为\verb|(n_points,)|.
+\item \verb|y|大小为\verb|(n, n_points)|的\verb |ndarray|的微分方程解的数据．
+\item 还有许多返回参数，感兴趣读者可以去\href{https://scipy.github.io/devdocs/reference/generated/scipy.integrate.solve_ivp.html#r179348322575-7}{官网}查看．
+\end{itemize}
+
+
+\subsection{代码实现}
+基于对\verb|solve_ivp|的使用说明，我们接下来对微分方程组\ref{PyIVP_eq} 进行数值计算．具体代码如下：
+\begin{lstlisting}[language=python]
+# 导入必要的库
+from scipy.integrate import solve_ivp
+import  numpy as np
+import matplotlib.pyplot as plt
+
+# 定义一些参数
+GM = 1 # 万有引力常数乘以中心天体质量
+x0,y0 = 1,0 # 初始位置
+vx0,vy0 = 0,0.7 # 初始速度
+tspan = (0, 4) # 总时间和步数
+init0=(x0,y0,vx0,vy0)
+
+# 定义微分方程
+def odefun(t,z,GM):
+    x,y,vx,vy  = z
+    temp = -GM /(x**2 + y**2)**(3/2)
+    return [vx,vy, temp * x, temp * y]
+# 调用求解器求解微分方程
+sol = solve_ivp(odefun,tspan,init0,dense_output=True,
+          max_step=0.001,args=(GM,))
+t = np.linspace(0, 4, 3000)
+z = sol.sol(t)
+
+
+# 微分方程解的可视化
+
+# xy的时序图
+plt.plot(t, z.T)
+plt.xlabel('t')
+plt.legend(['x', 'y','vx','vy'], shadow=True)
+plt.show()
+
+# xy的相图
+plt.plot(z[0],z[1])
+plt.xlabel('t')
+plt.xlabel('x')
+plt.ylabel('y')
+plt.title('Lotka-Volterra System')
+plt.show()
+\end{lstlisting}
+
+对应的输出如图所示．
+\begin{figure}[ht]
+\centering
+\includegraphics[width=8cm]{./figures/PyIVP_1.png}
+\caption{位置与速度关于时间的图形．}} \label{PyIVP_fig1}
+\end{figure}
+
+\begin{figure}[ht]
+\centering
+\includegraphics[width=8cm]{./figures/PyIVP_2.png}
+\caption{$x$与$y$的相图．} \label{PyIVP_fig2}
+\end{figure}
+
+我们现在来看代码的第\verb|2-4|行是一些基本必要库的导入. 
+\verb|7-9|行为方程的一些参数与初始条件.
+\verb|10|行为积分区间．注意它是一个元包数组，也可以写成\verb|[t0,tf]|形式.
+\verb|14-17|行为微分方程的定义，这里需要传递一个参数\verb|GM|.
+\verb|19|行为调用求解器求解微分方程组，我们使用了\verb|dense_output|参数，这样我们就可以在连续的对时间取值计算对应的\verb|x,y,vx,vy|. 
+\verb|28-39|行均为作图部分．
