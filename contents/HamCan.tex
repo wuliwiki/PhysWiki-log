@@ -1,7 +1,7 @@
 % 哈密顿正则方程
 % 哈密顿量|拉格朗日变换|哈密顿正则方程|广义动量|共轭动量
 
-\pentry{拉格朗日方程\upref{Lagrng}， 勒让德变换\upref{TrLgdr}}
+\pentry{拉格朗日方程（额外广义力）\upref{LagEqQ}， 勒让德变换\upref{TrLgdr}}
 
 \subsection{哈密顿量}
 拉格朗日力学中使用 $N$ 个广义坐标 $q_1,\dots,q_N$ 和 $N$ 个广义速度 $\dot q_1,\dots,\dot q_N$ 来描述力学系统的状态， 我们分别简记为 $q$ 和 $\dot q$． 而在哈密顿力学中， 系统的状态由广义坐标和对应的 $N$ \textbf{广义动量（generalized momentum）} $p_1, \dots, p_N$， 来描述， 简记为 $p$． 我们定义广义动量为（\autoref{Lagrng_eq13}~\upref{Lagrng}）
@@ -38,13 +38,13 @@ p_i = \pdv{L}{\dot q_i} = \pdv{\dot q_i} \sum_j \frac12 m_j \dot{\bvec r}_j^2
 \subsection{哈密顿方程}
 \textbf{哈密顿方程（Hamilton's equations）}也叫\textbf{哈密顿正则方程（Hamilton's canonical equations）}是一组关于广义坐标和广义动量的微分方程组， 共有 $2N$ 条方程：
 \begin{equation}\label{HamCan_eq2}
-\dot q_i = \pdv{H}{p_i}
+\dot q_i = \pdv{H}{p_i}~,
 \qquad
 \dot p_i = -\pdv{H}{q_i}
 \qquad
 (i = 1\dots N)
 \end{equation}
-与拉格朗日方程相比， 虽然方程的个数多了一倍， 但是方程却由二阶变为了一阶． 可见在方程中， $q$ 和 $p$ 是对称的， 具有同样的地位．
+推导见下文． 与拉格朗日方程相比， 虽然方程的个数多了一倍， 但是方程却由二阶变为了一阶． 可见在方程中， $q$ 和 $p$ 是对称的， 具有同样的地位．
 
 \begin{example}{直角坐标系中的质点运动}
 直角坐标系中一个质点的拉格朗日量为 $L = m(\dot x^2 + \dot y^2 + \dot z^2)/2 - V$， 易得共轭动量就是通常定义的动量（用 $x_1,x_2,x_3$ 表示 $x, y, z$）
@@ -57,7 +57,7 @@ H = \sum_i \frac{p_{x_i}^2}{2m} + V
 \end{equation}
 代入哈密顿方程得
 \begin{equation}
-\dot x_i = \frac{p_{x_i}}{m}
+\dot x_i = \frac{p_{x_i}}{m}~,
 \qquad
 \dot p_{x_i} = -\pdv{V}{x_i}
 \qquad (i = 1,2,3)
@@ -77,28 +77,39 @@ m\ddot r = mr \dot \theta^2 - \pdv{V}{r}
 以及角动量守恒 $\dot L = 0$．
 \end{example}
 
+\subsubsection{额外的广义力}
+在 “拉格朗日方程（额外广义力）\upref{LagEqQ}” 中， 我们讨论了若存在额外广义力 $Q_i^{(e)}$ 该如何拓展哈密顿方程． 那么同样地， 哈密顿正则方程\autoref{HamCan_eq2} 也可以拓展为
+\begin{equation}\label{HamCan_eq5}
+\dot q_i = \pdv{H}{p_i}~,
+\qquad
+\dot p_i = -\pdv{H}{q_i} + Q_i^{(e)}
+\qquad
+(i = 1\dots N)
+\end{equation}
+该式和牛顿三定律是等效的．
+
 \subsection{哈密顿正则方程的推导}
-对\autoref{HamCan_eq1} 全微分， 有
+现在推导\autoref{HamCan_eq5}． 对\autoref{HamCan_eq1} 全微分\upref{TDiff}， 有
 \begin{equation}\label{HamCan_eq9}
 \dd{H} = \sum_i \dot q_i \dd{p_i} + \sum_i p_i \dd{\dot q_i} - \dd{L}
 \end{equation}
-对拉格朗日量全微分， 有
+其中对拉格朗日量全微分为
 \begin{equation}
 \dd{L} = \sum_i \pdv{L}{q_i}\dd{q_i} + \sum_i \pdv{L}{\dot q_i}\dd{\dot q_i} + \pdv{L}{t}\dd{t}
 \end{equation}
-将拉格朗日方程（\autoref{Lagrng_eq1}~\upref{Lagrng}） 的右边和广义动量的定义（\autoref{Lagrng_eq13}~\upref{Lagrng}） 代入该式， 得
+将含广义力的拉格朗日方程（\autoref{LagEqQ_eq1}~\upref{LagEqQ}） 的右边和广义动量的定义（\autoref{Lagrng_eq13}~\upref{Lagrng}） 代入该式， 得
 \begin{equation}
-\dd{L} = \sum_i \dot p_i\dd{q_i} + \sum_i p_i\dd{\dot q_i} + \pdv{L}{t}\dd{t}
+\dd{L} = \sum_i (\dot p_i - Q_i^{(e)})\dd{q_i} + \sum_i p_i\dd{\dot q_i} + \pdv{L}{t}\dd{t}
 \end{equation}
 代入\autoref{HamCan_eq9}， 得
 \begin{equation}
-\dd{H} = - \sum_i \dot p_i \dd{q_i} + \sum_i \dot q_i \dd{p_i}  - \pdv{L}{t}\dd{t}
+\dd{H} = - \sum_i (\dot p_i - Q_i^{(e)}) \dd{q_i} + \sum_i \dot q_i \dd{p_i}  - \pdv{L}{t}\dd{t}
 \end{equation}
 由于 $H$ 是 $p_i, q_i, t$ 的函数， 其全微分为 
 \begin{equation}
 \dd{H} = \sum_i \pdv{H}{q_i}\dd{q_i} + \sum_i \pdv{H}{p_i}\dd{p_i} + \pdv{H}{t}\dd{t}
 \end{equation}
-最后， 对比以上两式可得哈密顿正则方程（\autoref{HamCan_eq2}）， 以及
+最后， 对比以上两式可得哈密顿正则方程的拓展形式（\autoref{HamCan_eq5}）， 以及
 \begin{equation}
 \pdv{H}{t} = - \pdv{L}{t}
 \end{equation}

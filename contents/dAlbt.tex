@@ -1,13 +1,16 @@
-% 达朗贝尔定理
-% 拉格朗日方程证明|广义力|非约束力|达朗贝尔定理
+% 拉格朗日方程的证明、达朗贝尔原理
+% 拉格朗日方程证明|广义力|非约束力|达朗贝尔原理
 
-以下使用牛顿第二定律证明拉格朗日方程， 其中会使用到一个关于约束的定理叫做达朗贝尔定理
+\pentry{拉格朗日方程（额外广义力）\upref{LagEqQ}}
 
-% 首先可以用牛顿定律来推导，然后再用最小作用量推导
+本文使用牛顿第二定律证明拉格朗日方程， 其中会使用到一个关于约束的定理叫做达朗贝尔原理\textbf{（D'Alembert's principle）}． 另一种推导方法见 “最小作用量、哈密顿原理\upref{HamPrn}”．
+
 \subsection{由牛顿第二定律证明拉格朗日方程}
-注意以下所有的函数偏导都是把 $q_1, q_2\dots q_N, \dot q_1, \dot q_2\dots \dot q_N, t$ 作为变量，即对一个变量求导数而把其他变量看做常数．另外，势能 $V$ 和位矢 $\bvec r_j$ 与 $\dot q_i$ 无关，偏导为 0．
+下面来证明包含额外广义力的拉格朗日方程（\autoref{LagEqQ_eq1}~\upref{LagEqQ}）．
 
-系统动能为
+注意以下所有的函数偏导都是把 $q_1, q_2\dots q_N,\ \dot q_1, \dot q_2\dots \dot q_N,\ t$ 作为变量，即对一个变量求导数而把其他变量看做常数．另外，势能 $V$ 和位矢 $\bvec r_j$ 与 $\dot q_i$ 无关，偏导为 0．
+
+把系统看成质点组， 每个质点质量为 $m_j$， 位置矢量是广义坐标的函数 $\bvec r_j(q_1,\dots,q_N,t)$， 那么系统动能为
 \begin{equation}
 T = \frac12 \sum_j m_j \bvec v_j^2 = \frac12 \sum_j m_j \dot{\bvec r}_j \vdot \dot{\bvec r}_j
 \end{equation}
@@ -27,20 +30,36 @@ T = \frac12 \sum_j m_j \bvec v_j^2 = \frac12 \sum_j m_j \dot{\bvec r}_j \vdot \d
 \begin{equation}\label{dAlbt_eq8}
 \dv{t} \pdv{T}{\dot q_i} = \sum_j m_j \ddot{\bvec r}_j \vdot \pdv{\bvec r_j}{q_i}  + \sum_j m_j \dot{\bvec r}_j \vdot \dv{t} \pdv{\bvec r_j}{q_i}
 \end{equation}
-拉格朗日方程的右边为
+拉格朗日方程（\autoref{LagEqQ_eq1}~\upref{LagEqQ}）的右边为
 \begin{equation}
-\pdv{L}{q_i} = \pdv{T}{q_i} - \pdv{V}{q_i}
+\pdv{L}{q_i} = \pdv{T}{q_i} - \pdv{V}{q_i} + Q_i^{(e)}
 \end{equation}
-其中第一项为
+其中右边第一项为
 \begin{equation}\label{dAlbt_eq28}
 \pdv{T}{q_i} = \sum_j m_j \dot{\bvec r}_j \vdot \pdv{\dot{\bvec r}_j}{q_i} = \sum_j m_j \dot{\bvec r}_j \vdot \pdv{q_i} \dv{\bvec r_j}{t}
 \end{equation}
-第二项被定义为\textbf{广义力}
+第二项是包含在势能中的广义力
 \begin{equation}\label{dAlbt_eq29}
-Q_i = - \pdv{V}{q_i} = \sum_j \qty(-\pdv{V}{x_j} \pdv{x_j}{q_i} - \pdv{V}{y_j}\pdv{y_j}{q_i} - \pdv{V}{z_j} \pdv{z_j}{q_i}) = \sum_j \bvec F_j^{(a)} \vdot \pdv{\bvec r_j}{q_i}
+Q_i^{(V)} = - \pdv{V}{q_i} = \sum_j \qty(-\pdv{V}{x_j} \pdv{x_j}{q_i} - \pdv{V}{y_j}\pdv{y_j}{q_i} - \pdv{V}{z_j} \pdv{z_j}{q_i}) = \sum_j \bvec F_j^{(V)} \vdot \pdv{\bvec r_j}{q_i}
 \end{equation}
-其中 $\bvec F_j^{(a)} = - \grad_j V$ 被称为\textbf{非约束力}．%未完成，最好以上的例子中能说明非约束力
-所以要证明拉格朗日方程，即证明\autoref{dAlbt_eq8} 等于\autoref{dAlbt_eq28} 加\autoref{dAlbt_eq29}， 首先需要证明
+其中
+\begin{equation}
+\bvec F_j^{(V)} = - \grad_j V = -\pdv{V}{x_j}\uvec x - \pdv{V}{y_j}\uvec y - \pdv{V}{z_j} \uvec z
+\end{equation}
+这是\textbf{非约束力}．%未完成，最好以上的例子中能说明非约束力
+势能外的广义力的定义为
+\begin{equation}
+Q_i^{(e)}(q, \dot q, t) = \sum_j \bvec F_j^{(e)} \vdot \pdv{\bvec r_j}{q_i} \qquad (i=1,\dots,N)
+\end{equation}
+每个质点的总非约束力为
+\begin{equation}
+\bvec F_j^{(a)} = \bvec F_j^{(V)} + \bvec F_j^{(e)}
+\end{equation}
+那么总广义力为
+\begin{equation}\label{dAlbt_eq1}
+Q_i = Q_i^{(V)} + Q_i^{(e)} = \sum_j \bvec F_j^{(a)} \vdot \pdv{\bvec r_j}{q_i}
+\end{equation}
+所以要证明拉格朗日方程，即证明\autoref{dAlbt_eq8} 等于\autoref{dAlbt_eq28} 加\autoref{dAlbt_eq1}， 首先需要证明
 \begin{equation}
 \dv{t} \pdv{\bvec r_j}{q_i} = \pdv{q_i} \dv{\bvec r_j}{t}
 \end{equation}
@@ -53,9 +72,9 @@ Q_i = - \pdv{V}{q_i} = \sum_j \qty(-\pdv{V}{x_j} \pdv{x_j}{q_i} - \pdv{V}{y_j}\p
 \sum_j \qty(\bvec F_j^{(a)} - m\ddot{\bvec r}_j) \vdot \pdv{\bvec r_j}{q_i}  = 0
 \qquad (i = 1\dots N)
 \end{equation}
-即可证明拉格朗日方程．该式被称为\textbf{达朗贝尔定理}．注意由于这里的 $\bvec F_j^{(a)}$ 为质点 $j$ 所受的非约束力而不是合力，所以求和项的小括号一般不为 0．
+即可证明拉格朗日方程．该式被称为\textbf{达朗贝尔原理}．注意由于这里的 $\bvec F_j^{(a)}$ 为质点 $j$ 所受的非约束力而不是合力，所以求和项的小括号一般不为 0．
 
-\subsection{达朗贝尔定理证明}
+\subsection{达朗贝尔原理证明}
 令第 $j$ 个质点所受和力为 $\bvec F_j = \bvec F_j^{(a)} + \bvec F_j^{(c)}$， 两项分别为非约束力和约束力．由牛顿第二定律 $\bvec F_j - m\ddot{\bvec r}_j = 0$， 所以
 \begin{equation}
 \sum_j \qty(\bvec F_j^{(a)}+\bvec F_j^{(c)} - m\ddot{\bvec r}_j) \vdot \pdv{\bvec r_j}{q_i} = 0

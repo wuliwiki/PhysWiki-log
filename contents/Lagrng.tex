@@ -1,4 +1,4 @@
-% 拉格朗日方程
+% 欧拉—拉格朗日方程
 % 广义坐标|拉格朗日量|拉格朗日方程|循环坐标|广义动量|约束
 
 \pentry{简谐振子\upref{SHO}， 角动量\upref{AMLaw1}， 自由度\upref{DoF}， 全导数\upref{TotDer}}
@@ -6,7 +6,7 @@
 若一个系统的状态可以由几个独立的\textbf{广义坐标（generalized coordinates）} $q_i(t)$ $(i=1,2\dots,N)$ 和时间 $t$ 的函数描述，则广义坐标关于时间的函数可通过\textbf{拉格朗日方程（Lagrange equation）}\footnote{也叫\textbf{欧拉-拉格朗日方程（Euler-Lagrange Equation）}}\footnote{方程中对 $\dot q$ 求偏导\upref{ParDer}可能会使初学者看起来有些奇怪不知道该怎么求， 这里明确一下该偏导在数学上是如何操作的： 可将\autoref{Lagrng_eq2} 中 $L$ 的所有 $\dot q_i$ 记为 $v_i$， 然后将 $q_i$ 和 $v_i$ 看作是完全没有关联的变量， 求偏导时对 $q_1,\dots, q_N, v_1, v_2\dots,t$ 中的一个求， 而保持其他量不变．}解出．
 \begin{equation}\label{Lagrng_eq1}
 \dv{t} \pdv{L}{\dot q_i} = \pdv{L}{q_i}
-\quad (i=1,\dots,N)
+\qquad (i=1,\dots,N)
 \end{equation}
 其中 $L$ 是系统的\textbf{拉格朗日量（lagrangian）}，等于系统动能减势能（我们先假设势能不是 $\dot q_i$ 的函数）． 为了方便， 我们也会把 $q_1, \dots, q_N$ 和 $\dot q_1,\dots,\dot q_N$ 分别记为 $q$ 和 $\dot q$． 那么拉格朗日量可以记为
 \begin{equation}\label{Lagrng_eq2}
@@ -20,7 +20,7 @@ L(q, \dot q, t) = T(q, \dot q, t) - V(q, t)
 % S(q) = \int_{t_1}^{t_2} {L(q,\dot q) \dd{t}} 
 % \end{equation}
 
-拉格朗日力学与牛顿力学完全等效，其优势在于，第一，只需写出拉格朗日量，就可由简单求导得到完整的动力学微分方程而无需进行受力分析．第二，方程的形式不随广义坐标的选取而改变．第三，无需解方程即可以得到一些守恒量．
+若在右边加上广义力（详见 “拉格朗日方程（广义力）\upref{LagEqQ}”）， 该方程与牛顿力学完全等效， 对比牛顿力学的优势在于， 第一，只需写出拉格朗日量，就可由简单求导得到完整的动力学微分方程而无需进行受力分析．第二，方程的形式不随广义坐标的选取而改变．第三，无需解方程即可以得到一些守恒量．
 
 我们以下先通过一些例子来学习如何使用拉格朗日方程， 而把方程的证明或推导留到 “达朗贝尔定理\upref{dAlbt}” 以及 “哈密顿原理\upref{HamPrn}” 中．
 
@@ -82,11 +82,11 @@ mr^2\dot\theta = l
 p_i = \pdv{L}{\dot q_i}
 \end{equation}
 
-\begin{example}{耦合弹簧振子}
-如图，%未完成
-三个弹性系数为 $k$ 的弹簧（忽略质量）将两个质量为 $m$ 的质点串联在两个固定点之间，令一个广义坐标为中间弹簧的伸长距离 $x$，另一个广义坐标为两质点的质心与其平衡位置的距离 $X$， 则两质点相对平衡位置的位移分别为
+\begin{example}{耦合弹簧振子}\label{Lagrng_ex2}
+如图， 三个弹性系数为 $k$ 的弹簧（忽略质量）将两个质量为 $m$ 的质点串联在两个固定点之间，令一个广义坐标为中间弹簧的伸长距离 $x$，另一个广义坐标为两质点的质心与其平衡位置的距离 $X$， 则两质点相对平衡位置的位移分别为
+\addTODO{画图}
 \begin{equation}
-x_1=X-x/2 \qquad x_2 = X+x/2
+x_1=X-x/2~, \qquad x_2 = X+x/2
 \end{equation}
 动能为
 \begin{equation}
@@ -98,11 +98,11 @@ V = \frac12 k x^2 + \frac12 kx_1^2 + \frac12 k x_2^2 = k\qty(X^2 + \frac34 x^2)
 \end{equation}
 可求得拉格朗日方程组为
 \begin{equation}
-m\ddot x =  - 3kx \qquad m\ddot X =  - kX
+m\ddot x =  - 3kx~, \qquad m\ddot X =  - kX
 \end{equation}
 可见该问题中使用这种广义坐标的好处就是两个微分方程都只含有一个变量，易于求解． 由“简谐振子\upref{SHO}” 中的结论可得 $x(t)$ 和 $X(t)$ 的通解为
 \begin{equation}
-x(t) = x_0 \cos(\sqrt{\frac{3k}{m}} t + \phi_x)
+x(t) = x_0 \cos(\sqrt{\frac{3k}{m}} t + \phi_x)~,
 \qquad
 X(t) = X_0 \cos(\sqrt{\frac{k}{m}} t + \phi_X)
 \end{equation}
@@ -194,6 +194,8 @@ r(t) = C_1 \E^{\omega_0 t} + C_2 \E^{-\omega_0 t} + \frac{g}{\omega^2 - \omega_0
 \end{equation}
 这种情况下， 质点一边以角频率 $\omega$ 延径向做简谐振动， 一边以指数形式远离或接近原点（取决于初始条件）．
 \end{example}
+
+以上的例题都非常简单， 只用于演示如何使用拉格朗日方程， 基本无法体现拉格朗日相对于牛顿力学的优势， 一个稍微复杂的例子见 “双摆和三摆\upref{Pendu3}”．
 
 % \subsection{非保守力的拉格朗日方程}
 % 未完成
