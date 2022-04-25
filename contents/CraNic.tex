@@ -1,11 +1,7 @@
-% Crank-Nicolson 算法解一维含时薛定谔方程
+% Crank-Nicolson 算法解一维含时薛定谔方程（Matlab)
 % 算法|薛定谔方程|数值解|偏微分方程
 
-\begin{issues}
-\issueDraft
-\end{issues}
-
-\pentry{薛定谔方程\upref{TDSE}}
+\pentry{薛定谔方程\upref{TDSE}， 矩阵\upref{Mat}}
 
 \footnote{参考 \cite{NR3}．}薛定谔方程为
 \begin{equation}
@@ -13,42 +9,83 @@
 \end{equation}
 用 Crank-Nicolson 或 Caley scheme\footnote{二者是一回事， 见 \cite{NR3} 19.2 节．} 得到的结果是
 \begin{equation}\label{CraNic_eq2}
-\qty(1+\frac{\I}{2}\mat H\Delta t)\bvec\psi^{n+1} = \qty(1-\frac{\I}{2}\mat H\Delta t)\bvec\psi^n
+\qty(1+\frac{\I}{2}\mat H_{n+1}\Delta t)\bvec\psi_{n+1} = \qty(1-\frac{\I}{2}\mat H_n\Delta t)\bvec\psi_n
 \end{equation}
-其中 $\bvec\psi^n$ 是时刻 $t_n$ 的已知矢量， $\bvec\psi^{n+1}$ 为时刻 $t_{n+1}$ 的未知矢量．
+其中 $\bvec\psi_n$ 是时刻 $t_n$ 的波函数列矢量（已知）， $\bvec\psi_{n+1}$ 为时刻 $t_{n+1}$ 的波函数列矢量（未知）， $\mat H_n$ 是 $t_n$ 时刻的哈密顿矩阵．
 
-但事实上， 还可以继续减少计算量． 将\autoref{CraNic_eq2} 整理后得
+但事实上， 还可以继续减少计算量． 若近似认为\footnote{或者更公平地， 把\autoref{CraNic_eq5} 中 $\mat H_n$ 改为 $\mat H_{n+1/2}$， 即 $(t_n+t_{n+1})/2$ 时的哈密顿矩阵．} $\mat H_{n+1}\approx \mat H_{n}$， 将\autoref{CraNic_eq2} 整理后得
 \begin{equation}\label{CraNic_eq5}
-\qty(\frac12 + \frac{\I}{4}\mat H\Delta t)\qty(\psi^{n+1}+\psi^n) = \psi^n
+\qty(\frac12 + \frac{\I}{4}\mat H_n\Delta t)\qty(\bvec\psi_{n+1}+\bvec\psi_n) = \bvec\psi_n
 \end{equation}
-解这个方程， 再减去 $\psi^n$ 即可．
+解这个方程， 再减去 $\bvec \psi_n$ 即可．
 
 \subsection{等间距网格}
-其中二阶导数用三点差分计算， 得
+对于等间距坐标网格 $x_1,x_2,\dots$， 可以用差分法（\autoref{DerDif_eq5}~\upref{DerDif}）计算二阶导数， 表示为矩阵有
 \begin{equation}
-\ali{
-\psi_i^{n+1} - \psi_i^n &= \frac{\I\Delta t}{4\Delta x^2} (\psi_{i-1}^n - 2\psi_i^n + \psi_{i+1}^n + \psi_{i-1}^{n+1} - 2\psi_i^{n+1} + \psi_{i+1}^{n+1})\\
-&\qquad\qquad - \frac{\I\Delta t}{2}(V_i^n\psi_i^n + V_i^{n+1}\psi_i^{n+1})
-}\end{equation}
-令 $\alpha = \I\Delta t/(4\Delta x^2), \beta = \I\Delta t/2$， 整理可得
-\begin{equation}\label{CraNic_eq4}
-\ali{
-&\quad -\alpha\psi_{i-1}^{n+1} + (1+2\alpha + \beta V_i^{n+1})\psi_i^{n+1} - \alpha \psi_{i+1}^{n+1}\\
-&= \alpha\psi_{i-1}^n + (1 - 2\alpha - \beta V_i^n)\psi_i^n + \alpha \psi_{i+1}^n
-}\end{equation}
-其中 $\psi_i^n = \psi(x_i, t_n)$， $V_i^n = V(x_i, t_n)$．
-
-我们把一个区间划分成 $N_x - 1$ 段等长的区间， 并令 $N_x$ 个格点为 $x_1\dots x_{N_x}$． 最简单的边界条件是取 $\psi(x_1) = \psi(x_{N_x}) = 0$． 这样\autoref{CraNic_eq4} 中的 $i$ 可以取 $i = 2\dots N_x - 1$， 得到 $N_x - 2$ 条式子， 其中只有 $\psi_2^{n+1}\dots \psi_{N_x-1}^{n+1}$ 这 $N_x - 2$ 个未知量， 每条式子最多包含连续 3 个未知量． 将线性方程用矩阵表示， 就可以得到一个三对角矩阵（第一行和最后一行只有两个系数）．
-
-
+\mat D_2 = \frac{1}{\Delta x^2}\pmat{-2 & 1 & 0 & 0 & \dots\\
+1 & -2 & 1 & 0 & \dots\\
+0 & 1 & -2 & 1 & \dots\\
+0 & 0 & 1 & -2 & \dots\\
+\vdots & \vdots & \vdots & \vdots & \ddots}
+\end{equation}
+那么 $\mat H_n = -\mat D_2/(2m) + \mat V_n$， 其中 $\mat V_n$ 是对角矩阵， 第 $i$ 个对角元为 $V(x_i, t_n)$． 现在， 就可以代入\autoref{CraNic_eq2} 或\autoref{CraNic_eq5} 求解了．
 
 \subsection{虚时间}
 使用虚时间后， \autoref{CraNic_eq2} 和\autoref{CraNic_eq5} 分别变为
 \begin{equation}
-\qty(1+\frac12\mat H\Delta t)\psi^{n+1} = \qty(1-\frac12\mat H\Delta t)\psi^n
+\qty(1+\frac12\mat H\Delta t)\bvec\psi_{n+1} = \qty(1-\frac12\mat H\Delta t)\bvec\psi_n
 \end{equation}
 \begin{equation}
-\qty(\frac12 + \frac14\mat H\Delta t)\qty(\psi^{n+1}+\psi^n) = \psi^n
+\qty(\frac12 + \frac14\mat H\Delta t)\qty(\bvec\psi_{n+1}+\bvec\psi_n) = \bvec\psi_n
 \end{equation}
 
-（代码未完成）
+\subsection{代码}
+\pentry{Matlab 的稀疏矩阵\upref{MatSpa}}
+Matlab 代码如下， 使用\autoref{CraNic_eq5}， 以及 Matlab 的稀疏矩阵\upref{MatSpa}．
+
+\begin{lstlisting}[language=matlab, caption=TDSE\_cn1d.m]
+% Crank-Nicolson 法解一维薛定谔方程
+% 等间距网格，稀疏矩阵
+function TDSE_cn1d
+% ==== 参数设置 ======
+m = 1; % 质量，角频率
+xmin = -10; xmax = 30; Nx = 300; % x 网格
+tmin = 0; tmax = 10; Nt = 1000; % 时间网格
+Nplot = 10; % 画图步数
+t0 = 0; % 高斯波包的初始时间
+p0 = 5; % 初始动量
+x0 = 0; sig_x = 2; % 初始位置， 波包宽度
+V = @(x,t) zeros(size(x)); % 势能函数
+% ===================
+close all;
+psi_gs = @(x) 1/(2*pi*sig_x^2)^0.25/sqrt(1 + 1i*t0/(2*m*sig_x^2))...
+      *exp(-(x-x0-p0*t0/m).^2/(2*sig_x)^2/(1 + 1i*t0/(2*m*sig_x^2)))...
+      .*exp(1i*p0*(x-p0*t0/(2*m)));
+x = linspace(xmin, xmax, Nx); dx = (xmax-xmin)/(Nx-1);
+t = linspace(tmin, tmax, Nt); dt = (tmax-tmin)/(Nt-1);
+psi = psi_gs(x).';
+% 准备稀疏矩阵 [对角线, 上对角线, 下对角线]
+ind1 = [1:Nx, 1:Nx-1, 2:Nx]; % 行标
+ind2 = [1:Nx, 2:Nx, 1:Nx-1]; % 列标
+% 动能矩阵非零元
+T = -1/(2*m)*[-2*ones(1,Nx), ones(1,2*Nx-2)]/dx^2;
+A = (1i*dt/4)*T; % 对角元稍后更新
+figure; plot(x, real(psi)); hold on;
+plot(x, imag(psi));
+for it = 1:Nt
+    % 更新对角元
+    A(1:Nx) = 0.5 + (1i*dt/4)*(T(1:Nx) + V(x, t(it)+dt/2));
+    Asp = sparse(ind1, ind2, A, Nx, Nx);
+    tmp = Asp \ psi;
+    % err = norm(Asp*tmp - psi);
+    psi = tmp - psi;
+    if mod(it, Nplot) == 0
+        clf;
+        plot(x, real(psi)); hold on;
+        plot(x, imag(psi));
+        axis([xmin,xmax,-0.5,0.5]);
+        pause(0.2);
+    end
+end
+end
+\end{lstlisting}

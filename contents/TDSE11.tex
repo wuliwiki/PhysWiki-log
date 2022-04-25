@@ -1,0 +1,65 @@
+% 薛定谔方程（单粒子一维）
+
+\begin{issues}
+\issueDraft
+\end{issues}
+
+\pentry{定态薛定谔方程（单粒子一维）\upref{SchEq}， 分离变量法解偏微分方程\upref{SepVar}}
+
+单粒子的一维波函数是位置和时间的函数 $\Psi(x, t)$， 薛定谔方程为
+\begin{equation}
+H\Psi = \I\hbar \pdv{t}\Psi
+\end{equation}
+其中
+\begin{equation}
+H = -\frac{\hbar^2}{2m}\pdv[2]{x} + V(x, t)
+\end{equation}
+也可以直接记为
+\begin{equation}\label{TDSE11_eq3}
+-\frac{\hbar^2}{2m}\pdv[2]{x}\Psi + V(x, t)\Psi = \I\hbar \pdv{t}\Psi
+\end{equation}
+$V(x,t)$ 是势能， 满足
+\begin{equation}
+F_x(t) = -\pdv{V}{x}
+\end{equation}
+其中 $F_x$ 是经典力学中质点的受力．
+
+\subsection{能量守恒系统的时间演化}
+当哈密顿算符 $H$ 不随时间变化时， 我们说这个系统能量守恒\upref{QMcons}． 这时我们可以用分离变量法，令
+\begin{equation}
+\Psi(x, t) = \psi(x) T(t)
+\end{equation}
+ 
+\begin{equation}\label{TDSE11_eq1}
+H\psi = E\psi
+\end{equation}
+以及
+\begin{equation}\label{TDSE11_eq2}
+\I \hbar\pdv{t}T = ET
+\end{equation}
+其中\autoref{TDSE11_eq1} 就是定态薛定谔方程\upref{SchEq}， 即哈密顿算符的本征方程． \autoref{TDSE11_eq2} 有简单的解
+\begin{equation}
+T(t) = \E^{-\I E t/\hbar}
+\end{equation}
+
+根据 $H$ 的不同， 本征值 $E$ 可以取离散或连续的值． 先看只取离散值的简单情况（如无限深势阱\upref{ISW}）， 令能级为 $E_n$ （$n = 1, 2, \dots$）， 那么含时薛定谔方程的通解为
+\begin{equation}\label{TDSE11_eq5}
+\Psi(x, t) = \sum_n C_n \psi_n(x) \E^{-\I E_n t/\hbar}
+\end{equation}
+其中 $C_n$ 为待定系数， 由初始条件决定． 本征波函数满足正交关系
+\begin{equation}
+\int_{-\infty}^{+\infty}\psi_m(x)\psi_n(x)\dd{x} = \delta_{m,n}
+\end{equation}
+原因见 “施图姆—刘维尔理论\upref{SLthrm}”， 也可以类比有限维的 “厄米矩阵的本征问题\upref{HerEig}”． 所以系数可以通过投影计算
+\begin{equation}
+C_n = \int_{-\infty}^{+\infty} \psi_n(x)\Psi(x, 0) \dd{x}
+\end{equation}
+这个投影过程可以类比傅里叶级数（指数）\upref{FSExp}． 事实上， 傅里叶级数（\autoref{FSTri_sub3}~\upref{FSTri}）就是无限深方势阱\upref{ISW}的波函数．
+
+两个具体的例子见 “无限深势阱中的高斯波包\upref{wvISW}” 和 “简谐振子中的高斯波包（Matlab）\upref{SHOgs}”．
+
+如果 $E$ 只在某个区间内取连续值， 我们同样可以使用分离变量法， 只是求和变为积分， 系数变为能量的函数． 我们知道此时每个能量都有二重简并， 所以定态薛定谔方程中一个能量 $E$ 有两个线性无关的解 $\psi_{E,1}(x)$ 和 $\psi_{E,2}(x)$， 那么
+\begin{equation}\label{TDSE11_eq4}
+\Psi(x, t) = \int [C_1(E) \psi_{E,1}(x) + C_2(E) \psi_{E,2}(x)] \E^{-\I E t/\hbar} \dd{E}
+\end{equation}
+一个经典的例子见 “一维自由粒子（量子）\upref{FreeP1}” ． 至于系数具体如何求， 见“量子散射（一维）\upref{Sca1D}”． 注意由于简并， 有时候需要先把 $\psi_{E,1}(x), \psi_{E,2}(x)$ 进行正交归一化\upref{ScaNrm}才能投影得到系数．

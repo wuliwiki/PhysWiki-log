@@ -1,20 +1,22 @@
 % 拉格朗日方程的证明、达朗贝尔原理
 % 拉格朗日方程证明|广义力|非约束力|达朗贝尔原理
 
-\pentry{拉格朗日方程（额外广义力）\upref{LagEqQ}}
+\pentry{广义力\upref{LagEqQ}}
 
-本文使用牛顿第二定律证明拉格朗日方程， 其中会使用到一个关于约束的定理叫做达朗贝尔原理\textbf{（D'Alembert's principle）}． 另一种推导方法见 “最小作用量、哈密顿原理\upref{HamPrn}”．
+本文使用牛顿第二定律证明拉格朗日方程， 其中会使用到一个关于约束的定理叫做达\textbf{朗贝尔原理（D'Alembert's principle）}． 另一种推导方法见 “最小作用量、哈密顿原理\upref{HamPrn}”．
 
 \subsection{由牛顿第二定律证明拉格朗日方程}
-下面来证明包含额外广义力的拉格朗日方程（\autoref{LagEqQ_eq1}~\upref{LagEqQ}）．
-
-注意以下所有的函数偏导都是把 $q_1, q_2\dots q_N,\ \dot q_1, \dot q_2\dots \dot q_N,\ t$ 作为变量，即对一个变量求导数而把其他变量看做常数．另外，势能 $V$ 和位矢 $\bvec r_j$ 与 $\dot q_i$ 无关，偏导为 0．
+下面来证明包含额外广义力的拉格朗日方程（\autoref{LagEqQ_eq1}~\upref{LagEqQ}）
+\begin{equation}
+\dv{t} \pdv{L}{\dot q_i} = \pdv{L}{q_i} + Q_i^{(e)}
+\end{equation}
+注意以下所有对 $q_i, \dot q_i$ 或 $t$ 的偏导\upref{ParDer}都是把 $q, \dot q, t$ 作为变量（$q, \dot q$ 分别是 $q_1, q_2\dots q_N$ 和 $\dot q_1, \dot q_2\dots \dot q_N$ 的简写）， 即对其中一个变量求导数而把其他变量看做常数． 另外我们假设势能 $V$ 和位矢 $\bvec r_j$ 都不显含 $\dot q$， 即对任何 $\dot q_i$ 的偏导为零． 所以该证明不适用于 $V$ 为广义势能（例如 “拉格朗日电磁势\upref{EMLagP}”）的情况．
 
 把系统看成质点组， 每个质点质量为 $m_j$， 位置矢量是广义坐标的函数 $\bvec r_j(q_1,\dots,q_N,t)$， 那么系统动能为
 \begin{equation}
 T = \frac12 \sum_j m_j \bvec v_j^2 = \frac12 \sum_j m_j \dot{\bvec r}_j \vdot \dot{\bvec r}_j
 \end{equation}
-由矢量内积的求导法则
+由矢量内积的求导法则\upref{DerV}得（$i=1,\dots,N$， 下同）
 \begin{equation}\label{dAlbt_eq5}
 \pdv{T}{\dot q_i} = \sum_j m_j \dot{\bvec r}_j \vdot \pdv{\dot{\bvec r}_j}{\dot q_i}
 \end{equation}
@@ -26,9 +28,9 @@ T = \frac12 \sum_j m_j \bvec v_j^2 = \frac12 \sum_j m_j \dot{\bvec r}_j \vdot \d
 \begin{equation}\label{dAlbt_eq27}
 \pdv{\dot{\bvec r}_j}{\dot q_i} = \pdv{\bvec r_j}{q_i}
 \end{equation}
-代入\autoref{dAlbt_eq5} 并对时间求导得到拉格朗日方程的左边（我们暂时只讨论 $\pdv*{V}{\dot q_i} = 0$ 的情况）
+代入\autoref{dAlbt_eq5} 并对时间求导得到拉格朗日方程的左边（注意我们假设 $\pdv*{V}{\dot q_i} = 0$）
 \begin{equation}\label{dAlbt_eq8}
-\dv{t} \pdv{T}{\dot q_i} = \sum_j m_j \ddot{\bvec r}_j \vdot \pdv{\bvec r_j}{q_i}  + \sum_j m_j \dot{\bvec r}_j \vdot \dv{t} \pdv{\bvec r_j}{q_i}
+\dv{t} \pdv{L}{\dot q_i} = \dv{t} \pdv{T}{\dot q_i} = \sum_j m_j \ddot{\bvec r}_j \vdot \pdv{\bvec r_j}{q_i}  + \sum_j m_j \dot{\bvec r}_j \vdot \dv{t} \pdv{\bvec r_j}{q_i}
 \end{equation}
 拉格朗日方程（\autoref{LagEqQ_eq1}~\upref{LagEqQ}）的右边为
 \begin{equation}
@@ -38,20 +40,19 @@ T = \frac12 \sum_j m_j \bvec v_j^2 = \frac12 \sum_j m_j \dot{\bvec r}_j \vdot \d
 \begin{equation}\label{dAlbt_eq28}
 \pdv{T}{q_i} = \sum_j m_j \dot{\bvec r}_j \vdot \pdv{\dot{\bvec r}_j}{q_i} = \sum_j m_j \dot{\bvec r}_j \vdot \pdv{q_i} \dv{\bvec r_j}{t}
 \end{equation}
-第二项是包含在势能中的广义力
+第二项是包含在势能中的广义力（\autoref{LagEqQ_eq3}~\upref{LagEqQ}）
 \begin{equation}\label{dAlbt_eq29}
 Q_i^{(V)} = - \pdv{V}{q_i} = \sum_j \qty(-\pdv{V}{x_j} \pdv{x_j}{q_i} - \pdv{V}{y_j}\pdv{y_j}{q_i} - \pdv{V}{z_j} \pdv{z_j}{q_i}) = \sum_j \bvec F_j^{(V)} \vdot \pdv{\bvec r_j}{q_i}
 \end{equation}
 其中
-\begin{equation}
+\begin{equation}\label{dAlbt_eq2}
 \bvec F_j^{(V)} = - \grad_j V = -\pdv{V}{x_j}\uvec x - \pdv{V}{y_j}\uvec y - \pdv{V}{z_j} \uvec z
 \end{equation}
-这是\textbf{非约束力}．%未完成，最好以上的例子中能说明非约束力
-势能外的广义力的定义为
+注意这属于非约束力． 不包含于势能中的额外广义力的定义为（上标 $e$ 表示 extra）
 \begin{equation}
-Q_i^{(e)}(q, \dot q, t) = \sum_j \bvec F_j^{(e)} \vdot \pdv{\bvec r_j}{q_i} \qquad (i=1,\dots,N)
+Q_i^{(e)}(q, \dot q, t) = \sum_j \bvec F_j^{(e)} \vdot \pdv{\bvec r_j}{q_i}
 \end{equation}
-每个质点的总非约束力为
+也是非约束力． 我们把非约束力称为\textbf{主动力}． 每个质点的总主动力可以分为由势能产生的部分和其他
 \begin{equation}
 \bvec F_j^{(a)} = \bvec F_j^{(V)} + \bvec F_j^{(e)}
 \end{equation}
@@ -70,19 +71,30 @@ Q_i = Q_i^{(V)} + Q_i^{(e)} = \sum_j \bvec F_j^{(a)} \vdot \pdv{\bvec r_j}{q_i}
 然后我们需要证明
 \begin{equation}
 \sum_j \qty(\bvec F_j^{(a)} - m\ddot{\bvec r}_j) \vdot \pdv{\bvec r_j}{q_i}  = 0
-\qquad (i = 1\dots N)
 \end{equation}
 即可证明拉格朗日方程．该式被称为\textbf{达朗贝尔原理}．注意由于这里的 $\bvec F_j^{(a)}$ 为质点 $j$ 所受的非约束力而不是合力，所以求和项的小括号一般不为 0．
 
-\subsection{达朗贝尔原理证明}
-令第 $j$ 个质点所受和力为 $\bvec F_j = \bvec F_j^{(a)} + \bvec F_j^{(c)}$， 两项分别为非约束力和约束力．由牛顿第二定律 $\bvec F_j - m\ddot{\bvec r}_j = 0$， 所以
+\subsection{达朗贝尔原理}
+\pentry{虚位移、虚功原理\upref{VirWrk}}
+令第 $j$ 个质点所受合力等于主动力（非约束力）加约束力 $\bvec F_j = \bvec F_j^{(a)} + \bvec F_j^{(c)}$． 由牛顿第二定律 $\bvec F_j - m\ddot{\bvec r}_j = 0$， 所以
 \begin{equation}
 \sum_j \qty(\bvec F_j^{(a)}+\bvec F_j^{(c)} - m\ddot{\bvec r}_j) \vdot \pdv{\bvec r_j}{q_i} = 0
-\qquad (i = 1\dots N)
 \end{equation}
 现在我们只需证明
-\begin{equation}
+\begin{equation}\label{dAlbt_eq3}
 \sum_j  \bvec F_j^{(c)} \vdot \pdv{\bvec r_j}{q_i}  = 0
-\qquad (i = 1\dots N)
 \end{equation}
-由于以上偏微分中时间保持不变，约束力不做功，该求和为零，证毕．%未完成: 这样的解释连我都不明白... 真的要结合有约束的例题来解释了
+即可． 所以达朗贝尔原理也可以表述为： \textbf{所有约束力的虚功\upref{VirWrk}之和为零}． 在不含时约束中， 约束力始终不做功， 而在含时约束中， 由于以上偏微分中时间保持不变， 约束力也不做功，该求和中每一项都为零． 证毕．
+
+如果证明的最后一步过于抽象， 可以结合 “欧拉—拉格朗日方程\upref{Lagrng}” 中的例题思考， 找出例题中的约束力， 并验证他们的确不做功． 这里再给出一个双摆的例子：
+
+\begin{example}{双摆的约束力}
+在双摆\upref{Pendu3}模型中， 若连接两质点的是轻杆， 那么第一个质点 $m_1$ 受到延两条杆方向的力， 分别记为 $\bvec F_1, \bvec F_2$． 第二个质点 $m_2$ 受到延第二条杆的力 $\bvec F_3$． 首先由于 $m_1$ 的摆动方向始终垂直于 $\bvec F_1$， $\bvec F_1$ 从不做功． 其次由于杆都是轻杆， 有 $\bvec F_2 = -\bvec F_3$， 且无论双摆怎么运动， $\bvec F_2, \bvec F_3$ 做功之和都为零（否则第二条杆就会具有大于零的动能， 以无穷大的速度运动）． 可见单个约束力的虚功未必为零， 而是求和后为零．
+\end{example}
+
+注意在这个例题中， 约束力无论是虚功还是真实的做功都为零． 但在含时约束中， 约束力的真实做功可能不为零（思考\autoref{Lagrng_ex3}~\upref{Lagrng}）．
+
+事实上， 对于不含时约束（即约束方程中不出现时间， 即 $\bvec r_j$ 不显含时间， 即 $\pdv*{\bvec r_j}{t} = \bvec 0$）， 约束力的总时功也为零． 证明： 所有约束力的总功率为
+\begin{equation}
+\dot W^{(c)} = \sum_j \bvec F_j^{(c)} \vdot \dot {\bvec r}_j = \sum_j \bvec F_j^{(c)} \vdot \sum_i \pdv{\bvec r_j}{q_i} \dot q_i = \sum_i \dot q_i \sum_j \bvec F_j^{(c)} \vdot \pdv{\bvec r_j}{q_i} = 0
+\end{equation}
