@@ -1,0 +1,68 @@
+% 一维方势阱中的光电离模拟（Matlab）
+
+\begin{issues}
+\issueDraft
+\end{issues}
+
+\pentry{Crank-Nicolson 算法解一维含时薛定谔方程（Matlab)\upref{CraNic}}
+
+\addTODO{代码未完成}
+\begin{lstlisting}[language=matlab]
+% Crank-Nicolson 法解一维薛定谔方程
+% 等间距网格，稀疏矩阵
+
+function TDSE_cn1d
+% ==== 参数设置 ======
+xmin = -80; xmax = 80; Nx = 1000; % x 网格
+tmin = 0; tmax = 20; Nt = 400; % 时间网格
+Nplot = 10; % 画图步数
+ax = [xmin, xmax, -0.5, 0.5];
+% 初始波函数
+123234
+% 方势垒 [-L,L], 高 V0
+L = 4; V0 = 4;
+E0 = 1; a = 0.2; w0 = 1; tc = 5; % 电场波包参数
+Ef = @(t) E0*exp(-a*(t-tc).^2).*sin(w0*t); % 电场函数
+V = @(x,t) V_fun(x,t,Ef,L,V0,q); % 势能函数
+% ===================
+close all;
+psi_gs = @(x) 1/(2*pi*sig_x^2)^0.25/sqrt(1 + 1i*t0/(2*m*sig_x^2))...
+      *exp(-(x-x0-p0*t0/m).^2/(2*sig_x)^2/(1 + 1i*t0/(2*m*sig_x^2)))...
+      .*exp(1i*p0*(x-p0*t0/(2*m)));
+x = linspace(xmin, xmax, Nx); dx = (xmax-xmin)/(Nx-1);
+t = linspace(tmin, tmax, Nt); dt = (tmax-tmin)/(Nt-1);
+psi = psi_gs(x).';
+% 准备稀疏矩阵 [对角线, 上对角线, 下对角线]
+ind1 = [1:Nx, 1:Nx-1, 2:Nx]; % 行标
+ind2 = [1:Nx, 2:Nx, 1:Nx-1]; % 列标
+% 动能矩阵非零元
+T = -1/(2*m)*[-2*ones(1,Nx), ones(1,2*Nx-2)]/dx^2;
+A = (1i*dt/4)*T; % 对角元稍后更新
+figure; plot(x, real(psi)); hold on;
+plot(x, imag(psi));
+for it = 1:Nt
+    % 更新对角元
+    A(1:Nx) = 0.5 + (1i*dt/4)*(T(1:Nx) + V(x, t(it)+dt/2));
+    Asp = sparse(ind1, ind2, A, Nx, Nx);
+    tmp = Asp \ psi;
+    % err = norm(Asp*tmp - psi);
+    psi = tmp - psi;
+    if mod(it, Nplot) == 0
+        clf;
+        plot(x, real(psi)); hold on;
+        plot(x, imag(psi));
+        plot([xmin, -L, -L, L, L, xmax], [0, 0, 0.4, 0.4, 0, 0], 'k');
+        axis(ax);
+        pause(0.2);
+    end
+end
+end
+
+% 势能函数：方势垒 + 电场
+function ret = V_fun(x,t,L,V0,q,Ef)
+ret = zeros(size(x));
+ret(x > -L & x < L) = V0;
+% 电场势能
+ret = ret - (q*Ef(t))*x;
+end
+\end{lstlisting}

@@ -113,16 +113,17 @@ X(t) = X_0 \cos(\sqrt{\frac{k}{m}} t + \phi_X)
 若用 $x_1, x_2$ 坐标结合受力分析列出微分方程，则会得到两条各含两个变量的微分方程．在振动系统中，这种能使方程分离变量的广义坐标叫做\textbf{简正坐标}．%未完成，用矩阵专门讨论如何获得简正坐标
 \end{example}
 
-以上几个例子中，每个质点的坐标都是独立的，在没有约束时，$D$ 维空间中的 $N$ 质点有 $D\times N$ 个独立的广义坐标． 在一些问题中，我们往往会遇到不同形式的\textbf{约束}，例如当两个质点之间由轻棍连接时，约束方程为 $(x_1-x_2)^2+(y_1-x_2)^2+(z_1-z_2)^2=L^2$ 这时两个质点的自由度\upref{DoF}就由 6 个变为 5 个．约束可以是时间的函数，例如细棍的长度可以是关于时间的函数 $L(t)$．这里我们只讨论\textbf{完整约束（holonomic constraint）}，即可以表示成以下形式
-\begin{equation}
-f_i(q_1,q_2,\dots ,q_N,t) = 0 \qquad (i = 1,2,\dots,M)
+\subsection{约束的分类、 约束力}
+
+以上几个例子中，每个质点的坐标都是独立的，在没有约束时，$D$ 维空间中的 $N$ 质点有 $D\times N$ 个独立的广义坐标． 在一些问题中，我们往往会遇到不同形式的\textbf{约束}，例如当两个质点之间由轻棍连接时，约束方程为 $(x_1-x_2)^2+(y_1-x_2)^2+(z_1-z_2)^2=L^2$ 这时两个质点的自由度\upref{DoF}就由 6 个变为 5 个． 约束可以是时间的函数，例如轻棍约束中， 轻棍的长度可以是关于时间的函数 $L(t)$． 这里我们只讨论\textbf{完整约束（holonomic constraint）}，即可以表示成以下形式（把系统看成质点组）
+\begin{equation}\label{Lagrng_eq3}
+f(\bvec r_1,\bvec r_2,\dots,t) = 0
 \end{equation}
 若给 $N$ 个自由度的系统施加 $M<N$ 个完整约束，系统的自由度就变为 $N-M$ 个自由度，并可以用 $N-M$ 个广义坐标描述．
 
-\subsection{约束的分类、 约束力}
-\addTODO{添加 “约束力” 的概念并简要讨论}
+若约束方程\autoref{Lagrng_eq3} 中不显含时间， 那么该约束称为\textbf{稳定约束（scleronomous）}， 否则称为\textbf{不稳定约束（rhenomous）}． 若系统中的约束都是稳定约束， 那么系统中任意一点 $\bvec r_j = \bvec r_j(q)$ 不显含时间， 即 $\pdv*{\bvec r_j}{t} = \bvec 0$． 不稳定约束则相反， 至少一部分 $\bvec r_j = \bvec r_j(q, t)$ 显含时间．
 
-\begin{example}{不含时约束}
+\begin{example}{稳定约束}
 两个质量为 $m$ 的质点分别被限制在 $x$ 轴和 $y$ 轴上移动， 且他们之间由长度为 $l$ 的轻杆相连． $x$ 轴的质点另与一平行于 $x$ 轴的弹簧相连， 平衡位置为 $x_0$， 恢复系数为 $k$， 求该系统的运动方程．% 图未完成
 
 该系统只有一个自由度， 我们可以把 $x$ 轴质点的 $x$ 坐标作为广义坐标， 则由约束方程 $x^2 + y^2 = l^2$ 可得 $y$ 轴质点的速度为
@@ -135,10 +136,9 @@ L = \frac12 m \dot x^2\qty(1 + \frac{x^2}{l^2 - x^2}) - \frac12 k (x-x_0)^2
 \end{equation}
 代入拉格朗日方程即可．
 \end{example}
-不含时约束问题中系统（看成质点组）中任意一点 $\bvec r_j$ 不显含时间， 即 $\pdv*{\bvec r_j}{t} = \bvec 0$．
-\addTODO{说明为什么}
+约束一般会带来\textbf{约束力（constraint force）}． 例如在上例中， 轻杆对在上面滑动的质点的力就是约束力．
 
-\begin{example}{含时约束}\label{Lagrng_ex3}
+\begin{example}{不稳定约束}\label{Lagrng_ex3}
 一个无穷长的细杆被固定在原点的转轴上，并在水平面上以角速度 $\omega$ 转动．一个质点可以沿细杆无摩擦运动，求质点的运动方程．
 
 首先给细杆定义一个正方向，并取质点的离原点的距离为 $r$． 质点速度（\autoref{PolA_eq3}~\upref{PolA}）为 $\bvec v = \dot r \uvec r + r\omega \uvec\theta$， 势能为 0． 系统的拉格朗日量为
@@ -205,9 +205,3 @@ r(t) = C_1 \E^{\omega_0 t} + C_2 \E^{-\omega_0 t} + \frac{g}{\omega^2 - \omega_0
 \end{example}
 
 以上的例题都非常简单， 只用于演示如何使用拉格朗日方程， 基本无法体现拉格朗日相对于牛顿力学的优势， 一个稍微复杂的例子见 “双摆和三摆\upref{Pendu3}”．
-
-\addTODO{讨论含时势能， $V$ 若含时， 有可能只是含时约束带来的， 也有可能 $V(\bvec r_i)$ 本来就含时， 例如变化的匀强电场中的带电粒子． 只要能保证\autoref{dAlbt_eq2}~\upref{dAlbt} 即可．}
-
-% \subsection{非保守力的拉格朗日方程}
-% 未完成
-% ：使用最小作用量证明

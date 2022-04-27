@@ -1,11 +1,15 @@
 % Crank-Nicolson 算法解一维含时薛定谔方程（Matlab)
 % 算法|薛定谔方程|数值解|偏微分方程
 
-\pentry{薛定谔方程\upref{TDSE}， 矩阵\upref{Mat}}
+\pentry{薛定谔方程（单粒子一维）\upref{TDSE11}}
 
-\footnote{参考 \cite{NR3}．}薛定谔方程为
+\footnote{参考 \cite{NR3}．}本文使用原子单位制\upref{AU}． 薛定谔方程为
 \begin{equation}
 -\frac12 \pdv[2]{\psi}{x} + V\psi = \I \pdv{\psi}{t}
+\end{equation}
+传播子作用于波函数为
+\begin{equation}
+\psi(x,t+\Delta t) = \exp(-\I H \Delta t)\psi(x,t)
 \end{equation}
 用 Crank-Nicolson 或 Caley scheme\footnote{二者是一回事， 见 \cite{NR3} 19.2 节．} 得到的结果是
 \begin{equation}\label{CraNic_eq2}
@@ -30,8 +34,9 @@
 \end{equation}
 那么 $\mat H_n = -\mat D_2/(2m) + \mat V_n$， 其中 $\mat V_n$ 是对角矩阵， 第 $i$ 个对角元为 $V(x_i, t_n)$． 现在， 就可以代入\autoref{CraNic_eq2} 或\autoref{CraNic_eq5} 求解了．
 
-\subsection{虚时间}
-使用虚时间后， \autoref{CraNic_eq2} 和\autoref{CraNic_eq5} 分别变为
+\subsection{虚时间法}
+\pentry{虚时间法求基态波函数\upref{ImgT}}
+虚时间法用于求解势阱中的基态， 使用虚时间后， \autoref{CraNic_eq2} 和\autoref{CraNic_eq5} 分别变为
 \begin{equation}
 \qty(1+\frac12\mat H\Delta t)\bvec\psi_{n+1} = \qty(1-\frac12\mat H\Delta t)\bvec\psi_n
 \end{equation}
@@ -41,21 +46,31 @@
 
 \subsection{代码}
 \pentry{Matlab 的稀疏矩阵\upref{MatSpa}}
-Matlab 代码如下， 使用\autoref{CraNic_eq5}， 以及 Matlab 的稀疏矩阵\upref{MatSpa}．
+Matlab 代码如下， 使用\autoref{CraNic_eq5}， 以及 Matlab 的稀疏矩阵\upref{MatSpa}． 势能函数可以在 \verb|V_fun| 中设置， 我们以方势垒为例， 所有参数和 “高斯波包的方势垒散射数值计算（Matlab）\upref{FSBsct}” 相同． 不同的是， 由于我们使用迪利克雷边界条件， 波函数到达边界后会发生全反射． 要避免反射， 可以用开放边界条件（未完成）以及吸收势能（未完成）．
+
+\begin{figure}[ht]
+\centering
+\includegraphics[width=14cm]{./figures/CraNic_1.png}
+\caption{运行结果}} \label{CraNic_fig1}
+\end{figure}
 
 \begin{lstlisting}[language=matlab, caption=TDSE\_cn1d.m]
 % Crank-Nicolson 法解一维薛定谔方程
 % 等间距网格，稀疏矩阵
+
 function TDSE_cn1d
 % ==== 参数设置 ======
-m = 1; % 质量，角频率
-xmin = -10; xmax = 30; Nx = 300; % x 网格
-tmin = 0; tmax = 10; Nt = 1000; % 时间网格
+xmin = -80; xmax = 80; Nx = 1000; % x 网格
+tmin = 0; tmax = 20; Nt = 400; % 时间网格
 Nplot = 10; % 画图步数
-t0 = 0; % 高斯波包的初始时间
-p0 = 5; % 初始动量
-x0 = 0; sig_x = 2; % 初始位置， 波包宽度
-V = @(x,t) zeros(size(x)); % 势能函数
+ax = [xmin, xmax, -0.5, 0.5];
+% 高斯波包
+x0 = -17; t0 = 0; m = 1; % 高斯波包的初始时间
+p0 = 4; % 初始动量
+sig_x = 2; % 初始位置， 波包宽度
+% 方势垒 [-L,L], 高 V0
+L = 4; V0 = 4;
+V = @(x,t) V_fun(x,t,L,V0); % 势能函数
 % ===================
 close all;
 psi_gs = @(x) 1/(2*pi*sig_x^2)^0.25/sqrt(1 + 1i*t0/(2*m*sig_x^2))...
@@ -83,9 +98,16 @@ for it = 1:Nt
         clf;
         plot(x, real(psi)); hold on;
         plot(x, imag(psi));
-        axis([xmin,xmax,-0.5,0.5]);
+        plot([xmin, -L, -L, L, L, xmax], [0, 0, 0.4, 0.4, 0, 0], 'k');
+        axis(ax);
         pause(0.2);
     end
 end
+end
+
+% 势能函数：方势垒
+function ret = V_fun(x,~,L,V0)
+ret = zeros(size(x));
+ret(x > -L & x < L) = V0;
 end
 \end{lstlisting}
