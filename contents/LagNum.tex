@@ -4,7 +4,7 @@
 \issueDraft
 \end{issues}
 
-\pentry{哈密顿正则方程\upref{HamCan}}
+\pentry{哈密顿正则方程\upref{HamCan}， 偏导与差分\upref{ParDf}}
 
 若程序中给出拉格朗日量拉格朗日方程\upref{Lagrng}的数值函数 $L(q, \dot q, t)$， 输入和输出均为数值（例如双精度实数）， 那么如何数值求解运动方程呢？
 
@@ -25,7 +25,7 @@
 \begin{equation}
 \sum_j\pdv{\dot q_j}\pdv{L}{\dot q_i}\ddot q_j = \pdv{L}{q_i} - \sum_j\pdv{q_j}\pdv{L}{\dot q_i}\dot q_j - \pdv{t}\pdv{L}{\dot q_i} + Q_i
 \end{equation}
-这样， 二阶导数只存在于左边的 $\ddot q_j$， 其他项都只是 $q,\dot q, t$ 的函数． 该式中的偏微最好计算出解析表达式， 但也可以通过差分来计算（会引入更多误差）． 数值解线性方程\footnote{如果 $N$ 不大可以直接用克拉默法则\upref{kramer}， 甚至写出解析解．}， 就可以得到（令 $v_i = \dot q_i$）
+这样， 二阶导数只存在于左边的 $\ddot q_j$， 其他项都只是 $q,\dot q, t$ 的函数． 该式中的偏微最好计算出解析表达式， 但也可以通过差分来计算\upref{ParDf}（会引入更多误差）． 数值解线性方程\footnote{如果 $N$ 不大可以直接用克拉默法则\upref{kramer}， 甚至写出解析解．}， 就可以得到（令 $v_i = \dot q_i$）
 \begin{equation}
 \leftgroup{
 &\dot v_i = f_i(q, v_i, t)\\
@@ -34,4 +34,41 @@
 \end{equation}
 就得到了 $2N$ 条方程组成的一阶常微分方程组， 变量一共有 $2N$ 个． 可以使用四阶龙格库塔法\upref{OdeRK4} 等方法求解．
 
-\addTODO{写一个一般的 Matlab 程序， 支持解析求偏导， 也支持差分法求偏导．}
+\addTODO{代码未完成．}
+\begin{lstlisting}[language=matlab, caption=lagr\_solve.m]
+% 数值解拉格朗日方程
+% L(qq, t), qq = [q, dq]
+% dL(i,qq,t), d2L(i,qq,t), dLdL(i,j,qq,t) 可选
+function lagr_solve(L, qq0, RelTol, dL, d2L, dLdL)
+h = 1e-6;
+if isempty(d2L)
+    d2L = @(i,qq,t)d2L_dif(L,i,qq,t,h);
+end
+if isempty(dLdL)
+    dLdL = @(i,j,qq,t)dLdL_dif(L,i,j,qq,t,h);
+end
+end
+
+% D^2 L / D(qq_i)^2
+function ret = d2L_dif(L, i, qq, t, h)
+L2 = L(qq,t);
+qq(i) = qq(i) + h;
+L3 = L(qq,t);
+qq(i) = qq(i) - 2*h;
+L1 = L(qq,t);
+ret = (L1 + L3 - 2*L2)/(2*h)^2;
+end
+
+% D^2 L / D(qq_i) D(qq_j)
+function ret = dLdL_dif(L, i, j, qq, t, h)
+qq(i) = qq(i) - h; qq(j) = qq(j) - h;
+L1 = L(qq,t);
+qq(i) = qq(i) + 2*h;
+L2 = L(qq,t);
+qq(j) = qq(j) + 2*h;
+L3 = L(qq,t);
+qq(i) = qq(i) - 2*h;
+L4 = L(qq,t);
+ret = (L1 - L2 + L3 - L4)/(2*h)^2;
+end
+\end{lstlisting}

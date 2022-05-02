@@ -1,0 +1,77 @@
+% 线性算子对角化的充要条件
+% 对角化|充要条件
+\pentry{本征矢量与本征多项式\upref{EigVM}}
+\begin{definition}{}
+ $n$ 维矢量空间 $V$ 中，若有一基底，使得在该基底下，线性算子 $\mathcal{A}$ 对应的矩阵 $A$ 取对角形式
+ \begin{equation}\label{LODia_eq3}
+ A=\begin{pmatrix}
+ \lambda_1&0&\cdots&0\\
+ 0&\lambda_2&\cdots&0\\
+ \vdots&\vdots&\cdots&\vdots\\
+ 0&0&\cdots&\lambda_n
+ \end{pmatrix}
+ \end{equation}
+ 则称算子 $\mathcal{A}$ 是\textbf{可对角化}的．\autoref{LODia_eq3} 通常又记为 $A=\mathrm{diag}(\lambda_1,\cdots,\lambda_n)$．
+\end{definition}
+\begin{theorem}{线性算子可对角化的充要条件}\label{LODia_the1}
+定义在域 $\mathbb{F}$ 上的 $n$ 维矢量空间，其上的线性算子 $\mathcal{A}$ 可对角化的充要条件为：$\mathcal{A}$ 的本征多项式\upref{EigVM} $\mathrm{det}{\mathcal{A}-t \mathcal{E}}$ 的 所有根都在 $\mathbb{F}$ 上，且每个本征值 $\lambda$ 的几何重数等于代数重数\upref{EigVM}．
+\end{theorem}
+\subsection{证明}
+先引入一个引理
+\begin{lemma}{}\label{LODia_lem1}
+属于不同本征值的特征矢量必然线性无关，且 $\sum\limits_{i=1}^nV^{\lambda_i}$ 是直和（各 $\lambda_i$ 不相同）．
+\end{lemma}
+\textbf{证明：}对每个 $V^{\lambda_i}$ 选取一个本征矢量 $\bvec{e_i}$ ，现证明它们线性无关．
+
+当 $m=1$ 时显然．对 $m$ 用数学归纳法，设存在线性关系式
+\begin{equation}\label{LODia_eq1}
+\sum_{i=1}^{m}\alpha_i\bvec e_i=\bvec 0
+\end{equation}
+对某一系数 $\alpha_i$ 不为0，不失一般性，设 $\alpha_1\neq0$．两边作用 $\mathcal A$：
+\begin{equation}\label{LODia_eq2}
+\sum_{i=1}^m\alpha_i\lambda_i\bvec e_i=\bvec 0
+\end{equation}
+$\lambda_m\times$\autoref{LODia_eq1} -\autoref{LODia_eq2} ：
+\begin{equation}
+\sum_{i=1}^{m-1}\alpha_i(\lambda_m-\lambda_i)\bvec e_i=\bvec 0
+\end{equation}
+由归纳假定 $\alpha_i(\lambda_m-\lambda_i)=0,\;(i=1\cdots m-1)$． 这和
+\begin{equation}
+\alpha_1\ne0,\;\lambda_m\neq\lambda_i,\;i<m\Rightarrow \alpha_1(\lambda
+_m-\lambda_1)\neq0
+\end{equation}
+矛盾．于是线性无关性得证！
+
+由本征子空间 $V^\lambda$ 的定义（\autoref{EigVM_def1}~\upref{EigVM}），任意非零矢量 $\bvec e_i\in V^{\lambda _i}$ 都是本征矢量．所以
+\begin{equation}
+V^{\lambda_i}\cap\sum_{j\neq i}V^{\lambda_j}=\bvec 0
+\end{equation}
+即  $\sum\limits_{i=1}^nV^{\lambda_i}$ 是直和．
+
+\textbf{证毕！}
+\subsubsection{\autoref{LODia_the1} 的证明}
+\textbf{充分性}：设$\lambda_i\;(i=1,\cdots, m)$ 是不同本征值．由于本征多项式所有根都在 $\mathbb{F}$ 内（意味着所有本征值代数重数之和=$n$），且代数重数且每一本征值代数重数和几何重数相同，所以
+\begin{equation}
+\sum_{i=1}^m \mathrm{dim}\;V^{\lambda_i}=n=\mathrm{dim}\; V
+\end{equation}
+于是
+\begin{equation}
+V=\bigoplus_{i=1}^m V^{\lambda_i}
+\end{equation}
+\begin{issues}
+直和词条部分应证明上两式等价并链接
+\end{issues}
+于是把 $V^{\lambda_i}$ 的基底合并就得到 $V$ 的一个基底．在此基底下 $\mathcal{A}$ 是对角化的\autoref{InvSP_the1}~\upref{InvSP}．
+
+\textbf{必要性：}设$\lambda_i\;(i=1,\cdots, m)$ 是 $\mathcal A$ 的不同本征值．由于 $\mathcal A$ 是对角化的，所以
+\begin{equation}
+A=\mathrm{diag}\;(\underbrace{\lambda_1,\cdots,\lambda_1}_{\mathrm{dim}\;V^{\lambda_1}};\cdots;\underbrace{\lambda_m,\cdots,\lambda_m}_{\mathrm{dim}\;V^{\lambda_m}})
+\end{equation}
+因为矢量空间在域 $\mathbb{F}$ 上，所以矩阵 $A$ 的元素 $\lambda_i\in \mathbb{F}$．
+于是
+\begin{equation}
+\mathrm{det}(\mathcal{A}-t\mathcal E)=(\lambda_1-t)^{\mathrm{dim}\;V^{\lambda_1}}\cdots(\lambda_m-t)^{\mathrm{dim}\;V^{\lambda_m}}
+\end{equation}
+上式的解释即要证的结论．
+
+\textbf{证毕！}

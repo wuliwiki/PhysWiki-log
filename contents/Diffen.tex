@@ -1,0 +1,81 @@
+% 有限差分
+% 差分公式|导数|差分
+\pentry{高阶导数（简明微积分）\upref{HigDer}}
+在实际当中，由于计算机的内存总是有限的，不可能存储一个连续的数据(因为实数的稠密性告诉我们：任意两实数之间有无穷多的数)，甚至不可能存储一个小数点后有无限位数的实数．所以在计算机进行求导计算时自变量 $x$ 的变化 $\Delta x$ 不可能取到无限小，即微分 $\dd f({x})$ 不可能实现，转而只能取一有限大小的 $\Delta x$，与微分相对应，此时 $\Delta f(x)$ 称为\textbf{差分}．
+\begin{definition}{差分}
+设函数 $f(x)$ 定义在某区间 $\mathcal{X}$ 上，给定自变量 $x$ 任一固定增量 $\Delta x$．称
+\begin{equation}
+\Delta f(x)=f(x+\Delta x)-f(x)
+\end{equation}
+为函数 $f(x)$ 的\textbf{一阶差分}．显然一阶差分也是 $x$ 的函数（因为 $\Delta x$ 固定），一阶差分的差分称为\textbf{二阶差分}．\textbf{$n$ 阶差分}可归纳定义为
+\begin{equation}
+\Delta^n f(x)=\Delta[\Delta^{n-1}f(x)]
+\end{equation}
+\end{definition}
+\begin{theorem}{差分公式}\label{Diffen_the1}
+$n$ 阶差分 $\Delta^n f(x)$ 具有如下公式
+\begin{equation}\label{Diffen_eq1}
+\Delta^nf(x)=\sum_{i=0}^n(-1)^iC_n^if(x+(n-i)\Delta x)
+\end{equation}
+其中，$C_n^i$ 为组合数\upref{HsCb}．
+\end{theorem}
+\autoref{Diffen_eq1} 表明，$n$ 阶差分可直接用函数 $f(x)$ 本身在等距分点
+\begin{equation}
+x,x+\Delta x,\cdots,x+n\Delta x
+\end{equation}
+表示出．
+\begin{theorem}{差分与导数关系}\label{Diffen_the2}
+设函数 $f(x)$ 在闭区间 $[x_0,x_0+n\Delta x]$ 上有直到 $n-1$ 阶连续导数，且至少在开区间 $(x_0,x_0+n\Delta x)$ 上有直到 $n$ 阶有限导数 $f^{(n)}(x)$ ．于是成立下面公式
+\begin{equation}\label{Diffen_eq2}
+\Delta^nf(x_0)=f^{(n)}(\xi_n)\Delta x^n ,\quad x_0<\xi_n<x_0+n\Delta x
+\end{equation}
+\end{theorem}
+若在点 $x_0$ 处导数 $f^{(n)}(x)$ 存在且连续，则让 $\Delta x\rightarrow0$ （此时 $\xi_n\rightarrow x_0$），得
+\begin{equation}
+f^{(n)}(x_0)=\lim_{\Delta x\rightarrow0}\frac{\Delta^n f(x_0)}{\Delta x^n}
+\end{equation}
+ 这个公式给出了用一次极限步骤求得 $n$ 阶导数的可能性．
+\subsection{证明}
+\subsubsection{\autoref{Diffen_the1} 的证明}
+当 $n=1,2$ 时，定理显然成立：
+\begin{equation}
+\begin{aligned}
+\Delta f(x)=&f(x+\Delta x)-f(x)\\
+=&\sum_{i=0}^1(-1)^iC_1^if(x+(1-i)\Delta x)\\
+\Delta^2 f(x)=&\Delta (\Delta f(x))=\Delta f(x+\Delta x)-\Delta f(x)\\
+=&f(x+2\Delta x)-2f(x+\Delta x)+f(x)\\
+=&\sum_{i=0}^2(-1)^iC_2^if(x+(2-i)\Delta x)
+\end{aligned}
+\end{equation}
+假设 $n=k$ 时，\autoref{Diffen_eq1} 成立，即
+\begin{aligned}
+\Delta^kf(x)=\sum_{i=0}^k(-1)^iC_k^if(x+(k-i)\Delta x)
+\end{aligned}
+那么
+\begin{equation}
+\begin{aligned}
+\Delta^{k+1} f(x)=&\Delta(\Delta^k f(x))=\Delta\qty(\sum_{i=0}^k(-1)^iC_k^if(x+(k-i)\Delta x))\\
+=&\sum_{i=0}^k(-1)^iC_k^i\Delta f(x+(k-i)\Delta x)\\
+=&\sum_{i=0}^k(-1)^iC_k^i\qty[f(x+(k+1-i)\Delta x)-f(x+(k-i)\Delta x)]\\
+=&f(x+(k+1)\Delta x)+\sum_{i=1}^{k}(-1)^iC_k^if(x+(k+1-i)\Delta x)\\
+&+\sum_{i=0}^{k-1}(-1)^{i+1}C_k^i f(x+(k-i)\Delta x)+(-1)^{k+1}f(x)\\
+=&f(x+(k+1)\Delta x)+\sum_{i=1}^{k}(-1)^{i}(C_k^{i}+C_k^{i-1}) f(x+(k+1-i)\Delta x)+(-1)^{k+1}f(x)\\
+=&f(x+(k+1)\Delta x)+\sum_{i=1}^{k}(-1)^{i}C_{k+1}^{i} f(x+(k+1-i)\Delta x)+(-1)^{k+1}f(x)\\
+=&\sum_{i=0}^{k+1}(-1)^iC_{k+1}^if(x+(k+1-i)\Delta x)
+\end{aligned}
+\end{equation}
+第三个等式用到了 $\Delta x$ 固定这一事实，$C_k^i+C_k^{i-1}=C_{k+1}^i$ 见\autoref{HsCb_eq5}~\upref{HsCb}．
+
+\textbf{证毕！}
+\subsubsection{\autoref{Diffen_the2} 证明}
+当 $n=1$ 时，\autoref{Diffen_eq2} 便是拉格朗日公式\autoref{MeanTh_eq2}~\upref{MeanTh}．
+
+假设 $n$ 为 $n-1$ 时，\autoref{Diffen_eq2} 成立．则
+\begin{equation}
+\Delta^n f(x_0)=\Delta(\Delta^{n-1}f(x_0))=\qty[f^{n-1}(\xi_{n-1}+\Delta x)-f^{n-1}(\xi_{n-1})]\Delta x^{n-1}
+\end{equation}
+其中，$x_0<\xi_{n-1}<x_0+(n-1)\Delta x$．上式右边应用拉格朗日公式\autoref{MeanTh_eq2}~\upref{MeanTh}，便得\autoref{Diffen_eq2} ，且
+\begin{equation}
+x_0<\xi_{n-1}<\xi_n<\xi_{n-1}+\Delta x<x_0+n\Delta x
+\end{equation}
+\textbf{证毕！}

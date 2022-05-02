@@ -2,3 +2,77 @@
 % 泰勒公式|余项
 
 \pentry{泰勒公式\upref{Tayl}}
+在用带有皮亚诺（Peano）余项的泰勒公式\autoref{Tayl_eq2}~\upref{Tayl}表达函数 $f(x)$ 时，得到的总是属于 “局部” 的性质，即关于点 $x_0$ 的性质的．若取其它数值 $x$ ，必须假定这些数值“充分接近”于 $x_0$，而不能任意选取．这是因为函数 $f(x)$ 与其n阶近似多项式 $p(x)$ 的差为一余项 $o((x-x_0)^n)$ ，而这余项仅仅说在 $x$ 充分接近 $x_0$ 时趋于0．而对于其它的 $x$，并不能保证近似多项式可以表达函数 $f(x)$ 至预先选定的准确度，而这往往是我们希望做到的．因此，我们需要推导余项的其它形式．
+
+假定 $f(x)$ 在区间 $[x_0,x_0+H]\;(H>0)$ 内定义着，并在该区间内有直至 $n$ 阶导数存在并连续，此外，至少在开区间 $(x_0,x_0+H)$ 内 $n+1$ 阶导数 $f^{(n+1)}(x)$ 存在且有限．函数在区间 $[x_0-H,x_0]$ 内定义时的情形，可类似说明．(注：之所以这样假定，是为了应用柯西微分中值定理\autoref{MeanTh_eq1}~\upref{MeanTh})
+
+若用 $n$ 阶多项式
+\begin{equation}\label{SchRo_eq2}
+p(x)=\sum_{i=0}^n\frac{f^{(i)}(x_0)}{i!}(x-x_0)^i
+\end{equation}
+作为 $f(x)$ 的近似公式，余项用 $r_n(x)$ 表示，即 
+\begin{equation}\label{SchRo_eq3}
+r_n(x)=f(x)-p(x)
+\end{equation}
+施勒米希-洛希（O.Schl$\ddot{o}$milch-Roche）推导出下面的公式
+\begin{equation}\label{SchRo_eq1}
+r_n(x)=\frac{f^{(n+1)}(x_0+\theta(x-x_0))}{n!p}\cdot(1-\theta)^{n+1-p}(x-x_0)^{n+1}\quad (0<\theta<1)
+\end{equation}
+其中，$p$ 为大于0的任一数．该式称为\textbf{施勒米希-洛希余项公式}．
+\subsection{\autoref{SchRo_eq1} 的证明}
+由\autoref{SchRo_eq2} ，\autoref{SchRo_eq3} 
+\begin{equation}
+r_n(x)=f(x)-\sum_{i=0}^n\frac{f^{(i)}(x_0)}{i!}(x-x_0)^i
+\end{equation}
+令 $x$ 固定为区间 $[x_0,x_0+H]$ 内任一数值，做辅助函数
+\begin{equation}
+\varphi(z)=f(x)-\sum_{i=0}^n\frac{f^{(i)}(z)}{i!}(x-z)^i
+\end{equation}
+其中 $z\in[x_0,x]$ ．在这区间内，函数 $\varphi(z)$ 是连续的（因为 $f(x)$ 在这区间直至 $n$ 阶导数皆是连续的），且有
+\begin{equation}\label{SchRo_eq4}
+\varphi(x_0)=r_n(x),\quad \varphi(x)=0
+\end{equation}
+此外，
+\begin{equation}\label{SchRo_eq6}
+\begin{aligned}
+\varphi'(z)&=-\qty(f'(z)+\sum_{i=1}^n\qty(\frac{f^{(i+1)}(z)}{i!}(x-z)^i-\frac{f^{(i)}(z)}{(i-1)!}(x-z)^{i-1}))\\
+&=-\qty(f'(z)+\sum_{i=1}^n\frac{f^{(i+1)}(z)}{i!}(x-z)^i-\sum_{i=0}^{n-1}\frac{f^{(i+1)}(z)}{i!}(x-z)^{i})\\
+&=-\frac{f^{(n+1)}}{n!}(x-z)^{n}
+\end{aligned}
+\end{equation}
+
+任取一函数 $\psi(z)$，其在区间 $[x_0,x]$ 内连续，且至少在开区间 $(x_0,x)$ 内有不等于0的导数 $\psi'(z)$．应用柯西微分中值定理\autoref{MeanTh_the3}~\upref{MeanTh}
+\begin{equation}\label{SchRo_eq5}
+\frac{\varphi(x)-\varphi(x_0)}{\psi(x)-\psi(x_0)}=\frac{\varphi'(c)}{\psi'(c)}
+\end{equation}
+其中，$x_0<c<x$ 或 $c=x_0+\theta(x-x_0)\quad(0<\theta<1)$．
+
+\autoref{SchRo_eq4}，\autoref{SchRo_eq6}  代入\autoref{SchRo_eq5} ，得
+\begin{equation}\label{SchRo_eq7}
+r_n(x)=\frac{\psi(x)-\psi(x_0)}{\psi'(c)}\cdot\frac{f^{(n+1)}(c)}{n!}(x-c)^n
+\end{equation}
+由于 $\psi(z)$ 为满足在区间 $[x_0,x]$ 内连续，且至少在开区间 $(x_0,x)$ 内有不等于0的导数的任意函数，取 $\psi(z)=(x-z)^p,\;p>0$，就有
+\begin{equation}
+\psi'(z)=-p(x-z)^{p-1}\quad (x_0<z<x)
+\end{equation}
+这时，\autoref{SchRo_eq7} 就为
+\begin{equation}
+\begin{aligned}
+r_n(x)&=\frac{-(x-x_0)^p}{-p(x-c)^{p-1}}\cdot\frac{f^{(n+1)}(c)}{n!}(x-c)^n\\
+&=\frac{f^{(n+1)}(c)}{n!p}(x-c)^{n+1-p}(x-x_0)^p
+\end{aligned}
+\end{equation}
+因为 $c=x_0+\theta(x-x_0)\quad(0<\theta<1)$，代入上式，即得\autoref{SchRo_eq1} .
+\textbf{证毕！}
+
+\subsection{例子}
+\subsubsection{拉格朗日余项公式}
+\autoref{SchRo_eq1} 中令 $p=n+1$，即得\textbf{拉格朗日余项公式}\autoref{Tayl_eq3}~\upref{Tayl}
+\begin{equation}
+r_n(x)=\frac{f^{(n+1)}(c)}{(n+1)!}(x-x_0)^{n+1}\quad (c\in(x_0,x))
+\end{equation}
+\subsubsection{柯西余项式}
+令 $p=1$，即得\textbf{柯西余项式}
+\begin{equation}
+r_n(x)=\frac{f^{(n+1)}(x_0+\theta(x-x_0))}{n!}(1-\theta)^{n}(x-x_0)^{n+1}
+\end{equation}
