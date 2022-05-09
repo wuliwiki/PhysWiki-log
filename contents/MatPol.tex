@@ -36,15 +36,20 @@ end
 if isscalar(Ph)
     Ph = Ph*ones(size(R));
 end
-if (size(R) ~= size(Th) || size(Th) ~= size(Ph)...
-        || size(Ph) ~= size(Val))
+if ~isequal(size(R),size(Th)) || ...
+    ~isequal(size(Th),size(Ph)) || ...
+    ~isequal(size(Ph),size(Val))
     error('wrong shape for Th, Ph, Val');
 end
 % plot
-[X,Y,Z] = sph2cart(Ph,pi/2-Th,R);
-h = surf(X,Y,Z,varargin{:});
+[X,Y,Z] = Sph2Cart(R, Th, Ph);
+h = surf(X,Y,Z,Val,varargin{:});
+view(0,0);
 shading flat; axis equal;
 xlabel x; ylabel y; zlabel z;
+Rmax = max(R(:));
+axis([-1, 1, -1, 1, -1, 1]*Rmax);
+set(datacursormode(gcf), 'UpdateFcn', @datatip);
 cameratoolbar;
 end
 \end{lstlisting}

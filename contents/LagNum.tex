@@ -1,4 +1,4 @@
-% 拉格朗日方程的数值解
+% 拉格朗日方程的数值解（Matlab）
 
 \begin{issues}
 \issueDraft
@@ -34,41 +34,134 @@
 \end{equation}
 就得到了 $2N$ 条方程组成的一阶常微分方程组， 变量一共有 $2N$ 个． 可以使用四阶龙格库塔法\upref{OdeRK4} 等方法求解．
 
-\addTODO{代码未完成．}
+代码依赖 “偏导与差分\upref{ParDf}” 中的 \verb|D2_ij.m|， 以及 “导数与差分\upref{DerDif}” 的 \verb|D_i.m|．
+\addTODO{dL, d2L, Q 参数未测试}
 \begin{lstlisting}[language=matlab, caption=lagr\_solve.m]
 % 数值解拉格朗日方程
-% L(qq, t), qq = [q, dq]
-% dL(i,qq,t), d2L(i,qq,t), dLdL(i,j,qq,t) 可选
-function lagr_solve(L, qq0, RelTol, dL, d2L, dLdL)
-h = 1e-6;
-if isempty(d2L)
-    d2L = @(i,qq,t)d2L_dif(L,i,qq,t,h);
+% 拉格朗日量 L(qqt), qqt = [q, dq, t]
+% 一阶偏微分 dL(i,qqt), 可选, 若不支持 i > N， 返回 nan
+% 二阶偏微分 d2L(i,j,qqt) 可选, i = N+1:2*N, j = 1:2*N+1
+% 广义力 Q(i, qqt) 可选
+function qq = lagr_solve(L, qq0, t, RelTol, dL, d2L, Q, vpa_flag)
+%====== 参数设置 =======
+h = 1e-5; % 1 阶差分长度
+h2 = 1e-5; % 2 阶差分长度
+%=====================
+N = numel(qq0)/2;
+if ~exist('vpa_flag', 'var') || isempty(vpa_flag)
+    vpa_flag = false;
 end
-if isempty(dLdL)
-    dLdL = @(i,j,qq,t)dLdL_dif(L,i,j,qq,t,h);
+if ~exist('d2L', 'var') || isempty(d2L)
+    if ~exist('dL', 'var') || isempty(dL) || isnan(dL(N+1,[qq0, tmin]))
+        if vpa_flag
+            d2L = @(i,j,qqt)D2_ij_vpa(L,i,j,qqt,h2);
+        else
+            d2L = @(i,j,qqt)D2_ij(L,i,j,qqt,h2);
+        end
+    else
+        d2L = @(i,j,qqt)d2L_dif1(dL,i,j,qqt,h);
+    end
+end
+if ~exist('dL', 'var') || isempty(dL)
+    if vpa_flag
+        dL = @(i, qqt)D_i_vpa(L, i, qqt, h);
+    else
+        dL = @(i, qqt)D_i(L, i, qqt, h);
+    end
+end
+if ~exist('Q', 'var') || isempty(Q)
+    Q = @(i,qqt) 0;
+end
+options = odeset('RelTol', RelTol);
+[T, QQ] = ode45(@(t,qq)ode_fun(t, qq, dL, d2L, Q), ...
+        [t(1), t(end)], qq0, options);
+qq = zeros(numel(t), 2*N);
+for i = 1:2*N
+    qq(:,i) = interp1(T, QQ(:,i), t, 'spline');
 end
 end
 
-% D^2 L / D(qq_i)^2
-function ret = d2L_dif(L, i, qq, t, h)
-L2 = L(qq,t);
-qq(i) = qq(i) + h;
-L3 = L(qq,t);
-qq(i) = qq(i) - 2*h;
-L1 = L(qq,t);
-ret = (L1 + L3 - 2*L2)/(2*h)^2;
+function dqq = ode_fun(t, qq, dL, d2L, Q)
+N = numel(qq)/2;
+dqq = zeros(2*N, 1);
+dqq(1:N) = qq(N+1:end);
+qqt = [qq; t];
+A = zeros(N, N); % A_ij = d2L/d(\dot q_i)d(\dot q_j)
+for i = 1:N
+    for j = i:N
+        A(i,j) = d2L(i+N, j+N, qqt);
+        if i ~= j
+            A(j,i) = A(i,j);
+        end
+    end
+end
+b = zeros(N, 1);
+for i = 1:N
+    b(i) = dL(i, qqt) - d2L(i+N,2*N+1,qqt) + Q(i,qqt);
+    for j = 1:N
+        b(i) = b(i) - d2L(N+i,j,qqt)*qqt(j+N);
+    end
+end
+dqq(N+1:end) = A \ b;
+if any(isnan(dqq) | isinf(dqq))
+    error('wrong!');
+end
 end
 
-% D^2 L / D(qq_i) D(qq_j)
-function ret = dLdL_dif(L, i, j, qq, t, h)
-qq(i) = qq(i) - h; qq(j) = qq(j) - h;
-L1 = L(qq,t);
-qq(i) = qq(i) + 2*h;
-L2 = L(qq,t);
-qq(j) = qq(j) + 2*h;
-L3 = L(qq,t);
-qq(i) = qq(i) - 2*h;
-L4 = L(qq,t);
-ret = (L1 - L2 + L3 - L4)/(2*h)^2;
+% d^2 L / d(qqt_i)d(qqt_j)
+% dL is dL/d(qqt_i)
+function ret = d2L_dif1(dL, i, j, qqt, h)
+qqt(j) = qqt(j) - 0.5*h;
+L1 = dL(i, qqt, h);
+h = (qqt(j) + h) - qqt(j);
+qqt(j) = qqt(j) + h;
+L2 = dL(i, qqt, h);
+ret = (L2 - L1) / h;
+end
+\end{lstlisting}
+
+用双摆的例子来测试， 比较 “双摆的数值计算（Matlab）\upref{DbPend}” 的结果：
+\begin{lstlisting}[language=matlab, caption=lagr\_solve\_demo.m]
+% lagr_solve_demo
+function lagr_solve_demo
+% ==== 参数 =====
+m1 = 1; m2 = 1; g = 9.8;
+l1 = 1; l2 = 1;
+tmin = 0; tmax = 10; Nt = 200;
+qq0 = [pi, pi, -4, 6];
+RelTol = 1e-6;
+L = @(qqt)L_fun(qqt, m1, l1, m2, l2, g);
+% ==============
+close all;
+t = linspace(tmin, tmax, Nt);
+qq = lagr_solve(L, qq0, t, RelTol);
+
+th1 = qq(:,1); th2 = qq(:,2);
+x1 = l1*sin(th1); y1 = -l1*cos(th1);
+x2 = x1 + l2*sin(th2); y2 = y1 - l2*cos(th2);
+figure;
+% 动画
+for it = 1:Nt
+    clf;
+    plot([0, x1(it)], [0, y1(it)], 'k'); hold on;
+    scatter(x1(it), y1(it), 'k');
+    plot([x1(it), x2(it)], [y1(it), y2(it)], 'k');
+    scatter(x2(it), y2(it), 'k');
+    plot(x2(1:it), y2(1:it));
+    axis equal; axis([-1,1,-1,1]*(l1+l2)*1.1);
+    title(['t = ' num2str(t(it), '%.2f')]);
+    xlabel x; ylabel y;
+    pause(0.1); % saveas(gcf, [num2str(it) '.png']);
+end
+end
+
+% 双摆
+function ret = L_fun(qqt, m1, l1, m2, l2, g)
+th1 = qqt(1); th2 = qqt(2);
+w1 = qqt(3); w2 = qqt(4);
+T = 0.5*m1*(l1*w1)^2 + 0.5*m2*((l1*w1*cos(th1) + l2*w2*cos(th2))^2 ...
+    + (l1*w1*sin(th1) + l2*w2*sin(th2))^2);
+V = -m1*g*l1*cos(th1) - m2*g*(l1*cos(th1) + l2*cos(th2));
+ret = T - V;
 end
 \end{lstlisting}

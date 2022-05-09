@@ -4,13 +4,78 @@
 \issueDraft
 \end{issues}
 
-\pentry{多元泰勒展开\upref{NDtalr}}
+\pentry{多元泰勒展开\upref{NDtalr}， 导数与差分\upref{DerDif}}
 
 对于可微的二元函数 $f(x,y)$， 可以证明
 \begin{equation}
 \begin{aligned}
-\pdv{}{x}{y} f(x_0,y_0) = \lim_{a\to 0}\lim_{b\to 0}\frac{1}{ab}[-& f(x_0-a/2,\ y_0+b/2) + f(x_0+a/2,\  y_0+b/2)\\
-& f(x_0-a/2,\  y_0-b/2) - f(x_0+a/2,\  y_0-b/2)]
+\pdv{}{x}{y} f(x_0,y_0) = \lim_{a\to 0}\lim_{b\to 0}\frac{1}{4ab}[-& f(x_0-a,\ y_0+b) + f(x_0+a,\  y_0+b)\\
+& f(x_0-a,\  y_0-b) - f(x_0+a,\  y_0-b)]
 \end{aligned}
 \end{equation}
 对每个 $f$ 使用多元泰勒展开\upref{NDtalr}即可证明．
+
+\subsubsection{Matlab 代码}
+
+计算过程中， 由于出现了大数加小数， 所以实际上 \verb|x(i) + h| 增加的值可能比 \verb|h| 有较大不同， 可以用 \verb|(x(i) + h) - x(i)| 来计算实际的增量， 这样会使结果更精确．
+
+注意该代码的有效数字估计只包括计算减法的截断误差， 不包括用差分代替微分的误差．
+\begin{lstlisting}[language=matlab, caption=D2\_ij.m]
+% 数值二阶偏导
+% digi 是结果的有效数字
+% D^2 f / D(x_i)D(x_j)
+function [ret, digi] = D2_ij(f, i, j, x, h)
+if i == j
+    h = (x(i) + h) - x(i);
+    if h == 0
+        error('h 太小');
+    end
+    f2 = f(x);
+    x(i) = x(i) + h;
+    f3 = f(x);
+    x(i) = x(i) - 2*h;
+    f1 = f(x);
+    val = f1 + f3;
+    dif = val - 2*f2;
+    ret = dif/h^2;
+else % i ~= j
+    x(i) = x(i) - 0.5*h; x(j) = x(j) - 0.5*h;
+    hi = (x(i) + h) - x(i);
+    hj = (x(j) + h) - x(j);
+    if hi == 0 || hj == 0
+        error('h 太小');
+    end
+    f1 = f(x);
+    x(i) = x(i) + hi;
+    f2 = f(x);
+    x(j) = x(j) + hj;
+    f3 = f(x);
+    x(i) = x(i) - hi;
+    f4 = f(x);
+    val = f1+f3;
+    dif = val-(f2+f4);
+    ret = dif/(hi*hj);
+end
+if nargout == 2
+    digi = max(0, 15.6536 + log10(abs(dif/val)));
+end
+end
+\end{lstlisting}
+
+另外给出一个变精度计算版本， 可以使截断误差精确到最后一位有效数字． 显然函数 \verb|f| 需要支持变精度 \verb|sym| 类型的变量．
+\begin{lstlisting}[language=matlab, caption=D2\_ij\_vpa.m]
+% 数值二阶偏导 (变精度)
+% D^2 f / D(x_i)D(x_j)
+% 精确到最后一位有效数字
+function ret = D2_ij_vpa(f, i, j, x, h)
+[ret, digi] = D2_ij(f, i, j, x, h);
+if digi >= 15
+    return;
+end
+old_digi = digits;
+digits(2*15.6536 - digi - 8);
+ret = D2_ij(f, i, j, arrayfun(@num2vpa, x), h);
+ret = double(ret);
+digits(old_digi);
+end
+\end{lstlisting}

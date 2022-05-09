@@ -38,3 +38,41 @@ f(x \pm h) = f(x) \pm f'(x) h + \frac12 f''(x) h^2 \pm \frac16 f'''(x) h^3 + \or
 \lim_{h\to 0} \frac{f''(x)h^2 + \order{h^4}}{h^2} = f''(x) + \order{h^2}
 \end{equation}
 这就验证了\autoref{DerDif_eq5} 的正确性． 另外我们得知用差分来近似二阶导数 $f''(x)$ 同样是精确到二阶无穷小 $\order{h^2}$．
+
+\subsubsection{Matlab 代码}
+\begin{lstlisting}[language=matlab, caption=D\_i.m]
+% 数值偏偏导
+% digi 是结果的有效数字
+function [ret, digi] = D_i(f, i, x, h)
+x(i) = x(i) - 0.5*h;
+f1 = f(x);
+h = (x(i) + h) - x(i);
+if h == 0
+    error('h 太小');
+end
+x(i) = x(i) + h;
+f2 = f(x);
+dif = f2 - f1;
+ret = dif/h;
+if nargout == 2
+    digi = max(0, 15.6536 + log10(abs(dif/f1)));
+end
+end
+\end{lstlisting}
+
+\begin{lstlisting}[language=matlab, caption=D\_i\_vpa.m]
+% 数值偏导 (变精度)
+% f 需要支持 sym 类型的变精度参数
+% 精确到最后一位有效数字
+function ret = D_i_vpa(f, i, x, h)
+[ret, digi] = D_i(f, i, x, h);
+if digi >= 15
+    return;
+end
+old_digi = digits;
+digits(2*15.6536 - digi - 8);
+ret = D_i(f, i, arrayfun(@num2vpa,x), h);
+ret = double(ret);
+digits(old_digi);
+end
+\end{lstlisting}
