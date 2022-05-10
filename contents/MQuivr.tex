@@ -56,3 +56,45 @@ Ptri = turn(Ptri, [0, 1, 0], u);
 Ptri = Ptri(:, 1:2) + [x + vx, y + vy];
 end
 \end{lstlisting}
+
+\begin{lstlisting}[language=matlab, caption=xy2equi.m]
+% map x, y coordinates to x1, y1 with equal axis
+% x range is [0 1], y range [0, ymax] depending on aspect ratial
+function [x1, y1] = xy2equi(x, y)
+xrange = get(gca, 'XLim');
+yrange = get(gca, 'YLim');
+aspect = get(gca, 'PlotBoxAspectRatio');
+aspect = aspect(2)/aspect(1);
+
+x1 = x / (xrange(2) - xrange(1));
+y1 = y / (yrange(2) - yrange(1)) * aspect;
+end
+\end{lstlisting}
+
+\begin{lstlisting}[language=matlab, caption=equi2xy.m]
+% the inverse of function xy2equi
+function [x1, y1] = equi2xy(x, y)
+xrange = get(gca, 'XLim');
+yrange = get(gca, 'YLim');
+aspect = get(gca, 'PlotBoxAspectRatio');
+aspect = aspect(2)/aspect(1);
+
+x1 = x * (xrange(2) - xrange(1));
+y1 = y * ((yrange(2) - yrange(1))/aspect);
+end
+\end{lstlisting}
+
+\begin{lstlisting}[language=matlab, caption=xy2equi\_demo.m]
+figure; axis([-1000,1000,-1,1]);
+set(gca, 'PlotBoxAspectRatio', [0.5, 1, 0.5]);
+% plot a square
+x = [0 1 1 0 0]/3-0.5/3;
+y = [0 0 1 1 0]/3-0.5/3;
+[x1, y1] = equi2xy(x, y);
+hold on; plot(x1, y1);
+[x2, y2] = xy2equi(x1, y1);
+% check x2 == x, y2 == y
+if norm(x2 - x) + norm(y2 - y) > 1e-14
+    error('something wrong');
+end
+\end{lstlisting}

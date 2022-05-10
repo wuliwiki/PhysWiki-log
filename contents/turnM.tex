@@ -16,7 +16,7 @@
 \caption{运行结果 2：绕 $(1,-1,0)$ 轴转动} \label{turnM_fig2}
 \end{figure}
 
-\begin{lstlisting}[language=matlab]
+\begin{lstlisting}[language=matlab, caption=turn\_demo.m]
 % turn_demo
 A = [1,-1,0]; % [0, 0, 1]
 X = [0,1,1,0,0]; Y = [0,0,1,1,0]; Z = [0,0,0,0,0];
@@ -61,8 +61,8 @@ if length(A(:)) ~= 3 % 两种格式都要求 A 是一个矢量
 end
 
 if numel(theta) == 3
-    D1 = vunit(A);
-    D2 = vunit(theta);
+    D1 = A/norm(A);
+    D2 = theta/norm(theta);
     A = cross(D1,D2);
     C = dot(D1,D2);
     S = sqrt(1-C^2);
@@ -73,7 +73,7 @@ else
     error('numel(theta)~=1 or numel(A2)~=3'); 
 end
 
-normA = sqrt(A(1)^2 + A(2)^2 + A(3)^3);
+normA = sqrt(A(1)^2 + A(2)^2 + A(3)^2);
 if normA == 0
     X1 = X; Y1 = Y; Z1 = Z;
     return;
