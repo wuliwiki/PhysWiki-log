@@ -1,0 +1,93 @@
+% R-矩阵法（量子力学）
+
+\pentry{球坐标系中的定态薛定谔方程\upref{RadSE}}
+
+\footnote{本文参考 \cite{Brandsen} 12.7 节．}本文使用原子单位制\upref{AU}． $R$-矩阵法的中心思想是， 若要解
+\begin{equation}\label{Rmat_eq9}
+H = -\frac{1}{2m}\dv[2]{x} + V(x)
+\end{equation}
+在 $[0, \infty)$ 的散射态波函数（边界条件 $\psi(0) = 0$）， 把 $[0,a]$ 内的波函数用一组正交归一基底展开， 而在 $[a,\infty)$ 根据 $V(r)$ 的渐进形式写出近似的波函数， $a$ 越大， 该近似越精确． 最后在 $x=a$ 处， 匹配波函数．
+
+在实际应用中， 我们往往是在球坐标系中解径向方程（\autoref{RadSE_eq1}~\upref{RadSE}）， 每个分波的径向哈密顿算符为
+\begin{equation}
+H_l = -\frac{1}{2m} \dv[2]{r} + V(r) + \frac{l(l + 1)}{2mr^2}
+\end{equation}
+这和\autoref{Rmat_eq9} 在数学上是相同的， 所以为了简单起见下文还是使用前者．
+
+\subsection{构建正交归一基底}
+一个算符是否为厄米算符与边界条件有关． 例如
+\begin{equation}
+H = -\frac{1}{2m}\dv[2]{x} + V(x)
+\end{equation}
+要证明厄米性， 用分部积分法得
+\begin{equation}\label{Rmat_eq1}
+\int_{0}^{\infty} uHv\dd{x} - \int_{0}^{\infty} vHu\dd{x}
+= \eval{-\frac{1}{2m}[uv' - u'v]}_{0}^{+\infty}
+\end{equation}
+由于我们假设波函数在 $x=0$ 和无穷远处消失， 则该式为零， 说明 $H$ 是厄米的． 但如果在有限区间 $[0, a]$ 中， 则波函数的边界条件必须满足 $u(a)v'(a) - u'(a)v(a) = 0$ 才能保证厄米性．
+
+但若边界条件不符合该要求， 为了在 $[0,a]$ 内构造一组离散的正交归一基底， 我们可以拼凑一个厄米算符． 把\autoref{Rmat_eq1} 修改积分区间并移项得
+\begin{equation}
+\qty[\int_{0}^{a} uHv\dd{x} + \frac{1}{2m}u(a)v'(a)] - \qty[\int_{0}^{a} vHu\dd{x} + \frac{1}{2m}u'(a)v(a)]
+= 0
+\end{equation}
+而又可以通过狄拉克 $\delta$ 函数\upref{Delta} 表示为
+\begin{equation}
+\int_{0}^{a} u\qty[H + \frac{\delta(x-a)}{2m}\dv{x}] v\dd{x} -
+\int_{0}^{a} v\qty[H + \frac{\delta(x-a)}{2m}\dv{x}] u\dd{x} = 0
+\end{equation}
+所以无论波函数在 $x=a$ 端的边界条件如何， 方括号中的算符都是厄米的． 令\textbf{布洛赫算符（Bloch operator）}为
+\begin{equation}\label{Rmat_eq6}
+\mathscr L = \delta(x-a)\dv{x}
+\end{equation}
+那么修正后的哈密顿算符（厄米算符）就是 $H + \mathscr L/(2m)$． 于是本征方程为
+\begin{equation}\label{Rmat_eq2}
+\qty(H + \frac{\mathscr L}{2m})\chi_j = \frac{k_j^2}{2m} \chi_j
+\end{equation}
+本征值为 ${k_i^2}/{2m}$． 于是实函数 $\chi_i(x)$ 就构成一组 $[0, a]$ 内的正交归一基底， 满足 $\int_0^a \chi_i \chi_j \dd{x} = \delta_{ij}$． 为了明确\autoref{Rmat_eq2} 的意义， 把\autoref{Rmat_eq2} 左乘任意 $\chi_i$ 并在 $[0,a]$ 积分\footnote{该积分实际上是在区间 $[0,a+\epsilon]$ 积分然后令 $\epsilon\to 0^+$， 下同．}得
+\begin{equation}\label{Rmat_eq3}
+\mel{\chi_i}{2mH + \mathscr L}{\chi_j} = k_i^2 \delta_{ij}
+\end{equation}
+这里使用了狄拉克符号\upref{braket}表示积分． 这组基底如何具体计算呢？ 首先还是要明确 $x=a$ 处的边界条件． 一个简单的例子是令 $u(a) = 0$， 解 $H$ 的本征基底． 这相当于解 $[0,a]$ 中的无限深势阱加上势能 $V(x)$． 另一个简单的例子是把边界条件 $u(a) = 0$ 改成 $u'(a) = 0$， 也能得到一组基底． 更妙地， 也可以把这两组基底合并． 可以验证这三组基底都满足\autoref{Rmat_eq3} 即\autoref{Rmat_eq2}．
+
+\subsection{散射态的展开}
+求出区间 $[0,a]$ 的基底以后， 就可以在该区间展开任意的散射态， 散射态满足
+\begin{equation}\label{Rmat_eq4}
+H\psi_k = \frac{k^2}{2m}\psi_k
+\end{equation}
+令
+\begin{equation}\label{Rmat_eq5}
+\psi_k = \sum_j c_j(k)\chi_j
+\end{equation}
+代入并左乘 $2m\chi_i$ 并在 $[0,a]$ 积分得
+\begin{equation}
+\sum_j \qty(2mH_{ij} - \delta_{ij}k^2) c_j = 0
+\end{equation}
+这是一个其次线性方程组， 可以解出坐标 $c_j$． 其中
+\begin{equation}
+2mH_{ij} = \mel{\chi_i}{2mH}{\chi_j} = \mel{\chi_i}{2mH + \mathscr L}{\chi_j} - \mel{\chi_i}{\mathscr L}{\chi_j} 
+= k_i^2\delta_{ij} - \chi_i(a)\chi'_j(a)
+\end{equation}
+代入得
+\begin{equation}\label{Rmat_eq7}
+\sum_j \qty[(k_i^2 - k^2)\delta_{ij} - \chi_i(a)\chi'_j(a)] c_j = 0
+\end{equation}
+
+由此可以证明一个有用的关系： $x=a$ 处的对数导数为（留做习题）
+\begin{equation}\label{Rmat_eq8}
+\frac{\psi_k'(a)}{\psi_k(a)} = \frac{1}{aR(k)}
+\end{equation}
+其中 $R(k^2)$ 就是 $R$-矩阵
+\begin{equation}
+R(k) = \frac{1}{a} \sum_{i=1}^\infty \frac{\chi_i^2(a)}{k_i^2 - k^2}
+\end{equation}
+事实上目前这只是一个数， 即 $1\times 1$ 的矩阵． 在多通道问题中才会成为真正的矩阵． 通过对数导数，我们就可以匹配 $[a,\infty)$ 区间的散射态波函数．
+
+\subsection{势能修正项}
+容易证明， 若给 $\mathscr L$ 的定义（\autoref{Rmat_eq6}） 加上一个任意实函数 $U(x)$， 也可以使 $H+\mathscr L/(2m)$ 为厄米算符． 事实上这相当于修改了 $H$ 中的势能 $V(x)$． 有时候选取适当的 $U(x)$ 可以使基底 $\chi_i$ 变得更简单． 按照同样的推导， \autoref{Rmat_eq7} 和\autoref{Rmat_eq8} 变为
+\begin{equation}
+\sum_j \qty[(k_i^2 - k^2)\delta_{ij} - \chi_i(a)\chi'_j(a) - U(a)\chi_i(a)\chi_j(a)] c_j = 0
+\end{equation}
+\begin{equation}
+\frac{\psi_k'(a)}{\psi_k(a)} = \frac{1}{aR(k)} - U(a)
+\end{equation}

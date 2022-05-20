@@ -3,7 +3,7 @@
 \pentry{Matlab 符号计算和变精度计算\upref{MatSym}}
 
 \begin{itemize}
-\item 双精度的小数部分有 53 bit， 含正负号 1 bit． 大概范围是 $[-2,2]$
+\item 双精度的小数部分有 52 bit， 正负号 1 bit． 大概范围是 $[-2,2]$
 \item 2 为底的指数部分有 11 bit． 范围是 $-1022,\dots,1023$， 因为 $-1024, -1023$ 用来表示 \verb|inf, nan| 等．
 \end{itemize}
 
@@ -56,7 +56,7 @@ if x == 0
 end
 N = x;
 Npow = 0;
-for e = [16, 8, 4, 2, 1]
+for e = [32, 16, 8, 4, 2, 1]
     fac = 2^e;
     while true
         if mod(N, 1) == 0
@@ -90,10 +90,11 @@ end
 % 双精度转换为变精度浮点数
 % vpa(x) 会对 x 进行猜测和近似，该函数不会
 function ret = num2vpa(x, digi)
+[N, Npow] = num2bin2(x);
 if nargin == 1
-    ret = vpa(num2sym(x));
+    ret = vpa(N)*2^vpa(Npow);
 elseif nargin == 2
-    ret = vpa(num2sym(x), digi);
+    ret = vpa(N, digi)*2^vpa(Npow, digi);
 end
 end
 \end{lstlisting}

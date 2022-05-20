@@ -1,0 +1,44 @@
+% 刚体的几何运算（Matlab）
+
+\begin{issues}
+\issueDraft
+\end{issues}
+
+\begin{itemize}
+\item \verb|intersect| 决定两个多边形重合部分的多边形
+\item \verb|alphaShape| 确定 2D 或 3D 刚体的形状
+\item \verb|inShape| 判断一点是否在某个 \verb|alphaShape| 的内部
+\end{itemize}
+
+\begin{figure}[ht]
+\centering
+\includegraphics[width=10cm]{./figures/RigBMa_1.png}
+\caption{\verb|intersect| 测试结果}} \label{RigBMa_fig1}
+\end{figure}
+
+\begin{lstlisting}[language=matlab]
+p1 = polyshape([0.425 0.284 0.335 0.482 0.388 0.425], ...
+    [0.715 0.610 0.371 0.453 0.584 0.715]);
+p2 = polyshape([0.439 0.411 0.389 0.408 0.466 0.439], ...
+    [0.621 0.639 0.610 0.524 0.541 0.621]);
+figure; subplot(1,2,1); plot(p1); hold on; plot(p2);
+p3 = intersect(p1, p2);
+subplot(1,2,1); plot(p3);
+\end{lstlisting}
+\verb|p1| 的类型是 \verb|polyshape|， \verb|p1.Vertices| 是 \verb|N*2| 尺寸的顶点坐标． 一个 \verb|polyshape| 可以表示多个多边形， 个数为 \verb|p3.NumRegions|． \verb|p3.Vertices| 中用一行 \verb|[nan, nan]| 隔开不同的多边形． 如果 \verb|p3| 是空的， 那么 \verb|p3.Vertices| 是空矩阵．
+
+
+\begin{figure}[ht]
+\centering
+\includegraphics[width=10cm]{./figures/RigBMa_2.png}
+\caption{\verb|alphaShape| 测试结果}} \label{RigBMa_fig2}
+\end{figure}
+
+\begin{lstlisting}[language=matlab]
+[X,Y,Z] = sphere(20);
+shp = alphaShape(X(:),Y(:),Z(:));
+figure; subplot(1,2,1); plot(shp);
+shp.Alpha = 2.5;
+subplot(1,2,2); plot(shp);
+inShape(shp, [1.01,0,0]); % 判断是否在内部
+\end{lstlisting}

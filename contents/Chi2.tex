@@ -1,0 +1,56 @@
+% 卡方分布
+
+\begin{issues}
+\issueDraft
+\end{issues}
+
+\subsection{卡方分布}
+\begin{figure}[ht]
+\centering
+\includegraphics[width=7cm]{./figures/Chi2_1.pdf}
+\caption{卡方概率密度函数（\autoref{Chi2_eq1}）， 来自 Wikipedia} \label{Chi2_fig1}
+\end{figure}
+
+\footnote{参考 Wikipedia \href{https://en.wikipedia.org/wiki/Chi-squared_distribution}{相关页面 1} 和\href{https://en.wikipedia.org/wiki/Pearson's_chi-squared_test}{相关页面 2}．}卡方分布为（可以认为 $x<0$ 时函数值为零）
+\begin{equation}\label{Chi2_eq1}
+f_k(x) = \frac{1}{2^{k/2}\Gamma(k/2)}x^{k/2-1}\E^{-x/2} \qquad (x > 0)
+\end{equation}
+期望值 $k$， 方差 $2k$．
+
+累计分布函数为（Matlab 的 \verb|gammainc(x/2,k/2)|）
+\begin{equation}
+F_k(x) = \int_0^{x} f_k(t) \dd{t} = \frac{\gamma(k/2, x/2)}{\Gamma(k/2)}
+\end{equation}
+其中 $\gamma$ 为下不完全 $\Gamma$ 函数\upref{IncGam}．
+
+\subsection{检验是否符合指定一维分布}
+若要检验 $N$ 次试验中， 某分布是否符合指定分布． 把随机变量划分成 $k$ 个区间， 落入每个区间的数量是 $f_i$， $\sum f_i = N$． 指定分布在每个区间的概率为 $p_i$， 那么 $f_i/N$ 应该接近于 $p_i$， 可以用以下函数判断有多接近
+\begin{equation}
+\sum_{i=1}^k C_i \qty(\frac{f_i}{N} - p_i)^2
+\end{equation}
+Pearson's cumulative test statistic 令 $C_i = N/p_i$， 于是
+\begin{equation}
+\chi^2 = \sum_{i=1}^k \frac{N}{p_i} \qty(\frac{f_i}{N} - p_i)^2 = \sum_{i=1}^k \frac{f_i^2}{Np_i} - N
+\end{equation}
+当 $N$ 足够大， 上式的值近似服从 $\chi^2(k-1)$ 分布．
+
+对于\textbf{显著水平（significance level）} $\alpha$， 当 $\chi_{\alpha}^2(k-1)$ 时就接受假设． 其中 $\chi_{\alpha}^2(k-1)$ 满足
+\begin{equation}
+1 - F_{k-1}(\chi_{\alpha+}^2(k-1)) = \int_{\chi_{\alpha}^2(k-1)}^\infty f_{k-1}(x) \dd{x} = \alpha
+\end{equation}
+假设被拒绝的显著水平越小， 说明假设越不可能成立．
+
+$\alpha$ 被称为 $p$ 值．
+
+\begin{figure}[ht]
+\centering
+\includegraphics[width=10cm]{./figures/Chi2_2.png}
+\caption{临时例题（待删除）}} \label{Chi2_fig2}
+\end{figure}
+
+\subsection{检验两个变量的独立性}
+\begin{equation}
+\chi^2 = \sum_{i=1}^{k} \sum_{j=1}^{l} \frac{N}{p_ip_j} \qty(\frac{f_{ij}}{N} - p_ip_j)^2 = \sum_{i=1}^{k} \sum_{j=1}^{l} \frac{f_{ij}^2}{Np_ip_j} - N
+\end{equation}
+当 $N$ 足够大， 上式的值近似服从 $\chi^2[(k-1)(l-1)]$ 分布．
+\addTODO{补充详细}

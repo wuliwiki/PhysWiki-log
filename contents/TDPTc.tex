@@ -11,11 +11,11 @@
 \end{equation}
 其中 $\ket{n}$， $\ket{\bvec k}$ 一起构成一组正交归一基
 \begin{equation}
-\braket{m}{n} = \delta_{m,n} \qquad
-\braket{\bvec k'}{\bvec k} = \delta(\bvec k' - \bvec k) \qquad
+\braket{m}{n} = \delta_{m,n}~, \qquad
+\braket{\bvec k'}{\bvec k} = \delta(\bvec k' - \bvec k)~, \qquad
 \braket{\bvec k}{n} = 0
 \end{equation}
-为了书写方便我们把\autoref{TDPTc_eq2} 的求和于积分一起记为
+为了书写方便我们把\autoref{TDPTc_eq2} 的求和与积分一起记为
 \begin{equation}
 \ket{\Psi(t)} = \sumint_\alpha c_\alpha(t) \ket{\alpha(t)} = \sumint_\alpha c_\alpha(t) \ket{\alpha}\E^{-\I\omega_\alpha t} 
 \end{equation}
@@ -32,6 +32,14 @@ $\alpha$ 既包括离散指标 $n$ 又包括连续指标 $\bvec k$． 求和积�
 \end{equation}
 注意这不是一个常规意义的矩阵， 因为 $\alpha$ 既有连续也有离散部分．
 
+$\mat H'$  “矩阵” 可以想象成是这个样子的
+\begin{figure}[ht]
+\centering
+\includegraphics[width=5cm]{./figures/TDPTc_1.pdf}
+\caption{$\mat H'$ 矩阵的结构} 
+\end{figure}
+图中方格子代表 $c_{mn} = \bra{m} H' \ket{n}$， 横条代表 $H_{m,\bvec k'} = \mel{m}{H'}{\bvec k'}$，  纵条代表 $H_{\bvec k, n} = \mel{\bvec k}{H'}{n}$． 
+
 \subsection{含时微扰}
 薛定谔方程各阶分离后变为（类比\autoref{TDPT_eq6}~\upref{TDPT}）
 \begin{equation}
@@ -41,11 +49,19 @@ $\alpha$ 既包括离散指标 $n$ 又包括连续指标 $\bvec k$． 求和积�
 \begin{equation}
 c_{\alpha'}^{(n)}(t) = -\I \int^t \sumint_\alpha \mel{\alpha'}{H'(t)}{\alpha} \E^{\I \omega_{\alpha'\alpha} t} c_{\alpha}^{(n-1)}(t) \dd{t}
 \end{equation}
+具体写出来， 就是
+\begin{equation}
+c_i^{(n + 1)}(t) = \frac{1}{\I\hbar} \int \dd{t'} \qty(\sum_{j \ne i} H'_{i,j} c_j^{(n)} + \int H_{i,\bvec k'} \phi ^{(n)}(\bvec k') \dd[3]{k'} )
+\end{equation}
+\begin{equation}
+c^{(n+1)}_{\bvec k}(t) = \frac{1}{\I\hbar} \int \dd{t'} \qty(\sum_j H'_{\bvec k,j} c_j^{(n)} + \int H_{\bvec k,\bvec k'} \phi ^{(n)}(\bvec k') \dd[3]{k'})
+\end{equation}
 
 \subsection{简单的一阶微扰}
-令 $H'(t) = W f(t)$， $\mathcal F[f(t)] = \tilde f(\omega)$， 简单的一阶微扰为
+假设初态为 $\ket{\alpha}$， 即 $c_\alpha = 1$， 其他系数都为零． 令 $H'(t) = W f(t)$， $f(t)$ 的傅里叶变换（\autoref{FTExp_eq6}~\upref{FTExp}）记为 $\tilde f(\omega)$， 那么简单的一阶微扰为
 \begin{equation}\label{TDPTc_eq1}
 c_{\alpha'}^{(1)}(+\infty) = -\I\sqrt{2\pi} \mel{\alpha'}{W}{\alpha} \tilde f(-\omega_{\alpha'\alpha})
 \end{equation}
+具体到\autoref{TDPTc_eq2}， 当 $\alpha'$ 取离散值 $n'$ 时， $|c_{n'}^{(1)}(+\infty)|^2$ 就是跃迁到该离散态的概率， 取连续值 $\bvec k$ 时， $|c_{\bvec k'}^{(1)}(+\infty)|^2$ 就是三维 $\bvec k'$ 空间的概率密度\upref{RandF}， 概率微元是 $|c_{\bvec k'}^{(1)}(+\infty)|^2\dd[3]{k}$．
 
 \addTODO{举例： 引用氢原子的单电离，不要直接写在这里}

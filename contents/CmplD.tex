@@ -1,0 +1,169 @@
+% 完备域
+% complete domain\mid 可分多项式\mid reducible polynomial\mid 微商\mid 形式微商\mid 导数\mid 多项式\mid 重根\mid 自同构\mid 形式求导\mid 形式微分
+
+\pentry{分裂域\upref{SpltFd}}
+
+由\autoref{SpltFd_the1}~\upref{SpltFd}可见，不可约多项式在其分裂域中有无重根，决定了该分裂域的自同构数量．一个域的全体自同构配合映射的复合，能构成一个群，域的许多性质都蕴含在这个群的结构中．群的元素数量自然是其重要性质之一．
+
+综上所述，研究多项式的重根是非常重要的课题．
+
+\subsection{可分多项式}
+
+为了研究重根，我们借用微积分的知识，引入\textbf{形式微商}的概念
+
+\begin{definition}{形式微商}\label{CmplD_def1}
+
+设$\mathbb{F}$是一个域，$f\in\mathbb{F}[x]$．若$f$表达为
+\begin{equation}
+f(x) = \sum_{i=0}^n a_ix^i
+\end{equation}
+其中各$a_i\in\mathbb{F}$，那么定义\textbf{形式微商}算子$\opn{D}:\mathbb{F}[x]\to\mathbb{F}[x]$为：
+\begin{equation}
+\opn{D}f = \sum_{i=0}^{n-1} a_{i+1}x^i
+\end{equation}
+
+形式微商也可称为“形式求导”、“形式微分”等．
+
+\end{definition}
+
+\autoref{CmplD_def1} 形式微商就是直接套用微积分中的求导操作，只不过这里没有求导的概念，而是就进行多项式变换，其形式就是求导或者求导的推广，因此才叫\textbf{形式}微商．
+
+\begin{example}{}
+考虑域$\mathbb{Z}_3$上的多项式$f(x)=x^5+2x^2-x-2$，则
+\begin{equation}
+\opn{D}f(x) = 2x^4+x-1
+\end{equation}
+
+显然，这和真正的求导不同．一方面我们没有在域$\mathbb{Z}_3$上定义极限的概念，另一方面实数域上$f$的导函数应该是$5x^4+4x-1$．
+\end{example}
+
+\begin{example}{一个很抽象的例子}
+
+考虑$\mathbb{R}$上的集合$S=\{\text{非零函数}\}\cup\{f\mid f(x)\equiv 0\}$，则$S$配上函数之间逐点相加和逐点相乘的运算，构成一个域，记为$\mathbb{S}$．
+
+取$f, g\in\mathbb{S}$，构成多项式$F(y)=(f+g)y^2+(fg)y$．则
+\begin{equation}
+\opn{D}F(y) = (2f+2g)y+fg
+\end{equation}
+
+\end{example}
+
+容易验证，形式微商有以下性质：
+
+\begin{theorem}{形式微商的性质}\label{CmplD_the1}
+
+给定域$\mathbb{F}$，$\opn{D}$是$\mathbb{F}[x]$上的形式微商算子．则：
+
+1. 任取$a\in\mathbb{F}$，则作为多项式，$\opn{D}a=0$．
+
+2. 当$\opn{ch}\mathbb{F}=0$\footnote{概念见\autoref{field_def2}~\upref{field}. }时，对于$f\in\mathbb{F}[x]$有：$\opn{D}f=0 \iff \opn{deg}f=0$．
+
+3. 对于$f, g\in\mathbb{F}[x]$，$a, b\in\mathbb{F}$，有$\opn{D}(af+bg)=a\opn{D}f+b\opn{D}g$．
+
+4. 对于$f, g\in\mathbb{F}[x]$，有$\opn{D}(fg) = (\opn{D}f)g+f\opn{D}g$．
+
+\end{theorem}
+
+用\autoref{CmplD_the1} 中的性质可知，如果$a$是$f\in\mathbb{F}[x]$在$\mathbb{F}$上的重根，那么存在$g\in\mathbb{F}[x]$使得$f(x)=(x-a)^2g(x)$．这样一来，$\opn{D}f(x)=(x-a)\qty[2g(x)+(x-1)\opn{D}g(x)]$．也就是说，$a$还是$\opn{D}f$的根．
+
+\autoref{CmplD_the1} 中这些性质都是由导数的性质自然启发而得的．但要注意的是，函数的导数和多项式的形式微商在概念上有所重叠，却不是互相包含的．函数的导数可以用来处理非多项式的函数，而多项式的形式微商又可以处理非实数域的多项式，所以请不要随意将二者混为一谈．\autoref{CmplD_the1} 中的性质能成立，也是需要额外验证的，而不能说因为导数有这些性质形式微商就一定有．
+
+下面这个定理说的就是导数所不具备的性质：
+
+\begin{theorem}{}\label{CmplD_the2}
+设$\mathbb{K}$是$f\in\mathbb{F}[x]$的分裂域，$a\in\mathbb{K}$是$f$的一个$k$重根．
+
+1. 如果$\opn{ch}\mathbb{F}\nmid k$，那么$a$是$\opn{D}f$的$k-1$重根；
+
+2. 如果$\opn{ch}\mathbb{F}\mid k$，那么$a$是$\opn{D}f$的\textbf{至少}$k$重根．
+\end{theorem}
+
+\textbf{证明}：
+
+由题设可知，存在$g(x)\in\mathbb{K}[x]$使得$f(x) = (x-a)^k g(x)$，其中$g(a)\neq 0$．
+
+1. 
+
+\begin{equation}
+\opn{D}f(x)=(x-a)^{k-1}\qty[kg(x)+(x-a)\opn{D}g(x)]
+\end{equation}
+
+显然，$[kg(x)+(x-a)\opn{D}g(x)]\mid_{x=a}\neq 0$．因此，$a$是$\opn{D}f$的$k-1$重根．
+
+
+2. 
+
+当$\opn{ch}\mathbb{F}\mid k$，则$k=0$．因此
+
+\begin{equation}
+\begin{aligned}
+\opn{D}f(x)&=(x-a)^{k-1}\qty[kg(x)+(x-a)\opn{D}g(x)]\\
+&=(x-a)^k\opn{D}g(x)
+\end{aligned}
+\end{equation}
+
+故$a$至少是其$k$重根．如果$\opn{D}g(a)=0$，重数还会更高．
+
+\textbf{证毕}．
+
+
+
+\begin{corollary}{}
+设$\mathbb{K}$是$f\in\mathbb{F}[x]$的分裂域，则$f$在$\mathbb{K}$中无重根的充分必要条件是$(f, \opn{D}f)=1$\footnote{即最大公因子为$1$．}．
+\end{corollary}
+
+\textbf{证明}：
+
+必要性：
+
+由于$f$在$\mathbb{K}$中无重根，而域的特征不可能是$1$，因此适用\autoref{CmplD_the2} 中第一个情况．
+
+因为$\mathbb{K}$是$f\in\mathbb{F}[x]$的分裂域，且$f$无重根，故在$\mathbb{K}$中有
+\begin{equation}
+f(x) = a_0(x-a_1)(x-a_2)\cdots(x-a_n)
+\end{equation}
+其中各$a_i\in\mathbb{K}$．
+
+则
+\begin{equation}
+\begin{aligned}
+\opn{D}f(x) &= a_0[(x-a_2)(x-a_3)\cdots(x-a_n)\\
+&+(x-a_1)(x-a_3)\cdots(x-a_n))\\
+&\vdots\\
+&+(x-a_1)(x-a_2)\cdots(x-a_{n-1}))
+]
+\end{aligned}
+\end{equation}
+
+$f$的因子必是若干个不同的$(x-a_i)$的积，但各$(x-a_i)$都不是$\opn{D}f$的因子．
+
+充分性：
+
+反设有重根，那至少是个二重根．于是$f$可以写成：
+
+\begin{equation}
+f(x) = a_0(x-a_1)(x-a_2)\cdots(x-a_n)
+\end{equation}
+其中各$a_i\in\mathbb{K}$，且$a_1=a_2$．
+
+那么$(x-a_1)=(x-a_2)$就是$f$和$\opn{D}f$的公因子．
+
+\textbf{证毕}．
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

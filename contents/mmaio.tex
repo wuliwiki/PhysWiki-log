@@ -8,8 +8,8 @@
 
 \subsection{常用环境变量}
 
-除了丰富的标准文件操作外，Wolfram 语言的统一符号（\verb`Symbol`）架构，
-让我们更容易将算法和高级编程应用于许多文件和系统管理任务．此介绍主要参考官方页面：
+Mathematica 中包含了常用的标准文件操作，
+同时也可以将算法和高级编程应用于文件和系统管理任务．此介绍主要参考官方页面：
 
 \begin{itemize}
 \item guide/FileOperations：较齐全的文件系统操作的函数列表
@@ -17,11 +17,15 @@
 \end{itemize}
 
 一个重要的原则是：不要直接使用\verb`裸字符串`硬编码\verb`文件名/文件路径`， 
-这样生成的路径依赖于操作系统细节，应该使用 Mathematica 提供的文件系统接口，对路径进行拼接或分割．
-同理，工程的根目录应该在运行时计算而不应该硬编码（见末尾举例）．
-或者，把脚本放在 MMA 的搜索路径里，如 \verb`$UserBaseDirectory/Applications` 目录下．
-如需获得操作系统细节，例如可使用：
+这样生成的路径依赖于操作平台的规范，相反：
+\begin{itemize}
+\item 使用 Mathematica 提供的文件系统接口，对路径进行拼接或分割．
+\item 同理，在脚本运行时再计算工程的根目录，而不应该用字面字符串硬编码（见末尾举例），
+因为未来可能会把脚本放到不同的目录下使用．
+\item 也可以把脚本放在 MMA 的搜索路径里，如 \verb`$UserBaseDirectory/Applications` 目录下．
+\end{itemize}
 
+如需获得操作系统细节，可使用：
 \begin{itemize}
 \item \verb`$OperatingSystem` : 给出正在运行的操作系统的名称．
 \item \verb`$PathnameSeparator` : 存储路径分隔符的字符串，可在构建路径时使用．
@@ -46,20 +50,22 @@ Windows 中的默认值是 \verb|\\|， 其他系统是 \verb|/|．
 全局变量 \verb`$Path` 被定义为字符串的列表， 其中每个字符串代表一个目录．
 每次你要求打开文件时， Wolfram 就依次将这些目录暂时设置为当前工作目录，然后从该目录中尝试寻找你要求的文件．
 也就是说，如果两个目录中含有同名的文件，排在前面的目录优先，不过你可以通过提供更详细的上层路径来避免歧义．
-在 \verb`$Path` 的典型设置中， 当前目录 \verb`．` 和你的主目录 \verb`~` 被列在第一位．
+在 \verb`$Path` 的典型设置中， 当前目录和你的主目录（分别用\verb`．`和\verb`~`表示）被列在最前．
 
 \subsubsection{预定义的环境变量}
 
 \begin{itemize}
 \item \verb`$InitialDirectory` ： Wolfram 系统启动时的初始目录．
-\item \verb`$HomeDirectory` ：  你的主目录， 如果被定义过的话
+\item \verb`$HomeDirectory` ：  你的主目录， 如果有定义的话
 \item \verb`$BaseDirectory` ：  Wolfram 系统要加载的全系统文件的基本目录．
 \item \verb`$UserBaseDirectory` ：  用于 Wolfram 系统加载的, 用户自定义文件的基本目录
 \item \verb`$InstallationDirectory` ：  你的 Wolfram 系统安装的最高级别目录
 \end{itemize}
 
-Wolfram 系统所使用的绝大多数文件都与操作系统无关． 然而， \verb`mx` 和 \verb`.exe` 文件与系统有关．
-对于这些文件， 按照惯例， 捆绑上不同计算机系统版本的名称， 形式如 \verb`name/$SystemID/name`．
+Wolfram 系统所使用的绝大多数文件都与操作系统无关． 
+然而， \verb`mx` 和 \verb`.exe` 文件与系统有关．
+对于这些文件， 按照惯例， 捆绑上不同计算机系统版本的名称， 
+形式如 \verb`name/$SystemID/name`．
 
 \subsection{笔记本界面中的接口}
 
@@ -113,7 +119,7 @@ Wolfram 系统所使用的绝大多数文件都与操作系统无关． 然而�
 \item \verb`DirectoryName[..., OperatingSystem->"os"]` 用来给出某种操作系统风格的路径， 
 选项有 \verb`"Windows"`， \verb`"MacOSX"`， 和 \verb`"Unix"`．
 \item \verb`ParentDirectory["dir",n]` ：给出路径的父目录， \verb`n` 代表上升 \verb`n` 次， 
-只能作用于目录， 并且要求目录真实存在．
+只能用于目录， 并且要求目录存在于硬盘上．
 \end{itemize}
 
 \subsubsection{查找文件}
@@ -157,10 +163,11 @@ Wolfram 系统所使用的绝大多数文件都与操作系统无关． 然而�
 \subsection{应用举例：计算包的本地根目录}
 
 假设你有一些 MMA 脚本组成的工程，它们的根目录为\verb`root`．
-也许你需要在脚本内部得到工程的根目录，以便于将脚本文件移动其他位置，甚至其他操作系统上，并且不影响代码的正常运行．
+在脚本中我们经常需要找出工程的根目录，以便于将脚本移动其他路径、甚至其他操作系统时，
+能够不影响代码的正常运行．
 
-一个简单的实现是：首先我们建立\verb`锚点`：
-在 \verb`root` 中新建 \verb`init.wl` 文件（或者别的名字，但后面要相应更改）．并写入以下代码:
+一个简单的实现是：首先我们建立具有特殊文件名的\verb`锚点`：
+例如在 \verb`root` 中新建 \verb`init.wl` 文件（或者别的名字，但后面要相应更改）．并写入以下代码:
 \begin{lstlisting}[language=mathematica]
 (*定义程序包的根目录*)
 $srcRoot=AbsoluteFileName[DirectoryName[
@@ -193,8 +200,8 @@ recurFind[start];
 (* 记录 master Kernel 的运行模式, 可在并行计算中使用 *)
 $inNBook=$Notebooks;echo[DateString[]," <<",$fileName];
 \end{lstlisting}
-运行之后，此脚本文件名保存在 \verb`$fileName` 中，工程跟目录保存在 \verb`$srcRoot` 中，
-由于根目录已添加到 \verb`$Path` 变量中，可以简单地使用文件名调用工程中的其他脚本：
+运行之后，此脚本文件路径保存在 \verb`$fileName` 中，工程根目录保存在 \verb`$srcRoot` 中．
+上面已经将根目录添加到 \verb`$Path` 变量中，因此可以只用文件名调用同目录下的其他脚本：
 \begin{lstlisting}[language=mathematica]
 Get["其他脚本名称.wl"]
 \end{lstlisting}

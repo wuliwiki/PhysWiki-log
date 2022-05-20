@@ -1,18 +1,18 @@
 % 域的扩张
-% 域|单扩张|超越扩域|最小多项式|超越元|代数元|扩张次数|代数闭包|algebraic closure
+% 域|单扩张|超越扩域|最小多项式|minimal polynomial|超越元|超越数|代数元|扩张次数|代数闭包|algebraic closure|极小多项式|中间域升链|null polynomial|零化多项式
 
-\pentry{域\upref{field}}
+\pentry{分式域\upref{FrcFld}，多项式环\upref{RPlynm}}
 %%未完成
 
 \subsection{域的单扩张}
-如果在一个域中添加不属于域集合的元素，我们可以得到一个更大的集合．要让这个新集合成为域，我们就得定义新元素和原来域中元素相加和相乘的结果；无论怎么定义，这个结果必须满足域的公理．如果在集合中任何元素都无法成为某个运算结果，那么我们就必须再引入新的元素来作为这个结果．以此类推，不停地添加新元素，直到最后不需要添加新元素了，那最后这个集合就是一个新的域，它包含了原来的域．这个域是原来的域的\textbf{扩张}，并且包含最初那个新元素的最小的域，因此被称为\textbf{单元素扩张}，简称\textbf{单扩张}．
+如果在一个域中添加不属于域集合的元素，我们可以得到一个更大的集合．要让这个新集合成为域，我们就得定义新元素和原来域中元素相加和相乘的结果；无论怎么定义，这个结果必须满足域的公理．如果在集合中任何元素都无法成为某个运算结果，那么我们就必须再引入新的元素来作为这个结果．以此类推，不停地添加新元素，直到最后不需要添加新元素了，那最后这个集合就是一个新的域，它包含了原来的域．这个域是原来的域的\textbf{扩张}，并且是包含最初那个新元素的最小的域，因此被称为\textbf{单元素扩张}，简称\textbf{单扩张}．
 
 域的单扩张具体是怎么进行的呢？我们将从例子开始说明，最后引入域的单扩张的定义．
 
 \begin{exercise}{有理数域的 $\sqrt{2}$ 扩张}\label{FldExp_exe1}
 给定有理数域 $\mathbb{Q}$，则 $\sqrt{2}$ 并不是 $\mathbb{Q}$ 的元素．将 $\sqrt{2}$ 添加进去，那么由于 $\sqrt{2}$ 是实数域 $\mathbb{R}$ 的元素，这提示我们可以把新的运算结果按照 $\mathbb{R}$ 中的运算来定义．这样，$\mathbb{Q}$ 中添加 $\sqrt{2}$ 的单扩域的集合就是 $\{a+b\sqrt{2}|a, b\in\mathbb{Q}\}$．
 
-请验证，任意 $a+b\sqrt{2}$ 都必须在扩域中，而这个集合也满足了加法和乘法的封闭性，所以构成了一个域；换句话说，这个集合是包含 $\sqrt{2}$ 和全体有理数的最小的域．
+请验证，任意 $a+b\sqrt{2}$ 都必须在扩域中；而这个集合也满足了加法和乘法的封闭性与逆元存在性，从而构成了一个域．于是，这个集合是包含 $\sqrt{2}$ 和全体有理数的最小的域．
 \end{exercise}
 
 \begin{exercise}{超越扩域}\label{FldExp_exe2}
@@ -27,7 +27,22 @@
 这是 $\mathbb{Q}$ 中添加 $\pi$ 后的单扩张．
 \end{exercise}
 
-观察这两个域扩张的特点，我们容易发现，由于加法和乘法的封闭性，添加某个元素后的单扩张，必须包含这个元素的所有多项式，系数取自域中；由于乘法逆元存在性，这些多项式的倒数也得包含进去．因此，域的单扩张可以简单理解为把新元素的多项式都添加进去的过程．
+
+
+借助\textbf{分式域}\upref{FrcFld}和\textbf{多项式环}\upref{RPlynm}的概念，我们可以简练地定义域的单扩张如下：
+
+
+\begin{definition}{域的单扩张}\label{FldExp_def1}
+给定域 $\mathbb{F}$ 和一个元素 $x_0$，其中 $x_0$ 在$\mathbb{F}$上的最小多项式是$f(x)$．定义 $\mathbb{F}$ 添加 $x_0$ 的\textbf{单扩张}是多项式环$\mathbb{F}[x_0]=\mathbb{F}[x]/<f(x_0)>$的分式域，记为$\mathbb{F}(x_0)$
+\end{definition}
+
+
+
+在\autoref{FldExp_def1} 中，如果 $x_0$ 在 $\mathbb{F}$ 中没有最小多项式，那么 $\mathbb{F}(x_0)$ 中的各元素彼此不同，此时我们称 $x_0$ 是 $\mathbb{F}$ 的\textbf{超越元（transcendental element）}；
+
+
+
+观察\autoref{FldExp_exe1} 和\autoref{FldExp_exe2} 中两个域扩张的特点，我们容易发现，由于加法和乘法的封闭性，添加某个元素后的单扩张，必须包含这个元素的所有多项式，系数取自域中；由于乘法逆元存在性，这些多项式的倒数也得包含进去．因此，域的单扩张可以简单理解为把新元素的多项式都添加进去的过程．
 
 但是两个场景是不太一样的．$\mathbb{Q}$ 中添加 $\pi$ 的过程中，包含了所有 $\pi$ 的有理系数多项式，比如$3.5\pi^4+2\pi^2+0.1\pi-1/3$，但是添加 $\sqrt{2}$ 的时候却只需要最多 $1$ 阶的多项式，像$3.5(\sqrt{2})^3+1$就可以改写为$7\sqrt{2}+1$．这是因为 $\sqrt{2}$ 的 $2$ 次方是一个有理数，落入了 $\mathbb{Q}$ 中，因此 $\sqrt{2}$ 的 $2$ 阶及以上的有理系数多项式都可以表示为最多 $1$ 阶的多项式．
 
@@ -35,16 +50,20 @@
 
 \begin{definition}{最小多项式}
 给定一个环 $R$ 和任意元素 $x_0$，其中 $x_0$\textbf{不一定}是 $R$ 中的元素．记
-$$R[x_0]=\{\sum_{i=0}^N r_ix_0^i|r_i\in R, N\in\mathbb{Z}^+\}$$称 $R[x_0]$ 是 $x_0$ 在 $R$ 中的\textbf{多项式环}．在 $R[x_0]$ 中，如果存在一个多项式 $f(x_0)=0$，并且任何更低阶的多项式的值都不是 $0$，那么称 $f(x_0)$ 是 $x_0$ 在 $R$ 上的\textbf{最小多项式（minimal polynomial）}，或\textbf{极小多项式}．使不存在值为 $0$ 的多项式（这也意味着所有多项式的值甚至都不在 $R$ 中），那么我们说，$x_0$ 在 $R$ 中\textbf{不具有最小多项式}．
+$$R[x_0]=\{\sum_{i=0}^N r_ix_0^i|r_i\in R, N\in\mathbb{Z}^+\}$$称 $R[x_0]$ 是 $x_0$ 在 $R$ 中的\textbf{多项式环}．在 $R[x_0]$ 中，如果存在一个多项式 $f(x_0)=0$，那么称 $f(x_0)$ 是 $x_0$ 在 $R$ 上的\textbf{零化多项式（null polynomial）}；阶数最低的零化多项式，称为$x_0$的\textbf{最小多项式（minimal polynomial）}，或\textbf{极小多项式}．
+
+如果不存在多项式$f$使得$f(x_0)=0$，那么称$x_0$ 在 $R$ 中\textbf{不具有最小多项式}．
 \end{definition}
 
 在\autoref{FldExp_exe1} 和\autoref{FldExp_exe2} 中，$\pi$ 和 $\sqrt{2}$ 的本质区别就是：在 $\mathbb{Q}$ 中，$\pi$ 没有最小多项式，但是 $\sqrt{2}$ 具有最小多项式 $x^2-2$．这决定了同一个域 $\mathbb{Q}$ 分别添加 $\pi$ 和 $\sqrt{2}$ 后的不同单扩张．
 
 \begin{definition}{代数元素与超越元素}\label{FldExp_def2}
 给定环$R$及其子环$S$，如果元素$a\in R$在$S$上有最小多项式，则称之为$S$的\textbf{代数元素（algebraic element）}，否则称之为\textbf{超越元素（transcendental element）}.
+
+特别地，整数环$\mathbb{Z}$上的代数元素，称为\textbf{代数数（algebraic number）}，而不是其代数元素的实数则称为\textbf{超越数（transcendental number）}．
 \end{definition}
 
-\autoref{FldExp_def2} 中要给定$R$来讨论其子环$S$，是为了保证$a$已经定义好了与$S$中各元素的运算．如果有别的办法定义，那自然不需要那么麻烦．比如我们在\autoref{FldExp_exe1} 中讨论的$\mathbb{Q}(\sqrt{2})$，虽然$\sqrt{2}$不在$\mathbb{Q}$中，但我们已经定义好了它与各有理数的运算关系．这个运算关系是怎么确定的呢？那就是其在$\mathbb{Q}$上的\textbf{最小多项式}，$x^2-2$．
+\autoref{FldExp_def2} 中要给定$R$来讨论其子环$S$，是为了保证$a$已经定义好了与$S$中各元素的运算．如果有别的办法定义，那自然不需要那么麻烦．比如我们在\autoref{FldExp_exe1} 中讨论的$\mathbb{Q}(\sqrt{2})$，虽然$\sqrt{2}$不在$\mathbb{Q}$中，但我们已经定义好了它与各有理数的运算关系．这个运算关系是怎么确定的呢？那就是用其在$\mathbb{Q}$上的\textbf{最小多项式}，$x^2-2$．
 
 
 
@@ -56,17 +75,20 @@ $$R[x_0]=\{\sum_{i=0}^N r_ix_0^i|r_i\in R, N\in\mathbb{Z}^+\}$$称 $R[x_0]$ 是 
 因此，关于$\sqrt{2}$的一切性质，其最小多项式$x^2-2$已经阐述清楚了．我们可以转而用最小多项式来描述扩域的过程，这和写出$\sqrt{2}$是等价的，只是用起来更方便，更广泛．比如说，要给$\mathbb{Q}$添加一个元素$a\not\in \mathbb{Q}$来进行扩域，而$a$在$\mathbb{Q}$上的最小多项式是$x^6+x^5-2x^3+7.5x^2-x+9$，那研究这个多项式自然比研究$a$到底是哪个实数要方便得多．
 
 
-\begin{definition}{域的单扩张}\label{FldExp_def1}
-给定域 $\mathbb{F}$ 和一个元素 $x_0$，其中 $x_0$ 不一定在 $\mathbb{F}$ 中．定义 $\mathbb{F}$ 添加 $x_0$ 的\textbf{单扩张}是集合
-\begin{equation}
-\{\frac{\sum_{i=0}^N a_ix_0^i}{\sum_{j=0}^M b_jx_0^j}|a_i, b_j\in\mathbb{F},\quad\sum_{j=0}^M b_jx_0^j\not=0,\quad N, M\in\mathbb{Z}^+\}
-\end{equation}
-记为 $\mathbb{F}(x_0)$；容易验证，这是一个域．
-\end{definition}
+% \begin{definition}{域的单扩张}
+% 给定域 $\mathbb{F}$ 和一个元素 $x_0$，其中 $x_0$ 不一定在 $\mathbb{F}$ 中．定义 $\mathbb{F}$ 添加 $x_0$ 的\textbf{单扩张}是集合
+% \begin{equation}
+% \{\frac{\sum_{i=0}^N a_ix_0^i}{\sum_{j=0}^M b_jx_0^j}|a_i, b_j\in\mathbb{F},\quad\sum_{j=0}^M b_jx_0^j\not=0,\quad N, M\in\mathbb{Z}^+\}
+% \end{equation}
+% 记为 $\mathbb{F}(x_0)$；容易验证，这是一个域．
+% \end{definition}
 
-在\autoref{FldExp_def1} 中，如果 $x_0$ 在 $\mathbb{F}$ 中没有最小多项式，那么 $\mathbb{F}(x_0)$ 中的各元素彼此不同，此时我们称 $x_0$ 是 $\mathbb{F}$ 的\textbf{超越元（transcendental element）}； 
 
-如果 $x_0$ 在 $\mathbb{F}$ 中有最小多项式 $f(x)$，那么称 $x_0$ 是 $\mathbb{F}$ 的\textbf{代数元（algebraic element）}，此时在 $\mathbb{F}(x_0)$ 中，若记 $g, h$ 为任意多项式，就有 $g(x_0)$ 和 $g(x_0)+f(x_0)h(x_0)$ 的值相等．这提示我们，在这种情形下，似乎可以把 $\mathbb{F}(x_0)$ 看成是某个\textbf{超越元} $x$ 的单扩张 $\mathbb{F}(x)$ 集合中，把 $g(x)$ 和 $g(x)+f(x)h(x)$ 认为是等价的，所得到的\textbf{商集}．实际上，严格来说不是商集，而是商集中再把类似$$\frac{\sum_{i=0}^N a_ix_0^i}{f(x)h(x)}$$的元素剔除以后剩下的集合．当然了，$0$ 不要剔除．
+
+
+ 
+
+% 如果 $x_0$ 在 $\mathbb{F}$ 中有最小多项式 $f(x)$，那么称 $x_0$ 是 $\mathbb{F}$ 的\textbf{代数元（algebraic element）}，此时在 $\mathbb{F}(x_0)$ 中，若记 $g, h$ 为任意多项式，就有 $g(x_0)$ 和 $g(x_0)+f(x_0)h(x_0)$ 的值相等．这提示我们，在这种情形下，似乎可以把 $\mathbb{F}(x_0)$ 看成是某个\textbf{超越元} $x$ 的单扩张 $\mathbb{F}(x)$ 集合中，把 $g(x)$ 和 $g(x)+f(x)h(x)$ 认为是等价的，所得到的\textbf{商集}．实际上，严格来说不是商集，而是商集中再把类似$$\frac{\sum_{i=0}^N a_ix_0^i}{f(x)h(x)}$$的元素剔除以后剩下的集合．当然了，$0$ 不要剔除．
 
 \begin{theorem}{}
 给定域 $\mathbb{F}$ ，取其超越元素 $x_1$和$x_2$，则$\mathbb{F}(x_1)$与$\mathbb{F}(x_2)$同构．
@@ -74,32 +96,44 @@ $$R[x_0]=\{\sum_{i=0}^N r_ix_0^i|r_i\in R, N\in\mathbb{Z}^+\}$$称 $R[x_0]$ 是 
 
 证明思路是显然的，从$\mathbb{F}(x_1)$到$\mathbb{F}(x_2)$的同构映射只需要将所有出现$x_1$的地方都替换成$x_2$即可，比如$\frac{1}{x_1+x_1^2}$映射到$\frac{1}{x_2+x_2^2}$．
 
+容易想到，$x_0$的最小多项式必然是给定域上的不可约多项式．因为一旦可约，那其因子的次数都小于它，但总得有一个因子是$x_0$的零化多项式，这就违背了“最小”的定义．
+
 
 
 \subsection{域的扩张次数}
 
-以上，我们讨论了如何添加一个元素，并根据元素的最小多项式来得到域的单扩张．对一个域进行单扩张以后，再进行单扩张，如此反复，我们可以获得域的多次扩张．
+以上，我们讨论了如何添加一个元素，并根据元素的最小多项式来得到域的单扩张．对一个域进行单扩张以后，再进行单扩张，如此反复，我们可以获得域的多次扩张．更一般地，我们有关于域扩张的如下定义：
+
+\begin{definition}{域的扩张}
+设$\mathbb{K}$是一个域，$\mathbb{F}\subseteq \mathbb{K}$且在$\mathbb{K}$的运算下也构成域，那么称$\mathbb{F}$是$\mathbb{K}$的\textbf{子域}，而$\mathbb{K}$是$\mathbb{F}$的\textbf{扩域（extension field）}或者\textbf{扩张（field extension）}．
+
+将上述域的扩张记为$\mathbb{K}/\mathbb{F}$．
+\end{definition}
 
 考虑域$\mathbb{F}$及其扩域$\mathbb{K}$．$\mathbb{K}$中的元素\textbf{彼此之间}可以\textbf{相加}，也可以\textbf{乘以}$\mathbb{F}$\textbf{中的元素}，这两种运算分别对应线性空间中的向量加法与数乘．也就是说，$\mathbb{K}$可以视为$\mathbb{F}$上的一个\textbf{线性空间}．
 
 \begin{definition}{域的扩张次数}
-给定域$\mathbb{F}$及其扩域$\mathbb{K}$．$\mathbb{K}$作为$\mathbb{F}$上的线性空间的维数，称为$\mathbb{K}$对$\mathbb{F}$的\textbf{扩张次数}，记为$[\mathbb{K}:\mathbb{F}]$．
+给定域的扩张$\mathbb{K}/\mathbb{F}$．$\mathbb{K}$作为$\mathbb{F}$上的线性空间的维数，称为$\mathbb{K}$对$\mathbb{F}$的\textbf{扩张次数}，记为$[\mathbb{K}:\mathbb{F}]$．
 
 $[\mathbb{K}:\mathbb{F}]<\infty$时，称之为\textbf{有限扩张}，否则为\textbf{无限扩张}．
-
-有时我们也用$[\mathbb{K}:\mathbb{F}]$表示“域扩张”本身．
 \end{definition}
 
 $[\mathbb{Q}(\sqrt{2}):\mathbb{Q}]=2$，因此\autoref{FldExp_exe1} 中的扩域是一个二次扩张．你可以把$1$和$\sqrt{2}$分别想象为两个基向量，而$\mathbb{Q}(\sqrt{2})$就是这两个基向量在域$\mathbb{Q}$上张成的线性空间．
 
 相对应地，$[\mathbb{Q}(2^{1/3}):\mathbb{Q}]$是一个三次扩张，其基向量是$1$、$2^{1/3}$和$2^{2/3}$．类似地，我们可以引申出以下定理：
 
+
+
+
 \begin{theorem}{}\label{FldExp_the1}
-设域$\mathbb{F}$有一个单扩张$\mathbb{F}(a)$，其中$a$在$\mathbb{F}$中的最小多项式为$f$，则$[\mathbb{F}(a):\mathbb{F}]=\opn{deg}f$．
+设域$\mathbb{F}$有一个\textbf{单扩张}$\mathbb{F}(a)$，其中$a$在$\mathbb{F}$中的最小多项式为$f$，则$[\mathbb{F}(a):\mathbb{F}]=\opn{deg}f$．
 \end{theorem}
 
-\begin{definition}{代数扩张与超越扩张}\label{FldExp_def3}
-给定域$\mathbb{F}$及其扩域$\mathbb{K}$．如果$\mathbb{K}$中元素都是$\mathbb{F}$的代数元素，则称$[\mathbb{K}:\mathbb{F}]$是一个\textbf{代数扩张（algebraic extension）}，否则是一个\textbf{超越扩张（transcendental expansion）}．
+
+
+
+\begin{definition}{代数扩张与超越扩张}\label{FldExp_def4}\label{FldExp_def3}
+给定域$\mathbb{F}$及其扩域$\mathbb{K}$．如果$\mathbb{K}$中元素都是$\mathbb{F}$的代数元素，则称$[\mathbb{K}:\mathbb{F}]$是一个\textbf{代数扩张（algebraic extension）}，否则是一个\textbf{超越扩张（transcendental extension）}．
 \end{definition}
 
 下面这个定理给出的是\textbf{单}代数扩张的等价定义：
@@ -126,17 +160,19 @@ $[\mathbb{Q}(\sqrt{2}):\mathbb{Q}]=2$，因此\autoref{FldExp_exe1} 中的扩域
 
 \textbf{证毕}．
 
-\begin{corollary}{}
-如果$[\mathbb{K}:\mathbb{F}]$是有限扩张，则必是代数扩张．
+\begin{corollary}{}\label{FldExp_cor1}
+如果$\mathbb{K}/\mathbb{F}$是有限扩张，则必是代数扩张．
 \end{corollary}
 
 证明思路类比\autoref{FldExp_the2} 中的 2 $\to$ 3．
 
+要注意的是，\autoref{FldExp_cor1} 只说了是有限扩张，而不是单有限扩张，因此无法像\autoref{FldExp_the2} 那样反过来说“代数扩张必是有限扩张”．比如说，$\mathbb{Q}$添加所有整数的平方根以后得到的显然是代数扩张，但同时也是无限扩张．
 
 
 
 
-\begin{theorem}{}
+
+\begin{theorem}{}\label{FldExp_the3}
 考虑扩域$[\mathbb{K}:\mathbb{F}]$和$[\mathbb{L}:\mathbb{K}]$，则有
 
 \begin{equation}
@@ -147,7 +183,7 @@ $[\mathbb{Q}(\sqrt{2}):\mathbb{Q}]=2$，因此\autoref{FldExp_exe1} 中的扩域
 
 \textbf{证明}：
 
-只需要考虑$[\mathbb{K}:\mathbb{F}]$和$[\mathbb{L}:\mathbb{K}]$都是有限扩域的情况，证明该情况之后可自然推出无限的情况．
+只需要考虑$[\mathbb{K}:\mathbb{F}]$和$[\mathbb{L}:\mathbb{K}]$都有限的情况，证明该情况之后可自然推出无限的情况．
 
 设$\{\alpha_i\}_{i=1}^{n}$是$\mathbb{K}$在$\mathbb{F}$上的基，$\{\beta_i\}_{i=1}^{m}$是$\mathbb{L}$在$\mathbb{K}$上的基．
 
@@ -177,6 +213,12 @@ l = \sum_{i=1}^m \sum_{j=1}^n f_{ij}a_jb_i
 \textbf{证毕}．
 
 
+\autoref{FldExp_the3} 中的$\mathbb{K}$通常称为扩张$\mathbb{L}/\mathbb{F}$的\textbf{中间域}，扩张$\mathbb{K}/\mathbb{F}$称为$\mathbb{L}/\mathbb{F}$的\textbf{子扩张}．
+
+
+
+
+
 
 \begin{corollary}{}
 如果$[\mathbb{K}:\mathbb{F}]$是一个素数，那么不存在\textbf{域}$\mathbb{M}$使得$\mathbb{F}\subsetneq\mathbb{M}\subsetneq\mathbb{K}$．
@@ -185,7 +227,7 @@ l = \sum_{i=1}^m \sum_{j=1}^n f_{ij}a_jb_i
 
 \begin{corollary}{中间域升链}
 
-如果$[\mathbb{K}:\mathbb{F}]$是有限扩张，那么存在下面一系列域：
+如果$\mathbb{K}/\mathbb{F}$是有限扩张，那么存在下面一系列域：
 \begin{equation}
 \mathbb{F}=\mathbb{F}_0\subseteq\mathbb{F}_1\subseteq\mathbb{F}_2\subseteq\cdots\subseteq\mathbb{F}_n=\mathbb{K}
 \end{equation}
@@ -195,29 +237,87 @@ l = \sum_{i=1}^m \sum_{j=1}^n f_{ij}a_jb_i
 \end{corollary}
 
 
+
+
+
+\subsection{同构的开拓}
+
+\begin{definition}{开拓}
+设$R_1$和$R_2$分别为环$K_1$和$K_2$的子环．若$\sigma:R_1\to R_2$和$\eta:K_1\to K_2$都是环同构，且$\eta|_{R_1}=\sigma$\footnote{即对于任意$r\in R_1$，有$\eta(r)=\sigma(r)$．}，那么称$\eta$是$\sigma$的\textbf{开拓}．
+\end{definition}
+
+特别地，如果有扩域$\mathbb{K}_1/\mathbb{F}$和$\mathbb{K}_2/\mathbb{F}$，那么$\mathbb{K}_1$到$\mathbb{K}_2$的保$\mathbb{F}$同构（如果存在的话）是$\opn{id}_\mathbb{F}$的开拓．
+
+同构的开拓有以下性质：
+
+\begin{theorem}{}\label{FldExp_the4}
+设$\sigma:\mathbb{F}_1\to\mathbb{F}_2$是域同构，$\mathbb{K}_1/\mathbb{F}$和$\mathbb{K}_2/\mathbb{F}$是域扩张．
+
+则：
+
+1. $\sigma$可开拓为$\mathbb{F}_1[x]\to\mathbb{F}_2[x]$的环同构，为方便仍记为$\sigma$．$p(x)\in\mathbb{F}_1[x]$不可约当且仅当$\sigma(p)$不可约．
+
+2. 设$a_1\in\mathbb{K}_1-\mathbb{F}_1$在$\mathbb{F}_1$上的最小多项式为$f(x)$，$a_2\in\mathbb{K}_2-\mathbb{F}_2$在$\mathbb{F}_1$上的最小多项式为$\sigma(f(x))$，则存在$\sigma$的开拓$\eta:\mathbb{F}_1(a_1)\to \mathbb{F}_2(a_2)$，使得$\eta(a_1)=a_2$
+\end{theorem}
+
+\textbf{证明}：
+
+1. 
+
+显然，对于任意多项式$f\in\mathbb{F}_1[x]$，若其表达式为$\sum_{i=0}^n c_ix^i$，那么$\sigma(f)$的表达式为$\sum_{i=0}^n \sigma(c_i)x^i$．
+
+由于$\sigma$是环同构，即具有高度对称性，因此“当且仅当”只需要证明充分性或必要性其一即可．
+
+设$p(x)$可约，即存在阶数都大于$1$的多项式$h(x),g(x)$，使得$p=hg$．那么$\sigma(p)=\sigma(h)\sigma(g)$，从而$\sigma(p)$也可约．必要性得证，定理得证．
+
+2. 
+
+定义$\eta$为：对于任意$\mathbb{F}_1$上的多项式$f$，有$\eta(f(a_1))=f(a_2)$．
+
+由\textbf{多项式环}\upref{RPlynm}的\autoref{RPlynm_the2}~\upref{RPlynm}，$\eta:\mathbb{F}_1(a_1)\to \mathbb{F}_2(a_2)$是环同构\footnote{本证明也可以这样来理解：由于同构，$\mathbb{F}_1[x]$和$\mathbb{F}_2[x]$本质上就是同一个环，$f$和$\sigma(f)$也就是同一个元素．于是命题化为：如果在一个域上$a_1$和$a_2$有相同的最小多项式，那么用它们分别进行单扩张得到的扩域是否同构？根据\autoref{RPlynm_the2}~\upref{RPlynm}，答案显然是肯定的．}．
+
+
+
+\textbf{证毕}．
+
+\autoref{FldExp_the4} 的第1条保证了$f$不可约则$\sigma(f)$也不可约，这是第2条中“$a_2$的最小多项式为$\sigma(f)$”有意义的前提，因为最小多项式必是不可约的．
+
+
+
+
+
+
+
+
 \subsection{代数闭包}
 
 最后，借着本节中代数元与超越元的讨论，我们引出代数闭包的概念：
 
 
 \begin{definition}{代数闭包}
-考虑扩域$[\mathbb{K}:\mathbb{F}]$．挑出$\mathbb{K}$中所有$\mathbb{F}$的\textbf{代数元}，构成一个新的集合$\mathbb{K}_{\mathbb{F}}$，称之为域$\mathbb{F}$在域$\mathbb{K}$上的\textbf{代数闭包（algebraic closure）}．
+考虑扩域$\mathbb{K}/\mathbb{F}$．$\mathbb{K}$中所有$\mathbb{F}$的\textbf{代数元}构成一个新的集合$\mathbb{K}_{\mathbb{F}}$，称之为域$\mathbb{F}$在域$\mathbb{K}$上的\textbf{代数闭包（algebraic closure）}．
 \end{definition}
 
 \begin{theorem}{}
 
-域$\mathbb{F}$在域$\mathbb{K}$上的代数闭包是一个域．
+域$\mathbb{F}$在域$\mathbb{K}$上的代数闭包$\mathbb{K}_{\mathbb{F}}$是一个域．
 
 \end{theorem}
 
 \textbf{证明}：
 
+$\mathbb{K}_{\mathbb{F}}$已经天然满足加法和乘法的结合性、单位元存在性以及乘法对加法的分配性．因此，我们只需要证明\textbf{加法与乘法的封闭性}和\textbf{加法与乘法的逆元存在性}．
 
+\textbf{逆元存在性}证明：任取$\alpha\in\mathbb{K}_{\mathbb{F}}-\{0\}$，设其最小多项式为$\sum_{i=0}^{n}a_ix^i$，那么$-\alpha$也有最小多项式$\sum_{i=0}^n(-1)^ia_ix^i$，$1/\alpha$也有最小多项式$\sum_{i=0}^na_ix^{n-i}$．于是按\autoref{FldExp_def2} ，$-\alpha$与$1/\alpha$都是$\mathbb{F}$的代数元素，逆元存在性得证．
+
+\textbf{封闭性}证明：记$\mathbb{F}(\alpha, \beta)=\mathbb{F}(\alpha)(\beta)=\mathbb{F}(\beta)(\alpha)$．如果$\alpha,\beta\in\mathbb{K}_{\mathbb{F}}$，那么$\mathbb{F}(\alpha)/\mathbb{F}$是一个代数扩张，$\mathbb{F}(\alpha, \beta)/\mathbb{F}(\alpha)$也是一个代数扩张，故由\autoref{FldExp_the2} 知它们都是有限扩张\footnote{思考：为什么不能用\autoref{FldExp_cor1} ？}，故由\autoref{FldExp_the3} 知$\mathbb{F}(\alpha, \beta)/\mathbb{F}$是有限扩张，再由\autoref{FldExp_the2} 或者\autoref{FldExp_cor1} 知它是代数扩张．
+
+因此，$\alpha+\beta\in\mathbb{F}(\alpha, \beta)$和$\alpha\beta\in\mathbb{F}(\alpha, \beta)$必是代数元素，封闭性得证．
 
 \textbf{证毕}．
 
 
-
+由于域的代数闭包也是一个域，故也可称之为\textbf{代数闭域}．注意，光有$\mathbb{F}$是无法讨论代数闭包的，必须有扩域$\mathbb{K}/\mathbb{F}$才行．
 
 
 

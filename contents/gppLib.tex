@@ -1,0 +1,82 @@
+% g++ 编译器创建静态和动态链接库
+
+参考\href{https://blog.feabhas.com/2014/04/static-and-dynamic-libraries-on-linux/}{这篇文章}和\href{https://gcc.gnu.org/onlinedocs/gcc/Link-Options.html}{这篇文章}．
+
+\begin{itemize}
+\item 用 \verb`ldd 可执行文件` 可以查看一个程序使用的动态链接库
+\item linux 编译器默认搜索路径 \verb`/usr/local/lib`, \verb`/usr/local/lib64`, \verb`/usr/lib` and \verb`/usr/lib64` (不包含子目录)
+\end{itemize}
+
+\subsection{静态链接库}
+
+\verb|.a| 文件是 static library, 在编译的时候一起编入可执行文件. 下面举一个例子
+
+\begin{lstlisting}[language=cpp]
+// lib1.cpp
+#include <iostream>
+using namespace std;
+int f1()
+{
+  cout << "In library 1" << endl;
+}
+\end{lstlisting}
+
+再编一个主文件
+
+\begin{lstlisting}[language=cpp]
+// main.cpp
+#include <iostream>
+using namespace std;
+void f1();
+int main()
+{
+  f1();
+  cout << "In main" << endl;
+}
+\end{lstlisting}
+
+如果将这两个文件用 g++ 正常编译 \verb`g++ main.cpp lib1.cpp` 执行结果为
+\begin{lstlisting}
+In library 1
+In main
+\end{lstlisting}
+但现在我们把 \verb|lib1.cpp| 先编译成 \verb|.o| 文件
+
+\begin{lstlisting}
+g++ -static -c -o lib1.o lib1.cpp
+\end{lstlisting}
+
+(其实 \verb`-o lib1.o` 可以省略) (\verb`-static` 用途不明), 再从 .o 文件生成 .a 文件 .a 文件的命名规则一般是前面加 (\verb`lib*.a`)
+
+\begin{lstlisting}
+ar rcs lib1.a lib1.o
+\end{lstlisting}
+
+(可以将多个 .o 文件封装到 .a 里面, 在后面添加 lib2.o, lib3.o 等即可)(其中 rcs 的 \verb`r` 选项是替换旧文件, \verb`c` 选项是 create archive, `s` 选项是 write out an index, 虽然还是不明白什么意思) 再来将 lib1.a 和主程序文件一块编译
+
+\begin{lstlisting}
+g++ main.cpp -o main.x -L./ -l 1
+\end{lstlisting}
+
+其中 \verb`-o` 的作用是给生成的可执行文件命名, \verb`-L` 的作用是声明 \verb`.a` 所在的目录, \verb`-l` 是指明所用的 .a 文件, (将 \verb`lib*.a` 写成 \verb`*` 即可).
+现在就可以运行 main.x 了
+\verb`./main.x`
+
+\begin{itemize}
+\item 所以简单来说， 静态链接库 \verb`.a` 就是压缩的 \verb`.o` 文件． 在 link 阶段使用．
+\item 另外**千万要注意** \verb`g++` 在 link 阶段 \verb`.o` 或 \verb`.a` 的顺序是非常重要的， 某个 \verb`o` 文件只能调用在它后面列出的 \verb`o` 文件， 否则会提示找不到 symbol． 要让 \verb`g++` 忽略这个顺序， 可以使用
+\verb`-Wl,--start-group 文件1 文件2 ... -Wl,--end-group`， 这样 linker 找不到 symbol 时就会在 group 内的文件中反复搜索（据说编译速度会降低很多）．
+* 总之， 有空还是多看看 \verb`g++` 手册吧．
+\end{itemize}
+
+\subsection{动态链接库 (*.so)}
+\begin{itemize}
+\item 这里的笔记没做完， 但动态链接库同样也是用 \verb`-l` 来 link， \verb`-L` 指定地址， 但还要加上一个 \verb`-rpath` 或者设置 \verb`LD_LIBRARY_PATH`．
+\item 如果同样的 \verb`-l` 既能匹配 \verb`lib***.a` 也能匹配 \verb`lib***.so`， 那么 gcc 会默认选 \verb`.so`． 如果想要静态链接， 要么用 \verb`-static` 选项（禁止链接到任何动态 lib）， 要么直接指定 \verb`.a` 的地址和文件名， 如 \verb`g++ -o main.x f1.o /some/path/lib***.a another/path/lib***.a`． 再次提醒其实 \verb`.a` 就是 \verb`.o` 的压缩文件（archive）， \verb`ar` 和 \verb`tar` 差不多．
+\end{itemize}
+
+编译方法:
+把 cpp 编译成 .o 文件时不需要声明动态链接库和所在目录, \verb`-c` 选项普通编译即可.
+把 .o 文件链接成可执行文件时, 在最后 (注意必须是在最后) 加上
+\verb`-Wl,-rpath,<library path>  -L<library path> -l <libname1> -l <libname2>`
+其中 \verb`-Wl, aaa, bbb` 命令是将 \verb`aaa bbb` 选项传给 linker, 剩下的 \verb`-L<library path> -l <libname1> -l <libname2>` 的用法和上述 .a 中的一样.

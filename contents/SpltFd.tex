@@ -1,0 +1,232 @@
+% 分裂域
+% splitting field|正规扩张|regular extension
+
+
+\pentry{域的扩张\upref{FldExp}}
+
+
+本节我们要介绍一个在代数中非常基础且重要的概念：分裂域．简单来说，分裂域就是在一个域中添加某个多项式的全体根所得到的扩域．从分裂域出发，我们可以讨论代数扩域的自同构问题．
+
+
+
+
+\subsection{分裂域的存在性}
+
+
+\begin{definition}{分裂域}
+给定域$\mathbb{F}$及其上一个多项式$f(x)$．若存在扩域$\mathbb{K}/\mathbb{F}$，使得$f(x)$在$\mathbb{K}$上可以分解为$f(x)=\prod_{i=1}^n (x-a_i)$，且$\mathbb{K}=\mathbb{F}(a_1, a_2, \cdots, a_n)$，则称$\mathbb{K}$是$f(x)\in \mathbb{F}[x]$上的\textbf{分裂域（splitting field）}．
+\end{definition}
+
+定义看起来有些绕口，先说$f$在$\mathbb{K}$中可以分解，也就是说每一个根都存在，再说$\mathbb{K}$可以看成用这些根对$\mathbb{F}$进行扩域的结果．这么定义是因为我们要先确定元素$a_i$都存在，而为此就需要先确定$\mathbb{K}$存在．但是定义中只说了“若$\mathbb{K}$存在”，这个假设到底成立与否呢？答案是肯定的．
+
+\begin{theorem}{分裂域的存在性}
+给定域$\mathbb{F}$及其上一个多项式$f(x)$，则$f(x)\in \mathbb{F}[x]$上的分裂域存在．
+\end{theorem}
+
+\textbf{证明}：
+
+当$\opn{deg}f=1$时，定理自然成立，此时$f\in\mathbb{F}[x]$的分裂域就是其本身．
+
+首先在环$\mathbb{F}[x]$上对元素$f(x)$进行因式分解\footnote{也就是画出它的一棵\textbf{真因子树}\upref{FctTre}．}，得到其不可约因子．任选其中一个不可约因子$h(x)$，如果$\opn{deg} h = 1$，则跳过本段接下来的步骤．构造环$R_1=\mathbb{F}(x)/<h(x)>=\mathbb{F}(a_1)$，再取其分式域$\mathbb{F}_1$，则$\mathbb{F}_1$就是$\mathbb{F}$的单扩张$\mathbb{F}(a_1)$．
+
+由\textbf{多项式环}\upref{RPlynm}的\autoref{RPlynm_the1}~\upref{RPlynm}，$(x-a_1)|h(x)$，因此在$\mathbb{F}_1$上可以分解出$h_1(x)=h(x)/(x-a_1)$．如果$\opn{deg}h_1 = 1$，则跳过本段接下来的步骤．对$h_1(x)$进行相同的操作：构造环$R_2=\mathbb{F}(x)/<h_1(x)>=\mathbb{F}(a_2)$，再取其分式域$\mathbb{F}_2=\mathbb{F}_1(a_2)=\mathbb{F}(a_1, a_2)$．
+
+以此类推，直到$h(x)$在$\mathbb{F}_{k_1}$上分解为一阶多项式之积．
+
+接下来，取$f$在$\mathbb{F}_{k_1}$上的不可约因子$g(x)$，如果$\opn{deg} g = 1$，则跳过本段接下来的步骤．执行相同的扩域操作，直到得到$\mathbb{F}_{k_1+k_2}$，使得$g$在$\mathbb{F}_{k_1+k_2}$上分解为一阶多项式之积．
+
+以此类推，最终可以得到$\mathbb{F}_k$，使得$f$在$\mathbb{F}_k$上可以分解为一阶多项式之积．则$\mathbb{F}_k$就是$f\in\mathbb{F}[x]$的分裂域．
+
+\textbf{证毕}．
+
+该证明过程的大体思路，就是看$f$的根是否在已知的域中．根$a$的最小多项式$h(x)$必是$f(x)$的一个不可约因子．如果$a$在已知的域中，那么$f$就可以因式分解出一阶多项式因子$(x-a)$；否则，就添加$a$进行一次单扩域，这次扩域至少能把$a$纳入，但也有可能把其它根一起纳入．因此我们容易得到以下推论：
+
+\begin{corollary}{}
+设$\mathbb{K}$是$f(x)\in \mathbb{F}[x]$上的分裂域，则$[\mathbb{K}:\mathbb{F}]\leq \opn{deg}f$．
+\end{corollary}
+
+\begin{corollary}{}
+设$\mathbb{K}$是$f(x)\in \mathbb{F}[x]$上的分裂域，$\mathbb{M}$是$\mathbb{K}$和$\mathbb{F}$之间的\textbf{中间域}，则$\mathbb{K}$也是$f(x)\in \mathbb{E}[x]$上的分裂域．
+\end{corollary}
+
+为了加深理解，我们讨论一个分裂域的例子．添加元素的过程中会遇到的主要情况在这里都出现了．
+
+\begin{example}{分裂域的一个例子}
+
+
+在有理数域$\mathbb{Q}$上有多项式$f(x)=(x^2-2)^2(x^2-3)(x^2-6)(x^2+1)$，其在$\mathbb{Q}$上有五个阶数大于$1$的不可约因子：$(x^2-2), (x^2-2), (x^2-3), (x^2-6), (x^2+1)$．
+
+考虑因子$(x^2-2)$，得到扩域$\mathbb{Q}(\sqrt{2})$．在$\mathbb{Q}(\sqrt{2})$上，$f$有分解：
+\begin{equation}
+f(x)=(x+\sqrt{2})^2(x-\sqrt{2})^2(x^2-3)(x^2-6)(x^2+1)
+\end{equation}
+
+取其阶数大于$1$的不可约因子$x^2-3$，得到扩域$\mathbb{Q}(\sqrt{2}, \sqrt{3})$．
+
+在$\mathbb{Q}(\sqrt{2}, \sqrt{3})$上，$f$有分解：
+
+\begin{equation}
+\begin{aligned}
+f(x)=&(x+\sqrt{2})^2(x-\sqrt{2})^2(x+\sqrt{3})(x-\sqrt{3})\times\\
+&(x+\sqrt{2}\sqrt{3})(x-\sqrt{2}\sqrt{3})(x^2+1)
+\end{aligned}
+\end{equation}
+
+取其阶数大于$1$的不可约因子$x^2+1$，得到扩域$\mathbb{Q}(\sqrt{2}, \sqrt{3}, \I)$．
+
+你可以验证，在最后这个扩域下，$f$可分解为一阶多项式之积．因此
+\begin{equation}
+\begin{aligned}
+&\mathbb{Q}(\sqrt{2}, \sqrt{3}, \I)=\\
+&\{a+A\I+(b+B\I)\sqrt{2}+(c+C\I)\sqrt{3}\\
+&+(d+D\I)\sqrt{6} | a, A, b, B, c, C, d, D\in\mathbb{Q}\}
+\end{aligned}
+\end{equation}
+就是$f\in\mathbb{Q}[x]$的分裂域．
+
+\end{example}
+
+\begin{corollary}{}
+设$\mathbb{K}$是$f(x)\in \mathbb{F}[x]$上的分裂域，则$[\mathbb{K}:\mathbb{F}]\leq \opn{deg}f$．
+\end{corollary}
+
+\begin{corollary}{}
+设$\mathbb{K}$是$f(x)\in \mathbb{F}[x]$上的分裂域，$\mathbb{M}$是$\mathbb{K}$和$\mathbb{F}$之间的\textbf{中间域}，则$\mathbb{K}$也是$f(x)\in \mathbb{E}[x]$上的分裂域．
+
+\end{corollary}
+
+
+分裂域的构造也可以这样理解：给定一个域$\mathbb{F}$和其上一个\textbf{不可约}多项式$f$，则$f\in\mathbb{F}[x]$的分裂域就是$\mathbb{F}[x]/<f(x)>$的\textbf{分式域}\upref{FrcFld}．对于任意的$f\in\mathbb{F}[x]$，如果它能写为若干不可约多项式之积，如$f=h_1h_2\cdots h_n$，那么$f$的分裂域是：求$h_1\in\mathbb{F}[x]$的分裂域$\mathbb{F}_1$，再求$h_2\in\mathbb{F}_1[x]$的分裂域$\mathbb{F}_2$，以此类推，$\mathbb{F}_n$即为$f\in\mathbb{F}[x]$的分裂域．
+
+
+
+
+
+
+
+
+
+
+\subsection{分裂域的唯一性}
+
+从\textbf{开拓}（\autoref{FldExp_def4}~\upref{FldExp}）的角度来说，如果存在域同构$\sigma:\mathbb{F}_1\to\mathbb{F}_2$，将其开拓为环同构$\sigma:\mathbb{F}_1[x]\to\mathbb{F}_2[x]$，任取$f\in\mathbb{F}_1[x]$，设$f\in\mathbb{F}_1[x]$的分裂域为$\mathbb{K}_1$，$\sigma(f)\in\mathbb{F}_2[x]$的分裂域为$\mathbb{K}_2$，则$\sigma$可以开拓为$\mathbb{K}_1\to\mathbb{K}_2$的同构．
+
+上述开拓的角度或许有些绕，但考虑到“同构的域就是同一个域”，我们完全可以大大简化上述表达：
+
+\begin{theorem}{}
+给定域$\mathbb{F}$和其上一个多项式$f$以后，所构造出来的分裂域是唯一的，或者说构造出来的两个分裂域都是同构的．
+\end{theorem}
+
+证明非常简单，只需要利用多项式环和分式域的唯一性即可．多项式环的唯一性依赖于\autoref{RPlynm_the2}~\upref{RPlynm}，分式域的唯一性由\autoref{FrcFld_the1}~\upref{FrcFld}得到．
+
+再回到开拓的角度来思考：上面只说了$\sigma$可以开拓为$\mathbb{K}_1\to\mathbb{K}_2$的同构，那这种同构是不是唯一的呢？一般情况下不是的．继续用“同构就是同一个”的思维，我们有如下定理：
+
+\begin{theorem}{}\label{SpltFd_the1}
+给定域$\mathbb{F}$和其上一个多项式$f$，设$f\in\mathbb{F}[x]$的分裂域是$\mathbb{K}$，$\mathbb{K}$到自身的保$\mathbb{F}$自同构数量为$N$，那么$N\leq[\mathbb{K}:\mathbb{F}]$．
+
+当且仅当$f$的每一个不可约因子$h$的不同根数目恰为$\opn{deg}h$时，等号成立．
+\end{theorem}
+
+\textbf{证明}：
+
+定理中第二段的描述已经暗示了证明思路．
+
+设$\sigma:\mathbb{K}\to\mathbb{K}$是自同构，且对于任意$a\in\mathbb{F}$有$\sigma(a)=a$．
+
+对于任意$g\in\mathbb{F}[x]$和任意$k\in\mathbb{K}$，必有$\sigma(g(k))=g(\sigma(k))$．因此$k$和$\sigma(k)$的最小多项式相同．因此，$f$的任意不可约因子$h$的根，必须被$\sigma$映射为$h$的根．
+
+由于分式域的唯一性，要保证$\sigma$是同态，$h$的任何根都可以映射到任何根上．
+
+综上，$\sigma$必须将$h$的根映射为$h$的根，但可以映射到任何根上．结合\autoref{FldExp_the1}~\upref{FldExp}即得证．
+
+\textbf{证毕}．
+
+\begin{example}{}
+
+给定有理数域$\mathbb{Q}$及其上的多项式$f(x)=x^2-2$．则$f\in\mathbb{Q}$的分裂域为$\mathbb{Q}(\sqrt{2})=\{a+b\sqrt{2}|a, b\in\mathbb{Q}\}$．
+
+$\mathbb{Q}(\sqrt{2})$一共有两个保$\mathbb{Q}$自同构：第一个就是恒等映射，第二个$\sigma$则定义如下：
+\begin{equation}
+\sigma(a+b\sqrt{2})=a-b\sqrt{2}
+\end{equation}
+也就是说，$\sigma$把根$\pm\sqrt{2}$映射到根$\mp\sqrt{2}$．
+
+
+而$[\mathbb{Q}(\sqrt{2}):\mathbb{Q}]=2$，因此这是一个\autoref{SpltFd_the1} 取等号的例子．
+
+\end{example}
+
+\begin{exercise}{}
+求$x^3-2\in\sqrt{Q}[x]$的分裂域及其所有保$\mathbb{Q}$自同构．
+\end{exercise}
+
+
+
+\begin{exercise}{}
+求$x^p-1\in\mathbb{Q}[x]$的分裂域及其所有保$\mathbb{Q}$自同构．这里$p$为素数．注意判断$x^p-1$是否为不可约多项式．
+\end{exercise}
+
+
+\begin{exercise}{}
+求$x^6-1\in\mathbb{Q}[x]$的分裂域及其所有保$\mathbb{Q}$自同构．
+\end{exercise}
+
+
+
+
+
+\subsection{正规扩张}
+
+分裂域的性质，其实对应的是一种非常重要的域扩张，它与代数方程的根式解问题息息相关．
+
+\begin{definition}{正规扩张}
+设$\mathbb{K}/\mathbb{F}$是一个\textbf{有限}扩域．如果对于$\mathbb{F}$上的任意不可约多项式$f$，要么$f$在$\mathbb{K}$中无根，要么就所有根都在$\mathbb{K}$中，则称$\mathbb{K}/\mathbb{F}$是一个\textbf{正规扩张}．
+\end{definition}
+
+\begin{theorem}{}
+设$\mathbb{K}/\mathbb{F}$是一个\textbf{有限}扩域，那么有：
+
+$\mathbb{K}/\mathbb{F}$为正规扩张$\iff$ $\mathbb{K}$是某个多项式$f\in\mathbb{F}$的分裂域．
+\end{theorem}
+
+\textbf{证明}：
+
+$\Leftarrow$易证，在此不赘述．下证$\Rightarrow$．
+
+由于$\mathbb{K}/\mathbb{F}$为有限扩张，故存在$a_1, a_2, \cdots, a_n\in \mathbb{K}$，使得$\mathbb{K}=\mathbb{F}(a_1, a_2, \cdots, a_n)$．
+
+设$a_i$在$\mathbb{F}$上的最小多项式为$f_i(x)$，令$f(x)=\prod_{i=1}^n f_i(x)$．
+
+由于$\mathbb{K}/\mathbb{F}$为正规扩张，而各$f_i$在$\mathbb{K}$上至少有一个根，故$f(x)$可以在$\mathbb{K}$上写为一次多项式的乘积：
+\begin{equation}
+f(x) = \prod_{i=1}^k (x-b_i)
+\end{equation}
+且各$a_i\in\{b_j\}$，各$b_i\in\mathbb{K}=\mathbb{F}(a_1, \cdots, a_n)$．
+
+于是$f\in\mathbb{F}$的分裂域为$\mathbb{F}(b_1, \cdots, b_k)=\mathbb{F}(a_1, \cdots, a_n)=\mathbb{K}$．
+
+\textbf{证毕}．
+
+
+\begin{example}{正规扩张的反例}
+$\mathbb{Q}(2^{1/3})$不是$\mathbb{Q}$的正规扩张．因为存在多项式$f(x)=x^3-2$，它在$\mathbb{Q}$上不可约，有一个根$2^{1/3}$在$\mathbb{Q}(2^{1/3})$上，但另外两个根都是复数，不在其中．
+
+显然，另外两个根的模都是$2^{1/3}$，与正实轴的夹角分别为$\pm 2\pi/3$．
+\end{example}
+
+\begin{exercise}{}
+求$x^3-2\in\mathbb{Q}[x]$的分裂域．
+\end{exercise}
+
+
+
+
+
+
+
+
+
+
+
+
+

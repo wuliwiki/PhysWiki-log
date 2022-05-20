@@ -1,0 +1,66 @@
+% 泊松分布
+
+\pentry{自然对数底（简明微积分）\upref{E}， 随机变量、概率密度函数\upref{RandF}}
+
+在一段时间内， 若一个事件在一段时间内的任意时刻都有均等的几率发生， 且发生次数不限， 那么在这段时间内发生 $k$ 次的概率为
+\begin{equation}
+f(\lambda, k) = \frac{\E^{-\lambda}\lambda^k}{k!} \qquad (k = 0,1,2,\dots)
+\end{equation}
+其中 $\lambda$ 是一个常参数， 该分布的平均值和方差都是 $\lambda$． 具体而言， 若在一段极小时间 $\Delta t$ 内发生的概率为 $\Delta P$， 那么令常数
+\begin{equation}
+\alpha = \lim_{\Delta t\to 0}\Delta P/\Delta t
+\end{equation}
+若考察的时长为 $T$， 那么
+\begin{equation}
+\lambda = \alpha T
+\end{equation}
+
+\subsection{平均值和方差的推导}
+\addTODO{补充完整}
+证明方差需要使用
+\begin{equation}
+\begin{aligned}
+\sum_{k=0}^\infty \frac{k^2\lambda^{k}}{k!}
+&= \sum_{k=0}^\infty \frac{(k+1)\lambda^{k+1}}{k!}
+= \lambda \sum_{k=0}^\infty \frac{(k+1)\lambda^k}{k!}\\
+&= \lambda\dv{\lambda} \sum_{k=0}^\infty \frac{\lambda^{k+1}}{k!}
+= \lambda \dv{\lambda} (\lambda \E^{\lambda})
+= \lambda(\lambda+1)\E^{\lambda}
+\end{aligned}
+\end{equation}
+
+\subsection{泊松分布的推导}
+若 $\dv*{P}{t} = \alpha$． 令 $\lambda = \alpha T$， 把 $[0,T]$ 划分成许多小时间段 $\Delta t$， 那么在时刻 $t$ 也就是第 $t/\Delta t+1$ 时间段发生第一次的概率为
+\begin{equation}
+\Delta P = \lim_{\Delta t\to 0}(1 - \alpha\Delta t)^{t/\Delta t} \alpha\Delta t
+= \qty[\lim_{\Delta t\to 0}(1 - \alpha\Delta t)^{1/(-\alpha\Delta t)}]^{-\alpha t} \alpha\Delta t
+= \E^{-\alpha t} \alpha \Delta t
+\end{equation}
+所以第一次出现的时间分布为
+\begin{equation}
+f(t) = \alpha\E^{-\alpha t}
+\end{equation}
+在时间 $[0,T]$ 内不发生的概率为
+\begin{equation}
+P_0(T) = \int_{T}^\infty f(t) \dd{t} = \E^{-\lambda}
+\end{equation}
+例如一半可能性不发生的时间为 $T_{1/2} = \ln 2/\alpha$．
+
+在时间 $[0,T]$ 内发生一次的概率为
+\begin{equation}
+P_1(T) = \int_{0}^{T} f(t') P_0(T-t')\dd{t'} = \lambda \E^{-\lambda}
+\end{equation}
+即假设事件在 $t'$ 时刻发生一次， 在接下来的长度为 $T-t'$ 的时间段内不发生．
+
+在时间 $[0,T]$ 内发生两次的概率为
+\begin{equation}
+P_2(T) = \int_{0}^{T} f(t') P_1(T-t')\dd{t'} = \frac{\lambda^2}{2}\E^{-\lambda}
+\end{equation}
+同理递归可得
+\begin{equation}
+P_{k}(T) = \int_{0}^{T} f(t') P_{k-1}(T-t')\dd{t'}
+\end{equation}
+\begin{equation}
+P_k(T) = \frac{\lambda^k}{k!}\E^{-\lambda}
+\end{equation}
+证毕．

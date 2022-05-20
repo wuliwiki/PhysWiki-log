@@ -14,11 +14,11 @@
 \subsection{1．矩阵的秩与线性变换的联系}
 
 \begin{definition}{(矩阵的秩)}
-\textbf{矩阵的秩} 既可以定义为其行向量组的秩 (称为\textbf{行秩}), 也可以定义为其列向量组的秩 (称为\textbf{列秩}),
+\textbf{矩阵的秩} 既可以定义为其行向量组的秩 (称为 \textbf{行秩}), 也可以定义为其列向量组的秩 (称为 \textbf{列秩}),
 这是因为矩阵的行秩和列秩被证明是相等的. \\
 
-\textsl{注}：矩阵行向量组形成的空间称为\textbf{行空间}, 行向量组的秩也正是行空间的维数;
-列向量组形成的空间称为\textbf{列空间}, 列向量组的秩也正是列空间的维数.
+\textsl{注}：矩阵行向量组形成的空间称为 \textbf{行空间}, 行向量组的秩也正是行空间的维数;
+列向量组形成的空间称为 \textbf{列空间}, 列向量组的秩也正是列空间的维数.
 \end{definition}
 
 
@@ -29,14 +29,14 @@
 \verb| |
 
 下面的定理表明，矩阵与线性变换的秩在某种意义下是等同的．
-\begin{theorem}{(像空间 $=$ 列空间)}
+\begin{theorem}{(像空间 $=$ 列空间)}\label{linmat_the1}
  如果将矩阵看成线性变换, 那么该变换的像空间的维数, 恰是矩阵的列空间的维数.\\
 
 \textsl{ 证明}：设 $A\in\mathbb{R}^{m\times n}$, $A$ 也可以看成从 $\mathbb{R}^{n}$ 到 $\mathbb{R}^{m}$
 的线性变换, 那么取定 $\mathbb{R}^{n}$ 的标准基 $(e_{1},e_{2},\ldots,e_{n})$ 后,
 $A$ 的像空间就由 $\{Ae_{1},Ae_{2},\ldots,Ae_{n}\}$ 张成, 因此像空间的维数就是 $\{Ae_{1},Ae_{2},\ldots,Ae_{n}\}$
 的极大无关组的个数, 也就是 $\{Ae_{1},Ae_{2},\ldots,Ae_{n}\}$ 的秩; 而每个 $Ae_{i}$
-正好又是矩阵 $A$ 的第 $i$ 列, 这就是说明了 $A$ 的像空间的维数等于它的列空间的维数. 
+正好又是矩阵 $A$ 的第 $i$ 列, 这就说明了 $A$ 的像空间的维数等于它的列空间的维数. $\square$
 \end{theorem}
 
 \textsl{注}：上述证明过程表明，对于看成线性变换的矩阵来说，其像空间正好就是其列空间． 
@@ -53,6 +53,52 @@ $A$ 的像空间就由 $\{Ae_{1},Ae_{2},\ldots,Ae_{n}\}$ 张成, 因此像空间
 \item 方阵是满秩的, 当且仅当它是可逆的, 当且仅当其线性变换是双射. \end{itemize}
 \verb| |
 
+在介绍线性方程组的解的结构性定理时, 很多书是采用初等行变换来证明的, 这显然是有利于初学者接受的, 但是\textsl{不够优雅}. 这里我们仅需巧妙地运用 \autoref{linmat_the1} 就能导出线性方程组的解的结构,
+并且能对齐次和非齐次线性方程组做统一的处理. 
+
+\begin{theorem}{(线性方程组的解的结构性定理)}\label{linmat_the2}
+设 $A\in\mathbb{R}^{m\times n},$ $b\in\mathbb{R}^{n\times1}$ 且 $b\neq0$.
+
+① $Ax=0$ 有唯一解 (即零解) $\Leftrightarrow$ $\ker A=\{0\}$ $\Leftrightarrow$
+$A$ 是单射 $\Leftrightarrow$ $A$ 列满秩 $\Leftrightarrow$ $\mathrm{rank}$
+$A=n.$ 
+
+② $Ax=0$ 有无穷个解 (即有非零解) $\Leftrightarrow$ $A$ 不是单射 $\Leftrightarrow$
+$A$ 列不满秩 $\Leftrightarrow\mathrm{rank}$ $A<n.$ 
+
+③ $Ax=b$ 无解 $\Leftrightarrow$ $b\notin\mathrm{Im}A$ $\Leftrightarrow$
+$b\notin$\{$A$ 的列空间\} $\Leftrightarrow$ $b$ 无法被 $A$ 的列向量组线性表出
+$\Leftrightarrow$ $\mathrm{rank}$ $A<$ $\mathrm{rank}$ $(A:b).$
+
+④ $Ax=b$ 有解 $\Leftrightarrow$ $b\in\mathrm{Im}A$ $\Leftrightarrow$
+$b\in$\{$A$ 的列空间\} $\Leftrightarrow$ $b$ 可以被 $A$ 的列向量组线性表出 $\Leftrightarrow$
+$\mathrm{rank}$ $A=$ $\mathrm{rank}$ $(A:b).$
+
+⑤ $Ax=b$ 有唯一解 $\Leftrightarrow$ $b\in\mathrm{Im}A$ 且 $A$ 是单射 $\Leftrightarrow$
+$\mathrm{rank}$ $A=$ $\mathrm{rank}$ $(A:b)=n$ (结合 ①、④)
+
+⑥ $Ax=b$ 有无穷多解 $\Leftrightarrow$ $b\in\mathrm{Im}A$ 且 $A$ 不是单射
+$\Leftrightarrow$ $\mathrm{rank}$ $A=$ $\mathrm{rank}$ $(A:b)<n$
+(结合 ②、④)
+\end{theorem}
+
+\textsl{注}：以上结果展示了将矩阵和线性变换视作 \textbf{代数同构} 的强大作用．
+
+\begin{exercise}{}
+对非齐次线性方程组 $A_{m\times n}x=b$, 设 $\mathrm{rank}A=r$, 则 ($\quad$)
+
+$(\mathrm{A})$ $r=m$ 时, 方程组 $Ax=b$ 有解
+
+$(\mathrm{B})$ $r=n$ 时, 方程组 $Ax=b$ 有唯一解
+
+$(\mathrm{C})$ $n=m$ 时, 方程组 $Ax=b$ 有唯一解
+
+$(\mathrm{D})$ $r<n$ 时, 方程组 $Ax=b$ 有无穷多解
+
+答案: 见末尾^\footnote{选$\mathrm{A}$}
+\end{exercise}
+\verb| |
+
 \begin{theorem}{}
 若 $A\in\mathbb{R}^{n\times m}$, $B\in\mathbb{R}^{m\times n}$, 且 $AB=I_n$, 则 $A$作为线性算子是满射，$B$作为线性算子是单射.
 
@@ -61,7 +107,7 @@ $A$ 的像空间就由 $\{Ae_{1},Ae_{2},\ldots,Ae_{n}\}$ 张成, 因此像空间
 说明 $\dim(\mathrm{Im}A)=n$, 矛盾. 
 
 再证 $B$ 是单射. 若 $Bx=0$, 则 $x=I_{n}x=(AB)x=A(Bx)=A0=0$, 说明 $\mathrm{Ker}B=\{0\}$.
-证毕. 
+$\square$
 \end{theorem}
 
 上面的定理有如下两个推论:
@@ -77,8 +123,10 @@ $A$ 的像空间就由 $\{Ae_{1},Ae_{2},\ldots,Ae_{n}\}$ 张成, 因此像空间
 
 
 \subsection{2．矩阵与线性变换的范数}
-线性空间上的范数是指其上的一个满足\textbf{非负正定性}、\textbf{正齐次性}、\textbf{三角不等式}的实值函数, 记作 $\left\Vert \cdot\right\Vert ~~$ 
-(参见《范数、赋范空间》的 \autoref{NormV_def1}~\upref{NormV}). 
+线性空间上的范数是指其上的一个满足 \textbf{非负正定性}、\textbf{正齐次性}、\textbf{三角不等式} 的实值函数, 记作 $\left\Vert \cdot\right\Vert ~~$ 
+(参见《范数、赋范空间》的 \autoref{NormV_def1}~\upref{NormV}). 对$\mathbb{R}^n$ 中的一个向量 $x$, 我们一般将其看成列向量, 并用 $|x|$ 来表示它的 \textbf{欧氏范数} (也称为 \textbf{模}), 即
+$$ |x|=\sqrt{x_1^2+x^2_2+\cdots+x_n^2}, \qquad\forall \,x\in \mathbb{R}^n. 
+$$
 
 \begin{definition}{(线性变换的范数)}
 设 $A\in L(\mathbb{R}^{n},\mathbb{R}^{m})$, 定义
@@ -89,25 +137,27 @@ $A$ 的像空间就由 $\{Ae_{1},Ae_{2},\ldots,Ae_{n}\}$ 张成, 因此像空间
 \textsl{注}：可以证明 $L(\mathbb{R}^{n},\mathbb{R}^{m})$ 中的这个范数不仅满足非负正定性、正齐次性、三角不等式,
 还满足
 
-$(4)$ 向量范数相容性: $\left\Vert A(x)\right\Vert \leqslant\left\Vert A\right\Vert \left|x\right|$;
+$(\mathrm{iv})$ 向量范数相容性: $\left\Vert A(x)\right\Vert \leqslant\left\Vert A\right\Vert \left|x\right|$;
 
-$(5)$ 复合运算相容性: $\left\Vert B\circ A\right\Vert \leqslant\left\Vert B\right\Vert \left\Vert A\right\Vert $.
+$(\mathrm{v})$ 复合运算相容性: $\left\Vert B\circ A\right\Vert \leqslant\left\Vert B\right\Vert \left\Vert A\right\Vert $.
 
 
 
 \begin{definition}{(矩阵的范数)}\label{linmat_def1}
 设 $A\in\mathbb{R}^{m\times n}$, 定义
 
-\[
+
+\begin{equation}\label{linmat_eq1}
 \left\Vert A\right\Vert =\max_{|x|=1}|Ax|=\max_{x\neq0}{\displaystyle \frac{|Ax|}{x}}.
-\]
+\end{equation}
+
 
 \end{definition}
 \textsl{注}：可以证明矩阵的这个范数不仅满足非负正定性、正齐次性、三角不等式, 还满足
 
-$(4)$ 向量范数相容性: $\left\Vert Ax\right\Vert \leqslant\left\Vert A\right\Vert \left|x\right|$;
+$(\mathrm{iv})$ 向量范数相容性: $\left\Vert Ax\right\Vert \leqslant\left\Vert A\right\Vert \left|x\right|$;
 
-$(5)$ 乘法运算相容性: $\left\Vert BA\right\Vert \leqslant\left\Vert B\right\Vert \left\Vert A\right\Vert $.
+$(\mathrm{v})$ 乘法运算相容性: $\left\Vert BA\right\Vert \leqslant\left\Vert B\right\Vert \left\Vert A\right\Vert $.
 
 
 
@@ -120,13 +170,13 @@ $(5)$ 乘法运算相容性: $\left\Vert BA\right\Vert \leqslant\left\Vert B\rig
 \end{theorem}
 
 \textsl{注}：矩阵按 \autoref{linmat_def1} 所定义的范数称为 \textbf{矩阵的标准范数}. 除此之外, 矩阵 $A\in\mathbb{R}^{m\times n}$ 还常用以下范数:
-矩阵按 ({*}) 定义的范数称为矩阵的标准范数. 除此之外, 矩阵 $A\in\mathbb{R}^{m\times n}$ 常用以下范数:
+矩阵按 ( \autoref{linmat_eq1} )  定义的范数称为矩阵的标准范数. 除此之外, 矩阵 $A\in\mathbb{R}^{m\times n}$ 常用以下范数:
 \[
 \left\Vert A\right\Vert _{1}=\max_{1\leqslant j\leqslant m}\{\sum_{i=1}^{n}|a_{ij}|\},\quad\left\Vert A\right\Vert _{\infty}=\max_{1\leqslant i\leqslant n}\{\sum_{j=1}^{n}|a_{ij}|\},\quad\left\Vert A\right\Vert _{F}=\left(\sum_{i,j=1}^{n}|a_{ij}|^{2}\right)^{\frac{1}{2}}
 \]
-分别称为矩阵的\textbf{列和范数}、\textbf{行和范数}、\textbf{Frobenius范数}(简称 \textbf{F范数}). 
+分别称为矩阵的 \textbf{列和范数}、\textbf{行和范数}、\textbf{Frobenius范数} (简称 \textbf{F范数}). 
 
- 可以证明, 矩阵的范数自然会满足 (\textsl{也应该满足}) 非负正定性、正齐次性、三角不等式, 但是却不一定要满足 $(4)$和$(5)$． 比如，矩阵的列和范数与行和范数都不满足 $(4)$， 但满足$(5)$； 而矩阵的 F范数则既满足 $(4)$, 也满足 $(5)$. 
+ 可以证明, 矩阵的范数自然会满足 (\textsl{也应该满足}) 非负正定性、正齐次性、三角不等式, 但是却不一定要满足 $(\mathrm{iv})$和$(\mathrm{v})$． 比如，矩阵的列和范数与行和范数都不满足 $(\mathrm{iv})$， 但满足$(\mathrm{v})$； 而矩阵的 F范数则既满足 $(\mathrm{iv})$, 也满足 $(\mathrm{v})$. 
 
 
 

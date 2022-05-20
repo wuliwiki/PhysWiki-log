@@ -1,0 +1,367 @@
+% Fortran 入门笔记
+
+\subsection{常识}
+\begin{itemize}
+\item Fortran 代码不区分大小写
+\item 感叹号用于写注释
+\item \verb`&` 用于续行, 如果一个 token 需要续行, 那么下一行的行首也需要 \verb`&`. 另外, 必须放在注释前面.
+\item 程序首尾  \verb`program <name> ....  end program <name>`, 或者直接用 \verb`end`
+\item 没有子程序的时候, \verb`program <name>` 可以省略, 最后一行 \verb`end program <name>` 也可以省略
+\item \verb`print*, <item1>, <item2>....` 星号代表默认格式
+\item 用 \verb`read*, item1, item2, ...` 来输入变量, 要先定义变量类型. 
+\item \verb`read` 读取 character 类型的时候, 只能读取字母, 不能有任何其他符号
+\item 字符串可以用单引号也可以用双引号
+\item 可以用 \verb`;` 符号在一行写多个语句, 叫 statement separator. 同一行中的每个 statement 不能超过 132 个字符
+\item \verb`stop` 可用于终止主程序, \verb`return` 终止子程序
+\item 所有的小括号前面可以有空格
+\item \verb`include "<file>"` 就是把文件的内容复制到当前位置, 应该相当于 C++ 的 #include
+\end{itemize}
+
+\subsection{算符}
+\begin{itemize}
+\item 指数算符是 \verb`**`
+\item 比较算符有: \verb`==   >=   <=  /= `.  注意不等是用斜杠不是感叹号. 感叹号是用于注释的
+\item 逻辑算符有 \verb`.and.   .or.   .not.   .eqv.` (同或)  \verb`.neqv.` (异或)
+\item \verb`//` 用于连接字符串
+\end{itemize}
+
+\subsection{结构}
+\begin{itemize}
+\item \verb`if (<logical>) then ....  else .... end if` 注意要有括号
+\item \verb`if (<logical>) then ... else if (<logical>) then ... else ... end if`
+\item \verb`if` 前面可以加上 \verb`<name>:` 如果这样做,  end if 后面也一定要加上 \verb`<name>`  , 也可以选择在 \verb`else if .. then` 或 \verb`else` 后面加上 \verb`<name>`. 注意只有开头有冒号, 后面没有冒号 .
+\item select case, 见 http://www.tutorialspoint.com/fortran/select_case_construct.htm
+\item do 循环:   \verb`do ii = 1,3; ...; end do;` 也可以设置步长 \verb`ii = int1, int2, step`. 其中 \verb`step` 可以是负值.
+\item do while 循环: \verb`do while (<logical>) ....  end do`
+\item \verb`exit` 相当于 C 语言的 break, \verb`exit <name>` 用于退出指定循环.
+\item \verb`cycle` 相当于 C 语言的 continue
+\item do 前面可以加上 \verb`<name>:` 如果这样, \verb`end do` 后面也一定要加上 \verb`<name>`
+\item \verb`cycle` 执行下一个当前循环, \verb`cycle <name>` 执行下一个指定循环
+\item \verb`do` 后面什么都不加相当于无条件循环, 需要用 \verb`exit` 退出.
+\item statement label 是在 statement 前面的 1-5 位数字.
+\item \verb`go to <label>` 可以使程序跳转到 \verb`<label>` 的语句.
+\end{itemize}
+
+\subsection{数据类型}
+\begin{itemize}
+\item \verb`integer, real, complex, character, logical` 是五种 intrinsic types, 前三种是 numeric, 剩下的是 non-numeric.
+\item 从 fortran90 开始, 所有变量都要定义. 用 implicit none 语句可以使未定义的变量出错. 亲自证明了不声明变量类型会导致很严重的错误且很难调试.
+\item 除了 imlicit none, 另一种声明如 implicit double precision (a-h,o-z), 作用是默认所有 a-h, o-z 开头的变量都是 double precision, 而 i-n 开头的所有变量都是普通 integer*4. 这种做法不建议使用.
+\item 所有的变量只能在 implicit none 后面紧接着, 不能在程序中定义.
+\item 声明变量格式:  \verb`<类型> :: a=1, b=2, ....`  初值可选
+\item 变量声明时 \verb`::` 可以省略
+\item 5 种基本变量类型可以定义 constant 格式, 如  \verb`real, parameter :: pi = 3.1415927`
+\item 声明变量后, 也可以把某个变量变成常数, 直接用 parameter (var1 = 1, var2 = 2) 即可. 括号不可省略
+\item \verb`selected_int_kind(8)` 可以返回 integer 类型的 kind, 是的 integer 有 8 位有效数字
+\item \verb`selected_real_kind(15, 307)` 可以返回 real 类型的 kind, 使得 real 有 15 位有效数字和最大指数 307
+\item \verb`huge()` 可以测试某个变量的最大值
+\item \verb`tiny()` 可以测试某个变量的最小值
+\item \verb`<类型>(kind=..) :: <name>` 的括号中 kind = 可以省略, 直接写数字. 这个数字叫做 kind type parameter
+\item \verb`kind()` 函数可以检查某个变量的字节数.
+\item \verb`precision()` 函数可以检查某个变量的精度(小数位数)
+\item 整型和整型相除得到整数, real 和 整型相除得到 real. real 赋值给 integer 向下取整.
+\item \verb`1` 和 \verb`2` 都是整型! 尤其注意 \verb`1/2 = 0` 而不是 1.   至少要加个小数点 !
+\item literal constant 指的是程序中写入的值, 例如 \verb`123, 'good', 1.7e-6` 等.
+\item 声明矩阵的时候, 只能直接用 constant 指定矩阵大小和初值.
+\end{itemize}
+
+\subsubsection{real}
+\begin{itemize}
+\item 指定 literal constant 的类型: 1.3e8 只有 real(4) 的精度 (7位有效数字, 默认), 1.3d8 是 real(8) 的精度(16位有效数字, 即 double), 1.3q8 是 real(16) 的精度(33位有效数字). d 代表 double, q 代表 quad. 另外也可以用 1.3e8_16 的格式 , 得到类型  real(16) 与 1.3q8 等效, 这么做的好处是可以用一个常数变量 (parameter) 来指定数据类型,例如 1.3e8_rk 
+\item real 的默认是单精度 real(4). 双精度 real(8) 需要声明.
+\item real 直接赋值溢出会出错, 算符运算结果溢出产生 Infinity
+\item underflow, 例如 1e-40. 会产生 warning.
+\item 强制类型转换 real (var, kind)
+\end{itemize}
+
+\subsubsection{integer}
+\begin{itemize}
+\item \verb`integer(kind = <n>)` 设置占用的字节, 可以取 1, 2, 4, 8 或者 16. 即最大值. 默认为 
+   kind = 4. (huge 约 2E9)
+\item 强制类型转换 int() 注意不是 integer()
+\item \verb`nint()` 采用四舍五入进行类型转换, 而 int() 采用向下取整
+\item literal constants 设定 kind 用下划线, 例如 \verb`3_4` 是 \verb`kind = 4` 的整数 3.
+\end{itemize}
+
+\subsubsection{other}
+\begin{itemize}
+\item literal constant 是 (<实部>, <虚部>). 赋值时如果需要包含变量, 用强制类型转换 cmplx (Re, Im, 8) 其中 kind = 8 是 double complex
+\item literal constant 是 .true. 或 .false.
+\item 强制类型转换 logical (var, kind)
+\end{itemize}
+
+\subsubsection{char}
+\begin{itemize}
+\item \verb`character (len = <n>)` 其中 n 是最大长度, 可以等于任意正整数, 默认为 1.  \verb`len =` 可以省略
+\item character 不是一个数组, 是一个独立的变量, 所以不能只改变其中一个元素. 声明数组: character(5) :: char(3,3) 生成 3*3 的矩阵, 每个矩阵元是 len=5.
+\item \verb`str(n:m)` 获取 character 类型变量 str 的第 n 到第 m 个字符, 注意不能用 str(n) 用而是用 str(n:n)
+\item \verb`str(1,2)(n:m)` 获取 character 矩阵的 (1,2) 元的第 n 到第 m 个字符
+\item \verb`str = 'some caracters'` 用于赋值（用双引号也行）, 字符串左对齐， 剩下的位置补 null (ascii 的 0), 如果长度超出, 多出的部分被截去，且不会报错．
+\item str = str1(n:m) 同样是左对齐，但是后面补空格
+\item 要获取某个字符的 ascii 代码, 用 iachar()， 如 iachar(str(1,2)(3:3)) . 如果输入的变量有多于一个字符, 返回首字符的 ascii 代码
+\item 用 \verb`//` 可以链接两个字符变量，然后把所有的 null 变为空格
+\item 用 \verb`trim()` 可以把字符变量最后的空格或者 null 去掉并返回 len 较短的字符常量
+\item \verb`len()` 可以用于返回字符变量/常量的长度, 如 len('1234 ') 返回 5, len(trim('1234 ')) 返回 4
+\item \verb`write(var, *) var1, var2, ...` 可以像输出到命令行一样将字符串或变量写到 character 变量中
+\end{itemize}
+
+\subsection{数组和矩阵}
+\subsubsection{基础}
+\begin{itemize}
+\item 声明矩阵例子:  \verb`integer, dimension (5,5) :: mymatrix`
+\item 更简单地: 可以用 \verb`integer :: matrix(5,5)  或者 integer matrix(5,5)`
+\item 如果用第二种格式, 可以在同一行声明很多不同尺寸的变量
+\item 所有的小括号前面可以有空格.
+\item 甚至可以指定矩阵的索引范围!   integer :: matrix(-3:1, 0:4). 这样 matrix(-3,0) 等表达都是合法的!
+\item 但是要注意 \verb`a:b` 中 a <= b, 否则返回空矩阵 (某些维度的长度为 0)
+\end{itemize}
+
+\subsubsection{Dynamic Matrix}
+\begin{itemize}
+\item \item 可用于变化尺寸声明: \verb`real, allocatable :: Mat (:,:)`
+\item 尺寸声明: \verb`allocate ( Mat1 (size1, size2), Mat2 (size1, size2))`.
+\item 用完了以后: \verb`deallocate (Mat)` 养成好习惯, 务必写上.
+\item 即使没有 \verb`implicit none`, 也需要 \verb`allocate`
+\item allocate 以后, 所有元素都是 0.
+\item 子程序中定义的 allocatable array 如果没有 save attribute, 在程序结束时会自动 deallocate.
+\end{itemize}
+
+\subsubsection{索引}
+\begin{itemize}
+\item \verb`rank()` 相当于 Matlab 的 ndims, 返回一个 integer
+\item \verb`size()` 相当于Matlab的 numel. 但是 \verb`size(Mat, dim)` 相当于 Matlab 的 size
+\item \verb`shape()` 相当于 Matlab 的 size, 返回一个 \verb`integer(2)` 数组.
+\item "extent" 指的是一个维度上面的索引数量 (这并不是个函数)
+\item \verb`lbound(Mat)` 返回在每个维度 index 的最小值, \verb`lbound (Mat, dim)` 返回指定维度的最小值
+\item 矩阵的赋值和 Matlab 一样, \verb`matrix(1:2,3:4) = 1`
+\item \verb`a((/1,3,4/))` 也是合法的
+\item 如果直接 \verb`print` 矩阵, 会把所有列展开成一行.
+\item \verb`n1 : n2 : step` 的格式叫做 subscript triplet
+\end{itemize}
+
+\subsubsection{赋值}
+\begin{itemize}
+\item 数组可以与常数相乘
+\item 数组可以用一个常数赋值
+\item array constructor 的格式 \verb`(/1,2,3,4/)` 相当于 Matlab 里面的中括号, 但只能表达一维矩阵. 例程 \verb`a(1:4,2) = (/1,2,3,4/)`. 里面可以是变量.
+\item 逻辑矩阵可以用 1 和 0 来赋值. \verb`logical :: Barray(4) = (/1,1,0,1/)`, 
+   或者 \verb`(/.true.,.true.,.false.,.true./)`
+\item \verb`reshape` 可以指定高维度矩阵的赋值: 
+   \verb`reshape ( (/5,9,6,10,8,12/), (/3,2/) )`, 生成 3 行 2 列的数组, 排序方式和 Matlab 相同
+\item \verb`reshape (  array, shape, pad, order )`　可以按照矢量 order 指定的顺序来填充矩阵, 默认
+\item reshape 的 pad 参数是用于 vector 不能把矩阵填满的情况下, 继续填满矩阵.
+\item 用函数生成数列  \verb`(/ ( (ii**2+3), ii=0,N ) /)`.  可以在后面加上 *2 之类的. 这种格式中 N 不能超过 1e5. 否则只能用循环.
+\end{itemize}
+
+\subsubsection{数学运算}
+\begin{itemize}
+\item \verb`sum (array, dim, mask)` 所有元素求和
+\item \verb`product (array, dim, mask)` 所有元素求积
+\item \verb`dot_product(v1, v2)` 矢量点乘 (仅限于一维矢量)
+\item \verb`matmul(mat1, mat2)` 矩阵乘法
+\item \verb`maxval(array, dim, mask)` 矩阵的最大值 (不知道 mask 是干啥的)
+\item \verb`minval` 矩阵的最小值
+\item \verb`maxloc(Mat, mask)` 找到矩阵中最大元素的位置
+\item \verb`minloc(Mat, mask)` 找到矩阵中最小元素的位置
+\item \verb`transpose()` 求转置矩阵
+\end{itemize}
+
+\subsubsection{逻辑运算}
+\begin{itemize}
+\item \verb`all (logical, dim)` 判断逻辑矩阵是否都是 .true.  dim 可选
+\item \verb`any (logical, dim)` 判断逻辑矩阵是否有任何 .true.
+\item \verb`count (logical, dim) `
+\item \verb`>, <, /=` 等算符用于两个矩阵返回逻辑数组. 进而使用 \verb`.and. .or.` 等
+\item where statement : 
+\verb`where ( a < 0 ); a = 1; elsewhere; a = 5; endwhere`
+\end{itemize}
+
+\subsubsection{矩阵处理}
+\begin{itemize}
+\item \verb`pack(Mat, mask)` 把 Mat 中对应 mask 中为 .true. 的矩阵元按顺序装到 rank1 向量. 如果被赋值的矢量有多余元素, 则随机赋值. 这相当于 Matlab 中的 Mat (mask)
+\item \verb`v = pack(Mat, mask, vector)` 多余元素赋值为 vector 中的对应元素. vector 要和 v 的长度一致.
+\item \verb`pack(M,.true.)` 相当于 Matlab 中的 M(:)
+\item \verb`unpack(vector, mask, array)` 是 pack 的逆过程
+\item \verb`spread(Mat, dim, ncopies)` 把 Mat 在 dim 的维度排列 ncopies 次. dim 只能从 1 到 \verb`rank(Mat) +1`
+\item \verb`merge(MatTrue, MatFalse, mask)` 在两个矩阵中选取矩阵元组成新的矩阵. mask 是逻辑数组, 用于选择矩阵元.
+\item \verb`cshift(Mat, shift, dim)` 是 circle shift, 把矩阵沿着 dim 的维度循环移动, shift > 0 是向 ind 变小的方向移动.
+\item \verb`eoshift()` 非循环移动, 规则类似.
+\end{itemize}
+
+\subsection{全局变量}
+\begin{itemize}
+\item \verb`common/group/var1, var2, ...` 其中 var1, var2 的变量名在不同的声明中可以不一致, 但是 group 的名字要一样
+\item 全局数组 \verb`common/grou/var1(N1), var2(N2)` 变量要在 common 之前再定义一次
+\end{itemize}
+
+\subsection{输入输出}
+
+\subsubsection{命令行输入输出}
+\begin{itemize}
+\item \verb`print (<格式>), item1, item2, item3...`
+\item 注意格式周围一定要有括号!!!
+\item free format 格式 (list directed form)
+\begin{lstlisting}
+   print *, item1, item2...
+   read (*,*) item1, item2... 
+   write (*,*) item1, item2...
+\end{lstlisting}
+   星号代表默认, print 的星号可以替换成 \verb`<format>`, read 和 write 的第一个星号可替换成输入输出的位置代号 (默认是命令行), 第二个星号可替换成 \verb`<format>`
+\item \verb`write (var, <format>)` 可以将内容写到变量中 (不确定是否只支持字符串变量)
+\item \verb`<format>` 可以是一个数字, 如 1010, 这样, 必定有另一行指令 1010 format(...)
+\item 一个 format 的例子如下
+\begin{lstlisting}
+write(6, 901) a, b, c
+901 format(1X,I3/'X=',T7,F5.2/D8.2)
+\end{lstlisting}
+这两个命令相当于在命令行中输出 1 个空格, 一个整型(a), 下一行, 'X=', tab 到第 7 列, 一个 real (b), 下一行, 一个 real (c).
+\item \verb`print <format>` 相当于 \verb`write(*,<format>)`
+\item \verb`<format>` 是一个指定输出格式的字符串, 例如 '(10ES12.3)' , '(5I6)' 等.
+\item 在命令行给 read 输入数据的时候, 用空格隔开, 按回车确认.
+
+\verb`<format>` 字符串的定义
+\item 任意格式中, 如果需要的空间超出列宽, 将显示为 \verb`****`
+
+real type
+\item 小数格式 <列数>F<列宽>.<小数位数>
+\item real 类型的科学计数法  <列数>ES<列宽>.<小数位数>, 显示出来的位数 = <小数位数>+6
+  所以<列宽> 需大于等于 <小数位数> +7 (正数+6, 负数带负号+7)
+\item 用 / 表示空白行
+
+integer type
+\item <列数>I<列宽>.<显示位数>  对于 <显示位数>, 不够的前面用0补齐, 超出的不
+   处理)
+\item 如果 write/read 命令后面是一个 list, 那么可以给 list 的每一项设置格式, 用 '(<fmt1>, <fmt2>...)'  (我猜测<列数>在该情况仍然可以使用)
+
+character type
+\item <列数>A<列宽>
+
+### 文件输入输出
+\item 在 visual studio 中, 生成的文件与源文件保存在同一目录下.
+\item 文件可以用 txt 编辑器打开, 不需要有拓展名或者可以有任何拓展名.
+\item 创建新数据文件并写入数据如下
+\begin{lstlisting}
+open (1, file = 'data1.txt', status = 'new')
+do ii = 1,100
+	write(1,*) x(ii), y(ii)
+end do
+close (1)
+\end{lstlisting}
+\item 这里的 1 是文件在程序中的编号, 可以取 1-99, 除了 5 和 6 (分别代表从键盘读写).
+\item 'new' 是创建新文件, 若打开已存在文件, 替换成 'old'
+\item 如果不指定 status, 则相当于 status = 'unknown', 如果文件存在就用存在的文件, 不存在就创建新文件
+\item 在读写文件时, 每个 write 语句写在新的一行, 每个 read 语句读取一行.
+
+#### Unformatted File
+\item 如果不需要人读取, 或者其他程序读取, 用这种文件效率更高
+\item ifort 写入的时候不用打开, 但是关闭是好习惯
+\begin{lstlisting}
+open(unit=7, file='fort.7', form='Unformatted') 这行可以省略!
+write(7) array1
+write(7) array2
+close(unit=7)
+\end{lstlisting}
+两个写入的矩阵尺寸可以不一样!
+
+\item 读取方法
+\begin{lstlisting}
+open(unit=7, file='fort.7', form='Unformatted') 这行可以省略!
+read(7) array1
+read(7) array2
+\end{lstlisting}
+\end{itemize}
+
+\subsection{常用函数}
+\begin{itemize}
+\item 已验证指数运算兼容复数, \verb`real` 和 \verb`imag` 兼容数组.
+\item 数学函数 \verb`sqrt(), exp(), log10(), abs(), aimag()` 取虚部, \verb`**` 指数, 
+\item 三角函数 \verb`sin(), cos(), tan(), asin(), acos(), atan(), atan2(), sinh(), cosh(), tanh(), atanh()`
+\item \verb`real(array, kind),  imag(array, kind), iabs(int), sign(), isign(int)`
+\item \verb`aimag(), dimag(), qimag()` 分别适用 kind = 4, 8, 16 的 complex.
+\item \verb`amod(),  mod(),  idim(), dim()`
+\item \verb`aint()` 向下取整, \verb`anint()` 最近取整, \verb`ceiling()`, \verb`floor()`, \verb`complx(x, y)` 生成复数, \verb`conjg()` 复共轭, \verb`dim(x, y)` 差值(正数)
+\end{itemize}
+
+\subsection{文字处理}
+\begin{itemize}
+\item \verb`index(string,subtring)` 返回 substring 在 string 中的位置
+\item \verb`len(string)` 返回 string 的最大长度
+\item \verb`achar()` 把 integer 转换成 character
+\item \verb`iachar()` 把 character 转换成 integer
+\item \verb`trim()` 把后面的空格清空. 应用  trim(char)//trim(char) 会消除中间多余的空格.
+\item 更多文字处理见 http://www.tutorialspoint.com/fortran/fortran_characters.htm
+\end{itemize}
+
+\subsection{子程序}
+\subsubsection{internal subroutine/function}
+\begin{itemize}
+\item 统称为 internal subprogram
+\item 在主程序或者外部子程序或者模块中(统称为 host), internal subprogram 可以在 host 的 end 之前紧接着定义, 前面加上 contains 即可.
+\item  stop <5位数/字符串> 可以终止程序, 且显示 <5位数/字符串>
+\item internal subprogram 可以不用自变量而获取 host 中的所有变量
+\item internal subprogram 不可以嵌套
+\item 只有在 host 外定义的 subprogram 才需要声明 interface, 叫做 implicit interface, host 内的叫 explicit interface, 不能声明 interface.
+\item 即使不需要使用 interface, 最好也用 external <subprogram-list> 声明一下, 这样如果有 intrinsic 的同名子函数, 就会覆盖.
+\item 声明默认变量用 optional, 如 logical, intent(out), optional :: fail
+\item 用 present() 检测 optional 变量是否被输入， 如 if (present(fail)) then
+\end{itemize}
+
+\subsubsection{subroutine}
+
+\begin{itemize}
+\item subroutine 可以任意修改其变量 (声明了 intent 的除外)
+\item 声明: \verb`subroutine <name> ( arg1, arg2 ) .... end subroutine  <name>`
+\item 调用:  \verb`call <name> (arg1, arg2)`
+\item 同样, 如果加了 \verb`implicit none`,  需要声明变量 (包括输入变量).
+\item 声明变量的用途: \verb`integer, dimension (5), intent (out) :: arg1, arg2`. 使用 \verb`intent(in)` 使变量不可修改, \verb`intent(out)` 在输入时重置 allocatable 矩阵 (常数及普通矩阵保持不变). intent(inout) 有输入且可以修改
+\item 若函数自变量中有 allocatable 矩阵, 必须要在主函数中声 Interface
+\item \verb`interface` 必须要在定义变量后面其他语句前面
+\item 格式
+\begin{lstlisting}
+interface
+    subroutine funName (Mat)
+         integer,  intent (out):: Mat(:, :)
+end subroutine funName
+\end{lstlisting}
+\item 同时在定义 subroutine 时也要使用 \verb`(:,:)` 声明变量维度, 冒号的个数代表维度.
+\item interface 中只需声明变长度的变量, 其他变量可以省略
+\item 用 integer, dimension(:, :) :: Mat 或 integer :: Mat(:, :) 等效
+\item subroutine 中不能出现与 subroutine 名字同名的变量, 否则编译器会认为这是一个 function.
+\item subroutine 如果需要输入矩阵, 调用的时候可以只输入矩阵的一个矩阵元.
+\end{itemize}
+
+\subsubsection{function}
+\begin{itemize}
+\item 定义 \verb`function(var1,var2)`
+\item 如果声明了 implicit none, 那么应该声明一个与函数名同名的变量, 类型是输出变量的类型.
+\item 如果返回变量有其他名字, 用 function(var1,var2) return <output>
+\item 函数内部使用的输入变量名叫做 dummy arguments, 调用时输入的叫做 actual arguments. 两者必须是完全同一类型, 没有任何自动转换.
+\item 函数的自变量不能做任何修改, 否则会出错.
+\item 函数内外的变量互不通用. (黑盒子)
+\item 函数中的一维数组不能超过 1e5 个元素, 否则会出错. 用 subroutine.
+\item 函数一般进行一些小型运算, subroutine 才是大型运算.
+\end{itemize}
+
+\subsection{模块}
+
+\begin{itemize}
+\item module 可以是一个独立的文件, 编译的时候一起编译.
+\item 调用模块命令:  use <module_name>.  必须放在 implicit none 之前.
+\item 模块文件格式
+\begin{lstlisting}
+  module <name>
+  <变量声明>
+  contains
+      subroutine <name>
+          ...
+      function <name>
+          ...
+      interface
+          ...
+  end module <name>
+\end{lstlisting}
+\item contains 命令前面声明的变量可以在 module 内部和声明了 module 的任何程序中使用.
+\item 如果 <变量声明> 中使用 private 声明, 则变量只在 module 内部通用. 例如
+   integer, private :: a(5)
+\item 模块中声明的变量, 可以在调用程序中修改. 所以可以通过模块来在函数间传递变量, 相当于 global.
+\end{itemize}

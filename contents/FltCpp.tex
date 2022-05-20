@@ -1,0 +1,79 @@
+% 双精度和高精度浮点数测试（C++）
+
+\begin{issues}
+\issueDraft
+\end{issues}
+
+\pentry{双精度和变精度浮点数测试（Matlab）\upref{FltMat}}
+
+double 和 “双精度和变精度浮点数测试（Matlab）\upref{FltMat}” 中的结果一样．
+
+g++ 在 64bit 机器上， long double 一般是 64 bit 浮点 + 15 bit 指数， 十进制大约是 18-19 位有效数字． 然而 sizeof 却是 16 字节， 但实际上只使用了不到 10 字节．
+
+\begin{lstlisting}
+sizeof(Doub) = 8
+sizeof(Ldoub) = 16
+
+std::numeric_limits<Doub>::max() = 1.797693135e+308
+std::numeric_limits<Ldoub>::max() = 1.189731495e+4932
+
+std::numeric_limits<Doub>::min() = 2.225073859e-308
+std::numeric_limits<Ldoub>::min() = 3.362103143e-4932
+
+std::numeric_limits<Doub>::denorm_min() = 4.940656458e-324
+std::numeric_limits<Ldoub>::denorm_min() = 3.645199532e-4951
+
+std::numeric_limits<Doub>::epsilon() = 2.220446049e-16
+std::numeric_limits<Ldoub>::epsilon() = 1.084202172e-19
+
+std::numeric_limits<Doub>::digits10 = 15
+std::numeric_limits<Ldoub>::digits10 = 18
+\end{lstlisting}
+
+然而 \verb|sqrt| 函数似乎并不会提高精度（仍然是 16 位）：
+\begin{lstlisting}
+sqrt(2.)       = 1.4142135623730951454
+sqrt(Ldoub(2)) = 1.4142135623730951454
+precise val    = 1.4142135623730950488...
+\end{lstlisting}
+
+
+\subsection{四精度}
+使用四精度比使用任意精度类型（如 MPFR 或 Flint 库）要快得多， 因为任意精度浮点数是动态分配内存的．
+
+如果想完全利用 16 字节， 见 GCC/g++ 编译器的 \verb|__float128| 类型（\href{https://gcc.gnu.org/onlinedocs/gcc-8.1.0/libquadmath.pdf}{文档}）． 相当于 FORTRAN 的 \verb|QUAD real|． 有 112 bit 小数， 15 bit 指数和 1 bit 正负号（\autoref{FltCpp_fig1} ）．
+
+\begin{figure}[ht]
+\centering
+\includegraphics[width=10cm]{./figures/FltCpp_1.png}
+\caption{见 Wikipedia }} \label{FltCpp_fig1}
+\end{figure}
+
+
+加上头文件 \verb|#include <quadmath.h>|， 使用 \verb|g++| 编译， 编译时加上选项 \verb|-lquadmath| 和 \verb|-fext-numeric-literals| 即可．
+
+\verb|__complex128| 是对应的四精度复数类型， 相当于两个 \verb|__float128|．
+
+\begin{lstlisting}
+FLT128_MAX = 1.1897e+4932
+FLT128_MIN = 3.3621e-4932
+FLT128_EPSILON = 1.9259e-34 // 2e-112
+FLT128_DENORM_MIN = 6.4752e-4966
+FLT128_MANT_DIG = 113 // 包括正负位
+FLT128_MAX_EXP = 16384 // 2e14
+FLT128_DIG = 33 // 33-34 位十进制有效数字
+M_PIq = 3.141592653589793238462643383279503 // 精确到最后一位
+sqrtq(3) = 1.732050807568877293527446341505872 // 精确到最后一位
+\end{lstlisting}
+
+\subsection{其他}
+另见 Boost 的 \href{https://www.boost.org/doc/libs/develop/libs/multiprecision/doc/html/boost_multiprecision/tut/floats/float128.html}{float128} 页面． 以及 Intel 编译器的 \href{https://community.intel.com/t5/Intel-C-Compiler/Quad-precision-Quad-data-type/td-p/1218636}{_Quad} 类型． 另外一个比较有名的库是 \href{https://www.davidhbailey.com/dhbsoftware/}{QD}．
+
+\subsection{Lapack}
+最重要的 BLAS 和 Lapack 的解决方案：
+\begin{itemize}
+\item \href{http://mplapack.sourceforge.net/}{MPACK} （最出名）
+\item \href{https://github.com/nakatamaho/mplapack}{mplapack} （C++ 被 Julia 采用）
+\item Eigen 支持自定义标量类型的矩阵， 但需要定义 \verb|Eigen::NumTraits<T>|， 详见\href{https://eigen.tuxfamily.org/dox/TopicCustomizing_CustomScalar.html}{这里}．
+\item \href{https://github.com/langou/latl}{latl} （没人气）
+\end{itemize}
