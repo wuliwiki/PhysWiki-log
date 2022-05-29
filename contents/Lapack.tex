@@ -1,0 +1,76 @@
+% Lapack 笔记
+
+\begin{issues}
+\issueDraft
+\end{issues}
+
+\pentry{BLAS 简介\upref{BLAS}}
+
+Intel MKL 提供的 \href{https://www.intel.com/content/www/us/en/developer/tools/oneapi/onemkl-function-finding-advisor.html}{Lapack 函数搜索}．
+
+如果有 Driver 就用尽量用， 其次再选 Computational
+
+问题类型
+\begin{itemize}
+\item linear equations/system of linear equations 线性方程组
+\item nonsymmetric eigenvalue problems 非对称或厄米矩阵本征值问题
+\item symmetric eigenvalue problems 对称或厄米矩阵本征值问题
+\item generalized symmetric-definite eigenvalue problems 广义对称或厄米正定矩阵本征值问题
+\item generalized nonsymmetric eigenvalue problems 广义非对称或厄米正定矩阵本征值问题
+\item linear least square (LLS) problems 线性最小二乘法问题
+\item generalized LLS problems 广义线性最小二乘法问题
+\item singular value decomposition 奇异值分解
+\item cosine-sine decomposition 余弦-正弦分解
+\end{itemize}
+
+矩阵类型
+\begin{itemize}
+\item 对称矩阵
+\item 厄米矩阵
+\item 正交矩阵
+\item 酉矩阵
+\item 带对角矩阵
+\item 三对角矩阵
+\end{itemize}
+
+\begin{figure}[ht]
+\centering
+\includegraphics[width=9cm]{./figures/Lapack_1.png}
+\caption{packed storage 把上半或下半三角矩阵存成一行} \label{Lapack_fig1}
+\end{figure}
+
+以下是一些分类搜索结果
+
+\subsection{线性方程组}
+\subsubsection{Driver - 线性方程组 - 一般矩阵}
+\begin{itemize}
+\item ?gesv 解方矩阵线性方程组， 多个 RHS
+\item ?gesvx gesv 并提供误差
+\item ?gesvxx 用额外循环减小 gesv 的误差
+\item ?gbsv gesv 的带对角矩阵版本
+\item ?gbsvx gbsv 并提供误差
+\item ?gbsvxx 用额外循环减小 gbsv 的误差
+\item ?gtsv gesv 的三对角矩阵版本
+\item ?gtsvx gtsv 并提供误差
+\end{itemize}
+
+
+\subsection{对称本征方程}
+\subsubsection{Driver - 实对称矩阵本征方程 - 所有本征值和本征矢（可选）}
+\begin{itemize}
+\item ?syev 对称矩阵的本征值和本征矢（可选）
+\item ?syevd syev 使用 divide and conquer 算法
+\item ?spev syev 用 packed storage
+\item ?spevd spev 用 packed storage
+\item ?sbev syev 用带对角矩阵
+\item ?sbevd sbev 用 divide and conquer 算法
+\item ?stev syev 使用三对角矩阵
+\end{itemize}
+
+\subsection{线性最小二乘法}
+\begin{itemize}
+\item ?gels Uses QR or LQ factorization to solve a overdetermined or underdetermined linear system with full rank matrix.
+\item ?gelsy Computes the minimum-norm solution to a linear least squares problem using a complete orthogonal factorization of A.
+\item ?gelss Computes the minimum-norm solution to a linear least squares problem using the singular value decomposition of A.
+\item ?gelsd Computes the minimum-norm solution to a linear least squares problem using the singular value decomposition of A and a divide and conquer method.
+\end{itemize}

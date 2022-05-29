@@ -1,0 +1,167 @@
+% 欧几里得矢量空间
+% 欧几里得矢量空间
+
+\begin{issues}
+\issueMissDepend%实二次型
+\end{issues}
+
+\begin{definition}{欧几里得矢量空间}
+定义在实数域 $\mathbb R$ 上的矢量空间 $V$ ，若其带有一个对称的双线性型 $(\bvec x,\bvec y)\mapsto(\bvec x|\bvec y)$（\autoref{MulMap_def2}~\upref{MulMap}），且对应的二次型 $\bvec x\mapsto(\bvec x|\bvec x)$ 是正定的，则称空间 $V$ 是一个\textbf{欧几里得矢量空间}．
+\end{definition}
+通常，对称的双线性型 $(*|*)$ 在 $\bvec x,\bvec y$ 处的值称为它们的\textbf{纯量积}．我们用符号 $(*|*)$ 代替通常的 $f(\bvec x,\bvec y)$．这里我们不用 $(\bvec x,\bvec y)$ 和 $\langle\bvec x,\bvec y\rangle$ 代替纯量乘积，出于这样的考虑：已经有简单的矢量对 $(\bvec x,\bvec y)$ ，它是笛卡尔积 $V\times V$ 的元素（\autoref{Set_eq1}~\upref{Set}）；而 $\langle \bvec x,\bvec y\rangle $ 又是矢量 $\bvec x,\bvec y$ 生成的子空间（\autoref{VecSpn_def1}~\upref{VecSpn}）．
+再一次把纯量乘积的性质列出来：
+\begin{enumerate}
+\item \textbf{对称性：}$(\bvec x|\bvec y)=(\bvec y|\bvec x)$;
+\item \textbf{线性：}$(\alpha\bvec x+\beta\bvec y|\bvec z)=\alpha(\bvec x|\bvec z)+\beta(\bvec y|\bvec z)$；
+\item \textbf{正定性：}$(\bvec x|\bvec x)>0,\;\forall\bvec x\neq0((\bvec 0|\bvec x)=0)$．
+\end{enumerate}
+\begin{example}{}\label{EuVS_ex1}
+次数 $\leq n-1$ 的多项式\upref{OnePol} （其域为实数域 $\mathbb R$）对通常的加法和数乘构成一个矢量空间 $V=P_n$．对任意两个矢量（多项式）$f,g\in P_n$ ，数 
+\begin{equation}\label{EuVS_eq1}
+(f|g)=\int_a^b f(x)g(x)\dd x
+\end{equation}
+给出 $P_n$ 上向量间的纯量乘积．此纯量乘积是用\autoref{EuVS_eq1} 在连续函数（区间 $[a,b]$ 上）的无穷维矢量空间 $C(a,b)$ 上给出的．相应的无穷维欧几里得空间则表示为 $C_2(a,b)$．
+\end{example}
+\begin{example}{}
+欧几里得矢量空间 $V$ 的任一子空间 $U$ 本身也是欧几里得矢量空间，因为 $V$ 中纯量乘积在 $U$ 中的限制定义了双线性函数 $U\times U\rightarrow\mathbb R$，且保持纯量乘积的性质．特别的，域 $\mathbb R$ 本身可看成是个1维的实的矢量空间．
+\end{example}
+\begin{definition}{长度}
+在欧几里得矢量空间 $V$ 中，称非负实数
+\begin{equation}
+\abs{\abs{\bvec v}}=\sqrt{(\bvec v|\bvec v)}
+\end{equation}
+是任意矢量 $\bvec v\in V$ 的\textbf{长度}或 \textbf{模}．长度为1的矢量称为\textbf{标准的}．
+\end{definition}
+因为 $(\bvec v|\bvec v)\neq0$ ，所以任意矢量 $\bvec v$ 的长度都是完全确定的．
+
+容易验证下面几个性质：
+\begin{enumerate}
+\item $\bvec v\neq0\Rightarrow \abs{\abs{\bvec v}}>0$．
+\item $\abs{\abs{\lambda\bvec v}}=\abs{\lambda}\cdot\abs{\abs{\bvec v}}$
+\end{enumerate}
+
+
+\begin{example}{矢量的标准化}
+任意矢量 $\bvec v$ 乘以它的长度的倒数$\frac{1}{\abs{\abs{\bvec v}}}$便可将其标准化，即
+\begin{equation}
+\abs{\abs{\frac{1}{\abs{\abs{\bvec v}}}\bvec v}}=1
+\end{equation}
+\end{example}
+\begin{theorem}{柯西-布尼亚科夫斯基不等式}\label{EuVS_the1}
+欧几里得向量空间中，对任意矢量 $\bvec x,\bvec y\in V$，成立不等式
+\begin{equation}\label{EuVS_eq4}
+\abs{(\bvec x|\bvec y)}\leq\abs{\abs{\bvec x}}\,\abs{\abs{\bvec y}}
+\end{equation}
+且等号仅在 $\bvec y=\lambda_0\bvec x,\;\lambda_0\in\mathbb R$ （即矢量共线）时成立.
+\end{theorem}
+\textbf{证明：}由纯量乘积的性质
+\begin{equation}\label{EuVS_eq2}
+\begin{aligned}
+&(\lambda\bvec x-\bvec y|\lambda\bvec x-\bvec y)\\
+&\underset{\text{线性}}{=}\lambda^2(\bvec x|\bvec x)-\lambda (\bvec x|\bvec y)-\lambda (\bvec y|\bvec x)+(\bvec y|\bvec y)\\
+&\underset{\text{对称性}}{=}\lambda^2(\bvec x|\bvec x)-2\lambda (\bvec x|\bvec y)+(\bvec y|\bvec y)\\
+&\underset{\text{正定性}}{\geq}0
+\end{aligned}
+\end{equation}
+\autoref{EuVS_eq2} 最后一不等式可看成关于 $\lambda$ 的二次三项式，其判别式满足
+\begin{equation}\label{EuVS_eq3}
+(2(\bvec x|\bvec y))^2-4(\bvec x|\bvec x)(\bvec y|\bvec y)\leq0
+\end{equation}
+即
+\begin{equation}
+\begin{aligned}
+(\bvec x|\bvec y)^2&\leq(\bvec x|\bvec x)(\bvec y|\bvec y)\\
+&\Downarrow\\
+\abs{(\bvec x|\bvec y)}&\leq\abs{\abs{\bvec x}}\,\abs{\abs{\bvec y}}
+\end{aligned}
+\end{equation}
+当等号成立时，\autoref{EuVS_eq3} 应取等，即二次三项式仅有一根 $\lambda_0$．对照\autoref{EuVS_eq2} 有
+\begin{equation}
+(\lambda_0\bvec x-\bvec y|\lambda_0\bvec x-\bvec y)=0
+\end{equation}
+即 $\bvec y=\lambda_0\bvec x$．
+
+\textbf{证毕！}
+\begin{corollary}{三角不等式}
+矢量 $\bvec x,\bvec y$ 与 $\bvec x+\bvec y$ 的长度满足不等式
+\begin{equation}
+\abs{\abs{\bvec x\pm\bvec y}}\leq\abs{\abs{\bvec x}}+\abs{\abs{\bvec y}}
+\end{equation}
+\end{corollary}
+\textbf{证明：}由\autoref{EuVS_the1} 
+\begin{equation}
+\begin{aligned}
+\abs{\abs{\bvec x\pm\bvec y}}^2&=\abs{\abs{\bvec x}}^2+\abs{\abs{\bvec y}}^2\pm2(\bvec x|\bvec y)\leq\abs{\abs{\bvec x}}^2+\abs{\abs{\bvec y}}^2+2(\bvec x|\bvec y)\\
+&\leq \abs{\abs{\bvec x}}^2+\abs{\abs{\bvec y}}^2+2\abs{\abs{\bvec x}}\cdot\abs{\abs{\bvec y}}=(\abs{\abs{\bvec x}}+\abs{\abs{\bvec y}})^2
+\end{aligned}
+\end{equation}
+
+\begin{example}{}
+在空间 $C_2(a,b)$（\autoref{EuVS_ex1} ） 上，\autoref{EuVS_eq4} 就变为
+\begin{equation}
+\abs{\int_a^b f(x)g(x)\dd x}\leq\sqrt{\int_a^b f^2(x)\dd x}\cdot\sqrt{\int_a^b g^2(x)\dd x}
+\end{equation}
+\end{example}
+\autoref{EuVS_the1} 意味着
+\begin{equation}
+-1\leq\frac{(\bvec x|\bvec y)}{\abs{\abs{\bvec x}}\,\abs{\abs{\bvec y}}}\leq1
+\end{equation}
+也就是说，存在一个角 $\varphi$ ，使得
+\begin{equation}
+\cos\varphi=\frac{(\bvec x|\bvec y)}{\abs{\abs{\bvec x}}\,\abs{\abs{\bvec y}}}
+\end{equation}
+\begin{definition}{夹角}
+欧几里得矢量空间中，由
+\begin{equation}
+\cos\varphi=\frac{(\bvec x|\bvec y)}{\abs{\abs{\bvec x}}\,\abs{\abs{\bvec y}}}
+\end{equation}
+确定的角 $\varphi$ 称之为矢量 $\bvec x$ 和 $\bvec y$ 的\textbf{夹角}． 
+\end{definition}
+\begin{definition}{正交}
+如果矢量的夹角为 $\pi/2$，亦即 $(\bvec x|\bvec y)=0$，则称它们是\textbf{正交的}，记作 $\bvec x\perp\bvec y$．
+\end{definition}
+\begin{theorem}{毕达哥拉斯定理}
+\begin{equation}
+\bvec x\perp\bvec y\Rightarrow\abs{\abs{\bvec x+\bvec y}}^2=\abs{\abs{\bvec x}}^2+\abs{\abs{\bvec y}}^2
+\end{equation}
+\end{theorem}
+\begin{exercise}{}
+试证明对两两正交的矢量 $\bvec v_1,\cdots,\bvec v_n$，成立
+\begin{equation}
+\abs{\abs{\bvec v_1+\cdots+\bvec v_n}}^2=\abs{\abs{\bvec v_1}}^2+\cdots+\abs{\abs{\bvec v_n}}^2
+\end{equation}
+\end{exercise}
+\begin{example}{}
+与给定矢量 $\bvec v$ 正交的所有矢量的集合是一个子空间，该空间称为 $\bvec v$ 的\textbf{正交补}．事实上，若
+\begin{equation}
+\bvec x\perp\bvec v,\quad\bvec y\perp\bvec v
+\end{equation}
+则
+\begin{equation}
+(\alpha\bvec x+\beta\bvec y|\bvec v)=\alpha(\bvec x|\bvec v)+\beta(\bvec y|\bvec v)=0,\quad \forall\alpha,\beta\in\mathbb R
+\end{equation}
+\end{example}
+若矢量 $\bvec v$ 与子空间 $U$ 任意矢量都正交，则说 $\bvec v$ 正交于子空间 $U$，记作 $\bvec v\perp U$．
+\begin{definition}{正交补}
+设 $U$ 是 $V$ 的子空间，则集合
+\begin{equation}
+\{\bvec x|\bvec x\perp U\wedge\bvec x\in V\}
+\end{equation}
+也是一个子空间，称为 $U$ 的\textbf{正交补}，记作 $U^{\perp}$ ．
+\end{definition}
+\begin{definition}{正交基底}
+称欧几里得空间 $V$ 的基底 $(\bvec e_1,\cdots,\bvec e_n)$ 是正交的，如果
+\begin{equation}
+(\bvec e_i|\bvec e_j)=0,\;i\neq j=1,\dots,n.
+\end{equation}
+若此外还有 $(\bvec e_i|\bvec e_i)=1,\;i=1,\cdots ,n$ ，则称此基底为\textbf{标准正交基底}.
+\end{definition}
+\begin{exercise}{}
+在标准正交基底下，矢量 $\bvec x$ 在基矢量 $\bvec e_i$ 上的坐标 $x_i$为
+\begin{equation}
+(\bvec x|\bvec e_i)=x_i
+\end{equation}
+\end{exercise}
+\begin{definition}{投影}
+称纯量乘积 $(\bvec x|\bvec e)$ 是矢量 $\bvec x$ 在直线 $\langle\bvec e\rangle_{\mathbb R}$ 上的\textbf{投影}，其中 $\bvec e$ 是个长度为1的矢量．  
+\end{definition}

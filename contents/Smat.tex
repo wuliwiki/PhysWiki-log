@@ -1,0 +1,103 @@
+% 散射理论与S矩阵
+% 相互作用场论|散射|S矩阵|费曼散射振幅
+\pentry{相互作用表象\upref{Ipic}}
+
+现在我们在相互作用表象中讨论形式散射理论，方便起见，设参考时间 $t_0=0$．在一般的散射问题中，入射粒子和出射粒子实际上是一系列波包，当 $t\rightarrow \pm\infty$ 时，我们假设不同的粒子间相互远离而导致它们之间的相互作用趋于 $0$．\footnote{在量子场论中问题会更加复杂，即使一个粒子与其他粒子完全远离，它与自己仍然存在自相互作用．只要允许相应的虚过程，单粒子与自身的相互作用是无法通过“绝热的方法”消去的．我们在后面会进一步讨论这个问题．}
+\subsection{入态和出态}
+设 $|\phi_{in/out,\alpha}\rangle=|\psi_\alpha^{\pm}(\mp \infty)\rangle^I$ 是一系列自由单粒子态的直积，分别代表入射粒子和出射粒子，$E_\alpha$ 是它们对应的自由哈密顿量 $H_0$ 的本征值，并且所有的 $|\phi_\alpha\rangle$ 构成 Hilbert 空间的一组完备基矢．在相互作用表象下 $|\phi_{in/out,\alpha}\rangle$ 随时间分别演化到  $|\psi_\alpha^{(\pm)}\rangle=|\psi_\alpha^{(\pm)}(0)\rangle^I$．
+我们称 $|\psi_\alpha^{+}\rangle$ 为入态，$|\psi_\alpha^{-}\rangle$ 为出态． 它们之间有以下的关系：
+
+\begin{equation}
+\begin{aligned}
+&|\psi_\alpha^{+}(-\infty)\rangle^I=|\phi_{in,\alpha}\rangle,|\psi_\alpha^{+}(0)\rangle^I=|\psi_\alpha^{+}\rangle\\
+&|\psi_\alpha^{-}(+\infty)\rangle^I=|\phi_{out,\alpha}\rangle,|\psi_\alpha^{-}(0)\rangle^I=|\psi_\alpha^{-}\rangle\\
+&|\psi_\alpha^+\rangle=U_I(0,-\infty)|\phi_{in,\alpha}\rangle = \Omega^{(+)} |\phi_{in,\alpha}\rangle,
+|\psi_\alpha^-\rangle=U_I(0,+\infty)|\phi_{out,\alpha} \rangle = \Omega^{(-)} |\phi_{out,\alpha}\rangle
+\end{aligned}
+\end{equation}
+
+其中我们定义了 Møller 波算符 $\Omega^{(\pm)}$，利用\autoref{Ipic_eq1}~\upref{Ipic}，可以证明
+\begin{equation}
+e^{iHt}\Omega^{(\pm)} e^{iH_0 t}=\Omega^{(\pm)}
+\end{equation}
+因此有
+\begin{equation}
+H\Omega^{(\pm)}=\Omega^{(\pm)}H_0
+\end{equation}
+这意味着 $H\Omega^{(\pm)}|\phi_{in/out,\alpha}\rangle=\Omega^{(\pm)}H_0|\phi_{in/out,\alpha}\rangle =E_\alpha \Omega^{(\pm)}|\phi_{in/out,\alpha}\rangle$，入态和出态是完全哈密顿量 $H$ 的本征值为 $E_\alpha$ 的本征态．
+\begin{equation}
+(H_0-E_\alpha)|\phi_{in/out,\alpha}\rangle=(H-E_\alpha)|\psi_\alpha^{\pm}\rangle=0
+\end{equation}
+我们也可以将 $|\psi_\alpha^{\pm}\rangle$ 看作是 $|\phi_{in/out,\alpha}\rangle$ 从相互作用表象变换到海森堡表象后得到的态矢量，在这种观点下，入态和出态分别 对应无穷远过去和无穷远未来的入射态和出射态，它们构成了海森堡表象下两组独立的完备基矢，共用同一个 Hilbert 空间．
+\subsection{ Lippman-Schwinger 方程}
+自由哈密顿量 $H_0$ 的本征态是容易确定的，但完全哈密顿量 $H$ 的本征态是复杂的．我们希望利用相互作用势 $V$ 和 $|\phi_{in/out,\alpha}\rangle$，具体地表达出入态和出态．当相互作用势较弱时，微扰论能很好地解决问题．以入态为例，利用相互作用表象下的时间演化算符可以写出
+\begin{equation}
+\begin{aligned}
+|\psi_\alpha^{(+)}\rangle=&U_I(0,-\infty)|\phi_{in,\alpha}\rangle\\
+=&\left[\mathbb{1}-i\int_{-\infty}^0 \dd t' V_I(t')+i^2\int_{-\infty}^0 \dd t'  \int_{-\infty}^{t'} \dd t'' V_I(t')V_I(t'')\right. \\
+&\left.-i^3\int_{-\infty}^0 \dd t'  \int_{-\infty}^{t'} \dd t'' \int_{-\infty}^{t''}\dd t''' V_I(t')V_I(t'')V_I(t''')+\cdots\right]|\phi_{in,\alpha}\rangle
+\end{aligned}
+\end{equation}
+注意到当 $t\rightarrow -\infty$ 时，$V_I(t)$ 将随时间振荡，于是积分无法计算．因此我们引入一个收敛因子 $e^{-\epsilon|t|}$ 来忽略相互作用 在 $t\rightarrow -\infty$ 时的影响，即 $V_I(t)\rightarrow V_I(t)e^{-\epsilon|t|}$．上式可以计算并化简为
+\begin{equation}
+\begin{aligned}
+|\psi_\alpha^{(+)}\rangle=&|\phi_{in,\alpha}\rangle-i\int_{-\infty}^0 \dd t' e^{i(\epsilon+H_0) t'} V  e^{-iE_\alpha t'}\dd t''|\phi_{in,\alpha}\rangle \\
+&+ i^2\int_{-\infty}^0 \dd t' e^{i(\epsilon+H_0)t'}V e^{-iH_0t'}  \int_{-\infty}^{t'}\dd t'' e^{i(\epsilon+H_0) t''} V e^{-iE_\alpha t''}|\phi_{in,\alpha}\rangle + \cdots\\
+=&|\phi_{in,\alpha}\rangle+\frac{1}{E_\alpha-H_0+i\epsilon}V|\phi_{in,\alpha}\rangle+\frac{1}{E_\alpha-H_0+i\epsilon}V\frac{1}{E_\alpha-H_0+i\epsilon}V|\phi_{in,\alpha}\rangle
++\cdots\\
+=&|\phi_{in,\alpha}\rangle+\frac{1}{E_\alpha-H_0+i\epsilon}V|\psi_\alpha^{(+)}\rangle
+\end{aligned}
+\end{equation}
+式中的 $\epsilon$ 始终代表大于 $0$ 的无穷小量．于是我们得到了入态 $|\psi_\alpha^{(+)}\rangle$ 关于 $|\phi_{in,\alpha}\rangle$ 的方程，类似地可以求出出态 $|\psi_\alpha^{(-)}\rangle$ 关于 $|\phi_{out,\alpha}\rangle $ 的方程．它们被称为 Lippman-Schwinger 方程
+\begin{equation}
+\begin{aligned}
+&|\psi_\alpha^{(+)}\rangle= |\phi_{in,\alpha}\rangle+\frac{1}{E_\alpha-H_0+i\epsilon}V|\psi_\alpha^{(+)}\rangle\\
+&|\psi_\alpha^{(-)}\rangle= |\phi_{out,\alpha}\rangle+\frac{1}{E_\alpha-H_0-i\epsilon}V|\psi_\alpha^{(-)}\rangle
+\end{aligned}
+\end{equation}
+\subsection{S-矩阵}
+定义 T-矩阵的矩阵元 $T_{\beta\alpha}^{\pm}=\langle \phi_\beta|V|\psi_\alpha^{(\pm)}\rangle$，我们可以将 Lippman-Schwinger 方程改写为
+\begin{equation}
+\begin{aligned}
+|\psi_\alpha^{(\pm)}\rangle= |\phi_{\alpha}\rangle+\int \dd\beta \frac{T_{\beta\alpha}^{(\pm)}}{E_\alpha-E_\beta\pm i\epsilon}|\phi_{\beta}\rangle
+\end{aligned}
+\end{equation}
+
+在散射问题中最重要的物理量是 S-矩阵．定义 S-矩阵的矩阵元为
+\begin{equation}
+S_{\beta\alpha}=\langle \psi_{\beta}^{(-)}| \psi_{\alpha}^{(+)}\rangle=\langle \phi_{out,\beta}| \Omega^{(-)\dagger}\Omega^{(+)}|\phi_{in,\alpha}\rangle=\langle \phi_{out,\beta}| S |\phi_{in,\alpha}\rangle
+\end{equation}
+S-矩阵的算符表达式为
+\begin{equation}
+S=\Omega^{(-)\dagger}\Omega^{(+)}=U_I(+\infty,0)U_I(0,-\infty)=U_I(+\infty,-\infty)
+\end{equation}
+我们可以看到，$S$ 算符就是相互作用表象下系统从无穷远过去到无穷远将来的演化算符，其矩阵元代表了从 $\phi_{in,\beta}$ 演化到 $\phi_{out,\alpha}$ 的概率振幅．$S$ 矩阵的幺正性保证了散射过程的概率守恒，可以验证 $S^\dagger=S^{-1}$，即 S-矩阵元满足
+\begin{equation}
+\int_{\beta}\dd \beta S_{\alpha\beta}S_{\gamma\beta}=\int_{\beta}\dd \beta S_{\beta\alpha}S_{\beta\gamma}=\delta(\gamma-\alpha)
+\end{equation}
+利用 Lippman-Schwinger 方程，计算 S-矩阵元
+\begin{equation}
+\begin{aligned}
+S_{\beta\alpha}&=\langle \psi_{\beta}^{(-)}| \psi_{\alpha}^{(+)}\rangle = \langle \phi_\beta|U_I(\infty,0)|\psi_{\alpha}^{(+)}\rangle\\
+&=\lim\limits_{t\rightarrow \infty} \langle \phi_\beta|e^{iH_0 t}e^{-iHt}|\psi_{\alpha}^{(+)}\rangle=e^{i(E_\beta-E_\alpha)t}\langle \phi_\beta|\psi_{\alpha}^{(+)}\rangle\\
+&=\delta(\alpha-\beta) + \lim\limits_{t\rightarrow \infty} \frac{e^{i(E_\beta-E_\alpha)t}}{E_\alpha-E_\beta+i\epsilon} \langle \phi_\beta|V|\psi_\alpha^{(+)}\rangle
+\end{aligned}
+\end{equation}
+再利用
+\begin{equation}
+\lim\limits_{t\rightarrow \infty}\lim\limits_{\epsilon\rightarrow +0} \frac{e^{i(E_\beta-E_\alpha)t}}{E_\alpha-E_\beta+i\epsilon}=-2\pi i \delta(E_\alpha-E_\beta)
+\end{equation}
+可以得到 S-矩阵的表达式
+\begin{equation}
+S_{\beta\alpha}=\delta(\alpha-\beta)-2\pi i \delta(E_\alpha-E_\beta)T_{\beta\alpha}^{(+)}
+\end{equation}
+
+对于任意的恰当正时洛伦兹变换 $\Lambda$，态 $\psi$ 在洛伦兹变化下变为 $U(\Lambda)\Psi$．根据 $U(\Lambda)$ 的幺正性，可以得出
+\begin{equation}
+S_{\beta\alpha}=\langle \psi_\beta^{(-)}| \psi_\alpha^{(+)} \rangle=\langle \psi_\beta^{(-)}| U(\Lambda)^\dagger U(\Lambda) |\psi_\alpha^{(+)} \rangle=S_{\beta'\alpha'}
+\end{equation}
+因此 S-矩阵具有洛伦兹不变性．注意 S-矩阵的表达式中有 $\delta(E_\alpha-E_\beta)$，因此除非 $\alpha$ 和 $\beta$ 态对应的四动量守恒，否则 S-矩阵为 $0$．我们可以写为以下形式
+\begin{equation}
+S_{\beta\alpha}=\delta(\alpha-\beta)-(2\pi)^4 i \mathcal{M}_{\beta\alpha}\delta^4(p_\beta-p_\alpha)
+\end{equation}
+$\mathcal{M}_{\beta\alpha}$ 被称为费曼散射振幅，或费曼振幅、费曼矩阵元．在相对论量子场论中，计算出费曼矩阵元就可以得到相应的 S-矩阵．量子场论的主要任务是计算散射过程的费曼振幅．它可以用来表达实验中可以测量的物理量，如衰变率、散射振幅等．

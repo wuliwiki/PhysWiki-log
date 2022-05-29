@@ -1,0 +1,358 @@
+% Julia 元素值的排序
+% Julia 元素值的排序
+
+
+\subsubsection{10.2 元素值的排序}
+
+排序的一个重要的前提条件是，数组中的所有元素值之间都是可比较的．在 Julia 中，我们最常用的排序函数莫过于\verb|sort|和\verb|issorted|．前者会对一个数组的复本中的所有元素值进行排序，并返回这个已排序的复本．而后者用于判断一个数组是否已经是有序的．
+
+在默认情况下，\verb|sort|函数会使用快速排序算法以整体升序的方式（或者说以元素值整体由小到大的顺序）对数组进行排序．并且，它只能排序一维数组中的元素值．例如：
+
+\begin{lstlisting}[language=julia]
+julia> vector_int = [115, 65, 18, 2, 117, -102, 123, 66, -93, -102];
+
+julia> sort(vector_int)
+10-element Array{Int64,1}:
+ -102
+ -102
+  -93
+    2
+    ⋮
+  115
+  117
+  123
+
+julia>
+\end{lstlisting}
+
+然而，这个函数的行为也是可定制的．进一步讲，通过为该函数的关键字参数进行赋值，我们就可以设定排序过程的一些细节．\verb|sort|函数共有 6 个关键字参数，分别名为\verb|dims|、\verb|alg|、\verb|lt|、\verb|by|、\verb|rev|和\verb|order|．我们下面就来对它们逐一说明．
+
+首先要讲的是参数\verb|dims|．这个参数的值用于确定哪一个维度中的元素值将会被排序．它的值只能是一个代表了某个有效维度的正整数．下面是相关的例子：
+
+\begin{lstlisting}[language=julia]
+julia> array2d_bool = 
+  Bool[0 0 1 0 0 1; 1 0 1 0 0 0; 0 0 0 1 0 0; 1 0 0 0 1 1; 0 1 0 1 0 0]
+5×6 Array{Bool,2}:
+ 0  0  1  0  0  1
+ 1  0  1  0  0  0
+ 0  0  0  1  0  0
+ 1  0  0  0  1  1
+ 0  1  0  1  0  0
+
+julia> sort(array2d_bool, dims=1)
+5×6 Array{Bool,2}:
+ 0  0  0  0  0  0
+ 0  0  0  0  0  0
+ 0  0  0  0  0  0
+ 1  0  1  1  0  1
+ 1  1  1  1  1  1
+
+julia> sort(array2d_bool, dims=2)
+5×6 Array{Bool,2}:
+ 0  0  0  0  1  1
+ 0  0  0  0  1  1
+ 0  0  0  0  0  1
+ 0  0  0  1  1  1
+ 0  0  0  0  1  1
+
+julia> 
+\end{lstlisting}
+
+我们可以看到，我们在对\verb|array2d_bool|排序的时候，若\verb|dims=1|，则它的每一列中的元素值就都会被分别排序．而若\verb|dims=2|，则它的每一行中的元素值就都会被分别排序．倘若这时我们不为\verb|dims|参数赋值，那么就会立即引发一个错误．比如：
+
+\begin{lstlisting}[language=julia]
+julia> sort(array2d_bool)
+ERROR: UndefKeywordError: keyword argument dims not assigned
+# 省略了一些回显的内容．
+
+julia> 
+\end{lstlisting}
+
+其原因是，\verb|array2d_bool|是一个多维数组，而\verb|sort|函数只能对一维数组中的元素值进行排序．所以，要让它在多维数组的某一个维度上排序是没有问题的，但要让它排序多个维度上的所有元素值，就超出了它的能力范围．
+
+另外还要注意，当\verb|sort|函数对一维数组排序时，\verb|dims|参数就不应该被赋值了，否则照样会引发一个错误，如：
+
+\begin{lstlisting}[language=julia]
+julia> sort(vector_int, dims=1)
+ERROR: MethodError: no meth od matching sort!(::Array{Int64,1}; dims=1)
+# 省略了一些回显的内容．
+
+julia> 
+\end{lstlisting}
+
+你也许会有个疑问，错误信息中的\verb|sort!|是什么？它其实是\verb|sort|函数内部使用的一个函数．我们也可以直接调用它，不过我稍后再讲．
+
+现在来说\verb|alg|参数．这个参数的名称是algorithm的缩写，代表排序算法．Julia为它预定义的可选值有\verb|InsertionSort|（插入排序）、\verb|QuickSort|（快速排序）、\verb|PartialQuickSort|（局部快速排序）和\verb|MergeSort|（归并排序）．这 4 个标识符各代表了一个常量，它们都被定义在了\verb|Base.Sort|模块中．\verb|alg|参数的默认值是\verb|QuickSort|．
+
+至于这几种排序算法孰优孰略，我就不多说了．它们都是很有知名度的算法．几乎所有的算法教程中都会对它们有所介绍．不过要注意，如果我们通过\verb|dims|参数指定的那个维度的长度不大于 20，那么 Julia 就会自动地把排序算法替换为\verb|InsertionSort|．这主要是因为在小数组上做插入排序会更快一些，而且它的空间复杂度也更低．
+
+参数\verb|lt|代表的是，比较两个元素值的函数．\verb|lt|是 less than 的缩写．因此，这个函数的功能就应该是判断它接受的第一个参数值是否小于第二个参数值．该参数的默认值是\verb|isless|函数．
+
+\verb|lt|参数虽然不能左右排序的算法，但是却能决定排序当中一个非常重要的细节——怎样比较各个元素值．请考虑下面的数组：
+
+\begin{lstlisting}[language=julia]
+julia> vector_tuple = 
+  [(115, 65), (18, 2), (117, -102), (123, 66), (-93, -102)]
+5-element Array{Tuple{Int64,Int64},1}:
+ (115, 65)  
+ (18, 2)    
+ (117, -102)
+ (123, 66)  
+ (-93, -102)
+
+julia> 
+\end{lstlisting}
+
+数组\verb|vector_tuple|中的每个元素值都是一个包含了两个整数值的元组．这些元组其实就是利用\verb|vector_int|数组中的元素值两两组合而成的．这倒是没有什么特殊的含义，只是为了方便你做对比罢了．
+
+在默认情况下，\verb|sort|函数会怎样对\verb|vector_tuple|数组的复本做排序呢？在比较其中的两个元组时，它会先对两者中的第一个元素值进行比较．若不同则比较完成，否则会再比较第二个元素值．倘若这两个元组完全相同，那么它们是否需要被交换就要看用的是哪一种排序算法了．示例如下：
+
+\begin{lstlisting}[language=julia]
+julia> sort(vector_tuple)
+5-element Array{Tuple{Int64,Int64},1}:
+ (-93, -102)
+ (18, 2)    
+ (115, 65)  
+ (117, -102)
+ (123, 66)  
+
+julia> 
+\end{lstlisting}
+
+现在，我们来自定义上述的比较过程．我们想让\verb|sort|函数先去比较两个元组中的第二个元素值，然后如有必要再去比较两者中的第一个元素值．为此，我们需要先编写一个比较函数．如果这个函数不需要被复用的话，我们就可以用一种简单的方式来编写，就像这样：
+
+\begin{lstlisting}[language=julia]
+(i,j) -> reverse(i) < reverse(j)
+\end{lstlisting}
+
+这个简单的函数没有名字，所以它是一个匿名函数．它的定义其实只有两个部分．第一个部分是，在符号\verb|->|左边的参数列表．这里有两个参数，即：\verb|i|和\verb|j|．第二个部分是，在符号\verb|->|右边的函数体．函数体可以产生一个或多个结果值．不过，上例中的函数体，即表达式\verb|reverse(i) < reverse(j)|，只会产生一个结果值．顺便说一句，\verb|reverse|函数会把其参数值中的所有元素值完全颠倒并返回新的值，如：调用表达式\verb|reverse((-93, -102))|的结果值会是\verb|(-102, -93)|．
+
+好了，我们现在可以用这个自定义的比较函数来调用\verb|sort|函数了．代码如下：
+
+\begin{lstlisting}[language=julia]
+julia> sort(vector_tuple, lt=(i,j)->reverse(i)<reverse(j))
+5-element Array{Tuple{Int64,Int64},1}:
+ (-93, -102)
+ (117, -102)
+ (18, 2)    
+ (115, 65)  
+ (123, 66)  
+
+julia> 
+\end{lstlisting}
+
+这种自定义的方式其实是很灵活的．因为当我们编写的函数拿到两个元素值的时候，基本上可以对它们的比较过程做出任意的干预．所以，不论你想自己制定什么样的比较规则，为\verb|lt|参数赋予适当的值通常都可以达到目的．
+
+不过，如果你只想在做比较之前对相关的元素值进行预处理，而在比较它们的时候依然使用默认的\verb|isless|函数的话，那么只为参数\verb|by|赋值就可以了．
+
+参数\verb|by|的值也应该是一个函数．这个函数可以决定的是，数组中的各个元素值将会以哪一种形态参与比较．这种形态可能只代表了元素值中的一部分（如只提取元组中的第二个元素值），也可能是元素值的某一种转换形式（如完全颠倒元组中的所有元素值）．这个参数的默认值是\verb|identity|函数，意味着数组中的各个元素值会以原本的形态来参与比较．
+
+下面是一些示例：
+
+\begin{lstlisting}[language=julia]
+julia> sort(vector_tuple, by=(e)->e[2])
+5-element Array{Tuple{Int64,Int64},1}:
+ (117, -102)
+ (-93, -102)
+ (18, 2)    
+ (115, 65)  
+ (123, 66)  
+
+julia> sort(vector_tuple, by=(e)->reverse(e))
+5-element Array{Tuple{Int64,Int64},1}:
+ (-93, -102)
+ (117, -102)
+ (18, 2)    
+ (115, 65)  
+ (123, 66)  
+
+julia> sort(vector_tuple, by=(e)->sum(abs,e))
+5-element Array{Tuple{Int64,Int64},1}:
+ (18, 2)    
+ (115, 65)  
+ (123, 66)  
+ (-93, -102)
+ (117, -102)
+
+julia> 
+\end{lstlisting}
+
+可以看到，即使我们只为\verb|by|参数赋值，也足以颠覆排序的结果了．所以说，这个参数在\verb|sort|函数中的地位仅次于\verb|lt|参数．
+
+下一个参数的名称\verb|rev|是reverse的缩写．这个参数的值可以决定是否反转数组中两个元素值的比较结果．无论\verb|sort|函数使用的是默认的比较规则还是我们利用\verb|lt|和\verb|by|自定义的比较规则，它的作用都会是如此．
+
+参数\verb|rev|的值可以是\verb|nothing|也可以是一个布尔值，而且其默认值是前者．在这里，默认值\verb|nothing|与\verb|false|的效果是一样的，即：不反转比较结果．之所以该参数的可选值中有\verb|nothing|，只是因为\verb|sort|函数的底层实现需要如此．而当\verb|rev|的值为\verb|true|时，\verb|sort|函数中的所有比较两个元素值的结果都会被反转，从而导致对数组的排序结果也会被完全反转．比如，在默认情况下，若\verb|rev=true|则意味着\verb|sort|函数会以整体降序的方式（或者说以元素值整体由大到小的顺序）对数组进行排序．
+
+参数\verb|order|的类型是\verb|Base.Order.Ordering|．Julia为它预定义的可选值有\verb|Base.Order.Forward|和\verb|Base.Order.Reverse|．前者是它的默认值．从这些名称上看，\verb|order|与\verb|rev|的作用好像很相似，而事实也确实如此．该参数同样可以决定是否反转两个元素值的比较结果．但不同的是，仅当\verb|lt|参数和\verb|by|参数的值都为默认值时，\verb|order|参数的值才会发挥作用．另外，如果同时设置了\verb|rev=true|和\verb|order=Base.Order.Reverse|，且两者都有效，那么它们就会相互抵消掉，如同它们的值都依然为默认值一样．
+
+以上，就是对\verb|sort|函数的调用方式的完整说明．只要你搞懂了它，那么\verb|issorted|函数也就容易理解了．
+
+对于任何的可迭代对象而言，\verb|issorted|函数都有两个衍生方法可用．其中的一个衍生方法只有两个必选的参数，即：代表可迭代对象的\verb|itr|和\verb|Base.Order.Ordering|类型的\verb|order|．后者可以是\verb|Base.Order.Forward|，也可以是\verb|Base.Order.Reverse|．它们分别代表着整体升序和整体降序．
+
+这个衍生方法调用起来也很简单，例如：
+
+\begin{lstlisting}[language=julia]
+julia> issorted(sort(vector_int), order=Base.Order.Forward)
+true
+
+julia> issorted(sort(vector_int), order=Base.Order.Reverse)
+false
+
+julia> 
+\end{lstlisting}
+
+一旦被调用，该衍生方法就会沿着可迭代对象\verb|itr|的线性索引号检查所有相邻的元素值，并判断它们是否都符合\verb|order|所描述的比较规则．如果结果是肯定的，那么该方法就会返回\verb|true|．但只要有一对相邻的元素值不符合规则，它就会返回\verb|false|．
+
+\verb|issorted|函数的另一个衍生方法其实是基于上述方法的．只不过它可以让我们更加精细地描述比较的规则．该方法除了必选的参数\verb|itr|之外，还有4个可选的关键字参数，即：\verb|lt|、\verb|by|、\verb|rev|和\verb|order|．这4个可选参数不但在含义上与\verb|sort|函数中的同名参数一致，而且它们的默认值也与之相同．由于这个衍生方法只有一个必选的参数，所以当我们只向\verb|issorted|函数传入一个参数值的时候，调用的就是该方法．
+
+下面我再来介绍几个相关的函数．首先要说的是\verb|sort!|函数，因为它正是\verb|sort|函数在底层使用的排序函数．不知道你是否还记得名称以\verb|!|结尾的函数意味着什么？这样的函数往往会修改我们传给它的那个最主要的参数值．
+
+\verb|sort!|函数的衍生方法有不少．其中的一个方法的参数列表与\verb|sort|函数的参数列表几乎完全相同．只不过，前者的\verb|alg|参数的默认值并不总是\verb|QuickSort|．更详细地说，仅当该方法要排序的数组中只存在数值（以及\verb|missing|）的情况下，\verb|alg|的默认值才会是\verb|QuickSort|，否则其默认值就会是\verb|MergeSort|．下面，我们就通过调用这个衍生方法来感受一下\verb|sort!|函数与\verb|sort|函数在行为上的不同．代码如下：
+
+\begin{lstlisting}[language=julia]
+julia> vector_temp = [115, 65, 18, 2, 117, -102, 123, 66];
+
+julia> sort(vector_temp)
+8-element Array{Int64,1}:
+ -102
+    2
+   18
+   65
+   66
+  115
+  117
+  123
+
+julia> vector_temp
+8-element Array{Int64,1}:
+  115
+   65
+   18
+    2
+  117
+ -102
+  123
+   66
+
+julia> sort!(vector_temp)
+8-element Array{Int64,1}:
+ -102
+    2
+   18
+   65
+   66
+  115
+  117
+  123
+
+julia> vector_temp
+8-element Array{Int64,1}:
+ -102
+    2
+   18
+   65
+   66
+  115
+  117
+  123
+
+julia> 
+\end{lstlisting}
+
+结果已经摆在这里了，我就不再描述了．你需要记住的是，在Julia中，由于数组总会以共享的方式被传递（passed by sharing），所以函数对数组的修改总是对外可见的．更明确地说，像\verb|sort!|这样的函数修改的总是原数组．
+
+我要介绍的第二个相关函数是\verb|sortperm|．这个函数也很有特点．它返回的不是已经排好序的数组复本，而是经过排序之后的所有元素值的索引号．这些索引号会被该函数组织成一个一维数组，以便将它们一起返回．而且，它们在这个一维数组中的位置很可能会与之前不同．
+
+请看下面的代码：
+
+\begin{lstlisting}[language=julia]
+julia> show(vector_int)
+[115, 65, 18, 2, 117, -102, 123, 66, -93, -102]
+
+julia> ord_nums = sortperm(vector_int); show(ord_nums)
+[6, 10, 9, 4, 3, 2, 8, 1, 5, 7]
+
+julia> ordered_vector_int = vector_int[ord_nums]; show(ordered_vector_int)
+[-102, -102, -93, 2, 18, 65, 66, 115, 117, 123]
+
+julia> ordered_vector_int == sort(vector_int)
+true
+
+julia>
+\end{lstlisting}
+
+为了方便对比，我在这里使用了函数\verb|show|，并额外添加了几个换行．\verb|show|函数的功能是，打印出其参数值的文本表示形式．
+
+可以看到，调用表达式\verb|sortperm(vector_int)|返回的是一个一维数组．这个一维数组中的第 1 个元素值\verb|6|的含义是，\verb|vector_int|中的第 6 个元素值\verb|-102|经排序后会处在第 1 的位置．而它的第 2 个元素值\verb|10|的含义为，\verb|vector_int|中的第 10 个元素值\verb|-102|经排序后会处在第 2 的位置．以此类推．
+
+更宽泛地讲，在\verb|sortperm|函数返回的一维数组中，每一个元素值都分别是原数组中的某个元素值的索引号，而它们所处的位置都分别是原数组中的某个元素值在经过排序之后的新位置．所以，多点索引表达式\verb|vector_int[ord_nums]|的求值结果就是已经排好序的原数组复本．它与调用表达式\verb|sort(vector_int)|的结果值是相同的．
+
+顺便说一下，\verb|sortperm|函数也有关键字参数\verb|alg|、\verb|lt|、\verb|by|、\verb|rev|和\verb|order|．而且，这些参数的含义和默认值也与\verb|sort|函数中的同名参数没什么两样．这就意味着，我们在调用这个函数的时候同样可以自己定制比较规则．不过要注意，\verb|sortperm|函数的第一个参数值只能是一个向量．也就是说，它无法对多维数组进行操作．
+
+我们要说的最后一个与排序相关的函数是\verb|sortslices|．它与\verb|sort|函数有一个很明显的不同．
+
+以二维数组为例，\verb|sort|函数排列的是各个列或各个行中的元素值．更具体地说，当\verb|dims=1|时，它会让每一个列里的元素值在各自所属的列中都是有序的．而当\verb|dims=2|时，它会让每一个行里的元素值在各自所属的行中都是有序的．我们在前面已经展示过相应的示例，相信你对此已经有所体会．
+
+然而，\verb|sortslices|函数却不会对各个行或各个列中的元素值进行排序．它会把每一个行或者每一个列都分别视为不可分割的部分，并称之为切片（slice），然后对这些切片进行排序．
+
+你还可以这样来理解：对于二维数组，\verb|sort|函数面向的是其中的一个个列或者一个个行，并且它会以列中或行中的元素值为单元进行排序．而\verb|sortslices|函数则是面向其中的某一个维度，并会以这个维度中的行或列为单元进行排序．
+
+如果你觉得这些描述都比较抽象，那么可以先看完接下来的示例再回顾它们．我们先定义如下的二维数组：
+
+\begin{lstlisting}[language=julia]
+julia> array2d_small = 
+  Int8[[3,1,7,2] [7,5,9,7] [3,0,1,6] [7,5,8,2]]
+4×4 Array{Int8,2}:
+ 3  7  3  7
+ 1  5  0  5
+ 7  9  1  8
+ 2  7  6  2
+
+julia> 
+\end{lstlisting}
+
+这个名为\verb|array2d_small|的二维数组有4个行和4个列．而且，无论从哪一个角度看，其中的各个元素值、各个行、各个列都是乱序的．
+
+对于这个二维数组来说，它在第一个维度上的切片会分别包含每一行中的元素值，即：\verb|[3 7 3 7]|、\verb|[1 5 0 5]|、\verb|[7 9 1 8]|和\verb|[2 7 6 2]|．因为在第一个维度上的是各个纵向的列，所有切分就是横向的，并且会切断所有的列．又由于这些列的长度都是 4，所以一共需要切分 3 次．你现在能感受到“切片”这个词的含义了吗？
+
+正因为如此，我们调用\verb|sortslices|函数为\verb|array2d_small|中的第一个维度排序才会得到如下的结果：
+
+\begin{lstlisting}[language=julia]
+julia> sortslices(array2d_small, dims=1)
+4×4 Array{Int8,2}:
+ 1  5  0  5
+ 2  7  6  2
+ 3  7  3  7
+ 7  9  1  8
+
+julia> 
+\end{lstlisting}
+
+切片\verb|[1 5 0 5]|中的第一个元素值比其他切片中的第一个元素值都要小，所以它被排在了最上面．实际上，我们仅通过这4个切片中的第一个元素值就可以排好它们的顺序了．
+
+我们再换一个维度对\verb|array2d_small|进行排序：
+
+\begin{lstlisting}[language=julia]
+julia> sortslices(array2d_small, dims=2)
+4×4 Array{Int8,2}:
+ 3  3  7  7
+ 0  1  5  5
+ 1  7  8  9
+ 6  2  2  7
+
+julia> 
+\end{lstlisting}
+
+这一次，\verb|array2d_small|会被切分成\verb|[3, 1, 7, 2]|、\verb|[7, 5, 9, 7]|、\verb|[3, 0, 1, 6]|和\verb|[7, 5, 8, 2]|．由于在第二个维度上的是各个横向的行，所有这次的切分是纵向的，不过切分的次数依然是 3 次．
+
+在排序的时候，\verb|sortslices|函数会成对地比较切片，并依次地比较其中在对应位置上的元素值．我们只靠心算也可以知道，\verb|[3, 0, 1, 6]|是最小的，会被排在最左边．而\verb|[7, 5, 9, 7]|是最大的，会被排在最右边．最后，经排序的新二维数组就如上所示了．
+
+\verb|sortslices|函数的关键字参数也很丰富．\verb|sort|函数中有的它也都有．因此，如果我们想在做这种排序的同时自定义比较规则，也是完全没有问题的．
+
+最后，关于这个函数，我们还需要注意如下三点：
+
+1. 我们在调用它的时候必须要为其\verb|dims|参数赋值，否则就会立即引发一个\verb|UndefKeywordError|类型的错误．
+2. 虽然该函数的第一个参数的类型是\verb|AbstractArray|，但它却不能对一维数组排序．其原因是一维数组无法被切分成多个切片，因而以切片为单元的排序也就无从谈起了．
+3. 对于三维及以上的多维数组，参数\verb|dims|的值通常必须是一个包含了多个有效维度的元组．虽然也可以把代表了某个有效维度的正整数赋给该参数，但是这样的话我们就必须要制定特殊的比较规则了．
+
+至此，关于数组的排序，我们先后讨论了 5 个函数，分别是\verb|sort|、\verb|issorted|、\verb|sort!|、\verb|sortperm|和\verb|sortslices|．其中最基础、最常用的显然是\verb|sort|函数．我们一旦理解了它，再去学习其他的函数就会容易很多．而且，我们前面讲的这些函数都很有特点，也都很有用，你都应该熟知．围绕着它们，\verb|Base.Sort|模块还定义了一系列功能更加复杂的函数．不过，鉴于篇幅，我就不在这里多说了，留给你自己去探索．

@@ -8,7 +8,7 @@
 
 double 和 “双精度和变精度浮点数测试（Matlab）\upref{FltMat}” 中的结果一样．
 
-g++ 在 64bit 机器上， long double 一般是 64 bit 浮点 + 15 bit 指数， 十进制大约是 18-19 位有效数字． 然而 sizeof 却是 16 字节， 但实际上只使用了不到 10 字节．
+在 x86 机器上， \verb|long double| 一般是 1 bit 指数 + 15 bit 指数 + 64 bit 小数 = 80 bit， 十进制大约是 18-19 位有效数字\footnote{Visual Studio 中据说 long double 和 double 是一样的．}． 虽然 \verb|sizeof| 是 16 字节， 但实际上只使用了 10 字节\footnote{详见\href{https://en.wikipedia.org/wiki/Extended_precision}{这里} 的 x86 extended precision format 一节}． \verb|long double| 的运算是硬件支持的， 所以比较快．
 
 \begin{lstlisting}
 sizeof(Doub) = 8
@@ -37,11 +37,41 @@ sqrt(Ldoub(2)) = 1.4142135623730951454
 precise val    = 1.4142135623730950488...
 \end{lstlisting}
 
+另外测试一下双精度的二进制表示（\autoref{CmArit_fig3}~\upref{CmArit}）， 例如双精度的 \verb|10| 表示为
+\begin{lstlisting}
+01000000 00100100 (48 个 0)
+\end{lstlisting}
+第一位 0 说明是正数， 1 是复数． 接下来 11 bit 先看成 unsigned， 然后再减 $2^{10}-1 = 1023$， 这里指数 \verb|10000000010| 表示 $1026-1023 = 3$， 于是指数项为 $2^{3} = 8$． 小数项应该是 $10/8 = 1+1/4$． 第 13 bit 表示 1/2， 14 bit 表示 1/4， 所以第 14 bit 是 1， 后面的小数全是零． 另外， 由于 intel 的 x86 和 x86-64 都使用 little endian， 所以在内存中实际上 byte 的顺序是相反的．
+
+理论上指数部分可以表示 $-1023$ 到 $1024$ 之间的数， 但首尾两个数有特殊用途， 所以只能表示 $-1022$ 到 $1023$． 当指数为 $-1024$ 时， 仍然相当于指数为 $-1023$ 但小数部分前面不加 1． 当指数为 $1024$ 时， 表示 \verb|nan| 或者 \verb|inf|．
+
+另外最大和最小的正 double 为
+\begin{lstlisting}
+std::numeric_limits<double>::max() = 1.797693135e+308
+01111111 11101111 11111111 11111111 11111111 11111111 11111111 11111111
+std::numeric_limits<double>::min() = 2.225073859e-308 = 2^-1022
+00000000 00010000 00000000 00000000 00000000 00000000 00000000 00000000
+std::numeric_limits<double>::epsilon() = 2.22e-16 = 2^-52
+00111100 10110000 00000000 00000000 00000000 00000000 00000000 00000000
+std::numeric_limits<double>::denorm_min() = 4.940656458e-324 = 2^-1074
+00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000001
+std::numeric_limits<double>::denorm_min()*11
+00000000 00000000 00000000 00000000 00000000 00000000 00000000 00001011
+double 1/0.:
+01111111 11110000 00000000 00000000 00000000 00000000 00000000 00000000
+double max()*2 (正无穷， 同 1/0.):
+01111111 11110000 00000000 00000000 00000000 00000000 00000000 00000000
+double -max()*2 (负无穷):
+11111111 11110000 00000000 00000000 00000000 00000000 00000000 00000000
+double sqrt(-1.) (NaN):
+11111111 11111000 00000000 00000000 00000000 00000000 00000000 00000000
+\end{lstlisting}
+其中 \verb|denorm_min()| 比较特殊， 当指数 bit 全为 0 的时候， 指数为 \verb|-1022| 而不是 \verb|-1023|， 且小数部分前面不加 1． 这叫做 \verb|denominize|．
 
 \subsection{四精度}
-使用四精度比使用任意精度类型（如 MPFR 或 Flint 库）要快得多， 因为任意精度浮点数是动态分配内存的．
+\footnote{参考 Wikipedia \href{https://en.wikipedia.org/wiki/Quadruple-precision_floating-point_format}{相关页面}．}使用四精度比使用任意精度类型（如 MPFR 或 Flint 库）要快得多， 因为任意精度浮点数是动态分配内存的．
 
-如果想完全利用 16 字节， 见 GCC/g++ 编译器的 \verb|__float128| 类型（\href{https://gcc.gnu.org/onlinedocs/gcc-8.1.0/libquadmath.pdf}{文档}）． 相当于 FORTRAN 的 \verb|QUAD real|． 有 112 bit 小数， 15 bit 指数和 1 bit 正负号（\autoref{FltCpp_fig1} ）．
+如果想完全利用 16 字节， 见 GCC/g++ 编译器的 \verb|__float128| 类型（\href{https://gcc.gnu.org/onlinedocs/gcc-8.1.0/libquadmath.pdf}{文档}）． 相当于 FORTRAN 的 \verb|QUAD real|． 有 112 bit 小数， 15 bit 指数和 1 bit 正负号（\autoref{FltCpp_fig1} ）． 实测的 bit 表示和上面二进制的同理（也存在两个奇怪的地方）．
 
 \begin{figure}[ht]
 \centering
@@ -66,8 +96,16 @@ M_PIq = 3.141592653589793238462643383279503 // 精确到最后一位
 sqrtq(3) = 1.732050807568877293527446341505872 // 精确到最后一位
 \end{lstlisting}
 
+给 \verb|__complex128| 的实部和虚部分别赋值：
+\begin{lstlisting}[language=cpp]
+__complex128 y;
+__real__ y = 实部;
+__imag__ y = 虚部;
+\end{lstlisting}
+看来还是用 \verb|std::complex<__real128>| 比较好．
+
 \subsection{其他}
-另见 Boost 的 \href{https://www.boost.org/doc/libs/develop/libs/multiprecision/doc/html/boost_multiprecision/tut/floats/float128.html}{float128} 页面． 以及 Intel 编译器的 \href{https://community.intel.com/t5/Intel-C-Compiler/Quad-precision-Quad-data-type/td-p/1218636}{_Quad} 类型． 另外一个比较有名的库是 \href{https://www.davidhbailey.com/dhbsoftware/}{QD}．
+另见 Boost 的 \href{https://www.boost.org/doc/libs/develop/libs/multiprecision/doc/html/boost_multiprecision/tut/floats/float128.html}{float128} 页面． 以及 Intel 编译器的 \href{https://community.intel.com/t5/Intel-C-Compiler/Quad-precision-Quad-data-type/td-p/1218636}{_Quad} 类型（其实也同样定义了 \verb|__float128| 和 \verb|__complex128|， 其他功能和 g++ 几乎完全兼容）． 另外一个比较有名的库是 \href{https://www.davidhbailey.com/dhbsoftware/}{QD}．
 
 \subsection{Lapack}
 最重要的 BLAS 和 Lapack 的解决方案：
@@ -75,5 +113,6 @@ sqrtq(3) = 1.732050807568877293527446341505872 // 精确到最后一位
 \item \href{http://mplapack.sourceforge.net/}{MPACK} （最出名）
 \item \href{https://github.com/nakatamaho/mplapack}{mplapack} （C++ 被 Julia 采用）
 \item Eigen 支持自定义标量类型的矩阵， 但需要定义 \verb|Eigen::NumTraits<T>|， 详见\href{https://eigen.tuxfamily.org/dox/TopicCustomizing_CustomScalar.html}{这里}．
+\item 可以改一下 Lapack++
 \item \href{https://github.com/langou/latl}{latl} （没人气）
 \end{itemize}

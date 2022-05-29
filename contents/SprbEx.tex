@@ -1,14 +1,17 @@
-% 完全域
-% complete domain|可分多项式|separable polynomial|微商|导数|形式微商|形式导数|多项式|重根|自同构|形式求导|形式微分
+% 可分扩张
+% 可分多项式|完全域|完备域|形式微商|微商|导数|形式导数|separable polynomial|重根|自同构|形式微分|Frobenius同态
+
 
 \pentry{分裂域\upref{SpltFd}}
 
-\addTODO{待加入目录．}
-\addTODO{需要进行串联所有逻辑的解释性语言．}
+\addTODO{画一个“各部分逻辑关系”的示意图．}
+
 
 由\autoref{SpltFd_the1}~\upref{SpltFd}可见，不可约多项式在其分裂域中有无重根，决定了该分裂域的自同构数量．一个域的全体自同构配合映射的复合，能构成一个群，域的许多性质都蕴含在这个群的结构中．群的元素数量自然是其重要性质之一．
 
 综上所述，研究多项式的重根是非常重要的课题．
+
+本节首先要提出形式微商的概念，这是一个用于判断多项式有无重根的有力工具．接着，就多项式有无重根问题，我们引入“可分”的概念，得到一系列如可分元素、可分多项式、可分扩张、完备域等重要概念，这一过程中会体现出形式微商简洁有力的作用．注意，这里的“完备域”或者说“完全域”，和数学分析中“所有柯西列都收敛”的“完备”不是一个概念．
 
 本节中如无特别声明或定义，多项式都是指\textbf{首一多项式}，即最高次项系数为$1$．这是合理的简化：我们讨论的是域上的多项式，因此任何多项式总可以乘以最高次项系数的乘法逆元来得到首一多项式．
 
@@ -16,7 +19,7 @@
 
 为了研究重根，我们借用微积分的知识，引入\textbf{形式微商}的概念
 
-\begin{definition}{形式微商}\label{CmplD_def1}
+\begin{definition}{形式微商}\label{SprbEx_def1}
 
 设$\mathbb{F}$是一个域，$f\in\mathbb{F}[x]$．若$f$表达为
 \begin{equation}
@@ -31,7 +34,7 @@ f(x) = \sum_{i=0}^n a_ix^i
 
 \end{definition}
 
-\autoref{CmplD_def1} 形式微商就是直接套用微积分中的求导操作，只不过这里没有求导的概念，而是就进行多项式变换，其形式就是求导或者求导的推广，因此才叫\textbf{形式}微商．
+\autoref{SprbEx_def1} 形式微商就是直接套用微积分中的求导操作，只不过这里没有求导的概念，而是就进行多项式变换，其形式就是求导或者求导的推广，因此才叫\textbf{形式}微商．
 
 \begin{example}{}
 考虑域$\mathbb{Z}_3$上的多项式$f(x)=x^5+2x^2-x-2$，则
@@ -57,7 +60,7 @@ f(x) = \sum_{i=0}^n a_ix^i
 
 容易验证，形式微商有以下性质：
 
-\begin{theorem}{形式微商的性质}\label{CmplD_the1}
+\begin{theorem}{形式微商的性质}\label{SprbEx_the1}
 
 给定域$\mathbb{F}$，$\opn{D}$是$\mathbb{F}[x]$上的形式微商算子．则：
 
@@ -71,13 +74,13 @@ f(x) = \sum_{i=0}^n a_ix^i
 
 \end{theorem}
 
-用\autoref{CmplD_the1} 中的性质可知，如果$a$是$f\in\mathbb{F}[x]$在$\mathbb{F}$上的重根，那么存在$g\in\mathbb{F}[x]$使得$f(x)=(x-a)^2g(x)$．这样一来，$\opn{D}f(x)=(x-a)\qty[2g(x)+(x-1)\opn{D}g(x)]$．也就是说，$a$还是$\opn{D}f$的根．
+用\autoref{SprbEx_the1} 中的性质可知，如果$a$是$f\in\mathbb{F}[x]$在$\mathbb{F}$上的重根，那么存在$g\in\mathbb{F}[x]$使得$f(x)=(x-a)^2g(x)$．这样一来，$\opn{D}f(x)=(x-a)\qty[2g(x)+(x-1)\opn{D}g(x)]$．也就是说，$a$还是$\opn{D}f$的根．
 
-\autoref{CmplD_the1} 中这些性质都是由导数的性质自然启发而得的．但要注意的是，函数的导数和多项式的形式微商在概念上有所重叠，却不是互相包含的．函数的导数可以用来处理非多项式的函数，而多项式的形式微商又可以处理非实数域的多项式，所以二者都有对方所不能处理的领域，勿随意混为一谈．\autoref{CmplD_the1} 中的性质能成立，也是需要额外验证的，而不能说因为导数有这些性质所以形式微商就一定有．
+\autoref{SprbEx_the1} 中这些性质都是由导数的性质自然启发而得的．但要注意的是，函数的导数和多项式的形式微商在概念上有所重叠，却不是互相包含的．函数的导数可以用来处理非多项式的函数，而多项式的形式微商又可以处理非实数域的多项式，所以二者都有对方所不能处理的领域，勿随意混为一谈．\autoref{SprbEx_the1} 中的性质能成立，也是需要额外验证的，而不能说因为导数有这些性质所以形式微商就一定有．
 
 下面这个定理说的就是导数所不具备的性质：
 
-\begin{theorem}{}\label{CmplD_the2}
+\begin{theorem}{}\label{SprbEx_the2}
 设$\mathbb{K}$是$f\in\mathbb{F}[x]$的分裂域，$a\in\mathbb{K}$是$f$的一个$k$重根．
 
 1. 如果$\opn{ch}\mathbb{F}\nmid k$，那么$a$是$\opn{D}f$的$k-1$重根；
@@ -115,7 +118,7 @@ f(x) = \sum_{i=0}^n a_ix^i
 
 
 
-\begin{corollary}{}\label{CmplD_cor1}
+\begin{corollary}{}\label{SprbEx_cor1}
 设$\mathbb{K}$是次数大于$1$的多项式$f\in\mathbb{F}[x]$的分裂域，则$f$在$\mathbb{K}$中无重根的充分必要条件是$(f, \opn{D}f)=1$\footnote{即最大公因子为$1$．}．
 \end{corollary}
 
@@ -123,7 +126,7 @@ f(x) = \sum_{i=0}^n a_ix^i
 
 必要性：
 
-由于$f$在$\mathbb{K}$中无重根，而域的特征不可能是$1$，因此适用\autoref{CmplD_the2} 中第一个情况．
+由于$f$在$\mathbb{K}$中无重根，而域的特征不可能是$1$，因此适用\autoref{SprbEx_the2} 中第一个情况．
 
 因为$\mathbb{K}$是$f\in\mathbb{F}[x]$的分裂域，且$f$无重根，故在$\mathbb{K}$中有
 \begin{equation}
@@ -159,13 +162,13 @@ f(x) = a_0(x-a_1)(x-a_2)\cdots(x-a_n)
 
 
 
-\begin{corollary}{}\label{CmplD_cor2}
+\begin{corollary}{}\label{SprbEx_cor2}
 设$\mathbb{K}$是$f\in\mathbb{F}[x]$的分裂域，且$f$是$\mathbb{F}[x]$上次数大于$1$的\textbf{不可约}多项式，那么$f$在$\mathbb{K}$中无重根的充分必要条件是$\opn{D}f \neq 0$．
 \end{corollary}
 
 \textbf{证明}：
 
-注意\autoref{CmplD_cor1} 和\autoref{CmplD_cor2} 的题设差异在于，后者多了“在$\mathbb{F}[x]$上不可约”这一要求．我们只需要证明加上这一要求时，$(f, \opn{D}f)=1 \iff \opn{D}f\neq 0$即可．
+注意\autoref{SprbEx_cor1} 和\autoref{SprbEx_cor2} 的题设差异在于，后者多了“在$\mathbb{F}[x]$上不可约”这一要求．我们只需要证明加上这一要求时，$(f, \opn{D}f)=1 \iff \opn{D}f\neq 0$即可．
 
 $\Rightarrow$：
 
@@ -183,13 +186,13 @@ $\Leftarrow$：
 
 对于次数大于$1$的多项式$f$，其形式微商可以为$0$．比如，$\mathbb{Z}_3$上的多项式$x^3+1$就是这样．不过$x^3+1$在$\mathbb{Z}_3[x]$上是可约的．
 
-下面我们给出一个例子，说明存在次数大于$1$的不可约多项式之形式微商为$0$，作为\autoref{CmplD_cor2} 的一个小验证．
+下面我们给出一个例子，说明存在次数大于$1$的不可约多项式之形式微商为$0$，作为\autoref{SprbEx_cor2} 的一个小验证．
 
 
 
 
 
-\begin{example}{}\label{CmplD_ex1}
+\begin{example}{}\label{SprbEx_ex1}
 
 考虑这样一个域$\mathbb{F}$，其定义为：$\mathbb{F}$是全体以$t$为不定元（或称抽象符号）、以$\mathbb{Z}_2$为系数域的有理式\footnote{即要么是$0$，要么是两个非零多项式的比，如$(x^4+3)/(x-2)$．}构成的集合，其加法和乘法运算都继承$\mathbb{Z}_2$的运算．
 
@@ -210,13 +213,13 @@ $\Leftarrow$：
 
 $p(x)$显然是不可约的．这是因为如果可约，那么它应该有两个一次多项式因子，也就是说它的根都在$\mathbb{F}$中，而根据$\mathbb{F}$的定义，这显然是不成立的．
 
-综上，我们得到的就是这样一个例子：$p(x)$是$\mathbb{F}[x]$上次数大于$1$的不可约多项式，且$\opn{D}p=0$，符合\autoref{CmplD_cor2} 的论断，即它有重根．
+综上，我们得到的就是这样一个例子：$p(x)$是$\mathbb{F}[x]$上次数大于$1$的不可约多项式，且$\opn{D}p=0$，符合\autoref{SprbEx_cor2} 的论断，即它有重根．
 
 \end{example}
 
-一般来说，\autoref{CmplD_ex1} 中的$\mathbb{Z}_2$替换为任意素域$\mathbb{Z}_p$、$x^2-t$也替换为$x^p-t$后，结论依然成立．感兴趣的读者可自行验证这一点．其中，证明$x^p-t$不可约，可以使用整环上的\textbf{爱森斯坦判别式}\upref{EsstCr}．
+一般来说，\autoref{SprbEx_ex1} 中的$\mathbb{Z}_2$替换为任意素域$\mathbb{Z}_p$、$x^2-t$也替换为$x^p-t$后，结论依然成立．感兴趣的读者可自行验证这一点．其中，证明$x^p-t$不可约，可以使用整环上的\textbf{爱森斯坦判别式}\upref{EsstCr}．
 
-\begin{corollary}{}\label{CmplD_cor3}
+\begin{corollary}{}\label{SprbEx_cor3}
 
 若域$\mathbb{F}$的特征为$0$，则其上任意次数大于$1$的不可约多项式在其分裂域（或大一些，$\mathbb{F}$的代数闭包）上没有重根．
 
@@ -230,18 +233,32 @@ $p(x)$显然是不可约的．这是因为如果可约，那么它应该有两�
 \subsection{可分多项式}
 
 
-\begin{definition}{}\label{CmplD_def2}
 
-设$\mathbb{F}$是域．若不可约多项式$f(x)\in\mathbb{F}[x]$在其分裂域中无重根，则称$f$为$\mathbb{F}$上\textbf{可分的（separable）}不可约多项式．
+\subsubsection{完备域}
 
-若任意$g(x)\in\mathbb{F}[x]$的每一个不可约因式都是可分的，则称$g$可分．
+
+
+\begin{definition}{}\label{SprbEx_def2}
+
+设$\mathbb{F}$是域．若多项式$f(x)\in\mathbb{F}[x]$在其分裂域中无重根，则称$f$为$\mathbb{F}$上\textbf{可分（separable）}多项式\footnote{这里采用GTM 242 \textsl{Abstract Algebra}的定义．有些材料中（如孟道骥《抽象代数I-代数学基础》）会把无重根的\textbf{不可约}多项式定义为可分的，而一般的多项式则只要求其不可约因子是可分的，即定义为可分多项式．我们通常研究的是不可约多项式，在这一点上所有“可分”定义都是一致的，所以一般多项式的可分定义之分歧无伤大雅．}．
+
 
 \end{definition}
 
-简单来说，可分多项式就是在系数域的代数闭包里没有重根的多项式．由\autoref{CmplD_cor3} 可知，只有在域特征为某个素数的情况下才有可能出现不可分多项式，比如\autoref{CmplD_ex1} 那样的．
+简单来说，可分多项式就是在系数域的代数闭包里没有重根的多项式．由\autoref{SprbEx_cor3} 可知，只有在域特征为某个素数的情况下才有可能出现不可分多项式，比如\autoref{SprbEx_ex1} 那样的．
 
 
-\begin{theorem}{}\label{CmplD_the3}
+\begin{definition}{可分元}
+如果域$\mathbb{F}$的代数元$a$在$\mathbb{F}$上的最小多项式是可分的，那么称这个元素是\textbf{（可分）}元．
+\end{definition}
+
+\begin{definition}{可分扩张}
+如果域扩张$\mathbb{K}/\mathbb{F}$中，任意$a\in\mathbb{K}$都是$\mathbb{F}$的可分元，那么称该扩张是\textbf{可分}扩张．
+\end{definition}
+
+
+
+\begin{theorem}{}\label{SprbEx_the3}
 设域$\mathbb{F}$的特征为素数$p$，$f(x)\in\mathbb{F}[x]$是其上的\textbf{不可分不可约}多项式，$\mathbb{K}$是$f(x)\in\mathbb{F}[x]$的分裂域．
 
 则$f(x)$在$\mathbb{K}$中每个根的重数是相同的．
@@ -255,7 +272,7 @@ f(x) = \sum_{i=0}^n a_ix^i
 \end{equation}
 
 
-由于其不可分、不可约，故由\autoref{CmplD_def2} 和\autoref{CmplD_cor2} 知，$a_i\neq 0 \Rightarrow p\mid i$．也就是说我们可以把$f$中次数不是$p$整数倍的单项式挖掉．
+由于其不可分、不可约，故由\autoref{SprbEx_def2} 和\autoref{SprbEx_cor2} 知，$a_i\neq 0 \Rightarrow p\mid i$．也就是说我们可以把$f$中次数不是$p$整数倍的单项式挖掉．
 
 换言之，存在$g(x)\in\mathbb{F}[x]$，使得$f(x)=g_0(x^p)$．
 
@@ -291,16 +308,41 @@ f(x) = \prod_{j=1}^{r} (x-b_j)^{p^k}
 \textbf{证毕}．
 
 
-\begin{definition}{完全域}
+\begin{definition}{完备域}\label{SprbEx_def3}
 
-若域$\mathbb{F}[x]$上的每个多项式都是可分多项式，则称$\mathbb{F}$是一个\textbf{完全域（complete domain）}．
+若域$\mathbb{F}[x]$上的每个不可约多项式都是可分多项式，则称$\mathbb{F}$是一个\textbf{完备域（complete domain）}，或\textbf{完全域}．
+
 
 \end{definition}
 
-由\autoref{CmplD_cor3} 可知，特征为$0$的域都是完全域，因此我们接下来只讨论特征为素数$p$的情况．首先，我们给出两个相似的简单引理，对之后的定理证明有帮助：
+\begin{theorem}{}\label{SprbEx_the5}
+\autoref{SprbEx_def3} 一个等价表述为：所有代数扩张都是可分扩张，则为完备域．
+\end{theorem}
 
 
-\begin{lemma}{}\label{CmplD_lem2}
+
+
+\textbf{证明}：
+
+按照可分元和可分扩张的定义，“所有代数扩张都是可分扩张”等价于“所有代数元的最小多项式都是可分多项式”．但是，任意一个不可约多项式都可以是一个代数元的最小多项式，因此该命题又等价于“所有不可约多项式都是可分多项式”．
+
+\textbf{证毕}．
+
+
+
+
+
+
+
+
+
+\subsubsection{特征不为$0$时的完备域}
+
+
+由\autoref{SprbEx_cor3} 可知，特征为$0$的域都是完备域，因此我们接下来只讨论特征为素数$p$的情况．首先，我们给出两个相似的简单引理，对之后的定理证明有帮助：
+
+
+\begin{lemma}{}\label{SprbEx_lem2}
 设域$\mathbb{F}$的特征为$p$，则对于任意$a_i\in\mathbb{F}$和任意正整数$k$，只要$p\mid k$，就有
 
 \begin{equation}
@@ -309,10 +351,10 @@ f(x) = \prod_{j=1}^{r} (x-b_j)^{p^k}
 
 \end{lemma}
 
-由于证明思路是完全一样的，因此省略\autoref{CmplD_lem2} 的证明，读者可参考下面\autoref{CmplD_lem1} 的证明．
+由于证明思路是完全一样的，因此省略\autoref{SprbEx_lem2} 的证明，读者可参考下面\autoref{SprbEx_lem1} 的证明．
 
 
-\begin{lemma}{}\label{CmplD_lem1}
+\begin{lemma}{}\label{SprbEx_lem1}
 设域$\mathbb{F}$的特征为$p$，则对于任意多项式
 \begin{equation}
 f(x) = \sum_{i=0}^n a_ix^i
@@ -329,10 +371,31 @@ f(x) = \sum_{i=0}^n a_ix^i
 
 \textbf{证毕}．
 
-\begin{theorem}{}\label{CmplD_the4}
-设域$\mathbb{F}$的特征为$p$，则$\mathbb{F}$是完全域的充要条件为：$\forall a\in\mathbb{F}$，存在$b\in\mathbb{F}$使得$a=b^p$．
 
-等价表述为：定义映射$\sigma:\mathbb{F}\to\mathbb{F}$为$\sigma(a)=a^p$，则$\mathbb{F}$是完全域的充要条件为$\sigma(\mathbb{F})=\mathbb{F}$．
+这两个定理揭示了有限域上极为重要而简洁的性质．我们简单看看一个例子，利用起这个性质：
+
+
+
+
+\begin{example}{}\label{SprbEx_ex2}
+考虑$\mathbb{Z}_p$的单超越扩域$\mathbb{Z}_p(\pi)$．则$x^p-\pi$是$\mathbb{Z}_p(\pi)$上的不可约多项式\footnote{考虑到$\mathbb{Z}_p(\pi)$是整环，且$\pi$是其素元素，应用\textbf{爱森斯坦判别式}\upref{EsstCr}即可得证．}，但$\opn{D}(x^p-\pi)=0$，从而是一个不可分的不可约多项式．因此，$\mathbb{Z}_p(\pi)$不是完备域．
+
+\end{example}
+
+
+
+在域$\mathbb{F}$上，任取$a\in\mathbb{F}$，如果存在$b\in\mathbb{F}$使得$a=b^p$，那么据\autoref{SprbEx_lem2} ，$x^p-a$一定是有重根的：$x^p-a=(x-b)^p$\footnote{和\autoref{SprbEx_ex2} 比起来，这里爱森斯坦判别式无效了，因为任何元素都不是素元素了．理由很简单，$a=b^p$，所以$a\mid b\cdot b^{p-1}$．于是，要么$a$是\textbf{单位}（\autoref{FctTre_def3}~\upref{FctTre}），这样$a\mid 1$；要么$a$不是素元素．总之$x^p-a$没法符合爱森斯坦判别式中素元素或素理想的要求．}．所以为了构造完备域，我们必须要求所有这类多项式都是可约的，这样才不违反“不存在不可约不可分多项式”的规定．
+
+因此，如果对于任意$a\in\mathbb{F}$，总存在$b\in\mathbb{F}$使得$a=b^p$，那么至少能保证形如$x^p-a$的多项式不会违反完备域的要求．但这个条件是不是能保证所有不可约多项式都是无重根的呢？这是一个很有力的猜想，而下面的\autoref{SprbEx_the4} 说明它确实是成立的．
+
+
+
+
+
+\begin{theorem}{特征不为零时完备域的等价定义}\label{SprbEx_the4}
+设域$\mathbb{F}$的特征为$p$，则$\mathbb{F}$是完备域的充要条件为：$\forall a\in\mathbb{F}$，存在$b\in\mathbb{F}$使得$a=b^p$．
+
+等价表述为：定义映射$\sigma:\mathbb{F}\to\mathbb{F}$为$\sigma(a)=a^p$，则$\mathbb{F}$是完备域的充要条件为$\sigma(\mathbb{F})=\mathbb{F}$．
 \end{theorem}
 
 \textbf{证明}：
@@ -341,7 +404,7 @@ f(x) = \sum_{i=0}^n a_ix^i
 
 设$\forall a\in\mathbb{F}$，存在$b\in\mathbb{F}$使得$a=b^p$，但反设存在\textbf{不可分}的不可约多项式$f(x)\in\mathbb{F}[x]$．
 
-由\autoref{CmplD_the3} ，存在\textbf{可分}的不可约多项式$h(x)\in\mathbb{F}[x]$和正整数$k$，使得$f(x)=h(x^{p^k})$．
+由\autoref{SprbEx_cor2} ，存在\textbf{可分}的不可约多项式$h(x)\in\mathbb{F}[x]$和正整数$k$，使得$f(x)=h(x^{p^k})$．
 
 设
 \begin{equation}
@@ -349,17 +412,17 @@ h(x) = \sum_{i=0}^r a_ix^i
 \end{equation}
 则存在$b_i\in\mathbb{F}$使得$a_i=b_i^{p^k}$．
 
-\begin{equation}\label{CmplD_eq1}
+\begin{equation}\label{SprbEx_eq1}
 \begin{aligned}
 f(x)&=h(x^{p^k}) \\
-&=\sum_{i=0}^r b_i^{p^k}(x^{p^k})^i\\
+&=\sum_{i=0}^r a_i(x^{p^k})^i\\
 &=\sum_{i=0}^r b_i^{p^k}(x^{i})^{p^k}\\
 &=\sum_{i=0}^r \qty(b_ix^i)^{p^k}\\
 &=\qty(\sum_{i=0}^r b_ix^i)^{p^k}
 \end{aligned}
 \end{equation}
 
-\autoref{CmplD_eq1} 的最后两步，应用了\autoref{CmplD_lem1} ．这么一来，$f(x)$就可约了，和“不可约”的假设矛盾．故反设不成立，故不存在不可分的不可约多项式，也就是说$\mathbb{F}$是完全域．
+\autoref{SprbEx_eq1} 的最后一个等号，应用了\autoref{SprbEx_lem1} ．这么一来，$f(x)$就可约了，和“不可约”的假设矛盾．故反设不成立，故不存在不可分的不可约多项式，也就是说$\mathbb{F}$是完备域．
 
 必要性：
 
@@ -369,14 +432,28 @@ f(x)&=h(x^{p^k}) \\
 
 于是$f(x)=(x-a_0)^p$．如果它有非平凡因子，那么因子必形如$(x-a_0)^k$，其中$k\in(0, p)$，而$a_0^k\not\in\mathbb{F}$，所以这个因子不可能在$\mathbb{F}[x]$中．因此，$f$在$\mathbb{F}[x]$上是不可约的．
 
-显然，$f$有重根\footnote{你也可以计算$\opn{D}f$看看是否符合\autoref{CmplD_cor2} .}，因此不可分．这个不可分不可约多项式的存在意味着$\mathbb{F}$不完全，从而得证必要性．
+显然，$f$有重根\footnote{你也可以计算$\opn{D}f$看看是否符合\autoref{SprbEx_cor2} .}，因此不可分．这个不可分不可约多项式的存在意味着$\mathbb{F}$不完全，从而得证必要性．
 
 \textbf{证毕}．
 
-\autoref{CmplD_the1} 真是一个深刻的结论，使得我们可以仅从域中元素的性质判断其多项式的性质．
 
-\begin{corollary}{}\label{CmplD_cor4}
-有限域都是完全域．
+
+
+特征为$p$的域上，域自同构$\sigma(a)=a^p$称为\textbf{Frobenius同态}．
+
+
+\autoref{SprbEx_the1} 真是一个深刻的结论，使得我们可以仅从域中元素的性质判断其多项式的性质．
+
+
+
+
+
+
+
+
+
+\begin{corollary}{}\label{SprbEx_cor4}
+有限域都是完备域．
 \end{corollary}
 
 \textbf{证明}：
@@ -391,20 +468,21 @@ f(x)&=h(x^{p^k}) \\
 
 \textbf{证毕}．
 
-另外，由于$\sigma(ab)=\sigma(a)\sigma(b)$和$\sigma(a+b)=(a+b)^p=a^p+b^p=\sigma(a)+\sigma(b)$，因此\autoref{CmplD_cor4} 证明中的$\sigma$还是一个\textbf{域同构}．
+另外，由于$\sigma(ab)=\sigma(a)\sigma(b)$和$\sigma(a+b)=(a+b)^p=a^p+b^p=\sigma(a)+\sigma(b)$，因此\autoref{SprbEx_cor4} 证明中的$\sigma$还是一个\textbf{域同构}．
 
 
-\begin{corollary}{}\label{CmplD_cor5}
-设$\mathbb{F}$是完全域，$\mathbb{K}$是其代数扩张，则$\mathbb{K}$也是完全域．
+\begin{corollary}{}\label{SprbEx_cor5}
+设$\mathbb{F}$是完备域，$\mathbb{K}$是其代数扩张，则$\mathbb{K}$也是完备域．
 \end{corollary}
+
 
 \textbf{证明}：
 
-由于扩域不改变域的特征以及特征为$0$的域都是完全域，我们只需要讨论特征为素数$p$的情况．又因为我们只需要证明，如果$x_0$是$\mathbb{F}$的代数元，那必存在$y_0\in\mathbb{F}(x_0)$使得$y_0^p=x_0$，故只需要考虑单代数扩张的情况．
+% 由于扩域不改变域的特征以及特征为$0$的域都是完备域，我们只需要讨论特征为素数$p$的情况．又因为我们只需要证明，如果$x_0$是$\mathbb{F}$的代数元，那必存在$y_0\in\mathbb{F}(x_0)$使得$y_0^p=x_0$，故只需要考虑单代数扩张的情况．
 
 % 设$x_0$在$\mathbb{F}$上的最小多项式为$f(x)=\sum_{i=0}^n a_ix^i$．
 
-% 由于$\mathbb{F}$是完全域，所以可以取$b_i\in\mathbb{F}$使得$b_i^p=a_i$．定义$h(x) = \sum_{i=0}^n b_ix^i$．由于$\opn{ch}\mathbb{F}=p$，据\autoref{CmplD_lem1} 知
+% 由于$\mathbb{F}$是完备域，所以可以取$b_i\in\mathbb{F}$使得$b_i^p=a_i$．定义$h(x) = \sum_{i=0}^n b_ix^i$．由于$\opn{ch}\mathbb{F}=p$，据\autoref{SprbEx_lem1} 知
 % \begin{equation}
 % \begin{aligned}
 % \qty(h(x))^p&=(\sum_{i=0}^n b_ix^i)^p\\
@@ -414,33 +492,69 @@ f(x)&=h(x^{p^k}) \\
 % \end{aligned}
 % \end{equation}
 
-% \textbf{如果}$g(x)=\sum_{i=0}^nb_ix^i$在$\mathbb{F}$上是可约的，即存在$c(x)=\sum_{i=0}^rc_ix^i$和$d(x)=\sum_{i=0}^{n-r}d_ix^i$使得$h(x)=c(x)d(x)$，那么据\autoref{CmplD_lem2} ，知
+% \textbf{如果}$g(x)=\sum_{i=0}^nb_ix^i$在$\mathbb{F}$上是可约的，即存在$c(x)=\sum_{i=0}^rc_ix^i$和$d(x)=\sum_{i=0}^{n-r}d_ix^i$使得$h(x)=c(x)d(x)$，那么据\autoref{SprbEx_lem2} ，知
 % \begin{equation}
 % f(x) = (\sum_{i=0}^rc_i^px^i)(\sum_{i=0}^rd_i^px^i)
 % \end{equation}
 % 即$f$也可约．但由于$f$是最小多项式，故矛盾，故$g$在$\mathbb{F}$上\textbf{不可约}．
 
-% \textbf{证毕}．
-
-考虑映射$\sigma:\mathbb{F}\to\mathbb{F}$，定义为$\sigma(a)=a^p$．由\autoref{CmplD_the4} ，
-\begin{equation}
-\sigma(\mathbb{F})=\mathbb{F}
-\end{equation}
-易验证，$\sigma$是域同构．
-
-设$x_0$是$\mathbb{F}$的一个代数元，其最小多项式为$f(x)$．
-
-将$\sigma$开拓为$\mathbb{F}[x_0]\to\mathbb{F}[x_0^p]$上的环同构，定义为$\sigma(\sum_{i=0}^n a_ix_0^i)=\sum_{i=0}^n a_i^p(x_0^p)^{i}$．
 
 
 
 
 
-\begin{example}{\autoref{CmplD_cor5} 的正例}
+
+% 考虑映射$\sigma:\mathbb{F}\to\mathbb{F}$，定义为$\sigma(a)=a^p$．由\autoref{SprbEx_the4} ，
+% \begin{equation}
+% \sigma(\mathbb{F})=\mathbb{F}
+% \end{equation}
+% 易验证，$\sigma$是域同构．
+
+% 设$x_0$是$\mathbb{F}$的一个代数元，其最小多项式为$f(x)$．
+
+% 将$\sigma$开拓为$\mathbb{F}[x_0]\to\mathbb{F}[x_0^p]$上的环同构，定义为$\sigma(\sum_{i=0}^n a_ix_0^i)=\sum_{i=0}^n a_i^p(x_0^p)^{i}$．
+
+
+由\autoref{FldExp_cor2}~\upref{FldExp}，$\mathbb{K}$的代数扩张都是$\mathbb{F}$的代数扩张，从而是$\mathbb{F}$的可分扩张，从而是$\mathbb{K}$的可分扩张．由可分扩张的等价定义\autoref{SprbEx_the5} 即得证．
+
+
+\textbf{证毕}．
+
+
+\begin{example}{}\label{SprbEx_ex3}
 考虑$\mathbb{Z}_5$的单代数扩张$\mathbb{Z}_5(\sqrt{2})=\{0, 1, 2, 3, 4, \sqrt{2}, \sqrt{3}\}$．
 
-则这是一个完全域，其中对于任意$a\in\mathbb{Z}_5(\sqrt{2})$，都有$a^5=a$．
+则这是一个完备域，其中对于任意$a\in\mathbb{Z}_5(\sqrt{2})$，都有$a^5=a$．
 \end{example}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

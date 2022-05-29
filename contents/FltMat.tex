@@ -1,6 +1,10 @@
 % 双精度和变精度浮点数测试（Matlab）
 
-\pentry{Matlab 符号计算和变精度计算\upref{MatSym}}
+\begin{issues}
+\issueDraft
+\end{issues}
+
+\pentry{计算机算数\upref{CmArit}， Matlab 符号计算和变精度计算\upref{MatSym}}
 
 \begin{itemize}
 \item 双精度的小数部分有 52 bit， 正负号 1 bit． 大概范围是 $[-2,2]$
@@ -36,7 +40,7 @@ function [a, Npow] = num2bin(x)
 if isnan(x) || isinf(x)
     a = x; Npow = x; return;
 end
-sgn = sign(x); x = abs(vpa(x));
+sgn = sign(x); x = abs(num2sym(x));
 Npow = floor(log2(x));
 a = sgn * (x * 2^(-Npow));
 if a*2^Npow - sgn*x ~= 0
@@ -95,6 +99,36 @@ if nargin == 1
     ret = vpa(N)*2^vpa(Npow);
 elseif nargin == 2
     ret = vpa(N, digi)*2^vpa(Npow, digi);
+end
+end
+\end{lstlisting}
+
+该函数参考 “计算机算数\upref{CmArit}”
+\begin{lstlisting}[language=matlab, caption=double2bin.m]
+% 把一个双精度数转换为 '0' '1' 字符串
+% convert a double to bit string
+function str = double2bin(x)
+if abs(x) < 2^-1022 || isnan(x) || isinf(x)
+    error('not implemented!');
+end
+% 1 bit sign
+if x > 0
+    str = '0';
+else
+    str = '1';
+end
+x = abs(x);
+% 11 bit exponent
+[~, e] = num2bin(x);
+str = [str dec2bin(e + 1023, 11)];
+% 52 bit mantessa
+i = int64(num2bin2(x));
+mstr = dec2bin(i);
+str = [str mstr(2:end)];
+if numel(str) < 64
+    str = [str repmat('0', [1,64-numel(str)])];
+elseif numel(str) > 64
+    error('something wrong!');
 end
 end
 \end{lstlisting}
