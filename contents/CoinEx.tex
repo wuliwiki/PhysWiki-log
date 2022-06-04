@@ -1,0 +1,27 @@
+% 抛硬币实验进阶
+
+\begin{issues}
+\issueDraft
+\end{issues}
+
+\pentry{二项分布\upref{BiDist}， 中心极限定理\upref{CLT}}
+
+我们都知道一枚公平的硬币， 若抛许多次， 那么正反的比例大约是 1:1． 那么若把某次实验的结果中， 前 $n$ 次中正面向上所占的比例记为 $P_n$， 那么对任意一次实验， 数列 $P_n$ 是否都满足以下极限呢？
+\begin{equation}
+\lim_{n\to\infty} P_n = \frac{1}{2} \qquad (\text{误})
+\end{equation}
+这是错误的． 根据数列极限的定义\upref{Lim0}， 对于任意给定的 $\epsilon > 0$， 都存在整数 $N$， 当 $n>N$ 时就必有 $\abs{P_n -1/2} < \epsilon$． 对于抛硬币而言， 这是无法做到的． 因为无论抛几次， 都存在不为零的概率使全部正面向上或反面向上（概率为 $1/2^n$）． 所以只要令 $\epsilon = 0.5$ 或更小， 就不可能找到符合条件的 $N$．
+
+当抛硬币次数较多时， 根据中心极限定理\upref{CLT}可知正面向上概率的方差为 $1/(4N)$． 该分布为二项分布， 本质上和高尔顿板\upref{Galton} 原理相同．
+
+\begin{lstlisting}[language=matlab]
+N = 60; % 每组投掷
+M = 10000; % 实验组数
+data = sum(rand(M, N) > 0.5, 2)/N;
+format long;
+disp('理论方差 =');
+disp(1/(4*N));
+disp('实验方差 =');
+disp(std(data)^2);
+hist(data, 20);
+\end{lstlisting}

@@ -1,0 +1,159 @@
+% Julia 数组的拷贝
+% Julia 数组 拷贝
+
+本文授权转载自郝林的 《Julia 编程基础》． 原文链接：\href{https://github.com/hyper0x/JuliaBasics/blob/master/book/ch10.md}{第 10 章 容器：数组（下）}．
+
+
+\subsubsection{10.3 数组的拷贝}
+
+在 Julia 中，任何的值都可以通过两种方式进行拷贝．一种方式是浅拷贝，另一种方式是深拷贝．数组也不例外．
+
+函数\verb|copy|的功能是浅拷贝一个值．它只会拷贝原值的外层结构，然后把原结构中的各个内部对象原封不动地塞到这个新的结构中．也就是说，新的结构加上原有的内部对象就形成了新的值．
+
+这些原有的内部对象可能是原语类型的值，也可能是复合类型的值，另外还可能是更加复杂的值，比如容器．就拿数组来说，它的内部对象通常指的是其中的元素值．至于它们有多复杂，就要看数组的元素类型是什么了．
+
+对于元素类型属于原语类型的数组来说，从表面上看，浅拷贝与深拷贝并没有什么区别．例如：
+
+\begin{lstlisting}[language=julia]
+julia> array_orig1 = [2, 4, 6, 8, 10];
+
+julia> array_copy1 = copy(array_orig1);
+
+julia> array_copy1[1] = 12; show(array_copy1)
+[12, 4, 6, 8, 10]
+
+julia> show(array_orig1)
+[2, 4, 6, 8, 10]
+
+julia> 
+\end{lstlisting}
+
+我利用\verb|copy|函数得到了数组\verb|array_orig1|的复本，并将其赋给了\verb|array_copy1|变量．然后，我又使用索引表达式为这个复本中的第一个元素赋予了新的值．可以看到，即使我没有采用深拷贝，这种改变也不会影响到原数组\verb|array_orig1|．
+
+再来看元素类型属于复合类型的数组．我们对其复本中的元素值进行替换仍然不会影响到原数组．不过，有一些改变却会给这类的原数组带来实质性的影响．请看下面的代码：
+
+\begin{lstlisting}[language=julia]
+julia> mutable struct Person
+           name::String
+           age::UInt8
+           extra
+       end
+
+julia> p1 = Person("Robert", 37, "Beijing");
+   p2 = Person("Andres", 32, "Madrid"); p3 = Person("Eric", 28, "Paris");
+
+julia> array_orig2 = Person[p1, p2, p3]
+3-element Array{Person,1}:
+ Person("Robert", 0x25, "Beijing")
+ Person("Andres", 0x20, "Madrid") 
+ Person("Eric", 0x1c, "Paris")    
+
+julia> array_copy2 = copy(array_orig2)
+3-element Array{Person,1}:
+ Person("Robert", 0x25, "Beijing")
+ Person("Andres", 0x20, "Madrid") 
+ Person("Eric", 0x1c, "Paris")    
+
+julia> 
+\end{lstlisting}
+
+数组\verb|array_orig2|的元素类型是\verb|Person|，是一个可变的复合类型．该数组包含了 3 个元素值，分别是我刚刚定义的\verb|p1|、\verb|p2|和\verb|p3|．数组\verb|array_copy2|是\verb|array_orig2|的复本，同样是由\verb|copy|函数创建的．
+
+我将要把\verb|array_copy2|中的第三个元素值替换掉．这显然会改变\verb|array_copy2|，但却不会对\verb|array_orig2|造成影响．如：
+
+\begin{lstlisting}[language=julia]
+julia> array_copy2[3] = Person("Mark", 45, "New York")
+Person("Mark", 0x2d, "New York")
+
+julia> show(array_orig2)
+Person[Person("Robert", 0x25, "Beijing"),
+   Person("Andres", 0x20, "Madrid"), Person("Eric", 0x1c, "Paris")]
+
+julia> 
+\end{lstlisting}
+
+实际上，无论数组的元素类型是什么，通过索引表达式替换元素值的操作都不会对原数组产生任何的影响．但是，如果我们改变的是某个元素值的内部对象，那么结果就截然不同了．就像下面这样：
+
+\begin{lstlisting}[language=julia]
+julia> array_copy2[1].age = 38; Int(array_orig2[1].age)
+38
+
+julia> 
+\end{lstlisting}
+
+我修改了\verb|array_copy2|中的第一个元素值，把它的字段\verb|age|的值改成了\verb|38|．可以看到，这一操作使得\verb|array_orig2|中对应元素值里的\verb|age|字段的值也发生了同样的改变．
+
+其实，\verb|array_copy2|中的第一个元素值就是\verb|array_orig2|中的第一个元素值本身，也就是说它们完全是同一个值．所以，我对前者的修改实际上就是在修改后者．而且，对于其中任何在对应位置上的元素值来说都会是如此．其根本原因就是，数组\verb|array_copy2|是经由对数组\verb|array_orig2|的浅拷贝而得出的复本．\verb|copy|函数只拷贝了原数组的外层结构给新数组，却在新数组上直接沿用了原数组中的所有元素值．
+
+不但如此，我们对原\verb|Person|类型值的修改，也会立即反应到这两个数组中相应的元素值上．例如：
+
+\begin{lstlisting}[language=julia]
+julia> p1.age = 25
+25
+
+julia> Int(array_orig2[1].age), Int(array_copy2[1].age)
+(25, 25)
+
+julia> 
+\end{lstlisting}
+
+这再次印证了 Julia 中的值总是以共享的方式被传递的（passed by sharing）．数组\verb|array_orig2|和\verb|array_copy2|中的第一个元素值实际上都是\verb|p1|的值本身．\verb|p2|和\verb|p3|的情况也是这样．
+
+如果我们在元素类型属于容器类型的数组上做浅拷贝，显然也会发生类似的事情．比如：
+
+\begin{lstlisting}[language=julia]
+julia> a1 = [1, 3, 5]; a2 = [2, 4, 6];
+
+julia> array_orig3 = [a1, a2]; array_copy3 = copy(array_orig3);
+
+julia> a1[2] = 30; array_orig3[1][2], array_copy3[1][2]
+(30, 30)
+
+julia> 
+\end{lstlisting}
+
+那么，与浅拷贝相比，深拷贝有着怎样的不同呢？
+
+深拷贝除了会拷贝原值的外层结构，还会把原结构中的所有内部对象都复制一遍，无论这些内部对象藏得有多么深．也就是说，新的结构和新的内部对象共同形成了全新的值．如此一来，复本与原值就可以做到相互独立、毫不相干了．示例如下：
+
+\begin{lstlisting}[language=julia]
+julia> array_deepcopy3 = deepcopy(array_orig3);
+
+julia> a1[2] = 60; array_orig3[1][2], array_deepcopy3[1][2]
+(60, 30)
+
+julia> 
+\end{lstlisting}
+
+函数\verb|deepcopy|用于对一个值进行深拷贝．我利用它得到了数组\verb|array_orig3|的复本\verb|array_deepcopy3|．我虽然可以通过\verb|a1[2] = 60|修改数组\verb|array_orig3|中的元素值，但无法通过同样的方式对数组\verb|array_deepcopy3|进行修改．注意，在前一个例子执行完之后，\verb|array_orig3|的值已变为\verb|[[1, 30, 5], [2, 4, 6]]|，而\verb|array_deepcopy3|正是基于那时的它的复本．因此，索引表达式\verb|array_deepcopy3[1][2]的结果值才会是\verb|30|．
+
+我们来看一个更复杂一些的例子：
+
+\begin{lstlisting}[language=julia]
+julia> a3 = [7, 9, 11]; a4 = [8, 10, 12];
+
+julia> array_orig4 = [[a1, a3], [a2, a4]]
+2-element Array{Array{Array{Int64,1},1},1}:
+ [[1, 60, 5], [7, 9, 11]]
+ [[2, 4, 6], [8, 10, 12]]
+
+julia> array_deepcopy4 = deepcopy(array_orig4);
+
+julia> 
+\end{lstlisting}
+
+数组\verb|array_orig4|中的每一个元素值都分别是一个数组，并且在这些数组之中还有数组．也就是说，\verb|array_orig4|是数组的数组的数组，即一个拥有三层结构的数组．而数组\verb|array_deepcopy4|则产生自对\verb|array_orig4|的深度拷贝．下面我们来看看\verb|deepcopy|函数是否已将其中的所有内部对象全都拷贝了出来．代码如下：
+
+\begin{lstlisting}[language=julia]
+julia> a4[1] = 80; array_orig4[2][2][1], array_deepcopy4[2][2][1]
+(80, 8)
+
+julia> array_orig4[2][2][1] = 82; array_deepcopy4[2][2][1]
+8
+
+julia> 
+\end{lstlisting}
+
+显然，无论内部对象有多么复杂，由\verb|deepcopy|函数产生的数组复本都是完全独立于原数组的．
+
+好了，现在我们知道了，拷贝像数组这样的对象很容易，调用一个函数就可以了．\verb|copy|函数用于浅拷贝，它只会拷贝原数组的外层结构，并沿用其所有的元素值．\verb|deepcopy|函数用于深拷贝，它不仅会拷贝原数组的外层结构，而且还会拷贝其所有的元素值以及更深层次的内部对象（如果有的话）．

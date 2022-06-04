@@ -1,0 +1,137 @@
+% Julia 数组的比较
+% Julia 数组 比较
+
+本文授权转载自郝林的 《Julia 编程基础》． 原文链接：\href{https://github.com/hyper0x/JuliaBasics/blob/master/book/ch10.md}{第 10 章 容器：数组（下）}．
+
+
+\subsubsection{10.5 数组的比较}
+
+在这本书里，容器的比较已经不是一个新问题了．对于一维数组，我们同样可以直接使用比较操作符对它们进行比较．如：
+
+\begin{lstlisting}[language=julia]
+julia> [1, 2, 3, 4] < [1, 3, 2, 4]
+true
+
+julia> 
+\end{lstlisting}
+
+Julia 会沿着线性索引号依次地比较两个数组中的每一个元素值，直到足以做出判断为止．
+
+在一般情况下，如果两个数组中同索引号的元素值都相同，并且两个数组的尺寸也相同，那么它们就一定是相等的．但是，如果我们使用的是\verb|===|，那么就需要特别注意了．因为这个操作符比较的是两个数组在内存中的存储地址．例如：
+
+\begin{lstlisting}[language=julia]
+julia> a5 = [1,1,2,3,5,8,13];  a5 === a5, a5 === [1,1,2,3,5,8,13]
+(true, false)
+
+julia> 
+\end{lstlisting}
+
+对于多维数组，操作符\verb|==|、\verb|!=|、\verb|===|和\verb|!==|以及函数\verb|isequal|都依然是有效的．但是，其他的比较操作符（如\verb|<|、\verb|<=|、\verb|>|、\verb|>=|等）就无法应用了．即使是很通用的\verb|isless|函数也不能接受多维数组．
+
+为了解决这一问题，我们可以参考\verb|cmp|函数的做法．\verb|cmp|是compare的缩写．这个函数的功能就是比较两个值的大小．它有一个衍生方法可以比较两个一维数组．例如：
+
+\begin{lstlisting}[language=julia]
+julia> cmp([1,2,3,4], [1,3,2,4])
+-1
+
+julia> 
+\end{lstlisting}
+
+当第一个数组小于第二个数组时该方法会返回\verb|-1|，当第一个数组大于第二个数组时该方法会返回\verb|1|，若两个数组相等它就会返回\verb|0|．不过很可惜，这个方法只接受\verb|AbstractVector|类型的参数值．
+
+我们可以从这个\verb|cmp|方法的源码中找到灵感．该方法被定义在了Julia的\verb|Base|模块里的\verb|abstractarray.jl|文件中．即使我们只是把它的源码复制出来、改动一下它的参数类型，也可以满足当下的需求．就像这样：
+
+\begin{lstlisting}[language=julia]
+julia> import Base.cmp
+
+julia> function cmp(A::Array, B::Array)
+           for (a, b) in zip(A, B)
+               if !isequal(a, b)
+                   return isless(a, b) ? -1 : 1
+               end
+           end
+           return cmp(length(A), length(B))
+       end
+cmp (generic function with 31 methods)
+
+julia>
+\end{lstlisting}
+
+我为\verb|cmp|函数定义了一个新的衍生方法．由于其中涉及到了一些我们未曾讲过的流程控制和衍生方法创建的代码，所以你在这里不用太在意它的编写细节．实际上，除了把两个参数的类型都改为\verb|Array|之外，它与那个可以比较一维数组的\verb|cmp|方法一模一样．
+
+为了测试这个方法是否可用，我还定义了一些数组：
+
+\begin{lstlisting}[language=julia]
+julia> a6 = [[1,2] [3,4]]
+2×2 Array{Int64,2}:
+ 1  3
+ 2  4
+
+julia> a7 = [[1,3] [2,4]]
+2×2 Array{Int64,2}:
+ 1  2
+ 3  4
+
+julia> a8 = vcat(a6, a7)
+4×2 Array{Int64,2}:
+ 1  3
+ 2  4
+ 1  2
+ 3  4
+
+julia> a9 = hcat(a6, a7)
+2×4 Array{Int64,2}:
+ 1  3  1  2
+ 2  4  3  4
+
+julia> a10 = cat(a6, a7, dims = 3)
+2×2×2 Array{Int64,3}:
+[:, :, 1] =
+ 1  3
+ 2  4
+
+[:, :, 2] =
+ 1  2
+ 3  4
+
+julia> 
+\end{lstlisting}
+
+你最好先在心里估算一下它们谁大谁小，然后再来看下面的测试结果：
+
+\begin{lstlisting}[language=julia]
+julia> cmp(a6, a7), cmp(a6, a8), cmp(a6, a9), cmp(a6, a10)
+(-1, 1, -1, -1)
+
+julia> 
+\end{lstlisting}
+
+你能看出哪里不太对吗？没错，数组\verb|a6|竟然比数组\verb|a8|还要大！可是，\verb|a8|中的第一个列向量（即\verb|[1,2,1,3]|）明显要比\verb|a6|中的\verb|[1,2]|更大啊．这是怎么回事呢？
+
+我在前面说过，对于数组的比较，Julia会沿着线性索引号去比较每一个对应的元素值，直到能做出判断为止．我们创建的这个\verb|cmp|方法也是这么做的．因此，我们用索引表达式查看一下就可以知道原因了：
+
+\begin{lstlisting}[language=julia]
+julia> a6[[1,2,3,4]]
+4-element Array{Int64,1}:
+ 1
+ 2
+ 3
+ 4
+
+julia> a8[[1,2,3,4]]
+4-element Array{Int64,1}:
+ 1
+ 2
+ 1
+ 3
+
+julia>
+\end{lstlisting}
+
+在数组\verb|a8|中，与索引号\verb|3|和\verb|4|对应的是它的第一个列向量中的后两个元素值，即：\verb|1|和\verb|3|．然而，由于数组\verb|a6|中的列向量长度为\verb|2|，所以其中与索引号\verb|3|和\verb|4|对应的就是其第二个列向量中的那两个元素值，即：\verb|3|和\verb|4|．所以谁大谁小也就不言自明了．这就是所谓的“沿着线性索引号比较”．这种比较不会在意数组在各个维度上的长度，而只会关注与线性索引号对应的那些元素值．
+
+正因为数组\verb|a6|和\verb|a8|在第一个维度上的长度不同，所以才导致实际的比较结果与我们的直觉不一样．而其根本的原因在于，我们在做位置上的对应（或者说基于图形的对应），而Julia却在用线性索引号做对应．既然我们编写的是Julia程序，那么最好还是遵从后者．这种情况也恰恰代表了我们在编程时需要做出的一种思维转变．要想编写出优秀的程序，我们首先就要面向计算机转变思维．
+
+言归正传．我把相关的代码放到了\verb|Programs|项目中，源码文件的相对路径为\verb|src/ch10/cmp/main.jl|．其中还有一些我没在这里展示的代码，是关于\verb|isless|函数的．你如果有兴趣的话可以先自行探究一番．
+
+总之，我们可以使用Julia中现成的操作符和函数比较一维数组，不过需要注意涉及到\verb|===|的操作．对于多维数组，我们自己编写比较函数其实也并不困难．不过，这种比较应该基于位置还是基于索引号，就需要我们仔细斟酌了．我还是建议做基于索引号的比较．因为这样看起来更容易做到程序上的兼容．
