@@ -1,0 +1,74 @@
+% 有限域
+% 素域|域的扩张|伽罗瓦域|伽罗华域|Galois Field|本原元素|primitive element
+
+\pentry{分裂域\upref{SpltFd}}
+
+有限域，即元素数量有限的域，有时也称\textbf{伽罗华域（Galois Field）}，是一类性质良好的代数结构，在近代编码学、密码学、计算机理论等领域有广泛应用．
+
+\subsection{有限域的基本结构}
+
+
+
+设$\mathbb{F}$是一个有限域．
+
+回顾\textbf{环和域}\upref{field}中的讨论，可知$\mathbb{F}$的特征一定是一个素数$p$，其素域相应为$\mathbb{Z}_p$．再由\textbf{域的扩张}\upref{FldExp}讨论可知，$\mathbb{F}$应该是$\mathbb{Z}_p$的有限扩张，假设$[\mathbb{F}:\mathbb{Z}_p]=k$，则$\abs{\mathbb{F}}=p^k$．
+
+由此可知，有限域的阶一定是$p^k$．反过来，$p^k$阶的域一定存在吗？是否唯一呢？
+
+由域的定义，非零元构成乘法群，因此$G=(\mathbb{F}-\{0\}, \times)$是一个\textbf{有限群}，且$\abs{G}=p^k-1$．于是，对于任意$a\in G\subseteq\mathbb{F}$，有
+\begin{equation}
+a^{p^k}=a
+\end{equation}
+于是，$G$中元素都是多项式$f(x)=x^{p^k}-x$的根．再考虑到$f(0)=0$，因此$\mathbb{F}$中的元素都是$f$的根．
+
+可$\mathbb{F}$中一共就$p^k$个不同的元素，因此\footnote{再注意到，多项式环都是欧几里得环，进而是主理想整环，进而是唯一析因环；而多项式总能被自己的根的一次因式约去．于是，多项式不同根的数目，不会超过自己的次数．}它们就是$f\in\mathbb{Z}_p[x]$的全部根．因此，$\mathbb{F}$是$f\in\mathbb{Z}_p[x]$的\textbf{分裂域}．
+
+由分裂域的存在唯一性，$p^k$阶的域也是存在且唯一的．我们将其记为$\opn{GF}(p^k)$，意为“阶数为$p^k$的伽罗华域”；有时候也记为$\mathbb{F}_{p^k}$．
+
+\begin{example}{}
+由上述讨论，$f(x)=x^{p^k}-x$在$\opn{GF}(p^k)$上不同根的数目恰为$p^k$，故显然没有重根．
+
+这一点也符合\autoref{SprbEx_cor1}~\upref{SprbEx}．$\opn{D}f(x)=p^kx^{p^k-1}-1$的最低次项是零次的，而显然$\opn{D}f\not\mid f$，故得$(f, \opn{D}f)=1$，故$f$应无重根．
+\end{example}
+
+
+\begin{theorem}{}\label{FntFld_the1}
+有限域的乘法群，必是循环群．
+\end{theorem}
+
+\textbf{证明}：
+
+考虑$\mathbb{F}=\opn{GL}(p^k)$，其非零元构成的乘法群记为$G$．
+
+设$G$中各元素的阶，最大的是$m$．则$m\mid \abs{G} = p^k-1$，且$\forall g\in G$都是$f(x)=x^m-1$的根．
+
+$f\in\mathbb{F}[x]$一共$m$个根，而$G$中的$p^k-1$个元素都是其根，加之$m\mid p^k-1$，可知$m=p^k-1$．
+
+因此，阶数为$m=p^k-1=\abs{G}$的那个元素，就是$G$的循环生成元．
+
+\textbf{证毕}．
+
+
+
+\begin{corollary}{}\label{FntFld_cor1}
+有限域是其素域的单扩域．
+\end{corollary}
+
+\textbf{证明}：
+
+沿用\autoref{FntFld_the1} 的设定．
+
+设$g_0$是$G$的循环生成元，则$G=\{g_0^i\mid i\in\mathbb{Z}^+\}$．
+
+因此，$\mathbb{F}=G\cup\{0\}=\mathbb{Z}_p(g_0)$．
+
+\textbf{证毕}．
+
+\begin{definition}{原根}
+
+如果$a$是$\opn{GL}(p^k)$的乘法群的循环生成元，由\autoref{FntFld_cor1} 知$\opn{GL}(p^k)=\mathbb{Z}_p(a)$．称$a$是$\opn{GL}(p^k)$的\textbf{本原元素（primitive element）}或\textbf{原根}．
+
+该定义和\autoref{PrmtEl_def1}~\upref{PrmtEl}一致．
+
+\end{definition}
+

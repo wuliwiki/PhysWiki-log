@@ -1,0 +1,177 @@
+% Julia if 语句
+% if 语句
+
+本文授权转载自郝林的 《Julia 编程基础》． 原文链接：\href{https://github.com/hyper0x/JuliaBasics/blob/master/book/ch11.md}{第 11 章 流程控制}．
+
+\subsubsection{11.2 if 语句}
+
+我们在很早以前就已经见识过\verb|if|语句了，如：
+
+\begin{lstlisting}[language=julia]
+# 假设在这之前已经定义了变量`name`，并为它赋予了某个值．
+if name == "" 
+    name = "handsome" 
+end
+\end{lstlisting}
+
+\verb|if|语句总是以\verb|if|关键字开头，并以\verb|end|关键字结尾．与\verb|if|关键字处于同一行的必须是一个结果类型为\verb|Bool|的表达式．我们通常称这样的表达式为条件表达式．在上面的这个例子中，\verb|name == ""|显然就是条件表达式．只有当它的结果值为\verb|true|时，\verb|if|语句中的子语句，即\verb|name = "handsome"|，才会被执行．否则，其中的子语句就会被跳过而不执行．这里的子语句的数量可多可少，也可以是零个．因此，我们也可以称之为子语句组，或\verb|if|子语句组．
+
+当然了，Julia 中的\verb|if|语句远不止这么简单．我们也可以让\verb|if|语句在条件不满足的时候，即条件表达式的结果为\verb|false|时，执行指定的子语句组．比如这样：
+
+\begin{lstlisting}[language=julia]
+if name == "" 
+    name = "handsome" 
+else 
+    name = "dear " * name
+end
+\end{lstlisting}
+
+在\verb|else|关键字和\verb|end|关键字之间的就是当条件不满足时会执行的子语句．与\verb|if|子语句组一样，这里的子语句的数量也可以是任意的．我们可称之为\verb|else|子语句组．
+
+另外，\verb|if|语句中的条件表达式可以不止一个．如果一条\verb|if|语句拥有多个条件表达式，那么它们就必须各自独占一个分支，比如：
+
+\begin{lstlisting}[language=julia]
+if name == ""
+    name = "handsome"
+elseif name == "Robert"
+    name = "my master"
+else
+    name = "dear " * name
+end
+\end{lstlisting}
+
+由关键字\verb|if|、\verb|elseif|和\verb|else|引领的分支可以被分别叫做\verb|if|分支、\verb|elseif|分支和\verb|else|分支．前两者都必须携带条件表达式，而后者则不能携带条件表达式．其中的\verb|elseif|分支可以有任意个，并且必须处于\verb|if|分支和\verb|else|分支之间．
+
+顾名思义，\verb|elseif|分支属于一种备选分支．只有在前一个分支中的条件不满足时，它的条件表达式才会被求值．与\verb|if|分支一样，一旦\verb|elseif|分支中的条件满足，那么它包含的子语句就会被执行，而后续的分支则都会被跳过．从这个角度讲，\verb|else|分支可以被视为默认分支．因为只有在前面所有分支中的条件都不满足时，它包含的子语句才会被执行．
+
+正因为如此，我们可以说，在\verb|if|语句里最多只会有一个分支被选中并执行．或者说，这些分支的执行是互斥的．而且，当默认分支不存在时，还可能会出现所有的分支都未被选中的情况．
+
+最后，在编写\verb|if|语句的时候，我们还有几点需要特别的注意．
+
+第一点，\verb|if|语句并不会自成一个作用域．换句话说，我们在其内部编写的那些有名称的程序定义都可以被外界的代码直接访问到．示例如下：
+
+\begin{lstlisting}[language=julia]
+julia> name = "Robert"
+"Robert"
+
+julia> if name == ""
+           title = "handsome"
+       elseif name == "Robert"
+           title = "my master"
+       else
+           title = "dear " * name
+       end
+"my master"
+
+julia> title
+"my master"
+
+julia> 
+\end{lstlisting}
+
+可以看到，\verb|title|是一个我在\verb|if|语句里面定义的变量．而且，在这条\verb|if|语句执行之后，我仍然可以在REPL环境中直接引用到这个变量．这就如同该变量被直接定义在了REPL环境中那样．更宽泛地讲，对于这种在\verb|if|语句里面编写的程序定义，其作用域并非它们所属的\verb|if|语句所占据的区域，而是包含了这条\verb|if|语句的那个作用域．
+
+如果你还使用过其他的编程语言的话，那么就很可能会发觉Julia的\verb|if|语句在这方面与一些主流的编程语言并不相同．这也是我在此做出特别提示的主要原因．
+
+第二点，你也许已经发现了，上例中的\verb|if|语句是有结果值的，即：\verb|"my master"|．实际上，在 Julia 中，\verb|if|语句也属于一种复合表达式．我们同样可以把它赋给一个变量，例如：
+
+\begin{lstlisting}[language=julia]
+julia> result = if name == ""
+           title = "handsome"
+       elseif name == "Robert"
+           title = "my master"
+       else
+           title = "dear " * name
+       end
+"my master"
+
+julia> result
+"my master"
+
+julia> 
+\end{lstlisting}
+
+这显然要比使用\verb|begin|代码块复杂一些，因为\verb|if|语句还会包含它自己的处理逻辑．\verb|if|语句的结果值总会是实际执行的那个分支中的最后一条子语句所呈现的结果．在上例中，这个结果就是变量\verb|title|所代表的值．
+
+第三点，在\verb|if|语句的条件表达式中可以存在多个条件．这就会涉及到多个条件之间的连接方式及其判断结果的合并方式．我们之前使用过的代表逻辑与的操作符\verb|&&|就可以用于此处．示例如下：
+
+\begin{lstlisting}[language=julia]
+# 假设在这之前已经定义了变量`action`和`weather`，并为它们赋予了值．
+# 假设在这之前已经定义了变量`prompt`．
+if action == "walk" && weather == "rain"
+    prompt = "Don't forget to bring an umbrella."
+end
+\end{lstlisting}
+
+这条\verb|if|语句中的条件有两个，即：动作为“散步”和天气为“雨”．它们由操作符\verb|&&|相连．所以，这个条件表达式所代表的整体条件就是，动作为“散步”并且天气为“雨”．
+
+但要注意，只要多个条件之间均由\verb|&&|相连，对条件的判断就会形成短路条件求值．更具体地说，Julia会从左到右地依次判断条件表达式中的每一个条件，一旦它判断当前条件的结果为\verb|false|，它就会停下来并忽略掉对后续条件的判断，进而直接裁决该条件表达式的最终结果为\verb|false|．这就是“短路”一词所代表的求值行为．所以说，对于这样的条件表达式，只有其中所有条件的判断结果都为\verb|true|，它的最终结果才可能是\verb|true|．下面有一些示例可用于验证这个求值的过程：
+
+\begin{lstlisting}[language=julia]
+julia> action = "walk"; weather = "rain"; prompt = "";
+
+julia> is_walk(action) = (println("Check action (1)"); action == "walk")
+is_walk (generic function with 1 method)
+
+julia> is_rain(weather) = (println("Check weather (1)"); weather == "rain")
+is_rain (generic function with 1 method)
+
+julia> if is_walk(action) && is_rain(weather)
+           prompt = "Don't forget to bring an umbrella."
+       end
+Check action (1)
+Check weather (1)
+"Don't forget to bring an umbrella."
+
+julia> action = "sleep";
+
+julia> if is_walk(action) && is_rain(weather)
+           prompt = "Don't forget to bring an umbrella."
+       end
+Check action (1)
+
+julia> 
+\end{lstlisting}
+
+函数\verb|is_walk|和\verb|is_rain|包含的第一条语句都是打印语句．这样我们就可以知道这些函数是否被调用了．可以看到，在我把变量\verb|action|的值改为\verb|sleep|之后，那条\verb|if|语句中的第二个条件（即\verb|is_rain(weather)|）就不再有被求值的机会了．这是因为该语句中的第一个条件（即\verb|is_walk(action)|）的求值结果变成了\verb|false|，从而造成了“短路”．
+
+我们再来看一个很不一样的例子：
+
+\begin{lstlisting}[language=julia]
+julia> is_sleep(action) = (println("Check action (2)"); action == "sleep")
+is_sleep (generic function with 1 method)
+
+julia> is_sunny(action) = (println("Check weather (2)"); action == "sunny")
+is_sunny (generic function with 1 method)
+
+julia> if is_sleep(action) || is_sunny(weather)
+           prompt = "The idea looks good."
+       end
+Check action (2)
+"The idea looks good."
+
+julia> 
+\end{lstlisting}
+
+这条\verb|if|语句也包含了两个条件，即：动作为“睡觉”和天气为“晴”．但不同的是，这两个条件是由操作符\verb`||`相连的．所以，其整体条件就是，动作为“睡觉”或者天气为“晴”．
+
+操作符\verb`||`同样可用于短路条件求值．但正如我刚刚所讲，它代表的是“或者”，而不是“并且”．Julia仍然会从左到右地依次判断条件表达式中的每一个条件，但只要它发现当前条件的判断结果为\verb|true|，它就不会再继续做判断了，而是直接裁决该条件表达式的最终结果为\verb|true|．也就是说，对于这样的条件表达式，只有其中所有条件的判断结果都为\verb|false|，它的最终结果才可能是\verb|false|．
+
+含有多个条件的条件表达式可以是很复杂的．这主要是因为其中可以同时出现\verb`&&`和\verb`||`．并且，表达式的编写者还可以利用圆括号改变条件求值的默认次序．下面是一个还算简单的示例：
+
+\begin{lstlisting}[language=julia]
+julia> action = "drive"; weather = "rain"; road_condition = "bad"; prompt = ""
+""
+
+julia> if weather != "sunny" && (road_condition != "good"
+ && (action == "ride" || action == "drive"))
+           prompt = "Please pay attention to traffic safety."
+       end
+"Please pay attention to traffic safety."
+
+julia> 
+\end{lstlisting}
+
+在一般情况下，为了提高代码的可读性和逻辑的清晰性，我们往往会在条件表达式中添加一些必要的圆括号．即便这些圆括号对于条件的判断次序没有影响，也是如此．当然了，无论怎样，我们都不应该编写过长的条件表达式．如果你编写的条件表达式很长，那么很可能就说明你应该对它进行整理（或者说重构）了．
+
+好了，我再复述一下我们需要特别注意的三点，即：\verb`if`语句不会自成一个作用域、\verb`if`语句属于一种复合表达式，\verb`if`语句中的条件表达式可以包含多个条件（实际上，所有的条件表达式都是如此）．希望你能够在编写\verb`if`语句的时候想起它们．

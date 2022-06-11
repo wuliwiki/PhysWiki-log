@@ -1,0 +1,72 @@
+% Julia 最简单的代码块
+% Julia 最简单的代码块
+
+本文授权转载自郝林的 《Julia 编程基础》． 原文链接：\href{https://github.com/hyper0x/JuliaBasics/blob/master/book/ch11.md}{第 11 章 流程控制}．
+
+\subsubsection{11.1 最简单的代码块}
+
+还记得吗？我在第一章的最开始就已经在使用英文分号\verb|;|来分隔多个并列的表达式了．例如：
+
+\begin{lstlisting}[language=julia]
+julia> a = 5 * 8; b = a^2
+1600
+
+julia> 
+\end{lstlisting}
+
+这时，Julia 会（从左到右）逐个地对这些表达式进行求值，并把最后一个表达式的结果值作为最终的求值结果．
+
+这与我们让每一个表达式都独占一行好像并没有什么区别．但是，像上面这样的并列的表达式却可以被称为代码块．你可能会说，“它不应该是一个代码块，因为它没有明显的边界”．实际上，这样的并列表达式是有边界的，只不过它的边界可以被省略不写罢了．它的边界是一对圆括号．
+
+并列表达式可以被作为一个整体出现在赋值符号\verb|=|的右边，例如：
+
+\begin{lstlisting}[language=julia]
+julia> c1 = (a = 5 * 8; b = a^2)
+1600
+
+julia> c1
+1600
+
+julia> 
+\end{lstlisting}
+
+这就相当于我们把这个并列表达式的最终结果值赋给了变量\verb|c1|．注意，这里的圆括号就不能被省略了，否则会引起歧义．
+
+另外，我们还可以使用关键字\verb|begin|和\verb|end|对并列表达式进行包装，以形成边界更加清晰的代码块．示例如下：
+
+\begin{lstlisting}[language=julia]
+julia> begin a = 5 * 8; b = a^2 end
+1600
+
+julia> c2 = begin a = 5 * 8; b = a^2 end
+1600
+
+julia> c2
+1600
+
+julia> 
+\end{lstlisting}
+
+这样的代码块也被称为\verb|begin|代码块．在这里，\verb|begin|代码块的优势在于，当并列表达式中的子表达式过多时，它可以被分成多行来编写，而其边界会依然清晰．如：
+
+\begin{lstlisting}[language=julia]
+julia> c2 = begin
+           a = 5 * 8
+           b = a^2
+       end
+1600
+
+julia> 
+\end{lstlisting}
+
+虽然我们也可以让由圆括号包裹的并列表达式占据多行，但是这样的代码看起来就要简陋很多了：
+
+\begin{lstlisting}[language=julia]
+julia> c2 = (a = 5 * 8;
+           b = a^2)
+1600
+
+julia> 
+\end{lstlisting}
+
+最后，无论是纯粹的并列表达式，还是\verb|begin|代码块，我们都可以称之为复合表达式（compound expression）．它们的主体都只是多个子表达式的排列而已，并没有额外的处理逻辑在里面．这正是我说它们是最简单的主要原因．
