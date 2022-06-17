@@ -1,0 +1,87 @@
+% 流体力学守恒方程
+% 流体力学|守恒方程
+
+\pentry{流体运动的描述方法\upref{fluid1}，物质导数（实质导数）\upref{fluid2}，重积分、面积分、体积分（简明微积分）\upref{IntN}}
+
+人们一般用密度 $\rho$，速度 $\bvec v$ 等物理量描述流体中每个位置流体微元的性质，并列出所谓的流体力学方程来描述每个流体微元随时间的演化．它们之间应当满足一定的守恒方程，例如\textbf{连续性方程，动量守恒方程，能量守恒方程}等．在这一节中，我们将对流体力学的守恒方程进行简要的推导和介绍．
+\subsection{连续性方程（流守恒方程）}
+让我们对物质体（Material Volumn）进行分析，取一个随流体一起运动的被闭曲面 $S$ 包围的体积 $V$，对其中的密度进行积分得到这一个物质体的质量．物质体在随流体一起运动的过程中，其质量应当是不变的，那么我们有
+\begin{equation}
+\frac{\dd}{\dd t}\int_{V(t)} \rho \dd V=0
+\end{equation}
+进一步将它拆成两部分，一部分是每个位置密度的偏导数随时间的变化，另一部分是闭合曲面 $S$ 的变化带来的质量变化．我们得到
+\begin{equation}
+\int \pdv{\rho}{t}\dd V+\int_S \rho \bvec u\cdot \hat{\bvec n}\dd S=0\Rightarrow \int \qty[\pdv{\rho}{t}+\nabla\cdot(\rho\bvec u)]\dd V=0
+\end{equation}
+如上，我们得到了连续性方程的微分形式
+\begin{equation}\label{fluidC_eq6}
+\pdv{\rho}{t}+\nabla\cdot(\rho\bvec u)=0
+\end{equation}
+利用 $\nabla\cdot (\rho\bvec u)=\rho \nabla\cdot u+\bvec u\cdot \nabla \rho$，上式可以改写为
+\begin{equation}\label{fluidC_eq1}
+\frac{\dd \rho}{\dd t}+\rho \nabla\cdot u=0
+\end{equation}
+我们也可以用另一种方式来考察这一结果．直接从 $\dv{t} (\rho \delta V)=0$ 出发（这表明一个流体微元随时间演化的过程中质量是不变的），得到
+\begin{equation}
+\rho \dv{\delta V}{t}+\delta V\dv{\rho}{t}=0\Rightarrow \dv{\delta V}{t}=-\delta V \frac{1}{\rho}\frac{\dd \rho}{\dd t}
+\end{equation}
+利用 \autoref{fluidC_eq1}，上式得到了以下结果：
+\begin{equation}
+\frac{1}{\delta V}\dv{\delta V}{t}=\nabla\cdot \bvec u
+\end{equation}
+这个结果是不难理解的．取 $\delta V$ 为一个无限小立方体，计算六个面流体运动的流进流出，可以轻易得到这个表达式，然后事实上不论 $\delta V$ 的形状如何，上式都是成立的，因为我们总能把 $\delta V$ 分割成许许多多个小立方体，而每个小立方体都满足上式，进而利用 $\nabla\cdot u$ 在这一小区域的连续性，就可以得到这个结果．
+\subsection{动量守恒方程}
+类似上面的推导，我们先对物质体列出积分方程：
+\begin{equation}\label{fluidC_eq2}
+\dv{t}\int_{V(t)} \rho \bvec u \dd V=\int \rho \bvec g\dd V+\int_S \bvec f\dd S
+\end{equation}
+其中 $\bvec g$ 表示作用于每个流体微元上的体力，例如重力就是体力的一种．对上式左侧进行化简，可以得到
+\begin{equation}
+\int \pdv{(\rho \bvec u)}{t}\dd V+\int_S\rho \bvec u (\bvec u\cdot \hat{\bvec n})\dd S=\int \rho\bvec g\dd V+\int_S \hat n\cdot \overleftrightarrow {\bvec T}\dd S
+\end{equation}
+其中 $T$ 是流体的应力张量，$T_{ij}$ 表示在法线为 $x_i$ 方向的单位面元上，面外对面内的面力的 $x_j$ 分量．可以证明，为了保证角动量守恒，应力张量是二阶对称的张量．
+最终我们有矢量表达式
+\begin{equation}\label{fluidC_eq3}
+\rho \frac{\partial \bvec u}{\partial t}+\rho(\bvec u\cdot \nabla)\bvec u=\rho \bvec g+\nabla\cdot \overleftrightarrow {\bvec T}
+\end{equation}
+
+或者我们有一种更简单的推导方法．注意到 $\dd(\rho \bvec u \delta V)/\dd t=\rho \delta V \dd {\bvec u}/\dd t+\bvec u \dd (\rho \delta V)/\dd t=\rho \delta V \dd {\bvec u}/\dd t$．所以从\autoref{fluidC_eq2} 出发立刻可以得到
+\begin{equation}
+\rho \dv{\bvec u}{t}=\rho \bvec g+\nabla\cdot \overleftrightarrow {\bvec T}
+\end{equation}
+这和\autoref{fluidC_eq3} 是等价的．
+
+应力张量 $T_{ij}$ 一般表示为 $-p+\tau_{ij}$，$p$ 表示压强，$\tau_{ij}$ 则是由流体的粘性带来的项，$\tau_{ij}$ 是对称张量．
+
+\subsection{能量守恒方程}
+最后让我们讨论能量守恒方程．流体微元的能量一般分为内能 $e$ 和动能 $\frac{1}{2}\rho u^2$，前者和流体的热力学状态（压强、温度或密度）有关，而后者和流体微元的运动有关．下面我们来具体分析能量守恒方程的形式．
+
+\begin{equation}
+\dv{t} \int_{V(t)} \rho\qty(e+\frac{1}{2}|\bvec u|^2)\dd V=\int \rho \bvec g\cdot \bvec u \dd V+\int_S \bvec f\cdot \bvec u \dd S -\int_S \bvec q\cdot \bvec n\dd A
+\end{equation}
+$e$ 为单位质量的内能．面力 $\bvec f$ 在速度方向上作用一段距离导致做功，$\bvec q$ 表示面元上的热流方向．
+
+那么经过一系列的化简我们可以得到
+\begin{equation}\label{fluidC_eq4}
+\begin{aligned}
+\rho \dv{t} \qty(e+\frac{1}{2}|\bvec u|^2)&=\rho \bvec g\cdot \bvec u+\pdv{x_i} (T_{ij}u_j)-\nabla\cdot \bvec q\\
+&=\rho g_iu_i+\qty(-p\pdv{u_j}{x_j}+\tau_{ij}\pdv{u_j}{x_i})+u_j\qty(-\pdv{p}{x_j}+\pdv{\tau_{ij}}{x_i})-\pdv{q_i}{x_i}
+\end{aligned}
+\end{equation}
+以上就是我们得到的能量守恒方程．下面我们对动量守恒方程点乘 $\bvec u$，来考察能量守恒方程中的\textbf{动能守恒}
+\begin{equation}\label{fluidC_eq5}
+\rho \dv{}{t}\qty(\frac{1}{2}|\bvec u|^2)=\rho g_iu_i+u_j\pdv{T_{ij}}{x_i}=\rho g_iu_i+u_j\qty(-\pdv{p}{x_j}+\pdv{\tau_{ij}}{x_i})
+\end{equation}
+将 \autoref{fluidC_eq4} 和 \autoref{fluidC_eq5} 相减，我们得到了\textbf{内能守恒}：
+\begin{equation}
+\begin{aligned}
+\rho \dv{e}{t}&=T_{ij}\pdv{u_j}{x_i}-\pdv{q_i}{x_i}
+\\&=-p\pdv{u_j}{x_j}+\tau_{ij}\pdv{u_j}{x_i}-\pdv{q_i}{x_i}=-\frac{p}{\rho}\dv{\rho}{t}-\nabla\cdot \bvec q\\
+\Rightarrow \dv{e}{t}&=p\dv{\nu}{t}+\tau_{ij}S_{ij}-\nabla\cdot \bvec q,\ (\nu=1/\rho)\\
+\end{aligned}
+\end{equation}
+
+如果将应力张量的表达式\autoref{NSeq_eq1}~\upref{NSeq} 代入，并利用热传导定律\upref{Heatco}将 $\bvec q$ 表达为 $-k\nabla T$，上述方程可以改写为
+\begin{equation}\label{fluidC_eq7}
+\rho \dv{e}{t}=-p\pdv{u_m}{x_m}+2\mu\qty(S_{ij}-\frac{1}{3}\pdv{u_m}{x_m}\delta_{ij})^2+\mu_\nu\qty(\pdv{u_m}{x_m})^2+\pdv{x_i}\qty(k\pdv{T}{x_i})
+\end{equation}
