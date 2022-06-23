@@ -1,0 +1,222 @@
+% 形式微商（环）
+
+% 形式微商|微商|重根|可分扩张|可分元素|多项式|导数|形式导数|形式微分
+
+为了研究重根，我们借用微积分的知识，引入\textbf{形式微商}的概念
+
+\begin{definition}{形式微商}\label{FomDer_def1}
+
+设$\mathbb{F}$是一个域，$f\in\mathbb{F}[x]$．若$f$表达为
+\begin{equation}
+f(x) = \sum_{i=0}^n a_ix^i
+\end{equation}
+其中各$a_i\in\mathbb{F}$，那么定义\textbf{形式微商}算子$\opn{D}:\mathbb{F}[x]\to\mathbb{F}[x]$为：
+\begin{equation}
+\opn{D}f = \sum_{i=0}^{n-1} (i+1)a_{i+1}x^i = \sum_{i=1}^{n} ia_{i}x^{i+1}
+\end{equation}
+
+形式微商也可称为“形式求导”、“形式微分”等．
+
+\end{definition}
+
+\autoref{FomDer_def1} 形式微商就是直接套用微积分中的求导操作，只不过这里没有求导的概念，而是就进行多项式变换，其形式就是求导或者求导的推广，因此才叫\textbf{形式}微商．
+
+\begin{example}{}
+考虑域$\mathbb{Z}_3$上的多项式$f(x)=x^5+2x^2-x-2$，则
+\begin{equation}
+\opn{D}f(x) = 2x^4+x-1
+\end{equation}
+
+显然，这和真正的求导不同．一方面我们没有在域$\mathbb{Z}_3$上定义极限的概念，另一方面实数域上$f$的导函数应该是$5x^4+4x-1$．
+\end{example}
+
+\begin{example}{一个很抽象的例子}
+
+考虑$\mathbb{R}$上的函数集合$S=\{\text{非零函数}\}\cup\{f\mid f(x)\equiv 0\}$，则$S$配上函数之间逐点相加和逐点相乘的运算，构成一个域，记为$\mathbb{S}$．
+
+取$f, g\in\mathbb{S}$，构成多项式$F(y)=(f+g)y^2+(fg)y$．则
+\begin{equation}
+\opn{D}F(y) = (2f+2g)y+fg
+\end{equation}
+
+\end{example}
+
+注意，$\opn{D}f(x)$这一表示应理解为“多项式$\opn{D}f$和表示其自变量的抽象符号$x$”，而不是“对多项式$f(x)$进行$\opn{D}$操作”．换言之，$\opn{D}f$是整体，故应是$\opn{D}f$和$(x)$，而不是$\opn{D}$和$f(x)$．
+
+容易验证，形式微商有以下性质：
+
+\begin{theorem}{形式微商的性质}\label{FomDer_the1}
+
+给定域$\mathbb{F}$，$\opn{D}$是$\mathbb{F}[x]$上的形式微商算子．则：
+
+1. 任取$a\in\mathbb{F}$，则作为多项式，$\opn{D}a=0$．
+
+2. 当$\opn{ch}\mathbb{F}=0$\footnote{概念见\autoref{field_def2}~\upref{field}. }时，对于$f\in\mathbb{F}[x]$有：$\opn{D}f=0 \iff \opn{deg}f=0$．
+
+3. 对于$f, g\in\mathbb{F}[x]$，$a, b\in\mathbb{F}$，有$\opn{D}(af+bg)=a\opn{D}f+b\opn{D}g$．
+
+4. 对于$f, g\in\mathbb{F}[x]$，有$\opn{D}(fg) = (\opn{D}f)g+f\opn{D}g$．
+
+\end{theorem}
+
+用\autoref{FomDer_the1} 中的性质可知，如果$a$是$f\in\mathbb{F}[x]$在$\mathbb{F}$上的重根，那么存在$g\in\mathbb{F}[x]$使得$f(x)=(x-a)^2g(x)$．这样一来，$\opn{D}f(x)=(x-a)\qty[2g(x)+(x-1)\opn{D}g(x)]$．也就是说，$a$还是$\opn{D}f$的根．
+
+\autoref{FomDer_the1} 中这些性质都是由导数的性质自然启发而得的．但要注意的是，函数的导数和多项式的形式微商在概念上有所重叠，却不是互相包含的．函数的导数可以用来处理非多项式的函数，而多项式的形式微商又可以处理非实数域的多项式，所以二者都有对方所不能处理的领域，勿随意混为一谈．\autoref{FomDer_the1} 中的性质能成立，也是需要额外验证的，而不能说因为导数有这些性质所以形式微商就一定有．
+
+下面这个定理说的就是导数所不具备的性质：
+
+\begin{theorem}{}\label{FomDer_the2}
+设$\mathbb{K}$是$f\in\mathbb{F}[x]$的分裂域，$a\in\mathbb{K}$是$f$的一个$k$重根．
+
+1. 如果$\opn{ch}\mathbb{F}\nmid k$，那么$a$是$\opn{D}f$的$k-1$重根；
+
+2. 如果$\opn{ch}\mathbb{F}\mid k$，那么$a$是$\opn{D}f$的\textbf{至少}$k$重根．
+\end{theorem}
+
+\textbf{证明}：
+
+由题设可知，存在$g(x)\in\mathbb{K}[x]$使得$f(x) = (x-a)^k g(x)$，其中$g(a)\neq 0$．
+
+1. 
+
+\begin{equation}
+\opn{D}f(x)=(x-a)^{k-1}\qty[kg(x)+(x-a)\opn{D}g(x)]
+\end{equation}
+
+显然，$[kg(x)+(x-a)\opn{D}g(x)]\mid_{x=a}\neq 0$．因此，$a$是$\opn{D}f$的$k-1$重根．
+
+
+2. 
+
+当$\opn{ch}\mathbb{F}\mid k$，则$k=0$．因此
+
+\begin{equation}
+\begin{aligned}
+\opn{D}f(x)&=(x-a)^{k-1}\qty[kg(x)+(x-a)\opn{D}g(x)]\\
+&=(x-a)^k\opn{D}g(x)
+\end{aligned}
+\end{equation}
+
+故$a$至少是其$k$重根．如果$\opn{D}g(a)=0$，重数还会更高．
+
+\textbf{证毕}．
+
+
+
+\begin{corollary}{}\label{FomDer_cor1}
+设$\mathbb{K}$是次数大于$1$的多项式$f\in\mathbb{F}[x]$的分裂域，则$f$在$\mathbb{K}$中无重根的充分必要条件是$(f, \opn{D}f)=1$\footnote{即最大公因子为$1$．}．
+\end{corollary}
+
+\textbf{证明}：
+
+必要性：
+
+由于$f$在$\mathbb{K}$中无重根，而域的特征不可能是$1$，因此适用\autoref{FomDer_the2} 中第一个情况．
+
+因为$\mathbb{K}$是$f\in\mathbb{F}[x]$的分裂域，且$f$无重根，故在$\mathbb{K}$中有
+\begin{equation}
+f(x) = a_0(x-a_1)(x-a_2)\cdots(x-a_n)
+\end{equation}
+其中各$a_i\in\mathbb{K}$且各不相同．
+
+则
+\begin{equation}
+\begin{aligned}
+\opn{D}f(x) &= a_0[(x-a_2)(x-a_3)\cdots(x-a_n)\\
+&+(x-a_1)(x-a_3)\cdots(x-a_n))\\
+&\vdots\\
+&+(x-a_1)(x-a_2)\cdots(x-a_{n-1}))
+]
+\end{aligned}
+\end{equation}
+
+$f$的因子必是若干个不同的$(x-a_i)$的积，但各$(x-a_i)$都不是$\opn{D}f$的因子．
+
+充分性：
+
+反设有重根，那至少是个二重根．于是$f$可以写成：
+
+\begin{equation}
+f(x) = a_0(x-a_1)(x-a_2)\cdots(x-a_n)
+\end{equation}
+其中各$a_i\in\mathbb{K}$，且$a_1=a_2$．
+
+那么$(x-a_1)=(x-a_2)$就是$f$和$\opn{D}f$的公因子．
+
+\textbf{证毕}．
+
+
+
+\begin{corollary}{}\label{FomDer_cor2}
+设$\mathbb{K}$是$f\in\mathbb{F}[x]$的分裂域，且$f$是$\mathbb{F}[x]$上次数大于$1$的\textbf{不可约}多项式，那么$f$在$\mathbb{K}$中无重根的充分必要条件是$\opn{D}f \neq 0$．
+\end{corollary}
+
+\textbf{证明}：
+
+注意\autoref{FomDer_cor1} 和\autoref{FomDer_cor2} 的题设差异在于，后者多了“在$\mathbb{F}[x]$上不可约”这一要求．我们只需要证明加上这一要求时，$(f, \opn{D}f)=1 \iff \opn{D}f\neq 0$即可．
+
+$\Rightarrow$：
+
+如果$\opn{D}f=0$，则$(f, \opn{D}f)=f\neq 1$．
+
+$\Leftarrow$：
+
+设$g(x)=(f(x), \opn{D}f(x))\in\mathbb{F}[x]$，于是$g\mid f$．由于$f$不可约，故要么$g=1$，要么$g\propto f$\footnote{这里$\propto$是“正比”符号，意为$g$与$f$只相差$a$倍，其中$a\in\mathbb{F}$．但是考虑到本节开头的声明，无特别定义，则$g$也是首一多项式，这里实际上也可以写成$g=f$．}．
+
+但$g\mid \opn{D}f$导致$\opn{deg}g\leq\opn{deg}\opn{D}f<\opn{deg}f$，因此必有$g(x)=1$．
+
+
+
+\textbf{证毕}．
+
+对于次数大于$1$的多项式$f$，其形式微商可以为$0$．比如，$\mathbb{Z}_3$上的多项式$x^3+1$就是这样．不过$x^3+1$在$\mathbb{Z}_3[x]$上是可约的．
+
+下面我们给出一个例子，说明存在次数大于$1$的不可约多项式之形式微商为$0$，作为\autoref{FomDer_cor2} 的一个小验证．
+
+
+
+
+
+\begin{example}{}\label{FomDer_ex1}
+
+考虑这样一个域$\mathbb{F}$，其定义为：$\mathbb{F}$是全体以$t$为不定元（或称抽象符号）、以$\mathbb{Z}_2$为系数域的有理式\footnote{即要么是$0$，要么是两个非零多项式的比，如$(x^4+3)/(x-2)$．}构成的集合，其加法和乘法运算都继承$\mathbb{Z}_2$的运算．
+
+换言之，$\mathbb{F}$中的元素都形如$\frac{f(t)}{g(t)}$，其中$f(t), g(t)\in\mathbb{Z}_2[t]$且$\opn{deg}g\geq 0$．
+
+显然，$t$也是$\mathbb{F}$中的一个元素，也就是我们说的系数、数字等．而$\opn{ch}\mathbb{F}=2$，因为它的素域是$\mathbb{Z}_2$．
+
+考虑$\mathbb{F}[x]$中的多项式$p(x) = x^2-t$，它的分裂域要引入新元素$\sqrt{t}$．在分裂域中，注意到
+\begin{equation}
+\begin{aligned}
+(x-\sqrt{t})^2&=x^2+t-2\sqrt{t}\\
+&=x^2+t\\
+&=x^2-t
+\end{aligned}
+\end{equation}
+
+因此$p(x)$在其分裂域中有二重根$\sqrt{t}$．
+
+$p(x)$显然是不可约的．这是因为如果可约，那么它应该有两个一次多项式因子，也就是说它的根都在$\mathbb{F}$中，而根据$\mathbb{F}$的定义，这显然是不成立的．
+
+综上，我们得到的就是这样一个例子：$p(x)$是$\mathbb{F}[x]$上次数大于$1$的不可约多项式，且$\opn{D}p=0$，符合\autoref{FomDer_cor2} 的论断，即它有重根．
+
+\end{example}
+
+一般来说，\autoref{FomDer_ex1} 中的$\mathbb{Z}_2$替换为任意素域$\mathbb{Z}_p$、$x^2-t$也替换为$x^p-t$后，结论依然成立．感兴趣的读者可自行验证这一点．其中，证明$x^p-t$不可约，可以使用整环上的\textbf{爱森斯坦判别式}\upref{EsstCr}．
+
+\begin{corollary}{}\label{FomDer_cor3}
+
+若域$\mathbb{F}$的特征为$0$，则其上任意次数大于$1$的不可约多项式在其分裂域（或大一些，$\mathbb{F}$的代数闭包）上没有重根．
+
+\end{corollary}
+
+证明只需要说其形式微商不可能为$0$即可，很简单，在此不赘述．
+
+
+
+
+
+
+
+
+
