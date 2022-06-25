@@ -1,7 +1,7 @@
 % 正规扩张
 % 分裂域|多项式|共轭|compositum|composite|合成域
 
-\pentry{分裂域\upref{SpltFd}}
+\pentry{纯不可分扩张\upref{PInsEx}}
 
 \autoref{SpltFd_the2}~\upref{SpltFd}揭示了\textbf{有限扩张}情况下，分裂域和正规扩张的等价性，但并没有说到一般情况．本节的焦点集中在正规扩张本身上，讨论一般情况．
 
@@ -30,15 +30,22 @@
 
 现在我们讨论的是，给定域上正规扩张集合的结构．
 
-\begin{theorem}{}
+\begin{theorem}{}\label{NomEx_the6}
 设$\mathbb{K}/\mathbb{F}$是正规扩张，且存在中间域$\mathbb{M}$，则$\mathbb{K}/\mathbb{M}$也是正规扩张．
 \end{theorem}
 
 \textbf{证明}：
 
-正规扩张等价于分裂域．如果$\mathbb{K}=\mathbb{F}(a_1, a_2, \cdots)$，那么$\mathbb{K}=\mathbb{M}(a_1, a_2, \cdots)$．由此得证．
+% $\opn{ch}\mathbb{F}=p\neq 0$时，正规扩张等价于分裂域．如果$\mathbb{K}=\mathbb{F}(a_1, a_2, \cdots)$，那么$\mathbb{K}=\mathbb{M}(a_1, a_2, \cdots)$．由此得证．
+
+% $\opn{ch}\mathbb{F}=p=0$时，
+
+由于$\mathbb{F}\subseteq\mathbb{M}$，故$\mathbb{K}$的保$\mathbb{M}$自同构一定是保$\mathbb{F}$的，故$\mathbb{K}$关于$\mathbb{M}$的共轭必是关于$\mathbb{F}$的共轭．由\autoref{NomEx_the1} 则得证．
 
 \textbf{证毕}．
+
+
+
 
 
 \begin{definition}{合成}
@@ -133,13 +140,13 @@ $\mathbb{K}$关于$\mathbb{F}$的全体共轭域之合成记为$\mathbb{H}$．�
 
 \subsection{纯不可分扩张}
 
-\pentry{纯不可分扩张\upref{PInsEx}}
+
 
 留意\autoref{PInsEx_the2}~\upref{PInsEx}，纯不可分元素与其在域自同构下的像的数目息息相关．和正规扩张结合起来，这一性质可以延伸出下列性质：
 
 \begin{theorem}{}\label{NomEx_the5}
 设$\mathbb{K}/\mathbb{F}$是\textbf{正规扩张}，记
-\begin{equation}
+\begin{equation}\label{NomEx_eq1}
 \mathbb{S}=\{\alpha\in\mathbb{K}\mid \sigma\alpha = \alpha, \sigma\text{是域}\overline{\mathbb{F}}\text{的任意保}\mathbb{F}\text{自同构}\}
 \end{equation}
 则$\mathbb{S}/\mathbb{F}$是纯不可分扩张，$\mathbb{K}/\mathbb{S}$是可分扩张．
@@ -147,9 +154,42 @@ $\mathbb{K}$关于$\mathbb{F}$的全体共轭域之合成记为$\mathbb{H}$．�
 
 \textbf{证明}：
 
-首先要证明$\mathbb{S}$确实是一个域：
+首先要证明$\mathbb{S}$确实是一个域\footnote{非常显然，建议能自己想就跳过本段说明．}：任取$\alpha, \beta, \gamma\in\mathbb{S}$，则有$\sigma(\alpha\beta+\gamma)=\sigma(\alpha)\sigma(\beta)+\sigma(\gamma)=\alpha\beta+\gamma$，所以$\mathbb{S}$的元素之间相加、相乘是封闭的；由于$\sigma(\alpha^{-1})=(\sigma(\alpha))^{-1}=\alpha^{-1}$和$\sigma(-\alpha)=-(\sigma(\alpha))/=-\alpha/$，所以取逆运算也封闭．
 
 然后，据\autoref{PInsEx_the2}~\upref{PInsEx}直接可得$\mathbb{S}/\mathbb{F}$是纯不可分扩张．
+
+接下来证明$\mathbb{K}/\mathbb{S}$是可分扩张，只考虑$\opn{ch}\mathbb{F}$是素数$p$的情况，因为特征为$0$的域必是完美域\footnote{见\textbf{可分扩张}\upref{SprbEx}．}．
+
+任取$\alpha\in\mathbb{K}$．取$\mathbb{F}(\alpha)$的\textbf{全体}保$\mathbb{F}$单同态$\varphi_1, \cdots, \varphi_n:\mathbb{F}\to\overline{\mathbb{F}}$，\textbf{互不相同}，其中$\varphi_1$是恒等映射．由\autoref{FldExp_the5}~\upref{FldExp}，可将每个$\varphi_i$开拓为$\overline{\mathbb{F}}$的保$\mathbb{F}$自同构$\phi_i$．
+
+由于$\mathbb{K}/\mathbb{F}$是正规扩张，而域同态总是把多项式的根映射为另一根，故$\phi_i\mathbb{K}\subseteq\mathbb{K}$．又据\autoref{SpltFd_the1}~\upref{SpltFd}的证明过程\footnote{即\autoref{SpltFd_eq1}~\upref{SpltFd}附近所讨论的内容．或者换一个理由：$\mathbb{K}$是由$\alpha$生成的，因此$\varphi_i\alpha=\varphi_j\alpha\implies \varphi_i=\varphi_j$．}，可知不同的$\varphi_i$将$\alpha$映入不同的$\varphi_i\alpha$，并且因为$\{\varphi_i\}$便历所有可能性，$\{\varphi_i\alpha\}$就是$\opn{irr}(\alpha, \mathbb{F})$的\textbf{全体根}集合．
+
+构造$\mathbb{K}[x]$上的多项式：
+\begin{equation}
+f(x) = (x-\varphi_1\alpha)(x-\varphi_2\alpha)\cdots(x-\varphi_n\alpha)
+\end{equation}
+则由于已设定$\varphi_1$是恒等映射，可知$f(\alpha)=0$；由于各$\varphi_i\alpha$互不相同，可知$f$是可分多项式\footnote{注意，这里没法证明$f=\opn{irr}(\alpha, \mathbb{F})$，因为无法保证$f\in\mathbb{F}[x]$．最多只能确定$\opn{irr}(\alpha, \mathbb{F})=f^k$，其中$k$是正整数．换句话说，没法证明$f$的系数都在$\mathbb{F}$上．}．
+
+下证$f$的系数都在$\mathbb{S}$上．
+
+任取$\overline{\mathbb{F}}$的保$\mathbb{F}$自同构$\sigma$，则$\sigma\mid_{\{\varphi_i\alpha\}}$是一个$\{\varphi_i\alpha\}$（$\opn{irr}(\alpha, \mathbb{F})$的全体根集合）上的置换．于是有
+\begin{equation}\label{NomEx_eq2}
+\begin{aligned}
+\sigma(\prod_i \varphi_i\alpha) &= \prod_i \varphi_i\alpha\\
+\sigma(\sum_{j}\frac{\prod_i \varphi_i\alpha}{\varphi_j\alpha}) &= \sum_{j}\frac{\prod_i \varphi_i\alpha}{\varphi_j\alpha}\\
+\sigma(\sum_{j, k}\frac{\prod_i \varphi_i\alpha}{\varphi_j\alpha\times\varphi_k\alpha}) &= \sum_{j, k}\frac{\prod_i \varphi_i\alpha}{\varphi_j\alpha\times\varphi_k\alpha}\\
+&\vdots\\
+\sigma(\sum_i\varphi_i\alpha) &= \sum_i\varphi_i\alpha\\
+\sigma(1) &= 1
+\end{aligned}
+\end{equation}
+式中第$k$行左边的括号里和右边是$f(x)$的第$k-1$次项系数．
+
+由\autoref{NomEx_eq2} ，$f$的每一项系数都满足\autoref{NomEx_eq1} ，故$f$的系数都在$\mathbb{S}$上．
+
+故$\opn{irr}(\alpha, \mathbb{S})\mid f$，因此也是可分的．
+
+故$\alpha$是$\mathbb{S}$上的可分元素．由$\alpha$的任意性，得证$\mathbb{K}/\mathbb{S}$是可分扩张．
 
 \textbf{证毕}．
 
@@ -158,8 +198,23 @@ $\mathbb{K}$关于$\mathbb{F}$的全体共轭域之合成记为$\mathbb{H}$．�
 
 
 
+% 注释掉的原因：本来想引入gtm 242的几个定理，却发现已经在可分扩张\upref{SprbEx}里讲清楚了．毕竟本书思路和gtm 242有所不同，这方面比gtm 242要更细．
+% \subsection{完美域}
 
 
+% 我们已经在\textbf{可分扩张}\upref{SprbEx}中简单讨论过完美域，这里添加一些其和可分性的联系．
+
+% \begin{lemma}{}
+% 完美域的纯不可分扩张只有它自己．
+% \end{lemma}
+
+% \textbf{证明}：
+
+% 由\autoref{SprbEx_the5}~\upref{SprbEx}，完美域的代数扩张全都是可分扩张，从而由\autoref{PInsEx_def2}~\upref{PInsEx}直接得证．
+
+% \textbf{证毕}．
+
+% 注意，此证明同时适用于完美域的特征为$0$或者素数$p$的情况．
 
 
 
