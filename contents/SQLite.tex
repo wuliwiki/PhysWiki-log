@@ -1,0 +1,51 @@
+% SQLite 教程
+
+\begin{issues}
+\issueDraft
+\end{issues}
+
+\subsection{安装}
+ubuntu 上用 \verb|sudo apt install libsqlite3-dev| 安装
+
+另外安装命令行工具 \verb|sudo apt install sqlite3|
+
+\href{https://sqlitestudio.pl/}{SQLiteStudio} 是一个 GUI 工具， 无需安装．
+
+\begin{lstlisting}[language=cpp]
+#include <iostream>
+#include <sqlite3.h>
+
+int test_sqlite()
+{
+	using namespace std;
+    sqlite3* DB;
+    int exit;
+    exit = sqlite3_open("example.db", &DB);
+    if (exit) {
+		cout << sqlite3_errmsg(DB) << endl;
+        cerr << "Error open DB!" << endl;
+    }
+	char* messaggeError;
+	string sql = "CREATE TABLE PERSON("
+                 "ID INT PRIMARY KEY     NOT NULL, "
+                 "NAME           TEXT    NOT NULL, "
+                 "SURNAME        TEXT    NOT NULL, "
+                 "AGE            INT     NOT NULL, "
+                 "ADDRESS        CHAR(50), "
+                 "SALARY         REAL );";
+	exit = sqlite3_exec(DB, sql.c_str(), NULL, 0, &messaggeError);
+    if (exit != SQLITE_OK) {
+        cerr << "Error Create Table" << endl;
+        sqlite3_free(messaggeError);
+    }
+    sqlite3_close(DB);
+    return 0;
+}
+\end{lstlisting}
+
+sqlite3 的数据库文件是二进制的， 可以用命令行 dump 出一个文本文件
+\begin{lstlisting}
+sqlite> .output example.sql
+sqlite> .dump
+sqlite> .exit
+\end{lstlisting}
