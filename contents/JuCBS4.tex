@@ -1,0 +1,132 @@
+% Julia while 语句
+% while 语句
+
+本文授权转载自郝林的 《Julia 编程基础》． 原文链接：\href{https://github.com/hyper0x/JuliaBasics/blob/master/book/ch11.md}{第 11 章 流程控制}．
+
+
+\subsubsection{11.4 while 语句}
+
+与\verb|for|语句的用途相似，\verb|while|语句也可以被用来实现循环．不过，在代码的编写方面，这两者却截然不同．\verb|while|语句总是需要携带一个条件表达式．这个条件表达式非常关键，它可以控制当前的循环在什么时候开始，以及在什么时候结束．下面是一个简单的例子：
+
+\begin{lstlisting}[language=julia]
+julia> num = 0;
+
+julia> while num <= 9 
+           global num += 1 
+           print("$num ") 
+       end
+1 2 3 4 5 6 7 8 9 10 
+julia> 
+\end{lstlisting}
+
+在解释这个例子之前，我先讲两个知识点．
+
+第一个知识点很重要．我在前面讲变量和常量的时候说过，Julia中其实没有任何一个标识符的作用域可以是真正全局的．对于Julia，所谓的“全局”只是针对于某个模块而言的．Julia里根本就不存在能够跨越多个模块的（更别提跨越全部模块的）纯粹的全局作用域．即使是被直接定义在\verb|Core|模块中的那些程序定义，也是由于Julia进行了特殊的处理，才使得它们的作用域看起来像是真正全局的．
+
+在Julia程序的上下文中，如果一个变量、常量或者类型等被直接定义在了某个模块当中，那么它们就可以被称为全局程序定义，它们的作用域就是 Julia 所说的全局作用域．但是，你一定要清楚，这里的“全局”的真正含义．
+
+第二知识点很简单．我在讲变量和常量的时候也说过，我们在 REPL 环境中输入的代码默认都属于\verb|Main|模块．因此，把这两点综合起来看，我们在 REPL 环境中直接定义的变量、常量、类型、结构体、有名函数等就都属于全局程序定义，而它们的作用域则都是全局作用域．
+
+现在，基于这两点以及之后的结论，我们再来看上面的示例．
+
+我先定义了一个全局的变量\verb|num|，并把\verb|0|赋给了它．在它下面，与\verb|while|关键字处于同一行的就是这条\verb|while|语句的条件表达式，即：\verb|num <= 9|．
+
+在该\verb|while|语句刚开始执行的时候，Julia会先对它的条件表达式进行求值．只要其求值结果为\verb|true|，此\verb|while|语句中的子语句就会被执行．在这之后，每当该\verb|while|语句中的子语句被完整地执行一遍，它的条件表达式就会被重新求值一次．如果其求值结果依然为\verb|true|，那么那些子语句就会被再次执行．这就是所谓的循环．直到这个条件表达式的求值结果变为\verb|false|，这条\verb|while|语句所代表的循环才会结束．
+
+我们再来看这条\verb|while|语句中的子语句组．我先试图把变量\verb|num|的值加\verb|1|，之后又打印了该变量的值和必要的间距．在这里，我使用了一个我们还未曾用到过的关键字\verb|global|．
+
+我们在非全局的作用域（或者说局部作用域）中使用\verb|global|，会让Julia认为在该关键字右边的标识符指代的是一个全局的变量．那为什么要这么做呢？其主要原因是，如果我们不在这里添加\verb|global|，那么Julia就会认为\verb|num|是一个新的局部变量．在这里，该局部变量的作用域就是\verb|while|语句所占据的区域．注意，这里出现了局部变量对同名的全局变量的遮蔽．如此一来，语句\verb|num += 1|就变得不合法了，并且Julia会对此报错．因为\verb|num += 1|就相当于\verb|num = num + 1|，而我们是不能在一个变量被定义之前就引用它的（Julia 在对\verb|num + 1|进行求值时，局部变量\verb|num|还不存在）．
+
+即使我们把\verb|num += 1|替换成一条肯定合法的语句，如\verb|num = 10|，若不在这里添加\verb|global|也是不妥的．代码如下（看看就可以了，不要去尝试执行它）：
+
+\begin{lstlisting}[language=julia]
+julia> num = 0
+0
+
+julia> while num <= 9 
+           num = 10 
+           print("$num ") 
+       end
+\end{lstlisting}
+
+因为，如此一来就会出现这种情况：虽然我们在\verb|while|语句的子语句组中定义了局部变量\verb|num|，但是在其条件表达式中引用的依然是全局变量\verb|num|．显然，我们为局部变量\verb|num|赋值并不会影响到全局变量\verb|num|．因此，这个循环会一直执行下去．倘若我们不采取任何的措施（如杀掉进程），那么它就永远不会结束．这就是一个简单的死循环！
+
+这种行为是由上面这段代码的编写方式决定的．而且，我们只有在定义一个变量或者给一个变量赋值的时候才能添加像\verb|global|这样的关键字．所以这个问题没有其他更好的解决方案．我在前面使用的语句\verb|global num += 1|其实就是最优的．请记住，若想在局部的作用域中为全局的变量赋值，那么就一定要在该变量的左边添加\verb|global|．
+
+既然我们讲到了\verb|global|这个关键字，那我就再说一下与之相对应的关键字\verb|local|．与\verb|global|正好相反，\verb|local|会让Julia认为处于该关键字右边的标识符指代的是一个在当前作用域之下的局部变量．
+
+\verb|local|的适用场景没有\verb|global|广泛．不过，对于嵌套在一起的局部作用域而言，它还是很有用的．请看下面的示例：
+
+\begin{lstlisting}[language=julia]
+julia> num = 0;
+
+julia> while num < (10-1) 
+           global num += 1
+           sign = num
+           while num % 2 != 0
+               sign = num + 1
+               global num += 1
+           end
+           print("$sign")
+           # print("(num=$num)")
+           print(" ")
+       end
+2 4 6 8 10 
+julia> 
+\end{lstlisting}
+
+这段代码包含了一个两层的循环．这两层循环都是用\verb|while|语句实现的．同时，它们也代表了两个嵌套在一起的局部作用域．
+
+可以看到，循环中引用的\verb|num|仍然是一个全局变量．外层循环的条件是\verb|num|小于\verb|9|，而内层循环的条件是\verb|num|不能被\verb|2|整除．而且，无论是哪一层循环，都会在当前的条件满足的情况下对\verb|num|进行加\verb|1|的操作．
+
+此外，我在外层的循环里还定义了一个局部的变量\verb|sign|．并且，我在内层的循环中还引用了这个局部变量，并对它进行了重新赋值．这个局部变量代表了我们在每一次外层迭代的最后将要打印的内容．你肯定也发现了，每当外层的迭代即将完成的时候，变量\verb|sign|的值都会与\verb|num|的值相等．其实，我在这里添加这个局部变量只是为了体现\verb|local|的用法和作用．
+
+上面的这个双层循环的作用是打印出\verb|10|以内的所有正偶数．但是，如果我们在内层循环中的代码\verb|sign = num + 1|的左边添加一个关键字\verb|local|，那么情况就会明显不同．代码如下：
+
+\begin{lstlisting}[language=julia]
+julia> num = 0;
+
+julia> while num < (10-1) 
+           global num += 1
+           sign = num
+           while num % 2 != 0
+               local sign = num + 1
+               global num += 1
+           end
+           print("$sign")
+           # print("(num=$num)")
+           print(" ")
+       end
+1 3 5 7 9 
+julia> 
+\end{lstlisting}
+
+可以看到，在我添加了\verb|local|之后，这段代码打印出了\verb|10|以内的所有正奇数．
+
+让我们来一起分析一下原因．我刚刚说过，\verb|local|关键字的作用是，让Julia认为处于该关键字右边的标识符指代的是一个在当前作用域之下的局部变量．因此，在这个\verb|local|右边的\verb|sign|就会被视为一个在内层的\verb|while|语句中定义的局部变量．以下简称这个\verb|sign|为内层的\verb|sign|．显然，这个内层的\verb|sign|与在外层的\verb|while|语句中定义的那个\verb|sign|（以下简称外层的\verb|sign|）就不再是同一个变量了．又由于我对内层\verb|sign|的赋值肯定不会影响到外层\verb|sign|的值，所以外层迭代打印出的内容才都会是奇数．这就是\verb|local|关键字对这段代码的实际影响．
+
+关键字\verb|local|可以把一个原本引用自外层局部作用域的变量变成一个仅属于当前作用域的新变量．这是对重名变量的另一种解法．但它可以解决的只是在多个嵌套在一起的局部作用域当中出现重名变量的问题．别忘了，在默认的情况下，Julia会让同名的局部变量遮蔽掉那个对应的全局变量．所以，在这里并不会涉及到（也用不着涉及到）全局作用域．
+
+反观关键字\verb|global|，它面向的则是在某个局部作用域和全局作用域当中出现重名变量的问题．它的添加会改变 Julia 的默认行为，让当前作用域下的标识符不再代表一个新的变量，而是代表同名的全局变量．
+
+由于\verb|while|语句的编写特点，\verb|global|往往会在这种语句中经常出现．然而，\verb|local|在\verb|while|语句中出现的次数就明显少了许多．原因是，我们通常很少会编写拥有很多层的嵌套循环．即使编写了这样的代码，我们一般也不会写出重名的局部变量．因为这么做会大大降低代码的可读性，同时还会加重我们自己的心智负担．
+
+最后，顺便说一下，我们在\verb|while|语句中也可以使用\verb|break|语句和\verb|continue|语句．而且，它们在这里的用法和作用与在\verb|for|语句中的没有什么两样．但特别的是，当我们仅仅把\verb|true|作为\verb|while|语句的条件表达式时，\verb|break|语句的加入就显得尤为重要了．例如：
+
+\begin{lstlisting}[language=julia]
+julia> num = 0;
+
+julia> while true
+           global num += 1
+           print("$num ")
+           if num >= 10
+               break
+           end
+       end
+1 2 3 4 5 6 7 8 9 10 
+julia> 
+\end{lstlisting}
+
+很显然，如果上面这条\verb|while|语句中没有\verb|break|语句，那么它就将形成一个死循环！在绝大多数情况下，这都不会是我们的意愿．实际上，对于几乎所有的\verb|while|语句，我们都应该考虑清楚并实现好它的结束机制．
+
+现在总结一下．\verb|while|语句也可以被用来实现循环．它总是需要携带一个条件表达式，用于控制循环的启停．在这里，我们需要特别注意变量的作用域问题．由于我们经常需要在\verb|while|语句的条件表达式和子语句组中引用外界的变量，所以在编写它的时候还是需要考虑得更周到一些的．在必要的时候，我们可以借助关键字\verb|global|或\verb|local|来辅助控制变量的定义或引用．

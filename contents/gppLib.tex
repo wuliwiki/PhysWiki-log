@@ -13,6 +13,8 @@
 \item linux 编译器默认搜索路径（不包含子目录） \verb`/usr/local/lib`, \verb`/usr/local/lib64`, \verb`/usr/lib` and \verb`/usr/lib64`
 \end{itemize}
 
+事实上， 用 \verb|apt| 安装 \verb|lib*-dev| 就是在系统的默认搜索路径添加头文件和 \verb|lib*.a|， \verb|lib*.so| 文件， 以及它依赖的 package 中的这些文件． 这些文件在同一系统版本和同一 cpu 架构都是通用的（运气好的话也可能在不同系统中通用）．
+
 \subsection{静态链接库}
 
 \verb|.a| 文件是 static library, 在编译的时候一起编入可执行文件. 下面举一个例子
@@ -93,8 +95,12 @@ g++ -c main.cpp
 g++ -o main.x main.o -l1 -L./ -Wl,-rpath,./
 \end{lstlisting}
 可以用 \verb|ldd main.x| 查看动态链接库， 会发现其中有 \verb|lib1.so|． 如果不用 \verb|rpath|， 也可以在执行可执行文件以前把路径加入到环境变量 \verb`LD_LIBRARY_PATH` 中． \verb|rpath| 可以是相对于可执行文件的相对路径， 也可以是绝对路径．
+\begin{lstlisting}
+export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/your/custom/path/
+\end{lstlisting}
+注意 \verb|rpath| 只能设定当前可执行文件的的路径， 如果可执行文件依赖的 \verb|.so| 文件所需要的 \verb|.so| 文件不在默认路径， 就只能通过修改 \verb`LD_LIBRARY_PATH` 才可以．
 
-如果同样的 \verb`-l` 既能匹配 \verb`lib***.a` 也能匹配 \verb`lib***.so`， 那么 gcc 会默认选 \verb`.so`． 如果想要静态链接， 要么用 \verb`-static` 选项（禁止链接到任何动态 lib）， 要么直接指定 \verb`.a` 的地址和文件名， 如 \verb`g++ -o main.x f1.o /some/path/lib***.a another/path/lib***.a`．
+如果同样的 \verb`-l` 既能匹配 \verb`lib***.a` 也能匹配 \verb`lib***.so`， 那么 gcc 会默认选 \verb`.so` （貌似有时候二者都需要）． 如果想要静态链接， 要么用 \verb`-static` 选项（禁止链接到任何动态 lib）， 要么直接指定 \verb`.a` 的地址和文件名， 如 \verb`g++ -o main.x f1.o /some/path/lib***.a another/path/lib***.a`．
 
 \subsection{多个动态库}
 动态库本身也可以依赖于其他动态库， 例如再添加一个程序

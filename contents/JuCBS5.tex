@@ -1,0 +1,69 @@
+% Julia let 语句
+% let 语句
+
+本文授权转载自郝林的 《Julia 编程基础》． 原文链接：\href{https://github.com/hyper0x/JuliaBasics/blob/master/book/ch11.md}{第 11 章 流程控制}．
+
+
+\subsubsection{11.5 let 语句}
+
+Julia的\verb|let|语句本身既不包含条件也没有循环，但它的功能却是独树一帜的．
+
+\verb|let|语句能够自成一个作用域．通常，我们会让\verb|let|语句在开始处携带赋值语句，并以此定义相应的局部变量．另外，与其他的代码块一样，\verb|let|语句也可以包含子语句组．下面是一个简单的例子：
+
+\begin{lstlisting}[language=julia]
+julia> x = "Python";
+
+julia> let x = "Julia", y = "Golang"
+           println("$x, $y")
+       end
+Julia, Golang
+
+julia> 
+\end{lstlisting}
+
+请注意其中的赋值语句．如果我们想在\verb|let|语句的开始处同时定义多个局部变量，那么可以在关键字\verb|let|的右边并列多条赋值语句，并用英文逗号分隔它们．你也许还记得我们在讲变量和常量的时候提到过的平行赋值法，如\verb|x, y = "Julia", "Golang"|．不过很可惜，平行赋值法不能被用在这里：
+
+\begin{lstlisting}[language=julia]
+julia> let x, y = "Julia", "Golang"
+           println("$x, $y")
+       end
+ERROR: syntax: invalid let syntax
+# 省略了一些回显的内容．
+
+julia> 
+\end{lstlisting}
+
+你肯定也发现了，在前面那段代码中有两个名称为\verb|x|的变量．全局变量\verb|x|的值是\verb|Python|，而局部变量\verb|x|的值为\verb|Julia|．根据我们之前讲过的遮蔽规则，\verb|let|语句中的子语句在默认情况下只能引用到局部变量\verb|x|．因此，前面那条\verb|let|语句并没有打印出\verb|Python|．
+
+然而，我们是可以让它打印出\verb|Python|的．只要稍微调整一下其中的赋值语句就可以了，就像这样：
+
+\begin{lstlisting}[language=julia]
+julia> let x = x, y = "Golang"
+           println("$x, $y")
+       end
+Python, Golang
+
+julia> 
+\end{lstlisting}
+
+你可能会觉得在\verb|let|关键字右边的赋值语句\verb|x = x|很奇怪．它难道是把\verb|x|的值赋给了\verb|x|自己吗？
+
+实际上，并不是这样．在这个等号左边和右边的两个\verb|x|指代的并不是同一个变量．首先，我们需要知道，Julia对赋值语句的解析是从右到左的．这很合理，因为它需要先知道这个值具体是什么，才能够判断该值是不是可以被赋给某个变量．尤其在对新变量赋值的时候，这一点尤为重要．
+
+其次，与\verb|let|关键字处于同一行的赋值语句总是会在当前的作用域下创建新的局部变量．在这个等号左边的\verb|x|指代的就是一个新变量．然而，对等号右边的\verb|x|的求值会先于对此局部变量的创建．那时，在\verb|let|语句所代表的作用域下还没有名为\verb|x|的程序定义，所以等号右边的\verb|x|就会去指代那个在外面的全局变量\verb|x|．
+
+因此，这里的\verb|x = x|其实就是在把全局变量\verb|x|的值赋给\verb|let|语句中的局部变量\verb|x|．你可别小看这条短短的赋值语句．\verb|let|语句中的这种赋值方式在Julia中是非常特别的．你可以思考一下，是否能够用别的形式完全实现上述代码的功能．你可以考虑利用关键字\verb|global|和\verb|local|，以及其他的代码块．
+
+总之，\verb|let|语句是一种很纯粹的代码块．它会形成局部的作用域，并保证其中定义的局部变量不被外泄．它本身就可以携带赋值语句，但也可以不携带而由其子语句定义局部变量，如：
+
+\begin{lstlisting}[language=julia]
+julia> let  
+           y = "Golang"
+           println("$x, $y")
+       end
+Python, Golang
+
+julia> 
+\end{lstlisting}
+
+\verb|let|语句本身携带的赋值语句一定会在当前的作用域下创建新的局部变量，即使这个局部变量与外界的变量重名也是如此．或者说，这里的赋值语句总是会执行“定义并赋值”的操作．正因为如此，这里才存在着一种特殊的赋值方式．就像我在前面讲过的那样．
