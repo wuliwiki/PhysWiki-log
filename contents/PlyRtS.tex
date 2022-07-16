@@ -1,0 +1,623 @@
+% 三次与四次多项式的根
+% Galois理论|求根公式|五次方程|5次方程|Galois群|resolvent polynomial|Galois预解式|伽罗华预解式|伽罗瓦预解式|多项式方程|代数解|根式解
+
+
+\pentry{Galois扩张\upref{GExt}，多项式的结式与判别式\upref{RDPly}， 韦达定理\upref{VietaF}}
+
+\addTODO{加入目录}
+
+第一子节讲讲骂战的历史故事，不想看历史的读者请直接跳转到\autoref{PlyRtS_sub1} ．
+
+\subsection{古典数学难题}
+
+代数方程的根式解表达，是古典代数学中的经典难题．根式解即用任意多项式的系数进行有限次加、减、乘、除以及开根号运算，得到其根．比如，二次多项式$ax^2+bx+c$的根总可以表达为$\frac{-b\pm\sqrt{b^2-4ac}}{2a}$．
+
+得到二次多项式求根公式的方法很简单，配方即可．
+
+更高次多项式的求根则复杂许多．
+
+中世纪之后，代数学的第一次重大进展是找到了三次和四次方程的根式通解．给定精度后找方程的数值近似解并不是难事，希腊人、阿拉伯人和中国人都早已发展出很多成熟的算术和几何方法来找数值解．但真正的代数解则直到近代才得出．
+
+\subsubsection{三次方程}
+
+1494年，意大利数学家卢卡·帕乔利（Lusa Pacioli）发表了他近三十年心血的结晶，《算术、几何、比及比例概要》（\textsl{Summa de arithmetica, geometria, Proportioni et proportionalita}）\footnote{关于这本书的介绍，可参考\href{https://en.wikipedia.org/wiki/Summa_de_arithmetica}{维基百科相关页面}．}，有时也被翻译为《数学大全》或者《算术大全》．在这本书里，他列出了两种无法解出的三次代数方程：
+\begin{equation}\label{PlyRtS_eq1}
+n=ax+bx^3
+\end{equation}
+\begin{equation}\label{PlyRtS_eq2}
+n=ax^2+bx^3
+\end{equation}
+
+但是就在约一个世纪后，一个名叫希皮奥内·德尔·费罗（Scipione del Ferro）的意大利数学家就发现了\autoref{PlyRtS_eq1} 的解法．这个人很“自闭”，他不喜欢公开交流思想，只喜欢和自己的朋友或学生交流．所幸，费罗在三次方程求根公式上的成果被记录在他的笔记本上，在他1526年去世后由女婿哈尼瓦·纳威（Hannival Nave）继承了，这位女婿也是个数学家．
+
+戏剧的是，在费罗去世之前，还秘密将\autoref{PlyRtS_eq1} 的解法传给了他的学生，安东尼奥·玛丽亚·菲奥利（Antonio Maria del Fiore）．目前英文维基上都没有此人的介绍\footnote{参考\href{https://es.wikipedia.org/wiki/Antonio_Maria_del_Fiore}{Fiore的维基页面（意大利语）}，或\href{https://second.wiki/wiki/antonio_maria_del_fiore}{一个英文介绍页}．他的名字Fiore也可写作Fior ， Fióre ，Flòrido 或者 Floridus．}，而现代数学科普书《代数的历史：人类对未知量的不舍追踪》中对菲奥利的介绍只是“威尼斯人”和“\textbf{数学才能平庸之辈”}．与其说他是个数学家，倒不如说是个客观上促进了代数变革的\textbf{商人}．
+
+拿到方程解的秘密后，他开始琢磨怎么捞钱．当时的意大利北部有的是营销的机会，因为学者们很难得到赞助，大学薪水不太理想，还没有终身教职制度，大家巴不得有路子来宣传自己．
+
+于是又一个人物登场了：尼科洛·塔尔塔利亚（Niccolò Tartaglia）．塔尔塔利亚13岁遭遇法国军队屠杀，活是活了下来，但是下颌严重创伤，从此变得口吃——所以人们叫他“Tartaglia”——口吃的人．没错，那个时代就这样，外号也能变成姓氏．1530年，塔尔塔利亚开始和一个数学老师交流他关于三次方程的一些成果，比如，\autoref{PlyRtS_eq2} 的通解．
+
+菲奥利不知道怎么听说了这些消息，也不知道谁给他的自信——可能是老师留下的秘籍给了他自信？——总之，他向塔尔塔利亚发起赌局．双方要给对手出30道题，并在1535年2月22日将对手问题的解答递交给公证人，输家要请赢家吃30顿饭．
+
+塔尔塔利亚一开始没把菲奥利的数学能力当回事，没有做充分准备．后来听到传言，说菲奥利十年前就从一位数学大师那里得到了秘传，塔尔塔利亚才开始上心．2月13日，他花了一个上午就解决了\autoref{PlyRtS_eq1} 的通解问题．和他想的一样，菲奥利出的题全都是关于\autoref{PlyRtS_eq1} 根式通解的，这人也就这一板斧了．
+
+毫无悬念，塔尔塔利亚秒杀了菲奥利——菲奥利一题都做不出来．赢得荣誉后，塔尔塔利亚却放弃了赌金．吉罗拉莫·卡尔达诺（Girolamo Cardano）在他的自传里是这么评价塔尔塔利亚的：“与一个可怜的失败者面对面进餐的场景对他毫无吸引力．”不能怪卡尔达诺嘴毒，谁让菲奥利自找不快呢？
+
+\subsubsection{四次方程}
+
+卡尔达诺从自己手下的数学教师达伊科那里得知了塔尔塔利亚获胜的情况．当时，卡尔达诺正准备写一本数学著作，他琢磨着怎么把塔尔塔利亚的解法秘密骗过来，写到自己的书里．
+
+1539年1月至3月，卡尔达诺开始和塔尔塔利亚书信往来．卡尔达诺就像钓鱼一样，变着法地耍塔尔塔利亚，激将法、糖衣炮弹全上阵，打一巴掌给颗糖．其中最大的那颗糖，当属他承诺把塔尔塔利亚引荐给米兰帝国军队的司令官兼伦巴底地方长官——地位仅次于皇帝．当时塔尔塔利亚出版了一本关于火炮技术的著作，卡尔达诺就告诉他自己已经买了两本，送了一本给这位司令官，而这位司令官非常想见见作者本人．
+
+塔尔塔利亚上钩了，急忙奔到米兰．真是不凑巧呢，司令官当时不在米兰，于是塔尔塔利亚只好在卡尔达诺家住了几天．这几天，塔尔塔利亚受到了皇室般的贵宾待遇．3月25日时，上头了的塔尔塔利亚让卡尔达诺发誓不公布三次方程解的秘密，然后用一首25行诗（\autoref{PlyRtS_sub2}） 写下了这个秘密．
+
+回家以后冷静下来，塔尔塔利亚开始后悔了．卡尔达诺写信问他这首诗某些地方的解释时，他也很不耐烦地怼了回去．当得知卡尔达诺5月出版的算数书\textsl{Pratica Arithmeticæ et mensurandi singularis}里并没有公布他的秘密时，塔尔塔利亚平静了些．可没多久，他听说卡尔达诺又开始写一本关于代数的书，又开始暴躁和疑心起来．卡尔达诺好生安抚，直到1540年二人断绝书信来往．
+
+1540年到1545年，是代数历史上的重要时期．卡尔达诺在塔尔塔利亚和费罗的基础上，给出了三次方程的一般解．由于费罗的成果早于塔尔塔利亚，并且也正是因为知道菲奥利得到了秘传，塔尔塔利亚才意识到原来三次方程是有解的，因此卡尔达诺不打算遵守誓言了——他觉得塔尔塔利亚只是再次发现而已．1545年，他出版了《大衍术》（\textsl{Ars Magna}）\footnote{这是《大衍术》的\href{https://web.archive.org/web/20220201093634/http://www.filosofia.unimi.it/cardano/testi/operaomnia/vol_4_s_4.pdf}{电子稿}．}，首次发表了\textbf{三次和四次}方程的通解公式．
+
+卡尔达诺有一个年轻有才的秘书，费拉里（Lodovico Ferrari）．\textbf{四次}代数方程的根式通解就是这位年轻人在1940时发现的，那时他才18岁．想必是卡尔达诺偷偷把“发誓绝不外传”的三次方程求根公式教给了他的结果．
+
+《大衍术》一出版，可想而知塔尔塔利亚暴怒的样子．他跳出来骂卡尔达诺\footnote{参考\href{https://arxiv.org/ftp/arxiv/papers/1308/1308.2181.pdf}{这篇文章}．}，但后者不接茬，只是让费拉里替父——替师父出征．1548年10月，费拉里和塔尔塔利亚在米兰又比了一场，塔尔塔利亚才消停了．有说法是塔尔塔利亚缺席，但总之比赛结果是费拉里赢了．费拉里从此名声大震，平步青云，而塔尔塔利亚则带着满腔悲愤，于1557年饮恨辞世．
+
+幸运的是，他的身后名还是保住了．今天的数学历史学家承认了塔尔塔利亚的成就，并将卡尔达诺发布的三次方程求根公式称为卡尔达诺-塔尔塔利亚公式．
+
+
+
+
+
+
+\subsubsection{小结语}
+
+如果塔尔塔利亚没有受到费罗的启发，可能很久都不会尝试解三次方程．如果卡尔达诺没有钓出塔尔塔利亚的秘密，可能四次方程根式解的发现又要推迟数十年．可如果费罗不自闭，塔尔塔利亚也积极发表自己的成果，这一切发展又可能提前很久．
+
+所以学术交流制度是多么关键\footnote{All hail to Sci-Hub and arxiv.org! }．
+
+
+\subsection{塔尔塔利亚的25行诗}\label{PlyRtS_sub2}
+
+这里贴出塔尔塔利亚25行诗歌的原文及翻译，包括英文翻译、中文翻译和数学翻译．
+
+原诗出处见\textsl{The Cubic Equation as Poetry:
+The solution to the cubic equation, in terza rima.}，2016年4月12日刊登于《科学美国人》（\textsl{Scientific American} ），作者为Evelyn Lamb\footnote{这是她的\href{https://www.scientificamerican.com/author/evelyn-lamb/}{《科学美国人》作品集}}．
+
+
+
+\subsubsection{塔尔塔利亚的原诗}
+
+Quando che'l cubo con le cose appresso 
+//
+Se agguaglia à qualche numero discreto
+//
+Trouan dui altri differenti in esso.
+
+
+
+Dapoi terrai questo per consueto
+​//Che'llor produtto sempre sia eguale
+//​Alterzo cubo delle cose neto,
+ 
+
+El residuo poi suo generale 
+//Delli lor lati cubi ben sottratti
+//​Varra la tua cosa principale.
+ 
+
+In el secondo de cotestiatti 
+​//Quando che'l cubo restasse lui solo 
+//Tu osseruarai quest'altri contratti,
+ 
+
+Del numer farai due tal part'à uolo 
+//Che l'una in l'altra si produca schietto
+//El terzo cubo delle cose in stolo
+​
+
+Delle qual poi, per communprecetto 
+​//Torrai li lati cubi insieme gionti 
+//Et cotal somma sara il tuo concetto.
+ 
+
+El terzo poi de questi nostri conti 
+//Se solue col secondo se ben guardi 
+//Che per natura son quasi congionti.
+ 
+
+Questi trouai, & non con paßi tardi 
+//Nel mille cinquecentè, quatroe trenta 
+//Con fondamenti ben sald'è gagliardi
+​
+
+Nella citta dal mar'intorno centa.
+
+
+\subsubsection{英文翻译\footnote{取自\href{https://www.maa.org/press/periodicals/convergence/how-tartaglia-solved-the-cubic-equation-tartaglias-poem．}{Tartaglia's Poem}．}}
+
+01) When the cube with the cose beside it 
+
+02) Equates itself to some other whole number,
+
+03) Find two other, of which it is the difference. 
+
+04) Hereafter you will consider this customarily
+
+05) That their product always will be equal 
+
+06) To the third of the cube of the cose net. 
+
+07) Its general remainder then
+
+08) Of their cube sides, well subtracted, 
+
+09) Will be the value of your principal unknown.
+
+10) In the second of these acts,
+
+11) When the cube remains solo , 
+
+12) You will observe these other arrangements:
+
+13) Of the number you will quickly make two such parts,
+
+14) That the one times the other will produce straightforward 
+
+15) The third of the cube of the cose in a multitude, 
+
+16) Of which then, per common precept,
+
+17) You will take the cube sides joined together. 
+
+18) And this sum will be your concept. 
+
+19) The third then of these our calculations 
+
+20) Solves itself with the second, if you look well after,
+
+21) That by nature they are quasi conjoined.
+
+22) I found these, and not with slow steps,
+
+23) In thousand five hundred, four and thirty
+
+24) With very firm and strong foundations
+
+25) In the city girded around by the sea.
+
+
+\subsubsection{中文翻译及数学翻译\footnote{中文翻译是笔者做的，数学翻译取自\href{https://www.maa.org/press/periodicals/convergence/how-tartaglia-solved-the-cubic-equation-tartaglias-poem}{这篇文章}．注意其中$p$和$q$都是非负的．}}
+
+某与某立方一起//和别的数能对齐//再找二数相差之
+
+\begin{equation}
+\leftgroup{
+    x^3+px=q\\
+    u-v=q
+}
+\end{equation}
+
+你要学会不惊奇//它们相乘总相宜//三分倍数再三幂
+\begin{equation}
+uv=(p/3)^3
+\end{equation}
+
+于是一般有残余//三次根号相减去//所得莫非你所需
+
+\begin{equation}
+\sqrt[3]{u}-\sqrt[3]{v}=x
+\end{equation}
+
+
+问题解答有次序//立方独留须自立//留心观察有新意
+
+\begin{equation}
+x^3=px+q
+\end{equation}
+
+分开此数不犹豫//你我相乘肠子直//三分之前求三幂
+
+\begin{equation}
+\leftgroup{
+    q=u+v\\
+    uv=p^3/3
+}
+\end{equation}
+
+想必结果无异议//三次根号凑一起//所得莫非你所思
+
+\begin{equation}
+\sqrt[3]{u}+\sqrt[3]{v}=x
+\end{equation}
+
+
+还有一类尚未计//留心可知同上题//自然二者本同体\footnote{指形如
+$
+x^3+q=px
+$
+的方程．}
+
+
+干脆利落不儿戏//一五三四全找齐//基础坚实无可疑//四面环海诞生地
+
+
+
+
+
+
+\subsection{Galois理论}\label{PlyRtS_sub1}
+
+三次四次方程都有根式解，这不禁让人猜想五次方程是否也有根式解，尽管可能复杂得吓人．事实上，五次及以上的代数方程就没有根式解了．卡尔达诺时代的人们没有合适的数学工具来得出这一结果，但现在我们有了，那就是Galois理论．
+
+
+
+
+
+
+
+
+\subsubsection{三次方程根式解}
+
+现在我们来看看，卡尔达诺是怎么处理三次方程的．当然，他那时论述的是实数域上的多项式，但现在我们完全可以解开束缚，讨论所有特征不是$2$或$3$的域上的三次多项式．
+
+设$\mathbb{F}$的特征不为$2$或$3$，其上的一个三次多项式表达为
+\begin{equation}
+f(x) = ax^3+bx^2+cx+d
+\end{equation}
+
+为了化简，取$y=x+b/3a$，就总能把$f(x)$化为$g(y)=a(y^3+py+q)$的形式．注意，$f$和$g$的首项系数以及各根之间的距离相等（$y$只不过是相对于$x$做了平移），因此$\opn{Dis}(f)=\opn{Dis}(g)$．
+
+现在我们考虑方程$x^3+px+q=0$．令$x=u+v$，则有
+\begin{equation}\label{PlyRtS_eq3}
+u^3+v^3+(3uv+p)(u+v)+q=0
+\end{equation}
+
+令$3uv+p=0$，于是有$u^3v^3=-p^3/27$，且\autoref{PlyRtS_eq3} 化为$u^3+v^3+q=0$．于是有
+\begin{equation}
+\begin{aligned}
+(x-u^3)(x-v^3) &= x^2-(u^3+v^3)x+u^3v^3\\
+&= x^2+qx-p^3/27
+\end{aligned}
+\end{equation}
+
+则
+\begin{equation}
+\leftgroup{
+    u^3 &= \frac{-q+\sqrt{q^2+4p^3/27}}{2}\\
+    v^3 &= \frac{-q-\sqrt{q^2+4p^3/27}}{2}
+}
+\end{equation}
+
+于是
+\begin{equation}\label{PlyRtS_eq4}
+\begin{aligned}
+x&=u+v\\
+&=\qty(\frac{-q+\sqrt{q^2+4p^3/27}}{2})^{1/3}+\qty(\frac{-q-\sqrt{q^2+4p^3/27}}{2})^{1/3}
+\end{aligned}
+\end{equation}
+
+注意\autoref{PlyRtS_eq4} 中分母有$2$和$27=3^3$．这就是为什么我们要求系数域的特征不是$2$或$3$．
+
+
+
+
+
+
+\subsubsection{三次多项式的Galois群}
+
+
+\begin{definition}{多项式的Galois群}
+给定域$\mathbb{F}$上的多项式$f$，令$\mathbb{K}$是其分裂域．则$f$的Galois群定义为
+\begin{equation}
+\opn{Gal}(f:\mathbb{F})=\opn{Gal}(\mathbb{K}/\mathbb{F})
+\end{equation}
+\end{definition}
+
+给定一个多项式，其分裂域总是一个有限扩张，因此Galois群总是有限群．根据\autoref{GExt_the3}~\upref{GExt}和\autoref{GExt_the4}~\upref{GExt}，此时Galois群和中间域总是一一对应的．
+
+另外，这个多项式应该是可分的，这样才能保证其根都是可分元素，从而保证$\mathbb{K}/\mathbb{F}$是可分扩张．
+
+由于$\opn{Gal}(\mathbb{K}/\mathbb{F})$中的自同构总是把$\mathbb{F}$上同一个多项式的根映射为另一根，并且只需要知道了这些根的象，便知道了所有$\mathbb{K}$中元素的象，故我们总可以把$\opn{Gal}(f:\mathbb{F})$同构到$S_n$的一个子群上，其中$n=\opn{deg}f$．
+
+\begin{theorem}{}\label{PlyRtS_the1}
+设$f\in\mathbb{F}[x]$是$\mathbb{F}$上的\textbf{可分不可约}多项式，其全体不同的根为$\{\alpha_1, \alpha_2, \cdots, \alpha_n\}$．则$\opn{Gal}(f:\mathbb{F})$同构于$S_n$的一个\textbf{可递子群}$G$（定义见\autoref{Group3_ex4}~\upref{Group3}），且$n$整除$\abs{G}$．
+\end{theorem}
+
+\textbf{证明}：
+
+设$f\in\mathbb{F}[x]$的分裂域为$\mathbb{K}$．
+
+对于任意$\sigma\in\opn{Gal}(\mathbb{K}/\mathbb{F})$，只要确定了各$\sigma(\alpha_i)$，就确定了整个$\sigma$．更准确地，据\autoref{SpltFd_the1}~\upref{SpltFd}及其证明细节，可知只需要确定部分$\sigma(\alpha_i)$就能确定整个$\sigma$．
+
+因此可以构造集合映射$I:\opn{Gal}(\mathbb{K}/\mathbb{F})\to S_n$，定义为$\sigma(\alpha_i)=\alpha_{I(\sigma)(i)}$．也就是说，如果$\sigma(\alpha_i)=\alpha_j$，那么$I(\sigma)(i)=j$．易验证这是个单同态，从而得证$\opn{Gal}(f:\mathbb{F})$同构于$S_n$的一个\textbf{子群}$G$．
+
+据\autoref{FldExp_the4}~\upref{FldExp}第2条，可知对于任意$i, j$，总可以有$\sigma\in\opn{Gal}(\mathbb{K}/\mathbb{F})$使得$\sigma(\alpha_i)=\alpha_j$．由此可知$G$是可递的．
+
+\textbf{证毕}．
+
+
+\begin{example}{}
+回忆\autoref{SpltFd_exe1}~\upref{SpltFd}，$[\mathbb{Q}(2^{1/3}):\mathbb{Q}]=6$，$x^3-2$可由\textbf{爱森斯坦判别式}\upref{EsstCr}证明为不可约多项式，故其Galois群有6个元素．
+
+在这个例子里，$\opn{Gal}(\mathbb{Q}(2^{1/3})/\mathbb{Q})=S_4$，自然是可递的．
+\end{example}
+
+\begin{example}{}
+考虑$f(x)=x^{p-1}+x^{p-2}+\cdots+1\in\mathbb{Q}[x]$，其中$p$为素数．则易证$f$在$\mathbb{Q}$上不可约．其分裂域为$\mathbb{Q}(\alpha)$，其中$\alpha=\exp{2p\I/p}$．由于$[\mathbb{Q}(\alpha):\mathbb{Q}]=p-1$，故$\opn{Gal}(\mathbb{Q}(\alpha)/\mathbb{Q})$有$p-1$个元素．
+
+这个扩张符合\autoref{SpltFd_the1}~\upref{SpltFd}证明中最简单的那种情况，任意一个根的单扩张都是整个扩张本身．也就是对于$\sigma\in\opn{Gal}(\mathbb{Q}(\alpha)/\mathbb{Q})$，只需要确定$\sigma(\alpha)$就能确定$\sigma$本身；而$\sigma(\alpha)$可以等于任何其它根．给各根记为$\alpha_i$，其中$i=1, 2, \cdots, p-1$，$\alpha$不一定是$\alpha_1$．于是，只要取$\sigma_i$、$\sigma_j$使得$\sigma_i(\alpha)=\alpha_i$和$\sigma_j(\alpha)=\alpha_j$，那么$\sigma_j\sigma_i^{-1}$就对应能把$i$映射到$j$的置换．由此可知$\opn{Gal}(\mathbb{Q}(\alpha)/\mathbb{Q})$可递．
+\end{example}
+
+
+\begin{theorem}{}
+设$\mathbb{F}$上有可分的不可约多项式$f$，且$\opn{ch}\mathbb{F}\neq 2$．则
+
+$\opn{Gal}(f:\mathbb{F})$中有一个关于根的奇置换$\iff$ 元素$\opn{Dis}(f)\in\mathbb{F}$在$\mathbb{K}$中没有平方根．
+\end{theorem}
+
+\textbf{证明}：
+
+首先对置换奇偶性进行一般的讨论．
+
+根据\autoref{RDPly_def1}~\upref{RDPly}，$f$的判别式为
+\begin{equation}
+\opn{Dis}(f) = a^{2(n-1)}\prod_{1\leq i<j\leq n}(\alpha_i-\alpha_j)^2
+\end{equation}
+其平方根为
+\begin{equation}
+d = a^{(n-1)}\prod_{1\leq i<j\leq n}(\alpha_i-\alpha_j)
+\end{equation}
+
+显然，对于任意$\sigma\in\opn{Gal}(f:\mathbb{F})$，$\sigma d=\pm d$．
+
+如果$\sigma_0\in\opn{Gal}(f:\mathbb{F})$是一个\textbf{对换}，那么$\sigma_0 d=-d$．由此可得，任意$\sigma\in\opn{Gal}(f:\mathbb{F})$是奇置换当且仅当$\sigma d=-d$，是偶变换当且仅当$\sigma d=d$．
+
+$\implies$：
+
+反设$\opn{Dis}(f)$的平方根$d\in\mathbb{K}$．于是对于任意$\sigma\in\opn{Gal}(f:\mathbb{F})$，都有$\sigma d = d$，从而任意$\sigma$都是偶置换．
+
+$\impliedby$：
+
+设$d\not\in\mathbb{K}$．由\autoref{GExt_the4}~\upref{GExt}，$\mathbb{F}$是$\opn{Gal}(f:\mathbb{F})$的不变子域，因此$\mathbb{F}(d)$不是，即存在$\sigma\in\opn{Gal}(f:\mathbb{F})$使得$\sigma d\neq d$，从而必有$\sigma d= -d$，于是$\sigma$是奇置换．
+
+\textbf{证毕}．
+
+
+\begin{corollary}{三次多项式的Galois群}\label{PlyRtS_cor1}
+设$f$是$\mathbb{F}$上可分的不可约多项式，次数为$3$．$\opn{Dis}(f)\in\mathbb{K}$的平方根为$d$．
+
+则$d\in\mathbb{K}\implies\opn{Gal}(f:\mathbb{F})\cong A_3$\footnote{交错群$A_n$的定义见\autoref{permu_def2}~\upref{permu}．}，$d\not\in\mathbb{K}\implies\opn{Gal}(f:\mathbb{F})\cong S_3$．
+\end{corollary}
+
+\textbf{证明}：
+
+由\autoref{PlyRtS_the1} ，只需证明$S_3$的可递子群必为$S_3$和$A_3$．注意$S_3$中的奇置换只有三个：$\pmat{1&2}$、$\pmat{1&3}$和$\pmat{2&3}$；余下的$\pmat{1}$、$\pmat{1&2&3}$和$\pmat{1&3&2}$是偶置换．
+
+设$H$是$S_3$的一个可递子群，且$H$中没有奇置换．由于$H$是可递的，故必有置换能把$1$映射到$2$，于是这个置换必须是$\pmat{1&2&3}$．同理，由于必有置换能把$1$映射到$3$，因此$H$中必有$\pmat{1&3&2}$．于是，$H\subseteq A_3$．易证$A_3$是可递的．
+
+设$H$是$S_3$的一个可递子群，且$H$中有奇置换．
+
+\textbf{证毕}．
+
+\begin{example}{}
+我们还是拿2的3次方根举例子．
+
+考虑$f(x)\in\mathbb{Q}[x]$，其中$f(x)=x^3-2$．用\textbf{爱森斯坦判别式}\upref{EsstCr}可以判断出$f$是不可约的，由$\mathbb{Q}$是完美域可知$f$是可分的，从而其分裂域是Galois扩张．
+
+记$\omega=\exp{2\pi\I/3}$，则$f$的三个根为$2^{1/3}, 2^{1/3}\omega, 2^{1/3}\omega^2$．于是$\opn{Dis}f=-108$，在$\mathbb{Q}$中没有平方根．因此$\opn{Gal}(f:\mathbb{Q})\cong S_3$．
+\end{example}
+
+
+
+
+\subsubsection{四次方程根式解}
+
+卡尔达诺和费拉里用简洁的手法得出了一般四次方程的根式通解，但我们不会介绍那个方法，而是介绍一个和Galois群联系更紧密的方法\footnote{思路见\cite{GTM242}第207页．}．
+
+先写出一个一般的四次方程$f(x)=ax^4+bx^3+cx^2+dx+e\in\mathbb{F}[x]$，其中$a\neq 0$且$\opn{ch}\mathbb{F}\neq 2$．
+
+做代换$x=y-b/4a$，则
+\begin{equation}\label{PlyRtS_eq6}
+f(x) = g(y) = a(y^4+py^2+qy+r)
+\end{equation}
+
+和三次方程的化简原理一样，$f$和$g$的根彼此之间是平移的关系，故$\opn{Dis}(f)=\opn{Dis}(g)$．
+
+设$g(x)$在$\overline{\mathbb{F}}$上的根为$\beta_1, \beta_2, \beta_3, \beta_4$．由\autoref{VietaF_eq1}~\upref{VietaF}，$\sum_{i}\beta_i=0$，$\sum_{i<j}\beta_i\beta_j=p$，$\sum_{i<j<k}\beta_i\beta_j\beta_k=-q$，$\beta_1\beta_2\beta_3\beta_4=r$．
+
+特别注意$\sum_i\beta_i=0$．
+
+于是可以令
+\begin{equation}\label{PlyRtS_eq5}
+\leftgroup{
+    u&=-(\beta_1+\beta_2)(\beta_3+\beta_4)=(\beta_1+\beta_2)^2\\
+    v&=-(\beta_1+\beta_3)(\beta_2+\beta_4)=(\beta_1+\beta_3)^2\\
+    w&=-(\beta_1+\beta_4)(\beta_2+\beta_3)=(\beta_1+\beta_4)^2
+}
+\end{equation}
+
+将\autoref{PlyRtS_eq5} 各行中间部分展开，经过冗长的运算，能得到：
+\begin{equation}\label{PlyRtS_eq8}
+\leftgroup{
+    u+v+w&=-2p\\
+    uv+uw+vw&=p^2-4r\\
+    uvw&=q^2
+}
+\end{equation}
+
+因此
+\begin{equation}\label{PlyRtS_eq7}
+\begin{aligned}
+(x-u)(x-v)(x-w)=x^3+2px^2+(p^2-4r)x-q^2
+\end{aligned}
+\end{equation}
+这是一个三次多项式，于是我们总可以用$p, q, r$的根式表出$u, v, w$．
+
+记$s(x)=(x-u)(x-v)(x-w)$，则$\opn{Dis}(f)=\opn{Dis}(g)=a^6\opn{Dis}(s)$．称$s$是$f$或$g$的\textbf{Galois预解式（resolvent polynomial）}．
+
+由\autoref{PlyRtS_eq5} ，$u'=\beta_1+\beta_2$、$v'=\beta_1+\beta_3$和$w'=\beta_1+\beta_4$分别是$u$、$v$和$w$的平方根，于是它们也能用$p, q, r$的根式表出．
+
+我们有
+\begin{equation}
+\begin{aligned}
+u'v'w'&=(\beta_1+\beta_2)(\beta_1+\beta_3)(\beta_1+\beta_4)\\
+&=\beta_1\sum_i\beta_i+\sum_{i<j<k}\beta_i\beta_j\beta_k\\
+&=-q
+\end{aligned}
+\end{equation}
+
+且
+\begin{equation}
+\leftgroup{
+    u'+v'+w'&=3\beta_1+\beta_2+\beta_3+\beta_4=2\beta_1\\
+    u'-v'-w'&=2\beta_2\\
+    -u'+v'-w'&=2\beta_3\\
+    -u'-v'+w'&=2\beta_4
+}
+\end{equation}
+
+于是我们可以用$p, q, r$的根式表出各$\beta_i$，即得出了\autoref{PlyRtS_eq6} 的根式解，进而得到了一般四次方程的根式解（逆代换$x=y-b/4a$）．
+
+\begin{theorem}{}\label{PlyRtS_the2}
+
+设$\mathbb{F}$的特征不为$2$，则其上多项式$x^4+py^2+qy+r$的根为
+\begin{equation}
+\leftgroup{
+    \beta_1&=\frac{1}{2}(u'+v'+w')\\
+    \beta_2&=\frac{1}{2}(u'-v'-w')\\
+    \beta_3&=\frac{1}{2}(-u'+v'-w')\\
+    \beta_4&=\frac{1}{2}(-u'-v'+w')
+}
+\end{equation}
+
+其中$u, v, w$是$x^3+2px^2+(p^2-4r)x-q^2$的根，$u', v', w'$分别是$u, v, w$平方根之一，且使得$u'v'w'=-q$．
+
+\end{theorem}
+
+由于\autoref{PlyRtS_the2} 依赖于三次方程的解，因此如果要用Cardano的三次方程公式来求出四次方程的通解，我们还额外需要$\mathbb{F}$的特征不为$3$．
+
+
+\subsubsection{四次多项式的Galois群}
+
+
+\autoref{PlyRtS_the2} 根的结构反映出四次多项式的Galois群．
+
+\begin{theorem}{四次多项式的Galois群}\label{PlyRtS_the3}
+
+设域$\mathbb{F}$上有\textbf{可分的不可约}多项式$f(x)=ax^4+bx^3+cx^2+dx+e$，$\opn{ch}\mathbb{F}\neq 2$．设$\mathbb{K}\subseteq\overline{\mathbb{F}}$是$f$的预解式$s$（\autoref{PlyRtS_eq7}） 的分裂域．
+
+显然，$\mathbb{K}=\mathbb{F}(u, v, w)$，而$s$是$u, v, w$在$\mathbb{F}$上的\textbf{零化多项式}，且$uvw=q^2\in\mathbb{F}$．因此$\mathbb{K}=\mathbb{F}(u, v)$，且$u$在$\mathbb{F}$上的最小多项式次数不大于三，$v$在$\mathbb{F}(u)$上的最小多项式次数不大于前者减一，故$[\mathbb{K}:\mathbb{F}]$只有四种可能：$6$，$3$，$2$和$1$．这还意味着
+\begin{equation}
+[\mathbb{K}:\mathbb{F}]\leq 6
+\end{equation}
+
+则有：
+
+1．当$[\mathbb{K}:\mathbb{F}]=6$，有$\opn{Gal}(f:\mathbb{F})\cong S_4$；
+
+2．当$[\mathbb{K}:\mathbb{F}]=3$，有$\opn{Gal}(f:\mathbb{F})\cong A_4$；
+
+3．当$[\mathbb{K}:\mathbb{F}]=2$，如果$f$在$\mathbb{F}$上不可约则$\opn{Gal}(f:\mathbb{F})\cong D_4$\footnote{$D_n$是正$n$边形的对称群（dihedral group）．}，否则$\opn{Gal}(f:\mathbb{F})\cong \mathbb{Z}_4$；
+
+4．当$[\mathbb{K}:\mathbb{F}]=1$，有$\opn{Gal}(f:\mathbb{F})\cong V_4$\footnote{$V_4$即Klein四元群，除了$\mathbb{Z}_4$外唯一一个四元群．}；
+
+\end{theorem}
+
+\subsection{\autoref{PlyRtS_the3} 的证明}
+
+\subsubsection{基本情况梳理}
+
+
+设$f$的根为$\alpha_1, \alpha_2, \alpha_3, \alpha_4$，且令$\beta_i=\alpha_i+b/4a$．用代换$x=y-b/4a$和\autoref{PlyRtS_eq6} 定义系数$p, q, r$，再用\autoref{PlyRtS_eq8}  的右边定义预解式$s(x)$，其根为$u, v, w$，它们的平方根分别为$u', v', w'$，且$u'v'w'=-q$．
+
+由于$\opn{Dis}(s)=\opn{Dis}(f)\neq 0$，故$s$也是可分的，进而可知$u, v, w$互不相等．因此$\mathbb{K}/\mathbb{F}$是Galois扩张．
+
+令$\mathbb{E}$为$f\in\mathbb{F}[x]$的分裂域，则$\opn{Gal}(\mathbb{E}:\mathbb{F})=\opn{Gal}(f:\mathbb{F})$．注意$\mathbb{K}$是其Galois预解式$s$的分裂域．
+
+由\autoref{PlyRtS_the2} ，且$u'v'w'=-q\in\mathbb{F}$，得知$\mathbb{E}=\mathbb{F}(\beta_1, \beta_2, \beta_3, \beta_4)\subseteq\mathbb{F}(u', v', w')=\mathbb{F}(u', v')\subseteq\mathbb{K}(u', v')$．
+
+注意到$u'$和$v'$在$\mathbb{K}$上的最小多项式次数都不大于$2$，因此
+\begin{equation}
+[\mathbb{E}:\mathbb{K}]\leq 4
+\end{equation}
+
+对分裂域中根的置换，都可以唯一地拓展为一个Galois群中的元素．由\autoref{PlyRtS_cor1} ，$\opn{Gal}(s:\mathbb{F})$同构于$S_3$或$A_3$．
+
+由\autoref{PlyRtS_the1} ，$\opn{Gal}(f:\mathbb{F})$是$S_4$的可递子群，且有$4\mid\abs{\opn{Gal}(f:\mathbb{F})}$和$\abs{\opn{Gal}(f:\mathbb{F})}\mid \abs{S_4}=24$，故得以下\autoref{PlyRtS_lem1} ：
+
+\begin{lemma}{}\label{PlyRtS_lem1}
+设域$\mathbb{F}$上有\textbf{可分的不可约}多项式$f(x)=ax^4+bx^3+cx^2+dx+e$，$\opn{ch}\mathbb{F}\neq 2$．则：
+
+$\abs{\opn{Gal}(f:\mathbb{F})}$只有四种情况：$4, 8, 12, 24$．
+\end{lemma}
+
+
+
+\subsubsection{讨论$S_4$的一般情况}
+
+
+\pentry{Sylow定理\upref{Sylow}}
+
+
+接着写出
+\begin{equation}
+V_4=\{1, \pmat{1&2}\pmat{3&4}, \pmat{1&3}\pmat{2&4}, \pmat{1&4}\pmat{2&3}\}\vartriangleleft S_4
+\end{equation}
+
+对于$\pmat{1&2}\pmat{3&4}$，求其共轭元素，发现一共有$3$个，因此集合$\{\pmat{1&2}\pmat{3&4}\}$的\textbf{中心}（\autoref{NormSG_ex1}~\upref{NormSG}）$C$有$8$个元素．容易验证，
+\begin{equation}\label{PlyRtS_eq10}
+C = V_4\cup\{\pmat{1&2}, \pmat{3&4}, \pmat{1&3&2&4}, \pmat{1&4&2&3}\}
+\end{equation}
+
+由于$8=2^3$，且$2\not\mid 24/8=3$，可知$C$是$S_4$的一个Sylow-$2$子群（\autoref{Sylow_def1}~\upref{Sylow}）．类似地，其余Sylow子群分别是$\pmat{1&3}\pmat{2&4}$和$\pmat{1&4}\pmat{2&3}$的中心．
+
+除去$V_4$中各元素的单元素集合的中心外，$S_4$中还剩下$8$个元素，都是三元轮换．
+
+这样分类后容易验证，$V_4$的中心就是$V_4$本身．
+
+另外，如果把一个正方形的四个顶点顺时针依次编号为$1, 3, 2, 4$，则不难看出$C$实际上就是正方形的对称群$D_4$．类似地，$S_4$的每个Sylow-$2$子群都同构于$D_4$．
+\addTODO{完成\textbf{Sylow定理}\upref{Sylow}中相应的Sylow定理后，在此引用．}
+
+
+
+
+\subsubsection{使预解式的根不变的置换}
+
+
+
+将$\beta_i=\alpha_i+b/4a$的逆代换应用于\autoref{PlyRtS_eq5} ，得到
+\begin{equation}
+\leftgroup{
+    u = -(\alpha_1+\alpha_2+\frac{b}{2a})(\alpha_3+\alpha_4+\frac{b}{2a}) &= (\alpha_1+\alpha_2+\frac{b}{2a})^2\\
+    &=(\alpha_3+\alpha_4+\frac{b}{2a})\\
+    v = -(\alpha_1+\alpha_3+\frac{b}{2a})(\alpha_2+\alpha_4+\frac{b}{2a}) &= (\alpha_1+\alpha_3+\frac{b}{2a})^2\\
+    &=(\alpha_2+\alpha_4+\frac{b}{2a})\\
+    w = -(\alpha_1+\alpha_4+\frac{b}{2a})(\alpha_2+\alpha_3+\frac{b}{2a}) &= (\alpha_1+\alpha_4+\frac{b}{2a})^2\\
+    &=(\alpha_2+\alpha_3+\frac{b}{2a})
+}
+\end{equation}
+
+检查$S_4$的各对换作用在根的集合$\{\alpha_1, \alpha_2, \alpha_3, \alpha_4\}$上后$u, v, w$的变化，可见各对换相当于$\{u, v, w\}$上的一个置换，进而$\opn{Gal}(f:\mathbb{F})$是$\{u, v, w\}$上的置换．特别地，$\forall \sigma\in V_4$，都有$\sigma u=u$，$\sigma v=v$和$\sigma w=w$；反过来，如果$\sigma u=u$，$\sigma v=v$和$\sigma w=w$，则$\sigma\in V_4$\footnote{可自行验证．提示：先考虑满足$\sigma u=u$的置换集合，然后类比得出满足另外两式的置换集合，就很容易看出交集是什么了．}．综上，又由于$\mathbb{K}=\mathbb{F}(u, v, w)$，得$\sigma\in\opn{Gal}(\mathbb{E}:\mathbb{K}) \iff \sigma\in V_4$．
+
+由\autoref{GExt_the8}~\upref{GExt}
+\begin{equation}\label{PlyRtS_eq9}
+\opn{Gal}(\mathbb{K}:\mathbb{F})\cong \opn{Gal}(\mathbb{E}:\mathbb{F})/\opn{Gal}(\mathbb{E}:\mathbb{K})\cong \opn{Gal}(f:\mathbb{F})/V_4
+\end{equation}
+
+而$\abs{V_4}=4$．
+
+\autoref{PlyRtS_eq9} 意味着，只需要研究$\mathbb{K}/\mathbb{F}$上的根置换即可得到$\opn{Gal}(f:\mathbb{F})$．
+
+\subsubsection{正式证明各情况}
+
+如果$[\mathbb{K}:\mathbb{F}]=1$，即$\mathbb{K}=\mathbb{F}$，则按\autoref{PlyRtS_eq9} 知$\opn{Gal}(f:\mathbb{F})/V_4=\{e\}$，即$\opn{Gal}(f:\mathbb{F})=V_4$．
+
+如果$[\mathbb{K}:\mathbb{F}]=6$，则$\deg\opn{Irr}(u, \mathbb{F})=3>1$，$\deg\opn{Irr}(v, \mathbb{F}(u))=2>1$，因此$\opn{Gal}(\mathbb{K}:\mathbb{F})\geq 3\cdot 2 =6$．由\autoref{PlyRtS_eq9} ，$\abs{\opn{Gal}(f:\mathbb{F})}=6\cdot\abs{\opn{Gal}(\mathbb{K}:\mathbb{F})}$且$\abs{\opn{Gal}(f:\mathbb{F})}\leq 24$，故$\abs{\opn{Gal}(f:\mathbb{F})}=24$，即$\opn{Gal}(f:\mathbb{F})=S_4$．
+
+如果$[\mathbb{K}:\mathbb{F}]=3$，而$3$是素数，故$\mathbb{K}/\mathbb{F}$应是一次单扩张，%又由$uvw=q^2\in\mathbb{F}$可知$\mathbb{K}=\mathbb{F}(u)=\mathbb{F}(v)=\mathbb{F}(w)$．
+故$\abs{\opn{Gal}(\mathbb{K}:\mathbb{F})}=\deg\opn{Irr}(u, \mathbb{F})=3$．于是$\abs{\opn{Gal}(f:\mathbb{F})}=3\cdot 4=12$．于是$\opn{Gal}(f:\mathbb{F})=A_4$，唯一阶数为$12$的$S_4$的子群．
+
+如果$[\mathbb{K}:\mathbb{F}]=2$，而$2$是素数，故同理可知$\abs{\opn{Gal}(\mathbb{K}:\mathbb{F})}=2$，进而$\abs{\opn{Gal}(f:\mathbb{F})}=8$，故$\opn{Gal}(f:\mathbb{F})$是$S_4$的一个Sylow-$2$子群．由前面关于$S_4$一般情况的讨论知，这就是$D_4$．
+
+
+
+
+
+
+

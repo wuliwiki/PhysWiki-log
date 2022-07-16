@@ -1,0 +1,131 @@
+% Sylow定理
+% 西罗定理|西罗子群|Sylow子群|群论|有限群
+
+\pentry{群作用\upref{Group3}}
+
+\addTODO{加入目录}
+
+拉格朗日定理（\autoref{coset_the2}~\upref{coset}）揭示了子群阶数的特点．可惜的是，其逆命题“如果$n\mid \abs{G}$则$G$总有阶数为$n$的子群”是不成立的．比如说，交错群$A_4$就没有$6$阶的子群——你可以动手验证这一点．
+
+但是，挪威数学家Peter Ludwig Sylow于1872年发表的文章\footnote{L. Sylow, \href{https://eudml.org/doc/156588}{Théorèmes sur les groupes de substitutions}, Mathematische Annalen 5 (1872), 584–594. 对此文的英文翻译见 \href{http://www.maths.qmul.ac.uk/~raw/pubs_files/Sylow.pdf}{Theorems on groups of substitutions}．}指出，在$n$是素数或者素数的幂时，拉格朗日定理逆命题是成立的．同时他还发现了所谓的Sylow子群全都是彼此共轭的．
+
+举个例子：考虑阶数为$300$的群$G$，对$300$进行素因子分解得$300=2^2\cdot 3^2\cdot 5^2$，那么阶数为$2^2$的子群总存在，且它们彼此共轭．不过，$2$阶子群虽存在，却不能总保证所有$2$阶子群彼此共轭．
+
+
+\begin{definition}{Sylow子群}\label{Sylow_def1}
+给定群$G$和它的子群$H$．如果$\abs{H}=p^k$，其中$p$是素数，且$p^{k+1}\not\mid\abs{G}$，那么称$H$是$G$的一个$p$\textbf{-Sylow 子群}，或\textbf{Sylow-}$p$\textbf{子群}，或直接统称为\textbf{Sylow子群}．
+\end{definition}
+
+
+
+\begin{exercise}{}
+考虑循环群$C_{12}$，求它的所有Sylow子群．
+\end{exercise}
+
+\begin{example}{}
+考虑置换群$S_4$．则
+\begin{equation}
+C=\{1, \pmat{1&2}\pmat{3&4}, \pmat{1&3}\pmat{2&4}, \pmat{1&4}\pmat{2&3}, \pmat{1&2}, \pmat{3&4}, \pmat{1&3&2&4}, \pmat{1&4&2&3}\}
+\end{equation}
+是它的一个Sylow-$2$子群．
+
+$C$是$\pmat{1&2}\pmat{3&4}$的中心，因此我们可以类似构造出$S_4$的剩下两个Sylow-$2$子群，分别是$\pmat{1&3}\pmat{2&4}$和$\pmat{1&4}\pmat{2&3}$的中心．这三个Sylow-$2$子群的交集是$V_4=\{1, \pmat{1&2}\pmat{3&4}, \pmat{1&3}\pmat{2&4}, \pmat{1&4}\pmat{2&3}\}$．
+
+如果把一个正方形的四个顶点顺时针依次编号为$1, 3, 2, 4$，则不难看出$C$实际上就是正方形的对称群$D_4$．类似地，$S_4$的每个Sylow-$2$子群都同构于$D_4$．
+
+\end{example}
+
+Sylow定理通常被拆分成三个部分来表述．
+
+\begin{theorem}{Sylow第一定理}
+取\textbf{有限群}$G$．如果素数$p\mid\abs{G}$，那么$G$一定有一个Sylow-$p$子群$H_p$．
+\end{theorem}
+
+\textbf{证明}：
+
+令$\abs{G}=p^km$，其中$p\not\mid m$．
+
+先证明当$G$是阿贝尔群时，$p$阶子群存在．
+
+任取$g\in G$，如果$g$的阶（\autoref{coset_def1}~\upref{coset}）$\opn{ord}g$是$p$的倍数$np$，那么$g^n$生成的循环群就是$p$阶的．否则，设$\opn{ord}g=r$，取$g$生成的子群$H_g$，它是$G$的正规子群（因为$G$阿贝尔），于是$\abs{G/H_g}=p^km/r$．在$G/H_g$中再任挑一个元素，如果该元素的阶\textbf{不是}$p$，同样求出其循环群后用$\abs{G/H_g}$去除掉这个循环群，得到商群．易证有限步后，总能得到一个阶数为$p$\textbf{的倍数}的元素\footnote{注意，这里说的\textbf{阶数}逻辑上有跳步．比如说，在$G/H_g$中找到了一个$h$，其阶数为$sp$，那这只能说明$h^{sp}\in H_g$．不过由于$h^{sp}$本身也是有限阶的，因此$h$在$G$中的阶数也确实是$p$的倍数．}．于是这个元素的一个幂生成的循环群是$p$阶的．
+
+下设$G$是任意的有限群，$Z(G)$是它的中心．设定理对于阶数小于$p^km$的群都成立，然后分类进行归纳讨论．
+
+如果$p\mid \abs{Z(G)}$，那么由于$Z(G)$是阿贝尔群，故存在$G$的$p$阶子群$A$．由于$A\subseteq Z(G)$，故$A\vartriangleleft G$．于是得到商群$G/A$，其阶数为$p^{k-1}m$．由归纳假设，$G/A$有一个$p^{k-1}$阶Sylow子群，因此这个子群是$G$的$p^k$阶子群，从而是$G$的Sylow-$p$子群．
+
+如果$p\not\mid \abs{Z}(G)$，那么根据共轭类等式（The Class Equation\autoref{Group3_the4}~\upref{Group3}），
+\begin{equation}
+\abs{G} = \abs{Z(G)} + \sum_{C\in O, \abs{C}>1} \abs{C}
+\end{equation}
+其中$O$是$G$在伴随作用下全体轨道构成的集合．
+
+由于$p\mid \abs{G}$，$p\not\mid \abs{Z(G)}$，故存在$\abs{C}$使得$p\not\mid \abs{C}$，即存在$x\in G$使得$p\not\mid \abs{C_x}$，故$\abs{C_x}\mid m$．由\autoref{Group3_cor3}~\upref{Group3}，得$\abs{C_G(x)}=p^km/\abs{C_x}=p^ks<\abs{G}$\footnote{$C_G(x)$即$x$的中心化子，或者说$x$在伴随作用下的迷向子群．}，其中$s>1$．因此由归纳假设，$C_G(x)$有一个$p^k$阶子群$A$，从而$G$有个Sylow-$p$子群$A$．
+
+\textbf{证毕}．
+
+
+
+
+
+\begin{theorem}{Sylow第二定理}\label{Sylow_the1}
+取\textbf{有限群}$G$，它的所有Sylow-$p$子群彼此共轭．
+\end{theorem}
+
+\textbf{证明}：
+
+令$\abs{G}=p^km$，其中$p\not\mid m$．
+
+任取$G$的两个Sylow-$p$子群$A$和$B$，记$G/B$是$B$在$G$中的左陪集构成的集合\footnote{不是商群，因为不能保证$B\vartriangleleft G$．}．考虑群$A$作用在集合$G/B$上，方式是\textbf{左伴随作用}．
+
+据\autoref{Group3_the5}~\upref{Group3}，
+\begin{equation}
+\abs{G/B} = \abs{\opn{Fix}_A(G/B)} \opn{mod} p
+\end{equation}
+
+由Sylow子群的定义，知$\abs{G/B}=m$．故$m\abs{\opn{Fix}_A(G/B)} \opn{mod} p$，意味着$\abs{\opn{Fix}_A(G/B)}\neq 0$，即\textbf{存在不动点}$gB\in G/B$．
+
+因此$agB=gB$对所有$a\in A$成立，即$ag\in gB$，即$A\subseteq gBg^{-1}$．又因为$\abs{A}=p=\abs{B}=\abs{gBg^{-1}}$，故$A=gBg^{-1}$．
+
+
+\textbf{证毕}．
+
+
+
+
+\begin{theorem}{Sylow第三定理}
+取\textbf{有限群}$G$，设$n_p$是它的所有Sylow-$p$子群的数目．令$\abs{G}=p^km$，其中$p\not\mid m$．
+
+那么$n_p\equiv 1\opn{mod} p$，或者说$p\mid n_p-1$；且$n_p\mid m$．
+\end{theorem}
+
+\textbf{证明}：
+
+设$G$的所有Sylow-$p$子群构成的集合为$S_p$，注意$S_p$的元素是$G$的Sylow子群，不是$G$的元素．
+
+\autoref{Sylow_the1} 保证了求共轭运算导出$G$在$S_p$上的一个\textbf{可递}作用，考虑这个作用．任取$P\in S_p$，$P$的轨道都是$S_p$本身，即$P$的轨道的元素数量就是$n_p$．
+
+设$P$的迷向子群为$F_P\subseteq G$．由共轭作用和迷向子群的定义，$F_P=\{g\in G\mid gPg^{-1}=P\}$，故可见$F_P$是$P$的\textbf{正规化子}$N(P)$.（\autoref{NormSG_def2}~\upref{NormSG}）．
+
+由\autoref{Group3_cor2}~\upref{Group3}，$n_p=\abs{G}/\abs{N(P)}$．
+
+\textbf{证毕}．
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

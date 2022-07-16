@@ -1,0 +1,148 @@
+% 多项式的结式与判别式
+% 多项式|代数|判别式
+
+\pentry{一元多项式\upref{OnePol}}
+
+结式和判别式都是由多项式的系数组合成的表达式，刻画了多项式的根的性质．其中结式可用于判断两个多项式有无公共根，而判别式可用于判断一个多项式有无重根．
+
+介绍概念时，我们会先给出定义，然后再给例子来加深理解．
+
+\subsection{结式}
+\pentry{行列式的性质\upref{DetPro}}
+
+\begin{definition}{结式}
+设$f(x)=a(x-\alpha_1)(x-\alpha_2)\cdots(x-\alpha_m)$和$g(x)=b(x-\beta_1)(x-\beta_2)\cdots(x-\beta_n)$，且两多项式的系数都取自域$\mathbb{F}$\footnote{这里用“\textbf{域}\upref{field}”这个术语是为了尽可能全面，避免重复词条．在初等数学中，我们常取$\mathbb{F}$为\textbf{有理数域}$\mathbb{Q}$或\textbf{实数域}$\mathbb{R}$，也就是说多项式的系数取自有理数域和实数域．具体情况看具体情况下的声明．}．
+
+则记
+\begin{equation}\label{RDPly_eq1}
+\begin{aligned}
+\opn{Res}(f, g)&=a^nb^m(\alpha_1-\beta_1)(\alpha_2-\beta_1)\cdots(\alpha_m-\beta_n)\\
+&=a^n\prod_{i} g(\alpha_i)\\
+&=(-1)^{mn}b^m\prod_{i} f(\beta_i)
+\end{aligned}
+\end{equation}
+称之为$f$和$g$的\textbf{结式（resultant）}
+
+\end{definition}
+
+结式有以下两个重要性质：
+
+\begin{theorem}{}
+设$f, g$是系数取自域$\mathbb{F}$的多项式．则$\opn{Res}(f, g)=0$当且仅当$f, g$（在$\mathbb{F}$的代数闭包中）有共同根．
+\end{theorem}
+
+\textbf{证明}：
+
+由根的定义和\autoref{RDPly_eq1} ，显然$\opn{Res}(f, g)=0$当且仅当存在$\alpha_i=\beta_j$的情况．
+
+\textbf{证毕}．
+
+
+另一个性质式，能用多项式的系数来表示结式，于是，我们能从系数轻易判断两多项式有无公共根．
+
+
+
+\begin{theorem}{}\label{RDPly_the2}
+设$f(x)=a_mx^m+\cdots+a_0$，$g(x)=b_nx^n+\cdots+b_0$，其中各系数$a_i, b_j$都取自域$\mathbb{F}$，且$a_mb_m\neq 0$．则
+\begin{equation}\label{RDPly_eq2}
+\opn{Res}(f, g)=
+\begin{vmatrix}
+a_m&\cdots&\cdots&a_0\\
+&\ddots& & \ddots\\
+&&a_m\cdots&\cdots&a_0\\
+b_n&\cdots&\cdots&b_0\\
+&\ddots& & \ddots\\
+&&b_n\cdots&\cdots&b_0\\
+\end{vmatrix}
+\end{equation}
+其中\autoref{RDPly_eq2} 的前$n$行都是$a_i$，后$m$行都是$b_j$．
+
+举例而言，$ax^2+bx+c$和$dx+e$的结式是
+\begin{equation}
+\vmat{
+    a&b&c\\
+    d&e&0\\
+    0&d&e
+}
+=
+ae^2+cd^2-bde
+\end{equation}
+
+\end{theorem}
+
+证明过于长，此处暂略．
+
+
+
+\subsection{判别式}
+
+\begin{definition}{判别式}\label{RDPly_def1}
+设$f(x)=a(x-\alpha_1)(x-\alpha_2)\cdots(x-\alpha_n)$的系数都在域$\mathbb{F}$中，且有根$\alpha_1, \cdots, \alpha_n$（重根也按重数分别计入）．
+
+记
+\begin{equation}\label{RDPly_eq3}
+\opn{Dis}(f) = a^{2(n-1)}\prod_{1\leq i<j\leq n}(\alpha_i-\alpha_j)^2
+\end{equation}
+称之为$f$的\textbf{判别式（discriminant）}．
+\end{definition}
+
+\begin{example}{}
+二次多项式$ax^2+b^x+c$又可以写为
+\begin{equation}
+(x-\frac{-b+\sqrt{b^2-4ac}}{2a})(x-\frac{-b-\sqrt{b^2-4ac}}{2a})
+\end{equation}
+因此其判别式为
+\begin{equation}
+\begin{aligned}
+(\frac{-b+\sqrt{b^2-4ac}}{2a}-\frac{-b-\sqrt{b^2-4ac}}{2a})^2 &= (\frac{\sqrt{b^2-4ac}}{a})^2\\
+&=\frac{b^2-4ac}{a^2}
+\end{aligned}
+\end{equation}
+看起来，这个和中学教的$b^2-4ac$相差一个因子$a^2$．不过对于分辨是否有重根，这个因子没有影响，因为我们只看判别式是不是零．详见\autoref{RDPly_the1} ．
+\end{example}
+
+
+\begin{theorem}{}\label{RDPly_the1}
+设$f(x)$的系数都在域$\mathbb{F}$中，且次数大于等于1．则$f$\textbf{无重根}的充要条件是$\opn{Dis}f\neq 0$．
+\end{theorem}
+
+\textbf{证明}：
+
+充分性：
+
+设$f(x)=a(x-\alpha_1)(x-\alpha_2)\cdots(x-\alpha_n)$有重根，即存在$i\neq j$使得$\alpha_i=\alpha_j$．于是根据\autoref{RDPly_eq3} ，$\opn{Dis}f = 0$．因此$\opn{Dis}f\neq 0$时$f$不能有重根．
+
+必要性：
+
+同样由\autoref{RDPly_eq3} ，当各$\alpha_i$互不相等时，$\opn{Dis}f\neq 0$．
+
+\textbf{证毕}．
+
+
+将\autoref{RDPly_the2} 和\autoref{RDPly_the1} 相结合，我们还能得到判别式的行列式表达法：
+
+\begin{theorem}{}
+设$f(x)=a_nx^n+\cdots+a_n$的系数$a_i$都在域$\mathbb{F}$中，且其次数大于等于2，则
+\begin{equation}
+\opn{Dis}(f) = (-1)^{n(n-1)/2}\frac{1}{a_n}
+\begin{vmatrix}
+a_n&\cdots&\cdots&a_0\\
+&\ddots&&&\ddots\\
+&&a_n&\cdots&\cdots&a_0\\
+na_n&\cdots&\cdots&a_0\\
+&\ddots&&&\ddots\\
+&&na_n&\cdots&\cdots&a_0
+\end{vmatrix}
+\end{equation}
+\end{theorem}
+
+对于$f$有无重根的深入讨论，参见域论中的\textbf{可分扩张}\upref{SprbEx}词条．
+
+
+
+
+
+
+
+
+
