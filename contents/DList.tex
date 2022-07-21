@@ -1,0 +1,52 @@
+% 双链表
+% 双链表|数据结构|链表|C++
+
+本文对应了上一篇文章，这里讲解\textbf{双链表}．
+
+双链表在竞赛中用的不多，通常是因为需要优化某些问题而使用双链表．
+
+\begin{figure}[ht]
+\centering
+\includegraphics[width=14.25cm]{./figures/DList_1.png}
+\caption{双链表示意图} \label{DList_fig1}
+\end{figure}
+
+双链表上的每个结点都有 $4$ 个值，$\mathtt{Lnext}$ 指针表示它左边的结点的下标，$\mathtt{R-next}$ 指针表示它右边的结点的下标，其他的数组和变量和单链表\upref{List}的存储代表一个意思．
+
+用 C++ 的指针和结构体来实现双链表：
+\begin{lstlisting}[language=cpp]
+struct Double_List
+{
+    int value;
+    Double_List *prev, *next;  // 左指针和右指针
+};
+\end{lstlisting}
+
+这里来详细的讲解一下如何使用数组来模拟双链表．
+
+数组模拟双链表需要这么几个数组和变量：
+\begin{lstlisting}[language=cpp]
+// 为了简化代码，我们用 e 表示 value, l 表示 Lnext, r 表示 Rnext
+int e[N], l[N], r[N], idx;
+\end{lstlisting}
+
+双链表的基本操作有：\begin{enumerate}
+\item 在第 $k$ 个插入的数左侧插入一个数；
+\item 在第 $k$ 个插入的数右侧插入一个数；
+\item 将第 $k$ 个插入的数删除
+\end{enumerate}
+
+$\text{insert}$ 操作：
+
+\begin{lstlisting}[language=cpp]
+
+void insert(int k, int x)
+{
+    e[idx] = x;
+    l[idx] = k;
+    r[idx] = r[k];
+    l[r[k]] = idx;
+    r[k] = idx ++ ;
+}
+\end{lstlisting}
+

@@ -1,0 +1,78 @@
+% CMake 笔记
+
+\pentry{Makefile 笔记\upref{Make}}
+
+\subsection{常识}
+\begin{itemize}
+\item 在 windows 下可直接使用 GUI， linux 命令行中使用 \verb`ccmake` 可以有 TUI． 否则就用 \verb`cmake`
+\item 在 \verb|CMakeLists.txt| 的路径下， \verb`cmake .` 生成 Makefile， 然后 \verb|make -j10| 多线程编译． \verb|make VERBOSE=1 -j10| 输出编译命令．
+\item 基本语法是 \verb`command(args ...)` 其中 command 不区分大小写， \verb`args` 用空格隔开， 如果 arg 本身有空格， 用双引号即可
+\item \verb`message(STATUS "...")` 可以输出到 stdout． 如果 \verb`message(STATUS ${var})` 中的变量是 list， 那么中间不会有空格， 应该用 \verb`message(STATUS "${var}")`， 输出中每个变量会用分号隔开．
+\item 两个 \verb`arg` 之间可以换行
+\item 变量可以是 string 或者 list of strings， 使用变量格式为 \verb`${VAR}`
+\item \verb`set` 可以对变量赋值， 例如 \verb`set(var, 1)`
+\item \verb`set` 也可以把许多变量变成一个 list， 如 \verb`set(Foo a b c)` 将 \verb`Foo` 变成包含 \verb`a b c` 的 list， 当 \verb`${Foo}` 被使用时相当于 \verb`a b c`， 例如 \verb`command(Foo)` 相当于 \verb`command(a b c)`． 另外 \verb`command("${Foo}")` 相当于 \verb`command("a b c")` （双引号中的是一个变量）
+\item linux 环境变量和 windows 注册表变量可以直接作为变量使用， 格式如 \verb`$EVN{VAR}`． 注意 cmake 看到的环境变量未必和 bash 中的相同， 可以用 \verb`cmake -E environment` 检查． 例子： \verb|message(STATUS $ENV{PWD})|
+\end{itemize}
+
+\subsection{常用命令}
+\begin{itemize}
+\item \verb`cmake_minimum_required(VERSION x.x)`
+\item \verb|set(CMAKE_CXX_COMPILER "/usr/bin/g++")| 设置 compiler
+\item \verb|set(CMAKE_CXX_FLAGS "-std=c++11")| 设置 flag
+\item \verb|set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -fsanitize=address")| 设置 debug 模式的 flag
+\item \verb|cmake -DCMAKE_BUILD_TYPE=Debug| 用 debug 模式编译
+\item \verb`project(project_name)`
+\item \verb`set(var str1 [str2] ...)` 对变量赋值（若有多个值就生成 list）
+\item \verb`list(APPEND var str1 [str2] ...)` 在变量（list）后面添加元素
+\item \verb`file(GLOB var "folder/*.cpp" "fname2.cpp")` 可以列出所有 \verb|"folder/*.txt"| 文件， 以及 \verb|fname2.cpp| （如果存在） 赋值给 \verb|var|． 注意文件名包括绝对路径．
+\item \verb|add_definitions(-D FOO -D BAR)| 给编译器添加宏定义
+\item \verb|add_compile_options(-Wall -fopenmp)| 给编译器添加选项
+\item \verb`add_executable(exe_name source_name)` 前者是执行文件名， 后者是所有需要 link 的 \verb|cpp| 文件名，不需要头文件． cmake 会自动分析代码得到哪个 cpp 调用哪个头文件， 如果头文件改变了， 只有调用它的 cpp 会重新编译．
+\item \verb`configure_file(file_in file_out)` 将文件中 \verb`@var@` 替换为变量 \verb`var` 的值
+\item \verb`include_directories(dir1 [dir2] ...)` 添加头文件的搜索路径
+\item \verb`add_library(exe_name source_name)` 单独编译一个 library （在 library 路径的 CMakeLists 中使用这个而不是 \verb`add_executable`）
+\item \verb|link_directories(路径)| 相当于编译器的 \verb`-L` 选项， 添加静态或动态 library 的搜索路径．
+\item \verb|set(CMAKE_INSTALL_RPATH 路径)| 相当于设置 \verb|rpath|
+\item \verb`add_subdirectory(dir1 [dir2] ...)` 执行子目录中的 CMakeLists
+\item \verb`target_link_libraries(exe_name lib1 [lib2] ...)` link 阶段链接 library， 相当于 \verb|-l lib1 -l lib2|
+\item \verb`option(opt_name description default)` 定义一个 option 开关（会在 gui 中显示开关）以及默认值． \verb`opt_name` 可以在 CMakeLists 中的 \verb`if` 语句中使用例如 \verb`if(opt_name) ... endif(opt_name)`． \verb`default` 可以是 \verb`ON` 或 \verb`OFF`
+\item 在 configure 的模板文件中， 当 \verb`opt_name` 为 \verb`ON` 时 \verb`#cmakedefine opt_name` 会被替换为 \verb`#define opt_name`
+\end{itemize}
+
+\subsection{内置变量}
+\begin{itemize}
+\item \verb`PROJECT_SOURCE_DIR` 是源文件的根目录， 就是传给 \verb`ccmake` 的目录
+\item \verb`PROJECT_BINARY_DIR` 是 Cmake 的输出目录， 临时文件， Makefile 等都在这个目录． 这就是运行 \verb`ccmake` 的目录
+\end{itemize}
+
+\subsection{判断}
+参考\href{https://cmake.org/cmake/help/latest/command/if.html}{这里}．
+\begin{lstlisting}[language=bash]
+if(<condition> AND (<condition> OR <condition>))
+  <commands>
+elseif(("bar" IN_LIST var) OR (file1 IS_NEWER_THAN file2))
+  <commands>
+elseif (var)
+  当 var 不是 false constant
+elseif(DEFINED <name>|CACHE{<name>}|ENV{<name>})
+  若定义了变量
+else()
+  <commands>
+endif()
+\end{lstlisting}
+
+\subsection{CMake 与 Visual Studio}
+\begin{itemize}
+\item 链接 \verb`*.lib`， 只需要在 \verb`add_executable()` 命令前面插入（必须在之前） \verb`abc.lib` 的路径 \verb`link_directories(path/to/lib)` 然后再 \verb`add_executable()` 之后插入 \verb`target_link_libraries(exe_name abs)` 即可
+\item \verb`if(MSVC)...end(MSVC)` 可以专门给 Visual Studio 执行一些命令
+\item 生成的 sln 文件中， 除了有 target 的工程， 还会有另外两个工程： \verb`ZERO_CHECK` 会重新运行/更新 \verb`CMakeLists.txt`， \verb`ALL_BUILD` 会编译所有工程． 如果看着不爽的话也可以把这两个 project 删掉． 如果直接 run without debug 的话， 会提示 ALL_BUILD 不能 run， 所以要 run 只能右键某个 project 然后 run （所以还是把两个多余的 project 删掉好些）．
+\end{itemize}
+
+\subsection{ccmake 使用}
+\begin{itemize}
+\item \verb`sudo apt install cmake-curses-gui` 安装
+\item 在需要生成 binary 的目录打开 \verb`ccmake`， 这个目录可以是源文件目录
+\item 如果 binary 目录不是源文件目录， 那么指定目录即可， 例如 \verb`ccmake ../`
+\item \verb`h` 帮助， \verb`q` 退出， \verb`c` configure， \verb`G` 生成 Makefile
+\end{itemize}

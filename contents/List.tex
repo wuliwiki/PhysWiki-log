@@ -1,0 +1,141 @@
+% 单链表
+% 链表|单链表|数据结构
+
+链表是一种用于存储数据的链式数据结构，形如一条链子一样来连接元素，通常用于存储树和图．
+
+与数组不同的是：数组是一种支持随机访问，但不支持在任意位置插入或删除元素的数据结构．但链表支持在任意位置插入或删除,但只能按顺序依次访问其中的元素．
+
+\textbf{单链表：}
+
+\begin{figure}[ht]
+\centering
+\includegraphics[width=14.25cm]{./figures/List_1.png}
+\caption{单链表示意图} \label{List_fig1}
+\end{figure}
+
+可以看到，链表上每个结点都有三个值，分别为：下标、值和 $\text{next}$ 指针．
+
+下标为 $3$ 的结点的下一个结点为空结点，所以 $\text{next}$ 值为 $-1$．
+
+如果用 C++ 的指针和结构体来写链表的话，长成这样子：
+\begin{lstlisting}[language=cpp]
+struct List
+{
+    int value;
+    List *next;
+};
+\end{lstlisting}
+
+一般在竞赛中很少用上面这种方式来实现链表，因为这种写法效率很低，所以这里我们来讲一下如何使用数组来模拟链表．
+
+数组模拟单链表需要这么几个数组和变量：
+\begin{lstlisting}[language=cpp]
+int value[N], Next[N], head, idx;
+// N 表示数组的大小
+// head 表示头节点指向的下一个值
+// idx 表示插入的第几个数，后续模拟一下链表就懂了
+// value[i] 表示结点 i 的值
+// next[i] 表示结点 i 的 next 指针是多少
+\end{lstlisting}
+
+单链表通常有这么几个操作：
+\begin{enumerate}
+\item 向链表头插入一个数；
+\item 删除第 $k$ 个插入的数后面的数；
+\item 在第 $k$ 个插入的数后插入一个数．
+\end{enumerate}
+
+我们来模拟一个样例来更好的理解单链表，如要进行如下这些操作：
+
+\begin{enumerate}
+\item 先在链表头插入一个数 $9$
+\item 在第 $1$ 个插入的数后面再插入一个数 $1$
+\item 删除第一个插入的数的后面的一个数
+\item 删除头结点后面的数
+\item 在链表头插入一个数 $6$
+\item 在第 $3$ 个插入的数后面再插入一个数 $6$
+\item 在第 $4$ 个插入的数后面再插入一个数 $5$
+\item 在第 $4$ 个插入的数后面再插入一个数 $5$
+\item 在第 $3$ 个插入的数后面再插入一个数 $4$
+\item 删除第 $6$ 个插入的数的后面一个数
+\end{enumerate}
+
+我们来借助几张图片来模拟一下上面的 $10$ 个操作
+
+\begin{figure}[ht]
+\centering
+\includegraphics[width=14.25cm]{./figures/List_2.png}
+\caption{执行 $1\sim3$ 次操作} \label{List_fig2}
+\end{figure}
+
+\begin{figure}[ht]
+\centering
+\includegraphics[width=14.25cm]{./figures/List_3.png}
+\caption{执行 $4\sim7$ 次操作} \label{List_fig3}
+\end{figure}
+
+\begin{figure}[ht]
+\centering
+\includegraphics[width=14，25cm]{./figures/List_4.png}
+\caption{执行 $8\sim9$ 次操作} \label{List_fig4}
+\end{figure}
+
+经过模拟了 $10$ 次单链表的操作，就可以理解单链表的执行过程了，让我们来看看这些操作具体怎么写．
+
+\textbf{第一个操作}：\textbf{向头结点插入一个数}
+
+代码如下：
+
+\begin{lstlisting}[language=cpp]
+void add_to_head(int x) 
+{
+    value[idx] = x;
+    Next[idx] = head;
+    head = idx;
+    idx ++ ;
+}
+// 熟练掌握了之后就可以写成一行了．
+
+value[idx] = x, Next[idx] = head, head = idx ++ ;
+\end{lstlisting}
+
+\begin{figure}[ht]
+\centering
+\includegraphics[width=14.25cm]{./figures/List_5.png}
+\caption{向头结点插入一个数} \label{List_fig5}
+\end{figure}
+
+
+
+\textbf{第二个操作}：在第 $k$ 个插入的数后插入一个数
+
+
+代码如下：
+
+\begin{lstlisting}[language=cpp]
+void add(int k, int x)
+{
+    value[idx] = x, Next[idx] = ne[k], ne[k] = idx ++ ;
+}
+\end{lstlisting}
+
+插入方式和\textbf{插入一个数到头结点的后面}类似，这里就再不详讲了．
+
+\textbf{第三个操作}：删除一个点的后面一个点
+
+代码如下：
+
+\begin{lstlisting}[language=cpp]
+void remove(int k)
+{
+    Next[k] = Next[Next[k]];
+}
+\end{lstlisting}
+
+\begin{figure}[ht]
+\centering
+\includegraphics[width=14.25cm]{./figures/List_6.png}
+\caption{删除一个点} \label{List_fig6}
+\end{figure}
+
+到目前为止，单链表的基本操作就讲完了．

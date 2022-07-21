@@ -3,38 +3,51 @@
 
 \pentry{域上的代数\upref{AlgFie}}
 
-\subsection{概念}
+\subsection{李代数}
 
-李代数是对域上的代数\upref{AlgFie}进行的一种推广．域上的代数是指域上的线性空间配合了一个矢量乘法，使得这个线性空间在矢量乘法下也能构成一个环．李代数也是域上线性空间配合了一个矢量乘法，这个矢量乘法和构成环的乘法几乎一样，但是有一点显著不同：将环乘法的结合律替代为Jacobi结合性．
+李代数（Lie algebra）是对域上的代数\upref{AlgFie}进行的一种推广．域上的代数是指域上的线性空间配合了一个矢量乘法，使得这个线性空间在矢量乘法下也能构成一个环．李代数也是域上线性空间配合了一个矢量乘法，这个矢量乘法和构成环的乘法几乎一样，但是有一点显著不同：将环乘法的结合律替代为Jacobi结合性．
 
 李代数在现代理论物理的时空研究中应用广泛，常用于描述光滑张量场之间的作用——要注意的是，此时我们把一个光滑张量场本身看成一个向量．
 
-\begin{definition}{李代数}
-给定域 $\mathbb{F}$ 上的一个线性空间 $V$．在 $V$ 上定义一个“乘法”运算：对于任意 $\bvec{v}_1, \bvec{v}_2\in V$，将它们的运算结果记为 $[\bvec{v}_1, \bvec{v}_2]$．称这个结构 $(V, [*, *])$ 为一个\textbf{李代数}，如果它满足以下性质：
+\begin{definition}{李代数}\label{LieAlg_def2}
+给定域 $\mathbb{F}$ 上的一个线性空间 $V$．在 $V$ 上定义一个“乘法”运算 $[\cdot, \cdot] : V \times V \to V$，对于任意 $\bvec{v}_1, \bvec{v}_2\in V$，将它们的运算结果记为 $[\bvec{v}_1, \bvec{v}_2]$，称为\textbf{李括号}．$(V, [\cdot, \cdot])$ 被称为一个\textbf{李代数}，如果它满足以下性质：
+
 \begin{itemize}
-\item \textbf{封闭性} 对于任意 $\bvec{v}_1, \bvec{v}_2\in V$,$[\bvec{v}_1, \bvec{v}_2]\in V$．
-\item \textbf{双线性性} 对于任意 $k_i, c_i\in \mathbb{F}$ 和任意 $\bvec{v}_i, \bvec{u}_i\in V$，都有 $[k_1\bvec{v}_1+k_2\bvec{v}_2, c_1\bvec{u}_1, c_2\bvec{u}_2]=k_1c_1[\bvec{v}_1, \bvec{u}_1]+k_1c_2[\bvec{v}_1, \bvec{u}_2]+k_2c_1[\bvec{v}_2, \bvec{u}_1]+k_2c_2[\bvec{v}_2, \bvec{u}_2]$．
+\item \textbf{封闭性} 对于任意 $\bvec{v}_1, \bvec{v}_2\in V$,$[\bvec{v}_1, \bvec{v}_2]\in V$．% 这条其实已经在“运算”的定义里了．
+
+\item \textbf{双线性性}\footnote{如果用爱因斯坦求和约定\upref{EinSum}来表达，双线性性还可以写为 $[a^i\bvec{v}_i, b^j\bvec{u}_j] = a^i b^j[\bvec{v}_i, \bvec{u}_j]$．} 对于任意 $c_1, c_2 \in \mathbb{F}$ 和任意 $\bvec{v}, \bvec{v}_1, \bvec{v}_2, \bvec{u}, \bvec{u}_1, \bvec{u}_2 \in V$，都有 
+$$\begin{aligned}
+{[\bvec{v}, c_1\bvec{u}_1 + c_2\bvec{u}_2]} &= c_1 [\bvec{v}, \bvec{u}_1] + c_2[\bvec{v}, \bvec{u}_2], \\
+[c_1\bvec{v}_1+c_2\bvec{v}_2, \bvec{u}] &= c_1[\bvec{v}_1, \bvec{u}] + c_2[\bvec{v}_1, \bvec{u}_2]
+\end{aligned}$$
+
 \item \textbf{反对称性} 对于任意 $\bvec{v}, \bvec{u}\in V$，有 $[\bvec{v}, \bvec{u}]=-[\bvec{u}, \bvec{v}]$．
-\item \textbf{Jacobi结合性} 对于任意 $\bvec{x}, \bvec{y}, \bvec{z}\in V$，有 $[\bvec{x}, ([\bvec{y}, \bvec{z}])]+[\bvec{z}, ([\bvec{x}, \bvec{y}])]+[\bvec{y}, ([\bvec{z}, \bvec{x}])]=0$．
+
+\item \textbf{Jacobi结合性} 对于任意 $\bvec{x}, \bvec{y}, \bvec{z}\in V$，有
+$$
+[\bvec{x}, [\bvec{y}, \bvec{z}]]+[\bvec{z}, [\bvec{x}, \bvec{y}]]+[\bvec{y}, [\bvec{z}, \bvec{x}]]=0
+$$
 \end{itemize}
 
-由于这个乘法用括号 $[*, *]$ 表示，因此有时也称之为“括积”．
+由于李括号用有时也被视为乘法，因此有时也称之为\textbf{括积}．
 \end{definition}
 
-李代数是对李群的性质进行进一步的抽象，是对李群的一些核心性质的代数刻画．
+% 李代数是对李群的性质进行进一步的抽象，是对李群的一些核心性质的代数刻画．% 不大正确，李代数只是李群的“线性近似”
 
-李代数定义中的双线性性可以通过反对称性和单对称性\footnote{即对于参与运算的双方中某一方线性就可以，比如对后面的线性：$[\bvec{v},a\bvec{x}+b\bvec{y}]=a[\bvec{v}, \bvec{x}]+b[\bvec{v}, \bvec{y}]$．}推出，所以和本书中群的定义一样，是有冗余的定义．如果用爱因斯坦求和约定\upref{EinSum}来表达，双线性性还可以写为 $[a_i\bvec{v}_i, b_j\bvec{u}_j]=a_ib_j[\bvec{v}_i, \bvec{u}_j]$．
+李代数定义中的双线性性可以通过反对称性和单线性性\footnote{即对于参与运算的双方中某一方线性就可以，比如对后面的线性：$[\bvec{v},a\bvec{x}+b\bvec{y}]=a[\bvec{v}, \bvec{x}]+b[\bvec{v}, \bvec{y}]$．}推出，所以和本书中群的定义一样，是有冗余的．
 
 \begin{definition}{交换李代数}
-设 $\mathfrak{g}$ 为域 $\mathbb{F}$ 上的 $n$ 维李代数，那么如果对于任意的 $\bvec{x},\bvec{y}\in\mathfrak{g}$，都有 $[\bvec{x}, \bvec{y}]=0$，则称这是一个\textbf{交换李代数（commutative Lie algebra）}或\textbf{阿贝尔李代数（abelian Lie algebra）}．
+设 $\mathfrak{g}$ 为域 $\mathbb{F}$ 上的 $n$ 维李代数，那么如果对于任意的 $\bvec{x},\bvec{y}\in\mathfrak{g}$，都有 $[\bvec{x}, \bvec{y}] = [\bvec{y}, \bvec{x}]$（等价的 $[\bvec{x}, \bvec{y}] = 0$），则称这是一个\textbf{交换李代数（commutative Lie algebra）}或\textbf{阿贝尔李代数（abelian Lie algebra）}．
 \end{definition}
 
-交换李代数之所以要求括积为零，是因为反对称性和交换性结合必然得到括积为零．
-
-李代数和结合代数的关系极为紧密．事实上，每个结合代数都可以唯一地导出一个李代数，这由以下定理决定：
+李代数和结合代数\autoref{AlgFie_def1}~\upref{AlgFie}（很多时候直接称代数）的关系极为紧密，每个结合代数都可以唯一地导出一个李代数：
 
 \begin{theorem}{结合代数导出李代数}
-设 $\mathfrak{A}$ 是域 $\mathbb{F}$ 上的一个结合代数，即 $\mathfrak{A}$ 是 $\mathbb{F}$ 上的线性空间，且定义了一个乘法 $\times$ 使得它还成为一个环，那么如果定义 $\forall \bvec{x}, \bvec{y}\in\mathfrak{A}, [\bvec{x}, \bvec{y}]=\bvec{x}\times \bvec{y}-\bvec{y}\times \bvec{x}$，则这个括号 $[*, *]$ 配上 $\mathfrak{A}$ 构成一个李代数．
+设 $\mathfrak{A}$ 是域 $\mathbb{F}$ 上的一个结合代数，以 $\times$ 为环的乘法，那么如果定义
+$$
+[\bvec{x}, \bvec{y}] := \bvec{x}\times \bvec{y}-\bvec{y}\times \bvec{x}
+$$
+其中 $\bvec{x}, \bvec{y}\in\mathfrak{A}$，则 $(\mathfrak{A}, [\cdot, \cdot])$ 构成一个李代数．
 \end{theorem}
 
 \textbf{证明}：
@@ -65,19 +78,22 @@
 \end{aligned}
 \end{equation}
 
+\addTODO{该证明不够清晰}
 
 由\autoref{LieAlg_eq1} ，轮换 $\bvec{x}, \bvec{y}$ 和 $\bvec{z}$ 的顺序后把得到的三个式子相加，即可以得到Jacobi结合性．
 
 \textbf{证毕}．
 
-知道了每个结合代数可以对应一个李代数后，我们自然会好奇，每个李代数是不是也能对应一个结合代数？答案是肯定的，见泛包络代数\upref{UEnAl}．要注意的是，这种对应可能并不是直接对应，比如说下面\autoref{LieAlg_ex1} 中的三维叉积，就不是直接对应到一个三维空间的结合代数，而是用四元数结合代数导出四维李代数以后，商去其中心得到的商代数．
+知道了每个结合代数可以对应一个李代数后，我们自然会好奇，每个李代数是不是也能“对应”一个结合代数？答案是肯定的，见泛包络代数\upref{UEnAl}．
+% 要注意的是，这种对应可能并不是直接对应，比如说下面\autoref{LieAlg_ex1} 中的三维叉积，就不是直接对应到一个三维空间的结合代数，而是用四元数结合代数导出四维李代数以后，商去其中心得到的商代数．% 我不明白这段话想表达什么
 
 
 \begin{definition}{中心}\label{LieAlg_def1}
 设 $\mathfrak{g}$ 为域 $\mathbb{F}$ 上的李代数，记 $C(\mathfrak{g})=\{\bvec{x}\in\mathfrak{g}|\forall\bvec{y}\in\mathfrak{g}, [\bvec{x}, \bvec{y}]=\bvec{0}\}$，称之为 $\mathfrak{g}$ 的\textbf{中心（center）}．
 \end{definition}
 
-李代数的中心，概念直接来自群等其它代数结构的中心，即“和所有元素的运算都交换的元素所构成的集合”．李代数的特殊之处在于，两个元素若交换，则它们的乘积为 $\bvec{0}$，因此我们如上定义．
+李代数的中心，概念直接来自群等其它代数结构的中心，即“和所有元素的运算都交换的元素所构成的集合”．对李代数来说，交换意味着李括号的结果为 $0$．
+% 李代数的特殊之处在于，两个元素若交换，则它们的乘积为 $\bvec{0}$，因此我们如上定义．
 
 
 
@@ -112,7 +128,7 @@
 \end{enumerate}
 \end{theorem}
 
-\autoref{LieAlg_the1} 的证明思路简述如下，细节读者可自行补充：对于第一条，直接应用反交换性；对于第二条，考虑 $[\bvec{x}_i, [\bvec{x}_j, \bvec{x}_k]]=[\bvec{x}_i, C^{jk}_l \bvec{x}^l=C^{il}_mC^{jk}_l \bvec{x}_m$，再应用反交换性就能直接得到式中左边的第二项，以此类推，应用Jacobi结合性即可得到整个式子．
+\autoref{LieAlg_the1} 的证明思路简述如下，细节读者可自行补充：对于第一条，直接应用反交换性；对于第二条，考虑 $[\bvec{x}_i, [\bvec{x}_j, \bvec{x}_k]] = [\bvec{x}_i, C_{jk}^l \bvec{x}_l] = C_{jk}^l C_{il}^m \bvec{x}_m$，再应用反交换性就能直接得到式中左边的第二项，以此类推，应用Jacobi结合性即可得到整个式子．
 
 结构常数唯一地对应李代数，也就是说，我们也可以任取一个线性空间，然后通过定义满足\autoref{LieAlg_the1} 的结构常数来定义括积，从而得到一个李代数．
 
