@@ -1,0 +1,66 @@
+% SSH 笔记
+
+\begin{issues}
+\issueDraft
+\end{issues}
+
+\subsection{密码连接 ssh}
+\begin{itemize}
+\item 安装 openssh-server \verb`sudo apt install openssh-server`
+\item 修改 sshd 设置文件 \verb`/etc/ssh/sshd_config` (注意不是 \verb`ssh_config`)： 将 \verb`PasswordAuthentication` 改为 \verb`yes`， 最后一行加上 \verb`AllowUsers 用户名`， 用户名是 linux 的用户名
+\item 改完设置文件后 \verb`sudo service ssh restart` 才会生效
+\item 查看 service 是否在运行用  \verb`sudo service ssh status`
+\item 可以试试自己连接自己， 即 \verb`ssh localhost`， 如果成功， 就可以了
+\end{itemize}
+
+
+\subsection{使用 key 连接 ssh}
+\begin{itemize}
+\item 参考\href{https://www.digitalocean.com/community/tutorials/ssh-essentials-working-with-ssh-servers-clients-and-keys}{这个教程}
+\item 用 \verb`ssh-keygen` 生成 key， 使用默认路径 \verb`~/.ssh/`， 会生成 \verb`id_rsa` 和 \verb`id_rsa.pub` 两个文件． 后者用于加密而不能解密， 是 public key， 可以给任何人． 前者是 private key， 用于解密， 绝对不能给别人．
+\item 要先登录 host， 要把 public key （只有一行内容） append 到服务器中的 \verb`~/.ssh/authorized_keys` 文件．
+\item 一般来说如果用 key 的话 server 的 \verb`/etc/ssh/sshd_config` 是不需要设置的
+\item 其中 append 的操作也可以用 \verb`ssh-copy-id -i /path/to/key.pub SERVERNAME` 会更方便， 如果事先允许密码登录的话
+\item ssh 用 key 来登录的原理大概就是， client 告诉 server 我要用哪个用户名登录， server 去用户名的 \verb`~/.ssh/authorized_keys` 中寻找 public key， 然后用其加密一个随机字符串给 client， client 用 private key 解密， 将字符串的 MD5 hash 发给 server， server 一对照 MD5 如果吻合， 开始连接．  (其实我猜 host 还需要发送一个密钥用于 ssh 通讯， 要不然 client 发给 host 的东西就无法加密了)
+\item 现在 ssh 的话应该就不需要密码了
+\item client 上可以写一个设置文件 \verb`~/.ssh/config`， 设置 host 的名字， 就可以用名字而不是 ip 登录了
+\begin{lstlisting}[language=bash]
+Host [SERVERNAME]
+Hostname [ip-or-domain-of-server]
+User [USERNAME]
+PubKeyAuthentication yes
+IdentityFile [./path/to/key]
+\end{lstlisting}
+最后一条强制使用 key 登录而不用密码．
+
+\item 如果说用 key \verb`ssh` 的时候说 \verb`permission id_rsa too open`， 用 \verb`chmod 700 id_rsa*` 即可， 其中 7 变为二进制是 \verb`111` 对应 \verb`rwx` 的三个开关都打开， 0 对应 \verb`000` 没有任何权限， 所以 700 就是 owner 有所有权限， 其他用户没有任何权限
+\item 虽然 public key 中最后有 \verb`用户名@主机`， 其实这个好像没有任何影响， private key 和 public key 都可以复制到许多不同的机器中， 让这些机器两两之间互相 ssh， 而它们的 \verb`~/.ssh/authorized_keys` 中只需要有一条
+\item ssh 登录一个新主机时， 如果 \verb`known_host` 没有， 就会让确认， 确认以后就会把新主机的 id 加入该文件， 如果这个 id 以后变了（例如主机重装了 \verb`openssh-server`） 再登录就会出错（为了安全）， 这时只需要将 \verb`known_host` 中该主机的记录删除即可． 也可以直接把整个文件删除， 但这样就所有 ssh 登录都要再确认一次了．
+\end{itemize}
+
+
+\subsection{ssh 语法}
+\begin{itemize}
+\item \verb`ssh xxx@xxx "命令"` 可以直接将某个命令在 host 上执行并退出， 而不需要先进入 host 的 shell， 执行命令再 exit． 用 \verb`&&` 可以将多个命令写在一起依次执行．
+\item \verb`ssh xxx@xxx "cat > remote_file" < local_file` 可以直接将本地文件用 ssh 直接传到 host， 而不需要用 sftp． 也可以用 piping， 例如 \verb`cat local_file | ssh xxx@xxx "cat > remote_file"`， 效果一样
+\item \verb`ssh xxx@xxx "cat /path/to/remote_file" > /path/to/local_file` 可以将 host 的文件传到本地
+\end{itemize}
+
+\subsection{端口转发}
+\begin{itemize}
+\item 现在就可以测试 -L 转发了， 格式为 \verb`ssh -L 本地端口号:目标地址:目标端口号 用户名@转发服务器` 其中 \verb`本地端口号` 永远都是输入这个命令的机器的端口号． \verb`目标地址` 既可以和 \verb`转发服务器` 相同也可以不同． 其实这个命令就是在通常的 \verb`ssh` 命令中增加了 \verb`-L 本地端口号:目标地址:目标端口号`
+\item 可以先在本地做实验， 确定本地装了 open-ssh server 和 client， 确保可以 \verb`ssh localhost`
+\item 输入 \verb`ssh -L 6600:120.79.212.166:80 localhost`， 这样就把本地端口 6600 连接到了 wuli.wiki 的 80 端口
+\item 执行以后， 结果相当于 \verb`ssh localhost`， 如果这个 session 结束， 那么转发也就结束了．
+\item 执行以后可以在浏览器输入 \verb`localhost:6600`， 就相当于输入了 \verb`120.79.212.166:80`
+\item 注意一些网站禁止 ip 访问， 或者 ip 访问和域名访问有不同的结果
+
+\item 作为第二个测试， 我们需要一台中转服务器， 例如要从本地通过中转 ssh 到 120.79.212.166:80 (wuli.wiki)， 就在本地执行 \verb`ssh -L 6500:wuli.wiki:22 用户名@中转服务器`
+\item 再打开另一个 shell， 执行 \verb`ssh -p 6500 root@localhost`， 其中 \verb`-p` 选项用于指定端口， 就相当于先 ssh 到中转服务器再 ssh 到 wuli.wiki
+
+\item 转发后， 如果要使用 git， 可以用 \verb`:` 指定端口， 注意前面要加上 \verb`ssh://`．  例如 \verb`git clone ssh://root@localhost:6500/root/github/PhysWikiScan`
+
+\subsubsection{Remote Forwarding}
+\item 用途： 例如校内网的服务器想让外网访问， 那就把外网一台有公共 ip 的转发服务器的某个端口和内网的服务器的某个端口链接
+\item \verb`ssh -R 转发服务器端口号:localhost:本地端口号 用户名@转发服务器`
+\end{itemize}

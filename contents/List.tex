@@ -30,12 +30,12 @@ struct List
 
 数组模拟单链表需要这么几个数组和变量：
 \begin{lstlisting}[language=cpp]
-int value[N], Next[N], head, idx;
+int e[N], ne[N], head, idx;
 // N 表示数组的大小
-// head 表示头节点指向的下一个值
+// head 表示头结点的下标
 // idx 表示插入的第几个数，后续模拟一下链表就懂了
-// value[i] 表示结点 i 的值
-// next[i] 表示结点 i 的 next 指针是多少
+// e[i] 表示结点 i 的值
+// ne[i] 表示结点 i 的 next 指针是多少
 \end{lstlisting}
 
 单链表通常有这么几个操作：
@@ -89,14 +89,14 @@ int value[N], Next[N], head, idx;
 \begin{lstlisting}[language=cpp]
 void add_to_head(int x) 
 {
-    value[idx] = x;
-    Next[idx] = head;
+    e[idx] = x;
+    ne[idx] = head;
     head = idx;
     idx ++ ;
 }
 // 熟练掌握了之后就可以写成一行了．
 
-value[idx] = x, Next[idx] = head, head = idx ++ ;
+e[idx] = x, ne[idx] = head, head = idx ++ ;
 \end{lstlisting}
 
 \begin{figure}[ht]
@@ -115,7 +115,7 @@ value[idx] = x, Next[idx] = head, head = idx ++ ;
 \begin{lstlisting}[language=cpp]
 void add(int k, int x)
 {
-    value[idx] = x, Next[idx] = ne[k], ne[k] = idx ++ ;
+    e[idx] = x, ne[idx] = ne[k], ne[k] = idx ++ ;
 }
 \end{lstlisting}
 
@@ -128,7 +128,7 @@ void add(int k, int x)
 \begin{lstlisting}[language=cpp]
 void remove(int k)
 {
-    Next[k] = Next[Next[k]];
+    ne[k] = ne[ne[k]];
 }
 \end{lstlisting}
 

@@ -1,0 +1,51 @@
+% 队列
+% 队列|数据结构|C++
+
+队列是一种 “先进先出” 的数据结构．队列在左端（队头）弹出元素，在右端（队尾）插入元素．C++ STL 中的 $\mathtt{queue}$ 实现了队列．队列通常是实现广度优先搜索（BFS）的数据结构．队列还有多种变体，如两端都能插入和弹出元素的\textbf{双端队列}（$\text{C++ STL deque}$），还有给元素赋予优先级，具有最高优先级的元素最先弹出，等价于一个二叉堆的\textbf{优先队列}（$\text{C++ STL priority_queue}$）．
+
+队列通常有四种基本操作：
+
+\begin{enumerate}
+\item 向队尾插入一个数 $x$；
+\item 从队头弹出一个数；
+\item 判断队列是否为空；
+\item 查询队头元素．
+\end{enumerate}
+
+C++ STL：
+
+\begin{lstlisting}[language=cpp]
+queue<int> q;
+int hh = 0, tt = -1;  // hh 为队头，tt 为队尾
+
+q.push(x);  // 在队尾插入新元素
+q.pop();    // 删除队列首元素但不返回其值
+q.empty();  // 如果队列为空返回 true，否则返回 false
+q.front();  // 返回队首元素的值，但不删除该元素
+
+// 还有如下几个操作
+q.back();   // 返回队列尾元素的值，但不删除该元素
+q.size();   // 返回队列中元素的个数
+
+\end{lstlisting}
+
+我们这里也是着重讲一下如何用数组实现队列．
+
+定义一个数组 $q$ 用于模拟队列，定义 $\mathtt{hh}$ 为队头，初始化为 $0$，$\mathtt{tt}$ 为队尾，初始化为 $-1$．
+
+\begin{lstlisting}[language=cpp]
+string op;
+cin >> op;
+if (op == "push") 
+{
+    int x;
+    cin >> x;
+    q[ ++ tt] = x;
+} 
+// 如果 hh <= tt 说明队列不为空
+else if (op == "empty") cout << (hh <= tt ? "NO" : "YES") << endl;
+else if (op == "query") cout << q[hh] << endl;
+else if (op == "pop") hh ++ ;
+\end{lstlisting}
+
+以上就是队列的基本操作．

@@ -1,0 +1,29 @@
+% MPI 笔记（C++）
+
+\begin{issues}
+\issueDraft
+\end{issues}
+
+\begin{itemize}
+\item \href{https://www.codingame.com/playgrounds/349/introduction-to-mpi/introduction-to-distributed-computing}{一个教程}， \href{https://people.sc.fsu.edu/~jburkardt/cpp_src/hello_mpi/hello_mpi.html}{入门例程}， \href{https://mpitutorial.com/tutorials/running-an-mpi-cluster-within-a-lan/}{如何配置集群}
+\item intel MPI 和 MKL 一样是免费的， google 一下， 下载安装包即可， 运行 \verb`sudo ./install.sh` 安装， 过程和 MKL 差不多
+\item 如果已经安装了 MKL， 可能会提示目录已经存在（不确定 MKL 是否已经包含 MPI）
+\item 安装好以后同样需要在 \verb`~/.bashrc` 中添加路径， 即在文件最后加入命令 \verb`source /opt/intel/compilers_and_libraries_2020.1.217/linux/mpi/intel64/bin/mpivars.sh`
+\item 重启一下 shell， 运行 \verb`mpicxx --help`， 如果进入帮助页面就说明成功了
+\item 尝试直接使用 Intel 的 MPI
+\item \verb`mpicxx` 或者 \verb`mpigxx` 都是 g++ 的一个 wraper， 和 g++ 一样使用即可
+\item 编译完以后， 如果直接运行程序只会有一个 process， 需要用例如 \verb|mpiexec -np 4 ./main.x| 指定进程数量． \verb|mpirun| 也一样．
+\item \verb|MPI_Init(&argc, &argv);| 开始 MPI， \verb|MPI_Finalize();| 结束．
+\item \verb|MPI_Comm_size(MPI_Comm comm, &size);| 获取指定 communicator 的进程数
+\item \verb|MPI_Comm_rank(MPI_Comm comm, &rank);|获取当前进程的 id， 称为 rank．
+\item \verb|int MPI_Send(const void *buf, int count, MPI_Datatype datatype, int dest, int tag, MPI_Comm comm)| 其中 \verb|dest| 是进程 \verb|id|， \verb|tag| 是一个编号用于区分不同的消息， \verb|comm| 一般是 \verb|MPI_COMM_WORLD| （所有进程）．
+\item 常用的 \verb|MPI_Datatype| 有 \verb|MPI_CHAR|， \verb|MPI_UNSIGNED_CHAR|， \verb|MPI_INT|， \verb|MPI_UNSIGNED|， \verb|MPI_LONG|， \verb|MPI_LONG_LONG|， \verb|MPI_FLOAT|， \verb|MPI_DOUBLE|， \verb|MPI_LONG_DOUBLE|， \verb|MPI_COMPLEX|， \verb|MPI_REAL16|， \verb|MPI_COMPLEX32|．
+\item \verb|int MPI_Recv(void *buf, int count, MPI_Datatype datatype, int source, int tag, MPI_Comm comm, MPI_Status *status)|， 接收信息． \verb|status| 可以用于获取更多信息， 其他参数同理．
+\item \verb|int MPI_Bcast(void *buffer, int count, MPI_Datatype datatype, int root,  MPI_Comm comm)| 只从 id 为 root 的进程调用， 对所有其他进程中的 buffer 赋值． 这相当于分别对每个进程用 \verb|MPI_Send()| 和 \verb|MPI_Recv()|．
+\item \verb|double MPI_Wtime()| 返回当前进程的时间（从任意起点开始， 单位秒）．
+\item \verb|int MPI_Reduce(const void* send_buffer, void* receive_buffer, int count, MPI_Datatype datatype, MPI_Op operation, int root, MPI_Comm communicator);| 把每个进程中的某个变量相加或相乘等， 赋值给 id 为 \verb|root| 的某个变量． 其中 \verb|operation| 可以是 \verb|MPI_MAX, MPI_MIN, MPI_SUM, MPI_PROD|
+\item \verb|int MPI_Allreduce(void *sendbuf, void *recvbuf, int count, MPI_Datatype datatype, MPI_Op op, MPI_Comm comm);| 和 \verb|MPI_Reduce| 一样， 但结果会返回到所有进程．
+\item \verb|int MPI_Barrier(MPI_Comm comm)| 可以同步所有的进程到某个点．
+\item \verb|Scatter()|
+\item \verb|Gather()|
+\end{itemize}

@@ -1,3 +1,181 @@
 % Vim 笔记
 
-123
+\begin{issues}
+\issueDraft
+\end{issues}
+
+\subsection{基础}
+\begin{itemize}
+\item linux 命令行输入 \verb`vimtutor` 进入教程
+\item 在 Ubuntu 中, \verb`vi` 就是 \verb`vim`, 打开的都是 vim 程序.
+\item 撤销: \verb`u`, 重做: \verb`Ctrl+r`
+\item 复制: \verb`y` (yank), 剪切: \verb`d` (delete)
+\item 用 \verb`:w /<path>/<file>` 另存.
+\item 命令行用 \verb`ctrl+D` 可以查看所有候选的补全
+\item 由于 ctrl 键过于重要， 建议仿照 hhkb， 将 caps loc 和左 ctrl 键位置调换， 用 sharp keys 软件就可以 
+\end{itemize}
+
+\subsection{移动}
+\begin{itemize}
+\item 使用 hjkl 按键可以上下左右移动， 不需要方向键（好远）
+\item \verb`w` 可以跳到下一个单词， 比 \verb`l` 要快
+\item \verb`b` 跳到上一个单词， 比 \verb`h` 要快
+\item \verb`e` 跳到下个单词末尾
+\item \verb`0` 使光标跳到行首
+\item \verb`^` 跳到第一个不为空格/tab 的字母
+\item \verb`$` 跳到行末
+\item \verb`ctrl+e` 将窗口向下移动一行， \verb`ctrl+y` 向上移动一行
+\item \verb`ctrl+u` 向上翻半页， ctrl+d 向下翻半页， ctrl+b 上一页， ctrl+f 下一页
+\item \verb`ctrl+]` 可以进入一个 tag， 相当于点击链接， 用 ctrl+o 返回
+\item \verb`G` 可以跳到文档最后， \verb`gg` 可以跳到文件开始
+\item \verb`123G` 跳到第 123 行
+\item 用 \verb`:<number>` 也可以直接跳到指定的行
+\item 按 \verb`$` 跳到行末
+\item 按 \verb`A` 跳到行末并编辑
+\item \verb` `\verb` ` 可以让光标回到上一个位置, \verb`''` 让光标回到上一个位置的行首． 连续按多次将在两个位置间跳转
+\item 要在 insert 或者 command 模式移动光标（包括上键查找历史）， 可以设置快捷键如下
+\begin{lstlisting}[language=bash]
+" insert mode 快捷键
+inoremap <C-h> <Left>
+inoremap <C-j> <Down>
+inoremap <C-k> <Up>
+inoremap <C-l> <Right>
+" command mode 快捷键
+cnoremap <C-h> <Left>
+cnoremap <C-j> <Down>
+cnoremap <C-k> <Up>
+cnoremap <C-l> <Right>
+\end{lstlisting}
+\item \verb`z+回车` 用于将当前行移动到屏幕顶部， \verb`zz` 移动到中间
+\item \verb`H` 让光标跳到屏幕第一行行首， \verb`L` 跳到最后一行行首， \verb`M` 跳到中间
+\item \verb`(` 和 \verb`)` 把光标移动到上一句或者下一句． 下一句． 下一句． 下一句．
+\item \verb`{` 和 \verb`}` 把光标移动到上一段或者下一段
+\end{itemize}
+
+\subsection{编辑}
+\begin{itemize}
+\item 按 \verb`i` 直接编辑
+\item 用 \verb`x` 键删除光标处的字符
+\item 在单词首字母按 \verb`dw` 可以删除当前字符到单词 \verb`d` 开启 delete 模式， \verb`w` 跳到下一个单词行首
+\item \verb`d$` 可以删除当前字符到行末 
+\item \verb`dw`, \verb`d$` 这样的操作叫做 operator + motion
+\item 在移动前面加数字， 可以重复移动指定的次数， 例如 \verb`100w`， \verb`d3w`（删除三个字）
+\item \verb`dd` 删除一行， \verb`3dd` 删除三行
+\item 编辑模式或者命令模式下 \verb`ctrl+U` 可以删除光标左边的内容
+\item \verb`f` 加一个字符可以跳到同一行内下一个出现该字符的位置（话说为什么不直接用 \verb`/`）
+\end{itemize}
+
+\subsection{vimtutor 笔记}
+\begin{itemize}
+\item \verb`set mouse=a` 可以使用鼠标！
+\item 鼠标双击也可以进入 tag
+\item \verb`:help 内容` 可以进入帮助页面
+\item 按 \verb`esc` 进入 normal mode
+\item \verb`u` 撤销, ctrl+R 重做，\verb`10u` 撤销 10 次． 注意每次撤销一个命令， 一次插入很多单词也算一个命令， \verb`10x` 也算一个命令
+\item \verb`U` 用于撤销改行的所有修改
+\item \verb`p` （put）用于把 \verb`dd` 删除的行插入到光标下方， 可以多次粘贴， 可以 \verb`5p`
+\item \verb`r` （replace）可以替换光标处的单个字符， 例如 \verb`ra` 替换为 \verb`a`， \verb`3ra` 连续三个字符替换为 \verb`a`
+\item \verb`c` （change）相当于 \verb`d` 再 \verb`a`
+\item \verb`ctrl+G` 查看当前的位置和文件状态
+\item \verb`%` 可以找到对应的另一半括号 (), [], {}
+\end{itemize}
+
+\subsection{Visual}
+\begin{itemize}
+\item 选择: \verb`v`, 选择行: \verb`V`, 选择块: \verb`ctrl+v`.
+\item 复制时用 \verb`v` 粘贴(光标右侧): \verb`p`, 粘贴(光标左侧): \verb`P`
+\item 剪切整行直接用 \verb`dd` (事实上是剪切!)
+\item 复制时用 \verb`V` 或, 粘贴(光标下一行下移): \verb`p`, 粘贴(光标所在行下移): \verb`P`
+\item 全选，用 \verb`ggVG` 即可
+\end{itemize}
+
+\subsection{搜索替换}
+\begin{itemize}
+\item 如果 search 的内容中包含 \verb`/`, 用 \verb`\/` 即可， 可能的转义的字符都用 \verb`\` 试试就行
+\item 用 \verb`:/ *<string>*` 会向下搜索文档中所有包含 \verb`string` 的位置, 如果再按 \verb`n`, 会搜索下一处. 
+\item 向下搜索 \verb`/pattern`， 向上搜索 \verb`?pattern`，下一个 \verb`n`， 上一个 \verb`N`.
+\item \verb`:noh` 可以取消搜索匹配的高亮（如果有设置）
+\item \verb`q/` 可以打开新窗口编辑搜索历史， 用回车执行， 按两次 \verb`ctrl+c` 关闭
+\item 不区分大小写搜索:  \verb`/` 后面加 \verb`\c`
+\item \verb`*` 可以搜索当前光标下的单词
+\end{itemize}
+
+\subsection{命令}
+\begin{itemize}
+\item 用 \verb`esc` 返回 Normal mode
+\item 可以用 tab 键补全命令（包括查看文件目录）
+\item 可以用上下方向键根据命令历史补全（同 Matlab）
+\item 也可以用 \verb`q:` 打开一个窗口编辑历史命令， 用回车执行，按两次 \verb`ctrl+c` 关闭
+命令模式下，\verb`ctrl+r` 快捷键可以插入许多内容． \verb`ctrl+r %` 可以插入当前文件名（含相对目录）
+\end{itemize}
+
+\subsection{多窗口}
+\begin{itemize}
+\item 参考 \verb`:help usr_08.txt`
+\item \verb`:split` 将当前窗口复制一份， 选中上方窗口
+\item \verb`:10split` 指定新增窗口行数
+\item \verb`:split [file]` 在新窗口打开文件
+\item \verb`:only` 关闭其他所有窗口
+\item \verb`:new` 创建新文件，在新窗口打开
+\item \verb`ctrl+w w` 切换窗口， \verb`ctrl+w ctrl+w` 也一样（ctrl 按着连按两个 w）
+\item 貌似按下 \verb`ctrl+w` 以后， \verb`ctrl` 都可以一直按着也没关系， 例如 \verb`ctrl+w` 后 \verb`ctrl` 不松手连续按 \verb`wj, wk`
+\item \verb`ctrl+w +` 或 \verb`ctrl+w -` 用于调整窗口大小， 例如 \verb`10ctrl+w -`
+\item \verb`10 ctrl+w _` 指定大小为 10 行
+\item \verb`:q` 仅退出当前窗口， \verb`:qa` 退出所有窗口
+\item \verb`:vsplit` 可以让窗口左右划分
+\item \verb`:vnew` 可以就是左右划分的 \verb`new`
+\item \verb`ctrl+w` 后加上 \verb`hjkl` 可以切换到指定方向的窗口
+\item \verb`ctrl+w` 后加上 \verb`t` 或者 \verb`b` 可以跳到最上方和最下方的窗口
+\item 打开 vim 时用 \verb`vim -o 1.txt 2.txt 3.txt` 可以每个文件开一个窗口
+\end{itemize}
+
+\subsection{多 Tab}
+\begin{itemize}
+\item 用 \verb`:tabnew` 新建一个 tab
+\item \verb`:tabf 文件名` 新建一个 tab 用于打开某文件
+\item \verb`q` 退出当前 tab
+\item \verb`:tabn` 和 \verb`:tabp` 用于切换到后一个/前一个 tab
+\end{itemize}
+
+\subsection{设置}
+\begin{itemize}
+\item Tab 默认占七个格, 可以在 .vimrc 文件中设置 \verb`set ts=4`
+\end{itemize}
+
+\subsection{目录}
+\begin{itemize}
+\item 当前目录可以用 \verb`:pwd` 查看
+\item \verb`:cd` 可以更改当前目录
+\end{itemize}
+
+\subsection{文件搜索}
+\begin{itemize}
+\item 用 \verb`find: **/文件名` 可以搜索当前目录和子目录下的文件名并打开（但如果有太多 match 就会出错）
+\end{itemize}
+
+\subsection{vimrc}
+\begin{itemize}
+\item 修改 vimrc 以后， 使用 \verb`:source ~/.vimrc` 就可以生效， 不需要重启 vim
+\end{itemize}
+
+\subsection{旧}
+\begin{itemize}
+\item 要养成经常保存的习惯，尤其是用 ssh
+\item home, end, page up, page down 都可以正常使用
+\item 用 \verb`:e <filename>` 打开文件.
+\item \verb`gd` 跳到光标所在变量的声明处, 其实是搜索最早出现的地方.
+\item vim 中可以查看正在被程序写入的文件, 但不要修改! \verb`:edit` 命令可以刷新
+\item linux 的 \verb`file -bi <filename>` 命令可以检测文件的 encoding，注意 UTF8 文件首位要有 BOM (Byte Order Mark) 该命令才能检测到 UTF8．
+\item vim 默认的 encoding 是 latin1，或者系统 environment variable 的设置. 如果是 UTF8, 有时候不会自动加 BOM, 需要在 vim 里面用 \verb`:set bomb` 才行, BOM 有时候会产生一些问题， 例如 gcc (GNU compiler collection) 不接受 BOM, 又例如 cat 两个文件的时候第二个文件的 BOM 也会复制到第一个文件的结尾.
+\item 要检查当前打开文件被识别的 encoding，用 \verb`:set fileencoding`.
+\item 要显示行号，用 \verb`:set number`. 要隐藏，用 \verb`:set nonumber`. 如果要默认显示行号，在 \verb`~/.vimrc` 文件中输入 \verb`set number` 即可
+\end{itemize}
+
+\subsection{NERDtree}
+\begin{itemize}
+\item \verb`?` 可以查看简单的说明
+\item \verb`u` 可以将 root 移动到上一层
+\item \verb`U` 相当于 \verb`u` 但是保持打开的子目录
+\item \verb`C` 将选中的目录作为 root
+\item \verb`q` 退出
+\end{itemize}

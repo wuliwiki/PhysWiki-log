@@ -1,0 +1,153 @@
+% 简单刚体系统的静力学分析
+% 静力学 刚体 系统 受力分析
+
+本文简要介绍分析简单平面刚体系统的静力学分析．\footnote{本文参考了张娟著《理论力学》.本文无协议冲突的部分适用于CC-BY-SA，否则相应部分遵循原协定．}
+
+\subsection{轻绳与轻杆模型}
+\subsubsection{轻绳}
+\begin{figure}[ht]
+\centering
+\includegraphics[width=4cm]{./figures/RGDFA_1.png}
+\caption{轻绳} \label{RGDFA_fig1}
+\end{figure}
+拉紧的轻绳只能受拉而不能受压．
+
+拉紧的轻绳向与其相连的刚体提供拉力，但不能提供压力（轻绳不能被压缩）；如果轻绳被拉直，那么轻绳提供的拉力方向总是平行于绳．
+
+\subsubsection{轻杆}
+\begin{figure}[ht]
+\centering
+\includegraphics[width=4cm]{./figures/RGDFA_2.png}
+\caption{轻杆} \label{RGDFA_fig2}
+\end{figure}
+轻杆可以受压或受拉，同时轻杆提供的力的方向也不一定平行于轻杆．
+
+\subsection{常见约束条件}
+\subsubsection{接触面 Surface Constraint}
+\begin{figure}[ht]
+\centering
+\includegraphics[width=5cm]{./figures/RGDFA_3.png}
+\caption{接触面模型1} \label{RGDFA_fig3}
+\end{figure}
+\begin{figure}[ht]
+\centering
+\includegraphics[width=4cm]{./figures/RGDFA_4.png}
+\caption{接触面模型2} \label{RGDFA_fig4}
+\end{figure}
+放置于平坦接触面的刚体受一个垂直于公切面的支持力．如果接触面粗糙，还可以提供一个平行于接触面的静摩擦力.
+\subsubsection{小车模型 Roller Support}
+\begin{figure}[ht]
+\centering
+\includegraphics[width=5cm]{./figures/RGDFA_5.png}
+\caption{小车模型} \label{RGDFA_fig5}
+\end{figure}
+小车可以为与其相连的杆提供一个垂直接触面向上的支持力，但是不能提供一个垂直表面向下的拉力；如果接触面是粗糙的，那还能提供一个平行于接触面的静摩擦力.
+\subsubsection{铰链模型 Fixed Hinge}
+\begin{figure}[ht]
+\centering
+\includegraphics[width=5cm]{./figures/RGDFA_6.png}
+\caption{铰链模型} \label{RGDFA_fig6}
+\end{figure}
+铰链可以为与其相连的杆提供一个任意方向的力，但是不能提供力偶．在初步的受力分析中，力的方向不能确定，因此可以先记为两个互相垂直的分力．
+\subsubsection{钉子模型 Fixed Rod}
+\begin{figure}[ht]
+\centering
+\includegraphics[width=4cm]{./figures/RGDFA_7.png}
+\caption{钉子模型} \label{RGDFA_fig7}
+\end{figure}
+杆钉入墙中的部分可以提供一个任意方向的力与一个力偶.同铰链一样，力的方向无法立刻确定，先记为两个互相垂直的分力．
+
+\subsection{主动力与约束力}
+先简要定义约束力与主动力：
+\begin{figure}[ht]
+\centering
+\includegraphics[width=5cm]{./figures/RGDFA_8.png}
+\caption{主动力与约束力}} \label{RGDFA_fig8}
+\end{figure}
+\begin{itemize}
+\item 约束力：由于约束条件而产生的力，例如桌面对物体产生的支持力，绳子对物体提供的拉力等．
+\item 主动力：由于其他外界因素而产生的力，例如重力、外加的压力等．
+\end{itemize}
+
+\subsection{受力分析}
+总体思路是系统法与隔离法，即先分析系统的整体受力，再逐个分析系统内各个组件的受力．分析系统受力不是一蹴而就，经常是一个反复试错、修正的过程．
+\begin{itemize}
+\item 先把系统视作一个整体，进行受力分析．此时，系统中各刚体之间的约束力是内力，均可被忽略．
+\item 随后逐个分析系统内各个组件的受力．一般而言，先分析受到主动力的组件，以及只受两个力的组件（由二力平衡定理立刻得知该两力等大、反向、作用点共线）．
+\end{itemize}
+
+在分析一个组件时，标注主动力，
+\begin{figure}[ht]
+\centering
+\includegraphics[width=5cm]{./figures/RGDFA_12.png}
+\caption{“标注主动力”} \label{RGDFA_fig12}
+\end{figure}
+并根据约束条件标注约束力（注意到，此时系统中其他组件对该组件的约束力不能再被忽视），
+\begin{figure}[ht]
+\centering
+\includegraphics[width=5cm]{./figures/RGDFA_13.png}
+\caption{“标注约束力”} \label{RGDFA_fig13}
+\end{figure}
+最终根据刚体平衡条件计算，并得到各个约束力．
+
+根据牛顿第三定律，若A对B施加约束力，那么B对A也会施加一个等大反向的约束力．标注组件的约束力时必须注意到这一点．同时，若A对B施加的约束力已被确定，那么B对A施加的约束力也随之确定．
+
+\subsection{刚体平衡条件}
+\pentry{刚体的静力平衡\upref{RBSt}}
+对于一个刚体，处于平衡的条件是合力为0，且力矩和为0.\footnote{或许你已经知道，若合力为0但力矩和不为0，那么刚体会开始加速旋转}
+
+对于合力，一般把所有力分解至水平与竖直方向，在这两个方向上的合力分别为0. 力是有方向的，在这种平面情况下，以正负号代表方向．可选取水平向右、垂直向上为正方向．
+\begin{equation}
+\sum F_x=\sum F_y=0
+\end{equation}
+如果一个力的计算结果是负数，那么说明力的实际方向与假定的相反．
+
+对于力矩和，一般选取未知力较多的点作为参考点，因为作用点在该点上的未知力关于该点的力矩均为0．同时，计算力矩时，也是一般把力分解至水平与竖直方向，分别计算力矩．力矩也是有方向的，在这种平面情况下，以正负号代表方向．可使用右手法则确定力矩的正负：拇指放在参考点，四指指向力的方向．拇指向纸面内为正，朝纸面外为负．
+\begin{equation}
+\sum M=0
+\end{equation}
+有时，也可以选取多个不同的点作为参考点，并列出多个 力矩和 方程．
+
+\begin{example}{框架结构的受力}
+\begin{figure}[ht]
+\centering
+\includegraphics[width=5cm]{./figures/RGDFA_9.png}
+\caption{框架结构} \label{RGDFA_fig9}
+\end{figure}
+如图，杆的重力均不计，分析框架的受力
+
+先分析系统的整体受力．但此时未知力太多，无法得到有价值的信息．
+
+\begin{figure}[ht]
+\centering
+\includegraphics[width=5cm]{./figures/RGDFA_10.png}
+\caption{AB杆受力} \label{RGDFA_fig10}
+\end{figure}
+
+再分析AB杆的受力．显然，AB杆只受两个力（分别由两个铰链提供），根据二力平衡定理，两力等大、反向、作用点共线．
+
+\begin{figure}[ht]
+\centering
+\includegraphics[width=5cm]{./figures/RGDFA_11.png}
+\caption{BC杆受力} \label{RGDFA_fig11}
+\end{figure}
+再分析BC杆的受力．注意根据牛顿第三定律，B处力的方向已经可以确定．
+
+最后，根据各组件力的平衡条件列方程组，即可解得$\bvec F_A, \bvec F_B, \bvec F_C$．例如，在BC杆中，可列出平衡方程：
+
+x方向合力为0: $F_{Cx}-P-F_{B} \cos \theta=0$
+
+y方向合力为0: $F_{Cy}-P-F_{B}\sin \theta=0$
+
+关于C点的力矩和为0: $P \cdot l_{CP} + F_{By} \cdot l_{CB} = 0$
+
+共有3个未知量（$F_{Cx}, F_{Cy}, F_B$）与3个方程，原则上可以解出全部未知力．
+\end{example}
+\begin{exercise}{“反重力积木”？}
+\begin{figure}[ht]
+\centering
+\includegraphics[width=10cm]{./figures/RGDFA_14.png}
+\caption{“反重力积木”} \label{RGDFA_fig14}
+\end{figure}
+试受力分析该“反重力积木”，并说明其实它并没有反重力．\footnote{图片来自网络}
+\end{exercise}

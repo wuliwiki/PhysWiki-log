@@ -1,0 +1,84 @@
+% Docker 笔记
+
+\begin{issues}
+\issueDraft
+\end{issues}
+
+\subsection{Linux 安装}
+\subsubsection{apt 安装}
+\begin{itemize}
+\item ubuntu x86/64 安装参考\href{https://docs.docker.com/install/linux/docker-ce/ubuntu/}{这里}．
+\begin{lstlisting}[language=bash]
+sudo apt-get remove docker docker-engine docker.io containerd runc
+sudo apt-get update
+sudo apt-get install \
+    apt-transport-https \
+    ca-certificates \
+    curl \
+    gnupg-agent \
+    software-properties-common
+sudo add-apt-repository \
+   "deb [arch=amd64] https://download.docker.com/linux/ubuntu \
+   $(lsb_release -cs) \
+   stable"
+sudo apt-get update
+sudo apt-get install docker-ce docker-ce-cli containerd.io
+\end{lstlisting}
+\item 测试安装成功， 用 \verb`sudo docker run hello-world`
+\end{itemize}
+
+\subsubsection{deb 安装包安装}
+\begin{itemize}
+\item 但是如果 apt 不能用的话， 也可以下载 deb 文件离线安装
+\item 安装包下载 https://download.docker.com/linux/ubuntu/dists/ ， 选择系统版本代号， 然后 pool/stable/amd64/
+\item 选好了以后需要下载三个安装包， 依次安装（如果次序不对也问题不大，会提示 dependency 找不到的错误）
+\item 三个安装包依次是 containerd.io, docker-ce-cli, docker-ce, 用 \verb`dpkg -i xxx.deb` 安装即可
+\end{itemize}
+
+\subsection{基础}
+\begin{itemize}
+\item docker 在功能上基本和虚拟机一样， 但是占用资源要少得多， 因为共享内核
+\item docker 本质上就是一个进程
+\item windows 和 mac 上有 docker desktop， 建议使用
+\item 用了 docker 就不能用 virtualbox 了， 必须要在 eufi 把 Hyper V 关掉或打开才可以
+\item 最新的 windows docker 需要 WSL2 才能使用了
+\item 重启以后启动 docker， 登录， 用 powershell \verb`docker --version` 检查版本
+\item \verb`docker run hello-world` 测试最简单的 image
+\item \verb`docker images` 可以检查本地所有 image
+\item \verb`docker ps -a` 可以检查本地所有 container/process
+\item 要下载 image， 用 \verb`docker pull` 例如 \verb`docker pull [image_name]`
+\item 注意区分 container 和 image， image 相当于 VirtualBox 里面的 snapshot， 而 container 相当于现在在运行的虚拟机， \verb`container commit` 以后可以生成 image
+\item \verb`docker run -it -d IMAGE_NAME/ID` 从 image 创建 container
+\item \verb`docker exec -it CONTAINER_ID bash` 进入某个 container 的 bash
+\item docerk image 没有简单的上锁设置，就算修改了 passwd． 能执行 \verb`sudo docker...` 命令的人都可以自由访问本地的任何 container
+\item \verb`docker stop CONTAINER_ID` 停止 container
+\item \verb`docker start CONTAINER_ID` 开始 container
+\item \verb`docker rm [-f] CONTAINER_ID` 删除 container
+\item \verb`docker image rm [-f] IMAGE_NAME/ID` 删除 image
+\item \verb`docker commit CONTAINER_ID USR_NAME/REPO_NAME` 会将 container commit， 也可以用 \verb`REPO_NAME:TAG_NAME` 指定 tag
+\item \verb`docker login` 用于登录 docker hub, 如果 \verb`permission denied`， 就加 \verb`sudu`
+\item \verb`docker push USR_NAME/REPO_NAME` 可以直接将 commit 的 image push 到 docker hub， 也可以用 \verb`REPO_NAME:TAG_NAME` 指定 tag
+\end{itemize}
+
+
+\subsection{docker 网络}
+\begin{itemize}
+\item \href{https://www.freecodecamp.org/news/how-to-get-a-docker-container-ip-address-explained-with-examples/}{简单介绍}
+\item container 自己的 ip 默认为 \verb`172.17.xxx.xxx`
+\item 如果要把 container 的 port 映射到 host 的 port， 使用 \verb`docker run -p HOST_PORT:CONTAINER_PORT IMAG_NAME`， 这样如果 docker 有一个 web server 就可以从外面访问了
+\end{itemize}
+
+\subsection{ubuntu image 缺少的功能}
+\begin{itemize}
+\item \verb`apt install sudo`
+\item \verb`apt install bash-completion`, 然后在 bashrc 中加上
+\begin{lstlisting}[language=bash]
+if ! shopt -oq posix; then
+  if [ -f /usr/share/bash-completion/bash_completion ]; then
+    . /usr/share/bash-completion/bash_completion
+  elif [ -f /etc/bash_completion ]; then
+    . /etc/bash_completion
+  fi
+fi
+\end{lstlisting}
+\end{itemize}
