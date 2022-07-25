@@ -1,0 +1,69 @@
+% 单调栈
+
+% 单调栈|数据结构|栈|C++
+
+单调栈内部的元素都是单调递增或者递减的．单调栈处理问题的思想就是\textbf{及时排除不可能的答案，从而可以更高效的求出答案}．
+
+单调栈可以解决的问题很少，经典问题就是用 $O(n)$ 的时间复杂度处理这么一类问题：求出每个数左/右边第一个比它小/大的数．
+
+我们就用：求出每个数左边第一个比它小的数，如果没有输出 $-1$．这个问题来讲解．
+
+举个例子：
+输入：\verb|3 4 2 7 9|，输出：\verb|-1 3 -1 2 2|．
+
+先想一下朴素算法怎么做：
+两重循环来枚举，第一重循环枚举每个数 $a_i$，第二重循环从 $a_i$ 往左枚举每个数，直到找到第一个比 $a_i$ 小的数为止．
+
+\begin{lstlisting}[language=cpp]
+// 朴素算法的代码
+cout << -1 << ' ';   // 第一个数的左边肯定没有比他小的数，所以先输出 -1
+bool res = true;
+for (int i = 0; i < n; i ++ ) {
+    for (int j = i - 1; j >= 0; j -- )
+        if (a[i] > a[j])
+        {
+            cout << a[j] << ' ';
+            res = true;
+            break;
+        } else res = 0;
+    
+    if (!res) cout << -1 << ' ';
+}
+\end{lstlisting}
+
+上面的代码的时间复杂度显然是 $O(n^2)$ 的，我们来分析一下枚举的过程有没有什么性质，是不是有些元素是不是永远不会作为答案输出．
+如果在枚举的过程中发现了这样一对数：$a_i \geqslant a_j, i < j$，那显然 $a_i$ 永远不会作为答案输出．因为 $a_j$ 比 $a_i$ 小，且比 $a_i$ 靠前，所以我们就可以用一个栈来维护 $a_i$ 左边的数，如果发现栈顶元素大于等于要插入的数 $x$，那么就可以把栈顶元素删了，我们就可以以一直删，直到发现了栈顶元素小于 $x$，那么栈顶元素就是答案，这样栈内的元素也就单调上升了．
+
+\begin{lstlisting}[language=cpp]
+// 单调栈代码
+cin >> n;
+while (n -- )
+{
+    int x;
+    cin >> x;
+    while (tt && stk[tt] >= x) tt -- ;  // 只要栈不为空且栈顶元素大于要插入的数 x，那么就删除栈顶元素
+    if (!tt) printf("-1 ");             // 如果栈位空，则没有比该元素小的值
+    else printf("%d ", stk[tt]);        // 栈顶元素就是左侧第一个比它小的元素
+    stk[ ++ tt] = x;
+}
+\end{lstlisting}
+
+\begin{lstlisting}[language=cpp]
+// C++ STL
+
+int n;
+scanf("%d", &n);
+
+stack<int> st;
+while (n -- )
+{
+    int x;
+    cin >> x;
+    while (st.size() != 0 && st.top() >= x) st.pop();
+    if (st.size() != 0) cout << st.top() << ' ';
+    else cout << "-1" << ' ';
+    st.push(x);
+}
+\end{lstlisting}
+
+\href{https://img-blog.csdnimg.cn/20201211221031165.gif#pic_center}{图示}

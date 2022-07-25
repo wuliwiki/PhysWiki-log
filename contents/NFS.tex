@@ -1,0 +1,34 @@
+% Linux 创建网络文件夹（命令行）
+
+这里介绍两种不同的方法．
+
+\subsection{使用 SSHFS}
+\begin{itemize}
+\item \href{https://www.digitalocean.com/community/tutorials/how-to-use-sshfs-to-mount-remote-file-systems-over-ssh}{参考这里}．
+\item 首先确保 \verb`ssh` 可以连接， 但这个程序其实和 \verb`ssh` 是独立的， 不适用 \verb`ssh` 的配置文件
+\item 安装 \verb`sshfs`
+\item 注意 \verb`sshfs` 在 WSL 下无效， 好失望… 希望 wsl 2 （据说要 2020 年）可以
+\item 创建需要网盘目录， 一般在 \verb`/mnt/` 目录下， 例如 \verb`/mnt/101`
+\item \verb`sudo sshfs -o allow_other addis@10.0.2.101:/home/addis /mnt/101` 注意 \verb`addis@` 一定要有， 否则无法进入网盘
+\item 要弹出网盘， 用 \verb`umount [dir]`， 然后可以手动删掉路径
+\end{itemize}
+
+\subsubsection{开机自动 mount}
+\begin{itemize}
+\item \href{https://www.linode.com/docs/networking/ssh/using-sshfs-on-linux/}{参考这里}
+\item 要重启以后自动 mount 网盘（permanent mount， 两边重启都不怕）， **一定** 要先用上面 \verb`sshfs` 命令先临时 mount 一次 （否则会出错！）， 成功以后用 \verb`sudo vim /etc/fstab` 在配置文件中最后一行加入 \verb`addis@10.0.2.4:/some/path /mnt/folder  fuse.sshfs noauto,x-systemd.automount,_netdev,follow_symlinks,identityfile=/home/addis/.ssh/id_rsa,allow_other,default_permissions,reconnect 0 0`． 可能需要修改的： \verb`addis@10.0.2.4:/some/path /mnt/folder/`， \verb`/home/addis/.ssh/id_rsa`， 其他的什么意思不清楚也不用管
+\item 现在可以试一试重启， 如果启动失败， 会进入一个安全命令行， 将 \verb`/etc/fstab` 加入的一行删掉即可． 如果成功的话， 重启后进入 \verb`/mnt/folder` 就会自动 mount
+\end{itemize}
+
+\subsection{使用 NFS}
+\begin{itemize}
+\item Network File System
+\item 安装 \verb|sudo apt-get install nfs-kernel-server|
+\item \verb|mkdir cloud|
+\item \verb|vim /etc/exports|， 添加一行 \verb|/home/mpiuser/cloud *(rw,sync,no_root_squash,no_subtree_check)|
+\item \verb|sudo service nfs-kernel-server restart|
+\item 在其他 client 机器上， 创建相同的 \verb|cloud| 文件夹， 然后 \verb|sudo apt-get install nfs-common|
+\item 在 client 机器上， \verb|sudo mount -t nfs manager:/home/mpiuser/cloud ~/cloud|
+\item 用 \verb|df -h| 查看是否成功．
+\item 要每次开机都自动 mount， 可以 \verb|vim /etc/fstab|， 添加一行 \verb|manager:/home/mpiuser/cloud /home/mpiuser/cloud nfs|
+\end{itemize}

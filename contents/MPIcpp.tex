@@ -4,15 +4,17 @@
 \issueDraft
 \end{issues}
 
+本文参考\href{https://www.codingame.com/playgrounds/349/introduction-to-mpi/introduction-to-distributed-computing}{一个教程}， \href{https://people.sc.fsu.edu/~jburkardt/cpp_src/hello_mpi/hello_mpi.html}{入门例程}， \href{https://mpitutorial.com/tutorials/running-an-mpi-cluster-within-a-lan/}{如何配置集群}．
+
+\subsection{基本语法}
 \begin{itemize}
-\item \href{https://www.codingame.com/playgrounds/349/introduction-to-mpi/introduction-to-distributed-computing}{一个教程}， \href{https://people.sc.fsu.edu/~jburkardt/cpp_src/hello_mpi/hello_mpi.html}{入门例程}， \href{https://mpitutorial.com/tutorials/running-an-mpi-cluster-within-a-lan/}{如何配置集群}
 \item intel MPI 和 MKL 一样是免费的， google 一下， 下载安装包即可， 运行 \verb`sudo ./install.sh` 安装， 过程和 MKL 差不多
 \item 如果已经安装了 MKL， 可能会提示目录已经存在（不确定 MKL 是否已经包含 MPI）
 \item 安装好以后同样需要在 \verb`~/.bashrc` 中添加路径， 即在文件最后加入命令 \verb`source /opt/intel/compilers_and_libraries_2020.1.217/linux/mpi/intel64/bin/mpivars.sh`
 \item 重启一下 shell， 运行 \verb`mpicxx --help`， 如果进入帮助页面就说明成功了
 \item 尝试直接使用 Intel 的 MPI
 \item \verb`mpicxx` 或者 \verb`mpigxx` 都是 g++ 的一个 wraper， 和 g++ 一样使用即可
-\item 编译完以后， 如果直接运行程序只会有一个 process， 需要用例如 \verb|mpiexec -np 4 ./main.x| 指定进程数量． \verb|mpirun| 也一样．
+\item 编译完以后， 如果直接运行程序只会有一个 process， 需要用例如 \verb|mpiexec -np 4 ./main.x| 指定进程数量． \verb|mpirun| 也基本一样， 但并不在 MPI 标准中．
 \item \verb|MPI_Init(&argc, &argv);| 开始 MPI， \verb|MPI_Finalize();| 结束．
 \item \verb|MPI_Comm_size(MPI_Comm comm, &size);| 获取指定 communicator 的进程数
 \item \verb|MPI_Comm_rank(MPI_Comm comm, &rank);|获取当前进程的 id， 称为 rank．
@@ -24,6 +26,13 @@
 \item \verb|int MPI_Reduce(const void* send_buffer, void* receive_buffer, int count, MPI_Datatype datatype, MPI_Op operation, int root, MPI_Comm communicator);| 把每个进程中的某个变量相加或相乘等， 赋值给 id 为 \verb|root| 的某个变量． 其中 \verb|operation| 可以是 \verb|MPI_MAX, MPI_MIN, MPI_SUM, MPI_PROD|
 \item \verb|int MPI_Allreduce(void *sendbuf, void *recvbuf, int count, MPI_Datatype datatype, MPI_Op op, MPI_Comm comm);| 和 \verb|MPI_Reduce| 一样， 但结果会返回到所有进程．
 \item \verb|int MPI_Barrier(MPI_Comm comm)| 可以同步所有的进程到某个点．
-\item \verb|Scatter()|
-\item \verb|Gather()|
+\item \verb|Scatter()| （未完成）
+\item \verb|Gather()| （未完成）
+\end{itemize}
+
+\subsection{配置集群}
+\begin{itemize}
+\item 配置 host 文件（给每个 ip 一个名称）， 设置免密码 ssh\upref{SSH}．
+\item 设置一个共享网络文件夹\upref{NFS}（应该方法不限）， 把 mpicxx 编译的可执行文件放到里面
+\item \verb|mpirun -np 5 -host localhost,worker1,... ./可执行文件|
 \end{itemize}
