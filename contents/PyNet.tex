@@ -1,0 +1,48 @@
+% Python 网络编程笔记
+
+\begin{itemize}
+\item 参考\href{https://www.tutorialspoint.com/python/python_networking.htm}{这个教程}．
+\item 基本概念： Socket Programming
+\item Sockets are the endpoints of a bidirectional communications channel. Sockets may communicate within a process, between processes on the same machine, or between processes on different continents.
+\item 安装 python \verb|socket| 模块： \verb|pip3 install sockets|
+\end{itemize}
+
+\subsection{一个简单的 python 网络程序}
+\begin{itemize}
+\item 以阿里云为例， 在服务器上， 先用 \verb|ifconfig| 查看 ip 是多少， 这个 ip 未必是公网 ip
+\item 运行 \verb|python3 -m http.server --bind 上面的ip地址 端口号如9000|
+\item 现在就可以在任意电脑浏览器输入 \verb|公网ip:端口号|, 浏览用户文件夹的文件了．
+\end{itemize}
+
+在服务器自己写一个简单的 server.py， 注意这里的 ip 必须是 ifconfig 里面显示的， 而不是 127.0.0.1 或者公网 ip． 用 \verb|python3 server.py| 运行．
+\begin{lstlisting}[language=python]
+import socket               # Import socket module
+
+s = socket.socket()         # Create a socket object
+host = "172.19.190.150"   # socket.gethostname() # Get local machine name
+port = 12345                # Reserve a port for your service.
+s.bind((host, port))        # Bind to the port
+
+s.listen(5)                 # Now wait for client connection.
+while True:
+   c, addr = s.accept()     # Establish connection with client.
+   print('Got connection from', addr)
+   msg = 'Thank you for connecting'
+   c.send(msg.encode())
+   c.close()                # Close the connection
+\end{lstlisting}
+
+再在自己电脑写一个简单的 client.py， 用 \verb|python3 client.py| 运行．
+\begin{lstlisting}[language=python]
+import socket               # Import socket module
+
+s = socket.socket()         # Create a socket object
+host = "47.254.67.252" # socket.gethostname() # Get local machine name
+port = 12345                # Reserve a port for your service.
+
+s.connect((host, port))
+print(s.recv(1024).decode())
+s.close()
+\end{lstlisting}
+
+这时服务器的命令行就会显示 \verb|Got connection from ('120.79.212.166', 45286)|， 自己的电脑会显示 \verb|Thank you for connecting|．

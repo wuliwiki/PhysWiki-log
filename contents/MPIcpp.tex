@@ -6,15 +6,21 @@
 
 本文参考\href{https://www.codingame.com/playgrounds/349/introduction-to-mpi/introduction-to-distributed-computing}{一个教程}， \href{https://people.sc.fsu.edu/~jburkardt/cpp_src/hello_mpi/hello_mpi.html}{入门例程}， \href{https://mpitutorial.com/tutorials/running-an-mpi-cluster-within-a-lan/}{如何配置集群}．
 
-\subsection{基本语法}
+\subsection{安装}
 \begin{itemize}
 \item intel MPI 和 MKL 一样是免费的， google 一下， 下载安装包即可， 运行 \verb`sudo ./install.sh` 安装， 过程和 MKL 差不多
 \item 如果已经安装了 MKL， 可能会提示目录已经存在（不确定 MKL 是否已经包含 MPI）
 \item 安装好以后同样需要在 \verb`~/.bashrc` 中添加路径， 即在文件最后加入命令 \verb`source /opt/intel/compilers_and_libraries_2020.1.217/linux/mpi/intel64/bin/mpivars.sh`
 \item 重启一下 shell， 运行 \verb`mpicxx --help`， 如果进入帮助页面就说明成功了
-\item 尝试直接使用 Intel 的 MPI
 \item \verb`mpicxx` 或者 \verb`mpigxx` 都是 g++ 的一个 wraper， 和 g++ 一样使用即可
-\item 编译完以后， 如果直接运行程序只会有一个 process， 需要用例如 \verb|mpiexec -np 4 ./main.x| 指定进程数量． \verb|mpirun| 也基本一样， 但并不在 MPI 标准中．
+\item 检查 OpenMPI 版本用 \verb|mpiexec --version|， 目前是 4.1.x， \verb|mpicxx --version| 只会给出 g++ 的版本号．
+\item 所有的机器都需要使用同一个版本的 MPI．
+\item 要安装比 apt 更新的版本， 复制 \verb|https://www.open-mpi.org/software/ompi/v4.1/| 里面的压缩包链接， 用 \verb|wget| 下载， 然后解压如 \verb|tar -xzvf openmpi-4.1.4.tar.gz| （要几分钟）． 进入解压文件夹， \verb|./configure|， \verb|make all -j20|， \verb|sudo make install| 即可． 如果 \verb|mpicxx --version| 说找不到 so 文件， 就用 \verb|sudo ldconfig| 即可．
+\end{itemize}
+
+\subsection{基本语法}
+\begin{itemize}
+\item 编译完以后， 如果直接运行程序只会有一个 process， 需要用例如 \verb|mpiexec -np 4 ./main.x| 指定进程数量． \verb|mpirun| 也基本一样， 但并不在 MPI 标准中， 不建议使用．
 \item \verb|MPI_Init(&argc, &argv);| 开始 MPI， \verb|MPI_Finalize();| 结束．
 \item \verb|MPI_Comm_size(MPI_Comm comm, &size);| 获取指定 communicator 的进程数
 \item \verb|MPI_Comm_rank(MPI_Comm comm, &rank);|获取当前进程的 id， 称为 rank．

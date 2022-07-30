@@ -1,9 +1,9 @@
-% 分圆域
-% 分圆域|cyclotomy|域扩张|单位根|本原根|原根|primitive element|切圆域|割圆域
+% 分圆多项式和分圆域
+% 分圆域|cyclotomy|域扩张|单位根|本原根|原根|primitive element|切圆域|割圆域|分圆多项式|切圆多项式|割圆多项式
 
 \addTODO{预备知识待确定}
-\addTODO{加入目录}
-\pentry{本原多项式（线性代数）\upref{PPlyR}}
+
+\pentry{本原多项式（线性代数）\upref{PPlyR}，Galois扩张\upref{GExt}}
 
 
 
@@ -65,9 +65,18 @@ $n$次\textbf{单位根}即形如$x^n-1$的多项式在$\mathbb{C}$中的根，�
 
 \end{example}
 
-\begin{exercise}{}
+\begin{exercise}{}\label{Cycltm_exe1}
 请尝试算几个\autoref{Cycltm_ex1} 中未列出的分圆多项式的例子．
 \end{exercise}
+
+更多的例子，可以参见维基百科\href{https://en.wikipedia.org/wiki/Cyclotomic_polynomial#Examples}{分圆域}，这也是\autoref{Cycltm_exe1} 的部分答案．
+
+
+
+
+
+\subsubsection{分圆多项式的基本性质}
+
 
 下面列出分圆多项式的几个基本性质．
 
@@ -98,7 +107,7 @@ $n$次\textbf{单位根}即形如$x^n-1$的多项式在$\mathbb{C}$中的根，�
 x^n-1 = \prod_{d\mid n}\Phi_d(x)
 \end{equation}
 
-等价表述：不同的次的\textbf{本原单位根}之间无交集，且全体满足$d\mid n$的$d$次\textbf{本原单位根}构成的集合，恰为全体$n$次\textbf{单位根}之集合．
+等价表述：不同次的\textbf{本原单位根}之间无交集，且全体满足$d\mid n$的$d$次\textbf{本原单位根}构成的集合，恰为全体$n$次\textbf{单位根}之集合．
 \end{theorem}
 
 \textbf{证明}：
@@ -132,21 +141,271 @@ x^{2d}-1 = f(x)\Phi_d(x)
 
 
 
-\begin{theorem}{}
-各$\Phi_n$皆是有理数域上的不可约多项式．
+\begin{theorem}{}\label{Cycltm_the5}
+各$\Phi_n$皆是$\mathbb{Q}$上的不可约多项式．
 \end{theorem}
 
 \textbf{证明}：
 
-反设$\Phi_n=f(x)g(x)$，其中$f$和$g$都是次数大于$0$的有理系数多项式．不妨\footnote{我们总可以通过乘以一个正整数，将一个有理系数多项式化为本原多项式．}设$f$的首项系数是$s$，且$f$是整系数多项式，则$f$是本原多项式，$g$的首项系数是$1/s$．
+反设$\Phi_n=f(x)g(x)$，其中$f$和$g$都是次数大于$0$的有理系数多项式．不妨\footnote{总可以选择$f$使之不可约，并且可以乘以一个正整数，将它化为本原多项式．}设$f$是\textbf{不可约本原多项式}，首项系数是$s$，则$g$的首项系数是$1/s$．
 
-由\autoref{Cycltm_the2} ，$\Phi_n$也是本原多项式．于是由\autoref{PPlyR_lem2}~\upref{PPlyR}，知$g(x)$应为本原多项式，故$1/s$也是整数，故$s=1$．因此$g$和$f$都是首一整系数多项式．
+首先讨论$f$和$g$的关系．
 
-任取$\Phi_n$的一根$\varepsilon_i$，则由\autoref{Cycltm_def2} 的互素条件可知，$\varepsilon_i$的全体幂包含了全体$n$次单位根．于是，任取$f$的一根$\alpha$和$g$的一根$\beta$，总存在正整数$k$使得$\beta=\alpha^k$，且$k$与$p$互素（因为$\beta$是本原单位根）．遍历$f$和$g$的所有根，挑出其中使得$k$最小的情况，设该情况为“取$f$的根$\alpha_0$和$g$的根$\beta_0$”．由于$\alpha\neq \beta$，知$k>1$．
+由\autoref{Cycltm_the2} ，$\Phi_n$也是本原多项式．于是由\autoref{PPlyR_lem2}~\upref{PPlyR}，知$g(x)$应为本原多项式，故$1/s$也是整数，故$s=1$．因此$g$和$f$都是\textbf{首一}整系数多项式．
 
-设素数$p$满足$p\mid k$，则$p\not\mid n$，因此$\alpha^p$是本原单位根．
+任取$\Phi_n$的一根$\varepsilon_i$，则由\autoref{Cycltm_def2} 的互素条件可知，$\varepsilon_i$的全体幂包含了全体$n$次单位根．于是，任取$f$的一根$\alpha$和$g$的一根$\beta$，总存在正整数$k$使得$\beta=\alpha^k$，且$k$与$n$互素（因为$\beta$是本原单位根）．遍历$f$和$g$的所有根，挑出其中使得$k$\textbf{最小}的情况，设该情况为“取$f$的根$\alpha_0$和$g$的根$\beta_0$，则$\beta_0=\alpha_0^k$”．由于$\alpha_0\neq \beta_0$，知$k>1$．
+
+设素数$p$满足$p\mid k$，则$p\not\mid n$\footnote{这一条会在证明的最后一段用到．}，因此$\alpha_0^p$是$n$次本原单位根．显然，$\Phi_n(\alpha_0^p)=0$，即$f(\alpha_0^p)$和$g(\alpha_0^p)$中至少一个为零．
+
+设$\alpha_0^p$是$f$的根，那么$\beta_0=\alpha_0^k=(\alpha_0^p)^{k/p}$．由于$k/p<k$，故这违反了“$k$最小”的假设，因此$f(\alpha_0^p)\neq 0$．因此$\alpha_0^p$是$g$的根．又因为“$k$最小”的假设，知$k=p$．
+
+由于$f$不可约，可知$f=\opn{Irr}(\alpha_0, \mathbb{Q})$；又因为$g(\alpha_0^p)=0$，可知$f(x)\mid g(x^p)$．设$g(x^p)=f(x)h(x)$．由于$g(x)$是首一整系数的，故$g(x)$是本原多项式，故$g(x^p)$是本原多项式．由\autoref{PPlyR_lem2}~\upref{PPlyR}，$h(x)$也是本原多项式．
+
+接下来利用上述讨论所得，完成证明．
+
+考虑商映射$\pi:\mathbb{Z}\to\mathbb{Z}/p\mathbb{Z}$，其中$\pi(a)=\bar{a}$．于是$\pi$可以扩展为$\mathbb{Z}[x]\to\mathbb{Z}/p\mathbb{Z}[x]$的映射，也用$\bar{f}$来表示$\pi(f)$．设$g(x)=\sum_i c_ix^i$，记$\bar{g}(x)=\pi(g)(x)=\sum_i \bar{c_i}x^i$．
+
+由于$\mathbb{Z}/p\mathbb{Z}$上任意元素$\bar{a}$都满足$\bar{a}^p=\bar{a}$，故$\qty(\bar{g}(x))^p=\sum_i\bar{c_i}^px^{pi}=\sum_i \bar{c_i}(x^p)^i=\bar{g}(x^p)$．
+
+由于$f(x)\mid g(x^p)$，故$\bar{f}(x)\mid \bar{g}(x^p)$，故$\bar{f}(x)\mid \qty(\bar{g}(x))^p$．所以，$\bar{\Phi}=\bar{f}\bar{g}$在\textbf{其}在$\mathbb{Z}/p\mathbb{Z}$的分裂域上\textbf{有重根}．
+
+已知$\Phi$是可分多项式，无重根，因此由\autoref{SprbEx_cor2}~\upref{SprbEx}，知$\opn{D}\Phi\neq 0$．由于$p\not\mid n$，而$\Phi(x)$的最高次单项式为$x^n$，故$\opn{D}x^n=nx^{n-1}\implies \opn{D} \bar{1}x^n=\bar{n}x^{n-1}\neq 0$，故$\opn{D}\bar{\Phi}\neq 0$．因此$\bar{\Phi}$也\textbf{无重根}．这和上一段的结论矛盾，因此整个反设不成立．
 
 \textbf{证毕}．
+
+
+
+\begin{theorem}{}
+对于素数$p$，$\Phi_p(x)=x^{p-1}+x^{p-2}+\cdots+x+1$．
+\end{theorem}
+
+\textbf{证明}：
+
+由于$p$是素数，因此除了$1$以外的所有$p$次单位根都是本原单位根．因此
+\begin{equation}
+\Phi_p(x) = (x^p-1)/(x-1) = x^{p-1}+x^{p-2}+\cdots+x+1
+\end{equation}
+
+\textbf{证毕}．
+
+
+
+
+
+
+\begin{theorem}{}
+$\Phi_n(0)=\pm 1$，且对于$n>1$，总有$\Phi(0)=1$．
+\end{theorem}
+
+\textbf{证明}：
+
+$\Phi_n(0)$就是全体$n$次本原单位根的积．记$\varepsilon=\exp{2\pi\I/n}$，则$\varepsilon^k$是$n$次本原单位根，当且仅当$k$与$n$互素．
+
+由于单位根的模都是$1$，故其积的模也是$1$．全体$n$次本原单位根之积是$\Phi_n(x)$的常数项，由\autoref{Cycltm_the2} ，是整数．因此必为$\pm 1$．
+
+由于$k$与$n$互素当且仅当$n-k$与$n$互素，故本原单位根的还是本原单位根．当$n>1$时，要么$n$为奇数，则$(-1)^n\neq 0$；要么$n$为偶数，则$2$和$n$不互素，故$-1$不是$n$次本原单位根．所以$n>1$时$-1$不是$n$次本原单位根．于是本原单位根以共轭形式成对出现，每对的乘积都是$1$．
+
+\textbf{证毕}．
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+为了进一步讨论分圆多项式的性质，我们需要回顾\textbf{Möbius函数（数论）}\upref{MbusF}中的一些概念：
+
+
+
+
+\begin{definition}{Möbius函数\footnote{见\autoref{MbusF_def1}~\upref{MbusF}．}}
+Möbius函数$\mu:\mathbb{N}\to\{-1, 0, 1\}$定义为：
+\begin{equation}
+\mu(\prod_{k=1}^r p_k^{f_k})=
+\leftgroup{
+    1, \quad\text{如果}\prod_{k=1}^r p_k^{f_k}=1\\
+    (-1)^r, \quad\text{如果}f_k=1\text{恒成立}\\
+    0, \quad\text{如果有一个}f_k>1
+}
+\end{equation}
+
+其中各$f_k$为正整数，$p_k$为互不相同的素数．
+
+\end{definition}
+
+
+
+
+\begin{lemma}{Möbius反演公式\footnote{见\autoref{MbusF_the3}~\upref{MbusF}}}\label{Cycltm_lem1}
+取映射$f:\mathbb{Z}^+\to\mathbb{Z}^+$，令$S(n)=\sum_{d\mid n}f(d)$，$P(n)=\prod_{d\mid n}f(d)$．则有
+\begin{equation}
+f(n) = \sum_{s\mid n}\mu(s)S\qty(\frac{n}{s})
+\end{equation}
+和
+\begin{equation}
+f(n) = \prod_{s\mid n}\qty(P(\frac{n}{s}))^{\mu(s)}
+\end{equation}
+\end{lemma}
+
+
+
+
+
+
+有了Möbius函数的概念，我们可以得到一个重要的性质：
+
+
+
+\begin{theorem}{Möbius函数表示分圆多项式}\label{Cycltm_the4}
+\begin{equation}\label{Cycltm_eq5}
+\Phi_n(x) = \prod_{d\mid n}(x^d-1)^{\mu(n/d)}
+\end{equation}
+\end{theorem}
+
+
+\textbf{证明}：
+
+由\autoref{Cycltm_the1} ，
+\begin{equation}\label{Cycltm_eq4}
+x^n-1 = \prod_{d\mid n}\Phi_d(x)
+\end{equation}
+
+又由\autoref{Cycltm_lem1} ，令$f(n)=\Phi_n(x)$，其中$x$是\textbf{任意}正整数，于是有
+\begin{equation}\label{Cycltm_eq3}
+\begin{aligned}
+\Phi_n(x)&=\prod_{s\mid n}\qty(\prod_{k\mid \frac{n}{s}}\Phi_k(x))^{\mu(s)}\\
+&=\prod_{s\mid n}\qty(x^{n/s}-1)^{\mu(s)}\\
+&=\prod_{d\mid n}\qty(x^{d}-1)^{\mu(n/d)}
+\end{aligned}
+\end{equation}
+
+再由$x$的任意性得证．
+
+\autoref{Cycltm_eq3} 第二个等号即为\autoref{Cycltm_eq4} ；第三个等号是作代换$d=n/s$的结果，这也说明\autoref{Cycltm_eq5} 有两种表达方式，另一种右边是$\prod_{s\mid n}\qty(x^{n/s}-1)^{\mu(s)}$．
+
+\textbf{证毕}．
+
+
+
+
+
+
+
+
+
+
+
+\begin{theorem}{}\label{Cycltm_the3}
+设$n$是一正整数，其质因数分解为$n=\prod_{k=1}^r p_k^{f_k}$，其中$f_k$是正整数，$p_k$是互不相同的素数．
+
+任取$m=\prod_{k=1}^r p_k^{g_k}$，其中$1\leq g_k\leq f_k$，则有
+\begin{equation}
+\Phi_n(x) = \Phi_m(x^{n/m})
+\end{equation}
+\end{theorem}
+
+\textbf{证明}：
+
+由\autoref{Cycltm_the4} ，
+\begin{equation}
+\Phi_n(x) = \prod_{d\mid n}(x^d-1)^{\mu(n/d)}
+\end{equation}
+故
+\begin{equation}\label{Cycltm_eq6}
+\begin{aligned}
+\Phi_m(x^{n/m}) &= \prod_{s\mid m}(x^{ns/m}-1)^{\mu(m/s)}\\
+&=\prod_{d\mid n}(x^{d}-1)^{\mu(n/d)}
+\end{aligned}
+\end{equation}
+
+\autoref{Cycltm_eq6} 第三个等号是进行代换$d=ns/m$的结果．
+
+% 由此定义，任取正整数$d\mid n$，如果$d\not\mid m$，那么必有$\mu(d)=0$．
+
+\textbf{证毕}．
+
+
+
+
+
+
+
+
+由\autoref{Cycltm_the3} 直接可得以下推论：
+
+\begin{corollary}{}\label{Cycltm_cor1}
+对于素数$p$，$\Phi_{p^k}(x) = \Phi_p(x^{p^{k-1}})$
+\end{corollary}
+
+
+
+
+\begin{example}{\autoref{Cycltm_cor1}  的实例}
+\begin{equation}
+\leftgroup{
+    \Phi_2(x) &= x+1\\
+    \Phi_4(x) &= x^2+1\\
+    \Phi_8(x) &= x^4+1\\
+    \Phi_{16}(x) &= x^8+1
+}
+\end{equation}
+\begin{equation}
+\leftgroup{
+    \Phi_3(x) &= x^2+x+1\\
+    \Phi_9(x) &= x^6+x^3+1\\
+    \Phi_{27}(x) &= x^{18}+x^9+1
+}
+\end{equation}
+\end{example}
+
+
+
+
+\subsection{分圆域}
+
+\begin{definition}{}
+设$\varepsilon_n$是一个$n$次本原单位根，则$\mathbb{Q}(\varepsilon_n)$被称为$n$次\textbf{分圆域（cyclotomic field）}．
+\end{definition}
+
+
+\begin{theorem}{}
+分圆域$\mathbb{Q}(\varepsilon_n)$是有理数域$\mathbb{Q}$的Galois扩张，$[\mathbb{Q}(\varepsilon_n):\mathbb{Q}]=\deg \Phi_n$，且$\opn{Gal}(\mathbb{Q}(\varepsilon_n):\mathbb{Q})\cong U_n$．
+
+其中$U_n$是环$\mathbb{Z}/n\mathbb{Z}$中全体有乘法逆元的元素\footnote{这样的元素又称\textbf{单位}（\autoref{FctTre_def3}~\upref{FctTre}）．}．
+\end{theorem}
+
+\textbf{证明}：
+
+由\autoref{Cycltm_the5} ，$\opn{Irr}(\varepsilon_n, \mathbb{Q})=\Phi_n$．由于$\varepsilon_n$的幂能生成所有$n$次单位根，也包括$\Phi_n$的所有根，故$[\mathbb{Q}(\varepsilon_n):\mathbb{Q}]$是正规扩张．由于$\mathbb{Q}$是完美域，故$[\mathbb{Q}(\varepsilon_n):\mathbb{Q}]$是正规扩张．因此$[\mathbb{Q}(\varepsilon_n):\mathbb{Q}]$是Galois扩张．
+
+又由\autoref{FldExp_the1}~\upref{FldExp}，得证$[\mathbb{Q}(\varepsilon_n):\mathbb{Q}]=\deg \Phi_n$．
+
+记$\mathbb{Z}/n\mathbb{Z}=\{\bar{i}\}_{i=0}^{n-1}$．它同构于$C=\langle \varepsilon_n \rangle$，全体$n$次单位根构成的乘法群．
+
+$\Phi_n$的根的置换，必是$C$到自身的一个自同构．又因为$C$到自身的自同构不改变元素的阶，且$n$次单位根本原当且仅当它是$n$阶的，故$C$到自身的自同构都是本原单位根的置换．因此$\opn{Gal}(\mathbb{Q}(\varepsilon_n):\mathbb{Q})\cong \opn{Aut}C$，即$C$的自同构群．
+
+又由于$\varepsilon_n$是本原单位根，是$C$的生成元，因此$C$的自同构$\sigma$由$\sigma(\varepsilon_n)$唯一确定．记$\sigma_k(\varepsilon_n)=\varepsilon_n^{k+1}$，则$\sigma_k(\alpha)=\alpha\varepsilon_n^k$．
+
+则$\sigma\in \opn{Aut}C$当且仅当$k$与$n$互素（保证$\varepsilon_n^k$是本原单位根）．于是各$\sigma_k$对应各$\bar{k}\in\mathbb{Z}/n\mathbb{Z}$，而“$k$与$n$互素”当且仅当$\bar{k}$有乘法逆元．从而得证$\opn{Aut}C=U_n$．
+
+\textbf{证毕}．
+
+
+
+
+
+
+
+
+
 
 
 

@@ -3,7 +3,7 @@
 
 堆是一个以一颗完全二叉树的结构存储值的数据结构．
 
-堆分为\textbf{大根堆}和\textbf{小根堆}，大根堆的意思是，父节点的值都大于左右两个儿子的值，小根堆则相反．C++ STL 中的 \verb|priority_queue| 优先队列默认就是大根堆．
+堆分为\textbf{大根堆}和\textbf{小根堆}，大根堆的意思是，父结点的值都大于左右两个儿子的值，小根堆则相反．C++ STL 中的 \verb|priority_queue| 是优先队列其实就是堆，默认为大根堆．
 
 以一个例题来讲解堆．
 
@@ -16,4 +16,114 @@
 \item 修改第 $k$ 个插入的数，将其变为 $x$．
 \end{enumerate}
 
-C++ STL 中的堆只能实现前 $3$ 个操作，所以我们这里讲解一下如何使用数组来模拟堆．
+本题要我们实现一个小根堆，根结点是整课树中最小的结点，父结点永远大于左右两个子结点．
+C++ STL 中的堆只能实现前 $3$ 个操作．
+\begin{lstlisting}[language=cpp]
+priority_queue<int, vector<int>, greater<int>> heap;   // 定义小根堆的方式
+int t;
+cin >> t;
+while (t -- )
+{
+    int x;            
+    cin >> x;
+    heap.push(x);   // 向队尾插入一个数 x
+    cout << heap.top() << endl;     // 输出最小值，即队头
+    heap.pop();     // 删除最小值，即删除队头
+}
+\end{lstlisting}
+
+要想实现随机删除和修改，只能用数组来模拟堆，所以我们讲解一下如何使用数组模拟堆．
+
+首先需要一个数组 \verb|h[N]| 用于存储堆中的元素，由于需要在任意位置进行删除和修改，所以需要多开两个数组 \verb|ph[N]| 和 \verb|hp[N]|．
+
+\verb|ph[i]| 的意思是第 $i$ 个插入的数在堆中的下标是什么，而 \verb|hp[i]| 的意思是在堆中下标是 $i$ 的点是第几个插入的．
+比如 \verb|ph[1] = a|，\verb|hp[a] = 1|．
+
+因为是随机插入和删除，所以在堆中删除或者插入某个值的话必定要进行调整．分为 $up$ 操作和 $down$ 操作，$up$ 是如果一个数不符合堆的性质（太小了）就要往上调整，$down$ 也同理，因为某个数不符合堆的性质，就要往下调整．
+
+堆的存储只用开一个一维数组 \verb|h[N]| 就可以了，父结点是 $i$，左子结点就是 $2 \times i$，右子结点就是 $2 \times i + 1$．
+$2 \times i$ 可以写成 $\mathtt{u << 1}$ ，$2 \times i + 1$ 可以写成 $\mathtt{u << 1 | 1}$．比如父结点的下标是 $1$，左子结点的下标就是 $2$，右子结点的下标就是 $3$．有一点需要注意：下标必须从 $1$ 开始，如果从 $0$ 开始的话左子结点和右子结点的下标均为 $0$，这样显然是不行的．
+
+插入一个数，就直接在堆的结尾插入一个数就可以了，然后再 $up$ 一遍．
+
+输出最小值直接输出堆顶，一定是最小值．
+
+删除最小值直接删除堆顶不太好删，我们可以把堆的结尾的数与堆顶的数交换，再删除堆的结尾的数（交换完之后堆的结尾的数就是堆顶，即最小值）删除，然后再 $down$ 一遍，这样就实现了删除最小值．
+
+删除任意一个数与删除最小值类似，都是把堆的结尾的数与要删除的数交换，然后再删除堆的结尾的数，最后要注意进行 $up$ 或 $down$ 操作，为了不判断，干脆两个操作都写上，虽然两个函数都执行了，但其中只有一个函数对堆有影响．
+
+修改任意一个数直接修改就好了，最后也要注意进行 $up$ 或 $down$ 操作．
+
+因为有任意删除和修改操作，涉及到第 $k$ 个插入的数，所以不能直接知道第 $k$ 个插入的数在堆中的下标是多少，所以需要写一个独特的 $\mathtt{swap}$ 操作，就有了前面所提到的两个数组 \verb|ph[N]| 和 \verb|hp[N]|．
+
+具体看一下代码：
+
+\begin{lstlisting}[language=cpp]
+void heap_swap(int a, int b)
+{
+    swap(hp[a], hp[b]);
+    swap(ph[hp[a]], ph[hp[b]]);
+    swap(h[a], h[b]);
+}
+\end{lstlisting}
+
+这三行的代码的意思是：先交换一下 \verb|hp| 数组，再交换一下对应的 \verb|ph| 数组，最后再交换堆中的元素．
+
+举个例子：
+第一个插入的数是 $a$，第二个插入的数是 $b$，所以：
+
+\verb|hp[a] = 1|、\verb|hp[b] = 2|、\verb|ph[hp[a]] = ph[1] = a|、\verb|ph[hp[b]] = ph[2] = b|、\verb|h[1] = 3|、\verb|h[2] = 4|．
+
+先交换一下 \verb|hp| 数组就有：\verb|hp[a] = 2|，\verb|hp[b] = 1|．
+
+再交换一下对应的：\verb|ph| 数组就有：\verb|ph[hp[a]] = ph[2] = a|，\verb|ph[hp[b]] = ph[1] = b|．
+
+最后再交换一下对应的 \verb|h| 数组：\verb|h[1] = 4|，\verb|h[2] = 3|．
+
+具体的可以看一下图片：
+\begin{figure}[ht]
+\centering
+\includegraphics[width=14．25cm]{./figures/heap_1.png}
+\caption{交换前} \label{heap_fig1}
+\end{figure}
+
+\begin{figure}[ht]
+\centering
+\includegraphics[width=14.25cm]{./figures/heap_2.png}
+\caption{交换后} \label{heap_fig2}
+\end{figure}
+
+看一下 $down$ 操作：
+
+\begin{lstlisting}[language=cpp]
+void down(int u)
+{
+    int t = u;    // t 为：父结点、左子结点、右子结点三者的最小值
+    if ((u << 1) <= cnt && h[u << 1] < h[t]) t = u << 1;
+    if ((u << 1 | 1) <= cnt && h[u << 1 | 1] < h[t]) t = u << 1 | 1;
+    if (u != t)    // 需要交换
+    {
+        heap_swap(u, t);
+        down(t);
+    }
+}
+\end{lstlisting}
+
+$up$ 操作：
+
+\begin{lstlisting}[language=cpp]
+
+// up 操作，只和我的父结点进行比较
+void up(int u)
+{
+    int t = u;
+    if (u / 2 && h[u / 2] > h[t]) t = u / 2;
+    if (u != t)
+    {
+        heap_swap(u, t);
+        up(t);
+    }
+}
+\end{lstlisting}
+
+以上就是堆的基本操作了．

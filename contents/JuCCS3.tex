@@ -1,0 +1,253 @@
+% Jula 函数的基本编写方式
+% 函数 基本 编写方式
+
+本文授权转载自郝林的 《Julia 编程基础》． 原文链接：\href{https://github.com/hyper0x/JuliaBasics/blob/master/book/ch12.md}{第 12 章 函数与方法}．
+
+\subsubsection{12.3 基本的编写方式}
+
+\textbf{12.3.1 标准形式}
+
+在 Julia 中，使用标准的形式编写函数需要以关键字\verb|function|和函数的签名为首行，并以单独的关键字\verb|end|为尾行．夹在这两行之间的就是函数的主体，或称函数体．函数体中可以有若干的表达式和语句，包括各种复杂的流程控制语句．下面是一个我们之前写过的例子：
+
+\begin{lstlisting}[language=julia]
+function sum1(a, b)
+    a + b
+end
+\end{lstlisting}
+
+在这个例子中，\verb|sum1(a, b)|就是函数的签名．它与关键字\verb|function|之间是有空格分隔的．另外，\verb|a + b|是该函数主体中的唯一的一个表达式．
+
+函数的签名由函数名称、参数列表和结果声明组成．其中，函数名称和参数列表是必须要有的，而结果声明是可有可无的．函数签名中的参数列表负责声明当前函数需要接受的所有参数．这些参数可以是必选的，也可以是可选的．多个参数声明之间需要由英文逗号分隔．注意，即使一个函数没有任何参数，圆括号在这里也是必不可少的．
+
+这个\verb|sum1|函数的签名还是很简单的．它的参数列表中没有携带任何的参数类型声明．从这个角度讲，它的功能是比较泛化的．当我们没有为函数定义中的某个参数指定类型时，Julia就会把它的类型设置为\verb|Any|．由于\verb|Any|类型是Julia中唯一的顶层类型，所以这就相当于没有任何类型方面的约束．因此，我们在调用函数的时候可以把任意类型的值传给这样的参数．不过，对于这个\verb|sum1|函数的调用是否能够成功完成，还要取决于\verb|+|函数及其衍生方法是否对那些参数值的实际类型有所支持．
+
+我们当然可以为\verb|sum1|函数的参数添加类型声明，以使得它的功能更加具体化．比如：
+
+\begin{lstlisting}[language=julia]
+function sum1(a::Number, b::Number)
+    a + b
+end
+\end{lstlisting}
+
+在这个函数定义中，参数\verb|a|和\verb|b|的类型都被声明为了\verb|Number|．这里的\verb|::Number|就是类型声明．它由符号\verb|::|和一个类型字面量组成．一个参数声明当中的参数名称和类型声明总是应该紧挨在一起的．虽然中间夹杂空格对定义的识别不会有什么实质上的影响，但是这显然会降低其可读性．
+
+这两个\verb|sum1|函数（更确切地说，它们都是衍生方法）可以同时存在．当我们传入的两个参数值的类型都是\verb|Number|（及其子类型）时，第二个\verb|sum1|函数就会被调用．否则，第一个\verb|sum1|函数才会被调用．关于此，你同样可以使用\verb|@which|宏进行验证．
+
+另一方面，这两个\verb|sum1|函数的定义中并没有结果声明，可它们依然可以返回一个结果值．更宽泛地讲，在这种情况下，函数可以返回任何类型的结果值．而且，Julia的函数总是会有一个结果值的，只不过这个结果值可以是\verb|nothing|．这时就相当于函数没有结果，或者说函数返回的结果没有实际意义．我们之前展示过的函数\verb|greet|就是一个没有结果的函数．示例如下：
+
+\begin{lstlisting}[language=julia]
+julia> greet() == nothing
+Hello World!true
+
+julia> 
+\end{lstlisting}
+
+我先调用了函数\verb|greet|，紧接着用操作符\verb|==|去判断该函数返回的结果值是否等于\verb|nothing|．注意看，在REPL环境回显的内容中，\verb|Hello World!|是\verb|greet|函数向标准输出打印的内容，而随后的\verb|true|才是\verb|==|判断的结果．
+
+函数\verb|greet|不会返回任何有意义的结果值．这一点我们并不难看出来．可是，\verb|sum1|函数返回的结果值又会是什么？你可能会说，肯定是表达式\verb|a + b|的求值结果．这是没错的．但是，这背后的规则是什么呢？
+
+在缺省情况下，Julia会把函数实际执行的流程当中的最后一个表达式的求值结果作为该函数的结果值．因此，\verb|greet|函数返回的结果值就是其中最后一个表达式\verb|print("Hello World!")|的求值结果\verb|nothing|．而\verb|sum1|函数返回的结果值则是其中最后一个表达式\verb|a + b|的求值结果．
+
+对于如此简单的函数，即便我不说明规则，你可能也猜得出来．然而，函数中的流程越复杂，这一规则就显得越重要．到了那时，我们首先要搞清楚的就是，函数实际执行的流程到底是什么．关于这一点，我在后面还会谈到，现在先来看另一个问题．
+
+既然函数无论如何都会返回一个结果值，那么函数定义中的结果声明起到的作用又是什么呢？这其实很简单，那就是：向我们表明该函数返回的结果值的类型．对于函数的编写者来说，这就是一种约束．当函数实际返回的结果值无法被转换成其定义中声明的结果类型的值时，Julia就会抛出一个\verb|MethodError|类型的异常．例如：
+
+\begin{lstlisting}[language=julia]
+julia> function sum2(a::Number, b::Number)::String
+           a + b
+       end
+sum2 (generic function with 1 method)
+
+julia> sum2(1, 2)
+ERROR: MethodError: 
+    Cannot `convert` an object of type Int64 to an object of type String
+# 省略了一些回显的内容．
+
+julia> 
+\end{lstlisting}
+
+而对于函数的使用者来说，结果声明有利于他们对函数的进一步认识，并且可以帮助他们更加合理地运用函数．所以说，函数的结果声明也是程序文档的一部分．类似的，周全的函数参数列表也会起到这样的作用．不过，尽管如此，它们依然不能完全取代正式的函数注释和文档．
+
+到了这里，你应该已经知道了编写函数结果声明的方式．虽然上面这个\verb|sum2|函数的定义本身无意义，但是它可以告诉我们，函数的结果声明是紧跟在其参数列表之后的，并且它其实只是一个类型声明而已．
+
+从定义的角度讲，函数的结果值只可能有一个．可是，从实际运用的角度说，函数实际上是可以同时返回多个结果值的．请看下面的函数定义：
+
+\begin{lstlisting}[language=julia]
+function sum3(a, b)
+    try
+        a + b, nothing
+    catch e
+        0, e
+    end
+end
+\end{lstlisting}
+
+这个名叫\verb|sum3|的函数中只有一条\verb|try|语句．这条\verb|try|语句由一条\verb|try|子句和一条\verb|catch|子句组成．如果\verb|a + b|不会引发任何异常，那么\verb|try|子句中的表达式\verb|a + b, nothing|就会被完全地求值．又由于，这个表达式在此时会是\verb|sum3|函数实际执行的流程当中的最后一个表达式，所以它的求值结果就会成为\verb|sum3|函数返回的那个结果值．请注意，这个表达式包含了两个由英文逗号分隔的、独立的子表达式．因此，\verb|sum3|函数在此时实际上会返回两个独立的结果值，即：\verb|a + b|的求值结果和一个表示了没有异常发生的值\verb|nothing|．
+
+我们再来说另一种情况．如果\verb|a + b|引发了一个异常，那么\verb|catch|子句就会被执行，其中的表达式\verb|0, e|的求值结果就会被作为\verb|sum3|函数的结果值．类似的，此时的\verb|sum3|函数也会返回两个独立的结果值，即：默认的相加结果值\verb|0|和\verb|catch|子句捕获到的那个异常值．下面，我们就实际调用一下\verb|sum3|函数（假设该函数已经由REPL环境解析了）：
+
+\begin{lstlisting}[language=julia]
+julia> sum3(1, 2)
+(3, nothing)
+
+julia> typeof(ans)
+Tuple{Int64,Nothing}
+
+julia> sum3("a", "b")
+(0, MethodError(+, ("a", "b"), 0x00000000000065c1))
+
+julia> typeof(ans)
+Tuple{Int64,MethodError}
+
+julia> 
+\end{lstlisting}
+
+在一个函数同时返回多个结果值的时候，Julia会自动地把这些结果值包装成一个元组．如此一来，从表面上看，函数返回的依然是一个单一的结果值，并没有违反函数定义方面的规则．
+
+\verb|sum3|函数在经过了上述的两个调用之后分别返回了符合我们预期的结果值，而且结果值的类型也都是元组．但要注意，这两个元组的类型中的第二个类型参数值是不同的．你现在可以思考一下，如果我们要为\verb|sum3|函数的定义添加结果声明，并且让该声明起到程序文档的作用，那么应该怎样去编写它呢？
+
+我们把\verb|sum3|函数的结果声明写成\verb|::Tuple{Number, Any}|怎么样？在\verb|sum3|函数返回的元组中，第一个元素值总会是一个数值．而这些元组中的第二个元素值可能是\verb|Nothing|类型的，也可能是\verb|Exception|类型的．因此，这个结果声明确实是可以的．不过，它还可以变得更好．
+
+你还记得我们之前讲过的底层类型\verb|Union|吗？我们可以利用它编写出一个联合类型，即\verb|Union{Nothing, Exception}|，并把它作为\verb|sum3|函数的结果声明中的第二个类型参数值．代码如下：
+
+\begin{lstlisting}[language=julia]
+julia> function sum3(a, b)::Tuple{Number, Union{Nothing, Exception}}
+           try
+               a + b, nothing
+           catch e
+               0, e
+           end
+       end
+sum3 (generic function with 1 method)
+
+julia> sum3(1, 2)
+(3, nothing)
+
+julia> sum3("a", "b")
+(0, MethodError(+, ("a", "b"), 0x00000000000065c1))
+
+julia> 
+\end{lstlisting}
+
+你或许会感觉这样写有些啰嗦．如果确实是这样，我们就想到一块去了．下面是经过我简化后的代码：
+
+\begin{lstlisting}[language=julia]
+function sum3(a, b)::Union{Number, Exception}
+    try
+        a + b
+    catch e
+        e
+    end
+end
+\end{lstlisting}
+
+\verb|sum3|函数不再同时返回多个结果值．不过前提是，我们使用\verb|::Union{Number, Exception}|作为该函数的结果声明．这样的话，它就可以只使用一个单一的结果值来表示两种不同的执行状态了．
+
+一个更加重要的建议是，通过对输入的合理约束，从源头掐断引发异常的可能性．就像这样：
+
+\begin{lstlisting}[language=julia]
+function sum3(a::Number, b::Number)::Number
+    a + b
+end
+\end{lstlisting}
+
+我为\verb|sum3|函数的两个参数添加了类型声明．由于两个数值肯定是能够相加的，所以原来的\verb|try|语句就不再有必要了．随后，函数的结果声明也可以变得更加简单．虽然很多时候都会比这里的情况复杂得多，简化代码并不这么容易，但这正是我们努力的方向——尽量提前进行约束和检查以降低函数中主流程的复杂度和发生异常的可能性．
+
+\textbf{12.3.2 简洁形式}
+
+一旦我们能够把一个函数的函数体写得足够简单，就可以把它的定义简写成单行的代码，如：
+
+\begin{lstlisting}[language=julia]
+sum3(a, b) = a + b
+\end{lstlisting}
+
+这与前面用到的\verb|greet|函数的定义方式是一样的，可以被叫做函数定义的简洁形式．我们在以前已经谈论过很多次这种定义方式了．
+ 
+我在这里再正式地描述一下．不像标准的定义方式，函数的简洁形式没有\verb|function|，没有\verb|end|，没有换行．我们需要用符号\verb|=|把函数的签名和函数的主体分隔开．这看起来与定义变量的方式很相似，也更加贴近数学中的函数定义．
+
+别看函数定义的简洁形式只能有一行，我们仍然可以在这一行里塞下流程控制语句（在这里也可以叫做复合表达式）．比如：
+
+\begin{lstlisting}[language=julia]
+sum3(a, b) = try a+b catch e e end
+\end{lstlisting}
+
+请注意，在此函数定义中的\verb|catch|关键字的右边有两个标识符\verb|e|．它们担任的角色是不同的．靠近\verb|catch|的那个标识符\verb|e|代表的总是\verb|catch|子句携带的用于承载异常值的变量．而靠近\verb|end|的\verb|e|代表的则是\verb|catch|子句中的一个表达式．如果这里只写了一个\verb|e|，那么Julia就会把它当作\verb|catch|子句携带的那个变量．从而，当\verb|a + b|引发异常时，这个\verb|sum3|函数返回的结果值就会是\verb|nothing|．另外，在这个定义的最右边的那个\verb|end|是属于\verb|try|语句的．别忘了，函数的简洁定义并不以\verb|end|结尾．
+
+不只是\verb|try|语句，我们还可以在其中写下\verb|if|语句，如：
+
+\begin{lstlisting}[language=julia]
+sum4(a, b) = if isa(a, Number) && isa(b, Number) a+b
+  else MethodError(+, (a, b)) end 
+\end{lstlisting}
+
+而且，这里还可以有更复杂一些的\verb|for|语句和\verb|while|语句等．另外，如果函数体中需要包含多条语句，那么我们就必须使用英文分号和圆括号，并以此消除代码的歧义．在这里，英文分号用于分隔多条语句，而圆括号则用于包裹函数体中的所有语句．例如：
+
+\begin{lstlisting}[language=julia]
+sum5(a, b) = (res = 0; err = nothing;
+  try res = a + b catch e err = e end; (res, err))
+\end{lstlisting}
+
+请注意，如果函数中的流程不是非常简单的话，我们通常就不会用简洁形式去定义它．如你所见，尽管我们可以在简洁定义的函数体中塞下那些复杂的语句，可是代码的可读性也会大打折扣．在这种情况下，标准的定义方式才是更好的选择．
+
+无论怎样，以简洁形式定义函数通常都会减少我们的工作量，并可以使一些仅包含了简单逻辑的函数看起来更加清晰．不过，这还不是最简单的函数定义方式．
+
+\textbf{12.3.3 匿名函数}
+
+我们之前在讲\verb|sort|函数的时候使用过一种没有名称的函数，也被称为匿名函数．匿名函数的定义只包含两个部分，即：参数列表和函数体．这两个部分之间需要由符号\verb|->|分隔．例如：
+
+\begin{lstlisting}[language=julia]
+(a, b) -> a+b
+\end{lstlisting}
+
+匿名函数的参数列表在定义中位于\verb|->|的左侧．如果参数列表中包含了多个参数，那么它就必须由一个圆括号包裹．若参数只有一个，则可以省略掉圆括号．此外，匿名函数的参数列表也可以是空的．示例如下：
+
+\begin{lstlisting}[language=julia]
+() -> (res = 0; for e in 1:10 res += e end; res)
+\end{lstlisting}
+
+在这种情况下，参数列表中的圆括号也是不能省略的．
+
+匿名函数的函数体在定义中位于\verb|->|的右侧，用于计算和产生结果值．这里的函数体所产生的结果值可以只有一个，也可以有多个．若有多个结果值，那么我们就必须使用某种容器去包装它们．在这里，Julia是不会自动对它们进行包装的．例如：
+
+\begin{lstlisting}[language=julia]
+() -> (res = 0; max = 10; for e in 1:max res += e end; (res,max))
+\end{lstlisting}
+
+不过，与有名函数的简洁定义不同，匿名函数的定义可以占据多行．对于一个多行的匿名函数定义，我们需要使用关键字\verb|function|和\verb|end|来指明它的边界，就像这样：
+
+\begin{lstlisting}[language=julia]
+function ()
+    res = 0
+    max = 10
+    for e in 1:max res += e end;
+    res,max
+end
+\end{lstlisting}
+
+这显然与函数的标准定义基本相同．只不过在它的参数列表的左边并没有那个用于表明函数名称的标识符．
+
+对于匿名函数的定义和有名函数的简洁定义，Julia在函数体编写方面的语法规则是趋同的，只有很小的差别．而我对此的编写建议也是一样的，即：尽量保持简单．尤其在编写匿名函数的时候，我们更应该尽可能地去简化函数体．否则宁可不使用匿名函数．我这么说的原因与匿名函数的具体用途有关．
+
+我们为一个程序定义起名字的最主要原因是，便于日后对它们的引用以及复用．反过来讲，如果一个程序定义只会在某段代码中使用一次，那么我们就没有必要为它命名．匿名函数正是为此而生的．它为程序的编写者们提供了一种相当快捷的函数定义方式，同时还避免了无用代码的出现．
+
+由于一个Julia函数要想被调用就必须有名字，所以匿名函数的主要用途是作为传给其他函数的参数值，或者作为其他函数返回的结果值．比如，我们在调用\verb|sort|函数时可以这样给予它需要的参数值：
+
+\begin{lstlisting}[language=julia]
+julia> sort([(1,2), (2,1), (4,0)], by=(e)->e[2])
+3-element Array{Tuple{Int64,Int64},1}:
+ (4, 0)
+ (2, 1)
+ (1, 2)
+
+julia> 
+\end{lstlisting}
+
+匿名函数在被传入其他函数之后就会与相应的参数名绑定在一起，随后就可以被调用了．相似的，一个由其他函数返回的匿名函数一般也会被随即赋给某个变量或者字段．当然了，我们也可以编写一个匿名函数，并直接把它赋给一个变量或字段．
+
+一般来说，只要不属于上述这几种情况，匿名函数就是不适用的．我们很可能需要考虑先使用其他的方式定义好函数，然后再进行引用或者调用．
+
+好了，现在让我们来稍微总结一下．
+
+总的来说，Julia 的函数有四种编写方式．一般的函数，即那些有名称的函数，可以使用标准形式或者简洁形式来编写．而匿名函数也有两种编写方式，分别对应于单行的定义和多行的定义．不过，对于匿名函数来说，多行的定义并不多见．因为它显得有些复杂了，与匿名函数的适用场景并不相符．
+
+有名函数的标准定义需要多行代码．这是使用最广泛的一种定义方式，也是 Julia 函数最初的样子．而有名函数的简洁定义只能有一行代码，这也约束了它的逻辑复杂度．虽然其中可以有流程控制语句，但是在绝大多数情况下都不会出现嵌套的语句．相比之下，匿名函数的定义更应该保持简约．这与它的用途有关．匿名函数的主要用途是直接被当作普通的值来传递和赋予．一旦其逻辑趋于复杂，通常就会对代码的可读性产生明显的负面影响．

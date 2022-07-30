@@ -1,0 +1,62 @@
+% 晶格动力学
+% 晶格动力学|晶格振动|声子
+
+\pentry{晶格振动导论\upref{LatVib}，一维双原子链晶格\upref{twatom}}
+\subsection{简单晶格}
+\subsubsection{晶格的势能和力常数}
+从一维晶格的动力学推广到三维晶格的动力学是容易的，以简单晶格为例，假设晶体的原胞数为 $N$，每个原胞中仅含一个原子，其质量为 $M$．晶体中第 $l$ 个原胞的原子的平衡位置为 $\bvec R_l=\sum_{i=1}^3 l_i\bvec a_i$，偏离平衡位置的位移为 $\bvec u_l$．即
+\begin{equation}
+\bvec X_l(t)=\bvec R_l+\bvec u_l(t)
+\end{equation}
+晶格振动的总动能为
+\begin{equation}
+T=\frac{1}{2}\sum_{l,a} M \dot{u_l^\alpha}\dot{u_l^\alpha},\alpha=x,y,z
+\end{equation}
+为了描述晶格的动力学，需要知道这个多体体系的势能．设平衡状态晶体的势能为 $\Phi_0$，平衡状态为势能最低点，那么它在平衡位置处关于原子位移的一阶导也为 $0$．我们关注其二阶导
+\begin{equation}
+\Phi_{\alpha\beta}(l,l')=\qty(\pdv{^2\Phi}{u_l^\alpha\partial u_{l'}^\beta})_{\bvec u=0}=\Phi_{\alpha\beta}(l-l')=\Phi_{\beta\alpha}(l'-l)
+\end{equation}
+因此我们可以将系统的势能在平衡态附近进行泰勒展开，其二次项系数就是 $\Phi_{\alpha\beta}(l,l')$．类似于晶格振动的动力学过程，原子偏离平衡态的位移是微小的，于是我们暂时地忽略高次项的影响．$\Phi_{\alpha\beta}(l,l')$ 的物理意义是：$l'$ 的原子沿 $\beta$ 方向位移单位距离时，它对 $l$ 原子的作用力沿 $-\alpha$ 方向的分量．因此它被称为\textbf{力常数}．换言之，
+\begin{equation}\label{latdyn_eq1}
+F_\alpha(l)=-\pdv{\Phi}{u_l^\alpha}=-\sum_{l'\beta}\Phi_{\alpha\beta}(l-l')u_{l'}^\beta
+\end{equation}
+
+当刚体作整体平移时，原子仍处于平衡状态，所以可以得到力常数的关系式
+\begin{equation}
+\sum_{l'}\Phi_{\alpha\beta}(l-l')=0
+\end{equation}
+\subsubsection{晶格的振动}
+定义 $\Delta \Phi=\Phi-\Phi_0$（相当于重新选择能量零点为基态能量），对晶体的势能泰勒展开到二次方项，我们将哈密顿量简写为
+\begin{equation}
+H=T+\Delta \Phi=\frac{1}{2M}\sum_{l,\alpha}p_l^\alpha p_l^\alpha + \frac{1}{2}\sum_{l,a}\sum_{l',\beta}\Phi_{\alpha\beta}(l-l')u_l^\alpha u_{l'}^\beta
+\end{equation}
+根据\autoref{latdyn_eq1}，对于每一个原子，可以写出牛顿方程
+\begin{equation}\label{latdyn_eq2}
+M \ddot{u}_l^\alpha = -\sum_{l',\beta}\Phi_{\alpha\beta}(l-l')u_{l'}^\beta
+\end{equation}
+从分析力学的角度看，$u_l^\alpha$ 是广义坐标，$p_l^\alpha=M\dot{u}_l^\alpha$ 为其共轭动量．而上述方程就是哈密顿正则方程 $\dot{p_l^\alpha}=-\pdv{H}{u_l^\alpha}$．后面我们将看到，在正则量子化之后，$u_l^\alpha$ 和 $p_l^\alpha$ 将满足对易关系式，而晶格的振动能量将不再是连续的，而是分立的．晶格的振动激发就是我们所称的“声子”．
+
+每一种振动模式对应一种声子的激发，而当振动模式具有平面波的形式时，它将对应于特定动量的声子．我们希望求出振动模式的具体形式．设格波解
+\begin{equation}
+u_l^\alpha = u^\alpha(\bvec k) \exp(i\bvec k\cdot \bvec R_l)
+\end{equation}
+则这一格波对应于波长 $2\pi/|\bvec k|$ 的集体振动．代入 \autoref{latdyn_eq2} 后得到
+\begin{equation}
+\begin{aligned}
+M\ddot{u}^\alpha(\bvec k)&=-\sum_{\beta}\sum_{l'}\Phi_{\alpha\beta}(l-l')u^\beta(\bvec k)\exp(-i\bvec k\cdot(\bvec R_l-\bvec R_l'))\\
+\ddot{u}^\alpha(\bvec k)&=-\sum_{\beta}D_{\alpha\beta}(\bvec k)u^\beta(\bvec k)
+\end{aligned}
+\end{equation}
+其中 $D_{\alpha\beta}(\bvec k)$ 与 $l$ 无关，这是由于晶格的周期性边界条件和平移不变性．它的表达式为
+\begin{equation}
+D_{\alpha\beta}(\bvec k)=\frac{1}{M}\sum_l \Phi_{\alpha\beta}(l)\exp(-i\bvec k\cdot \bvec R_l)
+\end{equation}
+因此，我们通过假设格波解的方式，将原来的 $3N$ 个方程转变为 $3$ 个方程．$D_{\alpha\beta}(\bvec k)$ 是 $3\times 3$ 矩阵，它对应于力常数的傅里叶变换，也被称为动力矩阵．继续设 $u(\bvec k)$ 有一个 $\exp(-i\omega t)$ 的因子，则可以得到动力矩阵的本征方程
+\begin{equation}
+\omega^2 u^\alpha(\bvec k)=\sum_{\beta}D_{\alpha\beta}(\bvec k)u^\beta(\bvec k)
+\end{equation}
+$\omega$ 和 $\bvec k$ 所满足的\textbf{色散关系}由久期方程决定
+\begin{equation}
+\rm{det} |D_{\alpha\beta}(\bvec k)-\omega^2\delta_{\alpha\beta}|=0
+\end{equation}
+
