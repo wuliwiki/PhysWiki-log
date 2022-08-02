@@ -1,0 +1,111 @@
+% 张量的对称化和交错化
+% 对称化|交错化
+
+\begin{issues}
+\issueTODO
+\end{issues}
+
+\pentry{张量的坐标\upref{CofTen}，置换群\upref{Perm}}
+
+张量可按选出来的共变或逆变指标的集合来讨论对称性和斜对称性．由于张量的共边和逆变指标的对称性（即共边和逆变或矢量和对偶矢量的区别仅在于原矢量空间的选择），在讨论张量的对称性和斜对称性时可直接将张量限制在 $(p,0)$ 型或 $(0,p)$ 型张量，而不减少一般性．比如：讨论张量 $T^{i_1 i_2\cdots i_p}$ 和 ${S_{i_1}}^{i_2\cdots i_p}$ 在指标 $\{i_1,i_2\}$ 上的对称性质没有任何区别，只需将 $T$ 的上指标 $i_1$ 当作下指标即可移值到张量 $S$．故在本词条里，我们总是将张量限制为 $(p,0)$ 型张量．并且讨论的是这 $p$ 个指标的对称性和斜对称性，而不是它的一部分（因为在讨论某些指标的（斜）对称性质的时候，只需将其它指标当作固定的就变成这里讨论的情形）．
+\subsection{张量的对称化}
+设 $T\in \mathbb{T}_p^0(V)$ （\autoref{CofTen_def1}~\upref{CofTen}），即
+\begin{equation}
+T=\sum_{i_1,\cdots,i_p}T_{i_1,\cdots,i_p}e^{i_1}\otimes\cdots\otimes e^{i_p}
+\end{equation}
+而 $S_p$ 是作用在指标集合 $\{1,2,\cdots,p\}$ 上的 $p$ 阶置换群\upref{Perm}．
+
+对任意置换 $\pi\in S_p$ ，定义映射：
+\begin{equation}\label{SIofTe_eq1}
+f_\pi(T)(x_1,x_2,\cdots,x_p):=T(x_{\pi1},\cdots,x_{\pi p})
+\end{equation}
+其中，$x_i$ 是以 $i$ 为指标的矢量．
+
+\begin{theorem}{}
+$\forall \pi,\sigma\in S_p$ 都有 
+$f_{\pi}(T)\in\mathbb{T}_p^0,\quad f_\pi \circ f_\sigma=f_{\pi\sigma}$ 且
+\begin{equation}\label{SIofTe_eq2}
+f_{\pi}(T)=\sum_{i_1\cdots i_p}T_{i_{\pi1}\cdots i_{\pi p}}e^{i_1}\otimes\cdots\otimes e^{i_p}
+\end{equation}
+上式等价于
+\begin{equation}\label{SIofTe_eq3}
+f_{\pi}(T)=\sum_{i_1\cdots i_p}T_{i_1\cdots i_p}e^{i_{\pi^{-1}1}}\otimes\cdots\otimes e^{i_{\pi^{-1}p}}
+\end{equation}
+\end{theorem}
+\textbf{证明：}
+
+1．$f_\pi(T)\in\mathbb{T}_p^0$
+
+不失一般性，设 $\pi k=1$，那么由\autoref{SIofTe_eq1} 
+\begin{equation}
+\begin{aligned}
+f_\pi(T)(\alpha x_1+\beta y_1,x_2,\cdots,x_p)&=T(x_{\pi1},\cdots,\alpha x_1+\beta y_1,\cdots,x_{\pi p})\\
+&=\alpha T(x_{\pi1},\cdots,x_1,\cdots,x_{\pi p})+\beta T(x_{\pi1},\cdots,y_1,\cdots,x_{\pi p})\\
+&=\alpha f_{\pi}(T)(x_1,x_2,\cdots,x_p)+\beta f_{\pi}(T)(y_1,x_2,\cdots,x_p)
+\end{aligned}
+\end{equation}
+
+2. $f_\pi \circ f_\sigma=f_{\pi\sigma}$
+
+由\autoref{SIofTe_eq1} 和函数的复合，有
+\begin{equation}
+\begin{aligned}
+f_\pi\circ f_\sigma(T)(x_1,\cdots,x_p)&=f_\pi\circ T(x_{\sigma1},\cdots,x_{\sigma p})=f_\pi(T)(x_{\sigma1},\cdots,x_{\sigma p})\\
+&=T(x_{\pi\sigma1},\cdots,x_{\pi\sigma p})=f_{\pi\sigma}(T)(x_1,\cdots,x_p)
+\end{aligned}
+\end{equation}
+
+
+3.\autoref{SIofTe_eq2} ，\autoref{SIofTe_eq3} 的证明：
+
+由张量坐标的定义（\autoref{CofTen_def2}~\upref{CofTen}）
+\begin{equation}
+\begin{aligned}
+f_{\pi}(T)_{i_1\cdots i_p}&=f_{\pi}(T)(e_{i_1},\cdots,e_{i_p})=T(e_{i_{\pi1}},\cdots,e_{i_{\pi p}})=T_{i_{\pi1}\cdots i_{\pi p}}
+\end{aligned}
+\end{equation}
+于是由\autoref{CofTen_the1}~\upref{CofTen}，即得\autoref{SIofTe_eq2} ，将\autoref{SIofTe_eq2} 指标中的 $i$ 换为  $\pi^{-1} i$，即得\autoref{SIofTe_eq3} ．
+
+\textbf{证毕！}
+
+若设 $f_\pi(\alpha T+\beta T')=\alpha f(T)+\beta f_\pi(T')$，则任意 $\pi \in S_p$ 引导出非退化的线性算子\upref{LiOper} $f_\pi:\mathbb{T}_p^0\rightarrow\mathbb{T}_p^0$ ．
+
+\begin{definition}{对称，对称化}
+称 $(p,0)$ 型张量 $T$ 是\textbf{对称的}，如果 $\forall \pi\in S_p$ 都有 $f_{\pi}(T)=T$．称映射 
+\begin{equation}
+S=\frac{1}{p!}\sum_{\pi\in S_p} f_\pi:\mathbb{T}_p^0\rightarrow\mathbb{T}_p^0
+\end{equation}
+为 $\mathbb{T}_p^0$ 上的矢量的\textbf{对称化}．
+\end{definition}
+
+\begin{theorem}{张量的对称化}
+每个张量经 $S$ 的作用后都是对称的，即 $\forall \pi\in S_p$，都有 $f_\pi(S(T))=S(T)$．
+\end{theorem}
+\textbf{证明：}
+\begin{equation}
+f_\pi(S(T))=\frac{1}{p!}\sum_{\sigma\in S_p} f_\pi(f_\sigma(T))=\frac{1}{p!}\sum_{\sigma\in S_p} f_{\pi\sigma}(T)
+\end{equation}
+由于 $S_p$ 是个群，则其上任一个元素 $\pi$ 都是其上的一个双射．即当 $\sigma$ 取遍 $S_p$ 时，$\pi\sigma$ 也取遍 $S_p$ ．所以上式变为
+\begin{equation}
+f_\pi(S(T))=\frac{1}{p!}\sum_{\tau\in S_p} f_{\tau}(T)=S(T)
+\end{equation}
+\textbf{证毕！}
+
+\begin{exercise}{}
+试证明：$\mathbb{T}_p^0(V)$ 上所有对称张量构成一个子空间（矢量空间）．
+\end{exercise}
+\begin{definition}{对称张量子空间}
+$\mathbb{T}_p^0$ 中全体对称张量构成的子空间记作 $\mathbb{T}_p^+(V)$．
+\end{definition}
+\begin{exercise}{}
+试证明: 若 $T\in\mathbb{T}_p^+(V)$，则 $S(T)=T$．
+\end{exercise}
+\subsection{张量的交错化}
+\pentry{置换的奇偶性\upref{permu}}
+\begin{definition}{斜对称张量}
+称张量 $T$ 是\textbf{斜对称(反对称)}的，若 $\forall \pi\in S_p$，都有
+\begin{equation}
+f_\pi(T)=\epsilon_\pi T
+\end{equation}
+其中 $\epsilon_\pi$ 是置换 $\pi$ 的（奇偶性）符号．
+\end{definition}

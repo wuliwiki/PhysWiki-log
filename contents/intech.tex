@@ -1,0 +1,273 @@
+% 不定积分的常用技巧
+% 不定积分
+
+\begin{issues}
+\issueDraft
+\end{issues}
+
+\pentry{不定积分\upref{Int}}\pentry{复数\upref{CplxNo}}
+
+\subsection{一、分项积分法}
+分项积分法的原理是不定积分的基本性质\upref{Int}：
+$$\int \left[f(x)+g(x)-h(x)\right]\,\mathrm{d}x=\int f(x)\,\mathrm{d}x+\int g(x)\,\mathrm{d}x-\int h(x)\,\mathrm{d}x$$
+
+\begin{itemize}
+\item 多项式的积分等于各个单项式的积分之和
+\end{itemize}
+\begin{itemize}
+\item 分母为多项式，可将其化为简单分式再积分
+\end{itemize}
+
+\begin{example}{}
+求 $\displaystyle{\int \frac{\,\mathrm{d}x}{x^2-a^2}}$
+
+\textbf{解：}因式分解，\(x^2-a^2=(x+a)(x-a)\)
+
+设 $\displaystyle{\frac{1}{x^2-a^2}=\frac{A}{x-a}+\frac{B}{x+a}}$ 于是 \(A(x+a)+B(x-a)=1\)
+
+由掩盖法， $\displaystyle{A=\frac{1}{2a},B=-\frac{1}{2a}}$ , 所以 $\displaystyle{\frac{1}{x^2-a^2}=\frac{1}{2a}\left(\frac{1}{x-a}-\frac{1}{x+a} \right)}$，于是：
+
+$\begin{eqnarray*}
+LHS&=&\frac{1}{2a}\left(\int\frac{\mathrm{d}x}{x-a}-\int\frac{\mathrm{d}x}{x+a}\right)\\&=&\frac{1}{2a}\left(\ln|x-a|-\ln|x+a|\right)+C \\&=&\frac{1}{2a}\ln\left|\frac{x-a}{x+a}\right|+C
+\end{eqnarray*}$
+
+更一般地，让我们求
+$$\int\frac{mx+n}{x^2+px+q}\,\mathrm{d}x$$
+
+对分母配方： $\displaystyle{x^2+px+q=\left(x+\frac{p}{2}\right)^2+q-\frac{p^2}{4}}$
+
+令 $\displaystyle{t=x+\frac{p}{2}}$ ，于是 $\displaystyle{x=t-\frac{p}{2},\mathrm{d}x=\mathrm {d}t}$ ，令 $\displaystyle{q-\frac{p^2}{4}=\pm a^2}$
+
+令 $\displaystyle{A=m,B=n-\frac{1}{2}mp}$ ，则 \(mx+n=At+B\)
+
+则 $\displaystyle{LHS=\int\frac{At+B}{t^2\pm a^2}\,\mathrm{d}t =A\int\frac{t\mathrm{d}t}{t^2\pm a^2}+B\int\frac{\mathrm{d}t}{t^2\pm a^2}}$
+
+首先，$\displaystyle{A\int\frac{t\mathrm{d}t}{t^2\pm a^2}=\frac{A}{2}\int\frac{\mathrm{d}\left(t^2\pm a^2\right)}{t^2\pm a^2}=\frac{A}{2}\ln\left|t^2\pm a^2\right|+C}$
+
+1. 当 $\displaystyle{q>\frac{p^2}{4}}$ 时，$\displaystyle{B\int\frac{\mathrm{d}t}{t^2+ a^2}=\frac{B}{a}\arctan{\frac{t}{a}}+C}$
+
+$\begin{eqnarray*}LHS&=&\frac{A}{2}\ln\left|t^2+ a^2\right|+\frac{B}{a}\arctan{\frac{t}{a}}+C \\&=&\frac{m}{2}\ln\left|x^2+px+q\right|+\frac{2n-mp}{\sqrt{4q-p^2}}\arctan{\frac{2x+p}{\sqrt{4q-p^2}}}+C \end{eqnarray*}$
+
+2. 当 $\displaystyle{q<\frac{p^2}{4}}$ 时：$\displaystyle{B\int\frac{\mathrm{d}t}{t^2- a^2}=\frac{B}{2a}\ln\left|\frac{t-a}{t+a}\right|+C}$ 
+
+$\begin{eqnarray*} LHS&=&\frac{A}{2}\ln\left|t^2- a^2\right|+\frac{B}{2a}\ln\left|\frac{t-a}{t+a}\right|+C \\&=&\frac{m}{2}\ln\left|x^2+px+q\right|+\frac{2n-mp}{2\sqrt{p^2-4q}}\ln\left|\frac{x+2p-\sqrt{p^2-4q}}{x+2p+\sqrt{p^2-4q}}\right|+C \end{eqnarray*}$
+\end{example}
+\begin{itemize}
+\item 对于被积函数的分母为二次函数，分子小于二次的情况，普遍可采用上面的公式
+\end{itemize}
+\begin{itemize}
+\item 对于被积函数的分母大于二次的情况，需用待定系数法，将被积函数分解为简单分式之和.待定系数法有以下两种类型：
+\end{itemize}
+1. 方程两端同次幂的系数相同
+
+2.“掩盖”
+
+\begin{itemize}
+\item 若被积函数的分式中分子幂次高于分母幂次，应用长除法，使其变成既约真分式，长除法的大致步骤如下：
+\end{itemize}
+
+1. 用分子的最高次项除以分母的最高次项，得到首商，写在横线上对应位置；
+
+2. 分子对应项减去刚才的乘积，得到第一余式写在下面，将分子下一项抄下来；
+
+3. 把第一余式当作被除式，重复上述操作，直至余式次数低于除式次数.
+\begin{example}{}
+$\displaystyle{\frac{x^3-12x^2-42}{x-3}=x^2-9x-27+\frac{-123}{x-3}}$ 
+\end{example}
+\subsection{二、分部积分法}
+分部积分的基本原理如下：
+$$\int u\,\mathrm{d}v=uv-\int v\,\mathrm{d}u$$
+
+更高级地，我们有莱布尼兹公式：
+$$\int uv^{(n+1)}\,\mathrm{d}x=uv^{(n)}-u'v^{(n-1)}+...+(-1)^nu^{(n)}v+(-1)^{n+1}\int u^{(n+1)}v\mathrm{d}x$$
+
+当被积函数的因式之一是多项式时，运用莱布尼兹公式特别方便
+
+\begin{example}{}
+求 $\displaystyle{\int\left(2x^3+3x^2+4x+5\right)e^x\mathrm {d}x}$ 
+
+令 $\displaystyle{u=2x^3+3x^2+4x+5,\mathrm{d}v=e^x\,\mathrm{d}x,v=e^x}$
+
+则 $\displaystyle{u'=6x^2+6x+4,u''=12x+6,u'''=12\,;\,v'=e^x,v''=e^x,v'''=e^x}$ 
+
+$\begin{eqnarray*} LHS&=&(2x^3+3x^2+4x+5)e^x-(6x^2+6x+4)e^x+(12x+6)e^x-12e^x+C \\&=&(2x^3-3x^2+10x-5)e^x+C \end{eqnarray*}$ 
+\end{example}
+\begin{corollary}{}
+求 $\displaystyle{\int P(x)e^ax\,\mathrm{d}x}$ ，其中 $P(x)$ 为 $x$ 的多项式
+
+\textbf{解：}令 $v^{(n+1)}=e^{ax}$ ，则
+$$v^{(n)}=\frac{e^{ax}}{a},v^{(n-1)}=\frac{e^{ax}}{a^2},v^{(n-2)}=\frac{e^{ax}}{a^3}...$$ 
+
+设 $\deg (P)=n$ ，则：
+$$\int P(x)e^{ax}\,\mathrm{d}x=e^{ax}\left(\frac{P}{a}-\frac{P'}{a^2}+\frac{P''}{a^3}-...\right)$$
+
+同理， $\displaystyle{\int P(x)\sin bx\,\mathrm{d}x=\sin bx\left(\frac{P'}{b^2}-\frac{P'''}{b^4}+...\right)-\cos bx\left(\frac{P}{b}-\frac{P''}{b^3}+...\right)+C}$
+
+同理， $\displaystyle{\int P(x)\cos bx\,\mathrm{d}x=\sin bx\left(\frac{P}{b}-\frac{P''}{b^3}+...\right)+\cos bx\left(\frac{P'}{b^2}-\frac{P'''}{b^4}+...\right)+C}$
+\end{corollary}
+\begin{itemize}
+\item 把 1 看作被积函数的因式之一，可以帮助积分
+\end{itemize}
+\begin{corollary}{}
+求 $\displaystyle{\int \ln x\,\mathrm{d}x}$
+
+\textbf{解：}令 $\displaystyle{u=\ln x\,,\mathrm{d}v=\mathrm{d}x\Rightarrow \mathrm{d}u=\frac{1}{x},v=x}$ 
+
+则 $\displaystyle{\int \ln x\,\mathrm{d}x=x\ln x-\int x\cdot\frac{\mathrm{d}x}x=x\ln x-x+C}$
+\end{corollary}
+\begin{corollary}{}
+求 $\displaystyle{\int\arctan x\,\mathrm{d}x}$
+
+\textbf{解：}令 $\displaystyle{u=\arctan x\,,\mathrm{d}v=\mathrm{d}x\Rightarrow \mathrm{d}u=\frac{\mathrm{d}x}{x^2},v=x}$
+
+则 $\displaystyle{\int\arctan x\,\mathrm{d}x=x\cdot \arctan x-\int\frac{x\,\mathrm{d}x}{1+x^2}=x\cdot \arctan x-\frac{1}{2}\ln\left(1+x^2\right)+C}$ 
+\end{corollary}
+下面我们研究几类常见复合函数的不定积分
+\begin{corollary}{}
+研究 $\displaystyle{\int e^{ax}\cos{bx}\,\mathrm{d}x}$ 和 $\displaystyle{\int e^{ax}\sin{bx}\,\mathrm{d}x}$
+
+\textbf{解：}令 $u=\cos bx$ 或 $u=\sin bx$，$\mathrm{d}v=e^{ax}\mathrm{d}x$
+
+则 $\mathrm{d}u=-b\sin bx \,\mathrm{d}x$ 或 $\mathrm{d}u=b\cos bx\mathrm{d}x$，$\displaystyle{v=\frac{e^{ax}}{a}}$ ，于是
+$$
+\left\{\begin{align*} \int e^{ax}\cos bx\,\mathrm{d}x &=\frac{1}{a}e^{ax}\cos bx+\frac{b}{a}\int e^{ax}\sin bx\,\mathrm{d}x \\\int e^{ax}\sin bx\,\mathrm{d}x&=\frac{1}{a}e^{ax}\sin bx-\frac{b}{a}\int e^{ax}\cos bx\,\mathrm{d}x \end{align*}\right.$$
+
+解得：$$\begin{align*}\leftgroup{\int e^{ax}\cos bx\,\mathrm{d}x&=e^{ax}\frac{a\cos bx+b\sin bx}{a^2+b^2}+C\\ \int e^{ax}\sin bx\,\mathrm{d}x&=e^{ax}\frac{a\sin bx-b\cos bx}{a^2+b^2}+C}\end{align*}$$ 
+\end{corollary}
+\begin{corollary}{}
+研究 $\displaystyle{\int x^k (\ln x)^n\,\mathrm{d}x}$
+
+\textbf{解：}首先求 $\displaystyle{\int x^k\ln x\,\mathrm{d}x}$
+
+令 $\displaystyle{u=\ln x\,,dv=x^k\,\mathrm{d}x\Rightarrow\mathrm{d}u=\frac{\mathrm{d}x}{x},v=\frac{x^{k+1}}{k+1}}$
+
+则 $\displaystyle{LHS=\frac{x^{k+1}\ln x}{k+1}-\int\frac{x^k\,\mathrm{d}x}{k+1}=\frac{x^{k+1}\ln x}{k+1}-\frac{x^{k+1}}{(k+1)^2}+C}$
+
+然后，在 $\displaystyle{\int x^k (\ln x)^n\,\mathrm{d}x}$ 中，令 $\displaystyle{u=(\ln x)^n\,,\mathrm{d}v=x^k\,\mathrm{d}x\Rightarrow\,\mathrm{d}u=\frac{n(\ln x)^{n-1}\mathrm{d}x}{x}\,,v=\frac{x^{k+1}}{k+1}}$
+
+所以 $\displaystyle{\int x^k(\ln x)^n\,\mathrm{d}x=\frac{x^{k+1}}{k+1}(\ln x)^n-\frac{n}{k+1}\int x^k(\ln x)^{n-1}\,\mathrm{d}x}$
+
+此即原积分式的递推公式
+\end{corollary}
+\begin{corollary}{}
+研究 $\displaystyle{\int x^n e^{ax}\cos bx\,\mathrm{d}x,\int x^n e^{ax}\sin bx\,\mathrm {d}x}$
+
+\textbf{解：}令 $\displaystyle{u=x^n\,,\mathrm{d}v=e^{ax}\cos{bx}\,\mathrm{d}x\,\text{或}\,\mathrm{d}v=e^{ax}\sin{bx}\,\mathrm{d}x}$
+
+则 $\displaystyle{\mathrm{d}u=nx^{n-1}\mathrm{d}x\,,v=e^{ax}\frac{a\cos bx+b\sin bx}{a^2+b^2}\,\text{或}\,v=e^{ax}\frac{a\sin bx-b\cos bx}{a^2+b^2}}$
+
+令 $\displaystyle{I_n=\int x^n e^{ax}\cos bx\,\mathrm{d}x},J_n=\int x^n e^{ax}\sin bx\,\mathrm{d}x$，则：
+
+$\displaystyle{I_n=x^n e^{ax}\frac{{a\cos bx+b\sin bx}}{a^2+b^2}-\frac{n}{a^2+b^2}\left(aI_{n-1}+bJ_{n-1}\right)+C}$
+
+$\displaystyle{J_n=x^n e^{ax}\frac{{a\sin bx-b\cos bx}}{a^2+b^2}-\frac{n}{a^2+b^2}\left(aJ_{n-1}-bI_{n-1}\right)+C}$ 
+\end{corollary}
+\subsection{三、换元积分法\upref{IntCV}}
+\subsubsection{1. 常用换元}
+我们将求不定积分中较为常用的换元总结如下：
+\begin{itemize}
+\item $\displaystyle{\int f(ax+b)\,\mathrm{d}x=\frac{1}{a}\int f(ax+b)\,\mathrm{d}\left(ax+b\right)}$
+\end{itemize}
+\begin{itemize}
+\item $\displaystyle{\int x^nf(x^{n+1})\,\mathrm{d}x=\frac{1}{n+1}\int f(x^{n+1})\,\mathrm{d}(x^{n+1})}$
+\end{itemize} 
+\begin{itemize}
+\item $\displaystyle{\int \frac{f(\ln x)\,\mathrm{d}x}{x}=\int f(\ln x)\,\mathrm{d}(\ln x)}$ 
+\end{itemize}
+\begin{itemize}
+\item $\displaystyle{\int e^xf(e^x)\,\mathrm{d}x=\int f(e^x)\,\mathrm{d}(e^x)}$ 
+\end{itemize}
+\begin{itemize}
+\item $\displaystyle{\int \frac{f(\sqrt{x})\,\mathrm{d}x}{\sqrt{x}}=2\int f(\sqrt{x})\,\mathrm{d}(\sqrt{x})}$
+\end{itemize} 
+\begin{itemize}
+\item $\displaystyle{\int \frac{1}{x^n}f\left(\frac{1}{x^n}\right)\,\mathrm{d}x=(1-n)\int f\left(\frac{1}{x^{n-1}}\right)\,\mathrm{d}\left(\frac{1}{x^{n-1}}\right)}$ 
+\end{itemize}
+\begin{itemize}
+\item $\displaystyle{\int f(\sin x)\cos x\,\mathrm{d}x=\int f(\sin x)\,\mathrm{d}(\sin x)}$ 
+\end{itemize}
+\begin{itemize}
+\item $\displaystyle{\int f(\cos x)\sin x\,\mathrm{d}x=-\int f(\cos x)\,\mathrm{d}(\cos x)}$
+\end{itemize} 
+\begin{itemize}
+\item $\displaystyle{\int f(\tan x)\sec^2x\,\mathrm{d}x=\int f(\tan x)\,\mathrm{d}(\tan x)}$
+\end{itemize} 
+\subsubsection{2. 三角换元}
+\begin{itemize}
+\item $a^2-x^2$ 中，令 $x=a\sin\theta$ 
+\end{itemize}
+\begin{itemize}
+\item $x^2+a^2$ 中，令 $x=a\tan \theta$ 
+\end{itemize}
+\begin{itemize}
+\item $x^2-a^2$ 中，令 $x=a\sec\theta$ 
+\end{itemize}
+
+\begin{example}{}
+求 $\displaystyle{\int \sqrt{a^2-x^2}\,\mathrm{d}x}$ 
+
+\textbf{解：}令 $\displaystyle{x=a\sin\theta\,,\mathrm{d}x=a\cos\theta\,\mathrm{d}\theta\,,\sqrt{a^2-x^2}=a\cos\theta}$
+
+$\begin{eqnarray*} LHS&=&\int a\cos\theta\cdot a\cos\theta\,\mathrm{d}\theta\\ &=&a^2\int\cos^2\theta\,\mathrm{d}\theta\\ &=&a^2\int\frac{\cos2\theta+1}{2}\,\mathrm{d}\theta\\ &=&a^2\left(\frac{\sin2\theta}{4}+\frac{\theta}{2}\right)+C\\ &=&\frac{1}{2}a^2\left(\sin\theta\cos\theta+\theta\right)+C\\ &=&\frac{1}{2}\left(x\sqrt{a^2-x^2}+a^2\arcsin\frac{x}{a}\right)+C     \end{eqnarray*}$ 
+\end{example}
+\begin{example}{}
+求 $\displaystyle{\int \sqrt{x^2-a^2}\,\mathrm{d}x}$
+
+令 $\displaystyle{x=a\sec\theta\,,\mathrm{d}x=a\sec\theta\tan\theta\,\mathrm{d}\theta\,,\sqrt{x^2-a^2}=a\tan\theta}$ 
+
+$\begin{eqnarray*} LHS&=&\int a\tan\theta\cdot a\sec\theta\tan\theta\,\mathrm{d}\theta\\ &=&a^2\int \tan^2\theta \sec\theta\,\mathrm{d}\theta\\ &=&a^2\int (\sec^2\theta-1)\sec\theta\,\mathrm{d}\theta\\ &=&a^2\left(\int\sec^3\theta\,\mathrm{d}\theta-\int\sec\theta\,\mathrm{d}\theta\right)\\ &=&a^2\left(\frac{1}{2}\sec\theta\tan\theta+\frac{1}2\ln\left|\tan\left(\frac{\theta}{2}+\frac{\pi}{4}\right)\right|-\ln\left|\tan\left(\frac{\theta}{2}+\frac{\pi}{4}\right)\right|\right)+C\\ &=&\frac{1}{2}\left(x\sqrt{x^2-a^2}-a^2\ln|x+\sqrt{x^2-a^2}|\right)+C \end{eqnarray*}$ 
+\end{example}
+\begin{example}{}
+求 $\displaystyle{\int\sqrt{x^2+a^2}\,\mathrm{d}x}$
+
+令 $x=a\tan \theta\,,\mathrm{d}x=a\sec^2\theta\,\mathrm{d}\theta\,,\sqrt{x^2+a^2}=a\sec\theta$
+
+$\begin{eqnarray*} LHS&=&a^2\int \sec^3\theta\,\mathrm{d}\theta\\ &=&\frac{a^2}{2}\tan\theta\sec\theta+\frac{a^2}{2}\ln\left|\tan\left(\frac{\theta}{2}+\frac{\pi}{4}\right)\right|+C\\ &=&\frac{1}{2}\left(x\sqrt{x^2+a^2}+a^2\ln\left|x+\sqrt{x^2+a^2}\right|\right)+C \end{eqnarray*}$ 
+\end{example}
+\subsubsection{3. 万能替换法}
+若被积函数由 $\sin x$ 或 $\cos x$ 组成，可令 $\displaystyle{t=\tan\frac{x}{2}\,,x=2\arctan t\,,\mathrm{d}x=\frac{2}{1+t^2}\,\mathrm{d}t}$ ，则：
+$$\sin\frac{x}{2}=\frac{t}{\sqrt{1+t^2}}\,,\cos \frac{x}{2}=\frac{1}{\sqrt{1+t^2}}$$
+
+使用二倍角公式：
+$$\sin x=2\sin\frac{x}{2}\cos\frac{x}{2}=\frac{2t}{1+t^2}$$ $$ \cos x=2\cos^2\frac{x}{2}-1=\frac{1-t^2}{1+t^2} $$
+
+于是，被积函数就化为 $t$ 的有理函数
+\subsubsection{4. 欧拉换元法}
+此类方法适用于计算形如 $\displaystyle{G\left(x,\sqrt{ax^2+bx+c}\right)}$ 的函数的不定积分
+
+\begin{itemize}
+\item 第一类替换（要求 $a>0$)
+\end{itemize}
+令 $\sqrt{ax^2+bx+c}=t-\sqrt{a}x$
+
+两边平方并消去二次项得： $bx+c=t^2-2\sqrt{a}tx$
+
+所以 $\displaystyle{x=\frac{t^2-c}{2\sqrt{a}t+b}\,,\sqrt{ax^2+bx+c}=\frac{\sqrt{a}t^2+bt+c\sqrt{a}}{2\sqrt{a}t+b}\,,\mathrm{d}x=2\frac{\sqrt{a}t^2+bt+c\sqrt{a}}{(2\sqrt{a}t+b)^2}\,\mathrm{d}t}$
+
+\begin{itemize}
+\item 第二类替换（要求 $c>0$ ）
+\end{itemize}
+令 $\displaystyle{\sqrt{ax^2+bx+c}=xt+\sqrt{c}}$
+
+两边平方，消去 $c$ 得： $ax+b=t^2x+2\sqrt{c}t$
+
+所以 :
+
+$\displaystyle{x=\frac{2\sqrt{c}t-b}{a-t^2}\,,\sqrt{ax^2+bx+c}=\frac{2\sqrt{c}t-b}{a-t^2}}$
+
+$\displaystyle{t+\sqrt{c}=\frac{\sqrt{c}t^2-bt+a\sqrt{c}}{a-t^2}\,,\mathrm{d}x=2\frac{\sqrt{c}t^2-bt+a\sqrt{c}}{(a-t^2)^2}\mathrm{d}t}$ 
+
+\begin{itemize}
+\item 第三类替换（要求 $b^2-4ac>0$）
+\end{itemize}
+若 $ax^2+bx+c=0$ 有相异实根 $\lambda$ 和 $\mu$
+
+则 $ax^2+bx+c=a(x-\lambda)(x-\mu)$
+
+令 $\sqrt{ax^2+bx+c}=t(x-\lambda)$
+
+两边平方得，约去 $x-\lambda$ 得： $t^2x-ax=-a\mu+\lambda t^2$
+
+于是 $\displaystyle{x=\frac{\lambda t^2-a\mu}{t^2-a^2}\,,t^2=\frac{a(x-\mu)}{x-\lambda}}$ 
+
+于是： $\displaystyle{\sqrt{ax^2+bx+c}=\frac{a(\lambda-\mu)t}{t^2-a}\,,\mathrm{d}x=\frac{2a(\lambda-\mu)t}{(t^2-a)^2}\,\mathrm{d}t}$ 

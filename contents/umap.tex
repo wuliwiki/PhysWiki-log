@@ -1,0 +1,31 @@
+% C++ unordered_map 笔记
+
+\begin{issues}
+\issueDraft
+\end{issues}
+
+\begin{itemize}
+\item \verb|unordered_map<key类型, val类型>|
+\item \verb|umap.count(key)| 如果存在返回 1， 否则返回 0， 不可以用多个 key．
+\item \verb|key| 如果不存在， \verb|umap[key]| 返回默认值 （例如 \verb|int| 返回 \verb|0|）
+\item \verb|key| 即使不存在， 也可以视为 lvalue， 例如直接用 \verb|umap[key]++|， \verb|&umap[key]| 之类的． 用了之后就存在了．
+\item 对每个 element 循环用 \verb|for (auto &e : umap.)|， 每个 \verb|e| 是一个 \verb|pair<>|， 分别是 key, value．
+\item 如果要用 \verb|pair| 作为 key， 定义以下类函数 \verb|hash_pair|， 并声明 \verb|unordered_map<key类型, val类型, hash_combine>|
+\begin{lstlisting}[language=cpp]
+template<class T> // from boost library
+inline void hash_combine(size_t &seed, const T &v) {
+    seed ^= hash<T>{}(v) + 0x9e3779b9 + (seed << 6) + (seed >> 2);
+}
+
+struct hash_pair { // similar to std::hash, for pair<>
+    template<class T, class T1>
+    size_t operator()(const pair<T,T1> &a) const {
+        size_t h = 0;
+        hash_combine(h, a.first);
+        hash_combine(h, a.second);
+        return h;
+    }
+};
+\end{lstlisting}
+\item unordered_map 会先用 hash 函数查找 key， 如果有 hash collilsion 也没关系， 会进一步对比区分．
+\end{itemize}

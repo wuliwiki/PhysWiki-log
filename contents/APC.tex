@@ -1,12 +1,8 @@
 % 布置、排列、组合
 % 布置|排列|组合
 
-\begin{issues}
-\issueDraft
-\end{issues}
-
 \pentry{计数原理\upref{ProfPM}}
-组合学的一个重要方面在与计数问题．实际上，在很长一段时间里，大多数数学工作者把组合学与“计数”当作一回事．“计数”往往是指找出进行某个确定的运算方法的个数，与之紧密联系的内容便是排列组合．
+\footnote{I.Tomeson.组合学引论,栾汝书等译.高等教育出版社．1987.}组合学的一个重要方面在与计数问题．实际上，在很长一段时间里，大多数数学工作者把组合学与“计数”当作一回事．“计数”往往是指找出进行某个确定的运算方法的个数，与之紧密联系的内容便是排列组合．
 
 “排列”和“组合”这两个术语在高中部分已经熟悉．本节将给予这些概念于一个更完整、更直观的描述，这意味着要建立一些术语，而这些术语给出了这种直观的意义．排列组合在很多方面都有应用，本节的术语将使得这种应用更加直观．
 \subsection{布置Arrangement}
@@ -85,22 +81,92 @@ $n$ 个物体在 $m$ 个房间里有序布置的个数 $[m]^n$ 为
 将 $n$ 个物体的集合在 $m$ 个房间的集合里进行布置，要求每个房间至多包含一个物体的布置个数为 $m(m-1)\cdots(m-n+1)$．
 \end{theorem}
 
-\begin{definition}{排列，全排列}
+\begin{definition}{排列，全排列}\label{APC_def3}
 从 $m$ 元集 $Y$ 的 $n$ 个不同字母构成的字叫作从集合 $Y$ 的 $m$ 个物体每次取 $n$ 个的\textbf{排列}（\textbf{permutation}）(或 $m$ 元集 $Y$ 的 $n$ 排列)，其个数记为 $[m]_n$ (或$P(m,n)$)，其中 $m\geq n$．若 $m=n$，则 $[n]_n$ 也记作 $P_n$ 或 $n!=1\cdot2\cdots n$，此时的排列称 $n$元集 $Y$ 的\textbf{全排列}.
 \end{definition}
 由\autoref{APC_the2} 
 \begin{equation}
-P(m,n)=m(m-1)\cdots(m-n+1)
+[m]_n=P(m,n)=m(m-1)\cdots(m-n+1)
 \end{equation}
 
 \subsection{组合}
 
 \begin{definition}{增字}
-若集合 $Y=\{y_1,y_2,\cdots,y_m\}$ 是个偏序集\autoref{Relat_sub2}~\upref{Relat}，那么称由 $Y$ 的 $n$ 个字母构成的字 $y_{i1}y_{i2}\cdots y_{in}$ 为\textbf{增字}，如果 $y_{i1}\leq y_{i2}\leq\cdots\leq y_{in}$．
+若集合 $Y=\{y_1,y_2,\cdots,y_m\}$ 是个偏序集（\autoref{Relat_sub2}~\upref{Relat}），那么称由 $Y$ 的 $n$ 个字母构成的字 $y_{i1}y_{i2}\cdots y_{in}$ 为\textbf{增字}，如果 $y_{i1}\leq y_{i2}\leq\cdots\leq y_{in}$．若 $y_{i1}<y_{i2}<\cdots<y_{in}$，则称字 $y_{i1}y_{i2}\cdots y_{in}$ 为\textbf{严格增字}．
 \end{definition}
-\begin{theorem}{}
-从 $m$ 个字母中选出 $n$ 个构成的增字个数等于 $\frac{[m]^n}{n!}$
+\begin{theorem}{}\label{APC_the4}
+从 $m$ 个字母中选出 $n$ 个构成的增字个数等于 $\frac{[m]^n}{n!}$．
 \end{theorem}
-\textbf{证明：}
+\textbf{证明：}下面将增字和 $n$ 个物体在 $m$ 个房间里的有序布置联系起来：若房间 $y_i$ 里有选自集合 $\{x_1,x_2,\cdots,x_n\}$ 的 $p_i$ 个物体，在构造增字里这个房间 $y_i$ 就写 $p_i$ 次：$\underbrace{y_i\cdots y_i}_{p_i\text{个}}$；
+若房间 $y_i$ 不包含物体，$y_i$ 就不出现在增字中．例如（不失一般性设 $y_1\leq y_2\leq\cdots$）：
+\begin{equation}
+\begin{aligned}
+&x_2| x_1 x_3 x_6|x_4 x_5|\quad|x_7\cdots\\
+&y_1\quad y_2\qquad y_3\quad y_4\quad y_5
+\end{aligned}
+\end{equation}
+对应增字
+\begin{equation}
+y_1y_2y_2y_2y_3y_3y_5\cdots
+\end{equation}
+
+这一构造说明每一有序布置都有一增字对应，且哪些物体放在房间里对增字没有影响，而只有房间里的物体个数有意义．即不改变房间物体数的所有布置都对应于每一增字，而不改变房间物体数的有序布置共 $n!$ 个（比如房间 $y_i$ 的物体数有 $p_i$ 个，对于 $n$ 个物体所有可能的排列个数为 $n!$，将每一排列分成 $m$ 段，第 $i$ 段对于房间 $y_i$ ，且第 $i$ 段的物体数为 $p_i$，这便是保持房间 $y_i$ 的物体数 $p_i$ 不变的所有有序布置），因此每一增字都对应 $n!$ 个有序布置．
+
+显然对应不同增字的有序布置是不同的，即对应不同增字的有序布置的构成集合是不相交的，而每一有序布置都在这样的某个集合里，即每一增字对应的 $n!$ 个有序布置的集合构成了所有有序布置构成集合的不相交的并集（也称不交并）．因此，若设增字的个数为 $x$，则 $x\cdot n!=[m]^n$．
 
 \textbf{证毕！}
+
+\begin{definition}{重复组合}
+从 $m$ 个字母的集合 $Y$ 中选出 $n$ 个构成的增字也叫从 $m$ 个物体的集合 $Y$ 中一次取 $n$ 个的\textbf{重复组合}．
+\end{definition}
+
+\begin{theorem}{}\label{APC_the3}
+从 $m$ 个字母中取 $n$ 个构成的严格增字的个数为 $\frac{[m]_n}{n!}$．
+\end{theorem}
+\textbf{证明：}由\autoref{APC_def3} 知道，从 $m$ 个字母的集 $Y$ 中的 $n$ 个不同字母构成的字的集合有 $[m]_n$ 个元素，而这 $[m]_n$ 个字都能由 $Y$ 中的 $n$ 个字母构成的严格增字的集合里，用 $n!$ 种不同的方法排列每个字的字母无重复的得到．因此，若设从 $m$ 个字母中取 $n$ 个构成的严格增字的个数为 $x$，则
+
+\begin{equation}
+x\cdot n!=[m]_n
+\end{equation}
+
+\textbf{证毕！}
+
+注意 $m$ 元集的 $n$ 元子集的每一个都和一个由该子集中的元素构成的增字一一对应，所以由下面推论．
+\begin{corollary}{}
+$m$ 元集 $Y$ 的 $n$ 元子集个数为 $\frac{[m]_n}{n!}$．
+\end{corollary}
+
+\begin{definition}{组合}
+由 $Y$ 中 $n$ 个字母构成的严格增字也叫从 $m$ 个物体的集合 $Y$ 中一次取 $n$ 个的\textbf{组合(combination)}，其个数记作 $C_m^n$ 或 $\left(\begin{aligned}&m\\&n\end{aligned}\right)$
+\end{definition}
+\subsection{多项式数}
+\begin{theorem}{}
+若物体集合 $X=\{x_1,x_2,\cdots x_n\}$ 在房间集合 $Y=\{y_1,y_2,\cdots,y_p\}$ 的布置，使得房间 $y_i$（$i=1,\cdots,p$） 分别含有 $n_i$ 个物体（ $\sum_{i}^p n_i=n$）．则这样的布置个数为
+\begin{equation}
+\frac{n!}{n_1!n_2!\cdots n_p!}
+\end{equation}
+ 
+\end{theorem}
+\textbf{证明：}首先，和\autoref{APC_the4} 证明中提到的一样，不改变房间内物体数的有序布置个数为 $n!$，那么在房间中物体顺序无关的布置情形，这 $n!$ 个有序布置中，房间 $y_i$ 内 $n_i$ 个物体的 $n_i !$ 个全排列对应的布置都是同一个，故知该定理对应的布置（与房间中物体顺序无关）个数为
+\begin{equation}
+\frac{n!}{n_1!n_2!\cdots n_p!}
+\end{equation}
+
+\textbf{证毕！}
+
+\begin{definition}{多项式数}
+称数 $\frac{n!}{n_1!n_2!\cdots n_p!}$ 为\textbf{多项式数}，并记作 $\left(\begin{aligned}
+&n\\n_1,n_2,&\cdots,n_p
+\end{aligned}\right)$．
+\end{definition}
+
+多项式数推广了组合数（$p=2$ 的情形），并且将二项式公式（\autoref{BiNor_eq1}~\upref{BiNor}）扩充到一般的多项式中：
+\begin{equation}
+(a_1+\cdots+a_p)^n=\sum_{\begin{aligned}
+&n_1,\cdots n_p\\
+n_1+&\cdots+n_p=n
+\end{aligned}}\left(\begin{aligned}
+&n\\n_1,n_2,&\cdots,n_p
+\end{aligned}\right)a_1^{n_1}\cdots a_p^{n_p}
+\end{equation}
+上式的成立可通过将 $a_1^{n_1}\cdots a_p^{n_p}$ 理解成在第 $i$ 个房间放 $n_i$ 个物体 $a_i$ 得到（相当于在 $n$ 个括号中的 $n_i$ 个里取 $a_i$ 作乘法）．
