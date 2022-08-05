@@ -1,0 +1,130 @@
+% 行列式唯一性定理
+% 行列式|唯一性
+
+\pentry{行列式的性质\upref{DetPro}}
+在行列式的性质\upref{DetPro} 一节中，我们看到行列式 $\det \mat A$ 关于矩阵 $\mat A$ 的行是斜对称的（或反对称），即交换 $\mat A$ 的任意两行行列式变号； 且 $\det \mat A$ 是 $\mat A$ 的行的多重线性函数（下面解释），等等一些其它性质．事实上，任意函数只要满足斜对称性和多重线性性就天然具备其它性质，具有斜对称性和多重线性性的函数简称\textbf{斜对称多重线性函数}．
+
+本节将证明：若 $\mathcal D$ 是矩阵 $\mat A$ 的斜对称多重线性函数，那么它将和 $\mat A$ 的行列式 $\det A$ 成比例，比例系数为 $\mathcal D(\mat E)$ ($\mat E$ 为单位矩阵)，即 $\mathcal D(\mat A)=\mathcal D(\mat E)\cdot \det \mat A$．那么若函数 $\mathcal D$ 还满足条件 $\mathcal D(\mat E)=1$，则 $\mathcal D(\mat A)=\det\mat A$．
+
+简言之，若矩阵 $\mat A$ 的斜对称多重线性函数 $\mathcal D$ 满足条件 $\mathcal D(\mat E)=1$ ，那么 $\mathcal D$ 就为矩阵的行列式函数 $\det$．这便是行列式唯一性定理．本定理将有助于与行列式有关的其它理解，比如外代数和行列式的联系．
+
+\subsection{两个引理}
+
+先引入两个有助于证明的定理．
+
+所有矩阵元为实数的 $n$ 阶矩阵 $\mat A$ 的集合一般记为 $M_n(\mathbb R)$ ，其中 $\mathbb R$ 是实数集．
+
+为方便讨论矩阵的函数与矩阵行列的关系，我们引入下面两个记号：
+\begin{equation}
+\begin{aligned}
+&\mat A_{(i)}=(a_{i1},a_{i2},\cdots,a_{in}),\quad i=1,2,\cdots, n\\
+&\mat A^{(j)}=[a_{1j},a_{2j},\cdots,a_{nj}],\quad j=1,2,\cdots, n
+\end{aligned}
+\end{equation}
+其中，$\mat A_{(i)},\mat A^{(j)}$ 分别表示矩阵 $\mat A=(a_{ij})$ 的第 $i$ 行和第 $j$ 列．于是矩阵 $\mat A$ 的函数 $\mathcal D(\mat A)$ 可记为 
+\begin{equation}
+\begin{aligned}
+&\mathcal D(\mat A)=\mathcal D(\mat A_{(1)},\mat A_{(2)},\cdots,\mat A_{(n)})\\
+&\mathcal D(\mat A)=\mathcal D(\mat A^{(1)},\mat A^{(2)},\cdots,\mat A^{(n)})\\
+\end{aligned}
+\end{equation}
+当讨论 $\mathcal D$ 与矩阵行的关系时，往往用上式第一中记法，反之讨论 $\mathcal D$ 与矩阵列的关系时用第二种记法．
+
+\begin{lemma}{}\label{DetoD_lem1}
+若任意函数 $\mathcal D:M_n(\mathbb R)\rightarrow \mathbb R$ 满足下面两个性质：
+\begin{enumerate}
+\item \textbf{斜对称性：}任意交换矩阵的两行函数 $\mathcal D$ 变号．即任意 $i\neq j\in \{1,2,\cdots,n\}$，有
+\begin{equation}
+\mathcal D(\mat A_{(1)},\cdots,\mat A_{(i)},\cdots,\mat A_{(j)},\cdots,\mat A_{(n)})=-\mathcal D(\mat A_{(1)},\cdots,\mat A_{(j)},\cdots,\mat A_{(i)},\cdots,\mat A_{(n)})
+\end{equation}
+\item \textbf{多重线性性：}函数 $\mathcal D$ 是矩阵 $\mat A$ 的任一行 $\mat A_{(k)}$ 的线性函数．即
+\begin{equation}\label{DetoD_eq1}
+\begin{aligned}
+&\mathcal D(A_{(1)},\cdots,\alpha A'_{(k)}+\beta A''_{(k)},\cdots,A_{(n)})\\
+&=\alpha\mathcal D(A_{(1)},\cdots,A'_{(k)},\cdots,A_{(n)})+\beta\mathcal D(A_{(1)},\cdots,A''_{(k)},\cdots,A_{(n)}),\quad\forall\alpha,\beta\in\mathbb R
+\end{aligned}
+\end{equation}
+\end{enumerate}
+那么，$\mathcal D$ 亦满足：
+\begin{enumerate}
+\item $\mathcal D(\lambda\mat A)=\lambda^n\mathcal D(\mat A)$
+\item 某 $\mat A$ 有一行为0，比如第 $i$ 行 $\mat A_{(i)}=\bvec 0$ ，则 $\mathcal D(\mat A)=0$
+\item 若 $\mat A$ 有两行相同，比如 $\mat A_{(i)}=\mat A_{(j)},i\neq j$，则 $\mathcal D(\mat A)=0$
+\item 在第 $i$ 行 $\mat A_{(i)}$加上 一常数 $\lambda$ 乘以任一 $j\neq i$ 行 $\mat A_{(j)}$，其值不变，即
+\begin{equation}
+\mathcal D(\mat A_{(1)},\cdots,\mat A_{(i)}+\lambda \mat A_{(j)},\cdots,\mat A_{(n)})=\mathcal D(\mat A_{(1)},\cdots,\mat A_{(i)},\cdots,\mat A_{(n)})
+\end{equation}
+\end{enumerate}
+\end{lemma}
+引理结论的1，2容易通过多重线性性\autoref{DetoD_eq1} 证得！而结论3容易通过斜对称性得到，结论4通过多重线性性和结论3得到．
+
+\begin{lemma}{}\label{DetoD_lem2}
+设 $\mat A$ 是一个 $n$ 阶上三角矩阵：
+\begin{equation}
+\begin{pmatrix}
+&a_{11}&a_{12}&\cdots&a_{1n}\\
+&0&a_{22}&\cdots&a_{2n}\\
+&\vdots&\vdots&\vdots&\vdots\\
+&0&0&\cdots&a_{nn}
+\end{pmatrix}
+\end{equation}
+$\mat E$ 是单位矩阵，且 $\mathcal D$ 是满足\autoref{DetoD_lem1} 条件的任意函数，则
+\begin{equation}
+\mathcal D(\mat A)=\mathcal D(\mat E)a_{11}a_{22}\cdots a_{nn}
+\end{equation}
+\end{lemma}
+
+\textbf{证明：}显然，
+\begin{equation}
+\begin{aligned}
+\mat A_{(1)}&=(a_{11},a_{12},\cdots,a_{1n})\\
+\mat A_{(i)}&=(0,\cdots,0,a_{ii},\cdots,a_{in})\\
+\mat A_{(n)}&=(0,\cdots,0,a_{nn})=a_{nn}(0,\cdots,0,1)=a_{nn}\mat E_{(n)}
+\end{aligned}
+\end{equation}
+由 $\mathcal D$ 的多重线性性，有
+\begin{equation}\label{DetoD_eq2}
+\begin{aligned}
+\mathcal D(\mat A)&=\mathcal D(\mat A_{(1)},\cdots,\mat A_{(n-1)},a_{nn}\mat E_{(n)})\\
+&=a_{nn}\mathcal D(\mat A_{(1)},\cdots,\mat A_{(n-1)},\mat E_{(n)})
+\end{aligned}
+\end{equation}
+
+对\autoref{DetoD_eq2} 最后一等式中 $\mathcal D$ 内的矩阵进行下面的变换，从矩阵的第 $i$ （$i\neq n$）行减去最后一行与 $a_{in}$ 的乘积，即第 $i$ 行变为 $\mat A_{(i)}-a_{in}\mat E_{(n)}$．这时最后一列的元素除第 $n$ 个都变为0，而第 $n-1$ 行变成 $a_{n-1,n-1}\mat E_{(n-1)}$．这时，由\autoref{DetoD_lem1} 的4，$\mathcal D$ 的值不变，即
+\begin{equation}
+\mathcal D(\mat A)=a_{nn}a_{n-1,n-1}\mathcal D(\overline{\mat A}_{(1)},\cdots,\mat E_{(n-1)},\mat E_{(n)})
+\end{equation}
+重复同样的过程，最后即得
+\begin{equation}
+\mathcal D(\mat A)=a_{nn}\cdots a_{11}\cdot \mathcal D(\mat E)
+\end{equation}
+
+\textbf{证毕！}
+
+显然行列式函数 $\det$ 是斜对称多重线性函数，所以具有\autoref{DetoD_lem1} ，\autoref{DetoD_lem2} 的性质．
+\subsection{行列式唯一性定理}
+现在来证明行列式的唯一性定理．
+\begin{theorem}{行列式唯一性定理}
+设 $\mathcal D:M_n(\mathbb R)\rightarrow \mathbb R$ 是斜对称多重线性函数，则
+\begin{equation}
+\mathcal D(\mat A)=\mathcal D(\mat E)\cdot \det \mat A
+\end{equation}
+特别的，在 $\mathcal D(\mat E)=1$ 时，$\mathcal D(\mat A)=\det \mat A$．
+\end{theorem}
+\textbf{证明：}因为借助2-型初等变换，即矩阵某一行加其它行乘任意常数，矩阵行列式不变；而借助1-型初等变换，即交换矩阵任意两行，行列式变号（\autoref{DetoD_lem1} ）．而矩阵都可用初等变换化为上三角矩阵（见高斯消元法\upref{GAUSS}）．假设 $\overline{\mat A}$ 为 $\mat A$ 的上三角矩阵，在转化过程中初等1-型变换进行了 $q$ 次，则
+\begin{equation}
+\begin{aligned}
+&\det{\mat A}=(-1)^q\det{\overline{\mat A}}=(-1)^q\overline{a}_{11}\cdots \overline{a}_{nn}\\
+&\mathcal D(\mat A)=(-1)^q\mathcal{D}(\overline{\mat A})
+\end{aligned}
+\end{equation}
+由\autoref{DetoD_lem2}
+\begin{equation}
+\mathcal D(\overline{\mat A})=\overline{a}_{11}\cdots \overline{a}_{nn}\mathcal D(\mat E)
+\end{equation}
+故
+\begin{equation}
+\mathcal D(\mat A)=\mathcal D(\mat E)\cdot \det \mat A
+\end{equation}
+
+\textbf{证毕！}

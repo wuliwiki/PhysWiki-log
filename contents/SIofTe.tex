@@ -1,13 +1,12 @@
 % 张量的对称化和交错化
 % 对称化|交错化
 
-\begin{issues}
-\issueTODO
-\end{issues}
 
 \pentry{张量的坐标\upref{CofTen}，置换群\upref{Perm}}
 
 张量可按选出来的共变或逆变指标的集合来讨论对称性和斜对称性．由于张量的共边和逆变指标的对称性（即共边和逆变或矢量和对偶矢量的区别仅在于原矢量空间的选择），在讨论张量的对称性和斜对称性时可直接将张量限制在 $(p,0)$ 型或 $(0,p)$ 型张量，而不减少一般性．比如：讨论张量 $T^{i_1 i_2\cdots i_p}$ 和 ${S_{i_1}}^{i_2\cdots i_p}$ 在指标 $\{i_1,i_2\}$ 上的对称性质没有任何区别，只需将 $T$ 的上指标 $i_1$ 当作下指标即可移值到张量 $S$．故在本词条里，我们总是将张量限制为 $(p,0)$ 型张量．并且讨论的是这 $p$ 个指标的对称性和斜对称性，而不是它的一部分（因为在讨论某些指标的（斜）对称性质的时候，只需将其它指标当作固定的就变成这里讨论的情形）．
+
+本节将引入对称化映射和交错化映射，并证明在这两映射作用下，张量将变为对称张量和斜对称张量．张量的对称性和斜对称性的概念事实上已在多重线性映射\upref{MulMap}中指出．
 \subsection{张量的对称化}
 设 $T\in \mathbb{T}_p^0(V)$ （\autoref{CofTen_def1}~\upref{CofTen}），即
 \begin{equation}
@@ -23,7 +22,13 @@ f_\pi(T)(x_1,x_2,\cdots,x_p):=T(x_{\pi1},\cdots,x_{\pi p})
 
 \begin{theorem}{}
 $\forall \pi,\sigma\in S_p$ 都有 
-$f_{\pi}(T)\in\mathbb{T}_p^0,\quad f_\pi \circ f_\sigma=f_{\pi\sigma}$ 且
+\begin{equation}
+f_{\pi}(T)\in\mathbb{T}_p^0
+\end{equation}
+\begin{equation}\label{SIofTe_eq6}
+f_\pi \circ f_\sigma=f_{\pi\sigma}
+\end{equation}
+
 \begin{equation}\label{SIofTe_eq2}
 f_{\pi}(T)=\sum_{i_1\cdots i_p}T_{i_{\pi1}\cdots i_{\pi p}}e^{i_1}\otimes\cdots\otimes e^{i_p}
 \end{equation}
@@ -75,7 +80,7 @@ f_{\pi}(T)_{i_1\cdots i_p}&=f_{\pi}(T)(e_{i_1},\cdots,e_{i_p})=T(e_{i_{\pi1}},\c
 \begin{equation}
 S=\frac{1}{p!}\sum_{\pi\in S_p} f_\pi:\mathbb{T}_p^0\rightarrow\mathbb{T}_p^0
 \end{equation}
-为 $\mathbb{T}_p^0$ 上的矢量的\textbf{对称化}．
+为 $\mathbb{T}_p^0(V)$ 上矢量的\textbf{对称化}映射．
 \end{definition}
 
 \begin{theorem}{张量的对称化}
@@ -100,12 +105,121 @@ $\mathbb{T}_p^0$ 中全体对称张量构成的子空间记作 $\mathbb{T}_p^+(V
 \begin{exercise}{}
 试证明: 若 $T\in\mathbb{T}_p^+(V)$，则 $S(T)=T$．
 \end{exercise}
+
+由于 $\mathbb{T}_p^0$ 型张量共 $p$ 个指标，每个指标所在处需放一个数字，这些数字在 $\{1,\cdots,n\}$ 中选取．对 $\mathbb{T}_p^0$ 的对称张量，独立分量的个数相当于从 $n$ 个数字中一次选 $p$ 个的重复组合（\autoref{APC_def4}~\upref{APC}），该个数为 $\qty(\begin{aligned}
+&n+p-1\\&\qquad p
+\end{aligned})$．
 \subsection{张量的交错化}
 \pentry{置换的奇偶性\upref{permu}}
 \begin{definition}{斜对称张量}
 称张量 $T$ 是\textbf{斜对称(反对称)}的，若 $\forall \pi\in S_p$，都有
-\begin{equation}
+\begin{equation}\label{SIofTe_eq4}
 f_\pi(T)=\epsilon_\pi T
 \end{equation}
 其中 $\epsilon_\pi$ 是置换 $\pi$ 的（奇偶性）符号．
 \end{definition}
+
+\autoref{SIofTe_eq4} 等价为
+\begin{equation}\label{SIofTe_eq5}
+f_\tau(T)=-T
+\end{equation}
+其中，$\tau$ 是 $S_p$ 上的对换．
+\begin{example}{}
+\autoref{SIofTe_eq4} 和\autoref{SIofTe_eq5} 等价性的证明
+
+\textbf{证明：}
+根据\autoref{permu_the2}~\upref{permu}，置换都可分解成轮换的乘积，而由\autoref{permu_the1}~\upref{permu}，轮换都可分解成对换的乘积，而奇偶性不变，即最终置换都能写成对换的乘积，而奇偶性不变，而对换都是奇置换，那么由 \autoref{SIofTe_eq4} 可得\autoref{SIofTe_eq5} ；同样由\autoref{SIofTe_eq5} ，任意对换 $\tau$ 的符号 $\epsilon_\tau=-1$ ，那么对任意置换 $\pi$，有
+\begin{equation}
+\begin{aligned}
+&\pi=\tau_1\cdots\tau_{2n}, \quad &\text{ $\pi$ 为偶置换}\\
+&\pi=\tau_1\cdots\tau_{2n+1}, &\quad \text{ $\pi$ 为奇置换}
+\end{aligned}
+\end{equation}
+于是由\autoref{SIofTe_eq6} 和\autoref{SIofTe_eq5} 
+\begin{equation}
+\begin{aligned}
+&f_\pi(T)=f_{\tau_1}\cdots f_{\tau_{2n}}(T)=(-1)^{2n}T=\epsilon_\pi T,\quad&\text{$\pi$ 是偶置换}\\
+&f_\pi(T)=f_{\tau_1}\cdots f_{\tau_{2n+1}}(T)=(-1)^{2n+1}T=\epsilon_\pi T,\quad&\text{$\pi$ 是奇置换}
+\end{aligned}
+\end{equation}
+即由\autoref{SIofTe_eq5} 得到\autoref{SIofTe_eq4} 
+
+\textbf{证毕！}
+
+\end{example}
+
+
+
+
+
+
+\begin{exercise}{}\label{SIofTe_exe1}
+试证明：若 $T$ 是斜对称的，则 $T_{i_{\pi1}\cdots i_{\pi p}}=\epsilon_\pi T_{i_1\cdots i_p}$ ，特别的，$ T_{i_1\cdots i_p}$ 在任两指标相同时为0．
+\end{exercise}
+
+由\autoref{SIofTe_exe1} ，对于 $p$ 个数字构成的所有排列中，只要确定了一个排列下的坐标即可．而 $p$ 个指标中有两个相同则该坐标为0，所以独立的坐标个数相当于从 $n$ 个数中选择 $p$ 个不同的数的个数，即共有 $\left(\begin{aligned}
+&n\\
+&p
+\end{aligned}\right)$
+个独立的指标．
+
+\begin{definition}{张量的交错化}
+称映射
+\begin{equation}\label{SIofTe_eq7}
+A=\frac{1}{p!}\sum_{\pi\in S_p}\epsilon_\pi f_\pi:\mathbb{T}_p^0(V)\rightarrow\mathbb{T}_p^0(V)
+\end{equation}
+为 $\mathbb{T}_p^0(V)$ 上矢量的\textbf{交错化}映射．
+\end{definition}
+\begin{theorem}{}
+$\mathbb{T}_p^0$ 上所有斜对称张量的集合构成 $\mathbb{T}_p^0$ 的一个子空间．
+\end{theorem}
+\textbf{证明:}结合律、单位元显然，封闭性证明如下：
+\begin{equation}
+\begin{aligned}
+f_\pi P=\epsilon_\pi P,\quad&f_\pi R=\epsilon_\pi R\\
+&\Downarrow\\
+f_\pi(\alpha P+\beta R)&=\alpha f_\pi P+\beta f_\pi R\\
+&=\alpha \epsilon_\pi P+\beta \epsilon_\pi R
+\end{aligned}
+\end{equation}
+斜对称张量的逆元由 $f_\pi$ 的线性易证也是斜对称张量．
+
+\textbf{证毕！}
+\begin{definition}{斜对称张量子空间}
+$\mathbb{T}_p^0$ 上所有斜对称张量构成的子空间记作 $\Lambda^p(V^*)$．
+\end{definition}
+\begin{theorem}{}\label{SIofTe_the1}
+交错化映射 $A$ 是个线性算子，且满足：
+\begin{enumerate}
+\item $A^2=A$;
+\item $\mathrm{Im} A=\Lambda^p(V^*)$;
+\item $Af_\sigma=f_\sigma A=\epsilon_\sigma A$．
+\end{enumerate}
+\end{theorem}
+\textbf{证明：}1.由\autoref{SIofTe_eq7} 
+\begin{equation}\label{SIofTe_eq8}
+\begin{aligned}
+A^2&=\frac{1}{(p!)^2}\sum_{\sigma,\pi\in S_p}\epsilon_\sigma\epsilon_\pi f_\sigma\circ f_\pi=\frac{1}{(p!)^2}\sum_{\sigma,\pi\in S_p}\epsilon_{\sigma\pi} f_{\sigma\pi}\\
+\end{aligned}
+\end{equation}
+由于对任意 $\rho\in S_p$，任选 $\sigma\in S_p$ ，都有 $\pi=\sigma^{-1}\rho$，使得 $\rho=\sigma\pi$．而每个 $\rho$ 都是 $S_p$ 上的双射，所以表示成 $\rho=\sigma\pi$ 的 $\sigma$ 和 $\pi$ 一一对应，而 $\sigma$ 共能取 $\abs{S_p}=p!$ 个，那么每一个 $\rho$ 都有 $p!$ 种方式被表达成 $\sigma \pi$ 的形式．所以，若提取出\autoref{SIofTe_eq8} 中的 $\sigma\pi=\rho$ 的项，其系数就是 $p!$，因此
+\begin{equation}
+A^2=\frac{1}{(p!)}\sum_{\rho\in S_p}\epsilon_\rho f_\rho=A
+\end{equation}
+
+2．注意 ${\epsilon_\sigma}^2=1$
+\begin{equation}\label{SIofTe_eq9}
+f_\sigma(A(T))=\frac{1}{p!}\sum_{\pi\in S_p}\epsilon_\pi f_\sigma(f_\pi(T))=\epsilon_\sigma\frac{1}{p!}\sum_{\pi\in S_p}\epsilon_{\sigma\pi} f_{\sigma\pi}(T)=\epsilon_\sigma A(T)
+\end{equation}
+ 所以 $\mathrm{Im} A\subset\Lambda^p(V^*)$．另外，任意 $T\in\Lambda_p(V^*)$，都有
+ \begin{equation}
+ A(T)=\frac{1}{p!}\sum_{\pi\in S_p}\epsilon_\pi f_\pi(T)=\frac{1}{p!}\sum_{\pi\in S_p}T=T
+ \end{equation}
+ 即 $T\in A(T)\Rightarrow\Lambda_p(V^*)\subset\mathrm{Im} A$．
+ 故 $\mathrm{Im} A=\Lambda^p(V^*)$．
+
+3．由\autoref{SIofTe_eq9} ，$f_\sigma A=\epsilon_\sigma A$．同样的易证 $Af_\sigma=\epsilon_\sigma A$，故 $Af_\sigma=f_\sigma A=\epsilon_\sigma A$．
+
+\textbf{证毕！}
+
+\autoref{SIofTe_the1} 的第2条说明在 $A$ 的作用下张量变为斜对称张量．

@@ -1,0 +1,30 @@
+% C++ 标准库常用算法
+
+\begin{issues}
+\issueDraft
+\end{issues}
+
+\begin{itemize}
+\item \href{https://en.cppreference.com/w/cpp/container/vector/assign}{vector::assign}： 
+\item \href{https://cplusplus.com/reference/algorithm/copy/}{copy}： 复制一段元素 \verb|copy(iter1_beg, iter1_end, iter_result);|
+\item \href{https://cplusplus.com/reference/algorithm/move/}{move}： \verb|move (iter_beg, iter_end, iter_result);| 对每个元素用 \verb|std::move|
+\begin{lstlisting}[language=cpp]
+template<class InputIterator, class OutputIterator>
+  OutputIterator move (InputIterator first, InputIterator last,
+      OutputIterator result) {
+  while (first!=last) {
+    *result = std::move(*first); ++result; ++first;
+  }
+  return result;
+}
+\end{lstlisting}
+\item \href{https://cplusplus.com/reference/algorithm/sort/}{sort}： \verb|sort(iter_beg, iter_end, Compare（可选）)| 升序排列， 其中 compare 可以是函数指针， functor， lambda 等． \verb|iter| 需要支持随机访问．
+\item \href{https://cplusplus.com/reference/algorithm/find/}{find}： \verb|iter = find(iter_start, iter_end, elm)| 寻找第一个符合的元素， 如果找到返回 iterator， 否则返回 \verb|iter_end| 元素需要定义 \verb|operator==|， iterator 需要支持 forward．
+\item \verb|swap(容器1, 容器2)|， 一般来说是不会逐个元素 copy， 只会交换容器指针． 数组除外．
+\begin{lstlisting}[language=cpp]
+template <class T> void swap (T& a, T& b)
+{ T c(std::move(a)); a=std::move(b); b=std::move(c); }
+template <class T, size_t N> void swap (T (&a)[N], T (&b)[N])
+{ for (size_t i = 0; i<N; ++i) swap (a[i],b[i]); }
+\end{lstlisting}
+\end{itemize}
