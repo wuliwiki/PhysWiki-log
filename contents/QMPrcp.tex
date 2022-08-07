@@ -1,5 +1,5 @@
 % 量子力学的基本原理（量子力学）
-% 量子力学|态矢
+% 量子力学|态矢|算符|算符对易|动量算符|能量算符|角动量算符|算符运算|算符乘积|量子力学的基本假设|量子力学公理
 
 \pentry{线性代数，微积分，经典力学}
 \pentry{量子力学的基本原理（科普）\upref{QM0}}
@@ -28,10 +28,55 @@
 
 \subsection{量子力学的基本假设}
 
+本小节\textbf{定义的概念}有：
 
-\subsubsection{薛定谔方程}
+\begin{itemize}
+\item 量子态（波函数）-\autoref{QMPrcp_def6} 
+\item 量子态（狄拉克符号）-\autoref{QMPrcp_def4} 
+\item 量子态的等价-\autoref{QMPrcp_def2} 
+\item 内积-\autoref{QMPrcp_def1} 
+\item 态矢量的坐标表示（列矩阵和行矩阵之分）-\autoref{QMPrcp_def3} 
+\item 算符-\autoref{QMPrcp_def7} 
+\item 算符的加减法和乘法-\autoref{QMPrcp_def8} 
+\item 单位算符-\autoref{QMPrcp_def9} 
+\item 零算符-\autoref{QMPrcp_def10} 
+\item 线性算符-\autoref{QMPrcp_def11} 
+\item 共轭算符-\autoref{QMPrcp_def5} 
+\item 厄米算符\footnote{也有译名为埃米尔特算符、厄密算符的．}-\autoref{QMPrcp_def12} 
+\item 简并-\autoref{QMPrcp_def16} 
+\item 对易子-\autoref{QMPrcp_def13} 
+\item 可观测量-\autoref{QMPrcp_def14} 
+\item 得到特定测量值的概率-\autoref{QMPrcp_eq5} 
+\end{itemize}
 
-一个系统所处的量子态被表示为一个以空间坐标为自变量的复值函数，称为（\textbf{位置表象}下的）\textbf{态函数（state function）}．
+
+讨论的\textbf{定理}有：
+
+\begin{itemize}
+\item 算符运算的简单性质-\autoref{QMPrcp_the4} 
+\item 算符的矩阵表示-\autoref{QMPrcp_the1} 
+\item 算符用本征矢展开-\autoref{QMPrcp_cor2} 
+\item 厄米算符的本征值必为实数-\autoref{QMPrcp_the2} 
+\item 不同本征值的本征态相互正交-\autoref{QMPrcp_the3} 
+\end{itemize}
+
+列举的\textbf{对易关系}有：
+
+\begin{itemize}
+\item 海森堡对易关系-\autoref{QMPrcp_the5} 、\autoref{QMPrcp_cor1} 
+\item 角动量算符的对易关系-\autoref{QMPrcp_the6} 
+\item 自旋算符的对易关系-\autoref{QMPrcp_the8}  
+\end{itemize}
+
+
+
+\subsubsection{波函数}
+
+\begin{definition}{量子态（波函数）}\label{QMPrcp_def6}
+一个系统所处的\textbf{量子态}被\textbf{表示}为一个复值函数，称为\textbf{态函数（state function）}．
+
+如果该函数的自变量是空间位置，则称之为在\textbf{位置表象}下的表示；如自变量是动量，则为\textbf{动量表象}下的表示．
+\end{definition}
 
 量子态的演化规律满足薛定谔方程，参见\textbf{薛定谔方程（单粒子一维）}\upref{TDSE11}、\textbf{定态薛定谔方程（单粒子一维）}\upref{SchEq}、\textbf{薛定谔方程（单粒子多维）}\upref{QMndim}、\textbf{薛定谔方程 2（单粒子多维）}\upref{TDSE}和\textbf{多体薛定谔方程}\upref{NbdQM}等词条，或在百科中搜索关键词“薛定谔方程”．
 
@@ -39,16 +84,32 @@
 
 表示量子态的态函数全体构成了一个线性空间，因此量子态也有等价的代数诠释．位置表象和动量表象的态函数的不同，相当于选择了不同的基矢量后矢量坐标不同．
 
-一个系统所处的\textbf{量子态}被表示为复\textbf{希尔伯特空间}\upref{Hilber}上的一个矢量，用\textbf{狄拉克符号}\footnote{见\textbf{狄拉克符号}\upref{braket}或\textbf{对偶空间}\autoref{DualSp_sub1}~\upref{DualSp}．}表示．每个量子态都有\textbf{两个}矢量表示，数学上可以理解为这两个“表示矢量”来自两个复希尔伯特空间，这两个空间之间存在一个同构$\sigma$，使得如果矢量$\bvec{v}$表示一个量子态，则$\sigma(\bvec{v})$表示同一个量子态．
+\begin{definition}{量子态（狄拉克符号）}\label{QMPrcp_def4}
+一个系统所处的\textbf{量子态}\textbf{是}复\textbf{希尔伯特空间}\upref{Hilber}上的一个矢量，用\textbf{狄拉克符号}\footnote{见\textbf{狄拉克符号}\upref{braket}或\textbf{对偶空间}\autoref{DualSp_sub1}~\upref{DualSp}．}表示．
+
+每个量子态都有\textbf{两个}矢量表示，数学上可以理解为这两个“表示矢量”来自两个同构的复希尔伯特空间，这两个空间之间给定了一个同构$\sigma$，使得如果矢量$\bvec{v}$表示一个量子态，则$\sigma(\bvec{v})$表示同一个量子态．
 
 量子态的两个“表示空间”中的矢量分别被称为\textbf{左矢}和\textbf{右矢}，分别用$\bra{*}$和$\ket{*}$表示．$*$号处填表示这个量子态的符号．
 
+\end{definition}
+
+如果一个量子态的右矢表示为$\ket{s}$，那其左矢表示应为$\bra{s}=\sigma(\ket{s})$，这里的$\sigma$就是\autoref{QMPrcp_def4} 中提到的两个希尔伯特空间（左矢空间和右矢空间）之间的同构，从右矢空间到左矢空间．
+
+\begin{definition}{}\label{QMPrcp_def2}
+
 若已知态$\ket{s}$，则对于任意复数$c\in\mathbb{C}$，定义$c\ket{s}$和$\ket{s}$是\textbf{同一个态}，$c\ket{s}$也可表示为$\ket{cs}$．态$\ket{s}$的对偶矢量表示为$\bra{s}$．
+
+对于复数$a$，规定$a\ket{s}$的对偶是$a^*\bra{s}$．
+\end{definition}
+
+
 
 
 \subsubsection{内积}
 
-一个左矢$\bra{a}$和一个右矢$\ket{b}$可以相乘得到一个复数，记为$\braket{a}{b}$．该运算称为“\textbf{内积（inner product）}”，定义为“满足\textbf{埃尔米特矢量空间（酉空间）}\upref{HVorUV}内积的性质\footnote{注意\textbf{埃尔米特矢量空间（酉空间）}\upref{HVorUV}中描述的是同一个空间中的两个向量相乘，而左矢和右矢是在不同的空间中．}”的运算，即
+
+\begin{definition}{内积}\label{QMPrcp_def1}
+一个左矢$\bra{a}$和一个右矢$\ket{b}$可以相乘得到一个复数，记为$\braket{a}{b}$．该运算称为“\textbf{内积（inner product）}”，定义为“满足\textbf{埃尔米特矢量空间（酉空间）}\upref{HVorUV}内积的性质\footnote{注意\textbf{埃尔米特矢量空间（酉空间）}\upref{HVorUV}中描述的是同一个空间中的两个矢量相乘，而左矢和右矢是在不同的空间中．}”的运算，即
 \begin{equation}
 \leftgroup{
     \braket{a}{b}&=\braket{b}{a}^*\\
@@ -57,13 +118,30 @@
 } 
 \end{equation}
 
+
+\end{definition}
 有了内积的概念后，我们就有了矢量的模长和矢量间正交的概念．为了方便，可以规定仅使用模长为$1$的矢量来表示量子态．
 
-如果取右矢空间的标准正交基，则由已有的同构关系$\sigma$，可以得到左矢空间的标准正交基．在这两个基下，任意左矢和右矢都可以用坐标来表示．规定态的右矢$\ket{s}$的坐标用\textbf{列矩阵}表示，左矢$\bra{s}$用\textbf{行矩阵}表示．
+\begin{example}{态矢量归一化}
+任取量子态$\ket{s}$，则总可以取其等价态
+\begin{equation}
+\ket{\tilde{s}}= \frac{\ket{s}}{\sqrt{\braket{s}{s}}}
+\end{equation}
 
-对于复数$a$，规定$\ket{as}$的对偶是$\bra{a^*s}$．此时左矢和右矢的内积可以表示为矩阵乘法．
+显然，$\braket{\tilde{s}}{\tilde{s}}=1$，因此这是取出模长为$1$的量子态的简单方法．称$\ket{\tilde{s}}$是$\ket{s}$的\textbf{归一化}表示．
+\end{example}
 
-如果一个量子态的矢量表示是$\ket{s_i}$，态函数表示是$\psi_i$，且态函数取值连续，那么内积对应态函数的积分：
+如果取右矢空间的标准正交基$\{\ket{s_\alpha}\}$，则由已有的同构关系$\sigma$，可以得到左矢空间的标准正交基$\{\sigma(\ket{s_\alpha})\}$．在这两个基下，任意左矢和右矢都可以用坐标来表示．
+
+\begin{definition}{态矢量的坐标表示}\label{QMPrcp_def3}
+态的右矢$\ket{s}$的坐标用\textbf{列矩阵}表示，左矢$\bra{s}$用\textbf{行矩阵}表示．
+\end{definition}
+
+按照\autoref{QMPrcp_def2} ，态左矢的坐标矩阵，是态右矢的坐标矩阵之\textbf{转置}、\textbf{取共轭}\footnote{取共轭即把矩阵元素都换成共轭元素．显然，反过来先取共轭再转置，结果是一样的．矩阵转置、取共轭后的结果，就是它的\textbf{厄米共轭}．}．再结合\autoref{QMPrcp_def1} 和\autoref{QMPrcp_def3} ，分量离散的态矢量的内积可以用矩阵乘法表示．
+
+
+
+如果一个量子态的矢量表示是$\ket{s_i}$，态函数表示是$\psi_i$，且态函数取值连续（即态矢量的分量是连续的），那么内积对应态函数的积分：
 \begin{equation}
 \braket{s_2}{s_1} = \int_{\text{整个态空间}}\psi_2^*\psi_1\dd \bvec{x}
 \end{equation}
@@ -74,54 +152,46 @@ $\ket{s_i}$可以和$\psi_i$视为等价，有时也可以把这个态表示为$
 
 \subsubsection{算符}
 
-\textbf{算符（operator）}是把一个态映射为另一个态的\textbf{映射}．从代数角度来说，量子力学中的算符大都是线性空间上的线性变换，非线性算符包括\textbf{时间反演算符}．对于线性算符，我们关心的是这个变换本身的性质，而不是它把给定态变成什么态了．
+\begin{definition}{算符}\label{QMPrcp_def7}
+\textbf{算符（operator）}是把一个态变为另一个态的\textbf{映射}．
+\end{definition}
+
+注意，这里的“变为”并不是说物理上把态改变了，而是指“映射到了”的意思．
+
+从代数角度来说，量子力学中的算符大都是线性空间上的线性变换，非线性算符包括\textbf{时间反演算符}．对于线性算符，我们关心的是这个变换本身的性质．
 \addTODO{有了讨论时间反演算符的词条或相关内容后，在此引用．}
 
-给定右矢空间的基以后，算符可以表示为矩阵，该矩阵称为该算符的\textbf{坐标}．由于规定右矢坐标是列矩阵，因此为了与矩阵乘法配合，算符$X$应从\textbf{左边}作用在\textbf{右矢}$\ket{s}$上：
-\begin{equation}
-X\cdot\ket{s} = X\ket{s}
-\end{equation}
-得到另一个右矢．如果对于所涉及的\textbf{任意}态右矢$\ket{s}$都有
-\begin{equation}
-X\ket{s}=Y\ket{s}
-\end{equation}
-那么称算符$X$和$Y$\textbf{相等}，记为$X=Y$．
+给定右矢空间的基以后，算符对量子态的作用可以表示为方阵乘在量子态的右矢或左矢矩阵上，该方阵称为该算符的\textbf{坐标}．如果用波函数表示一个量子态，那么算符也可能是求导算符或者其与其它算符相结合的形式．由于规定右矢坐标是列矩阵，因此为了与矩阵乘法配合，算符$X$应从\textbf{左边}作用在\textbf{右矢}$\ket{s}$上，得到另一个右矢$X\ket{s}$，而从\textbf{右边}作用在左矢$\bra{s}$上，得到另一个左矢$\bra{s}X$．
 
-如果对于\textbf{任意}态右矢$\ket{s}$都有
-\begin{equation}
-X\ket{s}
-\end{equation}
-则称$X$为一个\textbf{零算符}，记为$X=0$．
 
-由于矢量之间可以相加，算符之间也可以相加：
+
+
+
+
+
+
+\begin{definition}{算符的运算}\label{QMPrcp_def8}
+算符之间的加减法，由\textbf{矢量的加减法}导出：
 \begin{equation}
 (X+Y)\ket{s} = X\ket{x}+Y\ket{s}
 \end{equation}
+
+算符之间的乘法，由\textbf{映射的复合}导出：
+\begin{equation}
+(XY)\ket{s} = X(Y\ket{s})
+\end{equation}
+\end{definition}
+
+
+\begin{theorem}{算符运算的简单性质}\label{QMPrcp_the4}
+
 由矢量加法的结合性，容易证明算符加法具有结合性：
 \begin{equation}
 (X+Y)+Z=X+(Y+Z)
 \end{equation}
 
-如果算符$X$是线性的，则
-\begin{equation}
-X(a\ket{s_a}+b\ket{s_b}) = aX\ket{s_a}+bX\ket{s_b}
-\end{equation}
-
-相应地，算符总是从\textbf{右边}作用在\textbf{左矢}上：
-\begin{equation}
-\bra{s}\cdot X = \bra{s}X
-\end{equation}
-
-一般地，$X\ket{s}$和$\bra{s}X$\textbf{并不是}同一个量子态的表示．$X\ket{s}$的对偶表示定义为$\bra{s}X^\dagger$，如此定义的$X^\dagger$称为$X$的\textbf{共轭算符（conjugate operator）}，或\textbf{厄米共轭（hermitian conjugate）}．
-
-若$X$在某个基下的坐标是矩阵$\mathcal{M}$，则$X^\dagger$的坐标$\mathcal{M}^\dagger$是$\mathcal{M}$的共轭转置，即元素全部取共轭后进行转置，或者反过来先转置再共轭．
-
-算符的乘法定义为
-\begin{equation}
-(XY)\ket{s} = X(Y\ket{s})
-\end{equation}
-可以理解为映射的复合，可以表示为矩阵乘法．算符乘法和映射复合一样，\textbf{通常}不可交换：
-\begin{equation}
+算符乘法和映射复合一样，\textbf{通常}不可交换：
+\begin{equation}\label{QMPrcp_eq6}
 XY\neq YX
 \end{equation}
 却可复合：
@@ -129,29 +199,215 @@ XY\neq YX
 (XY)Z=X(YZ)
 \end{equation}
 
+
+\end{theorem}
+
+\begin{definition}{单位算符}\label{QMPrcp_def9}
+如果对于\textbf{任意}态右矢$\ket{s}$都有
+\begin{equation}
+I\ket{s} = \ket{s}
+\end{equation}
+则称$I$为一个\textbf{单位算符（indentity operator）}．
+\end{definition}
+
+
+
+\begin{definition}{零算符与相等}\label{QMPrcp_def10}
+
+如果对于\textbf{任意}态右矢$\ket{s}$都有
+\begin{equation}
+X\ket{s} = 0
+\end{equation}
+则称$X$为一个\textbf{零算符（null operator）}，记为$X=0$．
+
+如果$X-Y=0$，称算符$X$与$Y$\textbf{相等}，记为$X=Y$．
+
+\end{definition}
+
+
+
+
+
+
+
+\begin{definition}{线性算符}\label{QMPrcp_def11}
+如果算符$X$对于任意的复数$a, b$和量子态$\ket{s_a}, \ket{s_b}$，都有
+\begin{equation}
+X(a\ket{s_a}+b\ket{s_b}) = aX\ket{s_a}+bX\ket{s_b}
+\end{equation}
+则称$X$是一个\textbf{线性算符（linear operator）}．
+\end{definition}
+
+
+一般地，$X\ket{s}$和$\bra{s}X$\textbf{并不是}同一个量子态的表示．比如，对于复数$a$，$a\ket{s}$的对偶表示应该是$\bra{s}a^*$．这提示我们应该做出以下定义：
+
+\begin{definition}{共轭算符}\label{QMPrcp_def5}
+对于算符$X$，若存在算符$X^\dagger$使得对于任意量子态$\ket{s}$，$X\ket{s}$都和$\bra{s}X^\dagger$互为对偶表示，则称$X^\dagger$为$X$的\textbf{共轭算符（conjugate operator）}，或\textbf{厄米共轭（hermitian conjugate）}．
+\end{definition}
+\addTODO{共轭算符在分析语言下的定义．}
+
+
+
+
+
+\begin{theorem}{算符的矩阵表示}\label{QMPrcp_the1}
+设$\{\ket{s_i}\}_{i=1}^n$构成了态空间的一组离散基，那么算符$X$在这组基下的坐标为
+\begin{equation}
+\pmat{
+    \bra{s_1}X\ket{s_1}&\bra{s_1}X\ket{s_2}&\cdots\\
+    \bra{s_2}X\ket{s_1}&\bra{s_2}X\ket{s_2}&\cdots\\
+    \vdots & \vdots& \ddots
+}
+\end{equation}
+\end{theorem}
+
+\textbf{证明}：
+
+在给定基下，$\bra{s_i}$的坐标是一个行矩阵$\mathcal{C}$，除了第$i$列为$1$，其它列都为$0$；类似地，$\ket{s_j}$的坐标是一个列矩阵$\mathcal{R}$，除了第$j$行为$1$，其它行都为$0$．设$X$的坐标是$\mathcal{M}$，其第$i$行$j$列的坐标为$m^i_j$．则有
+
+\begin{equation}
+\bra{s_i}X\ket{s_j} = \mathcal{CMR} = m^i_j
+\end{equation}
+
+
+
+
+
+
+
+由\autoref{QMPrcp_the1} 可知，若$X$在某个基下的坐标是矩阵$\mathcal{M}$，则$X^\dagger$的坐标$\mathcal{M}^\dagger$是$\mathcal{M}$的共轭转置，即元素全部取共轭后进行转置，或者反过来先转置再共轭．这一点和右矢、左矢之间互为厄米共轭是一致的．
+
+
+
+
+
+
+\begin{lemma}{}\label{QMPrcp_lem1}
+如果$\ket{s}$是$X$的本征矢量，本征值为$a$，即$X\ket{s}=a\ket{s}$，那么$\bra{s}X=a\bra{s}$．
+\end{lemma}
+
+\textbf{证明}：
+
+由\autoref{QMPrcp_def5} ，$X^\dagger\ket{s}$与$\bra{s}X$互为共轭．因此，如果$\ket{s}$是$X$的本征矢量，本征值为$a$，即$X\ket{s}=a\ket{s}$，那么$X^\dagger\ket{s}=a^*\ket{s}$\footnote{用$\ket{s}$作为第一个基向量，则$X$的第一行第一列的元素即为$a$，于是$X^\dagger$的第一行第一列为$a^*$．}，从而推知$\bra{s}X=a\bra{s}$．
+
+\textbf{证毕}．
+
+
+
+
 注意
 \begin{equation}
 (XY)^\dagger = Y^\dagger X^\dagger
 \end{equation}
 
-\begin{example}{位置表象下的算符}
+
+\begin{definition}{厄米算符}\label{QMPrcp_def12}
+若$X=X^\dagger$，则称$X$是一个\textbf{厄米算符（hermitian operator）}．
+\end{definition}
+
+\begin{theorem}{}\label{QMPrcp_the2}
+厄米算符的本征值必为实数．
+\end{theorem}
+
+\textbf{证明}：
+
+取$\ket{s}$为$X$的任意\textbf{本征}矢量，其本征值为$a$，若$X$是厄米的，则据\autoref{QMPrcp_def5} 和\autoref{QMPrcp_eq3} 知，$\bra{s}X$与$X\ket{s}$互为对偶表示，即$X\ket{s}=a\ket{s}$，$\bra{s}X=a^*\bra{s}$\footnote{其实到这一步已经证毕了，引用\autoref{QMPrcp_lem1} 即可．}．
+
+于是
+\begin{equation}\label{QMPrcp_eq5}
+\begin{aligned}
+a&=\bra{s}a\ket{s}\\
+&=\bra{s}(X\ket{s})\\
+&=(\bra{s}X)\ket{s}\\
+&=a^*\braket{s}{s}\\
+&=a^*
+\end{aligned}
+\end{equation}
+
+从而$a=a^*\implies a$为实数．
+
+\textbf{证毕}．
+
+
+\begin{theorem}{不同本征值的本征态相互正交}\label{QMPrcp_the3}
+任取算符$X$，若$\ket{s_a}$和$\ket{s_b}$都是$X$的本征矢量，其本征值分别为$a,b$，且$a\neq b$．则$\braket{s_a}{s_b}=0$．
+\end{theorem}
+
+\textbf{证明}：
+
+\begin{equation}
+\begin{aligned}
+a\braket{s_a}{s_b}&=(\bra{s_a}X)\ket{s_b}\\
+&=\bra{s_a}(X\ket{s_b})\\
+&=b\braket{s_a}{s_b}
+\end{aligned}
+\end{equation}
+
+而$a\neq b$，因此必有$\braket{s_a}{s_b}=0$．
+
+\textbf{证毕}．
+
+
+
+\begin{definition}{简并}\label{QMPrcp_def16}
+若对于算符$X$，存在两个\textbf{线性无关}的\textbf{本征}右矢$\ket{s_1}$和$\ket{s_2}$，使得$X\ket{s_1}=a\ket{s_1}$，$X\ket{s_2}=a\ket{s_2}$，则称$a$是一个\textbf{简并（degenerate）}的本征值．
+\end{definition}
+
+
+
+
+
+
+要指出一点，矢量算符可以理解为普通的算符和基矢量的结合．如$\nabla$算符将标量值函数变成一个矢量值函数，但其实也可以说$\nabla=x\hat{\bvec{x}}+y\hat{\bvec{y}}+z\hat{\bvec{z}}$，即由三个算符$x, y, z$和单位矢量结合而得．
+
+
+
+以下几个例子给出的是重要的算符．其中，动量算符和能量算符可由德布罗意关系得出，因为$E=h\nu$和$p=h/\lambda$意味着一个简谐波应写为$\exp{(\frac{\I \bvec{p}}{\hbar}\cdot\bvec{x}-\I Et)}$．角动量算符继承经典力学中的关系：$\bvec{L}=\bvec{r}\times\bvec{p}$．注意$\hbar=h/2\pi$．
+
+\begin{example}{位置表象下的算符}\label{QMPrcp_ex1}
 \textbf{位置表象}下，单粒子态函数的
 \begin{itemize}
-\item \textbf{位置算符}为$x$（一维情况）或$\bvec{x}$（三维情况）；
-\item \textbf{动量算符}为$-\I\hbar\frac{\partial}{\partial x}$（一维情况）或$-\I\hbar\nabla$（三维情况）；
-\item \textbf{能量算符}为$\I \frac{\partial}{\partial t}$．
+\item \textbf{位置算符}为$\hat{x}=x$（一维情况）或$\uvec{r}=x\uvec{x}+y\uvec{y}+z\uvec{z}$（三维情况）；
+\item \textbf{动量算符}为$\hat{p}=-\I\hbar\frac{\partial}{\partial x}$（一维情况）或$\uvec{p}=-\I\hbar\nabla=-\I\hbar(\uvec{x}\frac{\partial}{\partial x}+\uvec{y}\frac{\partial}{\partial y}+\uvec{z}\frac{\partial}{\partial z})$（三维情况）；
+\item \textbf{能量算符}为$\hat{E}=\I \frac{\partial}{\partial t}$；
+\item \textbf{角动量算符}为$\uvec{L}=\uvec{r}\times \uvec{p}$，展开后得
+\begin{equation}\label{QMPrcp_eq3}
+\hat{\bvec{L}}=
+-\I\hbar
+\pmat{
+    y\frac{\partial}{\partial_z}-z\frac{\partial}{\partial_y}\\
+    z\frac{\partial}{\partial_x}-x\frac{\partial}{\partial_z}\\
+    x\frac{\partial}{\partial_y}-y\frac{\partial}{\partial_x}
+}
+\end{equation}
 \end{itemize}
 \end{example}
 
 
-\begin{example}{动量表象下的算符}
+\begin{example}{动量表象下的算符}\label{QMPrcp_ex2}
 \textbf{动量表象}下，单粒子态函数的
 \begin{itemize}
-\item \textbf{位置算符}为$\I\hbar\frac{\partial}{\partial p}$（一维情况）或$\pmat{\frac{\partial}{\partial p_x}, \frac{\partial}{\partial p_y}, \frac{\partial}{\partial p_z}}\Tr$（三维情况）；
-\item \textbf{动量算符}为$p$（一维情况）或$\bvec{p}$（三维情况）；
-\item \textbf{能量算符}为$\I \frac{\partial}{\partial t}$．
+\item \textbf{位置算符}为$\hat{x}=\I\hbar\frac{\partial}{\partial p}$（一维情况）或$\uvec{r}=\I\hbar (\uvec{p}_{x}\frac{\partial}{\partial p_x}+\uvec{p}_{y}\frac{\partial}{\partial p_y}+\uvec{p}_{z}\frac{\partial}{\partial p_z})$（三维情况）；
+\item \textbf{动量算符}为$\hat{p}=p$（一维情况）或$\uvec{p}=p_x\uvec{p}_x+p_y\uvec{p}_y+p_z\uvec{p}_z$（三维情况）；
+\item \textbf{能量算符}为$\hat{E}=\I \frac{\partial}{\partial t}$；
+\item \textbf{角动量算符}为$\uvec{L}=\uvec{r}\times \uvec{p}$，展开后得
+\begin{equation}
+\hat{\bvec{L}}=
+\I\hbar
+\pmat{
+    p_y\frac{\partial}{\partial p_z}-p_z\frac{\partial}{\partial p_y}\\
+    p_z\frac{\partial}{\partial p_x}-p_x\frac{\partial}{\partial p_z}\\
+    p_x\frac{\partial}{\partial p_y}-p_y\frac{\partial}{\partial p_x}
+}
+\end{equation}
 \end{itemize}
+
+其中角动量要特别注意，算符相乘不是数字相乘，而是函数复合．所以位置算符和动量算符做叉乘的时候，应代入一个“辅助函数”$\psi$，根据复合的定义得$[(\frac{\partial}{\partial_x})(p_y)]\psi=\frac{\partial}{\partial_x}(p_y\psi)=p_y\frac{\partial}{\partial_x}\psi$．
 \end{example}
+\addTODO{动量表象的正确性有待核验，特别是角动量算符．核验后删除此“未完成”．}
+
+
+
 
 \begin{example}{投影算符}
 
@@ -166,10 +422,186 @@ XY\neq YX
 \end{example}
 
 
+\begin{corollary}{}\label{QMPrcp_cor3}
+如果$\{\ket{s_\alpha}\}$构成了态空间的一组基，那么
+\begin{equation}
+\sum_\alpha \ket{s_\alpha}\bra{s_\alpha} = \mathbb{1}
+\end{equation}
+其中$\mathbb{1}$是单位算符，它作用在任何态矢量和算符上都不会改变对方．
+\end{corollary}
+
+该推论由投影算符的概念直接可得．
+
+
+
+
+
+
+\begin{corollary}{可对角化算符用本征矢展开}\label{QMPrcp_cor2}
+设$X$是一个可对角化的算符，有一个由本征矢量$\{\ket{s_i}\}$构成的离散基，且$X\ket{s_i}=\alpha_i\ket{s_i}$．则在这组基下有
+\begin{equation}
+X=\sum_{i}\alpha_i\ket{s_i}\bra{s_i}
+\end{equation}
+\end{corollary}
+
+\textbf{证明}：
+
+% 设$X$在给定本征基下的矩阵表示为$\mathcal{M}$，其第$j$行$i$列的元素是$m^j_i$．由\autoref{QMPrcp_the1} ，$m^j_i=\bra{s_i}$
+
+利用\autoref{QMPrcp_cor3} ，
+\begin{equation}\label{QMPrcp_eq4}
+X=\sum_{i}\sum_{j}\ket{s_i}\bra{s_i}X\ket{s_j}\bra{s_j}
+\end{equation}
+
+由\autoref{QMPrcp_the1} ，$\bra{s_i}X\ket{s_j}$是$X$在其本征矢构成的基下第$i$行$j$列的坐标值，而此时$X$的坐标应该是对角矩阵，且对角元是对应的本征值．于是，$\bra{s_i}X\ket{s_j}=\delta_{ij}\alpha_i$．
+
+于是\autoref{QMPrcp_eq4} 变为
+\begin{equation}
+\begin{aligned}
+X&=\sum_{i, j}\alpha_i\delta_{ij}\ket{s_i}\bra{s_j}\\
+&=\sum_i\alpha_i\ket{s_i}\bra{s_i}
+\end{aligned}
+\end{equation}
+
+
+
+\textbf{证毕}．
+
+
+
+
+
+
+
+
+
+
+
+\subsubsection{算符对易性}
+
+
+
+\begin{definition}{对易子}\label{QMPrcp_def13}
+对于算符$X$和$Y$，定义$[X, Y]=XY-YX$，称为算符$X$和$Y$的\textbf{对易子（commutator）}，或译作\textbf{对易关系}、\textbf{交换子}．
+
+定义$\{X, Y\}=XY+YX$，称为算符$X$和$Y$的\textbf{反对易子}．
+\end{definition}
+
+\autoref{QMPrcp_ex1} 和\autoref{QMPrcp_ex2} 中所举的是量子力学中最重要的几个算符，其对易关系非常重要．我们将这几例的对易关系列举如下\footnote{计算过程中不要忘了，要代入辅助函数，利用映射的复合来定义算子的乘法．}：
+
+\begin{theorem}{海森堡对易关系}\label{QMPrcp_the5}
+
+\begin{equation}
+[\hat{x}, \hat{p}_x] = \I\hbar
+\end{equation}
+
+\end{theorem}
+
+
+
+海森堡对易关系是量子力学中最基本的对易关系．
+
+
+
+\begin{corollary}{}\label{QMPrcp_cor1}
+
+\begin{equation}
+[\hat{i}, \hat{p}_j]=\I\hbar\delta_{ij}
+\end{equation}
+其中$i, j\in\{x, y, z\}$，$\delta_{ij}$是\textbf{克罗内克 delta 函数}\upref{Kronec}．
+\end{corollary}
+
+\begin{theorem}{角动量算符的对易关系}\label{QMPrcp_the6}
+
+定义角动量算符$\hat{\bvec{L}}$的$x$分量为$\hat{L}_x=-\I\hbar(y\frac{\partial}{\partial_z}-z\frac{\partial}{\partial _y})$．定义$\hat{\bvec{L}}^2=\hat{\bvec{L}}\cdot \hat{\bvec{L}}=\hat{L}_x^2+\hat{L}_y^2+\hat{L}_z^2$．
+
+\begin{equation}
+[\hat{p}_x, \hat{L}_x]=0
+\end{equation}
+
+\begin{equation}
+[\hat{p}_x, \hat{L}_y]=\I\hbar\hat{p}_z
+\end{equation}
+
+\begin{equation}
+[\hat{x}, \hat{L}_x]=0
+\end{equation}
+
+\begin{equation}
+[\hat{x}, \hat{L}_y]=\I\hbar\hat{z}
+\end{equation}
+
+\begin{equation}
+[\hat{L}_x, \hat{L}_x]=0
+\end{equation}
+
+\begin{equation}
+[\hat{L}_x, \hat{L}_y]=\I\hbar\hat{L}_z
+\end{equation}
+
+\begin{equation}
+[\hat{\bvec{L}}^2, \hat{L}_x]=0
+\end{equation}
+
+\begin{equation}
+\hat{\bvec{L}}\times\hat{\bvec{L}}=\I\hbar \hat{\bvec{L}}
+\end{equation}
+
+\end{theorem}
+
+
+
+
+
+\begin{theorem}{自旋算符的对易关系}\label{QMPrcp_the8}
+
+\begin{equation}
+[\hat{S}_z, \hat{S}_z]=0
+\end{equation}
+
+\begin{equation}
+[\hat{S}_x, \hat{S}_y]=\I\hbar S_z
+\end{equation}
+
+\begin{equation}
+\{\hat{S}_z, \hat{S}_z\}=\frac{\hbar^2}{2}
+\end{equation}
+
+\begin{equation}
+\{\hat{S}_x, \hat{S}_y\}=0
+\end{equation}
+
+\end{theorem}
+
+
+
+
+
+
+\begin{theorem}{Jacobi恒等式}
+对于任意算符$X, Y$和$Z$，有：
+\begin{equation}
+[X, [Y, Z]]+[Y, [Z, X]]+[Z, [X, Y]]=0
+\end{equation}
+\end{theorem}
+
+Jacobi恒等式建议自行证明，也可直接参考\textbf{李代数}\upref{LieAlg}词条中李代数的定义（要求Jacobi恒等式成立），以及\autoref{LieAlg_the2}~\upref{LieAlg}（该定理适用于对易子）．
+
+
+
+
+
+
 
 \subsubsection{测量}
 
-每一个测量行为被表示为一个算符．测量假设认为，进行测量后，量子态会坍缩成该测量算符的一个\textbf{本征}矢量，称为其\textbf{本征态（eigenstate）}，同时返回该本征态的\textbf{本征值}作为测量值．
+每一个测量行为被表示为一个算符．测量假设认为，进行测量后，量子态会坍缩成该测量算符的一个\textbf{本征}矢量，称为其\textbf{本征态（eigenstate）}，同时返回该本征态的\textbf{本征值}作为\textbf{测量值}．
+
+
+\begin{definition}{可观测量}\label{QMPrcp_def14}
+厄米算符所代表的测量行为称为\textbf{可观测量（observable）}\footnote{这里的observable是名词，复数为observables．}，如位置、动量、能量等．
+\end{definition}
+
 
 \begin{example}{}
 用\textbf{位置算符}表示的测量，测量值被认为是粒子的位置，测量后粒子坍缩为位置算符的本征态．
@@ -185,12 +617,47 @@ XY\neq YX
 \end{equation}
 其中\autoref{QMPrcp_eq1} 是离散情况，\autoref{QMPrcp_eq2} 是连续情况，$\ket{s_i}$和$\ket{s_x}$都表示$X$的本征态，$c_i$和$c(x)$表示各本征态的本征值．
 
-离散情况下，对$\ket{a}$进行$X$测量后，得到测量值$c_i$且$\ket{a}$坍缩为$\ket{s_i}$的概率为$\abs{c_i}^2$
+\begin{definition}{概率}\label{QMPrcp_def15}
 
-\begin{example}{}
+设可观测量$X$有一个本征矢构成的基$\{\ket{s_\alpha}\}$．\textbf{离散}情况下，指标$\alpha$只有最多可数个\footnote{“可数”的概念见\autoref{CardiN_sub1}~\upref{CardiN}．}可能性，此时设$\ket{a}=\sum_{\alpha}\ket{s_\alpha}$；\textbf{连续}情况下，指标$\alpha$的取值范围是一个实数区间．
+
+离散情况下，对$\ket{a}$进行$X$测量后，得到测量值$c_\alpha$且$\ket{a}$坍缩为$\ket{s_\alpha}$的概率为$\abs{c_\alpha}^2$．
+
+连续情况下，对$\ket{a}$进行$X$测量后，得到测量值在$s_{\alpha}$附近、$\alpha$的取值范围为$\dd x$的概率为$\abs{c_\alpha}^2\dd x$．
+\end{definition}
+
+
+\begin{theorem}{}\label{QMPrcp_the7}
+给定可观测量，则任何量子态都是由该可观测量的本征矢线性组合而成，即可观测量的全体本征矢\textbf{张成}了整个态空间．
+\end{theorem}
+\addTODO{定理名称应该怎么叫？本征矢完备性？另，取了名字以后要把这个列在小节开头的“目录”里．}
+
+\textbf{证明}：
+
+由线性代数知识知，一个线性变换的全体本征矢能张成整个空间，当且仅当这个线性变换可对角化．
+
+由厄米算符的定义，其矩阵表示必为共轭对称的，即对称位置的矩阵元互为共轭．由线性代数知识，任何矩阵都相似于一个上三角矩阵，而相似矩阵是同一个线性变换在不同基下的表示，因此可以选择一组基，使得算符的矩阵表示是上三角的．但这个上三角矩阵仍是共轭对称的，因此其非对角线元素必须为零．
+
+因此厄米算符总能对角化．
+
+\textbf{证毕}．
+
+
+\autoref{QMPrcp_the3} （本征矢的正交性）和\autoref{QMPrcp_the7} （本征矢的完备性）可以综合起来，表述为“可观测量的本征右矢构成了一个\textbf{完备正交}集”．因此，可观测量是可对角化的算符，适用\autoref{QMPrcp_cor2} ．
+
+
+
+
+
+
+
+
+
+
+\begin{example}{光的偏振态}\label{QMPrcp_ex3}
 考虑光的偏振实验．
 
-把光的量子态定义为沿着偏振角度的一个矢量\footnote{注意，根据前面的规定，$\pm\ket{s}$表示同一个态，因此无所谓正负方向．}，构成一个态空间．取水平方向的偏振，表示为$\ket{h}$，和竖直方向的偏振，表示为$\ket{v}$，则$\{\ket{h}, \ket{v}\}$构成一组基．
+把光的量子态定义为偏振态，即沿着偏振角度的一个矢量\footnote{注意，根据前面的规定，$\pm\ket{s}$表示同一个态，因此无所谓正负、大小．不过默认使用模为$1$的归一化矢量．}，构成一个态空间．取水平方向的偏振，表示为$\ket{h}$，和竖直方向的偏振，表示为$\ket{v}$，则$\{\ket{h}, \ket{v}\}$构成一组基．
 
 易证，与水平方向成$\theta$角的偏振态被表示为$\cos\theta\ket{h}+\sin\theta\ket{v}$．
 
@@ -215,7 +682,7 @@ XY\neq YX
 现在在两个检偏器中间插入一个与水平面成$\pi/4$角的检偏器，它的本征值为$1$和$0$，分别对应本征态$\frac{\sqrt{2}}{2}\ket{h}+\frac{\sqrt{2}}{2}\ket{v}$和$\frac{\sqrt{2}}{2}\ket{h}-\frac{\sqrt{2}}{2}\ket{v}$，因此这个检偏器的测量算符表示为
 \begin{equation}
 \pmat{
-    \frac{\sqrt{2}}{2}&\frac{\sqrt{2}}{2}\\\frac{\sqrt{2}}{2}&\frac{\sqrt{2}}{2}
+    \frac{1}{2}&\frac{1}{2}\\\frac{1}{2}&\frac{1}{2}
 }
 \end{equation}
 
@@ -230,9 +697,6 @@ XY\neq YX
 
 %算符的特征值必为实数；因此算符必为Hermitian的．
 %讨论期待值的计算．
-
-
-
 
 
 

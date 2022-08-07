@@ -1,0 +1,31 @@
+% Linux 安装 CUDA Toolkit
+
+\subsection{安装 CUDA 和驱动}
+直接安装 cuda, 是包括显卡驱动的! (远程的话就用 Xwindow 打开 firefox)
+\href{https://docs.nvidia.com/cuda/cuda-installation-guide-linux/index.html#ubuntu-installation}{网址}． 直接看 3.6 Ubuntu, 按照步骤来．
+\begin{itemize}
+\item 点击 pre-installation actions, 下载适合的 deb 安装包即可. \href{https://developer.nvidia.com/cuda-downloads}{网址}
+\item \verb`sudo dpkg -i cuda-repo-<distro>_<version>_<architecture>.deb`   最后一项是安装包的文件名
+\item \verb`sudo apt-key add /var/cuda-repo-<version>/7fa2af80.pub`
+\item `sudo apt-get update`
+\item `sudo apt-get install cuda`
+\item 按照 post-installation action 的说明来
+\end{itemize}
+
+post-installation action
+\begin{itemize}
+\item (put this command to \verb|~/.bashrc|)
+\item \verb`export PATH=/usr/local/cuda-9.2/bin${PATH:+:${PATH}}`
+\item (注意! cuda-9.2 以后可能会变, 具体数字要 cd 到 local 文件夹中查看!
+如果不执行这个, nvcc 命令就找不到. 执行后, `nvcc` 和 `nvprof` 应该都能正常工作了.
+剩下的步骤暂时还没有进行.
+\end{itemize}
+
+\subsection{只安装驱动}
+\begin{itemize}
+\item 首先更新驱动, 先删除以前驱动 \verb|sudo apt-get purge nvidia*|
+\item 然后安装驱动 \verb|sudo add-apt-repository ppa:graphics-drivers|， \verb|sudo apt-get update|， \verb|sudo apt-get install nvidia-390|
+\item 最后那三个数字是驱动的版本号, 上这个网页可以找到某个显卡的最新驱动版本号． \href{http://www.nvidia.com/Download/index.aspx?lang=en-us}{网址}
+\item 重新启动服务器！
+\item 驱动安装完成后, \verb|nvidia-smi| 命令会显示显卡的信息.
+\end{itemize}

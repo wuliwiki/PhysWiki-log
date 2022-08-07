@@ -1,0 +1,34 @@
+% Windows 安装 CUDA （Visual Studio）
+
+\begin{itemize}
+\item 目前 VS 还是不能完全兼容 linux 的代码， 主要体现在： \verb|cudaMemcpyToSymbol()| 的第一个变量不能是非指针， atomicAdd() 找不到函数或 argument 不匹配， 等． 另外调试的时候并不能 host 和 device 一起调试， 只能调试其中一个（用 nsight legacy）． 所以现在还是用 \verb|linux + cuda-gdb| 好了， 除非以后把这些问题都解决．
+\item Visual Studio 上跑 CUDA 的一个小问题是 Intellisense 不兼容 \verb`<<<>>>`, 不过不影响运行. 另一个问题是 CUDA 的 include path 需要手动添加 \verb`$(VC_IncludePath);$(WindowsSDK_IncludePath)` . 第三个问题是多个 \verb`.cu` 文件的工程需要重启 Visual Studio 才能编译成功.
+\item 貌似最新的 VS 版本不兼容 CUDA Toolkit, 安装一个老版本 \verb|https://docs.microsoft.com/en-us/visualstudio/productinfo/installing-an-earlier-release-of-vs2017| 安装了最老的 15.4.5 (这里备份一下, 免得以后下不了)
+\item 安装了 C++ Desktop Development 版块
+\item CUDA Toolkit 同样是在\href{https://developer.nvidia.com/cuda-downloads}{这个页面}下载
+\item 安装了 CUDA Toolkit Windows 10/Server 2016 和 Patch 1． 重新启动.
+\item VS 中创建一个 CUDA runtime 工程. 开始时给出的是一个加法例程, 会显示无法找到 \verb`<stdio.h>`. 在 project property 里面找到 VC++ Directories -> Include Directories , 然后复制所有内容．
+\item \verb|$(VC_IncludePath);$(WindowsSDK_IncludePath)| 然后再打开 project properties 里面的 CUDA C/C++ >  common > Additional Include Directories, 把这些内容复制进去即可.
+\item 现在可以把自动生成的代码全部删掉, 测试一个小程序
+\begin{lstlisting}[language=cpp]
+#include <iostream>
+#include <stdio.h>
+using namespace std;
+
+__global__
+void kernel()
+{
+	printf("hello!\n");
+}
+
+int main()
+{
+	kernel<<<1,2>>>();
+}
+\end{lstlisting}
+\item 应该就可以跑成功.
+\item CUDA 自带的 Sample 在这个目录 C:\ProgramData\NVIDIA Corporation\CUDA Samples\v9.2
+\item 如果还是遇到头文件找不到 (如 \verb`math.h`), \verb`$(VC_IncludePath);$(WindowsSDK_IncludePath)` 这两个放到 CUDA >common 里面就绝对够了. 如果还不行就说明 VS 没有安装完整, 去 controll panel 里面 modify 一下, 多添加一些 win10 SDK 什么的.
+\item 另一个问题是多个 .cu 文件就编译出错了, 解决办法就是重启 VS ... 真的无语. Windows 什么时候能有 Linux 稳定啊!
+\item 如果要使用 MatFile_win64 工程和 NR3 工程, 用 CUDATest/template/ 中的模板即可 (按照 README 里面的步骤创建新工程).
+\end{itemize}

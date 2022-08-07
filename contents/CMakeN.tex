@@ -26,6 +26,8 @@
 \item \verb`project(project_name)`
 \item \verb`set(var str1 [str2] ...)` 对变量赋值（若有多个值就生成 list）
 \item \verb`list(APPEND var str1 [str2] ...)` 在变量（list）后面添加元素
+\item \verb|list(REMOVE_ITEM var str1 ...)| 从 list 中移除（如果不存在也不报错）
+\item 使用一个不存在的变量相当于空字符串．
 \item \verb|set(var "${var} str1 str2")| 等效于上一条
 \item \verb`file(GLOB var "folder/*.cpp" "fname2.cpp")` 可以列出所有 \verb|"folder/*.txt"| 文件， 以及 \verb|fname2.cpp| （如果存在） 赋值给 \verb|var|． 注意文件名包括绝对路径．
 \item \verb|add_definitions(-D FOO -D BAR)| 给编译器添加宏定义
@@ -40,6 +42,7 @@
 \item \verb`target_link_libraries(exe_name lib1 [lib2] ...)` link 阶段链接 library， 相当于 \verb|-l lib1 -l lib2|
 \item \verb`option(opt_name description default)` 定义一个 option 开关（会在 gui 中显示开关）以及默认值． \verb`opt_name` 可以在 CMakeLists 中的 \verb`if` 语句中使用例如 \verb`if(opt_name) ... endif(opt_name)`． \verb`default` 可以是 \verb`ON` 或 \verb`OFF`
 \item 在 configure 的模板文件中， 当 \verb`opt_name` 为 \verb`ON` 时 \verb`#cmakedefine opt_name` 会被替换为 \verb`#define opt_name`
+\item 【cmake 3.16 的新功能】 \verb|target_precompile_headers(可执行文件 PRIVATE foo.h bar.h)| 可以编译头文件， 注意貌似不会自动包括 .h 包括的文件． 如果头文件（或者依赖的文件）改了， 那么将会自动重新编译头文件．
 \end{itemize}
 
 \subsection{内置变量}
@@ -68,7 +71,7 @@ endif()
 \begin{itemize}
 \item 链接 \verb`*.lib`， 只需要在 \verb`add_executable()` 命令前面插入（必须在之前） \verb`abc.lib` 的路径 \verb`link_directories(path/to/lib)` 然后再 \verb`add_executable()` 之后插入 \verb`target_link_libraries(exe_name abs)` 即可
 \item \verb`if(MSVC)...end(MSVC)` 可以专门给 Visual Studio 执行一些命令
-\item 生成的 sln 文件中， 除了有 target 的工程， 还会有另外两个工程： \verb`ZERO_CHECK` 会重新运行/更新 \verb`CMakeLists.txt`， \verb`ALL_BUILD` 会编译所有工程． 如果看着不爽的话也可以把这两个 project 删掉． 如果直接 run without debug 的话， 会提示 ALL_BUILD 不能 run， 所以要 run 只能右键某个 project 然后 run （所以还是把两个多余的 project 删掉好些）．
+\item 生成的 sln 文件中， 除了有 target 的工程， 还会有另外两个工程： \verb`ZERO_CHECK` 会重新运行/更新 \verb`CMakeLists.txt`， \verb`ALL_BUILD` 会编译所有工程． 如果看着不爽的话也可以把这两个 project 删掉． 如果直接 run without debug 的话， 会提示 \verb`ALL_BUILD` 不能 run， 所以要 run 只能右键某个 project 然后 run （所以还是把两个多余的 project 删掉好些）．
 \end{itemize}
 
 \subsection{ccmake 使用}

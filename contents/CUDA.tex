@@ -1,0 +1,128 @@
+% CUDA 笔记
+
+
+\subsection{笔记 1}
+\begin{itemize}
+\item Nvidia 的一个官方入门 ppt \verb|cuda-c-basics.pdf|
+\item 一本很好的入门教材是 CUDA by examples.
+\item CUDA 的编译器叫做 nvcc, 用法与 g++ 大致相同.
+\item 在函数定义前面加 \verb`__global__` 就可以定义为在 GPU 中执行的函数 (device code). 在 CPU 中执行的叫做 host code.
+\item host code 中调用 device code 函数用 \verb`fun<<<m,n>>>()`.
+\item 指针也分为 device pointer 和 host pointer. 前者不能在 host code 中 dereference, 后者不能在 device code 中 dereference, 但两者都可在 device 和 host 间传递.
+\item memory management:
+\verb`cudaMalloc();` 用于在 GPU 中分配空间
+\item \verb`nvprof ./<exename>` 可用于测试程序的用时情况 (profiling)
+\end{itemize}
+
+\subsection{笔记 2}
+\begin{itemize}
+\item 所有有 CUDA 语法的源文件都用 \verb`.cu` 后缀, 否则会报错 (包括 include 的头文件中的 cuda 语法)!
+\item \verb`cudaGetDeviceCount(int *deviceCount)` 可以返回 GPU 的数量.
+\item \verb`cudaSetDevice(int device)` 用于切换 GPU, 其中 device 是 GPU 的编号, 从 0 开始. 默认的 GPU 编号是 0.
+\item \verb`cudaGetDeviceProperties(struct cudaDeviceProp * prop, int device)` 可以获取 GPU 信息. prop 中常用的 member 如下:
+\verb`prop.name` 是 GPU 型号 (名称), \verb`prop.major` 是 capability 的编号, 每个编号是一种构架, 3: Kepler,  5: Maxwell, 6: Pascal, 7: Volta, prop.minor 是 capability 的小数点后的编号, \verb`prop.multiProcessorCount` 是 multiprocessor 的数量, 总核数等于该数量乘以每个 mp 中的核数 (与构架有关), \verb`prop.deviceOverlap` 表示 GPU 是否有同时执行 kernel 和传数据的能力, 只有这个能力存在, 用多个 stream 才有可能加速.
+\verb`prop.totalGlobalMem` 和 \verb`prop.totalConstMem` 分别是 GPU 内存的大小和 const 空间的大小. \verb`prop.canMapHostMemory` 决定 GPU 是否能使用 zero-copy memory. 剩下的见 cudaDeviceProp 的定义.
+\item kernel function 如果在 runtime 时出错了, 应该是会终止而不会与任何报错的, 所以在 nvprof 里面应该就看不到 kernel 了. 但如果能看到, 应该就是执行成功了.
+\item 许多 \verb`cuda*()` 函数都会返回错误类型 \verb`cudaError_t`, \verb`cudaGetErrorString(cudaError_t err)` 可以返回错误的描述.
+\item \verb`cudaDeviceSynchronize()` 函数在使 host 程序等待所有 device 完成任务.
+\item \verb`__syncthreads()` 函数在 kernel 中的所有 thread 同步.
+\item pascal 6.0: 64 cores/Multiprocessor, 6.1: 128 cores/Multiprocessor.   volta 7.0: 64 cores/Multiprocessor
+\item pascal 构架的 shared memory 是 48kb/block (6144 个 double), volta 构架是 96kb/block. 如果超出, 编译的时候会报错.
+\item 在 global scope 声明的 const (不是 \verb`__constant__`) 变量既可以在 host code 中也可以在 device code 中使用.
+\item 在 global scope 声明的变量前面加 \verb`__device__` , 则该 global 变量只能用于 device code, 不能在 host 中使用, 但可以在 host 中用 \verb`cudaMemcpyToSymbol()` 对其赋值. 如果改用 \verb`__cnstant__`, 则只能在 device code 中读取该变量, 但同样可以在 host 中用 \verb`cudaMemcpyToSymbol()`. \verb`__constant__` 空间一般只有 64kb, 但有可能将速度变快 (见 cuda by examples).
+\item \verb`__device__`, \verb`__constant__`, 支持特定的 class object, 这个 class 必须要有一个空的 constructor 或者没有 constructor (默认).
+
+\item 如果 class 的成员函数需要在 kernel 中执行, 前面要加 \verb`__device__`, 如果要在 kernel 和 host 中执行, 前面要加 \verb`__host__ __device__`.
+\item kernel 里面是可以用 \verb`new` 和 \verb`delete` 的, 也可用 \verb`malloc()` 和 \verb`free()` ! 使用的是 device 空间的储存, 在一块专门的区域叫做 heap. 如果不够的话, \verb`new` 会返回 \verb`nullptr`. （貌似不一定！）
+\item heap size 默认是 8M, 但也可以手动设置大小.
+\begin{lstlisting}[language=cpp]
+cudaDeviceGetLimit(size_t* size, cudaLimitMallocHeapSize)  // 获取 heap size
+cudaDeviceSetLimit(cudaLimitMallocHeapSize, size_t size) // 设置 heap size
+\end{lstlisting}
+\item 如果每个线程都用 \verb`new`，貌似消耗的 heap 空间会随 block 数量不断增长，而不是与 cuda core 的数量成正比．而且 heap 不够的时候不会报错，而是整个 kernel 都不执行.
+\item 在 Tesla V100 上, 用 \verb`cudaMalloc()` 代替 new, 速度要快许多,  然而 Quadro P5000 反而会慢, 但是慢的不多.
+\item 要在 cuda 中使用 complex, 用 \verb`#include "cuda_complex.h"` , 见我的 CUDATest/template.
+\item 执行一个 parallel for 类似的问题时, 最好是安排每个线程执行 for(i=ind; i<N; i+=Nblock*Nthread)，而千万不要企图用大量的 block 使得每个线程只用执行一个 i.
+\item 如果每个线程都是完全独立的话, 貌似在 Tesla V100 上用 <<<2*Ncore/32,32>>> 所需的时间最短, 总线程数是 2*Ncore = 10240. (这个结论是用 cn3Dz 得出的).
+\item 用 Even 给 GPU 计时:
+\begin{lstlisting}[language=cpp]
+cudaEven_t start, stop;
+cudaEventCreate(&start); cudaEventCreate(&stop);
+cudaEventRecord(start, 0);
+// do some work on the GPU
+cudaEventRecord(stop, 0);
+cudaEventSynchronize(stop); // let CPU wait for the event to finish
+cudaEventElapsedtime(&elapsedTime, start, stop); // time unit is "ms"
+cudaEventDestroy(start); cudaEventDestroy(stop);
+\end{lstlisting}
+
+\subsection{不同的 Memory}
+\item \verb`malloc()` 分配 pageable host memory, 而 \verb`cudaHostAlloc(void** pointer, size_t size, cudaHostAllocDefault)` 分配 page-locked host memory (或 pinned memory). 后者不会被 swap 到硬盘中. 要释放后者分配的内存, 用 \verb`cudaFreeHost(void * pointer)` 即可. page-locked 内存在 CPU 和 GPU 间的传输速度大概是 pageable 内存的两倍.
+\item 如果用 \verb`cudaHostAlloc(void** pointer, size_t size, cudaHostAllocMapped)`, 分配出来的内存就是 zero-copy memory, 因为这种内存可以直接在 kernel code 中读取.
+\item 要使用 zero-copy memory, 开始时需要在 host 程序中用 \verb`cudaSetDeviceFlags(cudaDeviceMapHost)`.
+\item 当 zero-copy memory 内存只用于 GPU 时, 选项 \verb`cudaHostAllocMapped | cudaHostAllocWriteCombined` 可以提升性能.
+\item \verb`cudaHostGetDevicePointer(void **pDevice, void *pHost, 0)` 函数用于将 zero-copy memory 从 Host 中的指针得到 Device 的指针.
+\item 调用 kernel 后, zero-copy memory 会变成 undefined. 使用 \verb`cudaThreadSynchronize()` 即可恢复.
+\end{itemize}
+
+\subsection{Unified Memory}
+\begin{itemize}
+\item \verb|cudaMallocManaged(void **pointer, size_t size);|
+\item \verb|cudaFree(void *pointer);|
+\item 每次调用完 kernel 以后需要 cudaDeviceSynchronize(), 否则 CPU 无法读取 Unified Memory.
+\item 至于多线程多 GPU 同时运行的情况, 还有待研究.
+\end{itemize}
+
+\subsection{cuda-gdb}
+\begin{itemize}
+\item 基本用法与 gdb 一样 \verb|cuda-gdb name.x|
+\item 编译的时候, 给 nvcc 加上 \verb`-g` 和 \verb`-G`. 其中 \verb`-g` 是 CPU 调试, \verb`-G` 是 GPU 调试.
+\item 在 kernel 中, 切换不同的线程用
+\verb`cuda block <number> tread <number>` 或者 \verb`cuda block (1,2,3) tread (4,5,6)` 指定三维线程.
+\item 也可以单独用 \verb`cuda block <number>` 和 \verb`cuda thread <number>` .
+\item 要显示当前线程编号, 用 \verb`cuda block thread`
+\item 显示当前 device 信息用 \verb`info cuda devices`
+\item 显示正在运行的 kernel 用 \verb`info cuda kernels`
+\end{itemize}
+
+\subsection{多 GPU}
+\begin{itemize}
+\item 首先创建 cuda 工程 (也可以用 CUDATest/template).
+\item 为了在 CUDA 中使用 openMP, 在 Project Property > CUDA C/C++ > Command Line > Additional Options 中加入 -Xcompiler "/openmp" 即可. 然后插入工程中唯一一个 ".cu" 源代码. 这个代码是 CUDA by Examples 中 11 章最后一个例程的简化版. 这个代码很有希望可以改成多 GPU 的 cuCn3D 工程.
+\begin{lstlisting}[language=cpp]
+#ifdef _MSC_VER
+#include "cuda_runtime.h"
+#include "device_launch_parameters.h"
+#endif
+#include <iostream>
+using namespace std;
+__global__
+void add1(int *x, int thread) { x[thread] += 1; }
+
+int main()
+{
+	int i, N = 3;
+	int *x, *dev_x;
+	cudaSetDevice(0);
+	cudaSetDeviceFlags(cudaDeviceMapHost);
+	cudaHostAlloc((void**)&x, N*sizeof(int),
+       cudaHostAllocWriteCombined | cudaHostAllocPortable | 
+       cudaHostAllocMapped);
+	for (i = 0; i < N; ++i)
+		x[i] = i;
+	cudaHostGetDevicePointer(&dev_x, x, 0);
+
+	#pragma omp parallel for
+	for (i = 0; i < N; ++i) {
+		if (i != 0) {
+			cudaSetDevice(i);
+			cudaSetDeviceFlags(cudaDeviceMapHost);
+		}
+		add1<<<1,1>>>(dev_x, i);
+		cudaThreadSynchronize();
+	}
+	cout << "the result is: " << x[0] << " " << x[1]
+        << " " << x[2] << endl;
+}
+\end{lstlisting}
+\end{itemize}

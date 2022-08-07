@@ -1,0 +1,209 @@
+% 初等矩阵与初等变化
+%初等矩阵 初等变换 
+
+\begin{issues}
+\issueMissDepend
+\end{issues}
+
+\footnote{本文参考了Steven J. Leon的 Linear Algebra with Applications与MIT的《线性代数》课程．本文适用于CC-BY-SA．}
+
+\subsection{初等变换 Elementary Operations}
+初等变换包括三种类型，以下分别举例说明：
+
+\begin{enumerate}
+\item 交换两行（列）
+
+\begin{equation}
+\left[
+    \begin{array}{ccc}
+        a_{11} & a_{12} & a_{13}\\
+        a_{21} & a_{22} & a_{23}\\
+        a_{31} & a_{32} & a_{33}\\
+    \end{array}
+\right]
+\Rightarrow
+\left[
+    \begin{array}{ccc}
+        a_{11} & a_{12} & a_{13}\\
+        a_{31} & a_{32} & a_{33}\\
+        a_{21} & a_{22} & a_{23}\\
+    \end{array}
+\right]
+\end{equation}
+
+\item 一行（列）扩大非零常数倍数
+\begin{equation}
+\left[
+    \begin{array}{ccc}
+        a_{11} & a_{12} & a_{13}\\
+        a_{21} & a_{22} & a_{23}\\
+        a_{31} & a_{32} & a_{33}\\
+    \end{array}
+\right]
+\Rightarrow
+\left[
+    \begin{array}{ccc}
+        a_{11} & a_{12} & a_{13}\\
+        ca_{21} & ca_{22} & ca_{23}\\
+        a_{31} & a_{32} & a_{33}\\
+    \end{array}
+\right]
+\end{equation}
+\item 一行（列）加上另一行（列）的常数倍数
+\begin{equation}
+\left[
+    \begin{array}{ccc}
+        a_{11} & a_{12} & a_{13}\\
+        a_{21} & a_{22} & a_{23}\\
+        a_{31} & a_{32} & a_{33}\\
+    \end{array}
+\right]
+\Rightarrow
+\left[
+    \begin{array}{ccc}
+        a_{11} & a_{12} & a_{13}\\
+        a_{21}+ca_{31} & a_{21}+ca_{32} & a_{21}+ca_{33}\\
+        a_{31} & a_{32} & a_{33}\\
+    \end{array}
+\right]
+\end{equation}
+\end{enumerate}
+
+\subsection{初等矩阵 Elementary Matrices}
+初等矩阵是单位矩阵$\mat I$只经一次初等变化得到的矩阵，也包括三种类型，常记作 $\mat E$．以下分别举例说明．
+\begin{table}[ht]
+\centering
+\caption{初等矩阵}\label{EleOpt_tab1}
+\begin{tabular}{|c|c|c|c|}
+\hline
+种类 & 效果 & 形式 & 逆矩阵\upref{InvMat} & 行列式\upref{Deter} \\
+\hline
+1 & 交换两行（列） & 
+交换第2，3行
+$
+\mat E_1=
+    \begin{bmatrix}
+        1 & 0 & 0\\
+        0 & 0 & 1\\
+        0 & 1 & 0\\
+    \end{bmatrix}
+$
+& 
+$
+    \mat E_1^{-1}=\mat E_1=
+    \begin{bmatrix}
+        1 & 0 & 0\\
+        0 & 0 & 1\\
+        0 & 1 & 0\\
+    \end{bmatrix}
+$
+& $det (\mat E_1) = -1$ \\
+\hline
+2 & 一行（列）扩大非零常数倍数 & 
+第2行扩大c倍
+$
+    \mat E_2= \begin{bmatrix}
+        1 & 0 & 0\\
+        0 & c & 0\\
+        0 & 0 & 1\\
+    \end{bmatrix}
+$
+& 
+$
+    \mat E_2^{-1}= \begin{bmatrix}
+        1 & 0 & 0\\
+        0 & \frac{1}{c} & 0\\
+        0 & 0 & 1\\
+    \end{bmatrix}
+$
+& 
+$det (\mat E_2) = c$
+ \\
+\hline
+3 & 一行（列）加上另一行（列）的常数倍数 & 
+第2行加上第3行的c倍
+$
+    \mat E_3 = \begin{bmatrix}
+        1 & 0 & 0\\
+        0 & 1 & c\\
+        0 & 0 & 1\\
+    \end{bmatrix}
+$
+& 
+$
+    \mat E_3^{-1} = \begin{bmatrix}
+        1 & 0 & 0\\
+        0 & 1 & -c\\
+        0 & 0 & 1\\
+    \end{bmatrix}
+$
+& $det (\mat E_3) = 1$\\
+\hline
+\end{tabular}
+\end{table}
+初等矩阵的逆矩阵仍是原类型的初等矩阵．
+
+\subsection{初等变化与初等矩阵}
+\pentry{矩阵乘法\upref{Mat}}
+\begin{theorem}{}
+对矩阵进行一次初等行操作⇔相应的初等矩阵E*矩阵 (左乘)
+
+对矩阵进行一次初等列操作⇔矩阵*相应的初等矩阵E（右乘）
+\end{theorem}
+
+\begin{example}{}
+例如
+\begin{equation}
+\begin{bmatrix}
+    a_{11} & a_{12} & a_{13}\\
+    a_{31} & a_{32} & a_{33}\\
+    a_{21} & a_{22} & a_{23}\\
+\end{bmatrix}
+=
+    \begin{bmatrix}
+        1 & 0 & 0\\
+        0 & 0 & 1\\
+        0 & 1 & 0\\
+    \end{bmatrix}
+\begin{bmatrix}
+        a_{11} & a_{12} & a_{13}\\
+        a_{21} & a_{22} & a_{23}\\
+        a_{31} & a_{32} & a_{33}\\
+\end{bmatrix}
+\end{equation}
+\end{example}
+
+运用初等变换的性质，可以很容易地理解一些结论．
+
+\begin{example}{}
+例如行列式的性质\upref{DetPro}的\autoref{DetPro_the6}~\upref{DetPro}“将行列式的两列交换，结果取相反数”： 交换两列，相当于对相应矩阵做一次初等列变换．那么自然有，
+$$det (\mat A \mat E_1)=det (\mat A) det(\mat E_1)=-det (\mat A)$$
+\end{example}
+
+\begin{example}{}
+如何理解初等矩阵的逆矩阵？
+
+以“交换第2，3行”的初等矩阵为例．根据逆矩阵的定义，$\mat E_1^{-1} \mat E_1 = \mat I$．既然$\mat E_1$的效果是"交换第2，3行"，那么左乘的$\mat E_1^{-1}$的效果也应该是再次"交换第2，3行"，才可使矩阵恢复$\mat I$．所以，$\mat E_1^{-1} =  \mat E_1$
+
+同理可理解剩余两种变换，试着自己给出说明．
+\end{example}
+
+% $$
+%     \begin{bmatrix}
+%         1 & 0 & 0\\
+%         0 & 1 & 0\\
+%         0 & 0 & 1\\
+%     \end{bmatrix}
+% $$
+
+\subsection{行等价 Row Equivalent}
+\begin{definition}{行等价}
+若$\mat A$经过有限次初等行变换即可得到$\mat B$，则称$\mat A$与$\mat B$行等价．
+\begin{equation}
+\mat A= ... \mat E_3 \mat E_2 \mat E_1 \mat  B
+\end{equation}
+\end{definition}
+
+可以证明，所有可逆矩阵\upref{InvMat}都行等价于单位矩阵 $\mat I$．
+
+可以用该思路来理解 高斯消元法求逆矩阵\upref{InvMGs}．

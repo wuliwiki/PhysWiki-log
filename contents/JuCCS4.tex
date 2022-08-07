@@ -1,0 +1,267 @@
+% Julia 函数的参数
+% 函数 参数
+
+本文授权转载自郝林的 《Julia 编程基础》． 原文链接：\href{https://github.com/hyper0x/JuliaBasics/blob/master/book/ch12.md}{第 12 章 函数与方法}．
+
+\subsubsection{12.4 函数的参数}
+
+我们在前面讲过不少与函数的参数有关的知识．这包括在调用函数的时候怎样传入参数值、什么是可选的参数，以及怎样为关键字参数赋值，等等．而在本小节，我们会专注于在编写函数定义的时候怎样为其添加各种参数声明．
+
+我们已经知道，每一个函数定义都拥有自己的参数列表，其中可以有零个、一个或多个参数声明．这些参数声明会确定参数的名称，还可以同时指定参数的类型．即使有的参数声明指定了类型，而有的没有指定类型，也是毫无问题的．
+
+\textbf{12.4.1 可选参数}
+
+在很多时候，为了能够让调用方更加方便地使用函数，我们可以把函数的一些参数变为可选参数．比如，我们之前讲过的\verb|sort|函数就是如此．这使得我们仅向它提供一个向量就可以执行默认的排序操作．
+
+在函数的定义中，声明可选的参数是非常容易的．我们只要在声明参数的同时为它指定默认值基本上就可以达到目的．不过，这方面也有一些小的限制．我们先来看一个示例：
+
+\begin{lstlisting}[language=julia]
+function map1(vec::Vector, f=identity)
+    [f(e) for e in vec]
+end
+\end{lstlisting}
+
+我在这里定义了一个名叫\verb|map1|的函数．这个函数的功能很简单，即：操作第一个参数值中的每一个元素值，并把操作所产生的新值依次地放到一个新的向量中，最后把这个新的向量作为结果值返回．
+
+\verb|map1|函数定义中的第二个参数声明看起来就像一条赋值语句．虽然我们不能称之为赋值语句，但是它与赋值语句起到的作用是类似的．这个参数声明的含义是，若函数的调用方没有为可选的参数\verb|f|赋值，那么Julia就会自动地把该参数的值设置为\verb|identity|．
+
+解释一下，所谓的\verb|identity|指的也是一个函数．这个函数会直接返回它接受的那个唯一的参数值．我把\verb|identity|作为参数\verb|f|的默认值的目的是实现一个小功能，即：当调用方没有指定具体的操作时，\verb|map1|函数只会生成一个依次包含了原有元素值的向量，并返回它．这相当于对原有的向量做了一次浅拷贝．
+
+下面，我们就来调用一下\verb|map1|函数（假设该函数已经由 REPL 环境解析了）：
+
+\begin{lstlisting}[language=julia]
+julia> map1([1,2,3,4])
+4-element Array{Int64,1}:
+ 1
+ 2
+ 3
+ 4
+
+julia> map1([1,2,3,4], (e)->e*10)
+4-element Array{Int64,1}:
+ 10
+ 20
+ 30
+ 40
+
+julia> 
+\end{lstlisting}
+
+可以看到，我们在调用\verb|map1|函数的时候给不给参数\verb|f|赋值都是可以的．这就好像是有两个\verb|map1|函数分别受理着不同的调用．没错，Julia对函数的可选参数的支持实际上正是利用了衍生方法和多重分派机制．这里确实有两个\verb|map1|函数．你肯定也明白，它们其实都是衍生方法．
+
+我们在REPL环境中很容易就能验证这一点．下面是我在一个新的环境里输入并执行的代码：
+
+\begin{lstlisting}[language=julia]
+julia> function map1(vec::Vector, f=identity)
+           [f(e) for e in vec]
+       end
+map1 (generic function with 2 methods)
+
+julia> methods(map1)
+# 2 methods for generic function "map1":
+[1] map1(vec::Array{T,1} where T) in Main at REPL[1]:2
+[2] map1(vec::Array{T,1} where T, f) in Main at REPL[1]:2
+
+julia> 
+\end{lstlisting}
+
+在解析了\verb|map1|函数的定义之后，REPL环境回显了一行内容．在这行内容中有一个很关键的信息，即：\verb|2 methods|．这说明在当前的环境中已经存在了两个名叫\verb|map1|的衍生方法．我们只要调用一下\verb|methods|函数便知，这两个衍生方法都是从同一个函数定义中产生出来的．其中的一个方法没有参数\verb|f|，而另一个方法拥有参数\verb|f|．至于哪一个方法会被调用，那就要看我们在调用时是否为可选参数\verb|f|赋值了．
+
+另一方面，从规则上讲，我们可以把一个函数定义中的所有参数都变成可选参数．但是，只要有一个参数不是可选参数，它们在编写位置上就是有要求的．每一个可选参数的声明都应该在所有必选参数声明的右侧．换句话说，在同一个函数定义中，我们必须先声明必选参数，再声明可选参数．
+
+最后，对于我们在上面讲述的参数声明，无论它们是可选的还是必选的，我们都可以把它们统称为位置参数（positional arguments）．因此，确切地说，我们刚刚讲到的可选参数应该被称为可选的位置参数．位置参数背后的规则是，我们在为它们赋值时，放置参数值的先后顺序是要与参数声明的位置严格对应的．顺便说一句，Julia的多重分派机制在为某个函数调用选择衍生方法的时候依据的就是位置参数．
+
+\textbf{12.4.2 关键字参数}
+
+关键字参数（keyword arguments）的关键不在于声明的位置，而在于参数的名称．这与位置参数是截然不同的．
+
+关键字参数也是可以有默认值的．也就是说，关键字参数也可以被分为必选参数和可选参数．我们在为一个函数声明多个关键字参数的时候，并不用在意它们谁先谁后．当然了，在顺序上符合某种逻辑的参数声明可以明显降低函数的使用成本，尤其是在参数众多的时候．
+
+虽然多个关键字参数之间的先后顺序可以是任意的，但Julia对关键字参数和位置参数之间的先后顺序却有着严格的规定，即：任何的关键字参数都必须在所有的位置参数之后声明．这使得同一个参数列表中的位置参数和关键字参数之间总会有一个明显的分界点．而且，这个分界点的代表并不是用于分隔两个参数声明的英文逗号，而是一个英文分号．下面的示例是在一个新的REPL环境中执行的：
+
+\begin{lstlisting}[language=julia]
+julia> function map2(vec::Vector; f=identity)
+           [f(e) for e in vec]
+       end
+map2 (generic function with 1 method)
+
+julia> methods(map2)
+# 1 method for generic function "map2":
+[1] map2(vec::Array{T,1} where T; f) in Main at REPL[1]:2
+
+julia> 
+\end{lstlisting}
+
+你可以把这个示例与前一个示例对比起来看．函数\verb|map2|的定义与\verb|map1|的定义几乎一模一样．唯一的区别是，我把其中用于分隔参数\verb|vec|和\verb|f|的符号由英文逗号换成了英文分号．这就意味着，\verb|f|在这里是一个关键字参数，而且是一个可选的关键字参数．
+
+这个对\verb|map2|函数的定义只产生了一个衍生方法．这是因为Julia的多重分派机制根本就不关心函数拥有哪些关键字参数．在此机制的眼里，这里的函数就等同于一个仅有\verb|vec|参数的衍生方法．当然了，Julia语言还是会完整地对这个函数定义进行解析的，包括它的关键字参数．我们在调用函数的时候，它的关键字参数也是不容忽视的．
+
+由于\verb|map2|函数的参数\verb|f|拥有一个默认值，所以我们在调用这个函数的时候可以不为\verb|f|传递参数值．但是请注意，如果我们需要为\verb|f|赋值，那么就必须带上参数名称和\verb|=|，就像这样：
+
+\begin{lstlisting}[language=julia]
+julia> map2([1,2,3,4]; f=(e)->e*10)
+4-element Array{Int64,1}:
+ 10
+ 20
+ 30
+ 40
+
+julia>
+\end{lstlisting}
+
+请注意，从规则上讲，我们在调用函数的时候既可以用英文分号去分隔针对位置参数的赋值操作和针对关键字参数的赋值操作，也可以使用英文逗号．也就是说，\verb|map2([1,2,3,4], f=(e)->e*10)|等同于\verb|map2([1,2,3,4]; f=(e)->e*10)|．不过，使用英文分号显然可以获得更好的可读性．另外，与两种参数的声明顺序一样，我们必须先为位置参数赋值，再为关键字参数赋值．
+
+从形式方面讲，我们为关键字参数\verb|f|赋值的方式与标准的赋值操作并没有什么两样．这也是关键字参数和位置参数的一个重要区别．Julia会通过我们传入参数值时所展现的位置来决定哪一个参数值与哪一个位置参数绑定在一起．而对于关键字参数，由于参数值的传入顺序与参数的声明顺序无关，所以依靠我们指定的参数名称来绑定二者就是顺理成章的选择了．
+
+另外，我们也可以定义只有关键字参数而没有位置参数的函数，比如：
+
+\begin{lstlisting}[language=julia]
+function map3(;vec::Vector, f=identity)
+    [f(e) for e in vec]
+end
+\end{lstlisting}
+
+请看仔细，在函数参数列表的左圆括号的右边有一个英文分号．由于位置参数声明和关键字参数声明的识别恰恰依赖于它们的分隔符，所以这里的英文分号是必须存在的．否则，Julia就会认为\verb|vec|和\verb|f|都是位置参数．幸好这两种参数的声明顺序是固定的，这才只需要多写一个英文分号而已．
+
+现在，让我们把\verb|map3|函数的定义放到REPL环境中，然后对这个函数进行解析和调用：
+
+\begin{lstlisting}[language=julia]
+julia> function map3(;vec::Vector, f=identity)
+           [f(e) for e in vec]
+       end
+map3 (generic function with 1 method)
+
+julia> methods(map3)
+# 1 method for generic function "map3":
+[1] map3(; vec, f) in Main at REPL[1]:2
+
+julia> map3(vec=[1,2,3,4], f=(e)->e*10)
+4-element Array{Int64,1}:
+ 10
+ 20
+ 30
+ 40
+
+julia>
+\end{lstlisting}
+
+我们在这里只需要关注两点．第一点，\verb|map3|函数的定义也只会产生一个衍生方法．这同样是由于它没有可选的位置参数．第二点，虽然\verb|map3|函数没有位置参数，但是我们并不需要用特别的方法调用它，不像它的声明那样还需要添加额外的符号．我们在调用时只要注意一下位置参数和关键字参数的不同赋值方式就好了．
+
+最后，我们再来强调一下要点．在声明参数的时候，位置参数在左，关键字参数在右，两方之间的分隔符与分隔参数声明的普通符号不同．即使没有位置参数声明，这个分隔符也必须要有．位置参数声明的相对位置很重要．这关乎调用函数时的参数赋值．我们通常会把更重要的参数声明放在更靠左的位置．虽然在关键字参数声明中重要的是参数名称而不是相对位置，但我们仍然应该按照某种易懂的逻辑去排列多个参数声明．
+
+在为位置参数赋值时，我们不需要也不能指定参数的名称，而只能依赖参数值传入的顺序进行参数绑定．但在为关键字参数赋值时，情况却恰恰相反．所以，我们可以说，位置参数可以减少函数调用的代码量，但是大量的位置参数会明显加重函数调用者的心智负担．而关键字参数恰恰可以让函数的调用更加直观和灵活．一般来说，对于很重要的参数，我建议把它们声明为位置参数，并认真考虑它们的相对位置，而把重要性一般或相互的关联性不大的参数声明为关键字参数．
+
+\textbf{12.4.3 可变参数}
+
+可变参数的意思是数量可变的参数，英文里称为variable arguments，可简称为varargs或vararg．其含义是，声明参数的一方可以接受数量任意的同类型参数值．或者说，参数的实际数量并不固定，且会随着使用方给予的参数值的数量而动态的变化．
+
+我们在前面专门讲过拥有可变参数的元组类型，如\verb|Tuple{Vararg{String}}|．对于这样的元组类型，其实例的长度是可变的．例如：
+
+\begin{lstlisting}[language=julia]
+julia> isa((), Tuple{Vararg{String}})
+true
+
+julia> isa(("Julia",), Tuple{Vararg{String}})
+true
+
+julia> isa(("Julia", "Python", "Golang"), Tuple{Vararg{String}})
+true
+
+julia> 
+\end{lstlisting}
+
+函数也可以拥有可变参数．我们通常把这样的函数简称为变参函数（varargs function）．下面是一个简单的示例：
+
+\begin{lstlisting}[language=julia]
+julia> function map4(vec::Vector...; f=identity)
+           [f(e...) for e in zip(vec...)]
+       end
+map4 (generic function with 1 method)
+
+julia> methods(map4)
+# 1 method for generic function "map4":
+[1] map4(vec::Array{T,1} where T...; f) in Main at REPL[1]:2
+
+julia>  
+\end{lstlisting}
+
+不同于前面的\verb|map1|、\verb|map2|和\verb|map3|，\verb|map4|可以接受任意多个位置参数值．更重要的是，Julia会把这些位置参数值全部与参数名称\verb|vec|绑定到一起．下面，我们就一起来看一看它是怎么做到的．
+
+我们已经知道了，那个名叫\verb|vec|的位置参数就是可变参数．在这个参数的声明中，除了类型声明\verb|::Vector|之外，还有一个特殊的符号\verb|...|．而后者正是函数的可变参数的唯一标志．
+
+我们在前面已经接触过\verb|...|几次了．这个符号在不同的上下文中有着不同的作用．在这里，它的作用就是把紧挨在它左边的那个参数变成可变参数．我们在调用包含了可变参数的函数的时候，处在与这个参数对应的位置上以及更靠右的位置上的那些位置参数值都会被绑定到该参数的名称上．例如：
+
+\begin{lstlisting}[language=julia]
+julia> map4([1,2,3,4], [10,20,30,40], [100,200,300,400]; f=+)
+4-element Array{Int64,1}:
+ 111
+ 222
+ 333
+ 444
+
+julia> 
+\end{lstlisting}
+
+在这个例子中，数组\verb|[1,2,3,4]|、\verb|[10,20,30,40]|和\verb|[100,200,300,400]|都会与\verb|vec|进行绑定．正是由于这种特殊的绑定操作，Julia对于可变参数的声明位置是有着严格的规定的．可变参数只能是函数的最后一个位置参数，否则参数的声明就是不合法的．
+
+更具体地说，Julia会先把相应位置上的那些参数值都放到一个元组中，然后再让这个元组与可变参数的名称绑定在一起．请注意，在这种情况下，可变参数的实际类型会与我们为它声明的类型有所不同．
+
+依然以\verb|map4|函数为例，我为参数\verb|vec|声明的类型是\verb|Vector|，但由于它是一个可变参数，所以它的实际类型就会变成\verb|Tuple|．这个\verb|Tuple|类型的类型参数值肯定都是\verb|Vector|，但具体是什么，就取决于我们为\verb|vec|实际传入的参数值了．
+
+如果我们像上例那样传入了三个整数向量，那么\verb|vec|的实际类型就会是
+
+\begin{lstlisting}[language=julia]
+Tuple{Array{Int64,1},Array{Int64,1},Array{Int64,1}}
+\end{lstlisting}
+
+而如果我们只传入了一个整数向量，那么\verb|vec|的实际类型就会是
+
+\begin{lstlisting}[language=julia]
+Tuple{Array{Int64,1}}
+\end{lstlisting}
+
+以此类推．对于这个可变参数而言，有参数值\verb|["a","b","c"]|和\verb|["d","e","f"]|就会有参数类型\verb|Tuple{Array{String,1},Array{String,1}}|，而有参数值\verb|['u','v','w']|和\verb|["x","y","z"]|就会有参数类型\verb|Tuple{Array{Char,1},Array{String,1}}|，等等．但是，无论怎样，我们为\verb|vec|传入的多个参数值都必须是向量，因为该参数的类型已被声明为了\verb|Vector|．这个基本的类型约束是不会有变化的．
+
+在看明白了\verb|map4|函数中的可变参数\verb|vec|之后，我们再来关注该函数的函数体．其中只有一行代码，即：
+
+\begin{lstlisting}[language=julia]
+[f(e...) for e in zip(vec...)]
+\end{lstlisting}
+
+还记得吗？这是一个数组推导式．其中的函数\verb|zip|可以把多个可迭代对象压缩成（或者说组合成）一个可迭代对象．它的具体做法是，把各个可迭代对象中的、在对应位置上的元素值分别包装成一个个类型相同的元组，然后再把这些元组按照原有的顺序放到一个新的可迭代对象中．示例如下：
+
+\begin{lstlisting}[language=julia]
+julia> zip([1,2,3,4], [10,20,30,40], [100,200,300,400])
+Base.Iterators.Zip{Tuple{Array{Int64,1},Array{Int64,1},
+  Array{Int64,1}}}(([1, 2, 3, 4], [10, 20, 30, 40], [100, 200, 300, 400]))
+
+julia> zip(['u','v','w'], ["x","y","z"])
+Base.Iterators.Zip{Tuple{Array{Char,1},
+  Array{String,1}}}((['u', 'v', 'w'], ["x", "y", "z"]))
+
+julia> 
+\end{lstlisting}
+
+你在这里不用太深究类型\verb|Base.Iterators.Zip|的内部机制，只要知道它的实例都是可迭代对象就可以了．我们或许可以用数组来模拟此类实例的内部结构．上面的调用表达式\verb|zip([1,2,3,4], [10,20,30,40], [100,200,300,400])|所产生的结果值就类似于：
+
+\begin{lstlisting}[language=julia]
+[(1,10,100), (2,20,200), (3,30,300), (4,40,400)]
+\end{lstlisting}
+
+这种模拟虽然并不严谨，但是应该能够让你领悟到这类实例被迭代的时候将会发生什么．
+
+一旦了解了\verb|zip|函数的功用，我们就可以进一步解释\verb|map4|的函数体了．调用表达式\verb|zip(vec...)|的含义是，把与\verb|vec|绑定在一起的那个元组中的所有元素值都平铺开来，并让它们中的每一个都成为传入\verb|zip|函数的独立参数值．而\verb|f(e...)|的作用也是类似的，它会把迭代变量\verb|e|包含的元素值都拿出来，然后相继传入到函数\verb|f|中．不要忘了，变量\verb|e|中的每一个元素值都是由多个位置参数值在对应位置上的元素值组合而成的．
+
+由此可见，我们传入\verb|map4|函数的参数值应该是彼此呼应的．比如，若与参数\verb|vec|绑定在一起的参数值都是整数向量，那么参数\verb|f|代表的那个函数就应该能够同时接受多个整数作为其参数值．再比如，如果与参数\verb|vec|绑定在一起的参数值既有字符向量也有字符串向量，那么\verb|f|代表的就应该是一个可以同时接受字符和字符串的函数．示例如下：
+
+\begin{lstlisting}[language=julia]
+julia> map4(['u','v','w'], ["x","y","z"]; f=*)
+3-element Array{String,1}:
+ "ux"
+ "vy"
+ "wz"
+
+julia> 
+\end{lstlisting}
+
+到了这里，我想你应该已经对\verb|map4|函数的定义和用法都了如指掌了．我讲了这么多是想告诉你，与可变参数绑定的实际参数值在数量上几乎没有限制．因此，我们可以说，变参函数的调用方可以自由决定传入多少个参数值．所以，我们在定义变参函数的时候必须对此做好妥帖的应对方案．另外，由于符号\verb|...|的特殊性，它不但是可变参数声明的必要组成部分，而且还是可以帮助我们更好地实现变参函数的一把利器．合理地利用好这个符号可以让我们事半功倍．
