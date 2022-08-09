@@ -1,0 +1,110 @@
+% 可观测量的相容性
+% 不确定性关系|量子力学|算符|狄拉克符号|现代量子力学
+
+
+\pentry{Stern-Gerlach 实验\upref{SGExp}}
+
+\subsection{相容可观测量}
+
+\addTODO{加入目录}
+
+按照相容算符的\autoref{QMPrcp_def17}~\upref{QMPrcp}，我们可以定义可观测量的相容：
+
+\begin{definition}{相容可观测量}
+设$X, Y$分别是两个可观测量对应的算符，若$[X, Y]=0$，则称它们是\textbf{相容}的，否则称它们是\textbf{不相容}的．
+\end{definition}
+
+相容的可观测量具有一个关键性质：
+
+\begin{theorem}{}\label{MsrCmp_the1}
+设$X, Y$是相容的可观测量，且$X$无\textbf{简并}（\autoref{QMPrcp_def16}~\upref{QMPrcp}）的本征值．则$X$的本征矢量都是$Y$的本征矢量．
+\end{theorem}
+
+\textbf{证明}：
+
+任取$X$的本征矢$\ket{s}$，设$X\ket{s}=ks$，其中$k\in\mathbb{C}$．
+
+由于$XY-YX=0$，故有：
+\begin{equation}
+\begin{aligned}
+XY\ket{s} &= YX\ket{s}\\
+X(Y\ket{s}) &= kY\ket{s}
+\end{aligned}
+\end{equation}
+
+即$Y\ket{s}$也是$X$的本征矢量，本征值也是$k$．又因为$X$没有简并本征值，故$Y\ket{s}$应该是$\ket{s}$的倍数，即$\ket{s}$是$Y$的本征矢．
+
+\textbf{证毕}．
+
+
+根据量子力学的基本假设（\autoref{QMPrcp_sub2}~\upref{QMPrcp}），对一个量子态进行测量，所得测量值是可观测量的一个本征值，且获得该测量值的概率正比于该量子态在对应本征矢量方向上投影的\textbf{模方}；另外，当测量完成后，量子态会坍缩成所得本征值对应的本征矢．
+
+因此，如果$[X, Y]=0$且无简并，根据\autoref{MsrCmp_the1} ，可知当我们对量子态进行$X$测量后，结果是$Y$的本征矢，故再进行$Y$测量时所得结果是确定的．
+
+但是，如果$[X, Y]\neq 0$，那么两个可观测量不共享所有本征矢，此时先进行$X$测量后，再测量$Y$，所得结果是不确定的\footnote{可参考\textbf{Stern-Gerlach 实验}\upref{SGExp}．}．这就是\textbf{不确定性原理}\upref{Uncert}．
+
+
+
+\subsection{不相容可观测量}
+
+
+考虑类似\textbf{Stern-Gerlach 实验}\upref{SGExp}中的序列实验（\autoref{SGExp_sub1}~\upref{SGExp}）．
+
+让一个处于$\ket{a}$态系统通过$X$算符的测量仪器，得到若干$X$的本征态；取出其中某一态$\ket{b}$，再让它通过一台$Y$仪器．最终，从$Y$出口得到某本征态$\ket{c}$的概率是
+\begin{equation}
+\abs{\braket{a}{b}}^2\cdot\abs{\braket{b}{c}}^2
+\end{equation}
+
+如果我们把所有通过$X$的结果都保留，让它们一起通过$Y$，则最终得到$\ket{c}$的概率是\footnote{注意，$\braket{a}{b}=\braket{b}{a}^*$．}
+\begin{equation}\label{MsrCmp_eq1}
+\sum_{b}\abs{\braket{a}{b}}^2\cdot\abs{\braket{b}{c}}^2=\sum_{b}(\braket{a}{b}\braket{b}{a})\cdot(\braket{c}{b}\braket{b}{c})
+\end{equation}
+
+如果撤掉$X$，让$\ket{a}$直接通过$Y$，则最终得到$\ket{c}$的概率是\footnote{注意$\sum_{b}\ket{b}\bra{b}=\mathbb{1}$，参见\autoref{QMPrcp_cor3}~\upref{QMPrcp}．}
+\begin{equation}\label{MsrCmp_eq2}
+\begin{aligned}
+\abs{\braket{a}{c}}^2&=\abs{\sum_{b}\braket{a}{b}\braket{b}{c}}^2\\
+&=\qty(\sum_{b_1}\braket{a}{b_1}\braket{b_1}{c})\qty(\sum_{b_2}\braket{a}{b_2}\braket{b_2}{c})^*\\
+&=\qty(\sum_{b_1}\braket{a}{b_1}\braket{b_1}{c})\qty(\sum_{b_2}\braket{b_2}{a}\braket{c}{b_2})\\
+&=\sum_{b_1, b_2}\braket{a}{b_1}\braket{b_1}{c}\braket{b_2}{a}\braket{c}{b_2}
+\end{aligned}
+\end{equation}
+
+注意\autoref{MsrCmp_eq1} 和\autoref{MsrCmp_eq2} 形式不一样，一个是模方乘积求和，一个是乘积求和的模方，由复数运算的Cauchy不等式，可知通常\autoref{MsrCmp_eq1} 大于\autoref{MsrCmp_eq2} \footnote{如果你直接用\autoref{SGExp_sub1}~\upref{SGExp}来类比的话，其实会得到等号．这是因为Stern-Gerlach实验高度对称，按照实验设计总是劈裂出概率相等的两个结果．不取等号的情况，可以参考\textbf{光的偏振态实验}\autoref{QMPrcp_ex3}~\upref{QMPrcp}．}．这意味着把通过$X$的结果都保留，并不等价于撤掉$X$；这可以理解为量子力学基本假设中“坍缩”造成的．
+
+\begin{theorem}{}
+如果$[X, Y]=0$，且不存在简并时，则\autoref{MsrCmp_eq1} $=$ \autoref{MsrCmp_eq2} ．
+\end{theorem}
+
+\textbf{证明}：
+
+由\autoref{MsrCmp_the1} ，按照题设，$X$和$Y$共享本征向量，因此直接通过$Y$和先通过$X$再通过$Y$，量子态变化情况都是相同的．唯一的不同只可能是$Y$和$X$的测量值．
+
+\textbf{证毕}．
+
+简而言之，“三道栅栏（三块偏振片，依次相对前一块旋转$\pi/4$）”的透光能力比“两道栅栏（两块互相垂直的偏振片）”强，这种奇特现象是因为可观测量不相容．
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

@@ -13,21 +13,242 @@
 \end{equation}
 其中 $\mat A$ 是 $M \times N$ 的矩阵， $\bvec x$ 是 $N$ 维列矢量， $\bvec y$ 是 $M$ 维列矢量， $\mat A \bvec x$ 表示矩阵与列矢量相乘（\autoref{Mat_eq4}~\upref{Mat}）． $\mat A$ 和 $\bvec y$ 是已知的， $\bvec x$ 是未知的， 被称为方程组的\textbf{解（solution）}．
 
-即相当于求解一组线性方程：
-\begin{equation}
-\begin{cases}
-A_{11}x_1+A_{12}x_2+A_{13}x_3+...&=y_1\\
-A_{21}x_1+A_{22}x_2+A_{23}x_3+...&=y_2\\
-A_{31}x_1+A_{32}x_2+A_{33}x_3+...&=y_3\\
-...
-\end{cases}
-\end{equation}
+正如你所知道的那样\upref{LinEqu}，线性方程组$\mat A \bvec x=\bvec y$可以有零个解（无解）、一个解（唯一解）或无数解；但不能有只有两个解，等等．
 
+% 求解$\mat A x = y$即相当于求解一组线性方程：
+% \begin{equation}
+% \begin{cases}
+% A_{11}x_1+A_{12}x_2+A_{13}x_3+...&=y_1\\
+% A_{21}x_1+A_{22}x_2+A_{23}x_3+...&=y_2\\
+% A_{31}x_1+A_{32}x_2+A_{33}x_3+...&=y_3\\
+% ...
+% \end{cases}
+% \end{equation}
+
+\subsection{线性方程组的几何含义}\label{LinEq_sub2}
+可以分别从行与列的角度来理解线性方程组的几何含义．\footnote{本文参考了Gilbert Strang的《线性代数》课程，J. Leon 的Linear Algebra with Applications，以及李永乐等的线代考研课程}更深刻、数学的表示可以见线性方程组的仿射解释\upref{AS2LF}．
+
+\subsubsection{行视角}
+$$
+\mat A \bvec x=\bvec y \Leftrightarrow 
+\begin{bmatrix}
+A_{11}&A_{12}&A_{13}&...\\
+A_{11}&A_{12}&A_{13}&...\\
+A_{11}&A_{12}&A_{13}&...\\
+...
+\end{bmatrix}
+\begin{bmatrix}
+x_{1}\\
+x_{2}\\
+x_{3}\\
+...\\
+\end{bmatrix}
+=
+\begin{bmatrix}
+y_{1}\\
+y_{2}\\
+y_{3}\\
+...\\
+\end{bmatrix}
+\Leftrightarrow 
+\begin{cases}
+y_1&=A_{11}x_1+A_{12}x_2+A_{13}x_3+...\\
+y_2&=A_{21}x_1+A_{22}x_2+A_{23}x_3+...\\
+y_3&=A_{31}x_1+A_{32}x_2+A_{33}x_3+...\\
+...&\\
+\end{cases}
+$$
+
+这相当于求解一组线性方程．其中每一条方程可以看作某种（高维）直线，方程组的解就是这些直线的交点．
+
+\begin{example}{}
+例如，求解
+$$
+\begin{bmatrix}
+2&-1\\
+-1&2\\
+\end{bmatrix}
+\begin{bmatrix}
+x_1\\
+x_2\\
+\end{bmatrix}
+=
+\begin{bmatrix}
+0\\
+3\\
+\end{bmatrix}
+$$
+即
+$$
+\begin{cases}
+2x_1-x_2=0\\
+-x_1+2_2=3\\
+\end{cases}
+$$
+\begin{figure}[ht]
+\centering
+\includegraphics[width=8cm]{./figures/LinEq_2.png}
+\caption{行视角下的线性方程组．解可以理解为直线的交点．仿自Strang的《线性代数》} \label{LinEq_fig2}
+\end{figure}
+\end{example}
+从这个角度可以很直观的理解“无解”、“无数解”．很显然，一组直线不能仅有两个交点，所以线性方程组也不可能只有两个解．
+\begin{figure}[ht]
+\centering
+\includegraphics[width=12cm]{./figures/LinEq_3.png}
+\caption{“无解(没有交点)”、“唯一解（有唯一交点）”、“无数解（有无数交点）”} \label{LinEq_fig3}
+\end{figure}
+
+或者用分块矩阵\upref{BlkMat}的视角，将$\mat A$划分为若干行向量$\bvec \alpha_1, \bvec \alpha_2,\bvec \alpha_3...$，让表述变得更加简洁．
+$$
+\mat A \bvec x=\bvec y \Leftrightarrow 
+\begin{bmatrix}
+\bvec \alpha_1\\
+\bvec \alpha_2\\
+\bvec \alpha_3\\
+...
+\end{bmatrix}
+\bvec x
+=
+\begin{bmatrix}
+y_{1}\\
+y_{2}\\
+y_{3}\\
+...\\
+\end{bmatrix}
+\Leftrightarrow 
+\begin{cases}
+y_1&=\bvec \alpha_1 \bvec x\\
+y_2&=\bvec \alpha_2 \bvec x\\
+y_3&=\bvec \alpha_3 \bvec x\\
+...&\\
+\end{cases}
+$$
+
+\subsubsection{列视角}
+运用分块矩阵\upref{BlkMat}的视角，将$\mat A$划分为若干列向量$\bvec \alpha_1, \bvec \alpha_2,\bvec \alpha_3...$
+$$
+\mat A \bvec x=\bvec y \Leftrightarrow 
+\begin{bmatrix}
+\bvec \alpha_1& \bvec \alpha_2& \bvec \alpha_3&...
+\end{bmatrix}
+\begin{bmatrix}
+x_{1}\\
+x_{2}\\
+x_{3}\\
+...\\
+\end{bmatrix}
+=
+\bvec y
+\Leftrightarrow 
+\bvec y = \bvec \alpha_1 x_1+\bvec \alpha_2 x_2+\bvec \alpha_3 x_3+...
+$$
+此时，$\bvec y$可以看作是一系列$\bvec \alpha_i$的线性组合，而解$\bvec x$是各个列向量的“系数”．方程组无解的含义即为“$\bvec y$不能由$\bvec \alpha_i$线性组合得到”，无数解的含义即为“有无数种方法线性组合$\bvec \alpha_i$以得到$\bvec y$”，这暗示了这一系列$\bvec \alpha_i$中存在线性相关的项．
+
+\begin{example}{}
+还是例如求解
+$$
+\begin{bmatrix}
+2&-1\\
+-1&2\\
+\end{bmatrix}
+\begin{bmatrix}
+x_1\\
+x_2\\
+\end{bmatrix}
+=
+\begin{bmatrix}
+0\\
+3\\
+\end{bmatrix}
+$$
+即
+$$
+\begin{bmatrix}
+2\\
+-1\\
+\end{bmatrix}
+x_1
++
+\begin{bmatrix}
+-1\\
+2\\
+\end{bmatrix}
+x_2
+=
+\begin{bmatrix}
+0\\
+3\\
+\end{bmatrix}
+$$
+\begin{figure}[ht]
+\centering
+\includegraphics[width=8cm]{./figures/LinEq_4.png}
+\caption{列视角下的线性方程组．解可理解为各列向量的“系数”．仿自Strang的《线性代数》} \label{LinEq_fig4}
+\end{figure}
+\end{example}
+看起来，在线性方程组中，矩阵$\mat A$的行向量与列向量存在一种微妙的关联．
+
+\subsection{线性方程组的解的结构}
 \begin{figure}[ht]
 \centering
 \includegraphics[width=14cm]{./figures/LinEq_1.png}
 \caption{$Ax=b$ 的解} \label{LinEq_fig1}
 \end{figure}
+
+\addTODO{需要补充证明}%我不会证明QAQ
+
+关于线性方程组的解，我们有如下定理．记m为$\mat A$的行数，n为$\mat A$的列数，r为$\mat A$的矩阵的秩\upref{MatRnk}．可参考\autoref{LinEq_fig1} 的分类．
+
+\begin{theorem}{$\mat A \bvec x=\bvec y$解的唯一性}
+若 $n-r=0$，若解存在，则解唯一.
+
+若 $n-r>0$，若解存在，则解不唯一.
+\end{theorem}
+n-r事实上是$\mat A$的零空间的基个数$dim(Nul(\mat A))=n-r$．
+
+\begin{theorem}{$\mat A \bvec x=\bvec y$解的存在性}
+若 $m-r=0$，则解一定存在.
+
+若 $m-r>0$，则解可能不存在.
+\end{theorem}
+m-r事实上是$\mat A$的左零空间的基个数$dim(Nul(\mat A^T))=m-r$．
+
+\begin{theorem}{$\mat A \bvec x=\bvec y$解的存在性2}
+若$\bvec y$是$\mat A$的列向量的线性组合($\bvec y \in Col(\mat A)$)，则$\mat A \bvec x=\bvec y$一定存在解；否则无解．
+\end{theorem}
+由列视角（\autoref{LinEq_sub2} ）看，这是显然的．
+
+\begin{corollary}{}
+设 $\overline{\mat A} = [\mat A | \bvec y] $ 为A的增广矩阵．
+
+$\mat A \bvec x=\bvec y$无解：$rank(\overline{\mat A})=rank(\mat A)+1$
+
+唯一解：$rank(\overline{\mat A})=rank(\mat A)=n$
+
+无数解：$rank(\overline{\mat A})=rank(\mat A)<n$
+\end{corollary}
+考虑到秩的含义，结合上述定理，也容易理解该推论．
+
+\begin{theorem}{$\mat A \bvec x=\bvec 0$解的唯一性}
+若 $n-r=0$，则只有一个解 $\bvec x = \bvec 0$.
+
+若 $n-r>0$，则解不唯一，且存在(n-r)个线性无关的解．
+\end{theorem}
+这(n-r)个解即为零空间的(n-r)个基．
+
+\begin{theorem}{$\mat A \bvec x=0$解的存在性}
+一定存在平凡解 $\bvec x=0$
+\end{theorem}
+
+\begin{theorem}{解的结构}
+$\mat A \bvec x=\bvec y$的通解等于$\mat A \bvec x=\bvec y$的一个特解加上$\mat A \bvec x=0$的各个线性无关的解的线性组合，即$\bvec x = \bvec x_p +k_1\bvec x_{n1}+k_2\bvec x_{n2}+...$
+
+因此，通常的解题套路是先求解$\mat A \bvec x=\bvec y$的一个特解，再求解$\mat A \bvec x=0$的各个线性无关的解．
+
+(若n-r=0，则$\mat A \bvec x=0$仅有解$\bvec x_n=0$，$\mat A \bvec x=\bvec y$自然只有一个解$\bvec x = \bvec x_p$)
+\end{theorem}
+
+更深入的探讨详见下文：
 
 从矢量空间\upref{LSpace}的角度来看， $\bvec x$ 是一个 $N$ 维矢量空间（以下称为 $X$ 空间）中一个矢量关于某组基底的坐标， $\bvec y$ 是一个 $M$ 维矢量空间（以下称为 $Y$ 空间）中一个矢量关于某组基底的坐标． 矩阵 $\mat A$ 可以将 $X$ 空间中的任意矢量映射到 $Y$ 后的坐标．
 

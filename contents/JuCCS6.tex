@@ -1,0 +1,258 @@
+% Julia 衍生方法
+% Julia 函数 衍生方法
+
+本文授权转载自郝林的 《Julia 编程基础》． 原文链接：\href{https://github.com/hyper0x/JuliaBasics/blob/master/book/ch12.md}{第 12 章 函数与方法}．
+
+
+\subsubsection{12.6 衍生方法}
+
+我们已经知道，当一个函数被调用的时候，Julia会通过多重分派（multiple dispatch）机制去决定实际调用这个函数的哪一个衍生方法．这种决定依据的是函数定义中所声明的位置参数．更具体地说，决定的因子有位置参数的数量以及各个位置参数的类型．
+
+我们一直在说的多重分派机制的含义是，通过多个决定因子来确定将要执行的代码块，或者说确定将流程的控制权委派给哪一个代码块．在 Julia中，这样的代码块指的就是衍生方法，也可以简单地称之为方法．相应的，还存在一种被叫做单一分派（single dispatch）的机制．顾名思义，单一分派机制只会依据一个决定因子．这个决定因子往往是被调用函数所属的对象的类型，或者被调用函数的第一个参数的类型．像C++、Java、Python、JavaScript等编程语言都具备单一分派机制的某种实现．很显然，多重分派机制是更加灵活和强大的．
+
+\textbf{12.6.1 泛化函数}
+
+我们在之前讲过的参数化类型也可以被称为泛化类型．因为它们代表着一种对数据结构的泛化定义．对于函数，Julia 也有一个比较相近的概念，叫做泛化函数（generic function）．我们都知道，一个函数定义的编写就意味着对某种功能的实现．然而，一个泛化函数的意义却在于对某种功能的命名和定义，与具体的实现无关．
+
+Julia中的泛化函数是一个抽象的概念，它无需落实在应用程序的代码上．不过，如果我们非要把泛化函数写在代码里，也是可以做到的．示例如下：
+
+\begin{lstlisting}[language=julia]
+function sum1 end
+\end{lstlisting}
+
+这行代码很特别，它定义了一个名为\verb|sum1|的泛化函数．与通常的函数定义有着鲜明的区别，它根本就没有参数列表和结果声明，更没有函数体．这样的定义让泛化函数变得可见，也让程序的阅读者更加明确了某个泛化函数的存在，从而可以在一定程度上增强代码的可读性．然而，只要我们编写了相应的衍生方法（也就是通常的函数定义），它就是可有可无的．并且，单独的泛化函数定义是没有任何实质上的功能的．所以，泛化函数的定义仅仅属于一种文档化的代码．正是由于这些特点，只要没有特别说明，我们所说的函数定义指的就肯定不是泛化函数的定义，而是那种一般的函数定义．
+
+我们定义的每一个函数（确切地说是衍生方法）都与泛化函数脱不了干系．在默认的情况下，当 Julia 解析一个函数定义的时候，如果在当前的模块下还没有同名的函数被解析过，那么它就会创建一个与之同名的泛化函数，并把这个正在被解析的函数作为该泛化函数的第一个衍生方法．这里只有一个例外，那就是：这个函数的定义代表的是为其他模块中的泛化函数编写的衍生方法．我们稍后会解释这个例外．
+
+下面是一个在新的 REPL 环境中执行的示例：
+
+\begin{lstlisting}[language=julia]
+julia> function sum1(a, b)
+           a + b
+       end
+sum1 (generic function with 1 method)
+
+julia> methods(sum1)
+# 1 method for generic function "sum1":
+[1] sum1(a, b) in Main at REPL[1]:2
+
+julia> 
+\end{lstlisting}
+
+虽然这个名为\verb|sum1|的定义是以关键字\verb|function|开头的，并且我们也可以称之为函数，但是，它实质上是一个衍生方法．它衍生自那个Julia刚刚创建的、名字也叫\verb|sum1|的泛化函数．这一点从REPL环境在解析函数定义之后回显的内容那里就可以得到验证．开头的\verb|sum1|是泛化函数及其衍生方法共用的名称．括号中的generic function|说明泛化函数\verb|sum1|已经被创建（有时也表示已经存在），而之后的\verb|with 1 method|则说明该泛化函数目前只拥有 1 个衍生方法（也就是我们刚刚定义的那一个）．这与调用表达式\verb|methods(sum1)|返回的结果是一致的．
+
+下面，我们再来定一个`sum1`函数：
+
+\begin{lstlisting}[language=julia]
+julia> function sum1(a::Number, b::Number)
+           a + b
+       end
+sum1 (generic function with 2 methods)
+
+julia> methods(sum1)
+# 2 methods for generic function "sum1":
+[1] sum1(a::Number, b::Number) in Main at REPL[3]:2
+[2] sum1(a, b) in Main at REPL[1]:2
+
+julia> 
+\end{lstlisting}
+
+我们这次定义的\verb|sum1|函数与之前的不同．它的位置参数\verb|a|和\verb|b|都拥有了确定的类型．实际上，Julia正是利用函数定义中位置参数的声明来区分它们的．这个新的函数定义使得泛化函数\verb|sum1|又多了1个衍生方法．
+
+你可能已经有所察觉，\verb|sum1|这个名称好像就代表着那个泛化函数．没错，泛化函数只有一个唯一的标志，那就是它的名称．在同一个模块内，同名的函数定义一定会属于同一个泛化函数．不过，处于不同模块的多个同名函数定义却可能属于不同的泛化函数．关于这一点，我们在后面就会讲到．
+
+到这里，我想你应该已经搞清楚了几个基本的问题．首先，泛化函数是什么，它与我们通常所说的函数有什么不同．其次，泛化函数是怎样产生的，它与我们定义的函数之间有什么样的关联．最后，我们一般怎样去判断多个函数定义是否是属于同一个泛化函数的衍生方法．
+
+为了避免混淆，我在这里再对几个看起来很相似的概念做一下解释．函数，是一个很笼统的概念．我们编写的以\verb|function|关键字开头的程序定义都可以被称为函数定义．不过，Julia中的函数又可以被分为两种，即：泛化函数和衍生方法．其中，泛化函数是抽象的．它常常只体现为Julia内部的一种对象，而无需落实在应用程序的代码上．相对的，衍生方法是具体的，并且一定会出现在应用程序之中．因此，我们常常会直接把程序中出现的一般函数定义称为方法．当然了，我们称呼它们为函数也没有错．所以，本教程里提到的“函数”和“方法”在Julia程序的上下文中指的都是那种一般的函数定义．最后，衍生方法一定不是独立存在的，它肯定会与某个泛化函数关联在一起．
+
+\textbf{12.6.2 方法的定义}
+
+我们其实已经在前面展示过不少衍生方法的定义了．而且，我们也已经知道，同属于一个泛化函数的衍生方法一定拥有着相同的名称，同时拥有着不同的位置参数列表．我们刚刚讲过的那两个名为\verb|sum1|的方法就是如此．
+
+我在前面也讲了，Julia在选择衍生方法的时候会把它们的所有位置参数都考虑在内．这不仅涉及到了位置参数的数量，还涉及到了每一个位置参数声明中的类型信息．另一方面，虽然我们定义的函数也可以包含关键字参数，但是这种参数却不会在多重分派的过程中发挥任何作用．
+
+下面，我们就再编写一个带有关键字参数的\verb|sum1|方法：
+
+\begin{lstlisting}[language=julia]
+julia> function sum1(a::Number, b::Number; print::Bool)
+           res = a + b
+           if print
+               println("$a + $b = $res")
+           end
+           res
+       end
+sum1 (generic function with 2 methods)
+
+julia>
+\end{lstlisting}
+
+这个方法定义除了拥有位置参数\verb|a|和\verb|b|之外，还有一个名为\verb|print|的关键字参数．这个\verb|sum1|方法看上去没有任何的问题，并且与前两个\verb|sum1|方法有着明显的不同．可是，REPL环境回显的内容却显示，泛化函数\verb|sum1|仍然只有两个衍生方法．你能想到这是为什么吗？
+
+我们在前面已经讲过，Julia的多重分派机制只会关心同名函数定义的位置参数列表，而不会在意它们的关键字参数．如果只看名称和位置参数列表，那么我定义的第三个\verb|sum1|方法和第二个\verb|sum1|方法就是一样的．
+
+又由于它们直接所属的作用域是相同的，都是\verb|Main|模块，所以它们在Julia看来就是重复的函数定义．对于重复的函数定义，Julia总是会以最后解析的那一个为准．也就是说，这里的第三个\verb|sum1|方法会覆盖掉第二个\verb|sum1|方法．如果我们通过调用\verb|methods|函数去查看的话，就可以验证这一点：
+
+\begin{lstlisting}[language=julia]
+julia> methods(sum1)
+# 2 methods for generic function "sum1":
+[1] sum1(a::Number, b::Number; print) in Main at REPL[5]:2
+[2] sum1(a, b) in Main at REPL[1]:2
+
+julia> 
+\end{lstlisting}
+
+顺便说一下，Julia的多重分派机制同样也不会去理会函数定义中的结果声明．无论我们是否声明了结果的类型，以及声明的结果类型是什么，都不会干扰Julia对重复函数定义的判断和处理．下面是相应的例子：
+
+\begin{lstlisting}[language=julia]
+julia> function sum1(a::Number, b::Number; print::Bool=false)::String
+           res = a + b
+           if print
+               println("$a + $b = $res")
+           end
+           "$res"
+       end
+sum1 (generic function with 2 methods)
+
+julia> methods(sum1)
+# 2 methods for generic function "sum1":
+[1] sum1(a::Number, b::Number; print) in Main at REPL[7]:2
+[2] sum1(a, b) in Main at REPL[1]:2
+
+julia> 
+\end{lstlisting}
+
+至此，泛化函数\verb|sum1|的衍生方法只剩下我们刚刚定义的第四个方法，以及最初定义的第一个方法．虽然从\verb|methods|函数返回的结果中看不到方法定义的结果声明，但是我们还是能够依据相应的位置信息（如\verb|REPL[7]:2|）做出判断的．
+
+以上就是为泛化函数定义衍生方法的一般方式．在两者处于同一个模块的情况下，这种方式肯定是有效的．但是，如果你想为处于其他模块中的泛化函数定义衍生方法，那么就需要先在当前的作用域中导入这个函数．比如，导入语句\verb|import Base.cmp|会把处在\verb|Base|模块中的泛化函数\verb|cmp|导入到当前的作用域中．
+
+在这里需要注意的是，在不同的模块中是可以存在同名的函数定义的．如果确实存在这种情况，那么这些模块就会包含名称相同的泛化函数．这样的话，我们在定义方法之前，就要先搞清楚我们要衍生的是哪一个泛化函数，应该先导入哪一个模块中的标识符．
+
+对于此，我就不再举例了．因为我们在前面已经一起编写过不少这样的函数定义了．比如，在讲数值类型的提升的时候，我们编写过\verb|Base.promote_rule|函数的衍生方法．又比如，我们在讲标准字典的实例化的时候，一起编写过\verb|Base.==|函数和\verb|Base.hash|函数的衍生方法．还有，我们在讲数组的比较时还为\verb|Base.cmp|函数编写过衍生方法．这些都是很好的参考．如果你忘记了，可以再翻回去看一看．
+
+现在，我想你已经很清楚如何正确地编写衍生方法了．请记住，衍生方法定义的关键就在于它的名称和位置参数列表．它的名称会告诉 Julia，你在为哪一个泛化函数定义衍生方法．而它的位置参数列表则会让 Julia知道，你定义的衍生方法与已经存在的方法定义在表面上有哪些不同．请注意，不同的位置参数列表就意味着新方法的加入，而相同的位置参数列表则会导致方法的覆盖．
+
+\textbf{12.6.3 方法的选择}
+
+我们在前面已经讲过了，Julia的多重分派机制在选择衍生方法的时候会使用一些决定因子，即：所有位置参数的类型以及它们的数量．在本小节，我们会介绍一些更加详细的规则．
+
+已知，我们编写的函数定义最终都会被Julia解析为衍生方法．如果我们想为某个泛化函数定义多个衍生方法，那么只需要编写更多的名称相同但位置参数列表不同的函数定义就可以了．由于泛化函数只有函数名称这么一个标志，所以在同一个模块中的同名函数定义都会被解析为同一个泛化函数的衍生方法．
+
+当我们调用某个泛化函数的时候，Julia首先会识别出我们给予的各个位置参数值的类型，然后连同函数的名称一起合成一个期望的函数签名对象．随后，Julia会拿着这个函数签名对象到相应的方法表中去查找，并选择一个签名与之最相似的方法．
+
+下面，我将用一些示例来说明．首先，我们定义两个名为\verb|sum2|的方法：
+
+\begin{lstlisting}[language=julia]
+# 第 1 个方法．
+function sum2(a::Integer, b::Integer)
+    a + b
+end
+
+# 第 2 个方法．
+function sum2(a::Integer, b::Integer, c::Integer)
+    a + b + c
+end
+\end{lstlisting}
+
+还记得吗？Julia 中所有的整数类型都是\verb|Integer|的子类型，包括有符号的整数类型、无符号的整数类型，以及布尔类型．
+
+当 Julia 执行\verb|sum2(1, 2)|的时候，它会选择第1个方法，而不是第2个方法．因为第1个方法中的位置参数的数量与这个调用表达式给予的位置参数值的数量是一致的．如果我们再定义第3个\verb|sum2|方法：
+
+\begin{lstlisting}[language=julia]
+# 第 3 个方法．
+function sum2(a::Integer, b::Int)
+    a + b
+end
+\end{lstlisting}
+
+那么，\verb|sum2(1, 2)|就一定会被分派给第3个方法．原因是，第3个方法中的位置参数的类型更加匹配．更具体地说，这个调用表达式给予的位置参数值都是\verb|Int|类型的，而第3个方法中的参数\verb|b|也是这个类型的．我们再来看第4个\verb|sum2|方法：
+
+\begin{lstlisting}[language=julia]
+# 第 4 个方法．
+function sum2(a::Int, b::Integer)
+    a + b
+end
+\end{lstlisting}
+
+与第3个方法恰恰相反，第4个方法中的参数\verb|a|的类型是\verb|Int|，而参数\verb|b|的类型则是\verb|Integer|．对于上述的调用表达式，第4个方法在位置参数类型的匹配度方面与第3个方法难分高下．Julia在这种情况下会怎样去选择呢？请看下面的执行结果：
+
+\begin{lstlisting}[language=julia]
+julia> sum2(1, 2)
+ERROR: MethodError: sum2(::Int64, ::Int64) is ambiguous. Candidates:
+  sum2(a::Integer, b::Int64) in Main at REPL[3]:3
+  sum2(a::Int64, b::Integer) in Main at REPL[4]:3
+Possible fix, define
+  sum2(::Int64, ::Int64)
+Stacktrace:
+ [1] top-level scope at REPL[5]:1
+
+julia> 
+\end{lstlisting}
+
+可以看到，Julia报错了．对于\verb|sum2|函数的第3个方法和第 4个方法，Julia认为它们的定义是模棱两可的，从而无法做出很清晰的选择．所以，即使它们都是当前最匹配的方法，Julia也不会选择它们中的任何一个，而是把这当作一个程序定义方面的错误暴露出来．
+
+我们在遇到这种错误的时候，一定要认真地反思一下，仔细斟酌并修正函数定义中存在的歧义．实际上，Julia已经给我们提供了一个建议，即：也许应该把函数的签名修正为\verb|sum2(::Int64, ::Int64)|．
+
+顺便说一下，这对于我们来说其实是一个警示．虽然Julia的衍生方法和多重分派机制可以给程序带来极大的灵活性，但是同时也会给程序的设计者带来很大的挑战．尤其是在一个泛化函数需要许多衍生方法的时候，我们仍然要尽力地保证它们在签名和功能方面都满足正交（orthogonality）设计原则，即：相互独立、没有重复且只有单向的依赖关系．这显然不是一件容易的事情，往往需要我们花很多时间进行方法研究和经验积累才能够优雅地达到目的．
+
+回到原先的话题．当存在比上述两个含糊不清的方法更加匹配的方法时，Julia就会直接去选择那个方法．这也是它提出前面那个建议的原因．相应的代码如下：
+
+\begin{lstlisting}[language=julia]
+# 第 5 个方法．
+function sum2(a::Int, b::Int)
+    a + b
+end
+\end{lstlisting}
+
+对于\verb|sum2(1, 2)|来说，第5个\verb|sum2|方法显然是更加适合的．从原理上讲，Julia总是会选择位置参数的类型最具体的那一个方法．
+
+现在，让我们来换一个调用表达式，使用\verb|sum2(2, 3.2)|．下面是执行它的结果：
+
+\begin{lstlisting}[language=julia]
+julia> sum2(2, 3.2)
+ERROR: MethodError: no method matching sum2(::Int64, ::Float64)
+Closest candidates are:
+  sum2(::Int64, ::Int64) at REPL[6]:3
+  sum2(::Integer, ::Int64) at REPL[3]:3
+  sum2(::Int64, ::Integer) at REPL[4]:3
+  ...
+Stacktrace:
+ [1] top-level scope at REPL[7]:1
+
+julia> 
+\end{lstlisting}
+
+Julia又报错了．这次是因为它没有找到一个能够与\verb|sum2(2, 3.2)|相匹配的方法．到目前为止，我们还没有定义出可以接受浮点数的\verb|sum2|方法．从表面上看，整数值和浮点数值很相近，而且相互转换应该也很容易．但请记住，Julia语言本身在任何情况下都不会对一个值进行隐式的类型转换．所有的类型转换要么是通过调用某个函数（如\verb|trunc|函数、\verb|convert|函数等）完成的，要么是使用操作符\verb|::|做到的．
+
+所以说，我们在这时就不得不再添加一个方法来匹配上面的这个调用表达式：
+
+\begin{lstlisting}[language=julia]
+# 第 6 个方法．
+function sum2(a::Number, b::Number)
+    a + b
+end
+\end{lstlisting}
+
+虽然距离类型\verb|Int64|和\verb|Float64|最近的共同超类型是\verb|Real|，但是为了做到更大程度的泛化，我还是把所有参数的类型都声明为了\verb|Number|．如此一来，任意的数值就都可以作为该方法的参数值了．又由于\verb|+|函数本身就支持所有的数值，所以这并不会带来任何问题．
+
+顺便说一下，不知道你是否还记得，\verb|+|函数也拥有一个参数类型都为\verb|Number|的衍生方法：
+
+\begin{lstlisting}[language=julia]
++(x::Number, y::Number) = +(promote(x,y)...)
+\end{lstlisting}
+
+正因为有了这个\verb|+|方法，我们才能够把两个任意类型的数值相加在一起．该方法会先通过调用\verb|promote|函数把两个数值都转换为公共类型的值．别忘了，\verb|promote|函数能够这样做完全得益于Julia的类型提升系统．在这之后，这个\verb|+|方法会依据上述的公共类型把转换后的值传给其他相应的\verb|+|方法，如\verb|+(x::Float64, y::Float64)|等．
+
+你可能也看出来了，这个衍生方法同时担任着两个角色，即：调用入口和功能适配器．它是\verb|+|函数下的一个很重要的方法．而且，它与相关的\verb|+|方法都是满足正交设计原则的．我们在设计一个泛化函数的衍生方法群的时候可以以此为鉴．不过在这里，由于我们定义的所有\verb|sum2|方法都直接使用了\verb|+|函数，所以就没有必要再自己去做功能适配了．
+
+最后，我在这里再提示一个很容易被忽略的问题，那就是：当我们定义的函数包含了可选的位置参数的时候，一定要当心衍生方法之间的覆盖现象．因为，Julia会把这样的函数定义解析为多个衍生方法．例如，若我们有如下的函数定义：
+
+\begin{lstlisting}[language=julia]
+# 第 7 个方法．
+function sum2(a::Integer, b::Integer, c::Integer=0)
+    a + b + c
+end
+\end{lstlisting}
+
+那么，它会被Julia同时解析为\verb|sum2(a::Integer, b::Integer)|方法和\verb|sum2(a::Integer, b::Integer, c::Integer)|方法．如此一来，Julia之前解析的第1个\verb|sum2|方法和第2个\verb|sum2|方法就都会被覆盖掉．在这之后，诸如\verb|sum2(1, 2)|和\verb|sum2(1, 2, 3)|这样的调用表达式就都会导致第7个方法的执行．一旦第7个方法与前面那两个方法的行为不完全一致，后续相应的调用表达式的求值结果就很可能会与之前的不同，从而导致程序功能的不稳定．
+
+好了，到目前为止，我们已经讲述了很多关于衍生方法的内容，包括泛化函数、衍生方法的定义方式，以及Julia在选择衍生方法时所遵循的规则．接下来，我们会讲解函数的参数化定义方式．

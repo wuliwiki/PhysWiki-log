@@ -202,28 +202,28 @@ $$
 
 \subsection{张量}
 
-一个 $(r, s)$ 型张量是一个\textbf{有两种编号（系数）的多维数组}，记作 $\bmat{A_{i_1 \dots i_s}^{j_1 \dots j_r}}$，定义对它作用一个列矩阵 $\bmat{v^{i}}$，为
+一个 $(r, s)$ 型张量是一个\textbf{有两种编号（系数）的多维数组}，记作 $\bmat{A_{j_1 \dots j_s}^{i_1 \dots i_r}}$，定义对它作用一个列矩阵 $\bmat{v^{j}}$，为
 \begin{equation}\label{TsrFst_eq1}
-\bmat{B_{i_1 \dots i_{s - 1}}^{j_1 \dots j_r}} = \bmat{\sum_{i} A_{i_1 \dots i_{s - 1} i}^{j_1 \dots j_r} v^{i}}
+\bmat{B_{j_1 \dots j_{s - 1}}^{i_1 \dots i_r}} = \bmat{\sum_{j} A_{j_1 \dots j_{s - 1} j}^{i_1 \dots i_r} v^{j}}
 \end{equation}
 得到一个 $(r - 1,s)$ 型张量．
 
-实际上这个定义并不唯一我们也可以对任意的系数 $i_k$ 求和，因此在定义“作用一个列/行矩阵”的时候，我们需要声明是哪个系数的作用．实际上作用两次\autoref{TsrFst_eq1} 得到的结果一般依赖于作用列矩阵的顺序，即一般来说
+实际上这个定义并不唯一我们也可以对任意的系数 $j_k$ 求和，因此在定义“作用一个列/行矩阵”的时候，我们需要声明是哪个系数的作用．实际上作用两次\autoref{TsrFst_eq1} 得到的结果一般依赖于作用列矩阵的顺序，即一般来说
 $$
-\sum_{i, i'} A_{i_1 \dots i_{s - 2} i' i}^{j_1 \dots j_r} v^{i} w^{i'} \neq \sum_{i, i'} A_{i_1 \dots i_{s - 2} i' i}^{j_1 \dots j_r} w^{i} v^{i'}
+\sum_{j, j'} A_{j_1 \dots j_{s - 2} j' j}^{i_1 \dots i_r} v^{j} w^{j'} \neq \sum_{j, j'} A_{j_1 \dots j_{s - 2} j' j}^{i_1 \dots i_r} w^{j} v^{j'}
 $$
 
 对于 $(r, s)$ 型张量 $\bvec{A}$ 来说，我们也可以一次性作用 $s$ 个列矩阵 $\bvec{v}[1], \dots, \bvec{v}[s]$， $r$ 个行矩阵 $\bvec{\theta}[1], \dots, \bvec{\theta}[r]$，得到一个数矩阵
 $$\begin{aligned}
 &\bvec{A}(\bvec{v}[1], \dots, \bvec{v}[s], \bvec{\theta}[1], \dots, \bvec{\theta}[r]) \\
-= &\bmat{\sum A_{i_1 \dots i_s}^{j_1 \dots j_r} v[1]^{i_1} \dots v[1]^{i_s} \bvec{\theta}[1]_{j_1} \dots \bvec{\theta}[r]_{j_r}}
+= &\bmat{\sum A_{j_1 \dots j_s}^{i_1 \dots i_r} v[1]^{j_1} \dots v[s]^{j_s} \bvec{\theta}[1]_{i_1} \dots \bvec{\theta}[r]_{i_r}}
 \end{aligned}$$
 
 \addTODO{符号可以优化吗？}
 
 \subsection{与线性代数的关系}
 \addTODO{可能不应该写在这里}
-% 让我们考虑列矩阵 $\bmat{A^i}$．对于 $n \times 1$ 列矩阵，我们有 $n$ 个特殊的列矩阵，
+% 让我们考虑列矩阵 $\bmat{A^j}$．对于 $n \times 1$ 列矩阵，我们有 $n$ 个特殊的列矩阵，
 % $$
 % \bmat{
 % 1 \\
@@ -259,9 +259,9 @@ $$\begin{aligned}
 
 % 这种情况下，根据矩阵的加法和数乘，我们得到了
 % $$
-% \bmat{A^i} = \sum_i A^i \bvec{e}_i
+% \bmat{A^j} = \sum_i A^i \bvec{e}_i
 % $$
 
 \subsection{张量的推广}
 
-张量的定义是基于列/行向量的，而在线性代数中它们正好对应原向量和对偶向量．但如果我们抛开线性代数，假设存在第三种“基本向量呢”？比如垂直于纸面向外写，我们可以得到“竖向量”．如果以这三种向量为基础，我们可以定义 $(r, s, t)$ 型“广义张量”是一个\textbf{有三种编号（系数）的多维数组}，记作 $\bmat{{}^{k_1 \dots k_t}A_{i_1 \dots i_s}^{j_1 \dots j_r}}$．我们甚至可以定义第四个、第五个……基本向量．那么这些“广义张量”有什么用呢？我不知道，我只是说这东西是可以做到的．
+张量的定义是基于列/行向量的，而在线性代数中它们正好对应原向量和对偶向量．但如果我们抛开线性代数，假设存在第三种“基本向量呢”？比如垂直于纸面向外写，我们可以得到“竖向量”．如果以这三种向量为基础，我们可以定义 $(r, s, t)$ 型“广义张量”是一个\textbf{有三种编号（系数）的多维数组}，记作 $\bmat{{}^{k_1 \dots k_t}A_{j_1 \dots j_s}^{i_1 \dots i_r}}$．我们甚至可以定义第四个、第五个……基本向量．

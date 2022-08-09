@@ -26,11 +26,118 @@ x_i = \frac{\abs{\mat A_i}}{\abs{\mat A}} \qquad (i = 1, \dots, N)
 在数值计算时， 克拉默法则解方程组效率较低， 直接用高斯消元法求逆矩阵高斯消元法求逆矩阵\upref{InvMGs}会更快．
 
 \subsection{证明}
-证明需要代数余子式 $\mat A^*$
-\addTODO{证明}
+% 证明需要代数余子式 $\mat A^*$（未完成）
+% \begin{equation}
+% \bvec A^{-1} = \frac{\mat A^*}{\abs{\mat A}}
+% \end{equation}
+% \begin{equation}
+% \bvec x = \frac{\mat A^* \bvec b}{\abs{\mat A}}
+% \end{equation}
+以下证明\footnote{参考了J. Leon的Linear Algebra with Applications}以三阶矩阵为例，但可以方便地推广至任意阶矩阵．
+
+定义伴随矩阵
 \begin{equation}
-\bvec A^{-1} = \frac{\mat A^*}{\abs{\mat A}}
+\mat A^*=
+\begin{bmatrix}
+A_{11}&A_{21}&A_{31}\\
+A_{12}&A_{22}&A_{32}\\
+A_{13}&A_{23}&A_{33}\\
+\end{bmatrix}
 \end{equation}
+其中$A_{ij}$称为代数余子式，$A_{ij}$可以理解为去掉第i行与第j列的$\mat A$的行列式乘以$(-1)^{i+j}$．
+
+根据行列式的定义，可以得出$det(\mat A) = A_{11}a_{11}+A_{12}a_{12}+A_{13}a_{13}$．（可以沿任意行、列展开，例如$det(\mat A) = A_{11}a_{11}+A_{21}a_{21}+A_{31}a_{31}$）
+
+同时，伴随矩阵有一重要性质 $\mat A \mat A^* = det(\mat A)\mat I$．
+
+先证明$\mat A \mat A^* = det(\mat A)\mat I$
+
 \begin{equation}
-\bvec x = \frac{\mat A^* \bvec b}{\abs{\mat A}}
+\mat A \mat A^* =
+\begin{bmatrix}
+a_{11}&a_{12}&a_{13}\\
+a_{21}&a_{22}&a_{23}\\
+a_{31}&a_{32}&a_{33}\\
+\end{bmatrix}
+\begin{bmatrix}
+A_{11}&A_{21}&A_{31}\\
+A_{12}&A_{22}&A_{32}\\
+A_{13}&A_{23}&A_{33}\\
+\end{bmatrix}
+=
+\begin{bmatrix}
+A_{11}a_{11}+A_{12}a_{12}+A_{13}a_{13}&A_{21}a_{11}+A_{22}a_{12}+A_{23}a_{13}&A_{31}a_{11}+A_{32}a_{12}+A_{33}a_{13}\\
+A_{11}a_{21}+A_{12}a_{22}+A_{13}a_{23}&A_{21}a_{21}+A_{22}a_{22}+A_{23}a_{23}&A_{31}a_{21}+A_{32}a_{22}+A_{33}a_{23}\\
+A_{11}a_{31}+A_{12}a_{32}+A_{13}a_{33}&A_{21}a_{31}+A_{22}a_{32}+A_{23}a_{33}&A_{31}a_{31}+A_{32}a_{32}+A_{33}a_{33}\\
+\end{bmatrix}
 \end{equation}
+
+其中
+$
+A_{11}a_{11}+A_{12}a_{12}+A_{13}a_{13}
+$，即为$\mat A$的行列式；
+
+而
+$
+A_{21}a_{11}+A_{22}a_{12}+A_{23}a_{13}
+$，即相当于(沿第二行)计算
+$
+\begin{bmatrix}
+a_{11}&a_{12}&a_{13}\\
+a_{11}&a_{12}&a_{13}\\
+a_{31}&a_{32}&a_{33}\\
+\end{bmatrix}
+$
+的行列式，因此
+$
+A_{21}a_{11}+A_{22}a_{12}+A_{23}a_{13}=0
+$
+
+类似地，可以推知
+\begin{equation}
+\mat A \mat A^* =
+\begin{bmatrix}
+det(\mat A)&0&0\\
+0&det(\mat A)&0\\
+0&0&det(\mat A)\\
+\end{bmatrix}
+=det(\mat A) \mat I
+\end{equation}
+
+再证明$x_i=\frac{det(\mat A_i)}{det(\mat A)}$
+
+$$
+\bvec x = \mat A^{-1} \bvec b = \frac{1}{det(\mat A)}\mat A^* \bvec b = 
+\frac{1}{det(\mat A)}
+\begin{bmatrix}
+A_{11}&A_{21}&A_{31}\\
+A_{12}&A_{22}&A_{32}\\
+A_{13}&A_{23}&A_{33}\\
+\end{bmatrix}
+\begin{bmatrix}
+b_1\\
+b_2\\
+b_3\\
+\end{bmatrix}
+=
+\frac{1}{det(\mat A)}
+\begin{bmatrix}
+A_{11}b_1+A_{21}b_2+A_{31}b_3\\
+A_{12}b_1+A_{22}b_2+A_{32}b_3\\
+A_{13}b_1+A_{23}b_2+A_{33}b_3\\
+\end{bmatrix}
+$$
+
+$$
+\therefore x_1=\frac{1}{det(\mat A)}(A_{11}b_1+A_{21}b_2+A_{31}b_3)
+=\frac{1}{det(\mat A)}det\left(
+\begin{bmatrix}
+b_{1}&a_{12}&a_{13}\\
+b_{2}&a_{22}&a_{23}\\
+b_{3}&a_{32}&a_{33}\\
+\end{bmatrix}
+\right)
+=\frac{det(\mat A_1)}{det(\mat A)}
+$$
+
+同理可证$x_2, x_3,...$
