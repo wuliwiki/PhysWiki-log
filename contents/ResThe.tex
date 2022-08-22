@@ -13,7 +13,7 @@
 考虑 $f(z)=1/z$ 的围道积分．
 
 令积分路径为 $\Gamma(t)=\rho\E^{\I t}$，其中 $\rho$ 是一个常数．$\Gamma$ 就是一个绕着一个半径为 $\rho$ 的圆的逆时针路径．$f$ 沿 $\Gamma$ 的围道积分就是：
-\begin{equation}
+\begin{equation}\label{ResThe_eq1}
 \begin{aligned}
 \int_{\Gamma}\frac{1}{z}\dd z&=\int^{2\pi}_0\frac{1}{\rho\E^{\I t}}\cdot\frac{\dd\rho\E^{\I t}}{\dd t}\dd t\\
 &=\int_0^{2\pi}\frac{1}{\rho\E^{\I t}}\cdot (\I \rho \E^{\I t})\dd t\\
@@ -40,7 +40,7 @@
 \int_{\Gamma}\frac{1}{z^n}\dd z&=\int^{2\pi}_0\frac{1}{(\rho\E^{\I t})^n}\cdot\frac{\dd\rho\E^{\I t}}{\dd t}\dd t\\
 &=\int_0^{2\pi}\frac{1}{(\rho\E^{\I t})^n}\cdot (\I \rho \E^{\I t})\dd t\\
 &=\int_0^{2\pi}\frac{\I}{\rho^{n-1}}\E^{(1-n)\I t}\dd t\\
-&=\frac{1}{(1-n)\rho^{n-1}}\E^{(1-n)\I t}|^{t=2\pi}_{t=0}\\
+&=\frac{1}{(1-n)\rho^{n-1}}\E^{(1-n)\I t}\mid^{t=2\pi}_{t=0}\\
 &=0
 \end{aligned}
 \end{equation}
@@ -74,7 +74,7 @@
 
 有时候回路中会有多个极点，此时我们要做的就是把这些极点的留数求和：
 
-\begin{theorem}{留数定理}
+\begin{theorem}{留数定理}\label{ResThe_the3}
 
 如果连续复变函数 $f(z)$ 在闭合路径 $\Gamma$ 中有多个极点，那么沿 $\Gamma$ 的回路积分为
 
@@ -88,12 +88,95 @@
 
 
 
+\begin{example}{}\label{ResThe_ex3}
+
+考虑函数$f(z)=\E^{\I z^2}$在$x$轴上的积分，即$\int^\infty_{-\infty} f(x) \dd x$．
+
+设$\Gamma_1$为实数轴上从$0$到$\rho$的路径，$\Gamma_2$为从$\rho$到$\E^{\pi\I/4}$的\textbf{八分之一}圆弧路径，$\Gamma_3$为上述圆弧半径上从$\E^{\pi\I/4}$到$0$的路径．于是有
+\begin{equation}
+\int^\rho_{0} f(x) \dd x = \int_{\Gamma_1}f(z)\dd z
+\end{equation}
+
+\begin{figure}[ht]
+\centering
+\includegraphics[width=10cm]{./figures/ResThe_1.pdf}
+\caption{\autoref{ResThe_ex3} 的积分路径．} \label{ResThe_fig1}
+\end{figure}
+
+由于$f(z)$在整个复平面上都没有极点，因此据\autoref{ResThe_the3} ，
+\begin{equation}
+\sum_{i=1, 2, 3}\int_{\Gamma_i} f(z) \dd z = 0
+\end{equation}
+
+由于$f(x)$作为实函数是偶函数，故$\int^\infty_{-\infty} f(x)\dd x=2\int^\infty_0 f(x)\dd x$．于是我们可以根据$f(z)$在$\Gamma_2$和$\Gamma_3$上的围道积分计算出\autoref{ResThe_eq1} ，再取$\rho\to\infty$的极限得到所求．
+
+先计算$f(z)$沿着$\Gamma_2$的积分：
+\begin{equation}
+\ali{
+    \int_{\Gamma_2} f(z) \dd z &= \int_0^{\pi/4}\E^{\I \rho^2\E^{2\I t}}\cdot\I\rho\E^{\I t}\dd t\\
+    &= \I\rho \cdot (-\frac{1}{2\rho^2}) \E^{\I\rho^2\E^{2\I t}}\mid^{t=\pi/4}_{t=0}\\
+    &= -\frac{\I}{2\rho}\qty(\E^{-\rho^2}-\E^{\I\rho^2})
+}
+\end{equation}
+于是显然可知，
+\begin{equation}
+\lim_{\rho\to+\infty}\int_{\Gamma_2} f(z) \dd z = 0
+\end{equation}
+
+再计算$f(z)$沿着$\Gamma_3$的积分：
+\begin{equation}
+\ali{
+    \int_{\Gamma_3} f(z) \dd z &= \int^0_\rho \E^{\I \qty(\frac{\sqrt{2}}{2}t+\frac{\sqrt{2}}{2}\I t)^2} \cdot \frac{\mathrm{d}\qty(\frac{\sqrt{2}}{2}t+\frac{\sqrt{2}}{2}\I t)}{\dd t}\dd t\\
+    &= \qty(\frac{\sqrt{2}}{2}+\frac{\sqrt{2}}{2}\I ) \cdot \int^0_\rho \E^{\I \qty(\frac{\sqrt{2}}{2}t+\frac{\sqrt{2}}{2}\I t)^2} \cdot \dd t\\
+    &= \qty(\frac{\sqrt{2}}{2}+\frac{\sqrt{2}}{2}\I ) \cdot \int^0_\rho \E^{-t^2} \cdot \dd t\\
+}
+\end{equation}
+由\textbf{高斯积分}\upref{GsInt}的\autoref{GsInt_eq1}~\upref{GsInt}，可知
+\begin{equation}
+\lim_{\rho\to+\infty}\int_{\Gamma_3} f(z) \dd z = \qty(\frac{\sqrt{2}}{4}+\frac{\sqrt{2}}{4}\I )\sqrt{\pi}=\sqrt{\frac{\pi}{8}}\qty(1+\I)
+\end{equation}
+
+$\Gamma_2$和$\Gamma_3$的积分得到了，就可以进行最后的计算：
+
+\begin{equation}\label{ResThe_eq2}
+\ali{
+    \int^\infty_{-\infty} f(x) &= 2\int^\infty_0 f(x)\dd x\\
+    &=-2\lim_{\rho\to +\infty}\qty[ \int_{\Gamma_2} f(z)\dd z + \int_{\Gamma_3} f(z)\dd z ]\\
+    &= -2\cdot \sqrt{\frac{\pi}{8}}\qty(1+\I)\\
+    &=\sqrt{\frac{\pi}{2}}(1+\I)
+}
+\end{equation}
+
+注意到$\sqrt{\I}=\sqrt{\frac{1}{2}}(1+\I)$，\autoref{ResThe_eq2} 也可写为
+\begin{equation}\label{ResThe_eq3}
+\ali{
+    \int^\infty_{-\infty} f(x) &= \sqrt{\frac{\pi}{-\I}}
+}
+\end{equation}
+这和\textbf{高斯积分}\upref{GsInt}的\autoref{GsInt_eq5}~\upref{GsInt}相符．
+
+类似地可证
+\begin{equation}
+\int^\infty_{-\infty} \E^{-\I x^2}\dd x = \sqrt{\frac{\pi}{2}}(1-\I)
+\end{equation}
+
+
+
+\end{example}
+
+
+
+
+
+
+
+
 
 \subsection{留数的计算}
 
 
 
-如果能把给定函数 $f$ 在给定点的洛朗展开写出来，我们直接就能得到对应的留数，用于计算围道积分．但那样常常是非常麻烦的，也是没有必要的，因为留数只是洛朗级数中的一个系数，通常没必要为了求这一个系数而把整个级数算出来．
+如果能把给定函数 $f$ 在给定点的洛朗展开写出来，我们直接就能得到对应的留数，用于计算围道积分．但那样常常非常麻烦，也没有必要，因为留数只是洛朗级数中的一个系数，通常没必要为了求这一个系数而把整个级数算出来．
 
 \begin{lemma}{}\label{ResThe_lem1}
 如果 $f(z)$ 是一个在 $c\in\mathbb{C}$ 处解析的函数，那么 $\opn{Rez}_c\frac{f(z)}{z-c}=f(c)$．
@@ -118,6 +201,31 @@
 如果 $f(z)$ 是一个在 $c\in\mathbb{C}$ 处解析的函数，$k$ 是一个正整数，那么 $\opn{Rez}_c\frac{f(z)}{(z-c)^k}=\frac{f^{(k-1)}(c)}{(k-1)!}$．
 \end{theorem}
 
+\textbf{证明}：
+
+由于$f(z)$在$c$处解析，因此可以在$c$处展开为
+\begin{equation}
+f(z) = \sum_{n=0}^\infty a_n(z-c)^n
+\end{equation}
+于是
+\begin{equation}
+\frac{f(z)}{(z-c)^k} = \sum_{n=0}^\infty a_n(z-c)^{n-k} = \sum_{n=-k}^\infty a_{n+k}(z-c)^n
+\end{equation}
+因此
+\begin{equation}
+\opn{Rez}_c\frac{f(z)}{(z-c)^k} = a_{k-1}
+\end{equation}
+
+而
+\begin{equation}
+f^{k-1}(c)=(k-1)!a_{k-1}
+\end{equation}
+
+\textbf{证毕}．
+
+
+
+
 在很多材料中会把点 $c$ 称为 $f(z)/(z-c)^k$ 的 $k$\textbf{级极点}，其中 $f(z)$ 在 $c$ 处解析．
 
 \begin{example}{}
@@ -125,7 +233,7 @@
 
 在 $0$ 处，$\frac{\E^{2z}}{z^2}$ 有一个二级极点．根据\autoref{ResThe_the2} ，将 $k=2$、$f(z)=\E^{2z}$ 和 $c=0$ 代入，可得：
 \begin{equation}
-\opn{Rez}_0\frac{\E^{2z}}{z^2}=\frac{(\E^{2z})'|_{z=0}}{1!}=2
+\opn{Rez}_0\frac{\E^{2z}}{z^2}=\frac{(\E^{2z})'\mid_{z=0}}{1!}=2
 \end{equation}
 
 

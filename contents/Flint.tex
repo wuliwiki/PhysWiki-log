@@ -1,0 +1,178 @@
+% FLINT 库笔记
+
+\begin{issues}
+\issueDraft
+\end{issues}
+
+\pentry{GNU Multiple Precision（GMP）库笔记\upref{GMP}}
+
+\subsubsection{flint.h}
+\begin{itemize}
+\item \href{http://flintlib.org/sphinx/fmpz.html}{文档}
+\item \verb|fmpz_t| 相比于 GMP 的大整数类型 \verb|mpz_t| （即 \verb|__mpz_struct[1]|）对较小的整数进行了优化， 使其无需额外的 alloc． 当大小超过一定范围时才变为 \verb|__mpz_struct| 的指针， 使用 \verb|mpz_t| 的功能．
+\item \verb|fmpz| 就是一个 \verb|slong|. 当第二最重要 bit 为 0 就是一个普通的 slong 叫做 \verb|COEFF|， 绝对值最多有 \verb|FLINT_BITS - 2| bits.
+\item 当第二重要 bit 为 1 时， 它代表一个指针 （把 \verb|slong| 左移 \verb|<< 2| 就是 \verb|__mpz_struct *|）只想 GMP 的大整数．
+\end{itemize}
+\begin{lstlisting}[language=cpp]
+// COEFF_MIN, COEFF_MAX 是 fmpz 不额外 alloc 时能表示的最小和最大整数
+#define COEFF_MAX ((WORD(1) << (FLINT_BITS - 2)) - WORD(1))
+#define COEFF_MIN (-((WORD(1) << (FLINT_BITS - 2)) - WORD(1)))
+/* fmpz x 是否是指针，存在 alloc */
+#define COEFF_IS_MPZ(x) (((x) >> (FLINT_BITS - 2)) == WORD(1))
+
+// from flint.h
+#define ulong mp_limb_t
+#define slong mp_limb_signed_t
+
+#if GMP_LIMB_BITS == 64
+    #define FLINT_BITS 64 // 一个 limb 或者 slong 的 bit 数
+    #define FLINT_D_BITS 53
+    #define FLINT64 1
+#else 
+    #define FLINT_BITS 32
+    #define FLINT_D_BITS 31
+#endif
+
+typedef slong fmpz;
+typedef fmpz fmpz_t[1];
+
+// 当 fmpz 存在额外 alloc 时， 在 fmpz （即 slong）和 mpz 指针之间转换
+// fmpz-conversions.h
+#define PTR_TO_COEFF(x) (((ulong) (x) >> 2) | (WORD(1) << (FLINT_BITS - 2)))
+#define COEFF_TO_PTR(x) ((__mpz_struct *) ((x) << 2))
+
+// alloc 并 init 一个 GMP 大整数结构 __mpz_struct
+// fmpz_gc.c （gc 是 garbage collection）
+
+// mpz_free_arr[i] 是第 i 个未使用的 __mpz_struct 的地址
+__mpz_struct ** mpz_free_arr = NULL;
+// mpz_arr[i] 是第 i 个 alloc 的 __mpz_struct 的地址
+__mpz_struct ** mpz_arr = NULL;
+ulong mpz_num = 0; // mpz_arr 中已使用的数量
+// mpz_arr 的尺寸， 如果不够了就重新乘以 2， 重新 alloc mpz_arr
+ulong mpz_alloc = 0;
+ulong mpz_free_num = 0; // alloc 未使用的 __mpz_struct 的数量
+// mpz_free_arr 的尺寸？
+ulong mpz_free_alloc = 0;
+
+// 新 alloc 一个 __mpz_struct， 或者用之前已经 alloc 但未使用的
+__mpz_struct * _fmpz_new_mpz(void)
+{
+    __mpz_struct * z = NULL;
+
+#if FLINT_USES_PTHREAD
+    pthread_once(&fmpz_initialised, fmpz_lock_init);
+    pthread_mutex_lock(&fmpz_lock);
+#endif
+
+    if (mpz_free_num != 0) // 存在未使用的 __mpz_struct
+        z = mpz_free_arr[--mpz_free_num];
+    else
+    { // 需要新 alloc 一个 __mpz_struct
+        z = flint_malloc(sizeof(__mpz_struct));
+
+        if (mpz_num == mpz_alloc) /* store pointer to prevent gc cleanup */
+        {
+            mpz_alloc = FLINT_MAX(64, mpz_alloc * 2);
+            mpz_arr = flint_realloc(mpz_arr, mpz_alloc
+                * sizeof(__mpz_struct *));
+        }
+        mpz_arr[mpz_num++] = z;
+
+        mpz_init(z);
+    }
+
+#if FLINT_USES_PTHREAD
+    pthread_mutex_unlock(&fmpz_lock);
+#endif
+
+    return z;
+}
+
+// 把 fmpz 从非额外 alloc 变为额外 alloc
+// fmpz_gc.c
+__mpz_struct * _fmpz_promote(fmpz_t f)
+{
+    if (!COEFF_IS_MPZ(*f)) /* f is small so promote it first */
+    {
+        __mpz_struct * mf = _fmpz_new_mpz();
+        (*f) = PTR_TO_COEFF(mf);
+        return mf;
+    }
+    else /* f is large already, just return the pointer */
+        return COEFF_TO_PTR(*f);
+}
+
+// gmpcompat.h
+static __inline__
+void flint_mpz_set_si(mpz_ptr r, slong s)
+{
+   /* GMP 6.2 lazily performs allocation, deal with that if necessary
+      (in older GMP versions, this code is simply never triggered) */
+   if (r->_mp_alloc == 0)
+   {
+      r->_mp_d = (mp_ptr) flint_malloc(sizeof(mp_limb_t));
+      r->_mp_alloc = 1;
+   }
+
+   if (s < 0) {
+      r->_mp_size = -1;
+      r->_mp_d[0] = -s;
+   } else {
+      r->_mp_size = s != 0;
+      r->_mp_d[0] = s;
+   }
+}
+
+// fmpz_gc.c
+void _fmpz_clear_mpz(fmpz f)
+{
+    __mpz_struct * ptr = COEFF_TO_PTR(f);
+
+    if (ptr->_mp_alloc > FLINT_MPZ_MAX_CACHE_LIMBS)
+        mpz_realloc2(ptr, 1);
+
+#if FLINT_USES_PTHREAD
+    pthread_mutex_lock(&fmpz_lock);
+#endif
+
+    if (mpz_free_num == mpz_free_alloc)
+    {
+        mpz_free_alloc = FLINT_MAX(64, mpz_free_alloc * 2);
+        mpz_free_arr = flint_realloc(mpz_free_arr, mpz_free_alloc
+           * sizeof(__mpz_struct *));
+    }
+
+    mpz_free_arr[mpz_free_num++] = ptr;
+
+#if FLINT_USES_PTHREAD
+    pthread_mutex_unlock(&fmpz_lock);
+#endif
+}
+
+// fmpz.h
+FMPZ_INLINE void _fmpz_demote(fmpz_t f)
+{
+    if (COEFF_IS_MPZ(*f)) 
+    {
+        _fmpz_clear_mpz(*f);
+        (*f) = WORD(0);
+    }
+}
+
+FMPZ_INLINE void
+fmpz_set_si(fmpz_t f, slong val)
+{
+    if (val < COEFF_MIN || val > COEFF_MAX) /* val is large */
+    {
+        // __mpz_struct 是 GMP 的大整数数据结构
+        __mpz_struct *mpz_coeff = _fmpz_promote(f);
+        flint_mpz_set_si(mpz_coeff, val);
+    }
+    else
+    {
+        _fmpz_demote(f);
+        *f = val;               /* val is small */
+    }
+}
+\end{lstlisting}

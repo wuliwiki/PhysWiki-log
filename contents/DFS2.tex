@@ -1,10 +1,6 @@
 % 树与图的深度优先搜索
 % DFS|算法|树与图的深度优先搜索|C++
 
-\begin{issues}
-\issueTODO
-\end{issues}
-
 本文将介绍树与图的深度优先搜索．
 
 \textbf{树与图的存储：}
@@ -30,8 +26,8 @@ void add(int a, int b)
 
 \begin{figure}[ht]
 \centering
-\includegraphics[width=14.25cm]{./figures/DFS2_2.png}
-\caption{树} \label{DFS2_fig2}
+\includegraphics[width=10cm]{./figures/DFS2_2.png}
+\caption{示例图} \label{DFS2_fig2}
 \end{figure}
 
 \begin{lstlisting}[language=cpp]
@@ -41,7 +37,7 @@ int h[N], e[M], ne[M], idx;
 
 void add(int a, int b)  // 添加一条边 a->b
 {
-    e[ ++ idx] = b, ne[idx] = h[a], h[a] = idx;
+    e[idx] = b, ne[idx] = h[a], h[a] = idx ++ ;
 }
 
 int main()
@@ -54,7 +50,8 @@ int main()
     {
         int a, b;
         cin >> a >> b;
-        add(a, b), add(b, a);
+        // 添加一条无向边 a -- b，等于添加两条有向边 a --> b, b --> a
+        add(a, b), add(b, a);  // 建立双向边（无向边）
     }
     
     // 打印邻接表
@@ -93,3 +90,39 @@ int main()
 \end{lstlisting}
 
 输出的结果就是每个链表的结点的值．
+
+图的深度优先遍历就是从根结点开始选择一条边遍历，遍历到当前边的叶结点就回溯，再继续走到别的分支．
+
+\begin{lstlisting}[language=cpp]
+void dfs(int x)
+{
+    st[x] = true;
+    for (int i = h[x]; ~i; i = ne[i])
+    {
+        int j = e[i];  // j 为图中点的编号
+        if (!st[j]) dfs(j); // 没被访问过就继续遍历
+    }
+}
+\end{lstlisting}
+
+树的 DFS 序就是每一个结点在深度优先遍历中进出栈的时间序列，最后序列的长度为 $2n$．树的 DFS 序的特点是，对于一个结点 $x$，在序列中会出现两次，那么以这个结点出现的首次和末次的序列就是以这个结点为根的 DFS 序．
+
+\begin{lstlisting}[language=cpp]
+void dfs(int x)
+{
+    a[cnt ++ ] = x;
+    st[x] = true; // 标记 x 结点已经被访问
+    for (int i = h[x]; ~i; i = ne[i])
+    {
+        int j = e[i];
+        if (!st[j]) dfs(j); // 没被访问过就继续遍历
+    }
+    
+    a[cnt ++ ] = x;
+}
+
+dfs(1);   // 调用入口
+
+// 输出 DFS 序
+for (int i = 0; i < cnt; i ++ ) cout << a[i] << ' ';
+\end{lstlisting}

@@ -84,3 +84,160 @@ int main()
 \begin{lstlisting}[language=makefile]
 g++ -o test.x test.cpp -larb -lflint
 \end{lstlisting}
+
+\subsection{内部实现}
+要配合 gdb 学习可以自己编译一个 debug 版本的 libarb 库， 见 Automake 笔记\upref{automk}．
+
+\pentry{FLINT 库笔记\upref{Flint}}
+\subsubsection{arf_t 的数据结构}
+\begin{itemize}
+\item \verb|arf_t| 是任意精度浮点数， \href{https://arblib.org/arf.html}{文档}．
+\item \verb|arf_t| 的数据结构， 看懂下面的代码就了解了． 基本就是小数部分 \verb|.d|（例如 0.100101110， 小数点后面用一个 flint 大整数表示）， 指数部分 \verb|.exp|（一个 flint 大整数）， 和 \verb|.size| 部分（最后一 bit 是符号位， 1 表示复数， \verb|.size >> 1| 是用到的 limb 的个数， 这可能和 alloc 的 limb 的个数是不一样的）．
+\item 当 \verb|.size == 0| 时， arf_t 是某个 \textbf{special} 值， 即： \verb|.exp == ARF_EXP_ZERO| 时， arf 为零； \verb|.exp == ARF_EXP_POS_INF| 时， arf 为正无穷； \verb|.exp == ARF_EXP_NEG_INF| 时， arf 为负无穷； \verb|.exp == ARF_EXP_NAN| 是， arf 为 nan； 如果不是 special， 就叫做 \textbf{normal}．
+\item 相关函数： \verb|arf_is_special|， \verb|arf_is_zero|， \verb|arf_is_pos_inf|， \verb|arf_is_neg_inf|， \verb|arf_is_nan|， \verb|arf_is_normal|， \verb|arf_is_finite|， \verb|arf_is_inf|， \verb|arf_is_one|
+\end{itemize}
+
+\begin{lstlisting}[language=cpp]
+#define ARF_NOPTR_LIMBS 2
+#define ARF_NOPTR_D(x) ((x)->d.noptr.d) // 小数部分的 limb 指针（非 alloc）
+#define ARF_PTR_D(x) ((x)->d.ptr.d) // 小数部分的 limb 指针（alloc）
+
+typedef struct
+{ // mp_limb_t 是 GMP 整数的一个 limb
+    mp_limb_t d[ARF_NOPTR_LIMBS];
+}
+mantissa_noptr_struct; // arf 的小数部分至少有两个 limb
+
+typedef struct
+{
+    mp_size_t alloc; // GMP limb 的 alloc 的个数， 并不一定全部用到．
+    mp_ptr d; // mp_limb_t （GMP 整数的一个 limb）的指针
+}
+mantissa_ptr_struct;
+
+typedef union
+{
+    mantissa_noptr_struct noptr;
+    mantissa_ptr_struct ptr;
+}
+mantissa_struct;
+
+typedef struct
+{
+    fmpz exp; // 指数（fmpz 是 flint 的任意精度整数）
+    mp_size_t size; // 最后 1bit 是符号， >>1 是小数部分 limb 的数量
+    mantissa_struct d; // 小数部分
+	// 当 size <= ARF_NOPTR_LIMBS 时使用 d.noptr， 否则使用 d.ptr
+}
+arf_struct;
+
+typedef arf_struct arf_t[1];
+typedef arf_struct * arf_ptr;
+typedef const arf_struct * arf_srcptr;
+
+/* Raw size field (encodes both limb size and sign). */
+#define ARF_XSIZE(x) ((x)->size)
+
+// 获取用到的 limb 的个数
+#define ARF_SIZE(x) (ARF_XSIZE(x) >> 1)
+// 获取符号位， 1 为负数
+#define ARF_SGNBIT(x) (ARF_XSIZE(x) & 1)
+
+// x 是 arf_t， 获取其小数部分的 limb 指针和 limb 个数
+// 当 limb 个数小于 ARF_NOPTR_LIMBS = 2 时， 不存在额外 alloc 的空间．
+#define ARF_GET_MPN_READONLY(xptr, xn, x)   \
+    do {                                    \
+        xn = ARF_SIZE(x);                   \
+        if (xn <= ARF_NOPTR_LIMBS)          \
+            xptr = ARF_NOPTR_D(x);          \
+        else                                \
+            xptr = ARF_PTR_D(x);            \
+    } while (0)
+
+
+// get a quad precision number from arf_t type
+// similar to arf_get_d()
+inline void arf_get_q(Qdoub_O v, const arf_t x, arf_rnd_t rnd)
+{
+	arf_t t;
+	// mp_limb_t is the type of a limb, with FLINT_BITS bits
+	// typedef const mp_limb_t *mp_srcptr;
+	mp_srcptr tp; // pointer to least significant limb
+	mp_size_t tn; // # of limbs
+
+	arf_init(t);
+	arf_set_round(t, x, 113, rnd);
+	ARF_GET_MPN_READONLY(tp, tn, t);
+	if (tn == 1)
+		v = (Qdoub)(tp[0]);
+	else if (tn == 2)
+	    // FLINT_BITS 是每个 limb 的 bit 数， 即 sizeof(mp_limb_t)*8
+		v = (Qdoub)(tp[1]) + (Qdoub)(tp[0]) * ldexpq(1,-FLINT_BITS);
+	else if (tn == 3)
+		v = (Qdoub)(tp[2]) + (Qdoub)(tp[1]) * ldexpq(1,-FLINT_BITS)
+		    + (Qdoub)(tp[0]) * ldexpq(1,-2*FLINT_BITS);
+	else if (tn == 4)
+		v = (Qdoub)(tp[3]) + (Qdoub)(tp[2]) * ldexpq(1,-FLINT_BITS)
+		    + (Qdoub)(tp[1]) * ldexpq(1,-2*FLINT_BITS)
+			+ (Qdoub)(tp[0]) * ldexpq(1,-3*FLINT_BITS);
+	else
+		SLS_ERR("not implemented!");
+
+	v = ldexpq(v, ARF_EXP(t) - FLINT_BITS);
+
+	if (ARF_SGNBIT(t)) // 1 for negative
+		v = -v;
+	arf_clear(t);
+}
+\end{lstlisting}
+
+\subsubsection{mag_t 的数据结构}
+\begin{lstlisting}[language=cpp]
+typedef struct
+{
+    fmpz exp; // 指数部分， flint 整数
+    mp_limb_t man; // 小数部分， 单个 limb
+}
+mag_struct; // 用于表示误差半径， 非负浮点数
+
+typedef mag_struct mag_t[1];
+typedef mag_struct * mag_ptr;
+typedef const mag_struct * mag_srcptr;
+
+MAG_INLINE int
+mag_is_inf(const mag_t x)
+{
+    return (MAG_MAN(x) == 0) && (MAG_EXP(x) != 0);
+}
+\end{lstlisting}
+
+\subsubsection{arb_t 的数据结构}
+\href{https://arblib.org/arb.html}{文档}．
+
+\begin{lstlisting}[language=cpp]
+typedef struct
+{
+    arf_struct mid; // 区间中点
+    mag_struct rad; // 误差半径
+}
+arb_struct;
+
+typedef arb_struct arb_t[1];
+typedef arb_struct * arb_ptr;
+typedef const arb_struct * arb_srcptr;
+\end{lstlisting}
+
+\subsubsection{acb_t 数据结构}
+就是两个 \verb|arb| 类型
+\begin{lstlisting}[language=cpp]
+typedef struct
+{
+    arb_struct real;
+    arb_struct imag;
+}
+acb_struct;
+
+typedef acb_struct acb_t[1];
+typedef acb_struct * acb_ptr;
+typedef const acb_struct * acb_srcptr;
+\end{lstlisting}

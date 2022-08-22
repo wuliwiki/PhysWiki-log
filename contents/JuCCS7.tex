@@ -1,0 +1,86 @@
+% Julia 函数的参数化
+% 函数 参数化
+
+本文授权转载自郝林的 《Julia 编程基础》． 原文链接：\href{https://github.com/hyper0x/JuliaBasics/blob/master/book/ch12.md}{第 12 章 函数与方法}．
+
+
+\subsubsection{12.7 函数的参数化}
+
+我们在定义一个类型的时候可以使其包含参数，并以此实现极大的灵活性和扩展能力．这样的定义不止可以表示单个的类型，还可以表示一个完整的类型族群．如此定义出来的类型也被称为参数化类型．在Julia语言中，到处都充斥着大量的参数化类型．不但如此，针对函数的参数化也是相当普遍的．
+
+对于函数来说，参数化的意义主要在于，确定其结果与其参数之间在类型约束方面的对应关系．我们下面就以之前编写的一个\verb|sum3|方法作为开始，讲解函数的参数化．我们先来回顾一下这个方法的定义．
+
+\begin{lstlisting}[language=julia]
+sum3(a, b) = a + b
+\end{lstlisting}
+
+我们可以看到，这个函数定义对于参数的类型没有任何的限制．同时，它也没有对结果进行声明．
+
+尽管函数\verb|+|的衍生方法众多，但终归还是有不适用的类型存在的，如\verb|Char|类型和\verb|String|类型等等．所以，我们还是应该对这个\verb|sum3|方法有所约束，不能让它对什么类型的参数值都可以接受．下面是我对它的改写，以及新的REPL环境对它的解析：
+
+\begin{lstlisting}[language=julia]
+julia> sum3(a::T, b::T) where {T<:Number} = a + b
+sum3 (generic function with 1 method)
+
+julia> 
+\end{lstlisting}
+
+在对函数进行参数化定义的时候，我们需要把\verb|where|关键字以及相关的内容写在函数签名的右侧．如果函数的定义是用简洁形式编写的，那么它们还应该处于符号\verb|=|的左边．
+
+还记得吗？我们在讲参数化类型的时候介绍过针对这种类型的值化表示法．这种表示法使用\verb|where|关键字来引领针对类型参数的范围约束，如\verb|Drawer{T} where T<:Jewelry|．很显然，函数定义的参数化方式与之是类似的．
+
+由于改造后的\verb|sum3|方法的两个参数类型都被声明为了占位符\verb|T|，因此它现在只能够接受类型相同的两个参数值．又由于存在\verb|T<:Number|，所以我们传给它的两个参数值的类型还必须都是\verb|Number|类型的某个子类型．否则，Julia就会立即抛出一个\verb|MethodError|类型的错误，并会告诉我们它没有找到与之相匹配的衍生方法．例如：
+
+\begin{lstlisting}[language=julia]
+julia> sum3(1, 2.3)
+ERROR: MethodError: no method matching sum3(::Int64, ::Float64)
+Closest candidates are:
+  sum3(::T, ::T) where T<:Number at REPL[1]:1
+Stacktrace:
+ [1] top-level scope at REPL[2]:1
+
+julia> sum3('1', '2')
+ERROR: MethodError: no method matching sum3(::Char, ::Char)
+Stacktrace:
+ [1] top-level scope at REPL[3]:1
+
+julia> 
+\end{lstlisting}
+
+同样的类型约束也可以被用在函数的结果声明上．不过，在这种情况下，我们就不能使用简洁形式去定义函数了．以下是我对前述\verb|sum3|方法进行的第二次改造：
+
+\begin{lstlisting}[language=julia]
+julia> function sum3(a::T, b::T)::T where {T<:Number}
+           a + b
+       end
+sum3 (generic function with 1 method)
+
+julia> 
+\end{lstlisting}
+
+这一版的定义可以明确地告诉使用者，它返回的结果值会与它接受的参数值拥有相同的类型．请注意，\verb|sum3|函数至此仍然只有一个衍生方法．因为Julia的多重分派机制并不会依据函数定义中的结果声明去识别和分辨衍生方法．这使得这一版的\verb|sum3|方法覆盖掉了上一版的\verb|sum3|方法．
+
+除此之外，参数化的函数参数类型不仅可以是\verb|T|，还可以是\verb|Vector{T}|、\verb|Array{T,N}|、\verb|Dict{K, V}|等等．当然了，如果这里存在多个类型参数占位符，那么我们还需要在函数签名的右侧追加多个\verb|where|以及针对相应的类型参数的范围约束．例如：
+
+\begin{lstlisting}[language=julia]
+julia> op1 = Dict("a"=>1, "b"=>2, "c"=>3); op2 = 10;
+
+julia> function add_value!(d::Dict{K,V}, v::V)::Dict{K,V} 
+         where {K} where {V<:Number}
+           for (key, num) in d
+               d[key] = num + v
+           end
+           d
+       end
+add_value! (generic function with 1 method)
+
+julia> add_value!(op1, op2)
+Dict{String,Int64} with 3 entries:
+  "c" => 13
+  "b" => 12
+  "a" => 11
+
+julia> 
+\end{lstlisting}
+
+关于函数定义的参数化，我已经把所有的基本方式都展示在这里了．怎么样？还是很简单的吧？至于更高级的玩法，你或许可以在“参数化类型”一章里的相关内容之中找到灵感．

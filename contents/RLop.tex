@@ -9,23 +9,105 @@
 
 \pentry{本征方程} % 未完成
 
-\subsection{结论}
+\subsection{概念}
 
-已知某个算符 $\Q Q$，若能找到另一个算符 $\Q Q_+$，使得 $\comm*{\Q Q}{\Q Q_+} = h \Q Q_+$ 成立（ $h$ 是大于零的实数）， 这个算符就是 $\Q Q$ 对应的升算符． 同理，若有 $\Q Q_-$ 使得 $\comm*{\Q Q}{\Q Q_-} = - h\Q Q_-$ 成立，这个算符就是对应的降算符．升降算符的作用是把一个本征函数变为本征值更大或者更小的本征函数．即
 
-\begin{equation}\label{RLop_eq1}
-\Q Q(\Q Q_\pm\psi) = (q \pm h) (\Q Q_ \pm\psi)
-\end{equation}
+有时候如果算符过于复杂，求解本征方程比较困难，就可以尝试寻找升降算符．升降算符可以让我们不用求解本征方程就可以快速地找到本征值．可参见\textbf{量子简谐振子（升降算符法）}\upref{QSHOop}和轨道角动量．%未完成
 
-\subsection{意义}
-有时候如果算符过于复杂求解本征方程比较困难，就可以尝试寻找升降算符．升降算符可以让我们不用求解本征方程就可以快速地找到本征值．具体见简谐振子和轨道角动量．%未完成
 
-\subsection{证明}
+\begin{definition}{升降算符}
+已知某个算符 $\Q Q$，若能找到另一个算符 $\Q Q_+$，使得 $\comm*{\Q Q}{\Q Q_+} = h \Q Q_+$ 成立（ $h$ 是大于零的实数）， 这个算符就是 $\Q Q$ 对应的升算符． 
+
+同理，若有 $\Q Q_-$ 使得 $\comm*{\Q Q}{\Q Q_-} = - h\Q Q_-$ 成立，这个算符就是对应的降算符．
+\end{definition}
+
+% 升降算符的作用是把一个本征函数变为本征值更大或者更小的本征函数．即
+% \begin{equation}
+% \Q Q(\Q Q_\pm\psi) = (q \pm h) (\Q Q_ \pm\psi)
+% \end{equation}
 如果 $\psi$ 是 $\Q Q$ 的一个本征函数，且本征值为 $\lambda$，那么根据对易关系 $\comm*{\Q Q}{\Q Q_+} = h \Q Q_+$ 有
-\begin{equation}
-\Q Q (\Q Q_+ \psi) = \Q Q_+ (\Q Q\psi) + h \Q Q_+ \psi  = \Q Q_+ (\lambda \psi) + h \Q Q_+ \psi  = (\lambda  + h)(\Q Q_+ \psi)
+\begin{equation}\label{RLop_eq1}
+\begin{aligned}
+\Q Q (\Q Q_\pm \psi) &= \Q Q_\pm (\Q Q\psi) \pm h \Q Q_\pm \psi  \\
+&= \Q Q_\pm (\lambda \psi) \pm h \Q Q_\pm \psi  \\
+&= (\lambda  \pm h)(\Q Q_\pm \psi)
+\end{aligned}
 \end{equation}
-降算符的证明同理．
+
+因此，升降算符的作用是把一个本征函数变为本征值更大或者更小的本征函数．
+
+
+
+
+
+
+
+
+
+
+\subsection{升降算符的矩阵形式}\label{RLop_sub1}
+
+给定\textbf{可对角化}算符$\Q Q$\footnote{量子力学中可观测量都是厄米算符，从而都是可对角化的．}，将它对角化，即用它的本征矢将它展开为矩阵$\mathcal{Q}$，并将本征值从小到大按行数增加排序：
+\begin{equation}
+\mathcal{Q}=
+\pmat{
+    a_1\\
+    &a_2\\
+    &&\ddots\\
+}
+\end{equation}
+其中$a_{i+1}\geq a_i$．
+
+定义矩阵
+\begin{equation}\label{RLop_eq2}
+\mathcal{Q}_+ = 
+\pmat{
+    0&0&0&\cdots&0\\
+    1&0&0&\cdots&0\\
+    0&1&0&\cdots&0\\
+    0&0&1&\cdots&\vdots\\
+    \vdots&\vdots&\vdots&\ddots&\vdots
+}
+\end{equation}
+则它能将属于本征值$a_i$的本征矢变换为属于本征值$a_{i+1}$的本征矢，除了本征值最大的情况以外．
+
+容易计算出，
+\begin{equation}
+[\mathcal{Q}, \mathcal{Q}_+]=
+\pmat{
+    0&0&0&\cdots&0\\
+    a_2-a_1&0&0&\cdots&0\\
+    0&a_3-a_2&0&\cdots&0\\
+    0&0&a_4-a_3&\cdots&\vdots\\
+    \vdots&\vdots&\vdots&\ddots&\vdots
+}
+\end{equation}
+由此可以看出，$\mathcal{Q}$有升降算符的\textbf{充要条件}，是各$a_{i+1}-a_i$相等，即有
+\begin{equation}
+\mathcal{Q}=\pmat{
+    a_1\\
+    &a_1+h\\
+    &&a_1+2h\\
+    &&&\ddots
+}
+\end{equation}
+其升算符的矩阵表示为\autoref{RLop_eq2} ，降算符的矩阵表示为
+\begin{equation}\label{RLop_eq3}
+\mathcal{Q}_- = 
+\pmat{
+    0&1&0&0&\cdots&0\\
+    0&0&1&0&\cdots&0\\
+    0&0&0&1&\cdots&0\\
+    \vdots&\vdots&\vdots&\ddots&\vdots
+}
+\end{equation}
+
+由\autoref{RLop_eq2} 和\autoref{RLop_eq3} 可见，如果厄米算符$\hat{Q}$具有升降算符且由最大本征值，则\textbf{升算符}作用在\textbf{最大}本征值的本征向量上时，得到的是零向量；同样，\textbf{降算符}作用在\textbf{最小}本征值的本征向量上时，得到的也是零向量．
+
+
+
+
+
 
 \subsection{本征函数的归一化}
 注意升降算符并不一定能保持函数的归一化．若假设 $\Q a_\pm \ket{\psi_n} = A_n \ket{\psi_{n+1}}$， 其中 $\ket{\psi_n}$ 和 $\ket{\psi_{n + 1}}$ 都是归一化的本征态，那么由归一化条件要求
@@ -33,3 +115,18 @@
 \bra{\psi_n} \Q a_\pm\Her \Q a_\pm \ket{\psi_n} = \abs{A_n}^2 \braket{\psi_{n+1}} = \abs{A_n}^2
 \end{equation}
 习惯上令 $A_n$ 为实数，即上式开方． 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

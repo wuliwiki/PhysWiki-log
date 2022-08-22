@@ -1,4 +1,4 @@
-% g++ 编译器笔记
+% gcc/g++ 编译器笔记
 
 \begin{issues}
 \issueDraft
@@ -13,11 +13,18 @@
 \item 编译器会自动搜索默认目录 \verb|/usr/local/include/| 下的头文件
 \item \verb|-D 宏| 定义宏
 \item \verb|-O3| 是最优化， \verb|-g| 是调试， 如果不调试， 需要手动定义 \verb|-D NDEBUG|
+\item \verb|-g| 不包含一些信息如宏定义， 需要用 \verb|-g3|， 要打出 Macro 的位置和定义， 用 \verb|info macro 宏名|
 \item link 时候， \verb|-l| 选项需要放在所有 \verb|.o| 文件后面
 \item 检查内存泄露可以用 Address Sanitizer： \verb|g++ main.cpp -fsanitize=address -static-libasan -g|
+\item 检查 signed 整数加减乘的溢出可以用 \verb|-ftrapv|， 亲测支持 \verb|int, long, long long| （其他类型貌似不行）， 运行时会终止程序， 可以用 gdb 找到位置， 不能在程序中 \verb|catch|．如果想支持所有整数类型， 可以用 \verb|SafeInt| 库．
 \end{itemize}
 
 \subsection{linker (ld)}
 \begin{itemize}
 \item \verb|-L| 指定添加 \verb|-l| 的搜索路径
+\end{itemize}
+
+\subsection{preprocessor}
+\begin{itemize}
+\item \verb|g++ -E -P xxx.cpp > out.txt| 会显示 preprocessor 的输出， 其中 \verb|-P| 会删掉 linkmarker （用于显示代码在头文件中来源）
 \end{itemize}

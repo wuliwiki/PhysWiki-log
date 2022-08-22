@@ -1,0 +1,268 @@
+% 单源最短路径
+% 单源最短路径|最短路|算法|C++
+
+单元最短路径问题，为给定一张有向图 $G = (V, E)$，$V$ 是点集，$E$ 是边集，$|V|= n$，$|E| = m$，求给定的源点（起点）$s \in V$ 到每个结点 $v \in V$ 的最短路径．$(x, y, w)$ 表示有一条从结点 $x$ 指向结点 $y$ 的有向边，边权为 $w$．
+
+\subsection{Dijkstra 算法}
+
+\verb|dist[i]| 表示从起点 $s$ 到结点 $i$ 的\textbf{实际}最短路径的长度（这条路径的权值之和）．
+
+$\delta(u)$ 表示从起点 $s$ 到结点 $u$ 的估计最短路径长度．任意时刻都存在 \verb|dist[u]| $\geq \delta(u)$．
+
+Dijkstra 算法是一种求解没有负权边的图中的单源最短路问题．将所有结点划分为两个集合，$S$ 集合存储当前已经确定了最短路的结点，$T$ 集合存储当前还未确定最短路的结点．
+
+具体做法是：
+\begin{enumerate}
+\item 初始化所有点的 \verb|dist| 距离为正无穷，起点的距离为 $0$（\verb|dist[S] = 0|）．
+\item 每次从 $T$ 集合中选出一条 \verb|dist| 值最小的结点 $t$，并把 $t$ 结点加入 $S$ 集合中．
+\item 用 $t$ 更新其他结点．
+\item 重复 $2 \sim 3$ 步骤，直到所有点都被加入 $S$ 集合．
+\end{enumerate}
+
+朴素 Dijkstra 算法的时间复杂度为 $\mathcal{O}(n^2)$，使用二叉堆可以使操作 $2$ 的时间复杂度从 $\mathcal{O}(n^2)$ 的时间复杂度优化到 $\mathcal{O}(\log_2 n)$．每更新一条边 $(x, y)$，就把 $y$ 这个结点和 \verb|dist[y]| 值插入到二叉堆中．每次找最小值直接取堆顶即可．每次取堆顶时判断堆顶是不是已经被访问过了，如果被访问过了，直接忽略这次操作，否则会重复更新，导致影响时间复杂度．所以堆优化版 Dijkstra 的时间复杂度为 $\mathcal{O}(m \log_2 n)$．
+
+\textbf{Dijkstra 算法正确性证明：}
+参考算法导论中的反证法
+
+要证明在算法结束时，每个点的实际最短距离等于估计最短距离，即证明的是对于每个结点 $u \in V$，当结点 $u$ 第一次加入到 $S$ 集合时，$dist[u] =\delta(u)$，也就是 \verb|dist[u]| 必然满足已经是起点到 $u$ 的最短距离．
+
+初始化： $S = \varnothing$，方程显然成立，得证．
+
+接下来使用反证法证明此结论，假设结点 $u$ 是第一次加入 $S$ 集合时使得 $dist[u] \neq \delta(u)$，因为 $s$ 结点是第一次加入 $S$ 集合中的结点，所以有 $dist[s] = \delta(s) = 0$，因为 $s$ 结点是第一个加入 $S$ 结点中的结点，所以将 $u$ 结点加入 $S$ 集合之前，必定有 $S \neq \varnothing$．此时一定有一条从 $s$ 结点到 $u$ 结点的路径，否则 $dist[u] = \delta(u) = +\infty$，而这与假设矛盾，所以一定存在一条路径从结点 $s$ 到结点 $u$．
+
+所以这条路径上一定存在一条最短从结点 $s$ 到结点 $u$ 的最短路径 $p$．
+将 $p$ 分解为：$s \thicksim x \thicksim y \thicksim u$，其中 $y$ 为第一个属于 $T$ 集合中的点，$x$ 为 $y$ 的前驱结点．有可能存在 $s = x$ 或 $y = u$ 的情况．
+
+因为结点 $u$ 是第一次加入 $S$ 集合时不满足 $dist[u] \neq \delta(u)$ 的结点，所以在之前所以的结点都满足实际最短路径等于估计最短路径，所以在将 $x$ 结点加入到 $S$ 集合时，满足 $dist[x] = \delta(x)$．此时 $x$ 结点会更新其他结点，所以在将 $u$ 加入到 $S$ 集合时，$dist[y] = \delta(y)$．
+
+因为结点 $y$ 是结点 $u$ 的前面的一个结点，所以存在 $\delta(y) \leq \delta(u)$．所以 $dist[y] = \delta(y) \leq \delta(u) \leq dist[u]$．又因为结点 $u$ 是算法在 $T$ 集合中选择的第一个点，所以有 \verb|dist[u] <= dist[y]|．所以上面的不等式其实都为等式，所以 $\delta(u) = dist[u]$ 成立，这与假设矛盾，所以证明得证．
+
+\textbf{C++ 代码：}
+
+朴素版 Dijkstra
+\begin{lstlisting}[language=cpp]
+const int N = 1e5 + 10, M = 510, INF = 0x3f3f3f3f;
+int n, m, dist[N], st[N], g[M][M]; // st 为 true 表示在 S 集合，反之不在
+
+int dijkstra()
+{
+    memset(dist, 0x3f, sizeof dist);  // 初始化距离
+    dist[1] = 0;
+    
+    for (int i = 0; i < n - 1; i ++ ) // 迭代 n - 1 次
+    {
+        int t = -1;
+        for (int j = 1; j <= n; j ++ )
+            if (!st[j] && (t == -1 || dist[j] < dist[t]))
+                t = j; // t 为 不在 S 集合中距离最短的点
+        
+        st[t] = true; // 加入 S 集合
+        
+        for (int j = 1; j <= n; j ++ ) // 更新
+            dist[j] = min(dist[j], dist[t] + g[t][j]);
+    }
+    
+    // 求 1 号点到 n 号点的最短距离
+    return dist[n];
+}
+
+int main()
+{
+    cin >> n >> m;
+    
+    // 稠密图用邻接矩阵存图
+    memset(g, 0x3f, sizeof g);
+    for (int i = 0; i < m; i ++ ) 
+    {
+        int a, b, c;
+        cin >> a >> b >> c;
+        // 因为图中可能有重边，所以只保留权值小的边
+        g[a][b] = min(g[a][b], c);
+    }
+    
+    // 输出邻接矩阵，没有边的地方初始化为正无穷
+    for (int i = 1; i <= 4; i ++ ) {
+        for (int j = 1; j <= 4; j ++ )
+            printf("%10d ", g[i][j]);
+        cout << endl;
+    }
+    
+    int t = dijkstra();
+    if (t == INF) cout << -1 << endl; 
+    else cout << t << endl;
+    
+    return 0;
+}
+\end{lstlisting}
+
+堆优化版 Dijkstra
+
+\begin{lstlisting}[language=cpp]
+const int N = 1e6 + 10, INF = 0x3f3f3f3f;
+typedef pair<int, int> PII; // first 存储距离，second 存储结点编号
+priority_queue<PII, vector<PII>, greater<PII>> heap; // 小根堆
+int n, m, dist[N], st[N], h[N], e[N], w[N], ne[N], idx; // 稀疏图用邻接表存图
+
+int dijkstra()
+{
+    memset(dist, 0x3f, sizeof dist);
+    dist[1] = 0;
+    heap.push({0, 1});  // 把起点加入到优先队列中
+    
+    while (heap.size())
+    {
+        auto t = heap.top(); // 取出堆顶
+        heap.pop();
+        
+        int ver = t.second;
+        if (st[ver]) continue;  // 如果访问过就不重复访问
+        st[ver] = true;
+        
+        for (int i = h[ver]; ~i; i = ne[i])
+        {
+            int j = e[i];
+            // 更新
+            if (dist[j] > dist[ver] + w[i])
+            {
+                dist[j] = dist[ver] + w[i];
+                heap.push({dist[j], j});
+            }
+        }
+    }
+    
+    // 求 1 号点到 n 号点的最短距离
+    return dist[n];
+}
+\end{lstlisting}
+
+\subsection{Bellman-Ford 算法与 SPFA 算法}
+
+Bellman-Ford 算法可以求解带有负权边的单源最短路径．
+
+Bellman-Ford 算法的步骤非常简单，就是迭代 $n - 1$ 次，依次扫描每条边，如果边能够被更新的，就更新一下每条边．具体的：对于每条边 $(x, y, w)$，如果 $dist[y] > dist[x] + w$，则用 $dist[x] + w$ 更新 $dist[x]$．这种更新方法被称为\textbf{松弛}操作．
+
+迭代结束之后，如果每条边都满足 $dist[y] <= dist[x] + w$，则所有边都满足\textbf{三角不等式}性质．
+
+Bellman-Ford 算法的时间复杂度为 $\mathcal{O}(nm)$．
+
+队列优化版的 Bellman-Ford 算法在国内被称为 SPFA 算法．SPFA 的优化思路是对上面的松弛操作做优化，因为不一定所有的边都会被松弛，只有当前结点的出边变小了，当前结点才有可能被更新．
+
+SPFA 算法的流程为：
+
+\begin{enumerate}
+\item 建立一个队列，最初把起点入队
+\item 当队列非空，取出队头并弹出队头
+\item 更新队头的所有出边 $(t, y, w)$
+\item 如果队头的出边没有入队过，则把队头的出边入队
+\item 重复 $2 \sim 4$，直到队列为空．
+\end{enumerate}
+
+SPFA 算法的期望时间复杂度为 $\mathcal{O}(m)$，但最坏情况会被卡到 $\mathcal{O}(nm)$．
+
+C++ 代码：
+SPFA
+
+\begin{lstlisting}[language=cpp]
+const int N = 1e5 + 10, INF = 0x3f3f3f3f;
+int n, m, dist[N], st[N], q[N], h[N], e[N], w[N], ne[N], idx;
+
+int spfa()
+{
+    memset(dist, 0x3f, sizeof dist);
+    dist[1] = 0;
+    int hh = 0, tt = 0; // 循环队列
+    q[tt ++ ] = 1;
+    st[1] = true;
+    
+    while (hh <= tt)
+    {
+        auto t = q[hh ++ ];
+        if (hh == N) hh = 0;
+        st[t] = false;
+        
+        for (int i = h[t]; ~i; i = ne[i])
+        {
+            int j = e[i];
+            if (dist[j] > dist[t] + w[i])
+            {
+                dist[j] = dist[t] + w[i];
+                if (!st[j])
+                {
+                    q[tt ++ ] = j;
+                    if (tt == N) tt = 0;
+                    st[j] = true;
+                }
+            }
+        }
+    }
+    return dist[n];
+}
+\end{lstlisting}
+
+Bellman-Ford 算法与 SPFA 算法一个很好的应用就是可以判断一个图中存不存在负环（一张图中存在一个环，权值之和为负数）．一般判断负环的算法选择 SPFA，因为 SPFA 的效率要远远大于 Bellman-Ford 算法．
+
+SPFA 算法判断负环的方法有两种，分别为：
+
+\begin{enumerate}
+\item 记录每个结点入队次数，若有某个结点入队次数大于等于结点总数，说明存在负环．
+\item 记录每个结点到 $1$ 号结点的最短路径包含的边数，若某个结点到 $1$ 号结点的最短路径包含的边数大于等于结点总数，也说明图中存在负环．
+\end{enumerate}
+
+方法 $1$ 的原理：本质是 Bellman-Ford 算法，若经过了 $n$ 轮迭代，还有结点可以被更新的话，说明存在负环．对于 SPFA 来说，每个结点被更新一次就入队一次，如果一个结点入队的次数大于等于 $n$ 次，那么这个结点就被更新了大于等于 $n$ 次．一个结点每更新一次，这个结点的最短路径的距离就会加 $1$，那么一个结点更新 $n$ 次，说明这个结点的最短路径的距离的长度就等于 $n$，显然这条最短路径的结点个数就等于 $n + 1$．图中一共有 $n$ 个点，这个结点的最短路径中包含的结点个数大于等于 $n$ 了，根据抽屉原理，必然有两个一样的结点，说明存在一个环，根据松弛操作，这个环一定是负环．
+
+方法 $2$ 的原理：类似于方法 $1$，原理其实也是抽屉原理，用一个 \verb|cnt| 数组记录每个点的最短路径包含的边数，每松弛一次，更新一下距离并且更新一下 \verb|cnt| 数组．如果 \verb|cnt[i] >= n|，说明图中存在负环．
+
+SPFA 算法判断负环推荐使用第二种，第二种的效率远远高于第一种，对于这样一张图，图中的边权都为负数，且有很多点．第一种方法需要绕环 $n$ 次才能达到一个结点入队的次数大于等于 $n$，而第二种方法则需要绕环 $1$ 次，再走一个结点就能达到一个结点的最短路径包含的边数大于等于 $n$．第一种方法的时间复杂度可以近似的看成 $\mathcal{o}(n^2)$，而第二种的时间复杂度可以近似的看成 $\mathcal{O}(n)$．
+
+判断负环还要注意一种情况，有可能构成负环的结点不与 $1$ 号点联通，那么只把 $1$ 号点加到队列里就不能成功的找到负环．所以一种很实用的方法是最开始将所有点入队，这样就能成功的遍历到所有结点并找到负环．这种方法的一种更好的理解方式就是，设立一个虚拟源点，从虚拟源点向所有点连一条边权是 $0$ 的边．然后初始化是把虚拟源点加入队列，然后第一次迭代是把虚拟源点可以到达的点全部加入队列．所以最开始将所有点加入队列等价于在图中建立一个虚拟源点．
+
+还需注意的一点是 SPFA 算法判断负环不需要初始化 \verb|dist| 数组为正无穷，初始化任意值都没问题，因为如果图中存在负环，松弛操作一定会执行，所以所以 \verb|dist| 的值初始化任意值都没问题．这里的正无穷（0x3f3f3f3f）严格意义来讲其实是有限值，为 $1061109567$．
+
+\begin{lstlisting}[language=cpp]
+const int N = 2010, M = 1e4 + 10, INF = 0x3f3f3f3f; // N 结点数量
+int n, m, dist[N], st[N], cnt[N], q[N], h[N], e[M], w[M], ne[M], idx;
+
+bool spfa()
+{
+    memset(dist, 0, sizeof dist);
+    memset(cnt, 0, sizeof cnt);
+    memset(st, false, sizeof st);
+
+    int hh = 0, tt = 0; // 循环队列
+    for (int i = 1; i <= n; i ++ )
+    {
+        q[tt ++ ] = i;
+        st[i] = true;
+    }
+    
+    int count = 0; // 计数器
+    while (hh != tt)
+    {
+        int t = q[hh ++ ];
+        if (hh == N) hh = 0;
+        st[t] = false;
+
+        for (int i = h[t]; ~i; i = ne[i])
+        {
+            int j = e[i];
+            if (dist[j] > dist[t] + w[i])
+            {
+                dist[j] = dist[t] + w[i];
+                cnt[j] = cnt[t] + 1;
+                if ( ++ count > N) return true;  // trick
+                if (cnt[j] >= n) return true;
+                if (!st[j])
+                {
+                    q[tt ++ ] = j;
+                    if (tt == N) tt = 0;    
+                    st[j] = true;
+                }
+            }
+        }
+    }
+
+    return false;
+}
+\end{lstlisting}
+
+实际运用中 SPFA 的效率其实不是那么好，这里有个经验上的做法，如果 SPFA 的效率很低的时候，就认为有负环．这里的技巧是：当所有点的总共入队次数超过一个定值的时候，就认为有负环．定值经验上取 $2 \times n$ 或 $3 \times n$．

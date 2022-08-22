@@ -1,0 +1,42 @@
+% GNU Multiple Precision（GMP）库笔记
+
+\href{https://gmplib.org/}{GMP} 可能是最常用的大整数库． Boost\upref{Boost} 中也提供 C++ 的 wrapper （可以选择后台用 GMP 或者其他库）， 封装得更为友好．
+
+\subsection{数据结构}
+\begin{itemize}
+\item \verb|mpz_t| 大整数（\verb|z| 表示整数）， \verb|mpq_t| 大分数， 浮点数 \verb|mpf_t|
+\item \textbf{limb} 的意思是大整数数据的一个 word （4 或 8 字节）， 类型为 \verb|mp_limb_t|．
+\item 原理参考\href{https://gmplib.org/manual/Integer-Internals#Integer-Internals}{这篇文档}．
+\item \verb|_mp_size| limb 的个数（至少是 1）， 类型是 \verb|mp_size_t| （\verb|long| 或者 \verb|int|）． 负数的 \verb|_mp_size| 代表 mpz 是负的， 零代表 mpz 为零， 此时 \verb|_mp_d| 无定义.
+\item \verb|_mp_d| limb 的指针（little endian）， \verb|_mp_d[0]| 是最不重要的 limb， \verb|_mp_d[ABS(_mp_size)-1]| 最重要的 limb．
+\verb|_mp_alloc| 和 \verb|vector.capacity()| 类似． 有 \verb|_mp_alloc >= ABS(_mp_size)|， 如果需要更多会重新 allocate．
+\end{itemize}
+
+\begin{lstlisting}[language=cpp]
+#ifdef _LONG_LONG_LIMB
+typedef unsigned long long int	mp_limb_t;
+typedef long long int		mp_limb_signed_t;
+#else
+typedef unsigned long int	mp_limb_t;
+typedef long int		mp_limb_signed_t;
+#endif
+
+typedef mp_limb_t *mp_ptr;
+typedef const mp_limb_t *mp_srcptr;
+
+/* For reference, note that the name __mpz_struct gets into C++ mangled
+   function names, which means although the "__" suggests an internal, we
+   must leave this name for binary compatibility.  */
+typedef struct
+{
+  int _mp_alloc;		/* Number of *limbs* allocated and pointed
+				   to by the _mp_d field.  */
+  int _mp_size;			/* abs(_mp_size) is the number of limbs the
+				   last field points to.  If _mp_size is
+				   negative this is a negative number.  */
+  mp_limb_t *_mp_d;		/* Pointer to the limbs.  */
+} __mpz_struct;
+
+typedef __mpz_struct MP_INT;    /* gmp 1 source compatibility */
+typedef __mpz_struct mpz_t[1];
+\end{lstlisting}

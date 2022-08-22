@@ -1,0 +1,185 @@
+% 时间演化算符（量子力学）
+% 薛定谔方程
+
+\pentry{量子力学的基本原理（量子力学）\upref{QMPrcp}}
+
+
+
+
+本节介绍时间演化算符，以此为切入点，引入量子态的演化方程，即薛定谔方程．
+
+
+“我们应当记住的首要之点是：时间在量子力学中只是一个参量而不是一个算符．特别地，时间不是前一章所说的可观测量．像谈论位置算符一样谈论时间算符是无意义的．”——樱井纯，J. 拿波里塔诺，《现代量子力学》，2.1节．
+
+量子力学中，时间不是一个算符，意味着量子力学认为时间是独立存在的，即采用经典时空观．
+
+
+\subsection{时间演化算符的基本性质}
+
+\begin{definition}{时间演化算符}\label{TOprt_def1}
+设一个物理系统在时间$t$时的态矢量为$\ket{s, t}$，而$t_0<t$是一个初始时间，那么定义
+\begin{equation}\label{TOprt_eq1}
+\mathcal{U}(t, t_0)\ket{s, t_0}=\ket{s, t}
+\end{equation}
+其中$\mathcal{U}(t, t_0)$称为从$t_0$到$t$的\textbf{时间演化算符（time evolution operator）}．
+\end{definition}
+
+从\autoref{TOprt_def1} 可以看出来，我们只需要研究清楚时间演化算符的性质，就能从一个初始态算出之后任意时间的态．
+
+那么时间演化算符应该具有什么样的性质呢？
+
+
+首先，时间演化算符只依赖于时间长短，即
+\begin{equation}\label{TOprt_eq2}
+\mathcal{U}(t_2, t_1)\mathcal{U}(t_1, t_0) = \mathcal{U}(t_2, t_0)
+\end{equation}
+这样才能确定唯一的演化结果$\ket{s, t}$．
+
+于是，我们可以省略掉初始时间，而把$\mathcal{U}(t, t_0)$简记为$\mathcal{U}(t-t_0)$，即把自变量由“初始时间和结束时间”替换为“演化所用时间”．同样，也可以把量子态$\ket{s, t_0}$简记为$\ket{s}$．此时$\ket{s, t_0+t}=\mathcal{U}(t)\ket{s}$．
+
+为了\textbf{方便讨论}，以下\textbf{默认}$t_0=0$，故$\ket{s, t}=\mathcal{U}(t)\ket{s}$．
+
+接着，我们希望量子态随时间\textbf{连续地}变化，因此有
+\begin{equation}\label{TOprt_eq3}
+\lim_{t\to 0}\mathcal{U}(t) = \mathcal{U}(0) = 1
+\end{equation}
+其中$1$是恒等变换．
+
+最后，我们希望一个量子态归一化以后，在演化过程中始终保持归一化．也就是说，$\bra{s}H^\dagger H\ket{s}=\braket{s}{s}=1$对任意态$\ket{s}$成立，即
+\begin{equation}\label{TOprt_eq4}
+H^\dagger H=1
+\end{equation}
+满足\autoref{TOprt_eq1} 的方程被称为\textbf{幺正（unitary）}的．
+
+
+
+有了三条规则，\autoref{TOprt_eq2} ，\autoref{TOprt_eq3} 和\autoref{TOprt_eq4} ，就可以推导时间演化算符的具体形式了．
+
+
+\subsection{无穷小时间演化算符}
+
+我们首先考虑演化用时趋于$0$时，时间演化算符的极限．这是因为微分的思想即线性近似的思想，而线性的情形是最好处理的．为了方便，我们将不使用极限语言，而是用“无穷小”的术语，这并不失严谨性．
+
+记$\dd t$是一段无穷小时间，则由连续性\autoref{TOprt_eq3} ，可知应设
+\begin{equation}\label{TOprt_eq5}
+\mathcal{U}(\dd t) = 1+\Omega \dd t
+\end{equation}
+其中$\Omega$是某个确定的算符．
+
+\autoref{TOprt_eq5} 的形式天然满足\autoref{TOprt_eq2} ：
+\begin{equation}
+\begin{aligned}
+\mathcal{U}(t_2)\mathcal{U}(t_1)&=(1+\Omega \dd t_2)(1+\Omega \dd t_1)\\
+&=1+\Omega(\dd t_2+\dd t_1)\\
+&=\mathcal{U}(t_2+t_1)
+\end{aligned}
+\end{equation}
+
+接下来要确定$\Omega$的形式．根据幺正性\autoref{TOprt_eq4} ，我们有
+\begin{equation}
+(1+\Omega^\dagger \dd t)(1+\Omega \dd t)=1
+\end{equation}
+展开后，剔除高阶无穷小项$\dd t^2$，可得到
+\begin{equation}
+\Omega^\dagger + \Omega = 0
+\end{equation}
+因此，$\Omega$是一个\textbf{反厄米算符}（\autoref{QMPrcp_def19}~\upref{QMPrcp}）．
+
+
+现在，借用经典力学中“哈密顿量是时间演化生成元”的概念，令$\Omega$为哈密顿算符$H$的某个倍数．考虑到哈密顿算符是可观测量（能量），应为\textbf{厄米算符}，再考虑到量纲，故可以设
+\begin{equation}\label{TOprt_eq6}
+\Omega=-\frac{\I}{\hbar}H
+\end{equation}
+从而得到\textbf{无穷小时间演化算符}
+\begin{equation}\label{TOprt_eq11}
+\mathcal{U}(\dd t)= 1-\frac{\I}{\hbar}H=1+\frac{1}{\I\hbar}H
+\end{equation}
+
+这里我们直接给出了调整量纲的常量$\hbar$．为什么是$\hbar$，而不是$h$或别的什么同量纲量呢？这个问题在\autoref{TOprt_sub1} 中解答．
+
+
+
+\subsection{一般的时间演化算符}
+
+将\autoref{TOprt_eq11} 代入\autoref{TOprt_eq2} ，可得
+\begin{equation}\label{TOprt_eq7}
+\mathcal{U}(t+\dd t) = \mathcal{U}(t)\mathcal{U}(\dd t) = \mathcal{U}(t)(1-\frac{\I}{\hbar}H \dd t)
+\end{equation}
+
+因此有\footnote{$\partial\mathcal{U}(t)/\partial t=(\mathcal{U}(t+\dd t)-\mathcal{U}(t))/\dd t$，代入\autoref{TOprt_eq7} 即可．}
+\begin{equation}\label{TOprt_eq8}
+\I\hbar\frac{\partial}{\partial t}\mathcal{U}(t) = H\mathcal{U}(t)
+\end{equation}
+
+
+\autoref{TOprt_eq8} 被称为\textbf{时间演化算符的薛定谔方程}．由时间演化算符的定义，我们可以由此得到量子态的演化方程\footnote{$\partial\ket{s, t}/\partial t=\partial(\mathcal{U}(t)\ket{s})/\partial t=\partial \mathcal{U}(t)/\partial t \ket{s}$．}：
+\begin{equation}\label{TOprt_eq9}
+\I\hbar\frac{\partial}{\partial t}\ket{s, t} = H\ket{s, t}
+\end{equation}
+当选择$H=\frac{\hat{\bvec{p}}^2}{2m}+V(\bvec{x})$时，\autoref{TOprt_eq9} 正是我们熟知的薛定谔时间相关波动方程\footnote{准确来说，为了从态右矢得到波函数，还需左乘位置算子的本征矢$\bra{x}$，该本征矢在薛定谔绘景下不随时间变化．}．
+
+
+我们只需要关注$\mathcal{U}(t)$的演化即可，无须求解\autoref{TOprt_eq9} ．
+
+\autoref{TOprt_eq8} 的解需要分三个情况讨论：
+
+
+\subsubsection{哈密顿算符不依赖于时间}
+
+如果$H$是一个不随时间改变的常量，那么根据指数映射的性质，由\autoref{TOprt_eq8} 易得
+\begin{equation}
+\mathcal{U}(t) = \exp\qty(\frac{H}{\I \hbar}t)
+\end{equation}
+
+其中$\exp(X)=\sum_{i=0}^\infty \frac{1}{i!}X^i$对所有算符$X$成立．
+
+
+
+\subsubsection{不同时间的哈密顿算符彼此对易}
+
+如果哈密顿算符作为时间的函数$H(t)$，满足$H(t_1)H(t_2)=H(t_2)H(t_1)$，则可类比\autoref{ODEa2_exe1}~\upref{ODEa2}，猜出形式解
+\begin{equation}\label{TOprt_eq10}
+\mathcal{U}(t)=\exp\qty(\frac{1}{\I\hbar}\int^t_{t_0}\dd t' H(t'))
+\end{equation}
+易验证\autoref{TOprt_eq10} 确实满足\autoref{TOprt_eq8} ．
+
+
+
+\subsubsection{不同时间的哈密顿算符彼此不对易}
+
+如果$H(t_1)H(t_2)\not=H(t_2)H(t_1)$，那么\autoref{TOprt_eq10} 就不再满足\autoref{TOprt_eq8} 了．此时形式解应为所谓的\textbf{戴森（Dyson）级数}：
+\begin{equation}
+\mathcal{U}(t) = 1+\sum_{n=1}^\infty \qty(\frac{1}{\I \hbar})\int^{t_1}_{t_0}\dd t_1\int^{t_2}_{t_0}\dd t_2\cdot \int^{t_{n-1}}_{t_0}\dd t_{n-1}H(t_1)H(t_2)\cdots H(t_n)
+\end{equation}
+\addTODO{引用戴森级数相关词条．}
+
+
+\subsection{$\hbar$的由来}\label{TOprt_sub1}
+
+这一小节回答之前遗留的问题，即为什么$\mathcal{U}(\dd t) = 1-\frac{\I}{\hbar} H \dd t$中选择$\hbar$．
+
+如果尚未确定$\hbar$，只是用一个常数$C$来取代它，即设$\mathcal{U}(\dd t) = 1-\frac{\I}{C} H \dd t$，那么\autoref{TOprt_eq9} 变为
+\begin{equation}
+\I C\frac{\partial}{\partial t}\ket{s, t}=H\ket{s, t}
+\end{equation}
+
+根据德布罗意关系$E=h\nu$和$p=h/\lambda$，可以取能量、动量的共同本征矢（位置表象）\footnote{注意到$\exp\qty[2\pi \I \qty(A\abs{\bvec{x}}-Bt)]$中，$A=1/\lambda$，$B=\nu$．}
+\begin{equation}
+\psi(t, \bvec{x})=\exp[2\pi\I\qty(\frac{\bvec{p}\cdot\bvec{x}}{h}-\frac{Et}{h})]
+\end{equation}
+从而有
+\begin{equation}
+E\ket{s, t}=H\ket{s, t}=\I C\frac{\partial}{\partial t}\psi(t, \bvec{x}) = \frac{2\pi C E}{h} \psi(t, \bvec{x})
+\end{equation}
+故
+\begin{equation}
+C=h/2\pi=\hbar
+\end{equation}
+
+
+
+
+
+
+
+

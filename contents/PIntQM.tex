@@ -1,0 +1,184 @@
+% 路径积分（量子力学）
+% 传播子|跃迁振幅|关联振幅|概率振幅|高等量子力学
+
+\pentry{传播子（量子力学）\upref{PpgtQM}，薛定谔绘景和海森堡绘景\upref{HsbPic}}
+
+% 定义传播子$C_i(t) = \bra{\bvec{x}_{i+1}}\E^{-\I Ht}\ket{\bvec{x}_i}$．
+
+
+
+
+\subsection{概念的引入}
+
+为了方便，我们考虑二维时空的情况，即空间只有一维．
+
+在初始时刻$t=0$时，一个粒子处于$x_0$位置，将它的态记为$\ket{x_0}$，其在位置空间的波函数为$\psi_0(x)=\braket{x}{x_0}=\delta(x-x_0)$．
+
+时间过去$t_1$后，我们在$x_1$位置测量，发现粒子的概率振幅为$\bra{x_1}\E^{-\I H t_1}\ket{x_0}$．因此我们可以说，粒子在时间$t_1$后“出现”在\footnote{我们也可以说“传播”到．}$x_1$的概率密度是$\abs{\bra{x_1}\E^{-\I H t_1}\ket{x_0}}^2$．
+
+同样地，时间过去$t_2>t_1$后，粒子在$x_2$位置的概率振幅为$\bra{x_2}\E^{-\I H t_2}\ket{x_0}$．
+
+注意到$\int \ket{x_1}\bra{x_1}\dd x_1=1$，即恒等变换（其矩阵总是单位矩阵），因此我们可以把这个积分插入到任何位置，比如：
+\begin{equation}\label{PIntQM_eq1}
+\ali{
+    \bra{x_2}\E^{-\I H t_2}\ket{x_0} &= \bra{x_2}\int \ket{x_1}\bra{x_1}\dd x_1 \E^{-\I H t_2}\ket{x_0}\\
+    &= \int \braket{x_2}{x_1}\bra{x_1} \E^{-\I H t_2}\ket{x_0}\dd x_1\\
+    &= \int \bra{x_2}\E^{-\I H( t_2-t_1)}\ket{x_1}\bra{x_1} \E^{-\I H t_1}\ket{x_0}\dd x_1\\
+}
+\end{equation}
+
+\autoref{PIntQM_eq1} 数学上成立，但它有什么物理意义呢？
+
+每个$\bra{x_2}\E^{-\I H( t_2-t_1)}\ket{x_1}\bra{x_1} \E^{-\I H t_1}\ket{x_0}$表达的是，粒子从$x_0$开始，$t_1$后出现在$x_1$的振幅，乘以从$x_1$开始，再过$t_2-t_1$后出现在$x_2$的振幅．而\autoref{PIntQM_eq1} 是对这个表达式关于$x_1$遍历全空间求积分．
+
+综上，\autoref{PIntQM_eq1} 表达的是：求粒子从$x_0$出发、经过$t_2$后出现在$x_2$的概率振幅，等于先求出粒子经过$t_1$后传播到$x_1$后再从$x_1$经过$t_2-t_1$后传播到$x_2$的振幅，然后把所有可能的$x_1$遍历一遍，把得到的所有\textbf{路径}的振幅求积分．这个过程如\autoref{PIntQM_fig1} 所示：
+
+\begin{figure}[ht]
+\centering
+\includegraphics[width=10cm]{./figures/PIntQM_1.pdf}
+\caption{路径积分的示意图．如图，计算粒子从$x_0$经过时间$t_2$后传播到$x_2$的概率振幅，相当于图中各路径的振幅关于$x_1$遍历整个空间求积分．也就是说，$x_1$取遍所有可能性，得到类似图中三条路径的所有路径，所有这些路径的振幅积分，即为所求．} \label{PIntQM_fig1}
+\end{figure}
+
+
+
+同样地，我们可以把时间分成多段，产生更多的路径可能性，则我们所求的振幅$\bra{x_n}\mathcal{U}(t)\ket{x_1}$同样是所有这些可能路径的振幅之积分，如\autoref{PIntQM_fig2} 所示．
+
+\begin{figure}[ht]
+\centering
+\includegraphics[width=10cm]{./figures/PIntQM_2.pdf}
+\caption{将时间分成多段后，得到更多可能路径．} \label{PIntQM_fig2}
+\end{figure}
+
+
+积分表达式为：
+\begin{equation}\label{PIntQM_eq5}
+\ali{
+    &\bra{x_n}\E^{-\I H t_n}\ket{x_0}\\
+    =& \int \bra{x_n}\E^{-\I H( t_n-t_1 )}\ket{x_1}\bra{x_1} \E^{-\I H t_1}\ket{x_0}\dd x_1\\
+    =& \int\int \bra{x_n}\E^{\I H (t_3-t_2)}\ket{x_2}\bra{x_2}\E^{-\I H( t_2-t_1 )}\ket{x_1}\bra{x_1} \E^{-\I H t_1}\ket{x_0}\dd x_1\dd x_2\\
+    =& \cdots\\
+    =&\int\int\cdots\int \dd x_1\dd x_2\cdots \dd x_{n-1}\times \\
+    &\qty (\bra{x_n}\E^{-\I H( t_n-t_{n-1} )}\ket{x_{n-1}}\cdots\bra{x_2}\E^{-\I H( t_2-t_1 )}\ket{x_1}\bra{x_1} \E^{-\I H t_1}\ket{x_0})
+}
+\end{equation}
+
+
+
+最后，当我们给时间所分的段数趋于无穷时，能得到所有可能的路径，如\autoref{PIntQM_fig3} 所示．同样地，所有这些路径的振幅之积分就是我们所求的$\bra{x_n}\E^{-\I H t_n}\ket{x_0}$．
+
+
+
+\begin{figure}[ht]
+\centering
+\includegraphics[width=10cm]{./figures/PIntQM_4.pdf}
+\caption{全体可能的路径．} \label{PIntQM_fig3}
+\end{figure}
+
+
+\subsection{路径积分的计算}
+
+
+\subsubsection{无穷小路径的概率振幅与经典作用量}
+
+我们回到\autoref{PIntQM_fig1} 的例子．任取$t_1$时刻一个给定的位置$x_1$，得到一条给定的折线路径．粒子沿着\textbf{这条路径}演化到$x_2$的概率振幅是\footnote{你可以理解为，在$t_1$时刻整个宇宙盖上了吸收粒子的材料，只有$x_1$处例外，然后立刻把材料取走，那么在$t_2$时刻在$x_2$找到粒子的概率振幅就是\autoref{PIntQM_eq2} ．这可以和单缝衍射作类比．}
+\begin{equation}\label{PIntQM_eq2}
+\bra{x_2}\E^{\I H (t_2-t_1)}\ket{x_1}\bra{x_1}\E^{\I H t_1}\ket{x_1}
+\end{equation}
+这是两条直线段路径的概率振幅之\textbf{积}．
+
+% 应用上述事实，让时间分割趋于无穷，可以推知，一条任意路径的概率振幅，可以视为各\textbf{无穷小段}的概率振幅之积．于是，我们又要考虑无穷小近似了．
+
+% \subsubsection{无穷小路径的概率振幅}
+
+由于概率振幅是个数字，即路径的泛函，这让人想到一个重要的泛函，经典作用量：$S=\int_{\text{给定路径}}L\dd t$，其中拉格朗日函数$L=\frac{m\dot{x}^2}{2}-V(x)$．
+
+折线段的作用量，是各直线段组分的作用量之\textbf{和}；而\autoref{PIntQM_eq2} 中，折线段的概率振幅，是各直线段组分的作用量之\textbf{积}．因此，我们可以取作用量的指数，来对应概率振幅．
+
+对于每条折线段（以\autoref{PIntQM_fig2} 为例），记其$t_{i-1}$和$t_i$之间直线段的作用量为
+\begin{equation}
+S(t_{i}-t_{i-1})=\int^{t_i}_{t_{i-1}}\dd t L(x, \dot{x})
+\end{equation}
+给定\textbf{无穷小段}的作用量记为$S(\dd t)$．
+
+我们猜测
+\begin{equation}
+\ali{
+    \bra{x_1}\E^{\I H \dd t}\ket{x_0} &= \qty(\frac{1}{\omega(\dd t)})\exp\qty(\I S(\dd t))\\
+    %&= \qty(\frac{1}{\omega(\Delta t)})\qty(1+\frac{\I}{\hbar}S(\dd t))
+}
+\end{equation}
+其中$\omega$是比例和量纲的修正项．下面就讨论该猜想的合理性．
+
+我们对自由粒子应用上述猜想．注意到自由粒子的拉格朗日函数为$L=mv^2/2$，而无穷小段可以近似于匀速直线运动，故无穷小段的作用量为（时间差$\Delta t$是小量，位置$x_0$到$x_1=x_0+v \Delta t$）：
+\begin{equation}\label{PIntQM_eq6}
+\ali{
+    S(\Delta t) &= \int^{\Delta t}_0 \dd t\qty(\frac{mv^2}{2})\\
+    &= \frac{mv^2}{2}\Delta t\\
+    &= \frac{m}{2}\qty(\frac{x_1-x_0}{\Delta t})^2\Delta t
+}
+\end{equation}
+于是
+\begin{equation}\label{PIntQM_eq3}
+\ali{
+    \exp\qty(\I S(\Delta t)) &= \exp\qty(\frac{\I m(x_1-x_0)^2}{2\Delta t})
+}
+\end{equation}
+\autoref{PIntQM_eq3} 右边的指数恰为自由粒子传播子\autoref{PpgtQM_eq9}~\upref{PpgtQM}的指数部分！
+
+因此，对于一维自由粒子，其无穷小段路径的概率振幅为
+\begin{equation}\label{PIntQM_eq4}
+\bra{x_1}\E^{-\I H \dd t}\ket{x_0} = \sqrt{\frac{m}{2\pi\I \dd t}}\exp\qty(\I S(\dd t))
+\end{equation}
+其中$S$是该路径的经典作用量．
+
+类似地，对于三维自由粒子，其无穷小段路径的概率振幅为
+\begin{equation}
+\bra{x_1}\E^{-\I H \dd t}\ket{x_0} = \qty(\frac{m}{2\pi\I \dd t})^{3/2}\exp\qty(\I S(\dd t))
+\end{equation}
+
+
+
+\subsubsection{一维自由粒子的路径积分}
+
+考虑\autoref{PIntQM_fig2} 中任意\textbf{给定路径}$\Gamma$，其起点与终点分别\textbf{固定}为$(x_0, t_0)$和$(x_n, t_n)$．
+
+设时间段均匀划分为$n$段，即各$t_{i+1}-t_i=t_n/n$．当$n\to\infty$时，各$t_{i+1}-t_i$趋于$0$，则由\autoref{PIntQM_eq5} 、\autoref{PIntQM_eq6} 和\autoref{PIntQM_eq4} ，粒子沿着这条路径的概率传播的振幅为
+\begin{equation}
+\ali{
+    \bra{x_n}\E^{-\I H t_n}\ket{x_0} &= \lim_{n\to\infty} \int\int\cdots\int \dd x_1\dd x_2\cdots \dd x_{n-1}\times \\
+    &\phantom{11}\qty (\bra{x_n}\E^{-\I H( t_n-t_{n-1} )}\ket{x_{n-1}}\cdots\bra{x_2}\E^{-\I H( t_2-t_1 )}\ket{x_1}\bra{x_1} \E^{-\I H t_1}\ket{x_0})\\
+    &= \lim_{n\to\infty} \qty(\frac{m}{2\pi\I \dd t})^{3n/2}\int\int\cdots\int \dd x_1\dd x_2\cdots \dd x_{n-1}\times \\
+    &\phantom{11}\exp\qty(\I\frac{nm}{2t_n}\sum_{i=0}^{n-1}(x_{i+1}-x_i)^2)
+}
+\end{equation}
+
+%未完．参考费曼的《量子力学与路径积分》继续．
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

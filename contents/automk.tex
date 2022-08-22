@@ -1,0 +1,31 @@
+% Automake 笔记
+
+\begin{issues}
+\issueDraft
+\end{issues}
+
+\pentry{Makefile 笔记\upref{Make}}
+
+\subsection{用户}
+经典的三部使用
+\begin{lstlisting}[language=bash]
+./configure [一些选项]
+make [-j4]
+make install
+\end{lstlisting}
+其中的选共享可以通过 \verb|.configure --help| 查看．
+
+若要 build 一个 debug 版本， 参考\href{https://stackoverflow.com/questions/4553735/gnu-autotools-debug-release-targets}{这里}的高赞． 例如 arb\upref{ArbLib} 中（注意 \verb|./config --help| 中只有 \verb|CFLAGS| 没有 \verb|CPPFLAGS|）， 用
+\begin{lstlisting}[language=bash]
+./configure --prefix=/home/addis/arb-debug-install \
+     CFLAGS=-DDEBUG CFLAGS="-g3 -O0"
+make [-j4]
+make install
+\end{lstlisting}
+即可． 现在在编译主程序后用 gdb 调试就可以进入到 arb 的内部函数中调试．
+
+\subsection{作者}
+\begin{itemize}
+\item 参考\href{https://www.gnu.org/software/automake/manual/html_node/Autotools-Introduction.html}{官方教程}．
+\item 一般来说建议学 Cmake\upref{CMakeN} 而不是 autotool． Makefile 的基础还是要学的．
+\end{itemize}

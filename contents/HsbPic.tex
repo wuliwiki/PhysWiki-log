@@ -1,47 +1,128 @@
-% 海森堡绘景
+% 薛定谔绘景和海森堡绘景
 
-\begin{issues}
-\issueDraft
-\end{issues}
 
-\pentry{薛定谔方程\upref{TDSE}}
 
-\footnote{参考 Wikipedia \href{https://en.wikipedia.org/wiki/Heisenberg_picture}{相关页面}．}薛定谔方程\upref{TDSE}通常使用的是动量表象\upref{moTDSE}和\textbf{薛定谔绘景}， 在海森堡绘景中， 波函数（态矢）不随时间改变， 而测量量的算符随时间改变． 海森堡绘景相当于在薛定谔绘景的基础上做了一个基底变换， 类似于位置和动量表象\upref{moTDSE}的关系．
+\pentry{时间演化算符（量子力学）\upref{TOprt}，转移矩阵\upref{TransM}}
+
+% \footnote{参考 Wikipedia \href{https://en.wikipedia.org/wiki/Heisenberg_picture}{相关页面}．}
+薛定谔方程\upref{TDSE}通常使用的是动量表象\upref{moTDSE}和\textbf{薛定谔绘景}， 在海森堡绘景中， 波函数（态矢）不随时间改变， 而测量量的算符随时间改变． 海森堡绘景相当于在薛定谔绘景的基础上做了一个基底变换， 类似于位置和动量表象\upref{moTDSE}的关系．
+
+
+
+作为一个物理理论，量子力学关心的是可观测量，包括本征值、概率、期望等，因此我们关心的不是量子态本身如何，而是量子态在可观测量的本征矢下展开的系数．随着时间流逝，这些系数会变化，而薛定谔绘景和海森堡绘景就是两种不同的解释系数变化的方法．
+
+薛定谔绘景认为，可观测量不变，但是态矢量会随着时间变化，导致展开系数变化；海森堡绘景则认为，态矢量不变，但可观测量会变化，造成其本征矢量变化，从而导致态矢量的展开系数变化．
+
+这和线性代数里情况一模一样．一个矩阵可以解释为线性变换，它把一个向量变为另一个向量，导致这个向量的坐标变化了；也可以解释为\textbf{转移矩阵}\upref{TransM}，向量本身没变，但是基变了，同样导致坐标变化．
+
+你可以用这样一副图像来抽象地理解两个绘景的关系：薛定谔绘景中，坐标系不变，但向量在顺时针旋转；海森堡绘景中，向量不变，但坐标系在以相同的角速度逆时针旋转．这副图像已经能说明为什么海森堡绘景可以看作是基向量反向演化．
+
+
 
 本文中，角标 $H$ 代表海森堡绘景， 角标 $S$ 代表薛定谔绘景． 例如波函数分别记为 $\psi_H(\bvec r, t)$ 和 $\psi_S(\bvec r)$， 后者不是时间的函数， 它的定义是
 \begin{equation}
 \psi_S(\bvec r) = \psi_H(\bvec r, 0)
 \end{equation}
 
-\addTODO{演化子是什么？链接}
+% \addTODO{演化子是什么？链接} %Jier: 就是时间演化算符\upref{TOprt}，该词条我已经更新了
 
-使用演化子（propagator） $U(t)$， 波函数之间的关系为
+% 使用演化子（propagator） $U(t)$， 波函数之间的关系为
+% \begin{equation}
+% \psi_H(\bvec r, t) = U(t) \psi_H(\bvec r, 0) = U(t) \psi_S(\bvec r)
+% \end{equation}
+% 薛定谔方程在海森堡绘景中可以记为
+% \begin{equation}
+% H(U\psi_H) = \I\hbar \pdv{t} (U\psi_H)
+% \end{equation}
+% 由于 $\psi_H$ 不含时， 两边抵消， 得演化子满足方程
+% \begin{equation}
+% H U(t) = \I\hbar \pdv{t} U(t)
+% \end{equation}
+
+% 定义海森堡绘景中的算符为
+% \begin{equation}
+% Q_H(t) = U\Her(t) Q_S(t) U(t)
+% \end{equation}
+% 对时间求导得
+% \begin{equation}
+% \dv{t}Q_H = \frac{\I}{\hbar} [H_H, Q_H(t)] + \qty(\pdv{Q_S}{t})_H
+% \end{equation}
+% 平均值公式仍然和薛定谔绘景相同
+% \begin{equation}
+% \mel{\psi_H}{Q_H}{\psi_H} = \mel{\psi_S}{Q_S}{\psi_S}
+% \end{equation}
+% 证明：
+% \begin{equation}
+% \mel{\psi_S}{Q_S}{\psi_S} = \mel{\psi_H}{U\Her(t)Q_SU(t)}{\psi_H} = \mel{\psi_H}{Q_H}{\psi_H}
+% \end{equation}
+% 证毕．
+
+\subsection{薛定谔绘景}
+
+薛定谔绘景，简而言之，是固定算符不变，研究态矢量的演化．这也是我们在\textbf{量子力学的基本原理（量子力学）}\upref{QMPrcp}中使用的描述．
+
+在薛定谔绘景中，算符是恒定的，从而其对应的本征矢量也是恒定的．实际的量子态$\ket{s}$则随着时间$t$演化为$\mathcal{U}(t)\ket{s}$．这个过程可以理解为，映射$\mathcal{U}(t)$作用在矢量$\ket{s}$上，导致$\ket{s}$变化，于是其关于各可观测量的本征态的基底展开系数变化——这些系数的模方就是测量后得到对应本征态的概率（概率密度），因此我们观测到的概率就会变化．
+
+薛定谔绘景下，初态为$\ket{s}$的量子态，其可观测量$X$的期望值随时间演化：
 \begin{equation}
-\psi_H(\bvec r, t) = U(t) \psi_H(\bvec r, 0) = U(t) \psi_S(\bvec r)
-\end{equation}
-薛定谔方程在海森堡绘景中可以记为
-\begin{equation}
-H(U\psi_H) = \I\hbar \pdv{t} (U\psi_H)
-\end{equation}
-由于 $\psi_H$ 不含时， 两边抵消， 得演化子满足方程
-\begin{equation}
-H U(t) = \I\hbar \pdv{t} U(t)
+\langle X \rangle(t) = \bra{s}\mathcal{U}^\dagger(t)X\mathcal{U}(t)\ket{s}
 \end{equation}
 
-定义海森堡绘景中的算符为
-\begin{equation}
-Q_H(t) = U\Her(t) Q_S(t) U(t)
+
+
+\subsection{海森堡绘景}
+
+海森堡绘景是另一种描述量子力学的框架，量子态本身不变，但可观测量的算符以及对应的本征态则随时间变化，由此造成量子态的基底展开系数变化．海森堡绘景下计算得到的可观测量的演化规律和薛定谔绘景相同．
+
+注意，时间演化算符$\mathcal{U}(t)=\exp(-\I Ht)$是一个\textbf{幺正算符}，即$\mathcal{U}^\dagger(t)=\mathcal{U}(t)^{-1}$．
+
+\subsubsection{离散情况}
+
+
+
+设$X^{(S)}$是薛定谔绘景下\textbf{不随时间改变}的可观测量．设能量算子$H^{(S)}$的本征值$E_a$的本征矢为$\ket{a}$，其中$a$是正整数；$H^{(H)}(t)$的对应本征值$E_a$的本征矢则记为$\ket{a; t}$．规定在$t=0$时，$\ket{a; 0}$．
+
+现在，固定$\ket{s}$不变，而让可观测量算符$X^{(H)}(0)$变为$X^{(H)}(t)$．我们通过转移矩阵$\Omega(t)=\omega^i_j(t)$实现这个变化：$X^{(H)}(t)=X^{(H)}(0)$，这也可以理解为通过改变基来改变测量算符．如果所用的基是测量算符的本征矢构成的，那改变后的基就是海森堡绘景中改变后的本征矢构成的．
+
+设有一初始量子态$\ket{s}=\sum_a c^a\ket{a}=\sum_a c^a\ket{a; 0}$\footnote{这里的$a$是上标，功能类似下标，不是次方．这么写是为了配合\textbf{爱因斯坦求和约定}\upref{EinSum}，但该预备知识并非必要．}．在薛定谔绘景中，一段时间$t$后，这个态变为$\sum_a c^a\mathcal{U}(t)\ket{a}=\sum_ac^a\E^{-\I at}\ket{a}$，即系数的变化是$c^a\to c^a\E^{-\I at}$．
+
+根据\textbf{转移矩阵}\upref{TransM}的\autoref{TransM_sub1}~\upref{TransM}，如果固定$\ket{s}$不变，而基根据转移矩阵$\Omega(t)$改变，那么$\ket{s}$的系数变化是$c^a \to \sum_{j}\omega^a_j(t)c^j$．
+
+因此，薛定谔绘景和海森堡绘景的统一性要求，在能量本征态为基时有
+\begin{equation}\label{HsbPic_eq1}
+\E^{-\I at}c^a = \sum_{j}\omega^a_j(t)c^j
 \end{equation}
-对时间求导得
+由于能量本征态随时间的演化依旧是能量本征态，因此$\Omega(t)$在能量本征态下的矩阵是对角矩阵，于是\autoref{HsbPic_eq1} 简化为
 \begin{equation}
-\dv{t}Q_H = \frac{\I}{\hbar} [H_H, Q_H(t)] + \qty(\pdv{Q_S}{t})_H
+\E^{-\I at} = \omega^a_a(t)
 \end{equation}
-平均值公式仍然和薛定谔绘景相同
-\begin{equation}
-\mel{\psi_H}{Q_H}{\psi_H} = \mel{\psi_S}{Q_S}{\psi_S}
+这意味着$\Omega(t)$就是$\E^{-\I H t}=\mathcal{U}(t)$．
+
+于是，海森堡绘景下，测量算符随时间的演化为
+\begin{equation}\label{HsbPic_eq2}
+X\to \mathcal{U}(t)^\dagger X \mathcal{U}(t)
 \end{equation}
-证明：
-\begin{equation}
-\mel{\psi_S}{Q_S}{\psi_S} = \mel{\psi_H}{U\Her(t)Q_SU(t)}{\psi_H} = \mel{\psi_H}{Q_H}{\psi_H}
+相当于测量算符的本征矢量$\ket{a}$随时间的演化为
+\begin{equation}\label{HsbPic_eq3}
+\ket{a; 0}\to \ket{a; t}=\mathcal{U}(t)^\dagger \ket{a} = \E^{\I Ht}\ket{a}
 \end{equation}
-证毕．
+
+
+\subsubsection{连续情况}
+
+连续情况的讨论和离散情况完全相同，只是要求指标$a$的取值范围为指定范围的实数，并将$\sum_a$都替换为$\int \dd a$．\autoref{HsbPic_eq2} 和\autoref{HsbPic_eq3} 依然成立．
+
+
+\addTODO{时间相关算符的海森堡绘景？}
+
+
+
+
+
+
+
+
+
+
+
+

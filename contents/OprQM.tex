@@ -1,0 +1,163 @@
+% 量子力学中的基本算符
+% 动量算符|角动量算符|哈密顿算符|哈密顿量|能量算符|生成元
+\addTODO{加入目录．}
+
+\pentry{经典力学，量子力学的基本原理（量子力学）\upref{QMPrcp}}
+
+本文中，$\hbar=c=1$．
+
+在\textbf{量子力学的基本原理（量子力学）}的\autoref{QMPrcp_ex1}~\upref{QMPrcp} 和\autoref{QMPrcp_ex2} 中，我们不加证明地给出了动量、能量（哈密顿）、角动量算符在给定表象下的形式，相当于进行了定义．本文将讨论如何从经典力学中导出这几个算符的定义．
+
+\subsection{无穷小算符}
+
+考虑无穷小算符总是有益的，因为微分线性近似，而线性的东西很简单．
+
+如果要求一个算符在时间趋于$0$的时候趋于恒等算符，即连续性，那么对于\textbf{无穷小}自变量$\varepsilon$后，这个算符总可以写为
+\begin{equation}\label{OprQM_eq1}
+U(\varepsilon) = 1-\I G\varepsilon
+\end{equation}
+我们称$G$是$U$的生成元．
+
+当$G$是一个厄米算符时，有
+\begin{equation}
+U^{\dagger}(\varepsilon)U(\varepsilon) = (1-\I G\varepsilon)(1+\I G\varepsilon) = 1+o(\varepsilon)
+\end{equation}
+其中$o(\varepsilon)$表示比$\varepsilon$更高阶的无穷小．
+
+因此，$G$是厄米算符$\implies$ $U(\varepsilon)$是\textbf{幺正}算符．
+
+量子态归一化要求可观测量是幺正的，因此可观测量的生成元应该是厄米算符．
+
+
+
+\subsection{位置算符}
+
+位置算符的本征矢都是位置精确给定的态，本征值即对应的位置，因此位置算符是$x_0$或$\bvec{x}_0$，即空间坐标．
+
+\textbf{位置表象}下，位置算符的表示为
+\begin{equation}
+\leftgroup{
+    \bra{x_0}x_0 &= x_0\qquad\text{一维情况}\\
+    \bra{\bvec{x}_0}\bvec{x}_0&=\bvec{x}_0\qquad\text{三维情况}
+    }
+\end{equation}
+
+% 处于$x_0$或$\pmat{x_0, y_0, z_0}$的位置本征矢，在\textbf{位置表象下}的波函数为$\delta(x-x_0)$或$\delta(x-x_0)\delta(y-y_0)\delta(z-z_0)$．
+
+\addTODO{动量表象下的位置算符由傅里叶变换给出．}
+
+
+
+
+
+\subsection{动量算符}
+
+\pentry{平移算符\upref{tranOp}}
+
+由经典力学，动量是平移生成元，\autoref{OprQM_eq1} 中的$G$应是动量算符．
+
+显然，\textbf{动量表象}下的动量算符就是$p$或$\bvec{p}$，这和位置算符的情况一致．
+
+又由\autoref{tranOp_eq1}~\upref{tranOp}，可知\textbf{位置表象}下一维无穷小平移算符为
+\begin{equation}
+\bra{x}P(\dd x) = \exp(-\dd x \cdot \partial_x) = 1-\dd x\partial_x
+\end{equation}
+
+代回\autoref{OprQM_eq1} ，注意$P(\dd x)$相当于$U(\varepsilon)$，即可得到一维动量算符：
+\begin{equation}
+p  = -\I\partial_x
+\end{equation}
+
+三维情况类似可得
+\begin{equation}
+\uvec{p} = -\I\nabla
+\end{equation}
+
+
+
+
+\subsection{哈密顿算符}
+
+哈密顿算符$H$即能量算符，较为特殊，取决于我们希望将量子力学应用在什么背景下．
+
+对于经典量子力学，我们考虑的背景是经典力学，因此用经典的能量关系
+\begin{equation}
+E=\frac{p^2}{2m}+V
+\end{equation}
+来定义哈密顿算子，此时有
+\begin{equation}
+\bra{x}H = \leftgroup{
+    &\frac{-\partial_x^2}{2m}+V\qquad\text{一维情况}\\
+    &\frac{-\nabla^2}{2m}+V\qquad\text{三维情况}
+}
+\end{equation}
+
+如果使用狭义相对论的能量关系
+\begin{equation}
+E^2 = p^2+m^2
+\end{equation}
+那么可以得到哈密顿算子的平方
+\begin{equation}\label{OprQM_eq2}
+\bra{x}H^2 = \leftgroup{
+    -\partial_x^2&+m^2\qquad\text{一维情况}\\
+    -\nabla^2&+m^2\qquad\text{三维情况}
+}
+\end{equation}
+由此可以把薛定谔方程调整为\textbf{Klein-Gordon 方程}\upref{KGeq}．
+
+Klein-Gordon方程是平方形式，并不协变，且有负能量和负概率密度的问题\footnote{一说负概率密度可以解释为粒子的荷，如电荷．}，因此狄拉克（Dirac）想办法把\autoref{OprQM_eq2} 取了平方根，得到\textbf{狄拉克方程}\upref{qed4}．
+
+
+
+\subsection{角动量算符}\label{OprQM_sub1}
+
+角动量算符和经典力学有所不同．经典力学中的角动量对应的是量子力学中的\textbf{空间角动量}算符，是空间转动的生成元．但量子力学中还有\textbf{自旋角动量}的概念，是自旋态空间中的转动的生成元．自旋为$1/2$的系统使用一个二维态空间，自旋为$1$的系统使用一个三维态空间，诸如此类．
+
+经典力学中的空间，可以视为量子力学中位置态的态空间，因此我们可以把自旋态空间和位置态空间合并（取直积）为一个“总空间”，以全面描述量子态的角动量．
+
+给定一个空间转动$R$，规定它与一个总空间中的转动算符相联系\footnote{这里$\mathfrak{D}$是沿用了\cite{Sakurai}的习惯，字母$D$代表德语的“转动”（Drehung）．}：
+\begin{equation}
+R\to \mathfrak{D}(R)
+\end{equation}
+并规定这是一个\textbf{群同态}\upref{Group2}．
+
+
+\subsubsection{空间角动量算符}
+
+空间角动量算符完全依照经典力学的方式来定义，可参见\textbf{轨道角动量（量子力学）}\upref{QOrbAM}．
+
+
+\subsubsection{无穷小转动与总角动量算符}
+
+
+在总空间中，一个无穷小转动为
+\begin{equation}
+R(\dd \phi, k) = 1-\I J_k\dd \phi
+\end{equation}
+其中$k$是所绕的轴，$\dd \phi$是无穷小的转动角度．
+更一般地说，绕着单位矢量$\uvec{n}$、角度为无穷小量$\dd \phi$的转动被表示为
+\begin{equation}
+\mathfrak{D}(\uvec{n}, \dd \phi) = 1-\I(\bvec{J}\cdot\uvec{n})\dd \phi
+\end{equation}
+
+按照“角动量是转动生成元”的思想，$J_k=\bvec{j}\cdot \uvec{k}$应该是关于$k$轴的角动量算符．
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

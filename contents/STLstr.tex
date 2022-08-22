@@ -1,0 +1,114 @@
+% C++ 标准库常用容器
+
+\begin{issues}
+\issueDraft
+\end{issues}
+
+\subsection{pair}
+\begin{itemize}
+\item 例如 \verb|pair<string, int> p("abc", 123);|， \verb|p.first|， \verb|p.second|
+\item 当且仅当 \verb|p.first, p.second| 都相等， \verb|==| 才会相等．
+\item 比较大小时， 仅需要 \verb|<| 对两种类型都有定义． 若 \verb|p.first < q.first| 则 \verb|p < q|． 若 \verb|p.first == q.first|（根据 \verb|<| 来确定， 不需要使用 \verb|==|）， 且 \verb|p.second < q.second|， 也有 \verb|p < q|．
+\end{itemize}
+
+\subsection{vector}
+\begin{itemize}
+\item constructor： \verb|v(N)| （default val）， \verb|v(N,val)|， \verb|v({1,2,3})|
+\item ini list 赋值： \verb|v = {1,2,3}|， （\verb|vector<vector<int>> vv;|）\verb|vv = {{1,2,3},{2,3},{4,5,6}}|．
+\item 成员函数 \verb|insert(iter, val)| 在指定位置插入一个元素． \verb|insert(iter, n, val)| 插入多个元素． \verb|insert(iter, iter2_begin, iter2_end)| 第二个 vector 的第一个元素会插入到第一个 vector 的 \verb|iter| 位置． \verb|insert(iter, initializer_list)| 插入 \verb|initializer_list|
+\item 成员函数 \verb|erase(iter)| 删掉一个元素， \verb|erase(iter_beg, iter_end)| 删掉一段元素．
+\item \verb|.resize()| 不会改变原来元素的值．
+\end{itemize}
+
+\subsection{unordered\_map}
+\begin{itemize}
+\item \href{https://cplusplus.com/reference/unordered_map/}{unordered\_map}
+\item \verb|unordered_map<key类型, val类型>|
+\item \verb|umap.count(key)| 如果存在返回 1， 否则返回 0， 不可以用多个 key．
+\item \verb|key| 如果不存在， \verb|umap[key]| 返回默认值 （例如 \verb|int| 返回 \verb|0|）
+\item \verb|key| 即使不存在， 也可以视为 lvalue， 例如直接用 \verb|umap[key]++|， \verb|&umap[key]| 之类的． 用了之后就存在了．
+\item 对每个 element 循环用 \verb|for (auto &e : umap.)|， 每个 \verb|e| 是一个 \verb|pair<>|， 分别是 key, value．
+\item 如果要用 \verb|pair| 作为 key， 定义以下类函数 \verb|hash_pair|， 并声明 \verb|unordered_map<key类型, val类型, hash_combine>|
+\begin{lstlisting}[language=cpp]
+template<class T> // from boost library
+inline void hash_combine(size_t &seed, const T &v) {
+    seed ^= hash<T>{}(v) + 0x9e3779b9 + (seed << 6) + (seed >> 2);
+}
+
+struct hash_pair { // similar to std::hash, for pair<>
+    template<class T, class T1>
+    size_t operator()(const pair<T,T1> &a) const {
+        size_t h = 0;
+        hash_combine(h, a.first);
+        hash_combine(h, a.second);
+        return h;
+    }
+};
+\end{lstlisting}
+\item \verb|unordered_map| 会先用 hash 函数查找 key， 如果有 hash collilsion 也没关系， 会进一步对比区分．
+\end{itemize}
+
+\subsection{map}
+\begin{itemize}
+\item \href{https://cplusplus.com/reference/map/map/}{map}
+\item \verb|map<key类型, val类型, 比较函数（可选）, allocator（可选）>|
+\item 不需要 hash 函数， 会按照 key 自动排序， key 需要可以比较大小． 不允许有重复的 key．
+\item 具有双向 iterator
+\end{itemize}
+
+\subsection{unordered\_set}
+\begin{itemize}
+\item \href{https://cplusplus.com/reference/unordered_set/unordered_set/}{unordered\_set}： \verb|unordered_set<key类型, hash类型（默认 std::hash）, ...>|
+\item 和 \verb|unordered_map| 类似， 不过只有 key 没有 value
+\item 成员函数： \verb|operator=, empty, max_size, begin, end, find, count, emplace, insert, erase|
+\item 重复 \verb|insert| 不会报错
+\item \verb|erase| 不存在的元素不会报错． \verb|insert| 重复的元素也不会报错． \verb|count| 只可能返回 \verb|0, 1|
+\end{itemize}
+
+\subsection{set}
+\begin{itemize}
+\item 和 \verb|unordered_set| 类似， 只是会自动根据元素的大小排序， 越小的 iterator 元素值越小．
+\end{itemize}
+
+\subsection{stack}
+\begin{itemize}
+\item \href{https://cplusplus.com/reference/stack/stack/}{stack}： \verb|stack <class T, class Container = deque<T>>|
+\item 同样是 container adaptor， 成员函数： \verb|empty, size, top, push, emplace, pop, swap|
+\item \verb|Container| 至少支持的成员函数： \verb|empty, size, back, push_back, pop_back|
+\item 不支持随机访问．
+\end{itemize}
+
+\subsection{queue}
+\begin{itemize}
+\item \href{https://cplusplus.com/reference/queue/queue/}{queue}： \verb|queue<class T, class Container = deque<T>>| 像排队一样， 后面进， 前面出． 不支持随机访问． 如果要 print， 可以复制一个， 然后边 print 边 pop． 事实上， \verb|deque| 是可以 iterate 以及随机访问的．
+\item 成员函数： \verb|empty, size, front, back, push, emplace, pop, swap|， swap 交换两个 queue 的内容： \verb|p.swap(q);|， 相当于 \verb|std::swap(p, q)|． queue 本身并不实现这些功能， 只是通过调用 \verb|Container| 的成员函数来实现（container adaptor）．
+\item 其中 \verb|Container| 类型至少应该支持 \verb|empty, size, front, back, push_back, pop_front|， 上一条的功能都是通过调用这些实现的．
+\end{itemize}
+
+\subsection{deque}
+\begin{itemize}
+\item \href{https://cplusplus.com/reference/deque/deque/}{double ended queue}： \verb|deque<class T, class Alloc = allocator<T> >|
+\item 直接用 \verb|deque| 比 \verb|stack| 和 \verb|queue| 功能都要更多．
+\item 成员函数（基本是 \verb|vector| 的拓展版）： \verb|begin, end, operator[], size, max_size, resize, empty, front, back, push_front, pop_back, pop_front, pop_back, insert, erase, swap, clear, emplace, emplace_front, emplace_back|
+\end{itemize}
+
+\subsection{priority\_queue}
+\begin{itemize}
+\item \href{https://cplusplus.com/reference/queue/priority_queue/}{priority\_queue} 总是先处理（\verb|top|， \verb|pop|）最大的值， 但 iterate 时并不是完全排序的． 所以比（ordered） \verb|set| 可能更快．
+\item \verb|priority_queue<数值类型, 容器（默认 vector）, Compare（默认 less）>|
+\item 是一个 container adaptor， 底层默认用 \verb|vector| 储存数据．
+\item 成员函数 \verb|empty|， \verb|size|， \verb|top|， \verb|push|， \verb|emplace|， \verb|pop|， \verb|swap|
+\end{itemize}
+
+
+\subsection{forward\_list}
+\begin{itemize}
+\item \href{https://cplusplus.com/reference/forward_list/forward_list/}{单链表}
+\item 成员函数： \verb|sort()|（升序排序）, \verb|merge(list2)| （合并两个升序的 list， 结果仍然是升序）， \verb|insert_after(iter, val)|，  \verb|insert_after(iter, iter2_beg, iter2_end)|， \verb|erase_after(iter)|， \verb|erase_after(iter_beg, iter_end)|．
+\end{itemize}
+
+\subsection{list}
+\begin{itemize}
+\item \href{https://cplusplus.com/reference/list/list/}{双链表}
+\item 支持几乎和单链表一样的操作以及更多．
+\end{itemize}
