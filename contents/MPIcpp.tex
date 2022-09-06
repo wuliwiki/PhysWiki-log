@@ -6,17 +6,32 @@
 
 本文参考\href{https://www.codingame.com/playgrounds/349/introduction-to-mpi/introduction-to-distributed-computing}{一个教程}， \href{https://people.sc.fsu.edu/~jburkardt/cpp_src/hello_mpi/hello_mpi.html}{入门例程}， \href{https://mpitutorial.com/tutorials/running-an-mpi-cluster-within-a-lan/}{如何配置集群}．
 
-\subsection{安装}
+\subsection{安装 MPICH}
 \begin{itemize}
+\item mpich 虚拟机亲测成功， 然而在组里的服务器上不成功（ubuntu 系统不同， apt 中的 mpich 版本也不同， 不想自己编译了）
+\item 安装 \verb|sudo apt install libmpich-dev|， 自动选择的版本是 \verb|3.3a2|． 安装完如果找不到 \verb|mpiexec|， 就退出 shell 再重新打开．
+\item 要再每台机器把 s0 到 s3 的 ip 放到 \verb|/etc/localhost| 里面！ 确保可以 ping， 然后用 \verb|mpiexec -np 4 -host s0,s1,s2,s3 ./quad_mpi|， 不能用 \verb|localhost| 注意 \verb|./| 不能少．
+\end{itemize}
+
+\subsection{安装 OpenMPI}
+\begin{itemize}
+\item 检查 OpenMPI 版本用 \verb|mpiexec --version|， 目前是 4.1.x， \verb|mpicxx --version| 只会给出 g++ 的版本号．
+\item \verb|sudo apt install openmpi-bin libopenmpi-dev| 然而 apt 的版本是非常老的， \verb|2.x.x|， 目前的版本是 \verb|4.1.4|． 笔者用 \verb|2.x.x| 在多台机器上从来没成功过． 其实 \verb|4.1.4| 也没有成功\footnote{WARNING: Open MPI accepted a TCP connection from what appears to be a another Open MPI process but cannot find a corresponding process entry for that peer.}\footnote{WARNING: Open MPI failed to TCP connect to a peer MPI process.  This should not happen. ... connect() to 10.0.2.4:1024 failed}．
+\item 要安装比 apt 更新的版本， 复制 \verb|https://www.open-mpi.org/software/ompi/v4.1/| 里面的压缩包链接， 用 \verb|wget| 下载， 然后解压如 \verb|tar -xzvf openmpi-4.1.4.tar.gz| （要几分钟）． 进入解压文件夹， \verb|./configure|， \verb|make all -j20|， \verb|sudo make install| 即可． 如果 \verb|mpicxx --version| 说找不到 so 文件， 就用 \verb|sudo ldconfig| 即可．
+\item \verb|sudo make uninstall| 卸载
+\end{itemize}
+
+\subsection{安装 Intel MPI}
+\begin{itemize}
+\item 【更新】现在 Intel 已经包括在 Intel OneAPI\upref{OneAPI} 中了． 编译器， MKL， MPI 等（Parallel Studio 中的一切）， 商用和非商用都已经免费． 组里的服务器亲测成功， \verb|mpiexec -np 2 --host server1,server2 ./可执行文件|
 \item intel MPI 和 MKL 一样是免费的， google 一下， 下载安装包即可， 运行 \verb`sudo ./install.sh` 安装， 过程和 MKL 差不多
 \item 如果已经安装了 MKL， 可能会提示目录已经存在（不确定 MKL 是否已经包含 MPI）
 \item 安装好以后同样需要在 \verb`~/.bashrc` 中添加路径， 即在文件最后加入命令 \verb`source /opt/intel/compilers_and_libraries_2020.1.217/linux/mpi/intel64/bin/mpivars.sh`
 \item 重启一下 shell， 运行 \verb`mpicxx --help`， 如果进入帮助页面就说明成功了
 \item \verb`mpicxx` 或者 \verb`mpigxx` 都是 g++ 的一个 wraper， 和 g++ 一样使用即可
-\item 检查 OpenMPI 版本用 \verb|mpiexec --version|， 目前是 4.1.x， \verb|mpicxx --version| 只会给出 g++ 的版本号．
 \item 所有的机器都需要使用同一个版本的 MPI．
-\item 要安装比 apt 更新的版本， 复制 \verb|https://www.open-mpi.org/software/ompi/v4.1/| 里面的压缩包链接， 用 \verb|wget| 下载， 然后解压如 \verb|tar -xzvf openmpi-4.1.4.tar.gz| （要几分钟）． 进入解压文件夹， \verb|./configure|， \verb|make all -j20|， \verb|sudo make install| 即可． 如果 \verb|mpicxx --version| 说找不到 so 文件， 就用 \verb|sudo ldconfig| 即可．
 \end{itemize}
+
 
 \subsection{基本语法}
 \begin{itemize}
@@ -26,6 +41,7 @@
 \item \verb|MPI_Comm_rank(MPI_Comm comm, &rank);|获取当前进程的 id， 称为 rank．
 \item \verb|int MPI_Send(const void *buf, int count, MPI_Datatype datatype, int dest, int tag, MPI_Comm comm)| 其中 \verb|dest| 是进程 \verb|id|， \verb|tag| 是一个编号用于区分不同的消息， \verb|comm| 一般是 \verb|MPI_COMM_WORLD| （所有进程）．
 \item 常用的 \verb|MPI_Datatype| 有 \verb|MPI_CHAR|， \verb|MPI_UNSIGNED_CHAR|， \verb|MPI_INT|， \verb|MPI_UNSIGNED|， \verb|MPI_LONG|， \verb|MPI_LONG_LONG|， \verb|MPI_FLOAT|， \verb|MPI_DOUBLE|， \verb|MPI_LONG_DOUBLE|， \verb|MPI_COMPLEX|， \verb|MPI_REAL16|， \verb|MPI_COMPLEX32|．
+\item \verb|count| 是 \verb|buf| 中有几个数据， 即数组的长度．
 \item \verb|int MPI_Recv(void *buf, int count, MPI_Datatype datatype, int source, int tag, MPI_Comm comm, MPI_Status *status)|， 接收信息． \verb|status| 可以用于获取更多信息， 其他参数同理．
 \item \verb|int MPI_Bcast(void *buffer, int count, MPI_Datatype datatype, int root,  MPI_Comm comm)| 只从 id 为 root 的进程调用， 对所有其他进程中的 buffer 赋值． 这相当于分别对每个进程用 \verb|MPI_Send()| 和 \verb|MPI_Recv()|．
 \item \verb|double MPI_Wtime()| 返回当前进程的时间（从任意起点开始， 单位秒）．

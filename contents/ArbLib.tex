@@ -89,11 +89,11 @@ g++ -o test.x test.cpp -larb -lflint
 要配合 gdb 学习可以自己编译一个 debug 版本的 libarb 库， 见 Automake 笔记\upref{automk}．
 
 \pentry{FLINT 库笔记\upref{Flint}}
-\subsubsection{arf_t 的数据结构}
+\subsubsection{arf\_t 的数据结构}
 \begin{itemize}
 \item \verb|arf_t| 是任意精度浮点数， \href{https://arblib.org/arf.html}{文档}．
 \item \verb|arf_t| 的数据结构， 看懂下面的代码就了解了． 基本就是小数部分 \verb|.d|（例如 0.100101110， 小数点后面用一个 flint 大整数表示）， 指数部分 \verb|.exp|（一个 flint 大整数）， 和 \verb|.size| 部分（最后一 bit 是符号位， 1 表示复数， \verb|.size >> 1| 是用到的 limb 的个数， 这可能和 alloc 的 limb 的个数是不一样的）．
-\item 当 \verb|.size == 0| 时， arf_t 是某个 \textbf{special} 值， 即： \verb|.exp == ARF_EXP_ZERO| 时， arf 为零； \verb|.exp == ARF_EXP_POS_INF| 时， arf 为正无穷； \verb|.exp == ARF_EXP_NEG_INF| 时， arf 为负无穷； \verb|.exp == ARF_EXP_NAN| 是， arf 为 nan； 如果不是 special， 就叫做 \textbf{normal}．
+\item 当 \verb|.size == 0| 时， \verb|arf_t| 是某个 \textbf{special} 值， 即： \verb|.exp == ARF_EXP_ZERO| 时， arf 为零； \verb|.exp == ARF_EXP_POS_INF| 时， arf 为正无穷； \verb|.exp == ARF_EXP_NEG_INF| 时， arf 为负无穷； \verb|.exp == ARF_EXP_NAN| 是， arf 为 nan； 如果不是 special， 就叫做 \textbf{normal}．
 \item 相关函数： \verb|arf_is_special|， \verb|arf_is_zero|， \verb|arf_is_pos_inf|， \verb|arf_is_neg_inf|， \verb|arf_is_nan|， \verb|arf_is_normal|， \verb|arf_is_finite|， \verb|arf_is_inf|， \verb|arf_is_one|
 \end{itemize}
 
@@ -191,7 +191,7 @@ inline void arf_get_q(Qdoub_O v, const arf_t x, arf_rnd_t rnd)
 }
 \end{lstlisting}
 
-\subsubsection{mag_t 的数据结构}
+\subsubsection{mag\_t 的数据结构}
 \begin{lstlisting}[language=cpp]
 typedef struct
 {
@@ -211,7 +211,7 @@ mag_is_inf(const mag_t x)
 }
 \end{lstlisting}
 
-\subsubsection{arb_t 的数据结构}
+\subsubsection{arb\_t 的数据结构}
 \href{https://arblib.org/arb.html}{文档}．
 
 \begin{lstlisting}[language=cpp]
@@ -227,7 +227,7 @@ typedef arb_struct * arb_ptr;
 typedef const arb_struct * arb_srcptr;
 \end{lstlisting}
 
-\subsubsection{acb_t 数据结构}
+\subsubsection{acb\_t 数据结构}
 就是两个 \verb|arb| 类型
 \begin{lstlisting}[language=cpp]
 typedef struct

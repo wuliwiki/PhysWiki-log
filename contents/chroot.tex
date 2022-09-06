@@ -1,0 +1,73 @@
+% chroot 笔记
+
+\begin{issues}
+\issueDraft
+\end{issues}
+
+参考\href{https://www.howtogeek.com/441534/how-to-use-the-chroot-command-on-linux/}{这篇文章}．
+以及\href{https://devops.stackexchange.com/questions/2826/difference-between-chroot-and-docker}{docker 和 chroot 的区别}（见 Docker 笔记\upref{Docker}）．
+
+\begin{itemize}
+\item \verb|sudo chroot 要作为根目录的目录 shell所在的路径| 运行以后， chroot 会把第一个 arg 变为根目录， 并在其中开启第二个 arg 的 shell
+\item 注意在 WSL1 中使用会出现 bug， 例如退格键变成空格， vim 排版混乱等．
+\end{itemize}
+
+一个便捷使用 chroot 的脚本（修改自\href{https://gist.github.com/xmonader/5d1fc6134f1f65acd0d10f71453adb27}{这里}）
+
+\begin{lstlisting}[language=bash]
+# 根目录
+chr=test_root
+# 要拷贝的命令
+bins="bash touch ls rm mkdir rmdir pwd cp mv\
+          cat vim tree find ln which sh ldd chmod"
+
+# 拷贝可执行文件以及依赖库
+copy_chroot () {
+	if [ $# != 2 ] ; then
+		echo "usage $0 PATH_TO_BINARY TARGET_FOLDER"
+		exit 1
+	fi
+
+	PATH_TO_BINARY=`which $1`
+	TARGET_FOLDER="$2"
+
+	# if we cannot find the the binary we have to abort
+	if [ ! -f "$PATH_TO_BINARY" ] ; then
+		echo "The file '$PATH_TO_BINARY' was not found. Aborting!"
+		exit 1
+	fi
+
+	# copy the binary to the target folder
+	# create directories if required
+	echo "---> copy binary itself"
+	cp --parents -v "$PATH_TO_BINARY" "$TARGET_FOLDER"
+
+	# copy the required shared libs to the target folder
+	# create directories if required
+	echo "---> copy libraries"
+	for lib in `ldd "$PATH_TO_BINARY" | cut -d'>' -f2 \
+            | awk '{print $1}'` ; do
+	if [ -f "$lib" ] ; then
+			cp -v --parents "$lib" "$TARGET_FOLDER"
+	fi  
+	done
+
+	# I'm on a 64bit system at home. the following
+    # code will be not required on a 32bit system.
+	# however, I've not tested that yet
+	# create lib64 - if required and link the content from lib to it
+	if [ ! -d "$TARGET_FOLDER/lib64" ] ; then
+		mkdir -v "$TARGET_FOLDER/lib64"
+	fi
+}
+
+mkdir "$chr"
+
+for bin in $bins; do
+	echo; echo "====== $bin ======";
+	copy_chroot $bin "$chr"
+done
+
+# 进入新环境
+chroot $chr `which bash`
+\end{lstlisting}

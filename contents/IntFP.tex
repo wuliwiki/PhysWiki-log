@@ -1,0 +1,114 @@
+% 场与粒子的相互作用
+% 场论|相互作用|interaction|电磁场
+
+\pentry{自由粒子拉格朗日函数（狭义相对论）\upref{FPLSR}}
+
+本文中$c=1$，闵可夫斯基空间度规为$g_{\mu\nu}\opn{diag}(1, -1, -1, -1)$．
+
+本文的目的是简单介绍描述场与粒子相互作用的拉格朗日方法之\textbf{思路}，启发自Suskkind的\textsl{Special Relativity and Classical Field Theory}\cite{SusskindClassicalFields}．特别要强调，我们并不是把粒子和场分开讨论，得到两种作用量或者拉格朗日函数；我们研究的是粒子和场构成的整体，只有对这个整体的\textbf{一个}作用量．
+
+\subsection{场对粒子的作用}
+
+粒子的运动轨迹由拉格朗日函数决定，因此要体现场对粒子的作用，就需要在粒子的拉格朗日函数里有场的出现．
+
+自由粒子的拉格朗日函数\upref{FPLSR}为$L(t, x^\mu, \dot{x}^\mu ) = -m\sqrt{1-\dot{x}^\mu \dot{x}^\nu g_{\mu\nu}}$．如何添加一个“相互作用”的项呢？注意到和粒子有关的部分是$\sqrt{1-\dot{x}^\mu \dot{x}^\nu g_{\mu\nu}}$，我们带着这部分，简单地把标量场$\phi$加进去试试：
+\begin{equation}\label{IntFP_eq1}
+\mathcal{L}(t, x^\mu, \dot{x}^\mu ) = -(m+g\phi)\sqrt{1-\dot{x}^\mu \dot{x}^\nu g_{\mu\nu}}
+\end{equation}
+其中$g$是一个常数，常称为\textbf{耦合常数（coupling constant）}，用来表征场对粒子的作用强度．
+
+把\autoref{IntFP_eq1} 代入粒子的欧拉-拉格朗日方程，得到粒子的运动方程
+\begin{equation}\label{IntFP_eq2}
+\frac{\dd }{\dd t} \qty[-\qty(m+g\phi)\frac{-\dot{x}^\rho}{\sqrt{1-\dot{x}^\mu \dot{x}^\nu g_{\mu\nu}}}] = -g\frac{\partial \phi}{\partial x^\rho}\sqrt{1-\dot{x}^\mu \dot{x}^\nu g_{\mu\nu}}
+\end{equation}
+
+
+\subsubsection{低速、弱场近似}
+
+如果取\textbf{非相对论}和\textbf{弱场}极限，即$\dot{x}^\rho\ll c$且$g\phi$和$\dot{x}^\mu \dot{x}^\nu g_{\mu\nu}$相当，那么\autoref{IntFP_eq1} 化为
+\begin{equation}\label{IntFP_eq3}
+\mathcal{L}(t, x^\mu, \dot{x}^\mu ) = -m-g\phi+\frac{1}{2}mv^2
+\end{equation}
+其中$v^2=\dot{x}^\mu \dot{x}^\nu g_{\mu\nu}$．
+
+于是\autoref{IntFP_eq2} 化为、或者说\autoref{IntFP_eq3} 的欧拉-拉格朗日方程为
+\begin{equation}\label{IntFP_eq4}
+\frac{\dd}{\dd t} m\dot{x}^\rho = -g\frac{\dd \phi}{\dd x^k}
+\end{equation}
+这正是粒子在标量势下的运动方程．
+
+如果$\phi$是引力势场，$g=m$是物体的质量，那\autoref{IntFP_eq4} 描述的就是低速、弱场近似下（牛顿理论）粒子在引力场中的运动，故可以说物体的质量是引力场的耦合常数．
+
+当然，也可以把$\phi$解释为电势，$g$解释为电荷，于是\autoref{IntFP_eq4} 描述的是低速、弱场近似下带电粒子在电场中的运动．
+
+
+
+
+
+
+
+
+\subsection{粒子对场的作用}
+\pentry{狄拉克 delta 导函数\upref{delta2}}
+
+由于我们是把粒子和场作为一个整体，不可割裂，因此粒子拉格朗日函数中的相互作用项也应该是场的相互作用项．
+
+以上一小节讨论的\autoref{IntFP_eq1} 为例，我们希望$-g\phi\sqrt{1-\dot{x}^\mu \dot{x}^\nu g_{\mu\nu}}$也是影响场演化的相互作用项．问题是，粒子的作用量是对时间的积分：
+\begin{equation}
+\mathcal{S}_{\text{粒子相互作用项}} = \int -g\phi\sqrt{1-\dot{x}^\mu \dot{x}^\nu g_{\mu\nu}}\dd t
+\end{equation}
+因为粒子有给定轨迹．但场的作用量是对一片时空区域积分，怎么办呢？
+
+
+\subsubsection{低速、弱场及静态近似}
+
+首先要再次把问题简化成低速、弱场的情况，这样粒子的拉格朗日函数相互作用项就是
+\begin{equation}
+\mathcal{L}_{\text{粒子相互作用项}} = -g\phi
+\end{equation}
+
+只需要添加狄拉克函数，就可以把粒子的作用量从对时间的积分改写为对时空区域的积分：
+\begin{equation}
+\ali{
+\mathcal{S}_{\text{粒子相互作用项}} &= \int -g\phi \dd t \\
+&= \int -g\delta^3(x^1(t), x^2(t), x^3(t))\phi \dd x^4
+}
+\end{equation}
+其中$\delta^3$是三维狄拉克函数，在任意参考系中，取任意时间断面，它的中心点就在粒子的轨迹上．
+
+场的拉格朗日函数自由项取\autoref{CFa1_ex1}~\upref{CFa1}中的$\frac{1}{2}\partial_\mu\phi\partial_\nu\phi g^{\mu\nu}$（加了个系数$1/2$，下面会看到用处何在）．加上相互作用项，凑出场的拉格朗日函数：
+\begin{equation}
+\mathcal{L}_{\text{场}} = \frac{1}{2}\partial_\mu\phi\partial_\nu\phi g^{\mu\nu} - g\delta^3(x^1(t), x^2(t), x^3(t))\phi
+\end{equation}
+
+现在代入场的欧拉-拉格朗日方程\autoref{CFa1_eq5}~\upref{CFa1}看看：
+\begin{equation}
+(\partial_\mu\partial_\nu)\phi g^{\mu\nu} = -g\delta^3(x^1(t), x^2(t), x^3(t))
+\end{equation}
+或者写成更明显的形式：
+\begin{equation}\label{IntFP_eq5}
+(\partial_0^2-\partial_1^2-\partial_2^2-\partial_3^2)\phi = -g\delta^3(x^1(t), x^2(t), x^3(t))
+\end{equation}
+
+考虑一个极为简单的特殊情况：粒子和场都保持静止，不随时间变化，此时有$\partial_0^2\phi = 0$．假设粒子总待在点$(x, y, z)$，即$\delta^3(x^1(t), x^2(t), x^3(t))=\delta^3(x, y, z)$．
+
+于是\autoref{IntFP_eq5} 变成
+\begin{equation}
+(\partial_1^2+\partial_2^2+\partial_3^2)\phi = g\delta^3(x, y, z)
+\end{equation}
+这正是泊松方程．也就是说，这里的场$\phi$可以解释为电势，$(x, y, z)$是带电粒子的位置，耦合常数$g$则是电荷．
+
+
+
+\subsubsection{非静态情况}
+
+
+
+
+
+
+
+
+
+
+

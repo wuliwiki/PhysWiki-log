@@ -26,7 +26,7 @@ H_{ij} = \bra{\Psi_i} H \ket{\Psi_j}
 &= \sum_{j=0}^{K-1} P_{ij} \E^{-\I E_j t/\hbar} P_{jk}^{-1}
 = \sum_{j=0}^{K-1} P_{ij}P_{kj} \E^{-\I E_j t/\hbar} 
 }\end{equation}
-要说明的是，这种算法的误差（除数值计算误差）来源于两个方面，第一是用 $\exp(\I H\Delta t/\hbar)$ 代替 $\exp( -\frac{\I}{\hbar} \int_{t}^{t+\Delta t} \dd{t} \cdot H(t) )$， 但如果 不含时就没有该误差，第二是有限数量的基底不具有完备性，这个误差可以随着基底数量增加而减小．
+要说明的是，这种算法的误差（除数值计算误差）来源于两个方面，第一是用 $\exp(\I H\Delta t/\hbar)$ 代替 $\exp( -\frac{\I}{\hbar} \int_{t}^{t+\Delta t} \dd{t} \cdot H(t) )$， 但如果不含时就没有该误差，第二是有限数量的基底不具有完备性，这个误差可以随着基底数量增加而减小．
 
 \subsection{Lanczos算法}
 在以上的算法中，选取施密特正交归一化 %(链接未完成)
@@ -103,7 +103,7 @@ H_{ij}=\mel{\Psi_i}{H}{\Psi_j}
 
 \subsubsection{定理4}
 在正交归一基底 $\ket{\Psi_j}$ 中， 矩阵 $\mat H$ 是对称三对角矩阵．所以我们已经顺便求出了所有的矩阵元！
-\begin{equation}
+\begin{equation}\label{Lanc_eq2}
 \mat H =
 \begin{pmatrix}
 \alpha_0 & \beta_1 &&& \\ 
@@ -122,18 +122,20 @@ H_{ij}=\mel{\Psi_i}{H}{\Psi_j}
 \end{equation}
 注意在 $\ket{\Psi_i}$ 基底下， $\Psi(\bvec r, t)$ 就是 $(1, 0, 0, \dots)$． 所以在该基底下
 \begin{equation}\label{Lanc_eq1}
-\E^{-\I \mat H \Delta t} \Psi(\bvec r, t) = \mat P \exp(-\I \mat \Lambda \Delta t) (\mat P\Her)_{\text{第1列}} = \mat P \exp(-\I \mat \Lambda \Delta t) (\mat P_{\text{第1行}})\Her
+\bvec a \equiv \E^{-\I \mat H \Delta t} \Psi(\bvec r, t) = \mat P \exp(-\I \mat \Lambda \Delta t) (\mat P\Her)_{\text{第1列}} = \mat P \exp(-\I \mat \Lambda \Delta t) (\mat P_{\text{第1行}})\Her
 \end{equation}
-
+这里的 $\bvec a$ 其实就是 $\exp(-\I \mat H \dd{t})$ 的第一列．
 
 \subsection{误差分析}
-要判断 $K$ 是否足够， 只需要计算\autoref{Lanc_eq1} 中的矢量 $\bvec a \equiv \exp(-\I \mat \Lambda \Delta t) (\mat P_{\text{第1行}})\Her$ 的最后几个矩阵元的平方和是否可以忽略不计， 如果可以就说明 $K$ 是足够的．
+要判断 $K$ 是否足够， 只需要计算\autoref{Lanc_eq1} 中的矢量 $\bvec a$ 的最后几个矩阵元的平方和是否可以忽略不计， 如果可以就说明 $K$ 是足够的．
 
 第一个被截去的系数 $a_{K+1}$ 的模长可以用下式估计（Feist 论文 4.51）
 \begin{equation}
 \abs{a_{K+1}} \approx \frac{\Delta t^K}{K!} \prod_i \beta_i
 \end{equation}
-可以做个实验把该式和直接计算的结果进行对比． 对于固定的 $K$， 该式可以用于薛定谔方程的变步长演化． Feist 用的 Sort Iterative Lanczos 就是使用 $K$ 等于 "a few"， 以及较小的 $\Delta t$．
+推导： 把\autoref{Lanc_eq2} 做 $K-1$ 次幂， 左下角的矩阵元就是 $\prod_i \beta_i$． 此时如果把\autoref{Lanc_eq2} 拓展到无限大的矩阵， 那么做 $K-1$ 次幂后第一列也是相同的． 也就是说， $\exp(-\I \mat H \dd{t})$ 的泰勒展开的前 $K$ 项的第一列都是精确的． 若考察 $K+1$ 项， 则无限大矩阵的结果中第一列最后会多出一个元素 $\beta_1\beta_2\dots\beta_K$ （可以借助 Mathematica）． 接下来的推导就很简单了． % 见同文件夹的 .nb 文件
+
+对于固定的 $K$， 该式可以用于薛定谔方程的变步长演化． Feist 用的 Sort Iterative Lanczos 就是使用 $K$ 等于 "a few"， 以及较小的 $\Delta t$．
 
 \subsection{定理1证明}
 
@@ -184,7 +186,7 @@ $m \geqslant j + 2$ 的情况在证明3中已经证明，只需证明另一种�
 H_{j, j+1} &= \mel{\Psi_j}{H}{\Psi_{j+1}} = \bra{\Psi_j} H \qty(H \ket{\Psi_j} - \alpha_j \ket{\Psi_j} - \beta_j \ket{\Psi_{j-1}}) \\
 &= \mel{\Psi_j}{H^2}{\Psi_j} - \alpha_j \bra{\Psi_j} H \ket{\Psi_j} - \beta_j \bra{\Psi_j}  H \ket{\Psi_{j-1}}
 }\end{equation}
-易证 $\ev{H^2}{\Psi_j}$， $\alpha_j$ 及 $\beta_j$ 是实数，只需要证明 $\mel{\Psi_j}{H}{\Psi_{j-1}}$ 是实数即可，即证 $\mel{\Psi_{j-1}}{H}{\Psi_j}$ 是实数，重复上述论证，即证 $\mel{\Psi_{j-2}}{H}{\Psi_{j - 1}}$ 是实数，\dots\dots，即证 $\mel{\Psi_1}{H}{\Psi_0}$ 是实数，即证 $\mel{\Psi_0}{H}{\Psi_1}$ 是实数，即证 $\mel*{\Psi_0}{H}{\tilde\Psi_1}$ 是实数．而
+易证 $\ev{H^2}{\Psi_j}$， $\alpha_j$ 及 $\beta_j$ 是实数，只需要证明 $\mel{\Psi_j}{H}{\Psi_{j-1}}$ 是实数即可，即证 $\mel{\Psi_{j-1}}{H}{\Psi_j}$ 是实数，重复上述论证，即证 $\mel{\Psi_{j-2}}{H}{\Psi_{j - 1}}$ 是实数，……，即证 $\mel{\Psi_1}{H}{\Psi_0}$ 是实数，即证 $\mel{\Psi_0}{H}{\Psi_1}$ 是实数，即证 $\mel*{\Psi_0}{H}{\tilde\Psi_1}$ 是实数．而
 \begin{equation}
 \mel*{\Psi_0}{H}{\tilde\Psi_1} = \bra{\Psi_0} H \qty(H \ket{\Psi_0} - \alpha_0 \ket{\Psi_0}) = \ev{H^2}{\Psi_0} - \alpha_0 \ev{H}{\Psi_0} 
 \end{equation}

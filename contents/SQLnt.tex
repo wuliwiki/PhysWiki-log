@@ -1,0 +1,87 @@
+% SQL 基础笔记
+
+\begin{issues}
+\issueDraft
+\end{issues}
+
+\begin{itemize}
+\item 本文参考 w3schools
+\item SQL（Structured Query Language） 是操作数据库的语言
+\item MySQL 是具体的管理数据库的软件， 是 **RDBMS （relational database management system）
+\item 开发者需要掌握 SQL 语言来使用 MySQL． 不同的 RDBMS 基本都是用 SQL 语言， 虽然有微小差异， 但都兼容 SQL standard．
+\item dump 操作常常用于备份数据库（而不是直接拷贝数据库文件）． 数据库文件一般是加密的， 但是 dump 不会加密．
+\item 一个 database 里面可以有许多 table， 每个 field 就是 table 的一列， 每个 record 就是一行
+\item 显示数据库 \verb`SHOW DATABASES;`
+\end{itemize}
+
+\subsection{SQL Basics}
+\begin{itemize}
+\item 大部分操作都通过 **SQL statement** 完成， 如 \verb`SELECT * FROM 表名;`
+\item 命令可以随意换行，用分号结尾
+\item SQL 关键字不区分大小写，但一般关键词用大写
+\item 数据中的字符串用单引号，大部分数据库双引号也行，字符串区分大小写
+\item 一些最重要的关键字如
+\item \verb`SELECT` - extracts data from a database
+\item \verb`UPDATE` - updates data in a database
+\item \verb`DELETE` - deletes data from a database
+\item \verb`INSERT INTO` - inserts new data into a database
+\item \verb`CREATE DATABASE` - creates a new database
+\item \verb`ALTER DATABASE` - modifies a database
+\item \verb`CREATE TABLE` - creates a new table
+\item \verb`ALTER TABLE` - modifies a table
+\item \verb`DROP TABLE` - deletes a table
+\item \verb`CREATE INDEX` - creates an index (search key)
+\item \verb`DROP INDEX` - deletes an index
+\end{itemize}
+
+\subsubsection{SELECT}
+\begin{itemize}
+\item \verb`SELECT column1, column2, ... FROM table_name;` 获取的数据表叫做 **result-set**． 如果要选取所有 column， 用 \verb`*` 即可 e.g. \verb`SELECT * FROM Customers;` 显示名为 Customers 的表格中全部内容
+\item \verb`SELECT DISTINCT column1, column2, ... FROM table_name;` 仅列出不完全相同的行， 例如 \verb`SELECT DISTINCT Country FROM Customers;`
+\item \verb`SELECT COUNT(DISTINCT Country) FROM Customers;` 显示表格中有多少不同的国家． （这个命令在 Microsoft Access 里面没用）
+\end{itemize}
+
+\subsubsection{WHERE}
+\begin{itemize}
+\item \verb`SELECT column1, column2, ... FROM table_name WHERE condition;`
+\item \verb`SELECT * FROM Customers WHERE Country='Mexico';`
+\item \verb`SELECT * FROM Customers WHERE CustomerID=1;`
+\item \verb`WHERE` 后面可以是 \verb`=`, \verb`>`, \verb`<`, \verb`>=`, \verb`<=`, \verb`<>`（不等于，有时候 \verb`!=` 也行）, \verb`BETWEEN` \verb`LIKE` \verb`IN`(在几个可能的值之中)
+\item \verb`SELECT * FROM Products WHERE Price BETWEEN 50 AND 60;`
+\item \verb`WHERE` 后面的条件可以用 \verb`AND`, \verb`OR`, \verb`NOT`
+\item \verb`SELECT column1, column2, ... FROM table_name WHERE NOT condition;`
+\item \verb`SELECT * FROM Customers WHERE City='Berlin' OR City='München';`
+\end{itemize}
+
+\subsubsection{ORDER BY}
+\begin{itemize}
+\item 用 \verb`ORDER BY` 来进行排序 \verb`SELECT column1, column2, ... FROM table_name ORDER BY column1, column2, ... ASC|DESC;`
+\item \verb`SELECT * FROM Customers ORDER BY Country DESC;`
+\end{itemize}
+
+\subsubsection{INSERT INTO}
+\begin{itemize}
+\item \verb`INSERT INTO table_name (column1, column2, column3, ...) VALUES (value1, value2, value3, ...);` 插入行， 如果每列都插入， 那么 \verb`(column1, column2,...)` 可以省略
+\item 对所有列， \verb`INSERT INTO table_name VALUES (value1, value2, value3, ...);`
+\item 第一列总是数字（无论 field 叫做什么）？ 插入时可以指定，  如果不指定会自动更新． 不能指定已经存在的数字．
+\item 如果某列时 optional 的， 那么插入一行时可以不输入这列的信息， 这列的值就是 \verb`NULL`
+\item \verb`SELECT column_names FROM table_name WHERE column_name IS NULL;`
+\item \verb`SELECT column_names FROM table_name WHERE column_name IS NOT NULL;`
+\end{itemize}
+
+\subsubsection{UPDATE}
+\begin{itemize}
+\item 改变已经存在的 record. where 可以选择一条或多条 record
+\item 如果不用 \verb`WHERE`， 所有行的指定列都会被更新
+\item \verb`UPDATE table_name SET column1 = value1, column2 = value2, ... WHERE condition;`
+\item \verb`UPDATE Customers SET ContactName = 'Alfred Schmidt', City= 'Frankfurt' WHERE CustomerID = 1;`
+\item \verb`UPDATE Customers SET ContactName='Juan' WHERE Country='Mexico';`
+\end{itemize}
+
+\subsubsection{DELETE}
+\begin{itemize}
+\item \verb`DELETE FROM table_name WHERE condition;`
+\item e.g. \verb`DELETE FROM Customers WHERE CustomerName='Alfreds Futterkiste';`
+\item \verb`DELETE FROM table_name;`
+\item e.g. \verb`DELETE FROM Customers;`
+\end{itemize}

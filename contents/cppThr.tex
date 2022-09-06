@@ -1,0 +1,47 @@
+% C++ 多线程笔记
+
+\begin{itemize}
+\item \verb|#include <thread>| \verb|#include <mutex>|
+\item \verb|std::thread th(函数, arg1, arg2, ...)|; 创建一个线程， 调用\verb|函数|（可以是函数指针， 函数对象， lambda）， \verb|arg| 是\verb|函数|的变量．
+\item \verb|th.join()| 可以让主程序等待某个线程自己退出．
+\item 声明一个全局变量 \verb|std::mutex m| 相当于 openmp 的 atomic 操作， 可以避免多个线程操作同意数据． \verb|m.lock()| 给 mutex 上锁， 如果已经被别人上锁就暂停并等待解锁． \verb|m.try_lock()| 试图上锁， 如果已经被别人上锁就返回 \verb|false|． \verb|m.unlock()| 解锁．
+\item 为了避免在 \verb|m.lock()| 和 \verb|m.unlock()| 之间发生 throw， 通常不直接调用他们， 而是用 \verb|std::lock_guard<std::mutex> guard(m)| （相当于 lock）， 当该变量被 destroy 时， 会自动 unlock．
+\item \verb|std::this_thread::sleep_for(std::chrono::seconds(2));| 可以让某个线程暂停．
+\end{itemize}
+
+例程（编译时要给 linker 加上 \verb|-l pthread|）：
+\begin{lstlisting}[language=cpp]
+#include <thread>
+#include <mutex>
+#include <chrono>
+using namespace std;
+
+mutex mut;
+
+// A dummy function
+void myfun(int id, int *i)
+{
+    if (id == 1)
+        this_thread::sleep_for(chrono::milliseconds(100));
+    lock_guard<mutex> guard(mut);
+    printf("id = %d, i = %d\n", id, *i);
+    int j = *i+1;
+    if (id == 2)
+        this_thread::sleep_for(chrono::milliseconds(100));
+    *i = j;
+}
+
+int main()
+{
+    int i = 0;
+    thread th1(myfun, 1, &i);
+    thread th2(myfun, 2, &i);
+    myfun(0, &i);
+    th1.join();
+    th2.join();
+    return 0;
+}
+\end{lstlisting}
+
+\addTODO{互斥锁、条件锁、读写锁以及自旋锁分别什么时候用？}
+% 参考 https://www.zhihu.com/question/66733477

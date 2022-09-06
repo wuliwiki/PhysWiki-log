@@ -25,7 +25,6 @@
 \item history 命令可以输出最近 1000 条输入的命令
 \item 用 \verb`!<number>` 可以重新输入第 \verb`<number>` 条历史命令
 \item \verb`/etc/passwd` 文件中记录了系统的所有 user
-\item \verb`su <usr_name>` 可以临时改变登录的身份
 \item Ctrl+L 相当于 \verb`clear` 命令
 \item \verb`df` 用于查看磁盘空间, \verb`-h` 选项可以显示 \verb`Mb`, \verb`Gb` 等.
 \item \verb`du /some/path` 用于查看指定目录中所有子文件夹的大小, \verb`-a` 选项可以显示文件夹和文件. \verb`--max-depth=N` is used to control the level of subfolders to display, \verb`-h` is for human readable file size (\verb`Mb`, \verb`Gb`, etc)
@@ -48,7 +47,9 @@
 \item 要 cd 到当前目录的绝对目录， 可以用 \verb|cd `pwd -P`|, 两个 \verb|`| （backtick）内的东西会先展开
 \item \verb`rm <filename>` 或者 \verb`rm /<dir>/<filename>` 删除文件  (注意是永久删除!)
 \item \verb`mv <filename> /<dir>` 可以移动文件, \verb`mv <filename> <newname>` 可以重命名
-\item \verb`cp <filename> /<dir>` 复制文件 \verb`cp <filename> <newname>` 复制到当前目录且重命名. 复制多个文件用 \verb`cp <file1> <file2> <dir>`.
+\item \verb`cp <filename> /<dir>` 复制文件 \verb`cp <filename> <newname>` 复制到当前目录且重命名. 复制多个文件用 \verb`cp <file1> <file2> <dir>`. 
+\item \verb|cp| 会默认拷贝 symlink 指向的文件而不是 symlink 本身． \verb|-d| 选项可以只拷贝 link．
+\item \verb|cp| 会默认覆盖目标的同名文件， \verb|cp -n| 可以不覆盖且跳过（但不会提示）． 如果要提示且手动逐个选择是否覆盖， 用 \verb|-i| 选项．
 \item 打开文件的一般方式 \verb`<program_name> <filename.extension>`
 \item 要使用外接储存器(U盘, 移动硬盘等), 需要新建一个文件夹, 然后连接外接储存器, 叫做 Mount The Drive. 习惯上, 新建文件夹都放在 \verb`/mnt` 目录下
 \item 要连接储存器, 用 \verb`sudo fdisk -l` 显示所有的外接硬盘的路径名
@@ -58,6 +59,11 @@
 \item \verb`mkdir` 新建文件夹, \verb`rmdir` 删除空文件夹, \verb`rmdir -r` (recursive) 删除所包含的文件夹 (其实不用 \verb`rmdir` 用 \verb`rm` 也可以!)， \verb`-P` 选项可以一次创建多层目录
 \item \verb`dd` 命令可以直接在当前位置生成一个大小为 100 MB 的文件， 内容为随机， 还会显示写入速度
 \verb`dd if=/dev/urandom of=./dump.txt bs=1048576 count=1024` 写 1024Mb 随机文件
+\item \verb`locate ???` 命令可以从数据库中寻找计算机上所有文件名包含 \verb`???` 的文件， 但刚创建的文件可能找不到
+\item \verb`sudo updatedb` 可以将刚创建的文件加到数据库中， 让 \verb`locate` 可以找到
+\item 对于整个系统， \verb`locate` 比 \verb`find` 要快得多， 因为数据库已经是 index 过的 \verb`-c` 选项可以显示匹配结果的个数， \verb`-i` 选项可以不区分大小写
+\item \verb|rename 's/老名字/新名字/' *|． \verb|-n| 选项显示重命名的预览， 不真的重命名
+\item \verb|sudo swapoff -a| 不使用 swap file， \verb|sudo swapon -a| 恢复使用．
 \end{itemize}
 
 \subsection{包管理}
@@ -83,13 +89,14 @@
 \item \verb`nano` 是一个命令行应用, 可以编辑文本文件. 打开文件命令: \verb`nano <filename.txt>`
 \item 但是比较著名的文本编辑还是 VIM 和 VI 
 \item \verb`head` 和 \verb`tail` 命令可以预览一个文件的前几行和后几行
-\item \verb`echo <text>` 可以在命令行显示该文字
+\item \verb`echo <text>` 可以在命令行显示该文字， 也就是把命令的 params 输出到 stdout
 \item \verb`echo <text> > <filename>` 可以把文件中的文本替换 \verb`>>` 可以附加在文本最后. 如果用双引号, 甚至还可以换行.
 \item \verb`>` 是 output redirect 操作, 类似, \verb`<` 是 input redirection 操作, 可以把文档中的内容输入到命令行.
 \item linux 命令行有两个主要的 output, stdout 和 stderr, \verb`>` 只用于将 stdout 输出到文件, 如果也要输出 stderr 有三种办法: 1.\verb`<command> > file1.out 2 > file2.out`, 2. \verb`<command> > file.out 2 > &1`, 3. \verb`<command> &> file.out` 其中后两种将 stdout 和 stderr 输出到同一文件.
 \item 运行一个程序，指定输入输出文件， 并让 standartd err 显示在 standard out \verb`./program.x < <inputfile> > <outputfile> 2>&1` 
-\item \verb`echo` 的输出文件如果不存在, 就会新建一个.
-\item \verb`cat` 命令与 \verb`echo` 相似, 只是把 \verb`<text>` 换成 \verb`<textfile>`
+\item \verb`>` 的输出文件如果不存在, 就会新建一个.
+\item  \verb`cat 文件` 把文件的内容输出到 stdout
+\item  \verb`cat` 把 stdin 的内容输出到 stdout
 \item \verb`<命令> | less` 可以用键盘滚动输出结果(用于长输出以及没有滚动条的情况), 按 q 键退出
 \item \verb`|` 的作用相当于把前面一个命令的输出放到后面一个命令的输入中.
 \item \verb`<命令> > <文件名.txt>` 可以把命令行的输出写入文件中 !! 例如: \verb`date > time.txt , cal > calander.txt`
@@ -105,13 +112,16 @@
 
 \subsection{账户与权限}
 \begin{itemize}
-\item \verb`sudo` (super user do) 加在命令前可以获得管理员权限, \verb`su` (super user) 可以把以下所有操作改为管理员权限 (不建议常用)
+\item \verb`sudo` (super user do) 加在命令前可以获得管理员权限, \verb`su` (super user) 可以把以下所有操作改为管理员权限 (不建议常用)．
+\item \verb`su <usr_name>` 可以临时改变登录的身份， \verb|sudo -i| 或者 \verb|su| 可以持续管理员身份．
+\item 使用 \verb|sudo| 以后， 命令的执行者就会临时变为 \verb|root|， 一些 config 文件也会使用 \verb|/root/| 文件夹中的而不是 \verb|/home/用户名| 中的， 例如 \verb|/root/.ssh/config|．
 \item \verb`sudo` 的密码是用户密码, 而 \verb`su` 的密码是 root 密码, 后者的权限更高
 \item \verb`useradd -m` (给新用户创建 home 目录) \verb`-g users` (设置用户组为 users) \verb`<username>`
 \item \verb`passwd <username>` 可以修改密码
 \item \verb`userdel <username>` 删除账户
 \item \verb`users` 命令显示目前所有登录的用户, \verb`who` 命令可以显示更详细的信息
 \item \verb`ls -l` 最左边第一列是 owner 的权限, 第二列是 group 的权限, 第三列是其他人的权限, \verb`r (read) w (write) x (execute)`
+\item \verb`ls` 选项： \verb`-a` (all)(显示隐藏) \verb`-m` (挤到一起) \verb`-1` 显示为一列 \verb`-v` 按照数字大小排序
 \item \verb`chown <user> <file>` 修改文件的所有者
 \item \verb`chmod <权限> <file>` 修改文件的权限. <权限> 是三位8进制数, 每一位是 x(1),w(2),r(4)之和.
 \item \verb`groups` 或者 \verb`groups <user>` 可以查看用户所在的组
@@ -159,8 +169,56 @@
 \item 这样也可以给文件加密得到稳定 hash： \verb`cat 文件名 | openssl enc -base64 -e -aes-256-cbc -pass pass:密码 > 加密文件名`
 \end{itemize}
 
+\subsection{sftp}
+\begin{itemize}
+\item SFTP 其实是 ssh 的一个子功能， 通过 ssh 协议传输文件， 只要能 ssh 到某个机器， 就可以 sftp
+\item 连接方法为 \verb`sftp [usr@][url]` 就和 \verb`ssh [usr@][url]` 一样． 成功以后会出现提示符 \verb`sftp>`， 可以进行下一步操作
+\item \verb`sftp>` 环境下同样可以用 \verb`cd`, \verb`ls`, \verb`pwd` 等命令
+\item \verb`get /path/to/file` 可以传输某个文件到本地（进入 sftp 时的目录）
+\item \verb`get /remote/file /local/file` 可以传输某个文件到本地指定的目录和文件名， 但该目录必须存在
+\item \verb`get -r 文件夹` 可以传送整个文件夹
+\item 如果要指定端口用 \verb`sftp -oPort=xxx xxx@xxx.xxx.xxx.xxx`
+\end{itemize}
+
+\subsection{rsync}
+\begin{itemize}
+```bash
+for ((i=275;i<=294;++i)); do rsync -zvh addis1@headnode.beocat.ksu.edu:/homes/addis1/github/FEDVR-TDSE/data/${i}/analysis/* ./${i}/analysis/; done
+```
+\item 格式 \verb`rsync -avzh file1 file2 folder3 file4 dest_path` 其中 file1 到 file4 等文件或文件夹会自动同步到 dest_path 文件夹中（例如生成 \verb`dest_path/file1`， \verb`dest_path/folder3`）． 如果 dest_path 不存在， 会自动用 mkdir 生成，但只能生成一层． file, folder 和 dest_path 都可以是远程或者本地
+\item \verb`-a` 是 archive (包括 permission 和 symlink)， \verb`-v` 是 verbose （显示详情）， \verb`-z` 是 zip （传输过程压缩） \verb`-h` 人可读
+\item \verb`rsync -avzh source/ dest/ --delete` 会把 dest 文件夹中多余的文件删除
+\item 如果远程目录有需要 \verb`\` 的字符， 例如 \verb`\(...\)`， 需要用三次， 例如 \verb`\\\(...\\\)`． 本地的 shell 会先把 \verb`\\` 变为 \verb`\`, \verb`\(` 变为 \verb`(`
+\item 若要在每个文件传输完成之后从原来文件夹删除， 用 \verb`--remove-source-files`
+\item 若要删除目标文件夹中， 源文件夹不存在的内容， 用 \verb`--delete`
+\end{itemize}
+
+\subsection{服务器}
+\begin{itemize}
+\item \verb`sudo tasksel` 快速安装某一类型的服务器需要所有的软件 (email server , file server, ...). 进入界面以后, 用空格选择想要的项目然按空格确认安装.
+\item \verb`sudo /etc/init.d/<aptname> start` 或者 \verb`stop` 或者 \verb`restart` 可以进行对某个软件的 service 进行操作, 而不需要重启 linux 系统.
+\end{itemize}
+
+\subsection{环境变量}
+\begin{itemize}
+\item \verb|echo $VAR| 显示环境变量或任何变量
+\item \verb|export VAR=XXX| 修改环境变量
+\item \verb|export VAR=~/opt/bin:$VAR| 可以 append 某个变量（如 PATH）
+\item \verb|PWD| 是当前路径， 修改该变量相当于 \verb|cd|
+\item \verb|PATH| 是命令搜索路径， 只有这里面的目录中的执行文件才不指定路径
+\item \verb|HOME| 是用户的 \verb|~| 文件夹
+\item \verb|LD_LIBRARY_PATH| 是动态链接库的默认搜索地址， 见这里\upref{gppLib}．
+\item \verb|LD_RUN_PATH| 编译的链接阶段， 如果没有指定 \verb|rpath|， 就用该变量中的 path 替代\upref{gppLib}．
+\end{itemize}
+
 \subsection{其他}
 \begin{itemize}
 \item \verb`alias` 可以给一个长命令设置别名， 例如 \verb|alias abcde='echo hello'|， 仅限于当前 terminal， 可以添加到 \verb|~/.bashrc| 中每次 login 都定义．
 \end{itemize}
 
+
+\begin{figure}[ht]
+\centering
+\includegraphics[width=14cm]{./figures/LinNt_1.png}
+\caption{参考 \href{https://www.howtogeek.com/}{How to geek}} \label{LinNt_fig1}
+\end{figure}

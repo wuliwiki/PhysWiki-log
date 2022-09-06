@@ -1,0 +1,32 @@
+% Intel OneAPI 安装笔记（Linux 和 WSL2）
+
+\pentry{Lapack 笔记\upref{Lapack}}
+
+如果要安装 icpc 以及 mkl， 可以\textbf{先用 oneAPI BASE 只安装 mkl （intel gdb， python 可能也有用）， 然后再安装 oneAPI HPC 中的编译器（MPI 可能也有用）}．
+装错了有没关系， 可以随时添加或者删除组件． 安装的 GUI 界面可以通过 X11 传输， 所以远程 ssh 也有 GUI 安装． 如果不能用 GUI 会自动切换到 TUI．
+
+安装完以后需要在 \verb|~/.bashrc| 中加上 \verb|source /opt/intel/oneapi/setvars.sh|．
+
+\subsection{oneAPI BASE}
+\begin{itemize}
+\item 注意所有 oneAPI 都只提供最新版本的下载， 所以尽量把离线安装包保存到本地
+\item BASE 的\href{https://www.intel.com/content/www/us/en/developer/tools/oneapi/base-toolkit-download.html?operatingsystem=linux&distributions=webdownload&options=offline}{下载链接}．
+\item 安装和卸载都用 \verb`sudo sh ./l_BaseKit_p_2022.2.0.262_offline.sh` 在 WSL2 中会弹出 GUI． 光 MKL 需要 7.4GB．
+\item 注意 WSL1 用 .sh 安装包安装会出错． WSL2 成功．
+\item 注意 oneAPI_BASE 不包括 icpc 和 icc 编译器！ 他们并不包含在 DPC++ 里面． \href{https://stackoverflow.com/questions/66527842/can-not-find-the-icc-compiler-after-having-installed-intel-oneapi-invoking-from}{详见这里}．
+\item MKL 和 icpc 安装完需要 8.6G．
+\item 目前 20220807 最新版仅支持 ubuntu 的 20.04 以及一些更早版本
+\end{itemize}
+
+\subsection{oneMKL}
+\begin{itemize}
+\item 这个文件仅仅安装 MKL， 不包含编译器等
+\item 安装和卸载都用 \verb`sudo sh ./l_onemkl_p_2022.1.0.223_offline.sh`
+\end{itemize}
+
+\subsection{oneAPI HPC}
+\begin{itemize}
+\item oneAPI HCP， 包括 icpc/ifort 编译器和 MPI 等， 但不包括 MKL！
+\item 光装一个 C++ 编译器需要 6G！
+\item 安装和卸载都用 \verb`sudo sh ./l_HPCKit_p_2022.2.0.191_offline.sh`
+\end{itemize}

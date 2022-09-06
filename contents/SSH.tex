@@ -39,25 +39,33 @@
 \item 参考\href{https://www.digitalocean.com/community/tutorials/ssh-essentials-working-with-ssh-servers-clients-and-keys}{这个教程}
 \item 用 \verb`ssh-keygen` 生成 key， 使用默认路径 \verb`~/.ssh/`， 会生成 \verb`id_rsa` 和 \verb`id_rsa.pub` 两个文件． 后者用于加密而不能解密， 是 public key， 可以给任何人． 前者是 private key， 用于解密， 绝对不能给别人．
 \item 要先登录 host， 要把 public key （只有一行内容） append 到服务器中的 \verb`~/.ssh/authorized_keys` 文件．
+\item 如果使用 \verb|sudo ssh|， 那么设置文件就在 \verb|/root/.ssh/| 下， 可以把 \verb|~/.ssh| 中的文件 copy 过去．
 \item 一般来说如果用 key 的话 server 的 \verb`/etc/ssh/sshd_config` 是不需要设置的
 \item 其中 append 的操作也可以用 \verb`ssh-copy-id -i /path/to/key.pub SERVERNAME` 会更方便， 如果事先允许密码登录的话
 \item ssh 用 key 来登录的原理大概就是， client 告诉 server 我要用哪个用户名登录， server 去用户名的 \verb`~/.ssh/authorized_keys` 中寻找 public key， 然后用其加密一个随机字符串给 client， client 用 private key 解密， 将字符串的 MD5 hash 发给 server， server 一对照 MD5 如果吻合， 开始连接．  (其实我猜 host 还需要发送一个密钥用于 ssh 通讯， 要不然 client 发给 host 的东西就无法加密了)
 \item 现在 ssh 的话应该就不需要密码了
-\item client 上可以写一个设置文件 \verb`~/.ssh/config`， 设置 host 的名字， 就可以用名字而不是 ip 登录了
+\item 如果想不写 ip 而是写名字， 那么在 \verb|/etc/hosts| 中添加 ip 和对应的名字即可．
+\item 如果没有管理员权限， 那么可以在用户文件夹创建 \verb|~/.hosts|， 然后在 \verb|~/.bashrc| 修改环境变量 \verb|export HOSTALIASES=~/.hosts|
+\item 另一种方法是， 在 client 上可以写一个设置文件 \verb`~/.ssh/config`， 设置 host 的名字， 就可以用名字而不是 ip 登录了
 \begin{lstlisting}[language=bash]
 Host [SERVERNAME]
 Hostname [ip-or-domain-of-server]
 User [USERNAME]
 PubKeyAuthentication yes
 IdentityFile [./path/to/key]
+
+# 简单的设置例如
+Host server1
+Hostname 10.0.2.101
+User addis
 \end{lstlisting}
 最后一条强制使用 key 登录而不用密码．
 
 \item 如果说用 key \verb`ssh` 的时候说 \verb`permission id_rsa too open`， 用 \verb`chmod 700 id_rsa*` 即可， 其中 7 变为二进制是 \verb`111` 对应 \verb`rwx` 的三个开关都打开， 0 对应 \verb`000` 没有任何权限， 所以 700 就是 owner 有所有权限， 其他用户没有任何权限
 \item 虽然 public key 中最后有 \verb`用户名@主机`， 其实这个好像没有任何影响， private key 和 public key 都可以复制到许多不同的机器中， 让这些机器两两之间互相 ssh， 而它们的 \verb`~/.ssh/authorized_keys` 中只需要有一条
 \item ssh 登录一个新主机时， 如果 \verb`known_host` 没有， 就会让确认， 确认以后就会把新主机的 id 加入该文件， 如果这个 id 以后变了（例如主机重装了 \verb`openssh-server`） 再登录就会出错（为了安全）， 这时只需要将 \verb`known_host` 中该主机的记录删除即可． 也可以直接把整个文件删除， 但这样就所有 ssh 登录都要再确认一次了．
+\item \verb|ssh-keygen -R [ip 或者 alias]| 可以删除该 server 在 \verb|known_host| 中的记录．
 \end{itemize}
-
 
 \subsection{ssh 语法}
 \begin{itemize}

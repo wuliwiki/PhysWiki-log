@@ -24,9 +24,7 @@
 #include <iostream>
 using namespace std;
 int f1()
-{
-  cout << "In library 1" << endl;
-}
+{ cout << "In library 1" << endl; }
 \end{lstlisting}
 
 再编一个主文件
@@ -100,7 +98,11 @@ export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/your/custom/path/
 \end{lstlisting}
 注意 \verb|rpath| 只能设定当前可执行文件的的路径， 如果可执行文件依赖的 \verb|.so| 文件所需要的 \verb|.so| 文件不在默认路径， 就只能通过修改 \verb`LD_LIBRARY_PATH` 才可以．
 
+如果不指定 \verb|rpath|， 设置环境变量 \verb|LD_RUN_PATH| 也是等效的． 链接的程序是 \verb|ld|， 而动态链接库是 \verb|ld-linux.so|
+
 如果同样的 \verb`-l` 既能匹配 \verb`lib***.a` 也能匹配 \verb`lib***.so`， 那么 gcc 会默认选 \verb`.so` （貌似有时候二者都需要）． 如果想要静态链接， 要么用 \verb`-static` 选项（禁止链接到任何动态 lib）， 要么直接指定 \verb`.a` 的地址和文件名， 如 \verb`g++ -o main.x f1.o /some/path/lib***.a another/path/lib***.a`．
+
+如果要查看 \verb|.a| 或 \verb|.so| 文件里面是否有某个函数， 用例如 \verb`nm -A /usr/lib/x86_64-linux-gnu/libflint.a | grep fmpz_set` 类似地也有 \verb|nm xxx.so|
 
 Linux 程序运行时搜索动态链接库的顺序：
 \begin{itemize}

@@ -1,33 +1,281 @@
 % 霍奇星算子
 % Hodge算子|Hodge 算子|Hodge star operator|星算子|Hodge 星算子|外代数|Grassmann 代数|Exterior algebra|麦克斯韦方程组|对偶
 
-\pentry{外导数\upref{ExtDer}}
+\pentry{外导数\upref{ExtDer}，体积形式\upref{VolFom}}
 
-\addTODO{未完成：需添加更多讨论以及麦克斯韦方程组的表示．}
-\addTODO{定义有问题，修正前暂移出目录．}
+\addTODO{加入目录．}
 
 \subsection{星算子的定义}
 
 考虑 $n$ 维线性空间 $V$ 上的外代数 $\bigwedge V$，我们注意到各阶的外积空间具有明显的对称性：$\opn{dim}\bigwedge^k V=C^k_n=C^{n-k}_n=\opn{dim}\bigwedge^{n-k} V$．这意味着这样的一对空间之间存在线性同构，我们使用星算子 $\star$ 来描述这一同构．
 
-星算子是一个映射，把一个 $\bigwedge^k V$ 中的元素 $\omega$ 映射为一个 $\bigwedge^{n-k} V$ 中的元素 $\star\omega$．为了方便描述星算子的定义，我们先引入一些新的表示方法．
 
-选定 $V$ 的基 $\{\bvec{e}_i\}$，那么任意 $\omega\in\bigwedge^k V$ 都可以表示为各 $\bvec{e}_{i_1}\wedge\bvec{e}_{i_2}\wedge\cdots\wedge\bvec{e}_{i_k}$ 的线性组合，因此我们只需要描述 $\star\bvec{e}_{i_1}\wedge\bvec{e}_{i_2}\wedge\cdots\wedge\bvec{e}_{i_k}$ 即可定义星算子．
+\subsubsection{定义前的准备}
 
-为了方便，我们只考虑 $\bvec{e}_{i_1}\wedge\bvec{e}_{i_2}\wedge\cdots\wedge\bvec{e}_{i_k}$ 中各 $i_{r+1}>i_r$ 的情况，也就是下标顺序排列的情况\footnote{乱序排列的情况无非两种，奇排列和偶排列，根据外代数的定义，前者加上负号即可，后者和顺序排列是相等的．}．规定了只考虑下标顺序排列的情况后，就可以暂时不管顺序的问题，把 $\bvec{e}_{i_1}\wedge\bvec{e}_{i_2}\wedge\cdots\wedge\bvec{e}_{i_k}$ 表示为集合 $\{i_1, i_2, \cdots, i_k\}$．利用这个表达，我们就可以定义 $\star\{i_1, i_2, \cdots i_k\}=\{1, 2, \cdots, n\}-\{i_1, i_2, \cdots, i_k\}$．这样，我们就定义出了 $\bigwedge V$ 中各基向量的星算子了．再加上一条“星算子是线性的”，即 $\star(\sum a_i\omega_i)=\sum a_i\star\omega_i$，就得到星算子的完整定义了：
 
-\begin{definition}{霍奇星算子}
-定义域 $\mathbb{F}$ 上 $n$ 维线性空间 $V$ 上的外代数 $\bigwedge V$ 的自同构映射 $\star:\bigwedge V\to \bigwedge V$，满足：
-\begin{enumerate}
-\item 线性性：对于任意 $a_i\in\mathbb{F}$，$\omega_i\in\bigwedge V$，有 $\star(\sum a_i\omega_i)=\sum a_i\star\omega_i$；
-\item 如果把下标顺序排列的 $\bvec{e}_{i_1}\wedge\bvec{e}_{i_2}\wedge\cdots\wedge\bvec{e}_{i_k}$ 表示为集合 $\{i_1, i_2, \cdots, i_k\}$，那么 $\star\{i_1, i_2, \cdots i_k\}=\{1, 2, \cdots, n\}-\{i_1, i_2, \cdots, i_k\}$．
-\end{enumerate}
-称这一同构为\textbf{霍奇星算子（Hodge star operator）}．
+星算子是一个映射，把一个 $\bigwedge^k V$ 中的元素 $\omega$ 映射为一个 $\bigwedge^{n-k} V$ 中的元素 $\star\omega$．为了方便定义星算子，我们要先扩张一下内积的定义：
+
+
+\begin{definition}{$k$-向量的内积}\label{HodgeO_def1}
+
+设线性空间上有内积，即对于向量$\alpha$和$\beta$，有内积$\langle \alpha, \beta \rangle$．
+
+给定向量$\alpha_i$和$\beta_j$，构成两个$k$-向量$\omega_\alpha=\alpha_1\wedge \alpha_2\wedge \cdots\wedge \alpha_k$和$\omega_\beta=\beta_1\wedge \beta_2\wedge \cdots\wedge \beta_k$．则这两个$k$-向量的内积定义为
+\begin{equation}\label{HodgeO_eq1}
+\langle\omega_\alpha, \omega_\beta\rangle = \det \pmat{\langle \alpha_i, \beta_j \rangle_{i, j=1}^k}
+\end{equation}
+即用各$\langle \alpha_i, \beta_j \rangle$构成的方阵的行列式．
+
 \end{definition}
 
-\subsection{麦克斯韦方程组的外微分形式：后两个方程\cite{KnotsVol4}}
+显然，如果有某个$\beta_j$正交于所有$\alpha_i$，那么\autoref{HodgeO_eq1} 就是$0$．这一点对于霍奇星算子的性质很重要．
 
-星算子描述的是外积空间中一个非常显眼的对偶，即 $\bigwedge^k V$ 和 $\bigwedge^{n-k} V$ 之间的同构．
+
+
+
+
+
+
+\begin{example}{$2$-向量的内积}
+
+设二维欧几里得空间有极坐标的坐标函数$r$和$\theta$，诱导出余切向量的基$\{\dd r, \dd \theta\}$．于是，基向量的内积为
+\begin{equation}
+\leftgroup{
+    \langle\dd r, \dd r\rangle &= 1\\
+    \langle\dd r, \dd \theta\rangle &= 0 = \langle\dd \theta, \dd r\rangle\\
+    \langle\dd \theta, \dd \theta\rangle &= \frac{1}{r^2}
+}
+\end{equation}
+
+构造$2$-向量$\omega_1=a_1\dd r\wedge \dd \theta$和$\omega_2=a_2\dd r\wedge \dd \theta$，则它们的内积为
+\begin{equation}
+\ali{
+    \langle\omega_1, \omega_2\rangle &= a_1a_2\det\pmat{
+        \langle\dd r, \dd r\rangle&\langle\dd r, \dd \theta\rangle\\
+        \langle\dd \theta, \dd r\rangle&\langle\dd \theta, \dd \theta\rangle
+    }\\
+    &= \frac{a_1a_2}{r^2}
+}
+\end{equation}
+
+\end{example}
+
+
+
+另一等价所需要的预备知识则是如下定义的复杂指标．
+
+\begin{definition}{复杂指标（正整数指标）}
+给定正整数指标集合$\Gamma=\{1, 2, \cdots, n\}$．设$I$是$\Gamma$的$k$次\textbf{有序}子集，即对于一个正整数$k\leq n$，存在一个置换$\sigma\in S_n$，将$I$表示为$(\sigma(1), \sigma(2), \cdots, \sigma(k))$．
+
+再定义$I$的补集$\bar{I}=(\sigma(k+1), \cdots, \sigma(n))$，如果$k=n$则$\bar{I}=\varnothing$．
+
+则光滑函数$\omega_{\sigma(1), \sigma(2), \cdots, \sigma(k)}$表示为$\omega_I$，向量$v^{\sigma(1)}\wedge  v^{\sigma(2)}\wedge \cdots\wedge  v^{\sigma(k)}$表示为$v^I$．
+
+复杂指标也应用爱因斯坦求和约定：$\omega_I v^I$是$I$遍历所有$k$次有序子集、或者特别声明的范围后，所得结果的乘积．
+\end{definition}
+
+
+可以看到，之所以要求$I$是有序的，是因为外积有次序要求．定义中使用正整数是为了方便，实际上复杂指标的概念也可以推广到任意指标集合上．
+
+
+
+\begin{example}{复杂指标的一个例子}
+设$I$的取值范围为$\{(1, 2), (2, 3), (3, 1)\}$，那么$\omega_{1,2}\dd x^1\wedge  \dd x^2+\omega_{2,3}\dd x^2\wedge  \dd x^3+\omega_{3, 1}\dd x^3\wedge  \dd x^1$表示为$\omega_I\dd x^I$．
+
+特别地，外导数可以表示为
+\begin{equation}
+\dd (\omega_I\dd x^I)=\dd \omega_I\wedge  \dd x^I
+\end{equation}
+\end{example}
+
+
+% 为了方便描述星算子的定义，我们先引入一些新的表示方法．
+
+% 选定 $V$ 的基 $\{e_i\}$，那么任意 $\omega\in\bigwedge^k V$ 都可以表示为各 $e_{i_1}\wedge e_{i_2}\wedge \cdots\wedge e_{i_k}$ 的线性组合，因此我们只需要描述 $\stare_{i_1}\wedge e_{i_2}\wedge \cdots\wedge e_{i_k}$ 即可定义星算子．
+
+% 为了方便，我们只考虑 $e_{i_1}\wedge e_{i_2}\wedge \cdots\wedge e_{i_k}$ 中各 $i_{r+1}>i_r$ 的情况，也就是下标顺序排列的情况\footnote{乱序排列的情况无非两种，奇排列和偶排列，根据外代数的定义，前者加上负号即可，后者和顺序排列是相等的．}．规定了只考虑下标顺序排列的情况后，就可以暂时不管顺序的问题，把 $e_{i_1}\wedge e_{i_2}\wedge \cdots\wedge e_{i_k}$ 表示为集合 $\{i_1, i_2, \cdots, i_k\}$．利用这个表达，我们就可以定义 $\star\{i_1, i_2, \cdots i_k\}=\{1, 2, \cdots, n\}-\{i_1, i_2, \cdots, i_k\}$．这样，我们就定义出了 $\bigwedge V$ 中各基向量的星算子了．再加上一条“星算子是线性的”，即 $\star(\sum a_i\omega_i)=\sum a_i\star\omega_i$，就得到星算子的完整定义了：
+
+
+
+
+
+\subsubsection{星算子的定义}
+
+
+\begin{definition}{霍奇星算子}\label{HodgeO_def2}
+
+在$n$维线性空间$V$的外代数$\bigwedge V$上\textbf{任取}$k$-向量$\alpha$和$\beta$，且有标准正交基$\{e_1, e_2, \cdots, e_n\}$．为方便，记$\omega=e_1\wedge e_2\wedge \cdots\wedge e_n$\footnote{如果这里的$V$是流形上的余切空间，则$\omega$就是给定点处的体积形式．}．定义映射$\star:\bigwedge^k V \to \bigwedge^{n-k} V$如下：
+\begin{equation}
+\alpha\wedge \star\beta = \langle\alpha, \beta\rangle\omega
+\end{equation}
+称$\star$是$\bigwedge V$上的\textbf{霍奇星算子（Hodge star operator或Hodge star）}，或\textbf{霍奇对偶（Hodge dual）}．
+
+\end{definition}
+
+
+使用复杂指标可以得到另一种定义方式：
+
+
+\begin{theorem}{霍奇星算子（等价定义）}\label{HodgeO_the1}
+设$I$是\autoref{HodgeO_def1} 中描述的一个复杂指标，$\bar{I}$是其补，$\{e_1, e_2, \cdots, e_n\}$是线性空间的一组\textbf{标准正交基}，则
+\begin{equation}
+\star e_I = (\opn{sign}\sigma) e_{\overline{I}}
+\end{equation}
+\end{theorem}
+
+
+
+欧几里得空间中，如果用通常的标准正交坐标系，坐标函数为$x^1, x^2, \cdots, x^n$，那么体积形式为$\dd x^1\wedge  \dd x^2\wedge  \cdots \wedge  \dd x^n$，于是
+\begin{equation}\label{HodgeO_eq2}
+\leftgroup{
+    \star\dd x^1 \wedge  \dd x^2 &= \dd x^3\wedge  \dd x^4\wedge \cdots\wedge \dd x^n\\
+    \star\dd x^1 \wedge  \dd x^3 &= -\dd x^2\wedge  \dd x^4\wedge \cdots\wedge \dd x^n
+}
+\end{equation}
+
+如果流形上坐标函数仍记为$x^1, x^2, \cdots, x^n$，而某处的体积形式为$\sqrt{\abs{g}}\dd x^1\wedge  \dd x^2\wedge  \cdots \wedge  \dd x^n$，则\autoref{HodgeO_eq2} 的例子应变为
+\begin{equation}\label{HodgeO_eq3}
+\leftgroup{
+    \frac{\star\dd x^1 \wedge  \dd x^2}{\langle\dd x^1\wedge \dd x^2, \dd x^1\wedge  \dd x^2\rangle} &= \sqrt{\abs{g}}\dd x^3\wedge  \dd x^4\wedge \cdots\wedge \dd x^n\\
+    \frac{\star\dd x^1 \wedge  \dd x^3}{\langle\dd x^1\wedge \dd x^3, \dd x^1\wedge  \dd x^3\rangle} &= -\sqrt{\abs{g}}\dd x^2\wedge  \dd x^4\wedge \cdots\wedge \dd x^n
+}
+\end{equation}
+
+
+
+\subsection{星算子的性质}
+
+
+\begin{theorem}{线性性}\label{HodgeO_the2}
+设$V$是$n$维线性空间，取$v_i\in\bigwedge^k V$，$a_i$为$V$的基域中的元素，则$\star(a_1v_1+a_2v_2)=a_1\star v_1+a_2\star v_2$．
+\end{theorem}
+
+\textbf{证明}：
+
+取$V$的标准正交基$\{e_i\}$，记其体积形式为$\omega$．任取$k$次复杂指标$I$、$I_1$和$I_2$，分别对应置换$\sigma$、$\sigma_1$和$\sigma_2$，则
+\begin{equation}
+\ali{
+    e_{\overline{I}}\wedge \star a_1 e_I &= a_1\langle  e_{\overline{I}}, e_I \rangle \omega\\
+    &= e_{\overline{I}}\wedge a_1\star  e_I
+}
+\end{equation}
+故
+\begin{equation}\label{HodgeO_eq4}
+\star a_1e_I = a_1\star e_I
+\end{equation}
+
+又因为
+\begin{equation}
+\ali{
+    \langle e_I, (e_{I_1}+e_{I_2}) \rangle \omega &= \langle e_I, e_{I_1} \rangle\omega + \langle e_I, e_{I_2} \rangle\omega\\
+}
+\end{equation}
+故得
+\begin{equation}\label{HodgeO_eq5}
+e_I\wedge \star(e_{I_1}+e_{I_2}) = e_I\wedge e_{I_1} + e_I\wedge e_{I_2}
+\end{equation}
+
+综合\autoref{HodgeO_eq4} 和\autoref{HodgeO_eq5} ，并考虑到复杂指标选取的任意性，即可得证．
+
+
+\textbf{证毕}．
+
+
+
+\begin{theorem}{对偶}\label{HodgeO_the3}
+
+设$V$是$n$维线性空间，取$v\in\bigwedge^k V$，则$\star \star v = (-1)^{(n-k)k} v$．
+
+\end{theorem}
+
+\textbf{证明}：
+
+取$V$的标准正交基$\{e_i\}$，任取一个$k$次复杂指标$I$，其对应的置换为$\sigma$，补为$\bar{I}$，则由\autoref{HodgeO_the1} 和\autoref{HodgeO_the2} ，
+\begin{equation}\label{HodgeO_eq6}
+\ali{
+    \star \star e_I &= \star(\opn{sign}\sigma)e_{\overline{I}}\\
+    &= (\opn{sign}\sigma)\star e_{\overline{I}}\\
+}
+\end{equation}
+
+复杂指标$\bar{I}$对应的置换$\bar{\sigma}$，相当于进行$\sigma$置换后再把后$n-k$个元素整体挪到前面，也就是进行$\sigma$后再进行$(n-k)k$次\textbf{对换}．因此，$\opn{sign}\bar{\sigma}=(-1)^{(n-k)k}\opn{sign}\sigma$，故将$\star e_{\overline{I}}=\opn{sign}\bar{\sigma}e_I$代入\autoref{HodgeO_eq6} 后有
+\begin{equation}
+\ali{
+    \star \star e_I &= (\opn{sign}\sigma)\star e_{\overline{I}}\\
+    &= (-1)^{(n-k)k}(\opn{sign}\sigma)^2 e_I
+}
+\end{equation}
+
+\textbf{证毕}．
+
+\autoref{HodgeO_the3} 的例子请参见\autoref{HodgeO_sub1} ．
+
+
+
+\subsection{常见例子}\label{HodgeO_sub1}
+
+
+\subsubsection{二维欧几里得空间}
+
+
+\begin{equation}
+\ali{
+    \star e_x &= e_y\\
+    \star e_y &= -e_x
+}
+\end{equation}
+
+
+\subsubsection{三维欧几里得空间}
+
+\begin{equation}
+\leftgroup{
+    \star 1 &=\dd x\wedge  \dd y\wedge  \dd z\\
+    \star \dd x &= \dd y\wedge  \dd z\\
+    \star \dd y &= \dd z\wedge  \dd x\\
+    \star \dd z &= \dd x\wedge  \dd y\\
+    \star \dd y\wedge  \dd z &= \dd x\\
+    \star \dd z\wedge  \dd x &= \dd y\\
+    \star \dd x\wedge  \dd y &= \dd z\\
+    \star \dd x\wedge  \dd y\wedge  \dd z & = 1
+}
+\end{equation}
+
+
+
+
+\subsubsection{四维闵可夫斯基时空}
+
+取通常的参考系$(t, x, y, z)$，注意由于闵可夫斯基度量是$\eta_{\mu\nu}=\opn{diag} (1, -1, -1, -1)$，故这不是一个标准正交基，不适用\autoref{HodgeO_the1} ．但是可以取体积形式$\omega=\dd t\wedge \dd x\wedge \dd y\wedge \dd z$，适用\autoref{HodgeO_def2}  ．
+
+
+\begin{equation}\label{HodgeO_eq7}
+\ali{
+    \star \dd t &= \dd x\wedge \dd y\wedge \dd z\\
+    \star \dd x &= \dd t\wedge \dd y\wedge \dd z\\
+    \star \dd y &= -\dd t\wedge \dd x\wedge \dd z\\
+    \star \dd z &= \dd t\wedge \dd x\wedge \dd y
+}
+\end{equation}
+
+如果取不同的号差，即$\eta_{\mu\nu}=\opn{diag} (-1, 1, 1, 1)$，则\autoref{HodgeO_eq7} 应变为
+\begin{equation}
+\ali{
+    \star \dd t &= -\dd x\wedge \dd y\wedge \dd z\\
+    \star \dd x &= -\dd t\wedge \dd y\wedge \dd z\\
+    \star \dd y &= \dd t\wedge \dd x\wedge \dd z\\
+    \star \dd z &= -\dd t\wedge \dd x\wedge \dd y
+}
+\end{equation}
+
+
+
+
+
+% \addTODO{应该并入\textbf{麦克斯韦方程组（外微分形式）}\upref{MWEq2}，以本词条为预备．}
+% \subsection{麦克斯韦方程组的外微分形式：后两个方程\cite{KnotsVol4}}
+
+% 星算子描述的是外积空间中一个非常显眼的对偶，即 $\bigwedge^k V$ 和 $\bigwedge^{n-k} V$ 之间的同构．
 
 
 
