@@ -66,5 +66,19 @@ $$
 $$
 这是一个渐近展开， 右边的级数是发散的． 它的推导可见拉普拉斯方法\upref{LapAsm}
 
-
-	
+\subsubsection{Matlab 代码}
+Matlab 中的默认 \verb|gamma(x)| 函数接受一个实数 double 类型 \verb|x|， 但如果你安装了符号工具箱 Matlab 符号计算和变精度计算\upref{MatSym}， 可以用 \verb|gamma(vpa(x))|．
+\begin{lstlisting}[language=matlab]
+% symbolic implementation of gamma function
+% input and output are 'double' (supports complex and matrix)
+% efficiency: ~6e-4 [s/eval]
+function z = gamma_sym(z)
+if issym(z), error('argument must be double'); end
+old = digits(17);
+z = double(gamma(vpa(z)));
+if any(isnan(z) | isinf(z))
+    warning('bad output !');
+end
+digits(old);
+end
+\end{lstlisting}

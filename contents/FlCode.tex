@@ -56,3 +56,14 @@ Psi = C * exp(1i*k_dot_r) .* hypergeom(-Sign*1i*eta, 1, ....
     Sign*1i*kr - 1i*k_dot_r);
 end
 \end{lstlisting}
+
+对应的 Mathematica 程序 % 已和 Matlab 数值验证
+\begin{lstlisting}[language=Mathematica]
+CoulombPlane[k_, r_, Z_, Sgn_] := 
+ Module[{k0, η, kdotr, kr, Coef, S},
+  k0 = Norm[k]; η = -Z/k0; S = Sign[Sgn];
+  kdotr = Dot[k, r]; kr = k0 Norm[r];
+  Coef = 1/(2 π)^(3/2) Gamma[1 + S I η] Exp[-π η/2];
+  Psi = Coef Exp[I kdotr] Hypergeometric1F1[-S I η, 1, 
+     S I kr - I kdotr]]
+\end{lstlisting}

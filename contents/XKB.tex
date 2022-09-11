@@ -1,0 +1,23 @@
+% Linux 键盘设置（XKB）
+
+\begin{issues}
+\issueDraft
+\end{issues}
+
+\begin{itemize}
+\item Linux 中所有的 GUI 功能都使用 X windows 系统， 通过 X server 显示． X server 会在重新 login 以后重启．
+\item 注意 Ubuntu （20.04 亲测， 参考\href{https://manpages.ubuntu.com/manpages/focal/en/man5/keyboard.5.html}{这里}）设置 xkb config 文件无效的！ 需要在 \verb|/etc/default/keyboard| 里面设置（同样重新 login 以后生效）． 例如添加一行 \verb|XKBOPTIONS=ctrl:swapcaps| 对调 Ctrl 和 Capslock 按键．
+\item 这相当于 \verb|setxkbmap -option "ctrl:swapcaps"|， 但后者只对当前的 \verb|X session| 有效．
+\item 显示 xkb 当前的所有设置 \verb|setxkbmap -print -verbose 10|
+\item 更多设置参考\href{https://gist.github.com/jatcwang/ae3b7019f219b8cdc6798329108c9aee}{这里}．
+\item 另一个是参考\href{https://www.linux.com/training-tutorials/hacking-your-linux-keyboard-xkb/}{这里}． 设置文件 \verb`/usr/share/X11/xorg.conf.d/10-keyboard.conf`：
+\begin{lstlisting}
+Section "InputClass"
+        Identifier "system-keyboard"
+        MatchIsKeyboard "on"
+        Option "XkbLayout" "us"
+        Option "XkbModel" "pc104"
+        Option "XkbOptions" "ctrl:swapcaps"
+EndSection
+\end{lstlisting}
+\end{itemize}

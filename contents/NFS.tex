@@ -9,7 +9,8 @@
 \item 安装 \verb`sshfs`
 \item 注意 \verb`sshfs` 在 WSL 下无效， 好失望… 希望 wsl 2 （据说要 2020 年）可以
 \item 创建需要网盘目录， 一般在 \verb`/mnt/` 目录下， 例如 \verb`/mnt/101`
-\item \verb`sudo sshfs -o allow_other addis@10.0.2.101:/home/addis /mnt/101` 注意 \verb`addis@` 一定要有， 否则无法进入网盘． 另外一定要用 ip 不能用 ssh 设置的别名
+\item \verb`sudo sshfs -o allow_other -o follow_symlinks addis@10.0.2.101:/home/addis /mnt/101` 注意 \verb`addis@` 一定要有， 否则无法进入网盘． 另外一定要用 ip 不能用 ssh 设置的别名
+\item 其中 \verb|-o follow_symlinks| 选项如果没有的话， 使用绝对路径的 \verb|symlink| 就会被误以为是本地计算机上的路径． 但如果使用该选项， 远程的 symlink 在本地就会显示为真正的文件夹， 不能只删掉 link．
 \item 要弹出网盘， 用 \verb`umount [dir]`， 然后可以手动删掉路径
 \item 理论上 \verb|sudo sftp| （注意有没有 \verb|sudo| 区别很大） 可以连接的话 \verb|sudo sshfs| 就是可以的． 如果不 mount 在 \verb|mnt| 目录， 不用 sudo 应该也是可以的．
 \item 如果出现问题， 用 \verb|sudo sshfs -o debug ...| 来 debug

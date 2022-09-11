@@ -7,15 +7,15 @@
 
 \pentry{跃迁概率（含时微扰）\upref{HionCr}}
 
-本文使用原子单位制\upref{AU}．
+本文使用原子单位制\upref{AU}， 用平面波近似末态库伦函数．
 
 \subsection{长度规范}
 归一化的平面波和归一化的氢原子基态为
 \begin{equation}
-\ket{\bvec k} = (2\pi)^{-3/2} \E^{\I \bvec k \vdot \bvec r}
-\qquad \ket{0} = \frac{1}{\sqrt{\pi}} \E^{-r}
+\ket{\bvec k} = (2\pi)^{-3/2} \E^{\I \bvec k \vdot \bvec r},
+\qquad \ket{0} = \frac{1}{\sqrt{\pi}} \E^{-r}~.
 \end{equation}
-长度规范下的跃迁偶极子， 可以在极坐标系中积分
+长度规范下的跃迁偶极子， 可以在极坐标系中积分（令 $\uvec k$ 方向为极轴， $\uvec r$ 与其夹角为 $\theta$）
 \begin{equation}
 \mel{\bvec k}{\bvec r}{0}
 =  \frac{\uvec k}{(2\pi)^{3/2}\sqrt{\pi}} \int_0^{+\infty} \int_0^\pi \E^{-r} \E^{-\I k r \cos\theta} r \cos\theta \cdot 2\pi r^2 \sin\theta \dd{\theta} \dd{r}
@@ -27,6 +27,35 @@
 &= -\I \frac{8 \sqrt2}{\pi} \frac{\bvec k}{(k^2+1)^3}
 }\end{equation}
 \addTODO{代入未完成}
+
+Matlab 代码如下
+\begin{lstlisting}[language=matlab, caption=hydrogen\_trans\_dipole0]
+% approximate hydrogen transition dipole with Coulomb plane wave
+% since middle and right parts are symmetric,
+%     assuming \vec k in z+ direction
+% <\vec k|\vec r|n,0,0> = [0, 0, <\vec k|z|n,0,0>]
+% output numerical integration and analytical result (HyIon2_eq1)
+function [dipole_z, dipole_analy_z] = hydrogen_trans_dipole0(kz, ZZ, n)
+% === params ===
+rmax = 30; Nr = 300; Nth = 300;
+% ==============
+k = [0, 0, kz];
+r = linspace(0, rmax, Nr); dr = rmax / (Nr-1);
+th = linspace(0, pi, Nth); dth = pi / (Nth-1);
+ph = 0;
+[R, Th] = ndgrid(r, th);
+Z = R .* cos(Th);
+Psi_n = hydrogen_Psi(ZZ, n, 0, 0, r', th, ph);
+% <\vec k|\vec r|0>
+Psi_k = 1/(2*pi)^(3/2) * exp(1i*kz.*Z);
+dipole_z = sum(sum(conj(Psi_k).*Z.*Psi_n .*R.^2.*sin(Th))) ...
+    * dr * dth * 2*pi;
+% HyIon2_eq1
+if n == 1
+    dipole_analy_z = -1i*(8*sqrt(2))/pi * kz / (dot(k,k) + 1)^3;
+end
+end
+\end{lstlisting}
 
 \subsection{速度规范}
 注意一阶微扰理论中的初态和末态波函数都是无微扰（无外场）情况下的， 与规范无关． 要计算 $\mel{\bvec k}{\grad}{0}$， 先看积分
@@ -70,3 +99,34 @@
 这说明在使用平面波近似库伦函数时， 长度规范的 transition amplitude 恰好是速度规范的 2 倍， 截面是四倍（待求证）．
 
 教材中推导微分截面一般使用速度规范， 因为速度规范的结果与实验吻合更好．
+
+\subsection{使用库仑平面波}
+
+理论上若把上面的平面波换成库仑平面波（库仑势能中的精确散射态\upref{CulmWf}）， 那么理论上用不同的规范结果是一样的． 笔者没有见过该积分的解析解， 长度规范的 Matlab 数值积分代码如下：
+
+\begin{lstlisting}[language=matlab, caption=hydrogen\_trans\_dipole.m]
+% exact hydrogen transition dipole with Coulomb plane wave
+% since middle and right parts are symmetric,
+%     assuming \vec k in z+ direction
+% <C_{\vec k}|\vec r|n,0,0> = [0, 0, <C_{\vec k}|z|n,0,0>]
+function dipole_z = hydrogen_trans_dipole(kz, ZZ, n)
+% === params ===
+rmax = 30; Nr = 300; Nth = 300;
+Sign = -1; % plane wave out
+% ==============
+k = [0, 0, kz];
+dr = rmax / Nr; dth = pi / Nth;
+r = linspace(dr/2, rmax-dr/2, Nr);
+th = linspace(dth/2, pi-dth/2, Nth); 
+ph = 0;
+Psi_n = hydrogen_Psi(ZZ, n, 0, 0, r', th, ph);
+[R, Th] = ndgrid(r, th); Ph = ones(size(R)) * ph;
+[X, Y, Z] = Sph2Cart(R, Th, Ph); % Y all 0
+Psi_k = coulomb_plane(k, X, Y, Z, ZZ, Sign);
+% <C_{\vec k}|\vec r|0>
+dipole_z = sum(sum(conj(Psi_k).*Z.*Psi_n .*R.^2.*sin(Th))) ...
+    * dr * dth * 2*pi;
+end
+\end{lstlisting}
+
+\addTODO{速度规范数值积分，验证}

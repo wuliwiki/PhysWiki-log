@@ -1,4 +1,4 @@
-% Linux 网络基础笔记
+% Linux 网络笔记
 
 \begin{issues}
 \issueDraft
@@ -37,4 +37,10 @@
 \item 屏蔽 facebook： \verb|host facebook.com|， \verb`whois 66.220.156.68 | grep CIDR`， \verb|iptables -A OUTPUT -p tcp -d 66.220.144.0/20 -j DROP|
 \item Port Forwarding： \verb|iptables -t nat -A PREROUTING -i eth0 -p tcp --dport 25 -j REDIRECT --to-port 2525| 就是 network interface eth0, from port 25 to port 2525
 \item 屏蔽某个 mac 地址 \verb|iptables -A INPUT -m mac --mac-source 00:00:00:00:00:00 -j DROP|
+\end{itemize}
+
+\subsection{NAT}
+\begin{itemize}
+\item \verb|NAT| 的原理大概就是把不同内网的 ip 地址 + 端口 （socket） 映射到某个（例如学校的）公网 ip 地址和不同的端口， 并在链接建立以后把后者的端口回传给前者的端口
+\item 所以两个不同的 NAT 后面的电脑是可以 P2P 连接的， 但是首先要通过一个公网服务器建立连接， 这几乎是常规操作了（猜测 teamviewer 应该就是这个原理）
 \end{itemize}

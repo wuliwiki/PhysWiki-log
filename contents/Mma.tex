@@ -1,4 +1,4 @@
-% Mathematica 入门笔记
+% Mathematica 笔记
 
 \pentry{复数\upref{CplxNo}， 自然对数底\upref{E}}
 
@@ -95,7 +95,8 @@ Mathematica 相对于 Matlab， Python 等偏数值计算的语言最大的特�
 \item 合并矩阵/矢量 \verb|Join[{{1,2},{3,4}},{{5,6},{7,8}}]| 得 \verb|{{1,2},{3,4},{5,6},{7,8}}|， 在第 1 个维度上合并． 等效于 \verb|Join[{{1,2},{3,4}},{{5,6},{7,8}},1]|
 \item \verb|Join[{{1,2},{3,4}},{{5,6},{7,8}},2]| 得 \verb|{{1,2,5,6},{3,4,7,8}}|， 在在第 2 个维度上合并．
 \item Mathematica 中把若干矢量排列成矩阵都是按行排列． 例如 \verb|Eigenvector| 返回的本征矢．
-\item \verb|Dot| 点乘， 也可以用 \verb|.|． 例如 \verb|{1, 2}.{3, 4}|． 注意不会进行共轭．
+\item \verb|Dot| 点乘， 也可以用 \verb|.|． 例如 \verb|{1, 1+I}.{3, 4}|． 注意第一个向量不会进行共轭．
+\item \verb|Norm| 计算矢量的模长， \verb|Norm[{3,4}]| 结果是 \verb|5|．
 \item \verb|Transpose[]| 可以把矩阵做转置． 也可以在矩阵后面用 \verb|\[Transpose]| 或者 \verb|Esc| 键搜索 \verb|tr|．
 \item \verb|ConjugateTranspose[]| 可以把矩阵做厄米共轭． 也可以在矩阵后面用 \verb|\[HermitianConjugate]| 或者 \verb|Esc| 键搜索 \verb|hc|．
 \item \verb|LinearSolve[{{1, 2}, {3, 4}}, {5, 6}]| 解线性方程组．
@@ -134,7 +135,8 @@ Mathematica 相对于 Matlab， Python 等偏数值计算的语言最大的特�
 \subsection{函数}
 \begin{itemize}
 \item 定义函数 \verb|f[x_, y_] := x^2 + y^2|． 左边的自变量需要用下划线．
-\item 更复杂的函数也可以用 \verb|Module[]| 定义如 \verb|f[x0_] := Module[{x = x0}, While[x > 0, x = Log[x]]; x]| 注意 \verb|Module| 定义的函数不支持一些符号运算， 例如 \verb|D[f[x]]| 会得到错误的结果．
+\item 更复杂的函数也可以用 \verb|Module[]| 定义如 \verb|f[x0_] := Module[{x = x0}, While[x > 0, x = Log[x]]; x]|． 格式为 \verb|Module[{a,b,...}, expr]|， 或 \verb|Module[{a=1,b=2,...}, expr]| 其中第一个大括号中声明本地变量以及初始化（大括号中可以为空）， \verb|expr| 可以由许多分号隔开， 最后一个是函数的返回值．
+\item 注意 \verb|Module| 定义的函数不支持一些符号运算， 例如 \verb|D[f[x]]| 会得到错误的结果．
 \item 匿名函数 \verb|...#...&[...]| 中 \verb|&| 之前就是函数的定义， 可以把方括号中的内容的变量在左边用 \verb|#| 代替， 如 \verb|# Sin[#] &[x]| 得到函数 \verb|x Sin[x]|． 又例如 \verb|#.#\[Transpose] &[RandomInteger[{-5, 5}, {6, 6}]]| 可以随机生成对称矩阵． 也可以用 \verb|@| 代替方括号．
 \item 如果一个函数返回一个 list， 可以用 \verb|{a,b,..} = Fun[...]| 把每个元素分别赋给不同变量． 这是事实上不是函数的功能， \verb|{a, b, c} = {{1, 2}, 2, "c"}| 也可以对 \verb|a,b,c| 分别赋值．
 \item 变量默认值： \verb|foo[a_, b_:2, c_:3] := bar[a, b, c]| 输入 \verb|foo[1]| 返回 \verb|bar[1,2,3]|
