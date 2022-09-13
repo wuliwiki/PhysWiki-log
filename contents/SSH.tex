@@ -48,24 +48,36 @@
 \item 如果没有管理员权限， 那么可以在用户文件夹创建 \verb|~/.hosts|， 然后在 \verb|~/.bashrc| 修改环境变量 \verb|export HOSTALIASES=~/.hosts|
 \item 另一种方法是， 在 client 上可以写一个设置文件 \verb`~/.ssh/config`， 设置 host 的名字， 就可以用名字而不是 ip 登录了
 \begin{lstlisting}[language=bash]
-Host [SERVERNAME]
-Hostname [ip-or-domain-of-server]
-User [USERNAME]
+Host 别名
+Hostname 网址或者ip或者/etc/hosts中的名字
+User 登录的用户名
+Port 端口号
 PubKeyAuthentication yes
-IdentityFile [./path/to/key]
+IdentityFile [./path/to/key] # ssh-keygen 生成的 key
 
-# 简单的设置例如
-Host server1
+# 简单的设置例如（默认项可以忽略，例如端口 22， 当前用户名等）
+Host myserver1
 Hostname 10.0.2.101
 User addis
 \end{lstlisting}
-最后一条强制使用 key 登录而不用密码．
+\verb|PubKeyAuthentication| 强制使用 key 登录而不用密码．
 
-\item 如果要设置 tunnel （也就是 ssh 到一个机器再 ssh 到另一个）, ， 就先在 .ssh 中设置好第一个机器的自动登录，再设置第二个机器如下(参考\href{https://askubuntu.com/questions/311447/how-do-i-ssh-to-machine-a-via-b-in-one-command}{这里})
+\item 如果遇到错误 \verb|Unable to negotiate with 40.74.28.9 port 22: no matching host key type found. Their offer: ssh-rsa|， 就在 config 中加上两行 \verb|HostkeyAlgorithms +ssh-rsa| 和 \verb|PubkeyAcceptedAlgorithms +ssh-rsa|．
+
+\item 如果要设置 tunnel （也就是 ssh 到一个机器再 ssh 到另一个）， 就先在 .ssh 中设置好第一个机器的自动登录，再设置第二个机器如下（参考\href{https://askubuntu.com/questions/311447/how-do-i-ssh-to-machine-a-via-b-in-one-command}{这里}）
 \begin{lstlisting}[language=bash]
-Host 第二个机器
-ProxyCommand ssh -q unibroker nc 第二个机器的IP或者hostname 22
+Host server1
+  Hostname server1.example.com
+  User 用户名
+  IdentityFile ~/.ssh/id_rsa
+
+Host server2
+  Hostname server2.example.com
+  User 用户名
+  IdentityFile ~/.ssh/id_rsa
+  ProxyJump server1
 \end{lstlisting}
+注意第二个 \verb|IdentityFile| 应该也是本机的， 如果服务器不认识仍然会索取密码． 用 \verb|ssh-copy-id server2| 即可．
 
 \item 如果说用 key \verb`ssh` 的时候说 \verb`permission id_rsa too open`， 用 \verb`chmod 700 id_rsa*` 即可， 其中 7 变为二进制是 \verb`111` 对应 \verb`rwx` 的三个开关都打开， 0 对应 \verb`000` 没有任何权限， 所以 700 就是 owner 有所有权限， 其他用户没有任何权限
 \item 虽然 public key 中最后有 \verb`用户名@主机`， 其实这个好像没有任何影响， private key 和 public key 都可以复制到许多不同的机器中， 让这些机器两两之间互相 ssh， 而它们的 \verb`~/.ssh/authorized_keys` 中只需要有一条

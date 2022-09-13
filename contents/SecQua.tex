@@ -1,0 +1,54 @@
+% 二次量子化
+% 二次量子化|多体系统|玻色统计|费米统计
+
+\pentry{全同粒子\upref{IdPar}，全同粒子的统计\upref{IdParS}}
+
+薛定谔方程是关于单粒子的量子力学，而如果我们考虑一个多粒子体系，研究粒子间相互作用对多体系统的影响，则有必要建立一个关于多粒子的量子力学．一个直接的想法是，讲单个时空坐标变量的波函数拓展为 $N$ 个变量的波函数 $\psi(x_1,\cdots,x_N)$，波函数的模方具有概率的意义，因此可以乘上一个系数使它归一化．此外，如果某多体系统中两个电子可以被看作是两个独立的波函数 $\psi_1(x_1)$ 和 $\psi_2(x_2)$，那么这意味着 $\psi(x_1,x_2)$ 可以写成 $\psi_1(x_1)\psi_2(x_2)$ 也就是这两个单粒子波函数的乘积，此时这个量子态可以用 $\ket{\psi_1}\ket{\psi_2}$ 表示，它的坐标表象就是 $(\bra{x_1}\bra{x_2})(\ket{\psi_1}\ket{\psi_2})=\braket{x_1}{\psi_1} \braket{x_2}{\psi_2}=\psi_1(x_1)\psi_2(x_2)=\psi(x_1,x_2)$．
+
+然而当我们讨论全同粒子的时候，例如 $N$ 个电子组成的体系，上述波函数的定义并没有体现粒子的全同性，波函数不具有交换对称性或交换反对称性\footnote{玻色统计满足交换对称性 $\psi(x_1,x_2,\cdots)=\psi(x_2,x_1,\cdots)$，而费米统计满足交换反对称性，$\psi(x_1,x_2,\cdots)=-\psi(x_2,x_1,\cdots)$．}．因此有必要将波函数对称化．我们令 $\xi=\pm 1$，$\xi=1$ 对应玻色统计，而 $\xi=-1$ 对应费米统计．那么可以定义新的对称化的波函数为
+\begin{equation}
+\psi'(x_1,\cdots,x_N)\propto \sum_{P\in S_N} \xi^P \psi(x_{P_1},x_{P_2},\cdots,x_{P_N})
+\end{equation}
+其中 $\xi^P$ 中的指数 $P$ 看作是排列 $P\in S_N$ 的逆序数，每交换排列 $P$ 的某两个 $P_i,P_j$，逆序数都会改变 $\pm 1$．
+
+$N$ 体系统的波函数所在的 Hilbert 空间记为 $\mathcal{H}_N$．完整的 Hilbert 空间被称为 Fock 空间，记为 $\mathcal{F}$，那么我们可以将 $\mathcal{F}$ 表示为一切 $\mathcal{H}_N$ 的直和，即
+\begin{equation}
+\mathcal{F}=\mathcal{H}_1 \oplus \mathcal{H}_2 \oplus \cdots
+\end{equation}
+为了更清楚地了解 $\mathcal{F}$ 的结构，我们需要从几个方面进行研究：首先是研究 $\mathcal{H}_N$ 的一组正交完备基底，有了基底以后我们可以用这些基函数的线性组合来表示任意 $N$ 体系统，经过合适的基底构造还可以将单粒子态与多粒子态联系起来；然后我们需要研究产生算符和湮灭算符，它们将不同粒子数的 Hilbert 空间之间关联了起来．最后，我们需要研究多粒子系统的算符，这里面包括能量算符、动量算符、相互作用势能算符等等，这是二次量子化的一个非常重要的内容．
+\subsection{Fock 空间的基底}
+最简单的一组基底为坐标表象下的基底，我们将它记为 $\ket{x_1\cdots x_N}$（类似于单粒子 Hilbert 空间的 $\ket{x}$ 基底），满足正交完备性．对于多体系统的这组基底，我们约定每交换两个坐标 $x_i,x_j$，态矢 $\ket{x_1\cdots x_N}$ 将改变一个 $\xi$ 的因子，即满足交换对称性
+\begin{equation}
+\begin{aligned}
+\ket{\cdots x_i \cdots x_j \cdots}& =
+\xi \ket{\cdots x_j \cdots x_i \cdots} \\
+&=\frac{1}{\sqrt{N!}}\sum_P \xi^P\ket{x_{P_1}}\ket{x_{P_2}}\cdots\ket{x_{P_N}}
+\end{aligned}
+\end{equation}
+
+更一般地，我们定义这样的多粒子态，其中第 $i$ 个粒子的波函数可以由 $\psi_i(x)$ 描述．
+\begin{equation}
+\begin{aligned}
+\ket{\psi_1\cdots\psi_N}&=\frac{1}{\sqrt{N!}}\sum_P \xi^P\ket{\psi_{P_1}}\cdots \ket{\psi_{P_N}}\\
+&=\frac{1}{\sqrt{N!}}\sum_P \xi^P\psi_{P_1}(x_1)\cdots \psi_{P_N}(x_N)
+\end{aligned}
+\end{equation}
+则经过计算，它的坐标表象为
+\begin{equation}\label{SecQua_eq1}
+\braket{x_1\cdots x_N}{\psi_1\cdots\psi_N}=\frac{1}{N!}\sum_P\sum_Q \xi^P \xi^Q \braket{x_{P_1}}{\psi_{Q_1}}\cdots\braket{x_{P_N}}{\psi_{Q_N}}
+\end{equation}
+我们可以将右侧的 $\braket{x_{P_i}}{\psi_{Q_i}}$ 重排，使得 $Q_i$ 从左往右依次是 $1,2,\cdots,N$，那么 $P_i$ 从左往右依次是 $P'_1,P'_2,\cdots,P'_N$．这意味着 $P'_{Q_i}=P_i$，或者说 $P'=P\circ Q^{-1}$．根据逆序数的性质，$\xi^P\xi^Q=\xi^{P\circ Q^{-1}}=\xi^{P'}$，\autoref{SecQua_eq1}  最终可以化简为
+\begin{equation}
+\begin{aligned}
+\braket{x_1\cdots x_N}{\psi_1\cdots\psi_N}&=\frac{1}{N!}\sum_{P'}\sum_Q \xi^{P'} \braket{x_{P'_1}}{\psi_{1}}\cdots\braket{x_{P'_N}}{\psi_{N}}\\
+&=\sum_{P}\xi^P\braket{x_{P_1}}{\psi_{1}}\cdots\braket{x_{P_N}}{\psi_{N}}\\
+&=\left|\begin{matrix}
+\psi_1(x_1) &\psi_2(x_1) &\cdots &\psi_N(x_1)\\
+\psi_1(x_2) &\psi_2(x_2) &\cdots & \psi_N(x_2)\\
+\vdots & \vdots & & \vdots \\
+\psi_1(x_N) & \psi_2(x_N) & \cdots & \psi_N(x_N)
+\end{matrix}\right|_\xi
+\end{aligned}
+\end{equation}
+上述行列式右下角的 $\xi$ 表示每一个乘积项都带有一个 $\xi^P$ 的符号．利用上述公式，我们可以构造一组正交完备基．
+\addTODO{未完待续}

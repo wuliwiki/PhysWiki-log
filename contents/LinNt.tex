@@ -54,7 +54,8 @@
 \item 要使用外接储存器(U盘, 移动硬盘等), 需要新建一个文件夹, 然后连接外接储存器, 叫做 Mount The Drive. 习惯上, 新建文件夹都放在 \verb`/mnt` 目录下
 \item 要连接储存器, 用 \verb`sudo fdisk -l` 显示所有的外接硬盘的路径名
 \item \verb`sudo mount <硬盘地址> <新建文件夹路径>`
-\item \verb`umount <硬盘地址>` 断开连接
+\item \verb`sudo umount <硬盘地址>` 断开连接
+\item \verb`sudo mount -a` 把 \verb|/etc/fstab| 中的设置全部 mount 一次
 \item 创建 symbolic link (相当于快捷方式), \verb`ln -s /path/to/file /path/to/symlink`
 \item \verb`mkdir` 新建文件夹, \verb`rmdir` 删除空文件夹, \verb`rmdir -r` (recursive) 删除所包含的文件夹 (其实不用 \verb`rmdir` 用 \verb`rm` 也可以!)， \verb`-P` 选项可以一次创建多层目录
 \item \verb`dd` 命令可以直接在当前位置生成一个大小为 100 MB 的文件， 内容为随机， 还会显示写入速度
@@ -62,13 +63,14 @@
 \item \verb`locate ???` 命令可以从数据库中寻找计算机上所有文件名包含 \verb`???` 的文件， 但刚创建的文件可能找不到
 \item \verb`sudo updatedb` 可以将刚创建的文件加到数据库中， 让 \verb`locate` 可以找到
 \item 对于整个系统， \verb`locate` 比 \verb`find` 要快得多， 因为数据库已经是 index 过的 \verb`-c` 选项可以显示匹配结果的个数， \verb`-i` 选项可以不区分大小写
+\item \verb|plocate| 是一个比较快的实现， \verb|mlocate| 是一个比较安全的实现， 命令都是 \verb|locate|， \verb|/etc/updatedb.conf| 中可以设置 \verb|updatedb| 的一些选项， 例如忽略挂载到某个目录的硬盘， 忽略 \verb|.git| 文件夹等， 忽略某些文件系统等．
 \item \verb|rename 's/老名字/新名字/' *|． \verb|-n| 选项显示重命名的预览， 不真的重命名
 \item \verb|sudo swapoff -a| 不使用 swap file， \verb|sudo swapon -a| 恢复使用．
 \end{itemize}
 
 \subsection{包管理}
 \begin{itemize}
-\item \verb`sudo apt-get install <appname>` 安装程序(99%的程序都可以这样安装)(需要联网)
+\item \verb`sudo apt-get install <appname>` 安装程序(99\%的程序都可以这样安装)(需要联网)
 \item \verb`sudo apt-get remove <appname>` 卸载程序
 \item \verb`sudo apt-get upgrade <appname>` 升级程序
 \item \verb`apt-get` （和 \verb`apt-cash`， 如果听说过）中常用的功能都在 \verb`apt` 中有同样的， 所以大部分情况下只需要 \verb`apt` 就可以了， 例如 \verb`apt install`， \verb`apt purge`． \verb`apt` 对新手更友好， 例如会默认显示进度条， 更新的 package 数等．
@@ -191,6 +193,11 @@ for ((i=275;i<=294;++i)); do rsync -zvh addis1@headnode.beocat.ksu.edu:/homes/ad
 \item 如果远程目录有需要 \verb`\` 的字符， 例如 \verb`\(...\)`， 需要用三次， 例如 \verb`\\\(...\\\)`． 本地的 shell 会先把 \verb`\\` 变为 \verb`\`, \verb`\(` 变为 \verb`(`
 \item 若要在每个文件传输完成之后从原来文件夹删除， 用 \verb`--remove-source-files`
 \item 若要删除目标文件夹中， 源文件夹不存在的内容， 用 \verb`--delete`
+\end{itemize}
+
+\subsection{curl}
+\begin{itemize}
+\item \verb|curl 链接|
 \end{itemize}
 
 \subsection{服务器}
