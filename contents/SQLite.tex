@@ -1,4 +1,4 @@
-% SQLite 教程
+% SQLite C++ API 笔记
 
 \begin{issues}
 \issueDraft
@@ -11,43 +11,129 @@ ubuntu 上用 \verb|sudo apt install libsqlite3-dev| 安装
 
 另外安装命令行工具 \verb|sudo apt install sqlite3|
 
-\href{https://sqlitestudio.pl/}{SQLiteStudio} 是一个 GUI 工具， 无需安装．
-
+\subsection{例子}
+参考\href{https://www.tutorialspoint.com/sqlite/sqlite_c_cpp.htm}{这里}． 注意所有的数据必须先转换成字符串才能加到数据库中．
 \begin{lstlisting}[language=cpp]
 #include <iostream>
 #include <sqlite3.h>
 
-int test_sqlite()
+void test_sqlite()
 {
-	using namespace std;
-    sqlite3* DB;
-    int exit;
-    exit = sqlite3_open("example.db", &DB);
-    if (exit) {
+	using namespace slisc;
+#ifdef SLS_USE_SQLITE
+	sqlite3* DB;
+	int exit;
+	file_remove("example.db");
+	exit = sqlite3_open("example.db", &DB);
+	if (exit) {
 		cout << sqlite3_errmsg(DB) << endl;
-        cerr << "Error open DB!" << endl;
-    }
+		SLS_ERR("Error open DB!");
+	}
 	char* messaggeError;
 	string sql = "CREATE TABLE PERSON("
-                 "ID INT PRIMARY KEY     NOT NULL, "
-                 "NAME           TEXT    NOT NULL, "
-                 "SURNAME        TEXT    NOT NULL, "
-                 "AGE            INT     NOT NULL, "
-                 "ADDRESS        CHAR(50), "
-                 "SALARY         REAL );";
+					  "ID       INT     PRIMARY KEY  NOT NULL, "
+					  "NAME     TEXT    NOT NULL, "
+					  "SURNAME  TEXT    NOT NULL, "
+					  "AGE      INT     NOT NULL, "
+					  "ADDRESS  CHAR(50), "
+					  "SALARY   REAL );";
 	exit = sqlite3_exec(DB, sql.c_str(), NULL, 0, &messaggeError);
-    if (exit != SQLITE_OK) {
-        cerr << "Error Create Table" << endl;
-        sqlite3_free(messaggeError);
-    }
-    sqlite3_close(DB);
-    return 0;
+	if (exit != SQLITE_OK) {
+		SLS_ERR("Error Create Table");
+		sqlite3_free(messaggeError);
+	}
+
+	sql = "INSERT INTO PERSON"
+					  "(ID, NAME, SURNAME, AGE, ADDRESS, SALARY)"
+					  " VALUES "
+					  "(0, 'Addis', 'Chen', 30, 'ABC Rd,
+                          Manhattan, NY, 12345', 1500.03);"
+		   "INSERT INTO PERSON"
+					  " VALUES "
+					  "(1, 'Bob', 'Chen', 31, 'DEF Ave,
+                          Manhattan, NY, 12345', 4500.03);";
+	exit = sqlite3_exec(DB, sql.c_str(), NULL, 0, &messaggeError);
+	if (exit != SQLITE_OK) {
+		SLS_ERR("Error Inserting Table :" + Str(messaggeError));
+		sqlite3_free(messaggeError);
+	}
+
+	sqlite3_close(DB);
+#else
+	cout << "---------- disabled! ----------" << endl;
+#endif
 }
 \end{lstlisting}
 
-sqlite3 的数据库文件是二进制的， 可以用命令行 dump 出一个文本文件
+另一个挺有用的小程序是（修改自\href{https://www.sqlite.org/quickstart.html}{官方教程}）， 可以在命令行对任意数据库文件执行任意 SQL 命令． 编译： \verb|g++ -o sqcmd sqcmd.cpp -l sqlite3|． 使用方法如 \verb|./sqcmd example.db "SELECT * FROM PERSON"|
+\begin{lstlisting}[language=cpp]
+#include <stdio.h>
+#include <sqlite3.h>
+
+static int callback(void *NotUsed, int argc, char **argv, char **col_name){
+  int i;
+  for(i=0; i<argc; i++){
+    printf("%s = %s\n", col_name[i], argv[i] ? argv[i] : "NULL");
+  }
+  printf("\n");
+  return 0;
+}
+
+int main(int argc, char **argv){
+  sqlite3 *db;
+  char *zErrMsg = 0;
+  int ret;
+
+  if( argc!=3 ){
+    fprintf(stderr, "Usage: %s DATABASE SQL-STATEMENT\n", argv[0]);
+    return(1);
+  }
+  ret = sqlite3_open(argv[1], &db);
+  if( ret ){
+    fprintf(stderr, "Can't open database: %s\n", sqlite3_errmsg(db));
+    sqlite3_close(db);
+    return(1);
+  }
+  ret = sqlite3_exec(db, argv[2], callback, 0, &zErrMsg);
+  if( ret!=SQLITE_OK ){
+    fprintf(stderr, "SQL error: %s\n", zErrMsg);
+    sqlite3_free(zErrMsg);
+  }
+  sqlite3_close(db);
+  return 0;
+}
+\end{lstlisting}
+
+sqlite3 的数据库文件是二进制的， 可以用 \verb|sqlite3| 命令行 dump 出一个通用的文本文件
 \begin{lstlisting}
 sqlite> .output example.sql
 sqlite> .dump
 sqlite> .exit
 \end{lstlisting}
+
+\subsection{binding}
+当然也不需要把所有数据类型都转换成 string 那么蠢． 这就要用到 binding， 参考\href{https://www.sqlite.org/c3ref/bind_blob.html}{这里}．
+\begin{itemize}
+\item 事实上 \verb|sqlite3_exec()| 命令是调用一系列命令， 如果用 binding， 就必须把它们分开用．
+\item 首先用 \verb|sqlite3_stmt stmt;| 创建一个 statement object．
+\item 然后把 sql 命令 \verb|str| parse 为 \verb|stmt|： \verb|ret = sqlite3_prepare_v2(db, str.c_str(), str.size()+1, &stmt, NULL);|． 这里 \verb|str| 中的数据可以用 \verb|?| 或者 \verb|?编号| 代替， 以后再 bind 到不同的数据上． 这样就不需要每换一次数据都要重新 parse 一次．
+\item \verb|int sqlite3_bind_parameter_count(stmt)| 可以返回 \verb|?| 的个数．
+\item \verb|ret = sqlite3_bind_text(stmt, 问号的编号, names[i].c_str(), names[i].size(), SQLITE_STATIC);| 用于把字符串 bind 到指定的问号上． 如果问号没有指定编号则从左到右从 1 开始．
+\item \verb|ret = sqlite3_bind_text(stmt, 问号的编号, int);| 用于把整数 bind 到指定的问号上．
+\item bind 好之后用 \verb|ret = sqlite3_step(stmt)| 来执行， 当 statement 不是 query 时返回 \verb|SQLITE_DONE|； 是 query 时返回 \verb|SQLITE_ROW|， 每调用一次返回一行．
+\item 要查看 query 的结果， \verb|sqlite3_column_int(stmt, 从0开始的列编号)| 获取当前返回行的某个整数类型的列
+\item \verb|(char*)sqlite3_column_text(stmt, 从0开始的列编号)| 同理获得字符串类型
+\item 最后用 \verb|sqlite3_finalize(stmt);| 释放内存．
+\end{itemize}
+
+
+\subsection{sqlite3 命令}
+\begin{itemize}
+\item \verb|sqlite3| 是一个命令行程序， 可以手动输入 SQL 命令来操作 sqlite 数据库．
+\end{itemize}
+
+\subsection{GUI 浏览器}
+\begin{itemize}
+\item DB Browser for SQLite 是一个比较简单的 GUI 工具， 可以直接在 snap store 里面安装．
+\item \href{https://sqlitestudio.pl/}{SQLiteStudio} 有更多特性和更漂亮的界面， 无需安装．
+\end{itemize}

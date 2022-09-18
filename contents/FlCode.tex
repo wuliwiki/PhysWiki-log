@@ -4,6 +4,7 @@
 
 \addTODO{$G_l$ 没有定义．}
 
+\subsection{库仑函数}
 在 Mathematica 中定义库仑函数 $F_l(\eta, \rho)$ 为（\autoref{CulmF_eq1}~\upref{CulmF}） % 已验证
 \begin{lstlisting}[language=Mathematica]
 CoulombF[l_, η_, ρ_] := 2^l E^(-π η/2) \
@@ -54,6 +55,34 @@ kr = k0*sqrt(X.^2+Y.^2+Z.^2);
 C = 1/(2*pi)^1.5 * double(gamma(1+Sign*1i*vpa(eta))) * exp(-pi*eta*0.5);
 Psi = C * exp(1i*k_dot_r) .* hypergeom(-Sign*1i*eta, 1, ....
     Sign*1i*kr - 1i*k_dot_r);
+end
+\end{lstlisting}
+
+一个并行版的程序（参考 Matlab 并行运算笔记\upref{MatPar}）：
+\begin{lstlisting}[language=matlab, caption=coulomb\_plane\_par.m]
+% 直角坐标系的库仑平面波 （coulomb_plane 的并行版， 需要 parallel toolbox）
+% 6 和 12 线程的机器上， 12 worker 的效率大概是单线程的 5.32 倍
+% parfor 划分成列是划分成元素的 3 倍， 因为 hypergeom 输入矩阵效率最高
+
+% Sign = 1 球面波出射, Sign = -1 球面波入射
+% 'numel(k) = 3'
+% 归一化: delta(\vec k - \vec k'),
+%     无穷远平面波振幅 1/(2*pi)^1.5
+function Psi = coulomb_plane_par(k,X,Y,Z,ZZ,Sign)
+if (ZZ < 0)
+    error('ZZ (nuclear charge) must be positive!');
+end
+Sign = sign(Sign);
+k0 = norm(k);
+eta = -ZZ/k0;
+k_dot_r = k(1)*X + k(2)*Y + k(3)*Z;
+kr = k0*sqrt(X.^2+Y.^2+Z.^2);
+C = 1/(2*pi)^1.5 * double(gamma(1+Sign*1i*vpa(eta))) * exp(-pi*eta*0.5);
+Psi = zeros(size(X)); Ncol = size(Psi, 2);
+parfor i = 1:Ncol
+    Psi(:,i) = C * exp(1i*k_dot_r(:,i)) .* hypergeom(-Sign*1i*eta, 1, ....
+        Sign*1i*kr(:,i) - 1i*k_dot_r(:,i));
+end
 end
 \end{lstlisting}
 

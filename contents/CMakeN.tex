@@ -1,12 +1,18 @@
 % CMake 笔记
 
+\begin{issues}
+\issueDraft
+\end{issues}
+
 \pentry{Makefile 笔记\upref{Make}}
 
 \subsection{常识}
 \begin{itemize}
 \item 在 windows 下可直接使用 GUI， linux 命令行中使用 \verb`ccmake` 可以有 TUI． 否则就用 \verb`cmake`
-\item 在 \verb|CMakeLists.txt| 的路径下， \verb`cmake .` 生成 Makefile， 然后 \verb|make -j10| 多线程编译． \verb|make VERBOSE=1 -j10| 输出编译命令．
-\item 基本语法是 \verb`command(args ...)` 其中 command 不区分大小写， \verb`args` 用空格隔开， 如果 arg 本身有空格， 用双引号即可
+\item 在 \verb|CMakeLists.txt| 的路径下， \verb`cmake .` 生成 Makefile， 然后 \verb|make -j12| 多线程编译． \verb|make VERBOSE=1 -j12| 输出编译命令． cmake 会在当前目录生成 \verb|Makefile| 和一些临时文件和文件夹， 清理麻烦， 所以还是建议输出到子文件夹．
+\item 要指定目录， 用 \verb|cmake -S CMakeList的目录 -B 生成Makefile的目录|， 然后再到 Makefile 的目录 \verb|make -j12| 即可． 如果要清理 cmake 生成的文件以及所有编译出来的文件， 直接把第二个目录清空即可．
+\item 当然， 也不是什么平台都可以用 \verb|make|， 所以也可以用 \verb|cmake --build 生成Makefile的目录 [--target 可执行文件] -- -j 12| 其中 \verb|--| 后面的选项会传给 \verb|make| 或者别的具体用于编译的程序．
+\item Cmake 的基本语法是 \verb`command(arg1 arg2 ...)` 其中 command 不区分大小写， \verb`arg` 用空格隔开， 如果 arg 本身有空格， 用双引号即可
 \item \verb`message(STATUS "...")` 可以输出到 stdout． 如果 \verb`message(STATUS ${var})` 中的变量是 list， 那么中间不会有空格， 应该用 \verb`message(STATUS "${var}")`， 输出中每个变量会用分号隔开．
 \item 两个 \verb`arg` 之间可以换行
 \item 变量可以是 string 或者 list of strings， 使用变量格式为 \verb`${VAR}`
@@ -20,18 +26,18 @@
 \item \verb`cmake_minimum_required(VERSION x.x)`
 \item \verb|set(CMAKE_CXX_COMPILER "/usr/bin/g++")| 设置 compiler
 \item \verb|set(CMAKE_CXX_FLAGS "-std=c++11")| 设置 flag， 包括 c++ 标准．
-\item 用标准的 \verb|set(CMAKE_CXX_STANDARD 11)| 会对 g++ 自动使用 \verb|-std=gnu11|， 一些情况会出错．
-\item \verb|set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -fsanitize=address")| 设置 debug 模式的 flag
+\item 用标准的 \verb|set(CMAKE_CXX_STANDARD 11)| 会对 g++ 自动使用 \verb|-std=gnu11| 而不是 \verb|-std=c++11|， 一些情况会出错．
 \item \verb|cmake -DCMAKE_BUILD_TYPE=Debug| 用 debug 模式编译
-\item \verb`project(project_name)`
+\item 添加 debug 模式的 flag 如 \verb|set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -fsanitize=address")|
+\item \verb`project(project_name)` 指定项目名称
 \item \verb`set(var str1 [str2] ...)` 对变量赋值（若有多个值就生成 list）
 \item \verb`list(APPEND var str1 [str2] ...)` 在变量（list）后面添加元素
-\item \verb|list(REMOVE_ITEM var str1 ...)| 从 list 中移除（如果不存在也不报错）
+\item \verb|list(REMOVE_ITEM var str1 ...)| 从 \verb|var| 的 list 中移除（如果不存在也不报错）
 \item 使用一个不存在的变量相当于空字符串．
 \item \verb|set(var "${var} str1 str2")| 等效于上一条
 \item \verb`file(GLOB var "folder/*.cpp" "fname2.cpp")` 可以列出所有 \verb|"folder/*.txt"| 文件， 以及 \verb|fname2.cpp| （如果存在） 赋值给 \verb|var|． 注意文件名包括绝对路径．
 \item \verb|add_definitions(-D FOO -D BAR)| 给编译器添加宏定义
-\item \verb|add_compile_options(-Wall -fopenmp)| 给编译器添加选项
+\item \verb|add_compile_options(-Wall -fopenmp)| 给编译器添加选项（注意不能用 \verb|-D|）
 \item \verb`add_executable(exe_name source_name)` 前者是执行文件名， 后者是所有需要 link 的 \verb|cpp| 文件名，不需要头文件． cmake 会自动分析代码得到哪个 cpp 调用哪个头文件， 如果头文件改变了， 只有调用它的 cpp 会重新编译．
 \item \verb`configure_file(file_in file_out)` 将文件中 \verb`@var@` 替换为变量 \verb`var` 的值
 \item \verb`include_directories(dir1 [dir2] ...)` 添加头文件的搜索路径

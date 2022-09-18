@@ -46,8 +46,8 @@
 \item \verb`cd -` 返回刚才所在的目录
 \item 要 cd 到当前目录的绝对目录， 可以用 \verb|cd `pwd -P`|, 两个 \verb|`| （backtick）内的东西会先展开
 \item \verb`rm <filename>` 或者 \verb`rm /<dir>/<filename>` 删除文件  (注意是永久删除!)
-\item \verb`mv <filename> /<dir>` 可以移动文件, \verb`mv <filename> <newname>` 可以重命名
-\item \verb`cp <filename> /<dir>` 复制文件 \verb`cp <filename> <newname>` 复制到当前目录且重命名. 复制多个文件用 \verb`cp <file1> <file2> <dir>`. 
+\item \verb`mv <filename> /<dir>` 可以移动文件, \verb`mv <filename> <newname>` 可以重命名． 注意 \verb|mv| 会覆盖文件， 但是不会覆盖文件夹（只要目标的同名文件夹非空就不行， 即使里面没有同名文件）． 此时可以用 \verb|rsync|．
+\item \verb`cp <filename> /<dir>` 复制文件 \verb`cp <filename> <newname>` 复制到当前目录且重命名. 复制多个文件用 \verb`cp <file1> <file2> <dir>`， 也可以在 \verb|<dir>| 前面加 \verb|-t|． 注意 \verb|cp| 会覆盖目标文件以及文件夹．
 \item \verb|cp| 会默认拷贝 symlink 指向的文件而不是 symlink 本身． \verb|-d| 选项可以只拷贝 link．
 \item \verb|cp| 会默认覆盖目标的同名文件， \verb|cp -n| 可以不覆盖且跳过（但不会提示）． 如果要提示且手动逐个选择是否覆盖， 用 \verb|-i| 选项．
 \item 打开文件的一般方式 \verb`<program_name> <filename.extension>`
@@ -61,11 +61,11 @@
 \item \verb`dd` 命令可以直接在当前位置生成一个大小为 100 MB 的文件， 内容为随机， 还会显示写入速度
 \verb`dd if=/dev/urandom of=./dump.txt bs=1048576 count=1024` 写 1024Mb 随机文件
 \item \verb`locate ???` 命令可以从数据库中寻找计算机上所有文件名包含 \verb`???` 的文件， 但刚创建的文件可能找不到
-\item \verb`sudo updatedb` 可以将刚创建的文件加到数据库中， 让 \verb`locate` 可以找到
+\item \verb`sudo updatedb` 可以将刚创建的文件加到数据库中， 让 \verb`locate` 可以找到（\verb|-v| 选项显示哪些文件夹被更新）
 \item 对于整个系统， \verb`locate` 比 \verb`find` 要快得多， 因为数据库已经是 index 过的 \verb`-c` 选项可以显示匹配结果的个数， \verb`-i` 选项可以不区分大小写
 \item \verb|plocate| 是一个比较快的实现， \verb|mlocate| 是一个比较安全的实现， 命令都是 \verb|locate|， \verb|/etc/updatedb.conf| 中可以设置 \verb|updatedb| 的一些选项， 例如忽略挂载到某个目录的硬盘， 忽略 \verb|.git| 文件夹等， 忽略某些文件系统等．
 \item \verb|rename 's/老名字/新名字/' *|． \verb|-n| 选项显示重命名的预览， 不真的重命名
-\item \verb|sudo swapoff -a| 不使用 swap file， \verb|sudo swapon -a| 恢复使用．
+\item \verb|sudo swapoff -a| 不使用 swap file， \verb|sudo swapon -a| 恢复使用． 可能还需要在 \verb|/etc/fstab| 里面注释掉相应的行．
 \end{itemize}
 
 \subsection{包管理}
