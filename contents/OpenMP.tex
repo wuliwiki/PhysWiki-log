@@ -7,10 +7,10 @@
 \pentry{C++ 基础\upref{Cpp0}}
 
 \begin{itemize}
-\item 在 Ubuntu 中运行单线程程序, top 命令会显示某个 CPU 的用量是 100. 然而在 Windows 中, 貌似这个程序会在所有 CPU 中来回切换, 使表面上看起来像是在并行(然而实际上并没有). 当在 windows 中用 OpenMP parallel for 的时候, 可以看到所有的 CPU 用量都是 100\%.
-\item 在 Visual Studio 中使用 OpenMP, 只需打开 Project Property > C/C++ > Language > Open MP Support 选 Yes 即可.
+\item 在 Ubuntu 中运行单线程程序， top 命令会显示某个 CPU 的用量是 100. 然而在 Windows 中， 貌似这个程序会在所有 CPU 中来回切换， 使表面上看起来像是在并行（然而实际上并没有）. 当在 windows 中用 OpenMP parallel for 的时候， 可以看到所有的 CPU 用量都是 100\%.
+\item 在 Visual Studio 中使用 OpenMP, 只需打开 Project Property > C/C++ > Language > Open MP Support 选 Yes 即可．
 \item 如果不只是用 pragma 而是用到了 omp 的函数， 需要头文件 \verb`<omp.h>`
-\item 如何判断 OpenMP 生效了? 可以用一个 \verb|#pragma omp parallel for|, 如果不是按顺序执行的, 就是生效了.
+\item 如何判断 OpenMP 生效了？ 可以用一个 \verb|#pragma omp parallel for|, 如果不是按顺序执行的， 就是生效了．
 
 \item 要指定 parallel for 的线程数上限， 用 \verb`omp_set_num_threads()` （用于 override \verb`OMP_NUM_THREADS` 环境变量）． 注意这里是 “上限”， 当 runtime 系统决定用更少的线程效果会更好时， 就会这么做． 如果不希望是 “上限” 而是严格规定， 用 \verb`omp_set_dynamic(0)` 或者设置环境变量 \verb`OMP_DYNAMIC` 为 \verb`false`．
  或者局部地
@@ -25,9 +25,9 @@ for () ...
 \item 获取当前的总线程数用 \verb`omp_get_num_threads()`， 这个必须在 parallel 里面执行才不等于 1（例如 parallel for 的内部）
 \item 获取当前线程编号用 \verb`omp_get_thread_num()`
 
-\item \verb|#pragma omp parallel| 让每个线程执行接下来的一个命令 (或者 {} 中所有的命令). 如果 {} 中声明了变量, 则每个线程中都有一个同名变量.
-\item [重要] 在 parallel for 之前声明的变量在 parallel for 内也是唯一的, 在 parallel for 内声明的变量每个线程都有一个. 在 parallel for 之前声明变量是许多常见的 bug 的来源. 尤其是 parallel for 内部的 for 循环的循环变量. 最好的办法是把 parallel for 内每个被赋值的变量都审核一遍.
-\item 与 CUDA 不同, parallel for 内部不能有同步, 因为一个线程有可能执行不止一个循环. 如果要同步就用多个 parallel for, 中间就会自动同步.
+\item \verb|#pragma omp parallel| 让每个线程执行接下来的一个命令 （或者 {} 中所有的命令）. 如果 {} 中声明了变量， 则每个线程中都有一个同名变量．
+\item [重要] 在 parallel for 之前声明的变量在 parallel for 内也是唯一的， 在 parallel for 内声明的变量每个线程都有一个． 在 parallel for 之前声明变量是许多常见的 bug 的来源． 尤其是 parallel for 内部的 for 循环的循环变量． 最好的办法是把 parallel for 内每个被赋值的变量都审核一遍．
+\item 与 CUDA 不同， parallel for 内部不能有同步， 因为一个线程有可能执行不止一个循环． 如果要同步就用多个 parallel for, 中间就会自动同步．
 \begin{lstlisting}[language=cpp]
 #pragma omp parallel
 {
@@ -38,7 +38,7 @@ for () ...
 ...
 }
 \end{lstlisting}
-\item 若要让每个线程执行指定的代码, 用 sections
+\item 若要让每个线程执行指定的代码， 用 sections
 \begin{lstlisting}[language=cpp]
 #pragma omp parallel sections
 {
@@ -49,7 +49,7 @@ function1();
 function4();
 }
 \end{lstlisting}
-在这个代码中, function1-function4 分别只执行一次, 其中被 \verb|#pragma omp section| 隔开的三个部分允许并行, 但 function2() 和 function3() 不允许并行. 千万注意两个 section 中不能对同名变量赋值, 也就是说同名变量并不会每个线程都复制一份.
+在这个代码中， function1-function4 分别只执行一次， 其中被 \verb|#pragma omp section| 隔开的三个部分允许并行， 但 function2() 和 function3() 不允许并行． 千万注意两个 section 中不能对同名变量赋值， 也就是说同名变量并不会每个线程都复制一份．
 
 现在有一个问题就是如何并行嵌套循环
 \begin{lstlisting}[language=cpp]
@@ -57,7 +57,7 @@ for (i = 0; i < Nx; ++i)
 for (j = 0; j < Ny; ++j)
 {}
 \end{lstlisting}
-两个 for 之间没有代码. 现在使用的方法是
+两个 for 之间没有代码． 现在使用的方法是
 \begin{lstlisting}[language=cpp]
 for (ind = 0; ind < Nx*Ny; ++ind)
 {
@@ -65,7 +65,7 @@ i = ind/Ny; j = ind%Ny;
 ...
 }
 \end{lstlisting}
-\item atomic 运算与 CUDA 的概念一样, 在某个命令前面加上 \verb|#pragma omp atomic| 即可
+\item atomic 运算与 CUDA 的概念一样， 在某个命令前面加上 \verb|#pragma omp atomic| 即可
 \item \verb|omp_set_nested(N)| 允许 N 重 parallel for 嵌套， 默认不允许嵌套（$N=0$）， 只对最外层 parallel for 生效． 用 \verb|gdb| 可以追踪线程的数量． 例如以下代码的子函数内的 parallel for 就默认会失效， 除非把注释去掉．
 \begin{lstlisting}[language=cpp]
 void fun(int i)

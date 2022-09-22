@@ -16,9 +16,9 @@
 \end{definition}
 
 \begin{theorem}{匀速性}\label{geodes_the1}
-如果 $(M, \nabla, <*, *>)$ 是一个带黎曼度量的黎曼流形，$c:I\to M$ 是其上一条测地线，那么 $\sqrt{<c'(t), c'(t)>}$ 是一个常数．
+如果 $(M, \nabla,  \langle *, * \rangle )$ 是一个带黎曼度量的黎曼流形，$c:I\to M$ 是其上一条测地线，那么 $\sqrt{ \langle c'(t), c'(t) \rangle }$ 是一个常数．
 
-定义 $\abs{c'(t)}=\sqrt{<c'(t), c'(t)>}$ 为该测地线的\textbf{速率（speed）}．
+定义 $\abs{c'(t)}=\sqrt{ \langle c'(t), c'(t) \rangle }$ 为该测地线的\textbf{速率（speed）}．
 \end{theorem}
 
 \autoref{geodes_the1} 的证明很简单，只需要应用协变导数对黎曼度量的Leibniz律（相容性）和测地线的定义即可．
@@ -85,6 +85,70 @@ T(t)=c'(t)&=\frac{D}{\dd t}c(t)=\varphi^{-1}(\frac{\dd}{\dd t}\varphi(c(t)))\\
 \begin{theorem}{}
 保联络微分同胚将测地线映射为测地线．
 \end{theorem}
+
+
+
+\subsection{最小作用量}
+
+\begin{theorem}{}
+在流形上，定义关于独立参数$t$和曲线$y(t)$的拉格朗日函数：$L(\dot{y}, y, t) = \sqrt{\abs{\langle \dot{y}, \dot{y} \rangle}}$，则当曲线$y(t)$是测地线时，对于固定的$y(a)$和$y(b)$，作用量$S=\int_a^b L \dd t$取极小值．
+\end{theorem}
+
+\textbf{证明}：
+
+我们只需要证明，测地线方程满足定理中所给拉格朗日函数的\textbf{欧拉—拉格朗日方程}\upref{Lagrng}．
+
+对于给定曲线$y(t)$，$\dot{y}(t)$是沿着$y(t)$的向量场．设度量张量为$g_{ij}$，则拉格朗日函数为
+\begin{equation}
+L = \sqrt{\abs{g_{ij}\dot{y}^i\dot{y}^j}}
+\end{equation}
+为方便计算，也可以表示为
+\begin{equation}
+L = \sqrt{\pm{g_{ij}\dot{y}^i\dot{y}^j}}
+\end{equation}
+其中正负号的选择取决于$g_{ij}$的定义，如选择号差为$-2$的闵可夫斯基度量时取负号．
+
+求偏微分得：
+\begin{equation}\label{geodes_eq2}
+\ali{
+    \frac{\partial L}{\partial y_s} &= \pm \frac{\dot{y}^i\dot{y}^j\partial_s g_{ij}}{2\sqrt{\pm{g_{ij}\dot{y}^i\dot{y}^j}}}
+}
+\end{equation}
+
+\begin{equation}\label{geodes_eq3}
+\ali{
+    \frac{\partial L}{\partial \dot{y}_s} &= \pm \frac{g_{is}\dot{y}^i+g_{sj}\dot{y}^j}{2\sqrt{\pm{g_{ij}\dot{y}^i\dot{y}^j}}}\\
+    &= \pm\frac{g_{is}\dot{y}^i}{\sqrt{\pm{g_{ij}\dot{y}^i\dot{y}^j}}}
+}
+\end{equation}
+
+对于测地线$y(t)$，由\autoref{geodes_the1} ，$\sqrt{\pm{g_{ij}\dot{y}^i\dot{y}^j}}$是常数，因此由\autoref{geodes_eq2} 和\autoref{geodes_eq3} 给出的欧拉拉格朗日方程为
+\begin{equation}\label{geodes_eq4}
+\ali{
+    \dot{y}^i\dot{y}^j\partial_s g_{ij} &= \frac{\dd }{\dd t}(2g_{is}\dot{y}^i)\\
+    \dot{y}^i\dot{y}^j\partial_s g_{ij} &= 2g_{is} \dot{y}^k\partial_k \dot{y}^i + 2\dot{y}^i\dot{y}^k\partial_k g_{is}\\
+    \dot{y}^i\dot{y}^j\partial_s g_{ij} &= 2g_{is} \frac{\dd }{\dd t}\dot{y}^i + 2\dot{y}^i\dot{y}^j\partial_j g_{is}\\
+    0 &= g_{is}\ddot{y}^i + \frac{1}{2}\dot{y}^i\dot{y}^j(\partial_j g_is + \partial_i g_{sj} - \partial_s g_{ij})\\
+    \text{（两边同乘$g^{sk}$）}0 &= \ddot{y}^k + \frac{1}{2}\dot{y}^i\dot{y}^j g^{sk}(\partial_j g_is + \partial_i g_{sj} - \partial_s g_{ij})
+}
+\end{equation}
+
+
+
+将\autoref{CrstfS_eq3}~\upref{CrstfS}誊抄如下：
+\begin{equation}
+\Gamma^{k}_{ij}=\frac{1}{2}g^{sk}(\partial_ig_{js}+\partial_jg_{si}-\partial_sg_{ij})
+\end{equation}
+再代入\autoref{geodes_eq4} 得
+\begin{equation}
+0 = \ddot{y}^k + \dot{y}^i\dot{y}^j\Gamma^k_{ij}
+\end{equation}
+
+正是测地线方程．
+
+\textbf{证毕}．
+
+
 
 
 

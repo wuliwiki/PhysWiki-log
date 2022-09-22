@@ -184,10 +184,8 @@
 
 \subsection{rsync}
 \begin{itemize}
-```bash
-for ((i=275;i<=294;++i)); do rsync -zvh addis1@headnode.beocat.ksu.edu:/homes/addis1/github/FEDVR-TDSE/data/${i}/analysis/* ./${i}/analysis/; done
-```
-\item 格式 \verb`rsync -avzh file1 file2 folder3 file4 dest_path` 其中 file1 到 file4 等文件或文件夹会自动同步到 dest_path 文件夹中（例如生成 \verb`dest_path/file1`， \verb`dest_path/folder3`）． 如果 dest_path 不存在， 会自动用 mkdir 生成，但只能生成一层． file, folder 和 dest_path 都可以是远程或者本地
+\item \verb|for ((i=275;i<=294;++i)); do rsync -zvh addis1@headnode.beocat.ksu.edu:/homes/addis1/github/FEDVR-TDSE/data/${i}/analysis/* ./${i}/analysis/; done|
+\item 格式 \verb`rsync -avzh file1 file2 folder3 file4 dest_path` 其中 file1 到 file4 等文件或文件夹会自动同步到 \verb|dest_path| 文件夹中（例如生成 \verb`dest_path/file1`， \verb`dest_path/folder3`）． 如果 \verb|dest_path| 不存在， 会自动用 mkdir 生成，但只能生成一层． file, folder 和 \verb|dest_path| 都可以是远程或者本地
 \item \verb`-a` 是 archive (包括 permission 和 symlink)， \verb`-v` 是 verbose （显示详情）， \verb`-z` 是 zip （传输过程压缩） \verb`-h` 人可读
 \item \verb`rsync -avzh source/ dest/ --delete` 会把 dest 文件夹中多余的文件删除
 \item 如果远程目录有需要 \verb`\` 的字符， 例如 \verb`\(...\)`， 需要用三次， 例如 \verb`\\\(...\\\)`． 本地的 shell 会先把 \verb`\\` 变为 \verb`\`, \verb`\(` 变为 \verb`(`
@@ -197,7 +195,10 @@ for ((i=275;i<=294;++i)); do rsync -zvh addis1@headnode.beocat.ksu.edu:/homes/ad
 
 \subsection{curl}
 \begin{itemize}
-\item \verb|curl 链接|
+\item \verb|curl| 是 client URL 的意思， 用于通过 url 从服务器接受或发送信息．
+\item \verb|curl "网址" -so 文件| 可以把某个 url 返回的字符串（如 html 和 json）保存到文件中， 其中 \verb|-s| 是 silent， \verb|-o| 是 output file． 这大概相当于在浏览器中输入 \verb|网址| 然后复制 html 源码等．
+\item \verb|curl --header "<HeaderName>: 123" www.example.com|． 可以发送一个 header 的 url， 也可以用 \verb|-H|
+\item \verb|curl -u 用户名:密码 www.example.com| 使用 Basic Auth 进行用户登录
 \end{itemize}
 
 \subsection{服务器}

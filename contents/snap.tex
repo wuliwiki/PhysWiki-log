@@ -16,7 +16,7 @@
 \item \verb|aptitude| 遇到冲突时会提供多种解决方案（卸载哪些包，安装哪些，升级哪些）， 手动选择合适的即可． 这是解决 \verb|you have held broken packages| 的常见办法．
 \item \verb|/var/lib/apt/extended_states| 文件储存了哪些包是自动安装的哪些是手动安装的
 \item 列出所有手动安装的包 \verb`comm -23 <(apt-mark showmanual | sort -u) <(gzip -dc /var/log/installer/initial-status.gz | sed -n 's/^Package: //p' | sort -u)`
-\item 列出所有没有被依赖的包（无论是怎么安装的）（参考\href{https://askubuntu.com/questions/1114733/how-do-i-list-all-packages-that-no-package-depends-on}{这里}） \verb`dpkg-query --show --showformat='${Package}\t${Status}\n' | tac | awk '/installed$/ {print $1}' | xargs apt-cache rdepends --installed | tac | awk '{ if (/^ /) ++deps; else if (!/:$/) { if (!deps) print; deps = 0 } }'`．
+\item 列出所有没有被依赖的包（无论是怎么安装的）（参考\href{https://askubuntu.com/questions/1114733/how-do-i-list-all-packages-that-no-package-depends-on}{这里}） \verb`dpkg-query --show --showformat='${Package}\t${Status}\n' | tac | awk '/installed$/ {print $1}' | xargs apt-cache rdepends --installed | tac | awk '{ if (/^ /) ++deps; else if (!/:$/) { if (!deps) print; deps = 0 } }'`． 注意这里面有一些重要的系统包（包括 linux 内核）如果不是自己装的包要删除时要小心．
 \item 或者 \verb`comm -23 <(aptitude search '~i !~M' -F '%p' | sed "s/ *$//" | sort -u) <(gzip -dc /var/log/installer/initial-status.gz | sed -n 's/^Package: //p' | sort -u)` 参考\href{https://askubuntu.com/questions/2389/how-to-list-manually-installed-packages}{这里}.
 \item \verb|apt --installed list| 列出所有安装的包
 \item \verb|apt/dpkg| 安装时不会覆盖文件， 而是会给出警告并停止安装．

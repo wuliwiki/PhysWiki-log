@@ -17,12 +17,12 @@
 \item \verb|sda, sdb| 等编号是不稳定的， 可能重启等操作之后会变
 \item \verb|fdisk -l| 查看所有挂载的硬盘
 \item \verb|lsblk| 也可以查看
-\item \verb|resize2fs -p /dev/sd? ???K| 可以改变 ext4 文件系统的大小, Gparted 用的就是这个命令. 这个命令需要很长时间.
+\item \verb|resize2fs -p /dev/sd? ???K| 可以改变 ext4 文件系统的大小， Gparted 用的就是这个命令． 这个命令需要很长时间．
 \item \verb|mklabel| 修改分区的 label
 \item \verb|mkfs.ext4 /dev/sdx1| 或者 \verb|mke4fs -t ext4 /dev/sdb1| 把某个分区格式化为 \verb|ext4|
 \item Clonezilla 的分区备份对 GPT 和 MBR 都是通用的， 如果发生任何问题， 用 live cd 重装系统，确保能正常启动， 然后还原对应的分区就行，无需任何额外设置．
 \item 之前 SMART 提示 threshold exceeded，但并没有看到那一项有问题，现在重新写 GPT，安装，clonezilla 还原， 又可以正常用了．
-\item  正常的 ext4 系统分区用 Gparted 缩小以后， 突然就不能启动了！貌似并不是 grub 的问题，内核已经加载然后弄出一堆错误.
+\item  正常的 ext4 系统分区用 Gparted 缩小以后， 突然就不能启动了！貌似并不是 grub 的问题，内核已经加载然后弄出一堆错误．
 \item 有一个工具叫做 boot-repair 可能可以用来修复 bootloader 的问题
 \item \verb|extFAT| 在 Ubuntu 中并不怎么支持 resize 和移动， 还是用 windows 的傲梅比较好
 \end{itemize}
@@ -50,16 +50,16 @@
 \item 注意 \verb|grub-install| 可能使用 \verb|grub-pc| 包也可能使用 \verb|grub-efi-amd64| 包． 前者给 MBR 硬盘安装， 后者给 GPT 硬盘安装． 它们可以同时安装．
 \item 如果遇到 \verb|failed to get canonical path of...| 就用 \verb|sudo grub-install /dev/sdX --root-directory=/mnt/[mount point directory]|
 \item 如果安装遇到 \verb|will not proceed with blocklist|， 就在安装命令后面加 \verb|--force|．
-\item \verb|df| 只会显示已挂载的硬盘, 而 \verb|fdisk| 或者 \verb|disk, gparted| 软件才会显示所有连接的硬盘
-\item 要安装 ubuntu live 镜像到 disk, 用 \verb|sudo dd bs=4M if=/path/to/ISOfile of=/dev/sda status=progress oflag=sync| 注意 \verb|sda| 后面不能有数字！ 这样 \verb|dd| 会把整个硬盘克隆成 iso 的内容而无视之前的任何 partition table 和分区. 此时 u 盘和光盘完全等效，都是只读的（亲测成功）.
+\item \verb|df| 只会显示已挂载的硬盘， 而 \verb|fdisk| 或者 \verb|disk, gparted| 软件才会显示所有连接的硬盘
+\item 要安装 ubuntu live 镜像到 disk, 用 \verb|sudo dd bs=4M if=/path/to/ISOfile of=/dev/sda status=progress oflag=sync| 注意 \verb|sda| 后面不能有数字！ 这样 \verb|dd| 会把整个硬盘克隆成 iso 的内容而无视之前的任何 partition table 和分区． 此时 u 盘和光盘完全等效，都是只读的（亲测成功）.
 \end{itemize}
 
 \begin{itemize}
-\item grub 在菜单中按 c 进入命令行模式, 然后 ls 可以看见有哪些硬盘和分区， 例如 (hd0,msdos1)， 然后继续 ls (hd0,msdos1)/ 按 tab，就会提示该目录下有什么
+\item grub 在菜单中按 c 进入命令行模式， 然后 ls 可以看见有哪些硬盘和分区， 例如 （hd0,msdos1）， 然后继续 ls (hd0,msdos1)/ 按 tab，就会提示该目录下有什么
 \item grub 在菜单中按 e 就可以编辑临时的 grub config 文件，填入 ls 获得的信息即可
 \item grub 的菜单是由 \verb|/boot/grub/grub.cfg| 或者 \verb|grub.config| 定义的
 \item 如何克隆 MBR 硬盘上安装的 Ubuntu?
-\item 如果克隆 MBR 硬盘的分区， 那么 grub 并不会一起克隆过去, 所以还需要 \verb|sudo grub-install ...| 在新硬盘上面安装 grub （如果说什么不推荐用啥不稳定的，就在后面加 --force）. 然后再把原来的 grub.cfg 拷贝到新硬盘就好了(不确定新安装 grub 会不会把 cfg 重置）.
+\item 如果克隆 MBR 硬盘的分区， 那么 grub 并不会一起克隆过去， 所以还需要 \verb|sudo grub-install ...| 在新硬盘上面安装 grub （如果说什么不推荐用啥不稳定的，就在后面加 --force）. 然后再把原来的 grub.cfg 拷贝到新硬盘就好了（不确定新安装 grub 会不会把 cfg 重置）.
 \item 注意克隆分区以后， 目标分区的 uuid 会和原来的 uuid 一模一样，如果拔掉原来的硬盘没什么问题， 但如果要一起插的话还是需要改一下
 \item \verb|blkid| 可以查看所有分区的 uuid
 \item uuid 需要 umount 才可以修改， 随机生成 uuid 用 \verb|tune2fs -U random /dev/sdb?| , disk 中会看到变化， 如果 blkid 看见 uuid 没有变化， 就 mount 再 umount 即可刷新
