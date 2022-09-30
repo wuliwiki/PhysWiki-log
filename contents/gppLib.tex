@@ -100,6 +100,8 @@ export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/your/custom/path/
 
 如果不指定 \verb|rpath|， 设置环境变量 \verb|LD_RUN_PATH| 也是等效的． 链接的程序是 \verb|ld|， 而动态链接库是 \verb|ld-linux.so|
 
+如果要修改已经编译好的可执行文件（包括 so） 的 rpath， 可以用 \verb|chrpath| 或者 \verb|patchelf| 参考\href{https://stackoverflow.com/questions/13769141/can-i-change-rpath-in-an-already-compiled-binary}{这里}．
+
 如果同样的 \verb`-l` 既能匹配 \verb`lib***.a` 也能匹配 \verb`lib***.so`， 那么 gcc 会默认选 \verb`.so` （貌似有时候二者都需要）． 如果想要静态链接， 要么用 \verb`-static` 选项（禁止链接到任何动态 lib）， 要么直接指定 \verb`.a` 的地址和文件名， 如 \verb`g++ -o main.x f1.o /some/path/lib***.a another/path/lib***.a`．
 
 如果要查看 \verb|.a| 或 \verb|.so| 文件里面是否有某个函数， 用例如 \verb`nm -A /usr/lib/x86_64-linux-gnu/libflint.a | grep fmpz_set` 类似地也有 \verb|nm xxx.so|

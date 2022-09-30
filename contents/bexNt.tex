@@ -1,0 +1,115 @@
+% 北太天元插件开发笔记
+
+\begin{issues}
+\issueDraft
+\end{issues}
+
+\begin{itemize}
+\item 对象临时托管到 BALTAM 中时，必须从 \verb|baltam::extern_obj_base| 继承
+\begin{lstlisting}[language=cpp, caption=extern\_obj.h节选]
+struct extern_obj_base {
+    virtual extern_obj_base* dup() const { return nullptr; }
+    virtual ~extern_obj_base() {};
+    virtual std::string to_string() const { return ""; }
+    virtual std::string classname() const { return "extern object"; };
+    int sid; ///< 整数，用于存储内核自动分配的外部类 ID
+};
+\end{lstlisting}
+\end{itemize}
+
+\subsection{插件的 main.cpp}
+\begin{itemize}
+\item \verb|#define PLUGIN_NAME "vector"| 定义插件名称
+\item \verb|bxArray| 相当于 Matlab api 的 \href{https://www.mathworks.com/help/matlab/apiref/mxarray.html}{mxArray}， 基本上就是 Matlab 的矩阵， 什么都能装．
+\item 若编译动态库， 就在编译时定义 \verb|BV_USE_DYN_LOADER|
+\end{itemize}
+
+\begin{lstlisting}[language=cpp,caption=vector 插件的 main.cpp]
+static bexfun_info_t flist[] = {
+    {"我的命名空间::函数名1", 函数名1, 函数名1的帮助说明字符串},
+    {"我的命名空间::函数名2", 函数名2, 函数名2的帮助说明字符串},
+    ...
+    {"", NULL, NULL} // 表示结尾
+};
+// 告诉 baltam 插件包含的函数
+// 如果使用了命名空间， 在 Baltam 中调用函数同样需要 \verb|命名空间::函数名| 来调用
+bexfun_info_t *bxPluginFunctions() { return flist; }
+
+// [可选] plugin 初始化， 输入 libbex 的句柄， 正常结束返回 0
+// int bxPluginInitLib(void *hdl) {...}
+
+// 自定义 class， 必须继承于 extern_obj_base
+...
+struct bVector : public extern_obj_base {
+    BALTAM_LOCAL static int ID; // 定义插件的 ID （会被内核使用）
+    std::vector<bxArray*> data;
+    // 复制这个对象（duplicate） 用于 baltam 中的 B = A
+    extern_obj_base *dup() const override;
+    ~bVector() override;
+    // 可选：打印对象信息
+    std::string to_string() const override;
+    // 可选：自定义类型名字
+    std::string classname() const override;
+};
+
+// 声明自定义类型
+int bxPluginInit(int, const bxArray*[]) {
+    bxAddCXXClass<自定义类型>(PLUGIN_NAME, bex::__bxAddCXXClass_impl);
+    return 0;
+}
+
+int bVector::ID = 0;
+
+// bex 就相当于 matlab 的 mex 哈哈哈
+extern_obj_base *bVector::dup() const {
+    bVector *ret = new bVector(*this);
+    for (size_t i = 0; i < this->data.size(); ++i)
+        ret->data[i] = bex::__bxDuplicateArray(data[i]);
+    return ret;
+}
+
+// 把 vector<> 中的每个 bxArray 毁灭
+bVector::~bVector(){
+    for (auto &i : data)
+        bex::__bxDestroyArray(i);
+}
+
+// 自定义插件函数的 prototype 为 （nlhs 是输出个数， nrhs 是输入个数）．
+// 当 nlhs 为零时， 输出 plhs[0] 可以传给 ans 变量
+void 函数名(int nlhs, bxArray *plhs[], int nrhs, const bxArray *prhs
+[]);
+
+// 显示 bVector 信息
+// bxGetExtObj() 把 bxArray 转换为外部对象
+void bv_show(int, bxArray *[], int nrhs, const bxArray *prhs[]){
+    bVector *bv = bxGetExtObj<bVector>(prhs[0], bex::__bxGetExtObj_impl);
+// 这里用 cout 并不妥， 应该用 bxPrintf， 见文档
+    for (size_t i = 0; i < bv->data.size(); ++i){
+        std::cout << '[' << i << "]    "
+            << bex::__bxTypeCStr(bv->data[i]) << std::endl;
+    }
+}
+\end{lstlisting}
+
+\subsection{文档笔记}
+\begin{itemize}
+\item 插件目录为 \verb|Baltam/plugin/插件名/|， 插件的 so 文件必须是 \verb|main.so|
+\item \verb|int bxPrintf(const char * format, ...);| 用法和 \verb|printf| 一样
+\item \verb|void bxErrMsgTxt(const char * str);| 终止当前函数调用并向图形界面或命令行窗口输出错误信息
+\item \verb|baInt bxAsInt(const bxArray *ba, int * err);| 尝试将给定 bxArray 对象转化为内置整数
+\item \verb|int bxAsCStr(const bxArray *ba, char *buff, baSize size);| 尝试将给定 bxArray 对象转化为 char 类型字符串
+\end{itemize}
+
+\subsubsection{算符重载}
+\begin{lstlisting}[language=cpp]
+// 用于实现重载 + 的声明， 函数名称任意
+void my_add(int, bxArray*[], int, const bxArray*[]);
+
+int bxPluginInit(int, const bxArray*[]) {
+    bxAddCXXClass<自定义类型1>(PLUGIN_NAME);
+    // 向内核注册重载的算符， ID 可以是自定义对象， 也可以是内建对象的
+    bxRegisterBinaryOperator(PLUGIN_NAME, "+", 自定义类型1::ID,
+        自定义类型2::ID, my_add);
+    return 0;
+}
+\end{lstlisting}

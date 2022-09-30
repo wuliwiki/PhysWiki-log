@@ -1,0 +1,113 @@
+% 求极限的一些方法
+
+\begin{issues}
+\issueDraft
+\end{issues}
+\footnote{本文参考了\cite{同济高}，\cite{Thomas}与武忠祥的《考研高数》课程．部分例题来自练习册}
+尽管实际中极限的求解往往交给电脑解决，但求解极限还是高数考试中的重要环节．本文简要介绍求解极限的一些基本方法与思路．
+
+要强调的是，极限问题千变万化，没有什么题目能只用一种方法就能解决，也没有什么能简单机械地解决任意问题的“万能套路”．你往往需要多次运用各种方法才能得到最终的答案．解决问题的关键最终在于你的积累与灵性（\textsl{多做题}），而不是单纯地“背诵方法”．
+
+\subsection{基础知识}
+这里列举一些关于极限计算的基本知识．你需要熟悉这些内容．
+\begin{itemize}
+\item 极限的四则运算法则
+\item 极限与函数连续性：连续函数的极限值就是他在该点处的函数值；极限号可以通过连续函数 $\lim f(g(x)) = f(\lim g(x))$
+\item 极限的有理运算性质：
+可先提取极限存在且\textbf{非零}的乘数 
+$$\lim_{x\to x_0} f(x)g(x) = f(x_0)\lim_{x\to x_0} g(x)$$
+也可先提取极限存在的加数
+$$\lim_{x\to x_0} (f(x)+g(x)) = f(x_0)+\lim_{x\to x_0} g(x)$$
+这能帮助简化计算(为了方便展示，这里假定f(x)连续，但这个条件其实是非必须的)
+\item 导数的极限定义：有时，解决极限的办法是通过导数的定义，将其凑成某个函数的导数
+\item 三角函数的相关公式
+\item 有界函数*无穷小=0
+\item 洛必达法则：用来处理$\frac{0}{0}$，$\frac{\infty}{\infty}$等不定式时很方便．\textsl{洛必达虽好，可不要贪杯哦}
+\item 泰勒展开：将一点处的函数换成他在该点处的泰勒展开式，从而将复杂函数化为多项式．
+\item 等价无穷小：也是用于将复杂的函数代换成简单的函数
+\item 几个常用的等式：
+$$\lim_{x\to0} \frac{\sin(x)}{x}=1$$
+$$\lim_{x\to0} (1+x)^{1/x}=e$$
+$$\lim_{x\to0+} x\ln(x)=0$$
+$$\lim_{x\to+\infty} \frac{a_nx^n+a_{n-1}x^{n-1}+...}{b_nx^n+b_{n-1}x^{n-1}+...}=\frac{a_n}{b_n}$$
+你可以使用非常简单的方法从容地“证明”这些等式，不过最好有个大致印象．
+\end{itemize}
+
+\subsection{拼凑与代换}
+\textsl{有借有还，再借不难.} 拼凑与代换的核心思路是变形待求的极限式，以配凑出容易解决的形式．当然，为了运用拼凑与代换，\textsl{你先得有个目标、知道“我想凑出什么样的形式”}．这需要你知晓各种常用形式．（常用的等式、等价无穷小．．．）
+
+拼凑与代换的基本方法包括：
+\begin{itemize}
+\item 加一项再减去相同的一项
+\item 乘一项再除以相同的一项
+\item 提取一个公因式
+\item 代换自变量
+\item ...
+\end{itemize}
+
+\begin{example}{}
+求解 $\lim_{x \to 0} \frac{\sin(3x)}{x}$．假设我们对等价无穷小、洛必达、泰勒等等等一无所知，我们能用的只有拼凑与代换法．
+
+我们知道一个基本结论$\lim_{x \to 0} \frac{\sin(x)}{x}=1$，因此我们想配凑出类似的形式．因此，我们令 $t=3x, x=t/3$，那么原式化为$\lim_{t \to 0} \frac{\sin(t)}{t/3}=3\lim_{t \to 0} \frac{\sin(t)}{t}=3$.
+\end{example}
+
+\begin{example}{}
+由于很多结论都适用于$x\to0$的情况，因此常通过代换变量，令自变量趋于0. 有时这种变形会给你一些启发．
+
+例如，$x\to+\infty$，则令 $t=1/x$，那么$t\to0+$; 若$x\to-\infty$，则令 $t=-1/x$，那么$t\to0+$．（我们不喜欢负数，特别当他在根式中时）
+\end{example}
+
+\subsection{$\infty+\infty$ 型不定式}
+如果两个加数均为不定式（$\infty+\infty$），将他们通分，并化为一个分式．
+
+\subsection{$0\cdot\infty$ 型不定式}
+把趋于0的因子移动到分母,将整体化为分式 $\frac{\infty}{\infty}$
+\begin{example}{}
+求解$\lim_{x\to0+} x\ln(x)$
+
+将x移动至分母，化为1/x. 即$\lim_{x\to0+} x\ln(x)=\lim_{x\to0+} \frac{\ln(x)}{1/x}$
+
+随后运用洛必达，即有$-\lim_{x\to0+} \frac{1/x}{1/x^2}=-\lim_{x\to0+} x=0$
+\end{example}
+
+
+\subsection{分式与根式}
+\begin{itemize}
+\item 有理化．常用于出现根式相加减的情况．
+\item 上下同除以最高次的项
+\end{itemize}
+
+\subsection{幂指函数}
+若待求极限含有幂指函数，则可以运用指数与对数改写式子 $f(x)^{g(x)}=\E^{g(x)\ln(f(x))}$
+\begin{example}{}
+求解 $\lim (1+f(x))^{g(x)}$，其中$f(x)\to0$,$g(x)\to\infty$.(即$1^\infty$型不定式)
+
+这是一个幂指函数，取对数再取指数．原式化为$\E^{\lim g(x) \ln (1+f(x))}$，运用等价无穷小，$\E^{\lim g(x) f(x)}$．即只要$\lim g(x) f(x)$存在，原式的极限就存在．
+
+有些考研教材上将 $\lim (1+f(x))^{g(x)} = \E^{\lim g(x) f(x) }$($f(x)\to0$,$g(x)\to\infty$,$\lim g(x) f(x)$存在)作为一个基本结论．
+
+当然，你也可以从常见等式 $e=\lim_{x\to0} (1+x)^{1/x}$出发，运用拼凑与代换解决问题，不过这会让问题变得过于繁琐．
+\end{example}
+
+\subsection{形式相近的项、变上限积分}
+若极限式中出现变上限积分，则可以运用积分中值定理．
+
+若极限式中出现相似的结构，可以构造函数并运用Lagrange中值定理
+
+%极限中出现变上限积分时，自变量往往位于上（下）限，且上下限往往趋于一致．
+
+\begin{example}{}
+求解 $\lim_{x\to0} \frac{\int^x_0 \cos(x)\dd x}{x}$
+
+可以运用洛必达法则，原式化为$\lim_{x\to0} \cos(x) = 1$
+
+另一种思路是运用积分中值定理．根据中值定理，$\exists \xi \in (0,x)$, $\int^x_0 \cos(x) \dd x = \cos(\xi) (x-0)$，因此原式化为 $\lim_{x\to0} \frac{\cos(\xi)x}{x} = \lim_{x\to0} \cos(\xi)$．由于$\xi \in (0,x)$，当$x\to0$时，$\xi$\textsl{别无选择，只能也趋向0}(这是可运用中值定理的重要特征；如果$\xi$不趋于一个常数，这道题就无法由中值定理求解)．因此，$\lim_{x\to0} \cos(\xi)=1$
+
+尽管在这里微分中值定理看起来更为繁琐，但这是因为\textsl{这道题太简单了}．在另一些问题中，微分中值定理比洛必达更为\textsl{优雅}．
+\end{example}
+
+\begin{example}{}
+求解 $\lim_{x\to0} \frac{e^{x^2}-e^x}{x}$
+
+注意到分子的两项都是$e^x$式结构，因此设$f(x)=e^x$，原式化为$\lim_{x\to0} \frac{f(x^2)-f(x)}{x}$．根据Lagrange中值定理 $\exists \xi \in (x^2,x), f'(\xi)(x-x^2) = f(x)-f(x^2)$，所以原式化为 $\lim_{x\to0} \frac{f'(\xi)(x^2-x)}{x}$，即$\lim_{x\to0} e^\xi(x-1)=-\lim_{x\to0} e^\xi=-1$
+\end{example}
