@@ -1,7 +1,40 @@
-% Pthread 笔记
+% Pthreads 笔记
 
 \begin{issues}
 \issueDraft
 \end{issues}
 
-参考\href{https://www.geeksforgeeks.org/multithreading-c-2/}{这里}．
+参考\href{https://www.geeksforgeeks.org/multithreading-c-2/}{这里}． 其中第二个例子（编译时使用 \verb|-lpthread| 选项）：
+\begin{lstlisting}[language=cpp]
+#include <stdio.h>
+#include <stdlib.h>
+#include <unistd.h>
+#include <pthread.h>
+
+int g = 0;
+
+void *myThreadFun(void *vargp)
+{
+	int *myid = (int *)vargp;
+	static int s = 0;
+	++s; ++g;
+	printf("Thread ID: %d, Static: %d, Global: %d\n", *myid, ++s, ++g);
+}
+
+int main()
+{
+	int i;
+	pthread_t tid;
+	for (i = 0; i < 3; i++)
+		pthread_create(&tid, NULL, myThreadFun, (void *)&tid);
+	pthread_exit(NULL);
+	return 0;
+}
+\end{lstlisting}
+
+\begin{itemize}
+\item \verb|pthread_create| 第一个参数会赋值给 \verb|tid|， 第二个参数是输入一些 attributes， 要默认就用 \verb|NULL|， 第三个参数是函数指针， 第四个是函数参数． 函数调用在 \verb|tid| 被赋值以后．
+\item 其他的功能和 \verb|std::thread| 大同小异．
+\end{itemize}
+
+\addTODO{\verb|pthread_exit()| 是什么？ \verb|joint()| 怎么实现？ \verb|mutex| 怎么实现？ 见\href{https://www.geeksforgeeks.org/thread-functions-in-c-c/}{这里}， 以及\href{https://www.geeksforgeeks.org/mutex-lock-for-linux-thread-synchronization/}{这里}． 笔者的一个小程序 Exec 见\href{https://github.com/MacroUniverse/Exec/tree/master}{这里}．}

@@ -1,0 +1,106 @@
+% 字符串的分片与索引（Python）
+% 字符串|分片|索引
+
+\pentry{Python 基本变量类型\upref{PyType}}
+\subsection{分片}
+\begin{definition}{分片}
+
+\textbf{字符串}可以通过string[x] 的方式进行索引、分片，也就是加一个[]（像不像一把刀）．字符串的分片(slice)实际上可以看作是从字符串这个大面包\autoref{Strsi_fig1} 中找出来你要吃的那片美味（复制出来一小段你要的长度），放在你的嘴里（储存在另一个地方），而不会对字符串这个源文件改动．分片获得的每个字符串可以看作是原字符串的一个副本（面包片）．
+\begin{figure}[ht]
+\centering
+\includegraphics[width=10cm]{./figures/Strsi_1.png}
+\caption{切片} \label{Strsi_fig1}
+\end{figure}
+
+\end{definition}
+
+我们来看一段程序：
+\begin{lstlisting}[language=python]
+name = 'My name is Mike'
+print(name[0])
+'M'
+print(name[-4])
+'M'
+print(name[11:14]) # 从第一个到第十四个，第十四个不包括在内
+'Mik'
+print(name[11:15]) # 从第一个到第十五个，第十五个不包括在内
+'Mike'
+print(name[5:])  #代表着从编号为5的字符到结束的字符串分片．
+'me is Mike'
+print(name[:5]) #从编号为0的字符开始到编号为5但不包含第5个字符
+'My na'
+\end{lstlisting}
+\textbf{\textsl{：}}两边分别代表着字符串的分割从哪里开始，并到哪里结束．我们不妨列个表格\autoref{Strsi_tab1} 来说明字符的对应关系
+\begin{table}[ht]
+\centering
+\caption{对应关系}\label{Strsi_tab1}
+\begin{tabular}{|c|c|c|c|c|c|c|c|c|c|c|c|c|c|c|c|}
+\hline
+ 字符  & M & y &   & n & a & m & e &   & i & s &   & M & i & k &e\\
+\hline
+ 序号  & 0 & 1 & 2 & 3 & 4 & 5 & 6 & 7 & 8 & 9 & 10 & 11 & 12 & 13 & 14\\
+\hline
+ 反序  & -15 & -14 & -13 & -12 & -11 & -10 & -9 & -8 & -7 & -6 & -5 & -4 & -3 & -2 & -1\\
+\hline
+\end{tabular}
+\end{table}
+\begin{example}{”朋友中的魔鬼“}
+这个文字小游戏代码如下：
+\begin{lstlisting}[language=python]
+word = 'friends'
+find_the_evil_in_your_friends = word[0]+word[2:4]+word[-3:-1] 
+print(find_the_evil_in_your_friends)
+\end{lstlisting}
+没有问题的话，你会得到结果：
+\begin{lstlisting}[language=python]
+fiend
+\end{lstlisting}
+也就发现了朋友中的魔鬼．你get到了吗？
+\end{example}
+\begin{example}{密码遮盖}
+我们来看这样一个场景：很多时候我们使用手机号在网站注册时，为了保证用户的信息安全性，通常账户信息只会显示后四位，其余的用\textbf{“*”}来代替，让我们利用所学来试试吧！
+\begin{lstlisting}[language=python]
+p_number = '13755878256'
+hide_number = phone_number.replace(phone_number[:9],'*' * 9)
+print(hide_number)
+\end{lstlisting}
+其中我们使用了一个新的字符串方法\textbf{\textsl{replace()}}进行“遮挡”．replace方法的括号中，第一个p_ number [: 9]代表要被替换掉的部分，后面的‘* ' *9表示将要替换的字符，然后把*乘以9，显示9个*．你会得到这样的结果: ********8526\footnote{此处电话随手打的，大家不要有任何的好奇心}
+你懂了吗？
+
+\end{example}
+
+\subsection{索引}
+索引小胖猫可以快速帮你找出你爱吃的面包哟,如下代码我们来模拟手机通讯簿中的电话号码联想功能（简陋的模拟）
+
+\begin{lstlisting}[language=python]
+s = '132'
+na = '1386-132-0706'
+nb = '1321-282-5046'
+print(s+' is at '+ str(na.find(s))+' to '+ str(na.find(s)+len(s))+' of na')
+print(s+' is at '+ str(nb.find(s))+' to '+ str(nb.find(s)+len(s))+' of nb')
+\end{lstlisting}
+你会得到结果：
+
+\textsl{\textbf{132 is at 5 to 8 of na}}
+
+\textsl{\textbf{132 is at 0 to 3 of nb}}
+\subsection{附注：}
+\begin{figure}[ht]
+\centering
+\includegraphics[width=10cm]{./figures/Strsi_2.png}
+\caption{填空} \label{Strsi_fig2}
+\end{figure}
+这样的填空题我们屡见不鲜，当字符串中有多个这样的“空”需要填写的时候，我们可以使用.format()进行批处理，它的基本使用方法有如下几种，输入代码：
+\begin{lstlisting}[language=python]
+print('{} word is what she needs. '.format('This'))
+print('{} word is {} she needs. '.format('This','what'))
+print('{p} word is what she needs. '.format('This'))
+print('{jih} word is {wul} she needs. '.format('This','what'))
+print('{0} word is {1} she needs. '.format('This','what'))
+print('{1} word is {0} she needs. '.format('what','This'))
+\end{lstlisting}
+所有的结果都为：
+
+\textsl{\textbf{This word is what she needs.}}
+
+好了，到这里你就掌握了变量和字符串的基本概念和常用方法．加油！

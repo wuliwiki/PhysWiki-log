@@ -96,21 +96,22 @@ g++ -o main.x main.o -l1 -L./ -Wl,-rpath,./
 \begin{lstlisting}
 export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/your/custom/path/
 \end{lstlisting}
-注意 \verb|rpath| 只能设定当前可执行文件的的路径， 如果可执行文件依赖的 \verb|.so| 文件所需要的 \verb|.so| 文件不在默认路径， 就只能通过修改 \verb`LD_LIBRARY_PATH` 才可以．
-
-如果不指定 \verb|rpath|， 设置环境变量 \verb|LD_RUN_PATH| 也是等效的． 链接的程序是 \verb|ld|， 而动态链接库是 \verb|ld-linux.so|
-
-如果要修改已经编译好的可执行文件（包括 so） 的 rpath， 可以用 \verb|chrpath| 或者 \verb|patchelf| 参考\href{https://stackoverflow.com/questions/13769141/can-i-change-rpath-in-an-already-compiled-binary}{这里}．
-
-如果同样的 \verb`-l` 既能匹配 \verb`lib***.a` 也能匹配 \verb`lib***.so`， 那么 gcc 会默认选 \verb`.so` （貌似有时候二者都需要）． 如果想要静态链接， 要么用 \verb`-static` 选项（禁止链接到任何动态 lib）， 要么直接指定 \verb`.a` 的地址和文件名， 如 \verb`g++ -o main.x f1.o /some/path/lib***.a another/path/lib***.a`．
-
-如果要查看 \verb|.a| 或 \verb|.so| 文件里面是否有某个函数， 用例如 \verb`nm -A /usr/lib/x86_64-linux-gnu/libflint.a | grep fmpz_set` 类似地也有 \verb|nm xxx.so|
+\begin{itemize}
+\item 注意 \verb|rpath| 只能设定当前可执行文件的的路径， 如果可执行文件依赖的 \verb|.so| 文件所需要的 \verb|.so| 文件不在默认路径， 就只能通过修改 \verb`LD_LIBRARY_PATH` 才可以．
+\item 如果不指定 \verb|rpath|， 设置环境变量 \verb|LD_RUN_PATH| 也是等效的． 链接的程序是 \verb|ld|， 而动态链接库是 \verb|ld-linux.so|
+\item 如果要修改已经编译好的可执行文件（包括 so） 的 rpath， 可以用 \verb|chrpath| 或者 \verb|patchelf| 参考\href{https://stackoverflow.com/questions/13769141/can-i-change-rpath-in-an-already-compiled-binary}{这里}．
+\item 如果同样的 \verb`-l` 既能匹配 \verb`lib***.a` 也能匹配 \verb`lib***.so`， 那么 gcc 会默认选 \verb`.so` （貌似有时候二者都需要）． 如果想要静态链接， 要么用 \verb`-static` 选项（禁止链接到任何动态 lib）， 要么直接指定 \verb`.a` 的地址和文件名， 如 \verb`g++ -o main.x f1.o /some/path/lib***.a another/path/lib***.a`．
+\item 如果要查看 \verb|.a| 或 \verb|.so| 文件里面是否有某个函数， 用例如 \verb`nm -A /usr/lib/x86_64-linux-gnu/libflint.a | grep fmpz_set` 类似地也有 \verb|nm xxx.so|
+\item 如果 \verb|rpath| 是相对路径， 那么它相对的是 pwd 而不是可执行文件的位置， 定义时可以使用 \verb|${ORIGIN}| 来表示可执行文件的位置．
+\end{itemize}
 
 Linux 程序运行时搜索动态链接库的顺序：
 \begin{itemize}
 \item 环境变量 \verb|LD_LIBRARY_PATH|
 \item 可执行文件的 \verb|rpath|
 \item \verb|/lib/| 和 \verb|/usr/lib/| 中的， 以及 \verb|/etc/ld.so.conf| 中的文件
+\item \verb`ld --verbose | grep SEARCH_DIR | tr -s ' ;' \\012` 可以查看 \verb|linker| 的默认搜索路径
+\item \verb|sudo ldconfig| 可以更新动态链接库的搜索
 \end{itemize}
 
 \subsection{多个动态库}
@@ -119,7 +120,7 @@ Linux 程序运行时搜索动态链接库的顺序：
 // lib0.cpp
 #include <iostream>
 using namespace std;
-int f0()
+void f0()
 {
   cout << "In library 0" << endl;
 }
@@ -129,7 +130,7 @@ int f0()
 // lib1.cpp
 #include <iostream>
 using namespace std;
-int f1()
+void f1()
 {
   cout << "In library 1" << endl;
   void f0();

@@ -1,0 +1,639 @@
+% 背包问题
+% 动态规划|背包问题|算法|dp
+
+背包问题是 $\tt dp$ 问题中给一个很大的分支，可以归类于\textbf{组合数 $\tt dp$}．
+
+背包问题大致为这么几类，分别为：$01$ 背包问题、多重背包问题、完全背包问题、分组背包问题、混合背包问题、二维费用的背包问题、有依赖的背包问题、背包问题求方案数、背包问题求具体方案．
+
+\subsection{$01$ 背包问题}
+
+题意：有 $N$ 件物品和一个能被重为 $W$ 的背包．第 $i$ 件物品的重量是 $w$，价值是 $v$ ．每件物品只能用一次，求解将哪些物品装入背包里物品价值总和最大．
+
+\textbf{状态表示：}$f(i, j)$ 表示只从前 $i$ 个物品中选，并且总体积不超过 $j$ 的选法的集合．
+
+\textbf{
+状态计算：}依据为第 $i$ 的物品选还是不选划分为两个不重不漏的集合．
+
+\begin{enumerate}
+\item 不选择第 $i$ 个物品，状态转移为 $f(i - 1, j)$．
+\item 选择第 $i$ 个物品，对应着：从前 $i - 1$ 个物品中选，总体积不超过 $j - v_i$，并且把第 $i$ 个物品的价值加上．状态转移为：$f(i - 1, j - v_i) + w_i$．
+\end{enumerate}
+
+\textbf{时间复杂度：}朴素做法需要两重循环，第一维枚举物品，第二维枚举体积．因此时间复杂度为：$\mathcal{O}(n \times m)$．
+
+\textbf{朴素代码：}
+
+\begin{lstlisting}[language=cpp]
+const int M = 1010;
+int N, V; // 物品数量, 背包容积
+int v[M], w[M];  // 第 i 件物品的体积和价值
+int f[M][M];
+
+int main()
+{
+    cin >> N >> V;
+    for (int i = 1; i <= N; i ++ ) cin >> v[i] >> w[i];
+
+    for (int i = 1; i <= N; i ++ )
+        for (int j = 1; j <= V; j ++ )
+        {
+            f[i][j] = f[i - 1][j]; // 不包含 i 的情况
+            if (v[i] <= j)  // 如果要选 i, 物品的体积不能超过背包的容积
+                f[i][j] = max(f[i][j], f[i - 1][j - v[i]] + w[i]);
+        }
+
+    cout << f[N][V] << endl;
+
+    return 0;
+}
+\end{lstlisting}
+
+因为状态转移每次只依赖上一个状态，即 $f(i, j)$ 只依赖于 $f(i - 1, j)$ 这个状态．因此可以优化至一维．
+
+一维状态转移方程：$f_j = max(f_j, f_j - v_i + w_i)$．
+
+但要注意优化至一维是枚举体积的时候要倒着循环．简单的证明一下：
+
+如果正着循环．
+
+\begin{lstlisting}[language=cpp]
+for (int i = 1; i <= n; i ++ ) 
+    for (int j = v[i]; j <= m; j ++ ) 
+        f[j] = max(f[j], f[j - v[i]] + w[i]);
+\end{lstlisting}
+
+对于二维状态：$f(i, j)$ 需要由 $f(i - 1, j - v_i)$ 得来，但是化成一维时，（用二维理解）可见 $f(i, j)$ 是由 $f(i, j - v_i)$ 得来的，而不是由 $f(i - 1, j - v_i)$ 得来的．
+
+例子：假设有 $2$ 件物品，背包的总体积为 $8$．
+
+\begin{lstlisting}[language=cpp]
+    物品    体积    价值
+    1       3       6
+    2       7       1
+\end{lstlisting}
+
+正序模拟过程如下：
+
+\begin{lstlisting}[language=cpp]
+f[3] = max(f[3], f[0] + w[1] = 6)  == f[3] = 6 
+f[4] = max(f[4], f[1] + w[1] = 6)  == f[4] = 6 
+f[5] = max(f[5], f[2] + w[1] = 6)  == f[5] = 6 
+
+// 到 f[6] 出错了，f[3] 应该是没被计算过的，但是正序循环，导致被重复计算．
+f[6] = max(f[6], f[3] + w[1] = 6)  == f[6] = 12
+f[7] = max(f[7], f[4] + w[1] = 6)  == f[7] = 12 
+f[8] = max(f[8], f[5] + w[1] = 6)  == f[8] = 12 
+f[9] = max(f[9], f[6] + w[1] = 6)  == f[9] = 18 
+f[10] = max(f[10], f[7] + w[1] = 6)  == f[10] = 18 
+f[7] = max(f[7], f[0] + w[2] = 1)  == f[7] = 12 
+f[8] = max(f[8], f[1] + w[2] = 1)  == f[8] = 12 
+f[9] = max(f[9], f[2] + w[2] = 1)  == f[9] = 18 
+f[10] = max(f[10], f[3] + w[2] = 1)  == f[10] = 18 
+18
+\end{lstlisting}
+
+倒序循环模拟过程如下：
+
+\begin{lstlisting}[language=cpp]
+f[10] = max(f[10], f[7] + w[1] = 6)  == f[10] = 6 
+f[9] = max(f[9], f[6] + w[1] = 6)  == f[9] = 6 
+f[8] = max(f[8], f[5] + w[1] = 6)  == f[8] = 6 
+f[7] = max(f[7], f[4] + w[1] = 6)  == f[7] = 6 
+
+// f[6] 中的 f[3] 没被计算，因此可以得出正确答案．
+f[6] = max(f[6], f[3] + w[1] = 6)  == f[6] = 6 
+f[5] = max(f[5], f[2] + w[1] = 6)  == f[5] = 6 
+f[4] = max(f[4], f[1] + w[1] = 6)  == f[4] = 6 
+f[3] = max(f[3], f[0] + w[1] = 6)  == f[3] = 6 
+f[10] = max(f[10], f[3] + w[2] = 1)  == f[10] = 7 
+f[9] = max(f[9], f[2] + w[2] = 1)  == f[9] = 6 
+f[8] = max(f[8], f[1] + w[2] = 1)  == f[8] = 6 
+f[7] = max(f[7], f[0] + w[2] = 1)  == f[7] = 6 
+7
+\end{lstlisting}
+
+\textbf{一维状态代码如下：}
+
+\begin{lstlisting}[language=cpp]
+int n, m, f[10005], v, w;
+
+int main()
+{
+    cin >> n >> m;
+    while (n -- )
+    {
+        cin >> v >> w;
+        for (int j = m; j >= v; j -- )
+            f[j] = max(f[j], f[j - v] + w);
+    }
+    
+    cout << f[m] << endl;
+}
+\end{lstlisting}
+
+\subsection{完全背包问题}
+
+\textbf{题意：}有 $N$ 件物品和一个能被重为 $W$ 的背包．第 $i$ 件物品的重量是 $w$，价值是 $v$ ．每件物品可以用\textbf{无限次}，求解将哪些物品装入背包里物品价值总和最大．
+
+\textbf{状态表示：}$f(i, j)$ 表示只从前 $i$ 个物品中选，并且总体积不超过 $j$ 的选法的集合．
+
+\textbf{
+状态计算：}依据为第 $i$ 的物品选几个划分为 $s$ 个子集．为什么不是无限个子集呢？因为总体积是有限制的．
+
+\begin{enumerate}
+\item 第 $i$ 个物品一个都不选，状态转移为：$f(i - 1, j)$．
+\item 第 $i$ 个物品选一个，对应着：从 $i - 1$ 个物品中选，总体积不超过 $j - v_i$，并且把第 $i$ 个物品的价值加上．状态转移为：$f(i - 1, j - v_i) + w_i$．
+\item 第 $i$ 个物品选两个，对应着：从 $i - 1$ 个物品中选，总体积不超过 $j - 2 \times v_i$，并且把第 $i$ 个物品的价值加两次．状态转移为：$f(i - 1, j - 2 \times v_i) + 2 \times w_i$．
+\end{enumerate}
+
+\textbf{时间复杂度：}朴素做法需要三重循环，第一维枚举物品，第二维枚举体积，第三维枚举决策（第 $i$ 个物品选择几个），因此时间复杂度为：$\mathcal{O}(n \times m^2)$．
+
+\textbf{三维朴素代码：}
+
+\begin{lstlisting}[language=cpp]
+const int M = 1010;
+int f[M][M], N, V, v[M], w[M];
+
+int main()
+{
+    scanf("%d%d", &N, &V);
+
+    for (int i = 1; i <= N; i ++ ) scanf("%d%d", &v[i], &w[i]);
+
+    for (int i = 1; i <= N; i ++ ) 
+        for (int j = 1; j <= V; j ++ ) 
+            for (int k = 0; k * v[i] <= j; k ++ )
+                f[i][j] = max(f[i][j], f[i - 1][j - k * v[i]] + k * w[i]);
+    cout << f[N][V] << endl;
+
+    return 0;
+}
+\end{lstlisting}
+
+观察一下状态转移方程可以优化成二维：
+
+\begin{equation}
+f(i, j) = \max(f(i - 1, j), f(i - 1, j - v) + w, f(i - 1, j - 2v) + 2w , \cdots , f(i - 1, j - sv) + sw)
+\end{equation}
+
+有：
+
+\begin{equation}
+f(i, j - v) = max(f(i - 1, j - v), f(i - 1, j - 2v) + w, f(i - 1, j - 3v) + 2w , \cdots, f(i - 1, j - sv) + (s - 1)w)
+\end{equation}
+
+因此不难看出第二个方程的第一项到最后一项只比第一个方程的第二项到最后一项少了 $w$．
+
+因此状态转移方程可优化为：$f(i, j) = \max(f(i - 1, j), f(i, j - v) + w$．如此一来，第三重循环就可以删去了，因此时间复杂度为 $\mathcal{O}(n \times m)$．
+
+同样可以优化成一维：$f_j = \max(f_j, (f_j - v) + w)$，此时循环可以从小到大循环，因为 $f(i, j)$ 从 $f(i, j - v + w)$ 转移得来．
+
+\textbf{一维代码：}
+
+\begin{lstlisting}[language=cpp]
+const int M = 1010;
+int f[M], N, V, v[M], w[M];
+
+int main()
+{
+    scanf("%d%d", &N, &V);
+    for (int i = 1; i <= N; i ++ ) scanf("%d%d", &v[i], &w[i]);
+    
+    for (int i = 1; i <= N; i ++ ) 
+        for (int j = v[i]; j <= V; j ++ ) 
+            f[j] = max(f[j], f[j - v[i]] + w[i]);
+
+    cout << f[V] << endl;
+
+    return 0;
+}
+\end{lstlisting}
+
+\subsection{多重背包问题}
+
+\textbf{题意：}有 $N$ 件物品和一个能被重为 $W$ 的背包．第 $i$ 件物品的重量是 $w$，价值是 $v$ ．每件物品可以用 $s_i$ 次，求解将哪些物品装入背包里物品价值总和最大．
+
+\textbf{状态表示：}$f(i, j)$ 表示只从前 $i$ 个物品中选，并且总体积不超过 $j$ 的选法的集合．
+
+\textbf{状态计算：}依据为第 $i$ 的物品选几个划分为 $s$ 个子集．
+
+\begin{enumerate}
+\item 第 $i$ 个物品一个都不选，状态转移为：$f(i - 1, j)$．
+\item 第 $i$ 个物品选一个，对应着：从 $i - 1$ 个物品中选，总体积不超过 $j - v_i$，并且把第 $i$ 个物品的价值加上．状态转移为：$f(i - 1, j - v_i) + w_i$．
+\item 第 $i$ 个物品选两个，对应着：从 $i - 1$ 个物品中选，总体积不超过 $j - 2 \times v_i$，并且把第 $i$ 个物品的价值加两次．状态转移为：$f(i - 1, j - 2 \times v_i) + 2 \times w_i$．
+\item 第 $i$ 个物品选 $s$ 次，对应着：从 $i - 1$ 个物品中选，总体积不超过 $j - s \times v_i$，并且把第 $i$ 个物品的价值加 $s$ 次．状态转移为：$f(i - 1, j - s \times v_i) + s \times w_i$．
+\end{enumerate}
+
+\textbf{时间复杂度：}朴素做法需要三重循环，第一维枚举物品，第二维枚举体积，第三维枚举决策（第 $i$ 个物品选择几个），因此时间复杂度为：$\mathcal{O}(n \times m^2)$．
+
+\textbf{三维朴素代码：}
+
+\begin{lstlisting}[language=cpp]
+const int M = 110;
+int f[M][M], v[M], w[M], s[M], N, V;
+
+int main()
+{
+    scanf("%d%d", &N, &V);
+    for (int i = 1; i <= N; i ++ ) scanf("%d%d%d", &v[i], &w[i], &s[i]);
+
+    for (int i = 1; i <= N; i ++ )
+        for (int j = 1; j <= V; j ++ ) 
+            for (int k = 0; k <= s[i]; k ++ )
+                if (j >= k * v[i])
+                    f[i][j] = max(f[i][j], f[i - 1][j - k * v[i]] + k * w[i]);
+                        
+    cout << f[N][V] << endl;
+
+    return 0;
+}
+\end{lstlisting}
+
+可以看出多重背包的转移方程与完全背包的转移方程非常类似，可以像完全背包那样优化吗？答案是不行的．
+
+多重背包的方程：
+\begin{equation}
+f(i, j) = f(i - 1, j), f(i - 1, j - v) + w, f(i - 1, j - 2v) + 2w, \cdots , f(i - 1, j - sv) + sw
+\end{equation}
+\begin{equation}
+f(i, j - v) = f(i - 1, j - v), f(i - 1, j - 2v) + w, f(i - 1, j - 3v) + 2w, \cdots, f(i - 1, j - sv) + (s - 1)w + f(i - 1, j - v - sv) + sw
+\end{equation}
+
+为什么 $f(i, j - v)$ 的最后一项比完全背包多出一项呢？因为完全背包只要体积够用就可以一直选，没有最后一项．而多重背包最多只能选 $s$ 个，因此有最后一项的限制．
+
+所以多重背包不能使用完全背包的优化方式．
+
+所以多重背包就产生了一种二进制的优化方式．
+
+二进制倍增拆分优化思想．
+
+首先要知道的是 01 背包第 i 件物品可以取 $0$ 件、$1$ 件．而多重背包问题第 $i$ 件物品可以取 $0$ 件、$1$、$2$ ··· $s_i$ 件．
+
+那么可以将多重背包问题转化为 01 背包问题：将第 $i$ 件物品换成 $s_i$ 件 01 背包中物品，即取 $0$ 件和 $1$ 件、取 $0$ 件和 $2$ 件，以此类推，每件物品的体积是 $k \times v_i$，价值是 $k \times w_i$．（$0 \leq k \leq s_i$）．
+
+这样的做法时间复杂度太高，为 $\mathcal{O}(N \times V \times \sum s_i)$．
+
+假设有 $50$ 个苹果，想要取出 $n$ 个苹果（$n \leq 50$），应该怎么取呢？朴素做法是一个一个取，而二进制拆分思想就是准备 $6$ 个抽屉，抽屉中分别放入 $2^k$ 个苹果，也就是 $1, 2, 4, 8, 16, 19$ 个苹果，注意最后 $19$ 个苹果是剩下的，如果放 $2^5 = 32$ 个苹果就能取出不止 $50$ 个苹果了．这样一来每次只需拿出几个抽屉即可．
+
+对应到多重背包问题，将第 $i$ 件物品拆分成若干组，每组物品的体积和价值也要乘上这个拆分系数（也就是每组放入 $2^0, 2^1, 2^2, \cdots , 2^k, s_i - 2^k + 1$）．举个例子：$s_i = 12$，拆分系数为 $1, 2, 4, 5$．转化为 $4$ 件 01 背包中的物品：$(v_i, w_i)$、$(2 \times v_i, 2 \times w_i)$、$(4 \times v_i, 4 \times w_i)$、$(5 \times v_i, 5 \times w_i)$．
+
+因此可以把每件物品的 $s_i$ 拆分成 $\log_2 s_i$ 个，然后再把这 $\log_2 s_i$ 个物品做一遍 01 背包问题，时间复杂度可以从 $\mathcal{O}(N \times V \times \sum s_i)$ 优化成 $\mathcal{O}(N \times V \times \sum \log_2 s_i)$．
+
+\textbf{二进制拆分优化后的代码：}
+
+\begin{lstlisting}[language=cpp]
+const int N = 25000;
+int f[N], n, m;
+
+int main()
+{
+    cin >> n >> m;
+    for (int i = 1; i <= n; i ++ ) 
+    {
+        int v, w, s;
+        cin >> v >> w >> s;
+        for (int k = 1; k <= s; k <<= 1)  // k <<= 1 等价于 k *= 2
+        {
+            for (int j = m; j >= k * v; j -- )
+                f[j] = max(f[j], f[j - k * v] + k * w);
+            s -= k;
+        }
+        if (s)  // 剩余的
+        {
+            for (int j = m; j >= s * v; j -- )
+                f[j] = max(f[j], f[j - s * v] + s * w);
+        }
+    }
+
+    cout << f[m] << endl;
+}
+\end{lstlisting}
+
+\subsection{混合背包问题}
+
+\textbf{题意：}
+
+有 $N$ 种物品和一个容量是 $V$ 的背包．
+
+物品一共有三类：
+
+\begin{itemize}
+\item 第一类物品只能用 $1$ 次（01背包）；
+\item 第二类物品可以用无限次（完全背包）；
+\item 第三类物品最多只能用 $s_i$ 次（多重背包）；
+\end{itemize}
+
+每种体积是 $v_i$，价值是 $w_i$．求解将哪些物品装入背包，可使物品体积总和不超过背包容量，且价值总和最大．输出最大价值．
+
+混合背包问题就是三种背包的结合版．
+
+\textbf{状态表示：$f(i, j)$} 表示从前 $i$ 个物品中选，总体积不超过 $j$ 的所有选法的集合．
+
+\textbf{状态计算：}
+
+\begin{itemize}
+\item 01 背包问题：$f(i, j) = \max(f(i - 1, j), f(i - 1, j - v) + w)$．
+\item 完全背包问题：$f(i, j) = \max(f(i - 1, j), f(i, j - v) + w)$．
+\item 多重背包问题：
+\begin{equation}
+f(i, j) = \max(f(i - 1, j), f(i - 1, j - v) + w, f(i - 1, j - 2 \times v) + 2 \times w , \cdots)
+\end{equation}
+\end{itemize}
+
+每个物品之间是独立的，只跟第 $i$ 个物品的类型有关，因此操作的时候只需要判断一下属于哪一类背包问题，然后用对应的转移方程．
+
+其中 01 背包问题可以转化为只有一个物品的多重背包问题．
+
+时间复杂度：$\mathcal{O}(N \times V \times \sum \log_2 s_i)$．
+
+\textbf{代码：}
+
+\begin{lstlisting}[language=cpp]
+const int N = 1010;
+int n, m, f[N];
+
+int main()
+{
+    cin >> n >> m;
+
+    for (int i = 0; i < n; i ++ )
+    {
+        int v, w, s;
+        cin >> v >> w >> s;
+        if (!s)     // 完全背包问题
+        {
+            for (int j = v; j <= m; j ++ )
+                f[j] = max(f[j], f[j - v] + w);
+        }
+        else
+        {
+            if (s == -1) s = 1;     // 01 背包问题
+            
+            // 完全背包问题转化为 01 背包问题，二进制拆分优化
+            for (int k = 1; k <= s; k *= 2)
+            {
+                for (int j = m; j >= k * v; j -- )
+                    f[j] = max(f[j], f[j - k * v] + k * w);
+                s -= k;
+            }
+            if (s)
+            {
+                for (int j = m; j >= s * v; j -- )
+                    f[j] = max(f[j], f[j - s * v] + s * w);
+            }
+        }
+    }
+
+    cout << f[m] << endl;
+
+    return 0;
+}
+\end{lstlisting}
+
+\subsection{二维费用的背包问题}
+
+题意：有 $N$ 件物品和一个容积为 $V$ 的背包，能承受的最大重量为 $M$．第 $i$ 件物品的重量是 $w$，价值是 $v$，重量为 $w$．求解将哪些物品装入背包，可使物品总体积不超过背包容量，总重量不超过背包可承受的最大重量，且价值总和最大．
+
+这题和 01 背包非常类似，只是多了一维重量的限制．
+
+\textbf{状态表示：$f(i, j, k)$} 表示只从前 $i$ 个物品中选，且总体积不超过 $j$，总重量不超过 $k$ 所有选法的集合．
+
+\textbf{状态计算：}
+
+\begin{enumerate}
+\item 不选择第 $i$ 个物品，状态转移为 $f(i - 1, j, k)$．
+\item 选择第 $i$ 个物品，对应着：从前 $i - 1$ 个物品中选，总体积不超过 $j - v_i$，总重量不超过 $k - m_i$， 并且把第 $i$ 个物品的价值加上．状态转移为：$f(i - 1, j - v_i, k - m_i) + w_i$．
+\end{enumerate}
+
+也可以优化掉第一维，因此状态转移方程为：
+\begin{equation}
+f(j, k) = \max(f(j, k), f(j - v_i, k - m_i) + w_i)
+\end{equation}
+
+二维费用的背包问题同样也可以是完全背包问题、多重背包问题...
+
+时间复杂度：$\mathcal{O}(N \times V \times M)$．
+
+\textbf{代码：}
+
+\begin{lstlisting}[language=cpp]
+const int N = 110;
+int n, V, M, f[N][N];
+
+int main()
+{
+    cin >> n >> V >> M;
+    for (int i = 1; i <= n; i ++ )
+    {
+        int v, m, w;
+        cin >> v >> m >> w;
+        
+        for (int j = M; j >= v; j -- )
+        {
+            for (int k = M; k >= m; k -- )
+                f[j][k] = max(f[j][k], f[j - v][k - m] + w);
+        }
+    }
+    
+    cout << f[V][M] << endl;
+    
+    return 0;
+}
+\end{lstlisting}
+
+\subsection{分组背包问题}
+
+题意：有 $N$ 组物品和一个容量是 $V$ 的背包，每组物品有若干个，同一组内的物品最多只能选一个，每件物品的体积是 $v_{ij}$，价值是 $w_{ij}$，其中 $i$ 是组号，$j$ 是组内编号，求解将哪些物品装入背包，可使物品总体积不超过背包容量，且总价值最大．
+
+本题和 01 背包问题非常类似，组内的物品做一遍 01 背包就可以了．
+
+\textbf{状态表示 $f(i, j)$：}表示从前 $i$ 个组中选，且总体积不超过 $j$ 的所有选法的集合．
+
+\textbf{状态计算：}依据第 $i$ 组中选哪个物品划分为 $i$ 个物品．
+
+\begin{enumerate}
+\item 第 $i$ 组中的物品一个都不选：$f(i - 1, j)$．
+\item 选第 $i$ 组中的第一个物品：$f(i - 1, j - v(1, 1) + w(1, 1))$．
+\item 选第 $i$ 组中的第 $k$ 个物品：$f(i - 1, j - v(i, k) + w(i, k))$．
+\end{enumerate}
+
+做法类似 01 背包问题，因此可以优化一维．
+
+时间复杂度为：$\mathcal{O}(N \times V \times S)$．
+
+\textbf{代码：}
+
+\begin{lstlisting}[language=cpp]
+const int N = 110;
+int n, m, v[N][N], w[N][N], f[N], s[N];
+
+int main()
+{
+    cin >> n >> m;
+    for (int i = 1; i <= n; i ++ )
+    {
+        cin >> s[i];
+        for (int j = 1; j <= s[i]; j ++ )
+            cin >> v[i][j] >> w[i][j];
+    }
+    
+    for (int i = 1; i <= n; i ++ ）
+        for (int j = m; j >= 0; j -- )
+            for (int k = 0; k <= s[i]; k ++ )   // 组内编号
+                if (j >= v[i][k])
+                    f[j] = max(f[j], f[j - v[i][k]] + w[i][k]);
+    
+    cout << f[m] << endl;
+    
+    return 0;
+}
+\end{lstlisting}
+
+\subsection{01 背包问题求方案数}
+
+\textbf{题意：}
+
+有 $N$ 件物品和一个容量是 $V$ 的背包．每件物品只能使用一次．
+
+第 $i$ 件物品的体积是 $v\_i$，价值是 $w\_i$，求解将哪些物品装入背包，可使这些物品的总体积不超过背包容量，且总价值最大．
+
+输出\textbf{最优选法的方案数}．
+
+本题是 01 背包问题求最优解的方案数．
+
+\textbf{状态表示：}
+
+\begin{itemize}
+\item $f(i, j)$ 表示从 $i$ 个物品中选，体积不超过 $j$ 的所有选法的集合．
+\item $cnt_i$ 表示背包容积为 $i$ 时的最佳方案数．
+\end{itemize}
+
+\textbf{状态计算：}
+
+\begin{itemize}
+\item $f_j = \max(f_j, f_{j - v} + w)$．
+\item $cnt_i = \max(cnt_{j - v}, cnt_{j - v} + cnt_j)$．
+\end{itemize}
+
+如果 $f_{j - v} + w$ 大于 $f_j$，那么用 $f_{j - v} + w$ 更新 $f_j$，即 $cnt_j = cnt_{j - v}$，如果 $f_j == f_{j - v} + w$，则有两个相同的方案数，即 $cnt_j = cnt_j + cnt_{j - v}$．
+
+还有一点要注意的是 $cnt_i$，（$0 \leq i \leq m$）最开始要初始化为 $1$，因为一个物品都不选也是一种方案．
+
+时间复杂度：$\mathcal{O}(N \times V)$．
+
+\textbf{代码：}
+
+\begin{lstlisting}[language=cpp]
+const int N = 1100, mod = 1e9 + 7;
+int n, m, f[N], cnt[N];
+
+int main()
+{
+    cin >> n >> m;
+    for (int i = 0; i <= m; i ++ ) cnt[i] = 1;
+    
+    for (int i = 1; i <= n; i ++ )
+    {
+        int v, w;
+        cin >> v >> w;
+        
+        for (int j = m; j >= v; j -- )
+        {
+            int value = f[j - v] + w;
+            if (value > f[j])
+            {
+                f[j] = value;
+                cnt[j] = cnt[j - v];
+            } else if (value == f[j]) 
+                cnt[j] = (cnt[j] + cnt[j - v]) % mod;
+        }
+    }
+    
+    cout << cnt[m] << endl;
+    
+    return 0;
+}
+\end{lstlisting}
+
+\subsection{01 背包问题求具体方案}
+
+\textbf{题意：}
+
+在 01 背包问题中输出\textbf{字典序最小的方案}．这里的字典序是指：所选物品的编号所构成的序列．物品的编号范围是 $1 \sim N$．
+
+首先考虑没有“字典序最小的限制”，在做完 dp 之后直接从后往前推就行了．可以对应图论中的问题，最后一个结点的值就是 $f(n, m)$，看 $f(n, m)$ 由哪个值转移得来的．
+
+\begin{enumerate}
+\item $f(n, m) = f(n - 1, m)$，即不选第 $n$ 个物品．
+\item $f(n, m) = f(n - 1, m - v) + w$，即选第 $n$ 个物品．
+\item 第三种情况是 $f(n - 1) == f(n - 1, m - v) + w$，即选或者不选都可以，此时会优先不选物品 $i$．（枚举顺序会优先考虑字典序小的方案）．
+\end{enumerate}
+
+假设问题的字典序最小的方案为 $(1, 4)$，但是上面的做法会优先不选物品 $i$，所以得到的方案为 $(2, 3)$．
+
+因此在做 01 背包问题的时候，需要从后往前枚举物品 $i$，所以最大值为  $f(1, m)$，这样在最后找方案的时候，能选则一定选，这样得到的方案字典序是最小的．
+
+所以倒着做 01 背包问题状态转移方程就变成了：
+\begin{equation}
+f(i, j) = \max(f(i + 1, j), f(i + 1, j - v) + w)
+\end{equation}
+
+例子：
+
+\begin{lstlisting}[language=cpp]
+4 7
+1 1 
+2 3 
+3 4
+4 5
+\end{lstlisting}
+
+\begin{figure}[ht]
+\centering
+\includegraphics[width=10cm]{./figures/dp1_1.png}
+\caption{转移过程} \label{dp1_fig1}
+\end{figure}
+
+\textbf{时间复杂度：}$\mathcal{O}(N \times V)$．
+
+\textbf{代码：}
+
+\begin{lstlisting}[language=cpp]
+const int N = 1010;
+int n, m, v[N], w[N], f[N][N];
+
+int main()
+{
+    scanf("%d%d", &n, &m);
+    for (int i = 1; i <= n; i ++ ) cin >> v[i] >> w[i];
+    
+    for (int i = n; i >= 1; i -- )
+        for (int j = 1; j <= m; j ++ )
+        {
+            f[i][j] = f[i + 1][j];
+            if (j >= v[i])
+            	f[i][j] = max(f[i + 1][j], f[i + 1][j - v[i]] + w[i]);
+        }
+      
+    /* 
+    for (int i = 1; i <= n + 1; i ++ )
+    {
+        cout << "i = " << i << ": ";
+        for (int j = 1; j <= m; j ++ )
+            cout << f[i][j] << ' ';
+        cout << endl;
+    }
+    */
+    
+    int j = m;
+    for (int i = 1; i <= n; i ++ )   // 往前推
+        if (j >= v[i] && f[i][j] == f[i + 1][j - v[i]] + w[i])
+        {
+            cout << i << ' ';
+            j -= v[i];  // 选了第 i 个物品，总体积要减少
+        }
+    
+    return 0;
+}
+\end{lstlisting}
+

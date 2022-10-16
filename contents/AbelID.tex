@@ -1,0 +1,207 @@
+% 阿贝尔微分方程恒等式
+% 朗斯基行列式|Wronski行列式|Wronskian|线性微分方程|Abel's Identity|Abel's Formula|阿贝尔公式
+
+本文翻译并节选自WikiPedia的\href{https://en.wikipedia.org/wiki/Abel\%27s_identity}{Abel's Identity}．
+
+
+\subsection{综述}
+
+在数学中，\textbf{阿贝尔恒等式（Abel's identity）}（亦称\textbf{阿贝尔公式（Abel's formula）}\footnote{ Rainville, Earl David; Bedient, Phillip Edward (1969). \href{https://archive.org/details/elementarydiffer00rain}{ Elementary Differential Equations} . Collier-Macmillan International Editions.} 或者 \textbf{阿贝尔微分方程恒等式(Abel's differential equation identity)}），是一个等式，用于表示一个二阶齐次线性常微分方程的两个解的朗斯基行列式，只需要用到原方程的系数．这一关系也可以推广到$n$阶的线性微分方程．该恒等式命名自挪威数学家Niels Henrik Abel．
+
+由于阿贝尔恒等式把微分方程不同的线性独立解联系起来了，因此它也可以用来从一个特解得到另一个特解．它给出了解之间很有用的恒等关系，同时也在参数变易法（variation of parameters）等其它技巧中功不可没．在Bessel方程等无法给出简单解析解的方程中尤其有用，因为这些情况下朗斯基行列式非常难算．
+
+用\href{https://en.wikipedia.org/wiki/Liouville\%27s_formula}{Liouville公式}能将阿贝尔恒等式推广到齐次线性微分方程的一阶系统上．
+
+
+
+\subsection{公式描述}
+
+考虑二阶齐次线性微分方程
+\begin{equation}\label{AbelID_eq1}
+y'' + p(x)y' +q(x)y = 0
+\end{equation}
+其中$p, q$是实数轴上一区间$I$上的连续函数，函数值为实数或者复数．
+
+阿贝尔恒等式是说，对于\autoref{AbelID_eq1} 的任意两个解$y_1, y_2$以及任意$x_0\in I$，其朗斯基行列式$W[y_1, y_2]$满足以下等式：
+\begin{equation}\label{AbelID_eq4}
+W[y_1, y_2](x) = W[y_1, y_2](x_0)\cdot \exp\qty(-\int _{x_0}^x p(z)\dd z), \quad x\in I
+\end{equation}
+
+（译者注：或者使用$W'=-pW$，见本小节的“定理证明”部分．）
+
+
+\subsubsection{批注}
+
+\begin{itemize}
+\item 特别地，朗斯基行列式$W[y_1, y_2]$在$I$上要么恒等于$0$，要么恒大于$0$，要么恒小于$0$．对于恒大于或小于$0$的情况，$y_1$和$y_2$就是线性无关的．
+\item 没必要假设$y_1$和$y_2$的二阶导数连续．
+\item 阿贝尔这个定理在$p(x)=0$的时候尤其好用，因为此时$W$是常数．
+\end{itemize}
+
+
+\subsubsection{定理证明}
+
+考虑朗斯基行列式
+\begin{equation}
+W[y_1, y_2] = y_1y'_2 - y'_1y_2
+\end{equation}
+两边求导得（省略$x$以简化表达）
+\begin{equation}\label{AbelID_eq3}
+W' = y_1y_2'' - y''_1y_2
+\end{equation}
+
+而从原本的微分方程能得到
+\begin{equation}\label{AbelID_eq2}
+y''_i = -(py'_i+qy_i)
+\end{equation}
+
+把\autoref{AbelID_eq2} 代入\autoref{AbelID_eq3} 得到
+\begin{equation}\label{AbelID_eq6}
+\ali{
+    W' &= -y_1(py'_2 + qy_2) + y_2(py'_1 + qy_1)\\
+    &= p(-y_1y'_2 + y'_1y_2)\\
+    &= -pW
+}
+\end{equation}
+这是一个一阶常微分方程，其解正是阿贝尔恒等式\autoref{AbelID_eq4} ．
+
+由于$p$在$I$上连续，因此它在$I$的任何有界闭子区间上有界且可积，从而使得下列函数有良好定义：
+\begin{equation}\label{AbelID_eq5}
+V(x) = W(x) \exp\qty(\int_{x_0}^x p(\xi)\dd \xi),\quad x\in I
+\end{equation}
+对\autoref{AbelID_eq5} 两边求导，再代入\autoref{AbelID_eq6} 可得
+\begin{equation}
+\ali{
+    V(x) &= ( W'(x) + W(x) p(x) )\exp\qty(\int_{x_0}^x p(\xi)\dd \xi)\\
+    &= 0
+}
+\end{equation}
+
+从而$V(x)$是常数，即
+\begin{equation}
+W(x)\exp\qty(\int_{x_0}^x p(\xi)\dd \xi)
+\end{equation}
+是\textbf{常数}．由于$V(x_0)=W(x_0)$，此常数即为$W(x_0)$．
+
+
+\subsection{推广}
+
+考虑区间$I$上的$n$阶齐次线性微分方程（$n$为正整数）
+\begin{equation}\label{AbelID_eq7}
+y^{(n)} + p_{n-1}(x)y^{(n-1)} + \cdots + p_1(x)y' + p_0(x)y = 0
+\end{equation}
+其中$p_{n-1}$在$I$上连续．
+
+阿贝尔恒等式的推广形式是说，\autoref{AbelID_eq7} 的$n$个解$y_1, y_2, \cdots, y_n$的朗斯基行列式$W[y_1, y_2, \cdots, y_n]$，满足下列关系：
+\begin{equation}
+\ali{
+W[y_1, y_2, \cdots, y_n](x) &= W[y_1, y_2, \cdots, y_n](x_0)\exp\qty(-\int_{x_0}^x p_{n-1}(z)\dd z) \\
+\forall x, x_0&\in I
+}
+\end{equation}
+
+
+
+
+\subsubsection{直接证明}
+
+先写出$W[y_1, y_2, \cdots, y_n]$的定义：
+\begin{equation}
+W[y_1, y_2, \cdots, y_n] = 
+\begin{vmatrix}
+y_1&y_2&\cdots&y_n\\
+y'_1&y'_2&\cdots&y'_n\\
+y''_1&y''_2&\cdots&y''_n\\
+\vdots&\vdots&\ddots&\vdots\\
+y_1^{(n-1)}&y_2^{(n-1)}&\cdots&y_n^{(n-1)}\\
+\end{vmatrix}
+\end{equation}
+
+求导得
+\begin{equation}\label{AbelID_eq8}
+\ali{
+    W'[y_1, y_2, \cdots, y_n] ={}& \\
+&\vmat{
+y'_1&y'_2&\cdots&y'_n\\
+y'_1&y'_2&\cdots&y'_n\\
+y''_1&y''_2&\cdots&y''_n\\
+\vdots&\vdots&\ddots&\vdots\\
+y_1^{(n-1)}&y_2^{(n-1)}&\cdots&y_n^{(n-1)}\\
+}+\\
+&\vmat{
+y_1&y_2&\cdots&y_n\\
+y''_1&y''_2&\cdots&y''_n\\
+y''_1&y''_2&\cdots&y''_n\\
+\vdots&\vdots&\ddots&\vdots\\
+y_1^{(n-1)}&y_2^{(n-1)}&\cdots&y_n^{(n-1)}\\
+}+\\
+&\qquad\vdots\\
+&\vmat{
+y_1&y_2&\cdots&y_n\\
+y'_1&y'_2&\cdots&y'_n\\
+y''_1&y''_2&\cdots&y''_n\\
+\vdots&\vdots&\ddots&\vdots\\
+y_1^{(n)}&y_2^{(n)}&\cdots&y_n^{(n)}\\
+}\\
+}
+\end{equation}
+
+容易发现，\autoref{AbelID_eq8} 右端除了最后一项，其它所有项都因为求导而有两行完全相同，于是它们都为零．因此
+\begin{equation}\label{AbelID_eq9}
+W'[y_1, y_2, \cdots, y_n] = 
+\vmat{
+y_1&y_2&\cdots&y_n\\
+y'_1&y'_2&\cdots&y'_n\\
+y''_1&y''_2&\cdots&y''_n\\
+\vdots&\vdots&\ddots&\vdots\\
+y_1^{(n)}&y_2^{(n)}&\cdots&y_n^{(n)}\\
+}
+\end{equation}
+缺失了$y_i^{(n-1)}$项．
+
+注意到各$y_i$都是\autoref{AbelID_eq7} 的解，可知
+\begin{equation}
+y_i^{(n)}  + p_{n-2}\,y_i^{(n-2)} + \cdots + p_1\,y'_i + p_0\,y_i = -p_{n-1}y_i^{(n-1)}
+\end{equation}
+对于全体$i\in\{1, 2, 3, \cdots, n\}$都成立．
+
+把\autoref{AbelID_eq9}  右端行列式的第一行乘以$p_0$后加到最后一行、第二行乘以$p_1$后加到最后一行、第三行……第$n-1$行乘以$p_n$后加到最后一行，行列式的值不变，于是得到
+\begin{equation}\label{AbelID_eq10}
+\begin{aligned}
+W'[y_1, y_2, \cdots, y_n] &= 
+\begin{vmatrix}
+y_1&y_2&\cdots&y_n\\
+y'_1&y'_2&\cdots&y'_n\\
+y''_1&y''_2&\cdots&y''_n\\
+\vdots&\vdots&\ddots&\vdots\\
+-p_{n-1}y_1^{(n-1)}&-p_{n-1}y_2^{(n-1)}&\cdots&-p_{n-1}y_n^{(n-1)}\\
+\end{vmatrix}\\
+&=-p_{n-1}
+\begin{vmatrix}
+y_1&y_2&\cdots&y_n\\
+y'_1&y'_2&\cdots&y'_n\\
+y''_1&y''_2&\cdots&y''_n\\
+\vdots&\vdots&\ddots&\vdots\\
+y_1^{(n-1)}&y_2^{(n-1)}&\cdots&y_n^{(n-1)}\\
+\end{vmatrix}\\
+&= -p_{n-1}W[y_1, y_2, \cdots, y_n]
+\end{aligned}
+\end{equation}
+
+这是关于$W$的微分方程，解方程即得证．
+
+
+
+%\subsubsection{利用Liouville公式证明}
+
+
+
+
+
+
+
+
+
+
+
+

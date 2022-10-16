@@ -68,6 +68,28 @@
 \item \verb|sudo swapoff -a| 不使用 swap file， \verb|sudo swapon -a| 恢复使用． 可能还需要在 \verb|/etc/fstab| 里面注释掉相应的行．
 \end{itemize}
 
+\subsubsection{split}
+\begin{itemize}
+把文件 \verb`file` 分割成 \verb`file-01`, \verb`file-02`, ...
+\item \verb`split -b 500000000 -d file  path/to/file-`
+\item \verb`-d` 拓展名用数字而不是字母
+\item \verb`-b 10` 划分成 10 字节的小块
+\item \verb`-l 4` 划分成每个文件 4 行
+\item \verb`-n 10` 把文件 (几乎) 等分为 10 份
+\item \verb`-a 4` 拓展名位数为 4
+\item 如果文件个数超出拓展名位数， 那么位数会自动增加， 且增加后第一位不变以保持正确排序
+要缝合分割后的文件， 用 \verb`cat file-* > file`
+\end{itemize}
+
+
+\subsubsection{find}
+\begin{itemize}
+\item \verb`find /path1/ path2/ -name '<filename>'` 可以搜索该目录下的文件. 加上 \verb`-iname` 选项可以不区分大小写. 也可以用 \verb`'*<filename>*'` 来表示含该文字的文件名. 加 \verb`-user <name>` 选项用于查找某个用户的文件， 加 \verb`-size +100M` 可以查找大于 100M 的文件． \verb`-type d` 选项搜索目录， 默认是只搜索文件
+\item 如果要执行， 用 \verb`find ... -exec xxxx {} \;` 可以将找到的每个结果分别用程序 \verb`xxxx` 执行， \verb`find ... -exec xxxx {} +` 将找到的结果用 \verb`xxxx` 一次执行． 其中 \verb`{}` 可以重复使用
+\item \verb`-execdir ... {} ... \;` 相当于先 \verb`cd` 到每个文件所在目录然后执行命令
+\item 删除当前目录以及子目录的空文件夹 \verb`find . -empty -type d -delete` 删除空文件 \verb`find . -empty -type f -delete`
+\end{itemize}
+
 \subsection{包管理}
 \begin{itemize}
 \item \verb`sudo apt-get install <appname>` 安装程序(99\%的程序都可以这样安装)(需要联网)
@@ -104,12 +126,15 @@
 \item \verb`<命令> > <文件名.txt>` 可以把命令行的输出写入文件中 !! 例如: \verb`date > time.txt , cal > calander.txt`
 \item \verb`grep <string> < <filename>` 可以在文档中高亮标出指定字符串
 \item \verb`cat <filename> | grep <string>` 可以达到同样的效果
+\item \verb`grep -iRl "文字" [path]` 可以搜索当前目录或者指定目录下所有子文件夹中文件的内容， 并列出文件名． \verb`i` 选项不区分大小写， \verb`R` 搜索子文件夹， \verb`l` 仅列出文件名． 要列出每一个 match， 用 \verb`grep -iR` 即可
 \item 用 vim 的时候, 最好在前面加上 \verb`sudo`, 否则有可能编辑了保存不了(例如一些 configuration file). 甚至要首先用 \verb`chown` 把文件所有权变成自己的.
 \item \verb`#` 在文件中起标注的作用 (如果文件中有 linux 代码), 在命令行, \verb`#` 后面的代码同样会被忽略.
 \item 要转换文档 encoding，用 \verb|iconv -f [encoding] -t [encoding] -o [newfilename] [filename]|． 微软的 ANSI 格式其实叫做 iso-8859-1, 例如 `iconv -f iso-8859-1 -t utf-8 -o out.txt in.txt`.
 \item \verb`sed` 命令可以用来处理文件或 standard input 中的文字, 并输出到文件或者 standard out. 在 \verb`SCID_TDSE` 的 makefile 中遇见, 命令是
 \verb|sed -e 's/^!\*nq/    /' inputfile.f90 > outputfile.f90|
 其中 \verb`-e` 是将后面的命令作用到 \verb`inputfile.f90` 上. \verb`s/str1/str2` 是将文本中的 \verb`str1` 替换成 \verb`str2`, \verb`\*` 转义为 \verb`*` (直接用 \verb`*` 就是通配符)， \verb`^` 大概是要求 \verb`str1` 出现在行首.
+\item 将子目录下所有头文件中的 CRLF 都替换为 LF： \verb`sudo find . -name "*.h" | xargs sudo sed -i -e 's/\r//g'`． 选项 \verb`-i` 直接修改源文件， \verb`-e` 用于指定后面的 \verb`s/旧内容/新内容/g`
+\item \verb`xarg` 用于使用 piping 构建新命令， 即将 find 输出的东西放到 \verb`sudo sed -i -e 's/\r//g'` 的后面
 \end{itemize}
 
 \subsection{账户与权限}
@@ -124,7 +149,7 @@
 \item \verb`users` 命令显示目前所有登录的用户, \verb`who` 命令可以显示更详细的信息
 \item \verb`ls -l` 最左边第一列是 owner 的权限, 第二列是 group 的权限, 第三列是其他人的权限, \verb`r (read) w (write) x (execute)`
 \item \verb`ls` 选项： \verb`-a` (all)(显示隐藏) \verb`-m` (挤到一起) \verb`-1` 显示为一列 \verb`-v` 按照数字大小排序
-\item \verb`chown <user> <file>` 修改文件的所有者
+\item \verb`chown <user> <files>` 修改文件的所有者， \verb|-R| 对文件夹 recursive
 \item \verb`chmod <权限> <file>` 修改文件的权限. <权限> 是三位8进制数, 每一位是 x(1),w(2),r(4)之和.
 \item \verb`groups` 或者 \verb`groups <user>` 可以查看用户所在的组
 \item \verb`id` 可以查看用户的信息 \verb`uid (user id) gid (group id)`
@@ -186,7 +211,7 @@
 \begin{itemize}
 \item \verb|for ((i=275;i<=294;++i)); do rsync -zvh addis1@headnode.beocat.ksu.edu:/homes/addis1/github/FEDVR-TDSE/data/${i}/analysis/* ./${i}/analysis/; done|
 \item 格式 \verb`rsync -avzh file1 file2 folder3 file4 dest_path` 其中 file1 到 file4 等文件或文件夹会自动同步到 \verb|dest_path| 文件夹中（例如生成 \verb`dest_path/file1`， \verb`dest_path/folder3`）． 如果 \verb|dest_path| 不存在， 会自动用 mkdir 生成，但只能生成一层． file, folder 和 \verb|dest_path| 都可以是远程或者本地
-\item \verb`-a` 是 archive (包括 permission 和 symlink)， \verb`-v` 是 verbose （显示详情）， \verb`-z` 是 zip （传输过程压缩） \verb`-h` 人可读
+\item \verb`-a` 是 archive (包括所有子文件夹， 文件的 permission 和 symlink)， \verb`-v` 是 verbose （显示详情）， \verb`-z` 是 zip （传输过程压缩） \verb`-h` 人可读
 \item \verb`rsync -avzh source/ dest/ --delete` 会把 dest 文件夹中多余的文件删除
 \item 如果远程目录有需要 \verb`\` 的字符， 例如 \verb`\(...\)`， 需要用三次， 例如 \verb`\\\(...\\\)`． 本地的 shell 会先把 \verb`\\` 变为 \verb`\`, \verb`\(` 变为 \verb`(`
 \item 若要在每个文件传输完成之后从原来文件夹删除， 用 \verb`--remove-source-files`

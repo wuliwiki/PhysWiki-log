@@ -23,7 +23,7 @@
 \item Clonezilla 的分区备份对 GPT 和 MBR 都是通用的， 如果发生任何问题， 用 live cd 重装系统，确保能正常启动， 然后还原对应的分区就行，无需任何额外设置．
 \item 之前 SMART 提示 threshold exceeded，但并没有看到那一项有问题，现在重新写 GPT，安装，clonezilla 还原， 又可以正常用了．
 \item  正常的 ext4 系统分区用 Gparted 缩小以后， 突然就不能启动了！貌似并不是 grub 的问题，内核已经加载然后弄出一堆错误．
-\item 有一个工具叫做 boot-repair 可能可以用来修复 bootloader 的问题
+\item 有一个工具叫做 \href{https://help.ubuntu.com/community/Boot-Repair}{boot-repair} 可能可以用来修复 bootloader 的问题
 \item \verb|extFAT| 在 Ubuntu 中并不怎么支持 resize 和移动， 还是用 windows 的傲梅比较好
 \end{itemize}
 
@@ -65,4 +65,15 @@
 \item uuid 需要 umount 才可以修改， 随机生成 uuid 用 \verb|tune2fs -U random /dev/sdb?| , disk 中会看到变化， 如果 blkid 看见 uuid 没有变化， 就 mount 再 umount 即可刷新
 \item \verb|fdisk| 也可以改变 uuid, \verb|sudo fdisk /dev/sd?| 然后按 x 再按 i 即可
 \item 理论上 GPT 是可以在 BIOS 主板上 boot 的（实际上对大部分 linux 可以）， 见\href{https://superuser.com/questions/1337344/is-it-possible-to-boot-linux-from-a-gpt-disk-on-a-bios-system}{这里}．
+\end{itemize}
+
+\subsection{Clone Ubuntu 硬盘}
+以下步骤亲测成功．
+\begin{itemize}
+\item 启动 Ubuntu 的 live cd 的 usb
+\item 如果目标硬盘/分区比原硬盘/分区小， 那么用 GParted 缩小原分区．
+\item 用 GParted 把每个分区逐一复制粘贴， 分区尺寸要一模一样．
+\item 如果 part table 是 MBR， 用上面的 \verb|dd| 命令备份并拷贝 MBR
+\item 用 GParted 把目标分区的 UUID 随机生成新的， 避免两个分区具有一样的 UUID 发生冲突
+\item 用 \verb|grub-install /dev/sd?| 重新安装 grub， 确认目标硬盘中 \verb|/boot/grub/grub.cfg| 配置文件中所有 UUID 都是新分区的 UUID 而不是老的． 如果是老的就全部替换．
 \end{itemize}

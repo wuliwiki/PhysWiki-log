@@ -10,72 +10,114 @@
 有时，把一个大矩阵$\mat M$视为若干个小矩阵的“组合”可以帮助简化问题，例如：
 \begin{equation}
 \mat M = 
-\begin{bmatrix}
+\begin{pmatrix}
 \mat A & \mat B\\
 \mat C & \mat D\\
-\end{bmatrix}
+\end{pmatrix}
 \end{equation}
 其中 $\mat A, \mat B, \mat C, \mat D$都是矩阵．这些子矩阵可以不是方阵，但这种划分必须“有意义”，即$\mat A$与$\mat C$的行数相同、$\mat A$与$\mat B$的列数相同，等等．
 
 \subsubsection{分块矩阵的加法、乘法}
 若相应的计算都有定义，那么分块矩阵的加法、乘法法则\upref{Mat}与普通矩阵形式上完全类似，例如：
 \begin{equation}
-\begin{bmatrix}
+\begin{pmatrix}
 \mat A & \mat B\\
 \mat C & \mat D\\
-\end{bmatrix}
+\end{pmatrix}
 +
-\begin{bmatrix}
+\begin{pmatrix}
 \mat E & \mat F\\
 \mat G & \mat H\\
-\end{bmatrix}
+\end{pmatrix}
 =
-\begin{bmatrix}
+\begin{pmatrix}
 \mat A +\mat E & \mat B +\mat F\\
 \mat C +\mat G & \mat D +\mat H\\
-\end{bmatrix}
+\end{pmatrix}
 \end{equation}
 
 \begin{equation}
-\begin{bmatrix}
+\begin{pmatrix}
 \mat A & \mat B\\
 \mat C & \mat D\\
-\end{bmatrix}
-\begin{bmatrix}
+\end{pmatrix}
+\begin{pmatrix}
 \mat E & \mat F\\
 \mat G & \mat H\\
-\end{bmatrix}
+\end{pmatrix}
 =
-\begin{bmatrix}
+\begin{pmatrix}
 \mat A \mat E +\mat B \mat G & \mat A \mat F +\mat B \mat H \\
 \mat C \mat E +\mat D \mat G  & \mat C \mat F +\mat D \mat H \\
-\end{bmatrix}
+\end{pmatrix}
 \end{equation}
 
 \begin{equation}
 \mat M
-\begin{bmatrix}
+\begin{pmatrix}
 \mat A & \mat B\\
 \mat C & \mat D\\
-\end{bmatrix}
+\end{pmatrix}
 =
-\begin{bmatrix}
+\begin{pmatrix}
 \mat M \mat A & \mat M \mat B\\
 \mat M \mat C & \mat M \mat D\\
-\end{bmatrix}
+\end{pmatrix}
 \end{equation}
 
 %相乘时可以把每块看成一个元素， 元素之间的乘法就是块的矩阵乘法．
+
+\begin{theorem}{分块矩阵的乘法}
+在数域$K$上，设矩阵$A\in{M_{s\times{n}}(K)},B\in{M_{n\times{m}}(K)}$．分别对两个矩阵分块，如果满足下面两个条件
+\begin{enumerate}
+\item $\mat A$分块的列组数等于$\mat B$分块的行组数（块数）.
+\item $\mat A$的每个列组所含的列数\textbf{对应}等于$\mat B$的每个行组所含的行数．
+\end{enumerate}
+则分块矩阵的乘法类似地满足矩阵乘法运算规律．
+\begin{equation}
+\mat A\mat B=
+\begin{pmatrix}
+\mat A_{11} & \mat A_{12}\\
+\mat A_{21} & \mat A_{22}
+\end{pmatrix}
+\begin{pmatrix}
+\mat B_{11} & \mat B_{12}\\
+\mat B_{21} & \mat B_{22}
+\end{pmatrix}
+=
+\begin{pmatrix}
+\mat A_{11}\mat B_{11}+\mat A_{12}\mat B_{22} & \mat A_{11}\mat B_{12}+\mat A_{12}\mat B_{22}\\
+\mat A_{21}\mat B_{11}+\mat A_{22}\mat B_{21} & \mat A_{21}\mat B_{12}+\mat A_{22}\mat B_{22}
+\end{pmatrix}
+\end{equation}
+\end{theorem}
+\textsl{和矩阵乘法规则的区别在于矩阵乘法的相对顺序不能改变，因为矩阵乘法没有交换律}
+
+\textbf{证明}：
+设$\mat C=\mat A\mat B$，则$\mat C$的行数和列数分别为$s$和$m$．设矩阵$\mat A$的分块的行数为$s_1,s_2$，列数为$n_1,n_2$，矩阵$\mat B$的分块的行数为$n_1,n_2$，列数为$m_1,m_2$．分块矩阵的乘积的行数为$s=s_1+s_2$，$m=m_1+m_2$，和$\mat C$的行数和列数相等．于是得到证明思路：证明任意$\mat C$的$(i,j)$元等于分块矩阵乘积的$(i,j)$元．
+
+设$\mat C$的$(i,j)$处于$s_p\times{m_q}$部分，则该元素就在分块矩阵乘法结果的$(i,j)$元，即
+\[\sum_{k=1}^{2}\mat A_{pk}\mat B_{kq}(i;j)\]
+根据矩阵的乘法，可以展开每两块矩阵第$i,j$项的乘法，等于
+\[=\sum_{k=1}^{2}\sum_{l=1}^{n_k}\mat A_{pk}(i;l)\mat B_{kq}(l;j)\]
+\[=\sum_{l=1}^{n_1}\mat A_{p1}(i;l)\mat B_{1q}(l;j)+\sum_{l=1}^{n_2}\mat A_{p2}(i;l)\mat B_{2q}(l;j)\]
+可以将$l$用在$\mat A,\mat B$中的绝对位置来表示，而不是$\mat A_{pk},\mat B_{kq}$中的相对位置来表示，得到
+\[=\sum_{l=1}^{n_1}\mat A(i;l)\mat B(r;j)+\sum_{l=n_1+1}^{n_1+n_2}\mat A(i;l)\mat B(l;j)\]
+注意到求和的上下限恰好可以合并，得到
+\[\sum_{l=1}^{n}\mat A(i;l)\mat B(l;j)\]
+这正是$C$的$(i,j)$元．得证．
+
+证明2阶情况是出于简便起见，其思路是可以推广到更加一般的情况
 
 \subsection{块对角矩阵}
 %是这个吗？
 定义块对角矩阵： 只有对角块为非零的矩阵，例如：
 \begin{equation}
 \mat M = 
-\begin{bmatrix}
+\begin{pmatrix}
 \mat A & \mat O\\
 \mat O & \mat B\\
-\end{bmatrix}
+\end{pmatrix}
 \end{equation}
 
 更详细的讨论见块对角矩阵\upref{BlDiag}
@@ -87,10 +129,123 @@
 块对角矩阵有一些特别的性质，包括：
 \begin{itemize}
 \item $\mat M ^ {-1} = 
-\begin{bmatrix}
+\begin{pmatrix}
 \mat A^{-1} & \mat O\\
 \mat O & \mat B^{-1}\\
-\end{bmatrix}
+\end{pmatrix}
 $，可以直接运用逆矩阵\upref{InvMat}的定义证明（若A，B为方阵）
 \item ...
 \end{itemize}
+
+
+% test1 中的内容备份
+
+% \subsection{分块矩阵的运算}
+
+% 把一个矩阵分成若干个子矩阵，称为\textbf{矩阵的分块}，将矩阵看作是由子矩阵组成的矩阵，这种矩阵称为\textbf{分块矩阵}.
+
+% 构造分块矩阵的好处在于，使得矩阵的结构变得更加清楚，而且使得矩阵的运算通过它们的分块矩阵形式来进行，从而可以使有关矩阵的问题变得更加容易解决．
+% \begin{equation}
+% \mat M=
+% \begin{pmatrix}
+% \mat A & \mat B\\
+% \mat C & \mat D
+% \end{pmatrix}
+% \end{equation}
+
+% 容易由矩阵的加法运算定义得到分块矩阵的加法运算规律
+
+% \begin{equation}
+% \mat A+\mat B=
+% \begin{pmatrix}
+% \mat A_1 & \mat A_2\\
+% \mat A_3 & \mat A_4
+% \end{pmatrix}
+% +
+% \begin{pmatrix}
+% \mat B_1 & \mat B_2\\
+% \mat B_3 & \mat B_4
+% \end{pmatrix}
+% =
+% \begin{pmatrix}
+% \mat A_1+\mat B_1 & \mat A_2+\mat B_2\\
+% \mat A_3+\mat B_3 & \mat A_4+\mat B_4
+% \end{pmatrix}
+% \end{equation}
+
+% 由矩阵的数乘定义得到分块矩阵的数乘运算规律
+
+% \begin{equation}
+% k\mat A=
+% k\begin{pmatrix}
+% \mat A_1 & \mat A_2\\
+% \mat A_3 & \mat A_4
+% \end{pmatrix}
+% =
+% \begin{pmatrix}
+% k\mat A_1 & k\mat A_2\\
+% k\mat A_3 & k\mat A_4
+% \end{pmatrix}
+% \end{equation}
+% \textsl{其中$\mat A$是定义在数域$K$上的矩阵，$k\in{K}$}
+
+% 分块矩阵的转置运算为
+
+% \begin{equation}
+% \mat A=
+% \begin{pmatrix}
+% \mat A_1 & \mat A_2\\
+% \mat A_3 & \mat A_4
+% \end{pmatrix}
+% ,
+% \mat A'
+% =
+% \begin{pmatrix}
+% \mat A_1' & \mat A_3'\\
+% \mat A_2' & \mat A_4'
+% \end{pmatrix}
+% \end{equation}
+
+% \begin{theorem}{分块矩阵的乘法}
+% 在数域$K$上，设矩阵$A\in{M_{s\times{n}}(K)},B\in{M_{n\times{m}}(K)}$．分别对两个矩阵分块，如果满足下面两个条件
+% \begin{enumerate}
+% \item $\mat A$分块的列组数等于$\mat B$分块的行组数（块数）.
+% \item $\mat A$的每个列组所含的列数\textbf{对应}等于$\mat B$的每个行组所含的行数．
+% \end{enumerate}
+% 则分块矩阵的乘法类似地满足矩阵乘法运算规律．
+% \begin{equation}
+% \mat A\mat B=
+% \begin{pmatrix}
+% \mat A_{11} & \mat A_{12}\\
+% \mat A_{21} & \mat A_{22}
+% \end{pmatrix}
+% \begin{pmatrix}
+% \mat B_{11} & \mat B_{12}\\
+% \mat B_{21} & \mat B_{22}
+% \end{pmatrix}
+% =
+% \begin{pmatrix}
+% \mat A_{11}\mat B_{11}+\mat A_{12}\mat B_{22} & \mat A_{11}\mat B_{12}+\mat A_{12}\mat B_{22}\\
+% \mat A_{21}\mat B_{11}+\mat A_{22}\mat B_{21} & \mat A_{21}\mat B_{12}+\mat A_{22}\mat B_{22}
+% \end{pmatrix}
+% \end{equation}
+% \end{theorem}
+% \textsl{和矩阵乘法规则的区别在于矩阵乘法的相对顺序不能改变，因为矩阵乘法没有交换律}
+
+% \textbf{证明}：
+% 设$\mat C=\mat A\mat B$，则$\mat C$的行数和列数分别为$s$和$m$．设矩阵$\mat A$的分块的行数为$s_1,s_2$，列数为$n_1,n_2$，矩阵$\mat B$的分块的行数为$n_1,n_2$，列数为$m_1,m_2$．分块矩阵的乘积的行数为$s=s_1+s_2$，$m=m_1+m_2$，和$\mat C$的行数和列数相等．于是得到证明思路：证明任意$\mat C$的$(i,j)$元等于分块矩阵乘积的$(i,j)$元．
+
+% 设$\mat C$的$(i,j)$处于$s_p\times{m_q}$部分，则该元素就在分块矩阵乘法结果的$(i,j)$元，即
+% \[\sum_{k=1}^{2}\mat A_{pk}\mat B_{kq}(i;j)\]
+% 根据矩阵的乘法，可以展开每两块矩阵第$i,j$项的乘法，等于
+% \[=\sum_{k=1}^{2}\sum_{l=1}^{n_k}\mat A_{pk}(i;l)\mat B_{kq}(l;j)\]
+% \[=\sum_{l=1}^{n_1}\mat A_{p1}(i;l)\mat B_{1q}(l;j)+\sum_{l=1}^{n_2}\mat A_{p2}(i;l)\mat B_{2q}(l;j)\]
+% 可以将$l$用在$\mat A,\mat B$中的绝对位置来表示，而不是$\mat A_{pk},\mat B_{kq}$中的相对位置来表示，得到
+% \[=\sum_{l=1}^{n_1}\mat A(i;l)\mat B(r;j)+\sum_{l=n_1+1}^{n_1+n_2}\mat A(i;l)\mat B(l;j)\]
+% 注意到求和的上下限恰好可以合并，得到
+% \[\sum_{l=1}^{n}\mat A(i;l)\mat B(l;j)\]
+% 这正是$C$的$(i,j)$元．得证．
+
+% \subsection{分块矩阵的应用}
+
+% 分块乘法可以简便的得到矩阵方程的解

@@ -1,10 +1,6 @@
 % 线段树
 % 线段树|数据结构|C++|高级数据结构
 
-\begin{issues}
-\issueDraft
-\end{issues}
-
 \textbf{线段树（Segment tree）}是一种二叉树形的数据结构，用以存储区间或线段，并且可以在 $O(\log N)$ 的时间复杂度查询区间最大值、最小值、总和等属性．
 
 \textbf{线段树的存储：}
@@ -22,7 +18,7 @@
 
 \begin{figure}[ht]
 \centering
-\includegraphics[width=14.25cm]{./figures/STree_2.png}
+\includegraphics[width=10.25cm]{./figures/STree_2.png}
 \caption{区间视角} \label{STree_fig2}
 \end{figure}
 
@@ -135,33 +131,37 @@ void modify(int u, int x, int v)    // 把 a[x] 修改为 v
 
 \begin{figure}[ht]
 \centering
-\includegraphics[width=14.25cm]{./figures/STree_6.png}
+\includegraphics[width=10cm]{./figures/STree_6.png}
 \caption{情况 $1$} \label{STree_fig6}
 \end{figure}
 
 \begin{figure}[ht]
 \centering
-\includegraphics[width=14.25cm]{./figures/STree_7.png}
+\includegraphics[width=9cm]{./figures/STree_7.png}
 \caption{情况 $2(2)$} \label{STree_fig7}
 \end{figure}
 
 \begin{figure}[ht]
 \centering
-\includegraphics[width=14.25cm]{./figures/STree_8.png}
+\includegraphics[width=8.5cm]{./figures/STree_8.png}
 \caption{情况 $4(3)$} \label{STree_fig8}
 \end{figure}
 
-
-
 只有 $4(3)$ 这种情况会对线段树的左右两棵子树递归，但这种操作至多发生一次，也就是最开始递归根结点，然后就变成了前三种情况．
 
-以上就是线段树的基本操作，让我们来看几道例题来加深对线段树的理解．
+\begin{lstlisting}[language=cpp]
+int query(int u, int l, int r)
+{
+    // 完全包含
+    if (tr[u].l >= l && tr[u].r <= r) return tr[u].v;  
+    
+    int mid = tr[u].l + tr[u].r >> 1;
+    int v = 0;
+    if (l <= mid) v = query(u << 1, l, r);
+    if (r > mid) v = max(v, query(u << 1 | 1, l, r));
+    
+    return v;
+}
+\end{lstlisting}
 
-\href{https://www.spoj.com/problems/GSS3/}{例题：你能回答这些问题吗？}
-
-题意：给定长度为 $N$ 的数列 $A$，以及 $M$ 条指令，每条指令可能是以下两种之一：
-\begin{enumerate}
-\item \verb|1 x y|，查询区间 $[x,y]$ 中的最大连续子段和，即 $\max_{x\leq l \leq r \leq y}{\sum^{r} _ {i = l}A[i]}$．
-\item \verb|2 x y|，把 $A[x]$ 改成 $y$．
-\end{enumerate}
-
+以上就是线段树的基本操作．

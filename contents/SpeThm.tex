@@ -1,0 +1,77 @@
+% Sperner定理
+% 组合数学|Sperner定理
+
+先给出一些记号：
+\begin{itemize}
+\item 集合$\{1,2,\cdots,n\}$简记为$[n]$
+\item 集合$X$的所有子集构成的集族记为$2^{X}$，称为$[n]$的幂集
+\end{itemize}
+
+\begin{definition}{独立族}
+设$\mathcal{F}\subset 2^{[n]}$是$[n]$的一个子集族．我们说$\mathcal{F}$是\textbf{独立的}如果$\forall A,B\in \mathcal{F}$我们都有$A\not\subset B$和$B\not\subset A$（即$\mathcal{F}$中的任意两个集合互不包含）.
+\end{definition}
+
+下面我们给出Sperner定理：
+\begin{theorem}{Sperner's Theorem}
+对于任意$[n]$的独立子集族$\mathcal{F}$，我们有：
+$|\mathcal{F}|\leq \pmat{n\\\lfloor \frac{n}{2}\rfloor}$
+\end{theorem}
+为给出定理1的证明，我们先引入\textbf{链}的定义：
+\begin{definition}{链}
+$[n]$的子集构成的一条\textbf{链}指一列$[n]$的子集$\{A_i\}_{i=1}^{k}$使得：\\
+$A_1\subset A_2\subset A_3\subset \cdots \subset A_k$，其中$A_1,\cdots,A_k$互不相同．这里$k$称为链的长度．\\
+$\qquad$
+一条链称为\textbf{极大链}如果$k=n+1$．简单地我们知道，$[n]$的子集可以构成的极大链的个数为$n!$．
+\end{definition}
+
+\textbf{定理1}的证明：\\
+\begin{enumerate}
+\item 如果$\mathcal{F}$是独立族，那么每一条极大链$\mathcal{C}$中至多含有一个$\mathcal{F}$中的集合；
+\item 算两次：$\sum\limits_{A\in \mathcal{F}}N_A=\sum\limits_{\mathcal{C}}N_{\mathcal{C}}$，其中$N_A$表示包含集合$A$的极大链的个数，$N_{\mathcal{C}}$表示极大链$\mathcal{C}$中含有的$\mathcal{F}$中的集合的个数，$\sum\limits_{\mathcal{C}}$表示对所有极大链求和；
+\item 考察$N_A$，$N_A=|A|!\cdot (n-|A|)!=\frac{n!}{\pmat{n\\|A|}}\geq \frac{n!}{\pmat{n\\ \lfloor\frac{n}{2} \rfloor}}$；
+\item 由1.，我们有：$N_{\mathcal{C}}\leq 1$；
+\item 从而$n!=\sum\limits_{\mathcal{C}}1\geq \sum\limits_{\mathcal{C}}N_{\mathcal{C}}=\sum\limits_{A\in \mathcal{F}}N_A\geq \sum\limits_{A\in \mathcal{F}}\frac{n!}{\pmat{n\\ \lfloor\frac{n}{2} \rfloor}}=\frac{n!}{\pmat{n\\ \lfloor\frac{n}{2} \rfloor}}\cdot |\mathcal{F}|$，整理即得$|\mathcal{F}|\leqslant\pmat{n\\ \lfloor\frac{n}{2} \rfloor}$，证毕．$\square$
+\end{enumerate}
+
+Sperner定理（\textbf{定理1}）的另一个证明用到如下引理1：（以下讨论默认对$[n]$进行）\\
+$\qquad$先给出\textbf{对称链}的定义：
+
+\begin{definition}{对称链}
+一个链称为\textbf{对称链}如果$|A_1|=\frac{n+1-k}{2}$且$|A_k|=n-\frac{n+1-k}{2}$\\
+$\qquad$
+换句话说，存在$s\in \mathbb{N}$使得链中的集合大小分别为$s,s+1,\cdots,n-s$．
+\end{definition}
+
+\begin{example}{对称链的例子与反例}
+$n=3$时，$\{\{2\},\{2,3\}\}$是对称链，$\{\{1\},\{1,2\},\{1,2,3\}\}$不是对称链;\\
+$n=4$时，$\{\emptyset,\{1,2,3,4\}\}$不是对称链．
+\end{example}
+
+
+\begin{lemma}{$[n]$的幂集的对称链划分}
+$2^{[n]}$可以划分为不交对称链．
+\end{lemma}
+
+\textbf{引理1}的证明：利用\textbf{数学归纳法}可证明引理1．此处略去不表．\\\\
+\textbf{引理1注记：}考察引理1中划分出的不交对称链的个数：每个大小为$\lfloor\frac{n}{2}\rfloor$的集合都唯一包含于某一条对称链，从而对称链个数为$\pmat{n\\ \lfloor\frac{n}{2} \rfloor}$．$\square$
+
+\textbf{定理1}的另证：考虑\textbf{引理1}中的对称链划分，我们知道每个$A_i\in \mathcal{F}$被包含于唯一一条对称链，从而$\mathcal{F}$中$A_i$的个数不大于对称链的个数，即$|\mathcal{F}|\leq \pmat{n\\ \lfloor\frac{n}{2} \rfloor}$，证毕．$\square$\\
+\\
+\\
+下面我们来考察Sperner定理中等号成立的条件：
+\begin{theorem}{Sperner定理的取等条件}
+Sperner定理中等号成立当且仅当$\mathcal{F}=\mathcal{A}_{\lfloor\frac{n}{2} \rfloor}$ 或$ \mathcal{A}_{\lceil\frac{n}{2} \rceil}$，这里$\mathcal{A}_s\triangleq\{B\subset[n]||B|=s\}$．
+\end{theorem}
+
+\textbf{定理2}的证明：
+\begin{enumerate}
+\item 定理1中等号取到当且仅当$|A|=\lfloor\frac{n}{2} \rfloor$或$\lceil\frac{n}{2} \rceil,\forall A\in \mathcal{F}$且$N_{\mathcal{C}}=1,\forall \mathcal{C}$是极大链．可以看出，只需要考察$n=2k+1$的情形（即$n$是奇数）；
+\item 倘若$A\in \mathcal{F}$使得$|A|=\lfloor\frac{n}{2} \rfloor=k$，则$\forall x\in [n]\backslash A,y\in A,\hat{A}\triangleq A\cup\{x\}\notin \mathcal{F}$；
+\item 由于$N_{\mathcal{C}}=1$，这里$\mathcal{C}$取作包含$\hat{A}$和$B\triangleq \hat{A}\backslash\{y\}$的极大链，我们有$B\in \mathcal{F}$．也就是说，任一大小为$k$的集合若落在$\mathcal{F}$中，则其替换了一个元素后得到的集合依旧落在$\mathcal{F}$中；
+\item 而每一个大小为$k$的集合总可以对任一大小为$k$的集合作若干次替换后得到，故若存在$A\in \mathcal{F}$使得$|A|=k$，则$\mathcal{A}_k\subset \mathcal{F}$．
+\item 由$|\mathcal{A}_{\lfloor\frac{n}{2} \rfloor}|=| \mathcal{A}_{\lceil\frac{n}{2} \rceil}|=\pmat{n\\ \lfloor\frac{n}{2} \rfloor}$我们知道：此时$\mathcal{F}=\mathcal{A}_{\lfloor\frac{n}{2} \rfloor}$ 或$ \mathcal{A}_{\lceil\frac{n}{2} \rceil}$，证毕.$\square$
+\end{enumerate}
+
+
+
+

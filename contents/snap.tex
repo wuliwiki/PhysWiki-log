@@ -8,9 +8,10 @@
 \begin{itemize}
 \item \verb|apt-show-versions 包1 包2| 可以查看已安装包的版本
 \item \verb|apt show 包| 显示包的详细信息， 包括依赖（可以是存在但没有安装的包）
+\item \verb|apt policy 包| 显示包的来源
 \item \verb|apt-cache rdepends 包| 显示它目前被谁依赖
 \item \verb|apt remove 包| 不会清除它依赖的包， 但是会清除依赖它的包！
-\item \verb|apt autoremove| 清除没有被依赖的, 被自动安装的包, 比如 \verb|apt remove| 了一个包以后， 就用这个清干净
+\item \verb|apt autoremove| 清除没有被依赖的, 被自动安装的包, 比如 \verb|apt remove| 了一个包以后， 就用这个清干净． 也可以 \verb|apt autoremove 包|， 相当于卸载包后再 \verb|autoremove|．
 \item 当 apt 出现 conflict 的时候， \verb|aptitude| 通常能提供更详细的信息
 \item \verb|apt|， \verb|aptitude| 和 \verb|synaptic| 都使用 \verb|dpkg| 作为后端， 所以它们不会冲突
 \item \verb|aptitude| 遇到冲突时会提供多种解决方案（卸载哪些包，安装哪些，升级哪些）， 手动选择合适的即可． 这是解决 \verb|you have held broken packages| 的常见办法．
@@ -23,15 +24,30 @@
 \item \verb|apt install ... -y| 可以自动全选 yes
 \item \verb|apt install -f| 可以修复依赖
 \item 第三方的 source 保存在 \verb|sudo sh -c 'echo "deb http://apt.postgresql.org/pub/repos/apt $(lsb_release -cs)-pgdg main" > /etc/apt/sources.list.d/pgdg.list'|
-\item \verb|apt clean| 和 \verb|apt autoclean| 可以清楚缓存（例如下载的安装包等， 后者清的没那么干净）
 \item \verb|apt upgrade| 自动更新所有包， 但并不删除已存在的包， \verb|apt dist-upgrade| 或者等效的 \verb|apt full-upgrade| 更激进， 会删除已有的包， 可能会更新内核， 可能造成一些破坏．
+\verb|apt download 包| 可以不安装只下载某个包的 deb （但不会下载它的依赖！）
+\item 事实上， \verb|apt install| 命令也是先下载所有需要的以及依赖的 deb 包然后再安装， 这些 deb 包存在 \verb|/var/cache/apt/archives| 目录中．
+\item \verb|apt clean| 和 \verb|apt autoclean| 可以清除缓存（例如下载的 deb 安装包等， 后者清的没那么干净）
 \end{itemize}
+
+\addTODO{如何指定某个文件夹为 apt 的 source？ cuda 安装好像就是这么做的}
 
 \subsubsection{配置 source}
 \begin{itemize}
 \item 例如在 debian 中， 如果 \verb|apt update| 显示 public key 的问题， 就用
 \item \verb|sudo apt-key adv --keyserver keyserver.ubuntu.com --recv-keys DCC9EFBF77E11517|， 其他系统替换成不同网址即可
 \end{itemize}
+
+\subsubsection{apt-clone}
+\begin{itemize}
+\item 一个\href{https://ubunlog.com/en/apt-clone-copia-seguridad-paquetes/}{教程}．
+\item \verb|sudo apt-clone clone --with-dpkg-repack 文件夹| 可以把本机所有安装包备份到文件夹中的一个压缩文件．
+\item \verb|apt-clone info 备份文件.gz| 可以查看包的信息
+\item \verb|sudo apt-clone restore 备份文件.gz| 可以进行恢复（注意一定要相同架构相同 ubuntu 版本）
+\item 直接解压备份文件即可得到所有备份的 deb， 可单独用 \verb|sudo apt install xxx.deb| 安装
+\item \verb|sudo apt-clone restore 备份文件.gz --destination 某文件夹| 把包安装到某个文件夹（使用 chroot）．
+\end{itemize}
+
 
 
 \subsection{dpkg}
@@ -41,8 +57,18 @@
 \item 其实也可以直接用 \verb|sudo apt install *.deb|
 \item \verb|sudo apt remove 包| 或者 \verb|dpkg --remove 包| 卸载， \verb|dpkg --purge 包| 可以连配置文件一起卸载．
 \item \verb|dpkg -S 文件| 查看该文件是哪个包安装的． 例如 \verb|dpkg -S /bin/gcc|
+\item \verb|dpkg -f 文件名.deb field名| 查看 deb 的某个属性， 如果省略 \verb|field名| 则查看所有属性
 \item 要卸载某个 \verb|.deb| 包中的所有包， 用 \verb|sudo dpkg -r $(dpkg -f 文件名.deb Package)| （不支持 \verb|*|）
 \end{itemize}
+
+\subsubsection{dpkg-deb}
+\begin{itemize}
+\item \verb|dpkg-deb| 用于操作 deb 安装包（Debian package archive）
+\item \verb|dpkg-deb -I xxx.deb| 查看信息
+\item \verb|dpkg-deb -c xxx.deb| 列出所有要安装的文件和路径． 这和安装完以后用 \verb|dpkg -L 包名| 列出的文件一样．
+\item deb 文件其实就是一个压缩包， 里面包含所有需要安装的文件， 以及一些配置文件．
+\end{itemize}
+
 
 \subsection{Snap}
 \begin{itemize}

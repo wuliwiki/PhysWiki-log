@@ -8,9 +8,9 @@
 
 参考 \href{https://docs.julialang.org/en/v1/manual/types/#man-declared-types}{Julia 文档}．
 \begin{itemize}
-\item Julia 是动态类型的语言． 具体类型不能互相作为子类， 只能作为抽象类的子类．
-\item Julia 中所有的值都是对象． C++ 中 \verb|float|, \verb|double| 等不是对象， 只有 \verb|struct|, \verb|class| 定义的才是对象． Julia 中的对象没有成员函数．
-\item 可以在 literal、 变量、 表达式、 函数定义后面加上 \verb|::变量类型| 用于确认它具有该类型， 如果类型不符会产生异常． 如果 \verb|变量类型| 是抽象的， 那么表达式只需要是它的一个 sub type．
+\item Julia 是动态类型的语言． 具体类型不能互相作为子类， 只能作为抽象类的子类（sub type）．
+\item Julia 中所有的值都是对象． C++ 中 \verb|float|, \verb|double| 等不是对象， 只有 \verb|struct|, \verb|class| 定义的才是对象． Julia 中的对象\textbf{没有成员函数}．
+\item 可以在 literal、 变量、 表达式、 函数定义后面加上 \verb|::变量类型| 用于确认它具有该类型， 如果类型不符会产生异常． 如果 \verb|变量类型| 是抽象的， 那么表达式只能是它的一个子类．
 \item 只有 “值” 有类型， 而不是变量具有类型． 变量只是个名字而已
 \item 抽象和具体的类都可以使用其他类作为参数
 \end{itemize}
@@ -34,13 +34,44 @@ julia> BigFloat("2.1", RoundUp, precision=128)
 2.100000000...00000000000007
 \end{lstlisting}
 
-使用 \verb|typeof(var)| 来询问变量类型， 用 \verb|isa(var, type)| 来确定类型．
+使用 \verb|typeof(var)| 来询问变量类型， 用 \verb|isa(var, type)| 来确定类型． \verb|sizeof(变量或类型)| 来查看类型的字节数
+
+\subsubsection{逻辑类型}
+\begin{itemize}
+\item \verb|Bool| 类型的值可以是 \verb|true| 或者 \verb|false|
+\item \verb|any([true, false, ...])| 和 \verb|all([trua, false, ...])|
+\end{itemize}
+
+\subsubsection{整数}
+\begin{itemize}
+\item 整数 literal 的类型取决于它的大小， 例如 \verb|typeof(3)| 是 \verb|Int64|； \verb|typeof(12345678902234567890)| 是 \verb|Int128|， \verb|typeof(1234567890223456789032345678904234567890)| 是 \verb|BigInt|． \verb|typemin(类型)| 和 \verb|typemax(类型)| 可以查看最大最小值．
+\item 两个相同类型的 Int 相加时， 如果 overflow 会变成负数． 两个不同类型的 Int 相加时， 较小的类型会先转换为较大的类型． 若 \verb|a = Int8(1)|， \verb|a += 1| 后 \verb|a| 会变为 \verb|Int64|． 因为 \verb|1| 相当于 \verb|Int64(1)|．
+\end{itemize}
+
+\subsubsection{浮点数}
+\begin{itemize}
+\item 任何浮点数 literal 都是 \verb|Float64|．
+\item \verb|eps(Float64)| 返回 \verb|2.220446049250313e-16|
+\item \verb|NaN| 是 not a number， 可以用 \verb|isnan(x)| 来判断
+\end{itemize}
+
+\subsection{字符串类型}
+\begin{itemize}
+\item 任何单个 UTF8 字符都属于 \verb|Char| 类型． \verb|sizeof(Char) = 4|， 格式应该是 UTF32
+\item \verb|s = "abcde"| 的类型是 \verb|String|， 注意 \verb|String| 并不是 \verb|Array{Char, 1}|！ \verb|s[i]| 可以获取单个 Char， 但是不能赋值， 因为 String 是不可改变的（immutable）．
+\item 子串替换： \verb|s1 = replace(s, "bc" => "BC")|．
+\end{itemize}
+
 
 \subsection{抽象类型}
 声明抽象类型
 \begin{lstlisting}[language=julia]
 abstract type 子类名 <: 母类名 end
 \end{lstlisting}
+声明后， 可以用 \verb|类1 <: 类2| 来判断是否符合该关系， 返回一个 \verb|Bool|．
+
+用 \verb|supertype(类)| 可以查看某个类的母类， \verb|subtypes(类)| 可以查看所有子类．
+
 例子
 \begin{lstlisting}[language=julia]
 abstract type Number end
@@ -166,7 +197,14 @@ struct Point{T} <: Pointy{T}
 end
 \end{lstlisting}
 
-\subsection{Tuple Types}
+\subsection{Pair}
+\begin{itemize}
+\item \verb|"abc" => 1.23| 的类型是 \verb|Pair{String, Float64}|， 令 \verb|p = "abc" => 1.23|， 那么 \verb|p.first| 和 \verb|p.second| 分别可以获取两个变量．
+\item \verb|Pair| 同样是 immutable 的．
+\end{itemize}
+
+
+\subsection{Tuple}
 Tuple 是函数参数列表的抽象． 例如两个元素的 tuple type 类似于如下的含参 struct 类型
 \begin{lstlisting}[language=julia]
 struct Tuple2{A,B}
@@ -186,6 +224,15 @@ true
 julia> Tuple{Int,AbstractString} <: Tuple{Real,Real}
 false
 \end{lstlisting}
+
+\begin{itemize}
+\item \verb|t = (值1, 值2, 值3, ...)| 就是 \verb|Tuple|
+\item 数组的元素类型必须相同， 而 \verb|Tuple| 的元素类型可以不同
+\item \verb|t = (1, "3.1", [1 2; 3 4])| 的类型是 \verb|Tuple{Int64, String, Matrix{Int64}}|
+\item 数组的 \verb|length()|， \verb|isempty()|， \verb|reverse()| 同样适用于 \verb|Tuple|．
+\item \verb|t[i]| 获取某个元素， 但不能对其赋值！ Tuple 的元素永远不能改变！ Tuple 类型是 immutable 的．
+\end{itemize}
+
 
 \subsection{Vararg Tuple Types}
 

@@ -52,7 +52,7 @@ Fock 空间的最简单的一组基底为坐标表象下的基底，我们将它
 \end{aligned}
 \end{equation}
 上述行列式右下角的 $\xi$ 表示每一个乘积项都带有一个 $\xi^P$ 的符号．可以将上述公式拓展到求某两个多粒子态（这两个多粒子态分别是由若干个单粒子波函数张量积再作对称化而构造的） $\ket{\psi_1\cdots\psi_N}$ 和 $\ket{\phi_1\cdots\phi_N}$ 的内积：
-\begin{equation}
+\begin{equation}\label{SecQua_eq2}
 \begin{aligned}
 \braket{\phi_1\cdots \phi_N}{\psi_1\cdots\psi_N}
 &=\sum_{P}\xi^P\braket{\phi_{P_1}}{\psi_{1}}\cdots\braket{\phi_{P_N}}{\psi_{N}}\\
@@ -83,3 +83,52 @@ n_1!n_2!\cdots\ &\xi=1\\
 \end{equation}
 上述公式中 $\ket{i_j},i_j=1,2,\cdots$ 是单粒子 Hilbert 空间的完备基，因此左侧相当于枚举这 $N$ 个粒子分别对应单粒子 Hilbert 空间基底中的哪个矢量．要注意的是，如果是费米子，则上述公式中 $i_j,j=1,\cdots,N$ 必须互不相同，由于交换任意两个粒子，将 $i_j,i_k$ 对换后 $\ket{i_1\cdots i_N}\bra{i_1\cdots i_N}$ 都不变，这意味着左侧的这一个投影算符项被重复计算了 $N!$ 次，这也解释了为什么等式左侧有一个因子 $1/N!$，这样才能得到正确的完备关系．对于玻色子，则 $i_j,j=1,\cdots,N$ 可能出现重复，设重数为 $n_1,n_2,\cdots$，那么相应的投影算符 $\ket{i_1i_2\cdots i_N}\bra{i_1i_2\cdots i_N}$ 实际上被统计了 $N!/(n_1!n_2!\cdots)$．注意到 $\ket{i_1i_2\cdots i_N}$ 并非归一化的态矢量，它与自己的内积为 $n_1!n_2!\cdots$．因此为了得到正确的完备关系，需要乘的因子仍然是 $1/N!$．因此上述完备关系对费米统计、玻色统计都是成立的．
 \subsection{产生湮灭算符}
+定义产生湮灭算符，它们作用到一个 $N$ 粒子态上，将得到一个 $N+1$ 或 $N-1$ 粒子的态．也就是说，产生湮灭算符联系了相邻两个 $\mathcal{H}_N$ 之间的变换．
+
+具体地，定义产生算符 $a^\dagger(\varphi)$ 为：在当前的多体系统中激发一个波函数为 $\varphi$ 的单粒子，也就是说
+\begin{equation}\label{SecQua_eq3}
+a^\dagger(\varphi)\ket{\psi_1\cdots\psi_N}=\ket{\varphi\psi_1\cdots\psi_N}
+\end{equation}
+注意对于费米子系统，$\varphi$ 在 $\ket{\varphi\psi_1\cdots\psi_N}$ 中的位置是对符号有影响的，而对于玻色系统则没有影响．因此，两个产生算符作用于任意的态矢量，其作用的先后顺序只会对结果产生一个符号的影响（如果是玻色子，则不会产生影响），即 $a^\dagger(\varphi_1)a^\dagger(\varphi_2)\ket{\cdots}=\xi a^\dagger(\varphi_2)a^\dagger(\varphi_1)\ket{\cdots}$ 总是成立，因此两个产生算符总是满足对易关系或反对易关系：
+\begin{equation}
+[a^\dagger(\varphi_1),a^\dagger(\varphi_2)]_{-\xi}=0
+\end{equation}
+这里我们定义了 $[A,B]_{-\xi}=AB-\xi BA$，对于费米子系统它实际上就是 $\{\cdot,\cdot \}$ 括号．
+
+现在考虑湮灭算符．由产生算符得到湮灭算符的最直接的做法是，取 $a^\dagger$ 算符的共轭\footnote{回忆共轭算符在量子力学中的定义：$\bra{\psi}F\ket{\phi}=(\psi,F \phi)=(F^\dagger \psi,\phi)$ 恒成立．}：
+\begin{equation}
+a(\varphi)=(a^\dagger(\varphi))^\dagger
+\end{equation}
+那么
+\begin{equation}\label{SecQua_eq4}
+\begin{aligned}
+\bra{\phi_1\cdots\phi_{N-1}} a(\varphi) \ket{\psi_1\cdots\psi_{N}}&=(\bra{\psi_1\cdots\psi_{N}}a^\dagger(\varphi)\ket{\phi_1\cdots\phi_{N-1}})^*\\
+&=(\braket{\psi_1\cdots\psi_{N}}{\varphi\phi_1\cdots\phi_{N-1}})^*\\
+&=\left|
+\begin{matrix}
+\braket{\varphi}{\psi_1} & \braket{\phi_1}{\psi_1} & \vdots\\
+\braket{\varphi}{\psi_2} & \braket{\phi_1}{\psi_2} & \vdots\\
+\cdots & \cdots & \ddots
+\end{matrix}
+\right|_{\xi}
+\end{aligned}
+\end{equation}
+我们期望 $a(\varphi)$ 作用于 $\ket{\psi_1\cdots\psi_N}$ 后得到的是 $N-1$ 粒子的态，那么根据\autoref{SecQua_eq2} 这些态和 $\bra{\phi_1\cdots\phi_{N-1}}$ 作内积以后得到的将是若干个 $N-1$ 阶行列式的和．因此，可以对上面的 $N$ 阶行列式的第一列拉普拉斯展开，即展开成第一列每一个元素乘以它的代数余子式（代数余子式是一个 $N-1$ 阶行列式带上一个 $(-1)^{ij}$ 的符号）．最终我们得到了湮灭算符的另一个等价的定义式：
+\begin{equation}
+a(\varphi)\ket{\psi_1\cdots\psi_N}=\sum_{k=1}^N \xi^{k-1} \braket{\varphi}{\psi_k} \cdot\ket{\psi_1\cdots\psi_{k-1}\psi_{k+1}\cdots \psi_N}
+\end{equation}
+不难验证湮灭算符也有类似于反湮灭算符的对易（反对易）关系：
+\begin{equation}
+[a(\varphi_1),a(\varphi_2)]_{-\xi}=0
+\end{equation}
+利用上面的定义式，最后还可以证明
+\begin{equation}
+[a(\varphi_1),a^\dagger(\varphi_2)]_{-\xi}=\braket{\varphi_1}{\varphi_2}
+\end{equation}
+这个关系式非常重要，注意到如果我们取单粒子 Hilbert 空间的一组正交完备基，再用这组基中的态矢量构造产生湮灭算符，那么不同的基对应的产生湮灭算符就是完全对易（或反对易）的．这些正交完备集的产生湮灭算符，代表了多体系统（或者场）的不同模式的激发．
+\begin{exercise}{证明产生湮灭算符的对易关系式}
+利用 \autoref{SecQua_eq3} 和 \autoref{SecQua_eq4}，证明
+\begin{equation}
+[a(\varphi_1),a^\dagger(\varphi_2)]_{-\xi}=\braket{\varphi_1}{\varphi_2}
+\end{equation}
+\end{exercise}

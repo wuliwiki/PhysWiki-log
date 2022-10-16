@@ -11,7 +11,7 @@
 \bvec p(t) = p_0 \cos(\omega t) \uvec z
 \end{equation}
 
-使用洛伦兹规范， 在 $d \ll \lambda \ll r$ 的近似下 （$d$ 是偶极子的长度， $\lambda = \frac{2\pi}{k}$）
+使用洛伦兹规范， 在 $d \ll \lambda \ll r$ 的远场近似下 （$d$ 是偶极子的长度， $\lambda = \frac{2\pi}{k}$）
 \begin{equation}
 \varphi(r, \theta, t) = -\frac{p_0\omega}{4\pi\epsilon_0 c} \qty(\frac{\cos\theta}{r}) \sin[\omega(t - r/c)]
 \end{equation}
@@ -26,13 +26,62 @@
 \bvec B = -\frac{\mu_0 p_0\omega^2}{4\pi c} \qty(\frac{\sin\theta}{r})\cos[\omega(t - r/c)]\uvec \phi
 \end{equation}
 
+%看起来是对的，但和网上看到的又似乎不大一样，需要dalao check一下
+\begin{figure}[ht]
+\centering
+\includegraphics[width=12cm]{./figures/DipRad_4.png}
+\caption{$Z=0$平面上的电场矢量场.原点附近由于远场近似不再有效而发散．笔者制作的\href{https://www.geogebra.org/m/xnputtwr}{一个可动的立体模型}（站外链接）} \label{DipRad_fig4}
+\end{figure}
+
 \begin{figure}[ht]
 \centering
 \includegraphics[width=12cm]{./figures/DipRad_1.png}
-\caption{$\theta = \pi/2$时的电场强度大小随r关系示意图．z轴高度为电场强度．在一个局域截面上，辐射出的球面波行为类似于平面电磁波\upref{VcPlWv} .\href{https://www.geogebra.org/m/xnputtwr}{一个可动的模型}（站外链接）} \label{DipRad_fig1}
+\caption{$X$轴上的电场矢量场．在远处辐射场行为类似平面电磁波\upref{VcPlWv} } \label{DipRad_fig1}
 \end{figure}
 
+\begin{figure}[ht]
+\centering
+\includegraphics[width=12cm]{./figures/DipRad_3.png}
+\caption{$Y=0$上的电场矢量场．} \label{DipRad_fig3}
+\end{figure}
+\subsubsection{绘制矢量场的.m代码}
+\begin{lstlisting}[language=matlab]
+clc
+clear
+T=2;%周期
+w=2*pi/T;
+v=1;%波速
+k=w/v;
+t=0;%时刻
+
+[x y z] = meshgrid(-5:0.2:5,-5:0.2:5,-5:0.2:5);
+%将轴的范围设成0，可得到截面上的矢量场.完整的矢量场太复杂了
+[phi theta r]=cart2sph(x,y,z);
+theta = pi/2-theta;
+E = -(sin(theta)./r).*cos(w*t-k*r);%电场强度数值
+a = E.*cos(theta).*cos(phi);
+b = E.*cos(theta).*sin(phi);
+c = E.*-sin(theta);
+
+hold on
+axis equal;
+axis([-5 5 -5 5 -5 5]);
+
+xlabel('X','fontsize',12,'fontname','Times New Roman');
+ylabel('Y','fontsize',12,'fontname','Times New Roman');
+zlabel('Z','fontsize',12,'fontname','Times New Roman');
+
+quiver3(x,y,z,a,b,c,0);
+
+line([-10 10], [0 0],[0 0]);
+
+hold off
+
+\end{lstlisting}
+
+
 \subsubsection{辐射功率}
+可用能流密度（坡印廷矢量\upref{EBS}）描述辐射功率．
 \begin{equation}
 \bvec s(\bvec r, t) = \frac{1}{\mu_0} \bvec E \cross \bvec B = \frac{\mu_0p_0^2\omega^4}{16\pi^2c} \frac{\sin^2\theta}{r^2} \cos^2[\omega(t - r/c)] \uvec r
 \end{equation}
@@ -44,8 +93,8 @@
 
 \begin{figure}[ht]
 \centering
-\includegraphics[width=5cm]{./figures/DipRad_2.png}
-\caption{$s$的“等强度面”.注意平行于偶极子的$\bvec z$方向上没有能流．仿自\cite{GriffE} .\href{https://www.geogebra.org/m/semmtxm5}{一个立体模型}（站外链接）} \label{DipRad_fig2}
+\includegraphics[width=10cm]{./figures/DipRad_2.pdf}
+\caption{$\ev{\bvec s}$的“等强度面”,内圈的$\ev{\bvec s}$强度更高.注意平行于偶极子的方向上没有能流.\href{https://www.geogebra.org/m/semmtxm5}{一个立体模型}（站外链接）} \label{DipRad_fig2}
 \end{figure}
 总辐射功率（时间平均）为
 \begin{equation}

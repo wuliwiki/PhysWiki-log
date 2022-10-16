@@ -27,7 +27,7 @@ sudo snap install Julia --classic
 \item \verb|ans| 变量和 Matlab 一样， 用于显示上一次运算的输出结果（结果赋值给变量的除外）
 \item 在一行中运行多个命令， 用分号隔开
 \item 要清空 workspace 中的变量只能重启
-\item \verb|println("$var1 some words $var2")| 中 \verb|var1, var2| 可以是数字、字符串等， 这和 \verb|println(var1, " some words ", var2)| 等效．
+\item \verb|println("$var1 some words $var2")| 中 \verb|var1, var2| 可以是数字、字符串等， 这和 \verb|println(var1, " some words ", var2)| 等效． 其实这是字符串的功能而不是 \verb|println| 特有的．
 \end{itemize}
 
 \subsection{计算器}
@@ -54,7 +54,7 @@ sudo snap install Julia --classic
 \subsection{数组和矩阵}
 \begin{itemize}
 \item 索引从 1 开始， 和 Matlab 一样
-\item 矩阵（数组）使用\textbf{列主序}， 和 Matlab 一样
+\item 矩阵（数组）使用\textbf{列主序}\upref{MatSto}， 和 Matlab 一样
 \item 一维数组 \verb|Array{T, 1}| 不区分行和列， 但是二维数组 \verb|Array{T, 2}| 可以区分行向量和列向量
 \item \verb|Array{类型,1}| 也叫 \verb|Vector{类型}|； \verb|Array{类型,2}| 也叫 \verb|Matrix{类型}|．
 \item 矩阵切割如 \verb|a[:, j, :]|
@@ -62,10 +62,11 @@ sudo snap install Julia --classic
 \item 零向量矩阵 \verb|zeros(整数)| 或 \verb|zeros(整数, 整数)| 分别返回 \verb|Array{Float64,1}| 和 \verb|Array{Float64,2}|
 \item 随机矩阵如 \verb|rand(ComplexF64, N1, N2, ...)|．
 \item 求矩阵的哈希值如 \verb|hash(矩阵)|． 把运算结果的 hash 输出可以保证计算过程不被优化掉．
-\item \verb|LinRange(初始值,中止值,个数)| 生成等间距数组
+\item \verb|LinRange(初始值,中止值,个数)| 概念上是等间距数组， 相当于 Matlab 的 \verb|linspace|． 但类型为 \verb|LinRange{Float64, Int64}|．
 \item 64 位机器上， 整数 literal 的类型默认是 \verb|Int64|
-\item \verb|a = [1 2; 3 4]| 得到 \verb|Array{Float64,2}|
-\item \verb|a[:, 1]| 仍然得到 \verb|Array{Float64,2}|
+\item \verb|a = [1 2; 3 4]| 得到 \verb|Array{Float64,2}| 注意不能用逗号！
+\item \verb|[1, 2]| 和 \verb|[1; 2]| 的类型是 \verb|Array{Float64,1}|， 但 \verb|[1 2]| 的类型是 \verb|Array{Int64,2}|
+\item \verb|a[:, 1]| 或者 \verb|a[1, :]| 仍然得到 \verb|Array{Float64,2}|
 \item \verb|a[:, 1] = [3; 4]| 可以修改 \verb|a| 的值
 \item \verb|a = b| 是浅复制， \verb|a| 改变了 \verb|b| 也会改变．
 \item \verb|b = a[:, 1]| 却是复制数据．
@@ -105,7 +106,7 @@ end
 \subsubsection{特殊矩阵类}
 \begin{itemize}
 \item \verb|Symmetric|， \verb|Hermitian|， \verb|UpperTriangular|， \verb|LowerTriangular|， \verb|Tridiagonal|， \verb|SymTridiagonal|， \verb|Bidiagonal|， \verb|Diagonal|
-\item 稀疏矩阵： \verb|S = sparse(行标矢量,列标矢量,非零元矢量)| 可以创建 CSC 格式\upref{SprMat}的矩阵： \verb|SparseMatrixCSC{Int64, Int64}|
+\item 稀疏矩阵： \verb|using SparseArrays|， 然后 \verb|S = sparse(行标矢量,列标矢量,非零元矢量)| 可以创建 CSC 格式\upref{SprMat}的矩阵： \verb|SparseMatrixCSC{矩阵元类型, 指标类型}|
 \end{itemize}
 
 \subsection{BLAS 和 Lapack}
@@ -115,16 +116,9 @@ end
 \item 普通矩阵本征问题 \verb|geev!(jobvl, jobvr, A)|； 对称矩阵本征问题 \verb|syev!(jobz, uplo, A)|； 对称三对角矩阵本征问题 \verb|stev!(job, dv, ev)|
 \end{itemize}
 
-\subsection{Tuple}
-\begin{itemize}
-\item \verb|(值1, 值2, 值3, ...)| 就是 \verb|Tuple|
-\item 数组的元素类型必须相同， 而 \verb|Tuple| 的元素类型可以不同
-\item 数组的 \verb|length()|， \verb|isempty()|， \verb|reverse()| 同样适用于 \verb|Tuple|．
-\end{itemize}
-
 \subsection{脚本}
 \begin{itemize}
-\item 在系统命令行用 \verb|Julia <file>| 运行脚本， 用 \verb|Julia <file> <arg1> <arg2>| 给出 arguments
+\item 在系统命令行用 \verb|julia <file>| 运行脚本， 用 \verb|julia <file> <arg1> <arg2>| 给出 arguments
 \item 在 REPL 中运行脚本如 \verb|include("/Users/addis/Desktop/main.jl")|（路径不区分大小写）， 也支持反斜杠， 但要转义成 \verb|\\|
 \item 在文件中， 如果要确定当前文件是不是主文件， 用 \verb|abspath(PROGRAM_FILE) == @__FILE__|
 \end{itemize}
@@ -220,4 +214,10 @@ println(a == a1)
 \subsection{调用 C/C++/Fortran 函数}
 \begin{itemize}
 \item \href{https://docs.julialang.org/en/v1/manual/calling-c-and-fortran-code/}{见相关文档}．
+\end{itemize}
+
+\subsection{并行计算}
+\begin{itemize}
+\item 多线程参考\href{https://docs.julialang.org/en/v1/manual/multi-threading/}{官方文档}．
+\item MPI 并行参考\href{http://www.claudiobellei.com/2018/09/30/julia-mpi/}{这篇文章}．
 \end{itemize}

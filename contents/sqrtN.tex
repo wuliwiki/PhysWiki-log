@@ -1,0 +1,31 @@
+% 开根号的数值计算
+
+\begin{issues}
+\issueDraft
+\end{issues}
+
+\footnote{参考 Wikipedia \href{https://en.wikipedia.org/wiki/Methods_of_computing_square_roots}{相关页面}．}使用迭代公式．
+\begin{equation}
+y_{i+1} = y_i + \frac{x}{y_i}
+\end{equation}
+收敛速度如何？ 如何证明收敛？
+
+\begin{lstlisting}[language=python]
+import math
+def p(x):
+    if x < 0 :
+        return False
+    elif x == 0 or x == 1:
+        return x
+    else :
+        y0 = x / 2
+        y = (y0 + x / y0) /2
+        while True:
+            y0 = y
+            y = (y0 + x / y0) /2
+            if (y0 - y) <= 1e-6:
+                return y
+                break
+            else :
+                continue
+\end{lstlisting}

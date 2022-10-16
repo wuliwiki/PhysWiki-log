@@ -7,6 +7,49 @@
 \begin{itemize}
 \item 参考\href{https://www.geeksforgeeks.org/how-to-call-c-c-from-python/}{这里}．
 \item 大概就是先编译一个动态链接库． 但注意 python 只能导入其中的 C 语言函数， 不能直接导入对象等．
+\item 所以如果写 cpp 文件， 必须在 \verb|extern "C" {}| 定义要导出的函数（可以只是简单把 cpp 函数和对象封装一下， 但不能使用相同的函数名否则编译器会报错）．
+\begin{lstlisting}[language=cpp, caption=test.cpp]
+int myfun_imp() {
+	return 123456;
+}
+
+extern "C" {
+	int myfun() { return myfun_imp(); }
+}
+\end{lstlisting}
+\item 编译\upref{gppLib} 出动态链接库（\verb|test.so|）： \verb|g++ -shared -fPIC -o test.so test.cpp|
+\item 在同目录打开 python， 确定当前路径用 \verb|os.getcwd()|
 \item \verb|from ctypes import cdll|
-\item \verb|lib = cdll.LoadLibrary('./文件名.so')|
+\item \verb|lib = cdll.LoadLibrary('./test.so')|
+\item 现在调用 \verb|lib.myfun()| 就会返回 \verb|123456| 了！
+\end{itemize}
+
+\subsubsection{传递数组}
+\begin{itemize}
+\item 参考\href{https://stackoverflow.com/questions/5862915/passing-numpy-arrays-to-a-c-function-for-input-and-output}{这里}． 例如定义以下函数
+\begin{lstlisting}[language=cpp]
+void cfun(const double *indatav, size_t size, double *outdatav) 
+{
+    size_t i;
+    for (i = 0; i < size; ++i)
+        outdatav[i] = indatav[i] * 2.0;
+}
+\end{lstlisting}
+\item 修改函数的 protorype 使用 numpy 的指针
+\begin{lstlisting}[language=python]
+import ctypes
+from numpy.ctypeslib import ndpointer
+lib = ctypes.cdll.LoadLibrary("./ctest.so")
+fun = lib.cfun
+fun.restype = None
+fun.argtypes = [ndpointer(ctypes.c_double, flags="C_CONTIGUOUS"),
+                ctypes.c_size_t,
+                ndpointer(ctypes.c_double, flags="C_CONTIGUOUS")]
+\end{lstlisting}
+\item 然后就可以调用了
+\begin{lstlisting}[language=python]
+indata = numpy.ones((5,6))
+outdata = numpy.empty((5,6))
+fun(indata, indata.size, outdata)
+\end{lstlisting}
 \end{itemize}
