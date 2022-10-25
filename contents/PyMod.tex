@@ -15,8 +15,10 @@ def plus1(num):
 # 全局变量
 num = 3.5
 num2 = plus1(num)
+# 执行一些命令
+print('欢迎使用 mymodule.py')
 \end{lstlisting}
-在该模块中定义了一个函数和两个全局变量． 注意在定义第二个变量时执行了函数 \verb|plus1|， 这个命令会在模块被调用时执行．
+在该模块中定义了一个函数和两个全局变量． 注意在定义第二个变量时执行了函数 \verb|plus1|， 这个命令会在模块被调用时执行． 关于创建模块， 详见 “Python 创建模块笔记\upref{PyMod2}”．
 
 \subsection{使用模块}
 现在，我们我们在同一文件夹中新建如下 \verb|test.py|， 就可以用 \verb|import| 语句来使用我们刚刚创建的模块．
@@ -36,6 +38,8 @@ sys.path.insert(1, 路径)
 其中 \verb|路径| 既可以是绝对路径也可以是相对路径． % 未完成：介绍当前路径
 例如要指定当前路径的子文件夹 \verb|modules|， 则使用 \verb|'modules/'| 即可； 如果是上层文件夹中的子文件夹， 可用 \verb|'../modules/'|．
 
+\verb|import module名字| 以后， 可以用 \verb|module名字.__file__| 查看 module 的文件路径．
+
 \subsection{模块嵌套}
 在上面的例子中， 如果在 \verb|mymodule.py| 文件中使用了 \verb|import| 语句导入其他模块中的函数和变量等， 那么在其 \verb|test.py| 中也可以使用这些函数和变量． 例如在 \verb|mymodule.py| 第一行插入
 \begin{lstlisting}[language=python]
@@ -49,9 +53,11 @@ import math
 
 \subsection{模块目录}
 \begin{itemize}
-\item \verb|__init__.py| （通常为空）用于把所在目录标记为模块目录． 例如创建 \verb|mymod/__init__.py| 以及 \verb|mymod/mod1.py| 后， 如果 \verb|mymod| 在搜索路径下， 那么就可以 \verb|import mymod.mod1| 或者 \verb|from mymod import mod1|．
+\item \verb|__init__.py| 文件（通常为空）用于把所在目录标记为模块目录． 例如创建 \verb|mymod/__init__.py| 以及 \verb|mymod/mod1.py| 后， 如果 \verb|mymod| 在搜索路径下， 那么就可以 \verb|import mymod.mod1| 或者 \verb|from mymod import mod1|． 例如： \verb|import matplotlib.pyplot as plt| 对应的文件就是 \verb|matplotlib/pyplot.py|
+\item \verb|__init__.py| 也可以存在于子文件夹中．
 \end{itemize}
-\addTODO{另一种情况是 \verb|mymod| 的子文件夹下面也有 \verb|__init__.py|}
+
+\addTODO{另一种情况是 mymod 的子文件夹下面也有 \_\_init\_\_.py}
 
 \subsection{Python 内建模块}
 Python 中有几个\textbf{内建模块（built-in module）}，可以随时导入．

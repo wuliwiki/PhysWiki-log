@@ -1,4 +1,4 @@
-% Python 基本变量类型
+% Python 的变量
 % Python|变量类型|整数|浮点|字符
 
 \begin{issues}
@@ -16,10 +16,12 @@ n = 123; x = 3.14; print(type(n)); print(type(x))
 <class 'int'>
 <class 'float'>;
 \end{lstlisting}
-或者用 \verb|is| 判断变量是否为某个类型
+判断变量是否为某个类型
 \begin{lstlisting}[language=python]
-type(i) is int # true
+type(i) == int # true
 \end{lstlisting}
+
+用 \verb|is| 判断两个变量是否是同一个对象， 例如 \verb|a = [1,2,3]; b = [1,2,3];|， 那么 \verb|a == b| 返回 \verb|True| 而 \verb|a is b| 返回 \verb|False|． 此时改变 \verb|a| 的元素， \verb|b| 不会改变． 但若令 \verb|b = a;|， 那么 \verb|a, b| 会同时改变， 此时 \verb|a is b| 和 \verb|a == b| 都返回 \verb|True|．
 
 \subsection{整数}
 与一些编译语言不同， Python 的整数类型（integer）没有长度限制（除超出了内存大小）． 例如
@@ -34,29 +36,27 @@ print(12345678901234567890123456789 + 1)
 转换格式为 \verb|类型(变量)|． 例如 \verb|int('123')| 会把字符串 \verb|'123'| 变为整数 \verb|123|．
 \begin{lstlisting}[language=python]
 "'我们在这里完整列举一下'"
-a = "小时百科"  #str 字符串
-b = 2 #int 整型
-c = 5.2 #float 浮点型
-d = True #bool 布尔型
-e = int(c)#返回值5.0，字符串中的数字可以转换，文字不可以
-e = str(b)#返回值2,此时的2可以用来进行字符串的加减，如：
-f = e + "00"
-print(f)#返回值200
-e = int (d)
-print (e)#返回值1
-e = float(d)
-print (e)#返回值1.0
-e = bool(a)
-print (e)#返回值True
-e = bool(b)
-print (e)#返回值True
-e = bool(c)
-print (e)#返回值True
-e = bool(0)
-print (e)#返回值False
+a = "小时百科"  # str 字符串
+b = 23 # int 整型
+c = 5.2 # float 浮点型
+d = True # bool 布尔型
+int(c) # 返回整型 5 （向零取整）
+str(b) # 返回字符串 "23"
+float(d) # 返回 1.0
+bool(a) # 返回 True （只有空字符串返回 False）
+bool(b) # 返回 True （只有 0 返回 False）
+bool(c) # 返回 True （只有 0.0 返回 False）
 \end{lstlisting}
+
 \subsection{字符串}
 raw string： \verb|r'foo\nbar'| 其中 \verb|\n| 会被当成两个字符．
 
 \subsection{变量和对象}
 和 C 语言类似的语言不同， Python 中的变量和对象（object）是分开考虑的． 对象可以理解为内存上的一小段某类型的数据， 而变量是指向对象的一个个名称． 例如两个变量可以指向同一个对象， 要判断变量 \verb|a| 和 \verb|b| 是否指向同一个对象， 用 \verb|a is b|， 返回一个 \verb|bool|．
+
+\subsection{变量的范围}
+\begin{itemize}
+\item \verb|dir()| will give you the list of in scope variables:
+\item \verb|globals()| will give you a dictionary of global variables
+\item \verb|locals()| will give you a dictionary of local variables
+\end{itemize}

@@ -1,3 +1,178 @@
 % 双指针算法
 % 双指针|算法
 
+双指针算法的作用类似于前缀和算法，双指针算法是运用某些单调的性质，从而优化时间复杂度．
+
+双指针算法有两大类．
+
+第一类是有两个序列，第一个指针指向第一个序列，另一个指针指向另一个．归并排序算法在合并的一步也是双指针算法．
+
+第二类是两个指针指向同一个序列，一帮情况是一个指针指向第一个元素，另一个指向最后一个元素，维护一段区间．例子：快速排序．
+
+一般写法：
+
+\begin{lstlisting}[language=cpp]
+for (int i = 0, j = 0; i < n; i ++ )
+{
+    while (j < n && check(i, j)) j ++ ;
+    // 每道题目的具体逻辑
+}
+\end{lstlisting}
+
+双指针算法的时间复杂度为：$\mathcal{O}(n)$．
+
+例 $1$：有一段区间中有若干单词，单词之前用一个空格 \verb| | 隔开，要求输出每个单词，一个单词占一行．
+
+双指针算法：用 $i$ 指针枚举每个字母，$j$ 指针如果不是字母就往右移动一格，然后输出 $[i \sim j]$ 之间的字母，最后让 $i$ 指针指向 $j$，最后 \verb|for| 循环中的 $i$ 会自增，然后重新进行双指针算法．时间复杂度为：$\mathcal{O}(n)$．
+
+\begin{lstlisting}[language=cpp]
+char s[1010];
+cin.getline(s, 1010);
+int n = strlen(s);
+
+for (int i = 0; i < n; i ++ )
+{
+    int j = i;
+    while (j < n && s[j] != ' ') j ++ ;
+
+    for (int k = i; k < j; k ++ ) cout << s[k];
+    cout << endl;
+
+    i = j;
+}
+\end{lstlisting}
+
+
+
+例 $2$：给定一个长度为 $n$ 的整数序列，请找出最长的不包含重复的数的连续区间，输出它的长度．
+
+在序列中，右端点为 $i$，左端点为 $j$，枚举每一个 $i$ 当作序列的右端点，判断 $j$ 最远可以到达什么地方，使得 $[j \sim i]$ 之间没有重复元素．
+
+模拟一下双指针的过程：
+
+\begin{lstlisting}[language=cpp]
+序列：1 2 2 3 5
+
+最开始：i = 1, j = 1
+
+i = 2, j = 1
+
+第三次循环，有重复元素了，i = 2, j = 2
+
+i = 3, j = 2
+
+i = 5, j = 2
+\end{lstlisting}
+
+每次 $i$ 往右走，$j$ 也一定会往后走，一定不会往前走，所以具有单调性，因此可以用双指针．
+
+证明：
+
+假设 $i$ 往后移动了 $1$ 格到达 $i'$，那么旧的 $j$ 也一定会往右走，如果说新的 $i'$ 指针对应的新的 $j'$ 指针往左走了，就矛盾了．因为如果新的 $i'$ 和新的 $j'$ 之前没有重复元素的话，那么新的 $j'$ 和旧的 $i$ 之前也一定没有重复元素，所以就矛盾了．
+
+所以 $j$ 指针具有单调性，所以只用枚举 $i$ 就行了，每次看一下 $j$ 要不要往后走．
+
+证毕．
+
+伪代码：
+
+\begin{lstlisting}[language=cpp]
+for (int i = 0, j = 0; i < n; i ++ )
+{
+    // check(j, i) 判断 j ~ i 之前有没有重复元素，右的话 j 就往左（后）走
+    while (j < n && check(j, i)) j ++ ;    
+    res = max(res, i - j + 1);
+}
+\end{lstlisting}
+
+$i$ 指针和 $j$ 指针最多走 $n$ 步，所以一共最多走 $2 \times n$ 步．所以时间复杂度为 $\mathcal{O}(n)$．
+
+具体思路与分析：
+
+指针 $i$ 对应的指针 $j$，表示 $j$ 离 $i$ 最远可以到达什么地方，使得 $[j \sim i]$ 之前没有重复元素．
+
+对于每一个 $i$，因为 $[j \sim i - 1]$ 之前没有重复元素，并且是上一层循环的最优解，又因为 $a_i$ 中的每个数的出现次数是依次加的，所以重复元素必定是 $a_i$，所以 $j$ 肯定是往右走，减少 $a_i$ 出现的次数直到没有重复元素，一定不可能往左走从而增加元素，前面证明过了．
+
+用一个 \verb|cnt| 数组记录每个数出现的次数，如果 \verb|cnt[a[i]] > 1| 说明 $a_i$ 重复出现了，所以 $j$ 开始往右走，并且将 $a_j$ 这个数出现的次数减 $1$，注意要先减少次数，$j$ 再往右移动． 直到没有重复元素，即 $j$ 走到离 $i$ 可以到达的最远位置，然后每次更新 \verb|res|．
+
+时间复杂度为：$\mathcal{O}(n)$．
+
+\begin{lstlisting}[language=cpp]
+const int N = 100010;
+int n, a[N];
+unordered_map<int, int> cnt;
+
+int main() 
+{
+    cin >> n;
+    for (int i = 0; i < n; i ++ ) cin >> a[i];
+
+    int res = 0;
+    for (int i = 0, j = 0; i < n; i ++ )
+    {
+        cnt[a[i]] ++;
+        while (cnt[a[i]] > 1)
+        {
+            cnt[a[j]] -- ;
+            j ++ ;
+        }
+
+        res = max(res, i - j + 1);
+    }
+
+    cout << res << endl;
+}
+\end{lstlisting}
+
+例 $3$：
+
+给定两个升序排序的有序数组 $A$ 和 $B$，以及一个目标值 $x$．数组下标从 $0$ 开始．请你求出满足 $A[i] + B[j] = x$ 的数对 $(i, j)$．
+
+朴素做法，暴力枚举，时间复杂度：$\mathcal{O}(n \times m)$．
+
+\begin{lstlisting}[language=cpp]
+for (int i = 0; i < n; i ++ )   
+    for (int j = 0; j < m; j ++ )
+        if (a[i] + b[j] == x)
+        {
+            cout << i << ' ' << j << endl; 
+            break;
+        }
+\end{lstlisting}
+
+题目中的一个重要性质：$a$ 数组和 $b$ 数组都是单调上升的．
+
+因此 $i$ 枚举 $a$ 数组的每一位，$j$ 从 $b$ 数组的最后一位开始枚举，使得满足 \verb|a_i + b_j >= x|，并且 $j$ 最小．
+
+为什么 $j$ 一定往左走？
+
+证明：
+
+因为 $a$ 数组和 $b$ 数组都是单调上升的．每次找到 $j$，为了尽可能的达到 \verb|a_i + b_j == x|，所以 $j$ 只能往左走．
+
+证毕．
+
+时间复杂度：$\mathcal{O}(n + m)$．
+
+代码：
+
+\begin{lstlisting}[language=cpp]
+const int N = 1e5 + 10;
+int a[N], b[N];
+
+int main()
+{
+    int n, m, x;
+    cin >> n >> m >> x;
+    for (int i = 0; i < n; i ++ ) cin >> a[i];
+    for (int i = 0; i < m; i ++ ) cin >> b[i];
+    
+    for (int i = 0, j = m - 1; i < n; i ++ )
+    {
+        while (j > 0 && a[i] + b[j] > x) j -- ;
+        if (a[i] + b[j] == x) cout << i << ' ' << j << endl;
+    }
+    
+    return 0;
+}
+\end{lstlisting}

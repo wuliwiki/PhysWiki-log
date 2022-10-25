@@ -15,14 +15,14 @@ sudo snap install Julia --classic
 \end{lstlisting}
 如果版本较老， 最好还是从\href{https://julialang.org/downloads}{官网下载安装包}， 直接解压即可使用 \verb|bin/julia| 执行文件． 也可以创建软链 \verb|sudo ln -s /home/用户名/julia-xxx/bin/julia /usr/bin/julia|
 
-另外本地的 Jupyter Notebook 也支持 Julia． 在 julia 命令行里面运行 \verb|using Pkg|， \verb|Pkg.add("IJulia")|． 现在打开 Jupyter notebook 就可以新建 julia 文档了．
+另外本地的 Jupyter Notebook 也支持 Julia． 在 julia 命令行里面运行 \verb|import Pkg|， \verb|Pkg.add("IJulia")|． 现在打开 Jupyter notebook 就可以新建 julia 文档了．
 
 \subsection{命令行}
 \begin{itemize}
 \item 最简单的 Hello World 程序如 \verb|println("hello world")|
 
 \item 为了区分， 系统的命令行叫做 terminal， 而 Julia 的命令行叫做 \textbf{REPL (read-eval-print-loop)}
-\item 注释用 \verb|#|， 或者 \verb|#=一些注释=#|
+\item 注释用 \verb|#|， 或者 \verb|#=一些注释=#|， 多行注释也可以和 python 一样用 \verb|"""..."""|
 \item \verb|Ctrl + D| 退出或者 \verb|exit()| 退出
 \item \verb|ans| 变量和 Matlab 一样， 用于显示上一次运算的输出结果（结果赋值给变量的除外）
 \item 在一行中运行多个命令， 用分号隔开
@@ -61,16 +61,21 @@ sudo snap install Julia --classic
 \item 矩阵尺寸 \verb|size(矩阵, 维度)|， 元素个数 \verb|length()|， \verb|isempty()| 检查空矩阵， \verb|reverse()| 元素倒序排序
 \item 零向量矩阵 \verb|zeros(整数)| 或 \verb|zeros(整数, 整数)| 分别返回 \verb|Array{Float64,1}| 和 \verb|Array{Float64,2}|
 \item 随机矩阵如 \verb|rand(ComplexF64, N1, N2, ...)|．
-\item 求矩阵的哈希值如 \verb|hash(矩阵)|． 把运算结果的 hash 输出可以保证计算过程不被优化掉．
-\item \verb|LinRange(初始值,中止值,个数)| 概念上是等间距数组， 相当于 Matlab 的 \verb|linspace|． 但类型为 \verb|LinRange{Float64, Int64}|．
+\item 求矩阵的哈希值如 \verb|hash(矩阵)|， 类型为 \verb|UInt64|． 把运算结果的 hash 输出可以保证计算过程不被优化掉． 事实上可以作用于任何对象（包括自定义类型）．
 \item 64 位机器上， 整数 literal 的类型默认是 \verb|Int64|
-\item \verb|a = [1 2; 3 4]| 得到 \verb|Array{Float64,2}| 注意不能用逗号！
+\item \verb|a = [1 2; 3 4]| 得到 \verb|Array{Float64,2}| 注意不能用逗号！ 也可以不写 \verb|;| 而使用换行．
 \item \verb|[1, 2]| 和 \verb|[1; 2]| 的类型是 \verb|Array{Float64,1}|， 但 \verb|[1 2]| 的类型是 \verb|Array{Int64,2}|
 \item \verb|a[:, 1]| 或者 \verb|a[1, :]| 仍然得到 \verb|Array{Float64,2}|
 \item \verb|a[:, 1] = [3; 4]| 可以修改 \verb|a| 的值
-\item \verb|a = b| 是浅复制， \verb|a| 改变了 \verb|b| 也会改变．
+\item \verb|a = b| 是浅复制， \verb|a| 改变了 \verb|b| 也会改变（同一对象）．
+\item 可以用 \verb|a === b| 来判断是否是同一对象．
 \item \verb|b = a[:, 1]| 却是复制数据．
 \item \verb|a| 作为参数传给函数是 pass by reference， 相当于 C 语言传递指针
+\item 方括号前面可以指定类型， 如 \verb|Float32[1, 4, 5]|．
+\item 数组的类型也可以是抽象类型甚至任意类型 \verb|Any|． 例如 \verb|["a", 1.23]| 的类型就是 \verb|Vector{Any}| 即 \verb|Array{Any, 1}|
+\item \verb|函数.(数组)| 可以对数组内的每个元素分别作用， 返回数组． 例如 \verb|sin.([1,2,3])|． \verb|sin([1,2,3])| 是错误的用法．
+\item \verb|exp([1 2;3 4])| 是矩阵的指数， \verb|exp.([1 2;3 4])| 是逐个元素做指数．
+\item \verb|collect(1:5)| 可以把类似 range 的类型变为 \verb|Vector{}| 类型．
 \end{itemize}
 
 \subsection{子数组}
@@ -96,6 +101,16 @@ struct SubArray{T,N,P,I,L} <: AbstractArray{T,N}
     ...
 end
 \end{lstlisting}
+
+\begin{itemize}
+\item \verb|1:5| 等效于 \verb|range(1,5)|， 类型是 \verb|UnitRange{Int64}|
+\item \verb|1:3:9| 等效于 \verb|StepRange(1, 3, 9)|， 类型是 \verb|StepRange{Int64, Int64}| 注意 \verb|StepRange| 类型的参数只能是整数． \verb|StepRange(1, Int8(3), 9)| 的类型是 \verb|StepRange{Int64, Int8}|
+\item \verb|1.2:5.1| （等效于 \verb|range(1.2,5.1)|）和 \verb|1:0.2:4.1| （等效于 \verb|1:0.2:4| 和 \verb|range(1,4,16)|）的类型是 \verb|StepRangeLen{Float64, Base.TwicePrecision{Float64}, Base.TwicePrecision{Float64}, Int64}|. \verb|range(2,4,3)| 虽然每个元素都是整数， 但类型也是一样的．
+\item \verb|LinRange(初始值,中止值,个数)| 概念上是等间距数组， 相当于 Matlab 的 \verb|linspace|． 但类型为 \verb|LinRange{Float64, Int64}|．
+\addTODO{这和 \lstinline|range(初始值,中止值,个数)| 有什么不同？}
+\item 所有这些 range 类型的抽象类都是 \verb|AbstractRange <: AbstractVector <: Any|， 都可以像数组一样用 \verb|size(x, dim)| 来获取尺寸， \verb|length()| 获取元素个数， 可以用 \verb|x[i]| 获取元素．
+\end{itemize}
+
 
 \subsection{线性代数}
 \begin{itemize}
@@ -166,12 +181,12 @@ end
 
 \subsection{异常处理}
 \begin{lstlisting}[language=julia]
-try
+try 
     一些命令
 catch y
-    if isa(y, 错误类型 1)
+    if isa(y, 错误类型1)
         一些命令
-    elseif isa(y, 错误类型 2)
+    elseif isa(y, 错误类型2)
         一些命令
     end
 end
@@ -207,8 +222,10 @@ println(a == a1)
 \subsection{模块}
 \begin{itemize}
 \item 定义模块 \verb|module 模块名; 定义变量、类型、函数; end|．
-\item 使用模块 \verb|using 模块名|、 \verb|using 模块名: 变量/函数名|、 \verb|import 模块名|、 \verb|import 模块名: 变量/函数名|
-\item \verb|import| 的函数可以拓展定义， 而 \verb|using| 不行．
+\item \verb|import 模块名| 后， 调用函数（或变量）用 \verb|模块名.函数名|， 但 \verb|using 模块名| 后， 可以省略 \verb|模块名.|
+\item 要 \verb|using| 指定内容， 用 \verb|using 模块名: 函数1, 函数2, 变量3|．
+\item \verb|import 模块名: 函数1, 函数2, 变量3| 应该和上一条等效．
+\item \verb|import 模块名 as 自定义名| 和 python 一样．
 \end{itemize}
 
 \subsection{调用 C/C++/Fortran 函数}

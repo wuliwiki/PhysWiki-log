@@ -1,9 +1,22 @@
-% Julia 符号计算笔记
+% JuliaSymbolics 符号计算笔记
 
 \begin{itemize}
-\item \href{https://symbolics.juliasymbolics.org/dev/tutorials/symbolic_functions/}{入门教程}
+\item \href{https://symbolics.juliasymbolics.org/dev/tutorials/symbolic_functions/}{JuliaSymbolics 入门教程}
+\item 功能并不完善， 对比 sympy \href{https://github.com/JuliaSymbolics/Symbolics.jl/issues/59}{缺失的功能}．
 \item \verb|using Symbolics|
-\item \verb|using Latexify| 可以把符号表达式变为 Latex 代码．
 \item \verb|@variables x y| 创建两个符号变量， 类型为 \verb|Num|
-\item \verb|z = x^2 + y| 生成一个符号表达式， 类型也是 \verb|Num|
+\item \verb|z = x^2 + y| 生成一个符号表达式， 类型也是 \verb|Num|．
+\item 同理也可以创建表达式数组/矩阵．
+\item \verb|using Latexify; latexify(A::Num)| 可以把符号表达式变为 Latex 代码．
+\item 在 Jupyter Notebook 中， 运算结果的表达式会自动使用 \verb|latexify| 显示为漂亮排版．
+\item \verb|simplify(表达式)| 化简表达式
+\item \verb|substitute.(表达式, (Dict(x => y^2),))|
+\end{itemize}
+
+
+\subsection{求导和积分}
+\begin{itemize}
+\item \verb|@variables t; Dt = Differential(t)| 定义微分算符． 类型是 \verb|Differential|．
+\item \verb|Dt| 本身可以进行运算， 如 \verb|D2t = Dt*Dt|, \verb|D2t = Dt^2|．
+\item \verb|Dt(t + t^2)| 求导， 但不会进行具体计算． 用 \verb|expand_derivatives(求导表达式)| 具体计算求导结果．
 \end{itemize}

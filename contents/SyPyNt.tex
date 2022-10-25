@@ -1,0 +1,69 @@
+% SymPy 符号计算笔记
+
+\begin{issues}
+\issueDraft
+\end{issues}
+
+\pentry{Python 符号计算简介\upref{SymPy}}
+
+为了书写方便， 本文使用 \verb|from sympy import *|． 所有的变量都假设用 \verb|sympy.symbols()| 声明过．
+
+\subsection{基础}
+\begin{itemize}
+\item \href{https://docs.sympy.org/latest/reference/index.html}{参考文档}．
+\item \verb|import sympy as sm|
+\item \verb|x0, x1 = symbols('x0, x1')| 声明变量， 类型为 \verb|sympy.core.symbol.Symbol|
+\item \verb|x, y, z = symbols('x:z')|， \verb|x4, x5, x6, x7 = symbols('x4:8')|
+\item 常数如 \verb|pi, E, I, oo| （无穷）
+\item 整数为 \verb|numer(n)|， 类型为 \verb|sympy.core.numbers.Integer|， 也可能是 \verb|sympy.core.numbers.One|
+\item 有理数 \verb|Rational(n,m)|． 如果 \verb|n, m| 已经是 \verb|numbers.Integer| 类型， 也可以直接 \verb|n/m|
+\item 虚数单位 \verb|I| 的类型是 \verb|sympy.core.numbers.ImaginaryUnit|， 其他虚数和复数都没有专门的类型而是 \verb|I| 和其他实数相乘相加．
+\item 函数如 \verb|sin(), asin(), sinh(), exp(), log(), sqrt()|
+\item \verb|latex(表达式)| 可以把表达式转换为 latex 代码．
+\item \verb|表达式.subs(符号, 表达式或值)| 替换表达式中的符号
+\item \verb|表达式.subs({符号1:表达式或值1, 符号2:表达式或值2})| 替换多个符号
+\end{itemize}
+
+\subsubsection{检查表达式结构}
+\begin{itemize}
+\item 虽然表达式的类型有很多， 但都有 \verb|args| 参数．
+\item 例如令 \verb|expr = sin(x)**2 + cos(x)**2|， 那么 \verb|expr| 的类型是 \verb|sympy.core.add.Add|， \verb|expr.args| 是 \verb|(cos(x)**2, sin(x)**2)|． \verb|expr.args[0]| 的类型是 \verb|sympy.core.power.Pow|， \verb|expr.args[0].args| 是 \verb|(cos(x), 2)|， 以此类推． 这样就可以生成一个树状结构．
+\end{itemize}
+
+\subsection{基本运算}
+\begin{itemize}
+\item \verb|summation(含i的表达式, (i, 第一个, 最后一个))| （注意求和包含 \verb|最后一个| 的项）， 例如 \verb|summation(1/2**n, (n, 1, 2)))| 得 \verb|3/4|， 又例如 \verb|summation(1/2**n, (n, 1, oo))| 得 \verb|1|．
+\item \verb|product(含i的表达式, (i, 第一个, 最后一个))| 同理
+\end{itemize}
+
+\subsection{线性代数}
+\begin{itemize}
+\item 矩阵 \verb|mat = Matrix([[x**2, sin(x)], [1, 1/y]])|， 类型为 \verb|sympy.matrices.dense.MutableDenseMatrix|
+\item \verb|mat[i,j]| 获取矩阵元．
+\item Matrix 永远是二维的， 行主序， \verb|mat[i]| 返回单个矩阵元而不是像 numpy 一样返回一行．
+\item \verb|mat[:,j]| 获取一列， 类型还是一样．
+\item 其他一些操作和 NumPy\upref{numpy} 数组类似， 如 \verb|len(mat)| 获取元素个数， \verb|shape(mat)| 或者 \verb|mat.shape| 获取形状． 又如 \verb|Matrix([1,2])| 的形状是 \verb|(2,)|， 而 \verb|Matrix([[1,2]])| 的形状是 \verb|(1,2)|．
+\item \verb|Matrix(Numpy矩阵)| 也可以生成 sympy 矩阵．
+\item \verb|mat.norm()| 返回 2-norm， \verb|mat.norm(n)| 返回 n-norm．
+\item 矩阵乘法用 \verb|mat1 * mat2|
+\item 点乘 \verb|dot(v1, v2)|
+\item \verb|mat.eigenvals()| 求本征值， 返回一个字典， \verb|表达式:简并重数|． \verb|mat.eigenvals(multiple=true)| 返回一个 list， 可能包含重复的表达式． 说明见 \verb|help(mat.eigenvals)|
+\item \verb|mat.eigenvects()| 求本征值和本征矢， 返回 tuple 的 list： \verb|[(本征值, 简并数, 本征空间), ...]|
+\end{itemize}
+
+
+\subsection{微积分}
+\begin{itemize}
+\item 极限如 \verb|limit(sin(x)/x, x, 0)|
+\item 积分如 \verb|integrate(exp(x)*(sin(x) + cos(x)), x)|
+\item 格式为 \verb|integrate(表达式, (x, 下限, 上限))|
+\item 微分方程 \verb|dsolve(Eq(y(t).diff(t, t) - y(t), exp(t)), y(t))|
+\end{itemize}
+
+
+\subsection{任意精度求值}
+\begin{itemize}
+\item 通过 \href{https://mpmath.org/}{mpmath} 库完成任意精度计算（和 arb\upref{ArbLib} 是同一个作者， 但是完全用 python 编写）
+\item \verb|N(表达式, 有效数字)| 对表达式求值， 例如 \verb|N(pi, 50)|， \verb|N(sin(numer(1)), 50)|
+\end{itemize}
+

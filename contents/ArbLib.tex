@@ -29,7 +29,7 @@ sudo make install;
 \subsection{编译}
 在 Ubuntu 中如果你使用 \verb|apt| 安装， 在编译程序是需要加 \verb|-lflint-arb| 选项． 如果你直接从源码编译， 则需要加 \verb|-larb| 选项． 对一些编译器（例如 intel 的 \verb|icpc|）， 可能还需要加上 \verb|-lflint, -lmpfr, -lgmp|， 如果 link 阶段遇到问题可以试试加上．
 
-一个 C++ 例程： 该程序用 80 bit 初始精度计算复参数的超几何函数\upref{HypGeo} $_1F_1$ 并于 Mathematica 的结果比较． 如果 Arb 估计的结果精度小于 15 位有效数字则显示警告． 初始精度越高， 结果的有效数字也越高， 具体取决于 $_1F_1$ 的参数． 读者可以尝试在程序内加入一个循环， 若结果有效数字不够， 则把初始精度加倍再次计算， 直到达到精度为止．
+一个 C++ 例程： 该程序用 80 bit 初始精度计算复参数的超几何函数\upref{HypGeo} $_1F_1$ 并于 Mathematica 的结果比较． 如果 Arb 估计的结果精度小于 16 位有效数字则显示警告． 初始精度越高， 结果的有效数字也越高， 具体取决于 $_1F_1$ 的参数． 读者可以尝试在程序内加入一个循环， 若结果有效数字不够， 则把初始精度加倍再次计算， 直到达到精度为止．
 
 \begin{lstlisting}[language=cpp, caption=test.cpp]
 #include "arb_hypgeom.h"
@@ -56,13 +56,14 @@ Comp hypergeom1F1(Comp_I a, Comp_I b, Comp_I z)
 	arb_init(temp1);
 	acb_t a1, b1, z1, res1;
 	acb_init(a1); acb_init(b1); acb_init(z1); acb_init(res1);
+	// error range is set to 0
 	acb_set_d_d(a1, real(a), imag(a));
 	acb_set_d_d(b1, real(b), imag(b));
 	acb_set_d_d(z1, real(z), imag(z));
 	acb_hypgeom_1f1(res1, a1, b1, z1, 0, prec);
 	// acb_printn(res1, 100, 0); printf("\n"); // print result
 	int digits = acb_rel_accuracy_bits(res1)/3.321928;
-	if (digits < 15) {
+	if (digits < 16) {
 		cout << "warning: hypergeom1F1 error too large" << endl;
 	}
 	acb_get_real(temp1, res1);
@@ -94,7 +95,7 @@ g++ -o test.x test.cpp -larb -lflint
 \end{lstlisting}
 
 \subsubsection{常用函数和常数}
-数学常数：
+数学常数（\verb|prec| 是结果的二进制精度， 根上面的 \verb|hypergeom1F1| 不同）：
 \begin{itemize}
 \item \verb|void arb_const_pi(arb_t z, slong prec)| 圆周率
 \item \verb|void arb_const_sqrt_pi(arb_t z, slong prec)| 根号圆周率
@@ -104,7 +105,10 @@ g++ -o test.x test.cpp -larb -lflint
 
 
 \subsection{内部实现}
-要配合 gdb 学习可以自己编译一个 debug 版本的 libarb 库， 见 Automake 笔记\upref{automk}．
+\begin{itemize}
+\item 要配合 gdb 学习可以自己编译一个 debug 版本的 libarb 库， 见 Automake 笔记\upref{automk}．
+\item \verb|ARF_PREC_EXACT| 的定义是 \verb|std::numeric_limits<slong>::max()|
+\end{itemize}
 
 \pentry{FLINT 库笔记\upref{Flint}}
 \subsubsection{arf\_t 的数据结构}
@@ -228,6 +232,8 @@ mag_is_inf(const mag_t x)
     return (MAG_MAN(x) == 0) && (MAG_EXP(x) != 0);
 }
 \end{lstlisting}
+
+它表示的值为 \verb|x->man * 2^ (x->exp - MAG_BITS)| 其中 \verb|#define MAG_BITS 30|． % 已验证
 
 \subsubsection{arb\_t 的数据结构}
 \href{https://arblib.org/arb.html}{文档}．

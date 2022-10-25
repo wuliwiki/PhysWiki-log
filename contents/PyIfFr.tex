@@ -3,6 +3,42 @@
 
 \pentry{Python 简介\upref{Python}}
 
+\subsection{判断语句}
+有时我们在程序中做什么将取决于前面步骤的结果．在这种情况下，您可能会发现 \verb|if| 语句很有帮助．假设我想知道一个二次方程 $ax^2+bx+c=0$ 有多少实根．下面的代码根据 $a$、$b$ 和 $c$ 的值告诉我根的数量．
+\begin{lstlisting}[language=python]
+a = 5
+b = 7
+c = -1 
+D = b**2 - 4*a*c
+if D > 0:
+    print("two roots")
+if D < 0:
+    print("no roots")
+if D == 0:
+    print("one root")
+\end{lstlisting}
+
+通常 \verb|if| 可以嵌套使用；循环语句可以与条件判断语句结合使用．例如，一个简单的打分系统：
+\begin{equation}
+f=\left\{\begin{array}{lc}\begin{array}{c}A, \\B, \\C, \end{array}&\begin{array}{c}x>90; \\x>80; \\x>60.\end{array}\end{array}\right.\\\\
+\end{equation}
+\begin{lstlisting}[language=python]
+x = 99
+if x > 90:
+    print('A')
+elif x > 80:
+    print('B')
+else:
+    print('C')
+\end{lstlisting}
+
+
+\begin{itemize}
+\item 真和假是 \verb|True|， \verb|False|
+\item \verb|and|（\verb|&|）， \verb|or|（\verb`|`）， \verb|not|（不是 \verb|!|）
+\end{itemize}
+
+
 \subsection{循环语句}
 我们经常需要对某个操作重复执行多次，可以用 \verb|for| 循环，例如输出 $1$ 到 $3$ 的平方：
 \begin{lstlisting}[language=python]
@@ -50,30 +86,10 @@ while sum0 < 50:
 5 55.0
 \end{lstlisting}
 
-有时我们在程序中做什么将取决于前面步骤的结果．在这种情况下，您可能会发现 \verb|if| 语句很有帮助．假设我想知道一个二次方程 $ax^2+bx+c=0$ 有多少实根．下面的代码根据 $a$、$b$ 和 $c$ 的值告诉我根的数量．
-\begin{lstlisting}[language=python]
-a = 5
-b = 7
-c = -1 
-D = b**2 - 4*a*c
-if D > 0:
-    print("two roots")
-if D < 0:
-    print("no roots")
-if D == 0:
-    print("one root")
-\end{lstlisting}
-
-通常 \verb|if| 可以嵌套使用；循环语句可以与条件判断语句结合使用．例如，一个简单的打分系统：
-\begin{equation}
-f=\left\{\begin{array}{lc}\begin{array}{c}A, \\B, \\C, \end{array}&\begin{array}{c}x>90; \\x>80; \\x>60.\end{array}\end{array}\right.\\\\
-\end{equation}
-\begin{lstlisting}[language=python]
-x = 99
-if x > 90:
-    print('A')
-elif x > 80:
-    print('B')
-else:
-    print('C')
-\end{lstlisting}
+\subsection{迭代器（iterator）}
+\begin{itemize}
+\item \verb|it = iter()| 函数可以获取 set, list 等的迭代器． set 和 list 的迭代器分别为 \verb|set_iterator|， \verb|list_iterator|． \verb|string| 也可以．
+\item \verb|next(it)| 返回下一个值（包括第一个值）， 没有 \verb|last| 函数
+\item 循环如 \verb|for val in it:|
+\item 自定义的类型中， 用 \verb|__iter__(self)| 和 \verb|__next__(self)| 函数定义以上两个函数的行为．
+\end{itemize}

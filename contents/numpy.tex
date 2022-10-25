@@ -1,4 +1,4 @@
-% Numpy 库
+% NumPy 库
 % numpy|数组|矩阵|线性代数
 
 \pentry{Python 数据类型\upref{PyData}}
@@ -10,7 +10,7 @@ import numpy as np
 \end{lstlisting}
 这相当于给 \verb|numpy.| 指定一个更简单的名字 \verb|np.|， 方便了使用． 你也可以把 \verb|np| 替换成其他名字． 上文使用 \verb|math| 模块时也可以使用
 \begin{lstlisting}[language=python]
-import numpy as m
+import math as m
 \end{lstlisting}
 
 要创建一个一维数组（或者叫做行矢量）， 如
@@ -40,22 +40,23 @@ a[1:6:2]
 \end{lstlisting}
 括号中的第三个参数表示步长，2表示隔一个元素取一个元素，上述代码取出 \verb|a| 中第 1 个（注意不是第 0 个），第  3 个，第 5 个值， 返回结果为 2,4,6．
 
-创建一个二维数组，如
+创建一个二维数组，如（默认是行主序\upref{MatSto}）
 \begin{lstlisting}[language=python]
 b = np.array([[1, 2, 3, 4],[4, 5, 6, 7], [7, 8, 9, 10]])
 \end{lstlisting}
-数组的大小可以通过其 \verb|shape| 属性获得． 例如获取 \verb|a| 和 \verb|b| 的数组大小，
+数组的形状可以通过其 \verb|shape| 属性获得． 也可以用 \verb|shape()| 函数 例如
 \begin{lstlisting}[language=python]
-a.shape
-b.shape
+a.shape # 或 shape(a)
+b.shape # 或 shape(b)
 \end{lstlisting}
-最终会得到返回值为
+最终会得到返回值为 \verb|tuple| 类型
 \begin{lstlisting}[language=python]
 (8,)
 (3, 4)
 \end{lstlisting}
 注意到返回值都有一个小括号，说明返回值类型为一个\textbf{元组类型}． 数组 \verb|a| 的shape只有一个元素，因此它是一维数组．而数组 \verb|c| 的shape有两个元素，因此它是二维数组，其中第0轴的长度为3，第1轴的长度为4．
 
+另外注意 \verb|np.array([1,2])| 的形状是 \verb|(2,)|， 而 \verb|np.array([[1,2]])| 的形状是 \verb|(1,2)|． 对 numpy 数组用单索引 \verb|[i]| 的效果和 list 一样．
 
 修改数组的shape属性，在保持数组元素个数不变的情况下，改变数组每个轴的长度．下面的例子将数组 \verb|c| 的shape改为 \verb|(4,3)|，注意从 \verb|(3,4)| 改为 \verb|(4,3)| 并\textbf{不是对数组进行转置\upref{Mat}}，而只是改变每个轴的大小，数组元素在内存中的位置并没有改变：
 \begin{lstlisting}
@@ -194,3 +195,8 @@ D = np.random.rand(3,5)
 print(D)
 \end{lstlisting}
 创建其他随机数方法类似，例如正态分布随机数用 \verb|np.random.randn| 函数．
+
+\begin{itemize}
+\item 逐个元素相乘 \verb|m1*m2|
+\item 矩阵惩罚 \verb|matmul(m1, m2)|
+\end{itemize}

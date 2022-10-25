@@ -1,0 +1,50 @@
+% Python 创建模块笔记
+
+\subsection{区分脚本和模块}
+有时候我们希望同一个 \verb|.py| 文件既可以作为脚本直接执行也可以作为模块被导入， 并且该文件可以根据这两种方式自动选择执行什么． 这是可以用 \verb|__name__| 来判断：
+\begin{lstlisting}[language=python, caption=my\_module.py]
+#!/usr/bin/python3
+# 执行一些命令（无论作为脚本还是模块都会被运行）
+# 被赋值的变量会作为模块的全局变量， 定义的函数会作为模板中的函数
+
+print('欢迎使用 my_module.py')
+
+def plus1(num):
+    return num + 1
+
+num = 3.5
+num2 = plus1(num)
+
+
+if __name__ == '__main__':
+    # 脚本模式下运行的命令
+    print('正在被作为脚本执行,  __name__ 的值为 __main__')
+else:
+    # 作为模块导入时运行的命令
+    print('正在被作为模块导入, __name__ 的值为', __name__)
+\end{lstlisting}
+若运行 \verb|./my_module.py| 或者 \verb|python3 my_module.py| 或者 \verb|python3 -m my_module|， 就会得到
+\begin{lstlisting}
+欢迎使用 my_module.py
+正在被作为脚本执行,  __name__ 的值为 __main__
+\end{lstlisting}
+若在同目录下进入 python3 运行 \verb|import my_modul|， 就会得到
+\begin{lstlisting}
+欢迎使用 my_module.py
+正在被作为模块导入, __name__ 的值为 my_module
+\end{lstlisting}
+
+再来写另一个模块调用上面的模块
+\begin{lstlisting}[language=python]
+#!/usr/bin/python3
+print('欢迎使用 my_module2.py')
+if __name__ == '__main__':
+    # 脚本模式下运行的命令
+    print('正在被作为脚本执行,  __name__ 的值为 __main__')
+else:
+    # 作为模块导入时运行的命令
+    print('正在被作为模块导入, __name__ 的值为', __name__)
+
+import my_module
+\end{lstlisting}
+
