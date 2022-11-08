@@ -4,26 +4,9 @@
 \issueDraft
 \end{issues}
 
-\subsection{Linux 安装}
 \subsubsection{apt 安装}
 \begin{itemize}
-\item ubuntu x86/64 安装参考\href{https://docs.docker.com/install/linux/docker-ce/ubuntu/}{这里}．
-\begin{lstlisting}[language=bash]
-sudo apt-get remove docker docker-engine docker.io containerd runc
-sudo apt-get update
-sudo apt-get install \
-    apt-transport-https \
-    ca-certificates \
-    curl \
-    gnupg-agent \
-    software-properties-common
-sudo add-apt-repository \
-   "deb [arch=amd64] https://download.docker.com/linux/ubuntu \
-   $(lsb_release -cs) \
-   stable"
-sudo apt-get update
-sudo apt-get install docker-ce docker-ce-cli containerd.io
-\end{lstlisting}
+\item ubuntu x86/64 安装 Docker Engine 参考\href{https://docs.docker.com/install/linux/docker-ce/ubuntu/}{这里}．
 \item 测试安装成功， 用 \verb`sudo docker run hello-world`
 \end{itemize}
 
@@ -37,29 +20,62 @@ sudo apt-get install docker-ce docker-ce-cli containerd.io
 
 \subsection{基础}
 \begin{itemize}
+\item 参考\href{https://docs.docker.com/get-started/}{官方入门}．
 \item \href{https://devops.stackexchange.com/questions/2826/difference-between-chroot-and-docker}{docker 和 chroot 的对比}．
-\item docker 在功能上基本和虚拟机一样， 但是占用资源要少得多， 因为共享内核
+\item docker 在功能上基本和虚拟机一样， 但是占用资源要少得多， 因为共享 host 系统的内核
 \item docker 本质上就是一个进程
 \item windows 和 mac 上有 docker desktop， 建议使用
 \item 用了 docker 就不能用 virtualbox 了， 必须要在 eufi 把 Hyper V 关掉或打开才可以
 \item 最新的 windows docker 需要 WSL2 才能使用了
 \item 重启以后启动 docker， 登录， 用 powershell \verb`docker --version` 检查版本
-\item \verb`docker run hello-world` 测试最简单的 image
+\item \verb`sudo docker run hello-world` 测试最简单的 image
+\item 所有 \verb|docker| 命令前面都需要 \verb|sudo|， 以下省略． 如果不加， 会有错误 \verb|Cannot connect to the Docker daemon...|
 \item \verb`docker images` 可以检查本地所有 image
 \item \verb`docker ps -a` 可以检查本地所有 container/process
+\item \verb|docker container ls| 也可以， 但区别是什么？
 \item 要下载 image， 用 \verb`docker pull` 例如 \verb`docker pull [image_name]`
 \item 注意区分 container 和 image， image 相当于 VirtualBox 里面的 snapshot， 而 container 相当于现在在运行的虚拟机， \verb`container commit` 以后可以生成 image
 \item \verb`docker run -it -d IMAGE_NAME/ID` 从 image 创建 container
-\item \verb`docker exec -it CONTAINER_ID bash` 进入某个 container 的 bash
+\item \verb`docker exec -it CONTAINER_ID bash` 进入某个 container 的 bash． 在 \verb|-it| 前面加上 \verb|-u 0| 可以以 root 的身份 login．
 \item docerk image 没有简单的上锁设置，就算修改了 passwd． 能执行 \verb`sudo docker...` 命令的人都可以自由访问本地的任何 container
 \item \verb`docker stop CONTAINER_ID` 停止 container
 \item \verb`docker start CONTAINER_ID` 开始 container
 \item \verb`docker rm [-f] CONTAINER_ID` 删除 container
 \item \verb`docker image rm [-f] IMAGE_NAME/ID` 删除 image
-\item \verb`docker commit CONTAINER_ID USR_NAME/REPO_NAME` 会将 container commit， 也可以用 \verb`REPO_NAME:TAG_NAME` 指定 tag
+\item \verb`docker commit CONTAINER_ID USR_NAME/REPO_NAME` 会将 container commit， 也可以在后面加 \verb`:TAG_NAME` 指定 tag
 \item \verb`sudo docker login` 用于登录 docker hub
 \item \verb`docker push USR_NAME/REPO_NAME` 可以直接将 commit 的 image push 到 docker hub， 也可以用 \verb`REPO_NAME:TAG_NAME` 指定 tag
+\item \verb|docker save -o image.tar IMAGE_NAME| 可以把镜像保存为文件． 也可以用 \verb|IMAGE_NAME:TAG_NAME|
+\item \verb|docker load -i image.tar| 可以恢复保存的镜像文件
+\item \verb|docker rename 旧镜像名字 新镜像名字|
+\item 从正在运行的 container 立面拷贝文件到外面 \verb|docker cp CONTAINER_ID:/容器内某路径/ 本地某路径|
+\item \verb|docker save -o 备份文件.tar IMAGE|
 \end{itemize}
+
+\subsection{Dockerfile}
+\begin{itemize}
+\item dockerfile 是一系列创建 docker image 的命令． 当然也可以写一个 bash 脚本直接在 container 中运行， 但前者更灵活方便．
+\item \verb|docker build -t 容器名:tag名 .| 使用当前路径下的 \verb|Dockerfile| 创建 image 并命名．
+\item 如果想指定 Dockerfile 文件名， 用 \verb|-f 文件|
+\item 一个例子是 mplapack 的 \verb|sudo docker build -t mplapack:ubuntu2204  .|． 其中 \verb|-t| 命名一个 tag， \verb|-f| 指定 dockerfile， \verb|.| 指定某个路径为当前路径， \verb|tee| 把 stdout 输出到命令行以及指定的文件．
+\item 每个命令会建立一个 \textbf{layer}， 应该相当于 git 的一次 commit． 每个 layer 保存两个 image 之间的差别， 可以从任意 layer 建立 container．
+\item 不一定每个 layer 都有 tag， 但都会有 id．
+\item \verb|CMD["命令", "参数1", "参数2", ...]| 或者 \verb|CMD 命令 参数1 参数2， ...| 可以在每次 container 运行时都执行一次某个命令．
+\item \verb|docker run| 执行 \verb|CMD| 中命令时， 会把命令行输出转到 host 的命令行．
+\end{itemize}
+
+具体命令
+\begin{itemize}
+\item \verb|# Comment| 写注释
+\item dockerfile 命令一般用大写（但严格来说不区分大小写）
+\item 第一个除了 \verb|ARG| 的命令必须是 \verb|FROM|， 例如 \verb|FROM image:tag|， 这和 \verb|docker pull image:tag| 一样． 例如 \verb|FROM ubuntu:22.04|．
+\item \verb|RUN 命令| 可以在 container 的 shell 中执行命令．
+\item 用 \verb|\| 给命令换行
+\item 也可以用 \verb|RUN 命令1 && 命令2 ...| 执行多个命令
+\item \verb|COPY 本地文件/文件夹 容器内路径| 可以从外面到里面复制文件
+\item \verb|ARG| 命令基本是定义 container 的环境变量． 例如 \verb|ARG ver="2.0.1"|， 之后可以用例如 \verb|myapp-${ver}| 来获替换成值（双引号不会包含）．
+\end{itemize}
+
 
 \subsection{docker 文件夹映射}
 \begin{itemize}
@@ -75,6 +91,8 @@ sudo apt-get install docker-ce docker-ce-cli containerd.io
 
 \subsection{ubuntu image 缺少的功能}
 \begin{itemize}
+\item \verb|docker pull ubuntu| 安装官方 ubuntu docker 镜像， 这是一个非常精简的系统， 比 ubuntu server 还精简， 只有 30 多 M．
+\item \verb|apt update|
 \item \verb`apt install sudo`
 \item \verb`apt install bash-completion`, 然后在 bashrc 中加上
 \begin{lstlisting}[language=bash]
@@ -86,4 +104,9 @@ if ! shopt -oq posix; then
   fi
 fi
 \end{lstlisting}
+\end{itemize}
+
+\subsection{X11 转发}
+\begin{itemize}
+\item 参考\href{https://opendata-forum.cern.ch/t/x11-forwarding-with-docker/31}{这篇文章}．
 \end{itemize}

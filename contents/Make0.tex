@@ -33,14 +33,14 @@ echo "file a" > a
 生成文件 \verb|a| 的内容为 \verb|file a|．
 
 但为什么不生成 \verb|b| 呢？ 因为 \verb|make| 默认情况下只生成第一个出现的目标． 如果想指定生成 \verb|b|， 执行 \verb|make b| 即可． 执行过程中命令行显示 \verb|Makefile| 的 5-7 行被执行了． 但注意第 2 行没有被执行． 这是因为 \verb|a| 文件已经存在了且上一次 \verb|make| 后没有被修改过， 所以就不需要再重复生成一次了． \verb|b| 中的内容如下
-\begin{lstlisting}
+\begin{lstlisting}[language=none]
 text in a {
 file a
 }
 \end{lstlisting}
 
 现在两个文件都生成了， 且没有被修改， 所以若再次执行 \verb|make b|， 则会显示
-\begin{lstlisting}
+\begin{lstlisting}[language=none]
 make: 'b' is up to date.
 \end{lstlisting}
 执行 \verb|make| 或 \verb|make a| 结果类似．
@@ -48,7 +48,7 @@ make: 'b' is up to date.
 接下来我们把 \verb|a|, \verb|b| 两个文件都删除， 执行一次 \verb|make b|， 会发现第 2 行和 5-7 行都被执行了， 因为当 \verb|make| 要生成 \verb|b| 时发现它的依赖文件 \verb|a| 并不存在， 所以就会先生成 \verb|a|． 两文件中内容与之前相同．
 
 我们来手动把 \verb|a| 中的内容修改为 \verb|modified file a|， 再次运行 \verb|make b|， 发现 \verb|Makefile| 的 5-7 行被执行， 且 \verb|b| 中的内容变为
-\begin{lstlisting}
+\begin{lstlisting}[language=none]
 text in a {
 modified file a
 }

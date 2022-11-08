@@ -3,7 +3,7 @@
 \pentry{HTML 基础}
 JavaScript 常见于网页中， 一般浏览器都可以运行． 我们以 Chrome 浏览器为例演示 \verb|Hello World| 程序．
 
-\begin{lstlisting} [language=js]
+\begin{lstlisting}[language=js]
 <!DOCTYPE html>
 <html>
 	<body>
@@ -27,6 +27,13 @@ JavaScript 常见于网页中， 一般浏览器都可以运行． 我们以 Chr
 \item 插入到 \verb|<script>| 之前
 \end{enumerate}
 
+\subsection{用 VScode debug  Javascript}
+\begin{itemize}
+\item 先用 VScode 打开文件夹， 按左边的 debuug 图标 （小虫子）， 弹出来的窗口中按齿轮按钮， 会自动创建 \verb`.vscode/launch.json` 设置文件， 不用做任何改动，现在就可以 debug 了．
+\item 可以在行号左边点击添加 break point， 快捷键 F5，F10，F11 都跟 Visual Studio 中的一样．
+\item 菜单 View 里面可以打开 Debug Console， 相当于 python REPL， 可以输入任何命令．
+\end{itemize}
+
 \subsection{常识}
 \begin{itemize}
 \item \verb|<body>| 中任意位置可以包含任意多个 \verb|<script>|
@@ -37,7 +44,8 @@ JavaScript 常见于网页中， 一般浏览器都可以运行． 我们以 Chr
 \item 命令后的 \verb|;| 不是必须的， 可用于在同一行中分隔两个命令．
 \item 弹出输入框如 \verb|person = prompt("提示", "默认");|
 \item 按钮如 \verb|<button onclick="函数名()">按钮文字</button>|
-\item 输入框如 \verb|<input id="b"><br>|， 获取或更改网页上的文字用 \verb|document.getElementById('b').value|
+\item 输入框如 \verb|<input id="b"><br>|
+\item 获取或更改网页上的文字用 \verb|document.getElementById('b').value|
 \end{itemize}
 
 \subsubsection{算符}
@@ -72,11 +80,13 @@ JavaScript 常见于网页中， 一般浏览器都可以运行． 我们以 Chr
 \subsubsection{数组}
 \begin{itemize}
 \item 数组如 \verb|v = [1, 'a', [2, 'b']]|， \verb|typeof| 返回 \verb|object|， 可以嵌套
-\item 数组索引从 0 开始如 \verb|v[0]|， \verb|v[2][1]| 长度为 \verb|v.length|
+\item 数组索引从 0 开始如 \verb|v[0]|， \verb|v[2][1]|
+\item 数组长度为 \verb|v.length|
 \item \verb|console.table()| 可以显示二维数组
 \item \verb|a.push(元素)| 在最后新增元素， \verb|a.pop()| 删除最后一个元素
 \item \verb|a.shift()| 删除第一个元素， \verb|a.unshift(元素)| 新增元素到第一个
 \item 子数组如 \verb|v.slice(i, j)|， 复制从 \verb|i| 到 \verb|j-1| 个元素， 注意没有 view
+\item \verb|a = [1,2,3]; b = a; c = [1,2,3]| 会有 \verb|a == b|， \verb|a === b|， \verb|c| 永远不等于 \verb|a| 和 \verb|b|． 改变 \verb|a| 的一个元素 \verb|b| 也会变， 
 \end{itemize}
 
 \subsection{函数}
@@ -86,7 +96,7 @@ JavaScript 常见于网页中， 一般浏览器都可以运行． 我们以 Chr
 \item 定义函数如 \verb|function myFunction(p1, p2) {return p1 * p2;}|， 可以在定义之前调用函数． \verb|return| 可选
 \item 调用函数必须要有括号， 没有括号返回函数定义．
 \item 数组作为函数变量是 pass by reference
-\item \verb|function(){...}| 是一个（匿名）函数的定义， 可以作为另一个函数的变量， 相当于把某个函数名作为变量．
+\item \verb|myfun = function(){...}| 是一个（匿名）函数的定义， 可以作为另一个函数的变量， 相当于把某个函数名作为变量． 类型为 \verb|function|．
 \item \verb|(function(){...})()| 叫做 Immediately-Invoked Function Expression (IIFE)， 可以立即执行 \verb|...| 中的代码而避免污染当前范围的变量名
 \end{itemize}
 
@@ -103,7 +113,7 @@ JavaScript 常见于网页中， 一般浏览器都可以运行． 我们以 Chr
 \end{itemize}
 
 定义成员函数， 可以使用关键词 \verb|this|
-\begin{lstlisting} % [language=js]
+\begin{lstlisting}[language=js]
 const person = {
   firstName: "John",
   lastName : "Doe",
@@ -115,7 +125,7 @@ const person = {
 \end{lstlisting}
 
 Constructor 的例子（\href{https://www.w3schools.com/js/js_object_constructors.asp}{参考}）
-\begin{lstlisting} [language=js]
+\begin{lstlisting}[language=js]
 function Person(first, last, age, eyecolor) {
   this.firstName = first;
   this.lastName = last;

@@ -42,25 +42,25 @@ int main()
 \end{lstlisting}
 
 如果将这两个文件用 g++ 正常编译 \verb`g++ main.cpp lib1.cpp` 执行结果为
-\begin{lstlisting}
+\begin{lstlisting}[language=none]
 In library 1
 In main
 \end{lstlisting}
 但现在我们把 \verb|lib1.cpp| 先编译成 \verb|.o| 文件
 
-\begin{lstlisting}
+\begin{lstlisting}[language=none]
 g++ -static -c -o lib1.o lib1.cpp
 \end{lstlisting}
 
 (其实 \verb`-o lib1.o` 可以省略) （\verb`-static` 用于静态编译）, 再从 \verb|.o| 文件生成 \verb|.a| 文件 \verb|.a| 文件的命名规则一般是前面加 (\verb`lib*.a`)
 
-\begin{lstlisting}
+\begin{lstlisting}[language=none]
 ar rcs lib1.a lib1.o
 \end{lstlisting}
 可以将多个 \verb|.o| 文件封装到 \verb|.a| 里面, 在后面添加 \verb|lib2.o, lib3.o| 等即可． \verb`.a` 就是 \verb`.o` 的压缩文件（archive）， \verb`ar` 和 \verb`tar` 差不多． (其中 \verb|rcs| 选项中的 \verb`r` 选项是添加并替换旧文件（如果有同名）, \verb`c` 选项是 create archive, \verb`s` 选项是 write out an index, 虽然还是不明白什么意思)． 若要打印文件内容， 用 \verb|ar p lib1.a| 或者 \verb|ar pv lib1.a| （verbose）． 若要取出所有文件， 用 \verb|ar x lib1.a [文件1] [文件2]|．
 
 再来将 \verb|lib1.a| 和主程序文件一块编译
-\begin{lstlisting}
+\begin{lstlisting}[language=none]
 g++ main.cpp -o main.x -L./ -l 1
 \end{lstlisting}
 
@@ -72,28 +72,29 @@ g++ main.cpp -o main.x -L./ -l 1
 \item 所以简单来说， 静态链接库 \verb`.a` 就是 archive 的 \verb`.o` 文件． 在 link 阶段使用．
 \item 另外要注意 \verb`g++` 在 link 阶段 \verb`.o` 或 \verb`.a` 的顺序是非常重要的， 某个 \verb`o` 文件只能调用在它后面列出的 \verb`o` 文件， 否则会提示找不到 symbol． 要让 \verb`g++` 忽略这个顺序， 可以使用
 \verb`-Wl,--start-group 文件1 文件2 ... -Wl,--end-group`， 这样 linker 找不到 symbol 时就会在 group 内的文件中反复搜索（编译速度会降低）．
+\item 注意 \verb|-L| 和 \verb|rpath| 里面的路径可以是相对路径， 但如果 \verb|rpath| 用相对路径， 那么可执行文件和 so 文件就必须保持相对位置否则运行时会找不到．
 \item 总之， 有空还是多看看 \verb`g++` 手册吧．
 \end{itemize}
 
 \subsection{动态链接库 (*.so)}
 创建动态库：
-\begin{lstlisting}
+\begin{lstlisting}[language=none]
 g++ -shared -fPIC -o lib1.so lib1.cpp
 \end{lstlisting}
 
 使用方法:
 把 cpp 编译成 .o 文件时不需要声明动态链接库和所在目录, \verb`-c` 选项普通编译即可.
-\begin{lstlisting}
+\begin{lstlisting}[language=none]
 g++ -c main.cpp
 \end{lstlisting}
 把 \verb|.o| 文件链接成可执行文件时, 在最后 (注意必须是在最后) 加上
 \verb`-Wl,-rpath,<library path>  -L<library path> -l <libname1> -l <libname2>`
 其中 \verb`-Wl,aaa,bbb` 命令是将 \verb`aaa bbb` 选项传给 linker, 剩下的 \verb`-L<library path> -l <libname1> -l <libname2>` 的用法和上述 \verb|.a| 中的一样.
-\begin{lstlisting}
+\begin{lstlisting}[language=none]
 g++ -o main.x main.o -l1 -L./ -Wl,-rpath,./
 \end{lstlisting}
 可以用 \verb|ldd main.x| 查看动态链接库， 会发现其中有 \verb|lib1.so|． 如果不用 \verb|rpath|， 也可以在执行可执行文件以前把路径加入到环境变量 \verb`LD_LIBRARY_PATH` 中． \verb|rpath| 可以是相对于可执行文件的相对路径， 也可以是绝对路径．
-\begin{lstlisting}
+\begin{lstlisting}[language=none]
 export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/your/custom/path/
 \end{lstlisting}
 \begin{itemize}
@@ -101,6 +102,7 @@ export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/your/custom/path/
 \item 如果不指定 \verb|rpath|， 设置环境变量 \verb|LD_RUN_PATH| 也是等效的． 链接的程序是 \verb|ld|， 而动态链接库是 \verb|ld-linux.so|
 \item 如果要修改已经编译好的可执行文件（包括 so） 的 rpath， 可以用 \verb|chrpath| 或者 \verb|patchelf| 参考\href{https://stackoverflow.com/questions/13769141/can-i-change-rpath-in-an-already-compiled-binary}{这里}．
 \item 如果同样的 \verb`-l` 既能匹配 \verb`lib***.a` 也能匹配 \verb`lib***.so`， 那么 gcc 会默认选 \verb`.so` （貌似有时候二者都需要）． 如果想要静态链接， 要么用 \verb`-static` 选项（禁止链接到任何动态 lib）， 要么直接指定 \verb`.a` 的地址和文件名， 如 \verb`g++ -o main.x f1.o /some/path/lib***.a another/path/lib***.a`．
+\item 注意带版本号的 \verb|lib***.so.x.x| 不会自动匹配， 一般存在一个名为 \verb|lib***.so| 的软链指向某个具体的版本．
 \item 如果要查看 \verb|.a| 或 \verb|.so| 文件里面是否有某个函数， 用例如 \verb`nm -A /usr/lib/x86_64-linux-gnu/libflint.a | grep fmpz_set` 类似地也有 \verb|nm xxx.so|
 \item 如果 \verb|rpath| 是相对路径， 那么它相对的是 pwd 而不是可执行文件的位置， 定义时可以使用 \verb|${ORIGIN}| 来表示可执行文件的位置．
 \end{itemize}
@@ -138,13 +140,13 @@ void f1()
 }
 \end{lstlisting}
 制作库
-\begin{lstlisting}
+\begin{lstlisting}[language=none]
 g++ -c lib0.cpp lib1.cpp // 生成 lib0.o lib1.o
 g++ -shared -fPIC -o lib0.so lib0.cpp
 g++ -shared -fPIC -o lib1.so lib1.cpp -l0 -L./ -Wl,-rpath,./
 \end{lstlisting}
 编译主程序， 使用库， 注意只需要链接 \verb|lib1|
-\begin{lstlisting}
+\begin{lstlisting}[language=none]
 g++ -c main.cpp
 g++ -o main.x main.o -l1 -L./ -Wl,-rpath,./
 \end{lstlisting}

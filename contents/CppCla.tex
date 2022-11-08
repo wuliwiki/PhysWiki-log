@@ -1,0 +1,79 @@
+% C++ 的 Class 笔记
+
+\begin{issues}
+\issueDraft
+\end{issues}
+
+\footnote{本文部分参考 Ivor Horton 的 C++ 教程}
+
+\subsection{基础}
+\begin{itemize}
+\item copy constructor 本身就是一个 constructor, 只有在用同类初始化, 或者函数 pass by value 和 return by value 的时候才用到.
+\item 可以强制 constructor 或 \verb|operator=| 等函数使用 default 或者 delete. 格式为 \verb|fun() = default| 或 \verb|fun() = delete|.
+\item 可以声明一个成员函数将一个 class type 转换成另一种 type，如 \verb|operator bool() {}| 该函数的 return type 是 bool，将当前 class type 转换为 bool 类型．在前面加 explicit 可以阻止 implicit conversion，而只允许 explicit conversion．
+\end{itemize}
+
+\subsection{继承}
+\begin{itemize}
+
+\item Derived Class 继承 (inherit) Base Class 的所有数据, 以及所有函数 (除了 destructor, constructor, \verb|operator=|). 当 Derived Class 重新定义了 Base Class 的同格式函数时, 就把 Base Class 的函数覆盖了, 若要用 Base Class 的函数, 就在函数前面加 Base Class 名和 \verb|::|.
+\item 声明 Derived Class 的 object 的时候, Base Class 的 Constructor 先被调用, 毁灭 object 的时候, Base Class 的 Destructor 后被调用.
+\item \verb|class CCandyBox : CBox {...};| 这种情况下默认 \verb|class CCandyBox : private CBox {...};|
+\item \verb|protected| 和 \verb|private| 对当前的 class 来说效果是一样的, 只是继承的时候有所不同.
+\item 一般情况下 Base class 中的 private members 在 Derived class 的函数中没有访问权限 (但 protected 有). 在 private 继承下, 所有继承的 member 都变为 private; 在 protected 继承下, 所有继承的 member 都变为 protected; 在 pubic 继承下, 继承的 member 权限不变.
+\item 如果 Derived Class 无法访问 Base Class member（包括如 \verb|operator=|）, 可以在 member 前面加 \verb|this->|, 或者在 Derived Class 内部的一开始声明如 \verb|using BaseClass::m_data|; 这样做仍然不能获取 Base Class 的 private members.
+\item 在 Derived class 的 constructor 的 Initializer list 中可以指定 Base Class 的 constructor. 如果不指定, 一律用默认 constructor. 就算指定了, list 中也还可以有其他变量.
+\item Derived Class 的 constructor initializer list 中不可以有 Base class 中的变量？
+\item 在写 Drived Class 的 copy constructor 的时候, 要处理 base class 的 copy, 例如直接在 initilization list 中调用 base class 的 copy constructor, 否则 base class 就会用默认的 connstrtor. move constructor 也一样!
+\item 用 \verb|final| 可以禁止被继承, 如 \verb|class CCandyBox final {...};|
+\item 如果 class A 声明一个函数是 friend，那么这个函数必须要在 class 的前面有声明，如果函数是 class B 的成员函数，那么 class B 要在 class A 前声明，且这个成员函数要在 class A 之后定义，因为会用到 class A 中的数据．
+\item 声明 friend class 如 \verb|friend Cbox|; class 声明只是一厢情愿的．friend 声明不会被继承．
+\end{itemize}
+
+\subsection{类模板}
+\begin{itemize}
+\item 如果 Base Class 是一个 template Class, 那么任何 member 都默认不能被 Derived class 直接访问.
+\end{itemize}
+
+
+\subsection{虚函数}
+\begin{itemize}
+\item virtual function 第一是用来给 base class 的函数调用 derived class 的函数用的，另一种情况就是通过 base class 的指针（指向 derived class object）来调用 derived class 的函数．只要在最底层 base class 的被 call 函数声明 virtual，但为了可读性建议把所有的同名函数都声明 virtual．
+\item 含有 virtual function 的 class 叫做 \textbf{polymorphic class}.
+\item 为了确保 derived class 中的函数覆盖 base class 中的 virtual 函数，可以用 override， 如 \verb|virtual double volume() const override|
+\item 成员函数后面用 \verb|final| 可以防止 base class 函数被 override，如 \verb|virtual double volume() const final|
+\item base class 的指针可以用来储存 derived class object 的地址．pointer 所指的 object 决定哪个同名 virtual function 被调用．
+\item 如果没有 virtual function，通过指针调用的函数版本将由指针的类型决定（包括 delete 调用的 destructor），如果指针类型是 base class，存的却是 derived class 的地址，就可能会出问题．
+\item 如果一个函数以 base class 为自变量, 该自变量也可以输入 derived class, 只有 base class 的部分进入函数内部？ （private 继承的是 base class 能否被函数修改？）但 virtual function 仍然会调用的 drived class 的版本．
+\item 如果一个函数以 base class 的 reference 为自变量, 那么在函数内部可以调用该变量的 virtual function.
+\item \textbf{pure virtual function} 在 base class 中是 trivial 的，例如 \verb|virtual double volume() const = 0;| 也可以不写 \verb|= 0|， 但是不定义该函数（前者更有保障一些）． 含有 pure virtual function 的 class 叫做 \textbf{抽象类（abstract class）}, 抽象类只能被继承, 不能创建 object,  但可以声明指针．
+\item \verb|dynamic_cast<>()| 可以将指针在 base class 和 derived class 间转换． 注意 \verb|dynamic_cast<>()| 只能对 polymorphic class 使用．
+\item 如果函数自变量是 base class reference， 而调用时输入的是 derived class reference，那么可以在函数内使用 \verb|static_cast<CDerived&>()| 得到 derived class．例如 NR3 工程中
+\begin{lstlisting}[language=cpp]
+template <class T, class T1, class T2>
+void myplus(NRbase<T> &v, NRbase<T1> &v1, NRbase<T2> &v2)
+{
+	// if v, v1, v2 are vectors
+	/*auto& v_ = static_cast<NRvector<T>&>(v);
+	auto& v1_ = static_cast<NRvector<T1>&>(v1);
+	auto& v2_ = static_cast<NRvector<T2>&>(v2);*/
+
+	// if v, v1, v2 are matrices
+	auto& v_ = static_cast<NRmatrix<T>&>(v);
+	auto& v1_ = static_cast<NRmatrix<T1>&>(v1);
+	auto& v2_ = static_cast<NRmatrix<T2>&>(v2);
+	// check v1 and v2 has the same size
+	v_.resize(v1_);
+	for (Long i = 0; i < v1.size(); ++i)
+		v(i) = v1(i) + v2(i);
+}
+\end{lstlisting}
+
+\item class 中的 \verb`typedef` 和 \verb`using` 同样由 \verb`private`, \verb`protected` 和 \verb`public` 之分, 和 data member 是一样的.
+\item \verb`operator=` 不会被继承
+\item 如果在 \verb`operator=` 自变量用 template, 那么默认的 \verb`operator=` 会首先被使用! 这种情况下若不想用默认的, 那么就自己写一个默认的 \verb`operator=(rhs)` 然后在函数体调用 template 版本即可: \verb`return operator=<T1>(rhs)`.
+\item c++ 自带的 type 如果用 default constructor, 如 \verb`double x = double()`, 生成的就是 0 或等效的值. 注意不能是 \verb`double x()`, 这个什么都不会定义, 且不会报错.
+\item 自定义类型的 temporary 是可以被赋值的! 例如 \verb`a + b = c` 对 \verb`complex<double> a, b, c` 是合法的! 如果想禁止这么做, 函数返回 \verb`const` 类型即可.
+\item 如果 \verb`const T &` 指向 temporary (例如 \verb`T()`), 那么 temporary 的寿命会随 \verb`const T&` 延长. 例如函数可以返回了指向 temporary 的 \verb`const T &` 没有问题. 但这么做很危险, 因为如果 \verb`const T&` 再次作为自变量传递到另一个函数中(或者再次被返回?) temporary 就会失效.
+\item template specilization 的时候, template argument 可以任意多.
+\end{itemize}

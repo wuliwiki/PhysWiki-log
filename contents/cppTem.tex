@@ -1,0 +1,86 @@
+% C++ 模板笔记
+
+\begin{issues}
+\issueDraft
+\end{issues}
+
+\begin{itemize}
+\item template function 的自变量不允许自动类型转换 (除非用 \verb`<>` 声明 template 类型)
+\item 如果 function template 的 return type 是 template type 且没有出现在 parameter list, 那么使用该函数的时候就必须要在函数名后面加 \verb`<>` 至少声明 return type
+\item 在函数后面加 \verb`<>` 声明 template parameter 的时候, 可以只声明前几个, 把剩下的留给编译器 deduce.
+\item 如果 Derived class template 中 overload 了 Base class template 的 member function, 那么需要声明 \verb`using <Base>::<fun>` 才可以使用 Base class template 中的 overload 函数.
+\item \verb`if constexpr` 加上 \verb`<typetrait>` 可以对不同的类型执行不同的代码 (没有 overhead).
+
+\subsection{Template Function Overloading}
+【这里的笔记过时了， 用 SFINAE 就好】
+在普通的 function overloading 的基础上：
+\item 所有可以 instantiate 的 template 函数也都是 viable 的．
+\item 如果存在多于一个 best match, 就先在其中选非 template 的 function, 如果没有就选最 spetialized template function, 如果还没有就报错 (ambiguous).
+\item 什么样的含有 template type 的 function argument 算是更 specialized 的呢? 目前已知 \verb|T *| 和 \verb|vector<T>| 肯定比 T 更 specialled. 猜测大概是能接受的变量类型越少越 specialize.
+
+\subsubsection{Meta programming}
+\item constexpr 函数是在编译时计算的, 其实就是 meta-programming.
+\item 而且 constexpr 函数既可以用在编译时也可以用在运行时.
+\item \verb`if constexpr` 加上 \verb`<typetrait>` 可以对不同的类型执行不同的代码 (没有 overhead).
+\item \verb`<typetrait>` 里面有用的模板有 \verb`is_float<T>`, \verb`is_same<T1, T2>`
+\begin{lstlisting}[language=cpp]
+template <class T, class T1>
+inline void divide_equals_vs(T *v, const T1 &s, Long_I N)
+{
+	constexpr std::is_floating_point<T> is_float;
+	if constexpr (is_float) {
+		times_equals_vs(v, 1./s, N);
+	}
+	else {
+		for (Long i = 0; i < N; ++i)
+			v[i] /= s;
+	}
+}
+\end{lstlisting}
+\item constexpr 函数和 constructor 会自动 inline, 即可以无视 one definition rule.
+\item \verb`if constexpr()` 是编译时完成的, 相当于 \verb`#ifdef`, \verb`#endif` 导致的条件编译, 所以没有编译到的部分即使对当前的情况有语法错误也没有关系. 例如下面这段 SLISC 中的代码, 当 T1, T2 是 Vector<> 或 Matrix<> 的时候, 即使 \verb`dim1()`, \verb`dim2()`, \verb`dim3()` 没有定义也不会出错!
+\begin{lstlisting}[language=cpp]
+template <class T1, class T2>
+Bool shape_cmp(const T1 &v1, const T2 &v2)
+{
+	if constexpr (T1::ndims() == 1 && T2::ndims() == 1) {
+		return v1.size() == v2.size();
+	}
+	else if constexpr (T1::ndims() == 2 && T2::ndims() == 2) {
+		return v1.nrows() == v2.nrows() && v1.ncols() == v2.ncols();
+	}
+	else if constexpr (T1::ndims() == 3 && T2::ndims() == 3) {
+		return v1.dim1() == v2.dim1() && v1.dim2() == v2.dim2()
+			&& v1.dim3() == v2.dim3();
+	}
+	return false;
+}
+\end{lstlisting}
+\item 感觉在 class 里面定义 \verb`enum{};` 的做法完全可以被 \verb`static constexpr` 函数取代.
+\begin{lstlisting}[language=cpp]
+constexpr long myfac(long i)
+{
+	if (i == 0)
+		return 1;
+	return myfac(i - 1)*i;
+}
+
+int main()
+{
+	constexpr long i = myfac(4);
+	int a[i]; // totally ok!
+	long j = 5;
+	long k = myfac(j); // still ok!
+}
+\end{lstlisting}
+\item \verb`std::common_type<T1, T2, ...>::type` 返回一个共同的类型 \verb`T` 使得所有的 \verb`T1, T2...` 都可以 implicitly 转换成 T. 例如可以定义两种类型的加法为
+\begin{lstlisting}[language=cpp]
+template <class T1, class T2>
+std::common_type<T1, T2, ...>::type myplus(const T1 &x, const T2 &y)
+{
+	return x + y;
+}
+\end{lstlisting}
+该函数 argument 如果输入 \verb`complex<double>` 和 \verb`double` 就可以返回前者, 输入 \verb`double` 和 \verb`int` 也可以返回前者.
+\item 模板也可以有默认变量， 或者任意个数变量 \verb|...|
+\end{itemize}

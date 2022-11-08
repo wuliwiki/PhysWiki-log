@@ -1,38 +1,92 @@
 % 幂函数（复数）
 % 复数|幂函数|反函数
 
+\begin{issues}
+\issueDraft
+\issueTODO
+\end{issues}
+
+
 \pentry{复变函数\upref{Cplx}}
 
-\subsection{实参数幂函数}
-我们先来看实参数的幂函数 $f(x) = x^a$ 在 $a\in\mathbb R$ 和 $x > 0$ 时函数曲线如\autoref{CPow_fig1} 所示． 注意 $x^{1/a}$ 是 $x^a$ 的反函数．
-\begin{figure}[ht]
-\centering
-\includegraphics[width=8cm]{./figures/CPow_1.pdf}
-\caption{实参数的幂函数（相同颜色的函数互为反函数）} \label{CPow_fig1}
-\end{figure}
+\subsection{复数幂函数}
 
-由图可知， 对正数次幂（$a > 0$）， 其定义域可以包含 $0$， 且 $0^a = 0$．
+\subsubsection{定义}
+任意给定$\alpha\in \mathbb{C}$，对于复变量$z\ne 0$，定义$z$的$\alpha$次幂函数为
+\begin{align}
+w&=z^\alpha\notag\\
+&=\exp\{\alpha \ln z\}
+\end{align}
+当$z=0$时，定义$0^\alpha = 0$
+\subsubsection{分解}
+上面那个式子有点抽象，我们可以把它分解开来研究
+\begin{align}
+\ln z &= \ln |z|+i\phi(z)\notag\\
+\alpha&=\alpha_R+i\alpha_I\notag\\
+\end{align}
 
-另外在多数应用中， 我们定义 $0^0 = 0$， 但注意这不是唯一的定义． 我们几乎总是默认幂级数\upref{powerS} $\sum_{n=0}^\infty c_n x^n$ 在 $x = 0$ 处的值是 $c_0$， 即 $n=0$ 时的项是常数项． 如果没有 $0^0 = 0$， 那么该幂级数将只能更繁琐地记为 $c_0 + \sum_{n=1}^\infty c_n x^n$．
+\begin{align}
+z^\alpha&=\exp\{(\alpha_R+i\alpha_I)[\ln |z|+i\phi(z)]\notag\}\\
+&=\exp\{[\alpha_R \ln|z|-\alpha_I\phi (z)]+i[\alpha_I\ln|z|+a_R\phi(z)]\}\notag\\
+&=|z|^{\alpha_R}\E^{-\alpha_I\phi(z)}\cdot \E^{i[\alpha_I\ln(z)+\alpha_R\phi(z)]}
+\end{align}
 
-\subsubsection{负数的幂函数}
-显然， 负数的整数次幂是良好定义的， 因为这只涉及实数的乘法运算． 当 $a$ 为偶数时， $x^a = (-x)^a$ 是偶函数， $a$ 为奇数时， $x^a = -(-x)^a$ 是奇函数． 这样我们就可以把\autoref{CPow_fig1} 中整数次幂的曲线根据对称性延申到负半轴．
+\begin{align}
+\therefore |z^\alpha|&=|z|^{\alpha_R}\E^{-\alpha_I\phi(z)}\notag\\
+\arg z^\alpha&=\alpha_I\ln(z)+\alpha_R\phi(z)\notag
+\end{align}
+\[\text{其中}\phi(z)=\arg z+2k\pi,k\in\mathbb Z\]
+\subsubsection{分析}
+幂函数特点：\\
+\begin{itemize}
+\item $z^\alpha$ 的模长和幅角都分别与 $z$ 和 $\alpha$ 有关\\
+\item $z^\alpha$可能是单值的、有限多值或无限多值的函数，取决于$\alpha$
+\end{itemize}
 
-而当我们试图将非整数次幂扩展到负实数时， 便需要把函数值拓展到复数域中， 并且可能有多个不同的函数值， 例如 $(-1)^{1/2} = \pm\I$. 
+下面讨论不同的$\alpha$下幂函数的单值或多值性\\
+\[
+(1)~~\alpha_R=n,\alpha_I=0~~(n\in\mathbb Z)
+\]
+\begin{align}
+|z^\alpha|&=|z|^{\alpha_R}\E^{-\alpha_I\phi(z)}\notag\\
+&=|z|^{n}\notag\\
+\arg z^\alpha&=\alpha_I\ln(z)+\alpha_R\phi(z)\notag\\
+&=n(\arg z+2k\pi)\notag\\
+\because e^{i2kn\pi}&=1\notag\\
+\therefore z^\alpha&=|z|^{n}\cdot \E^{in\arg z}\\
+\text{此时}&\text{幂函数为单值函数}\notag
+\end{align}
 
-有理数次幂函数 $x^{n/m}$ （$x\in \mathbb R$， $n$ 为整数， $m$ 为正整数） 总是有 $m$ 个可能的值
-\begin{equation}
-x^{n/m} = \leftgroup{
-&\abs{x^n}^{1/m}\E^{\I 2\pi k/m} & (x^n > 0)\\
-&\abs{x^n}^{1/m}\E^{\I 2\pi (k+1/2)/m} & (x^n < 0)
-}\qquad (k = 0,1,\dots, m-1)
-\end{equation}
-我们暂不讨论无理数次幂的一般情况．
-
-\subsection{复参数的幂函数}
-我们再来将复数的幂函数分解为模长和相位的形式（令 $z = \abs{z} \E^{\I\phi(z)}$， $a = a_I + \I a_R$ ）
-\begin{equation}
-z^a = \abs{z}^{a_R} \E^{-\phi(z) a_I} \E^{\I[\ln\abs{z}a_I + \phi(z)a_R]}
-\end{equation}
-可见 $z^a$ 的模长和幅角都分别与 $z$ 和 $a$ 有关． 一般情况下， 这是一个比较复杂的函数， 含有不同的分支（因为 $\phi(z)$ 可以加整数个 $2\pi$）．% 未完成： 分支是什么？
-当且仅当 $a$ 为整数时才不会出现分支． 在数值计算中， 分支切割线出现在 $\phi(z) = \pm\pi$ 处， 这是因为数值计算通常取 $\phi(z)\in(-\pi, \pi]$．
+\[
+(2)~~\alpha_R=\frac m n,\alpha_I=0~~(m,n\in\mathbb Z)
+\]
+\begin{align}
+|z^\alpha|&=|z|^{\alpha_R}\E^{-\alpha_I\phi(z)}\notag\\
+&=|z|^{\frac m n}\notag\\
+\arg z^\alpha&=\alpha_I\ln(z)+\alpha_R\phi(z)\notag\\
+&=\frac 1 n(\arg z+2k\pi)\notag\\
+\therefore z^\alpha&=|z|^{\frac 1 n}\cdot \E^{i(\frac {\arg z} n+2\frac k n \pi)}\\
+    \E^{i2\frac k n \pi} \text{有n个取值} & \text{(当} k=0,1,\dots,n-1 \text{时)}\notag\\
+\text{此时}&\text{幂函数为n值函数}\notag
+\end{align}
+\[
+(3)~~\alpha_R=\frac m n,\alpha_I=0~~(m,n\in\mathbb Z)
+\]
+\begin{align}
+    \text{由(3)(4)知}&\text{，}z^\alpha=\sqrt[n]{z^m}\notag\\
+\text{可见此时}&\text{幂函数为n值函数}\notag
+\end{align}
+\[
+(4)~~\alpha_R=\frac 1 n,\alpha_I=0~~(n\in\mathbb Z)
+\]
+\begin{align}
+|z^\alpha|&=|z|^{\alpha_R}\E^{-\alpha_I\phi(z)}\notag\\
+&=|z|^{\frac 1 n}\notag\\
+\arg z^\alpha&=\alpha_I\ln(z)+\alpha_R\phi(z)\notag\\
+&=\frac 1 n(\arg z+2k\pi)\notag\\
+\therefore z^\alpha&=|z|^{\frac 1 n}\cdot \E^{i(\frac {\arg z} n+2\frac k n \pi)}\\
+    \E^{i2\frac k n \pi}\text{有n个取值}&\text{(当}k=0,1,\dots,n-1\text{时)}\notag\\
+\text{此时}&\text{幂函数为n值函数}\notag
+\end{align}
+\\
+在数值计算中， 分支切割线出现在 $\phi(z) = \pm\pi$ 处， 这是因为数值计算通常取 $\phi(z)\in(-\pi, \pi]$．

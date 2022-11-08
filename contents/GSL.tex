@@ -6,14 +6,84 @@
 \issueMissDepend
 \end{issues}
 
-GNUGNU Scientific Library (GSL) 是一个 GNU 开源项目， 由 C 语言写成．
+GNU Scientific Library (GSL) 是一个 GNU 开源项目， 由 C 语言写成．
 
-\subsection{安装}
-在 Debian 系统上可执行 \verb|sudo apt install libgsl-dev| 安装．
+\subsection{Linux 安装使用}
+在 Debian/Ubuntu 系统上可执行 \verb|sudo apt install libgsl-dev| 安装．
 
 第二种方法是自己下载源码编译．
 
-\subsection{使用}
-在编译时加上 linker 选项 \verb|-lgsl| 即可．
+\href{https://coral.ise.lehigh.edu/jild13/2016/07/11/hello/}{参考资料}: gsl 通常的使用方法是先安装，生成 include 文件夹 (含有所有头文件) 和 lib 文件夹 (.so 文件以及 .a 文件). 先下载最新版安装包, 目前是 \verb`gsl-2.5.tar.gz`, 解压命令 \verb`tar -xvzf gsl-2.5.tar.gz`, 得到 gsl-2.5 文件夹, \verb`cd gsl-2.5`, 然后 \verb`./configure --prefix=安装目录` 其中安装目录只能是绝对目录. 然后 `make`, 安装好以后 \verb`make check` 检查, 然后 \verb`make install` 即可. 只有最后一步会在安装目录中生成文件.
 
-\subsection{源码结构}
+\begin{lstlisting}[language=cpp]
+// example.c
+#include <stdio.h>
+#include <gsl/gsl_sf_bessel.h>
+
+int main (void) {
+    double x = 15.0;
+    double y = gsl_sf_bessel_J0 (x);
+    printf ("J0(%g) = %.18e\n", x, y);
+    return 0;
+}
+\end{lstlisting}
+
+要编译, 用 \verb|gcc -Wall -I 安装目录/include/ -c example.c|
+
+要 link, 用
+\begin{lstlisting}[language=cpp]
+gcc test.o -Wl,-rpath,安装目录/lib -L 安装目录/lib -lgsl -lgslcblas -lm
+\end{lstlisting}
+其中 gsl 包含所有 gsl 的函数, gslcblas 提供了一个 cblas, 但也可以用其他更优化的如 ATLAS 提供的, m 是编译器的 math library.
+
+以下试图使用 apt 直接安装 gsl
+\begin{itemize}
+\item 使用 \verb`sudo apt-get install libgsl` 再按两次 tab 即可显示所有相关包
+\item 安装完后用 \verb`locate libgsl.so` 或者 \verb`locate libgsl` 就能找到所有 \verb`so` 文件（貌似找不到 \verb`a` 文件）， 只好放弃
+\end{itemize}
+
+\subsubsection{源码再利用}
+gsl 完全是 c 语言写的, 所以 cuda 应该也是以用的, 但是不能用编译好的 a 和 so, 而是要重新由源码编译. 即使不用 cuda, 直接使用源码也可以让代码更 portable.
+
+用 understand 分析了一下 \verb`bessel` 和 \verb`3j` symbol 两个函数, 发现如果不修改代码, 要找到编译某个函数需要的所有文件真的很难, 至少有几十个文件. 其中有一个比较特殊的文件是 \verb`config.h`, 应该是要运行安装包的 config 以后才会生成的.
+
+我觉得可以把所有的头文件和 c 文件都放在一个文件夹里面, 然后做一个类似 SCID_TDSE 的 makefile, 自动分析出 dependency. 不过 c 和 fortran 不同， 要做到自动还是很有难度的. 不知道 understand 有没有这个功能. 如果不行, 干脆就所有 c 文件都编译? 又或许安装包里的 makefile 已经有 dependency list 了.
+
+然后又发现 gsl 安装的就是所谓的 two-step process: configure followed by make.
+
+用 git 对比了一下安装过程的源码, 发现安装过程并不会改变任何源码(.c 和 .h 文件), 只会根据系统生成 "config.h", 其实也可以直接手动修改该文件, 主要是一些宏的定义和取消, 注释非常易懂. 所以理论上, 只要把所有源码文件都放到一起编译就可以了.
+
+
+\subsection{Visual Studio 编译 GSL}
+\begin{itemize}
+\item 其实与其自己编译，可以看看 MSYS2\upref{Mingw} 里面安装 GSL 后的 dll 能不能拿来直接用
+\item 也可以直接到 \href{https://github.com/MacroUniverse/GSL-bin}{GSL-bin repo} 中复制头文件， lib 和 dll 文件
+\end{itemize}
+
+以下介绍如何使用用 CMake 和 Visual Studio 2017 编译 lib 和 dll 以及测试文件（貌似测试的时候有一项会 fail）
+
+\begin{itemize}
+\item Windows 安装 Cmake
+\item 首先下载 GSL \href{https://github.com/ampl/gsl}{源码}（含 CMake）
+\item 打开 CMakeLists.txt 文件， 会提示各个编译器选项怎么设置， 如
+\begin{lstlisting}[language=none]
+    cmake -G"Visual Studio 15 2017 Win64" -DGSL_INSTALL_MULTI_CONFIG=ON \
+          -DBUILD_SHARED_LIBS=ON -DMSVC_RUNTIME_DYNAMIC=ON \
+          <path to gsl sources>
+\end{lstlisting}
+\item 在 PowerShell 里面运行这个貌似会出错， 最稳妥的办法还是用 CMake 的 GUI 界面． 输入源码路径和输出路径， 然后 Configure． 选择 \verb`x64`, \verb`Visual Studio 2017`， \verb`native generator`． 成功以后按照上面的选项勾选 \verb`GSL_INSTALL_MULTI_CONFIG=ON` \verb`BUILD_SHARED_LIBS=ON` \verb`MSVC_RUNTIME_DYNAMIC=ON`， 然后点 generate 即可．
+\item 在输出路径找到 \verb`sln` 文件， 双击打开 Visual Studio 2017， 选 Release， 确认是 x64， 然后在菜单中 Build -> All 即可．
+
+\item 成功之后， dll 文件在 \verb`bin/Release/gsl.dll`， lib 文件在 \verb`Release/gsl.lib`， 头文件在 \verb`gsl` 中．
+\item 要测试， 在 Power Shell 里面 cd 到 CMake 输出目录下， \verb`CTest -VV` 即可 （\verb`-VV` 是 extra verbose）
+\end{itemize}
+
+\subsection{使用部分源码}
+\begin{itemize}
+\item \href{https://github.com/MacroUniverse/SLISC}{SLISC} 的源码中实现了自己从部分 GSL 源码直接编译． 供参考．
+\end{itemize}
+
+\subsection{异常处理}
+如果要临时关闭一些 trivial 的异常（比如 exp(-x) 对于大 x 会 underflow 异常）， 用 \verb|gsl_set_error_handler_off()|
+要恢复默认的异常处理， 用 \verb|gsl_set_error_handler(NULL)|
+详见\href{https://www.gnu.org/software/gsl/doc/html/err.html}{这里}．

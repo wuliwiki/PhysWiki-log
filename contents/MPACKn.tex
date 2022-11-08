@@ -1,0 +1,71 @@
+% MPACK/MPLAPACK 笔记
+
+\begin{issues}
+\issueDraft
+\end{issues}
+
+\begin{itemize}
+\item MPACK 是一个高精度计算库， 支持四精度（double double， \verb|dd|）， 八精度（qd），乃至任意精度的 BLAS\upref{BLAS} 和 LAPACK\upref{Lapack}． 源码主要是 C++．
+\item \href{https://mplapack.sourceforge.net/}{官方主页} （然而这里下载的安装包在 ubuntu 22.04 下编译出错）．
+\item 【更新】最新版改名为 MPLAPACK， 见 \href{https://github.com/nakatamaho/mplapack}{GitHub 仓库}． 推荐的用 Docker 编译需要 3 小时左右， 但很稳定． 编译完成以后， library 安装到 container 的目录 \verb|/home/docker/MPLAPACK| 中．
+\item 另见一个 \href{https://github.com/Auto-Mech/MPACK}{github 页面}， 这里说可以直接用 conda 下载编译好的 lib： \verb|conda install -c auto-mech mpack|． 亲测有效， 安装路径在 \verb|~/miniconda3/pkgs/mpack-0.6.8-0/|
+\item \verb|x86| 下的 Ubuntu 22.04 也可以直接从笔者的 \href{https://github.com/MacroUniverse/MPACK-source}{github 仓库}下载．
+\item 四精度需要使用的 lib 应该是 \verb|libmlapack_dd.so|， 头文件 \verb|mlapack_dd.h|
+\item 源码也可以在笔者的 \href{https://github.com/MacroUniverse/MPACK-source}{github} 下载．
+\item 编译例子 \verb|inv_mat_dd| 成功！ 路径在 \verb|mpack-0.6.7/examples/mlapack/|：
+\item \verb|g++ inv_mat_dd.cpp -I ~/miniconda3/pkgs/mpack-0.6.8-0/include/mpack -I ~/miniconda3/pkgs/mpack-0.6.8-0/include -L ~/miniconda3/pkgs/mpack-0.6.8-0/lib -Wl,-rpath,/home/addis/miniconda3/envs/mpack/lib -l mlapack_dd -l mblas_dd -l qd|
+\end{itemize}
+
+\subsection{四精度 LAPACK， 基于 QD 库}
+\begin{itemize}
+\item 虽然 MPACK 主页上说可以使用 GCC 的 \verb|__float128|， 但源码中并没有搜到任何相关内容， 似乎目前还是只能使用 \verb|QD| 库．
+\item 见 \verb|example| 里面的 \verb|*_dd.cpp| 源码
+\item 普通整数 \verb|mpackint| 类型为 \verb|long long| （8 字节符号整数）
+\item 四精度实数 \verb|dd_real| 类的定义为（头文件 \verb|include/qd/dd_real.h|， 这其实是 QD 库\upref{libQD}的头文件， 有微量修改．）
+\begin{lstlisting}[language=cpp]
+struct dd_real {
+    double x[2];
+  public:
+    dd_real(double, double);
+    dd_real(void);
+    dd_real(double);
+    dd_real(int);
+    dd_real(const char *);
+    dd_real(const double *);
+    ...
+};
+\end{lstlisting}
+\item 四精度复数 \verb|dd_complex| 类的定义为（头文件 \verb|include/mpack/dd_complex.h|）
+\begin{lstlisting}[language=cpp]
+class dd_complex {
+  private:
+    dd_real re;
+    dd_real im;
+
+  public:
+    dd_complex(void);
+    dd_complex(const dd_complex &);
+    dd_complex(const dd_real &, const dd_real &);
+    dd_complex(const dd_real &);
+    dd_complex(const std::complex<double> &);
+    const dd_real & real(void) const;
+    dd_real & real(void);
+    const dd_real & imag(void) const;
+    dd_real & imag(void);
+    dd_complex & operator=(std::complex<double>);
+    dd_complex & operator=(dd_real);
+    dd_complex & operator=(double);
+    dd_complex & operator+=(const dd_complex &);
+    dd_complex & operator+=(const dd_real &);
+\end{lstlisting}
+\item \verb|mlapack_dd.h| 中的 lapack 函数以 \verb|R|（实数）或者 \verb|C|（复数） 开头， 例如 \verb|?gbsv| 函数为 \verb|Rgbsv|． 函数的用法应该都是一样的．
+\begin{lstlisting}[language=cpp]
+void Rgbsv(mpackint n, mpackint kl, mpackint ku, mpackint nrhs,
+dd_real *AB, mpackint ldab, mpackint *ipiv, dd_real *B,
+mpackint ldb, mpackint *info);
+
+void Cgbsv(mpackint n, mpackint kl, mpackint ku, mpackint nrhs,
+dd_complex *ab, mpackint ldab, mpackint *ipiv, dd_complex *b,
+mpackint ldb, mpackint *info);
+\end{lstlisting}
+\end{itemize}

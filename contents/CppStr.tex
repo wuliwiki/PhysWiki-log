@@ -1,0 +1,59 @@
+% C++ 字符串笔记
+
+\begin{issues}
+\issueDraft
+\end{issues}
+
+\subsubsection{待整合}
+\begin{itemize}
+\item 要 \verb`#include <string>`, \verb`use std::string`.
+\item constructors: \verb`string s1;`, \verb`string s2{s1};`, \verb`string s3{"something"};`, \verb`string s4(10, 'c');`
+\item \verb`getline(cin, str);` 从命令行读取一行字到 \verb`string str` 中.
+\item \verb`string::empty()` 判断是否是空.
+\item \verb`string::size()` 返回字符数.
+\item \verb`str[n]` 可以直接读取或赋值某个字符.
+\item \verb`str1 + str2` 可以连接两个字符串.
+\item \verb`str1 + "something"` 可以连接 string 和 literal, 但不能是 \verb`wchar_t`.
+\item \verb`str1 == str2`, \verb`str1 != str2` 可以比较字符串是否相同.
+\end{itemize}
+
+\subsubsection{iostream}
+\begin{itemize}
+\item \verb`wchart_t` 类型的 literal 例如 \verb`L"this is a string"`
+\item \item \verb`std::endl` 用于换行
+\item \verb`<< hex <<` 把后面的数字都变成 16 进制, \verb`<< dec <<` 把后面的数字都变成 10 进制.
+\item \verb`cin.getline(name, max, '\n');` 用于读取一个字符串, 不超过 max 字符, 然后存在 \verb`char[]` 数组 name 里面, 后面加上 \verb`\0`.
+\item \verb`cout.precision(N);` 可以控制输出的有效数字位数.
+
+### \verb`#include <iomanip>`
+\item \verb`std::setw(n)` 用于把两个数字的间隔控制在 n 个字节之内. (用于列对齐).
+\item \verb`std::setprecision(n)` 用于显示 n 位小数.
+\item \verb`std::setiosflags(std::ios::left)` 用于左对齐, 另有 \verb`ios::fixed` (非科学计数法) 或 \verb`ios::right` .
+\end{itemize}
+
+\subsubsection{cstring}
+\begin{itemize}
+\item \item 用于处理 \verb`\0` 结尾的字符串.
+\item \verb`strlen()` 函数用于返回字符串长度(不包括 \verb`\0`), 返回类型是 \verb`size_t`. 对于 \verb`wchar_t` 字符串, 用 \verb`wcslen()`.
+\item \verb`strcpy(pstr1, pstr2)` 把 \verb`pstr2` 指向的字符串拷贝的 \verb`pstr1` 的地址. \verb`strcpy_s(pstr1, len1, pstr2)` 是更安全的版本.
+\end{itemize}
+
+\subsection{【回收内容】MFC 的 CString 类}
+\begin{itemize}
+\item \verb`CString(TCHAR str)` 可以把 \verb`str` 从 \verb`TCHAR` 转换成 \verb`CString`.
+\item \verb`CString Class` 需要 \verb`#include <atlstr.h>`
+\item 控制台输出的时候用 \verb`std::wcout << str.GetString()`.  str 是 CString 的一个 object.
+\item \verb`Format` 函数可以把数值转换为 \verb`cstring`. \verb`int num; CString str{}; str.Format(_T("%d"), num);`
+\item \verb`CString::GetLength()` 函数可以返回字符个数.
+\item \verb`CString::GetAt()` 可以获取某个字符
+\item \verb`CString::Left(int count)` 获取左边 count 个字符 CString::Right 同理.
+\item \verb`CString::GetMid(int start, int count)` 可以获取 substring
+\item \verb`CString::Delete(int index, ind nCount)` 函数可以删除从第 index 到 index + nCount -1 的 nCount 个字符.
+\item \verb`CString::Insert(ind index, CString str)` 可以把 str 插入到 index 的位置.
+\item CString::TrimRight(TCHAR, str) 可以从右边重复删除 str 字符串. 另见 TrimLeft().
+\item \verb`CString CString::Left(int nCount)` 提取前 nCount 个字符.
+\item int CString::ReverseFind(TCHAR ch) 可以从后面开始搜索 ch, 返回 ch 的 ind (从 0 开始!).
+\item 单个 char 可以总转换为 CString
+
+\item 要在命令行中用 \verb`wcout` 输出中文, 要添加头文件 \verb`<io.h>` 和 \verb`<fcntl.h>`, 然后添加命令 _setmode(_fileno(stdout), _O_U16TEXT); 要还原, 添加 _setmode(_fileno(stdout), _O_TEXT); 注意只有在两条命令之间可以输出中文, 且不能使用 cout.
+\end{itemize}

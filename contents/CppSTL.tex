@@ -1,0 +1,44 @@
+% C++ 标准库常用功能笔记
+
+\begin{issues}
+\issueDraft
+\end{issues}
+
+这里列举标准库中最常用的功能．
+
+\subsection{string}
+详见 “C++ 字符串笔记\upref{CppStr}”．
+
+\subsection{vector}
+更多容器详见 “C++ 标准库常用容器\upref{STLstr}”
+\begin{itemize}
+\item \verb`v.size()` 检查大小
+\item \verb`v.empty()` 检查是否为空
+\item range based for loop \verb`for (auto &i : v)`
+\item iterator 类似指针, \verb`auto a = v.begin()`, 生成第一个元素的 iterator, \verb`v.end()` 生成最后一个元素后的一个 iterator. \verb`*a` 获取 a 指向的元素, \verb`*(a + n)` 获取 a 后面的第 n 个元素. \verb`==` 只有在 iterator 指向同一个 vector 的同一个元素时才成立.
+\end{itemize}
+
+\subsection{ctime}
+\begin{itemize}
+\item \verb`clock()` 用于测量 CPU 时, 而不是真正的时间. 如果在 ubuntu 下用 OpenMP, 时间将是所有 CPU 的累加.
+\begin{lstlisting}[language=cpp]
+clock_t start, stop;
+start = clock();
+...
+stop = clock();
+\end{lstlisting}
+\item \verb`time()` 用于测量从 1970 年某时刻起流逝的秒数, 但仅限于整数秒.
+若要精确测量物理时间, 用 chrono, 这个头文件用起来要复杂得多, 见我在 nr3plus.h 中写的 tic(), toc() 函数.
+\end{itemize}
+
+\subsection{algorithm}
+\begin{itemize}
+\item 提供 \verb`max()`, \verb`min()`, \verb`swap()` 交换两个变量值．
+\end{itemize}
+
+
+\subsection{stdlib}
+\begin{itemize}
+\item \verb`int system("命令")` 在调用程序的环境（如 linux 的 bash，windows 的 cmd）中执行命令，例如获得文件列表 \verb`ls`， 当前目录 \verb`pwd` 等． 但这些命令返回的值不能直接获得，需要 redirect 到文件再读取文件．
+\item \verb`int remove("文件名")` 可以删除文件．
+\end{itemize}

@@ -1,16 +1,14 @@
-% 双精度和高精度浮点数测试（C++）
+% 双精度和四精度浮点数测试（C++）
 
 \begin{issues}
 \issueDraft
 \end{issues}
 
-\pentry{双精度和变精度浮点数测试（Matlab）\upref{FltMat}}
-
-double 和 “双精度和变精度浮点数测试（Matlab）\upref{FltMat}” 中的结果一样．
+另见 “双精度和变精度浮点数测试（Matlab）\upref{FltMat}”．
 
 在 x86 机器上， \verb|long double| 一般是 1 bit 指数 + 15 bit 指数 + 64 bit 小数 = 80 bit， 十进制大约是 18-19 位有效数字\footnote{Visual Studio 中据说 long double 和 double 是一样的．}． 虽然 \verb|sizeof| 是 16 字节， 但实际上只使用了 10 字节\footnote{详见\href{https://en.wikipedia.org/wiki/Extended_precision}{这里} 的 x86 extended precision format 一节}． \verb|long double| 的运算是硬件支持的， 所以比较快．
 
-\begin{lstlisting}
+\begin{lstlisting}[language=none]
 sizeof(Doub) = 8
 sizeof(Ldoub) = 16
 
@@ -31,22 +29,22 @@ std::numeric_limits<Ldoub>::digits10 = 18
 \end{lstlisting}
 
 然而 \verb|sqrt| 函数似乎并不会提高精度（仍然是 16 位）：
-\begin{lstlisting}
+\begin{lstlisting}[language=none]
 sqrt(2.)       = 1.4142135623730951454
 sqrt(Ldoub(2)) = 1.4142135623730951454
 precise val    = 1.4142135623730950488...
 \end{lstlisting}
 
 另外测试一下双精度的二进制表示（\autoref{CmArit_fig3}~\upref{CmArit}）， 例如双精度的 \verb|10| 表示为
-\begin{lstlisting}
-01000000 00100100 (48 个 0)
+\begin{lstlisting}[language=none]
+01000000 00100100 (后面省略 48 个 0)
 \end{lstlisting}
-第一位 0 说明是正数， 1 是复数． 接下来 11 bit 先看成 unsigned， 然后再减 $2^{10}-1 = 1023$， 这里指数 \verb|10000000010| 表示 $1026-1023 = 3$， 于是指数项为 $2^{3} = 8$． 小数项应该是 $10/8 = 1+1/4$． 第 13 bit 表示 1/2， 14 bit 表示 1/4， 所以第 14 bit 是 1， 后面的小数全是零． 另外， 由于 intel 的 x86 和 x86-64 都使用 little endian， 所以在内存中实际上 byte 的顺序是相反的．
+第一位 0 说明是正数， 1 是负数． 接下来 11 bit 先看成 unsigned， 然后再减 $2^{10}-1 = 1023$， 这里指数 \verb|10000000010| 表示 $1026-1023 = 3$， 于是指数项为 $2^{3} = 8$． 所以要表示 10， 小数项应该是 $10/8 = 1+1/4$． 第 13 bit 表示 1/2， 14 bit 表示 1/4， 所以第 14 bit 是 1， 后面的小数全是零． 另外， 由于 intel 的 x86 和 x86-64 都使用 little endian， 所以在内存中实际上 byte 的顺序是相反的．
 
 理论上指数部分可以表示 $-1023$ 到 $1024$ 之间的数， 但首尾两个数有特殊用途， 所以只能表示 $-1022$ 到 $1023$． 当指数为 $-1024$ 时， 仍然相当于指数为 $-1023$ 但小数部分前面不加 1． 当指数为 $1024$ 时， 表示 \verb|nan| 或者 \verb|inf|．
 
 另外最大和最小的正 double 为
-\begin{lstlisting}
+\begin{lstlisting}[language=none]
 std::numeric_limits<double>::max() = 1.797693135e+308
 01111111 11101111 11111111 11111111 11111111 11111111 11111111 11111111
 std::numeric_limits<double>::min() = 2.225073859e-308 = 2^-1022
@@ -84,7 +82,7 @@ double sqrt(-1.) (NaN):
 
 \verb|__complex128| 是对应的四精度复数类型， 相当于两个 \verb|__float128|．
 
-\begin{lstlisting}
+\begin{lstlisting}[language=none]
 FLT128_MAX = 1.1897e+4932
 FLT128_MIN = 3.3621e-4932
 FLT128_EPSILON = 1.9259e-34 // 2e-112
@@ -104,15 +102,4 @@ __imag__ y = 虚部;
 \end{lstlisting}
 看来还是用 \verb|std::complex<__real128>| 比较好．
 
-\subsection{其他}
-另见 Boost 的 \href{https://www.boost.org/doc/libs/develop/libs/multiprecision/doc/html/boost_multiprecision/tut/floats/float128.html}{float128} 页面． 以及 Intel 编译器的 \href{https://community.intel.com/t5/Intel-C-Compiler/Quad-precision-Quad-data-type/td-p/1218636}{\_Quad} 类型（其实也同样定义了 \verb|__float128| 和 \verb|__complex128|， 其他功能和 g++ 几乎完全兼容）． 另外一个比较有名的库是 \href{https://www.davidhbailey.com/dhbsoftware/}{QD}．
-
-\subsection{Lapack}
-最重要的 BLAS 和 Lapack 的解决方案：
-\begin{itemize}
-\item \href{http://mplapack.sourceforge.net/}{MPACK} （最出名）
-\item \href{https://github.com/nakatamaho/mplapack}{mplapack} （C++ 被 Julia 采用）
-\item Eigen 支持自定义标量类型的矩阵， 但需要定义 \verb|Eigen::NumTraits<T>|， 详见\href{https://eigen.tuxfamily.org/dox/TopicCustomizing_CustomScalar.html}{这里}．
-\item 可以改一下 Lapack++
-\item \href{https://github.com/langou/latl}{latl} （没人气）
-\end{itemize}
+另见 “C++ 高精度计算资源列表\upref{CppMp}”．

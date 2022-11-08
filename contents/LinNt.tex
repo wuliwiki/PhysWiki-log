@@ -26,7 +26,7 @@
 \item 用 \verb`!<number>` 可以重新输入第 \verb`<number>` 条历史命令
 \item \verb`/etc/passwd` 文件中记录了系统的所有 user
 \item Ctrl+L 相当于 \verb`clear` 命令
-\item \verb`df` 用于查看磁盘空间, \verb`-h` 选项可以显示 \verb`Mb`, \verb`Gb` 等.
+\item \verb`df` 用于查看磁盘空间, \verb`-h` 选项可以显示 \verb`Mb`, \verb`Gb` 等， \verb|-T| 选项可以增加显示文件系统类型.
 \item \verb`du /some/path` 用于查看指定目录中所有子文件夹的大小, \verb`-a` 选项可以显示文件夹和文件. \verb`--max-depth=N` is used to control the level of subfolders to display, \verb`-h` is for human readable file size (\verb`Mb`, \verb`Gb`, etc)
 \item \verb|du -hd 0| 用于查看当前目录的大小（不会跟随 symlink， 但是会包括 mount）． \verb|-h| 是 human readable， \verb|-d| 是 depth
 \item \verb`ctrl+u` 可以删除光标前面的所有内容
@@ -70,7 +70,8 @@
 
 \subsubsection{split}
 \begin{itemize}
-\item 把文件 \verb`file` 分割成 \verb`file-01`, \verb`file-02`, ... \verb`split -b 500000000 -d file  path/to/file-`
+\item 把文件 \verb`file` 分割成 \verb`file-01`, \verb`file-02`, ...
+\item \verb`split -b 500000000 -d file  path/to/file-`
 \item \verb`-d` 拓展名用数字而不是字母
 \item \verb`-b 10` 划分成 10 字节的小块
 \item \verb`-l 4` 划分成每个文件 4 行
@@ -84,9 +85,10 @@
 \subsubsection{find}
 \begin{itemize}
 \item \verb`find /path1/ path2/ -name '<filename>'` 可以搜索该目录下的文件. 加上 \verb`-iname` 选项可以不区分大小写. 也可以用 \verb`'*<filename>*'` 来表示含该文字的文件名. 加 \verb`-user <name>` 选项用于查找某个用户的文件， 加 \verb`-size +100M` 可以查找大于 100M 的文件． \verb`-type d` 选项搜索目录， 默认是只搜索文件
-\item 如果要执行， 用 \verb`find ... -exec xxxx {} \;` 可以将找到的每个结果分别用程序 \verb`xxxx` 执行， \verb`find ... -exec xxxx {} +` 将找到的结果用 \verb`xxxx` 一次执行． 其中 \verb`{}` 可以重复使用
+\item 如果要执行， 用 \verb`find ... -exec xxxx {} \;` 可以将找到的每个结果分别用程序 \verb`xxxx` 执行， \verb`find ... -exec xxxx {} +` 将找到的结果用 \verb`xxxx` 一次执行（如果数量太多也可能自动分为几次）． 其中 \verb`{}` 可以重复使用．
 \item \verb`-execdir ... {} ... \;` 相当于先 \verb`cd` 到每个文件所在目录然后执行命令
 \item 删除当前目录以及子目录的空文件夹 \verb`find . -empty -type d -delete` 删除空文件 \verb`find . -empty -type f -delete`
+\item Linux 用 \verb`find 文件夹 -type f -exec sha1sum {} \; | sort | sha1sum` 可以对比两个文件夹． 对比包含文件名， 文件夹名， 和每个文件的 hash， 不包括 metadata （例如权限， 最后修改时间等）．
 \end{itemize}
 
 \subsection{包管理}
@@ -138,7 +140,7 @@
 
 \subsection{账户与权限}
 \begin{itemize}
-\item \verb`sudo` (super user do) 加在命令前可以获得管理员权限, \verb`su` (super user) 可以把以下所有操作改为管理员权限 (不建议常用)．
+\item \verb`sudo` (super user do) 加在命令前可以获得管理员权限, \verb`su` (super user) 可以把以下所有操作改为管理员权限 (不建议常用)． 如果 ubuntu 中不允许 \verb|su|， 那么就用 \verb|sudo -i| 也是一样的．
 \item \verb`su <usr_name>` 可以临时改变登录的身份， \verb|sudo -i| 或者 \verb|su| 可以持续管理员身份．
 \item 使用 \verb|sudo| 以后， 命令的执行者就会临时变为 \verb|root|， 一些 config 文件也会使用 \verb|/root/| 文件夹中的而不是 \verb|/home/用户名| 中的， 例如 \verb|/root/.ssh/config|．
 \item \verb`sudo` 的密码是用户密码, 而 \verb`su` 的密码是 root 密码, 后者的权限更高
@@ -178,6 +180,7 @@
 \item \verb`pstree` 可以看到哪些进程生成了哪些子进程， 例如 shell 里面运行 .sh 文件会生成一个子进程用于运行一个新的 shell
 \item \verb`kill -STOP 进程号` 可以暂停程序
 \item \verb`kill -CONT` 可以继续暂停的程序
+\item 如果一个进程 kill 不掉， 可以试试 \verb|kill -9|
 \end{itemize}
 
 \subsection{文件压缩和加密}

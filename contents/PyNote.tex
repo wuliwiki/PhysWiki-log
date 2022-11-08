@@ -1,0 +1,155 @@
+% Python 语法笔记
+
+\begin{issues}
+\issueDraft
+\end{issues}
+
+例程参考 GitHub 的 MyPythonLibrary， 还有以前 computational physics 课的作业等．
+
+\subsection{语法}
+\begin{itemize}
+\item 严格区分大小写
+\item 不需要声明变量
+\item 用 \verb|#| 号进行注释
+\item 用 \verb|\| 把一行长代码转移到下一行. (相当于Matlab里面的省略号)
+\item 逗号赋值 \verb`a,b,c=1,2,3`
+\item 调用没有自变量的函数需要保留括号  \verb`MyFun()`
+\item \verb`locals()` 和 \verb`globals()` 查看所有变量
+\item \verb`if 'a' in locals()` 用于查询变量 a 是否存在
+\item 上一次输出储存在变量 \verb`_` 中
+\end{itemize}
+
+\subsection{变量类型}
+\begin{itemize}
+\item 用 \verb`type()` 可以检查任意变量的类型
+\item 有一类变量叫做 \verb`type`, 例如 float, bool, int 等.
+\item 强制类型转换 \verb`int()` \verb`float()` 等等
+\item \verb`float` 就是双精度 double, 有 16 位有效数字
+\item int 类型可以储存任意位数的整数, 并不会溢出 
+\item \verb`1+2j` 或者 \verb`1+2J` 表示复数
+\end{itemize}
+
+\subsection{字符串类 (str)}
+\begin{itemize}
+\item raw string：在字符串的第一个单引号前面加r，可以把字符串原样输出，不做任何转义
+\item str 类型, a='word'; 也可以 a="""word""" 后者可以输入多行字符, 可以用加号合并两个字符串.
+\item str*10, 就是'strstrstrstrstrstrstrstrstrstr'.
+\item string类型不是list，不支持索引修改
+\item sep='00'; sep.join(['1','2','3']) 可以生成 '1002003'
+\end{itemize}
+
+\subsection{逻辑类 (bool)}
+\begin{itemize}
+\item 逻辑变量是 True 和 False, 注意大写
+\item 逻辑与是 and, 或是 or, 非是 not, 异或是 ^
+
+\item NoneType, 当函数没有输出的时候返回.
+\item list 相当于数组, "listA+listB"操作合并两个list. list.append( )可以把输入的东西变成一个元素
+    加入到list最后. list.reverse( ) 可以颠倒 list 的顺序.
+\item listA.append(listB) 
+\item dictionary类.  dict={"a":"b", "c":"d", "e":"f"}
+\end{itemize}
+
+\subsection{Import}
+\begin{itemize}
+\item \verb`from math import *` 用这个格式可以在代码中直接输入 math 包里面的函数名, sin, cos, 而不用 \verb`math.sin`
+\item indentation 很重要, 用四个空格
+\item \verb`print()` 相当于 Matlab 的 disp(), print(string,end=' ') 可在输出后面用空格隔离, 默认为回车. 
+\end{itemize}
+
+\subsection{Math}
+\begin{itemize}
+\item 牢记指数是 \verb`**` 不是 \verb`^` !!
+\item 有些版本中 \verb`3/4=0`, 因为 int 相除输出 int, 向下取整. 这时把任意一个转换成float 即可. 3.0/4=0.75
+\item 整除是 \verb`//`
+\item 求余是 \verb`%`
+\end{itemize}
+
+\subsection{循环}
+\begin{itemize}
+\item while循环的例子  \verb`while a > b :`
+\item for 循环的例子 \verb`for ii in range(inta,intb):`
+\item python 一个最恶心的地方就是表示范围的第二个索引 intb 在执行的时候会减 1.  名言: "实际少一个!"
+\item \verb`for ii in range(0,5):` 或 "for ii in range(5) 和 \verb`for ii in [0,1,2,3,4]:` 等效
+\item \verb`range(inta,intb)` 实际上不是数组, 输出的数据类型叫做 range.
+\item 记得加冒号!!
+\item \verb`break` 跳出任意循环 (for/while), \verb`continue` 跳到下一个循环.
+\item \verb`pass` 是一个用来填充格式的语句, 不做任何事情, 可以放在循环中或函数定义中.
+\item for 或 while 下面可以加上一个 else, 如果循环没有被 break 打断, 则会执行 else.
+\item range 函数可以有 1 到 3 个变量, \verb`range(n)` 相当于 \verb`[0, … , n-1]`, \verb`range(n1,n2,step)` 相当于 \verb`[n1, …, n2-1]` 步长为 step 
+\end{itemize}
+
+\subsection{判断}
+\begin{itemize}
+\item \verb`if <条件语句> :`
+\item \verb`if a in (b,c,d,e)`:   一定记住加冒号!
+\item \verb`elseif` 要写成 \verb`elif`
+\item \verb`if` 后面加非零整数是 \verb`false`，加零是 \verb`true`，单元素的空 list 是 false，否则是 true
+\end{itemize}
+
+\subsection{数组(list)}
+\begin{itemize}
+\item python 一个最恶心的地方就是 a:b 要写成 a:b+1, 另外和 C 语言一样, 数组 index 都是从 0 开始的
+\item 直接定义数组 \verb`a=[1,2,3,4], b=[[1,2],[3,4,[7,8],5],[6]]`, 可以任意数量任意嵌套.
+\item \verb`a = [x*2 for x in range(0,3)]` 的结果是 \verb`a = [0,2,4]`
+\item \verb`a = [[ii+jj for ii in range(0,3)] for jj in range(0,3)]` 的结果是 \verb`a = [[0,1,2],[1,2,3],[2,3,4]]`
+\item \verb`len()` 获取数组最外层长度
+\item 数组索引可以用负数，-1 代表最后一个元素，-2 代表倒数第二个元素等．(注意“实际少一个” 的规则仍然成立)
+\item 使用 \verb`a[ind1:ind2]` 超出范围时并不会出错．
+\item list 的每一个元素可以是不同的变量类型
+\item 复制 np 数组的方法：\verb`B = np.array(A)`. 这样产生的就不是镜像而是一个新的数组 . 如果用等号的话，python 会把用两个变量名视为等效，数组还是同一个．这什么鬼啊！
+\item list 或者 nparray 在函数中如果给自变量元素进行赋值，那么函数结束以后自变量也会改变！python 这是什么鬼啊！所以在函数中千万不要变动原数组，除非在函数外也不需要了．
+\item list 的不同元素可以装不同的变量类型!
+\item 用小括号的 list 叫做 tuple
+\end{itemize}
+
+\subsection{匿名函数}
+\begin{itemize}
+\item 定义格式 \verb`f = lambda x, y: a*(x**2+y**2)` 相当于 Matlab 中的 \verb`f=@(x,y) a*(x^2+y^2)`
+\item 注意参数是动态变化的! 如果定义了 lambda 以后再改动 a, 那么再次调用 lambda 时 a 会更新.
+\item 在函数定义内可以使用函数外定义的 lambda 函数, 但是不能更改其参数.
+\end{itemize}
+
+\subsection{函数}
+\begin{itemize}
+\item 基本格式
+\begin{lstlisting}[language=python]
+def FunctionName(a,b,c):
+""" 函数的描述, 会出现在documentation中 (详见P25)
+     三个引号可以占用多行 """
+    ...
+    ...
+   return d,e,f,g
+\end{lstlisting}
+
+函数中任何return都会跳出函数.
+
+\item 调用函数
+\verb`d,e,f,g=FunctionName(a,b,c)`
+\verb`d,e,f,g=Function Name(b=1,a=2,c=3)`  这样可以不按顺序输入
+\item \verb`func(*list)` 可以把 list 中的变量按顺序输给 function 做自变量.
+
+\item 自定义函数的类是 \verb`function`, 可以把函数名赋值给另一个变量.
+\item 系统函数的类是 \verb`builtin_function_or_method`
+
+\item 内嵌函数
+内嵌函数可以自动读取母函数的所有变量, 但只要函数中有对该变量名进行赋值, 就不能从母函数中读取, 相当于子函数的一个本地新变量.
+
+\item 定义函数自变量的默认值  \verb`def func(a,b=1,c='str'):` 调用时必须按顺序输入
+\item 4类输入类型: positional arguments, keyword arguments, *name, **name. 定义函数时用*name 可以接受任意数量的positional argument, **name可以接受任意数量的keyword argument.
+\end{itemize}
+
+\subsection{常用函数}
+\begin{itemize}
+\item \verb`dir()` 可以获取当前的所有对象
+\end{itemize}
+
+\subsection{杂}
+\begin{itemize}
+\item Python 完全是面对对象的
+\item Spyder 的强项是科学计算
+\item Anaconda 清洁地装在一个单独的目录, 不需要系统权限, 不影响其他目录下的安装
+\item 常用的 IDE 有, Spyder, Wing IDE, PyCharm, Python Tools for Visual Studio.
+\item 其实 Jupiter 并不比 Spyder 要慢, 前者具有格式优势, 后者具有调试优势.
+\item \verb`from sys import argv`， 可以获得命令行的 arguments 数组（list of string）， argv[0] 是调用程序的命令， 剩下的是跟随的 arguments
+\end{itemize}

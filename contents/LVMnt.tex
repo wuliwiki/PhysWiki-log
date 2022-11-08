@@ -1,0 +1,25 @@
+% Logical Volume Management（LVM）笔记
+
+\begin{issues}
+\issueDraft
+\end{issues}
+
+\pentry{Linux 分区和文件系统操作笔记\upref{fdisk}}
+
+\begin{itemize}
+\item LVM 可以用于把若干个物理硬盘合并为一整个逻辑硬盘， 并在上面划分若干逻辑分区， 这些分区可以随时伸缩．
+\item 据说 overhead 很小， 基本不影响读写速度．
+\item 如果重启， mount 的就没有了， 用 \verb`sudo vgscan` 可以找到 \textbf{Volume Group（VG）}， 然后重新 mount 如百科服务器的 \verb`mount /dev/LVM/data /mnt/drive`
+\item 其他命令包括 \verb|vgs|， \verb|lvs|， \verb|lvdisplay|， 它们都是指向 \verb|/sbin/lvm| 的软链， 但是 \verb|lvm| 会根据 \verb|arg[0]| 的不同来区分用的是哪个命令．
+\end{itemize}
+
+\begin{itemize}
+\item 一个\href{https://www.howtoforge.com/linux_lvm}{教程}
+\item \verb|apt-get install lvm2 dmsetup mdadm reiserfsprogs xfsprogs|
+\item \verb|fdisk -l|
+\item Now we prepare our new partitions for LVM: \verb|pvcreate /dev/sdb1 /dev/sdc1 /dev/sdd1 /dev/sde1|
+\item 如果要删除， 用 \verb|pvremove /dev/sdb1 /dev/sdc1 /dev/sdd1 /dev/sde1|
+\item \verb|pvdisplay| 可以显示信息
+\item \verb|vgextend VG名 /dev/硬盘| 可以对 volume group 进行拓展
+\item \verb|lvextend -l +100%FREE /dev/centos/root|
+\end{itemize}
