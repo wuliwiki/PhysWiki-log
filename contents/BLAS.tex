@@ -7,17 +7,17 @@
 
 BLAS 被广泛用于科学计算和工业界， 已成为业界标准． 在更高级的语言和库中， 即使我们不直接使用 BLAS 接口， 它们也是通过调用 BLAS 来实现的（如 Matlab 中的各种矩阵运算）．
 
-BLAS 原本是用 Fortran 语言写的， 但后来也产生了 C 语言的版本 cBLAS， 接口与 Fortran 的略有不同（例如使用指针传递数组）， 但大同小异．
+BLAS 原本是用 Fortran 语言写的， 但后来也产生了 C 语言的版本 CBLAS， 接口与 Fortran 的略有不同（例如使用指针传递数组）， 但大同小异．
 
 注意 BLAS 是一个接口的标准而不是某种具体\textbf{实现（implementation）}． 简单来说， 就是不同的作者可以各自写出不同版本的 BLAS 库， 实现同样的接口和功能， 但每个函数内部的算法可以不同．  这些不同导致了不同版本的 BLAS 在不同机器上运行的速度也不同．
 
 BLAS 的官网是 \href{http://www.netlib.org/blas/}{Netlib}， 可以浏览完整的说明文档以及下载源代码． 这个版本的 BLAS 被称为 reference BLAS， 运行速度较慢， 通常被其他版本用于衡量性能． 对于 Intel CPU 的计算机， 性能最高的是 Intel 的 \href{https://software.intel.com/en-us/mkl}{MKL （Math Kernel Library）} 中提供的 \href{https://software.intel.com/en-us/mkl-developer-reference-c-blas-and-sparse-blas-routines}{BLAS}． MKL 虽然不是一个开源软件， 但目前可以免费下载使用． 如果想要免费开源的版本， 可以尝试 \href{https://www.openblas.net/}{OpenBlas} 或者 \href{https://sourceforge.net/projects/math-atlas/}{ATLAS}\footnote{至于安装， 在 Windows 系统上作者推荐在 Visual Studio 的基础上安装 MKL 或者 Parallel Studio， 这些软件都比较大， 可能需要较长时间下载安装． 在 Linux 系统上， 可以直接用 apt-get 等安装开源版本， 也可以下载 intel MKL 的 deb 安装包按照提示安装．}． 另外， 无论是否使用 MKL， BLAS 的文档都推荐看 MKL 的\href{https://software.intel.com/en-us/mkl-developer-reference-c-blas-and-sparse-blas-routines}{相关页面}．
 % 未完成： 要不要写安装教程？
 
-\subsection{使用 cBLAS}
+\subsection{使用 CBLAS}
 \pentry{矩阵的储存\upref{MatSto}}
 
-我们这里介绍一个 cBLAS 的例子\footnote{要在 Linux 上编译， 见 “在 Linux 上编译第一个 C++ 程序\upref{linCpp}”}． 我们来测试矩阵和矢量的乘法函数 \verb|gemv|， 参考文档见\href{https://software.intel.com/en-us/node/834919#88940C4E-0889-46C3-B6CF-F8B6EA6CF4BC}{这里}．
+我们这里介绍一个 CBLAS 的例子\footnote{要在 Linux 上编译， 见 “在 Linux 上编译第一个 C++ 程序\upref{linCpp}”}． 我们来测试矩阵和矢量的乘法函数 \verb|gemv|， 参考文档见\href{https://software.intel.com/en-us/node/834919#88940C4E-0889-46C3-B6CF-F8B6EA6CF4BC}{这里}．
 
 BLAS 可以分为四种类型和三个级别
 
@@ -37,9 +37,7 @@ BLAS 可以分为四种类型和三个级别
 \end{enumerate}
 
 根据上述的类型和级别，BLAS 有一套系统的命名规则，
-我们需要的函数名格式为 \verb|cblas_?gemv|， 其中 \verb|cblas_| 是固定前缀， 问号表示 \verb|s|, \verb|d|, \verb|c|, \verb|z|, 中的一个， 分别代表单精度（\verb|float|）， 双精度（\verb|double|）， 单精度复数和双精度复数\footnote{注意 C 语言中内置的复数类型和 C++ 标准库中的 \lstinline|std::complex<>| 不同， 但由于 cBLAS 用指针 \lstinline|void *| 传递复数（任何指针都可以自动转换）， 所以只要内存中用两个连续的 \lstinline|float| 或 \lstinline|double| 表示一个复数即可}． \verb|ge| 表示输入的矩阵是一个一般的矩阵\footnote{而不是对称矩阵或者厄米矩阵等， 后者可以使用专门的函数使性能提升， 例如 \href{https://software.intel.com/en-us/node/834934}{symv}}， 以行主序或者列主序\upref{MatSto}线性储存， \lstinline|mv| 表示矩阵与向量操作． 
-
-
+我们需要的函数名格式为 \verb|cblas_?gemv|， 其中 \verb|cblas_| 是固定前缀， 问号表示 \verb|s|, \verb|d|, \verb|c|, \verb|z|, 中的一个， 分别代表单精度（\verb|float|）， 双精度（\verb|double|）， 单精度复数和双精度复数\footnote{注意 C 语言中内置的复数类型和 C++ 标准库中的 \lstinline|std::complex<>| 不同， 但由于 CBLAS 用指针 \lstinline|void *| 传递复数（任何指针都可以自动转换）， 所以只要内存中用两个连续的 \lstinline|float| 或 \lstinline|double| 表示一个复数即可}． \verb|ge| 表示输入的矩阵是一个一般的矩阵\footnote{而不是对称矩阵或者厄米矩阵等， 后者可以使用专门的函数使性能提升， 例如 \href{https://software.intel.com/en-us/node/834934}{symv}}， 以行主序或者列主序\upref{MatSto}线性储存， \lstinline|mv| 表示矩阵与向量操作． 
 
 我们接下来以 \verb|cblas_zgemv| 为例， 先来看函数声明．
 \begin{lstlisting}[language=cpp]
@@ -108,10 +106,41 @@ $ ./a.out
 (-18,59)  (-21,74)
 \end{lstlisting}
 
+\subsubsection{64位整数}
+注意使用 64bit 时， 头文件不需要改变， 而是在 \verb|#include <cblas.h>| 之前定义 \verb|#define CBLAS_INT long long|．
+
+另外在 ubuntu 上需要安装 \verb|libblas64-dev|．
+
 \subsubsection{其他参数}
 \begin{itemize}
 \item \verb|trans| （也是 \verb|enum|）指定预先转置矩阵（\verb|CblasTrans|）或不转置（\verb|CblasNoTrans|）
 \item \verb|alpha, beta| 用于计算 \verb|y = alpha * a * x + beta y|， 上例中我们使用了 \verb|alpha = 1, beta = 0|
 \item \verb|lda| 叫做 leading dimension， 在列主元的情况下用于指定从某一列第 $i$ 个元的索引（index）减去上一列第 $i$ 元的索引． 在上例中 \verb|lda| 就是行数． 但如果我们需要在一个更大的列（行）主元矩阵中截取一个小矩阵进行计算， 那么 \verb|lda| 就是大矩阵的行（列）数．
 \item \verb|incx| 和 \verb|incy| 用于指定两个矢量的步长（increment）， 由于上例中两矢量在内存中是连续的， 所以步长为 1． 但若某个矢量是行（列）主元矩阵中的一列（行）， 那么步长就是矩阵的列（行）数．
+\end{itemize}
+
+\subsection{XBLAS}
+\begin{itemize}
+\item XBLAS 文档在\href{https://netlib.org/xblas/}{这里}．
+\item XBLAS 的一个功能是函数接口不变， 但在内部使用四精度浮点．
+\item 第二个功能是提供混合精度的函数接口．
+\end{itemize}
+
+\subsection{从源码编译 CBLAS}
+一般用 (C)BLAS 也需要用 LAPACK(E)， 所以可以直接用 LAPACK 的源码编译， 详见 “Lapack 笔记\upref{Lapack}”．
+
+\subsection{OpenBlas}
+\begin{itemize}
+\item openblas 是一个比较快的实现， 也包含 lapack．
+\item 源码和文档都见 \href{https://github.com/xianyi/OpenBLAS}{github}．
+\item Ubuntu 中 \verb|apt install openblas| 会安装 \verb|cblas.h|， 但没有 \verb|lapacke.h|， 自己重新编译会更好．
+\item 注意 CMakeList.txt 只处于实验阶段， 最好用 automake
+\item 自己编译的命令： \verb|cmake -DBUILD_STATIC_LIBS=OFF -DBUILD_TESTING=OFF -DCMAKE_BUILD_TYPE=Release 源码路径|
+\item 其中 \verb|BUILD_STATIC_LIBS| 只编译静态链接库， \verb|BUILD_TESTING| 安装测试． 用 \verb|cmake -LH| 查看所有编译选项和说明．
+\item 自己编译后安装的文件： \verb|/usr/local/lib/libopenblas.a| 以及 \verb|/usr/local/include/openblas/| 中的 \verb|cblas.h|， \verb|lapack.h|， \verb|lapacke.h|， \verb|lapacke_config.h|， \verb|lapacke_mangling.h|， \verb|lapacke_utils.h|， \verb|openblas_config.h|， \verb|f77blas.h|
+\item \verb|Makefile.rule| 中比较重要的编译选项： \verb|USE_THREAD| （强制单线程或多线程）， \verb|NO_STATIC| （不编译静态库），\verb|NO_SHARED| （不编译动态库）， \verb|ONLY_CBLAS| （不支持 fortran）， \verb|PREFIX| （安装目录）， \verb|COMMON_OPT| （编译器优化选项）
+\item 设置好以后， \verb|make -j12| 即可编译．
+\item 默认安装目录是 \verb|/opt/OpenBLAS|
+\item blas 安装文件： \verb|lib/libopenblas.a或so|（软链）， \verb|lib/libopenblas_skylakex-r0.3.21.a或so| （同时包括 (c)blas 以及 lapack(e)， 支持 32 和 64bit 整数）， \verb|include/cblas.h|， \verb|openblas_config.h|， \verb|f77blas.h|
+\item lapack 头文件： \verb|include/lapack.h|， \verb|lapacke.h|， \verb|lapacke_config.h|， \verb|lapacke_mangling.h|， \verb|lapacke_utils.h|
 \end{itemize}

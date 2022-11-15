@@ -9,10 +9,21 @@
 \item 要系统地学习 make， 参考资料是 \href{https://www.gnu.org/software/make/manual/}{GNU Make 文档}， 提供网页版和 pdf 下载．
 \item make 程序广义上是声明如何更新一系列文件， 以及他们的 dependencies． 当某个文件改变后， 任何依赖于它的文件都需要通过指定的规则 （rule） 来更新
 \item 使用 \verb|make| 命令是可以选择使用多线程， 例如 \verb|make -j4| 使用 4 线程．
+\item 要指定 Makefile 文件， 用 \verb|make -f 文件|
 \item 突然发现， rule 的 “:” 前面不可以有空格 ？
 \item rule 的第一行用于声明什么文件取决于什么文件， 剩下的行声明用什么命令去更新．
-\item “:” 后面的文件会按照顺序更新， 而且只会更新一次， 若以如果更新第二个文件的时候第一个文件被删掉也不会出错．
-\item “:” 后面可以有 phony target， 比如说 \verb|make clean| 中的 \verb|clean|
+\item \verb|:| 后面的文件会按照顺序更新， 而且只会更新一次， 若以如果更新第二个文件的时候第一个文件被删掉也不会出错．
+\item \verb|:| 后面可以有 phony target， 比如说 \verb|make clean| 中的 \verb|clean|
+\item \verb|$(var)| 和 \verb|${var}| 是完全等效的， 在双引号内也可以替换．
+\item 判断句如下， 注意第二行前面是空格而不是 tab．
+\begin{lstlisting}[language=makefile]
+ifeq ($(var1), true)
+    var2 = false
+else ifneq($(var2), abc)
+    ...
+endif
+\end{lstlisting}
+\item Makefile 中 \verb|$(info 显示 一些 文字)| 会在 make 的时候显示文字到命令行．
 \item 要想列出 \verb|Makefile| 包含的所有 target， 直接在命令行用 \verb|make|， 空格， 然后按两次 tab 自动补全即可．
 \item \verb|rm| 命令后面记得加 \verb|-f| 选项， 否则如果文件不存在就会出错导致 make 就会失败
 \item 可以根据所有 rule 中的 target 和 dependency 画一个树状图， 如果某个点的文件不存在， 那么就会先运行生成它的 rule， 如果图中的任何一点更新了， 从这点到顶点的所有文件都要更新． 具体的规则是， 如果一个 target 的任何一个 dependency 比它要新， 那么 target 就要重新编译．
@@ -22,6 +33,7 @@ goal: file1 file2 ...
 	command1
 	command2
 \end{lstlisting}
+\item 注意 Makefile 中空格和 tab 是区分的！ command 前面必须是 tab．
 \item 如果没有 goal 的话， default goal 就是第一个开头不为 “.” 的 target． 剩下的 rule 的顺序应该可以随意
 任何一个被依赖的文件改变了， 或者它们依赖的文件改变了， 就会执行 command． make 并不知道 command 的含义． 只是把它传给 shell 来执行．
 \item implicit rules 大概就是可以仅声明 “A: B”， 由自定义的命令或者 make 默认的命令来生成 “A”． implicit rule 中的 dependency 是至少有这些 dependency， 而不是只能有这些 dependency．
@@ -39,4 +51,8 @@ file1.o: file1.f90 file2.o file3.o
 \item \verb|$^| 列出所有的 prerequisites (“:” 右边的内容)
 \item \verb|$(shell ...)| 可以执行 shell 命令， 如 \verb|$(shell echo *.f90)| 可以在当前位置列出所有 “.f90” 文件．
 \item \verb|$@| 大概就是 target file （如果 “:” 左边只有一个文件的话）
+\item 如果在 rule 的命令中用 \verb|source 脚本| 会出错， 因为默认 shell 是 \verb|/bin/sh|． 可以用 \verb|. 脚本| 等效替代． 也可以用 \verb|SHELL := /bin/bash|． 但注意这也并不能改变外部的环境变量， 因为 rule 中的命令本身就是在一个新的 shell 中运行的．
+\item 在 rule 的命令中用 \verb|: 要显示的内容| 可以在命令行显示内容． 其中 \verb|: 命令| 不做任何事情．
+\item \verb|make VAR1=... VAR2=...| 可以设置参数（等号两边不能有空格！）， 相当于在 \verb|Makefile| 里面使用 \verb|VAR1=... VAR2=...|， 如果 \verb|Makefile| 里面已经设置了这些参数（默认值）， 那么则会覆盖． 
+\item 在 rule 的命令前面加一个 \verb|@| 就可以不在 std 输出命令的内容． 例如 \verb|@printf "一些信息"|
 \end{itemize}

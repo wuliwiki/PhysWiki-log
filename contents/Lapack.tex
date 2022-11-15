@@ -44,33 +44,78 @@ Intel MKL 提供的 \href{https://www.intel.com/content/www/us/en/developer/tool
 \subsection{线性方程组}
 \subsubsection{Driver - 线性方程组 - 一般矩阵}
 \begin{itemize}
-\item ?gesv 解方矩阵线性方程组， 多个 RHS
-\item ?gesvx gesv 并提供误差
-\item ?gesvxx 用额外循环减小 gesv 的误差
-\item ?gbsv gesv 的带对角矩阵版本
-\item ?gbsvx gbsv 并提供误差
-\item ?gbsvxx 用额外循环减小 gbsv 的误差
-\item ?gtsv gesv 的三对角矩阵版本
-\item ?gtsvx gtsv 并提供误差
+\item \verb|?gesv| 解方矩阵线性方程组， 多个 RHS
+\item \verb|?gesvx| gesv 并提供误差
+\item \verb|?gesvxx| 用额外循环减小 gesv 的误差
+\item \verb|?gbsv| gesv 的带对角矩阵版本
+\item \verb|?gbsvx| gbsv 并提供误差
+\item \verb|?gbsvxx| 用额外循环减小 gbsv 的误差
+\item \verb|?gtsv| gesv 的三对角矩阵版本
+\item \verb|?gtsvx| gtsv 并提供误差
 \end{itemize}
 
 
 \subsection{对称本征方程}
 \subsubsection{Driver - 实对称矩阵本征方程 - 所有本征值和本征矢（可选）}
 \begin{itemize}
-\item ?syev 对称矩阵的本征值和本征矢（可选）
-\item ?syevd syev 使用 divide and conquer 算法
-\item ?spev syev 用 packed storage
-\item ?spevd spev 用 packed storage
-\item ?sbev syev 用带对角矩阵
-\item ?sbevd sbev 用 divide and conquer 算法
-\item ?stev syev 使用三对角矩阵
+\item \verb|?syev| 对称矩阵的本征值和本征矢（可选）
+\item \verb|?syevd| syev 使用 divide and conquer 算法
+\item \verb|?spev| syev 用 packed storage
+\item \verb|?spevd| spev 用 packed storage
+\item \verb|?sbev| syev 用带对角矩阵
+\item \verb|?sbevd| sbev 用 divide and conquer 算法
+\item \verb|?stev| syev 使用三对角矩阵
 \end{itemize}
 
 \subsection{线性最小二乘法}
 \begin{itemize}
-\item ?gels Uses QR or LQ factorization to solve a overdetermined or underdetermined linear system with full rank matrix.
-\item ?gelsy Computes the minimum-norm solution to a linear least squares problem using a complete orthogonal factorization of A.
-\item ?gelss Computes the minimum-norm solution to a linear least squares problem using the singular value decomposition of A.
-\item ?gelsd Computes the minimum-norm solution to a linear least squares problem using the singular value decomposition of A and a divide and conquer method.
+\item \verb|?gels| Uses QR or LQ factorization to solve a overdetermined or underdetermined linear system with full rank matrix.
+\item \verb|?gelsy| Computes the minimum-norm solution to a linear least squares problem using a complete orthogonal factorization of A.
+\item \verb|?gelss| Computes the minimum-norm solution to a linear least squares problem using the singular value decomposition of A.
+\item \verb|?gelsd| Computes the minimum-norm solution to a linear least squares problem using the singular value decomposition of A and a divide and conquer method.
+\end{itemize}
+
+\subsection{编译 Netlib 的 reference LAPACK}
+\begin{itemize}
+\item 在 ubuntu 中可以直接用 \verb|apt install libblas-dev libblas64-dev liblapacke-dev liblapacke64-dev|．
+\item 一般用 (C)BLAS 也需要用 LAPACK(E)， 所以可以直接用 LAPACK 的源码编译， 会把 Blas 和 lapack 一起编译． 见 \href{https://github.com/Reference-LAPACK/lapack/}{github}．
+\item 编译时一些有用的选项如（可以用 \verb|cmake -LH| 查看）
+\begin{lstlisting}[language=none]
+cmake -DBUILD_INDEX64=OFF -DBUILD_SHARED_LIBS=ON \
+    -DLAPACKE=ON -DCBLAS=ON  ../lapack-3.*/
+\end{lstlisting}
+\item \verb|BUILD_INDEX64| 选择是使用 32bit 的整数还是 64bit 的．
+\item \verb|BUILD_SHARED_LIBS| 选择是编译 \verb|.so| 库还是 \verb|.a| 库．
+\item \verb|LAPACKE| 和 \verb|CBLAS| 选择是否编译 C 接口．
+\item \verb|BLAS++| 和 \verb|LAPACK++| 编译 C++ 接口．
+\item \verb|BUILD_HTML_DOCUMENTATION| 生成 html 文档， 需要 Doxygen．
+\item \verb|BUILD_TESTING| 生成测试目录
+\item \verb|CMAKE_BUILD_TYPE| 填 \verb|Release| 或者 \verb|Debug|
+\item \verb|CMAKE_INSTALL_PREFIX| 安装目录， 默认 \verb|/usr/local|
+\item \verb|USE_OPTIMIZED_BLAS| 和 \verb|USE_OPTIMIZED_LAPACK| 使用其他 blas （例如 MKL）， 而不是 netlib 的 reference blas
+\item \verb|USE_XBLAS| 内部四精度实现以及混合精度接口． 见 “BLAS 简介\upref{BLAS}”．
+\end{itemize}
+
+安装的 Blas 文件
+\begin{itemize}
+\item \verb|/usr/local/include| 中的 \verb|cblas.h|， \verb|cblas_mangling.h|．
+\item \verb|/usr/local/lib64| 中的 \verb|libcblas.so或a| 和 \verb|libcblas64.so或a|
+\item 带 \verb|64| 的是 \verb|BUILD_INDEX64=true| 生成的， 否则是 32 位整数． 下同．
+\item \verb|cblas(64).so| 会调用 \verb|blas(64).so|．
+\item 另外还会调用 \verb|libgfortran.so| 和 \verb|lbquadmath.so|， 下同．
+\end{itemize}
+
+安装的 lapack 文件
+\begin{itemize}
+\item \verb|/usr/local/include| 中的 \verb|lapack.h|， \verb|lapacke.h|， \verb|lapacke_config.h|， \verb|lapacke_mangling.h|， \verb|lapacke_utils.h|．
+\item \verb|/usr/local/lib64| 中的 \verb|liblapack.a或so| 和 \verb|liblapacke64.a或so|， 以及 \verb|liblapacke.a或so| 和 \verb|liblapack64.a或so|
+\item \verb|lapacke(64).so| 会调用 \verb|lapack(64).so| 以及 \verb|blas(64).so|
+\end{itemize}
+
+\subsubsection{C 接口使用}
+\begin{itemize}
+\item 32bit int 可以索引 2.15GB 的 char 数组， 或者 17.18GB 的 double 数组， 所以一般情况是够用的．
+\item \verb|#include <cblas.h>| 以及 \verb|#include <lapacke.h>| 即可．
+\item 注意头文件是默认使用 32 位整数的， 即 \verb|#define CBLAS_INT int|， \verb|#define lapack_int int|． 如果程序中要使用 64 位， 需要在这两个 include 之前自定义 \verb|#define CBLAS_INT long long|， \verb|#define lapack_int long long|
+\item link 阶段使用 \verb|-l cblas.so| 和 \verb|-l lapacke.so| 即可．
 \end{itemize}

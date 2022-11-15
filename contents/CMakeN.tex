@@ -10,6 +10,8 @@
 \begin{itemize}
 \item 在 windows 下可直接使用 GUI， linux 命令行中使用 \verb`ccmake` 可以有 TUI． 否则就用 \verb`cmake`
 \item 在 \verb|CMakeLists.txt| 的路径下， \verb`cmake .` 生成 Makefile， 然后 \verb|make -j12| 多线程编译． \verb|make VERBOSE=1 -j12| 输出编译命令． cmake 会在当前目录生成 \verb|Makefile| 和一些临时文件和文件夹， 清理麻烦， 所以还是建议输出到子文件夹．
+\item 如果不想改变源码路径， 就用在别的文件夹 \verb|cmake 源码路径| 即可．
+\item \verb|cmake -L 源码路径| 列出编译选项， \verb|-LH| 列出所有选项以及帮助说明． \verb|-LAH| 列出所有选项（会多出很多 \verb|CMAKE_| 开头的， 不是作者提供的选项）， 用 \verb|cmake -D 选项1=值1 -D 选项2=值2 源码路径| 来设置选项．
 \item 要指定目录， 用 \verb|cmake -S CMakeList的目录 -B 生成Makefile的目录|， 然后再到 Makefile 的目录 \verb|make -j12| 即可． 如果要清理 cmake 生成的文件以及所有编译出来的文件， 直接把第二个目录清空即可．
 \item 当然， 也不是什么平台都可以用 \verb|make|， 所以也可以用 \verb|cmake --build 生成Makefile的目录 [--target 可执行文件] -- -j 12| 其中 \verb|--| 后面的选项会传给 \verb|make| 或者别的具体用于编译的程序．
 \item Cmake 的基本语法是 \verb`command(arg1 arg2 ...)` 其中 command 不区分大小写， \verb`arg` 用空格隔开， 如果 arg 本身有空格， 用双引号即可

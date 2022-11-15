@@ -10,9 +10,16 @@
 \item Shift 模式： 可以求出指定值附近的若干本征值和本征矢． 但这可能需要提供矩阵的逆（见下文）．
 \end{itemize}
 
-\href{http://www.ime.unicamp.br/~chico/arpack++/}{Arpack++} 是 Arpack 的 C++ 模板库， 但实际上只是一个 C++ 接口， 仍然调用 Fortran 版的动态链接库． 官网提供的版本已经多年没有维护（最后更新于 2000 年， 版本 1.2）， 用目前的 g++ 编译器无法正常编译． 麻省理工在 GitHub 上维护了一个新版本： \href{https://github.com/m-reuter/arpackpp}{Arpack++2}． 本文使用的是当前最新的 release 2.3．
+\href{http://www.ime.unicamp.br/~chico/arpack++/}{Arpack++} 是 Arpack 的 C++ 模板库， 但实际上只是一个 C++ 接口， 仍然调用 Fortran 版的动态链接库． 官网提供的版本已经多年没有维护（最后更新于 2000 年， 版本 1.2）， 用目前的 g++ 编译器无法正常编译． 麻省理工在 GitHub 上维护了一个新版本： \href{https://github.com/m-reuter/arpackpp}{Arpack++2}． 本文使用的是当前最新的 release 2.3． 另见 github 上的 \href{https://github.com/opencollab/arpack-ng}{Arpack-ng}， 这个应该是原 Fortran 版本的更新， Arpack++2 依赖于它， ubuntu 中也可以用 \verb|sudo apt install libarpack2-dev| 安装． Arpack++2 只包含头文件， 需要依赖于 fortran 的 \verb|libarpack2-dev|．
 
 另一个由 Arpack 改写的 C++ 头文件库是 \href{https://spectralib.org/}{Spectra}， 基于 \href{https://eigen.tuxfamily.org/index.php?title=Main_Page}{Eigen}．
+
+\subsubsection{编译 arpack-ng}
+\begin{itemize}
+\item 详见 SLISC0 中的 Dockerfile_centos7.9
+\item 安装命令： \verb|wget https://github.com/opencollab/arpack-ng/archive/refs/tags/3.8.0.tar.gz|， \verb|tar -xzf 3.8.0.tar.gz|， \verb|cd arpack-ng-3.8.0|， \verb|sh bootstrap|， \verb|./configure|， \verb|make -j12|， \verb|make check|， \verb|make install|．
+\item 安装的文件： \verb|/usr/local/include/arpack/| 中的 \verb|arpackdef.h|， debug.h， stat.h． 库文件： \verb|/usr/local/lib/| 中的 \verb|libarpack.la|， \verb|libarpack.so|， \verb|libarpack.so.2|， \verb|libarpack.so.2.1.0|
+\end{itemize}
 
 \subsection{Ubuntu/Debian 安装}
 Ubuntu/Debian 中可以直接用 apt 安装， 如果没有装 gfortran 要先 \verb|apt install gfortran|． 然后安装 \verb|apt install libarpack++2-dev| （当前最新是 2.3 版）， 其实我们只需要它安装的二进制文件和 dependency． 注意 dependency 中会自动安装 OpenBlas， 如果已经装了其他版本的 Blas 如 CBLAS 可以将其手动卸载\footnote{OpenBlas 和 CBLAS 的接口不完全相同， 前者的函数使用 \lstinline|double *| 输入复数， 而后者使用 \lstinline|void *|， 兼容性更强． 例如本书的 SLISC0 库用 OpenBlas 就会编译出错（待更新）．}： \verb|sudo apt purge libopenblas-dev|．
