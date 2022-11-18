@@ -49,6 +49,7 @@
 \item 要改变容器在 \verb|start| 时执行的命令， 只能先 \verb|commit|， 再用不同的命令 \verb|run| 一次．
 \item \verb`docker rm [-f] 容器` 删除容器
 \item \verb`docker image rm [-f] 镜像` 删除镜像． 如果该镜像有容器就要 \verb|-f|． 如果该镜像有基于它的子镜像， \verb|-f| 也没用．
+\item \verb|docker image prune| 用于移除没有被使用的镜像， 具体呢？
 \item 如果一个镜像 ID 有多个 tag， 那么无法直接删除 ID， 需要具体指定 tag．
 \item \verb`docker commit 容器 [repo名][:tag名]` 会将容器 commit， 如果不指定 \verb|[repo名]| 或 \verb|[tag名]| 那么二者都会是 \verb|<none>| （和 Dockerfile 中间步骤产生的那些镜像一样）． 如果不指定 \verb|tag名| 则 tag 默认为 \verb|latest|． 如果 \verb|repo名:tag名| 和已经存在则会覆盖， 之前镜像会变为 \verb|<none>:<none>|．
 \item 即使容器不发生改变， \verb|commit| 多次也会产生多个镜像．
@@ -139,6 +140,7 @@ ubuntu        22.04        a8780b506fa4   4 days ago           77.8MB
 \item \verb|CMD["命令", "参数1", "参数2", ...]| 或者 \verb|CMD 命令 参数1 参数2， ...| 可以在每次容器开始运行时都执行一次某个命令．
 \item \verb|docker run| 执行 \verb|CMD| 中命令时， 会把命令行输出转到 host 的命令行．
 \item \verb|docker build| 会自动检查 Dockerfile 和之前的变化， 把前面相同的步骤略过， 所以还是不要把所有命令都放在同一个 \verb|RUN| 里面．
+\item 如果用 \verb|docker build --no-cache|， 可以强制重新开始 build， 不跳过重复的步骤．
 \end{itemize}
 
 \subsubsection{具体命令}
@@ -151,7 +153,7 @@ ubuntu        22.04        a8780b506fa4   4 days ago           77.8MB
 \item 用 \verb|\| 给命令换行
 \item 也可以用 \verb|RUN 命令1 && 命令2 ...| 执行多个命令
 \item \verb|COPY 本地文件/文件夹 容器内路径| 可以从外面到里面复制文件． 注意第一个路径只能是相对路径．
-\item \verb|ARG| 命令基本是定义容器中的环境变量． 例如 \verb|ARG ver="2.0.1"|， 之后可以用例如 \verb|myapp-${ver}| 来获替换成值（双引号不会包含）．
+\item \verb|ARG| 命令基本是定义容器中的环境变量． 例如 \verb|ARG ver="2.0.1"|， 之后可以用例如 \verb|RUN ... myapp-${ver}| 来获替换成值（双引号不会包含， 花括号有时候可以省略）． 在 bash session 中不会有该环境变量．
 \item \verb|ENV| 和 \verb|ARG| 有什么不同？
 \item docker 默认的 shell 是 \verb|sh|， 用 \verb|SHELL| 来修改 Dockerfile 之后的 shell， 这个只对 Dockerfile 有用．
 \end{itemize}
@@ -176,6 +178,8 @@ USER ${DOCKER_USER} # 指定用户， 对 dockerfile 下面命令生效， 对 b
 \item push： \verb|sudo docker push hub用户名/repo名:tag|
 \item pull： \verb|sudo docker pull hub用户名/repo名:tag|
 \item 如果用 Dockerfile 生成镜像时存在许多没有 tag 的镜像， 这些不会被 push． 如果把所有镜像删掉再 pull， \verb|docker images -a| 只会显示一个．
+\item 如果镜像是通过 dockerfile 生成的， 那么 push 以后在 dockerhub 上面会看到每个 layer 的生成命令．
+\item 如果相同的 \verb|hub用户名/repo名:tag| 重复 push， 会进行覆盖．
 \end{itemize}
 
 \subsection{docker 文件夹映射}

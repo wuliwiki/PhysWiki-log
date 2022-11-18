@@ -111,6 +111,7 @@
 \item 不同的 ubuntu 版本可以用 apt 安装的包的版本也是有一些区别的．
 \item \verb|dpkg| 用于手动（通过安装包文件）安装和卸载指定的包， 不会自动安装或者卸载 dependency， 也不会从网上下载包． \verb|apt| 会调用 \verb|dpkg|．
 \item \verb|aptitude| 是比 \verb|apt| 更高级的包管理器， 还有 GUI 界面．
+\item 下载文件用 \verb|wget [-q] 网址 [-O 新文件名]| 其中 \verb|-q| 是安静模式， \verb|-O| 是把下载的文件重命名．
 \end{itemize}
 
 \subsection{文本相关}
@@ -139,6 +140,7 @@
 \item \verb`sed` 命令可以用来处理文件或 standard input 中的文字, 并输出到文件或者 standard out. 在 \verb`SCID_TDSE` 的 makefile 中遇见, 命令是
 \verb|sed -e 's/^!\*nq/    /' inputfile.f90 > outputfile.f90|
 其中 \verb`-e` 是将后面的命令作用到 \verb`inputfile.f90` 上. \verb`s/str1/str2` 是将文本中的 \verb`str1` 替换成 \verb`str2`, \verb`\*` 转义为 \verb`*` (直接用 \verb`*` 就是通配符)， \verb`^` 大概是要求 \verb`str1` 出现在行首.
+\item \verb|sed -i '...' 文件| 可以直接修改文件而不是输出到 stdout． 例如 \verb|sed -i '8d' 文件| 把文件的第 8 行删除．
 \item 将子目录下所有头文件中的 CRLF 都替换为 LF： \verb`sudo find . -name "*.h" | xargs sudo sed -i -e 's/\r//g'`． 选项 \verb`-i` 直接修改源文件， \verb`-e` 用于指定后面的 \verb`s/旧内容/新内容/g`
 \item \verb`xarg` 用于使用 piping 构建新命令， 即将 find 输出的东西放到 \verb`sudo sed -i -e 's/\r//g'` 的后面
 \end{itemize}
@@ -254,6 +256,7 @@
 \item \verb|HOME| 是用户的 \verb|~| 文件夹
 \item \verb|LD_LIBRARY_PATH| 是动态链接库的默认搜索地址， 见这里\upref{gppLib}．
 \item \verb|LD_RUN_PATH| 编译的链接阶段， 如果没有指定 \verb|rpath|， 就用该变量中的 path 替代\upref{gppLib}．
+\item 另外 \verb|g++| 中的 \verb|-L| 选项（make 的时候搜索静态或动态库的路径）可以用环境变量 \verb|LIBRARY_PATH| 设置， \verb|-I| 选项（搜索头文件的路径）可以用环境变量 \verb|CPATH| 设置．
 \end{itemize}
 
 \subsection{其他}

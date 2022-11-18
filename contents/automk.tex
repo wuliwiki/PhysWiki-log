@@ -18,6 +18,8 @@ make install
 \end{lstlisting}
 其中的选共享可以通过 \verb|.configure --help| 查看． 例如 \verb|--prefix=绝对安装路径|， 编译后 \verb|make install| 后头文件库文件等都会放到这个路径． 当然还会有一些包作者定义的选项， 例如如果依赖于第三方的包且没有安装在默认路径，会要求提供安装路径（即使输入相对路径，编译出来 so 的 rpath 也会是绝对路径）．
 
+如果依赖别的包， 选项一般是 \verb|--with-包名=绝对路径|． 如果用了没用，可能还需要设置环境变量 \verb|LIBRARY_PATH|， 相当于 \verb|g++| 的 \verb|-L| 选项． 如果要跑 \verb|make check|， 最好也添加相同的路径到 \verb|LD_LIBRARY_PATH|， 否则测试时链接不上会 fail．
+
 注意许多库直接把头文件库文件安装到标准目录而不是子文件夹． 为了避免冲突， 以及区分哪些文件是哪些库安装的， 强烈建议自定义安装路径． 另外如果没有管理员权限， 也只能安装到自定义路径．
 
 \begin{itemize}
@@ -35,6 +37,7 @@ make install
 
 \subsection{开发者}
 \begin{itemize}
+\item 这里有一个\href{https://devmanual.gentoo.org/general-concepts/autotools/index.html}{教程}．
 \item 参考\href{https://www.gnu.org/software/automake/manual/html_node/Autotools-Introduction.html}{官方教程}．
 \item 一般来说建议学 Cmake\upref{CMakeN} 而不是 autotool． Makefile 的基础还是要学的．
 \end{itemize}
