@@ -1,0 +1,28 @@
+% 去噪扩散概率模型
+% 扩散 马尔科夫
+
+\textbf{去噪扩散概率模型}（Denoising Diffusion Probabilistic Models, DDPM）是一种参数化的马尔科夫链，通过变分推理的方法来训练．去噪扩散概率模型（后文简称扩散模型）是深度生成模型的一种，通常包含两个过程：第一是前向扩散过程，第二是反向的逆扩散过程．正反两个方向的马尔科夫链均由有限个时间步组成．其中，前向扩散过程就是一个无参数的马尔科夫链，而反向的逆扩散过程须要学习算法来训练模型．模型结构如图1所示．
+\begin{figure}[ht]
+\centering
+\includegraphics[width=14cm]{./figures/DDPM_1.png}
+\caption{去噪扩散概率模型的结构} \label{DDPM_fig1}
+\end{figure}
+
+设源数据为$X_0$，$t$为时间变量，某个扩散过程中有$T$个时间步.
+
+前向扩散过程会逐渐向原数据添加小幅的高斯噪音，时间序列为：$t=0$ -> $1$ -> $2$ -> ... -> $T-1$ -> $T$.每一步所添加的高斯噪音的方差序列为：$\beta_1$, $\beta_2$, ..., $\beta_T$.
+
+从$t-1$到$t$的转换概率为$q(X_t|X_{t-1})$，则从源数据到扩散过程最后一步的转换概率为：
+\begin{equation}
+q(X_{1:T}|X_0)=\prod_{t=1}^{T}q(X_{t}|X_{t-1})
+\end{equation}
+其中，
+\begin{equation}
+q(X_{t}|X_{t-1})=N(X_t;\sqrt{1-\beta_t}X_{t-1},\beta_tI)
+\end{equation}
+
+
+参考文献：
+\begin{enumerate}
+\item J. Ho, A. Jain, and P. Abbeel, “Denoising Diffusion Probabilistic Models,” in Advances in Neural Information Processing Systems, 2020, vol. 33, pp. 6840–6851.
+\end{enumerate}

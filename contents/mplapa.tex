@@ -1,0 +1,82 @@
+% MPLAPACK 笔记
+
+\begin{issues}
+\issueDraft
+\end{issues}
+
+\pentry{Lapack 笔记\upref{Lapack}}
+
+\subsection{__float128}
+\begin{itemize}
+\item 源码和 manual 见 \href{https://github.com/nakatamaho/mplapack}{github}．
+\item GCC 里面 \verb|_Float128| 就是 \verb|__float128|
+\item 应该只支持列主元\upref{MatSto}， 没有 \verb|LAPACK_ROW_MAJOR| 或者 \verb|LAPACK_COL_MAJOR| 参数．
+\item 动态链接库： \verb|libmplapack__Float128.so|
+\item \verb|example/00_*/Cgetri_test__Float128.cpp| 可以这么编译： \verb|g++ -g3 -I ../../../../include/mplapack/ -L ../../../../lib Cgetri_test__Float128.cpp -l mplapack__Float128 -l mpblas__Float128|
+\item 注意当不指定 \verb|-std=...| 时， 默认的选项是 \verb|-std=gnu++XX|（当前 2022 年 11 月是 \verb|gnu++17|）\upref{gpp}． 与 \verb|-std=c++XX| 的区别是， 后者支持一些与标准不兼容的拓展． 如果用 \verb|c++XX| 则编译不成功．
+\end{itemize}
+
+\begin{lstlisting}[language=cpp]
+// 包含 mplapack_utils__Float128.h
+#include <mplapack/mpblas__Float128.h>
+// 包含 mplapack__config.h 和 quadmath.h
+#include <mplapack/mplapack__Float128.h>
+
+typedef int64_t mplapackint;
+typedef mplapackint mplapacklogical;
+
+// 普通矩阵相乘
+// cblas (mkl)
+void cblas_zgemm(const CBLAS_LAYOUT Layout,
+    const CBLAS_TRANSPOSE transa, const CBLAS_TRANSPOSE transb,
+    const MKL_INT m, const MKL_INT n, const MKL_INT k,
+    const void *alpha, const void *a,
+    const MKL_INT lda, const void *b,
+    const MKL_INT ldb, const void *beta,
+    void *c, const MKL_INT ldc);
+// mplapack
+// transa="N" 表示不转置， "T" 表示转置
+// 注意 alpha, beta 不是 pointer
+void Cgemm(const char *transa, const char *transb,
+    mplapackint const m, mplapackint const n,
+    mplapackint const k, complex<_Float128> const alpha,
+    complex<_Float128> *a, mplapackint const lda,
+    complex<_Float128> *b, mplapackint const ldb,
+    complex<_Float128> const beta, complex<_Float128> *c,
+    mplapackint const ldc);
+
+// 带对角矩阵乘以矢量
+void Cgbmv(const char *trans, mplapackint const m,
+    mplapackint const n, mplapackint const kl,
+    mplapackint const ku, complex<_Float128> const alpha,
+    complex<_Float128> *a, mplapackint const lda,
+    complex<_Float128> *x, mplapackint const incx,
+    complex<_Float128> const beta, complex<_Float128> *y,
+    mplapackint const incy);
+
+
+// 从 LU 分解计算逆矩阵
+// 所以 mplapack 中的参数和 LAPACKE 并不完全一致， 需要手动查看．
+    // lapacke 的版本
+lapack_int LAPACKE_zgetri
+    (int matrix_layout , lapack_int n , lapack_complex_double *a,
+    lapack_int lda , const lapack_int *ipiv);
+    // mplapack 的版本
+void Cgetri(mplapackint const n, complex<_Float128> *a,
+    mplapackint const lda, mplapackint *ipiv,
+    complex<_Float128> *work, mplapackint const lwork,
+    mplapackint &info);
+
+// 解带对角矩阵
+    // lapacke 的版本
+lapack_int LAPACKE_zgbsv(int matrix_layout, lapack_int n,
+    lapack_int kl, lapack_int ku, lapack_int nrhs,
+    lapack_complex_double *ab, lapack_int ldab, lapack_int *ipiv,
+    lapack_complex_double *b, lapack_int ldb);
+    // mplapack 的版本
+void Cgbsv(mplapackint const n, mplapackint const kl,
+    mplapackint const ku, mplapackint const nrhs,
+    complex<_Float128> *ab, mplapackint const ldab,
+    mplapackint *ipiv, complex<_Float128> *b,
+    mplapackint const ldb, mplapackint &info);
+\end{lstlisting}

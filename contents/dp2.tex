@@ -1,0 +1,160 @@
+% 树形动态规划
+% 树|动态规划|dp
+
+
+\pentry{树与图的深度优先搜索
+\upref{DFS2}}
+
+树形 $\texttt{dp}$ 顾名思义就是在树上做 $\texttt{dp}$．通常是从根节点开始遍历整棵树，在\textbf{回溯}的时候\textbf{从子节点往上更新父节点}的信息．对于特殊的节点，如根节点或叶子节点需要进行特殊的处理．因为树的遍历需要用到递归，所以树形 $\texttt{dp}$ 一般是根据递归实现的．所以树形 $\texttt{dp}$ 较为抽象，可以画图理解．
+
+树形 $\texttt{dp}$ 的框架：
+
+\begin{lstlisting}[language=cpp]
+void dfs(int u, int father) // father 是 u 节点的父节点
+{
+    for (int i = h[u]; ~i; i = ne[i])   // 遍历每条边
+    {
+        int j = e[i];
+        if (j == father) continue;  // 如果是双向边需要特判，不往回重复搜索
+        dfs(j); // 递归搜索
+        f[j] <-- f[u] // 回溯的时候，用子节点更新父节点
+    }
+}
+\end{lstlisting}
+
+\href{https://www.luogu.com.cn/problem/P1352}{例题 $1$：没有上司的舞会}
+
+简化题意：有 $n$ 节点构成一课树，每个节点有一个值 $w_i$，要求整棵树的权值最大值，如果一个节点的父节点加进了答案，那么这个节点就不能加进答案．
+
+这是一个树的模型，因此可以通过树形 $\texttt{dp}$ 来求解．
+
+\begin{itemize}
+\item 状态表示：\\
+    (1)：$f(u, 0)$：表示从 $u$ 的子树中选，且\textbf{不选} $u$ 的子节点权值最大值．\\
+    (2)：$f(u, 1)$：表示从 $u$ 的子树中选，且\textbf{选择} $u$ 的子节点权值最大值．
+
+\end{itemize}
+
+\begin{itemize}
+\item 状态计算：\\
+    (1)：$f(u, 0) = \sum_{s_i \in \text{son}(u)} \max(f(s_i, 0), f(s_i, 1))$ \\
+    (2)：$f(u, 1) = \sum_{s_i \in \text{son}(u)} f(s_i, 0)$
+\end{itemize}
+
+因为没选 $u$ 这个节点，那么子节点可选可不选，因此求两者的最大值，如果选择了 $u$ 这个节点，那么子节点一定不能选．
+
+每次 $\texttt{dfs}$ 的时候初始化每个节点的 $f(u, 1) = w_u$，从下往上递归计算，递归结束的时候，根节点就是答案．可见树形 $\texttt{dp}$ 的状态转移方程不止 $1$ 个，通常需要分类讨论．
+
+\textbf{时间复杂度：}$\mathcal{O}(n)$．
+
+\textbf{C++ 代码：}
+
+\begin{lstlisting}[language=cpp]
+void dfs(int u)
+{
+    f[u][1] = w[u];    // 初始化每个节点选择自己的权值
+    for (int i = h[u]; ~i; i = ne[i]) // 遍历 u 的每条边
+    {
+        int j = e[i];
+        dfs(j);
+        
+        f[u][1] += f[j][0];  // 选择 u
+        f[u][0] += max(f[j][1], f[j][0]); // 不选 u
+    }
+
+    return; // 回溯
+}
+
+\end{lstlisting}
+
+\href{https://www.luogu.com.cn/problem/SP1437}{例题 $2$：树的最长路径}
+
+简化题意：树中包含 $n$ 个结点和 $n-1$ 条无向边，每条边都有一个权值．换句话说，要找到一条路径，使得使得路径两端的点的距离最远，这条路径就被称为是树的直径．路径中可以只包含一个点．
+
+对于没有边权的树的来说，它的最长路径就是最长边数的路径，做法是任取一点作为起点，然后找到以这个点最远的一个点 $u$，在从 $u$ 这个点找到一个距离它最远的一个点 $v$，则 $u$ 到 $v$ 这条路径就是最长路径，而对于有权树，需要用树形 $\tt dp$ 解决．
+
+\begin{itemize}
+\item 状态表示：$f_u$ 表示经过 $u$ 的一条最长路径．
+\end{itemize}
+
+\begin{itemize}
+\item 状态计算： \\
+    (1)：以 $u$ 为根的路径有好几条，$d_1 = f(x) + w(u \to x)$． \\
+    (2)：$d_2 = f_y + w(u \to y)$．
+\end{itemize}
+
+\begin{figure}[ht]
+\centering
+\includegraphics[width=10cm]{./figures/dp2_1.png}
+\caption{树形图} \label{dp2_fig1}
+\end{figure}
+
+表示经过 $u$ 的一条最长路径必然经过以下三个区域的其中一个区域，因此有：
+
+\begin{equation}
+d_1 = f_x + w(x \to u) \\
+d_2 = f_y + w(y \to u) \\
+d_3 = f_z + w(z \to u) \\
+\end{equation}
+
+因为要求最大值，所以求一条最长路径和一条次长路径就行了，不一定非得选 $2$ 条路径，因为有些路径的权值之和可能为负数，但是最优解的路径一定是 $2$ 条．
+
+最大值和次大值需要初始化为 $0$，因为如果边权为负数，可以选一个点，答案为 $0$．
+
+状态计算过程中的 $f_x$ 表示以 $x$ 为根的子树中最长的一条路径，不是\textbf{经过 $u$ 的一条最长路径}．所以状态计算中的两条路径（一条最长边和一条次长边）加起来就是经过 $u$ 的一条最长路径．
+
+本题的答案不一定为以 $u$ 为顶点的路径，因为 $u$ 到其他点的距离可能均为负数，所以答案可以是以其他点顶点的路径，本题采用 $\tt dfs$ 递归的方法 来求解，所以是求解方式自下而上的．
+
+\textbf{时间复杂度：$\mathcal{O}(n)$．}
+
+\textbf{C++ 代码：}
+
+\begin{lstlisting}[language=cpp]
+const int N = 10010, M = N * 2;
+int n, h[N], e[M], w[M], ne[M], idx, ans;
+
+void add(int a, int b, int c)
+{
+    e[idx] = b, w[idx] = c, ne[idx] = h[a], h[a] = idx ++ ;
+}
+
+int dfs(int u, int father)
+{
+    int dist = 0; // 表示从当前点往下走的最大长度
+    int d1 = 0, d2 = 0;     // d1 最长路径，d2 次长路径
+
+    int d = 0;
+    for (int i = h[u]; i != -1; i = ne[i])
+    {
+        int j = e[i];
+        if (j == father) continue;
+        d = dfs(j, u) + w[i];
+        dist = max(dist, d); // f[x]
+
+        if (d >= d1) d2 = d1, d1 = d;
+        else if (d > d2) d2 = d;
+    }
+
+    ans = max(ans, d1 + d2);
+    return dist;
+}
+
+int main()
+{
+    cin >> n;
+
+    memset(h, -1, sizeof h);
+    for (int i = 0; i < n - 1; i ++ )
+    {
+        int a, b, c;
+        cin >> a >> b >> c;
+        add(a, b, c), add(b, a, c);
+    }
+
+    dfs(1, -1);
+
+    cout << ans << endl;
+
+    return 0;
+}
+\end{lstlisting}

@@ -1,0 +1,25 @@
+% Linux 的 System Call 笔记
+
+\begin{issues}
+\issueDraft
+\end{issues}
+
+\subsection{理论基础}
+\begin{itemize}
+\item 参考 \href{https://en.wikipedia.org/wiki/Linux_kernel_interfaces}{Linux Kernel Interfaces - Wikipedia}， \href{https://en.wikipedia.org/wiki/System_call}{System Call - Wikipedia}．
+\item \href{https://en.wikipedia.org/wiki/User_space_and_kernel_space}{User Space - Wikipedia}： 系统的虚拟内存被划分为 kernel space 和 user space． 前者跑的是系统内核和一些驱动， 剩下的所有程序和另一些驱动都在后者．
+\item 系统内核的两种 API： 一个是 \textbf{Linux API（"kernel–user space" API）}（user-space 程序需要的）， 另一个是 \textbf{"kernel internal" API}（内核内部使用的）．
+\item Linux API 由内核的 \textbf{System Call Interface（SCI）} 以及 \textbf{GNU C Library (glibc)} 中的函数构成． glibc 提供 SCI 的一个 wrapper．
+\item 内核大约一共提供 380 个 system call． 常见的如 \verb|open, read, write, close, wait, exec, fork, exit, kill|
+\item 一些常用的工具用于诊断程序的 system call 如： \verb|strace, ftrace, truss|
+\item 六类 system call： \verb|Process control|， \verb|File management|， \verb|Device management|， \verb|Information maintenance|， \verb|Communication|， \verb|Protection|
+\item 类 Unix 系统的 system call 都是在 \verb|kernel mode| 执行的．
+\end{itemize}
+
+\subsection{编程实践}
+\begin{itemize}
+\item 参考\href{https://jameshfisher.com/2018/02/19/how-to-syscall-in-c/}{这篇教程}．
+\item \verb|<unistd.h>| 头文件提供各种 system call， 例如 \verb|write(1, "hello, world!\n", 14);|
+\item \verb|<sys/syscall.h>| 是更底层的工具， 例如提供函数 \verb|syscall(SYS_write, 1, "hello, world!\n", 14);|． 而 \verb|syscall()| 是用机器码定义的．
+\end{itemize}
+

@@ -46,6 +46,7 @@
 \item \verb|sudo apt-clone restore 备份文件.gz| 可以进行恢复（注意一定要相同架构相同 ubuntu 版本）
 \item 直接解压备份文件即可得到所有备份的 deb， 可单独用 \verb|sudo apt install xxx.deb| 安装
 \item \verb|sudo apt-clone restore 备份文件.gz --destination 某文件夹| 把包安装到某个文件夹（使用 chroot）．
+\item \verb|aptic| 软件据说也有类似的功能．
 \end{itemize}
 
 
@@ -54,10 +55,11 @@
 \begin{itemize}
 \item \verb`dpkg -l | grep -i 关键字` 可以查找已安装的某个包
 \item \verb|sudo dpkg -i 名字.deb| 安装 deb 安装包， 其中 \verb|名字| 可以带 \verb|*|． 完了以后用 \verb|sudo apt install -fy| 安装缺失的依赖包（dpkg 不自动安装依赖）．
-\item 其实也可以直接用 \verb|sudo apt install *.deb|
+\item 其实也可以直接用 \verb|sudo apt install *.deb|， 会自动安装依赖
 \item \verb|sudo apt remove 包| 或者 \verb|dpkg --remove 包| 卸载， \verb|dpkg --purge 包| 可以连配置文件一起卸载．
 \item \verb|dpkg -S 文件| 查看该文件是哪个包安装的． 例如 \verb|dpkg -S /bin/gcc|
-\item \verb|dpkg -f 文件名.deb field名| 查看 deb 的某个属性， 如果省略 \verb|field名| 则查看所有属性
+\item \verb|dpkg -f 文件名.deb [field名]| 查看 deb 的某个属性， 如果省略 \verb|field名| 则查看所有属性
+\item \verb|sudo apt show *.deb| 同样可以检查包的信息．
 \item 要卸载某个 \verb|.deb| 包中的所有包， 用 \verb|sudo dpkg -r $(dpkg -f 文件名.deb Package)| （不支持 \verb|*|）
 \end{itemize}
 

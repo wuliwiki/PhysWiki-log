@@ -1,0 +1,51 @@
+% 约化密度矩阵
+% 偏迹|约化密度矩阵|部分迹
+
+\pentry{密度矩阵\upref{denMat}，张量积空间的算符\upref{ProdOp}}
+
+对于孤立系统，我们知道其量子态是 Hilbert 空间的一个射线，而量子测量一个正交投影算符，系统的动力学演化是幺正的（$U(t,0)=e^{-iHt}$）．现在我们转而研究开放系统（open systems），也就是说，当我们考察一个更大的量子系统中的一个\textbf{子系统}，那么这个子系统与外部之间是有相互作用的．此时子系统的\textbf{态}不再是射线，对它的测量不再是正交投影算符，同时子系统的演化也不再是幺正的了．
+\subsection{偏迹}
+假设整个大系统的 Hilbert 空间可以表示为两个子 Hilbert 空间的张量积：$\mathcal{H}_A\otimes \mathcal{H}_B$，其中 $\mathcal A$ 是待研究的子系统的 Hilbert 空间．可以将该大系统的量子态表示为
+\begin{equation}
+\ket{\psi}_{AB}=\sum_{i,\mu}a_{i\mu}\ket{i}_A\otimes \ket{\mu}_B
+\end{equation}
+其中 $\ket{i}_A,\ket{\mu}_B$ 分别组成了 $\mathcal{H}_A, \mathcal{H}_B$ 的两组正交完备基，因此 $\ket{i}_A,\ket{\mu}_B$ 组成了 $\mathcal{H}_A\otimes \mathcal{H}_B$ 的正交完备基．现在考虑对子系统 A 的测量操作 $M_A$（它是 $\mathcal H_A$ 的正交投影算符），它所对应的 $\mathcal{H}_A\otimes \mathcal{H}_B$ 上的测量算符应当是 $M_A\otimes I_B$．该可观测量的期望值为
+\begin{equation}
+\begin{aligned}
+\Braket{M_A}&={}_{AB}\bra{\psi}M_A\otimes I_B \ket{\psi}_{AB}\\
+&=\sum_{i,j,\mu}a_{i\mu}^*a_{j\mu} \cdot [{}_A\bra{i} M_A \ket{j}_A]\\
+&=\text{tr}(M_A \rho_A)
+\end{aligned}
+\end{equation}
+其中 $\rho_A$ 被定义为
+\begin{equation}\label{partra_eq1}
+\rho_A=\text{tr}_B(\ket{\psi}\bra{\psi})=\sum_{i,j,\mu}a_{i\mu}a_{j\mu}^*\ket{i}\bra{j}
+\end{equation}
+我们称该算符为\textbf{约化密度算符}，$\text{tr}_B$ 为\textbf{偏迹}（partial trace），有时候也被称为部分迹，也就是说，我们只对 $\rho=\ket{\psi}\bra{\psi}$ 中 $\mathcal{H}_B$ 的指标部分取迹．
+
+\subsection{约化密度算符的性质}
+\pentry{正定矩阵\upref{DefMat}}
+根据\autoref{partra_eq1} ，我们很容易证明以下性质：
+\begin{enumerate}
+\item $\rho_A$ 是厄米的．
+\item $\rho_A$ 是正定的，也就是说对于任意 $\ket{\varphi}$，$\bra{\varphi}{\rho_A}\ket{\varphi}\ge 0$．
+\item $\text{tr}(\rho_A)=1$，这是由于 $\ket{\psi}_{AB}$ 是归一化的．
+\end{enumerate}
+
+因为密度矩阵的正定性，它总是可以在一组正交完备基上对角化，也就是说总是可以表示为
+\begin{equation}
+\rho_A=\sum_a p_a\ket{a}\bra{a}
+\end{equation}
+其中 $\ket{a}$ 组成了 $\mathcal{H}$ 的一组正交完备基；$p_a$ 是该正定算符的特征值，且 $\sum_a p_a=1,p_a>0$．如果 $\rho^2\neq \rho$，那么所有 $p_a$ 都小于 $1$，此时子系统 $A$ 不再是一个纯态，而是多个纯态组成的\textbf{系综}，系综中每个态都被赋予了一个经典意义上概率的诠释，即都有一定的概率 $p_a$ 出现．这可以从以下的式子中看到：
+\begin{equation}
+\Braket{M}=\text{tr} M\rho_A = \sum_a p_a \bra{a}M\ket{a}
+\end{equation}
+
+
+除了 $\rho^2\neq \rho$ 这个判据以外，我们也可以采用以下的判据
+\begin{equation}\label{partra_eq2}
+\text{tr} \rho^2 <1
+\end{equation}
+若该判据成立，那么 $A$ 就不是纯态；否则 $A$ 是纯态．
+
+若 $A$ 不是纯态，那么可以知道 $A$ 与 $B$ 间存在\textbf{纠缠}\upref{entang}，以至于 $A$ 不能被视作孤立的系统．

@@ -1,0 +1,61 @@
+% Verlet算法的简单示例
+
+% Verlet算法的简单实现
+
+\begin{issues}
+\issueNeedCite
+\end{issues}
+
+Verlet算法常用于数值计算一些经典动力学问题．一些论坛探讨可以参考https://www.zhihu.com/question/22531466/answer/27695021与https://www.zhihu.com/question/22531466/answer/763079874．
+
+简而言之，Verlet算法认为，某时刻粒子的位置可由前两时刻粒子的位置与受力递推得到．假定时间步长为$\Delta t$.
+\begin{equation}
+\begin{aligned}
+\bvec r (t) &= 2\bvec r(t-\Delta t) - \bvec r(t-2\Delta t) + \frac{\bvec f(t-\Delta t)}{m}(\Delta t)^2 \qquad t>0\\
+\bvec r (0) &= \bvec r_0\\
+\bvec r (- \Delta t) &= \bvec r_0 - \bvec v_0 \Delta t + \frac{\bvec f(0)}{2m}(\Delta t)^2\\
+\end{aligned}
+\end{equation}
+
+其中，$\bvec r_0, \bvec v_0$分别为初始时刻$t=0$粒子的位置与速度，是需要给定的已知量；$\bvec f = \bvec f(t)$是$t$时刻粒子的受力．
+
+以下是使用Verlet算法模拟单粒子圆周运动的octave/matlab代码．
+\begin{lstlisting}[language=matlab]
+clc
+clear
+
+function f = centriforce(r) %有心力，例如引力、点电荷的静电力
+  mag = 1/(norm(r)^2);
+  f = -mag*r/norm(r);
+end
+
+r0=[10;0]; %点粒子的初始位置
+v0=[0;2]; %点粒子的初始速度．v0=[0;sqrt(10)]时为匀速率圆周运动
+dt = 0.01;
+
+R0 = r0 - v0*dt + 100*centriforce(r0)/2*dt^2;
+R1 = r0;
+R2 = [0;0];
+i=0;
+
+while 1
+  R2 = 2*R1 - R0 + 100*centriforce(R1)*dt^2;
+  if mod(i,5) == 0
+    clf
+    hold on
+    scatter(0,0);
+    scatter(R2(1),R2(2));
+    axis equal
+    axis([-10 10 -10 10])
+    hold off
+    pause(0.05);
+    i = 0;
+  endif
+
+  R0 = R1;
+  R1 = R2;
+  R2 = [0;0];
+  i=i+1;
+end
+
+\end{lstlisting}

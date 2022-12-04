@@ -1,0 +1,24 @@
+% Linux 的二进制兼容问题
+
+\begin{issues}
+\issueDraft
+\end{issues}
+
+\pentry{g++ 编译器创建静态和动态链接库\upref{gppLib}}
+
+参考这里的\href{https://stackoverflow.com/questions/20183883/determining-binary-compatibility-under-linux}{回答}．
+
+静态链接的程序一般没什么问题． 但对于动态链接的程序， 可以把所有非基础的 so 依赖库打包到一个文件夹里面并设置 \verb|rpath/runpath| 或者 \verb|LD_LIBRARY_PATH|． 但是这里面不能包括一些基础的系统库例如
+\begin{itemize}
+\item \verb`linux-vdso.so.1` 直接由内核提供，不存在于文件系统， 见\href{https://unix.stackexchange.com/questions/476971/ldd-shows-no-location-after-arrow-library-does-not-exist-on-system}{这里} 和 \href{https://en.wikipedia.org/wiki/VDSO}{vDSO - Wikipedia}．
+\item \verb`libc.so.6` 是 GNU C library， 提供 C 语言支持， 包括 system call 的 wrapper．
+\item \verb`libm.so.6` 是 GNU C library 的一部分， 提供数学函数．
+\item \verb`libgcc_s.so.1` 是 GCC runtime library 例如在 32bit 系统中提供 64bit 整数运算．
+\item \verb`ld-linux-x86-64.so.2` 是 dynamic linker
+\item \verb`libgomp.so.1` 跟 openmp 有关．
+\item \verb`libstdc++.so.6` 是 C++ 库
+\item \verb`libgfortran.so.5` 是 fortran 库
+\item \verb`libquadmath.so.0` 是和 G++ 一起安装的．
+\end{itemize}
+
+最兼容的方法大概使用 chroot， 可以把除了 \verb|vdso| 以外的所有动态库都放到 fake root 文件夹里面．

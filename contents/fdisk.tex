@@ -7,9 +7,9 @@
 \subsection{文件操作}
 \begin{itemize}
 \item \verb|sudo dd| 是一个很危险的命令， 它直接操作硬盘上的任意位置的数据， 无论是否被挂载． \verb|sudo dd if=/dev/random of=/dev/sda| 会把整个硬盘包括分区方式（MBR，GPT）等所有信息抹掉
-\item MBR (Master Boot Record) 和 GPT (GUID Partition Table) 是唯一两种硬盘的分区方式（partition schemes）
+\item \textbf{MBR (Master Boot Record)} 和 \textbf{GPT (GUID Partition Table)} 几乎是唯一两种硬盘的\textbf{分区方式（partition schemes）}
 \item 要备份 MBR，用 \verb|dd if=/dev/sda of=/data/disk.img bs=446 count=1| ， 还原同理， 但还原最好只用 440 字节
-\item 用 dd 把一个硬盘的分区克隆的另一个硬盘的分区后（两个分区大小必须完全相同）， 再 clone MBR 用 \verb|dd if=/dev/sda of=/dev/sdc bs=440 count=1|
+\item 用 \verb|dd| 把一个硬盘的分区克隆的另一个硬盘的分区后（两个分区大小必须完全相同）， 再 clone MBR 用 \verb|dd if=/dev/sda of=/dev/sdc bs=440 count=1|
 \item 要擦除 MBR 中的 grub， 首先备份！ 然后用 \verb|sudo dd if=/dev/zero of=/dev/sdx bs=440 count=1|
 \item 不同的分区当然可以有不同的文件系统
 \item \verb|Gparted| 是一个 GUI 硬盘分区工具， 在 Ubuntu live CD 中自带
@@ -27,8 +27,9 @@
 \item \verb|extFAT| 在 Ubuntu 中并不怎么支持 resize 和移动， 还是用 windows 的傲梅比较好
 \end{itemize}
 
-\subsubsection{/etc/fstab}
+\subsubsection{fstab （File System Table）}
 \begin{itemize}
+\item \verb|/etc/fstab|
 \item \verb|uid=1000,gid=1000| 是当前登录用户的 user/group id．
 \item \verb|NTFS| 的设置是 \verb|LABEL=mydrive2 /mnt/drive2 ntfs-3g nofail,x-gvfs-show,uid=1000,gid=1000 0 0|
 \item \verb|exFAT| 的设置是 \verb|LABEL=mydrive1 /mnt/drive1 exfat nofail,x-gvfs-show,uid=1000,gid=1000 0 0|

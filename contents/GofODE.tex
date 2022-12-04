@@ -1,0 +1,146 @@
+% 常微分方程的几何图像
+% 向量场|单参数微分同胚群|微分方程|解
+
+
+\pentry{相空间和相流\upref{PSaPF}，}
+这里，将从几何上来理解常微分方程．这需要先引入一些概念．
+\subsection{微分同胚}
+以下新名词的理解只需掌握函数可微性的知识．
+\begin{definition}{可微函数}
+设 $U$ 是矢量空间 $\mathbb R^n$ 上的区域，其上坐标为 $x_1,\cdots,x_n$，称函数
+\begin{equation}
+f:U\rightarrow\mathbb R
+\end{equation}
+是 $U$ 上的\textbf{可微函数}，若 $f(x_1,\cdots,x_n)$ 是 $r$ 次连续可微的，此处，$1\leq r\leq\infty$．通常人们都不关心 $r$ 的具体值，因此并不指明．若有需要将指出“$r$次可微”或函数类 $C^r$.
+\end{definition}
+\begin{definition}{可微映射}
+设 $U$ 是 $\mathbb R^n$ 中区域，$V$ 是 $\mathbb R^m$ 中区域，其中 $x_1,\cdots,x_n$ 是 $U$ 中的坐标，$y_1,\cdots,y_m$ 是 $V$ 中的坐标，称映射
+\begin{equation}
+f:U\rightarrow V,\quad f(x_1,\cdots,x_n)=(y_1,\cdots,y_m)
+\end{equation}
+为\textbf{可微映射}，若 $y_i=f_i(x_1,\cdots,x_n)$ 是可微函数．其中 $1\leq i\leq m$．
+\end{definition}
+\begin{definition}{微分同胚}
+若映射 $f:U\rightarrow V$ 是个双射，且 $f$ 和其逆 $f^{-1}$ 都是可微映射，则称 $f$ 为\textbf{微分同胚}．
+\end{definition}
+
+\begin{definition}{单参数微分同胚群}\label{GofODE_def1}
+设 $M$ 是一流形（可认为是欧氏空间中一区域），若映射
+\begin{equation}
+g:\mathbb R\times M\rightarrow M,\quad g(t,x) =g^t x
+\end{equation}
+满足：1.$g$ 是可微映射；2.族 $\{g^t|t\in\mathbb R\}$ 是 $M$ 的单参数变换群（\autoref{PSaPF_def1}~\upref{PSaPF}）．则称 $\{g^t|t\in\mathbb R\}$ 是 $M$ 的\textbf{单参数微分同胚群}．
+\end{definition}
+\begin{theorem}{}
+若 $\{g^t|t\in\mathbb R\}$ 是单参数微分同胚群，则对每一 $t$，映射 $g^t$ 是微分同胚．
+\end{theorem}
+\textbf{证明：}因为 $g$ 是可微映射，且
+\begin{equation}
+\dv{g^tx}{x}=\pdv{g(t,x)}{x}
+\end{equation}
+所以 $g^t$ 对 $x$ 可微．又 $\{g^t\}$ 是单参数变换群，所以对每一 $t$，$g^t$ 是双射\upref{PSaPF}，这意味着 $\dv{g^t x}{x}\neq 0$（因为否则 $g^t(x+\dd x)=g^t(x)$,这违反了 $g^t$ 的单射性）．所以
+\begin{equation}
+\dv{{g^{t}}^{-1}}{x}=\frac{1}{\dv{g^t x}{x}}
+\end{equation}
+可微．
+
+\textbf{证毕！}
+\subsection{向量场}
+常微分方程研究的过程是可微过程，即要求相空间 $M$ 是微分流形，状态随时间的变化由可微函数描述．由于状态x经过t时间后变为 $g^tx$，要这个有可微函数描述的映射就是 $g(t,x)=g^tx$，由\autoref{GofODE_def1} ，$\{g^t|t\in\mathbb R\}$ 就是 $M$ 的单参数微分同胚群．因此，以后提到相流 $\{M,\{g^t\}\}$ ，都有将 $\{g^t\}$ 理解成单参数微分同胚群．
+
+掌握了以上概念，下面的概念是容易理解的．
+\begin{definition}{相速度}
+称
+\begin{equation}\label{GofODE_eq2}
+v(x):=\left.\dv{}{t}\right|_{t=\tau} g^tx
+\end{equation}
+为相流 $g^t$ 在点 $x\in M$ 的\textbf{相速度}．
+\end{definition}
+由于 $M$ 可看成欧几里得空间中的区域，所以其中的点就有坐标，因此 $\dd g^t x$ 有定义，上面的 $v(x)$ 也就有定义．
+
+\subsubsection{两曲线的相切}
+同样令 $U$ 是 $\mathbb R^n$ 中一区域，其坐标为 $x_1,\cdots,x_n$，每个 $x_i$ 其实都相当于将 $U$ 映射到 $\mathbb R$ 的映射
+\begin{equation}
+x_i:U\rightarrow\mathbb R.
+\end{equation}
+$U$ 上的曲线就是 $t$ 轴上一区间 $I$ 到 $U$ 的连续映射 $\varphi$，通常我们设它连续可微．
+\begin{definition}{速度相量}
+设 $\varphi$ 是 $U$ 的曲线且 $\varphi(0)=x$，则
+\begin{equation}
+v=\left.\dv{}{t}\right|_{t=0}(x\circ\varphi)
+\end{equation}
+称为曲线在点 $x$ 处的\textbf{速度向量}．其分量为 $v_i=\left.\dv{}{t}\right|_{t=0}(x_i\circ\varphi)$
+\end{definition}
+\begin{definition}{曲线的相切}
+若两曲线 $\varphi_1,\varphi_2$ 经过同一点 $x=\varphi_1(0)=\varphi_2(0)$．如果对 $t\rightarrow0$ 时，点 $\varphi_1(t),\varphi_2(t)$ 之间距离是比 $t$ 高阶的无穷小 $o(t)$，则称它们在点 $x$ \textbf{相切}．
+\end{definition}
+
+\begin{theorem}{}
+两曲线 $\varphi_1,\varphi_2$ 在点 $x$ 处相切，当且仅当它们的速度向量相同．
+\end{theorem}
+\textbf{证明：}将 $x\circ\varphi_1(t)-x\circ\varphi_2(t)$ 在 $t=0$ 处展开：
+\begin{equation}
+x\circ\varphi_1(t)-x\circ\varphi_2(t)=\sum_{i=1}\frac{1}{i!}\qty(\left.\dv[i]{}{t}\right|_{t=0}\qty(x\circ\varphi_1-x\circ\varphi_2))t^i
+\end{equation}
+要使 $\abs{x\circ\varphi_1(t)-x\circ\varphi_2(t)}=o(t)$ 上式就不能含 $t$ 的一次项，于是只能
+\begin{equation}
+\left.\dv{}{t}\right|_{t=0}x\circ\varphi_1=\left.\dv{}{t}\right|_{t=0}x\circ\varphi_2
+\end{equation}
+
+\textbf{证毕！}
+
+这一定理意味着相切的曲线对应同一速度向量，而在一点 $x_0$ 处都有一速度矢量与任一矢量 $v$ 对应，只需这样定义曲线 $\varphi$（注意下面 $x(x_0)$ 代表 $x_0$ 的坐标）．
+\begin{equation}
+x\circ\varphi(t)=\int_0^t v\dd t+x(x_0)
+\end{equation}
+也就是说在\textbf{点 $x$ 的速度矢量 $v$ 相当于过 $x$ 点的曲线的等价类}，该等价类中的任一曲线在点 $x$ 的速度矢量都是 $v$．所以有下面的定义
+\begin{definition}{切向量}
+称过点 $x\in U$ 的曲线的等价类为点 $x$ 的\textbf{切向量}．
+\end{definition}
+
+由于 $n$ 维空间中的区域 $U$ 上的一点处所有的速度矢量构成一 $n$ 维的矢量空间，所以在 $x$ 点的所有切向量构成的几何就是一个 $n$ 维的矢量空间．
+\begin{definition}{切空间}
+在点 $x\in U$ 处的所有切向量构成的集合称为 $U$ 在 $x$ 的\textbf{切空间}，记作 $TU_x$
+\end{definition}
+
+我们说过，$n$ 维流形 $M$ 相当于 $\mathbb R^n$ 中一区域，那么在它上面任一点 $x$ 都有一切空间 $TM_x$．
+\begin{definition}{切丛}
+流形 $M$ 上所有点的切空间构成的集合
+\begin{equation}
+TM=\bigcup_{x\in U}TM_x
+\end{equation}
+称为流形 $M$ 的\textbf{切丛}．
+\end{definition} 
+流形 $M$ 的向量场就是说对 $M$ 上的每一点都有一向量与之对应，每一点处的向量显然是该点的切向量，它是在 该点的切空间 $TM_x$ 中的，而另一点的向量又在另一点的切空间中的，那么向量场就相当于一个映射 $v$，它把 $x\in M$ 映到 $v(x)\in TM_x$，由于向量场 $v$ 定义域在 $M$ ，它的像要 $v$ 取遍 $M$，那么像所在的集合就是
+$\bigcup_{x\in M} TM_x$ ．这就是说 $M$ 的向量场相当于是流形 $M$ 到其切丛 $TM$ 的映射．一般情况，我们还要求它是可微映射．
+\begin{definition}{向量场}
+设 $M$ 是一 $n$ 维流形（$\mathbb R^n$ 中的一区域） ，映射
+\begin{equation}
+v:M\rightarrow\mathbb TM
+\end{equation}
+是可微映射，则称 $v$ 是 $M$ 的一个\textbf{向量场}．它由 $n$ 个可微函数 $v_i:M\rightarrow \mathbb R$ 所指定． 
+\end{definition}
+\begin{definition}{奇点}
+设 $v$ 是 $M$ 的向量场，且 $v(x)=0$，则称点 $x$ 为向量场 $v$ 的\textbf{奇点}．
+\end{definition}
+\subsection{微分方程}
+有了上述诸概念，微分方程的几何意义就是显然的了．
+\begin{definition}{微分方程}
+设 $U$ 是 $\mathbb R^n$ 中一区域，$v$ 是 $U$ 上的向量场，则称方程
+\begin{equation}\label{GofODE_eq1}
+\dot x=v(x),\quad x\in U
+\end{equation}
+是由向量场 $v$ 确定的\textbf{微分方程}．$U$ 称为该微分方程的\textbf{相空间}． 
+\end{definition}
+
+\begin{definition}{微分方程的解}
+若从 $t$ 轴的区间 $I$ 到相空间 $U$ 的可微映射 $\varphi$ 满足：
+\begin{equation}\label{GofODE_eq3}
+\left.\dv{}{t}\right|_{t=\tau}\varphi(t)=v(\varphi(\tau)),\quad\forall\tau\in I
+\end{equation}
+则称 $\varphi$ 为微分方程\autoref{GofODE_eq1} 的解．
+\end{definition}
+\begin{definition}{相曲线}
+设 $\varphi$ 是微分方程\autoref{GofODE_eq1} 的解，则 $\varphi$ 的像称为该微分方程的\textbf{相曲线}．
+\end{definition}
+观察\autoref{GofODE_eq2} 和\autoref{GofODE_eq3} ，可以发现：若 $x=\varphi(t_0)$, 那么若求得了微分方程满足条件 $x=\varphi(t_0)$ 的解 $\varphi(t)$，那么 $\varphi(t)$ 就是相流 $\{g^t\}$ 在点 $x$ 处的运动，而向量场 $v$ 对应相流 $\{g^t\}$ 的相速度．

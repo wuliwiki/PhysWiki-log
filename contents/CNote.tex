@@ -18,22 +18,7 @@ strcat(s1, s2) // 连接
 strrev(s1) // 反转
 \end{lstlisting}
 
-\subsection{printf 和 scanf}
-\begin{lstlisting}[language=cpp]
-#include <stdio.h>
-void main( )
-{
-  int x,y,z;
-  scanf("%d+\n,\n=%d",&x,&y);
-  z=x*y;
-  printf("x=%d,y=%d\n",x,y);
-  printf("xy=%d\n",z);
-}
-\end{lstlisting}
-引号内除了特殊字符，其它都需要输入一摸一样的，否则会出错．但是，1.变量前面可以多打任意多个空格和回车，2.任意多个空格、回车相连等效．
- 
-\verb|%d,%c,%f|, 都行 \verb|%s| 输入字符串， \verb|%lld| 输入 \verb|long long| 类型．
-
+\subsection{printf}
 \begin{lstlisting}[language=cpp]
 #include<stdio.h>
 
@@ -70,6 +55,27 @@ printf("%10.3g\n", y); // "  1.23e-05"
 
 如果不想输出到命令行而是输出到字符串， 就用 \verb|int sprintf(char *str, const char *format, ...)|． 返回写入的字符数． 该函数返回写入到 \verb|str| 的总字符数．
 
+\subsection{scanf}
+\begin{lstlisting}[language=cpp]
+#include <stdio.h>
+int main()
+{
+  int x,y,z;
+  scanf("%d+\n,\n=%d",&x,&y);
+  z=x*y;
+  printf("x=%d,y=%d\n",x,y);
+  printf("xy=%d\n",z);
+}
+// 输入：
+// 123+
+// ,
+// =234
+// 输出：
+// x=123,y=234
+// xy=28782
+\end{lstlisting}
+引号内除了特殊字符，其它都需要输入一摸一样的，否则会出错．但是，1.变量前面可以多打任意多个空格和回车（后面不可以），2.任意多个空格或回车相连等效．
+
 \subsection{getchar}
 \begin{lstlisting}[language=cpp]
 #include <stdio.h>
@@ -105,3 +111,30 @@ typedef union {} 名称 // 同理
 \begin{lstlisting}[language=cpp]
 union {} // 和 struct 类似， 但变量共用内存
 \end{lstlisting}
+
+\subsection{函数指针}
+\begin{lstlisting}[language=cpp]
+// 函数指针
+double(*p1)(double) = sin;
+// 定义函数指针类
+typedef double(*Tpf)(double);
+Tpf p3 = sin;
+// 定义函数类
+typedef double(Tf)(double);
+Tf *p2 = sin;
+// 作为类型参数（\verb|&sin| 和 \verb|sin| 等效）
+vector<double(*)(double)> arr {&sin, cos} arr;
+// 调用函数（dereference 可选）
+cout << "sin(1) = " << arr[0](1) << endl;
+cout << "cos(1) = " << (*arr[1])(1) << endl;
+\end{lstlisting}
+
+\subsection{文件处理}
+\begin{itemize}
+\item \verb|fopen| 以及选项 \verb|a, a+, w, w+| 创建新文件．
+\item \verb|fopen| 打开已有文件．
+\item \verb|fscanf, fgets| 读取文件
+\item \verb|fprintf| 写文件
+\item \verb|fseek, rewind| 移动到文件的某个位置．
+\item \verb|fclose| 关闭文件
+\end{itemize}

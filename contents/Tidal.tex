@@ -1,0 +1,100 @@
+% 潮汐力
+
+\begin{issues}
+\issueDraft
+\issueNeedCite
+\end{issues}
+\pentry{万有引力、引力势能\upref{Gravty}， 离心力\upref{Centri}}
+\begin{figure}[ht]
+\centering
+\includegraphics[width=8cm]{./figures/Tidal_1.pdf}
+\caption{潮汐力分布示意图（地球参考系）} \label{Tidal_fig1}
+\end{figure}
+
+我们先以月球对地球的潮汐力为例，并忽略地球自转、公转等因素．
+
+\begin{figure}[ht]
+\centering
+\includegraphics[width=12cm]{./figures/Tidal_2.pdf}
+\caption{月球对地球各点的引力不同} \label{Tidal_fig2}
+\end{figure}
+
+众所周知，引力与两点距离有关：
+$$\bvec F_\text{引力}= - \frac{GMm}{r^2}\hat R \qquad a_\text{引力}=-\frac{GM}{r^2}\hat R$$
+
+如\autoref{Tidal_fig2}  所示，由于月球到地球各点的距离不同，所以准确的说，月球对地球各点的引力也不同，而潮汐现象正是由于引力的这种细微差异．地球表面上正对月球$A$点、背对月球的$B$点的引力为：
+\begin{equation}
+\begin{aligned}
+\bvec F_A &= - \frac{GM_\text{月}\Delta m}{(R-r)^2} \hat R\\
+\bvec F_B &= -\frac{GM_\text{月} \Delta m}{(R+r)^2}\hat R\\
+\end{aligned}
+\end{equation}
+以及月球对地球整体施加的引力加速度(转动的向心加速度)%这里我不大会表述...不是地球的自转
+\begin{equation}
+\bvec a_\text{地球} = -\frac{GM_\text{月}}{R^2}\hat R
+\end{equation}
+其中$r$是地球半径，$R$是地月距离，$\hat R$是从月球指向地球的单位方向向量，负号表示引力方向是从地球指向月球的．
+
+\begin{figure}[ht]
+\centering
+\includegraphics[width=12cm]{./figures/Tidal_3.pdf}
+\caption{地球表面上，正对与背对月球的两点都被拉起} \label{Tidal_fig3}
+\end{figure}
+
+而从地球这一非惯性参考系上看，各点都还受一个离心惯性力(不是地球自转的离心惯性力，而是地球与月球转动的)：
+$$f_\text{惯} = \bvec a_\text{惯} \Delta m =\frac{GM_\text{月}\Delta m}{R^2}\hat R$$．如\autoref{Tidal_fig3} 所示，考虑到这个因素后，有趣的事情发生了：在一个地球人看来，地球表面上正对与背对月球的两点似乎都正被拉起，这就是\textbf{潮汐力}．某种意义上，潮汐力也是由于处于地球这一非惯性参考系的我们的错觉．
+
+具体而言，A点处的潮汐力为
+$$
+\bvec F_A' =\bvec F_A + a_\text{惯}\Delta m =  -\frac{GM_\text{月}\Delta m}{(R-r)^2}\hat R + \frac{GM_\text{月}\Delta m}{R^2} \hat R
+\approx -\frac{2rGM_\text{月}\Delta m}{R^3} \hat R
+$$
+同理，B点处的潮汐力为
+$$
+\bvec F_B' = \bvec F_B + a_\text{惯}\Delta m
+\approx \frac{2rGM_\text{月}\Delta m}{R^3} \hat R
+$$
+
+再强调一次，无论是正对月球的一面，还是背对月球的一面，潮汐力的方向都是离开地表的．因此，潮汐力不能简单地理解为“因为地球的一面离月球更近，所以那一侧的海洋被吸起了”．由于潮汐力的这一非同寻常的性质，因此一天之内，地球出现两次潮汐现象．
+\begin{figure}[ht]
+\centering
+\includegraphics[width=12cm]{./figures/Tidal_4.png}
+\caption{一天内，地球出现两次潮汐现象} \label{Tidal_fig4}
+\end{figure}
+
+同时，我们发现潮汐力是与距离的三次方成反比的，这意味着感性上说“潮汐力比引力衰减得更快”．
+\begin{exercise}{谁是弄潮儿？}
+你可能觉得太阳的质量远比月球大，因此太阳对地球产生的潮汐作用更明显？是这样的吗？\footnote{月球产生的潮汐力应该大概是太阳的二倍多．但是，这不代表太阳对潮汐现象没有影响．}
+\end{exercise}
+
+绘制地球表面潮汐力分布的octave/matlab代码：
+\begin{lstlisting}[language=matlab]
+clc
+clear
+
+[x y z] = sphere(20);
+xs = -60; %地月距离大概是地球半径的60倍
+scatter3(xs,0,0);
+
+u = x - xs;
+v = y;
+w = z;
+
+r = sqrt(u.^2+v.^2+w.^2);
+mag = 10^4./(r.^2);
+
+u = -mag.*u./r;
+v = -mag.*v./r;
+w = -mag.*w./r;
+u = u + 10^4/(xs^2); %地球参考系这一非惯性参考系中的离心力．注释掉这一行即可得到月球引力在地球表面的分布．
+
+hold on
+axis equal
+axis off
+surf(x,y,z,'FaceColor','none','EdgeColor',[0.8 0.8 0.8]);
+axis([-1.2 1.2 -1.2 1.2 -1.2 1.2])
+quiver3(x,y,z,u,v,w);
+view(-30,30);
+hold off
+
+\end{lstlisting}

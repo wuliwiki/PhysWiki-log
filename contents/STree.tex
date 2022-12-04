@@ -25,7 +25,7 @@
 
 可以看出，线段树的每个结点都代表一个区间，叶结点的区间长度都为 $1$，对于每个区间结点 $[l, r]$，左子结点为 $[l, mid]$，右子结点为 $[mid + 1, r]$，$mid = \left\lfloor\dfrac{l+r}{2}\right\rfloor$．
 
-\textbf{线段树的建树（$\text{build}$）操作}：
+\textbf{线段树的建树（$\texttt{build}$）操作}：
 
 一般来说，线段树每个结点上存储了很多信息，具体存什么信息得根据具体情况判断，这里以存储区间最大值为例，我们用递归来建树，每个叶结点 $[i, i]$ 保存 $a_i$ 的值，每次递归左子节点和右子节点，最后根据子节点的信息更新当前结点的信息，这一操作称为 $\text{pushup}$ 操作．
 
@@ -61,7 +61,7 @@ build(1, 1, n);   // 调用建树，从根节点开始
 \end{lstlisting}
 
 
-\textbf{线段树的 $\text{pushup}$ 操作：}
+\textbf{线段树的 $\texttt{pushup}$ 操作：}
 
 线段树可以很容易的把左右两个子结点的信息上传到当前结点，所以在记录每个结点 $i$ 的最大值就可以用左子节点 $\mathtt{i<<1}$ 的最大值和右子节点 $\mathtt{i<<1|1}$ 的最大值两者取一个最大值就是当前结点 $i$ 的最大值．
 
@@ -72,7 +72,7 @@ void pushup(int u)
 }
 \end{lstlisting}
 
-线段树的单点修改（$\text{modify}$）操作：
+线段树的单点修改（$\texttt{modify}$）操作：
 
 单点修改操作一般是把 $a[x]$ 的值修改成 $v$，我们从根结点开始，递归左右两个子节点，找到 $[x, x]$ 区间，然后从下往上把对应的父节点保存的最大值进行更新．
 
@@ -97,7 +97,7 @@ void modify(int u, int x, int v)    // 把 a[x] 修改为 v
 }
 \end{lstlisting}
 
-\textbf{线段树的区间查询（$\text{query}$）操作：}
+\textbf{线段树的区间查询（$\texttt{query}$）操作：}
 
 查询操作一般为查询某个区间的某种属性，例如查询区间 $[l. r]$ 内的最大值．我们只需要从根节点开始递归查询，会出现如下几种情况：
 
@@ -113,7 +113,7 @@ void modify(int u, int x, int v)    // 把 a[x] 修改为 v
 \caption{$\text{query}$} \label{STree_fig5}
 \end{figure}
 
-查询操作会把询问的区间 $[l, r]$ 分成 $O(\log N)$ 个区间，来简单的证明一下：
+查询操作会把询问的区间 $[l, r]$ 分成 $\log N$ 个区间，来简单的证明一下：
 在递归每个树上的结点 $[T_l, T_r]$ 时，$mid = \left\lfloor\dfrac{T_l+T_r}{2}\right\rfloor$ 会出现以下几种情况：
 
 \begin{enumerate}

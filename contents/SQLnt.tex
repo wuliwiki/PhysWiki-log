@@ -7,21 +7,22 @@
 \begin{itemize}
 \item 本文参考 \href{https://www.w3schools.com/sql/default.asp}{w3schools}
 \item 以下用 SQLite 做测试．
-\item SQL（Structured Query Language） 是操作数据库的语言
-\item MySQL 是具体的管理数据库的软件， 是 \textbf{RDBMS （relational database management system）}
+\item \textbf{SQL（Structured Query Language）} 是操作数据库的语言
+\item MySQL 是一个具体的管理数据库的软件， 是 \textbf{RDBMS （relational database management system）}
 \item 开发者需要掌握 SQL 语言来使用 MySQL． 不同的 RDBMS 基本都是用 SQL 语言， 虽然有微小差异， 但都兼容 SQL standard．
 \item dump 操作常常用于备份数据库（而不是直接拷贝数据库文件）． 数据库文件一般是加密的， 但是 dump 不会加密．
-\item 一个 database 里面可以有许多 table， 每个 field 就是 table 的一列， 每个 record 就是一行
-\item 显示数据库 \verb`SHOW DATABASES;`
+\item 一个 database 里面可以有许多 table， 每个 \textbf{field} 就是 table 的一列， 每个 \textbf{record} 就是一行
+\item 以下的命令可以在 DB BROWSER for SQLITE 里面实验， 先创建数据库， 然后选 Execute SQL， 把命令或者 sql 里面的东西粘贴过去， 执行即可．
 \end{itemize}
 
 \subsection{SQL Basics}
 \begin{itemize}
+\item 显示数据库 \verb`SHOW DATABASES;`
 \item 用 \verb|--| 注释直到行末， 用 \verb|/*   */| 注释块
 \item 大部分操作都通过 \textbf{SQL statement} 完成， 如 \verb`SELECT * FROM 表名;`
 \item 命令可以随意换行，两个命令之间必须用 \verb|;| 隔开
 \item SQL 关键字， 表格名， 列名都不区分大小写，一般关键词用大写
-\item 数据中的字符串用单引号，大部分数据库双引号也行，字符串区分大小写
+\item 数据中的字符串用单引号，大部分数据库双引号也行（但不是标准），字符串区分大小写
 \item 一些最重要的关键字如
 \item \verb`SELECT` - extracts data from a database
 \item \verb`UPDATE` - updates data in a database
@@ -39,7 +40,7 @@
 \subsubsection{SELECT}
 \begin{itemize}
 \item \verb`SELECT 列1, 列2, ... FROM 表格名;` 获取的数据表叫做 \textbf{result-set}． 如果要选取所有列， 用 \verb`*` 即可 e.g. \verb`SELECT * FROM 表格名;` 显示名为 \verb|表格名| 的表格中全部内容
-\item \verb`SELECT DISTINCT 列1, 列2, ... FROM 表格名;` 仅列出不完全相同的行， 例如 \verb`SELECT DISTINCT Country FROM 表格名;`
+\item \verb`SELECT DISTINCT 列1, 列2, ... FROM 表格名;` 仅列出（输出中）不完全相同的行， 例如 \verb`SELECT DISTINCT Country FROM 表格名;`
 \item 获取表格行数： \verb`SELECT COUNT(*) FROM 表格名`
 \item \verb`SELECT COUNT(DISTINCT Country) FROM 表格名;` 显示表格中有多少不同的国家． （这个命令在 Microsoft Access 里面没用）， 除了 \verb|COUNT| 还有 \verb|AVG| 和 \verb|SUM|
 \end{itemize}
@@ -100,8 +101,9 @@
 \item \verb|CREATE TABLE Person (列1名称 类型 选项1 选项2 ... , 列2名称 类型 选项1 选项2 ... , ...)|
 \item 数据类型详见\href{https://www.w3schools.com/sql/sql_datatypes.asp}{这里}．
 \item 选项 \verb|PRIMARY KEY| 可以使表格的某一列不出现重复的值且不能为 \verb|NULL|． 一个表格中只能有一个 \verb|PRIMARY KEY|， 但可以是多行．
+\item \verb|列名称 类型 UNIQUE| 可以保证该列没有重复数据．
 \item \verb|AUTO_INCREMENT| 选项可以在创建时（如果不指定）自动比该列当前的最大值加 1， 例如 ID 号． 在 sqlite 中没有下划线且只能出现在 \verb|INTEGER PRIMARY KEY AUTOINCREMENT| 中．
-\item 如果要在一个 table 中的某列指定另一个 table 中的某个 \verb|PRIMARY KEY|， 那就使用 \verb|FOREIGN KEY|． 例如在 \verb|Orders| 表中链接 \verb|Persons| 表中名为 \verb|PersonID| 的 primary key：
+\item 如果要在一个 table 中的某列指定另一个 table 中的某个 \verb|PRIMARY KEY|， 那就使用 \verb|FOREIGN KEY (本表列名) REFERENCES 别的表名 (别的表的列名)|． 例如在 \verb|Orders| 表中链接 \verb|Persons| 表中名为 \verb|PersonID| 的 primary key：
 \begin{lstlisting}[language=none]
 CREATE TABLE Orders (
     OrderID int NOT NULL,

@@ -1,0 +1,85 @@
+% 地球测地线
+\begin{figure}[ht]
+\centering
+\includegraphics[width=6cm]{./figures/EGDT_1.pdf}
+\caption{球面两点间的最短路径} \label{EGDT_fig1}
+\end{figure}
+
+众所周知，球面上两点间的最短路径不再是一条直线段，而是一条圆弧曲线段．这也是为什么在平面地图上两点间的最短路径不是两点的直接连线，而是一条有弧度的曲线段．
+
+以下是绘制地球上两点间最短路径的octave/matlab代码．该程序同时将返回该路径的长度，单位为$\Si{km}$. 本代码的运行需要函数\verb|Sph2Cart| \upref{SphCar}．这个简略的模型只适用于演示，并且可能存在bug．%代码还写的很丑．．．
+
+\begin{lstlisting}[language=matlab]
+clc
+clear
+
+%L -180~180 W:-, E:+
+%A -90~90, N:+, S:-
+
+%在这里分别设定两点的角度制经纬度，L为经度（记E为正，W为负，取值范围-180~180），A为纬度（记N为正，S为负，取值范围-90~90）．
+L(1)=rand*360-180;
+A(1)=rand*180-90;
+
+L(2)=rand*360-180;
+A(2)=rand*180-90;
+
+%将经纬度换算为球坐标系坐标
+if L>=0
+  phi = L;
+else
+  phi = 360 + L;
+end
+
+theta = -A +90;
+
+phi = phi/360*2*pi;
+theta = theta/360*2*pi;
+
+hold on
+axis equal
+axis([-1.2 1.2 -1.2 1.2 -1.2 1.2])
+
+%绘制球面
+[gx gy gz] = sphere(18);
+g = surf(gx,gy,gz,'FaceColor',[0.8 0.8 1],'EdgeColor',[0.6 0.6 0.6]);
+
+%绘制两点
+[x y z] = Sph2Cart(1, theta, phi);
+scatter3(x,y,z,'r');
+text(x(1),y(1),z(1)+0.2,'Point 1');
+text(x(2),y(2),z(2)+0.2,'Point 2');
+scatter3(0,0,0,'k');
+line([0 x(1)],[0, y(1)],[0 z(1)]);
+line([0 x(2)],[0, y(2)],[0 z(2)]);
+
+pointA=[x(1),y(1),z(1)];
+pointB=[x(2),y(2),z(2)];
+
+%计算路径长度
+angle = abs(acos(dot(pointA,pointB) /(norm(pointA) * norm(pointB))));
+length = 6370 * angle
+
+%绘制路径
+n = cross(pointA, pointB);
+n = n / norm(n);
+
+Bd = cross(n, pointA);
+Bd = Bd/norm(Bd);
+
+P(:,1) = pointA/norm(pointA);
+P(:,2) = Bd;
+P(:,3) = n;
+
+t = linspace(0,angle,10);
+
+cPoint(1,:)= 1.02*cos(t);
+cPoint(2,:)= 1.02*sin(t);
+cPoint(3,:)= 0;
+
+for i =1:size(t,2)
+  ccPoint(:,i) = P*cPoint(:,i);
+end
+
+plot3(ccPoint(1,:),ccPoint(2,:),ccPoint(3,:));
+
+\end{lstlisting}

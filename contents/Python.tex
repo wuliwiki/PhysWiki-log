@@ -1,143 +1,109 @@
-% Python 简介
+% Python 简介与安装
 % Python|科学计算|Jupyter|模块|函数|变量
 
-到 2019 年， 在一些排名中， Python 已经成为最流行的语言， 无论是在科学计算还是在计算机领域都有大量的使用者． 本书中我们主要介绍 python 在科学计算中的应用．
-
-如果不想安装软件可以直接用浏览器访问 \href{https://jupyter.org/}{Jupyter Notebook} 运行 Python 程序， 要在本地使用 Python 推荐安装 Anoconda 或 miniconda\upref{CondaN}． 以下我们用前者进行讲解． Jupyter Notebook 的优点是交互式编程， 即每输入一个命令都可以立即执行（快捷键 Shift + Enter）， 利于学习和实验．
-
-\subsection{作为计算器}
-请在 Jupyter Notebook 中尝试输入以下命令并执行（运行结果略）． Python 程序使用 \verb|#| 注释一行，  或者用两个 \verb|"""| 或 \verb|'''| 注释多行\footnote{事实上 \lstinline|"""..."""| 或 \lstinline|'''...'''| 是一个字符串\upref{PyStr}而不是注释， 但单独出现的字符串并不会对程序运行造成影响， 所以可以用作注释}． 注释是为了辅助人阅读代码， 不会被执行．
-
-四则运算
-\begin{lstlisting}[language=python]
-2 + 2
-\end{lstlisting}
-\begin{lstlisting}[language=python]
-123 / 456 # 得到浮点数
-123 // 456 # 两数相除后向下取整
-\end{lstlisting}
-幂运算
-\begin{lstlisting}[language=python]
-3 ** 2
-\end{lstlisting}
-求余
-\begin{lstlisting}[language=python]
-4 % 3 # 使得 a == a // b + a % b 恒成立
-\end{lstlisting}
-使用括号
-\begin{lstlisting}[language=python]
-(123 - 234*2)**2 / (34 + 54**4)
-\end{lstlisting}
-如果一行太长， 可以用 \verb|\| 换行
-\begin{lstlisting}[language=python]
-1 + 2 + 3 + 4 + \
-    5 + 6
-\end{lstlisting}
-各种常见的数学函数都在 math 模块\upref{Module}中， 需要加载．
-\begin{lstlisting}[language=python]
-import math
-\end{lstlisting}
-使用模块中的函数， 要在前面加上模块名和一点． 例如开方 （square root）
-\begin{lstlisting}[language=python]
-math.sqrt(284)
-\end{lstlisting}
-自然指数函数
-\begin{lstlisting}[language=python]
-math.exp(5.1)
-\end{lstlisting}
-这样做虽然略显麻烦， 但可以区分不同模块中同名函数． 在确保没有冲突的情况下我们也可以用以下方法加载模块中的指定函数， 如
-\begin{lstlisting}[language=python]
-from math import sqrt, exp, sin, cos
-\end{lstlisting}
-现在使用这些函数就不需要 \verb|math.| 的前缀了
-\begin{lstlisting}[language=python]
-sin(1)
-\end{lstlisting}
-我们甚至可以用这种方式引入一个模块中所有函数（和其他内容）而无需前缀． 这样做引起名称冲突的可能性更大， 不建议使用．
-\begin{lstlisting}[language=python]
-from math import *
-\end{lstlisting}
-从模块中不仅可以引入函数， 还有常数， 例如圆周率和自然对数底（注意 \verb|e| 这种单字母名称很可能会产生冲突， 所以不建议取消 \verb|math.| 前缀）
-\begin{lstlisting}[language=python]
-sin(pi/2)
-\end{lstlisting}
-\begin{lstlisting}[language=python]
-log(e)
-\end{lstlisting}
-
-\verb|math| 模块中的其他常用函数如： 绝对值 （absolute value）
-\begin{lstlisting}[language=python]
-abs(-32)
-\end{lstlisting}
-自然对数
-\begin{lstlisting}[language=python]
-log(0.5)
-\end{lstlisting}
-以 10 为底的对数
-\begin{lstlisting}[language=python]
-log10(1000)
-\end{lstlisting}
-弧度转为角度
-\begin{lstlisting}[language=python]
-degrees(pi/2)
-\end{lstlisting}
-
-\subsubsection{复数}
 \begin{itemize}
-\item 复数常数如 \verb|z = 1+2j| 或者直接 \verb|3j|， 相当于 \verb|z = complex(1,2)|， 类型是 \verb|complex| （\verb|builtin| 模块）． \verb|z.real| 和 \verb|z.imag| properties 可以获取或改变矢部和虚部．
-\item \verb|math.sin()| 不支持复数， 但是 \verb|numpy.sin()| 可以． \verb|cmath.sin()| （complex math 模块） 也可以．
+\item \autoref{Python_sub1} Python 简介
+\item \autoref{Python_sub2} Python 安装
 \end{itemize}
 
-\subsection{变量}
-Python 中的\textbf{变量（variable）} 和数学中的不同， Python 的变量可以理解为一个储存数值的容器， 我们可以用等号把一个数值储存在一个变量中． 例如要计算一个长方体的体积， 我们既可以直接把三个数字相乘， 也可以先把这三个数字赋值给三个\textbf{变量}然后相乘
-\begin{lstlisting}[language=python]
-a = 1
-b = 2
-c = 3
-volumn = a*b*c
-\end{lstlisting}
-在 Jupyter Notebook 执行这四行发现并没有输出， 无论是一次性执行还是分开执行． 这是因为赋值命令默认不输出结果． 要强制输出结果可以用
-\begin{lstlisting}[language=python]
-print(volumn)
-\end{lstlisting}
-或者一次输出多个变量
-\begin{lstlisting}[language=python]
-print(a, b, c, volumn)
-\end{lstlisting}
-注意：在python2.x版本中，\verb|print| 是一个关键字，输出内容不需要加括号， python 3.x 中它是一个函数， 可以介绍任意多个用逗号隔开的变量， 他们甚至可以是不同类型的． 例如
-\begin{lstlisting}[language=python]
-print volumn  #2.x
-print(volumn) # 3.x
-\end{lstlisting}
-要强调的是， 这里的等号并不是数学上的等于， 而是\textbf{赋值}， 即把等号右边得到的数值储存在左边的变量中． 在第 4 行执行时， 计算机会先计算等号右边表达式的结果 6， 然后将 6 储存在变量 \verb|volumn| 中． \verb|volumn| 这个变量中并不会包含 \verb|a*b*c| 这个信息， 只储存 6 这个数值． 所以改变 \verb|a, b, c| 后 \verb|volumn| 的值并不会自动改变．
+\subsection{Python 简介}\label{Python_sub1}
 
-如果要让长方形的某个边长增加 1， 我们可以执行
-\begin{lstlisting}[language=python]
-a = a + 1
-\end{lstlisting}
-如果将等号理解为数学上的等于， 这个式子显然是错的． 但正确的理解是， 先把 \verb|a| 当前的值 1 加上 1 得到 2， 然后把 2 \textbf{赋值}给 \verb|a|． 由于我们没有给 \verb|volumn| 重新赋值， 它仍然是 6， 要更新 \verb|volumn|， 只需要重新执行
-\begin{lstlisting}[language=python]
-volumn = a*b*c
-\end{lstlisting}
-并用 \verb|print(volumn)| 显示新的值．
+\subsubsection{1.1.Python 是什么？}
 
-等效地， 我们也可以用\textbf{自加运算} \verb|+=|， 将 \verb|a = a + 1| 记为
-\begin{lstlisting}[language=python]
-a += 1
-\end{lstlisting}
-注意 \verb|+=| 是一个整体的算符， 中间不能有空格． 类似的运算还有 \verb|-=|， \verb|*=|， \verb|/=| 等．
+\begin{itemize}
+\item Python 是一门流行的编程语言．由荷兰数学和计算机科学研究学会的吉多·范罗苏姆于1990年代初设计．
+\item Python 是一门解释型编程语言： 这意味着开发过程中没有了编译这个环节．类似于PHP和Perl语言．
+\item Python 是一门交互式编程语言： 这意味着，您可以在一个 Python 提示符 >>> 后直接执行代码．
+\item Python 是一门面向对象的语言: 这意味着Python支持面向对象的风格或代码封装在对象的编程技术．
+\end{itemize}
+ 
+\subsubsection{1.2.Python 可以做什么？}
+\begin{itemize}
+\item Web开发：可以在服务器上使用 Python 来创建 Web 应用程序．
+\item 软件开发：可用于快速原型设计，也可用于生产就绪的软件开发．
+\item 数学运算：Python 可用于处理大数据并执行复杂的数学运算．
+\item 系统脚本：可以与软件一起使用来创建工作流．
+\end{itemize}
 
-\subsection{函数}
-Python 中的函数与数学中的函数不完全一样， 函数可以有若干个输入变量和输出变量（也可以没有）． 下面我们定义一个简单的函数来计算长方形的面积
-\begin{lstlisting}[language=python]
-def f(a, b, c):
-    volumn = a*b*c
-    return volumn
-\end{lstlisting}
-这段代码用到了两个 Python 的\textbf{关键字（keyword）} \verb|def| 和 \verb|return|． 关键字是指在程序中有特殊含义的单词， 不能作为变量名和函数名的名称． 其中 \verb|def| 用于定义函数， \verb|f| 是函数名， \verb|a|， \verb|b| 和 \verb|c| 分别是函数的\textbf{输入变量（argument）}． 冒号以后是\textbf{函数体}， 可以有若干行命令． 注意这些命令前面必须有\textbf{缩进（indentation）}．  在以上代码中， 函数体的第一行计算面积， 第二行将用关键字 \verb|return| 将计算的结果作为输出并退出函数．
+\subsubsection{1.3.Python 有什么特点？}
 
-现在我们可以使用这个函数， 使用方法和 \verb|sin|， \verb|sqrt| 等数学函数一样， 只是不同输入变量要用逗号隔开．
-\begin{lstlisting}[language=python]
-V = f(1.2, 3.4, 6)
-print(V)
+\begin{itemize}
+\item 易于学习：Python有相对较少的关键字，结构简单和一个明确定义的语法．
+\item 易于阅读：Python代码定义的更清晰．
+\item 易于维护：Python的成功在于它的源代码是相当容易维护的．
+\item 可嵌入: 你可以将Python嵌入到C/C++程序，让你的程序拥有"脚本化"的能力．
+\item 广泛的标准库：Python的最大的优势之一是丰富的库，且跨平台在 UNIX，Windows 和 Mac 兼容很好．
+\item 可扩展：如果你需要一段运行很快的关键代码，或者是想要编写一些不愿开放的算法，你可以使用C或C++完成那部分程序，然后从你的Python程序中调用．
+\end{itemize}
+
+%如果不想安装软件可以直接用浏览器访问 \href{https://jupyter.org/}{Jupyter Notebook} 运行 Python 程序， 要在本地使用 Python 推荐安装 Anoconda 或 miniconda\upref{CondaN}． 以下我们用前者进行讲解． Jupyter Notebook 的优点是交互式编程， 即每输入一个命令都可以立即执行（快捷键 Shift + Enter）， 利于学习和实验．
+
+\subsection{Python 安装}\label{Python_sub2}
+Python 已经能够工作在不同平台上．您需要下载适用于您使用平台的二进制代码，然后安装 Python．如果您平台的二进制代码是不可用的，你需要使用C编译器手动编译源代码．编译的源代码，功能上有更多的选择性， 为 Python 安装提供了更多的灵活性．\textbf{不过需要注意：太高版本的Python部分库是无法安装的（推荐3.8.6）}
+
+\subsubsection{2.1.Window 平台安装 Python:}
+访问 \href{https://www.python.org/downloads/windows/}{Python 官网关于 Windows 下载}，一般就下载  Windows installer，其中“Stable Releases”是指稳定版本，推荐下载．
+\begin{figure}[ht]
+\centering
+\includegraphics[width=14.25cm]{./figures/Python_1.png}
+\caption{Python 官网关于 Windows} \label{Python_fig1}
+\end{figure}
+
+\subsubsection{2.2.MAC 平台安装 Python:}
+MAC 系统都自带有 Python2.7 环境，你可以在链接 \href{https://www.python.org/downloads/mac-osx/}{Python 官网关于 mac 下载} 上下载最新版安装 Python 3.x．你也可以参考源码安装的方式来安装．
+
+\subsubsection{2.3.Unix & Linux 平台安装 Python:}
+你可以访问 \href{https://www.python.org/downloads/source/}{Python 官网关于 Linux 下载},选择适用于 Unix/Linux 的源码压缩包．
+\begin{figure}[ht]
+\centering
+\includegraphics[width=14.25cm]{./figures/Python_2.png}
+\caption{Python 官网关于 Linux} \label{Python_fig2}
+\end{figure}
+
+也可以直接用命令行下载
+\begin{lstlisting}[language=bash]
+wget https://www.python.org/ftp/python/3.7.6/Python-3.7.6.tgz
 \end{lstlisting}
+
+创建安装目录（你想放哪就放哪）
+\begin{lstlisting}[language=bash]
+mkdir -p /usr/local/python3
+\end{lstlisting}
+
+解压
+\begin{lstlisting}[language=bash]
+tar -zxvf Python-3.7.6.tgz
+\end{lstlisting}
+
+编译安装
+\begin{lstlisting}[language=bash]
+# gcc 环境、zlib 库和 readline-devel 包
+yum -y install gcc
+yum -y install zlib*
+yum install readline-devel
+# 配置
+cd Python-3.7.6
+./configure --prefix=/usr/local/python3
+# 编译安装
+make && make install
+\end{lstlisting}
+
+建立软链接
+\begin{lstlisting}[language=bash]
+ln -s /usr/local/python3/bin/python3.7 /usr/bin/python3
+ln -s /usr/local/python3/bin/pip3.7 /usr/bin/pip3
+\end{lstlisting}
+
+测试安装
+\begin{lstlisting}[language=bash]
+# 返回 Python 3.7.6（版本）
+python3 --version
+# 命令行输出
+python3
+......
+print("你好")
+\end{lstlisting}
+
+\textbf{百科下一个词条—Python - IDE安装-\upref{PyIDE}}
+
+\textbf{教程下一个词条——Python 解释器的使用\upref{PyItpt}}

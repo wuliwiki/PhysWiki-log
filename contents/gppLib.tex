@@ -8,12 +8,7 @@
 
 参考\href{https://blog.feabhas.com/2014/04/static-and-dynamic-libraries-on-linux/}{这篇文章}和\href{https://gcc.gnu.org/onlinedocs/gcc/Link-Options.html}{这篇文章}．
 
-\begin{itemize}
-\item 用 \verb`ldd 可执行文件` 可以查看一个程序使用的所有动态链接库， 包括库所依赖的其他库
-\item linux 编译器默认搜索路径（不包含子目录） \verb`/usr/local/lib`, \verb`/usr/local/lib64`, \verb`/usr/lib` and \verb`/usr/lib64`
-\end{itemize}
-
-事实上， 用 \verb|apt| 安装 \verb|lib*-dev| 就是在系统的默认搜索路径添加头文件和 \verb|lib*.a|， \verb|lib*.so| 文件， 以及它依赖的 package 中的这些文件． 这些文件在同一系统版本和同一 cpu 架构都是通用的（运气好的话也可能在不同系统中通用）．
+事实上， ubuntu 系统中用 \verb|apt| 安装 \verb|lib*-dev| 就是在系统的默认搜索路径添加头文件和 \verb|lib*.a|， \verb|lib*.so| 文件， 以及它依赖的 package 中的这些文件． 这些文件在同一系统版本和同一 cpu 架构都是通用的（运气好的话也可能在不同系统中通用）．
 
 \subsection{静态链接库}
 
@@ -23,8 +18,7 @@
 // lib1.cpp
 #include <iostream>
 using namespace std;
-int f1()
-{ cout << "In library 1" << endl; }
+int f1() { cout << "In library 1" << endl; }
 \end{lstlisting}
 
 再编一个主文件
@@ -71,58 +65,78 @@ g++ main.cpp -o main.x -L./ -l 1
 \begin{itemize}
 \item 所以简单来说， 静态链接库 \verb`.a` 就是 archive 的 \verb`.o` 文件． 在 link 阶段使用．
 \item 另外要注意 \verb`g++` 在（静态） link 阶段 \verb`.o` 或 \verb`.a` 的顺序是非常重要的， 某个 \verb`o` 文件只能调用在它后面列出的 \verb`o` 文件， 否则会提示找不到 symbol． 要让 \verb`g++` 忽略这个顺序， 可以使用
-\item 关于 so 动态链接库和 ELF 的一个\href{https://amir.rachum.com/blog/2016/09/17/shared-libraries/}{详细教程}．
+\item 关于 so 动态链接库和 ELF 的一个\href{https://amir.rachum.com/blog/2016/09/17/shared-libraries/}{详细教程}（强烈推荐）．
 \item 要强制 \verb|g++| 进行动态链接， 可以用 \verb|-l| 的另一种形式 \verb|-l :libXXX.so|． 其中 \verb|:文件名| 直接搜索 \verb|文件名|， 而不是 \verb|lib文件名.so或a|．
 \verb`-Wl,--start-group 文件1 文件2 ... -Wl,--end-group`， 这样 linker 找不到 symbol 时就会在 group 内的文件中反复搜索（编译速度会降低）．
-\item 注意 \verb|-L| 和 \verb|rpath| 里面的路径可以是相对路径， 但如果 \verb|rpath| 用相对路径， 那么可执行文件和 so 文件就必须保持相对位置否则运行时会找不到．
-\item 总之， 有空还是多看看 \verb`g++` 手册吧．
-\item 注意 \verb|ldd| 未必会显示所有依赖的库（我猜有一些可能是程序运行中途加载的，例如在源码中加载而不是在 link 阶段加载）．
-\addTODO{看一下 \verb|dlopen()| 函数有什么用．}
+\item 注意 \verb|ldd| 未必会显示所有依赖的库（不包含用 \verb|ldopen()| 函数直接从代码中加载的， 因为很有可能会根据用户输入来加载， 无法预判）．
 \item 另外 \verb|ldd| 不会列出依赖树， 如果想要依赖树， 用 \verb|lddtree| （\verb|apt install pax-utils|）
 \item \verb|stdc++.so.6| 即使同名，也不一定是正确的版本， 见\href{https://unix.stackexchange.com/questions/458659/what-do-the-multiple-glibc-versions-mean-in-the-output-of-ldd}{这里}． 如果不同路径都有这个文件， 似乎会自动加载正确的版本．
 \end{itemize}
 
 \subsection{动态链接库 (*.so)}
-创建动态库：
+\footnote{部分参考\href{https://amir.rachum.com/blog/2016/09/17/shared-libraries/}{这个教程}．}创建动态库：
 \begin{lstlisting}[language=none]
 g++ -shared -fPIC -o lib1.so lib1.cpp
 \end{lstlisting}
 
 使用方法:
-把 cpp 编译成 .o 文件时不需要声明动态链接库和所在目录, \verb`-c` 选项普通编译即可.
+把 cpp 编译成 .o 文件时不需要声明动态链接库和所在目录, \verb`-c` 选项（不链接）普通编译即可.
 \begin{lstlisting}[language=none]
 g++ -c main.cpp
 \end{lstlisting}
 把 \verb|.o| 文件链接成可执行文件时, 在最后 (注意必须是在最后) 加上
-\verb`-Wl,-rpath,<library path>  -L<library path> -l <libname1> -l <libname2>`
-其中 \verb`-Wl,aaa,bbb` 命令是将 \verb`aaa bbb` 选项传给 linker, 剩下的 \verb`-L<library path> -l <libname1> -l <libname2>` 的用法和上述 \verb|.a| 中的一样.
+\verb`-Wl,-rpath,<library path>  -L<library path> -l <libname1> -l <libname2>` 其中 \verb|<library path>| 可以是多个路径，如 \verb|path1:path2:...|
+其中 \verb`-Wl,aaa,bbb` 命令是将 \verb`aaa bbb` 选项传给 linker， 剩下的 \verb`-L<library path> -l <libname1> -l <libname2>` 的用法和上述 \verb|.a| 中的一样.
+
 \begin{lstlisting}[language=none]
 g++ -o main.x main.o -l1 -L./ -Wl,-rpath,./
 \end{lstlisting}
+
+Linux 程序运行时搜索动态链接库的顺序（详见\href{https://unix.stackexchange.com/questions/22926/where-do-executables-look-for-shared-objects-at-runtime}{这里}以及 \href{https://man7.org/linux/man-pages/man8/ld.so.8.html}{man8}）：
+\begin{enumerate}
+\item 可执行文件的 \verb|rpath| （一般不推荐）
+\item 环境变量 \verb|LD_LIBRARY_PATH|
+\item 可执行文件的 \verb|runpath|
+\item \verb|/lib/| 和 \verb|/usr/lib/| 中的， 以及 \verb|/etc/ld.so.conf| 中的文件． 在 ubuntu 中， 该文件实际上 \verb|include| 了 \verb|/etc/ld.so.conf.d| 路径中的所有 \verb|*.conf| 文件．
+\end{enumerate}
+
+\begin{itemize}
+\item 实际上（从 GCC5.4 左右开始） \verb|-Wl,-rpath| 设置的变为 \verb|runpath| 而不是 \verb|rpath|． 二者唯一区别在于动态库搜索路径顺序． 一般并不推荐使用 \verb|rpath|．
+\item 如果要强制新编译器设置 \verb|rpath|， 用 \verb|-Wl,--disable-new-dtags,-rpath|， 如果要强制旧编译器使用 \verb|runpath|， 也可以用 \verb|-Wl,--enable-new-dtags,-rpath|．
+\item \verb|-L| 和 \verb|rpath| 里面的路径可以是相对路径， 但如果 \verb|rpath| 用相对路径， 那么就是相对于执行程序时的 \verb|pwd|． 如果要相对于执行程序， 那么用 \verb|$ORIGIN/相对路径|
+\end{itemize}
+
 可以用 \verb|ldd main.x| 查看动态链接库， 会发现其中有 \verb|lib1.so|． 如果不用 \verb|rpath|， 也可以在执行可执行文件以前把路径加入到环境变量 \verb`LD_LIBRARY_PATH` 中． \verb|rpath| 和 \verb|LD_LIBRARY_PATH| 可以是相对于可执行文件的相对路径， 也可以是绝对路径． 也可以用 \verb|$ORIGIN| 表示可执行文件的路径
 \begin{lstlisting}[language=none]
 export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/your/custom/path/
 \end{lstlisting}
 \begin{itemize}
-\item 注意 \verb|rpath| 只能设定当前可执行文件的的路径， 如果可执行文件依赖的 \verb|.so| 文件所需要的 \verb|.so| 文件不在默认路径， 就只能通过修改 \verb`LD_LIBRARY_PATH` 才可以．
-\item \verb|LD_LIBRARY_PATH| 中不可以有关键的系统 \verb|.so| 文件， 否则如果不兼容很多系统命令像 \verb|ls, touch, echo| 等都会用不了．
-\item 另外 \verb|g++| 中的 \verb|-L| 选项（make 的时候搜索静态或动态库的路径）可以用环境变量 \verb|LIBRARY_PATH| 设置， \verb|-I| 选项（搜索头文件的路径）可以用环境变量 \verb|CPATH| 设置．
+\item \verb|g++| 中的 \verb|-L| 选项（make 的时候搜索静态或动态库的路径）可以用环境变量 \verb|LIBRARY_PATH| 设置， \verb|-I| 选项（搜索头文件的路径）可以用环境变量 \verb|CPATH| 设置．
+\item 注意 \verb|rpath| 只能设定当前可执行文件的的路径， 如果可执行文件依赖的 \verb|.so| 文件所需要的 \verb|.so| 文件不在默认路径， 就只能通过修改 \verb`LD_LIBRARY_PATH` 或者用 \verb|patchelf|（见下文） 对其修改才可以．
+\item \verb|LD_LIBRARY_PATH| 中不可以有关键的系统 \verb|.so| 文件， 否则如果不兼容， 很多系统命令像 \verb|ls, touch, echo| 等都会用不了．
 \item \verb|LIBRARY_PATH| 的顺序很重要， 如果同名 \verb|.a| 的路径出现在同名 \verb|.so| 路径的前面， 那么就会链接 \verb|.a|． 如果二者的路径相同， 那么还是会有限链接 \verb|.so|．
 \item 如果不指定 \verb|rpath|， 设置环境变量 \verb|LD_RUN_PATH| 也是等效的． 链接的程序是 \verb|ld|， 而动态链接库是 \verb|ld-linux.so|
-\item 如果要修改已经编译好的可执行文件（包括 so） 的 rpath， 可以用 \verb|chrpath| 或者 \verb|patchelf --set-rpath '路径' XXX.so| 其中如果要设置相对路径如 \verb|'$ORIGIN/相对路径'| 参考\href{https://stackoverflow.com/questions/13769141/can-i-change-rpath-in-an-already-compiled-binary}{这里}． 用这种方法， 加上 rpath 中的 \verb|ORIGIN| 功能， 似乎可以像 AppImage 或者 snap 一样把任何动态链接的程序打包到同一个文件夹中， 包括所有依赖， 也就是所谓的绿色软件．
+\item 如果要修改已经编译好的可执行文件（包括 so） 的 rpath， 可以用 \verb|chrpath| （不推荐）或者 \verb|patchelf --set-rpath '路径' XXX.so| （其实设置的也是 \verb|runpath| 而不是 \verb|rpath|）其中如果要设置相对路径如 \verb|'$ORIGIN/相对路径'| 参考\href{https://stackoverflow.com/questions/13769141/can-i-change-rpath-in-an-already-compiled-binary}{这里}． 用这种方法， 加上 \verb|$ORIGIN| 功能， 似乎可以像 AppImage 或者 snap 一样把任何动态链接的程序打包到同一个文件夹中， 包括所有依赖， 也就是所谓的绿色软件．
+\item 如果要强制设置 \verb|rpath| （不推荐）而不是 \verb|runpath|， 先用 \verb|patchelf --remove-rpath 文件| 移除已有的 \verb|runpath| 或 \verb|rpath|， 然后 \verb|patchelf --force-rpath --set-rpath '路径' 文件| 即可．
+\item \verb|patchelf --print-needed 文件| 可以显示直接依赖的动态库（不包含依赖的依赖）． 这应该和 \verb|lddtree 文件| 的第一层是一样的．
+\item \verb|patchelf --remove-needed lib依赖库.so 文件| 可以删除指定的依赖库．
+\item 也可以用 \verb`readelf -a 文件 | grep NEEDED`．
+\item \verb|patchelf --add-needed lib依赖库.so 文件| 添加指定依赖库． 注意多次添加会出现重复的依赖．
+\item \verb|patchelf| 可以同时指定多个 \verb|文件|．
+\item \verb|patchelf --print-interpreter main.x| 可以显示动态链接程序的 链接器 一般是 \verb|/lib64/ld-linux-x86-64.so.2|． 也可以用 \verb|patchelf --set-interpreter 链接器 文件| 指定． 
 \item 如果同样的 \verb`-l` 既能匹配 \verb`lib***.a` 也能匹配 \verb`lib***.so`， 那么 gcc 会默认选 \verb`.so` （貌似有时候二者都需要）． 如果想要静态链接， 要么用 \verb`-static` 选项（禁止链接到任何动态 lib）， 要么直接指定 \verb`.a` 的地址和文件名， 如 \verb`g++ -o main.x f1.o /some/path/lib***.a another/path/lib***.a`．
 \item 注意带版本号的 \verb|lib***.so.x.x| 不会自动匹配， 一般存在一个名为 \verb|lib***.so| 的软链指向某个具体的版本．
-\item 如果要查看 \verb|.a| 或 \verb|.so| 文件里面是否有某个函数， 用例如 \verb`nm -A /usr/lib/x86_64-linux-gnu/libflint.a | grep fmpz_set` 类似地也有 \verb|nm xxx.so|
+\item 另外也可以具体指定库文件的全名来设置每个库具体用静态还是动态链接， 用哪个版本： \verb|-l:lib库.so或a|． 不能有空格．
 \item 如果 \verb|rpath| 是相对路径， 那么它相对的是 pwd 而不是可执行文件的位置， 定义时可以使用 \verb|${ORIGIN}| 来表示可执行文件的位置．
-\item \verb`objdump -x 可执行文件或者so库 |grep RUNPATH或RPATH` 可以查看 \verb|可执行文件或者so库| 的 rpath．
-\item \verb|readelf -s 链接库.so| 可以检查里面的 symbols． 详见\href{https://amir.rachum.com/blog/2016/09/17/shared-libraries/}{这个教程}．
-\end{itemize}
-
-Linux 程序运行时搜索动态链接库的顺序（简化版，详见\href{https://unix.stackexchange.com/questions/22926/where-do-executables-look-for-shared-objects-at-runtime}{这里}以及 \href{https://man7.org/linux/man-pages/man8/ld.so.8.html}{man8}）：
-\begin{itemize}
-\item 环境变量 \verb|LD_LIBRARY_PATH|
-\item 可执行文件的 \verb|rpath|
-\item \verb|/lib/| 和 \verb|/usr/lib/| 中的， 以及 \verb|/etc/ld.so.conf.d| 中的文件
+\item 动态链接的可执行程序或者库都是 \textbf{ELF （Executable and Linkable Format）} 文件．
+\item 查看 \verb|elf文件| 的 runpath 或 rpath 可以用 \verb`readelf elf文件 -d | grep PATH` 或者 \verb`objdump -x elf文件 | grep PATH`．
+\item \verb|readelf -s 链接库.so| 可以检查里面的 symbols． 函数的类型是 \verb|FUNC|， 输出有两个表， 看 \verb|.dynsym| 就可以， 它是 \verb|.symtab| 中 allocable 的一个子集（详见\href{https://blogs.oracle.com/solaris/post/inside-elf-symbol-tables}{这里}）． 如果是 c++ 函数， 那么函数名是 mangle 的， 用 \verb|--demangle| 来显示 c++ 中的函数名（会包括 namespace）．
+\item 如果要查看 \verb|.a| 或 \verb|.so| 文件里面是否有某个函数， 用例如 \verb`nm -A /usr/lib/x86_64-linux-gnu/libflint.a | grep fmpz_set` 类似地也有 \verb|nm xxx.so|， 同样也可以用 \verb|--demangle|
+\item 如果 \verb|so| 库中没有 debug 信息， 那么除了函数名外并不能查看输入输出变量的个数和类型． 如果有 debug 信息， 可以用 \verb|readelf -wi| 查看．
+\item 在编译一个 elf 文件的时候， \verb|-l| 的顺序就搜索 symbol 的顺序， 如果多个依赖的 \verb|so| 中有相同的 symbol， 会使用第一个搜到的． 如果函数 prototype 不对就会运行出错． 注意不会搜索间接依赖库中的 symbol．
+\item 动态可执行文件几乎总是包含一些基本的库： \verb|linux-vdso.so.1| 不存在于文件系统， 开机时自动加载到内存． \verb|libc.so.6| 是 GNU C library， 里面有 system call． \verb|ld-linux-x86-64.so.2| 是 linker， 它的路径是专门由可执行文件的 interpreter path 指定的， 不归 rpath 那些管．
+\item 如果一个执行文件用了和系统不同版本的 \verb|libc.so|， 那么一定要用匹配版本的 \verb|ld-*.so| 并且专门指定器路径． 事实上 \verb|dpkg -L libc6| 中列出的所有库都似乎需要和 \verb|libc.so| 的版本匹配． 常见的有 \verb|libm, libpthread, librt| 等．
+\item 在编译命令中用 \verb|-Wl,--dynamic-linker=/绝对路径/ld-linux.so.X| 可以指定 dynamic linker．
 \end{itemize}
 
 其他笔记：
@@ -168,3 +182,61 @@ g++ -c main.cpp
 g++ -o main.x main.o -l1 -L./ -Wl,-rpath,./
 \end{lstlisting}
 用 \verb|ldd main.x| 检查所有依赖的动态库， 会发现 \verb|lib0, lib1| 都在．
+
+\begin{itemize}
+\item 如果 \verb|main.x| 依赖 \verb|-l test1, -l test2|， 而它们又分别依赖 \verb|-l:libbase.so.1| 和 \verb|-l:libbase.so.2|， 而这两个库里面有同名的 symbol， 那么 \verb|libbase.so.1和2| 中的所有同名 symbol 会使用前者中的， 而不可能分别调用不同的版本． 这之和链接的顺序有关， 和 \verb|main.x| 中调用函数的顺序无关．
+\item 详细代码示例如下． 另外在所有 so 库中都定义了 \verb|conflict()|． 注意 \verb|main.x| 并不直接依赖 \verb|libbase.so.x| 而是间接依赖， 无法调用其中的函数． 所以使用的 \verb|conflict()| 会是最先链接的 \verb|libtest| 中的． 如果 main.x 直接依赖所有四个库， 那么编译的时候会警告可能发生冲突， 运行时会调用最先链接的库中的 \verb|conflict()|．
+\item 又例如 \verb|main()| 无法直接调用 \verb|base()|， 因为不是直接依赖 \verb|libbase|． 链接阶段错误： \verb|undefined reference to symbol '_Z4basev', error adding symbols: DSO missing from command line, ld returned 1 exit status|．
+\end{itemize}
+
+\begin{lstlisting}[language=bash, caption=make.sh（注意要 source make.sh 而不是 ./make.sh）]
+export LD_LIBRARY_PATH=$PWD
+g++ -shared -fPIC -o libbase.so.1 libbase.1.cpp
+g++ -shared -fPIC -o libbase.so.2 libbase.2.cpp
+g++ -shared -fPIC -o libtest1.so libtest1.cpp -L . -l:libbase.so.1
+g++ -shared -fPIC -o libtest2.so libtest2.cpp -L . -l:libbase.so.2
+g++ -o main.x main.cpp -L . -l:libtest1.so -l:libtest2.so
+\end{lstlisting}
+
+\begin{lstlisting}[language=cpp, caption=main.cpp]
+void test1(); void test2();
+void conflict();
+int main() { test1(); test2(); conflict(); }
+\end{lstlisting}
+
+\begin{lstlisting}[language=cpp, caption=libtest1.cpp]
+#include <iostream>
+using namespace std;
+void base();
+void test1() { base(); }
+void conflict() { cout << "conflict() in libtest1.cpp" << endl; }
+\end{lstlisting}
+
+\begin{lstlisting}[language=cpp, caption=libtest2.cpp]
+#include <iostream>
+using namespace std;
+void base();
+void test2() { base(); }
+void conflict() { cout << "conflict() in libtest2.cpp" << endl; }
+\end{lstlisting}
+
+\begin{lstlisting}[language=cpp, caption=libtest1.cpp]
+#include <iostream>
+using namespace std;
+void base() { cout << "base() in libbase.1" << endl; }
+void conflict() { cout << "conflict() in libbase1" << endl; }
+\end{lstlisting}
+
+\begin{lstlisting}[language=cpp, caption=libtest2.cpp]
+#include <iostream>
+using namespace std;
+void base() { cout << "base() in libbase.2" << endl; }
+void conflict() { cout << "conflict() in libbase2" << endl; }
+\end{lstlisting}
+
+\subsection{如何把一个动态程序变得 portable}
+\begin{itemize}
+\item 首先可以自己写脚本复制所有 so 文件到某个文件夹中然后修改所有东西的 rpath． 缺点： 像 \verb|libc.so| 这样的东西可能会和系统本身的发生冲突， 所以这个方法并不总是 work， 应该只对相同发行版的相同版本相同 cpu 架构有效． 然而静态链接的程序就没有这个问题．
+\item AppImage 就是把所有动态依赖编译成一整个（伪）静态程序．
+\item 其他一些类似的工具如 \href{https://statifier.sourceforge.net/}{Statifier}， 参考\href{https://askubuntu.com/questions/537479/is-there-any-open-source-way-to-make-a-static-from-a-dynamic-executable-with-no}{这个问题}．
+\end{itemize}

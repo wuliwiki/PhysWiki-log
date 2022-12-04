@@ -1,0 +1,32 @@
+% C++ 的 smart pointer
+
+\begin{issues}
+\issueDraft
+\end{issues}
+
+\subsection{unique_ptr}
+\begin{itemize}
+\item \href{https://en.cppreference.com/w/cpp/memory/unique_ptr}{文档}．
+\item \verb|unique_ptr<类> p(类指针)|
+\item \verb|unique_ptr<类，删除函数类> p(类指针， 删除函数)|
+\item \verb|删除函数类| 和 \verb|删除函数| 可以省略， 省略后默认用 \verb|delete 类指针|．
+\item 一般指针的操作 \verb|*, ->, []|， 也可以使用．
+\item unique_ptr 的 destructor 被调用时， 删除函数被调用．
+\item 必须初始化， 不存在 copy assignment， 只有 move assignment． \verb|p2 = move(p1)| 可以转移．
+\item \verb|p.get()| 返回 \verb|类指针|． \verb|p.get_deleter()| 返回 \verb|删除函数|．
+\item \verb|if(p)| 可以判断是否在管理一个对象．
+\item \verb|p.reset(新指针)| 调用原来对象的删除函数， 并管理新的对象．
+\end{itemize}
+
+\subsection{shared_ptr}
+\begin{itemize}
+\item 可以使用 \verb|operator=| 复制， 只有所有复制的 shared_ptr 的 destructor 都被调用， 才会调用删除函数．
+\item \verb|p.use_count()| 返回有几个 shared_ptr 正在使用．
+\end{itemize}
+
+\subsection{weak_ptr}
+\begin{itemize}
+\item 可以从 \verb|shared_ptr|， 或者 \verb|weak_ptr| 初始化
+\item \verb|p.lock()| 创建出管理对象的一个新的 \verb|shared_ptr|
+\item \verb|p.expired()| 可以检查对象是否已经被删除．
+\end{itemize}
