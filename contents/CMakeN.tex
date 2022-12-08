@@ -10,55 +10,63 @@
 
 \subsection{常识}
 \begin{itemize}
-\item 在 windows 下可直接使用 GUI， linux 命令行中使用 \verb`ccmake` 可以有 TUI． 否则就用 \verb`cmake`
-\item 在 \verb|CMakeLists.txt| 的路径下， \verb`cmake .` 生成 Makefile， 然后 \verb|make -j12| 多线程编译． \verb|make VERBOSE=1 -j12| 输出编译命令． cmake 会在当前目录生成 \verb|Makefile| 和一些临时文件和文件夹， 清理麻烦， 所以还是建议输出到子文件夹．
+\item 在 Windows 下可直接使用 GUI， linux 命令行中使用 \verb`ccmake` 可以有 TUI． 否则就用 \verb`cmake`
+\item 在 \verb|CMakeLists.txt| 的路径下， \verb`cmake .` 生成 Makefile， 然后 \verb|make -j12| 多线程编译． \verb|make VERBOSE=1 -j12| 输出编译命令． cmake 会在当前路径生成 \verb|Makefile| 和一些临时文件和文件夹， 清理麻烦， 所以还是建议输出到子文件夹．
+\item \verb|CMakeLists.txt| 中， 注释如 \verb|#[[一些注释]]| 或者 \verb|#一些注释|
 \item 如果不想改变源码路径， 就用在别的文件夹 \verb|cmake 源码路径| 即可．
-\item \verb|cmake -L 源码路径| 列出编译选项， \verb|-LH| 列出所有选项以及帮助说明． \verb|-LAH| 列出所有选项（会多出很多 \verb|CMAKE_| 开头的， 不是作者提供的选项）， 用 \verb|cmake -D 选项1=值1 -D 选项2=值2 源码路径| 来设置选项．
-\item 要指定目录， 用 \verb|cmake -S CMakeList的目录 -B 生成Makefile的目录|， 然后再到 Makefile 的目录 \verb|make -j12| 即可． 如果要清理 cmake 生成的文件以及所有编译出来的文件， 直接把第二个目录清空即可．
-\item 当然， 也不是什么平台都可以用 \verb|make|， 所以也可以用 \verb|cmake --build 生成Makefile的目录 [--target 可执行文件] -- -j 12| 其中 \verb|--| 后面的选项会传给 \verb|make| 或者别的具体用于编译的程序．
-\item Cmake 的基本语法是 \verb`command(arg1 arg2 ...)` 其中 command 不区分大小写， \verb`arg` 用空格隔开， 如果 arg 本身有空格， 用双引号即可
-\item \verb`message(STATUS "...")` 可以输出到 stdout． 如果 \verb`message(STATUS ${var})` 中的变量是 list， 那么中间不会有空格， 应该用 \verb`message(STATUS "${var}")`， 输出中每个变量会用分号隔开．
-\item 两个 \verb`arg` 之间可以换行
-\item 变量可以是 string 或者 list of strings， 使用变量格式为 \verb`${VAR}`
-\item \verb`set` 可以对变量赋值， 例如 \verb`set(var, 1)`
-\item \verb`set` 也可以把许多变量变成一个 list， 如 \verb`set(Foo a b c)` 将 \verb`Foo` 变成包含 \verb`a b c` 的 list， 当 \verb`${Foo}` 被使用时相当于 \verb`a b c`， 例如 \verb`command(Foo)` 相当于 \verb`command(a b c)`． 另外 \verb`command("${Foo}")` 相当于 \verb`command("a b c")` （双引号中的是一个变量）
-\item linux 环境变量和 windows 注册表变量可以直接作为变量使用， 格式如 \verb`$EVN{VAR}`． 注意 cmake 看到的环境变量未必和 bash 中的相同， 可以用 \verb`cmake -E environment` 检查． 例子： \verb|message(STATUS $ENV{PWD})|
+\item \verb|cmake -L 源码路径| 列出编译选项， \verb|-LH| 列出选项以及帮助说明． \verb|-LAH| 列出所有选项（会多出很多 \verb|CMAKE_| 开头的， 不是作者提供的选项）， 用 \verb|cmake -D 选项1=值1 -D 选项2=值2 源码路径| 来设置选项（\verb|-D| 后面可以没有空格）．
+\item 要指定路径， 用 \verb|cmake -S CMakeList的路径 -B 生成Makefile的路径|， 然后再到 Makefile 的路径 \verb|make -j12| 即可． 如果要清理 cmake 生成的文件以及所有编译出来的文件， 直接把第二个路径清空即可．
+\item 当然， 也不是什么平台都可以用 \verb|make|， 所以也可以用 \verb|cmake --build 生成Makefile的路径 [--target 可执行文件] -- -j 12| 其中 \verb|--| 后面的选项会传给 \verb|make| 或者别的具体用于编译的程序．
+\item Cmake 的基本语法是 \verb`command(arg1 arg2 ...)` 其中 \verb|command| 不区分大小写， \verb`arg` 用空格隔开， 如果 \verb|arg| 本身有空格， 用双引号即可
+\item 每个 \verb`arg` 前后都可以换行
+\item \verb`message(STATUS "...")` 可以输出到 stdout． 如果 \verb`message(STATUS ${var})` 中的变量是 list， 那么中间不会有空格， 应该用 \verb`message(STATUS "${var}")`， 输出中每个元素会用分号隔开． \verb`message(STATUS ${var1} ${var2} ...)` 相当于把若干变量合成 list．
+\item 和 bash 一样， 变量都是字符串或者字符串列表， 使用变量格式为 \verb`${VAR}`．
+\item 当字符串中没有空格时， 两边是否加双引号是等效的． 被引号引起来的就是单个字符串而不是字符串列表．
+\item \verb`set` 可以对变量赋值， 例如 \verb`set(var, 123)`
+\item \verb`set` 也可以把许多变量变成一个 list， 如 \verb`set(Foo aaa bbb ccc)` （等效于 \verb|set(Foo "aaa" "bbb" "ccc")|） 将 \verb`Foo` 变成 list
+\item 把 list 作为 \verb|command()| 的参数相当于多个 \verb|arg|． 例如 \verb`command(${Foo})` 相当于 \verb`command(aaa bbb ccc)`．
+\item \verb|set(MY_LIST "one" "two")| 相当于 \verb|set(MY_LIST "one;two")|． 后者是 list 的内部的表示方法．
+\item 所以 \verb`command("${Foo}")` 相当于 \verb`command("aaa;bbb;ccc")` （双引号中的是一个字符串不是 list）
+\item linux 环境变量和 windows 注册表变量可以直接作为变量使用， 格式如 \verb`$EVN{VAR}`． 例子： \verb|message(STATUS $ENV{PWD})|． 注意 cmake 看到的环境变量未必和 bash 中的相同， 可以用 \verb`cmake -E environment` 检查．
+\item \verb|separate_arguments(VAR)| 可以把一个含有若干空格的字符串拆分成 list （即把空格替换为分号）．
 \end{itemize}
 
 \subsection{常用命令}
 \begin{itemize}
-\item \verb`cmake_minimum_required(VERSION x.x)`
+\item \verb`cmake_minimum_required(VERSION x.x)` （必须有）
+\item \verb`project(project_name)` 指定项目名称（必须有）
 \item \verb|set(CMAKE_CXX_COMPILER "/usr/bin/g++")| 设置 compiler
 \item \verb|set(CMAKE_CXX_FLAGS "-std=c++11")| 设置 flag， 包括 c++ 标准．
 \item 用标准的 \verb|set(CMAKE_CXX_STANDARD 11)| 会对 g++ 自动使用 \verb|-std=gnu11| 而不是 \verb|-std=c++11|， 一些情况会出错．
 \item \verb|cmake -DCMAKE_BUILD_TYPE=Debug| 用 debug 模式编译
 \item 添加 debug 模式的 flag 如 \verb|set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -fsanitize=address")|
-\item \verb`project(project_name)` 指定项目名称
 \item \verb`set(var str1 [str2] ...)` 对变量赋值（若有多个值就生成 list）
 \item \verb`list(APPEND var str1 [str2] ...)` 在变量（list）后面添加元素
 \item \verb|list(REMOVE_ITEM var str1 ...)| 从 \verb|var| 的 list 中移除（如果不存在也不报错）
-\item 使用一个不存在的变量相当于空字符串．
 \item \verb|set(var "${var} str1 str2")| 等效于上一条
+\item 使用一个不存在的变量相当于空字符串．
 \item \verb`file(GLOB var "folder/*.cpp" "fname2.cpp")` 可以列出所有 \verb|"folder/*.txt"| 文件， 以及 \verb|fname2.cpp| （如果存在） 赋值给 \verb|var|． 注意文件名包括绝对路径．
 \item \verb|add_definitions(-D FOO -D BAR)| 给编译器添加宏定义
 \item \verb|add_compile_options(-Wall -fopenmp)| 给编译器添加选项（注意不能用 \verb|-D|）
-\item \verb`add_executable(exe_name source_name)` 前者是执行文件名， 后者是所有需要 link 的 \verb|cpp| 文件名，不需要头文件． cmake 会自动分析代码得到哪个 cpp 调用哪个头文件， 如果头文件改变了， 只有调用它的 cpp 会重新编译．
-\item \verb`configure_file(file_in file_out)` 将文件中 \verb`@var@` 替换为变量 \verb`var` 的值
+\item \verb`add_executable(exe_name source_name)` 前者是可执行文件名， 后者是所有需要 link 的 \verb|c/c++| 文件名，不需要头文件． cmake 会自动分析代码得到哪个 cpp 调用哪个头文件， 如果头文件改变了， 只有调用它的 cpp 会重新编译．
+\item \verb`configure_file(file_in file_out)` 将文件中 \verb`@var@` 替换为变量 \verb`var` 的字符串．
 \item \verb`include_directories(dir1 [dir2] ...)` 添加头文件的搜索路径
-\item \verb`add_library(exe_name source_name)` 单独编译一个 library （在 library 路径的 CMakeLists 中使用这个而不是 \verb`add_executable`）
+\item \verb`add_library(exe_name source_name)` 单独编译一个 library （在 library 路径的 \verb|CMakeLists.txt| 中使用这个命令而不是 \verb`add_executable` 命令）
 \item \verb|link_directories(路径)| 相当于编译器的 \verb`-L` 选项， 添加静态或动态 library 的搜索路径．
-\item \verb|set(CMAKE_INSTALL_RPATH 路径)| 相当于设置 \verb|rpath|
-\item \verb`add_subdirectory(dir1 [dir2] ...)` 执行子目录中的 CMakeLists
+\item \verb|set(CMAKE_INSTALL_RPATH 路径)| 相当于设置 \verb|rpath| （到底是 \verb|RUNPATH| 还是 \verb|RPATH|？）
+\item \verb`add_subdirectory(dir1 [dir2] ...)` 执行子路径中的 \verb|CMakeLists.txt|
 \item \verb`target_link_libraries(exe_name lib1 [lib2] ...)` link 阶段链接 library， 相当于 \verb|-l lib1 -l lib2|
-\item \verb`option(opt_name description default)` 定义一个 option 开关（会在 gui 中显示开关）以及默认值． \verb`opt_name` 可以在 CMakeLists 中的 \verb`if` 语句中使用例如 \verb`if(opt_name) ... endif(opt_name)`． \verb`default` 可以是 \verb`ON` 或 \verb`OFF`
+\item \verb`option(opt_name description default)` 定义一个 option 开关（会在 gui 中显示开关）以及默认值． \verb`opt_name` 可以在 \verb|CMakeLists.txt| 中的 \verb`if` 语句中使用例如 \verb`if(opt_name) ... endif(opt_name)`． \verb`default` 可以是 \verb`ON` 或 \verb`OFF`．
+\item 如果需要字符串类型的 option， 可以用 cached variable： \verb|set(VAR "默认值" CACHE STRING "描述")|． 如果之前 \verb|VAR| 已经被赋值（例如命令行 \verb|-D VAR=...|）， 则值不会被覆盖． 这种变量叫做 \textbf{cached variable}．
+\item 以上两种方式产生的变量都可以在 \verb|cmake -LH .| 的帮助中看到说明．
 \item 在 configure 的模板文件中， 当 \verb`opt_name` 为 \verb`ON` 时 \verb`#cmakedefine opt_name` 会被替换为 \verb`#define opt_name`
 \item 【cmake 3.16 的新功能】 \verb|target_precompile_headers(可执行文件 PRIVATE foo.h bar.h)| 可以编译头文件， 注意貌似不会自动包括 .h 包括的文件． 如果头文件（或者依赖的文件）改了， 那么将会自动重新编译头文件．
 \end{itemize}
 
 \subsection{内置变量}
 \begin{itemize}
-\item \verb`PROJECT_SOURCE_DIR` 是源文件的根目录， 就是传给 \verb`ccmake` 的目录
-\item \verb`PROJECT_BINARY_DIR` 是 Cmake 的输出目录， 临时文件， Makefile 等都在这个目录． 这就是运行 \verb`ccmake` 的目录
+\item \verb`PROJECT_SOURCE_DIR` 是源文件的根路径， 就是传给 \verb`ccmake` 的路径
+\item \verb`PROJECT_BINARY_DIR` 是 Cmake 的输出路径， 临时文件， Makefile 等都在这个路径． 这就是运行 \verb`ccmake` 的路径
 \end{itemize}
 
 \subsection{判断}
@@ -70,8 +78,10 @@ elseif(("bar" IN_LIST var) OR (file1 IS_NEWER_THAN file2))
   <commands>
 elseif (var)
   当 var 不是 false constant
-elseif(DEFINED <name>|CACHE{<name>}|ENV{<name>})
+elseif (DEFINED <name>|CACHE{<name>}|ENV{<name>})
   若定义了变量
+elseif (var1 STREQUAL var2)
+  比较字符串
 else()
   <commands>
 endif()
@@ -87,7 +97,7 @@ endif()
 \subsection{ccmake 使用}
 \begin{itemize}
 \item \verb`sudo apt install cmake-curses-gui` 安装
-\item 在需要生成 binary 的目录打开 \verb`ccmake`， 这个目录可以是源文件目录
-\item 如果 binary 目录不是源文件目录， 那么指定目录即可， 例如 \verb`ccmake ../`
+\item 在需要生成 binary 的路径打开 \verb`ccmake`， 这个路径可以是源文件路径
+\item 如果 binary 路径不是源文件路径， 那么指定路径即可， 例如 \verb`ccmake ../`
 \item \verb`h` 帮助， \verb`q` 退出， \verb`c` configure， \verb`G` 生成 Makefile
 \end{itemize}

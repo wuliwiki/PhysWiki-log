@@ -12,13 +12,22 @@
 
 前向扩散过程会逐渐向原数据添加小幅的高斯噪音，时间序列为：$t=0$ -> $1$ -> $2$ -> ... -> $T-1$ -> $T$.每一步所添加的高斯噪音的方差序列为：$\beta_1$, $\beta_2$, ..., $\beta_T$.
 
-从$t-1$到$t$的转换概率为$q(X_t|X_{t-1})$，则从源数据到扩散过程最后一步的转换概率为：
+从$t-1$到$t$的转换概率为$q(x_t|x_{t-1})$，则从源数据到扩散过程最后一步的转换概率为：
 \begin{equation}
-q(X_{1:T}|X_0)=\prod_{t=1}^{T}q(X_{t}|X_{t-1})
+q(x_{1:T})=\prod_{t=1}^{T}q(x_{t}|x_{t-1})
 \end{equation}
 其中，
 \begin{equation}
-q(X_{t}|X_{t-1})=N(X_t;\sqrt{1-\beta_t}X_{t-1},\beta_tI)
+q(x_{t}|x_{t-1})=\mathcal{N}(x_t;\sqrt{1-\beta_t}x_{t-1},\beta_tI)
+\end{equation}
+
+反向的逆扩散过程是一个参数化的马尔科夫过程，每一步转换概率的参数通过学习而获得．时间序列为：$t=T$ -> $T-1$ -> ... -> $1$ -> $0$.逆过程的起点为时间步t=T时的带有噪音的数据，其数据分布为$p_\theta(x_T)=\mathcal{N}(x_T;0,I)$.整个过程的转换概率为：
+\begin{equation}
+p_{\theta}(x_{0:T})=\prod_{t=1}^{T}p_{\theta}(x_{t-1}|x_{t})
+\end{equation}
+其中，
+\begin{equation}
+p_{\theta}(x_{t-1}|x_{t})=\mathcal{N}(x_{t-1};\mu_\theta(x_{t},t),\Sigma_\theta(x_t,t))
 \end{equation}
 
 
