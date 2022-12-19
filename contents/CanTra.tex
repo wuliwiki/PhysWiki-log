@@ -1,21 +1,171 @@
 % 正则变换
 % 哈密顿量|分析力学|拉格朗日|哈密顿原理|哈密顿正则方程|正则变换
 
-\begin{issues}
-\issueDraft
-\end{issues}
 
 \pentry{哈密顿正则方程\upref{HamCan}}
-
-\footnote{参考 \cite{Goldstein}．}对于同一系统， 我们可以采用不同的广义坐标， 广义动量和哈密顿量． 那么如何在这些不同选择中做变换呢？ 我们把一组广义坐标和广义动量记为 $q_1,\dots, q_N, p_1, \dots, p_N$， 哈密顿量为 $H(q, p, t)$． 另一组记为 $Q_1,\dots, Q_N, P_1, \dots, P_N$， 哈密顿量为 $K(Q, P, t)$． 那么他们满足什么关系，或者在二者之间进行变换呢？
-
-首先， 根据勒让德变换\autoref{HamCan_eq1}~\upref{HamCan}， 拉格朗日量可以表示为
+简单来说，正则变换就是在相空间中选择另一组变量 $P,Q$ 作为坐标，使得和原来的变量 $p,q$ 之间一一对应，并且要求新坐标 $P,Q$ 仍满足哈密顿正则方程。本词条阐明正则变换的意义，条件，生成函数及生成函数的四种主要形式。
+\subsection{为什么要作正则变换}
+若存在循环坐标 $q^s$， 即拉氏量 $L$ 不显含 $q^s$，则哈密顿量
 \begin{equation}
-L = \sum_i \dot q_i p_i - H(q, p, t)
+H=\sum_i p_i\dot q^i-L
+\end{equation}
+显然也不含循环坐标 $q^s$。由哈密顿正则方程\autoref{HamCan_eq2}~\upref{HamCan}
+\begin{equation}\label{CanTra_eq7}
+\dot p_s=-\pdv{H}{q^s}=0
+\end{equation}
+即 $p_s$ 是体系的循环积分（守恒量）。这就是说，哈密顿正则方程具有容易获得系统循环积分的优点。
+
+之所以要在相空间中选择新的变量作为坐标，是因为人们总希望尽可能多找到系统运动方程的积分（守恒量），也就是要使尽可能多的坐标成为循环坐标。然而，能否出现循环坐标及循环坐标的数量是同坐标系的选择直接相关的，这可以从下面的例子看出。
+\begin{example}{}
+已知在二维平面上，质量为 $m$ 的质点受到来自 $O$ 点的引力场的作用（引力势能为 $-\mu\frac{m}{r}$）。那么在极坐标和平面直角坐标系下，其拉氏量和动量分别为
+\begin{equation}
+\begin{aligned}
+L&=\frac{m}{2}\qty(\dot r^2+r^2\dot\theta^2)+\mu\frac{m}{r}\\
+L&=\frac{m}{2}\qty(\dot x^2+\dot y^2)+\mu\frac{m}{\sqrt{x^2+y^2}}\\
+p_\theta&=\pdv{L}{\dot \theta}=mr^2\dot\theta\\
+p_r&=\pdv{L}{\dot r}=m\dot r\\
+p_x&=\pdv{L}{\dot x}=m\dot x\\
+p_y&=\pdv{L}{\dot y}=m\dot y
+\end{aligned}
 \end{equation}
 
-如果对于不同的变量 $Q, P$， 以及哈密顿量 $K$， 那么
+而哈密顿量分别为（注意，在拉氏量 $L=T-V$ 时，$H=T+V$）
+\begin{equation}
+\begin{aligned}
+H&=\frac{m}{2}\qty(\dot r^2+r^2\dot\theta^2)-\mu\frac{m}{r}\\
+&=\frac{1}{2m}\qty(p_r^2+\frac{p_\theta^2}{r^2})-\mu\frac{m}{r}\\
+H&=\frac{m}{2}(\dot x^2+\dot y^2)-\mu\frac{m}{\sqrt{x^2+y^2}}\\
+&=\frac{1}{2m}\qty(p_x^2+p_y^2)-\mu\frac{m}{\sqrt{x^2+y^2}}
+\end{aligned}
+\end{equation}
 
-代入哈密顿原理
+从哈密顿量看到，在极坐标系中 $\theta$ 是循环坐标，从而就有一循环积分；而在直角坐标系中，并无循环坐标存在。 
+\end{example}
 
-* 生成函数并不能生成所有的正则变换， 另一种方法是什么矩阵
+考虑到通过正则方程获得循环积分的便利性，和循环坐标与坐标系选择的相关性，人们一方面要在进行坐标变换时，使新坐标描述系统时仍能满足正则方程；一方面要设法找到成为循环坐标的变量。说白了，我们所需要的和真正感兴趣的坐标变换，绝非随意的一种变换，而是指在限定意义下的坐标变换，即以新坐标描述的体系的哈密顿量仍能满足正则方程为前提条件，这样的坐标变换就称为\textbf{正则变换（canonical transformation）}。
+
+\subsection{正则变换的条件}
+在相空间中，设旧坐标 $(p,q)$ 和新坐标 $(Q,P)$ 的转换关系为
+\begin{equation}
+Q^i=Q^i(p,q,t),\quad P_i=P_i(p,q,t)
+\end{equation}
+
+设新坐标描述的哈密顿量为 $H'=H'(P,Q)$，要使运动方程具有正则形式，即新变量要满足下面的正则方程
+\begin{equation}
+\dot Q^i=\pdv{H'}{P_i},\quad \dot P_i=-\pdv{H'}{Q^i}
+\end{equation}
+该方程可以通过下面变分得到
+\begin{equation}\label{CanTra_eq1}
+\delta\int\qty(\sum_iP_i\dd Q^i-H'\dd t)=0
+\end{equation}
+而旧变量的哈密顿正则方程是通过变分
+\begin{equation}\label{CanTra_eq2}
+\delta\int\qty(\sum_ip_i\dd q^i-H\dd t)=0
+\end{equation}
+得到的。要使 \autoref{CanTra_eq1} ，\autoref{CanTra_eq2} 描述的是同一物理系统，那么它们的被积函数只能相差某个关于相空间坐标的函数 $F$ 的全微分，因为这是在变分时不起作用的常数。因此
+\begin{equation}
+\sum_ip_i\dd q^i-H\dd t=\sum_iP_i\dd Q^i-H'\dd t+\dd F
+\end{equation}
+显然，若坐标变换满足该条件，该变换便是\textbf{正则变换}。
+
+\begin{definition}{正则变换}
+在相空间 $(p,q)$ 中，若以新变量 $(P,Q)$ 为新坐标，且新旧坐标的变换
+\begin{equation}\label{CanTra_eq3}
+Q^i=Q^i(p,q,t),\quad P_i=P_i(p,q,t)
+\end{equation}
+满足关系
+\begin{equation}\label{CanTra_eq4}
+\sum_ip_i\dd q^i-H\dd t=\sum_iP_i\dd Q^i-H'\dd t+\dd F
+\end{equation}
+其中 $H,H'$ 分别是以旧坐标 $(p,q)$ 和新坐标 $(P,Q)$ 描述的哈密顿量。则称坐标变换\autoref{CanTra_eq3} 为对应物理系统的\textbf{正则变换}，函数 $F$ 称为该正则变换的\textbf{生成函数}或\textbf{母函数}。
+\end{definition}
+
+\subsection{生成函数的四种形式}
+既然生成函数只要是关于相空间坐标的函数，那么我们就可以期望它是变量 $p,q,P,Q$ 的函数，在各种可能的生成函数中，主要的生成函数是自变量为一新一旧变量和时间 $t$ 的函数。这有四种可能：$F_1(p,P,t),F_2(p,Q,t),F_3(q,P,t),F_4(q,Q,t)$。
+\subsubsection{生成函数 $F_4(q,Q,t)$}
+改写 \autoref{CanTra_eq4} 为：
+\begin{equation}\label{CanTra_eq5}
+\dd F=\sum_ip_i\dd q^i-\sum_iP_i\dd Q^i+(H'-H)\dd t
+\end{equation}
+则得到的生成函数是关于新旧变量 $q,Q$ （和时间 $t$）的函数 $F=F(q,Q,t)$。此时，有
+\begin{equation}
+p_i=\pdv{F}{q^i},\quad P_i=-\pdv{F}{Q^i},\quad H'=H+\pdv{F}{t}
+\end{equation}
+显然，$F_4=F$。
+\subsubsection{生成函数 $F_3(q,P,t)$}
+若在\autoref{CanTra_eq5} 中让 $F$ 由 $F+\sum_iP_i Q^i$ 代替，那么
+\begin{equation}
+\dd (F+\sum_iP_i\dd Q^i)=\sum_i p_i\dd q^i+\sum_i Q^i\dd P_i+(H'-H)\dd t
+\end{equation}
+于是就得到关于 $q,P$ 的母函数 $F_3=F+\sum_iP_i Q^i$。此时
+\begin{equation}
+p_i=\pdv{F_3}{q^i},\quad Q^i=\pdv{F_3}{P_i},\quad H'=H+\pdv{F_3}{t}
+\end{equation}
+
+\subsubsection{生成函数 $F_2(p,Q,t)$}
+同理，若用 $F-\sum_ip_iq^i$ 代替 $F$，就有
+\begin{equation}\label{CanTra_eq6}
+\dd (F-\sum_ip_i q^i)=-\sum_i q^i\dd p_i-\sum_i P_i\dd Q^i+(H'-H)\dd t
+\end{equation}
+于是就得到关于 $p,Q$ 的母函数 $F_2=F-\sum_ip_i q^i$。此时
+\begin{equation}
+q^i=-\pdv{F_2}{p_i},\quad P_i=-\pdv{F_2}{Q^i},\quad H'=H+\pdv{F_2}{t}
+\end{equation}
+\subsubsection{生成函数 $F_1(p,P,t)$}
+用 $F_2+\sum_iP_iQ^i$ 代替\autoref{CanTra_eq6} 中的 $F_2$，就有
+\begin{equation}
+\dd(F-\sum_ip_i q^i+\sum_i P_i Q^i)=-\sum_i q^i\dd p_i+\sum_i Q^i\dd P_i+(H'-H)\dd t
+\end{equation}
+于是就得到关于 $p,P$ 的母函数 $F_1=F-\sum_ip_i q^i+\sum_i P_i Q^i$。此时
+\begin{equation}
+q^i=-\pdv{F_1}{p_i},\quad Q^i=\pdv{F_1}{P_i},\quad H'=H+\pdv{F_1}{t}
+\end{equation}
+
+对于这四种母函数，实际上只需要记住关于 $q,Q$ 的母函数 $F_4=F$，其满足
+\begin{equation}
+\dd F=\sum_ip_i\dd q^i-\sum_iP_i\dd Q^i+(H'-H)\dd t
+\end{equation}
+\subsubsection{小记}
+其它几种可以这样方便记忆：若母函数自变量相对 $F$ 只改变关于新变量 $P,Q$ 的函数，则只要母函数 $F$ 加上 $\sum_iP_iQ^i$；若只改变成关于旧变量 $p,q$ 的函数，则 $F$ 减 $-\sum_ip_iq^i$；若同时改变，则 $F$ 既加上 $\sum_iP_iQ^i$ 又减 $-\sum_ip_iq^i$。
+
+值得注意的是，母函数关于时间的偏导数总具有相同的形式 $H'-H$。
+
+正则变换的广泛性，使得原来的广义坐标和广义动量 $q,p$ 的概念丧失其原始含义，因为 $P,Q$ 都和 $p,q$ 联系在一起，$Q$ 不再是纯粹的空间坐标，$P$ 也不再是纯粹的动量。$P,Q$ 的区别仅仅在于名称的不同，例如变换 $Q^i=p_i,P_i=-q^i$ 并不影响方程的正则形式。由于这个原因，变量 $p,q$ 经常被称为\textbf{正则共轭变量}。
+
+使用何种母函数，要视方便程度而定。
+\begin{theorem}{}
+泊松括号想对正则变换是不变的，即
+\begin{equation}
+\{f,g\}_{p,q}=\{P,Q\}_{P,Q}
+\end{equation}
+其中下指标是指微分运算是对哪两个变量进行的。
+\end{theorem}
+\footnote{参考 朗道《力学》}为避免繁琐的证明，可这样论证：假定 $g$ 是某个系统的哈密顿量，那么 $\{f,g\}_{p,q}=\dv{f}{t}$。然而 $\dv{f}{t}$ 只依赖于该系统的运动性质，而不以变量的特定选择有关。因此，从一组正则变量变到另一组正则变量时，泊松括号并不改变。
+\begin{example}{一个重要的例子}
+设 $p_t,q_t$ 是正则变量 $p,q$ 在 $t$ 时刻的值，而 $p_{t+\tau},q_{t+\tau}$ 是在另一时刻 $t+\tau$ 的值。后者是前者的某一函数
+\begin{equation}
+\begin{aligned}
+p_{t+\tau}&=p(p_t,q_t,t,\tau)\\
+q_{t+\tau}&=q(p_t,q_t,t,\tau)
+\end{aligned}
+\end{equation}
+若将这一变换视作 $p_t,q_t$ 到 $p_{t+\tau},q_{t+\tau}$ 的坐标变换，则这即是正则变换，因为由\autoref{EPAct_eq1}~\upref{EPAct}
+\begin{equation}
+\dd S=\sum \qty(p_{t+\tau}\dd {q_{t+\tau}}-p_{t}\dd {q_{t}})-(H_{t+\tau}-H_t)\dd t
+\end{equation}
+于\autoref{CanTra_eq5} 对比，可知 $-S$ 是变换的母函数。 
+
+\end{example}
+
+%\footnote{参考 \cite{Goldstein}。}对于同一系统， 我们可以采用不同的广义坐标， 广义动量和哈密顿量。 那么如何在这些不同选择中做变换呢？ 我们把一组广义坐标和广义动量记为 $Q^1,\dots, Q^N, p_1, \dots, p_N$， 哈密顿量为 $H(q, p, t)$。 另一组记为 $Q^1,\dots, Q^N, P_1, \dots, P_N$， 哈密顿量为 $K(Q, P, t)$。 那么他们满足什么关系，或者在二者之间进行变换呢？
+
+%首先， 根据勒让德变换\autoref{HamCan_eq1}~\upref{HamCan}， 拉格朗日量可以表示为
+%\begin{equation}
+%L = \sum_i \dot Q^i p_i - H(q, p, t)
+%\end{equation}
+
+%如果对于不同的变量 $Q, P$， 以及哈密顿量 $K$， 那么
+
+%代入哈密顿原理
+
+%* 生成函数并不能生成所有的正则变换， 另一种方法是什么矩阵

@@ -6,19 +6,19 @@
 
 \subsection{变量类型}
 
-参考 \href{https://docs.julialang.org/en/v1/manual/types/#man-declared-types}{Julia 文档}．
+参考 \href{https://docs.julialang.org/en/v1/manual/types/#man-declared-types}{Julia 文档}。
 \begin{itemize}
-\item Julia 是动态类型的语言． 具体类型不能互相作为子类， 只能作为抽象类的子类（sub type）．
-\item Julia 中所有的值都是对象． C++ 中 \verb|float|, \verb|double| 等不是对象， 只有 \verb|struct|, \verb|class| 定义的才是对象． Julia 中的对象\textbf{没有成员函数}．
-\item 可以在 literal、 变量、 表达式、 函数定义后面加上 \verb|::变量类型| 用于确认它具有该类型， 如果类型不符会产生异常． 如果 \verb|变量类型| 是抽象的， 那么表达式只能是它的一个子类．
-\item 只有 “值” 有类型， 而不是变量具有类型． 变量只是个名字而已
+\item Julia 是动态类型的语言。 具体类型不能互相作为子类， 只能作为抽象类的子类（sub type）。
+\item Julia 中所有的值都是对象。 C++ 中 \verb|float|, \verb|double| 等不是对象， 只有 \verb|struct|, \verb|class| 定义的才是对象。 Julia 中的对象\textbf{没有成员函数}。
+\item 可以在 literal、 变量、 表达式、 函数定义后面加上 \verb|::变量类型| 用于确认它具有该类型， 如果类型不符会产生异常。 如果 \verb|变量类型| 是抽象的， 那么表达式只能是它的一个子类。
+\item 只有 “值” 有类型， 而不是变量具有类型。 变量只是个名字而已
 \item 抽象和具体的类都可以使用其他类作为参数
 \end{itemize}
 
 常见类型
 \verb|Int8|, \verb|UInt8|, \verb|Int16|, \verb|UInt16|, \verb|Int32|, \verb|UInt32|, \verb|Int64|（即 \verb|Int|）, \verb|UInt64|, \verb|Int128|, \verb|UInt128|, \verb|Float16|, \verb|Float32|, \verb|Float64|, \verb|ComplexF16|, \verb|ComplexF32| 和 \verb|ComplexF64|
 
-\verb|BigInt| 是任意大小的整数， \verb|BigFloat| 是任意精度浮点数．
+\verb|BigInt| 是任意大小的整数， \verb|BigFloat| 是任意精度浮点数。
 
 \begin{lstlisting}[language=julia]
 julia> BigFloat(2.1) # 2.1 here is a Float64
@@ -37,12 +37,12 @@ julia> BigFloat("2.1", RoundUp, precision=128)
 2.100000000...00000000000007
 \end{lstlisting}
 
-使用 \verb|typeof(var)| 来询问变量类型， 用 \verb|isa(var, type)| 来确定类型． \verb|sizeof(变量或类型)| 来查看类型的字节数
+使用 \verb|typeof(var)| 来询问变量类型， 用 \verb|isa(var, type)| 来确定类型。 \verb|sizeof(变量或类型)| 来查看类型的字节数
 
 \begin{itemize}
 \item \verb|setprecision(二进制精度);| 可以设置运算默认的精度
-\item \verb|BigFloat(pi)| 会默认为上面设置的精度， \verb|BigFloat(pi, precision=...)| 可以临时改变精度， 但是 \verb|BigFloat(pi, precision=...)*2| 仍然是上面设置的精度， 因为乘法使用上面设置的精度．
-\item \verb|pi| 的加减乘除都得到 \verb|Float64| 类型．
+\item \verb|BigFloat(pi)| 会默认为上面设置的精度， \verb|BigFloat(pi, precision=...)| 可以临时改变精度， 但是 \verb|BigFloat(pi, precision=...)*2| 仍然是上面设置的精度， 因为乘法使用上面设置的精度。
+\item \verb|pi| 的加减乘除都得到 \verb|Float64| 类型。
 \end{itemize}
 
 
@@ -54,32 +54,32 @@ julia> BigFloat("2.1", RoundUp, precision=128)
 
 \subsubsection{整数}
 \begin{itemize}
-\item 整数 literal 的类型取决于它的大小， 例如 \verb|typeof(3)| 是 \verb|Int64|； \verb|typeof(12345678902234567890)| 是 \verb|Int128|， \verb|typeof(1234567890223456789032345678904234567890)| 是 \verb|BigInt|． \verb|typemin(类型)| 和 \verb|typemax(类型)| 可以查看最大最小值．
-\item 两个相同类型的 Int 相加时， 如果 overflow 会变成负数． 两个不同类型的 Int 相加时， 较小的类型会先转换为较大的类型． 若 \verb|a = Int8(1)|， \verb|a += 1| 后 \verb|a| 会变为 \verb|Int64|． 因为 \verb|1| 相当于 \verb|Int64(1)|．
+\item 整数 literal 的类型取决于它的大小， 例如 \verb|typeof(3)| 是 \verb|Int64|； \verb|typeof(12345678902234567890)| 是 \verb|Int128|， \verb|typeof(1234567890223456789032345678904234567890)| 是 \verb|BigInt|。 \verb|typemin(类型)| 和 \verb|typemax(类型)| 可以查看最大最小值。
+\item 两个相同类型的 Int 相加时， 如果 overflow 会变成负数。 两个不同类型的 Int 相加时， 较小的类型会先转换为较大的类型。 若 \verb|a = Int8(1)|， \verb|a += 1| 后 \verb|a| 会变为 \verb|Int64|。 因为 \verb|1| 相当于 \verb|Int64(1)|。
 \end{itemize}
 
 \subsubsection{浮点数}
 \begin{itemize}
-\item 任何浮点数 literal 都是 \verb|Float64|．
+\item 任何浮点数 literal 都是 \verb|Float64|。
 \item \verb|eps(Float64)| 返回 \verb|2.220446049250313e-16|
 \item \verb|NaN| 是 not a number， 可以用 \verb|isnan(x)| 来判断
 \end{itemize}
 
 \subsection{无理数}
 \begin{itemize}
-\item \verb|pi| 的类型是 \verb|Irrational{:π}| 其中 \verb|:π| 的类型是 \verb|Symbol| （又例如 \verb|:abc|， \verb|:a|）注意 \verb|:pi| 和 \verb|:π| 是两个不同的 \verb|Symbol|．
-\item \verb|BigFloat(pi, precision=500)| 可以获得 500 位二进制的 pi．
+\item \verb|pi| 的类型是 \verb|Irrational{:π}| 其中 \verb|:π| 的类型是 \verb|Symbol| （又例如 \verb|:abc|， \verb|:a|）注意 \verb|:pi| 和 \verb|:π| 是两个不同的 \verb|Symbol|。
+\item \verb|BigFloat(pi, precision=500)| 可以获得 500 位二进制的 pi。
 \end{itemize}
 
 
 \subsection{字符串类型}
 \begin{itemize}
-\item 任何单个 UTF8 字符都属于 \verb|Char| 类型． \verb|sizeof(Char) = 4|， 格式应该是 UTF32
-\item \verb|s = "abcde"| 的类型是 \verb|String|， 注意 \verb|String| 并不是 \verb|Array{Char, 1}|！ \verb|s[i]| 可以获取单个 Char， 但是不能赋值， 因为 String 是不可改变的（immutable）．
-\item 子串替换： \verb|s1 = replace(s, "bc" => "BC")|． \verb|s1| 也可以是 \verb|s| 本身．
-\item \verb|s = s1*s2| 拼接字符串（等效地： \verb|s = string(s1, s2)|）， \verb|s *= s1| append．
-\item \verb|s = s1^3| 重复字符串 3 次， \verb|s ^= 3| 同理． 相当于 \verb|repeat(s1, 3)|
-\item \verb|findfirst("abc", s)| 搜索字符串， 返回一个 \verb|UnitRange{Int64}|， 如 \verb|3:5|．
+\item 任何单个 UTF8 字符都属于 \verb|Char| 类型。 \verb|sizeof(Char) = 4|， 格式应该是 UTF32
+\item \verb|s = "abcde"| 的类型是 \verb|String|， 注意 \verb|String| 并不是 \verb|Array{Char, 1}|！ \verb|s[i]| 可以获取单个 Char， 但是不能赋值， 因为 String 是不可改变的（immutable）。
+\item 子串替换： \verb|s1 = replace(s, "bc" => "BC")|。 \verb|s1| 也可以是 \verb|s| 本身。
+\item \verb|s = s1*s2| 拼接字符串（等效地： \verb|s = string(s1, s2)|）， \verb|s *= s1| append。
+\item \verb|s = s1^3| 重复字符串 3 次， \verb|s ^= 3| 同理。 相当于 \verb|repeat(s1, 3)|
+\item \verb|findfirst("abc", s)| 搜索字符串， 返回一个 \verb|UnitRange{Int64}|， 如 \verb|3:5|。
 \item \verb|findnext("abc", s, ind)| 从 \verb|ind| 开始搜索下一个
 \item \verb|collect(s)| 把字符串变为 \verb|Vector{Char}|
 \item \verb|s = b"abcABC123"| 的类型是 \verb|Base.CodeUnits{UInt8, String}|， \verb|s[i]| 的类型是 \verb|UInt8|
@@ -91,9 +91,9 @@ julia> BigFloat("2.1", RoundUp, precision=128)
 \begin{lstlisting}[language=julia]
 abstract type 子类名 <: 母类名 end
 \end{lstlisting}
-声明后， 可以用 \verb|类1 <: 类2| 来判断是否符合该关系， 返回一个 \verb|Bool|．
+声明后， 可以用 \verb|类1 <: 类2| 来判断是否符合该关系， 返回一个 \verb|Bool|。
 
-用 \verb|supertype(类)| 可以查看某个类的母类， \verb|subtypes(类)| 可以查看所有子类．
+用 \verb|supertype(类)| 可以查看某个类的母类， \verb|subtypes(类)| 可以查看所有子类。
 
 例子
 \begin{lstlisting}[language=julia]
@@ -104,7 +104,7 @@ abstract type Integer  <: Real end
 abstract type Signed   <: Integer end
 abstract type Unsigned <: Integer end
 \end{lstlisting}
-最高级的抽象类是 \verb|Any|， 这里的 \verb|Number| 就是 \verb|Any| 的子类．
+最高级的抽象类是 \verb|Any|， 这里的 \verb|Number| 就是 \verb|Any| 的子类。
 
 \begin{figure}[ht]
 \centering
@@ -120,7 +120,7 @@ Irrational{sym} <: AbstractIrrational
 
 
 \subsection{原始类型}
-\textbf{原始类型（primitive type）}是由 bit 组成的具体类型． Julia 可以自定义原始类型． 定义原始类型的格式为
+\textbf{原始类型（primitive type）}是由 bit 组成的具体类型。 Julia 可以自定义原始类型。 定义原始类型的格式为
 \begin{lstlisting}[language=julia]
 primitive type 类名 比特数 end
 primitive type 类名 <: 父类名 比特数 end
@@ -161,9 +161,9 @@ foo = Foo("Hello, world.", 23, 1.5) # 叫做 constructor
 \end{lstlisting}
 查看成员名称用 \verb|fieldnames(Foo)|
 
-要获取成员的值， 用 \verb|foo.bar|, \verb|foo.baz|, \verb|foo.qux| 等． 用 \verb|struct| 声明的复合类型值在生成后就不能被改变． 如果 struct 里面有矩阵等， 那么矩阵元仍然是 mutable 的（没有 lower level const）．
+要获取成员的值， 用 \verb|foo.bar|, \verb|foo.baz|, \verb|foo.qux| 等。 用 \verb|struct| 声明的复合类型值在生成后就不能被改变。 如果 struct 里面有矩阵等， 那么矩阵元仍然是 mutable 的（没有 lower level const）。
 
-如果要支持成员改变， 那么用 \verb|mutable struct| 来声明即可． mutable struct 通常存在 heap 中而不是在 stack 中．
+如果要支持成员改变， 那么用 \verb|mutable struct| 来声明即可。 mutable struct 通常存在 heap 中而不是在 stack 中。
 
 \subsection{Type Unions}
 \begin{lstlisting}[language=julia]
@@ -172,13 +172,13 @@ IntOrString = Union{Int, AbstractString}
 "Hello!" :: IntOrString
 1.0 :: IntOrString # 异常
 \end{lstlisting}
-但是， 这和使用 \verb|<:| 有什么区别？ 一个类只可能有一个非 Union 的母类， 如果一个函数的参数想要支持两个母类不同的类怎么办？ 那就用 Union 即可．
+但是， 这和使用 \verb|<:| 有什么区别？ 一个类只可能有一个非 Union 的母类， 如果一个函数的参数想要支持两个母类不同的类怎么办？ 那就用 Union 即可。
 
-另外一个应用的例子是 \verb|Union{T, Nothing}| 作为函数参数， 这样这个参数就可以忽略了．
+另外一个应用的例子是 \verb|Union{T, Nothing}| 作为函数参数， 这样这个参数就可以忽略了。
 
 \subsection{含参类型}
 
-复数类型 \verb|ComplexF16|, \verb|ComplexF32| 和 \verb|ComplexF64| 是 \verb|Complex{Float16}|, \verb|Complex{Float32}| 和 \verb|Complex{Float64}| 的别名． \verb|Complex| 就是一个\textbf{含参类型（parametric type）}
+复数类型 \verb|ComplexF16|, \verb|ComplexF32| 和 \verb|ComplexF64| 是 \verb|Complex{Float16}|, \verb|Complex{Float32}| 和 \verb|Complex{Float64}| 的别名。 \verb|Complex| 就是一个\textbf{含参类型（parametric type）}
 
 例如
 \begin{lstlisting}[language=julia]
@@ -187,7 +187,7 @@ struct Point{T}
     y::T
 end
 \end{lstlisting}
-那么 \verb|Point{Float64}| 等都是合法的具体类型．
+那么 \verb|Point{Float64}| 等都是合法的具体类型。
 
 \verb|Point| 本身是一个抽象类， 是其具体类的母类
 \begin{lstlisting}[language=julia]
@@ -196,7 +196,7 @@ true
 julia> Point{AbstractString} <: Point
 true
 \end{lstlisting}
-\verb|<:| 相当于一个二元算符， 输出 \verb|Bool|．
+\verb|<:| 相当于一个二元算符， 输出 \verb|Bool|。
 
 例子：
 \begin{lstlisting}[language=julia]
@@ -222,13 +222,13 @@ end
 
 \subsection{Pair}
 \begin{itemize}
-\item \verb|"abc" => 1.23| 的类型是 \verb|Pair{String, Float64}|， 令 \verb|p = "abc" => 1.23|， 那么 \verb|p.first| 和 \verb|p.second| 分别可以获取两个变量．
-\item \verb|Pair| 同样是 immutable 的．
+\item \verb|"abc" => 1.23| 的类型是 \verb|Pair{String, Float64}|， 令 \verb|p = "abc" => 1.23|， 那么 \verb|p.first| 和 \verb|p.second| 分别可以获取两个变量。
+\item \verb|Pair| 同样是 immutable 的。
 \end{itemize}
 
 
 \subsection{Tuple}
-Tuple 是函数参数列表的抽象． 例如两个元素的 tuple type 类似于如下的含参 struct 类型
+Tuple 是函数参数列表的抽象。 例如两个元素的 tuple type 类似于如下的含参 struct 类型
 \begin{lstlisting}[language=julia]
 struct Tuple2{A,B}
     a::A
@@ -252,32 +252,32 @@ false
 \item \verb|t = (值1, 值2, 值3, ...)| 就是 \verb|Tuple|
 \item 数组的元素类型必须相同， 而 \verb|Tuple| 的元素类型可以不同
 \item \verb|t = (1, "3.1", [1 2; 3 4])| 的类型是 \verb|Tuple{Int64, String, Matrix{Int64}}|
-\item 数组的 \verb|length()|， \verb|isempty()|， \verb|reverse()| 同样适用于 \verb|Tuple|．
-\item \verb|t[i]| 获取某个元素， 但不能对其赋值！ Tuple 的元素永远不能改变！ Tuple 类型是 immutable 的．
-\item named tuple： \verb|x = (a=2, b="abc")|， 类型为 \verb|NamedTuple{(:a, :b), Tuple{Int64, String}}|． 然后可以使用 \verb|x.a| 和 \verb|x.b| 来获取元素．
-\item 单个元素的 tuple 如 \verb|(1,)|， 空 tuple 用 \verb|()| 表示， 类型为 \verb|Tuple{}|．
-\item \verb|(x,y) = (1,"ab")| 或者 \verb|x,y = (1,"ab")| 会分别把元素赋值给 \verb|x, y|． 这可以用于函数返回多个值．
+\item 数组的 \verb|length()|， \verb|isempty()|， \verb|reverse()| 同样适用于 \verb|Tuple|。
+\item \verb|t[i]| 获取某个元素， 但不能对其赋值！ Tuple 的元素永远不能改变！ Tuple 类型是 immutable 的。
+\item named tuple： \verb|x = (a=2, b="abc")|， 类型为 \verb|NamedTuple{(:a, :b), Tuple{Int64, String}}|。 然后可以使用 \verb|x.a| 和 \verb|x.b| 来获取元素。
+\item 单个元素的 tuple 如 \verb|(1,)|， 空 tuple 用 \verb|()| 表示， 类型为 \verb|Tuple{}|。
+\item \verb|(x,y) = (1,"ab")| 或者 \verb|x,y = (1,"ab")| 会分别把元素赋值给 \verb|x, y|。 这可以用于函数返回多个值。
 \end{itemize}
 
 \subsection{类似 C++ 的数据结构}
 \subsubsection{Set}
 \begin{itemize}
-\item \verb|s = Set{Int64}()| 生成某种类型的空 set．
+\item \verb|s = Set{Int64}()| 生成某种类型的空 set。
 \item \verb|s = Set([1,2,3])| 把数组变为 \verb|Set| （自动推导出类型 \verb|Set{Int64}|）
-\item \verb|push!(s, 123, 23, 532)| 添加若干元素．
-\item \verb|empty!(s)| 清空集合．
+\item \verb|push!(s, 123, 23, 532)| 添加若干元素。
+\item \verb|empty!(s)| 清空集合。
 \item \verb|in(123, s)| 查看某个元素是否存在
-\item \verb|union!(s1,s2)| 计算并集， 赋值给 \verb|s1|， \verb|s = union(s1,s2)| 计算并集， 赋值给 \verb|s|．
+\item \verb|union!(s1,s2)| 计算并集， 赋值给 \verb|s1|， \verb|s = union(s1,s2)| 计算并集， 赋值给 \verb|s|。
 \end{itemize}
 
 \subsubsection{Dict}
 \begin{itemize}
 \item \verb|d = Dict{key类型,Val类型}()| 创建一个字典（哈希表）， 也可以直接用 \verb|Dict("ab"=>12, "bc"=>23)| （会自动推导类型 \verb|Dict{String, Int64}|）
-\item \verb|push!(d, key1=>val1, key2=>val2)| 添加若干 entry， 如果 \verb|key| 已经存在， 就覆盖 \verb|val|．
-\item 添加新元素也可以用 \verb|a[key] = val|．
-\item \verb|a[key]| 获取对应的 \verb|val|， 如果 \verb|key| 不存在则会出错．
+\item \verb|push!(d, key1=>val1, key2=>val2)| 添加若干 entry， 如果 \verb|key| 已经存在， 就覆盖 \verb|val|。
+\item 添加新元素也可以用 \verb|a[key] = val|。
+\item \verb|a[key]| 获取对应的 \verb|val|， 如果 \verb|key| 不存在则会出错。
 \item 删除一个元素用 \verb|delete!(d, key)|
-\item \verb|keys(d)| 表示所有存在的 key， 类型是 \verb|Base.KeySet{key类型, Dict{key类型, val类型}}|， 不会复制值．
+\item \verb|keys(d)| 表示所有存在的 key， 类型是 \verb|Base.KeySet{key类型, Dict{key类型, val类型}}|， 不会复制值。
 \item \verb|vals(d)| 同理， 类型是 \verb|Base.ValueIterator{Dict{String, Int64}}|
 \item 要循环， 可以
 \begin{lstlisting}[language=julia]
@@ -301,7 +301,7 @@ end
 \subsection{Type{T} type selectors}
 
 \subsection{Type Aliases}
-使用等号． 例如
+使用等号。 例如
 \begin{lstlisting}[language=julia]
 # 32-bit system:
 julia> UInt

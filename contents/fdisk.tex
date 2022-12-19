@@ -6,23 +6,23 @@
 
 \subsection{文件操作}
 \begin{itemize}
-\item \verb|sudo dd| 是一个很危险的命令， 它直接操作硬盘上的任意位置的数据， 无论是否被挂载． \verb|sudo dd if=/dev/random of=/dev/sda| 会把整个硬盘包括分区方式（MBR，GPT）等所有信息抹掉
+\item \verb|sudo dd| 是一个很危险的命令， 它直接操作硬盘上的任意位置的数据， 无论是否被挂载。 \verb|sudo dd if=/dev/random of=/dev/sda| 会把整个硬盘包括分区方式（MBR，GPT）等所有信息抹掉
 \item \textbf{MBR (Master Boot Record)} 和 \textbf{GPT (GUID Partition Table)} 几乎是唯一两种硬盘的\textbf{分区方式（partition schemes）}
 \item 要备份 MBR，用 \verb|dd if=/dev/sda of=/data/disk.img bs=446 count=1| ， 还原同理， 但还原最好只用 440 字节
 \item 用 \verb|dd| 把一个硬盘的分区克隆的另一个硬盘的分区后（两个分区大小必须完全相同）， 再 clone MBR 用 \verb|dd if=/dev/sda of=/dev/sdc bs=440 count=1|
 \item 要擦除 MBR 中的 grub， 首先备份！ 然后用 \verb|sudo dd if=/dev/zero of=/dev/sdx bs=440 count=1|
 \item 不同的分区当然可以有不同的文件系统
 \item \verb|Gparted| 是一个 GUI 硬盘分区工具， 在 Ubuntu live CD 中自带
-\item \verb|GParted| 使用 \verb|e2image -ra -p /dev/sda1 /dev/sdb1| 来复制分区， 没有数据的部分不会复制，Arch Wiki 中的 “disk cloning” 词条列出了很多工具． 用 \verb|e2image| 来备份和恢复参考\href{https://stackoverflow.com/questions/51755887/backup-and-restore-e2image-how-do-i-properly-pipe-the-output-from-lzop}{这里}．
+\item \verb|GParted| 使用 \verb|e2image -ra -p /dev/sda1 /dev/sdb1| 来复制分区， 没有数据的部分不会复制，Arch Wiki 中的 “disk cloning” 词条列出了很多工具。 用 \verb|e2image| 来备份和恢复参考\href{https://stackoverflow.com/questions/51755887/backup-and-restore-e2image-how-do-i-properly-pipe-the-output-from-lzop}{这里}。
 \item \verb|sda, sdb| 等编号是不稳定的， 可能重启等操作之后会变
 \item \verb|fdisk -l| 查看所有挂载的硬盘
 \item \verb|lsblk| 也可以查看
-\item \verb|resize2fs -p /dev/sd? ???K| 可以改变 ext4 文件系统的大小， Gparted 用的就是这个命令． 这个命令需要很长时间．
+\item \verb|resize2fs -p /dev/sd? ???K| 可以改变 ext4 文件系统的大小， Gparted 用的就是这个命令。 这个命令需要很长时间。
 \item \verb|mklabel| 修改分区的 label
 \item \verb|mkfs.ext4 /dev/sdx1| 或者 \verb|mke4fs -t ext4 /dev/sdb1| 把某个分区格式化为 \verb|ext4|
-\item Clonezilla 的分区备份对 GPT 和 MBR 都是通用的， 如果发生任何问题， 用 live cd 重装系统，确保能正常启动， 然后还原对应的分区就行，无需任何额外设置．
-\item 之前 SMART 提示 threshold exceeded，但并没有看到那一项有问题，现在重新写 GPT，安装，clonezilla 还原， 又可以正常用了．
-\item  正常的 ext4 系统分区用 Gparted 缩小以后， 突然就不能启动了！貌似并不是 grub 的问题，内核已经加载然后弄出一堆错误．
+\item Clonezilla 的分区备份对 GPT 和 MBR 都是通用的， 如果发生任何问题， 用 live cd 重装系统，确保能正常启动， 然后还原对应的分区就行，无需任何额外设置。
+\item 之前 SMART 提示 threshold exceeded，但并没有看到那一项有问题，现在重新写 GPT，安装，clonezilla 还原， 又可以正常用了。
+\item  正常的 ext4 系统分区用 Gparted 缩小以后， 突然就不能启动了！貌似并不是 grub 的问题，内核已经加载然后弄出一堆错误。
 \item 有一个工具叫做 \href{https://help.ubuntu.com/community/Boot-Repair}{boot-repair} 可能可以用来修复 bootloader 的问题
 \item \verb|extFAT| 在 Ubuntu 中并不怎么支持 resize 和移动， 还是用 windows 的傲梅比较好
 \end{itemize}
@@ -30,19 +30,19 @@
 \subsubsection{fstab （File System Table）}
 \begin{itemize}
 \item \verb|/etc/fstab|
-\item \verb|uid=1000,gid=1000| 是当前登录用户的 user/group id．
+\item \verb|uid=1000,gid=1000| 是当前登录用户的 user/group id。
 \item \verb|NTFS| 的设置是 \verb|LABEL=mydrive2 /mnt/drive2 ntfs-3g nofail,x-gvfs-show,uid=1000,gid=1000 0 0|
 \item \verb|exFAT| 的设置是 \verb|LABEL=mydrive1 /mnt/drive1 exfat nofail,x-gvfs-show,uid=1000,gid=1000 0 0|
-\item 第一列可以是 \verb|LABEL=| 或者 \verb|UUID=|， 第二列是 mount point， 第三列是文件系统， 用 \verb|auto| 可以自动检测． 第四列是一些选项， \verb|nofail| 是即使硬盘没有插入也不会报错， \verb|x-gvfs-show| 是在 gnome 文件浏览器和 taskbar 中显示． \verb|uid| 和 \verb|gid| 是挂载后文件的 owner， \verb|1000| 是当前用户．
+\item 第一列可以是 \verb|LABEL=| 或者 \verb|UUID=|， 第二列是 mount point， 第三列是文件系统， 用 \verb|auto| 可以自动检测。 第四列是一些选项， \verb|nofail| 是即使硬盘没有插入也不会报错， \verb|x-gvfs-show| 是在 gnome 文件浏览器和 taskbar 中显示。 \verb|uid| 和 \verb|gid| 是挂载后文件的 owner， \verb|1000| 是当前用户。
 \end{itemize}
 
 \subsubsection{逻辑卷管理（LVM）}
-可以把多个物理硬盘融合为一个逻辑硬盘， 见 Logical Volume Management（LVM）笔记\upref{LVMnt}．
+可以把多个物理硬盘融合为一个逻辑硬盘， 见 Logical Volume Management（LVM）笔记\upref{LVMnt}。
 
 \subsection{Bootloader}
 \begin{itemize}
 \item 开机的时候，BIOS/EUFI 会先启动 bootloader 然后再由 bootloader 加载系统（也就是按 F2 或 Del 以后进入的那个界面选择的其实是 bootloader)
-\item 有一个设置 Grub 的 GUI 软件叫做 \verb|grub-customizer|, 可以设置 grub 菜单， 记住上次的选择， 检测新系统， 等．
+\item 有一个设置 Grub 的 GUI 软件叫做 \verb|grub-customizer|, 可以设置 grub 菜单， 记住上次的选择， 检测新系统， 等。
 \item \verb|os-prober| 也可以发现新系统并加入 grub 菜单（会被 grub-customizer 使用）
 \item grub 可以装在和系统不同的盘上
 \item MBR 的 grub 设置文件在 \verb|/boot/grub/grub.cfg| ， GPT 的在 \verb|/boot/efi/EFI/ubuntu/grub.cfg|
@@ -51,11 +51,11 @@
 \item windows的bootloader自动加载windows，而grub会搜索每个硬盘和分区，并列出所有选项
 \item 在GPT中，bootloader总是会在EFI分区，而在MBR中，bootloader在masterrecord中
 \item \verb|sudo grub-install /dev/sd#| 可以在某个硬盘中安装 grub (注意如果硬盘只有一个分区的话， 分区名和硬盘名相同， 安装可能就会出错)
-\item 注意 \verb|grub-install| 可能使用 \verb|grub-pc| 包也可能使用 \verb|grub-efi-amd64| 包． 前者给 MBR 硬盘安装， 后者给 GPT 硬盘安装． 它们可以同时安装．
+\item 注意 \verb|grub-install| 可能使用 \verb|grub-pc| 包也可能使用 \verb|grub-efi-amd64| 包。 前者给 MBR 硬盘安装， 后者给 GPT 硬盘安装。 它们可以同时安装。
 \item 如果遇到 \verb|failed to get canonical path of...| 就用 \verb|sudo grub-install /dev/sdX --root-directory=/mnt/[mount point directory]|
-\item 如果安装遇到 \verb|will not proceed with blocklist|， 就在安装命令后面加 \verb|--force|．
+\item 如果安装遇到 \verb|will not proceed with blocklist|， 就在安装命令后面加 \verb|--force|。
 \item \verb|df| 只会显示已挂载的硬盘， 而 \verb|fdisk| 或者 \verb|disk, gparted| 软件才会显示所有连接的硬盘
-\item 要安装 ubuntu live 镜像到 disk, 用 \verb|sudo dd bs=4M if=/path/to/ISOfile of=/dev/sda status=progress oflag=sync| 注意 \verb|sda| 后面不能有数字！ 这样 \verb|dd| 会把整个硬盘克隆成 iso 的内容而无视之前的任何 partition table 和分区． 此时 u 盘和光盘完全等效，都是只读的（亲测成功）.
+\item 要安装 ubuntu live 镜像到 disk, 用 \verb|sudo dd bs=4M if=/path/to/ISOfile of=/dev/sda status=progress oflag=sync| 注意 \verb|sda| 后面不能有数字！ 这样 \verb|dd| 会把整个硬盘克隆成 iso 的内容而无视之前的任何 partition table 和分区。 此时 u 盘和光盘完全等效，都是只读的（亲测成功）.
 \end{itemize}
 
 \begin{itemize}
@@ -68,16 +68,16 @@
 \item \verb|blkid| 可以查看所有分区的 uuid
 \item uuid 需要 umount 才可以修改， 随机生成 uuid 用 \verb|tune2fs -U random /dev/sdb?| , disk 中会看到变化， 如果 blkid 看见 uuid 没有变化， 就 mount 再 umount 即可刷新
 \item \verb|fdisk| 也可以改变 uuid, \verb|sudo fdisk /dev/sd?| 然后按 x 再按 i 即可
-\item 理论上 GPT 是可以在 BIOS 主板上 boot 的（实际上对大部分 linux 可以）， 见\href{https://superuser.com/questions/1337344/is-it-possible-to-boot-linux-from-a-gpt-disk-on-a-bios-system}{这里}．
+\item 理论上 GPT 是可以在 BIOS 主板上 boot 的（实际上对大部分 linux 可以）， 见\href{https://superuser.com/questions/1337344/is-it-possible-to-boot-linux-from-a-gpt-disk-on-a-bios-system}{这里}。
 \end{itemize}
 
 \subsection{Clone Ubuntu 硬盘}
-以下步骤亲测成功．
+以下步骤亲测成功。
 \begin{itemize}
 \item 启动 Ubuntu 的 live cd 的 usb
-\item 如果目标硬盘/分区比原硬盘/分区小， 那么用 GParted 缩小原分区．
-\item 用 GParted 把每个分区逐一复制粘贴， 分区尺寸要一模一样．
+\item 如果目标硬盘/分区比原硬盘/分区小， 那么用 GParted 缩小原分区。
+\item 用 GParted 把每个分区逐一复制粘贴， 分区尺寸要一模一样。
 \item 如果 part table 是 MBR， 用上面的 \verb|dd| 命令备份并拷贝 MBR
 \item 用 GParted 把目标分区的 UUID 随机生成新的， 避免两个分区具有一样的 UUID 发生冲突
-\item 用 \verb|grub-install /dev/sd?| 重新安装 grub， 确认目标硬盘中 \verb|/boot/grub/grub.cfg| 配置文件中所有 UUID 都是新分区的 UUID 而不是老的． 如果是老的就全部替换．
+\item 用 \verb|grub-install /dev/sd?| 重新安装 grub， 确认目标硬盘中 \verb|/boot/grub/grub.cfg| 配置文件中所有 UUID 都是新分区的 UUID 而不是老的。 如果是老的就全部替换。
 \end{itemize}

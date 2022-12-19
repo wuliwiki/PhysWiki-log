@@ -5,9 +5,10 @@
 \issueDraft
 \end{issues}
 
-\addTODO{类和继承参考\href{https://www.w3schools.com/python/python_inheritance.asp}{这里}， 算符重载参考\href{https://www.geeksforgeeks.org/operator-overloading-in-python/}{这里}．}
+\addTODO{类和继承参考\href{https://www.w3schools.com/python/python_inheritance.asp}{这里}， 算符重载参考\href{https://www.geeksforgeeks.org/operator-overloading-in-python/}{这里}。}
 
 \subsection{基础}
+一个例子
 \begin{lstlisting}[language=python]
 # 定义 person 类
 class person(): # 括号可以省略
@@ -15,8 +16,8 @@ class person(): # 括号可以省略
         self.name = name 
         self.age = age 
     def show(self): 
-        print("name is", self.name ) 
-        print("age is", self.age ) 
+        print("name is", self.name)
+        print("age is", self.age)
 
 # 生成对象
 p1 = person("jason", "30") 
@@ -34,42 +35,45 @@ name is justin
 age is 28
 \end{lstlisting}
 
-来定义一个平面点类
+另一个例子： 来定义一个平面点类
 \begin{lstlisting}[language=python]
 class point:
     """这里是 point.__doc__ 的内容"""
     def __init__(self, x, y): 
-        self.x = x 
-        self.y = y 
-    def __str__(self): # 用于 print()
+        self.x = x
+        self.y = y
+    # 用于 print()
+    def __str__(self):
         return "({0}, {1})".format(self.x, self.y)
-    def __repr__(self): # 用于不加自动显示内容， 也可以用 repr(obj) 直接调用
-        return __str__(self)
+    # 用于不加分号自动显示（一般是构造该对象的命令）， 也可以用 repr(obj) 直接调用
+    def __repr__(self):
+        return "point({0}, {1})".format(self.x, self.y)
     def __add__(self, other): # 算符 +， self 必须是第一个变量
         if isinstance(other, point):
             return point(self.x + other.x, self.y + other.y)
         else:
             return point(self.x + other, self.y + other)
+
     @property # 调用可以直接用 \verb|p.len|， 省略括号
     def len(self):
         return self.x**2 + self.y**2
 \end{lstlisting}
 
 \begin{itemize}
-\item 用 \verb|dir(类名)| 或者 \verb|dir(obj)| 查看对象的所有性质（attributes）
+\item 用 \verb|dir(类名)| 或者 \verb|dir(obj)| 查看其所有性质（attributes）
 \item 用 \verb|vars(obj)| 查看对象的所有数据成员， 等效地也可以用 \verb|teddy.__dict__|
-\item \verb|obj.__module__| 查看对象的模块， 如果不在模块中定义的， 就是 \verb|'__main__'|． 如果是内建类型， 就是 \verb|'builtins'|
-\item \verb|import inspect| 可以检查 python 对象的方方面面， 各种性质． 具体见 \verb|dir(inspect)|．
+\item \verb|obj.__module__| 查看对象所在的模块， 如果不在模块中定义的， 就返回 \verb|'__main__'|。 如果是内建类型， 就返回 \verb|'builtins'|
+\item \verb|import inspect| 模块可以检查 python 对象的方方面面， 各种性质。 具体见 \verb|dir(inspect)|。
 \end{itemize}
 
 \subsection{算符重载}
 \begin{itemize}
-\item 算符对应的函数名： \verb|__add__|（\verb|+|）， \verb|__sub__|（\verb|-|）， \verb|__mul__|（\verb|*|）， \verb|__truediv__|（\verb|/|）， \verb|__floordiv__|（\verb|//|）， \verb|__mod__|（\verb|%|）， \verb|__lshift__|（\verb|<<|）， \verb|__rshift__|（\verb|>>|）， \verb|__and__|（\verb|&|）， \verb|__or__|（\verb`|`）， \verb|__xor__|（\verb|^|）， \verb|__invert__|（\verb|~|）， \verb|__lt__|（\verb|<|）， \verb|__le__|（\verb|<=|），\verb|__eq__|（\verb|==|），\verb|__ne__|（\verb|!=|），\verb|__gt__|（\verb|>|），\verb|__ge__|（\verb|>=|）， \verb|__getitem__(self, i)|（\verb|v[i]|）， \verb|__setitem__(self, i, val)|（\verb|v[i] = val|）， \verb|__iter__(self)| （迭代器 \verb|iter()|）， \verb|__next__(self)|（迭代器 \verb|next()|）
-\item \verb|__radd__(self, other)| 可以定义 \verb|other + self| （当 \verb|other| 具有不同类型时会被调用）．
-\item \verb|x[start:end:step]| 中， \verb|start:end:step| 等效于 \verb|slice(start, end, step)|， 类型是 \verb|slice|. 如果三个中哪个被省略了， 哪个就是 \verb|None|． 注意 \verb|start:end:step| 不能单独使用．
+\item 算符对应的函数名： \verb|__add__|（\verb|+|）， \verb|__sub__|（\verb|-|）， \verb|__mul__|（\verb|*|）， \verb|__truediv__|（\verb|/|）， \verb|__floordiv__|（\verb|//|）， \verb|__mod__|（\verb|%|）， \verb|__lshift__|（\verb|<<|）， \verb|__rshift__|（\verb|>>|）， \verb|__and__|（\verb|&|）， \verb|__or__|（\verb`|`）， \verb|__xor__|（\verb|^|）， \verb|__invert__|（\verb|~|）， \verb|__lt__|（\verb|<|）， \verb|__le__|（\verb|<=|），\verb|__eq__|（\verb|==|），\verb|__ne__|（\verb|!=|），\verb|__gt__|（\verb|>|），\verb|__ge__|（\verb|>=|）， \verb|__getitem__(self, i)|（\verb|对象[i]|）， \verb|__setitem__(self, i, val)|（\verb|对象[i] = 值|）， \verb|__iter__(self)| （迭代器 \verb|iter()|）， \verb|__next__(self)|（迭代器 \verb|next()|）
+\item \verb|__radd__(self, other)| 可以定义 \verb|other + self| （当 \verb|other| 具有不同类型时会被调用）。
+\item \verb|x[start:end:step]| 中， \verb|start:end:step| 等效于 \verb|slice(start, end, step)|， 类型是 \verb|slice|. 如果三个中哪个被省略了， 哪个就是 \verb|None|。 注意 \verb|start:end:step| 不能单独使用。
 \end{itemize}
 
 \subsection{继承}
 \begin{itemize}
-\item \verb|class 类名(基类名):| 定义派生类， \verb|类名.__base__| 查看基类． 最底层的基类都是 \verb|object|
+\item \verb|class 类名(基类名):| 定义派生类， \verb|类名.__base__| 查看基类。 最底层的基类都是 \verb|object|
 \end{itemize}

@@ -1,24 +1,25 @@
 % C++ 基础
 % c++|cpp|语法
 
-Matlab 和 Python 等动态语言虽然用起来方便， 但缺点是运行较慢， 对于一些计算量大的项目不适合． 目前在高性能计算中广泛使用的只有两种语言即 C++ 和 Fortran． 虽然 Fortran 普遍被认为是一个过时的语言， 但在计算物理中， 许多人仍然在使用， 一是因为以前遗留下的 Fortran 代码比较多， 二是一些年纪较大的学者只会 Fortran．
+Matlab 和 Python 等动态语言虽然用起来方便， 但缺点是运行较慢， 对于一些计算量大的项目不适合。 目前在高性能计算中广泛使用的只有两种语言即 C++ 和 Fortran。 虽然 Fortran 普遍被认为是一个过时的语言， 但在计算物理中， 许多人仍然在使用， 一是因为以前遗留下的 Fortran 代码比较多， 二是一些年纪较大的学者只会 Fortran。
 
-一本在数值算法中很有名的书是 Numerical Recipes， 这本书第三版以前都使用 Fortran 或 C， 而第三版却只有 C++， 这也是本书选择介绍 C++ 而不是 Fortran 的原因之一． 本书将从 Numerical Recipes 中借鉴许多代码上的风格和算法．
+一本在数值算法中很有名的书是 Numerical Recipes， 这本书第三版以前都使用 Fortran 或 C， 而第三版却只有 C++， 这也是本书选择介绍 C++ 而不是 Fortran 的原因之一。 本书将从 Numerical Recipes 中借鉴许多代码上的风格和算法。
 
-C++ 的特征实在多不胜数， 事实上无论是什么语言， 做计算物理的研究者大多会倾向于只选择一些最基础的语法来使用．
-我们在这里列出本书使用的 C++ 特性．
+C++ 的特征实在多不胜数， 事实上无论是什么语言， 做计算物理的研究者大多会倾向于只选择一些最基础的语法来使用。
+我们在这里列出本书使用的 C++ 特性。
 
 \subsection{基础语法}
 \begin{itemize}
-\item 基本类型 （\verb|bool|, \verb|char|, \verb|int|, \verb|long|, \verb|long| \verb|long|, \verb|float|, \verb|double|， \verb|long double|） \verb|char, short, int| 几乎总是 8, 16, 32 bit 的， 虽然标准没这么规定．
+\item 基本类型 （\verb|bool|, \verb|char|, \verb|int|, \verb|long|, \verb|long| \verb|long|, \verb|float|, \verb|double|， \verb|long double|） \verb|char, short, int| 几乎总是 8, 16, 32 bit 的， 虽然标准没这么规定。
 \item 基本算符 （\verb|=, +, -, *, /, %, ++, --, +=, -=, *=, /=, ?:|) 以及优先级
-\item 算符 \verb|%| 的定义使 \verb|(m / n) * n + m % n == m| 成立．
+\item 求值顺序没有定义： 例如 \verb|f1() + f2() + f3()| 等效于 \verb|(f1() + f2()) + f3()|， 但是三个函数被调用的顺序是没有定义的。
+\item 算符 \verb|%| 的定义使 \verb|(m / n) * n + m % n == m| 成立。
 \item 比特算符（\verb|&|, \verb+|+, \verb|^|, \verb|~|, \verb|<<|， \verb|>>|）
 \item 格式输出（\verb|printf|）
 \item scope （scope 内的名字在 scope 外没有定义， scope 内可以定义与 scope 外相同的名字并覆盖， 类的 destructor 会在 scope 结束时自动调用）
 \item 判断（\verb|if|, \verb|else if|, \verb|else|）
 \item 循环 （\verb|for(;;)|, \verb|while|， \verb|do while|， \verb|break|， \verb|continue|）
-\item \verb|goto|， \verb|label:| 谨慎使用， 可用于跳出多重循环．
+\item \verb|goto|， \verb|label:| 谨慎使用， 可用于跳出多重循环。
 \item 函数（函数名重载， 变量默认值， 算符函数， \verb|inline| 函数， \verb|static| 变量）
 \item \verb|const|
 \item 指针， reference， pass by reference/value
@@ -28,8 +29,8 @@ C++ 的特征实在多不胜数， 事实上无论是什么语言， 做计算�
 \item one definition rule （ODR)
 \item 栈（stack）和堆（heap）
 \item \verb|typedef|
-\item 数组： 不指定个数的数组作为函数参数和指针是完全等效的．
-\item 动态内存管理 \verb|new|, \verb|delete|．
+\item 数组： 不指定个数的数组作为函数参数和指针是完全等效的。
+\item 动态内存管理 \verb|new|, \verb|delete|。
 \item 异常处理 \verb|throw|, \verb|try|, \verb|catch|
 \end{itemize}
 
@@ -39,17 +40,17 @@ C++ 的特征实在多不胜数， 事实上无论是什么语言， 做计算�
 \item \verb|complex|
 \item \verb|vector| （包括内存管理机制、 改变长度可能使指针失效）
 \item \verb|string|, \verb|string32|
-\item \verb|iostream| （\verb|cin|， \verb|cout|， \verb|<<| 算符， \verb|>>| 算符， \verb|cin| 可以放在判断语句中， 如 \verb|if (cin >> a)|．）
+\item \verb|iostream| （\verb|cin|， \verb|cout|， \verb|<<| 算符， \verb|>>| 算符， \verb|cin| 可以放在判断语句中， 如 \verb|if (cin >> a)|。）
 \item \verb|ifstream|， \verb|ofstream|
-\item 如何判断 \verb|cin| 或 \verb|fin| 读到了文件末尾（文件末尾允许任意多空格/空行）？ 不要用 \verb|cin.eof| 判断， 例如读 int， 可以先初始化为 \verb|INT_MAX|， 然后读完以后判断是否仍为 \verb|INT_MAX|．
+\item 如何判断 \verb|cin| 或 \verb|fin| 读到了文件末尾（文件末尾允许任意多空格/空行）？ 不要用 \verb|cin.eof| 判断， 例如读 int， 可以先初始化为 \verb|INT_MAX|， 然后读完以后判断是否仍为 \verb|INT_MAX|。
 \item 换行： \verb|cin.ignore(numeric_limits<int>::max(), '\n');|
-\item C 语言的 \verb|#include <climits>| 中的常数（\verb|INT_MIN|， \verb|INT_MAX|， \verb|DBL_MAX|， \verb|DBL_EPSILON|）， 以及 \verb|std::numeric_limits<>::max()| 等．
+\item C 语言的 \verb|#include <climits>| 中的常数（\verb|INT_MIN|， \verb|INT_MAX|， \verb|DBL_MAX|， \verb|DBL_EPSILON|）， 以及 \verb|std::numeric_limits<>::max()| 等。
 \end{itemize}
 
 \subsubsection{高级}
 \begin{itemize}
-\item \verb|__cplusplus| 用于检测 cpp 版本．
-\item linux 中用 \verb|<bits/stdc++.h>| 快速 include 所有 C 头文件和 STL 头文件．
+\item \verb|__cplusplus| 用于检测 cpp 版本。
+\item linux 中用 \verb|<bits/stdc++.h>| 快速 include 所有 C 头文件和 STL 头文件。
 \item \verb|pair|
 \item \verb|unordered_set|， \verb|set|
 \item \verb|unordered_map|， \verb|ordered_map|
@@ -59,12 +60,12 @@ C++ 的特征实在多不胜数， 事实上无论是什么语言， 做计算�
 
 \subsection{较高级的功能}
 \begin{itemize}
-\item \verb|for(auto &e : v)|， 需要定义 \verb|v.begin()|， \verb|v.end()|， iterator 需要支持 \verb|++|， \verb|!=|， \verb|*p|．
+\item \verb|for(auto &e : v)|， 需要定义 \verb|v.begin()|， \verb|v.end()|， iterator 需要支持 \verb|++|， \verb|!=|， \verb|*p|。
 \item 类（constructor, destructor, \verb|public|, \verb|private|， 数据成员， 函数成员， \verb|operator+, -, *, /, (), []|）
-\item POD （plain old data）， \verb|类名() = default;| （可以有其他 constructor）， 没有 destructor， 没有 virtual function． 可以用 \verb|std::is_pod<类名>::value| 来判断．
+\item POD （plain old data）， \verb|类名() = default;| （可以有其他 constructor）， 没有 destructor， 没有 virtual function。 可以用 \verb|std::is_pod<类名>::value| 来判断。
 \item 宏 （\verb|#include|, \verb|#define|, \verb|#if|, \verb|#ifdef|, \verb|#ifndef|, \verb|#else|, \verb|#endif|）
 \item 宏函数， \verb|var|（变量）， \verb|#var|（字符串）， 以及 \verb|... ## ...| 用于连接（忽略两边空格）
-\item \verb|#define ... do {} while(0)| 避免多个语句不加花括号带来的错误．
+\item \verb|#define ... do {} while(0)| 避免多个语句不加花括号带来的错误。
 \item \verb|namespace|
 \item \verb|constexpr|
 \item \verb|decltype| （\verb|double x; decltype(x) y;|）

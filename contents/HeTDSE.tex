@@ -4,13 +4,13 @@
 \pentry{广义球谐函数\upref{GenYlm}， Crank-Nicolson 算法解一维含时薛定谔方程\upref{CraNic}， Lanczos 算法\upref{Lanc}， 氢原子球坐标薛定谔方程数值解\upref{HyTDSE}} % 已包含 “张量积空间”
 
 \subsection{波函数展开}
-使用角向基底为两个电子总轨道角动量和 $z$ 分量的本征态\upref{AMAdd}， 即广义球谐函数 $\mathcal{Y}_{l_1,l_2}^{L,M}(\uvec r_1, \uvec r_2)$．
+使用角向基底为两个电子总轨道角动量和 $z$ 分量的本征态\upref{AMAdd}， 即广义球谐函数 $\mathcal{Y}_{l_1,l_2}^{L,M}(\uvec r_1, \uvec r_2)$。
 
-总波函数所在的空间可以看做角向空间和径向空间的张量积空间． 现在有了角向空间的基底， 总波函数就可以在该基底上展开
+总波函数所在的空间可以看做角向空间和径向空间的张量积空间。 现在有了角向空间的基底， 总波函数就可以在该基底上展开
 \begin{equation}
 \ket{\Psi} = \sum_\lambda \ket{R_\lambda}\ket{\mathcal{Y_\lambda}}
 \end{equation}
-其中 $\lambda$ 是将所有的 $(l_1,l_2,L,M)$ 组合排序后的序号． $\ket{R_\lambda}$ 是二维径向波函数
+其中 $\lambda$ 是将所有的 $(l_1,l_2,L,M)$ 组合排序后的序号。 $\ket{R_\lambda}$ 是二维径向波函数
 \begin{equation}\label{HeTDSE_eq6}
 \ket{R_\lambda} = \frac{1}{r_1 r_2} \psi_\lambda(r_1, r_2)
 \end{equation}
@@ -19,7 +19,7 @@
 \Psi(\bvec r_1, \bvec r_2) = \sum_{L, M, l_1, l_2}  \frac{1}{r_1 r_2} \psi_{l_1, l_2}^{L, M}(r_1, r_2)\mathcal{Y}_{l_1, l_2}^{L, M}(\uvec r_1, \uvec r_2)
 \end{equation}
 
-由张量积空间\upref{DirPro}中的结论， 我们可以求哈密顿算符 $H$ 关于角向基底的 “矩阵元” $H_{\lambda, \lambda'}$， 每个矩阵元是径向空间中的一个算符． 列出薛定谔方程的 “矩阵形式”， 就得到了一组 couple 的径向波函数的薛定谔方程
+由张量积空间\upref{DirPro}中的结论， 我们可以求哈密顿算符 $H$ 关于角向基底的 “矩阵元” $H_{\lambda, \lambda'}$， 每个矩阵元是径向空间中的一个算符。 列出薛定谔方程的 “矩阵形式”， 就得到了一组 couple 的径向波函数的薛定谔方程
 \begin{equation}
 \sum_{\lambda'} H_{\lambda, \lambda'} \ket{R_{\lambda'}} = \I \pdv{t} \ket{R_{\lambda}}
 \end{equation}
@@ -32,16 +32,16 @@ H = H_1 + H_2 + V_{12} + V_{F1} + V_{F2}
 \begin{equation}
 H_i = K_{ri} + \frac{L_i^2}{2m r_i^2} - \frac{2}{r_i} \qquad (i = 1,2)
 \end{equation}
-其中第二项是对角矩阵是因为 $\mathcal Y$ 基底是 $L_i^2$ 的本征函数． $V_{12}$ 是两电子之间的库仑势能， $V_{Fi}$ 是电场对每个电子的作用势能．
+其中第二项是对角矩阵是因为 $\mathcal Y$ 基底是 $L_i^2$ 的本征函数。 $V_{12}$ 是两电子之间的库仑势能， $V_{Fi}$ 是电场对每个电子的作用势能。
 
 \subsection{波函数的对称性}
-我们一般假设电子自旋态恒为 singlet （反对称）， 所以总波函数满足粒子交换对称 $\Psi(\bvec r_1, \bvec r_2) = \Psi(\bvec r_2, \bvec r_1)$． 由\autoref{GenYlm_eq5}~\upref{GenYlm} 可以导出分波的对称性
+我们一般假设电子自旋态恒为 singlet （反对称）， 所以总波函数满足粒子交换对称 $\Psi(\bvec r_1, \bvec r_2) = \Psi(\bvec r_2, \bvec r_1)$。 由\autoref{GenYlm_eq5}~\upref{GenYlm} 可以导出分波的对称性
 \begin{equation}\label{HeTDSE_eq1}
 \psi_{l_1, l_2}^{L, M}(r_1, r_2) = (-1)^{l_1 + l_2 - L} \psi_{l_2, l_1}^{L, M}(r_2, r_1)
 \end{equation}
-理论上用该式可以在程序中减少一半重复的分波， 并且分波的 coupling 演化也可以得到精简， 但由于编程麻烦暂时没有实现．
+理论上用该式可以在程序中减少一半重复的分波， 并且分波的 coupling 演化也可以得到精简， 但由于编程麻烦暂时没有实现。
 
-另外可以证明（其实是数值计算发现的） $l_1 + l_2 - L$ 为奇数的分波（奇分波）和 $l_1 + l_2 - L$ 为偶数的分波（偶分波）在线偏振电场中是独立演化的， 也就是 $V_{12}$ 和 $z_1, z_2$ 不会把奇偶性不同的分波耦合起来． 所以如果氦原子从基态（只包含偶分波：$l_1 = l_2, L = 0$）开始在线偏振电场中演化， 那么奇数分波的项将始终为零， 可以在程序中去除．
+另外可以证明（其实是数值计算发现的） $l_1 + l_2 - L$ 为奇数的分波（奇分波）和 $l_1 + l_2 - L$ 为偶数的分波（偶分波）在线偏振电场中是独立演化的， 也就是 $V_{12}$ 和 $z_1, z_2$ 不会把奇偶性不同的分波耦合起来。 所以如果氦原子从基态（只包含偶分波：$l_1 = l_2, L = 0$）开始在线偏振电场中演化， 那么奇数分波的项将始终为零， 可以在程序中去除。
 
 \subsection{电子相互作用项}
 \begin{equation}\label{HeTDSE_eq5}
@@ -49,12 +49,12 @@ H_i = K_{ri} + \frac{L_i^2}{2m r_i^2} - \frac{2}{r_i} \qquad (i = 1,2)
 V_{12} = \frac{1}{\abs{\bvec r_2 - \bvec r_1}} &= 4\pi \sum_{l=0}^{\infty} \frac{1}{2l+1} \frac{r_<^l}{r_>^{l+1}} \sum_{m = -l}^l Y_{l,m}^*(\uvec r_1) Y_{l,m}(\uvec r_2)\\
 &= 4\pi \sum_{l=0}^{\infty} \frac{(-1)^l}{\sqrt{2l + 1}} \frac{r_<^l}{r_>^{l+1}} \mathcal{Y}_{l,l}^{0,0} (\uvec r_1, \uvec r_2)
 }\end{equation}
-这就相当于将张量积空间中的线性算符分解成径向和角向算符的张量积之和． 第二步使用了\autoref{SphCup_eq9}~\upref{SphCup}， 即
+这就相当于将张量积空间中的线性算符分解成径向和角向算符的张量积之和。 第二步使用了\autoref{SphCup_eq9}~\upref{SphCup}， 即
 \begin{equation}
 \mathcal{Y}_{l,l}^{0,0} (\uvec r_1, \uvec r_2) = \frac{(-1)^l}{\sqrt{2l+1}} \sum_{m = -l}^l Y_{lm}^*(\uvec r_1) Y_{lm}(\uvec r_2)
 \end{equation}
 
-要计算矩阵元 $\mel{\mathcal Y_\lambda}{V_{12}}{\mathcal Y_{\lambda'}}$， 就要对 6 个球谐函数的乘积的线性组合做两次角向积分． 使用\autoref{SphCup_eq1}~\upref{SphCup} 可以将上式表示为六个 CG 系数相乘的线性组合（二重求和）．
+要计算矩阵元 $\mel{\mathcal Y_\lambda}{V_{12}}{\mathcal Y_{\lambda'}}$， 就要对 6 个球谐函数的乘积的线性组合做两次角向积分。 使用\autoref{SphCup_eq1}~\upref{SphCup} 可以将上式表示为六个 CG 系数相乘的线性组合（二重求和）。
 \begin{equation}\label{HeTDSE_eq10}
 \ali{
 &\quad\mel{\mathcal{Y}_{l_1 l_2}^{LM}}{Y_{lm}^*(\uvec r_1)Y_{lm}(\uvec r_2)}{\mathcal{Y}_{l_1' l_2'}^{L'M'}}\\
@@ -82,14 +82,14 @@ m_1 + m_2 = m_1' + m_2' = M \qquad
 \abs{m_2'-m_2} \leqslant l
 \end{equation}
 
-由于 CG 系数都是实数， 这必定是一个实数矩阵． 选择定则如下
+由于 CG 系数都是实数， 这必定是一个实数矩阵。 选择定则如下
 \begin{itemize}
-\item 根据总角动量守恒（$1/r_{12}$ 算符与 $L, L_z$ 算符对易）， $L \ne L'$ 或 $M \ne M'$ 时， 矩阵元为零．
-\item 根据 parity CG coefficients， 当 $l_1' + l + l_1$ 或 $l_2' + l + l_2$ 为奇数时， 上式等于 0．
-\item 根据 $\Pi \mathcal{Y} = (-1)^{l_1 + l_2} \mathcal{Y}$， 考虑到 $1/r_{12}$ 具有偶宇称， 所以 $l_1 + l_2$ 与 $l_1' + l_2'$ 的奇偶性必须不同．
+\item 根据总角动量守恒（$1/r_{12}$ 算符与 $L, L_z$ 算符对易）， $L \ne L'$ 或 $M \ne M'$ 时， 矩阵元为零。
+\item 根据 parity CG coefficients， 当 $l_1' + l + l_1$ 或 $l_2' + l + l_2$ 为奇数时， 上式等于 0。
+\item 根据 $\Pi \mathcal{Y} = (-1)^{l_1 + l_2} \mathcal{Y}$， 考虑到 $1/r_{12}$ 具有偶宇称， 所以 $l_1 + l_2$ 与 $l_1' + l_2'$ 的奇偶性必须不同。
 \end{itemize}
 
-爱华的论文中将\autoref{HeTDSE_eq9} 用 9j 符号表示， 但仅限于 $M \ne M'$． 然而经过数值验证， 我发现应该可以将爱华的公式拓展为
+爱华的论文中将\autoref{HeTDSE_eq9} 用 9j 符号表示， 但仅限于 $M \ne M'$。 然而经过数值验证， 我发现应该可以将爱华的公式拓展为
 \begin{equation}
 \ali{
 \mel{\mathcal{Y}_{l_1 l_2}^{LM}}{\mathcal{Y}_{ll}^{00}}{\mathcal{Y}_{l_1' l_2'}^{L'M'}}
@@ -98,25 +98,25 @@ m_1 + m_2 = m_1' + m_2' = M \qquad
 \bmat{l & l_2' & l_2\\ 0 & 0 & 0}
 \Bmat{l & l_1' & l_1\\ l & l_2' & l_2\\ 0 & L & L}
 }\end{equation}
-注意当 $M = M'$ 时， 结果与 $M$ 无关．
+注意当 $M = M'$ 时， 结果与 $M$ 无关。
 
 \subsubsection{泊松积分}
-按照 FEDVR 基底的思路， 我们会自然地想把 $V_{12}$ 算符展开后的 $\mel{r_i r_j}{r_<^l/r_>^l}{r_{i'} r_{j'}}$ 用高斯 Lobatto\upref{GLquad} 积分来计算， 然而这么做并不精确， 因为 $r_<^l/r_>^l$ 用有限阶多项式展开会有误差． 使用泊松积分法可以减小计算误差， 且仍然保持对角矩阵的形式， 即
+按照 FEDVR 基底的思路， 我们会自然地想把 $V_{12}$ 算符展开后的 $\mel{r_i r_j}{r_<^l/r_>^l}{r_{i'} r_{j'}}$ 用高斯 Lobatto\upref{GLquad} 积分来计算， 然而这么做并不精确， 因为 $r_<^l/r_>^l$ 用有限阶多项式展开会有误差。 使用泊松积分法可以减小计算误差， 且仍然保持对角矩阵的形式， 即
 \begin{equation}
 \mel*{r_i r_j}{\frac{r_<^l}{r_>^{l+1}}}{r_{i'} r_{j'}} \propto \delta_{i,i'} \delta_{j,j'}
 \end{equation}
-根据我的猜测（有空验证一下！）， 泊松积分积分的结果应该和直接用数值积分的结果是一样的．
+根据我的猜测（有空验证一下！）， 泊松积分积分的结果应该和直接用数值积分的结果是一样的。
 \begin{equation}\label{HeTDSE_eq3}
 \mel*{r_i r_j}{\frac{r_<^l}{r_>^{l+1}}}{r_{i'} r_{j'}} = \delta_{i,i'} \delta_{j,j'} \qty[\frac{2l+1}{r_i r_j \sqrt{\omega_i \omega_j}} (2\mat T_l)^{-1}_{i,j} + \frac{r_i^l r_j^l}{r_{max}^{2l+1}}]
 \end{equation}
-推导参考 McCurdy, Solving the three-body Coulomb breakup problem using exterior complex scaling 式 68． 其中 $\mat T_l$ 是单电子动能算符的矩阵
+推导参考 McCurdy, Solving the three-body Coulomb breakup problem using exterior complex scaling 式 68。 其中 $\mat T_l$ 是单电子动能算符的矩阵
 \begin{equation}
 \begin{aligned}
 (T_l)_{ij} &= \mel*{r_i}{\qty[-\frac{1}{2m}\dv[2]{r} + \frac{l(l+1)}{2mr}]}{r_j}\\
 &= -\frac{1}{2m} \mel*{r_i}{\dv[2]{r}}{r_j} + \delta_{i,j}\frac{l(l+1)}{2mr_i^2}
 \end{aligned}
 \end{equation}
-其中 $\ket{r_i}$ 是一维 FEDVR 格点在 $r_i$ 处的正交归一基底\upref{FEDVR}， $r_{max}$ 是计算 $T_l$ 时最后一个 FE 的边界． 虽然\autoref{HeTDSE_eq3} 中含有 $r_{max}$， 但结果却与 $r_{max}$ 无关， 原因是 $T_l$ 也和 $r_{max}$ 相关， 两项中的 $r_{max}$ 抵消了．
+其中 $\ket{r_i}$ 是一维 FEDVR 格点在 $r_i$ 处的正交归一基底\upref{FEDVR}， $r_{max}$ 是计算 $T_l$ 时最后一个 FE 的边界。 虽然\autoref{HeTDSE_eq3} 中含有 $r_{max}$， 但结果却与 $r_{max}$ 无关， 原因是 $T_l$ 也和 $r_{max}$ 相关， 两项中的 $r_{max}$ 抵消了。
 
 \subsection{电场作用项}
 对每个电子，
@@ -142,7 +142,7 @@ z =2\sqrt{\frac{\pi}{3}} rY_{1,0}
 &= \delta_{l_2, l_2'} \delta_{M, M'} \sqrt{(2l_1 + 1)(2l_1'+1)} r \sum_{m_1,m_2} (-1)^{m_1} \times\\
 &\qquad  \bmat{l_1 & l_2 & L\\ m_1 & m_2 & M} \bmat{l_1' & l_2 & L'\\ m_1 & m_2 & M}  \pmat{l_1 & 1 & l_1'\\ 0 & 0 & 0} \pmat{l_1 & 1 & l_1'\\ -m_1 & 0 & m_1}
 }\end{equation}
-最后一步使用了 3j 符号中 $m_1 + m_2 + m_3 = 0$， 以及 CG 系数中 $m_1 + m_2 = M$ 的性质． 两个 delta 函数验证了对第一个电子作用的 $z$ 方向电场不会影响第二个电子的角动量以及总角动量的 $z$ 分量． 推导中还陆续得出了 $m_1' = m_1, m_2' = m_2$ 的结论， 即该电场同样不会影响每个电子的角动量 $z$ 分量（所以对 $m_1', m_2'$ 的求和消去了）． 最后对 $m_1,m_2$ 的求和中， 要求 $m_1+m_2=M$， 且 $\abs{m_1} < \min\qty{l_1, l'_1}$．
+最后一步使用了 3j 符号中 $m_1 + m_2 + m_3 = 0$， 以及 CG 系数中 $m_1 + m_2 = M$ 的性质。 两个 delta 函数验证了对第一个电子作用的 $z$ 方向电场不会影响第二个电子的角动量以及总角动量的 $z$ 分量。 推导中还陆续得出了 $m_1' = m_1, m_2' = m_2$ 的结论， 即该电场同样不会影响每个电子的角动量 $z$ 分量（所以对 $m_1', m_2'$ 的求和消去了）。 最后对 $m_1,m_2$ 的求和中， 要求 $m_1+m_2=M$， 且 $\abs{m_1} < \min\qty{l_1, l'_1}$。
 
 同理， 对第二个电子有
 % 已验证： M = M' = 0 时和爱华的程序一样
@@ -167,8 +167,8 @@ r\sqrt{9(2l'_1+1)(2l'_2+1)(2L'+1)/(4\pi)^2}\\
 &\times\bmat{0 & l'_1 & l_1\\ 0 & 0 & 0} \bmat{1 & l'_2 & l_2\\ 0 & 0 & 0} \bmat{1 & L' & L\\ 0 & 0 & 0}\Bmat{0 & l'_1 & l_1\\ 1 & l'_2 & l_2\\ 1 & L' & L}
 \end{aligned}
 \end{equation}
-选择定则： $L' - L = \pm 1$， $M' = M$， $l_1+l_2-L$ 奇偶性不变． % 已数值验证，见与爱华的聊天记录， 似乎连 multi-photon 也不会变．
-这就是为什么从基态（$l_1=l_2$， $L=0$）的电离计算可以排除所有 $l_1+l_2-L$ 为奇数的分波．
+选择定则： $L' - L = \pm 1$， $M' = M$， $l_1+l_2-L$ 奇偶性不变。 % 已数值验证，见与爱华的聊天记录， 似乎连 multi-photon 也不会变。
+这就是为什么从基态（$l_1=l_2$， $L=0$）的电离计算可以排除所有 $l_1+l_2-L$ 为奇数的分波。
 
 \subsection{非线性偏振电场}
 对非线性偏振电场， \autoref{HeTDSE_eq12} 的前两项不为零， 但只和 $z$ 分量的结果大同小异（只有最后一个 3j 系数变为两项， 再除以 $\sqrt{2}$ 以归一化）
@@ -202,7 +202,7 @@ r\sqrt{9(2l'_1+1)(2l'_2+1)(2L'+1)/(4\pi)^2}\\
 }\end{equation}
 
 \subsection{束缚态}
-能量较低的束缚态可以轻易用虚时间演化得到， 即把 $\exp(-\I H \Delta t)$ 替换为 $\exp(- H \Delta t)$， 这相当于把 $\Delta t$ 变为虚数 $-\I \Delta t$， 因此得名． 氦原子基态只包含 $L = 0$ 的分波， 这要求 $l_1 = l_2 = 0, 1, 2, \dots$（参考\autoref{AMAdd_fig2}~\upref{AMAdd}）．
+能量较低的束缚态可以轻易用虚时间演化得到， 即把 $\exp(-\I H \Delta t)$ 替换为 $\exp(- H \Delta t)$， 这相当于把 $\Delta t$ 变为虚数 $-\I \Delta t$， 因此得名。 氦原子基态只包含 $L = 0$ 的分波， 这要求 $l_1 = l_2 = 0, 1, 2, \dots$（参考\autoref{AMAdd_fig2}~\upref{AMAdd}）。
 
 \subsection{Crank-Nicolson 波函数演化}
 
@@ -210,46 +210,46 @@ r\sqrt{9(2l'_1+1)(2l'_2+1)(2L'+1)/(4\pi)^2}\\
 \begin{equation}
 \exp(-\I H\Delta t) = \exp(-\I H_0\frac{\Delta t}{2})\exp(-\I H_{int}\Delta t) \exp(-\I H_0\frac{\Delta t}{2}) + \order{\Delta t^3}
 \end{equation}
-只是这里的 $H_{int} = V_{12} + V_F$ 是所有 $\mel{\mathcal{Y}}{\ }{\mathcal{Y}}$ 作用后为非对角（算符）矩阵的项， 即电子的相互作用和电场对每个电子的作用．
+只是这里的 $H_{int} = V_{12} + V_F$ 是所有 $\mel{\mathcal{Y}}{\ }{\mathcal{Y}}$ 作用后为非对角（算符）矩阵的项， 即电子的相互作用和电场对每个电子的作用。
 
 $H_0 = H_1 + H_2$ 由于 $H_1$ 和 $H_2$ 对易， 我们可以将它们独立演化
 \begin{equation}
 \exp(-\I H_0 \frac{\Delta t}{2}) = \exp(-\I H_1 \frac{\Delta t}{2}) \exp(-\I H_2 \frac{\Delta t}{2})
 \end{equation}
-也就是对每个 partial wave 的二维网格， 用类似氢原子的方法演化每一列再演化每一行．
+也就是对每个 partial wave 的二维网格， 用类似氢原子的方法演化每一列再演化每一行。
 
-根据以上的推导可以看出 $H_{int}$ 在展开成径向算符与角向算符的张量积的线性组合后， 径向算符都是关于 $r$ 的函数， 这对 FEDVR 基底来说都是对角矩阵（即使使用泊松积分）． 所以在演化 $\exp(-\I H_{int}\Delta t)$ 时， 每个二维 FEDVR 格点都可以独立进行， 给大量并行提供了可能性． 总结起来， 程序中的\textbf{三维波函数矩阵的每个方向的演化都可以每列独立进行}．
+根据以上的推导可以看出 $H_{int}$ 在展开成径向算符与角向算符的张量积的线性组合后， 径向算符都是关于 $r$ 的函数， 这对 FEDVR 基底来说都是对角矩阵（即使使用泊松积分）。 所以在演化 $\exp(-\I H_{int}\Delta t)$ 时， 每个二维 FEDVR 格点都可以独立进行， 给大量并行提供了可能性。 总结起来， 程序中的\textbf{三维波函数矩阵的每个方向的演化都可以每列独立进行}。
 
 在演化 $\exp(-\I H_{int}\Delta t)$ 的时候， 爱华的做法是进一步 split 成三个 operators
 \begin{equation}\label{HeTDSE_eq4}
 \exp(-\I H_{int}\Delta t) = \exp(-\I V_F\frac{\Delta t}{2})   \exp(-\I V_{12} \Delta t) \exp(-\I V_F\frac{\Delta t}{2})
 \end{equation}
-这是因为 $V_F = V_{F1} + V_{F2}$ 是含时的， 和电场分量 $E_z$ 成正比．
+这是因为 $V_F = V_{F1} + V_{F2}$ 是含时的， 和电场分量 $E_z$ 成正比。
 
-爱华进一步分割的原因是， 他的代码中预先储存了 $V_F$ 和 $V_{12}$ 对角化后的本征值和本征矢矩阵， 如果直接对 $H_{int}$ 对角化， 那么就需要每一步都重新对角化一次． 预先储存所需的内存和分波数的平方成正比， 然而当我们需要很多分波的时候， 内存就远远不够了． 为了解决内存问题， 我径向和角向都使用 Crank-Nicolson 演化， 而且每个时间步长对每个格点重新生成 $V_F + V_{12}$ 矩阵并一次演化不需要分成三次． 对于波函数绝对值低于某个阈值的格点， 我们甚至可以忽略不演化．
+爱华进一步分割的原因是， 他的代码中预先储存了 $V_F$ 和 $V_{12}$ 对角化后的本征值和本征矢矩阵， 如果直接对 $H_{int}$ 对角化， 那么就需要每一步都重新对角化一次。 预先储存所需的内存和分波数的平方成正比， 然而当我们需要很多分波的时候， 内存就远远不够了。 为了解决内存问题， 我径向和角向都使用 Crank-Nicolson 演化， 而且每个时间步长对每个格点重新生成 $V_F + V_{12}$ 矩阵并一次演化不需要分成三次。 对于波函数绝对值低于某个阈值的格点， 我们甚至可以忽略不演化。
 
-另外一点， 如果只关心 single ionization， 可以用一个长方形网格（见 Ossiander 2017 Nat. Phys.）． 但要注意在短边加入 absorber 防止反射．）
+另外一点， 如果只关心 single ionization， 可以用一个长方形网格（见 Ossiander 2017 Nat. Phys.）。 但要注意在短边加入 absorber 防止反射。）
 
 \subsection{Lanczos 波函数演化}
-这是 Pazourek 组用的算法， 注意他们并没有使用算符拆分． 一口气把整个哈密顿作用在波函数上． 我们的程序实现了这个， 并不困难．
+这是 Pazourek 组用的算法， 注意他们并没有使用算符拆分。 一口气把整个哈密顿作用在波函数上。 我们的程序实现了这个， 并不困难。
 
 \subsection{分波收敛分析}
-使用 $l_{1,max}, l_{2,max}, L_{max}$ 来生成分波列表有时候会有较大的浪费， 会出现许多概率极小的分波． 最好的办法是把各个分波的概率画成图， 从图中可以轻易看出分波是否收敛以及是否有浪费．
+使用 $l_{1,max}, l_{2,max}, L_{max}$ 来生成分波列表有时候会有较大的浪费， 会出现许多概率极小的分波。 最好的办法是把各个分波的概率画成图， 从图中可以轻易看出分波是否收敛以及是否有浪费。
 \begin{figure}[ht]
 \centering
 \includegraphics[width=10cm]{./figures/HeTDSE_2.png}
-\caption{$l_{1,max}, l_{2,max}, L_{max} = 5$， 可以看出 $L$ 较小时需要更大 $l_1, l_2$， 而 $L$ 较大时浪费严重． 理想情况是每个 $L$ 中最小概率的分波都差不多．} \label{HeTDSE_fig2}
+\caption{$l_{1,max}, l_{2,max}, L_{max} = 5$， 可以看出 $L$ 较小时需要更大 $l_1, l_2$， 而 $L$ 较大时浪费严重。 理想情况是每个 $L$ 中最小概率的分波都差不多。} \label{HeTDSE_fig2}
 \end{figure}
 
 \subsection{时间步长误差分析以及变步长演化}
-首先要注意的是一个电磁场周期至少要有若干个步长， 可以在程序中检查．
+首先要注意的是一个电磁场周期至少要有若干个步长， 可以在程序中检查。
 
-对于任何演化算法， 一个最简单的方法就是每隔一段时间， 使用 \verb|dt/N| （$N = 2$ 或 $4$） 为步长， 演化 $N$ 次然后和 \verb|dt| 一次的结果做对比， 计算 $\norm{\Delta \Psi' - \Delta \Psi}/\norm{\Delta \Psi}$ 用于衡量相对误差． 其中 $\Delta\Psi = \Psi(t+dt) - \Psi(t)$． 然而这对 Crank-Nicolson 似乎不准．
+对于任何演化算法， 一个最简单的方法就是每隔一段时间， 使用 \verb|dt/N| （$N = 2$ 或 $4$） 为步长， 演化 $N$ 次然后和 \verb|dt| 一次的结果做对比， 计算 $\norm{\Delta \Psi' - \Delta \Psi}/\norm{\Delta \Psi}$ 用于衡量相对误差。 其中 $\Delta\Psi = \Psi(t+dt) - \Psi(t)$。 然而这对 Crank-Nicolson 似乎不准。
 
-对于 Lanzos， 有标准的误差公式， 也可以和 $\norm{\Delta \Psi' - \Delta \Psi}/\norm{\Delta \Psi}$ 对比看看哪个更准．
+对于 Lanzos， 有标准的误差公式， 也可以和 $\norm{\Delta \Psi' - \Delta \Psi}/\norm{\Delta \Psi}$ 对比看看哪个更准。
 
 \subsection{分波误差分析（原创）}
-我们截取有限个分波时， 在分波演化（\autoref{HeTDSE_eq4}） 的过程中， 会引入新的误差． 截取以后， $V_F, V_{12}$ 仍然是厄米矩阵， 所以他们的传播子同样是幺正的， 所以不能用波函数的模长来估计误差． 所以可以用另一种方法来估计误差． 误差可以每隔几步估算一次， 令 $\mat V'_F, \mat V'_{12}$ 为两倍基底数量的矩阵， 那么可以计算 $\mat (\I V'_F\Delta t) \bvec v$ 比基底多出来的几个分波， 对每个分波的绝对值进行求和．
+我们截取有限个分波时， 在分波演化（\autoref{HeTDSE_eq4}） 的过程中， 会引入新的误差。 截取以后， $V_F, V_{12}$ 仍然是厄米矩阵， 所以他们的传播子同样是幺正的， 所以不能用波函数的模长来估计误差。 所以可以用另一种方法来估计误差。 误差可以每隔几步估算一次， 令 $\mat V'_F, \mat V'_{12}$ 为两倍基底数量的矩阵， 那么可以计算 $\mat (\I V'_F\Delta t) \bvec v$ 比基底多出来的几个分波， 对每个分波的绝对值进行求和。
 \begin{figure}[ht]
 \centering
 \includegraphics[width=7cm]{./figures/HeTDSE_1.png}
@@ -257,14 +257,14 @@ $H_0 = H_1 + H_2$ 由于 $H_1$ 和 $H_2$ 对易， 我们可以将它们独立�
 \end{figure}
 
 \subsection{束缚态}
-理论上可以数值解总哈密顿矩阵的本征值， 但实际上这个矩阵大到几乎不可能解出（事实上我们从来不会把总哈密顿矩阵直接储存， 而是储存 split operator）． 我们使用虚时间演化（imaginary time propagation）\upref{ImgT}．
+理论上可以数值解总哈密顿矩阵的本征值， 但实际上这个矩阵大到几乎不可能解出（事实上我们从来不会把总哈密顿矩阵直接储存， 而是储存 split operator）。 我们使用虚时间演化（imaginary time propagation）\upref{ImgT}。
 
-虚时演化的初始态我用的是两个 He+ 的基态相乘（实数波函数）， 和爱华略有不同， 不过这影响不大． 由于我们的 split operator 都是实数矩阵， 使用虚时间后其指数函数也是实数矩阵， 所以虚时间演化得到的基态波函数也一定会是纯实数．
-我们只需用 $L = 0, M = 0$ 的所有 partial waves 即可．
+虚时演化的初始态我用的是两个 He+ 的基态相乘（实数波函数）， 和爱华略有不同， 不过这影响不大。 由于我们的 split operator 都是实数矩阵， 使用虚时间后其指数函数也是实数矩阵， 所以虚时间演化得到的基态波函数也一定会是纯实数。
+我们只需用 $L = 0, M = 0$ 的所有 partial waves 即可。
 
 \subsection{双电子近似}
 Argon 的电子数为 $N = 18$， 基态电离势能为 $I_p = 15.6\Si{eV}$ （$0.5733\Si{au}$）， 使用等效势能
 \begin{equation}
 V_{eff} = \frac{-2 - (N-2)\E^{-r/a}}{r} + V_0 \E^{-r/b}
 \end{equation}
-满足 $V_{eff}(r\to\infty) \to -2/r$， 当 $V_{eff}(r\to 0) \to -N/r$． 参数 $a$ 越小屏蔽势能的半径就越小， 越接近于氦原子， 电离势能越大．
+满足 $V_{eff}(r\to\infty) \to -2/r$， 当 $V_{eff}(r\to 0) \to -N/r$。 参数 $a$ 越小屏蔽势能的半径就越小， 越接近于氦原子， 电离势能越大。

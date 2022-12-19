@@ -1,0 +1,40 @@
+% 用 Filebrowser 搭建个人网盘
+
+\begin{issues}
+\issueDraft
+\end{issues}
+
+\subsection{特性}
+\begin{itemize}
+\item 在线视频播放
+\item 上传多个文件/文件夹
+\item 创建用户并管理用户权限
+\item 使用 bash
+\item 分享文件/文件夹链接（文件夹内容实时更新）， 无需登录即可下载
+\item 适配手机浏览器
+\end{itemize}
+
+\subsection{使用说明}
+docker 的详细教程参考 Docker 笔记\upref{Docker}。 首先克隆 docker 镜像： \verb|docker pull filebrowser/filebrowser|
+启动的格式如
+\begin{lstlisting}[language=bash]
+docker run --name filebrowser -d --restart always \
+   -v 本地网盘文件目录:/srv \
+   -v /root/filebrowserconfig.json:/etc/config.json \
+   -v /root/filebrowser/database.db:/etc/database.db \
+   -p 端口号:80 filebrowser/filebrowser
+\end{lstlisting}
+具体例子如 % 已用百科文件服务器
+\begin{lstlisting}[language=bash]
+docker run --name filebrowser -d --restart always \
+   -v /mnt/drive/filebrowser/root:/srv \
+   -v /mnt/drive/filebrowser/filebrowserconfig.json:/etc/config.json \
+   -v /mnt/drive/filebrowser/database.db:/etc/database.db \
+   -p 5000:80 filebrowser/filebrowser
+\end{lstlisting}
+
+\begin{itemize}
+\item 设置好后， 浏览器访问 \verb`网站域名:端口` 就可以看到初始页面了， 用户名和密码都是 \verb`admin`
+\item 也可以直接用 sftp 把文件同步到 \verb`本地网盘文件目录` 可能会更稳定和方便。
+\item \verb`本地网盘文件目录` 不支持 symlink 和 mount
+\end{itemize}

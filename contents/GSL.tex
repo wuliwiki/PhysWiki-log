@@ -6,14 +6,14 @@
 \issueMissDepend
 \end{issues}
 
-GNU Scientific Library (GSL) 是一个 GNU 开源项目， 由 C 语言写成．
+GNU Scientific Library (GSL) 是一个 GNU 开源项目， 由 C 语言写成。
 
 \subsection{Linux 安装使用}
-在 Debian/Ubuntu 系统上可执行 \verb|sudo apt install libgsl-dev| 安装．
+在 Debian/Ubuntu 系统上可执行 \verb|sudo apt install libgsl-dev| 安装。
 
-第二种方法是自己下载源码编译．
+第二种方法是自己下载源码编译。
 
-\href{https://coral.ise.lehigh.edu/jild13/2016/07/11/hello/}{参考资料}． gsl 通常的使用方法是先安装，生成 include 文件夹 (含有所有头文件) 和 lib 文件夹 (.so 文件以及 .a 文件). 先下载最新版安装包, 目前是 \verb`gsl-2.5.tar.gz`, 解压命令 \verb`tar -xvzf gsl-2.5.tar.gz`, 得到 gsl-2.5 文件夹, \verb`cd gsl-2.5`, 然后 \verb`./configure --prefix=安装目录` 其中安装目录只能是绝对目录. 然后 \verb`make`, 安装好以后 \verb`make check` 检查, 然后 \verb`make install` 即可. 只有最后一步会在安装目录中生成文件.
+\href{https://coral.ise.lehigh.edu/jild13/2016/07/11/hello/}{参考资料}。 gsl 通常的使用方法是先安装，生成 include 文件夹 (含有所有头文件) 和 lib 文件夹 (.so 文件以及 .a 文件). 先下载最新版安装包, 目前是 \verb`gsl-2.5.tar.gz`, 解压命令 \verb`tar -xvzf gsl-2.5.tar.gz`, 得到 gsl-2.5 文件夹, \verb`cd gsl-2.5`, 然后 \verb`./configure --prefix=安装目录` 其中安装目录只能是绝对目录. 然后 \verb`make`, 安装好以后 \verb`make check` 检查, 然后 \verb`make install` 即可. 只有最后一步会在安装目录中生成文件.
 
 \begin{lstlisting}[language=cpp]
 // example.c
@@ -71,19 +71,19 @@ gsl 完全是 c 语言写的, 所以 cuda 应该也是以用的, 但是不能用
           -DBUILD_SHARED_LIBS=ON -DMSVC_RUNTIME_DYNAMIC=ON \
           <path to gsl sources>
 \end{lstlisting}
-\item 在 PowerShell 里面运行这个貌似会出错， 最稳妥的办法还是用 CMake 的 GUI 界面． 输入源码路径和输出路径， 然后 Configure． 选择 \verb`x64`, \verb`Visual Studio 2017`， \verb`native generator`． 成功以后按照上面的选项勾选 \verb`GSL_INSTALL_MULTI_CONFIG=ON` \verb`BUILD_SHARED_LIBS=ON` \verb`MSVC_RUNTIME_DYNAMIC=ON`， 然后点 generate 即可．
-\item 在输出路径找到 \verb`sln` 文件， 双击打开 Visual Studio 2017， 选 Release， 确认是 x64， 然后在菜单中 Build -> All 即可．
+\item 在 PowerShell 里面运行这个貌似会出错， 最稳妥的办法还是用 CMake 的 GUI 界面。 输入源码路径和输出路径， 然后 Configure。 选择 \verb`x64`, \verb`Visual Studio 2017`， \verb`native generator`。 成功以后按照上面的选项勾选 \verb`GSL_INSTALL_MULTI_CONFIG=ON` \verb`BUILD_SHARED_LIBS=ON` \verb`MSVC_RUNTIME_DYNAMIC=ON`， 然后点 generate 即可。
+\item 在输出路径找到 \verb`sln` 文件， 双击打开 Visual Studio 2017， 选 Release， 确认是 x64， 然后在菜单中 Build -> All 即可。
 
-\item 成功之后， dll 文件在 \verb`bin/Release/gsl.dll`， lib 文件在 \verb`Release/gsl.lib`， 头文件在 \verb`gsl` 中．
+\item 成功之后， dll 文件在 \verb`bin/Release/gsl.dll`， lib 文件在 \verb`Release/gsl.lib`， 头文件在 \verb`gsl` 中。
 \item 要测试， 在 Power Shell 里面 cd 到 CMake 输出目录下， \verb`CTest -VV` 即可 （\verb`-VV` 是 extra verbose）
 \end{itemize}
 
 \subsection{使用部分源码}
 \begin{itemize}
-\item \href{https://github.com/MacroUniverse/SLISC}{SLISC} 的源码中实现了自己从部分 GSL 源码直接编译． 供参考．
+\item \href{https://github.com/MacroUniverse/SLISC}{SLISC} 的源码中实现了自己从部分 GSL 源码直接编译。 供参考。
 \end{itemize}
 
 \subsection{异常处理}
 如果要临时关闭一些 trivial 的异常（比如 exp(-x) 对于大 x 会 underflow 异常）， 用 \verb|gsl_set_error_handler_off()|
 要恢复默认的异常处理， 用 \verb|gsl_set_error_handler(NULL)|
-详见\href{https://www.gnu.org/software/gsl/doc/html/err.html}{这里}．
+详见\href{https://www.gnu.org/software/gsl/doc/html/err.html}{这里}。

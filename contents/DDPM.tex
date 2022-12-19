@@ -1,7 +1,7 @@
 % 去噪扩散概率模型
 % 扩散 马尔科夫
 
-\textbf{去噪扩散概率模型}（Denoising Diffusion Probabilistic Models, DDPM）是一种参数化的马尔科夫链，通过变分推理的方法来训练．去噪扩散概率模型（后文简称扩散模型）是深度生成模型的一种，通常包含两个过程：第一是前向扩散过程，第二是反向的逆扩散过程．正反两个方向的马尔科夫链均由有限个时间步组成．其中，前向扩散过程就是一个无参数的马尔科夫链，而反向的逆扩散过程须要学习算法来训练模型．模型结构如图1所示．
+\textbf{去噪扩散概率模型}（Denoising Diffusion Probabilistic Models, DDPM）是一种参数化的马尔科夫链，通过变分推理的方法来训练。去噪扩散概率模型（后文简称扩散模型）是深度生成模型的一种，通常包含两个过程：第一是前向扩散过程，第二是反向的逆扩散过程。正反两个方向的马尔科夫链均由有限个时间步组成。其中，前向扩散过程就是一个无参数的马尔科夫链，而反向的逆扩散过程须要学习算法来训练模型。模型结构如图1所示。
 \begin{figure}[ht]
 \centering
 \includegraphics[width=14cm]{./figures/DDPM_1.png}
@@ -12,22 +12,22 @@
 
 前向扩散过程会逐渐向原数据添加小幅的高斯噪音，时间序列为：$t=0$ -> $1$ -> $2$ -> ... -> $T-1$ -> $T$.每一步所添加的高斯噪音的方差序列为：$\beta_1$, $\beta_2$, ..., $\beta_T$.
 
-从$t-1$到$t$的转换概率为$q(x_t|x_{t-1})$，则从源数据到扩散过程最后一步的转换概率为：
+从$t-1$到$t$的转换概率为$q(\bvec x_t|\bvec x_{t-1})$，则从源数据到扩散过程最后一步的转换概率为：
 \begin{equation}
-q(x_{1:T})=\prod_{t=1}^{T}q(x_{t}|x_{t-1})
+q(\bvec x_{1:T})=\prod_{t=1}^{T}q(\bvec x_{t}|\bvec x_{t-1})
 \end{equation}
 其中，
 \begin{equation}
-q(x_{t}|x_{t-1})=\mathcal{N}(x_t;\sqrt{1-\beta_t}x_{t-1},\beta_tI)
+q(\bvec x_{t}|\bvec x_{t-1})=\mathcal{N}(\bvec x_t;\sqrt{1-\beta_t}\bvec x_{t-1},\beta_tI)
 \end{equation}
 
-反向的逆扩散过程是一个参数化的马尔科夫过程，每一步转换概率的参数通过学习而获得．时间序列为：$t=T$ -> $T-1$ -> ... -> $1$ -> $0$.逆过程的起点为时间步t=T时的带有噪音的数据，其数据分布为$p_\theta(x_T)=\mathcal{N}(x_T;0,I)$.整个过程的转换概率为：
+反向的逆扩散过程是一个参数化的马尔科夫过程，每一步转换概率的参数通过学习而获得。时间序列为：$t=T$ -> $T-1$ -> ... -> $1$ -> $0$.逆过程的起点为时间步t=T时的带有噪音的数据，其数据分布为$p_\theta(\bvec x_T)=\mathcal{N}(\bvec x_T;0,I)$.整个过程的转换概率为：
 \begin{equation}
-p_{\theta}(x_{0:T})=\prod_{t=1}^{T}p_{\theta}(x_{t-1}|x_{t})
+p_{\theta}(\bvec x_{0:T})=\prod_{t=1}^{T}p_{\theta}(\bvec x_{t-1}|\bvec x_{t})
 \end{equation}
 其中，
 \begin{equation}
-p_{\theta}(x_{t-1}|x_{t})=\mathcal{N}(x_{t-1};\mu_\theta(x_{t},t),\Sigma_\theta(x_t,t))
+p_{\theta}(\bvec x_{t-1}|\bvec x_{t})=\mathcal{N}(\bvec x_{t-1};\mu_\theta(\bvec x_{t},t),\Sigma_\theta(\bvec x_t,t))
 \end{equation}
 
 

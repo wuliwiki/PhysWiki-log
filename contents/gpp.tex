@@ -7,7 +7,7 @@
 \pentry{在 Linux 上编译 C/C++ 程序\upref{linCpp}}
 
 \begin{itemize}
-\item 注意： 不要改变系统默认的 \verb|/usr/bin/gcc| 和 \verb|/usr/bin/g++| symlink 的版本！ 因为一些安装过程（例如 cuda）需要 \verb|gcc| 编译 kernel module， 必须使用默认版本． 如果已经改变了， 就卸载 \verb|gcc| 和 \verb|g++|， 再重装一次就行．
+\item 注意： 不要改变系统默认的 \verb|/usr/bin/gcc| 和 \verb|/usr/bin/g++| symlink 的版本！ 因为一些安装过程（例如 cuda）需要 \verb|gcc| 编译 kernel module， 必须使用默认版本。 如果已经改变了， 就卸载 \verb|gcc| 和 \verb|g++|， 再重装一次就行。
 \item \verb|-I <dir>| 选项可以声明 .h 所在的目录
 \item \verb|-c| 选项只编译不 link
 \item 使用其他目录下的 cpp 文件如 \verb|g++ -c <other flags>  <dir1>/1.cpp <dir2>/2.cpp 3.cpp 4.cpp.....|
@@ -15,10 +15,10 @@
 \item \verb|-D 宏| 定义宏
 \item \verb|-O3| 是最优化， \verb|-g| 是调试， 如果不调试， 需要手动定义 \verb|-D NDEBUG|
 \item \verb|-g| 不包含一些信息如宏定义， 需要用 \verb|-g3|， 要打出 Macro 的位置和定义， 用 \verb|info macro 宏名|
-\item static link 时候， .o 文件或者库只能调用它后面的 .o 文件或者库． 因为 linker 按顺序搜索， 从 \verb|main()| 函数开始， 如果有未定义的 symbol 就留到以后再找， 而把没有用的 symbol 抛弃． 这样能提高效率．
+\item static link 时候， .o 文件或者库只能调用它后面的 .o 文件或者库。 因为 linker 按顺序搜索， 从 \verb|main()| 函数开始， 如果有未定义的 symbol 就留到以后再找， 而把没有用的 symbol 抛弃。 这样能提高效率。
 \item 如果有多个 .o 或者库互相依赖， 就用括号括起来， 例如 \verb|g++ hello.cpp -L. -( -la -lb -)|
 \item 检查内存泄露可以用 Address Sanitizer： \verb|g++ main.cpp -fsanitize=address -static-libasan -g|
-\item 检查 signed 整数加减乘的溢出可以用 \verb|-ftrapv|， 亲测支持 \verb|int, long, long long| （其他类型貌似不行）， 运行时会终止程序， 可以用 gdb 找到位置， 不能在程序中 \verb|catch|．如果想支持所有整数类型， 可以用 \verb|SafeInt| 库．
+\item 检查 signed 整数加减乘的溢出可以用 \verb|-ftrapv|， 亲测支持 \verb|int, long, long long| （其他类型貌似不行）， 运行时会终止程序， 可以用 gdb 找到位置， 不能在程序中 \verb|catch|。如果想支持所有整数类型， 可以用 \verb|SafeInt| 库。
 \item \verb|g++| 的默认输出是 stderr 而不是 stdout， 所以如果 pipe 的时候要指定 stderr
 \end{itemize}
 
@@ -36,21 +36,21 @@
 
 \subsection{编译警告}
 \begin{itemize}
-\item 详见\href{https://gcc.gnu.org/onlinedocs/gcc/Warning-Options.html}{文档}．
-\item 在编译输出的警告中一般会有 \verb|[-Wxxx]|， 如果要禁止输出该警告， 就用 \verb|-Wno-xxx|．
+\item 详见\href{https://gcc.gnu.org/onlinedocs/gcc/Warning-Options.html}{文档}。
+\item 在编译输出的警告中一般会有 \verb|[-Wxxx]|， 如果要禁止输出该警告， 就用 \verb|-Wno-xxx|。
 \end{itemize}
 
 \subsection{宏}
 \begin{itemize}
-\item 参考\href{https://gcc.gnu.org/onlinedocs/cpp/Common-Predefined-Macros.html}{文档}．
-\item \verb|#if GCC_VERSION > 30200| 可以要求 GCC 版本大于 3.2.0． 其中 3 是 \verb|__GNUC__|， 2 是 \verb|__GNUC_MINOR__|,  0 是 \verb|__GNUC_PATCHLEVEL__|．
+\item 参考\href{https://gcc.gnu.org/onlinedocs/cpp/Common-Predefined-Macros.html}{文档}。
+\item \verb|#if GCC_VERSION > 30200| 可以要求 GCC 版本大于 3.2.0。 其中 3 是 \verb|__GNUC__|， 2 是 \verb|__GNUC_MINOR__|,  0 是 \verb|__GNUC_PATCHLEVEL__|。
 \end{itemize}
 
 
 \subsection{标准}
 \begin{itemize}
-\item 参考\href{https://gcc.gnu.org/onlinedocs/gcc/Standards.html}{文档}．
-\item 目前（2022-11-23）， \verb|g++| 的默认标准是 \verb|-std=gnu++17| 这是 \verb|-std=c++17| 加上 GNU 的一些拓展．
+\item 参考\href{https://gcc.gnu.org/onlinedocs/gcc/Standards.html}{文档}。
+\item 目前（2022-11-23）， \verb|g++| 的默认标准是 \verb|-std=gnu++17| 这是 \verb|-std=c++17| 加上 GNU 的一些拓展。
 \item 其他的选项如 \verb|-ansi 或 -std=c++98 或 -std=c++03|， \verb|-std=c++11或14或17或20|
-\item 如果要严格符合标准（去除所有 gnu 拓展）， 用 \verb|-pedantic| 给出警告，或者 \verb|-pedantic-errors| 给出错误．
+\item 如果要严格符合标准（去除所有 gnu 拓展）， 用 \verb|-pedantic| 给出警告，或者 \verb|-pedantic-errors| 给出错误。
 \end{itemize}

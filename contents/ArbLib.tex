@@ -2,34 +2,34 @@
 
 \pentry{C++ 基础\upref{Cpp0}}
 
-Arb 是一个支持任意精度计算的 C/C++ 库（也提供 python 接口\upref{PyFlnt}）， 支持对计算进行严谨的误差估计， 即每个任意精度浮点数 $z$ 都会伴随一个误差半径 $r$， 使得精确结果必定落在复平面上以 $z$ 为圆心半径为 $r$ 的圆盘中． 通过增加浮点数的精度， 就可以用数值方法无限逼近理论值． Arb 还提供了许多特殊函数的计算， 例如 $\Gamma$ 函数\upref{Gamma}， 超几何函数\upref{HypGeo} 等， 以及常用的线性代数功能和离散傅里叶变换\upref{DFT}等． 官方主页 \href{https://arblib.org/}{arblib.org} 包含详细的文档．
+Arb 是一个支持任意精度计算的 C/C++ 库（也提供 python 接口\upref{PyFlnt}）， 支持对计算进行严谨的误差估计， 即每个任意精度浮点数 $z$ 都会伴随一个误差半径 $r$， 使得精确结果必定落在复平面上以 $z$ 为圆心半径为 $r$ 的圆盘中。 通过增加浮点数的精度， 就可以用数值方法无限逼近理论值。 Arb 还提供了许多特殊函数的计算， 例如 $\Gamma$ 函数\upref{Gamma}， 超几何函数\upref{HypGeo} 等， 以及常用的线性代数功能和离散傅里叶变换\upref{DFT}等。 官方主页 \href{https://arblib.org/}{arblib.org} 包含详细的文档。
 
 \subsection{安装}
-以 Ubuntu 为例， 最方便的安装方式就是使用 \verb|apt| 安装． 首先安装 dependency
+以 Ubuntu 为例， 最方便的安装方式就是使用 \verb|apt| 安装。 首先安装 dependency
 \begin{lstlisting}[language=bash]
 sudo apt install libmpfr-dev libflint-dev
 \end{lstlisting}
-其中 \verb|MPFR| 和 \verb|flint| 两个包分别用于任意精度浮点数以及数论． 然后安装 Arb
+其中 \verb|MPFR| 和 \verb|flint| 两个包分别用于任意精度浮点数以及数论。 然后安装 Arb
 \begin{lstlisting}[language=bash]
 sudo apt install libflint-arb-dev libflint-arb2
 \end{lstlisting}
 
-但目前这并不是 Arb 的最新版本（例如没有实现库仑函数\upref{CulmF}）． 要获得最新版本， 可以直接从 \href{https://github.com/fredrik-johansson/arb/}{GitHub} 下载源码编译即可（默认使用 gcc 编译器）． 目前笔者使用的版本是 release 2.19.0 （ubuntu 20.04 和 22.04 均可直接用 apt 安装更高版本）．
+但目前这并不是 Arb 的最新版本（例如没有实现库仑函数\upref{CulmF}）。 要获得最新版本， 可以直接从 \href{https://github.com/fredrik-johansson/arb/}{GitHub} 下载源码编译即可（默认使用 gcc 编译器）。 目前笔者使用的版本是 release 2.19.0 （ubuntu 20.04 和 22.04 均可直接用 apt 安装更高版本）。
 
-可以用 \verb|./configure --help| 查看编译选项， 若所有的包都安装在默认目录则不需要编译选项．
+可以用 \verb|./configure --help| 查看编译选项， 若所有的包都安装在默认目录则不需要编译选项。
 \begin{lstlisting}[language=bash]
 ./configure [编译选项];
 make -j4;
 sudo make install;
 \end{lstlisting}
-其中 \verb|-j4| 是使用 4 线程进行编译， 也可以改成其他数字．
+其中 \verb|-j4| 是使用 4 线程进行编译， 也可以改成其他数字。
 
-要在 windows 上安装， 参考\href{https://github.com/ahrvoje/arb4win}{这个}． 这里面的 dll 是可以直接拿来用的， 无需编译．
+要在 windows 上安装， 参考\href{https://github.com/ahrvoje/arb4win}{这个}。 这里面的 dll 是可以直接拿来用的， 无需编译。
 
 \subsection{编译}
-在 Ubuntu 中如果你使用 \verb|apt| 安装， 在编译程序是需要加 \verb|-lflint-arb| 选项． 如果你直接从源码编译， 则需要加 \verb|-larb| 选项． 对一些编译器（例如 intel 的 \verb|icpc|）， 可能还需要加上 \verb|-lflint, -lmpfr, -lgmp|， 如果 link 阶段遇到问题可以试试加上．
+在 Ubuntu 中如果你使用 \verb|apt| 安装， 在编译程序是需要加 \verb|-lflint-arb| 选项。 如果你直接从源码编译， 则需要加 \verb|-larb| 选项。 对一些编译器（例如 intel 的 \verb|icpc|）， 可能还需要加上 \verb|-lflint, -lmpfr, -lgmp|， 如果 link 阶段遇到问题可以试试加上。
 
-一个 C++ 例程： 该程序用 80 bit 初始精度计算复参数的超几何函数\upref{HypGeo} $_1F_1$ 并于 Mathematica 的结果比较． 如果 Arb 估计的结果精度小于 16 位有效数字则显示警告． 初始精度越高， 结果的有效数字也越高， 具体取决于 $_1F_1$ 的参数． 读者可以尝试在程序内加入一个循环， 若结果有效数字不够， 则把初始精度加倍再次计算， 直到达到精度为止．
+一个 C++ 例程： 该程序用 80 bit 初始精度计算复参数的超几何函数\upref{HypGeo} $_1F_1$ 并于 Mathematica 的结果比较。 如果 Arb 估计的结果精度小于 16 位有效数字则显示警告。 初始精度越高， 结果的有效数字也越高， 具体取决于 $_1F_1$ 的参数。 读者可以尝试在程序内加入一个循环， 若结果有效数字不够， 则把初始精度加倍再次计算， 直到达到精度为止。
 
 \begin{lstlisting}[language=cpp, caption=test.cpp]
 #include "arb_hypgeom.h"
@@ -106,16 +106,16 @@ g++ -o test.x test.cpp -larb -lflint
 
 \subsection{内部实现}
 \begin{itemize}
-\item 要配合 gdb 学习可以自己编译一个 debug 版本的 libarb 库， 见 Automake 笔记\upref{automk}．
+\item 要配合 gdb 学习可以自己编译一个 debug 版本的 libarb 库， 见 Automake 笔记\upref{automk}。
 \item \verb|ARF_PREC_EXACT| 的定义是 \verb|std::numeric_limits<slong>::max()|
 \end{itemize}
 
 \pentry{FLINT 库笔记\upref{Flint}}
 \subsubsection{arf\_t 的数据结构}
 \begin{itemize}
-\item \verb|arf_t| 是任意精度浮点数， \href{https://arblib.org/arf.html}{文档}．
-\item \verb|arf_t| 的数据结构， 看懂下面的代码就了解了． 基本就是小数部分 \verb|.d|（例如 0.100101110， 小数点后面用一个 flint 大整数表示）， 指数部分 \verb|.exp|（一个 flint 大整数）， 和 \verb|.size| 部分（最后一 bit 是符号位， 1 表示复数， \verb|.size >> 1| 是用到的 limb 的个数， 这可能和 alloc 的 limb 的个数是不一样的）．
-\item 当 \verb|.size == 0| 时， \verb|arf_t| 是某个 \textbf{special} 值， 即： \verb|.exp == ARF_EXP_ZERO| 时， arf 为零； \verb|.exp == ARF_EXP_POS_INF| 时， arf 为正无穷； \verb|.exp == ARF_EXP_NEG_INF| 时， arf 为负无穷； \verb|.exp == ARF_EXP_NAN| 是， arf 为 nan； 如果不是 special， 就叫做 \textbf{normal}．
+\item \verb|arf_t| 是任意精度浮点数， \href{https://arblib.org/arf.html}{文档}。
+\item \verb|arf_t| 的数据结构， 看懂下面的代码就了解了。 基本就是小数部分 \verb|.d|（例如 0.100101110， 小数点后面用一个 flint 大整数表示）， 指数部分 \verb|.exp|（一个 flint 大整数）， 和 \verb|.size| 部分（最后一 bit 是符号位， 1 表示复数， \verb|.size >> 1| 是用到的 limb 的个数， 这可能和 alloc 的 limb 的个数是不一样的）。
+\item 当 \verb|.size == 0| 时， \verb|arf_t| 是某个 \textbf{special} 值， 即： \verb|.exp == ARF_EXP_ZERO| 时， arf 为零； \verb|.exp == ARF_EXP_POS_INF| 时， arf 为正无穷； \verb|.exp == ARF_EXP_NEG_INF| 时， arf 为负无穷； \verb|.exp == ARF_EXP_NAN| 是， arf 为 nan； 如果不是 special， 就叫做 \textbf{normal}。
 \item 相关函数： \verb|arf_is_special|， \verb|arf_is_zero|， \verb|arf_is_pos_inf|， \verb|arf_is_neg_inf|， \verb|arf_is_nan|， \verb|arf_is_normal|， \verb|arf_is_finite|， \verb|arf_is_inf|， \verb|arf_is_one|
 \end{itemize}
 
@@ -132,7 +132,7 @@ mantissa_noptr_struct; // arf 的小数部分至少有两个 limb
 
 typedef struct
 {
-    mp_size_t alloc; // GMP limb 的 alloc 的个数， 并不一定全部用到．
+    mp_size_t alloc; // GMP limb 的 alloc 的个数， 并不一定全部用到。
     mp_ptr d; // mp_limb_t （GMP 整数的一个 limb）的指针
 }
 mantissa_ptr_struct;
@@ -166,7 +166,7 @@ typedef const arf_struct * arf_srcptr;
 #define ARF_SGNBIT(x) (ARF_XSIZE(x) & 1)
 
 // x 是 arf_t， 获取其小数部分的 limb 指针和 limb 个数
-// 当 limb 个数小于 ARF_NOPTR_LIMBS = 2 时， 不存在额外 alloc 的空间．
+// 当 limb 个数小于 ARF_NOPTR_LIMBS = 2 时， 不存在额外 alloc 的空间。
 #define ARF_GET_MPN_READONLY(xptr, xn, x)   \
     do {                                    \
         xn = ARF_SIZE(x);                   \
@@ -233,10 +233,10 @@ mag_is_inf(const mag_t x)
 }
 \end{lstlisting}
 
-它表示的值为 \verb|x->man * 2^ (x->exp - MAG_BITS)| 其中 \verb|#define MAG_BITS 30|． % 已验证
+它表示的值为 \verb|x->man * 2^ (x->exp - MAG_BITS)| 其中 \verb|#define MAG_BITS 30|。 % 已验证
 
 \subsubsection{arb\_t 的数据结构}
-\href{https://arblib.org/arb.html}{文档}．
+\href{https://arblib.org/arb.html}{文档}。
 
 \begin{lstlisting}[language=cpp]
 typedef struct

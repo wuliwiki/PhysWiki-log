@@ -1,32 +1,32 @@
 % 深度卷积生成对抗网络
 % 卷积 生成对抗
 
-\textbf{深度卷积生成对抗网络}（Deep Convolutional Generative Adversarial Networks, DCGAN）是生成对抗网络的一种基本实现，最初由文献\cite{DCGAN}提出．顾名思义，该网络模型的生成器采用的是深层卷积网络，即由多层卷积层堆叠而成．
+\textbf{深度卷积生成对抗网络}（Deep Convolutional Generative Adversarial Networks, DCGAN）是生成对抗网络的一种基本实现，最初由文献\cite{DCGAN}提出。顾名思义，该网络模型的生成器采用的是深层卷积网络，即由多层卷积层堆叠而成。
 
 建立稳定的深度卷积生成对抗网络的要点是\cite{DCGAN}：
 \begin{enumerate}
-\item 在判别器中，用跳跃卷积代替池化层；在生成器中，用分数步长跳跃卷积代替池化层．
-\item 生成器和判别器中均采用批归一化层．
-\item 移除全连接隐含层，从而构建更深层的网络结构．
-\item 在生成器中，除了输出层以外，均使用线性阈值单元（$ReLU$）作为激活函数．输出层使用双曲正切函数（$Tanh$）作为激活函数．
-\item 在判别器的每一层中使用倾斜线性阈值单元（$Leaky ReLU$）作为激活函数．
+\item 在判别器中，用跳跃卷积代替池化层；在生成器中，用分数步长跳跃卷积代替池化层。
+\item 生成器和判别器中均采用批归一化层。
+\item 移除全连接隐含层，从而构建更深层的网络结构。
+\item 在生成器中，除了输出层以外，均使用线性阈值单元（$ReLU$）作为激活函数。输出层使用双曲正切函数（$Tanh$）作为激活函数。
+\item 在判别器的每一层中使用倾斜线性阈值单元（$Leaky ReLU$）作为激活函数。
 \end{enumerate}
 
-图$1$是深度卷积生成对抗网络生成器结构的一个典型例子．在该模型中，输入的是维度为$100$的随机噪音，服从均匀分布．数据经过一系列分数步长跳跃卷积（转置卷积，又称为反卷积），最终转换为$64 \times64$像素的图像．该网络结构中没有全连接层和池化层．
+图$1$是深度卷积生成对抗网络生成器结构的一个典型例子。在该模型中，输入的是维度为$100$的随机噪音，服从均匀分布。数据经过一系列分数步长跳跃卷积（转置卷积，又称为反卷积），最终转换为$64 \times64$像素的图像。该网络结构中没有全连接层和池化层。
 \begin{figure}[ht]
 \centering
 \includegraphics[width=14.25cm]{./figures/DCGAN_1.png}
 \caption{深度卷积生成对抗网络生成器结构示意图 \cite{DCGAN}} \label{DCGAN_fig1}
 \end{figure}
 
-图$2$表示的是用深度卷积生成对抗网络生成的一些卧室的图片．这些图片是模型经过$5$轮训练之后生成的结果 \cite{DCGAN}．
+图$2$表示的是用深度卷积生成对抗网络生成的一些卧室的图片。这些图片是模型经过$5$轮训练之后生成的结果 \cite{DCGAN}。
 \begin{figure}[ht]
 \centering
 \includegraphics[width=14.25cm]{./figures/DCGAN_2.png}
 \caption{卧室图片生成结果展示} \label{DCGAN_fig2}
 \end{figure}
 
-一个很有趣的事情是，当生成模型训练好时，内隐空间中的表示矢量经过一定运算之后，再送入模型，能够产生有意义的输出结果，而这些新的结果还在原来的数据空间中．该事实表明模型学习到的内隐表示空间是具有线性结构的 \cite{DCGAN}．图$3$展示的是一个典型的例子．每一列的三个图片所对应的表示矢量求平均值，生成最下面一行的三个图片，然后再对这三个图片的表示矢量做运算：vector(”smiling woman”) - vector(”neutral woman”) + vector(”neutral man”) = vector("smiling man").
+一个很有趣的事情是，当生成模型训练好时，内隐空间中的表示矢量经过一定运算之后，再送入模型，能够产生有意义的输出结果，而这些新的结果还在原来的数据空间中。该事实表明模型学习到的内隐表示空间是具有线性结构的 \cite{DCGAN}。图$3$展示的是一个典型的例子。每一列的三个图片所对应的表示矢量求平均值，生成最下面一行的三个图片，然后再对这三个图片的表示矢量做运算：vector(”smiling woman”) - vector(”neutral woman”) + vector(”neutral man”) = vector("smiling man").
 
 \begin{figure}[ht]
 \centering

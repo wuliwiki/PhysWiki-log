@@ -1,0 +1,102 @@
+% 区间动态规划
+% 动态规划|算法|C++
+
+区间动态规划和普通的动态规划的区别是状态的定义集中在了区间上。像树形 $\tt dp$ 一般是由子结点从下往上递归的计算父结点，而区间 $\tt dp$ 是\textbf{由子区间逐步计算}得来的。所以状态表示也会发生一定的改变，一般来说，状态表示定义为：$f(l, r)$ 表示一段区间。而状态转移一般由两个小区间合并为一个大区间，这需要具体问题具体分析。
+
+我们还是通过一道具体的例题来学习区间 $\tt dp$，\href{https://www.luogu.com.cn/problem/P1775}{石子合并}。
+
+\textbf{状态表示}：
+\begin{itemize}
+\item 集合：$f(l, r)$ 表示从第 $l$ 堆石子到第 $r$ 堆石子合并为一堆的合并方式的集合。
+\item 属性：合并代价的最小值。
+\end{itemize}
+
+\textbf{状态计算：}
+
+不难看出最后一个肯定是由相邻的两堆合并得到的，而这两堆又是由更小的相邻的两堆合并得到的，所以较大的一堆一定是由较小的相邻的两堆合并得到的。
+
+这样的话，划分集合的依据可以定义为最后一次合并的位置来划分集合。所以可以枚举分界点，\textbf{答案就是合并的两堆已计算好的代价加合并这两堆的代价}，即整个区间的和。这样就将集合划分成了 $k - 1$ 个子集，$k$ 为区间的长度（$r - l + 1$）。第一个子集左边 $1$ 个石子，右边 $k - 1$ 个石子、第二个子集左边 $2$ 个石子，右边 $k - 2$ 个石子，以此类推划分集合。
+
+由此可得状态转移方程：$f(l, r) = \min(f(l, k) + f(k + 1, r) + \sum^{r}_{i = l}a_i, (l \leq k < r))$。
+
+\textbf{时间复杂度：} 具体的做法为：首先需要枚举区间长度，第二重循环枚举起点，限制条件是这个区间对应的右端点不能超过整个区间的长度，第三重循环枚举分界点。最后计算答案的时候还需要枚举合并的区间计算合并的代价。时间复杂度为：$\mathcal{O}(n^4)$，这样做显然会超时，但计算一个区间的和可以利用\textbf{前缀和}算法，所以最后时间复杂度为：$\mathcal{O}(n^3)$。
+
+\textbf{C++ 代码：}
+
+\begin{lstlisting}[language=cpp]
+
+const int N = 1010, INF = 1e8;
+int a[N], s[N], f[N][N], n;
+
+int main()
+{
+    scanf("%d", &n);
+    for (int i = 1; i <= n; i ++ ) 
+    {
+        cin >> a[i];
+        s[i] = s[i - 1] + a[i];
+    }
+
+    for (int len = 2; len <= n; len ++ )  // 区间长度
+        for (int i = 1; i + len - 1 <= n; i ++ ) // 枚举起点
+        {
+            int l = i, r = i + len - 1;  // 左端点, 右端点
+            f[l][r] = INF;
+            for (int k = l; k < r; k ++ ) 
+              f[l][r] = min(f[l][r], f[l][k] + f[k + 1][r] + s[r] - s[l - 1]);
+        }
+
+    cout << f[1][n] << endl;
+
+    return 0;
+}
+\end{lstlisting}
+
+\href{https://www.luogu.com.cn/problem/P1063}{例题 $2$：能量项链}
+
+做法还是区间 $\tt dp$，不过做之前需要一些特殊处理，题目的输入为环形，但环形不好做区间 $\tt dp$，所以需要将环形复制一遍转化为一条链，这样在枚举左端点的时候，每个长度为 $n$ 的区间都对应着选择 $n$ 个不同的区间。
+
+每次合并的区间长度为 $n + 1$ 的区间，对应着有 $n$ 个珠子，区间长度最小从 $3$ 开始枚举，因为只有 $2$ 个珠子才可以进行合并，因为最后还要用到第一个珠子的头标记，每个珠子有头结点和尾结点。然后枚举分界点 $k$，$k$ 必须从 $l + 1$ 的位置开始，因为头尾才能合并。
+
+\textbf{状态表示：}
+\begin{itemize}
+\item 集合：$f(l, r)$ 表示从 $l$ 到 $r$ 的合并成一个珠子的集合。
+\item 属性：释放的总能量的最大值。
+\end{itemize}
+
+\textbf{状态计算：} $f(l, r) = \max(f(l, r), f(l, k) + f(k, r) + w_l \times w_k \times w_r), l < k < r$。倒数第二步合并的是 $f(l, k)$ 和 $f(k + 1, r)$，最后一步是将合并这两堆的代价加起来。
+
+\textbf{时间复杂度：} $\mathcal{O}(n^3)$
+
+\textbf{C++ 代码：}
+
+\begin{lstlisting}[language=cpp]
+const int N = 210;
+int n, w[N], f[N][N];
+
+int main()
+{
+  cin >> n;
+  for (int i = 1; i <= n; i ++ )
+  {
+    cin >> w[i];
+    w[i + n] = w[i];
+  }
+  
+  for (int len = 3; len <= n + 1; len ++ )
+    for (int l = 1; l + len - 1 <= n * 2; l ++ )
+    {
+      int r = l + len - 1;
+      for (int k = l + 1; k < r; k ++ )
+        f[l][r] = max(f[l][r], f[l][k] + f[k][r] + w[l] * w[k] * w[r]);
+    }
+  
+  int res = 0;
+  for (int i = 1; i <= n; i ++ )
+    res = max(res, f[i][i + n]);
+  cout << res << endl;
+
+  return 0;
+}
+\end{lstlisting}
+

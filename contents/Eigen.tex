@@ -1,16 +1,16 @@
 % Eigen （C++ 线性代数库）笔记
 
 \subsection{Visual Studio中使用 Eigen}
-Eigen 的\href{http://eigen.tuxfamily.org/index.php?title=Main_Page}{主页}．
+Eigen 的\href{http://eigen.tuxfamily.org/index.php?title=Main_Page}{主页}。
 \begin{enumerate}
-\item 首先\href{http://eigen.tuxfamily.org/index.php?title=Main_Page#Documentation}{下载} Eigen, 不需要任何安装．
-\item 在 Visual Studio 中创建新 Project, 在 Project 的属性中的 Include Directories 加入解压文件夹的目录．
-\item 在使用 Eigen 的代码中加入 \verb|#include <Eigen/Dense>| 即可．
+\item 首先\href{http://eigen.tuxfamily.org/index.php?title=Main_Page#Documentation}{下载} Eigen, 不需要任何安装。
+\item 在 Visual Studio 中创建新 Project, 在 Project 的属性中的 Include Directories 加入解压文件夹的目录。
+\item 在使用 Eigen 的代码中加入 \verb|#include <Eigen/Dense>| 即可。
 \end{enumerate}
 
 \subsection{基础}
 \begin{itemize}
-\item 与 Matlab 的\href{https://eigen.tuxfamily.org/dox/AsciiQuickReference.txt}{语法对照表}．
+\item 与 Matlab 的\href{https://eigen.tuxfamily.org/dox/AsciiQuickReference.txt}{语法对照表}。
 \item \href{https://eigen.tuxfamily.org/dox/AsciiQuickReference.txt}{ascii 快速参考}
 \item 所有的 Eigen 名字都有 namespace Eigen
 \end{itemize}
@@ -34,30 +34,30 @@ Matrix<>::setZero(m,n); 把矩阵赋值为 m*n 的 0 矩阵;
 
 以下函数用法类似
 \verb|setOnes(); setConstant(); setIdentity(); setRandom(); setLinSpaced();|
-注意其中 \verb|setConstant()| 输入 1 个变量时与 \verb|fill()| 功能相同， 输入 3 个变量时最后一个为常数． \verb|setLinSpaced(size, val1, val2)| 只能对 Vector 或者 RowVector 使用． 如果想赋值给 \verb|MatrixXd|, 可以用 \verb|MatrixXd a = VectorXd::LinSpaced(3, 3, 4)|; 对于整型， \verb|setLinSpaced| 不保证最后一个值等于 val2, 而是保证间隔相等． 这时候只能先生成 Xd, 然后 .cast<int>.
+注意其中 \verb|setConstant()| 输入 1 个变量时与 \verb|fill()| 功能相同， 输入 3 个变量时最后一个为常数。 \verb|setLinSpaced(size, val1, val2)| 只能对 Vector 或者 RowVector 使用。 如果想赋值给 \verb|MatrixXd|, 可以用 \verb|MatrixXd a = VectorXd::LinSpaced(3, 3, 4)|; 对于整型， \verb|setLinSpaced| 不保证最后一个值等于 val2, 而是保证间隔相等。 这时候只能先生成 Xd, 然后 .cast<int>.
 * 逗号赋值都是 RowMaor 的， 无论 a 是什么 major.
 a << 1,2,3,4;
 
 \subsection{operations}
 获取信息
 \begin{itemize}
-\item \verb|Matrix<>::size()| 相当于 Matlab 的 numel(), 另外， rows() 和 cols() 分别是行数和列数．
-\item \verb|Matrix<>::data()| 可以获得 Matrix 数据的指针， 用于直接读写矩阵数据． 注意 rowwise 需要专门声明． 也可以用 \verb|&| 来获取矩阵元的地址．
+\item \verb|Matrix<>::size()| 相当于 Matlab 的 numel(), 另外， rows() 和 cols() 分别是行数和列数。
+\item \verb|Matrix<>::data()| 可以获得 Matrix 数据的指针， 用于直接读写矩阵数据。 注意 rowwise 需要专门声明。 也可以用 \verb|&| 来获取矩阵元的地址。
 \item 矩阵转置用 \verb|Matrix<>::transpose()| 复数矩阵共轭用 conjugate(), 共轭转置用 adjoint()
 \item 矩阵元求和， \verb|Matrix<>::sum(); Matrix<>::colwise().sum(); Matrix<>::rowwise().sum()|
 \item 点乘和叉乘如 \verb|v.dot(w), v.cross(w)|
 类似的有 \verb|mean(), prod(), all(), any(), maxCoeff(), minCoeff()|
 获取子矩阵
-对 Vector, 有 \verb|Matrix<>::head(n), tail(n), segment(n)|. 对 Matrix, 有 \verb|block(i,j,rows,cols)|, 有 \verb|row(i), col(j), topRows(n), middleRows(i, rows), bottomRows(n), leftCols(n), middleCols(j, cols), rightCols(n), topLeftCorner(rows,cols), bottomRightCorner(rows,cols)| 等．
+对 Vector, 有 \verb|Matrix<>::head(n), tail(n), segment(n)|. 对 Matrix, 有 \verb|block(i,j,rows,cols)|, 有 \verb|row(i), col(j), topRows(n), middleRows(i, rows), bottomRows(n), leftCols(n), middleCols(j, cols), rightCols(n), topLeftCorner(rows,cols), bottomRightCorner(rows,cols)| 等。
 \end{itemize}
 
 
 \subsubsection{逐个矩阵元的运算}
 \begin{itemize}
 \item \verb|Matrix<>::cwiseAbs()|
-\item 类似的有 \verb|cwiseInverse(); cwiseMax(); cwiseMin(); cwiseSign(); cwiseSqrt(); Matrix<>::array()| 用于把 Matrix 转换为 array, 逐个元素运算， 或加减一个常数． 如 \verb|Matrix<>::array().square()|
+\item 类似的有 \verb|cwiseInverse(); cwiseMax(); cwiseMin(); cwiseSign(); cwiseSqrt(); Matrix<>::array()| 用于把 Matrix 转换为 array, 逐个元素运算， 或加减一个常数。 如 \verb|Matrix<>::array().square()|
 \item 类似的有 \verb|round(); pow(); sqrt();| 注意 array 可以直接赋值给 matrix.
-\item 复制 vector 给矩阵的每一列 \verb|mat.colwise() = v;| 类似地， \verb|+=, -=| 等也可以使用．
+\item 复制 vector 给矩阵的每一列 \verb|mat.colwise() = v;| 类似地， \verb|+=, -=| 等也可以使用。
 \end{itemize}
 
 
@@ -74,12 +74,12 @@ U = svd.matrixU(); V = svd.matrixV(); X = svd.singularValues();
 \end{lstlisting}
 
 \subsection{外部接口}
-这里介绍如何直接操作 \verb|Matrix<>| 底层的数据， 以及如何将内存中已有的数据直接给 Eigen 使用而无需复制．
+这里介绍如何直接操作 \verb|Matrix<>| 底层的数据， 以及如何将内存中已有的数据直接给 Eigen 使用而无需复制。
 
 \subsubsection{访问底层数据}
 \begin{itemize}
-\item \verb|Matrix<>::data()| 可以返回第一个矩阵元的指针． 然后就可以当做矩阵来用了．
-\item 查看了一下源码， \verb|Matrix<>::innerStride()| 一律返回 1, \verb|outerStride()| 返回 \verb|innerSize()|, 而 \verb|innerSize| 对于 c-major 是 \verb|rows()|, 对于 r-major 是 \verb|cols()|. 这就说明矩阵的内存显然是连续的（无论怎么优化）, 可以放心使用．
+\item \verb|Matrix<>::data()| 可以返回第一个矩阵元的指针。 然后就可以当做矩阵来用了。
+\item 查看了一下源码， \verb|Matrix<>::innerStride()| 一律返回 1, \verb|outerStride()| 返回 \verb|innerSize()|, 而 \verb|innerSize| 对于 c-major 是 \verb|rows()|, 对于 r-major 是 \verb|cols()|. 这就说明矩阵的内存显然是连续的（无论怎么优化）, 可以放心使用。
 \item 要注意 \verb|Matrix<> |到底是 col-major 还是 row-major, 默认是 col-major. 不推荐用 \verb|#define EIGEN_DEFAULT_TO_ROW_MAJOR| 将默认改为 row-major. 建议用例如 \verb`typedef Matrix<double, Dynamic, Dynamic, Aligned | RowMajor> RMatrixXd.`
 \end{itemize}
 

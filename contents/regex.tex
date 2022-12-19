@@ -8,9 +8,9 @@
 
 \pentry{文本文件与字符编码\upref{encode}}
 
-\footnote{参考 Matlab 文档\href{https://www.mathworks.com/help/matlab/ref/regexp.html}{相关页面}．}在文本文件中搜索内容的时候， 有时候想要的是某种格式而不是某些具体的字符， 例如要搜索 “*月*日 消费 ** 元”， 找到匹配项后需要选中这几个字（以便进行替换等操作）， 又或者仅选中 “元” 前面的数值（以便进行统计等）． 理论上我们可以通过编程解决这个问题， 但更简单地， 可以用一种广为使用的表达式来达到同样的效果， 就是下面要介绍的\textbf{正则表达式（regular expresion）}．
+\footnote{参考 Matlab 文档\href{https://www.mathworks.com/help/matlab/ref/regexp.html}{相关页面}。}在文本文件中搜索内容的时候， 有时候想要的是某种格式而不是某些具体的字符， 例如要搜索 “*月*日 消费 ** 元”， 找到匹配项后需要选中这几个字（以便进行替换等操作）， 又或者仅选中 “元” 前面的数值（以便进行统计等）。 理论上我们可以通过编程解决这个问题， 但更简单地， 可以用一种广为使用的表达式来达到同样的效果， 就是下面要介绍的\textbf{正则表达式（regular expresion）}。
 
-正则表达式在许多软件中都被支持， 例如在常用的文本编辑器（如 VScode）， 搜索软件（如 Fileseek）， 和大部分编程语言（如 C++， python， Matlab）中都有很好的支持．
+正则表达式在许多软件中都被支持， 例如在常用的文本编辑器（如 VScode）， 搜索软件（如 Fileseek）， 和大部分编程语言（如 C++， python， Matlab）中都有很好的支持。
 
 \subsubsection{字符匹配}
 \begin{table}[ht]
@@ -22,7 +22,7 @@
 \hline
 \verb|.| & 匹配单个任意字符， 包括空格回车等 & \verb|.at| 可以匹配 \verb|bat|， \verb|cat|， \verb|hat| 等 \\
 \hline
-\verb|[...]| & 匹配方括号中的任意一个字符． 如果要表示一个范围的字符可以用 \verb|-| 连接 & \verb|[bc]ase| 可以匹配 \verb|base| 和 \verb|case|； 又例如 \verb|[a-z0-9]| 可以匹配任意一个小写字母或数字 \\
+\verb|[...]| & 匹配方括号中的任意一个字符。 如果要表示一个范围的字符可以用 \verb|-| 连接 & \verb|[bc]ase| 可以匹配 \verb|base| 和 \verb|case|； 又例如 \verb|[a-z0-9]| 可以匹配任意一个小写字母或数字 \\
 \hline
 \verb|[^...]| & 匹配任何除方括号中以外的字符 & 例如 \verb|[^b]ase| 不能匹配 \verb|base| 但可以匹配 \verb|case| \\
 \hline
@@ -69,7 +69,14 @@
 \subsubsection{Group}
 \begin{itemize}
 \item \verb|(expr)| 可以把表达式 group 到一起并 match， 例如 \verb|abc(\d+)def| 寻找 \verb|abc\d+def| 并且 match \verb|\d+| 部分
-\item 在 VScode 中， 用小括号 group 起来的部分， 在替换的时候可以用 \verb|$1|， \verb|$2| 等来表示．
+\item 在 VScode 中， 用小括号 group 起来的部分， 在替换的时候可以用 \verb|$1|， \verb|$2| 等来表示。
 \item \verb|(?:expr)| 可以把表达式 group 到一起， 例如 \verb|(?:abc){2}| 搜索 "abcabc"
 \item \verb`(expr1|expr2)` 匹配其中一个
 \end{itemize}
+
+
+\subsection{例子}
+\begin{itemize}
+\item 在 VS code 中， 要把 \verb|[链接名](网址)| 替换为 \verb|\href{网址}{链接名}|， 搜索正则表达式 \verb|\[(.*?)\]\((.*?)\)|， 替换为为 \verb|\href{$2}{$1}|。
+\end{itemize}
+

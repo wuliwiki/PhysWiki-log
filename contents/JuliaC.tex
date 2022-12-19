@@ -5,9 +5,9 @@
 \end{issues}
 
 \begin{itemize}
-\item 参考\href{https://docs.julialang.org/en/v1/manual/calling-c-and-fortran-code/}{这里}． 以及\href{https://discourse.julialang.org/t/how-to-make-julia-call-c-c-coded-function/54780/5}{这里的例子}．
+\item 参考\href{https://docs.julialang.org/en/v1/manual/calling-c-and-fortran-code/}{这里}。 以及\href{https://discourse.julialang.org/t/how-to-make-julia-call-c-c-coded-function/54780/5}{这里的例子}。
 \item 基本没有 overhead （如果不考虑 inline function)
-\item 下面是 C 语言的例子， 如果是 C++ 需要把要导出的函数定义在 \verb|extern "C" {}| 中．
+\item 下面是 C 语言的例子， 如果是 C++ 需要把要导出的函数定义在 \verb|extern "C" {}| 中。
 \end{itemize}
 
 \begin{lstlisting}[language=cpp]
@@ -31,4 +31,4 @@ test = joinpath(@__DIR__, "test.so")
 a = ccall((:myfun,test), Int32, ())
 b = ccall((:myfun2,test), Float64, (Float32,Float32), 2.5, 1.5)
 \end{lstlisting}
-其中 \verb|@__DIR__| 是当前路径． 注意 \verb|ccall| 是一个关键字， 不是函数． \verb|:函数名| 的类型是 \verb|Symbol|． 第二个参数是返回类型， 第三个参数是函数的参数类型， 后面是具体的参数． 如果只有一个参数， 用 \verb|(类型,)| 即 1-Tuple． 没有参数时， \verb|()| 表示 0-Tuple．
+其中 \verb|@__DIR__| 是当前路径。 注意 \verb|ccall| 是一个关键字， 不是函数。 \verb|:函数名| 的类型是 \verb|Symbol|。 第二个参数是返回类型， 第三个参数是函数的参数类型， 后面是具体的参数。 如果只有一个参数， 用 \verb|(类型,)| 即 1-Tuple。 没有参数时， \verb|()| 表示 0-Tuple。

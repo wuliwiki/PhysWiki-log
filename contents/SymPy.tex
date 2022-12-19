@@ -2,17 +2,17 @@
 % 符号计算|python
 
 \subsection{什么是符号计算？}
-符号计算又称计算机代数，通俗地说就是用计算机推导数学公式，如对表达式进行因式分解、化简、微分、积分、解代数方程、求解常微分方程等．在SciPy 数值微分与积分\upref{SciPy}部分我们已经介绍了如何利用\verb|python|实现相关数值计算，这里面我们将进一步介绍符号计算在\verb|python|中的实现．那么数值计算与符号计算有什么区别与联系呢？个人认为：首先在数值计算过程中，所有出现的\verb|变量|或者\verb|参数|在使用之前必须给定具体取值，并且计算结果大多数是近似的；相反的是，在符号计算过程中，变量可以预先不给定取值，计算结果是准确的，解析的．不太准确的表述为：符号计算就是对表达式进行的操作；数值计算是对数据进行的操作．
+符号计算又称计算机代数，通俗地说就是用计算机推导数学公式，如对表达式进行因式分解、化简、微分、积分、解代数方程、求解常微分方程等。在SciPy 数值微分与积分\upref{SciPy}部分我们已经介绍了如何利用\verb|python|实现相关数值计算，这里面我们将进一步介绍符号计算在\verb|python|中的实现。那么数值计算与符号计算有什么区别与联系呢？个人认为：首先在数值计算过程中，所有出现的\verb|变量|或者\verb|参数|在使用之前必须给定具体取值，并且计算结果大多数是近似的；相反的是，在符号计算过程中，变量可以预先不给定取值，计算结果是准确的，解析的。不太准确的表述为：符号计算就是对表达式进行的操作；数值计算是对数据进行的操作。
 
 \subsection{SymPy 库}
-在\verb|python|中，专门进行符号计算的库是 \href{https://www.sympy.org/en/index.html}{sympy} (symbol python的简写)．利用这个库可以进行符号表达式的加减乘除等四则运算、符号化简、求导、积分、极限、解方程（组）、解微分方程（组）等等．下面我们将进行逐一介绍．
+在\verb|python|中，专门进行符号计算的库是 \href{https://www.sympy.org/en/index.html}{sympy} (symbol python的简写)。利用这个库可以进行符号表达式的加减乘除等四则运算、符号化简、求导、积分、极限、解方程（组）、解微分方程（组）等等。下面我们将进行逐一介绍。
 
 \subsubsection{符号变量的定义}
 我们首先导入\verb|sympy|库：
 \begin{lstlisting}[language=python]
 import sympy as sm
 \end{lstlisting}
-为了代码简洁，后面默认在代码之前均引入了这个库．例如
+为了代码简洁，后面默认在代码之前均引入了这个库。例如
 
 定义单个变量（类型为 \verb|sympy.core.symbol.Symbol|）
 \begin{lstlisting}[language=python]
@@ -23,11 +23,11 @@ x0 = sm.symbols('x0')
 x0 = sm.symbols('x0')
 x1 = sm.symbols('x1')
 \end{lstlisting}
-这样定义理论上没有问题，但是显得繁琐．上述代码可以改写为
+这样定义理论上没有问题，但是显得繁琐。上述代码可以改写为
 \begin{lstlisting}[language=python]
 x0, x1 = sm.symbols('x0, x1')
 \end{lstlisting}
-对于多个变量的定义方法类似．需要说明的是\verb|sm.symbols('x0, x1')|中的\verb|,|用空格隔开也是可以的．即\verb|sm.symbols('x0 x1')|．
+对于多个变量的定义方法类似。需要说明的是\verb|sm.symbols('x0, x1')|中的\verb|,|用空格隔开也是可以的。即\verb|sm.symbols('x0 x1')|。
 
 当定义多个连续变量时，也可以这样
 \begin{lstlisting}[language=python]
@@ -37,14 +37,14 @@ x4, x5, x6, x7 = sm.symbols('x4:8')
 注意不包括\verb|x8|.
 
 \subsubsection{符号常量与函数}
-\verb|sympy|库中预置了许多常量：圆周率$\pi$,自然常数$e$,无穷大$\infty$,虚数单位$\I$等等．它们分别为
+\verb|sympy|库中预置了许多常量：圆周率$\pi$,自然常数$e$,无穷大$\infty$,虚数单位$\I$等等。它们分别为
 \begin{lstlisting}[language=python]
 sm.pi # 类型为 sympy.core.numbers.Pi
 sm.E  # 类型为 sympy.core.numbers.Exp1
 sm.I  # 类型为 sympy.core.numbers.ImaginaryUnit
 sm.oo # 类型为 sympy.core.numbers.Infinity 
 \end{lstlisting}
-里面也有许多常用函数，比如 $\sin(x)$, $\arcsin(x)$, $\sinh(x)$, $\exp(x)$, $\log(x)$, $\sqrt{x}$． 对应 \verb|python| 代码为：
+里面也有许多常用函数，比如 $\sin(x)$, $\arcsin(x)$, $\sinh(x)$, $\exp(x)$, $\log(x)$, $\sqrt{x}$。 对应 \verb|python| 代码为：
 \begin{lstlisting}[language=python]
 sm.sin(), sm.asin(), sm.sinh(), sm.exp(), sm.log(), sm.sqrt()
 # 返回的类型由返回的表达式决定， 例如
@@ -80,7 +80,7 @@ exp(x)
 0.666666666666667*sin(x)
 >>> sm.Rational(2, 3) * sm.sin(x) # 使用有理数 2/3
 \end{lstlisting}
-为了巩固上面符号计算的一些细节我们来做一个练习．
+为了巩固上面符号计算的一些细节我们来做一个练习。
 \begin{example}{}
 用\verb|sympy|库的函数写一个函数返回如下表达式：
 \begin{align}
@@ -169,7 +169,7 @@ x*(x + y)*(x + 2*y)
 >>> sm.trigsimp(2*sm.sin(x)*sm.cos(x))
 sin(2*x)
 \end{lstlisting}
-需要说明的是以上各种表达式化简不会改变原有表达式．
+需要说明的是以上各种表达式化简不会改变原有表达式。
 
 \subsubsection{替换与计算表达式}
 \verb|sympy|库中提供了表达式替换函数\verb|subs|与计算函数\verb|evalf|， 它的用法为
@@ -207,14 +207,14 @@ x**3 + 3*x**2*y + 3*x*y**2 + y**3
 >>> print(f(0,1), f(1,0), f(np.pi, np.pi), sep=' ')
 0.2919265817264289 1.708073418273571 1.0
 \end{lstlisting}
-仔细的观察我们发现，虽然我们定义的是符号变量与符号表达式，但是该函数返回值是浮点型数据．默认情况下，\verb|lambdify|函数调用了\verb|math|模块，也就是说\verb|sm.sin()|被转化为\verb|math.sin()|.
+仔细的观察我们发现，虽然我们定义的是符号变量与符号表达式，但是该函数返回值是浮点型数据。默认情况下，\verb|lambdify|函数调用了\verb|math|模块，也就是说\verb|sm.sin()|被转化为\verb|math.sin()|.
 
 \subsubsection{符号方程(组)求解}
 \verb|sympy|库中提供了\verb|solve|函数进行方程的求解，它的用法为
 \begin{lstlisting}[language=python]
 sm.solve(表达式，求解变量)
 \end{lstlisting}
-它的返回值是列表形式．例如
+它的返回值是列表形式。例如
 \begin{lstlisting}[language=python]
 # 定义两个符号变量x y
 >>> x,y = sm.symbols('x y')
@@ -248,7 +248,7 @@ x+y+z=5 \\
 # 调用函数
 >>> sm.solve_linear_system(M, x, y, z)
 {x: 98/11, y: -45/11, z: 2/11}
-# 它的返回值为字典类型．
+# 它的返回值为字典类型。
 \end{lstlisting}
 
 \subsubsection{符号求导}
@@ -273,7 +273,7 @@ Derivative(sin(y)*cos(x)**2, x)
 \end{lstlisting}
 
 \subsubsection{符号积分}
-\verb|sympy|提供了两种方法计算符号表达式的积分，分别为\verb|Integral()|与\verb|sm.integrate()|,这两个方法与求导的两种方法一一对应．用法为：
+\verb|sympy|提供了两种方法计算符号表达式的积分，分别为\verb|Integral()|与\verb|sm.integrate()|,这两个方法与求导的两种方法一一对应。用法为：
 \begin{lstlisting}[language=python]
 # 计算不定积分
 >>> sm.integrate(sm.sec(x), x)

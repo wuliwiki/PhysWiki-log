@@ -7,7 +7,7 @@
 
 \pentry{SLISC 库简介\upref{SLISC}， 数据结构：密矩阵\upref{MatSto}}
 
-我们先以双精度类型 \verb|Doub| （即 \verb|double|）来举例介绍 SLISC 中的密矩阵． 我们习惯上也把 1 维的矩阵称为矢量．
+我们先以双精度类型 \verb|Doub| （即 \verb|double|）来举例介绍 SLISC 中的密矩阵。 我们习惯上也把 1 维的矩阵称为矢量。
 
 先来看一个基本的使用的例子
 \begin{lstlisting}[language=cpp]
@@ -21,7 +21,7 @@ int main()
     VecDoub v(3); // 生成长度为 3 的 double 矢量， 不初始化
     copy(a, 1); // 全部元素赋值为 1
     linspace(v, 1.1, 3.3); // 等间距赋值 v = [1.1, 2.2, 3.3]
-    u.resize(v.size()); // u 变为和 v 相等的长度． 注意 resize 会丢失所有数据
+    u.resize(v.size()); // u 变为和 v 相等的长度。 注意 resize 会丢失所有数据
     copy(u, 3); // 全部元素赋值为 3
     copy(u, v); // 把 v 复制到 u
     cout << "u = " << endl; disp(u); // 把 u 输出到命令行
@@ -30,7 +30,7 @@ int main()
     assign2(v, 2, 2, 4., 5.); // 从 v[2] 开始的 2 个元素手动赋值
     v[2] = 2*PI; // 给单个元素赋值为两倍圆周率
     cout << "v[2] = " << v[2] << endl; // 获取单个元素
-    v.end() = v.end(2) = 10; // 给最后一个和倒数第 2 个元素赋值．
+    v.end() = v.end(2) = 10; // 给最后一个和倒数第 2 个元素赋值。
     resize_cpy(v, 5); // 把 v 的长度变为 5， 原来的元素不变， 新增元素为 0
     VecDoub w;
     w << u; // 把 u 的数据转移给 w （转移指针地址）， u 变为长度为 0 的矢量
@@ -49,7 +49,7 @@ int main()
 \end{lstlisting}
 
 \subsection{Vbase 类}
-所有密矩阵都继承于 \verb|VbaseDoub|， \verb|VbaseDoub| 不直接使用， 仅用于继承． 这里使用继承主要是为了避免在每个密矩阵中都重复定义这些基础功能．
+所有密矩阵都继承于 \verb|VbaseDoub|， \verb|VbaseDoub| 不直接使用， 仅用于继承。 这里使用继承主要是为了避免在每个密矩阵中都重复定义这些基础功能。
 \begin{lstlisting}[language=cpp]
 class VbaseDoub
 {
@@ -76,10 +76,10 @@ public:
 };
 \end{lstlisting}
 
-简单来说， \verb|VbaseDoub| 就是一个简单的 \verb|std::vector|， 负责内存管理， 用方括号 \verb|[i]| 获取第 \verb|i| 个矩阵元， 用 \verb|end()| 获取最后一个元， \verb|end(i)| 获取第 \verb|N-i| 个元． 用 \verb|.size()| 获取元素长度， \verb|.resize(N)| 释放内存并重新分配 \verb|N| 个元素的新内存． \verb|<<| 用于把一个对象所分配的内存转移到另一个对象中． 所有继承 \verb|VbaseDoub| 的密矩阵都具有这些功能， 也会增加新的功能．
+简单来说， \verb|VbaseDoub| 就是一个简单的 \verb|std::vector|， 负责内存管理， 用方括号 \verb|[i]| 获取第 \verb|i| 个矩阵元， 用 \verb|end()| 获取最后一个元， \verb|end(i)| 获取第 \verb|N-i| 个元。 用 \verb|.size()| 获取元素长度， \verb|.resize(N)| 释放内存并重新分配 \verb|N| 个元素的新内存。 \verb|<<| 用于把一个对象所分配的内存转移到另一个对象中。 所有继承 \verb|VbaseDoub| 的密矩阵都具有这些功能， 也会增加新的功能。
 
 \subsection{矢量}
-\verb|VecDoub| 矢量继承 \verb|VbaseDoub|， 为了避免歧义， 任何两个容器之间禁止使用等号． 如果要复制使用 \verb|copy(a, b)| 函数把 \verb|b| 复制给 \verb|a|．
+\verb|VecDoub| 矢量继承 \verb|VbaseDoub|， 为了避免歧义， 任何两个容器之间禁止使用等号。 如果要复制使用 \verb|copy(a, b)| 函数把 \verb|b| 复制给 \verb|a|。
 \begin{lstlisting}[language=cpp]
 class VecDoub : public VbaseDoub
 {
@@ -94,7 +94,7 @@ public:
 \end{lstlisting}
 
 \subsection{矩阵}
-列主序矩阵\upref{MatSto} \verb|CmatDoub| 和行主序矩阵 \verb|MatDoub| 同样继承 \verb|VbaseDoub|． 在此基础上增加一个行数 \verb|m_N0|， 列数 \verb|m_N1|， 双索引 \verb|a(i, j)|．以 \verb|CmatDoub| 定义为例：
+列主序矩阵\upref{MatSto} \verb|CmatDoub| 和行主序矩阵 \verb|MatDoub| 同样继承 \verb|VbaseDoub|。 在此基础上增加一个行数 \verb|m_N0|， 列数 \verb|m_N1|， 双索引 \verb|a(i, j)|。以 \verb|CmatDoub| 定义为例：
 \begin{lstlisting}[language=cpp]
 class CmatDoub : public VbaseDoub
 {
@@ -138,4 +138,4 @@ public:
 };
 \end{lstlisting}
 
-更高维的数组的定义也大同小异．
+更高维的数组的定义也大同小异。

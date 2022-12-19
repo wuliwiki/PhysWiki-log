@@ -12,7 +12,7 @@ ubuntu 上用 \verb|sudo apt install libsqlite3-dev| 安装
 另外安装命令行工具 \verb|sudo apt install sqlite3|
 
 \subsection{例子}
-参考\href{https://www.tutorialspoint.com/sqlite/sqlite_c_cpp.htm}{这里}． 注意所有的数据必须先转换成字符串才能加到数据库中．
+参考\href{https://www.tutorialspoint.com/sqlite/sqlite_c_cpp.htm}{这里}。 注意所有的数据必须先转换成字符串才能加到数据库中。
 \begin{lstlisting}[language=cpp]
 #include <iostream>
 #include <sqlite3.h>
@@ -65,7 +65,7 @@ void test_sqlite()
 }
 \end{lstlisting}
 
-另一个挺有用的小程序是（修改自\href{https://www.sqlite.org/quickstart.html}{官方教程}）， 可以在命令行对任意数据库文件执行任意 SQL 命令． 编译： \verb|g++ -o sqcmd sqcmd.cpp -l sqlite3|． 使用方法如 \verb|./sqcmd example.db "SELECT * FROM PERSON"|
+另一个挺有用的小程序是（修改自\href{https://www.sqlite.org/quickstart.html}{官方教程}）， 可以在命令行对任意数据库文件执行任意 SQL 命令。 编译： \verb|g++ -o sqcmd sqcmd.cpp -l sqlite3|。 使用方法如 \verb|./sqcmd example.db "SELECT * FROM PERSON"|
 \begin{lstlisting}[language=cpp]
 #include <stdio.h>
 #include <sqlite3.h>
@@ -112,28 +112,28 @@ sqlite> .exit
 \end{lstlisting}
 
 \subsection{binding}
-当然也不需要把所有数据类型都转换成 string 那么蠢． 这就要用到 binding， 参考\href{https://www.sqlite.org/c3ref/bind_blob.html}{这里}．
+当然也不需要把所有数据类型都转换成 string 那么蠢。 这就要用到 binding， 参考\href{https://www.sqlite.org/c3ref/bind_blob.html}{这里}。
 \begin{itemize}
-\item 事实上 \verb|sqlite3_exec()| 命令是调用一系列命令， 如果用 binding， 就必须把它们分开用．
-\item 首先用 \verb|sqlite3_stmt stmt;| 创建一个 statement object．
-\item 然后把 sql 命令 \verb|str| parse 为 \verb|stmt|： \verb|ret = sqlite3_prepare_v2(db, str.c_str(), str.size()+1, &stmt, NULL);|． 这里 \verb|str| 中的数据可以用 \verb|?| 或者 \verb|?编号| 代替， 以后再 bind 到不同的数据上． 这样就不需要每换一次数据都要重新 parse 一次．
-\item \verb|int sqlite3_bind_parameter_count(stmt)| 可以返回 \verb|?| 的个数．
-\item \verb|ret = sqlite3_bind_text(stmt, 问号的编号, names[i].c_str(), names[i].size(), SQLITE_STATIC);| 用于把字符串 bind 到指定的问号上． 如果问号没有指定编号则从左到右从 1 开始．
-\item \verb|ret = sqlite3_bind_text(stmt, 问号的编号, int);| 用于把整数 bind 到指定的问号上．
-\item bind 好之后用 \verb|ret = sqlite3_step(stmt)| 来执行， 当 statement 不是 query 时返回 \verb|SQLITE_DONE|； 是 query 时返回 \verb|SQLITE_ROW|， 每调用一次返回一行．
+\item 事实上 \verb|sqlite3_exec()| 命令是调用一系列命令， 如果用 binding， 就必须把它们分开用。
+\item 首先用 \verb|sqlite3_stmt stmt;| 创建一个 statement object。
+\item 然后把 sql 命令 \verb|str| parse 为 \verb|stmt|： \verb|ret = sqlite3_prepare_v2(db, str.c_str(), str.size()+1, &stmt, NULL);|。 这里 \verb|str| 中的数据可以用 \verb|?| 或者 \verb|?编号| 代替， 以后再 bind 到不同的数据上。 这样就不需要每换一次数据都要重新 parse 一次。
+\item \verb|int sqlite3_bind_parameter_count(stmt)| 可以返回 \verb|?| 的个数。
+\item \verb|ret = sqlite3_bind_text(stmt, 问号的编号, names[i].c_str(), names[i].size(), SQLITE_STATIC);| 用于把字符串 bind 到指定的问号上。 如果问号没有指定编号则从左到右从 1 开始。
+\item \verb|ret = sqlite3_bind_text(stmt, 问号的编号, int);| 用于把整数 bind 到指定的问号上。
+\item bind 好之后用 \verb|ret = sqlite3_step(stmt)| 来执行， 当 statement 不是 query 时返回 \verb|SQLITE_DONE|； 是 query 时返回 \verb|SQLITE_ROW|， 每调用一次返回一行。
 \item 要查看 query 的结果， \verb|sqlite3_column_int(stmt, 从0开始的列编号)| 获取当前返回行的某个整数类型的列
 \item \verb|(char*)sqlite3_column_text(stmt, 从0开始的列编号)| 同理获得字符串类型
-\item 最后用 \verb|sqlite3_finalize(stmt);| 释放内存．
+\item 最后用 \verb|sqlite3_finalize(stmt);| 释放内存。
 \end{itemize}
 
 
 \subsection{sqlite3 命令}
 \begin{itemize}
-\item \verb|sqlite3| 是一个命令行程序， 可以手动输入 SQL 命令来操作 sqlite 数据库．
+\item \verb|sqlite3| 是一个命令行程序， 可以手动输入 SQL 命令来操作 sqlite 数据库。
 \end{itemize}
 
 \subsection{GUI 浏览器}
 \begin{itemize}
-\item DB Browser for SQLite 是一个比较简单的 GUI 工具， 可以直接在 snap store 里面安装．
-\item \href{https://sqlitestudio.pl/}{SQLiteStudio} 有更多特性和更漂亮的界面， 无需安装．
+\item DB Browser for SQLite 是一个比较简单的 GUI 工具， 可以直接在 snap store 里面安装。
+\item \href{https://sqlitestudio.pl/}{SQLiteStudio} 有更多特性和更漂亮的界面， 无需安装。
 \end{itemize}
