@@ -1,13 +1,15 @@
-% 本构关系；广义胡克定律（弹性力学）
+% 广义胡克定律（弹性力学本构关系）
 
 \begin{issues}
 \issueDraft
 \end{issues}
-%工程量似乎有点巨大。。。先占位
+%工程量似乎有点巨大...先占位
+\footnote{本文参考了冯西桥的《弹性力学》。}
+\pentry{杨氏模量、泊松比、剪切模量、广义胡克定律的基本形式\upref{YoungM}}
 
-之前我们已经分别探讨了应力\upref{STRESS}与应变\upref{Strain}。现在我们要探讨力如何使材料变形，即应力与应变之间的联系。这就是材料的本构关系所描述的。
+\textsl{小学二年级的我们}就已经知道"力使物体变形"。之前我们分别探讨了应力\upref{STRESS}与应变\upref{Strain}，现在我们要找到二者间的关系。这就是材料的本构关系。
 
-以下是各向同性的线弹性材料的本构关系。本构关系一共包括$6$个独立的方程以联系$6$个独立的应力-应变分量。为了构建本构关系，需要知道材料的两个力学属性，例如杨氏模量$E$与泊松比$\nu$. 举个例子，铁的杨氏模量约为$E = 200 \Si{GPa} = 2 \times 10^{11} \Si{Pa}$\footnote{防杠声明：铁的模量具体数值和成分、加工工艺、工作条件甚至是加工批次都有关，因此不能一概而论；此外，实际的材料往往是各向异性的。}，泊松比约为$\nu=0.3$（这也是常见金属的泊松比）。
+以下是各向同性的线弹性材料的本构关系，本构关系一共包括$6$个独立的方程以联系$6$个独立的应力-应变分量。为了运用本构关系，需要知道材料的两个力学属性，例如杨氏模量$E$与泊松比$\nu$. 举个例子，铁的杨氏模量约为$E = 200 \Si{GPa} = 2 \times 10^{11} \Si{Pa}$\footnote{防杠声明：铁的模量具体数值和成分、加工工艺、工作条件甚至是加工批次都有关，因此不能一概而论；此外，实际的材料往往是各向异性的。}，泊松比约为$\nu=0.3$（这也是常见金属的泊松比）。
 
 \subsection{应力-应变本构关系}
 \begin{equation}\label{ELACST_eq1}
@@ -49,3 +51,29 @@ G&=\frac{E}{2(1+\nu)}\\
 \sigma_{ij}=\frac{E}{1+\nu}\left(\pdv{u_i}{x_j}+\pdv{u_j}{x_i}\right)
 +\delta_{ij}\frac{\nu E}{(1+\nu)(1-2\nu)}\sum_k\pdv{u_k}{x_k}\qquad i,j=1,2,3
 \end{equation}
+
+\subsection{简单的推导}
+以$\varepsilon_{11}$为例，先根据单向拉伸的广义胡克定律\upref{YoungM}
+$$\varepsilon_{11} = \frac{\sigma_{11}}{E}$$
+
+再考虑其余方向的拉伸在该方向上产生的压缩现象，即泊松现象
+$$
+\begin{aligned}
+\varepsilon_{11} &= \frac{\sigma_{11}}{E} - \nu \varepsilon_{22}  - \nu \varepsilon_{33}\\
+&=\frac{\sigma_{11}}{E} - \nu\frac{\sigma_{22}}{E} - \nu\frac{\sigma_{33}}{E}\\
+&=\frac{(1+\nu)\sigma_{11}}{E} - \nu\frac{\sigma_{11}}{E}  - \nu\frac{\sigma_{22}}{E} - \nu\frac{\sigma_{33}}{E} \quad \text{仅仅是数学上“加一项再减一项”}\\
+&=\frac{(1+\nu)\sigma_{11}}{E} - \frac{\nu}{E}\sum_k \sigma_{kk} \\
+\end{aligned}
+$$
+此即为$i=j$情况下的\autoref{ELACST_eq2} 
+
+而$\varepsilon_{12}$的情况遵循单向剪切的广义胡克定律\upref{YoungM}
+$$
+\begin{aligned}
+\varepsilon_{12} &= \frac{\sigma_{12}}{2G}\\
+&=\frac{(1+\nu)\sigma_{12}}{E}
+\end{aligned}
+$$
+此即为$i=1, j=2$情况下的\autoref{ELACST_eq2} 
+
+同理，可推导其余的本构关系式。

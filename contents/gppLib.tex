@@ -116,6 +116,7 @@ export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/your/custom/path/
 \item \verb|LD_LIBRARY_PATH| 中不可以有关键的系统 \verb|.so| 文件， 否则如果不兼容， 很多系统命令像 \verb|ls, touch, echo| 等都会用不了。
 \item \verb|LIBRARY_PATH| 的顺序很重要， 如果同名 \verb|.a| 的路径出现在同名 \verb|.so| 路径的前面， 那么就会链接 \verb|.a|。 如果二者的路径相同， 那么还是会有限链接 \verb|.so|。
 \item 如果不指定 \verb|rpath|， 设置环境变量 \verb|LD_RUN_PATH| 也是等效的。 链接的程序是 \verb|ld|， 而动态链接库是 \verb|ld-linux.so|
+\item 动态链接库文件内部的 \verb|DT_SONAME| entry 会保存本来的文件名给运行时的 linker 确认。 用 \verb|patchelf --print-soname 文件| 可以显示（通常来说， \verb|lib*.so.*.*.*| 内部的 soname 可能会省略最后若干个版本编号。 所以把 so 文件重命名以后， 还要用 \verb|patchelf --set-soname 新文件名 新文件名|。
 \item 如果要修改已经编译好的可执行文件（包括 so） 的 rpath， 可以用 \verb|chrpath| （不推荐）或者 \verb|patchelf --set-rpath '路径' XXX.so| （其实设置的也是 \verb|runpath| 而不是 \verb|rpath|）其中如果要设置相对路径如 \verb|'$ORIGIN/相对路径'| 参考\href{https://stackoverflow.com/questions/13769141/can-i-change-rpath-in-an-already-compiled-binary}{这里}。 用这种方法， 加上 \verb|$ORIGIN| 功能， 似乎可以像 AppImage 或者 snap 一样把任何动态链接的程序打包到同一个文件夹中， 包括所有依赖， 也就是所谓的绿色软件。
 \item 如果要强制设置 \verb|rpath| （不推荐）而不是 \verb|runpath|， 先用 \verb|patchelf --remove-rpath 文件| 移除已有的 \verb|runpath| 或 \verb|rpath|， 然后 \verb|patchelf --force-rpath --set-rpath '路径' 文件| 即可。
 \item \verb|patchelf --print-needed 文件| 可以显示直接依赖的动态库（不包含依赖的依赖）。 这应该和 \verb|lddtree 文件| 的第一层是一样的。
