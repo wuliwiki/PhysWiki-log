@@ -24,14 +24,13 @@
 
 \subsection{基础}
 \begin{itemize}
-\item \verb|git init| 可以把某个文件夹变为仓库， 也可以现在 GitHub 上新建仓库再 \verb|git clone| 到本地。
-\item \verb|git status| 用于查看仓库的当前状态， 例如有哪些新增、 改变和删除的文件。
+\item \verb|git init| 可以把某个文件夹变为仓库， 也可以现在 GitHub 上新建仓库再 \verb|git clone| 到本地。 注意多次使用并不会丢失什么东西（如果 .git 文件夹里面已经有数据）。
+\item \verb|git status| 用于查看仓库的当前状态， 例如有哪些新增、 改变、移动和删除的文件。 注意 \verb|renamed: xxx -> xxx| 不一定只是改了文件名，也可能有内容改动。
 \item \verb|git diff [文件或路径]| 用于显示上次 \verb|commit| 之后的改变， 如果有文件被 \verb|add|, 则显示其 \verb|add| 之后的改变。
 \item \verb|git add [文件或路径]| 用于把改变的文件添加到 staging area, commit 的时候只会 commit 这些文件。 如果文件又发生了改动， 需要再次 \verb|git add|.
 \item 快速 add 并 commit 可以用 \verb|git commit -am "标题"|
 \item 考虑到 \verb|git status| 和 \verb|git diff| 太常用， 可以用 \verb|ctrl+r stat| 或者 \verb|ctrl+r dif| 等。 如果不对就再按一次 \verb|ctrl+r| 即可。 这是命令行的功能不是 Git 功能。
 安装后的设置
-\item \verb|git fsck| 可以检查数据库是否出现错误（硬盘坏点等）
 \end{itemize}
 
 \begin{itemize}
@@ -49,9 +48,9 @@
 \item 如果 clone 了以后用 \verb|git status| 发现所有的文件都改变了， 用 \verb|git config --global core.fileMode false| 即可。 如果还是不行就去掉 \verb|--global|。
 \item \verb|git clone <folder1> <folder2>| 把 folder1 中的 repo 复制到 folder2 中。 但注意路径要用 \verb|/| 而不是 \verb|\|. 如 \verb|/C/Users/addis/Documents/GitHub/cn2D/|
 \item \verb|git clone --no-checkout ...| 选项可以只复制 .git 文件夹。
-\item Git bash 第一次 push 到 GitHub 的时候会弹出登录框， 密码被存在 Windows 的 Credential Manager 中的 git:https://github.com.
+\item Git bash 第一次 push 到 GitHub 的时候会弹出登录框， 密码被存在 Windows 的 Credential Manager 中的 、\verb|git:https://github.com|.
 \item 检查当前目录的 repository 的状态， 用 \verb|git status|. 
-\item 用 \verb|git add <file>| 把变化添加到 staging area （也就是 index）. 用 \verb|git add <dir>/| 添加目录， 用 \verb|git add .| 添加所有变化。
+\item 用 \verb|git add <file>| 把变化添加到 staging area （也就是 index）. 用 \verb|git add <dir>/| 添加目录， 用 \verb|git add 目录| 添加某个目录的变化， 用 \verb|git add -A| 添加所有变化。
 \item 用 \verb|git add -u| 可以只 add 修改的和删除的文件， 新文件不 add
 \item \verb|.gitignore| 的例子： \verb|folder/| 忽略整个文件夹， \verb|folder/*.txt| 忽略文件夹中的所有 txt 文件， \verb|folder/**/*.pdf| 忽略 folder 文件夹和所有子文件夹中的 pdf 文件。
 \item \verb|git diff| 用于显示文件夹和 stage area 中的区别。 \verb|git diff --staged| 用于显示 stage area 和上一次 commit 的区别。 \verb|git diff --name-only| 可以只显示文件名。
@@ -70,8 +69,6 @@
 \item \verb|git checkout -- <file>| 可以撤销一个文件从上次 commit 后的变化 （危险操作!）. \verb|git checkout .| 可以撤销所有文件从上次 commit 后的变化 （危险操作!） 但是他们不会影响 untracked files
 \item 注意 \verb|git checkout folder| checkout 的是 index， 也就是 git add 保存的地方。 而对于服务器上被 push 的 repo， index 和 HEAD 的版本很可能是不同的。 这时用 \verb|git checkout master -- ...| 的才是最新版本。
 \item \verb|git checkout <hash> -- <file1> <file2>...| 可以将某个文件还原到某次 commit 的状态。 同样也适用于文件夹。
-\item \verb|git --work-tree=/path/to/outputdir checkout ...| 可以指定 checkout 的路径， 对 \verb|status| 等命令同样有效
-\item \verb|git --git-dir /path/to/repo 命令| 可以指定 \verb|.git| 所在的文件夹而无需先 cd 到那个文件夹
 \item 【不推荐】\verb|GIT_WORK_TREE=/some/path/ git checkout ...| 可以把任何 \verb|git checkout| 的内容输出到指定文件夹， 注意这里的 \verb|GIT_WORK_TREE=/some/path/| 只有本次有效
 \item 【不推荐】（建议使用上一条） \verb|git checkout-index -a -f --prefix=/some/path/| 可以把所有最新版本的所有内容从 \verb|.git| 文件夹 checkout 到指定的文件夹， 注意最后的 \verb|/| 是必须的， \verb|-a| 表示全部文件， \verb|-f| 表示覆盖已有文件。 如果要 checkout 某个文件， 在后面用 \verb|-- 文件名| 即可， 要把 \verb|-a| 去掉。 这种方法不能 checkout 某个文件夹
 \item \verb|git mv <old_name> <new_name2>| 可以把某个文件重命名， 包括只改变大小写（windows 中也可以， 直接在文件夹中改变大小写是无效的）
@@ -95,6 +92,13 @@
 \item 把某文件从所有历史中删除用 \verb|git filter-branch -f --tree-filter 'rm -rf <path/file>' HEAD| 注意这样做本身并不一定会使 repo 变小。 如果要清空一个文件夹， 就用 \verb|path/*| 就好
 \item \verb|git gc --aggressive --prune=now| 会可以将 repo 缩小，PhysWiki 的 .git 大概能缩小到一半。 鼓励经常使用 \verb|git gc|，但 \verb|--aggressive| 选项会比较慢但也是安全的。 gc 表示 garbage collection。 该命令还可以让 \verb|.git| 中的文件数量大大减小（copy 文件夹会快很多）
 \item \verb|git gc| 命令只对本地 repo 有效，其实最有效的貌似还是直接把本地 repo 删了再 clone 一次。但是注意检查是否有不小心被 .gitignore 屏蔽的文件没有在服务器上
+\item 注意 \verb|git gc| 用的内存可能会非常多（尤其是 repo 很大的时候）， 可以用（按需要调节， 容量单位有 \verb|k,m,g|）。 实测中，100GB 的数据库可以只用 4G 服务器内存和 4G 缓存， 限制单线程，以及 50k window 完成。
+\begin{lstlisting}[language=bash]
+git config --global pack.windowMemory 20m # 限制内存大小
+git config --global pack.packSizeLimit 20m # 限制 pack 文件大小（默认单个文件）
+git config --global pack.threads 2 # 使用多少线程压缩 pack
+\end{lstlisting}
+\item 如果一个 repo 中的 pack 文件太大， 可以用 \verb|git repack --max-pack-size=1g -a| 拆分成 1GB 的小块。 这和先设置 \verb|pack.packSizeLimit| 效果是一样的。
 \item 即使是二进制文件， git 也会尽量储存每个版本的增量， 而不是每个版本储存一次。
 \item \verb|git clean -f| 可以清除 untracked file, \verb|-d| 选项可以清除 untracked directory,  \verb|git clean -n| 显示将要清除的文件。
 \item 要让 windows 中 git bash 支持中文， 在右键 option > text 中 local 选择 C, character set 选 UTF8, 另外输入以下命令
@@ -107,8 +111,23 @@
 \verb|git config --global core.quotepath false|
 \item 用 \verb|gitk| 可以弹出 GUI 显示每一次 commit 的文件目录， 不需要 checkout 就可以看到。
 \item \verb|git push| 到一个 nonbare repo 一般是不允许的， 除非这个 repo 设置了 \verb|git config receive.denyCurrentBranch warn| 或者 \verb|git config receive.denyCurrentBranch ignore.| 这时如果 push, 并不会改变 remote 的 working directory. (其实这正是我增量备份 .git 需要的!)
+\item \verb|git config --local --bool core.bare false|， 然后把所有文件数据库文件放到新建的 \verb|.git| 里面， 就可以把一个 bare repo 变成正常 repo。
 \item windows 文本编辑器默认是 ANSI 编码， 而 ANSI 在 git 中显示的是乱码。 而 Visual Studio Code 保存的时候默认会存成 UTF-8 编码， ANSI 编码在 Visual Studio Code 中也会是乱码， 这时千万不要保存， 否则就成了永久的乱码了。
 \item 要检查编码类型， 或转换编码类型，用 Visual Studio Code.  不要用 Windows 的 Notepad。
+\end{itemize}
+
+\subsection{用 Git 备份大型文件夹}
+\begin{itemize}
+\item 优点是可以防止任何形式的数据 corruption， 增量备份， 保留所有历史版本
+\item 缺点就是慢！慢！慢！（windows 下移动硬盘 git add 写入 15MB 左右， SSD 硬盘可以 30MB 左右， linux 也有 30MB 左右）。
+\item 另一个缺点： 经过测试， 即使二进制大文件只改变了一点， git 也做不到对其增量备份。 所以如果经常对大文件做微小改动会使 repo 迅速变大。
+\item 最好的代替方案是用 \href{https://bup.github.io/}{bup}， 或者 \href{https://git-annex.branchable.com/}{git-annex}。
+\item 参考子节： 检查数据完整性
+\item \verb|git fsck| 可以检查数据库（\verb|.git| 文件夹）是否出现错误（硬盘坏点等）， 但无法恢复， 只能通过备份。
+\item \verb|git status| 一般只是检查 tree 中的文件的修改时间是否有更新， 而不会做一次完整的 checksum。 如果需要检查是否有硬件 bit rot， 可以先 touch 所有文件： \verb|find . -type f -exec touch {} +|， 然后再 \verb|git status|。
+\item \verb|git --git-dir=路径/.git --work-tree=tree的路径 命令| 可以指定 \verb|.git| 所在的文件夹以及 tree 的路径， 然后执行 \verb|git 命令|， 例如 \verb|git status| 甚至 \verb|init|。 注意两个路径选项都不能省略， 无论当前在什么路径。
+\item 如果要删除某个 commit 之前的所有 commit， 以减小数据库的尺寸， 可以先搞一个新的 branch， 把 master branch 删除（\verb|git branch -D master|）， 然后把新 branch 重命名为 master。 最后做一下 \verb|git gc|。
+\item git gui 可以查看 \verb|.git| 数据库中每一次备份的文件目录。
 \end{itemize}
 
 \subsection{分支}

@@ -1,0 +1,57 @@
+% 用 cp 或 rsync 增量备份文件夹
+
+\begin{issues}
+\issueDraft
+\end{issues}
+
+
+事实上， 如果要备份一些不常改动的大文件（例如视频、电影）， 要防止 bit rot， 只需要生成一个哈希表： \verb`find . -type f -exec sha1sum {} \; | sort > sha1sum.txt`。 然后把文件夹复制粘贴到备份文件夹即可。 要更新， 可以用 rsync（同样具有对比 hash 的功能）也可以自己写一个 bash 脚本或者简单的程序做这件事情。 要检查 bitrot， 就再运行一次输出到 \verb|sha1sum2.txt|， 然后用 \verb|git diff --no-index| 对比两个文件即可。
+
+最后， 至于网络备份， 国内的主流网盘基本都支持秒传功能。 所谓秒传就是通过检测文件 hash 和大小等来避免重复上传任何人已经传过的文件。 所以如果同样的文件夹用网盘第二次备份， 那么所有文件都将秒传。 一些网盘（如某度）还支持删除重复文件的功能。 不过为了防和谐， 可以自己写一个程序把文件的少数一些 bit 就地打乱， 以及把文件名 flit 一下等等， 等传完再就地复原， 这样就完美了。
+
+\subsection{用 hash 和 cp 备份}
+
+\addTODO{未完成！ 该脚本已被 backup.py 代替！}
+\begin{lstlisting}[language=bash]
+#! /usr/bin/bash
+
+dest="$1" # backup directory
+dest=${dest%/}
+
+for repo in */ ; do
+  repo=${repo%/}
+  if ! [ -f "$repo/sha1sum.txt" ]; then
+    continue
+  fi
+
+  printf "\n\n\n===============================\n"
+  echo "$repo"
+  printf "===============================\n\n\n"
+
+  if [ -d "$dest/${repo}.backup" ]; then
+    echo "$dest/${repo}.backup folder exists! skip!" 1>&2
+    continue
+  fi
+
+  if ! [ -s "$repo/sha1sum.txt" ]; then
+    echo "sha1sum.txt is empty! hasing..." 1>&2
+    cd $repo
+    find . -type f -exec sha1sum {} \; | sort > sha1sum.txt
+    cd - > /dev/null
+  else
+    echo "sha1sum.txt not empty! rehasing..."
+    cd $repo
+    find . -type f -exec sha1sum {} \; | sort > sha1sum-new.txt
+    cd - > /dev/null
+  fi
+
+  # # copy folder
+  # echo "copying to $dest/${repo}.backup ..."
+  # mkdir "$dest/${repo}.backup"
+  # cp -a $repo -t "$dest/${repo}.backup"
+  # # verify if needed
+  # cd "$dest/${repo}.backup"
+  # find . -type f -exec sha1sum {} \; | sort > sha1sum.txt
+  # cd - > /dev/null
+done
+\end{lstlisting}

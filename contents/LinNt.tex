@@ -1,4 +1,4 @@
-% Linux 基础笔记
+% Linux 命令笔记
 
 \subsection{基础}
 \begin{itemize}
@@ -15,6 +15,7 @@
 \item shebang 在文件第一行以 \verb`#!` 开头， 如 \verb`#!/bin/bash` （默认） 或者 \verb`#!/usr/bin/python`
 \item 命令的短选项可以合并, 例如 \verb`ls -l -h` 可以写成 \verb`ls -lh`. 有些段选项有对应的长选项， 如 \verb`ls -l` 相当于 \verb`ls --human-readable`.
 \item \verb`ls -1` 可以将文件名列成一列， \verb`ls -v` 可以按照数字的大小排序（否则是逐位排序， 如 1,10,100,2,10,200）， \verb`ls *.md` 可以只列出 md 文件
+\item \verb|stat 文件| 可以显示一些 metadata， 例如大小权限， 最后访问和修改时间等。
 \item 要区分命令的 argument 和命令选项的 argument, 后者紧跟在选项后面.
 \item 使用 Tab 键可以自动完成命令
 \item \verb`Ctrl-D` 可以关闭当前 terminal, 安装 bash-completion 软件可以让该功能更完善
@@ -28,7 +29,7 @@
 \item Ctrl+L 相当于 \verb`clear` 命令
 \item \verb`df` 用于查看磁盘空间, \verb`-h` 选项可以显示 \verb`Mb`, \verb`Gb` 等， \verb|-T| 选项可以增加显示文件系统类型.
 \item \verb`du /some/path` 用于查看指定目录中所有子文件夹的大小, \verb`-a` 选项可以显示文件夹和文件. \verb`--max-depth=N` is used to control the level of subfolders to display, \verb`-h` is for human readable file size (\verb`Mb`, \verb`Gb`, etc)
-\item \verb|du -hd 0| 用于查看当前目录的大小（不会跟随 symlink， 但是会包括 mount）。 \verb|-h| 是 human readable， \verb|-d| 是 depth
+\item \verb|du -hd 0| 用于查看当前目录的大小（不会跟随 symlink， 但是会包括 mount）。 \verb|-h| 是 human readable， \verb|-d| 是 depth。 \verb|-x| 不会计入被 mount 的文件夹。
 \item \verb`ctrl+u` 可以删除光标前面的所有内容
 \item \verb`ctrl+c` 可以放弃当前输入直接开始新的一行
 \end{itemize}
@@ -64,16 +65,36 @@
 \item \verb|dirname 相对或绝对路径/文件名或文件夹| 返回 \verb|相对或绝对路径| （最后没有 \verb|/|）。
 \item \verb`mkdir` 新建文件夹, \verb`rmdir` 删除空文件夹, \verb`rmdir -r` (recursive) 删除所包含的文件夹 (其实不用 \verb`rmdir` 用 \verb`rm` 也可以!)， \verb`-P` 选项可以一次创建多层目录
 \item \verb`dd` 命令可以直接在当前位置生成一个大小为 100 MB 的文件， 内容为随机， 还会显示写入速度
-\verb`dd if=/dev/urandom of=./dump.txt bs=1048576 count=1024` 写 1024Mb 随机文件
+\verb`dd if=/dev/urandom of=./dump.txt bs=1M count=1024` 写 1024Mb 随机文件
+\item \verb|dd conv=notrunc if=... of=文件名 bs=.. seek=第几字节 count=..|  从文件的某个字节开始修改文件（覆盖内容）。
 \item \verb`locate ???` 命令可以从数据库中寻找计算机上所有文件名包含 \verb`???` 的文件， 但刚创建的文件可能找不到
 \item \verb`sudo updatedb` 可以将刚创建的文件加到数据库中， 让 \verb`locate` 可以找到（\verb|-v| 选项显示哪些文件夹被更新）
 \item 对于整个系统， \verb`locate` 比 \verb`find` 要快得多， 因为数据库已经是 index 过的 \verb`-c` 选项可以显示匹配结果的个数， \verb`-i` 选项可以不区分大小写
 \item \verb|plocate| 是一个比较快的实现， \verb|mlocate| 是一个比较安全的实现， 命令都是 \verb|locate|， \verb|/etc/updatedb.conf| 中可以设置 \verb|updatedb| 的一些选项， 例如忽略挂载到某个目录的硬盘， 忽略 \verb|.git| 文件夹等， 忽略某些文件系统等。
 \item \verb|rename 's/老名字/新名字/' *|。 \verb|-n| 选项显示重命名的预览， 不真的重命名
 \item \verb|sudo swapoff -a| 不使用 swap file， \verb|sudo swapon -a| 恢复使用。 可能还需要在 \verb|/etc/fstab| 里面注释掉相应的行。
+\item 要改变 swap 文件的尺寸： \verb|sudo swapoff /swapfile|， \verb|sudo dd if=/dev/zero of=/swapfile bs=1M count=1024 oflag=append conv=notrunc|， \verb|sudo mkswap /swapfile|， \verb|sudo swapon /swapfile| 如果系统不允许关闭 swap， 也可以考虑用多个 swap 文件。
 \item \verb|tree| （非系统自带） 可以显示当前目录的树状图， \verb|tree -a| 也显示隐藏文件。
 \item \verb|sort| 可以排列 stdin 输入的列。 \verb|-k| 可以按列排序
+\item \verb`cmp --silent 文件1 文件2 || echo "files are different"` 可以用于比较两个文件是否相同。
 \end{itemize}
+
+\subsubsection{rsync}
+\begin{itemize}
+\item 可以用于同步和备份文件（后者很广泛）
+\item \verb|–dry-run| 可以看看哪些文件会修改
+\item 从远程传到本地： \verb|rsync -azvh 用户名@域名或IP:/路径/* 本地路径/| 其中 \verb|-v| 是 verbose， \verb|-h| 是 human readable， \verb|-z| 是在传输过程中压缩（通常只用于网络传输）
+\item 同步文件夹时， 用 \verb|源文件夹/| 不会包括 \verb|源文件夹| 本身， 而去掉斜杠就会。
+\item \verb`-a` 是 archive (包括所有子文件夹， 文件的 permission 和 symlink 都会原封不动复制)， \verb`-v` 是 verbose （显示详情）， \verb`-z` 是 zip （传输过程压缩） \verb`-h` 人可读
+\item 格式 \verb`rsync -avzh file1 file2 folder3 file4 dest_path` 其中 file1 到 file4 等文件或文件夹会自动同步到 \verb|dest_path| 文件夹中（例如生成 \verb`dest_path/file1`， \verb`dest_path/folder3`）。 如果 \verb|dest_path| 不存在， 会自动用 mkdir 生成，但只能生成一层。 file, folder 和 \verb|dest_path| 都可以是远程或者本地
+\item 若要删除目标文件夹中， 源文件夹不存在的内容， 用 \verb`--delete`。
+\item 常用的同步命令： \verb|rsync -av --delete 目录1/ 目录2/|。 完成后， 两个目录的内容将一模一样。
+\item 如果远程目录有需要 \verb`\` 的字符， 例如 \verb`\(...\)`， 需要用三次， 例如 \verb`\\\(...\\\)`。 本地的 shell 会先把 \verb`\\` 变为 \verb`\`, \verb`\(` 变为 \verb`(`
+\item 若要在每个文件传输完成之后从原来文件夹删除， 用 \verb`--remove-source-files`。 注意不会删除任何目录。  
+\item \verb|--checksum| 选项： 如果文件大小和修改时间都相同， 会用 checksum 检查它们是否真的相同。 如果不加， rsync 会直接跳过大小和修改时间都相同的同名文件。
+\item 当两个文件只有部分不同时， rsync 会用 delta-transfer algorithm， 只传输不同的部分。 \verb|--whole-file| 可以取消这个功能。
+\end{itemize}
+
 
 \subsubsection{split}
 \begin{itemize}
@@ -205,6 +226,7 @@
 连续输入这个进程 4 次， 然后用 \verb`top` 命令打开进程管理
 \item top 中的 \verb`NI` 就是 nice value
 \item 在 top 界面中用 \verb`r` (renice) 可以调整进程的 nice value （优先级，越小越优先）按 ESC 可以退出
+\item \verb|ionice| 可以调整硬盘读写的优先级。
 \item 在 top 界面中用 \verb`k` 可以杀进程，输入进程的 PID，两次回车即可
 \item \verb`pstree` 可以看到哪些进程生成了哪些子进程， 例如 shell 里面运行 .sh 文件会生成一个子进程用于运行一个新的 shell
 \item \verb`kill -STOP 进程号` 可以暂停程序
@@ -237,17 +259,6 @@
 \item \verb`get /remote/file /local/file` 可以传输某个文件到本地指定的目录和文件名， 但该目录必须存在
 \item \verb`get -r 文件夹` 可以传送整个文件夹
 \item 如果要指定端口用 \verb`sftp -oPort=xxx xxx@xxx.xxx.xxx.xxx`
-\end{itemize}
-
-\subsection{rsync}
-\begin{itemize}
-\item \verb|for ((i=275;i<=294;++i)); do rsync -zvh addis1@headnode.beocat.ksu.edu:/homes/addis1/github/FEDVR-TDSE/data/${i}/analysis/* ./${i}/analysis/; done|
-\item 格式 \verb`rsync -avzh file1 file2 folder3 file4 dest_path` 其中 file1 到 file4 等文件或文件夹会自动同步到 \verb|dest_path| 文件夹中（例如生成 \verb`dest_path/file1`， \verb`dest_path/folder3`）。 如果 \verb|dest_path| 不存在， 会自动用 mkdir 生成，但只能生成一层。 file, folder 和 \verb|dest_path| 都可以是远程或者本地
-\item \verb`-a` 是 archive (包括所有子文件夹， 文件的 permission 和 symlink)， \verb`-v` 是 verbose （显示详情）， \verb`-z` 是 zip （传输过程压缩） \verb`-h` 人可读
-\item \verb`rsync -avzh source/ dest/ --delete` 会把 dest 文件夹中多余的文件删除
-\item 如果远程目录有需要 \verb`\` 的字符， 例如 \verb`\(...\)`， 需要用三次， 例如 \verb`\\\(...\\\)`。 本地的 shell 会先把 \verb`\\` 变为 \verb`\`, \verb`\(` 变为 \verb`(`
-\item 若要在每个文件传输完成之后从原来文件夹删除， 用 \verb`--remove-source-files`
-\item 若要删除目标文件夹中， 源文件夹不存在的内容， 用 \verb`--delete`
 \end{itemize}
 
 \subsection{curl}

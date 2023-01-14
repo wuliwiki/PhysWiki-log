@@ -81,3 +81,33 @@
 \item 用 GParted 把目标分区的 UUID 随机生成新的， 避免两个分区具有一样的 UUID 发生冲突
 \item 用 \verb|grub-install /dev/sd?| 重新安装 grub， 确认目标硬盘中 \verb|/boot/grub/grub.cfg| 配置文件中所有 UUID 都是新分区的 UUID 而不是老的。 如果是老的就全部替换。
 \end{itemize}
+
+\subsection{常见文件系统}
+\subsubsection{NTFS}
+\begin{itemize}
+\item 微软专属
+\item 支持在线扩容（瞬间完成）
+\item linux 中读写巨慢
+\item 不支持 symlink， WSL 支持但在 file explorer 中用不了（据说开发者模式可以支持）
+\end{itemize}
+
+\subsubsection{exFAT}
+\begin{itemize}
+\item 不支持 symlink
+\item linux 中性能比 NTFS 要好一些
+\item 几乎不可能改变分区大小， 只能先把文件移走， 重新分区再移动回来
+\item 一般用于移动硬盘， 常用操作系统都兼容
+\end{itemize}
+
+\subsubsection{ext4}
+\begin{itemize}
+\item linux 常用的文件系统， linux 下速度快（尤其是小文件读写）
+\item 支持在线扩容（时间较长）
+\end{itemize}
+
+\subsubsection{btrfs}
+\begin{itemize}
+\item Fedora 桌面版的默认文件系统
+\item 比较现代和 fancy 的文件系统， 支持创建和恢复到某个时间点的状态。
+\item 似乎可以检测到 bitrot， 但不能恢复
+\end{itemize}

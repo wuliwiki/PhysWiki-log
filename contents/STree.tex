@@ -165,3 +165,132 @@ int query(int u, int l, int r)
 \end{lstlisting}
 
 以上就是线段树的基本操作。
+
+例题：\href{https://www.spoj.com/problems/GSS3/}{GSS 3}
+
+题目大意：
+
+给定长度为 $N$ 的数列 $A$，以及 $M$ 条指令，每条指令可能是以下两种之一：
+
+1.  \verb|1 x y|，查询区间 $[x,y]$ 中的最大连续子段和，即 $\max\limits_{x \le l \le r \le y}${$\sum\limits^r_{i=l} A[i]$}。
+
+2.  \verb|2 x y|，把 $A[x]$ 改成 $y$。
+
+对于每个查询指令，输出一个整数表示答案。
+
+
+本题因为要求最大连续子段和，首先考虑一下线段树要存什么信息。肯定要存一个最大连续子段和 $\tt tmax$。那父节点的最大连续子段和能否由子节点更新得来呢？答案是不行的，因为当父节点的最大连续子段和是横跨左右子节点的时候，不能由子节点直接更新得来。
+
+所以还需存左子节点的最大后缀和 $\tt rmax$ 以及右子节点的最大前缀和 $\tt lmax$。所以由子节点向父节点更新的最大连续子段和只有三种情况：
+
+\begin{enumerate}
+\item 左子节点的最大连续子段和 $\tt l.tmax$。
+\item 右子节点的最大连续子段和 $\tt r.tmax$。
+\item 左子节点的最大后缀和 $\tt l.rmax$ 加右子节点的最大前缀和 $\tt r.lmax$。
+\end{enumerate}
+
+所以父节点 $u$ 的最大连续子段和为：$\texttt{u.tmax = max(l.tmax, r.tmax, l.rmax + r.lmax)}$。
+
+那么父节点的最大前/后缀和能否由子节点的最大前/后缀和更新呢？还是不行，因为当父节点的最大前缀和横跨左右两个子节点的时候，不能只由单个子节点更新。
+
+所以父节点的最大前缀和有两种情况：
+
+\begin{enumerate}
+\item 左子节点的最大前缀和 $\tt l.lmax$
+\item 左子节点的和 $\sum\limits^{\tt mid}_{i = l}a_i$ 加右子节点的最大前缀和 $\tt r.lmax$。
+\end{enumerate}
+
+所以还需维护一个区间和 $\tt sum$ 用于计算当前区间的所有元素之和。
+
+后缀和同理。
+\begin{lstlisting}[language=cpp]
+const int N = 500010;
+struct Node
+{
+    int l, r, lmax, rmax, tmax, sum;
+}tr[N * 4];
+int n, m, a[N];
+
+void pushup(Node &u, Node &l, Node &r)
+{
+    u.sum = l.sum + r.sum;
+    u.lmax = max(l.lmax, l.sum + r.lmax);
+    u.rmax = max(r.rmax, r.sum + l.rmax);
+    u.tmax = max(max(l.tmax, r.tmax), l.rmax + r.lmax);
+}
+
+void pushup(int u)
+{
+    pushup(tr[u], tr[u << 1], tr[u << 1 | 1]);
+}
+\end{lstlisting}
+
+修改与建树操作较简单，着重分析一下查询操作。
+
+查询操作肯定是要返回一个区间的最大连续子段和，但是如果查询的区间横跨树中左右子节点，就需要先递归求左子节点的最大连续子段和，再递归求一下右子节点的最大连续子段和，再利用 $\tt pushup$ 操作合并答案。因为父节点的 $\tt tmax$ 不只是由左右子节点的 $\tt tmax$ 两者取最大值，还有可能横跨区间计算，所以需要分情况讨论。
+
+\begin{lstlisting}[language=cpp]
+Node find(int u, int l, int r)
+{
+    if (tr[u].l >= l && tr[u].r <= r) return tr[u];
+    else 
+    {
+        int mid = tr[u].l + tr[u].r >> 1;
+        // 查询的区间完全在树中节点对应的区间的左半边
+        if (r <= mid) return find(u << 1, l, r);    
+        // 查询的区间完全在树中节点对应的区间的右半边
+        else if (l > mid) return find(u << 1 | 1, l, r);
+        // 查询的区间在树中节点对应的区间的左右两边
+        else 
+        {
+            auto left = find(u << 1, l, r);
+            auto right = find(u << 1 | 1, l, r);
+            Node res;
+            pushup(res, left, right);
+            return res;
+        }
+    }
+}
+\end{lstlisting}
+
+以上讲的线段树的操作只涉及到了单点修改，那如果想要进行区间修改该怎么做呢？如果直接暴力修改，则单次修改的时间复杂度最坏为 $\mathcal{O}(n)$，时间复杂度太高。并且如果修改的区间后续根本没被查询，那么完全没有必要修改这些区间。
+
+可以像区间查询那样，如果树中区间已经被查询区间完全包含了，直接返回，前面证明了查询的时间复杂度为 $\mathcal{O}(\log_2 n)$，但还要在回溯之前在当前区间内加一个\textbf{延迟标记（懒标记）}：“表示当前区间已被修改，但子区间还未被更新”，只有在后续查询或者更新区间的时候，如果涉及到了这个区间，就往下面的两个子结点下传标记，并且清除当前这个区间的标记。
+
+\begin{figure}[ht]
+\centering
+\includegraphics[width=14cm]{./figures/STree_9.png}
+\caption{给 $[1, 3]$ 这个区间都加一} \label{STree_fig9}
+\end{figure}
+
+如上图，若要给 $[1, 3]$ 这个区间都加一，这个树中结点正好被查询区间完全包含，给这个节点打一个延迟标记 $\texttt{add = 1}$，并且更新这个节点的值 $\texttt{v = 14}$。
+
+\begin{figure}[ht]
+\centering
+\includegraphics[width=14cm]{./figures/STree_10.png}
+\caption{查询区间 $[1, 2]$ 的和} \label{STree_fig10}
+\end{figure}
+
+查询区间 $[1, 2]$ 的和，第一次递归到 $[1, 3]$ 这个区间的时候，发现这个区间有标记，则将标记下传到左右两个子节点（右子节点没画出来），然后更新左右两个子节点的值。
+
+所以可以很容易的写出延迟标记 $\tt pushdown$ 的代码：
+
+\begin{lstlisting}[language=cpp]
+#define lson u << 1
+#define rson u << 1 | 1
+
+void pushdown(int u)
+{
+    if (tr[u].add)  // 如果节点 u 有标记
+    {
+        tr[lson].add += tr[u].add;    // 更新左子节点的延迟标记
+        // 更新左子节点的值
+        tr[lson].sum += (1ll * tr[lson].r - tr[lson].l + 1) * tr[u].add; 
+        
+        tr[rson].add += tr[u].add;
+        tr[rson].sum += (1ll * tr[rson].r - tr[rson].l + 1) * tr[u].add;
+        
+        tr[u].add = 0;  // 清除当前结点的延迟标记
+    }
+}
+\end{lstlisting}

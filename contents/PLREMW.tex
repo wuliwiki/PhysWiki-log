@@ -9,7 +9,7 @@
 
 \begin{figure}[ht]
 \centering
-\includegraphics[width=5cm]{./figures/PLREMW_1.png}
+\includegraphics[width=5cm]{./figures/PLREMW_1.pdf}
 \caption{沿z轴传播的电磁波只有x,y分量} \label{PLREMW_fig1}
 \end{figure}
 
@@ -28,20 +28,59 @@ E_{0} \cos(kz - \omega t+\varphi_{0})\\
 \subsubsection{$\varphi_0=n\pi, n=0,\pm1,\pm2,...$:线偏振}
 \begin{figure}[ht]
 \centering
-\includegraphics[width=10cm]{./figures/PLREMW_2.png}
-\caption{线偏振} \label{PLREMW_fig2}
+\includegraphics[width=10cm]{./figures/PLREMW_2.pdf}
+\caption{线偏振。右侧图像为俯视图，下同} \label{PLREMW_fig2}
 \end{figure}
 
 \subsubsection{$\varphi_0=\frac{\pi}{2}n, n=\pm1,\pm3,\pm5,...$：圆偏振}
 \begin{figure}[ht]
 \centering
-\includegraphics[width=10cm]{./figures/PLREMW_3.png}
+\includegraphics[width=10cm]{./figures/PLREMW_3.pdf}
 \caption{圆偏振,\href{https://www.geogebra.org/m/hj6qsfdu}{一个可动的模型}（站外链接）} \label{PLREMW_fig3}
 \end{figure}
 
 \subsubsection{其余情况：椭圆偏振}
 \begin{figure}[ht]
 \centering
-\includegraphics[width=10cm]{./figures/PLREMW_4.png}
+\includegraphics[width=10cm]{./figures/PLREMW_4.pdf}
 \caption{椭圆偏振} \label{PLREMW_fig4}
 \end{figure}
+
+\subsection{附录：绘制图像的octave/matlab代码}
+\begin{lstlisting}[language=matlab]
+t=0; 
+T=1; %周期
+v=1; %波速
+phi0=pi/3; %相位差
+E0=1; %振幅
+
+w=2*pi/T;
+k=w/v;
+
+E = [];
+z=0:0.01:5;
+E(1,:)=E0*cos(k*z-w*t);
+E(2,:)=E0*cos(k*z-w*t+phi0);
+E(3,:)=z;
+
+subplot(1,2,1)
+hold on
+axis equal
+axis off
+line([0 0],[0 0],[0,5],'color','r');
+line([0 2],[0 0],[0,0],'color','r');
+line([0 0],[0 2],[0,0],'color','r');
+plot3(E(1,:),E(2,:),E(3,:),'b')
+for i=1:20:size(z,2) %绘制电场向量
+  quiver3(0,0,E(3,i),E(1,i),E(2,i),0,'b');
+end
+view(30,30)
+
+subplot(1,2,2)
+hold on
+axis equal
+axis off
+plot3(E(1,:),E(2,:),E(3,:),'b')
+view(0,90)
+
+\end{lstlisting}

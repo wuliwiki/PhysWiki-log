@@ -1,0 +1,55 @@
+% 搭建 Linux 局域网
+
+\begin{issues}
+\issueDraft
+\end{issues}
+
+\subsection{硬件}
+\begin{itemize}
+\item 交换机（managed, unmanaged）
+\item 网线（cat6， 类型需要交换机支持）
+\item 笔记本电脑
+\end{itemize}
+
+\subsection{wifi 路由器连接}
+\begin{itemize}
+\item wifi 路由器同样也支持有线连接，可以充当 switch， 还有路由器， 和 DH 什么服务器。
+\item 路由器是否会改变机器的 ip？ （如果机器太多应该会的）
+\end{itemize}
+
+\subsection{switch 连接}
+\subsubsection{用 Windows 共享网络}
+\begin{itemize}
+\item 可以用 Windows 电脑来提供网络， 例如通过 wifi 接互联网， 就再控制面板中找到 view network status and tasks， 点 Wi-Fi 2 (Wifi 名称)， 点最下面的 properties， 点 sharing 面板， 勾选 Allow other network users to connect through this computer's Internet connection， 然后在下面选中要分享的 Ethernet 网卡。 下面那个勾也可以打上（... control or disable the shared Internet connection）。 这样就成功了， 链接 switch 的所有电脑都可以上网了。
+\item 如果重启 Windows 以后， Linux 连不上， 就把上面的 share 关闭， 连 Linux， 再开一次。
+\end{itemize}
+
+\subsubsection{基本操作}
+\begin{itemize}
+\item Windows 上可以用 cmd 里面的 \verb|ipconfig| 命令来查看 ip。 Linux 上用 \verb|ifconfig|。 如果 Win 上装了 WSL， 那么 WSL 里面看到的 ip 和 cmd 里面是一样的。
+\item 每个机器可以自己设置自己的 ip 地址， 也可以从 DH 什么服务器获取设置， 一般好像不用管它。
+\item 每台机器上， 要搜索局域网中所有设备， 用 \verb|sudo arp-scan -l --interface=网卡名| 其中 \verb|网卡名| 就是 \verb|ifconfig| 里面显示的。
+\end{itemize}
+
+\subsubsection{笔记本合上盖子不作为}
+\begin{itemize}
+\item \verb|sudo vim /etc/systemd/logind.conf|， 找到所有包含 \verb|LidSwitch| 的选项， 取消注释， 值改成 \verb|ignore|
+\item 然后运行 \verb|systemctl restart systemd-logind.service| 生效。 注意系统会重新 login
+\end{itemize}
+
+
+\subsection{ssh 互通}
+\begin{itemize}
+\item 安装 \verb|openssh-server|， 设置见\upref{SSH}。 注意每个用户还是单独生成自己的密钥比较好， 否则可能连接会被拒绝。
+\end{itemize}
+
+\subsection{共享文件夹}
+Linux 详见 “Linux 创建网络文件夹（sshfs 和 NFS）\upref{NFS}”。 要把 windows 上的目录挂载到 linux， 建议用 sshfs， 好处是 windows 上无需安装任何第三方的 server， 只要 linux 能 ssh 到 windows 的 WSL1 就行。 但是 windows 重启以后可能就会需要重新连一次。
+
+Windows Server 自带 NFS， 普通 Windows 可以用第三方的 \href{https://sourceforge.net/projects/freenfs/files/latest/download}{freeNFS}
+
+\subsection{远程桌面}
+\begin{itemize}
+\item 安装向日葵， 或者 teamviewer 之类的远程桌面即可。
+\item 远程桌面对 wayland 支持一般欠佳。 较新的 ubuntu 如果用的显示服务器是 wayland， 可以退出登录， 在登录的时候选择 xorg。
+\end{itemize}
