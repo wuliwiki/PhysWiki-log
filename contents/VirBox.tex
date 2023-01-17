@@ -28,7 +28,7 @@ virtualbox-guest-x11 virtualbox-guest-dkms
 \item 如果要断网， 在 setting 里面的 Network 将 Cable Connected 取消勾选即可。
 \end{itemize}
 
-\subsection{网络}
+\subsection{用 Virtualbox 搭建局域网}\label{VirBox_sub1}
 
 \begin{itemize}
 \item 使用 Virtualbox 运行若干个 linux (ubuntu 18 lts) 系统， 并组成 LAN 网络， 以及连接 internet
@@ -41,9 +41,9 @@ virtualbox-guest-x11 virtualbox-guest-dkms
 \item 看网页上不同 network type 的表， 其中 \verb` NAT network` 满足要求， 但不能从 host 连接虚拟机， 而 \verb` bridged networking` 可以
 \item \verb` Not attached` 模式， guest 会有一张网卡， 但是没有连接 cable
 \item \verb` NAT (Network Address Translation)` 模式， 新建虚拟机默认使用这个， guest 可以连接 internet， 但是外部不能访问 guest （例如 guest 上的 web server）， 包括 host
-\item \verb` NAT network` 模式： **我需要的就是这个， 目前用得是这个** 类似于用 router 将虚拟机连起来，并连互联网， host 连不连暂时无所谓。 在选择这个之前需要在 File->Preference 菜单中的 Network 中新建一个网卡（直接按+按钮即可，无需设置）， 然后在对每个虚拟机的 \verb` NAT network` 设置里面选这个网卡。
+\item \verb` NAT network` 模式： \textbf{需要的就是这个， 目前用得是这个} 类似于用 router 将虚拟机连起来，并连互联网， host 连不连暂时无所谓。 在选择这个之前需要在 File->Preference 菜单中的 Network 中新建一个网卡（直接按+按钮即可，无需设置）， 然后在对每个虚拟机的 \verb` NAT network` 设置里面选这个网卡。
 \item 完了以后好像还要在 linux 里面设置 \verb` netplan` (ubuntu 18) 或者 \verb` ifupdown` (old ubuntu)， 可以参考\href{https://www.linux.com/tutorials/how-use-netplan-network-configuration-tool-linux/}{这里}
-\item netplan 配置文件目录为 \verb` cd /etc/netplan/`， 里面可以手动指定 ip 地址
+\item netplan 配置文件目录为 \verb` cd /etc/netplan/`， 里面可以手动指定当前机器的 ip 地址
 \item 首先备份 netplan 的配置文件 \verb` sudo cp 50-cloud-init.yaml 50-cloud-init.yaml.backup`
 \item 然后配置文件这样设置 (host 和每个 guest 给一个不同的 ip) (注意其中 \verb` enp0s3` 是 ifconfig 的连接名)
 \begin{lstlisting}[language=none]
@@ -54,8 +54,9 @@ network:
             addresses: [10.0.2.4/24]
     version: 2
 \end{lstlisting}
+\item 在桌面版的 ubuntu， 该文件由设置面板管理， 会有一行 \verb|renderer: NetworkManager|
 \item 注意 ubuntu desktop 这么做以后好像连不上 internet， 其实也没关系， 因为 virtualbox 分配的 ip 似乎完全不会变
-\item 然后用 \verb` sudo netplan try`， 然后 \verb` ifconfig` 看一下 ip 是否变为指定 ip
+\item 然后用 \verb` sudo netplan try`， 然后 \verb` ifconfig` 看一下 ip 是否变为指定 ip。 如果有什么问题， 两分钟后会自动恢复原来的设置。
 \item 使用 \verb` sudo netplan apply` 使配置生效
 \item 另外试一下 \verb` apt update` 可不可以连接外网
 \item 如果上不了外网， \verb` sudo ifconfig enp0s3 down; sudo ifconfig enp0s3 up` 重启网卡即可（如果通过 ssh 链接， 一定不能拆开使用， 否则会断开链接）。

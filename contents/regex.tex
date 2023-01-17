@@ -52,6 +52,7 @@
 \item \verb`\特殊字符` 例如 \verb`\?` 表示问号， \verb`\*` 表示星号， \verb`\\` 表示反斜杠
 \item \verb`\oN` 或 \verb`\o{N}`， 用 8 进制指定字符
 \item \verb`\xN` 或 \verb`\x{N}`， 用 16 进制指定字符
+\item 任何在 regular expression 中有特殊意义的字符都可以用 \verb`\` 变为 literal, 如 \verb`\\` 等
 \end{itemize}
 
 \subsubsection{重复匹配}
@@ -66,6 +67,14 @@
 \item 以上 quantifier 后面加 \verb|?| 可以匹配尽量短的内容， 例如 \verb|abc.+?def|
 \end{itemize}
 
+\subsubsection{Anchors}
+\begin{itemize}
+\item \verb`^` 行首
+\item \verb`$` 行末
+\item \verb`\<` 单词开头
+\item \verb`\>` 单词解为
+\end{itemize}
+
 \subsubsection{Group}
 \begin{itemize}
 \item \verb|(expr)| 可以把表达式 group 到一起并 match， 例如 \verb|abc(\d+)def| 寻找 \verb|abc\d+def| 并且 match \verb|\d+| 部分
@@ -74,9 +83,13 @@
 \item \verb`(expr1|expr2)` 匹配其中一个
 \end{itemize}
 
-
-\subsection{例子}
+\begin{example}{}
 \begin{itemize}
 \item 在 VS code 中， 要把 \verb|[链接名](网址)| 替换为 \verb|\href{网址}{链接名}|， 搜索正则表达式 \verb|\[(.*?)\]\((.*?)\)|， 替换为为 \verb|\href{$2}{$1}|。
+\item 例如 \verb`c[aeiou]+t` 可以匹配 \verb`cat`, \verb`coat` 等. 其中 \verb`[aeiou]` 代表 \verb`aeiou` 中的任意一个, \verb`+` 代表 \verb`aeiou` 可以出现多次.
+\item \verb`^M\w*` 匹配行首以 M 开头的一个单词, 包括 \verb`M`
+\item \verb`\w*m$` 匹配行末以 m 解为的一个单词, 包括 \verb`m`
+\item \verb`\<n\w*` 匹配任何以 \verb`n` 开头的单词
+\item \verb`\w*e\>` 匹配任何以 \verb`e` 结尾的单词
 \end{itemize}
-
+\end{example}

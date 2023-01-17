@@ -209,7 +209,7 @@
 \item \verb`gpasswd -a <username> <groupname>` 可以在组内新增用户
 \item \verb`vim /etc/group` 可以查看记录 group 信息的文件
 \item \verb`gpasswd -d <username> <groupname>` 可以在组中移除用户
-\item \verb`hostname` 可以显示当前主机的名字. \verb`$(hostname)` 是一个环境变量， 可以试试 \verb`echo $(hostname)`
+\item \verb`hostname` 可以显示当前主机的名字. 也可以用环境变量 \verb|HOSTNAME|
 \item \verb|sudo hostname 新名字| 可以改变 hostname
 \item 其实真正和 windows 的任务管理器相对应的是 \verb`top`, 会显示实时进程. 
 \item \verb`K <PID>` 会结束对应编号的进程. 系统的关键进程是杀不掉的.
@@ -250,6 +250,19 @@
 \item 这样也可以给文件加密得到稳定 hash： \verb`cat 文件名 | openssl enc -base64 -e -aes-256-cbc -pass pass:密码 > 加密文件名`
 \end{itemize}
 
+\subsubsection{7zip}
+\begin{itemize}
+\item 在最后用 \verb`-o/path/to/extract/` 指定输出路径
+\item 如果要解压分卷压缩， 直接 \verb`7z x 第一个文件名` 即可
+\item ubuntu 上安装用 \verb`sudo apt-get install p7zip-full`
+
+\item 将每个子文件夹中的文件分别压缩，删除原文件
+\verb`find . -type f -exec 7z a {}.7z -p密码 -sdel {} \;`
+\item 将每个子文件夹中的压缩包分别解压，删除压缩包
+\verb`find . -type f -name "*.7z" -execdir 7z x {} -p密码 \; -exec rm {} \;`
+\item 注意即使用完全一样的命令， 产生的压缩包也不是完全一样的（看 sha1sum）
+\end{itemize}
+
 \subsection{sftp}
 \begin{itemize}
 \item SFTP 其实是 ssh 的一个子功能， 通过 ssh 协议传输文件， 只要能 ssh 到某个机器， 就可以 sftp
@@ -284,11 +297,16 @@
 \item \verb|VAR=XXX| 修改环境变量（对子进程无效）
 \item \verb|export VAR=~/opt/bin:$VAR| 可以 append 某个变量（如 PATH）
 \item \verb|PWD| 是当前路径， 修改该变量相当于 \verb|cd|
-\item \verb|PATH| 是命令搜索路径， 只有这里面的目录中的执行文件才不指定路径
+\item \verb|PATH| 是命令搜索路径，多个路径之间用冒号分隔， 只有这里面的目录中的执行文件才不指定路径。 常见路径包括 \verb`/bin`, \verb`/sbin`, \verb`/usr/bin`，\verb`/usr/sbin`， 其中带 \verb`s` 的目录中的文件通常不是给普通用户调用的， 根目录的文件夹中的程序通常是用于启动或修复系统必须的， 所以普通用户用得最多的是 \verb`/usr/bin`
 \item \verb|HOME| 是用户的 \verb|~| 文件夹
+\item \verb`USER` 是当前用户名
+\item \verb`LANG` 是当前 local， 推荐使用 \verb`en_US.UTF-8`
+\item \verb`BASH` 是当前 bash 程序所在目录
+\item \verb|PWD| 是当前目录
 \item \verb|LD_LIBRARY_PATH| 是动态链接库的默认搜索地址， 见这里\upref{gppLib}。
 \item \verb|LD_RUN_PATH| 编译的链接阶段， 如果没有指定 \verb|rpath|， 就用该变量中的 path 替代\upref{gppLib}。
 \item 另外 \verb|g++| 中的 \verb|-L| 选项（make 的时候搜索静态或动态库的路径）可以用环境变量 \verb|LIBRARY_PATH| 设置， \verb|-I| 选项（搜索头文件的路径）可以用环境变量 \verb|CPATH| 设置。
+\item 在 cpp 程序中获取环境变量可以用 \verb`<cstdlib>` 中的 \verb`char* getenv(const char* env_var);`
 \end{itemize}
 
 \subsection{其他}

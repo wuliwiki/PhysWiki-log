@@ -27,11 +27,13 @@
 \begin{itemize}
 \item Network File System
 \item 安装 \verb|sudo apt-get install nfs-kernel-server|
-\item \verb|mkdir cloud|
-\item \verb|vim /etc/exports|， 添加一行 \verb|/home/mpiuser/cloud *(rw,sync,no_root_squash,no_subtree_check)|
+\item \verb|mkdir 文件夹|
+\item \verb|sudo vim /etc/exports|， 添加一行 \verb|/home/用户名/文件夹 *(rw,sync,no_root_squash,no_subtree_check)|
 \item \verb|sudo service nfs-kernel-server restart|
-\item 在其他 client 机器上， 创建相同的 \verb|cloud| 文件夹， 然后 \verb|sudo apt-get install nfs-common|
-\item 在 client 机器上， \verb|sudo mount -t nfs [host]:/home/mpiuser/cloud ~/cloud|。 其中 \verb|host| 是 ip 地址或者域名。
+\item 在其他 client 机器上， 创建相同的 \verb|文件夹| 文件夹， 然后 \verb|sudo apt-get install nfs-common|
+\item 在 client 机器上， \verb|sudo mount -t nfs [host]:/home/用户名/文件夹 ~/文件夹|。 其中 \verb|[host]| 是 ip 地址或者域名。
 \item 用 \verb|df -h| 查看是否成功。
-\item 要每次开机都自动 mount， 可以 \verb|vim /etc/fstab|， 添加一行 \verb|[host]:/home/mpiuser/cloud /home/mpiuser/cloud nfs|
+\item 要每次开机都自动 mount， 可以 \verb|sudo vim /etc/fstab|， 添加一行 \verb|[host]:/home/用户名/文件夹 /home/用户名/文件夹 nfs|
+\item 使用以上方法， symlink 可以正常使用（server 和 client 都使用 ext4 文件系统）。
+\item NFS 的默认端口是 2049
 \end{itemize}

@@ -1,0 +1,36 @@
+% Slurm 笔记
+
+\begin{issues}
+\issueDraft
+\end{issues}
+
+\subsection{使用 cpu}
+\begin{itemize}
+\item \verb` sbatch` 命令用于提交任务
+\item \verb` --mem-per-cpu=512M` 指定内存
+\item \verb` --time=hours:minutes:seconds` 指定时间
+\item \verb` --cpus-per-task=1`
+\item \verb` --ntasks=1`
+\item \verb` --nodes=1` 机器的数量
+\item 一个 batch script 的例子如
+\begin{lstlisting}[language=bash]
+#!/bin/sh
+srun hello.x < ./param.inp
+\end{lstlisting}
+\item 文件 IO 目录是相对于提交任务时的 \verb` pwd` 的， stdout 会自动生成 \verb` slurm-任务编号.out`
+\item \verb` kstat` 会列出所有人的所有任务
+\item \verb` kstat --me` 可以查看我正在运行的所有任务， 或者用 \verb` kstat | grep addis1` 也可以
+\item \verb` kstat | grep USER` 也可以查看某个其他用户的所有任务
+\item \verb` kstat -c` 可以看到所有用户的 cpu 使用情况
+\item \verb` scancel 任务编号` 可以取消某个任务
+\item home 文件夹有 1T 的空间
+\item 要运行， 例如
+\verb|sbatch --time=24:0:0 --mem-per-cpu=300M --cpus-per-task=10 --ntasks=1 --nodes=1 ./job.sh|
+\item 要取消， 用 \verb` scancel JOB_ID`， 要取消个人的所有任务， 用 \verb` scancel -u addis1`
+\end{itemize}
+
+\subsection{使用 GPU 节点}
+\begin{itemize}
+\item 创建 gpu interactive session \verb|srun -J srun -N 1 -n 32 -t 24:00:00 --mem=120G --partition=ksu-gen-gpu.q --gres=gpu:1 --pty bash|
+\item 使用 \verb` module load` 才能加载中 cuda 的 nvcc 和 nvprof。 详见 Environment Modules 笔记\upref{EnvMod}。
+\end{itemize}

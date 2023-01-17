@@ -7,6 +7,7 @@
 
 \subsection{新安装设置}
 \begin{itemize}
+\item 如果要安装最新版本的 Git， 见\href{https://git-scm.com/downloads}{这里}。
 \item 要设置用户名， 用 \verb|git config --global user.name "用户名"|.
 \item 要设置 commit 邮箱， 用 \verb|git config --global user.email "邮箱"|  邮箱决定 commit 的作者。
 \item Github 的 token 是命令行使用的密码， 和 GitHub 的密码是不同的， GitHub 创建 token 参考\href{https://docs.github.com/en/github/authenticating-to-github/keeping-your-account-and-data-secure/creating-a-personal-access-token#creating-a-token}{这里}。
@@ -95,7 +96,7 @@
 \item 注意 \verb|git gc| 用的内存可能会非常多（尤其是 repo 很大的时候）， 可以用（按需要调节， 容量单位有 \verb|k,m,g|）。 实测中，100GB 的数据库可以只用 4G 服务器内存和 4G 缓存， 限制单线程，以及 50k window 完成。
 \begin{lstlisting}[language=bash]
 git config --global pack.windowMemory 20m # 限制内存大小
-git config --global pack.packSizeLimit 20m # 限制 pack 文件大小（默认单个文件）
+git config --global pack.packSizeLimit 1g # 限制 pack 文件大小（默认单个文件）
 git config --global pack.threads 2 # 使用多少线程压缩 pack
 \end{lstlisting}
 \item 如果一个 repo 中的 pack 文件太大， 可以用 \verb|git repack --max-pack-size=1g -a| 拆分成 1GB 的小块。 这和先设置 \verb|pack.packSizeLimit| 效果是一样的。

@@ -6,7 +6,7 @@
 
 \subsection{密码连接 ssh}
 \begin{itemize}
-\item ssh 连接服务器： \verb|ssh name@111.222.333.444 -p 端口号|
+\item ssh 连接服务器： \verb|ssh name@111.222.333.444 -p 端口号|。 不指定端口的话默认 22
 \item \verb`sudo apt-get install ssh` 会安装 ssh server 用于远程控制。 确保 port22 是打开的
 \item 检查本机 ip 地址， \verb`hostname -I`, 或者 \verb`ip addr show`， 或者 \verb|ifconfig|.
 \item 服务器端安装 openssh-server \verb`sudo apt install openssh-server`
@@ -18,6 +18,7 @@
 
 \subsection{putty}
 \begin{itemize}
+\item 用于在 windows 上用 ssh 连接 linux 电脑
 \item 不能自动储存密码， 用升级版： kitty! 更高级： MobaXterm!
 \item 注意网络断开会丢失未保存的信息， 确保电脑不要自动待机， 离开前千万要保存!
 \item putty 是其他电脑上的远程控制程序。
@@ -42,7 +43,7 @@
 \item 要先登录 host， 要把 public key （只有一行内容） append 到服务器中的 \verb`~/.ssh/authorized_keys` 文件。
 \item 如果使用 \verb|sudo ssh|， 那么设置文件就在 \verb|/root/.ssh/| 下， 可以把 \verb|~/.ssh| 中的文件 copy 过去。
 \item 一般来说如果用 key 的话 server 的 \verb`/etc/ssh/sshd_config` 是不需要设置的
-\item 其中 append 的操作也可以用 \verb`ssh-copy-id -i /path/to/key.pub SERVERNAME` 会更方便， 如果事先允许密码登录的话
+\item 其中 append 的操作也可以用 \verb`ssh-copy-id -i /path/to/key.pub SERVERNAME` 会更方便， 如果事先允许密码登录的话。 省略 \verb|-i /path/to/key.pub| 的话默认就用 \verb|~/.ssh/id_rsa.pub|
 \item ssh 用 key 来登录的原理大概就是， client 告诉 server 我要用哪个用户名登录， server 去用户名的 \verb`~/.ssh/authorized_keys` 中寻找 public key， 然后用其加密一个随机字符串给 client， client 用 private key 解密， 将字符串的 MD5 hash 发给 server， server 一对照 MD5 如果吻合， 开始连接。  (其实我猜 host 还需要发送一个密钥用于 ssh 通讯， 要不然 client 发给 host 的东西就无法加密了)
 \item 现在 ssh 的话应该就不需要密码了
 \item 如果想不写 ip 而是写名字， 那么在 \verb|/etc/hosts| 中添加 ip 和对应的名字即可。
@@ -95,7 +96,7 @@ Host server2
 
 \subsection{端口转发}
 \begin{itemize}
-\item 现在就可以测试 -L 转发了， 格式为 \verb`ssh -L 本地端口号:目标地址:目标端口号 用户名@转发服务器` 其中 \verb`本地端口号` 永远都是输入这个命令的机器的端口号。 \verb`目标地址` 既可以和 \verb`转发服务器` 相同也可以不同。 其实这个命令就是在通常的 \verb`ssh` 命令中增加了 \verb`-L 本地端口号:目标地址:目标端口号`
+\item 现在就可以测试 \verb|-L| 转发了， 格式为 \verb`ssh -L 本地端口号:目标地址:目标端口号 用户名@转发服务器` 其中 \verb`本地端口号` 永远都是输入这个命令的机器的端口号。 \verb`目标地址` 既可以和 \verb`转发服务器` 相同也可以不同。 其实这个命令就是在通常的 \verb`ssh` 命令中增加了 \verb`-L 本地端口号:目标地址:目标端口号`
 \item 可以先在本地做实验， 确定本地装了 open-ssh server 和 client， 确保可以 \verb`ssh localhost`
 \item 输入 \verb`ssh -L 6600:120.79.212.166:80 localhost`， 这样就把本地端口 6600 连接到了 wuli.wiki 的 80 端口
 \item 执行以后， 结果相当于 \verb`ssh localhost`， 如果这个 session 结束， 那么转发也就结束了。
@@ -106,6 +107,7 @@ Host server2
 \item 再打开另一个 shell， 执行 \verb`ssh -p 6500 root@localhost`， 其中 \verb`-p` 选项用于指定端口， 就相当于先 ssh 到中转服务器再 ssh 到 wuli.wiki
 
 \item 转发后， 如果要使用 git， 可以用 \verb`:` 指定端口， 注意前面要加上 \verb`ssh://`。  例如 \verb`git clone ssh://root@localhost:6500/root/github/PhysWikiScan`
+\end{itemize}
 
 \subsubsection{Remote Forwarding}
 \begin{itemize}

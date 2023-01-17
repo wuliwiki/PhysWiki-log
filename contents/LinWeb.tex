@@ -5,10 +5,17 @@
 \end{issues}
 
 \begin{itemize}
+\item VirtualBox 虚拟机搭建局域网见： \autoref{VirBox_sub1}~\upref{VirBox}
 \item \verb`sudo ifconfig` 显示网卡信息， 以及 ip 地址 （inet addr）
+\item \verb|ip -4 addr show scope global| 也可以（有什么不同？）
+\item 不同的网卡有不同的 ip 地址， 通常有一张网卡是连互联网的， 其他网卡都是局域网， 甚至虚拟网卡（例如虚拟机， docker 等）。 每个局域网的 ip 范围由子网掩码决定。 对这些不同的局域网来说， 当前电脑就是一个\textbf{网关（gateway）}把它们连起来。
+\item 可以想象每张网卡上都长了很多\textbf{端口（port）}， 用于给不同的应用收发各种消息。 例如 http 协议的默认端口是 80， https 是 443
+\item 要找到公网网卡， 用 \verb`ip route show | grep default` 找默认网卡， 默认网卡几乎肯定是公网网卡。
 \item \verb`ifconfig 网卡名 up` 启动网卡， \verb`ifconfig 网卡名 down` 关闭网卡， 可以用这两个命令重启网卡
 \item \verb`ifoncig` 用于查看网络相关信息： 其中 \verb`Link encap:Ethernet` 表示在使用 Ethernet， \verb`HWaddr` 是硬件地址， 即 MAC 地址， \verb`inet addr` 本机的 IP 地址， \verb`Bcast` broadcast 地址， \verb`Mask` 掩码， \verb`UP` 表示 Ethernet 的 kernel module 被加载， \verb`BROADCAST` 支持 broadcasting， 从 DHCP 获取 IP 的必要条件， \verb`RUNNING` 准备好传输数据， \verb`mtu` (Maximum Transmission Unit)， 就是 packet 的最大尺寸
 \item \verb`netplan` 是 ubuntu 18.04 的默认管理网络设置的程序， 比如设置 hdcp， 静态 ip， 掩码， 网关等， 设置完成以后用 \verb`sudo netplan apply` 可以生效。 但有时候还需要重启网卡才能成功。
+\item DHCP 的默认地址段是 100 到 149。 HDCP 开启的时候也仍然可以用 netplan 设置静态 ip， 但要避开 100 到 149。
+\item 如果 \verb|ip -4 addr show scope global| 返回的 \verb|valid_lft| 和 \verb|preferred_lft| 不是 \verb|forever|， 
 \item \verb`sudo hpclient` 显示 ip 地址
 \item \verb`sudo /etc/init.d/networking restart` 重启网络服务 
 \item 要从某个网址下载文件， 只需安装 wget 软件即可， 使用方法如 \verb`wget http://...` 文件会下载到当前文件夹
@@ -17,6 +24,7 @@
 \item 如果连不上网， 可以参考\href{https://upcloud.com/community/tutorials/troubleshoot-network-connectivity-linux-server/}{这篇文章}的步骤调试
 \item 如果想 ping 某个端口， 用 \verb|telnet IP 端口号|
 \item 如果想获得某个 ip 的子网掩码， 用 \verb`whois 66.220.156.68 | grep CIDR` 输出如 \verb|CIDR: 66.220.144.0/20|
+\item \verb|traceroute 域名或者ip| 可以查看从当前机器出发到某个机器所经过的网关的 ip （有些会隐藏）。 例如局域网里面的某台机器 traceroute 到外网的某个网址， 那么第一条显示的是当前局域网的网关（用于该局域网的网卡）的 ip， 如果该网关仍然没有处于公网， 那么第二条会显示第一条中网关所在的另一个局域网的网关的 ip…… 直到公网 ip， 然后各种互联网上的公网 ip， 最终达到网址的服务器的 ip。 注意每条中只会显示进入某个机器所用网卡的 ip， 不会显示出去时所用网卡的 ip。
 \end{itemize}
 
 \subsection{iptables}
@@ -24,7 +32,7 @@
 \item 参考 \href{https://www.tecmint.com/linux-iptables-firewall-rules-examples-commands/}{25 Useful IPtable Firewall Rules Every Linux Administrator Should Know}。
 \item \verb|iptables| 是一个命令行防火墙， 它不是一个 service 而是个命令， 所以不能 turn on/off。
 \item 但是可以关闭 ufw 服务： \verb|sudo ufw status|， \verb|sudo ufw disable|， \verb|sudo ufw enable| （其实我需要的只是 disable）
-\item table 的种类有 \verb|FILTER|， \verb|NAT|， \verb|MANGLE|， 每种又有不同的 chain， 例如 \verb|INPUT|， \verb|OUTPUT|， \verb|FORWARD|,  \verb|PREROUTING|， \verb|POSTROUTING| 等。
+\item table 的种类有 \verb|FILTER|， \verb|NAT|， \verb|MANGLE|， 每种又有不同的 \textbf{chain}， 例如 \verb|INPUT|， \verb|OUTPUT|， \verb|FORWARD|,  \verb|PREROUTING|， \verb|POSTROUTING| 等。
 \item 查看所有防火墙规则 \verb|iptables -L -n -v|
 \item 查看某个 table 的规则用 \verb|-t|， 如 \verb|iptables -t nat -L -v -n|
 \item 屏蔽某个 ip： \verb|iptables -A INPUT -s xxx.xxx.xxx.xxx -j DROP|
@@ -34,9 +42,13 @@
 \item 允许一个 INPUT 端口：  \verb|iptables -A INPUT  -p tcp --dport xxx -j ACCEPT|
 \item 允许多个 INPUT 端口 \verb|iptables -A INPUT  -p tcp -m multiport --dports 22,80,443 -j ACCEPT|
 \item 允许多个 OUTPUT 端口 \verb|iptables -A OUTPUT -p tcp -m multiport --sports 22,80,443 -j ACCEPT|
-\item 屏蔽 facebook： \verb|host facebook.com|， \verb`whois 66.220.156.68 | grep CIDR`， \verb|iptables -A OUTPUT -p tcp -d 66.220.144.0/20 -j DROP|
-\item Port Forwarding： \verb|iptables -t nat -A PREROUTING -i eth0 -p tcp --dport 25 -j REDIRECT --to-port 2525| 就是 network interface eth0, from port 25 to port 2525
+\item 屏蔽 facebook： \verb|host facebook.com|， \verb`whois 66.220.156.68 | grep CIDR`， 例如得到 \verb|66.220.144.0/20|， 那么 \verb|iptables -A OUTPUT -p tcp -d 66.220.144.0/20 -j DROP|
+\item Port Forwarding： \verb|iptables -t nat -A PREROUTING -i eth0 -p tcp --dport 25 -j REDIRECT --to-port 2525| 就是网卡 eth0, 从端口 25 到端口 2525
 \item 屏蔽某个 mac 地址 \verb|iptables -A INPUT -m mac --mac-source 00:00:00:00:00:00 -j DROP|
+\end{itemize}
+
+\begin{itemize}
+\item 另外参考一个\href{https://www.digitalocean.com/community/tutorials/how-to-forward-ports-through-a-linux-gateway-with-iptables}{具体教程}， 讲解如何设置网关（文章中称为防火墙）的两个网卡间的 port forwarding 可以让外网访问内网的 nginx 服务器。 
 \end{itemize}
 
 \subsection{NAT}
