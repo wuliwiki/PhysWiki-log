@@ -24,16 +24,28 @@
 \end{itemize}
 
 \subsection{使用 NFS}
+\subsubsection{服务器端}
 \begin{itemize}
 \item Network File System
 \item 安装 \verb|sudo apt-get install nfs-kernel-server|
 \item \verb|mkdir 文件夹|
 \item \verb|sudo vim /etc/exports|， 添加一行 \verb|/home/用户名/文件夹 *(rw,sync,no_root_squash,no_subtree_check)|
 \item \verb|sudo service nfs-kernel-server restart|
+\item \verb|nfsstat –s| 可以检查 nfs 的信息， 包括 nfs 版本（v1 到 v4） 等
+\end{itemize}
+
+\subsubsection{客户端}
+\begin{itemize}
 \item 在其他 client 机器上， 创建相同的 \verb|文件夹| 文件夹， 然后 \verb|sudo apt-get install nfs-common|
 \item 在 client 机器上， \verb|sudo mount -t nfs [host]:/home/用户名/文件夹 ~/文件夹|。 其中 \verb|[host]| 是 ip 地址或者域名。
 \item 用 \verb|df -h| 查看是否成功。
 \item 要每次开机都自动 mount， 可以 \verb|sudo vim /etc/fstab|， 添加一行 \verb|[host]:/home/用户名/文件夹 /home/用户名/文件夹 nfs|
 \item 使用以上方法， symlink 可以正常使用（server 和 client 都使用 ext4 文件系统）。
 \item NFS 的默认端口是 2049
+\item 要在 Windows 上面挂在 NFS 网盘似乎设置起来比较复杂。 可以用第三方客户端， 例如 \href{https://sourceforge.net/projects/nfsclient/}{NFSClient}。 但似乎不支持挂载， 传文件就把右边拖动到左边即可。
+\begin{figure}[ht]
+\centering
+\includegraphics[width=10cm]{./figures/NFS_1.png}
+\caption{NFSClient} \label{NFS_fig1}
+\end{figure}
 \end{itemize}

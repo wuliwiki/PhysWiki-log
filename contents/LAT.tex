@@ -1,0 +1,83 @@
+% 横波与纵波
+
+\subsection{横波 Transverse Wave}
+\begin{figure}[ht]
+\centering
+\includegraphics[width=8cm]{./figures/LAT_1.pdf}
+\caption{横波示意图，图中可见波峰与波谷。背景灰色圆圈是各微元的平衡位置。} \label{LAT_fig1}
+\end{figure}
+横波中，各微元的振动方向垂直于波的传播方向。相邻微元间受剪切力并发生剪切变形。由于空气等介质不能发生剪切变形，因此横波不能在空气中传播。
+
+\subsection{纵波 Longitudinal Wave}
+\begin{figure}[ht]
+\centering
+\includegraphics[width=8cm]{./figures/LAT_2.pdf}
+\caption{横波示意图，图中可见疏部与密部。} \label{LAT_fig2}
+\end{figure}
+纵波中，各微元的振动方向平行于波的传播方向。相邻微元间受拉力、压力力并发生拉伸、压缩变形。在空气中，“拉伸变形”、“压缩变形”可以理解为气体分子的疏散与聚集。
+
+\subsection{附录：绘制相应图形的octave/matlab代码}
+\begin{lstlisting}[language=matlab]
+%绘制横波
+T=2;
+v=4;
+t=0;
+A=0.3;
+
+w=2*pi/T;
+k=w/v;
+
+for t=0:0.1:5
+  [x y]=meshgrid(-5:5);
+  xo=x;
+  yo=y;
+  [a b] = size(x);
+
+  wave = A*cos(k*x-w*t);
+  y=y+wave;
+
+  clf
+  hold on
+  scatter(xo,yo,'MarkerEdgeColor',[0.9 0.9 0.9]);
+  scatter(x,y);
+  axis equal
+  axis([-6 6 -6 6])
+  axis off
+  hold off
+  drawnow
+  pause(0.1)
+end
+
+\end{lstlisting}
+
+\begin{lstlisting}[language=matlab]
+%绘制纵波
+T=2;
+v=5;
+t=0;
+A=0.5;
+
+w=2*pi/T;
+k=w/v;
+
+for t=0:0.1:5
+  [x y]=meshgrid(-5:5);
+  xo=x;
+  yo=y;
+  [a b] = size(x);
+
+  wave = A*cos(k*x-w*t);
+  x=x+wave;
+
+  clf
+  hold on
+  scatter(xo,yo,'MarkerEdgeColor',[0.9 0.9 0.9]);
+  scatter(x,y);
+  axis equal
+  axis([-6 6 -6 6])
+  axis off
+  hold off
+  drawnow
+  pause(0.1)
+end
+\end{lstlisting}

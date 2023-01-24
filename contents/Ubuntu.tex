@@ -1,0 +1,26 @@
+% Ubuntu 笔记
+
+\subsection{改键位}
+注意 Ubuntu （20.04 亲测， 参考\href{https://manpages.ubuntu.com/manpages/focal/en/man5/keyboard.5.html}{这里}）设置 xkb config 文件无效的！ 需要在 \verb|/etc/default/keyboard| 里面设置（同样重新 login 以后生效）。 例如添加一行 \verb|XKBOPTIONS=ctrl:swapcaps| 对调 Ctrl 和 Capslock 按键。
+
+\subsection{系统版本升级}
+\begin{itemize}
+\item 参考\href{https://www.cyberciti.biz/faq/upgrade-ubuntu-18-04-to-20-04-lts-using-command-line/#Make_a_backup}{这里}。
+\item \verb|sudo apt update && sudo apt upgrade|
+\item \verb|sudo reboot|
+\item \verb|sudo apt install update-manager-core|
+\item \verb|sudo do-release-upgrade|
+\item \verb|sudo reboot|
+\end{itemize}
+
+\subsection{取消 Alt+F5 快捷键}
+\begin{itemize}
+\item \verb|gsettings set org.gnome.desktop.wm.keybindings unmaximize "['<Super>Down']"|
+\item 参考\href{https://askubuntu.com/questions/1322105/cant-find-alt-f5-in-settings-keyboard-shortcuts}{这里}。
+\end{itemize}
+
+\subsection{笔记本合上盖子不作为}
+\begin{itemize}
+\item \verb|sudo vim /etc/systemd/logind.conf|， 找到所有包含 \verb|LidSwitch| 的选项， 取消注释， 值改成 \verb|ignore|
+\item 然后运行 \verb|systemctl restart systemd-logind.service| 生效。 注意系统会重新 login
+\end{itemize}
