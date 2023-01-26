@@ -1,6 +1,6 @@
 % 群代数与正则表示
-% 群代数|群空间|正则表示
-\pentry{群矩阵表示及实例\upref{gprep}}
+% 群代数|群空间|正则表示|类空间|类算符
+\pentry{群矩阵表示及实例\upref{gprep}，共轭与共轭类\upref{gpcon}}
 
 
 \subsection{群代数}
@@ -46,26 +46,50 @@ x * y = \displaystyle\sum_{\nu} x_\nu g_\nu \sum_{\mu} y_\mu g_\mu =
 
 注：群代数的结合律来自于群元的结合律。
 
-在群代数的视角下，不同的群空间中的矢量相乘时可以将其中的一个视作算符，例如考虑$g_\alpha x=L(g_\alpha)x=\displaystyle\sum_\nu x_\nu (g_\alpha g_\nu)$，在这里值得注意的是我们将算符定义为了左侧相乘的元素，这涉及到对于算符的两种定义，我们将在后文加以区分，在那之前，我们先默认被抽象为算符的是左侧的矢量。
+我们同样可以在这个线性空间中定义内积
+$$(g_\alpha,g_\beta)=\delta_{\alpha,\beta}$$
+
+在群代数的视角下，群元的相乘可以视作一个算符，由群元映射出的算符给出的表示被称为正则表示，由算符定义不同可以分为\textbf{左正则表示}和\textbf{右正则表示}。
 
 这样给出的算符可以验证其的确符合群乘法规则：
 
-$$L(g_\alpha)L(g_\beta)x=L(g_\alpha)g_\beta x=g_\alpha g_\beta x=L(g_\alpha g_\beta)x$$
+$$L(g_\alpha)x=g_\alpha x,R(g_\alpha)x=xg_\alpha^{-1}$$
 
-显然在给定的基下任意群元所对应的算符可以写成矩阵形式，对于自然基底下算符对应的矩阵表示称为正则表示，由于此处算符被定义为左乘所以此处给出的表示为左正则表示。
+容易验证这两种方法定义的算符均符合群的乘法规则，可以构成一个表示。
 
-在给出左正则表示的具体形式之前，我们可以先定义群空间中的内积为：$(g_\alpha,g_\beta)=\delta_{\alpha,\beta}$。
+表示矩阵的形式也极为简单，仅仅是标定了群元相乘的结果，我们以$C_3$群的左正则表示为例(以$\{e,a,a^2\}$为基)。
 
-群的左正则表示是一个$m$维表示，有：
+$$D(e)=\begin{pmatrix}
+ 1& 0& 0\\
+ 0 &1 & 0 \\
+ 0&0&1
+ \end{pmatrix},
+ D(a)=\begin{pmatrix}
+ 0&0& 1\\
+ 1&0 & 0 \\
+ 0&1&0
+ \end{pmatrix},
+ D(a^2)=\begin{pmatrix}
+ 0& 1& 0\\
+ 0 &0 & 1 \\
+ 1&0&0
+\end{pmatrix}$$
 
-$$D(g_\alpha)_{\mu\nu}=(g_\mu,g_\alpha g_\nu)=\delta_{\mu,(\alpha\nu)}$$
+\subsection{类空间}
 
-类似的可以定义右正则表示：
+\begin{definition}{}
+设集合$C_\alpha=\{s_1,s_2,...s_{n(\alpha)}\}$为群$G$的一个共轭类。
 
-$$x g_\alpha=R(g_\alpha)x=\displaystyle\sum_\nu x_\nu (g_\nu g_\alpha)$$
+那么定义群代数空间$A_G$中矢量$c^\alpha$为\textbf{类算符}。
+$$c^\alpha=\displaystyle\sum_{s_i\in C_\alpha}s_i$$
+\end{definition}
 
-这样定义后有：
+根据共轭类的定义可以看出类算符与所有群元对易。
 
-$$R(g_\alpha)R(g_\beta)x=R(g_\alpha)x g_\beta= (x g_\alpha) g_\beta=R(g_\alpha g_\beta)x$$
+完全类似上文的，可以定义：
+\begin{definition}{类空间}
+以群$G$中所有类算符构成的线性空间$V_C$：
+$$V_C=\{x=\displaystyle\sum_\alpha x_\alpha c^\alpha,x_\alpha \in \mathbb{C}\}$$
 
-这里有一个值得特别注意的地方，我们在此处定义的算符始终作用于矢量$x$上，所以第二个等号后的$g_\alpha$会紧贴着出现在$x$后边而非$g_\beta$后边。注意到这点后不难发现右正则表示也遵循着群乘法规则。
+称为群$G$的\textbf{类空间}，类空间是群空间的一个子空间。
+\end{definition}

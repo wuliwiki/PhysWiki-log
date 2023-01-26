@@ -1,0 +1,47 @@
+% Wireshark 笔记
+
+\begin{issues}
+\issueDraft
+\end{issues}
+
+\begin{figure}[ht]
+\centering
+\includegraphics[width=10cm]{./figures/wiresh_1.png}
+\caption{Wireshark 初始界面} \label{wiresh_fig1}
+\end{figure}
+
+\begin{figure}[ht]
+\centering
+\includegraphics[width=10cm]{./figures/wiresh_2.png}
+\caption{Wireshark 抓包界面} \label{wiresh_fig2}
+\end{figure}
+
+
+\begin{itemize}
+\item 参考\href{https://www.varonis.com/blog/how-to-use-wireshark}{这个教程}。
+\item Ubuntu 安装： \verb|sudo apt install wireshark|
+\item Wireshark 是一个 packet sniffer and analysis tool， 可以抓获 TCP, DNS, SSH, HTTP(S)   等协议的数据包
+\end{itemize}
+
+\subsection{TCP 包}
+一个 256 byte 的 \textbf{TCP （Transmission Control Protocol）}包的构成（数字是字节数）：
+\begin{itemize}
+\item 14 (Ether) + 20 (IP) + 20 (TCP) + 202 (TCP payload)
+\item \textbf{Ether 的构成}： 6 (MAC) * 2 + 2 (type-IPv4)
+\item \textbf{IP 的构成}： 1 (v4 固定是len=20) + 1 (diff service field) + 2 (IP 包长度 242) + 2 (ID) + 2 (frag offset) + 1 (time to live) + 1 (protocol-TCP) + 2 (header checksum) + 4 (src IP) + 4 (dst IP)
+\item \textbf{TCP 的构成}： 2 (src port) + 2 (dst port) + 4 (seq num) + 4 (ack num) + 2 (Flags/seg len/header len) + 2 (Window) + 2 (chk sum) + 2 (urgent ptr) + 0 (var length options )
+\item \textbf{TCP payload 的构成}： 202
+\end{itemize}
+
+如果是 HTTP， 那么 payload 就是 HTTP 协议
+
+\addTODO{这些在《图解》里面都有啊，真的不用自己数}
+
+\subsection{UDP 包}
+一个 222 byte 的 \textbf{UDP（User Datagram Protocol）} 包的构成：
+\begin{itemize}
+\item 14 (Ether) + 20 (IP) + 8 (UDP) + 180 (UDP payload)
+\item Ether 和 IP 同上
+\item \textbf{UDP 的构成}：2 (src port) + 2 (dst port) + 2 (len) + 2 (chk sum)
+\item \textbf{UDP payload 的构成}： 180
+\end{itemize}

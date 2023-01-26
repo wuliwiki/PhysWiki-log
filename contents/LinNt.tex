@@ -64,6 +64,7 @@
 \item \verb|readlink -f 相对路径| 可以把相对路径变为绝对路径（展开所有软链，最后没有 \verb|/|）。 \verb|相对路径|
 \item \verb|dirname 相对或绝对路径/文件名或文件夹| 返回 \verb|相对或绝对路径| （最后没有 \verb|/|）。
 \item \verb`mkdir` 新建文件夹, \verb`rmdir` 删除空文件夹, \verb`rmdir -r` (recursive) 删除所包含的文件夹 (其实不用 \verb`rmdir` 用 \verb`rm` 也可以!)， \verb`-P` 选项可以一次创建多层目录
+\item \verb|dos2unix 文件1 文件2...| 可以把 Windows 文件中的 CRLF 转换为 Linux 中的 LF 换行。 
 \item \verb`dd` 命令可以直接在当前位置生成一个大小为 100 MB 的文件， 内容为随机， 还会显示写入速度
 \verb`dd if=/dev/urandom of=./dump.txt bs=1M count=1024` 写 1024Mb 随机文件
 \item \verb|dd conv=notrunc if=... of=文件名 bs=.. seek=第几字节 count=..|  从文件的某个字节开始修改文件（覆盖内容）。
@@ -164,6 +165,7 @@
 \item \verb`echo <text>` 可以在命令行显示该文字， 也就是把命令的 params 输出到 stdout
 \item \verb`echo <text> > <filename>` 可以把文件中的文本替换 \verb`>>` 可以附加在文本最后. 如果用双引号, 甚至还可以换行.
 \item \verb`>` 是 output redirect 操作, 类似, \verb`<` 是 input redirection 操作, 可以把文档中的内容输入到命令行.
+\item 如果 \verb|>| 或者 \verb|>>| 的对象需要 \verb|sudo| 权限， 那么用 \verb|tee|， 如 \verb`echo 一些文字 | sudo tee [-a] 文件` 其中 \verb|-a| 是 append。
 \item linux 命令行有两个主要的 output, stdout 和 stderr, \verb`>` 只用于将 stdout 输出到文件, 如果也要输出 stderr 有三种办法: 1.\verb`<command> > file1.out 2 > file2.out`, 2. \verb`<command> > file.out 2 > &1`, 3. \verb`<command> &> file.out` 其中后两种将 stdout 和 stderr 输出到同一文件.
 \item 运行一个程序，指定输入输出文件， 并让 standartd err 显示在 standard out \verb`./program.x < <inputfile> > <outputfile> 2>&1` 
 \item \verb`>` 的输出文件如果不存在, 就会新建一个.
@@ -314,9 +316,13 @@
 \item \verb`alias` 可以给一个长命令设置别名， 例如 \verb|alias abcde='echo hello'|， 仅限于当前 terminal， 可以添加到 \verb|~/.bashrc| 中每次 login 都定义。
 \end{itemize}
 
-
 \begin{figure}[ht]
 \centering
 \includegraphics[width=14cm]{./figures/LinNt_1.png}
 \caption{参考 \href{https://www.howtogeek.com/}{How to geek}} \label{LinNt_fig1}
 \end{figure}
+
+\subsection{硬件}
+\begin{itemize}
+\item \verb|lscpu| 查看 CPU 信息， \verb|free| 查看内存使用情况， \verb|ifconfig| 和 \verb|ip| 查看网卡。
+\end{itemize}

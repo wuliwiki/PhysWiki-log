@@ -19,7 +19,7 @@
 \subsubsection{开机自动 mount}
 \begin{itemize}
 \item \href{https://www.linode.com/docs/networking/ssh/using-sshfs-on-linux/}{参考这里}
-\item 要重启以后自动 mount 网盘（permanent mount， 两边重启都不怕）， \textbf{一定}要先用上面 \verb`sshfs` 命令先临时 mount 一次 （否则会出错！）， 成功以后用 \verb`sudo vim /etc/fstab` 在配置文件中最后一行加入 \verb`addis@10.0.2.4:/some/path /mnt/folder  fuse.sshfs noauto,x-systemd.automount,_netdev,follow_symlinks,identityfile=/home/addis/.ssh/id_rsa,allow_other,default_permissions,reconnect 0 0`。 可能需要修改的： \verb`addis@10.0.2.4:/some/path /mnt/folder/`， \verb`/home/addis/.ssh/id_rsa`， 其他的什么意思不清楚也不用管
+\item 要重启以后自动 mount 网盘（permanent mount， 两边重启都不怕）， \textbf{一定}要先用上面 \verb`sshfs` 命令先临时 mount 一次 （否则会出错！）， 成功以后用 \verb`sudo vim /etc/fstab` 在配置文件中最后一行加入 \verb`addis@192.168.137.1:/ /mnt/Miranda fuse.sshfs x-systemd.automount,_netdev,follow_symlinks,identityfile=/home/addis/.ssh/id_rsa,allow_other,default_permissions,reconnect 0 0`， \verb`/home/addis/.ssh/id_rsa`， 其他的什么意思不清楚也不用管. Use \verb`sudo mount -a` to take effect.
 \item 现在可以试一试重启， 如果启动失败， 会进入一个安全命令行， 将 \verb`/etc/fstab` 加入的一行删掉即可。 如果成功的话， 重启后进入 \verb`/mnt/folder` 就会自动 mount
 \end{itemize}
 

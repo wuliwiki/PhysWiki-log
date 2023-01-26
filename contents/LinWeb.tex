@@ -5,9 +5,8 @@
 \end{issues}
 
 \begin{itemize}
-\item VirtualBox 虚拟机搭建局域网见： \autoref{VirBox_sub1}~\upref{VirBox}
 \item \verb`sudo ifconfig` 显示网卡信息， 以及 ip 地址 （inet addr）
-\item \verb|ip -4 addr show scope global| 也可以（有什么不同？）
+\item \verb|ip -4 addr show scope global| 也可以。 \verb|ifconfig| 现在已经有点过时了（但仍然很多人和教材在用）， 可以用 \verb|ip| 代替。
 \item 不同的网卡有不同的 ip 地址， 通常有一张网卡是连互联网的， 其他网卡都是局域网， 甚至虚拟网卡（例如虚拟机， docker 等）。 每个局域网的 ip 范围由子网掩码决定。 对这些不同的局域网来说， 当前电脑就是一个\textbf{网关（gateway）}把它们连起来。
 \item 可以想象每张网卡上都长了很多\textbf{端口（port）}， 用于给不同的应用收发各种消息。 例如 http 协议的默认端口是 80， https 是 443
 \item 要找到公网网卡， 用 \verb`ip route show | grep default` 找默认网卡， 默认网卡几乎肯定是公网网卡。
@@ -30,6 +29,7 @@
 \subsection{iptables}
 \begin{itemize}
 \item 参考 \href{https://www.tecmint.com/linux-iptables-firewall-rules-examples-commands/}{25 Useful IPtable Firewall Rules Every Linux Administrator Should Know}。
+\item 注意与 routing table 区分
 \item \verb|iptables| 是一个命令行防火墙， 它不是一个 service 而是个命令， 所以不能 turn on/off。
 \item 但是可以关闭 ufw 服务： \verb|sudo ufw status|， \verb|sudo ufw disable|， \verb|sudo ufw enable| （其实我需要的只是 disable）
 \item table 的种类有 \verb|FILTER|， \verb|NAT|， \verb|MANGLE|， 每种又有不同的 \textbf{chain}， 例如 \verb|INPUT|， \verb|OUTPUT|， \verb|FORWARD|,  \verb|PREROUTING|， \verb|POSTROUTING| 等。
@@ -55,4 +55,49 @@
 \begin{itemize}
 \item \verb|NAT| 的原理大概就是把不同内网的 ip 地址 + 端口 （socket） 映射到某个（例如学校的）公网 ip 地址和不同的端口， 并在链接建立以后把后者的端口回传给前者的端口
 \item 所以两个不同的 NAT 后面的电脑是可以 P2P 连接的， 但是首先要通过一个公网服务器建立连接， 这几乎是常规操作了（猜测 teamviewer 应该就是这个原理）
+\end{itemize}
+
+\subsection{调试工具}
+\begin{itemize}
+\item \verb|iperf| 可以用于测试网速
+\end{itemize}
+
+
+\subsection{用 Virtualbox 搭建局域网}\label{LinWeb_sub1}
+
+\begin{itemize}
+\item 使用 Virtualbox 运行若干个 linux (ubuntu 18 lts) 系统， 并组成 LAN 网络， 以及连接 internet
+\item 为了节约空间， 只需要一台 desktop 系统， 其他都是 server 系统（没有 GUI 的）即可
+\item 设置好 ssh\upref{SSH} 以后， server 开机后无需登录就可以接收 ssh 连接
+\item host 表示运行虚拟机的 OS， guest 表示虚拟机中运行的 OS
+\item clone 虚拟机的时候选择改 mac 地址 (也可以 clone 完了以后在网络设置里面刷新 mac 地址)
+\item 克隆完后进入每个 guest 在 \verb` /etc/hostname` 修改 hostname， 重启即可
+\item 参考\href{https://www.thomas-krenn.com/en/wiki/Network_Configuration_in_VirtualBox}{这里}。
+\item 看网页上不同 network type 的表， 其中 \verb` NAT network` 满足要求， 但不能从 host 连接虚拟机， 而 \verb` bridged networking` 可以
+\item \verb` Not attached` 模式， guest 会有一张网卡， 但是没有连接 cable
+\item \verb` NAT (Network Address Translation)` 模式， 新建虚拟机默认使用这个， guest 可以连接 internet， 但是外部不能访问 guest （例如 guest 上的 web server）， 包括 host
+\item \verb` NAT network` 模式： \textbf{需要的就是这个， 目前用得是这个} 类似于用 router 将虚拟机连起来，并连互联网， host 连不连暂时无所谓。 在选择这个之前需要在 File->Preference 菜单中的 Network 中新建一个网卡（直接按+按钮即可，无需设置）， 然后在对每个虚拟机的 \verb` NAT network` 设置里面选这个网卡。
+\item 完了以后好像还要在 linux 里面设置 \verb` netplan` (ubuntu 18) 或者 \verb` ifupdown` (old ubuntu)， 可以参考\href{https://www.linux.com/tutorials/how-use-netplan-network-configuration-tool-linux/}{这里}
+\item netplan 配置文件目录为 \verb` cd /etc/netplan/`， 里面可以手动指定当前机器的 ip 地址
+\item 首先备份 netplan 的配置文件 \verb` sudo cp 50-cloud-init.yaml 50-cloud-init.yaml.backup`
+\item 然后配置文件这样设置 (host 和每个 guest 给一个不同的 ip) (注意其中 \verb` enp0s3` 是 ifconfig 的连接名)
+\begin{lstlisting}[language=none]
+network:
+    ethernets:
+        enp0s3:
+            dhcp4: false
+            addresses: [10.0.2.4/24]
+    version: 2
+\end{lstlisting}
+\item 在桌面版的 ubuntu， 该文件由设置面板管理， 会有一行 \verb|renderer: NetworkManager|
+\item 注意 ubuntu desktop 这么做以后好像连不上 internet， 其实也没关系， 因为 virtualbox 分配的 ip 似乎完全不会变
+\item 然后用 \verb` sudo netplan try`， 然后 \verb` ifconfig` 看一下 ip 是否变为指定 ip。 如果有什么问题， 两分钟后会自动恢复原来的设置。
+\item 使用 \verb` sudo netplan apply` 使配置生效
+\item 另外试一下 \verb` apt update` 可不可以连接外网
+\item 如果上不了外网， \verb` sudo ifconfig enp0s3 down; sudo ifconfig enp0s3 up` 重启网卡即可（如果通过 ssh 链接， 一定不能拆开使用， 否则会断开链接）。
+\end{itemize}
+
+\subsection{配置静态 ip 以及 routing table}
+\begin{itemize}
+\item 参考\href{https://linuxiac.com/how-to-set-static-ip-address-and-modifying-routing-table-on-linux/}{这里}。
 \end{itemize}
