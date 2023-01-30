@@ -1,0 +1,52 @@
+% YAML 笔记
+
+\begin{issues}
+\issueDraft
+\end{issues}
+
+\pentry{JSON 笔记\upref{json}}
+
+\begin{itemize}
+\item \textbf{YAML Ain't Markup Language}
+\item 许多设置文件的格式都是 yaml 的
+\item yaml 禁止 tab， 用空格缩进（数量任意）
+\item yaml 几乎和 json 一样， 有 dictionary （key-value 对）， value 也可以是别的 dictionary 或者 array （list）
+\item dic 可以写成一个 pair 一行， 也可以写成类似 json 的 \verb|{key : val, key : val}|
+\item array 的元素可以每行用一个 \verb|-| 开头， 也可以写成类似 json 的 \verb|[val, val, val]|
+\item 一个转换器见\href{https://onlineyamltools.com/convert-yaml-to-json}{这里}
+\end{itemize}
+
+一个转换例子
+\begin{lstlisting}[language=none]
+key1:
+    key1.1: val1.1
+    key1.2: val1.2
+    key1.3:
+        key1: 1
+        key2: 2
+    key1.4: {key1: 1, key2: 2}
+    key1.5:
+        - 1
+        - 2
+        - 3
+    key1.6: [1, 2, 3]
+    key1.7:
+        - a: b
+          c: d
+        - e: f
+          g: h
+\end{lstlisting}
+对应的 JSON
+\begin{lstlisting}[language=json]
+{
+  "key1": {
+    "key1.1": "val1.1",
+    "key1.2": "val1.2",
+    "key1.3": {"key1": 1, "key2": 2},
+    "key1.4": {"key1": 1, "key2": 2},
+    "key1.5": [1, 2, 3],
+    "key1.6": [1, 2, 3],
+    "key1.7": [{"a": "b", "c": "d"}, {"e": "f", "g": "h"}]
+  }
+}
+\end{lstlisting}

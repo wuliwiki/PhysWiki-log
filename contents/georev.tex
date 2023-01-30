@@ -1,0 +1,159 @@
+% 地球的公转
+
+
+众所周知，地球的赤道面（$0 ^\circ$纬度确定的平面）与黄道面（地球公转轨道确定的平面）存在倾角，因此地球呈现丰富的气候现象。本模型演示了地球绕太阳的公转，并体现了：
+\begin{itemize}
+\item 赤道面与黄道面
+\item 自转轴
+\item 晨昏线
+\item 太阳垂直入射的纬度线
+\item 若额外加入地球贴图，本模型也可以体现自转。（纯网格球体的旋转显示效果不好）
+\end{itemize}
+
+本模型仅适用于基础性定性演示。
+\begin{itemize}
+\item 太阳、地球的尺寸不正确。由于宇宙的尺寸如此之大，很难在合理范围内合乎比例地体现相对大小。
+\item 没有考虑地球公转轨道的非椭圆性
+\item 假定公转周期是365天，自转周期是1天，没有闰年
+\item 没有引入初相位对齐自转与公转
+\item 没有进动等
+\end{itemize}
+
+\subsection{地球的公转（黄道面参考系）}
+\begin{figure}[ht]
+\centering
+\includegraphics[width=8cm]{./figures/georev_1.png}
+\caption{地球的公转示意图（黄道面参考系）} \label{georev_fig1}
+\end{figure}
+
+以下是相应的octave/matlab代码：
+\begin{lstlisting}[language=matlab]
+clc
+clear
+
+function c=CIRCLE(x,y,z,r)
+  t = linspace(0,2*pi,40);
+  cx = r*cos(t)+x;
+  cy = r*sin(t)+y;
+  cz = zeros(size(t))+z;
+  c=plot3(cx,cy,cz);
+end
+
+function s = SPHERE(x,y,z,r)
+[X,Y,Z] = sphere(20);
+X = r*X+x;
+Y = r*Y+y;
+Z = r*Z+z;
+s = surf(X,Y,Z);
+set(s,'EdgeColor','none')
+end
+
+R=5;
+
+for t=linspace(0,365,100)
+%t unit in day, 0-1 is one day, 0-365 is one year.
+% 大致上，t=0,90,180,270时，分别为北半球冬至，春分，夏至，秋分
+%t的设定参考：
+%公转：范围为0-365，step为100
+%自转：范围为0-1，step为100
+%公转+自转：范围为0-365，step为365*6，需要额外的地球贴图以获得更好效果
+  clf;
+
+  hold on
+  axis equal
+  axis([-7 7 -7 7 -2 2])
+  xlabel('X')
+  ylabel('Y')
+  zlabel('Z')
+  view(0,30)
+
+  sun = SPHERE(0,0,0,0.5);  %绘制太阳
+  set(sun,'facecolor','r')
+  c1 = CIRCLE(0,0,0,5); %地球公转轨道
+  [mx my] = meshgrid(-R-2:R+2);
+  mz = zeros(size(mx));
+  s1 = surf(mx,my,mz,'edgecolor','none','facecolor','y','faceAlpha',0.3); %黄道面
+
+  ex = R*cos(2*pi/365*t);
+  ey = R*sin(2*pi/365*t);
+  earth = SPHERE(ex,ey,0,1); %绘制地球公转
+  set(earth, 'FaceColor',[0.8 0.8 1],'EdgeColor',[0.6 0.6 0.6]);
+
+  rotate(earth,[0 0 1],mod(t,1)*360,[ex ey 0]); %自转
+  rotate(earth,[0 1 0],23.5,[ex ey 0]); %自转倾角
+  l = line([ex ex],[ey ey],[-5 5]);  %绘制自转轴
+  rotate(l,[0 1 0],23.5,[ex ey 0]);
+
+  [mx my] = meshgrid(ex-2:ex+2, ey-2:ey+2);
+  mz = zeros(size(mx));
+  s2 = surf(mx,my,mz,'edgecolor','none','facecolor','r','faceAlpha',0.3);
+  %绘制赤道面
+  rotate(s2,[0 1 0],23.5,[ex ey 0]);
+
+  rc = 1.01;
+  cx = (R-rc)*ex/R;
+  cy = (R-rc)*ey/R;
+  c2 = CIRCLE(ex,ey,0,rc); %绘制直射纬度
+  rotate(c2,[0 1 0],23.5,[cx cy 0]);
+
+  c3 = CIRCLE(ex,ey,0,1.01); %绘制晨昏线
+  rotate(c3,[0 1 0],90,[ex ey 0]);
+  rotate(c3,[0 0 1],2/365*t*180,[ex ey 0]);
+  hold off
+
+  pause(0.05);
+end
+\end{lstlisting}
+
+\subsection{地球的公转（赤道面参考系）}
+\begin{figure}[ht]
+\centering
+\includegraphics[width=8cm]{./figures/georev_2.png}
+\caption{地球的公转示意图（赤道面参考系，没有跟随地球自转）} \label{georev_fig2}
+\end{figure}
+
+先定义函数
+\begin{lstlisting}[language=matlab]
+function TRANSLATE(f,x,y,z)
+  X = get(f,'XDATA');
+  Y = get(f,'YDATA');
+  Z = get(f,'ZDATA');
+  X = X+x;
+  Y = Y+y;
+  Z = Z+z;
+  set(f,'XDATA',X,'YDATA',Y,'ZDATA',Z);
+end
+
+\end{lstlisting}
+再将以下代码加入每帧的画图后（"hold off"前），即可得到赤道面参考系的地球公转。
+\begin{lstlisting}[language=matlab]
+  c4 = CIRCLE(0,0,0,5); %太阳的黄道轨迹
+  set(c4,'color',[0.8 0.8 0]);
+  rotate(c4,[0 1 0],-23.5,[0 0 0]);
+
+  [mx my] = meshgrid(-R-2:R+2); %新的黄道面（可选）
+  mz = zeros(size(mx));
+  s3 = surf(mx,my,mz,'edgecolor','none','facecolor','y','faceAlpha',0.3); %黄道面
+  rotate(s3,[0 1 0],-23.5,[0 0 0]);
+
+  rotate(sun,[0 1 0],-23.5,[ex ey 0]);
+  rotate(c1,[0 1 0],-23.5,[ex ey 0]);
+  rotate(s1,[0 1 0],-23.5,[ex ey 0]);
+  rotate(earth,[0 1 0],-23.5,[ex ey 0]);
+  rotate(l,[0 1 0],-23.5,[ex ey 0]);
+  rotate(s2,[0 1 0],-23.5,[ex ey 0]);
+  rotate(c2,[0 1 0],-23.5,[ex ey 0]);
+  rotate(c3,[0 1 0],-23.5,[ex ey 0]);
+
+  TRANSLATE(sun,-ex,-ey,0);
+  TRANSLATE(c1,-ex,-ey,0);
+  TRANSLATE(s1,-ex,-ey,0);
+  TRANSLATE(earth,-ex,-ey,0);
+  TRANSLATE(l,-ex,-ey,0);
+  TRANSLATE(s2,-ex,-ey,0);
+  TRANSLATE(c2,-ex,-ey,0);
+  TRANSLATE(c3,-ex,-ey,0);
+
+  delete(s1)%删除旧的黄道面（可选）
+\end{lstlisting}
+

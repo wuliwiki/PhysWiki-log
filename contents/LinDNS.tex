@@ -1,0 +1,34 @@
+% Linux DNS 笔记
+
+\begin{issues}
+\issueDraft
+\end{issues}
+
+\begin{itemize}
+\item 基本原理参考《30 张图解网络》系列教程
+\item \textbf{domain name system (DNS)}
+\item \verb|nslookup 域名| 可以查看用于解析域名的服务器， 在 ubuntu22.04 上会返回 \verb|127.0.0.53|。 这实际上是本机的 \verb|systemd-resolved|
+\item 操作系统会使用 \verb|/etc/resolv.conf| 文件中可以配置 linux 的 dns 服务器， 但如果用了 \verb|systemd-resolved|， 该文件实际上是一个软链， 自动生成， 不建议修改。
+\item 如果没用 \verb|resolved| 的话， 可以在该文件里面添加若干行类似 \verb|nameserver 8.8.8.8| 的设置， 其中 \verb|8.8.8.8| 是 google 提供的 DNS 服务。
+\item \verb|dig +trace +nodnssec 域名| 可以看到每一个域名服务器的 ip 和详细信息。 \verb|*.root-servers.net| 是跟域名服务器， \verb|tld| 是\textbf{顶级域名（top level domain）}服务器。 顶级域名就是 \verb|.com|， \verb|.net| 这些
+\item \verb|resolvectl query 域名| 可以获取域名以及解析的信息
+\end{itemize}
+
+\subsection{DNS record 的类型}
+\begin{itemize}
+\item \textbf{A records} map domain names to IPv4 addresses.
+\item \textbf{AAAA record} is the IPv6 equivalent of an A record
+\item \textbf{CNAME}	Redirects a domain to a different domain
+\item \textbf{MX} Provides the domain names of mail servers that receive emails on behalf of a domain
+\item \textbf{SOA} Provides important details about a DNS zone; required for every DNS zone
+\item \textbf{TXT} Provides any type of descriptive information in text format
+\end{itemize}
+
+\subsection{关于 Zone 和 SOA}
+\begin{itemize}
+\item \textbf{Zone} ：DNS zones need an SOA。 a 'zone' is an area of control over namespace. \textsl{A zone can include a single domain name, one domain and many subdomains, or many domain names.} In some cases, 'zone' is essentially equivalent with 'domain,' but this is not always true.
+\item \textbf{start of authority (SOA) record}： stores important information about a domain or \textbf{zone}
+\item A \textbf{zone file} is a plain text file stored in a DNS server that contains an actual representation of the zone and \textsl{contains all the records for every domain within the zone}.
+\item A \textbf{zone serial number} is a version number for the SOA record
+\item A DNS zone transfer is the process of sending DNS record data from a primary nameserver to a secondary nameserver.
+\end{itemize}

@@ -1,0 +1,122 @@
+% 单体算符
+% 多体系统|单体算符|二次量子化
+
+\pentry{二次量子化\upref{SecQua}}
+
+现在我们来考察多体系统量子力学的单体算符。具体而言，我们希望考察多体系统中单粒子相关的物理量，由于是可观测的物理量，我们研究的单体算符是 Fock 空间 $\mathcal{F}$ 上的幺正算符。
+
+回忆一下 Fock 空间的定义\autoref{SecQua_eq6}~\upref{SecQua}，我们知道它可以根据粒子数不同划分为多个子 Hilbert 空间的直和：
+\begin{equation}\label{oneopr_eq1}
+\mathcal{F}=\mathcal{H}_1\oplus \mathcal{H}_2\oplus \cdots
+\end{equation}
+根据我们对内积的定义，对于两个态矢量 $v_i\in \mathcal{H}_i, v_j\in \mathcal{H}_j$，当 $i\neq j$ 时 $v_i,v_j$ 的内积一定是 $0$。而我们又希望单体算符 $A^{(1)}$ 所对应的物理量由 $\bra{v}A^{(1)} \ket{v}$ 给出，这实际上告诉我们 $A^{(1)}$ 作用于 $v_i\in \mathcal{H}_i$ 后所得到的态矢量 $A^{(1)} \ket{v_i}$ 也一定属于 $\mathcal{H}_i$。因此当我们限制在每个子空间 $\mathcal{H}_i$ 上以后， $A^{(1)}$ 仍然是幺正算符。这不仅对单体算符成立，对于两体算符和 $n$ 体算符这都是成立的。
+
+在我们考察单体算符的形式定义之前，我们先来看一个最简单的例子：\textbf{粒子数算符}。
+\subsection{粒子数算符}
+设单粒子 Hilbert 空间的一组正交完备基是 $\ket{1},\ket{2},\cdots$，基于这一组基底，可以根据定义\autoref{SecQua_eq3}~\upref{SecQua}与\autoref{SecQua_eq7}~\upref{SecQua}构造多体系统的产生湮灭算符：
+\begin{equation}
+a_1,a^\dagger_1,a_2,a^\dagger_2,\cdots
+\end{equation}
+那么粒子数算符被定义为
+\begin{equation}\label{oneopr_eq2}
+\hat N=\sum_i a_i^\dagger a_i
+\end{equation}
+根据产生湮灭算符之间的对易关系，我们很容易能证明，对于玻色子系统：
+\begin{equation}
+\begin{aligned}
+&[\hat N,a_i^\dagger]_-=a_i^\dagger,\quad [\hat N,a_i]_-=-a_i\\
+&\hat N (a_1^\dagger)^{n_1} (a_2^\dagger)^{n_2}\cdots \ket{0} = (n_1+n_2+\cdots)   (a_1^\dagger)^{n_1} (a_2^\dagger)^{n_2}\cdots \ket{0} 
+\end{aligned}
+\end{equation}
+而对于费米子系统\footnote{也就是说产生湮灭算符之间满足 $[a_i,a_j^\dagger]_+=\delta_{ij}$ 的反对易关系。$[\cdot,\cdot]_+$ 符号常常也写为 $\{\cdot,\cdot\}$。}：
+\begin{equation}
+\begin{aligned}
+&[\hat N,a_i^\dagger]_+=a_i^\dagger,\quad [\hat N,a_i]_+=a_i\\
+&\hat N a_{i_1}^\dagger a_{i_2}^\dagger \cdots a_{i_n}^\dagger \ket{0}= n a_{i_1}^\dagger a_{i_2}^\dagger \cdots a_{i_n}^\dagger \ket{0},\quad i_j\neq i_k(j\neq k)
+\end{aligned}
+\end{equation}
+这也就意味着对于 $v_n\in \mathcal{H_n}$，$\hat N v_n=n v_n$。所以 Fock 空间的直和分解 \autoref{oneopr_eq1} 实际上是将整个 Hilbert 空间按照粒子数算符的本征值划分为了不同的子空间。
+
+如果我们将单粒子 Hilbert 空间的基底 $\ket{1},\ket{2},\cdots$ 切换到坐标表象下的基底 $\ket{x},\cdots$，那么产生湮灭算符与原先的产生湮灭算符之间有\autoref{SecQua_eq8}~\upref{SecQua}的等式关系。此时产生湮灭算符之间的对易关系为 $[a_{\bvec x},a_{\bvec y}^\dagger]_{-\xi}=\delta^3(\bvec x-\bvec y)$，而粒子数算符为
+\begin{equation}
+\begin{aligned}
+\hat N=\int \dd[3]{\bvec x} a^\dagger_{\bvec x} a_{\bvec x}
+\end{aligned}
+\end{equation}
+注意相比于\autoref{oneopr_eq2}，求和变为了空间积分，这是符合我们的预期的。类似地，如果切换到动量表象下，我们有 $[a_{\bvec k},a_{\bvec q}]_{-\xi}= (2\pi)^3 \delta(\bvec k-\bvec q)$，而粒子数算符为
+\begin{equation}
+\begin{aligned}
+\hat N=\int \frac{\dd[3]{\bvec p}}{(2\pi)^3} a^\dagger_{\bvec p} a_{\bvec p}
+\end{aligned}
+\end{equation}
+注意积分测度的变化。
+\subsection{单体算符的形式定义}
+当我们构造单粒子 Hilbert 空间上的物理量时，我们只需要用到 $\hat x,\ \hat p=-i\hbar \partial_x$ 这两个算符（显然它们是幺正的），利用它们可以表达哈密顿量、角动量等等，假设作用于单粒子 Hilbert 空间上的单体算符的形式为 $A^{(1)}(\hat x,\hat p)$（如果是三维空间，那括号内就包含三个反向上的坐标和动量算符）。
+
+假设单粒子 Hilbert 空间的一组正交完备基为 $\ket{1},\ket{2},\cdots$。此时单粒子 Hilbert 空间上单体算符可以表达为
+\begin{equation}
+A^{(1)}(\hat x,\hat p)=\sum_{\alpha\beta}A_{\alpha\beta} \ket{\alpha}\bra{\beta}
+\end{equation}
+其中 $A_{\alpha\beta}$ 为 $A^{(1)}$ 算符的矩阵表示。现在考察多体系统，多粒子态 $\ket{\psi_1,\cdots,\psi_N}$ 不再是 $N$ 个单粒子态的简单的张量积，因为交换对称性，我们需要仔细考虑。由于 Fock 空间可以表达为一系列多粒子态 $\ket{ijk\cdots}$ 的直和，我们只需要去考量算符 $\hat A^{(1)}$ 作用在 $\ket{\psi_1 \psi_2 \cdots\psi_N}$ 上的结果即可。我们期待单体算符 $\hat A^{(1)}$ 能够被写为
+\begin{equation}
+\hat A^{(1)}=\sum_{i} A^{(1)}(\hat x_i,\hat p_i)
+\end{equation}
+其中算符 $A^{(1)}(x_i,p_i)$ 仅仅作用于多粒子态的 $\psi_i$ 成分上。具体而言：
+\begin{equation}
+\begin{aligned}
+\bra{x_1,\cdots,x_N}\hat A^{(1)} \ket{\psi_1,\cdots,\psi_N}&=\sum_{i=1}^N A^{(1)}(\hat x_i,-i\hbar\hat\partial_{x_i})\sum_{P} \xi^P \psi_1(x_{p_1})\psi_2(x_{p_2})\cdots\\
+&=\sum_{P}\xi^P \alpha(x_{p_1})A_{\alpha\beta}^{(1)}\braket{\beta}{\psi_1}\psi_2(x_{p_2})\psi_3(x_{p_3})\cdots\\
+&\quad +\sum_P\xi^P \psi_1(x_{p_1})\alpha(x_{p_2})A_{\alpha\beta}^{(2)}\braket{\beta}{\psi_2}\psi_3(x_{p_3})\cdots\\
+&\quad +\cdots \\
+&=\sum_{\alpha\beta} A_{\alpha\beta}^{(1)}\left(\braket{\beta}{\psi_1} \braket{x_1,\cdots,x_N}{\alpha,\psi_2,\cdots,\psi_N}\right.\\
+&\left.\quad \quad\quad+\braket{\beta}{\psi_2}\braket{x_1,\cdots,x_N}{\psi_1,\alpha,\cdots,\psi_N}+\cdots\right)\\
+&=\bra{x_1,\cdots,x_N}\sum_{\alpha\beta} A_{\alpha\beta}^{(1)}a^\dagger(\alpha)a(\beta)
+\ket{\psi_1,\cdots,\psi_N}
+\end{aligned}
+\end{equation}
+最后一行利用了\autoref{SecQua_eq5}~\upref{SecQua}。上式对任意的 $x_1,\cdots,x_N,\psi_1,\cdots,\psi_N$ 都成立，这也就意味着单体算符 $A^{(1)}$ 总是可以表达为
+\begin{equation}\label{oneopr_eq3}
+\begin{aligned}
+\hat A^{(1)}=\sum_{\alpha\beta}A_{\alpha\beta}^{(1)}a^\dagger(\alpha)a(\beta)
+\end{aligned}
+\end{equation}
+这就是单体算符的形式定义。
+\subsection{动量算符、能量算符和粒子数密度算符}
+下面来举一些单体算符的例子。
+\begin{example}{粒子数算符}
+对于粒子数算符 $\hat N$，$A^{(1)}(\hat x,\hat p)=1$，因此作用于 $\ket{\psi_1,\cdots,\psi_N}$ 的本征值为 $\sum_{i=1}^N 1=N$。
+
+此时 $A_{\alpha\beta}^{(1)}=\delta_{\alpha\beta}$，根据\autoref{oneopr_eq3} 可以得到
+\begin{equation}
+\hat N=\sum_{\alpha} a^\dagger(\alpha) a(\alpha)
+\end{equation}
+
+\end{example}
+
+\begin{example}{动量算符}
+对于动量算符 $\hat{\bvec P}$，我们期待 $A^{(1)}(\hat x,\hat p)=\hat{\bvec p}$。那么在动量表象下 $A_{\bvec p\bvec q}^{(q)}=(2\pi)^3 \bvec q \delta^3(\bvec p-\bvec q)$，因此容易证明
+\begin{equation}
+\begin{aligned}
+\hat{\bvec P}=\int\frac{\dd[3]{\bvec p}}{(2\pi)^3} \int\frac{\dd[3]{\bvec q}}{(2\pi)^3} (2\pi)^3 \bvec p \delta^3(\bvec p-\bvec q)a^\dagger(\bvec p)a(\bvec q)=\int\frac{\dd[3]{\bvec p}}{(2\pi)^3} \bvec p a^\dagger(\bvec p)a(\bvec p)
+\end{aligned}
+\end{equation}
+\end{example}
+
+
+
+\begin{example}{能量算符}
+对于能量算符 $\hat H$，我们期待 $A^{(1)}(\hat x,\hat p)=\frac{1}{2m}\hat{\bvec p}^2$。同样地在动量表象下，我们有
+\begin{equation}
+\begin{aligned}
+\hat{H}=\int\frac{\dd[3]{\bvec p}}{(2\pi)^3} \frac{|\bvec p|^2}{2m} a^\dagger(\bvec p)a(\bvec p)
+\end{aligned}
+\end{equation}
+\end{example}
+
+\begin{example}{粒子数密度算符}
+如果我们希望考察多体系统在某个给定坐标 $\bvec y$ 处的粒子数密度 $\rho_{\bvec y}$，那么我们可以令 $A^{(1)}(\hat x,\hat p)=\delta^3(\hat{\bvec x}-\bvec y)$，在这样的定义下，容易得到 $\int \dd[3]{\bvec y} A^{(1)}_{\\bvec y}(\hat x,\hat p)=1$，这正好对应于粒子数算符：$\int \dd[3]{\bvec y} \rho_{\bvec y}=\hat N$，这是符合我们的期待的。因此在这样的定义下
+\begin{equation}
+\rho_{\bvec y}=a^\dagger(\bvec y)a(\bvec y)
+\end{equation}
+
+\end{example}

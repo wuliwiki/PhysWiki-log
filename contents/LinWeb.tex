@@ -5,6 +5,7 @@
 \end{issues}
 
 \begin{itemize}
+\item \href{https://itsfoss.com/basic-linux-networking-commands/}{21 个 Linux 常用网络命令}
 \item \verb`sudo ifconfig` 显示网卡信息， 以及 ip 地址 （inet addr）
 \item \verb|ip -4 addr show scope global| 也可以。 \verb|ifconfig| 现在已经有点过时了（但仍然很多人和教材在用）， 可以用 \verb|ip| 代替。
 \item 不同的网卡有不同的 ip 地址， 通常有一张网卡是连互联网的， 其他网卡都是局域网， 甚至虚拟网卡（例如虚拟机， docker 等）。 每个局域网的 ip 范围由子网掩码决定。 对这些不同的局域网来说， 当前电脑就是一个\textbf{网关（gateway）}把它们连起来。
@@ -14,7 +15,7 @@
 \item \verb`ifoncig` 用于查看网络相关信息： 其中 \verb`Link encap:Ethernet` 表示在使用 Ethernet， \verb`HWaddr` 是硬件地址， 即 MAC 地址， \verb`inet addr` 本机的 IP 地址， \verb`Bcast` broadcast 地址， \verb`Mask` 掩码， \verb`UP` 表示 Ethernet 的 kernel module 被加载， \verb`BROADCAST` 支持 broadcasting， 从 DHCP 获取 IP 的必要条件， \verb`RUNNING` 准备好传输数据， \verb`mtu` (Maximum Transmission Unit)， 就是 packet 的最大尺寸
 \item \verb`netplan` 是 ubuntu 18.04 的默认管理网络设置的程序， 比如设置 hdcp， 静态 ip， 掩码， 网关等， 设置完成以后用 \verb`sudo netplan apply` 可以生效。 但有时候还需要重启网卡才能成功。
 \item DHCP 的默认地址段是 100 到 149。 HDCP 开启的时候也仍然可以用 netplan 设置静态 ip， 但要避开 100 到 149。
-\item 如果 \verb|ip -4 addr show scope global| 返回的 \verb|valid_lft| 和 \verb|preferred_lft| 不是 \verb|forever|， 
+\item 如果 \verb|ip -4 addr show scope global| 返回的 \verb|valid_lft| 和 \verb|preferred_lft| 不是 \verb|forever|， 那（理论上）这个 ip 就可能会变化
 \item \verb`sudo hpclient` 显示 ip 地址
 \item \verb`sudo /etc/init.d/networking restart` 重启网络服务 
 \item 要从某个网址下载文件， 只需安装 wget 软件即可， 使用方法如 \verb`wget http://...` 文件会下载到当前文件夹
@@ -24,7 +25,52 @@
 \item 如果想 ping 某个端口， 用 \verb|telnet IP 端口号|
 \item 如果想获得某个 ip 的子网掩码， 用 \verb`whois 66.220.156.68 | grep CIDR` 输出如 \verb|CIDR: 66.220.144.0/20|
 \item \verb|traceroute 域名或者ip| 可以查看从当前机器出发到某个机器所经过的网关的 ip （有些会隐藏）。 例如局域网里面的某台机器 traceroute 到外网的某个网址， 那么第一条显示的是当前局域网的网关（用于该局域网的网卡）的 ip， 如果该网关仍然没有处于公网， 那么第二条会显示第一条中网关所在的另一个局域网的网关的 ip…… 直到公网 ip， 然后各种互联网上的公网 ip， 最终达到网址的服务器的 ip。 注意每条中只会显示进入某个机器所用网卡的 ip， 不会显示出去时所用网卡的 ip。
+\item \verb|cat /sys/class/net/enp5s0/speed| 可以查看以太网的连接速度（即是否是 Gigabit 在 GUI 的网络设置里面也可以看到）
+\item \verb|iperf3| 可以测试网络中两个主机之间的网速， 参考\href{https://www.cyberciti.biz/faq/how-to-test-the-network-speedthroughput-between-two-linux-servers/}{这个教程}。 不过貌似比较麻烦， 倒不如用 sftp， 一般不需要安装额外东西。
 \end{itemize}
+
+\subsection{ip}
+\verb|ip a| （或者 \verb|ip addr|） 输出的的一个例子如下：
+\begin{lstlisting}[language=none]
+1: lo: <LOOPBACK,UP,LOWER_UP> mtu 65536 qdisc noqueue state 
+UNKNOWN group default qlen 1000
+    link/loopback 00:00:00:00:00:00 brd 00:00:00:00:00:00
+    inet 127.0.0.1/8 scope host lo
+       valid_lft forever preferred_lft forever
+    inet6 ::1/128 scope host 
+       valid_lft forever preferred_lft forever
+2: enp3s0: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc
+fq_codel state UP group default qlen 1000
+    link/ether d8:bb:c1:17:da:ca brd ff:ff:ff:ff:ff:ff
+    inet 192.168.137.1/24 brd 192.168.137.255 scope global 
+noprefixroute enp3s0
+       valid_lft forever preferred_lft forever
+    inet6 fe80::dabb:c1ff:fe17:daca/64 scope link 
+       valid_lft forever preferred_lft forever
+3: wlo1: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc
+noqueue state UP group default qlen 1000
+    link/ether 14:18:c3:7f:91:85 brd ff:ff:ff:ff:ff:ff
+    altname wlp0s20f3
+    inet 10.150.61.141/17 brd 10.150.127.255 scope global 
+dynamic noprefixroute wlo1
+       valid_lft 66898sec preferred_lft 66898sec
+    inet6 fe80::e7b9:9ec8:8534:38d2/64 scope link noprefixroute 
+       valid_lft forever preferred_lft forever
+\end{lstlisting}
+\begin{itemize}
+\item 其中第一张网卡是 \verb|enp3s0|， \verb|en| 表示 ethernet， \verb|p3|， \verb|s0| 表示某些编号。
+\item 尖括号里 \verb|LOWER_UP| indicates that an Ethernet cable was plugged in and that the device is connected to the network
+\item 加括号里 \verb|LOOPBACK| 表示 loop back （例如 localhost 127.0.0.1）
+\item \verb|qlen|： default transmit queue length。
+\item \verb|inet| ipv4 地址， \verb|inet6| ipv6 地址
+\item \verb|brd| 广播（broadcast）地址
+\item \verb|mtu| maximum transmission unit （ethernet 都是 1500 字节）
+\item \verb|valid_lft|： valid life time
+\item \verb|preferred_lft|： preferred life time
+\item \verb|qdisc|： queuing discipline。 也就是排队的算法， \verb|noqueque| 是说没有队列。
+\item \verb|state| 是网卡的状态， 它的值可以是 \verb|UP, DOWN, UNKNOWN|， 如果开启以后没有连接，会显示 \verb|UNKNOWN|。
+\end{itemize}
+
 
 \subsection{iptables}
 \begin{itemize}
@@ -55,6 +101,7 @@
 \begin{itemize}
 \item \verb|NAT| 的原理大概就是把不同内网的 ip 地址 + 端口 （socket） 映射到某个（例如学校的）公网 ip 地址和不同的端口， 并在链接建立以后把后者的端口回传给前者的端口
 \item 所以两个不同的 NAT 后面的电脑是可以 P2P 连接的， 但是首先要通过一个公网服务器建立连接， 这几乎是常规操作了（猜测 teamviewer 应该就是这个原理）
+\item 具体设置见下文
 \end{itemize}
 
 \subsection{调试工具}
@@ -64,8 +111,8 @@
 
 
 \subsection{用 Virtualbox 搭建局域网}\label{LinWeb_sub1}
-
 \begin{itemize}
+\item 另见 “搭建 Linux 局域网\upref{LinLAN}”
 \item 使用 Virtualbox 运行若干个 linux (ubuntu 18 lts) 系统， 并组成 LAN 网络， 以及连接 internet
 \item 为了节约空间， 只需要一台 desktop 系统， 其他都是 server 系统（没有 GUI 的）即可
 \item 设置好 ssh\upref{SSH} 以后， server 开机后无需登录就可以接收 ssh 连接
@@ -78,26 +125,95 @@
 \item \verb` NAT (Network Address Translation)` 模式， 新建虚拟机默认使用这个， guest 可以连接 internet， 但是外部不能访问 guest （例如 guest 上的 web server）， 包括 host
 \item \verb` NAT network` 模式： \textbf{需要的就是这个， 目前用得是这个} 类似于用 router 将虚拟机连起来，并连互联网， host 连不连暂时无所谓。 在选择这个之前需要在 File->Preference 菜单中的 Network 中新建一个网卡（直接按+按钮即可，无需设置）， 然后在对每个虚拟机的 \verb` NAT network` 设置里面选这个网卡。
 \item 完了以后好像还要在 linux 里面设置 \verb` netplan` (ubuntu 18) 或者 \verb` ifupdown` (old ubuntu)， 可以参考\href{https://www.linux.com/tutorials/how-use-netplan-network-configuration-tool-linux/}{这里}
+\item 一个详细的 netplan \href{https://linuxconfig.org/netplan-network-configuration-tutorial-for-beginners}{教程}。
 \item netplan 配置文件目录为 \verb` cd /etc/netplan/`， 里面可以手动指定当前机器的 ip 地址
 \item 首先备份 netplan 的配置文件 \verb` sudo cp 50-cloud-init.yaml 50-cloud-init.yaml.backup`
 \item 然后配置文件这样设置 (host 和每个 guest 给一个不同的 ip) (注意其中 \verb` enp0s3` 是 ifconfig 的连接名)
 \begin{lstlisting}[language=none]
 network:
+    version: 2
     ethernets:
         enp0s3:
             dhcp4: false
             addresses: [10.0.2.4/24]
-    version: 2
 \end{lstlisting}
 \item 在桌面版的 ubuntu， 该文件由设置面板管理， 会有一行 \verb|renderer: NetworkManager|
 \item 注意 ubuntu desktop 这么做以后好像连不上 internet， 其实也没关系， 因为 virtualbox 分配的 ip 似乎完全不会变
-\item 然后用 \verb` sudo netplan try`， 然后 \verb` ifconfig` 看一下 ip 是否变为指定 ip。 如果有什么问题， 两分钟后会自动恢复原来的设置。
+\item 然后用 \verb` sudo netplan try`， 然后 \verb` ifconfig` 看一下 ip 是否变为指定 ip。 如果有什么问题， 两分钟后会自动恢复原来的设置。（据说恢复时有一个 bug， 并不能恢复， 需要重启才可以）
 \item 使用 \verb` sudo netplan apply` 使配置生效
 \item 另外试一下 \verb` apt update` 可不可以连接外网
 \item 如果上不了外网， \verb` sudo ifconfig enp0s3 down; sudo ifconfig enp0s3 up` 重启网卡即可（如果通过 ssh 链接， 一定不能拆开使用， 否则会断开链接）。
+\item 要搜索局域网中所有设备， 用 \verb|sudo arp-scan -l --interface=网卡名| 其中 \verb|网卡名| 就是 \verb|ifconfig| 里面显示的。
+\end{itemize}
+
+\subsection{netplan}
+\begin{itemize}
+\item 一个详细的 netplan \href{https://linuxconfig.org/netplan-network-configuration-tutorial-for-beginners}{教程}。
+\item 可以选择两个后端（netplan 设置文件中的 \verb|renderer|）： \verb|systemd-networkd| 和 \verb|NetworkManager|。 如果不指定， 默认是前者， 此时 Ubuntu 桌面右上角的网络设置中将会显示 \verb|unmanaged|。
+\item 从 Ubuntu 18.04 开始， netplan 代替了传统的配置文件 \verb|/etc/network/interfaces|， 如果要切换回后者， 见\href{https://linuxconfig.org/how-to-switch-back-networking-to-etc-network-interfaces-on-ubuntu-20-04-focal-fossa-linux}{这个教程}。
+\item netplan 的目标是让网络设置更中心化以及更简单。
+\item netplan 的三个路径（按优先级排序）：\verb|/run/netplan|，\verb|/etc/netplan|，\verb|/lib/netplan|， 一般来说默认文件是 \verb|/etc/netplan/01-network-manager-all.yaml|， 内容是
+\begin{lstlisting}[language=none]
+# Let NetworkManager manage all devices on this system
+network:
+  version: 2
+  renderer: NetworkManager
+\end{lstlisting}
+其中 \verb|renderer| 的另一个选项是 \verb|networkd|（如果不指定就默认这个）。 桌面版还是建议用 NetworkManager， 因为 GUI 网络设置就是用的这个，可以查看各种信息。
+\end{itemize}
+
+\begin{figure}[ht]
+\centering
+\includegraphics[width=6cm]{./figures/LinWeb_1.png}
+\caption{netplan 的结构} \label{LinWeb_fig1}
+\end{figure}
+
+\begin{itemize}
+\item 要指定 gateway 的话， \verb|gateway4 xxx.xxx.xxx.xxx| 已经过时了， 应该用 \verb|routes: [{to: default, via: xxx.xxx.xxx.xxx}]|。
 \end{itemize}
 
 \subsection{配置静态 ip 以及 routing table}
 \begin{itemize}
+\item 一个完整的静态 ip 示例（在 LAN 中实测可以访问外网）
+\begin{lstlisting}[language=none, caption=01-network-manager-all.yaml]
+# Let NetworkManager manage all devices on this system
+network:
+  version: 2
+  renderer: NetworkManager
+  ethernets:
+    enp5s0:
+      dhcp4: false
+      addresses: [192.168.137.183/24]
+      routes:
+        - to: default
+          via: 192.168.137.214
+      nameservers:
+        addresses: [10.130.30.52, 10.130.30.53]
+\end{lstlisting}
+\item 一般来说， \verb|nameservers| 的 ip 可以设置为常用的 \verb|8.8.8.8| 等， 但笔者的校园网禁止访问公共 DNS， 所以笔者在 LAN 的网关电脑上查到了两个校园网提供的 DNS 地址并填入。
 \item 参考\href{https://linuxiac.com/how-to-set-static-ip-address-and-modifying-routing-table-on-linux/}{这里}。
+\item 查看 ip 用 \verb|ip a| （即 \verb|ip address|）
+\item 要给某个网卡添加一个 ip， 用 \verb|sudo ip address add 192.168.137.10/255.255.255.0 dev enp3s0| （\verb|en| 表示 ethernet， \verb|p3| 表示 bus number， \verb|s10| 表示 slot number）
+\item 关闭和启动网卡 \verb|ip link set dev eth0 up|， \verb|ip link set dev eth0 down|
+\item \verb|ip route show| 或者 \verb|route -n| 可以查看路由表。 前者可以看到 DHCP 服务器的位置
+\item 要给路由表添加一条， 用 \verb|ip route add 192.168.1.0/255.255.255.0 via 192.168.1.1|
+\item 给路由表设置默认网卡， 用 \verb|ip route add default via 192.168.1.1 dev eth0|
+\item \verb|arp -a| 查看 ARP （由 ip 获取 mac 地址的协议）缓存
+\item \verb|netstat -napt| 可以查看 tcp 连接状态
+\end{itemize}
+
+
+\subsection{Ubuntu 设置 NAT}
+\begin{itemize}
+\item 比如说网关主机（Ubuntu 22.04）上有两张网卡， 一个 ethernet 连接 LAN， 一个 wifi 网卡连接外网。 要使 LAN 中的主机可以访问 internet， 需要在网关主机上设置 NAT， 参考\href{https://unix.stackexchange.com/questions/575178/sharing-wifi-internet-through-ethernet-interface}{这里}的 Setup a NAT 步骤（亲测成功）：
+\item \verb|/etc/ufw/sysctl.conf| 中注释掉 \verb|net.ipv4.ip_forward=1|.
+\item \verb|/etc/default/ufw| 中设置 \verb|DEFAULT_FORWARD_POLICY="ACCEPT"|
+\item \verb|/etc/ufw/before.rules| 中在 filter rules 之前添加如下几行：
+\begin{lstlisting}[language=none]
+*nat
+:POSTROUTING ACCEPT [0:0]
+-A POSTROUTING -o 无线网卡名 -j MASQUERADE
+COMMIT
+\end{lstlisting}
+\item \verb|sudo systemctl restart ufw|， \verb|sudo ufw enable|
 \end{itemize}
