@@ -203,3 +203,41 @@ line([B(8,1), B(5,1)],[B(8,2), B(5,2)],[B(8,3), B(5,3)],'color','r');
 line([B(8,1), B(7,1)],[B(8,2), B(7,2)],[B(8,3), B(7,3)],'color','r');
 
 \end{lstlisting}
+
+\begin{figure}[ht]
+\centering
+\includegraphics[width=8 cm]{./figures/Strain_10.png}
+\caption{简单的剪切变形} \label{Strain_fig10}
+\end{figure}
+
+另一个以点阵代替正方体的实现的octave/matlab代码：
+\begin{lstlisting}[language=matlab]
+clc
+clear
+
+function s = SHPERE(x,y,z,r)
+  [X,Y,Z] = sphere(50);
+  X = r*X+x;
+  Y = r*Y+y;
+  Z = r*Z+z;
+  s = surf(X,Y,Z);
+end
+
+u1 = @(x,y,z) 0.2*y;
+u2 = @(x,y,z) -0.05*y;
+u3 = @(x,y,z) 0;
+
+hold on
+axis equal
+
+for x = 0:3
+  for y = 0:3
+    for z = 0:3
+      a = u1(x,y,z)+x;
+      b = u2(x,y,z)+y;
+      c = u3(x,y,z)+z;
+      SPHERE(a,b,c,0.5);
+    end
+  end
+end
+\end{lstlisting}

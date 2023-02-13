@@ -11,10 +11,10 @@
 \item 不同的网卡有不同的 ip 地址， 通常有一张网卡是连互联网的， 其他网卡都是局域网， 甚至虚拟网卡（例如虚拟机， docker 等）。 每个局域网的 ip 范围由子网掩码决定。 对这些不同的局域网来说， 当前电脑就是一个\textbf{网关（gateway）}把它们连起来。
 \item 可以想象每张网卡上都长了很多\textbf{端口（port）}， 用于给不同的应用收发各种消息。 例如 http 协议的默认端口是 80， https 是 443
 \item 要找到公网网卡， 用 \verb`ip route show | grep default` 找默认网卡， 默认网卡几乎肯定是公网网卡。
-\item \verb`ifconfig 网卡名 up` 启动网卡， \verb`ifconfig 网卡名 down` 关闭网卡， 可以用这两个命令重启网卡
+\item \verb`ifconfig 网卡名 up` 启动网卡， \verb`ifconfig 网卡名 down` 关闭网卡， 可以用这两个命令重启网卡（要防止 ssh 被中断，两个命令用分号写到一行）
 \item \verb`ifoncig` 用于查看网络相关信息： 其中 \verb`Link encap:Ethernet` 表示在使用 Ethernet， \verb`HWaddr` 是硬件地址， 即 MAC 地址， \verb`inet addr` 本机的 IP 地址， \verb`Bcast` broadcast 地址， \verb`Mask` 掩码， \verb`UP` 表示 Ethernet 的 kernel module 被加载， \verb`BROADCAST` 支持 broadcasting， 从 DHCP 获取 IP 的必要条件， \verb`RUNNING` 准备好传输数据， \verb`mtu` (Maximum Transmission Unit)， 就是 packet 的最大尺寸
-\item \verb`netplan` 是 ubuntu 18.04 的默认管理网络设置的程序， 比如设置 hdcp， 静态 ip， 掩码， 网关等， 设置完成以后用 \verb`sudo netplan apply` 可以生效。 但有时候还需要重启网卡才能成功。
-\item DHCP 的默认地址段是 100 到 149。 HDCP 开启的时候也仍然可以用 netplan 设置静态 ip， 但要避开 100 到 149。
+\item \verb`netplan` 是 ubuntu 18.04 的默认管理网络设置的程序， 比如设置 DHCP， 静态 ip， 掩码， 网关等， 设置完成以后用 \verb`sudo netplan apply` 可以生效。 但有时候还需要重启网卡才能成功。
+\item DHCP 的默认地址段是 100 到 149。 DHCP 开启的时候也仍然可以用 netplan 设置静态 ip， 但要避开 100 到 149。
 \item 如果 \verb|ip -4 addr show scope global| 返回的 \verb|valid_lft| 和 \verb|preferred_lft| 不是 \verb|forever|， 那（理论上）这个 ip 就可能会变化
 \item \verb`sudo hpclient` 显示 ip 地址
 \item \verb`sudo /etc/init.d/networking restart` 重启网络服务 
@@ -25,7 +25,7 @@
 \item 如果想 ping 某个端口， 用 \verb|telnet IP 端口号|
 \item 如果想获得某个 ip 的子网掩码， 用 \verb`whois 66.220.156.68 | grep CIDR` 输出如 \verb|CIDR: 66.220.144.0/20|
 \item \verb|traceroute 域名或者ip| 可以查看从当前机器出发到某个机器所经过的网关的 ip （有些会隐藏）。 例如局域网里面的某台机器 traceroute 到外网的某个网址， 那么第一条显示的是当前局域网的网关（用于该局域网的网卡）的 ip， 如果该网关仍然没有处于公网， 那么第二条会显示第一条中网关所在的另一个局域网的网关的 ip…… 直到公网 ip， 然后各种互联网上的公网 ip， 最终达到网址的服务器的 ip。 注意每条中只会显示进入某个机器所用网卡的 ip， 不会显示出去时所用网卡的 ip。
-\item \verb|cat /sys/class/net/enp5s0/speed| 可以查看以太网的连接速度（即是否是 Gigabit 在 GUI 的网络设置里面也可以看到）
+\item \verb|cat /sys/class/net/enp5s0/speed| 可以查看以太网的连接速度（即是否是 Gigabit。 在 GUI 的网络设置里面也可以看到）
 \item \verb|iperf3| 可以测试网络中两个主机之间的网速， 参考\href{https://www.cyberciti.biz/faq/how-to-test-the-network-speedthroughput-between-two-linux-servers/}{这个教程}。 不过貌似比较麻烦， 倒不如用 sftp， 一般不需要安装额外东西。
 \end{itemize}
 
@@ -59,7 +59,7 @@ dynamic noprefixroute wlo1
 \end{lstlisting}
 \begin{itemize}
 \item 其中第一张网卡是 \verb|enp3s0|， \verb|en| 表示 ethernet， \verb|p3|， \verb|s0| 表示某些编号。
-\item 尖括号里 \verb|LOWER_UP| indicates that an Ethernet cable was plugged in and that the device is connected to the network
+\item 尖括号里 \verb|LOWER_UP| 表示网线已经插入， 已经连接到网络。
 \item 加括号里 \verb|LOOPBACK| 表示 loop back （例如 localhost 127.0.0.1）
 \item \verb|qlen|： default transmit queue length。
 \item \verb|inet| ipv4 地址， \verb|inet6| ipv6 地址
@@ -72,41 +72,42 @@ dynamic noprefixroute wlo1
 \end{itemize}
 
 
-\subsection{iptables}
+\subsection{iptables 和 ufw}
 \begin{itemize}
 \item 参考 \href{https://www.tecmint.com/linux-iptables-firewall-rules-examples-commands/}{25 Useful IPtable Firewall Rules Every Linux Administrator Should Know}。
 \item 注意与 routing table 区分
 \item \verb|iptables| 是一个命令行防火墙， 它不是一个 service 而是个命令， 所以不能 turn on/off。
-\item 但是可以关闭 ufw 服务： \verb|sudo ufw status|， \verb|sudo ufw disable|， \verb|sudo ufw enable| （其实我需要的只是 disable）
-\item table 的种类有 \verb|FILTER|， \verb|NAT|， \verb|MANGLE|， 每种又有不同的 \textbf{chain}， 例如 \verb|INPUT|， \verb|OUTPUT|， \verb|FORWARD|,  \verb|PREROUTING|， \verb|POSTROUTING| 等。
-\item 查看所有防火墙规则 \verb|iptables -L -n -v|
-\item 查看某个 table 的规则用 \verb|-t|， 如 \verb|iptables -t nat -L -v -n|
-\item 屏蔽某个 ip： \verb|iptables -A INPUT -s xxx.xxx.xxx.xxx -j DROP|
-\item 屏蔽某个 ip 的 tcp traffic： \verb|iptables -A INPUT -p tcp -s xxx.xxx.xxx.xxx -j DROP|
-\item 取消屏蔽 ip： \verb|iptables -D INPUT -s xxx.xxx.xxx.xxx -j DROP|
-\item 屏蔽一个 OUTPUT 端口： \verb|iptables -A OUTPUT -p tcp --dport xxx -j DROP|
-\item 允许一个 INPUT 端口：  \verb|iptables -A INPUT  -p tcp --dport xxx -j ACCEPT|
-\item 允许多个 INPUT 端口 \verb|iptables -A INPUT  -p tcp -m multiport --dports 22,80,443 -j ACCEPT|
-\item 允许多个 OUTPUT 端口 \verb|iptables -A OUTPUT -p tcp -m multiport --sports 22,80,443 -j ACCEPT|
-\item 屏蔽 facebook： \verb|host facebook.com|， \verb`whois 66.220.156.68 | grep CIDR`， 例如得到 \verb|66.220.144.0/20|， 那么 \verb|iptables -A OUTPUT -p tcp -d 66.220.144.0/20 -j DROP|
-\item Port Forwarding： \verb|iptables -t nat -A PREROUTING -i eth0 -p tcp --dport 25 -j REDIRECT --to-port 2525| 就是网卡 eth0, 从端口 25 到端口 2525
-\item 屏蔽某个 mac 地址 \verb|iptables -A INPUT -m mac --mac-source 00:00:00:00:00:00 -j DROP|
+\item 但是可以关闭 ufw 服务： \verb|sudo ufw status|， \verb|sudo ufw disable|（马上关闭，且关机不自动开启）， \verb|sudo ufw enable| （马上打开，且开机自动开启）。 disable 是最方便的， 但会使 NAT 失效， 所以要用 NAT 的话可以允许需要的端口而不 disable。
+\item 要重启， 用 \verb|sudo systemctl restart ufw|
+\item \textbf{table} 的种类有 \verb|FILTER|， \verb|NAT|， \verb|MANGLE|， 每种又有不同的 \textbf{chain}， 例如 \verb|INPUT|， \verb|OUTPUT|， \verb|FORWARD|,  \verb|PREROUTING|， \verb|POSTROUTING| 等。
+\item 查看所有防火墙规则 \verb|sudo iptables -L -n -v|
+\item 查看某个 table 的规则用 \verb|-t|， 如 \verb|sudo iptables -t nat -L -n -v|
+\item 屏蔽某个 ip： \verb|sudo iptables -A INPUT -s xxx.xxx.xxx.xxx -j DROP|。
+\item 其中 \verb|-A| 就是添加一个规则， 如果改成 \verb|-D| 就是删除该规则。
+\item 屏蔽某个 ip 的 tcp traffic： \verb|sudo iptables -A INPUT -p tcp -s xxx.xxx.xxx.xxx -j DROP|
+\item 屏蔽一个 OUTPUT 端口： \verb|sudo iptables -A OUTPUT -p tcp --dport xxx -j DROP|
+\item 允许一个 INPUT 端口：  \verb|sudo iptables -A INPUT  -p tcp --dport xxx -j ACCEPT|
+\item 允许多个 INPUT 端口 \verb|sudo iptables -A INPUT  -p tcp -m multiport --dports 22,80,443 -j ACCEPT|。
+\item 如果是一个范围， 就用例如 \verb|--dports 5000:5005|。
+\item 允许多个 OUTPUT 端口 \verb|sudo iptables -A OUTPUT -p tcp -m multiport --sports 22,80,443 -j ACCEPT|.
+\item 要允许所有 INPUT或OUTPUT 端口， 用 \verb|sudo iptables -A INPUT或OUTPUT -p tcp -m multiport --sports 1:65535 -j ACCEPT|。
+\item 屏蔽 facebook： \verb|host facebook.com|， \verb`whois 66.220.156.68 | grep CIDR`， 例如得到 \verb|66.220.144.0/20|， 那么 \verb|sudo iptables -A OUTPUT -p tcp -d 66.220.144.0/20 -j DROP|
+\item Port Forwarding： \verb|sudo iptables -t nat -A PREROUTING -i eth0 -p tcp --dport 25 -j REDIRECT --to-port 2525| 就是网卡 eth0, 从端口 25 到端口 2525
+\item 屏蔽某个 mac 地址 \verb|sudo iptables -A INPUT -m mac --mac-source 00:00:00:00:00:00 -j DROP|
 \end{itemize}
 
+\subsubsection{让 iptables 规则永久生效}
 \begin{itemize}
-\item 另外参考一个\href{https://www.digitalocean.com/community/tutorials/how-to-forward-ports-through-a-linux-gateway-with-iptables}{具体教程}， 讲解如何设置网关（文章中称为防火墙）的两个网卡间的 port forwarding 可以让外网访问内网的 nginx 服务器。 
-\end{itemize}
-
-\subsection{NAT}
-\begin{itemize}
-\item \verb|NAT| 的原理大概就是把不同内网的 ip 地址 + 端口 （socket） 映射到某个（例如学校的）公网 ip 地址和不同的端口， 并在链接建立以后把后者的端口回传给前者的端口
-\item 所以两个不同的 NAT 后面的电脑是可以 P2P 连接的， 但是首先要通过一个公网服务器建立连接， 这几乎是常规操作了（猜测 teamviewer 应该就是这个原理）
-\item 具体设置见下文
+\item 参考\href{https://www.cyberciti.biz/faq/how-to-save-iptables-firewall-rules-permanently-on-linux/}{这篇}。
+\item 以上对 iptables 的所有改变重启后都会抹掉。 以下介绍如何让规则永久生效。
+\item 在对 iptables 做出任何改变以前， 安装 \verb|sudo apt install iptables-persistent|。 安装过程中会把当前的所有 rule 保存到设置文件 \verb|/etc/iptables/rules.v4| 和 \verb|v6| 里面， 对应 ipv4 和 ipv6。 然后为了安全期间可以复制一个备份 \verb|rules.v4.backup|
+\item 现在修改规则以后， 用 \verb|sudo iptables-save -f /etc/iptables/rules.v4| 把修改后的规则保存到设置文件中。 这样重启以后会自动按照配置文件设置。
 \end{itemize}
 
 \subsection{调试工具}
 \begin{itemize}
 \item \verb|iperf| 可以用于测试网速
+\item \verb`sudo lsof -i -P -n | grep LISTEN` 可以查看哪些端口被占用。 \verb|lsof| 意思是 list opened files。
 \end{itemize}
 
 
@@ -191,7 +192,7 @@ network:
         addresses: [10.130.30.52, 10.130.30.53]
 \end{lstlisting}
 \item 一般来说， \verb|nameservers| 的 ip 可以设置为常用的 \verb|8.8.8.8| 等， 但笔者的校园网禁止访问公共 DNS， 所以笔者在 LAN 的网关电脑上查到了两个校园网提供的 DNS 地址并填入。
-\item 参考\href{https://linuxiac.com/how-to-set-static-ip-address-and-modifying-routing-table-on-linux/}{这里}。
+\item 参考\href{https://linuxiac.com/how-to-set-static-ip-address-and-modifying-routing-table-on-linux/}{这个教程}， 以及 “Linux DNS 笔记\upref{LinDNS}”。
 \item 查看 ip 用 \verb|ip a| （即 \verb|ip address|）
 \item 要给某个网卡添加一个 ip， 用 \verb|sudo ip address add 192.168.137.10/255.255.255.0 dev enp3s0| （\verb|en| 表示 ethernet， \verb|p3| 表示 bus number， \verb|s10| 表示 slot number）
 \item 关闭和启动网卡 \verb|ip link set dev eth0 up|， \verb|ip link set dev eth0 down|
@@ -203,8 +204,11 @@ network:
 \end{itemize}
 
 
-\subsection{Ubuntu 设置 NAT}
+\subsection{NAT}
 \begin{itemize}
+\item \verb|NAT| 的原理大概就是把不同内网的 ip 地址 + 端口 （socket） 映射到某个（例如学校的）公网 ip 地址和不同的端口， 并在链接建立以后把后者的端口回传给前者的端口
+\item 所以两个不同的 NAT 后面的电脑是可以 P2P 连接的， 但是首先要通过一个公网服务器建立连接， 这几乎是常规操作了（猜测 teamviewer 应该就是这个原理）
+\item 具体设置见下文
 \item 比如说网关主机（Ubuntu 22.04）上有两张网卡， 一个 ethernet 连接 LAN， 一个 wifi 网卡连接外网。 要使 LAN 中的主机可以访问 internet， 需要在网关主机上设置 NAT， 参考\href{https://unix.stackexchange.com/questions/575178/sharing-wifi-internet-through-ethernet-interface}{这里}的 Setup a NAT 步骤（亲测成功）：
 \item \verb|/etc/ufw/sysctl.conf| 中注释掉 \verb|net.ipv4.ip_forward=1|.
 \item \verb|/etc/default/ufw| 中设置 \verb|DEFAULT_FORWARD_POLICY="ACCEPT"|
@@ -215,5 +219,5 @@ network:
 -A POSTROUTING -o 无线网卡名 -j MASQUERADE
 COMMIT
 \end{lstlisting}
-\item \verb|sudo systemctl restart ufw|， \verb|sudo ufw enable|
+\item \verb|sudo systemctl restart ufw|， \verb|sudo ufw enable|。 注意如果 disable 的话， 就访问不了外网了。
 \end{itemize}

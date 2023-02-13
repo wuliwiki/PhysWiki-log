@@ -1,0 +1,57 @@
+% 内网穿透笔记
+
+\begin{issues}
+\issueDraft
+\end{issues}
+
+英文叫做 NAT Penetration， 好像也叫 ingress as a service
+
+\subsection{自己搭建}
+FRP 是最著名的穿透软件， 可以自己在服务器上面安装。 \href{https://github.com/fatedier/frp}{GitHub 主页}。
+frp is a fast \textbf{reverse proxy} to help you expose a local server behind a NAT or firewall to the Internet.
+
+README.md 中 ssh tunnel 的例子：
+\begin{itemize}
+\item A 是有公共 ip 的服务器（reverse proxy）， B 是防火墙后面的服务器。
+\item 下载 release 压缩包， \verb|fprs| 和 \verb|fprs.ini| （\verb|s| 表示 server）上传到服务器端， \verb|fprc| 和 \verb|fprc.ini| （\verb|s| 表示 client）
+\item 映射 ssh 的例子： 服务器端设置文件：
+\begin{lstlisting}[language=none,caption=fprs.ini]
+[common]
+bind_port = fpr使用的端口
+\end{lstlisting}
+\item A 上启动服务端 \verb|./frps -c ./frps.ini|
+\item B 上设置文件：
+\begin{lstlisting}[language=none,caption=fprc.ini]
+[common]
+server_addr = 公网ip或者域名
+server_port = fpr使用的端口
+
+[映射名]
+type = tcp或udp
+local_ip = 127.0.0.1
+local_port = B的端口
+remote_port = A的端口
+\end{lstlisting}
+\item B 上启动 \verb|./frpc -c ./frpc.ini|
+\item 要开机启动， 可以设置 systemd\upref{systmd}
+\item 现在第三个机器上， 用 \verb|ssh 用户名@公网ip或者域名 -p A的端口| 就可以了连接 ssh 了。
+\end{itemize}
+
+\subsection{一些商业服务}
+比自己搭建服务器贵得多
+\begin{itemize}
+\item Ngrok
+\item Natapp
+\item 小米球
+\item Sunny-Ngrok
+\item echosite
+\item Ssh、autossh
+\item Lanproxy
+\item Spike
+\item fcn
+\item 花生壳
+\end{itemize}
+
+其他方案（包括 VPN， 端口映射）参考\href{https://johackim.com/how-to-expose-local-server-behind-firewall}{这里}。
+
+另外参考一个\href{https://www.digitalocean.com/community/tutorials/how-to-forward-ports-through-a-linux-gateway-with-iptables}{具体教程}， 讲解如何设置网关（文章中称为防火墙）的两个网卡间的 port forwarding 可以让外网访问内网的 nginx 服务器。 

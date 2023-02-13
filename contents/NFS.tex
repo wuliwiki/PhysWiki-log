@@ -1,10 +1,11 @@
-% Linux 创建网络文件夹（sshfs 和 NFS）
+% 创建网络文件夹（NFS、SMB、sshfs）
 
 这里介绍两种不同的方法。
 
 \subsection{使用 SSHFS}
 \begin{itemize}
 \item \href{https://www.digitalocean.com/community/tutorials/how-to-use-sshfs-to-mount-remote-file-systems-over-ssh}{参考这里}。
+\item sshfs 相当于把 sftp 的某个文件夹挂载到某个本地目录。
 \item 首先确保 \verb`ssh` 和 \verb|sftp| 可以连接。 注意如果使用 \verb|sudo sshfs| 就要确保 \verb|sudo ssh| 和 \verb|sudo sftp| 可以链接， 后者使用的配置文件在 \verb|/root/.ssh/| 而不是 \verb|~/.ssh/|
 \item 安装 \verb`sshfs`
 \item 注意 \verb`sshfs` 在 WSL 下无效， 好失望… 希望 wsl 2 （据说要 2020 年）可以
@@ -30,6 +31,7 @@
 \item 安装 \verb|sudo apt-get install nfs-kernel-server|
 \item \verb|mkdir 文件夹|
 \item \verb|sudo vim /etc/exports|， 添加一行 \verb|/home/用户名/文件夹 *(rw,sync,no_root_squash,no_subtree_check)|
+\item 据说如果把 \verb|sync| 变为 \verb|async|， 可以用 ram 作为文件缓存， 但如果服务器断电缓存中的文件将丢失。
 \item \verb|sudo service nfs-kernel-server restart|
 \item \verb|nfsstat –s| 可以检查 nfs 的信息， 包括 nfs 版本（v1 到 v4） 等
 \end{itemize}
@@ -48,4 +50,63 @@
 \includegraphics[width=10cm]{./figures/NFS_1.png}
 \caption{NFSClient} \label{NFS_fig1}
 \end{figure}
+\end{itemize}
+
+\subsection{SMB 协议}
+\subsubsection{Ubuntu 服务器端}
+\begin{itemize}
+\item \verb|SMB| 对 Windows 更友好， \verb|NFS| 对 linux 更友好。
+\item 同一个文件夹可以同时用以上两种协议分享， 同时支持 Linux 和 Windows。
+\item 参考一个 \href{https://ubuntu.com/tutorials/install-and-configure-samba}{Samba 教程}。
+\item \verb|sudo apt install samba|（如果有冲突用把 \verb|apt| 换成 \verb|aptitude|）
+\item 设置文件在 \verb|/etc/samba/smb.conf|， 在最后加入：
+\begin{lstlisting}[language=none]
+[global]
+   # 支持 symlink 到任何地方
+   allow insecure wide links = yes
+
+[共享名称]
+   comment = 一些备注
+   path = 共享文件夹的绝对路径
+   read only = no
+   browsable = yes
+   # 支持 symlink 到任何地方
+   wide links = yes
+\end{lstlisting}
+\item \verb|sudo service smbd restart| 重启 samba
+\item \verb|sudo ufw allow samba| 设置防火墙
+\item \verb|sudo smbpasswd -a 用户名| 创建用户名，设置密码
+\item SMB 协议默认端口为 \verb|139| 和 \verb|445|
+\end{itemize}
+
+\subsubsection{Ubuntu 客户端}
+\begin{itemize}
+\item Ubuntu 客户端： 在文件浏览器的 Other locations 中， 最下面的 Connect to server， 地址输入 \verb|smb://ip地址/共享名称| 但重启或 logout 以后就会消失
+\item 安装客户端： \verb|sudo apt install cifs-utils -y|
+\item 编辑文件（可以放到任何路径，用任何文件名）： \verb|sudo vim /root/.SMBcredentials|
+\begin{lstlisting}[language=none]
+username=smb用户名
+password=smb密码
+\end{lstlisting}
+\item 为了安全起见， 可以 \verb|sudo chmod 400 /root/.SMBcredentials|
+\item 临时 mount： 用 \verb|sudo mount -t cifs -o rw,vers=3.0,credentials=/root/.SMBcredentials[,port=端口号] //ip地址/共享名称 /mount文件夹|
+\item 要开机自动 mount， 在 \verb|/etc/fstab| 加入一行： \verb|//ip地址/共享名称 /mount文件夹 cifs vers=3.0,credentials=/.SMBcredentials,file_mode=0777,dir_mode=0777
+|
+\item 修改了 \verb|fstab| 以后， 就可以用 \verb|sudo mount /mount文件夹| 测试是否成功。
+\end{itemize}
+
+\subsubsection{Windows 服务器端}
+\begin{itemize}
+\item Windows 11 中只需要右键一个文件夹或者硬盘， 然后 give access to 进行设置即可。
+\end{itemize}
+
+\subsubsection{Windows 客户端}
+\begin{itemize}
+\item Windows 客户端： 在文件夹的地址中填写： \verb|\\ip地址\共享名称|。 在 Windows 中， 软链会显示为正常文件。 也可以在文件浏览器中打开我的电脑， 然后上面的选项中映射网络硬盘， 可以选择开机自动连接。
+\item 如果要指定端口， 用 \verb|\\ip地址@端口号\共享名称|
+\end{itemize}
+
+\subsubsection{Mac 客户端}
+\begin{itemize}
+\item 在状态栏的 GoTo 中连接服务器， 然后 \verb|smb://ip地址/共享名称| 好像就行了。不知道重启会不会还在。
 \end{itemize}

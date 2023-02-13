@@ -1,5 +1,7 @@
 % Linux 命令笔记
 
+\pentry{Linux 基础\upref{Linux}}
+
 \subsection{基础}
 \begin{itemize}
 \item \href{http://faculty.salina.k-state.edu/tim/unix_sg/index.html}{一个教程}
@@ -32,6 +34,7 @@
 \item \verb|du -hd 0| 用于查看当前目录的大小（不会跟随 symlink， 但是会包括 mount）。 \verb|-h| 是 human readable， \verb|-d| 是 depth。 \verb|-x| 不会计入被 mount 的文件夹。
 \item \verb`ctrl+u` 可以删除光标前面的所有内容
 \item \verb`ctrl+c` 可以放弃当前输入直接开始新的一行
+\item \verb|which 命令| 可以查看某个命令的文件位置， \verb|whereis 命令| 还可以查看源码、设置文件和文档等的位置（如果有）。
 \end{itemize}
 
 \subsection{目录与文件}
@@ -68,6 +71,7 @@
 \item \verb`dd` 命令可以直接在当前位置生成一个大小为 100 MB 的文件， 内容为随机， 还会显示写入速度
 \verb`dd if=/dev/urandom of=./dump.txt bs=1M count=1024` 写 1024Mb 随机文件
 \item \verb|dd conv=notrunc if=... of=文件名 bs=.. seek=第几字节 count=..|  从文件的某个字节开始修改文件（覆盖内容）。
+\item \verb|dd| 也可以用来复制文件， 可以用来测试传输速度。
 \item \verb`locate ???` 命令可以从数据库中寻找计算机上所有文件名包含 \verb`???` 的文件， 但刚创建的文件可能找不到
 \item \verb`sudo updatedb` 可以将刚创建的文件加到数据库中， 让 \verb`locate` 可以找到（\verb|-v| 选项显示哪些文件夹被更新）
 \item 对于整个系统， \verb`locate` 比 \verb`find` 要快得多， 因为数据库已经是 index 过的 \verb`-c` 选项可以显示匹配结果的个数， \verb`-i` 选项可以不区分大小写
@@ -217,6 +221,9 @@
 \item 其实真正和 windows 的任务管理器相对应的是 \verb`top`, 会显示实时进程. 
 \item \verb`K <PID>` 会结束对应编号的进程. 系统的关键进程是杀不掉的.
 \item \verb`last -数字` 可以查看最近若干次登录的记录
+\item \verb|sudo visudo| 可以安全地编辑管理员权限文件 \verb|/etc/sudoers|（保存时会检查语法错误）， 默认使用 nano 编辑器， 要用 vim
+ 可以 \verb|sudo update-alternatives --config editor| 然后选 vim。
+\item 例如在 \verb|visudo| 设置里面 \verb|Defaults  env_reset| 后面加上 \verb|,timestamp_timeout=3600|， 那么可以设置输入密码以后一个小时内不需要重复输入（默认只有几分钟）
 \end{itemize}
 
 \subsection{进程}
@@ -229,7 +236,7 @@
 连续输入这个进程 4 次， 然后用 \verb`top` 命令打开进程管理
 \item top 中的 \verb`NI` 就是 nice value
 \item 在 top 界面中用 \verb`r` (renice) 可以调整进程的 nice value （优先级，越小越优先）按 ESC 可以退出
-\item \verb|ionice| 可以调整硬盘读写的优先级。
+\item \verb|ionice| 可以调整硬盘读写的优先级： \verb|ionice -p <PID>| 查看某个进程的优先级（0 到 7， 从高到低）， \verb|ionice -p <PID> -n 优先级| 可以改变优先级。
 \item 在 top 界面中用 \verb`k` 可以杀进程，输入进程的 PID，两次回车即可
 \item \verb`pstree` 可以看到哪些进程生成了哪些子进程， 例如 shell 里面运行 .sh 文件会生成一个子进程用于运行一个新的 shell
 \item \verb`kill -STOP 进程号` 可以暂停程序

@@ -1,0 +1,102 @@
+% MacOS 笔记
+
+\begin{issues}
+\issueDraft
+\end{issues}
+
+\subsection{快捷键}
+\begin{itemize}
+\item Mac 的 Delete 键是 Win 的 backspace
+\item Mac 的 Cmd 是 Win 的 Win 键
+\item Mac 的 Opt 是 Win 的 Alt 键
+\item \verb|Cmd + c|， \verb|Cmd + v| 复制粘贴
+\item \verb|Cmd + c| 然后 \verb|Cmd + Alt + v| 移动
+\item \verb|Cmd + Del| 把文件移动到回收站
+\item \verb|Cmd + z| 撤销
+\item \verb|Cmd + Tab| 切换程序
+\item \verb|Cmd + Delete| 删除
+\item \verb|Ctrl + 左右箭头| 切换屏幕
+\item \verb|Ctrl + 上下箭头| 程序管理
+\item \verb|Ctrl + Alt + eject| 睡眠
+\item \verb|Ctrl + Alt + Cmd| 关机
+\item \verb|Alt + Cmd + ESC| 强制退出
+\item \verb|Ctrl + Shift + eject| 关闭屏幕
+\item \verb|F11| 临时显示桌面
+\end{itemize}
+
+\subsection{常识}
+\begin{itemize}
+\item Mac 不能写入 NTFS 文件系统只能读取
+\item account name 很难修改，最好新建一个（管理员）用户，然后把老用户删掉。
+\item 要默认 terminal 的 shell （如 \verb|/bin/bash| 可以在 user 设置里面把左下角解锁， 然后右键用户名， 高级设置里面修改。
+\item 修改 hostname 用： \verb|sudo scutil --set HostName 新名字|
+\item 根目录： 选择 Go->go to folder, 然后输入"/", 按回车即可到根目录。 根目录里面有 Applications, Library, System, Users 四个文件夹
+\item 从 U 盘启动： 长按住 opt 按键开机即可
+\item 重新安装最新系统（联网）： 长安住 cmd + opt + R 即可。 重装系统据说不会删除用户文件
+\item 要抹掉磁盘， 在重新安装的界面选择 disk util， 然后擦除磁盘即可。
+\end{itemize}
+
+\subsection{VMware MacOS 虚拟机}
+\begin{itemize}
+\item 据说 VMware Workstation Pro 和 MacOS 兼容比较好。 笔者测试 MacOS 12.4 没问题。
+\end{itemize}
+
+若显示性能较差（即用小分辨率的屏幕可以明显变得顺滑）， 则修改 xm 文件的以下设置（如果没有则添加）。 但是亲测无效。
+\begin{lstlisting}[language=none]
+svga.vramSize = "268435456"
+vmotion.checkpointFBSize = "1342177728"
+vmotion.checkpointSVGAPrimarySize = "268435456"
+vmotion.svga.mobMaxSize = "268435456"
+vmotion.svga.graphicsMemoryKB = "262144"
+svga.graphicsMemoryKB and set its value to "262144"
+vmotion.svga.maxTextureSize and assign it the value "16384"
+vmotion.svga.maxTextureAnisotropy, and change it to "2"
+\end{lstlisting}
+
+\subsection{命令行}
+\begin{itemize}
+\item 强制重启（用 GUI 重启可能会有一些软件不能正常退出） \verb|sudo shutdown -r now|
+\end{itemize}
+
+\subsection{Time Machine 相关}
+\begin{itemize}
+\item 完全没必要操作移动硬盘里面的文件! 只要进入 Time Machine 的时光界面, 用 finder 上面的小齿轮菜单, 就可以删除某次备份或者删除某个文件的所有备份 (要先选中该文件)(该操作只能在移动硬盘作为 time machine 的情况下使用)
+恢复整个系统: 开机的时候按住 Cmd+R, 然后选择从 time machine 中恢复即可.
+\item You can move, copy, or delete the Backups.backupdb folder on your Time Machine backup disk as you would other folders. You can also delete folders within the Backups.backupdb folder. You can’t delete individual items inside the dated folders.
+\item Important: Do not use Terminal or any app other than the Finder to move, copy, or remove items from the Backups.backupdb folder.
+\end{itemize}
+
+\subsection{网络硬盘}
+\subsubsection{SFTP}
+首先可以用 sftp server, 在 Mac 上启动 server (详见 "MacOS 设置 SSH & FTP" 笔记)
+\verb|sudo -s launchctl load -w /System/Library/LaunchDaemons/ftp.plist|， 然后在 windows 上用 WinSCP 客户端即可.
+
+\subsubsection{SMB}
+\begin{itemize}
+\item 在 Mac 的 Sharing 设置中打开 SMB 共享 (最好另外创建一个 Remote 账户专门用于远程访问, 只允许在某特定的文件夹中写入, 其他只读). 然后在网络设置中的 Advanced 中设置工作组与 windows 同名 (windows 的工作组名称可以在 \verb|我的电脑->属性| 中查看, 一般叫做 WORKGROUP).
+
+\item Mac 设置好了以后, 在网络设置中查看 IP 地址, 然后在 Windows 中随便打开一个文件浏览器, 输入 \verb|\<ip 地址>\| 看看能否访问, 如果可以就是成功了. 现在只能访问 Remote 账户的 home 文件夹, 要访问 Addis 账户的文件夹 (前提是 Addis 的文件夹权限中添加了 Remote 读取权限), 输入 \verb|\<ip 地址>\Addis| 即可! 子文件夹以此类推 (注意 windows 的目录斜线都是反斜线, 且 windows 不区分任何文件夹的大小写, 因为 command prompt 根本不区分命令的大小写). 注意 windows 搜索网络上的计算机貌似是看不到 Mac 的.
+
+\item Mac 的 SFTP 和 SMB 都可以在 Power Nap 的时候正常工作! 设置 -> Energy Saver 仅选中 Put hard disks to sleep when possible & Wake for network access & Enable Power Nap 三个选项.
+\end{itemize}
+
+\subsubsection{Windows 映射网络磁盘}
+浏览器中找到 \verb|这台电脑|, 右键会有 map network drive, 按照设置来, 地址就输入以上输入的即可! 在 win10 的文件浏览器主界面的 Ribbon 菜单上也会有该按钮.
+
+创建的时候, 选择每次登录重新连接, 保存账户密码, 就真的可以像一个本地磁盘一样使用了!
+
+\subsection{Static IP}
+\begin{itemize}
+\item Mac 设置 Static IP, 就不用经常改 FTP Client 的地址了, 但这种方法在 Jardine 会导致连不上外网, 不要使用. 用 Dynamic DNS.
+\item 首先链接网络, 点击 Wifi 图标, Open Network Preference (和在设置中进入一样). 先记下 Advanced 按钮中 TCP/IP 面板显示的几串数字 (其中 IPv4 就是常用的 IP). 为了保险先创建新的 Network Location (网络设置), 不同的 Location 互不影响, 搞砸了换回原来的即可. 在 Location 下拉菜单中创建例如 StaticIP, 然后点 Advanced, TCP/IP 中把 Configure IPv4 选成 Manually, 然后把刚才的几串数字原样输入即可. 完了以后 OK -> Apply 即可. 现在无论怎么重启, IP 都不会变了(应该).
+\end{itemize}
+
+\subsection{Dynamic DNS (Domain Name Service)}
+\begin{itemize}
+\item 比较有名的 Dynamic DNS 是 Dyn, 但是现在不免费了. 一个免费的叫做 NO-IP, 网址是 https://www.noip.com/, 可以在上面注册一个账号, 申请三个免费域名 (但是要每月确认才能持续有效).  域名是 "xxxx.ddns.net"  , 这串字符在远程访问时相当于 IP 地址. (貌似只能有一个域名关联一个 ip)
+
+\item 在 Mac 上安装客户端, 这个客户端的作用就是把本地的 IP 实时和我的域名在 DNS 服务器上关联, 所以 ssh 和 sftp 输入域名时, 域名服务器就会返回正确的 IP 地址, 这与直接使用 IP 地址登录 ssh 和 sftp 是完全一样的.
+注意确认 preference 中选择 "Local IP from this computer", 或者默认选项, 总之保证与域名关联的 ip 是能成功连接 ssh 或 sftp 的 ip 即可. 注意关联的 ip 以网页上的为主, 客户端显示的 internal ip 是不准确的.
+另外不要设置软件开机启动, 而是在 Daemon 面板中设置开机启动 Daemon 后台, 这样开机以后 dock 栏不会显示任何图标, 但仍然可以更新 ip, 更新频率目前设置成 5 分钟一次.
+每月 Confirm Hostname: 在网站的 Hostname 列表中, 会显示有效时间, 按右边的小齿轮 Modify, 在右下角有 Update Hostname 按钮.
+\end{itemize}

@@ -17,6 +17,7 @@
 \item \verb|sda, sdb| 等编号是不稳定的， 可能重启等操作之后会变
 \item \verb|fdisk -l| 查看所有挂载的硬盘
 \item \verb|lsblk| 也可以查看
+\item 用 \verb|sudo e2fsck -f test.img| 可以检查并自动修复文件系统。
 \item \verb|resize2fs -p /dev/sd? ???K| 可以改变 ext4 文件系统的大小， Gparted 用的就是这个命令。 这个命令需要很长时间。
 \item \verb|mklabel| 修改分区的 label
 \item \verb|mkfs.ext4 /dev/sdx1| 或者 \verb|mke4fs -t ext4 /dev/sdb1| 把某个分区格式化为 \verb|ext4|
@@ -34,6 +35,22 @@
 \item \verb|NTFS| 的设置是 \verb|LABEL=mydrive2 /mnt/drive2 ntfs-3g nofail,x-gvfs-show,uid=1000,gid=1000 0 0|
 \item \verb|exFAT| 的设置是 \verb|LABEL=mydrive1 /mnt/drive1 exfat nofail,x-gvfs-show,uid=1000,gid=1000 0 0|
 \item 第一列可以是 \verb|LABEL=| 或者 \verb|UUID=|， 第二列是 mount point， 第三列是文件系统， 用 \verb|auto| 可以自动检测。 第四列是一些选项， \verb|nofail| 是即使硬盘没有插入也不会报错， \verb|x-gvfs-show| 是在 gnome 文件浏览器和 taskbar 中显示。 \verb|uid| 和 \verb|gid| 是挂载后文件的 owner， \verb|1000| 是当前用户。
+\item \verb|sudo mount -a| 会挂载 \verb|fstab| 中的所有硬盘（如果没有已经挂载）。 \verb|sudo umount -a| 同理（如果被占用则不会弹出）。
+\item \verb|mount| 未必需要 sudo， 如果被挂载的目录不需要管理员权限。
+\item \verb|sudo mount 挂载目录| 可以根据 \verb|fstab| 中该目录的设置挂载。 \verb|umount 挂载目录| 同理。 可以是相对或绝对目录。
+\item 注意如果某个目录中有打开的 bash （包括当前正在用的）， 那么 \verb|umount| 就会失败（\verb|target is busy|）。
+\end{itemize}
+
+\subsubsection{挂载文件作为硬盘}
+\begin{itemize}
+\item 参考\href{https://www.tecmint.com/create-virtual-harddisk-volume-in-linux/}{这个教程}。
+\item 先随便创建一个文件， 文件大小就是硬盘的初始大小（下面可以 resize）。 如 \verb|sudo dd if=/dev/zero of=/路径/虚拟硬盘名.img bs=1M count=100|。 其中镜像文件 \verb|.img| 是不必须的。
+\item 格式化为 ext4： \verb|sudo mkfs -t ext4 /路径/虚拟硬盘名.img|。 注意运行完以后， 镜像文件会自动缩小的刚好够用， 所以第一步中不需要弄太大的文件。
+\item 临时挂载： \verb|sudo mount -t auto -o loop /路径/虚拟硬盘名.img 挂载目录| 其中 \verb|-t| 是文件系统类型。 镜像文件甚至可以存在于 \verb|挂载目录| 中。 但是挂载以后并不能看到该文件。
+\item 要永久挂载， 可以用 \verb|/路径/虚拟硬盘名.img /挂载目录 ext4 nofail 0 0|
+\item 使用 \verb|df -h| 查看文件系统会看到例如 \verb|/dev/loop13 488M  24K  452M  1% /mnt/test_dir|
+\item \verb|resize2fs 虚拟硬盘名.img 1G| 可以改变分区大小。
+\item 如果文件在 \verb|ext4| 系统中 \verb|du| 镜像文件， 那么 resize 后所占硬盘空间仍然会是刚好够用。 这只是 ext4 特有的优化， 实际上文件的大小的确是 \verb|resize2fs| 的目标大小（可以用 \verb|stat 文件| 确认）。 如果把这个文件移动到比如说 exFat 文件系统中， 那么占用空间就会变成后者的大小。
 \end{itemize}
 
 \subsubsection{逻辑卷管理（LVM）}

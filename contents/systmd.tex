@@ -1,0 +1,33 @@
+% service、systemd、systemctl 笔记1
+
+\begin{issues}
+\issueDraft
+\end{issues}
+
+\begin{itemize}
+\item 要创建一个 service， 就创建文件：
+\begin{lstlisting}[language=none,caption=/etc/systemd/system/名字.service]
+[Unit]
+Description=(description of your program)
+
+[Service]
+ExecStart=/路径/命令 参数1 参数2
+# 等 15 秒再运行以上命令，防止系统没有加载完成（如网络设置等）
+ExecStartPre=/bin/sleep 15
+
+[Install]
+WantedBy=multi-user.target
+\end{lstlisting}
+\item 注意 \verb|ExecStart| 不支持 \verb|>| 和 \verb`|` 等
+\item \verb|sudo systemctl daemon-reload| 使文件生效
+\item \verb|sudo systemctl enable 名字.service| 就可以设置开机自启服务
+\item \verb|disable| 不开机自启
+\item \verb|status| 查看状态
+\item \verb|start| 启动
+\item \verb|stop| 停止
+\item \verb|restart| 停止
+\end{itemize}
+
+You can start and stop it manually with systemctl start scanner.service and systemctl stop scanner.service and see its status with systemctl status scanner.service.
+
+See Arch Linux help about systemd
