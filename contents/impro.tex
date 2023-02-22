@@ -5,8 +5,43 @@
 \issueDraft
 \end{issues}
 
-\pentry{定积分\upref{DefInt}}
+\pentry{牛顿—莱布尼兹公式（简明微积分）\upref{NLeib}}
 \subsection{积分限为无穷的反常积分}
+
+\subsubsection{引入}
+在许多物理、数学问题中我们会遇到一些积分到无穷的积分。例如 势能（简介）\upref{POTENT} 中，我们定义势能是
+$$E_P=\int ^\infty_a \bvec F_{in} \cdot \dd \bvec r$$
+
+你可能会想，“功是力在位移上的作用量，如果物体在力的作用下运动了无穷远，那么力岂不做了无穷多的功？那这个结论还有什么意义？”结果真的是这样吗？
+
+我们先看一个简单的例子：$\int^a_1 \frac{1}{x^2} \dd x$ （许多有心力遵循平方反比律），并令$a\to+\infty$。
+
+\begin{figure}[ht]
+\centering
+\includegraphics[width=14cm]{./figures/impro_2.pdf}
+\caption{$f(x)=\frac{1}{x^2} \quad x>1$的图像} \label{impro_fig2}
+\end{figure}
+
+\begin{table}[ht]
+\centering
+\caption{积分结果}\label{impro_tab1}
+\begin{tabular}{|c|c|}
+\hline
+$a$的值 & $\int^a_1 \frac{1}{x^2} \dd x$的值 \\
+\hline
+$a=10$ & $0.9000$ \\
+\hline
+$a=100$ & $0.9900$ \\
+\hline
+$a=1000$ & $0.9990$ \\
+\hline
+$a=10000$& $0.9999$\\
+\hline
+\end{tabular}
+\end{table}
+看起来，随着$a$的增大，$\int^a_1 \frac{1}{x^2} \dd x$似乎并没有趋向无穷，而是趋向某一个确定的值$1$。这也就启发我们，即使积分区间趋向无穷大，积分结果仍然可能是有意义的。这就要求我们扩展定积分\upref{DefInt}的定义，\textsl{玩一种很新的积分}。
+
+\subsubsection{定义}
 \begin{definition}{反常积分}
 设函数 $f(x)$ 在 $[a, +\infty)$ 上连续（或分段连续），对于任意 $t>a$，积分 $\displaystyle \int^t_af(x)\mathrm{d} x$ 存在，则定义 $\displaystyle \int ^{+\infty}_a f(x)\mathrm{d} x=\lim_{t\rightarrow+\infty }\int _a^{+\infty}f(x)\mathrm{d} x$，并称 $\displaystyle \int ^{+\infty}_a f(x)\mathrm{d} x $ 为 $f(x)$ 在 $[a, +\infty)$ 的反常积分。
 
@@ -18,3 +53,85 @@
 对于定义在 $(-\infty,+\infty )$ 上的连续函数 $f(x)$ 的反常积分 $\displaystyle \int ^{+\infty}_{-\infty}f(x)\mathrm{d} x$ 作如下定义
 $$\displaystyle \int ^{+\infty}_{-\infty}f(x)\mathrm{d} x=\displaystyle \int ^{+\infty}_c f(x)\mathrm{d} x+\displaystyle \int ^c _{-\infty}f(x)\mathrm{d} x$$
 其中 $c$ 是任意实数。当且仅当等式右边的两个积分同时收敛时，称反常积分 $\displaystyle \int ^{+\infty}_{-\infty}f(x)\mathrm{d} x$ 收敛，且右端两个积分值的和称为反常积分 $\displaystyle \int ^{+\infty}_{-\infty}f(x)\mathrm{d} x$ 的值；否则称 $\displaystyle \int ^{+\infty}_{-\infty}f(x)\mathrm{d} x$ 发散。
+
+\subsubsection{计算}
+为了计算反常积分，我们仅需要简单地推广牛顿—莱布尼兹公式\upref{NLeib}。
+\begin{equation}
+\displaystyle \int ^{+\infty}_a f(x)\mathrm{d} x=\lim_{t\rightarrow+\infty }\int _a^{t}f(x)\mathrm{d} x
+=\lim_{t\rightarrow+\infty }F(t) - F(a)
+\end{equation}
+其中$F(x)$是$f(x)$的原函数。
+
+换句话说，如果$\lim_{t\rightarrow+\infty } F(t)$存在，那么原反常积分就收敛（趋近于一个确定的值）。
+
+\begin{example}{计算$\int^{+\infty}_1 \frac{1}{x^2} \dd x$}
+使用推广的牛顿—莱布尼兹公式计算上文中的$\int^{+\infty}_1 \frac{1}{x^2} \dd x$
+
+很显然，$f(x)=\frac{1}{x^2}$的原函数是$F(x)=-\frac{1}{x}$，那么
+$$\int^{+\infty}_1 \frac{1}{x^2} \dd x=\lim_{t\rightarrow+\infty } (-\frac{1}{t}) - (-\frac{1}{1})=1$$
+
+因此，随着$a$增大、积分结果趋向于$1$并不是巧合。
+\end{example}
+
+\begin{example}{计算$\int^{+\infty}_1 \frac{1}{x} \dd x$}
+\begin{figure}[ht]
+\centering
+\includegraphics[width=14cm]{./figures/impro_3.pdf}
+\caption{$f(x) = \frac{1}{x}$(红)与$f(x) = \frac{1}{x^2}$(蓝)的图像} \label{impro_fig3}
+\end{figure}
+
+$$\int^{+\infty}_1 \frac{1}{x} \dd x=\lim_{t\rightarrow+\infty } {\ln(t)} - \ln(1)$$
+很遗憾，$\lim_{t\rightarrow+\infty } {\ln(t)} $是发散的，因此这个反常积分也是发散的。
+
+有人论证，这个结果似乎意味着\textsl{二次元}中引力势能是无穷大的，因此可怜的\textsl{二次元}宇航员永远没有足够的能量来摆脱母星的引力束缚。在三次元中，正如我们上文所见，引力势能是有限的。
+
+\end{example}
+
+\begin{exercise}{}
+计算$\int^{+\infty}_1 \frac{1}{x^{0.9}} \dd x$与$\int^{+\infty}_1 \frac{1}{x^{1.1}} \dd x$。你发现了什么？
+\begin{figure}[ht]
+\centering
+\includegraphics[width=14cm]{./figures/impro_4.pdf}
+\caption{三者的函数图像} \label{impro_fig4}
+\end{figure}
+\end{exercise}
+
+\subsection{瑕积分：被积函数趋向无穷的积分}
+\begin{figure}[ht]
+\centering
+\includegraphics[width=8cm]{./figures/impro_1.pdf}
+\caption{$f(x)=\frac{1}{x^{\frac{4}{5}}}$的图像} \label{impro_fig1}
+\end{figure}
+接下来，我们来处理一类被积函数趋近于无穷的问题。例如，积分$\int_0^1 \frac{1}{x^{\frac{4}{5}}} \dd x$。
+
+注意到当$x=0$时，$\frac{1}{x^{\frac{4}{5}}}$发散，我们开始怀疑这个积分是否有意义。我们试着在$t\to0$时积分$\int_t^1 \frac{1}{x^{\frac{4}{5}}} \dd x$
+
+\begin{table}[ht]
+\centering
+\caption{积分结果}\label{impro_tab2}
+\begin{tabular}{|c|c|}
+\hline
+$t$的值 & $\int_t^1 \frac{1}{x^{\frac{4}{5}}} \dd x$的值 \\
+\hline
+$t=10^{-8}$ & $4.8744$ \\
+\hline
+$t=10^{-9}$  & $4.9208$ \\
+\hline
+$t=10^{-10}$  & $4.9500$ \\
+\hline
+\end{tabular}
+\end{table}
+与之前的例子类似，尽管$t\to0$时被积函数$\frac{1}{x^{\frac{4}{5}}}$发散，但$\int_t^1 \frac{1}{x^{\frac{4}{5}}}\dd x$正趋向一个有限的值。这种情况再次提醒我们需要继续扩展定积分的定义，即允许一个发散的函数具有有限的定积分值。于是，我们引入了瑕积分的概念。
+
+%补充具体定义
+
+计算瑕积分时，我们同样需要推广牛顿—莱布尼兹公式。
+\begin{equation}
+\displaystyle \int ^{b}_a f(x)\mathrm{d} x=\lim_{t\rightarrow a+}\int _t^{b}f(x)\mathrm{d} x
+= F(b) - \lim_{t\rightarrow a+ }F(t)
+\end{equation}
+其中$F(x)$是$f(x)$的原函数，在$x=a$处$f(x)$发散。
+
+\begin{example}{计算$\int_t^1 \frac{1}{x^{\frac{4}{5}}}\dd x$}
+$\int_t^1 \frac{1}{x^{\frac{4}{5}}}\dd x = 5\times(1)^{\frac{1}{5}} - \lim_{t\rightarrow 0+ }5t^{\frac{1}{5}}=5$
+\end{example}
