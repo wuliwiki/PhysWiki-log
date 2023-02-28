@@ -99,12 +99,12 @@ Git for Windows 的 Git bash 是不支持 symlink 的， symlink clone 下来以
 \item \verb|git gc| 命令只对本地 repo 有效，其实最有效的貌似还是直接把本地 repo 删了再 clone 一次。但是注意检查是否有不小心被 .gitignore 屏蔽的文件没有在服务器上
 \item 注意 \verb|git gc| 用的内存可能会非常多（尤其是 repo 很大的时候）， 可以用（按需要调节， 容量单位有 \verb|k,m,g|）。 实测中，100GB 的数据库可以只用 4G 服务器内存和 4G 缓存， 限制单线程，以及 50k window 完成。
 \begin{lstlisting}[language=bash]
-git config --global pack.windowMemory 20m # 限制内存大小
+git config --global pack.windowMemory 512m # 限制内存大小
 git config --global pack.packSizeLimit 1g # 限制 pack 文件大小（默认单个文件）
 git config --global pack.threads 2 # 使用多少线程压缩 pack
 \end{lstlisting}
 \item 如果一个 repo 中的 pack 文件太大， 可以用 \verb|git repack --max-pack-size=1g -a| 拆分成 1GB 的小块。 这和先设置 \verb|pack.packSizeLimit| 效果是一样的。
-\item 即使是二进制文件， git 也会尽量储存每个版本的增量， 而不是每个版本储存一次。
+\item 即使是二进制文件， git 也会尽量储存每个版本的增量， 而不是每个版本储存一次。 \verb|windowMemory| 越大， 就能做越多 delta。
 \item \verb|git clean -f| 可以清除 untracked file, \verb|-d| 选项可以清除 untracked directory,  \verb|git clean -n| 显示将要清除的文件。
 \item 要让 windows 中 git bash 支持中文， 在右键 option > text 中 local 选择 C, character set 选 UTF8, 另外输入以下命令
 \verb|export LESSCHARSET=utf-8|
@@ -121,6 +121,12 @@ git config --global pack.threads 2 # 使用多少线程压缩 pack
 \item 要检查编码类型， 或转换编码类型，用 Visual Studio Code.  不要用 Windows 的 Notepad。
 \end{itemize}
 
+\subsubsection{把几次 commit 合并}
+\begin{itemize}
+\item 首先用 \verb|git rebase -i HEAD~数字| 把之前 \verb|数字| 次 commit 显示到默认编辑器中（最新的 commit 在最下面）， 把连续几个 commit 前面的 \verb|pick| 改成 \verb|squash|， 然后保存退出。 修改的这几次 commit 将消失不见， 融入前一次的 commit 作为一次 commit。 commit 信息也会自动融合， 但会跳出另一个编辑器手动修改。 修改之后， 从改成 \verb|squash| 的 commit 的上一次 commit 开始， 后面所有 commit 的 hash 都会改变。
+\end{itemize}
+
+
 \subsection{用 Git 备份大型文件夹}
 \begin{itemize}
 \item 优点是可以防止任何形式的数据 corruption， 增量备份， 保留所有历史版本
@@ -134,6 +140,15 @@ git config --global pack.threads 2 # 使用多少线程压缩 pack
 \item 如果要删除某个 commit 之前的所有 commit， 以减小数据库的尺寸， 可以先搞一个新的 branch， 把 master branch 删除（\verb|git branch -D master|）， 然后把新 branch 重命名为 master。 最后做一下 \verb|git gc|。
 \item git gui 可以查看 \verb|.git| 数据库中每一次备份的文件目录。
 \end{itemize}
+
+\subsubsection{修复 packfile}
+\begin{itemize}
+\item 如果 \verb|git fsck| 报告某个 pack 文件毁坏了， 首先把它做一个备份。 以下步骤笔者没试过。
+\item \verb|git unpack-objects < path/to/packfile.pack| 把 packfile 加压成 object
+\item \verb|git repack -a| 然后 repack， 不会包含坏的 object
+\item \verb|git index-pack -v path/to/packfile.pack| 
+\end{itemize}
+
 
 \subsection{分支}
 \begin{itemize}

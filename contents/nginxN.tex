@@ -6,9 +6,59 @@
 
 \begin{itemize}
 \item 一个\href{https://zhuanlan.zhihu.com/p/80600540}{知乎教程}
+\item \href{https://nginx.org/en/docs/}{官方文档}
 \item \verb|sudo apt install nginx|
 \item 要重启 nginx 服务用 \verb|sudo systemctl restart nginx|
-\item 要查看是否连接成功， 用 \verb|curl 本机某网卡的ip| （默认访问 80 接口）。 如果打印出一个 html 文本， 包含 \verb|Welcome to nginx!|， 就是成功了（当然也可以用浏览器访问， 只是有时候只有命令行）。
-\item 如果要限制 nginx 只监听某个网卡， 编辑 \verb|sudo vim /etc/nginx/sites-enabled/default|， 然后在 \verb|listen 80 default_server;| 的 \verb|80| 改成 \verb|ip地址:80|， 然后重启 \verb|nginx| 服务即可生效。
+\item 要查看是否连接成功， 用 \verb|curl localhost| 或者 \verb|curl http://localhost|（默认访问 80 接口）。 如果打印出一个 html 文本， 包含 \verb|Welcome to nginx!|， 就是成功了（当然也可以用浏览器访问， 只是有时候只有命令行）。
+\item 如果要限制 nginx 只监听某个网卡， 编辑配置文件 \verb|sudo vim /etc/nginx/sites-enabled/default|， 然后在 \verb|listen 80 default_server;| 的 \verb|80| 改成 \verb|ip地址:80|， 然后重启 \verb|nginx| 服务即可生效。
 \item 事实上不光是本机， 监听的网卡所在的所有机器访问该网卡的 ip 的 80 端口都会收到
+\end{itemize}
+
+\subsection{http 静态网站}
+\begin{itemize}
+\item 配置文件： \verb|/etc/nginx/nginx.conf|。 在 \verb|http| section 里面加入
+\begin{lstlisting}[language=none]
+server {
+    listen ip地址:80;
+    server_name ip地址或者域名:80;
+    
+    location / {
+        root /静态网页根目录;
+    }
+}
+\end{lstlisting}
+\item 要特别注意 \verb|静态网页根目录| 以及它的所有上层目录需要可以被 nginx 的用户 \verb|www-data| 读取和执行， 里面的文件也一样。如果权限不对访问网页会出现错误 \verb|403 forbidden|。
+\item 在非 ubuntu 系统中 nginx 可能会有别的用户名。  要查看具体的用户名， 用 \verb`ps aux | grep nginx`， 看第一列中除了 \verb|root| 都有哪些用户。
+\item 要访问静态， 在本机或者其他机器的命令行用 \verb|curl ip地址或者域名|， 如果 \verb|ip| 不是公网 ip 就只能在局域网的机器上访问。 如果机器上有 GUI 浏览器， 也可以直接在网址栏输入 \verb|ip地址或者域名|。
+\item 如果只是从本机访问， 那么 \verb|ip地址或者域名| 中可以使用任何域名不需要注册。
+\end{itemize}
+
+\subsection{使用 https}
+\begin{itemize}
+\item 首先要申请一个 \textbf{SSL/TLS 证书}： 比较著名的证书颁发机构如 \href{https://letsencrypt.org/}{Let's Encrypt}。 我们以它为例。
+\item 一般最好有一个域名（子域名也可以）， 因为 SSL/TLS 证书是颁发给域名而不是 ip 的。 确保 \verb|80| 端口可以访问： \verb|http://域名|。
+\item 安装 \href{https://certbot.eff.org/instructions?ws=nginx&os=ubuntufocal}{Certbot}， 用于自动获取以及更新证书：
+\item 首先更新 snapd： \verb|sudo snap install core; sudo snap refresh core|
+\item 卸载老版本： \verb|sudo apt remove certbot|
+\item 安装 cerbot： \verb|sudo snap install --classic certbot|
+\item \verb|sudo ln -s /snap/bin/certbot /usr/bin/certbot|
+\item 获取证书，指定 nginx： \verb|sudo certbot certonly --nginx|， 这时会互动提示输入域名等信息。
+\item 测试自动更新： \verb|sudo certbot renew --dry-run|
+\item 生成的证书存在 \verb|/etc/letsencrypt/live/域名| 中： \verb|cert.pem  chain.pem  fullchain.pem  privkey.pem|
+\item 更改 nginx 设置， 在上面的 \verb|server {}| 后面添加一个：
+\begin{lstlisting}[language=none]
+server {
+    listen 443 ssl;
+    server_name 域名:80;
+    ssl_certificate /etc/letsencrypt/live/域名/fullchain.pem;
+    ssl_certificate_key /etc/letsencrypt/live/域名/privkey.pem;
+
+    location / {
+        root /var/www/html;
+        index index.html;
+    }
+}
+\end{lstlisting}
+\item 重启 nginx： \verb|systemctl restart nginx.service|
+\item 现在就可以访问域名： \verb|https://域名|
 \end{itemize}

@@ -3,13 +3,113 @@
 \begin{issues}
 \issueDraft
 \issueMissDepend
+\issueOther{注：本文中的自选$S$实际上为二倍的自选，所以电子自选被取值为$\pm 1$，系数被吸纳入$J$与$B$中。
+}
 \end{issues}
 
-\footnote{参考 Wikipedia \href{https://en.wikipedia.org/wiki/Ising_model}{相关页面}。}平均磁化率
+
+
+伊辛模型是用来描述铁磁现象的模型，其哈密顿量的形式为：
+
 \begin{equation}
-\ev{M} = \frac{\sum_i M_i \E^{-M_i H \beta}}{\sum_i M_i \E^{-M_i H\beta}} = -kT \pdv{H} \ln Q
+H=-J\sum\limits_{<i,j>}S_iS_j
 \end{equation}
-平均能量
+
+上式中的$J$为交换耦合常数$(J>0)$，$S_i$与$S_j$是两原子的自旋，求和中的$<i,j>$代表仅对最近邻的原子进行计算。
+
+伊辛模型在一维和二维的情况下是可以严格求解的。在此介绍一维伊辛模型求解方法。
+
+\subsection{一维伊辛模型求解}
+
+构建一维伊辛模型，并附以周期性边界条件，在外加磁场$B$的情况下，模型的哈密顿量被写成：
+
 \begin{equation}
-U = - \ev{M} H
+H=-J\sum\limits_{i=1}^NS_iS_{i+1}-B\sum\limits_{i=1}^NS_i=-\sum\limits_{i=1}^N[JS_iS_{i+1}+B(S_i+S_{i+1})]
 \end{equation}
+
+上式中的$BS_i$项中应为$B\mu_i$，在此将玻尔磁子吸纳进$B$的定义中。
+
+写出配分函数：
+
+\begin{align}
+Z&=\sum\limits_{S_1,S_2,...S_N}exp\{\sum\limits_{i=1}^N\beta[JS_iS_{i+1}+B(S_i+S_{i+1})]\} \\
+&=\sum\limits_{S_1,S_2,...S_N}\prod\limits_{i=1}^N exp\{\beta[JS_iS_{i+1}+B(S_i+S_{i+1})]\}
+\end{align}
+
+考虑：
+
+\begin{equation}
+\bra{S_i}P\ket{S_j}=exp\{\beta[JS_iS_{j}+B(S_i+S_{j})]\}
+\end{equation}
+
+则有：
+
+\begin{align}
+Z&=\sum\limits_{S_1,S_2,...S_N}\prod\limits_{i=1}^N\bra{S_i}P\ket{S_i+1} \\
+&=\sum\limits_{S_1,S_2,...S_N}\bra{S_1}P\ket{S_2} \bra{S_2}P\ket{S_3}\cdots\bra{S_{N-1}}P\ket{S_N} 
+\end{align}
+
+考虑:
+
+\begin{equation}
+\sum_S\ket{S}\bra{S}=\mathbb{1}
+\end{equation}
+
+则有:
+\begin{equation}
+Z=\sum\limits_{S_1}\bra{S_1}P^N\ket{S_1}=tr(P^N)
+\end{equation}
+
+考虑P的矩阵元，由于$S\in\{-1,1\}$,有：
+$$P=\begin{pmatrix}
+e^{\beta(J+B)},&e^{-\beta J} \\
+~~e^{-\beta J}~~, & e^{\beta(J-B)}
+\end{pmatrix}$$
+
+计算得 $P$ 的本征值
+$$\lambda=e^{\beta J}\cosh{(\beta B)}\pm \sqrt{e^{2\beta J }\sinh^2{(\beta B)}+e^{-2\beta J }}$$
+
+则有：
+\begin{align}
+Z&=tr(P^N)=\lambda_1^N+\lambda_2^N \\
+\lambda_1&=e^{\beta J}\cosh{(\beta B)}+ \sqrt{e^{2\beta J }\sinh^2{(\beta B)}+e^{-2\beta J }} \\
+\lambda_2&=e^{\beta J}\cosh{(\beta B)}- \sqrt{e^{2\beta J }\sinh^2{(\beta B)}+e^{-2\beta J }}
+\end{align}
+
+则体系亥姆霍兹自由能$F$:
+$$F=-\beta^{-1}\ln{Z}=-\beta^{-1}\ln{(\lambda_1^N+\lambda_2^N)}=-N\beta^{-1}\ln{\lambda_1}-\beta^{-1}\ln[1+(\frac{\lambda_2}{\lambda_1})^N]$$
+
+在通常情况下$(B$和$T$不全为$0)$，有 $\lambda_1>\lambda_2$。所以在热力学极限下$(N\rightarrow\infty)$，有：
+$$F=-N\beta^{-1}\ln{\lambda_1}$$
+
+可以求出平均自旋（此处$B$包含玻尔磁子）：
+% $$s=-\frac{1}{N}\frac{\partial F}{\partial B}=\frac{\sinh(\beta B)}{\sqrt{\sinh^2(\beta B)+e^{-4\beta J}}}$$
+
+% %图
+% \begin{figure}[ht]
+% \centering
+% \includegraphics[width=10cm]{./figures/Ising_1.png}
+% \caption{外磁场为0时} \label{Ising_fig1}
+% \end{figure}
+
+
+% 从图中可以看出，
+
+% 在$B\neq 0$时，$s$随温度连续变化。
+
+% 在$B=0$时，分两种情况，当$T=0$时，$m$根据磁场趋向
+% 于0的方向可分别取值$\pm1$，当$T\neq0$时， $s=0$。
+
+
+
+
+
+
+%\footnote{参考 Wikipedia \href{https://en.wikipedia.org/wiki/Ising_model}{相关页面}。}平均磁化率
+%\begin{equation}
+%\ev{M} = \frac{\sum_i M_i \E^{-M_i H \beta}}{\sum_i M_i \E^{-M_i H\beta}} = -kT \pdv{H} \ln Q
+%\end{equation}
+%平均能量
+%\begin{equation}
+%U = - \ev{M} H
+%\end{equation}

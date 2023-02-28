@@ -92,6 +92,7 @@ dynamic noprefixroute wlo1
 \item 允许多个 OUTPUT 端口 \verb|sudo iptables -A OUTPUT -p tcp -m multiport --sports 22,80,443 -j ACCEPT|.
 \item 要允许所有 INPUT或OUTPUT 端口， 用 \verb|sudo iptables -A INPUT或OUTPUT -p tcp -m multiport --sports 1:65535 -j ACCEPT|。
 \item 屏蔽 facebook： \verb|host facebook.com|， \verb`whois 66.220.156.68 | grep CIDR`， 例如得到 \verb|66.220.144.0/20|， 那么 \verb|sudo iptables -A OUTPUT -p tcp -d 66.220.144.0/20 -j DROP|
+\item 以上操作默认对所有网卡进行， 如果要指定某个网卡， 用 \verb|-i 网卡名|。
 \item Port Forwarding： \verb|sudo iptables -t nat -A PREROUTING -i eth0 -p tcp --dport 25 -j REDIRECT --to-port 2525| 就是网卡 eth0, 从端口 25 到端口 2525
 \item 屏蔽某个 mac 地址 \verb|sudo iptables -A INPUT -m mac --mac-source 00:00:00:00:00:00 -j DROP|
 \end{itemize}

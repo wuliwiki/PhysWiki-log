@@ -1,0 +1,76 @@
+% SLISC 库代码生成
+
+\begin{issues}
+\issueDraft
+\end{issues}
+
+\pentry{SLISC 库概述\upref{SLISC}}
+
+SLISC 中许多头文件（\verb|xxx.h|）都是根据模板文件（\verb|xxx.h.in|） 生成的。 如果你需要修改代码， 那么一种方法是直接修改头文件。 另一种是修改头文件的模板。 模板文件的语法是 SLISC 库原创的。
+
+下面来看一个模板文件的例子：
+\begin{lstlisting}[language=cpp, caption=demo.h.in]
+#include <complex>
+#include <vector>
+using namespace std;
+//% tem('add', {
+//%  'vector<double>', 'Int', 'vector<float>';
+//%  'vector<complex<double>>', 'vector<complex<double>>', 'vector<Int>';
+//% });
+//%----------------------------------
+//% [Tz, Tx, Ty] = varargin{:};
+void add(@Tz@ &z, const @Tx@ &x, const @Ty@ &y)
+{
+//% if is_vec(Tz) && is_vec(Tx) && is_scalar(Ty)
+	for (size_t i = 0; i < z.size(); ++i)
+		z[i] = x[i] + y;
+//% elseif is_vec(Tz) && is_scalar(Tx) && is_vec(Ty)
+	for (size_t i = 0; i < z.size(); ++i)
+		z[i] = x + y[i];
+//% elseif is_vec(Tz) && is_vec(Tx) && is_vec(Ty)
+	for (size_t i = 0; i < z.size(); ++i)
+		z[i] = x[i] + y[i];
+//% else
+//%     error('not implemented!');
+//% end
+}
+//%-----------------------------------
+\end{lstlisting}
+
+安装 \verb|octave| 后， 在命令行中用 \verb`$octave auto_gen.m`， 就会自动生成文件：
+\begin{lstlisting}[language=cpp,caption=demo.h]
+#include <complex>
+#include <vector>
+using namespace std;
+
+void add(vector<double> &z, const Int &x, const vector<float> &y)
+{
+	for (size_t i = 0; i < z.size(); ++i)
+		z[i] = x + y[i];
+}
+
+void add(vector<complex<double>> &z, const vector<complex<double>> &x,
+        const vector<Int> &y)
+{
+	for (size_t i = 0; i < z.size(); ++i)
+		z[i] = x[i] + y[i];
+}
+\end{lstlisting}
+
+观察一下很容易可以学会该模板的一些基础：
+\begin{itemize}
+\item \verb|//%| 后面是宏命令， 实际使用的语言是 Matlab/Octave
+\item 模板声明的基本格式为
+\begin{lstlisting}[language=cpp]
+//% tem(模板名, {
+//%   模板参数1-1, 模板参数1-2, 模板参数1-3;
+//%   模板参数2-1, 模板参数2-2, 模板参数2-3;
+//%   ...
+//% });
+//%----------------------------------
+//% [模板参数1, 模板参数2, 模板参数3] = varargin{:};
+代码
+//%----------------------------------
+\end{lstlisting}
+\item 每一行模板参数都会把模板体中的代码按照该组参数重新生成一次。 所以有多少行参数， 模板就会生成多少次。
+\end{itemize}

@@ -38,21 +38,23 @@ m_storage = {m_data = 0x855ceb0, m_rows = 2, m_cols = 2}}, <No data fields>
 \end{itemize}
 
 \subsection{重新定义类型名称}
-在 C++ 标准中， 一些基本类型在内存中的长度在不同计算机上可能会不同。 例如 \verb|long| 有时候和 \verb|int| 一样是 4 字节， 而另一些时候则和 \verb|long long| 一样是 8 字节。 因此， SLISC 仿照 Numerical Recipe 的方式， 定义自己的类型名称。 以后本书统一使用这些定义。
+在 C++ 标准中， 一些基本类型在内存中的长度在不同计算机上可能会不同。 例如 \verb|long| 有时候和 \verb|int| 一样是 4 字节， 而另一些时候则和 \verb|long long| 一样是 8 字节。 因此， SLISC 仿照 Numerical Recipe \cite{NR3} 的方式， 定义自己的类型名称。
 \begin{itemize}
 \item \verb|Char| 是 \verb|char|， 即 1 字节字符或整数
 \item \verb|Uchar| 是 \verb|unsigned char|， 即 1 字节无符号整数
 \item \verb|Short| 是 2 字节整数
 \item \verb|Int| 是 4 字节整数
-\item \verb|Long| 是 \verb|Int| 或者 \verb|Llong|， 取决于宏 \verb|SLS_USE_INT_AS_LONG| 是否定义。 SLISC 库种， \verb|Long| 被用来作为矩阵的索引类型。
+\item \verb|Long| 是 \verb|Int| 或者 \verb|Llong|， 取决于宏 \verb|SLS_USE_INT_AS_LONG| 是否定义。 SLISC 库中， \verb|Long| 被用来作为矩阵的索引类型。
 \item \verb|Llong| 是 8 字节整数
-\item \verb|Float| 是 \verb|float|（4 字节）
-\item \verb|Doub| 是 \verb|double|（8 字节）
-\item \verb|Ldoub| 是 \verb|long double| （16 字节）
-\item \verb|Fcomp| 是 \verb|std::complex<float>| （8 字节）
-\item \verb|Comp| 是 \verb|std::complex<double>| （16 字节）
-\item \verb|Lcomp| 是 \verb|std::complex<long double>| （32 字节）
+\item \verb|Float| 是 \verb|float|（4 字节浮点数）
+\item \verb|Doub| 是 \verb|double|（8 字节浮点数）
+\item \verb|Ldoub| 是 \verb|long double| （16 字节浮点数， 但并不一定是四精度， 取决于机器和编译器）
+\item \verb|Qdoub| 是 16 字节浮点数， 标准的四精度\upref{FltCpp}。
+\item \verb|Fcomp| 是 \verb|std::complex<float>| （8 字节复数）
+\item \verb|Comp| 是 \verb|std::complex<double>| （16 字节复数）
+\item \verb|Lcomp| 是 \verb|std::complex<long double>| （32 字节复数）
+\item \verb|Qcomp| 是 \verb|std::complex<Qdoub>| 32 字节复数， 标准的四精度。
 \end{itemize}
-另外我们还定义一些附加类型， 用于声明函数的参数。 例如 \verb|Doub_I| 是 \verb|const Doub|， 表示函数的输入参数。 又如 \verb|Doub_O| 是 \verb|Doub &|， 表示函数的输出参数。 \verb|Doub_IO| 也是 \verb|Doub &|， 但表示既作为输入也作为输出。 以上的标量类型都同理， 在后面加 \verb|_I|， \verb|_O|， \verb|_IO| 分别表示 in， out， in-out。
+另外我们还定义一些附加类型， 用于声明函数的参数。 例如 \verb|Doub_I| 是 \verb|const Doub|， 表示函数的输入参数。 又如 \verb|Doub_O| 是 \verb|Doub &|， 表示函数的输出参数（原来的值不会被使用）。 \verb|Doub_IO| 也是 \verb|Doub &|， 但表示既作为输入也作为输出（原来的值会被使用且被覆盖）。 以上的标量类型都同理， 在后面加 \verb|_I|， \verb|_O|， \verb|_IO| 分别表示 in， out， in-out。
 
 以后还会看到矢量类和矩阵类， 但和标量不同， 为了避免不必要的复制， 它们都必须 pass by reference 而不是 pass by value。 例如矩阵类 \verb|CmatDoub| 的 \verb|CmatDoub_I| 是 \verb|const CmatDoub &|， \verb|CmatDoub_O| 和 \verb|CmatDoub_IO| 都是 \verb|CmatDoub &|。

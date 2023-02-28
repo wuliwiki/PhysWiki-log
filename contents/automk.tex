@@ -1,12 +1,10 @@
-% Automake 笔记
+% Autotools 笔记
 
 \begin{issues}
 \issueDraft
 \end{issues}
 
 \pentry{Makefile 笔记\upref{Make}}
-
-\addTODO{libtool 讲一讲}
 
 \subsection{使用}
 经典的三部使用
@@ -28,7 +26,7 @@ make install
 
 若要 build 一个 debug 版本， 参考\href{https://stackoverflow.com/questions/4553735/gnu-autotools-debug-release-targets}{这里}的高赞。 例如 arb\upref{ArbLib} 中（注意 \verb|./config --help| 中只有 \verb|CFLAGS| 没有 \verb|CPPFLAGS|）， 用
 \begin{lstlisting}[language=bash]
-./configure --prefix=/home/addis/arb-debug-install \
+./configure --prefix=/安装路径 \
      CFLAGS=-DDEBUG CFLAGS="-g3 -O0"
 make [-j4]
 make install
@@ -37,7 +35,16 @@ make install
 
 \subsection{开发者}
 \begin{itemize}
+\item 一般来说建议学 Cmake\upref{CMakeN} 而不是 autotool。 Makefile 的基础还是要学的。 但如果要维护或者修改一些老项目就需要了。
 \item 这里有一个\href{https://devmanual.gentoo.org/general-concepts/autotools/index.html}{教程}。
 \item 参考\href{https://www.gnu.org/software/automake/manual/html_node/Autotools-Introduction.html}{官方教程}。
-\item 一般来说建议学 Cmake\upref{CMakeN} 而不是 autotool。 Makefile 的基础还是要学的。
+\item 发展历史参考\href{https://www.zhihu.com/question/22644913/answer/141475420}{知乎这篇文章}。
+\begin{figure}[ht]
+\centering
+\includegraphics[width=14.25cm]{./figures/automk_1.png}
+\caption{autotools 的结构（来自\href{https://www.zhihu.com/question/22644913/answer/141475420}{知乎}）} \label{automk_fig1}
+\end{figure}
+\item automake 是 autotools 的一部分， 也叫做 \textbf{GNU Build System}
+\item autotools 主要包含 autoconf（用于生成 \verb|configure| 脚本），automake（用于生成 \verb|Makefile.in|），libtool（用于制作 shared library）
 \end{itemize}
+

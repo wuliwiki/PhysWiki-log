@@ -85,15 +85,22 @@ password=smb密码
 \subsection{使用 NFS}
 \subsubsection{服务器端}
 \begin{itemize}
-\item Network File System
+\item Network File System， 默认端口 \verb|2049|
+\item NFS 无法设置密码， 一般只在信任的局域网中使用！ 把共享文件夹设为只读会更安全一些。
+\item 注意如果防火墙允许， NFS 会监听所有网卡！ 要指定网卡（指定 ip 地址）见下文。
 \item 安装 \verb|sudo apt-get install nfs-kernel-server|
 \item \verb|mkdir 文件夹|
 \item \verb|sudo vim /etc/exports|， 添加一行 \verb|/home/用户名/文件夹 *(rw,sync,no_root_squash,no_subtree_check)|
 \item 据说如果把 \verb|sync| 变为 \verb|async|， 可以用 ram 作为文件缓存， 但如果服务器断电缓存中的文件将丢失。
-\item \verb|sudo service nfs-kernel-server restart|
+\item \verb|sudo systemctl restart nfs-kernel-server| 或者 \verb|sudo service nfs-kernel-server restart|
 \item \verb|nfsstat –s| 可以检查 nfs 的信息， 包括 nfs 版本（v1 到 v4） 等
 \item NFS 无法在服务器端 follow symbolic link。 也就是说软链的相对路径和绝对路径都是客户端的文件系统。
-
+\item 要指定网卡， 添加一个设置文件 \verb|sudo vim /etc/nfs.conf.d/interfaces.conf|， 内容为
+\begin{lstlisting}[language=none]
+[nfsd]
+host=ip地址或hostname
+\end{lstlisting}
+然后重启服务 \verb|sudo systemctl restart nfs-kernel-server|
 \end{itemize}
 
 \subsubsection{Ubuntu 客户端}

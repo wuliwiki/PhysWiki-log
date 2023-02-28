@@ -1,0 +1,69 @@
+% WSL 笔记
+
+\begin{issues}
+\issueDraft
+\end{issues}
+
+\subsection{cmd 中的 wsl 命令}
+\begin{itemize}
+\item \href{https://docs.microsoft.com/en-us/windows/wsl/}{官方文档}
+\item \verb`wsl --help` 获取帮助
+\item \verb`wsl --shutdown` 关闭所有 distro 和虚拟机
+\item \verb`wsl --status` 显示 wsl 状态
+\item \verb`wsl --update` 更新
+\item \verb`wsl --set-default-version 1 或 2` 切换新安装 wsl 的默认的版本
+\item \verb`wsl --set-version Ubuntu-22.04 2` 把某个已安装的 distro 在 WSL1 和 2 之间转换， 如果 windows 没有开 Virtual Machine Platform， 会提示且不做转换。 （两三分钟就好了）。 注意这并不会把整个 linux 的文件系统都变成 ext4 的虚拟硬盘（可以用 windirtree 验证）。 其实还是另外新装 wsl2 版本的 ubuntu 比较好， 因为 wsl1 没有 snap store 和正常的 systemd systemctl 等。 可以用下面的方法把某个 wsl1 distro 重命名， 再安装相同的 wsl2 distro （没试过）。
+\item \verb`wsl --set-default [distro]` 选择默认的 distro
+\item \verb`wsl --list` 列出所有 distro `wsl --list --verbose` 显示详细信息
+\item \verb`wsl --list --online` 列出所有可下载的 distro
+\item \verb`wsl --install -d` 安装某个 distro
+\item WSL 虚拟机的默认路径是 \verb`C:/Users/用户名/AppData/Local/Packages/CanonicalGroup...distro版本号/`
+\item \verb`wsl --unregister ...` 删除某个 distro 以及它的所有文件
+
+\subsubsection{镜像导出导入}
+\item \verb`wsl --export <distribution name> <export file name>` 可以导出 wsl。 例如 \verb`wsl --export Ubuntu ubuntu.tar` 导出文件会存到当前路径。
+\item export 和 import 可以把同一个 distro 安装多份或者重命名。
+\item \verb`wsl --import <new distribution name> <install location> <export file name> --version 1或2` 例如 \verb`wsl --import Ubuntu-20.04-WSL1-20220904 C:\Users\用户名\ C:\Users\用户名\Desktop\Ubuntu-20.04-WSL1-20220904.tar --version 1或2` 注意 import 以后默认会以 root 身份登录， 可以设置 \verb`.bashrc` 自动 \verb`su` 成某个用户。
+\item \verb`No3/WSL-images/Ubuntu-20.04-WSL2-20220905.tar` 是从 Miranda 的 Win11 备份的镜像， 亲测在 Surface 上可以直接 import， X11 可用（但是 CLion 好卡）
+\item import wsl 以后， 会默认用 root 登录， 先试试 xeyes 可不可以。 可以的话 \verb`cp ~/.Xautority /home/用户名/` 然后 \verb`su 用户名` 再试试 xeyes 可不可以。 可以的话就把这两个命令添加到 \verb`/root/.bashrc` 中。
+\end{itemize}
+
+\subsection{ssh 到 WSL}
+\begin{itemize}
+\item 很容易可以从其他机器通过 ip 地址和端口 22 ssh 到 WSL
+\item WSL (不是 WSL 2) 是 windows 开机就运行的， 而不是打开 terminal 才开始运行。 所以只要 windows 开着就可以 ssh 连接
+\item WSL 的 IP 地址 (用 verb`ifconfig` 查看) 和 windows 的 IP 地址 (在 cmd 中用 verb`ipconfig`) 是一样的， 而不是像虚拟机一样使用 NAT
+\item 所以设置 sshd 的方法基本上和任何 linux 主机一样， 安装 \verb`openssh-server` 即可
+\item 重启 windows 以后貌似 service 会停止， 要自动还需要一些设置
+\item 不行的话就重装一下 \verb|openssh-server|
+\item 如果说 \verb|sshd: no hostkeys available -- exiting.|， 那就用 \verb|sudo ssh-keygen -A|
+\end{itemize}
+
+\subsection{WSL 内挂载 windows 硬盘}
+\begin{itemize}
+\item 例如 \verb`sudo mount -o uid=用户名 -t drvfs g: /mnt/g`
+\end{itemize}
+
+\subsection{中文乱吗}
+\begin{itemize}
+\item 确保系统语言设置里面的 Nonunicode 程序显示为 Chinese (Simplified)， 否则全部中文都是乱码
+\end{itemize}
+
+\subsection{使用 MobaXterm 显示 WSL 的图形界面}
+\begin{itemize}
+\item mobaxter 可以直接 `ssh localhost` 进入 wsl， 可以使用 X11 的图形界面
+\item 参考\href{https://nickjanetakis.com/blog/using-wsl-and-mobaxterm-to-create-a-linux-dev-environment-on-windows}{这里}
+\item 确保 MobaXterm 是打开的， 且右上角的 X 标志正在运行
+\item 在 .bashrc 文件中添加 \verb`export DISPLAY=:0`， 重启终端即可
+\item 测试了 firefox， nautilus 都没问题
+\end{itemize}
+
+\subsection{启动时运行程序}
+\begin{itemize}
+\item 创建 \verb|/etc/wsl.conf|， 内容如下即可。
+\begin{lstlisting}[language=none]
+[boot]
+command="命令1; 命令2"
+\end{lstlisting}
+其中的命令会直接使用 sudo 权限运行。
+\end{itemize}
