@@ -41,7 +41,7 @@ Git for Windows 的 Git bash 是不支持 symlink 的， symlink clone 下来以
 \item 要把某个路径变为一个 repository, 先 cd 到该路径， 然后 \verb|git init| 即可。 该命令会在当前目录创建 .git 文件夹， 里面包含所有历史信息。
 \item \verb|git clone| 时在后面加上 \verb|--depth N| 选项可以只下载最后 \verb|N| 次的 commit
 \item \verb|git clone <url> newname| 会把本地 repo 文件夹命名成 \verb|newname|
-\item git 会无视隐藏目录（\verb|.| 开头的）， \verb|git status| 也不显示， \verb|git clean| 也删不掉
+\item git 会无视隐藏目录（\verb|.| 开头的）， \verb|git status| 也不显示
 \item \verb|git status| 只会显示 worktree 和 index 之间的区别， 而不一定是最新 commit 之间的（对于服务器上被 push 的 repo 而言）
 \item \verb|git status 目录| 可以只显示某个目录的 status
 \item 每个 repo 的设置文件是 \verb|.git/config|. 用户的 \verb|.gitconfig| 文件可以在 home 目录 （~） 找到 （对当前用户生效）, \verb|git config --global| 的设置全部存在这里。 系统的设置文件可以在 linux 的 \verb|/etc/gitconfig| 或 Windows 的 \verb|/C/ProgramData/Git/config| 中找到 （对所有用户生效）. repo 中的设置覆盖用户设置覆盖系统设置。
@@ -105,7 +105,7 @@ git config --global pack.threads 2 # 使用多少线程压缩 pack
 \end{lstlisting}
 \item 如果一个 repo 中的 pack 文件太大， 可以用 \verb|git repack --max-pack-size=1g -a| 拆分成 1GB 的小块。 这和先设置 \verb|pack.packSizeLimit| 效果是一样的。
 \item 即使是二进制文件， git 也会尽量储存每个版本的增量， 而不是每个版本储存一次。 \verb|windowMemory| 越大， 就能做越多 delta。
-\item \verb|git clean -f| 可以清除 untracked file, \verb|-d| 选项可以清除 untracked directory,  \verb|git clean -n| 显示将要清除的文件。
+\item \verb|git clean -f| 可以清除 untracked file, \verb|-d| 选项可以清除 untracked directory,  \verb|git clean -n| 显示将要清除的文件。 \verb|git clean -fdX| 会连被 ignore 的文件和文件夹一起删掉。
 \item 要让 windows 中 git bash 支持中文， 在右键 option > text 中 local 选择 C, character set 选 UTF8, 另外输入以下命令
 \verb|export LESSCHARSET=utf-8|
 \verb|git config --global core.quotepath false|     显示 status 编码

@@ -32,6 +32,16 @@
 \item 参考\href{https://askubuntu.com/questions/1322105/cant-find-alt-f5-in-settings-keyboard-shortcuts}{这里}。
 \end{itemize}
 
+\subsection{自定义屏幕分辨率}
+\begin{itemize}
+\item 在 22.04 下， 例如要定义 1368x912 的分辨率， 先用 \verb|cvt 1368 912|， 输出第二行为 \verb|Modeline "1368x912_60.00"  103.00  1368 1448 1592 1816  912 915 925 947 -hsync +vsync|
+\item 执行 \verb|xrandr --newmode "1368x912"  103.00  1368 1448 1592 1816  912 915 925 947 -hsync +vsync|， 后面的数据是复制过来的。 双引号中的名字可以随意。
+\item 执行 \verb|xrandr|， 找到 connected 的显示器名称， 如 \verb|eDP-1 connected primary 1368x912+0+0 ...|
+\item 执行 \verb|xrandr --addmode eDP-1 "1368x912"| 即可添加分辨率。
+\item 现在打开 setting 中的 display 就可以看到这个分辨率的选项了。
+\end{itemize}
+
+
 \subsection{笔记本合上盖子不作为}
 \begin{itemize}
 \item \verb|sudo vim /etc/systemd/logind.conf|， 找到所有包含 \verb|LidSwitch| 的选项， 取消注释， 值改成 \verb|ignore|

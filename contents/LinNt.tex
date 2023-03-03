@@ -78,7 +78,8 @@
 \item \verb|plocate| 是一个比较快的实现， \verb|mlocate| 是一个比较安全的实现， 命令都是 \verb|locate|， \verb|/etc/updatedb.conf| 中可以设置 \verb|updatedb| 的一些选项， 例如忽略挂载到某个目录的硬盘， 忽略 \verb|.git| 文件夹等， 忽略某些文件系统等。
 \item \verb|rename 's/老名字/新名字/' *|。 \verb|-n| 选项显示重命名的预览， 不真的重命名
 \item \verb|sudo swapoff -a| 不使用 swap file， \verb|sudo swapon -a| 恢复使用。 可能还需要在 \verb|/etc/fstab| 里面注释掉相应的行。
-\item 要改变 swap 文件的尺寸： \verb|sudo swapoff /swapfile|， \verb|sudo dd if=/dev/zero of=/swapfile bs=1M count=1024 oflag=append conv=notrunc|， \verb|sudo mkswap /swapfile|， \verb|sudo swapon /swapfile| 如果系统不允许关闭 swap， 也可以考虑用多个 swap 文件。
+\item 要改变 swap 文件的尺寸： \verb|sudo swapoff /swapfile|， \verb|sudo dd if=/dev/zero of=/swapfile bs=1M count=1024 oflag=append conv=notrunc|， \verb|sudo mkswap /swapfile|， \verb|sudo swapon /swapfile| 一般无需重启， 但如果系统不允许关闭 swap， 也可以考虑用多个 swap 文件。
+\item 用 \verb|free -h| 可以查看当前 RAM 和 swap 的大小和使用情况。
 \item 如果要开机自动使用 swapfile， 用 \verb|/swapfile none swap sw 0 0|
 \item \verb|tree| （非系统自带） 可以显示当前目录的树状图， \verb|tree -a| 也显示隐藏文件。
 \item \verb|sort| 可以排列 stdin 输入的列。 \verb|-k| 可以按列排序
@@ -183,6 +184,7 @@
 \item \verb`grep <string> < <filename>` 可以在文档中高亮标出指定字符串， 用 \verb|-i| 不区分大小写。
 \item \verb`cat <filename> | grep <string>` 可以达到同样的效果
 \item \verb`grep -iRl "文字" [path]` 可以搜索当前目录或者指定目录下所有子文件夹中文件的内容， 并列出文件名。 \verb`i` 选项不区分大小写， \verb`R` 搜索子文件夹， \verb`l` 仅列出文件名。 要列出每一个 match， 用 \verb`grep -iR` 即可
+\item \verb|egrep| 是支持正则表达式\upref{regex}的 grep， 例如 \verb`lsb_release -a 2>&1 | egrep -o -m 1 [0-9]{2}\.[0-9]{2}` 可以获取 ubuntu 系统的版本号（相当于 \verb|lsb_release -rs|）。 其中 \verb|-m 1| 只匹配第一个结果， \verb|-o| 只输出匹配部分。
 \item 用 vim 的时候, 最好在前面加上 \verb`sudo`, 否则有可能编辑了保存不了(例如一些 configuration file). 甚至要首先用 \verb`chown` 把文件所有权变成自己的.
 \item \verb`#` 在文件中起标注的作用 (如果文件中有 linux 代码), 在命令行, \verb`#` 后面的代码同样会被忽略.
 \item 要转换文档 encoding，用 \verb|iconv -f [encoding] -t [encoding] -o [newfilename] [filename]|。 微软的 ANSI 格式其实叫做 iso-8859-1, 例如 \verb`iconv -f iso-8859-1 -t utf-8 -o out.txt in.txt`.
@@ -250,20 +252,20 @@
 \item 如果一个进程 kill 不掉， 可以试试 \verb|kill -9|
 \end{itemize}
 
-\subsection{文件压缩和加密}
+\subsection{文件打包压缩}
 \begin{itemize}
 \item \verb`tar -czvf <path/name.tar.gz> <some/path/or/file>` 是常见的压缩命令. 其中 \verb`-c` 是 create, \verb`-v` 是 verbose, \verb`-f` 指定目标文件（一定要紧接文件名）, \verb`-z` 使用 gzip 压缩. 如果不需要压缩就用 \verb`-cvf <path/name.tar>`.
 \item 要解压, windows 中可以用 好压或 Matlab, linux 中把以上命令中的 \verb`-c` 换成 \verb`-x` （extract）即可, 如 \verb`tar -xzvf 文件.tar.gz -C 目标文件夹` 如果省略 \verb`-C` 选项就解压到当前文件夹.
 \item 如果要直接压缩文件可以用 \verb|gzip [-9] < 文件 > 文件.gz|， 其中 \verb|-9| 可以增加压缩率。
-\item openssl 可以用来给文件或字符串加密或解密
-\item 文件加密： \verb`openssl aes-256-cbc -nosalt -in 文件名 -out 加密文件名 -pass pass:密码`
-\item 文件解密： \verb`openssl aes-256-cbc -nosalt -d -in 加密文件名 -out 文件名 -pass pass:密码`
-注意： 文件加密得到的结果的 hash 是不稳定的！
-\item 字符串加密： \verb`echo '需要加密的字符串' | openssl enc -base64 -e -aes-256-cbc -nosalt -pass pass:密码`
-\item 字符串解密： \verb`echo "需要解密的字符串" | openssl enc -base64 -d -aes-256-cbc -nosalt -pass pass:密码`
-\item \verb`-salt` 和 \verb`-nosalt` 是什么？
-\item \verb`-base64` 是什么？
-\item 这样也可以给文件加密得到稳定 hash： \verb`cat 文件名 | openssl enc -base64 -e -aes-256-cbc -pass pass:密码 > 加密文件名`
+\end{itemize}
+
+\subsubsection{zip 命令}
+\begin{itemize}
+\item 要压缩为 zip 文件， 用 \verb|zip -r 文件名.zip files|
+\item \verb|unzip archive.zip| 解压
+\item 要添加密码， 用 \verb|zip -r -P 密码 文件名.zip files|
+\item \verb|-0| 到 \verb|-9| 可以设置压缩等级， 9 得到的文件最小。
+\item \verb|zip -r 文件名.zip files -x "*.log"| 可以排除所有 \verb|.log| 后缀名的文件
 \end{itemize}
 
 \subsubsection{7zip}
@@ -277,6 +279,19 @@
 \item 将每个子文件夹中的压缩包分别解压，删除压缩包
 \verb`find . -type f -name "*.7z" -execdir 7z x {} -p密码 \; -exec rm {} \;`
 \item 注意即使用完全一样的命令， 产生的压缩包也不是完全一样的（看 sha1sum）
+\end{itemize}
+
+\subsection{文件加密}
+\begin{itemize}
+\item \verb|openssl| 可以用来给文件或字符串加密或解密
+\item 文件加密： \verb`openssl aes-256-cbc -nosalt -in 文件名 -out 加密文件名 -pass pass:密码`
+\item 文件解密： \verb`openssl aes-256-cbc -nosalt -d -in 加密文件名 -out 文件名 -pass pass:密码`
+注意： 文件加密得到的结果的 hash 是不稳定的！
+\item 字符串加密： \verb`echo '需要加密的字符串' | openssl enc -base64 -e -aes-256-cbc -nosalt -pass pass:密码`
+\item 字符串解密： \verb`echo "需要解密的字符串" | openssl enc -base64 -d -aes-256-cbc -nosalt -pass pass:密码`
+\item \verb`-salt` 和 \verb`-nosalt` 是什么？
+\item \verb`-base64` 是什么？
+\item 这样也可以给文件加密得到稳定 hash： \verb`cat 文件名 | openssl enc -base64 -e -aes-256-cbc -pass pass:密码 > 加密文件名`
 \end{itemize}
 
 \subsection{sftp}
