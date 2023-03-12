@@ -1,0 +1,77 @@
+% 速度的坐标系变换
+
+\pentry{速度的参考系变换\upref{Vtrans}， 圆周运动的速度\upref{CMVD}， 三维旋转矩阵\upref{Rot3D}}
+
+\subsection{有相对转动}
+对于任意两个坐标系， 他们之间的相对运动除了平移可能还有转动， 即 $\uvec x, \uvec y, \uvec z$ 和 $\uvec x', \uvec y', \uvec z'$ 之间的关系可能随时间变化。 这时\autoref{Vtrans_eq1}~\upref{Vtrans} 是否仍然成立呢？
+
+要回答这个问题我们首先要修改 $\bvec v_r$ 的定义。 按照上一节的定义， 如果坐标系间存在相对转动， $\bvec v_r$ 将与固定点的位置有关。 若定义某时刻点 $P$ 在 $S'$ 中的坐标为 $(x_p', y_p', z_p')$， 则 $\bvec v_r$ 可以定义为 $S'$ 系中的固定点 $(x_p', y_p', z_p')$ 相对于 $S$ 系的瞬时速度。 这时仍有
+\begin{equation}\label{Vtran2_eq2}
+\bvec v = \bvec v' + \bvec v_r~.
+\end{equation}
+证明见下文。 再次强调， 这三个矢量也表示几何矢量。 若要记为坐标的形式需要使用同一坐标系。
+
+\begin{example}{}\label{Vtran2_ex1}
+令 $S'$ 系 $t = 0$ 时与 $S$ 系重合并绕 $z$ 轴逆时针以恒定角速度 $\omega$ 相对 $S$ 转动， 又令点 $P$ 的运动方程为 $\bvec r(t) = \alpha t \uvec x'$， 验证\autoref{Vtran2_eq2}。
+
+首先将 $\bvec r(t)$ 用 $\uvec x, \uvec y$ 基底表示为
+\begin{equation}
+\bvec r(t) = \alpha t (\cos\omega t\, \uvec x + \sin\omega t\, \uvec y)~.
+\end{equation}
+将 $\uvec x, \uvec y, \uvec z$ 视为常矢量， $\bvec r(t)$ 关于时间求导得点 $P$ 相对于 $S$ 系的速度
+\begin{equation}
+\bvec v = \alpha (\cos\omega t \,\uvec x + \sin\omega t \,\uvec y)
++ \alpha\omega t (-\sin\omega t \,\uvec x + \cos\omega t \,\uvec y)~.
+\end{equation}
+将 $\uvec x', \uvec y', \uvec z'$ 视为常矢量， $\bvec r(t)$ 关于时间求导得点 $P$ 相对于 $S'$ 系的速度
+\begin{equation}
+\bvec v' = \dv{t} (\alpha t \uvec x') = \alpha \uvec x' = \alpha (\cos\omega t\, \uvec x + \sin\omega t \,\uvec y)~.
+\end{equation}
+最后， $t$ 时刻两坐标系在点 $P$ 处的相对速度（见\autoref{CMVD_eq5}~\upref{CMVD} ）为
+\begin{equation}\label{Vtran2_eq3}
+\begin{aligned}
+\bvec v_r &= \bvec\omega \cross \bvec r = (\omega \uvec z') \cross (\alpha t \uvec x') \\
+&= \alpha\omega t \uvec z'\cross\uvec x' = \alpha\omega t \uvec y' = \alpha\omega t(-\sin \omega t \,\uvec x + \cos\omega t \,\uvec y)~.
+\end{aligned}\end{equation}
+将以上三式代入\autoref{Vtran2_eq2} 可验证其成立。 注意以上我们将所有的矢量用 $\uvec x, \uvec y, \uvec z$ 基底， 同理我们也可以将所有矢量用 $\uvec x', \uvec y', \uvec z'$ 基底展开。
+\end{example}
+
+一般情况下， 相对速度 $\bvec v_r$ 可以拆分成 $S'$ 的原点 $O'$ 在 $S$ 中的速度， 以及 $S'$ 相对 $S$ 旋转产生的速度（\autoref{CMVD_eq5}~\upref{CMVD}）两部分， 根据\autoref{Vtrans_eq1}~\upref{Vtrans} 有
+\begin{equation}\label{Vtran2_eq4}
+\bvec v_r = \bvec v_{O'} + \bvec \omega \cross \bvec r'~.
+\end{equation}
+\textbf{证明}： 可以先在 $O'$ 处建立一个相对 $S$ 只平动不转动的坐标系 $S''$， 然后考虑 $S'$ 中的固定点相对 $S''$ 以速度 $\bvec \omega \cross \bvec r'$ 旋转即可。 证毕。
+
+所以\autoref{Vtran2_eq2} 也可以进一步写成
+\begin{equation}\label{Vtran2_eq7}
+\bvec v = \bvec v_{O'} + \bvec \omega \cross \bvec r' + \bvec v'~.
+\end{equation}
+
+\subsubsection{证明}
+现在用旋转变换矩阵\upref{Rot3D}在 $S$ 系中证明\autoref{Vtran2_eq2} 即\autoref{Vtran2_eq7}。
+
+令 $S'$ 中坐标到 $S$ 坐标的旋转变换矩阵\upref{Rot3D}为 $\mat R$， 即对任意几何矢量 $\bvec A$ 有
+\begin{equation}
+(\bvec A)_S = \mat R (\bvec A)_{S'}~, \qquad
+(\bvec A)_{S'} = \mat R\Tr (\bvec A)_S
+\end{equation}
+那么令 $\bvec r_{O'}$ 为 $S$ 的原点指向 $S'$ 的原点的几何矢量， 令 $\bvec r, \bvec r'$ 分别为质点在两参考系中的位置矢量， 有
+\begin{equation}
+\bvec r = \bvec r_{O'} + \bvec r'~.
+\end{equation}
+用 $S$ 中的坐标来表示， 就是
+\begin{equation}
+(\bvec r)_S = (\bvec r_{O'})_S + (\bvec r')_S = (\bvec r_{O'})_S + \mat R(\bvec r')_{S'}~.
+\end{equation}
+两边对时间求导得（未完成：引用矩阵乘法的求导法则）
+\begin{equation}
+\begin{aligned}
+(\bvec v)_S &= ({\bvec v}_{O'})_S + \dot{\mat R}(\bvec r')_{S'} + \mat R (\bvec v')_{S'}\\
+&= ({\bvec v}_{O'})_S + \dot{\mat R}(\bvec r')_{S'} + (\bvec v')_S~.
+\end{aligned}
+\end{equation}
+其中第二项为（详见 “旋转矩阵的导数\upref{RotDer}”）
+\begin{equation}
+\dot{\mat R}(\bvec r')_{S'} = \dot{\mat R}\mat R\Tr (\bvec r')_S = \mat \Omega (\bvec r')_S = (\bvec \omega \cross \bvec r')_S~,
+\end{equation}
+代入得\autoref{Vtran2_eq7}， 证毕。

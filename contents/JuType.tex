@@ -147,7 +147,7 @@ primitive type UInt128 <: Unsigned 128 end
 \end{lstlisting}
 
 \subsection{复合类型}
-\textbf{复合类型（composite）} 类似于 C++ 中的 \verb|struct|
+\textbf{复合类型（composite）} 类似于 C++ 中的 \verb|struct|， 但是不能有成员函数。
 \begin{lstlisting}[language=julia]
 struct Foo
     bar # 抽象类型是 Any
@@ -159,11 +159,25 @@ end
 \begin{lstlisting}[language=julia]
 foo = Foo("Hello, world.", 23, 1.5) # 叫做 constructor
 \end{lstlisting}
-查看成员名称用 \verb|fieldnames(Foo)|
-
-要获取成员的值， 用 \verb|foo.bar|, \verb|foo.baz|, \verb|foo.qux| 等。 用 \verb|struct| 声明的复合类型值在生成后就不能被改变。 如果 struct 里面有矩阵等， 那么矩阵元仍然是 mutable 的（没有 lower level const）。
-
-如果要支持成员改变， 那么用 \verb|mutable struct| 来声明即可。 mutable struct 通常存在 heap 中而不是在 stack 中。
+\begin{itemize}
+\item 要获取成员的值， 用 \verb|foo.bar|, \verb|foo.baz|, \verb|foo.qux| 等。 用 \verb|struct| 声明的复合类型值在生成后就不能被改变。 如果 struct 里面有矩阵等， 那么矩阵元仍然是 mutable 的（没有 lower level const）。
+\item 如果要支持成员改变， 那么用 \verb|mutable struct| 来声明即可。 mutable struct 通常存在 heap 中而不是在 stack 中。
+\item 查看成员名称用 \verb|fieldnames(Foo或Foo的对象)|， 如果还要显示成员类型， 用 \verb|dump(Foo)|。
+\item \verb|ismutable(Foo)| 可以判断是否 \verb|mutable struct|。
+\item 要判断一个类型是 primitive 还是 struct， 可以先打个 \verb|?| 进入 help 模式， 然后再输入 \verb|Foo|。 等效地也可以用 \verb|@doc Foo|。
+\item 定义 constructor 如：
+\begin{lstlisting}[language=julia]
+struct Person
+    name::String
+    age::Int
+    function abc(name::String, age::Int, add::Int)
+        new(name, age+add)
+    end
+end
+\end{lstlisting}
+\item 注意 struct 里面的函数并不能用于定义其他 “成员函数”。
+\item 要定义类型转换， 可以定义一个新的 constructor， 也可以定义一个函数 \verb|Base.convert(::Type{类型1}, f::类型2)|， 转换用 \verb|g = convert(类型1, f)|
+\end{itemize}
 
 \subsection{Type Unions}
 \begin{lstlisting}[language=julia]

@@ -179,16 +179,16 @@
 \item  \verb`cat 文件` 把文件的内容输出到 stdout
 \item  \verb`cat` 把 stdin 的内容输出到 stdout
 \item \verb`<命令> | less` 可以用键盘滚动输出结果(用于长输出以及没有滚动条的情况), 按 q 键退出
-\item \verb`|` 的作用相当于把前面一个命令的输出放到后面一个命令的输入中.
+\item \verb`|` 的作用相当于把前面一个命令的 stdout 输出放到后面一个命令的 stdin 输入中.
 \item \verb`<命令> > <文件名.txt>` 可以把命令行的输出写入文件中 !! 例如: \verb`date > time.txt , cal > calander.txt`
 \item \verb`grep <string> < <filename>` 可以在文档中高亮标出指定字符串， 用 \verb|-i| 不区分大小写。
 \item \verb`cat <filename> | grep <string>` 可以达到同样的效果
 \item \verb`grep -iRl "文字" [path]` 可以搜索当前目录或者指定目录下所有子文件夹中文件的内容， 并列出文件名。 \verb`i` 选项不区分大小写， \verb`R` 搜索子文件夹， \verb`l` 仅列出文件名。 要列出每一个 match， 用 \verb`grep -iR` 即可
 \item \verb|egrep| 是支持正则表达式\upref{regex}的 grep， 例如 \verb`lsb_release -a 2>&1 | egrep -o -m 1 [0-9]{2}\.[0-9]{2}` 可以获取 ubuntu 系统的版本号（相当于 \verb|lsb_release -rs|）。 其中 \verb|-m 1| 只匹配第一个结果， \verb|-o| 只输出匹配部分。
-\item 用 vim 的时候, 最好在前面加上 \verb`sudo`, 否则有可能编辑了保存不了(例如一些 configuration file). 甚至要首先用 \verb`chown` 把文件所有权变成自己的.
+\item 用 vim 的时候, 有时要在前面加上 \verb`sudo`, 否则有可能编辑了保存不了(例如一些 configuration file). 也可以要首先用 \verb`chown` 把文件所有权变成自己的.
 \item \verb`#` 在文件中起标注的作用 (如果文件中有 linux 代码), 在命令行, \verb`#` 后面的代码同样会被忽略.
 \item 要转换文档 encoding，用 \verb|iconv -f [encoding] -t [encoding] -o [newfilename] [filename]|。 微软的 ANSI 格式其实叫做 iso-8859-1, 例如 \verb`iconv -f iso-8859-1 -t utf-8 -o out.txt in.txt`.
-\item \verb|tr [opt] SET1 [SET2]| 可以用来把 stdin 中 \verb|SET1| 中的字符分别替换为 \verb|SET2| 中的， 输出到 stdout。 另外 \verb|-s| 选项可以把替换后相邻重复的字符只保留一个。 例如 \verb`echo $PATH | tr : '\n'` 可以分行显示每个路径。
+\item \verb|tr [opt] SET1 [SET2]| 可以用来把 stdin 中 \verb|SET1| 中的字符分别替换为 \verb|SET2| 中的， 输出到 stdout。 另外 \verb|-s| 选项可以把替换后相邻重复的字符只保留一个。 例如 \verb`echo $PATH | tr : '\n'` 可以分行显示每个路径（\verb|'\n'| 也可以换成 \verb|\\n|）。
 
 \subsubsection{sed}
 \item \verb|sed|（stream editor） 命令通常用于批量自动修改文本文件， 而不是用交互的编辑器手动编辑。
@@ -354,4 +354,9 @@
 \subsection{硬件}
 \begin{itemize}
 \item \verb|lscpu| 查看 CPU 信息， \verb|free| 查看内存使用情况， \verb|ifconfig| 和 \verb|ip| 查看网卡。
+\end{itemize}
+
+\subsection{多媒体}
+\begin{itemize}
+\item HEIC 文件转换为 \verb|jpg| 或 \verb|png|： 安装 \verb|sudo apt install libheif-examples|。 然后 \verb|find . -iname "*.heic" -exec heif-convert -q 100 {} {}.jpg或png \;|
 \end{itemize}

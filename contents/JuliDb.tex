@@ -1,0 +1,36 @@
+% Julia 调试笔记
+
+\begin{issues}
+\issueDraft
+\end{issues}
+
+\begin{itemize}
+\item \href{https://github.com/JuliaDebug/Debugger.jl}{Debugger.jl} 是 julia 的常用的命令行 debugger。 如果想用图形界面， 用 Julia 的 \href{https://www.julia-vscode.org}{VScode 拓展} 比较好。
+\item 安装： \verb|julia> import Pkg; Pkg.add("Debugger")|
+\item 示例：
+\begin{lstlisting}[language=none]
+using Debugger
+function foo(n)
+    x = n+1
+    ((BigInt[1 1; 1 0])^x)[2,1]
+end
+@enter foo(20)
+\end{lstlisting}
+\item 进入调试界面以后， 用 \verb|?| 可以看到常用操作。
+\item \verb|st|： 显示当前函数， 运行位置。
+\item \verb|+| 或 \verb|-|： 增减显示的代码行数。
+\item \verb|o|： 用默认编辑器（如 vim）打开当前文件的当前行。
+\item \verb|bt|： 显示调用顺序
+\item \verb|n|： 运行到下一行
+\item \verb|u 行号|： 运行到指定行
+\item \verb|c|： 运行到下一个断点
+\item \verb|s|： 进入下一个函数
+\item \verb|so|： 退出当前函数
+\item \verb|sl|： 进入当前行的最后一个函数调用例如进入 \verb|f(g(h(x)))| 中的 \verb|f|
+\item \verb|bp add "file.jl":line [cond]| 添加断点。
+\item \verb|bp| 显示所有断点
+\item \verb|w add 表达式| 可以把表达式添加到 watch
+\item \verb|w| 可以重新求 watch 中的所有表达式并显示。
+\item \verb|`| 可以进入 eval 模式， 运行任何表达式， 用 \verb|Ctrl + C| 回到 debug 模式。
+\item \verb|q| 退出 debugger。
+\end{itemize}

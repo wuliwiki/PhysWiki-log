@@ -40,17 +40,18 @@ Expression & Calls \\
 
 \begin{itemize}
 \item \verb|[1,2,3]'| 返回的是 \verb|LinearAlgebra.Adjoint{Int64, Vector{Int64}}|， Julia 真心牛逼。
-\item 可以看出， Julia 可以把若干算符合并为一个函数， 这立马解决了 C++ expresion template 才能搞定的痛点。 Julia 真心牛逼。
+\item 可以看出， Julia 可以把若干算符合并为一个函数， 这立马解决了 C++ expresion template 才能搞定的痛点。
 \item \verb|@which sin(pi)| 可以返回调用的 \verb|sin| 的定义（具体到行）。
 \item \verb|function g(x,y)::变量类型| 可以限制返回的变量类型。
 \item \verb|fun(a,b,x...)| 可以定义任意变量个数的函数。 在函数体内 \verb|x| 是一个 tuple， 包括后面的所有变量。
+\item \verb|return 表达式| 用于返回一个值。 如果不使用， 那就返回最后一个表达式的值， 如果最后一个表达式没有值（如 \verb|println()|）， 那就返回 \verb|nothing|（类型为 \verb|Nothing|）。
+\item 函数参数可以在函数内被改变。 如果数组
 \end{itemize}
 
 \subsubsection{默认值与命名值}
 \begin{itemize}
-\item \verb|fun(a, b=2; c=3, d) = a + b + c - d;| 中， \verb|b| 的默认值是 \verb|2|， 含有默认值的普通变量必须放在所有普通变量的最后。 \verb|;| 后面是命名变量， 每一个都可以有或没有默认值。
+\item \verb|fun(a, b=2; c=3, d) = a + b + c - d;| 中， \verb|b| 的默认值是 \verb|2|， 含有默认值的普通变量必须放在所有普通变量的最后。 \verb|;| 后面是命名变量， 每一个都可以有或没有默认值。 调用时命名变量需要制定名字， 例如 \verb|fun(1, d=4)|。
 \end{itemize}
-
 
 \subsubsection{匿名函数}
 \begin{itemize}

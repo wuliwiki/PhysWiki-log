@@ -1,0 +1,42 @@
+% Julia 解释器笔记
+
+\begin{issues}
+\issueDraft
+\end{issues}
+
+本文是关于 Julia 解释器的原理： 它使用了哪些技术， 可以使得它作为一门动态语言能达到编译语言的性能。
+
+\begin{itemize}
+\item \textbf{JIT} 编译器： 所有的代码都经过 JIT 编译， 官方称为 \textbf{just-ahead-of-time}。
+\item \textbf{Multiple Dispatch （MD）}： 可以基于参数的类型生成不同的专门代码。
+\item \textbf{Type Inference}： 自动推导变量类型。
+\item 内建并行， 包括分布计算
+\item 高效内存管理： 减少内存分配， 增加内存重复利用。
+\item 基于 \textbf{LLVM}： Julia 编译器先把 Julia 语言变为 Julia IR （和 LLVM IR 相似）， 再变为 LLVM IR\upref{llvmIR}, 最后交给 LLVM 进行优化。
+\item Julia IR 使用 \textbf{Single Static Assignment (SSA)} 形式， 把 julia 代码的控制流表示为 \textbf{directed acyclic graph (DAG)}。 Julia IR 中的变量类型都是明确的。
+\item \verb|LLVM.jl| 包可以把 julia 代码直接生成 LLVM IR， 或者把 Julia IR 转为 LLVM IR。
+\item 一些预备知识： 编译原理， 编译器设计， LLVM， Julia 背后原理。
+\end{itemize}
+
+\subsection{把 Julia 代码编译成 LLVM IR 代码}
+首先安装 \verb|using Pkg; Pkg.add("LLVM")|
+\begin{lstlisting}[language=julia]
+using LLVM
+function add(x::Int, y::Int)::Int
+    return x + y
+end
+llvm_ir = @code_llvm add(1, 2) # 生成 LLVM IR
+\end{lstlisting}
+生成的代码如下
+\begin{lstlisting}[language=none]
+;  @ REPL[3]:1 within `add'
+define i64 @julia_add_652(i64 signext %0, i64 signext %1) {
+top:
+;  @ REPL[3]:2 within `add'
+; ┌ @ int.jl:87 within `+'
+   %2 = add i64 %1, %0
+; └
+  ret i64 %2
+}
+\end{lstlisting}
+所以上面参数 \verb|(1,2)| 的作用是提供自变量的类型。

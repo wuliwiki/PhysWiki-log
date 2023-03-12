@@ -1,0 +1,22 @@
+% LLVM Debugger (LLDB) 笔记（C++）
+
+\begin{issues}
+\issueDraft
+\end{issues}
+
+\pentry{LLVM 笔记\upref{LLVMnt}}
+
+\begin{itemize}
+\item 很多用法和 GDB\upref{gdbNt} 差不多， 对比见\href{https://lldb.llvm.org/use/map.html}{这里}。
+\end{itemize}
+
+\subsubsection{同时调试 C++ 和 LLVM IR}
+\begin{itemize}
+\item 在 GDB 中， 也可以用类似的方法同时调试 C++ 和汇编码。
+\item debug 时若要查看 LLVM IR 代码（而不是汇编）， 编译时需要用 \verb|clang++ -g -S -emit-llvm -o 程序.ll 程序.cpp| 生成 LLVM IR 代码。
+\item 若要用 TUI 同时显示 C++ 和 IR， 用 \verb|layout split|
+\item 调试时， \verb|source list| 可以显示当前函数的 C++ 代码
+\item \verb|source list -f myprogram.ll -o line_number| 显示对应的 IR。
+\item \verb|thread step-over或step-in| 可以逐步调试 C++ 代码
+\item \verb|thread step-inst| 逐步调试 LLVM IR 代码
+\end{itemize}

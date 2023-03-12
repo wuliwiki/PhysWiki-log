@@ -17,7 +17,7 @@
 \item \verb|-g| 不包含一些信息如宏定义， 需要用 \verb|-g3|， 要打出 Macro 的位置和定义， 用 \verb|info macro 宏名|
 \item static link 时候， .o 文件或者库只能调用它后面的 .o 文件或者库。 因为 linker 按顺序搜索， 从 \verb|main()| 函数开始， 如果有未定义的 symbol 就留到以后再找， 而把没有用的 symbol 抛弃。 这样能提高效率。
 \item 如果有多个 .o 或者库互相依赖， 就用括号括起来， 例如 \verb|g++ hello.cpp -L. -( -la -lb -)|
-\item 检查内存泄露可以用 Address Sanitizer： \verb|g++ main.cpp -fsanitize=address -static-libasan -g|
+\item 检查内存泄露可以用 Address Sanitizer： \verb|g++ main.cpp -fsanitize=address -static-libasan -g|。 注意仅适用于动态编译。
 \item 检查 signed 整数加减乘的溢出可以用 \verb|-ftrapv|， 亲测支持 \verb|int, long, long long| （其他类型貌似不行）， 运行时会终止程序， 可以用 gdb 找到位置， 不能在程序中 \verb|catch|。如果想支持所有整数类型， 可以用 \verb|SafeInt| 库。
 \item \verb|g++| 的默认输出是 stderr 而不是 stdout， 所以如果 pipe 的时候要指定 stderr
 \end{itemize}

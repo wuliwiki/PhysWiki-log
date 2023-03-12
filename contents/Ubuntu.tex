@@ -39,6 +39,24 @@
 \item 执行 \verb|xrandr|， 找到 connected 的显示器名称， 如 \verb|eDP-1 connected primary 1368x912+0+0 ...|
 \item 执行 \verb|xrandr --addmode eDP-1 "1368x912"| 即可添加分辨率。
 \item 现在打开 setting 中的 display 就可以看到这个分辨率的选项了。
+\item 重启以后， 这些设置都会消失。 要永久生效参考\href{https://askubuntu.com/questions/1376391/how-to-permanently-save-an-xrandr-configuration-for-a-monitor-even-after-reboot}{这里}。
+\item 创建设置文件 \verb|sudo vim /usr/share/X11/xorg.conf.d/10-monitor.conf|， 内容如下
+\begin{lstlisting}[language=none]
+Section "Monitor"
+  Identifier "Monitor0"
+  Modeline "1368x912_60.00" 复制过来
+EndSection
+Section "Screen"
+  Identifier "Screen0"
+  Device "eDP-1"
+  Monitor "Monitor0"
+  DefaultDepth 24
+  SubSection "Display"
+    Depth 24
+    Modes "1368x912"
+  EndSubSection
+EndSection
+\end{lstlisting}
 \end{itemize}
 
 

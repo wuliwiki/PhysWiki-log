@@ -76,6 +76,8 @@
 \item \verb|add_custom_command(OUTPUT output_files COMMAND 命令... [ARGS 参数...] [WORKING_DIRECTORY dir] [DEPENDS 依赖文件] [COMMENT 注释])| 相当于 Makefile 中的一个 rule， 指定依赖关系， 以及使用的命令。 当 \verb|OUTPUT| 的文件缺失时或者 \verb|依赖文件| 更新时， 就会运行命令。 可以把 \verb|命令| 和所有的参数写成一整个字符串， 但是 cmake 可能会自动把空格 escape 比较恶心。 可以试试用 \verb|string(REPLACE " " ";" 命令变量 ${命令变量})| 然后 \verb|COMMAND ${命令变量}| 把命令拆成一个 list。 \verb|注释| 会在该命令被运行时输出到 stdout。
 \item \verb|add_custom_target(目标名 [COMMAND 命令...] [ARGS arguments...] [DEPENDS depends...] [BYPRODUCTS byproducts...] [WORKING_DIRECTORY dir] [SOURCES sources...] [COMMENT 注释])| 会在生成的 Makefile 中添加一个 target。
 \item \verb|add_dependencies(目标名 依赖1 [依赖2 ...])| 可以给 target（例如可执行文件）添加依赖。
+\item \verb|check_symbol_exists("符号名字" "路径/头文件1;头文件2" 变量)| 可以检查 \verb|符号名字| 是否有定义， 包括函数名， 变量名， 以及宏。
+\item \verb|check_symbol_exists| 的实现使用了 \verb|try_compile()| 和 \verb|try_run()| 函数， 试图编译和运行一个测试程序， 从运行结果来判断是否存在符号。
 \end{itemize}
 
 \subsection{依赖}

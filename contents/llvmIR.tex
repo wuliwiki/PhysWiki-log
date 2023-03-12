@@ -4,12 +4,40 @@
 \issueDraft
 \end{issues}
 
-\textbf{LLVM IR (Intermediate Representation)} 是 LLVM 的一个 portable 的中间语言。 使用 LLVM 的编译器会先把高级语言编译成 IR， 然后再做进一步优化。
+\pentry{LLVM 笔记\upref{LLVMnt}}
 
-以下是 IR 中的一个函数例子： 计算两个整数相加。
+\textbf{LLVM IR (Intermediate Representation)} 是 LLVM 的一个 portable 的中间语言。 使用 LLVM 的编译器会先把高级语言编译成 IR， 然后再做进一步优化。 LLVM IR 的语法和汇编语言类似。
+
+以下是一个函数例子： 计算两个整数相加。
 \begin{lstlisting}[language=none]
 define i32 @add(i32 %a, i32 %b) {
   %sum = add i32 %a, %b
   ret i32 %sum
 }
+\end{lstlisting}
+
+另一个完整的例子， 可以编译运行
+\begin{lstlisting}[language=none,caption=test.ll]
+; Declare the main function
+define i32 @main() {
+    ; Allocate stack space for a single 32-bit integer
+    %var = alloca i32
+
+    ; Store the value 42 into the variable
+    store i32 42, i32* %var
+
+    ; Load the value of the variable into a register
+    %val = load i32, i32* %var
+
+    ; Return the value of the variable
+    ret i32 %val
+}
+\end{lstlisting}
+
+编译：
+\begin{lstlisting}[language=none]
+llvm-as test.ll -o test.bc # 编译成 bitcode
+clang test.bc -o test # 编译成可执行文件
+./test # 执行
+echo $? # 查看返回值（exit status）
 \end{lstlisting}
