@@ -12,7 +12,7 @@
 \item 开发者需要掌握 SQL 语言来使用 MySQL。 不同的 RDBMS 基本都是用 SQL 语言， 虽然有微小差异， 但都兼容 SQL standard。
 \item dump 操作常常用于备份数据库（而不是直接拷贝数据库文件）。 数据库文件一般是加密的， 但是 dump 不会加密。
 \item 一个 database 里面可以有许多 table， 每个 \textbf{field} 就是 table 的一列， 每个 \textbf{record} 就是一行
-\item 以下的命令可以在 DB BROWSER for SQLITE 里面实验， 先创建数据库， 然后选 Execute SQL， 把命令或者 sql 里面的东西粘贴过去， 执行即可。
+\item 以下的命令可以在 \textbf{DB BROWSER for SQLITE} 里面实验（可以从 Ubuntu 商店下载）， 先创建数据库， 然后选 Execute SQL， 把命令或者 sql 里面的东西粘贴过去， 执行即可。
 \end{itemize}
 
 \subsection{SQL Basics}
@@ -24,17 +24,17 @@
 \item SQL 关键字， 表格名， 列名都不区分大小写，一般关键词用大写
 \item 数据中的字符串用单引号，大部分数据库双引号也行（但不是标准），字符串区分大小写
 \item 一些最重要的关键字如
-\item \verb`SELECT` - extracts data from a database
-\item \verb`UPDATE` - updates data in a database
-\item \verb`DELETE` - deletes data from a database
-\item \verb`INSERT INTO` - inserts new data into a database
-\item \verb`CREATE DATABASE` - creates a new database
-\item \verb`ALTER DATABASE` - modifies a database
-\item \verb`CREATE TABLE` - creates a new table
-\item \verb`ALTER TABLE` - modifies a table
-\item \verb`DROP TABLE` - deletes a table
-\item \verb`CREATE INDEX` - creates an index (search key)
-\item \verb`DROP INDEX` - deletes an index
+\item \verb`SELECT` - 提取数据
+\item \verb`UPDATE` - 更新数据
+\item \verb`DELETE` - 删除数据
+\item \verb`INSERT INTO` - 添加数据
+\item \verb`CREATE DATABASE` - 创建新数据库
+\item \verb`ALTER DATABASE` - 更改数据库
+\item \verb`CREATE TABLE` - 创建新表格
+\item \verb`ALTER TABLE` - 修改表格
+\item \verb`DROP TABLE` - 删除表格
+\item \verb`CREATE INDEX` - 新增 index (search key)
+\item \verb`DROP INDEX` - 删除 index
 \end{itemize}
 
 \subsubsection{SELECT}
@@ -68,16 +68,15 @@
 \subsubsection{INSERT INTO}
 \begin{itemize}
 \item \verb`INSERT INTO 表格名 (列1, 列2, 列3, ...) VALUES (值1, 值2, 值3, ...);` 插入行， 如果每列都插入， 那么 \verb`(列1, 列2,...)` 可以省略
-\item 对所有列， \verb`INSERT INTO 表格名 VALUES (值1, 值2, 值3, ...);`
 \item 第一列总是数字（无论 field 叫做什么）？ 插入时可以指定，  如果不指定会自动更新。 不能指定已经存在的数字。
-\item 如果某列时 optional 的， 那么插入一行时可以不输入这列的信息， 这列的值就是 \verb`NULL`
+\item 如果某列是 optional 的， 那么插入一行时可以不输入这列的信息， 这列的值就是 \verb`NULL`（见下文）
 \item \verb`SELECT 列 FROM 表格名 WHERE 列 IS NULL;`
 \item \verb`SELECT 列 FROM 表格名 WHERE 列 IS NOT NULL;`
 \end{itemize}
 
 \subsubsection{UPDATE}
 \begin{itemize}
-\item 改变已经存在的 record. where 可以选择一条或多条 record
+\item 改变已经存在的 record. \verb|WHERE| 可以选择一条或多条 record
 \item 如果不用 \verb`WHERE`， 所有行的指定列都会被更新
 \item \verb`UPDATE 表格名 SET 列1 = 值1, ..., 列n = 值n WHERE condition;`
 \item 例如 \verb`UPDATE 表格名 SET ContactName = 'Alfred Schmidt', City= 'Frankfurt' WHERE CustomerID = 1;`
@@ -102,7 +101,7 @@
 \item 数据类型详见\href{https://www.w3schools.com/sql/sql_datatypes.asp}{这里}。
 \item 选项 \verb|PRIMARY KEY| 可以使表格的某一列不出现重复的值且不能为 \verb|NULL|。 一个表格中只能有一个 \verb|PRIMARY KEY|， 但可以是多行。
 \item \verb|列名称 类型 UNIQUE| 可以保证该列没有重复数据。
-\item \verb|AUTO_INCREMENT| 选项可以在创建时（如果不指定）自动比该列当前的最大值加 1， 例如 ID 号。 在 sqlite 中没有下划线且只能出现在 \verb|INTEGER PRIMARY KEY AUTOINCREMENT| 中。
+\item \verb|AUTO_INCREMENT| 选项可以在创建时（如果不指定）自动比该列当前的最大值加 1， 例如 ID 号。 在 sqlite 中叫做 \verb|AUTOINCREMENT| 且只能出现在 \verb|INTEGER PRIMARY KEY AUTOINCREMENT| 中。
 \item 如果要在一个 table 中的某列指定另一个 table 中的某个 \verb|PRIMARY KEY|， 那就使用 \verb|FOREIGN KEY (本表列名) REFERENCES 别的表名 (别的表的列名)|。 例如在 \verb|Orders| 表中链接 \verb|Persons| 表中名为 \verb|PersonID| 的 primary key：
 \begin{lstlisting}[language=none]
 CREATE TABLE Orders (
@@ -113,6 +112,7 @@ CREATE TABLE Orders (
     FOREIGN KEY (PersonID) REFERENCES Persons (PersonID)
 );
 \end{lstlisting}
+\item 一般如果没有指定 \verb|NOT NULL| 或者 \verb|NULL|， 那就默认 \verb|NULL|， 也就是该列是 optional 的， 允许 NULL 值。
 \end{itemize}
 
 \subsubsection{DROP}

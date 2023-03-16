@@ -1,12 +1,12 @@
 % C++ 多线程笔记（std::thread）
 
 \begin{itemize}
-\item 据说在支持 pthread\upref{pthred} 的平台上， \verb|std::thread| 底层使用 pthread。
+\item 在 Linux 或其他 POSIX 系统上 \verb|std::thread| 底层通常使用 pthread\upref{pthred}。
 \item \verb|#include <thread>|， \verb|#include <mutex>|
 \item \verb|std::thread th(函数, arg1, arg2, ...)|; 创建一个线程， 调用\verb|函数|（可以是函数指针， 函数对象， lambda）， \verb|arg| 是\verb|函数|的变量。
 \item \verb|th.join()| 可以让主程序等待某个线程自己退出。
-\item 声明一个全局变量 \verb|std::mutex m| 相当于 openmp 的 atomic 操作， 可以避免多个线程操作同意数据。 \verb|m.lock()| 给 mutex 上锁， 如果已经被别人上锁就暂停并等待解锁。 \verb|m.try_lock()| 试图上锁， 如果已经被别人上锁就返回 \verb|false|。 \verb|m.unlock()| 解锁。
-\item 为了避免在 \verb|m.lock()| 和 \verb|m.unlock()| 之间发生 throw， 通常不直接调用他们， 而是用 \verb|std::lock_guard<std::mutex> guard(m)| （相当于 lock）， 当该变量被 destroy 时， 会自动 unlock。
+\item 声明一个全局变量 \verb|std::mutex m| 相当于 openmp 的 atomic 操作， 可以避免多个线程操作同一数据。 \verb|m.lock()| 给 mutex 上锁， 如果已经被别人上锁就暂停该线程并等待解锁。 \verb|m.try_lock()| 试图上锁， 如果已经被别人上锁就返回 \verb|false|。 \verb|m.unlock()| 解锁。
+\item 为了避免在 \verb|m.lock()| 和 \verb|m.unlock()| 之间发生 throw， 通常不直接调用他们， 而是用 \verb|std::lock_guard<std::mutex> guard(m)| （相当于 lock）， 当 \verb|guard| 被 destroy 时， 会自动 unlock。
 \item \verb|std::this_thread::sleep_for(std::chrono::seconds(2));| 可以让某个线程暂停。
 \end{itemize}
 

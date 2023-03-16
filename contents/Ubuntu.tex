@@ -13,7 +13,7 @@
 \end{itemize}
 
 
-\subsection{改键位}
+\subsection{改键位}\label{Ubuntu_sub1}
 注意 Ubuntu （20.04 亲测， 参考\href{https://manpages.ubuntu.com/manpages/focal/en/man5/keyboard.5.html}{这里}）设置 xkb config 文件无效的！ 需要在 \verb|/etc/default/keyboard| 里面设置（同样重新 login 以后生效）。 例如添加一行 \verb|XKBOPTIONS=ctrl:swapcaps| 对调 Ctrl 和 Capslock 按键。
 
 \subsection{系统版本升级}
@@ -31,6 +31,9 @@
 \item \verb|gsettings set org.gnome.desktop.wm.keybindings unmaximize "['<Super>Down']"|
 \item 参考\href{https://askubuntu.com/questions/1322105/cant-find-alt-f5-in-settings-keyboard-shortcuts}{这里}。
 \end{itemize}
+
+\subsection{Xorg / Wayland}
+用 \verb|echo $XDG_SESSION_TYPE| 可以判断显示服务用的是 xorg 还是 wayland。 新版本 ubuntu 会默认用后者， 但远程桌面软件可能无法正常工作。 可以在 login 的时候在右下角的小齿轮中选择 xrog。
 
 \subsection{自定义屏幕分辨率}
 \begin{itemize}
@@ -71,13 +74,33 @@ EndSection
 \item 修改设置文件 \verb|~/.config/user-dirs.dirs| 即可
 \end{itemize}
 
+\subsection{编辑器}
+\begin{itemize}
+\item （貌似没用）默认文本编辑器从 gedit 替换为 vscode： 修改 \verb`/usr/bin/gnome-text-editor` 软链指向 \verb`code` 即可
+\item 第二种方法： \verb|sudo update-alternatives --install /usr/bin/editor editor /usr/bin/code 100| 然后 \verb|sudo update-alternatives --config editor| 选择 \verb|code| 即可。
+\item 第三种方法： 在 \verb|~/.bashrc| 中添加一行 \verb|export EDITOR="/usr/bin/code"|。
+\end{itemize}
+
+\subsection{安装搜狗输入法}
+\begin{itemize}
+\item \href{https://shurufa.sogou.com/linux}{官网}说支持 Ubuntu 16.04 到 20.04 亲测 22.04 也可成功。 下载安装包。
+\item \href{https://shurufa.sogou.com/linux/guide}{安装说明}， 可以直接搜索 \verb|Ubuntu20.04|。
+\item 先把系统切换成中文输入法。 完了可以再切换回英文。
+\item \verb|sudo apt update && sudo apt install fcitx -y|
+\item 语言设置中， 语言支持， 将语言选择为 fcitx
+\item fcitx 开机自启动： \verb|sudo cp /usr/share/applications/fcitx.desktop /etc/xdg/autostart/|
+\item \verb|sudo apt purge ibus|
+\item \verb|sudo dpkg -i 安装包名|
+\item \verb|sudo apt install libqt5qml5 libqt5quick5 libqt5quickwidgets5 qml-module-qtquick2|
+\item \verb|sudo apt install libgsettings-qt1|
+\item 重启电脑， 右上角菜单栏就可以找到搜狗。
+\item 如果系统中还有一些 UI 中残留有中文， 就在语言设置里面 Manage Installed Language， 然后按 apply system-wide。
+\end{itemize}
 
 \subsection{recycle}
 \begin{itemize}
 \item 用 \verb`apt-clone` 是最方便快速的（未测试）， 或者释放出 deb 文件单独安装
-\item 默认文本编辑器从 gedit 替换为 vscode： 修改 \verb`/usr/bin/gnome-text-editor` 软链指向 \verb`code` 即可
 \item CLion 的工具栏 Tools 可以直接创建快捷方式
-\item 搜狗拼音还是老老实实按照笔记来弄
 \item Matlab 和 Mathematica 和 Intel oneAPI 都可以直接复制目录（亲测有效）， 不过前两个需要再次注册。
 \item GitHub Desktop 可以在这里安装 https://github.com/shiftkey/desktop/
 \item \verb`~/.config` 文件夹（很多常用软件的设置文件都在这，可以选择性拷贝）和 \verb`~/.vim` 文件夹， 以及 \verb`~/.vimrc` 都可以拷贝

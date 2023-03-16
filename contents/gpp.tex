@@ -7,6 +7,7 @@
 \pentry{在 Linux 上编译 C/C++ 程序\upref{linCpp}}
 
 \begin{itemize}
+\item 参考\href{https://gcc.gnu.org/onlinedocs/gcc-12.2.0/gcc/}{官方文档}。
 \item 注意： 不要改变系统默认的 \verb|/usr/bin/gcc| 和 \verb|/usr/bin/g++| symlink 的版本！ 因为一些安装过程（例如 cuda）需要 \verb|gcc| 编译 kernel module， 必须使用默认版本。 如果已经改变了， 就卸载 \verb|gcc| 和 \verb|g++|， 再重装一次就行。
 \item \verb|-I <dir>| 选项可以声明 .h 所在的目录
 \item \verb|-c| 选项只编译不 link
@@ -37,7 +38,7 @@
 \subsection{编译警告}
 \begin{itemize}
 \item 详见\href{https://gcc.gnu.org/onlinedocs/gcc/Warning-Options.html}{文档}。
-\item 在编译输出的警告中一般会有 \verb|[-Wxxx]|， 如果要禁止输出该警告， 就用 \verb|-Wno-xxx|。
+\item 在编译输出的警告中一般会有 \verb|[-Wxxx]|， 如果不需要警告， 就用 \verb|-Wno-xxx|。
 \end{itemize}
 
 \subsection{宏}
@@ -46,6 +47,13 @@
 \item \verb|#if GCC_VERSION > 30200| 可以要求 GCC 版本大于 3.2.0。 其中 3 是 \verb|__GNUC__|， 2 是 \verb|__GNUC_MINOR__|,  0 是 \verb|__GNUC_PATCHLEVEL__|。
 \end{itemize}
 
+\subsection{环境变量}
+\begin{itemize}
+\item 参考\href{https://gcc.gnu.org/onlinedocs/gcc/Environment-Variables.html}{官方文档}。
+\item \verb|CPATH| 是搜索头文件的路径。 相当于 \verb|-I| 选项。
+\item \verb|LIBRARY_PATH| 是编译时搜索库文件的路径。 相当于 \verb|-L| 选项。
+\item \verb|LD_LIBRARY_PATH| 是运行时搜索动态链接库的路径。 相当于 \verb|rpath|（详见 “g++ 编译器创建静态和动态链接库\upref{gppLib}”）。
+\end{itemize}
 
 \subsection{标准}
 \begin{itemize}

@@ -3,27 +3,28 @@
 
 \pentry{GitHub Desktop 的简单使用\upref{GitHub}}
 
-一个简单美观的 GUI 客户端是 GitHub Desktop\upref{GitHub}（未必需要使用 GitHub）， 然而许多 GUI 的功能比起命令行来还是要少得多， 例如 GitHub Desktop 不支持 \verb|stage|， 不支持把仓库或指定文件恢复到以前某个版本等。 要安装 Git 命令行程序， Windows 用户可以下载 \href{https://gitforwindows.org/}{Git for Windows}， Debian 或 Ubuntu 可以直接用 \verb|sudo apt install git| 安装。Git for Windows 的 Git Bash 相当于 linux 的命令行， 有当前路径 \verb|pwd|, 更改路径用 \verb|cd|.
+一个简单美观的 GUI 客户端是 GitHub Desktop\upref{GitHub}（未必需要使用 GitHub）， 然而许多 GUI 的功能比起命令行来还是要少得多， 例如 GitHub Desktop 不支持 \verb|stage|， 不支持把仓库或指定文件恢复到以前某个版本等。 要安装 Git 命令行程序， Windows 用户可以下载 \href{https://gitforwindows.org/}{Git for Windows}， Debian 或 Ubuntu 可以直接用 \verb|sudo apt install git| 安装。Git for Windows 的 Git Bash 相当于 linux 的命令行， linux 常用的命令很多都有.
 
-Git for Windows 的 Git bash 是不支持 symlink 的， symlink clone 下来以后都会变成文本文件（文本就是 symlink 指向的路径）， 所以还是建议在 WSL 中安装 Git 使用。
+Git for Windows 的 Git bash 是不支持 symlink 的， symlink clone 下来以后都会变成文本文件（文本就是 symlink 指向的路径）， 所以还是建议在 WSL\upref{WSLnt} 中安装 Git 使用。
 
 \subsection{新安装设置}
 \begin{itemize}
 \item 如果要安装最新版本的 Git， 见\href{https://git-scm.com/downloads}{这里}。
 \item 要设置用户名， 用 \verb|git config --global user.name "用户名"|.
 \item 要设置 commit 邮箱， 用 \verb|git config --global user.email "邮箱"|  邮箱决定 commit 的作者。
-\item Github 的 token 是命令行使用的密码， 和 GitHub 的密码是不同的， GitHub 创建 token 参考\href{https://docs.github.com/en/github/authenticating-to-github/keeping-your-account-and-data-secure/creating-a-personal-access-token#creating-a-token}{这里}。
-\item 要查看 token 登录 github 后用 \href{https://github.com/settings/tokens/}{https://github.com/settings/tokens/}。 注意每个 token 只能查看一次， 要注意保存， 如果丢失只能新建一个。
-\item 私有仓库用网址如果 clone, 每次连接服务器需要输入用户名和 token, 包括 \verb|clone, pull| 等。 要让 Git 记住账户密码， 用 \verb|git config --global credential.helper store| 如果 github 修改了密码， 再用一次该命令即可， 要测试是否成功可用 \verb|git pull|， 如果成功则不需要密码。
-\item 清空账号密码用 \verb|git config --global --unset credential.helper|. 如果还不行的话只好把下文的所有 config 文件删除并重装 git。
-\item Windows 下设置 \verb|git config --global core.autocrlf true|, 这样 commit 的时候会把所有 CRLF 换行变为 LF, 而 checkout 的时候会把所有 LF 变为 CRLF. Linux 下设置 \verb|git config --global core.autocrlf input|, 这样 commit 的时候会把所有 CRLF 变为 LF, 而 chekout 的时候不做任何操作。 如果这么设置了， GitHub Desktop 自动产生的 .gitattribute 文件就可以删掉了 （因为解决的是同一个问题）.
+\item 如果从 Github 上 clone 或者 pull 会提示输入密码， 这个密码不是登录 GitHub 的密码而是 token。 GitHub 创建 token 参考\href{https://docs.github.com/en/github/authenticating-to-github/keeping-your-account-and-data-secure/creating-a-personal-access-token#creating-a-token}{这里}。 在 GitHub 上可以管理所有 token。
+\item 要查看 token 登录 github 后用 \href{https://github.com/settings/tokens/}{https://github.com/settings/tokens}。 注意每个 token 只能查看一次， 要注意保存， 如果丢失只能新建一个。
+\item 私有仓库用网址如果 clone, 每次连接服务器需要输入用户名和 token, 包括 \verb|clone, pull| 等。 要让 Git 记住 token， 用 \verb|git config --global credential.helper store| 如果 token 变了， 再用一次该命令即可， 要测试是否成功可用 \verb|git pull|， 如果成功则不需要 token。
+\item 清空账号 token 用 \verb|git config --global --unset credential.helper|. 如果还不行的话只好把下文的所有 config 文件删除并重装 git。
+\item Windows 下设置 \verb|git config --global core.autocrlf true|, 这样 commit 的时候会把所有 CRLF 换行变为 LF（\autoref{encode_sub1}~\upref{encode}）, 而 checkout 的时候会把所有 LF 变为 CRLF. Linux 下设置 \verb|git config --global core.autocrlf input|, 这样 commit 的时候会把所有 CRLF 变为 LF, 而 chekout 的时候不做任何操作。 如果这么设置了， GitHub Desktop 自动产生的 \verb|.gitattribute| 文件就可以删掉了 （因为解决的是同一个问题）.
 \item 如果仓库中的中文路径显示乱码（反斜杠加数字）， 用 \verb|git config --global core.quotepath off|
 \item 如果有时候在 windows 上 pull 提示文件名太长， 用 \verb|git config --global core.longpaths true|
 \item 如果在 windows git bash 上 pull 显示 invalid path， 用 \verb|git config core.protectNTFS false|。 但这么做可能仍会有一些问题（例如 windows 的文件夹中最后的 。 会自动删除）
 \item \verb|git config --global core.editor "vim"| 可以把用于 commit 的编辑器设为 vim
-\item on linux, don't show any safe directory warning: \verb|git config --global --add safe.directory "*"|
+\item 有时候 git 会提示某个路径不安全， 要忽略用 \verb|git config --global --add safe.directory "*"|
 \item 为了防止大文件传服务器失败， 使用例如 \verb|git config --global http.postBuffer 2000000000| （字节）
 \item 要关闭 CRLF 即将变为 LF 警告， 用 \verb|git config --global core.safecrlf false| （不会改变功能）
+\item 如果提示 https 证书有问题， 用 \verb|git config --global http.sslverify false| 忽略
 \end{itemize}
 
 \subsection{基础}

@@ -1,16 +1,16 @@
 % 在 Linux 上编译 C/C++ 程序
 % linux|c++|gcc|g++
 
-本文介绍如何使用 Linux 控制行用 g++ 编译器编译一个 C++ 的 hello world 程序。 阅读本文不需要任何基础（包括 C++ 和 Linux）。
+本文介绍如何使用 Linux 命令行\upref{Linux}用 g++ 编译器\upref{gpp}编译一个 C++\upref{Cpp0} 的 Hello World 程序。 阅读本文不需要任何基础（包括 C++ 和 Linux）。
 
-如何安装 Linux 控制行？ 你可以直接在电脑上安装一个 Linux 系统， 也可以在 Win10 下使用 WSL（已经安装 win10 系统的话建议使用后者）， 如果是 win7 系统， 可以安装一个 MinGW。 安装方法请自行搜索。 本文以 Ubuntu 系统为例（Linux 有不同的版本， Ubuntu 是广泛使用的一个）。
+如何安装 Linux 命令行？ 你可以直接在电脑上安装一个 Linux 系统\footnote{推荐 Ubuntu， 因为小时百科大部分 Linux 相关的教程都是以 Ubuntu 为环境的。}， 也可以在 Windows 10 或 11 中使用 WSL\upref{WSLnt}。 如果使用 Win7 系统， 可以安装一个 MinGW\upref{Mingw}。 本文以 Ubuntu 系统为例（Linux 有不同的版本， Ubuntu 是广泛使用的一个）。
 
-\subsection{在控制行安装 g++}
-打开控制行后， 要检查是否安装了 g++， 输入以下命令并按回车。
+\subsection{在命令行安装 g++}
+打开命令行后， 要检查是否安装了 g++， 输入以下命令并按回车。
 \begin{lstlisting}[language=bash]
 g++ --version
 \end{lstlisting}
-这个命令由两部分组成， 第一部分是 \verb|g++|， 即在控制行中调用 \verb|g++| 这个程序。 第二部分是 g++ 程序的 \verb|--version| 选项， 即查看已安装 g++ 的版本。 如果系统上没有安装 g++， 控制行（Terminal）会返回类似这样的提示
+这个命令由两部分组成， 第一部分是 \verb|g++|， 即在命令行中运行名为 \verb|g++| 这个程序。 第二部分是 g++ 程序的 \verb|--version| 选项， 即查看已安装 g++ 的版本。 如果系统上没有安装 g++， 命令行会返回类似这样的提示（以 Ubuntu 为例）
 \begin{lstlisting}[language=bash]
 Command 'g++' not found, but can be installed with:
 sudo apt install g++
@@ -20,33 +20,33 @@ sudo apt install g++
 sudo apt update
 sudo apt install g++
 \end{lstlisting}
-\verb|sudo| 是 super user do， 即获取操作系统的 root 权限， root 权限是 Linux 系统的最高权限。 控制行中的一些命令（如安装卸载软件）一般需要 root 权限， 所以需要在前面加 sudo （如果你已经以 root 的身份登录 Linux 则不需要）。
+\verb|sudo| 是 super user do， 即使用操作系统的 root 权限运行指定的程序。 root 权限是 Linux 系统的最高权限， 几乎可以做任何事情（包括危险操作）使用时需要谨慎。 命令行中的一些命令（如安装卸载软件）一般需要 root 权限， 所以需要在 \verb|apt| 命令前面加 \verb|sudo|。 如果你已经以 root 的身份登录 Linux 则可以不用。
 
 \verb|apt| （也可以用 \verb|apt-get|） 是 Ubuntu 系统中用来管理程序的命令（安装，卸载，更新等）。 注意系统一般要链接网络才能使用 apt 安装程序。 在安装任何程序之前， 建议新更新一下 apt 的数据库（第一行）。
 
-\verb|update| 是 \verb|apt| 的一个参数（argument）， 就跟 g++ 的 \verb|--version| 参数一样。 Linux 中程序的许多参数以 \verb|--| 或者 \verb|-| 开头。
+\verb|update| 是 \verb|apt| 的一个\textbf{参数（argument）}， 就跟 g++ 的 \verb|--version| 参数一样。 Linux 中程序的许多参数以 \verb|--| 或者 \verb|-| 开头。
 
-\verb|install| 是 \verb|apt| 程序的另一个参数。 \verb|g++| 是 \verb|install| 的参数， 即要安装的软件名。
+\verb|install| 是 \verb|apt| 程序的另一个参数。 \verb|g++| 是 \verb|install| 的参数， 即要安装的程序。
 
-运行后可以按提示安装 g++， 过程中可能需要输入 Linux 的用户密码， 以及确认是否安装（输入 \verb|Y| 然后按回车）
+运行后可以按提示安装 g++， 过程中可能需要输入 Linux 的用户密码， 以及确认是否安装。 输入 \verb|Y| 然后按回车确认， 也可以直接按回车， 因为大写的 \verb|Y| 表示这是默认选项。
 \begin{lstlisting}[language=bash]
 After this operation, 155 MB of additional disk space will be used.
 Do you want to continue? [Y/n] Y
 \end{lstlisting}
 
-安装完以后， 再次查看 g++ 的 version， 得到
+安装完以后， 再次查看 \verb|g++ --version|， 得到
 \begin{lstlisting}[language=bash]
 g++ (Ubuntu 7.4.0-1ubuntu1~18.04.1) 7.4.0
 Copyright (C) 2017 Free Software Foundation, Inc.
 This is free software; see the source for copying conditions.  There is NO
 warranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 \end{lstlisting}
-可以看到我们安装的版本是 7.4.0。
+可以看到我们安装的版本是 7.4.0， 不同 Ubuntu 版本的默认 g++ 版本不一样。
 
 
 \subsection{创建第一个 C++ 程序}
 打开一个文本编辑器， 创建一个新文本文档， 命名为 hello.cpp， 输入如下 C++ 代码并保存。
-\begin{lstlisting}[language=bash]
+\begin{lstlisting}[language=bash, caption=hello.cpp]
 // print hello world
 #include <iostream>
 
@@ -55,23 +55,23 @@ int main()
     std::cout << "hello world!" << std::endl;
 }
 \end{lstlisting}
-在编译之前， 我们首先要介绍 working directory。 控制行一般会在输入的每一行命令之前显示当前的路径（directory）如\autoref{linCpp_fig1}。
+在编译之前， 我们首先要介绍\textbf{工作目录（working directory）}， 也叫\textbf{当前目录（current directory）}， 路径有时候也叫\textbf{路径}。 命令行一般会在输入的每一行命令之前显示当前的路径如\autoref{linCpp_fig1}。
 \begin{figure}[ht]
 \centering
 \includegraphics[width=14cm]{./figures/linCpp_1.png}
 \caption{蓝色的路径就是当前路径} \label{linCpp_fig1}
 \end{figure}
 
-这个目录一般是打开控制行的目录（例如 Ubuntu 中在某个文件夹中右键打开控制行， 或者 win10 中按 shift + 右键）。 我们假设刚才创建的 cpp 文件就保存在这个目录下。
+这个目录一般是打开命令行的目录（例如 Ubuntu 中在某个文件夹中右键打开命令行， 或者 win10 中按 \verb|Shift + 右键| 打开 WSL 的命令行）。 另外也可以在命令行中运行 \verb|pwd| 命令显示当前路径。我们假设刚才创建的 cpp 文件就保存在这个目录下。
 
-现在我们来用 g++ 编译这个程序， 控制行输入
+现在我们来用 g++ 编译这个程序， 命令行输入
 \begin{lstlisting}[language=bash]
 g++ hello.cpp
 \end{lstlisting}
-如果编译成功， 将会在同一文件夹中生成 a.out 可执行文件， 相当于 windows 中的 exe 文件。 要运行该文件， 使用（\verb|./| 表示当前的 working directory）
+如果编译成功， 将会在同一文件夹中生成名为 \verb|a.out| 可执行文件， 相当于 windows 中的 exe 文件。 要运行该文件， 使用（\verb|./| 表示当前的 working directory）
 \begin{lstlisting}[language=bash]
 ./a.out
 \end{lstlisting}
-运行后可以看到程序在控制行输出了 \verb|hello world!|。
+运行后可以看到程序在命令行输出了 \verb|hello world!|。
 
 这样， 我们就成功在 Linux 中运行了第一个 C++ 程序。

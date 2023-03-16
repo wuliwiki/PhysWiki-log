@@ -1,0 +1,85 @@
+% SLISC 的使用和测试
+
+\begin{issues}
+\issueDraft
+\end{issues}
+
+\pentry{SLISC 库概述\upref{SLISC}， 在 Linux 上编译 C/C++ 程序\upref{linCpp}}
+
+\subsection{直接使用头文件}
+和 C++ 标准库一样， SLISC 一般无需编译。 如果你不想修改 SLISC 源码， 只需要把 \verb|SLISC| 文件夹复制到项目文件夹中， 并在 C++ 源码中使用相应的头文件即可。
+
+下载 SLISC 源码， 创建 “SLISC 库概述\upref{SLISC}” 中的 \verb|intro.cpp|。 注意如果 \verb|intro.cpp| 和 \verb|SLISC| 文件夹不在同一个目录， 那么你需要修改 \verb|#include| 中的相对路径， 也可以用绝对路径。
+
+要编译， 用 \verb|g++ intro.cpp -o intro.x|。 编译成功后， 运行程序就得到输出结果
+\begin{lstlisting}[language=none]
+u = 
+0   1   2   
+
+a 有 2 行和 3 列, 共计 6 个元素。
+1.1   0   4.4   
+0   9.9   5.5
+\end{lstlisting}
+以及两个输出文件 \verb|data0.matb| 和 \verb|data.matb|。
+
+另外也推荐使用 Jupyter Notebook 和 Cling\upref{Cling}， 无需编译， 交互运行代码。
+
+\subsection{使用 64 位索引}
+若使用默认选项， \verb|Long| 类型的最大值（也就是数组最多的元素个数）是 $2^{31}-1 = 2147483647$。 也就是 SLISC 只能处理大约 2.1GB 的 \verb|char| 数组或者 16.8GB 的 \verb|double| 数组。 这在一般情况下是够用的， 但如果要数组可能会更大， 那么就不能定义该选项， 且需要使用 64 位版本的头文件， 位于 \verb|SLISC-64| 目录下。 我们可以直接把 \verb|SLISC-64/*.h| 复制并覆盖到 \verb|SLISC| 中。
+
+\subsection{生成头文件}
+
+注意如果头文件 \verb|SLISC/xxx.h| 有对应的 \verb|SLISC/xxx.h.in| 模板文件， 那么这些头文件都是自动生成的。 要重新生成 64 位版本的头文件， 首先确保你的机器上安装了 \verb|octave 4.1| 或以上的版本以及 \verb|make|\upref{Make}， 然后在 \verb|SLISC| 目录下运行 \verb|make [选项] h| 即可。 例如 \verb|SLISC| 中的被生成的头文件是使用 \verb|make h| 生成的， \verb|SLISC-64| 中的则是使用 \verb|make opt_long32=false h| 生成到 \verb|SLISC| 并复制过去的。 \verb|SLISC-64q| 则使用 \verb|make opt_long32=false opt_quadmath=true h| 生成， 支持 4 精度浮点数\upref{FltCpp}。
+
+\subsection{编译测试}
+SLISC 中几乎每个头文件都有对应的测试代码， 在 \verb|test/test_xxx.cpp| 中， 一般对应同名的 \verb|SLISC/xxx.h|。 为了测试代码在你使用的环境（CPU 架构和操作系统）中能正常运行， 强烈建议编译并运行测试。
+
+最小测试的编译命令为 \verb|make opt_min=true -j8|， 然后运行使用 \verb|./main.x|。 这里的 \verb|-j8| 代表使用 8 个进程并行编译， 你也可以改为其他的数字， 匹配你电脑 cpu 的核数即可。 如果不使用 \verb|-j| 选项， 默认单线程编译，可能时间较长。
+
+如果你想测试其他非默认的编译选项， 就先生成头文件 \verb|make [选项] h| 生成头文件到 \verb|SLISC|（也可以从对应的 \verb|SLISC-xxx| 把头文件覆盖过去， 然后用 \verb|make [选项] -j8|。 完成后同样运行 \verb|./main.x| 即可测试。
+
+以下列出一些\textbf{常用选项}， 注意只有改变 \verb|opt_long32| 或 \verb|opt_quadmath| 需要重新生成头文件。
+\begin{itemize}
+\item \verb|opt_compiler|： 选择编译器， 支持 \verb|g++|（默认）， \verb|clang++|， \verb|icpc|， \verb|icpx|。 非默认编译器不支持 SLISC 的所有功能（例如四精度类型）。
+\item \verb|opt_long32|： \verb|true|（默认）使用 32 位的 \verb|Long| 类型， \verb|false| 使用 64 位的 \verb|Long| 类型。
+\item \verb|opt_debug|： \verb|true|（默认）使用 debug 模式编译， 会检查索引是否超出数组边界， 矩阵尺寸是否合法等。 还会在可执行文件中生成调试信息， 以便使用 \verb|gdb|\upref{gdbNt} 调试。 \verb|false|： Release 模式， 开启编译器优化， 没有边界和尺寸检查等， 不生成调试信息。
+\item \verb|opt_asan|： \verb|true|（默认） 开启 address sanitizer， 进一步检测内存泄漏。
+\item \verb|opt_std|： C++ 标准， 支持 \verb|c++11|（默认） 及以上标准。
+\item \verb|opt_static|： \verb|false|（默认）动态编译， 可执行文件体积较小， 但需要依赖动态链接库文件（取决于系统版本， 详见下文）， 所以无法将可执行文件直接复制到其他系统使用。 \verb|true|： 静态编译， 不支持 address sanitizer， 但优点是编译后没有其他依赖， 一般复制到相似的系统中也能正常运行。
+\item \verb|opt_min|： \verb|true| 兼容模式， 功能最少， 无需安装任何第三方库。 \verb|false| 使用默认的第三方库。
+\end{itemize}
+
+\subsubsection{直接下载依赖库（推荐）}
+\addTODO{添加网盘链接}
+\begin{itemize}
+\item 依赖库取决于系统要查看 Ubuntu 系统的版本用 \verb|lsb_release -a| 命令。
+\item 可以在 GitHub 上下载对应的版本（推荐）： \href{https://github.com/MacroUniverse/SLISC-libs-x64-ubuntu16.04}{Ubuntu16.04}， \href{https://github.com/MacroUniverse/SLISC-libs-x64-ubuntu18.04}{Ubuntu18.04}， \href{https://github.com/MacroUniverse/SLISC-libs-x64-ubuntu20.04}{Ubuntu20.04}， \href{https://github.com/MacroUniverse/SLISC-libs-x64-ubuntu22.04}{Ubuntu22.04}， \href{https://github.com/MacroUniverse/SLISC-libs-x64-centos7.9.2009}{CentOS7.9} （注意 \verb|Ubuntu16.04| 不支持 MPLAPACK 库）
+\item 除了特殊说明， 解压后的文件夹包含 SLISC 所需的所有依赖， 无需任何其他安装。
+\item 如果国内访问 GitHub 较慢， 可以从网盘下载（不保证及时更新）。
+\item 注意文件夹中存在软链， 但 windows 不支持软链（WSL 支持）， 所以应该用 Linux 命令行解压（命令 \verb|unzip 文件名.zip|）。
+\item 在解压的文件夹中， 每个子文件夹是一个第三方库， 其中的 \verb|include| 中是头文件， \verb|lib| 中是库文件， 静态库的后缀名为 \verb|.a|， 用于静态编译； 动态库后缀名为 \verb|.so.版本号|。
+\item 解压以后， 在解压的文件夹中使用 \verb|source setup.sh| 设置把库的路径添加到环境变量 \verb|CPATH, LIBRARY_PATH, LD_LIBRARY_PATH| 中。 他们分别是头文件的搜索路径， 编译时库文件的搜索路径， 运行时动态链接库的搜索路径。 除此之外， 该脚本也会把对一些超出 GitHub 尺寸限制的大文件进行拼接。
+\item 要查看环境变量， 如 \verb`echo $CPATH | tr : \\n`。
+\end{itemize}
+
+可以用以下选项开始或关闭第三方库。
+\begin{itemize}
+\item \verb|opt_lapack|： \verb|reference|（默认）使用 Netlib 的基准版 BLAS\upref{BLAS} 和 LAPACK\upref{Lapack}， \verb|openblas| 使用 OpenBlas 和基于它的 LAPACK （性能较高）， \verb|mkl| 使用 Intel 的 MKL （性能最高）。
+\item \verb|opt_mplapack|： \verb|true| 或 \verb|false|， 默认取 \verb|opt_quadmath| 的值。 四精度版本的 BLAS 和 LAPACK。 如果编译时提示 \verb|_Float128| 未定义， 需要开启选项 \verb|opt_no__Float128|
+\item \verb|opt_boost|： \verb|true|（默认） 或 \verb|false|， 使用 Boost 库\upref{Boost}。
+\item \verb|opt_gsl|： \verb|true|（默认） 或 \verb|false|， 使用 GSL 库\upref{GSL}。
+\item \verb|opt_eigen|： \verb|true|（默认） 或 \verb|false|， 使用 Eigen 库\upref{Eigen}。
+\item \verb|opt_arb|： \verb|true|（默认） 或 \verb|false|， 使用 Arb 库\upref{ArbLib}。
+\item \verb|opt_arpack|： \verb|true|（默认） 或 \verb|false|， 使用 Arpack++ 库\upref{Arpkpp}
+\item \verb|opt_sqlite|： \verb|true|（默认） 或 \verb|false|， 使用 SqLite 3 库\upref{SQLite}。
+\item \verb|opt_matfile|： \verb|true| 或 \verb|false|（默认）， 读写 Matlab 文件（已停止维护）。
+\end{itemize}
+
+\subsubsection{用包管理程序安装依赖库（不推荐）}
+除了直接下载， 也可以用包管理程序如 \verb|apt| 安装依赖库， 但有的库会确实 64 位版本或者静态库文件等。 例如在 \verb|Ubuntu| 中可以使用以下命令： 
+\begin{lstlisting}[language=bash]
+apt -y update && apt -y upgrade
+apt install -y vim git make g++ gdb gfortran libarpack++2-dev \
+liblapacke-dev libsqlite3-dev libgmp-dev libflint-arb-dev \
+libflint-dev libgsl-dev libboost-filesystem-dev
+\end{lstlisting}

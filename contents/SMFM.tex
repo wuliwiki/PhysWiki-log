@@ -21,7 +21,7 @@
 \item \textbf{不碰撞假设}：电子以物质波的形式存在，并且不会与离子碰撞。
 \item \textbf{泡利不相容原理}：电子是费米子，满足泡利不相容原理。
 \end{enumerate}
-\subsection{动量空间、费米能和态密度}
+\subsection{k动量空间}
 根据上面的假设，我们可以写出电子满足的薛定谔方程：
 \begin{equation}
 -\frac{\hbar^2}{2m}\nabla^2\psi=E\psi
@@ -34,5 +34,107 @@
 \end{equation}
 所以最终的波函数为$\psi=L^{-3/2}e^{i\vec{k}\cdot \vec{r}}$，其中$\vec{k}$满足：
 \begin{equation}
-(k_x, k_y, k_z)=\frac{2\pi}{L}(n_x, n_y, n_z)
+\left (k_x, k_y, k_z\right )=\frac{2\pi}{L}\left(n_x, n_y, n_z\right )
 \end{equation}
+能量$E$满足：
+\begin{equation}
+E=\frac{\hbar ^2 k^2}{2m}
+\end{equation}
+可以这么理解，每一个电子的波函数中的$\vec{k}$是分立的，对应下列图片中的一个小格子。当格子足够密集时，所有能量相等的电子则可以近似对应一个$\vec{k}$空间中的球面。
+\begin{figure}[ht]
+\centering
+\includegraphics[width=6cm]{./figures/SMFM_2.png}
+\caption{k动量空间} \label{SMFM_fig2}
+\end{figure}
+\subsection{费米分布和费米能}
+由于电子是费米子，自由电子不能处在同一个状态内，即上述的k动量空间中一个格子内不能有超过2个电子（"2"是来自于电子自旋），热力学统计给出一定温度下电子的分布有：
+\begin{equation}
+f(E)=\left (\exp(\frac{E-\mu}{k_B\ T})+1\right )^{-1}    \in[0,1]
+\end{equation}
+表征某个能量值下电子的存在几率。由于能量$E$是$\vec{k}$的函数，那么其自然也表明是否有电子处在某个特定的$\vec{k}$上。那么总的电子数就是$N=\textstyle \sum_{\vec{k}}2\ f(\vec{k})$。总的能量就是$E_{sum}=\textstyle \sum_{\vec{k}}2\ E(\vec{k})f(\vec{k})$。
+
+其中$\mu$是化学势，其与电子总数有关，随温度缓慢变化。$\mu (T=0K)$称为费米能$E_F$.
+
+T=0K时的情况非常特殊。我们先来考虑T=0K时的情况来理解函数$f(E)$。T=0K时的函数是一个阶跃函数：
+\begin{cases}
+f(E)=1, &\text{if } E<\mu \newline
+f(E)=0, &\text{if } E>\mu
+\end{cases}
+这表明电子会占满能量小于$\mu$的所有格子。实验测得$\mu(T=0K)$，即$E_F$，大致在2~10eV之间，而室温300K对应的能量$k_BT\approx2.59*10^{-2}\ eV$，远远小于$E_F$的尺度，而前面提到$\mu$是随温度缓慢变化的，则可以画出室温300K时的电子分布(假设$E_F=3\ eV$)：
+\begin{figure}[ht]
+\centering
+\includegraphics[width=12cm]{./figures/SMFM_3.png}
+\caption{电子随能量的分布} \label{SMFM_fig3}
+\end{figure}
+可以发现，图像中只是$E_F$附近的电子分布出现了变化，则可以推断，电子的热力学性质大致都是$E_F$附近的电子分布变化导致的。
+
+\subsection{求和与积分的转换、态密度}
+前面提到，电子总数和总能量有：
+\begin{equation}
+E_{sum}=\textstyle \sum_{\vec{k}}2\ E(\vec{k})f(\vec{k})
+\end{equation}
+
+\begin{equation}
+N=\textstyle \sum_{\vec{k}}2\ f(\vec{k})
+\end{equation}
+
+为了能计算出电子总数与总能量的表达式，我们需要把求和形式变成积分形式。做一个简单的移动：
+\begin{equation}
+\iiint g(\vec{k})\,dk_x\,dk_y\,dk_z=dk_x\,dk_y\,dk_z\,\sum g(\vec{k})
+\end{equation}
+从图2就可以看出，有$dk_x\,dk_y\,dk_z=(\frac{2\pi}{L})^3$。
+所以当L的尺度足够大，即$(\frac{2\pi}{L})^3$的尺度足够小时，我们就能有：
+\begin{equation}
+E_{sum}=\textstyle \sum_{\vec{k}}2\ E(\vec{k})f(\vec{k})=(\frac{L}{2\pi})^3\,2 \int_{\vec{k}}E(\vec{k})f(\vec{k})d^3k
+\end{equation}
+
+\begin{equation}
+N=\textstyle \sum_{\vec{k}}2\ f(\vec{k})=(\frac{L}{2\pi})^3\,2 \int_{\vec{k}}f(\vec{k})d^3k
+\end{equation}
+由于$E(\vec{k})$和$f(\vec{k})$与k的方向是无关的，所以上述的积分还可以再次简化成：
+\begin{equation}
+E_{sum}=(\frac{L}{2\pi})^3\,2\int d\Omega \int E(k)f(k)k^2dk=\frac{L^3}{\pi^2} \int E(k)f(k)k^2dk
+\end{equation}
+\begin{equation}
+N=(\frac{L}{2\pi})^3\,2\int d\Omega \int f(k)k^2dk=\frac{L^3}{\pi^2}\int f(k)k^2dk
+\end{equation}
+借助$E=\frac{\hbar^2}{2m}k^2$，可以继续化简式子变成：
+\begin{equation}
+E_{sum}=L^3 \int E\,f(E)\,\frac{\sqrt{2m^3}}{\pi^2\hbar^3}\sqrt{E}dE
+\end{equation}
+\begin{equation}
+N=L^3 \int f(E)\,\frac{\sqrt{2m^3}}{\pi^2\hbar^3}\sqrt{E}dE
+\end{equation}
+这样就能直接在E空间上积分了。此外，可以定义态密度：
+\begin{equation}
+g(E)=\frac{\sqrt{2m^3}}{\pi^2\hbar^3}\sqrt{E}
+\end{equation}
+其表征dE范围内的量子态数目（即k空间中格子的数目X2）。
+
+\subsection{电子热性质}
+电子数密度$N/L^3$和单位体积电子气总能量$E_{sum}/L^3$都有一个共同形式：
+\begin{equation}
+\int_0^{\infty} dE\,f(E)h(E)
+\end{equation}
+设$h(E)$的原函数为$Q(E)$，即$Q(E)=\int_0^E d\epsilon\,h(\epsilon)$，则$h(E)=Q^\prime(E)$，则有：
+\begin{equation}
+\int_0^{\infty} dE\,f(E)h(E)=\int_0^{\infty} f(E)dQ(E)= f\,Q\bigg|_0^\infty-\int_0^{\infty} Q(E)f^\prime (E)dE
+\end{equation}
+其中因为$Q(0)=0$和$f(\infty)=0$（$e^{-\infty}$级的无穷小比$1/Q(\infty)$更高阶），所以$f\,Q\bigg|_0^\infty=0-0=0$，所以有：
+\begin{equation}
+\int_0^{\infty} dE\,f(E)h(E)=-\int_0^{\infty} dE\,Q(E)f^\prime (E)
+\end{equation}
+我们记得$f(E)$为：
+\begin{equation}
+f(E)=\left (\exp(\frac{E-\mu}{k_B\ T})+1\right )^{-1}
+\end{equation}
+令$x=\frac{E-\mu}{k_B\,T}$，则$-f^\prime(E)$为：
+\begin{equation}
+-f^\prime(E)=\frac{(k_BT)^{-1}}{(e^{x/2}+e^{-x/2})^2}
+\end{equation}
+画出$-f^\prime(E)$图像，可以发现其在$E=\mu$附近外都非常接近0（假设$\mu=3eV$，室温下）：
+\begin{figure}[ht]
+\centering
+\includegraphics[width=10cm]{./figures/SMFM_4.png}
+\caption{函数性质} \label{SMFM_fig4}
+\end{figure}
