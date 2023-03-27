@@ -1,0 +1,73 @@
+% 戴森级数
+% 戴森级数|时间演化算符
+
+\pentry{时间演化算符（量子力学）\upref{TOprt}}
+
+\subsection{戴森级数}
+
+考虑时间演化算符所满足的微分方程式：
+
+\begin{equation}
+i\hbar \frac{d}{dt}\hat U (t,t_0) = \hat H(t) \hat U (t,t_0)
+\end{equation}
+
+将其转化为积分方程，且考虑$\lim_\limits{t\rightarrow t_0}\hat U(t,t_0)=\hat I$，则有：
+
+\begin{equation}
+\hat U (t,t_0) =\hat I - \frac{i}{\hbar}\int^t_{t_0} \hat H(t_1) \hat U (t_1,t_0)dt_1
+\end{equation}
+
+将$\hat{U}$不断迭代，则有:
+
+\begin{align}
+\hat U (t,t_0) &=\hat I - \frac{i}{\hbar}\int^t_{t_0} \hat H(t_1) \hat U (t_1,t_0)dt_1 \\
+&=\hat I - \frac{i}{\hbar}\int^t_{t_0} \hat H(t_1) dt_1 - (\frac{i}{\hbar})^2\int^t_{t_0}\int^{t_1}_{t_0} \hat H(t_1)H(t_2) \hat U (t_1,t_0)dt_2 dt_1 \\
+&= \cdots \\
+&=\hat I +\sum^\limits{\infty}_\limits{n=1}(-\frac{i}{\hbar})^n\int^{t}_{t_0}\int^{t_1}_{t_0}\cdots\int^{t_{n-1}}_{t_0}H(t_1)H(t_2)\cdots H(t_n)dt_n\cdots dt_2dt_1 
+\end{align}
+
+上式即被称为戴森级数。
+
+\subsection{时序算符}
+
+考虑算符$\hat T$，其作用为：
+$$\hat T\hat H(t_1)\hat H(t_2)=\left\{  
+\begin{array}{**lr**}  
+\hat H(t_1)\hat H(t_2) , t_1>t_2&  \\  
+\hat H(t_1)\hat H(t_2) , t_1 \leq t_2\\  
+\end{array}  
+\right.  $$
+
+显然有$\hat TH(t_1)H(t_2)=\hat TH(t_2)H(t_1)$。
+
+则有：
+\begin{equation}
+\int^t_{t_0}\int^{t_2}_{t_0}\hat T\hat H(t_1)\hat H(t_2)dt_1dt_2=\int^t_{t_0}\int^{t_1}_{t_0}\hat T\hat H(t_1)\hat H(t_2)dt_2dt_1 = \int^t_{t_0}\int^{t_1}_{t_0}\hat H(t_1)\hat H(t_2)dt_2dt_1
+\end{equation}
+
+前一等号的直观理解即对一个关于$t_1=t_2$对称的函数积分关于对称轴对称的两区域。
+
+则：
+
+\begin{align}
+\int^t_{t_0}\int^{t}_{t_0}\hat T\hat H(t_1)\hat H(t_2)dt_1dt_2 &= 
+\int^t_{t_0}\int^{t_2}_{t_0}\hat T\hat H(t_1)\hat H(t_2)dt_1dt_2+\int^t_{t_0}\int^{t_1}_{t_0}\hat T\hat H(t_1)\hat H(t_2)dt_2dt_1 \\ 
+&= 2\int^t_{t_0}\int^{t_1}_{t_0}\hat H(t_1)\hat H(t_2)dt_2dt_1
+\end{align}
+
+同时：
+
+\begin{align}
+\int^t_{t_0}\int^{t}_{t_0}\hat T\hat H(t_1)\hat H(t_2)dt_1dt_2 &= \hat T\int^t_{t_0}\int^{t}_{t_0}\hat H(t_1)\hat H(t_2)dt_1dt_2 \\&= \hat T\int^{t}_{t_0}\hat H(t_1)dt_1\int^t_{t_0}\hat H(t_2)dt_2\\&=[\int^t_{t_0}\hat H(t_0)dt_0]^2 
+\end{align}
+
+此结论不仅局限为两个哈密顿量相乘的项$\hat H$的作用始终为将哈密顿量按其时间综量大小排序。
+
+由此可以将戴森级数写成：
+
+
+\begin{align}
+\hat U (t,t_0) &=\hat I +\sum^\limits{\infty}_\limits{n=1}(-\frac{i}{\hbar})^n\int^{t}_{t_0}\int^{t_1}_{t_0}\cdots\int^{t_{n-1}}_{t_0}H(t_1)H(t_2)\cdots H(t_n)dt_n\cdots dt_2dt_1 \\
+&=\hat I +\hat T \sum^\limits{\infty}_\limits{n=1}\frac{1}{n!}(-\frac{i}{\hbar})^n [\int^t_{t_0}\hat H(t_0)dt_0]^n \\
+&=\hat T \exp(-\frac{i}{\hbar}\int^t_{t_0}\hat H(t_0)dt_0)
+\end{align}

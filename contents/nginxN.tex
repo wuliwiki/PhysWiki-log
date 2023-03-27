@@ -12,6 +12,7 @@
 \item 要查看是否连接成功， 用 \verb|curl localhost| 或者 \verb|curl http://localhost|（默认访问 80 接口）。 如果打印出一个 html 文本， 包含 \verb|Welcome to nginx!|， 就是成功了（当然也可以用浏览器访问， 只是有时候只有命令行）。
 \item 如果要限制 nginx 只监听某个网卡， 编辑配置文件 \verb|sudo vim /etc/nginx/sites-enabled/default|， 然后在 \verb|listen 80 default_server;| 的 \verb|80| 改成 \verb|网卡ip:80|， 然后重启 \verb|nginx| 服务即可生效。
 \item 事实上不光是本机， 监听的网卡所在的所有机器访问该网卡的 ip 的 80 端口都会收到
+\item 要重置所有 \verb|/etc/nginx| 配置文件（为了确保可以先把这个文件夹删掉）， 用 \verb|apt purge nginx nginx-common nginx-full|， 然后 \verb|apt install nginx|。
 \end{itemize}
 
 \subsection{http 静态网站}
@@ -19,8 +20,8 @@
 \item 配置文件： \verb|/etc/nginx/nginx.conf|。 在 \verb|http| section 里面加入
 \begin{lstlisting}[language=none]
 server {
-    listen 网卡ip:80;
-    server_name 公网ip或域名:80;
+    listen 80;
+    server_name 公网ip或域名;
     
     location / {
         root /静态网页根目录;
@@ -48,8 +49,8 @@ server {
 \item 更改 nginx 设置， 在 \verb|http { ... }| 的最后添加一个：
 \begin{lstlisting}[language=none]
 server {
-    listen 网卡ip:443 ssl;
-    server_name 域名:443;
+    listen 443 ssl;
+    server_name 域名;
     ssl_certificate /etc/letsencrypt/live/域名/fullchain.pem;
     ssl_certificate_key /etc/letsencrypt/live/域名/privkey.pem;
 
@@ -63,6 +64,13 @@ server {
 \item 现在就可以访问域名： \verb|https://域名|
 \end{itemize}
 
+\subsubsection{创建多个网站}
+\begin{itemize}
+\item 即使 ip 地址和端口号（80, 443） 相同， nginx 也可以同时创建多个网站， 通过 http 中的域名来判断用户需要的是哪个网站。
+\item 可以继续在 \verb|/etc/nginx/nginx.conf| 中插入新的 section （包括下面的反向代理 section）， 同样先添加 80 端口， 输入不同的域名和目录， 重启 nginx 即可。
+\end{itemize}
+
+
 \subsection{反向代理其他网站}
 比如你在国内访问 github 很慢， 但在美国有一个私人服务器， 那么你可以用 Nginx 作为反向代理， 这样你就可以访问你代理服务器的域名了。
 
@@ -71,8 +79,8 @@ server {
 如果只需要 http 代理， 用
 \begin{lstlisting}[language=none]
 server {
-   listen 网卡ip:端口号;
-   server_name 公网ip或域名:端口号;
+   listen 80;
+   server_name 公网ip或域名;
 
    location / {
        proxy_pass https://github.com/;
@@ -86,8 +94,8 @@ server {
 如果需要 https 代理， 用
 \begin{lstlisting}[language=none]
 server {
-  listen 网卡ip:端口号 ssl;
-  server_name 域名:端口号;
+  listen 443 ssl;
+  server_name 域名;
 
   ssl_certificate /etc/letsencrypt/live/域名/fullchain.pem;
   ssl_certificate_key /etc/letsencrypt/live/域名/privkey.pem;
@@ -99,4 +107,16 @@ server {
     proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
   }
 }
+\end{lstlisting}
+
+尝试了对 wikipedia 也进行反向代理， 但根据 wikipedia 的设置浏览器 ulr 总是会跳转回 wikipedia.org， GPT-4 建议在 location 中添加以下设置， 但仍然无效。 这可能超出了 nginx 的能力范围。
+\begin{lstlisting}[language=none]
+proxy_set_header Referer "";
+proxy_redirect https://wikipedia.org/ $scheme://$host/;
+
+# Enable URL rewriting
+sub_filter_once off;
+sub_filter_types *;
+sub_filter 'https://wikipedia.org' '$scheme://$host';
+sub_filter 'https://www.wikipedia.org' '$scheme://$host';
 \end{lstlisting}

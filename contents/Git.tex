@@ -58,6 +58,7 @@ Git for Windows 的 Git bash 是不支持 symlink 的， symlink clone 下来以
 \item 用 \verb|git add <file>| 把变化添加到 staging area （也就是 index）. 用 \verb|git add <dir>/| 添加目录， 用 \verb|git add 目录| 添加某个目录的变化， 用 \verb|git add -A| 添加所有变化。
 \item 用 \verb|git add -u| 可以只 add 修改的和删除的文件， 新文件不 add
 \item \verb|.gitignore| 的例子： \verb|folder/| 忽略整个文件夹， \verb|folder/*.txt| 忽略文件夹中的所有 txt 文件， \verb|folder/**/*.pdf| 忽略 folder 文件夹和所有子文件夹中的 pdf 文件。
+\item 如果要无视 \verb|.gitignore|， 用 \verb|git add -f ...|。
 \item \verb|git diff| 用于显示文件夹和 stage area 中的区别。 \verb|git diff --staged| 用于显示 stage area 和上一次 commit 的区别。 \verb|git diff --name-only| 可以只显示文件名。
 \item \verb|git diff| 的 \verb|--word-diff| 选项可以显示行内的细微差别， 当行比较长的时候使用（如 latex 段落）。 github 中有时候也不会显示具体位置。 如果还想更精确， 用 \verb|--word-diff-regex=.|
 \item \verb|git commit| 用于自动打开文本编辑器信息并 commit. \verb|git commit -m "message"| 直接把 message 作为 commit 信息。 \verb|git commit -a| 可以自动 git add 所有变化的文件， 也可以在后面再加 \verb|-m "message"|.
@@ -120,7 +121,8 @@ git config --global pack.threads 2 # 使用多少线程压缩 pack
 \item \verb|git push| 到一个 nonbare repo 一般是不允许的， 除非这个 repo 设置了 \verb|git config receive.denyCurrentBranch warn| 或者 \verb|git config receive.denyCurrentBranch ignore.| 这时如果 push, 并不会改变 remote 的 working directory. (其实这正是我增量备份 .git 需要的!)
 \item \verb|git config --local --bool core.bare false|， 然后把所有文件数据库文件放到新建的 \verb|.git| 里面， 就可以把一个 bare repo 变成正常 repo。
 \item windows 文本编辑器默认是 ANSI 编码， 而 ANSI 在 git 中显示的是乱码。 而 Visual Studio Code 保存的时候默认会存成 UTF-8 编码， ANSI 编码在 Visual Studio Code 中也会是乱码， 这时千万不要保存， 否则就成了永久的乱码了。
-\item 要检查编码类型， 或转换编码类型，用 Visual Studio Code.  不要用 Windows 的 Notepad。
+\item 要检查编码类型， 或转换编码类型，用 Visual Studio Code\upref{encode}.  不要用 Windows 的 Notepad。
+\item 如果 repo 的子文件夹也是一个 repo （含有 \verb|.git| 文件夹）， 那么后者就会被前者自动忽略。
 \end{itemize}
 
 \subsubsection{把几次 commit 合并}

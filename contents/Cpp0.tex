@@ -66,7 +66,7 @@ C++ 的特征实在多不胜数， 事实上无论是什么语言， 做计算�
 \item 类（constructor, destructor, \verb|public|, \verb|private|， 数据成员， 函数成员， \verb|operator+, -, *, /, (), []|）
 \item POD （plain old data）， \verb|类名() = default;| （可以有其他 constructor）， 没有 destructor， 没有 virtual function。 可以用 \verb|std::is_pod<类名>::value| 来判断。
 \item 宏 （\verb|#include|, \verb|#define|, \verb|#if|, \verb|#ifdef|, \verb|#ifndef|, \verb|#else|, \verb|#endif|）
-\item 宏函数， \verb|var|（变量）， \verb|#var|（字符串）， 以及 \verb|... ## ...| 用于连接（忽略两边空格）
+\item 宏函数， \verb|var|（变量）， \verb|#var|（字符串）， 以及 \verb|...##...| 用于连接变量\footnote{例如 \verb|#define MYFUN1(x) x*x|， 那么 \verb|MYFUN1(abcd)| 就展开为 \verb|abcd*abcd|。 \verb|#define MYFUN2(x) #x|， 那么 \verb|MYFUN2(abcd)| 就展开为 \verb|"abcd"|。\verb|#define MYFUN3(x,y) a##x##y##f|， 那么 \verb|MYFUN3(bc,de)| 展开为 \verb|abcdef|。 注意作为宏函数自变量的宏名不会\textbf{先}展开， 例如 \verb|#define NUM 5|， 那么 \verb|MYFUN1(NUM)| 先展开为 \verb|NUM*NUM| 再进一步展开为 \verb|5*5|。 又例如 \verb|MYFUN2(NUM)| 会展开为 \verb|"NUM"|， 但字符串不会作为宏进一步展开。 宏函数体中双引号内的东西都不会展开， 例如 \verb|#define MYFUN4(x) "x"|， 那么 \verb|MYFUN4(abc)| 仍然展开为 \verb|"x"|}。
 \item \verb|#define ... do {} while(0)| 避免多个语句不加花括号带来的错误。
 \item \verb|namespace|
 \item \verb|constexpr|

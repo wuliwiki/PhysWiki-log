@@ -1,35 +1,9 @@
-% 三维欧几里得空间中的曲线
+% 三维空间中的曲线
 % 曲线|微分几何|曲率|curvature|扭率|第二曲率|torsion|活动坐标架|活动标架
 
-\pentry{矢量的导数\upref{DerV}，张成空间\upref{VecSpn}}
+\pentry{欧几里得空间中的曲线\upref{eucur}，张成空间\upref{VecSpn}}
 
-三维欧几里得空间是我们最为熟悉的空间，其性质也非常好，易于研究。本节讨论的是三维空间中的曲线的性质，引入曲率、挠率等概念，介绍了Frenet向量组以及该组中向量之间的关系。
-
-\subsection{一般欧几里得空间中曲线的概念}
-
-\begin{definition}{曲线}
-令 $I$ 是实数轴 $\mathbb{R}$ 上的一个区间，则称\textbf{连续函数}$f:I\to \mathbb{R}^n$ 为 $\mathbb{R}^n$ 中的一条\textbf{曲线（curve）}，按拓扑学的习惯也称\textbf{道路（path）}。此处连续是指函数的 $n$ 个分量都是 $\mathbb{R}\to\mathbb{R}$ 的连续函数。
-\end{definition}
-
-我们可以任意取定一个坐标系，把向量值函数 $f$ 分为 $n$ 个标量值函数，简称为 $f$ 的分量，由此来理解连续的含义。你可能自然会想确认，$f$ 的分量的连续性，和取定坐标系的方式是否有关？答案是无关的。这是因为我们可以用另一种方式来理解此处的“连续”，那就是取集合 $I$ 与 $\mathbb{R}^3$，配上通常的拓扑——即 $I$ 取 $\mathbb{R}$ 的子拓扑，$\mathbb{R}^3$ 取 $\mathbb{R}$ 的乘积拓扑——所得到的拓扑空间，那么 $f$ 就是拓扑空间之间的映射，其连续性取决于拓扑意义上的连续性，和具体坐标系的选择就无关了。
-
-要强调的一点是，即便两条曲线的轨迹一样，它们也不一定是同一条曲线。比如说，取 $f, g:\mathbb{R}\to\mathbb{R}^2$ 这两个函数，定义为 $f(t)=\pmat{\cos t\\\sin t}$ 和 $g(t)=\pmat{\cos 2t\\\sin 2t}$，那么尽管它们的轨迹都是平面上的单位圆，但由于两条曲线的“速度”不一样，我们依然把它们认为是不同的曲线。
-
-\begin{definition}{可微曲线}
-如果曲线 $f:I\to\mathbb{R}^n$ 对于任意分量都是可微的，那么称 $f$ 是一个\textbf{可微曲线（differentiable curve）}或\textbf{可微道路（differentiable path）}，有时也记为 $C^1$ 的曲线。
-\end{definition}
-
-同样地，$f$ 本身的可微性，和具体坐标系的选择有关系吗？由于“微分”这一概念是实数空间特有的，我们没法像前面一样直接用拓扑的概念绕过坐标系的选择；但答案是一样的，\textbf{无关}。证明这一点的思路也可以应用到之前对一般曲线的讨论上去：考虑变换坐标系后各点的变换，会发现变换后的分量就是过渡矩阵乘以原先的函数列矩阵，也就是说，变换坐标后新的函数分量，是旧分量的某种线性组合。这样一来，变换前可微当且仅当变换后也可微，从而可知和变换无关。
-
-\begin{definition}{光滑曲线}
-如果曲线 $f:I\to\mathbb{R}^n$ 对于任意分量都是光滑的，那么称 $f$ 是一个\textbf{光滑曲线（smooth curve）}或\textbf{光滑道路（smooth path）}，有时也记为 $C^\infty$ 的曲线。
-\end{definition}
-
-和上述坐标变换的讨论类似，可证明光滑曲线的光滑性不依赖于坐标系的选择。
-
-\begin{definition}{正则曲线}
-
-\end{definition}
+三维欧几里得空间是我们最为熟悉的空间，其性质也非常好，易于研究。本节讨论的是三维空间中的 $C^2$ 参数曲线 $f: I = (a, b) \to \mathbb{R}^3$ 的性质，介绍了Frenet向量组以及该组中向量之间的关系，并引入了曲率、挠率等概念。
 
 \subsection{Frenet向量组}
 
@@ -43,7 +17,7 @@ Frenet向量组是\textbf{三维}欧几里得空间 $\mathbb{R}^3$ 中特有的�
 
 Frenet向量组中的第一个向量，是\textbf{单位切向量}。关于 $t$ 对曲线 $f(t)$ 求导就能得到切向量，如果把 $t$ 看作时间，那么切向量 $\frac{\dd}{\dd t}f(t)$ 也可以看成是曲线上一点的切速度。单位切向量就是方向与切速度相同，但长度为 $1$ 的向量。
 
-为了得到单位切向量，我们可以用切速度除以切速度的大小来获得：$\frac{\dd}{\dd t}f(t)/\abs{\frac{\dd}{\dd t}f(t)}$。但更简单的方法是，令切速度的大小恒为 $1$，或者说只讨论切速度大小恒为 $1$ 的\textbf{可微曲线}。当切速度恒为 $1$ 的时候，曲线走过的弧长就恒等于经过的时间，于是我们说这时是用\textbf{弧长}来作曲线的参数。弧长参数通常用字母 $s$ 表示。
+为了得到单位切向量，我们可以用切速度除以切速度的大小来获得：$\frac{\dd}{\dd t}f(t)/\abs{\frac{\dd}{\dd t}f(t)}$。但更简单的方法是，令切速度的大小恒为 $1$，或者说只讨论切速度大小恒为 $1$ 的情况，即弧长参数曲线\autoref{eucur_def1}~\upref{eucur}；我们将用字母 $s$来表示弧长参数。
 
 \begin{definition}{单位切向量}\label{Curv3D_def1}
 使用弧长参数来描述可微曲线 $f(s)$，记 $T(s)=\frac{\dd}{\dd s}f(s)$，称为曲线在参数为 $s$ 处的\textbf{单位切向量（unit tangent vector）}。
@@ -109,13 +83,13 @@ Frenet向量组可以用于构成所谓的\textbf{Frenet坐标架}，也称\text
 \frac{\dd}{\dd s}N(s)=-\kappa(s) T(s)+\tau(s) B(s)
 \end{equation}
 \begin{equation}\label{Curv3D_eq3}
-\frac{\dd}{\dd s}B(s)=-\tau(s) N(s)
+\frac{\dd}{\dd s}B(s)=-\tau(s) N(s)~.
 \end{equation}
 
 用矩阵的形式可以更简洁地表示为
 
 \begin{equation}
-\pmat{T'\\N'\\B'}=\pmat{0&\kappa&0\\-\kappa&0&\tau\\0&-\tau&0}\pmat{T\\N\\B}
+\pmat{T'\\N'\\B'}=\pmat{0&\kappa&0\\-\kappa&0&\tau\\0&-\tau&0}\pmat{T\\N\\B}~.
 \end{equation}
 
 矩阵表示也更好记忆。

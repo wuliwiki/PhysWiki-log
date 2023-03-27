@@ -1,4 +1,4 @@
-% 氢原子电离计算（一阶微扰）
+% 氢原子电离计算（一阶微扰，Matlab）
 % 氢原子|偶极子|跃迁|微扰
 
 \begin{issues}
@@ -7,10 +7,16 @@
 
 \pentry{跃迁概率（含时微扰）\upref{HionCr}}
 
-本文使用原子单位制\upref{AU}， 用平面波近似末态库仑函数。
+本文使用原子单位制\upref{AU}。
 
-\subsection{长度规范}
-归一化的平面波和归一化的氢原子基态为
+\begin{figure}[ht]
+\centering
+\includegraphics[width=10cm]{./figures/HyIon2_1.pdf}
+\caption{偶极子绝对值， 线：平面波近似， 点： 无近似（代码： \verb|plot_hydrogen_trans_dipole.m|）} \label{HyIon2_fig1}
+\end{figure}
+
+\subsection{长度规范（平面波近似）}
+归一化的平面波和归一化的氢原子基态为（用平面波近似末态库仑函数）
 \begin{equation}
 \ket{\bvec k} = (2\pi)^{-3/2} \E^{\I \bvec k \vdot \bvec r},
 \qquad \ket{0} = \frac{1}{\sqrt{\pi}} \E^{-r}~.
@@ -20,15 +26,14 @@
 \mel{\bvec k}{\bvec r}{0}
 =  \frac{\uvec k}{(2\pi)^{3/2}\sqrt{\pi}} \int_0^{+\infty} \int_0^\pi \E^{-r} \E^{-\I k r \cos\theta} r \cos\theta \cdot 2\pi r^2 \sin\theta \dd{\theta} \dd{r}
 \end{equation}
-换元， 令 $u = \cos\theta$， 得\footnote{最后一步可通过 Wolfram Alpha 获得}
+换元， 令 $u = \cos\theta$， 得\footnote{最后一步可通过 Wolfram Alpha 或 Mathematica\upref{Mma} 获得。}
 \begin{equation}\label{HyIon2_eq1}\ali{% 已检查多次
 \mel{\bvec k}{\bvec r}{0} &= \frac{1}{\sqrt 2 \pi} \uvec k \int_0^{+\infty} r^3 \E^{-r} \int_{-1}^1 \E^{-\I k r u} u  \dd{u} \cdot \dd{r}\\
 &=  \I\frac{\sqrt2 \uvec k}{k\pi}  \int_0^{+\infty} r^2 \E^{-r} \qty[\cos(kr) - \frac{1}{kr}\sin(kr)] \dd{r}\\
 &= -\I \frac{8 \sqrt2}{\pi} \frac{\bvec k}{(k^2+1)^3}
 }\end{equation}
+注意这是一个纯虚数。 Matlab 代码如下：
 
-
-Matlab 代码如下
 \begin{lstlisting}[language=matlab, caption=hydrogen\_trans\_dipole0.m]
 % hydrogen transition dipole, approximate Coulomb plane wave with plane wave
 % since middle and right parts are symmetric,
@@ -56,6 +61,7 @@ if n == 1
 end
 end
 \end{lstlisting}
+
 
 \subsection{速度规范}
 注意一阶微扰理论中的初态和末态波函数都是无微扰（无外场）情况下的， 与规范无关。 要计算 $\mel{\bvec k}{\grad}{0}$， 先看积分
@@ -101,32 +107,66 @@ end
 教材中推导微分截面一般使用速度规范， 因为速度规范的结果与实验吻合更好。
 
 \subsection{使用库仑平面波}
+\subsubsection{长度规范}
 
-理论上若把上面的平面波换成库仑平面波（库仑势能中的精确散射态\upref{CulmWf}）， 那么理论上用不同的规范结果是一样的。 笔者没有见过该积分的解析解， 长度规范的 Matlab 数值积分代码如下：
+理论上若把上面的平面波换成库仑平面波（库仑势能中的精确散射态\upref{CulmWf}）， 那么理论上用不同的规范结果是一样的。
+\begin{equation}
+\begin{aligned}
+&\quad\mel*{\psi_{\bvec k}^{(-)}}{z}{\psi_{n,l,m}} = \int \psi_{\bvec k}^{(-)}(\bvec r)^* z \psi_{nlm}(r,\theta,\phi) r^2 \dd{r}\dd{\Omega}\\
+&= \sum_{l',m'} \frac{\I^{-l'}}{k} \E^{\I\sigma_{l'}} Y_{l',m'}(\uvec k) \int \frac{1}{r} \sqrt{\frac{2}{\pi}} F_{l'}\qty(\eta, kr) Y_{l',m'}^*(\uvec r) \qty(r \sqrt{\frac{4\pi}{3}} Y_{1,0}(\uvec r))R_{n,l}(r) Y_{l,m}(\bvec r) r \dd{r}\dd{\Omega}\\
+&= \sqrt{\frac{8}{3}}\sum_{l',m'} \frac{\I^{-l'}}{k} \E^{\I\sigma_{l'}} Y_{l',m'}(\uvec k) \int F_{l'}\qty(\eta, kr) R_{n,l}(r) r \dd{r} \int Y_{l',m'}^*(\uvec r)Y_{1,0}(\uvec r)Y_{l,m}(\bvec r) \dd{\Omega}\\
+&= \sqrt{\frac{2}{\pi}} \sum_{l'} \sqrt{(2l'+1)(2l+1)} \frac{\I^{-l'}}{k} \E^{\I\sigma_{l'}} \int_0^\infty F_{l'}\qty(\eta, kr) R_{n,l}(r) r\dd{r}\times\\
+& \qquad \sum_{m'}  (-1)^{m'} Y_{l',m'}(\uvec k) \pmat{l'& 1& l\\ 0 & 0 & 0}\pmat{l' & 1 & l\\  -m' & 0 & m}
+\end{aligned}
+\end{equation}
+其中 $\eta = -Z/k$。 对 $l=0$ 有
+\begin{equation}
+\mel*{\psi_{\bvec k}^{(-)}}{z}{\psi_{n00}} = \frac{1}{\sqrt{2}\pi k\I} \E^{\I\sigma_1} \cos\theta \int_0^\infty F_1\qty(\eta, kr) rR_{n,0}(r) \dd{r}~.
+\end{equation}
+
+
+笔者没有见过该积分的解析解， 长度规范的 Matlab 数值积分代码如下：
 
 \begin{lstlisting}[language=matlab, caption=hydrogen\_trans\_dipole.m]
-% exact hydrogen transition dipole with Coulomb plane wave
-% since middle and right parts are symmetric,
-%     assuming \vec k in z+ direction
-% <C_{\vec k}|\vec r|n,0,0> = [0, 0, <C_{\vec k}|z|n,0,0>]
 function dipole_z = hydrogen_trans_dipole(kz, ZZ, n)
-% === params ===
-rmax = 25; Nr = 300; Nth = 180;
-Sign = -1; % plane wave out
-% ==============
-k = [0, 0, kz];
-dr = rmax / Nr; dth = pi / Nth;
-r = linspace(dr/2, rmax-dr/2, Nr);
-th = linspace(dth/2, pi-dth/2, Nth); 
-ph = 0;
-Psi_n = hydrogen_Psi(ZZ, n, 0, 0, r', th, ph);
-[R, Th] = ndgrid(r, th); Ph = ones(size(R)) * ph;
-[X, Y, Z] = Sph2Cart(R, Th, Ph); % Y all 0
-Psi_k = coulomb_plane_par(k, X, Y, Z, ZZ, Sign);
-% <C_{\vec k}|\vec r|0>
-dipole_z = sum(sum(conj(Psi_k).*Z.*Psi_n .*R.^2.*sin(Th))) ...
-    * dr * dth * 2*pi;
+eta = -ZZ/kz;
+f = @(r) coulombF_sym(1, eta, kz*r) .* r .* hydrogen_Rnl(ZZ, n, 0, r);
+dipole_z = exp(1i*coulomb_sigma(1,eta)) / (sqrt(2)*pi*kz*1i) ...
+    * integral(f, 0, Inf, 'AbsTol',1e-10) ;
 end
 \end{lstlisting}
 
-\addTODO{速度规范数值积分，验证}
+\subsubsection{速度规范}
+\addTODO{速度规范数值积分，验证和长度规范一样}
+
+画图代码：
+\begin{lstlisting}[language=matlab,caption=plot\_hydrogen\_trans\_dipole.m]
+% == params ==
+n = 1; ZZ = 1;
+kmin = 1; kmax = 3; Nk = 50;
+% ============
+
+kz = linspace(kmin, kmax, Nk);
+dipole_z0 = zeros(1, Nk);
+dipole_z0_ana = dipole_z0;
+dipole_z = dipole_z0;
+
+% plane wave approx
+for i = 1:Nk
+    [dipole_z0(i), dipole_z0_ana(i)]
+        = hydrogen_trans_dipole0(kz(i), ZZ, n);
+end
+
+% Coulomb wave
+parfor i = 1:Nk
+    disp(i);
+    dipole_z(i) = hydrogen_trans_dipole(kz(i), ZZ, n);
+end
+
+figure; plot(kz, abs(dipole_z0)); hold on;
+plot(kz, abs(dipole_z0_ana), '--');
+plot(kz, abs(dipole_z), '.');
+legend({'dipole0', 'dipole0-analy', 'dipole'});
+grid on;
+xlabel 'k [au]'; ylabel 'abs dipole';
+\end{lstlisting}

@@ -1,19 +1,19 @@
-% 四阶龙格库塔法
+% 四阶龙格库塔法（Matlab）
 % 龙格库塔|常微分方程|ode|数值计算
 
 \pentry{中点法解常微分方程（组）\upref{OdeMid}}
 
-\textbf{龙格库塔法}是一类数值解微分方程\upref{ODE}或方程组的算法， 其中较常见的是\textbf{四阶龙格库塔法}。 这里不进行推导， 仅仅给出公式如下（$y_n, t_n, h$ 的定义类比\autoref{OdeNum_eq5}~\upref{OdeNum}）
+\footnote{参考 Wikipedia \href{https://en.wikipedia.org/wiki/Runge–Kutta_methods}{相关页面}。}\textbf{龙格库塔法（Runge-Kutta）}是一类数值解微分方程\upref{ODE}或方程组的算法， 其中较常见的是\textbf{四阶龙格库塔法}。 这里不进行推导， 仅仅给出公式如下（$y_n, t_n, h$ 的定义类比\autoref{OdeNum_eq5}~\upref{OdeNum}）
 \begin{equation}\label{OdeRK4_eq1}
-y_{n+1} = y_n + \frac h6 (k_1 + 2k_2 + 2k_3 + k_4)
+y_{n+1} = y_n + \frac h6 (k_1 + 2k_2 + 2k_3 + k_4)~,
 \end{equation}
 其中
 \begin{equation}\label{OdeRK4_eq2}
 \ali{
-k_1 &= f(y_n, t_n) 
-& k_2 &= f \qty(y_n + h\frac{k_1}{2}, t_n + \frac h2 )\\
-k_3 &= f \qty( y_n + h\frac{k_2}{2}, t_n + \frac h2 ) \qquad
-&k_4 &= f(y_n + hk_3, t_n + h)
+k_1 &= f(y_n, t_n)~,
+& k_2 &= f \qty(y_n + h\frac{k_1}{2}, t_n + \frac h2)~,\\
+k_3 &= f \qty( y_n + h\frac{k_2}{2}, t_n + \frac h2)~, \qquad
+&k_4 &= f(y_n + hk_3, t_n + h)~.
 }\end{equation}
 由以上两式， 不难把该算法拓展到方程组的情况。 对于 $N$ 元微分方程组
 \begin{equation}\label{OdeRK4_eq3}
@@ -22,23 +22,23 @@ y'_1(t) = f_1(y_1,\dots, y_N, t)\\
 y'_2(t) = f_2(y_1,\dots, y_N, t)\\
 \qquad\;\; \vdots\\
 y'_N(t) = f_N(y_1,\dots, y_N, t)
-\end{cases}
+\end{cases}\quad ,
 \end{equation}
 我们可以把该式记为矢量函数的形式
 \begin{equation}\label{OdeRK4_eq4}
-\bvec y'(t) = \bvec f(\bvec y, t)
+\bvec y'(t) = \bvec f(\bvec y, t)~,
 \end{equation}
 其中
 \begin{equation}
-\bvec y'(t) = \pmat{y'_1(t)\\ \vdots\\ y'_N(t)}
+\bvec y'(t) = \pmat{y'_1(t)\\ \vdots\\ y'_N(t)}~,
 \qquad
-\bvec y = \pmat{y_1\\ \vdots\\ y_N}
+\bvec y = \pmat{y_1\\ \vdots\\ y_N}~.
 \end{equation}
 现在我们仅需要把\autoref{OdeRK4_eq1} 和 \autoref{OdeRK4_eq2} 中的所有 $y_i$ 和 $k_i$ 都变为 $N$ 维列矢量 $\bvec y_i$ 和 $\bvec k_i$ 即可将微分方程拓展为微分方程组。
 
 \subsection{例程：天体运动}\label{OdeRK4_sub1}
 
-到目前为止， 我们每求一个微分方程的数值解都要重新写一次程序， 对于一些较为复杂的算法这样做效率较低。 我们这里不妨把四阶龙格库塔法写到一个单独的函数文件 odeRK4.m 中， 当我们要解某个特定的方程时， 只需把\autoref{OdeRK4_eq2} 中的 $f(y, t)$ 作为自变量输入即可解出 $y(t)$。 这样的程序就叫做微分方程的解算器， 它可以求解用户自定义的微分方程。
+到目前为止， 我们每求一个微分方程的数值解都要重新写一次程序， 对于一些较为复杂的算法这样做效率较低。 我们这里不妨把四阶龙格库塔法写到一个单独的函数文件 \verb|odeRK4.m| 中， 当我们要解某个特定的方程时， 只需把\autoref{OdeRK4_eq2} 中的 $f(y, t)$ 作为自变量输入即可解出 $y(t)$。 这样的程序就叫做微分方程的解算器， 它可以求解用户自定义的微分方程。
 
 \begin{lstlisting}[language=matlab, caption=odeRK4.m]
 % 四阶龙格库塔定步长节微分方程

@@ -1,0 +1,20 @@
+% CLion 笔记
+
+\begin{issues}
+\issueDraft
+\end{issues}
+
+\subsubsection{cmake 环境}
+\begin{itemize}
+\item \verb|Settings > Build,Execution,Development > Toolchains| 选择编译环境， 如 WSL， Mingw， Docker， SSH 等。 会检测 CMake 的版本以及 GDB 的版本。
+\item \textbf{SSH} 设置中甚至可以自动读取 \verb|~/.ssh/config| 中的 host 设置， 但是第一次编译时可能要稍微花点时间把源码传到 remote host （目录如 \verb|/tmp/tmp.TH5zt7WrwC|）。 另外仍然不会运行 \verb|~/.bashrc|， 需要在 CLion 中手动添加环境变量。
+\item \textbf{MinGW}（放弃） 设置时选择自己安装的 MSYS2 中的 \verb|mingw64.exe| 却提示说找不到文件。 又试了用 CLion 自带的 mingw， CMake 说找不到 \verb|/usr/bin/g++|， 放弃。
+\item 下面的 CMake 面板里面的齿轮按钮可以设置 \verb|cmake|。 也可以用 \verb|Settings > Build,Execution,Development > CMake| 进入。 包括 Build options \verb|-- -j 16|， 运行 \verb|cmake| 时的环境变量（例如 \verb|CPATH, LIBRARY_PATH|）。
+\item \textbf{Remote Development} 在 File 菜单中选这个可以用 SSH 直接连到 Linux 服务器， 在服务器的文件系统中打开项目并调试。 第一次使用会自动在服务器下载安装 backend， 在本地安装 client。
+\item Linux/WSL 环境下 CLion 通过 \verb|sh| 运行 CMake， 而且应该是新开的 session，所以还是不要试图通过脚本设置环境变量了
+\end{itemize}
+
+\subsubsection{运行环境}
+\begin{itemize}
+\item 上面菜单栏的 Select Run Debug Configuration 可以设置运行时的 working dir， arguments， input file， 环境变量（例如 \verb|LD_LIBRARY_PATH|）。
+\end{itemize}

@@ -20,7 +20,7 @@
 \item 显示数据库 \verb`SHOW DATABASES;`
 \item 用 \verb|--| 注释直到行末， 用 \verb|/*   */| 注释块
 \item 大部分操作都通过 \textbf{SQL statement} 完成， 如 \verb`SELECT * FROM 表名;`
-\item 命令可以随意换行，两个命令之间必须用 \verb|;| 隔开
+\item 命令可以随意换行，两个命令之间必须用 \verb|;| 隔开（即使不在一行）
 \item SQL 关键字， 表格名， 列名都不区分大小写，一般关键词用大写
 \item 数据中的字符串用单引号，大部分数据库双引号也行（但不是标准），字符串区分大小写
 \item 一些最重要的关键字如
@@ -98,16 +98,17 @@
 \subsubsection{CREATE}
 \begin{itemize}
 \item \verb|CREATE TABLE Person (列1名称 类型 选项1 选项2 ... , 列2名称 类型 选项1 选项2 ... , ...)|
-\item 数据类型详见\href{https://www.w3schools.com/sql/sql_datatypes.asp}{这里}。
+\item 数据类型详见\href{https://www.w3schools.com/sql/sql_datatypes.asp}{这里}， 注意一般来说 \verb|INT| 就是 \verb|INTEGER|。
+\item sqlite 支持的类型为 \verb|NULL, INT, REAL, TEXT, BLOB|
 \item 选项 \verb|PRIMARY KEY| 可以使表格的某一列不出现重复的值且不能为 \verb|NULL|。 一个表格中只能有一个 \verb|PRIMARY KEY|， 但可以是多行。
 \item \verb|列名称 类型 UNIQUE| 可以保证该列没有重复数据。
-\item \verb|AUTO_INCREMENT| 选项可以在创建时（如果不指定）自动比该列当前的最大值加 1， 例如 ID 号。 在 sqlite 中叫做 \verb|AUTOINCREMENT| 且只能出现在 \verb|INTEGER PRIMARY KEY AUTOINCREMENT| 中。
+\item \verb|AUTO_INCREMENT| 选项可以在新增一行时（如果不提供）自动比该列当前的最大值加 1， 例如 ID 号。 在 sqlite 中叫做 \verb|AUTOINCREMENT| 且只能出现在 \verb|INT PRIMARY KEY AUTOINCREMENT| 中。
 \item 如果要在一个 table 中的某列指定另一个 table 中的某个 \verb|PRIMARY KEY|， 那就使用 \verb|FOREIGN KEY (本表列名) REFERENCES 别的表名 (别的表的列名)|。 例如在 \verb|Orders| 表中链接 \verb|Persons| 表中名为 \verb|PersonID| 的 primary key：
 \begin{lstlisting}[language=none]
 CREATE TABLE Orders (
-    OrderID int NOT NULL,
-    OrderNumber int NOT NULL,
-    PersonID int,
+    OrderID INT NOT NULL,
+    OrderNumber INT NOT NULL,
+    PersonID INT,
     PRIMARY KEY (OrderID),
     FOREIGN KEY (PersonID) REFERENCES Persons (PersonID)
 );

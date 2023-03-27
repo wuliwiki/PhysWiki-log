@@ -33,6 +33,7 @@
 \subsection{preprocessor}
 \begin{itemize}
 \item \verb|g++ -E -P xxx.cpp > out.txt| 会显示 preprocessor 的输出， 其中 \verb|-P| 会删掉 linkmarker （用于显示代码在头文件中来源）
+\item \verb|g++ -E -dM xxx.cpp > out.txt| 会输出所有 Macro 的定义， 每行一个（但并没有定义的位置）。
 \end{itemize}
 
 \subsection{编译警告}
@@ -61,4 +62,10 @@
 \item 目前（2022-11-23）， \verb|g++| 的默认标准是 \verb|-std=gnu++17| 这是 \verb|-std=c++17| 加上 GNU 的一些拓展。
 \item 其他的选项如 \verb|-ansi 或 -std=c++98 或 -std=c++03|， \verb|-std=c++11或14或17或20|
 \item 如果要严格符合标准（去除所有 gnu 拓展）， 用 \verb|-pedantic| 给出警告，或者 \verb|-pedantic-errors| 给出错误。
+\end{itemize}
+
+\subsection{依赖}
+\begin{itemize}
+\item \verb|g++| 的 \verb|-MM| 选项可以生成某个 cpp 文件或者 h 文件的所有依赖（包括依赖的依赖）。 \verb|-MM -nostdinc++| 则可以在依赖中去掉标准库中的头文件。
+\item \verb|g++| 的 \verb|-M| 选项也一样， 但会生成多条依赖关系， 每个依赖关系只包含直接依赖。
 \end{itemize}

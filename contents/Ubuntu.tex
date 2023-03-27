@@ -97,6 +97,33 @@ EndSection
 \item 如果系统中还有一些 UI 中残留有中文， 就在语言设置里面 Manage Installed Language， 然后按 apply system-wide。
 \end{itemize}
 
+\subsection{应用图标}
+\begin{itemize}
+\item Launcher 中的应用图标都是 \verb|usr/shared/applications| 中的文本设置文件， 例如。
+\begin{lstlisting}[language=none,caption=xxx.desktop]
+[Desktop Entry]
+Version=1.0
+Type=Application
+Name=Launcher中显示的软件名
+Icon=/路径/图片文件（支持 svg）
+Exec="/路径/可执行文件或脚本" %f
+Comment=描述
+Categories=Development;IDE;
+Terminal=false
+StartupNotify=true
+\end{lstlisting}
+\item 其中 \verb|%f| 是， 比如说用这个 app 打开一个或者多个文件， \verb|%f| 就会替换为文件列表
+\item 注意执行程序的环境不会先跑 \verb|~/.bashrc|， 比如从 Launcher 中打开 CLion， \verb|~/.bashrc| 中设置的环境变量并不会生效。 要解决这个问题， 可以自己另外创建一个脚本
+\begin{lstlisting}[language=none,caption=clion.sh]
+#!/bin/bash
+source xxx_setup.sh # 注意直接 \verb`source ~/.bashrc` 貌似无效不知道为什么
+sh /home/addis/clion-*/bin/clion.sh
+\end{lstlisting}
+\item 现在再把 \verb|Exec| 设置为 \verb|/路径/clion.sh| 即可。
+\item 如果要 debug， 可以在 \verb|clion.sh| 中输出一些信息， 然后把上面的 \verb|Terminal| 选项变为 \verb|true|。
+\end{itemize}
+
+
 \subsection{recycle}
 \begin{itemize}
 \item 用 \verb`apt-clone` 是最方便快速的（未测试）， 或者释放出 deb 文件单独安装

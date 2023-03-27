@@ -67,14 +67,15 @@
 \item 以上两种方式产生的变量都可以在 \verb|cmake -LH .| 的帮助中看到说明。
 \item 在模板文件 \verb`*.in` 中， 当 \verb`opt_name` 为 \verb`ON` 时， 使用 \verb|configure_file| 命令后 \verb`#cmakedefine opt_name` 会被替换为 \verb`#define opt_name`。 如果想要给宏定义一个值， 用 \verb`#cmakedefine USE_FEATURE_B @USE_FEATURE_B@`
 \item 【cmake 3.16 的新功能】 \verb|target_precompile_headers(可执行文件 PRIVATE foo.h bar.h)| 可以编译头文件， 注意貌似不会自动包括 .h 包括的文件。 如果头文件（或者依赖的文件）改了， 那么将会自动重新编译头文件。
-\item \verb|execute_process(COMMAND 命令 参数1 参数2 ...)| 可以执行命令， 其中命令和参数中都可以用 \verb|${变量}|。 其他功能（包括命令返回的内容， 文件输入输出）， 详见\href{https://cmake.org/cmake/help/latest/command/execute_process.html}{文档}。
+\item \verb|execute_process(COMMAND 命令 参数1 参数2 ...)| 可以执行 shell 命令， 其中命令和参数中都可以用 \verb|${变量}|。 其他功能（包括命令返回的内容， 文件输入输出）， 详见\href{https://cmake.org/cmake/help/latest/command/execute_process.html}{文档}。 注意这个命令是在运行 \verb|cmake| 时执行而不是运行 \verb|make| 时。 后者可以用 \verb|add_custom_target|， 再用 \verb|add_dependencies(目标, target)| 把 target 作为目标的依赖。
 \item \verb|include(文件或者模块)|， 详见\href{https://cmake.org/cmake/help/latest/command/include.html}{文档}。 模块可以是 \verb|*.cmake| 的文件， 也可以是 cmake 的内建模块如 \verb|CheckCXXCompilerFlag|
 \item \verb|macro(宏名 [参数1 参数2]) 一些命令 endmacro()| 定义宏， 调用如 \verb|ei_add_cxx_compiler_flag(参数1 参数2)|
 \item \verb|check_cxx_source_compiles(代码变量 输出变量)|\href{https://cmake.org/cmake/help/latest/module/CheckCXXSourceCompiles.html}{（文档）} 可以判断某个源码是否可以编译成功。 在调用前， 可以用 \verb|CMAKE_REQUIRED_LIBRARIES| 变量设置所需的库， \verb|CMAKE_REQUIRED_FLAGS| 指定额外的编译器选项， 等。
 \item \verb|check_cxx_compiler_flag(编译器选项 输出变量)| 可以检查某个编译器选项是否可用。 \verb|输出变量| 是 True 或 False。
 \item 循环如 \verb|foreach(变量 IN 列表) ... endforeach()| 或者 \verb|foreach(变量 IN 变量1 变量2 ...) ... endforeach()| 其中 \verb|IN| 在 cmake 2.4 以后可以省略。 \href{https://cmake.org/cmake/help/latest/command/foreach.html}{文档}。
 \item \verb|find_program(变量 程序名 [路径1 路径2 ...])| 可以在指定路径或者 \verb|$PATH| 中寻找某个可执行文件， 并把绝对路径写入\verb|变量|。 如果没有找到， 会赋空值。
-\item \verb|add_custom_command(OUTPUT output_files COMMAND 命令... [ARGS 参数...] [WORKING_DIRECTORY dir] [DEPENDS 依赖文件] [COMMENT 注释])| 相当于 Makefile 中的一个 rule， 指定依赖关系， 以及使用的命令。 当 \verb|OUTPUT| 的文件缺失时或者 \verb|依赖文件| 更新时， 就会运行命令。 可以把 \verb|命令| 和所有的参数写成一整个字符串， 但是 cmake 可能会自动把空格 escape 比较恶心。 可以试试用 \verb|string(REPLACE " " ";" 命令变量 ${命令变量})| 然后 \verb|COMMAND ${命令变量}| 把命令拆成一个 list。 \verb|注释| 会在该命令被运行时输出到 stdout。
+\item \verb|add_custom_command(OUTPUT output_files COMMAND 命令... [ARGS 参数...] [WORKING_DIRECTORY dir] [DEPENDS 依赖文件] [COMMENT 注释])| 相当于 Makefile 中的一个 rule， 指定依赖关系， 以及使用的命令。 其中 \verb|命令| 可以包含完整的命令而不需要额外用 \verb|参数|。 当 \verb|OUTPUT| 的文件缺失时或者 \verb|依赖文件| 更新时， 就会运行命令。 可以把 \verb|命令| 和所有的参数写成一整个字符串， 但是 cmake 可能会自动把空格 escape 比较恶心。 可以试试用 \verb|string(REPLACE " " ";" 命令变量 ${命令变量})| 然后 \verb|COMMAND ${命令变量}| 把命令拆成一个 list。 \verb|注释| 会在该命令被运行时输出到 stdout。
+\item 为了更好的跨平台， \verb|命令| 可以使用 \verb|${CMAKE_COMMAND} -E 一些命令|。 其中 \verb|${CMAKE_COMMAND}| 就是当前使用的 \verb|cmake| 程序， \verb|一些命令| 如 \verb|echo 字符串|，\verb|copy 文件 文件|， \verb|make_directory 目录|， \verb|remove_directory 目录|， \verb|remove 文件| 等。
 \item \verb|add_custom_target(目标名 [COMMAND 命令...] [ARGS arguments...] [DEPENDS depends...] [BYPRODUCTS byproducts...] [WORKING_DIRECTORY dir] [SOURCES sources...] [COMMENT 注释])| 会在生成的 Makefile 中添加一个 target。
 \item \verb|add_dependencies(目标名 依赖1 [依赖2 ...])| 可以给 target（例如可执行文件）添加依赖。
 \item \verb|check_symbol_exists("符号名字" "路径/头文件1;头文件2" 变量)| 可以检查 \verb|符号名字| 是否有定义， 包括函数名， 变量名， 以及宏。
