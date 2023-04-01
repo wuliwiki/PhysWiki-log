@@ -1,10 +1,12 @@
-% SQLite C++ API 笔记
+% SQLite C API 笔记
 
 \begin{issues}
 \issueDraft
 \end{issues}
 
 \pentry{SQL 基础笔记\upref{SQLnt}}
+
+这里介绍官方的 C API， 可以在 C 或者 C++ 中调用。 如果想要更方便的 C++ wrapper， 可以见 \href{https://github.com/SRombauts/SQLiteCpp}{SQLiteCpp}。
 
 \subsection{安装}
 ubuntu 上用 \verb|sudo apt install libsqlite3-dev| 安装
@@ -117,20 +119,41 @@ sqlite> .exit
 \item 事实上 \verb|sqlite3_exec()| 命令是调用一系列命令， 如果用 binding， 就必须把它们分开用。
 \item 首先用 \verb|sqlite3_stmt stmt;| 创建一个 statement object。
 \item 然后把 sql 命令 \verb|str| parse 为 \verb|stmt|： \verb|ret = sqlite3_prepare_v2(db, str.c_str(), str.size()+1, &stmt, NULL);|。 这里 \verb|str| 中的数据可以用 \verb|?| 或者 \verb|?编号| 代替， 以后再 bind 到不同的数据上。 这样就不需要每换一次数据都要重新 parse 一次。
+\item 注意只有数据可以用 \verb|?| 代替， \verb|表名| 和 \verb|列名| 不可以。
+\item 不可以对字符串用 \verb|'?'|， \verb|sqlite3_prepare| 会自己添加。 如果用了就会错。
 \item \verb|int sqlite3_bind_parameter_count(stmt)| 可以返回 \verb|?| 的个数。
 \item \verb|ret = sqlite3_bind_text(stmt, 问号的编号, names[i].c_str(), names[i].size(), SQLITE_STATIC);| 用于把字符串 bind 到指定的问号上。 如果问号没有指定编号则从左到右从 1 开始。
+\item \verb|SQLITE_STATIC| 的意思是假设字符串写入数据库之前都不会改变， 如果会， 就用 \verb|SQLITE_TRANSIENT|， 这样 \verb|stmt| 会立即把字符串复制下来。
 \item \verb|ret = sqlite3_bind_text(stmt, 问号的编号, int);| 用于把整数 bind 到指定的问号上。
 \item bind 好之后用 \verb|ret = sqlite3_step(stmt)| 来执行， 当 statement 不是 query 时返回 \verb|SQLITE_DONE|； 是 query 时返回 \verb|SQLITE_ROW|， 每调用一次返回一行。
+\item \verb|int sqlite3_column_type(stmt, 从0开始的列编号)| 可以查看类型， 类型有 \verb|SQLITE_INTEGER, SQLITE_FLOAT, SQLITE_TEXT, SQLITE_BLOB, SQLITE_NULL|。
 \item 要查看 query 的结果， \verb|sqlite3_column_int(stmt, 从0开始的列编号)| 获取当前返回行的某个整数类型的列
 \item \verb|(char*)sqlite3_column_text(stmt, 从0开始的列编号)| 同理获得字符串类型
 \item 最后用 \verb|sqlite3_finalize(stmt);| 释放内存。
+\item 每次操作完， \verb|int sqlite3_changes(db)| 可以获取改变的行数。
 \end{itemize}
 
 
 \subsection{sqlite3 命令}
 \begin{itemize}
 \item \verb|sqlite3| 是一个命令行程序， 可以手动输入 SQL 命令来操作 sqlite 数据库。
-\item \verb|VACUUM| 命令可以重建数据库， 让它尺寸更小， 一些操作更快。
+\item \verb|sqlite3 文件.db| 可以打开二进制的 sqlite3 数据库文件。
+\item \verb|sqlite3| 命令行中的 \verb|VACUUM| 命令可以重建数据库， 让它尺寸更小， 一些操作更快。
+\item \verb|Ctrl+D| 或者 \verb|.quit| 可以退出。 \verb|.| 开头的命令是 \verb|sqlite3| 自己的命令而不是 SQL 命令。
+\item 更简单地也可以用 \verb|sqlite3 文件.db "命令; 命令;..."| 直接执行命令不进入 sqlite3 命令行。
+\item \verb|sqlite3 文件.db .dump > 文件.sql| 可以把二进制数据库 dump 成 SQL 命令的文本文件。 用这些命令可以重建该数据库。
+\item 相反， 可以 \verb|sqlite3 文件.db < 文件.sql| 由 \verb|sql| 命令生成数据库（如果 \verb|文件.db| 不存在）。 如果存在， 就打开 \verb|文件.db| 继续运行 \verb|文件.sql| 中的命令。
+\item \verb|SQLite| 不支持删除一列， 需要重新创建新表格， 把需要的列复制进去然后删除旧表格再重命名。
+\item 默认情况下， sqlite3 的 \verb|INSERT| 命令不检查 \verb|FOREIGN KEY| 是否存在。 要检查， 每次打开文件都要用 \verb|PRAGMA foreign_keys = ON;|
+\begin{lstlisting}[language=none]
+CREATE TABLE 新表名 (...);
+
+INSERT INTO 新表名 (列1, 列2, ...)
+SELECT 列1, 列2, ... FROM 旧表名;
+
+DROP TABLE 旧表名;
+ALTER TABLE 新表名 RENAME TO 旧表名;
+\end{lstlisting}
 \end{itemize}
 
 \subsection{GUI 浏览器}

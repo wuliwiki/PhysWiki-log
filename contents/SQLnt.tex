@@ -43,6 +43,7 @@
 \item \verb`SELECT DISTINCT 列1, 列2, ... FROM 表格名;` 仅列出（输出中）不完全相同的行， 例如 \verb`SELECT DISTINCT Country FROM 表格名;`
 \item 获取表格行数： \verb`SELECT COUNT(*) FROM 表格名`
 \item \verb`SELECT COUNT(DISTINCT Country) FROM 表格名;` 显示表格中有多少不同的国家。 （这个命令在 Microsoft Access 里面没用）， 除了 \verb|COUNT| 还有 \verb|AVG| 和 \verb|SUM|
+\item \verb|SELECT MIN(列) FROM 表格名;|
 \end{itemize}
 
 \subsubsection{WHERE}
@@ -57,6 +58,8 @@
 \item \verb`SELECT 列1, 列2, ... FROM 表格名 WHERE NOT condition;`
 \item \verb`SELECT * FROM 表格名 WHERE City='Berlin' OR City='München';`
 \item \verb`SELECT OCTET_LENGTH(列名) FROM 表名 WHERE ...;` 可以返回 blob 的大小
+\item \verb|SELECT EXISTS(SELECT 1 FROM 表格名 WHERE 条件);| 可以检查表格中是否有满足条件的行。 其中 \verb|SELECT 1| 并不返回任意表格中的数据而是如果改行存在就返回 \verb|1|（一行一列的数据）。 而 \verb|SELECT EXISTS()| 如果接收到任何返回值就返回 \verb|1|， 否则返回 \verb|0|。
+\item \verb|SELECT * FROM 表格名 WHERE 列名 LIKE '%字符%';| 可以搜索某列中是否包含 \verb|字符|。
 \end{itemize}
 
 \subsubsection{ORDER BY}
@@ -86,6 +89,7 @@
 \subsubsection{DELETE}
 \begin{itemize}
 \item \verb`DELETE FROM 表格名 WHERE condition;` 删除符合条件的行
+\item \verb|DELETE FROM 表格名;| 删除表格的所有数据（表格还在）。
 \item e.g. \verb`DELETE FROM 表格名 WHERE CustomerName='Alfreds Futterkiste';`
 \end{itemize}
 
@@ -93,11 +97,13 @@
 \begin{itemize}
 \item 给表格重命名 \verb|ALTER TABLE 旧名字 RENAME TO 新名字;|
 \item 从表格中删除一列 \verb|ALTER TABLE 表名 DROP COLUMN 列名;|
+\item 给表格一列重命名 \verb|ALTER TABLE 表名 RENAME COLUMN 列名 TO 新列名;|
 \end{itemize}
 
 \subsubsection{CREATE}
 \begin{itemize}
 \item \verb|CREATE TABLE Person (列1名称 类型 选项1 选项2 ... , 列2名称 类型 选项1 选项2 ... , ...)|
+\item 强烈不建议用 SQL 命令的关键字作为表名列名等（大小写都不行）， 例如 \verb|add|。 因为为了区分关键字， 在命令中需要使用 \verb|"add", [add]| 或者 \verb|`add`| 来 escape。 普通列名则不需要 escape。
 \item 数据类型详见\href{https://www.w3schools.com/sql/sql_datatypes.asp}{这里}， 注意一般来说 \verb|INT| 就是 \verb|INTEGER|。
 \item sqlite 支持的类型为 \verb|NULL, INT, REAL, TEXT, BLOB|
 \item 选项 \verb|PRIMARY KEY| 可以使表格的某一列不出现重复的值且不能为 \verb|NULL|。 一个表格中只能有一个 \verb|PRIMARY KEY|， 但可以是多行。

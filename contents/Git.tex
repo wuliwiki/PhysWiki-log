@@ -97,7 +97,7 @@ Git for Windows 的 Git bash 是不支持 symlink 的， symlink clone 下来以
 \item \verb|git reset --soft HEAD~1| 用于撤销最近一次 commit，改变的文件变为 staged 的状态
 \item \verb|git reset --hard HEAD~1| 用于撤销最近一次 commit (本地). 如果已经推送到了服务器， 继续用 \verb|git push origin HEAD --force| 即可。
 \item \verb|git stash| 可以临时保存修改（不包括 untracked 的文件） \verb|git stash -u| 包括 untracked 的文件。 \verb|git stash pop| 可以恢复这些修改（相当于 merge）。 注意 \verb|pop| 以后的文件并不一定和 stash 的时候一模一样， 例如 stash 之后 pop 之前 pull 了一些变化， 那么 pop 的时候相当于在这些变化的基础上 merge。
-\item 把某文件从所有历史中删除用 \verb|git filter-branch -f --tree-filter 'rm -rf <path/file>' HEAD| 注意这样做本身并不一定会使 repo 变小。 如果要清空一个文件夹， 就用 \verb|path/*| 就好
+\item 把某文件从所有历史中删除用 \verb|git filter-branch -f --tree-filter 'rm -rf <path/file>' HEAD| 注意这样做本身并不一定会使 repo 变小。 如果要清空一个文件夹， 就用 \verb|path/*| 就好。 特别注意这会把几乎所有的 commit 的 hash 改变。
 \item \verb|git gc --aggressive --prune=now| 会可以将 repo 缩小，PhysWiki 的 .git 大概能缩小到一半。 鼓励经常使用 \verb|git gc|，但 \verb|--aggressive| 选项会比较慢但也是安全的。 gc 表示 garbage collection。 该命令还可以让 \verb|.git| 中的文件数量大大减小（copy 文件夹会快很多）
 \item \verb|git gc| 命令只对本地 repo 有效，其实最有效的貌似还是直接把本地 repo 删了再 clone 一次。但是注意检查是否有不小心被 .gitignore 屏蔽的文件没有在服务器上
 \item 注意 \verb|git gc| 用的内存可能会非常多（尤其是 repo 很大的时候）， 可以用（按需要调节， 容量单位有 \verb|k,m,g|）。 实测中，100GB 的数据库可以只用 4G 服务器内存和 4G 缓存， 限制单线程，以及 50k window 完成。

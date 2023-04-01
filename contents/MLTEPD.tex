@@ -1,0 +1,96 @@
+% 点电荷系统的静电场 (MATLAB绘图)
+
+\pentry{电势、电势能\upref{QEng}}
+\begin{figure}[ht]
+\centering
+\includegraphics[width=10cm]{./figures/MLTEPD_1.pdf}
+\caption{随机生成的点电荷电场\upref{Efield}} \label{MLTEPD_fig1}
+\end{figure}
+\begin{lstlisting}[language=matlab]
+%本代码基于CC-BY发布
+
+clc
+clear
+
+[x y z]=meshgrid(-10:0.5:10,0,-10:0.5:10);
+[sx sy sz] = size(x);
+
+N=2; %设定电荷个数
+
+chargeLocation=zeros(3,N);
+q = zeros(N,1);
+
+for n = 1:N %随机生成电荷的位置与电量
+  chargeLocation(:,n) = 20*rand(3,1) - 10;
+  chargeLocation(2,n) = 0;
+  q(n)=4*rand() - 2;
+end
+
+%你也可以手动指定各电荷的位置与电量
+%chargeLocation(:,1) = [0;0;0]; %x;y;z
+%chargeLocation(:,2) = [0;0;5];
+%q(1)=1;
+%q(2)=-1;
+
+for i=1:sx
+ for j=1:sy
+   for k=1:sz
+      r = [x(i,j,k);y(i,j,k);z(i,j,k)];
+
+      E = [0;0;0];
+
+      for n = 1:N
+        R = r-chargeLocation(:,n);
+        E = E + 30*q(n)/norm(R)^3 * R;
+      end
+
+      if isnan(norm(E))
+        E=[0;0;0];
+      elseif norm(E) >= 0.5;
+        E = E/norm(E) * 0.5;
+      end
+
+      u(i,j,k)=E(1);
+      v(i,j,k)=E(2);
+      w(i,j,k)=E(3);
+   end
+ end
+end
+
+hold on
+axis equal
+axis([-10 10 -10 10 -10 10])
+
+quiver3(x,y,z,u,v,w,0);
+
+for n=1:N
+  %正电荷记为红色，负电荷记为黑色，大小与电荷量有关。
+  s = scatter3(chargeLocation(1,n),
+  chargeLocation(2,n),chargeLocation(3,n),'r');
+  if q(n) > 0 
+    set(s,'MarkerEdgeColor','r')
+  else
+    set(s,'MarkerEdgeColor','k')
+  end
+  set(s,'sizedata',36*log(abs(q(n))+1));
+end
+
+xlabel('X','fontsize',15)
+ylabel('Y','fontsize',15)
+zlabel('Z','fontsize',15)
+view(0,0)
+hold off
+
+U=0; 
+%计算该点电荷系统的相互作用能。
+%由于没有正确地选择常数，因此结果只有定性的演示意义。
+for i=1:N
+  for j = i+1:N
+    r1 = chargeLocation(:,i);
+    r2 = chargeLocation(:,j);
+    phi = 30*q(j)/norm(r1-r2);
+    U = U + q(i)*phi;
+  end
+end
+U
+\end{lstlisting}

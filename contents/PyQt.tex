@@ -1,0 +1,102 @@
+% PyQt 笔记
+
+\begin{issues}
+\issueDraft
+\end{issues}
+
+\begin{itemize}
+\item PyQt \href{https://www.riverbankcomputing.com/static/Docs/PyQt5/}{文档}。
+\end{itemize}
+
+
+GPT-4 生成的一个程序
+\begin{figure}[ht]
+\centering
+\includegraphics[width=9cm]{./figures/PyQt_1.png}
+\caption{可以把输入的字体显示为不同颜色} \label{PyQt_fig1}
+\end{figure}
+
+
+\begin{lstlisting}[language=python]
+import sys
+from PyQt5.QtWidgets import QApplication, QMainWindow, \ 
+    QMenu, QMenuBar, QAction, QRadioButton, QVBoxLayout, \ 
+    QLabel, QLineEdit, QPushButton, QWidget, QGroupBox
+from PyQt5.QtGui import QColor
+
+class MainWindow(QMainWindow):
+    def __init__(self):
+        super().__init__()
+
+        self.initUI()
+
+    def initUI(self):
+        # Drop menu
+        menubar = self.menuBar()
+        fileMenu = menubar.addMenu('File')
+
+        exitAction = QAction('Exit', self)
+        exitAction.triggered.connect(self.close)
+        fileMenu.addAction(exitAction)
+
+        # Radio buttons (circled single selection)
+        self.radio_group = QGroupBox("Color Options")
+        self.radio_layout = QVBoxLayout()
+
+        self.red_radio = QRadioButton("Red")
+        self.green_radio = QRadioButton("Green")
+        self.blue_radio = QRadioButton("Blue")
+
+        self.radio_layout.addWidget(self.red_radio)
+        self.radio_layout.addWidget(self.green_radio)
+        self.radio_layout.addWidget(self.blue_radio)
+
+        self.radio_group.setLayout(self.radio_layout)
+
+        # Textbox
+        self.textbox = QLineEdit(self)
+        self.textbox.setPlaceholderText("Enter text here")
+
+        # Button to display the text
+        self.button = QPushButton("Display Text", self)
+        self.button.clicked.connect(self.on_click)
+
+        # Label to display the text
+        self.result_label = QLabel("")
+
+        # Main layout
+        self.layout = QVBoxLayout()
+        self.layout.addWidget(self.radio_group)
+        self.layout.addWidget(self.textbox)
+        self.layout.addWidget(self.button)
+        self.layout.addWidget(self.result_label)
+
+        self.container = QWidget()
+        self.container.setLayout(self.layout)
+        self.setCentralWidget(self.container)
+
+        self.setWindowTitle('PyQt5 GUI Demo')
+        self.setGeometry(300, 300, 300, 200)
+
+    def on_click(self):
+        text = self.textbox.text()
+
+        if self.red_radio.isChecked():
+            color = QColor(255, 0, 0)
+        elif self.green_radio.isChecked():
+            color = QColor(0, 255, 0)
+        elif self.blue_radio.isChecked():
+            color = QColor(0, 0, 255)
+        else:
+            color = QColor(0, 0, 0)
+
+        self.result_label.setText(text)
+        self.result_label.setStyleSheet(f"color: rgb({color.red()},
+            {color.green()}, {color.blue()});")
+
+if __name__ == '__main__':
+    app = QApplication(sys.argv)
+    window = MainWindow()
+    window.show()
+    sys.exit(app.exec_())
+\end{lstlisting}
