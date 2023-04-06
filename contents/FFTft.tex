@@ -3,9 +3,9 @@
 \pentry{离散傅里叶变换\upref{DFT}， Matlab 画图\upref{MatPlt}}
 
 \subsection{直接数值积分}
-作为下文 FFT 方法的参照， 我们先实现直接用数值积分计算傅里叶变换（\autoref{FTExp_eq6}~\upref{FTExp}）。 调用时需要提供一元函数（句柄） \verb|f|， 而不是一系列离散函数值。 \verb|xspan| 是对 \verb|f| 积分的区间， 而 \verb|kspan| 是输出中 \verb|k| 的区间， \verb|Nk| 是 \verb|k| 的长度。 这么做虽然直观且精确， 但计算量较大， 所以一般还是用下一节中的 FFT 方法。
+作为下文 FFT 方法的参照， 我们先实现直接用数值积分计算傅里叶变换（\autoref{eq_FTExp_6}~\upref{FTExp}）。 调用时需要提供一元函数（句柄） \verb|f|， 而不是一系列离散函数值。 \verb|xspan| 是对 \verb|f| 积分的区间， 而 \verb|kspan| 是输出中 \verb|k| 的区间， \verb|Nk| 是 \verb|k| 的长度。 这么做虽然直观且精确， 但计算量较大， 所以一般还是用下一节中的 FFT 方法。
 
-尤其是如果 \verb|f| 并不是通过函数给出， 而只是一系列等间距的散点， 那么与其先插值再做数值积分， FFT 方法是最适合的， 因为 FFT 已经相当于对散点进行了 sinc 插值（\autoref{DFT_sub2}~\upref{DFT}）。
+尤其是如果 \verb|f| 并不是通过函数给出， 而只是一系列等间距的散点， 那么与其先插值再做数值积分， FFT 方法是最适合的， 因为 FFT 已经相当于对散点进行了 sinc 插值（\autoref{sub_DFT_2}~\upref{DFT}）。
 \addTODO{搞几个具体的例子， 对比数值积分和 FFT 的结果。}
 \begin{lstlisting}[language=matlab, caption=CFT.m]
 % Continuous Fourier Transform by Integration
@@ -57,7 +57,7 @@ end
 \end{lstlisting}
 
 \subsection{用 FFT 计算傅里叶变换}
-这里使用的算法见\autoref{DFT_sub1}~\upref{DFT}。 给出任意等间距的 $x$ 坐标格点 \verb|[x0, x0+dx, x0+2*dx, ...]|， 以及对应的函数值 \verb|f = [f(1), f(2), ...]|， 那么该代码可以通过 Matlab 提供的快速傅里叶变换（FFT） 计算傅里叶变换（\autoref{FTExp_eq6}~\upref{FTExp}）。 输入中 \verb|Nk| 是可选的， 若 \verb|Nk| 大于 \verb|f| 的个数， 输出中 \verb|k| 的步长将会相应变小使 \verb|k| 的长度为 \verb|Nk|， 但区间不会变。 \verb|k| 的区间是由 \verb|dx| 决定的。 
+这里使用的算法见\autoref{sub_DFT_1}~\upref{DFT}。 给出任意等间距的 $x$ 坐标格点 \verb|[x0, x0+dx, x0+2*dx, ...]|， 以及对应的函数值 \verb|f = [f(1), f(2), ...]|， 那么该代码可以通过 Matlab 提供的快速傅里叶变换（FFT） 计算傅里叶变换（\autoref{eq_FTExp_6}~\upref{FTExp}）。 输入中 \verb|Nk| 是可选的， 若 \verb|Nk| 大于 \verb|f| 的个数， 输出中 \verb|k| 的步长将会相应变小使 \verb|k| 的长度为 \verb|Nk|， 但区间不会变。 \verb|k| 的区间是由 \verb|dx| 决定的。 
 \begin{lstlisting}[language=matlab, caption=FFT.m]
 % fft approximation of the analytical fourier transform from f(x) to g(k)
 % x and k are both equally spaced, x starts from x0 equally spaced by dx
@@ -239,7 +239,7 @@ end
 \end{lstlisting}
 
 \subsubsection{傅里叶级数}
-根据\autoref{DFT_eq10}~\upref{DFT}， 傅里叶级数与傅里叶变换值相差一个常数：
+根据\autoref{eq_DFT_10}~\upref{DFT}， 傅里叶级数与傅里叶变换值相差一个常数：
 \begin{lstlisting}[language=matlab, caption=FS.m]
 % Fourier series by FFT
 function [C, k] = FS(f, x0, dx)

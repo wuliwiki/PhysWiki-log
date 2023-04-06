@@ -3,15 +3,15 @@
 \pentry{薛定谔方程（单粒子一维）\upref{TDSE11}， 一维波动方程的简单数值解（Matlab）\upref{W1dNum}}
 
 本文使用原子单位制\upref{AU}。 本文演示如何用差分法解一维薛定谔方程。
-\begin{equation}\label{TDSE1N_eq1}
+\begin{equation}\label{eq_TDSE1N_1}
 -\frac{1}{2m}\pdv[2]{x}\psi + V(x,t)\psi = \I\pdv{t}\psi
 \end{equation}
 
-乍看之下， 类比 “一维波动方程的简单数值解（Matlab）\upref{W1dNum}”， 我们似乎也能用简单的差分法求解\autoref{TDSE1N_eq1}， 但事实证明这是行不通的， 迭代几步以后， 数值误差就会盖过波函数本身。 这说明对薛定谔方程来说，差分法是一个不稳定的算法。 但为了教学，还是把公式和代码给出来。
+乍看之下， 类比 “一维波动方程的简单数值解（Matlab）\upref{W1dNum}”， 我们似乎也能用简单的差分法求解\autoref{eq_TDSE1N_1}， 但事实证明这是行不通的， 迭代几步以后， 数值误差就会盖过波函数本身。 这说明对薛定谔方程来说，差分法是一个不稳定的算法。 但为了教学，还是把公式和代码给出来。
 
 一些稳定的算法如直接对角化（未完成）、 Crank-Nicolson\upref{CraNic}、 以及 Lanczos 算法\upref{Lanc}（通常配合 FEDVR 网格\upref{FEDVR}一起使用）。
 
-把波函数取离散值， 令 $\psi_{i,n} = \psi(x_i,t_n)$。 用有限差分表示二阶导数（\autoref{DerDif_eq5}~\upref{DerDif}）， 得
+把波函数取离散值， 令 $\psi_{i,n} = \psi(x_i,t_n)$。 用有限差分表示二阶导数（\autoref{eq_DerDif_5}~\upref{DerDif}）， 得
 \begin{equation}
 -\frac{1}{2m}\frac{\psi_{i-1,n} - 2\psi_{i,n} + \psi_{i+1,n}}{\Delta x^2} + V_{i,n}\psi_{i,n} = \I \frac{\psi_{i, n+1} - \psi_{i, n}}{\Delta t}
 \end{equation}
@@ -23,8 +23,8 @@
 失败的差分法程序如下
 \begin{figure}[ht]
 \centering
-\includegraphics[width=10cm]{./figures/TDSE1N_1.png}
-\caption{程序运行的第 24 个循环， 噪音已经使波函数扭曲。 即使把时间步长和空间步长设置得很小也不会有多大改善。} \label{TDSE1N_fig1}
+\includegraphics[width=10cm]{./figures/e4b82b14bb81000b.png}
+\caption{程序运行的第 24 个循环， 噪音已经使波函数扭曲。 即使把时间步长和空间步长设置得很小也不会有多大改善。} \label{fig_TDSE1N_1}
 \end{figure}
 
 \begin{lstlisting}[language=matlab, caption=TDSE\_1d\_failed.m]

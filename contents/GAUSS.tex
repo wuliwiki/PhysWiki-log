@@ -4,7 +4,7 @@
 \pentry{矩阵\upref{Mat}}
 
 \footnote{参考 Wikipedia \href{https://en.wikipedia.org/wiki/Gaussian_elimination}{相关页面}。}线性方程组（有 $x_1\dots x_n$ 这 $n$ 个未知量， 所以也叫 \textbf{$\boldsymbol{n}$ 元一次方程组}）
-\begin{equation}\label{GAUSS_eq1}
+\begin{equation}\label{eq_GAUSS_1}
 \leftgroup{
 &a_{1,1}x_1 + a_{1,2}x_2 + \dots + a_{1,n}x_n&=\quad &y_1\\
 &a_{2,1}x_1 + a_{2,2}x_2 + \dots + a_{2,n}x_n&=\quad &y_2\\
@@ -12,7 +12,7 @@
 &a_{m,1}x_1 + a_{m,2}x_2 + \dots + a_{m,n}x_n&=\quad &y_m}\\
 \end{equation}
 可以写成矩阵和列矢量相乘的形式
-\begin{equation}\label{GAUSS_eq2}
+\begin{equation}\label{eq_GAUSS_2}
 \mat A \bvec x = \bvec y
 \end{equation}
 其中 $\mat A$ 是维度 $m \times n$ 的矩阵，称为\textbf{系数矩阵}。
@@ -28,9 +28,9 @@ a_{m,1} &a_{m,2} &\cdots &a_{m,n} \\
 $\bvec x$ 是 $n$ 维列矢量 $(x_1,x_2,\dots,x_m,\dots,x_n)\Tr$。
 $\bvec y$ 是 $m$ 维列矢量 $(y_1,y_2,\dots,y_m)\Tr$，称为\textbf{常数列}。 $\mat A$ 和 $\bvec y$ 通常看做已知的，而 $\bvec x$ 看做未知的， 即方程组待求的\textbf{解}。 下面我们介绍一种解线性方程组的简单的方法， \textbf{高斯消元法（Gauss elimination）。} 先来看一个简单的例子。
 
-\begin{example}{}\label{GAUSS_ex1}
+\begin{example}{}\label{ex_GAUSS_1}
 我们先回顾一下初中阶段如何解线性方程组， 例如
-\begin{equation}\label{GAUSS_eq4}
+\begin{equation}\label{eq_GAUSS_4}
 \leftgroup{
 &2x + 3y = 21\\
 &5x - 2y = 5
@@ -51,7 +51,7 @@ x = - \frac32 y + \frac{21}{2}
 \end{equation}
 解得 $y = 5$， 再代入第一条等式得 $x = 3$。 为什么可以这么做？  简单来说是因为如果两条等式都成立， 将它们两边相加得到的新的等式同样成立。 下面我们来详细讲解第二种方法。
 
-为了书写简单， 我们可以用所谓的\textbf{增广矩阵（augmented matrix）}来表示矩阵和常数列， 即把\autoref{GAUSS_eq4} 记为
+为了书写简单， 我们可以用所谓的\textbf{增广矩阵（augmented matrix）}来表示矩阵和常数列， 即把\autoref{eq_GAUSS_4} 记为
 \begin{equation}
 \qty( \begin{array}{cc|c}
 	2 & 3 & 21 \\
@@ -73,7 +73,7 @@ x = - \frac32 y + \frac{21}{2}
 
 \subsection{一般步骤}
 
-我们将\autoref{GAUSS_eq1} 形式的方程组用增广矩阵表示为
+我们将\autoref{eq_GAUSS_1} 形式的方程组用增广矩阵表示为
 \begin{equation}
 \mat B=(\mat A ,\bvec y)={
 	\qty( \begin{array}{cccc|c}
@@ -94,7 +94,7 @@ x = - \frac32 y + \frac{21}{2}
 \item 把矩阵第 $i$ 行的所有元素乘以数 $k$ 后加到第 $j$ 行上， 记作 $\bvec r_i + \bvec r_j \times k$
 \end{enumerate}
 
-任何非零矩阵（或增广矩阵）经过有限次初等行变换后总可以使系数矩阵 $\mat A$ 转化为\textbf{梯形矩阵（echelon form）}。 我们把梯形矩阵定义为满足该条件的矩阵： 第 $i$ 行的第一个非零系数\footnote{为了书写简单， 我们将每次变换后的系数矩阵元仍然用 $a_{i,j}$ 来表示， 虽然它的值可能已经发生变化。 若需要区分， 可以将第 $n$ 次变换后的矩阵元用 $a_{i,j}^{(n)}$ 表示。} $a_{i,q(i)}$ 的列标 $q(i)$ 总是大于第 $i-1$ 行的第一个非零元 $a_{i-1, q(i-1)}$ 的列标 $q(i-1)$。 与\autoref{GAUSS_ex1} 不同的是， 当系数矩阵经过行变换化为梯形矩阵后， 最后若干行有可能都为零， 最后一个非零行也未必只有一个非零元。
+任何非零矩阵（或增广矩阵）经过有限次初等行变换后总可以使系数矩阵 $\mat A$ 转化为\textbf{梯形矩阵（echelon form）}。 我们把梯形矩阵定义为满足该条件的矩阵： 第 $i$ 行的第一个非零系数\footnote{为了书写简单， 我们将每次变换后的系数矩阵元仍然用 $a_{i,j}$ 来表示， 虽然它的值可能已经发生变化。 若需要区分， 可以将第 $n$ 次变换后的矩阵元用 $a_{i,j}^{(n)}$ 表示。} $a_{i,q(i)}$ 的列标 $q(i)$ 总是大于第 $i-1$ 行的第一个非零元 $a_{i-1, q(i-1)}$ 的列标 $q(i-1)$。 与\autoref{ex_GAUSS_1} 不同的是， 当系数矩阵经过行变换化为梯形矩阵后， 最后若干行有可能都为零， 最后一个非零行也未必只有一个非零元。
 
 高斯消元法的一般步骤如下：
 \begin{itemize}
@@ -104,7 +104,7 @@ x = - \frac32 y + \frac{21}{2}
 \end{itemize}
 完成后， 系数矩阵就会变为梯形矩阵。
 
-\begin{example}{解线性方程组}\label{GAUSS_ex2}
+\begin{example}{解线性方程组}\label{ex_GAUSS_2}
 \begin{equation}
 \leftgroup{
 &x_1  &+ &x_2 &- &x_3 &+ &x_4&=\quad &3\\
@@ -199,12 +199,12 @@ x_4 &= -1}
 
 \subsection{解的结构}
 按照高斯消元法的一般步骤， 如果方程有解， 我们总可以将解表示为一些常矢量的线性组合加上一个常矢量。
-\begin{equation}\label{GAUSS_eq18}
+\begin{equation}\label{eq_GAUSS_18}
 \bvec x = \sum_{i=1}^{d} c_i \bvec x_i + \bvec x_0
 \end{equation}
-其中 $c_i$ 是 $d$ 个任意常数（当方程有唯一解时 $d = 0$）， 无论这些常数取什么值， $\bvec x$ 都是方程的解。 另一方面， 给出方程的任意一个解， 总能找到一些常数 $c_i$ 与之对应。 \autoref{GAUSS_eq18} 叫做方程的\textbf{通解（general solution）}， 通解中的任意一个就做方程的\textbf{特解（special solution）}。
+其中 $c_i$ 是 $d$ 个任意常数（当方程有唯一解时 $d = 0$）， 无论这些常数取什么值， $\bvec x$ 都是方程的解。 另一方面， 给出方程的任意一个解， 总能找到一些常数 $c_i$ 与之对应。 \autoref{eq_GAUSS_18} 叫做方程的\textbf{通解（general solution）}， 通解中的任意一个就做方程的\textbf{特解（special solution）}。
 
-将\autoref{GAUSS_eq18} 代入方程组， 使用矩阵乘法分配律（\autoref{Mat_eq13}~\upref{Mat}）得到
+将\autoref{eq_GAUSS_18} 代入方程组， 使用矩阵乘法分配律（\autoref{eq_Mat_13}~\upref{Mat}）得到
 \begin{equation}
 \mat A \sum_{i=1}^{d} c_i \bvec x_i + \mat A \bvec x_0 = \bvec y
 \end{equation}
@@ -215,4 +215,4 @@ x_4 &= -1}
 线性方程组 $\mat A \bvec x = \bvec y$ 中， 如果 $\bvec y = \bvec 0$ （粗体的 $\bvec 0$ 表示零矢量， 即每个元都是 $0$），%未完成：这个符号应该在”几何矢量“中提到
 则方程组被称为是\textbf{齐次（homogeneous）}的。 上式说明 $\sum_{i} c_i \bvec x_i$ 就是齐次方程组 $\mat A \bvec x = \bvec 0$ 的通解。
 
-综上所述， 对于任意有解的\textbf{非齐次（inhomogeneous）}方程组 $\mat A \bvec x = \bvec y$， 我们可以将通解（\autoref{GAUSS_eq18}） 从形式上理解为齐次方程组 $\mat A \bvec x = \bvec 0$ 的通解与非齐次方程组的任一特解相加。
+综上所述， 对于任意有解的\textbf{非齐次（inhomogeneous）}方程组 $\mat A \bvec x = \bvec y$， 我们可以将通解（\autoref{eq_GAUSS_18}） 从形式上理解为齐次方程组 $\mat A \bvec x = \bvec 0$ 的通解与非齐次方程组的任一特解相加。

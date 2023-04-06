@@ -16,7 +16,7 @@ Git for Windows 的 Git bash 是不支持 symlink 的， symlink clone 下来以
 \item 要查看 token 登录 github 后用 \href{https://github.com/settings/tokens/}{https://github.com/settings/tokens}。 注意每个 token 只能查看一次， 要注意保存， 如果丢失只能新建一个。
 \item 私有仓库用网址如果 clone, 每次连接服务器需要输入用户名和 token, 包括 \verb|clone, pull| 等。 要让 Git 记住 token， 用 \verb|git config --global credential.helper store| 如果 token 变了， 再用一次该命令即可， 要测试是否成功可用 \verb|git pull|， 如果成功则不需要 token。
 \item 清空账号 token 用 \verb|git config --global --unset credential.helper|. 如果还不行的话只好把下文的所有 config 文件删除并重装 git。
-\item Windows 下设置 \verb|git config --global core.autocrlf true|, 这样 commit 的时候会把所有 CRLF 换行变为 LF（\autoref{encode_sub1}~\upref{encode}）, 而 checkout 的时候会把所有 LF 变为 CRLF. Linux 下设置 \verb|git config --global core.autocrlf input|, 这样 commit 的时候会把所有 CRLF 变为 LF, 而 chekout 的时候不做任何操作。 如果这么设置了， GitHub Desktop 自动产生的 \verb|.gitattribute| 文件就可以删掉了 （因为解决的是同一个问题）.
+\item Windows 下设置 \verb|git config --global core.autocrlf true|, 这样 commit 的时候会把所有 CRLF 换行变为 LF（\autoref{sub_encode_1}~\upref{encode}）, 而 checkout 的时候会把所有 LF 变为 CRLF. Linux 下设置 \verb|git config --global core.autocrlf input|, 这样 commit 的时候会把所有 CRLF 变为 LF, 而 chekout 的时候不做任何操作。 如果这么设置了， GitHub Desktop 自动产生的 \verb|.gitattribute| 文件就可以删掉了 （因为解决的是同一个问题）.
 \item 如果仓库中的中文路径显示乱码（反斜杠加数字）， 用 \verb|git config --global core.quotepath off|
 \item 如果有时候在 windows 上 pull 提示文件名太长， 用 \verb|git config --global core.longpaths true|
 \item 如果在 windows git bash 上 pull 显示 invalid path， 用 \verb|git config core.protectNTFS false|。 但这么做可能仍会有一些问题（例如 windows 的文件夹中最后的 。 会自动删除）
@@ -59,6 +59,7 @@ Git for Windows 的 Git bash 是不支持 symlink 的， symlink clone 下来以
 \item 用 \verb|git add -u| 可以只 add 修改的和删除的文件， 新文件不 add
 \item \verb|.gitignore| 的例子： \verb|folder/| 忽略整个文件夹， \verb|folder/*.txt| 忽略文件夹中的所有 txt 文件， \verb|folder/**/*.pdf| 忽略 folder 文件夹和所有子文件夹中的 pdf 文件。
 \item 如果要无视 \verb|.gitignore|， 用 \verb|git add -f ...|。
+\item 如果把一个已经 commit 的文件放到 gitignore 中， 还需要用 \verb|git update-index --assume-unchanged 文件| 才能生效。
 \item \verb|git diff| 用于显示文件夹和 stage area 中的区别。 \verb|git diff --staged| 用于显示 stage area 和上一次 commit 的区别。 \verb|git diff --name-only| 可以只显示文件名。
 \item \verb|git diff| 的 \verb|--word-diff| 选项可以显示行内的细微差别， 当行比较长的时候使用（如 latex 段落）。 github 中有时候也不会显示具体位置。 如果还想更精确， 用 \verb|--word-diff-regex=.|
 \item \verb|git commit| 用于自动打开文本编辑器信息并 commit. \verb|git commit -m "message"| 直接把 message 作为 commit 信息。 \verb|git commit -a| 可以自动 git add 所有变化的文件， 也可以在后面再加 \verb|-m "message"|.
@@ -66,6 +67,7 @@ Git for Windows 的 Git bash 是不支持 symlink 的， symlink clone 下来以
 \item 要删除一个文件， 用 \verb|git rm <file>|. 这样做相当于手动删除文件， 再 stage 该变化。 如果文件已经 stage 了， 用 \verb|git rm -f <file>|.
 \item 要重命名文件， 用 \verb|git mv <file_from> <file_to>|, 相当于 \verb|git rm <file_from>| 再 \verb|git add <file>|. （在 Windows 中， 要改变文件名的大小写必须这么做而不能直接给文件重命名）
 \item 要浏览所有 commit 历史， 用 \verb|git log|. 要显示每次 commit 的 diff, 用 \verb|git log -p|, 要只显示前两次， 用 \verb|-2|. 用 \verb|--stat| 可以显示基本统计（几个+几个-）.
+\item \verb|git log <hash>| 查看某次 commit 以及更早。
 \item \verb|git log ... --name-only [COMMIT_HASH]| 只显示改变的文件名
 \item \verb|git log --name-status [COMMIT_HASH]| 显示改变的文件名每个文件是改变了还是新增还是删除等。
 \item \verb|git log -- <filename>| 可以只显示一个文件的历史， \verb|-p| 和 \verb|--word-diff-regex| 同样有效。
@@ -157,18 +159,19 @@ git config --global pack.threads 2 # 使用多少线程压缩 pack
 \subsection{分支}
 \begin{itemize}
 \item \verb|git branch <branch>| 创造一个 new branch.
-\item \verb|git branch <branch> <id>| 用于从指定的 commit 创建 branch.
+\item \verb|git branch <branch> <hash>| 用于从指定的 commit 创建 branch.
 \item \verb|git branch -m 新名字| 重命名当前的 branch。
 \item \verb|git branch -d <branch>| 用于删除某个 branch.
-\item \verb|git branch -r <branch>| 显示 remote 的所有 branch。
+\item \verb|git branch -r| 显示 remote 的所有 branch。
 \item \verb|git branch --set-upstream-to=<remote>/<branch>| 用于设置 pull 和 push 的默认 remote 和 branch
 \item \verb|git branch --set-upstream-to <remote>/<branch>| 可以将某个 remote 作为默认
 \item \verb|git branch| 显示本地 checkout 过的 branch。 \verb|-vv| 显示更多信息， 包括 hash， remote， 最后 commit 标题。 前面有星号的是当前的 branch （\verb|git status| 也会显示）。
 \item \verb|git clone| 下载一个完整的 repo 以后， 是包含所有 branch 的， 可以 \verb|git checkout <branch>|。 但开始 \verb|git branch [-vv]| 并不会显示， 只会显示 checkout 过的。
 \item \verb|git clone ... --depth = 1| 后不能 checkout 其他 branch。 因为它包含一个默认的 \verb|--single-branch| 选项。 默认下载的是 \verb|master|， 如果要指定， 用 \verb|git clone --depth 1  --branch <branch> url|
 \item \verb|git checkout <branch> -- <file1> <file2>...| 可以把某个 branch 的指定文件还原到当前 branch。
+\item \verb|git fetch <remote> <branch>| 可以下载一个指定的 branch。 注意不要用 \verb|pull|， 会试图和当前 branch 合并。
+\item fetch 完了以后用 \verb|git checkout <branch>| 就在本地创建刚 fetch 的 branch。
 \item \verb|git pull| 只是从服务器下载当前 branch 的变化。
-\item \verb|git fetch <remote> <branch>| 可以下载一个指定的 branch。
 \item \verb|git diff branchA branchB -- <filename>| 用于比较两个 branch 中同一个文件。
 \item \verb|git checkout <branch> -- <filename>| 可以从别的 branch 里面 checkout 一个文件到当前 branch。
 

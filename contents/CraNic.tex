@@ -12,19 +12,19 @@
 \psi(x,t+\Delta t) = \exp(-\I H \Delta t)\psi(x,t)
 \end{equation}
 用 Crank-Nicolson 或 Caley scheme\footnote{二者是一回事， 见 \cite{NR3} 19.2 节。} 得到的结果是
-\begin{equation}\label{CraNic_eq2}
+\begin{equation}\label{eq_CraNic_2}
 \qty(1+\frac{\I}{2}\mat H_{n+1}\Delta t)\bvec\psi_{n+1} = \qty(1-\frac{\I}{2}\mat H_n\Delta t)\bvec\psi_n
 \end{equation}
 其中 $\bvec\psi_n$ 是时刻 $t_n$ 的波函数列矢量（已知）， $\bvec\psi_{n+1}$ 为时刻 $t_{n+1}$ 的波函数列矢量（未知）， $\mat H_n$ 是 $t_n$ 时刻的哈密顿矩阵。
 
-但事实上， 还可以继续减少计算量。 若近似认为\footnote{或者更公平地， 把\autoref{CraNic_eq5} 中 $\mat H_n$ 改为 $\mat H_{n+1/2}$， 即 $(t_n+t_{n+1})/2$ 时的哈密顿矩阵。} $\mat H_{n+1}\approx \mat H_{n}$， 将\autoref{CraNic_eq2} 整理后得
-\begin{equation}\label{CraNic_eq5}
+但事实上， 还可以继续减少计算量。 若近似认为\footnote{或者更公平地， 把\autoref{eq_CraNic_5} 中 $\mat H_n$ 改为 $\mat H_{n+1/2}$， 即 $(t_n+t_{n+1})/2$ 时的哈密顿矩阵。} $\mat H_{n+1}\approx \mat H_{n}$， 将\autoref{eq_CraNic_2} 整理后得
+\begin{equation}\label{eq_CraNic_5}
 \qty(\frac12 + \frac{\I}{4}\mat H_n\Delta t)\qty(\bvec\psi_{n+1}+\bvec\psi_n) = \bvec\psi_n
 \end{equation}
 解这个方程， 再减去 $\bvec \psi_n$ 即可。
 
 \subsection{等间距网格}
-对于等间距坐标网格 $x_1,x_2,\dots$， 可以用差分法（\autoref{DerDif_eq5}~\upref{DerDif}）计算二阶导数， 表示为矩阵有
+对于等间距坐标网格 $x_1,x_2,\dots$， 可以用差分法（\autoref{eq_DerDif_5}~\upref{DerDif}）计算二阶导数， 表示为矩阵有
 \begin{equation}
 \mat D_2 = \frac{1}{\Delta x^2}\pmat{-2 & 1 & 0 & 0 & \dots\\
 1 & -2 & 1 & 0 & \dots\\
@@ -32,11 +32,11 @@
 0 & 0 & 1 & -2 & \dots\\
 \vdots & \vdots & \vdots & \vdots & \ddots}
 \end{equation}
-那么 $\mat H_n = -\mat D_2/(2m) + \mat V_n$， 其中 $\mat V_n$ 是对角矩阵， 第 $i$ 个对角元为 $V(x_i, t_n)$。 现在， 就可以代入\autoref{CraNic_eq2} 或\autoref{CraNic_eq5} 求解了。
+那么 $\mat H_n = -\mat D_2/(2m) + \mat V_n$， 其中 $\mat V_n$ 是对角矩阵， 第 $i$ 个对角元为 $V(x_i, t_n)$。 现在， 就可以代入\autoref{eq_CraNic_2} 或\autoref{eq_CraNic_5} 求解了。
 
 \subsection{虚时间法}
 \pentry{虚时间法求基态波函数\upref{ImgT}}
-虚时间法用于求解势阱中的基态， 使用虚时间后， \autoref{CraNic_eq2} 和\autoref{CraNic_eq5} 分别变为
+虚时间法用于求解势阱中的基态， 使用虚时间后， \autoref{eq_CraNic_2} 和\autoref{eq_CraNic_5} 分别变为
 \begin{equation}
 \qty(1+\frac12\mat H\Delta t)\bvec\psi_{n+1} = \qty(1-\frac12\mat H\Delta t)\bvec\psi_n
 \end{equation}
@@ -46,12 +46,12 @@
 
 \subsection{代码}
 \pentry{Matlab 的稀疏矩阵\upref{MatSpa}}
-Matlab 代码如下， 使用\autoref{CraNic_eq5}， 以及 Matlab 的稀疏矩阵\upref{MatSpa}。 势能函数可以在 \verb|V_fun| 中设置， 我们以方势垒为例， 所有参数和 “高斯波包的方势垒散射数值计算（Matlab）\upref{FSBsct}” 相同。 不同的是， 由于我们使用迪利克雷边界条件， 波函数到达边界后会发生全反射。 要避免反射， 可以用开放边界条件（未完成）以及吸收势能（未完成）。
+Matlab 代码如下， 使用\autoref{eq_CraNic_5}， 以及 Matlab 的稀疏矩阵\upref{MatSpa}。 势能函数可以在 \verb|V_fun| 中设置， 我们以方势垒为例， 所有参数和 “高斯波包的方势垒散射数值计算（Matlab）\upref{FSBsct}” 相同。 不同的是， 由于我们使用迪利克雷边界条件， 波函数到达边界后会发生全反射。 要避免反射， 可以用开放边界条件（未完成）以及吸收势能（未完成）。
 
 \begin{figure}[ht]
 \centering
-\includegraphics[width=14cm]{./figures/CraNic_1.png}
-\caption{运行结果} \label{CraNic_fig1}
+\includegraphics[width=14cm]{./figures/2ace98562a465a6b.png}
+\caption{运行结果} \label{fig_CraNic_1}
 \end{figure}
 
 \begin{lstlisting}[language=matlab, caption=TDSE\_cn1d.m]

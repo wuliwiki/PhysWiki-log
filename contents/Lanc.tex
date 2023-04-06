@@ -103,7 +103,7 @@ H_{ij}=\mel{\Psi_i}{H}{\Psi_j}
 
 \subsubsection{定理4}
 在正交归一基底 $\ket{\Psi_j}$ 中， 矩阵 $\mat H$ 是对称三对角矩阵。所以我们已经顺便求出了所有的矩阵元！
-\begin{equation}\label{Lanc_eq2}
+\begin{equation}\label{eq_Lanc_2}
 \mat H =
 \begin{pmatrix}
 \alpha_0 & \beta_1 &&& \\ 
@@ -121,19 +121,19 @@ H_{ij}=\mel{\Psi_i}{H}{\Psi_j}
 \E^{-\I \mat H \Delta t} = \mat P \exp(-\I \mat \Lambda \Delta t) \mat P\Her
 \end{equation}
 注意在 $\ket{\Psi_i}$ 基底下， $\Psi(\bvec r, t)$ 就是 $(1, 0, 0, \dots)$。 所以在该基底下
-\begin{equation}\label{Lanc_eq1}
+\begin{equation}\label{eq_Lanc_1}
 \bvec a \equiv \E^{-\I \mat H \Delta t} \Psi(\bvec r, t) = \mat P \exp(-\I \mat \Lambda \Delta t) (\mat P\Her)_{\text{第1列}} = \mat P \exp(-\I \mat \Lambda \Delta t) (\mat P_{\text{第1行}})\Her
 \end{equation}
 这里的 $\bvec a$ 其实就是 $\exp(-\I \mat H \dd{t})$ 的第一列。
 
 \subsection{误差分析}
-要判断 $K$ 是否足够， 只需要计算\autoref{Lanc_eq1} 中的矢量 $\bvec a$ 的最后几个矩阵元的平方和是否可以忽略不计， 如果可以就说明 $K$ 是足够的。
+要判断 $K$ 是否足够， 只需要计算\autoref{eq_Lanc_1} 中的矢量 $\bvec a$ 的最后几个矩阵元的平方和是否可以忽略不计， 如果可以就说明 $K$ 是足够的。
 
 第一个被截去的系数 $a_{K+1}$ 的模长可以用下式估计（Feist 论文 4.51）
 \begin{equation}
 \abs{a_{K+1}} \approx \frac{\Delta t^K}{K!} \prod_i \beta_i
 \end{equation}
-推导： 把\autoref{Lanc_eq2} 做 $K-1$ 次幂， 左下角的矩阵元就是 $\prod_i \beta_i$。 此时如果把\autoref{Lanc_eq2} 拓展到无限大的矩阵， 那么做 $K-1$ 次幂后第一列也是相同的。 也就是说， $\exp(-\I \mat H \dd{t})$ 的泰勒展开的前 $K$ 项的第一列都是精确的。 若考察 $K+1$ 项， 则无限大矩阵的结果中第一列最后会多出一个元素 $\beta_1\beta_2\dots\beta_K$ （可以借助 Mathematica）。 接下来的推导就很简单了。 % 见同文件夹的 .nb 文件
+推导： 把\autoref{eq_Lanc_2} 做 $K-1$ 次幂， 左下角的矩阵元就是 $\prod_i \beta_i$。 此时如果把\autoref{eq_Lanc_2} 拓展到无限大的矩阵， 那么做 $K-1$ 次幂后第一列也是相同的。 也就是说， $\exp(-\I \mat H \dd{t})$ 的泰勒展开的前 $K$ 项的第一列都是精确的。 若考察 $K+1$ 项， 则无限大矩阵的结果中第一列最后会多出一个元素 $\beta_1\beta_2\dots\beta_K$ （可以借助 Mathematica）。 接下来的推导就很简单了。 % 见同文件夹的 .nb 文件
 
 对于固定的 $K$， 该式可以用于薛定谔方程的变步长演化。 Feist 用的 Sort Iterative Lanczos 就是使用 $K$ 等于 "a few"， 以及较小的 $\Delta t$。
 

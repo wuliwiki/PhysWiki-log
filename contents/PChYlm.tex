@@ -11,21 +11,21 @@
 \begin{equation}
 \frac{1}{\abs{\bvec r - \bvec r'}} = 4\pi \sum_{l=0}^{\infty} \frac{1}{2l+1} \frac{r_<^l}{r_>^{l+1}} \sum_{m = -l}^l Y_{l,m}^*(\uvec r') Y_{l,m}(\uvec r)~.
 \end{equation}
-根据\autoref{SphHar_eq10}~\upref{SphHar}， 令 $\alpha$ 为 $\uvec r, \uvec r'$ 的夹角， 上式也可以记为
-\begin{equation}\label{PChYlm_eq1}
+根据\autoref{eq_SphHar_10}~\upref{SphHar}， 令 $\alpha$ 为 $\uvec r, \uvec r'$ 的夹角， 上式也可以记为
+\begin{equation}\label{eq_PChYlm_1}
 \frac{1}{\abs{\bvec r - \bvec r'}} = \sum_{l=0}^{\infty} \frac{r_<^l}{r_>^{l+1}} P_l(\cos\alpha) = \sum_{l=0}^{\infty} \sqrt{\frac{4\pi}{2l+1}} \frac{r_<^l}{r_>^{l+1}} Y_{l,0}(\alpha, 0)~.
 \end{equation}
 
 \begin{figure}[ht]
 \centering
-\includegraphics[width=14.2cm]{./figures/PChYlm_1.png}
-\caption{左： $1/\abs{\bvec r - \uvec z}$ 使用\autoref{PChYlm_eq1} 展开， 右： 左图延 $z$ 轴的截线 $1/\abs{z - 1}$。 注意左图中 $r = 1$ 的圆周上有肉眼可见的不收敛， 增大 $l$ 的个数即可。} \label{PChYlm_fig1}
+\includegraphics[width=14.2cm]{./figures/087cff97de7efbdc.png}
+\caption{左： $1/\abs{\bvec r - \uvec z}$ 使用\autoref{eq_PChYlm_1} 展开， 右： 左图延 $z$ 轴的截线 $1/\abs{z - 1}$。 注意左图中 $r = 1$ 的圆周上有肉眼可见的不收敛， 增大 $l$ 的个数即可。} \label{fig_PChYlm_1}
 \end{figure}
 
 \subsection{证明}
-和 “平面波的球谐展开\upref{Pl2Ylm}” 中的证明类似， 我们既可以直接积分得到径向函数， 根据\autoref{PChYlm_eq1} 还可以假设 $\bvec r'$ 在 $z$ 轴。 也可以在球坐标中解偏微分方程。
+和 “平面波的球谐展开\upref{Pl2Ylm}” 中的证明类似， 我们既可以直接积分得到径向函数， 根据\autoref{eq_PChYlm_1} 还可以假设 $\bvec r'$ 在 $z$ 轴。 也可以在球坐标中解偏微分方程。
 
-除 $\bvec r'$ 点外， $f(\bvec r) = \frac{1}{\abs{\bvec r - \bvec r'}}$ 符合拉普拉斯方程。 球坐标系中拉普拉斯方程\upref{SphLap}的通解为（\autoref{SphLap_eq6}~\upref{SphLap}）
+除 $\bvec r'$ 点外， $f(\bvec r) = \frac{1}{\abs{\bvec r - \bvec r'}}$ 符合拉普拉斯方程。 球坐标系中拉普拉斯方程\upref{SphLap}的通解为（\autoref{eq_SphLap_6}~\upref{SphLap}）
 \begin{equation}
 f(\bvec r) = f(r, \theta, \phi) = \sum_{l = 0}^\infty \sum_{m = -l}^l \qty(C_{l,m} r^l + \frac{C'_{l,m}}{r^{l+1}})P_l^m(\cos\theta)\E^{\I m\phi}~,
 \end{equation}
@@ -35,7 +35,7 @@ f(\bvec r) = f(r, \theta, \phi) = \sum_{l = 0}^\infty \sum_{m = -l}^l \qty(C_{l,
 \addTODO{具体计算}
 
 \subsection{附： 画图代码}
-\autoref{PChYlm_fig1} 的 Matlab 代码如下， 其中 \verb|surfSph| 函数见 “Matlab 球坐标中的分布图\upref{MatPol}”。 \verb|SphHarm| 函数见 “球谐函数数值计算\upref{YlmNum}”。
+\autoref{fig_PChYlm_1} 的 Matlab 代码如下， 其中 \verb|surfSph| 函数见 “Matlab 球坐标中的分布图\upref{MatPol}”。 \verb|SphHarm| 函数见 “球谐函数数值计算\upref{YlmNum}”。
 \begin{lstlisting}[language=matlab, caption=Ylm\_Coul\_exp.m]
 % expansion of 1/|r-r'| into Y_lm
 % r' in z axis
@@ -47,7 +47,7 @@ mark = r <= r0;
 th = linspace(0, 2*pi, Nth); ph = zeros(size(th));
 data = zeros(Nr, Nth);
 for l = 0:lmax
-    % PChYlm_eq1
+    % eq_PChYlm_1
     data(mark, :) = data(mark, :) + ...
         sqrt(4*pi/(2*l+1)) * (r(mark).').^l ./ r0^(l+1) ...
         .* SphHarm(l, 0, th, ph);

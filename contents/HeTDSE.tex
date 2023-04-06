@@ -11,11 +11,11 @@
 \ket{\Psi} = \sum_\lambda \ket{R_\lambda}\otimes\ket{\mathcal{Y_\lambda}}
 \end{equation}
 其中 $\lambda$ 是将所有的 $(l_1,l_2,L,M)$ 组合排序后的序号。 $\ket{R_\lambda}$ 是二维径向波函数
-\begin{equation}\label{HeTDSE_eq6}
+\begin{equation}\label{eq_HeTDSE_6}
 \ket{R_\lambda} = \frac{1}{r_1 r_2} \psi_\lambda(r_1, r_2)
 \end{equation}
 即总波函数为
-\begin{equation}\label{HeTDSE_eq2}
+\begin{equation}\label{eq_HeTDSE_2}
 \Psi(\bvec r_1, \bvec r_2) = \sum_{L, M, l_1, l_2}  \frac{1}{r_1 r_2} \psi_{l_1, l_2}^{L, M}(r_1, r_2)\mathcal{Y}_{l_1, l_2}^{L, M}(\uvec r_1, \uvec r_2)
 \end{equation}
 
@@ -39,8 +39,8 @@ H = H_1 + H_2 + V_{12} + V_{F1} + V_{F2}
 其中第二项是对角矩阵是因为 $\mathcal Y$ 基底是 $L_i^2$ 的本征函数。 剩下的哈密顿项都会耦合分波： $V_{12}$ 是两电子之间的库仑势能， $V_{Fi}$ 是电场对每个电子的作用势能。
 
 \subsection{波函数的对称性}
-我们一般假设电子\textbf{自旋态恒为 singlet （反对称）}， 所以总波函数满足粒子交换对称 $\Psi(\bvec r_1, \bvec r_2) = \Psi(\bvec r_2, \bvec r_1)$。 由\autoref{GenYlm_eq5}~\upref{GenYlm} 可以导出分波的对称性
-\begin{equation}\label{HeTDSE_eq1}
+我们一般假设电子\textbf{自旋态恒为 singlet （反对称）}， 所以总波函数满足粒子交换对称 $\Psi(\bvec r_1, \bvec r_2) = \Psi(\bvec r_2, \bvec r_1)$。 由\autoref{eq_GenYlm_5}~\upref{GenYlm} 可以导出分波的对称性
+\begin{equation}\label{eq_HeTDSE_1}
 \psi_{l_1, l_2}^{L, M}(r_1, r_2) = (-1)^{l_1 + l_2 - L} \psi_{l_2, l_1}^{L, M}(r_2, r_1)
 \end{equation}
 理论上用该式可以在程序中减少一半重复的分波， 并且分波的 coupling 演化也可以得到精简， 但由于编程麻烦暂时没有实现。
@@ -48,18 +48,18 @@ H = H_1 + H_2 + V_{12} + V_{F1} + V_{F2}
 另外可以证明（其实是数值计算发现的） $l_1 + l_2 - L$ 为奇数的分波（奇分波）和 $l_1 + l_2 - L$ 为偶数的分波（偶分波）在线偏振电场中是独立演化的， 也就是 $V_{12}$ 和 $z_1, z_2$ 不会把奇偶性不同的分波耦合起来。 所以如果氦原子从基态（只包含偶分波：$l_1 = l_2, L = 0$）开始在线偏振电场中演化， 那么奇数分波的项将始终为零， 可以在程序中去除。
 
 \subsection{电子相互作用项}
-\begin{equation}\label{HeTDSE_eq5}
+\begin{equation}\label{eq_HeTDSE_5}
 \ali{
 V_{12} = \frac{1}{\abs{\bvec r_2 - \bvec r_1}} &= 4\pi \sum_{l=0}^{\infty} \frac{1}{2l+1} \frac{r_<^l}{r_>^{l+1}} \sum_{m = -l}^l Y_{l,m}^*(\uvec r_1) Y_{l,m}(\uvec r_2)\\
 &= 4\pi \sum_{l=0}^{\infty} \frac{(-1)^l}{\sqrt{2l + 1}} \frac{r_<^l}{r_>^{l+1}} \mathcal{Y}_{l,l}^{0,0} (\uvec r_1, \uvec r_2)
 }\end{equation}
-这就相当于将张量积空间中的线性算符分解成径向和角向算符的张量积之和。 第二步使用了\autoref{SphCup_eq9}~\upref{SphCup}， 即
+这就相当于将张量积空间中的线性算符分解成径向和角向算符的张量积之和。 第二步使用了\autoref{eq_SphCup_9}~\upref{SphCup}， 即
 \begin{equation}
 \mathcal{Y}_{l,l}^{0,0} (\uvec r_1, \uvec r_2) = \frac{(-1)^l}{\sqrt{2l+1}} \sum_{m = -l}^l Y_{lm}^*(\uvec r_1) Y_{lm}(\uvec r_2)
 \end{equation}
 
-要计算矩阵元 $\mel{\mathcal Y_\lambda}{V_{12}}{\mathcal Y_{\lambda'}}$， 就要对 6 个球谐函数的乘积的线性组合做两次角向积分。 使用\autoref{SphCup_eq1}~\upref{SphCup} 可以将上式表示为六个 CG 系数相乘的线性组合（二重求和）。
-\begin{equation}\label{HeTDSE_eq10}
+要计算矩阵元 $\mel{\mathcal Y_\lambda}{V_{12}}{\mathcal Y_{\lambda'}}$， 就要对 6 个球谐函数的乘积的线性组合做两次角向积分。 使用\autoref{eq_SphCup_1}~\upref{SphCup} 可以将上式表示为六个 CG 系数相乘的线性组合（二重求和）。
+\begin{equation}\label{eq_HeTDSE_10}
 \ali{
 &\quad\mel{\mathcal{Y}_{l_1 l_2}^{LM}}{Y_{lm}^*(\uvec r_1)Y_{lm}(\uvec r_2)}{\mathcal{Y}_{l_1' l_2'}^{L'M'}}\\
 &= \sum_{m_1',m_2'}\sum_{m_1,m_2} \bmat{l_1 & l_2 & L\\ m_1 & m_2 & M}\bmat{l_1' & l_2' & L'\\ m_1' & m_2' & M'} \times\\
@@ -71,7 +71,7 @@ V_{12} = \frac{1}{\abs{\bvec r_2 - \bvec r_1}} &= 4\pi \sum_{l=0}^{\infty} \frac
 &\qquad\bmat{l_1 & l_2 & L\\ m_1 & m_2 & M}\bmat{l_1' & l_2' & L'\\ m_1' & m_2' & M'}
 }\end{equation}
 现在试图对 $m$  求和并使用选择定理（3j 符号第二行之和为 0）， 得（注意 $m$ 的范围）该求和中最多只有一项不为 0， 所以
-\begin{equation}\label{HeTDSE_eq9}
+\begin{equation}\label{eq_HeTDSE_9}
 \ali{
 & \mel{\mathcal{Y}_{l_1 l_2}^{LM}}{\mathcal{Y}_{l,l}^{0,0}}{\mathcal{Y}_{l_1' l_2'}^{L'M'}}
 =\\
@@ -93,7 +93,7 @@ m_1 + m_2 = m_1' + m_2' = M \qquad
 \item 根据 $\Pi \mathcal{Y} = (-1)^{l_1 + l_2} \mathcal{Y}$， 考虑到 $1/r_{12}$ 具有偶宇称， 所以 $l_1 + l_2$ 与 $l_1' + l_2'$ 的奇偶性必须不同。
 \end{itemize}
 
-爱华的论文中将\autoref{HeTDSE_eq9} 用 9j 符号表示， 但仅限于 $M \ne M'$。 然而经过数值验证， 我发现应该可以将爱华的公式拓展为
+爱华的论文中将\autoref{eq_HeTDSE_9} 用 9j 符号表示， 但仅限于 $M \ne M'$。 然而经过数值验证， 我发现应该可以将爱华的公式拓展为
 \begin{equation}
 \ali{
 \mel{\mathcal{Y}_{l_1 l_2}^{LM}}{\mathcal{Y}_{ll}^{00}}{\mathcal{Y}_{l_1' l_2'}^{L'M'}}
@@ -110,7 +110,7 @@ m_1 + m_2 = m_1' + m_2' = M \qquad
 \mel*{r_i r_j}{\frac{r_<^l}{r_>^{l+1}}}{r_{i'} r_{j'}} \propto \delta_{i,i'} \delta_{j,j'}
 \end{equation}
 根据我的猜测（有空验证一下！）， 泊松积分积分的结果应该和直接用数值积分的结果是一样的。
-\begin{equation}\label{HeTDSE_eq3}
+\begin{equation}\label{eq_HeTDSE_3}
 \mel*{r_i r_j}{\frac{r_<^l}{r_>^{l+1}}}{r_{i'} r_{j'}} = \delta_{i,i'} \delta_{j,j'} \qty[\frac{2l+1}{r_i r_j \sqrt{\omega_i \omega_j}} (2\mat T_l)^{-1}_{i,j} + \frac{r_i^l r_j^l}{r_{max}^{2l+1}}]
 \end{equation}
 推导参考 McCurdy, Solving the three-body Coulomb breakup problem using exterior complex scaling 式 68。 其中 $\mat T_l$ 是单电子动能算符的矩阵
@@ -120,11 +120,11 @@ m_1 + m_2 = m_1' + m_2' = M \qquad
 &= -\frac{1}{2m} \mel*{r_i}{\dv[2]{r}}{r_j} + \delta_{i,j}\frac{l(l+1)}{2mr_i^2}
 \end{aligned}
 \end{equation}
-其中 $\ket{r_i}$ 是一维 FEDVR 格点在 $r_i$ 处的正交归一基底\upref{FEDVR}， $r_{max}$ 是计算 $T_l$ 时最后一个 FE 的边界。 虽然\autoref{HeTDSE_eq3} 中含有 $r_{max}$， 但结果却与 $r_{max}$ 无关， 原因是 $T_l$ 也和 $r_{max}$ 相关， 两项中的 $r_{max}$ 抵消了。
+其中 $\ket{r_i}$ 是一维 FEDVR 格点在 $r_i$ 处的正交归一基底\upref{FEDVR}， $r_{max}$ 是计算 $T_l$ 时最后一个 FE 的边界。 虽然\autoref{eq_HeTDSE_3} 中含有 $r_{max}$， 但结果却与 $r_{max}$ 无关， 原因是 $T_l$ 也和 $r_{max}$ 相关， 两项中的 $r_{max}$ 抵消了。
 
 \subsection{电场作用项}
 对每个电子，
-\begin{equation}\label{HeTDSE_eq12}
+\begin{equation}\label{eq_HeTDSE_12}
 V_F = \bvec E \vdot \bvec r = E_x x + E_y y + E_z z
 \end{equation}
 与氢原子的情况相同， 有
@@ -175,7 +175,7 @@ r\sqrt{9(2l'_1+1)(2l'_2+1)(2L'+1)/(4\pi)^2}\\
 这就是为什么从基态（$l_1=l_2$， $L=0$）的电离计算可以排除所有 $l_1+l_2-L$ 为奇数的分波。
 
 \subsection{非线性偏振电场}
-对非线性偏振电场， \autoref{HeTDSE_eq12} 的前两项不为零， 但只和 $z$ 分量的结果大同小异（只有最后一个 3j 系数变为两项， 再除以 $\sqrt{2}$ 以归一化）
+对非线性偏振电场， \autoref{eq_HeTDSE_12} 的前两项不为零， 但只和 $z$ 分量的结果大同小异（只有最后一个 3j 系数变为两项， 再除以 $\sqrt{2}$ 以归一化）
 % 未完成： 以下四条都没有验证
 \begin{equation}\ali{
 &\mel{\mathcal{Y}_{l_1 l_2}^{LM}}{x_1}{\mathcal{Y}_{l_1' l_2'}^{L'M'}}
@@ -206,7 +206,7 @@ r\sqrt{9(2l'_1+1)(2l'_2+1)(2L'+1)/(4\pi)^2}\\
 }\end{equation}
 
 \subsection{束缚态}
-能量较低的束缚态可以轻易用虚时间演化得到， 即把 $\exp(-\I H \Delta t)$ 替换为 $\exp(- H \Delta t)$， 这相当于把 $\Delta t$ 变为虚数 $-\I \Delta t$， 因此得名。 氦原子基态只包含 $L = 0$ 的分波， 这要求 $l_1 = l_2 = 0, 1, 2, \dots$（参考\autoref{AMAdd_fig2}~\upref{AMAdd}）。
+能量较低的束缚态可以轻易用虚时间演化得到， 即把 $\exp(-\I H \Delta t)$ 替换为 $\exp(- H \Delta t)$， 这相当于把 $\Delta t$ 变为虚数 $-\I \Delta t$， 因此得名。 氦原子基态只包含 $L = 0$ 的分波， 这要求 $l_1 = l_2 = 0, 1, 2, \dots$（参考\autoref{fig_AMAdd_2}~\upref{AMAdd}）。
 
 \subsection{Crank-Nicolson 波函数演化}
 
@@ -225,7 +225,7 @@ $H_0 = H_1 + H_2$ 由于 $H_1$ 和 $H_2$ 对易， 我们可以将它们独立�
 根据以上的推导可以看出 $H_{int}$ 在展开成径向算符与角向算符的张量积的线性组合后， 径向算符都是关于 $r$ 的函数， 这对 FEDVR 基底来说都是对角矩阵（即使使用泊松积分）。 所以在演化 $\exp(-\I H_{int}\Delta t)$ 时， 每个二维 FEDVR 格点都可以独立进行， 给大量并行提供了可能性。 总结起来， 程序中的\textbf{三维波函数矩阵的每个方向的演化都可以每列独立进行}。
 
 在演化 $\exp(-\I H_{int}\Delta t)$ 的时候， 爱华的做法是进一步 split 成三个 operators
-\begin{equation}\label{HeTDSE_eq4}
+\begin{equation}\label{eq_HeTDSE_4}
 \exp(-\I H_{int}\Delta t) = \exp(-\I V_F\frac{\Delta t}{2})   \exp(-\I V_{12} \Delta t) \exp(-\I V_F\frac{\Delta t}{2})
 \end{equation}
 这是因为 $V_F = V_{F1} + V_{F2}$ 是含时的， 和电场分量 $E_z$ 成正比。
@@ -241,8 +241,8 @@ $H_0 = H_1 + H_2$ 由于 $H_1$ 和 $H_2$ 对易， 我们可以将它们独立�
 使用 $l_{1,max}, l_{2,max}, L_{max}$ 来生成分波列表有时候会有较大的浪费， 会出现许多概率极小的分波。 最好的办法是把各个分波的概率画成图， 从图中可以轻易看出分波是否收敛以及是否有浪费。
 \begin{figure}[ht]
 \centering
-\includegraphics[width=10cm]{./figures/HeTDSE_2.png}
-\caption{$l_{1,max}, l_{2,max}, L_{max} = 5$， 可以看出 $L$ 较小时需要更大 $l_1, l_2$， 而 $L$ 较大时浪费严重。 理想情况是每个 $L$ 中最小概率的分波都差不多。} \label{HeTDSE_fig2}
+\includegraphics[width=10cm]{./figures/8b6a1e7358991934.png}
+\caption{$l_{1,max}, l_{2,max}, L_{max} = 5$， 可以看出 $L$ 较小时需要更大 $l_1, l_2$， 而 $L$ 较大时浪费严重。 理想情况是每个 $L$ 中最小概率的分波都差不多。} \label{fig_HeTDSE_2}
 \end{figure}
 
 \subsection{时间步长误差分析以及变步长演化}
@@ -253,11 +253,11 @@ $H_0 = H_1 + H_2$ 由于 $H_1$ 和 $H_2$ 对易， 我们可以将它们独立�
 对于 Lanzos， 有标准的误差公式， 也可以和 $\norm{\Delta \Psi' - \Delta \Psi}/\norm{\Delta \Psi}$ 对比看看哪个更准。
 
 \subsection{分波误差分析（原创）}
-我们截取有限个分波时， 在分波演化（\autoref{HeTDSE_eq4}） 的过程中， 会引入新的误差。 截取以后， $V_F, V_{12}$ 仍然是厄米矩阵， 所以他们的传播子同样是幺正的， 所以不能用波函数的模长来估计误差。 所以可以用另一种方法来估计误差。 误差可以每隔几步估算一次， 令 $\mat V'_F, \mat V'_{12}$ 为两倍基底数量的矩阵， 那么可以计算 $\mat (\I V'_F\Delta t) \bvec v$ 比基底多出来的几个分波， 对每个分波的绝对值进行求和。
+我们截取有限个分波时， 在分波演化（\autoref{eq_HeTDSE_4}） 的过程中， 会引入新的误差。 截取以后， $V_F, V_{12}$ 仍然是厄米矩阵， 所以他们的传播子同样是幺正的， 所以不能用波函数的模长来估计误差。 所以可以用另一种方法来估计误差。 误差可以每隔几步估算一次， 令 $\mat V'_F, \mat V'_{12}$ 为两倍基底数量的矩阵， 那么可以计算 $\mat (\I V'_F\Delta t) \bvec v$ 比基底多出来的几个分波， 对每个分波的绝对值进行求和。
 \begin{figure}[ht]
 \centering
-\includegraphics[width=7cm]{./figures/HeTDSE_1.png}
-\caption{分波误差分析} \label{HeTDSE_fig1}
+\includegraphics[width=7cm]{./figures/6f6024825a91f487.png}
+\caption{分波误差分析} \label{fig_HeTDSE_1}
 \end{figure}
 
 \subsection{束缚态}

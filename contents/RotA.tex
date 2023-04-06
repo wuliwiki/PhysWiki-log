@@ -4,15 +4,15 @@
 \pentry{三维旋转矩阵\upref{Rot3D}，圆周运动的速度\upref{CMVD}， 几何矢量的内积\upref{Dot}， 矢量叉乘\upref{Cross}}
 
 \footnote{参考 Wikipedia \href{https://en.wikipedia.org/wiki/Rodrigues'_rotation_formula}{相关页面}。}三维空间中，某点 $\bvec r=(x,y,z)\Tr$ 以单位矢量 $\uvec A=(A_x, A_y, A_z)\Tr$ 为轴按右手定则\upref{RHRul}转动 $\theta$ 角的得到的点 $\bvec r'=(x',y',z')\Tr$ 可用\textbf{罗德里格斯旋转公式（Rodrigues' rotation formula）}计算：
-\begin{equation}\label{RotA_eq1}
+\begin{equation}\label{eq_RotA_1}
 \bvec r' = \bvec r \cos\theta + \uvec A \cross \bvec r \sin\theta + \uvec A (\uvec A \vdot \bvec r) (1 - \cos\theta)
 \end{equation}
 令该旋转的三维旋转矩阵\upref{Rot3D} $\mat R_\theta$， 则
-\begin{equation}\label{RotA_eq2}
+\begin{equation}\label{eq_RotA_2}
 \bvec r' = \mat R_\theta \bvec r
 \end{equation}
-从\autoref{RotA_eq1} 可得
-\begin{equation}\label{RotA_eq3}
+从\autoref{eq_RotA_1} 可得
+\begin{equation}\label{eq_RotA_3}
 \mat R_\theta =
 \begin{pmatrix}
 a A_x^2 + c & a A_x A_y - s A_z & a A_x A_z + s A_y\\
@@ -29,20 +29,20 @@ c = \cos\theta \qquad s = \sin\theta \qquad a = 1 - \cos\theta
 推导的思路是用 $\uvec A$ , $\bvec r$ 和 $\theta $ 三个已知量经过数乘，内积\upref{Dot}和叉乘\upref{Cross}三种运算，表示出旋转后的矢量 $\bvec r'$，再拆成三个分量，即可得到线性变换，进而写出矩阵。 注意该思路与推导平面旋转矩阵\upref{Rot2D} 的思路不一样。
 \begin{figure}[ht]
 \centering
-\includegraphics[width=5.5cm]{./figures/RotA_1.pdf}
-\caption{定轴旋转矩阵的推导}
+\includegraphics[width=5.5cm]{./figures/198985c6936602a9.pdf}
+\caption{定轴旋转矩阵的推导} \label{fig_RotA_1}
 \end{figure} 
 
 如图， $\bvec r$ 绕单位矢量 $\uvec A$ 旋转 $\theta$ 角后得到 $\bvec r'$。  $\bvec r$ 在 $\uvec A$ 方向投影得到的矢量为
-\begin{equation}\label{RotA_eq4}
+\begin{equation}\label{eq_RotA_4}
 \bvec r_3 = (\uvec A \vdot \bvec r)\uvec A
 \end{equation}
 在与 $\uvec A$ 垂直方向的分量为
-\begin{equation}\label{RotA_eq5}
+\begin{equation}\label{eq_RotA_5}
 \bvec r_1 = \bvec r - \bvec r_3
 \end{equation}
 为了构成一组正交基底，令
-\begin{equation}\label{RotA_eq6}
+\begin{equation}\label{eq_RotA_6}
 \bvec r_2 = \uvec A \cross \bvec r_1
 \end{equation}
 则 $\bvec r_2$ 相当于 $\bvec r_1$ 绕 $\uvec A$ 旋转 $90^\circ$。 现在有了正交的 $\bvec r_1$ , $\bvec r_2$  就可以表示出 $\bvec r_1$ 绕 $\uvec A$ 旋转 $\theta$ 角后的结果
@@ -50,14 +50,14 @@ c = \cos\theta \qquad s = \sin\theta \qquad a = 1 - \cos\theta
 \bvec r' - \bvec r_3 = \bvec r_1\cos \theta  + \bvec r_2\sin \theta
 \end{equation}
 即
-\begin{equation}\label{RotA_eq8}
+\begin{equation}\label{eq_RotA_8}
 \bvec r' = \bvec r_1\cos \theta  + \bvec r_2\sin \theta  + \bvec r_3
 \end{equation} 
-将\autoref{RotA_eq4} \autoref{RotA_eq5} \autoref{RotA_eq6} 代入\autoref{RotA_eq8}， 即可求出\autoref{RotA_eq1}。 把结果写成分量的形式，化简可得到\autoref{RotA_eq2}。
+将\autoref{eq_RotA_4} \autoref{eq_RotA_5} \autoref{eq_RotA_6} 代入\autoref{eq_RotA_8}， 即可求出\autoref{eq_RotA_1}。 把结果写成分量的形式，化简可得到\autoref{eq_RotA_2}。
 
 \subsection{由旋转矩阵推导出匀速圆周运动的线速度} 
 
-我们可以用旋转矩阵得到 $\bvec v = \bvec \omega  \cross \bvec r$ （\autoref{CMVD_eq5}~\upref{CMVD}）， 这也验证了旋转矩阵的正确性。
+我们可以用旋转矩阵得到 $\bvec v = \bvec \omega  \cross \bvec r$ （\autoref{eq_CMVD_5}~\upref{CMVD}）， 这也验证了旋转矩阵的正确性。
 
 在无穷小的时间 $t$ 内，点 $P$ 绕轴转过 $\theta$ 角，则 $\theta  = \omega t \to 0$， 此时有 $\sin\theta  \to \theta $ 和 $\cos\theta  \to 1$。 旋转矩阵变为
 \begin{equation}
@@ -77,4 +77,4 @@ A_z \theta & 1 & -A_x \theta\\
 &= \theta\uvec A\cross\bvec r
 = \qty(\bvec \omega t) \cross \bvec r
 }\end{equation} 
-两边除以 $t$，得 $\bvec v = \bvec \omega  \cross \bvec r$。 另见 “旋转矩阵的导数\upref{RotDer}” 的 \autoref{RotDer_exe1}。
+两边除以 $t$，得 $\bvec v = \bvec \omega  \cross \bvec r$。 另见 “旋转矩阵的导数\upref{RotDer}” 的 \autoref{exe_RotDer_1}。
