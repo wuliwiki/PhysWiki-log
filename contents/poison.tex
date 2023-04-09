@@ -6,28 +6,64 @@
 \end{issues}
 
 \pentry{哈密顿正则方程\upref{HamCan}}
+在理论力学里，泊松括号的引入能更加简洁地表明运动积分需要满足的条件。所谓运动积分，可以简单理解为在某一动力学系统中，不随时间改变的常数。动力学系统总满足二阶微分方程，所以我们总可以找到这样的运动积分。现在设$f(q,p,t)$为粒子关于动量、坐标和时间的函数，且为运动积分，则根据定义我们有：
+\begin{equation}
+\frac{df}{dt}=\frac{\partial f}{\partial t}+\frac{\partial f}{\partial q}\dot{q}+\frac{\partial f}{\partial p}\dot{ p}
+\end{equation}
 
-给定函数 $u(q, p, t)$ 和 $v(q, p, t)$， 定义泊松括号为
+结合正则方程，我们可以把上式改写为
+\begin{equation}\label{eq_poison_10}
+\frac{df}{dt}=\frac{\partial f}{\partial t}+\pb{H}{f}
+\end{equation}
+引入的泊松记号定义如下：
+
+
+对于任意两个函数 $u(q, p, t)$ 和 $v(q, p, t)$， 泊松括号的“作用”为
 \begin{equation}
 \pb{u}{v} = \sum_i \pdv{u}{q_i}\pdv{v}{p_i} - \pdv{v}{q_i}\pdv{u}{p_i}~,
 \end{equation}
-容易证明泊松括号满足
+其中$i$为系统的自由度。显然，如果函数$f$不显含时间，且为运动积分（也就是一守恒量），则该函数与系统哈密顿量的泊松括号为0.
+
+\subsection{泊松括号的性质}
+根据定义，我们可以证明泊松括号满足如下几条性质。
+\begin{enumerate}
+\item 反对称性
+$[u,v]=-[v,u]$
+\item 双线性
+
+$\pb{au+bv}{\phi}=a\pb{u}{\phi}+b\pb{v}{\phi}$
+\item 
+$\pb{uv}{f}=\pb{u}{f}v+u\pb{v}{f}$
+
+\item 轮换性，即雅克比恒等式
 \begin{equation}
-\pb{v}{u} = -\pb{u}{v}~.
+\pb{f}{\pb{g}{h}}+\pb{g}{\pb{h}{f}}+\pb{h}{\pb{f}{g}}=0
 \end{equation}
-
-\subsection{泊松括号与守恒量}
-对任意不显含时的物理量 $\omega (q,p)$ 都有
-\begin{equation}\label{eq_poison_1}
-\dot \omega  = \sum_i \qty(\pdv{\omega}{q_i} \dot q_i + \pdv{\omega}{p_i} \dot p_i)
-= \sum_i \qty(\pdv{\omega}{q_i} \pdv{H}{p_i} - \pdv{H}{q_i} \pdv{\omega}{p_i})
-= \pb{\omega}{H} ~.
-\end{equation}
-所以若泊松括号恒等于零， 则该物理量守恒。
-
-同理， 当 $\omega (q,p,t)$ 显含时间时有
+\end{enumerate}
+前三条性质的证明只需套用定义，读者可自行验证。至于雅克比恒等式的证明，这里提供一条相对简单的思路。注意到，若固定函数$u$，则泊松括号$\pb{u}{v}$可视作对$v$的线性映射，实际上是一线性微分算符。那么进行两次泊松括号的运算，实际上是对$v$求二阶偏导数。雅克比恒等式的三项都套了两层括号，那么展开后的式子是$f,g,h$中任意函数的二阶偏导。通过观察底层括号，你会发现，$f,g,h$都出现了两次。那么如果我们能证明，进行两次泊松运算后，对其中一个函数的二阶偏导数是两两抵消的（只剩一阶偏导数），自然就证明了这条性质。具体的推导参见朗道的力学。
+\subsection{泊松定理}
+如果在一个系统里，我们能找到两个运动积分$f$和$g$，那么可以证明$\pb{f}{g}$也是一运动积分。证明如下：
 \begin{equation}
-\dot \omega  =  \pb{\omega}{H}  + \pdv{\omega}{t}~,
+\frac{d\pb{f}{g}}{dt}=\pb{\frac{df}{dt}}{g}+\pb{f}{\frac{dg}{dt}}=0
+\end{equation}
+\subsection{量子力学中的“泊松”括号}
+如果读者已经学习过量子力学，可能会发现对易运算与泊松括号的相似之处。对易子作为量子力学的公设之一，其运算导出了力学量的运动方程，形式上也与本篇式2一致（当然，经典力学与量子力学的相似之处不止如此）。如果我们遵循某种额外施加的条件并视之为原则，那么我们可以找到这两种运算的直接联系。
+
+具体而言，我们假设，量子力学的对易运算其性质与经典力学相同，且算符不对易。那么我们有两种方法计算$\pb{uv}{fg}$
+\begin{equation}
+\begin{aligned}
+\pb{uv}{fg}&=f\pb{u}{g}v+\pb{u}{f}gv+uf\pb{v}{g}+u\pb{v}{f}g\\
+&=f\pb{u}{g}v+\pb{u}{f}vg+fu\pb{v}{g}+u\pb{v}{f}g
+\end{aligned}
+\end{equation}
+因此，我们有
+\begin{equation}
+\pb{u}{f}(gv-vg)=(uf-fu)\pb{v}{g}
+\end{equation}
+此式对$u,f$永远成立，则需要$(uf-fu)$与$\pb{u}{f}$线性依赖，所以
+\begin{equation}
+i\hbar\pb{u}{f}=[u,f]
 \end{equation}
 
-量子力学中的对易算符对应泊松括号。 该式对应量子力学中的算符平均值演化方程。 % 链接未完成
+为什么这里会出现$i\hbar$？我想应该是因为我们关心的，往往是能被实际观测到的物理量，假定这些物理量为厄米算符，那么厄米算符的对易子一般是非厄米的，所以左边的泊松括号需要乘以复数$i$，$\hbar$则为量纲为角动量的实常数.这可以是一个构建经典与量子之间对应的思路，譬如最基本的对易关系为$[p,q]$。
+
