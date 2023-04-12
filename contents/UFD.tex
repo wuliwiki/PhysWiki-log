@@ -4,13 +4,12 @@
 
 \pentry{真因子树\upref{FctTre}}
 
-唯一析因环，又称唯一分解整环，顾名思义，就是每个元素都有唯一的不可约因式分解。这个定义用真因子树的语言来描述颇为方便。
+唯一析因环，顾名思义，就是每个元素都有唯一的不可约因式分解。这个定义用真因子树的语言来描述颇为方便。
 
 \begin{definition}{唯一析因环}
-对于整环 $R$，如果它具有\textbf{有限析因性}和\textbf{唯一析因性}\footnote{见\textbf{真因子树}词条的\autoref{def_FctTre_1}~\upref{FctTre}。}，那么称其为一个\textbf{唯一析因环（unique factorization domain）}，常简称UFD。
+对于整环 $R$，如果它具有\textbf{有限析因性}和\textbf{唯一析因性}\footnote{见\textbf{真因子树}词条的\autoref{def_FctTre_1}~\upref{FctTre}。}，那么称其为一个\textbf{唯一析因环（unique factorization domain）}，或译作\textbf{唯一分解整环}，常简称UFD。
 \end{definition}
 
-“唯一析因”在有的地方也称为“唯一分解”。
 
 唯一析因环的好处显而易见，每个元素都可以唯一对应一种素元素分解，比如每个非平凡整数都可以表示为素数的乘积，且这种乘积是唯一的。
 
@@ -26,9 +25,146 @@
 \begin{example}{反面例子}
 我们给出一些不是唯一析因环的例子。
 \begin{itemize}
-\item 对于素数 $p>1$，环 $\mathbb{Z}[\sqrt{-p}]=\{a+b\I\sqrt{p}|a, b\in\mathbb{Z}\}$ 存在有多种因式分解方式的元素。比如说，在环 $\mathbb{Z}[\sqrt{-2}]$ 上，$6$ 可以分解为 $2\times (1+\I\sqrt{2})\times(1-\I\sqrt{2})$，也可以分解为 $(2+\I\sqrt{2})\times(2-\I\sqrt{2})$。
+\item 环 $\mathbb{Z}[\sqrt{-2}]=\{a+b\sqrt{-2}|a, b\in\mathbb{Z}\}$ 存在有多种因式分解方式的元素。比如说，$6$ 可以分解为 $2\times (1+\sqrt{-2})\times(1-\sqrt{-2})$，也可以分解为 $(2+\sqrt{-2})\times(2-\sqrt{-2})$，这两种分解都已不可再分。
 \item 复数域上的全体\textbf{整函数}构成的环不是UFD，因为存在可以无限析因的元素\footnote{本例取自维基百科\href{https://en.wikipedia.org/wiki/Unique_factorization_domain}{相关页面}。}：$\sin{\pi z=\pi z\prod\limits_{i=1}^\infty(1-\frac{z^2}{i^2})}$。
 \end{itemize}
 \end{example}
 
 \addTODO{关于整函数的概念，缺少“全纯函数”词条作为预备知识。}
+
+
+
+给定一个整环，如何判断它是否是唯一析因环呢？有限析因性通常是容易判断的，如$\mathbb{Z}[\sqrt{-2}]$中，任意元素$a+b\sqrt{-2}$的真因子之模长一定小于$\abs{a+b\sqrt{-2}}$，这就足以判断有限析因性\footnote{当然，我们已经知道$\mathbb{Z}[\sqrt{-2}]$不是唯一析因环。}——但唯一析因性通常并不容易，因此需要介绍判定唯一析因环的条件。
+
+
+
+
+\subsection{判定唯一析因环：素元素}
+
+
+
+如果一个整环$R$满足有限析因性，但不满足唯一析因性，会发生什么情况？以$\mathbb{Z}[\sqrt{-2}]$为例，$6=2\times 3=(2+\sqrt{-2})\times(2-\sqrt{-2})$，但是$2\nmid(2\pm\sqrt{-2})$，故不可约元素$2$不是素元素\footnote{注意由\autoref{the_FctTre_2}~\upref{FctTre}，素元素必是不可约元素，而这个反例说明不可约元素不一定是素元素。}。
+
+但是，如果不可约元素一定是素元素呢？应用有限析因时素元素的等价定义（\autoref{the_FctTre_1}~\upref{FctTre}）和不可约元素的定义（真因子树的末端），容易证明此时$R$中任意给定元素的所有真因子树都具有相同的末端，即唯一析因性。事实上，这就是判定唯一析因环的一种条件：
+
+
+
+\begin{definition}{}\label{def_UFD_1}
+给定整环$R$，如果$R$中所有不可约元素都是素元素，则称$R$满足\textbf{素性条件}。
+\end{definition}
+
+
+\begin{theorem}{}
+
+给定整环$R$，则“$R$满足\textbf{有限析因性}和\textbf{素性条件}”当且仅当“$R$是\textbf{唯一析因环}”。
+
+\end{theorem}
+
+
+\textbf{证明}：
+
+\textbf{必要性}：
+
+已知$R$有限析因了，只需要证明此时$R$有唯一析因性。
+
+由素性条件的\autoref{def_UFD_1}  和此时素元素的等价定义（\autoref{the_FctTre_1}~\upref{FctTre}），可知如果$t\in R$在$r\in R$的某棵真因子树的末端，则它必在$r$的每一棵真因子树的末端，因此$r$的所有真因子树的末端元素都相同，从而得证唯一析因性。
+
+\textbf{充分性}：
+
+由于$R$是唯一析因环，故已知$R$有限析因。任取不可约元素$x\in R$，如果$x\mid r$，则$x$在$r$的每一棵真因子树上。由\autoref{the_FctTre_1}~\upref{FctTre}得证$x$是素元素。
+
+\textbf{证毕}。
+
+
+
+
+
+
+
+\subsection{判定唯一析因环：最大公因子}
+
+
+
+满足有限析因性的环$R$中，如果没有唯一析因性，还有另外一个疑难：难以判断最大公因子。
+
+
+\begin{definition}{最大公因子}
+
+给定整环$R$。对于$a, b\in R$，如果$x\in R$是$a$和$b$的公因子，且$a$和$b$的任意公因子都是$x$的因子，那么称$x$是$a, b$的\textbf{最大公因子（greatest common divisor）}，记为$\opn{gcd}(a, b)$。
+
+对于任意多的元素，也可以定义它们的最大公因子为，使得所有公因子都是其因子的公因子，同样用符号$\opn{gcd}$表示，如$\opn{gcd}(a_1, a_2, a_3, \cdots)$。
+
+\end{definition}
+
+
+在$\mathbb{Z}[\sqrt{-2}]$上考虑$a=4+2\sqrt{-2}$和$b=6$，则它们的公因子集合为$\{2, 2+\sqrt{-2}\}$，但这两个公因子都不是彼此的因子，从而$a, b$没有最大公因子。
+
+观察$a, b$的构造可以发现，我们是取$6$的两个不同的不可约分解，然后在两个分解中各取一个对方没有的元素相乘得到$a$，也就是说这种反例的构造依赖于\textbf{没有}唯一析因性。
+
+事实上，这是另一种判定唯一析因环的条件：
+
+
+
+\begin{definition}{}
+如果整环$R$的任意两个元素之间都有最大公因子，则称$R$满足\textbf{最大公因子条件}。
+\end{definition}
+
+
+\begin{theorem}{}
+给定整环$R$。则“$R$满足\textbf{有限析因性}和\textbf{最大公因子条件}”当且仅当“$R$是唯一析因环”。
+\end{theorem}
+
+
+\textbf{证明}：
+
+\textbf{必要性}：
+
+反设$R$不是唯一析因环，则存在$r\in R$，它有两棵末端不相同的真因子树。分别取这两棵树独有的末端（即对方没有的）$x$和$y$，则$r$和$xy$之间没有最大公因子\footnote{$x, y$不可约，故$r$和$xy$的公因子集合就是$\{x, y\}$；又因为$x, y$分别是两棵树独有的元素，故二者不相伴。}。
+
+\textbf{充分性}：
+
+由于$R$是唯一析因环，故任意元素的不可约分解（真因子树的末端）是确定的，不随分解方式变化而变化。对于$a, b\in R$，各自取它们的唯一不可约分解，给$a$的分解结果编号，按顺序，先取第一个不可约因子，看它是否等于$b$的某个不可约因子。如果没有，则看$a$的下一个不可约因子；如果有，则把这两个相同的因子都取出备用，然后看$a$的下一个不可约因子是否等于$b$的某个\textbf{剩下的}不可约因子。以此类推，直到按顺序遍历$a$的全体有限个不可约因子。
+
+遍历后，把过程中取出的$a$的不可约因子乘起来，结果即为$\opn{gcd}(a, b)$。
+
+\textbf{证毕}。
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
