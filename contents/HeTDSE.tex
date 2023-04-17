@@ -1,7 +1,7 @@
 % 氦原子数值解 TDSE 笔记
 % 氦原子|薛定谔方程|波函数|动量谱|光电子|电离|FEDVR|数值解
 
-\pentry{广义球谐函数\upref{GenYlm}， Crank-Nicolson 算法解一维含时薛定谔方程\upref{CraNic}， Lanczos 算法\upref{Lanc}， 氢原子球坐标薛定谔方程数值解\upref{HyTDSE}} % 已包含 “张量积空间”
+\pentry{广义球谐函数\upref{GenYlm}， Lanczos 算法\upref{Lanc}， 氢原子球坐标薛定谔方程数值解\upref{HyTDSE}} % 已包含 “张量积空间”
 
 \subsection{波函数展开}
 使用角向基底为两个电子总轨道角动量和 $z$ 分量的本征态\upref{AMAdd}， 即广义球谐函数 $\mathcal{Y}_{l_1,l_2}^{L,M}(\uvec r_1, \uvec r_2)$。
@@ -210,7 +210,7 @@ r\sqrt{9(2l'_1+1)(2l'_2+1)(2L'+1)/(4\pi)^2}\\
 
 \subsection{Crank-Nicolson 波函数演化}
 
-演化（propagation）同样使用 split operator 
+Crank-Nicolson 演化（propagation）\upref{CraNic}同样使用 split operator 
 \begin{equation}
 \exp(-\I H\Delta t) = \exp(-\I H_0\frac{\Delta t}{2})\exp(-\I H_{int}\Delta t) \exp(-\I H_0\frac{\Delta t}{2}) + \order{\Delta t^3}
 \end{equation}
@@ -241,7 +241,7 @@ $H_0 = H_1 + H_2$ 由于 $H_1$ 和 $H_2$ 对易， 我们可以将它们独立�
 使用 $l_{1,max}, l_{2,max}, L_{max}$ 来生成分波列表有时候会有较大的浪费， 会出现许多概率极小的分波。 最好的办法是把各个分波的概率画成图， 从图中可以轻易看出分波是否收敛以及是否有浪费。
 \begin{figure}[ht]
 \centering
-\includegraphics[width=10cm]{./figures/8b6a1e7358991934.png}
+\includegraphics[width=10cm]{./figures/2cb63e0f9282ba7e.png}
 \caption{$l_{1,max}, l_{2,max}, L_{max} = 5$， 可以看出 $L$ 较小时需要更大 $l_1, l_2$， 而 $L$ 较大时浪费严重。 理想情况是每个 $L$ 中最小概率的分波都差不多。} \label{fig_HeTDSE_2}
 \end{figure}
 
@@ -256,7 +256,7 @@ $H_0 = H_1 + H_2$ 由于 $H_1$ 和 $H_2$ 对易， 我们可以将它们独立�
 我们截取有限个分波时， 在分波演化（\autoref{eq_HeTDSE_4}） 的过程中， 会引入新的误差。 截取以后， $V_F, V_{12}$ 仍然是厄米矩阵， 所以他们的传播子同样是幺正的， 所以不能用波函数的模长来估计误差。 所以可以用另一种方法来估计误差。 误差可以每隔几步估算一次， 令 $\mat V'_F, \mat V'_{12}$ 为两倍基底数量的矩阵， 那么可以计算 $\mat (\I V'_F\Delta t) \bvec v$ 比基底多出来的几个分波， 对每个分波的绝对值进行求和。
 \begin{figure}[ht]
 \centering
-\includegraphics[width=7cm]{./figures/6f6024825a91f487.png}
+\includegraphics[width=7cm]{./figures/af2029cef4b322c6.png}
 \caption{分波误差分析} \label{fig_HeTDSE_1}
 \end{figure}
 
