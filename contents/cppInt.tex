@@ -1,5 +1,7 @@
-% C++ 的整数笔记
+% C 和 C++ 的整数（笔记）
 % c++|int|long|整数|二进制|八进制|十六进制|转换|溢出
+
+\pentry{C++ 基础\upref{Cpp0}}
 
 本文的\textbf{模（modulo）}运算都是指 $M$ 加或减整数个 $N$ 后使结果范围在 $0$ 到 $N-1$ 之间， $N$ 只能是正整数。 以下我们假设整数用 $n$ 位二进制表示。
 
@@ -27,10 +29,11 @@
 \item \verb|bool| 转换为其他类型： \verb|true| 变为 1， \verb|false| 变为 0
 \item 浮点类型转换为整数类型： 向 0 取整
 \item 整型转为浮点： 如果位数太多会不精确
+\item \verb|signed| 和 \verb|unsigned| 整数之间比较大小或相等或时（如果开了 \verb|-Wall|， 编译器会给出警告）， 前者会先转换为后者。 这就导致负数有可能大于正数。做加减乘除时也一样， 这叫做 \textbf{usual arithmetic conversions}。
 \end{itemize}
 
 \subsection{2 的补}
-有符号整数类型的负数在内存中的二进制表示常采用 \textbf{2 的补（2's complement）}。 若采用 2 的补， 以下几点成立
+有符号整数类型的负数在内存中的二进制表示常采用 \textbf{2 的补（2's complement）}储存（例如 x86-64\upref{x86} 架构）。 若采用 2 的补， 以下几点成立
 \begin{itemize}
 \item 一个整数和它的相反数相加等于 $2^n$
 \item 范围内最大的整数加上 1 等于范围内最小的整数， 即加 1 后取相反数（如 $n = 8$ 时 $127 + 1 = -128$）
@@ -42,11 +45,11 @@
 数学上， 可以将无符号的整数类型及其加法构成一个 $2^n$ 元循环群（见\autoref{ex_Group_2}~\upref{Group}）。 若采用 2 的补， 由于群元素可以用任何符号， 有符号整数类型可以看作将无符号整数类型的后一半元素减去 $2^n$， 而群运算保持不变。
 
 \subsection{Integer Literal}
-\footnote{参考\href{https://en.cppreference.com/w/cpp/language/integer_literal}{cppreference}}这里讨论 c++11 标准。 literal 中的字母不区分大小写， \verb|0| 开头表示 8 进制，  \verb|0x| 开头表示 16 进制， 数字后面可以加 \verb|u|， 以及 \verb|l| 或 \verb|ll| 的一个。 literal 的类型会根据数值的大小而变化。
+\footnote{参考 \href{https://en.cppreference.com/w/cpp/language/integer_literal}{cppreference}}这里讨论 c++11 标准。 literal 中的字母不区分大小写， \verb|0| 开头表示 8 进制，  \verb|0x| 开头表示 16 进制， 数字后面可以加 \verb|u|， 以及 \verb|l| 或 \verb|ll| 的一个（可以是大写）。 literal 的类型会根据数值的大小而变化。
 
 \begin{itemize}
-\item 最小是 \verb|int|， 最大是 \verb|long long int| 每一种前面都可以加 unsigned
-\item 有后缀 \verb|u| 必定是 unsigned
+\item 最小是 \verb|int|， 最大是 \verb|long long int| 每一种前面都可以加 \verb|unsigned|
+\item 有后缀 \verb|u| 必定是 \verb|unsigned|
 \item 没有 \verb|u| 的十进制必定是 signed， 其他进制可以是 signed 或 unsigned （首选 signed）
 \item 后缀 \verb|l| 和 \verb|ll| 分别规定类型至少为 \verb|long| 和 \verb|long long|， 如果数值超出就不断升级
 \end{itemize}

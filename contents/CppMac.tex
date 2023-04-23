@@ -1,0 +1,68 @@
+% C++ 的宏和预编译器（笔记）
+
+\begin{issues}
+\issueDraft
+\end{issues}
+
+\addTODO{解释一下 SLISC 中所用的那些}
+
+\subsection{基础}
+\begin{itemize}
+\item C++ 的宏功能是从 C 语言直接沿用过来的， 没有做任何拓展。
+\item 宏是给预编译器的指令。 预编译器本质上就是对代码中的宏指令进行文本替换操作。
+\item 行首如果有 \verb|#| (前后都可以有空格) 的叫做 \textbf{preprocessor directive}， 是给预编译器看的。
+\item 最常见的 \verb|#include 头文件| 指令就是让预编译器把头文件中的代码原封不动地插入到当前位置。
+\item 所以从编译器（不是预编译器）看来， 每个 \verb|cpp| 文件其实都是单个文件， 无论它的 include 有多复杂。
+\item \verb|#define 宏名 代码| 把一个宏定义为一串别的代码。 \verb|代码| 如果要换行， 可以用 \verb|\|。
+\item \verb|#define 宏名| 仅仅定义一个宏， 也可以理解为 \verb|代码| 为空。
+\item \verb|#ifdef 宏 ... #else ... #endif| 可以判断宏是否存在， 类似地， 有 \verb|#ifndef 宏|。（注意每一个 \verb|#| 都要换行。
+\item 更一般地， 有 \verb|#if 条件 ... #elif ... #else ... #endif|。 例如条件可以是 \verb|#if defined(宏)| 相当于 \verb|#ifdef|， \verb|#if !defined(宏)| 相当于 \verb|#ifndef|。 预编译器会删除不满足条件的 \verb|...| 中的代码， 编译器将看不到它的存在。
+\item \verb|defined()| 函数是一个特殊的存在， 没有其他类似的函数了（除了下文的宏函数）。
+\item 条件中可以用 \verb|&&|， \verb`||`， 可以用括号， 可以用 \verb|>, <=, ==, !=| 等比较数值的大小， 可以用 \verb|+,-,*,/,%| 等算符。 注意运算和比较仅限于整数。
+\item 用 \verb|g++ -E 源文件.cpp| 可以输出预编译的结果（将把所有宏都进行替换）。
+\item \verb|#undef 宏| 可以在之后的代码中取消某个宏的定义， 否则该宏将在定义后的所有位置有定义， 而且会覆盖函数名和变量名。 所以使用宏时要特别小心， 一般会严格遵循特定的命名规则以防止和其他变量或宏发生冲突。
+\item 一个宏在一个 cpp 文件（包括它使用的头文件）中不能有多次定义。 另外如果需要找一个宏定义的位置， 可以故意多次定义， 然后编辑器的错误提示中就会包含它之前定义的位置。
+\item 命名规则： 宏名应该全部使用大写字母和下划线。 不要用下划线开头（下划线开头的宏保留给编译器和基本的库去定义）。 若要避免冲突， 可以你定义的所有宏前面加上一个特殊的前缀。 例如 \verb|前缀_宏名|， 如果你在写库， 通常这个前缀是库的名字。
+\item 在使用预编译器之前还会有 \textbf{translation phase}， 会把代码中\textbf{所有} “\verb|\| 紧接一个换行符” 进行删除处理， 哪怕它在字符串中间或者变量名中间（但这是很不推荐的）。 况且许多地方换行并不需要什么特殊符号， 所以这个功能一般用于把一个较长的宏写为多行。 所以对预编译器来说， 每个 preprocessor directive 仍然只能有一行（它看不到 \verb|\|）。
+\item translation phase 也会把每个注释替换成一个空格， 所以 \verb|int/*评论*/x;| 相当于 \verb|int x;|。
+\end{itemize}
+
+\subsection{C++ 标准中常用的宏}
+\begin{itemize}
+\item \verb|__cplusplus| 用于判断是否在使用 C++ （而不是 C）， 以及判断使用的 C++ 标准， 例如 \verb|#if __cplusplus >= 201103L| （\verb|L| 表示这是一个 \verb|long| 的 literal）
+\item \verb|__FILE__| 会替换为当前的文件名（一个字符串 literal）。
+\item \verb|__LINE__| 会替换为当前的行号（一个 \verb|int| 的 literal）。
+\item \verb|__DATE__| "Mmm dd yyyy" (e.g., "Apr 18 2023")
+\item \verb|__TIME__| "hh:mm:ss"
+\end{itemize}
+
+\subsubsection{__func__}
+\begin{itemize}
+\item \verb|__func__| 是当前函数名， 但这并不是一个宏， 而是每个函数都会在开始默认定义的一个 \verb|const char[]|， 存有当前函数名。
+\end{itemize}
+
+\subsection{宏函数}
+\begin{itemize}
+\item \verb|FUN(参数) #参数| 在参数两边加双引号。
+\item 若宏函数的参数不是宏， 那么它就被作为字符串替换到宏函数中。 记住预编译器不懂 C++ 语法，不知道什么是变量。
+\item 如果宏函数的参数也是宏， 那么会先对参数的宏进行展开（但未必会完全展开)， 然后再代入宏函数的函数体中。
+\item 多加一层 trivial 的宏函数有助于让作为参数的宏先完全展开： 例如 \verb|#define FOO(x) BAR(x)|， \verb|#define BAR(x) #x|。 那么 \verb|BAR(1+1)| 就是 \verb|"1+1"|， 但是 \verb|FOO(1+1)| 就是 \verb|"2"|。
+\item \verb|#宏| 只能用于宏参数前面， 用于其他宏名， 更不能直接在宏定义外面用。 一个常用的宏函数是 \verb|#define STRINGIFY(x) #x|
+\end{itemize}
+
+\begin{lstlisting}[language=cpp]
+#include <iostream>
+
+using namespace std;
+
+#define ITEM wi383uk33 "abcde
+
+#define STRINGIFY(x) #x
+#define STRINGIFY2(x) STRINGIFY(x)
+
+int main()
+{
+	cout << STRINGIFY(ITEM) << endl; // "ITEM"
+	cout << STRINGIFY2(ITEM) << endl; // R"(ITEM wi383uk33 "abcde)"
+}
+\end{lstlisting}

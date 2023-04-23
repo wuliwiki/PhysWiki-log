@@ -1,35 +1,40 @@
 % 编辑器事项
 % BUG|编辑器|LaTeX
 
-\subsection{符号替换模式下的 bug}
-“符号替换” 功能是指， 把一些 latex 命令（如 \verb|\alpha|）显示成符号以增加可读性， 并用一个紫色框表明。 以下按优先级排序
+\subsection{编辑冲突解决方案}
+
+以下任何这些方案， 都等现在的方案足够稳定了再说吧。
+
+\subsubsection{【方案 1】只占用子节}
 \begin{itemize}
-\item 自动引用同页面公式插入 label 的时候， 有可能会插入到 \verb|\begin{equation}| 的中间（有待复现）。
-
-\item 【完成】复制一个公式以后， 被替换的符号不会变为代码
-
-\item 【完成】为什么\href{https://docs.julialang.org/en/v1/manual/unicode-input/}{这个 Julia 文档页面}中的 \lstinline|\varphi| 和 \lstinline|\phi| 粘贴到浏览器（包括符号替换规则窗口）中之后显示出来是调换的？
-
-\item 【完成】搜索框中的 \lstinline|\phi| 和 \lstinline|\varphi| 的符号替换调换了， 但搜索的内容是正确的。 应该也按照 \lstinline|config.json| 中的规则替换（这应该和上一个 bug 有关）
-
-\item 【完成】搜索框中不能搜索 \lstinline|\subseteq|， 因为打了 \lstinline|\subset| 以后就会直接替换成符号。 任何两个前面部分相同的命令都有这个问题
-
-\item 【完成】自动引用公式后再连续撤销， 符号替换的紫色下划线会全部消失， 如果这时保存， tex 文件中的代码也会替换成符号
-
-\item 【完成】有点担心符号替换会出现循环 bug， 就是修好了 A 出现 B 修好了 B 出现 C， 修好了 C 出现 A。 是否要考虑一下系统的解决方法（但愿是我多虑了）。
-
-\item 【完成】选中一段公式代码， 按 【对齐】按钮， 公式中带紫色框的符号消失
-
-\item 【完成】删除一个带紫色框的符号再撤销， 紫色框消失
-
-\item 【完成】代码中空心句号被替换为实心句号后， 预览中仍然是空心句号（如 “。”）
-
-\item 【完成】使用替换功能时， 若替换的内容中的命令被替换成符号， 替换后不会出现紫色框
+\item 这是现有方案的一个小改进， 开发成本非常低。
+\item 每个作者都可以看到当前未通过审核的所有改变（无论哪种方案这都是应该的）， 鼓励同时编辑同一个词条的人进行沟通。
+\item 编辑器通过作者修改的内容决定占用哪些子节， 可以允许不同作者修改同一个词条的不同子节。
 \end{itemize}
 
-\subsection{实时预览 BUG}
+\subsubsection{【方案 2】使用 Git 的方式协同编辑}
 \begin{itemize}
-\item 公式调换位置后， \verb|\autoref| 显示的序号不会自动更新
+\item 这个方案是最理想的， 但需要较大开发成本。 当然也可以不严格实现取个折中。也可以完全用 github 管理， 0 成本。 还可以在自己服务器上搭建 GitLab。
+\item 使用 git 的方式管理协作。 从概念上每个人的每次新编辑（可以修改多个词条）都创建整个百科的一个新分支（以账号 ID 命名）。 完成后提交 pull request（PR）。 审稿人同意后 merge 到 master。 每个新分支都有自己的数据库（概念上）。
+\item 每个作者都可以看到当前未通过审核的所有改变。
+\item 为避免冲突每个词条一次只能有一个 PR， 这样抢锁就成了抢 PR。 与其让审稿人解决冲突， 需要作者自己解决冲突（把自己的更改 rebase 到 master 的最新 commit， 并确保可以编译成功）。
+\item 鼓励尽量把非 trivial 的公式用公式按钮创建， 按钮自动生成 label。 其他环境一律强制要求有 label。
+\item 用户可以直接申请在 master 分支中添 label， 自动通过（为了防止捣乱可以限制数量）然后 pull 到自己的分支。
+\item 数据库的实现上， 给每个分支新建一个临时数据库， 但每个表格只保存变化、删除和新添加的记录（但为了偷懒也可以先复制整个数据库）。 PR 通过以后删除数据库。 文件也是只有改变的才进行复制（为了偷懒也可以先复制所有词条文件）。
+\item 作者可以向管理员申请重命名 label（某些自动生成的 label 可能希望改成有意义的缩写）， 可以自动把所有分支的某个 label 都重命名（要确保都没有冲突）。
+\end{itemize}
+
+\subsubsection{权限 TODO}
+会员制需要考虑一个问题就是， 如果大家都可以用编辑器， 那不开会员也可以打开编辑器查看所有内容。 所以编辑者必须开通会员， 有足够的贡献才能抵扣会员。
+
+\subsubsection{Editor 使用数据库 TODO}
+\begin{itemize}
+\item \verb|data| 文件夹中的数据库文件为 \verb|scan.db|
+\end{itemize}
+
+\subsubsection{Scan TODO}
+\begin{itemize}
+\item 支持编译历史版本， 使用最新的数据库， 如果 label 找不到就显示找不到。
 \end{itemize}
 
 \subsection{Editor BUG}
@@ -166,6 +171,37 @@
 \item 【完成】手动打第二个美元符号时会出现两个
 
 \item 【完成】 “原子单位\upref{AU}” 的表格中和表格结束以后所有字体都变成了橙色
+\end{itemize}
+
+\subsubsection{符号替换模式下的 bug}
+“符号替换” 功能是指， 把一些 latex 命令（如 \verb|\alpha|）显示成符号以增加可读性， 并用一个紫色框表明。 以下按优先级排序
+\begin{itemize}
+\item 自动引用同页面公式插入 label 的时候， 有可能会插入到 \verb|\begin{equation}| 的中间（有待复现）。
+
+\item 【完成】复制一个公式以后， 被替换的符号不会变为代码
+
+\item 【完成】为什么\href{https://docs.julialang.org/en/v1/manual/unicode-input/}{这个 Julia 文档页面}中的 \lstinline|\varphi| 和 \lstinline|\phi| 粘贴到浏览器（包括符号替换规则窗口）中之后显示出来是调换的？
+
+\item 【完成】搜索框中的 \lstinline|\phi| 和 \lstinline|\varphi| 的符号替换调换了， 但搜索的内容是正确的。 应该也按照 \lstinline|config.json| 中的规则替换（这应该和上一个 bug 有关）
+
+\item 【完成】搜索框中不能搜索 \lstinline|\subseteq|， 因为打了 \lstinline|\subset| 以后就会直接替换成符号。 任何两个前面部分相同的命令都有这个问题
+
+\item 【完成】自动引用公式后再连续撤销， 符号替换的紫色下划线会全部消失， 如果这时保存， tex 文件中的代码也会替换成符号
+
+\item 【完成】有点担心符号替换会出现循环 bug， 就是修好了 A 出现 B 修好了 B 出现 C， 修好了 C 出现 A。 是否要考虑一下系统的解决方法（但愿是我多虑了）。
+
+\item 【完成】选中一段公式代码， 按 【对齐】按钮， 公式中带紫色框的符号消失
+
+\item 【完成】删除一个带紫色框的符号再撤销， 紫色框消失
+
+\item 【完成】代码中空心句号被替换为实心句号后， 预览中仍然是空心句号（如 “。”）
+
+\item 【完成】使用替换功能时， 若替换的内容中的命令被替换成符号， 替换后不会出现紫色框
+\end{itemize}
+
+\subsubsection{实时预览 BUG}
+\begin{itemize}
+\item 公式调换位置后， \verb|\autoref| 显示的序号不会自动更新
 \end{itemize}
 
 \subsection{Editor TODO}

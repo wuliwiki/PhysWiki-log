@@ -1,4 +1,4 @@
-% C++ 字符串笔记
+% C++ 字符串（笔记）
 
 \begin{issues}
 \issueDraft
@@ -6,7 +6,7 @@
 
 \subsubsection{待整合}
 \begin{itemize}
-\item 要 \verb`#include <string>`, \verb`use std::string`.
+\item 要 \verb`#include <string>`, \verb`use string`.
 \item constructors: \verb`string s1;`, \verb`string s2{s1};`, \verb`string s3{"something"};`, \verb`string s4(10, 'c');`
 \item \verb`getline(cin, str);` 从命令行读取一行字到 \verb`string str` 中.
 \item \verb`string::empty()` 判断是否是空.
@@ -15,25 +15,54 @@
 \item \verb`str1 + str2` 可以连接两个字符串.
 \item \verb`str1 + "something"` 可以连接 string 和 literal, 但不能是 \verb`wchar_t`.
 \item \verb`str1 == str2`, \verb`str1 != str2` 可以比较字符串是否相同.
+\item 任意两个 string literal 出现在一起会自动拼接： \verb`"abc" "def"` 相当于 \verb|"abcdef"|。 中间可以换行。
+\item \verb|u8""| 用于把字符串转换为 UTF-8 编码， \verb|U""| 用于把字符串转换为 UTF-32 编码（\verb|basic_string<char32_t>| 类型）。 这和源码文件的字符编码无关（首先确保你的文本文件使用编译器指定的编码）。
+\item 普通字符串中可以用 \verb|\0数字| （8 进制） 或 \verb|\x数字| （16 进制） 来指定某个不好表示的 code point。
+\item 裸字符串： \verb|R"(一些字符)"|。 里面的字符不会被 escape。 若要更裸一点， 还可以用 \verb|R"自定义标志(一些字符)自定义标志"|。 中间的 \verb|一些字符| 可以换行。
+\item 如果需要高性能， 函数还得是用 \verb|const char *| 输入字符串（会需要手打很多 \verb|.c_str()|）。 或者其次用 \verb|const string&| 加上一个 index 指明起始位置， 或者用 C++17 的 \verb|string_view|。
 \end{itemize}
+
+\subsection{字符串和数的转换}
+\begin{itemize}
+\item 以下字符串转整数的算法: 会忽略前面的空格， 然后可以有一个 \verb|+,-| 号， 然后跟一串数字， 直到遇见非数字。
+\item \verb|atoi, atol, atoll| （C 语言）（例如 \verb|int atoi( const char* str );|）不建议用， 因为如果超出范围的行为没有定义， 如果转换不了会返回 0。
+\item \verb|strtol, strtoll| （C 语言）例如 \verb|long strtol(const char* str, char** str_end, int base)|， \verb|str_end| 会指向处理完的后一个字符。 如果出错， 会把 \verb|errno| 设为 \verb|ERANGE| (在调用前要手动先设为 0)。
+\item \verb|stoi, stoil, stoill| （例如 \verb|int stoi(const string& str, size_t* pos = nullptr, int base = 10);|） \verb|pos| 用于输出处理了多少个字符。 但是缺点是如果处理子串， 需要生成一个新的字符串， 进行不必要的复制和内存分配。 如果出错会 \verb|throw|。
+\end{itemize}
+
+
+\subsubsection{UTF-8 编码}
+\begin{itemize}
+\item \verb|0| 开头的字节都是 ascii 字符。
+\item \verb|10| 开头的字节都不是字符的起始字节。
+\item \verb|110| 开头的字节是用 2 个字节表示一个字符。
+\item \verb|1110| 开头的字节用 3 个字节表示一个字符。
+\item \verb|11110| 开头的字节用 4 个字节表示一个字符。
+\item 所以搜索字符或者字符串时， 只要关键词是合法的 utf-8 字符串（哪怕只有一个 ascii 字符）， 搜到的必然也是合法的， 不可能把多字节表示的字符砍断， \verb|string::find()| 可以正常使用。
+\item \verb|string::find_first_of()| 这样的函数就用不了了。 因为单个字符一般也要用字符串来表示。
+\item 跳到上一个下一个字符也要用 iterator， 而不是直接用 index （SLISC\upref{SLISC} 提供一个这样的 iterator， 也包含 utfcpp 库）。
+\item STL 不提供这样的功能， 常用的第三方库有 \href{https://github.com/nemtrif/utfcpp}{utfcpp （header only）} 以及 \href{https://tzlaine.github.io/text/doc/html/index.html}{Boost.TexT}。
+\item 所以如果不追求性能， 还是直接用 \verb|basic_string<char32_t>| 和 \verb|U"字符串"| 最容易， 体验和 python 差不多。 但许多人还是喜欢 utf-8 （甚至微软的 utf-16）。
+\end{itemize}
+
 
 \subsubsection{iostream}
 \begin{itemize}
 \item \verb`wchart_t` 类型的 literal 例如 \verb`L"this is a string"`
-\item \item \verb`std::endl` 用于换行
+\item \verb`endl` 用于换行
 \item \verb`<< hex <<` 把后面的数字都变成 16 进制, \verb`<< dec <<` 把后面的数字都变成 10 进制.
 \item \verb`cin.getline(name, max, '\n');` 用于读取一个字符串, 不超过 max 字符, 然后存在 \verb`char[]` 数组 name 里面, 后面加上 \verb`\0`.
 \item \verb`cout.precision(N);` 可以控制输出的有效数字位数.
 
 \item \verb`#include <iomanip>`
-\item \verb`std::setw(n)` 用于把两个数字的间隔控制在 n 个字节之内. (用于列对齐).
-\item \verb`std::setprecision(n)` 用于显示 n 位小数.
-\item \verb`std::setiosflags(std::ios::left)` 用于左对齐, 另有 \verb`ios::fixed` (非科学计数法) 或 \verb`ios::right` .
+\item \verb`setw(n)` 用于把两个数字的间隔控制在 n 个字节之内. (用于列对齐).
+\item \verb`setprecision(n)` 用于显示 n 位小数.
+\item \verb`setiosflags(ios::left)` 用于左对齐, 另有 \verb`ios::fixed` (非科学计数法) 或 \verb`ios::right` .
 \end{itemize}
 
 \subsubsection{cstring}
 \begin{itemize}
-\item \item 用于处理 \verb`\0` 结尾的字符串.
+\item 用于处理 \verb`\0` 结尾的字符串.
 \item \verb`strlen()` 函数用于返回字符串长度(不包括 \verb`\0`), 返回类型是 \verb`size_t`. 对于 \verb`wchar_t` 字符串, 用 \verb`wcslen()`.
 \item \verb`strcpy(pstr1, pstr2)` 把 \verb`pstr2` 指向的字符串拷贝的 \verb`pstr1` 的地址. \verb`strcpy_s(pstr1, len1, pstr2)` 是更安全的版本.
 \end{itemize}
@@ -42,7 +71,7 @@
 \begin{itemize}
 \item \verb`CString(TCHAR str)` 可以把 \verb`str` 从 \verb`TCHAR` 转换成 \verb`CString`.
 \item \verb`CString Class` 需要 \verb`#include <atlstr.h>`
-\item 控制台输出的时候用 \verb`std::wcout << str.GetString()`.  str 是 CString 的一个 object.
+\item 控制台输出的时候用 \verb`wcout << str.GetString()`.  str 是 CString 的一个 object.
 \item \verb`Format` 函数可以把数值转换为 \verb`cstring`. \verb`int num; CString str{}; str.Format(_T("%d"), num);`
 \item \verb`CString::GetLength()` 函数可以返回字符个数.
 \item \verb`CString::GetAt()` 可以获取某个字符

@@ -136,8 +136,6 @@ S(t_{i}-t_{i-1})=\int^{t_i}_{t_{i-1}}\dd t L(x, \dot{x})~,
 \bra{x_1}\E^{-\I H \dd t}\ket{x_0} = \qty(\frac{m}{2\pi\I \dd t})^{3/2}\exp\qty(\I S(\dd t))~.
 \end{equation}
 
-
-
 \subsubsection{一维自由粒子的路径积分}
 
 考虑\autoref{fig_PIntQM_2} 中任意\textbf{给定路径}$\Gamma$，其起点与终点分别\textbf{固定}为$(x_0, t_0)$和$(x_n, t_n)$。
@@ -147,38 +145,100 @@ S(t_{i}-t_{i-1})=\int^{t_i}_{t_{i-1}}\dd t L(x, \dot{x})~,
 \ali{
     \bra{x_n}\E^{-\I H t_n}\ket{x_0} &= \lim_{n\to\infty} \int\int\cdots\int \dd x_1\dd x_2\cdots \dd x_{n-1}\times \\
     &\phantom{11}\qty (\bra{x_n}\E^{-\I H( t_n-t_{n-1} )}\ket{x_{n-1}}\cdots\bra{x_2}\E^{-\I H( t_2-t_1 )}\ket{x_1}\bra{x_1} \E^{-\I H t_1}\ket{x_0})\\
-    &= \lim_{n\to\infty} \qty(\frac{m}{2\pi\I \dd t})^{3n/2}\int\int\cdots\int \dd x_1\dd x_2\cdots \dd x_{n-1}\times \\
-    &\phantom{11}\exp\qty(\I\frac{nm}{2t_n}\sum_{i=0}^{n-1}(x_{i+1}-x_i)^2)~.
+    &= \lim_{n\to\infty} \qty(\frac{m}{2\pi\I \dd t})^{n/2}\int\int\cdots\int \dd x_1\dd x_2\cdots \dd x_{n-1}\times \\
+    &\phantom{11}\exp\qty(\I\frac{nm}{2t_n}\sum_{i=0}^{n-1}(x_{i+1}-x_i)^2)~.\\
+    &\propto \int \mathcal{D}[x] \exp\left(i\int_0^T \frac{m}{2}\dot x^2\right)
 }
 \end{equation}
-
+其中 $\mathcal{D}[x]$ 代表泛函积分测度，这里意味着对所有可能的固定两端 $x(t_0)=x_i,x(t_n)=x_f$ 的路径 $\Gamma$ 作积分。注意到 $S[x,\dot x]=\int_{t_0}^{t_n} \dd t\ m\dot x^2/2$ 为自由粒子沿路径 $\Gamma$ 计算得到的作用量，因此可以将上式简记为
+\begin{equation}
+\bra{x_f} e^{-iHT}\ket{x_i}=\mathcal{N}\cdot \int \mathcal{D}[x] \exp(i S[x,\dot x])
+\end{equation}
+$\mathcal{N}$ 是依赖于泛函积分测度定义方式的一个常数因子，例如在上文中我们将 $t_0$ 到 $t_n$ 的时间划分为 $n$ 段，这导致了常数因子 $\mathcal{N}=(\frac{m}{2\pi\I \dd t})^{n/2}$。
+\subsubsection{一维势场中粒子的路径积分}
+对于一维势场 $V(x)$ 中的粒子，其哈密顿量为 $H=\frac{\hat{p}^2}{2m}+V(x)$，拉氏量为 $L=\frac{m}{2}\dot x^2-V(x)$。类似于自由粒子的无穷小段路径概率振幅的公式\autoref{eq_PIntQM_4}，我们同样可以证明
+\begin{equation}
+\bra{x_1} e^{-iH \dd t} \ket{x_0} = \sqrt{\frac{m}{2\pi i \dd t}}\exp(iS(\dd t))
+\end{equation}
+其中
+\begin{equation}
+\exp(iS(\dd t))=\exp\left(i\Delta t\left(\frac{m(x_1-x_0)^2}{2\Delta t^2}-V\left(\frac{x_0+x_1}{2}\right)\right)\right)
+\end{equation}
+通过类似的推导，最终可以得到一维势场中粒子的路径积分公式：
+\begin{equation}
+\bra{x_f} e^{-iHT}\ket{x_i}=\mathcal{N}\cdot \int \mathcal{D}[x] \exp(i S[x,\dot x])
+\end{equation}
+其中 $S[x,\dot x]=\int_{t_0}^{t_n} \dd t\ \left(m\dot x^2/2-V(x)\right)$ 为粒子沿这条路径所对应的作用量。
 %未完。参考费曼的《量子力学与路径积分》继续。
 
+\subsubsection{路径积分的经典极限}
+在上面的推导中我们采取了自然单位制 $\hbar=1$。现在我们复原 $\hbar$，并考察路径积分公式在经典极限下的行为。
+\begin{equation}
+\bra{x_f} e^{-i\frac{H}{\hbar}T}\ket{x_i}=\mathcal{N}\cdot \int \mathcal{D}[x] \exp(\frac{i}{\hbar}S[x,\dot x])
+\end{equation}
+在经典极限 $\hbar\rightarrow 0$ 下，路径积分公式中 $S[x,\dot x]$ 取极值的路径对结果的贡献最大，而远离极值的路径对应的 $\exp(\frac{i}{\hbar}S[x,\dot x])$ 相位角振荡会非常剧烈，以至于在经典极限下这些偏离作用量极值的路径的贡献相抵消。这也就是说，在经典极限 $\hbar\rightarrow 0$ 的情形下，粒子的运动将只由作用量泛函取极值的路径所决定，这样就从量子力学的情况退化到了经典力学体系，与我们所知的最小作用量原理\upref{HamPrn} 相符合。
 
+\subsection{路径积分公式的 Dirac 方法推导}
+下面我们利用 Dirac 的思路给出一个更简洁的对路径积分公式的证明方法。
+\begin{theorem}{量子力学路径积分公式}
+    设有相互作用的哈密顿量
+    \begin{equation}
+        H=\frac{\hat p^2}{2m}+V(x)
+    \end{equation}
+    那么 $\bra{x_f}e^{-iHT}\ket{x_i}$ 的路径积分表达式为
+    \begin{equation}
+        \bra{x_f}e^{-iHT}\ket{x_i}=\mathcal{N}\cdot\int \mathcal D[x] \exp\left(iS[x,\dot x]\right)
+    \end{equation}
+    其中 $S[x,\dot x]=\int_0^T d t L(x(t),\dot x(t))=\int_0^T d t \left[\frac{1}{2}m\dot{x}^2(t)-V(x(t))\right]$ 为粒子的作用量。
+    $\mathcal D[x]$ 为泛函积分测度，当时间划分为 $N$ 个间隔时它可以被定义为 $=d x_1\cdots d x_{N-1}$（$x_i$ 为第 $i$ 个时刻的粒子坐标），
+    而此时常数 $\mathcal N=\left(\frac{m}{2\pi i a}\right)^{N/2}$（依赖于泛函积分测度的定义）。
+\end{theorem}
 
+将时间 $T$ 划分为 $N$ 段，并在计算的最后取 $N\rightarrow +\infty$ 的极限。设 $T=Na$。
+\begin{equation}
+\begin{aligned}
+        \bra{x_f}e^{-iHT}\ket{x_i}&=\int d x_1\cdots d x_{N-1}
+        \bra{x_f}e^{-iH a}\ket{x_{N-1}}\bra{x_{N-1}}e^{-iH a}
+        \ket{x_{N-2}}\bra{x_{N-2}}\cdots \ket{x_{1}}\bra{x_{1}}e^{-iH a}\ket{x_i}
+        \\
+        &=\int d x_1\cdots d x_{N-1}\frac{d p_1}{2\pi} \cdots \frac{d p_N}{2\pi}
+        \bra{x_f}e^{-iH a}\ket{p_N}\langle p_N|x_{N-1}\rangle 
+        \\
+        &\quad \times\bra{x_{N-1}}e^{-iH a}
+        \ket{p_{N-1}}\langle p_{N-1}|x_{N-2}\rangle
+        \cdots \bra{x_{1}}e^{-iH a}\ket{p_1}\langle p_1 | x_i\rangle
+\end{aligned}
+\end{equation}
 
+将 $e^{-iH a}=\exp[-ia[\hat p^2/2m + V(x)]]$ 改写为
+\begin{equation}
+        e^{-iH a}
+        =\exp[-iaV(x)]\exp\left[-ia\frac{\hat p^2}{2m}\right]+O(a^2)
+\end{equation}
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+当 $N\rightarrow \infty$ 时 $O(a^2)$ 的修正项可以忽略，代入上式可以得到
+\begin{equation}
+\begin{aligned}
+        \bra{x_f}e^{-iHT}\ket{x_i}&=\int d x_1\cdots d x_{N-1}\int \frac{d p_1}{2\pi} \cdots \frac{d p_N}{2\pi}
+        \exp(-iaV(x_f))\exp(-iap_N^2/2m) \exp(ip_Nx_f)\exp(-ip_N x_{N-1})
+        \\
+        &\quad \times \cdots \times 
+        \exp(-iaV(x_1))\exp(-iap_1^2/2m) \exp(ip_1x_1)\exp(-ip_1 x_{i})
+        \\
+        &=\int d x_1\cdots d x_{N-1}\int \frac{d p_1}{2\pi} \cdots \frac{d p_N}{2\pi}
+        \exp\left(ia\sum_{i=1}^N\left(p_i\frac{x_i-x_{i-1}}{a}-H(p_N,x_N) \right)\right),\quad x_0\equiv x_i,x_N\equiv x_f
+\end{aligned}
+\end{equation}
+为了使得关于 $p_i$ 的高斯积分收敛，我们可以手动的将 $p^2$ 视作 $p^2(1-i\epsilon)$，这样高动量处积分的贡献就被指数压低了\footnote{Gell-Mann-Low 定理将说明这样做是合理的。}。
+    利用高斯积分公式 $\int_{-\infty}^{\infty} dx e^{-x^2/A}=\sqrt{A\pi}$，可以将上面积分公式中的动量积分部分全部约去。最终可以得到
+\begin{equation}
+\begin{aligned}
+        \bra{x_f}e^{-i\hat HT}\ket{x_i}&=
+        \left(\frac{m}{2\pi i a}\right)^{N/2}
+        \int d x_1\cdots d x_{N-1} 
+        \exp\left( ia\sum_{i=1}^N \left( \frac{1}{2}m \left(\frac{x_i-x_{i-1}}{a}\right)^2 - V(x_i) \right) \right)
+        \\
+        &=\mathcal{N} \cdot 
+        \int d x_1\cdots d x_{N-1} \exp(iS[x,\dot x])
+\end{aligned}
+\end{equation}
