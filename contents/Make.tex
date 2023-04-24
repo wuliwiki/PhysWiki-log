@@ -8,6 +8,7 @@
 \begin{itemize}
 \item 要系统地学习 make， 参考资料是 \href{https://www.gnu.org/software/make/manual/}{GNU Make 文档}， 提供网页版和 pdf 下载。
 \item make 程序广义上是声明如何更新一系列文件， 以及他们的 dependencies。 当某个文件改变后， 任何依赖于它的文件都需要通过指定的规则 （rule） 来更新
+\item \verb|Makefile| 的语法虽然类似 bash\upref{Bash}， 但并不是 bash。 例如给变量赋值时， bash 不允许等号两边有空格， 但 Makefile 可以。
 \item 使用 \verb|make| 命令是可以选择使用多线程， 例如 \verb|make -j4| 使用 4 线程。 也可以 \verb|make -j`getconf _NPROCESSORS_ONLN`| 自动设置为 cpu 的数量。
 \item 要指定 Makefile 文件， 用 \verb|make -f 文件|
 \item 要显示详细的推导信息， 用 \verb|make --debug=v|
@@ -53,12 +54,27 @@ file1.o: file1.f90 file2.o file3.o
 \item \verb|$^| 列出所有的 prerequisites (“:” 右边的内容)
 \item \verb|$(shell ...)| 可以执行 shell 命令， 如 \verb|$(shell echo *.f90)| 可以在当前位置列出所有 “.f90” 文件。
 \item \verb|$@| 大概就是 target file （如果 “:” 左边只有一个文件的话）
-\item 如果在 rule 的命令中用 \verb|source 脚本| 会出错， 因为默认 shell 是 \verb|/bin/sh|。 可以用 \verb|. 脚本| 等效替代。 也可以用 \verb|SHELL := /bin/bash|。 但注意这也并不能改变外部的环境变量， 因为 rule 中的命令本身就是在一个新的 shell 中运行的。
+\item 如果在 rule 的命令中用 \verb|source 脚本| 会出错， 因为默认 shell 是 \verb|/bin/sh|。 可以用 \verb|. 脚本| 等效替代。 也可以用 \verb|SHELL := /bin/bash|。
 \item 在 rule 的命令中用 \verb|: 要显示的内容| 可以在命令行显示内容。 其中 \verb|: 命令| 不做任何事情。
 \item \verb|make VAR1=... VAR2=...| 可以设置参数（等号两边不能有空格！）， 相当于在 \verb|Makefile| 里面使用 \verb|VAR1=... VAR2=...|， 如果 \verb|Makefile| 里面已经设置了这些参数（默认值）， 那么则会覆盖。 
 \item 在 rule 的命令前面加一个 \verb|@| 就可以不在 std 输出命令的内容。 例如 \verb|@printf "一些信息"| 或者 \verb|@echo '一些信息'|
 \item \verb|Makefile| 的 recipe 中可以再次调用 \verb|make 目标|， 这样可以保证目标按顺序运行， 或者 \verb|cd ... && make 目标| 这样可以更改当前目录。
 \item 第一次进入 Makefile 时， \verb|MAKELEVEL| 的值是 0。 如果再次使用 \verb|make| 命令， \verb|MAKELEVEL| 会递增。
+\item 赋值有两种， \verb|var1 = $(var2)| 可以延迟展开， 也就是说使用 \verb|$(var1)| 时， 会带入 \verb|var2| 当下最新的值。 如果用 \verb|var1 := $(var2)|， 那么会马上对此时的 \verb|var2| 求值， 无论以后 \verb|var2| 如何改变 \verb|$(var1)| 都不会变。 如果等号右边没有变量， 那么两种赋值等效。
+\item rule 也可以在条件中定义， 例如
+\begin{lstlisting}[language=makefile]
+ifeq ($(var), val)
+目标1:
+	命令1
+else
+目标1:
+	命令2
+endif
+\end{lstlisting}
+\item \verb|$(error 一些 错误 信息)| 放在 \verb|命令2| 里面可以提示错误。
+\item recipe 中如果一个命令太长， 可以用 \verb|\| 换行， 缩进可以用多个 tab。
+\item \verb|变量 := $(shell 命令)| 可以用于执行某个命令， 然后把输出赋值给某个变量。 如果命令太长也可以用 \verb|\| 换行。 如果要把结果也输出到命令行， 再用 \verb|$(info 变量)| 即可。 但注意命令的所有输出都会拼接成一行。
+\item 如果一个 recipe 的\textbf{最后一个} exit code 是非 0， 那么 make 将终止。 linux 的 \verb|false| 命令会主动返回非 0。
 \end{itemize}
 
 \subsubsection{implicit rules 的变量}

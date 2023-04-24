@@ -15,7 +15,7 @@
 
 我们可以用换元积分法把上述定积分的区间变为任意 $[a,b]$。 令
 \begin{equation}
-t = \frac{b-a}{2}x + \frac{b+a}{2}
+t = \frac{b-a}{2}x + \frac{b+a}{2}~,
 \end{equation}
 那么换元得（过程略）
 \begin{equation}
@@ -26,7 +26,7 @@ t = \frac{b-a}{2}x + \frac{b+a}{2}
 g(t) = \frac{2}{b-a} f\qty(\frac{2t - b - a}{b - a}) = \frac{2}{b-a} f(x)~,
 \end{equation}
 \begin{equation}
-t_i = \frac{b-a}{2}x_i + \frac{b+a}{2}
+t_i = \frac{b-a}{2}x_i + \frac{b+a}{2}~,
 \end{equation}
 \begin{equation}
 \omega'_i = \frac{b-a}{2}\omega~.
@@ -43,7 +43,7 @@ x_i = -x_{N-i+1}, \qquad w_{i} = w_{N-i+1}~.
 
 其中 $x_0 = -1, x_N = 1$， 剩下的 $x_i$ （$1 < i < N$）是 $P'_{N-1}(x)$ 的根\footnote{$P_N(x)$ 在 $[-1,1]$ 有 $l$ 个根。 $P'_N(x)$ 有 $N-1$ 个根， 所以 $P'_{N-1}(x)$ 有 $N-2$ 个根， 加上两个端点就是 $N$ 个。}， $P_N(x)$ 是勒让德多项式\upref{Legen}。 另见\autoref{eq_Legen_6}~\upref{Legen}。
 \begin{equation} % 已数值验证
-w_i = \frac{2}{N(N-1)[P_{N-1}(x_i)]^2}
+w_i = \frac{2}{N(N-1)[P_{N-1}(x_i)]^2}~.
 \end{equation}
 
 低阶情况下 $x_i$ 可以表示为带根号的表达式， 在 Mathematica\upref{Mma} 中求解解析式和任意精度数值解如\begin{lstlisting}[language=mma, caption=gauss\_lobatto.nb]
@@ -70,24 +70,24 @@ p_n(x_{n'}) = \delta_{n, n'}~.
 
 由于任意两个基底乘积只是 $2N-2$ 阶的多项式， 所以可以用求和精确代替其积分（？）。
 \begin{equation}
-\int_{-1}^1 p_i(x) p_j(x) \dd{x} = \sum_k w_k p_i(x_k) p_j(x_k) = w_i \delta_{ij}
+\int_{-1}^1 p_i(x) p_j(x) \dd{x} = \sum_k w_k p_i(x_k) p_j(x_k) = w_i \delta_{ij}~.
 \end{equation}
 
 所以 $N$ 个正交归一基底就是
 \begin{equation}\label{eq_GLquad_3}
-f_n(x) = \frac{1}{\sqrt{w_n}} p_n(x)
+f_n(x) = \frac{1}{\sqrt{w_n}} p_n(x)~,
 \end{equation}
 满足
 \begin{equation}
-f_i(x_j) = \frac{1}{\sqrt{w_i}} \delta_{ij}
+f_i(x_j) = \frac{1}{\sqrt{w_i}} \delta_{ij}~.
 \end{equation}
 
 另一种等效的表示方法是利用 $N$ 阶 Gauss-Lobatto 数值积分对应的多项式， $N-1$ 阶勒让德多项式的导数， $P'_{N-1}(x)$，  来构建满足条件的多项式。 根据定义，其 $N-2$ 个零点分别为 $x_2, x_3\dots x_{N-1}$， 为了加入 $x_1=-1$ 与 $x_n=1$ 这两个零点，将其变为 $N$ 阶多项式
 \begin{equation}\label{eq_GLquad_10}
-(1-x^2)P'_{N-1}(x)
+(1-x^2)P'_{N-1}(x)~.
 \end{equation}
 然而，\autoref{eq_GLquad_5} 要求 $p_n(x_n)=1$， 所以我们将\autoref{eq_GLquad_10} 除以它自己在 $x_n$ 处的切线，在 $x=x_n$ 处形成极限类型 $0/0=1$ 即可得到 阶多项式 $u_n(x)$。 
 \begin{equation}\label{eq_GLquad_11}
-u_n(x) = \frac{(1-x^2)P'_{N-1}(x)}{[(1-x^2)P'_{N-1}(x)]'_x} = x_n (x-x_n)
+u_n(x) = \frac{(1-x^2)P'_{N-1}(x)}{[(1-x^2)P'_{N-1}(x)]'_x} = x_n (x-x_n)~.
 \end{equation}
 该式与\autoref{eq_GLquad_2} 事实上是完全相同的多项式，因为所有具有 $N-1$ 个零点的 $N-1$ 阶多项式都可以因式分解成\autoref{eq_GLquad_2} 的形式乘以一个待定常数。用\autoref{eq_GLquad_11} 便于快速地展开多项式（因为勒让德多项式的系数可以直接通过公式计算）。

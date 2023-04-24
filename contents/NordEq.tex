@@ -15,7 +15,7 @@
 
 当然，我们也可以写出常微分方程的标准形式
 \begin{equation}
-y'(t)=f(y(t),t),t _0 < t < T,\quad y(t_0)=\hat{y}
+y'(t)=f(y(t),t),t _0 < t < T,\quad y(t_0)=\hat{y}~.
 \end{equation}
 这里 $y(t_0)=\hat{y}$ 是方程的初始条件，因此这样的问题也叫做初值问题（Initial Value Problem (IVP)）。我们后面要讨论的数值方法都是围绕着IVP问题的。当然，常微分方程还有一类是边界问题（Boundary Value Problem（BVP）），这类问题我们留到偏微分方程的数值方法时一起讨论。
 
@@ -64,9 +64,9 @@ $y(t+h)\approx y(t)+\frac{1}{2}h\left(f(y(t),t)+f(y(t+h),t+h)\right)$ 。这正�
 
 我们把 $y(t_i)$ 称作精确解或者解析解，它的数值近似解记做 $y_i$ 。
 \begin{itemize}
-\item Forward Euler: $y_{n+1}=y_n+hf(y_n,t_n)$ 
-\item Backward Euler: $y_{n+1}=y_n+hf(y_{n+1},t_{n+1})$ 
-\item Trapezoidal Rule: $y_{n+1}=y_n+\frac{h}{2}\left(f(y_n,t_n)+f(y_{n+1},t_{n+1}) \right)$ 
+\item Forward Euler: $y_{n+1}=y_n+hf(y_n,t_n)~.$ 
+\item Backward Euler: $y_{n+1}=y_n+hf(y_{n+1},t_{n+1})~.$ 
+\item Trapezoidal Rule: $y_{n+1}=y_n+\frac{h}{2}\left(f(y_n,t_n)+f(y_{n+1},t_{n+1}) \right)~.$ 
 \end{itemize}
 
 
@@ -97,20 +97,20 @@ $y(t+h)\approx y(t)+\frac{1}{2}h\left(f(y(t),t)+f(y(t+h),t+h)\right)$ 。这正�
 也正是因为上面的原因，Karl Heun 将梯形公式改进成了显式方法----Heun方法。它的核心思想就是用Forward Euler方法求出 $\tilde{y}_{n+1}=y_n+hf(y_n,t_n)$ ，然后带入到梯形公式的右边， $y_{n+1}=y_n+\frac{h}{2}\left(f(y_n,t_n)+f(\tilde{y}_{n+1},t_{n+1}) \right)$ 。这样整个过程的每一步都是显式方法，从而避免了任何可能出现的解方程的过程。当然，有些资料上面也会这样描述Heun方法：
 \begin{equation}
 \begin{aligned}
-&k_1=f(y_n,t_n)\\
-&k_2=f(y_n+hf(y_n,t_n),t_n+h))=f(y_n+hk_1,t_n+h)\\
-&y_{n+1}=y_n+\frac{h}{2}(k_1+k_2)
+&k_1=f(y_n,t_n)~,\\
+&k_2=f(y_n+hf(y_n,t_n),t_n+h))=f(y_n+hk_1,t_n+h)~,\\
+&y_{n+1}=y_n+\frac{h}{2}(k_1+k_2)~.
 \end{aligned}
 \end{equation}
 
 事实上，这种形式是另一种更有名的方法的二阶特例，即龙格－库塔法（Runge-Kutta）。例如，我们最常见的RK4的形式为
 \begin{equation}
 \begin{aligned}
-&k_1=f(y_n,t_n)\\
-&k_2=f\left(y_n+\frac{h}{2}k_1, t_n+\frac{h}{2}\right)\\
-&k_3=f\left(y_n+\frac{h}{2}k_2, t_n+\frac{h}{2}\right)\\
-&k_4=f\left(y_n+hk_3, t_n+h\right)\\
-&y_{n+1}=y_{n}+\frac{h}{6}(k_1+2k_2+2k_3+k_4)
+&k_1=f(y_n,t_n)~,\\
+&k_2=f\left(y_n+\frac{h}{2}k_1, t_n+\frac{h}{2}\right)~,\\
+&k_3=f\left(y_n+\frac{h}{2}k_2, t_n+\frac{h}{2}\right)~,\\
+&k_4=f\left(y_n+hk_3, t_n+h\right)~,\\
+&y_{n+1}=y_{n}+\frac{h}{6}(k_1+2k_2+2k_3+k_4)~.
 \end{aligned}
 \end{equation}
 
@@ -123,7 +123,7 @@ $y(t+h)\approx y(t)+\frac{1}{2}h\left(f(y(t),t)+f(y(t+h),t+h)\right)$ 。这正�
 \begin{equation}
 \begin{cases}
  y'(t) = y-\frac{1}{2}e^{\frac{t}{2}}\cdot\sin(5t)+5e^{\frac{t}{2}}\cdot\cos(5t), 0\le t\le \pi\\ y(0)=0
-\end{cases}
+\end{cases}~.
 \end{equation}
 
 我们分别用了 Forward Euler，Heun和RK4方法，其中，Python 的科学计算包 \verb|scipy.integrate.solve_ivp| 提供了例如RK45（即我们上面提到的RK4），BDF（后面我们会专门讨论它）以及其他的一些常用方法。

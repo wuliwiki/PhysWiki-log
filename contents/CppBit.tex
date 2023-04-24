@@ -1,0 +1,17 @@
+% C 和 C++ 的比特运算
+
+\begin{issues}
+\issueDraft
+\end{issues}
+
+\begin{itemize}
+\item \verb|bits & mask| 可以把 mask 为 \verb|0| 的地方清零， 其余不变。
+\item \verb`bits | mask` 可以把 mask 为 \verb|1| 的地方开启， 其余不变。
+\item \verb|bits ^ mask| 可以把 mask 为 \verb|1| 的地方翻转， 其余不变（XOR 异或算符）。
+\item \verb|~(bits1 ^ bits2)| 可以实现 NXOR 同或（没有专门的同或算符）。
+\item 要把 \verb|bits| 的一些地方设为指定 pattern， 就先用 \verb|&| 把该部分清零再用 \verb`|` 设置 pattern。
+\item 对负数使用 \verb|>>| 是 implementation defined 的（大部分会在左边加 1）， 所以最好用 \verb|unsigned| 类型。
+\item 一位 16 进制是 4 bit， 两位是一个字节。 \verb|0001, 0011, 0111, 1111| 分别是 \verb|0x1, 0x3, 0x7, 0xF|。 不熟练的话也可以用 \verb|0b101010|， 但看起来比较业余。
+\item \verb|char| 可能是 \verb|signed| 也可能不是。 \verb|int16_t|， \verb|uint16_t| 保证有两个字节（\verb|short| 不保证）， \verb|int32_t|， \verb|uint32_t| 保证有四个字节（\verb|int| 不保证）。
+\item 操作整数和 double 的时候千万要注意 x86 是 little endian。 此时 \verb|<< 1| 是先把 bytes 翻过来， 平移后再次翻回去…… double 也是一样。
+\end{itemize}

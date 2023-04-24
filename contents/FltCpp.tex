@@ -6,8 +6,20 @@
 
 另见 “双精度和变精度浮点数测试（Matlab）\upref{FltMat}”。
 
+\subsubsection{double}
 根据 IEEE 754\footnote{参考 Wikipedia \href{https://en.wikipedia.org/wiki/IEEE_754}{相关页面}。} 标准， 双精度的格式是 1 bit 符号 + 11 bit 指数 + 52 bit 小数（mantissa）。
 
+\subsubsection{ULP}
+\textbf{unit in the last place (ULP)} 就是 mantissa 增加 1 bit 时表示的数增加多少。 这等于 $2^{-52}\times 2^{e}$。 $e$ 是双精度的指数（以 2 为底）。 其中 $2^{-52}$ 一般记为 \verb|eps|。
+
+所以双精度的 mantissa 表示 1 时， 相对精度就是 \verb|eps|， 表示 \verb|1-eps| 时， 相对精度就非常接近 \verb|eps/2|（\textbf{最小相对误差}）。 所以一般来说相对精度在二者之间。 但一个例外就是当绝对值非常小时（小于 \verb|1e-1022| 也就是 $2.225\e{-308}$）， mantissa 的第一 bit 可能并不是 1， 此时相对误差可能会变得很大。
+
+\subsubsection{需要多少位十进制数}
+需要多少位十进制数可以通过四舍五入精确表示任意的双精度数呢？ $N$ 位有效数字的十进制数的相对误差介于 $10^{-N}$ （前几位是 999... 时）和 $10^{-N+1}$ （前几位是 1000... 时）之间。 所以为了满足 \verb|eps/2|（$1.11\e{-16}$） 的相对误差， \textbf{最多需要 17 位有效数字}。
+
+那么一个 double 能不能精确地用十进制表示呢？ 可以的， 因为 \verb|eps| 可以， 但可能需要非常多的位数尤其是 2 的指数非常大或者非常小的时候可能会需要几百位， 没有太大必要。
+
+\subsubsection{long double}
 在 x86 机器上， \verb|long double| 一般是 1 bit 符号 + 15 bit 指数 + 64 bit 小数 = 80 bit， 十进制大约是 18-19 位有效数字\footnote{Visual Studio 中据说 long double 和 double 是一样的。}。 虽然 \verb|sizeof| 是 16 字节， 但实际上只使用了 10 字节\footnote{详见\href{https://en.wikipedia.org/wiki/Extended_precision}{这里} 的 x86 extended precision format 一节}。 \verb|long double| 的运算是硬件支持的， 所以比较快。
 
 \begin{lstlisting}[language=none]
@@ -43,7 +55,9 @@ precise val    = 1.4142135623730950488...
 \end{lstlisting}
 第一位 0 说明是正数， 1 是负数。 接下来 11 bit 先看成 unsigned， 然后再减 $2^{10}-1 = 1023$， 这里指数 \verb|10000000010| 表示 $1026-1023 = 3$， 于是指数项为 $2^{3} = 8$。 所以要表示 10， 小数项应该是 $10/8 = 1+1/4$。 第 13 bit 表示 1/2， 14 bit 表示 1/4， 所以第 14 bit 是 1， 后面的小数全是零。 另外， 由于 intel 的 x86 和 x86-64\upref{x86} 都使用 little endian， 所以在内存中实际上 byte 的顺序是相反的。
 
-理论上指数部分可以表示 $-1023$ 到 $1024$ 之间的数， 但首尾两个数有特殊用途， 所以只能表示 $-1022$ 到 $1023$。 当指数为 $-1023$ 时， 仍然相当于指数为 $-1022$ 但小数部分前面不加 1。 当指数为 $1024$ 时， 表示 \verb|nan| 或者 \verb|inf|。
+理论上指数部分可以表示 $-1023$ 到 $1024$ 之间的数， 但首尾两个数有特殊用途， 所以只能表示 $-1022$ 到 $1023$。 当指数为 $-1023$ 时， 仍然相当于指数为 $-1022$ 但小数部分前面不加 1。 当指数为 $1024$ 时， 表示 \verb|inf|（要求小数部分都是零， 正负号仍然有效）或者 \verb|nan| （\verb|0b1...| 表示安静的 \verb|qNaN|， \verb|0b0..1..| 表示会发错误信号的 \verb|sNaN|）。
+
+双精度类型可以表示 \verb|-2e53| 到 \verb|2e53| 的每一个整数， 更小或更大的整数有的也可以表示（事实上此时只可以表示整数）， 只是不连续。
 
 另外最大和最小的正 double 为
 \begin{lstlisting}[language=none]

@@ -11,10 +11,10 @@
 
 现在来定义 FEDVR 基底 $u_{ij}(x)$。 令 $a_i$ 是第 $i$ 个 FE 长度的一半， $b_i$ 是第 $i$ 个 FE 的中点坐标， 把\autoref{eq_GLquad_3}~\upref{GLquad} 中的 $f_n(x)$ （$x$ 超出 $[-1,1]$ 时令 $f_n(x) = 0$） 记为 $f_n(t)$， 并把 $t \in [-1,1]$ 线性依次映射到每个有限元的区间 $x \in [x_i, x_{i+1}]$ 上， 有
 \begin{equation}
-x_{ij} = a_i t_j + b_i
+x_{ij} = a_i t_j + b_i~,
 \end{equation}
 \begin{equation}
-x = a_i t + b_i \qquad (x_{i1} \leqslant x \leqslant x_{iN})
+x = a_i t + b_i \qquad (x_{i1} \leqslant x \leqslant x_{iN})~.
 \end{equation}
 则基底的定义为
 \begin{equation}
@@ -22,17 +22,17 @@ u_{ij}(x) = \leftgroup{
 &\frac{1}{\sqrt{a_i}} f_j\qty(\frac{x-b_i}{a_i})  \qquad &&( 1 < j < N) \\
 & \frac{1}{\sqrt{a_i+a_{i+1}}} \qty[ f_N\qty(\frac{x-b_i}{a_i}) + f_1\qty(\frac{x-b_{i+1}}{a_{i+1}})]
 \quad &&(j = N) 
-} \end{equation}
+} ~.\end{equation}
 易证正交归一关系
 \begin{equation}
-\int_{x_1}^{x_{N_e+1}} u_{ij}(x) u_{i'j'}(x) \dd{x} = \delta_{ii'} \delta_{jj'}
+\int_{x_1}^{x_{N_e+1}} u_{ij}(x) u_{i'j'}(x) \dd{x} = \delta_{ii'} \delta_{jj'}~.
 \end{equation}
 在总区间的两端我们一般采用函数值为零的边界条件， 所以不定义 $u_{11}(x)$ 和 $u_{N_e, N}(x)$。 这样，我们最终共有 $N_e(N-1)-1$ 个节点 $x_{ij}$ 和对应的基底 $u_{ij}(x)$。 令 $w_{0i}$ 为\autoref{eq_GLquad_3}~\upref{GLquad} 中的 $w_i$， 则每个基底在每个节点处的函数值为
 \begin{equation}
 u_{ij}(x_{i'j'}) = \delta_{ii'}\delta_{jj'}\times \leftgroup{
 &\frac{1}{\sqrt{a_i w_{0j}}} \qquad  &&( 1 < j < N) \\
 & \frac{1}{\sqrt{(a_i+a_{i+1}) w_{0N}}} \qquad &&(j = N) 
-}\end{equation}
+}~.\end{equation}
 
 易证， 若要对整个区间积分， 所需权重为
 \begin{equation}
@@ -40,13 +40,13 @@ w_{ij} = \frac{1}{u_{ij}^2(x_{ij})} =
 \begin{cases}
 a_i w_{0j} &(1 < j < N) \\
 (a_i + a_{i+1}) w_{0N} &(j = N)
-\end{cases}
+\end{cases}~.
 \end{equation}
 但如果只需要在某个 FE 区间内做积分， 只需用 $w_{ij} = a_i w_{0j}$ 即可。
 
 一个函数 $f(x)$ 用基底展开为
 \begin{equation}
-\braket{u_{ij}(x)}{f(x)} = \int_{x_1}^{x_{N_e+1}} u_{ij}(x) f(x) \dd{x} \approx \sqrt{w_{ij}} f(x_{ij})
+\braket{u_{ij}(x)}{f(x)} = \int_{x_1}^{x_{N_e+1}} u_{ij}(x) f(x) \dd{x} \approx \sqrt{w_{ij}} f(x_{ij})~.
 \end{equation}
 把所有基底按对应的 $x_{ij}$ 从小到大排序。 $f(x)$ 的展开系数就可以记为一个列矢量。
 
@@ -57,7 +57,7 @@ a_i w_{0j} &(1 < j < N) \\
 K_{ij} &= -\frac12\mel{u_i}{\dv[2]{x}}{u_j}% 未完成： 线性代数需要说一下这个怎么来的， 必须要用正交归一基底
 = -\frac12 \int u_i(x) u_j''(x) \dd{x}\\
 &= -\frac12 \eval{u_i(x) u'_j(x)}_{x_1}^{x_2} + \frac12 \int u'_i(x) u_j'(x) \dd{x}\\
-&= \frac12 \braket{u'_i(x)}{u_j'(x)}
+&= \frac12 \braket{u'_i(x)}{u_j'(x)}~.
 }\end{equation}
 可以看出 $\mat K$ 是实对称矩阵。 这个积分可以精确地用求和表示， 而且只有同一个 FE 里面的 $u_i(x), u_j(x)$ 才能使积分不为零（bridge function 属于两个 FE）， 所以就得到了几乎是 block diagonalized 的矩阵， 只是每一个 block 左上角和右下角的一个矩阵元与其他 block 重叠。
 
@@ -67,16 +67,16 @@ K_{ij} &= -\frac12\mel{u_i}{\dv[2]{x}}{u_j}% 未完成： 线性代数需要说�
 &\leftgroup{
 &\frac{t_j-t_1}{t_i-t_1} \frac{t_j-t_2}{t_i-t_2} \dots \frac{1}{t_i-t_j} \dots \frac{t_j-t_{i-1}}{t_i-t_{i-1}}\frac{t_j-t_{i+1}}{t_i-t_{i+1}} \dots \frac{t_j-t_N}{t_i-t_N} \qquad &&(i \ne j) \\
 & \frac{1}{t_i-t_1} + \dots + \frac{1}{t_i-t_{i-1}} + \frac{1}{t_i-t_{i+1}} + \dots \frac{1}{t_i-t_N} \quad &&(i = j)
-}} \end{equation}
+}} ~.\end{equation}
 代入得
 \begin{equation}
-u'_{ij}(x_{ij'}) = \frac{1}{a_i^{3/2}} f'_j\qty(t_{j'})  \qquad ( 1 < j < N)
+u'_{ij}(x_{ij'}) = \frac{1}{a_i^{3/2}} f'_j\qty(t_{j'})  \qquad ( 1 < j < N)~,
 \end{equation}
 \begin{equation}
-u'_{iN}(x_{i j'}) = \frac{1}{a_i\sqrt{a_i+a_{i+1}}} f'_N\qty(t_{j'})
+u'_{iN}(x_{i j'}) = \frac{1}{a_i\sqrt{a_i+a_{i+1}}} f'_N\qty(t_{j'})~,
 \end{equation}
 \begin{equation}
-u'_{iN}(x_{i+1, j'}) = \frac{1}{a_{i+1}\sqrt{a_i+a_{i+1}}} f'_1\qty(t_{j'})
+u'_{iN}(x_{i+1, j'}) = \frac{1}{a_{i+1}\sqrt{a_i+a_{i+1}}} f'_1\qty(t_{j'})~.
 \end{equation}
 注意 $u'_{iN}$ 在 $x_{iN}$ 处的左右导数不相等。
 
@@ -85,29 +85,29 @@ u'_{iN}(x_{i+1, j'}) = \frac{1}{a_{i+1}\sqrt{a_i+a_{i+1}}} f'_1\qty(t_{j'})
 K_{(im), (in)} &=  \frac12 \int_{x_{i1}}^{x_{iN}} u'_{im}(x) u'_{in}(x) \dd{x} \\
 &= \frac12 \sum_k  a_i w_{0k} u'_{im}(x_{ik}) u'_{in}(x_{ik}) \\
 &= \frac{1}{2a_i^2} \sum_k w_{0k} f'_m(t_k) f'_n(t_k)
-\qquad (1 < m \leqslant n < N)
+\qquad (1 < m \leqslant n < N)~.
 } \end{equation}
 再看含 bridge function 的矩阵元
 \begin{equation} \ali{
 K_{(im), (iN)} &= \frac12 \int_{x_{i1}}^{x_{iN}} u'_{im}(x) u'_{iN}(x) \dd{x} \\
 &= \frac{1}{2a_i^{3/2} \sqrt{a_i + a_{i+1}}} \sum_k w_{0k} f'_m(t_k) f'_N(t_k)
-\qquad (1< m < N)
+\qquad (1< m < N)~,
 } \end{equation}
 
 \begin{equation} \ali{
 K_{(iN), (iN)} &= \frac12 \int_{x_{i1}}^{x_{iN}} u'_{iN}(x)^2 \dd{x} + \frac12 \int_{x_{i+1,1}}^{x_{i+1,N}} u'_{i+1,1}(x)^2 \dd{x}\\
-&= \frac{1}{2(a_i + a_{i+1})} \sum_k w_{0k} \qty[\frac{1}{a_i} f'_N(t_k)^2 + \frac{1}{a_{i+1}} f'_1(t_k)^2]
+&= \frac{1}{2(a_i + a_{i+1})} \sum_k w_{0k} \qty[\frac{1}{a_i} f'_N(t_k)^2 + \frac{1}{a_{i+1}} f'_1(t_k)^2]~,
 } \end{equation}
 
 \begin{equation} \ali{
 K_{(iN), (i+1,n)} &= \frac12 \int_{x_{i+1,1}}^{x_{i+1,N}} u'_{i,N}(x) u'_{i+1,n}(x) \dd{x}\\
 &= \frac{1}{2 a_{i+1}^{3/2} \sqrt{a_i + a_{i+1}}} \sum_k w_{0k} f'_1(t_k) f'_n(t_k)
-\qquad (1< n < N)
+\qquad (1< n < N)~,
 } \end{equation}
 
 \begin{equation} \ali{
 K_{(iN), (i+1,N)} &= \frac12 \int_{x_{i+1,1}}^{x_{i+1,N}} u'_{i,N}(x) u'_{i+1,N}(x) \dd{x}\\
-&= \frac{1}{2a_{i+1}\sqrt{(a_i + a_{i+1})(a_{i+1}+a_{i+2})}} \sum_k w_{0k} f'_1(t_k) f'_N(t_k)
+&= \frac{1}{2a_{i+1}\sqrt{(a_i + a_{i+1})(a_{i+1}+a_{i+2})}} \sum_k w_{0k} f'_1(t_k) f'_N(t_k)~.
 } \end{equation}
 
 
