@@ -4,20 +4,44 @@
 \pentry{路径积分（量子力学）\upref{PIntQM}}
 在量子力学或量子场论中，N 点关联函数 $\bra{\Omega}\hat x(t_1)\cdots \hat x(t_n)\ket{\Omega}$ （其中 $\ket{\Omega}$ 为理论的真空，即哈密顿量 $H$ 的基态。）给出了描述理论的一切信息。所以我们经常从关联函数出发来研究我们的理论（无论是量子力学还是场论）。比如我们可以通过计算关联函数来得到系统基态的能量、激发态的能谱、粒子散射的振幅等等。在这一词条中我们将展现如何利用路径积分公式来计算理论的关联函数。
 \subsection{关联函数的路径积分公式}
-\addTODO{从薛定谔绘景到海森堡绘景}
+我们需要知道如何从一个给定的理论得到它的 N 点编时关联函数
+ $\bra{x_f,t_f} T[\hat x(t_1)\cdots \hat x(t_n)]\ket{x_i,t_i}$ 。
+这里初态和末态以及 $\hat x(t_1)\cdots \hat x(t_n)$ 中的时间指标代表它们是\textbf{海森堡绘景}\footnote{薛定谔绘景和海森堡绘景\upref{HsbPic}。}下的态矢量和算符。因此作绘景变换后，利用 $\hat x(t)=e^{iHt}\hat x e^{-iHt}$ 和 $\ket{x_i,t_i}=e^{iHt_i} \ket{x_i}$，可以得到：\textbf{（不妨设 $t_1>t_2>\cdots >t_n$）}
+\begin{equation}
+\begin{aligned}
+\bra{x_f} e^{-iH (t_f-t_1)} \hat x e^{-iH(t_1-t_2)}\cdots \hat x e^{-iH(t_N-t_i)}\ket{x_i}
+\end{aligned}
+\end{equation}
+向其中每个 $\hat x$ 出现的位置处插入完备基
+\begin{equation}
+\begin{aligned}
+\sum_{x_1,x_2,\cdots,x_N}\bra{x_f} e^{-iH (t_f-t_1)} \ket{x_{1}}x_1\bra{x_1} e^{-iH(t_1-t_2)}\ket{x_2}x_2\cdots x_N \bra{x_N} e^{-iH(t_N-t_i)}\ket{x_i}
+\end{aligned}
+\end{equation}
+利用路径积分的公式\autoref{the_PIntQM_1}~\upref{PIntQM}，可以得到
+\begin{equation}
+\begin{aligned}
+&\bra{x_f,t_f} \hat x(t_1)\cdots \hat x(t_n)\ket{x_i,t_i}\quad (t_1>t_2>\cdots >t_n)\\
+&=\sum_{x_1,x_2,\cdots,x_N}x_1x_2\cdots x_N
+\int \mathcal{D}[x]|_{x(t_1)=x_1}^{x(t_f)=x_f} \exp[i\int_{t_1}^{t_f} \dd t L(x(t),\dot x(t))] \cdot \\
+&\quad \int \mathcal{D}[x]|_{x(t_2)=x_2}^{x(t_1)=x_1}
+\exp[i\int_{t_2}^{t_1} \dd t L(x(t),\dot x(t))]
+\cdot \cdots 
+\int \mathcal{D}[x]|_{x(t_i)=x_i}^{x(t_N)=x_N} 
+\exp[i\int_{t_i}^{t_N} \dd t L(x(t),\dot x(t))]\\
+&=\int \mathcal{D}[x]|_{x(t_i)=x_i}^{x(t_f)=x_f} x(t_1)x(t_2)\cdots x(t_N) \exp[i\int_{t_i}^{t_f} \dd t L(x(t),\dot x(t))]
+\end{aligned}
+\end{equation}
+注意我们最后一行得到的这个式子中，任意交换 $t_1,t_2,\cdots t_N$ 对结果都没有影响。也就是说，对于任意的 $t_1,\cdots,t_N$（没有大小关系的约束），该路径积分表达式都等于编时关联函数（将算符按照时间从大到小的顺序排序）的值，因此我们就证明了以下定理：
 
 \begin{theorem}{}
 $\bra{x_f,t_f} T[\hat x(t_1)\cdots \hat x(t_n)]\ket{x_i,t_i}$ 可以用路径积分公式表达为
 \begin{equation}
 \begin{aligned}
         \bra{x_f,t_f} T[\hat x(t_1)\cdots \hat x(t_n)]\ket{x_i,t_i}=
-        \mathcal{N}\int \mathcal{D}[x] x(t_1)\cdots x(t_n) \exp(i S[x,\dot x])~.
+        \mathcal{N}\int \mathcal{D}[x]|_{x(t_i)=x_i}^{x(t_f)=x_f} x(t_1)\cdots x(t_n) \exp(i S[x,\dot x])~.
 \end{aligned}
 \end{equation}
 \end{theorem}
-我们需要知道如何从一个给定的理论得到它的 N 点编时关联函数
- $\bra{x_f,t_f} T[\hat x(t_1)\cdots \hat x(t_n)]\ket{x_i,t_i}$ 。
-这里初态和末态以及 $\hat x(t_1)\cdots \hat x(t_n)$ 中的时间指标代表它们是海森堡绘景下的态矢量和算符。因此作绘景变换后可以得到（不妨设 $t_1>t_2>\cdots t_n$）
-\addTODO{证明}
 \subsection{Gell-Mann-Low 定理}
 \addTODO{证明}

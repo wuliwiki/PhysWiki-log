@@ -1,0 +1,32 @@
+% C 和 C++ 性能优化笔记
+
+\begin{issues}
+\issueDraft
+\end{issues}
+
+\pentry{C++ 基础\upref{Cpp0}}
+
+\subsection{跑分！不要微优化！}
+\begin{itemize}
+\item 除非你在写很多人用的高性能库， 否则不要微优化。
+\item 先做跑分， 找到性能瓶颈。
+\item 通常 90\% 的性能提升空间都集中于 10\% 以下的代码。
+\end{itemize}
+
+
+\subsection{内存管理}
+\begin{itemize}
+\item 使用 workspace 减少内存分配， 参考\upref{Lapack} 的做法。 如果内存占用不是问题， 甚至可以把所有内存分配在程序一开始进行。
+\item 内存池的概念可以了解一下。
+\end{itemize}
+
+\subsection{g++ 和 clang++ 浮点数优化选项}
+\pentry{双精度和四精度浮点数笔记（C++）\upref{FltCpp}}
+\begin{itemize}
+\item \verb|-ffast-math|: enable all of the following
+\item \verb|-fno-math-errno|: Disable setting "errno" after calling math functions.
+\item \verb|-funsafe-math-optimizations|: Allow optimizations that may violate strict IEEE compliance.
+\item \verb|-fno-signed-zeros|: Ignore the signedness of zero, treating both positive and negative zeros as the same.
+\item \verb|-fno-trapping-math|: Assume that floating-point exceptions are not enabled and that no traps will occur.
+\item \verb|-ffinite-math-only|: Assume that arguments and results of mathematical functions are finite, i.e., no NaNs or infinities.
+\end{itemize}

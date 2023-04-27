@@ -24,12 +24,15 @@
 \item 一个 translation unit 中定义的函数要在另一个 translation unit 调用前要先声明（declare）。
 \item 每个 translation unit 编译的时候也不需要有其他 translation unit 存在， 即使调用了其他 translation unit 中定义的函数。
 \item 只有在 link 阶段编译器才会检查一个 o 文件中调用的函数是否能在另一个 o 文件中有定义， 如果没有， link 就会失败。
-\item ODR （one definition rule） 要求一个函数不能在同一个或不同 translation unit 中有重复的定义（definition）。 但重复的声明（declaration） 是允许的。
+\item \textbf{ODR （one definition rule）} 要求一个函数不能在同一个或不同 translation unit 中有重复的定义（definition）， 例如全局变量和函数（包括成员函数）。 但重复的声明（declaration） 是允许的。
 \item inline 函数或变量需要在使用到它的每个 translation unit 中都有一样的定义（所以一般放到头文件中）。 否则即使预先 declare 也会出错。
-\item class 的声明也需要在使用到它的每个 translation unit 中都有一样的定义（所以一般放到头文件中）。
+\item C++17 开始支持 \verb|inline| 的全局变量， 这相当于在一个 TU 中定义， 其他 TU 中声明， 这样就可以在头文件中定义全局变量。
+\item \verb|class| 的声明也需要在使用到它的每个 translation unit 中都有一样的定义（所以一般放到头文件中）。
 \item 任何函数或类的 template 的定义同样也需要在使用到它的每个 translation unit 中都有一样的定义（所以一般放到头文件中）。
 \item \verb|inline| 的含义已经与是否真的 \verb|inline| 几乎无关了， 只是为了避免 ODR 错误的一种手段。
 \item 即使使用了 \verb|inline|， 同一个 translation unit 中也不可以出现两个同样的定义。
 \item 如果一个函数调用的函数在它之后定义， 则需要将 declaration 放在它前面。
 \item 所以编译时若提示找不到某个函数， 一定要注意是 compile 过程中没找到还是 link 过程中没找到。 如果是后者可能是没有 link 到适当的库（\verb|-l| 选项）。 无论是静态还是动态库， 就相当于是编译好的 .o 文件打包好\upref{gppLib}。
+\item 另一个避免 ODR 的方法是用 \verb|static| 关键词让其具有 \textbf{internal linkage}。 这样它就只在当前的 TU 中生效， linker 看不见它。 这样就可以在不同 TU 中给同名函数或变量用不同的定义。 这（有点）相当于不用 \verb|static|， 但命名成不同的变量或函数。 如果制作成 \verb|.a| 或者 \verb|.so| 库\upref{gppLib}， 使用者同样也不能用它们。
+\item \verb|const| 的全局变量可以放在头文件中， 同样具有 local linkage， 在每个 TU 中都有一个独立的对象， 不违反 ODR。
 \end{itemize}

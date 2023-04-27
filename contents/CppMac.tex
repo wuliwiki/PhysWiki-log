@@ -48,8 +48,6 @@
 \item 如果宏函数的参数也是宏， 那么会先对参数的宏进行展开（但未必会完全展开)， 然后再代入宏函数的函数体中。
 \item 多加一层 trivial 的宏函数有助于让作为参数的宏先完全展开： 例如 \verb|#define FOO(x) BAR(x)|， \verb|#define BAR(x) #x|。 那么 \verb|BAR(1+1)| 就是 \verb|"1+1"|， 但是 \verb|FOO(1+1)| 就是 \verb|"2"|。
 \item \verb|#宏| 只能用于宏参数前面， 用于其他宏名， 更不能直接在宏定义外面用。 一个常用的宏函数是 \verb|#define STRINGIFY(x) #x|
-\end{itemize}
-
 \begin{lstlisting}[language=cpp]
 #include <iostream>
 
@@ -66,3 +64,5 @@ int main()
 	cout << STRINGIFY2(ITEM) << endl; // R"(ITEM wi383uk33 "abcde)"
 }
 \end{lstlisting}
+\item \verb|##| 可以用于拼接代码（两边可以有或没有空格）例如 \verb|#define MY_VAR(x) ab ## x ## cde|。 调用 \verb|MY_VAR(2)| 展开为 \verb|ab2cde|。
+\end{itemize}

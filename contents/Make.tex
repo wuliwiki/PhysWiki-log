@@ -12,11 +12,12 @@
 \item 使用 \verb|make| 命令是可以选择使用多线程， 例如 \verb|make -j4| 使用 4 线程。 也可以 \verb|make -j`getconf _NPROCESSORS_ONLN`| 自动设置为 cpu 的数量。
 \item 要指定 Makefile 文件， 用 \verb|make -f 文件|
 \item 要显示详细的推导信息， 用 \verb|make --debug=v|
-\item 突然发现， rule 的 “:” 前面不可以有空格 ？
 \item rule 的第一行用于声明什么文件取决于什么文件， 剩下的行声明用什么命令去更新。
+\item 如果一个目标已经有了一个 rule， 也可以另外写一些没有 recipe 的 rule 去添加额外的依赖。 注意 recipe 只能有一个。
 \item \verb|:| 后面的文件会按照顺序更新， 而且只会更新一次， 若以如果更新第二个文件的时候第一个文件被删掉也不会出错。
 \item \verb|:| 后面可以有 phony target， 比如说 \verb|make clean| 中的 \verb|clean|
 \item \verb|$(var)| 和 \verb|${var}| 是完全等效的， 在双引号内也可以替换。 在 rule 的命令中也可以替换。
+\item 赋值有两种， \verb|var1 = $(...)| 可以延迟展开， 也就是说使用每次 \verb|$(var1)| 时会重新求一次 \verb|$(...)|。 如果用 \verb|var1 := $(...)|， 那么会马上对此时的 \verb|$(...)| 展开， 何时使用 \verb|$(var1)| 都不受其他因素影响。 如果等号右边没有变量， 那么两种赋值等效。
 \item 如果要在 rule 的命令中使用 bash 的变量而不是 Makefile 的变量， 要把 \verb|$| escape 成 \verb|$$|。 如 \verb|echo $${var}|， 此时传给 bash 的命令就是 \verb|echo ${var}|。
 \item 判断句如下， 注意第二行前面是空格而不是 tab。
 \begin{lstlisting}[language=makefile]
@@ -40,7 +41,7 @@ goal: file1 file2 ...
 \item 如果没有 goal 的话， default goal 就是第一个开头不为 “.” 的 target。 剩下的 rule 的顺序应该可以随意
 任何一个被依赖的文件改变了， 或者它们依赖的文件改变了， 就会执行 command。 make 并不知道 command 的含义。 只是把它传给 shell 来执行。
 \item implicit rules 大概就是可以仅声明 “A: B”， 由自定义的命令或者 make 默认的命令来生成 “A”。 implicit rule 中的 dependency 是至少有这些 dependency， 而不是只能有这些 dependency。
-\item “MAKEFLAGS = -r” 大概是用来取消默认 implicit rules， 包括所有后缀名识别
+\item \verb|MAKEFLAGS = -r| 大概是用来取消默认 implicit rules， 包括所有后缀名识别
 \item 老的 suffix rule 和 implicit rules 的功能差不多， 现在已经过时了， 应该用 implicit rule。 一个例子如
 \begin{lstlisting}[language=makefile]
 .f90.o:
@@ -52,7 +53,8 @@ file1.o: file1.f90 file2.o file3.o
 \end{lstlisting}
 那么应该会执行 \verb|gfortran -c file1.f90|。 另外， 如果 “file2.o” 或 “file3.o” 被更新了， 这条命令应该也会再执行一次。
 \item \verb|$^| 列出所有的 prerequisites (“:” 右边的内容)
-\item \verb|$(shell ...)| 可以执行 shell 命令， 如 \verb|$(shell echo *.f90)| 可以在当前位置列出所有 “.f90” 文件。
+\item \verb|$(shell ...)| 可以执行 shell 命令并把命令行输出替换到当前未知， 如 \verb|$(shell echo *.f90)| 可以在当前位置列出所有 “.f90” 文件。 如果命令太长可以用 \verb|\| 换行。 注意输出中的换行符会替换为空格。
+\item 如果只是想在非 recipe 中执行某个 shell 命令并丢弃输出， 那么用 \verb|没用的变量 := $(shell 命令)|。  如果要把结果也输出到命令行， 再用 \verb|$(info 变量)| 即可。 赋值一定要有， 要不然就相当于把输出的内容直接插入到 Makefile 中造成语法错误。 另外赋值一定要用 \verb|:=| 千万不能用 \verb|=|， 前者立即展开 \verb|$(...)|， 后者只有在 \verb|没用的变量| 被使用时才展开。
 \item \verb|$@| 大概就是 target file （如果 “:” 左边只有一个文件的话）
 \item 如果在 rule 的命令中用 \verb|source 脚本| 会出错， 因为默认 shell 是 \verb|/bin/sh|。 可以用 \verb|. 脚本| 等效替代。 也可以用 \verb|SHELL := /bin/bash|。
 \item 在 rule 的命令中用 \verb|: 要显示的内容| 可以在命令行显示内容。 其中 \verb|: 命令| 不做任何事情。
@@ -60,7 +62,6 @@ file1.o: file1.f90 file2.o file3.o
 \item 在 rule 的命令前面加一个 \verb|@| 就可以不在 std 输出命令的内容。 例如 \verb|@printf "一些信息"| 或者 \verb|@echo '一些信息'|
 \item \verb|Makefile| 的 recipe 中可以再次调用 \verb|make 目标|， 这样可以保证目标按顺序运行， 或者 \verb|cd ... && make 目标| 这样可以更改当前目录。
 \item 第一次进入 Makefile 时， \verb|MAKELEVEL| 的值是 0。 如果再次使用 \verb|make| 命令， \verb|MAKELEVEL| 会递增。
-\item 赋值有两种， \verb|var1 = $(var2)| 可以延迟展开， 也就是说使用 \verb|$(var1)| 时， 会带入 \verb|var2| 当下最新的值。 如果用 \verb|var1 := $(var2)|， 那么会马上对此时的 \verb|var2| 求值， 无论以后 \verb|var2| 如何改变 \verb|$(var1)| 都不会变。 如果等号右边没有变量， 那么两种赋值等效。
 \item rule 也可以在条件中定义， 例如
 \begin{lstlisting}[language=makefile]
 ifeq ($(var), val)
@@ -72,8 +73,7 @@ else
 endif
 \end{lstlisting}
 \item \verb|$(error 一些 错误 信息)| 放在 \verb|命令2| 里面可以提示错误。
-\item recipe 中如果一个命令太长， 可以用 \verb|\| 换行， 缩进可以用多个 tab。
-\item \verb|变量 := $(shell 命令)| 可以用于执行某个命令， 然后把输出赋值给某个变量。 如果命令太长也可以用 \verb|\| 换行。 如果要把结果也输出到命令行， 再用 \verb|$(info 变量)| 即可。 但注意命令的所有输出都会拼接成一行。
+\item recipe 中如果一个命令太长， 可以用 \verb|\| 换行， 缩进可以用多个 tab 或者空格都行。
 \item 如果一个 recipe 的\textbf{最后一个} exit code 是非 0， 那么 make 将终止。 linux 的 \verb|false| 命令会主动返回非 0。
 \end{itemize}
 

@@ -1,4 +1,4 @@
-% 双精度和四精度浮点数测试（C++）
+% 双精度和四精度浮点数笔记（C++）
 
 \begin{issues}
 \issueDraft
@@ -7,12 +7,28 @@
 另见 “双精度和变精度浮点数测试（Matlab）\upref{FltMat}”。
 
 \subsubsection{double}
-根据 IEEE 754\footnote{参考 Wikipedia \href{https://en.wikipedia.org/wiki/IEEE_754}{相关页面}。} 标准， 双精度的格式是 1 bit 符号 + 11 bit 指数 + 52 bit 小数（mantissa）。
+\begin{itemize}
+\item 根据 IEEE 754\footnote{参考 Wikipedia \href{https://en.wikipedia.org/wiki/IEEE_754}{相关页面}。} 标准， 双精度的格式是 1 bit 符号 + 11 bit 指数 + 52 bit 小数（mantissa）。
+\item 符号位也用于区分 \verb|0| （也就是 \verb|+0|）和 \verb|-0|， 例如 \verb|1/0, 1/(-0)| 分别得到 \verb|inf, -inf|， 反之亦然。 另外一些函数也对 \verb|-0| 敏感， 例如 \verb|atan2|。
+\item \verb|0 == -0|， \verb|inf == inf|， \verb|-inf == -inf|， \verb|inf * 2 == inf|， \verb|inf * 0 == nan|。
+\item 无论哪种 \verb|nan| 和自身都不相等， 可以用这种方法来判断一个浮点数是否是 \verb|nan|。 也可以用 \verb|isnan()|。
+\end{itemize}
+
+C++ 浮点相关函数：
+\begin{itemize}
+\item \verb|bool signbit(x)| 获取符号位（对于 \verb|-0| 来说， 这不同于 \verb|(x < 0)|）
+\item \verb|ldexp(x, n)| 计算 $x \times 2^n$； 
+\item \verb|double man = frexp(x, &exp2)| 可以拆分 mantissa 和 exp。 其中 \verb|0.5 <= man < 1|； 
+\item \verb|int fpclassify(x)| 可以用来给浮点数归类（返回 \verb|FP_NORMAL, FP_SUBNORMAL, FP_ZERO, FP_INFINITE, FP_NAN| 之一）。 
+\item \verb|bool isfinite(x)| 检查是否是 \verb|FP_NORMAL, FP_SUBNORMAL, FP_ZERO| 之一。
+\item \verb|bool isnormal(x)| 检查 \verb|fpclassify| 是否返回 \verb|FP_NORMAL|。 
+\end{itemize}
+
 
 \subsubsection{ULP}
 \textbf{unit in the last place (ULP)} 就是 mantissa 增加 1 bit 时表示的数增加多少。 这等于 $2^{-52}\times 2^{e}$。 $e$ 是双精度的指数（以 2 为底）。 其中 $2^{-52}$ 一般记为 \verb|eps|。
 
-所以双精度的 mantissa 表示 1 时， 相对精度就是 \verb|eps|， 表示 \verb|1-eps| 时， 相对精度就非常接近 \verb|eps/2|（\textbf{最小相对误差}）。 所以一般来说相对精度在二者之间。 但一个例外就是当绝对值非常小时（小于 \verb|1e-1022| 也就是 $2.225\e{-308}$）， mantissa 的第一 bit 可能并不是 1， 此时相对误差可能会变得很大。
+所以双精度的 mantissa 表示 1 时， 相对精度就是 \verb|eps|， 表示 \verb|1-eps| 时， 相对精度就非常接近 \verb|eps/2|（\textbf{最小相对误差}）。 所以一般来说相对精度在二者之间。 但一个例外就是当绝对值非常小时（小于 \verb|1e-1022| 也就是 $2.225\e{-308}$）， 也就是 \textbf{subnormal}， mantissa 的第一 bit 可能并不是默认的 1， 此时相对误差可能会变得很大。
 
 \subsubsection{需要多少位十进制数}
 需要多少位十进制数可以通过四舍五入精确表示任意的双精度数呢？ $N$ 位有效数字的十进制数的相对误差介于 $10^{-N}$ （前几位是 999... 时）和 $10^{-N+1}$ （前几位是 1000... 时）之间。 所以为了满足 \verb|eps/2|（$1.11\e{-16}$） 的相对误差， \textbf{最多需要 17 位有效数字}。
@@ -55,11 +71,10 @@ precise val    = 1.4142135623730950488...
 \end{lstlisting}
 第一位 0 说明是正数， 1 是负数。 接下来 11 bit 先看成 unsigned， 然后再减 $2^{10}-1 = 1023$， 这里指数 \verb|10000000010| 表示 $1026-1023 = 3$， 于是指数项为 $2^{3} = 8$。 所以要表示 10， 小数项应该是 $10/8 = 1+1/4$。 第 13 bit 表示 1/2， 14 bit 表示 1/4， 所以第 14 bit 是 1， 后面的小数全是零。 另外， 由于 intel 的 x86 和 x86-64\upref{x86} 都使用 little endian， 所以在内存中实际上 byte 的顺序是相反的。
 
-理论上指数部分可以表示 $-1023$ 到 $1024$ 之间的数， 但首尾两个数有特殊用途， 所以只能表示 $-1022$ 到 $1023$。 当指数为 $-1023$ 时， 仍然相当于指数为 $-1022$ 但小数部分前面不加 1。 当指数为 $1024$ 时， 表示 \verb|inf|（要求小数部分都是零， 正负号仍然有效）或者 \verb|nan| （\verb|0b1...| 表示安静的 \verb|qNaN|， \verb|0b0..1..| 表示会发错误信号的 \verb|sNaN|）。
+理论上指数部分可以表示 $-1023$ 到 $1024$ 之间的数， 但首尾两个数有特殊用途， 所以只能表示 $-1022$ 到 $1023$。 当指数为 $-1023$ 时， 仍然相当于指数为 $-1022$ 但小数部分前面不加 1（如果小数也都是零， 那就表示 0， 所以 \verb|0| 除了第一 bit 其他都必须是 0）。 当指数为 $1024$ 时， 表示 \verb|inf|（要求小数部分都是零， 正负号仍然有效）或者 \verb|nan| （\verb|0b1...| 表示安静的 \verb|qNaN|， \verb|0b0..1..| 表示会发错误信号的 \verb|sNaN|）。
 
 双精度类型可以表示 \verb|-2e53| 到 \verb|2e53| 的每一个整数， 更小或更大的整数有的也可以表示（事实上此时只可以表示整数）， 只是不连续。
 
-另外最大和最小的正 double 为
 \begin{lstlisting}[language=none]
 std::numeric_limits<double>::max() = 1.797693135e+308
 01111111 11101111 11111111 11111111 11111111 11111111 11111111 11111111
