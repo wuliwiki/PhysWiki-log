@@ -1,0 +1,254 @@
+% SQL 入门语法
+
+\begin{issues}
+\issueDraft
+\end{issues}
+
+\subsection{SQL 基本语法}
+
+\subsubsection{SQL 库操作}
+\subsubsection{1.结构创建}
+\begin{itemize}
+\item CREATE 结构类型 结构名 结构描述；
+
+\end{itemize}
+\subsubsection{2.显示结构}
+\begin{itemize}
+\item 显示结构： show 结构类型（复数）
+\item 显示结构创建详情： show create 结构类型 结构名；
+\end{itemize}
+\subsubsection{3.数据操作（数据表）}
+\begin{itemize}
+\item 新增数据： INSERT INTO 表名 VALUES
+\begin{lstlisting}[language=bash]
+例如：向学生表中插入学生数据：张三 231119001  男 23
+INSERT INTO students
+VALUES
+（'张三','231119001','男','北京'）；
+\end{lstlisting}
+
+\item 查看数据：SELECT FORM 表名 
+\begin{lstlisting}[language=bash]
+例如：从学生表查询名字为张三的学号(具体查询)
+SElECT ID
+FROM students
+WHERE name='张三'；
+
+
+例如：从学生表查询姓名为张的学号(模糊查询)
+// % 表示任意多个字符
+//_ 表示任意多个任意字符
+
+SELECT ID
+FROM students
+WHERE  name like '张%' ;
+或者
+SELECT ID
+FROM students
+WHERE  name like '张_' ;
+\end{lstlisting}
+
+
+\item 更新数据： UPDATE 表名 SET
+\begin{lstlisting}[language=bash]
+例如：在学生表中，将学生张三的id改为231119002
+UPDATE students 
+SET id='231119002'
+WHERE name='张三';
+
+
+
+另外，SET后面除了带文本之外，还可以是数学表达式
+
+例如：将学生id为231119002的学生对应的年龄加2
+UPDATE students 
+SET age=age+2
+WHERE id='231119019'
+\end{lstlisting}
+
+\item 删除数据：DELETE FROM 表名
+\begin{lstlisting}[language=bash]
+例如：删除students表中名字为张三的信息
+
+DELETE FROM students 
+WHERE name='张三';
+\end{lstlisting}
+
+
+\end{itemize}
+
+\subsection{数据库操作}
+\subsubsection{创建数据库：根据项目需求创建一个存储数据库的仓库}
+\begin{itemize}
+
+\item 使用create database 数据库名字创建
+\item create database 数据库名字
+\begin{lstlisting}[language=bash]
+create database db_1
+\end{lstlisting}
+
+\end{itemize}
+\begin{enumerate}
+\item 数据库的创建是存储数据库的基础，数据库的创建通常是一次性的
+\item 创建数据库的语法包含几个部分
+\begin{itemize}
+\item 关键字 create database
+\item 数据库名字：自定义名字
+\item  数字，字母和下划线组成
+\item 数字不能开头
+\end{itemize}
+\item  创建好的数据库可以在数据存储指定地点看到
+
+
+
+\end{enumerate}
+
+\subsubsection{显示数据库：通过客户端指令来查看已有的数据库}
+\begin{enumerate}
+\item 数据库的查看是根据用户权限限定的
+\item 数据库的查看分为两种查看方式：
+\begin{itemize}
+\item 查看全部数据库：show database；
+\begin{lstlisting}[language=bash]
+show  database;
+\end{lstlisting}
+\item 查看数据库创建指令：show crete database 数据库名字；
+\begin{lstlisting}[language=bash]
+show crete database db_1;
+\end{lstlisting}
+\end{itemize}
+
+\end{enumerate}
+
+
+\subsubsection{使用数据库}
+\begin{enumerate}
+\item 使用数据库的指令是：use 数据库名字；
+\begin{lstlisting}[language=bash]
+use db_1;
+\end{lstlisting}
+\item 使用数据库的目标
+\begin{itemize}
+\item 让系统知道后续SQL指令都是针对当前选择的数据库
+\item  简化后续SQL指令的复杂度
+\end{itemize}
+
+\end{enumerate}
+
+\subsubsection{修改数据库：修改数据库的相关库选项}
+\begin{enumerate}
+\item 数据库名字不可修改
+\begin{itemize}
+\item 先新增
+\item 后迁移
+\item 最后删除
+\end{itemize}
+\item 数据库修改分为两个部分
+\begin{itemize}
+\item 字符集
+\item 校对集
+\end{itemize}
+\item 数据库修改指令：alter database数据库名字
+\end{enumerate}
+\subsubsection{删除数据库：将当前已有数据库删除}
+\begin{itemize}
+\item 删除数据库会删除数据库内所有的表和数据
+\item 删除数据库操作要慎重（删前备份）
+\item 删除数据库后，对应的存储文件夹就会消失
+\item 删除语法：drop database 数据库名字
+\begin{lstlisting}[language=bash]
+drop database db_1
+\end{lstlisting}
+\end{itemize}
+
+\subsection{数据定义}
+SQL的数据定义语句
+
+
+
+
+
+\subsubsection{模式的定义和删除}
+\begin{enumerate}
+\item 定义模式
+\begin{lstlisting}[language=bash]
+CREATE SCHEMA <模式名> AUTHORIZATION <用户名>；
+\end{lstlisting}
+如果没有指定 <模式名> ，那么 <模式名> 隐含为 <用户名>。
+
+\begin{lstlisting}[language=bash]
+例如：为用户zhang 创建一个模式 test，并且在其中定义一个表tab1
+CREATE SCHEMA test AUTHORIZATION zhang
+CREATE TABLE tab1(
+    COL1 SMALLINT,
+    COL2 INT,
+    COL3 CHAR(20)
+);
+
+\end{lstlisting}
+\item 删除模式
+\begin{lstlisting}[language=bash]
+DROP SCHEMA <模式名><CASCADE|RESTRICT>;
+其中 CASCADE和RESTRICT两者必选其一。
+\end{lstlisting}
+\end{enumerate}
+\subsubsection{基本表的定义，删除和修改}
+\begin{enumerate}
+\item 定义基本表
+\begin{lstlisting}[language=bash]
+CREATE TABLE <表名> （
+<列名><数据类型>[列级完整性约束条件]
+[,<列名><数据类型>[列级完整性约束条件]]
+...
+[,<表级完整性约束条件>]
+）;
+\end{lstlisting}
+\begin{lstlisting}[language=bash]
+例如：建立一个”学生”表Student
+CREATE TABLE Student(
+    Sno CHAR(9) PRIMARY KEY, /*列级完整性约束条件，Sno是主码*/
+    Sname CHAR(20)  UNIQUE,  /*Sname取唯一值*/ 
+    Ssex CHAR(2),
+    Sage SMALLINT,
+    Sdept CHAR(20)
+);
+
+\end{lstlisting}
+\item 数据类型
+\begin{table}[ht]
+\centering
+\caption{数据类型}\label{tab_SQLgrm}
+\begin{tabular}{|c|c|}
+\hline
+数据类型 & 含义 \\
+\hline
+CHAR(n),CHARACTER(n) & 长度为n的定长字符串\\
+\hline
+VARCHAR(n),CHARACTERVARYING(n) & 最大长度为n的边长字符串 \\
+\hline
+CLOB& 字符串大对象\\
+\hline
+BLOB & 二进制大对象 \\
+\hline
+INT,INTEGER & 长整型（4字节） \\
+\hline
+SMALLINT & 短整型（2字节） \\
+\hline
+BIGINT& 大整数（8字节） \\
+\hline
+\end{tabular}
+\end{table}
+\item 修改基本表
+\begin{lstlisting}[language=bash]
+ALTER TABLE<表明>
+      //ADD子句用于增加新列，新的列级完整性约束条件和新的表级完整性约束条件
+[ADD[COLUMN]<新列名><数据类型>[完整性约束]
+[ADD<表级完整性约束>]
+[DROP[COLUMN]<列名>[CASCADE|RESTRICT]]
+[DROP CONSTRAINT <完整性约束名>[RESTRICT|CASCADE]]
+[ALTER COLUMN<列名><数据类型>];
+\end{lstlisting}
+\end{enumerate}
+\subsubsection{索引的建立和删除}
+\subsubsection{数据字典}
+
