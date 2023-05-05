@@ -28,7 +28,6 @@
 \item 每次打开新的 shell，\verb`/etc/bashrc` 和 \verb`~/.bashrc` 文件都会被执行
 \item \verb|history| 命令可以输出最近 1000 条输入的命令
 \item 用 \verb`!数字` 可以重新输入第 \verb`数字` 条历史命令
-\item \verb`/etc/passwd` 文件中记录了系统的所有 user
 \item \verb`df` 用于查看磁盘空间, \verb`-h` 选项可以显示 \verb`Mb`, \verb`Gb` 等， \verb|-T| 选项可以增加显示文件系统类型.
 \item \verb`du /some/path` 用于查看指定目录中所有子文件夹的大小, \verb`-a` 选项可以显示文件夹和文件. \verb`--max-depth=N` is used to control the level of subfolders to display, \verb`-h` is for human readable file size (\verb`Mb`, \verb`Gb`, etc)
 \item \verb|du -hd 0| 用于查看当前目录的大小（不会跟随 symlink， 但是会包括 mount）。 \verb|-h| 是 human readable， \verb|-d| 是 depth。 \verb|-x| 不会计入被 mount 的文件夹。
@@ -204,25 +203,30 @@
 \subsection{账户与权限}
 \begin{itemize}
 \item \verb`sudo` (super user do) 加在命令前可以获得管理员权限, \verb`su` (super user) 可以把以下所有操作改为管理员权限 (不建议常用)。 如果 ubuntu 中不允许 \verb|su|， 那么就用 \verb|sudo -i| 也是一样的。
-\item \verb`su <usr_name>` 可以临时改变登录的身份， \verb|sudo -i| 或者 \verb|su| 可以持续管理员身份。
+\item \verb`su 用户名` 可以临时改变登录的身份， \verb|sudo -i| 或者 \verb|su| 可以持续管理员身份。
 \item 使用 \verb|sudo| 以后， 命令的执行者就会临时变为 \verb|root|， 一些 config 文件也会使用 \verb|/root/| 文件夹中的而不是 \verb|/home/用户名| 中的， 例如 \verb|/root/.ssh/config|。
 \item \verb`sudo` 的密码是用户密码, 而 \verb`su` 的密码是 root 密码, 后者的权限更高
-\item \verb`useradd -m` (给新用户创建 home 目录) \verb`-g users` (设置用户组为 users) \verb`<username>`
+\item \verb`useradd [-m] [-g 用户组] [-U] [-s /bin/bash] 用户名`。 其中 \verb|-m| 给新用户创建 home 目录， \verb|-U| 选项创建和用户名相同的用户组， \verb|-s| 指定 shell。
 \item \verb|adduser 用户名| 可以用互动的方式创建用户。
-\item \verb`passwd <username>` 可以修改密码
-\item \verb`userdel <username>` 删除账户
+\item \verb`passwd 用户名` 可以修改密码
+\item \verb`userdel 用户名` 删除账户
 \item \verb`users` 命令显示目前所有登录的用户, \verb`who` 命令可以显示更详细的信息
+\item \verb`/etc/passwd` 文件中记录了系统的所有 user， 格式为 \verb|用户名:密码(x代表已加密):用户ID:组ID:用户的可选信息(姓名电话等):HOME文件夹:默认shell|。 通常 1000 以下的用户 ID 是系统用户。
+\item \verb|/etc/group| 文件记录了所有用户组的信息， 格式为 \verb|用户名:密码:组ID:组员|
+\item 一个用户只能有一个 primary group， 就是 \verb|/etc/passwd| 中的。 也可以有多个 secondary group， 就是 \verb|/etc/group| 中的每行最后一个信息
+\item \verb|chgrp| 可以改变文件的组
+\item \verb|groupadd 组名| 新建用户组
+\item \verb`groupdel 组名` 移除用户组
+\item \verb`gpasswd -a 用户名 组名` 可以在组内新增用户
 \item \verb`ls -l` 最左边第一个字符是 filetype， 第一列（之后三个字符）是 owner 的权限, 第二列是 group 的权限, 第三列是其他人的权限, \verb`r (read) w (write) x (execute)`。 filetype 可以是 \verb|–|： 常规文件， \verb|d| 目录， \verb|l| symbolic link， 还有一些其他不常见的，详见\href{https://linuxconfig.org/identifying-file-types-in-linux}{这里}。
 \item \verb`ls` 选项： \verb`-a` (all)(显示隐藏) \verb`-m` (挤到一起) \verb`-1` 显示为一列 \verb`-v` 按照数字大小排序
-\item \verb`chown <user> <files>` 修改文件的所有者， \verb|-R| 对文件夹 recursive
+\item \verb`chown 用户名 文件` 修改文件的所有者， \verb|-R| 对文件夹 recursive
 \item \verb|ls -l| 中第二列是 “link 的数量”， 比较鸡肋， 普通文件和软链是 1， 文件夹是 2。
-\item \verb`chmod <权限> <file>` 修改文件的权限. <权限> 是三位8进制数, 每一位是 x(1),w(2),r(4)之和. 常见的例子： \verb|7| 代表 \verb|rwx|， \verb|6| 代表 \verb|rw|， \verb|4| 代表 \verb|r|
-\item \verb`chmod <权限> -R <文件夹>` 可以修改文件夹和所有内部子文件夹和子文件的权限。 千万注意不要为了方便把一些系统文件夹甚至 \verb|/home/用户| 文件夹的设置文件设得太开放， 这可能会影响一些秘钥的自动验证， 尤其是 \verb|ssh| 相关的。
+\item \verb`chmod 权限 文件` 修改文件的权限. <权限> 是三位8进制数, 每一位是 x(1),w(2),r(4)之和. 常见的例子： \verb|7| 代表 \verb|rwx|， \verb|6| 代表 \verb|rw|， \verb|4| 代表 \verb|r|
+\item \verb`chmod 权限 -R 文件夹` 可以修改文件夹和所有内部子文件夹和子文件的权限。 千万注意不要为了方便把一些系统文件夹甚至 \verb|/home/用户| 文件夹的设置文件设得太开放， 这可能会影响一些秘钥的自动验证， 尤其是 \verb|ssh| 相关的。
+\item 注意 \verb|cd| 到某个文件夹中必须要有 \verb|-x| 权限， 即使不执行任何东西。
 \item \verb`groups` 或者 \verb`groups <user>` 可以查看用户所在的组
 \item \verb`id` 可以查看用户的信息 \verb`uid (user id) gid (group id)`
-\item \verb`groupadd <groupname>` 新建用户组
-\item \verb`groupdel <groupname>` 移除用户组
-\item \verb`gpasswd -a <username> <groupname>` 可以在组内新增用户
 \item \verb`vim /etc/group` 可以查看记录 group 信息的文件
 \item \verb`gpasswd -d <username> <groupname>` 可以在组中移除用户
 \item \verb`hostname` 可以显示当前主机的名字. 也可以用环境变量 \verb|HOSTNAME|

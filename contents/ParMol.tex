@@ -1,9 +1,5 @@
 % 摩尔量与偏摩尔量
 
-\begin{issues}
-\issueDraft
-\end{issues}
-
 \pentry{相简介（热力学）\upref{PHS}}
 \footnote{本文参考了朱文涛的《简明物理化学》与Schroeder的《热物理学导论》}
 
@@ -30,9 +26,7 @@ $$U^\alpha = U^\alpha (p^\alpha, T^\alpha, n_1^\alpha,n_2^\alpha,...)~.$$
 $$U = U (p, T, n)~.$$
 由于内能是广延量，因此内能应当与相中物质的量成正比。比如，如果物质的量增多到原来的$4$倍，那么内能也将变为原来的$4$倍。
 $$U(p, T, 4 n) = 4 U (p, T, n)~,$$
-这是广延量的一个非常好的性质：根据齐次方程欧拉定理\footnote{关于这个神奇的定理可以参考\href{https://zhuanlan.zhihu.com/p/61111531}{https://zhuanlan.zhihu.com/p/61111531}(站外链接)}，我们可以将其化为以下形式
-\footnote{严格地论证步骤是基于$U=U(p,T,n)$定义偏摩尔量的微分形式$u = \left( \pdv{U}{n} \right)_{p,T}$ （见下），再从齐次方程欧拉定理论证 $U = n \cdot u $}
-：
+这是广延量的一个非常好的性质，我们可以将其简写为：
 $$U(p, T, n) = n \cdot u (p, T)~.$$
 可见， $u (p, T)$ 不再与相的规模相关，而成为了某种强度量。我们将其定义为\textbf{摩尔内能}，意味着每摩尔物质所具有的内能。摩尔量有时也通过在相应的状态量下加下标$m$表示，例如$U_m$。
 
@@ -104,17 +98,42 @@ $$\mu(T_0,p_1) = \mu(T_0,p_0) + \int_{p_0}^{p_1} \left( \pdv{\mu}{p} \right)_{T_
 \end{exercise}
 
 \subsection{多组分系统：偏摩尔量}
-我们还是以内能为例：
-$$U = U (p, T, n_1, n_2, ...)~.$$
-根据状态量的广延性质，有
+对于一个多组分的均匀热力学系统，其各个热力学量可以由温度 $T$，压强 $p$，各组分的物质的量 $n_1,n_2,\cdots $ 来决定。
+
+以内能为例，一个多元均匀体系的内能可以被表示为一个函数：
+\begin{equation}
+U = U (p, T, n_1, n_2, ...)~.
+\end{equation}
+内能为\textbf{广延量}，它应当具有广延性质。例如，当将整个多元体系复制成 4 份后，所有组分的物质的量都变为原先的 4 倍，那么内能也应当变为原先的 4 倍：
 $$ U (p, T, 4n_1, 4n_2, ...) = 4U (p, T, n_1, n_2, ...)~.$$
 注意这里的“广延性质”与单组份的情况不大一样：只有当所有组分的含量都翻4倍，总的内能才会上升到原来的4倍。
 
-如法炮制，我们可以得到
-$$ U (p, T, n_1, n_2, ...) = \sum_i n_i u_i(p, T, x_1, x_2, ...)~. $$
-其中，每一个 $u_i$被称为该组元的\textsl{偏摩尔内能}，该公式也称偏摩尔量的集合公式。偏摩尔量有时也通过在相应的状态量下加下标$B$或者$m,B$表示，$B$代表物质种类，例如$U_B$。
+更一般地，
+\begin{equation}
+U(p,T,n_1,n_2,\cdots )=\left(\sum_i n_i\right) U(p,T,x_1,x_2,\cdots)
+\end{equation}
+其中 $x_i$ 为各组分所占比例，即 $n_i/\sum_j n_j$，满足 $\sum_i x_i=1$。令 $\sum_i n_i=t$，那么
+\begin{equation}
+U(p,T,n_1,n_2,\cdots)=U(p,T,tx_1,tx_2,\cdots)=t\cdot U(p,T,x_1,x_2,\cdots)
+\end{equation}
+如果我们将上式两边对 $t$ 求偏导，那么由复合函数的偏导、链式法则（多元微积分）\upref{PChain}，可以得到
+\begin{equation}\label{eq_ParMol_1}
+\sum_i x_i \pdv{n_i} U(p,T,n_1,n_2,\cdots )=U(p,T,x_1,x_2,\cdots)
+\end{equation}
+由此引出了偏摩尔内能的定义：
+\begin{definition}{偏摩尔内能}
+\begin{equation}
+u_i(p,T,n_1,n_2,\cdots )\equiv \left(\frac{\partial U(p,T,n_1,\cdots)}{\partial n_i}\right)_{p,T,n_j,j\neq i}
+\end{equation}
+下角标的 $p,T,n_j,j\neq i$ 表示求偏导时固定温度压强以及其他物质的量不变。可以由广延量性质证明，偏摩尔内能只与各组分的浓度 $x_i=n_i/\sum_j n_j$ 有关，即 $u_i(p,T,n_1,n_2,\cdots)=u_i(p,T,x_1,x_2,\cdots)$ 恒成立，也就是说，偏摩尔内能是组分的\textbf{强度量，与相的规模无关}。它只与温度、压强、各组分的浓度有关。
+\end{definition}
+对\autoref{eq_ParMol_1} 两边同乘以 $t=\sum_i n_i$（$n_i=tx_i$），就可以得到
+\begin{equation}\label{eq_ParMol_2}
+U (p, T, n_1, n_2, ...) = \sum_i n_i u_i(p, T, x_1, x_2, ...)~. 
+\end{equation}
+其中，每一个 $u_i$ 为该组元的\textsl{偏摩尔内能}，该公式也称偏摩尔量的\textbf{集合公式}\footnote{在前面我们由偏摩尔量的定义式出发经历了一系列推到得到的该公式 $U=\sum_i n_i u_i$，这实际上正是齐次函数的欧拉定理，“齐次”正对应于广延量的性质。}。偏摩尔量有时也通过在相应的状态量下加下标$B$或者$m,B$表示，$B$代表物质种类，例如$u_B$。
 
-特别要注意的是，相比与摩尔量，偏摩尔量有一些相当独特的性质：
+特别要注意的是，相比于摩尔量，偏摩尔量有一些相当独特的性质：
 \begin{itemize}
 \item 尽管偏摩尔量与相的规模无关，但是\textbf{与相中各物质的比例}有关。当系统中物质比例改变时，偏摩尔量也可能改变。
 \item 某一物质的偏摩尔量与相应纯物质的摩尔量一般\textbf{不相同}。
@@ -126,45 +145,62 @@ $$ U (p, T, n_1, n_2, ...) = \sum_i n_i u_i(p, T, x_1, x_2, ...)~. $$
 $$U = 4 u_{A} +  2 u_B~. $$
 如果系统中具有$8 \Si{mol} A$物质与$4 \Si{mol} B$物质，那么
 $$U = 8 u_A +  4 u_B~.$$
-但是，如果系统中具有$8 \Si{mol} A$物质与$2 \Si{mol} B$物质，由于物质的比例不再是2:1，因此偏摩尔量改变。
-$$U \ne 8 u_A +  2 u_B~.$$
+但是，如果系统中具有$8 \Si{mol} A$物质与$2 \Si{mol} B$物质，由于物质的比例不再是2:1，因此偏摩尔量 $u_A,u_B$ 改变为 $u_A',u_B'$。系统的内能仍有以下公式成立：
+$$U = 8 u_A' +  2 u_B'~.$$
 \end{example}
 
-同理，我们可以定义其他广延量相应的偏摩尔量
-$$
+同理，我们可以定义其他\textbf{广延量}对应的偏摩尔量，常见的广延量有吉布斯自由能\upref{GibbsG}，熵\upref{Entrop}，体积等，在热力学中它们满足以下基本关系式（不管是在单元体系中还是在多元体系中）
+\begin{equation}\label{eq_ParMol_3}
+\begin{aligned}
+&G=U-TS+pV\\
+&\dd G=-S\dd T+V\dd p+\cdots\\
+&\Rightarrow S=-\left(\pdv{G}{T}\right)_{p,n_i},\quad V=\left(\pdv{G}{p}\right)_{T,n_i}
+\end{aligned}
+\end{equation}
+这些广延量都是 $p,T,n_1,n_2,\cdots$ 的函数，可以对 $n_i$ 求偏导得到各组分的偏摩尔量：
+\begin{definition}{偏摩尔量}
+\begin{equation}\label{eq_ParMol_4}
+\begin{aligned}
+u_i(p,T,x_1,x_2,\cdots )\equiv \left(\frac{\partial U(p,T,n_1,\cdots)}{\partial n_i}\right)_{p,T,n_j,j\neq i}\\
+\mu_i(p,T,x_1,x_2,\cdots )\equiv \left(\frac{\partial G(p,T,n_1,\cdots)}{\partial n_i}\right)_{p,T,n_j,j\neq i}\\
+v_i(p,T,x_1,x_2,\cdots )\equiv \left(\frac{\partial V(p,T,n_1,\cdots)}{\partial n_i}\right)_{p,T,n_j,j\neq i}\\
+s_i(p,T,x_1,x_2,\cdots )\equiv \left(\frac{\partial S(p,T,n_1,\cdots)}{\partial n_i}\right)_{p,T,n_j,j\neq i}
+\end{aligned}
+\end{equation}
+\end{definition}
+它们也满足类似于\autoref{eq_ParMol_2} 的公式，可以简单地记为
+\begin{equation}
 \begin{aligned}
 V &= \sum_i  n_i \cdot v_i ~,\\
 G &= \sum_i  n_i \cdot \mu_i~.\\
+S &= \sum_i  n_i \cdot s_i~.\\
 &...\\
 \end{aligned}
-$$
-
-\subsubsection{偏摩尔量的微分定义}
-我们还是以内能为例：
-$$ U (p, T, n_1, n_2, ...) = \sum_i n_i u_i(p, T, x_1, x_2, ...)~. $$
-对集合公式求关于$n_i$的偏导数\footnote{这个做法是不严谨的，因为$x_i$其实也是隐含$n_i$的，但阴差阳错间竟能得到正确结果。严谨的做法是先从$U=U(p,T,n_1, n_2,...)$定义偏摩尔量为 ${u_i} = \left(\pdv{U}{n_i}\right)_{p,T,n_j, j \neq i}$，然后再根据齐次方程欧拉定理得到上述的集合公式 $ U = \sum_i n_i u_i $}，
-$$
-{u_i} = \left(\pdv{U}{n_i}\right)_{p,T,n_j, j \neq i} ~.
-$$
-这告诉我们偏摩尔量的另一层含义：$u_i \dd n_i$ 是某一状态下保持$(p,T)$与其余物质的量不变，再往系统中加入少量物质i，系统内能的变化。
+\end{equation}
+\subsubsection{多元系的热力学全微分关系式}
+以 Gibbs 能 $G(p,T,n_1,n_2,\cdots)$ 为例，根据熵 $S$，体积 $V$ 的关系式\autoref{eq_ParMol_3} 和偏摩尔量 $\mu_i$ 的公式\autoref{eq_ParMol_4} ，可以得到 $G$ 的全微分表达式
+\begin{equation}\label{eq_ParMol_5}
+\begin{aligned}
+\dd G=-S\dd T+V\dd p+\sum_i \mu_i(p,T,x_1,x_2,\cdots) \dd n_i
+\end{aligned}
+\end{equation}
+类似地，内能的全微分公式为
+\begin{equation}
+\dd U=T\dd S-p\dd V+\sum_i \mu_i\dd n_i
+\end{equation}
+一个有趣的事实是，对 $G=\sum_i n_i\cdot \mu_i$ 求全微分还可以得到另一个全微分公式
+\begin{equation}\label{eq_ParMol_6}
+\dd G=\sum_i n_i \dd \mu_i + \mu_i \dd n_i
+\end{equation}
+联立\autoref{eq_ParMol_5} 和\autoref{eq_ParMol_6} 可以得到\textbf{吉布斯关系}：
+\begin{theorem}{吉布斯关系}
+\begin{equation}\label{eq_ParMol_7}
+S\dd T-V\dd p+\sum_i n_i\dd \mu_i=0
+\end{equation}
+\end{theorem}
+注意到 $T,p,\mu_1,\mu_2,\cdots$ 多元体系的\textbf{强度量}，它们只与各组分的浓度 $x_1,x_2,\cdots $ 有关，与相的规模无关。因此吉布斯关系\autoref{eq_ParMol_7} 实际上给出了各个强度量之间的依赖关系：$T,p,\mu_1,\cdots$ 这些强度量并不是可互相独立变化的自由度，而是被\autoref{eq_ParMol_7} 约束在一个高维空间的超曲面上。假如共有 $m$ 个组分，则总共 $m+2$ 个强度量，而自由度数为 $m+1$。
 
 \subsubsection{偏摩尔量与摩尔量的关系}
 我们在上文中已经提到，偏摩尔量$\mu_i$与相应纯物质的摩尔量$\mu_i^*$是不同的。那么他们之间到底是怎么联系的呢？我们一直避而不谈这个问题的原因在于，这个问题\textsl{太复杂了}，事实上这并不是经典热力学能有效处理的。
 
 不过，如果我们认为多元相是一种理想混合物\upref{IMCPTV}，那么我们就能联系偏摩尔量与摩尔量。\textsl{尽管事实上没什么物质混合得如此理想。}
-% \subsubsection{Gibbs-Duhem 公式}
-% $$
-% \sum n_B \dd Z_B = 0
-% $$
-
-% 推导：对集合公式两端求导，$dZ=\sum n_B \dd Z_B + \sum {Z_B}  \dd n_B$，即得证。
-
-% 特别地，对于二元混合物，
-% $$
-% n_1 \dd {Z_1} = - n_2 \dd {Z_2}
-% $$
-% 或
-% $$
-% \dd {Z_1} = -\frac{n_2}{n_1} \dd {Z_2}
-% $$
-

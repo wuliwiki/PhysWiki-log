@@ -39,9 +39,48 @@ $\bra{x_f,t_f} T[\hat x(t_1)\cdots \hat x(t_n)]\ket{x_i,t_i}$ 可以用路径积
 \begin{equation}
 \begin{aligned}
         \bra{x_f,t_f} T[\hat x(t_1)\cdots \hat x(t_n)]\ket{x_i,t_i}=
-        \mathcal{N}\int \mathcal{D}[x]|_{x(t_i)=x_i}^{x(t_f)=x_f} x(t_1)\cdots x(t_n) \exp(i S[x,\dot x])~.
+        \mathcal{N}\int \mathcal{D}[x]|_{x(t_i)=x_i}^{x(t_f)=x_f} x(t_1)\cdots x(t_n) \exp(i S[x,\dot x])
 \end{aligned}
 \end{equation}
 \end{theorem}
 \subsection{Gell-Mann-Low 定理}
-\addTODO{证明}
+将海森堡绘景的态矢量 $\ket{x,t}$ 变换到薛定谔绘景下得到
+\begin{equation}
+\ket{x,t}=e^{iHt}\ket{x}
+\end{equation}
+插入哈密顿量的本征矢构成的完备基
+\begin{equation}
+\begin{aligned}
+\ket{x,t}&=\sum_n e^{iHt}\ket{n}\langle n|x\rangle=
+\sum_n e^{iE_n t}\ket{n}\langle n|x\rangle\\
+&=e^{iE_0t}\left[\ket{\Omega}\langle\Omega|x\rangle+\sum_{n\neq 0}e^{-i(E_n-E_0)t}\ket{n}\langle n|x\rangle\right]
+\end{aligned}
+\end{equation}
+其中 $\ket{\Omega}$ 为基态，即能量最低的真空态。取 $t=-T\rightarrow -\infty(1-i\epsilon)$ 的极限，则 $e^{-i(E_n-E_0) t}$ 会被指数级地压低。因此可以得到以下定理：
+\begin{theorem}{Gell-Mann-Low 定理}
+$\lim\limits_{T\rightarrow \infty(1-i\epsilon)}\ket{x,t=-T}=
+    \lim\limits_{T\rightarrow \infty(1-i\epsilon)}
+    e^{-iE_0T}\ket{\Omega}\langle \Omega|x\rangle$，其中 $E_0$ 是基态能量（这里我们假定了系统只有唯一的真空态 $\ket \Omega$，并且与第一激发态之间有能隙。）。
+\end{theorem}
+为了计算关联函数 $\bra{x_f}e^{-iHT}\ket{x_i}$ 的路径积分表达式，$T\rightarrow \infty(1-i\epsilon)$ 所带的因子 $(1-i\epsilon)$ 可以手动地转移到 $H$ 上。
+这样在前面的推导过程中，路径积分表达式的收敛性也得到了保证。利用这个引理，我们可以将关联函数的左矢和右矢改为理论的真空态：
+\begin{equation}
+\begin{aligned}
+&\lim\limits_{T\rightarrow \infty(1-i\epsilon)}
+\bra{x_f,T} T[\hat x(t_1)\cdots \hat x(t_n)]\ket{x_i,-T}=
+e^{-2iE_0T}\langle x_f | \Omega \rangle\langle\Omega|x_i\rangle\bra{\Omega} T[\hat x(t_1)\cdots \hat x(t_n)]\ket{\Omega}\\
+&=\mathcal{N}\int \mathcal{D}[x] x(t_1)\cdots x(t_n) \exp(i S[x,\dot x])\\
+&\lim\limits_{T\rightarrow \infty(1-i\epsilon)}
+\langle x_f,T| x_i,-T\rangle=e^{-2iE_0T}\langle x_f | \Omega \rangle\langle\Omega|x_i\rangle\langle\Omega|\Omega\rangle\\
+&=\mathcal{N}\int \mathcal{D}[x] \exp(i S[x,\dot x])
+\end{aligned}
+\end{equation}
+将上面两个公式相除，就可以得到
+\begin{theorem}{}
+N 点编时关联函数的路径积分公式为
+\begin{equation}
+\bra{\Omega} T[\hat x(t_1)\cdots \hat x(t_n)]\ket{\Omega}
+=\frac{\int \mathcal{D}[x] x(t_1)\cdots x(t_n) \exp(i S[x,\dot x])}
+{\int \mathcal{D}[x]\exp(i S[x,\dot x])}
+\end{equation}
+\end{theorem}

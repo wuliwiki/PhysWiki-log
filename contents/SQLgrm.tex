@@ -18,24 +18,174 @@
 \item 显示结构创建详情： show create 结构类型 结构名；
 \end{itemize}
 \subsubsection{3.数据操作（数据表）}
+
+
+\subsubsection{插入数据}
 \begin{itemize}
-\item 新增数据： INSERT INTO 表名 VALUES
+\item 插入元组
 \begin{lstlisting}[language=bash]
-例如：向学生表中插入学生数据：张三 231119001  男 23
-INSERT INTO students
-VALUES
-（'张三','231119001','男','北京'）；
+//插入元组的INSERT语句的格式:
+INSERT 
+INTO <表名>[(<属性列1>[,<属性列2>]...)]
+VALUE(<常量1>[,<常量2>]...);
+\end{lstlisting}
+\begin{lstlisting}[language=bash]
+例如：将一个新学生元组（学号：231119001，姓名：张三，性别：男，年龄：18岁）插入到Student表中
+
+INSERT 
+INTO  Student(Sno,Sname，Ssex，Sage)
+VALUES ('231119001','张三'，'男'，'18');
 \end{lstlisting}
 
-\item 查看数据：SELECT FORM 表名 
 \begin{lstlisting}[language=bash]
-例如：从学生表查询名字为张三的学号(具体查询)
-SElECT ID
+例如：对每一个系，求学生的平均年龄，并把结果存入数据库
+
+首先在数据库中建立一个新表，将其中一列存放系名，另一列存放相应的学生平均年龄。
+
+
+\end{lstlisting}
+\item 插入子查询结果
+\begin{lstlisting}[language=bash]
+//插入子查询结果的INSERT 语句格式为
+INSERT
+INTO<表名>[(<属性列1>[,<属性列2>...])
+\end{lstlisting}
+
+\begin{lstlisting}[language=bash]
+例如：对每一个系，求学生的平均年龄，并把结果存入数据库
+
+首先在数据库中建立一个新表，其中一列存放系名，另一列存放相应的学生平均年龄
+
+CREATE　TABLE　Dept_age
+(
+     Sdept CHAR(15)
+     Avg_age SMALLINT
+);
+
+然后对Student表按系分组求平均年龄，再把系名和平均年龄存入新表中
+
+INSERT 
+INTO Dept_age(Sdept,Avg_age)
+SELECT Sdept,AVG(Sage)
+FROM Student
+GROUP BY Sdept;
+
+\end{lstlisting}
+\end{itemize}
+
+
+
+
+\subsubsection{数据查询}
+
+
+\begin{lstlisting}[language=bash]
+//数据查询的一般格式为
+SELECT [ALL|DISTINCT]<目标列表达式>[,<目标列表达式>]...
+FROM <表名或视图名>[,<表名或视图名>..]|(<SELECT语句>)[AS]<别名>
+[WHERE <条件表达式>]
+[GROUP BY<列名 1> [HAVING <条件表达式> ]]
+[ORDER BY<列名 2> [ASC|DESC]];
+\end{lstlisting}
+
+
+
+\begin{itemize}
+\item 查询指定列
+\end{itemize}
+
+\begin{lstlisting}[language=bash]
+
+
+例如：查询全体学生的学号与姓名
+SELECT Sno,Sname
+FROM Stuent;
+
+例如：从学生表查询名字为张三的学号
+SELECT ID
 FROM students
 WHERE name='张三'；
 
 
-例如：从学生表查询姓名为张的学号(模糊查询)
+
+\end{lstlisting}
+
+
+\begin{itemize}
+\item  查询全部列
+\end{itemize}
+\begin{lstlisting}[language=bash]
+例如：查询全体学生的详细记录
+SELECT *
+FROM Student;
+\end{lstlisting}
+
+
+
+\begin{itemize}
+\item 查询满足条件的元组 
+\end{itemize}
+
+\begin{table}[ht]
+\centering
+\caption{常用的查询条件}\label{tab_SQLgrm1}
+\begin{tabular}{|c|c|}
+\hline
+查询条件& 谓词 \\
+\hline
+比较 & =，>,<,>=,<=,<>,!>,!<;NOT+上述比较运算符 \\
+\hline
+确定范围& BETWEEN AND,NOT BETWEEN AND \\
+\hline
+确定集合 & IN, NOT IN \\
+\hline
+字符匹配 & LIKE，NOT LIKE\\
+\hline
+空值& IS NULL<IS NOT NULL \\
+\hline
+多重条件 & AND,OR,NOT \\
+\hline
+\end{tabular}
+\end{table}
+1.比较大小
+\begin{lstlisting}[language=bash]
+例1：查询计算机科学系全体学生的名单
+SELECT Sname
+FROM Student
+WHERE Sdept='计算机科学'；
+
+例2：查询所有年龄在20岁一下的学生姓名以及年龄
+SELECT Sname,Sage
+FROM Student
+WHERE Sage<20;
+\end{lstlisting}
+2.确定范围
+\begin{lstlisting}[language=bash]
+例1：查询年龄在20-33岁（包括20岁和23岁）之间的学生姓名
+SELECT Sname
+FROM Student
+WHERE Sage BETWEEN 20 AND  23；
+
+例2：查询不在年龄在20-33岁之间的学生姓名
+SELECT Sname
+FROM Student
+WHERE Sage NOT BETWEEN 20 AND  23；
+\end{lstlisting}
+3.确定集合
+\begin{lstlisting}[language=bash]
+例1：查询计算机科学系，数学系学生的姓名和性别
+SELECT Sname，Ssex
+FROM Student
+WHERE Sdept IN('计算机系','数学系')
+
+例2：查询不是计算机科学系，也不是数学系学生的姓名和性别
+SELECT Sname，Ssex
+FROM Student
+WHERE Sdept NOT IN('计算机系','数学系')
+\end{lstlisting}
+4.字符匹配
+\begin{lstlisting}[language=bash]
+例1：从学生表查询姓名为张的学号
 // % 表示任意多个字符
 //_ 表示任意多个任意字符
 
@@ -46,10 +196,109 @@ WHERE  name like '张%' ;
 SELECT ID
 FROM students
 WHERE  name like '张_' ;
+
+例2：查询名字中第二个字为“文”的学生的姓名和学号
+SELECT Sname，Sno
+FROM Student
+WHERE Sname LIKE '_文%'；
+\end{lstlisting}
+
+5.涉及空置的查询
+\begin{lstlisting}[language=bash]
+例如：某些学生选修课程后没有参加考试，所以有选课记录，但没有考试成绩。
+查询缺少成绩的学生的学号和课程号
+
+SELECT  Sno，Cno
+FROM SC
+WHERE Grade IS NULL;   //分数Grade 是空值
+\end{lstlisting}
+6.多重条件查询
+\begin{lstlisting}[language=bash]
+例如：查询计算机科学系年龄在20岁一下的学生姓名
+SELECT  Sname
+FROM Student
+WHERE Sdept='计算机科学' AND Sage<20
 \end{lstlisting}
 
 
-\item 更新数据： UPDATE 表名 SET
+\begin{itemize}
+\item ORDER BY 子句：用户可以用ORDER BY 子句对查询结果按照一个或多个属性列的升序（ASE）或降序（DESC）排列，默认值为升序。
+\end{itemize}
+
+
+\begin{lstlisting}[language=bash]
+例如：查询选修了3号课程的学生的学号及成绩，查询结果按分数的降序排列
+SELECT Sno，Grade
+FROM  SC
+WHERE Cno='3'
+ORDER BY Grade DESC;
+\end{lstlisting}
+
+\begin{itemize}
+\item 聚集函数
+\end{itemize}
+
+\begin{table}[ht]
+\centering
+\caption{聚集函数}\label{tab_SQLgrm2}
+\begin{tabular}{|c|c|}
+\hline
+COUNT (*) & *统计元组个数 \\
+\hline
+COUNT([DISTINCE|ALL]<列名>) & 统计一列中值的个数\\
+\hline
+SUM ([DISTINCE|ALL]<列名>)& 计算一列值的总和 \\
+\hline
+AVG([DISTINCE|ALL]<列名>) & 计算一列值的平均值\\
+\hline
+ MAX([DISTINCE|ALL]<列名>)& 求一列值中的最大值 \\
+\hline
+MIN ([DISTINCE|ALL]<列名>) & 求一列值中的最小值 \\
+\hline
+\end{tabular}
+\end{table}
+
+\begin{lstlisting}[language=bash]
+例1：查询学生总人数
+SELECT *
+FROM Student;
+
+例2：查询选修了课程的学生人数
+SELECT COUNT(*)
+FROM Student;
+
+例3：计算选修1号课程的学生平均成绩
+SELECT AVG(Grade)
+FROM SC
+WHERE  Cno='1';
+
+例4：查询选修1号课程的学生的最高分
+SELECT MAX(Grade)
+FROM SC
+WHERE Cno='1';
+\end{lstlisting}
+
+\begin{itemize}
+\item  GROUP BY 子句：将查询结果按某一列或者多列的值分组，值相等的为一组 
+\end{itemize}
+
+
+
+\begin{lstlisting}[language=bash]
+例如：求各个课程号及相应的选课人数
+SELECT Cno，COUNT(Sno)
+FROM SC
+GROUP BY Cno;
+\end{lstlisting}
+
+
+\subsubsection{修改数据}
+\begin{lstlisting}[language=bash]
+//修改数据的一般格式为：
+UPDATE<表名>
+SET <l列名>=<表达式> [,<列名>=<表达式>]...
+\end{lstlisting}
+
 \begin{lstlisting}[language=bash]
 例如：在学生表中，将学生张三的id改为231119002
 UPDATE students 
@@ -65,8 +314,15 @@ UPDATE students
 SET age=age+2
 WHERE id='231119019'
 \end{lstlisting}
+\subsubsection{删除数据}
 
-\item 删除数据：DELETE FROM 表名
+\begin{lstlisting}[language=bash]
+//删除语句的一般格式为
+DELETE
+FROM<表名>
+[WHERE <条件>]；
+\end{lstlisting}
+
 \begin{lstlisting}[language=bash]
 例如：删除students表中名字为张三的信息
 
@@ -74,8 +330,6 @@ DELETE FROM students
 WHERE name='张三';
 \end{lstlisting}
 
-
-\end{itemize}
 
 \subsection{数据库操作}
 \subsubsection{创建数据库：根据项目需求创建一个存储数据库的仓库}
@@ -244,11 +498,69 @@ ALTER TABLE<表明>
       //ADD子句用于增加新列，新的列级完整性约束条件和新的表级完整性约束条件
 [ADD[COLUMN]<新列名><数据类型>[完整性约束]
 [ADD<表级完整性约束>]
+     //DROP COLUMN 子句用于删除表中的列
 [DROP[COLUMN]<列名>[CASCADE|RESTRICT]]
+     //DROP CONSTRAINT 子句用于删除指定的完整性约束条件
 [DROP CONSTRAINT <完整性约束名>[RESTRICT|CASCADE]]
+     //ALTER COLUMN子句用于修改原有的列定义，包括修改列名和数据类型
 [ALTER COLUMN<列名><数据类型>];
 \end{lstlisting}
 \end{enumerate}
 \subsubsection{索引的建立和删除}
-\subsubsection{数据字典}
+\begin{enumerate}
+\item 建立索引
+\begin{lstlisting}[language=bash]
+CREATE [UNIQUE] [CLUSTER] INDEX <索引名>
+ON <表名>(<列名>[<次序>] [,<列名>[<次序>]]...)
+\end{lstlisting}
+\item 修改索引
+\begin{lstlisting}[language=bash]
+ALTER INDEX <旧索引名> RENAME TO <新索引名>
+\end{lstlisting}
+\item  删除索引
+\begin{lstlisting}[language=bash]
+DROP INDEX <索引名>
+\end{lstlisting}
+\end{enumerate}
+
+\subsection{视图}
+视图式从一个或几个基本表（或视图）导出的表。它与基本表不同，是一个虚表。数据库中只存放视图的定义，而不存放视图对应的数据，这些数据仍存放在原来的基本表中。
+视图一经定义，就可以和基本表一样被查询，被删除。也可以在一个视图之上再定义新的视图，但对视图的更新（增，删，改）操作则有一定的限制。
+\subsubsection{定义视图}
+\begin{itemize}
+\item 建立视图
+\begin{lstlisting}[language=bash]
+//SQL语言用CREATE  VIEW 命令建立视图，其一般格式为：
+
+CREATE  VIEW <视图名> [(<列名>[,<列名>]...)]
+AS <子查询>
+[WITH CHECK OPTION];
+\end{lstlisting}
+
+\begin{lstlisting}[language=bash]
+例如：建立信息系学生的视图
+CREATE VIEW IS_Student
+AS
+SELECT Sno,Sname,Sage
+FROM Student
+WHERE Sdept='IS';
+\end{lstlisting}
+
+
+\item 删除视图
+\begin{lstlisting}[language=bash]
+//删除视图的一般格式为：
+
+DROP VIEW <视图名> [CASCADE]; 
+
+// 如果该视图上还导了其他视图，则使用CASCADE级联删除语句把该视图和由它导出的所有视图一起删除
+
+
+\end{lstlisting}
+
+
+\end{itemize}
+\subsubsection{查询和更新视图}
+查询和更新视图的语句与查询和更新基本表的语句相同
+
 
