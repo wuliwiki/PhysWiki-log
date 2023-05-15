@@ -10,12 +10,13 @@
 \item \verb|bits ^ mask| 可以把 mask 为 \verb|1| 的地方翻转， 其余不变（异或算符 XOR， 相反时为 1， 否则为零）。
 \item \verb|~(bits1 ^ bits2)| 可以实现 NXOR 同或（没有专门的同或算符）。
 \item 要把 \verb|bits| 的一些地方设为指定 pattern， 就先用 \verb|&| 把该部分清零再用 \verb`|` 设置 pattern。
+\item \verb|<<| 和 \verb|>>| 的右边不可以是负数， 结果 undefined。
 \item 对负数使用 \verb|>>| 是 implementation defined 的（大部分会在左边加 1）， 所以要用 \verb|unsigned| 类型。
-\item 如果 \verb|n << m| 或者 \verb|n >> m| 中如果 \verb|m >= sizeof(n)|， 结果是未定义的， 有一些编译器会得到 \verb|n << (m % sizeof(n))|。 如果直接用超出范围的常数， 编译器可能会警告。
+\item 如果 \verb|n << m| 或者 \verb|n >> m| 中如果 \verb|m >= 8*max(sizeof(int), sizeof(n))|， 结果是未定义的， 有一些编译器会得到 \verb|n << (m % sizeof(n))|。 如果直接用超出范围的常数， 编译器可能会警告。 另外注意如果 \verb|sizeof(n) < sizeof(int)|， integral promotion 会把 \verb|n| 先变为 \verb|int| 类型。
 \item 无论使用什么 endian， 无符号的 \verb|n << 1| 等效于乘 2， \verb|n >> 1| 等效于除 2。
-\item 要得到右边 \verb|n| 个 \verb|1| 的单字节 mask， 就用 \verb|(Uchar(1) << n) - 1|
-\item 要得到左边 \verb|n| 个 \verb|1| 的单字节 mask， 就用 \verb|Uchar(0xFF) << (8-n)|
-\item 要得到左边第 \verb|m| bit 开始的 \verb|n| 个 \verb|1| 的单字节 mask， 就用 \verb|((Uchar(1) << n) - 1) << (8-n-m)|
+\item 要得到右边 \verb|n| 个 \verb|1| 的 mask， 就用 \verb|(1 << n) - 1|。 注意没有必要把他转换为比 \verb|int| 更小的类型， 因为在参与运算时仍然会根据 integral promotion 转成 \verb|int| 或者 \verb|unsigned int|（如果 \verb|int| 不能表示整个范围）。
+\item 要得到左边 \verb|n| 个 \verb|1| 的 “单字节” mask， 就用 \verb|255 << (8-n)|
+\item 要得到左边第 \verb|m| bit 开始的 \verb|n| 个 \verb|1| 的 “单字节” mask， 就用 \verb|((1 << n) - 1) << (8-n-m)|
 \item 操作多字节整数和浮点数的时候千万要注意如果系统是 little endian。 此时 \verb|<<| 要先把 bytes 翻过来， shift 完以后再次翻回去。
 \item 一位 16 进制是 4 bit， 两位是一个字节。 \verb|0001, 0011, 0111, 1111| 分别是 \verb|0x1, 0x3, 0x7, 0xF|。 不熟练的话也可以用 \verb|0b101010|， 但看起来比较业余。
 \item \verb|char| 可能是 \verb|signed| 也可能不是。 \verb|int16_t|， \verb|uint16_t| 保证有两个字节（\verb|short| 不保证）， \verb|int32_t|， \verb|uint32_t| 保证有四个字节（\verb|int| 不保证）。

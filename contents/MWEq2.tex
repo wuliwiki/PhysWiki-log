@@ -51,13 +51,153 @@
 
 
 
-\subsection{后两个方程}
+\subsection{后两个方程\footnote{该小节节选自《代数学基础》，故所用符号与上一小节有所不同。}}
 
 \pentry{霍奇星算子\upref{HodgeO}}
 
+% \begin{equation}
+% \prod_{n\in N }(-\frac{1}{n},\frac{1}{n})~.
+% \end{equation}
+
+
+接下来看剩下的两个方程：
 \begin{equation}
-\prod_{n\in N }(-\frac{1}{n},\frac{1}{n})~.
+    \left\{
+    \begin{aligned}
+        \nabla\cdot \bvec{E} ={}& \rho\\
+        \nabla\times \bvec{B} ={}& \bvec{j}+\partial_0\bvec{E}
+    \end{aligned}
+    \right.
 \end{equation}
+
+
+
+形式上，这两个方程和前面两个方程有两个区别。第一，电场和磁场的位置调换了，现在电场求的是散度，磁场求的是旋度；第二，方程右边多了一项常数$(\rho, \bvec{J})$。
+
+\textbf{第一个区别}提示我们要使用Hodge对偶，这样\textbf{从}$\mathbb{R}^{0,3}$\textbf{的视角看来}
+\footnote{$\mathbb{R}^{s, t}$指配备了一个二次型的实线性空间$\mathbb{R}^{s+t}$，且$s, t$分别为这个二次型的正号、负号之数量。}
+，电场从$1$-形式转化为$2$-形式，求外微分就是求其散度；而磁场从$2$-形式转化为$1$-形式，求外微分就是求其旋度。
+
+定义Hodge星算子需要一个非退化双线性形式，我们直接用Minkowski度规——下面会讨论为什么不用欧几里得度量。
+
+于是，$\dd\star F=0$就等同于
+\begin{equation}
+    \left\{
+        \begin{aligned}
+            \nabla\times \bvec{B} ={}& \partial_0\bvec{E}\\
+            \nabla\cdot \bvec{E} ={}& 0
+        \end{aligned}
+    \right.
+\end{equation}
+注意和$\nabla\times\bvec{E}=-\partial_0\bvec{B}$区分，为什么会有这个差异？
+
+
+计算一下就知道了：
+\begin{equation}
+    \begin{aligned}
+        \star E ={}& \star (E_1\dd x^1\wedge \dd x^0 + E_2\dd x^2\wedge \dd x^0 + E_3\dd x^3\wedge \dd x^0)\\
+        ={}& E_1\dd x^2\wedge \dd x^3 + E_2\dd x^3\wedge \dd x^1 + E_3\dd x^1\wedge \dd x^2
+    \end{aligned}
+\end{equation}
+而
+\begin{equation}
+    \begin{aligned}
+        \star B ={}& B_1\dd x^2\wedge \dd x^3+B_2\dd x^3\wedge \dd x^1 + B_3\dd x^1\wedge \dd x^2\\
+        ={}& -(B_1\dd x^1\wedge \dd x^0 + B_2\dd x^2\wedge \dd x^0 + B_3\dd x^3\wedge \dd x^0)
+    \end{aligned}
+\end{equation}
+所以差异是因为，$\star F$相比$F$，在形式上是把$B$替换为$E$，而把$E$替换为$-B$，多且仅仅多了一个负号。而仔细看计算过程会发现，这个负号是来自Minkowski度规的，如果换用欧几里得度量就会出现两个负号，负负得正，导致$\dd \star F=0$对应的方程形式上就是$\dd F=0$对应的方程中直接调换$\bvec{E}$和$\bvec{B}$的位置而已。
+
+
+\textbf{第二个区别}提示我们，式子的右端不再是$0$了。方程右边多出的这一项，在传统的向量分析里被认为是\textbf{切向量场}，即$\bvec{J}=\rho\partial_0+j^1\partial_1+j^2\partial_2+j^3\partial_3$。但是我们把电磁场$F$表示为$2$-形式，所以起码要考虑改用\textbf{余切向量场}，即$\bvec{J}$的对偶
+\footnote{就像量子力学里一样，虽然有两个互为对偶的空间（左矢空间和右矢空间），但它们都是量子态的表示空间，同一个态有左矢和右矢两种表示。}
+，记为$J$。同样，我们用Minkowski度规来定义切丛与余切丛之间的同构。
+
+
+
+综上，再考虑到$J$是$1$-形式，我们还需要额外添加一个星算子，把$3$-形式$\dd \star F$化为$1$-形式$\star \dd \star F$。
+
+现在，我们已经从散度、旋度、$k$-形式的概念直观\textbf{猜}出来式子的两端应该分别有$\star \dd \star F$和$J$，接下来就要通过计算来进一步确定式子的形态：
+
+
+\begin{equation}
+    \begin{aligned}
+        \star \dd \star F ={}& \star \dd \star (E_1\dd x^1\wedge \dd x^0 + E_2\dd x^2\wedge \dd x^0 + E_3\dd x^3\wedge \dd x^0)+\\
+        & \star \dd \star (B_1\dd x^2\wedge \dd x^3+B_2\dd x^3\wedge \dd x^1 + B_3\dd x^1\wedge \dd x^2)\\
+        ={}
+        & \star \dd (E_1\dd x^2\wedge \dd x^3 + E_2\dd x^3\wedge \dd x^1 + E_3\dd x^1\wedge \dd x^2)-\\
+        & \star \dd (B_1\dd x^1\wedge \dd x^0 + B_2\dd x^2\wedge \dd x^0 + B_3\dd x^3\wedge \dd x^0)\\
+        ={}
+        & \star (\partial_1E_1+\partial_2E_2+\partial_3E_3)\dd x^1\wedge \dd x^2\wedge \dd x^3+\\
+        & \star \partial_0E_1\dd x^0\wedge \dd x^2\wedge \dd x^3 +\\
+        & \star \partial_0E_2\dd x^0\wedge \dd x^3\wedge \dd x^1 +\\
+        & \star \partial_0E_3\dd x^0\wedge \dd x^1\wedge \dd x^2+\\
+        & \star (\partial_2B_1-\partial_1B_2)\dd x^1\wedge \dd x^2 \wedge \dd x^0+\\
+        & \star (\partial_3B_2-\partial_2B_3)\dd x^2\wedge \dd x^3 \wedge \dd x^0+\\
+        & \star (\partial_1B_3-\partial_3B_1)\dd x^3\wedge \dd x^1 \wedge \dd x^0\\
+        ={}
+        & (\partial_1E_1+\partial_2E_2+\partial_3E_3)\dd x^0+\\
+        & (\partial_0 E_1\dd x^1+\partial_0 E_2\dd x^2+\partial_0 E_3\dd x^3)+\\
+        & (\partial_2B_1-\partial_1B_2)\dd x^3+\\
+        & (\partial_3B_2-\partial_2B_3)\dd x^1+\\
+        & (\partial_1B_3-\partial_3B_1)\dd x^2
+    \end{aligned}
+\end{equation}
+
+由于$J$是$\bvec{J}=\rho\partial_0+j^1\partial_1+j^2\partial_2+j^3\partial_3$关于Minkowski度规的对偶，故
+\begin{equation}
+J = \rho\dd x^0 - j^1\dd x^1 - j^2\dd x^2 - j^3\dd x^3
+\end{equation}
+
+比较各$\dd x^i$前的系数可得，$\star \dd \star F = J$等价于
+\begin{equation}
+\left\{
+\begin{aligned}
+\partial_1E_1+\partial_2E_2+\partial_3E_3 = \rho&\implies \nabla\cdot \bvec{E}=\rho\\
+\left.
+\begin{aligned}
+(\partial_3B_2-\partial_2B_3)+\partial_0E_1 ={}& -j^1\\
+(\partial_1B_3-\partial_3B_1)+\partial_0E_2 ={}& -j^2\\
+(\partial_2B_1-\partial_1B_2)+\partial_0E_3 ={}& -j^3
+\end{aligned}
+\right\}&
+\implies -\nabla\times \bvec{B}+\partial_0\bvec{E}=-\bvec{j}
+\end{aligned}
+\right. 
+\end{equation}
+
+
+
+因此，剩下两个方程可以写为
+\begin{equation}
+    \star \dd \star F = J
+\end{equation}
+
+
+
+
+
+
+
+% \subsection{符号问题}
+
+
+
+% 电磁场理论中有两个因素会影响Hodge算子的符号：Minkowski度规的号差和时空的定向。上述计算默认使用的号差是$-2$，时空的定向为$\dd x^0\wedge \dd x^1\wedge \dd x^2\wedge \dd x^3$。
+
+% 对于$\dd F = 0$，由于该方程只涉及外微分，故不受上述两个因素影响。但是$\star \dd \star F = -J$就不同了。
+
+% 如果号差不变，但时空的定向改为$\dd x^1\wedge \dd x^2\wedge \dd x^3\wedge \dd x^0$，那么每一步
+
+
+
+
+
+
+
+
+
+
 
 
 

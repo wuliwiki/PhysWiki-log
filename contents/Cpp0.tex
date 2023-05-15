@@ -34,7 +34,16 @@ C++ 的特征实在多不胜数， 事实上无论是什么语言， 做计算�
 \item \verb|typedef|
 \item 数组： 不指定个数的数组作为函数参数和指针是完全等效的。
 \item 动态内存管理 \verb|new|, \verb|delete|。
-\item 异常处理 \verb|throw|, \verb|try|, \verb|catch|
+\item 异常处理 \verb|throw|, \verb|try|, \verb|catch|， \verb|std::runtime_error|， \verb|out_of_range| 等。
+\item \textbf{undefined behavior} 和 \textbf{implementation defined behavior} 有什么不同？ 前者编译器不需要诊断不需要有确定的行为，任何事情都可能发生（包括程序整个 crash）。 后者需要编译器或者操作系统等有自己的统一定义， 需要写入文档并遵守。 作为程序员， 前者坚决不要使用， 后者也最好不要使用。
+\end{itemize}
+
+\subsubsection{explicit 类型转换}
+\begin{itemize}
+\item \verb|static_cast<新类型>(变量)| 和 \verb|(新类型)变量| 效果相同， 但有一些转换不允许。
+\item \verb|reinterpret_cast<新类型*>(变量指针)| 和 \verb|reinterpret_cast<新类型&>(变量)| 并不会检查 \textbf{strict aliasing rule}， 需要用户自己保证。
+\item \textbf{strict aliasing rule}： 不允许不同类型的指针或索引指向同一个对象， 可能导致优化时出错。 但是有例外， 例如用 \verb|char*| 和 \verb|(un)signed char*| 指向任何地址， 用 base type 的指针指向对象等。
+\item standard-layout 类型 (e.g., structs without virtual functions or private members) 的指针可以互相转换， 如果他们前几个成员是一样的。
 \end{itemize}
 
 \subsection{标准库}
