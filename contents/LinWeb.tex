@@ -12,10 +12,10 @@
 \item 可以想象每张网卡上都长了很多\textbf{端口（port）}， 用于给不同的应用收发各种消息。 例如 http 协议的默认端口是 80， https 是 443
 \item 要找到公网网卡， 用 \verb`ip route show | grep default` 找默认网卡， 默认网卡几乎肯定是公网网卡。
 \item \verb`ifconfig 网卡名 up` 启动网卡， \verb`ifconfig 网卡名 down` 关闭网卡， 可以用这两个命令重启网卡（要防止 ssh 被中断，两个命令用分号写到一行）
-\item \verb`ifoncig` 用于查看网络相关信息： 其中 \verb`Link encap:Ethernet` 表示在使用 Ethernet， \verb`HWaddr` 是硬件地址， 即 MAC 地址， \verb`inet addr` 本机的 IP 地址， \verb`Bcast` broadcast 地址， \verb`Mask` 掩码， \verb`UP` 表示 Ethernet 的 kernel module 被加载， \verb`BROADCAST` 支持 broadcasting， 从 DHCP 获取 IP 的必要条件， \verb`RUNNING` 准备好传输数据， \verb`mtu` (Maximum Transmission Unit)， 就是 packet 的最大尺寸
+\item \verb`ifoncig` 用于查看网络相关信息： 其中 \verb`Link encap:Ethernet` 表示在使用 Ethernet， \verb`HWaddr` 是硬件地址， 即 MAC 地址， \verb`inet addr` 网卡的 IP 地址， \verb`Bcast` broadcast 地址， \verb`Mask` 掩码， \verb`UP` 表示 Ethernet 的 kernel module 被加载， \verb`BROADCAST` 支持 broadcasting， 从 \textbf{DHCP} 获取 IP 的必要条件， \verb`RUNNING` 准备好传输数据， \verb`mtu` (\textbf{Maximum Transmission Unit})， 就是 packet 的最大尺寸
 \item \verb`netplan` 是 ubuntu 18.04 的默认管理网络设置的程序， 比如设置 DHCP， 静态 ip， 掩码， 网关等， 设置完成以后用 \verb`sudo netplan apply` 可以生效。 但有时候还需要重启网卡才能成功。
 \item DHCP 的默认地址段是 100 到 149。 DHCP 开启的时候也仍然可以用 netplan 设置静态 ip， 但要避开 100 到 149。
-\item 如果 \verb|ip -4 addr show scope global| 返回的 \verb|valid_lft| 和 \verb|preferred_lft| 不是 \verb|forever|， 那（理论上）这个 ip 就可能会变化
+\item 如果 \verb|ip -4 addr show scope global| 返回的 \verb|valid_lft| 和 \verb|preferred_lft| 不是 \verb|forever|， 那（理论上）这个 ip 就可能会变化。 但实际上不常改变。
 \item \verb`sudo hpclient` 显示 ip 地址
 \item \verb`sudo /etc/init.d/networking restart` 重启网络服务 
 \item 要从某个网址下载文件， 只需安装 wget 软件即可， 使用方法如 \verb`wget http://...` 文件会下载到当前文件夹

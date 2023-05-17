@@ -127,3 +127,18 @@ CREATE TABLE Orders (
 \item \verb|DROP TABLE 表名| 删除表。
 \end{itemize}
 
+
+\subsection{关联两个表格}
+一个例子：
+\begin{lstlisting}[language=bash,caption=stat.sh]
+sqlite3 data/scan.db "\
+SELECT COUNT(1) FROM history WHERE \
+author IN ( \
+    SELECT id \
+    FROM authors \
+    WHERE name = '名字' \
+) AND \
+time >= 起始时间 AND \
+time <= 终止时间 \
+"
+\end{lstlisting}
