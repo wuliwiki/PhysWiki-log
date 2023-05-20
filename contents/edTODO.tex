@@ -1,36 +1,38 @@
 % 编辑器事项
 % BUG|编辑器|LaTeX
 
-\subsection{编辑冲突解决方案}
-
-以下任何这些方案， 都等现在的方案足够稳定了再说吧。
-
-\subsubsection{【方案 1】只占用子节}
+\subsection{Editor 使用数据库 TODO}
+按优先级排序
 \begin{itemize}
-\item 这是现有方案的一个小改进， 开发成本非常低。
-\item 每个作者都可以看到当前未通过审核的所有改变（无论哪种方案这都是应该的）， 鼓励同时编辑同一个词条的人进行沟通。
-\item 编辑器通过作者修改的内容决定占用哪些子节， 可以允许不同作者修改同一个词条的不同子节。
-\end{itemize}
-
-\subsubsection{【方案 2】使用 Git 的方式协同编辑}
-\begin{itemize}
-\item 这个方案是最理想的， 但需要较大开发成本。 当然也可以不严格实现取个折中。也可以完全用 github 管理， 0 成本。 还可以在自己服务器上搭建 GitLab。
-\item 使用 git 的方式管理协作。 从概念上每个人的每次新编辑（可以修改多个词条）都创建整个百科的一个新分支（以账号 ID 命名）。 完成后提交 pull request（PR）。 审稿人同意后 merge 到 master。 每个新分支都有自己的数据库（概念上）。
-\item 每个作者都可以看到当前未通过审核的所有改变。
-\item 为避免冲突每个词条一次只能有一个 PR， 这样抢锁就成了抢 PR。 与其让审稿人解决冲突， 需要作者自己解决冲突（把自己的更改 rebase 到 master 的最新 commit， 并确保可以编译成功）。
-\item 鼓励尽量把非 trivial 的公式用公式按钮创建， 按钮自动生成 label。 其他环境一律强制要求有 label。
-\item 用户可以直接申请在 master 分支中添 label， 自动通过（为了防止捣乱可以限制数量）然后 pull 到自己的分支。
-\item 数据库的实现上， 给每个分支新建一个临时数据库， 但每个表格只保存变化、删除和新添加的记录（但为了偷懒也可以先复制整个数据库）。 PR 通过以后删除数据库。 文件也是只有改变的才进行复制（为了偷懒也可以先复制所有词条文件）。
-\item 作者可以向管理员申请重命名 label（某些自动生成的 label 可能希望改成有意义的缩写）， 可以自动把所有分支的某个 label 都重命名（要确保都没有冲突）。
+\item editor 对 \verb|PhysWikiScan| 的所有调用都要检查是有 \verb|cerr| 输出， 以及 exit code 是否为零。 如果有错误应该在编辑器前端提示。
+\item 更新数据库时， 需要尽量开启 \verb|PRAGMA foreign_keys = ON;|
+\item 上传新的图片时， 插入信息到 \verb|figures| 表格。 \verb|PhysWiki/figures/| 中的文件使用 \verb|images.hash| + 拓展名命名。 \verb|\label{}| 格式为 \verb|fig_词条名_序号|。
+\item 上传的 \verb|svg| 做 hash 以前要把 CRLF 替换为 LF（保存到服务器的文件也使用 LF）。
+\item 如果发现上传图片文件的 hash 已存在于 \verb|images.hash|， 则提示已存在， 是否引用（\verb|\autoref{}|）（推荐用户这么做）， 或者重复使用图片（相当于上传新图片， 但更新 \verb|figures.aka| 指向已存在的图片）。 
+\item 若上传 pdf + svg 图片， 更新 \verb|figures.image_alt|。 同时支持上传其他文件（如果后缀名是 \verb|gif, eps 等|， 同样更新到 \verb|figures.image_alt|。
+\item 使用 \verb|entries.occupied| 标记词条占用状态（包括被谁占用）， 不要记录到其他任何地方。 若发现新作者， 添加到 \verb|authors| 表格。 发布或者使用解除占用按钮都重置该数据。
+\item 词条备份文件确保换行符使用 LF 而不是 CRLF， 保存前先计算文件 SHA1 的前 16 位， 确保 \verb|history.hash| 不存在（否则不备份）。 然后保存到 \verb|PhysWiki-backup/YYYYMMDDHHMM_authorID_entry.tex|， 其中 \verb|authorID| 是数据库的 \verb|authors.id|。 然后运行 \verb|./PhysWikiScan --backup YYYYMMDDHHMM_authorID_entry.tex| 更新数据库（scan 会更新 \verb|add, del| 等所有备份信息）。 如果输出了 \verb|cerr| 就说明运行失败（详见错误信息）。
+\item  \verb|YYYYMMDDHHMM_authorID_entry.tex|， 
+\item 打开词条后哪怕有一点改变都需要备份以及标记占用。 如果不产生新的备份（新的文件 hash）则不要占用。
+\item 标记占用（也就是产生新的备份）后更新 \item \verb|authors.recent_entries|。 “打开文件” 按钮中的 “我的编辑” 使用这里的数据。
+\item 引用文献按钮使用数据库 \verb|bibliography| 中的信息。 不要包括 id 为 \verb|''| 的条目。
+\item 百科创建词条以后， 自动按下 “标记词条：草稿”（用户笔记不需要）， 并更新 \verb|entries.draft|
+\item 创建词条或者重命名时需要更新 \verb|entries.caption|
+\item 创建词条时需要可以选择协议， 选项见数据库的 \verb|entries.license|（不要包含方括号）， 选择后更新数据库。 打开词条后也要允许在菜单中修改。
+\item 创建词条时需要可以选择文章类型， 选项见数据库的 \verb|entries.type|（不要包含方括号）， 默认选 \verb|Tutor|。 选择后更新数据库。 打开词条后也要允许在菜单中修改。
+\item 历史版本按钮中的字符数加减使用 \verb|history.add/del| 中的数据。
+\item 编辑器不应该使用任何 \verb|data/*.txt|， 将删除。 \verb|data/autoref.txt| 中的信息会直接输出到 stdout。
+\item 【先不做】上传或替换图片时弹出窗口让用户填写版权信息。
+\item 【先不做】上传或替换图片时允许上传附件
+\item 【先不做】关闭词条时， 如果内容有改变， 也备份一次。
+\item 【先不做】删除词条以前运行 \verb|./PhysWikiScan --delete 词条id|。 运行成功后再执行， 否则提示 \verb`cerr` 中的错误。
+\item 【先不做】发布按钮改成 “审稿”， 弹出窗口， 给用户选择 \verb|review.action| 和 \verb|review.comment|。 插入数据库（补全其他列）， 确保审稿的 hash 存在于 \verb|history| 表。 如果选择发布， 则行为和现在的发布按钮相同。 若选择撤回， 则撤回到上次发布的内容。
+\item 【先不做】在图片的下拉菜单中做一个图片浏览器按钮， 打开一个面板可以浏览所有图片。 选中图片后可以查看在哪个词条被使用。
+\item 【先不做】若替换图片， 则把替换前的 \verb|figures.image| 和 \verb|.image_alt| 都移动到 \verb|figures.image_old|。 
 \end{itemize}
 
 \subsubsection{权限 TODO}
 会员制需要考虑一个问题就是， 如果大家都可以用编辑器， 那不开会员也可以打开编辑器查看所有内容。 所以编辑者必须开通会员， 有足够的贡献才能抵扣会员。
-
-\subsubsection{Editor 使用数据库 TODO}
-\begin{itemize}
-\item \verb|data| 文件夹中的数据库文件为 \verb|scan.db|
-\end{itemize}
 
 \subsubsection{Scan TODO}
 \begin{itemize}
@@ -220,6 +222,8 @@ $$a^2 + b^2 = c^2$$
 行间公式也用两个美元符号， 而且前后都要有额外的空行， 否则视为行内公式。 注意 latex 代码还是要使用 html 中的而不是 tex 中的。
 \end{lstlisting}
 
+\item 凡是显示所有词条的列表， 每次只加载 50 个， 翻到最后再继续加载。
+
 \item 【先不做】在笔记功能中添加一个重置按钮， 按了之后提示两次 \verb|你确定要重置笔记吗？ 所有词条将被删除且原则上无法恢复（仍然可联系管理员恢复，但管理员一般很忙）！ 请确保你已经通过下载按钮下载最新源码！ 该功能主要用于解决历史用户的某些严重的 bug， 恢复后可以手动把备份的词条重新逐一手动复制上来|。
 
 \item 插入代码块时， 如果不指定， 声明 \verb`begin{lstlisting}[language=none]`
@@ -227,8 +231,6 @@ $$a^2 + b^2 = c^2$$
 \item “插入代码” 按钮中添加 Mathematica 语言， 声明 \verb`[language=mma]`。 按下 JavaScript 语言， 声明 \verb|[language=js]|
 
 \item 在 Mac 上， 提示以及使用 Mac 习惯的快捷方式（如保存用 \verb|Cmd+S|）
-
-\item 百科创建词条以后， 自动按下 “标记词条：草稿”（用户笔记不需要）。
 
 \item 每五分钟的备份也要包括图片和源文件（即 figures 文件夹中所有格式为 \verb|词条名_数字.任意拓展名| 的文件）， 命名规则和 tex 文档一样。 只有图片文件内容被改变时才备份（可以通过 hash 判断或者逐字节对比）。
 
@@ -340,6 +342,29 @@ $$a^2 + b^2 = c^2$$
 \item 【完成】要求：如果在论坛上面已经登录了， 编辑器页面应该也可以自动登录（应该是用 cookie 实现的吧？）
 
 \item 【完成】每个 \verb|\subsection| 需要可以折叠， 像环境一样
+\end{itemize}
+
+\subsection{编辑冲突解决方案}
+
+以下任何这些方案， 都等现在的方案足够稳定了再说吧。
+
+\subsubsection{【方案 1】只占用子节}
+\begin{itemize}
+\item 这是现有方案的一个小改进， 开发成本非常低。
+\item 每个作者都可以看到当前未通过审核的所有改变（无论哪种方案这都是应该的）， 鼓励同时编辑同一个词条的人进行沟通。
+\item 编辑器通过作者修改的内容决定占用哪些子节， 可以允许不同作者修改同一个词条的不同子节。
+\end{itemize}
+
+\subsubsection{【方案 2】使用 Git 的方式协同编辑}
+\begin{itemize}
+\item 这个方案是最理想的， 但需要较大开发成本。 当然也可以不严格实现取个折中。也可以完全用 github 管理， 0 成本。 还可以在自己服务器上搭建 GitLab。
+\item 使用 git 的方式管理协作。 从概念上每个人的每次新编辑（可以修改多个词条）都创建整个百科的一个新分支（以账号 ID 命名）。 完成后提交 pull request（PR）。 审稿人同意后 merge 到 master。 每个新分支都有自己的数据库（概念上）。
+\item 每个作者都可以看到当前未通过审核的所有改变。
+\item 为避免冲突每个词条一次只能有一个 PR， 这样抢锁就成了抢 PR。 与其让审稿人解决冲突， 需要作者自己解决冲突（把自己的更改 rebase 到 master 的最新 commit， 并确保可以编译成功）。
+\item 鼓励尽量把非 trivial 的公式用公式按钮创建， 按钮自动生成 label。 其他环境一律强制要求有 label。
+\item 用户可以直接申请在 master 分支中添 label， 自动通过（为了防止捣乱可以限制数量）然后 pull 到自己的分支。
+\item 数据库的实现上， 给每个分支新建一个临时数据库， 但每个表格只保存变化、删除和新添加的记录（但为了偷懒也可以先复制整个数据库）。 PR 通过以后删除数据库。 文件也是只有改变的才进行复制（为了偷懒也可以先复制所有词条文件）。
+\item 作者可以向管理员申请重命名 label（某些自动生成的 label 可能希望改成有意义的缩写）， 可以自动把所有分支的某个 label 都重命名（要确保都没有冲突）。
 \end{itemize}
 
 \subsubsection{性能优化}

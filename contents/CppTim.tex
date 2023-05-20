@@ -1,0 +1,35 @@
+% C++ 时间处理笔记
+
+\begin{issues}
+\issueDraft
+\end{issues}
+
+\pentry{C++ 基础\upref{Cpp0}}
+
+\verb|std::tm| 结构（\href{https://en.cppreference.com/w/cpp/chrono/c/tm}{参考}）代表一个人类可读的时间格式（数值取决于时区和是否夏令时）， 是从 C 语言迁移过来的， 成员如下
+\begin{itemize}
+\item \verb|tm_year| 年份四位数减去 1900
+\item \verb|tm_mon| 月份减去 1
+\item \verb|tm_mday| 日 [1,31]
+\item \verb|tm_hour| 小时 [0,23]
+\item \verb|tm_min| 分钟 [0,59]
+\item \verb|tm_sec| 秒 [0,60]
+\end{itemize}
+\begin{itemize}
+\item \verb|tm_wday| 周几（0 代表周日） [0-6]
+\item \verb|tm_yday| 一年中的第一天（0 代表 1/1）[0, 365]
+\item \verb|tm_isdst| 是否是夏令时 (DST) 若大于零则有 DST， 零则非 DST， 负数则无信息
+\end{itemize}
+
+\verb|std::time_t| 结构是一个表示时间的一个数字类型（几乎总是整型）的 \verb|typedef|。 几乎总是用于表示从 1970 年 1 月 1 日 UTC （epoch）起流逝的秒数（不包含增加的几个闰秒\upref{TimeCa}）。
+
+\subsubsection{函数}
+\begin{itemize}
+\item \verb|std::time_t now = std::time(nullptr);| 获取当前时间（如果电脑时间和时区正确，返回值与时区无关）。 返回值一定是 epoch 起流逝的秒数（不包含增加的几个闰秒）。
+\item \verb|std::time_t mktime(std::tm* time);| 可以从 \verb|std::tm| 转换为 \verb|time_t|（结合计算机上的时区信息）。
+\item \verb|std::tm* localtime(const std::time_t *time);| 可以从 \verb|time_t| 转换为 \verb|std::tm|（结合计算机上的时区信息）。 是 \verb|mktime| 的反函数。
+\item \verb|std::tm* gmtime(const std::time_t *time);| 可以把 \verb|timt_t| 转换为 GMT/UTC+0 时区的 \verb|std::tm|（结合计算机上的时区信息）。
+\item 对比 \verb|localtime()| 和 \verb|gmtime()| 的结果可以获得计算机的时区（注意时区未必是整数或者是半整数）。
+\item \verb|ss >> get_time(std::tm *t, "%Y 年 %m 月 %d 日 %H 时 %M 分 %S 秒")| 可以把 \verb|istringstream| 中的字符串 parse 到 \verb|std::tm| 结构。 完了以后如果 \verb|ss.fail()| 就是 parse 失败。
+\item \verb|ss << put_time(const std::tm* t, "%Y-%m-%d %H:%M");| 可以把 \verb|std::tm| 变为指定格式的字符串传给 \verb|ostringstream|。
+\end{itemize}
