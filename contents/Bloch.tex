@@ -8,7 +8,7 @@
 \pentry{定态薛定谔方程\upref{SchEq}}
 
 在固体物理中，我们研究原子按一定规则排布而成的理想晶格，研究电子在一个具有晶格周期性的等效势场 $V(\bvec r)$ 中的运动。根据定态薛定谔方程，我们有
-\begin{equation}
+\begin{equation}\label{eq_Bloch_4}
 H\psi=\qty[-\frac{\hbar^2}{2m}\nabla^2+V(\bvec r)] \psi = E\psi~,
 \end{equation}
 势场 $V(\bvec r)$ 满足周期性
@@ -19,12 +19,58 @@ V(\bvec r)=V(\bvec r+\bvec R_n)~,
 
 为了研究周期性势场下定态薛定谔方程的解，我们可以从最简单的一维薛定谔方程出发。
 
-\subsection{一维薛定谔方程}
-\footnote{参考\cite{GriffQ}}\textbf{布洛赫（Bloch）}理论也叫 Floquet 理论。 一维薛定谔方程中， 如果 $V(x)$ 是一个以 $a$ 为周期的函数， 那么解将满足
+\subsection{Bloch theory}
+\footnote{参考\cite{GriffQ}}\textbf{布洛赫（Bloch）}理论也叫 Floquet 理论，是由对称性得到的严格结论。它的内容可以表述如下：
+
+\begin{theorem}{Bloch theory I}
+周期势场$V(\bvec r) = V(\bvec k + \bvec R)$ 下的本征态波函数满足
 \begin{equation}\label{eq_Bloch_1}
-\psi(x+a) = \E^{\I K a}\psi(x)~,
+\psi(\bvec r + \bvec R) = \E^{\I \bvec r \vdot \bvec R}\psi(\bvec r)~,
 \end{equation}
-其中 $K$ 是一个常数。 令 $D(a)$ 为平移算符， 向右平移 $a$， 那么 $[D,H] = 0$。 所以存在能量和 $D$ 的共同本征态， 马上就得到\autoref{eq_Bloch_1} 。
+其中 $\bvec k$ 的量纲是$[L]^{-1}$，$\bvec R$是晶格矢量，简称为\textbf{格矢}。后面我们将会看到，$\bvec k$ 具有电子动量的物理意义。 
+\end{theorem} 
+
+也就是说，将空间坐标$\bvec r$平移格矢$\bvec R$，平移前后的波函数只相差一个跟$\bvec R$有关的相位因子，不改变波函数本身的实际性质。
+
+$\psi (\bvec r)$称为\textbf{布洛赫函数（Bloch function）}，晶体中用布洛赫函数来描述的电子称为\textbf{布洛赫电子}，与真空中的自由电子区分。
+
+布洛赫定理的另一种等价描述为：
+
+\begin{theorem}{Bloch theory II}
+周期势场中的本征态函数$\psi(\bvec r)$ 可写成一个\textbf{平面波}和\textbf{周期性函数}的乘积：
+\begin{equation}\label{eq_Bloch_2}
+\psi(\bvec r) = \E^{\I \bvec k \vdot \bvec r} u(\bvec r)
+\end{equation}
+$u( \bvec r)$ 是布洛赫函数的\textbf{周期部分}，周期为$\bvec R$，$\E^{\I \bvec k \vdot \bvec r}$ 是平面波部分。
+\end{theorem}
+
+从Bloch定理的等价描述中我们可以初步看到，布洛赫函数是真空中自由电子的平面波在周期性势场的调制的结果。
+
+\begin{exercise}{}
+请根据定理证明两种描述的等价性。答案在下面。
+\end{exercise}
+由\autoref{eq_Bloch_1} 到\autoref{eq_Bloch_2} ，等式两边同乘$\E^{-\I \bvec k \vdot (\bvec R + \bvec r)}$:
+\begin{equation}
+\E^{-\I \bvec k \vdot (\bvec R + \bvec r)}\psi(\bvec r + \bvec R) = \E^{-\I \bvec k \vdot \bvec r}\psi(\bvec r)~,
+\end{equation}
+观察左右两式，可以看到明显的周期函数：
+\begin{equation}
+u(\bvec R + \bvec r) = u(\bvec r),~\quad u(\bvec r) = \E^{-\I \bvec k \vdot \bvec r}\psi(\bvec r)~.
+\end{equation}
+整理一下，也即
+\begin{equation}
+\psi(\bvec r) = \E^{\I \bvec k \vdot \bvec r} u(\bvec r)
+\end{equation}
+证毕。由\autoref{eq_Bloch_2} 到\autoref{eq_Bloch_1} :
+\begin{equation}
+\psi(\bvec r + \bvec R) = \E^{\I \bvec k \vdot (\bvec R + \bvec r)} u(\bvec r + \bvec R)
+= \E^{\I \bvec k \vdot \bvec R } \E^{\I \bvec k \vdot  \bvec r}u(\bvec r )= \E^{\I \bvec k \vdot \bvec R } \psi(\bvec r).
+\end{equation}
+证毕。
+
+上面我们仅利用了函数的周期性性质。下面用量子力学的语言证明该Bloch定理，即周期性空间平移的效果仅是在波函数上乘上相因子。
+
+令 $D(a)$ 为平移算符， 向右平移 $a$， 那么 $[D,H] = 0$。 所以存在能量和 $D$ 的共同本征态， 马上就得到\autoref{eq_Bloch_1} 。
 
 波函数也可以记为
 \begin{equation}
@@ -46,7 +92,7 @@ K = \frac{2\pi}{a} \frac{n}{N} \qquad (n \in \mathbb Z)~,
 \subsection{三维薛定谔方程}
 
 \cite{黄昆}\cite{Bransden}布洛赫（Bloch）波函数定义为
-\begin{equation}\label{eq_Bloch_2}
+\begin{equation}\label{eq_Bloch_3}
 \phi(\bvec r) = \E^{\I \bvec k \vdot \bvec r} u(\bvec r)~,
 \end{equation}
 其中 $u(\bvec r)$ 具有与晶格同样的周期性。
