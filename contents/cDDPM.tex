@@ -1,0 +1,23 @@
+% 条件去噪扩散概率模型
+% 扩散 条件 生成模型
+
+\textbf{条件去噪扩散概率模型}（Conditional Denoising Diffusion Model）是去噪扩散概率模型的一个改进版本，通过将源图像信息纳入到模型当中，使得模型可以学习一个从源图像域到目标图像域的映射。
+
+假设有一个图像转换过程，源图像域图像为$x$，目标图像域图像为$y$.
+
+正向扩散过程的概率转移公式如下：
+\begin{equation}
+q({y_{1:T}}|{y_0}) = \prod\limits_{t = 1}^T {q({y_t}|{y_{t - 1},x})}
+\end{equation}
+\begin{equation}
+q({y_t}|{y_{t - 1}}) = {\rm{N}}({y_t};\sqrt {1 - {\beta _t}} {y_{t - 1}},{\beta _t}I)
+\end{equation}
+
+反向去噪过程的概率转移公式如下：
+\begin{equation}
+{p_\theta }({y_{0:T}|x}) = p({y_T})\prod\limits_{t = 1}^T {{p_\theta }({y_{t - 1}}|{y_t,x})}
+\end{equation}
+\begin{equation}
+{p_\theta }({y_{t - 1}}|{y_t,x}) = N({y_{t - 1}};{\mu _\theta }({y_t},t),\sum\nolimits_\theta  {({y_t},t)} )
+\end{equation}
+其中，$y_0$为随机采样的高斯噪音，$y_0$~$q(y_0)$；$x$为源图像；$p_\theta$为参数化的概率转移规则，即为深度神经网络模型所表示。

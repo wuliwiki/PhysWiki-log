@@ -27,7 +27,7 @@ V(\bvec r)=V(\bvec r+\bvec R_n)~,
 \begin{equation}\label{eq_Bloch_1}
 \psi(\bvec r + \bvec R) = \E^{\I \bvec r \vdot \bvec R}\psi(\bvec r)~,
 \end{equation}
-其中 $\bvec k$ 的量纲是$[L]^{-1}$，$\bvec R$是晶格矢量，简称为\textbf{格矢}。后面我们将会看到，$\bvec k$ 具有电子动量的物理意义。 
+其中 $\bvec k$ 的量纲是$[L^{-1}]$，$\bvec R$是晶格矢量，简称为\textbf{格矢}。后面我们将会看到，$\bvec k$ 具有电子动量的物理意义。 
 \end{theorem} 
 
 也就是说，将空间坐标$\bvec r$平移格矢$\bvec R$，平移前后的波函数只相差一个跟$\bvec R$有关的相位因子，不改变波函数本身的实际性质。
@@ -62,17 +62,59 @@ u(\bvec R + \bvec r) = u(\bvec r),~\quad u(\bvec r) = \E^{-\I \bvec k \vdot \bve
 \psi(\bvec r) = \E^{\I \bvec k \vdot \bvec r} u(\bvec r)
 \end{equation}
 证毕。由\autoref{eq_Bloch_2} 到\autoref{eq_Bloch_1} :
-\begin{equation}
-\psi(\bvec r + \bvec R) = \E^{\I \bvec k \vdot (\bvec R + \bvec r)} u(\bvec r + \bvec R)
-= \E^{\I \bvec k \vdot \bvec R } \E^{\I \bvec k \vdot  \bvec r}u(\bvec r )= \E^{\I \bvec k \vdot \bvec R } \psi(\bvec r).
-\end{equation}
+\begin{align}
+\psi(\bvec r + \bvec R) &= \E^{\I \bvec k \vdot (\bvec R + \bvec r)} u(\bvec r + \bvec R)\\
+&= \E^{\I \bvec k \vdot \bvec R } \E^{\I \bvec k \vdot  \bvec r}u(\bvec r )\\ &= \E^{\I \bvec k \vdot \bvec R } \psi(\bvec r)
+\end{align}
 证毕。
 
-上面我们仅利用了函数的周期性性质。下面用量子力学的语言证明该Bloch定理，即周期性空间平移的效果仅是在波函数上乘上相因子。
+\subsubsection{布洛赫定理的量子力学证明}
+上面我们仅利用了函数的周期性性质。下面用量子力学的语言证明Bloch定理，即周期性空间平移的效果仅是给波函数添加phase shift, 不改变物理实质。
 
-令 $D(a)$ 为平移算符， 向右平移 $a$， 那么 $[D,H] = 0$。 所以存在能量和 $D$ 的共同本征态， 马上就得到\autoref{eq_Bloch_1} 。
+定义平移算符$\hat{T}_{\bvec R}$，将$\hat{T}_{\bvec R}$作用到任何函数$f(\bvec r)$上的作用是：
+\begin{equation}
+\hat{T}_{\bvec R} f(\bvec r) = f(\bvec R + \bvec r)
+\end{equation}
+也即将函数的坐标平移矢量$\bvec R$，这里$\bvec R = n_1 \bvec a_1 + n_2 \bvec a_2 + n_3 \bvec a_3 $ 是任意格矢。我们可以想到，如果对函数 $f(\bvec r + \bvec R)$ 再平移一次空间坐标$\bvec R'$，则应得到$f(\bvec r + \bvec R + \bvec R')$，其效果等价于对 $f(\bvec r)$ 平移坐标$\bvec R + \bvec R'$，也即：
+\begin{equation}
+\hat{T}_{\bvec R'}\hat{T}_{\bvec R} f(\bvec r) = \hat{T}_{\bvec R + \bvec R'}f(\bvec r )
+\end{equation}
 
-波函数也可以记为
+从物理直觉上，晶体的周期性势场使得周期性平移不改变对系统的哈密顿量，也即能量守恒。下面将从数学角度证明哈密顿量与平移算符的对易性。
+
+\begin{align}
+\hat{T}_{\bvec R} \hat{H} f(\bvec r) &= \hat{T}_{\bvec R} \qty[(-\frac{\hbar^2}{2m}\nabla^2+V(\bvec r) ) f(\bvec r)] \\
+&= \qty[-\frac{\hbar^2}{2m}\nabla^2+V(\bvec r + \bvec R)]  f(\bvec r + \bvec R)\\
+&= \qty[-\frac{\hbar^2}{2m}\nabla^2+V(\bvec r) ] f(\bvec r+ \bvec R)\\
+& = \hat{H} \hat{T}_{\bvec R} f(\bvec r)
+\end{align}
+写成对易算符形式，也即
+\begin{equation}
+[\hat{T},\hat{H}] = 0
+\end{equation}
+因此，平移算符$\hat{T}$存在和能量 $\hat{H}$ 相同的本征态。
+为什么我们要关注它的对易性呢？因为\autoref{eq_Bloch_1} 实际上是波函数的本征方程，我们要证明平移算符的本征值为与$\bvec R$有关的相因子，就要先探究它的本征值长什么样。设哈密顿量的本征态为$\psi$，
+\begin{equation}\label{eq_Bloch_6}
+\hat{T}_{\bvec R} \psi (\bvec r) = \lambda_{\bvec R}\psi =\psi(\bvec r + \bvec R) 
+\end{equation}
+由波函数的归一化性质可知，$|\lambda_\bvec R |^2 = 1,~ \lambda_\bvec R = \E^{\I \beta}$。 利用平移算符的性质
+\begin{equation}
+\hat{T}_{\bvec R'} \hat{T}_{\bvec R}\psi (\bvec r) = \lambda_{\bvec R'}\lambda_{\bvec R}\psi (\bvec r) = \lambda_{\bvec R' + \bvec R} \psi (\bvec r),~
+\end{equation}
+\begin{equation}
+\lambda_{\bvec R'}\lambda_{\bvec R} =  \lambda_{\bvec R' + \bvec R},~
+\end{equation}
+\begin{equation}
+\E^{\I (\beta_{\bvec R'}+ \beta_{\bvec R})} = \E^{\I \beta_{\bvec R + \bvec R'}},~
+\end{equation}
+可以看到，$\beta$是$\bvec R$的线性函数，不妨设
+\begin{equation}
+\lambda_{\bvec R} = \E^{\I \bvec k \cdot \bvec R},~
+\end{equation}
+这就是我们要求的平移算符的本征值。其中 $\bvec k$ 是待定的常量。注意，由于不同的平移算符本征值对于不同的本征态，因此我们可以用$\bvec k$ 来区分这些本征态，记为$\psi_{\bvec k} (\bvec r)$。最后，将本征值代入\autoref{eq_Bloch_6}，我们就证明了布洛赫定理\autoref{eq_Bloch_1}。
+
+\subsection{一维布洛赫函数}
+在一维情况下，波函数可以记为
 \begin{equation}
 \psi(x) = \E^{\I K x} u(x)~,
 \end{equation}
@@ -89,7 +131,7 @@ K = \frac{2\pi}{a} \frac{n}{N} \qquad (n \in \mathbb Z)~,
 
 一个例子见一维 delta 势能晶格\upref{DelCry}。
 
-\subsection{三维薛定谔方程}
+\subsection{三维布洛赫函数}
 
 \cite{黄昆}\cite{Bransden}布洛赫（Bloch）波函数定义为
 \begin{equation}\label{eq_Bloch_3}
