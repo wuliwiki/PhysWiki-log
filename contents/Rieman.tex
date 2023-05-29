@@ -1,46 +1,176 @@
-% 黎曼积分
-% 积分|黎曼积分|微积分
+% 定积分存在条件
+% 积分|黎曼积分|微积分|振幅
 
-\begin{issues}
-\issueDraft
-\issueMissDepend
-\end{issues}
+\pentry{定积分\upref{DInt}，上确界与下确界\upref{SupInf}}
+“定积分\upref{DInt}"里给出了定积分的定义，并且强调了该定义只适用于有解函数的情况。也就是说定积分的存在是有条件的，所以自然而然就出现这样的疑问：是否有一般的办法断定积分是否存在？这就是本词条要完成的任务。
+\subsection{达布和}
+定积分的定义（\autoref{def_DInt_3}~\upref{DInt}）中，积分和（黎曼和）的极限要求 $\xi_i$ 在区间 $[x_i,x_{i+1}]$ 上的选择是任意的。为简化研究，除积分和外，按照达布（Darboux）的方法，引进一类更为简单的和。
+\begin{definition}{达布和}
+在将区间 $[a,b]$ 插入分点进行划分时，如果在每一部分区间 $[x_i,x_{i+1}]$ 上都选取使得函数 $f(x)$ 在该区间上为最大（最小）的 $x\in[x_i,x_{i+1}]$，则得到的积分和称\textbf{达布和}，或\textbf{上（下）积分和}。
+\end{definition}
+显然，达布和仅仅是给出了 $\xi_i$ 在区间 $[x_i,x_{i+1}]$ 的两种选择方式：使 $f(x)$ 在该区间上最大或最小。所以它只是某种特殊的积分和。
 
-\footnote{参考\href{https://math.berkeley.edu/~arveson/Dvi/105/note1.pdf}{这个讲义}。}我们来定义区间 $[a, b]$ 的实函数 $f(x)$ 的黎曼积分。 令有序实数列
+为方便起见，设
 \begin{equation}
 \mathcal P = \qty{a = x_0 < x_1 < \dots < x_n = b}~,
 \end{equation}
-令
+是给定的分点序列（或区间 $[a,b]$ 的分划）。用 $m_i,M_i$ 分别代表函数 $f(x)$ 在第 $i$ \footnote{从0开始计数}个部分区间 $[x_i,x_{i+1}]$ 的最大与最小值，而下、上积分和记为
 \begin{equation}
-m_k = \inf_{x_{k-1} \le x \le x_k} f(x), \qquad M_k = \sup_{x_{k-1} \le x \le x_k} f(x) \quad (1 \le k \le n)~,
+s= \sum_{k = 1}^n m_k\Delta k, \qquad  S = \sum_{k = 1}^n M_k \Delta_k~,
 \end{equation}
-对应的下和上黎曼求和为
+
+显然，$s,S$ 分别是给定分划时积分和中的\textbf{下确界}和\textbf{上确界}(\autoref{def_SupInf_2}~\upref{SupInf})。因为如果数集有最大值和最小值，则最大值和最小值就是数集的上确界和下确界。这个证明很简单，因为上确界是上界中的最小者，而如果数集有最大值 $a$，那么它的上界 $A$ 必须满足 $A\geq a$，由这不等式容易知道，上界中的最小值就是 $a$，同样下确界可以类似证明。
+\subsubsection{达布和的性质}
+达布和的两个基本性质可用如下两个定理说明。
+\begin{theorem}{}\label{the_Rieman_1}
+若在原来分划中加入新的分点，则达布下和只能增大，而达布上和只能减小。
+\end{theorem}
+\textbf{证明：}
+我们仅讨论下和，上和可类似讨论。只需讨论在任一部分区间 $[x_i,x_{i+1}]$ 内加入一个新的分点 $x'$ 即可，即
 \begin{equation}
-\underline I(f, \mathcal P) = \sum_{k = 1}^n m_k\Delta k, \qquad \bar I(f, \mathcal P) = \sum_{k = 1}^n M_k \Delta_k~,
+x_i<x'<x_{i+1}
 \end{equation}
-其中 $\Delta_k = x_k - x_{k-1}$， $1\le k\le n$。 下和上黎曼积分的定义为
+用 $s'$ 表示新的下和，那么，$s,s'$ 仅在这个区间  $[x_i,x_{i+1}]$ 有所不同，两者对应于该区间的项分别是
 \begin{equation}
-\underline I(f) = \sup_{\mathcal P} \underline I(f, \mathcal P), \qquad \bar I(f) = \inf_{\mathcal P} \bar I(f, \mathcal P)~,
+m_i(x_{i+1}-x_i),\qquad m_{1i}(x'-x_i)+m_{2i}(x_{i+1}-x'),
 \end{equation}
-显然， $\underline I(f) \le \bar I(f)$。 $f$ 叫做\textbf{黎曼可积（Riemann integrable）} 当且仅当上下黎曼积分相等
+其中 $m_{1i},m_{2i}$ 分别是函数 $f(x)$ 在区间 $[x_i,x'],[x',x_{i+1}]$ 山的最小值，由于 $m_i$ 是区间 $[x_i,x_{i+1}]$ 上 $f(x)$ 的最小值，所以
 \begin{equation}
-I(f) = \underline I(f) = \bar I(f)~.
+m_i\leq m_{1i},\qquad m_i\leq m_{2i}.
 \end{equation}
+于是
+\begin{equation}
+\begin{aligned}
+m_i(x_{i+1}-x_i)&=m_i(x_{i+1}-x')+m_i(x'-x_i)\\
+&\leq m_{2i}(x_{i+1}-x')+m_{1i}(x'-x_i)
+\end{aligned}
+\end{equation}
+由此推得 $s'>s$。
+
+\textbf{证毕！}
+\begin{theorem}{}\label{the_Rieman_2}
+任一达布下和都不大于任一达布上和。
+\end{theorem}
+\textbf{证明：}
+考虑\textbf{任意两个}分划，设它们的达布和分别为 $s_1,S_1$ 和 $s_2,S_2$。所以定理的证明相当于只需证明 $s_1\leq S_2$。把这两分划的分点合在一起构成新的分划，记其达布和为 $s_3,S_3$。根据\autoref{the_Rieman_1} ，
+\begin{equation}
+s_1\leq s_3,\qquad S_3\leq S_2
+\end{equation}
+ 而 $s_3\leq S_3$，所以 $s_1\leq S_2$。
+
+\textbf{证毕！}
+
+由\autoref{the_Rieman_2} ，下和的整个集合 $\{s\}$ 上有界，上和的整个集合 $\{S\}$ 下有界。由确界定理（\autoref{def_SupInf_3}~\upref{SupInf}），$\{s\},\{S\}$ 分别有有限的上确界和下确界：
+\begin{equation}
+I_*=\sup\qty{s},\qquad I^*=\inf\qty{S}.
+\end{equation}
+显然 $I_*\leq I^*$。
+
+上述可总结为
+\begin{equation}\label{eq_Rieman_2}
+s\leq I_*\leq I^*\leq S
+\end{equation}
+\begin{definition}{达布积分}
+称 $I_*,I^*$ 分别为\textbf{达布下积分}和\textbf{达布上积分}。
+\end{definition}
+
+\subsection{定积分的存在条件}
+
+借助达布和的知识，现在容易得到定积分存在的充要条件了。
+\begin{theorem}{定积分存在的充要条件}
+函数 $f(x)$ 从 $a$ 到 $b$ 的区间上定积分存在的充要条件是：其达布上和与下和之差在
+\begin{equation}
+\lambda=\max \left\{\Delta x_i|i=0,\cdots,n-1 \right\} 
+\end{equation}
+趋于0时其极限为0，即
+\begin{equation}\label{eq_Rieman_1}
+\lim_{\lambda\rightarrow0}(S-s)=0
+\end{equation}
+\end{theorem}
+\textbf{证明：}
+1.必要性：假定积分为 $I$，于是对任一 $\epsilon>0$，可以找到 $\delta>0$，使得只要 当所有 $\Delta x_i<\delta$ ，就有
+\begin{equation}
+\abs{\sigma-I}<\epsilon,\quad or \qquad I-\epsilon<\sigma<I+\epsilon.
+\end{equation}
+对应满足该条件的分划，设 $s,S$ 是其达布下和与上和，所以就有
+\begin{equation}
+I-\epsilon\leq s\leq S\leq I+\epsilon
+\end{equation}
+于是
+\begin{equation}
+\lim_{\lambda\rightarrow0}s=I,\quad \lim_{\lambda\rightarrow0}S=I
+\end{equation}
+上式等价于
+\begin{equation}
+\lim_{\lambda\rightarrow0}(S-s)=0.
+\end{equation}
+
+2.充分性：设\autoref{eq_Rieman_1} 成立，那么由 \autoref{eq_Rieman_2}  $I_*=I^*=I$。令 $\sigma$ 为 $s,S$ 对应的区间分划的和，那么
+\begin{equation}
+\begin{aligned}
+&s\leq I\leq S,\quad s\leq \sigma\leq S\\
+&\Downarrow\\
+&\abs{\sigma-I}\leq\abs{S-s}\\
+&\Downarrow\\
+&0\leq\lim_{\lambda\rightarrow0}\abs{\sigma-I}\leq\lim_{\lambda\rightarrow0}\abs{S-s}=0\\
+&\Downarrow\\
+&\lim_{\lambda\rightarrow0}\abs{\sigma-I}=0\\
+&\Downarrow\\
+&\lim_{\lambda\rightarrow0}\sigma=I
+\end{aligned}
+\end{equation}
+即定积分存在。
+
+\textbf{证毕！}
+
+\begin{definition}{振幅}\label{def_Rieman_1}
+函数在某一区间上的最大值与最小值之差称为函数在该区间上的\textbf{振幅}。
+\end{definition}
+那么如果以 $\omega_i$ 表示区间 $[x_i,x_{i+1}]$ 上的振幅，\autoref{eq_Rieman_1} 就等价于
+\begin{equation}\label{eq_Rieman_3}
+\lim_{\lambda\rightarrow0}\sum_{i=0}^{n-1}\omega_i\Delta x_i=0.
+\end{equation}
+
+有了定积分存在的充要条件，我们要证明函数可积（\autoref{def_DInt_3}~\upref{DInt}），就只需证明函数满足\autoref{eq_Rieman_1} 或\autoref{eq_Rieman_3} 即可。
+
+%\textbf{注意：以下内容属于可积函数的内容，应移到可积函数词条。}
+
+%\footnote{参考\href{https://math.berkeley.edu/~arveson/Dvi/105/note1.pdf}{这个讲义}。}
+%我们来定义区间 $[a, b]$ 的实函数 $f(x)$ 的黎曼积分。 令有序实数列
+%\begin{equation}
+%\mathcal P = \qty{a = x_0 < x_1 < \dots < x_n = b}~,
+%\end{equation}
+%令
+%\begin{equation}
+%m_k = \inf_{x_{k-1} \le x \le x_k} f(x), \qquad M_k = \sup_{x_{k-1} \le x \le x_k} f(x) \quad (1 \le k \le n)~,
+%\end{equation}
+%对应的下和上黎曼求和为
+%\begin{equation}
+%\underline I(f, \mathcal P) = \sum_{k = 1}^n m_k\Delta k, \qquad \bar I(f, \mathcal P) = \sum_{k = 1}^n M_k \Delta_k~,
+%\end{equation}
+%其中 $\Delta_k = x_k - x_{k-1}$， $1\le k\le n$。 下和上黎曼积分的定义为
+%\begin{equation}
+%\underline I(f) = \sup_{\mathcal P} \underline I(f, \mathcal P), \qquad \bar I(f) = \inf_{\mathcal P} \bar I(f, \mathcal P)~,
+%\end{equation}
+%显然， $\underline I(f) \le \bar I(f)$。 $f$ 叫做\textbf{黎曼可积（Riemann integrable）} 当且仅当上下黎曼积分相等
+%\begin{equation}
+%I(f) = \underline I(f) = \bar I(f)~.
+%\end{equation}
 % 我们以下用 $I(f)$ 表示黎曼积分， $\int$ 符号表示勒贝格积分。
 
-\begin{theorem}{}
-任何连续函数 $f \in C[a, b]$ 都是黎曼可积的。
-\end{theorem}
+%\begin{theorem}{}
+%任何连续函数 $f \in C[a, b]$ 都是黎曼可积的。
+%\end{theorem}
 
-\begin{theorem}{}
-任何单调函数 $f: [a, b] \to \mathbb{R}$ 都是黎曼可积的。
-\end{theorem}
+%\begin{theorem}{}
+%任何单调函数 $f: [a, b] \to \mathbb{R}$ 都是黎曼可积的。
+%\end{theorem}
 
-我们可以证明闭区间$[a, b]$上的单调函数最多只有可数个不连续点\autoref{def_confun_1}~\upref{confun}（待添加\footnote{参考 \href{https://en.wikipedia.org/wiki/Discontinuities_of_monotone_functions}{Wikipedia 相关页面}}），实际上我们可以把定理推广为
+%我们可以证明闭区间$[a, b]$上的单调函数最多只有可数个不连续点\autoref{def_confun_1}~\upref{confun}（待添加\footnote{参考 \href{https://en.wikipedia.org/wiki/Discontinuities_of_monotone_functions}{Wikipedia 相关页面}}），实际上我们可以把定理推广为
 
-\begin{theorem}{}
-任何函数 $f: [a, b] \to \mathbb{R}$ ，如果它只有有限个不连续点，那么 $f$ 是黎曼可积的。
-\end{theorem}
+%\begin{theorem}{}
+%任何函数 $f: [a, b] \to \mathbb{R}$ ，如果它只有有限个不连续点，那么 $f$ 是黎曼可积的。
+%\end{theorem}
 
 % 移动到勒贝格积分里去
 % \begin{theorem}{}
@@ -55,17 +185,17 @@ I(f) = \underline I(f) = \bar I(f)~.
 
 % \subsection{黎曼不可积函数的例子}
 
-不是所有函数都是黎曼可积的，比如
+%不是所有函数都是黎曼可积的，比如
 
-\begin{example}{Dirichlet函数}
-
-Dirichlet函数
-\begin{equation}
-D(x)=
-\leftgroup{
-    1, x\in\mathbb{Q}\\
-    0, x\not\in\mathbb{Q}
-}
-\end{equation}
-不是Riemann可积的：对于任何一个子区间$[a, b]$，其上最大值为$1$，最小值为$0$，因此上黎曼积分为 $1$，下黎曼积分为 $0$。
-\end{example}
+%\begin{example}{Dirichlet函数}
+%下例已移到
+%Dirichlet函数
+%\begin{equation}
+%D(x)=
+%\leftgroup{
+ %   1, x\in\mathbb{Q}\\
+  %  0, x\not\in\mathbb{Q}
+%}
+%\end{equation}
+%不是Riemann可积的：对于任何一个子区间$[a, b]$，其上最大值为$1$，最小值为$0$，因此上黎曼积分为 $1$，下黎曼积分为 $0$。
+%\end{example}
