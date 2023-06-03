@@ -5,7 +5,7 @@
 
 \subsection{定理的描述}
 
-本词条是专门用来证明下述\autoref{the_SprbE2_1} 的，其自然语言的描述即是本词条的标题。
+本词条是专门用来证明下述\autoref{the_SprbE2_1} 的，其自然语言的描述即是本词条的标题。本文部分节选自《代数学基础》。
 
 \begin{theorem}{}\label{the_SprbE2_1}
 域$\mathbb{F}$上的不可约可分多项式$f(x)$的分裂域$\mathbb{K}$是$\mathbb{F}$的可分扩张。
@@ -99,10 +99,14 @@ $\Leftarrow$：
 
 
 
+这样一来，只要有办法判断一个元素是否可分，就能判断其单扩张是否可分了。进一步，任何有限扩张都可以拆分成若干次单扩张的结果，于是也能讨论任何有限扩张的情形了。当然，这是目前的猜测，真实情况的性质更好，看下去就知道了。
+
+
+
 \subsection{推论}
 
 
-% \begin{lemma}{}
+% \begin{lemma}{}\label{lem_SprbE2_2}
 % 给定域$\mathbb{F}$和其上的两个可分代数元$a, b$，则$a+b$也是$\mathbb{F}$的可分代数元。
 % \end{lemma}
 
@@ -129,7 +133,7 @@ $\Leftarrow$：
 % \end{lemma}
 
 \begin{corollary}{}\label{cor_SprbE2_2}
-设$\mathbb{L}/\mathbb{K}$是一个\textbf{可分}域扩张，且$[\mathbb{L}:\mathbb{K}]=n$。则$\mathbb{L}$的保$\mathbb{K}$自同构有$n$个。
+设$\mathbb{L}/\mathbb{K}$是一个\textbf{可分正规}扩张，且$[\mathbb{L}:\mathbb{K}]=n$。则$\mathbb{L}$的保$\mathbb{K}$自同构有$n$个。
 \end{corollary}
 
 \textbf{证明}：
@@ -140,27 +144,100 @@ $\Leftarrow$：
 
 
 
-\begin{corollary}{可分扩张的传递性}\label{cor_SprbE2_1}
-设$\mathbb{L}/\mathbb{F}$是域代数扩张，其有一中间域$\mathbb{K}$。如果$\mathbb{K}/\mathbb{F}$和$\mathbb{L}/\mathbb{K}$都是可分扩张，那么$\mathbb{L}/\mathbb{F}$是可分扩张。
-\end{corollary}
+
+
+\begin{lemma}{可分元素的判定}\label{lem_SprbE2_2}
+设域$\mathbb{F}$的特征为
+\footnote{特征为$0$的域都是完美域，故无须讨论。}
+$p$，则$\alpha$是$\mathbb{F}$的可分元素当且仅当$\mathbb{F}(\alpha)=\mathbb{F}(\alpha^p)$。
+\end{lemma}
+
+
+
+
+
+%挺有趣，必要性我思路走偏了，看了朱富海老师的证明写的。但是充分性虽然和朱老师一样，确实我自己想出来的，这个思路倒是好想，遇到不可分不可约多项式，第一反应就是用可分不可约多项式来表达嘛。
+\textbf{证明}：
+
+\textbf{必要性}：
+
+令$f(x)=x^p-\alpha^p$，显然$f(\alpha)=0$，故$\opn{Irr}(\alpha, \mathbb{F}(\alpha))\mid f$。
+
+又因为域特征为$p$，
+\begin{equation}
+    f(x) = x^p-\alpha^p = (x-\alpha)^p
+\end{equation}
+结合$\alpha$在$\mathbb{F}$上可分$\implies$在$\mathbb{F}(\alpha^p)$上可分，可知$\opn{Irr}(\alpha, \mathbb{F}(\alpha))=x-\alpha$。因此，$\alpha\in\mathbb{F}$，从而得证。
+
+\textbf{充分性}：
+
+记$m=\opn{Irr}(\alpha, \mathbb{F})$。反设$\alpha$在$\mathbb{F}$上不可分，即存在$\mathbb{F}$上\textbf{可分的不可约}多项式$h$和\textbf{正整数}$k$，使得$m(x)=h\qty(x^{p^k})$。
+
+令$g(x)=h\qty(x^{p^{k-1}})$，则
+\begin{equation}
+    g(\alpha^p)= h\qty(\qty(\alpha^{p})^{p^{k-1}}) = h\qty(\alpha^{p^k}) = m(\alpha) = 0
+\end{equation}
+即$g(x)$是$\alpha^p$的零化多项式。
+
+故$\opn{deg}\opn{Irr}(\alpha^p, \mathbb{F})\leq \opn{deg}g< \opn{deg}m$。由单扩张的次数定理（\autoref{the_FldExp_1}~\upref{FldExp}）即可知$[\mathbb{F}(\alpha^p):\mathbb{F}]<[\mathbb{F}(\alpha):\mathbb{F}]$，从而$\mathbb{F}(\alpha^p))\subsetneq\mathbb{F}(\alpha)$。
+
+\textbf{证毕}。
+
+
+
+
+
+\begin{lemma}{}
+给定域$\mathbb{F}$。若$\mathbb{F}(a)/\mathbb{F}$和$\mathbb{F}(a, b)/\mathbb{F}(a)$都是可分扩张，则$\mathbb{F}(a, b)/\mathbb{F}$也是。
+\end{lemma}
 
 \textbf{证明}：
 
-% 任取$a\in\mathbb{E}$。
+不妨设$\opn{ch}\mathbb{F}=p$。
 
-% 由于$a$是$\mathbb{K}$上的可分元素，我们可以取它的最小多项式
-% \begin{equation}
-% f(x) = \sum_{i=0}^n a_ix^i \in\mathbb{K}[x]
-% \end{equation}
+因为$b$在$\mathbb{F}(a)$上可分，故由\autoref{lem_SprbE2_2} 知，
+\begin{equation}\label{eq_SprbE2_1}
+    \mathbb{F}(a, b^p) = \mathbb{F}(a)(b^p) = \mathbb{F}(a)(b) = \mathbb{F}(a, b)
+\end{equation}
 
-% 由于$\mathbb{K}/\mathbb{F}$是可分扩张，故各$a_i$都是$\mathbb{F}$上的可分元素。
 
-% 据\autoref{cor_PrmtEl_2}~\upref{PrmtEl}，存在$\gamma\in\mathbb{F}(a_1, a_2, \cdots, a_n)\subseteq\mathbb{K}$，使得$\mathbb{F}(a_1, a_2, \cdots, a_n)=\mathbb{F}(\gamma)$。%孟道骥的做法，在这里显得累赘了，略去。
 
-$\mathbb{L}$的保$\mathbb{F}$自同构数量，等于$\mathbb{L}$的保$\mathbb{K}$自同构数量\textbf{乘以}$\mathbb{K}$的保$\mathbb{F}$自同构数量。
 
-于是据\autoref{cor_SprbE2_2} ，可知$\mathbb{L}$的保$\mathbb{F}$自同构数量等于$[\mathbb{L}:\mathbb{F}]$。这违反了\autoref{the_SprbE2_1} 第$2$条，因此$\mathbb{L}/\mathbb{F}$是可分扩张。
+记$f=\opn{Irr}(a, \mathbb{F}(b))$，$g=\opn{Irr}(a, \mathbb{F}(b^p))$，则由于$\mathbb{F}(b^p)\subseteq\mathbb{F}(b)$，可知$f\mid g$。
 
+由于域特征为$p$，$f(x)^p\in\mathbb{F}(b^p)[x]$，且显然是$a$的零化多项式，因此$g\mid f^p$。又因为$a$在$\mathbb{F}$上可分$\implies$在$\mathbb{F}(b^p)$上可分，故得$g\mid f$。
+
+综上，$f=g$。
+
+由单扩张的次数定理（\autoref{the_FldExp_1}~\upref{FldExp}）可知
+\begin{equation}
+[\mathbb{F}(a, b^p):\mathbb{F}(b^p)] = [\mathbb{F}(a, b):\mathbb{F}(b)]
+\end{equation}
+
+再结合域扩张的次数乘积定理（\autoref{the_FldExp_3}~\upref{FldExp}）和\autoref{eq_SprbE2_1} 可知
+\begin{equation}
+[\mathbb{F}(b):\mathbb{F}(b^p)] = \frac{[\mathbb{F}(a, b^p):\mathbb{F}(b^p)]}{[\mathbb{F}(a, b):\mathbb{F}(b)]} = 1
+\end{equation}
+
+即$\mathbb{F}(b)=\mathbb{F}(b^p)$。由\autoref{lem_SprbE2_2} 可知$b$是$\mathbb{F}$上的可分元素。
+
+\textbf{证毕}。
+
+
+
+
+
+
+
+
+
+
+
+\begin{corollary}{可分扩张的传递性}\label{cor_SprbE2_1}
+设$\mathbb{K}/\mathbb{F}$是域代数扩张，其有一中间域$\mathbb{M}$。如果$\mathbb{M}/\mathbb{F}$和$\mathbb{K}/\mathbb{M}$都是可分扩张，那么$\mathbb{K}/\mathbb{F}$是可分扩张。
+\end{corollary}
+
+\textbf{证明}：
 
 
 
