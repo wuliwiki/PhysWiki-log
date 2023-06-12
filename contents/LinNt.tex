@@ -78,7 +78,7 @@
 \item \verb|plocate| 是一个比较快的实现， \verb|mlocate| 是一个比较安全的实现， 命令都是 \verb|locate|， \verb|/etc/updatedb.conf| 中可以设置 \verb|updatedb| 的一些选项， 例如忽略挂载到某个目录的硬盘， 忽略 \verb|.git| 文件夹等， 忽略某些文件系统等。
 \item 文件批量重命名 \verb|rename 's/老名字/新名字/' *|。 \verb|-n| 选项显示重命名的预览， 不真的重命名
 \item \verb|sudo swapoff -a| 不使用 swap file， \verb|sudo swapon -a| 恢复使用。 可能还需要在 \verb|/etc/fstab| 里面注释掉相应的行。
-\item 要改变 swap 文件的尺寸： \verb|sudo swapoff /swapfile|， \verb|sudo dd if=/dev/zero of=/swapfile bs=1M count=1024 oflag=append conv=notrunc|， \verb|sudo mkswap /swapfile|， \verb|sudo swapon /swapfile| 一般无需重启， 但如果系统不允许关闭 swap， 也可以考虑用多个 swap 文件。有时候 \verb|/swapfile| 也叫做 \verb|/swap|。
+\item 要改变 swap 文件的尺寸： \verb|sudo swapoff /swapfile|， \verb|sudo dd if=/dev/zero of=/swapfile bs=1M count=1024|， \verb|sudo mkswap /swapfile|， \verb|sudo swapon /swapfile| 一般无需重启， 但如果系统不允许关闭 swap， 也可以考虑用多个 swap 文件。有时候 \verb|/swapfile| 也叫做 \verb|/swap|。
 \item 用 \verb|free -h| 可以查看当前 RAM 和 swap 的大小和使用情况。
 \item 如果要开机自动使用 swapfile， 用 \verb|/swapfile none swap sw 0 0|
 \item \verb|tree| （非系统自带） 可以显示当前目录的树状图， \verb|tree -a| 也显示隐藏文件。
@@ -206,14 +206,16 @@
 \item \verb`su 用户名` 可以临时改变登录的身份， \verb|sudo -i| 或者 \verb|su| 可以持续管理员身份。
 \item 使用 \verb|sudo| 以后， 命令的执行者就会临时变为 \verb|root|， 一些 config 文件也会使用 \verb|/root/| 文件夹中的而不是 \verb|/home/用户名| 中的， 例如 \verb|/root/.ssh/config|。
 \item \verb`sudo` 的密码是用户密码, 而 \verb`su` 的密码是 root 密码, 后者的权限更高
-\item \verb`useradd [-m] [-g 用户组] [-U] [-s /bin/bash] 用户名`。 其中 \verb|-m| 给新用户创建 home 目录， \verb|-U| 选项创建和用户名相同的用户组， \verb|-s| 指定 shell。
+\item \verb`useradd [-m] [-g 用户组] [-U] [-s /bin/bash] 用户名`。 其中 \verb|-m| 给新用户创建 home 目录， \verb|-U| 选项创建和用户名相同的用户组并作为 primary group （不能和 \verb|-g| 选项同时使用）， \verb|-g| 用于指定用户的 primary group， \verb|-s| 指定 shell。
 \item \verb|adduser 用户名| 可以用互动的方式创建用户。
 \item \verb`passwd 用户名` 可以修改密码
 \item \verb`userdel 用户名` 删除账户
 \item \verb`users` 命令显示目前所有登录的用户, \verb`who` 命令可以显示更详细的信息
-\item \verb`/etc/passwd` 文件中记录了系统的所有 user， 格式为 \verb|用户名:密码(x代表已加密):用户ID:组ID:用户的可选信息(姓名电话等):HOME文件夹:默认shell|。 通常 1000 以下的用户 ID 是系统用户。
-\item \verb|/etc/group| 文件记录了所有用户组的信息， 格式为 \verb|用户名:密码:组ID:组员|
-\item 一个用户只能有一个 primary group， 就是 \verb|/etc/passwd| 中的。 也可以有多个 secondary group， 就是 \verb|/etc/group| 中的每行最后一个信息
+\item \verb`/etc/passwd` 文件中记录了系统的所有 user， 格式为 \verb|用户:密码(x代表已加密):用户ID:组ID:用户的可选信息(姓名电话等):HOME文件夹:默认shell|。 通常 1000 以下的用户 ID 是系统用户。
+\item \verb|/etc/group| 文件记录了所有用户组的信息， 格式为 \verb|组名:密码:组ID:组员|
+\item 把用户加入某个组： \verb|usermod -aG 组 用户名|
+\item 一个用户只能有一个 primary group， 就是 \verb|/etc/passwd| 中的。 也可以有多个 secondary group， 就是 \verb|/etc/group| 中的每行最后一个信息。
+\item 用户创建的文件和文件夹默认的组就是 primary group。
 \item \verb|chgrp| 可以改变文件的组
 \item \verb|groupadd 组名| 新建用户组
 \item \verb`groupdel 组名` 移除用户组
@@ -222,9 +224,33 @@
 \item \verb`ls` 选项： \verb`-a` (all)(显示隐藏) \verb`-m` (挤到一起) \verb`-1` 显示为一列 \verb`-v` 按照数字大小排序
 \item \verb`chown 用户名 文件` 修改文件的所有者， \verb|-R| 对文件夹 recursive
 \item \verb|ls -l| 中第二列是 “link 的数量”， 比较鸡肋， 普通文件和软链是 1， 文件夹是 2。
+\item 你自己对某个文件/文件夹是什么权限， 你调用的程序也只有这些权限。
 \item \verb`chmod 权限 文件` 修改文件的权限. <权限> 是三位8进制数, 每一位是 x(1),w(2),r(4)之和. 常见的例子： \verb|7| 代表 \verb|rwx|， \verb|6| 代表 \verb|rw|， \verb|4| 代表 \verb|r|
 \item \verb`chmod 权限 -R 文件夹` 可以修改文件夹和所有内部子文件夹和子文件的权限。 千万注意不要为了方便把一些系统文件夹甚至 \verb|/home/用户| 文件夹的设置文件设得太开放， 这可能会影响一些秘钥的自动验证， 尤其是 \verb|ssh| 相关的。
-\item 注意 \verb|cd| 到某个文件夹中必须要有 \verb|-x| 权限， 即使不执行任何东西。
+\item 注意对于文件夹而言，\verb|x| 权限控制的是 \verb|cd| 到其中的权限， 而 \verb|r| 权限则控制是否可以看到其中有什么文件。 如果只有 \verb|x| 没有 \verb|r| 则代表你可以 \verb|cd| 进去， 但 \verb|ls| 用不了。 如果它的子文件夹也只有 \verb|x| 没有 \verb|r|， 那么你无法知道这个子文件夹存在， 但如果你知道它的名字就可以 \verb|cd| 进去。
+\item 如果你对一个文件夹的 \verb|rwx| 都没有， 那么文件夹和其子文件夹内的所有内容你都无法看到也无法进行任何操作， 无论内部的文件和子文件夹有多开放。
+\item 如果你对一个文件夹只有 \verb|rw| 没有 \verb|x|， 也只是好了那么一点点， 你可以对文件夹就地重命名（不能移动）， 只能看到文件夹内第一层的文件和子文件夹的名字（看不到权限），其他同样什么也做不了。
+\item 用户创建的文件的权限默认是 \verb|644|， 文件夹默认 \verb|755|（允许 \verb|x|，所有人可以进入文件夹）。
+\item \verb|umask 002| 可以修改新建文件的默认权限为 \verb|664| （666-002=664）， 且新建文件夹的默认权限被修改为 \verb|775| （777-002=775）。 如果设 \verb|umask 007|， 那么文件默认权限为 \verb|660|（6-7=0）， 文件夹为 \verb|770|。 注意 \verb|umask| 只对当前的 shell 生效， 要永久生效可以放到 \verb|~/.bashrc| 里面。
+\item 用户创建的文件和文件夹的组默认为用户的 primary group。 但是一个例外是， 如果所在的文件夹的 SetGID 开启， 那么创建文件和文件夹的组默认为它所在的文件夹的组， 且创建的文件夹也会默认开启 SetGID。
+\item 要开启 SetGID， 用 \verb|chmod +s|。 在显示权限时， 文件夹会显示为 \verb|rws|。 \verb|s| 的编号是 \verb|2000|， 例如可以用 \verb|chmod 2775 文件夹|。
+\item 所以作为系统管理员，要想让不同组的用户可以访问不同的文件夹，那就首先把这个文件夹本身的 owner 设为 \verb|root|， 组设为可以访问的组， 权限设为 \verb|2750|。 所有子文件夹和文件的组设为可以访问的组， 权限分别设为 \verb|2775| 和 \verb|664|。 每个用户的 \verb|~/.bashrc| 中 \verb|umask| 设为 \verb|002| （默认为 022）。
+\begin{lstlisting}[language=bash]
+folder=文件夹
+group=组
+
+sudo chown root $folder
+sudo chgrp $group -R $folder
+sudo chmod 2750 $folder
+
+find $folder -type d -exec sudo chmod 2775 {} \;
+find $folder -type f -exec sudo chmod 664 {} \;
+find $folder -type f -name '*.sh' -exec sudo chmod +x {} \;
+
+sudo echo umask 002 >> /home/用户1/.bashrc
+sudo echo umask 002 >> /home/用户2/.bashrc
+...
+\end{lstlisting}
 \item \verb`groups` 或者 \verb`groups <user>` 可以查看用户所在的组
 \item \verb`id` 可以查看用户的信息 \verb`uid (user id) gid (group id)`
 \item \verb`vim /etc/group` 可以查看记录 group 信息的文件

@@ -5,7 +5,8 @@
 每个 subsubsection 按优先级排序
 
 \begin{itemize}
-\item 笔记功能为了保持数据库兼容性使用 \verb|PhysWikiScan| 仓库中的 \verb|PhysNoteScan| 可执行文件。
+\item 笔记功能为了保持数据库兼容性使用 \verb|PhysWikiScan| 仓库中的 \verb|NoteScan| 可执行文件。
+\item 为了防止同昵称用户的笔记文件夹冲突，使用数据库的 \verb|authors.id| 作为用户笔记文件夹的名称， 如果不存在就在数据库新建一个作者。
 \item editor 对 \verb|PhysWikiScan| 的所有调用都要检查是有 \verb|cerr| 输出， 以及 exit code 是否为零。 如果有错误应该在编辑器前端提示。
 \item 更新数据库时， 需要尽量开启 \verb|PRAGMA foreign_keys = ON;| 检查 foreign key 是否存在。
 \item 使用 \verb|entries.occupied| 标记词条占用状态（包括被谁占用）， 不要记录到其他任何地方。 “查看词条占用状态” 按钮使用该数据， 发布或者使用解除占用按钮都重置该数据。
@@ -66,6 +67,8 @@
 \item 有时候笔记页面登录后会弹出百科的词条列表， 甚至可以打开词条， 这比较严重
 
 \item 编辑器可以读取网站用户的编辑权限（等健叔更新 api）
+
+\item main.tex 按发布按钮不会自动 \verb|git add|。
 
 \item 如果文章带有脚注（例如 crypto.tex）， 导出 md 文件到知乎并发布后， 脚注编号会错误， 且返回链接会直接以文本的形式显示。 注意为了鼓励用户查看原文， 所有的链接仍然应该跳转到 wuli.wiki 的相关页面。
 
@@ -224,6 +227,7 @@
 \subsection{Editor TODO}
 按优先级排序
 \begin{itemize}
+\item 让 editor 在 littleshi.cn, PhysWiki, PhysWiki-backup， user-notes 等仓库中创建的文件的 mode 都默认为 660。 文件的 user 和 group 也需要时 editor（也就是说编辑器后台以 editor 的身份运行）。
 \item 知乎导入 md 的格式升级了， 导出 md 的功能也要相应更改， 现在的格式例如
 \begin{lstlisting}[language=markdown]
 # 大标题
@@ -238,6 +242,8 @@ $$a^2 + b^2 = c^2$$
 \end{lstlisting}
 
 \item 凡是显示所有词条的列表， 每次只加载 50 个， 翻到最后再继续加载。
+
+\item 编辑器的预览中， 如果有 \verb|wuli.wiki/changed/xxxx.html| 的链接， 点击以后在编辑器中打开 \verb|xxxx.tex|（相当于在 tex 代码中 Shift+Click 橙色下划线的链接）。 如果有 \verb|wuli.wiki/changed/xxxx.html#eq_xxxx|， 点击以后自动在编辑器中跳转到对应公式。 其他的链接也类推。
 
 \item 【先不做】在笔记功能中添加一个重置按钮， 按了之后提示两次 \verb|你确定要重置笔记吗？ 所有词条将被删除且原则上无法恢复（仍然可联系管理员恢复，但管理员一般很忙）！ 请确保你已经通过下载按钮下载最新源码！ 该功能主要用于解决历史用户的某些严重的 bug， 恢复后可以手动把备份的词条重新逐一手动复制上来|。
 

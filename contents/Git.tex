@@ -51,6 +51,7 @@ Git for Windows 的 Git bash 是不支持 symlink 的， symlink clone 下来以
 \item 所有 config 和 attribute 文件对 GitHub Desktop 同样有效。
 \item 要从服务器 clone 一个 Repository, 先获取网址， 然后用 \verb|git clone https://...| 即可。 git 会 clone 到当前目录下。
 \item 如果 clone 了以后用 \verb|git status| 发现所有的文件都改变了， 用 \verb|git config --global core.fileMode false| 即可。 如果还是不行就去掉 \verb|--global|。
+\item 注意 \verb|git| 只会追踪 \verb|x| 权限的变化（不确定是三个 \verb|x| 还是一个 \verb|x|）。
 \item \verb|git clone <folder1> <folder2>| 把 folder1 中的 repo 复制到 folder2 中。 但注意路径要用 \verb|/| 而不是 \verb|\|. 如 \verb|/C/Users/addis/Documents/GitHub/cn2D/|
 \item \verb|git clone --no-checkout ...| 选项可以只复制 .git 文件夹。
 \item Git bash 第一次 push 到 GitHub 的时候会弹出登录框， 密码被存在 Windows 的 Credential Manager 中的 、\verb|git:https://github.com|.
@@ -122,6 +123,7 @@ git config --global pack.threads 2 # 使用多少线程压缩 pack
 \item 用 \verb|gitk| 可以弹出 GUI 显示每一次 commit 的文件目录， 不需要 checkout 就可以看到。
 \item \verb|git push| 到一个 nonbare repo 一般是不允许的， 除非这个 repo 设置了 \verb|git config receive.denyCurrentBranch warn| 或者 \verb|git config receive.denyCurrentBranch ignore.| 这时如果 push, 并不会改变 remote 的 working directory. (其实这正是我增量备份 .git 需要的!)
 \item \verb|git config --local --bool core.bare false|， 然后把所有文件数据库文件放到新建的 \verb|.git| 里面， 就可以把一个 bare repo 变成正常 repo。
+\item 对一个 bare repo 使用 \verb|git status| 有时候会显示 \verb|not a git repo|， 改成非 bare 即可。
 \item windows 文本编辑器默认是 ANSI 编码， 而 ANSI 在 git 中显示的是乱码。 而 Visual Studio Code 保存的时候默认会存成 UTF-8 编码， ANSI 编码在 Visual Studio Code 中也会是乱码， 这时千万不要保存， 否则就成了永久的乱码了。
 \item 要检查编码类型， 或转换编码类型，用 Visual Studio Code\upref{encode}.  不要用 Windows 的 Notepad。
 \item 如果 repo 的子文件夹也是一个 repo （含有 \verb|.git| 文件夹）， 那么后者就会被前者自动忽略。
@@ -140,7 +142,7 @@ git config --global pack.threads 2 # 使用多少线程压缩 pack
 \item 另一个缺点： 经过测试， 即使二进制大文件只改变了一点， git 也做不到对其增量备份。 所以如果经常对大文件做微小改动会使 repo 迅速变大。
 \item 最好的代替方案是用 \href{https://bup.github.io/}{bup}， 或者 \href{https://git-annex.branchable.com/}{git-annex}。
 \item 参考子节： 检查数据完整性
-\item \verb|git fsck| 可以检查数据库（\verb|.git| 文件夹）是否出现错误（硬盘坏点等）， 但无法恢复， 只能通过备份。
+\item \verb|git fsck| 可以检查数据库（\verb|.git| 文件夹）是否出现错误（硬盘坏点等）， 但无法恢复， 只能通过备份。 如果检查完后输出了很多 \verb|dangling blob| 是没有关系的，说明 git 保存了一些没有出现在任何 commit 中的多余文件。
 \item \verb|git status| 一般只是检查 tree 中的文件的修改时间是否有更新， 而不会做一次完整的 checksum。 如果需要检查是否有硬件 bit rot， 可以先 touch 所有文件： \verb|find . -type f -exec touch {} +|， 然后再 \verb|git status|。
 \item \verb|git --git-dir=路径/.git --work-tree=tree的路径 命令| 可以指定 \verb|.git| 所在的文件夹以及 tree 的路径， 然后执行 \verb|git 命令|， 例如 \verb|git status| 甚至 \verb|init|。 注意两个路径选项都不能省略， 无论当前在什么路径。
 \item 如果要删除某个 commit 之前的所有 commit， 以减小数据库的尺寸， 可以先搞一个新的 branch， 把 master branch 删除（\verb|git branch -D master|）， 然后把新 branch 重命名为 master。 最后做一下 \verb|git gc|。
