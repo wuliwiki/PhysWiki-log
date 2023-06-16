@@ -1,32 +1,38 @@
 % TDSE Open Boundary Condition
 % 边界条件|波函数|量子力学|吸收
 
+\begin{issues}
+\issueDraft
+\end{issues}
+
+
+
 \subsection{Open boundary condition}
 
 Open boundary condition, or radiation boundary condition\footnote{I saw it on \href{http://hplgit.github.io/num-methods-for-PDEs/doc/pub/wave/sphinx/._main_wave003.html#problem-11-implement-open-boundary-conditions}{this website}.} is a B.C. that lets wave propagate through the boundary without having any reflection (except for numerical error).
 
 It has been successfully implemented for mechanical waves in 1D, 2D and 3D. For 1D case, the condition is
 \begin{equation}
-\pdv{y}{t} + c\pdv{y}{x} = 0
+\pdv{y}{t} + c\pdv{y}{x} = 0~,
 \end{equation}
 where $c$ is the constant wave velocity. To verify this, we can plug in any plane wave
 \begin{equation}
-\sin(kx - ckt + \phi)
+\sin(kx - ckt + \phi)~
 \end{equation}
 and easily see that the B.C. is satisfied.
 
 I think this idea might also work for quantum mechanics. In QM, any plane wave has the form
 \begin{equation}
-\exp(\I kx - \I \frac{k^2}{2}t + \phi)
+\exp(\I kx - \I \frac{k^2}{2}t + \phi)~.
 \end{equation}
 So the proper open B.C. will be
 \begin{equation}
--\frac12 \qty(\pdv{\Psi}{x})^2 = \I \pdv{\Psi}{t}
+-\frac12 \qty(\pdv{\Psi}{x})^2 = \I \pdv{\Psi}{t}~.
 \end{equation}
 
 Comparing to virtual absorbers we are using, this B.C. can be implemented using just 1 extra grid point, and it might have even less reflection (because there is only numerical error).
 
 If the potential at the boundary $V$ is not negligible, then a small modification might work.
 \begin{equation}
--\frac12 \qty(\pdv{\Psi}{x})^2 + V = \I \pdv{\Psi}{t}
+-\frac12 \qty(\pdv{\Psi}{x})^2 + V = \I \pdv{\Psi}{t}~.
 \end{equation}

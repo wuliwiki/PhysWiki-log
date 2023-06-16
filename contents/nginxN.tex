@@ -12,7 +12,7 @@
 \item 要查看是否连接成功， 用 \verb|curl localhost| 或者 \verb|curl http://localhost|（默认访问 80 接口）。 如果打印出一个 html 文本， 包含 \verb|Welcome to nginx!|， 就是成功了（当然也可以用浏览器访问， 只是有时候只有命令行）。
 \item 如果要限制 nginx 只监听某个网卡， 编辑配置文件 \verb|sudo vim /etc/nginx/sites-enabled/default|， 然后在 \verb|listen 80 default_server;| 的 \verb|80| 改成 \verb|网卡ip:80|， 然后重启 \verb|nginx| 服务即可生效。
 \item 事实上不光是本机， 监听的网卡所在的所有机器访问该网卡的 ip 的 80 端口都会收到
-\item 要重置所有 \verb|/etc/nginx| 配置文件（为了确保可以先把这个文件夹删掉）， 用 \verb|apt purge nginx nginx-common nginx-full|， 然后 \verb|apt install nginx|。
+\item 要重置所有 \verb|/etc/nginx| 配置文件（为了确保可以先把这个文件夹删掉）， 用 \verb|apt purge nginx nginx-common|， 然后 \verb|apt install nginx|。
 \end{itemize}
 
 \subsection{http 静态网站}
@@ -21,7 +21,7 @@
 \begin{lstlisting}[language=none]
 server {
     listen 80;
-    server_name 公网ip或域名;
+    server_name 公网ip或域名1 [域名2] [域名3];
     
     location / {
         root /静态网页根目录;
@@ -43,7 +43,7 @@ server {
 \item 卸载老版本： \verb|sudo apt remove certbot|
 \item 安装 cerbot： \verb|sudo snap install --classic certbot|
 \item \verb|sudo ln -s /snap/bin/certbot /usr/bin/certbot|
-\item 获取证书，指定 nginx： \verb|sudo certbot certonly --nginx|， 这时会互动提示输入域名等信息。
+\item 获取证书，指定 nginx： \verb|sudo certbot certonly --nginx|， 这时会互动提示输入域名等信息。 这个命令会从 \verb|nginx.config| 里面扫描 http 协议的域名， 让你互动选择对一个或者多个获取证书。
 \item 测试自动更新： \verb|sudo certbot renew --dry-run|
 \item 生成的证书存在 \verb|/etc/letsencrypt/live/域名| 中： \verb|cert.pem  chain.pem  fullchain.pem  privkey.pem|
 \item 更改 nginx 设置， 在 \verb|http { ... }| 的最后添加一个：
@@ -120,3 +120,101 @@ sub_filter_types *;
 sub_filter 'https://wikipedia.org' '$scheme://$host';
 sub_filter 'https://www.wikipedia.org' '$scheme://$host';
 \end{lstlisting}
+
+\subsection{多个域名和网站}
+\begin{itemize}
+\item 如果你只使用 ip 访问一个服务器， 那么常用的像 80, 433 端口只能用一次。
+\item 但是你如果把不同的域名或子域名指向这个 ip， 那么 nginx 就可以通过不同的 ip 给 80 和 433 端口提供不同的服务。 例如
+\begin{lstlisting}[language=none]
+server {
+    listen 80;
+    server_name example1.com www.example1.com;
+
+    location / {
+        root /var/www/example1.com;
+        index index.html;
+    }
+}
+
+# /etc/nginx/sites-available/example2.com
+server {
+    listen 80;
+    server_name example2.com www.example2.com;
+
+    location / {
+        root /var/www/example2.com;
+        index index.html;
+    }
+}
+\end{lstlisting}
+\item 注意如果一个在浏览器输入的域名是一个 CNAME 记录， 那么 nginx 仍然会使用你输入的域名来提供服务而不是 CNAME 指向的域名。
+\item 如果要用不同的域名指向不同的 web app， 就先用 web app 监听不同的端口（例如 5000 和 5001）， 然后再设置 nginx proxy（下文也有提）到 localhost 的这些端口即可：
+\begin{lstlisting}[language=none]
+server {
+    listen 80;
+    server_name app1.example.com;
+
+    location / {
+        proxy_pass http://localhost:5000;
+    }
+}
+
+server {
+    listen 80;
+    server_name app2.example.com;
+
+    location / {
+        proxy_pass http://localhost:5001;
+    }
+}
+\end{lstlisting}
+如果要用 https， 先设置好 SSL 证书（见下文）， 然后
+\begin{lstlisting}[language=none]
+server {
+    listen 80;
+    server_name app1.example.com;
+
+    location / {
+        return 301 https://$host$request_uri;
+    }
+}
+
+server {
+    listen 443 ssl;
+    server_name app1.example.com;
+
+    ssl_certificate /etc/letsencrypt/live/app1.example.com/fullchain.pem;
+    ssl_certificate_key /etc/letsencrypt/live/app1.example.com/privkey.pem;
+    include /etc/letsencrypt/options-ssl-nginx.conf;
+    ssl_dhparam /etc/letsencrypt/ssl-dhparams.pem;
+
+    location / {
+        proxy_pass http://localhost:5000;
+    }
+}
+
+# /etc/nginx/sites-available/app2
+server {
+    listen 80;
+    server_name app2.example.com;
+
+    location / {
+        return 301 https://$host$request_uri;
+    }
+}
+
+server {
+    listen 443 ssl;
+    server_name app2.example.com;
+
+    ssl_certificate /etc/letsencrypt/live/app2.example.com/fullchain.pem;
+    ssl_certificate_key /etc/letsencrypt/live/app2.example.com/privkey.pem;
+    include /etc/letsencrypt/options-ssl-nginx.conf;
+    ssl_dhparam /etc/letsencrypt/ssl-dhparams.pem;
+
+    location / {
+        proxy_pass http://localhost:5001;
+    }
+}
+\end{lstlisting}
+\end{itemize}

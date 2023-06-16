@@ -10,12 +10,12 @@
 
 一维前缀和：
 \begin{equation}
-\sum^{r}_{i=l}a_i
+\sum^{r}_{i=l}a_i~,
 \end{equation}
 
 预处理：
 \begin{equation}
-S_i=\sum^{i}_{k=1}a_k
+S_i=\sum^{i}_{k=1}a_k~.
 \end{equation}
 
 如何预处理？
@@ -23,20 +23,20 @@ S_i=\sum^{i}_{k=1}a_k
 \begin{equation}
 \because 
 \sum^{i}_{k=1}a_k-\sum^{i-1}_{k=1}a_{k}=a_k \\
- \therefore \sum^{i}_{k=1}a_k=\sum^{i-1}_{k=1}a_{k}+a_k \\
+ \therefore \sum^{i}_{k=1}a_k=\sum^{i-1}_{k=1}a_{k}+a_k ~,\\
 \end{equation}
 
 即：
 
 \begin{equation}
 \\S_k-S_{k-1}=a_k\\
- \\S_k=S_{k-1}+a_k\\
+ \\S_k=S_{k-1}+a_k~.\\
 \end{equation}
 
 如何求答案？
 
 \begin{equation}
-\sum^{r}_{i=l}a_i=\sum^{r}_{i=1}a_i-\sum^{l-1}_{i=1}a_i=S_r-S_{l-1}
+\sum^{r}_{i=l}a_i=\sum^{r}_{i=1}a_i-\sum^{l-1}_{i=1}a_i=S_r-S_{l-1}~.
 \end{equation}
 
 还有要注意的是 $S_0 = 0$，因为如果想求 $1 \sim n$ 一段数的和可以直接输出 $S_{10} - S_0 = S_{10} $。因此可以从下标为 $1$ 开始存数，这样就不需要做复杂的处理。
@@ -97,38 +97,38 @@ int main()
 二维前缀和：
 
 \begin{equation}
-\sum^{x2}_{i = x1}\sum^{y2}_{j = y1} a_{ij}
+\sum^{x2}_{i = x1}\sum^{y2}_{j = y1} a_{ij}~,
 \end{equation}
 
 预处理：
 
 \begin{equation}
-S_{ij} = \sum^{i}_{k_1 = 1} \sum^{j}_{k_2 = 1} a_{k_1 k_2}
+S_{ij} = \sum^{i}_{k_1 = 1} \sum^{j}_{k_2 = 1} a_{k_1 k_2}~.
 \end{equation}
 
 如何预处理？
 
 在预处理 $S_{ij}$ 时，要注意 $S_{i - 1, m}$ 和 $S_{i, j - 1}$ 都已经被算过了，因为预处理是逐行逐列来计算的（重复地方不重复计算）。
 \begin{equation}
-S_{ij} = \sum^{i}_{k_1 = 1} \sum^{j}_{k_2 = 1} a_{k_1 k_2} = \sum^{i - 1}_{k_1 = 1} \sum^{j}_{k_2 = 1} + \sum^{i}_{k_1 = 1} \sum^{j - 1}_{k_2 = 1} - \sum^{i- 1}_{k_1 = 1} \sum^{j - 1}_{k_2 = 1} + a_{i, j}
+S_{ij} = \sum^{i}_{k_1 = 1} \sum^{j}_{k_2 = 1} a_{k_1 k_2} = \sum^{i - 1}_{k_1 = 1} \sum^{j}_{k_2 = 1} + \sum^{i}_{k_1 = 1} \sum^{j - 1}_{k_2 = 1} - \sum^{i- 1}_{k_1 = 1} \sum^{j - 1}_{k_2 = 1} + a_{i, j}~,
 \end{equation}
 
 即：
 
 \begin{equation}
-S_{i, j} = S_{i - 1, j} + S_{i, j - 1} - S_{i - 1, j - 1} + a_{i, j}
+S_{i, j} = S_{i - 1, j} + S_{i, j - 1} - S_{i - 1, j - 1} + a_{i, j}~.
 \end{equation}
 
 如何求答案？
 
 \begin{equation}
-\sum^{x_2}_{i = x_1}\sum^{y_2}_{j = y_1} a_{ij} = \sum^{x_2}_{k_1 = 1} \sum^{y_2}_{k_2 = 1} a_{k_1 k_2} - \sum^{x_1 - 1}_{k_1 = 1} \sum^{y_2}_{k_2 = 1} a_{k_1 k_2} - \sum^{x_2}_{k_1 = 1} \sum^{y_1 - 1}_{k_2 = 1} a_{k_1 k_2} + \sum^{x_1 - 1}_{k_1 = 1} \sum^{y_1 - 1}_{k_2 = 1} a_{k_1 k_2}
+\sum^{x_2}_{i = x_1}\sum^{y_2}_{j = y_1} a_{ij} = \sum^{x_2}_{k_1 = 1} \sum^{y_2}_{k_2 = 1} a_{k_1 k_2} - \sum^{x_1 - 1}_{k_1 = 1} \sum^{y_2}_{k_2 = 1} a_{k_1 k_2} - \sum^{x_2}_{k_1 = 1} \sum^{y_1 - 1}_{k_2 = 1} a_{k_1 k_2} + \sum^{x_1 - 1}_{k_1 = 1} \sum^{y_1 - 1}_{k_2 = 1} a_{k_1 k_2}~,
 \end{equation}
 
 即：
 
 \begin{equation}
-S_{x_2, y_2} - S_{x_1 - 1, y_2} - S_{x_2, y_1 - 1} + S_{x_1 - 1, y_1 - 1}
+S_{x_2, y_2} - S_{x_1 - 1, y_2} - S_{x_2, y_1 - 1} + S_{x_1 - 1, y_1 - 1}~.
 \end{equation}
 
 二维前缀和可能有点抽象，可以根据几张图片来对二维前缀和有个更好的理解。

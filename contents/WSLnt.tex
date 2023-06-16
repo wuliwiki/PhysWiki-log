@@ -4,6 +4,8 @@
 \issueDraft
 \end{issues}
 
+重要提示：WSL1 用于 NTFS 文件系统最合适，包括移动硬盘。 exFAT 兼容性较差（不兼容软链， git 也会有权限 bug）。
+
 \subsection{cmd 中的 wsl 命令}
 \begin{itemize}
 \item \href{https://docs.microsoft.com/en-us/windows/wsl/}{官方文档}
@@ -39,8 +41,9 @@
 
 \subsection{ssh 到 WSL}
 \begin{itemize}
-\item 很容易可以从其他机器通过 ip 地址和端口 22 ssh 到 WSL
-\item WSL (不是 WSL 2) 是 windows 开机就运行的， 而不是打开 terminal 才开始运行。 所以只要 windows 开着就可以 ssh 连接
+\item WSL1 中 ssh 似乎需要自己重新安装一下才行。 每次开机都需要 \verb|sudo service ssh --full-restart| 才会运行。
+\item 很容易可以从其他机器通过 ip 地址和端口 22 ssh 到 WSL1
+\item WSL1 是 windows 开机就运行的， 而不是打开 terminal 才开始运行。 所以只要 windows 开着就可以 ssh 连接
 \item WSL 的 IP 地址 (用 verb`ifconfig` 查看) 和 windows 的 IP 地址 (在 cmd 中用 verb`ipconfig`) 是一样的， 而不是像虚拟机一样使用 NAT
 \item 所以设置 sshd 的方法基本上和任何 linux 主机一样， 安装 \verb`openssh-server` 即可
 \item 重启 windows 以后貌似 service 会停止， 要自动还需要一些设置
@@ -75,4 +78,15 @@
 command="命令1; 命令2"
 \end{lstlisting}
 其中的命令会直接使用 sudo 权限运行。
+\end{itemize}
+例如可以用这个在 WSL1 中自动挂载硬盘。
+
+\subsection{Bug 和兼容问题}
+\begin{itemize}
+\item WSL1 不支持 systemd， WSL2 目前支持。
+\item WSL1 + NTFS 在同一个文件夹中不支持用大小写区分不同的文件和文件夹
+\item 【可绕过】WSL1 在外挂 exFAT 硬盘中用 git 还是会有权限\href{https://github.com/microsoft/WSL/issues/5179}{错误}。 但实际上整个 .git 的任何文件都可以读写（可以把 \verb|.git| 文件夹复制一份都没问题）。 经测试，重新格式化为 NTFS 文件系统即可。
+\item  exFAT 无论在哪里都不支持 symlink， 但 NTFS 对 WSL 和 Ubuntu 都支持 symlink！
+\item 用 Ubuntu 操作过的 NTFS 磁盘在 WSL1 中可能会出现权限问题， 但用 \verb|sudo chmod -R 755 .| 就没问题了。
+\item 在 U 盘中实测 NTFS 的小文件写入速度比 exFAT 还要快 30\% 左右。
 \end{itemize}
