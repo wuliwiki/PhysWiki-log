@@ -1,21 +1,22 @@
-% 用 Filebrowser 搭建个人网盘
+% 用 Filebrowser 搭建个人网盘和视频服务器（笔记）
 
-\begin{issues}
-\issueDraft
-\end{issues}
+\subsection{功能简介}
 
-\subsection{特性}
+\href{https://filebrowser.org/}{Filebrowser 官网}
+
 \begin{itemize}
-\item 在线视频播放
 \item 上传多个文件/文件夹
 \item 创建用户并管理用户权限
 \item 使用 bash
 \item 分享文件/文件夹链接（文件夹内容实时更新）， 无需登录即可下载
 \item 适配手机浏览器
+\item 在线视频播放（支持 MP4 文件的视频流\footnote{视频流就是说无需把整个视频文件下载完成再开始播放， 可以像视频网站一样一边看一边加载。}）
 \end{itemize}
 
 \subsection{使用说明}
-docker 的详细教程参考 Docker 笔记\upref{Docker}。 首先克隆 docker 镜像： \verb|docker pull filebrowser/filebrowser|
+\pentry{Docker 笔记\upref{Docker}}
+
+首先克隆 docker 镜像： \verb|docker pull filebrowser/filebrowser|
 启动的格式如
 \begin{lstlisting}[language=bash]
 docker run --name filebrowser -d --restart always \
@@ -39,3 +40,51 @@ docker run --name filebrowser -d --restart always \
 \item \verb`本地网盘文件目录` 本身不支持 symlink 和 mount， 但它的子目录可以， 但注意如果 symlink 的目标不是 \verb|本地网盘文件目录| 的内部， 则会在网盘页面显示 bad link。
 \item \verb|filebrowserconfig.json| 好像并没有什么用， 重新创建镜像仍然会所有设置初始化。 要保留设置， 可以先把容器停止， commit 到自己的镜像， 然后调整以上参数再次创建容器即可。
 \end{itemize}
+
+\subsection{内网穿透}
+\pentry{FRP 内网穿透笔记\upref{NATthr}}
+
+如果你在带有公共 ip 的服务器上使用 filebrowser， 且把所有需要访问的文件都放在该服务器上， 那么你在任何能正常访问互联网的地方都可以访问服务器上的文件。
+
+但如果你有很多文件， 而服务器的储存空间太贵， 那么你可以在自己家的一台能上网的电脑上部署 filebrowser， 然后使用 FRP\upref{NATthr} 把 filebrowser 在你家电脑上监听的端口代理到服务器公共 ip 的某个端口。 这样， 你访问服务器的 \verb|ip:端口| 就可以访问你的所有文件。 但由于流量仍然经过服务器， 所以仍需支付服务器的流量费。
+
+你甚至可以把很多不同的内网中的装有 filebrowser 的电脑都映射到服务器的不同端口。
+
+\subsection{域名访问和端口转发}
+\pentry{Nginx 笔记\upref{nginxN}}
+
+如果你不打算使用域名， 那么你将只能使用 http 而不是 https 协议， 这时你跟服务器之间的通讯是明文的，你下载的文件或者观看的视频理论上都可能被别人截获（但除非你的文件非常有价值否则一般不会有人这么无聊）。 注意这并不意味着别人可以随意窥探你网盘中的任何内容，窃听者只能窃听正在传输中的数据而不能访问你的服务器（除非他破解了 filebrowser 的密码）。
+
+如果你想要 https 协议就必须拥有一个域名。 你可以把域名解析到公网 ip 上， 但如果你只是做到这一步， 你仍然需要在 url 后面指定端口号， 例如 \verb|https://example.com:5000|。 通过不同的端口号连接到不同的内网服务器。 这并不优雅。
+
+一种解决方案就是使用 nginx\upref{nginxN} 进行端口转发， 把你服务器的不同端口转发到 80 或者 443 端口， 即 http 和 https 的默认端口。 但这个转发是多对一的， nginx 怎么知道应该转发哪个呢？ 这就是域名相对于 ip 的另一个优越性（不光是方便记忆）： 在你的 http 请求中， 除了 ip 地址外也会包含你请求的域名。 nginx 可以通过请求域名的不同来选择在和你连接时把同一服务器的不同转口转发到 80 或者 443。 注意这并不意味着你需要有多个域名， 你只需要在域名记录中添加不同的子域名即可， 例如 \verb|files1.example.com|， \verb|files2.example.com|。
+
+这时 nginx 设置文件的一个例子（包含 http 和 https）：
+\begin{lstlisting}[language=none]
+server {
+    listen 80;
+    server_name files1.example.com;
+
+    location / {
+        proxy_pass http://localhost:5000;
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+    }
+}
+
+server {
+    listen 443;
+    server_name files1.example.com;
+    ssl_certificate /etc/letsencrypt/live/files1.example.com/fullchain.pem;
+    ssl_certificate_key /etc/letsencrypt/live/files1.example.com/privkey.pem;
+
+    location / {
+        proxy_pass http://localhost:5000;
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+    }
+}
+\end{lstlisting}
+这时 \verb|files1.example.com| 的 http 和 https 设置， 你可以在后面继续添加 \verb|files2.example.com| 等不同的域名，注意要把端口 \verb|5000| 改成对应的端口。

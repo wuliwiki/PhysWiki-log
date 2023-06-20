@@ -1,0 +1,25 @@
+% FFmpeg 笔记
+
+\begin{issues}
+\issueDraft
+\end{issues}
+
+\subsection{视频基础知识}
+\begin{itemize}
+\item 查看视频全部流的编码信息 \verb|ffprobe -show_streams 视频文件|， 或者 \verb|ffprobe -i 视频文件 -show_streams| 如果只查看视频流或音频流， 用 \verb|-select_streams v| 或 \verb|a|， 可以用 \verb|a:0| 查看第一个音频流。 要查看字幕流，用 \verb|s|， 数据流用 \verb|d|，附件用 \verb|t|
+\item 3d 视频通常有两个视频流，音频流可以用于不同语言的配音，注意每个音频流都可以支持双声道而不是用不同流区分。
+\item 数据流可以用于储存多媒体信息， 视频分节信息， 等
+\item 在 \verb|-show_streams| 的输出中， \verb|codec| 是编码格式， MP4 最常用的是 H264， 高清视频也常用 H265。 音频最常用 ACC
+\item \verb|bit_rate| （码率）是每个流每秒钟的平均比特数。 一个 4GB 的两小时视频大概是 \verb|4.4Mbit/s|， 也就是 \verb|550kB/s|， iPhone Xs max 录像大约是 \verb|1MB/s|， 录屏（886x1920px）大约 \verb|2MB/s|。
+\item 微信传视频如果不选原视频，会压缩到 \verb|440kbit/s|。
+\end{itemize}
+
+\subsection{格式转换}
+不同的视频格式（mp4, mov, mkv，ts）只是外面的 container 不同， 编码可能是相同的（例如最常用的 H264）。 所以转换格式的时候只需要让 ffmpeg 把容器换壳即可： \verb|ffmpeg -y -i 输入视频 -c copy 输出视频|。 这样的转换是完全无损的。
+
+\subsection{视频截图}
+\begin{itemize}
+\item \verb|ffmpeg -i input_video.mp4 -ss start_time -t duration -vf fps=1 output_%03d.jpg|
+\end{itemize}
+
+\href{https://wuli.wiki/assets/sogou/1012.单向函数 - 搜狗科学百科.html}{123}
