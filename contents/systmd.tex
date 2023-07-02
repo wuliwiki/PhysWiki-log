@@ -5,10 +5,10 @@
 \end{issues}
 
 \begin{itemize}
-\item 要创建一个 service， 就创建文件：
-\begin{lstlisting}[language=none,caption=/etc/systemd/system/名字.service]
+\item 要创建一个 service， 就创建文件 \verb|/etc/systemd/system/名字.service|：
+\begin{lstlisting}[language=none,caption=名字.service]
 [Unit]
-Description=(description of your program)
+Description=服务的描述
 
 [Service]
 ExecStart=/路径/命令 参数1 参数2
@@ -19,7 +19,7 @@ ExecStartPre=/bin/sleep 15
 WantedBy=multi-user.target
 \end{lstlisting}
 \item 注意 \verb|ExecStart| 不支持 \verb|>| 和 \verb`|` 等
-\item \verb|sudo systemctl daemon-reload| 使文件生效
+\item \verb|sudo systemctl daemon-reload| 使 service 文件生效
 \item \verb|sudo systemctl enable 名字.service| 就可以设置开机自启服务
 \item \verb|disable| 不开机自启
 \item \verb|status| 查看状态
@@ -32,6 +32,33 @@ WantedBy=multi-user.target
 You can start and stop it manually with systemctl start scanner.service and systemctl stop scanner.service and see its status with systemctl status scanner.service.
 
 See Arch Linux help about systemd
+
+\subsubsection{更多参数}
+\begin{lstlisting}[language=none,caption=名字.service]
+[Unit]
+Description=服务的描述
+Documentation=文档的url
+After=在哪些服务运行后运行（如果它们没运行也没关系）
+Before=在哪些服务之前运行（如果它们没运行也没关系）
+Wants=在运行之前试图运行的另一个服务（如果失败也没关系）
+Requires=在运行之前试图运行的另一个服务（如果失败就不运行）
+
+[Service]
+ExecStart=/路径/命令 参数1 参数2
+ExecStop=/路径/命令 参数1 参数2
+ExecStartPre=/路径/命令 参数1 参数2
+Restart=always, on-failure, on-abnormal, on-watchdog, on-abort, no.
+Type=simple(默认)|forking|oneshot|dbus, notify and idle.
+User=运行服务的用户
+Group=运行服务的组
+Environment=环境变量
+EnvironmentFile=环境变量文件
+
+[Install]
+WantedBy=在这个 target 启动该 service，失败也没关系
+RequiredBy=失败有关系
+\end{lstlisting}
+
 
 \subsection{supervisor}
 \begin{itemize}

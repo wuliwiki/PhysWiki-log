@@ -30,12 +30,16 @@
 
 \subsubsection{fstab （File System Table）}
 \begin{itemize}
-\item \verb|/etc/fstab|
+\item \verb|/etc/fstab| 用于设置如何把不同的分区或网络硬盘挂载到不同文件夹。
 \item 格式为 \verb|<file system> <mount point> <type> <options> <dump> <pass>|
-\item \verb|uid=1000,gid=1000| 是当前登录用户的 user/group id。
+\item \verb|uid=1000,gid=1000| 是当前登录用户的 user/group id，也可以直接把数字换成用户名和组名。
 \item \verb|NTFS| 的设置是 \verb|LABEL=mydrive2 /mnt/drive2 ntfs-3g nofail,x-gvfs-show,uid=1000,gid=1000 0 0|
+\item \verb|LABEL=win /mnt/win ntfs defaults,auto,rw,nofail,umask=000,uid=addis,gid=addis 0 0|
 \item \verb|exFAT| 的设置是 \verb|LABEL=mydrive1 /mnt/drive1 exfat nofail,x-gvfs-show,uid=1000,gid=1000 0 0|
-\item 第一列可以是 \verb|LABEL=| 或者 \verb|UUID=|， 第二列是 mount point， 第三列是文件系统， 用 \verb|auto| 可以自动检测。 第四列是一些选项， \verb|nofail| 是即使硬盘没有插入也不会报错， \verb|x-gvfs-show| 是在 gnome 文件浏览器和 taskbar 中显示。 \verb|uid| 和 \verb|gid| 是挂载后文件的 owner， \verb|1000| 是当前用户。
+\item 第一列可以是 \verb|LABEL=| 或者 \verb|UUID=|， 第二列是 mount point， 第三列是文件系统， 用 \verb|auto| 可以自动检测。 第四列是一些选项， \verb|nofail| 是即使硬盘没有插入也不会报错， \verb|x-gvfs-show| 是在 gnome 文件浏览器和 taskbar 中显示。 \verb|uid| 和 \verb|gid| 是挂载后文件的 owner， \verb|1000| 是当前用户。 \verb|auto| 是开机的时候自动挂载。
+\item \verb|defaults| 选项相当于 \verb|rw, suid, dev, exec, auto, nouser, async|.
+\item \verb|rw| 是支持读写， \verb|suid| 支持 SetUID 权限， \verb|exec| 支持可执行文件。 \verb|dev| 选项可以支持挂载文件夹中的设备文件（block device 和 character device）, \verb|nodev| 则禁止。 \verb|nouser| 只允许管理员挂载或弹出硬盘。 \verb|user| 允许任何用户挂载或弹出硬盘。 \verb|users| 允许任何用户挂载，但只有挂载的用户可以弹出某个硬盘。
+\item \verb|user| 和 \verb|users| 自动开启 \verb|noexec|， 除非明确指定 \verb|exec| 选项。 此时即使文件显示有 \verb|x| 权限也无法执行（但 script 仍然可以用 \verb|source| 执行）。
 \item \verb|sudo mount -a| 会挂载 \verb|fstab| 中的所有硬盘（如果没有已经挂载）。 \verb|sudo umount -a| 同理（如果被占用则不会弹出）。
 \item \verb|mount| 未必需要 sudo， 如果被挂载的目录不需要管理员权限。
 \item \verb|sudo mount 挂载目录| 可以根据 \verb|fstab| 中该目录的设置挂载。 \verb|umount 挂载目录| 同理。 可以是相对或绝对目录。
@@ -152,3 +156,4 @@ sudo apt install exfat-fuse exfat-utils
 \item 一个半免费软件（pro 要付费）： \href{https://www.diskinternals.com/linux-reader/}{Linux Reader}
 \item 高性能付费软件： \href{https://www.paragon-software.com/business/extfs-for-windows/}{Paragon ExtFS}
 \end{itemize}
+

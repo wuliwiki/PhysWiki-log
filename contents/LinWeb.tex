@@ -22,7 +22,10 @@
 \item \verb`ping` 可以用来检查是否有网络连接， 比如 \verb`ping google.com` 也可以用来查看某个域名的 ip 地址， 也可以直接使用 ip 地址如 \verb`ping 8.8.8.8` (8.8.8.8 是谷歌的主要 DNS 服务器)
 \item \verb`ping 域名` 和 \verb|host 域名| 都可以检查域名的 ip
 \item 如果连不上网， 可以参考\href{https://upcloud.com/community/tutorials/troubleshoot-network-connectivity-linux-server/}{这篇文章}的步骤调试
-\item 如果想 ping 某个端口， 用 \verb|telnet IP 端口号|
+\item 如果想 “ping 某个端口”， 用 \verb|telnet IP 端口号|。 一般来说我们说的端口是 TCP 中的概念， \verb|telnet| 只支持 TCP 不支持 UDP。 如果有任何进程在监听该端口且网络没有问题，那么就会现实 \verb|connected|。 如果卡在 \verb|Trying xxx.xxx.xxx.xxx...| 上， 就是无法建立连接（如果 ping 可以 telnet 不行， 多半是 GFW 屏蔽了某个端口）。 这有别与 \verb|connection refused|， 后者说明这个端口没有被监听（也叫做端口关闭）。
+\item 其实本来 \verb|telnet| 是一个远程命令行，也像 \verb|ssh| 一样有一个服务监听一个特定的端口。 但因为不安全，已经被 \verb|ssh| 代替。
+\item 除了 \verb|telnet|， 也可以用 \verb|nc -v <ip> <port>| （netcat） 或者 \verb|nmap -p <port> <ip>| 测试 tcp 连接。
+\item \verb|nmap| 也被用于测试某个接口是否开启， 以及是否在使用某个 app （如 ssh, ftp, 等）
 \item 如果想获得某个 ip 的子网掩码， 用 \verb`whois 66.220.156.68 | grep CIDR` 输出如 \verb|CIDR: 66.220.144.0/20|
 \item \verb|traceroute 域名或者ip| 可以查看从当前机器出发到某个机器所经过的网关的 ip （有些会隐藏）。 例如局域网里面的某台机器 traceroute 到外网的某个网址， 那么第一条显示的是当前局域网的网关（用于该局域网的网卡）的 ip， 如果该网关仍然没有处于公网， 那么第二条会显示第一条中网关所在的另一个局域网的网关的 ip…… 直到公网 ip， 然后各种互联网上的公网 ip， 最终达到网址的服务器的 ip。 注意每条中只会显示进入某个机器所用网卡的 ip， 不会显示出去时所用网卡的 ip。
 \item \verb|cat /sys/class/net/enp5s0/speed| 可以查看以太网的连接速度（即是否是 Gigabit。 在 GUI 的网络设置里面也可以看到）

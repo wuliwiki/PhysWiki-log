@@ -23,3 +23,34 @@
 \item 输出的高取决于输入的高、卷积步长和补零个数，即：$H_o=(H_i+2P)/S+1$
 \item 输出的深取决于输入的高、卷积步长和补零个数，即：$D_o=(D_i+2P)/S+1$
 \end{itemize}
+
+当前流行的深度学习开发框架都有相应的编程接口，能够很方便的构建卷积网络模型。
+你如果使用的是TensorFlow v2.x版本，可以采用以下函数来建立一个二维卷积层：
+\begin{lstlisting}[language=python]
+tf.nn.convolution(
+    input,
+    filters,
+    strides=None,
+    padding='VALID',
+    data_format=None,
+    dilations=None,
+    name=None
+)
+\end{lstlisting}
+该函数的参数主要是：input是输入张量，filters是过滤器（即卷积核）的个数，strides表示的是步长，padding表示的是补零方式，data_format表示的是数据格式，dilations表示的是升采样和降采样率。其中data_format数据格式参数有两个取值：$NHWC$和$NCHW$。$N$表示的是批次大小，$H$表示的是高度，$W$表示的是宽度，$C$表示的是通道数。
+
+你如果使用的是PyTorch，可以采用下面的代码来建立二维卷积层：
+\begin{lstlisting}[language=python]
+torch.nn.Conv2d(in_channels, 
+                out_channels, 
+                kernel_size,
+                stride=1, 
+                padding=0,
+                dilation=1,
+                groups=1,
+                bias=True,
+                padding_mode='zeros',
+                device=None,
+                dtype=None)
+\end{lstlisting}
+这是一个封装好的二维卷积层类，可以通过新建一个Conv2d对象来建立一个Pytorch的二维卷积层。该类的主要参数有：in_channels是输入数据的通道数，out_channels是输出结果的通道数，kernel_size是卷积核尺寸，stride是步幅，padding是补零数量，dilation是膨胀方式，groups是分组数，bias是偏置，padding_mode是补零方式，device是所采用的计算设备，可以是CPU，也可以是GPU，dtype是数据类型。

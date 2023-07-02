@@ -1,0 +1,27 @@
+% 残差网络
+% 残差 网络 卷积网络 变体 ResNet Residual learning
+
+\textbf{残差网络}（Resdual network, ResNet）是卷积神经网络的一种常见的变体。与原始的卷积网络所不同的是，残差网络学习的是源数据到源数据与标签之间的残差的映射。
+
+在卷积网络的实践中，人们发现了退化（degradation）现象。随着网络深度的增加，模型的准确率会降低，也就是说，较深的网络模型反而比浅层网络有更大的训练误差和测试误差[1]。文献[1]提出的解决方法是增加一条表示恒等映射的短连接（shortcut connections），将浅层网络输出的值通过恒等映射直接传递到深层网络上，从而保证深层网络的误差至少不会超过浅层网络。
+
+假设一个残差网络的输入张量为$\bvec x$，标签值为$\bvec y$，残差网络学习的是$F: \bvec x \rightarrow \bvec y-x$。数学表达式为：
+\begin{equation}
+\bvec y=F(\bvec  x;\bvec  w)+\bvec x
+\end{equation}
+其中，$\bvec x$和$\bvec y$分别为输入和输出张量，$F$为残差映射，$\bvec w$为权值，其值是学习而来的。
+
+为了表示上述数学模型，网络结构方面，采用卷积网络来表示残差映射，短连接来表示关于$x$的恒等映射，最后再将$\bvec x$与$F(\bvec x)$相加。此处的加法是元素级别（element-wise）对应的张量相加，因此，$\bvec x$和$F(\bvec x)$的维度要相同，否则无法运算。如下图所示：
+\begin{figure}[ht]
+\centering
+\includegraphics[width=12cm]{./figures/5d61fa5ce1ced1f0.png}
+\caption{残差网络示意图 [1]} \label{fig_ResNet}
+\end{figure}
+
+经过改进之后的网络，即残差网络，消除了原有深层网络的退化现象。经过在ImageNet数据集上的实验，发现34层的残差网络比18层的要有更小的训练误差和测试误差。
+
+
+\textbf{参考文献：}
+\begin{enumerate}
+\item S. R. Kaiming He Xiangyu Zhang, “Deep Residual Learning for Image Recognition,” in Proceedings of the IEEE conference on computer vision and pattern recognition, 2016, pp. 770–778.
+\end{enumerate}

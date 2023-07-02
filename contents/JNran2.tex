@@ -1,0 +1,56 @@
+% 贝叶斯公式
+% 概率论
+
+\pentry{条件概率 \upref{HsCpMi}，从集合论角度看随机事件\upref{JNran1}}
+\subsection{前言}
+贝叶斯公式可常常用于概率模型中的统计推断。在开始讨论贝叶斯公式前，我们需要定义几个概念。
+\begin{definition}{划分}
+设S为一个样本空间，我们定义对一个样本空间的划分为一系列的事件$A_1,A_2,A_3...,A_n$，这些事件对于$\forall i,j $ 且$i\neq j$都满足$A_i \cap A_j = \emptyset$,且对于他们的并集满足$A_1\cup A_2\cup ...\cup A_n = S$。
+\end{definition}
+划分是对样本空间进行的两两互不相交的切割，当我们有了划分后，对于任意一个事件$B$发生的概率，就可以看做是在每个划分中$B$事件发生的概率再乘以每个划分发生的概率。
+\begin{theorem}{全概率公式}
+设$A_1,A_2,...A_n$是样本空间$S$的一个划分，则任意一个事件$B$发生的概率可以写为$P(B) = \sum_i P(B A_i)= \sum_i P(B| A_i) P(A_i).$
+\end{theorem}
+证明如下，我们可以将事件B作一个切分，$B = B \cap S = B \cap (A_1 \cup A_2 \cup ...\cup A_n)$,根据集合运算的分配率，我们有
+\begin{aligned}
+B = (B\cap A_1) \cup (B\cap A_2) \cup ... \cup (B \cap A_n)~,
+\end{aligned}
+由于$\{A_i\}$是$S$的划分，有$A_i \cap A_j = \emptyset$，而 $(B\cap A_i) \cap (B\cap A_j) \subseteq A_i \cap A_j$,于是我们知道$(B\cap A_i) \cap (B \cap A_j) = \emptyset$。根据概率与条件概率的定义，我们有
+\begin{align}
+P(B) = \sum_i P(B\cap A_i)  = \sum_i P(B | A_i) P(A_i)~.
+\end{align}
+\subsection{贝叶斯公式}
+\begin{theorem}{贝叶斯公式}
+设$S$为样本空间，$A_1,A_2,...A_n$为样本空间的一个划分，$B$为一个事件，则有
+\begin{equation}
+P(A_i|B) = \frac{P(B|A_i)P(A_i)}{P(B)} = \frac{P(B|A_i)P(A_i)}{\sum_j P(B|A_j)P(A_j)}~.
+\end{equation}
+\end{theorem}
+贝叶斯公式证明如下：根据条件概率公式的定义$P(A|B) = P(AB)/P(B)$,$P(B|A) = P(BA)/P(A)$,我们显然有$AB = A\cap B = BA$,于是对比得到一个等式
+\begin{equation}
+P(A|B)P(B) = P(B|A)P(A)~,
+\end{equation}
+或
+\begin{equation}
+P(A|B) = \frac{P(B|A)P(A)}{P(B)}~.
+\end{equation}
+将上述等式做代换$A\rightarrow A_i$即可得到贝叶斯公式
+\begin{equation}
+P(A_i|B) = \frac{P(B|A_i)P(A_i)}{P(B)}~,
+\end{equation}
+再代入刚刚给出的全概率公式即可得到贝叶斯公式中第二个等式。
+\subsection{贝叶斯公式的应用}
+我们先来看一下贝叶斯公式说了什么，条件概率的表达式$P(A|B)$中，事件$B$作为前提，事件$A$作为结果，给出了在前提事件下作为结果的事件发生的概率，因此我们说$P(A|B)$描述了两个事件之间的因果关系强度。而贝叶斯公式的另一侧将前提事件与结果事件翻转过来了，这种翻转使得我们能够形成推断。具体讨论前我们先看例子
+\begin{example}{疾病原因的推断}
+有一种肺部疾病A，它的发病率为 $2 \%$ ，通过临床数据的统计，我们发现患者中有$70\%$吸烟，有百分之$30\%$不吸烟。我们调查发现人群中大概$20\%$吸烟，则一个不吸烟的人患疾病A的概率为多大？\\
+我们用事件A表示患有疾病A，用事件$B_1$表示吸烟,$B_2$表示不吸烟，则有$P(B_1|A) = 0.7,P(B_2|A)=0.3$,我们要求的概率可以写为$P(A|B_2)$,而根据贝叶斯公式,我们有
+\begin{equation}
+P(A|B_2) = \frac{P(B_2|A) P(A)}{P(B_2)}~,
+\end{equation}
+代入$P(A)=0.02$,$P(B_2)=0.8$我们得到$P(A|B_2) = 0.0075$。同理对一个吸烟的人，它患有疾病A的概率为
+\begin{equation}
+P(A|B_1) = \frac{P(B_1|A) P(A)}{P(B_1)} = 0.07~.
+\end{equation}
+\end{example}
+这个例子中，我们给出推断的方式是，我们先得到了关于疾病的统计数据，然后对患病人群进行划分。这里的划分是吸烟与不吸烟，我们将这个划分应用到整个人群中，通过统计在人群之中划分给出的概率，我们就可以推断吸烟的人换疾病A的概率与不吸烟的人换疾病A的概率。\\
+在推断前后，我们的信息从“结果，以及结果中对可能因素的划分”，得到了“可能的因素对结果的影响”，以此实现了统计推断。

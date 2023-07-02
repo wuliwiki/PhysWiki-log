@@ -1,0 +1,28 @@
+% 稠密连接网络
+% DenseNet 稠密
+
+\textbf{稠密连接卷积网络}（Densely Connected Convolutional Networks, DenseNet）是一种在残差网络基础上扩展的人工神经网络模型结构。
+
+传统的残差网络包含多少个残差块，就相应有多少条短连接。而稠密网络在此基础上阔餐了短连接的数量，在一个稠密连接块内的每层两两之间均有一条直接的短连接。在一个稠密块中的每一层都从前面所有层获得特征图（feature map），而每一层的特征图均直接传递到后面的所有层。写成数学形式，若一个稠密连接块中有$n$层，则该稠密块中有$\frac{n(n+1)}{2}$条短连接。
+
+稠密块中编号为$l$的层为$\bvec x_l$，从前面$l$层$\bvec x_0, \bvec x_1, ..., \bvec x_{l-1}$接收特征图，则有：
+\begin{equation}
+\bvec x_l=H_l([\bvec x_0, \bvec x_1, ..., \bvec x_{l-1}])
+\end{equation}
+
+\begin{figure}[ht]
+\centering
+\includegraphics[width=10cm]{./figures/9ae1265392693159.png}
+\caption{一个5层的稠密连接块 [1]} \label{fig_DensNe}
+\end{figure}
+上图所示的是一个包含$5$个卷积层的稠密连接块。每层都发出若干条短连接与后面每一层相连，每一层也都从前面所有层获得一条连接。短连接数一共有$5\times(5+1)=30$条。
+
+由于有大量短连接的存在，稠密连接网络与传统卷积网络相比，须要学习的参数数量更少。直观上看，是由于前面层的很多信息直接传递给后面层，使得整个网络的学习效率提高。这从另一面，可以说明，在传统网络中，其实很多层可能是冗余的。
+
+与数据流类似，网络中的梯度信息也很容易通过短连接从浅层向深层传递，从而使得较深的网络也比较容易训练。另外一个优势是，稠密网络本身具有一定正则化性能，可以有效避免过度拟合。
+
+
+\textbf{参考文献：}
+\begin{enumerate}
+\item G. Huang, Z. Liu, L. Van Der Maaten, and K. Q. Weinberger, “Densely connected convolutional networks,” in Proceedings of the IEEE conference on computer vision and pattern recognition, 2017, pp. 4700–4708.
+\end{enumerate}

@@ -4,9 +4,10 @@
 \issueDraft
 \end{issues}
 
-\subsection{视频基础知识}
+\subsection{获取信息}
 \begin{itemize}
-\item 查看视频全部流的编码信息 \verb|ffprobe -show_streams 视频文件|， 或者 \verb|ffprobe -i 视频文件 -show_streams| 如果只查看视频流或音频流， 用 \verb|-select_streams v| 或 \verb|a|， 可以用 \verb|a:0| 查看第一个音频流。 要查看字幕流，用 \verb|s|， 数据流用 \verb|d|，附件用 \verb|t|
+\item 查看视频全部流的编码信息用 \verb|ffprobe -i 视频文件 -show_streams| 或者 \verb|ffprobe -show_streams 视频文件|。
+\item 如果只查看视频流或音频流， 用 \verb|-select_streams v| 或 \verb|a|， 可以用 \verb|a:0| 查看第一个音频流。 要查看字幕流，用 \verb|s|， 数据流用 \verb|d|，附件用 \verb|t|
 \item 3d 视频通常有两个视频流，音频流可以用于不同语言的配音，注意每个音频流都可以支持双声道而不是用不同流区分。
 \item 数据流可以用于储存多媒体信息， 视频分节信息， 等
 \item 在 \verb|-show_streams| 的输出中， \verb|codec| 是编码格式， MP4 最常用的是 H264， 高清视频也常用 H265。 音频最常用 ACC
@@ -15,11 +16,21 @@
 \end{itemize}
 
 \subsection{格式转换}
-不同的视频格式（mp4, mov, mkv，ts）只是外面的 container 不同， 编码可能是相同的（例如最常用的 H264）。 所以转换格式的时候只需要让 ffmpeg 把容器换壳即可： \verb|ffmpeg -y -i 输入视频 -c copy 输出视频|。 这样的转换是完全无损的。
-
-\subsection{视频截图}
 \begin{itemize}
-\item \verb|ffmpeg -i input_video.mp4 -ss start_time -t duration -vf fps=1 output_%03d.jpg|
+\item 要从视频中提取音频并保持音频编码不变， 用 \verb|ffmpeg -i input_video.mp4 -vn -acodec copy output_audio.mp3|
+\item 要导出一段时间内的一些列的帧到图片，用 \verb|ffmpeg -i input_video.mp4 -ss start_time -t duration -vf fps=1 output_%03d.jpg|
+\item 不同的视频格式（mp4, mov, mkv，ts）只是外面的 container 不同， 编码可能是相同的（例如最常用的 H264）。 所以转换格式的时候只需要让 ffmpeg 把容器换壳即可： \verb|ffmpeg -y -i 输入视频 -c copy 输出视频|。 这样的转换是完全无损的。
 \end{itemize}
 
-\href{https://wuli.wiki/assets/sogou/1012.单向函数 - 搜狗科学百科.html}{123}
+\subsection{视频压缩}
+\begin{itemize}
+\item \verb|ffmpeg -i 输入视频 -c:v libx264 [-crf 23 或 -b:v 1M] -c:a copy 输出视频|。
+\item 其中 \verb|-c:v libx264| 使用 H264 编码。 \verb|-crf| （Constant Rate Factor）用于控制转换质量， 数值越小质量越高。 \verb|-b:v 1M| 用于指定码率（1 Mbps）（用 \verb|500k| 表示 500 kbps）， 使用该选项会让程序无视 \verb|-crf| 选项。 \verb|-c:a copy| 直接复制音频不做改动。
+\item 加上 \verb|-preset slow| 可以提高压缩率， \verb|-tune| 可以进一步调节。
+\item \verb|-profile:v baseline或main或high| 也会有影响， 默认为 \verb|high|
+\item 如果还要继续压缩， 就上 2 pass。 也就是变码率的压缩：
+\item \verb|ffmpeg -y -i input.mp4 -c:v libx264 -b:v 1M -pass 1 -an -f null /dev/null|
+\item \verb|ffmpeg -i input.mp4 -c:v libx264 -b:v 1M -pass 2 -c:a copy output.mp4|
+\item 该命令的视频压缩对 H264 编码默认使用所有 cpu 核， 要指定线程数可以用 \verb|-threads| 选项。
+\end{itemize}
+

@@ -5,17 +5,17 @@
 \subsection{基础}
 \begin{itemize}
 \item \href{http://faculty.salina.k-state.edu/tim/unix_sg/index.html}{一个教程}
-\item Linux 命令行区分大小写
+\item Linux 命令行区分大小写。
 \item \verb`man 命令`  会给出命令的帮助 (manual)
 \item \verb`clear` 清空命令行（老版本中其实是向下滚动一页）， \verb|Ctrl+L| 也可以。
-\item 几乎任何时候, Ctrl+C (有时候 Ctrl+D， 例如退出 bash) 可以强制终止当前的工作 (注意只用于可以安全终止的任务!)
+\item 几乎任何时候, \verb|Ctrl+C| (有时候 \verb|Ctrl+D|， 例如退出 bash) 可以强制终止当前的工作 (注意只用于可以安全终止的任务!)
 \item \verb`^` 代表 Ctrl 键
-\item Ubuntu 中, \verb|Ctrl++| 就是放大, 记住, 是 + 不是 =.
+\item Ubuntu 中, \verb|Ctrl + =| 就是放大， \verb|Ctrl + -| 是缩小。
 \item Linux 并没有文件拓展名...
 \item 可执行文件： 对 linux 来说缀名没有意义。 可执行文件如果在 system path， 就可以直接打文件名执行命令（一般没有拓展名）。 如果在某个目录， 就打 \verb`目录/文件名` 执行。 如果在当前目录就用 \verb`./文件名` 执行
-\item 除了二进制可执行文件， 文本文件也可以被看作可执行文件（与拓展名无关）。 默认用 bash 执行， 但如果有 shebang， 就用 shebang 指定的程序执行
-\item shebang 在文件第一行以 \verb`#!` 开头， 如 \verb`#!/bin/bash` （默认） 或者 \verb`#!/usr/bin/python`
-\item 命令的短选项可以合并, 例如 \verb`ls -l -h` 可以写成 \verb`ls -lh`. 有些段选项有对应的长选项， 如 \verb`ls -l` 相当于 \verb`ls --human-readable`.
+\item 除了二进制可执行文件， 文本文件也可以被看作可执行文件（与拓展名无关）。 默认用 bash 执行， 但如果有 \textbf{shebang}， 就用 shebang 指定的程序执行
+\item shebang 在文件第一行以 \verb`#!` 开头， 如 \verb`#!/bin/bash` （默认） 或者 \verb`#!/usr/bin/python`。 \verb|#!| 后面不应该有空格（即使有时候有也能用）
+\item 命令的短选项往往可以合并（取决于程序）， 例如 \verb`ls -l -h` 可以写成 \verb`ls -lh`. 有些段选项有对应的长选项， 如 \verb`ls -l` 相当于 \verb`ls --human-readable`.
 \item \verb`ls -1` 可以将文件名列成一列， \verb`ls -v` 可以按照数字的大小排序（否则是逐位排序， 如 1,10,100,2,10,200）， \verb`ls *.md` 可以只列出 md 文件
 \item \verb|ls ./**/文件名| 可以任意层子文件夹中的 \verb|文件名|。 如果无效， 需要先设置 \verb|shopt -s globstar|。
 \item \verb|stat 文件| 可以显示一些 metadata， 例如大小权限， 最后访问和修改时间等。
@@ -70,15 +70,17 @@
 \item \verb|dos2unix 文件1 文件2...| 可以把 Windows 文件中的 CRLF 转换为 Linux 中的 LF 换行。 
 \item \verb`dd` 命令可以直接在当前位置生成一个大小为 100 MB 的文件， 内容为随机， 还会显示写入速度
 \verb`dd if=/dev/urandom of=./dump.txt bs=1M count=1024` 写 1024Mb 随机文件
+\item \verb|/dev/random| 使用系统信息生成随机数，但有可能当 entropy 不足的时候会让 \verb|dd| 终端。 而 \verb|/dev/urandom| 不会中断，应该是使用伪随机数，稍微可能没有那么安全。
 \item \verb|dd conv=notrunc if=... of=文件名 bs=.. seek=第几字节 count=..|  从文件的某个字节开始修改文件（覆盖内容）。
 \item \verb|dd| 也可以用来复制文件， 可以用来测试传输速度。
 \item \verb`locate ???` 命令可以从数据库中寻找计算机上所有文件名包含 \verb`???` 的文件， 但刚创建的文件可能找不到
+\item \verb|truncate -s 100M 文件| 可以把文件截断到某个大小，后面的数据丢弃。
 \item \verb`sudo updatedb` 可以将刚创建的文件加到数据库中， 让 \verb`locate` 可以找到（\verb|-v| 选项显示哪些文件夹被更新）
 \item 对于整个系统， \verb`locate` 比 \verb`find` 要快得多， 因为数据库已经是 index 过的 \verb`-c` 选项可以显示匹配结果的个数， \verb`-i` 选项可以不区分大小写
 \item \verb|plocate| 是一个比较快的实现， \verb|mlocate| 是一个比较安全的实现， 命令都是 \verb|locate|， \verb|/etc/updatedb.conf| 中可以设置 \verb|updatedb| 的一些选项， 例如忽略挂载到某个目录的硬盘， 忽略 \verb|.git| 文件夹等， 忽略某些文件系统等。
 \item 文件批量重命名 \verb|rename 's/老名字/新名字/' *|。 \verb|-n| 选项显示重命名的预览， 不真的重命名
 \item \verb|sudo swapoff -a| 不使用 swap file， \verb|sudo swapon -a| 恢复使用。 可能还需要在 \verb|/etc/fstab| 里面注释掉相应的行。
-\item 要改变 swap 文件的尺寸： \verb|sudo swapoff /swapfile|， \verb|sudo dd if=/dev/zero of=/swapfile bs=1M count=1024|， \verb|sudo mkswap /swapfile|， \verb|sudo swapon /swapfile| 一般无需重启， 但如果系统不允许关闭 swap， 也可以考虑用多个 swap 文件。有时候 \verb|/swapfile| 也叫做 \verb|/swap|。
+\item 要改变 swap 文件的尺寸： \verb|sudo swapoff /swapfile|， \verb|sudo dd if=/dev/zero of=/swapfile bs=1M count=1024|（如果写入比较慢也可以 append： \verb|sudo dd ... oflag=append conv=notrunc|）， \verb|sudo mkswap /swapfile|， \verb|sudo swapon /swapfile| 一般无需重启， 但如果系统不允许关闭 swap， 也可以考虑用多个 swap 文件。有些系统中 \verb|/swapfile| 也命名为 \verb|/swap| 。
 \item 用 \verb|free -h| 可以查看当前 RAM 和 swap 的大小和使用情况。
 \item 如果要开机自动使用 swapfile， 用 \verb|/swapfile none swap sw 0 0|
 \item \verb|tree| （非系统自带） 可以显示当前目录的树状图， \verb|tree -a| 也显示隐藏文件。
@@ -90,8 +92,8 @@
 \begin{itemize}
 \item 可以用于同步和备份文件（后者很广泛）， 支持 ssh 进行远程传输， 也支持本地传输。
 \item 格式 \verb`rsync -avzh src1 src2 ... dest` 其中 \verb|src1| 等文件或文件夹会自动同步到 \verb|dest| 文件夹中（例如生成 \verb`dest_path/src1` 等）。 如果 \verb|dest| 不存在， 会自动用 mkdir 生成，但只能生成一层。 file, folder 和 \verb|dest_path| 都可以是远程或者本地
-\item 例如从远程传到本地： \verb|rsync -azvh 用户名@域名或IP:/路径/* 本地路径/|。 \verb`-a` 是 archive (包括所有子文件夹， 文件的 permission 和 symlink 都会原封不动复制)， \verb`-v` 是 verbose （显示详情）， \verb`-z` 是 zip （传输过程压缩） \verb`-h` 人可读。
-\item 如果在不同文件系统之间， 用了 \verb|sudo| 也还是显示 \verb|Operation not permitted|， 可以把 \verb|-a| 选项改为 \verb|-r|。
+\item 例如从远程传到本地： \verb|rsync -azvh 用户名@域名或IP:/路径/* 本地路径/|。 \verb`-a` 是 archive （包括所有子文件夹， 文件的 owner 和 permission 和 symlink 都会原封不动复制）， \verb`-v` 是 verbose （显示详情）， \verb`-z` 是 zip （传输过程压缩） \verb`-h` 人可读。
+\item 如果在不同文件系统之间， 用了 \verb|sudo| 也还是显示 \verb|Operation not permitted|， 可以把 \verb|-a| 选项改为 \verb|-rl|，其中 \verb|r| 是 recursive， \verb|l| 是复制软链而不是复制软链指向的目标。
 \item \verb|–dry-run| 可以看看哪些文件会修改
 \item 若要在每个文件传输完成之后从原来文件夹删除， 用 \verb`--remove-source-files`。 注意不会删除任何目录。 可以另外用 \verb|find src -type d -empty -delete| 删除空目录。
 \item 同步文件夹时， 用 \verb|源文件夹/| 不会包括 \verb|源文件夹| 本身， 而去掉斜杠就会。
@@ -102,6 +104,16 @@
 \item 当两个文件只有部分不同时， rsync 会用 delta-transfer algorithm， 只传输不同的部分。 \verb|--whole-file| 可以取消这个功能。
 \end{itemize}
 
+\subsubsection{find}
+\begin{itemize}
+\item \verb`find /path1/ path2/ -name '<filename>'` 可以搜索该目录下的文件. 加上 \verb`-iname` 选项可以不区分大小写. 也可以用 \verb`'*<filename>*'` 来表示含该文字的文件名. 加 \verb`-user 用户名` 选项用于查找某个用户的文件， 加 \verb`-size +100M` 可以查找大于 100M 的文件。 \verb`-type d` 选项搜索目录， 默认是只搜索文件
+\item 如果要执行， 用 \verb`find ... -exec xxxx {} \;` 可以将找到的每个结果分别用程序 \verb`xxxx` 执行， \verb`find ... -exec xxxx {} +` 将找到的结果用 \verb`xxxx` 一次执行（如果数量太多也可能自动分为几次）。 其中 \verb`{}` 可以重复使用。
+\item \verb`-execdir ... {} ... \;` 相当于先 \verb`cd` 到每个文件所在目录然后执行命令
+\item 删除当前目录以及子目录的空文件夹 \verb`find . -empty -type d -delete` 删除空文件 \verb`find . -empty -type f -delete`
+\item \verb|find . -type f -executable| 找所有的可执行文件。
+\item Linux 用 \verb`find 文件夹 -type f -exec sha1sum {} \; | sort | sha1sum` 可以对比两个文件夹。 对比包含文件名， 每个文件的路径， 和每个文件（包括隐藏文件）的 hash， 不包括 metadata （例如权限， 最后修改时间等）， 不包括空目录， 不包括软链。
+\item 如果要对比两个文件夹中所有包含的软链（它们的名字，路径以及内容）， 对他们分别用 \verb`find test -type l -exec printf "{} -> " \; -exec readlink {} \; | sort | sha1sum`
+\end{itemize}
 
 \subsubsection{split}
 \begin{itemize}
@@ -114,18 +126,6 @@
 \item \verb`-a 4` 拓展名位数为 4
 \item 如果文件个数超出拓展名位数， 那么位数会自动增加， 且增加后第一位不变以保持正确排序
 要缝合分割后的文件， 用 \verb`cat file-* > file`
-\end{itemize}
-
-
-\subsubsection{find}
-\begin{itemize}
-\item \verb`find /path1/ path2/ -name '<filename>'` 可以搜索该目录下的文件. 加上 \verb`-iname` 选项可以不区分大小写. 也可以用 \verb`'*<filename>*'` 来表示含该文字的文件名. 加 \verb`-user 用户名` 选项用于查找某个用户的文件， 加 \verb`-size +100M` 可以查找大于 100M 的文件。 \verb`-type d` 选项搜索目录， 默认是只搜索文件
-\item 如果要执行， 用 \verb`find ... -exec xxxx {} \;` 可以将找到的每个结果分别用程序 \verb`xxxx` 执行， \verb`find ... -exec xxxx {} +` 将找到的结果用 \verb`xxxx` 一次执行（如果数量太多也可能自动分为几次）。 其中 \verb`{}` 可以重复使用。
-\item \verb`-execdir ... {} ... \;` 相当于先 \verb`cd` 到每个文件所在目录然后执行命令
-\item 删除当前目录以及子目录的空文件夹 \verb`find . -empty -type d -delete` 删除空文件 \verb`find . -empty -type f -delete`
-\item \verb|find . -type f -executable| 找所有的可执行文件。
-\item Linux 用 \verb`find 文件夹 -type f -exec sha1sum {} \; | sort | sha1sum` 可以对比两个文件夹。 对比包含文件名， 每个文件的路径， 和每个文件（包括隐藏文件）的 hash， 不包括 metadata （例如权限， 最后修改时间等）， 不包括空目录， 不包括软链。
-\item 如果要对比两个文件夹中所有包含的软链（它们的名字，路径以及内容）， 对他们分别用 \verb`find test -type l -exec printf "{} -> " \; -exec readlink {} \; | sort | sha1sum`
 \end{itemize}
 
 \subsubsection{系统目录}
@@ -200,6 +200,11 @@
 \item \verb`xarg` 用于使用 piping 构建新命令， 即将 \verb|find| 输出到 \verb|stdout| 的东西放到 \verb`sudo sed -i -e 's/\r//g'` 的后面作为参数。
 \end{itemize}
 
+\subsubsection{awk}
+\begin{itemize}
+\item \verb`echo 111 222 333 | awk '{print $2}'` 可以提取 \verb|222|
+\end{itemize}
+
 \subsection{账户与权限}
 \begin{itemize}
 \item \verb`sudo` (super user do) 加在命令前可以获得管理员权限, \verb`su` (super user) 可以把以下所有操作改为管理员权限 (不建议常用)。 如果 ubuntu 中不允许 \verb|su|， 那么就用 \verb|sudo -i| 也是一样的。
@@ -232,9 +237,12 @@
 \item 如果你对一个文件夹只有 \verb|rw| 没有 \verb|x|， 也只是好了那么一点点， 你可以对文件夹就地重命名（不能移动）， 只能看到文件夹内第一层的文件和子文件夹的名字（看不到权限），其他同样什么也做不了。
 \item 用户创建的文件的权限默认是 \verb|644|， 文件夹默认 \verb|755|（允许 \verb|x|，所有人可以进入文件夹）。
 \item \verb|umask 002| 可以修改新建文件的默认权限为 \verb|664| （666-002=664）， 且新建文件夹的默认权限被修改为 \verb|775| （777-002=775）。 如果设 \verb|umask 007|， 那么文件默认权限为 \verb|660|（6-7=0）， 文件夹为 \verb|770|。 注意 \verb|umask| 只对当前的 shell 生效， 要永久生效可以放到 \verb|~/.bashrc| 里面。
-\item 用户创建的文件和文件夹的组默认为用户的 primary group。 但是一个例外是， 如果所在的文件夹的 SetGID 开启， 那么创建文件和文件夹的组默认为它所在的文件夹的组， 且创建的文件夹也会默认开启 SetGID。
-\item 要开启 SetGID， 用 \verb|chmod +s|。 在显示权限时， 文件夹会显示为 \verb|rws|。 \verb|s| 的编号是 \verb|2000|， 例如可以用 \verb|chmod 2775 文件夹|。
+\item 用户创建的文件和文件夹的组默认为用户的 primary group。 但是一个例外是， 如果所在的文件夹的 SetGID（\verb|sgid|） 开启， 那么创建文件和文件夹的组默认为它所在的文件夹的组， 且创建的文件夹也会默认开启 SetGID。
+\item 要开启 SetGID， 用 \verb|chmod +s|。 在显示权限时， 文件夹会显示为 \verb|rws|。 \verb|s| 的编号是八进制的 \verb|2000|， 例如可以用 \verb|chmod 2775 文件夹|。
 \item 所以作为系统管理员，要想让不同组的用户可以访问不同的文件夹，那就首先把这个文件夹本身的 owner 设为 \verb|root|， 组设为可以访问的组， 权限设为 \verb|2750|。 所有子文件夹和文件的组设为可以访问的组， 权限分别设为 \verb|2775| 和 \verb|664|。 每个用户的 \verb|~/.bashrc| 中 \verb|umask| 设为 \verb|002| （默认为 022）。
+\item SetUID （\verb|suid|） 权限可以让一个文件被执行时具有 owner 的权限而不是执行者的权限。 \verb|suid| 对文件夹没有任何作用。 它的编号是八进制的 \verb|4000|。
+\item 若对文件设置 \verb|sgid|，那么它被执行时具有所属组的权限而不是执行者的组的权限。
+\item \verb|sticky| 权限设在文件夹上，可以让里面创建的文件只能被它的 owner 或 root 重命名或删除。 而一般情况下，任何对文件夹具有 \verb|w| 权限的人都可以重命名和删除里面的文件。 注意无论如何重命名和删除文件都和文件本身的权限无关。 对文件设置 \verb|sticky| 没有作用。
 \begin{lstlisting}[language=bash]
 folder=文件夹
 group=组
@@ -259,7 +267,7 @@ sudo echo umask 002 >> /home/用户2/.bashrc
 \item \verb|sudo hostname 新名字| 可以改变 hostname
 \item 其实真正和 windows 的任务管理器相对应的是 \verb`top`, 会显示实时进程. 
 \item \verb`K <PID>` 会结束对应编号的进程. 系统的关键进程是杀不掉的.
-\item \verb`last -数字` 可以查看最近若干次登录的记录
+\item \verb`last <user>` 用于查看 \verb`<user>` 最近登录的状况. \verb`last` 用于查看所有 user 登录的状况. \verb`last -数字` 可以查看最近若干次登录的记录
 \item \verb|sudo visudo| 可以安全地编辑管理员权限文件 \verb|/etc/sudoers|（保存时会检查语法错误）， 默认使用 nano 编辑器， 要用 vim
  可以 \verb|sudo update-alternatives --config editor| 然后选 vim。
 \item 例如在 \verb|visudo| 设置里面 \verb|Defaults  env_reset| 后面加上 \verb|,timestamp_timeout=3600|， 那么可以设置输入密码以后一个小时内不需要重复输入（默认只有几分钟）
@@ -269,7 +277,8 @@ sudo echo umask 002 >> /home/用户2/.bashrc
 \begin{itemize}
 \item \verb`ps aux` 会显示当前所有\textbf{进程 (process)}, \textbf{PID} 是 process ID, 用于终止进程
 \item \verb`ps aux | grep 搜索词` 会搜索当前进程中包含 \verb`搜索词` 的内容
-\item 一个很占 cpu 的命令可以用于测试 \verb`dd if=/dev/random of=/dev/null &` 其中 \verb`&` 表示在后台运行，按回车后会输出 PID （进程号）。 连续输入这个进程 4 次， 然后用 \verb`top` 命令打开进程管理， 可以看到它们出现在顶部。
+\item \verb|ps -p 进程号 进程号 ...| 可以用来查看进程的信息。
+\item 一个很占 cpu 的命令可以用于测试 \verb`dd if=/dev/urandom of=/dev/null &` 其中 \verb`&` 表示在后台运行，按回车后会输出 PID （进程号）。 连续输入这个进程 4 次， 然后用 \verb`top` 命令打开进程管理， 可以看到它们出现在顶部。
 \item top 中的 \verb`NI` 就是 nice value
 \item 在 top 界面中用 \verb`r` (renice) 可以调整进程的 nice value （优先级，越小越优先）按 ESC 可以退出
 \item \verb|ionice| 可以调整硬盘读写的优先级： \verb|ionice -p <PID>| 查看某个进程的优先级（0 到 7， 从高到低）， \verb|ionice -p <PID> -n 优先级| 可以改变优先级。
@@ -277,7 +286,9 @@ sudo echo umask 002 >> /home/用户2/.bashrc
 \item \verb`pstree` 可以看到哪些进程生成了哪些子进程， 例如 shell 里面运行 .sh 文件会生成一个子进程用于运行一个新的 shell
 \item \verb`kill -STOP 进程号` 可以暂停程序
 \item \verb`kill -CONT` 可以继续暂停的程序
-\item 如果一个进程 kill 不掉， 可以试试 \verb|kill -9|
+\item \verb|kill -2 进程号| 给进程发送 \verb|SIGINT|， 相当于 \verb|Ctrl+C|
+\item 如果一个进程 kill 不掉， 可以试试 \verb|kill -9 进程号|， 就是给进程发送 \verb|SIGKILL|。 会立即杀掉进程不给它收尾的机会。
+\item 更多信号详见 “Linux 进程的信号（笔记）\upref{LinSig}”。
 \end{itemize}
 
 \subsection{文件打包压缩}

@@ -1,0 +1,25 @@
+% ZFS 笔记
+
+\begin{issues}
+\issueDraft
+\end{issues}
+
+\begin{itemize}
+\item Ubuntu/Debian 安装 zfs： \verb|sudo apt install zfsutils-linux|
+\item 创建一个 500MB 文件： \verb|dd if=/dev/zero of=虚拟硬盘文件 bs=1M count=500|
+\item 制作 loopback 设备 \verb|sudo losetup -fP --show 虚拟硬盘文件|。会返回设备路径如 \verb|/dev/loop0|
+\item \verb|sudo zpool create pool名 /dev/loop0|
+\item 检查状态： \verb|sudo zpool status|； \verb|sudo zfs list|
+\item 创建文件系统： \verb|sudo zfs create pool名/fs名|
+\item 创建测试文件： \verb|echo "This is a test file." > /pool名/fs名/文件|
+\item 创建文件系统镜像： \verb|sudo zfs snapshot pool名/fs名@镜像1|
+\item 改变测试文件： \verb|echo "This is some additional data." >> /pool名/fs名/文件|
+\item 对比当前文件系统和上一次镜像 \verb|sudo zfs diff pool名/fs名@镜像1 pool名/fs名|。 输出如 \verb|M	/pool名/fs名/文件|。 其中 \verb|M| 和 git 中一样表示 modified。
+\item 恢复镜像： \verb|sudo zfs rollback pool名/fs名@镜像1|。现在可以检查 \verb|文件| 恢复到了之前的版本。
+\item 添加另一个 loop 设备： \verb|dd if=/dev/zero of=虚拟硬盘文件2 bs=1M count=500|
+\item \verb|sudo losetup -fP --show 虚拟硬盘文件2|， 输出例如 \verb|loop1|
+\item 添加设备到已有的 pool 中： \verb|sudo zpool add pool名 /dev/loop1|
+\item 所以 zfs 不需要再给硬盘分区，而是把硬盘加入 pool， 再在 pool 中创建文件系统。 每个文件系统有自己的属性，有自己的镜像，共享整个 pool 的容量。 当然，作为高级功能， zfs 也允许不把整块硬盘加入 pool 而是把一个分区加入 pool。
+\item 添加设备后， pool 中的所有文件系统会自动按需使用新增到 pool 中的设备，无需手动 resize。
+\item 用完以后，删除 pool： \verb|sudo zpool destroy pool名|， \verb|sudo losetup -d /dev/loop0|
+\end{itemize}
