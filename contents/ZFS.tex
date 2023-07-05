@@ -1,4 +1,4 @@
-% ZFS 笔记
+% ZFS （Zettabyte File System）笔记
 
 \begin{issues}
 \issueDraft
@@ -22,4 +22,60 @@
 \item 所以 zfs 不需要再给硬盘分区，而是把硬盘加入 pool， 再在 pool 中创建文件系统。 每个文件系统有自己的属性，有自己的镜像，共享整个 pool 的容量。 当然，作为高级功能， zfs 也允许不把整块硬盘加入 pool 而是把一个分区加入 pool。
 \item 添加设备后， pool 中的所有文件系统会自动按需使用新增到 pool 中的设备，无需手动 resize。
 \item 用完以后，删除 pool： \verb|sudo zpool destroy pool名|， \verb|sudo losetup -d /dev/loop0|
+\end{itemize}
+
+\subsection{常识}
+\begin{itemize}
+\item \verb|zfs| 的程序是非常底层的，系统甚至不知道这些硬盘已经被挂载了。 \verb|disk| 会显示未挂载。 System Monitor 也不会显示磁盘的读写速度。
+\item \verb|vdev| 是 virtual device， 一个 pool 中的数据在所有 vdev 上面 strip。
+\item 每个 \verb|vdev| 可以有不同的 RAID （\verb|z1| 代表一个冗余相当于普通的 RAID5， \verb|z2| 代表两个，等），也可以是单个盘。 但是一个 pool 中只要有一个 vdev 数据丢失，那么就会导致数据彻底无法恢复。
+\item \verb|vdev| 可以有不同的大小，可以不断往 pool 中加入。 zfs 会根据每个 vdev 剩余的容量按比例 strip。
+\item \verb|vdev| 一旦加入 pool 就不能删除。
+\item 只要把一个 pool 的所有盘用任何方法让 linux 识别到， 那么用 \verb|zpool import [pool名]| 就会识别出这个 pool。
+\item zfs 自带 checksum， 也就是说它在读取数据的时候（或者让它检查完整性的时候）会自动检测 checksum 是否一致， 若不一致， 若有数据冗余， 则会自动修复数据。
+\item \verb|zpool scrub pool名| 可以马上检查整个 pool 的 checksum 是否一致。
+\item \verb|zpool list -v| 查看 pool， fs 和各个硬盘的占用空间状态和其他详细数据。
+\end{itemize}
+
+\subsection{RAID}
+\begin{itemize}
+\item 设置 RAID-Z1： \verb|sudo zpool create pool名 raidz1 /dev/sdb /dev/sdc ...|。 这会自动挂载到 \verb|/pool名| 目录。
+\item 创建文件系统： \verb|sudo zfs create pool名/fs名|。
+\item \verb|sudo zpool status yue| 可以查看各种状态以及 RAID 设置， 以及读写错误。
+\item 4 块 8TB 硬盘用 \verb|raidz1| 组合后 \verb|zpool list -v| 显示 \verb|29.1TB| 容量。
+\item 改变挂载目录： \verb|sudo zfs set mountpoint=/挂载目录 pool名/fs名|。
+\item \verb|sudo zfs unmount pool名| 弹出 pool， 用 \verb|zfs mount| 重新挂载。
+\item \verb|sudo zfs set compression=lz4 pool名/fs名| 开启 lz4 压缩（cpu 会间断性占用 70\% 左右， 8 核 16 线程）。 可以随时打开或者关闭，只对新数据生效。 \verb|lz4| 是 zfs 最流行的压缩算法。 压缩会占用 cpu 但反而有可能会让读写变快！ 因为真正需要读写的数据少了。 实测在我的 8cpu 电脑上开启最高压缩率算法 \verb|gzip-9| 并不会让写入变慢。 其实如果大文件主要是视频啥的，压缩率其实非常小。
+\item 【严重不推荐】\verb|sudo zfs set dedup=on pool名/fs名| 开启查重（重复文件可以节约空间，但会使写入速度严重变慢——实测慢一半）。 可以随时打开或者关闭，只对新数据生效。
+\item 把 \verb|set| 改成 \verb|inherit| 就相当于关闭这些选项。
+\item \verb|sudo zfs get all pool名/fs名| 可以列出所有当前选项。 把 \verb|all| 换成 \verb|选项名| 可以列出制定选项。
+\item \verb|compressratio| 属性可以显示当前的平均压缩率， 这只用于查看不能手动设置。
+\item 的确，以上设置（无论是否开启 \verb|dedup|）都需要 \verb|1GB/1TB| 的内存。
+\item 亲测 4 盘 8TB 希捷 exos， RAID-z1，lz4 压缩， 关闭 dedup， 大 mp4 文件写入平均 50-70MB/s，比较稳定。 一开始复制文件可以达到 100MB/s 以上，但这应该主要是在写入缓存。
+\item GPT 说 RAID-z1 的写入速度其实比使用单个硬盘更慢。 但是读取速度会更快。
+\item 由于磁盘碎片， 数据占总容量 80\% 的时候就会导致性能下降。
+\item \verb|zpool replace pool名 /dev/sda /dev/sdb| 可以把 pool 中的某块磁盘（可以离线）替换成一块新的。 新磁盘将没有任何碎片。 这种方法理论上可以用来去碎片化（但有可能花很长时间）。
+\end{itemize}
+
+\subsection{镜像和克隆}
+\begin{itemize}
+\item 由于 zfs 使用 copy-on-write， 制作镜像非常轻量。
+\item 可以把镜像挂在到一个指定的文件夹中（只读）。
+\item \verb|zfs list -t snapshot| 查看所有镜像。
+\item 删除镜像会自动释放不需要的空间（哪怕是删除中间的镜像）。
+\item 可以直接把镜像挂载到某个目录： \verb|zfs mount -o ro -t snapshot pool名/fs名@镜像名 /镜像挂载目录|
+\item 挂载后的镜像是只读的， 如果要写入， 可以先对镜像做一个克隆： \verb|zfs clone pool名/fs名@镜像名 pool名/fs克隆名|。 挂载克隆也是一样的语法： \verb|zfs mount pool名/fs克隆名 /镜像克隆挂载目录|
+\end{itemize}
+
+\subsection{测试 dedup}
+\begin{itemize}
+\item 2TB 的备份文件拷进去， 开启 \verb|dedup|， 然后再把其中的 1.5TB 拷进另一个文件夹。 开始时的 \verb|zfs list -v|（省略了一些空白列）：
+\begin{lstlisting}[language=none]
+(now is 9:55)
+NAME        SIZE  ALLOC   FREE  FRAG    CAP  DEDUP
+yue        29.1T  4.81T  24.3T  0%    16%  1.00x
+  raidz1   29.1T  4.81T  24.3T  0%  16.5%      -
+\end{lstlisting}
+\item 32GB 内存爆满， cpu 16 线程占用大部分
+\item 第二天连续四小时测试， 传输总大小除以总时间， 平均 9MB/s
 \end{itemize}

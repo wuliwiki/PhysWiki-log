@@ -57,17 +57,50 @@ $\langle S \rangle \lhd G*H$很好证，从形式上就可以，此处只举一�
 \end{aligned}
 \end{equation}
 
-定义满同态$h:G*H\to G*_FH$，使得$h$限制在$G$或$H$上都是恒等映射。
+下证$G*H/\langle S \rangle \cong G*_F H$。
 
-$G*H$中的一个不是$1$的词要被$h$映射为$1$，那么词中必有一对相邻字母互相抵消，按照共合积的定义，这对相邻字母必形如$\varphi(x)\phi(x^{-1})$或$\phi(x)\varphi(x^{-1})$。抵消后，剩下的词（按$G*H$中的方式抵消后）如果不是$G*H$的$1$，则还可以继续找互相抵消的相邻字母。以此类推，可知$\opn{ker}h\subseteq \langle S \rangle$。
+定义满同态$\sigma:G*H\to G*_FH$，使得$\sigma$限制在$G$或$H$上都是恒等映射。
 
-又显然有$\langle S \rangle \subseteq \opn{ker}h$，从而$\opn{ker}h=\langle S \rangle$。由群同态基本定理（\autoref{exe_Group2_1}~\upref{Group2}）即可得证。
+取$G*H\subseteq G*H*F$中的一个已化简的词$W$，则$\sigma(W)$等价于把$W$中能替换为$F$中元素的字母都替换了。替换后，如果有来自$F$的字母相邻，将它们进行$F$的群运算，再把所得新词中来自$F$的字母都替换回$G$或$H$中，化简，所得结果依然等价于\footnote{比如令$W=g_1h_1g_2h_2g_3$，替换后可能得到$g_1h_1x_1x_2g_3$，如果$x_1x_2=x_3$，则$W$还等价于$g_1h_1x_3g_3$，这时候我们再把$x_3$替换为$\varphi(x_3)$或者$\phi(x_3)$，将它和$g_3$或者$h_1$运算后得到剩下的词。}
+$W$。$G*H$中任何等价于$W$的词都可以按这个程序得出。
+
+如果$W$中没有任何字母可以替换，那么$W$无法化简为空字。
+
+于是，如果$\sigma(W)=1$，则$W$中必有可以替换进$F$的字母。挑其中一个这样的字母如$a=\varphi(x)$，则可将其补充为$a\phi(x^{-1})\phi(x)$，使得$W$作为自由积$G*H$不变。补充后，保持$a\phi(x^{-1})$部分不动，剩下部分按\textbf{自由积}的定义化简。接下来，在剩下的可替换进$F$的字母中挑一个，重复上述\textbf{补充、化简的程序}
+\footnote{举例而言，设$f_i\in F$，令$\varphi(f_i)=a_i, \phi(f_i)=b_i$，而$W=\cdots a_1b_2a_3 \cdots$。先对$a_1$进行程序，所得结果为$\cdots a_1b_1^{-1}b_1b_2a_3 \cdots $，注意此时$b_1b_2$是一个元素。接下来对$b_1b_2$进行程序，得到$\cdots a_1b_1^{-1}b_1b_2a_2^{-1}a_1^{-1}a_1a_2a_3 \cdots $；再对$a_1a_2a_3$进行程序，得到$\cdots a_1b_1^{-1}b_1b_2a_2^{-1}a_1^{-1}a_1a_2a_3b_3^{-1}b_2^{-1}b_1^{-1}b_1b_2b_3 \cdots $。最后这一步的最后三个字母$b_1b_2b_3$要乘进后面的省略号里，该省略号的第一个字母确实是$H$的元素。
+}。
+
+可替换字母乘以一个不可替换字母，结果一定是不可替换的\footnote{原因是子群中的元素乘以子群外的元素一定在子群外，这可由消去律得。这里的子群就是$\varphi(F)$和$\phi(F)$。}。
+
+将上述步骤最后所得的词按\textbf{共合积}的定义化简，即先将所有形如$\varphi(x)\phi(x^{-1})$和$\phi(x)\varphi(x^{-1})$的元素化为$1$，然后将所得结果按\textbf{自由积}的定义化简。此时如果所得结果是$1$，那么$W$确实是$S$中的元素相乘而得；如果不是，那么它已经不可再施行上述\textbf{补充、化简的程序}，从而$W$不可能等价为$1$。
+
+综上，$\opn{ker}\sigma\subseteq \langle S \rangle $
+
+又显然有$\langle S \rangle \subseteq \opn{ker}\sigma$，从而$\opn{ker}\sigma=\langle S \rangle$。由\textbf{群同态基本定理}即可得证。
 
 \textbf{证毕}。
 
 
 
 
+$\langle S \rangle$实际上是$G*H$中包含形如$\varphi(x)\phi(x^{-1})$和$\phi(x)\varphi(x^{-1})$的元素的最小正规子群。你可能会疑问，如果包含这些元素的最小正规子群是$N$，那么任取$A, B\in G*H$，应有
+\begin{equation}
+\begin{aligned}
+&\varphi(x)\phi(x^{-1}), \varphi(y)\phi(y^{-1})\in N \\
+\implies{}& A\varphi(x)\phi(x^{-1})A^{-1}\in N\\
+\implies{}& \varphi(y)\phi(y^{-1})A\varphi(x)\phi(x^{-1})A^{-1}\in N\\
+\implies{}& B\varphi(y)\phi(y^{-1})A\varphi(x)\phi(x^{-1})A^{-1}B^{-1}\in N
+\end{aligned}
+~.
+\end{equation}
+最右端这个词似乎不是直接由$S$的元素相乘而得的，但它其实是的：
+\begin{equation}
+\begin{aligned}
+&B\varphi(y)\phi(y^{-1})A\varphi(x)\phi(x^{-1})A^{-1}B^{-1} \\
+={}& \qty(B\varphi(y)\phi(y^{-1})B^{-1})\qty(BA\varphi(x)\phi(x^{-1})A^{-1}B^{-1})
+\end{aligned}
+~.
+\end{equation}
 
 
 

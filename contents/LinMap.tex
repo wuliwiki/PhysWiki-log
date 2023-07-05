@@ -9,19 +9,31 @@
 
 \pentry{子空间\upref{SubSpc}}
 
+
+\subsection{概念的引入}
+
+线性空间是一种集合，自然可以考虑其上各种各样的映射。比如在几何向量空间中，向量$\bvec{v}$有长度，表示为$\lVert \bvec{v} \rVert$，我们可以定义映射$f(\bvec{v})=\lVert \bvec{v} \rVert\bvec{v}$，也就是把每个向量都伸长，伸长倍数恰为自己的长度。
+
+可线性空间又不仅仅是个集合，它还有线性结构，即数乘和加法运算。上述$f$并不能体现线性结构的威力，因为它不能保持线性结构——所谓保持线性结构，就是“线性组合与映射可交换”。
+
+比如说，考虑三维几何向量的\textbf{投影变换}，记为$\pi$。任取若干向量$\bvec{v}_i$，它们的线性组合$\sum_{i}a_i\bvec{v}_i$也是一个向量。你可以先将$\bvec{v}_i$组合起来，再将结果用$\pi$投影，得到$\pi\qty(\sum_{i}a_i\bvec{v}_i)$；也可以先将每个$\bvec{v}_i$投影为$\pi(\bvec{v}_i)$，再用同一组系数$a_i$做组合，得到$\sum_{i}a_i\pi(\bvec{v}_i)$。验算一下，两条路是不是殊途同归？这就叫保持线性结构。
+
+保持线性结构的映射体现了线性性的威力，也是线性代数的核心之一。
+
 \subsection{线性映射}
+
 \begin{definition}{线性映射}\label{def_LinMap_1}
 给定域\upref{field} $\mathbb F$ （通常取实数域 $\mathbb R$ 或复数域 $\mathbb C$）上的线性空间 $V$ 和 $U$。 如果有映射\upref{map} $f:V\rightarrow U$ 满足： 对于任意的向量 ${v}_1, {v}_2\in V$ 和标量 $c_1, c_2 \in \mathbb{F}$，都有
 \begin{equation}
 f(c_1 {v}_1+c_2 {v}_2)=c_1f({v}_1)+c_2f({v}_2)~.
 \end{equation}
-则称 $f$ 是 $V$ 到 $U$ 的一个\textbf{线性映射（linear map）}， 也叫\textbf{线性变换（linear transform）}， 或者\textbf{线性算符（linear operator）}。
+则称 $f$ 是 $V$ 到 $U$ 的一个\textbf{线性映射（linear map）}， 也叫\textbf{线性变换（linear transform）}， 或者\textbf{线性算符（linear operator）}。“算符”也译作“\textbf{算子}”。
 \end{definition}
-一些教材中只把定义域和值域相同的线性映射 $f:V\to V$ 称为线性变换， 小时百科中不做这种区分。
+一些材料中只把定义域和值域相同的线性映射 $f:V\to V$ 称为线性变换， 小时百科中不做这种区分。
 
-\autoref{def_LinMap_1} 的内涵比看上去广一些， 不仅仅是对 $V$ 中两个向量的线性组合成立。 容易证明对于任意的一组有限个向量 $\{{v}_i\}\subseteq V$ 和一组对应的标量 $\{c_i\}\subseteq\mathbb{F}$，都有
+\autoref{def_LinMap_1} 的内涵比看上去广一些， 不仅仅是对 $V$ 中两个向量的线性组合成立。 容易证明对于任意的一组有限个向量 $\{v_i\}\subseteq V$ 和一组对应的标量 $\{c_i\}\subseteq\mathbb{F}$，都有
 \begin{equation}\label{eq_LinMap_1}
-f\qty(\sum_i c_i {v}_i)=\sum_i c_i f({v}_i)~.
+f\qty(\sum_i c_i v_i)=\sum_i c_i f(v_i)~.
 \end{equation}
 特殊地， 若令所有 $c_i = 0$ 可得
 \begin{corollary}{}\label{cor_LinMap_1}
@@ -51,7 +63,7 @@ f\qty(\sum_i c_i {v}_i)=\sum_i c_i f({v}_i)~.
 证明留作习题， 使用线性空间的定义\upref{LSpace}即可。
 
 \addTODO{这两段应该放到后面展开讲解， 太浓缩}
-如果 $\{{e}_i\}_{i=1}^n$ 是 $V$ 的一组基底， 那么任意 ${v}\in V$ 都可以唯一地表示为 ${v}=\sum_i c_i {e}_i$ 的形式，其中 $c_i\in\mathbb{F}$。 这样，由于线性性，$f({v})=\sum_ic_if({e}_i)$。也就是说，只需要知道了基向量被 $f$ 映射到哪里，也就可以计算出任意向量映射到哪里。于是，和线性函数一样，确定一个线性映射的时候，我们最多只能自由选择基向量映射到哪里，只不过这里的函数值不再是数字，而是 $U$ 中的向量。
+如果 $\{{e}_i\}_{i=1}^n$ 是 $V$ 的一组基底， 那么任意 $v\in V$ 都可以唯一地表示为 $v=\sum_i c_i {e}_i$ 的形式，其中 $c_i\in\mathbb{F}$。 这样，由于线性性，$f(v)=\sum_ic_if({e}_i)$。也就是说，只需要知道了基向量被 $f$ 映射到哪里，也就可以计算出任意向量映射到哪里。于是，和线性函数一样，确定一个线性映射的时候，我们最多只能自由选择基向量映射到哪里，只不过这里的函数值不再是数字，而是 $U$ 中的向量。
 
 在向量空间的表示\upref{VecRep}中我们还会看到，选定两个空间的基以后，一个线性映射也可以看成是多个线性函数的排列，因此线性映射和线性函数性质很相似。 线性函数是一种特殊的线性映射， $V$ 上的所有线性函数组成的向量空间叫做\textbf{对偶空间}\upref{DualSp}。
 
@@ -62,7 +74,7 @@ f\qty(\sum_i c_i {v}_i)=\sum_i c_i f({v}_i)~.
 
 如果一个线性变换的像空间是 $V$ 的一个真子集，那么这个真子集一定是 $V$ 中的一个“过原点的平面”，我们把这种线性变换称为\textbf{退化（degenerate）}的。反过来，$V$ 中的一个“过原点的平面”可以是某线性变换的像空间。一个线性变换唯一对应一个像空间，但是一个像空间总是对应无穷多个线性变换。
 
-如果 ${v}\in V$ 在基 $\{{e}_i\}$ 中表示为 $\sum c_i {e}_i$，那么它变换后的向量就是 $T {v}=T\sum c_i {e}_i=\sum c_iT {e}_i$。如果向量组 $\{T {e}_i\}$ 是线性相关的，那么就意味着存在并非全为零的 $\{c_i\}$ 使得 $T {v}=\sum c_iT {e}_i=0$；而 $\{c_i\}$ 并非全为零意味着 ${v}$ 不是零向量。这就是说，退化的线性变换会把一些非零向量变换成零向量。
+如果 $v\in V$ 在基 $\{{e}_i\}$ 中表示为 $\sum c_i {e}_i$，那么它变换后的向量就是 $T v=T\sum c_i {e}_i=\sum c_iT {e}_i$。如果向量组 $\{T {e}_i\}$ 是线性相关的，那么就意味着存在并非全为零的 $\{c_i\}$ 使得 $T v=\sum c_iT {e}_i=0$；而 $\{c_i\}$ 并非全为零意味着 $v$ 不是零向量。这就是说，退化的线性变换会把一些非零向量变换成零向量。
 
 \begin{exercise}{}
 如果线性变换非退化，那么非零向量有可能被变换为零向量吗？提示：退化和非退化的区别在于基做了线性变换后得到的向量组还是不是线性无关的，或者说还是不是一组基。
@@ -71,9 +83,9 @@ f\qty(\sum_i c_i {v}_i)=\sum_i c_i f({v}_i)~.
 退化的线性变换会把非零向量变成零向量这一事实，引申出了零化子的概念：
 
 \begin{theorem}{零空间}\label{the_LinMap_1}
-给定线性映射 $f:V\to U$， $V$ 中被变映射到 $U$ 中零向量的全体向量所构成的集合 $\{{v}\in V|f(v)= 0\}$ 构成 $V$ 的子空间， 称为 $f$ 的\textbf{零空间（null space）}， 也称为\textbf{零化子空间}或\textbf{零化子}。
+给定线性映射 $f:V\to U$， $V$ 中被变映射到 $U$ 中零向量的全体向量所构成的集合 $\{v\in V|f(v)= 0\}$ 构成 $V$ 的子空间， 称为 $f$ 的\textbf{零空间（null space）}， 也称为\textbf{零化子空间}或\textbf{零化子}。
 \end{theorem}
-证明留做习题： 只需要根据定义证明 $\{{v}\in V|f(v)= 0\}$ 是一个线性空间即可。 
+证明留做习题： 只需要根据定义证明 $\{v\in V|f(v)= 0\}$ 是一个线性空间即可。 
 
 
 \subsection{矩阵表示线性变换}

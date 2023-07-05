@@ -20,7 +20,8 @@
 \subsubsection{开机自动 mount}
 \begin{itemize}
 \item \href{https://www.linode.com/docs/networking/ssh/using-sshfs-on-linux/}{参考这里}
-\item 要重启以后自动 mount 网盘（permanent mount， 两边重启都不怕）， \textbf{一定}要先用上面 \verb`sshfs` 命令先临时 mount 一次 （否则会出错！）， 成功以后用 \verb`sudo vim /etc/fstab` 在配置文件中最后一行加入 \verb`addis@192.168.137.1:/ /mnt/Miranda fuse.sshfs x-systemd.automount,_netdev,follow_symlinks,identityfile=/home/addis/.ssh/id_rsa,allow_other,default_permissions,reconnect 0 0`， \verb`/home/addis/.ssh/id_rsa`， 其他的什么意思不清楚也不用管. Use \verb`sudo mount -a` to take effect.
+\item 要重启以后自动 mount 网盘（permanent mount， 两边重启都不怕）， \textbf{一定}要先用上面 \verb`sshfs` 命令先临时 mount 一次 （否则会出错！）， 成功以后用 \verb`sudo vim /etc/fstab` 在配置文件中最后一行加入 \verb`addis@192.168.137.1:/ /mnt/Miranda fuse.sshfs x-systemd.automount,_netdev,follow_symlinks,identityfile=/home/addis/.ssh/id_rsa,allow_other,default_permissions,reconnect 0 0`， \verb`/home/addis/.ssh/id_rsa`， 其他的什么意思不清楚也不用管. 用 \verb`sudo mount 挂载文件夹` 立即生效.
+\item 如果 \verb|ssh| 有某个权限， 但是 \verb|sshfs| 没有， 那么可以在选项里面加上 \verb|rw,exec,umask=0000|。 保守一些也可以用 \verb|0022|。
 \item 现在可以试一试重启， 如果启动失败， 会进入一个安全命令行， 将 \verb`/etc/fstab` 加入的一行删掉即可。 如果成功的话， 重启后进入 \verb`/mnt/folder` 就会自动 mount
 \end{itemize}
 
@@ -30,6 +31,7 @@
 \item \verb|SMB| 应该是最广泛使用的网络硬盘协议， 对各种不同的操作系统兼容性较好， 下文的 \verb|NFS| 更多用于 linux。
 \item SMB 和 NFS 都可以按需传播所需文件的一小部分，例如看视频的时候可以立即开始看。
 \item 同一个文件夹可以同时用以上两种协议分享。
+\item 从一个 smb 文件夹拷贝到另一个， 如果这两个硬盘在同一台机器上， 那么 smb 会直接让这台机器拷贝而不需要占用不必要的带宽（windows 亲测从 linux 拷贝到 linux）。
 \item 参考一个 \href{https://ubuntu.com/tutorials/install-and-configure-samba}{Samba 教程}。
 \item \verb|sudo apt install samba|（如果有冲突用把 \verb|apt| 换成 \verb|aptitude|）
 \item 设置文件在 \verb|/etc/samba/smb.conf|， 在最后加入：

@@ -1,0 +1,203 @@
+% B 树
+
+\begin{issues}
+\issueDraft
+\issueAi
+\end{issues}
+
+\pentry{二叉树\upref{tree}}
+
+\textbf{B-树（B-tree）}， 是一种常见的自平衡树数据结构， 它允许进行高效的插入、删除和搜索操作。 它常用于数据库和文件系统，因是因为 B-树可以最小化数据的读写操作。
+
+B-树与二叉搜索树的不同之处在于，它每个节点可以有两个以上的子节点，并针对读取和写入大块数据的系统进行了优化。 “平衡” 一词指的是所有叶节点都在同一深度的特性，这确保了低高度，从而能快速执行操作。
+
+\addTODO{画图}
+
+\subsubsection{B-树结构}
+一个\textbf{阶数（degree 或 order）}为 $m$ 的 B-树具有以下特性：
+\begin{itemize}
+\item 一棵树中的所有键都是唯一的。
+\item 根节点至少有 1 个键。 其他节点至少有 $m-1$ 个键。
+\item 每个节点（包括根节点）最多有 $2m-1$ 个键。
+\item 每个节点中的键是递增排列的。
+\item 每个节点的子节点数等于它的键数加 1。 也就是说每个节点最多有 $2m$ 个子节点。
+\item 每个节点的第 $i$ 个子节点中的键值必须介于该节点的第 $i-1$ 个和第 $i$ 键值之间。
+\item 所有叶节点在同一层级。
+\item B-树在根节点增长和收缩。
+\item 搜索、插入和删除节点的复杂度都是 $\order{\log n}$。
+\end{itemize}
+
+\begin{lstlisting}[language=cpp,caption=Btree.h]
+// ========= 代码未经测试 =====
+BTREE_ORDER = 3;
+
+struct Node {
+    int n; // 子节点数
+    bool leaf; // 是否是叶节点
+    int key[BTREE_ORDER*2-1]; // 键值
+    Node *child[BTREE_ORDER*2]; // 子节点指针
+    
+    Node() {
+        n = 0;
+        leaf = false;
+        for (int i = 0; i < 2*BTREE_ORDER; i++)
+            child[i] = nullptr;
+    }
+};
+
+// 在子树 x 中搜索键值 k
+Node* BtreeSearch(Node* x, int k) {
+    for (int i = 0; i < x->n && x->key[i] <= k; ++i)
+        ; // 当阶数较高可以用二分法来优化这一步
+    if (i < x->n && k == x->key[i])
+        return x; // 已找到
+    if (x->leaf)
+        return nullptr; // 未找到
+    return BtreeSearch(x->child[i], k);
+}
+
+// 遍历子树 x （按键值从小到大）
+void traverse(Node* x)
+{
+    for (int i = 0; i < x->n; ++i) {
+        if (leaf == false)
+            traverse(x[i]);
+        cout << " " << keys[i];
+    }
+    traverse(node->child[x->n]);
+}
+
+// ========= 以下未经审核 =====
+
+// 插入键 k
+void insert(int k, Node *r) {
+    if (r->n == 2*BTREE_ORDER - 1) {
+        Node *s = new Node();
+        root = s;
+        s->child[0] = r;
+        splitChild(s, 0);
+        insertNonFull(s, k);
+    } else {
+        insertNonFull(r, k);
+    }
+}
+
+void splitChild(Node *x, int i) {
+    Node *t = x->child[i];
+    Node *y = new Node();
+    y->leaf = t->leaf;
+    y->n = BTREE_ORDER - 1;
+
+    for (int j = 0; j < BTREE_ORDER - 1; j++)
+        y->key[j] = t->key[j + BTREE_ORDER];
+
+    if (!t->leaf) {
+        for (int j = 0; j < BTREE_ORDER; j++)
+            y->child[j] = t->child[j + BTREE_ORDER];
+    }
+
+    t->n = BTREE_ORDER - 1;
+
+    for (int j = x->n; j >= i + 1; j--)
+        x->child[j + 1] = x->child[j];
+
+    x->child[i + 1] = y;
+
+    for (int j = x->n - 1; j >= i; j--)
+        x->key[j + 1] = x->key[j];
+
+    x->key[i] = y->key[0];
+    x->n = x->n + 1;
+}
+
+void insertNonFull(Node *x, int k) {
+    int i = x->n - 1;
+    if (x->leaf) {
+        x->key[i + 1] = k;
+        x->n = x->n + 1;
+
+        // Sorting the keys
+        while (i >= 0 && k < x->key[i]) {
+            x->key[i + 1] = x->key[i];
+            i--;
+        }
+        x->key[i + 1] = k;
+    } else {
+        while (i >= 0 && k < x->key[i])
+            i--;
+        i++;
+        if (x->child[i]->n == 2*BTREE_ORDER - 1) {
+            splitChild(x, i);
+            if (k > x->key[i])
+                i++;
+        }
+        insertNonFull(x->child[i], k);
+    }
+}
+\end{lstlisting}
+
+
+========= 以下为草稿 ============
+
+
+2. 插入
+插入的开始与搜索类似。然而，如果键应该插入的节点已满，我们必须分裂节点。
+
+分裂涉及到：
+
+将节点中的中间键上移至其父节点。
+将剩余的键分裂成两个新的节点，并将它们作为新移动键的子节点链接。
+如果父节点已满并且发生了分裂，那么这个过程会继续向上，直到找到一个非满父节点或者创建一个新的根节点。
+
+3. 删除
+在B-树中，删除是最复杂的操作。目标是移除一个键并仍然保持 B-树的属性。
+
+B-树操作示例
+为了简化，我们将使用阶数为 m=3 的B-树（也称为2-3树），其中每个节点最多可以有3个子节点。
+
+插入
+让我们按顺序插入键1, 2, 3, 4, 和5。
+
+插入1：树为空，所以1成为根。
+
+插入2：根没有满，所以2被添加进去。
+
+Copy code
+ 1 2
+插入3：根已满，所以我们必须分裂它。
+
+markdown
+Copy code
+     2
+   /   \
+ 1       3
+插入4：从根开始，转到右子节点（3），这个节点没有满，所以4被添加进去。
+
+markdown
+Copy code
+     2
+   /   \
+ 1      3 4
+插入5：从根开始，转到右子节点（3 4），这个节点已满，所以必须分裂它。父节点没有满，所以可以接受另一个键。
+
+markdown
+Copy code
+     2 4
+   /   |   \
+ 1      3    5
+删除
+我们删除2：
+
+找到2：从根开始，这包含2。
+
+如果2有子节点，我们需要用后继或前驱键替换它，但在这种情况下，它没有。所以，2可以简单地被删除：
+
+markdown
+Copy code
+     4
+   /   \
+ 1      3 5
+这就是如何在B-树中插入和删除键！
+
+
+B-树有变体，如B+树和B*树，它们有自己的特定用途和优化。
