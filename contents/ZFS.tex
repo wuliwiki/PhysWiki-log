@@ -35,6 +35,7 @@
 \item zfs 自带 checksum， 也就是说它在读取数据的时候（或者让它检查完整性的时候）会自动检测 checksum 是否一致， 若不一致， 若有数据冗余， 则会自动修复数据。
 \item \verb|zpool scrub pool名| 可以马上检查整个 pool 的 checksum 是否一致。
 \item \verb|zpool list -v| 查看 pool， fs 和各个硬盘的占用空间状态和其他详细数据。
+\item \verb|zpool iostat -v 2| 可以查看实时数据。
 \end{itemize}
 
 \subsection{RAID}
@@ -71,11 +72,19 @@
 \begin{itemize}
 \item 2TB 的备份文件拷进去， 开启 \verb|dedup|， 然后再把其中的 1.5TB 拷进另一个文件夹。 开始时的 \verb|zfs list -v|（省略了一些空白列）：
 \begin{lstlisting}[language=none]
-(now is 9:55)
+(9:55am)
 NAME        SIZE  ALLOC   FREE  FRAG    CAP  DEDUP
 yue        29.1T  4.81T  24.3T  0%    16%  1.00x
   raidz1   29.1T  4.81T  24.3T  0%  16.5%      -
 \end{lstlisting}
 \item 32GB 内存爆满， cpu 16 线程占用大部分
-\item 第二天连续四小时测试， 传输总大小除以总时间， 平均 9MB/s
+\item 第二天连续四小时测试， 传输总大小除以总时间， 平均 9MB/s。
+\item 约 48 小时后（原来 dedup 了个寂寞）：
+\begin{lstlisting}[language=none]
+(7:16am)
+NAME        SIZE  ALLOC   FREE  FRAG    CAP  DEDUP 
+yue        29.1T  6.64T  22.5T  0%    22%  1.05x   
+  raidz1   29.1T  6.64T  22.5T  0%  22.8%      - 
+\end{lstlisting}
+\item 彻底弃坑 dedup， 传输文件期间几乎无响应， 各种卡死不能动， 完了一看 \verb|ALLOC| 的增加跟拷贝文件的大小还差不多。
 \end{itemize}

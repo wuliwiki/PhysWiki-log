@@ -7,8 +7,8 @@
 \begin{itemize}
 \item \textbf{Qt Framework} 是最大的概念， Qt 的一切都属于 Framework。 所有的组件\href{https://doc.qt.io/qt-6/qtmodules.html}{见这里}。
 \item License 选择： 以 GPL 或者 LGPL 使用 Qt 都是免费的。 LGPL 是说如果你的软件通过动态链接的方式使用 Qt， 那么调用的那部分程序不需要开源，只有你修改 Qt 库， 才需要把修改后的代码开源。 当然也有付费选项。
-\item \textbf{Qt Widgets}： 传统， 最受欢迎， 复杂界面， 基于 widgets （按钮，文字框，菜单）
-\item \textbf{Qt Quick}： 现代， 使用 \textbf{QML (Qt Meta-Object Language)}（类似于 HTML） 和 JS， 快速开发迭代， 更适配触屏和移动端。
+\item \textbf{Qt Widgets}： 传统， 最受欢迎， 复杂界面， 更底层的控制， 高性能， 适合桌面开发， 基于 widgets （按钮，文字框，菜单）
+\item \textbf{Qt Quick}： 现代， 使用 \textbf{QML (Qt Meta-Object Language)}（类似于 HTML） 和 JS， 快速开发迭代， 更适配触屏和移动端（或者桌面移动混合开发）。
 \item \textbf{Qt Creator} 是 Qt 的官方 IDE。 除此也可以用 Visual Studio 或者 Eclipse
 \item \textbf{PyQt} 是 Qt C++ 库的老牌非官方 Python wrapper， 同样支持 Widget 和 Quick。 在创建 Qt Creator 工程的时候可以选择。
 \item \textbf{PySide} 是 Qt 官方的 Python wrapper， 和 PyQt 的 API 基本一样， 在 Qt Creator 里面创建工程的时候可以直接用。 比 PyQt 对商用更友好， 据说功能更多。
@@ -20,10 +20,10 @@
 \begin{itemize}
 \item \textbf{Qt Core}： 关键的非 GUI 基础类。
 \item \textbf{Qt GUI}： 基础的 GUI 类， 包括 OpenGL。
-\item \textbf{Qt Network} 网络功能库。
-\item \textbf{Qt QML} QML 既是模块名， 也是一个设计 UI 的语言。
-\item \textbf{Qt SQL} 支持 SQL 数据库。
-\item \textbf{Qt Multimedia}: 视频，音乐，相机控制等。
+\item \textbf{Qt Network}： 网络功能库。
+\item \textbf{Qt QML}： QML 既是模块名， 也是一个设计 UI 的语言。
+\item \textbf{Qt SQL}： 支持 SQL 数据库。
+\item \textbf{Qt Multimedia}： 视频，音乐，相机控制等。
 \end{itemize}
 
 \subsection{Qt Add-Ons}
@@ -40,7 +40,7 @@
 \subsubsection{官方安装（推荐）}
 \begin{itemize}
 \item 找到安装包\href{https://www.qt.io/download-qt-installer}{下载地址}
-\item 下载对应系统的在线安装包（推荐）， 是图形界面。 默认会安装到用户文件夹。
+\item 下载对应系统的在线安装包（推荐）， 是图形界面。 默认会安装到用户 home 文件夹。
 \end{itemize}
 
 \subsubsection{Ubuntu 命令行安装 Qt5}
@@ -51,5 +51,67 @@
 
 \subsection{简单程序}
 \begin{itemize}
-\item \href{https://doc.qt.io/qt-5/qtwidgets-tutorials-notepad-example.html}{简单的 qt Widget 教程}
+\item 【试了没用】\href{https://doc.qt.io/qt-6.4/qtwidgets-tutorials-notepad-example.html}{简单的 qt Widget 教程}
+\end{itemize}
+
+
+\subsection{Ubuntu 22.04 尝试 Qt5 成功}
+\begin{figure}[ht]
+\centering
+\includegraphics[width=8cm]{./figures/fa99543eca4ff6d6.png}
+\caption{运行结果： 按下按钮会显示 “Hello, world!”} \label{fig_QtInt1}
+\end{figure}
+
+\begin{itemize}
+% \item \href{https://www.youtube.com/watch?v=sjApF6qnyUI}{Youtube 视频教程}
+% \item 下载在线安装包 \verb|.run| 文件， 运行 \verb|./*.run|， 弹出 GUI， 登录，配置，开始下载。
+% \item 完了以后什么 project 都跑不了， cmake 找不到这那的……
+% \item 又尝试从 apt 安装： \verb|sudo apt install -y qtcreator qtbase5-dev qt5-qmake cmake|， 没用 \verb|qtcreator| 命令都跑不了，各种错误。
+% \item 另外找到一个直接从源码在 20.04 编译 Qt 的教程 \verb|https://www.youtube.com/watch?v=LuzMteL7kpY|， 还没试，看起来好复杂。
+\item 第一个编译成功的例子： 使用 \verb|sudo apt install qtbase5-dev build-essential|。 如无意外会有 broken package， 把 \verb|apt| 换成 \verb|aptitude|， 然后选一个合适的解决方案。
+\item 只需要创建两个文件：
+\begin{lstlisting}[language=cpp,caption=main.cpp]
+#include <QApplication>
+#include <QPushButton>
+#include <QLabel>
+#include <QVBoxLayout>
+#include <QMainWindow>
+
+int main(int argc, char **argv) {
+    QApplication app(argc, argv);
+
+    QMainWindow window;
+    QWidget centralWidget;
+    QVBoxLayout layout;
+    QPushButton button("Click me!");
+    QLabel label;
+
+    QObject::connect(&button, &QPushButton::clicked, [&]() {
+        label.setText("Hello, world!");
+    });
+
+    layout.addWidget(&button);
+    layout.addWidget(&label);
+    centralWidget.setLayout(&layout);
+    window.setCentralWidget(& centralWidget);
+    window.show();
+
+    return app.exec();
+}
+\end{lstlisting}
+\begin{lstlisting}[language=cmake,caption=CMakeLists.txt]
+cmake_minimum_required(VERSION 3.10)
+
+project(qt_example)
+
+set(CMAKE_CXX_STANDARD 11)
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
+
+find_package(Qt5Widgets REQUIRED)
+
+add_executable(${PROJECT_NAME} main.cpp)
+
+target_link_libraries(${PROJECT_NAME} Qt5::Widgets)
+\end{lstlisting}
+运行 \verb|cmake .| 然后 \verb|make| 即可。
 \end{itemize}
