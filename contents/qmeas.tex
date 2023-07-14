@@ -1,0 +1,43 @@
+% 量子测量
+% 测量|投影测量|POVM测量
+
+\pentry{量子力学基本原理\upref{QMPrcp}}
+
+在量子力学的学习中，我们了解了测量公设。粗略地来讲，在量子态上进行对某个可观测量的测量，就会让这个量子态坍缩到这个可观测量的某个本征态上，同时返回这个本征态对应的本征值作为测量结果。得到这个本征态的概率由Born定则给出。在本节中，我们将会从量子信息的角度来研究量子测量，首先我们会回顾投影测量的基本结构，然后我们将会介绍von Neumann的测量理论，最后我们将会给出投影测量的推广——POVM测量。
+
+\subsection{投影测量}
+
+在数学上我们知道，可观测量$A$对应的是一个厄米算符，谱分解定理表明$A$的本征向量构成一组Hilbert空间的完备正交基，也即（先假设没有发生本征值的简并）
+\begin{equation}
+A=\sum_i\lambda_i\ket{i}\bra{i}.~
+\end{equation}
+对于待测量的物理系统，我们可以用这一组完备正交基来对量子态进行展开，具体来说，对于一个量子态$\ket{\psi}$，在上面测量$A$得到结果$\lambda_i$的概率为$p(\lambda_i)=|\braket{\psi}{i}|^2$。
+
+对于含有简并的情况也可以类似地处理。虽然在这种情况下本征态分解并不唯一，但是总可以先考虑$A$的一个特定分解，然后考虑在这一分解下与$A$具有相同本征态的另一个厄米算符$A'$，但是其本征值$\lambda_i'$不含简并。在这种情况下对$A$进行测量应当理解为“先对量子态进行了$A'$所对应的投影测量，再对测量结果$\lambda_i'$重新标记为$A$再相应本征态$\ket{i}$上所对应的本征值$\lambda_i$”。换句话说，含有简并的情况下的投影测量相当于是对不含简并的情况的测量的一种粗粒化。
+
+现在我们就可以在数学上重新审视什么是投影测量了。在量子力学中，更一般的投影测量$\Pi$被定义为一些投影算符的集合：
+$$
+\Pi=\left\{\Pi_j: \Pi_i \Pi_j=\delta_{i j} \Pi_i, \sum_j \Pi_j=\mathbb{I}\right\}.~
+$$
+两个条件分别对应着正交性和完备性。不含简并的测量相当于在说每一个$\Pi_j$都是秩为1的，即可以写作$\Pi_j=\ket{j}\bra{j}$。
+
+由测量公设可以得到，当我们对一个系统进行投影算符$\Pi_j$所对应的投影测量，我们会得到下面的结果：
+\begin{enumerate}
+\item 如果测量前的量子态处于$\ket{\psi}$，那么测量得到结果$\lambda_i$的概率为\begin{equation}
+p(\lambda_i)=\Vert \Pi_i\ket{\psi}\Vert^2=\bra{\psi}\Pi_i\ket{\psi}.~
+\end{equation}
+\item 如果测量得到结果$\lambda_i$，测量后的系统将会演化为下面的归一化量子态
+\begin{equation}
+\frac{\Pi_i\ket{\psi}}{\Vert\Pi_i\ket{\psi}\Vert}.~
+\end{equation}
+\item 测量结果的平均值为\begin{equation}
+\langle A\rangle \equiv \sum_i \lambda_i p\left(\lambda_i\right)=\sum_i \lambda_i\left\langle\psi\left|\Pi_i\right| \psi\right\rangle=\langle\psi|A| \psi\rangle.~
+\end{equation}
+如果是在混态上进行测量的，很容易得到此时的平均值可以表示为
+\begin{equation}
+\langle A\rangle=\operatorname{Tr}(\rho A).~
+\end{equation}
+
+\end{enumerate}
+
+\subsection{von Neumann测量模型}

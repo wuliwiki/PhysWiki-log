@@ -14,6 +14,7 @@
 \item \textbf{PySide} 是 Qt 官方的 Python wrapper， 和 PyQt 的 API 基本一样， 在 Qt Creator 里面创建工程的时候可以直接用。 比 PyQt 对商用更友好， 据说功能更多。
 \item \textbf{Qt Designer}： 是 Qt Widgets 的一个所见即所得图形编辑器。
 \item \textbf{Qt Design Studio}： 是 Qt Quick 的一个图形编辑器， 可以生成代码。
+\item 【试了没用】\href{https://doc.qt.io/qt-6.4/qtwidgets-tutorials-notepad-example.html}{简单的 qt Widget 教程}
 \end{itemize}
 
 \subsection{Qt Essentials}
@@ -49,13 +50,8 @@
 \item 在 \verb|20.04| 以上的系统暂时没有 \verb|qt5-default|， 可以用 \verb|sudo apt install build-essential qtcreator|
 \end{itemize}
 
-\subsection{简单程序}
-\begin{itemize}
-\item 【试了没用】\href{https://doc.qt.io/qt-6.4/qtwidgets-tutorials-notepad-example.html}{简单的 qt Widget 教程}
-\end{itemize}
 
-
-\subsection{Ubuntu 22.04 尝试 Qt5 成功}
+\subsection{简单的 Qt5 例子（Ubuntu 22.04）}
 \begin{figure}[ht]
 \centering
 \includegraphics[width=8cm]{./figures/fa99543eca4ff6d6.png}
@@ -68,7 +64,7 @@
 % \item 完了以后什么 project 都跑不了， cmake 找不到这那的……
 % \item 又尝试从 apt 安装： \verb|sudo apt install -y qtcreator qtbase5-dev qt5-qmake cmake|， 没用 \verb|qtcreator| 命令都跑不了，各种错误。
 % \item 另外找到一个直接从源码在 20.04 编译 Qt 的教程 \verb|https://www.youtube.com/watch?v=LuzMteL7kpY|， 还没试，看起来好复杂。
-\item 第一个编译成功的例子： 使用 \verb|sudo apt install qtbase5-dev build-essential|。 如无意外会有 broken package， 把 \verb|apt| 换成 \verb|aptitude|， 然后选一个合适的解决方案。
+\item 第一个编译成功的例子（不需要 qt creator）： 使用 \verb|sudo apt install qtbase5-dev build-essential|。 如无意外会有 broken package， 把 \verb|apt| 换成 \verb|aptitude|， 然后选一个合适的解决方案。
 \item 只需要创建两个文件：
 \begin{lstlisting}[language=cpp,caption=main.cpp]
 #include <QApplication>
@@ -93,7 +89,7 @@ int main(int argc, char **argv) {
     layout.addWidget(&button);
     layout.addWidget(&label);
     centralWidget.setLayout(&layout);
-    window.setCentralWidget(& centralWidget);
+    window.setCentralWidget(&centralWidget);
     window.show();
 
     return app.exec();
@@ -114,4 +110,6 @@ add_executable(${PROJECT_NAME} main.cpp)
 target_link_libraries(${PROJECT_NAME} Qt5::Widgets)
 \end{lstlisting}
 运行 \verb|cmake .| 然后 \verb|make| 即可。
+\item 编译好以后也可以直接用 Qt-creator 打开 CMakeLists.txt 文件进行调试（apt 安装的 qtcreator 貌似有兼容问题，可以直接从官网下载 Qt-creator 单独的安装包。
+\item Qt-creator 中运行 cmake， 运行 build， 然后选中 \verb|main.cpp| 然后设置断点， 运行 Debug 即可调试。
 \end{itemize}

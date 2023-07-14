@@ -165,5 +165,14 @@ ALTER TABLE 新表名 RENAME TO 旧表名;
 \subsection{SQLiteCpp 库（第三方）}
 
 \begin{itemize}
+\item Cpp 推荐使用这个，比 C 接口方便很多。
 \item \href{https://github.com/SRombauts/SQLiteCpp}{GitHub 官网}。
+\item 打开数据库，若只读用 \verb|SQLite::Database db_rw(文件路径, SQLite::OPEN_READONLY);|
+\item 若读写， 用 \verb|\verb`SQLite::OPEN_READWRITE|。 若用 \verb`SQLite::OPEN_READWRITE | SQLite::OPEN_CREATE`， 则当文件不存在时会自动创建。
+\end{itemize}
+
+\subsection{关于锁}
+\begin{itemize}
+\item 使用读写模式打开数据库并不会给数据库上锁， 只有当 \verb|BEGIN TRANSACTION| 到 \verb|COMMIT| 之间会上锁。 如果没有使用 transaction， 就只有执行写入命令的时候会上锁。
+\item 事实上 sqlite 鼓励整个程序只打开一次数据库， 程序结束再关上。 中见需要写入的时候就开 transaction， 每次用完马上 commit。
 \end{itemize}

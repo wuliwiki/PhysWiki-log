@@ -37,8 +37,8 @@
 \begin{lstlisting}[language=matlab, caption=hydrogen\_trans\_dipole0.m]
 % hydrogen transition dipole, approximate Coulomb plane wave with plane wave
 % since middle and right parts are symmetric,
-%     assuming \vec k in z+ direction
-% <\vec k|\vec r|n,0,0> = [0, 0, <\vec k|z|n,0,0>]
+%     assuming \bvec k in z+ direction
+% <\bvec k|\bvec r|n,0,0> = [0, 0, <\bvec k|z|n,0,0>]
 % output numerical integration and analytical result (eq_HyIon2_1)
 function [dipole_z, dipole_analy_z] = hydrogen_trans_dipole0(kz, ZZ, n)
 % === params ===
@@ -51,7 +51,7 @@ ph = 0;
 [R, Th] = ndgrid(r, th);
 Z = R .* cos(Th);
 Psi_n = hydrogen_Psi(ZZ, n, 0, 0, r', th, ph);
-% <\vec k|\vec r|0>
+% <\bvec k|\bvec r|0>
 Psi_k = 1/(2*pi)^(3/2) * exp(1i*kz.*Z);
 dipole_z = sum(sum(conj(Psi_k).*Z.*Psi_n .*R.^2.*sin(Th))) ...
     * dr * dth * 2*pi;

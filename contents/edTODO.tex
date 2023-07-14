@@ -37,9 +37,26 @@
 
 \subsubsection{图片相关}
 \begin{itemize}
-\item 上传新的图片时， 插入信息到 \verb|figures| 表格。 \verb|PhysWiki/figures/| 中的文件使用 \verb|images.hash| + 拓展名命名。 \verb|\label{}| 格式为 \verb|fig_词条名_序号|。
+\item 上传新的图片时， \verb|PhysWiki/figures/| 中的文件使用 \verb|images.hash| + 拓展名命名。 \verb|\label{}| 格式为 \verb|fig_词条名_序号|。这里的序号可以由小到大逐个查看数据库中存不存在 \verb|figures.id=词条名_序号|，使用第一个不存在的。
+\item 首先插入 \verb|images| 表的 \verb|hash, ext, figure, author, time|（此时如果有 foreign key 报错，需要 \verb|PRAGMA foreign_keys = OFF;|，完了再 \verb|ON|）， 再插入 \verb|figures| 表的 \verb|id, caption, authors, entry, image|， 再修改 \verb|entries| 表格的 \verb|figures|。 注意的格式，不要把已有的数据覆盖。 一个示例：
+\begin{lstlisting}[language=none]
+PRAGMA foreign_keys = OFF;
+
+INSERT INTO "images"
+("hash", "ext", "figures", "author", "time")
+VALUES ('3173003649033a60', 'png', 'test_10', 0, '202307121114');
+
+PRAGMA foreign_keys = ON;
+
+INSERT INTO "figures"
+("id", "caption", "authors", "entry", "image")
+VALUES ('test_10', '请输入图片描述', '0', 'test', '3173003649033a60');
+
+-- 这个最好还是 parse 一下，保证没有重复，排个序，不要直接 append，这里只是图方便
+UPDATE "entries" SET "figures" = "figures" || ' test_10' WHERE "id"='test';
+\end{lstlisting}
 \item 上传的 \verb|svg| 做 hash 以前要把 CRLF 替换为 LF（保存到服务器的文件也使用 LF）。
-\item 如果发现上传图片文件的 hash 已存在于 \verb|images.hash|， 则提示已存在， 是否引用（\verb|\autoref{}|）（推荐用户这么做）， 或者重复使用图片（相当于上传新图片， 但更新 \verb|figures.aka| 指向已存在的图片）。 
+\item 如果上传时发现图片文件的 hash 已存在于 \verb|images.hash|， 则提示已存在， 是否引用（\verb|\autoref{}|）（推荐用户这么做）， 或者重复使用图片（等效于上传新图片， 但更新 \verb|figures.aka| 指向已存在的图片）。 
 \item 若上传 pdf + svg 图片， 更新 \verb|figures.image_alt|。 同时支持上传其他文件（如果后缀名是 \verb|gif, eps 等|， 同样更新到 \verb|figures.image_alt|。
 \item 【先不做】上传或替换图片时弹出窗口让用户填写版权信息。
 \item 【先不做】上传或替换图片时允许上传附件
@@ -58,6 +75,8 @@
 \subsection{Editor BUG}
 按优先级排序
 \begin{itemize}
+\item 内部和外部引用按钮又失灵了（提示 scan 没有相应）。
+
 \item 重新编译按钮运行时如果碰到 stderr， 不应该显示在顶部而是显示在出现的地方（stdout 的最后）。
 
 \item 到了自动备份的时间， 如果编辑器中有修改但没保存的内容， 则应该自动保存并自动备份， 并将 tab 左上角的小红点去掉。
@@ -68,6 +87,8 @@
 
 \item 编辑器可以读取网站用户的编辑权限（等健叔更新 api）
 
+\item 在编辑器中 Ctrl+点击 \verb|\autoref{ex_AMLaw_2}~\upref{AMLaw}| 中的 \verb|ex_AMLaw_2|， 提示 \verb|打开文件失败：词条"ex_AMLaw_2"不存在|。
+
 \item main.tex 按发布按钮不会自动 \verb|git add|。
 
 \item 如果文章带有脚注（例如 crypto.tex）， 导出 md 文件到知乎并发布后， 脚注编号会错误， 且返回链接会直接以文本的形式显示。 注意为了鼓励用户查看原文， 所有的链接仍然应该跳转到 wuli.wiki 的相关页面。
@@ -75,6 +96,8 @@
 \item 网络不稳定的时候保存以后预览左下角会一直转圈， 无法进行其他操作。 其实再试一次就没问题了。 所以转圈的时候再按保存是否不要提示 “请等待操作完成后再进行保存。” 而是直接中断并再试一次？ 或者规定 2 秒钟内还在转圈就自动放弃（毕竟还会影响其他操作例如打开新文件等）？ 或者以上两者都实现。
 
 \item 在 Ubuntu 20.04 和 22.04 的 chrome 浏览器中（通过官方 deb 安装）， 任意找一个网页复制一些代码， 粘贴到编辑器中会变为复杂的 html 而不是复制的内容。 例如 \verb|<pre id="script-box" class="code" style="box-sizing: border-box; ...|。 用右键菜单粘贴则没有这个问题。
+
+\item 把词条保存，撤销（Ctrl+Z）然后重做（Ctrl+Z），会出现错误： \verb|请使用重命名按钮修改标题。|
 
 \item 【完成】每次关掉最后一个 tab 就会没有响应。
 
