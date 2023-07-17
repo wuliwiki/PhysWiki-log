@@ -54,12 +54,14 @@ if ! [ -d "$repo" ]; then
     echo "directory not found!" 1>&2
 fi
 
-# 判断文件是否存在
+# 判断文件是否存在且不是文件夹或者特殊文件
 if ! [ -f "$fname" ]; then
     echo "file not found!" 1>&2
 fi
 \end{lstlisting}
 \begin{itemize}
+\item 类似于 \verb|-f, -d|， 还有 \verb|-z|（判断字符串是否为空）， \verb|-n|（判断字符串是否为非空）， 例如 \verb`if [ -n $(git remote | grep github) ]`。  \verb|-e| 判断是否是文件（包括文件夹和特殊文件）， \verb|-h| 判断是否为 symlink， \verb|file1 -nt file2| （newer than）， \verb|file1 -ot file2| （older than）， \verb|-r, -w, -x| 是否是文件且具有读写执行权限。
+\item \verb|if [ string1 = string2 ]| 判断字符串是否相等， \verb|string1 != string2| 判断是否不相等。
 \item \verb|if [[ "字符串" =~ 正则表达式 ]]| 可以判断字符串是否匹配正则表达式。 其中正则表达式的格式和 \verb|grep -E| 中的是一样的。 例如 \verb|if [[ "$var" =~ ^-?[0-9]+$ ]]| 判断变量是否表示整数。
 \begin{lstlisting}[language=bash]
 # 判断文件是否为空

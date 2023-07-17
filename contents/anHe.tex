@@ -50,7 +50,7 @@
 \hat H_{\bvec k} f(\bvec{r})&=\E^{-i\bvec{k}\cdot\bvec{r}}(-\frac{h^2}{2m}\nabla^2+V(\bvec{r}))\E^{\I\bvec{k}\cdot\bvec{r}}f(\bvec{r})\\
 &=V(\bvec{r})f(\bvec{r})+\E^{-i\bvec{k}\cdot\bvec{r}}(-\frac{\hbar^2}{2m})\nabla(i\bvec{k}\E^{\I\bvec{k}\cdot\bvec{r}}f(\bvec{r})+\E^{\I\bvec{k}\cdot\bvec{r}}\nabla f(\bvec{r}))\\
 &=V(\bvec{r})f(\bvec{r})+\E^{-i\bvec{k}\cdot\bvec{r}}(-\frac{\hbar^2}{2m})(-k^2\E^{\I\bvec{k}\cdot\bvec{r}}+2i\bvec{k}\E^{\I\bvec{k}\cdot\bvec{r}}\nabla f(\bvec{r})+\E^{\I\bvec{k}\cdot\bvec{r}}\nabla^2 f(\bvec{r}))\\
-&=V(\bvec{r})f(\bvec{r})-\frac{\hbar^2}{2m}(-k^2+2i\bvec{k}+\nabla^2)f(\bvec{r})~,
+&=V(\bvec{r})f(\bvec{r})-\frac{\hbar^2}{2m}(-k^2+2i\bvec{k}\nabla+\nabla^2)f(\bvec{r})~,
 \end{aligned}
 \end{equation}
 即 $\hat H_{\bvec k}$ 的具体形式为
@@ -81,6 +81,55 @@ u_{n,\bvec{k}+\delta\bvec{k}}(\bvec{r})=u_{n,\bvec{k}}(\bvec r)+\frac{\hbar}{m}\
 \psi(\bvec{r},\dd{t})\approx \E^{-\frac{\I}{\hbar}E_{n,\bvec{k}}\dd{t}}\psi_{n,\bvec{k}+\frac{\bvec{F}\dd{t}}{\hbar}}(\bvec{r})-\frac{\bvec{F}}{m}\dd{t}\cdot\sum_{l\neq n}\frac{\bra{u_{l,\bvec{k}}}\hat {\bvec p}\ket{u_{n,\bvec{k}}}}{E_{n,\bvec{k}}-E_{l,\bvec{k}}}\psi_{l,\bvec{k}+\frac{\bvec{F}\dd{t}}{\hbar}}(\bvec{r})~.
 \end{equation}
 由此可见，不使用包络近似下，外力作用会将不同的能带耦合起来，这将使布洛赫电子的运动有别于经典的运动。
+当外力$\bvec F$很小时，$\psi$具有稳态解：
+\begin{equation}
+\psi(\bvec r,t=\infty)\approx\psi_{n,\bvec{k}}-\I\frac{\hbar}{m}\bvec{F}\cdot\sum_{l\neq n}\frac{\bra{u_{l,\bvec{k}}}\hat {\bvec p}\ket{u_{n,\bvec{k}}}}{(E_{n,\bvec{k}}-E_{l,\bvec{k}})^2}\psi_{l,\bvec{k}}~.
+\end{equation}
+
+现在我们可以来算速度了，根据隔壁量子力学的基础知识，有：
+\begin{equation}
+\bvec{v}=\frac{\dd{\ev{\bvec{r}}}}{\dd{t}}=\frac{\I}{\hbar}\ev{[\hat{H},\hat{\bvec{r}}]}=\frac{\I}{\hbar}\ev{[\frac{\hat{\bvec{p}}^2}{2m}+V(\bvec{r})-\bvec{F}\cdot\bvec{r},\hat{\bvec{r}}]}=\ev{\hat{\bvec{P}}}/m~.
+\end{equation}
+继续忽略外力$\bvec{F}$的高阶项，则：
+\begin{equation}\label{eq_anHe_15}
+\bvec{v}=\ev{\hat{\bvec{P}}}/m=\frac{1}{m}\bra{\psi_{n,\bvec{k}}}\hat{\bvec{p}}\ket{\psi_{n,\bvec{k}}}+\frac{\I\hbar}{m^2}\sum_{l\neq n}\frac{1}{(E_{l,\bvec{k}}-E_{l,\bvec{k}})^2}[(\bvec{F}\cdot\bra{u_{n,\bvec{k}}}\hat{\bvec{p}}\ket{u_{l,\bvec{k}}})\bra{\psi_{l,\bvec{k}}}\hat{\bvec{p}}\ket{\psi_{n,\bvec{k}}}-(\bvec{F}\cdot\bra{u_{l,\bvec{k}}}\hat{\bvec{p}}\ket{u_{n,\bvec{k}}})\bra{\psi_{n,\bvec{k}}}\hat{\bvec{p}}\ket{\psi_{l,\bvec{k}}}]~.
+\end{equation}
+对于$\bra{\psi_{n,\bvec{k}}}\hat{\bvec{p}}\ket{\psi_{l,\bvec{k}}}(l\neq n)$，则将其展开，由于$u_{n,\bvec{k}}$的正交性，有：
+\begin{equation}\label{eq_anHe_16}
+\bra{\psi_{n,\bvec{k}}}\hat{\bvec{p}}\ket{\psi_{l,\bvec{k}}}=\int\dd{V}\  u_{n,\bvec{k}}\E^{-\I\bvec{k}\cdot\bvec{r}}(-\I\hbar\nabla)(\E^{\I\bvec{k}\cdot\bvec{r}}u_{l,\bvec{k}})=\bra{u_{n,\bvec{k}}}\hat{\bvec{p}}\ket{u_{l,\bvec{k}}}~.
+\end{equation}
+不妨记$\bra{u_{n,\bvec{k}}}\hat{\bvec{p}}\ket{u_{l,\bvec{k}}}$为$\bvec{p}_{nl,\bvec{k}}$.\\
+而对于$\bra{\psi_{n,\bvec{k}}}\hat{\bvec{p}}\ket{\psi_{n,\bvec{k}}}$,注意到：
+\begin{equation}
+\bra{\psi_{n,\bvec{k}}}\hat{\bvec{p}}\ket{\psi_{n,\bvec{k}}}=\bra{u_{n,\bvec{k}}}\hbar\bvec{k}+\hat{\bvec{p}}\ket{u_{n,\bvec{k}}}=\frac{m}{\hbar}\bra{u_{n,\bvec{k}}}(\nabla_{\bvec{k}}\hat{H_{\bvec{k}}})\ket{u_{n,\bvec{k}}}~.
+\end{equation}
+并且：
+\begin{equation}\label{eq_anHe_18}
+\begin{aligned}
+\bra{u_{n,\bvec{k}}}\nabla_{\bvec{k}}\hat{H_\bvec{k}}\ket{u_{n,\bvec{k}}}&=\braket{u_{n,\bvec{k}}}{\nabla_{\bvec{k}}(\hat{H_\bvec{k}}u_{n,\bvec{k}})}-\bra{u_{n,\bvec{k}}}\hat{H_\bvec{k}}\ket{\nabla_{\bvec{k}}u_{n,\bvec{k}}}\\
+&=\braket{u_{n,\bvec{k}}}{\nabla_{\bvec{k}}(E_{n,\bvec{k}}u_{n,\bvec{k}})}-E_{n,\bvec{k}}\braket{u_{n,\bvec{k}}}{\nabla_{\bvec{k}}u_{n,\bvec{k}}}\\
+&=E_{n,\bvec{k}}\braket{u_{n,\bvec{k}}}{\nabla_{\bvec{k}}u_{n,\bvec{k}}}+\bra{u_{n,\bvec{k}}}{\nabla_{\bvec{k}}E_{n,\bvec{k}}\ket{u_{n,\bvec{k}}}}-E_{n,\bvec{k}}\braket{u_{n,\bvec{k}}}{\nabla_{\bvec{k}}u_{n,\bvec{k}}}\\
+&=\bra{u_{n,\bvec{k}}}{\nabla_{\bvec{k}}E_{n,\bvec{k}}\ket{u_{n,\bvec{k}}}}=\nabla_{\bvec{k}}E_{n,\bvec{k}}~.
+\end{aligned}
+\end{equation}
+将\autoref{eq_anHe_18} 和\autoref{eq_anHe_16} 代回到\autoref{eq_anHe_15} 里，就有了一个简单的结果：
+\begin{equation}
+\begin{aligned}
+\bvec{v}&=\frac{1}{\hbar}\nabla_{\bvec{k}}E_{n,\bvec{k}}+\frac{\I\hbar}{m^2}\sum_{l\neq n}\frac{1}{(E_{l,\bvec{k}}-E_{l,\bvec{k}})^2}((\bvec{F}\cdot\bvec{p}_{nl,\bvec{k}})\bvec{p}_{ln,\bvec{k}}-(\bvec{F}\cdot\bvec{p}_{ln,\bvec{k}})\bvec{p}_{nl,\bvec{k}})\\
+&=\frac{1}{\hbar}\nabla_{\bvec{k}}E_{n,\bvec{k}}-\frac{\bvec{F}}{\hbar}\cross\frac{\hbar^2}{m^2}\sum_{l\neq n}\I\frac{\bvec{p}_{nl,\bvec{k}}\cross\bvec{p}_{ln,\bvec{k}}}{(E_{l,\bvec{k}}-E_{n,\bvec{k}})^2}\\
+&=\frac{1}{\hbar}\nabla_{\bvec{k}}E_{n,\bvec{k}}-\frac{\bvec{F}}{\hbar}\cross\bvec{\Omega}_{n,\bvec{k}}~.
+\end{aligned}
+\end{equation}
+其中的$\bvec{\Omega}_{n,\bvec{k}}$称为Berry曲率。聪明的小伙伴一眼就能看出来了，等式右边第一项正是准经典模型中的电子的群速度，但后一项显然与外力的方向垂直。比如在均匀电场下，有：
+\begin{equation}
+-\hbar\frac{\dd{\bvec{k}}}{\dd{t}}=-e\bvec{E}~.
+\end{equation}
+\begin{equation}
+-\hbar\frac{\dd{\bvec{r}}}{\dd{t}}=\nabla_{\bvec{k}}E_{n,\bvec{k}}+e\bvec{E}\cross\bvec{\Omega}_{n,\bvec{k}}~.
+\end{equation}
+电子的速度不再与电场平行，这就是反常霍尔效应。
+
+
 
 
 
