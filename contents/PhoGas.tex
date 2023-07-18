@@ -1,32 +1,59 @@
 % 光子气体
 % 光子|气体|配分函数|压强|亥姆霍兹自由能
+\pentry{近独立子系\upref{depsys}，盒中的电磁波\upref{EBBox}}
 
 \begin{issues}
 \issueDraft
 \end{issues}
+光子气体是一类特殊的理想玻色气体。由于某一个光子可以被气体容器壁的分子吸收后再放出多个光子，光子气体的光子数是不守恒的，所以它的化学势 $\mu$ 为 $0$，辐射场的不同频率的能量密度只取决于光子气体的温度 $T$。
+\subsection{态密度}
+在一维情形下，施加周期性边界条件，一个电磁波振动模式所对应的波矢 $k$ 是 $2\pi/L$ 的倍数，那么波矢空间中 $d k$ 中包括了 $2\cdot \frac{L}{2\pi} dk$ 个振动模式，$2$ 来自于电磁波的两个偏振自由度。推广到三维情形，波矢空间的态密度为 $2\cdot V \frac{dk^3}{(2\pi)^3}=2\cdot Vk^2dk/(2\pi^2)$，前面的系数 $2$ 来自于电磁波的两个偏振自由度。对于电磁波，$k=\omega/c$，所以态密度为 $V \omega^2 d\omega/(\pi^2 c^3)$。
 
-\pentry{等间隔能级系统（正则系宗）\upref{EqCE}}
-
-我们仍用正则系宗下推导光子气体的总能能量和压强。 已知单模式（单频率）的光子气体配分函数为 $Q(\omega) = 1/[1-\exp(-\omega\hbar\beta)]$， 系统的配分函数为
+现在考察辐射场的能量 $U$，考察每个频率区间 $[\omega,\omega+d\omega]$ 范围内的辐射场能量 $U(\omega,T)d\omega$。根据玻色分布（\autoref{eq_depsys_1}~\upref{depsys}），每一个振动模式（能级）可以有多个光子占据，光子的平均占据数为 $\frac{1}{\exp(\hbar\omega/kT)-1}$，而每个光子的能量为 $\hbar\omega$，即某个能级上的光子平均能量为 $\hbar\omega/(\exp(\hbar\omega/kT)-1)$。用这一结果乘以态密度，最终可以得到辐射场的能量公式
 \begin{equation}
-Q = \prod_i Q(\omega_i) = \prod_i \frac{1}{1-\exp(-\omega_i\hbar\beta)}~.
+\begin{aligned}
+U(\omega,T) d\omega=\frac{V}{\pi^2c^3} \left[\hbar\omega^3/(\exp(\hbar\omega/kT)-1)\right] d\omega~.
+\end{aligned}
+\end{equation}
+
+对频率积分，就可以得到辐射场的总能量
+\begin{equation}
+\begin{aligned}
+U(T)&=\int U(\omega,T) d\omega=\frac{V}{\pi^2c^3} \int \frac{\hbar\omega^3}{\exp(\hbar\omega/kT)-1} d\omega~,\\
+&=\frac{V}{\pi^2c^3 } \frac{(kT)^4}{\hbar^3}\int \frac{z^3dz}{e^z-1}=\frac{V}{\pi^2c^3\hbar^3}(kT)^4\Gamma(4)\zeta(4)\\
+&=\frac{V\pi^2}{15c^3\hbar^3}(kT)^4
+\end{aligned}
+\end{equation}
+可以看出辐射场能量正比于温度的四次方。这里运用了公式
+\begin{equation}\label{eq_PhoGas_1}
+\int_0^\infty \frac{z^n dz}{e^z-1}=\Gamma(n+1)\zeta(n+1),\quad \zeta(4)=\sum_n \frac{1}{n^4}=\frac{\pi^4}{90}~.
+\end{equation}
+
+
+\subsection{巨正则系综方法}
+\pentry{等间隔能级系统（正则系宗）\upref{EqCE}}
+\addTODO{这个方法实际上是巨正则系综，光子数不确定，需要用巨配分函数。需要改一下描述，计算过程是不变的。需要引用巨正则系综的词条}
+我们用巨正则系综下推导光子气体的总能能量和压强。 已知单模式（单频率）的光子气体的巨配分函数为 $\Xi(\omega) =\sum_{n\ge 0} \exp(-(n\hbar\omega-\mu n)\beta)= 1/[1-\exp(-\omega\hbar\beta)]$，这里用到了光子气体化学势 $\mu=0$ 的性质。 系统的巨配分函数为
+\begin{equation}
+\Xi = \prod_i \Xi(\omega_i) = \prod_i \frac{1}{1-\exp(-\omega_i\hbar\beta)}~.
 \end{equation}
 系统总能量为
 \begin{equation}
-U = -\pdv{\beta} \ln Q = \sum_i \pdv{\beta} \ln(1 - \E^{-\omega_i \hbar \beta}) = \sum_i \frac{\omega_i \hbar \E^{-\omega_i \hbar\beta}}{1-\E^{-\omega_i \hbar \beta}} = \sum_i \frac{\omega_i \hbar}{\E^{\omega_i\hbar\beta} - 1}~.
+U = -\pdv{\beta} \ln \Xi = \sum_i \pdv{\beta} \ln(1 - \E^{-\omega_i \hbar \beta}) = \sum_i \frac{\omega_i \hbar \E^{-\omega_i \hbar\beta}}{1-\E^{-\omega_i \hbar \beta}} = \sum_i \frac{\omega_i \hbar}{\E^{\omega_i\hbar\beta} - 1}~.
 \end{equation}
 用积分来求和， 模式密度为 $\rho(\omega) = V\omega^2/(\pi^2 c^3)$
 \begin{equation}
 U = \frac{V}{\pi^2 c^3} \int_0^\infty \frac{\omega^3 \hbar}{\E^{\omega\hbar\beta} - 1}\dd{\omega}~,
 \end{equation}
 用换元积分法， 令 $x = \omega\hbar\beta$
-\begin{equation}
+\begin{equation}\label{eq_PhoGas_2}
 U = \frac{V}{\pi^2c^3 \beta^4 \hbar^3} \int_0^\infty \frac{x}{\E^x - 1}\dd{x} = \frac{\pi^2 V}{15c^3 \hbar^3} (kT)^4~.
 \end{equation}
-最后的积分可由 Mathematica 完成。
+最后的积分利用了公式 \autoref{eq_PhoGas_1} ，也可由 Mathematica 完成。
 
-\subsection{压强}
-由正则系宗法的步骤， 先求出亥姆霍兹自由能
+\subsubsection{计算压强}
+对于光子气体，由于化学势 $\mu=0$，所以亥姆霍兹自由能就等于热力学势 $\Omega$：$F=\Omega+\mu N=\Omega=-kT\ln \Xi$：
 \begin{equation}
-F = -kT \ln Q = kT \sum_i \ln(1 - \E^{-\omega_i \hbar\beta})~.
+F =\Omega= -kT \ln \Xi = kT \sum_i \ln(1 - \E^{-\omega_i \hbar\beta})~.
 \end{equation}
+光子气体的 $G=\mu N=0$，利用 $F=G-pV=-pV$，可以得到 $p=-F/V$，就求出了光子气体的压强。
