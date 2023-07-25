@@ -3,10 +3,12 @@
 
 \pentry{广义球谐函数\upref{GenYlm}， Lanczos 算法\upref{Lanc}， 氢原子球坐标薛定谔方程数值解\upref{HyTDSE}} % 已包含 “张量积空间”
 
+本文使用原子单位制\upref{AU}。
+
 \subsection{波函数展开}
 使用角向基底为两个电子总轨道角动量和 $z$ 分量的本征态\upref{AMAdd}， 即广义球谐函数 $\mathcal{Y}_{l_1,l_2}^{L,M}(\uvec r_1, \uvec r_2)$。
 
-总波函数所在的空间可以看做角向空间和径向空间的张量积空间。 现在有了角向空间的基底， 总波函数就可以在该基底上展开
+总波函数所在的空间可以看做角向空间和径向空间的张量积空间。 现在有了角向空间的正交归一基底（内积由\autoref{eq_GenYlm_7}~\upref{GenYlm}定义为 $\int \dots \dd{\Omega_1} \dd{\Omega_2}$）， 总波函数就可以在该基底上展开（$\ket{R_\lambda}$ 并不是基底也非正交归一，只相当于展开系数）
 \begin{equation}
 \ket{\Psi} = \sum_\lambda \ket{R_\lambda}\otimes\ket{\mathcal{Y_\lambda}}~.
 \end{equation}
@@ -18,25 +20,30 @@
 \begin{equation}\label{eq_HeTDSE_2}
 \Psi(\bvec r_1, \bvec r_2) = \sum_{L, M, l_1, l_2}  \frac{1}{r_1 r_2} \psi_{l_1, l_2}^{L, M}(r_1, r_2)\mathcal{Y}_{l_1, l_2}^{L, M}(\uvec r_1, \uvec r_2)~.
 \end{equation}
+由于总波函数的内积定义为 $\int \dots r_1^2\dd{r_1}\dd{\Omega_1} r_2^2\dd{r_2}\dd{\Omega_2}$，所以径向空间的内积定义为 $\int \dots r_1^2 \dd{r_1} r_2^2\dd{r_2}$。
 
 由张量积空间\upref{DirPro}中的结论， 我们可以求哈密顿算符 $H$ 关于角向基底的 “矩阵元” $H_{\lambda, \lambda'}$， 每个矩阵元是径向空间中的一个算符。
 \begin{equation}
 H_{\lambda, \lambda'} = \mel{\mathcal{Y}_{\lambda}}{H}{\mathcal{Y}_{\lambda'}}~.
 \end{equation}
-列出薛定谔方程的 “矩阵形式”， 就得到了一组 couple 的径向波函数的薛定谔方程
-\begin{equation}
+列出薛定谔方程的 “矩阵形式”， 就得到了一组耦合的二维径向波函数的薛定谔方程
+\begin{equation}\label{eq_HeTDSE_8}
 \sum_{\lambda'} H_{\lambda, \lambda'} \ket{R_{\lambda'}} = \I \pdv{t} \ket{R_{\lambda}}~,
 \end{equation}
-
 总哈密顿可以表示为
-\begin{equation}
+\begin{equation}\label{eq_HeTDSE_7}
 H = H_1 + H_2 + V_{12} + V_{F1} + V_{F2}~.
 \end{equation}
-其中 $H_i \ \ (i = 1, 2)$ 是单个电子的哈密顿算符， 不对耦合分波， 对应对角矩阵
+其中 $H_i \ \ (i = 1, 2)$ 是单个电子的哈密顿算符（\autoref{eq_RYTDSE_2}~\upref{RYTDSE}）， $V_{12}$ 是两电子之间的库仑势能， $V_{Fi}$ 是电场对每个电子的作用势能。
+
+$H_i$ 不耦合分波， 对应对角矩阵
 \begin{equation}
-\mel{\mathcal{Y}_{\lambda}}{H_i}{\mathcal{Y}_{\lambda'}} = \delta_{\lambda,\lambda'} \qty(K_{ri} + \frac{L_i^2}{2m r_i^2} - \frac{2}{r_i}) \qquad (i = 1,2)~,
+\begin{aligned}
+\mel{\mathcal{Y}_{\lambda}}{H_i}{\mathcal{Y}_{\lambda'}} &= \delta_{\lambda,\lambda'} \qty(K_{ri} + \frac{L_i^2}{2 r_i^2} - \frac{2}{r_i})\\
+&= \delta_{\lambda,\lambda'} \qty(-\frac{1}{2m}\pdv[2]{r_i} + \frac{l_i^2}{2m r_i^2} - \frac{2}{r_i}) \qquad (i = 1,2)~,
+\end{aligned}
 \end{equation}
-其中第二项是对角矩阵是因为 $\mathcal Y$ 基底是 $L_i^2$ 的本征函数。 剩下的哈密顿项都会耦合分波： $V_{12}$ 是两电子之间的库仑势能， $V_{Fi}$ 是电场对每个电子的作用势能。
+其中第二项 $L_i$ 变为 $l_i$ 是因为 $\ket{\mathcal Y_\lambda}$ 基底是 $L_i^2$ 的本征函数。 剩下的哈密顿项 $V_{12} + V_{F1} + V_{F2}$ 都会耦合分波。
 
 \subsection{波函数的对称性}
 我们一般假设电子\textbf{自旋态恒为 singlet （反对称）}， 所以总波函数满足粒子交换对称 $\Psi(\bvec r_1, \bvec r_2) = \Psi(\bvec r_2, \bvec r_1)$。 由\autoref{eq_GenYlm_5}~\upref{GenYlm} 可以导出分波的对称性
@@ -210,13 +217,13 @@ r\sqrt{9(2l'_1+1)(2l'_2+1)(2L'+1)/(4\pi)^2}\\
 
 \subsection{Crank-Nicolson 波函数演化}
 
-Crank-Nicolson 演化（propagation）\upref{CraNic}同样使用 split operator 
+对薛定谔方程\autoref{eq_HeTDSE_8} 做 Crank-Nicolson 演化（propagation）\upref{CraNic}同样使用 split operator 
 \begin{equation}
 \exp(-\I H\Delta t) = \exp(-\I H_0\frac{\Delta t}{2})\exp(-\I H_{int}\Delta t) \exp(-\I H_0\frac{\Delta t}{2}) + \order{\Delta t^3}~.
 \end{equation}
 只是这里的 $H_{int} = V_{12} + V_F$ 是所有 $\mel{\mathcal{Y}}{\ }{\mathcal{Y}}$ 作用后为非对角（算符）矩阵的项， 即电子的相互作用和电场对每个电子的作用。
 
-$H_0 = H_1 + H_2$ 由于 $H_1$ 和 $H_2$ 对易， 我们可以将它们独立演化
+$H_0 = H_1 + H_2$ 由于 $H_1$ 和 $H_2$ 对易， 我们可以将它们独立演化而不产生误差（\autoref{eq_OpExp_1}~\upref{OpExp}）：
 \begin{equation}
 \exp(-\I H_0 \frac{\Delta t}{2}) = \exp(-\I H_1 \frac{\Delta t}{2}) \exp(-\I H_2 \frac{\Delta t}{2})~.
 \end{equation}

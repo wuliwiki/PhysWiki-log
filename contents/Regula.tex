@@ -1,31 +1,32 @@
 % 正则化
 % 正则化
 
-\begin{issues}
-\issueMissDepend
-\issueNeedCite
-\end{issues}
 
-\pentry{范数、赋范空间\upref{NormV}}
+\pentry{欠拟合\upref{unfit}，过度拟合\upref{ovfit}，范数、赋范空间\upref{NormV}}
 
-\textbf{正则化}（Regularization）是机器学习中用于减少泛化误差（测试误差），从而缓解过度拟合的设计策略。当使用正则化策略减少泛化误差时，可能会增大训练误差。
+\textbf{正则化}（Regularization）是机器学习中用于减少泛化误差（测试误差），从而缓解过度拟合\upref{ovfit}的设计策略。当使用正则化策略减少泛化误差时，可能会增大训练误差。
 
-\textbf{参数范数惩罚}是最常用的正则化策略之一。传统机器学习方法就有很多使用，而在当今的深度学习中也应用广泛。参数范数惩罚的主要思想是给目标函数$J$添加一个参数范数惩罚项$\Omega(\theta)$，限制模型的学习能力，从而减少过度拟合的发生。设$J'$为正则化后的目标函数，则有：
+在深度学习中，很多正则化策略都是对估计进行正则化。估计的正则化会以偏差的增加换取方差的减少[1]。
+
+\textbf{参数范数惩罚}是最常用的正则化策略之一。传统机器学习方法就有很多使用，而在当今的深度学习中也应用广泛。参数范数惩罚的主要思想是给目标函数
+$J$添加一个参数范数惩罚项$\Omega(\bvec \theta)$，限制模型的学习能力，从而减少过度拟合的发生。设$J'$为正则化后的目标函数，则有：
 \begin{equation}
-J'(\bvec \theta;\bvec X,y)=J(\theta;\bvec X,y)+\alpha\Omega(\bvec \theta)~.
+J'(\bvec \theta; \bvec X,y)=J(\bvec \theta;\bvec X,y)+\alpha\Omega(\bvec \theta)~,
 \end{equation}
-其中，$\alpha\in[0,\infty)$是权衡范数惩罚项$\Omega$和标准目标函数$J(\bvec X;\bvec \theta)$相对贡献的超参数。将$\alpha$设为$0$表示没有正则化。
+其中，$\bvec \theta$表示的是模型参数，$\bvec X$表示的是训练数据的特征，$y$表示的是标签，$\alpha\in[0,+\infty)$是权衡范数惩罚项$\Omega$和标准目标函数$J(\bvec X; \bvec \theta)$相对贡献的超参数。将$\alpha$设为$0$表示没有正则化。
 
 
 \subsection{$L^2$参数正则化}
 
-$L^2$参数正则化指的是用参数的$2$范数作为惩罚项，即把公式$(1)$中的$\Omega(\theta)$写成参数的$2$范数形式。数学表示是：$\Omega(\theta)=\frac{1}{2}||\bvec w||_2^2$.
-在优化代价函数时，会使得$\Omega(\bvec \theta)$有极小化的趋势，因此，该正则化策略会使得权值趋向于原点。
+$L^2$参数正则化指的是用参数的$2$范数作为惩罚项，即把公式$(1)$中的$\Omega(\bvec \theta)$写成参数的$2$范数形式。数学表示是：$\Omega(\bvec \theta)=\frac{1}{2}||\bvec w||_2^2$.
+在优化代价函数时，会使得$\Omega(\bvec \theta)$ 有极小化的趋势，因此，该正则化策略会使得权值趋向于原点。
+其实，可以采用更为一般的做法，将参数正则化为接近空间中任意特定点，令人惊讶的是这样也仍然有正则化效果，但是特定点越接近真实值结果越好[1]。
 
 采用了$L_2$正则化策略的代价函数表示为：
 \begin{equation}
-J'(\bvec \theta;\bvec X,y)=J(\bvec \theta;\bvec X,y)+\alpha\frac{1}{2}||\bvec w||_2^2~
+J'(\bvec \theta;\bvec X,y)=J(\bvec \theta;\bvec X,y)+\alpha\frac{1}{2}||\bvec w||_2^2~,
 \end{equation}
+其中，$\bvec \theta$表示的是模型参数，$\bvec w$表示模型权重，$\bvec X$表示的是训练数据的特征，$y$表示的是标签，$\alpha\in[0,+\infty)$是权衡范数惩罚项$\Omega$和标准目标函数$J(\bvec X; \bvec \theta)$相对贡献的超参数。将$\alpha$设为$0$表示没有正则化。该公式是假设模型参数中没有偏置，因此$\bvec \theta$=$\bvec w$。
 
 有的文献称$L^2$正则化为\textbf{岭回归}。
 
@@ -36,8 +37,9 @@ $L_1$参数正则化也是一种常用的参数范数惩罚策略.顾名思义,�
 
 采用了$L_1$正则化策略的代价函数表示为：
 \begin{equation}
-J'(\bvec \theta;\bvec X,y)=J(\bvec \theta;\bvec X,y)+\alpha||\bvec w||_1~
+J'(\bvec \theta;\bvec X,y)=J(\bvec \theta;\bvec X,y)+\alpha||\bvec w||_1~,
 \end{equation}
+其中，$\bvec \theta$表示的是模型参数，$\bvec w$表示模型权重，$\bvec X$表示的是训练数据的特征，$y$表示的是标签，$\alpha\in[0,+\infty)$是权衡范数惩罚项$\Omega$和标准目标函数$J(\bvec X; \bvec \theta)$相对贡献的超参数。将$\alpha$设为$0$表示没有正则化。该公式是假设模型参数中没有偏置，因此$\bvec \theta$=$\bvec w$。
 
 
 \subsection{数据增强}
@@ -56,3 +58,9 @@ J'(\bvec \theta;\bvec X,y)=J(\bvec \theta;\bvec X,y)+\alpha||\bvec w||_1~
 在模型训练时，经常会出现的一种情况是，随着训练轮数的增加，训练误差不断减少，测试误差一开始也减少，但到一定时间之后，又会增加。此时，模型已经出现过度拟合。
 
 其实，我们只要在测试误差最小的时候，停止训练，并返回模型即可。此策略就被称为\textbf{提前终止}（Early stopping）。
+
+
+\textbf{参考文献：}
+\begin{enumerate}
+\item I. Goodfellow, Y. Bengio, A. Courville, and Y. Bengio, Deep learning, vol. 1, no. 2. MIT press Cambridge, 2016.
+\end{enumerate}

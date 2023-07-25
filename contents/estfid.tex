@@ -112,10 +112,70 @@ $$\curl \bvec B = \mu_0 \bvec j~$$ 静磁场的环路定理（专业术语：安
 \end{tabular}
 \end{table}
 
-稍微具体一点，引入势的数学考量是，如果一个场无旋，那么他可以写成一个标量函数的梯度 $\curl \bvec F = \bvec 0 \Rightarrow \bvec F = - \nabla \varphi$；以及如果一个场无散，那么他可以写成另一个场的旋度$\div \bvec F = \bvec 0 \Rightarrow \bvec F = \curl \bvec A$，静电场和磁场天然分别满足这些条件，详见griffiths书与“矢量分析总结\upref{VecAnl} ”；物理上的考量参考“电势、电势能\upref{QEng} ”
+\subsubsection{势的定义}
+引入势的数学考量是（详见griffiths书与“矢量分析总结\upref{VecAnl} ”）：
+\begin{itemize}
+\item 如果一个场无旋，那么他可以写成一个标量函数的梯度 $\curl \bvec F = \bvec 0 \Rightarrow \bvec F = - \nabla \varphi$；
+\item 以及如果一个场无散，那么他可以写成另一个场的旋度$\div \bvec F = \bvec 0 \Rightarrow \bvec F = \curl \bvec A$。
+\end{itemize}
+静电场和磁场天然分别满足这些条件，因此可以分别定义电势与磁势。
 
+物理上的考量参考“电势、电势能\upref{QEng} ”。
+
+从电场-电势的关系很容易看出，静电场其实只有一个自由度 $\varphi$，而非看起来的三个 $(E_x, E_y, E_z)$。
+
+\subsubsection{势的任意性}
 由于电荷直接感受到的是场而不是势(见下"洛伦兹力")，所以只要能得到相同的场，势的取值具有一定的灵活性。例如，由于 $\bvec E = -\grad \varphi$，即使势加上一个常数后，仍有 $\bvec E = -\grad (\varphi+\lambda) = -\grad \varphi - \grad \lambda = -\grad \varphi$，即相应的电场也不会变化。因此，电势总可以相差一个常数而不改变“实质性结果”。这就有点像我们做不定积分时，总会得到一个积分常数 $C$；或者对函数求导时，常数项不会改变导函数。
 选取常数的方法称为“规范”，根据相应的场合，我们会选取恰当的规范以简化计算。在静场中，我们一般令电势在无穷远处为零，并让磁势满足 $\div \bvec A = 0$。
+
+\subsubsection{势的方程}
+将势的定义代入Maxwell方程组，并辅以数学技巧，就可以得到相应势的方程。例如对于电势\footnote{为什么$\curl \bvec E = \bvec 0$的方程不见了？因为在引入电势概念时，我们已经用到了这个方程：任意标量函数的梯度的旋度始终为零：$\curl (\grad \varphi) = 0$。}：
+$$
+\left \{
+\begin{aligned}
+\bvec E &= -\grad \varphi\\
+\div \bvec E &= \frac{\rho}{\epsilon_0}\\
+%\lim_{R\to\infty} \varphi &= 0\\
+\end{aligned}
+\right.
+\Rightarrow
+\laplacian \varphi = -\frac{\rho}{\epsilon_0}
+~.
+$$
+
+磁势也是同理，但是需要更巧妙地运用数学技巧\upref{VecAnl} 与规范，\textsl{具体证明过程按惯例留给读者}：
+$$
+\left \{
+\begin{aligned}
+\bvec B &= \curl \bvec A\\
+\curl \bvec B &= \mu_0 \bvec  j\\
+\div \bvec A &= 0\\
+\end{aligned}
+\right.
+\Rightarrow
+\laplacian \bvec A = -\mu_0 \bvec j
+~.
+$$
+由于磁势$\bvec A$是一个矢量，所以磁势的方程其实包括三个标量方程（直角坐标系）：
+$$
+\nabla^2 \bvec A = - \mu_0 \bvec j~
+\Rightarrow
+\left \{
+\begin{aligned}
+\laplacian A_x = -\mu_0 j_x\\
+\laplacian A_y = -\mu_0 j_y\\
+\laplacian A_z = -\mu_0 j_z\\
+\end{aligned}
+\right.
+~.
+$$
+
+\subsubsection{场源导致的势}
+原则上，"场源导致的势"是相应势的方程的解，\textsl{但这么做就慢了}。根据电场的性质、势的定义、以及电势与积分路径无关的性质，就能轻松得到"电荷导致的势"，这也是我们在高中和大物里了解的方法：
+$$\varphi = \int \bvec E \cdot \dd {\bvec l} = \frac{1}{4\pi\epsilon_0} \frac{q}{R}~,$$
+并推广为连续形式
+$$\varphi = \frac{1}{4\pi\epsilon_0} \int \frac{\rho}{R} \dd V'~.$$
+根据磁势方程与电势的类似性，类比就能得到"电流导致的磁势"。如此操作避免了求解偏微分方程的困难。
 
 \begin{figure}[ht]
 \centering

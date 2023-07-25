@@ -7,6 +7,8 @@
 
 Git for Windows 的 Git bash 是不支持 symlink 的， symlink clone 下来以后都会变成文本文件（文本就是 symlink 指向的路径）， 所以还是建议在 WSL\upref{WSLnt} 中安装 Git 使用。 但就算使用 wsl， checkout 出的 symlink 也可能只是一个文本文件， 内容是目标的路径。 此时可以手动使用 \verb|ln -sf $(cat 文件) 文件| 去修复， 也可以写一个脚本（见文末）。
 
+但新的问题是，WSL 用 git 会有讨厌的权限问题\upref{WSLnt}。 所以 git bash 和 WSL 可以结合起来用。
+
 \subsection{新安装设置}
 \begin{itemize}
 \item 如果要安装最新版本的 Git， 见\href{https://git-scm.com/downloads}{这里}。
@@ -15,6 +17,7 @@ Git for Windows 的 Git bash 是不支持 symlink 的， symlink clone 下来以
 \item 如果从 Github 上 clone 或者 pull 会提示输入密码， 这个密码不是登录 GitHub 的密码而是 token。 GitHub 创建 token 参考\href{https://docs.github.com/en/github/authenticating-to-github/keeping-your-account-and-data-secure/creating-a-personal-access-token#creating-a-token}{这里}。 在 GitHub 上可以管理所有 token。
 \item 要查看 token 登录 github 后用 \href{https://github.com/settings/tokens/}{https://github.com/settings/tokens}。 注意每个 token 只能查看一次， 要注意保存， 如果丢失只能新建一个。
 \item 私有仓库用网址如果 clone, 每次连接服务器需要输入用户名和 token, 包括 \verb|clone, pull| 等。 要让 Git 记住 token， 用 \verb|git config --global credential.helper store| 如果 token 变了， 再用一次该命令即可， 要测试是否成功可用 \verb|git pull|， 如果成功则不需要 token。
+\item 在 windows 需要设置 \verb|git config --global credential.helper wincred|，然后可以用弹出来的 github 登录界面用账号密码登录，或者取消任何 GUI， 然后在命令行用用户名和 token 登录。
 \item 清空账号 token 用 \verb|git config --global --unset credential.helper|. 如果还不行的话只好把下文的所有 config 文件删除并重装 git。
 \item Windows 下设置 \verb|git config --global core.autocrlf true|, 这样 commit 的时候会把所有 CRLF 换行变为 LF（\autoref{sub_encode_1}~\upref{encode}）, 而 checkout 的时候会把所有 LF 变为 CRLF. Linux 下设置 \verb|git config --global core.autocrlf input|, 这样 commit 的时候会把所有 CRLF 变为 LF, 而 chekout 的时候不做任何操作。 如果这么设置了， GitHub Desktop 自动产生的 \verb|.gitattribute| 文件就可以删掉了 （因为解决的是同一个问题）.
 \item 如果仓库中的中文路径显示乱码（反斜杠加数字）， 用 \verb|git config --global core.quotepath off|

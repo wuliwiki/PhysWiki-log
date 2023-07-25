@@ -1,0 +1,156 @@
+% 动态场问题（电动力学）（摘要）
+
+\begin{issues}
+\issueDraft
+\issueOther{需要check}
+\end{issues}
+
+\pentry{静电场与静磁场（摘要）\upref{estfid}}
+
+\subsection{电磁感应}
+在理论与现实的诘难下\footnote{理论的诘难是，如果你对静磁旋度方程两边取旋度$\curl \bvec B = \mu_0 \bvec j$，你会发现 $\div (\curl \bvec B) = \mu_0 \div \bvec j$，根据矢量运算法则，这意味着 $\div \bvec j = 0$，与电荷守恒方程 $\div \bvec j +\pdv{q}{t} = 0$矛盾；现实的诘难是，人们发现在变化磁场中的线圈中会产生电流，而这是无法靠洛伦兹力公式解释的：磁场不能驱动静止的电荷，也不能对其做功。}，法拉第与麦克斯韦等人前仆后继地提出了电磁感应定律，即耳熟能详的“磁生电、电生磁”。电磁感应定律引入了两个含时项，如下表所示：
+
+\begin{figure}[ht]
+\centering
+\includegraphics[width=12 cm]{./figures/e9265eb3665eb1d0.pdf}
+\caption{不大严谨的电磁感应示意图} \label{fig_dynfld_1}
+\end{figure}
+%我不大确定产生的感应场具体是不是这样的，但我觉得至少这样很直观...
+
+\begin{table}[ht]
+\centering
+\caption{电场与磁场的旋度（无源）}\label{tab_dynfld1}
+\begin{tabular}{|c|c|}
+\hline
+电场 $\bvec E$ & 磁场 $\bvec B$ \\
+\hline
+$$\oint \bvec E \cdot \dd {\bvec l} = -\int \pdv{\bvec B}{t} \cdot \dd {\bvec A}~$$
+$$\curl \bvec E = -\pdv{\bvec B}{t}~$$
+法拉第定律：变化的磁场感应出电场；楞次定律：$-\pdv{\bvec B}{t}$前的负号，代表一种阻碍作用 \upref{FaraEB}
+ & 
+ $$ \oint \bvec B \cdot \dd {\bvec l} = \mu_0 \epsilon_0 \int \pdv{\bvec E}{t} \cdot \dd {\bvec A}~$$
+ $$\curl \bvec B = \mu_0 \epsilon_0 \pdv{\bvec E}{t}~$$ 
+ 安培-麦克斯韦定律：变化的电场感应出磁场 \upref{DisCur}
+ \\
+\hline
+\end{tabular}
+\end{table}
+
+这两个含时项的内涵远比他表面上看起来的深远，所有对于变化电磁场的理解，从光学到电路到无线通信，都离不开这两个含时项。可以说，这两个含时项直接翻开了人类历史的新篇章，\textsl{以及电动力学的后大半本书。}
+
+\subsection{Maxwell方程}
+结合电磁感应定律与原有的静场方程，我们就得到了如雷贯耳的Maxwell方程组 \upref{MWEq}：
+\begin{table}[ht]
+\centering
+\caption{Maxwell 方程组}\label{tab_dynfld2}
+\begin{tabular}{|c|c|c|}
+\hline
+&电场 $\bvec E$ & 磁场 $\bvec B$ \\
+\hline
+散度方程 & 
+$$\div \bvec E = \frac{\rho}{\epsilon_0}~$$ 
+&
+$$\div \bvec B = 0~$$\\
+\hline
+旋度方程 & 
+$$ \curl \bvec E = -\pdv{\bvec B}{t} ~$$
+ &
+$$\curl \bvec B = \mu_0 \bvec j + \mu_0 \epsilon_0 \pdv{\bvec E}{t}~$$ \\
+\hline 
+\end{tabular}
+\end{table}
+
+Maxwell方程组的这四个方程是电动力学的根基。
+
+现在，在Maxwell方程组的加持下，原则上我们不仅能处理静场问题，还能处理各种动态问题，包括那些场源也在随时间变化的问题，\textsl{正所谓电“动”力学}（电磁感应定律似乎没有直接提及场源的变化如何导致电磁场的变化，但Maxwell方程组确实能处理这个问题）。
+
+\subsection{势}
+\begin{table}[ht]
+\centering
+\caption{电势与磁势}\label{tab_dynfld3}
+\begin{tabular}{|c|c|c|}
+\hline
+* & 电场 $\bvec E$ & 磁场 $\bvec B$ \\
+\hline
+势与场 \upref{EMPot} & $$\bvec E = -\grad \varphi - \pdv{\bvec A}{t}~$$ & $$\bvec B = \curl \bvec A~$$ \\
+\hline
+势的任意性，“规范” \upref{Gauge} ；$\lambda$是同一标量函数 & $$\varphi += - \pdv{\lambda}{t}~$$ 
+& $$\bvec A += \grad \lambda~$$ $\div \bvec A$的取值可被控制 \\
+\hline
+势的方程；达朗贝尔方程 \upref{LoGaug} & $$\laplacian \varphi - \mu_0\epsilon_0 \pdv[2]{\varphi}{t} = -\frac{\rho}{\epsilon_0}~$$ (洛伦兹规范)& $$\laplacian \bvec A - \mu_0\epsilon_0 \pdv[2]{\bvec A}{t} = -\mu_0 \bvec j~.$$ (洛伦兹规范)\\
+\hline
+场源导致的势；推迟势 \upref{RetPt0}
+& $$\varphi(\bvec r, t) = \frac{1}{4\pi\epsilon_0} \int \frac{\rho(\bvec r', t-\frac{R}{c})}{R} \dd V'~.$$ (洛伦兹规范) $c$指光速
+& $$\bvec A(\bvec r, t) = \frac{\mu_0}{4\pi} \int \frac{\bvec j(\bvec r', t-\frac{R}{c})}{R}\dd{V'}~.$$ (洛伦兹规范)\\
+\hline
+\end{tabular}
+\end{table}
+洛伦兹规范 \upref{LoGaug}：取 $\div \bvec A = -\mu_0 \epsilon_0 \pdv{\varphi}{t}~$。
+
+\subsubsection{势}
+在动态问题中，$\bvec E$不再是无旋场，因此不能按照套路定义标势；但是，$\bvec B$仍然是无散的，因此仍可定义磁矢势 $\bvec B = \curl \bvec A~$。将磁矢势的方程带入$ \curl \bvec E = -\pdv{\bvec B}{t}$，发现$ \curl \bvec E = -\pdv{\bvec \curl \bvec A}{t} = - \curl \pdv{\bvec A}{t} \Rightarrow \curl(\bvec E + \pdv{\bvec A}{t}) = 0$，即 $(\bvec E + \pdv{\bvec A}{t})$ 这个奇怪的组合作为整体是无旋的，自然可为其定义一个标势 $\bvec E + \pdv{\bvec A}{t} = -\grad \varphi$，即有$\bvec E  = -\grad \varphi - \pdv{\bvec A}{t} $。
+
+由此，我们推广了势的含义，从而得到了动态问题中的势 \upref{EMPot}。
+
+\subsubsection{势的规范变换；洛伦兹规范}
+同静场问题一样，势的取值依旧具有任意性，只是此时电势与磁势得\textsl{此消彼长}：在磁势加上 $\grad \lambda$的同时，电势得加上 $ - \pdv{\lambda}{t}$，才能再得到相同的场。\upref{Gauge}
+
+同样地，我们可以做规范变换；不过与静场问题不同，我们一般不选取 $\div \bvec A =0$ （库伦规范 \upref{Cgauge}），反而选取$\div \bvec A = -\mu_0 \epsilon_0 \pdv{\varphi}{t}~$（洛伦兹规范 \upref{LoGaug}）。尽管洛伦兹规范形式上看起来更复杂，但它使势的达朗贝尔方程高度对称、简明（见下）。
+
+\subsubsection{达朗贝尔方程；推迟势}
+将势的表达形式代回Maxwell方程组、选取洛伦兹规范，并运用一些数学技巧，就能得到达朗贝尔方程组 \upref{LoGaug}。达朗贝尔方程组之于势，犹如Maxwell方程组之于场。或许你已经注意到，达朗贝尔方程形式上是一个波动方程。
+
+根据达朗贝尔方程，我们可以解出势对动态场源的响应的方程（你可以根据格林函数法从达朗贝尔方程推导 \footnote{比如参考周磊教授的《电动力学讲义》}，或者将其带回达朗贝尔方程检验 \cite{GriffE}，不过两种方法都十分艰难）。现在，无论是势还是源都是含时的：这无可厚非，因为动态问题中场源是变化的，而势为了响应动态变化的场源，自然也必须是动态的。
+
+看起来，动态问题中的势只不过是比静场问题中的势形式上多了一个含时项。但问题远非如此简单，正如显式写出的那样，场源与场点所含的“时”是不同的：场点的“时”是$t$，而场源的“时”是 $(t-\frac{R}{c})$ (如果你忘记了，$R = \abs{\bvec r-\bvec r'}$是场源到场点的距离)，二者相差一个$(-\frac{R}{c})$的延时。这是为什么？这就涉及到近代物理中一个不可回避的重要观点：信息传递不是及时的，而是需要时间的，并且传递速度是光速$c$。
+
+举个例子，$t=t_0$时刻的场点，能够感受到$R$距离之外场点$t=t_0$时的及时信息吗？不能，因为信息传递是需要时间的、$t=t_0$时刻场源的信息还没被发送到场点。场点能知道的，只是$\frac{R}{c}$前，即$t=t_0-\frac{R}{c}$时刻场源的信息。这就引出了推迟势 \upref{RetPt0} 的概念。有时定义推迟时刻 $t_r = t - \frac{R}{c}$。
+
+要记住，$t_r = t-\frac{R}{c} = t-\frac{\abs{\bvec r-\bvec r'}}{c}$是含$R$与$\bvec r'$的。对于同一个场点，各个场源的$t_r = t - \frac{R}{c}$ 仍是不同的，因为场点到各个场源的距离 $R$是不同的。
+
+\begin{figure}[ht]
+\centering
+\includegraphics[width=12 cm]{./figures/6b84001f4f4893ce.pdf}
+\caption{源->势->场} \label{fig_dynfld_6}
+\end{figure}
+
+\subsubsection{运动电荷的电磁场}
+最后，我们能不能像处理静场问题中的点电荷一样，根据这些知识处理一个运动点电荷的电磁场？答案当然是可以，但是由于晦涩难懂的推迟势问题，即使是最简单的匀速运动电荷的电场也异常繁杂，此处不再\textsl{Ctrl+V}。具体请参考 李纳-维谢尔势\upref{LWP} 与 带电粒子的辐射\upref{chgrad}。
+
+尽管动态问题中的势看起来只比静场问题中的势多了一个含时项，但如果你试图对场的方程做同样操作，你将得不到正确的场，正确的形式可参考 杰斐缅柯方程 \cite{GriffE}。
+
+\subsection{电磁场的“物质性”}
+在上文中，我们知道了信息在电磁场中传递是需要时间的。这似乎让我们察觉到电磁场如同一种“信使”、具有某种物质含义。接下来，我们会论证电磁场自己的能量、动量以及角动量，这让你更充分地感受到电磁场的“物质性”。
+
+\subsubsection{能量与能量流} 
+\upref{EBS}
+%有很多种方法论证电磁场具有能量，并且电荷系统中所谓“系统的电势能”其实就是暗藏在电场的能量。在这里，我们提供一种从洛伦兹力出发的途径。
+考虑一个小区域内广义洛伦兹力对电荷做功，这将改变电荷的机械动能：
+$$
+\begin{aligned}
+\pdv{u_{mech}}{t} &= \bvec f \cdot \bvec v = \rho (\bvec E + \bvec v \times \bvec B)\cdot \bvec v = \rho \bvec E \cdot \bvec v = \bvec E \cdot \bvec j \\
+ & = \bvec E \cdot (\frac{1}{\mu_0} \curl \bvec B - \epsilon_0 \pdv{\bvec E}{t})\\
+ & = \frac{1}{\mu_0} \bvec E \cdot (\curl \bvec B) - \epsilon_0 \bvec E \pdv{\bvec E}{t}\\
+ & = \frac{1}{\mu_0} (-\bvec B \pdv{\bvec B}{t} - \div(\bvec E \times \bvec B))- \epsilon_0 \bvec E \pdv{\bvec E}{t}\\
+ & = - (\frac{1}{2\mu_0} \pdv{B^2}{t} + \frac{\varepsilon_0}{2} \pdv{E^2}{t}) - \frac{1}{\mu_0} \div(\bvec E \times \bvec B)\\
+ & = - \pdv{}{t} (\frac{1}{2\mu_0} B^2 + \frac{\varepsilon_0}{2} E^2) - \frac{1}{\mu_0} \div(\bvec E \times \bvec B)
+\end{aligned}
+~.
+$$
+
+注意到 $(\frac{1}{2\mu_0} B^2 + \frac{\varepsilon_0}{2} E^2) = u_{emf}$就是我们以前知道的电磁场能量密度。电荷系统中所谓“系统的电势能”其实就是暗藏在电场的能量。
+
+将上式重新整理，我们得到
+$$
+- \frac{1}{\mu_0} \div(\bvec E \times \bvec B) = \pdv{u_{mech}}{t} + \pdv{u_{emf}}{t}~,
+$$
+类比电荷守恒方程$-\div \bvec j = \pdv{\rho}{t}$，其中的物理意义已经很显然了，这个方程告诉我们流入区域的$\frac{1}{\mu_0} \bvec E \times \bvec B$ (负号代表流入) 将转换为粒子的机械动能与电磁场的能量，那么$ \frac{1}{\mu_0} \bvec E \times \bvec B$应该是某种与电磁场能量有关的流。由此，我们将其定义为Poynting矢量$\bvec S$，代表电磁场能流密度。
+$$
+\bvec S = \frac{1}{\mu_0} \bvec E \times \bvec B~.
+$$
+
+\subsubsection{动量与动量流}
+具体可参考 电磁场的动量守恒、动量流密度张量\upref{EBP}。
+
+\subsubsection{角动量}
+具体可参考 \cite{GriffE}。
