@@ -1,31 +1,73 @@
 % 相互作用绘景
 % 动力学|微扰近似
-\pentry{量子力学的基本原理\upref{QMPrcp}， 薛定谔绘景和海森堡绘景\upref{HsbPic}}
+\pentry{量子力学的基本原理\upref{QMPrcp}， 薛定谔绘景和海森堡绘景\upref{HsbPic}，时间演化算符\upref{TOprt}}
+
+在本章节中，使用上角标为$(s)$代表薛定谔绘景，上角标为$(I)$代表相互作用绘景，例如$H^{(s)}$,$H^{(I)}$。
+
 \begin{definition}{}
 
-不同于海森堡绘景和薛定谔绘景，在相互作用绘景里，态矢和算符都随时间而改变。哈密顿量可以分割为：
+不同于海森堡绘景和薛定谔绘景，在相互作用绘景里，态矢和算符都随时间而改变。薛定谔绘景中的哈密顿量可以分割为：
 \begin{equation}
-H=H_0+H_I~.
+H^{(S)}=H^{(S)}_0+V^{(S)}~.
 \end{equation}
-下标I为相互作用的缩写。与海森堡绘景相仿，相互作用绘景里的态矢和算符通过薛定谔绘景（下标为S）导出如下：
-\begin{equation}
-\ket{s,t}_I=e^{iH_0 t}\ket{s,t}_S~,
-\end{equation}
-\begin{equation}\label{eq_QM06_1}
-\mathcal O_I(t)=e^{iH_0 t}\mathcal O_Se^{-iH_0 t}~.
-\end{equation}
-可以验证，该定义是良定义，算符期待值不随绘景改变。
-\end{definition}
-对于一个绘景，我们首要关心的是态矢是如何随着时间演化的。根据薛定谔方程，我们可以导出相互作用绘景下的态矢动力学方程。
+分别定义$\mathcal U^{(S)}(t)$为$H^{(S)}$对应的时间演化算符，$\mathcal U^{(S)}_0(t)$为$H^{(S)}_0$对应的时间演化算符，具体定义方法参考\href{https://wuli.wiki/online/TOprt.html}{时间演化算符}。
+
+定义：
 \begin{equation}
 \begin{aligned}
-H\ket{s,t}_I=i\frac{\partial\ket{s,t}_I}{\partial t}&= e^{iH_0 t}(-H_0)\ket{s,t}_S+e^{iH_0 t}H\ket{s,t}_S\\
-&=e^{iH_0 t}H_Ie^{-iH_0 t}e^{iH_0 t}\ket{s,t}_I\\
-&=H_{int}\ket{s,t}_I~.
+|\psi^{(I)}(t)\rangle&=\mathcal U^{(S)}_0(t)^\dagger|\psi^{(S)}(t)\rangle=\mathcal U^{(S)}_0(t)^\dagger\mathcal U^{(S)}(t)|\psi^{(S)}(0)\rangle~, \\
+A^{(I)}(t)&=\mathcal U^{(S)}_0(t)^\dagger A^{(S)}(t)\mathcal U^{(S)}_0 (t)~.
 \end{aligned}
 \end{equation}
-最后一行的$H_{int}$是相互作用绘景中的相互作用哈密顿量，自然满足\autoref{eq_QM06_1} 
-\subsection{时间演化}
-时间演化算符的定义和导出见该词条。\href{https://wuli.wiki/online/TOprt.html}{时间演化算符}
+上式中$A$为任意算符。容易验证，在如此定义的相互作用绘景中算符平均值与在薛定谔绘景中相同。
 
+\end{definition}
+
+考虑时间演化算符满足:
+\begin{equation}
+\begin{aligned}
+&\I\hbar\frac{\partial}{\partial t}\mathcal{U}^{(S)}(t) = H^{(S)}(t)\mathcal{U}^{(S)}(t) \\
+&\I\hbar\frac{\partial}{\partial t}\mathcal{U}_0^{(S)}(t) = H^{(S)}_0(t)\mathcal{U}_0^{(S)}(t)~.
+\end{aligned}
+\end{equation}
+
+计算相互作用绘景中算符与态矢的演化方法,（为了简洁，在推导算符随时间的变化时省略(t)，不应该忘记的是，以下涉及的所有算符都是含时的。）：
+\begin{equation}
+\begin{aligned}
+\frac{\partial}{\partial t}A^{(I)}&=\frac{\partial}{\partial t}\left(\mathcal U^{(S)\dagger}_0 A^{(S)}\mathcal U^{(S)}_0 \right)\\
+&=\left(\frac{\partial}{\partial t}\mathcal U^{(S)\dagger}_0\right) A^{(S)}\mathcal U^{(S)}_0 +\mathcal U^{(S)\dagger}_0 \left(\frac{\partial}{\partial t}A^{(S)}\right)\mathcal U^{(S)}_0+\mathcal U^{(S)\dagger}_0 A^{(S)}\left(\frac{\partial}{\partial t}\mathcal U^{(S)}_0\right)\\
+&=-\frac{1}{\I\hbar}\mathcal U^{(S)\dagger}_0 H^{(S)}_0A^{(S)}\mathcal U^{(S)}_0 +\frac{1}{\I\hbar}\mathcal U^{(S)\dagger}_0 A^{(S)}H^{(S)}_0\mathcal U^{(S)}_0+\mathcal U^{(S)\dagger}_0 \frac{\partial}{\partial t}\left(A^{(S)}\right)\mathcal U^{(S)}_0 \\
+&=-\frac{1}{\I\hbar}\left(\mathcal U^{(S)\dagger}_0 H^{(S)}_0 \mathcal U^{(S)}_0\right)\left(\mathcal U^{(S)\dagger}_0 A^{(S)}\mathcal U^{(S)}_0\right) +\frac{1}{\I\hbar}\left(\mathcal U^{(S)\dagger}_0 A^{(S)}\mathcal U^{(S)}_0\right)\left(\mathcal U^{(S)\dagger}_0 H^{(S)}_0\mathcal U^{(S)}_0\right)+\left(\frac{\partial}{\partial t}A\right)^{(I)} \\
+&=-\frac{1}{\I\hbar} H^{(I)}_0  A^{(I)}+\frac{1}{\I\hbar} A^{(I)} H^{(I)}_0+\left(\frac{\partial}{\partial t}A\right)^{(I)} \\
+&=\frac{1}{\I\hbar}\left[A^{(I)},H_0^{(I)}\right]+\left(\frac{\partial}{\partial t}A\right)^{(I)}~.
+\end{aligned}
+\end{equation}
+
+\begin{equation}
+\begin{aligned}
+\frac{\partial}{\partial t}|\psi^{(I)}(t)\rangle&=
+\frac{\partial}{\partial t}\left(\mathcal U^{(S)}_0(t)^\dagger\mathcal U^{(S)}(t)\right)|\psi^{(S)}(0)\rangle \\
+&=\left(\frac{\partial}{\partial t}\mathcal U^{(S)}_0(t)^\dagger\right)\mathcal U^{(S)}(t)|\psi^{(S)}(0)\rangle+\mathcal U^{(S)}_0(t)^\dagger\left(\frac{\partial}{\partial t}\mathcal U^{(S)}(t)\right)|\psi^{(S)}(0)\rangle \\
+&=-\frac{1}{\I\hbar}\mathcal U^{(S)}_0(t)^\dagger H^{(S)}_0(t)\mathcal U^{(S)}(t)|\psi^{(S)}(0)\rangle+\frac{1}{\I\hbar}\mathcal U^{(S)}_0(t)^\dagger H^{(S)}(t)\mathcal U^{(S)}(t) |\psi^{(S)}(0)\rangle \\
+&=\frac{1}{\I\hbar}\mathcal U^{(S)}_0(t)^\dagger V^{(S)}(t)\mathcal U^{(S)}(t) |\psi^{(S)}(0)\rangle \\
+&=\frac{1}{\I\hbar}\left(\mathcal U^{(S)}_0(t)^\dagger V^{(S)}(t)\mathcal U^{(S)}_0(t)\right)\left(\mathcal U^{(S)}_0(t)^\dagger\mathcal U^{(S)}(t) |\psi^{(S)}(0)\rangle\right) \\
+&=\frac{1}{\I\hbar}V^{(I)}(t)|\psi^{(I)}(t)\rangle~.
+\end{aligned}
+\end{equation}
+
+由此可见，在相互作用绘景下算符与态矢都随时间演化，且算符和态矢分别依据哈密顿量的两部分（$H_0^{(I)}$和$V^{(I)}$）演化。
+
+同样也可以计算相互作用绘景下的时间演化算符$\mathcal U^{(I)}(t)=\mathcal U^{(S)}_0(t)^\dagger\mathcal U^{(S)}(t)$随时间的演化。：
+
+\begin{equation}
+\begin{aligned}
+\frac{\partial}{\partial t}\mathcal U^{(I)}(t)&=
+\frac{\partial}{\partial t}\left(\mathcal U^{(S)}_0(t)^\dagger\mathcal U^{(S)}(t)\right)\\
+&=\left(\frac{\partial}{\partial t}\mathcal U^{(S)}_0(t)^\dagger\right)\mathcal U^{(S)}(t)+\mathcal U^{(S)}_0(t)^\dagger\left(\frac{\partial}{\partial t}\mathcal U^{(S)}(t)\right) \\
+&=-\frac{1}{\I\hbar}\mathcal U^{(S)}_0(t)^\dagger H^{(S)}_0(t)\mathcal U^{(S)}(t)+\frac{1}{\I\hbar}\mathcal U^{(S)}_0(t)^\dagger H^{(S)}(t)\mathcal U^{(S)}(t)  \\
+&=\frac{1}{\I\hbar}\mathcal U^{(S)}_0(t)^\dagger V^{(S)}(t)\mathcal U^{(S)}(t)  \\
+&=\frac{1}{\I\hbar}\left(\mathcal U^{(S)}_0(t)^\dagger V^{(S)}(t)\mathcal U^{(S)}_0(t)\right)\left(\mathcal U^{(S)}_0(t)^\dagger\mathcal U^{(S)}(t) \right) \\
+&=\frac{1}{\I\hbar}V^{(I)}(t)U^{(I)}(t)~.
+\end{aligned}
+\end{equation}
 
