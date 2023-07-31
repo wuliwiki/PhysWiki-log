@@ -1,0 +1,72 @@
+% Hubbard 模型
+% Hubbard model|hubbard model|Hubbard模型|hubbard模型
+
+\pentry{二次量子化\upref{SecQua}}
+
+\subsection{Hubbard 模型的哈密顿量}
+
+在本节中，通过对电子多体系统之间的相互作用进行近似计算，仅考虑其中的库伦相互作用来得到Hubbard模型的哈密顿量。
+
+选择原子轨道基$|j\rangle =c_j^\dagger |0\rangle$，写出系统的哈密顿量：
+
+\begin{equation}
+H=\sum\limits_{i,j,\sigma}\langle i |H_0| j \rangle c_{i,\sigma}^\dagger c_{j,\sigma}^~+\sum\limits_{l,m,k,n,\sigma,\sigma'}\langle l,m|V|k,n\rangle c_{l,\sigma}^\dagger  c_{m,\sigma'}^\dagger c_{n,\sigma'}^~c_{k,\sigma}^~~.
+\end{equation}
+
+上式中的$H_0$代表动能部分的哈密顿量，其对应的$\sum\limits_{i,j,\sigma}\langle i |H_0| j \rangle c_{i,\sigma}^\dagger c_{j,\sigma}^~$部分为跃迁项。
+
+上式中后一部分代表相互作用项，由于库仑相互作用并不影响自旋，所以电子被相互作用散射后自旋不变，这一点在哈密顿量中的体现则为发生散射后原本自旋为$\sigma$的粒子自旋还为$\sigma$，自旋为$
+\sigma'$的粒子散射后自旋还为$\sigma'$。也就是说上式中后一项中$l$和$k$对应的是同一粒子的两个态，而$m$和$n$对应的是同一个粒子的两个态。
+
+下面分别对哈密顿量的两项进行近似计算。
+
+\subsubsection{跃迁项}
+作为近似，我们仅考虑最近邻跃迁：
+
+\begin{equation}
+\langle i|H_0|j \rangle=\left\{
+\begin{array}{lc}
+~~\varepsilon~,~~~~~ i=j, \\
+~-t~,~i,j\text{最近邻，} \\
+~~0~,~~~~\text{其他情况。}
+\end{array}\right.~
+\end{equation}
+
+这样便有：
+
+\begin{equation}
+\sum\limits_{i,j,\sigma}\langle i|H_0|j \rangle c_{i,\sigma}^\dagger c_{j,\sigma}^~=\sum\limits_{i,\sigma}\varepsilon c_{i,\sigma}^\dagger c_{i,\sigma}^~-\sum\limits_{i,\Delta,\sigma}t\left(c_{i+\Delta,\sigma}^\dagger c_{i,\sigma}^~+h.c.\right)~.
+\end{equation}
+
+\subsubsection{相互作用项}
+
+考虑库仑相互作用是按照$r^{-1}$衰减的，且:
+
+$$\langle l,m|V|k,n\rangle=\iint \phi_l^*(r)\phi_m^*(r')\frac{e^2}{\abs{r-r'}}\phi_n^~(r')\phi_k^~(r)drdr'~.$$
+
+那么显而易见的是当$l=m=n=k$时积分值最大。那么仅考虑此最大值，忽略其他情况。计其积分值为$\frac{U}{2}$。那么：
+
+\begin{equation}
+\sum\limits_{l,m,n,k,\sigma,\sigma'}\langle l,m|V|k,n\rangle c_{l,\sigma}^\dagger c_{m,\sigma'}^\dagger c_{n,\sigma'}^~c_{k,\sigma'}^~=\frac{U}{2}\sum\limits_{l,\sigma,\sigma'}c_{l,\sigma}^\dagger c_{l,\sigma'}^\dagger c_{l,\sigma'}^~c_{l,\sigma'}^~~.
+\end{equation}
+展开自旋的求和可得：
+\begin{equation}
+\frac{U}{2}\sum\limits_l \left(c_{l,\uparrow}^\dagger c_{l,\uparrow}^\dagger c_{l,\uparrow}^~c_{l,\uparrow}^~+c_{l,\uparrow}^\dagger c_{l,\downarrow}^\dagger c_{l,\downarrow}^~c_{l,\uparrow}^~+c_{l,\downarrow}^\dagger c_{l,\uparrow}^\dagger c_{l,\uparrow}^~c_{l,\downarrow}^~+c_{l,\downarrow}^\dagger c_{l,\downarrow}^\dagger c_{l,\downarrow}^~c_{l,\downarrow}^~\right)~.
+\end{equation}
+由于电子是费米子，而第一项与第四项中都出现了两个湮灭算符，所以其都为0，那么我们只需要考虑第二项和第三项，考虑反对易关系$\left\{c_i^\dagger,c_j^~\right\}=\delta_{ij}$，$\left\{c_i^~,c_j^~\right\}=0$（以$\bar{\sigma}$表示与$\sigma$相反的自旋）:
+\begin{equation}
+\begin{aligned}
+\sum\limits_{l,\sigma,\sigma'}c_{l,\sigma}^\dagger c_{l,\sigma'}^\dagger c_{l,\sigma'}^~c_{l,\sigma'}^~&=\frac{U}{2}\sum\limits_l \left(c_{l,\uparrow}^\dagger c_{l,\downarrow}^\dagger c_{l,\downarrow}^~c_{l,\uparrow}^~+c_{l,\downarrow}^\dagger c_{l,\uparrow}^\dagger c_{l,\uparrow}^~c_{l,\downarrow}^~\right) \\
+&=\frac{U}{2}\sum\limits_{l,\sigma}c_{l,\sigma}^\dagger c_{l,\bar\sigma}^\dagger c_{l,\bar\sigma}^~ c_{l,\sigma}^~ \\
+&=\frac{U}{2}\sum\limits_{l,\sigma}c_{l,\sigma}^\dagger c_{l,\sigma}^~ c_{l,\bar\sigma}^\dagger c_{l,\bar\sigma}^~ \\
+&=\frac{U}{2}\sum\limits_{l,\sigma}\hat{n}_{l,\sigma}^~ \hat{n}_{l,\bar{\sigma}}^~ \\
+&=U\sum\limits_{l}\hat{n}_{l,\uparrow}^~\hat{n}_{l,\downarrow}^~
+~.
+\end{aligned}
+\end{equation}
+
+经过两次近似，得到Hubbard模型的哈密顿量为：
+
+\begin{equation}
+H=\sum\limits_{i,\sigma}\varepsilon c_{i,\sigma}^\dagger c_{i,\sigma}^~-\sum\limits_{i,\Delta,\sigma}t\left(c_{i+\Delta,\sigma}^\dagger c_{i,\sigma}^~+h.c.\right)+U\sum\limits_{l}\hat{n}_{l,\uparrow}^~\hat{n}_{l,\downarrow}^~~.
+\end{equation}
