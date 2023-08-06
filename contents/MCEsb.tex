@@ -3,9 +3,6 @@
 % license Xiao
 % type Tutor
 
-\begin{issues}
-\issueDraft
-\end{issues}
 
 巨正则系综的方法与正则系综方法的区别时，热力学系统可以与一个粒子源接触，从而粒子数可以是不固定的。
 
@@ -27,23 +24,63 @@ P(E_i,N)=\frac{\E^{(\mu N - E_i)/(kT)}}{\Xi}~,
 这保证了所有状态的概率之和为一，满足归一化关系。
 
 利用巨配分函数可以得到许多有用的结果。例如
-\begin{equation}
+\begin{equation}\label{eq_MCEsb_1}
 \begin{aligned}
 &\langle E-\mu N\rangle = \sum_{N,i} (E_i-\mu N) \frac{\exp((\mu N - E_i)/kT)}{\Xi}=-\frac{1}{\Xi}\frac{\partial }{\partial \beta}\Xi=-\frac{\partial}{\partial\beta} \ln \Xi~.\\
 &\langle N\rangle =kT \frac{1}{\Xi} \frac{\partial}{\partial \mu}\Xi=kT\frac{\partial}{\partial \mu}\ln \Xi
 \end{aligned}
 \end{equation}
-\subsection{“能级导向”}
-\begin{equation}\ali{
-\Xi & = \sum_{N=1}^\infty  \sum_{\{n_i\}}^*  \exp(N\mu  - \sum_{i=1}^\infty n_i \varepsilon_i)\beta
-= \sum_{N=1}^\infty  \sum_{\{n_i\}}^* z^N \prod_{i=0}^\infty \qty(\E^{-\varepsilon_i\beta})^{n_i}\\
-&= \sum_{N=1}^\infty \sum_{\{n_i\}}^* \prod_{i=0}^\infty \qty(z \E^{-\varepsilon_i \beta})^{n_i}
-= \sum_{n_1}^* \sum_{n_2}^* \dots \prod_{i=0}^\infty \qty(z \E^{-\varepsilon_i \beta})^{n_i}\\
-&= \sum_{n_1}^* \qty(z \E^{-\varepsilon_i\beta})^{n_1} \sum_{n_2}^* \qty(z \E^{ -\varepsilon_i\beta})^{n_2}\dots
-= \prod_i^\infty \sum_{n_i}^* \qty(z \E^{-\varepsilon_i \beta })^{n_i}~.
-}\end{equation}
+其中 $\beta=1/kT$。
+\subsection{近独立子系的巨配分函数}
+\pentry{近独立子系（理想玻色气体和费米气体）\upref{depsys}}
+\textbf{近独立子系}是指系统中不同粒子之间的相互作用可以近似忽略，那么就可以研究系统中单粒子态的能量本征态，称为\textbf{能级}。
 
+设系统中有 $N$ 个粒子（在巨正则系综中 $N$ 可以是任意值）。其中位于能级 $\varepsilon_i$ 上的粒子数为 $n_i$，满足 $\sum n_i=N$。那么这种微观状态所对应的系统的总能量就是 $E=\sum n_i \varepsilon_i$。利用前面巨配分函数的相关公式可以得到：
+
+\begin{equation}
+\begin{aligned}
+\Xi & = \sum_{N=1}^\infty  \sum_{\{n_i\}}^*  \exp(N\mu  - \sum_{i=1}^\infty n_i \varepsilon_i)\beta
+= \sum_{N=1}^\infty  \sum_{\{n_i\}}^* z^N \prod_{i=0}^\infty \qty(\E^{-\varepsilon_i\beta})^{n_i}
+,\quad z=e^{\mu\beta}~,
+\\
+&= \sum_{N=1}^\infty \sum_{\{n_i\}}^* \prod_{i=0}^\infty \qty(z \E^{-\varepsilon_i \beta})^{n_i}
+= \sum_{n_1}^* \sum_{n_2}^* \dots \prod_{i=0}^\infty \qty(z \E^{-\varepsilon_i \beta})^{n_i}
+~,
+\\
+&= \sum_{n_1}^* \qty(z \E^{-\varepsilon_i\beta})^{n_1} \sum_{n_2}^* \qty(z \E^{ -\varepsilon_i\beta})^{n_2}\dots
+= \prod_i^\infty \sum_{n_i}^* \qty(z \E^{-\varepsilon_i \beta })^{n_i}=\prod_i^\infty \Xi_i~.\\
+\Xi_i&\equiv \sum_{n_i}^* \left(e^{-(\varepsilon_i-\mu)\beta}\right)^{n_i}
+\end{aligned}
+\end{equation}
+
+其中 $\Xi_i$ 是单独考虑能级 $\varepsilon$ 这一子系统的各种粒子占据数情况，计算得到的“子系配分函数”。那么整个热力学系统的巨配分函数就是每个子系配分函数的乘积。之所以能这样做，是因为近独立子系中各个子系之间视为无相互作用，它们之间是统计独立的。
+
+利用上述公式还可以求得能级 $\varepsilon$ 上的平均粒子占据数：
+\begin{equation}
+\bar n_i = \sum_{n_i}^* n_i e^{-(\varepsilon-\mu)\beta n_i}/\Xi_i~.
+\end{equation}
+因此其计算和 \autoref{eq_MCEsb_1} 中 $\langle N\rangle$ 的计算是一样的：
+\begin{equation}
+\bar n_i = \frac{1}{\beta} \frac{\partial}{\partial \mu}\ln \Xi_i~.
+\end{equation}
+\subsubsection{玻色分布}
+每个能级上粒子占据数可以是任意的，所以
+\begin{equation}
+\Xi_i=\sum_{n_i\ge 0} \exp(-\beta n_i(\varepsilon_i-\mu))=\frac{1}{1-\exp(-\beta(\varepsilon_i-\mu))}~.
+\end{equation}
+对所有可能的 $n_i$ 求和，除以配分函数，就得到了能级 $\epsilon_l$ 所对应的期望粒子数：
+\begin{equation}
+\begin{aligned}
+\Xi_i&=\frac{1}{\beta}\pdv{\mu} \ln \Xi_i = \frac{1}{\beta} \frac{1}{\Xi_i} \pdv{\mu}\Xi_i=\frac{1}{\Xi_i}\frac{\exp(-\beta(\varepsilon_i-\mu))}{(1-\exp(-\beta(\varepsilon_i-\mu)))^2}\\
+&=\omega_l \frac{1}{\exp(\beta(\varepsilon_i-\mu))-1}~.
+\end{aligned}
+\end{equation}
 \subsection{系统的热力学性质}
+
+\begin{issues}
+\issueDraft
+\end{issues}
+
 由最大概率项假设，
 \begin{equation}
 1 = \frac{\Omega \E^{(\mu N - E)/(kT)}}{\Xi}
