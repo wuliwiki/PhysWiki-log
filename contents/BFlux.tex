@@ -10,32 +10,47 @@
 
 \pentry{曲面积分 通量\upref{SurInt}}
 
-\footnote{参考 \cite{GriffE} 和 Wikipedia \href{https://en.wikipedia.org/wiki/Magnetic_flux}{相关页面}。}令空间中磁感应强度为 $\bvec B(\bvec r)$ 我们可以通过曲面积分来定义一个通过某曲面的\textbf{磁通量（magnetic flux）}为
+\footnote{参考 \cite{GriffE} 和 Wikipedia \href{https://en.wikipedia.org/wiki/Magnetic_flux}{相关页面}。}磁通量的一个直观的含义是，通过空间中一个曲面的磁感线的条数，对于匀强磁场而言，如果磁场 $\bvec B$ 与平面法向量 $\bvec S$ 的夹角为 $\theta$，且平面面积为 $S$，那么通过该平面的磁通量为 $|\bvec B|S \cos\theta = \bvec B\cdot \bvec S$。
+
+将上述结果推广到任意曲面，以及非匀强磁场的情况。
+令空间中磁感应强度为 $\bvec B(\bvec r)$ 我们可以通过曲面积分来定义一个通过某曲面的\textbf{磁通量（magnetic flux）}为
 \begin{equation}
 \Phi  = \int \bvec B(\bvec r) \vdot \dd{\bvec s}~.
 \end{equation}
 形象来说， 磁通量也可以看作是磁感线通过曲面的条数。 反方向的磁感线共线为负，和正方向磁感线抵消。
 
-磁通量只与曲面的边界有关。 这是因为 $\bvec B$ 的散度恒为零（磁场的高斯定律）
-\addTODO{证明}
-
-
-利用磁场矢势% 未完成:链接
+磁通量只与曲面的边界有关。设有两个曲面 $S_1$ 和 $S_2$ 的边界都是 $C$，而曲面 $S_1,S_2$ 围成的一个闭曲面 $S$（没有边界），穿过这个闭曲面的磁通量为
+\begin{equation}
+\int_{S_2} \bvec B(\bvec r)\cdot \dd {\bvec s }- \int_{S_1} \bvec B(\bvec r)\cdot \dd {\bvec s} = \int_{S} \bvec B(\bvec r)\cdot \dd {\bvec s}=\int_V \bvec \nabla \cdot \bvec B \dd V=0~.
+\end{equation}
+在最后我们利用了磁场的高斯定律\upref{MagGau}（ $\bvec B$ 的散度恒为零）， 以及高斯散度定理\upref{Divgnc} $\int_S \bvec V\cdot \dd{\bvec s}=\int_V \bvec \nabla\cdot \bvec B \dd V$。由此我们得到了
+\begin{equation}
+\int_{S_1} \bvec B(\bvec r)\cdot \dd {\bvec s}
+=
+\int_{S_2} \bvec B(\bvec r)\cdot \dd {\bvec s }~.
+\end{equation}
+由此我们利用了磁场的高斯定律证明了磁通量只与曲面的边界 $C$ 有关。
+\subsection{穿过曲面的磁通量与磁矢势}
+\pentry{磁矢势\upref{BvecA}}
+利用磁场矢势的定义 $\bvec B=\nabla\times \bvec A$ % 未完成:链接
 及旋度定理， % 未完成:链接
 磁通量变为
 \begin{equation} \label{eq_BFlux_2}
 \Phi  = \int \curl \bvec A \vdot \dd{\bvec s}  = \oint \bvec A \vdot \dd{\bvec r}~.
 \end{equation}
-另外， 由于磁场的散度为零% 未完成:链接
-， 根据高斯定律， 任何闭合曲面的磁通量都是 0。 用另一种方式来理解： 如果选定一个闭合回路， 以该闭合回路为边界的任何曲面的磁通量都相等。
-
+磁矢势 $\bvec A$ 的定义正是由于磁场的散度为零% 未完成:链接
+。因此从上式再次可以看出，如果选定一个闭合回路， 以该闭合回路为边界的任何曲面的磁通量都相等，只与沿闭合回路的磁矢势的积分有关。
 \subsection{闭合线圈的磁通量}
-
-如何计算一个闭合线圈对自己产生的磁通量呢？ 利用磁场矢势公式
+如何计算一个通电闭合线圈对自己产生的磁通量呢？假设电流为 $I$，利用磁场矢势公式
 \begin{equation}
 \bvec A \qty(\bvec r) = \frac{\mu_0 I}{4 \pi} \oint \frac{\dd{\bvec r'}}{\abs{\bvec r - \bvec r'}}~.
 \end{equation}
 注意在该积分中， $\bvec r$ 视为常量， 积份完后， 积分变量 $\bvec r$ 消失。 现在根据\autoref{eq_BFlux_2} 再次将上式对 $\bvec r$ 进行同一环路积分得到磁通量
-\begin{equation}
+\begin{equation}\label{eq_BFlux_1}
 \Phi  = \frac{\mu_0 I}{4\pi} \oint\oint \frac{\dd{\bvec r'} \dd{\bvec r}}{\abs{\bvec r - \bvec r'}}~.
 \end{equation}
+
+值得注意的是，对于理想导线（足够细的）组成的通电闭合回路，上式实际上是不良定义的，因为当 $\bvec r$ 与 $\bvec r'$ 距离趋于 $\bvec 0$ 时，积分是发散的。也可以从磁通量的角度理解，通电细导线附近的磁场强度与垂直导线方向的距离成反比，% 未完成：计算
+离导线越近的地方磁场越强，当距离趋于零时磁场无穷大，这将导致闭合线圈对自己产生的磁通量为无穷大，从而导致许多电学磁学方面的悖论（比如感生电动势也将趋于无穷大）。
+
+如何解决这个问题呢？上面的问题实际上反映了“理想导线”这一理想模型的缺陷，它并不能完备地给出所有问题的解释。现实中的导线都是有一定粗细的，电流通过导线时有一定的横截面积，而这保证了闭合线圈通电时对自己产生的磁通量是有限的，不会出现无穷大。也就是说，我们可以取“导线粗细”作为理论的一个位置空间上的“截断”，那么\autoref{eq_BFlux_1} 中 $\bvec r$ 与 $\bvec r'$ 距离趋于 $\bvec 0$ 的部分不会对结果有贡献，最终磁通量的计算结果是有限的。

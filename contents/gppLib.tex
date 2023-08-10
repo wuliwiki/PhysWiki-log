@@ -117,10 +117,10 @@ export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/your/custom/path/
 \begin{itemize}
 \item \verb|g++| 中的 \verb|-L| 选项（make 的时候搜索静态或动态库的路径）可以用环境变量 \verb|LIBRARY_PATH| 设置， \verb|-I| 选项（搜索头文件的路径）可以用环境变量 \verb|CPATH| 设置。
 \item 注意 \verb|rpath| 只能设定当前可执行文件的的路径， 如果可执行文件依赖的 \verb|.so| 文件所需要的 \verb|.so| 文件不在默认路径， 就只能通过修改 \verb`LD_LIBRARY_PATH` 或者用 \verb|patchelf|（见下文） 对其修改才可以。
-\item \verb|LD_LIBRARY_PATH| 中不可以有关键的系统 \verb|.so| 文件， 否则如果不兼容， 很多系统命令像 \verb|ls, touch, echo| 等都会用不了。
+\item \verb|LD_LIBRARY_PATH| 中不可以有关键的系统 \verb|.so| 文件（如 \verb|libc|）， 否则如果不兼容， 很多系统命令像 \verb|ls, touch, echo| 等都会用不了。
 \item \verb|LIBRARY_PATH| 的顺序很重要， 如果同名 \verb|.a| 的路径出现在同名 \verb|.so| 路径的前面， 那么就会链接 \verb|.a|。 如果二者的路径相同， 那么还是会有限链接 \verb|.so|。
 \item 如果不指定 \verb|rpath|， 设置环境变量 \verb|LD_RUN_PATH| 也是等效的。 链接的程序是 \verb|ld|， 而动态链接库是 \verb|ld-linux.so|
-\item 动态链接库文件内部的 \verb|DT_SONAME| entry 会保存本来的文件名给运行时的 linker 确认。 用 \verb|patchelf --print-soname 文件| 可以显示（通常来说， \verb|lib*.so.*.*.*| 内部的 soname 可能会省略最后若干个版本编号。 所以把 so 文件重命名以后， 还要用 \verb|patchelf --set-soname 新文件名 新文件名|。
+\item 动态链接库文件内部的 \verb|DT_SONAME| entry 会保存本来的文件名给运行时的 linker 确认。 用 \verb|patchelf --print-soname 文件| 可以显示（通常来说， \verb|lib*.so.*.*.*| 内部的 \verb|soname| 可能会省略最后若干个版本编号。 所以把 so 文件重命名以后， 还要用 \verb|patchelf --set-soname 新文件名 新文件名|。
 \item 如果要修改已经编译好的可执行文件（包括 so） 的 rpath， 可以用 \verb|chrpath| （不推荐）或者 \verb|patchelf --set-rpath '路径' XXX.so| （其实设置的也是 \verb|runpath| 而不是 \verb|rpath|）其中如果要设置相对路径如 \verb|'$ORIGIN/相对路径'| 参考\href{https://stackoverflow.com/questions/13769141/can-i-change-rpath-in-an-already-compiled-binary}{这里}。 用这种方法， 加上 \verb|$ORIGIN| 功能， 似乎可以像 AppImage 或者 snap 一样把任何动态链接的程序打包到同一个文件夹中， 包括所有依赖， 也就是所谓的绿色软件。
 \item 如果要强制设置 \verb|rpath| （不推荐）而不是 \verb|runpath|， 先用 \verb|patchelf --remove-rpath 文件| 移除已有的 \verb|runpath| 或 \verb|rpath|， 然后 \verb|patchelf --force-rpath --set-rpath '路径' 文件| 即可。
 \item \verb|patchelf --print-needed 文件| 可以显示直接依赖的动态库（不包含依赖的依赖）。 这应该和 \verb|lddtree 文件| 的第一层是一样的。
@@ -128,17 +128,17 @@ export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/your/custom/path/
 \item 也可以用 \verb`readelf -a 文件 | grep NEEDED`。
 \item \verb|patchelf --add-needed lib依赖库.so 文件| 添加指定依赖库。 注意多次添加会出现重复的依赖。
 \item \verb|patchelf| 可以同时指定多个 \verb|文件|。
-\item \verb|patchelf --print-interpreter main.x| 可以显示动态链接程序的 链接器 一般是 \verb|/lib64/ld-linux-x86-64.so.2|。 也可以用 \verb|patchelf --set-interpreter 链接器 文件| 指定。 
+\item \verb|patchelf --print-interpreter main.x| 可以显示动态链接程序的链接器，一般是 \verb|/lib64/ld-linux-x86-64.so.2|。 也可以用 \verb|patchelf --set-interpreter 链接器 文件| 指定。 
 \item 如果同样的 \verb`-l` 既能匹配 \verb`lib***.a` 也能匹配 \verb`lib***.so`， 那么 gcc 会默认选 \verb`.so` （貌似有时候二者都需要）。 如果想要静态链接， 要么用 \verb`-static` 选项（禁止链接到任何动态 lib）， 要么直接指定 \verb`.a` 的地址和文件名， 如 \verb`g++ -o main.x f1.o /some/path/lib***.a another/path/lib***.a`。
-\item 注意带版本号的 \verb|lib***.so.x.x| 不会自动匹配， 一般存在一个名为 \verb|lib***.so| 的软链指向某个具体的版本。
+\item 注意编译选项 \verb|-l ***| 不会自动匹配到带版本号的 \verb|lib***.so.x.x|， 一般存在一个名为 \verb|lib***.so| 的软链指向某个具体的版本。
 \item 另外也可以具体指定库文件的全名来设置每个库具体用静态还是动态链接， 用哪个版本： \verb|-l:lib库.so或a|。 不能有空格。
-\item 如果 \verb|rpath| 是相对路径， 那么它相对的是 pwd 而不是可执行文件的位置， 定义时可以使用 \verb|${ORIGIN}| 来表示可执行文件的位置。
+\item 如果 \verb|rpath| 是相对路径， 那么它相对的是 \verb|pwd| 而不是可执行文件的位置， 定义时可以使用 \verb|${ORIGIN}| 来表示可执行文件的位置。
 \item 动态链接的可执行程序或者库都是 \textbf{ELF （Executable and Linkable Format）} 文件。
 \item 查看 \verb|elf文件| 的 runpath 或 rpath 可以用 \verb`readelf elf文件 -d | grep PATH` 或者 \verb`objdump -x elf文件 | grep PATH`。
 \item \verb|readelf -s 链接库.so| 可以检查里面的 symbols。 函数的类型是 \verb|FUNC|， 输出有两个表， 看 \verb|.dynsym| 就可以， 它是 \verb|.symtab| 中 allocable 的一个子集（详见\href{https://blogs.oracle.com/solaris/post/inside-elf-symbol-tables}{这里}）。 如果是 c++ 函数， 那么函数名是 mangle 的， 用 \verb|--demangle| 来显示 c++ 中的函数名（会包括 namespace）。
 \item 如果要查看 \verb|.a| 或 \verb|.so| 文件里面是否有某个函数， 用例如 \verb`nm -A /usr/lib/x86_64-linux-gnu/libflint.a | grep fmpz_set` 类似地也有 \verb|nm xxx.so|， 同样也可以用 \verb|--demangle|
 \item 如果 \verb|so| 库中没有 debug 信息， 那么除了函数名外并不能查看输入输出变量的个数和类型。 如果有 debug 信息， 可以用 \verb|readelf -wi| 查看。
-\item 在编译一个 elf 文件的时候， \verb|-l| 的顺序就搜索 symbol 的顺序， 如果多个依赖的 \verb|so| 中有相同的 symbol， 会使用第一个搜到的。 如果函数 prototype 不对就会运行出错。 注意不会搜索间接依赖库中的 symbol。
+\item 在编译一个 elf 文件的时候， \verb|-l| 的顺序就是搜索 symbol 的顺序， 如果多个依赖的 \verb|so| 中有相同的 symbol， 会使用第一个搜到的。 如果函数 prototype 不对就会运行出错。 注意不会搜索间接依赖库中的 symbol。
 \item 动态可执行文件几乎总是包含一些基本的库： \verb|linux-vdso.so.1| 不存在于文件系统， 开机时自动加载到内存。 \verb|libc.so.6| 是 GNU C library， 里面有 system call。 \verb|ld-linux-x86-64.so.2| 是 linker， 它的路径是专门由可执行文件的 interpreter path 指定的， 不归 rpath 那些管。
 \item 如果一个执行文件用了和系统不同版本的 \verb|libc.so|， 那么一定要用匹配版本的 \verb|ld-*.so| 并且专门指定器路径。 事实上 \verb|dpkg -L libc6| 中列出的所有库都似乎需要和 \verb|libc.so| 的版本匹配。 常见的有 \verb|libm, libpthread, librt| 等。
 \item 在编译命令中用 \verb|-Wl,--dynamic-linker=/绝对路径/ld-linux.so.X| 可以指定 dynamic linker。
@@ -146,7 +146,7 @@ export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/your/custom/path/
 
 其他笔记：
 \begin{itemize}
-\item \verb`ld --verbose | grep SEARCH_DIR | tr -s ' ;' \\012` 可以查看 \verb|linker| 的默认搜索路径
+\item \verb`ld --verbose | grep SEARCH_DIR | tr -s ' ;' \\n` 可以查看 \verb|linker| 的默认搜索路径
 \item \verb|sudo ldconfig| 可以更新动态链接库的搜索
 \item \verb`ldconfig -p | grep 库名` 可以查看除了 \verb|LD_LIBRARY_PATH| 之外的所有动态搜索路径中有没有某个 \verb|.so|。
 \item \verb`ldconfig -N -v $(sed 's/:/ /g' <<< $LD_LIBRARY_PATH) 2>&1 | grep 库名` 可以包括 \verb|LD_LIBRARY_PATH|
@@ -242,6 +242,6 @@ void conflict() { cout << "conflict() in libbase2" << endl; }
 \subsection{如何把一个动态程序变得 portable}
 \begin{itemize}
 \item 首先可以自己写脚本复制所有 so 文件到某个文件夹中然后修改所有东西的 rpath。 缺点： 像 \verb|libc.so| 这样的东西可能会和系统本身的发生冲突， 所以这个方法并不总是 work， 应该只对相同发行版的相同版本相同 cpu 架构有效。 然而静态链接的程序就没有这个问题。
-\item AppImage 就是把所有动态依赖编译成一整个（伪）静态程序。
+\item AppImage 就是把所有动态依赖编译成一整个（伪）静态程序（具体原理不知道）。
 \item 其他一些类似的工具如 \href{https://statifier.sourceforge.net/}{Statifier}， 参考\href{https://askubuntu.com/questions/537479/is-there-any-open-source-way-to-make-a-static-from-a-dynamic-executable-with-no}{这个问题}。
 \end{itemize}

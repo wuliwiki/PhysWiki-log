@@ -3,7 +3,7 @@
 % license Xiao
 % type Tutor
 
-\pentry{数论函数\upref{NumFun}，二项式定理\upref{BiNor}}
+\pentry{数论函数\upref{NumFun}，二项式定理\upref{BiNor}，积性函数\upref{MulFun}}
 
 \addTODO{还可继续添加性质和应用等内容}
 
@@ -69,6 +69,8 @@ Möbius函数有以下性质：
 \end{equation}
 \textbf{证毕}。
 
+需要指出，这其实就是容斥原理的数论形式。
+
 将\autoref{eq_MbusF_1} 作为指数，即得求积的性质：
 
 
@@ -123,19 +125,77 @@ f(n) = \prod_{d\mid n}\qty(P(\frac{n}{d}))^{\mu(d)}~.
 
 \textbf{证毕}。
 
+上述定理中和的形式也适用于一般的数论函数$f:\mathbb{Z}^+\to\mathbb{R}$甚至$f:\mathbb{Z}^+\to\mathbb{C}$.数论函数像$S(n)=\sum_{d\mid n}f(d)$这样的形式被称为$f(d)$的Möbius变换，而$\sum_{d\mid n}\mu(d)S\qty(\frac{n}{d})$就是Möbius逆变换。作为应用，我们来计算一下几个常见的数论函数的Möbius变换并给出一些类似的恒等式。特别重要的是Euler函数的Möbius变换。
 
+\begin{theorem}{Euler函数的Möbius变换}
+恒等函数$e(n)=n$的Möbius逆变换是Euler函数$\varphi(n)$，即有如下恒等式：
+\begin{equation}
+\varphi(n) = \sum_{d\mid n}\mu(d)\frac{n}{d}~.
+\end{equation}
+进而，我们得到如下简洁有力的恒等式：
+\begin{equation}
+\sum_{d\mid n}\varphi(d) = n~.
+\end{equation}
+\end{theorem}
 
+\textbf{证明}：
 
+证明是Möbius函数求和性质的简单应用。
 
+\begin{equation}
+\begin{aligned}
+\varphi(n)&=\sum_{1\leq l\leq n,(l,n)=1}1\\
+&=\sum_{l=1}^n\sum_{d\mid(l,n)}\mu(d)\\
+&=\sum_{l=1}^n\sum_{d\mid l,d\mid n}\mu(d)\\
+&=\sum_{d\mid n}\mu(d)\sum_{1\leq l\leq n,d|l}1\\
+&=\sum_{d\mid n}\mu(d)\frac{n}{d}~.
+\end{aligned}
+\end{equation}
 
+\begin{theorem}{}
+函数$u(n)=1,e(n)=n,e_\lambda(n)=n^\lambda$的Möbius变换分别是除数函数,除数和函数和除数幂和函数$d(n),\sigma(n),\sigma_\lambda(n)$.
+\end{theorem}
 
+证明由定义直接给出。
 
+为了后面的证明，我们先证明积性函数的Möbius变换仍是积性函数。
 
+\begin{theorem}{积性函数的Möbius变换}
+若$f(n)$是积性函数，那么$f(n)$的Möbius变换仍是积性函数。
+\end{theorem}
 
+\textbf{证明}：
 
+任取互素的整数$m,n$，我们有
 
+\begin{equation}
+\begin{aligned}
+\sum_{d\mid m}f(d)\sum_{l\mid n}f(l)&=\sum_{d\mid m}\sum_{l\mid n}f(d)f(l)\\
+&=\sum_{d\mid m}\sum_{l\mid n}f(dl)\\
+&=\sum_{d\mid mn}f(d)~.
+\end{aligned}
+\end{equation}
 
+\begin{theorem}{van Mangoldt函数的Möbius变换}
+van Mangoldt函数$\Lambda(n)$的Möbius变换是对数函数$\log n$，即有如下恒等式：
+\begin{equation}
+\sum_{d\mid n}\Lambda(n)=\log{n}~.
+\end{equation}
+\end{theorem}
 
+\textbf{证明}：
 
+依照积性函数的Möbius变换仍是积性函数，我们只需对素数幂证明定理。下令$n=p^s$.
 
+\begin{equation}
+\begin{aligned}
+\sum_{d\mid n}\Lambda(n)&=\sum_{l=0}^s \Lambda(p^s)\\
+&=\sum_{l=1}^s \log p\\
+&=\log p^s\\
+&=\log n~.
+\end{aligned}
+\end{equation}
 
+\begin{exercise}{}
+证明$\mu(n)/n$的Möbius变换是$\varphi(n)/n$.
+\end{exercise}

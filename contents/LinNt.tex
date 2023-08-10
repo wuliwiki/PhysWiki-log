@@ -199,6 +199,7 @@
 \item \verb|sed|（stream editor） 命令通常用于批量自动修改文本文件， 而不是用交互的编辑器手动编辑。
 \item \verb`sed` 命令可以用来处理文件或 \verb|stdin| 中的文字, 并输出到文件或者 \verb|stdout|. 例如
 \verb|sed -e 's/^!\*nq/    /' inputfile.f90 > outputfile.f90|， 其中 \verb`-e` 是将后面的命令作用到 \verb`inputfile.f90` 上. \verb`s/str1/str2/` 是将文本中的 \verb`str1` 替换成 \verb`str2`, \verb`\*` 转义为 \verb`*` (直接用 \verb`*` 就是通配符)， \verb`^` 大概是要求 \verb`str1` 出现在行首.
+\item \verb`命令 |sed -e '...'` 也可以直接把 \verb|命令| 的输出处理后输出到 stdout。
 \item \verb|sed -i '...' 文件| 可以直接修改文件而不是输出到 \verb|stdout|。 例如 \verb|sed -i '8d' 文件| 把文件的第 8 行删除。 由于只有一个命令， \verb|-e| 可以省略。
 \item 将子目录下所有头文件中的 CRLF 都替换为 LF： \verb`sudo find . -name "*.h" | xargs sudo sed -i -e 's/\r//g'`。 选项 \verb`-i` 直接修改源文件， \verb`-e` 用于指定后面的 \verb`s/旧内容/新内容/g`
 \item 上一条中的 \verb|g| 代表 global， 意思是全部替换， 如果没有 \verb|g| 将只替换第一个。
@@ -313,6 +314,7 @@ sudo echo umask 002 >> /home/用户2/.bashrc
 \item 要添加密码， 用 \verb|zip -r -P 密码 文件名.zip files|
 \item \verb|-0| 到 \verb|-9| 可以设置压缩等级， 9 得到的文件最小。
 \item \verb|zip -r 文件名.zip files -x "*.log"| 可以排除所有 \verb|.log| 后缀名的文件
+\item \verb|zip| 的分卷压缩的结果 \verb|xxx.zip.001, xxx.zip.002, ...| 其实就相当于压缩成一个文件然后用 \verb|split| 命令切割。
 \end{itemize}
 
 \subsubsection{7zip}

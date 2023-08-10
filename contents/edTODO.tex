@@ -11,15 +11,15 @@
 \item 【完成】创建词条时加一个 “文章类型” 栏, 点击可以有下拉菜单， 每一行显示 \verb|types.id|（空字符串不显示）和 \verb|.caption| 和 \verb|.intro|（每列对齐）。 
 \item 【完成】注意由于历史原因，关键词必须在第二行，剩下的 \verb|license|， \verb|type| 顺序可以随意。
 \item 【完成】tex 文件开头的连续若干行若都有行首注释， 那么都不允许手动修改。
-\item 重命名按钮改为 🛈 图标， 名字改为 “修改信息”。
+\item 重命名按钮改为 🛈 图标， 名字改为 “修改文章信息”。
 \item 【完成】笔记功能为了保持数据库兼容性使用 \verb|PhysWikiScan| 仓库中的 \verb|NoteScan| 可执行文件。
 \item 为了防止同昵称用户的笔记文件夹冲突，使用数据库的 \verb|authors.id| 作为用户笔记文件夹的名称， 如果不存在就在数据库新建一个作者。
 \item editor 对 \verb|PhysWikiScan| 的所有调用都要检查是有 \verb|cerr| 输出， 以及 exit code 是否为零。 如果有错误应该在编辑器前端提示。
-\item 更新数据库时， 需要尽量开启 \verb|PRAGMA foreign_keys = ON;| 检查 foreign key 是否存在。
-\item 使用 \verb|occupied| 表格标记词条占用状态（包括被谁占用）， 不要记录到其他任何地方。 “查看词条占用状态” 按钮使用该数据， 发布或者使用解除占用按钮都重置该数据。
-\item 打开词条后如果有一次备份（见\textbf{新备份算法}）标记占用。 如果不产生新的备份（即新的文件 hash）则不要占用。
+\item 【进行中】更新数据库时， 需要尽量开启 \verb|PRAGMA foreign_keys = ON;| 检查 foreign key 是否存在。
+\item 【进行中】使用 \verb|occupied| 表格标记词条占用状态（包括被谁占用）， 不要记录到其他任何地方。 “查看词条占用状态” 按钮使用该数据， 发布或者使用解除占用按钮都重置该数据。
+\item 打开词条后如果有一次备份（见下文\textbf{新备份算法}）则在数据库 \verb|occupied| 表标记占用。 如果不产生新的备份（即新的文件 hash）则不要占用。
 \item 【进行中】标记占用（也就是产生新的备份）后更新 \verb|authors.recent_entries|。 “打开文件” 按钮中的 “我的编辑” 使用这里的数据。
-\item 【已完成？】引用文献按钮使用数据库 \verb|bibliography| 中的信息。 不要包括 id 为 \verb|''| 的条目。
+\item 【完成】引用文献按钮使用数据库 \verb|bibliography| 中的信息。 不要包括 id 为 \verb|''| 的条目。
 \item 百科创建词条以后， 自动按下 “标记词条：草稿”（用户笔记不需要）， 并更新 \verb|entries.draft = 1|， 用户笔记不需要。
 \item 【进行中】创建词条或者重命名时需要更新 \verb|entries.caption|
 \item 【进行中】创建词条时需要可以选择协议， 选项见数据库的 \verb|entries.license|（不要包含方括号）， 选择后更新数据库。 打开词条后也要允许在菜单中修改。
@@ -33,13 +33,12 @@
 
 \subsubsection{新备份算法}
 \begin{itemize}
-\item 以下备份规则和用户是否重复关闭打开词条无关。
-\item 编辑器出现任何内容改动（即使不手动保存）都必须按照以下规则做一次自动备份（不使用 scan 更新 html， 只有手动按保存才更新）。 两次备份之间不少于 20s （这个参数需要以后可以调整）。
-\item 手动保存或关闭词条时， 如果内容有改变， 也按照以下规则备份一次。
-\item 词条备份文件确保使用 utf8 编码， 换行符使用 LF 而不是 CRLF。 保存前先计算文件内容 SHA1 的前 16 位， 确保数据库中 \verb|history.hash| 不存在（否则不备份）。 然后保存到 \verb|PhysWiki-backup/YYYYMMDDHHMM_authorID_entry.tex|， 其中 \verb|authorID| 是数据库的 \verb|authors.id| （非负整数）， 如果此时发现作者是新作者， 则将其先插入到 \verb|authors| 表格。
-\item 上一条中的 \verb|YYYYMMDDHHMM| 如果距离同一词条同一作者的上一个 \verb|YYYYMMDDHHMM| 少于 30 分钟（这个参数需要以后可以调整）但不是五分钟的整数倍， 则补全到五分钟的整数倍（到未来）。 补全后若文件文件名已存在则覆盖。
-\item 保存备份文件后不需要更新数据库， 运行 \verb|./PhysWikiScan --backup 文件名| 更新数据库（scan 会更新 \verb|add, del| 等所有备份信息）。 如果输出了 \verb|cerr| 就说明运行失败（前端提示错误信息）。
-\item 历史版本按钮中的字符数加减使用 \verb|history.add/del| 中的数据。 注意要显示用户名而不是 \verb|authors.id|。
+\item editor 备份步骤： 更新 \verb|contents/文件名.tex|， 然后运行 \verb|PhysWikiScan --backup 文件名|，不需要修改数据库（具体行为见 \verb|README.md|）。 注意输出中 \verb|exist| 不应该出现，因为编辑器前端应该检测到内容改变才进行备份。
+\item 编辑器出现任何内容改动（即使不手动保存）都必须做一次自动备份（不使用 scan 更新 html， 只有手动按保存才更新）。 两次备份之间不少于 20s （这个参数需要以后可以调整）。
+\item 手动保存或关闭词条时， 如果内容有改变， 也备份一次。
+\item 【不做】这些步骤由 scan 的 \verb|--backup| 完成：词条备份文件确保使用 utf8 编码， 换行符使用 LF 而不是 CRLF。 保存前先计算文件内容 SHA1 的前 16 位， 确保数据库中 \verb|history.hash| 不存在（否则不备份）。 然后保存到 \verb|PhysWiki-backup/YYYYMMDDHHMM_authorID_entry.tex|， 其中 \verb|authorID| 是数据库的 \verb|authors.id| （非负整数）， 如果此时发现作者是新作者， 则将其先插入到 \verb|authors| 表格。
+\item 【不做】由 scan 的 \verb|--backup| 完成：上一条中的 \verb|YYYYMMDDHHMM| 如果距离同一词条同一作者的上一个 \verb|YYYYMMDDHHMM| 少于 30 分钟（这个参数需要以后可以调整）但不是五分钟的整数倍， 则补全到五分钟的整数倍（到未来）。 补全后若文件文件名已存在则覆盖。
+\item 前端历史版本按钮中的字符数加减使用 \verb|history.add/del| 中的数据。 注意要显示用户名而不是 \verb|authors.id|。
 \end{itemize}
 
 \subsubsection{图片相关}
@@ -257,9 +256,10 @@ UPDATE "entries" SET "figures" = "figures" || ' test_10' WHERE "id"='test';
 \subsection{Editor TODO}
 按优先级排序
 \begin{itemize}
+\item 【进行中】Mac 上编辑器的快捷键应该符合 Mac 用户的习惯，例如保存用 \verb|Cmd+S|，\textbf{其他请自行搜索}。
 \item 【完成】选中若干行代码按 \verb|Tab| 应该用 tab 缩进， 按 \verb|Shift + Tab| 应该删除一个缩进。
 \item \verb|\href{}{}| 命令的第一个花括号中有 \verb|%|， 替换为 \verb|\%|， 因为前者在 latex 中是注释。 第一个花括号中首尾的空格自动删除， 并把任何中间的空格或非 ascii 字符（编码 0-127）视为 utf-8 编码，并将该字符的每个字节自动替换为 \verb|\%两位hex|。
-\item 【进行中】让 editor 在 littleshi.cn, PhysWiki, PhysWiki-backup， user-notes 等仓库中创建的文件的 mode 都默认为 664。 文件的 user 和 group 需要分别为 editor 和 wiki（也就是说编辑器后台以 editor 的身份运行）。
+\item 让 editor 在 littleshi.cn, PhysWiki, PhysWiki-backup， user-notes 等仓库中创建的文件的 mode 都默认为 664。 文件的 user 和 group 需要分别为 editor 和 wiki（也就是说编辑器后台以 editor 的身份运行）。
 \item 【完成】知乎导入 md 的格式升级了， 导出 md 的功能也要相应更改， 现在的格式例如
 \begin{lstlisting}[language=markdown]
 # 大标题

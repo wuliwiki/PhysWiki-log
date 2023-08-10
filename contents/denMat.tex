@@ -6,7 +6,7 @@
 \pentry{矩阵的迹\upref{trace}， 投影算符\upref{projOp}， 量子力学的基本假设\upref{QMPos}}
 
 \footnote{参考 Shankar, Principles of Quantum Mechanics 2ed， 以及 Wikipedia}若一个系综中的 $N$ 个系统中， 有 $n_i$ （$i = 1,2,\dots,k$） 个在状态 $\ket{i}$ （这里假设 $\ket{i}$ 是正交归一的）。 那么这个系综可以用\textbf{密度矩阵（density matrix）}（或算符）描述
-\begin{equation}
+\begin{equation}\label{eq_denMat_1}
 \rho = \sum_i p_i\ket{i}\bra{i}   ~.
 \end{equation}
 其中 $p_i = n_i/N$ 是随机选一个系统， 处于状态 $\ket{i}$ 的概率。 若所有系统都处于同一个 $\ket{i}$， 那么这个系综就是\textbf{纯的（pure）}， 否则就是\textbf{混合的（mixed）}。
@@ -30,7 +30,7 @@
 这个平均值既包含了每个 $\ket{i}$ 的平均， 又包含了对每个系统的平均。
 
 系综平均也可以用迹表示为 $\opn{tr}(\Omega\rho)$。 根据迹的定义，
-\begin{equation}
+\begin{equation}\label{eq_denMat_3}
 \opn{tr}(\Omega\rho) = \sum_j \mel{j}{\Omega\rho}{j} = \sum_{i,j} p_i\mel{j}{\Omega}{i} \braket{i}{j} = \sum_{i} p_i\mel{i}{\Omega}{i} = \ev{\bar\Omega}~.
 \end{equation}
 证毕。
@@ -45,8 +45,35 @@ P(\omega) = \abs{\braket{\omega}{\psi}}^2 = \braket{\mathbb P_\omega \psi}{\math
 \end{equation}
 
 \subsection{密度矩阵的性质}
+\pentry{正定矩阵\upref{DefMat}}
 \begin{itemize}
 \item 密度矩阵算符是厄米算符（自伴算符）
 
 \item 密度矩阵的迹为 1
+
+\item 密度矩阵是正定矩阵。可以从\autoref{eq_denMat_1} 看到，对任意态 $\ket\varphi$，总是有 $\bra\varphi \rho \ket\varphi\ge 0$
 \end{itemize}
+
+密度矩阵厄米正定的性质使得我们总是将它在一组正交完备基 $\ket{\psi_1},\ket{\psi_2},\cdots$ 下对角化：
+\begin{equation}
+\rho = \sum_i \ket{\psi_i} p_{\psi_i}\bra{\psi_i}~.
+\end{equation}
+这表明系统处于 $\ket{\psi_i}$ 状态的概率为 $p_{\psi_i}$。
+
+现在假设系综中每一个态都随时间发生演化，那么在薛定谔表象下
+\begin{equation}
+\ket{\psi_i(t)}= e^{-iHt}\ket{\psi_i(t)}~.
+\end{equation}
+密度算符随时间的演化为
+\begin{equation}\label{eq_denMat_2}
+\rho(t)= \sum_i p_{\psi_i}\ket{\psi_i(t)}\bra{\psi_i(t)}= e^{-iHt}\rho(0) e^{iHt}~.
+\end{equation}
+
+\subsection{统计系综与平衡态}
+从 \autoref{eq_denMat_2} 中可以看到，如果密度算符与哈密顿量 $H$ 对易，那么 $\rho(t)=\rho(0)$，密度算符不随时间发生变化，系综中每个状态发生的概率不变，根据\autoref{eq_denMat_3} ，各个物理量的系综平均值也是不变的。系统处于平衡态。
+
+因此统计系综处于平衡态等价于 $[\rho,H]=0$。由于两个算符对易，它们实际上可以被同时对角化。存在一组基底 $\ket{1},\cdots,\ket{n}$，满足 $\rho \ket{i} = p_i \ket{i}$，且 $H\ket{i}=E_i \ket{i}$。也就是说密度矩阵在哈密顿量的一组正交的本征态基底下可对角化：
+\begin{equation}
+\rho = \sum_i p_i \ket{i}\bra{i},\quad H\ket{i}=E_i \ket{i}~.
+\end{equation}
+
