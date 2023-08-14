@@ -131,16 +131,20 @@ CREATE TABLE Orders (
 
 
 \subsection{关联两个表格}
+可以在条件前面加上 \verb|JOIN 另一个表的一行 ON 当前表.列 = 另一个表.列|， 然后在条件中，就可以使用 \verb|当前表.列| 和 \verb|另一个表.列|。
+
 一个例子：
 \begin{lstlisting}[language=bash,caption=stat.sh]
-sqlite3 data/scan.db "\
-SELECT COUNT(1) FROM history WHERE \
-author IN ( \
-    SELECT id \
-    FROM authors \
-    WHERE name = '名字' \
-) AND \
-time >= 起始时间 AND \
-time <= 终止时间 \
-"
+SELECT COUNT(1) 
+FROM history 
+JOIN entries ON history.entry = entries.id 
+WHERE 
+history.author IN ( 
+    SELECT id 
+    FROM authors 
+    WHERE name LIKE 'john' 
+) AND 
+history.time >= '20220101' AND 
+history.time <= '20230101' AND 
+entries.type = 'Xiao'
 \end{lstlisting}

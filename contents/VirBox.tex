@@ -14,9 +14,10 @@
 \item 用 virtualbox 运行 linux, 首先下载 virtualbox 和 ubuntu 安装包.
 \item 安装任何操作系统需要先下载安装系统的 iso 文件（windows 可以用 media creator）， Ubuntu 直接从官网下载
 \item 如果选择系统的时候只出现 32bit 就检查三件事情 1. 搜索 turn windows features on and off， 检查 Hyper-V 是否开启，需要关闭。 2. 在 EUFI 里面检查 Intel Vitualization Technology 和 Intel VT-d Feature 有没有打开，需要打开。 参考\href{http://www.fixedbyvonnie.com/2014/11/virtualbox-showing-32-bit-guest-versions-64-bit-host-os/}{这里}。
+\item 如果启动时提示 BIOS 中禁止了所有 cpu 的虚拟化（VT-x）， 就重启然后在 BIOS 中开启相关设置。
 \item cpu， 内存等是可以在每次启动虚拟机之前设置的
 \item 硬盘选 dynamic 的话，无论虚拟硬盘有多大，实际上占的空间只是实际使用的空间。
-\item 如果安装完重启的时候卡住, 按 ctrl + C 即可.
+\item 如果安装完重启的时候卡住, 按 \verb|ctrl + C| 即可.
 \item 至于分辨率只有 1024 的问题, 在命令行安装如下软件, 就可以在 view 菜单中调整分辨率了.
 \begin{lstlisting}[language=bash]
 sudo apt-get install virtualbox-guest-utils
@@ -24,10 +25,16 @@ virtualbox-guest-x11 virtualbox-guest-dkms
 \end{lstlisting}
 \item 这些包好像在 ubuntu 18.04 上安装不了， 试图从 Virtualbox 的 Device 菜单中选择 Insert Guest Addition CD image， 看是不是同样的功能。 安装完需要重启。 果然， 屏幕尺寸可以调了， 剪切板可以复制了。
 \item snapshot 是一个非常重要好用的功能， 在虚拟机列表中右边的菜单中
-\item 备份虚拟机, 只需要在虚拟机列表中通过右键菜单找到所在文件夹, 复制即可. 需要恢复, 则在菜单中 Machne->Add 即可.
+\item 备份虚拟机, 只需要在虚拟机列表中通过右键菜单找到所在文件夹, 复制即可. 需要恢复, 则在菜单中 \verb|Machne->Add| 即可.
 \item 共享文件夹： 打开虚拟机， 菜单中选 device -> shared folders， 创建即可， Folder Path 是 host 中的 path， 可以下拉选择 Folder Name 就是 path 中最后那个文件夹的名字。 shared folder 在 windows guest 中以网络磁盘的形式存在。 Mount point 可以指定一个盘符， 如果想要自动分配盘符， 可以选择 automount。 选择 Make permanent， 重启以后也不会消失。
 \item 要开启共享剪贴板, 在菜单栏的 Devices 设置. Drag and Drop 的功能传文件最方便. 从虚拟机里面
 \item 如果要断网， 在 setting 里面的 Network 将 Cable Connected 取消勾选即可。
+\item Ubuntu guest 中如果挂载 host 的文件夹， 好像只有管理员才能访问。
+\end{itemize}
+
+\subsubsection{清理硬盘}
+\begin{itemize}
+\item 在命令行中用 \verb|VBoxManage modifymedium --compact /path/to/your.vdi| 命令可以清理硬盘。
 \end{itemize}
 
 \subsection{搭建局域网}

@@ -3,3 +3,47 @@
 % license Xiao
 % type Tutor
 
+在这一章中，我们将会讨论量子信息中的两个基本原理：不可克隆定理和不可删除定理。它们有时也被冠名为量子信息守恒原理，因为它们告诉了我们量子信息相比于经典信息的不同之处：它不可被复制，也不可被删除。这样的特性在很大程度上成为了量子通信、量子密码学中的无条件安全性的来源，而且也导致了量子纠错等任务相比于经典信息处理困难得多。
+
+\subsection{量子不可克隆定理}
+
+在日常生活中，我们经常需要对信息进行拷贝、复制或者说克隆。这一点可以通过手动抄写、复印机、文件拷贝等办法进行处理。
+
+不管怎么样，在信息的复制过程中，我们需要将想要复制的信息(这里用$\ket{\psi}\rangle$来标记）和一份空白的信息（这里用$\ket{0}\rangle$来标记）放进一个克隆机器中，这台机器便会输出两份信息$\ket{\psi}\rangle\ket{\psi}\rangle$。注意我们要求$\ket{\psi}\rangle$是任意的。不然这也称不上是一个克隆机器，只是一个把$\ket{\psi}\rangle$写入到$\ket{0}\rangle$的机器罢了。我们同样要求克隆机不会破坏初始输入的信息。
+
+对于经典信息来说，$\ket{\psi}\rangle=0,1$，在这种情况下显然是存在克隆机的。只需要让它执行这样的程序：
+\begin{itemize}
+\item 如果$\ket{\psi}\rangle=0$，那么在$\ket{0}\rangle$写入0。
+\item 如果$\ket{\psi}\rangle=1$，那么在$\ket{1}\rangle$写入1。
+\end{itemize}
+这也是拷贝文件时的处理逻辑。
+
+下面的问题是：对于量子信息（也就是$\ket{\psi}\rangle=\ket{\psi}$）是否也存在这种克隆机呢？具体来说，是否有这样一个幺正演化$U$，使得对于任意的输入$\ket{\psi}$，都有
+\begin{equation}
+U\ket{\psi}\ket{0}=\ket{\psi}\ket{\psi}~.
+\end{equation}
+成立？
+
+量子不可克隆定理告诉我们，这样的$U$并不存在。
+
+\textbf{证明：}假如存在着这样的$U$，那么对于任意两个态$\ket{\psi_1},\ket{\psi_2}$来说，有
+\begin{equation}
+\begin{aligned}
+U\ket{\psi_1}\ket{0}&=\ket{\psi_1}\ket{\psi_1}\\
+U\ket{\psi_2}\ket{0}&=\ket{\psi_2}\ket{\psi_2}~.
+\end{aligned}
+\end{equation}
+那么有
+\begin{equation}
+\braket{\psi_1}{\psi_2}=\bra{\psi_1}\bra{0}U^\dagger U\ket{\psi_2}\ket{0}=\bra{\psi_1}\bra{\psi_1}\ket{\psi_2}\ket{\psi_2}=\braket{\psi_1}{\psi_2}^2~.
+\end{equation}
+
+该式只在$\braket{\psi_1}{\psi_2}=0,1$时成立。而这与$\ket{\psi_1},\ket{\psi_2}$的任意性相矛盾。因此并不存在这样的$U$。
+
+值得注意的是，量子不可克隆定理并没有否认经典信息的克隆操作。经典信息可以被编码为$\ket{0}\to0,\ket{1}\to1$，而且整个过程中不允许有态的叠加出现。那么此时显然CNOT门就能够起到克隆信息的作用。因此这个故事也告诉了我们，如果把量子信息全部限制为某一个测量基矢下的本征态上，那它就会和经典信息没有差别。
+
+\subsection{量子不可删除定理}
+
+经典信息不但可以复制，同时还可以被删除。比如生活中我们会在电脑中删除某些文件，也可以把纸质文件放进碎纸机中进行粉碎。
+
+在信息的删除过程中，
