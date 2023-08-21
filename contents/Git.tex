@@ -76,9 +76,10 @@ Git for Windows 的 Git bash 是不支持 symlink 的， symlink clone 下来以
 \item \verb|git log <hash>| 查看某次 commit 以及更早。
 \item \verb|git log ... --name-only [COMMIT_HASH]| 只显示改变的文件名
 \item \verb|git log --name-status [COMMIT_HASH]| 显示改变的文件名每个文件是改变了还是新增还是删除等。
-\item \verb|git log -- <filename>| 可以只显示一个文件的历史， \verb|-p| 和 \verb|--word-diff-regex| 同样有效。
+\item \verb|git log -- 文件| 可以只显示一个文件的历史， \verb|-p| 和 \verb|--word-diff-regex| 同样有效。
 \item 要搜索 commit 的标题和描述， 用 \verb|git log --grep=<pattern>|
-\item 要浏览某个文件的历史， 用 \verb|git log -- <filename>|， 
+\item \verb|git log -S'字符串' -- 文件| 可以在一个文件所有历史版本中搜索 \verb|字符串|，且该字符串在改 commit 中发生了改变（变成别的或者由别的变成？）。 \verb|-G| 也类似，但支持 regex 搜索。
+\item 要浏览某个文件的历史， 用 \verb|git log -- 文件|， 
 \item \verb|git commit --amend| 可以覆盖上一次 commit (如果上一次 commit 忘了做什么事情).
 \item \verb|git reset| 可以 unstage 所有文件， \verb|git reset HEAD <file>| 可以 unstage 一个文件。
 \item \verb|git checkout -- <file>| 可以撤销一个文件从上次 commit 后的变化 （危险操作!）. \verb|git checkout .| 可以撤销所有文件从上次 commit 后的变化 （危险操作!） 但是他们不会影响 untracked files
@@ -181,8 +182,8 @@ git config --global pack.threads 2 # 使用多少线程压缩 pack
 \item \verb|git fetch <remote> <branch>| 可以下载一个指定的 branch。 注意不要用 \verb|pull|， 会试图和当前 branch 合并。
 \item fetch 完了以后用 \verb|git checkout <branch>| 就在本地创建刚 fetch 的 branch。
 \item \verb|git pull| 只是从服务器下载当前 branch 的变化。
-\item \verb|git diff branchA branchB -- <filename>| 用于比较两个 branch 中同一个文件。
-\item \verb|git checkout <branch> -- <filename>| 可以从别的 branch 里面 checkout 一个文件到当前 branch。
+\item \verb|git diff branchA branchB -- 文件| 用于比较两个 branch 中同一个文件。
+\item \verb|git checkout <branch> -- 文件| 可以从别的 branch 里面 checkout 一个文件到当前 branch。
 
 \item \verb|git show-branch| 可以查看已有的 branch 
 \item \verb|git checkout <branch>| 把文件夹中的文件切换成某个 branch 中的文件。 但是新的修改和 staging area 中的修改也会移植到该 branch 中。 如果不想移植， 就先 commit.

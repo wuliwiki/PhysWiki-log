@@ -45,7 +45,7 @@
 \begin{itemize}
 \item 按下 “上传图片并创建新标签” 按钮弹出一个窗口。窗口中有“上传图片”按钮，按下后弹出文件浏览器仅限选择一张 png 或者 pdf 图片（若该图的 hash 已经存在则见下文）。 另设一个“上传其他格式”按钮，按下后可以选择一张或多张常见格式图片，可以按多次，若第一个按钮上传的是 pdf，上传的其他格式图片中必须要有 svg 格式否则无法确定。 设一个“上传附件（源码或项目文件等）”按钮，用于上传附件，功能和 “上传其他格式” 一样，上传到 \verb|PhysWiki/files/|。另外可以在窗口提供输入 \verb|figures.caption|（必填） 和 \verb|width|（默认 6） 和 \verb|source|（选填） 和 \verb|images.license|（必填，默认和 \verb|entries.license| 一样）。
 \item 上传新的图片时， \verb|PhysWiki/figures/| 中的文件使用 \verb|images.hash| + 拓展名命名。 \verb|\label{}| 格式为 \verb|fig_词条名_序号|。这里的\verb|序号|可以由小到大逐个查看数据库中存不存在 \verb|figures.id=词条名_序号|，使用第一个不存在的。
-\item 首先插入 \verb|images| 表的 \verb|hash, ext, figure, author, time|（此时如果有 foreign key 报错，需要 \verb|PRAGMA foreign_keys = OFF;|，完了再 \verb|ON|）， 再插入 \verb|figures| 表的 \verb|id, caption, authors, entry, image|， 再修改 \verb|entries| 表格的 \verb|figures|。 注意的格式，不要把已有的数据覆盖。 一个示例：
+\item 【进行中】首先插入 \verb|images| 表的 \verb|hash, ext, figure, author, time|（此时如果有 foreign key 报错，需要 \verb|PRAGMA foreign_keys = OFF;|，完了再 \verb|ON|）， 再插入 \verb|figures| 表的 \verb|id, caption, authors, entry, image|， 再修改 \verb|entries| 表格的 \verb|figures|。 注意的格式，不要把已有的数据覆盖。 一个示例：
 \begin{lstlisting}[language=none]
 PRAGMA foreign_keys = OFF;
 
@@ -62,8 +62,8 @@ VALUES ('test_10', '请输入图片描述', '0', 'test', '3173003649033a60');
 -- 这个最好还是 parse 一下，保证没有重复，排个序，不要直接 append，这里只是图方便
 UPDATE "entries" SET "figures" = "figures" || ' test_10' WHERE "id"='test';
 \end{lstlisting}
-\item 上传的 \verb|svg| 做 hash 以前要把 CRLF 替换为 LF（保存到服务器的文件也使用 LF）。
-\item 如果上传时发现图片文件的 hash 已存在于 \verb|images.hash|， 则检查该文件的 \verb|images.figure和figures_aka| 中 \verb|figures.deleted==0| 的图片环境， 有就提示图片已存在，列出所有标签（\verb|fig_| 加 \verb|figures.id|）和图片标题和它们所在的词条 id 和 caption 让用户选择引用（\verb|\autoref{}|）或者选择重复使用图片。 如果 \verb|images.figure和figures_aka| 中没有 \verb|figures.deleted==0| 的图片环境（也就不用选了）或者用户选择重复使用图片， 就检查 \verb|images.figure和figures_aka| 中 \verb|figures.deleted==1| 的环境中有没有属于当前词条的（若有多个就选第一个）， 如果有就更新 \verb|figures.deleted=0| 然后根据该记录中的信息插入图片环境代码，否则新建标签和环境并在 \verb|figures| 表中插入新的记录， \verb|aka| 指向 \verb|images.figure|。
+\item 【完成】上传的 \verb|svg| 做 hash 以前要把 CRLF 替换为 LF（保存到服务器的文件也使用 LF）。
+\item 【进行中】如果上传时发现图片文件的 hash 已存在于 \verb|images.hash|， 则检查该文件的 \verb|images.figure和figures_aka| 中 \verb|figures.deleted==0| 的图片环境， 有就提示图片已存在，列出所有标签（\verb|fig_| 加 \verb|figures.id|）和图片标题和它们所在的词条 id 和 caption 让用户选择引用（\verb|\autoref{}|）或者选择重复使用图片。 如果 \verb|images.figure和figures_aka| 中没有 \verb|figures.deleted==0| 的图片环境（也就不用选了）或者用户选择重复使用图片， 就检查 \verb|images.figure和figures_aka| 中 \verb|figures.deleted==1| 的环境中有没有属于当前词条的（若有多个就选第一个）， 如果有就更新 \verb|figures.deleted=0| 然后根据该记录中的信息插入图片环境代码，否则新建标签和环境并在 \verb|figures| 表中插入新的记录， \verb|aka| 指向 \verb|images.figure|。
 \item 若上传 pdf + svg 图片， 更新 \verb|figures.image_alt|。 同时支持上传其他文件（如果后缀名是 \verb|gif, eps 等|， 同样更新到 \verb|figures.image_alt|。
 \item 【先不做】上传或替换图片时弹出窗口让用户填写版权信息。
 \item 【先不做】上传或替换图片时允许上传附件

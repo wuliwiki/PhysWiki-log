@@ -1,6 +1,6 @@
 % Mathematica 脚本模式
 % keys Mathematica|命令行脚本|wolframscript
-% license Xiao
+% license Usr
 % type Tutor
 
 \begin{issues}
@@ -54,24 +54,24 @@ wolframscript --help #查看使用帮助
 
 \subsubsection{常用调用方式}
 
-建立后缀名为 \verb`。wl`/\verb`。wls` 的文件，然后按平常写 \verb`Mathematica` 笔记本的语法编写脚本。
+建立后缀名为 \verb`.wl` or \verb`.wls` 的文件，然后按平常写 \verb`Mathematica` 笔记本的语法编写脚本。
 但最好用 \verb`字符串函数` 代替\verb`Box` 相关的函数，如 \verb`TableForm`。
-运行时，用 \verb`wolframscript` 唤起脚本(如 windows 为 \verb`wolframscript。exe`)。
+运行时，用 \verb`wolframscript` 唤起脚本(如 windows 为 \verb`wolframscript.exe`)。
 
-假如当前目录下有脚本 \verb`test。wl`，用类似下面的方式运行:
+假如当前目录下有脚本 \verb`test.wl`，用类似下面的方式运行:
 \begin{lstlisting}[language=bash]
-wolframscript -script test。wl \
---Lbd-num '0。90' --Lbd-fit '0。90'  --ord '\$ord0'
+wolframscript -script test.wl \
+--Lbd-num '0.90' --Lbd-fit '0.90'  --ord '\$ord0'
 \end{lstlisting}
 
-其中 \verb`--Lbd-num '0。90' --Lbd-fit '0。90'  --ord '\$ord0'` 将作为参数提供给脚本 \verb`test。wl`，可在脚本内部使用。
+其中 \verb`--Lbd-num '0.90' --Lbd-fit '0.90'  --ord '\$ord0'` 将作为参数提供给脚本 \verb`test.wl`，可在脚本内部使用。
 注意 \verb`$ScriptCommandLine` 中的参数，其类型均为 \verb`String`。
 也就是命令行接收到的 \verb`参数`，会被强制转码为 \verb`字符串`。
 所以上面收到的参数列表为:
-\begin{lstlisting}[language=mma]
-{"。/test。wl"，"--Lbd-num"，"0。90"，"--Lbd-fit"，"0。90"，"--ord"，"$ord0"}
+\begin{lstlisting}[language=bash]
+{"./test.wl"，"--Lbd-num"，"0.90"，"--Lbd-fit"，"0.90"，"--ord"，"$ord0"}
 \end{lstlisting}
-如果需要使用 \verb`数字`或其他类型的 \verb`值`，需要在脚本内部自行 \verb`ToExpression`。
+如果需要使用 \verb`数字`或其他类型的 \verb`值`，需要在脚本内部自行转换（\verb`ToExpression`）。
 
 此外，如果命令行参数中包含 \verb`$`，需要用 \verb`单引号 + 反斜杠`转义(escape)。
 例如\verb`$ord` -> \verb`'\$ord0'`。
@@ -83,22 +83,22 @@ wolframscript -script test。wl \
 \item \verb`$CommandLine`： \verb`字符串列表`，给出运行 \verb`WolframKernel` 使用的 \verb`完整命令行`。
 \item \verb`$ScriptCommandLine`： 为 \verb`正运行的脚本` 准备的 \verb`命令行参数列表`。
 这些参数出现在 \verb`-option` 给出的选项之后。
-\item \verb`$ScriptInputString`： 代表在 \verb`标准输入通道` 上对 \verb`原始操作系统命令` 的输入,
+\item \verb`$ScriptInputString`： 代表在 \verb`标准输入`通道 上对 \verb`原始操作系统命令` 的输入,
 正运行的 Wolfram Language 实例即来自 \verb`此命令的调用`(invoke)
-脚本迭代一次，\verb`-linewise` 选项就把 \verb`标准输入` 的一行载入该变量。
+。脚本迭代一次，\verb`-linewise` 选项就把 \verb`标准输入` 的一行载入该变量。
 可在交互式脚本中使用。
 \end{itemize}
 
 
 在上面的例子中，三个变量被填充如下，不同平台可能稍有不同
 
-\begin{lstlisting}[language=none]
+\begin{lstlisting}[language=bash]
 $CommandLine->{/usr/local/Wolfram/Mathematica/12.2/
 SystemFiles/Kernel/Binaries/Linux-x86-64/WolframKernel,
--wlbanner,-script,test。wl,--,test。wl,
---Lbd-num,0。90,--Lbd-fit,0。90,--ord,$ord0}
+-wlbanner,-script,test.wl,--,test.wl,
+--Lbd-num,0.90,--Lbd-fit,0.90,--ord,$ord0}
 
-$ScriptCommandLine->{test。wl,--Lbd-num,0。90,--Lbd-fit,0。90,--ord,ord0}
+$ScriptCommandLine->{test.wl,--Lbd-num,0.90,--Lbd-fit,0.90,--ord,ord0}
 
 $ScriptInputString->None
 \end{lstlisting}
@@ -106,12 +106,12 @@ $ScriptInputString->None
 也可用 \verb`wolfram` 命令运行脚本，但是 \verb`wolfram` 不会设置 \verb`$ScriptCommandLine`，只会填充 \verb`$CommandLine`:
 
 \begin{lstlisting}[language=bash]
-wolfram -script test。wl  --Lbd-num '0。90' --Lbd-fit '0。90'  --ord '\$ord0'
+wolfram -script test.wl  --Lbd-num '0.90' --Lbd-fit '0.90'  --ord '\$ord0'
 \end{lstlisting}
 
 \subsubsection{Unix平台} 
 
-\verb`Unix` 还可以加上 \verb`Shebang` 行。 即在脚本文件 **首行** 添加
+\verb`Unix` 还可以加上 \verb`Shebang` 行。 即在脚本文件\textbf{首行}添加
 \begin{lstlisting}[language=bash]
 #!/usr/bin/env wolframscript [其他选项]
 \end{lstlisting}
@@ -119,15 +119,16 @@ wolfram -script test。wl  --Lbd-num '0。90' --Lbd-fit '0。90'  --ord '\$ord0'
 运行的时候，不需要先输入 \verb`wolframscript`，传递参数的方法和上面相同。
 
 \begin{lstlisting}[language=bash]
-。/test。wl para1 para2
-wolframscript -script 。/init。wl &>\
-~/test/log。txt & # 在后台运行，把输出重定向到日志文件 log。txt
+./test.wl para1 para2
+# 或者
+wolframscript -script ./init.wl &>\
+~/test/log.txt & # 在后台运行，把输出重定向到日志文件 log.txt
 \end{lstlisting}
 
-经常用到的 mma 系统变量，参考
+下面是一些经常用到的 MMA 系统变量：
 
 \begin{itemize}
-\item \verb`guide/SystemInformation` : mma 系统信息
+\item \verb`guide/SystemInformation` : MMA 系统信息
 \item \verb`guide/WolframSystemSetup`: 更一般的系统设置
 \item \verb`$InputFileName`: 脚本的绝对路径。
 \item \verb`$Notebooks`: 如果是用前端运行的，则为\verb`True`。

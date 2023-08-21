@@ -17,10 +17,39 @@ H_n = \sum_{i=1}^n\frac{1}{n}~.
 可以通过积分的方法给出$H_n$的阶。
 
 \begin{theorem}{调和数的阶}
+当$n\to\infty$时，
 \begin{equation}
-H_n = \log n + \gamma + \Omicron() ~.
+H_n = \log n + \gamma + O(1/n) ~.
 \end{equation}
 其中 $\gamma$ 称为 Euler-Mascheroni 常数。
 \end{theorem}
 
 \textbf{证明}:
+
+\begin{equation}
+\begin{aligned}
+H_n & = \sum_{i=1}^n\frac{1}{n}\\
+& = \sum_{i=1}^n\int_n^{n+1}\frac{1}{n}\dd{t}\\
+& = \sum_{i=1}^n\int_n^{n+1}\qty(\frac{1}{n}-\frac{1}{t})\dd{t}+\int_1^{t+1}\frac{1}{t}\dd{t}\\
+& = \log n+\sum_{i=1}^n\int_n^{n+1}\qty(\frac{1}{\lfloor t\rfloor}-\frac{1}{t})\dd{t}+\log\qty(1+\frac{1}{n})\\
+& = \log n+\int_1^{n+1}\qty(\frac{1}{\lfloor t\rfloor}-\frac{1}{t})\dd{t}+\log\qty(1+\frac{1}{n})~.
+\end{aligned}
+\end{equation}
+
+我们来考察次项这个积分趋近无限时的表现，
+\begin{equation}
+\int_n^{n+1}\qty(\frac{1}{n}-\frac{1}{t})\dd{t}<\frac{1}{n(n+1)}<\frac{1}{n^2}~,
+\end{equation}
+可以知道，级数
+\begin{equation}
+\sum_{i=1}^{+\infty} \int_n^{n+1}\qty(\frac{1}{\lfloor t\rfloor}-\frac{1}{t})\dd{t}~
+\end{equation}
+收敛，也就是积分收敛。令
+\begin{equation}
+\gamma = \int_1^{+\infty} \qty(\frac{1}{\lfloor t\rfloor}-\frac{1}{t})\dd{t} = \sum_{i=1}^{+\infty} \int_n^{n+1}\qty(\frac{1}{\lfloor t\rfloor}-\frac{1}{t})\dd{t}~,
+\end{equation}
+我们得到
+\begin{aligned}
+\int_1^{n+1}\qty(\frac{1}{\lfloor t\rfloor}-\frac{1}{t})\dd{t}&=\gamma - \int_{n+1}^{+\infty}\qty(\frac{1}{\lfloor t\rfloor}-\frac{1}{t})\dd{t}\\
+\end{aligned}
+进而有
