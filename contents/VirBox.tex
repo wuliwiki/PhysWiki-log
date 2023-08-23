@@ -34,7 +34,11 @@ virtualbox-guest-x11 virtualbox-guest-dkms
 
 \subsubsection{清理硬盘}
 \begin{itemize}
+\item 必须要在虚拟机停止后才能清理硬盘。
 \item 在命令行中用 \verb|VBoxManage modifymedium --compact /path/to/your.vdi| 命令可以清理硬盘。
+\item 在 Windows 中，如果 \verb|VBoxManage| 找不到， 就用完整路径 \verb|"C:\Program Files\Oracle\VirtualBox\VBoxManage.exe" modifymedium --compact "文件名.vdi"| 如果不指定路径，就默认当前路径。
+\item 注意快照会使虚拟硬盘容量大大增加。 刚照的时候不会，之后改变文件会，删除文件总也不会释放。 若没有任何快照， \verb|snapshots| 文件夹就会是空的。
+\item 若没有快照，向硬盘中写入全 0 的文件不会增加 \verb|.vid| 文件的大小。 \verb|--compact| 也会把全零的 blocks 进行压缩。 所以用 \verb|dd if=/dev/zero of=zeros.txt status=progress;| 就可以把所有没有用到的硬盘都清零，便于 \verb|--compact| 清理。
 \end{itemize}
 
 \subsection{搭建局域网}

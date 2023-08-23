@@ -50,7 +50,9 @@
    # 支持 symlink 到任何地方
    wide links = yes
 \end{lstlisting}
-\item \verb|sudo service smbd restart| 重启 samba
+\item \verb|sudo service smbd restart| 或者 \verb|sudo systemctl status smbd.service| 重启 samba
+\item \verb|systemctl status smbd.service| 查看状态。
+\item 如果状态显示 PID 不对之类的警告， 就在 \verb|/lib/systemd/system/smbd.service| 里面的 \verb|[Service]| 中添加 \verb|NotifyAccess=all|， 再重启服务即可。
 \item \verb|sudo ufw allow samba| 设置防火墙
 \item \verb|sudo smbpasswd -a 用户名| 创建用户名，设置密码
 \item SMB 协议默认端口为 \verb|445|， 比较老的版本用 \verb|139|。

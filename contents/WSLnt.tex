@@ -6,30 +6,32 @@
 \issueDraft
 \end{issues}
 
-重要提示：WSL1 用于 NTFS 文件系统最合适，包括移动硬盘。 exFAT 兼容性较差（不兼容软链， git 也会有权限 bug）。 NTFS 用 WSL1 也不完美， 有时候 \verb|chmod -R| 不能真正的深入到每个子目录，还可能要 cd 进去再次用 \verb|chmod -R|，或者直接 \verb|find . -type f -exec sudo chmod 777 {} \;|（巨慢）。且这么做只能临时有效，打开另一个命令行就没用了。
+重要提示：截至到 2023 年 8 月，WSL 在中国大陆的安装过程中可能会遇到某种网络问题。
+
+重要提示：WSL1 用于 NTFS 文件系统最合适，包括移动硬盘。 exFAT 兼容性较差（不兼容软链， git 也会有权限 bug）。 NTFS 用 WSL1 也不完美， 有时候 \verb|chmod -R| 不能真正的深入到每个子目录，还可能要 cd 进去再次用 \verb|chmod -R|，或者直接 \verb|find . -type f -exec sudo chmod 777 {} \;|（巨慢）。且这么做只能临时有效，打开另一个命令行就没用了。 GDB\upref{gdbNt}也不能用（设置断点失败）。
 
 所以，有条件用双系统或者 Virtualbox 还是建议尽量用它们。
 
 \subsection{cmd 中的 wsl 命令}
 \begin{itemize}
 \item \href{https://docs.microsoft.com/en-us/windows/wsl/}{官方文档}
-\item \verb`wsl --help` 获取帮助
+\item \verb`wsl --help` 获取帮助（以下说明可能会和最新版本稍微不一致，所以建议直接看帮助）
 \item \verb`wsl --shutdown` 关闭所有 distro 和虚拟机
 \item \verb`wsl --status` 显示 wsl 状态
 \item \verb`wsl --update` 更新
-\item \verb`wsl --set-default-version 1 或 2` 切换新安装 wsl 的默认的版本
-\item \verb`wsl --set-version Ubuntu-22.04 2` 把某个已安装的 distro 在 WSL1 和 2 之间转换， 如果 windows 没有开 Virtual Machine Platform， 会提示且不做转换。 （两三分钟就好了）。 注意这并不会把整个 linux 的文件系统都变成 ext4 的虚拟硬盘（可以用 windirtree 验证）。 其实还是另外新装 wsl2 版本的 ubuntu 比较好， 因为 wsl1 没有 snap store 和正常的 systemd systemctl 等。 可以用下面的方法把某个 wsl1 distro 重命名， 再安装相同的 wsl2 distro （没试过）。
+\item \verb`wsl --set-default-version 1或2` 切换新安装 wsl 的默认的版本
+\item \verb`wsl --set-version Ubuntu-22.04 1或2` 把某个已安装的 distro 在 WSL1 和 2 之间转换， 如果 Turn Windows Features On or OFF 中没有开 Virtual Machine Platform， 会提示错误且不做转换， 打开这个和 Hyper-V，重启即可。 转换需要两三分钟。 注意这并不会把整个 linux 的文件系统都变成 ext4 的虚拟硬盘（可以用 WinDirStat 验证）。 其实还是另外新装 wsl2 版本的 ubuntu 比较好， 因为 WSL1 没有 snap store 和正常的 systemd systemctl 等。 可以用下面的方法把某个 WSL1 distro 重命名， 再安装相同的 WSL2 distro （没试过）。
 \item \verb`wsl --set-default [distro]` 选择默认的 distro
-\item \verb`wsl --list` 列出所有 distro `wsl --list --verbose` 显示详细信息
+\item \verb`wsl --list` 列出所有 distro \verb`wsl --list --verbose`（\verb|-l -v|） 显示详细信息
 \item \verb`wsl --list --online` 列出所有可下载的 distro
 \item \verb`wsl --install -d` 安装某个 distro
 \item WSL 虚拟机的默认路径是 \verb`C:/Users/用户名/AppData/Local/Packages/CanonicalGroup...distro版本号/`
 \item \verb`wsl --unregister ...` 删除某个 distro 以及它的所有文件
 
 \subsubsection{镜像导出导入}
-\item \verb`wsl --export <distribution name> <export file name>` 可以导出 wsl。 例如 \verb`wsl --export Ubuntu ubuntu.tar` 导出文件会存到当前路径。
+\item \verb`wsl --export distro名 导出文件名` 可以导出 wsl。 例如 \verb`wsl --export Ubuntu ubuntu.tar` 导出文件会存到当前路径。
 \item export 和 import 可以把同一个 distro 安装多份或者重命名。
-\item \verb`wsl --import <new distribution name> <install location> <export file name> --version 1或2` 例如 \verb`wsl --import Ubuntu-20.04-WSL1-20220904 C:\Users\用户名\ C:\Users\用户名\Desktop\Ubuntu-20.04-WSL1-20220904.tar --version 1或2` 注意 import 以后默认会以 root 身份登录， 可以设置 \verb`.bashrc` 自动 \verb`su` 成某个用户。
+\item \verb`wsl --import 新distro名 安装路径 导出文件名 --version 1或2` 例如 \verb`wsl --import Ubuntu-20.04-WSL1-20220904 C:\Users\用户名\ C:\Users\用户名\Desktop\Ubuntu-20.04-WSL1-20220904.tar --version 1或2` 注意 import 以后默认会以 root 身份登录， 可以设置 \verb`.bashrc` 自动 \verb`su` 成某个用户。
 \item \verb`No3/WSL-images/Ubuntu-20.04-WSL2-20220905.tar` 是从 Miranda 的 Win11 备份的镜像， 亲测在 Surface 上可以直接 import， X11 可用（但是 CLion 好卡）
 \item import wsl 以后， 会默认用 root 登录， 先试试 xeyes 可不可以。 可以的话 \verb`cp ~/.Xautority /home/用户名/` 然后 \verb`su 用户名` 再试试 xeyes 可不可以。 可以的话就把这两个命令添加到 \verb`/root/.bashrc` 中。
 \end{itemize}
@@ -40,7 +42,9 @@
 \item WSL2 是虚拟机， 兼容性是最好的， Windows 上的 docker\upref{Docker} 的新版本就是基于 WSL2。
 \item WSL 的网络是直接使用 Windows 的， 而 WSL2 的网络是基于虚拟机的虚拟网卡。
 \item WSL 即使使用 NTFS 也可以支持 symlink。
-\item 目前来说 WSL 在 NTFS 文件系统中的读写速度比 WSL 2 快很多
+\item （待重新测试新版本）目前来说 WSL 在 NTFS 文件系统中的读写速度比 WSL 2 快很多
+\item WSL2 无论在 Win 10 还是 11 都支持 GUI。 可以用 \verb|xeyes| 测试， 而 WSL1 不行。
+\item WSL1 和 2 是可以互相转换的，所以选错了也没关系。
 \end{itemize}
 
 \subsection{ssh 到 WSL}
@@ -48,7 +52,7 @@
 \item WSL1 中 ssh 似乎需要自己重新安装一下才行。 每次开机都需要 \verb|sudo service ssh --full-restart| 才会运行。
 \item 很容易可以从其他机器通过 ip 地址和端口 22 ssh 到 WSL1
 \item WSL1 是 windows 开机就运行的， 而不是打开 terminal 才开始运行。 所以只要 windows 开着就可以 ssh 连接
-\item WSL 的 IP 地址 (用 verb`ifconfig` 查看) 和 windows 的 IP 地址 (在 cmd 中用 verb`ipconfig`) 是一样的， 而不是像虚拟机一样使用 NAT
+\item WSL 的 IP 地址 (用 \verb`ifconfig` 查看) 和 windows 的 IP 地址 (在 cmd 中用 \verb`ipconfig`) 是一样的， 而不是像虚拟机一样使用 NAT
 \item 所以设置 sshd 的方法基本上和任何 linux 主机一样， 安装 \verb`openssh-server` 即可
 \item 重启 windows 以后貌似 service 会停止， 要自动还需要一些设置
 \item 不行的话就重装一下 \verb|openssh-server|
@@ -87,10 +91,11 @@ command="命令1; 命令2"
 \item 若想开机自动运行， 可以把 \verb|wsl.exe| （任务管理器里面可以找到进程的可执行文件的位置）创建一个快捷方式到启动文件夹 \verb|C:\ProgramData\Microsoft\Windows\Start Menu\Programs\StartUp|。
 \item 命令中不可以使用 \verb|&| 后台执行， 相当于有一个看不见的命令行窗口在执行这些。
 \item 例如可以用这个在 WSL1 中自动挂载硬盘： \verb|mount -o uid=addis -t drvfs g: /mnt/g;|
-\item 可以执行 \verb|service| 命令（例如用于开启 sshd） \verb|service ssh --full-restart;|
+\item 可以执行 \verb|service| 命令。 例如用于开启 sshd： \verb|service ssh --full-restart;|
 \item \verb|cmd| 中 \verb|wsl -l -v| 必须要显示 running， WSL 才有可能执行任何东西包括 service。
 \item 可以在最后执行一个永不结束的命令（就不用配置 service 这么麻烦）， 如 \verb|frp|\upref{NATthr}
 \item WSL1 不支持 systemd，只有 WSL2 支持。
+\item 笔者的设置为： \verb|command="date >> /home/addis/WSL-start-log.txt; service ssh --full-restart; mount -o uid=xxx -t drvfs e: /mnt/e; /home/用户名/frp/frpc -c /home/addis/frp/frpc.ini > /home/用户名/frp/frpc.log;"|。 其中 \verb|frpc| 见这里\upref{NATthr}。
 \end{itemize}
 
 \subsection{Bug 和兼容问题}

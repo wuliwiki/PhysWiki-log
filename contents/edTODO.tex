@@ -11,12 +11,12 @@
 \item 【完成】创建词条时加一个 “文章类型” 栏, 点击可以有下拉菜单， 每一行显示 \verb|types.id|（空字符串不显示）和 \verb|.caption| 和 \verb|.intro|（每列对齐）。 
 \item 【完成】注意由于历史原因，关键词必须在第二行，剩下的 \verb|license|， \verb|type| 顺序可以随意。
 \item 【完成】tex 文件开头的连续若干行若都有行首注释， 那么都不允许手动修改。
-\item 重命名按钮改为 🛈 图标， 名字改为 “修改文章信息”。
+\item 【待部署】重命名按钮改为 🛈 图标， 名字改为 “修改文章信息”。
 \item 【完成】笔记功能为了保持数据库兼容性使用 \verb|PhysWikiScan| 仓库中的 \verb|NoteScan| 可执行文件。
 \item 为了防止同昵称用户的笔记文件夹冲突，使用数据库的 \verb|authors.id| 作为用户笔记文件夹的名称， 如果不存在就在数据库新建一个作者。
-\item editor 对 \verb|PhysWikiScan| 的所有调用都要检查是有 \verb|cerr| 输出， 以及 exit code 是否为零。 如果有错误应该在编辑器前端提示。
-\item 【进行中】更新数据库时， 需要尽量开启 \verb|PRAGMA foreign_keys = ON;| 检查 foreign key 是否存在。
-\item 【进行中】使用 \verb|occupied| 表格标记词条占用状态（包括被谁占用）， 不要记录到其他任何地方。 “查看词条占用状态” 按钮使用该数据， 发布或者使用解除占用按钮都重置该数据。
+\item 【待部署】editor 对 \verb|PhysWikiScan| 的所有调用都要检查是有 \verb|cerr| 输出， 以及 exit code 是否为零。 如果有错误应该在编辑器前端提示。
+\item 【完成】更新数据库时， 需要尽量开启 \verb|PRAGMA foreign_keys = ON;| 检查 foreign key 是否存在。
+\item 【完成】使用 \verb|occupied| 表格标记词条占用状态（包括被谁占用）， 不要记录到其他任何地方。 “查看词条占用状态” 按钮使用该数据， 发布或者使用解除占用按钮都重置该数据。
 \item 打开词条后如果有一次备份（见下文\textbf{新备份算法}）则在数据库 \verb|occupied| 表标记占用。 如果不产生新的备份（即新的文件 hash）则不要占用。
 \item 【进行中】标记占用（也就是产生新的备份）后更新 \verb|authors.recent_entries|。 “打开文件” 按钮中的 “我的编辑” 使用这里的数据。
 \item 【完成】引用文献按钮使用数据库 \verb|bibliography| 中的信息。 不要包括 id 为 \verb|''| 的条目。
@@ -27,15 +27,15 @@
 \item 【进行中】编辑器不应该使用任何 \verb|data/*.txt|， 将删除。 \verb|data/autoref.txt| 中的信息会直接输出到 stdout。
 
 
-\item 【进行中】删除词条以前运行 \verb|./PhysWikiScan --delete 词条id|。 运行成功后再修改 \verb|main.tex| （scan 会删除词条 tex 文件）， 否则提示 \verb`cerr` 中的错误， 不删除词条。
+\item 【待部署】删除词条以前运行 \verb|./PhysWikiScan --delete 词条id|。 运行成功后再修改 \verb|main.tex| （scan 会删除词条 tex 文件）， 否则提示 \verb`cerr` 中的错误， 不删除词条。
 \item 【先不做】发布按钮改成 “审稿”， 弹出窗口， 给用户选择 \verb|review.action| 和 \verb|review.comment|。 插入数据库（补全其他列）， 确保审稿的 hash 存在于 \verb|history| 表。 如果选择发布， 则行为和现在的发布按钮相同。 若选择撤回， 则撤回到上次发布的内容。
 \end{itemize}
 
 \subsubsection{新备份算法}
 \begin{itemize}
-\item editor 备份步骤： 更新 \verb|contents/文件名.tex|， 然后运行 \verb|PhysWikiScan --backup 文件名|，不需要修改数据库（具体行为见 \verb|README.md|）。 注意输出中 \verb|exist| 不应该出现，因为编辑器前端应该检测到内容改变才进行备份。
-\item 编辑器出现任何内容改动（即使不手动保存）都必须做一次自动备份（不使用 scan 更新 html， 只有手动按保存才更新）。 两次备份之间不少于 20s （这个参数需要以后可以调整）。
-\item 手动保存或关闭词条时， 如果内容有改变， 也备份一次。
+\item 【进行中】editor 备份步骤： 更新 \verb|contents/文件名.tex|， 然后运行 \verb|PhysWikiScan --backup 文件名|，不需要修改数据库（具体行为见 \verb|README.md|）。 注意输出中 \verb|exist| 不应该出现，因为编辑器前端应该检测到内容改变才进行备份。
+\item 【进行中】编辑器出现任何内容改动（即使不手动保存）都必须做一次自动备份（不使用 scan 更新 html， 只有手动按保存才更新）。 两次备份之间不少于 20s （这个参数需要以后可以调整）。
+\item 【进行中】手动保存或关闭词条时， 如果内容有改变， 也备份一次。
 \item 【不做】这些步骤由 scan 的 \verb|--backup| 完成：词条备份文件确保使用 utf8 编码， 换行符使用 LF 而不是 CRLF。 保存前先计算文件内容 SHA1 的前 16 位， 确保数据库中 \verb|history.hash| 不存在（否则不备份）。 然后保存到 \verb|PhysWiki-backup/YYYYMMDDHHMM_authorID_entry.tex|， 其中 \verb|authorID| 是数据库的 \verb|authors.id| （非负整数）， 如果此时发现作者是新作者， 则将其先插入到 \verb|authors| 表格。
 \item 【不做】由 scan 的 \verb|--backup| 完成：上一条中的 \verb|YYYYMMDDHHMM| 如果距离同一词条同一作者的上一个 \verb|YYYYMMDDHHMM| 少于 30 分钟（这个参数需要以后可以调整）但不是五分钟的整数倍， 则补全到五分钟的整数倍（到未来）。 补全后若文件文件名已存在则覆盖。
 \item 前端历史版本按钮中的字符数加减使用 \verb|history.add/del| 中的数据。 注意要显示用户名而不是 \verb|authors.id|。
@@ -44,8 +44,8 @@
 \subsubsection{图片相关}
 \begin{itemize}
 \item 按下 “上传图片并创建新标签” 按钮弹出一个窗口。窗口中有“上传图片”按钮，按下后弹出文件浏览器仅限选择一张 png 或者 pdf 图片（若该图的 hash 已经存在则见下文）。 另设一个“上传其他格式”按钮，按下后可以选择一张或多张常见格式图片，可以按多次，若第一个按钮上传的是 pdf，上传的其他格式图片中必须要有 svg 格式否则无法确定。 设一个“上传附件（源码或项目文件等）”按钮，用于上传附件，功能和 “上传其他格式” 一样，上传到 \verb|PhysWiki/files/|。另外可以在窗口提供输入 \verb|figures.caption|（必填） 和 \verb|width|（默认 6） 和 \verb|source|（选填） 和 \verb|images.license|（必填，默认和 \verb|entries.license| 一样）。
-\item 上传新的图片时， \verb|PhysWiki/figures/| 中的文件使用 \verb|images.hash| + 拓展名命名。 \verb|\label{}| 格式为 \verb|fig_词条名_序号|。这里的\verb|序号|可以由小到大逐个查看数据库中存不存在 \verb|figures.id=词条名_序号|，使用第一个不存在的。
-\item 【进行中】首先插入 \verb|images| 表的 \verb|hash, ext, figure, author, time|（此时如果有 foreign key 报错，需要 \verb|PRAGMA foreign_keys = OFF;|，完了再 \verb|ON|）， 再插入 \verb|figures| 表的 \verb|id, caption, authors, entry, image|， 再修改 \verb|entries| 表格的 \verb|figures|。 注意的格式，不要把已有的数据覆盖。 一个示例：
+\item 【完成】上传新的图片时， \verb|PhysWiki/figures/| 中的文件使用 \verb|images.hash| + 拓展名命名。 \verb|\label{}| 格式为 \verb|fig_词条名_序号|。这里的\verb|序号|可以由小到大逐个查看数据库中存不存在 \verb|figures.id=词条名_序号|，使用第一个不存在的。
+\item 【完成】首先插入 \verb|images| 表的 \verb|hash, ext, figure, author, time|（此时如果有 foreign key 报错，需要 \verb|PRAGMA foreign_keys = OFF;|，完了再 \verb|ON|）， 再插入 \verb|figures| 表的 \verb|id, caption, authors, entry, image|， 再修改 \verb|entries| 表格的 \verb|figures|。 注意的格式，不要把已有的数据覆盖。 一个示例：
 \begin{lstlisting}[language=none]
 PRAGMA foreign_keys = OFF;
 
@@ -257,7 +257,7 @@ UPDATE "entries" SET "figures" = "figures" || ' test_10' WHERE "id"='test';
 \subsection{Editor TODO}
 按优先级排序
 \begin{itemize}
-\item 【进行中】Mac 上编辑器的快捷键应该符合 Mac 用户的习惯，例如保存用 \verb|Cmd+S|，\textbf{其他请自行搜索}。
+\item 【完成】Mac 上编辑器的快捷键应该符合 Mac 用户的习惯，例如保存用 \verb|Cmd+S|，\textbf{其他请自行搜索}。
 \item 【完成】选中若干行代码按 \verb|Tab| 应该用 tab 缩进， 按 \verb|Shift + Tab| 应该删除一个缩进。
 \item \verb|\href{}{}| 命令的第一个花括号中有 \verb|%|， 替换为 \verb|\%|， 因为前者在 latex 中是注释。 第一个花括号中首尾的空格自动删除， 并把任何中间的空格或非 ascii 字符（编码 0-127）视为 utf-8 编码，并将该字符的每个字节自动替换为 \verb|\%两位hex|。
 \item 让 editor 在 littleshi.cn, PhysWiki, PhysWiki-backup， user-notes 等仓库中创建的文件的 mode 都默认为 664。 文件的 user 和 group 需要分别为 editor 和 wiki（也就是说编辑器后台以 editor 的身份运行）。
