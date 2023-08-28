@@ -22,7 +22,7 @@
 \subsubsection{开机自动 mount}
 \begin{itemize}
 \item \href{https://www.linode.com/docs/networking/ssh/using-sshfs-on-linux/}{参考这里}
-\item 要重启以后自动 mount 网盘（permanent mount， 两边重启都不怕）， \textbf{一定}要先用上面 \verb`sshfs` 命令先临时 mount 一次 （否则会出错！）， 成功以后用 \verb`sudo vim /etc/fstab` 在配置文件中最后一行加入 \verb`addis@192.168.137.1:/ /mnt/Miranda fuse.sshfs x-systemd.automount,_netdev,follow_symlinks,identityfile=/home/addis/.ssh/id_rsa,allow_other,default_permissions,reconnect 0 0`， \verb`/home/addis/.ssh/id_rsa`， 其他的什么意思不清楚也不用管. 用 \verb`sudo mount 挂载文件夹` 立即生效.
+\item 要重启以后自动 mount 网盘（permanent mount， 两边重启都不怕）， \textbf{一定}要先用上面 \verb`sshfs` 命令先临时 mount 一次 （否则会出错！）， 成功以后用 \verb`sudo vim /etc/fstab` 在配置文件中最后一行加入 \verb`用户名@域名或ip:服务器目录 /mnt/挂载目录 fuse.sshfs x-systemd.automount,_netdev,follow_symlinks,identityfile=/home/用户/.ssh/id_rsa,allow_other,default_permissions,reconnect,rw,exec,umask=0022,x-gvfs-show,port=端口号 0 0`（关于这些选项参考这里\upref{fdisk}）. 用 \verb`sudo mount 挂载文件夹` 立即生效.
 \item 如果 \verb|ssh| 有某个权限， 但是 \verb|sshfs| 没有， 那么可以在选项里面加上 \verb|rw,exec,umask=0000|。 保守一些也可以用 \verb|0022|。
 \item 现在可以试一试重启， 如果启动失败， 会进入一个安全命令行， 将 \verb`/etc/fstab` 加入的一行删掉即可。 如果成功的话， 重启后进入 \verb`/mnt/folder` 就会自动 mount
 \end{itemize}
