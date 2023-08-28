@@ -2,19 +2,19 @@
 % license Xiao
 % type Note
 
-\subsection{Visual Studio中使用 Eigen}
+\subsection{安装}
 Eigen 的\href{http://eigen.tuxfamily.org/index.php?title=Main_Page}{主页}。
 \begin{enumerate}
 \item 首先\href{http://eigen.tuxfamily.org/index.php?title=Main_Page#Documentation}{下载} Eigen, 不需要任何安装。
-\item 在 Visual Studio 中创建新 Project, 在 Project 的属性中的 Include Directories 加入解压文件夹的目录。
-\item 在使用 Eigen 的代码中加入 \verb|#include <Eigen/Dense>| 即可。
+\item 把解压后的文件夹加入 include 路径。
+\item 在使用 Eigen 的代码中加入 \verb|#include <Eigen/Dense>| 等头文件即可。
 \end{enumerate}
 
 \subsection{基础}
 \begin{itemize}
 \item 与 Matlab 的\href{https://eigen.tuxfamily.org/dox/AsciiQuickReference.txt}{语法对照表}。
 \item \href{https://eigen.tuxfamily.org/dox/AsciiQuickReference.txt}{ascii 快速参考}
-\item 所有的 Eigen 名字都有 namespace Eigen
+\item 所有的 Eigen 名字都有 namespace \verb|Eigen|
 \end{itemize}
 
 \begin{lstlisting}[language=cpp]
@@ -91,3 +91,91 @@ U = svd.matrixU(); V = svd.matrixV(); X = svd.singularValues();
 \item \verb|Map<>| 有三个模板参数， 但是只需要用一个， 即 \verb|Map<Matrix<>>|.
 \item 创建 Map object 如 \verb|Map<MatrixXf> a(duuble* pa, rows,cols);|
 \end{itemize}
+
+\subsection{其他标量类型}
+Eigen 使用模板变成的巨大优势就是可以使用自定义标量类型。 代码已经默认支持 \verb|float,double,long double| 以及对应的复数。 要让矩阵元支持其他类型（如 g++ 的 \verb|__float128|，甚至 GMP 的任意精度类型）， 只需要告诉 Eigen 新增标量的特性即可：
+\begin{lstlisting}[language=cpp]
+namespace Eigen {
+template<> struct NumTraits<Qdoub> : GenericNumTraits<Qdoub>
+{
+    typedef Qdoub Real;
+    typedef Qdoub NonInteger;
+    typedef Qdoub Nested;
+    static inline Real epsilon() { return FLT128_EPSILON; }
+    static inline Real dummy_precision() { return 0; }
+    static inline int digits10() { return FLT128_DIG; }
+    enum {
+        IsInteger = 0,
+        IsSigned = 1,
+        IsComplex = 0,
+        RequireInitialization = 0,
+        ReadCost = 2,
+        AddCost = 2,
+        MulCost = 6
+    };
+};
+
+template<> struct NumTraits<Qcomp> : GenericNumTraits<Qcomp>
+{
+    typedef Qdoub Real;
+    typedef Qdoub NonInteger;
+    typedef Qdoub Nested;
+    static inline Real epsilon() { return FLT128_EPSILON; }
+    static inline Real dummy_precision() { return 0; }
+    static inline int digits10() { return FLT128_DIG; }
+    enum {
+        IsInteger = 0,
+        IsSigned = 0,
+        IsComplex = 1,
+        RequireInitialization = 0,
+        ReadCost = 4,
+        AddCost = 4,
+        MulCost = 12
+    };
+};
+typedef Matrix<Qdoub, Dynamic, Dynamic> MatrixXq;
+typedef Matrix<Qcomp, Dynamic, Dynamic> MatrixXqc;
+typedef Matrix<Qdoub, Dynamic, 1> VectorXq;
+typedef Matrix<Qcomp, Dynamic, 1> VectorXqc;
+} // namespace Eigen
+\end{lstlisting}
+
+
+\subsection{稀疏矩阵（Sparse Matrix）}
+
+参考：\href{https://eigen.tuxfamily.org/dox/group__TutorialSparse.html}{稀疏矩阵文档主页}， \href{https://eigen.tuxfamily.org/dox/classEigen_1_1SparseMatrix.html}{SparseMatrix 类文档}，\href{https://eigen.tuxfamily.org/dox/group__TopicSparseSystems.html}{解稀疏线性方程文档}。
+
+\verb|Eigen::SparseMatrix<Scalar_, Options_, StorageIndex_>| 模板中，\verb|Scalar_| 是矩阵元的类型， \verb|Options_| 只能是 \verb|Eigen::ColMajor| 或 \verb|Eigen::RowMajor|，默认是 \verb|ColMajor|。 \verb|StorageIndex_| 是内部数组的 index 的类型，必须是有符号整数，默认 \verb|int|。 注意这不是成员函数中行标和列表的 index 类型（\verb|Eigen::Index|）。
+
+除非特殊说明，我们下面都以 \verb|RowMajor| 为例。
+
+\subsubsection{内部结构}
+\begin{itemize}
+\item Eigen 中 \verb|RowMajor| 的稀疏矩阵类似 CSR（\autoref{sub_SprMat_3}~\upref{SprMat}），但允许储存矩阵元的数组 \verb|Values| 中有一些预留的空位。
+\item \verb|RowMajor| 的 \textbf{inner dimension} 是行的方向， \textbf{outer dimmension} 是列。 ColMajor 则相反。
+\item \verb|InnerIndices| 是非零矩阵元的列标， 大小元素都和 \verb|Values| 一一对应，空位处的值无意义。
+\item \verb|OuterStarts|： \verb|Values[OuterStarts[i]]| 是第 \verb|i| 行的第一个非零元。如果该行为零，那就和下一个非零元的 \verb|OuterStarts| 相同。 \verb|OuterStarts| 的尺寸比列数多 1，最后一个元素是 \verb|Values| 的长度。
+\item \verb|InnerNNZs| 是每一列非零元素的个数（不包含空位）， 长度和列数相同。
+\end{itemize}
+
+\subsubsection{常用成员函数}
+\begin{itemize}
+\item \verb|Scalar coeff(Index row, Index col) const|
+\item \verb|Scalar &coeffRef(Index row, Index col)|
+\item \verb|Index cols() const| 列数
+\item \verb|Index rows() const| 行数
+\item \verb|void conservativeResize(Index rows, Index cols)| 改变矩阵尺寸，保留原来的值。
+\item \verb|StorageIndex *innerIndexPtr()| 返回 \verb|InnerIndices| 数组的指针
+\item \verb|StorageIndex *innerNonZeroPtr()| 返回 \verb|InnerNNZs| 数组的指针
+\item \verb|Scalar &insert(Index row, Index col)| 返回一个引用，用于插入一个值。该矩阵元之前不能存在值
+\item \verb|bool isCompressed() const| 是否是 CSR 格式
+\item \verb|void makeCompressed()| 变为 CSR 格式
+\item \verb|Index nonZeros() const| 非零元的总个数
+\item \verb|StorageIndex *outerIndexPtr()| 返回 \verb|OuterStarts| 数组的指针
+
+\item \verb|void setFromTriplets(const InputIterators &begin, const InputIterators &end)| 从 \verb|vector<Eigen::Triplet<Scalar>>| 给稀疏矩阵赋值（不一定是 \verb|vector|）。
+\item \verb|Scalar *valuePtr()| 返回 \verb|Values| 数组的指针
+\end{itemize}
+
+\subsubsection{解线性方程组}
+\addTODO{……}
