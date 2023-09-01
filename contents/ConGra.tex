@@ -6,19 +6,35 @@
 \issueDraft
 \end{issues}
 
-\pentry{多元函数的极值\upref{MulPlo}}
+\pentry{多元函数的极值\upref{MulPlo}，线性方程组解的结构\upref{LinEq}， 厄米矩阵、自伴矩阵\upref{HerMat}}
+
+\subsection{共轭梯度法}
 
 \footnote{本文参考 \cite{NR3}。}要求解\textbf{对称正定矩阵（symmetric and positively defined, SPD）} $\mat A$， 的线性方程组
 \begin{equation}\label{eq_ConGra_1}
 \mat A \bvec x = \bvec b~.
 \end{equation}
 只需要令
-\begin{equation}
+\begin{equation}\label{eq_ConGra_2}
 f(\bvec x) = \frac{1}{2}\bvec x\Tr \mat A\bvec x - \bvec b\Tr \vdot \bvec x~.
 \end{equation}
 容易证明 $\grad f = \mat A \bvec x - \bvec b$。 注意 $f(x)$ 是一个凹二次函数， 所以取最小值当且仅当梯度为零。 这样， 解方程组的问题就转化为求函数极小值问题。 我们可以用梯度法（链接未完成）来求最小值， 即从出发点 $\bvec x_0$ 开始， 在梯度方向搜索函数最小值的位置 $\bvec x_1$， 再在其梯度方向搜索最小值的位置 $\bvec x_2$……
 
-梯度法可以拓展为\textbf{共轭梯度法}， 以适用于任意线性方程组。 该方法的优势在于用户只需要向解算器提供矩阵乘矢量的函数， 而不需要提供矩阵本身。 这样， 矩阵可以具有任意的数据结构， 例如各种稀疏矩阵\upref{SprMat}。
+同理，若 $\mat A$ 是一个厄米矩阵\upref{HerMat}且正定，把\autoref{eq_ConGra_2} 变为
+\begin{equation}
+f(\bvec x) = \frac{1}{2}\bvec x\Her \mat A \bvec x~,
+\end{equation}
+同样可以证明 $f$ 取最小值时\autoref{eq_ConGra_1} 成立。 注意此时梯度不太好定义，那么我们可以分别令
+\begin{equation}
+\pdv{f}{\Re[x_i]} = 0~, \qquad  \pdv{f}{\Im[x_i]} = 0~
+\end{equation}
+即可证明。
+
+要找现成的程序， Eigen\upref{Eigen} 提供 \href{https://eigen.tuxfamily.org/dox/classEigen_1_1ConjugateGradient.html}{Eigen::ConjugateGradient}，适用于对称或者厄米矩阵。 密矩阵\upref{MatSto}和稀疏矩阵\upref{SprMat}都可以。
+
+\subsection{双共轭梯度法}
+
+梯度法可以拓展为\textbf{双共轭梯度法}， 以适用于任意方矩阵的线性方程组。 该方法的优势在于用户只需要向解算器提供矩阵乘矢量的函数， 而不需要提供矩阵本身。 这样， 矩阵可以具有任意的数据结构， 例如各种稀疏矩阵\upref{SprMat}。
 
 当矩阵 $\mat A$ 接近于单位矩阵时， 该方法收敛更快， 因此， 我们可以选择不直接求解\autoref{eq_ConGra_1} 而是求解
 \begin{equation}
@@ -26,4 +42,4 @@ f(\bvec x) = \frac{1}{2}\bvec x\Tr \mat A\bvec x - \bvec b\Tr \vdot \bvec x~.
 \end{equation}
 其中 $\tilde {\mat A}$ 和 $\mat A$ 接近， 但更易于求解。 这样就有 $\tilde {\mat A}^{-1}\mat A \approx \mat I$。 这里 $\tilde {\mat A}$ 通常称为 preconditioner。 该方法称为 \textbf{preconditioned biconjugate gradient method (PBCG)}。 如果你找不到更好的 preconditioner， 通常可以用 $\mat A$ 的对角线充当。 若选择不使用 preconditioner， 也可以直接令 $\tilde {\mat A}$ 为单位矩阵。
 
-PBCG 的 C++ 代码见 \cite{NR3} 的 \verb|linbcg.h|。 另外 C++ 的 Eigen 库\upref{Eigen}也提供 \verb|Eigen::BiCGSTAB| 算法。 \verb|Matlab| 也有 \verb|x = bicgstab(A,b)| 函数（支持复数）。 其中 \verb|STAB| 意思是 \verb|stablized|， 单纯的 \verb|BiCG| 据说并不稳定， 见 Wikipedia \href{https://en.wikipedia.org/wiki/Biconjugate_gradient_stabilized_method}{相关页面}（Matlab 的程序和这里给出的伪代码非常相似）。
+PBCG 的 C++ 代码见 \cite{NR3} 的 \verb|linbcg.h|。 另外 C++ 的 Eigen 库\upref{Eigen}也提供 \verb|Eigen::BiCGSTAB| 算法。 \verb|Matlab| 也有 \verb|x = bicgstab(A,b)| 函数（支持复数）。 其中 \verb|STAB| 意思是 \verb|stablized|， 单纯的 \verb|BiCG| 据说并不稳定， 见 Wikipedia \href{https://en.wikipedia.org/wiki/Biconjugate_gradient_stabilized_method}{相关页面}（Matlab 的 \verb|bicgstab| 函数和这里给出的伪代码非常相似）。

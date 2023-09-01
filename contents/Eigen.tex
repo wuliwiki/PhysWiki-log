@@ -170,6 +170,7 @@ typedef Matrix<Qcomp, Dynamic, 1> VectorXqc;
 \item \verb|Scalar &insert(Index row, Index col)| 返回一个引用，用于插入一个值。该矩阵元之前不能存在值
 \item \verb|bool isCompressed() const| 是否是 CSR 格式
 \item \verb|void makeCompressed()| 变为 CSR 格式
+\item \verb|sqeeze()| 类似 \verb|makeCompressed()|， 但仍然会保留少量空位。
 \item \verb|Index nonZeros() const| 非零元的总个数
 \item \verb|StorageIndex *outerIndexPtr()| 返回 \verb|OuterStarts| 数组的指针
 
@@ -178,4 +179,9 @@ typedef Matrix<Qcomp, Dynamic, 1> VectorXqc;
 \end{itemize}
 
 \subsubsection{解线性方程组}
-\addTODO{……}
+\addTODO{见 \verb|SLISC/tests/eigen.cpp|}
+\begin{itemize}
+\item \verb`ConjugateGradient<SparseMatrix<Comp>, Lower|Upper> solver(H);`
+\item \verb|solver.make(H)|
+\item 要验证精度，可以用 \verb|(A*x - b).norm()/b.norm()|。
+\end{itemize}
