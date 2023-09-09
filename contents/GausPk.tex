@@ -3,10 +3,6 @@
 % license Xiao
 % type Tutor
 
-\begin{issues}
-\issueDraft
-\end{issues}
-
 \pentry{波包\upref{WvPck}， 高斯分布\upref{GausPD}}
 
 \begin{figure}[ht]
@@ -20,7 +16,7 @@
 f(x) = A_0 \E^{-a(x-x_0)^2}\E^{\I k_0 x}~,
 \end{equation}
 
-FWHMI （光强半高宽）是多少？ 即 $f(x)^2$ 大于峰值一半时的宽度。令
+FWHMI （光强半高宽）是多少？ 即 $f(x)^2$ 等于其峰值一半时的宽度。令
 \begin{equation}
 \E^{-2a\Delta x^2} = 1/2~,
 \end{equation}
@@ -37,3 +33,64 @@ FWHMI （光强半高宽）是多少？ 即 $f(x)^2$ 大于峰值一半时的宽
 \begin{equation}
 g(k) = A_0\sqrt{\frac{\pi}{a}} \exp[-\frac{(k-k_0)^2}{4a}]~.
 \end{equation}
+
+\subsection{高斯和 cos2 波包比较}
+$\cos^2$ 波包也叫 $\sin^2$ 波包，比起高斯波包，它的优点是存在明确的范围。 它的函数形式为
+\begin{equation}
+f(x) = \leftgroup{
+&A_0\cos^2[\pi(x-x_0)/L] \E^{\I k_0x} && (\abs{x-x_0} < L/2)\\
+&0 && (\text{otherwise})
+}~.
+\end{equation}
+其中 $L$ 是波包的总长度。 它的 FWHMI 为
+\begin{equation}
+\text{FWHMI} = \frac{2}{\pi}\opn{acos}(2^{-1/4}) L~.
+\end{equation}
+画图对比如下（代码见文末）：
+\begin{figure}[ht]
+\centering
+\includegraphics[width=13cm]{./figures/925904dd88cd4821.pdf}
+\caption{高斯波包和 cos2 波包的对比} \label{fig_GausPk_2}
+\end{figure}
+
+\subsection{附：Matlab 画图代码}
+\begin{lstlisting}[language=matlab, caption=sin2\_gaussian\_compare.m]
+% plot Gaussian vs cos2 profile
+
+% gaussian
+FWHMI = 1;
+a = iFWHMIexp(FWHMI);
+x = linspace(-2*FWHMI, 2*FWHMI, 1000);
+field_gauss = exp(-a.*x.^2);
+
+% cos2
+field_cos2  = zeros(size(x));
+dur_cos2 = FWHMI / FWHMIsin2;
+mark = abs(x) < dur_cos2/2;
+field_cos2(mark) = cos((pi/2)*x(mark)/(dur_cos2/2)).^2;
+
+% plot field profile
+figure;
+subplot(2, 1, 1); hold on;
+axis([min(x), max(x), 0, 1.1]);
+plot_vert(-FWHMI/2, 'c--');
+plot_vert(FWHMI/2, 'c--');
+plot_hori(sqrt(1/2), 'c--');
+plot(x, field_gauss, 'r');
+plot(x, field_cos2, 'b--');
+legend({'', '', '', 'Gaussian', 'cos2'});
+% xlabel('t [FWHM]');
+ylabel('field');
+title('Gaussian vs cos2 profile (lines show FWHMI)');
+
+% plot intensity profile
+subplot(2, 1, 2); hold on;
+axis([min(x), max(x), 0, 1.1]);
+plot_vert(-FWHMI/2, 'c--');
+plot_vert(FWHMI/2, 'c--');
+plot_hori(1/2, 'c--');
+plot(x, field_gauss.^2, 'r');
+plot(x, field_cos2.^2, 'b--');
+xlabel('t [FWHM]');
+ylabel('intensity');
+\end{lstlisting}

@@ -1,0 +1,39 @@
+% 拉格朗日插值法
+% license Xiao
+% type Tutor
+
+\pentry{高斯消元法解线性方程组\upref{GAUSS}}
+
+\footnote{参考 Wikipedia \href{https://en.wikipedia.org/wiki/Lagrange_polynomial}{相关页面}。}给定 $(x_1, y_1), \dots, (x_N, y_N)$， 可以使用一个唯一的 $N-1$ 阶多项式进行插值
+\begin{equation}
+p(x) = c_0 + c_1x + \dots + c_{N-1}x^{N-1}~.
+\end{equation}
+要解处系数，可以列 $N$ 元线性方程组
+\begin{equation}
+p(x_i) = y_i \qquad (i=1,\dots,N)~.
+\end{equation}
+方程组的系数矩阵是一个 $N\times N$ 的范德蒙矩阵、范德蒙行列式\upref{VandDe}
+\begin{equation}
+\pmat{1 && x_1 && \dots && x_1^{N-1}\\
+1 && x_2 && \dots && x_2^{N-1}\\
+\vdots && \vdots && \vdots && \vdots \\
+1 && x_N && \dots && x_N^{N-1}}~.
+\end{equation}
+
+\subsection{拉格朗日基底}
+使用拉格朗日基底函数进行插值，可以避免解方程直接得到插值多项式。 定义基底函数满足：
+\begin{equation}
+l_i(x_j) = \leftgroup{
+&1 && (j = i) \\
+&0 && (j \ne i)
+} \qquad (i,j=1,\dots,N)~.
+\end{equation}
+容易看出下面的多项式满足该条件
+\begin{equation}
+l_i(x) = \frac{x-x_1}{x_i-x_1} \frac{x-x_2}{x_i-x_2}  \dots \frac{x-x_{i-1}}{x_i-x_{i-1}}\frac{x-x_{i+1}}{x_i-x_{i+1}} \dots \frac{x-x_N}{x_i-x_N}~.
+\end{equation}
+
+那么， 对任意一组插值点， 插值多项式可以表示为拉格朗日基底的线性组合
+\begin{equation}
+p(x) = \sum_i y_i l_i(x)~.
+\end{equation}

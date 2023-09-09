@@ -6,62 +6,184 @@
 \issueDraft
 \end{issues}
 
-\pentry{化学势， 态函数\upref{statef}， 化学反应进度， 吉布斯自由能\upref{GibbsG}}
+\pentry{态函数\upref{statef}， 吉布斯自由能\upref{GibbsG}}
+\footnote{参考书目：朱文涛等人的《简明物理化学》}
+\subsection{化学反应平衡判据}
+什么是化学反应？唯象地说，化学反应前后系统中各物质的含量改变，系统状态也随之改变。
 
-对于一个多元系统，可以写出
-\begin{equation}
-G=G(p,T,n_1,n_2,...)~.
+我们假定一个始终保持等温等压的系统（这要求化学反应全程，系统能与环境交互）。系统反应前的Gibbs能是 
+$$G_0 = \sum_i n_i \mu_i~,$$
+现在，我们想象系统中发生了一点化学反应、系统物质的组成轻微变化\footnote{或许我们应该使用代表虚变动的$\delta$而不是$\mathrm{d}$。}：
+$$G_1 = \sum_i (n_i + \dd n_i) \mu_i~,$$
+这个微小过程前后，Gibbs能变化自然是：
+\begin{equation}\label{eq_chemBl_2}
+\dd G = G_1 - G_0 = \sum_i \mu_i \dd n_i~,
 \end{equation}
+根据我们对Gibbs判据 \upref{GibbsG} 的理解，
+\begin{equation}\label{eq_chemBl_1}
+\begin{aligned}
+\text{反应能继续发生} &\Longleftrightarrow \dd G < 0~,\\
+\text{反应达到平衡} &\Longleftrightarrow \dd G = 0~.\\
+\end{aligned}
+\end{equation}
+至此，我们已经原则上解决了化学平衡问题。复读一遍高中课本：化学反应达到平衡，不是反应物被完全消耗，而是反应物与生成物按特定比例共处一室。
+
+\subsection{化学反应的物质守恒；化学反应进度}
+\pentry{物质的量与摩尔（高中）\upref{MOLE}}
+我们上文中直接描述了每个物质的变化量$\dd n_i$。然而故事没那么简单，\textsl{或者说故事其实更简单}：根据物质守恒，每个物质的物质的量变动不是独立的。比如说，对于一个最简单的分解反应$A\to2B$，我们都知道消耗$1 \Si{mol} A$后，总会生成$2 \Si{mol} B$，而不能生成$3 \Si{mol} B$，或者只生成$1 \Si{mol} B$。
+
+因此，化学反应中各个物质的物质的量变化是高度关联的，一个化学反应只有一个自由度，我们称之为化学反应进度 $\dd \xi$。系统中各个物质的物质的量变化$\dd n_i$都可由$\dd \xi$确定：
+\begin{equation} \label{eq_chemBl_7}
+\dd n_i = \nu_i \dd \xi~,
+\end{equation}
+其中$\nu_i$是化学计量数，即化学方程式中物质前的数字，生成物记为正、反应物记为负。
+
+例如，在$A\to2B$中，若$\dd \xi=1 \Si{mol}$（读作“发生$1 \Si{mol}$反应后”），意味着$\dd n_A = \nu_A \dd \xi = - 1 \Si{mol}$以及$\dd n_B = \nu_i \dd \xi = 2 \Si{mol}$。
+
+化用化学反应进度的语言 \autoref{eq_chemBl_7} ，我们惊奇地发现Gibbs变 \autoref{eq_chemBl_2} 变得非常简单：
+\begin{equation}\label{eq_chemBl_3}
+\dd G = \sum_i \mu_i \dd n_i = \sum_i \mu_i \nu_i \dd \xi =  \dd \xi \sum_i \mu_i \nu_i~,
+\end{equation}
+在化学学科，可将 \autoref{eq_chemBl_3} 的$\dd \xi$ "除"到左边、令其变为偏微分形式，从而定义反应的摩尔Gibbs变$\Delta_r G_M$：
+\begin{equation} \label{eq_chemBl_5}
+\Delta_r G_M = \left(\pdv{G}{\xi}\right)_{p,T} = \sum_i \mu_i \nu_i~.
+\end{equation}
+根据定义，$\Delta_r G_M$与物质组成、\textbf{物质浓度}、系统的温度压力等有关。$\Delta_r G_M \dd \xi$的含义可以不严谨地理解为，发生少量反应$\dd \xi$后，系统Gibbs能的变化。
+
+由于$\Delta_r G_M$ 只是化学反应进度版的$\Delta G$，因此Gibbs判据\autoref{eq_chemBl_1} 对$\Delta_r G_M$依旧成立：
+\begin{equation}\label{eq_chemBl_6}
+\begin{aligned}
+\text{反应能继续发生} &\Longleftrightarrow \Delta_r G_M < 0~,\\
+\text{反应达到平衡} &\Longleftrightarrow \Delta_r G_M = 0~.\\
+\end{aligned}
+\end{equation}
+
+
+
+\subsection{化学平衡常数}
+\pentry{理想混合物的热力学量\upref{IMCPTV}}
+如果你对理想混合物稍有理解，你就知道
+\begin{equation}\label{eq_chemBl_4}
+\mu_i = \mu_i^* + RT \ln x_i~,
+\end{equation}
+其中$\mu_i^*$是纯物质的化学势，$x_i$是物质的物质的量浓度。
+
+将\autoref{eq_chemBl_4} 代入 \autoref{eq_chemBl_5} ，
+\begin{equation}
+\begin{aligned}
+\Delta_r G_M &= \sum_i \mu_i \nu_i = \sum_i (\mu_i^* + RT \ln x_i) \nu_i\\
+&= \sum_i \mu_i^* \nu_i + RT \sum_i \nu_i \ln x_i
+\end{aligned}~.
+\end{equation}
+
+$\Delta_r G_M$神奇地分为了相对独立的两项：
+\begin{itemize}
+\item $\sum_i \mu_i^* \nu_i$项与物质的浓度无关，与物质种类（以及温度、压力、化学方程式的书写）有关，称为标准摩尔Gibbs变：$\Delta_r G_M^* = \sum_i \mu_i^* \nu_i$
+\item $RT \sum_i \nu_i \ln x_i$项与物质的浓度有关。按化学学科惯例，一般将$\ln$提到最前，使累加变累乘：$RT \ln \Pi_i x_i^{\nu_i}$。$\Pi_i x_i^{\nu_i}$称为活度积 $J=\Pi_i x_i^{\nu_i}$。
+\end{itemize}
+因此，\begin{equation} \label{eq_chemBl_9}
+\Delta_r G_M = \Delta_r G_M^* + RT \ln J~.
+\end{equation}
+
+\subsubsection{标准平衡常数}
+对\autoref{eq_chemBl_9} 运用Gibbs判据 \autoref{eq_chemBl_6}：
+\begin{equation} \label{eq_chemBl_10}
+\begin{aligned}
+\text{反应达到平衡} &\Rightarrow \Delta_r G_M = 0\\
+&\Rightarrow \Delta_r G_M^* + RT \ln J_{eq} = 0\\
+&\Rightarrow \Delta_r G_M^* = - RT \ln J_{eq}\\
+&\Rightarrow J_{eq} = e^{-\frac{\Delta_r G_M^*}{RT}}\\
+\end{aligned}~.
+\end{equation}
+$J_{eq}$也称标准平衡常数 $K^*$，是不少化学书的标准术语。
+
+\subsubsection{活度积判据}
+在化学中，相比于Gibbs判据，更直观、易用的是活度积判据，这也是我们在高中时就\textsl{做烂的题}。根据 \autoref{eq_chemBl_9} ，\autoref{eq_chemBl_10} 与Gibbs判据 \autoref{eq_chemBl_6} ，
+$$
+\begin{aligned}
+\Delta_r G_M & = \Delta_r G_M^* + RT \ln J_{eq}\\
+& = - RT \ln K^* + RT \ln J_{eq}\\
+& = - RT \ln \frac{K^*}{J} \\
+\end{aligned}~.
+$$
+即$- RT \ln \frac{K^*}{J}<0 \Rightarrow \ln \frac{K^*}{J} >0 \Rightarrow \frac{K^*}{J} >1 \Rightarrow K^*>J, J<K^*$时，反应正向进行；$J=K^*$时，反应达到平衡。此为活度积判据。
+
+\begin{example}{电池、电池、还是电池}
+我们知道，Gibbs变还体现了系统做非体积功的能力 \upref{Td2Law}。系统发生$1 \Si{mol}$反应后\footnote{这么表述是不严谨的，因为$1 \Si{mol}$反应期间，系统的$J$也在变化。我们这里假定系统很大，在$1 \Si{mol}$反应期间系统的$J$几乎不变。当然如果你高兴，也可以取为$\dd \xi$，对于下述的分析没有本质影响，但是会让书写麻烦不少。}，能做的最多非体积功是：
+$$w = - \Delta_r G_M~,$$
+如果系统是一个电池，那么非体积功用来驱动电荷：
+$$w = NqE~,$$
+其中$N$代表$1\Si{mol}$反应中转移的电子数量，$q$代表电子电荷，$E$是电池电动势。%在电化学中，更常用的方案是，$n$代表载流子物质的量，$F = q \cdot N_A$是法拉第常数。
+因此，
+$$E = -\frac{\Delta_r G_M}{Nq} = -\frac{\Delta_r G_M^*}{Nq} - \frac{RT}{Nq} \ln J ~,$$
+有时定义标准电势
+$$E^* = -\frac{\Delta_r G_M^*}{Nq}~,$$
 那么，
-\begin{equation}
-\dd G=-S \dd T +V \dd P + \sum \mu_B \dd n_B~.
-\end{equation}
-在等温等压下，p，T均为定值
-\begin{equation}
-\dd G=\sum \mu_B \dd n_B~,
-\end{equation}
+$$E = E^* - \frac{RT}{Nq} \ln J ~.$$
+可见，电池电动势与物质种类、活度积等有关，史称能斯特Nernst方程。能斯特方程部分解释了不少电池现象：电压与电极材料的关联、电压与电池剩余电量的联系、温度对电压的影响...
+\end{example}
 
-代入化学反应进度 $\dd \xi=\dd n_B/\nu_b$，得
-\begin{equation}
-\dd G=\sum \nu_B \mu_B \dd \xi~.
-\end{equation}
-$\nu$: 化学反应系数
+至此，我们基于经典热力学理论，论证了为什么化学反应往往不会完全进行：因为Gibbs判据，或者更基本的，热力学第二定律。
 
-或写为导数形式
-\begin{equation}
-\dv{G}{\xi}=\sum \nu_B \mu_B~.
-\end{equation}
+必须注意的是，化学反应平衡仅仅表明反应的热力学倾向，而并不代表这个反应能真正发生。你可能查阅各种数据手册后发现，从单质生成某些蛋白质的反应有 $\Delta_r G_M <0$，然而这并不意味着你把单质元素堆在一块就能“合成”出蛋白质！你还得考虑更为复杂的动力学因素。更老生常谈的例子是钻石与石墨：常温下钻石到石墨的反应其实是$\Delta G<0$的，然而由于动力学因素（钻石结构十分紧凑，同时常温下原子活性低，原子没有动力克服能垒以形成热力学上更稳定的石墨结构），几乎不可能观察到钻石转变为石墨。
 
-定义摩尔Gibbs变
-\begin{equation}
-\Delta _r G_M = \dv{G}{\xi}=\sum \nu_B \mu_B~.
-\end{equation}
-含义为“化学反应进度再多进行一点后，系统的Gibbs能变”。
 
-\subsection{化学势判据}
-根据吉布斯自由能的含义\upref{GibbsG}，
-若 $\Delta _r G_M<0$，则反应会继续进行；若$\Delta _r G_M = 0$，则反应达到平衡。
+% --以下是本文章的旧版本，按需删除：--
 
-\subsection{活度积、标准平衡常数、活度积判据}
-注意到 
-$\mu_B=\mu_B^*+RT \ln x_B$，那么
-\begin{equation} \label{eq_chemBl_1}
-\Delta _r G_M =\sum \nu_B \mu_B = \sum \nu_B (\mu_B^*+RT\ln _B)=\sum \nu_B \mu_B^* + RT \sum \nu_B \ln x_B~.
-\end{equation}
+% 对于一个多元系统，可以写出
+% \begin{equation}
+% G=G(p,T,n_1,n_2,...)~.
+% \end{equation}
+% 那么，
+% \begin{equation}
+% \dd G=-S \dd T +V \dd P + \sum \mu_B \dd n_B~.
+% \end{equation}
+% 在等温等压下，p，T均为定值
+% \begin{equation}
+% \dd G=\sum \mu_B \dd n_B~,
+% \end{equation}
 
-定义标准摩尔Gibbs焓变 $\Delta _r G_M^*=\sum \nu_B \mu_B^*$与活度积 $J=\prod x_B^{\nu_B}~,$
+% 代入化学反应进度 $\dd \xi=\dd n_B/\nu_b$，得
+% \begin{equation}
+% \dd G=\sum \nu_B \mu_B \dd \xi~.
+% \end{equation}
+% $\nu$: 化学反应系数
 
-那么
-\begin{equation}
-\Delta _r G_M = \Delta _r G_M^* + RT \ln J~.
-\end{equation}
+% 或写为导数形式
+% \begin{equation}
+% \dv{G}{\xi}=\sum \nu_B \mu_B~.
+% \end{equation}
 
-再定义标准平衡常数 $K = e^{\frac{-\Delta _r G_M^*}{RT}}$，即$\Delta _r G_M^* = -RT \ln K~.$
+% 定义摩尔Gibbs变
+% \begin{equation}
+% \Delta _r G_M = \dv{G}{\xi}=\sum \nu_B \mu_B~.
+% \end{equation}
+% 含义为“化学反应进度再多进行一点后，系统的Gibbs能变”。
 
-那么 
-\begin{equation}
-\Delta _r G_M = -RT \ln K + RT \ln J = RT \ln \frac{J}{K}~.
-\end{equation}
+% \subsection{化学势判据}
+% 根据吉布斯自由能的含义\upref{GibbsG}，
+% 若 $\Delta _r G_M<0$，则反应会继续进行；若$\Delta _r G_M = 0$，则反应达到平衡。
 
-根据化学势判据，当 
-$RT \ln \frac{J}{K} < 0$，即$J<K$时，反应正向进行；$J=K$时，反应达到平衡。此为活度积判据。
+% \subsection{活度积、标准平衡常数、活度积判据}
+% 注意到 
+% $\mu_B=\mu_B^*+RT \ln x_B$，那么
+% \begin{equation} \label{eq_chemBl_1}
+% \Delta _r G_M =\sum \nu_B \mu_B = \sum \nu_B (\mu_B^*+RT\ln _B)=\sum \nu_B \mu_B^* + RT \sum \nu_B \ln x_B~.
+% \end{equation}
+
+% 定义标准摩尔Gibbs焓变 $\Delta _r G_M^*=\sum \nu_B \mu_B^*$与活度积 $J=\prod x_B^{\nu_B}~,$
+
+% 那么
+% \begin{equation}
+% \Delta _r G_M = \Delta _r G_M^* + RT \ln J~.
+% \end{equation}
+
+% 再定义标准平衡常数 $K = e^{\frac{-\Delta _r G_M^*}{RT}}$，即$\Delta _r G_M^* = -RT \ln K~.$
+
+% 那么 
+% \begin{equation}
+% \Delta _r G_M = -RT \ln K + RT \ln J = RT \ln \frac{J}{K}~.
+% \end{equation}
+
+% 根据化学势判据，当 
+% $RT \ln \frac{J}{K} < 0$，即$J<K$时，反应正向进行；$J=K$时，反应达到平衡。此为活度积判据。
