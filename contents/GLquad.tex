@@ -36,7 +36,7 @@ t_i = \frac{b-a}{2}x_i + \frac{b+a}{2}~,
 
 
 \subsection{Gauss-Lobatto 积分}
-Gauss-Lobatto 积分中令采样点（包括两个端点）的个数为 $N$， 如果 $f(x)$ 是 $2N-3$ 阶多项式（$f(x) = x^{2N-3} + \dots$）， 则积分没有误差。
+Gauss-Lobatto 积分中令采样点（包括两个端点）的个数为 $N$， 如果 $f(x)$ 是 $2N-3$ （或更低）阶多项式（$f(x) = x^{2N-3} + \dots$）， 则积分没有误差。
 
 注意 Gauss-Lobatto 积分是对称的
 \begin{equation}\label{eq_GLquad_5}
@@ -64,18 +64,17 @@ w = N[2/(NN (NN - 1) (LegendreP[NN - 1, x])^2) /. sol, digits]
 \begin{equation}\label{eq_GLquad_2}
 \ali{
 p_n(x) &= \prod_{i=1}^{n-1} \frac{x-x_i}{x_n-x_i} \prod_{i=n+1}^{N} \frac{x-x_i}{x_n-x_i}\\
-&= \frac{x-x_1}{x_n-x_1} \times\dots\times\frac{x-x_{n-1}}{x_n-x_{n-1}}\frac{x-x-{n+1}}{x_n-x_{n+1}} \dots \frac{x-x_N}{x_n-x_N}~,
+&= \frac{x-x_1}{x_n-x_1} \dots \frac{x-x_{n-1}}{x_n-x_{n-1}}\frac{x-x-{n+1}}{x_n-x_{n+1}} \dots \frac{x-x_N}{x_n-x_N}~,
 }\end{equation}
-\begin{equation}
+\begin{equation}\label{eq_GLquad_1}
 p_n(x_{n'}) = \delta_{n, n'}~.
 \end{equation}
 
-由于任意两个基底乘积只是 $2N-2$ 阶的多项式， 所以可以用求和精确代替其积分（？）。
+由于任意两个基底乘积只是 $2N-2$ 阶的多项式， 所以用求和代替积分存在误差。 可以证明它们之间有近似的正交关系
 \begin{equation}
-\int_{-1}^1 p_i(x) p_j(x) \dd{x} = \sum_k w_k p_i(x_k) p_j(x_k) = w_i \delta_{ij}~.
+\int_{-1}^1 p_i(x) p_j(x) \dd{x} \approx \sum_k w_k p_i(x_k) p_j(x_k) = w_i \delta_{ij}~.
 \end{equation}
-
-所以 $N$ 个正交归一基底就是
+所以可以定义 $N$ 个近似正交归一的多项式基底
 \begin{equation}\label{eq_GLquad_3}
 f_n(x) = \frac{1}{\sqrt{w_n}} p_n(x)~,
 \end{equation}
@@ -84,12 +83,12 @@ f_n(x) = \frac{1}{\sqrt{w_n}} p_n(x)~,
 f_i(x_j) = \frac{1}{\sqrt{w_i}} \delta_{ij}~.
 \end{equation}
 
-另一种等效的表示方法是利用 $N$ 阶 Gauss-Lobatto 数值积分对应的多项式， $N-1$ 阶勒让德多项式的导数， $P'_{N-1}(x)$，  来构建满足条件的多项式。 根据定义，其 $N-2$ 个零点分别为 $x_2, x_3\dots x_{N-1}$， 为了加入 $x_1=-1$ 与 $x_n=1$ 这两个零点，将其变为 $N$ 阶多项式
+基底的另一种等效的表示方法是利用 $N$ 阶 Gauss-Lobatto 数值积分对应的多项式 $P'_{N-1}(x)$ 来构建。 根据定义，其 $N-2$ 个零点分别为 $x_2, x_3\dots x_{N-1}$。给它加入 $x_1=-1$ 与 $x_N=1$ 这两个零点，将其变为 $N$ 阶多项式得
 \begin{equation}\label{eq_GLquad_10}
 (1-x^2)P'_{N-1}(x)~.
 \end{equation}
-然而，\autoref{eq_GLquad_5} 要求 $p_n(x_n)=1$， 所以我们将\autoref{eq_GLquad_10} 除以它自己在 $x_n$ 处的切线，在 $x=x_n$ 处形成极限类型 $0/0=1$ 即可得到 阶多项式 $u_n(x)$。 
+然而，\autoref{eq_GLquad_1} 要求 $p_n(x_n)=1$， 所以我们将\autoref{eq_GLquad_10} 除以它自己在 $x_N$ 处的切线，在 $x=x_N$ 处形成极限类型 $0/0=1$ 即可得到多项式 $p_n(x)$。 
 \begin{equation}\label{eq_GLquad_11}
-u_n(x) = \frac{(1-x^2)P'_{N-1}(x)}{[(1-x^2)P'_{N-1}(x)]'_x} = x_n (x-x_n)~.
+p_n(x) = \frac{(1-x^2)P'_{N-1}(x)}{[(1-x^2)P'_{N-1}(x)]'_{x = x_n}(x-x_n)}~.
 \end{equation}
 该式与\autoref{eq_GLquad_2} 事实上是完全相同的多项式，因为所有具有 $N-1$ 个零点的 $N-1$ 阶多项式都可以因式分解成\autoref{eq_GLquad_2} 的形式乘以一个待定常数。用\autoref{eq_GLquad_11} 便于快速地展开多项式（因为勒让德多项式的系数可以直接通过公式计算）。
