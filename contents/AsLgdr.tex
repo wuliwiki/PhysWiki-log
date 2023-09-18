@@ -1,4 +1,4 @@
-% 连带勒让德多项式
+% 连带勒让德函数
 % keys 连带勒让德方程|归一化
 % license Xiao
 % type Tutor
@@ -9,9 +9,9 @@
 \begin{equation}
 \dv{x} \qty[(1-x^2)\dv{x} P_l^m(x)] + \qty[l(l+1) - \frac{m^2}{1-x^2}]P_l^m(x) = 0~.
 \end{equation}
-当 $m = 0$ 时， 该方式变为勒让德方程（\autoref{eq_Legen_1}~\upref{Legen}）。
+当 $m = 0$ 时， 该方式变为勒让德方程（\autoref{eq_Legen_1}~\upref{Legen}）。 其中参数 $l, m$ 分别叫做\textbf{次数（degree）}和\textbf{阶数（order）}。
 
-我们只讨 $l$ 为非负整数， $m$ 为绝对值不大于 $l$ 的整数的情况， 且只讨论区间 $x\in [-1,1]$。 此时连带勒让德函数的解 $P_l^m(x)$ 可用勒让德多项式 $P_l(x)$ 生成
+最广义的情况下， $l,m$ 都可以是任意复数。 本文中我们只讨整数 $l,m$，且 $l\geq 0$， $\abs{m} \leq l$ 的情况， 且只讨论区间 $x\in [-1,1]$。 这些限制在实际应用中是最常见的。 此时连带勒让德函数的解 $P_l^m(x)$ 可用勒让德多项式\upref{Legen} $P_l(x)$ 生成
 \begin{equation}\label{eq_AsLgdr_1}
 P_l^m(x) = (-1)^m (1 - x^2)^{m/2} \dv[m]{x} P_l(x)~.
 \end{equation}
@@ -23,7 +23,7 @@ P_l^0(x) = P_l(x)~.
 \addTODO{画函数图}
 
 \subsection{归一化}
-连带勒让德多项式的归一化系数为（证明略）
+连带勒让德函数的归一化系数为（证明略）
 \begin{equation}\label{eq_AsLgdr_3}
 A_{l,m} = \sqrt{\frac{2l+1}{2}\frac{(l-m)!}{(l+m)!}}~.
 \end{equation}
@@ -55,10 +55,13 @@ A_{l,-m} P_l^{-m}(x) = (-1)^m A_{l,m} P_l^m(x)~,
 \begin{equation}
 P_l^{-m}(x) = (-1)^m \frac{(l-m)!}{(l+m)!} P_l^m(x)~.
 \end{equation}
-也就是，当把 $m$ 取相反数，归一化的连带勒让德多项式会不变（$m$ 为偶）或取相反数（$m$ 为奇）。
+也就是，当把 $m$ 取相反数，归一化的连带勒让德函数会不变（$m$ 为偶）或取相反数（$m$ 为奇）。
 \item 求导
-\begin{equation}
-\dv{x} P_l^m(x) = \frac{1}{1-x^2} [(l+1)xP_l^m(x) - (l+1-m)P_{l+1}^m(x)]~.
+\begin{equation}\label{eq_AsLgdr_7} % Mathematica 已验证
+\dv{x} P_l^m(x) = \frac{1}{x^2-1} [(l-m+1)P_{l+1}^m(x) - (l+1)xP_l^m(x)]~.
+\end{equation}
+\begin{equation}\label{eq_AsLgdr_8} % Mathematica 已验证
+\dv{x} P_l^m(x) = \frac{1}{(2l+1)(x^2-1)} [l(l-m+1)P_{l+1}^m(x) - (l+1)(l+m)P_{l-1}^m(x)]~.
 \end{equation}
 \item 特殊值
 \begin{equation}\label{eq_AsLgdr_5} % Mathematica 已验证
@@ -75,3 +78,12 @@ P_{m+1}^m(x) = x (2m + 1) P_m^m(x)~,
 \end{equation}
 在数值计算中， 一般使用\autoref{eq_AsLgdr_5} 到\autoref{eq_AsLgdr_6} 求 $P_l^m$。
 \end{itemize}
+
+
+\addTODO{Gaunt' Formula}
+\begin{figure}[ht]
+\centering
+\includegraphics[width=14.25cm]{./figures/7bdf34725614dfc8.png}
+\caption{Gaunt' Formula} \label{fig_AsLgdr_1}
+\end{figure}
+这应该可以用 3j 系数来表示。

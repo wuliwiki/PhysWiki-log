@@ -116,16 +116,16 @@ union {} // 和 struct 类似， 但变量共用内存
 
 \subsection{函数指针}
 \begin{lstlisting}[language=cpp]
-// 函数指针
-double(*p1)(double) = sin;
+// 函数指针（每个括号左右都可以有空格）
+double(*p1)(double) = sin; // 也可以用 \verb|&sin|，下同
 // 定义函数指针类
 typedef double(*Tpf)(double);
 Tpf p3 = sin;
 // 定义函数类
 typedef double(Tf)(double);
-Tf *p2 = sin;
-// 作为类型参数（\verb|&sin| 和 \verb|sin| 等效）
-vector<double(*)(double)> arr {&sin, cos} arr;
+Tf *p2 = sin; // 注意 `Tf my_fun;` 是非法的
+// 作为类型参数
+vector<double(*)(double)> arr{&sin, cos};
 // 调用函数（dereference 可选）
 cout << "sin(1) = " << arr[0](1) << endl;
 cout << "cos(1) = " << (*arr[1])(1) << endl;

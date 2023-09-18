@@ -1,0 +1,30 @@
+% C++ 的可调用类型
+% license Usr
+% type Tutor
+
+
+\textbf{可调用类型（Callable）}
+
+最经典的是 C 语言的函数指针\upref{CNote}。 C++ 还引入了函数引用，用法和指针类似（\verb|*| 换成 \verb|&| 即可）。
+
+\subsection{lambda 函数}
+lambda 函数是 C++11 引入的。 除了语法更简洁， 好处主要在于可以修改函数的接口， 预先填装一些参数或者改变参数的顺序或类型。 例如一个积分函数 \verb|integral(T integrand, double start, doube end)| 若要求 \verb|integrand| 只接收一个 \verb|double| 返回一个 \verb|double|， 但我们想要积分的函数还需要其他若干参数。 这时就可以直接 capture： \verb|auto integral = [&param1, &param2](double x) { return fun1(param1, param2, x); }|。 其中 \verb|&| 是 capture by reference。 也就是说 lambda 定义以后，仍然可以改变它们的值。 不加 \verb|&| 就是 capture by value， 复制定义时的值。
+
+\begin{itemize}
+\item lambda 函数的 \verb|sizeof()| 通常是函数指针的函数， 但如果有 capture， 就会相应增加每个 capture 变量的 \verb|sizeof|。
+\item 普通 capture 的参数默认都是 \verb|const|， 如果想改变可以用 \verb|[...](...) mutable {...}| 但这不会影响被 capture 参数在函数外的值。 capture by reference 的参数， 在 lambda 函数中可以修改， 修改后也会影响它在 lambda 外面的值。
+\item lambda 的返回值只能有一种类型， 它会自动推导返回值的类型。 如果要明确指定返回类型， 用 \verb|[...](...) -> 类型 {...}|， 此时返回值会试图 cast 成该类型。
+\item 从 C++14 开始， lambda 的参数类型可以是 \verb|auto| 或者 \verb|auto &|。 这样即使是同一个 lambda 对象， 返回值的类型也可以由不同的输入值决定。 相当于普通的函数模板声明返回 \verb|auto|。
+\end{itemize}
+
+\subsection{functor}
+functor 也可以达到 lambda 一样的效果。 可以把 \verb|param1, param2| 都用数据成员储存， 在 \verb|operator()| 中调用。 但比起 lambda 还是略嫌麻烦。
+
+\begin{itemize}
+\item 函数中可以定义 class， 且 class 的成员函数可以访问函数中的 \verb|static| 变量。
+\end{itemize}
+
+\subsection{强制类型转换}
+用模板的一个坏处就是每种不同的参数都会生成一个额外的函数，会导致编译出的二进制文件体积增大（对非大型程序来说这一般不是问题）。 在 C 语言中，函数传参问题的解决方法是把所有参数都用一个 \verb|void| 指针打包， 在函数体中再将其拆解并强制转换成所需的类型。
+
+该方法的缺点就是如果不小心可能导致 type safety 相关问题， 或者出现内存错误。

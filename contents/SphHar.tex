@@ -3,9 +3,9 @@
 % license Xiao
 % type Tutor
 
-\pentry{球坐标的拉普拉斯方程\upref{SphLap}， 连带勒让德多项式\upref{AsLgdr}}
+\pentry{球坐标的拉普拉斯方程\upref{SphLap}， 连带勒让德函数\upref{AsLgdr}}
 
-\footnote{参考 Wikipedia \href{https://en.wikipedia.org/wiki/Spherical_harmonics}{相关页面}。}当球坐标中的拉普拉斯方程\upref{SphLap}分离变量后， 关于极角 $\theta$ 的函数为连带勒让德多项式 $P_l^m(\cos\theta)$， 方向角函数为 $\E^{\I m\phi}$。 我们定义\textbf{球谐函数（spherical harmonics）}为\footnote{有些教材也将球谐函数记为 $Y_l^m$}\footnote{特殊地， $Y_{l,0}(\uvec r) = \sqrt{(2l + 1)/(4\pi)}P_l(\cos\theta)$， $P_l$ 是勒让德多项式\upref{Legen}。}
+\footnote{参考 Wikipedia \href{https://en.wikipedia.org/wiki/Spherical_harmonics}{相关页面}。}当球坐标中的拉普拉斯方程\upref{SphLap}分离变量后， 关于极角 $\theta$ 的函数为连带勒让德函数 $P_l^m(\cos\theta)$， 方向角函数为 $\E^{\I m\phi}$。 我们定义\textbf{球谐函数（spherical harmonics）}为\footnote{有些教材也将球谐函数记为 $Y_l^m$}\footnote{特殊地， $Y_{l,0}(\uvec r) = \sqrt{(2l + 1)/(4\pi)}P_l(\cos\theta)$， $P_l$ 是勒让德多项式\upref{Legen}。}
 \begin{equation}\label{eq_SphHar_1}
 Y_{l, m} (\uvec r) = Y_{l, m}(\theta, \phi) = A_{l,m} P_l^m(\cos \theta) \E^{\I m\phi}~,
 \end{equation}
@@ -52,7 +52,7 @@ Y_{l,m}(\uvec z) = \sqrt{\frac{2l+1}{4\pi}} \delta_{m,0}~.
 其中 $A_{l,m}'$ 是 $P_l^m(x)$ 的归一化系数（见\autoref{eq_AsLgdr_3}~\upref{AsLgdr}）， 代入后可得 $A_{l,m}$。
 
 \subsection{Condon–Shortley 相位}\label{sub_SphHar_1}
-与连带勒让德多项式相同， 在定义球谐函数时我们也可以选择是否包含 \textbf{Condon–Shortley 相位} $(-1)^m$。 物理中一般选择包含， 小时百科中也统一包含。 如果包含， 我们可以选择将其包含在连带勒让德多项式中（如\autoref{eq_AsLgdr_1}~\upref{AsLgdr}）， 或者包含在球谐函数的定义中。 如果不包含， 该相位在两个定义中都不出现。
+与连带勒让德函数相同， 在定义球谐函数时我们也可以选择是否包含 \textbf{Condon–Shortley 相位} $(-1)^m$。 物理中一般选择包含， 小时百科中也统一包含。 如果包含， 我们可以选择将其包含在连带勒让德函数中（如\autoref{eq_AsLgdr_1}~\upref{AsLgdr}）， 或者包含在球谐函数的定义中。 如果不包含， 该相位在两个定义中都不出现。
 
 \subsection{正交归一性}
 由勒让德函数的正交归一性（\autoref{eq_AsLgdr_4}~\upref{AsLgdr}）以及 $\E^{\I m \phi}$  的正交归一性（\autoref{eq_FSExp_4}~\upref{FSExp}）， 不难证明球谐函数的正交归一性
@@ -96,7 +96,9 @@ Y_{l,m}(-\uvec r) = (-1)^l Y_{l,m}(\uvec r)~,
 \end{equation}
 可以用\autoref{fig_SphHar_1} 验证。
 
-\subsection{积分}
+\subsection{求导和积分}
+以下公式在量子力学中计算氢原子跃迁矩阵元\upref{SelRul}以及数值解 TDSE\upref{HyTDSE} 时有应用。
+
 三个球谐函数之积的积分可以表示成两个 CG 系数\upref{SphCup}或 3j 符号\upref{ThreeJ}相乘\footnote{见 Bransden 附录 A4， 以及 Wikipedia 的 3j/CG coefficients 页面}
 \begin{equation}\label{eq_SphHar_3}
 % 已反复验证
@@ -112,7 +114,29 @@ Y_{l,m}(-\uvec r) = (-1)^l Y_{l,m}(\uvec r)~,
 & = (-1)^{m_1}\sqrt{\frac{(2l_1+1)(2l_2+1)(2l_3+1)}{4\pi}} \pmat{l_1& l_2& l_3\\ 0 & 0 & 0}\pmat{l_1 & l_2 & l_3\\  -m_1 & m_2 & m_3}~.
 \end{aligned}
 \end{equation}
-该式在量子力学中有一些应用， 如 “氢原子的选择定则\upref{SelRul}”。
+注意 $\cos\theta$ 是一个厄米（对称）算符。
+
+特殊地，考虑到 $\cos\theta = \sqrt{\frac{4\pi}{3}}Y_{1,0}$， 有
+\begin{equation} % \label{eq_ThreeJ_4}
+\begin{aligned} % Mathematica 已验证多次
+\int Y_{l,m}^* (\uvec r) \cos\theta (\uvec r) Y_{l+1, m}(\uvec r)
+&= \int Y_{l+1, m}^* (\uvec r) \cos\theta (\uvec r) Y_{l,m}(\uvec r)\\
+&=  \sqrt{\frac{(l+1)^2-m^2}{(2l+1)(2l+3)}}~.
+\end{aligned}
+\end{equation}
+
+根据 $P_l^m(x)$ 的求导公式（\autoref{eq_AsLgdr_8}~\upref{AsLgdr}）， 有
+\begin{equation}\label{eq_SphHar_18} % Mathematica 已验证
+\pdv{\theta}Y_{l,m}(\uvec r) = \frac{1}{\sin\theta}\qty[l\sqrt{\frac{(l+1)^2-m^2}{(2l+1)(2l+3)}}Y_{l+1, m}(\uvec r)  -(l+1)\sqrt{\frac{l^2-m^2}{(2l+1)(2l-1)}}Y_{l-1, m}(\uvec r)]~.
+\end{equation}
+故
+\begin{equation} % Mathematica 已验证多次
+\int Y^*_{l+1, m}(\uvec r)\sin\theta\pdv{\theta}Y_{l,m}(\uvec r)\dd{\Omega} = l\sqrt{\frac{(l+1)^2-m^2}{(2l+1)(2l+3)}}~,
+\end{equation}
+\begin{equation} % Mathematica 已验证多次
+\int Y^*_{l, m}(\uvec r)\sin\theta\pdv{\theta}Y_{l+1,m}(\uvec r)\dd{\Omega} = -(l+2)\sqrt{\frac{(l+1)^2-m^2}{(2l+1)(2l+3)}}~.
+\end{equation}
+注意 $\sin\theta\ \pdv*{\theta}$ 不是一个厄米算符。
 
 \subsection{矢量相加定理}
 这里的\textbf{矢量相加定理（vector addition theorem）}是指把勒让德多项式展开为两个球谐函数的乘积
@@ -126,7 +150,7 @@ P_l(\cos\theta) = \frac{4\pi}{2l+1} \sum_{m=-l}^l Y_{l,m}^*(\uvec u) Y_{l,m}(\uv
 \begin{equation}\label{eq_SphHar_6}
 Y_{l,m}(\uvec r) = (-1)^m Y_{l,-m}^*(\uvec r)~.
 \end{equation}
-这里的 $(-1)^m$ 是由连带勒让德多项式的性质而来， 而共轭由 $\exp(\I m\phi)$ 因子而来。
+这里的 $(-1)^m$ 是由连带勒让德函数的性质而来， 而共轭由 $\exp(\I m\phi)$ 因子而来。
 
 根据 “球坐标与直角坐标的转换\upref{SphCar}” 中定义的直角坐标系以及球谐函数表\upref{YlmTab}可得
 \begin{equation}\label{eq_SphHar_4}

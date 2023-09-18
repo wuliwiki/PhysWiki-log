@@ -28,7 +28,7 @@ V(\bvec r, t) = -\frac{Z}{r} - q\bvec E(t) \vdot \bvec r~.
 \end{equation}
 另外薛定谔方程中 $V(\bvec r, t) = \bvec E(t) \vdot \bvec r = E(t) z$， 进而可以用球谐函数表示（\autoref{eq_SphHar_4}~\upref{SphHar}）
 \begin{equation}
-V(\bvec r, t) = \sqrt{\frac{4\pi}{3}} E(t) r \cdot Y_{1,0}(\uvec r)~.
+V(\bvec r, t) = E(t) r \cos\theta = \sqrt{\frac{4\pi}{3}} E(t) r \cdot Y_{1,0}(\uvec r)~.
 \end{equation}
 以上两式代入\autoref{eq_HyTDSE_7}， 再把每一项与 $Y_{l,0}(\uvec r)$ 做内积（放入积分 $\int Y_{1,0}^*(\uvec r) \dd{\Omega}$ 中）可得一系列耦合的方程
 \begin{equation}\label{eq_HyTDSE_4}
@@ -41,7 +41,7 @@ H_0 = -\frac{1}{2m} \dv[2]{r} -\frac{Z}{r} + \frac{l(l+1)}{2mr^2}~.
 矩阵 $\mat F$ 就是跃迁偶极子矩阵的角向积分（\autoref{eq_SphHar_5}~\upref{SphHar}）
 \begin{equation}
 \begin{aligned}
-F_{l,l'} &= \sqrt{\frac{4\pi}{3}} \mel{Y_{l,0}}{Y_{1,0}}{Y_{l',0}}\\
+F_{l,l'} &= \mel{Y_{l,0}}{\cos\theta}{Y_{l',0}} = \sqrt{\frac{4\pi}{3}} \mel{Y_{l,0}}{Y_{1,0}}{Y_{l',0}}\\
 &= \sqrt{(2l+1)(2l'+1)} \pmat{l & 1 & l'\\ 0 & 0 & 0}^2\\
 &= \sqrt{\frac{2l+1}{2l'+1}} \bmat{l & 1 & l'\\ 0 & 0 & 0}^2~.
 \end{aligned}
@@ -73,17 +73,17 @@ H_0 \psi_{\lambda}(r) + r \sum_{\lambda'} \qty[E_x(t) F_{\lambda, \lambda'}^{x} 
 三个耦合矩阵分别为
 \begin{equation}
 \begin{aligned}
-F_{\lambda,\lambda'}^{x} = \sqrt{\frac{2\pi}{3}} E_x \qty(\mel{Y_{l,m}}{Y_{1,-1}}{Y_{l',m'}} - \mel{Y_{l,m}}{Y_{1,1}}{Y_{l',m'}})~,
+F_{\lambda,\lambda'}^{x} = \sqrt{\frac{2\pi}{3}} \qty(\mel{Y_{l,m}}{Y_{1,-1}}{Y_{l',m'}} - \mel{Y_{l,m}}{Y_{1,1}}{Y_{l',m'}})~,
 \end{aligned}
 \end{equation}
 \begin{equation}
 \begin{aligned}
-F_{\lambda,\lambda'}^{y} = \I\sqrt{\frac{2\pi}{3}} E_y \qty(\mel{Y_{l,m}}{Y_{1,-1}}{Y_{l',m'}} + \mel{Y_{l,m}}{Y_{1,1}}{Y_{l',m'}})~,
+F_{\lambda,\lambda'}^{y} = \I\sqrt{\frac{2\pi}{3}} \qty(\mel{Y_{l,m}}{Y_{1,-1}}{Y_{l',m'}} + \mel{Y_{l,m}}{Y_{1,1}}{Y_{l',m'}})~,
 \end{aligned}
 \end{equation}
 \begin{equation}
 \begin{aligned}
-F_{\lambda,\lambda'}^{z} = \sqrt{\frac{4\pi}{3}} E_z \mel{Y_{l,m}}{Y_{1,0}}{Y_{l',m'}}~.
+F_{\lambda,\lambda'}^{z} = \sqrt{\frac{4\pi}{3}} \mel{Y_{l,m}}{Y_{1,0}}{Y_{l',m'}}~.
 \end{aligned}
 \end{equation}
 其中（\autoref{eq_SphHar_5}~\upref{SphHar}）
@@ -162,10 +162,26 @@ H_0 \psi_{l} = \I \pdv{\psi_{l}}{t}~.
 要使用速度规范（注意仍然是位置表象而不是动量表象）， $H_0$ 算符的计算是一样的， 唯一不同的是把 $\bvec E\vdot \bvec r$ 换成了 $\bvec A\vdot \bvec p$。 \autoref{eq_SphNab_5}~\upref{SphNab}。
 
 先把电场限制在 $z$ 方向， 所以场的作用主要就是
-\begin{equation}
+\begin{equation}\label{eq_HyTDSE_25}
 \pdv{z} = \cos\theta\pdv{r} - \frac{\sin\theta}{r}\pdv{\theta}~.
 \end{equation}
 第二项只耦合不同的分波。 但第一项要更为复杂，它耦合不同分波中同一有限元中的不同基底。 所以 $\exp(-\I \lambda \pdv{z})$ 需要把 $\pdv{z}$ 作用在整个波函数上面， 然后用 lanczos 这样的整体方法来演化。
 
 在 FEDVR 中， $\pdv*{r}$ 可以用矩阵 $\mat D$ 精确表达， $\cos\theta$ 也在上文中可以表示为分波耦合矩阵。 所以 $\pdv*{z}$ 就是把这两个矩阵相乘即可。
 
+要注意第一项的角向并不是 $\mel{Y_{l,m}}{\cos\theta}{Y_{l',m}}$，而是要同时考虑径向
+\begin{equation}
+\begin{aligned}
+&\quad\mel{\frac{\psi_{l',m}}{r}Y_{l,m}}{\cos\theta\pdv{r}}{\frac{\psi_{l',m}}{r}Y_{l',m}}\\
+&= \mel{\frac{\psi_{l',m}}{r}Y_{l,m}}{\cos\theta}{\frac{1}{r}\dv{\psi_{l',m}}{r}Y_{l',m}}
+-\mel{\frac{\psi_{l',m}}{r}Y_{l,m}}{\frac{1}{r}\cos\theta}{\frac{\psi_{l',m}}{r}Y_{l',m}}\\
+&= \mel{\frac{\psi_{l',m}}{r^2}}{\dv{r}}{\psi_{l',m}}\mel{Y_{l,m}}{\cos\theta}{Y_{l',m}}
+-\mel{\frac{\psi_{l',m}}{r}}{\frac{1}{r}}{\frac{\psi_{l',m}}{r}}\mel{Y_{l,m}}{\cos\theta}{Y_{l',m}}~.
+\end{aligned}
+\end{equation}
+所以\autoref{eq_HyTDSE_25} 的第一项实际上需要拆分成两项， 没有导数的那个合并到第二项中去。
+\begin{figure}[ht]
+\centering
+\includegraphics[width=12cm]{./figures/27c3312e25e17bce.png}
+\caption{[Hprop]} \label{fig_HyTDSE_1}
+\end{figure}

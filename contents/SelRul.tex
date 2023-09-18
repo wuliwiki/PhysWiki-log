@@ -1,4 +1,4 @@
-% 氢原子的跃迁偶极子矩阵元和选择定则
+% 氢原子的跃迁偶极子矩阵元、选择定则
 % keys 选择定则|宇称|3j 符号
 % license Xiao
 % type Tutor
@@ -9,35 +9,44 @@
 
 \subsection{偶极子矩阵元的计算}
 相比于算符对易的方法\footnote{参考\cite{GriffQ}。}， 3j 符号的好处是不仅能得到选择定则，还可以直接算出偶极子矩阵元角向积分的具体值而无需手动积分\footnote{当然， 手动 3j 符号也比较繁琐， 可以借助 Wolfram Alpha 或 Mathematica， Matlab 中我也写了一个程序（同样可以符号计算）， 还没放进百科。}。 长度规范\upref{LenGau}中电场哈密顿量为 $\bvec{\mathcal{E}}\vdot \bvec r$ （长度规范\upref{LenGau}）。 其中 $\bvec r$ 的三个分量可以用球谐函数表示为（\autoref{eq_SphHar_4}~\upref{SphHar}）
-\begin{equation}
+\begin{equation}\label{eq_SelRul_5}
 x = \sqrt{\frac{2\pi}{3}} r (Y_{1,-1} - Y_{1,1})~, \qquad
 y = \I \sqrt{\frac{2\pi}{3}} r (Y_{1,-1}+Y_{1,1})~, \qquad
 z = \sqrt{\frac{4\pi}{3}} rY_{1,0}~,
 \end{equation}
 所以
 \begin{equation}\label{eq_SelRul_3}
-\quad\mel{\psi_{n,l,m}}{\bvec{\mathcal E}\vdot\bvec r}{\psi_{n',l',m'}} = \bvec{\mathcal E}\vdot\mel{\psi_{n,l,m}}{\bvec r}{\psi_{n',l',m'}}~,
-\end{equation}
-
-\begin{equation}
 \begin{aligned}
-&\qquad \mel{\psi_{n,l,m}}{\bvec r}{\psi_{n',l',m'}}
-= \sqrt{\frac{4\pi}{3}}\int R_{n,l}(r) r R_{n',l'}(r) r^2 \dd{r}\times\\
-&\Big[\frac{\uvec x}{\sqrt 2} \qty(\mel{Y_{l,m}}{Y_{1,-1}}{Y_{l',m'}} - \mel{Y_{l,m}}{Y_{1,1}}{Y_{l',m'}})\\
-&+ \frac{\I \uvec y}{\sqrt 2} \qty(\mel{Y_{l,m}}{Y_{1,-1}}{Y_{l',m'}} + \mel{Y_{l,m}}{Y_{1,1}}{Y_{l',m'}})\\
-&+ \uvec z\mel{Y_{l,m}}{Y_{1,0}}{Y_{l',m'}}\Big]~.
+&\quad\mel{\psi_{n,l,m}}{\bvec{\mathcal E}\vdot\bvec r}{\psi_{n',l',m'}}
+= \bvec{\mathcal E}\vdot\mel{\psi_{n,l,m}}{\bvec r}{\psi_{n',l',m'}}\\
+&= \int R_{n,l}(r) r R_{n',l'}(r) r^2 \dd{r} \times \bvec{\mathcal E}\vdot\mel{Y_{l,m}}{\uvec r}{Y_{l',m'}}~,
 \end{aligned}
 \end{equation}
-把三个球谐函数之积的积分用 3j 符号表示（\autoref{eq_SphHar_5}~\upref{SphHar}） 得跃迁偶极子矩阵元为
-\begin{equation}
+根据\autoref{eq_SelRul_5} 和\autoref{eq_SphHar_5}~\upref{SphHar}，
+\begin{equation}\label{eq_SelRul_1}
 \begin{aligned}
-&\quad\mel{\psi_{n,l,m}}{\bvec r}{\psi_{n',l',m'}}\\
-&= (-1)^m\sqrt{(2l+1)(2l'+1)} \pmat{l & 1 & l'\\ 0 & 0 & 0} \int_0^\infty R_{n,l}(r) r R_{n',l'}(r) r^2 \dd{r}\times\\
-&\Big\{\frac{\uvec x}{\sqrt 2} \qty[\pmat{l & 1 & l'\\ -m & -1 & m'} - \pmat{l & 1 & l'\\ -m & 1 & m'}]\\
-&+ \frac{\I \uvec y}{\sqrt 2} \qty[\pmat{l & 1 & l'\\ -m & -1 & m'} + \pmat{l & 1 & l'\\ -m & 1 & m'}]\\
-&+  \uvec z \pmat{l & 1 & l'\\ -m & 0 & m'}\Big\}~.
+&\mel{Y_{l,m}}{\uvec r}{Y_{l',m'}} = \pmat{
+  \mel{Y_{l,m}}{x/r}{Y_{l',m'}}\\
+  \mel{Y_{l,m}}{y/r}{Y_{l',m'}}\\
+  \mel{Y_{l,m}}{z/r}{Y_{l',m'}}
+}
+= \pmat{\sqrt{\frac{2\pi}{3}} \qty(\mel{Y_{l,m}}{Y_{1,-1}}{Y_{l',m'}} - \mel{Y_{l,m}}{Y_{1,1}}{Y_{l',m'}})\\
+\sqrt{\frac{2\pi}{3}} \qty(\mel{Y_{l,m}}{Y_{1,-1}}{Y_{l',m'}} + \mel{Y_{l,m}}{Y_{1,1}}{Y_{l',m'}})\\
+\sqrt{\frac{4\pi}{3}}\mel{Y_{l,m}}{Y_{1,0}}{Y_{l',m'}}}\\
+&= (-1)^m\sqrt{(2l+1)(2l'+1)} \pmat{l & 1 & l'\\ 0 & 0 & 0}
+\pmat{\frac{1}{\sqrt 2} \qty[\pmat{l & 1 & l'\\ -m & -1 & m'} - \pmat{l & 1 & l'\\ -m & 1 & m'}]\\
+\frac{\I}{\sqrt 2} \qty[\pmat{l & 1 & l'\\ -m & -1 & m'} + \pmat{l & 1 & l'\\ -m & 1 & m'}]\\
+\pmat{l & 1 & l'\\ -m & 0 & m'}}~.
 \end{aligned}
 \end{equation}
+根据\autoref{eq_ThreeJ_3}~\upref{ThreeJ} 可以直接算出最后一项的值（下文会看到只有 $l'=l\pm 1$ 才不为零）：
+\begin{equation}
+\begin{aligned}
+\pmat{l+1 && 1 && l \\ -m && 0 && m} &= \pmat{l && 1 && l+1 \\ -m && 0 && m}\\
+&= -(-1)^{l-m} \sqrt{\frac{(l+1)^2-m^2}{(l+1)(2l+1)(2l+3)}}~.
+\end{aligned}
+\end{equation}
+$x,y$ 分量也同理。
 
 Mathematica\upref{Mma} 代码如下（\verb|HydrogenR| 的定义见这里\upref{HWF}）
 \begin{lstlisting}[language=mma]

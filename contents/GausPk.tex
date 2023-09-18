@@ -8,12 +8,12 @@
 \begin{figure}[ht]
 \centering
 \includegraphics[width=14.25cm]{./figures/98b376107396a32e.pdf}
-\caption{高斯波包（\autoref{eq_GausPk_1} ），蓝色为实部，红色为虚部， $x_0 = 0$， $A_0 = 1$， $a = 1/20$， $k_0 = 5$。} \label{fig_GausPk_1}
+\caption{高斯波包（\autoref{eq_GausPk_1} ），蓝色为实部，红色为虚部， $x_0 = 0$， $A = 1$， $a = 1/20$， $k_0 = 5$。} \label{fig_GausPk_1}
 \end{figure}
 
-\footnote{参考 Wikipedia \href{https://en.wikipedia.org/wiki/Wave_packet}{相关页面}。}\textbf{高斯波包（Gaussian wave packet）}是指轮廓为高斯分布的波包， 在光学和量子力学中有重要应用。 高斯波包用复函数表示为（$A_0$ 为复数）
+\footnote{参考 Wikipedia \href{https://en.wikipedia.org/wiki/Wave_packet}{相关页面}。}\textbf{高斯波包（Gaussian wave packet）}是指轮廓为高斯分布的波包， 在光学和量子力学中有重要应用。 高斯波包用复函数表示为（$A$ 为复数）
 \begin{equation}\label{eq_GausPk_1}
-f(x) = A_0 \E^{-a(x-x_0)^2}\E^{\I k_0 x}~,
+f(x) = A \E^{-a x^2}\E^{\I k_0 x}~,
 \end{equation}
 
 FWHMI （光强半高宽）是多少？ 即 $f(x)^2$ 等于其峰值一半时的宽度。令
@@ -25,27 +25,42 @@ FWHMI （光强半高宽）是多少？ 即 $f(x)^2$ 等于其峰值一半时的
 \mathrm{FWHMI} = 2\Delta x = \sqrt{\frac{2\ln 2}{a}}~.
 \end{equation}
 
+$f(x)$ 的积分为（用于求电场矢势）
+\begin{equation}\label{eq_GausPk_3} % Mathematica 已验证
+\int A \E^{-a x^2}\E^{\I k_0 x} \dd{x} = -\I\frac{A}{2} \sqrt{\frac{\pi}{a}} \exp(-\frac{k^2}{4a}) \erfi\qty(\frac{k + 2 \I a x}{2 \sqrt{a}}) + C~.
+\end{equation}
+
+
 \subsection{频谱}
 \pentry{傅里叶变换（指数）\upref{FTExp}}
 （未完成：哪里有介绍频谱的概念？）
 
 要求\autoref{eq_GausPk_1} 的傅里叶变换 $g(k)$， 由\autoref{ex_FTExp_1}~\upref{FTExp}以及傅里叶变换性质\autoref{eq_FTExp_4}~\upref{FTExp}和\autoref{eq_FTExp_7}~\upref{FTExp}得
 \begin{equation}
-g(k) = A_0\sqrt{\frac{\pi}{a}} \exp[-\frac{(k-k_0)^2}{4a}]~.
+g(k) = A\sqrt{\frac{\pi}{a}} \exp[-\frac{(k-k_0)^2}{4a}]~.
 \end{equation}
 
 \subsection{高斯和 cos2 波包比较}
 $\cos^2$ 波包也叫 $\sin^2$ 波包，比起高斯波包，它的优点是存在明确的范围。 它的函数形式为
 \begin{equation}
 f(x) = \leftgroup{
-&A_0\cos^2[\pi(x-x_0)/L] \E^{\I k_0x} && (\abs{x-x_0} < L/2)\\
-&0 && (\text{otherwise})
-}~.
-\end{equation}
+&A\cos^2\qty(\frac{\pi x}{L}) \E^{\I k_0x} && (\abs{x-x_0} < L/2)\\
+&0 && (\text{otherwise})~.
+}\end{equation}
 其中 $L$ 是波包的总长度。 它的 FWHMI 为
 \begin{equation}
 \text{FWHMI} = \frac{2}{\pi}\opn{acos}(2^{-1/4}) L~.
 \end{equation}
+
+积分为（另 $a = \pi/L$）
+\begin{equation}\label{eq_GausPk_2} % Mathematica 已验证
+\begin{aligned}
+\int A\cos^2\qty(a x) \E^{\I k_0x} \dd{x} &= -\I\frac{A}{4}\E^{\I kx}\qty(\frac{2}{k} +\frac{\E^{2\I ax}}{2a+k} -\frac{\E^{-2\I ax}}{2a-k}) + C\\
+&= \frac{A}{4} \qty(\frac{2\sin(k x)}{k} +\frac{\sin[(2 a+k)x]}{2 a+k} +\frac{\sin[(2 a-k)x]}{2 a-k})\\
+&+\I\frac{A}{4} \qty(-\frac{2\cos(k x)}{k} -\frac{\cos[(2 a+k)x]}{2 a+k} +\frac{\cos[(2 a-k)x]}{2 a-k}) + C~.
+\end{aligned}
+\end{equation}
+
 画图对比如下（代码见文末）：
 \begin{figure}[ht]
 \centering
