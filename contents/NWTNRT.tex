@@ -1,0 +1,57 @@
+% 牛顿求根公式（牛顿迭代法）（Octave/matlab 绘图）
+% license Pub
+% type Note
+
+
+\begin{figure}[ht]
+\centering
+\includegraphics[width=8 cm]{./figures/ef3a3fca036b7c2e.pdf}
+\caption{牛顿迭代法求解$f(x)=0.2x^2=0$示意图} \label{fig_NWTNRT_1}
+\end{figure}
+
+Newton迭代法是求解方程（或函数零点）$f(x)=0$的经典方法。它的迭代公式是
+\begin{equation}
+x_{k+1} = x_k-\frac{f(x_k)}{f'(x_k)} \qquad k=0,1,2,...~,
+\end{equation}
+其中$x_0$是人为选定的、对解的初始猜测。如果迭代收敛，那么迭代的结果将收敛于方程$f(x)=0$的解$x$。
+$$\lim_{k\to+\infty} x_k = x~.$$
+
+以下的Octave/matlab代码粗糙地实现了Newton迭代法，同时做出了过程示意图（类似 \autoref{fig_NWTNRT_1} ）：
+\begin{lstlisting}[language=matlab]
+clc
+clear
+
+f = @(x) 0.2*x.^2; %待求解的 f(x)=0
+x(1) = 4;  
+%初始猜测。由于octave/matlab的数组序号从1开始，因此我们用x1表示x0
+
+hold on
+axis equal
+
+for i = 1:100
+  if i ~=1
+    dx = 0.001;
+    fx = (f(x(i-1)+dx) - f(x(i-1)))/dx; 
+    %数值近似x(i-1)处函数的导数值f'(x(i-1))。更好的办法是使用三点牛顿法。
+
+    x(i) = x(i-1) - f(x(i-1))/fx; %Newton 迭代公式
+    line([x(i) x(i-1)],[0 f(x(i-1))])
+  end
+
+  line([x(i) x(i)],[0 f(x(i))],'color','r')
+  scatter(x(i),0);
+
+  if i~=1 && abs(x(i) - x(i-1)) < 0.01 %如果误差已经足够小，则终止迭代
+    break;
+  end
+end
+
+if x(i) < x(1)
+  _x = x(i)-0.5:0.01:x(1)+0.5;
+else
+  _x = x(1)-0.5:0.01:x(i)+0.5;
+end
+
+_y = f(_x);
+plot(_x, _y,'k')
+\end{lstlisting}

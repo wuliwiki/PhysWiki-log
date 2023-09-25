@@ -18,24 +18,27 @@ Eigen 的\href{http://eigen.tuxfamily.org/index.php?title=Main_Page}{主页}。
 \end{itemize}
 
 \begin{lstlisting}[language=cpp]
-// Matrix Class
-Matrix<double, 3, Dynamic> A
-Matrix<double, Dynamic, Dynamic, Aligned | RowMajor> A
+// 矩阵
+// 第一个维度固定在 3， 第二个维度可以动态变化
+Matrix<double, 3, Dynamic> A;
+// 两个动态维度， Aligned 可以把起始地址 padding 到一个 2^n 的整数倍的地址
+// 以满足 SIMD 优化需求， 默认开启。 RowMajor 是行主序矩阵，默认是 ColMajor
+Matrix<double, Dynamic, Dynamic, Aligned | RowMajor> A 
 typedef Matrix<int, 4, 4> Matrix4i;
 typedef Matrix<double, 4, 4> Matrix4d;
 typedef Matrix<double, Dynamic, Dynamic> MatrixXd;
-typedef Matrix<double, Dynamic, 1> VectorXd;
+typedef Matrix<double, Dynamic, 1> VectorXd; // 矢量区分行和列
 typedef Matrix<double, 1, Dynamic> RowVectorXd;
 
-declaration & initialization
-MatrixXd a(10,15); // No initialization
-a.setRandom(m,n); 随机赋值
-Matrix<>::setZero(); 把矩阵赋值为 0;
-Matrix<>::setZero(m,n); 把矩阵赋值为 m*n 的 0 矩阵;
+// declaration & initialization
+MatrixXd a(10, 15); // No initialization
+a.setRandom(m,n); // 随机赋值
+a.setZero(); 把矩阵赋值为 0;
+a.setZero(m,n); 把矩阵赋值为 m*n 的 0 矩阵;
 \end{lstlisting}
 
 以下函数用法类似
-\verb|setOnes(); setConstant(); setIdentity(); setRandom(); setLinSpaced();|
+\verb|setOnes(); setConstant(); setIdentity();（单位矩阵） setRandom(); setLinSpaced();（等间距赋值）|
 注意其中 \verb|setConstant()| 输入 1 个变量时与 \verb|fill()| 功能相同， 输入 3 个变量时最后一个为常数。 \verb|setLinSpaced(size, val1, val2)| 只能对 Vector 或者 RowVector 使用。 如果想赋值给 \verb|MatrixXd|, 可以用 \verb|MatrixXd a = VectorXd::LinSpaced(3, 3, 4)|; 对于整型， \verb|setLinSpaced| 不保证最后一个值等于 val2, 而是保证间隔相等。 这时候只能先生成 Xd, 然后 .cast<int>.
 * 逗号赋值都是 RowMaor 的， 无论 a 是什么 major.
 a << 1,2,3,4;
@@ -43,9 +46,9 @@ a << 1,2,3,4;
 \subsection{operations}
 获取信息
 \begin{itemize}
-\item \verb|Matrix<>::size()| 相当于 Matlab 的 numel(), 另外， rows() 和 cols() 分别是行数和列数。
+\item \verb|Matrix<>::size()| 相当于 Matlab 的 \verb|numel()|, 另外， \verb|rows()| 和 \verb|cols()| 分别是行数和列数。
 \item \verb|Matrix<>::data()| 可以获得 Matrix 数据的指针， 用于直接读写矩阵数据。 注意 rowwise 需要专门声明。 也可以用 \verb|&| 来获取矩阵元的地址。
-\item 矩阵转置用 \verb|Matrix<>::transpose()| 复数矩阵共轭用 conjugate(), 共轭转置用 adjoint()
+\item 矩阵转置用 \verb|Matrix<>::transpose()| 复数矩阵共轭用 \verb|conjugate()|, 共轭转置用 \verb|adjoint()|
 \item 矩阵元求和， \verb|Matrix<>::sum(); Matrix<>::colwise().sum(); Matrix<>::rowwise().sum()|
 \item 点乘和叉乘如 \verb|v.dot(w), v.cross(w)|
 类似的有 \verb|mean(), prod(), all(), any(), maxCoeff(), minCoeff()|

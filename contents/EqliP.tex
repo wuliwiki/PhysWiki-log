@@ -1,0 +1,97 @@
+% 平衡位置和圈
+% keys 平衡位置|圈|闭轨线|常微分方程的解
+% license Xiao
+% type Tutor
+
+\pentry{自治系统解的特点\upref{AuSy}}
+本节介绍自治系统（\autoref{def_ODEPr_2}~\upref{ODEPr}）解的分类。概括来说，自治系统的解（或轨线\upref{AuSy}）有三种情形：
+\begin{enumerate}
+\item 定点解，即轨线成为个不依赖自变量 $x$ 的点，称为\textbf{平衡位置}；
+\item 周期解，即轨线自身相交，称为\textbf{闭轨线}或\textbf{圈(环)};
+\item 自身不相交的轨线。
+\end{enumerate}
+\begin{theorem}{}\label{the_EqliP_1}
+设 $y^i=\varphi_i(x)$ 是自治系统的解，其最大存在区间为 $(m_1,m_2)$，并且存在 $m_1<x_1\neq x_2<m_2$，满足
+\begin{equation}\label{eq_EqliP_1}
+\varphi_i(x_1)=\varphi_i(x_2)~.
+\end{equation}
+则 $m_1=-\infty,m_2=+\infty$，且\textbf{要么}：对一切值 $x$ 成立 $\varphi_i(x)=a^i$，其中 $a^i$ 是与 $x$ 无关的常数，这时轨线成为解的定义空间中的点。此时解本身称为\textbf{平衡位置}。\\
+\textbf{要么}：存在正数 $T$，使得对任意 $t$ 成立
+\begin{equation}\label{eq_EqliP_2}
+\varphi_i(x+T)=\varphi_i(x)~.
+\end{equation}
+且当 $\abs{\tau_1-\tau_2}<T$ 时，至少对一个 $i$，成立 $\varphi_i(\tau_1)\neq\varphi_i(\tau_2)$。此时解称为\textbf{周期的}，$T$ 称为\textbf{最小正周期}。此时轨线称为\textbf{闭轨线}或\textbf{圈（环）}。
+在证明定理前，先定义解的周期概念。
+\end{theorem}
+\begin{definition}{周期}
+满足\autoref{eq_EqliP_2} 的 $T$ 称为解 $y^i=\varphi_i(x)$ 的周期。
+\end{definition}
+$T$之所以是最小的正周期，是因为否则的化，将会存在 $T_1<T$，使得 $\varphi_i(x+T_1)=\varphi_i(x)$，那么对任意 $\tau_2=\tau_1+T_1$ ，成立 $\varphi_i(\tau_1)=\varphi_i(\tau_2)$，然而此时 $\abs{\tau_1-\tau_2}=T_1<T$，结果与 $\varphi_i(\tau_1)\neq\varphi_i(\tau_2)$矛盾。所得矛盾证明了定理中的 $T$ 是最小正周期。
+
+\begin{theorem}{周期集的性质}
+设 $F$ 是解的所有周期构成的集合，则 $F$ 是闭的，且其配合加法构成一群。
+\end{theorem}
+\textbf{证明：}将 $x$ 换成 $x-T$, 就有 $\varphi_i(x)=\varphi_i(x-T)$，于是 $-T$ 也是周期。设 $T_1,T_2\in F$，则
+\begin{equation}
+\varphi_i((x+T_1)+T_2)=\varphi_i(x+T_1)=\varphi_i(x)~.
+\end{equation}
+因此此 $T_1+T_2$ 是周期。于是 $F$ 在加法下构成群。
+
+闭集是集的任意收敛点都在集中的集合（\autoref{def_realat_1}~\upref{realat}）。所以要证 $F$ 闭，只需对任意收敛于 $T_0$ 的周期序列 $T_1,\cdots, T_m,\cdots$ ，证明
+\begin{equation}
+\varphi_i(x+T_0)=\varphi_i(x)~
+\end{equation}
+即可。由于
+\begin{equation}
+\varphi_i(x+T_m)=\varphi_i(x)~
+\end{equation}
+恒成立，并且 $\varphi_i(x)$ 连续，所以
+\begin{equation}
+\lim_{m\rightarrow\infty}\varphi_i(x+T_i)=\lim_{m\rightarrow\infty}\varphi_i(x)~.
+\end{equation}
+即 $\varphi_i(x+T_0)=\varphi_i(x)$。
+
+\textbf{证毕！}
+\begin{corollary}{}\label{cor_EqliP_1}
+周期集 $F$ 要么是实数集 $\mathbb R$，要么成为 $F=\{mT|m\in\mathbb Z\}$而 $T$ 是最小正周期。
+\end{corollary}
+\textbf{证明：}
+若周期集 $F$ 中无最小正数，也即对任意 $\epsilon$, 有正周期 $c<\epsilon$，由 $F$ 是加法群， 所以 $mc$ （$m$ 是整数）是周期。任意实数 $c_0$，可选取满足
+\begin{equation}
+(c_0-\epsilon)/c<c_0/c-1<m<c_0/c+1<(c_0+\epsilon)/c~
+\end{equation}
+的整数 $m$，于是有 $\abs{mc-c_0}<\epsilon$。于是 $c_0$ 是 $F$ 的收敛点（\autoref{def_realat_2}~\upref{realat}）。由 $F$ 是闭的，有 $c_0\in F$，由于 $F$ 的元素必定是实数，而现在任意实数都在 $F$ 中，所以 $F=\mathbb R$。
+
+若 $F$ 有最小正数 $T$，任意 $c\in F$，可取满足
+\begin{equation}
+(-T+c)/T=-1+c/T<m<(T+c)/T=1+c/T~
+\end{equation}
+的整数，于是 $\abs{c-mT}<T$。若 $c\neq mT$，那么由 $F$ 是加法群， $\abs{c-mT}$是小于 $T$ 周期，这就与 $T$ 是最小正周期相矛盾，于是只能有 $c=mT$. 
+
+\textbf{证毕！}
+
+\subsection{\autoref{the_EqliP_1} 的证明}
+
+\textbf{证明：}由\autoref{eq_EqliP_1} ，并根据\autoref{the_AuSy_2}~\upref{AuSy}
+\begin{equation}\label{eq_EqliP_3}
+\varphi_i(x)=\varphi_i(x+x_1-x_2)~.
+\end{equation}
+由此，区间 $(m_1-x_1+x_2,m_2-x_1+x_2)$ 应合于 $(m_1,m_2)$，于是 $m_1=-\infty,m_2=+\infty$。\autoref{eq_EqliP_3} 也表明 $x_1-x_2$ 是解的周期。由\autoref{cor_EqliP_1} ，此时解的周期集要么是实数集，即任意 $x$，都有
+\begin{equation}
+\varphi_i(x)=\varphi_i(x_1+(x-x_1))=\varphi(x_1)=a_i~.
+\end{equation}
+这表明解是平衡位置；要么有最小正周期，这表明解是周期解。
+
+\textbf{证毕！}
+
+
+
+
+
+
+
+
+
+
+
+

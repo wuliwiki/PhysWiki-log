@@ -1,0 +1,70 @@
+% 不动点迭代(Octave/matlab 绘图)
+% license Pub
+% type Note
+
+\begin{figure}[ht]
+\centering
+\includegraphics[width=8cm]{./figures/eb36329322fc836c.pdf}
+\caption{不动点迭代求解$x=\varphi(x)=0.2x^2$的Cobweb图} \label{fig_FPIPLT_1}
+\end{figure}
+
+\begin{figure}[ht]
+\centering
+\includegraphics[width=8 cm]{./figures/41df98badc53c142.pdf}
+\caption{对$x=\cos x$的不动点迭代更形象地展现了"Cobweb"（“蛛网”）\textsl{恐蜘蛛者慎入}} \label{fig_FPIPLT_2}
+\end{figure}
+
+不动点迭代法也是一种求解方程（或函数零点）$f(x)=0$的经典方法。为了使用不动点迭代，先得改写方程的形式：
+\begin{equation}
+f(x)=0\Rightarrow x = \varphi(x)~,
+\end{equation}
+使 $x = \varphi(x)$等式成立的$x$就是$\varphi(x)$的不动点，亦即$f(x)=0$的解。
+
+不动点迭代的迭代公式是
+\begin{equation}
+x_{k+1} = \varphi(x_k) \qquad k=0,1,2,...~,
+\end{equation}
+其中$x_0$是人为选定的、对解的初始猜测。如果满足收敛条件\footnote{参考你的数值计算课本}，那么迭代结果将收敛于不动点$x$：
+$$\lim_{k\to+\infty} x_k = x~.$$
+
+以下的Octave/matlab代码粗糙地实现了不动点迭代，同时做出了过程的Cobweb示意图：
+
+\begin{lstlisting}[language=matlab]
+clc
+clear
+
+f = @(x) 0.2*x.^2;
+x(1) = 4;
+
+hold on
+axis equal
+
+for i=1:100
+  if i~=1
+    x(i) = f(x(i-1));
+  end
+
+  line([x(i) x(i)],[0 f(x(i))],'Color','r');
+  scatter(x(i),0);
+  text(x(i),-0.1,[int2str(i)],'fontsize',12);
+
+  if i~=1
+    line([x(i - 1) x(i)],[f(x(i-1)) f(x(i-1))],'Color','b');
+    line([x(i) x(i)],[f(x(i - 1)) f(x(i))],'Color','b');
+  end
+
+  if i~=1 && abs(x(i) - x(i-1)) < 0.01
+    break;
+  end
+end
+
+if x(i) < x(1)
+  _x = x(i)-0.5:0.01:x(1)+0.5;
+else
+  _x = x(1)-0.5:0.01:x(i)+0.5;
+end
+
+_y = f(_x);
+plot(_x, _y,'k');
+plot(_x, _x,'k');
+\end{lstlisting}

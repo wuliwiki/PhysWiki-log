@@ -3,6 +3,8 @@
 % license Xiao
 % type Tutor
 
+\pentry{氢原子球坐标薛定谔方程数值解\upref{HyTDSE}， 施密特正交归一化（向量与矩阵）\upref{SmdtOt}}
+
 \subsection{背景介绍}
 
 \footnote{参考 Renate Pazourek 的论文}在计算含时薛定谔方程时，若已知某时刻 $t$ 的波函数 $\Psi(\bvec r,t)$，要求 $\Psi(\bvec r,t+\Delta t)$，通常使用传播算符 % 链接未完成
@@ -37,7 +39,7 @@ H_{ij} = \bra{\Psi_i} H \ket{\Psi_j}~.
 \qty{ \ket{\Psi_0}, H \ket{\Psi_0}, H^2 \ket{\Psi_0} \dots H^{K-1} \ket{\Psi_0}}~.
 \end{equation}
 我们把正交归一化后的基底记为
-\begin{equation}
+\begin{equation}\label{eq_Lanc_7}
 \qty{ \ket{\Psi_0}, \ket{\Psi_1}, \ket{\Psi_2} \dots \ket{\Psi_{K-1}} }~.
 \end{equation}
 这样，用其展开哈密顿算符
@@ -46,53 +48,61 @@ H_{ij}=\mel{\Psi_i}{H}{\Psi_j}~.
 \end{equation}
 在算法上，本来我们可以按部就班地按照以上步骤做，然而由于 Krilov 基底的性质，可以通过一些定理（见词条最后）大大减少计算量。正交归一化步骤如下
 
-\begin{enumerate}
-\item 如果 $\Psi(\bvec r,t)$ 没有归一化，将其进行归一化 $\ket{\Psi_0}=\Psi(\bvec r,t)/\sqrt{\braket{\Psi(\bvec r,t)}}$。
-\item 把 $\Psi_1$ 进行施密特正交化， 令
+【1】 如果 $\Psi(\bvec r,t)$ 没有归一化，将其进行归一化
 \begin{equation}
+\ket{\Psi_0}=\Psi(\bvec r,t)/\sqrt{\braket{\Psi(\bvec r,t)}}~.
+\end{equation}
+
+【2】 把 $\Psi_1$ 进行施密特正交化， 令
+\begin{equation}\label{eq_Lanc_31}
 \ket*{\tilde\Psi_1} = (1 - \ket{\Psi_0}\bra{\Psi_0})H \ket{\Psi_0}~,
 \qquad
 \ket{\Psi_1}=\ket*{\tilde\Psi_1}/\sqrt{\braket*{\tilde\Psi_1}}~.
 \end{equation}
 % 未完成
-\item 现在起我们令 $\beta_j = \sqrt{\braket*{\tilde\Psi_j}}$。 % 未完成
-\end{enumerate}
 
-\subsubsection{定理1}
+【3】 现在起我们令 $\beta_j = \sqrt{\braket*{\tilde\Psi_j}}$。 % 未完成
+
+\begin{theorem}{}
 对以上定义的基底
 \begin{equation}
-\qty(1 - \ket{\Psi_j} \bra{\Psi_j} - \ket{\Psi_{j - 1}} \bra{\Psi_{j - 1}} - \ldots - \ket{\Psi_0} \bra{\Psi_0}) H^{j + 1} \ket{\Psi_0}~
+\qty(1 - \ket{\Psi_j} \bra{\Psi_j} - \ket{\Psi_{j - 1}} \bra{\Psi_{j - 1}} - \ldots - \ket{\Psi_0} \bra{\Psi_0})\ H^{j + 1} \ket{\Psi_0}~
 \end{equation}
 与
 \begin{equation}
-\qty( 1 - \ket{\Psi_j}\bra{\Psi_j} - \ket{\Psi_{j - 1}}\bra{\Psi_{j - 1}} - \ldots - \ket{\Psi_0}\bra{\Psi_0}) H \ket{\Psi_j}~.
+\qty( 1 - \ket{\Psi_j}\bra{\Psi_j} - \ket{\Psi_{j - 1}}\bra{\Psi_{j - 1}} - \ldots - \ket{\Psi_0}\bra{\Psi_0})\ H \ket{\Psi_j}~.
 \end{equation}
-共线。故现在起采用后者进行正交化。
+共线。
+\end{theorem}
 
-\subsubsection{定理 2}
-\begin{equation}
+故现在起采用后者进行正交化。
+
+\begin{theorem}{}
+\begin{equation}\label{eq_Lanc_13}
 \bra{\Psi_{j-1}} H \ket{\Psi_j}  = \sqrt{\braket*{\tilde\Psi_j}} = \beta_j~.
 \end{equation}
+\end{theorem}
 
-\begin{enumerate}[resume]
-\item 把 $H^2 \ket{\Psi_0}$ 进行施密特正交化， 令
-\begin{equation}
+【4】 把 $H^2 \ket{\Psi_0}$ 进行施密特正交化， 令
+\begin{equation}\label{eq_Lanc_3}
 \alpha_i = \mel{\Psi_i}{H}{\Psi_i}~.
 \end{equation}
-根据两个定理，正交化结果也可以写成
+根据以上两个定理，正交化结果也可以写成
 \begin{equation}\ali{
 \ket*{\tilde\Psi_2}  &= \qty(1 -\ket{\Psi_1}\bra {\Psi_1}  - \ket{\Psi_0}\bra{\Psi_0}) H \ket{\Psi_1}\\
 &= H \ket{\Psi_1} - \alpha_1 \ket{\Psi_1} - \beta_1 \ket{\Psi_0} ~.\\ 
 }\end{equation}
-\item 再次归一化  $\ket{\Psi_2} = \ket*{\tilde\Psi_2} / \sqrt{\braket*{\tilde\Psi_2}} = \ket*{\tilde\Psi_2}/\beta_2~.$
-\end{enumerate}
 
-\subsubsection{定理 3}
+【5】 再次归一化  $\ket{\Psi_2} = \ket*{\tilde\Psi_2} / \sqrt{\braket*{\tilde\Psi_2}} = \ket*{\tilde\Psi_2}/\beta_2~.$
+
+\begin{theorem}{定理 3}
 \begin{equation}\ali{
 \ket*{\tilde\Psi_{j+1}} &= \qty(1 - \ket{\Psi_j}\bra{\Psi_j} - \ldots - \ket{\Psi_0}\bra{\Psi_0}) H \ket{\Psi_j}\\
 &= \qty(1 - \ket{\Psi_j}\bra{\Psi_j} - \ket{\Psi_{j-1}}\bra{\Psi_{j-1}}) H \ket{\Psi_j} \\
 &= H \ket{\Psi_j} - \alpha_j \ket{\Psi_j} - \beta_j \ket{\Psi_{j-1}}~,
 }\end{equation}
+\end{theorem}
+
 这就是最简洁的正交化公式。比起最原始的正交化
 \begin{equation}
 \ket*{\tilde\Psi_{j+1}} = \qty(1 - \ket{\Psi_j}\bra{\Psi_j}  - \ldots - \ket{\Psi_0}\bra{\Psi_0}) H^{j+1} \ket{\Psi_0}~.

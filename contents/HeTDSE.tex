@@ -131,8 +131,8 @@ m_1 + m_2 = m_1' + m_2' = M \qquad
 \end{equation}
 其中 $\ket{r_i}$ 是一维 FEDVR 格点在 $r_i$ 处的正交归一基底\upref{FEDVR}， $r_{max}$ 是计算 $T_l$ 时最后一个 FE 的边界。 虽然\autoref{eq_HeTDSE_3} 中含有 $r_{max}$， 但结果却与 $r_{max}$ 无关， 原因是 $T_l$ 也和 $r_{max}$ 相关， 两项中的 $r_{max}$ 抵消了。
 
-\subsection{电场作用项}
-对每个电子，
+\subsection{电场作用项（长度规范）}
+长度规范中，对每个电子，
 \begin{equation}\label{eq_HeTDSE_12}
 V_F = \bvec E \vdot \bvec r = E_x x + E_y y + E_z z~
 \end{equation}
@@ -142,19 +142,24 @@ x = \sqrt{\frac{2\pi}{3}} r (Y_{1,-1} - Y_{1,1})~, \qquad
 y = \I \sqrt{\frac{2\pi}{3}} r (Y_{1,-1}+Y_{1,1}) ~,\qquad
 z =2\sqrt{\frac{\pi}{3}} rY_{1,0}~.
 \end{equation}
-对线偏振电场我们只需要最后一项， 以第一个电子为例，
+对线偏振电场我们只需要最后一项， 以第一个电子为例， 令
+\begin{equation}\label{eq_HeTDSE_20}
+F^{(z1)} = \cos\theta_1~.
+\end{equation}
+
 % 已验证： M = M' = 0 时和爱华的程序一样
 \begin{equation}\ali{
-&\mel{\mathcal{Y}_{l_1 l_2}^{LM}}{z_1}{\mathcal{Y}_{l_1' l_2'}^{L'M'}}
-= 2\sqrt{\frac{\pi}{3}} r \sum_{m_1',m_2'}\sum_{m_1,m_2} \bmat{l_1 & l_2 & L\\ m_1 & m_2 & M}\bmat{l_1' & l_2 & L'\\ m_1' & m_2' & M'} \times\\
+&\mel{\mathcal{Y}_{l_1 l_2}^{LM}}{\cos\theta_1}{\mathcal{Y}_{l_1' l_2'}^{L'M'}}
+= 2\sqrt{\frac{\pi}{3}} \sum_{m_1',m_2'}\sum_{m_1,m_2} \bmat{l_1 & l_2 & L\\ m_1 & m_2 & M}\bmat{l_1' & l_2 & L'\\ m_1' & m_2' & M'} \times\\
 &\qquad  \iint Y_{l_1m_1}^*(\uvec r_1)Y_{l_2m_2}^*(\uvec r_2)Y_{10}(\uvec r_1)Y_{l_1' m_1'}(\uvec r_1)Y_{l_2' m_2'}(\uvec r_2) \dd{\Omega_1}\dd{\Omega_2}\\
-&= 2 \sqrt{\frac{\pi}{3}} \delta_{l_2, l_2'} r \sum_{m_1,m_2, m_1'} \bmat{l_1 & l_2 & L\\ m_1 & m_2 & M}\bmat{l_1' & l_2' & L'\\ m_1' & m_2 & M'} \times\\
-&\qquad  \iint Y_{l_1m_1}^*(\uvec r_1) Y_{10}(\uvec r_1)Y_{l_1' m_1'}(\uvec r_1)\dd{\Omega_1}\\
-&= \delta_{l_2, l_2'} \sqrt{(2l_1 + 1)(2l_1'+1)} r \sum_{m_1,m_2, m_1'} (-1)^{m_1} \times\\
+&= 2 \sqrt{\frac{\pi}{3}} \delta_{l_2, l_2'} \sum_{m_1,m_2, m_1'} \bmat{l_1 & l_2 & L\\ m_1 & m_2 & M}\bmat{l_1' & l_2' & L'\\ m_1' & m_2 & M'} \times\\
+&\qquad \int Y_{l_1m_1}^*(\uvec r_1) Y_{10}(\uvec r_1)Y_{l_1' m_1'}(\uvec r_1)\dd{\Omega_1}\\
+&= \delta_{l_2, l_2'} \sqrt{(2l_1 + 1)(2l_1'+1)} \sum_{m_1,m_2, m_1'} (-1)^{m_1} \times\\
 &\qquad  \bmat{l_1 & l_2 & L\\ m_1 & m_2 & M} \bmat{l_1' & l_2 & L'\\ m_1' & m_2 & M'} \pmat{l_1 & 1 & l_1'\\ 0 & 0 & 0} \pmat{l_1 & 1 & l_1'\\ -m_1 & 0 & m_1'}\\
-&= \delta_{l_2, l_2'} \delta_{M, M'} \sqrt{(2l_1 + 1)(2l_1'+1)} r \sum_{m_1,m_2} (-1)^{m_1} \times\\
+&= \delta_{l_2, l_2'} \delta_{M, M'} \sqrt{(2l_1 + 1)(2l_1'+1)} \sum_{m_1,m_2} (-1)^{m_1} \times\\
 &\qquad  \bmat{l_1 & l_2 & L\\ m_1 & m_2 & M} \bmat{l_1' & l_2 & L'\\ m_1 & m_2 & M}  \pmat{l_1 & 1 & l_1'\\ 0 & 0 & 0} \pmat{l_1 & 1 & l_1'\\ -m_1 & 0 & m_1}~.
 }\end{equation}
+
 最后一步使用了 3j 符号中 $m_1 + m_2 + m_3 = 0$， 以及 CG 系数中 $m_1 + m_2 = M$ 的性质。 两个 delta 函数验证了对第一个电子作用的 $z$ 方向电场不会影响第二个电子的角动量以及总角动量的 $z$ 分量。 推导中还陆续得出了 $m_1' = m_1, m_2' = m_2$ 的结论， 即该电场同样不会影响每个电子的角动量 $z$ 分量（所以对 $m_1', m_2'$ 的求和消去了）。 最后对 $m_1,m_2$ 的求和中， 要求 $m_1+m_2=M$， 且 $\abs{m_1} < \min\qty{l_1, l'_1}$。
 
 同理， 对第二个电子有
@@ -182,6 +187,32 @@ r\sqrt{9(2l'_1+1)(2l'_2+1)(2L'+1)/(4\pi)^2}\\
 \end{equation}
 选择定则： $L' - L = \pm 1$， $M' = M$， $l_1+l_2-L$ 奇偶性不变。 % 已数值验证，见与爱华的聊天记录， 似乎连 multi-photon 也不会变。
 这就是为什么从基态（$l_1=l_2$， $L=0$）的电离计算可以排除所有 $l_1+l_2-L$ 为奇数的分波。
+
+\subsection{电场作用项（速度规范）}
+类比氢原子（\autoref{sub_HyTDSE_1}~\upref{HyTDSE}），每两个分波之间的耦合从一个数变为一个算符
+\begin{equation}
+F^{(v)}_{\lambda,\lambda'} = F^{(z1)}_{\lambda,\lambda'}\pdv{r} + \frac{F^{(vz1)}_{\lambda,\lambda'}}{r}~.
+\end{equation}
+其中 $F^{(z1)}_{\lambda,\lambda'}$ 在 \autoref{eq_HeTDSE_20} 中定义。 第二项
+\begin{equation}
+F^{(vz1)} = -\cos\theta_1 -\sin\theta\pdv{\theta_1}~.
+\end{equation}
+为了方便暂且假设所有 $M=0$， 有
+\begin{equation}\ali{
+F^{(vz1)}_{\lambda,\lambda'} &= \mel{\mathcal{Y}_{l_1 l_2}^{L}}{F^{(vz1)}}{\mathcal{Y}_{l_1' l_2'}^{L'}}\\
+&= \delta_{l_2, l_2'} \sum_{m_1,m_2, m_1'} \bmat{l_1 & l_2 & L\\ m_1 & m_2 & 0}\bmat{l_1' & l_2' & L'\\ m_1' & m_2 & 0} \times\\
+& \qquad\int Y_{l_1m_1}^*(\uvec r_1) F^{(vz1)}(\uvec r_1)Y_{l_1' m_1'}(\uvec r_1)\dd{\Omega_1}\\
+&= \delta_{l_2, l_2'} \sum_{m_1} \bmat{l_1 & l_2 & L\\ m_1 & -m_1 & 0}\bmat{l_1' & l_2' & L'\\ m_1 & -m_1 & 0} \times\\
+& \qquad (\delta_{l_1',l_1+1} l'_1\mathcal C_{l_1,m_1} - \delta_{l_1,l'_1+1} l_1\mathcal C_{l'_1,m_1})~.
+}\end{equation}
+积分 $\mathcal C_{l,m}$ 可以参考\autoref{eq_HyTDSE_13}~\upref{HyTDSE}。 同理，
+\begin{equation}\ali{
+F^{(vz2)}_{\lambda,\lambda'} &= \mel{\mathcal{Y}_{l_1 l_2}^{LM}}{F^{(vz2)}}{\mathcal{Y}_{l_1' l_2'}^{L'}}\\
+&= \delta_{l_1, l_1'} \sum_{m_1,m_2, m_2'} \bmat{l_1 & l_2 & L\\ m_1 & m_2 & 0}\bmat{l_1' & l_2' & L'\\ m_1 & m'_2 & 0} \times\\
+& \quad\int Y_{l_2m_2}^*(\uvec r_2) F^{(vz2)}(\uvec r_2)Y_{l_2' m_2'}(\uvec r_2)\dd{\Omega_1}\\
+&= \delta_{l_1, l_1'} \sum_{m_2} \bmat{l_1 & l_2 & L\\ -m_2 & m_2 & 0}\bmat{l_1' & l_2' & L'\\ -m_2 & m_2 & 0} \times\\
+& \qquad (\delta_{l_2',l_2+1} l_2'\mathcal C_{l_2,m_2} - \delta_{l_2,l'_2+1} l_2 \mathcal C_{l'_2,m_2})~.
+}\end{equation}
 
 \subsection{非线性偏振电场}
 对非线性偏振电场， \autoref{eq_HeTDSE_12} 的前两项不为零， 但只和 $z$ 分量的结果大同小异（只有最后一个 3j 系数变为两项， 再除以 $\sqrt{2}$ 以归一化）

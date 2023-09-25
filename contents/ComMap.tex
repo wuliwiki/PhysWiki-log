@@ -1,0 +1,55 @@
+% 压缩映射
+% keys 压缩映射
+% license Xiao
+% type Tutor
+\pentry{映射\upref{map}，度量空间\upref{Metric}}
+在正式定义之前，我们先讨论根据“压缩映射”这一名词应该怎么定义它。首先，压缩映射是集合到自身的一个映射（因为“压缩”就应该是种包含关系）。其次，“压缩”是指对集合中任意两点，在压缩映射下两点的像点的“距离”比两原像更小。这就是说，压缩映射是定义在带有“距离”的集合上的，这样的集合便是度量空间\upref{Metric}。容易验证，满足上面定义的压缩映射 $A$ 的定义集合 $X$ 是个无限集。事实上，若 $X$ 有限，且 $d:X\times X\rightarrow \mathbb R$ 是距离函数\footnote{表示"距离"的集合的元素应都是可比较的，就是说它是个有序集\upref{OrdRel}，不妨将这个集合取作实数集。}。我们构建两个序列
+\begin{equation}
+\{x,Ax,A^2x,\cdots\},\{y,Ay,A^2y,\cdots\}~,
+\end{equation}
+由于 $X$ 有限，所以必有$m_1<n_1,m_2<n_2$ 存在，使得 $A^{m_1}x=A^{n_1}x,A^{m_2}y=A^{n_2}y$ 。那么
+\begin{equation}
+\begin{aligned}
+A^{m_1+(n_1-m_1)(n_2-m_2)}x&=\underbrace{A^{(n_1-m_1)}\cdots A^{(n_1-m_1)}}_{(n_2-m_2)\text{个}}A^{m_1}x\\
+&=\underbrace{A^{(n_1-m_1)}\cdots A^{(n_1-m_1)}}_{(n_2-m_2-1)\text{个}}A^{n_1}x\\
+&=\underbrace{A^{(n_1-m_1)}\cdots A^{(n_1-m_1)}}_{(n_2-m_2-1)\text{个}}A^{m_1}x\\
+&=A^{m_1}x\\~.
+\end{aligned}
+\end{equation}
+同理
+\begin{equation}
+\begin{aligned}
+A^{m_2+(n_1-m_1)(n_2-m_2)}y=A^{m_2}y\\~.
+\end{aligned}
+\end{equation}
+于是
+\begin{equation}\label{eq_ComMap_1}
+\begin{aligned}
+&d(A^{(n_1-m_1)(n_2-m_2)}(A^{m_1}x),A^{(n_1-m_1)(n_2-m_2)}(A^{m_2}y))\\
+&=d(A^{m_1}x,A^{m_2}y)~.
+\end{aligned}
+\end{equation}
+但是 $A$ 是压缩映射要求任意 $n>0$，都有 $d(A^n x,A^n y)<d(x,y)$\footnote{$A^n x$表示把$x$压缩 $n$ 次}。\autoref{eq_ComMap_1} 与这是矛盾的，这表明压缩映射必须定义在无限集上。上面的论证中用到了这样的事实，即映射\upref{map}可作用在其定义集合的所有元上。
+
+于是下面的定义就是容易理解的了。
+\begin{definition}{压缩映射}
+设 $A:M\rightarrow M$ 是度量空间 $M$ (度量为 $d$)到它自身的一个映射，若存在一常数 $\lambda\in(0,1)$，使得
+\begin{equation}
+d(Ax,Ay)\leq \lambda d(x,y),\quad \forall x,y\in M~.
+\end{equation}
+ 则称 $A$ 为 $M$ 上的\textbf{压缩映射}。
+\end{definition}
+\begin{theorem}{压缩映射必定连续}
+压缩映射是个连续映射。
+\end{theorem}
+\textbf{证明：}类比函数的连续性\upref{contin}，度量空间 $(M,d)$ 到度量空间 $(M',d')$ 上的连续映射可以描述为：对任意正数 $\epsilon$ ，若存在数 $\delta$，只要 $x$ 满足 $d(x,x_0)<\delta$，就有 $d'(f(x),f(x_0))<\epsilon$，则称映射 $f$ 在点 $x_0$ 连续。下面我们来证明压缩映射确是在度量空间上为连续。
+
+设 $x_0$ 为 $M$ 上任一点，对任意 $\epsilon>0$, 取 $\delta=\epsilon$，于是对任意 $x$, 只要 $d(x,x_0)<\epsilon$，就有
+\begin{equation}
+d(A x,A x_0)<d(x,x_0)<\epsilon~.
+\end{equation}
+于是 $d$ 在 $x_0$ 连续，由于 $x_0$ 的任意性， $d$ 是连续映射。
+
+
+
+\textbf{证毕！}

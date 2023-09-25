@@ -6,7 +6,7 @@
 \issueDraft
 \end{issues}
 
-\pentry{量子散射的延迟\upref{tDelay}， 库仑函数\upref{CulmF}， 选择定则\upref{SelRul}}
+\pentry{量子散射的延迟\upref{tDelay}， 库仑函数\upref{CulmF}， 选择定则\upref{SelRul}， 含时微扰理论\upref{TDPTc}}
 
 本文使用原子单位制\upref{AU}。 例如一个有限深势阱（短程势）中有一个束缚态， 被一个电场波包电离之后， 光电子波包逃出势阱。 那么光电子波包的延迟是多少呢？ 我们以下使用一阶含时微扰理论\upref{TDPT} 来分析。
 
@@ -15,7 +15,7 @@
 
 初态和末态能量分别为 $E_0, E$， 令 $\omega = E - E_0$， 不含时的末态记为 $\psi_k(x)$， 并令其为满足边界条件
 \begin{equation}\label{eq_HeAna2_2}
-\psi_k(x \to +\infty) \propto \E^{\I kx}~,
+\psi_k(x \to +\infty) = \frac{1}{\sqrt{2\pi}}\E^{\I kx}~,
 \end{equation}
 其中 $A(k)$ 是实函数。 那么一阶微扰系数为（\autoref{eq_TDPTc_1}~\upref{TDPTc}）
 \begin{equation}
@@ -25,9 +25,9 @@ c(k) = -\I \sqrt{2\pi} \mel{\psi_k}{H'}{\psi_0} \tilde f(-\omega)~.
 \begin{equation}
 \psi(x, t) = \int_{-\infty}^{\infty} c(k) \psi_k(x)\E^{-\I E t} \dd{k}~.
 \end{equation}
-那么根据\autoref{eq_tDelay_4}~\upref{tDelay} 延迟为
+那么根据\autoref{eq_tDelay_4}~\upref{tDelay} 延迟为（$k$ 视为 $E$ 的函数）
 \begin{equation}\label{eq_HeAna2_3}
-t = \pdv{E} \arg (c_E)~.
+t = \pdv{E} \arg (c(k))~.
 \end{equation}
 对于没有 chirp 的电场波包， $\tilde f(-\omega)$ 相位恒定（想象一个高斯波包乘以正弦函数的傅里叶变换）。 所以随 $E$ 变化的相位只有矩阵元， 绝对时间延迟为
 \begin{equation}\label{eq_HeAna2_1}
@@ -56,21 +56,31 @@ c_{l,m}(k) = -\sqrt{2\pi}\I \mel{C_{l,m}(k)}{z}{i} \tilde f(-\omega)~.
 t_{EWS}^C = \pdv{E} \braket{C(\bvec k)}{\psi(t)} = \pdv{\sigma_l}{E}~.
 \end{equation}
 
-但是库仑平面波本身还存在不收敛的相移 $-\eta\ln (2kr)$， 这对能量求导以后是一个负的， 会带来一个负延迟， 即提前。 重申，对于氢原子基态的线性光电离， 只需要 $l = 1$， 结果与方向无关。 所以氢原子 streaking 电离的角向变化完全是由 $t_{CLC}$ 决定的。
+但是库仑平面波本身还存在不收敛的相移 $-\eta\ln (2kr)$， 这对能量求导以后是一个负的， 会带来一个负延迟， 即提前。 从经典物理的角度来看， 提前是因为一开始电子在势阱中移动的速度比无穷远处更快，节约了一些时间。 重申，对于氢原子基态的线性光电离， 只需要 $l = 1$， 结果与方向无关。 所以氢原子 streaking 电离的角向变化完全是由 $t_{CLC}$ 决定的。
 
 库仑渐进相位为（\autoref{eq_CulmF_7}~\upref{CulmF}）
 \begin{equation}
 F_l(k, r) \overset{r\to \infty}{\longrightarrow} \sin\qty[kr - \frac{\pi l}{2} + \frac{Z}{k}\ln(2kr) + \sigma_l(k)]~, % Z > 0
 \end{equation}
 \begin{equation}
-\sigma_l(k) = \arg[\Gamma(l+1-\I Z/k)] \qquad (Z > 0)~.
+\sigma_l(k) = \arg[\Gamma(l+1-\I Z/k)] = \Im\ln\Gamma(l+1-\I Z/k) \qquad (Z > 0)~.
 \end{equation}
 \begin{figure}[ht]
 \centering
-\includegraphics[width=8cm]{./figures/bbe2fecdf936361f.png}
+\includegraphics[width=10cm]{./figures/bbe2fecdf936361f.png}
 \caption{库仑相移 $\sigma_l(k)$} \label{fig_HeAna2_1}
 \end{figure}
-其中 $\sigma_l(k)$ 产生的相移与距离无关， 可以单纯看作是非直线轨道带来的延迟（不确定）， 并且是 XUV 波包一瞬间带来的。 $kr\ln(2kr)$ 只和距离有关， 带来的延迟是库仑力产生的， 而且并不收敛。 那么光电离的总延迟就是
+
+所以
+\begin{equation}
+\begin{aligned}
+t_{EWS}^C &= \frac{1}{k} \Im\dv{k}\ln\Gamma(l+1-\I Z/k) = \frac{1}{k} \Im\frac{\dv{k}\Gamma(l+1-\I Z/k)}{\Gamma(l+1-\I Z/k)}\\
+&= \frac{Z}{k^3} \Re\frac{\Gamma'(l+1-\I Z/k)}{\Gamma(l+1-\I Z/k)}~.
+\end{aligned}
+\end{equation}
+另外 $\Gamma'(x)/\Gamma(x)$ 被称为双 $\Gamma$ 函数\upref{digama}。
+
+其中 $\sigma_l(k)$ 产生的相移与距离无关， 可以单纯看作是非直线轨道带来的延迟（不确定）， 并且是 XUV 波包一瞬间带来的。 $kr\ln(2kr)$ 只和距离有关， 带来的延迟是库仑力产生的， 而且关于 $r$ 并不收敛。 那么光电离的总延迟就是
 \begin{equation}\label{eq_HeAna2_5}
 t = \pdv{E} \arg\qty[\sigma_l(k) + \frac{Z}{k}\ln(2kr)]~. % Z > 0
 \end{equation}
