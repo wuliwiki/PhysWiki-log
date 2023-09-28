@@ -1,9 +1,71 @@
-% 线性算子的范数
+% 线性算子度量空间
 % keys 线性算子|范数|度量空间|完备性
 % license Xiao
 % type Tutor
 \pentry{线性算子代数\upref{LiOper}}
-线性算子是矢量空间上的线性映射（\upref{LiOper}），其不仅能在加法和数乘的定义下构成代数，而且能在其上定义范数使其变成完备度量空间。本节旨在说明后一论断。
-\begin{definition}{}
-设 $A:\mathbb R^m\righta \mathbb R^n$ 是从一个欧几里得空间到另一个欧几里得空间的一个线性算子。
+线性算子是矢量空间上的线性映射并且所有线性算子构成一矢量空间（\upref{LiOper}），其不仅能在加法和数乘的定义下构成代数，而且能在其上定义范数使其变成完备度量空间。本节旨在说明后一论断。下面我们约定 $\mathbb R^{n*}\equiv\mathbb R^n-0$，其中 $0$ 为矢量空间 $\mathbb R^n$ 的零矢量。
+\begin{definition}{}\label{def_ONorm_1}
+设 $\mathcal A$ 是 $\mathbb R^n$ 上的线性算子，则其\textbf{范数}定义为
+\begin{equation}\label{eq_ONorm_1}
+\norm{\mathcal A}=\sup_{x\in{\mathbb R^{n*}}}\frac{\abs{\mathcal Ax}}{\abs{x}}~.
+\end{equation}
+其中 $\abs{x}\equiv\sqrt{(x,x)}$ 是矢量 $x$ 的范数, $(\cdot,\cdot)$ 是 $\mathbb R^n$ 的内积。
 \end{definition}
+范数（\autoref{def_ONorm_1}） 的几何意义恰好是算子 $\mathcal A$ 的最大\textbf{伸缩系数}(矢量模之比)。
+\begin{example}{}
+试证明上面定义的算子的范数满足范数的定义（\autoref{def_NormV_1}~\upref{NormV}），即：
+\begin{enumerate}
+\item $\norm{\mathcal A}\geq0$，且 $\norm{\mathcal A}=0$ 当且仅当 $\norm{\mathcal A}=\mathcal O$，$\mathcal O$ 为零算子（\autoref{ex_LiOper_1}~\upref{LiOper}）;
+\item $\norm{\lambda \mathcal A}=\abs{\lambda}\norm{\mathcal A}$;
+\item 三角不等式：$\norm{\mathcal A+\mathcal B}\leq\norm{\mathcal A}+\norm{\mathcal B}$。\\
+此外，下面性质成立:\\
+\item $\norm{\mathcal{AB}}\leq{\norm{\mathcal A}}\norm{\mathcal B}$。
+\end{enumerate}
+\end{example}
+\textbf{证明：}1. 由于 $\abs{\mathcal A x}\geq0$，且 $x\neq0\Rightarrow\abs{x}>0$，所以
+$\norm{\mathcal A}\geq0$。当 $\mathcal A=0$ 时 意味着 $\sup\limits_{x\in{\mathbb R^{n*}}}\abs{\mathcal A x}=0\Rightarrow\mathcal A x=0$，即 $\mathcal A$ 将每个 $x$ 都映射为零矢量，于是 $\mathcal A=\mathcal O$。
+
+2.$\norm{\lambda\mathcal A}=\sup\limits_{x\in{\mathbb R^{n*}}}\frac{\abs{\lambda \mathcal Ax}}{\abs{x}}=\sup\limits_{x\in{\mathbb R^{n*}}}\frac{\abs{\lambda}\abs{ \mathcal Ax}}{\abs{x}}=\abs{\lambda}\sup\limits_{x\in{\mathbb R^{n*}}}\frac{\abs{\mathcal Ax}}{\abs{x}}=\abs{\lambda}\norm{\mathcal A}
+$。
+
+3.\begin{equation}
+\begin{aligned}
+\norm{\mathcal A+\mathcal B}&=\sup\limits_{x\in{\mathbb R^{n*}}}\frac{\abs{\mathcal Ax+\mathcal B x}}{\abs{x}}\leq\sup\limits_{x\in{\mathbb R^{n*}}}\qty(\frac{\abs{\mathcal Ax}+\abs{\mathcal B x}}{\abs{x}})\\
+&\leq \sup\limits_{x\in{\mathbb R^{n*}}}\frac{\abs{ \mathcal Ax}}{\abs{x}}+\sup\limits_{x\in{\mathbb R^{n*}}}\frac{\abs{\mathcal B x}}{\abs{x}}\\
+&=\norm{\mathcal A}+\norm{\mathcal B}~.
+\end{aligned}
+\end{equation}
+
+4. \autoref{eq_ONorm_1} $\Rightarrow\norm{\mathcal A}\geq\frac{\abs{\mathcal Ax}}{\abs{x}}\Rightarrow \norm{\mathcal A}\abs{x}\geq\abs{\mathcal A x}$，于是
+\begin{equation}
+\begin{aligned}
+\norm{\mathcal{AB}}&=\sup\limits_{x\in{\mathbb R^{n*}}}\frac{\abs{\mathcal{AB} x}}{\abs{x}}\leq\sup\limits_{x\in{\mathbb R^{n*}}}\frac{\norm{\mathcal A}\abs{\mathcal{B} x}}{\abs{x}}\\
+&\leq\sup\limits_{x\in{\mathbb R^{n*}}}\frac{\norm{\mathcal A}\norm{\mathcal B}\abs{x}}{\abs{x}}=\norm{\mathcal A}\norm{\mathcal B}~.
+\end{aligned}
+\end{equation}
+
+\textbf{证毕！}
+
+由矢量的模和度量的关系\upref{SNadM}，$d(\mathcal A,\mathcal B)\equiv\norm{\mathcal{A-B}}$构成了算子矢量空间（\upref{LiOper}）的度量。
+
+\begin{theorem}{}
+赋予度量 $d$ 的线性算子空间构成一完备度量空间。
+\end{theorem}
+\textbf{证明：}我们只需要证明完备性（\autoref{def_cauchy_2}~\upref{cauchy}）即可。设 $A_i$ 是任一柯西序列，即对每一 $\epsilon>0$，存在 $N(\epsilon)>0$，使得只要 $m,k>N(\epsilon)$ 时就有 $d(\mathcal{A_m,A_k})<\epsilon$。对任意点 $x$，记 $x_i\equiv\mathcal A_i x$，于是对 $m,k>N(\epsilon/\abs{x})$，就有
+\begin{equation}
+\abs{x_k-x_m}\leq d(\mathcal{A_k,A_m})\abs{x}<\epsilon~.
+\end{equation}
+即点列 $x_i$ 也是柯西序列。但是 $\mathbb R^n$ 是完备的（\upref{RCompl}），所以极限
+\begin{equation}
+y=\lim_{i\rightarrow\infty}x_i\in\mathbb R^n~
+\end{equation}
+存在，由于 $y$ 线性依赖于 $x$，于是就有 $\mathbb R^n$ 上的线性算子 $\mathcal A$ 存在，使得 $\mathcal Ax=y$。且对 $k>N'(\epsilon\abs{x})$
+\begin{equation}
+d(\mathcal{A_k,A})=\sup\limits_{x\in{\mathbb R^{n*}}}\frac{\abs{x_k -y}}{\abs{x}}\leq\epsilon~.
+\end{equation}
+所以 
+\begin{equation}
+\mathcal A=\lim_{k\rightarrow\infty}\mathcal A_k~.
+\end{equation}
+
+\textbf{证毕！}
