@@ -131,3 +131,8 @@ cmake -DBUILD_INDEX64=OFF -DBUILD_SHARED_LIBS=ON \
 \item 注意头文件是默认使用 32 位整数的， 即 \verb|#define CBLAS_INT int|， \verb|#define lapack_int int|。 如果程序中要使用 64 位， 需要在这两个 include 之前自定义 \verb|#define CBLAS_INT long long|， \verb|#define lapack_int long long|
 \item link 阶段使用 \verb|-l cblas.so| 和 \verb|-l lapacke.so| 即可。
 \end{itemize}
+
+\subsection{优化：内存对齐}
+\begin{itemize}
+\item 对于高度优化的线性代数库， 若传入的矩阵和矢量进行了数据对齐往往有助于提高效率。 这是因为 CPU 的 SIMD 指令要求每个矢量的起始地址是某个数的整数倍， 而这个数是 2 的某个指数， 如 16, 32 字节。
+\end{itemize}

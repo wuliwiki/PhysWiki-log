@@ -43,6 +43,7 @@
 \item 用 \verb|set(CMAKE_CXX_STANDARD_REQUIRED ON)| （默认关）如果编译器不支持该标准就报错
 \item \verb|set(CMAKE_CXX_EXTENSIONS OFF)| （默认开）不使用 c++ 标准拓展， 例如 \verb|-std=gnu11|。 后者并不完全兼容标准，一些情况会出错。
 \item 添加 debug 模式的 flag 如 \verb|set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -fsanitize=address")| 或者下面的 \verb`list(APPEND ...)`
+\item 同理， \verb|CMAKE_CXX_FLAGS_RELEASE| 可以设置 release 模式下的 flag。
 \item \verb`set(变量 str1 [str2] ...)` 对变量赋值（若有多个值就生成 list）
 \item \verb`list(APPEND 变量 str1 [str2] ...)` 在变量（list）后面添加元素
 \item \verb|list(REMOVE_ITEM 变量 str1 ...)| 从 \verb|变量| 的 list 中移除（如果不存在也不报错）
@@ -54,7 +55,7 @@
 \item \verb|string(REGEX MATCH "...(...)..." 变量 字符串变量|。 在\verb|字符串变量|中匹配正则表达式， 并把 \verb|()| 中的匹配结果赋值给 \verb|变量|。
 \item \verb|string(REPLACE "老词" "新词" 变量 "字符串")| 做字符串替换。
 \item \verb|add_definitions(-D FOO -D BAR)| 给编译器添加宏定义
-\item \verb|add_compile_options(-Wall -fopenmp)| 给编译器添加选项（注意不能用 \verb|-D|）
+\item \verb|add_compile_options(-Wall -fopenmp)| 给编译器添加选项（注意不能用 \verb|-D| 定义宏）， 该命令不受 \verb|CMAKE_BUILD_TYPE| 的影响。
 \item \verb`add_executable(目标名 源码1 源码2)` 前者是可执行文件名， 后者是所有需要 link 的 \verb|c/c++| 文件名，不需要头文件。 cmake 会自动分析代码得到哪个 cpp 调用哪个头文件， 如果头文件改变了， 只有调用它的 cpp 会重新编译。 注意 \verb|目标名| 可以是任意名字不一定是可执行文件名。
 \item 要指定可执行文件的名字， 用 \verb|set_target_properties(exe_targ_name PROPERTIES OUTPUT_NAME 可执行文件的名字)|
 \item 一般来说 \verb|add_executable| 指定的源码不需要包含头文件， 但如果头文件需要由其他 rule 来生成， 那就需要包含。 所以最保险还是把所有头文件都包含。
@@ -67,7 +68,7 @@
 \item \verb`target_link_libraries(exe_name lib1 [lib2] ...)` link 阶段链接 library， 相当于 \verb|-l lib1 -l lib2|
 \item \verb`option(opt_name description default)` 定义一个 option 开关（会在 cmake 的 GUI 中显示开关）以及默认值。 \verb`opt_name` 可以在 \verb|CMakeLists.txt| 中的 \verb`if` 语句中使用例如 \verb`if(opt_name) ... endif(opt_name)`。 \verb`default` 可以是 \verb`ON` 或 \verb`OFF`。
 \item 注意更新 \verb|option| 的默认值后， 需要清空 cmake 的临时文件才可以生效。
-\item 如果需要字符串类型的 option， 可以用 cached variable： \verb|set(变量 "默认值" CACHE STRING "描述")|。 如果之前 \verb|变量| 已经被赋值（例如命令行 \verb|cmake -D 变量=...|）， 则值不会被覆盖。 这种变量叫做 \textbf{cached variable}。
+\item 如果需要其他类型的 option， 可以用 cached variable： \verb|set(变量 "默认值" CACHE BOOL或STRING或FILEPATH或PATH或INTEGER "描述")|。 如果之前 \verb|变量| 已经被赋值（例如命令行 \verb|cmake -D 变量=...|）， 则值不会被覆盖。 这种变量叫做 \textbf{cached variable}。
 \item 以上两种方式产生的变量都可以在 \verb|cmake -LH .| 的帮助中看到说明。
 \item 在模板文件 \verb`*.in` 中， 当 \verb`opt_name` 为 \verb`ON` 时， 使用 \verb|configure_file| 命令后 \verb`#cmakedefine opt_name` 会被替换为 \verb`#define opt_name`。 如果想要给宏定义一个值， 用 \verb`#cmakedefine USE_FEATURE_B @USE_FEATURE_B@`
 \item 【cmake 3.16 的新功能】 \verb|target_precompile_headers(可执行文件 PRIVATE foo.h bar.h)| 可以编译头文件， 注意貌似不会自动包括 .h 包括的文件。 如果头文件（或者依赖的文件）改了， 那么将会自动重新编译头文件。
@@ -86,6 +87,7 @@
 \item \verb|check_symbol_exists| 的实现使用了 \verb|try_compile()| 和 \verb|try_run()| 函数， 试图编译和运行一个测试程序， 从运行结果来判断是否存在符号。
 \item \verb|find_library(变量 NAMES 库名 PATHS /usr/lib /usr/local/lib
 HINTS $ENV{LIBRARY_PATH} $ENV{LD_LIBRARY_PATH})| 可以寻找 \verb|lib库名.so或a[.版本号]|。 若要指定版本可以用例如 \verb|gfortran.3|， 也可以指定 \verb|gfortran.so或a|。
+\item \verb|set(CMAKE_FIND_LIBRARY_SUFFIXES ".a或.so或.lib")| 可以让 \verb|find_library()| 更倾向于某种类型的 lib。 也可以用 \verb|".a;.so"| 来指定优先级。
 \end{itemize}
 
 \subsection{依赖}
@@ -102,7 +104,7 @@ HINTS $ENV{LIBRARY_PATH} $ENV{LD_LIBRARY_PATH})| 可以寻找 \verb|lib库名.so
 \item \verb`PROJECT_BINARY_DIR` 是 Cmake 的输出路径， 临时文件， Makefile 等都在这个路径。 这就是运行 \verb`cmake` 的路径
 \item \verb|CMAKE_CURRENT_LIST_DIR| 当前在处理的 \verb|CMakeLists.txt| 的路径。
 \item \verb|CMAKE_SOURCE_DIR| 和 \verb|CMAKE_BINARY_DIR| 和上面两个有什么区别？
-\item \verb|CMAKE_BUILD_TYPE| 可以被用户设置为 \verb|Release|， \verb|Debug| 等。 例如 \verb|cmake -DCMAKE_BUILD_TYPE=Debug| 用 debug 模式编译
+\item \verb|CMAKE_BUILD_TYPE| 可以被用户设置为 \verb|Release|， \verb|Debug| 等。 例如 \verb|cmake -DCMAKE_BUILD_TYPE=Debug| 用 debug 模式编译。 \verb|Debug| 模式下，编译器优化会被自动关闭， \verb|-g| 选项会自动加上， \verb|NDEBUG| 不会。 在两种模式下， \verb|CMAKE_CXX_FLAGS_DEBUG| 和 \verb|CMAKE_CXX_FLAGS_RELEASE| 中的选项会分别传给编译器。 任何模式下 \verb|CMAKE_CXX_FLAGS| 的选项都会传给编译器。
 \item \verb|WIN32| 可以判断是否在 windows 上（包括 32 和 64 位）
 \item \verb|MSVC| 判断是否用 Visual C++ 编译器
 \end{itemize}

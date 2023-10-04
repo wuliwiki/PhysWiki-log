@@ -6,6 +6,44 @@
 \issueDraft
 \end{issues}
 
+本文假设我们在 linux 桌面环境（或 Windows 的 WSL）下使用 CLion。
+
+\subsubsection{简单的 cmake 文件}
+如果你只用 \verb|Makefile| 不想迁移到 \verb|cmake| 也没关系，你只需要写一个很简单的 wrapper，就可以用它作为 CLion 的工程文件。 一个简单的例子：
+\begin{lstlisting}[language=cmake]
+# just a wrapper for Makefile for CLion
+cmake_minimum_required(VERSION 3.10)
+project(FEDVR-TDSE)
+
+# ==== wrapper of Makefile ===
+add_custom_target(my_targ1
+  COMMAND make -f make/all.mak opt_debug=true main1.x
+  WORKING_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}"
+)
+
+add_custom_target(my_targ2
+  COMMAND make -f make/all.mak opt_debug=true main2.x
+  WORKING_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}"
+)
+
+
+# ==== dummy settings to make CLion happy ===
+set(CMAKE_CXX_STANDARD ${opt_std})
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
+set(CMAKE_CXX_EXTENSIONS OFF)
+
+file(GLOB ALL_HEADERS
+    "${PROJECT_SOURCE_DIR}/headers/*.h")
+
+message(STATUS "${ALL_HEADERS}")
+
+add_executable(dummy1
+    ${PROJECT_SOURCE_DIR}/main1.cpp ${ALL_HEADERS})
+
+add_executable(dummy2
+    ${PROJECT_SOURCE_DIR}/main2.cpp ${ALL_HEADERS})
+\end{lstlisting}
+
 \subsubsection{cmake 环境}
 \begin{itemize}
 \item \verb|Settings > Build,Execution,Development > Toolchains| 选择编译环境， 如 WSL， Mingw， Docker， SSH 等。 会检测 CMake 的版本以及 GDB 的版本。
@@ -19,6 +57,8 @@
 \subsubsection{运行环境}
 \begin{itemize}
 \item 上面菜单栏的 Select Run Debug Configuration 可以设置运行时的 working dir， arguments， input file， 环境变量（例如 \verb|LD_LIBRARY_PATH|）。
+\item 注意如果你在 \verb|~/.bashrc| 中设置的环境变量，如果用菜单栏打开 CLion，并不会生效。 所以此时在命令行中启动 CLion 即可省略手动设置。
+\item 为了方便在命令行启动 clion， 可以在 \verb|~/.bashrc| 中添加 \verb|alias clion="sh /opt/clion-*/bin/clion.sh"|。
 \end{itemize}
 
 \subsection{设置}
