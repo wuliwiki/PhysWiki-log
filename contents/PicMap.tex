@@ -1,0 +1,103 @@
+% 皮卡映射
+% keys 皮卡映射|逐次皮卡近似
+% license Xiao
+% type Tutor
+
+\pentry{定积分\upref{DInt}，映射\upref{map}}
+\cite{Arnold}通过曲线 $\varphi$ 构造出一新曲线 $f(\varphi)$ ，使得新曲线上每一点 $f(\varphi(t))$ 的切线平行于曲线 $\varphi$ 上点 $\varphi(t)$ 处给定的向量。具体来说，设 $U$ 是 $\mathbb R^n$ 的一区域，其上每一点 $x$ 都定义了一个依赖于时间的向量 $v(x,t)$ （或称为 $U$ 上定义了依赖于时间的向量场 $v$）。给定 $U$ 中的曲线 $\varphi:I\rightarrow U$($I$ 为 $t$ 轴上一区间)，那么向量场 $v$ 在曲线上每一点 $\varphi(t)$ 对应的向量为 $v(\varphi(t),t)$。于是新曲线 $f(\varphi)$ 是这样的曲线，其在每一 $\tau$ 时的点 $f(\varphi(\tau))$ 的切向量满足 $\dv{}{t}\big|_{t=\tau}(f\circ \varphi)=v(\varphi(\tau),\tau)$\footnote{当然，平行说明还有个系数，但是这里特指系数为1}。描述这样的曲线 $\varphi$ 到新曲线 $f(\varphi)$ 的映射\upref{map}称为\textbf{皮卡映射（Picard 映射）}。
+\subsection{皮卡映射}
+\begin{definition}{皮卡映射}\label{def_PicMap_1}
+设 $U$ 是 $\mathbb R^{n+1}$ 的一区域，在其上定义了一向量场\footnote{在 $U\in\mathbb R^{n+1}$ 上定义了向量场相当于在 $\mathbb R^n$ 中一区域定义了依赖于时间 $t\in\mathbb R$ 的向量场。前者表述的空间称为后者的扩张空间（\autoref{sub_PSaPF_1}~\upref{PSaPF}）。}（\autoref{def_GofODE_6}~\upref{GofODE}） 
+\begin{equation}
+v:U\rightarrow\mathbb TU~.
+\end{equation}
+$\varphi$ 是 $U$ 中满足 $\varphi(t_0)=x_0$ 的曲线，则称映射
+\begin{equation}\label{eq_PicMap_1}
+(A\varphi)(t)\equiv x_0+\int_{t_0}^{t}v(\varphi(\tau),\tau)\dd \tau~
+\end{equation}
+为曲线 $\varphi$ 的\textbf{皮卡映射（Picard Map）}。
+\end{definition}
+
+因为向量场 $v$ 可微，即表明 $v$ 连续，于是 $A\varphi$ 可导，因此 \autoref{eq_PicMap_1} 可写成微分形式
+\begin{equation}\label{eq_PicMap_2}
+\dv{}{t}((A\varphi)(t))=v(\varphi(t),t)~.
+\end{equation}
+所以\autoref{eq_PicMap_1} 等价于初始条件满足 $(A\varphi)(t_0)=x_0$ 的微分方程（\autoref{eq_PicMap_2}）. 由向量场 $v$ 确定的微分方程的定义（\autoref{def_GofODE_7}~\upref{GofODE}），于是\textbf{$\varphi$是满足初始条件 $\varphi(t_0)=x_0$ 的由向量场 $v$ 确定的微分方程的解，当且仅当 $\varphi=A\varphi$。}由映射不动点的定义，\textbf{向量场对应微分方程的解就是皮卡映射的不动点}。这可以描述为下面定理
+\begin{theorem}{微分方程的解是皮卡映射的不动点}\label{the_PicMap_1}
+设$v$ 是区域 $U\in\mathbb R^{n+1}$ 中定义的向量场，则 $\varphi$ 是 $v$ 确定的微分方程
+\begin{equation}\label{eq_PicMap_3}
+\dot x=v(x,t)~
+\end{equation}
+满足初始条件 $\varphi(t_0)=x_0$ 的解，当且仅当 $\varphi$ 是皮卡映射（\autoref{def_PicMap_1} ）的不动点，即 $A\varphi=\varphi$。
+\end{theorem}
+于是，微分方程有解，当且仅当皮卡映射存在不动点。下面定理表明，在一定条件下，皮卡映射是个压缩映射。
+
+接下来，我们设数 $a,b$ 确定柱体 $\Gamma=\{x,t:\abs{t-t_0}\leq a,\abs{x-x_0}\leq b\}$，其位于区域 $U$ 内。于是由 $v$ 在 $\Gamma$ 上连续可微（设为 $C^r$ 类，$r\geq1$）和 $\Gamma$ 是欧式空间中的闭区域，立刻有 $\abs{v},\abs{v_*}$ 在 $\Gamma$ 上能达到其上确界，设为 $K,L$，即 $\abs{v}\leq K,\abs{v_*}\leq L$。于是过内点 $x\in\Gamma$ 的积分曲线在 $x$ 处的速度向量的模 $\leq K$，即该积分曲线位于锥体 $\mathcal K_x\equiv\{x,t:\abs{t-t_0}\leq a',\abs{x-x_0}\leq K\abs{t-t_0}=b'\}$ 内，其中数 $a'$ 足够小，使得锥体 $\mathcal K_x$ 位于柱体 $\Gamma$ 内。（这段话里构造闭区域 $\Gamma$ ，是为了使 $v$ 在其上有界，而 $\mathcal K_x$ 是为了说明过初始点 $x$ 的积分曲线在 $\mathcal K_x$ 描述的区域内。）
+
+\begin{theorem}{}\label{the_PicMap_2}
+设 $M$ 是由依赖于参数 $x$ ，定义域为柱体 $\abs{x-x_0}\leq b',\abs{t-t_0}\leq a'$，满足 $\abs{\varphi(x,t)}\leq \abs{x}+K\abs{t-t_0}$ 的连续函数 $\varphi(x,t)$ 构成的度量空间\upref{Metric}，其上的度量 $d$ 定义为
+\begin{equation}
+d(\varphi_1(x,t),\varphi_2(x,t))\equiv\norm{\varphi_1-\varphi_2}=\max_{\begin{aligned}\abs{x-x_0}\leq b,\\\abs{t-t_0}\leq a\end{aligned}}\abs{\varphi_1(x,t)-\varphi_2(x,t)}~.
+\end{equation}
+则当 $a'$ 充分小时，皮卡映射
+\begin{equation}
+(A\varphi)(x,t)\equiv x+\int_{t_0}^{t}v(\varphi(x,\tau),\tau)\dd \tau~
+\end{equation}
+定义了一个从 $M$ 到自身的压缩映射（\upref{ComMap}）。
+\end{theorem}
+\textbf{证明：}首先验证 $A$ 将 $M$ 映射到自身，就是要验证对任意 $\varphi$，$A\varphi$ 连续且 $\abs{A\varphi}(x,t)\leq K\abs{t-t_0}$：连续性由对参数连续的函数的积分是对参数及积分上限也是连续获得；后一点由下面获得
+\begin{equation}
+\begin{aligned}
+\abs{(A\varphi)(x,t)}&=\abs{x+\int_{t_0}^t v(\varphi(x,\tau),\tau)\dd \tau}\leq\abs{x}+\abs{\int_{t_0}^t v(\varphi(x,\tau),\tau)\dd \tau}\\
+&\leq\abs{x}+\abs{\int_{t_0}^t K\dd \tau}\\
+&\leq\abs{x}+K\abs{t-t_0}~.
+\end{aligned}
+\end{equation}
+所以 $AM\in M$。
+
+其次，要证压缩映射，即验证 
+\begin{equation}
+\norm{A\varphi_1-A\varphi_2}\leq\lambda\norm{\varphi_1-\varphi_2},\quad 0<\lambda<1~.
+\end{equation}
+直接计算便是：
+\begin{equation}
+\begin{aligned}
+\norm{A\varphi_1-A\varphi_2}&=\max_{\begin{aligned}\abs{x-x_0}\leq b,\\\abs{t-t_0}\leq a\end{aligned}}\abs{\int_{t_0}^t v(\varphi_1(x,\tau),\tau)-v(\varphi_2(x,\tau),\tau)\dd \tau}\\
+&\leq\max_{\begin{aligned}\abs{x-x_0}\leq b,\\\abs{t-t_0}\leq a\end{aligned}}\int_{t_0}^t \abs{v(\varphi_1(x,\tau),\tau)-v(\varphi_2(x,\tau),\tau)}\dd \tau\\
+&\leq \max_{\begin{aligned}\abs{x-x_0}\leq b,\\\abs{t-t_0}\leq a\end{aligned}}\int_{t_0}^t L\abs{\varphi_1(x,\tau)-\varphi_2(x,\tau)}\dd \tau\\
+&\leq \max_{\begin{aligned}\abs{x-x_0}\leq b,\\\abs{t-t_0}\leq a\end{aligned}}\int_{t_0}^t L\norm{\varphi_1-\varphi_2}\dd \tau\\
+&\leq\max_{\begin{aligned}\abs{x-x_0}\leq b,\\\abs{t-t_0}\leq a\end{aligned}}\abs{ La'\norm{\varphi_1-\varphi_2}}\\
+&= La'\norm{\varphi_1-\varphi_2}~.
+\end{aligned}
+\end{equation}
+上面的第三行用了\autoref{the_LipCon_2}~\upref{LipCon}。由于 $a'$ 足够小，可使 $La'<1$ ，于是此时 $A$ 为压缩映射。
+
+\textbf{证毕！}
+\begin{definition}{}
+试证明\autoref{the_PicMap_2} 的 $M$ 是一完备度量空间。
+\end{definition}
+\textbf{提示}：柱体 $\Gamma$ 是欧氏空间闭区域，根据康托定理，其上的连续映射一致连续，而一致连续映射的序列收敛于连续映射。
+\subsection{逐次皮卡近似}
+逐次皮卡近似是指连续施行皮卡映射。考虑逐次皮卡近似是因为其和微分方程的解存在有着对应关系。
+\begin{definition}{逐次皮卡近似}
+设 $A$ 是皮卡映射，则称序列
+\begin{equation}
+\{A^n\varphi\}=\{\varphi, A\varphi, A^2\varphi,\cdots,\}~ 
+\end{equation}
+为初始曲线为 $\varphi$ 的\textbf{逐次皮卡近似}。
+\end{definition}
+
+\begin{example}{指数函数}
+设向量场定义为 $v(x,t)=x$ ,且给定曲线 $\varphi(t)=x_0$，取 $t_0=0$,于是此时皮卡近似为
+\begin{equation}
+\begin{aligned}
+\varphi(t)&=x_0,\\
+A\varphi(t)&=x_0+\int_{0}^{t}x_0\dd t=x_0(1+t),\\
+A^2\varphi(t)&=x_0+\int_{0}^{t}x_0(1+t)\dd t=x_0(1+t+\frac{1}{2}t^2),\\
+&\vdots\\
+A^n\varphi(t)&=x_0\sum_{i=0}^n\frac{t^i}{i!}\\
+\lim_{n\rightarrow\infty}A^n\varphi&=e^tx_0
+~.
+\end{aligned}
+\end{equation}
+\end{example}

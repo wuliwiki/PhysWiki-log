@@ -53,7 +53,68 @@ L_{L1}(G)=E_{x,y,z}[||y-G(x,z)||_1] ~
 \begin{equation}
 G^*=arg \mathop{min}\limits_G \mathop{max}\limits_D L_{cGAN}(G,D)+\lambda L_{L1}(G) ~
 \end{equation}
-其中，$G$表示生成器，$D$表示判别器，$x$为训练数据的输入，$y$为训练数据的输出，$z$表示随机噪音。
+其中，$G$表示生成器，$D$表示判别器，$x$为训练数据的输入，$y$为训练数据的输出，$z$表示随机噪音，$\lambda$表示$L1$损失的系数。
+
+可以参考以下示例Python代码来建立一个条件生成对抗网络的模型。本例使用的是Tensorflow框架。
+\begin{lstlisting}[language=python]
+import tensorflos as tf
+
+
+def build_model(self):
+    """
+      A表示输入域，B表示输出域。
+      该方法的功能是建立一个把数据从域A转换到域B的条件生成对抗网络模型。
+    """
+
+    # 1. 建立一个传送数据的节点。
+    # self.batch_size表示批次大小；self.image_size表示图像尺寸
+    # self.input_c_dim表示输入数据的通道数。
+    # self.output_c_dim表示输出数据的通道数。
+    self.real_data = tf.placeholder(tf.float32,
+                       [self.batch_size, self.    
+                        image_size, self.image_size,
+                        self.input_c_dim + self.output_c_dim],
+                        name='real_A_and_B_images')
+
+    # 2. 建立输入和输出数据的节点。
+    # self.real_B是喂送域B数据的节点；self.real_A是喂送域A数据的节点。
+    self.real_B = self.real_data[:,:,:,:self.input_c_dim]
+    self.real_A = self.real_data[:,:,:,self.input_c_dim:self.input_c_dim 
+                     + self.output_c_dim]
+    
+    # 3. 建立生成器
+    # self.fake_B是网络产生的域B数据的节点。
+    # self.generator是建立生成器的方法。
+    self.fake_B = self.generator(self.real_A)
+    
+    # 4. 建立判别器
+    self.real_AB = tf.concat([self.real_A, self.real_B], 3)
+    self.fake_AB = tf.concat([self.real_A, self.fake_B], 3)
+    self.D, self.D_logits = self.discriminator(self.real_AB, reuse=False)
+    self.D_, self.D_logits_ = self.discriminator(self.fake_AB, reuse=True)
+
+    # 5. 定义判别器损失
+    self.d_loss_real = tf.reduce_mean(tf.nn.sigmoid_cross_entropy_with_logits(
+                                  logits=self.D_logits, 
+                                  labels=tf.ones_like(self.D)))
+    self.d_loss_fake = tf.reduce_mean(
+                                      tf.nn.sigmoid_cross_entropy_with_logits(
+                                      logits=self.D_logits_,
+                                      labels=tf.zeros_like(self.D_)))
+    
+    # 6. 定义生成器损失
+    # tf.nn.sigmoid_cross_entropy_with_logits方法的功能是先计算Sigmoid激活函数值，再计算交叉熵。
+    self.g_loss = tf.reduce_mean(
+                                tf.nn.sigmoid_cross_entropy_with_logits(
+                                  logits=self.D_logits_,
+                                  labels=tf.ones_like(self.D_)))
+                                  +self.L1_lambda * tf.reduce_mean(
+                                    tf.abs(self.real_B - self.fake_B))
+
+\end{lstlisting}
+
+
+
 
 \textbf{参考文献：}
 \begin{enumerate}

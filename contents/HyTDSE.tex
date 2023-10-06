@@ -176,13 +176,13 @@ H_0 \psi_{l} = \I \pdv{\psi_{l}}{t}~.
 
 \subsection{速度规范}\label{sub_HyTDSE_1}
 \pentry{速度规范\upref{LVgaug}}
-要使用速度规范（注意仍然是位置表象而不是动量表象）， $H_0$ 算符的计算是一样的， 唯一不同的是把 $\bvec E\vdot \bvec r$ 换成了 $\bvec A\vdot \bvec p$。 \autoref{eq_SphNab_5}~\upref{SphNab}。
+要使用速度规范（注意仍然是位置表象而不是动量表象）， $H_0$ 算符的计算是一样的， 唯一不同的是把 $\bvec E\vdot \bvec r$ 换成了 $\bvec A\vdot \bvec p$。
 
-先把电场限制在 $z$ 方向， 所以场的作用主要就是
+先把电场限制在 $z$ 方向， 所以场的作用主要就是（\autoref{eq_SphNab_5}~\upref{SphNab}）
 \begin{equation}\label{eq_HyTDSE_25}
 \pdv{z} = \cos\theta\pdv{r} - \frac{\sin\theta}{r}\pdv{\theta}~.
 \end{equation}
-第二项只耦合不同的分波。 但第一项要更为复杂，它耦合不同分波中同一有限元中的不同基底。 所以 $\exp(-\I \lambda \pdv{z})$ 需要把 $\pdv{z}$ 作用在整个波函数上面， 然后用 lanczos 这样的整体方法来演化。
+第二项只耦合不同的分波。 但第一项要更为复杂，它耦合不同分波中同一有限元中的不同基底。 所以 $\exp(-\I \lambda \pdv{z})$ 需要把 $\pdv*{z}$ 作用在整个波函数上面， 然后用 lanczos 这样的整体方法来演化。
 
 在 FEDVR 中， $\pdv*{r}$ 可以用矩阵 $\mat D$ 精确表达， $\cos\theta$ 也在上文中可以表示为分波耦合矩阵。 所以 $\pdv*{z}$ 就是把这两个矩阵相乘即可。
 
@@ -195,8 +195,9 @@ H_0 \psi_{l} = \I \pdv{\psi_{l}}{t}~.
 \end{aligned}
 \end{equation}
 所以\autoref{eq_HyTDSE_25} 的第一项实际上需要拆分成两项， 没有导数的那个合并到第二项中去。 另外由\autoref{eq_SphHar_18}~\upref{SphHar} 得
-\begin{equation}\label{eq_HyTDSE_13}
-F^{(v2z)}_{l,l'} = -\mel{Y_{l,m}}{\cos\theta + \sin\theta\pdv{\theta}}{Y_{l',m}}~.
+\begin{equation}\label{eq_HyTDSE_13} % 和 Qprop 论文中一样
+F^{(v2z)}_{l,l'} = -\mel{Y_{l,m}}{\cos\theta + \sin\theta\pdv{\theta}}{Y_{l',m}}
+= \delta_{l',l+1} l'\mathcal C_{l,m} - \delta_{l,l'+1} l \mathcal C_{l',m}~.
 \end{equation}
 \begin{equation}
 \mat F^{(v2)}
@@ -206,7 +207,7 @@ F^{(v2z)}_{l,l'} = -\mel{Y_{l,m}}{\cos\theta + \sin\theta\pdv{\theta}}{Y_{l',m}}
 0 & -2\mathcal C_{1m} & 0 & 3\mathcal C_{2m} &\dots\\
 \vdots & 0 & -3\mathcal C_{2m} & 0 & \dots}~.
 \end{equation}
-
+所以\autoref{eq_HyTDSE_25} 的矩阵元为
 \begin{equation}\label{eq_HyTDSE_12}
 \mel{Y_{l,m}}{\pdv{z}}{Y_{l',m}} = F_{l,l'}^z\pdv{r} + \frac{F_{l,l'}^{(v2z)}}{r}~.
 \end{equation}
