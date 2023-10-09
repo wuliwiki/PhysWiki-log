@@ -1,0 +1,63 @@
+% 混合熵的微观解释
+% license CCBY4
+% type Tutor
+
+
+\pentry{理想气体混合的熵变\upref{IGME}，熵的微观定义与玻尔兹曼公式\upref{entro2}}
+
+\footnote{参考：Gaskel et al., Thermodynamics of Materials}
+
+\subsection{从微观角度论证混合熵的公式}
+\subsubsection{异种粒子}
+在理想气体混合的熵变\upref{IGME}我们已经知道了如何从经典的方法计算混合熵：
+\begin{equation}
+\Delta_{mix} S = - R \sum n_i \ln x_i~,
+\end{equation}
+现在，我们尝试用统计力学的观点，从微观角度论证混合熵的公式为什么是这样的。
+
+想象我们有两种不同的球：$N_A$个$A$球，$N_B$个$B$球，现在将他们混合在一起，那么会有几种可能的混合方式？幸运的是，统计力学假设所有微观粒子都是相同的，因此我们不需要考虑球的摆放顺序。那么，问题简化为\textsl{高中二年级}的组合问题，比如说：
+\begin{itemize}
+\item 共有$(N_A+N_B)$个格子，选择其中$N_A$个格子放置$A$球，其余$N_B$个格子放置$B$球，那么一共有几种选法？
+\item 共有$(N_A+N_B)$个空白球，选择其中$N_A$个球刷成$A$球，其余$N_B$个球刷成$B$球，那么一共有几种选法？
+\end{itemize}
+问题的答案比高中课本上的大多数习题都简单，就是一个组合数\footnote{如果你忘了组合数公式：$C^n_m = \frac{m!}{n!(m-n)!}$}：
+\begin{equation}
+\Omega = C^{N_A}_{N_A+N_B} C^{N_B}_{N_B} =  C^{N_A}_{N_A+N_B}  = \frac{(N_A+N_B)!}{N_A!N_B!}~,
+\end{equation}
+取对数并运用妇孺皆知的斯特林近似\footnote{如果你忘了斯特林近似：$\lim_{N \to +\infty} \ln N! = N (\ln N -1)$}
+\begin{equation}\label{eq_MICMXS_1}
+\begin{aligned}
+\ln \Omega &= \ln \frac{(N_A+N_B)!}{N_A!N_B!} \\
+ &= (N_A+N_B) (\ln (N_A+N_B) - 1) - N_A (\ln N_A - 1) - N_B (\ln N_B - 1) \\
+ &= (N_A+N_B) \ln (N_A+N_B) - N_A \ln N_A - N_B \ln N_B \\
+ &= N_A \ln \frac{N_A+N_B}{N_A} + N_B \ln \frac{N_A+N_B}{N_B} \\
+ &= - N_A \ln x_A - N_B \ln x_B \qquad \left [x_A = \frac{N_A}{N_A+N_B}, x_B = \frac{N_B}{N_A+N_B} \right ]\\
+\end{aligned}~,
+\end{equation}
+因此根据Boltzmann公式，
+\begin{equation}
+\Delta_{mix} S = k \ln \Omega = - k(N_A \ln x_A + N_B \ln x_B) = - R(n_A \ln x_A + n_B \ln x_B) ~.
+\end{equation}
+有点眼熟？那就对了：这就是混合熵。至此，我们从熵的微观含义论证了混合熵公式。($n_A$是以摩尔数计的$N_A$。)
+
+\subsubsection{同种粒子}
+现在，我们想一想如果$A$球和$B$球其实是相同的一种球时，会发生什么。你可能还会说，$\Omega = C^{N_A}_{N_A+N_B}$。但是，从问题的本质来看，不管你如何选取空格放球，最终我们只能把所有的格子放满同一种球。因此，我们实则只有一种方法：
+\begin{equation}
+\Omega = 1~,
+\end{equation}
+与
+\begin{equation}
+\Delta_{mix} S = 0~.
+\end{equation}
+这还是符合我们以前的论断。
+
+\subsection{为什么混合是自发过程？}
+要回答这个问题，我们先理解什么叫“混合”。比如说，我们认为所有$A$球都处于左侧格子、所有$B$球都处于右侧格子的情况叫做“不混合”，其余所有的情况都叫做（某种程度上的）“混合”。
+
+按照这个描述，要使$A$、$B$球不混合，我们只能选取左边的所有格子放置$A$球，因此只有一种选法：$\Omega_{unmixed} = 1$；而剩下的所有放置方式都将使$A$、$B$球混合，选法种数是：$\Omega_{mixed} =  C^{N_A}_{N_A+N_B} - 1$；
+
+当球很多时，$\Omega_{mixed} = C^{N_A}_{N_A+N_B} - 1$将\textsl{远远远远远远远远大于}$\Omega_{unmixed} = 1$，从而根据等概率假设，如果允许自由放置$A$、$B$球，那么系统大概一定会处于混合的状态。
+
+\begin{exercise}{道理我都懂，但是混合的方法到底有多少种}
+根据\autoref{eq_MICMXS_1} ，估计具有$1 \Si{mol}$粒子的系统的组合数的数量级（的数量级）。
+\end{exercise}
