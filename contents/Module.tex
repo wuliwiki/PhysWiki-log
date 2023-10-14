@@ -1,14 +1,26 @@
 % 模
-% keys 代数|环|线性空间|向量|module
+% keys 代数|环|线性空间|向量|module|子模|submodule|数乘|纯量乘法|
 % license Xiao
 % type Tutor
 
 \pentry{环\upref{Ring}，矢量空间\upref{LSpace}}
 
+
+
+\subsection{模的概念}
+
+
 模是对线性空间的一种推广，相当于要求进行数乘时所用的“数”不再是一个域的元素，而只要求是一个环。也就是说，线性空间是模的一种，但模不一定是线性空间。
 
+
+模也是交换群的推广。一方面，模关于加法是构成交换群的；另一方面，任何交换群实际上都是整数环上的模。
+
+
+最早给出模的严格定义的是德国数学家Emmy Noether，她意识到了有限群的矩阵表示理论和代数结构理论可以藉由模来联系，自此模一直都和表示理论密不可分。
+
+
 \begin{definition}{左模}
-给定一个环 $(R, \times)$ 和一个\textbf{阿贝尔}群 $(M, +)$，将 $R$ 中的每个元素都定义为 $M$ 上的一个变换，其中对于 $r\in R, m\in M$，记 $rm\in M$ 为 $r$ 对 $m$ 进行变换的结果。
+给定一个幺环 $(R, \times)$ 和一个\textbf{阿贝尔}群 $(M, +)$，将 $R$ 中的每个元素都定义为 $M$ 上的一个变换，其中对于 $r\in R, m\in M$，记 $rm\in M$ 为 $r$ 对 $m$ 进行变换的结果。
 
 如果所定义的变换满足：
 \begin{enumerate}
@@ -23,15 +35,33 @@
 
 类似地，也可以定义 $r_i$ 从右边作用于 $m_i$，所得的结构就是\textbf{右}$R$\textbf{-模（right} $R$\textbf{-modeule）}，记为 $M_R$。
 
-线性空间的数乘并没有左右的区分，而模的“数乘”，即以上定义的变换，是有的。这是因为域的乘法必然是交换的，而环的则不一定，导致 $r_1mr_2$ 的定义不明确。但是如果 $R$ 是交换环，那么我们就可以良好地定义 $r_1mr_2=(r_1\times r_2)m=(r_2\times r_1)m=m(r_1\times r_2)=m(r_2\times r_1)$。对于交换环 $R$ 的模，左模和右模是一样的，统称为 $R$-模。
+
+\begin{definition}{子模}
+令 $_RM$ 是 $R$ 上的一个左模，$N$ 是 $M$ 的一个子集，且对于任意 $r\in R$ 和 $n\in N$ 有 $rn\in N$，那么 $N$ 可以继承 $_RM$ 上的作用，构成一个左 $R$-模，记为 $_RN$。称 $_RN$ 为 $_RM$ 的\textbf{子模（submodule）}。
+\end{definition}
+
+
+\begin{definition}{模同态}
+
+设 $_RM$ 和 $_RN$ 都是左 $R$-模，且有群同态 $f:M\to N$，使得对于任何 $r, s\in R$ 和 $m\in M, n\in N$，有 $f(rm+sn)=rf(m)+sf(n)$，那么说 $f$ 是一个 $R$\textbf{-模同态（module）}\footnote{这里表述有冗余，因为群同态意味着$f(rm+sn)=f(rm)+f(sn)$}。
+
+\end{definition}
+
+
+
+线性空间的数乘并没有左右的区分，而模的“数乘”，即以上定义的变换，是有的。这是因为域的乘法必然是交换的，而环的则不一定，导致 $r_1mr_2$ 的定义不明确。但是如果 $R$ 是交换环，那么我们就可以良好地定义 $r_1mr_2=(r_1\times r_2)m=(r_2\times r_1)m=m(r_1\times r_2)=m(r_2\times r_1)$。交换环 $R$ 上的左模和右模可以一致地定义，统称为 $R$-模。
 
 \begin{definition}{线性空间}
 域上的模，称为\textbf{线性空间（linear space）}。
 \end{definition}
 
-我们在线性代数中已经熟悉了线性空间的概念。一般的模有很多和线性空间相似的性质。
 
-\subsection{模的分类}
+我们从直观的几何向量出发，抽象出其最重要的性质，即线性性，得到了线性空间的概念。但推广并不止步于此，我们继续将系数域的概念推广到一般的环，得到了模。模通常有一些一般线性空间不具备的性质，比如不一定有“基”，即便有，也可能出现元素数量不同的极大线性无关组。但无论如何，在模论的大部分研究中，我们关心的都是那些尽可能保留线性空间中优良性质的结构。
+
+
+
+\subsection{模的例子}
+
 
 \begin{definition}{有限生成模}
 令 $_RM$ 是 $R$ 上的一个左模，如果存在 $M$ 的有限子集 $\{m_1, \cdots, m_n\}$，使得 $M=\{r_1m_1+r_2m_2+\cdots+r_nm_n|r_i\in R\}$，则称 $_RM$ 是\textbf{有限生成（finitely generated）}的，子集 $\{m_1, \cdots, m_n\}$ 称为其一个\textbf{生成组}。
@@ -41,21 +71,46 @@
 
 
 \begin{definition}{自由模}
-令 $R$ 为一个环，集合 $M=\{(r_1, r_2, \cdots, r_n)|r_i\in R\}$。在 $M$ 上定义加法运算为 $(r_1, \cdots, r_n)+(s_1, \cdots, s_n)=(r_1+s_1, \cdots, r_n+s_n)$，使 $M$ 构成一个阿贝尔群。如果再定义\textbf{左数乘}为 $r(r_1, \cdots, r_n)=(r\times r_1, \cdots, r\times r_n)$，那么称这样的到的模为一个\textbf{自由}$R$\textbf{-模（free} $R$\textbf{-module）}。
+令 $R$ 为一个环，集合 $M=\{(r_1, r_2, \cdots, r_n)|r_i\in R\}$。在 $M$ 上定义加法运算为 $(r_1, \cdots, r_n)+(s_1, \cdots, s_n)=(r_1+s_1, \cdots, r_n+s_n)$，使 $M$ 构成一个阿贝尔群。如果再定义\textbf{左数乘}为 $r(r_1, \cdots, r_n)=(r\times r_1, \cdots, r\times r_n)$，那么称这样得到的模为一个\textbf{自由}$R$\textbf{-模（free} $R$\textbf{-module）}。
 \end{definition}
 
 
 
 
 
-\subsection{模的例子}
+
 
 \begin{example}{}
-线性空间都是模。
+线性空间都是其基域上的模。
 \end{example}
 
 \begin{example}{}
-给定一个超越数 $x$，则 $x$ 的全体\textbf{整系数}多项式构成一个 $\mathbb{Z}$-模。
+给定环$R$，则其多项式环$R[x]$构成一个$R$-模。
+\end{example}
+
+
+
+\begin{example}{}
+
+任取一个环$R$和它的一个理想$I$，则$I$可以构成$R$上的一个左模（右模同理）。
+
+这个例子暗示了将线性空间推广到模的有趣之处：域由于乘法可逆性，没有非平凡理想，而没有乘法可逆性的环便可以取非平凡理想，从模的角度讨论理想的性质。
+
+\end{example}
+
+
+\begin{example}{}
+
+给定环$R$上的左模$M$和集合$S$，令$M^S$的集合是由全体\textbf{映射}$f:S\to M$作为元素构成的。
+
+定义$M^S$上的\textbf{加法}，使得对于任意$f, g\in \phantom{}M^S, x\in S$都有$(f+g)(x)=f(x)+g(x)$。
+
+定义$R$对$M^S$的\textbf{数乘}使得对于任意$r\in R$有$(rf)(x)=r\qty(f(x))$。
+
+如此，$M^S$便是$R$上的一个模。
+
+进一步，如果$R$是交换环而$S$也是$R$上的模，则取全体$S\to M$的\textbf{模同态}所构成的集合，可以构造$M^S$的一个\textvf{子模}（子模的概念见下）。
+
 \end{example}
 
 \begin{example}{流形上的光滑向量场}
@@ -65,14 +120,8 @@
 \end{example}
 
 
-\subsection{子模}
-
-令 $_RM$ 是 $R$ 上的一个左模，$N$ 是 $M$ 的一个子集，且对于任意 $r\in R$ 和 $n\in N$ 有 $rn\in N$，那么 $N$ 可以继承 $_RM$ 上的作用，构成一个左 $R$-模，记为 $_RN$。称 $_RN$ 为 $_RM$ 的\textbf{子模（submodule）}。
 
 
-\subsection{同态}
-
-设 $_RM$ 和 $_RN$ 都是左 $R$-模，且有群同态 $f:M\to N$，使得对于任何 $r, s\in R$ 和 $m\in M, n\in N$，有 $f(rm+sn)=rf(m)+sf(n)$，那么说 $f$ 是一个 $R$\textbf{-模同态（module）}。
 
 
 
