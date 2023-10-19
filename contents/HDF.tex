@@ -1,0 +1,63 @@
+% Hierarchical Data Format（HDF） 笔记
+% license Usr
+% type Note
+
+
+\begin{issues}
+\issueDraft
+\end{issues}
+
+\begin{itemize}
+\item 广泛用于科学计算： 高能物理、天文、生物信息
+\item 由 HDF Group 开发
+\item 支持文件夹结构，多维数组，图片，表格，文字，支持大数据量，支持数据压缩，支持小部分读写（例如数组的某列）
+\item 支持 C, C++, Fortran, Java, Python, MATLAB
+\item \href{https://www.hdfgroup.org/downloads/hdfview/}{HDFView} 是一个 GUI 程序可以查看 HDF5 文件。
+\end{itemize}
+
+\subsection{C++ API}
+\begin{itemize}
+\item Ubuntu 安装： \verb|sudo apt install libhdf5-dev|
+\end{itemize}
+
+\begin{lstlisting}[language=cpp,caption=test\_hdf5.cpp]
+#include <iostream>
+#include <vector>
+#include <H5Cpp.h>
+
+// Use the standard HDF5 namespaces
+using namespace H5;
+using namespace std;
+
+int main() {
+	vector<double> data = {1., 2., 3., 4., 5., 6.};
+
+	// H5F_ACC_TRUNC: replace file if exist
+	H5File file("testfile.h5", H5F_ACC_TRUNC);
+
+	hsize_t dims[2] = {2, 3}; // array size (ROW major!)
+	DataSpace dataspace(2, dims);
+
+	// use Predfined Type (PredType), double
+	DataSet dataset = file.createDataSet("myDoubleArray",
+		PredType::NATIVE_DOUBLE, dataspace);
+
+	dataset.write(data.data(), PredType::NATIVE_DOUBLE);
+
+	// will be auto called in destructors
+	dataset.close(); dataspace.close(); file.close();
+}
+\end{lstlisting}
+\begin{itemize}
+\item 可以用 \verb|dpkg -L libhdf5-dev| 来查看所有头文件和 lib 文件的安装路径。
+\item 编译：\verb|g++ test_hdf5.cpp -o test_hdf5.x -I/usr/include/hdf5/serial/ -L/usr/lib/x86_64-linux-gnu/hdf5/serial/ -lhdf5_cpp -lhdf5|
+\item 运行： \verb|test_hdf5.x|
+\item 注意储存的矩阵是行主序的！
+\item 默认不开启压缩， 要让上面代码进行压缩，在创建 \verb|dataset| 时添加一个 \verb|DSetCreatPropList|（property list）：
+\end{itemize}
+\begin{lstlisting}[language=cpp]
+DSetCreatPropList plist;
+plist.setDeflate(6); // compression level from 0 to 9
+DataSet dataset = file.createDataSet("myDoubleArray",
+	PredType::NATIVE_DOUBLE, dataspace, plist);
+\end{lstlisting}
