@@ -8,51 +8,51 @@ Hartree-Fock 近似理论可以用来近似描述相互作用电子气，其核�
 
 写出库伦相互作用电子气的哈密顿量：
 
-$$H=\sum\limits_{i}\langle i|H_0|i\rangle c_{i,\sigma}^\dagger c_{i}^~+\frac{1}{2}\sum\limits_{\mu ,\nu,\mu', \nu'}V_{\mu \nu,\mu' \nu'}c_{\mu'}^\dagger c_{\nu'}^\dagger c_{\nu}^~ c_{\mu}^~~. $$
+$$H=\sum\limits_{i}\langle i|H_0|i\rangle c_{i,\sigma}^\dagger c_{i}+\frac{1}{2}\sum\limits_{\mu ,\nu,\mu', \nu'}V_{\mu \nu,\mu' \nu'}c_{\mu'}^\dagger c_{\nu'}^\dagger c_{\nu} c_{\mu}~. $$
 上式中的下表$\mu,\nu$等包括了粒子的自旋信息，值得注意的是我们考虑的是库伦相互作用，并不作用于自旋，所以相互作用项中的四算符部分里$\mu'$和$\mu$、$\nu'$和$\nu$表示的是同一个粒子散射前后的状态，其自选应该是相同的。
 
 但四算符的难以处理的，我们使用平均场手段将其近似为二算符。我们需要关注四算符的期待值：
 $$
-\langle n_\mu, n_\nu |c_{\mu'}^\dagger c_{\nu'}^\dagger c_{\nu}^~ c_{\mu}^~ |n_\mu ,n_\nu \rangle = \langle n_\mu, n_\nu |c_{\mu'}^\dagger c_{\nu'}^\dagger |n_\mu-1 ,n_\nu-1 \rangle~.
+\langle n_\mu, n_\nu |c_{\mu'}^\dagger c_{\nu'}^\dagger c_{\nu} c_{\mu} |n_\mu ,n_\nu \rangle = \langle n_\mu, n_\nu |c_{\mu'}^\dagger c_{\nu'}^\dagger |n_\mu-1 ,n_\nu-1 \rangle~.
 $$
 可以看到仅仅在$\mu=\mu',\nu=\nu'$或$\mu=\nu',\nu=\mu'$时上式非0：
-$$\langle n_\mu, n_\nu |c_{\mu'}^\dagger c_{\nu'}^\dagger c_{\nu}^~ c_{\mu}^~ |n_\mu ,n_\nu \rangle = \left(\delta_{\mu\mu'}\delta_{\nu\nu'}\pm \delta_{\mu\nu'}\delta_{\nu\mu'}\right)n_\mu n_\nu~.$$
+$$\langle n_\mu, n_\nu |c_{\mu'}^\dagger c_{\nu'}^\dagger c_{\nu} c_{\mu} |n_\mu ,n_\nu \rangle = \left(\delta_{\mu\mu'}\delta_{\nu\nu'}\pm \delta_{\mu\nu'}\delta_{\nu\mu'}\right)n_\mu n_\nu~.$$
 其中正负号来自于考虑的系统是费米子还是玻色子，费米子的反对易关系会带来一个负号，电子系统是费米子，所以我们需要的是负号的情况。所以在基态下四算符的平均值是：
 \begin{equation}\label{eq_HFock_1}
-\langle c_{\mu'}^\dagger c_{\nu'}^\dagger c_{\nu}^~ c_{\mu}^~ \rangle = \left(\delta_{\mu\mu'}\delta_{\nu\nu'}\pm \delta_{\mu\nu'}\delta_{\nu\mu'}\right)\langle n_\mu\rangle \langle n_\nu\rangle~.
+\langle c_{\mu'}^\dagger c_{\nu'}^\dagger c_{\nu} c_{\mu} \rangle = \left(\delta_{\mu\mu'}\delta_{\nu\nu'}\pm \delta_{\mu\nu'}\delta_{\nu\mu'}\right)\langle n_\mu\rangle \langle n_\nu\rangle~.
 \end{equation}
 这其实是Wick 定理（标量场）\upref{wick}的一个结论。
 考虑原式中的相互作用项期望值可以发现其变为两项：
 
-$$\frac{1}{2}\sum\limits_{\mu ,\nu,\mu', \nu'}V_{\mu \nu,\mu' \nu'}\langle c_{\mu'}^\dagger c_{\nu'}^\dagger c_{\nu}^~ c_{\mu}^~\rangle=\frac{1}{2}\sum\limits_{\mu,\nu}V_{\mu\nu,\mu\nu}\langle n_\mu\rangle \langle n_\nu\rangle-\frac{1}{2}\sum\limits_{\mu,\nu}V_{\mu\nu,\nu\mu}\langle n_\mu\rangle \langle n_\nu\rangle~.$$
+$$\frac{1}{2}\sum\limits_{\mu ,\nu,\mu', \nu'}V_{\mu \nu,\mu' \nu'}\langle c_{\mu'}^\dagger c_{\nu'}^\dagger c_{\nu} c_{\mu}\rangle=\frac{1}{2}\sum\limits_{\mu,\nu}V_{\mu\nu,\mu\nu}\langle n_\mu\rangle \langle n_\nu\rangle-\frac{1}{2}\sum\limits_{\mu,\nu}V_{\mu\nu,\nu\mu}\langle n_\mu\rangle \langle n_\nu\rangle~.$$
 上式中第一项被称为Hartree项，第二项被称为Fock项。
 
 其中:
-$$V_{\mu\nu,\mu\nu}=\iint \phi_\mu^*(r_1)\phi_\nu^*(r_2)\frac{e^2}{\abs{r_1-r_2}^2}\phi_\mu^~(r_1)\phi_\nu^~(r_2)dr_1dr_2=\iint \frac{e^2\abs{\phi_\mu^~(r_1)}^2\abs{\phi_\nu^~(r_2)}^2}{\abs{r_1-r_2}^2}dr_1dr_2~.$$
-$$V_{\mu\nu,\nu\mu}=\iint \phi_\mu^*(r_1)\phi_\nu^*(r_2)\frac{e^2}{\abs{r_1-r_2}^2}\phi_\mu^~(r_2)\phi_\nu^~(r_1)dr_1dr_2~.$$
+$$V_{\mu\nu,\mu\nu}=\iint \phi_\mu^*(r_1)\phi_\nu^*(r_2)\frac{e^2}{\abs{r_1-r_2}^2}\phi_\mu(r_1)\phi_\nu(r_2)dr_1dr_2=\iint \frac{e^2\abs{\phi_\mu(r_1)}^2\abs{\phi_\nu(r_2)}^2}{\abs{r_1-r_2}^2}dr_1dr_2~.$$
+$$V_{\mu\nu,\nu\mu}=\iint \phi_\mu^*(r_1)\phi_\nu^*(r_2)\frac{e^2}{\abs{r_1-r_2}^2}\phi_\mu(r_2)\phi_\nu(r_1)dr_1dr_2~.$$
 
 为了写出具体的哈密顿量形式，我们先不写出$\delta$项：
 \begin{equation}\label{eq_HFock_2}
-\langle c_{\mu'}^\dagger c_{\nu'}^\dagger c_{\nu}^~ c_{\mu}^~ \rangle = \langle c_{\mu'}^\dagger c_\mu^~\rangle\langle c_{\nu'}^\dagger c_\nu^~\rangle-\langle c_{\nu'}^\dagger c_\mu^~\rangle\langle c_{\mu'}^\dagger c_\nu^~\rangle~.
+\langle c_{\mu'}^\dagger c_{\nu'}^\dagger c_{\nu} c_{\mu} \rangle = \langle c_{\mu'}^\dagger c_\mu\rangle\langle c_{\nu'}^\dagger c_\nu\rangle-\langle c_{\nu'}^\dagger c_\mu\rangle\langle c_{\mu'}^\dagger c_\nu\rangle~.
 \end{equation}
 可以验证\autoref{eq_HFock_1} 与\autoref{eq_HFock_2} 相同。
 
 并且做如下变换：
-$$\langle c_{\mu'}^\dagger c_\mu^~\rangle\langle c_{\nu'}^\dagger c_\nu^~\rangle\rightrightarrows c_{\mu'}^\dagger c_\mu^~\langle c_{\nu'}^\dagger c_\nu^~\rangle+\langle c_{\mu'}^\dagger c_\mu^~\rangle c_{\nu'}^\dagger c_\nu^~-\langle c_{\mu'}^\dagger c_\mu^~\rangle\langle c_{\nu'}^\dagger c_\nu^~\rangle ~.$$
+$$\langle c_{\mu'}^\dagger c_\mu\rangle\langle c_{\nu'}^\dagger c_\nu\rangle\rightrightarrows c_{\mu'}^\dagger c_\mu\langle c_{\nu'}^\dagger c_\nu\rangle+\langle c_{\mu'}^\dagger c_\mu\rangle c_{\nu'}^\dagger c_\nu-\langle c_{\mu'}^\dagger c_\mu\rangle\langle c_{\nu'}^\dagger c_\nu\rangle ~.$$
 
 可以验证上式左右期望值相同。
 那么hartree项将变为：
 
 \begin{equation}
 \begin{aligned}
-V^{int}_{hartree}&=\frac{1}{2}\sum\limits_{\mu,\nu,\mu',\nu'}V_{\mu\nu,\mu'\nu'}\left(c_{\mu'}^\dagger c_\mu^~\langle c_{\nu'}^\dagger c_\nu^~\rangle+\langle c_{\mu'}^\dagger c_\mu^~\rangle c_{\nu'}^\dagger c_\nu^~-\langle c_{\mu'}^\dagger c_\mu^~\rangle\langle c_{\nu'}^\dagger c_\nu^~\rangle\right)~.
+V^{int}_{hartree}&=\frac{1}{2}\sum\limits_{\mu,\nu,\mu',\nu'}V_{\mu\nu,\mu'\nu'}\left(c_{\mu'}^\dagger c_\mu\langle c_{\nu'}^\dagger c_\nu\rangle+\langle c_{\mu'}^\dagger c_\mu\rangle c_{\nu'}^\dagger c_\nu-\langle c_{\mu'}^\dagger c_\mu\rangle\langle c_{\nu'}^\dagger c_\nu\rangle\right)~.
 \end{aligned}
 \end{equation}
 
 Fock项会变为：
 \begin{equation}
 \begin{aligned}
-V^{int}_{hartree}&=-\frac{1}{2}\sum\limits_{\mu,\nu,\mu',\nu'}V_{\mu\nu,\nu'\mu'}\left(c_{\nu'}^\dagger c_\mu^~\langle c_{\mu'}^\dagger c_\nu^~\rangle+\langle c_{\nu'}^\dagger c_\mu^~\rangle c_{\mu'}^\dagger c_\nu^~-\langle c_{\nu'}^\dagger c_\mu^~\rangle\langle c_{\mu'}^\dagger c_\nu^~\rangle\right)~.
+V^{int}_{hartree}&=-\frac{1}{2}\sum\limits_{\mu,\nu,\mu',\nu'}V_{\mu\nu,\nu'\mu'}\left(c_{\nu'}^\dagger c_\mu\langle c_{\mu'}^\dagger c_\nu\rangle+\langle c_{\nu'}^\dagger c_\mu\rangle c_{\mu'}^\dagger c_\nu-\langle c_{\nu'}^\dagger c_\mu\rangle\langle c_{\mu'}^\dagger c_\nu\rangle\right)~.
 \end{aligned}
 \end{equation}
 
