@@ -10,34 +10,32 @@ SQL数据库一般用于存储程序的各种数据。对于简单的程序来�
 \subsection{SQLite使用教程}
 SQL有许多不同的软件，例如MySQL，ProstgreSQL，SQLite等，为了简单起见，我们以SQLite软件作为入门演示。
 
-\begin{enumerate}
-\item 可以在\href{https://sqlitebrowser.org/dl/}{官方网站下载页面}下载，选择你需要的操作系统的安装包。安装完成如下图：
-
+可以在\href{https://sqlitebrowser.org/dl/}{官方网站下载页面}下载，选择你需要的操作系统的安装包。安装完成如下图：
 
 \begin{figure}[ht]
 \centering
-\includegraphics[width=12cm]{./figures/0efb331e4729b6f7.png}
+\includegraphics[width=14.25cm]{./figures/0efb331e4729b6f7.png}
 \caption{SQLite主页} \label{fig_SQLint_1}
 \end{figure}
 
-\item 根据需求创建数据库（相当于表格），我们以学生-课程数据库为例。
+根据需求创建数据库（相当于表格），我们以学生-课程数据库为例。
 
 \begin{figure}[ht]
 \centering
-\includegraphics[width=12cm]{./figures/81626c61a8ee6c7d.png}
+\includegraphics[width=14.25cm]{./figures/81626c61a8ee6c7d.png}
 \caption{点击创建数据库} \label{fig_SQLint_2}
 \end{figure}
 
 \begin{figure}[ht]
 \centering
-\includegraphics[width=12cm]{./figures/013db632fb5ccad6.png}
+\includegraphics[width=14.25cm]{./figures/013db632fb5ccad6.png}
 \caption{保存在合适的位置} \label{fig_SQLint_3}
 \end{figure}
 
 
 \begin{figure}[ht]
 \centering
-\includegraphics[width=12cm]{./figures/15dfd0190d5b237c.png}
+\includegraphics[width=14.25cm]{./figures/15dfd0190d5b237c.png}
 \caption{新增表} \label{fig_SQLint_5}
 \end{figure}
 
@@ -49,15 +47,15 @@ SQL有许多不同的软件，例如MySQL，ProstgreSQL，SQLite等，为了简�
 \item 一个表格有一个或多个主键，它用于唯一标识表中的特定记录。例如Sno，学生的学号是可以唯一标识一位学生的，所以学号是一个学生的主键。简单来说就是，知道了学生的学号，就能找到对应的学生。如果只知道一个学生的性别Ssex，是不能找到的，这也就是为什么性别不能作为主键的原因。
 \item 图4下方的语句属于SQL语句，基础SQL语句参考SQL 入门语法\upref{SQLgrm}。基础好的也可以直接用SQL语句建表。
 \end{itemize}
-\item 建表成功后如图所示：
+
+建表成功后如图所示：
 \begin{figure}[ht]
 \centering
 \includegraphics[width=12.5cm]{./figures/bd90e827cd376352.png}
 \caption{建表成功} \label{fig_SQLint_4}
 \end{figure}
 
-
-\item 表建立完成以后，我们需要网表里插入一些数据，具体操作如下：
+表建立完成以后，我们需要网表里插入一些数据，具体操作如下：
 \begin{figure}[ht]
 \centering
 \includegraphics[width=12.5cm]{./figures/784804ba9f7f24db.png}
@@ -86,10 +84,13 @@ SQL有许多不同的软件，例如MySQL，ProstgreSQL，SQLite等，为了简�
 \end{figure}
 % “sql语句写入值”
 % “运行sql语句”
-\item 作为示例，我建立了三个表格
-\\1.学生表（Student）:学号，姓名，性别，年龄。
-\\2.课程表（Course):课程号，课程名，学分。
-\\3.成绩表（SC）:学号，课程号，成绩。
+作为示例，我建立了三个表格
+\begin{itemize}
+\item 学生表（Student）:学号，姓名，性别，年龄。
+\item 课程表（Course):课程号，课程名，学分。
+\item 成绩表（SC）:学号，课程号，成绩。
+\end{itemize}
+
 \begin{figure}[ht]
 \centering
 \includegraphics[width=12.5cm]{./figures/c71d921783017f84.png}
@@ -97,16 +98,180 @@ SQL有许多不同的软件，例如MySQL，ProstgreSQL，SQLite等，为了简�
 \end{figure}
 % “建立三个表格”
 
-在这里，SC表中我们定义了一个外键约束，它引用了其他两个表（Student表中的学号，Course表中的课程号）。SQL语句如图：
+在这里，SC(成绩表)表中我们定义了一个外键约束，它引用了其他两个表（Student表中的学号，Course表中的课程号）。SQL语句如图11：
 % “建立SC表”
 \begin{figure}[ht]
 \centering
 \includegraphics[width=12.5cm]{./figures/1fdc442d2528b97b.png}
 \caption{} \label{fig_SQLint_11}
 \end{figure}
-\end{enumerate}
+
+建立完成SC（成绩表）并插入数据后如图所示：
+\begin{figure}[ht]
+\centering
+\includegraphics[width==12.5cm]{./figures/5a95b5a30d8e785b.png}
+\caption{} \label{fig_SQLint_12}
+\end{figure}
+
+\subsection{数据库的增，删，改，查}
+使用SQLite建立自己需要的数据库后，在后续的使用过程中，进行数据的插入，删除，修改和插入都是非常方便的。
+基于上面建立的三个表，添加了一些数据用于给大家举例子。（具体规范的语句格式参考SQL 入门语法\upref{SQLgrm}）
+\subsubsection{1.插入数据}
+
+\begin{itemize}
+\item 假如班级里转来一位新同学小赵，我们需要将他的一些信息加入到student（学生表），只需要在SQL命令框输入sql语句：
+
+\begin{lstlisting}[language=bash]
+insert  into student(Sno,Sname,Ssex,Sage)
+values('5','小赵','男','22');
+\end{lstlisting}
+执行成功后系统会自动添加一条记录到student表中：
+\begin{figure}[ht]
+\centering
+\includegraphics[width=12.5cm]{./figures/48c40e7ef9fb7bd5.png}
+\caption{} \label{fig_SQLint_13}
+\end{figure}
+\end{itemize}
+
+\begin{itemize}
+\item 对于每一门课程，求学生的平均成绩，并把结果存入数据库中：
+\begin{lstlisting}[language=bash]
+首先在数据库中建立一个新表，其中一列存放课程号，另一列存放学生对应该课程的平均成绩
+
+Create Table Avg_Grade
+(
+    Cno INTEGER,
+    Avg INTEGER
+);
+
+\end{lstlisting}
+运行成功后，数据库会自动建立一个表：
+\begin{figure}[ht]
+\centering
+\includegraphics[width=10cm]{./figures/e65ada344faf2d72.png}
+\caption{} \label{fig_SQLint_18}
+\end{figure}
+
+\begin{lstlisting}[language=bash]
+然后对成绩表（SC）按课程号分组求平均成绩，再把课程号和平均成绩存入新表中
+
+insert into Avg_Grade(Cno,Avg_Grade)
+select Cno,AVG(Grade)
+from SC
+group by Cno;
+\end{lstlisting}
+执行成功后如图：
+\begin{figure}[ht]
+\centering
+\includegraphics[width=10cm]{./figures/de0f6f307c7bc556.png}
+\caption{} \label{fig_SQLint_19}
+\end{figure}
+\end{itemize}
 
 
+
+
+
+\subsubsection{2.查询数据}
+\begin{itemize}
+\item 查询指定列
+\begin{lstlisting}[language=bash]
+例如从成绩表中查询小李的数据库成绩：
+select Grade
+from SC
+where Sno='1' and Cno='2001';
+\end{lstlisting}执行成功如图：
+\begin{figure}[ht]
+\centering
+\includegraphics[width=10cm]{./figures/57d3503e4f025a5e.png}
+\caption{} \label{fig_SQLint_21}
+\end{figure}
+\end{itemize}
+
+\begin{itemize}
+\item 查询全部列
+\begin{lstlisting}[language=bash]
+例如查询全体学生的学号和姓名：
+select Sno,Sname
+from student;
+\end{lstlisting}
+
+执行成功如图：
+\begin{figure}[ht]
+\centering
+\includegraphics[width=10cm]{./figures/7f363c66a962a5cb.png}
+\caption{} \label{fig_SQLint_20}
+\end{figure}
+\end{itemize}
+
+\begin{itemize}
+\item 查询满足条件的元组
+\begin{lstlisting}[language=bash]
+例1：查询成绩低于60分的学生的学号和课程号：
+select Sno，Cno
+from SC
+where Grade<60;
+\end{lstlisting}
+执行成功如图：
+\begin{figure}[ht]
+\centering
+\includegraphics[width=10cm]{./figures/a174b726c2397d25.png}
+\caption{} \label{fig_SQLint_22}
+\end{figure}
+\begin{lstlisting}[language=bash]
+例2：查询选了操作系统课程的学生的学号及成绩，查询结果按分数的降序排序：
+select Sno，Grade
+from SC
+where Cno='2004'
+order by Grade DESC;
+\end{lstlisting}
+执行成功如图：
+\begin{figure}[ht]
+\centering
+\includegraphics[width=10cm]{./figures/f0694a121bc852ca.png}
+\caption{} \label{fig_SQLint_23}
+\end{figure}
+\end{itemize}
+
+
+\subsubsection{3.修改数据}
+
+\begin{itemize}
+\item 将小李的数据库成绩改为90
+\begin{lstlisting}[language=bash]
+由学生表可知小李的学号为1，数据库的课程号为2001
+update SC
+set Grade='90'
+where Sno='1' and Cno='2001';
+\end{lstlisting}
+修改后如图所示:
+\begin{figure}[ht]
+\centering
+\includegraphics[width=6cm]{./figures/442d9e6dd3684cc6.png}
+\caption{} \label{fig_SQLint_15}
+\end{figure}
+当然，对于SQLite，还有一种很简便的修改方法，例如将小赵的年龄改为21岁：
+\begin{figure}[ht]
+\centering
+\includegraphics[width=12.5cm]{./figures/3488f0411dab1e51.png}
+\caption{} \label{fig_SQLint_16}
+\end{figure}
+\end{itemize}
+\begin{itemize}
+\item 另外，set后面除了带文本之外，还可以是数学表达式
+\begin{lstlisting}[language=bash]
+例如，将学生学号为01的学生对应的年龄加1：
+update student
+set Sage=Sage+1
+where Sno='01';
+\end{lstlisting}
+执行成功，小李的年龄由原来的20增加到了21
+\begin{figure}[ht]
+\centering
+\includegraphics[width=10cm]{./figures/66a3350dc3a4bf33.png}
+\caption{} \label{fig_SQLint_24}
+\end{figure}
+\end{itemize}
 
 
 

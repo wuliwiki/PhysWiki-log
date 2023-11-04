@@ -1,5 +1,5 @@
 % 对偶空间
-% keys 线性映射|矢量空间|对偶空间|对偶基|列向量|行向量|线性空间|向量空间|狄拉克符号|Dirac 符号
+% keys 线性映射|矢量空间|对偶空间|dual basis|dual space|对偶基|列向量|行向量|线性空间|向量空间|狄拉克符号|Dirac 符号|reciprocal  basis|互反基
 % license Xiao
 % type Tutor
 
@@ -12,7 +12,7 @@
 
 如果给定一个域 $\mathbb{K}$ 上的线性空间 $V$，把 $V$ 中的任意向量 $\bvec{v}$ 映射到 $\mathbb{K}$ 中的一个元素 $f(\bvec{v})$ 上，那么映射 $f:V\rightarrow\mathbb{K}$ 就是线性空间 $V$ 上的一个函数。你可以任意指定函数的对应规则，但我们只关心所有可能的函数中最容易研究的一类，线性函数。
 
-线性函数由于具有可加性，通俗来说就是“函数图像是平直的”，因此非常容易讨论。在微分几何中，尽管我们研究的不一定是平直的函数，但是总能在局部取平直的线性函数来考察任一点附近的函数性质，这其实就是微分的思想。换句话说，微分实际上是一种“线性近似”，在给定点把可微函数近似为一个线性函数，方便讨论。
+线性函数由于具有可加性，通俗来说就是“函数图像是平直的”，因此非常容易讨论。很多时候，尽管我们研究的不一定是平直的函数，但是总能在局部取平直的线性函数来考察任一点附近的函数性质，这其实就是微分的思想。换句话说，微分实际上是一种“线性近似”，在给定点把可微函数近似为一个线性函数，方便讨论。
 
 \begin{definition}{线性函数}\label{def_DualSp_3}
 给定一个域 $\mathbb{K}$ 上的线性空间 $V$，如果映射 $f:V\rightarrow\mathbb{K}$ 满足线性性，即对于任意 $\bvec{v}, \bvec{u}\in V$ 以及任意的 $a, b\in\mathbb{K}$，都有 $f(a\bvec{v}+b\bvec{u})=af(\bvec{v})+bf(\bvec{u})$，那么我们称 $f$ 是 $V$ 上的一个\textbf{线性函数（linear function）}。
@@ -48,6 +48,8 @@
 
 \begin{definition}{对偶空间}
 给定一个域 $\mathbb{K}$ 上的线性空间 $V$，记 $V^*$ 为集合 $\{V\text{上全体线性函数}\}$。在 $V^*$ 上定义加法和数乘如\autoref{def_DualSp_1} 和\autoref{def_DualSp_2}，那么 $V^*$ 构成一个线性空间，称作 $V$ 的\textbf{对偶空间}。
+
+为了简洁地表示区分，也可以称$V$为主空间。
 \end{definition}
 
 看起来，$V^*$ 称作线性函数空间更直接，为什么要特地取“对偶”一名字呢？初看对偶空间的定义，你可能会觉得 $V$ 和 $V^*$ 的元素之间是不对等的，$V^*$ 中的函数是用来对 $V$ 中的向量进行映射的。可是反过来看的话，$V$ 中向量也可以看成是 $V^*$ 中向量的映射。这就是说，$f\in V^*$ 可以看成是一个 $V\rightarrow\mathbb{K}$ 的映射，而 $\bvec{v}\in V$ 也可以看成是 $V^*\rightarrow\mathbb{K}$ 的映射。
@@ -60,31 +62,180 @@
 
 如果我们形式上进行一下简化，把 $f$ 记为向量形式 $\bvec{f}$，然后把 $f(\bvec{v})$ 记为 $\bvec{f}\bvec{v}$，那么可以更清晰地看出它们互为彼此的线性函数：给定一个域 $\mathbb{K}$ 上的线性空间 $V$ 及其对偶空间 $V^*$，取 $a_i\in\mathbb{K}$、$\bvec{f}_i\in V^*$ 和 $\bvec{v}_i\in V$，那么从 $\bvec{f}_0(a_1\bvec{v}_1+a_2\bvec{v}_2)=a_1\bvec{f}_0\bvec{v}_1+a_2\bvec{f}_0\bvec{v}_2$ 可知，$\bvec{f}$ 是 $V$ 上的线性函数；从 $(a_1\bvec{f}_1+a_2\bvec{f}_2)\bvec{v}_0=a_1\bvec{f}_1\bvec{v}_0+a_2\bvec{f}_2\bvec{v}_0$ 可知，$\bvec{v}$ 是 $V^*$ 上的线性函数。
 
-我们可以这么理解：$\bvec{f}\bvec{v}$ 实际上就是“取 $V$ 和 $V^*$ 中各一个元素，把它们俩对应到一个标量上”的过程。两个空间形式上平等，互为对偶空间，甚至可以写成 $V^{**}=V^*$。由此，我们可以更对称地定义对偶空间的概念：
+我们可以这么理解：$\bvec{f}\bvec{v}$ 实际上就是“取 $V$ 和 $V^*$ 中各一个元素，把它们俩对应到一个标量上”的过程。两个空间形式上平等，互为对偶空间，甚至可以写成 $V^{**}=V^*$。
 
-\begin{definition}{对偶空间}
-给定域 $\mathbb{K}$ 上两个 $n$ 维线性空间 $V$ 和 $W$。如果指定了一个非退化双线性映射 $m:V\times W\rightarrow\mathbb{K}$\footnote{即对于 $a_i, b_i\in\mathbb{K}$、$\bvec{v}_i\in V$ 和 $\bvec{w}_j\in W$，有 $m(\sum\limits_{i=1}^na_i\bvec{v}_i,\sum\limits_{j=1}^nb_j\bvec{w}_j )=\sum\limits_{i, j=1}^na_ib_jm(\bvec{v}_i)m(\bvec{w}_j)$}，那么称 $V$ 和 $W$ 是对偶的。如果把 $\bvec{v}\in V$ 视为线性函数 $f_{\bvec{v}}:W\rightarrow\mathbb{K}$，那么对于任意 $\bvec{w}\in W$ 有 $f_{\bvec{v}}(\bvec{w})=f(\bvec{v}, \bvec{w})$。
-\end{definition}
-\addTODO{“非退化”“双线性映射”}
+因此，互为对偶的两个空间地位平等，都是彼此的线性函数构成的线性空间
+\footnote{换句话说，谁是主空间，谁是（主空间的）对偶空间，并没有绝对的定义，而要看讨论的情景。如同样是考虑流形上的切向量和余切向量，有的视角会认为切向量更自然，因此把切空间当作主空间，此时余切空间就是对偶空间；但也有视角认为余切向量更自然，而把余切空间当作主空间，此时切空间是对偶空间。}
+。因此，我们可以说对偶向量之间是在\textbf{相互作用}，作用结果是一个标量。相互作用通常可以用$\langle *, * \rangle$来表示，就是把$\bvec{f}\bvec{v}$记为$\langle \bvec{f}, \bvec{v} \rangle$。
 
-
-\subsection{对偶空间的表示}\label{sub_DualSp_1}%对偶基；
-
-给定线性空间 $V$ 作为原空间，再给定 $V$ 的一组基，我们就可以把 $V$ 中的向量表示为列矩阵。对应地，$V^*$ 中的向量表示为行矩阵，这个行矩阵是该向量在对偶基下的坐标。这样一来，向量和对偶向量互相乘起来得到标量的过程，就是这两个矩阵相乘的过程，其中对偶向量的行矩阵放在左边，向量的列矩阵放在右边。
+注意，对偶向量的相互作用和两个向量的内积在概念上有所不同。作内积需要额外定义“内积”这一\textbf{双线性函数}\footnote{双线性函数即输入两个向量、输出一个标量的函数，且它对两个输入量都满足线性性。也就是说，固定其中一个输入量，则该双线性函数就可以视为一个线性函数。更多讨论请见\textbf{张量}\upref{Tensor}词条。}，不同的内积下，同一对向量的内积结果会不同。而对偶向量的相互作用不需要定义额外结构，从而也不会改变。
 
 
-\subsubsection{对偶基}
+不过，选定了$V$上的内积之后，我们就可以借此建立$V$和$V^*$之间的同构，详细讨论见下一节。
 
-给定了 $V$ 的基 $\{\bvec{e}_i\}$ 后，为了方便计算，我们通常规定 $V^*$ 的基 $\{\bvec{f}^j\}$ 满足关系：$\bvec{e}_i\bvec{f}^j=\delta_{i}^j$。这样我们就由 $V$ 的基\textbf{唯一}地决定了 $V^*$ 的基，称这样选出的 $V^*$ 的基为 $V$ 的\textbf{对偶基（dual space）}。
 
-事实上，以上定义是对偶基的一个特例。一般地，如果在给定了 $V$ 的基 $\{\bvec{e}_i\}$ 后，有一个对称矩阵 $g_{ij}$，它被定义为 $V$ 的度量在给定基下的表示\footnote{如果两个向量的坐标分别是 $x_i$ 和 $y_j$，那么它们的内积定义为 $x_iy_jg_{ij}$。}，那么对偶基的计算应该满足 $\bvec{e}_i\bvec{f}^j=g_{i}^j$，其中$g_i^j=g_{ik}\delta^{jk}$。注意，这里并没有要求 $g_{ij}$ 是正定的矩阵。具体的度量矩阵的定义要由问题情景来决定，比如说，狭义相对论中的闵可夫斯基度量就是：
+%Jier：正确，但不适合放在这里。我在下一节讨论对偶空间的对应关系时再讲这个。
+%我们可以更对称地定义对偶空间的概念：
+
+%\begin{definition}{对偶空间}\label{def_DualSp_4}
+%给定域 $\mathbb{K}$ 上两个 $n$ 维线性空间 $V$ 和 $W$。如果指定了一个非退化双线性映射 $m:V\times W\rightarrow\mathbb{K}$\footnote{即对于 $a_i, b_i\in\mathbb{K}$、$\bvec{v}_i\in V$ 和 $\bvec{w}_j\in W$，有 $m(\sum\limits_{i=1}^na_i\bvec{v}_i,\sum\limits_{j=1}^nb_j\bvec{w}_j )=\sum\limits_{i, j=1}^na_ib_jm(\bvec{v}_i)m(\bvec{w}_j)$}，那么称 $V$ 和 $W$ 是对偶的。如果把 $\bvec{v}\in V$ 视为线性函数 $f_{\bvec{v}}:W\rightarrow\mathbb{K}$，那么对于任意 $\bvec{w}\in W$ 有 $f_{\bvec{v}}(\bvec{w})=f(\bvec{v}, \bvec{w})$。
+%\end{definition}
+%\addTODO{“非退化”“双线性映射”}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+\subsection{对偶基与互反基}
+
+\begin{definition}{对偶基}\label{def_DualSp_4}
+
+给定线性空间$V$作为主空间，选择其一组基$\{\bvec{e}_i\}$。在$V^*$上选择一向量组$\{\bvec{f}_i\}$，使得
 \begin{equation}
-g_{ij}=\pmat{1&0&0&0\\0&-1&0&0\\0&0&-1&0\\0&0&0&-1}~.
+\langle \bvec{e}_i, \bvec{f}_j \rangle = \delta_{ij}~, 
+\end{equation}
+则$\{\bvec{f}_i\}$构成$V^*$的一组基，称为$\{\bvec{e}_i\}$的\textbf{对偶基（dual basis）}。
+
+\end{definition}
+
+
+\begin{exercise}{}
+利用“对偶向量是线性函数”这一定义，证明\autoref{def_DualSp_4} 中的$\{\bvec{f}_i\}$构成$V^*$上的一组基。
+\end{exercise}
+
+
+
+给定线性空间 $V$ 作为主空间，再给定 $V$ 的一组基，我们就可以把 $V$ 中的向量表示为列矩阵。对应地，$V^*$ 中的向量表示为行矩阵，这个行矩阵是该向量在对偶基下的坐标。这样一来，对偶基的定义就保证了，向量和对偶向量相互作用的过程，就是这两个矩阵相乘的过程，其中对偶向量的行矩阵放在左边，向量的列矩阵放在右边。
+
+
+要注意，虽然主空间中每个基都可以唯一对应一个对偶基，但却没有特别的理由让一个主向量对应一个对偶向量。哪怕是同一个主向量，在不同的基中，它对应的对偶向量也可能不同。所以仅仅讨论对偶空间而没有其它结构的话，只有基和对偶基之间的天然对应，而没有主向量和对偶向量之间的天然对应。
+
+
+
+不过，如果主空间上定义了内积，就可以建立主向量和对偶向量之间的天然对应了。
+
+
+
+\begin{example}{}\label{ex_DualSp_1}
+
+给定域$\mathbb{F}$上的线性空间$V$及其上的内积$g:V\times V\to \mathbb{F}$，则可以建立线性同构$\sigma_g: V\to V^*$，使得
+\begin{equation}
+g(\bvec{u}, \bvec{v}) = \langle \sigma_g(\bvec{u}) , \bvec{v} \rangle~
+\end{equation}
+对于任意$\bvec{u}, \bvec{v}\in V$成立。
+
+\end{example}
+
+
+
+事实上，不需要限定为内积，任意给定$V$上的\textbf{非退化对称双线性形式}，都可以导出$V$和$V^*$之间的同构，方式和\autoref{ex_DualSp_1} 一样，只不过用这个双线性形式取代内积。以下论述中我们依然使用“内积”这一概念，但都可以替换为“非退化对称双线性形式”。
+
+
+
+对偶基不依赖于内积即可确定，而对偶空间之间的对应则依赖于内积。这提示我们，主空间上会存在一个基之间的对应，依赖于内积：
+
+\begin{definition}{互反基}
+
+给定域$\mathbb{F}$上的线性空间$V$及其上的内积$g:V\times V\to \mathbb{F}$。对于$V$上的基$\{\bvec{e}_i\}$，若$V$的基$\{\bvec{\varepsilon}_i\}$满足$g(\bvec{e}_i, \bvec{\varepsilon}_j)=\delta_{ij}$，则称$\{\bvec{\varepsilon}_i\}$是$\{\bvec{e}_i\}$的\textbf{互反基（reciprocal basis）}。
+
+\end{definition}
+
+
+互反基是主空间的基，对偶基是对偶空间的基。先把给定的基天然对应到对偶基上，然后再用内积决定的线性同构把对偶基中的每个向量逐个对应回主空间，所得结果即为给定基的互反基。
+
+
+
+
+\begin{example}{}
+
+欧几里得空间（即定义了内积的有限维实线性空间）中，任何基的互反基都是它自身。
+
+闵可夫斯基空间中，记其闵可夫斯基“内积”为$g$。取标准正交基$\{\bvec{e}_0, \bvec{e}_1, \bvec{e}_2, \bvec{e}_3\}$，其中$g(\bvec{e}_0, \bvec{e}_0)=1$，以及对于$i=1, 2, 3$，$g(\bvec{e}_i, \bvec{e}_i)=-1$。那么这个标准正交基的互反基为
+\begin{equation}
+\{\bvec{e}_0, -\bvec{e}_1, -\bvec{e}_2, -\bvec{e}_3\}~. 
 \end{equation}
 
-\addTODO{应当使用“非退化双线性映射”来推广这个概念，再引导出 $g_{i j}$}
+\end{example}
 
-在闵可夫斯基度量下，如果一个向量在某基下的坐标是 $(a_1, a_2, a_3, a_4)\Tr$，一个对偶向量在\textbf{对偶基}下的坐标是 $(b_1, b_2, b_3, b_4)$，那么它们相乘之后的结果就是 $a_1b_1-a_2b_2-a_3b_3-a_4b_4$。
+
+
+
+
+
+
+
+
+
+
+%Jier：对偶基不依赖于任何别的结构来定义。依赖于内积或者一般的非退化双线性形式的应该是互反基。
+%事实上，以上定义是对偶基的一个特例。一般地，如果在给定了 $V$ 的基 $\{\bvec{e}_i\}$ 后，有一个对称矩阵 $g_{ij}$，它被定义为 $V$ 的度量在给定基下的表示\footnote{如果两个向量的坐标分别是 $x_i$ 和 $y_j$，那么它们的内积定义为 $x_iy_jg_{ij}$。}，那么对偶基的计算应该满足 $\bvec{e}_i\bvec{f}^j=g_{i}^j$，其中$g_i^j=g_{ik}\delta^{jk}$。注意，这里并没有要求 $g_{ij}$ 是正定的矩阵。具体的度量矩阵的定义要由问题情景来决定，比如说，狭义相对论中的闵可夫斯基度量就是：
+%\begin{equation}
+%g_{ij}=\pmat{1&0&0&0\\0&-1&0&0\\0&0&-1&0\\0&0&0&-1}~.
+%\end{equation}
+
+%\addTODO{应当使用“非退化双线性映射”来推广这个概念，再引导出 $g_{i j}$}
+
+%在闵可夫斯基度量下，如果一个向量在某基下的坐标是 $(a_1, a_2, a_3, a_4)\Tr$，一个对偶向量在\textbf{对偶基}下的坐标是 $(b_1, b_2, b_3, b_4)$，那么它们相乘之后的结果就是 $a_1b_1-a_2b_2-a_3b_3-a_4b_4$。
+
+
+
+\subsection{对偶空间的表示}\label{sub_DualSp_1}
+
+
+\subsubsection{矩阵表示的习惯}
+
+
+在线性空间中，给定了一组基，则任意向量都可以表示为一串标量。比如说，给定基$\{\bvec{e}_1, \bvec{e}_2\}$，则任意向量都可以表示为$a\bvec{e}_1+b\bvec{e}_2$的形式，其中$a, b$可以是任何标量。
+
+
+由于给定主空间的基相当于同时给定了对偶空间上的对偶基，故任意对偶向量也可以表示为一串标量。
+
+
+通常，在讨论时，选定了主空间以及主空间上的一组基后，我们用\textbf{列矩阵}来表示\textbf{主向量}，用\textbf{行矩阵}来表示\textbf{对偶向量}。比如，给定基$\{\bvec{e}_1, \bvec{e}_2\}$，则主向量$a\bvec{e}_1+b\bvec{e}_2$表示为
+\begin{equation}
+\begin{pmatrix}
+a\\
+b
+\end{pmatrix}~, 
+\end{equation}
+而对偶向量$x\bvec{f}_1+y\bvec{f}_2$表示为
+\begin{equation}
+\begin{pmatrix}
+x&y
+\end{pmatrix}~. 
+\end{equation}
+其中，$\{\bvec{f}_1, \bvec{f}_2\}$是$\{\bvec{e}_1, \bvec{e}_2\}$的对偶基。
+
+这种规定的好处是，对偶向量之间的相互作用可以直接用矩阵乘法表示：
+\begin{equation}
+\langle a\bvec{e}_1+b\bvec{e}_2 , x\bvec{f}_1+y\bvec{f}_2 \rangle = ax+by = 
+\begin{pmatrix}
+x&y
+\end{pmatrix}
+\begin{pmatrix}
+a\\
+b
+\end{pmatrix}~. 
+\end{equation}
+
+
+
+
+\subsubsection{对偶空间上的同构的表示}
+
+
+给定线性空间的基以后，内积，或者更一般的双线性形式，就都可以表示为对称
+
+
 
 
 

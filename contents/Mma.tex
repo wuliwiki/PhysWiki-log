@@ -1,5 +1,5 @@
 % Mathematica 笔记
-% license Xiao
+% license Usr
 % type Note
 
 \pentry{复数\upref{CplxNo}， 自然对数底\upref{E}}
@@ -10,6 +10,9 @@ Mathematica 相对于 Matlab， Python 等偏数值计算的语言最大的特�
 
 \subsection{常识}
 \begin{itemize}
+\item Mathematica 最常用的文件格式是 \verb|.nb|（notebook），里面有各种互动内容如输入，输出，图片，互动演示等，虽然这是个文本文件，但是非常难读，即使是输入的公式，也会保留很多显示格式信息（例如分数，根号是否要立体显示）
+\item 另一种格式 \verb|.m| 是纯文本脚本， 类似于常规编程语言的手写代码。该文件可以直接用文本编辑器手写，不支持互动和任何多媒体，常用于写软件包（见下文）。\verb|.nb| 的立体表达式等，都需要转换成具体的命令才可以在 \verb|.m| 中表示。 Mathematica 的编程语言叫做 \textbf{Wolfram Language}。
+\item 要像 Matlab 一样给代码设置断点逐行调试，可以另外下载官方的 \href{https://www.eclipse.org/}{eclipse} 插件：\href{https://www.wolfram.com/workbench/}{Wolfram Workbench}。
 \item 调整字体大小 \verb|Ctrl + 鼠标滚轮|。
 \item 快捷键 \verb|Shift + Enter| 执行选中的行。
 \item 一行输入多个表达式用分号 “\verb|;|”， 分号也可以用于抑制输出。 \verb|a = 3; b = 5; a b|
@@ -254,3 +257,21 @@ Show[ListPlot[{{1, 1}}], Plot[I^-3 BesselJ[3, I x], {x, 0, 10}],
 \item \verb|Save| 和 \verb|Get| 的例子： \verb|a = "This must be saved"; fun[x_, y_] := {x, y}; Save["temp", {a, fun}]; Clear[a, fun]; Get["temp"];| 注意多次对同一个文件用 \verb|Save| 不会覆盖之前的内容， 直接把新内容添加到底部。
 \item \verb|Put|，\verb|DumpSave|， \verb|Export| 研究一下。
 \end{itemize}
+
+\subsection{程序包}
+若你需要定义一些经常在不同脚本中使用的函数，你可以创建自己的程序包。创建一个脚本文件
+\begin{lstlisting}[language=mma,caption=MyPackage.m]
+(* ::Package:: *)
+BeginPackage["MyPackage`"]
+MyFunction::usage = "MyFunction[x] computes the square of x.";
+MyFunction[x_] := x^2
+EndPackage[]
+\end{lstlisting}
+现在，在其他脚本或者 notebook 中， 就可以首先添加 \verb|MyPackage.m| 所在的路径，然后加载模块，并调用其中的函数
+\begin{lstlisting}[language=mma]
+AppendTo[$Path, "C:\\Users\\addis\\Desktop\\"];
+Needs["MyPackage`"];
+
+MyFunction[2] (*既可以直接使用函数名*)
+MyPackage`MyFunction[3] (*也可以在函数名前面指定包的名字，避免函数名冲突*)
+\end{lstlisting}

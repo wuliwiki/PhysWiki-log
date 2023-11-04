@@ -49,13 +49,13 @@ w_i = \frac{2}{N(N-1)[P_{N-1}(x_i)]^2}~.
 \end{equation}
 
 低阶情况下 $x_i$ 可以表示为带根号的表达式， 在 Mathematica\upref{Mma} 中求解解析式和任意精度数值解如\begin{lstlisting}[language=mma, caption=gauss\_lobatto.nb]
-(*节点数*) NN = 6;
-(*有效数字*) digits = 38;
+NN = 6;(*Nodes*)
+digits = 38;(*digits*)
 sol = Solve[D[LegendreP[NN - 1, x], x] == 0, x];
 sol = Append[sol, {x -> -1}];
 sol = Append[sol, {x -> 1}];
-N[sol, digits]
-w = N[2/(NN (NN - 1) (LegendreP[NN - 1, x])^2) /. sol, digits]
+xi = N[x /. sol, digits](*DVR points*)
+w = N[2/(NN (NN - 1) (LegendreP[NN - 1, x])^2) /. sol, digits](*DVR weights*)
 \end{lstlisting}
 其中 \verb|sol| 得到的是 list of rule， \verb|/.| 用于把这些 rule 作用到前面的表达式上面。
 

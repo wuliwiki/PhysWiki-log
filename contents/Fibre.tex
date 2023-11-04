@@ -16,10 +16,14 @@
 准确的定义如下所述，其中 $E$ 就是“$B$ 上每个点都长出一个 $F$ 的丛空间”：
 
 \begin{definition}{纤维丛}
-给定拓扑空间 $B$ 和 $F$，如果存在一个拓扑空间 $E$ 和一个连续满射 $\pi:E\rightarrow B$，使得对于任意的 $x\in B$，都有 $\pi^{-1}(x)$ 同胚于 $F$，那么称这个结构 $(E, F, B, \pi)$ 为一个\textbf{纤维丛（fibre bundle）}，称 $E$ 是这个纤维丛的\textbf{全空间（total space）}，$F$ 是其\textbf{纤维（fibre）}，$B$ 是其\textbf{底空间（base space）}，有时也译作\textbf{基空间}。
+给定拓扑空间 $B$ 和 $F$，如果存在一个拓扑空间 $E$ 和一个连续满射 $\pi:E\rightarrow B$，使得对于任意的 $x\in B$，都有 $\pi^{-1}(x)$ 同胚于 $F$，那么称这个结构 $(E, F, B, \pi)$ 为一个\textbf{纤维丛（fibre bundle）}。
+
+称 $E$ 是这个纤维丛的\textbf{全空间（total space）}，$F$ 是其\textbf{纤维型（fibre type）}，$\pi^{-1}(p)$是其在$p\in B$处的\textbf{纤维（fibre）}，$B$ 是其\textbf{底空间（base space）}，有时也译作\textbf{基空间}。
 \end{definition}
 
 如果把 $B$ 想象成一块土地，$F$ 想象成一棵草，那么 $E$ 就是“土地上长了一片草”这一概念，$E$ 的每个元素就是某棵草上的一个点。定义中的连续满射 $f$ 的作用是把这样的一个点映射到相应的草所在的地点。
+
+每根纤维都是同胚的，即拓扑意义上都等价于纤维型。也就是说，纤维型是描述纤维的拓扑结构的，但不同点处的纤维不是同一个空间。
 
 要注意的是，$E$ 不完全等同于 $B\times F$。对于 $B\times F$ 来说，任意给定两个 $x_1, x_2\in B$，我们自然可以找到 $x_1\times F$ 和 $x_2\times F$ 上的一一对应关系，这是由集合笛卡尔积的定义决定的。但是纤维丛 $E$ 上，如果上述 $x_1\not=x_2$，那么两个地方长出来的纤维是没有天然的双射对应的的\footnote{在微分几何中，我们研究的切丛是纤维丛的一种，而所谓的“联络”实际上就是指定了不同纤维间的双射。}。这就是“纤维丛”这一名称的深意，而乘积空间应该被想象纤维被粘在一起的情况，只是纤维丛的一个定义了额外联系的特例。
 
@@ -31,12 +35,75 @@
 
 \subsection{纤维丛的例子}
 
-\subsubsection{向量丛}
-向量丛是纤维丛的特例，即纤维都是向量空间的情况。
+\subsubsection{平凡丛}
 
-\begin{definition}{向量丛}
-给定拓扑空间 $B$ 和线性空间 $V$，如果存在一个拓扑空间 $E$ 和一个连续满射 $\pi:E\rightarrow B$，使得对于任意的 $x\in B$，都有 $\pi^{-1}(x)\cong V$，那么称这个结构 $(E, V, B, \pi)$ 为一个\textbf{向量丛（vector bundle）}。
+
+给定两个拓扑空间$X, Y$，则它们的积空间$X\times Y$可以看成纤维丛，称为\textbf{平凡丛（trivial bundle）}。$X\times Y$可以用$X$作底空间、$Y$作纤维型，取关于$X$的投影映射$\pi_X$构成纤维丛
+\begin{equation}
+(X\times Y, Y, X, \pi_X)~, 
+\end{equation}
+也可以反过来，用$Y$作底空间、$X$作纤维型，取关于$Y$的投影映射$\pi_Y$构成纤维丛
+\begin{equation}
+(X\times Y, X, Y, \pi_Y)~. 
+\end{equation}
+
+
+如上一小节所说，平凡丛的特点是，任意两根纤维之间都存在一个天然的同胚映射。下面所说的切丛则不存在这样的天然同胚。
+
+
+\subsubsection{切丛}
+
+\pentry{切空间（流形）\upref{tgSpa}}
+
+
+给定光滑实流形$M$，在其上每一点$p$处的全体切向量构成了一个线性空间，称为$p$处的\textbf{切空间}。所有点处的切空间维度相等，从而线性同构，从而同胚。这样，我们可以以各线性空间为纤维，构造流形上的纤维丛。
+
+
+\begin{definition}{切丛}
+给定$n$维光滑\textbf{实}流形$M$，记$p\in M$处的切空间为$\opn{T}_p M$，取线性拓扑\footnote{线性空间的拓扑取线性拓扑，即任意定义一个内积，取关于这个内积的度量拓扑。不同的内积定义的度量拓扑是等价的。}使之构成拓扑空间。显然，各$\opn{T}_pM$都线性同构于$n$维实线性空间，且同胚于$n$维欧几里得空间$\mathbb{R}^n$。
+
+记\footnote{$\amalg$和$\coprod$都表示不交并。这里的$E$就是说把所有切空间都取不交并。}
+\begin{equation}
+\opn{T}M= \coprod_{p\in M}\opn{T}_p M~, 
+\end{equation}
+定义连续满射$\pi:\opn{T}M\to M$为：对于任意$v\in \opn{T}_p M$，$\pi(v)=p$。则可以得到一个纤维丛$(\opn{T}M, \mathbb{R}^n, M, \pi)$，称为$M$上的\textbf{切丛（tangent bundle）}。
+
 \end{definition}
+
+
+
+
+
+\subsubsection{向量丛}
+
+
+
+向量丛是纤维丛的特例，即纤维都是向量空间的情况。显然，切丛是一种向量丛，但向量丛不止切丛这一种。
+
+\begin{definition}{向量丛}\label{def_Fibre_1}
+给定拓扑空间 $B$ 和$q$维线性空间 $V$，如果存在一个拓扑空间 $E$ ，一个连续满射 $\pi:E\rightarrow B$，$B$的一族开覆盖$\{U_\alpha\}$和一族映射$\varphi=\{\varphi_\alpha: U_\alpha\times V\to \pi^{-1}(U_\alpha)\}$，满足下列\textbf{相容条件（compatibility）}：
+\begin{enumerate}
+\item 各$\varphi_\alpha$是同胚映射，且对于任意$v\in V, p\in U_\alpha$有$\pi\circ\varphi_\alpha(p, v)=p$；
+\item 对于\textbf{固定的}$p\in U_\alpha$，记$\phi_\alpha(v)=\varphi_\alpha(p, v)$。要求$\phi_\alpha(v)$是$V\to \pi^{-1}(p)$的同胚映射；且当$U_\alpha\cap U_\beta\not=\varnothing$时，$\phi_\beta^{-1}\circ\phi_\alpha$是$V$上的\textbf{线性自同构}，
+\end{enumerate}
+则称$(E, B, \pi, \varphi)$是$B$上的$q$阶\textbf{向量丛（vector bundle）}。
+
+\end{definition}
+
+
+
+
+
+
+\begin{example}{经典力学}
+经典力学中，可以把单个自由粒子的相空间看作是一维实流形上的三维实向量丛。作为底空间的一维实流形表示时间坐标，作为纤维的线性空间表示空间坐标。
+
+更多讨论请参见\textbf{从分析力学到场论}\upref{CFa1}。
+\end{example}
+
+
+
+
 
 向量丛之间也有丛映射：
 
@@ -48,7 +115,7 @@
 且在任意 $p\in M$ 处，$\varphi|_p$\footnote{即只考虑 $p$ 处纤维的映射 $\varphi$。}是从 $p\times V_E$ 到 $\overline{\varphi}(p)\times V_F$ 的映射，并且是一个线性映射。
 \end{definition}
 
-虽然，一个向量丛 $(E, V, B, \phi)$ 不能简单等同于 $B\times V$，不过 $B\times V$ 本身也是一个纤维丛，称之为\textbf{平凡（trivial）}的纤维丛。
+%虽然，一个向量丛 $(E, V, B, \phi)$ 不能简单等同于 $B\times V$，不过 $B\times V$ 本身也是一个纤维丛，称之为\textbf{平凡（trivial）}的纤维丛。
 
 
 
