@@ -1,0 +1,125 @@
+% Clifford 代数的基本运算
+% license Xiao
+% type Tutor
+
+
+\begin{issues}
+\issueTODO
+\end{issues}
+
+本节利用集合语言，介绍Clifford代数上的二元线性运算\footnote{本文参考Jie Peter《代数学讲义》}。通过线性性可以将这些运算推广到Clifford代数的其他元素上。我们也会证明，更改线性空间的正交基并不会改变运算的形式。
+\subsubsection{外积与正交基}
+\begin{definition}{外积}
+给定Clifford代数$\mathrm {Cl(X,R,s)}$，对于$A,B\in 2^x$，定义
+\begin{equation}
+A \wedge B=\left\{\begin{aligned}
+A B,\quad& A \cap B=\varnothing \\
+0,\quad& A \cap B \neq \varnothing~,
+\end{aligned}\right.
+\end{equation}
+并称之为外积（outer product or exterior product）或楔积（wedge product）。我们可以通过线性性将该运算拓展到任意元素之间的外积。
+\end{definition}
+
+在上一节，我们说过，集合语言的阐述实际上是指定了线性空间的正交基。正交性体现为CLifford积的反对称性。因而对于正交基$\{\mathrm {e_i}\}$，我们有$\mathrm{e_i\wedge e_j=-e_j\wedge e_i}$。所以对线性空间的任意两个向量作外积，反对称性亦能满足。
+
+不仅如此，基底之间的正交关系不随线性变换而改变。例如某线性空间下有两组正交基$\{e_i\},\{\theta_i\}$，且$\mathrm {\theta_1=a^ie_i,\theta_2=b^ie_i}$，那么由线性性我们可以展开得到后一组基的Clifford积：
+\begin{equation}
+\left\{\begin{array}{l}
+\theta_1 \theta_2=\left(a^i e_i\right) \wedge\left(b^j e_j\right)+\sum_k\left(a^k b^k s(e_k)\right) \\
+\theta_2 \theta_1=\left(b^j e_j\right) \wedge\left(a^i e_i\right)+\sum_k\left(b^k a^k s(e_k)\right)
+\end{array}\right.~,
+\end{equation}
+$a^i,b^i$是过渡矩阵里的两个列向量。由于从标准正交基到标准正交基的矩阵为正交矩阵，因而这两个列向量正交，上式右端第二项都为0。所以我们依然有$\theta_1\theta_2=-\theta_2\theta_1$
+\subsubsection{左内积}
+\begin{definition}{}
+给定Clifford代数$\mathrm {Cl(X,R,s)}$，对于$A,B\in 2^x$，定义
+\begin{equation}
+A\left\llcorner B=\left\{\begin{aligned}
+A B,\quad & A \subseteq B ; \\
+0,\quad & A \nsubseteq B .
+\end{aligned}\right.\right.~,
+\end{equation}
+并称之为左内积（left inner product or left interior product）。我们依然可以通过线性性将运算推广到Clifford代数的任意元素上。
+\end{definition}
+右内积的定义是对偶的，即:
+\begin{definition}{右内积}
+\begin{equation}
+A\lrcorner B=\left\{\begin{aligned}
+A B,\quad & A \supseteq B ; \\
+0,\quad & A \nsupseteq B .
+\end{aligned}\right.~,
+\end{equation}
+\end{definition}
+下面我们只研究左内积。
+
+与外积相同，左内积也具有“正交基形式不变性”。
+例如，在同一线性空间中选取两组正交基，$\{e_i\}$,$\{\theta _i\}$，且$\mathrm {\theta_1=a^ie_i,\theta_2=b^ie_i},\theta_3=c^ie_i$。那么我们有：
+\begin{equation}
+\begin{aligned}
+\theta_1\left\llcorner\theta_2\right. & =\left(a^i e_i\right)\left\llcorner\left(b^j e_j\right)\right. \\
+& =\sum_i s(i) a^i b^i=0
+\end{aligned}~,
+\end{equation}
+\begin{exercise}{}
+证明：$\theta_1\left\llcorner(\theta_2\theta_3)\right.$=0。提示：证明每一个分量为0.
+\end{exercise}
+从上述证明里，我们也可以清晰地看到，左内积的结果可以给出不同的分次结构：
+\begin{equation}
+A\left\llcorner B=\langle A B\rangle_{s-k} .\right.~,
+\end{equation}
+
+\subsubsection{标量积}
+标量积是一种特殊情况，即左右内积相等。
+\begin{definition}{标量积}
+给定Clifford代数$\mathrm {Cl(X,R,s)}$，对于$A,B\in 2^x$，
+\begin{equation}
+A * B=\left\{\begin{array}{cc}
+A B, & A=B \\
+0, & A \neq B .
+\end{array}\right.~,
+\end{equation}
+\end{definition}
+读者可以自行证明标量积的正交基形式不变性。
+
+在上一节，我们证明了$e_Ae_B\propto e_{A\Delta B}$。实际上这里的系数是A与B交集部分的标量积（默认下标都是从小到大排列），我们用$g_{AB}$表示，即标量积可视作利用V上二次型q诱导出几何代数上的二次型。
+\begin{theorem}{}
+已知几何代数$\mathcal {G}(V, q)$上的二次型 $q$ 在某基下表示为矩阵 $g_{ij}$，$q $诱导的标量积则表示为 $g_{AB}$，其中 $A,B$ 是复杂指标。则
+\begin{equation}
+g_{A B}=e_A*e_B=\left\{\begin{aligned}
+0,\quad & A \neq B \\
+(-1)^{\frac{|A|(|A|-1)}{2}} \prod_{i \in A} g_{i i}, \quad& A=B
+\end{aligned}\right.~,
+\end{equation}
+\end{theorem}
+
+Proof. 按照标量积定义，$A \neq B$时，$g_{AB}$=0。$A = B$时，$\frac{|A|(|A|-1)}{2}$是$e_B$进行对换，使得$e_i$相邻所需要跨过的总次数。比如从$e_1e_2e_3e_1e_2e_3$变换到$e_1e_1e_2e_2e_3e_3$的总步数。根据正交性，每一次变换位置都需要乘以-1。得证。
+
+\subsubsection{投影，对合，反转以及共轭}
+\begin{definition}{投影}
+给定Clifford代数$\mathrm {Cl(X,R,s)}$，对于$A,B\in 2^x$，定义
+\begin{equation}
+\langle A\rangle_k=\left\{\begin{array}{cc}
+A, & |A|=k \\
+0, & |A| \neq k
+\end{array}\right.~,
+\end{equation}
+并称之为在 k-次子空间上的投影。
+\end{definition}
+\begin{definition}{按次对合}
+给定Clifford代数$\mathrm {Cl(X,R,s)}$，对于$A,B\in 2^x$，定义
+\begin{equation}
+A^{\star}=(-1)^{|A|}A~,
+\end{equation}
+并称之为按次对合（grade involution） 、第一类对合（first main
+involution）或者简称为 main involution。
+\end{definition}
+\begin{definition}{反转}
+给定Clifford代数$\mathrm {Cl(X,R,s)}$，对于$A,B\in 2^x$，定义
+\begin{equation}
+A^{\dagger}=(-1)^{\frac{|A|(|A|-1)}{2}}A~,
+\end{equation}
+\end{definition}
+并称之为反转（reversion）、第二类对合（second main involution）或者主反自同构（principal anti-automorphism）。反转是下指标重排的过程：
+$$(e_1e_2...e_n)^{\dagger}=e_ne_{n-1}...e_2e_1~,$$
+
+

@@ -181,6 +181,8 @@
 \item linux 命令行有两个主要的 output, stdout 和 stderr, \verb`>` 只用于将 stdout 输出到文件, 如果也要输出 stderr 有三种办法: 1.\verb`<command> > file1.out 2 > file2.out`, 2. \verb`<command> > file.out 2 > &1`, 3. \verb`<command> &> file.out` 其中后两种将 stdout 和 stderr 输出到同一文件.
 \item 运行一个程序，指定输入输出文件， 并让 standartd err 显示在 standard out \verb`./program.x < <inputfile> > <outputfile> 2>&1` 
 \item \verb`>` 的输出文件如果不存在, 就会新建一个.
+\item \verb|wait <PID> && 命令 参数| 可以等某个后台的 PID 结束后再运行命令。 但如果这个 PID 在另一个 shell 中非后台非 \verb|nohup| 执行，那么就会出错。
+\item 另一个方法是 \verb|while pgrep -f "程序名PID等"; do sleep 20; done && 命令 参数|
 \item  \verb`cat 文件` 把文件的内容输出到 stdout
 \item  \verb`cat` 把 stdin 的内容输出到 stdout
 \item \verb`命令 | less` 可以用键盘滚动输出结果(用于长输出以及没有滚动条的情况), 按 q 键退出
@@ -282,7 +284,7 @@ sudo echo umask 002 >> /home/用户2/.bashrc
 \subsection{进程}
 \begin{itemize}
 \item \verb`ps aux` 会显示当前所有\textbf{进程 (process)}, \textbf{PID} 是 process ID, 用于终止进程
-\item \verb`ps aux | grep 搜索词` 会搜索当前进程中包含 \verb`搜索词` 的内容
+\item \verb`ps aux | grep 搜索词` 会搜索当前进程中包含 \verb`搜索词` 的内容。包括运行的命令和参数
 \item \verb|ps -p 进程号 进程号 ...| 可以用来查看进程的信息。
 \item 一个很占 cpu 的命令可以用于测试 \verb`dd if=/dev/urandom of=/dev/null &` 其中 \verb`&` 表示在后台运行，按回车后会输出 PID （进程号）。 连续输入这个进程 4 次， 然后用 \verb`top` 命令打开进程管理， 可以看到它们出现在顶部。
 \item top 中的 \verb`NI` 就是 nice value

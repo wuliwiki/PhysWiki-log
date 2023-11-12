@@ -79,6 +79,7 @@ Git for Windows 的 Git bash 是不支持 symlink 的， symlink clone 下来以
 \item \verb|git log -- 文件或文件夹| 可以只显示一个文件的历史， \verb|-p| 和 \verb|--word-diff-regex| 同样有效。
 \item 要搜索 commit 的标题和描述， 用 \verb|git log --grep=<pattern>|
 \item \verb|git log -S'字符串' -- 文件| 可以在一个文件所有历史版本中搜索 \verb|字符串|，且该字符串在改 commit 中发生了改变（变成别的或者由别的变成？）。 \verb|-G| 也类似，但支持 regex 搜索。
+\item \verb|git log --reverse --oneline -n 20|
 \item 要浏览某个文件的历史， 用 \verb|git log -- 文件|， 
 \item \verb|git commit --amend| 可以覆盖上一次 commit (如果上一次 commit 忘了做什么事情).
 \item \verb|git reset| 可以 unstage 所有文件， \verb|git reset HEAD <file>| 可以 unstage 一个文件。
@@ -108,6 +109,7 @@ Git for Windows 的 Git bash 是不支持 symlink 的， symlink clone 下来以
 \item \verb|git reset --soft HEAD~1| 用于撤销最近一次 commit，改变的文件变为 staged 的状态
 \item \verb|git reset --hard HEAD~1| 用于撤销最近一次 commit (本地). 如果已经推送到了服务器， 继续用 \verb|git push origin HEAD --force| 即可。
 \item \verb|git stash| 可以临时保存修改（不包括 untracked 的文件） \verb|git stash -u| 包括 untracked 的文件。 \verb|git stash pop| 可以恢复这些修改（相当于 merge）。 注意 \verb|pop| 以后的文件并不一定和 stash 的时候一模一样， 例如 stash 之后 pop 之前 pull 了一些变化， 那么 pop 的时候相当于在这些变化的基础上 merge。
+\item \verb|git stash list| 可以里列出文件， \verb|git stash drop| 可以丢弃这些文件。
 \item 把某文件从所有历史中删除用 \verb|git filter-branch -f --tree-filter 'rm -rf <path/file>' HEAD| 注意这样做本身并不一定会使 repo 变小。 如果要清空一个文件夹， 就用 \verb|path/*| 就好。 特别注意这会把几乎所有的 commit 的 hash 改变。
 \item \verb|git gc --aggressive --prune=now| 会可以将 repo 缩小，PhysWiki 的 .git 大概能缩小到一半。 鼓励经常使用 \verb|git gc|，但 \verb|--aggressive| 选项会比较慢但也是安全的。 gc 表示 garbage collection。 该命令还可以让 \verb|.git| 中的文件数量大大减小（copy 文件夹会快很多）
 \item \verb|git gc| 命令只对本地 repo 有效，其实最有效的貌似还是直接把本地 repo 删了再 clone 一次。但是注意检查是否有不小心被 .gitignore 屏蔽的文件没有在服务器上

@@ -86,3 +86,23 @@ int main()
 }
 \end{lstlisting}
 \end{itemize}
+
+当并行时一个或多个命令不是 thread safe 的时候，可以把它放在 critical block 里面， 这里面一次只有一个 thread 能进入。
+\begin{lstlisting}[language=cpp]
+#pragma omp parallel for
+for(int i = 0; i < size; i++) {
+	myArray[i] = i * 2;
+	#pragma omp critical
+	{
+		std::cout << "Processing value: " << myArray[i]
+			<< " by thread " << omp_get_thread_num() << std::endl;
+	}
+	// ...
+}
+\end{lstlisting}
+
+一个更高性能的命令是
+\begin{lstlisting}[language=cpp]
+#pragma omp atomic
+counter++;
+\end{lstlisting}

@@ -23,7 +23,7 @@
 \includegraphics[width=10cm]{./figures/4181cdc1351396c0.png}
 \caption{神经元示意图} \label{fig_NN_1}
 \end{figure}
-神经元的基本结构如图1所示。其中，$x_1, x_2, ..., x_i, ..., x_n$表示神经元的输入，$w_1, w_2, ..., w_i, ..., w_n$表示每个输入所对应的权重，$g$为激活函数，$w_0$为偏移量，$y$为神经元的输出值。输出和输入的关系是
+神经元的基本结构如\autoref{fig_NN_1} 所示。其中，$x_1, x_2, ..., x_i, ..., x_n$表示神经元的输入，$w_1, w_2, ..., w_i, ..., w_n$表示每个输入所对应的权重，$g$为激活函数，$w_0$为偏移量，$y$为神经元的输出值。输出和输入的关系是
 \begin{equation}
 y=g(w_1x_1+w_2x_2+...+w_ix_i+...+w_nx_n+w_0).~
 \end{equation}
@@ -34,16 +34,50 @@ y=g(\bvec w \bvec x).~
 其中，$\bvec w=(w_0, w_1, w_2, ..., w_i, ..., w_n)$，$\bvec x=(x_0, x_1, x_2, ..., x_i, ..., x_n)$，$x_0=1$.
 
 
-\subsubsection{2.感知机}
+\subsubsection{2.感知机与前馈神经网络}
 \textbf{感知机}（Perceptron）是有两层神经元构成的最简单的神经网络。其结构中主要包含输入层和输出层。输入层能够接收外界传送来的输入信号，并传递给输出层。输出层就是一个神经元，功能是接收来自输入层传递来的信号，然后做出处理，并输出结果。
 \begin{figure}[ht]
 \centering
 \includegraphics[width=5cm]{./figures/5aea3a7e0b71ef24.png}
 \caption{简单的感知机示意图} \label{fig_NN_2}
 \end{figure}
-图2表示的是一个简单的感知机。其中有两层，分别为输入层和输出层。输入层有两个输入神经元，分别接收输入信号$x_1$和$x_2$。输出层有一个输出神经元，产生输出结果$y$。
+\autoref{fig_NN_2} 表示的是一个简单的感知机。其中有两层，分别为输入层和输出层。输入层有两个输入神经元，分别接收输入信号$x_1$和$x_2$。输出层有一个输出神经元，产生输出结果$y$。此感知机的输入层只是接收输入数据而不做处理，只有输出层的那个神经元有计算功能，因此，该感知机只有一层功能神经元（Functional neuron）。
 
-感知机能够表示所有的原子布尔函数：与（AND）、或（OR）、与非（NAND）、或非（NOR）[2]。
+感知机能够表示所有的原子逻辑函数：与（AND）、或（OR）、与非（NAND）、或非（NOR）[2]。然而，对于某些逻辑函数，单一的感知器无法表示。比如，异或运算。
+
+\begin{figure}[ht]
+\centering
+\includegraphics[width=8cm]{./figures/ea59f6d033a62a51.png}
+\caption{逻辑与问题$x_1x_2$} \label{fig_NN_4}
+\end{figure}
+
+\begin{figure}[ht]
+\centering
+\includegraphics[width=8cm]{./figures/5760f1ee034fa814.png}
+\caption{逻辑或问题} \label{fig_NN_5}
+\end{figure}
+
+\autoref{fig_NN_4} 和\autoref{fig_NN_5} 分别表示的是两个输入变量$x_1$,$x_2$之间的逻辑与问题（$x_1 \wedge x_2$）和逻辑或问题（$x_1 \vee x_2$）。这两个基本的布尔运算很容易由感知机解决。
+
+\begin{figure}[ht]
+\centering
+\includegraphics[width=10cm]{./figures/85760f884011b87c.png}
+\caption{异或问题} \label{fig_NN_6}
+\end{figure}
+\autoref{fig_NN_6} 表示的是异或问题（$x_1 \oplus x_2$）。这是一个非线性可分问题，靠单一的感知器无法解决。
+
+感知机可以堆叠，层数也能加深，每层也可以有多个神经元。由多层神经元堆叠而成的具有层级结构的神经网络，称为\textbf{多层感知机}（Multi-layer perceptron, MLP），或者\textbf{前馈神经网络}（Feedforward neural network）.之所以称之为“前馈”神经网络，是因为数据在网络中的流动方向始终是单向的，数据从浅层网络向深层网络传播，而不会返回。在多层网络结构中，只有相邻层的神经元之间才有连接，同一层的神经元之间是没有连接的，跨层的神经元也不会互相连接。
+% 前馈神经网络是因为数据单向流动？此种表述可能有问题。无论是什么神经网络，即使是后面的循环神经网络，数据在两个互相连接的神经元之间的流动也是单向的。从数学图论的角度来说，全都是有向图。如果数据能够在两个相邻的神经元之间双向流动，即正反两个方向都能流动，那网络应该是无向图。因此，前馈网络与循环网络的区别是网络中是否存在环结构。
+
+\begin{figure}[ht]
+\centering
+\includegraphics[width=8cm]{./figures/d2e6a4c6b99c91b4.png}
+\caption{两层感知机} \label{fig_NN_3}
+\end{figure}
+\autoref{fig_NN_3} 表示的是一个简单的多层网络。其中，中间一层为\textbf{隐含层}（Hidden layer）。原始的输入信号，经过隐含层的处理，送到输出层，再由输出层做处理，最终产生结果作为整个网络的输出值。网络的输入层不对数据做处理，只有中间的隐含层和最后的输出层对数据做加工处理。因此，该网络拥有两层功能神经元。通常将具有两层功能神经元的感知机，称为“两层感知机”，或者“两层网络”，也有文献称其为“单隐层网络”。
+
+% 是隐含层中的激活函数作用于仿射变换，从而产生非线性性？
+隐含层的存在使得神经网络具有非线性可分的能力。事实上，两层感知机就能表示所有的逻辑函数[2]。隐含层的神经元的激活函数具有非线性性。将激活函数作用于线性变换的输出能够产生非线性变换[4]。
 
 
 
@@ -52,4 +86,5 @@ y=g(\bvec w \bvec x).~
 \item T. Kohonen, “An introduction to neural computing,” Neural Networks, vol. 1, no. 1, pp. 3–16, 1988.
 \item T. M. Mitchell, Machine learning. 1997.
 \item 周志华. 机器学习[M]. 北京：清华大学出版社. 2016: 97
+\item I. Goodfellow, Y. Bengio, and A. Courville, Deep learning. MIT press, 2016: 174.
 \end{enumerate}

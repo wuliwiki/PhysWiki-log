@@ -25,7 +25,7 @@
 
 \subsection{安装 Intel MPI}
 \begin{itemize}
-\item 【更新】现在 Intel 已经包括在 Intel OneAPI\upref{OneAPI} 中了。 编译器， MKL， MPI 等（Parallel Studio 中的一切）， 商用和非商用都已经免费。 组里的服务器亲测成功， \verb|mpiexec -np 2 --host server1,server2 ./可执行文件|
+\item 【更新】现在 Intel 已经包括在 Intel OneAPI\upref{OneAPI} 中了。 编译器， MKL， MPI 等（Parallel Studio 中的一切）， 商用和非商用都已经免费。 \textbf{组里的服务器亲测成功}， \verb|mpiexec -np 2 --host server1,server2 ./可执行文件|
 \item intel MPI 和 MKL 一样是免费的， google 一下， 下载安装包即可， 运行 \verb`sudo ./install.sh` 安装， 过程和 MKL 差不多
 \item 如果已经安装了 MKL， 可能会提示目录已经存在（不确定 MKL 是否已经包含 MPI）
 \item 安装好以后同样需要在 \verb`~/.bashrc` 中添加路径， 即在文件最后加入命令 \verb`source /opt/intel/compilers_and_libraries_2020.1.217/linux/mpi/intel64/bin/mpivars.sh`
@@ -37,6 +37,7 @@
 
 \subsection{基本语法}
 \begin{itemize}
+\item \verb|# include <mpi.h>|
 \item 编译完以后， 如果直接运行程序只会有一个 process， 需要用例如 \verb|mpiexec -np 4 ./main.x| 指定进程数量。 \verb|mpirun| 也基本一样， 但并不在 MPI 标准中， 不建议使用。
 \item \verb|MPI_Init(&argc, &argv);| 开始 MPI， \verb|MPI_Finalize();| 结束。
 \item \verb|MPI_Comm_size(MPI_Comm comm, &size);| 获取指定 communicator 的进程数

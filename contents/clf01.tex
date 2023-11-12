@@ -1,0 +1,119 @@
+% Clifford 代数
+% keys 环|二次型
+% license Xiao
+% type Tutor
+
+
+
+如果要构建有限维结合代数，我们需要对basis的结合作出约束。例如，Grassmann代数要求反对称性：$\mathrm {e_1e_2}=-\mathrm {e_2e_1}$。实际上，Grassmann代数是几何代数的一个平凡特例。本节先给出线性空间上的几何代数定义，再用集合语言将其拓展为Clifford代数。
+\subsection{几何代数}
+\begin{theorem}{线性空间的理想}
+给定域$\mathbb F$上的线性空间$V$，其上有一二次型$B_q(B_q(v,w)=\frac{1}{2}(q(v+w)-q(v)-q(w)))$.令$\mathcal T(V)$为$V$上的张量代数，那么如下定义的$\mathcal {I}_q(V)$是它的理想:
+\begin{equation}
+\mathcal{I}_{q}(V)=\left\{\sum A_{k} \otimes(v_k \otimes v_k-q(v_k)) \otimes B_{k} \mid v \in V, A_{k}, B_{k} \in \mathcal{T}(V)\right\}~,
+\end{equation}
+\end{theorem}
+proof.
+环理想首先是加法子群，其次对乘法有“吸收律”。该定理可以简化成一个更简单的形式。即对于环$R$上的一个非空子集$S$,我们可以证明该子集生成的理想为
+\begin{equation}
+\mathcal {I}_S=\left\{\sum _k a_k s_kb_k|k\in \mathbb N ,a_k,b_k\in R,s_k\in S\right\}~,
+\end{equation}
+检查理想的定义，该集合确实构成加法子群。其次，无论是左乘还是右乘环元素，都能表示为该形式，因而是理想。对于张量代数，乘法为张量积。
+
+\begin{definition}{几何代数}
+给定域$\mathbb F$上的线性空间$V$，其上有一二次型$B_q$.理想同上定义，商代数则为几何代数(\textbf{geometric algebra})，即
+\begin{equation}
+\mathcal{G}(V, q) \stackrel{\text { def }}{=} \mathcal{T}(V) / \mathcal{I}_{q}(V)~,
+\end{equation}
+另外，称$V$为$\mathcal{G}(V, q)$的底空间（\textbf{base space}）。
+\end{definition}
+划分等价类后，把$\mathcal{G}(V, q)$上的向量积称为\textbf{几何积}，或者\textbf{Clifford积}，符号可以用$\cdot$或者不写。
+
+观察等价类，我们会发现一项特殊的等价关系。即
+\begin{equation}
+v\cdot v=q(v)~,
+\end{equation}
+
+理想首先是正规子群。回想对正规子群求商集时，若$a,b$等价，即属于同一左陪集，那么$a^{-1}b$属于该正规子群。因而，上式的等价关系实际上指的是
+$v \otimes v-q(v)$在理想里，显然这是成立的。该等价关系得以让我们把重复的$\mathrm {e_i}$约掉。如果$\{\mathrm{e_i}\}$是线性空间中的正交基，由于
+\begin{equation}
+\begin{aligned}
+q(\mathrm{e_i+e_j,e_i+e_j})&=q(\mathrm{e_i})+q(\mathrm{e_j})+2 B_q(\mathrm{e_i,e_j})\\
+&=\mathrm{e_ie_i+e_je_j+e_ie_j+e_je_i}~,
+\end{aligned}
+\end{equation}
+
+因而对于正交基有$\mathrm{e_ie_j=-e_je_i}$，满足交换反对称关系。
+
+\subsection{Clifford代数的形式化定义}
+几何代数的基域为线性空间，而\textbf{Clifford代数}的基域是交换幺环。\textbf{Clifford代数}实际上是交换环上的模。
+\begin{definition}{Clifford代数}
+给定任意指标集合$X$，任意给定交换幺环$R$，任意函数$s:X\rightarrow {R}$作为$X$上的符号。幂集$2^X$可以生成如下自由R-模：
+\begin{equation}
+\mathrm{Cl}(X,R,s)=\bigoplus_{2^X}R~,
+\end{equation}
+称之为$(X,R,s)$上的\textbf{Clifford代数}。
+\end{definition}
+
+例如，给定整数环，指标集为$\{1,2,3\}$。那么$Cl(X,R,s)$上的一个元素为$2\{1\}+3\{2,3\}+4\{\}$
+
+
+$Cl(X,R,s)$上的乘法是$R$-线性的，并且对于$A,B\in 2^X$有
+\begin{equation}\label{eq_clf01_1}
+AB=\tau(A,B)A\Delta B~,
+\end{equation}
+其中映射$2^X \times 2^X \rightarrow R$定义为
+\begin{equation}
+\left\{\begin{aligned}
+\tau(\{x\},\{x\}) & =s(x), \quad \forall x \in X, \\
+\tau(\{x\},\{y\}) & =-\tau(\{y\},\{x\}), \quad \forall x, y \in X, x \neq y, \\
+\tau(A, B) & \in\{1,-1\}, \quad \forall A, B \subseteq X, A \cap B=\varnothing, \\
+\tau(A, \varnothing) & =\tau(\varnothing, A)=1, \quad \forall A \subseteq X, \\
+\tau(A, B) \tau(A \Delta B, C) & =\tau(B, C) \tau(A, B \Delta C), \quad \forall A, B, C \subseteq X~,
+\end{aligned}\right.
+\end{equation}
+
+
+从上式我们可以发现其与定义1的联系。
+\begin{enumerate}
+\item 幂集是张量积空间基底的拓展。因此$\tau(\{x\},\{x\})$是二次型的拓展。当环为域时可以清晰地看见这种联系：$\tau(\{e_i\},\{e_i\})=q(e_i)=s(e_i)$
+\item 同样的，上式第二条是正交基的反对称性。实际上是$\mathrm {e_ie_j=-e_je_i}$。也就是说，如果集合定义要与定义1兼容，各单点集需要构成正交基。
+\item 第三条定义是为了和第二条自洽
+\item 第四条是$1\times e_A=e_A\times 1$的拓展
+\item 最后一条实际上是结合律$(AB)C=A(BC)$，再次强调这里的$A,B,C$是指标集合$X$的子集（默认该子集的指标按从小到大排列），各自相当于张量积空间的基底。即$\mathrm {(e_Ae_B)e_C=e_A(e_Be_C),e_A=e_i/e_ie_j/...}$
+\item \autoref{eq_clf01_1} 实际上说的是$\mathrm {e_A e_B\propto e_{A\Delta B}}$。比如$\mathrm {(e_{1}e_{2}e_{3})(e_{2}e_{3}e_{4}e_{5})=-q(e_2)q(e_3)e_1 e_4 e_5}$
+\end{enumerate}
+
+下面证明第四条实际上是结合律。
+\begin{equation}
+\begin{aligned}
+\left(e_A e_B\right) e_C & =\tau(A, B) e_{A \Delta B} e_C \\
+& =\tau(A, B) \tau(A \Delta B, C) e_{(A \Delta B) \Delta C} \\
+& =\tau(B, C) \tau(A, B \Delta C) e_{A \Delta(B \Delta C)} \\
+& =\tau(B, C) e_A e_{B \Delta C} \\
+& =e_A\left(e_B e_C\right) .
+\end{aligned}~,
+\end{equation}
+从第二行到第三行的推导使用$(A \Delta B) \Delta C=A \Delta(B \Delta C)$
+\subsubsection{分次结构}
+\begin{definition}{}
+给定Clifford代数$\mathrm {Cl(X,R,s)}$。定义
+\begin{equation}
+\mathrm{Cl}^k(X,R,s)=\bigoplus_{A \in 2^X:|A|=k}R~,
+\end{equation}
+称之为$\mathrm {Cl(X,R,s)}$的k次部分。该子空间中的元素称之为\textbf{k-向量}
+\end{definition}
+\begin{definition}{}
+\begin{equation}
+\begin{array}{l}
+\mathrm{Cl}^{+}(X, R, s)=\bigoplus_{k \text { 为偶数 }} \mathrm{Cl}^k(X, R, s) \\
+\mathrm{Cl}^{-}(X, R, s)=\bigoplus_{k \text { 为奇数 }} \mathrm{Cl}^k(X, R, s)
+\end{array}~,
+\end{equation}
+\end{definition}
+
+
+
+
+
+
