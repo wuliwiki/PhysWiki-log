@@ -1,0 +1,129 @@
+% 极小多项式（线性代数）
+% keys 最小多项式|minimal polynomial|环|线性代数|域|Hamilton-Cayley 定理|Cayley-Hamilton 定理|哈密尔顿-凯莱定理
+% license Xiao
+% type Tutor
+
+
+\pentry{线性映射\upref{LinMap}}
+
+
+极小多项式又称最小多项式，描述了一个元素关于给定环的代数性质。本节是线性代数的一部分，因此我们只讨论线性变换的极小多项式。
+
+
+\subsection{零化多项式}
+
+
+
+
+
+\begin{definition}{线性变换的多项式}
+给定域$\mathbb{F}$上的线性空间$V$，令$A$是$V$上的\textbf{线性变换}。
+
+定义$A^k$是$A$与自身复合$k$次的结果，即$A^k=\overbrace{A\circ A\circ\cdots\circ A}^{k\text{个}A}$，则可以定义线性变换的多项式：若$f$是$\mathbb{F}$上的多项式，表达为
+\begin{equation}
+f(x) = \sum_{i=0}^m a_ix^i~, 
+\end{equation}
+那么$f(A)$就是$V$上的线性变换，表达为
+\begin{equation}
+f(A) = \sum_{i=0}^m a_ixA^i~. 
+\end{equation}
+\end{definition}
+
+
+
+\begin{definition}{零化多项式}\label{def_MinPol_1}
+给定域$\mathbb{F}$上的线性空间$V$，令$A$是$V$上的\textbf{线性变换}。
+
+对于$V$的子空间$W$，若$\mathbb{F}$上的多项式$f$满足$f(A)\bvec{w}=\bvec{0}$对任意$\bvec{w}\in W$成立，则称$f$是$A$在$W$上的\textbf{零化多项式（null polynomial）}。
+\end{definition}
+
+
+由\autoref{def_MinPol_1} 显然可知，$f$是$A$在$V$上的零化多项式，当且仅当$f(A)=0$。
+
+
+对于任意线性变换，其零化多项式一定存在，如以下定理所说：
+
+\begin{theorem}{Hamilton-Cayley定理}
+给定线性空间$V$上的线性变换$A$，$f(\lambda)$为其特征多项式，则$f(A)=0$。
+\end{theorem}
+
+\textbf{证明}：
+
+任取$V$的一组基，将线性变换$A$表示为矩阵$\bvec{A}$，恒等变换$I$的矩阵则必为$\bvec{I}$。
+
+令
+\begin{equation}\label{eq_MinPol_1}
+f(\lambda) = \sum_{i=0}^n a_i\lambda^i~, 
+\end{equation}
+再定义$\lambda\bvec{I}-\bvec{A}$的伴随矩阵为
+\begin{equation}\label{eq_MinPol_3}
+\bvec{B}(\lambda)=\sum_{i=0}^n \bvec{B}_i\lambda^i~, 
+\end{equation}
+其中各$\bvec{B}_i$是常数矩阵。
+
+由伴随矩阵和特征多项式的定义，
+\begin{equation}\label{eq_MinPol_2}
+\bvec{B}(\lambda)\qty(\lambda\bvec{I}-\bvec{A}) = \bvec{I}\opn{det}(\lambda\bvec{I}-\bvec{A}) = \bvec{I}f(\lambda)~. 
+\end{equation}
+
+将\autoref{eq_MinPol_1} 和\autoref{eq_MinPol_3} 代入\autoref{eq_MinPol_2} ，比较各$\lambda^i$的系数可得
+\begin{equation}
+\left\{
+\begin{aligned}
+\bvec{B}_{n-1} ={}& a_n\bvec{I}; \\
+\bvec{B}_{n-2}-\bvec{B}_{n-1}\bvec{A} ={}& a_{n-1}\bvec{I}; \\
+\cdots{}&\\
+\bvec{B}_{0}-\bvec{B}_{1}\bvec{A} ={}& a_1\bvec{I};\\
+-\bvec{B}_{0}\bvec{A} ={}& a_0\bvec{I}. 
+\end{aligned}
+\right. ~
+\end{equation}
+
+用$\bvec{A}^{n+1-k}$\textbf{右乘}上式的第$k$个等式，即得
+\begin{equation}\label{eq_MinPol_4}
+\left\{
+\begin{aligned}
+\bvec{B}_{n-1} \bvec{A}^n={}& a_n\bvec{A}^n; \\
+\bvec{B}_{n-2}\bvec{A}^{n-1}-\bvec{B}_{n-1}\bvec{A}^n ={}& a_{n-1}\bvec{A}^{n-1}; \\
+\cdots{}&\\
+\bvec{B}_{0}\bvec{A}-\bvec{B}_{1}\bvec{A}^2 ={}& a_1\bvec{A};\\
+-\bvec{B}_{0}\bvec{A} ={}& a_0\bvec{I}. 
+\end{aligned}
+\right. ~
+\end{equation}
+将\autoref{eq_MinPol_4} 中所有式子加起来，比较左右两端即可得
+\begin{equation}
+\bvec{0} = \sum_{i=0}^n a_i\bvec{A}^i~. 
+\end{equation}
+
+\textbf{证毕}。
+
+
+
+\subsection{极小多项式}
+
+
+
+域$\mathbb{F}$上的全体多项式配合多项式的加法和乘法，构成一个环，记为多项式环$\mathbb{F}[x]$。多项式环是\textbf{欧几里得环}\upref{EuRing}，从而是\textbf{主理想整环}\upref{PID}，这意味着多项式环中的任何\textbf{理想}\upref{Ideal}都有一个生成元。
+
+给定域$\mathbb{F}$上线性空间$V$上的线性变换$A$，则$A$的全体零化多项式显然构成$\mathbb{F}[x]$的理想，于是这个理想中存在一个生成元，即多项式$g(x)$，使得$A$的任何零化多项式都是$g(x)$乘以某个多项式。这样的$g(x)$就称为线性变换$A$在线性空间$V$上的\textbf{极小多项式（minimal polynomial）}，也译作\textbf{最小多项式}。
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

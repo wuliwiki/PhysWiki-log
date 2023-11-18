@@ -17,7 +17,7 @@
 \item 可执行文件： 对 linux 来说缀名没有意义。 可执行文件如果在 system path， 就可以直接打文件名执行命令（一般没有拓展名）。 如果在某个目录， 就打 \verb`目录/文件名` 执行。 如果在当前目录就用 \verb`./文件名` 执行
 \item 除了二进制可执行文件， 文本文件也可以被看作可执行文件（与拓展名无关）。 默认用 bash 执行， 但如果有 \textbf{shebang}， 就用 shebang 指定的程序执行
 \item shebang 在文件第一行以 \verb`#!` 开头， 如 \verb`#!/bin/bash` （默认） 或者 \verb`#!/usr/bin/python`。 \verb|#!| 后面不应该有空格（即使有时候有也能用）
-\item 命令的短选项往往可以合并（取决于程序）， 例如 \verb`ls -l -h` 可以写成 \verb`ls -lh`. 有些段选项有对应的长选项， 如 \verb`ls -l` 相当于 \verb`ls --human-readable`.
+\item 命令的短选项往往可以合并（取决于程序）， 例如 \verb`ls -l -h` 可以写成 \verb`ls -lh`. 有些段选项有对应的长选项， 如 \verb`ls -h` 相当于 \verb`ls --human-readable`.
 \item \verb`ls -1` 可以将文件名列成一列， \verb`ls -v` 可以按照数字的大小排序（否则是逐位排序， 如 1,10,100,2,10,200）， \verb`ls *.md` 可以只列出 md 文件
 \item \verb|ls ./**/文件名| 可以任意层子文件夹中的 \verb|文件名|。 如果无效， 需要先设置 \verb|shopt -s globstar|。
 \item \verb|stat 文件| 可以显示一些 metadata， 例如大小权限， 最后访问和修改时间等。
@@ -32,7 +32,7 @@
 \item 用 \verb`!数字` 可以重新输入第 \verb`数字` 条历史命令
 \item \verb`df` 用于查看磁盘空间, \verb`-h` 选项可以显示 \verb`Mb`, \verb`Gb` 等， \verb|-T| 选项可以增加显示文件系统类型.
 \item \verb`du /some/path` 用于查看指定目录中所有子文件夹的大小, \verb`-a` 选项可以显示文件夹和文件. \verb`--max-depth=N` is used to control the level of subfolders to display, \verb`-h` is for human readable file size (\verb`Mb`, \verb`Gb`, etc)
-\item \verb|du -hd 0| 用于查看当前目录的大小（不会跟随 symlink， 但是会包括 mount）。 \verb|-h| 是 human readable， \verb|-d| 是 depth。 \verb|-x| 不会计入被 mount 的文件夹。
+\item \verb|du -sh 目录|（或 \verb|du -hd 0 目录|） 用于查看 \verb|目录| 的大小（不会跟随 symlink， 但是会包括 mount）。 \verb|-h| 是 human readable， \verb|-d| 是 depth。 \verb|-x| 不会计入被 mount 的文件夹。
 \item \verb`ctrl+u` 可以删除光标前面的所有内容
 \item \verb`ctrl+c` 可以放弃当前输入直接开始新的一行
 \item \verb|which 命令| 可以查看某个命令的文件位置， \verb|whereis 命令| 还可以查看源码、设置文件和文档等的位置（如果有）。
@@ -196,8 +196,11 @@
 \item \verb`#` 在文件中起标注的作用 (如果文件中有 linux 代码), 在命令行, \verb`#` 后面的代码同样会被忽略.
 \item 要转换文档 encoding，用 \verb|iconv -f [encoding] -t [encoding] -o [newfilename] [filename]|。 微软的 ANSI 格式其实叫做 iso-8859-1, 例如 \verb`iconv -f iso-8859-1 -t utf-8 -o out.txt in.txt`.
 \item \verb|tr [opt] SET1 [SET2]| 可以用来把 stdin 中 \verb|SET1| 中的字符分别替换为 \verb|SET2| 中的， 输出到 stdout。 另外 \verb|-s| 选项可以把替换后相邻重复的字符只保留一个。 例如 \verb`echo $PATH | tr : '\n'` 可以分行显示每个路径（\verb|'\n'| 也可以换成 \verb|\\n|）。
+\item \verb`命令 | cut -c 1-16` 可以把 \verb|命令| 输出的前 16 个字符提取出来。
+\end{itemize}
 
 \subsubsection{sed}
+\begin{itemize}
 \item \verb|sed|（stream editor） 命令通常用于批量自动修改文本文件， 而不是用交互的编辑器手动编辑。
 \item \verb`sed` 命令可以用来处理文件或 \verb|stdin| 中的文字, 并输出到文件或者 \verb|stdout|. 例如
 \verb|sed -e 's/^!\*nq/    /' inputfile.f90 > outputfile.f90|， 其中 \verb`-e` 是将后面的命令作用到 \verb`inputfile.f90` 上. \verb`s/str1/str2/` 是将文本中的 \verb`str1` 替换成 \verb`str2`, \verb`\*` 转义为 \verb`*` (直接用 \verb`*` 就是通配符)， \verb`^` 大概是要求 \verb`str1` 出现在行首.

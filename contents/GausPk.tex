@@ -15,6 +15,9 @@
 \begin{equation}\label{eq_GausPk_1}
 f(x) = A \E^{-a x^2}\E^{\I k_0 x}~,
 \end{equation}
+由于机械波和电磁波的能量密度（光强）都正比于振幅平方，所以我们经常会讨论分布函数 $f(x)^2$ 的性质。
+
+$f(x)^2$ 的方差 $\sigma^2=1/(4a)$。
 
 FWHMI （光强半高宽）是多少？ 即 $f(x)^2$ 等于其峰值一半时的宽度。令
 \begin{equation}
@@ -22,7 +25,7 @@ FWHMI （光强半高宽）是多少？ 即 $f(x)^2$ 等于其峰值一半时的
 \end{equation}
 得
 \begin{equation}
-\mathrm{FWHMI} = 2\Delta x = \sqrt{\frac{2\ln 2}{a}}~.
+\mathrm{FWHMI} = 2\Delta x = \sqrt{\frac{2\ln 2}{a}} = 2\sqrt{2\ln 2}\ \sigma \approx 2.35482\sigma~.
 \end{equation}
 
 $f(x)$ 的积分为（用于求电场矢势）
@@ -31,16 +34,17 @@ $f(x)$ 的积分为（用于求电场矢势）
 \end{equation}
 $C$ 前面的部分在 $x = \pm \infty$ 处分别为 $\pm\frac{A}{2} \sqrt{\frac{\pi}{a}} \exp(-\frac{k^2}{4a})$。% 已数值验证
 
-\subsection{频谱}
+\subsubsection{频谱}
 \pentry{傅里叶变换（指数）\upref{FTExp}}
-（未完成：哪里有介绍频谱的概念？）
+% （未完成：哪里有介绍频谱的概念？）
 
 要求\autoref{eq_GausPk_1} 的傅里叶变换 $g(k)$， 由\autoref{ex_FTExp_1}~\upref{FTExp}以及傅里叶变换性质\autoref{eq_FTExp_4}~\upref{FTExp}和\autoref{eq_FTExp_7}~\upref{FTExp}得
-\begin{equation}
+\begin{equation} % Mathematica 已验证
 g(k) = A\sqrt{\frac{\pi}{a}} \exp[-\frac{(k-k_0)^2}{4a}]~.
 \end{equation}
+$g(k)^2$ 的半高全宽 FWHMI 为 $2\sqrt{2\ln 2}\sqrt{a} = 2.3548200 \sqrt{a}$。
 
-\subsection{高斯和 cos2 波包比较}
+\subsection{cos2 波包}
 $\cos^2$ 波包也叫 $\sin^2$ 波包，比起高斯波包，它的优点是存在明确的范围。 它的函数形式为
 \begin{equation}\label{eq_GausPk_5}
 f(x) = \leftgroup{
@@ -48,8 +52,8 @@ f(x) = \leftgroup{
 &0 && (\text{otherwise})~.
 }\end{equation}
 其中 $L$ 是波包的总长度。 它的 FWHMI 为
-\begin{equation}\label{eq_GausPk_4}
-\text{FWHMI} = \frac{2}{\pi}\opn{acos}(2^{-1/4}) L~.
+\begin{equation}\label{eq_GausPk_4} % 已数值验证
+\text{FWHMI} = \frac{2}{\pi}\opn{acos}(2^{-1/4}) L \approx 0.3640567 L~.
 \end{equation}
 
 积分为（令 $a = \pi/L$）
@@ -62,6 +66,17 @@ f(x) = \leftgroup{
 \end{equation}
 $C$ 前面的部分在 $x = \pm\infty$ 处分别为 $-2\I A\frac{a^2}{k(4 a^2 -k^2)}\E^{-\I{\pi k}/{(2a)}}$。
 
+傅里叶变换：
+\begin{equation} % Mathematica 已验证 + 数值已验证
+\tilde f(k) = \frac{1}{\sqrt{2\pi}} \int_{-\infty}^{+\infty} f(x) \E^{-\I k x} \dd{x}
+= \frac{\sqrt{2} \pi ^{3/2} A L}{4 \pi ^2-L^2 (k-k_0)^2} \sinc[L(k-k_0)/2]~.
+\end{equation}
+零点的位置为
+\begin{equation} % 数值已验证
+k = k_0 \pm 2n\pi/L \qquad (n=2,3,\dots)~.
+\end{equation}
+标准差约为 $2.92544/L$， 方差 $13.15947/L^2$， FWHMI $9.05144/L$。
+
 画图对比如下（代码见文末）：
 \begin{figure}[ht]
 \centering
@@ -69,7 +84,27 @@ $C$ 前面的部分在 $x = \pm\infty$ 处分别为 $-2\I A\frac{a^2}{k(4 a^2 -k
 \caption{高斯波包和 cos2 波包的对比} \label{fig_GausPk_2}
 \end{figure}
 
-\subsection{附：Matlab 画图代码}
+\subsection{附：Matlab 代码}
+\begin{lstlisting}[language=matlab, caption=cos2\_spec.m]
+% properties of cos2 wave packet spectra
+
+A = 0.9; L = 1.12;
+g = @(k) (sqrt(2)*pi^1.5*A*L)./(4*pi^2-L^2*k.^2) .* sinc(L*k/2);
+
+k = linspace(-40, 40, 1000);
+figure; plot(k, g(k));
+grid on;
+xlabel k;
+hold on;
+scatter((2:6)*2*pi/L, 0, 'k');
+scatter((-6:-2)*2*pi/L, 0, 'k');
+axis([-40, 40, -0.02, 0.21]);
+
+A = 1/sqrt(integral(@(k)g(k).^2, -inf, inf));
+integral(@(k)g(k).^2.*abs(k).*A^2, -inf, inf)
+
+\end{lstlisting}
+
 \begin{lstlisting}[language=matlab, caption=sin2\_gaussian\_compare.m]
 % plot Gaussian vs cos2 profile
 

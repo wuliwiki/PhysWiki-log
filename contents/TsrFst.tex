@@ -5,35 +5,18 @@
 
 \pentry{矩阵\upref{Mat}}
 
-本文的难度分级为：科普。
+直观上说，矩阵就是把数字排列成长方形，因此它是一个纯粹的“组合数学”对象：不需要学习集合论、微积分、线性代数，只需要理解了数（整数，有理数，实数或者复数都可）的概念和上面的加、减、乘（可以没有除法）我们就可以理解矩阵。
 
-直观上说，矩阵就是把数字排列成长方形。从这个角度来说，矩阵是一个纯粹的“组合数学”对象：不需要学习集合论、微积分、线性代数，只需要理解了数（整数，有理数，实数或者复数都可）的概念和上面的加、减、乘（可以没有除法）我们就可以理解矩阵。
-\addTODO{可以考虑移动到《矩阵》词条}
-
-不过，长方形只是一个很简单的二维图形，抛开纸张（二维）和方（形状）的限制我们可以得到很多不同的“数字结构”，其中张量就是一种（不那么简单的）对方矩阵的推广。
+不过，长方形只是一个很简单的二维图形，抛开纸张（二维）和方（形状）的限制我们可以得到很多不同的“数字结构”，其中张量就是一种（不那么简单的）对正方形矩阵的推广。
 
 在线性代数中，我们会学到用矩阵来理解（选定基之后的）线性算子\upref{LinMap}，用张量来理解多线性变换\upref{MulMap}。
 
 \subsection{列矩阵和行矩阵}
-在这个词条中，我们把一个 $n$ 行 $n$ 列的矩阵记作\textbf{方矩阵}（省略掉 $n$）， $n \times 1$ 矩阵记作\textbf{列矩阵}（列向量），$1 \times n$ 矩阵记作\textbf{行矩阵}（行向量），$1 \times 1$ 矩阵记作\textbf{数矩阵}（标量）。根据矩阵的乘法\autoref{sub_Mat_1}~\upref{Mat}，我们有以下五种合法的乘法（注意顺序不能颠倒）,
 
-其中三种“化简”的乘法；
+在这个词条中，我们把一个 $n$ 行 $n$ 列的矩阵记作\textbf{方矩阵}， $n \times 1$ 矩阵记作\textbf{列矩阵}（列向量），$1 \times n$ 矩阵记作\textbf{行矩阵}（行向量），$1 \times 1$ 矩阵记作\textbf{数矩阵}（标量）。根据矩阵的乘法\autoref{sub_Mat_1}~\upref{Mat}，我们有以下五种合法的乘法（注意顺序不能颠倒）,
+
+其中三种“化简”的乘法：
 \begin{itemize}
-\item 行矩阵 $\times$ 列矩阵 $\mapsto$ 数矩阵
-$$
-\bmat{
-\square & \square & \square
-}
-\bmat{
-\square \\
-\square \\
-\square
-}
-=
-\bmat{
-\square
-}~.
-$$
 \item 行矩阵 $\times$ 方矩阵 $\mapsto$ 行矩阵
 $$
 \bmat{
@@ -68,9 +51,24 @@ $$
 \square
 }~.
 $$
+\item 行矩阵 $\times$ 列矩阵 $\mapsto$ 数矩阵
+$$
+\bmat{
+\square & \square & \square
+}
+\bmat{
+\square \\
+\square \\
+\square
+}
+=
+\bmat{
+\square
+}~.
+$$
 \end{itemize}
 
-剩下两种种“化繁或不变”的乘法，
+一种“化繁”的乘法：
 \begin{itemize}
 \item 列矩阵 $\times$ 行矩阵 $\mapsto$ 方矩阵
 $$
@@ -86,6 +84,40 @@ $$
 \bmat{
 \square & \square & \square \\
 \square & \square & \square \\
+\square & \square & \square
+}~.
+$$
+\end{itemize}
+
+三种“不变”的乘法：
+\begin{itemize}
+\item 列矩阵 $\times$ 数矩阵 $\mapsto$ 列矩阵
+$$
+\bmat{
+\square \\
+\square \\
+\square
+}
+\bmat{
+\square
+}
+=
+\bmat{
+\square \\
+\square \\
+\square
+}~.
+$$
+\item 数矩阵 $\times$ 行矩阵 $\mapsto$ 行矩阵
+$$
+\bmat{
+\square
+}
+\bmat{
+\square & \square & \square
+}
+=
+\bmat{
 \square & \square & \square
 }~.
 $$
@@ -116,9 +148,9 @@ $$
 \item 行矩阵永远乘在左边
 \item 列矩阵永远乘在右边
 \end{itemize}
-因此，对于一个矩阵（方矩阵或者行矩阵），我们可以把\textbf{作用一个列矩阵}（或者\textbf{输入一个列矩阵}）定义为在右边乘上一个列矩阵；类似的对于一个矩阵（方矩阵或者列矩阵），我们可以把\textbf{作用一个行矩阵}（或者\textbf{输入一个行矩阵}）定义为在左边乘上一个行矩阵。
+因此，对于一个方矩阵或者行矩阵，我们可以把\textbf{作用一个列矩阵}定义为在右边乘上一个列矩阵；类似的对于一个方矩阵或者列矩阵，我们可以把\textbf{作用一个行矩阵}定义为在左边乘上一个行矩阵。
 
-就目前来说，上述行为显得很没有意义，因为总共只有三种情况，而我却用了 $2 \times 2 = 4$ 种情况来表述。但是，我们可以把这套语言进行推广，以此来得到张量。但在此之前我需要严格定义一下上述“化简”和“化繁或不变”的概念。
+就目前来说，上述行为显得很没有意义，因为总共只有三种情况，而我却用了 $2 \times 2 = 4$ 种情况来表述。但是，我们可以推广它来得到张量的定义。
 
 \subsection{矩阵的类型}
 我们现在有四种矩阵，方矩阵、列矩阵与行矩阵、数矩阵。我们把数矩阵作为终止状态，那么如果想通过“作用列/行矩阵”来得到终止状态，我们有
@@ -132,11 +164,11 @@ $$
 
 我们把\textbf{不需要任何作用}的数矩阵称为 $(0,0)$ 型，把\textbf{需要一次列矩阵作用}的行矩阵称为 $(0,1)$ 型，把\textbf{需要一次行矩阵作用}的列矩阵称为 $(1,0)$ 型，把\textbf{需要一次列矩阵作用和一次行矩阵作用}方列矩阵称为 $(1,1)$ 型。因此，所谓“化简”的乘法指的是使类型变小的乘法。
 
-注：这里我不称呼它们为 $(r, s)$ 型矩阵是因为这很容易和 $s \times t$ 型矩阵搞混；如果读者自认不会混淆，可以称呼它们为 $(r, s)$ 型矩阵。之后我会称呼它们为$(r, s)$ 型张量。
+注：这里我不称呼它们为 $(r, s)$ 型矩阵是因为这很容易和 $s \times t$ 型矩阵搞混。之后我会称呼它们为$(r, s)$ 型张量。
 
-因此对 $(r, s)$ 型作用一次列矩阵会得到，$(r, s - 1)$ 型；作用一次行矩阵会得到，$(r - 1, s)$ 型。这也解释为什么行矩阵不能再作用一次行矩阵，列矩阵不能再作用一次列矩阵。
+因此对 $(r, s)$ 型作用一次列矩阵会得到 $(r, s - 1)$ 型；作用一次行矩阵会得到 $(r - 1, s)$ 型。这也解释为什么行矩阵不能再作用一次行矩阵，列矩阵不能再作用一次列矩阵。
 
-很自然的我们就会考虑， $r$ 和 $s$ 如果不是 $0$ 或 $1$，我们能把 $(r, s)$ 型定义成\textbf{需要 $s$ 次列矩阵作用和 $r$ 次行矩阵作用来得到数矩阵}的\textbf{某种东西}吗？
+很自然的，如果取更大的 $r$ 和 $s$，我们能把 $(r, s)$ 型定义成需要 $s$ 次列矩阵作用和 $r$ 次行矩阵作用来得到数矩阵的\textbf{某种东西}吗？
 
 答案是肯定的，这就是 $(r, s)$ 型张量的定义。
 
@@ -155,11 +187,19 @@ $$
 \begin{enumerate}
 \item 不再需要记忆矩阵元是怎么摆放的了
 \item 不再需要考虑列/行矩阵是左乘还是右乘了
-\item 我们甚至可以省略掉求和符号（爱因斯坦求和约定）
+\item 我们甚至可以省略掉求和符号（指标与求和约定\upref{EinSum}）
 \end{enumerate}
 
+这套符号还和行列矩阵统一了，我们有列矩阵$\bvec{v} = \bmat{v^j}$，
+\begin{equation}
+\bmat{v^1 \\ \vdots \\ v^n}~,
+\end{equation}
+行矩阵 $\bvec{\theta} = \bmat{\theta_i}$，
+\begin{equation}
+\bmat{\theta_1 & \dots & \theta_n}~.
+\end{equation}
 
-考虑列矩阵 $\bvec{v} = \bmat{v^j},$ 行矩阵 $\bvec{\theta} = \bmat{\theta_i}$，在矩阵 $\bvec{A}$ 上作用列矩阵 $\bvec{v}$，我们得到了一个新的列矩阵
+现在在矩阵 $\bvec{A}$ 上作用列矩阵 $\bvec{v}$，我们得到了一个新的列矩阵
 $$
 \bmat{w^i} = \bmat{\sum_j A^i_j v^j}~.
 $$
@@ -169,11 +209,10 @@ $$
 \bmat{a} = \bmat{\sum_i w^i \theta_i}~,
 $$
 
-实际上，我们可以同时作用列矩阵和行矩阵，即
+反过来，我们也可以先作用行矩阵，再作业列矩阵，这会得到同样的结果；因此我们会同时作用列矩阵和行矩阵，即
 $$
-\bmat{a} = \bmat{\sum_{i, j} A^i_j v^j \theta_i}~,
+\bmat{a} = \bmat{\sum_{i, j} A^i_j v^j \theta_i}~.
 $$
-顺序并不重要。
 
 \begin{example}{}
 我们考虑一个 $3 \times 3$ 方矩阵与 $3 \times 1$ 列矩阵的乘法，
@@ -196,65 +235,37 @@ $$
 
 \subsection{张量}
 
-一个 $(r, s)$ 型张量是一个\textbf{有两种编号（系数）的多维数组}，记作 $\bmat{A_{j_1 \dots j_s}^{i_1 \dots i_r}}$，定义对它作用一个列矩阵 $\bmat{v^{j}}$，为
+一个 $(r, s)$ 型张量是一个\textbf{有两种编号（系数）的多维数组}，记作 $\bmat{A_{j_1 \dots j_s}^{i_1 \dots i_r}}$。
+
+
+定义对它作用一个列矩阵 $\bmat{v^{j}}$，为
 \begin{equation}\label{eq_TsrFst_1}
-\bmat{B_{j_1 \dots j_{s - 1}}^{i_1 \dots i_r}} = \bmat{\sum_{j} A_{j_1 \dots j_{s - 1} j}^{i_1 \dots i_r} v^{j}}~,
+\bmat{B_{j_1 \dots j_{s - 1}}^{i_1 \dots i_r}} = \bmat{\sum_j A_{j_1 \dots j_{s - 1} j}^{i_1 \dots i_r} v^j}~,
+\end{equation}
+得到一个 $(r,s - 1)$ 型张量。
+
+当$s > 1$时，我们也可以对任意的系数 $j_k$ 求和，因此在定义“作用一个列矩阵”的时候，我们需要声明是哪个系数的作用，数学中如不加申明的使用，一般指最后一位。
+
+\begin{example}{$(0, 2)$-型张量}
+一个$2$维的$(0, 2)$-型张量 $\bmat{A_{j_1 j_2}}$ 由 $A_{1 1}, A_{1 2}, A_{2 1}, A_{2 2}$ 四个数构成。考虑一个$2$维列向量$\bmat{v^1 \\ v^2}$，我们把它作用到$\bmat{A}$的 $j_2$ 系数上得到
+\begin{equation}
+\begin{aligned}
+\bmat{\sum_j A_{j_1 j} v^j} &= \bmat{\sum_j A_{1 j} v^j & \sum_j A_{2 j} v^j} \\
+&= \bmat{A_{1 1} v^1 + A_{1 2} v^2 & A_{2 1} v^1 + A_{2 2} v^2}~.
+\end{aligned}
+\end{equation}
+\end{example}
+
+类似的，可以对 $\bvec{A}$ 作用一个行矩阵$\bmat{\theta_i}$，为
+\begin{equation}
+\bmat{C_{j_1 \dots j_s}^{i_1 \dots i_{r - 1}}} = \bmat{\sum_i A_{j_1 \dots j_s}^{i_1 \dots i_{r - 1} i} \theta_i}~,
 \end{equation}
 得到一个 $(r - 1,s)$ 型张量。
 
-实际上这个定义并不唯一我们也可以对任意的系数 $j_k$ 求和，因此在定义“作用一个列/行矩阵”的时候，我们需要声明是哪个系数的作用。实际上作用两次\autoref{eq_TsrFst_1} 得到的结果一般依赖于作用列矩阵的顺序，即一般来说
-$$
-\sum_{j, j'} A_{j_1 \dots j_{s - 2} j' j}^{i_1 \dots i_r} v^{j} w^{j'} \neq \sum_{j, j'} A_{j_1 \dots j_{s - 2} j' j}^{i_1 \dots i_r} w^{j} v^{j'}~.
-$$
+对于 $(r, s)$ 型张量 $\bvec{A}$ 来说，我们也可以一次性作用 $s$ 个列矩阵，$r$ 个行矩阵，得到一个数矩阵。
 
-对于 $(r, s)$ 型张量 $\bvec{A}$ 来说，我们也可以一次性作用 $s$ 个列矩阵 $\bvec{v}[1], \dots, \bvec{v}[s]$， $r$ 个行矩阵 $\bvec{\theta}[1], \dots, \bvec{\theta}[r]$，得到一个数矩阵
-$$\begin{aligned}
-&\bvec{A}(\bvec{v}[1], \dots, \bvec{v}[s], \bvec{\theta}[1], \dots, \bvec{\theta}[r]) \\
-= &\bmat{\sum A_{j_1 \dots j_s}^{i_1 \dots i_r} v[1]^{j_1} \dots v[s]^{j_s} \bvec{\theta}[1]_{i_1} \dots \bvec{\theta}[r]_{i_r}}~.
-\end{aligned}$$
-
-\addTODO{符号可以优化吗？}
-
-% \subsection{与线性代数的关系}
-% \addTODO{可能不应该写在这里}
-% 让我们考虑列矩阵 $\bmat{A^j}$。对于 $n \times 1$ 列矩阵，我们有 $n$ 个特殊的列矩阵，
-% $$
-% \bmat{
-% 1 \\
-% \vdots \\
-% 0
-% }, \dots,
-% \bmat{
-% 0 \\
-% \vdots \\
-% 1
-% }
-% $$
-% 记作 $\bvec{e}_1, \dots, \bvec{e}_n$。
-
-% 以 $3 \times 1$ 列矩阵为例，
-% $$
-% \bvec{e}_1 = \bmat{
-% 1 \\
-% 0 \\
-% 0
-% },
-% \bvec{e}_2 = \bmat{
-% 0 \\
-% 1 \\
-% 0
-% }
-% \bvec{e}_3 = \bmat{
-% 0 \\
-% 0 \\
-% 1
-% }
-% $$
-
-% 这种情况下，根据矩阵的加法和数乘，我们得到了
-% $$
-% \bmat{A^j} = \sum_i A^i \bvec{e}_i
-% $$
+% 转置 和 缩并
+% 对于 $(r, s)$ 型张量 $$
 
 \subsection{张量的推广}
 

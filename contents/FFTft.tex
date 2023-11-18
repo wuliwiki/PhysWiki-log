@@ -59,7 +59,9 @@ end
 \end{lstlisting}
 
 \subsection{用 FFT 计算傅里叶变换}
-这里使用的算法见\autoref{sub_DFT_1}~\upref{DFT}。 给出任意等间距的 $x$ 坐标格点 \verb|[x0, x0+dx, x0+2*dx, ...]|， 以及对应的函数值 \verb|f = [f(1), f(2), ...]|， 那么该代码可以通过 Matlab 提供的快速傅里叶变换（FFT） 计算傅里叶变换（\autoref{eq_FTExp_6}~\upref{FTExp}）。 输入中 \verb|Nk| 是可选的， 若 \verb|Nk| 大于 \verb|f| 的个数， 输出中 \verb|k| 的步长将会相应变小使 \verb|k| 的长度为 \verb|Nk|， 但区间不会变。 \verb|k| 的区间是由 \verb|dx| 决定的。 
+这里使用的算法见\autoref{sub_DFT_1}~\upref{DFT}。 给出任意等间距的 $x$ 坐标格点 \verb|[x0, x0+dx, x0+2*dx, ...]|， 以及对应的函数值 \verb|f = [f(1), f(2), ...]|， 那么该代码可以通过 Matlab 提供的快速傅里叶变换（FFT） 计算傅里叶变换（\autoref{eq_FTExp_6}~\upref{FTExp}）。 输入中 \verb|Nk| 是可选的， 若 \verb|Nk| 大于 \verb|f| 的个数， 输出中 \verb|k| 的步长将会相应变小使 \verb|k| 的长度为 \verb|Nk|， 但区间不会变。 \verb|k| 的区间是由 \verb|dx| 决定的。
+
+在实现上， 由于 \verb|Nk| 等于 \verb|Nx|， 所以若 \verb|Nk > numel(f)| 时， 会在 \verb|f| 两边添加 0 使其具有 \verb|Nk| 个元。
 \begin{lstlisting}[language=matlab, caption=FFT.m]
 % fft approximation of the analytical fourier transform from f(x) to g(k)
 % x and k are both equally spaced, x starts from x0 equally spaced by dx
