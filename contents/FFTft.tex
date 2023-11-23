@@ -1,4 +1,4 @@
-% 傅里叶变换的数值计算（Matlab）
+% 傅里叶变换的数值计算、快速傅里叶变换（Matlab）
 % license Xiao
 % type Tutor
 
@@ -8,7 +8,7 @@
 作为下文 FFT 方法的参照， 我们先实现直接用数值积分计算傅里叶变换（\autoref{eq_FTExp_6}~\upref{FTExp}）。 调用时需要提供一元函数（句柄） \verb|f|， 而不是一系列离散函数值。 \verb|xspan| 是对 \verb|f| 积分的区间， 而 \verb|kspan| 是输出中 \verb|k| 的区间， \verb|Nk| 是 \verb|k| 的长度。 这么做虽然直观且精确， 但计算量较大， 所以一般还是用下一节中的 FFT 方法。
 
 尤其是如果 \verb|f| 并不是通过函数给出， 而只是一系列等间距的散点， 那么与其先插值再做数值积分， FFT 方法是最适合的， 因为 FFT 已经相当于对散点进行了 sinc 插值（\autoref{sub_DFT_2}~\upref{DFT}）。
-\addTODO{搞几个具体的例子， 对比数值积分和 FFT 的结果。}
+
 \begin{lstlisting}[language=matlab, caption=CFT.m]
 % Continuous Fourier Transform by Integration
 % f must be a function handle
@@ -58,55 +58,75 @@ end
 end
 \end{lstlisting}
 
-\subsection{用 FFT 计算傅里叶变换}
-这里使用的算法见\autoref{sub_DFT_1}~\upref{DFT}。 给出任意等间距的 $x$ 坐标格点 \verb|[x0, x0+dx, x0+2*dx, ...]|， 以及对应的函数值 \verb|f = [f(1), f(2), ...]|， 那么该代码可以通过 Matlab 提供的快速傅里叶变换（FFT） 计算傅里叶变换（\autoref{eq_FTExp_6}~\upref{FTExp}）。 输入中 \verb|Nk| 是可选的， 若 \verb|Nk| 大于 \verb|f| 的个数， 输出中 \verb|k| 的步长将会相应变小使 \verb|k| 的长度为 \verb|Nk|， 但区间不会变。 \verb|k| 的区间是由 \verb|dx| 决定的。
-
-在实现上， 由于 \verb|Nk| 等于 \verb|Nx|， 所以若 \verb|Nk > numel(f)| 时， 会在 \verb|f| 两边添加 0 使其具有 \verb|Nk| 个元。
+\subsection{用 FFT 近似傅里叶变换}
+这里使用的算法见\autoref{sub_DFT_1}~\upref{DFT}。 给出任意等间距的 $x$ 坐标格点 \verb|[x0, x0+dx, x0+2*dx, ...]|， 以及对应的函数值 \verb|f = [f(1), f(2), ...]|， 那么该代码可以通过 Matlab 提供的快速傅里叶变换（FFT） 计算傅里叶变换（\autoref{eq_FTExp_6}~\upref{FTExp}）。 输入中 \verb|Nk| 是可选的，默认等于 \verb|x| 的个数。 若 \verb|Nk| 大于 \verb|f| 的个数， 输出中 \verb|k| 的步长将会相应变小使 \verb|k| 的长度为 \verb|Nk|， 但区间不会变。 \verb|k| 的区间是由 \verb|dx| 决定的。 在实现上， 当 \verb|Nk > numel(f)| 时会预先在 \verb|f| 两边添加 0 使其先具有 \verb|Nk| 个元。
 \begin{lstlisting}[language=matlab, caption=FFT.m]
 % fft approximation of the analytical fourier transform from f(x) to g(k)
 % x and k are both equally spaced, x starts from x0 equally spaced by dx
 % norm(g) = norm(f)
 % numel(g) = Nk
 
-function [g, k] = FFT(f, x0, dx, Nk, dim)
-x_mid = (2*x0 + (numel(f)-1)*dx)/2; % mid point of x grid
-if exist('Nk', 'var')
-    f = fftresize(f, Nk);
+function [g, k] = FFT(f, x0, dx, Nk, k_mid)
+N = numel(f);
+if ~isvector(f)
+    error('f must be a vector!');
 end
-if exist('dim', 'var')
-    g = sffts(f, dim)*(dx/sqrt(2*pi));
-else
-    g = sffts(f)*(dx/sqrt(2*pi));
+if ~exist('k_mid', 'var')
+    k_mid = 0;
 end
-
-if ~exist('dim', 'var')
-    if isvector(f)
-        k = fftlinspace(2*pi/dx, numel(f));
-    else
-        k = fftlinspace(2*pi/dx, size(f,1));
-    end
-else
-    k = fftlinspace(2*pi/dx, size(f,dim));
+if ~exist('Nk', 'var')
+    Nk = N;
 end
-
-if (abs(x_mid/x0) > 1e-14)
-    if (isvector(g))
-        k = reshape(k, size(g));
-        g = g .* exp(-1i*k*x_mid);
-    else
-        error('asymmetric x not implemented!');
-    end
+f = reshape(f, 1, N);
+x_mid = x0 + ceil((N-1)/2)*dx;
+if k_mid ~= 0
+    x = linspace(x0, x0+dx*(N-1), N);
+    f = f .* exp(-1i*k_mid*(x-x_mid));
+end
+if Nk > N
+    N = Nk;
+    f = fftresize(f, N);
+end
+g = sffts(f)*(dx/sqrt(2*pi));
+k = fftlinspace(2*pi/dx, N) + k_mid;
+if (abs(x_mid/x0) > 2*eps)
+    g = g .* exp(-1i*k*x_mid);
 end
 end
 \end{lstlisting}
 对应的反傅里叶变换如下
 \begin{lstlisting}[language=matlab, caption=iFFT.m]
-% fft approximation of the analytical inverse fourier transform
-% norm(f) = norm(g)
-function [f, x] = iFFT(g, dk)
-f = siffts(g)*(numel(g)*dk/sqrt(2*pi));
-if nargout == 2
-    x = fftlinspace(2*pi/dk, numel(f));
+% ifft approximation of the analytical inverse Fourier transform
+%      from g(k) to f(x)
+% x and k are both equally spaced, k starts from k0 equally spaced by dk
+% norm(g) = norm(f)
+% numel(f) = Nx
+
+function [f, x] = iFFT(g, k0, dk, Nx, x_mid)
+N = numel(g);
+if ~isvector(g)
+    error('g must be a vector!');
+end
+if ~exist('x_mid', 'var')
+    x_mid = 0;
+end
+if ~exist('Nx', 'var')
+    Nx = N;
+end
+g = reshape(g, 1, N);
+k_mid = k0 + ceil((N-1)/2)*dk;
+if x_mid ~= 0
+    k = linspace(k0, k0+dk*(N-1), N);
+    g = g .* exp(1i*x_mid*k);
+end
+if Nx > N
+    N = Nx;
+    g = fftresize(g, N);
+end
+f = siffts(g)*(N*dk/sqrt(2*pi));
+x = fftlinspace(2*pi/dk, N) + x_mid;
+if (abs(k_mid/k0) > 2*eps)
+    f = f .* exp(1i*k_mid*(x-x_mid));
 end
 end
 \end{lstlisting}
@@ -241,6 +261,51 @@ else
 end
 end
 \end{lstlisting}
+
+\textbf{示例}
+\begin{lstlisting}[language=matlab]
+% === params ===
+x0 = -6; dx = 0.05; N = 300;
+Nk = 4*N; k_mid = 0.25;
+
+a = 2; x_shift = 0.8; k_shift = 2;
+f_anal = @(x) exp(-a*(x-x_shift).^2) .* exp(1i*k_shift*(x-x_shift));
+g_anal = @(k) exp(-(k-k_shift).^2/(4*a))/sqrt(2*a) .* exp(-1i*x_shift*k);
+% ============= 
+
+close all;
+x = linspace(x0, x0+dx*(N-1), N).';
+x_mid = x0 + ceil((N-1)/2)*dx;
+
+[g, k] = FFT(f_anal(x), x0, dx, Nk, k_mid);
+k = k(:); g = g(:);
+
+k0 = k(1); dk = k(2)-k(1);
+[f_, x_] = iFFT(g, k0, dk, N, x_mid);
+f_ = f_(:); x_ = x_(:);
+
+figure; plot(x, [real(f_anal(x)), imag(f_anal(x))], '.-');
+hold on; plot(x_, [real(f_) imag(f_)], 'o');
+grid on; axis([-2, 4, -1.1, 1.1]);
+xlabel x;
+
+figure; plot(k, [real(g_anal(k)), imag(g_anal(k))], '.-');
+hold on; plot(k, [real(g), imag(g)], 'o');
+grid on; axis([-7, 10, -0.6, 0.6]);
+xlabel k;
+\end{lstlisting}
+
+\begin{figure}[ht]
+\centering
+\includegraphics[width=8cm]{./figures/e6c21da4cdca9131.png}
+\caption{输出 $f(x)$} \label{fig_FFTft_1}
+\end{figure}
+\begin{figure}[ht]
+\centering
+\includegraphics[width=8cm]{./figures/18aee60e41043d4d.png}
+\caption{输出 $g(k)$} \label{fig_FFTft_2}
+\end{figure}
+
 
 \subsubsection{傅里叶级数}
 根据\autoref{eq_DFT_10}~\upref{DFT}， 傅里叶级数与傅里叶变换值相差一个常数：

@@ -1,5 +1,5 @@
-% 极小多项式（线性代数）
-% keys 最小多项式|minimal polynomial|环|线性代数|域|Hamilton-Cayley 定理|Cayley-Hamilton 定理|哈密尔顿-凯莱定理
+% 线性变换的极小多项式
+% keys 零化多项式|null polynomial|最小多项式|minimal polynomial|环|线性代数|域|Hamilton-Cayley 定理|Cayley-Hamilton 定理|哈密尔顿-凯莱定理
 % license Xiao
 % type Tutor
 
@@ -7,7 +7,7 @@
 \pentry{线性映射\upref{LinMap}}
 
 
-极小多项式又称最小多项式，描述了一个元素关于给定环的代数性质。本节是线性代数的一部分，因此我们只讨论线性变换的极小多项式。
+极小多项式又称最小多项式，描述了一个元素关于给定环的代数性质。本节是线性代数的一部分，因此我们只讨论线性变换的极小多项式。关于极小多项式的更多讨论，可参见\textbf{多项式环}\upref{RPlynm}。
 
 
 \subsection{零化多项式}
@@ -34,7 +34,7 @@ f(A) = \sum_{i=0}^m a_ixA^i~.
 \begin{definition}{零化多项式}\label{def_MinPol_1}
 给定域$\mathbb{F}$上的线性空间$V$，令$A$是$V$上的\textbf{线性变换}。
 
-对于$V$的子空间$W$，若$\mathbb{F}$上的多项式$f$满足$f(A)\bvec{w}=\bvec{0}$对任意$\bvec{w}\in W$成立，则称$f$是$A$在$W$上的\textbf{零化多项式（null polynomial）}。
+对于$V$的子空间$W$，若$\mathbb{F}$上的\textbf{非零多项式}$f$满足$f(A)\bvec{w}=\bvec{0}$对任意$\bvec{w}\in W$成立，则称$f$是$A$在$W$上的\textbf{零化多项式（null polynomial）}。
 \end{definition}
 
 
@@ -43,7 +43,7 @@ f(A) = \sum_{i=0}^m a_ixA^i~.
 
 对于任意线性变换，其零化多项式一定存在，如以下定理所说：
 
-\begin{theorem}{Hamilton-Cayley定理}
+\begin{theorem}{Hamilton-Cayley定理}\label{the_MinPol_1}
 给定线性空间$V$上的线性变换$A$，$f(\lambda)$为其特征多项式，则$f(A)=0$。
 \end{theorem}
 
@@ -104,12 +104,32 @@ f(\lambda) = \sum_{i=0}^n a_i\lambda^i~,
 
 
 
-域$\mathbb{F}$上的全体多项式配合多项式的加法和乘法，构成一个环，记为多项式环$\mathbb{F}[x]$。多项式环是\textbf{欧几里得环}\upref{EuRing}，从而是\textbf{主理想整环}\upref{PID}，这意味着多项式环中的任何\textbf{理想}\upref{Ideal}都有一个生成元。
+\begin{definition}{极小多项式}
 
-给定域$\mathbb{F}$上线性空间$V$上的线性变换$A$，则$A$的全体零化多项式显然构成$\mathbb{F}[x]$的理想，于是这个理想中存在一个生成元，即多项式$g(x)$，使得$A$的任何零化多项式都是$g(x)$乘以某个多项式。这样的$g(x)$就称为线性变换$A$在线性空间$V$上的\textbf{极小多项式（minimal polynomial）}，也译作\textbf{最小多项式}。
+设$V$是域$\mathbb{F}$上的线性空间，$A$是$V$上的线性变换。若$\mathbb{F}$上的多项式$f$是$A$的零化多项式，且对于$A$的任意零化多项式$g$，总存在多项式$h$使得$g=fh$，那么称$f$是$A$的\textbf{极小多项式（minimal polynomial）}，或\textbf{最小多项式}。
+
+\end{definition}
 
 
+由\autoref{the_MinPol_1} ，任何一个线性变换都有零化多项式；那么极小多项式是否总是存在呢？
 
+
+\begin{theorem}{极小多项式存在性}
+设$V$是域$\mathbb{F}$上的线性空间，$A$是$V$上的线性变换，则$A$有极小多项式。
+\end{theorem}
+
+\textbf{证明}：
+
+任取$A$的零化多项式$f$，如果\textbf{不存在次数比$f$更低的零化多项式}，那么$f$就是极小多项式。这是因为，此时对如果$f$不是极小多项式，则可以取零化多项式$g$，使得
+\begin{equation}\label{eq_MinPol_5}
+g=fh+r~, 
+\end{equation}
+其中$h$和$r$都是多项式，且$\opn{deg}r<\opn{deg}f$。显然，$f$和$gh$都是$A$的零化多项式，因此$r$也是，而$r$的次数比$f$的次数低，与假设矛盾。
+
+由于零化多项式的次数是正整数，因此$A$的零化多项式集合中一定存在次数最低的多项式，这个多项式就是$A$的极小多项式。
+
+
+\textbf{证毕}。
 
 
 

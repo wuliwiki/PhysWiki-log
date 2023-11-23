@@ -14,6 +14,8 @@
 注意该方法也适用于对非整数开根号。 另外如果要开根的数大于 $100$ 或小于 $1$， 可以先把它乘以 $100^{N}$ （$N$ 为任意整数） 使其落到 $1$ 到 $100$ 之间， 开完根后再除以 $10^N$ 即可。 这是因为 $\sqrt{100^{N} x}/10^N =  \sqrt{x}$。 这种做法可以保证上述的第一步中总是可以用一个一位数试根。
 \end{example}
 
+注意该算法适合手动计算，但并不适合用于在计算机中实际使用，计算机一般用效率更高的迭代法等\upref{sqrtN}。
+
 \subsubsection{推导}
 若我们要算 $s^2$ 的开根号， 并假设 $s$ 的 $n$ 位有效数字（不做四舍五入）为 $s_n$， 例如 $s = \sqrt{2} = 1.414213562\dots$， 则 $s_1 = 1$， $s_2=1.4$， $s_3=1.41$，…… 那么显然有
 \begin{equation}
@@ -24,3 +26,82 @@ s^2 = s_1^2 + (s_2+s_1)(s_2-s_1) + (s_3+s_2)(s_3-s_2) + \dots~
 s^2 = d_1^2 + (2s_1 + d_2)d_2 + (2s_2 + d_3)d_3 + \dots~
 \end{equation}
 现在， 若已知 $s^2$， 我们就可以先试出最大的 $d_1$， 满足 $d_1^2\leqslant s^2$。 然后再试出最大的 $d_2$， 满足 $(2s_1 + d_2)d_2 \leqslant s^2 - d_1^2$， 以此类推就可以求出任意位的小数。
+
+\subsection{教学代码}
+这里给出上面计算过程的 Matlab 代码，若有例子不会算可以用它来教学。 例如要计算\autoref{fig_Hsqrt_1} 中的例子 $\sqrt{21}$ 的 6 位小数，可以调用 \verb|sqrt_hand(21, 6)|， 输出如下：
+\begin{lstlisting}[language=bash]
+4.58257...
+-----------------
+4, 4, 21, 16
+5, 85, 500, 425
+8, 908, 7500, 7264
+2, 9162, 23600, 18324
+5, 91645, 527600, 458225
+7, 916507, 6937500, 6415549
+\end{lstlisting}
+\verb|sqrt_hand(3, 6)|
+\begin{lstlisting}[language=bash]
+1.73205...
+-----------------
+1, 1, 3, 1
+7, 27, 200, 189
+3, 343, 1100, 1029
+2, 3462, 7100, 6924
+0, 34640, 17600, 0
+5, 346405, 1760000, 1732025
+\end{lstlisting}
+\verb|sqrt_hand(0.3, 6)|（实际计算 $\sqrt{30}$）
+\begin{lstlisting}[language=bash]
+0.54772...
+-----------------
+5, 5, 30, 25
+4, 104, 500, 416
+7, 1087, 8400, 7609
+7, 10947, 79100, 76629
+2, 109542, 247100, 219084
+2, 1095442, 2801600, 2190884
+\end{lstlisting}
+\verb|sqrt_hand(101, 6)|（实际计算 $\sqrt{1.01}$）
+\begin{lstlisting}[language=bash]
+10.0498...
+-----------------
+1, 1, 1.01, 1
+0, 20, 1, 0
+0, 200, 100, 0
+4, 2004, 10000, 8016
+9, 20089, 198400, 180801
+8, 200988, 1759900, 1607904
+\end{lstlisting}
+
+\begin{lstlisting}[language=matlab,caption=sqrt\_hand.m]
+function sqrt_hand(x, N)
+if x <= 0
+    error('x <= 0');
+end
+if N > 14
+    error('too many digits!');
+end
+order = log10(x); % 0 to 2
+scale = round((1-order)/2)*2;
+ans_str = num2str(sqrt(x), N+2);
+disp([ans_str(1:N+1) '...']);
+x1 = x*10^scale;
+d = zeros(1, N);
+tmp = sqrt(x1);
+% get digits (cheating)
+for i = 1:N
+    d(i) = floor(tmp);
+    tmp = (tmp-d(i))*10;
+end
+rem = x1;
+disp('-----------------');
+left0 = 0;
+for i = 1:N
+    left = left0*10 + d(i);
+    low = left*d(i);
+    disp(d(i) + ", " + left + ", " + rem + ", " + low);
+    rem = (rem - low)*100;
+    left0 = left0*10 + d(i)*2;
+end
+end
+\end{lstlisting}
