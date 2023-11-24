@@ -1,4 +1,4 @@
-% Matlab 最小二乘法拟合函数
+% 最小二乘法拟合函数（Matlab）
 % keys 最小二乘法|数值拟合|极小值
 % license Xiao
 % type Tutor
@@ -17,7 +17,7 @@
 
 Matlab 代码如下， 需要 \verb|NelderMead.m| 函数\upref{NelMea}：
 \begin{lstlisting}[language=matlab, caption=curveFit\_test.m]
-function curveFit
+function curveFit_test
 close all;
 % 随机生成简谐曲线
 N = 20;
@@ -63,16 +63,61 @@ end
 一般参数函数的最小二乘法拟合代码为
 \begin{lstlisting}[language=matlab, caption=curveFit.m]
 % 最小二乘法拟合一元实函数，(x0,y0) 是数据点
-% fun 是函数句柄， 格式 y = fun(x, p)， 需要支持矢量输入
+% fun 是函数句柄， 格式 y = fun(x, p)， 需要支持矢量 x 输入
 % p0 是函数初始参数， double 矢量
 % 输出最优的 p 以及（局部）最小方差 s
 % 使方差 sum(abs(fun(x0, p) - y0).^2) 最小
-% p_err 是每个 p(i) 的绝对误差
+% p_err 是 NelderMead 算法中 p 的绝对误差
+% 返回方均差 err2
 
-function [p, s] = curveFit(x0, y0, fun, p0, p_err)
+function [p, err2] = curveFit(x0, y0, fun, p0, p_err)
 % Nelder-Mead 求方差最小值点
 f = @(p) sum((fun(x0, p) - y0).^2);
-p = NelderMead(f, p0, p_err);
-s = fun(x0, p);
+[p, sum_s2] = NelderMead(f, p0, p_err);
+err2 = sum_s2 / numel(x0);
 end
+\end{lstlisting}
+
+\subsection{例子： 拟合高斯函数}
+\begin{figure}[ht]
+\centering
+\includegraphics[width=10cm]{./figures/837874ae25f75b6b.png}
+\caption{高斯函数\upref{GausPD} $A\exp[-(x-x_m)^2/(2\sigma^2)]$ 的拟合（\verb|fit_gaussian_test.m|）} \label{fig_CurFit_2}
+\end{figure}
+
+\begin{lstlisting}[language=matlab,caption=fit\_gaussian.m]
+% fit a gaussian distribution
+% return mean square error
+function [A, xmid, sigma, s2] = fit_gaussian(x0, y0, p_err)
+    fun = @(x, p) p(1) * exp(-(x-p(2)).^2 / (2*p(3)^2));
+    [A, ind] = max(y0);
+    xmid = x0(ind);
+    sigma = abs(x0(end)-x0(1));
+    p0 = [A, xmid, sigma];
+    [p, s2] = curveFit(x0, y0, fun, p0, p_err);
+    A = p(1); xmid = p(2); sigma = p(3);
+end
+\end{lstlisting}
+
+\begin{lstlisting}[language=matlab,caption=fit\_gaussian\_test.m]
+% === params ===
+N = 10;
+A = 1.23; xmid = 0.12; sigma = 1.23;
+% ==============
+
+x = linspace(x0(1), x0(end), 500);
+x0 = linspace(-6, 6, N);
+y0 = A*exp(-(x0-xmid).^2/(2*sigma^2));
+y0_with_err = y0 + 0.2*(rand(1, N)-0.5);
+[A_fit, xmid_fit, sigma_fit, s2] = fit_gaussian(x0, y0_with_err, 1e-10);
+
+figure;
+plot(x, A*exp(-(x-xmid).^2/(2*sigma^2)), 'k');
+hold on;
+plot(x, A_fit*exp(-(x-xmid_fit).^2/(2*sigma_fit^2)), 'r--');
+plot(x0, y0_with_err, 'k.');
+grid on;
+xlabel x; ylabel y;
+title("mean sqr error = " + mean(s2));
+legend({'original', 'fitted', 'data'});
 \end{lstlisting}

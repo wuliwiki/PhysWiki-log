@@ -10,15 +10,18 @@
 
 \pentry{空间的张量积\upref{TPofSp}，置换的奇偶性\upref{permu}，群作用\upref{Group3}}
 
-\subsection{作为子空间的对称幂}
+\subsection{作为子空间的对称/反对称幂}
 
-向量空间 $V$ 的 $n$ 次张量幂 $V^{\otimes n}$ 上存在一个 $n$ 阶对称群 $S_n$ \upref{Perm}的\textbf{置换作用}：
+\subsubsection{对称幂}
+
+向量空间 $V$ 的 $n$ 次张量幂 $V^{\otimes n}$ 上存在一个 $n$ 阶对称群 $S_n$ \upref{Perm}的群作用：
 \begin{equation}
 \begin{aligned}
 \rho(\sigma): V^{\otimes n} &\to V^{\otimes n}~, \\
 \sum v_1 \otimes \dots \otimes v_n &\mapsto \sum v_{\sigma(1)} \otimes \dots \otimes v_{\sigma(n)}~.
 \end{aligned}
 \end{equation}
+被称为\textbf{置换作用}。
 
 \begin{example}{}
 考虑 $n = 2$，$S_2 = \mathbb{Z}/2\mathbb{Z} = \{e, (1 2)\}$，$\rho(e)$是恒等映射，而
@@ -30,7 +33,7 @@
 \end{equation}
 \end{example}
 
-特别的，我们把 $n$ 次张量幂 $V^{\otimes n}$ 的不动点集 $(V^{\otimes n})^{S_n}$ （\autoref{def_Group3_2}~\upref{Group3}）称为 $V$ 的 $n$ 阶\textbf{对称幂}，记做 $\opn{Sym}^n(V)$ 或者 $S^n(V)$。
+特别的，我们把 $n$ 次张量幂 $V^{\otimes n}$ 的不动点集 $(V^{\otimes n})^{S_n}$ （\autoref{def_Group3_2}~\upref{Group3}）称为 $V$ 的 $n$ 阶\textbf{对称幂}，记做 $\opn{Sym}^n V$ 或者 $S^n(V)$。
 
 \begin{example}{}\label{ex_vecSAS_1}
 考虑 $V = \mathbb{R}^2$；$\opn{Sym}^2(V) = \langle e_1 \otimes e_1, e_2 \otimes e_2, e_1 \otimes e_2 + e_2 \otimes e_1 \rangle$ 是一个三维矢量空间。
@@ -39,11 +42,14 @@
 我们定义（向量的）\textbf{对称积}
 \begin{equation}
 \begin{aligned}
-\cdot: V \times V &\to \opn{Sym}^2(V)~, \\
+\cdot: V \times V &\to V^{\otimes 2}~, \\
 v \cdot w &:= v \otimes w + w \otimes v~,
 \end{aligned}
 \end{equation}
 因此\autoref{ex_vecSAS_1} 中 $\opn{Sym}^2(V)$ 的基向量可以写成 $e_1 \cdot e_1, e_2 \cdot e_2$ 和 $e_1 \cdot e_2$。
+
+
+注意：我们会说一个向量\textbf{空间} $V$ 的（反）对称\textbf{幂}，以及两个\textbf{向量}的对称\textbf{积}，有时我们会把二阶对称幂 $\text{Sym}^2 V$ 称为向量空间 $V$ 的对称积，但是这并不严谨。
 
 更一般的，我们可以定义多项对称积
 \begin{equation}
@@ -64,34 +70,61 @@ v_1 \cdot v_2 \cdot v_3 = &\quad v_1 \otimes v_2 \otimes v_3 \\
 \end{aligned}
 \end{equation}
 
-\addTODO{对称积和对称幂}
+可以证明，$v_1 \cdot v_2 \cdots = v_1 \cdot v_3 \cdot v_2 \cdots = \cdots$ 在 $S_n$ 的置换作用下固定，这意味着$v \cdots w \in \text{Sym}^n V$；
 
-注释：
-
-可以证明，$v_1 \cdot v_2 \cdot v_3 = v_1 \cdot v_3 \cdot v_2 = \dots$，因此取 $V$ 的一组基 $\{e_1, \dots, e_k\}$，$\opn{Sym}^n(V)$ 的一组基为
+取 $V$ 的一组基 $\{e_1, \dots, e_k\}$，可以找到 $\opn{Sym}^n V$ 的一组基
 \begin{equation}
-\left\{ v_{i_1} \cdot \dots \cdot v_{i_n} \mid 1 \leq i_1 \leq \dots \leq i_n \leq k \right\}~,
+\left\{ e_{i_1} \cdot \dots \cdot e_{i_n} \mid 1 \leq i_1 \leq \dots \leq i_n \leq k \right\}~,
 \end{equation}
-特别的，$\dim(\opn{Sym}^n(V)) = \pmat{k + n - 1\\n}$（隔板法\upref{BarCom}）。
+特别的，$\dim(\opn{Sym}^n V) = \pmat{k + n - 1\\n}$（隔板法\upref{BarCom}）。
 
-\subsection{作为子空间的反对称幂}
+\subsubsection{反对称（交错）幂}
 
-类似的，也可以定义 $S_n$ \upref{Perm}的\textbf{（？）置换作用}：
+张量幂 $V^{\otimes n}$ 上存在另一个 $S_n$ \upref{Perm}的群作用：
 \begin{equation}
 \begin{aligned}
 \rho(\sigma): V^{\otimes n} &\to V^{\otimes n}~, \\
-\sum v_1 \otimes \dots \otimes v_n &\mapsto \sum v_{\sigma(1)} \otimes \dots \otimes v_{\sigma(n)}~.
+\sum v_1 \otimes \dots \otimes v_n &\mapsto \sum \opn{sgn}(\sigma) v_{\sigma(1)} \otimes \dots \otimes v_{\sigma(n)}~.
 \end{aligned}
 \end{equation}
+其中对于偶置换$\sigma = 1$、奇置换$\sigma = -1$；我们把它的不动点集称为 $V$ 的 $n$ 阶\textbf{反对称幂}，记做 ${\large \wedge}^n V$。
 
-\begin{example}{}
-考虑 $n = 2$，$S_2 = \mathbb{Z}/2\mathbb{Z} = \{e, (1 2)\}$，$\rho(e)$是恒等映射，而
-\begin{equation}
-\begin{aligned}
-\rho((1 2)): V \otimes V &\to V \otimes V~, \\
-\sum v_1 \otimes v_2 &\mapsto \sum v_2 \otimes v_1~.
-\end{aligned}
-\end{equation}
+\begin{example}{}\label{ex_vecSAS_2}
+考虑 $V = \mathbb{R}^2$；${\large \wedge}^2 V = \langle e_1 \otimes e_2 - e_2 \otimes e_1 \rangle$ 是一个一维矢量空间。
 \end{example}
 
-\subsection{作为商空间的对称/反对称幂}
+我们定义（向量的）\textbf{反对称积}（或称\textbf{交错积}）
+\begin{equation}
+\begin{aligned}
+\wedge: V \times V &\to V^{\otimes 2}~, \\
+v \wedge w &:= v \otimes w - w \otimes v~,
+\end{aligned}
+\end{equation}
+因此\autoref{ex_vecSAS_2} 中 ${\large \wedge}^2 V$ 的基向量可以写成 $e_1 \wedge e_2$。
+
+反对称积 $\wedge: V \times V \to V^{\otimes 2}$ 满足，
+\begin{itemize}
+\item $v \wedge w = - w \wedge v$，特别的，
+\item $v \wedge v = 0$；
+\end{itemize}
+这意味着$v \wedge w \in {\large \wedge}^2 V$。
+
+更一般的，我们可以定义多项对称积
+\begin{equation}
+\begin{aligned}
+\cdot: V^{\times n} &\to V^{\otimes n}~, \\
+v_1 \wedge \cdots \wedge v_n &:= \sum_{\sigma \in S_n} \text{sgn}(\sigma) v_{\sigma(1)} \otimes \dots \otimes v_{\sigma(n)}~,
+\end{aligned}
+\end{equation}
+
+
+
+取 $V$ 的一组基 $\{e_1, \dots, e_k\}$，可以找到 ${\large \wedge}^n V$ 的一组基
+\begin{equation}
+\left\{ e_{i_1} \cdot \dots \cdot e_{i_n} \mid 1 \leq i_1 \leq \dots \leq i_n \leq k \right\}~,
+\end{equation}
+特别的，$\dim({\large \wedge}^n V) = \pmat{k + n - 1\\n}$（隔板法\upref{BarCom}）。
+
+\subsubsection{张量积空间的对称反对称分解}
+
+\subsubsection{作为商空间的对称/反对称幂}
