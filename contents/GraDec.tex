@@ -1,0 +1,59 @@
+% 梯度下降
+% keys 梯度 下降 优化 更新
+% license Xiao
+% type Tutor
+
+\pentry{神经网络\upref{NN}}
+
+\textbf{梯度下降}（Gradient decent），或称\textbf{最速下降}，是一种一阶优化算法，是求解无约束问题最简单最经典的方法，是神经网络中最基本最常用的优化方法。
+
+梯度下降法搜索可能的权值假设空间，从而找到能够拟合训练样本的最佳权值 [1]。梯度下降法为误差反向传播算法提供了基础。而后者是多层神经网络训练的基础算法。
+
+假设有一个没有阈值的线性神经元，其输入向量为$\bvec x$，输出为$y_o$，权值向量为$\bvec w$。正如基本的感知机训练算法一样，为了能够实现权值更新，要定义一个衡量神经元输出值与样本实际值之间误差，即\textbf{训练误差}（Training error），在现代深度学习文献中，也称为\textbf{损失函数}（Loss function）。例如，可以采用最小二乘：
+\begin{equation}\label{eq_GraDec_1}
+E(\bvec w)=\frac{1}{2}\sum_i(y-y_o)^2=\frac{1}{2}\sum_i[y-y_o(\bvec x_i)]^2=\frac{1}{2}\sum_i[y-y_o(\bvec w \bvec x_i)]^2~,
+\end{equation}
+其中，$i$表示第$i$个样本。
+
+\autoref{eq_GraDec_1} 的含义是先计算出神经元对每个样本输入值产生的输出与样本输出值之间的误差，然后平方，最后把每个平方后的值相加求总和除以$2$，作为模型当前的训练误差。此时，由于在训练期间，训练样本本身是固定不变的，而模型的权值是变化的，是须要更新的。因此，训练误差是模型权值的函数。训练算法的实质就是，在一定的训练数据下，按照一定规则，反复调整权值（模型参数），从而使得训练误差达到最小。
+
+在梯度下降法中，参数更新规则是基于误差函数的梯度。为什么是基于梯度呢？从梯度的定义可知，梯度本身是一个矢量，梯度方向是函数值上升最快的方向。那么，如果每次更新权值时，都沿着梯度方向的反方向，则最有可能使得训练误差更快达到最小值。
+
+按照前面的分析，训练误差是模型权值的函数。计算该训练误差函数的梯度：
+\begin{equation}
+\nabla E(\bvec w)=[\frac{\partial E}{\partial w_0},\frac{ \partial E}{\partial w_1},\frac{\partial E}{\partial w_2},...,\frac{E}{\partial w_n}]~,
+\end{equation}
+其中，$w_0,w_1,w_2, ..., w_n$表示神经元每个输入所对应的权值，也即权值向量$\bvec w$的分量。
+
+然后，按照以下规则更新调整权值。
+\begin{equation}\label{eq_GraDec_2}
+\Delta \bvec w = - \eta \nabla E(\bvec w)~,
+\end{equation}
+
+\begin{equation}
+\bvec w \leftarrow \bvec w + \Delta \bvec w~.
+\end{equation}
+
+写成分量形式：
+\begin{equation}\label{eq_GraDec_3}
+\Delta w_i = - \eta \frac{\partial E}{w_i}~,
+\end{equation}
+
+\begin{equation}
+w_i \leftarrow w_i + \Delta w_i~.
+\end{equation}
+
+\autoref{eq_GraDec_2} 和\autoref{eq_GraDec_3} 中的$\eta$表示学习率，可以是一个固定值，也可以是自适应地随着训练过程而逐渐减小的值。学习率逐渐减小的目的是避免模型越过最小值点。
+
+比较感知机训练算法与梯度下降法。感知机训练算法在更新权值时，每个权值更新的幅度是相同的。梯度下降法更新权值时，每个权值更新调整的幅度往往是不同的，取决于训练误差对于该权值的偏导数。
+
+
+% \subsection{程序实践}
+
+
+\subsubsection{参考文献}
+\begin{enumerate}
+\item T. M. Mitchell, Machine learning. 1997.
+\item 周志华. 机器学习[M]. 北京：清华大学出版社. 2016: 97
+\item I. Goodfellow, Y. Bengio, and A. Courville, Deep learning. MIT press, 2016: 174.
+\end{enumerate}
