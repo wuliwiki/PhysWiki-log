@@ -1,0 +1,67 @@
+% 外同态
+% license Xiao
+% type Tutor
+\pentry{伴随映射\upref{AdjMap}}
+
+注：本文参考 Jier Peter 的《代数学基础》。
+
+几何代数有两种运算结构：依赖于二次型的标量积和与二次型无关的外代数形式。外同态既是线性空间的线性映射，亦是保外代数形式不变的同态映射（名副其实的\textbf{外同态}嘛）。
+\begin{definition}{}
+给定域$\mathbb F$上的几何代数$\mathcal G(V,q)$，$\mathcal G(W,q)$，及线性映射$f:V\rightarrow W$。称$f_{\wedge}:\mathcal G(V,q)\rightarrow \mathcal G(W,p)$为外同态（outermorphism）或者$\wedge$-同态，具有如下性质：
+\begin{equation}
+\begin{aligned}
+f_\wedge(1)&=1,\\
+f_\wedge|_V&=1,\\
+f_\wedge(x\wedge y)&=f(x)\wedge f(y),\quad\forall x,y\in\mathcal G(V,q)~.
+\end{aligned}
+\end{equation}
+\end{definition}
+一般几何代数之间的线性映射指的就是外同态。
+由第三条可知，外同态$f_{\wedge}$取决于线性映射$f$。由于$f_{\wedge}|_V=f$，我们可得映射复合的外同态:$(g\circ f)_{\wedge}=g_{\wedge} \circ f_\wedge$。
+
+线性空间的同态有矩阵表示，几何代数的外同态自然也有。
+要导出矩阵表示，需要利用定义的三条性质。为了方便，我们在$\mathbb R^3$下讨论。
+由于外积与空间是否退化无关，不妨选取标准正交基$\{e_i\}$。现在设$\mathbb R^3$上有线性映射$f$，对应矩阵表示如下：
+\begin{equation}
+F_b^a=\left(\begin{array}{lll}
+a & b & c \\
+d & e & f \\
+h & i & j
+\end{array}\right)~.
+\end{equation}
+第一列到第三列分别对应的标准正交基为$e_1,e_2,e_3$。
+与之对应，可以排列外积的$basis$如下：
+$$
+\left\{e_{\varnothing}, e_{\{1\}}, e_{\{2\}}, e_{\{3\}}, e_{\{1,2\}}, e_{\{1,3\}}, e_{\{2,3\}}, e_{\{1,2,3\}}\right\}~.
+$$
+根据第三条，我们可以得到这组基对应的外同态矩阵表示为
+
+\begin{equation}
+F_B^A=\left(\begin{array}{cccccccc}
+1 & 0 & 0 & 0 & 0 & 0 & 0 & 0 \\
+0 & a & b & c & 0 & 0 & 0 & 0 \\
+0 & d & e & f & 0 & 0 & 0 & 0 \\
+0 & h & i & j & 0 & 0 & 0 & 0 \\
+0 & 0 & 0 & 0 & a e-b d & a f-c d & b f-c e & 0 \\
+0 & 0 & 0 & 0 & a i-b h & a j-c h & b j-c i & 0 \\
+0 & 0 & 0 & 0 & d i-e h & d j-f h & e j-f i & 0 \\
+0 & 0 & 0 & 0 & 0 & 0 & 0 & \operatorname{det} F_b^a
+\end{array}\right) ~.
+\end{equation}
+具体计算以第五列为例,下标从小到大为排列的正方向：
+\begin{equation}
+\begin{aligned}
+f_\wedge(e_1\wedge e_2)&=f(e_1)\wedge f(e_2)\\
+&=(a e-b d)e_1 e_2+(a i-b h)e_1 e_3+ (d i-e h)e_2 e_3~.
+\end{aligned}
+\end{equation}
+因此每行每列的元素对应一个行列式。如果列的基为a,b，行的基为c,d，对应从$F^a_b$矩阵里选第a,b列，c,d行来求行列式。
+
+从矩阵表示里，我们可以清楚看到外同态具有明显的分次结构，保外积使得矩阵为分块对角矩阵，每一块都是行标和列标同次的部分。
+\subsubsection{外同态的伴随}
+通过定义二次型，任何线性映射都可以导出其伴随映射。外同态是几何代数上的线性映射，本节证明，其导出的伴随映射亦是外同态。也就是说，假设$f:V\rightarrow W$，$f_{\wedge}\,^*$保$W$上的外积不变。更准确来说：$f_{\wedge}\,^*=f^*\,_{\wedge}$。
+
+首先，由
+\begin{exercise}{}
+给定几何代数$\mathcal G(V,q)$，线性变换$f:V\rightarrow V$保二次型不变。证明$f^*=f^{-1}$，且对于任意$x,y\in\mathcal G(V,q)$有$f_{\wedge}(x)*f_{\wedge}(y)=x*y$
+\end{exercise}

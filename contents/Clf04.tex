@@ -7,7 +7,7 @@
 \issueTODO
 \end{issues}
 
-本文参考Jie Peter的《代数学基础》，以下默认讨论的域的特征不为2。
+本文参考 Jier Peter 的《代数学基础》，以下默认讨论的域的特征不为 2。
 
 \begin{definition}{}
 在几何代数$\mathcal G(V,q)$上，称由$V$中向量做外积得到的元素为\textbf{简单多重向量(simple multivector)}，或简称为\textbf{单向量}。英文常简称之为\textbf{blade}。
@@ -30,7 +30,7 @@ k-向量与k-单向量不是等同的概念。比如2-向量$2e_1e_2+3e_3e_4$就
 
 proof.
 
-取$W$的正交基$\{e_1,e_2,...,e_k\}$。将其拓展为$V$的一组基
+取$W$的正交基$\{e_1,e_2,...,e_k\}$,将其拓展为$V$的一组基
 \begin{equation}
 \{e_1,e_2,...,e_k\}\cup\{v_{k+1},v_{k+2}...v_{dim \,V}\}~,
 \end{equation}
@@ -38,6 +38,76 @@ proof.
 \begin{equation}
 u_r=v_r-\sum ^{k}_{i=1}\beta_q(v_r,e_i)q(e_i)^{-1}e_i~,
 \end{equation}
-可以验证$\{e_1,e_2,...,e_k\}\cup\{u_{k+1},...,u_{dim\,V}\}$构成全空间的一组正交基。且显然，该正交化依赖于子空间的非退化性（$q(e_i)$作为分母不可为$0$）。
+可以验证$\{e_1,e_2,...,e_k\}\cup\{u_{k+1},...,u_{dim\,V}\}$构成全空间的一组正交基。且显然，该正交化能实施的前提在于子空间的非退化性（$q(e_i)$作为分母不可为$0$）。
 
-我们可以构建子空间退化的反例。例如
+我们可以构建子空间退化的反例。例如令$\{e_1,e_2,e_3\}$为三维线性空间$V$的一组基。这组基对应的二次型是：
+\begin{equation}
+q_{ij}=((1\,0\,0)\quad (0\,0\,1)\quad(0\,1\,1))~,
+\end{equation}
+
+回忆二次型的表示方式，该双下标二次型表示为行矩阵的行矩阵。由上式得：$$q(e_1,e_2)=q(e_1,e_3)=0,q(e_1,e_1)=q(e_2,e_3)=q(e_3,e_3)=1,q(e_2,e_2)=0~.$$
+$e_1$和$e_2$是一组正交基，但其张成的空间无法扩展为全空间的正交基。这是由子空间的退化性导致的。反设存在$v\in V$并与$e_1,e_2$构成一组正交基，且$v=ae_1+be_2+ce_3$，由正交性解得$a=c=0$，则该向量与$e_2$平行，所以假设不成立。
+
+用单向量可以表示$V$的子空间。比如上例，$e_1$与$e_2$张成的子空间可以表示为$e_1\wedge e_2$。
+\begin{definition}{}
+给定几何代数$\mathcal G(V,q)$。对于\textbf{非零}单向量$A=v_1\wedge v_2\wedge ...\wedge  v_k$，记$\bar{A}=Span\{v_1,v_2\dots,v_k\}$。
+\end{definition}
+这个定义是合理的。非零单向量意味着$\{v_i\}$是线性无关组，对应的子空间是唯一的，取$\bar A$上的任意一组基做外积，结果必然是$kA,k\in\mathbb F$，$k$为渡矩阵相应的行列式。
+\begin{theorem}{}
+取几何代数$\mathcal G(V,q)$。如果$A=v_1\wedge v_2\wedge...\wedge v_k \neq 0 $是其上一个\textbf{非零}单向量，则对于任意$u\in V$有
+\begin{equation}
+u\wedge A=0\Longleftrightarrow  u\in Span\{v_1,v_2,...,v_k\}~.
+\end{equation}
+\end{theorem}
+Proof.把$u$写为基的线性组合，由外积的幂零性可知，必要性成立。下面证明充分条件。
+
+实对称矩阵总可以对角化。因此总可以把$q$化为正交基$\{o_i\}^n_i=1$对角矩阵，把该矩阵下为0的对角元写为$1$，令其为新的二次型$p$。
+
+建立\textbf{线性映射}$\mathcal G(V,q)\rightarrow \mathcal G(V,p)$，使得$f(o_i)=o_i$，且有$f(A\wedge B)=f(A)\wedge f(B),\forall A,B\in\mathcal G(V,q)$。
+
+利用这组正交基计算可得：$A\wedge B=0\Longleftrightarrow f(A)\wedge f(B)=0$。
+取$\bar A$上一组正交基$\{e_i\}^k_{i=1}$，并扩张成全空间的正交基，非退化性使得这样的扩张总存在。利用这组基计算，我们有：$f(u)\wedge f(A)=0\Rightarrow f(u)\in\overline{f(A)}=f(\bar{A})$
+综合以上讨论便有
+
+\begin{equation}
+\begin{aligned}
+u\wedge A=0 &\Longleftrightarrow f(u)\wedge f(A)=0\\
+&\Longrightarrow f(u)\in\overline{f(A)}=f(\bar{A})\\
+&\Longleftrightarrow u\in\bar{A}~.
+\end{aligned}
+\end{equation}
+
+证明这条定理的关键在于需要一组从子空间$\bar A$扩张到全空间的正交基，因而需要额外讨论退化二次型的情况。考虑到外积形式和元素所属关系不随二次型的改变而改变，所以我们可以通过定义非退化二次型和保外积的线性映射来证明这条定理。这样的线性映射是存在的，比如我们可以定义$f(A\wedge B)=A\wedge B$，加上$f(o_i)=o_i$的条件，可以证明这个映射保外积不变。
+
+下面介绍一条联系外积和Clifford积的定理。
+\begin{theorem}{}
+每个\textbf{非零}k-单向量都是k个向量的Clifford积。
+\end{theorem}
+给定几何代数$\mathcal G(V,q)$，取$\bar A$上关于$q|_{\bar A}$上的一组正交基$\{e_i\}^k_{i=1}$，并由外积定义得：
+\begin{equation}
+A\propto e_1\wedge e_2\wedge...\wedge e_k=e_1e_2...e_k~,
+\end{equation}
+准确而言，$A$的每个向量在写为这组基的线性组合后有：
+
+\begin{equation}
+A=\bigwedge ^k_{i=1}\left(\sum^k_{j=1}a^j_ie_j\right)=\mathrm{det}\,a^j_ie_1 e_2...e_k~,
+\end{equation}
+
+准确来说，证明里“由外积定义得”A的外积形式对应几何代数$\mathcal G(\bar A,q|_{\bar A})$，不过只要将该几何代数同构于$\mathcal G(V,q)$的子代数，依然能得到同样的外积形式。
+该定理表明，k个线性无关的向量做外积等同于k个向量的Clifford积。
+
+任意向量的Clifford积则可以写为外积和二次型的线性组合。
+
+例如，对应于基$\{x,y\}$的二次型$q(1,-1)$，有$(ax+by)(cx+dy)=(ac-bd)+(ad-bc)x\wedge y$
+
+
+由以上定理易得：
+\begin{corollary}{}
+对于任意单向量$A$，$A^2$为标量。
+\end{corollary}
+\begin{corollary}{}
+对于任意单向量$A$，若$A^2\neq 0$，则$A$有逆元
+\begin{equation}
+A^{-1}=\frac{A}{A^2}~.
+\end{equation}
+\end{corollary}

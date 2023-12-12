@@ -21,6 +21,23 @@
 \item Ubuntu 安装： \verb|sudo apt install libhdf5-dev|
 \end{itemize}
 
+常识：
+\begin{itemize}
+\item \verb|DataSet|：文件中的一个矩阵
+\item \verb|DataSet::write(内存地址, 元素类型, 内存矩阵DataSpace, 文件矩阵DataSpace)|：把内存中一个矩阵的一部分（用 \verb`DataSpace` 表示）写入文件中一个矩阵的一部分
+\item \verb|DataSpace|：内存中或文件中矩阵的 layout
+\item \verb|DataSpace::selectHyperslab| 选取一个子矩阵
+\item \verb`hsize_t` 用于表示矩阵尺寸的整型
+\item 文件中的矩阵只支持行主序（row major）储存
+\item 对内存中的 row major 密矩阵，可以直接用一个 \verb`write` 命令写整个矩阵
+\item 对内存中的 column major 矩阵，需要用 Hyperslab 一列一列的写
+\item 更灵活地，可以每次写入一个任意尺寸子矩阵，甚至单个元素。
+\item 支持的矩阵元类型： \verb`H5::PredType::NATIVE_DOUBLE`（双精度）， \verb`NATIVE_CHAR` 有符号字符， \verb`NATIVE_UCHAR` 无符号字符， \verb`NATIVE_INT`， \verb`NATIVE_UINT`， \verb`NATIVE_FLOAT`
+\item hdf 并不直接支持复数矩阵元，一般需要写成两个矩阵再合并。 或者把实矩阵的行数乘以 2， 每两个相邻的矩阵元表示一个复数。
+\item \verb`hdf5` 支持文件夹的概念，也就是一个数据文件中可以有多层文件夹。 所以存矩阵最通用的办法可能就是一个矩阵一个文件夹，数据全部存成一个一维矢量，然后用额外的 dataset 表示行数、列数等额外信息。
+\end{itemize}
+
+
 \begin{lstlisting}[language=cpp,caption=test\_hdf5.cpp]
 #include <iostream>
 #include <vector>

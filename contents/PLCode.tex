@@ -1,0 +1,65 @@
+% 偏振光三维视角代码
+% license CCBYSA4
+% type Wiki
+
+
+\begin{issues}
+\issueDraft
+\end{issues}
+
+代码如下供参考，对于其中的参数 \verb`phi`，原文中生成的图片，右旋圆偏振取了 $\pi/2$、右旋椭圆偏振取了 $\pi/4$、线偏振取了 $\pi$。
+
+\addTODO{需要补充插图}
+
+\begin{lstlisting}[language=Mathematica]
+phi = \[Pi];(*delta Phi*)
+
+r = \[Pi];(*渲染范围“半径”*)
+zSup = 4 r;(*z 上界*)
+zInf = -r; (*z 下界*)
+
+g3d[t_] := Graphics3D[
+   {
+    Table[{Gray, 
+      Line[{{-r, y, 0}, {r, y, 0}}]}, {y, {-r, -r/2, r/2, r}}],
+    Table[{Gray, 
+      Line[{{x, -r, 0}, {x, r, 0}}]}, {x, {-r, -r/2, r/2, r}}],
+    Table[{Gray, Line[{{-r, 0, z}, {r, 0, z}}]}, {z, r, zSup, r}],
+    Table[{Gray, Line[{{x, 0, 0}, {x, 0, zSup}}]}, {x, {-r, r}}],
+    Table[{Gray, Line[{{0, -r, z}, {0, r, z}}]}, {z, r, zSup, r}],
+    Table[{Gray, Line[{{0, y, 0}, {0, y, zSup}}]}, {y, {-r, r}}], Red,
+     Arrow[{{0, 0, 0}, {r Cos[t], r Cos[t + phi], 0}}],
+    Table[{Gray, Thin, 
+      Line[{{0, 0, z}, {r Cos[t + (z - zSup)], 
+         r Cos[t + phi + (z - zSup)], z}}]}, {z, 0, zSup, 2 \[Pi]/90}],
+    
+    PlotRange -> {{-r - r/4, r + r/4}, {-r - r/4, r + r/4}, {zInf, 
+       zSup}}
+    }, 
+   Boxed -> False, AxesOrigin -> {0, 0, 0}, Ticks -> None, 
+   ViewPoint -> {2, 2, 2}, 
+   ViewVertical -> {0, 1, 0}];  (*密布光矢，即当前时刻光矢+阴影*)
+
+p3dObject[t_] := 
+ ParametricPlot3D[{r Cos[u], r Cos[u + phi], zSup}, {u, 0, 2 Pi}, 
+  PlotStyle -> {Pink, Dashed}];(*轨迹投影*)
+p3dLocus[t_] := 
+ ParametricPlot3D[{r Cos[t + (z - zSup)], r Cos[t + phi + (z - zSup)],
+    z}, {z, 0, zSup}, PlotStyle -> {Red, Thick}];(*轨迹*)
+p3dX[t_] := 
+ ParametricPlot3D[{x, 0, z}, {x, -r, r}, {z, 0, zSup}, Mesh -> None, 
+  PlotStyle -> {Blue, Opacity[0.025]}];
+p3dY[t_] := 
+ ParametricPlot3D[{0, y, z}, {y, -r, r}, {z, 0, zSup}, Mesh ->  None, 
+  PlotStyle ->  {Green, Opacity[0.025]}]; (*x、y平面*)
+p3dZ[t_] := 
+ ParametricPlot3D[{f, g, zSup}, {f, -r - r/4, r + r/4}, {g, -r - r/4, 
+   r + r/4}, Mesh -> None, 
+  PlotStyle -> {Purple, Opacity[0.2]}];(*轨迹投影所在平面*)
+
+image[t_] := 
+ Show[g3d[t], p3dX[t], p3dY[t], p3dLocus[t], p3dObject[t], 
+  p3dZ[t]](*合并*)
+\end{lstlisting}
+
+可以使用 \verb`Export` 来输出 gif 格式动画，亦或直接使用 \verb`image` 函数来输出图片。

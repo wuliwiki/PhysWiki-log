@@ -219,13 +219,13 @@ network:
 \item 所以两个不同的 NAT 后面的电脑是可以 P2P 连接的， 但是首先要通过一个公网服务器建立连接， 这几乎是常规操作了（猜测 teamviewer 应该就是这个原理）
 \item 具体设置见下文
 \item 比如说网关主机（Ubuntu 22.04）上有两张网卡， 一个 ethernet 连接 LAN， 一个 wifi 网卡连接外网。 要使 LAN 中的主机可以访问 internet， 需要在网关主机上设置 NAT， 参考\href{https://unix.stackexchange.com/questions/575178/sharing-wifi-internet-through-ethernet-interface}{这里}的 Setup a NAT 步骤（亲测成功）：
-\item \verb|/etc/ufw/sysctl.conf| 中注释掉 \verb|net.ipv4.ip_forward=1|.
+\item \verb|/etc/ufw/sysctl.conf| 中注释 \verb|net/ipv4/ip_forward=1|.
 \item \verb|/etc/default/ufw| 中设置 \verb|DEFAULT_FORWARD_POLICY="ACCEPT"|
-\item \verb|/etc/ufw/before.rules| 中在 filter rules 之前添加如下几行：
+\item \verb|/etc/ufw/before.rules| 中在 \verb`*filter` 之前添加如下几行：
 \begin{lstlisting}[language=none]
 *nat
 :POSTROUTING ACCEPT [0:0]
--A POSTROUTING -o 无线网卡名 -j MASQUERADE
+-A POSTROUTING -o 链接互联网的网卡名如wlo1或enp3s0 -j MASQUERADE
 COMMIT
 \end{lstlisting}
 \item \verb|sudo systemctl restart ufw|， \verb|sudo ufw enable|。 注意如果 disable 的话， 就访问不了外网了。

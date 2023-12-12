@@ -1,10 +1,7 @@
 % Clifford 代数的基本运算
 % license Xiao
 % type Tutor
-
-
-
-
+\pentry{Clifford代数\upref{clf01}}
 本节利用集合语言，介绍Clifford代数上的二元线性运算\footnote{本文参考Jie Peter《代数学讲义》}。通过线性性可以将这些运算推广到Clifford代数的其他元素上。我们也会证明，更改线性空间的正交基并不会改变运算的形式。
 \subsubsection{外积与正交基}
 \begin{definition}{外积}
@@ -18,16 +15,20 @@ A B,\quad& A \cap B=\varnothing \\
 并称之为外积（outer product or exterior product）或楔积（wedge product）。我们可以通过线性性将该运算拓展到任意元素之间的外积。
 \end{definition}
 
-在上一节，我们说过，集合语言的阐述实际上是指定了线性空间的正交基。正交性体现为CLifford积的反对称性。因而对于正交基$\{\mathrm {e_i}\}$，我们有$\mathrm{e_i\wedge e_j=-e_j\wedge e_i}$。所以对线性空间的任意两个向量作外积，反对称性亦能满足。
 
-不仅如此，基底之间的正交关系不随线性变换而改变。例如某线性空间下有两组正交基$\{e_i\},\{\theta_i\}$，且$\mathrm {\theta_1=a^ie_i,\theta_2=b^ie_i}$，那么由线性性我们可以展开得到后一组基的Clifford积：
+Clifford积的结合性使得外积也具有\textbf{结合性}，读者可以自行验证。由运算的线性可知，外积还具有\textbf{幂零性}，即任意$v\in V,v\wedge v=0$。
+在上一节，我们说过，集合语言的阐述实际上是指定了线性空间的正交基。正交性体现为CLifford积的反对称性。因而对于\textbf{正交基}$\{\mathrm {e_i}\}$，我们有$\mathrm{e_i\wedge e_j=-e_j\wedge e_i}$。由外积的线性性可得，在给定\textbf{正交基}后，任意两个向量做外积，结果具有\textbf{反对称性}。也就是说，外积的反对称性是依赖于正交基的。
+
+
+在幂零性和正交性的保证下，正交基的外积表现不随正交变换而改变。例如某线性空间下有两组正交基$\{e_i\},\{\theta_i\}$，且$\mathrm {\theta_1=a^i e_i,\theta_2=b^i e_i}$.那么我们由线性性和$\{e_i\}$的正交关系得到：$\theta_i\wedge\theta_i=0$，而且有：
 \begin{equation}
 \left\{\begin{array}{l}
 \theta_1 \theta_2=\left(a^i e_i\right) \wedge\left(b^j e_j\right)+\sum_k\left(a^k b^k s(e_k)\right) \\
 \theta_2 \theta_1=\left(b^j e_j\right) \wedge\left(a^i e_i\right)+\sum_k\left(b^k a^k s(e_k)\right)
 \end{array}\right.~,
 \end{equation}
-$a^i,b^i$是过渡矩阵里的两个列向量。由于从标准正交基到标准正交基的矩阵为正交矩阵，因而这两个列向量正交，上式右端第二项都为0。所以我们依然有$\theta_1\theta_2=-\theta_2\theta_1$
+$a^i,b^i$是过渡矩阵里的两个列向量。
+正交性要求$\theta_1\theta_2=-\theta_2\theta_1$，对应$\theta_i\wedge\theta_j=-\theta_j\wedge\theta_i$。从上式可以看到，基的正交性等价于\textbf{正交变换条件}$\sum_k(a^k b^k s(e_k))=0$，这其实是\textbf{正交矩阵在任意线性空间的推广}。在配备了正定二次型的欧几里得空间中，这意味着正交矩阵定义为列向量组中任意两个列向量内积为$0$。
 \subsubsection{左内积}
 \begin{definition}{}
 给定Clifford代数$\mathrm {Cl(X,R,s)}$，对于$A,B\in 2^x$，定义
@@ -51,7 +52,7 @@ A B,\quad & A \supseteq B ; \\
 下面我们只研究左内积。
 
 与外积相同，左内积也具有“正交基形式不变性”。
-例如，在同一线性空间中选取两组正交基，$\{e_i\}$,$\{\theta _i\}$，且$\mathrm {\theta_1=a^ie_i,\theta_2=b^ie_i},\theta_3=c^ie_i$。那么我们有：
+例如，在同一线性空间中选取两组正交基，$\{e_i\}$,$\{\theta _i\}$，且$\mathrm {\theta_1=a^i e_i,\theta_2=b^i e_i},\theta_3=c^i e_i$。那么我们有：
 \begin{equation}
 \begin{aligned}
 \theta_1\left\llcorner\theta_2\right. & =\left(a^i e_i\right)\left\llcorner\left(b^j e_j\right)\right. \\
@@ -61,11 +62,13 @@ A B,\quad & A \supseteq B ; \\
 \begin{exercise}{}
 证明：$\theta_1\left\llcorner(\theta_2\theta_3)\right.$=0。提示：证明每一个分量为0.
 \end{exercise}
-从上述证明里，我们也可以清晰地看到，左内积的结果可以给出不同的分次结构：
+左内积可以给出几何代数上的分次结构：
+\begin{exercise}{}
+对于任意k-向量A和s-向量B，证明
 \begin{equation}
 A\left\llcorner B=\langle A B\rangle_{s-k} .\right.~,
 \end{equation}
-
+\end{exercise}
 \subsubsection{标量积}
 标量积是一种特殊情况，即左右内积相等。
 \begin{definition}{标量积}
@@ -91,6 +94,8 @@ g_{A B}=e_A*e_B=\left\{\begin{aligned}
 \end{theorem}
 
 Proof. 按照标量积定义，$A \neq B$时，$g_{AB}$=0。$A = B$时，$\frac{|A|(|A|-1)}{2}$是$e_B$进行对换，使得$e_i$相邻所需要跨过的总次数。比如从$e_1e_2e_3e_1e_2e_3$变换到$e_1e_1e_2e_2e_3e_3$的总步数。根据正交性，每一次变换位置都需要乘以-1。得证。
+
+对于任意$v_1,v_2\in V$，线性运算使得Clifford积可以分解为依赖于二次型的标量积和与二次型无关的外积：$v_1v_2=v_1* v_2+v_1\wedge v_2$
 
 \subsubsection{投影，对合，反转以及共轭}
 \begin{definition}{投影}
@@ -129,4 +134,53 @@ A^{\square}=A^{\star \dagger}~,
 \begin{exercise}{}
 已知$\mathcal G(\mathbb R^{0,1})\cong \mathbb C,G(\mathbb R^{0,2})\cong \mathbb H$，证明：按次对合和Clifford共轭在$\mathbb C$上就是复共轭，而Clifford共轭在$\mathbb H$上是四元数共轭
 \end{exercise}
+\subsubsection{常见结论}
+在实际运算的过程中，我们有时候会遇到多个元素通过多个运算结合在一起，下面给出一些结合相关的性质。
+\begin{exercise}{}
+对于$x,y,z\in\mathrm {CL(X,R,s)}$，证明
+\begin{equation}\label{eq_clf02_1}
+\left\{\begin{aligned}
+x \wedge(y \wedge z) & =(x \wedge y) \wedge z ;\\
+x\llcorner(y\lrcorner z) & =(x\llcorner y)\lrcorner z ;\\
+x\llcorner(y\llcorner z) & =(x \wedge y)\llcorner z; \\
+x *(y\llcorner z) & =(x \wedge y) * z ; \\
+1 \wedge x & =x \wedge 1=1\llcorner x=x\lrcorner 1=x .
+\end{aligned}\right.~
+\end{equation}
+\end{exercise}
+
+思路是先证明对基成立，才通过线性运算扩张。
+此外，还有以下可以简化运算的结论。
+\begin{exercise}{}
+对于任意$x,y\in\mathrm {CL(X,R,s)}$和$v\in \mathrm{CL^1(X,R,s)}$，证明
+\begin{equation}
+\left\{\begin{aligned}
+v x&=v\llcorner x+v \wedge x ; \\
+v \wedge x&=x^{\star} \wedge v=\frac{1}{2}\left(v x+x^{\star} v\right) ; \\
+v\llcorner x&=-x^{\star}\lrcorner v=\frac{1}{2}\left(v x-x^{\star} v\right) ; \\
+v\llcorner(x y)&=\left(v\llcorner x) y+x^{\star}(v\llcorner y) .\right.
+\end{aligned}\right.~
+\end{equation}
+\end{exercise}
 \subsubsection{几何代数上的对偶}
+\begin{definition}{}
+给定\textbf{非退化}几何代数\mathcal G(V,q)，对$x\in\mathcal G(V,q)$定义$x^c=xI^{-1}$，称为$x$的\textbf{对偶（dual）}。
+\end{definition}
+定义里可见，由于要求体积形式有逆元，元素的对偶存在性依赖于非退化的几何代数。如果满足非退化条件，元素的外积也有其对应的对偶空间的外积。
+\begin{definition}{}
+定义\textbf{对偶外积（dual outer product）}，用符号$\vee$表示，使得
+\begin{equation}
+x\vee y=(x^c\wedge y^c)^c~.
+\end{equation}
+\end{definition}
+对偶定义使得左内积和外积也存在对偶关系。
+\begin{theorem}{}\label{the_clf02_1}
+给定非退化的几何代数$\mathcal G(V,q)$，任取其元素$x,y$，则有
+\begin{equation}
+x\llcorner y=(x\wedge y^c)^c~.
+\end{equation}
+\end{theorem}
+proof.
+只需要证明$x\llcorner y^c=(x\wedge y)^c$。
+
+$x\llcorner y^c=x\llcorner (yI^{-1})=x\llcorner (y\llcorner I^{-1})=(x\wedge y)\llcorner I^{-1}=(x\wedge y)^c$

@@ -1,4 +1,4 @@
-% 线性映射的对称/反对称幂
+% 线性映射的张量积
 % keys 对称积|反对称积|对称幂|反对称幂
 % license Xiao
 % type Wiki
@@ -7,12 +7,107 @@
 \issueDraft
 \issueOther{可以对照张量的对称化和交错化\upref{SIofTe}进行阅读}
 \end{issues}
+\pentry{向量空间的张量积\upref{TPofSp}}
+
+\subsection{线性映射的张量积}
+
+两个线性映射 $f: V \to W$，$g: V' \to W'$ 之间可以定义它们的张量积\footnote{更严格的写法应该是 $\sum_i v_i \otimes v_i' \mapsto \sum_i f(v_i) \otimes g(v_i')$，不过本文的所有映射都是线性映射，所以只需要定义一组基的线性变换即可。}
+\begin{equation}
+\begin{aligned}
+f \otimes g: V \otimes V' &\to W \otimes W', \\
+v \otimes v' &\mapsto f(v) \otimes g(v')~.
+\end{aligned}
+\end{equation}
+此时 $f \otimes g \in L(V \otimes V', W \otimes W')$。
+
+从另一个角度来说，全体 $V$ 到 $W$ 的线性映射的集合 $L(V, W)$ 是一个向量空间（参考\autoref{sub_LinMap_1}~\upref{LinMap}），因此可以定义两个线性映射空间之间的张量积 $L(V, W) \otimes L(V', W')$；用这种方法我们也可以定义线性映射的张量积，此时 $f \otimes g \in L(V, W) \otimes L(V', W')$。这两种定义并不完全等价。
+
+\addTODO{考证中}
+
+要构造两种张量积之间的对应关系，我们需要考虑双线性映射
+\begin{equation}
+\begin{aligned}
+L(V, W) \times L(V', W') &\to L(V \otimes V', W \otimes W')~, \\
+(f, g) &\mapsto f \otimes_1 g~,
+\end{aligned}
+\end{equation}
+其中 $f \otimes_1 g \in L(V \otimes V', W \otimes W')$，是第一种张量积。
+
+\addTODO{张量积的万有性质}
+
+由于这个映射是双线性的，根据张量积的万有性质（TODO）可以得到一个唯一的映射
+\begin{equation}
+\begin{aligned}
+\iota: L(V, W) \otimes L(V', W') &\to L(V \otimes V', W \otimes W')~, \\
+f \otimes_2 g &\mapsto f \otimes_1 g~,
+\end{aligned}
+\end{equation}
+其中 $f \otimes_2 g \in L(V, W) \otimes L(V', W')$ 是第二种张量积。
+
+\begin{theorem}{}
+线性映射空间的张量积是张量积的线性映射空间的子集，即\footnote{用更严谨的说法是，它们之间存在一个（典范的）线性映射}
+\begin{equation}
+L(V, W) \otimes L(V', W') \subseteq L(V \otimes V', W \otimes W')~.
+\end{equation}
+如果 $V, W$ 是有限维度向量空间，那么上述包含关系相等。
+\end{theorem}
+
+这个定理中，我们把 $f \otimes_2 g$ 和 $\iota(f \otimes_2 g) = f \otimes_1 g$ 视作了相等，我们要证明的是 $\iota$ 是一个单射。
+
+\textbf{证明：}
+如果 $f \otimes_1 g = \iota(f \otimes_2 g) = 0$，这意味着对任意 $v \in V, v' \in V'$，$f(v) \otimes g(v') = (f \otimes_1 g)(v \otimes v') = 0$，即 $f(v)$ 或者 $g(v')$ 等于 $0$；假设 $f$ 不恒等于零，即存在 $v_0 \in V$ 使得 $f(v) \neq 0$，此时对任意的 $v' \in V'$ 我们都有 $g(v') = 0$，换言之 $g = 0$，我们得到了 $f$ 或者 $g$ 中至少有一个为零映射，因此 $f \otimes_2 g = 0$。证得 $\iota$ 是单射。
+
+进一步的，假设 $V, V', W, W'$ 都是有限维度向量空间，维度分别为 $n, n', m, m'$，我们有
+\begin{equation}
+\dim(L(V, W) \otimes L(V', W')) = n n' m m' = \dim(L(V \otimes V', W \otimes W'))~
+\end{equation}
+根据 Rank–nullity 定理可得 $\iota$ 是一个同构映射。
+\addTODO{张量积维度、Rank–Nullity 定理链接}
+
+\textbf{证明结束。}
+
+\begin{example}{无限维度的反例}
+\addTODO{TODO}
+$V = \left\langle v_1, \dots, v_n, \dots \right\rangle, V' = W = W' = \mathbb{F}$，
+\end{example}
+
+\subsubsection{用矩阵表示张量积}
+
+\addTODO{Kronecker product}
+
+\subsubsection{张量积与映射的运算}
+
+\addTODO{张量积的结合率与交换率}
+
+\addTODO{直积、复合}
+
+\subsection{对称/反对称多线性映射}
 
 \pentry{向量空间的对称/反对称幂\upref{vecSAS}}
 
-\subsection{线性映射的对称/反对称积}
+回忆\autoref{sub_vecSAS_1}~\upref{vecSAS}中我们定义的 $S_n$ 置换作用，
+\begin{equation}
+\begin{aligned}
+\rho(\sigma): V^{\times n} &\to V^{\times n}~, \\
+(v_1, \cdots, v_n) &\mapsto (v_{\sigma(1)}, \cdots, v_{\sigma(n)})~,
+\end{aligned}
+\end{equation}
+我们称一个多元线性映射 $f: V^{\times n} (= V \times \cdots \times V) \to W$ 为\textbf{对称多线性映射}（简称\textbf{对称映射}）如果它是 $(S_n, \rho)$-不变的（参考\autoref{def_GrpRep_1}~\upref{GrpRep}），即对任意置换 $g \in S_n$
+\begin{equation}
+f(v) = f(\rho(g) v)~,
+\end{equation}
+由于对称群的性质，我们可以把它简化为，交换任意两项 $v_i, v_j$ 后函数值保持不变：
+\begin{equation}
+f(\cdots, v_i, \cdots, v_j, \cdots) = f(\cdots, v_j, \cdots, v_i, \cdots)~.
+\end{equation}
+
+\addTODO{将 $G$-不变映射的定义改写到 $G$-空间}
+
+\addTODO{改写到张量幂和对称幂}
+
+
+\subsection{线性映射的对称/反对称幂}
 
 
 
-\subsection{线性映射的对称幂}
 

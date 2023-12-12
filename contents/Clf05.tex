@@ -1,0 +1,123 @@
+% 单向量的运算
+% license Xiao
+% type Tutor
+
+
+\begin{issues}
+\issueTODO
+\end{issues}
+注：本文参考 Jier Peter 的《代数学基础》。
+
+在上一节，我们介绍了单向量的基本运算。本节着重讨论外积、对偶以及左内积运算在单向量集合上的性质，即这些运算在单向量集合上是否封闭，以及运算结果与子空间的关系。需要注意的是，左内积以及对偶运算往往需要我们取一组正交基，因为用集合语言讨论非常方便，所以对于退化二次型，我们需要仔细检验某些结论是否成立。
+\subsubsection{互反基}
+由于几何代数定义在线性空间上，所以我们也可以定义“对偶基”的概念。稍后我们可以发现，对单向量取对偶后其子空间和“对偶基”的关系。
+
+\begin{definition}{}
+给定\textbf{非退化}的几何代数$\mathcal G(V,q)$，$\{e_1,e_2...e_k\}$是$V$上的一组基，则可以定义该基的\textbf{互反基(reciprocal basis)}$\{e^1,e^2...e^k\}$，使得
+\begin{equation}
+e^i*e_j=\delta^i_j~.
+\end{equation}
+\end{definition}
+reciprocal也可翻译为“互逆”、“对偶”和“倒易”等。
+内积关系是二次型确定的，从定义式可见$e^i$与$e_i$是线性关系。通过二次型确定$V$的对偶空间$V^*$，这两个空间共享一组基但二次型不同。
+
+非退化的几何代数里总存在标准正交基。在取了标准正交基后，其互反基实际上就是这组基本身：$e^i=e_i$。因此，互反基相当于利用二次型，将对偶空间同构回原空间。
+假设$\{x_i\}$为一般基向量组，考虑过渡矩阵为$T^i_j$的基变换：$y_i=T^j_ix_j$，由互反基与普通基的关系得：
+\begin{equation}
+y^j=S^j_ix^i~,
+\end{equation}
+其中$S^j_i$为$T^j_i$的逆矩阵。
+
+\subsubsection{运算封闭性}
+利用互反基的概念，我们可以表示任意单向量的对偶。下面我们来验证，如果$A$是单向量，那么$A^c=\bar A^{\perp}$
+\begin{theorem}{}\label{the_Clf05_1}
+给定\textbf{非退化}的几何代数$G(V,q)$。任取\textbf{非零}单向量$A=v_1\wedge v_2...\wedge v_k$，由于其非零，可以拓展为$V$上的一组基$\{v_1,v_2...v_k,v_{k+1}...v_n\}$，则有
+\begin{equation}
+A^c\propto v^{k+1}\wedge v^{k+2}...\wedge v^n~,
+\end{equation}
+\end{theorem}
+其中，$\{v^i\}$是$\{v_i\}$的互反基。
+
+proof.
+由几何代数非退化，可以取$\bar A$上的一组标准正交基$\{e_i\}^k_i=1$，并扩展为全空间的标准正交基$\{e_i\}^n_i=1$。由互反基定义得，$v^{k+m}$垂直于$\bar A$.则
+\begin{equation}
+\begin{aligned}
+A&\propto e_1\wedge e_2...\wedge e_k\\
+v^{k+1}\wedge v^{k+2}...\wedge v^n&\propto e^{k+1}\wedge e^{k+2}\wedge...\wedge e^n\\
+&=e_{k+1}\wedge e_{k+2}\wedge...\wedge e_n~,
+\end{aligned}
+\end{equation}
+对$A$取对偶，由定义得
+\begin{equation}
+\begin{aligned}
+A^c&=AI^{-1}\\
+&\propto AI\\
+&\propto e_1 e_2... e_k e_1 e_2... e_n\\
+&=e^{k+1} e^{k+2}... e^n\\
+&=e^{k+1}\wedge e^{k+2}\wedge...\wedge e^n~,
+\end{aligned}
+\end{equation}
+得证。
+
+由上述定理可知，单向量的对偶还是单向量。读者也可以进一步证明，单向量集合在其他运算下也是封闭的。
+\begin{corollary}{}
+给定非退化的几何代数$\mathcal G(V,q)$。任取两个单向量$A$，$B$，则$A\wedge B$与$A\vee B$也是单向量
+\end{corollary}
+\begin{corollary}{}\label{cor_Clf05_1}
+给定非退化的几何代数$\mathcal G(V,q)$。任取两个单向量$A$，$B$，则$A\llcorner B$也是单向量。
+\end{corollary}
+第二个推论的证明需要用到\autoref{the_clf02_1}~\upref{clf02}$A\llcorner B=(A\wedge B^c)^c$，并结合本节\autoref{the_Clf05_1}。
+但实际上，即使是非退化的几何代数，该推论也成立。
+\begin{corollary}{}\label{cor_Clf05_2}
+若$A,B$为几何代数$\mathcal G(V,q)$的两个单向量，则$A\llcorner B$也是单向量。
+\end{corollary}
+proof.
+设$A=v_1\wedge v_2\wedge...\wedge v_n$，由基本推论\autoref{eq_clf02_1}~\upref{clf02}得，上式可以写为$A\llcorner B=(v_1\wedge v_2...)\llcorner B=(v_1\llcorner (v_2\llcorner...(v_n\llcorner B))$，因此本推论只需要$v_n\llcorner B$成立。
+把$q$写为对角矩阵的形式，通过合同变换使得不为零的对角元都在前$k$列，并设$v_n=\sum \limits^{n}_{i=1}a^i e_i,u=\sum \limits^{k}_{i=1}a^i e_i$，其中$\{e_i\}$为标准正交基。
+
+代入计算可得：$v_n\llcorner B=u\llcorner B$，该结果是外积的线性组合。
+
+改变二次型，使得第$k$到第$n$列对角元为1，命名该几何代数为$\mathcal G(V,p)$，与$\mathcal G(V,q)$共享标准正交基。建立线性同构为basis和单向量的恒等映射。因而我们有
+\begin{equation}\label{eq_Clf05_1}
+u\llcorner_q B=u\llcorner _p B~.
+\end{equation}
+结合\autoref{cor_Clf05_1} ，可得上式为单向量。
+
+
+\subsubsection{与子空间关系}
+\autoref{the_Clf05_1} 的另一种阐述方式为
+\begin{theorem}{}
+取$A\in \mathcal B^{\bullet}(V,q)$，若$q$非退化，有
+\begin{equation}
+\bar A=\bar A^{\perp}~.
+\end{equation}
+\end{theorem}
+现在给出一些运算与子空间的关系。
+\begin{theorem}{}
+取$A,B\in \mathcal B^{\bullet}(V,q)$，则有
+\begin{equation}
+\left\{\begin{aligned}
+A \wedge B \neq 0 & \Longrightarrow \overline{A \wedge B}=\bar{A} \oplus \bar{B} \\
+\bar{A}+\bar{B}=V & \Longrightarrow \overline{A \vee B}=\bar{A} \cap \bar{B} \\
+\bar{A} \subseteq \bar{B} & \Longrightarrow A\llcorner B=A B \\
+A\llcorner B \neq 0 & \Longrightarrow \overline{A\llcorner B}=\bar{A}^{\perp} \cap \bar{B} \\
+\bar{A} \cap \bar{B}^{\perp} \neq\{0\} & \Longrightarrow A\llcorner B=0 .
+\end{aligned}\right.~
+\end{equation}
+\end{theorem}
+对于第一条，我们由左边可知，$A,B$各自对应的线性无关组合在一起也是线性无关的。若$\bar A,\bar B$有非0元素为$v$，可知$-v$也是交集元素，则合在一起的基矢组线性相关。
+
+对于第二条，设$\bar A$对应基矢组$\{e_i\}^k_{i=1}$，$\bar B$对应基矢组$\{e_i\}^n_{i=r+1}$，即交集部分为组$\{e_i\}^k_{i=r+1}$。根据定义有
+\begin{equation}
+\begin{aligned}
+A \vee B &=(A^c\wedge B^c)^c\\
+&\propto\left(\bigwedge\limits^n_{i=k+1}e_i\wedge \bigwedge\limits^r_{i=1}e_i\right)^c\\
+&=\bigwedge\limits^k_{i=r+1}e_i~,
+\end{aligned}
+\end{equation}
+因此第二条成立。
+
+读者可以验证第三条。
+第四条的证明思路仿照\autoref{cor_Clf05_2} 。由于$A\llcorner B=(v_1\wedge v_2...)\llcorner B=(v_1\llcorner (v_2\llcorner...(v_n\llcorner B))$，我们只消验证第四条对任意$v\in V$都成立即可。
+
+非退化的情况下把$\bar B$内的一组正交基$\{e_i\}^k_{i=1}$扩展到全空间，令任意向量$v=a^ie_i$，则$v\llcorner B\neq 0$意味着对于$v$总有：$i\in[1,k]$。
