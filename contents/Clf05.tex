@@ -6,6 +6,9 @@
 \begin{issues}
 \issueTODO
 \end{issues}
+
+% 可加入式五对向量空间的证明。
+
 注：本文参考 Jier Peter 的《代数学基础》。
 
 在上一节，我们介绍了单向量的基本运算。本节着重讨论外积、对偶以及左内积运算在单向量集合上的性质，即这些运算在单向量集合上是否封闭，以及运算结果与子空间的关系。需要注意的是，左内积以及对偶运算往往需要我们取一组正交基，因为用集合语言讨论非常方便，所以对于退化二次型，我们需要仔细检验某些结论是否成立。
@@ -19,9 +22,9 @@ e^i*e_j=\delta^i_j~.
 \end{equation}
 \end{definition}
 reciprocal也可翻译为“互逆”、“对偶”和“倒易”等。
-内积关系是二次型确定的，从定义式可见$e^i$与$e_i$是线性关系。通过二次型确定$V$的对偶空间$V^*$，这两个空间共享一组基但二次型不同。
+与对偶空间的概念相似，无论是定义中的基向量组还是互反基，都不要求正交性。
 
-非退化的几何代数里总存在标准正交基。在取了标准正交基后，其互反基实际上就是这组基本身：$e^i=e_i$。因此，互反基相当于利用二次型，将对偶空间同构回原空间。
+不过非退化的几何代数里总存在标准正交基。在取了标准正交基后，其互反基实际上就是这组基本身：$e^i=e_i$。因此，此时互反基相当于利用二次型，将对偶空间同构回原空间。
 假设$\{x_i\}$为一般基向量组，考虑过渡矩阵为$T^i_j$的基变换：$y_i=T^j_ix_j$，由互反基与普通基的关系得：
 \begin{equation}
 y^j=S^j_ix^i~,
@@ -39,7 +42,7 @@ A^c\propto v^{k+1}\wedge v^{k+2}...\wedge v^n~,
 其中，$\{v^i\}$是$\{v_i\}$的互反基。
 
 proof.
-由几何代数非退化，可以取$\bar A$上的一组标准正交基$\{e_i\}^k_i=1$，并扩展为全空间的标准正交基$\{e_i\}^n_i=1$。由互反基定义得，$v^{k+m}$垂直于$\bar A$.则
+由几何代数非退化，可以取$\bar A$上的一组标准正交基$\{e_i\}^k_{i=1}$，并扩展为全空间的标准正交基$\{e_i\}^n_{i=1}$。由互反基定义得，$v^{k+m}$垂直于$\bar A$.则
 \begin{equation}
 \begin{aligned}
 A&\propto e_1\wedge e_2...\wedge e_k\\
@@ -120,4 +123,20 @@ A \vee B &=(A^c\wedge B^c)^c\\
 读者可以验证第三条。
 第四条的证明思路仿照\autoref{cor_Clf05_2} 。由于$A\llcorner B=(v_1\wedge v_2...)\llcorner B=(v_1\llcorner (v_2\llcorner...(v_n\llcorner B))$，我们只消验证第四条对任意$v\in V$都成立即可。
 
-非退化的情况下把$\bar B$内的一组正交基$\{e_i\}^k_{i=1}$扩展到全空间，令任意向量$v=a^ie_i$，则$v\llcorner B\neq 0$意味着对于$v$总有：$i\in[1,k]$。
+非退化的情况下把$\bar B$内的一组正交基$\{e_i\}^k_{i=1}$扩展为全空间的正交基，然后证明该式成立。
+
+下面证明二次型退化的情况下该式依然成立。
+令$q$为该线性空间的标准二次型，前k个对角元不为0，其他的都为0。令$p$为把$q$中为0对角元改为1的结果。外积与二次型无关，所以可以建立从$\mathcal G(V,q)$到$\mathcal G(V,p)$的线性同构（恒等映射），该同构保外积形式不变。令$\{e_i\}^n_{i=1}$为这两个代数的公共正交基，$v=a^ie_i,u=\sum \limits ^k_{i=1}a^ie_i$。则我们有：
+\begin{equation}
+v_{\llcorner q} B=u_{\llcorner q}B=u_{\llcorner p}B~,
+\end{equation}
+由\autoref{cor_Clf05_2} 可得，上式为单向量，且由前面的证明可知，非退化下其张成的空间为$\bar u^{\perp}\cap\bar B$。最后我们只需要证明：$u^{\perp}|_p=v^{\perp}|_q$。
+
+设$x=\{b^ie_i|x\in u^{\perp}|_p\}$，则
+\begin{equation}
+\begin{aligned}
+u\cdot x|_p&=\sum \limits^k_{i=1}a^i b^i p(e_i)=0\\
+& \Leftrightarrow \sum \limits^n_{i=1}a^i b^i q(e_i)=0\\
+& \Leftrightarrow u^{\perp}|_p=v^{\perp}|_q~.
+\end{aligned}
+\end{equation}

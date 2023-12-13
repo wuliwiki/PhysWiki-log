@@ -3,7 +3,7 @@
 % license Xiao
 % type Tutor
 
-\pentry{函数（高中）\upref{functi}，神经网络\upref{NN}}
+\pentry{函数（高中）\upref{functi}，神经网络\upref{NN}，张量（向量与矩阵）\upref{TsrFst}}
 
 \textbf{激活函数}（Activation function）是人工神经元计算流程的最后一步，跟随在仿射变换之后的一个非线性变换。神经元中的仿射变换是带有参数的，参数的值是模型训练时学习而来的。而激活函数往往是一个无参数的固定的非线性变换，它决定着一个神经元输出的值的范围。
 
@@ -80,3 +80,29 @@ g'(x)=1-g^2(x)~.
 \begin{equation}
 y=g(x)=\max\{0,x\}~.
 \end{equation}
+
+在TensorFlow中，可以用以下函数实现线性整流单元：
+\begin{lstlisting}[language=python]
+tf.nn.relu(Tensor, name)
+\end{lstlisting}
+
+参数含义：
+\begin{itemize}
+\item Tensor： 输入张量 \\
+\item name：该操作的名称（可选） \\
+\end{itemize}
+返回值的数据类型为Tensor张量。
+
+例子：
+\begin{lstlisting}[language=python]
+import tensorflow as tf
+
+result = tf.nn.relu([2., -1., 0.]).numpy()
+print(result)
+\end{lstlisting}
+执行后输出：
+\begin{lstlisting}[language=python]
+array([2., 0., 0.], dtype=float32)
+\end{lstlisting}
+
+从上述代码和执行结果可以看出，tf.nn.relu函数对于输入张量的每个分量做线性整流处理。输入张量$[2, -1, 0]$的三个分量中的$2$是大于$0$的，因此结果张量中的第$1$个分量为$2$；第$2$分量为$-1$，小于$0$，因此计算后的结果为$0$；第$3$个分量为$0$，计算结果显然为$0$。
