@@ -2,17 +2,134 @@
 % license Xiao
 % type Tutor
 
-
 \begin{issues}
 \issueTODO 
 \begin{itemize}
-\item 本篇放在线性代数第五章 线性方程组，面向初学者。用矩阵语言介绍二次型，区分高代中张量形式的二次型（虽然它们当然是一回事）。
+\item 本篇放在线性代数第五章 线性方程组。
+\item 不知道初等变换在哪个词条，需要加入到预备知识里
 \item  本篇最好加上一些应用实例，譬如几何上通过二次型简化方程，以及物理上的惯性张量（？）等等。
 \end{itemize}
 \end{issues}
-
+\pentry{集合的基数\upref{CardiN}}
 \begin{definition}{}
-\begin{itemize}
-\item 
-\end{itemize}
+二次型是关于变量的二次齐次多项式。即满足$q(k\bvec{v})=k^2 q(\bvec{v})$，对于任意$\bvec{v}=(v_1,v_2...v_n),k\in \mathbb F$。比如：
+\begin{equation}
+q(\bvec{v})=av_1x_2+bv_2v_1+cv_1^2+dv_2^2~.
+\end{equation}
+容易验证，任意二次型都可以写为如下形式：
+\begin{equation}
+q(\bvec{v})=\bvec{v}^TQ\bvec{v}~.
+\end{equation}
+一般称矩阵$Q$为二次型$q$的方阵形式。
 \end{definition}
+
+二次型相应的指标表达式为$q(\bvec v)=\sum\limits_{i,j}Q^i_j v^j v^i$。矩阵元素$Q^i_j$为结果中$v^j v^i$的系数。由于$v^j v^i=v^i v^j$，因此$Q^i_j+Q^j_i$为实际相应项的系数，满足该条件的矩阵可以有很多个。
+\begin{equation}
+\begin{aligned}
+& \left(\begin{array}{ll}
+x & y
+\end{array}\right)\left(\begin{array}{cc}
+1 & 2 \\
+0 & -1
+\end{array}\right)\left(\begin{array}{l}
+x \\
+y
+\end{array}\right) \\
+= & x^2+2 x y+0 y x-y^2 \\
+= & x^2+x y+y x-y^2 \\
+= & \left(\begin{array}{ll}
+x & y
+\end{array}\right)\left(\begin{array}{cc}
+1 & 1 \\
+1 & -1
+\end{array}\right)\left(\begin{array}{l}
+x \\
+y
+\end{array}\right)
+\end{aligned}~.
+\end{equation}
+但二次型总能对应唯一一个对称矩阵\footnote{前提为：域的特征不为2。因为特征为2的域有：-1=1}。
+\subsection{二次型的坐标变换}
+当我们用上述定义表示二次型时，如果基向量组变换，二次型的形式亦有所不同。具体而言，如果利用过渡矩阵$B$改变基向量组，由相似变换的知识可知，在新基下向量$\bvec{v'}=B^{-1}\bvec{v}$，那么新的二次型形式为：
+\begin{equation}
+\bvec{v}^T Q\bvec{v}=(B\bvec{v})^T Q(B\bvec{v})=\bvec{v}^T (B)^{T}QB\bvec{v}~.
+\end{equation}
+因此，新的二次型形式对应矩阵$Q'=B^{T}QB$，这就是常说的合同变换。合同变换的结果是同一二次型在不同基下的表示\footnote{$f(\bvec{v}):V\rightarrow \mathbb F$没有发生改变，虽然坐标不同，但还是同一个向量嘛}。
+\begin{definition}{合同}
+如果存在可逆方阵$C$使得
+\begin{equation}
+B=C^T AC~
+\end{equation}
+则称矩阵$A,B$合同。
+\end{definition}
+可以证明合同关系是一种\textbf{等价划分}。即满足反身性、传递性与对称性，等价划分实际上是在划分不同的二次型，等价类内二次型有不同的矩阵形式而已。
+
+\begin{definition}{二次型的等价性}
+给定线性空间的二次型$q_i$，如果$q_1,q_2$在某\textbf{两个}基下矩阵形式相同，则称这两个二次型等价。
+\end{definition}
+
+通过坐标变换，二次型可以简化为最简单的一种形式：对角矩阵。在对角矩阵下，二次型形式只有平方项，这就是所说的\textbf{标准二次型}。如果二次型 $q$
+等价于标准二次型 $p$，那么称 $p$ 是 $q$ 的\textbf{标准形}。
+
+由于实对称矩阵总能通过合同变换化为对角矩阵。因此实数域上的二次型总有标准形。
+\begin{theorem}{}
+给定实数域上的二次型 $V^T QV$，那么它总有标准形。
+\end{theorem}
+由于合同变换的结果总为对称矩阵，因此证明过程相对简洁，只需要利用对角元，通过初等变换把上三角的非对角元部分化为0即可\footnote{回顾初等变换，左乘可逆矩阵是行变换，右乘是列变换}。
+\subsection{二次型的正定性}
+二次型正定意味着$f(\bvec{v})>0$，负定则意味着$f(\bvec{v})< 0$。为了方便，我们可以进一步把实对称矩阵化为对角元为$\pm 1$，非对角元为$0$的形式，比如想要把第$n$个对角化化为$\pm 1$，则合同变换为第$n$列乘以$k$和第$n$行乘以$k$，在\textbf{实数域}上$k^2>0$，因此二次型正定意味着对角元都为$1$。
+
+上述形式还意味着基向量组是“标准正交”的。比如\textbf{“正定”}即对角矩阵为$E$，则二次型$\bvec{v}^{T}Q\bvec{v}=\bvec{v}^{T}\bvec{v}$。
+
+因此，二次型实际上是同向量内积的推广。
+
+可以证明，二次型的“正负号”数量不会随基的改变而改变。
+\begin{theorem}{惯性定理}
+给定\textbf{实数域}$\mathbb R$上的\textbf{有限维}线性空间$V$和其上一个二次型$f$。令$E=\{\bvec e_i\}$和$F=\{\bvec \theta_i\}$是$V$上的两组关于$f$的\textbf{标准正交基}，$Q,P$分别为$f$在$\{\bvec e_i\}$和$\{\bvec \theta_i\}$上的\textbf{标准二次型}。定义
+\begin{equation}
+\begin{aligned}
+E^{+} & =\left\{\mathbf{e}_i \in E \mid Q^i_i>0\right\} \\
+E^{-} & =\left\{\mathbf{e}_i \in E \mid Q^i_i<0\right\} \\
+E^0 & =\left\{\mathbf{e}_i \in E \mid Q^i_i=0\right\}
+\end{aligned}~.
+\end{equation}
+以及
+\begin{equation}
+\begin{aligned}
+F^{+} & =\left\{\mathbf{e}_i \in E \mid P^i_i>0\right\} \\
+F^{-} & =\left\{\mathbf{e}_i \in E \mid P^i_i<0\right\} \\
+F^0 & =\left\{\mathbf{e}_i \in E \mid P^i_i=0\right\}
+\end{aligned}~.
+\end{equation}
+则必有
+\begin{equation}
+\left\{
+\begin{aligned}
+\mid E^{+}\mid&=\mid F^{+}\mid\\
+\mid E^{-}\mid&=\mid F^{-}\mid\\
+\opn{Span}\, E^{0}&=\opn{Span}\, F^{0}\\
+\end{aligned}\right.~.
+\end{equation}
+上述的符号$\mid \quad\mid$表示集合内元素的数量，$\opn{Span}$表示集合元素张成的向量空间.
+\end{theorem}
+Proof\footnote{引自Jie Peter的《代数学基础》}.
+为了证明方便，这里拓展二次型的概念到广义内积\footnote{相对于常用的欧几里得空间内积}，即对称双线性函数，这是为了符合内积的对称性$(\bvec v,\bvec w)=(\bvec w,\bvec v)$，以及线性$(\bvec v_1+\bvec v_2,\bvec w)=(\bvec v_1,\bvec w)+(\bvec v_2,\bvec w)$。对称矩阵总能保证该性质成立。设$q(\bvec v)=v^T Q v$，拓展至广义内积
+\begin{equation}
+f(\bvec v,\bvec w)=v^T Q w~.
+\end{equation}
+
+首先验证第三条，设$V_1$为$\{\bvec u\mid f(\bvec{v},\bvec u)=0,\forall \bvec v\in V\}$，证明思路为$\opn{Span}E_0=V_1=\opn{Span}F_0$。
+
+容易验证，$\opn{Span}E_0\subseteq V_1$，现在通过反证法证明$ V_1\subseteq \opn{Span}E_0$。假设$\bvec x\in V_1,\bvec x\notin \opn{Span}E_0$，则$\bvec v$必至少含有一个$E^0$以外的基向量，设为$\bvec e_i$，因此$f(\bvec v,\bvec e_i)=0$，则与假设矛盾。所以$\opn{Span}E_0=V_1$。由于内积结果和具体的基无关，同理可证$V_1=\opn{Span}F_0$，则第三条得证。
+
+现在证明第一条，只需要否定$\mid E^{+}\mid<\mid F^{+}\mid$和$\mid E^{+}\mid>\mid F^{+}\mid$的情况即可。现在假设$\mid E^{+}\mid<\mid F^{+}\mid$，这意味着$E^0\cup E^{+} \cup F^{+}$必然线性相关，不然整体维度会大于空间维度。
+设$\bvec x^0\in E^0,\bvec x^+\in E^{+},\bvec y^{-}\in F^{-}$，由于线性相关，至少存在一组向量使得：
+\begin{equation}
+\bvec x^0+\bvec x^{+}+\bvec y^{-}=0~.
+\end{equation}
+此时有$f(\bvec x^0+\bvec x^{+},\bvec x^0+\bvec x^{+})> 0$，但由上式得$f(\bvec x^0+\bvec x^{+},\bvec x^0+\bvec x^{+})=f(-\bvec y^{-},-\bvec y^{-})< 0$，矛盾，因此题设不成立。
+同理可证第二种情况不成立。
+
+基于相同的思路，可以证明第三条在\textbf{复数域}下依然成立，而第一第二条不成立。
+惯性定理让我们找到了实二次型合同变换中的基本不变量。一一般称对角元为$1$的数量为正惯性指数，从定义知这是该空间中内积为$1$的基向量数量；类似的，对角元为$-1$的数量为负惯性指数。因此同一二次型在进行合同变换时不改变正负符号差、符号差、标准型的秩。
+

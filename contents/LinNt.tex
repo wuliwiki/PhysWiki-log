@@ -94,20 +94,24 @@
 
 \subsubsection{rsync}
 \begin{itemize}
-\item 可以用于同步和备份文件（后者很广泛）， 支持 ssh 进行远程传输， 也支持本地传输。
-\item 格式 \verb`rsync -avzh src1 src2 ... dest` 其中 \verb|src1| 等文件或文件夹会自动同步到 \verb|dest| 文件夹中（例如生成 \verb`dest_path/src1` 等）。 如果 \verb|dest| 不存在， 会自动用 mkdir 生成，但只能生成一层。 file, folder 和 \verb|dest_path| 都可以是远程或者本地
-\item 例如从远程传到本地： \verb|rsync -azvh 用户名@域名或IP:/路径/* 本地路径/|。 \verb`-a` 是 archive （包括所有子文件夹， 文件的 owner 和 permission 和 symlink 都会原封不动复制）， \verb`-v` 是 verbose （显示详情）， \verb`-z` 是 zip （传输过程压缩） \verb`-h` 人可读。
+\item 可以用于同步和备份文件，广泛使用， 支持 ssh 进行远程传输， 也支持本地传输。
+\item 格式 \verb`rsync -avzh src1 src2 ... dest` 其中 \verb|src1| 等文件或文件夹会自动同步到 \verb|dest| 文件夹中（例如生成 \verb`dest_path/src1` 等）。 如果 \verb|dest| 不存在， 会自动用 mkdir 生成，但只能生成一层。 \verb`src` 和 \verb|dest| 都可以是 ssh 远程或者本地
+\item 例如从远程传到本地： \verb|rsync -azvh ssh名:/路径/* 本地路径/|，其中 \verb`ssh名` 是 \verb`用户名@域名或IP` 或者 \verb`.ssh/config` 配置文件中的连接名。 \verb`-a` 是 archive （包括所有子文件夹， 文件的 owner 和 permission 和 symlink 都会原封不动复制）， \verb`-v` 是 verbose （显示详情）， \verb`-z` 是 zip （传输过程压缩） \verb`-h` 人可读。
 \item 如果在不同文件系统之间， 用了 \verb|sudo| 也还是显示 \verb|Operation not permitted|， 可以把 \verb|-a| 选项改为 \verb|-rl|，其中 \verb|r| 是 recursive， \verb|l| 是复制软链而不是复制软链指向的目标。
-\item \verb|–dry-run| 可以看看哪些文件会修改
+\item \verb|–dry-run| 可以看看哪些文件会修改而不修改任何东西
 \item \verb|--progress| 选项（相当于 \verb|info=progress2|）可以显示传输速率，进度等详细信息。 其他的一些选项如 \verb|info=stats| 显示总体的统计而不是单个文件。 如果需要多个选项，可以用逗号隔开例如 \verb|info=progress2,stats|
 \item \verb|--partial| 选项可以支持中断续传。
-\item 若要在每个文件传输完成之后从原来文件夹删除， 用 \verb`--remove-source-files`。 注意不会删除任何目录。 可以另外用 \verb|find src -type d -empty -delete| 删除空目录。
-\item 同步文件夹时， 用 \verb|源文件夹/| 不会包括 \verb|源文件夹| 本身， 而去掉斜杠就会。
+\item 若要在每个文件传输完成之后从原来文件夹删除， 用 \verb`--remove-source-files`。 注意不会删除任何目录。 可以另外用 \verb|find src -type d -empty -delete| 删除空目录。如果目标文件夹中已经有相同的文件（默认用修改时间和文件大小判断），也会删除源文件。
+\item 同步文件夹时， 用 \verb|src/| 不会包括 \verb|src| 本身， 而去掉斜杠就会。 \verb`dest` 文件夹则没有这种区别。
 \item 若要删除目标文件夹中， 源文件夹不存在的内容， 用 \verb`--delete`。
 \item 常用的同步命令： \verb|rsync -avh --delete 目录1/ 目录2/|。 完成后， 两个目录的内容将一模一样。
 \item 如果远程目录有需要 \verb`\` 的字符， 例如 \verb`\(...\)`， 需要用三次， 例如 \verb`\\\(...\\\)`。 本地的 shell 会先把 \verb`\\` 变为 \verb`\`, \verb`\(` 变为 \verb`(`
-\item \verb|--checksum| 选项： 如果文件大小和修改时间都相同， 会用 checksum 检查它们是否真的相同。 如果不加， rsync 会直接跳过大小和修改时间都相同的同名文件。
+\item \verb|--checksum| 选项： 如果文件大小和修改时间都相同， 会用 checksum 检查它们是否真的相同。 如果不加， rsync 会认为大小和修改时间都相同的同名文件就是相同的。
 \item 当两个文件只有部分不同时， rsync 会用 delta-transfer algorithm， 只传输不同的部分。 \verb|--whole-file| 可以取消这个功能。
+\item \verb`--exclude='foo/'` 会忽略 \verb`src` 中的所有名为 \verb`foo` 的文件夹。 \verb`--exclude='/src/foo/'` 会忽略指定的那个 \verb`foo` 文件夹。
+\item 要只同步文件夹和子文件夹而不同步文件， 用 \verb`rsync -av --include='*/' --exclude='*' --dirs src/ dest/`
+\item \verb`--ignore-existing` 会跳过 \verb`dest` 中原本需要替换掉的文件。
+\item \verb`--update` 会跳过 \verb`dest` 中修改日期较新的文件。
 \end{itemize}
 
 \subsubsection{find}
@@ -241,6 +245,7 @@
 \item \verb`ls` 选项： \verb`-a` (all)(显示隐藏) \verb`-m` (挤到一起) \verb`-1` 显示为一列 \verb`-v` 按照数字大小排序
 \item \verb`chown 用户名 文件` 修改文件的所有者， \verb|-R| 对文件夹 recursive
 \item \verb|ls -l| 中第二列是 “link 的数量”， 比较鸡肋， 普通文件和软链是 1， 文件夹是 2。
+\item \verb`ls -ltr` 中 \verb`-t` 是根据修改时间从新到老排序， \verb`-r` 是 reverse 也就是从老到新。
 \item 你自己对某个文件/文件夹是什么权限， 你调用的程序也只有这些权限。
 \item \verb`chmod 权限 文件` 修改文件的权限. <权限> 是三位8进制数, 每一位是 x(1),w(2),r(4)之和. 常见的例子： \verb|7| 代表 \verb|rwx|， \verb|6| 代表 \verb|rw|， \verb|4| 代表 \verb|r|
 \item \verb`chmod 权限 -R 文件夹` 可以修改文件夹和所有内部子文件夹和子文件的权限。 千万注意不要为了方便把一些系统文件夹甚至 \verb|/home/用户| 文件夹的设置文件设得太开放， 这可能会影响一些秘钥的自动验证， 尤其是 \verb|ssh| 相关的。
