@@ -1,0 +1,134 @@
+% 绝热近似（量子力学）
+% license Usr
+% type Tutor
+
+\begin{issues}
+\issueTODO
+\end{issues}
+
+\pentry{薛定谔方程（单粒子一维）\upref{TDSE11}}
+
+\footnote{参考 Griffiths\cite{GriffE} 的章节： The Adiabatic Approximation、 Shankar\cite{Shankar} 的 Chap18-P478、 Wikipedia \href{https://en.wikipedia.org/wiki/Adiabatic_theorem}{相关页面}。}量子力学中，\textbf{绝热近似（adiabatic approximation）}说的大概是： 若系统初始时处于某个离散非简并的本征态，那么当哈密顿量随时间缓慢改变时（改变的特征时间远大于本征态的）， 那改变过程中波函数将仍然处于同一个本征态，但整体相位会发生某种改变。下面先给出定量结论，证明留到文末。
+
+令含时薛定谔方程为（\autoref{eq_TDSE11_6}~\upref{TDSE11}）
+\begin{equation}
+H(t)\Psi(t) = \I\hbar\dot\Psi(t)~.
+\end{equation}
+当系统不存在简并时， 绝热近似下含时薛定谔方程的通解可以表示为（$C_n$ 为常数，由初始波函数决定）
+\begin{equation}\label{eq_AdiaQM_2}
+\Psi(t) \approx \sum_n C_n \psi_n(t) \E^{\I\theta_n(t)}~.
+\end{equation}
+其中 $\psi_n(t)$ 是 $H(t)$ 一组正交归一本征态，任意时刻都满足不含时薛定谔方程（时间看作数学参数）
+\begin{equation}\label{eq_AdiaQM_3}
+H(t)\psi_n(t) = E_n\psi_n(t)~.
+\end{equation}
+和正交归一化
+\begin{equation}\label{eq_AdiaQM_6}
+\braket*{\psi_m(t)}{\psi_n(t)} = \delta_{m,n}~.
+\end{equation}
+为了方便且不失一般性本文规定 $\psi_n(t)$ 始终是实值函数（否则有可能出现一个随时间变化的整体相位让事情更复杂）。 另外相位函数为
+\begin{equation}
+\theta_n(t) = -\frac{1}{\hbar} \int_0^t E_n(t')\dd{t'}~.
+\end{equation}
+
+\begin{example}{}
+\begin{enumerate}
+\item 当无限深势阱\upref{ISW}缓慢变长。
+\item 量子简谐振子\upref{QSHOop}的固有频率 $\omega$ 缓慢变化。
+\end{enumerate}
+\end{example}
+
+容易看出若 $H(t)$ 不随时间变化时，通解就回到了熟悉的通解（\autoref{eq_TDSE11_5}~\upref{TDSE11}）
+\begin{equation}
+\Psi(t) = \sum_n C_n \psi_n \E^{-\I E_n t/\hbar}~.
+\end{equation}
+
+\autoref{eq_AdiaQM_2} 中 $C_n$ 为常数是一个很有力的结论。它告诉我们若开始时波函数处于某个（非简并）本征态，那么它将始终（近似）处于该本征态。
+
+该理论在对分子的计算中有广泛的应用，且有一个响亮的名字，叫\textbf{波恩—奥本海默近似（Born–Oppenheimer approximation）}。 这是因为在分子运动中，原子核的运动速度通常要比电子慢得多，使绝热近似效果较好。
+
+同为含时近似理论，绝热近似和含时微扰理论\upref{TDPTc}有什么区别呢？ 前者不要求 $H(t)$ 缓慢变化，例如用激光波包对原子光电离时，电场随时间的周期变化往往并不算慢。 那可以使用绝热近似的情况是否可以使用含时微扰理论呢？ 理论上可以，但计算比较麻烦，因为含时微扰使用初始的本征态展开任意时刻的波函数。
+
+\subsection{能级分裂}
+\pentry{一阶不含时微扰理论（量子力学）\upref{TIPT}}
+若考虑的时间段内，只有初始的一瞬间存在简并， 那么可以认为这个瞬间波函数几乎不发生变化（毕竟 $H(t)$ 是缓慢变化），令 $\psi_n(0)$ 取好量子态\upref{TIPT}，并假设系统始终是非简并的即可。
+\begin{example}{}
+给氢原子的任意束缚态 $\psi_{n,l,m}$ 缓慢施加外电场或磁场（参考 “类氢原子斯塔克效应（微扰）\upref{HStark}”，以及“塞曼效应\upref{ZemEff}”）。注意 $\psi_{n,l,m}$ 并不是好本征态，需要先做投影。
+\addTODO{推导}
+\end{example}
+
+\subsection{含时薛定谔方程的一种矩阵形式}
+为了推导绝热近似， 我们需要先采用某种基底把含时薛定谔方程变为矩阵形式。
+
+在绝热近似中， 我们选择把含时波函数用瞬时本征态 $\psi_n(t)$ 展开（注意这里的系数是含时的）
+\begin{equation}
+\Psi(t) \equiv \sum_n c_n(t) \psi_n(t) \E^{\I \theta_n(t)}~,
+\end{equation}
+为了下面化简方便，不失一般性，令
+\begin{equation}
+\theta_n(t) \equiv -\frac{1}{\hbar} \int_0^t E_n(t')\dd{t'}~.
+\end{equation}
+代入含时薛定谔方程
+\begin{equation}\label{eq_AdiaQM_1}
+H(t)\Psi(t) = \I\hbar \dot \Psi(t)~,
+\end{equation}
+得
+\begin{equation}\label{eq_AdiaQM_5}
+\dot c_m(t) = -\sum_n c_n \braket*{\psi_m}{\dot\psi_n}\E^{\I(\theta_n-\theta_m)}~.
+\end{equation}
+这可以表示为矩阵乘法
+\begin{equation}\label{eq_AdiaQM_9}
+\dot{\bvec c}(t) = \frac{1}{\I\hbar}\mat A(t) \bvec c(t)~.
+\end{equation}
+其中矩阵 $\mat A$ 定义为
+\begin{equation}\label{eq_AdiaQM_10}
+A_{ij}(t) = -\I\hbar \braket*{\psi_m}{\dot\psi_n}\E^{\I(\theta_n-\theta_m)}~.
+\end{equation}
+注意\autoref{eq_AdiaQM_9} 可以看作含时薛定谔方程的一种矩阵形式，和\autoref{eq_AdiaQM_1} 完全等效。 这类似于 “含时微扰理论\upref{TDPT}” 中的\autoref{eq_TDPT_3}。
+
+另外对\autoref{eq_AdiaQM_3} 求时间偏导得
+\begin{equation}\label{eq_AdiaQM_4}
+\mel*{\psi_m}{\dot H}{\psi_n} = (E_n-E_m)\braket*{\psi_m}{\dot\psi_n} + \delta_{m,n}\dot E_n~.
+\end{equation}
+对\autoref{eq_AdiaQM_6} 求导可以证明矩阵 $\braket*{\psi_m}{\dot\psi_n}$ 是一个反对称矩阵，即满足
+\begin{equation}\label{eq_AdiaQM_7}
+\braket*{\psi_m}{\dot\psi_n} = -\braket*{\psi_n}{\dot\psi_m}~.
+\end{equation}
+注意 $n=m$ 时该式两边恒为零，\autoref{eq_AdiaQM_10} 中 \textbf{$\mat A$ 的对角元也恒为零}。 且通过该式容易证明 \textbf{$\mat A$ 是厄米矩阵}。
+
+要精确计算矩阵 $\mat A$，一般直接根据定义直接求解 $\psi_n(t)$（\autoref{eq_AdiaQM_3}）再代入 \autoref{eq_AdiaQM_10} 即可。 但为了估计 $\mat A$ 矩阵元的大小，我们可以由\autoref{eq_AdiaQM_4} 得
+\begin{equation}\label{eq_AdiaQM_11}
+\braket*{\psi_m}{\dot\psi_n} = \frac{\mel*{\psi_m}{\dot H}{\psi_n}}{E_n-E_m} \qquad (E_m\ne E_n)~.
+\end{equation}
+
+到现在为止，所有推导都是精确的。 绝热近似的关键就在于假设 $H$ 随时间变化缓慢，即 $\dot H$ 非常小，以至于如果两个能级 $E_n$ 和 $E_m$ 不是特别接近时，可以近似认为\autoref{eq_AdiaQM_11} 对应的矩阵元 $A_{m,n}$ 可以忽略不计。
+
+\subsection{非简并情况}
+若在考虑的时间区间内， $H(t)$ 始终没有发生简并，不同的能级之间也没有太接近， 那么可以假设\autoref{eq_AdiaQM_11} 对全部 $m\ne n$ 为零，也就是 $\mat A = \bvec 0$。 此时\autoref{eq_AdiaQM_9} 直接变为
+\begin{equation}
+\dot{\bvec c}(t) = \bvec 0~.
+\end{equation}
+这说明所有系数都不随时间变化，令常数 $C_n = c_n(0)$，得到\autoref{eq_AdiaQM_2}。
+
+\subsection{存在简并的情况}
+对 $\mat A$ 不为零的情况，\autoref{eq_AdiaQM_9} 形式上的通解为（引用未完成）
+\begin{equation}
+\bvec c(t) = \mat U(t)\bvec c(0)~.
+\end{equation}
+其中
+\begin{equation}
+\mat U(t) = \hat{\mathcal{T}}\exp[-\frac{\I}{\hbar}\int_0^t \mat A(t') \dd{t'}]~.
+\end{equation}
+
+考虑任意两个 $E_m\ne E_n$ 不同的简并空间在任何时间都具有不同能量且能使\autoref{eq_AdiaQM_11} 右边忽略的情况。 此时 $\mat A$ 是块对角厄米矩阵，每个对角块代表一个本征子空间（或者若干个可能在某时刻本征值相同的本征子空间张成的空间），不同子空间之间不存在耦合。 $\mat U$ 也是结构相同的分块酉矩阵，且每个对角块都分别是一个酉矩阵。每个本征子空间独立演化，投影概率保持不变。
+
+但是每个空间内部的波函数投影该如何随时间演化呢？该空间内部所有的态都是同一个能量的本征态，所以内部的正交归一基底可以任意选取。
+\addTODO{我猜如果时刻选择让 $\mel*{\psi_m}{\dot H}{\psi_n}$ 对角化的基底（好本征态），仍然可以使 $\mat A = \mat 0$！ 也就是说好本征态之间没有 coupling}
+
+\subsubsection{能级分裂与合并}
+当每个子空间的本征能量随时间变化时，哪些矩阵元被忽略可能取决于时刻 $t$。 这就是说矩阵 $\mat A(t)$ 的对角块可能有些时候会发生拆分或合并（多个对角块发生耦合后合并为一个）。 但若这种合并的持续时间只有很短乃至一瞬间，那我们是否可以认为合并前后波函数不发生变化，也就是假设合并不存在呢？
+
+\addTODO{？？？，每个时刻 $t$ 都对分块厄米矩阵 $\mat A$ 的每个块分别对角化不就行了吗？？？ 如果不是分块矩阵，就直接整个对角化不就好了吗？ 但是！但是！这样一来 $t$ 改变时难道要不断的对角化？一种特殊情况：假设 $H=H^0 + \lambda(t)H^1$ 就不存在这个问题了！ $\mat A$ 关于时间的变化就只是乘以 $\lambda(t)$ 而已。 只需要对 $H^1$ 做一次对角化。}
+\addTODO{有没有可能即使 $E_m=E_n$，$\braket*{\psi_m}{\dot\psi_n}$ 也恒为零呢？什么时候？例如缓慢增加氢原子的核电荷时 $\psi_{n,l,m}$ 之间会耦合嘛？ stark 的好本征态之间呢？}
+\addTODO{或许可以搞个矩阵来数值验证一下，例如氢原子的 stark 效应是否真的可以这么搞？以及氢原子的 $Z$ 慢慢变化。}
+\addTODO{啥时候讲 avoided crossing 啊……}

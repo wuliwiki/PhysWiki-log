@@ -2,25 +2,25 @@
 % license Xiao
 % type Tutor
 
-\pentry{对易厄米矩阵与共同本征矢\upref{Commut}}
+\pentry{定态薛定谔方程（单粒子多维）\upref{QMndim}， 厄米矩阵的本征问题\upref{HerEig}， 子空间\upref{SubSpc}}
 
 \footnote{参考 \cite{GriffQ} \cite{Shankar} \cite{Sakurai} \cite{Merzbacher} 相关章节。}量子力学中的不含时微扰理论实际上是线性代数中求解厄米矩阵本征值问题的一种近似方法， 无需任何量子力学知识， 笔者建议完全从线性代数的角度理解该理论而不考虑量子力学。
 
-我们只讨论量子力学中束缚态， 因为它们的本征值和厄米矩阵的本征值一样是离散的。 唯一需要注意的是， 线性代数中的厄米矩阵是有限维的（即行数和列数有限）， 而量子力学中的厄米矩阵可能是无穷维的（例如量子简谐振子\upref{SHO}）。 实际计算中， 我们往往仍然从中截取出有限维矩阵作为近似。
+我们只讨论量子力学中束缚态， 因为它们的本征值和厄米矩阵的本征值一样是离散的。 唯一需要注意的是， 线性代数中的厄米矩阵是有限维的（即行数和列数有限）， 而量子力学中的厄米矩阵可能是无穷维的（例如量子简谐振子\upref{SHO}），但这一般不会导致什么问题。
 
-不含时微扰问题如下： 已知厄米矩阵 $H^0$ 的本征方程（本文的上标如 $H^0, \psi^0, E_n^0$ 只是为了区分符号而不是指数）
+不含时微扰问题如下： 已知厄米算符 $H^0$ （也就是哈密顿量）的本征方程（本文的上标如 $H^0, \psi^0, E_n^0$ 只是为了区分符号而不是幂）
 \begin{equation}
-H^0 \psi_n^0 = E_n^0 \psi_n^0 \qquad (n = 1,2,\dots, N)~,
+H^0 \psi_n^0 = E_n^0 \psi_n^0 \qquad (n = 1,\dots, N)~,
 \end{equation}
-其中 $\psi_n^0$ 是一组完备正交归一基底。 如果我们稍微改变 $H^0$， 本征值 $E_n^0$ 和本征矢 $\psi_n^0$ 也会稍微改变。 我们希望知道它们如何变化， 于是令 $\lambda$ 为一个很小的常数， 变化后的矩阵为
+其中 $\psi_n^0$ 是一组完备正交归一基底。 如果我们稍微改变 $H^0$， 本征值 $E_n^0$ 和本征矢 $\psi_n^0$ 也会稍微改变。 我们希望知道它们如何变化， 于是令 $\lambda$ 为一个很小的常数， 变化后的算符为
 \begin{equation}\label{eq_TIPT_3}
 H = H^0 + \lambda H^1~.
 \end{equation}
-要求解本征方程
+我们想求解变化后的本征方程（定态薛定谔方程\upref{QMndim}），同样得到一组正交归一基底 $\psi_n$
 \begin{equation}\label{eq_TIPT_9}
 H \psi_n = E_n \psi_n~,
 \end{equation}
-令
+但这个方程往往难以精确求解\footnote{实际上量子力学问题中只有为数不多的理想化模型存在解析表达式，这就是为什么我们需要学习各种各样的近似理论。}，于是令
 \begin{equation}\label{eq_TIPT_11}
 E_n = E_n^0 + \lambda E_n^1 + \lambda^2 E_n^2 + \dots~
 \end{equation}
@@ -28,14 +28,39 @@ E_n = E_n^0 + \lambda E_n^1 + \lambda^2 E_n^2 + \dots~
 \psi_n = \psi_n^0 + \lambda\psi_n^1 + \lambda^2 \psi_n^2 + \dots~
 \end{equation}
 代入后本征方程\autoref{eq_TIPT_9} 变为
-\begin{equation}
+\begin{equation}\label{eq_TIPT_10}
 (H^0 + \lambda H^1)(\psi_n^0 + \lambda\psi_n^1 + \dots) = (E_n^0 + \lambda E_n^1 + \dots)(\psi_n^0 + \lambda\psi_n^1 + \dots)~.
 \end{equation}
-拆括号后， 根据等式两边 $\lambda^k$ 的次数 $k$ 合并同类项， 分别令等式两边 $k=1,2,\dots$ 的项相等即可保证本征方程成立。 若我们忽略所有 $k > 1$ 的项并解出本征方程， 就把这种近似称为\textbf{一阶微扰}； 若忽略所有 $k > K$ 的项并解出本征方程， 就把这种近似称为 $K$ 阶微扰。
+拆括号后， 根据等式两边每项中 $\lambda^k$ 的次数 $k$ 合并同类项， 分别令等式两边 $k=1,2,\dots$ 的项相等即可保证本征方程成立。 若我们去掉所有 $k > 1$ 的项并解出本征方程， 就把这种近似称为\textbf{一阶微扰}； 若忽略所有 $k > K$ 的项并解出本征方程， 就把这种近似称为 \textbf{$K$ 阶微扰}。
 
-在微扰理论中我们通常假设 $H^1$ 已经足够小， 那么令 $\lambda = 1$ 也能使\autoref{eq_TIPT_11} 和\autoref{eq_TIPT_12} 收敛， 此时 $\lambda$ 的作用就只是标记阶数。
+如果 $H^1$ 本身已经足够小， 那么即使令 $\lambda = 1$ 也能使\autoref{eq_TIPT_11} 和\autoref{eq_TIPT_12} 收敛， 那么此时 $\lambda$ 的作用就只是标记阶数。
 
-\subsection{一阶微扰}
+\subsection{一阶微扰的结论}
+下文将证明，若去掉\autoref{eq_TIPT_10} 展开括号后所有包含 $\lambda^k$（$k>1$） 的项，那么以下公式可以使其精确成立：
+
+\textbf{能级的一阶修正}
+\begin{equation}\label{eq_TIPT_6}
+E_n^1 = \mel{\psi_n^0}{H^1}{\psi_n^0}~,
+\end{equation}
+
+\textbf{本征波函数的一阶修正}
+\begin{equation}\label{eq_TIPT_5}
+\psi_n^1 = \sum_m^{E_m^0 \ne E_n^0} \braket{\psi_m^0}{\psi_n^1} \psi_m^0~,
+\end{equation}
+这里的求和是对所有使 $E_m^0 \ne E_n^0$ 的 $m$ 进行的（当系统无简并时等效于 $m\ne n$）， 其中
+\begin{equation}\label{eq_TIPT_4}
+\braket{\psi_m^0}{\psi_n^1} = \frac{\mel{\psi_m^0}{H^1}{\psi_n^0}}{E_n^0 - E_m^0} \qquad (E_m^0 \ne E_n^0)~.
+\end{equation}
+
+还可以证明， \textbf{经过一阶修正的本征波函数 $\psi_n^0 + \lambda\psi_n^1$ 是严格正交归一的}。
+
+\subsubsection{简并情况的要求}
+对简并情况（即存在多个 $\psi_n^0$ 具有相同的能量本征值），首先要确保所有 $\psi_n^0$ 都取 “\textbf{好本征态（good eigen states）}”， 也就是对每一个能级的所有 $\psi_i^0$， 矩阵 $\mel{\psi_m^0}{H^1}{\psi_n^0}$ 是对角矩阵。
+
+加入了微扰后，每个简并空间可能会分裂成多个不同能级的简并子空间\upref{SubSpc}，甚至使简并会完全消失。这也叫做\textbf{能级分裂（energy splitting）}。
+
+\subsection{一阶微扰推导：准备}
+\pentry{对易厄米矩阵与共同本征矢\upref{Commut}}
 来考虑一阶微扰， 令 $\lambda \to 0$， 忽略 $\order{\lambda^2}$， 有
 \begin{equation}
 H^0\psi_n^1 + H^1 \psi_n^0 = E_n^0 \psi_n^1 + E_n^1 \psi_n^0~.
@@ -52,26 +77,31 @@ H^0\psi_n^1 + H^1 \psi_n^0 = E_n^0 \psi_n^1 + E_n^1 \psi_n^0~.
 \begin{equation}\label{eq_TIPT_2}
 \mel{\psi_m^0}{H^1}{\psi_n^0} = (E_n^0 - E_m^0) \braket{\psi_m^0}{\psi_n^1} + E_n^1 \delta_{m,n}~.
 \end{equation}
-下面分为 $H^0$ 是否简并来具体讨论。 简并是指 $H^0$ 的一个本征值可能对应多个线性无关的本征矢。
+下面分为 $H^0$ 是否简并来具体讨论。 简并是指 $H^0$ 的一个本征值可能对应多个线性无关的本征矢， 也就是存在 $E_m=E_n$ 且 $m\ne n$。
 
-\subsection{非简并情况}\label{sub_TIPT_1}
-先看简单情况， $H^0$ 非简并时， 当 $m\ne n$ 必有 $E_n^0 \ne E_m^0$， 即\autoref{eq_TIPT_2} 右边第一项对角线元素全为零。 所以考虑等式两边对角线上的元素（$m = n$）有
-\begin{equation}\label{eq_TIPT_6}
-E_n^1 = \mel{\psi_n^0}{H^1}{\psi_n^0}~,
-\end{equation}
-对 $m \ne n$ 即 $E_m^0 \ne E_n^0$ 的元素有
-\begin{equation}\label{eq_TIPT_4}
-\braket{\psi_m^0}{\psi_n^1} = \frac{\mel{\psi_m^0}{H^1}{\psi_n^0}}{E_n^0 - E_m^0} \qquad (E_m^0 \ne E_n^0)~.
-\end{equation}
-于是， 要满足\autoref{eq_TIPT_2}， 只需要令
-\begin{equation}\label{eq_TIPT_5}
-\ket{\psi_n^1} = \sum_m^{E_m^0 \ne E_n^0} \braket{\psi_m^0}{\psi_n^1} \ket{\psi_m^0}~.
-\end{equation}
-即可。 注意\autoref{eq_TIPT_5} 再加上任意 $c \psi_n^0$ 同样能使\autoref{eq_TIPT_2} 成立， 说明\autoref{eq_TIPT_2} 的解不是唯一的， 为简单起见我们一般不添加这些项。 注意无论是能量还是波函数修正都和微扰哈密顿 $H^1$ 成正比。
+\subsection{一阶微扰推导：非简并情况}\label{sub_TIPT_1}
+先看简单情况， $H^0$ 非简并时， 当 $m\ne n$ 必有 $E_n^0 \ne E_m^0$， 即\autoref{eq_TIPT_2} 右边第一项对角线元全为零。 所以考虑等式两边对角线上的元素（$m = n$）有\autoref{eq_TIPT_6}。 对 $m \ne n$ 即 $E_m^0 \ne E_n^0$ 的元素有\autoref{eq_TIPT_4}。 于是， 要满足\autoref{eq_TIPT_2}， 只需要令\autoref{eq_TIPT_5} 成立即可。 注意\autoref{eq_TIPT_5} 再加上任意 $c \psi_n^0$ 同样能使\autoref{eq_TIPT_2} 成立， 说明\autoref{eq_TIPT_2} 的解不是唯一的， 为简单起见我们一般不添加这些项。 注意无论是能量还是波函数修正都和微扰哈密顿 $H^1$ 成正比。
 
 以上两式之所把条件写成 $E_m^0 \ne E_n^0$ 而不是 $m \ne n$ 是因为前者对下面介绍的简并情况同样适用。 对非简并情况， 两个条件是等价的。
 
-\subsubsection{验证正交归一性}
+\subsection{一阶微扰推导：简并情况}
+先复习一下简并的一些概念， 简并是指 $H^0$ 的一个本征值可能对应多个线性无关的本征矢。 它们的任意线性组合也是本征矢， 每个本征值对应的所有本征矢的集合构成一个矢量空间， 即\textbf{本征子空间}（\autoref{sub_HerEig_1}~\upref{HerEig}）。 以下假设所有 $\psi_n^0$ 按照不同本征值来分段排序， 每一段中的 $\psi_n^0$ 具有相同本征值， 那么矩阵 $\mel{\psi_m^0}{H^1}{\psi_n^0}$ 也可以相应划分为分块矩阵， 块 $(i,j)$ 代表 $H^1$ 对第 $i$ 和 $j$ 个本征子空间之间的耦合。
+
+$H^0$ 简并时， 当 $m\ne n$ 也未必有 $E_n^0 \ne E_m^0$， 所以我们从\autoref{eq_TIPT_2} 重新推导一次。
+
+观察等式右边可以发现右边第一项对角块都为零， 因为对角块中 $E_m = E_n$。 右边第二项是对角矩阵， 所以两项相加后矩阵的对角块都一定是对角矩阵。 等式左边矩阵的对角块也需要满足同样的要求， 但 $H^1$ 是给定好的无法改变， 所以左边是否满足该要求取决于基底 $\psi_n^0$ 的选取。
+
+当 $H^0$ 非简并时， $\psi_n^0$ 是唯一确定的（除了整体相位）， 但现在 $H^0$ 简并， $\psi_n^0$ 的选取就仍有一定自由： 每个本征子空间中的正交归一基底可以任意选取。 所以我们在每个本征子空间中对 $\mel{\psi_m^0}{H^1}{\psi_n^0}$ 进行角化即可满足上述要求， 也就是对每个对角块对角化（非对角块没有要求）。 注意这并不要求 $[H^0, H^1] = 0$ （对易）， 因为对易要求整个 $\mel{\psi_m^0}{H^1}{\psi_n^0}$ 矩阵可以被彻底对角化而不只是每个对角块对角化。 这样通常就能唯一地确定一组 $\psi_n^0$， 但不唯一也关系不大。
+
+这样得到的 $\psi_n^0$ 就是好本征态或者好量子态， $n$ 叫做\textbf{好量子数（good quantum number）}。 好量子数的这个定义有些模糊， 它强调的不是 $n$ 的数值， 而是能够划分能级分裂后子空间的某个物理量。
+
+现在对\autoref{eq_TIPT_2} 考虑对角块， 有 $E_n^0 = E_m^0$， 所以同样有\autoref{eq_TIPT_6}， 只是现在这就是对角块中的对角元， 也就是 $H^1$ 在该本征子空间中的本征值。
+
+在非对角子空间中， 有 $E_n^0 \ne E_m^0$， 所以同样有\autoref{eq_TIPT_4} 和\autoref{eq_TIPT_5}。 但注意此时 $E_n^0 \ne E_m^0$ 只是 $m \ne n$ 的充分非必要条件。
+
+同样容易验证正交归一性\autoref{eq_TIPT_7} 成立。 另外给\autoref{eq_TIPT_5} 再加上若干 $c_m \psi_m^0$ （$E_m = E_n$） 同样可能使\autoref{eq_TIPT_2} 成立且符合正交归一化要求（\autoref{eq_TIPT_8}）， 但为简单起见一般同样不加。
+
+\subsection{正交归一性的证明}
 正交性要求 $\braket{\psi_m}{\psi_n} = \delta_{m,n}$， 即
 \begin{equation}\label{eq_TIPT_7}
 \braket{\psi_m^0 + \lambda \psi_m^1 + \dots}{\psi_n^0 + \lambda \psi_n^1 + \dots} = \delta_{m,n}~.
@@ -84,27 +114,4 @@ E_n^1 = \mel{\psi_n^0}{H^1}{\psi_n^0}~,
 \begin{equation}
 \Re{\braket{\psi_n^0}{\psi_n^1}} = 0~,
 \end{equation}
-\autoref{eq_TIPT_5} 同样满足该要求。
-
-\subsection{简并情况}
-先复习一下简并的一些概念， 简并是指 $H^0$ 的一个本征值可能对应多个线性无关的本征矢。 它们的任意线性组合也是本征矢， 每个本征值对应的所有本征矢的集合构成一个矢量空间， 即\textbf{本征子空间}（\autoref{sub_HerEig_1}~\upref{HerEig}）。 以下假设所有 $\psi_n^0$ 按照不同本征值来分段排序， 每一段中的 $\psi_n^0$ 具有相同本征值， 那么矩阵 $\mel{\psi_m^0}{H^1}{\psi_n^0}$ 也可以相应划分为分块矩阵， 对角块 $(i,j)$ 代表 $H^1$ 对第 $i$ 和 $j$ 个本征子空间之间的耦合。
-
-$H^0$ 简并时， 当 $m\ne n$ 也未必有 $E_n^0 \ne E_m^0$， 所以我们从\autoref{eq_TIPT_2} 重新推导一次。
-
-观察等式右边可以发现右边第一项对角块都为零， 因为对角块中 $E_m = E_n$。 右边第二项是对角矩阵， 所以两项相加后矩阵的对角块都一定是对角矩阵。 等式左边矩阵的对角块也需要满足同样的要求， 但 $H^1$ 是给定好的无法改变， 所以左边是否满足该要求取决于基底 $\psi_n^0$ 的选取。
-
-当 $H^0$ 非简并时， $\psi_n^0$ 是唯一确定的（除了整体相位）， 但现在 $H^0$ 简并， $\psi_n^0$ 的选取就仍有一定自由： 每个本征子空间中的正交归一基底可以任意选取。 所以我们在每个本征子空间中对 $\mel{\psi_m^0}{H^1}{\psi_n^0}$ 进行角化即可满足上述要求， 也就是对每个对角块对角化。 注意这并不要求 $[H^0, H^1] = 0$ 对易， 因为对易要求整个 $\mel{\psi_m^0}{H^1}{\psi_n^0}$ 矩阵可以被彻底对角化而不只是每个对角块对角化。 这样通常就能唯一地确定一组 $\psi_n^0$， 但不唯一也关系不大。
-\addTODO{在对易厄米算符与共同本征矢\upref{Commut} 中用例子讨论： 如何同时对角化两个矩阵。 先对第一个矩阵对角化， 然后用本征矢表示第二个矩阵， 第二个矩阵变为块对角矩阵， 再依次对每个块对角化即可。 但要讨论这个， 是不是首先应该介绍如何对块对角矩阵对角化？}
-
-这样得到的 $\psi_n^0$ 通常叫做\textbf{好本征态（good eigen states）}， $n$ 叫做\textbf{好量子数（good quantum number）}。 好量子数的这个定义有些模糊， 它强调的不是 $n$ 的数值， 而是能够唯一确定 $\psi_n$ 的某个物理量。
-
-现在对\autoref{eq_TIPT_2} 考虑对角块， 有 $E_n^0 = E_m^0$， 所以同样有\autoref{eq_TIPT_6}， 只是现在这就是对角块中的对角元， 也就是 $H^1$ 在该本征子空间中的本征值。
-
-在非对角子空间中， 有 $E_n^0 \ne E_m^0$， 所以同样有\autoref{eq_TIPT_4} 和\autoref{eq_TIPT_5}。 但注意此时 $E_n^0 \ne E_m^0$ 只是 $m \ne n$ 的充分非必要条件。
-
-同样容易验证正交归一性\autoref{eq_TIPT_7} 成立。 另外给\autoref{eq_TIPT_5} 再加上若干 $c_m \psi_m^0$ （$E_m = E_n$） 同样可能使\autoref{eq_TIPT_2} 成立且符合正交归一化要求（\autoref{eq_TIPT_8}）， 但为简单起见一般同样不加。
-
-\subsection{绝热近似}
-接下来考虑一个应用问题： 含时薛定谔方程中如果初始波函数处于任意一个态 $\psi$， 然后非常缓慢地增加 $H'$ 的强度， $\psi$ 会如何变化？ 是否先分解为好量子态的线性组合， 然后再对修正后的好量子态做同样的线性组合？
-
-\textbf{绝热近似（adiabatic approximation）}（链接未完成）告诉我们， 如果 $\psi$ 是一个好量子态， 那么这是可以的（参考\cite{GriffQ}）。 那么既然好量子态是完备的， 含时薛定谔方程又是线性的， 上面的猜测的确成立。
+\autoref{eq_TIPT_5} 同样满足该要求。 \textbf{证毕}。

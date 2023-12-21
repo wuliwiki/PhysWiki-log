@@ -3,6 +3,11 @@
 % license Xiao
 % type Tutor
 
+\begin{issues}
+\issueTODO 缺作图说明
+\end{issues}
+
+
 \pentry{环的理想和商环\upref{Ideal}，}
 
 环同态的概念和群同态是类似的，只不过我们需要兼顾两个运算的性质。
@@ -11,11 +16,27 @@
 \begin{definition}{环同态}
 给定环 $R_1$ 和 $R_2$，如果存在映射 $f:R_1\rightarrow R_2$，使得对于任意的 $r, s\in R_1$ 都有 $f(r)+f(s)=f(r+s)$ 和 $f(rs)=f(r)f(s)$，那么我们称 $f$ 是一个从 $R_1$ 到 $R_2$ 的\textbf{环同态映射（ring homomorphism）}，而环 $R_1$ 和 $R_2$ 是\textbf{同态（homomorphic）}的环。
 \end{definition}
+容易验证，由于环同态保加法和乘法，乘法对加法的分配律也在同态映射下不变。
 
+一个常见的环同态例子为\textbf{自然同态}（也称\textbf{典范映射}）：如果$I$是环$R$的理想，那么我们有环同态$\pi:R\rightarrow R/I$，使得对于任意$r\in R$都有$\pi (r)=r+I$。可以验证这是一个\textbf{满的}环同态。
 \begin{definition}{环同构}
 如果一个环同态是双射，那么我们称它为一个\textbf{环同构（ring isomorphism）}，相应的两个环就是\textbf{同构（isomorphic）}的。记“$R_1$ 和 $R_2$ 同构”为 $R_1\cong R_2$。
 \end{definition}
-
+\begin{exercise}{验证下列映射是否为环同态}
+\begin{enumerate}
+\item $f:\mathbb R^{2\times 2}\rightarrow \mathbb R,\quad f(A)=A^i_i,\quad \forall A\in \mathbb R^{2\times 2}$
+\item $f:\mathbb R^{2\times 2}\rightarrow \mathbb R,f(A)=\opn {Tr}A,\quad \forall A\in \mathbb R^{2\times 2}$
+\item $f:\mathbb R^{2\times 2}\rightarrow \mathbb R,f(A)=\opn {det}A,\quad \forall A\in \mathbb R^{2\times 2}$
+\end{enumerate}
+\end{exercise}
+\begin{exercise}{环同态的基本性质}
+\begin{enumerate}
+\item 证明：环同态把单位元映射为单位元（乘法单位元\textbf{1}和加法单位元\textbf{0}）。
+\item 证明：环同态把子环映射为子环。
+\item 证明：$f(-r)=f(r)$
+\item 证明：若$r$和$f(r)$非零，则有$f(r^{-1})=f(r)^{-1}$
+\end{enumerate}
+\end{exercise}
 同构的两个环具有完全相同的运算结构，而同态的两个环的运算结构似而不同，和群的同态、同构类似。
 
 \subsection{环同态基本定理}\pentry{群同态基本定理：\autoref{exe_Group2_1}~\upref{Group2}}
@@ -24,14 +45,70 @@
 给定环同态 $f:R_1\rightarrow R_2$，记 $\opn{ker}f=\{r\in R_1|f(r)=0\}$，称为同态 $f$ 的\textbf{核}。
 \end{definition}
 
-
+从定义可见，环同态首先是加法群的同态，因此同态映射的核是原环的正规子群。实际上，$\opn{ker} f$还是$R_1$的\textbf{理想}，只需验证“左右吸收律”成立即可。
 和群同态基本定理类似，我们有如下环同态基本定理：
 
-\begin{definition}{环同态基本定理}
-给定环同态 $f:R_1\rightarrow R_2$，则 $\opn{ker}f$ 是 $R_1$ 的理想，并且 $R_1/\opn{ker}f\cong R_2$。
-\end{definition}
+\begin{theorem}{第一同态定理}
+给定\textbf{满射}的环同态：$f:R_1\rightarrow R_2$，记$K= \opn{ker}f$，则有：
+\begin{itemize}
+\item $R_1/K\cong R_2$，且存在同构映射$g:R_1/K\rightarrow R_2$，使得交换图成立；
+\item 取$R_1$中包含$K$的\textbf{子环}，则$f(B)$也是子环，且$B$的左陪集与$f(B)$的左陪集一一对应；
+\item 取$R_1$中包含$K$的\textbf{理想}$I$，则$R_1/I \cong R_2/f(I)$
+\end{itemize}
+\end{theorem}
+Proof.
 
+首先是\textbf{第一条}，摘去环的乘法结构后这就是群同态基本定理。因此假设同构映射就是$f$，可证$f(r+K)=f(r),\forall r\in R_1$。也就是说，$K$的每个左陪集映射到$R_2$上的一个点。同构映射是保运算结构不变的双射，因此先证明运算保加法和乘法：
+\begin{equation}
+\begin{aligned}
+f(r_1 +K)+f(r_2 +K)&=f(r_1)+f(r_2)=f(r_1+r_2+K).\\
+f(r_1 +K)f(r_2 +K)&=f(r_1 r_2+K)~.
+\end{aligned}
+\end{equation}
+由于该环同态是满射，所以相应的同构映射也是满射。下面证明这还是单射。
+\begin{equation}
+\begin{aligned}
+f(r_1+K)=f(r_2+K)&\Leftrightarrow f(r_1)=f(r_2)\\
+&\Leftrightarrow  f(r_1-r_2)=0\\
+&\Leftrightarrow r_1-r_2\in K\\
+&\Leftrightarrow r_1+K=r_2+K~.
+\end{aligned}
+\end{equation}
+然后我们证明\textbf{第二条}。要证明$f(B)$的子环，只需要证明对加法和乘法封闭即可。
 
+设$f(b_1),f(b_2)\in R_2,\,\forall b_1,b_2\in R_1$，则
+\begin{equation}
+\begin{aligned}
+f^{-1}(r_1)f(r_2)\in f(B)&\Leftrightarrow f(r_1^{-1}r_2)\in f(B)\\
+&\Leftrightarrow r_1^{-1}r_2\in B~.
+\end{aligned}
+\end{equation}
+加法的证明同理。
+
+$B$由$K$的部分左陪集组成。因为设$r\in B$，有$r+K\subseteq B$，由于$f(r+K)=f(r)$，每个被$B$包含的左陪集与$f(B)$内的元素一一对应，设$B=\bigcup r_i+K$。则$B$的每个左陪集$r+B=\bigcup (r+r_i)+K$，与$f(B)$的左陪集$\bigcup f(r+r_i)=f(r)+f(B)$一一对应。
+
+易证\textbf{第三条}中$f(I)$是$R_2$的理想，同样完整包含$K$的若干左陪集。因此同理我们可以得到$R_1/I$与$R_2/I$的双射。现在利用第一条证明它们同构。也就是说只需证明：
+\begin{enumerate}
+\item 存在从$R_1$到$R_2/f(I)$的满同态。
+构建复合映射为$g=\pi\circ f:R_1\rightarrow R_2\rightarrow R_2/f(I)$，容易验证该映射符合要求。
+\item $I$为上述满同态的核，即$I=\opn{ker}g$。一方面，设$r\in I$，则$g(r)\in f(I)$，因此$r\in \opn{ker}g$；另一方面，设$r\in \opn{ker}g$，则$g(r)\in f(I)$，两边乘以$g^{-1}$得证$r\in I$。
+\end{enumerate}
+\begin{theorem}{第二同态定理}
+若环$S$是环$R$的子环，且$I$为环$R$的理想，则有：
+\begin{enumerate}
+\item $S+I:=\{s+a|s\in S,a\in I\}$也是$R$的子环。
+\item $S\cap I$是$S$的理想。
+\item $(S+I)/I$同构于$S/(S\cap I)$。
+\end{enumerate}
+\end{theorem}
+前两条证明从略。第三条只需先证明$S$满同态于$(S+I)/I$，这是从单点集到陪集的映射，易证满同态，然后证明$S\cap I$是该同态的核即可。设$s\in S$，该映射为$f(s)=s+I$，因而若$s+I=I$，必有$s\in I$。
+\begin{theorem}{第三同态定理}
+令$R$为任意环，$J$与$I$为环上的理想，且$J\subset I$。可得：
+\begin{equation}
+(R/J)/(I/J)\cong R/I~.
+\end{equation}
+\end{theorem}
+易证$I/J$为$R/J$的理想。仿照第二同态定理的证明过程，接下来先证明存在从$R/J$到$R/I$的满同态（其实就是$R+J\rightarrow R+I$\footnote{由于商环的陪集保运算，因而这样的同态映射总存在。由于$J\subset I$，$R+I$的陪集可能比$R+J$中相应代表元素所在的陪集要更“大些”。}），并证明满同态的核正是$I/J$即可。
 
 
 
