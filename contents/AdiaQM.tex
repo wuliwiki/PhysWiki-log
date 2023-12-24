@@ -26,14 +26,14 @@ H(t)\psi_n(t) = E_n\psi_n(t)~.
 \begin{equation}\label{eq_AdiaQM_6}
 \braket*{\psi_m(t)}{\psi_n(t)} = \delta_{m,n}~.
 \end{equation}
-为了方便且不失一般性本文规定 $\psi_n(t)$ 始终是实值函数（否则有可能出现一个随时间变化的整体相位让事情更复杂）。 另外相位函数为
-\begin{equation}
-\theta_n(t) = -\frac{1}{\hbar} \int_0^t E_n(t')\dd{t'}~.
+为了方便且不失一般性本文规定 $\psi_n(t)$ 始终是实值函数（否则有可能出现一个随时间变化的整体相位让事情更复杂）。 相位函数定义为
+\begin{equation}\label{eq_AdiaQM_8}
+\theta_n(t) \equiv -\frac{1}{\hbar} \int_0^t E_n(t')\dd{t'}~.
 \end{equation}
 
 \begin{example}{}
 \begin{enumerate}
-\item 当无限深势阱\upref{ISW}缓慢变长。
+\item 无限深势阱\upref{ISW}缓慢变长。
 \item 量子简谐振子\upref{QSHOop}的固有频率 $\omega$ 缓慢变化。
 \end{enumerate}
 \end{example}
@@ -78,11 +78,11 @@ H(t)\Psi(t) = \I\hbar \dot \Psi(t)~,
 \end{equation}
 这可以表示为矩阵乘法
 \begin{equation}\label{eq_AdiaQM_9}
-\dot{\bvec c}(t) = \frac{1}{\I\hbar}\mat A(t) \bvec c(t)~.
+\dot{\bvec c}(t) = \frac{1}{\I\hbar}\tilde{\mat H}(t) \bvec c(t)~.
 \end{equation}
-其中矩阵 $\mat A$ 定义为
+其中矩阵 $\tilde{\mat H}$ 定义为
 \begin{equation}\label{eq_AdiaQM_10}
-A_{ij}(t) = -\I\hbar \braket*{\psi_m}{\dot\psi_n}\E^{\I(\theta_n-\theta_m)}~.
+\tilde H_{ij}(t) = -\I\hbar \braket*{\psi_m}{\dot\psi_n}\E^{\I(\theta_n-\theta_m)}~.
 \end{equation}
 注意\autoref{eq_AdiaQM_9} 可以看作含时薛定谔方程的一种矩阵形式，和\autoref{eq_AdiaQM_1} 完全等效。 这类似于 “含时微扰理论\upref{TDPT}” 中的\autoref{eq_TDPT_3}。
 
@@ -94,41 +94,95 @@ A_{ij}(t) = -\I\hbar \braket*{\psi_m}{\dot\psi_n}\E^{\I(\theta_n-\theta_m)}~.
 \begin{equation}\label{eq_AdiaQM_7}
 \braket*{\psi_m}{\dot\psi_n} = -\braket*{\psi_n}{\dot\psi_m}~.
 \end{equation}
-注意 $n=m$ 时该式两边恒为零，\autoref{eq_AdiaQM_10} 中 \textbf{$\mat A$ 的对角元也恒为零}。 且通过该式容易证明 \textbf{$\mat A$ 是厄米矩阵}。
+注意 $n=m$ 时该式两边恒为零，\autoref{eq_AdiaQM_10} 中 \textbf{$\tilde{\mat H}$ 的对角元也恒为零}。 且通过该式容易证明 \textbf{$\tilde{\mat H}$ 是厄米矩阵}。
 
-要精确计算矩阵 $\mat A$，一般直接根据定义直接求解 $\psi_n(t)$（\autoref{eq_AdiaQM_3}）再代入 \autoref{eq_AdiaQM_10} 即可。 但为了估计 $\mat A$ 矩阵元的大小，我们可以由\autoref{eq_AdiaQM_4} 得
+要精确计算矩阵 $\tilde{\mat H}$，一般直接根据定义直接求解 $\psi_n(t)$（\autoref{eq_AdiaQM_3}）再代入 \autoref{eq_AdiaQM_10} 即可。 但为了估计 $\tilde{\mat H}$ 矩阵元的大小，我们可以由\autoref{eq_AdiaQM_4} 得
 \begin{equation}\label{eq_AdiaQM_11}
 \braket*{\psi_m}{\dot\psi_n} = \frac{\mel*{\psi_m}{\dot H}{\psi_n}}{E_n-E_m} \qquad (E_m\ne E_n)~.
 \end{equation}
 
-到现在为止，所有推导都是精确的。 绝热近似的关键就在于假设 $H$ 随时间变化缓慢，即 $\dot H$ 非常小，以至于如果两个能级 $E_n$ 和 $E_m$ 不是特别接近时，可以近似认为\autoref{eq_AdiaQM_11} 对应的矩阵元 $A_{m,n}$ 可以忽略不计。
+到现在为止，所有推导都是精确的。 绝热近似的关键就在于假设 $H$ 随时间变化缓慢，即 $\dot H$ 非常小，以至于如果两个能级 $E_n$ 和 $E_m$ 不是特别接近时，可以近似认为\autoref{eq_AdiaQM_11} 对应的矩阵元 $\tilde H_{m,n}$ 可以忽略不计。
 
 \subsection{非简并情况}
-若在考虑的时间区间内， $H(t)$ 始终没有发生简并，不同的能级之间也没有太接近， 那么可以假设\autoref{eq_AdiaQM_11} 对全部 $m\ne n$ 为零，也就是 $\mat A = \bvec 0$。 此时\autoref{eq_AdiaQM_9} 直接变为
+若在考虑的时间区间内， $H(t)$ 始终没有发生简并，不同的能级之间也没有太接近， 那么可以假设\autoref{eq_AdiaQM_11} 对全部 $m\ne n$ 为零，也就是 $\tilde{\mat H} = \bvec 0$。 此时\autoref{eq_AdiaQM_9} 直接变为
 \begin{equation}
 \dot{\bvec c}(t) = \bvec 0~.
 \end{equation}
 这说明所有系数都不随时间变化，令常数 $C_n = c_n(0)$，得到\autoref{eq_AdiaQM_2}。
 
 \subsection{存在简并的情况}
-对 $\mat A$ 不为零的情况，\autoref{eq_AdiaQM_9} 形式上的通解为（引用未完成）
+对 $\tilde{\mat H}$ 不为零的情况，\autoref{eq_AdiaQM_9} 形式上的通解为（引用未完成）
 \begin{equation}
 \bvec c(t) = \mat U(t)\bvec c(0)~.
 \end{equation}
-其中
+其中演化算符为
 \begin{equation}
-\mat U(t) = \hat{\mathcal{T}}\exp[-\frac{\I}{\hbar}\int_0^t \mat A(t') \dd{t'}]~.
+\mat U(t) = \hat{\mathcal{T}}\exp[-\frac{\I}{\hbar}\int_0^t \tilde{\mat H}(t') \dd{t'}]~.
 \end{equation}
 
-考虑任意两个 $E_m\ne E_n$ 不同的简并空间在任何时间都具有不同能量且能使\autoref{eq_AdiaQM_11} 右边忽略的情况。 此时 $\mat A$ 是块对角厄米矩阵，每个对角块代表一个本征子空间（或者若干个可能在某时刻本征值相同的本征子空间张成的空间），不同子空间之间不存在耦合。 $\mat U$ 也是结构相同的分块酉矩阵，且每个对角块都分别是一个酉矩阵。每个本征子空间独立演化，投影概率保持不变。
+考虑任意两个 $E_m\ne E_n$ 不同的简并空间在任何时间都具有不同能量且能使\autoref{eq_AdiaQM_11} 右边忽略的情况。 此时 $\tilde{\mat H}$ 是块对角厄米矩阵，每个对角块代表一个本征子空间（或者若干个可能在某时刻本征值相同的本征子空间张成的空间），不同子空间之间不存在耦合。 $\mat U$ 也是结构相同的分块酉矩阵，且每个对角块都分别是一个酉矩阵。每个本征子空间独立演化，投影概率保持不变。
 
 但是每个空间内部的波函数投影该如何随时间演化呢？该空间内部所有的态都是同一个能量的本征态，所以内部的正交归一基底可以任意选取。
-\addTODO{我猜如果时刻选择让 $\mel*{\psi_m}{\dot H}{\psi_n}$ 对角化的基底（好本征态），仍然可以使 $\mat A = \mat 0$！ 也就是说好本征态之间没有 coupling}
 
 \subsubsection{能级分裂与合并}
-当每个子空间的本征能量随时间变化时，哪些矩阵元被忽略可能取决于时刻 $t$。 这就是说矩阵 $\mat A(t)$ 的对角块可能有些时候会发生拆分或合并（多个对角块发生耦合后合并为一个）。 但若这种合并的持续时间只有很短乃至一瞬间，那我们是否可以认为合并前后波函数不发生变化，也就是假设合并不存在呢？
+当每个子空间的本征能量随时间变化时，哪些矩阵元被忽略可能取决于时刻 $t$。 这就是说矩阵 $\tilde{\mat H}(t)$ 的对角块可能有些时候会发生拆分或合并（多个对角块发生耦合后合并为一个）。 但若这种合并的持续时间只有很短乃至一瞬间，那我们是否可以认为合并前后波函数不发生变化，也就是假设合并不存在呢？
 
-\addTODO{？？？，每个时刻 $t$ 都对分块厄米矩阵 $\mat A$ 的每个块分别对角化不就行了吗？？？ 如果不是分块矩阵，就直接整个对角化不就好了吗？ 但是！但是！这样一来 $t$ 改变时难道要不断的对角化？一种特殊情况：假设 $H=H^0 + \lambda(t)H^1$ 就不存在这个问题了！ $\mat A$ 关于时间的变化就只是乘以 $\lambda(t)$ 而已。 只需要对 $H^1$ 做一次对角化。}
-\addTODO{有没有可能即使 $E_m=E_n$，$\braket*{\psi_m}{\dot\psi_n}$ 也恒为零呢？什么时候？例如缓慢增加氢原子的核电荷时 $\psi_{n,l,m}$ 之间会耦合嘛？ stark 的好本征态之间呢？}
-\addTODO{或许可以搞个矩阵来数值验证一下，例如氢原子的 stark 效应是否真的可以这么搞？以及氢原子的 $Z$ 慢慢变化。}
-\addTODO{啥时候讲 avoided crossing 啊……}
+我们先看一个经典的例子，或许会让你有些惊讶
+\begin{example}{二阶系统}
+令一个 $t=0$ 时简并的双态系统，哈密顿量为（为了书写方便本例中使用原子单位制\upref{AU}，即 $\hbar=1$）
+\begin{equation}
+\mat H(t) = \pmat{1 & 0\\ 0 & 1}
++ \alpha t \pmat{0 & 1\\ 1 & 0}~.
+\end{equation}
+当 $t>0$ 时， 第二个哈密顿矩阵会导致能级分裂。
+
+令 $\bvec\psi = (x,y)$， 代入含时薛定谔方程得
+\begin{equation}
+\leftgroup{
+&\I\dot x = x + \alpha t y~,\\
+&\I\dot y = \alpha t x + y~.
+}\end{equation}
+求解厄米矩阵 $\mat H(t)$ 的本征方程， 两个能级分别为
+\begin{equation}\label{eq_AdiaQM_12}
+E_\pm(t) = 1 \pm \alpha t~.
+\end{equation}
+正交归一的两个本征态始终为
+\begin{equation}
+\psi_\pm = \frac{1}{\sqrt{2}}\pmat{1\\ \pm1}~.
+\end{equation}
+其时间导数恒为零，根据（\autoref{eq_AdiaQM_10}） $\tilde{\mat H}$ 恒为零。 所以即使开始时存在简并，也能使\textbf{绝热近似精确成立}（\autoref{eq_AdiaQM_2} ）！ 把\autoref{eq_AdiaQM_12} 代入\autoref{eq_AdiaQM_8} 得
+\begin{equation}
+\theta_\pm = -\qty(t \pm \frac{1}{2}at^2)~.
+\end{equation}
+所以方程的通解为：
+\begin{equation}
+\leftgroup{
+&x(t) = C_+\E^{\I\theta_+(t)} + C_-\E^{\I\theta_-(t)}~,\\
+&y(t) = C_+\E^{\I\theta_+(t)} + C_-\E^{\I\theta_-(t)}~.
+}\end{equation}
+\end{example}
+
+更一般地， 令含时哈密顿为
+\begin{equation}
+\mat H(t) = E_0\mat I + \alpha(t) \mat H^1~,
+\end{equation}
+其中 $\mat I$ 是单位矩阵， $\mat H^1$ 且与时间无关。 \textbf{那么绝热近似就是精确的}。
+
+记 $\mat H^1$ 的本征值和本征矢为（都与时间无关）
+\begin{equation}
+E_n^1~, \quad \bvec\psi_n \qquad (n=1,\dots,N)~,
+\end{equation}
+那么 $\mat H(t)$ 的本征值和本征矢为，
+\begin{equation}
+E_n(t) = E_0 + \alpha(t) E_n^1~, \quad \bvec\psi_n \qquad (n=1,\dots,N)~,
+\end{equation}
+精确的波函数通解为
+\begin{equation}
+\bvec \Psi(t) = \sum_n C_n \bvec\psi_n \E^{\I\theta_n(t)}~.
+\end{equation}
+其中
+\begin{equation}
+\theta_n(t) = -\qty(E_0 t + E_n^1 \int_0^t\alpha(t')\dd{t'})~.
+\end{equation}
+
+% \addTODO{？？？，每个时刻 $t$ 都对分块厄米矩阵 $\tilde{\mat H}$ 的每个块分别对角化不就行了吗？？？ 如果不是分块矩阵，就直接整个对角化不就好了吗？ 但是！但是！这样一来 $t$ 改变时难道要不断的对角化？一种特殊情况：假设 $H=H^0 + \lambda(t)H^1$ 就不存在这个问题了！ $\tilde{\mat H}$ 关于时间的变化就只是乘以 $\lambda(t)$ 而已。 只需要对 $H^1$ 做一次对角化。}
