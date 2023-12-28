@@ -1,0 +1,156 @@
+% 前推
+% license Usr
+% type Tutor
+
+
+\pentry{流形\upref{Manif}，光滑映射（流形）\upref{DiffTg}，切向量场\upref{Vec}}
+\begin{issues}
+\issueTODO缺图
+\end{issues}
+
+赋予流形以联络，便可以比较同一流形上不同点的切向量“大小”。那对于不同流形，我们能否找到一个定义去联系同一点上的不同切空间呢？
+\subsection{前推}
+\begin{definition}{前推}
+设$M,N$都是光滑流形。$f,g\in C^{\infty}(N)$。对任意$p\in M,\,F:M\rightarrow N$为光滑映射。定义$F_*:T_p M\rightarrow T_{F(p)N}$为
+\begin{equation}
+(F_*X)(f)=X(f\circ F)~,
+\end{equation}
+称之为与$F$关联的\textbf{前推（push-forward）}。
+\end{definition}
+可记忆前推是顺着光滑映射的方向对切向量进行转移，在$M$上$p$点的切空间与$N$上$F(p)$点的切空间建立关联。这样的定义是合理的，$F_*X$确实是一个切向量，满足导子的性质：
+\begin{equation}
+\begin{aligned}
+(F_*X)(fg)&=X((fg)\circ F)\\
+&=X(f\circ F)(g\circ F)\\
+&=(g\circ F)X(f\circ F(p))+(f\circ F)X(g\circ F(p))\\
+&=g(F)F_*X(f)+f(F)F_*X(g)~.
+\end{aligned}
+\end{equation}
+易证前推具有如下性质：
+\begin{lemma}{}
+令$F:M\rightarrow N$与$G:N\rightarrow P$都是光滑映射。且有$p\in M$。那么我们有：
+\begin{enumerate}
+\item $F_*:T_P M\rightarrow T_{F(p)}N$是线性的。
+\item $(G\circ F)_*=G_*\circ F_*:T_p M\rightarrow T_{G\circ F(p)}P$
+\item $(Id_M)_*=Id_{T_p M}:T_p M\rightarrow T_p M$
+\item 若$F$是微分同胚，那么前推：$F_*: T_p M\rightarrow T_{F(p)N}$是同构映射。
+\end{enumerate}
+\end{lemma}
+
+
+\subsection{前推的应用}
+\subsubsection{流形上的切空间}
+令$(U,\phi)$是$M$上的光滑坐标卡，也就是说$\phi$是双向光滑的微分同胚映射。因此，$\phi_*:T_p M\rightarrow T_{\phi(p)}R^n$是同构映射。那么我们可以利用前推来定义该坐标卡上每一点切空间的basis：
+\begin{equation}
+\frac{\partial}{\partial x^i}\bigg|_p=\phi^{-1}_* (\frac{\partial}{\partial x^i})\bigg|_{\phi(p)}~.
+\end{equation}
+
+设$\{\widetilde{e_i}\}$为$U$上$p$点的切空间基矢，对应$\phi (U)$上切空间的基矢$\{{e_i}\}$，并设$f\in C^{\infty}(U)$，那么我们有：
+\begin{equation}
+\begin{aligned}
+\widetilde e_i f=\frac{\partial}{\partial x^i}\bigg|_p f&= (\frac{\partial}{\partial x^i})\bigg|_{\phi(p)}(f\circ \phi^{-1})\\
+&=e_i\hat f(\hat p)~.
+\end{aligned}
+\end{equation}
+
+可见，固定一个图，则流形上该点切空间的基矢定义与光滑函数的定义是自洽的。称$\hat f=f\circ \phi^{-1}$为光滑函数$f$的坐标表示，$\hat p=\phi (p)$为$p$点的坐标表示，一个函数在某个图光滑等价于在“表示”里光滑。
+\begin{exercise}{}
+设$U\subset R^n$，基矢组为$\{e_i\}$，任意坐标表示为$(x^1,x^2...x^n)$。另有$V\subset R^m$，基矢组为$\{\widetilde \theta_i\}$，对应坐标表示$(y^1,y^2...y^m)$。设$F:U\rightarrow V$是光滑映射，$f$是$V$上的光滑函数。证明：
+\begin{equation}
+(F_*\widetilde e_i)f=(\frac{\partial F^j}{\partial x^i}(p)\theta_j)f~.
+\end{equation}
+
+\end{exercise}
+切空间是线性空间，因此可以通过过渡矩阵来进行坐标变换。那不同图上同一点的切空间是否也存在一个过渡矩阵，建立不同基矢组的联系？答案是肯定的。
+具体来说，设$(U,\phi),(V,\psi)$是$M$上相容的图。$\{\widetilde e_i\}$与$\{\widetilde \theta_i\}$分别是$U$和$V$上切空间的基矢，且图上的坐标分别为$\phi(p)=(x^1,x^2...),\psi(p)=(y^1,y^2...y^n)$。则$\phi\circ\psi^{-1}:\psi(U\cap V)\rightarrow\phi(U\cap V)$是光滑的。又设\textbf{该转移映射的坐标表示}为
+\begin{equation}
+\phi\circ \psi^{-1}(y)=(x'^1,x'^2...x'^n)~,
+\end{equation}
+对于$p\in U\cap V$，我们有：$\widetilde\theta_i|_p=T^j_i \widetilde e_j|_p$，$T^j_i$是光滑函数构成的过渡矩阵。该假设是合理的，切向量作为道路等价类，无论在什么图里，作用在光滑函数上都会得到相同的结果，即$Xf=a^i\widetilde e_if=b^i\widetilde \theta_i f$。不同点的切空间没有自然同构，因而过渡矩阵元是流形上的光滑函数。
+
+两边作用在$\phi(p)$上，利用$e_ix^k=\delta^k_i$，计算分量得：
+\begin{equation}
+\begin{aligned}
+ T^j_i e_j x^k&=\theta_i (\phi^k\circ \psi^{-1}(y))\\
+T^k_i&=\frac{\partial x'^{k}}{\partial y^i}~.
+\end{aligned}
+\end{equation}
+
+从推导中我们也可以看到，实际上$e_j,x^k$都是包含转移函数的形式。
+严谨的推导如下：
+\begin{equation}
+\begin{aligned}
+\left.\frac{\partial}{\partial y^i}\right|_p & =\left.\left(\phi^{-1}\right)_* \frac{\partial}{\partial y^i}\right|_{\psi(p)} \\
+& =\left.\left(\phi^{-1}\right)_*\left(\phi \circ \psi^{-1}\right)_* \frac{\partial}{\partial y^i}\right|_{\psi(p)} \\
+& =\left.\left(\phi^{-1}\right)_* \frac{\partial x'^j}{\partial y^i}(\psi(p)) \frac{\partial}{\partial x'^j}\right|_{\phi(p)} \\
+& =\left.\frac{\partial x'^j}{\partial y^i}(\psi(p))\left(\phi^{-1}\right)_* \frac{\partial}{\partial x'^j}\right|_{\phi(p)} \\
+& =\left.\frac{\partial x'^j}{\partial y^i}(\widehat{p}) \frac{\partial}{\partial x'^j}\right|_p,
+\end{aligned}~.
+\end{equation}
+
+于是，我们得到了不同图之间基矢的“联系”，类似多元函数微分学的结果，只不过雅克比矩阵的矩阵元为转移函数对变量的偏导数。回顾切向量的导子定义，我们可以得到同一切向量的坐标变换。若$X=a^i\widetilde e_i=b^i\widetilde  \theta_i$，则有：
+\begin{equation}
+b^i=T^i_ja^j~,
+\end{equation}
+其中$T^i_j=\frac{\partial y'^{i}}{\partial x^j}(\phi(p)),y'^i=\psi\circ\phi^{-1}$。
+\subsubsection{曲线上的切向量}
+设光滑曲线$\gamma(t):[0,1]\rightarrow M$，定义$\gamma(t_0)$处的切向量为导数的前推：
+\begin{equation}
+\gamma^{\prime}\left(t_0\right)=\left.\gamma_* \frac{d}{d t}\right|_{t_0}~.
+\end{equation}
+设$\gamma(t)=(\gamma^1(t),\gamma^2(t)...\gamma^n(t))=(x^1,x^2...x^n),f\in C^{\infty}(M)$。由前推的定义及链式法则，可知曲线上的切向量对光滑函数作用为：
+\begin{equation}
+\begin{aligned}
+\gamma'(t_0)f&=\frac{d(f\circ\gamma)}{dt}\\
+&=\gamma^i(t_0)'\frac{\partial f}{\partial x^i}\bigg|_{\gamma(t_0)}
+\end{aligned}~,
+\end{equation}
+也就是说，$\gamma'(t_0)=\gamma^i(t_0)'\frac{\partial }{\partial x^i}\bigg|_{\gamma(t_0)}$，这确实是一个切向量。与欧几里得空间的意义相同，流形上曲线某点处的切向量等于沿着该点切向求方向导数。
+
+广义上来看，“前推”可以概括顺着光滑映射方向的一切复合作用。例如，若$\gamma:[0,1]\rightarrow M$，则对于光滑映射$F:M\rightarrow N$，复合映射：$F\circ \gamma:[0,1]\rightarrow M\rightarrow N$可看作把$M$上的光滑曲线迁移到$N$上，在这个过程中，每一点的切向量也在前推。
+\begin{lemma}{}
+$F,\gamma,M,N$的定义如上。$N$上该复合曲线的切向量为：
+\begin{equation}
+(F\circ\gamma)'(t_0)=F_*\gamma(t_0)'~.
+\end{equation}
+\end{lemma}
+\subsubsection{前推切向量场}
+定义光滑映射$f:M\rightarrow N$，$X \in \mathfrak{X
+}(M),Y\in \mathfrak{X}(N)$。若对于任意$p\in M$，有$F_*X_p=Y_{F(p)}$，则称这两个场是\textbf{“F关联”}的。我们可以用下述定理判断两个向量场是否关联:
+\begin{theorem}{}
+$X,Y,M,N$定义如上。$X$与$Y$是F关联的，当且仅当对于定义在$N$上一开集的任意光滑函数$f$有：
+\begin{equation}
+X(f\circ F)=(Yf)\circ F~.
+\end{equation}
+\end{theorem}
+Proof.
+先看左侧。对定义域中的$p$点作用，我们有：
+\begin{equation}
+X(f\circ F)=(F_*X)f~.
+\end{equation}
+
+对于右侧，我们有：
+\begin{equation}
+(Yf)\circ F=(Y\circ F(p))(f (F(p)))=Y_{F(p)}f~,
+\end{equation}
+得证。
+
+如果不满足上述条件，两个流形上的切向量场未必存在F关联。有一种情况十分特殊，如果该光滑映射是微分同胚映射（即双向光滑双射，是流形意义上的同构），总存在这样的F关联，此时我们把$Y$称为\textbf{$X$的前推}。
+\begin{theorem}{}
+设$F:M\rightarrow N$是微分同胚。对于任意光滑切场$X\in \mathfrak{X}(M)$，总存在$N$上的一个光滑切场与之F关联。
+\end{theorem}
+基矢组为
+proof.设$q\in N$，定义F关联的$Y$场为：
+\begin{equation}
+Y_q=F_*X_{F^{-1}(q)}=F_*(X\circ F^{-1}(q))~,
+\end{equation}
+由于复合函数光滑，所以前推的切场是光滑的。我们一般的研究对象都要具备光滑性，所以要求前推切场保持光滑性质，因此要求流形之间的光滑映射是微分同胚。
+\subsubsection{向量场的协变导数}
+\pentry{仿射联络\upref{affcon}，协变导数\upref{CoDer}}
+设$f:(M,\nabla)\rightarrow(N,\widetilde {\nabla})$是\textbf{保联络的微分同胚映射}。$c(t)$是$M$上的光滑曲线，$\frac{D}{dt}$和$\frac{\widetilde D}{dt}$分别是$M$上沿$c(t)$与$N$上沿$f\circ  c(t)$的协变导数。如果$V(t)$是$M$上沿$c$定义的光滑切向量场（即每一点的切向量不一定是曲线上该点的切向量）。那么我们有：
+\begin{equation}
+f_*(\frac{DV}{dt})=\frac{\widetilde D(f_*V)}{dt}~.
+\end{equation}
+\begin{exercise}{}
+测地线为“加速度”不变的曲线，满足$\frac{Dc'(t)}{dt}=0$。证明当微分同胚映射$f:M\rightarrow N$保联络，即满足$F_*(\nabla_X Y)=\widetilde \nabla_{f_*(X)f*(Y)}$时，该同胚映射把测地线映射为测地线。
+\end{exercise}

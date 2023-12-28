@@ -116,6 +116,9 @@
 
 \subsubsection{find}
 \begin{itemize}
+\item 要查看一个文件夹中有多少文件（包括子文件夹），可以用 \verb`tree 文件夹 | tail -1` 或者 \verb`find 文件夹 -type f -printf \\n | wc -l`。 网上给的命令一般有问题： \verb`find 文件夹 -type f | wc -l`， 如果输出的文件路径很长就会自动换行导致结果偏大（笔者测试 160 字符左右就会换行）！
+\item 要查看一个文件夹中有多少子文件夹， 用 \verb`tree 文件夹 | tail -1` 或 \verb`find 文件夹 -type d -printf \\n | wc -l` 后者会算上 \verb`文件夹` 本身，所以结果多一个
+\item 在条件前面加 \verb`!` 就是排除这些文件， 如 \verb`find . -type f ! -name "*.png"` 查找不以 \verb`.png` 结尾的文件（夹）
 \item \verb`find /path1/ path2/ -name '<filename>'` 可以搜索该目录下的文件. 加上 \verb`-iname` 选项可以不区分大小写. 也可以用 \verb`'*<filename>*'` 来表示含该文字的文件名. 加 \verb`-user 用户名` 选项用于查找某个用户的文件， 加 \verb`-size +100M` 可以查找大于 100M 的文件。 \verb`-type d` 选项搜索目录， 默认是只搜索文件
 \item 如果要执行， 用 \verb`find ... -exec xxxx {} \;` 可以将找到的每个结果分别用程序 \verb`xxxx` 执行， \verb`find ... -exec xxxx {} +` 将找到的结果用 \verb`xxxx` 一次执行（如果数量太多也可能自动分为几次）。 其中 \verb`{}` 可以重复使用。
 \item \verb`-execdir ... {} ... \;` 相当于先 \verb`cd` 到每个文件所在目录然后执行命令
@@ -345,11 +348,12 @@ sudo echo umask 002 >> /home/用户2/.bashrc
 \subsection{文件加密}
 \begin{itemize}
 \item \verb|openssl| 可以用来给文件或字符串加密或解密
-\item 文件加密： \verb`openssl aes-256-cbc -nosalt -in 文件名 -out 加密文件名 -pass pass:密码`
-\item 文件解密： \verb`openssl aes-256-cbc -nosalt -d -in 加密文件名 -out 文件名 -pass pass:密码`
-\item 字符串加密： \verb`echo '需要加密的字符串' | openssl enc -base64 -e -aes-256-cbc -nosalt -pass pass:密码`
-\item 字符串解密： \verb`echo "需要解密的字符串" | openssl enc -base64 -d -aes-256-cbc -nosalt -pass pass:密码`
+\item 文件加密： \verb`openssl aes-256-cbc -nosalt -pbkdf2 -in 文件名 -out 加密文件名 -pass pass:密码`
+\item 文件解密： \verb`openssl aes-256-cbc -nosalt -pbkdf2 -d -in 加密文件名 -out 文件名 -pass pass:密码`
+\item 字符串加密： \verb`echo '需要加密的字符串' | openssl enc -base64 -e -aes-256-cbc -nosalt -pbkdf2 -pass pass:密码`
+\item 字符串解密： \verb`echo "需要解密的字符串" | openssl enc -base64 -d -aes-256-cbc -nosalt -pbkdf2 -pass pass:密码`
 \item salt 在加密过程中加入了随机性， 使加密更安全。 如果没有 \verb|-nosalt|， 文件加密得到的结果的 hash 是不稳定的。
+\item 这里的 \verb|-base64| 使用 \verb|a-z|， \verb|A-Z|, \verb|0-9| 和 \verb|+=| 64 个字符对加密结果进行编码。 另外也可以用 \verb|-hex| 用 16 进制编码
 \item 这样也可以给文件加密得到稳定 hash： \verb`cat 文件名 | openssl enc -base64 -e -aes-256-cbc -pass pass:密码 > 加密文件名`
 \item \verb|openssl| 同样也可以生成密钥对， 然后用密钥给文件加密， 具体问 GPT 吧。
 \end{itemize}
