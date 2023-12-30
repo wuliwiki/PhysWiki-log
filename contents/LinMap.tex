@@ -29,9 +29,11 @@
 \begin{equation}
 f(c_1 {v}_1+c_2 {v}_2)=c_1f({v}_1)+c_2f({v}_2)~.
 \end{equation}
-则称 $f$ 是 $V$ 到 $U$ 的一个\textbf{线性映射（linear map）}， 也叫\textbf{线性变换（linear transform）}， 或者\textbf{线性算符（linear operator）}。“算符”也译作“\textbf{算子}”。
+则称 $f$ 是 $V$ 到 $U$ 的一个\textbf{线性映射（linear map）}， 也叫\textbf{线性变换（linear transform）}。
+
+特殊地，把 $f:V\to V$ 称为\textbf{线性算子（linear operator）}，“算子” 也叫“\textbf{算符}”。
 \end{definition}
-一些材料中只把定义域和值域相同的线性映射 $f:V\to V$ 称为线性变换， 小时百科中不做这种区分。
+注意一些材料中只把 $f:V\to V$ 称为线性变换，小时百科以\autoref{def_LinMap_1} 为准。
 
 \autoref{def_LinMap_1} 的内涵比看上去广一些， 不仅仅是对 $V$ 中两个向量的线性组合成立。 容易证明对于任意的一组有限个向量 $\{v_i\}\subseteq V$ 和一组对应的标量 $\{c_i\}\subseteq\mathbb{F}$，都有
 \begin{equation}\label{eq_LinMap_1}
@@ -59,10 +61,20 @@ f\qty(\sum_i c_i v_i)=\sum_i c_i f(v_i)~.
 \end{exercise}
 
 在映射\upref{map}中， 我们把一个映射的像定义为值域中所有被映射到的元素的集合。
-\begin{theorem}{值空间}
-线性映射 $f:V\to U$ 的像 $M = f(V) \subseteq U$ 是一个线性空间， 即 $U$ 的子空间\upref{SubSpc}。 称为 $f$ 的\textbf{值空间（range space）}。 为了方便我们也可以把该映射记为 $f: V\to M \subseteq U$。
-\end{theorem}
+\begin{definition}{值空间}\label{def_LinMap_3}
+线性映射 $f:V\to U$ 的像 $M = f(V) \subseteq U$ 是一个线性空间， 即 $U$ 的子空间\upref{SubSpc}。 称为 $f$ 的\textbf{值空间（range space）}。 在不造成歧义的情况下我们也可以把该映射记为 $f: V\to M \subseteq U$。
+
+我们把值空间的维度称为线性映射 $f$ 的\textbf{秩}，记做 $\opn{rank}(f)$。
+\end{definition}
 证明留作习题， 使用线性空间的定义\upref{LSpace}即可。
+
+反过来，我们可以定义所有映射到零向量的元素的集合。
+\begin{definition}{零空间}\label{def_LinMap_2}
+给定线性映射 $f:V\to U$， $V$ 中被变映射到 $U$ 中零向量的全体向量所构成的集合 $\{v\in V|f(v)= 0\}$ 构成 $V$ 的子空间， 称为 $f$ 的\textbf{零空间（null space）}， 也称为\textbf{零化子空间}或\textbf{零化子}。
+
+我们把零空间的维度称为线性映射 $f$ 的\textbf{零化度}，记做 $\opn{nullity}(f)$。
+\end{definition}
+证明留做习题： 只需要根据定义证明 $\{v\in V|f(v)= 0\}$ 是一个线性空间即可。 
 
 \addTODO{这两段应该放到后面展开讲解， 太浓缩}
 如果 $\{{e}_i\}_{i=1}^n$ 是 $V$ 的一组基底， 那么任意 $v\in V$ 都可以唯一地表示为 $v=\sum_i c_i {e}_i$ 的形式，其中 $c_i\in\mathbb{F}$。 这样，由于线性性，$f(v)=\sum_ic_if({e}_i)$。也就是说，只需要知道了基向量被 $f$ 映射到哪里，也就可以计算出任意向量映射到哪里。于是，和线性函数一样，确定一个线性映射的时候，我们最多只能自由选择基向量映射到哪里，只不过这里的函数值不再是数字，而是 $U$ 中的向量。
@@ -88,28 +100,11 @@ v &\mapsto f(v) + f(v')~.
 
 特别的，零函数 $v \mapsto 0$ 是向量空间 $L(V, W)$ 的零向量。
 
-
-\subsection{线性变换}
-
-\addTODO{以下需要改：线性变换和映射是同义词！}
-要知道一个具体的线性变换的性质，我们只需要知道它把基向量都映射到哪里去了。我们知道，基向量张成线性空间 $V$ 本身，而任意一组基向量变换后所得到的向量组，张成\upref{VecSpn}了线性变换的\textbf{像空间（image space）}，即 $V$ 中全体向量变换后的结果之集合。如果基向量变换后的向量组还是线性无关的，那么这个向量组也是一组基，从而像空间就是 $V$ 本身；但有的时候变换后的向量组线性相关了，这时候的像空间就是 $V$ 的一个真子集了。极端情况下甚至把所有向量都变换为零向量，这样的线性变换的像空间就只有零向量了。
-
-如果一个线性变换的像空间是 $V$ 的一个真子集，那么这个真子集一定是 $V$ 中的一个“过原点的平面”，我们把这种线性变换称为\textbf{退化（degenerate）}的。反过来，$V$ 中的一个“过原点的平面”可以是某线性变换的像空间。一个线性变换唯一对应一个像空间，但是一个像空间总是对应无穷多个线性变换。
-
-如果 $v\in V$ 在基 $\{{e}_i\}$ 中表示为 $\sum c_i {e}_i$，那么它变换后的向量就是 $T v=T\sum c_i {e}_i=\sum c_iT {e}_i$。如果向量组 $\{T {e}_i\}$ 是线性相关的，那么就意味着存在并非全为零的 $\{c_i\}$ 使得 $T v=\sum c_iT {e}_i=0$；而 $\{c_i\}$ 并非全为零意味着 $v$ 不是零向量。这就是说，退化的线性变换会把一些非零向量变换成零向量。
-
-\begin{exercise}{}
-如果线性变换非退化，那么非零向量有可能被变换为零向量吗？提示：退化和非退化的区别在于基做了线性变换后得到的向量组还是不是线性无关的，或者说还是不是一组基。
-\end{exercise}
-
-退化的线性变换会把非零向量变成零向量这一事实，引申出了零化子的概念：
-
-\begin{theorem}{零空间}\label{the_LinMap_1}
-给定线性映射 $f:V\to U$， $V$ 中被变映射到 $U$ 中零向量的全体向量所构成的集合 $\{v\in V|f(v)= 0\}$ 构成 $V$ 的子空间， 称为 $f$ 的\textbf{零空间（null space）}， 也称为\textbf{零化子空间}或\textbf{零化子}。
-\end{theorem}
-证明留做习题： 只需要根据定义证明 $\{v\in V|f(v)= 0\}$ 是一个线性空间即可。 
+% Giacomo：将线性算子（自同态）的部分移动到了《线性算子》
 
 \subsection{矩阵表示线性变换}
+
+% Giacomo: 应当改成更一般的 n x m 矩阵
 
 \footnote{节选自小时百科《代数学》。}给定实向量空间 $V$，并指定它的一组基 $\{\bvec{v}_i\}_{i=1}^n$，这样就可以把每个向量都表示为一个 $n\times 1$ 的列矩阵，而每个线性变换也可以表示为一个 $n\times n$ 的\textbf{方阵}。
 
@@ -164,4 +159,5 @@ c_1\\c_2\\c_3\\\vdots\\c_n
 
 在将来的词条中，我们会看到如何在给定了具体的基时用矩阵来描述向量和线性变换，以及当基的选择变化时，这些矩阵该如何变化。
 
-零化子空间是一种子空间，而我们也会在将来的词条中解释子空间的概念。
+% 零化子空间是一种子空间，而我们也会在将来的词条中解释子空间的概念。
+

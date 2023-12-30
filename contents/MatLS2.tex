@@ -1,17 +1,25 @@
-% 线性映射的结构
+% 秩-零化度定理
 % keys 线性变换|线性映射|补空间|线性空间|零空间|值空间
 % license Xiao
 % type Tutor
 
-\pentry{补空间\upref{DirSum}}
+\begin{issues}
+\issueTODO %用更规范的语言描述这个定义。
+\end{issues}
 
-如果线性映射是单射\upref{map}的（即定义域空间到值域空间\upref{LinMap}是双射的）， 那么它的结构简单明了， 没有太多值得讨论的。 我们现在来看一个揭示多对一线性映射的结构的重要定理。 考虑线性映射 $A:X\to Y$， 线性空间 $X$ 的零空间（\autoref{the_LinMap_1}~\upref{LinMap}） $X_0$ 中的每个矢量都被 $A$ 映射到 $Y$ 空间中的零矢量， 即 $A(X_0) = \qty{0}$。
+\pentry{直和（线性空间）\upref{DirSum}，线性映射\upref{LinMap}}
+
+\addTODO{需要在《线性代数》part中写一个矩阵版本}
+% prt_LA1
+
+如果线性映射是单射\upref{map}的（即定义域空间到值域空间\upref{LinMap}是双射的）， 那么它的结构简单明了， 没有太多值得讨论的。 我们现在来看一个揭示多对一线性映射的结构的重要定理。 考虑线性映射 $A:X\to Y$， 线性空间 $X$ 的零空间（\autoref{def_LinMap_2}~\upref{LinMap}）$X_0$ 中的每个矢量都被 $A$ 映射到 $Y$ 空间中的零矢量， 即 $A(X_0) = \qty{0}$。
 
 \begin{figure}[ht]
 \centering
 \includegraphics[width=9cm]{./figures/704f87dae0252e2f.pdf}
 \caption{两个 $X$ 子空间的线性映射： $X_0$ 是零空间， $X_1$ 是 $X_0$ 在 $X$ 中的补空间} \label{fig_MatLS2_1}
 \end{figure}
+\addTODO{“一一对应”放到箭头上面，$N_0, R$ 改成文中的符号}
 
 \begin{theorem}{}\label{the_MatLS2_1}
 令 $A:X \to Y$ 的零空间为 $X_0$， $X_1$ 为 $X_0$ 在 $X$ 中任意一个补空间（即 $X_0\oplus X_1 = X$， \autoref{def_DirSum_1}~\upref{DirSum}）， 令值空间 $Y_1 = A(X)$， 那么映射 $A:X_1\to Y_1$ 是一一对应的（即双射）。
@@ -22,29 +30,32 @@
 
 该定理可以更好地帮助我们理解线性方程组解的结构\upref{LinEq}： 当 $\mat A \bvec x = \bvec b$ 的解集等于一个特解加齐次解集， 齐次解。 $\bvec b$ 是 $Y_1$ 中的某向量， 特解是 $X_1$ 中映射到 $\bvec b$ 的向量， 而齐次解就是零空间 $X_0$。
 
-\begin{corollary}{}\label{cor_MatLS2_1}
-令\autoref{the_MatLS2_1} 中 $X, X_0, Y_1$ 的维数分别为 $N_X, N_0, R$， 那么
+我们记
+
+\begin{corollary}{秩-零化度定理}\label{cor_MatLS2_1}
+线性映射 $f: X \to Y$ 满足
 \begin{equation}\label{eq_MatLS2_1}
-N_X = N_0 + R~.
+\dim(X) = \opn{nullity}(f) + \opn{rank}(f)~.
 \end{equation}
+其中 $\opn{nullity}(f), \opn{rank}(f)$ 分别是 $f$ 的零化度（\autoref{def_LinMap_2}~\upref{LinMap}）和秩（\autoref{def_LinMap_3}~\upref{LinMap}）。
 \end{corollary}
-证明： 见\autoref{eq_MatLS2_1}， 由于 $X_1$ 与 $Y_1$ 一一对应， $X_1$ 的维数也是 $R$， 又因为 $X_0\oplus X_1 = X$， $X$ 的维数等于 $X_0, X_1$ 维数之和（\autoref{cor_DirSum_1}~\upref{DirSum}）。 证毕。
+证明： 见\autoref{eq_MatLS2_1}， 由于 $X_1$ 与 $Y_1$ 一一对应， $X_1$ 的维数也是 $\opn{rank}(A)$， 又因为 $X_0\oplus X_1 = X$， $X$ 的维数等于 $X_0, X_1$ 维数之和（\autoref{cor_DirSum_1}~\upref{DirSum}）。 证毕。
 
 \begin{corollary}{}
 线性映射 $A:X\to Y$ 中值空间 $A(X) \subseteq Y$ 的维数小于或等于定义域空间 $X$ 的维数。
 \end{corollary}
-证明： \autoref{eq_MatLS2_1} 中 $N_X, N_0, R > 0$， 所以有 $R \leqslant N_X$。
+证明： \autoref{eq_MatLS2_1} 中 $\dim(X), \opn{nullity}(A), \opn{rank}(A) > 0$， 所以有 $\opn{rank}(A) \leqslant \dim(X)$。
 
 \begin{corollary}{}
 线性映射 $A:X\to Y$ 是单射（即 $A:X\to A(X)$ 是双射）当且仅当零空间 $X_0$ 中只有零向量。
 \end{corollary}
-说明：零空间 $X_0$ 只有零矢量一个元素当且仅当\autoref{eq_MatLS2_1} 中 $N_X = R$ 或 $N_0 = 0$。
+说明：零空间 $X_0$ 只有零矢量一个元素当且仅当\autoref{eq_MatLS2_1} 中 $\dim(X) = \opn{rank}(A)$ 或 $\opn{nullity}(A) = 0$。
 
-证明： 前者证明后者： 使用\autoref{cor_LinMap_1}~\upref{LinMap} 以及单射的定义， 可得 $0\in X$ 是零空间中的唯一向量。 后者证明前者： $N_0 = 0$ 即\autoref{the_MatLS2_1} 中的 $X = X_1$， 与值空间 $Y_1 = A(X)$ 有一一对应关系。 证毕。
+证明： 前者证明后者： 使用\autoref{cor_LinMap_1}~\upref{LinMap} 以及单射的定义， 可得 $0\in X$ 是零空间中的唯一向量。 后者证明前者： $\opn{nullity}(A) = 0$ 即\autoref{the_MatLS2_1} 中的 $X = X_1$， 与值空间 $Y_1 = A(X)$ 有一一对应关系。 证毕。
 
 \subsection{证明}
 要证明\autoref{the_MatLS2_1}， 首先证明 $A(X_1) = A(X)$。 任意 $x\in X$ 可以表示为 $x = x_0 + x_1$， 其中 $x_0\in X_0$， $x_1\in X_1$。 $Ax = A x_0 + A x_1 = A x_1$。 这说明任意 $y_1 \in Y_1 = A(X)$ 都能找到 $x_1$ 使 $A x_1 = y_1$， 所以 $A(X_1) = Y_1$。
 
 现在证明 $X_1$ 和 $Y_1$ 一一对应： 令 $u, v \in X_1$， 我们要证明如果 $Au = Av$ 那么 $u = v$。 算符 $A$ 是线性的， 所以 $A(u-v) = 0$， 所以 $u - v \in X_0$。 由封闭性， $u - v \in X_1$。 由于补空间只交于零矢量 $X_0 \cap X_1 = \qty{0}$， 所以 $u - v = 0$， 即 $u = v$。 证毕。
 
-\addTODO{线性方程组词条\upref{LinEq}中说明： 线性方程组的解空间就是 $X_1$ 中的特解加上齐次解 $X_0$。}
+\addTODO{线性方程组词条\upref{LinEq}中说明： 线性方程组的解空间就是特解加上齐次解 $X_0$。}
