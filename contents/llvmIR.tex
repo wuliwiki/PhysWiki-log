@@ -10,36 +10,195 @@
 
 \textbf{LLVM IR (Intermediate Representation)} 是 LLVM 的一个 portable 的中间语言。 使用 LLVM 的编译器会先把高级语言编译成 IR， 然后再做进一步优化。 LLVM IR 的语法和汇编语言类似。
 
-以下是一个函数例子： 计算两个整数相加。
-\begin{lstlisting}[language=none]
-define i32 @add(i32 %a, i32 %b) {
-  %sum = add i32 %a, %b
-  ret i32 %sum
-}
-\end{lstlisting}
-
-另一个完整的例子， 可以编译运行
+一个完整的例子， 可以编译运行
 \begin{lstlisting}[language=none,caption=test.ll]
 ; Declare the main function
 define i32 @main() {
-    ; Allocate stack space for a single 32-bit integer
+  entry:
+    ; Allocate stack space for a single 32-bit integer in the stack memory
+    ; `var` is a pointer
     %var = alloca i32
 
-    ; Store the value 42 into the variable
+    ; Store the value 42 into the variable on memory stack
     store i32 42, i32* %var
 
-    ; Load the value of the variable into a register
+    ; Load the value of the variable into a [virtual] register
     %val = load i32, i32* %var
 
-    ; Return the value of the variable
+    ; Return the value of the register
     ret i32 %val
 }
 \end{lstlisting}
 
 编译：
-\begin{lstlisting}[language=none]
+\begin{lstlisting}[language=bash]
 llvm-as test.ll -o test.bc # 编译成 bitcode
 clang test.bc -o test # 编译成可执行文件
 ./test # 执行
 echo $? # 查看返回值（exit status）
+\end{lstlisting}
+
+\begin{itemize}
+\item \textbf{Static Single Assignment (SSA)}：每个变量只能赋值一次！
+\item  在使用一个变量之前， 通常需要把它加载到 register 中， 而不是直接 dereference。
+\item 例如算数以及 return 都需要先加载到 register 中.
+\end{itemize}
+
+以下是一个函数例子： 计算两个整数相加。
+\begin{lstlisting}[language=none]
+define i32 @add(i32 %a, i32 %b) {
+  entry:
+    %sum = add i32 %a, %b
+    ret i32 %sum
+}
+\end{lstlisting}
+
+调用该函数
+\begin{lstlisting}[language=none]
+define i32 @main() {
+  entry:
+    ; set a=10, b=20 in registers
+    %a = add i32 0, 10
+    %b = add i32 0, 20
+    %sum = call i32 @add(i32 %a, i32 %b)
+    ret i32 %sum
+}
+\end{lstlisting}
+
+其中对 \verb`a, b` 的赋值也可以用
+\begin{lstlisting}[language=none]
+%a = or i32 10, 0
+%b = or i32 20, 0
+\end{lstlisting}
+
+第三种方法是从内存 stack 中加载到 register
+\begin{lstlisting}[language=none]
+define i32 @main() {
+  entry:
+    %a = alloca i32
+    %b = alloca i32
+    store i32 10, i32* %a
+    store i32 20, i32* %b
+    %a_val = load i32, i32* %a
+    %b_val = load i32, i32* %b
+    %sum = call i32 @add(i32 %a_val, i32 %b_val)
+    ret i32 %sum
+}
+\end{lstlisting}
+
+\subsection{常识}
+\begin{itemize}
+\item 缩进不重要
+\item 名字（变量、函数、label）里面可以包含英文句号 “\verb`.`”
+\item 变量名以 \verb`%` 开始
+\item 注释用 \verb`;`
+\end{itemize}
+
+\subsection{判断}
+\begin{itemize}
+\item \verb`br i1 条件, label %真标签, label %假标签` 用于判断， \verb`i1` 是一个 1bit 整数，也就是 bool。 如果条件为真， 就跳到标签 \verb`真标签`， 否则跳到 \verb`假标签`
+\item 例如， \verb`%cond = icmp eq i32 %x, %y`, 然后 \verb`br i1 %cond, label %equals, label %notequals`
+\item label 的定义： \verb`标签名:`
+\item 判断 $x < y$： \verb`icmp slt i32 %x, %y` （signed less than）， 或者 \verb`sgt`（signed greater than）
+\item \verb`ult, ugt` （unsigned less/greater than）
+\item 与： \verb`%and_result = and i1 %a, %b`
+\item 或： \verb`%result = or i1 %cond1, %cond2`
+\end{itemize}
+
+
+\subsection{循环}
+一个什么都不做的空循环
+\begin{lstlisting}[language=none]
+define void @countUpTo(i32 %limit) {
+  entry:
+    ; Initialize loop variable
+    %i = alloca i32
+    store i32 0, i32* %i
+
+    ; Jump to the loop condition check
+    br label %loop.cond
+
+  loop.cond:
+    ; Load loop variable
+    %i.val = load i32, i32* %i
+
+    ; Check if the loop variable is less than the limit
+    %cond = icmp slt i32 %i.val, %limit
+    br i1 %cond, label %loop.body, label %loop.end
+
+  loop.body:
+    ; Increment the loop variable
+    %next.val = add i32 %i.val, 1
+    store i32 %next.val, i32* %i
+
+    ; Jump back to the loop condition
+    br label %loop.cond
+
+  loop.end:
+    ; Exit point of the loop
+    ret void
+}
+\end{lstlisting}
+
+生成数组 \verb`[1,2,3,4]`
+\begin{lstlisting}[language=none]
+define void @assignArray() {
+  entry:
+    ; Allocate an array of 4 integers on the stack
+    %array = alloca [4 x i32]
+
+    ; Loop counter
+    %i = alloca i32
+    store i32 0, i32* %i
+
+    ; Jump to the loop condition
+    br label %loop.cond
+
+  loop.cond:
+    ; Load the loop counter
+    %i.val = load i32, i32* %i
+
+    ; Check if the loop counter is less than 4
+    %cond = icmp slt i32 %i.val, 4
+    br i1 %cond, label %loop.body, label %loop.end
+
+  loop.body:
+    ; Calculate the address of the current array element
+    %addr = getelementptr [4 x i32], [4 x i32]* %array, i32 0, i32 %i.val
+
+    ; Assign the corresponding value (i+1) to the array element
+    %val = add i32 %i.val, 1
+    store i32 %val, i32* %addr
+
+    ; Increment the loop counter
+    %next.i = add i32 %i.val, 1
+    store i32 %next.i, i32* %i
+
+    ; Jump back to the loop condition
+    br label %loop.cond
+
+  loop.end:
+    ; Exit point of the loop
+    ret void
+}
+\end{lstlisting}
+
+要在 heap 中分配内存，取决于所在系统，一般调用 C 语言的 \verb`malloc`
+\begin{lstlisting}[language=none]
+declare i8* @malloc(i32) ; 声明 malloc
+
+define i32* @createArray() {
+  entry:
+    ; Calculate the size of the array (4 integers)
+    %size = mul i32 4, 4 ; size for 4 integers (assuming i32 is 4 bytes)
+
+    ; Call malloc to allocate memory on the heap
+    %arrayPtr = call i8* @malloc(i32 %size)
+
+    ; Cast the returned i8* (generic pointer) to i32* (pointer to integers)
+    %typedArrayPtr = bitcast i8* %arrayPtr to i32*
+
+    ; Return the pointer to the allocated memory
+    ret i32* %typedArrayPtr
+}
 \end{lstlisting}
