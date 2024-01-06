@@ -22,64 +22,350 @@
 
 纯态和非纯态都可以对应一个唯一密度矩阵。
 
-\subsection{测量}
-对于某个物理量对应的算符 $\Omega$， 它的\textbf{系综平均值（ensemble average）}为
-\begin{equation}
-\ev{\bar\Omega} = \sum_i p_i \mel{i}{\Omega}{i}~.
-\end{equation}
-这个平均值既包含了每个 $\ket{i}$ 的平均， 又包含了对每个系统的平均。
-
-系综平均也可以用迹表示为 $\opn{tr}(\Omega\rho)$。 根据迹的定义，
-\begin{equation}\label{eq_denMat_3}
-\opn{tr}(\Omega\rho) = \sum_j \mel{j}{\Omega\rho}{j} = \sum_{i,j} p_i\mel{j}{\Omega}{i} \braket{i}{j} = \sum_{i} p_i\mel{i}{\Omega}{i} = \ev{\bar\Omega}~.
-\end{equation}
-证毕。
-
-对于纯态， 获得测量值 $\omega$ 的概率可以看作投影算符 $\mathbb P_\omega$ 的平均值（满足 $\mathbb P_\omega^2 = \mathbb P_\omega$）
-\begin{equation}
-P(\omega) = \abs{\braket{\omega}{\psi}}^2 = \braket{\mathbb P_\omega \psi}{\mathbb P_\omega \psi} = \mel{\psi}{\mathbb P_\omega}{\psi}~,
-\end{equation}
-所以对于混合态， 测量值 $\omega$ 的概率为
-\begin{equation}
-\overline{P(\omega)} = \opn{tr}(\mathbb P_\omega\rho)~.
-\end{equation}
-
 \subsection{密度矩阵的性质}
-\pentry{正定矩阵\upref{DefMat}}
+\pentry{半正定矩阵\upref{DefMat}}
 \begin{itemize}
 \item 密度矩阵算符是厄米算符（自伴算符）
 
 \item 密度矩阵的迹为 1
 
-\item 密度矩阵是正定矩阵。可以从\autoref{eq_denMat_1} 看到，对任意态 $\ket\varphi$，总是有 $\bra\varphi \rho \ket\varphi\ge 0$
+\item 密度矩阵是半正定矩阵。可以从\autoref{eq_denMat_1} 看到，对任意态 $\ket\varphi$，总是有 
+    $\bra\varphi \rho \ket\varphi\ge 0$
+\item 对于给定力学量算符$\Omega$，求取$\Omega$的期望值
+    是$\left\langle \Omega \right\rangle = \opn{tr}\left(\rho\Omega\right)$
+    
+    对于某个物理量对应的算符 $\Omega$， 它的\textbf{系综平均值（ensemble average）}为
+    \begin{equation}
+    \ev{\bar\Omega} = \sum_i p_i \mel{i}{\Omega}{i}~.
+    \end{equation}
+    这个平均值既包含了每个 $\ket{i}$ 的平均， 又包含了对每个系统的平均。
+
+    系综平均也可以用迹表示为 $\opn{tr}(\Omega\rho)$。 根据迹的定义，
+    \begin{equation}\label{eq_denMat_3}
+    \opn{tr}(\Omega\rho) = \sum_j \mel{j}{\Omega\rho}{j} = \sum_{i,j} p_i\mel{j}{\Omega}{i} \braket{i}{j} = \sum_{i} p_i\mel{i}{\Omega}{i} = \ev{\bar\Omega}~.
+    \end{equation}
+    证毕。
+
+    对于纯态， 获得测量值 $\omega$ 的概率可以看作投影算符 $\mathbb P_\omega$ 的平均值
+    （满足 $\mathbb P_\omega^2 = \mathbb P_\omega$）
+    \begin{equation}
+    P(\omega) = \abs{\braket{\omega}{\psi}}^2 = \braket{\mathbb P_\omega \psi}{\mathbb P_\omega \psi} = \mel{\psi}{\mathbb P_\omega}{\psi}~,
+    \end{equation}
+    所以对于混合态， 测量值 $\omega$ 的概率为
+    \begin{equation}
+\overline{P(\omega)} = \opn{tr}(\mathbb P_\omega\rho)~.
+\end{equation}
+
+\item 在薛定谔绘景下，密度矩阵的演化方程为：
+
+    $$\mathrm{i}\hbar \frac{\partial}{\partial t} \rho= \left[ H, \rho \right]~.$$
+    特别的，若哈密顿量不含时，其为：
+    $$\rho \left( t \right) = \exp\left(-\frac{\mathrm{i}Ht}{\hbar}\right) \rho \left(0\right) \exp\left(\frac{\mathrm{i}Ht}{\hbar}\right)~.$$
+    密度矩阵厄米半正定的性质使得我们总是将它在一组正交完备基 $\ket{\psi_1},\ket{\psi_2},\cdots$ 下对角化：
+    \begin{equation}
+    \rho = \sum\limits_k p_k\ket{\psi_k} \bra{\psi_k}~.
+    \end{equation}
+    这表明系统处于 $\ket{\psi_k}$ 状态的概率为 $p_k$。
+
+    考虑薛定谔方程:
+    $$\mathrm{i}\hbar\frac{\partial}{\partial t} \ket{\psi} = H \ket{\psi}~.$$
+
+    有：
+
+    \begin{equation}\label{eq_denMat_4}
+    \begin{aligned}
+    \frac{\partial}{\partial t}\ket{\psi} &= -\frac{\mathrm{i}H}{\hbar}\ket{\psi}~, \\
+    \frac{\partial}{\partial t}\bra{\psi} &= \frac{\mathrm{i}}{\hbar}\bra{\psi}H~.
+    \end{aligned}~
+    \end{equation}
+
+    \autoref{eq_denMat_4} 中第二行为第一行取转置复共轭，则：
+    \begin{equation}\label{eq_denMat_2}
+    \begin{aligned}
+    \frac{\partial}{\partial t}\rho &= \sum\limits_kp_k\frac{\partial}{\partial t}\left( \ketbra{\psi_k}{\psi_k} \right) \\
+    &= \sum\limits_k p_k\left[ \left(\frac{\partial}{\partial t}\ket{\psi_k}\right)\bra{\psi_k} + \ket{\psi_k}\left(\frac{\partial}{\partial t}\bra{\psi_k}\right)\right] \\ 
+    &= \sum\limits_k p_k \left( -\frac{\mathrm{i}}{\hbar}H\ketbra{\psi_k}{\psi_k} + \frac{\mathrm{i}}{\hbar}\ketbra{\psi_k}{\psi_k}H \right) \\
+    &=-\frac{\mathrm{i}}{\hbar}\left(  H\rho -  \rho H\right) \\
+    &= -\frac{\mathrm{i}}{\hbar}\left[ H, \rho \right]~.
+    \end{aligned}~
+    \end{equation}
+    上式中$\left[ H, \rho \right] = H\rho -  \rho H$表示对易子，则整整理可得：
+    \begin{equation}\label{eq_denMat_5}
+    \mathrm{i}\hbar \frac{\partial}{\partial t} \rho= \left[ H, \rho \right]~.
+    \end{equation}
+
+    应当注意的是，此处推导是在薛定谔绘景中完成的，相互作用绘景中结果形式类似，而海森堡绘景中态不随时间变化，进而密度矩阵也不变。
+
+    可以发现结果与海森堡运动方程的形式极为相似，但应注意到是其与海森堡运动方程相差一个负号。
+
+    特别的，如果哈密顿量不含时，则可解得:
+    $$\ket{\psi\left( t\right)} = \exp\left(-\frac{\mathrm{i}Ht}{\hbar}\right)\ket{\psi\left(0\right)}~.$$
+
+    进而有：
+    \begin{equation}\label{eq_denMat_6}
+    \rho \left( t \right) = \exp\left(-\frac{\mathrm{i}Ht}{\hbar}\right) \rho \left(0\right) \exp\left(\frac{\mathrm{i}Ht}{\hbar}\right)~.
+    \end{equation}
+    
+\item 期望值随时间变化的方程为：
+    \begin{equation}
+    \frac{\mathrm{d}}{\mathrm{d}t}\left\langle B \right\rangle = \left\langle \frac{\partial}{\partial t} B \right\rangle + \frac{1}{\mathrm{i}\hbar}\left\langle \left[ B, H \right]\right\rangle~.
+    \end{equation}
+    以下我们将要推导由密度矩阵计算得到的算符平均值随时间的变化的表达式与纯态的一样，都是海森堡运动方程的形式。
+    
+    \begin{equation}\label{eq_denMat_11}
+    \begin{aligned}
+    \frac{\mathrm{d}}{\mathrm{d}t}\left\langle B \right\rangle \left( t \right) &= \frac{\mathrm{d}}{\mathrm{d}t}\opn{tr}\left[\rho\left(t\right)B\right] \\
+    &=\frac{\mathrm{d}}{\mathrm{d}t}\left[ \sum\limits_k \bra{u_k}\rho\left(t\right)B\ket{u_k}     \right] \\
+    &= \sum\limits_k\bra{u_k}\left\{ \frac{\mathrm{d}}{\mathrm{d} t}\left[\rho \left(t\right)\right]B + \rho\left(t\right)\frac{\mathrm{d}}{\mathrm{d}t}\left( B\right) \right\}\ket{u_k} \\
+    &=\opn{tr}\left[ \rho\left(t\right)\frac{\mathrm{d}}{\mathrm{d}t}\left(B\right) \right] + \opn{tr}\left\{\frac{1}{\mathrm{i}\hbar}\left[H,\rho\left(t\right)\right]B\right\} \\
+    &=\left\langle \frac{\partial}{\partial t} B \right\rangle + \frac{1}{\mathrm{i}\hbar}\opn{tr}\left[H\rho\left(t\right)B - \rho\left(t\right)HB\right] \\
+    &=\left\langle \frac{\partial}{\partial t}B\right\rangle + \frac{1}{\mathrm{i}\hbar}\opn{tr}\left[\rho\left(t\right)BH - \rho \left(t\right)HB\right] \\
+    &=\left\langle\frac{\partial}{\partial t}B\right\rangle + \frac{1}{\mathrm{i}\hbar}\left\langle\left[B,H\right]\right\rangle
+    \end{aligned}~
+    \end{equation}
+    由此我们使用密度矩阵的语言也得到了海森堡运动方程。
+
+
+
 \end{itemize}
-
-密度矩阵厄米正定的性质使得我们总是将它在一组正交完备基 $\ket{\psi_1},\ket{\psi_2},\cdots$ 下对角化：
-\begin{equation}
-\rho = \sum_i \ket{\psi_i} p_{\psi_i}\bra{\psi_i}~.
-\end{equation}
-这表明系统处于 $\ket{\psi_i}$ 状态的概率为 $p_{\psi_i}$。
-
-现在假设系综中每一个态都随时间发生演化，那么在薛定谔表象下
-\begin{equation}
-\ket{\psi_i(t)}= e^{-iHt}\ket{\psi_i(t)}~.
-\end{equation}
-密度算符随时间的演化为
-\begin{equation}\label{eq_denMat_2}
-\rho(t)= \sum_i p_{\psi_i}\ket{\psi_i(t)}\bra{\psi_i(t)}= e^{-iHt}\rho(0) e^{iHt}~.
-\end{equation}
-
 \subsection{密度矩阵矩阵元}
 
-回顾在基矢量$\left\{ \ket{u_n}\right\}$下，密度矩阵$\rho$的
+
+回顾在基矢量$\left\{ \ket{u_n}\right\}$下，密度矩阵$\rho$的表达形式：
+$$\rho = \sum\limits_k p_k\rho_k = \sum\limits_{m,n}\rho_{mn}\ket{u_m}\bra{u_n} ~,$$
+上式中$\rho_k = \ket{\psi_k}\bra{\psi_k}$，$\rho_{m,n}$是密度矩阵的矩阵元。
+
+\subsubsection{密度矩阵的对角元}
+
+我们首先考虑对角元，即$\rho_{nn}$，显然有
+$$\rho_{nn} = \sum\limits_{k} p_k \left[\rho_k\right]_{nn}~.$$
+其中$\left[\rho_k\right]_{nn}$表示密度矩阵$\rho_k = \ket{\psi_k}\bra{\psi_k}$的第$n$个对角元。
+
+假设：
+$$\ket{\psi_k} = \sum\limits_n C_n^{k}\ket{u_n} = \sum\limits_n\ket{u_n}\braket{u_n}{\psi_k}~,$$
+那么有：
+$$\left[\rho_k\right]_{nn} = \left|\braket{u_n}{\psi_k}\right|^2 = \left| C_n^{k}\right|^2~.$$
+则可以得到$\rho_{nn} = \sum\limits_k p_k \left|C_n^k\right|^2$，由此可以看到密度矩阵的对角元应当是一个非负实数。
+
+现在考虑其物理意义，可以发现计算式中$\left| C_n^k \right|^2$表示的是量子态$\ket{\psi_k}$，在沿着基$\left\{\ket{u_n}\right\}$进行测量时，塌缩到$\ket{u_n}$的概率，经过经典概率$p_k$的叠加，$\rho_{nn}$表示的实际上是密度矩阵在沿着基$\left\{\ket{u_n}\right\}$测量时得到态$\ket{u_n}$的概率，因此我们称对角元$\rho_{nn}$为$\ket{u_n}$的\textbf{布局数}。
+
+而且可以注意到，当且仅当所有$\psi_k$对应的$C_n^k$均为$0$时，$\rho_{nn} = 0$。
+
+\subsubsection{密度矩阵的非对角元}
+
+接下来我们讨论非对角元的情况，首先列出非对角元的计算式：
+$$\rho_{pq} = \sum\limits_k p_k \braket{u_p}{\psi_k}\braket{\psi_k}{u_q} = \sum\limits_k p_k C_p^k \left(C_q^k\right)^*~.$$
+
+注意到非对角元计算式中$C_p^k\left(C_q^k\right)^*$不再是模方，也就不一定为正实数，因此即使$C_p^k \left(C_q^k\right)^*$不全为$0$，$\rho_{pq}$也可能为$0$
+
+考虑非对角项的物理意义，$C_p^k\left(C_q^k\right)^* = \braket{u_p}{\psi_k}\braket{\psi_k}{u_q}$当且仅当$\braket{u_p}{\psi_k}$和$\braket{u_q}{\psi_k}$均不为$0$的时候才非零，那么换句话说就是当且仅当$\ket{\psi_k}$中存在$\ket{u_p}$和$\ket{u_q}$的线性叠加时才非$0$。所以我们可以这样说：至少对于纯态，非对角元非零就意味着存在相干。反之也是一样，但对于混态则不同，我们举一个例子：
+
+\begin{example}{}
+考虑$\ket{+} = \frac{1}{\sqrt{2}}\left(\ket{\uparrow} + \ket{\downarrow}\right)$，$\ket{-} = \frac{1}{\sqrt{2}}\left(\ket{\uparrow} - \ket{\downarrow}\right)$。
+
+可以看出$\ket{+}$和$\ket{-}$各自是存在相干的。同样我们写出其密度矩阵也可以看出其密度矩阵非对角元存在非$0$。
+\begin{equation}
+\rho_+ =  \frac{1}{2}\begin{pmatrix}
+1&1 \\
+1&1 \\
+\end{pmatrix}~~~~,
+\rho_- =  \frac{1}{2}\begin{pmatrix}
+1&-1 \\
+-1&1 \\
+\end{pmatrix}~.
+\end{equation}
+
+但现在我们以各自$\frac{1}{2}$的概率混合起来，则有：
+$$\rho = \frac{1}{2}\rho_+ + \frac{1}{2}\rho_- = \frac{1}{2}\begin{pmatrix}
+1&0 \\
+0&1 \\
+\end{pmatrix}~.$$
+
+可以看到其中非对角元的元素均为$0$。
+\end{example}
+
+对于这种情况，我们可以说两个态的相干性通过求取经典平均的这一过程抵消了。
+
+但另一方面，如果非对角元非零，则一定意味着相干，因为非对角元非零代表着至少有一个$C_p^k\left(C_q^k\right)^*$非零，且并未因为经典平均抵消。因此我们称非对角元为\textbf{相干项}。
+
+\subsubsection{矩阵元的演化}
+
+前文中已经提到了不含时哈密顿量下密度矩阵对时间的演化\autoref{eq_denMat_6} ，我们由此讨论矩阵元的演化。选取哈密顿量的本征基$\left\{\ket{u_n}\right\}$作为密度矩阵的基：
+
+\begin{equation}
+\begin{aligned}
+&H \ket{u_n} = E_n \ket{u_n}~, \\ 
+&\rho\left( t \right)_{mn} = \bra{u_m} \rho\left( t \right) \ket{u_n}~.
+\end{aligned}~
+\end{equation}
+
+则对于对角元：
+\begin{equation}
+\begin{aligned}
+\rho\left( t \right)_{nn} &= \bra{u_n}\rho\left( t \right)\ket{u_n}\\
+&= \bra{u_n}\exp\left(-\frac{\mathrm{i}}{\hbar}H t\right)\rho\left( 0 \right)\exp\left(\frac{\mathrm{i}}{\hbar}H t\right)\ket{u_n} \\
+&=\bra{u_n}\exp\left(-\frac{\mathrm{i}}{\hbar}E_n t\right)  \rho\left( 0 \right)  \exp\left(\frac{\mathrm{i}}{\hbar}E_n t\right)  \ket{u_n} \\
+&=\bra{u_n}\rho\left( 0 \right)\ket{u_n} \\
+&=\rho\left( 0 \right)_{nn}~.
+\end{aligned}~
+\end{equation}
+
+对于非对角元：
+
+\begin{equation}
+\begin{aligned}
+\rho \left( t \right)_{pq} &= \bra{u_p}\rho\left(t\right)\ket{u_q} \\
+&= \bra{u_p}\exp\left(-\frac{\mathrm{i}}{\hbar}H t\right)\rho\left(0\right)\exp\left(\frac{\mathrm{i}}{\hbar}H t\right)\ket{u_q} \\
+&= \bra{u_p}\exp\left(-\frac{\mathrm{i}}{\hbar}E_p t\right)\rho\left( 0 \right)\exp\left(\frac{\mathrm{i}}{\hbar}E_q t\right)\ket{u_q} \\
+&=\exp\left[-\frac{\mathrm{i}}{\hbar}\left(E_p-E_q\right) t\right]\bra{u_p}\rho\left( 0 \right)\ket{u_q} \\
+&= \rho \left( 0 \right)_{pq}\exp\left[-\frac{\mathrm{i}}{\hbar}\left(E_p-E_q\right) t\right]~.
+\end{aligned}~
+\end{equation}
+
+这说明了在能量表象下，\textbf{密度矩阵$\rho$的布局数不变，而相干项以体系的 Bohr 频率震荡}。
+
+
+
 
 
 
 \subsection{统计系综与平衡态}
-从 \autoref{eq_denMat_2} 中可以看到，如果密度算符与哈密顿量 $H$ 对易，那么 $\rho(t)=\rho(0)$，密度算符不随时间发生变化，系综中每个状态发生的概率不变，根据\autoref{eq_denMat_3} ，各个物理量的系综平均值也是不变的。系统处于平衡态。
+从\autoref{eq_denMat_5} 中可以看到，如果密度算符与哈密顿量 $H$ 对易，那么 $\rho(t)=\rho(0)$，密度算符不随时间发生变化，系综中每个状态发生的概率不变，根据\autoref{eq_denMat_3} ，各个物理量的系综平均值也是不变的。系统处于平衡态。
 
 因此统计系综处于平衡态等价于 $[\rho,H]=0$。由于两个算符对易，它们实际上可以被同时对角化。存在一组基底 $\ket{1},\cdots,\ket{n}$，满足 $\rho \ket{i} = p_i \ket{i}$，且 $H\ket{i}=E_i \ket{i}$。也就是说密度矩阵在哈密顿量的一组正交的本征态基底下可对角化：
 \begin{equation}
 \rho = \sum_i p_i \ket{i}\bra{i},\quad H\ket{i}=E_i \ket{i}~.
 \end{equation}
 
+
+
+\subsection{密度矩阵的经典对应}
+
+\pentry{哈密顿正则方程\upref{HamCan}}
+
+此部分内容可参考\href{https://chem.libretexts.org/Bookshelves/Physical_and_Theoretical_Chemistry_Textbook_Maps/Supplemental_Modules_(Physical_and_Theoretical_Chemistry)/Statistical_Mechanics/Fundamentals_of_Statistical_Mechanics/09._Classical_and_quantum_dynamics_of_density_matrices}{libretexts上的文章}。
+
+密度矩阵的经典对应是经典物理中的相空间密度，接下来我们将逐步解释这一事实。
+
+在考虑密度矩阵和相空间密度具体是如何关联起来之前，我们首先先回顾一下相空间的知识。
+
+经典力学中，三维空间中一个$N$粒子体系某一时刻的状态需要$6N$个参数来描述 （$p_1,~p_2,~\cdots p_{3N};~q_1,~q_2,~\cdots q_{3N}$），所以我们可以用一个$6N$维空间中的一个点描述某一时刻体系的状态，这个空间便是\textbf{相空间}，这个点就是\textbf{相点}。
+
+哈密顿方程\autoref{eq_HamCan_2}~\upref{HamCan}告诉我们，在给定体系的哈密顿量后，广义坐标和广义动量对时间的导数就已经确定。因此我们求解后给出一组时间$t$的参数方程。相点在相空间中随着时间变化刻画出了一条轨迹。
+
+统计力学中处理问题经常考虑系综平均，以气体为例，一团固定总分子数，总体积，总内能的气体，其可能有大量不同的微观态，我们运用\textbf{等概率假设}，假设每一种符合条件的微观态都以相同的概率出现。而换个图像看待这个事情，将满足宏观态（$N,~V,~E$）条件的相点称为\textbf{代表点}，可以考虑对代表点求平均，这样可以达到一样的效果。
+
+值得注意的是，前边提到代表点是会随着时间运动的，这一点应该牢记。
+
+相空间中到处都散布着满足条件的代表点，想计算其平均值我们就需要一个方程来描述代表点具体如何分布，之后再进行积分。我们引入\textbf{相空间密度}$\rho\left(p,~q,~t\right)$来做这件事，其归一地描述了每一个坐标处代表点的数目。设$A$为任意力学量，应当有：
+
+\begin{equation}\label{eq_denMat_7}
+\begin{aligned}
+&\left\langle A \right\rangle = \int A \left(p,~q,~t\right)\rho\left(p,~q,~t \right) \mathrm{d}^Np~\mathrm{d}^Nq ,\\
+&\int \rho\left(p,~q,~t \right) \mathrm{d}^Np~\mathrm{d}^Nq = 1~.
+\end{aligned}~
+\end{equation}
+
+由上式不难看出其与密度矩阵的:
+
+\begin{equation}
+\begin{aligned}
+&\left\langle A \right\rangle = \opn{tr}\left(A\rho\right), \\
+& \opn{tr}\left(\rho\right)=1~.
+\end{aligned}~
+\end{equation}
+
+的相似性。
+
+接下来，我们进一步从相空间密度$\rho\left(q,~p,~t\right)$的时间演化和力学量$ A\left(q,~p,~t\right)$的时间演化的角度论证二者的一致性。
+
+首先考虑$\rho\left(q,~p,~t\right)$的时间演化，考虑相空间中提及元$V$，其边界为$\partial V$，因为前文提到的，代表点在相空间中会运动，但不会凭空产生或消失。因此考虑$V$中代表点的消失速率为$-\frac{\partial}{\partial t}\int_V \rho \mathrm{d}V$，同时考虑代表点流出$\partial V$边界的速率。前文中提到代表点的运动轨迹由哈密顿正则方程给出的参数方程确定，参数为时间$t$。由此我们可以得到某一点的代表点的速度就是对参数方程求导数，即为：$$\mathbf{v} = \left(\dot{p}_1(t),~\dot{p}_2(t),~\cdots \dot{p}_N(t),~\dot{q}_1(t),~\dot{q}_2(t),~\cdots \dot{q}_N(t)\right)~.$$
+
+因此单位面元$\mathrm{d}\bvec{\sigma}$的代表点通量即为$\left(\rho\mathbf{v}\right)\cdot \mathrm{d}\bvec{\sigma}$，因此应该有$V$中代表点的流失速率等于从内到外穿过表面的速率。即：
+
+\begin{equation}
+\begin{aligned}
+-\frac{\partial}{\partial t}\int_V \rho \mathrm{d}V &= \int_{\partial V}\rho\mathbf{v}\cdot \mathrm{d}\bvec{\sigma} \\
+&=\int_V\div\left(\rho\mathbf{v}\right)\mathrm{d}\sigma~.
+\end{aligned}~
+\end{equation}
+
+上式第二个等号来自于高斯定理\autoref{eq_Divgnc_13}~\upref{Divgnc}。
+
+考虑$\rho$解析，则有：
+
+$$\int_V \left[\frac{\partial}{\partial t}\rho +\div\left(\rho\mathbf{v}\right)\right]\mathrm{d}V  = 0~.$$
+
+考虑$V$为任意选取，即有：
+
+\begin{equation}\label{eq_denMat_8}
+\frac{\partial}{\partial t}\rho +\div\left(\rho\mathbf{v}\right)= 0~.
+\end{equation}
+
+
+有：
+
+\begin{equation}\label{eq_denMat_9}
+\begin{aligned}
+\div\left(\rho\mathbf{v}\right)&= \sum_i^N\left[
+    \frac{\partial}{\partial p_i}\left( \rho \dot{p}_i \right) + 
+    \frac{\partial}{\partial q_i}\left( \rho \dot{q}_i \right)
+    \right] \\
+&=\sum_i^N\left[
+    \frac{\partial\rho}{\partial p_i}\dot{p}_i +
+    \rho \frac{\partial \dot{p}_i}{\partial p_i} +
+    \frac{\partial\rho}{\partial q_i}\dot{q}_i +
+    \rho \frac{\partial \dot{q}_i}{\partial q_i}
+    \right]~.
+\end{aligned}~
+\end{equation}
+
+其中
+
+\begin{equation}\label{eq_denMat_10}
+\begin{aligned}
+\frac{\partial \dot{p}_i}{\partial p_i} 
+&= -\frac{\partial}{\partial p_i}\left(\frac{\partial H}{\partial q_i}\right) \\
+&= -\frac{\partial}{\partial q_i}\left(\frac{\partial H}{\partial p_i}\right) \\
+&= -\frac{\partial \dot{q}_i}{\partial q_i}~.
+\end{aligned}~
+\end{equation}
+
+综合\autoref{eq_denMat_8} ，\autoref{eq_denMat_9} 和\autoref{eq_denMat_10} 有：
+
+\begin{equation}
+\begin{aligned}
+\frac{\partial \rho}{\partial t}&=-\div \left(\rho \mathbf{v}\right) \\
+&= - \sum_i^N\left(\frac{\partial \rho}{\partial p_i}\dot{p}_i + \frac{\partial \rho}{\partial q_i}\dot{q}_i\right)\\
+&= \sum_i^N\left(\frac{\partial H}{\partial q_i}\frac{\partial \rho}{\partial p_i} - \frac{\partial \rho}{\partial q_i}\frac{\partial H}{\partial p_i}\right) \\
+&= \left\{H,~\rho\right\}~.
+\end{aligned}~
+\end{equation}
+
+上式中$\left\{H,~\rho\right\}$为泊松括号\autoref{eq_poison_1}~\upref{poison}，是对易子的经典对应。对比\autoref{eq_denMat_5} 
+$$\mathrm{i}\hbar \frac{\partial}{\partial t} \rho= \left[ H, \rho \right]~.$$
+
+可以发现其就是密度矩阵的经典对应。
+
+再回头考虑力学量$ A \left(q,~p,~t\right)$的时间演化。仍然考虑解析，有：
+
+\begin{equation}
+\begin{aligned}
+\frac{\mathrm{d}}{\mathrm{d} t}\ A  
+&=  \sum_i^N\left(
+    \frac{\partial A}{\partial q_i}\dot{q}_i +
+    \frac{\partial A}{\partial p_i}\dot{p}_i 
+    \right)+
+    \frac{\partial A}{\partial t} \\
+&=  \sum_i^N\left(
+    \frac{\partial A}{\partial q_i}\frac{\partial H}{\partial p_i} -
+    \frac{\partial H}{\partial q_i}\frac{\partial A}{\partial p_i} 
+    \right)+
+    \frac{\partial A}{\partial t} \\
+&=  \left\{ A,~H \right\} + \frac{\partial A}{\partial t}    
+\end{aligned}~
+\end{equation}
+
+此处形式与\autoref{eq_denMat_11} 形成对比。
+
+综上所述，我们论证了密度矩阵的经典对应是相空间密度。

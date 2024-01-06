@@ -3,24 +3,16 @@
 % license Xiao
 % type Wiki
 
-\begin{issues}
-\issueOther{可以对照张量的对称化和交错化\upref{SIofTe}进行阅读}
-\end{issues}
+% \begin{issues}
+% \end{issues}
 
-\pentry{空间的张量积\upref{TPofSp}，置换的奇偶性\upref{permu}，群作用\upref{Group3}}
+\pentry{向量空间的张量积\upref{vecTsr}，对称/反对称多线性映射\upref{SASmap}}
 
-\subsection{作为子空间的对称/反对称幂}\label{sub_vecSAS_1}
+\subsection{作为子空间的对称/反对称幂}
 
 \subsubsection{对称幂}
 
-$k$ 维向量空间 $V$ 的 $n$ 次笛卡尔幂空间 $V^{\times n}$ 上存在一个 $n$ 阶对称群 $S_n$ \upref{Perm}的群作用：
-\begin{equation}
-\begin{aligned}
-\rho(\sigma): V^{\times n} &\to V^{\times n}~, \\
-(v_1, \cdots, v_n) &\mapsto (v_{\sigma(1)}, \cdots, v_{\sigma(n)})~,
-\end{aligned}
-\end{equation}
-被称为\textbf{置换作用}。类似的 $n$ 阶张量幂空间 $V^{\otimes n}$ 上可以定义一个 $S_n$ 的群作用：
+我们可以在 $V^{\times n}$ 上定义自然置换作用\autoref{ex_Group3_6}~\upref{Group3}，类似的 $n$ 阶张量幂空间 $V^{\otimes n}$ 上也可以定义一个 $S_n$ \upref{Perm}的群作用：
 \begin{equation}
 \begin{aligned}
 \rho(\sigma): V^{\otimes n} &\to V^{\otimes n}~, \\
@@ -43,14 +35,13 @@ v_1 \otimes v_2 &\mapsto v_2 \otimes v_1~.
 
 特别的，我们把 $n$ 阶张量幂空间 $V^{\otimes n}$ 的不动点集 $(V^{\otimes n})^{S_n}$ （\autoref{def_Group3_2}~\upref{Group3}）称为 $V$ 的 $n$ 阶\textbf{对称幂空间}，记做 $\opn{Sym}^n V$ 或者 $S^n(V)$。
 
-由于对称群 $S_n$ 由对换生成（见对称群\upref{Perm}），我们只需要考虑“交换两项不变”。
-\begin{theorem}{}
+\begin{exercise}{}
 $v_1 \otimes \cdots \otimes v_n \in \opn{Sym}^n V$ 当且仅当对任意的的 $i, j$，
 \begin{equation}
 \cdots \otimes v_i \otimes \cdots \otimes v_j \otimes \cdots = \cdots \otimes v_j \otimes \cdots \otimes v_i \otimes \cdots~.
 \end{equation}
 
-\end{theorem}
+\end{exercise}
 
 \begin{example}{}\label{ex_vecSAS_1}
 考虑 $V = \mathbb{R}^2$；$\opn{Sym}^2 V = \langle e_1 \otimes e_1, e_2 \otimes e_2, e_1 \otimes e_2 + e_2 \otimes e_1 \rangle$ 是一个三维向量空间。
@@ -96,7 +87,7 @@ v_1 \cdot v_2 \cdot v_3 = &\frac16 (v_1 \otimes v_2 \otimes v_3 \\
 
 \subsubsection{反对称幂（又称交错幂、外幂）}
 
-张量幂空间 $V^{\otimes n}$ 上存在另一个 $S_n$ \upref{Perm}的群作用：
+张量幂空间 $V^{\otimes n}$ 上存在另一个 $S_n$ 的群作用：
 \begin{equation}
 \begin{aligned}
 \rho(\sigma): V^{\otimes n} &\to V^{\otimes n}~, \\
@@ -229,3 +220,34 @@ v_1 \otimes v_2 &= v_1 \cdot v_2 + v_1 \wedge v_2~.
 \begin{equation}
 \ker({\large \wedge}) = \{v - \rho_\text{sign}(g) v \mid v \in V^{\otimes n}, g \in S_n\}~.
 \end{equation}
+
+\subsubsection{对称/反对称幂的万有性质}
+
+\addTODO{万有性质的词条，包含初/终性质}
+
+\begin{theorem}{对称映射的万有性质}
+对称幂映射 $\opn{Sym}: V^{\times n} \to \opn{Sym}^n V$ 是一个对称映射，而且 $\opn{Sym}^n V$ 是所有到达域中“最小的”的（初对象，相关词条有待补充）：任意对称映射 $f: V^{\times n} \to W$，我们都有唯一确定的线性映射 $\bar{f}: \opn{Sym}^n V \to W$，满足 $f = \bar{f} \circ \opn{Sym}$，我们有交换图
+\begin{equation}
+\begin{CD}
+V^{\times n} @>{\opn{Sym}}>> \opn{Sym}^n V \\
+@V{f}VV @V{\bar{f}}VV \\
+W @= W
+\end{CD}~.
+\end{equation}
+\end{theorem}
+
+对称映射的万有性质可以对照张量积的万有性质\autoref{def_vecTsr_1}~\upref{vecTsr}进行理解。
+
+类似的，
+\begin{theorem}{反对称映射的万有性质}\label{the_vecSAS_1}
+反对称幂映射 ${\large \wedge}: V^{\times n} \to {\large \wedge}^n V$ 是一个反对称映射，任意反对称映射 $f: V^{\times n} \to W$，我们都有唯一确定的线性映射 $\bar{f}: {\large \wedge}^n V \to W$，满足 $f = \bar{f} \circ {\large \wedge}$，我们有交换图
+\begin{equation}
+\begin{CD}
+V^{\times n} @>{{\large \wedge}}>> {\large \wedge}^n V \\
+@V{f}VV @V{\bar{f}}VV \\
+W @= W
+\end{CD}~.
+\end{equation}
+\end{theorem}
+
+万有性质保证了对称/反对称幂空间在同构意义下的唯一性，进而证明了子空间构造和商空间构造是同构的。

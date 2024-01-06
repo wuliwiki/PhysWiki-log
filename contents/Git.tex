@@ -11,6 +11,8 @@ Git for Windows 的 Git bash 是不支持 symlink 的， symlink clone 下来以
 
 但新的问题是，WSL 用 git 会有讨厌的权限问题\upref{WSLnt}。 所以 git bash 和 WSL 可以结合起来用。
 
+如果 repo 非常大（几 G 到几百 G）， 可以考虑用 \href{https://git-scm.com/docs/scalar}{Scalar}
+
 \subsection{新安装设置}
 \begin{itemize}
 \item 如果要安装最新版本的 Git， 见\href{https://git-scm.com/downloads}{这里}。
@@ -155,6 +157,7 @@ git config --global pack.threads 2 # 使用多少线程压缩 pack
 \item \verb|git fsck| 可以检查数据库（\verb|.git| 文件夹）是否出现错误（硬盘坏点等）， 但无法恢复， 只能通过备份。 如果检查完后输出了很多 \verb|dangling blob| 是没有关系的，说明 git 保存了一些没有出现在任何 commit 中的多余文件。
 \item \verb|git status| 一般只是检查 tree 中的文件的修改时间是否有更新， 而不会做一次完整的 checksum。 如果需要检查是否有硬件 bit rot， 可以先 touch 所有文件： \verb|find . -type f -exec touch {} +|， 然后再 \verb|git status|。
 \item \verb|git --git-dir=路径/.git --work-tree=tree的路径 命令| 可以指定 \verb|.git| 所在的文件夹以及 tree 的路径， 然后执行 \verb|git 命令|， 例如 \verb|git status| 甚至 \verb|init|。 注意两个路径选项都不能省略， 无论当前在什么路径。
+\item 如果 work tree 不干净，可以用 \verb`git ls-tree -d --name-only master` 当前目录下的文件（git 数据库中的版本，默认是该 branch 的最后一次 commit）
 \item 如果要删除某个 commit 之前的所有 commit， 以减小数据库的尺寸， 可以先搞一个新的 branch， 把 master branch 删除（\verb|git branch -D master|）， 然后把新 branch 重命名为 master。 最后做一下 \verb|git gc|。
 \item git gui 可以查看 \verb|.git| 数据库中每一次备份的文件目录。
 \end{itemize}

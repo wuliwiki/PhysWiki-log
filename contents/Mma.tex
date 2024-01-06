@@ -8,6 +8,20 @@ Mathematica 相对于 Matlab， Python 等偏数值计算的语言最大的特�
 
 以下笔记详情参考 Mathematica 的\href{https://reference.wolfram.com/language/}{官方文档}。
 
+\subsubsection{待整理}
+\begin{itemize}
+\item \href{https://www.wolfram.com/learningcenter/tutorialcollection/}{官方教程}
+\item Mathematica 的根基是 Expression, 用 FullForm 函数可以查看 Expression 的全称.
+\item 如果 expression 和 literal constant 运算, 是非常精确的.
+\item 如果函数不支持 List 输入, \verb`Map[Function, {arg1,arg2...}]` 可以把一个函数依次作用在一个 List 上面.
+\item \verb`var1=var2=var3=val` 可以给 \verb`var1,var2,var3` 同时赋值, 用 \verb`.` 给变量赋值可以清除变量的值, 相当于 \verb`Clear[var1,var2,var3]`
+\item 如果 \verb`x2 = [x1 的表达式], x3=[x2 的表达式]`, 那么如果输入 \verb`x3` 会返回 \verb`x1` 的表达式. 但是 \verb`[x2 的表达式]` 的信息还在, 因为如果这是把 \verb`x2` 清空, 输入 \verb`x3` 又会出现 \verb`x2` 的表达式.
+\item 变量名建议用小写开头
+\item 两个变量用空格隔开代表相乘
+\item \verb`expr_of_x/.x->3` 可用于临时赋值表达式中的变量
+\end{itemize}
+
+
 \subsection{常识}
 \begin{itemize}
 \item Mathematica 最常用的文件格式是 \verb|.nb|（notebook），里面有各种互动内容如输入，输出，图片，互动演示等，虽然这是个文本文件，但是非常难读，即使是输入的公式，也会保留很多显示格式信息（例如分数，根号是否要立体显示）
@@ -21,6 +35,7 @@ Mathematica 相对于 Matlab， Python 等偏数值计算的语言最大的特�
 \item 可以用小数点产生数值解， 例如 \verb|Sqrt[2.]|。
 \item 空格表示乘号， 相当于 \verb|*|。 数字和变量间相乘不需要空格或 \verb|*|。
 \item 科学计数法如 \verb|2.3*^-70| 表示 $2.3\e{-70}$。
+\item 变量名不能有下划线！
 \item 中断执行 \verb|Alt + ,| （笔记本界面） 或者 \verb|Ctrl + C| （文本界面）。
 \item 输入 \verb|In[8]|
 \end{itemize}
@@ -58,6 +73,7 @@ Mathematica 相对于 Matlab， Python 等偏数值计算的语言最大的特�
 \item \verb|Alt + 1| 到 \verb|Alt + 6| 不同级别的标题
 \item \verb|Alt + 7| 正文
 \item \verb|Alt + +| 和 \verb|Alt + -| 用于选中一段文字后改变大小。
+\item \verb`Ctrl+_` 下标（注意下标是有语法含义的，数组等，具体待查）
 \end{itemize}
 
 \subsection{变量}
@@ -105,7 +121,7 @@ Mathematica 相对于 Matlab， Python 等偏数值计算的语言最大的特�
 \item \verb|Transpose[]| 可以把矩阵做转置。 也可以在矩阵后面用 \verb|\[Transpose]| 或者 \verb|Esc| 键搜索 \verb|tr|。
 \item \verb|ConjugateTranspose[]| 可以把矩阵做厄米共轭。 也可以在矩阵后面用 \verb|\[HermitianConjugate]| 或者 \verb|Esc| 键搜索 \verb|hc|。
 \item \verb|LinearSolve[{{1, 2}, {3, 4}}, {5, 6}]| 解线性方程组。
-\item \verb|Eigenvectors[{{1,2},{3,4}}]|， \verb|Eigenvalues[{{1,2},{3,4}}]| 计算矩阵本征值。 或者 \verb|EigenSystem[矩阵]|， 一次返回 \verb|{本征值，本征矢}|，和分别计算是一样的。 注意返回的本征矢矩阵每行是一个本征矢而不是每列。 注意符号计算时返回的本征矢未必是归一化也未必是正交的（因为这往往需要很久）， 数值计算时返回的是正交归一本征矢。
+\item \verb|Eigenvectors[{{1,2},{3,4}}]|， \verb|Eigenvalues[{{1,2},{3,4}}]| 计算矩阵本征值。 或者 \verb|EigenSystem[矩阵]|， 一次返回 \verb|{本征值，本征矢}|，和分别计算是一样的。 注意返回的本征矢矩阵每行是一个本征矢而不是每列。 注意符号计算时返回的本征矢未必是归一化也\textbf{未必是正交}的（因为这往往需要很久表达式也很复杂）， 数值计算时返回的是正交归一本征矢。
 \item \verb|Orthogonalize[]| 可以把矢量的 list 正交归一化（如果看成矩阵， 则每行是一个矢量）。
 \item \verb|MatrixExp[A]| 计算矩阵的指数 $\E^{A}$。
 \end{itemize}

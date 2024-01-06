@@ -1,0 +1,21 @@
+% Git-LFS 笔记
+% license Usr
+% type Note
+
+\begin{issues}
+\issueDraft
+\end{issues}
+
+\begin{itemize}
+\item 更复杂的解决方案，见 Git Scalar（linux 支持 2020/10 才完成，而且需要 Windows 版本的 git 才可以实现后台 maintenance 服务，另外可以选择使用 GVSF 虚拟文件系统） 和 Git Annex\upref{gitanx} 等。
+\item git-lfs 的原理很简单，对于超过一定尺寸的文件，把它们替换成一个文本文件里面是该文件的 hash 和其他信息 （该文本文件叫做 pointer file）。 然后用传统的 git 来储存小文件以及 pointer file。 而大文件使用服务器上的另外服务储存，不在传统的 git 上游文件夹，甚至可以是一个完全不同的服务器。 本地仓库的 \verb`.git/lfs` 文件夹也可以储存大文件的缓存， 而 working tree 中可以选择保留 pointer 或者 checkout 真正的文件。
+\begin{lstlisting}[language=none,caption=example\_pointer\_file]
+version https://git-lfs.github.com/spec/v1
+oid sha256:24b9da6552252987aa493b52f8696cd6d3b00373f2ed1f20c5908b07cfe4f2c0
+size 12345
+\end{lstlisting}
+\item 被 lfs 处理的大文件即使改变一点，也没有 delta 储存，而是会把整个文件都新上传到服务器，占用服务器上新文件大小的额外空间。
+\item github 和 gitlab 都支持 LFS， Linux/Windows/MacOS 也支持。
+\item 上游 repo 只支持网络不支持本地文件系统，但应该可以通过 \verb`loop back` 端口使用本地文件系统。
+\item 第一次 clone 的时候，默认大文件都不下载，只下载 pointer 文件。
+\end{itemize}
