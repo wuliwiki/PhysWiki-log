@@ -1,5 +1,90 @@
 % von Neumann 熵
-% keys von Neumann entropy
+% keys von Neumann entropy|von Neumann熵|冯诺依曼熵|纠缠熵
 % license Xiao
 % type Tutor
 
+\begin{issues}
+\issueTODO
+\issueMissDepend（香农熵）
+\end{issues}
+
+\pentry{密度矩阵\upref{denMat}}
+%此处还应该运用香农熵的预备知识，但在我编辑这条消息的时候还没有相对应的词条，如果以后有了记得加上。
+
+\footnote{参考了\cite{量子信息}和Wikipedia\href{https://en.wikipedia.org/wiki/Von_Neumann_entropy}{相关界面}}
+von Neumann 熵的形式来自于 Shannon 熵。
+
+\begin{definition}{von Neumann熵}\label{def_vonNE_1}
+对于一个给定的密度矩阵，von Neumann熵 $S\left(\rho\right)$的定义为：
+
+\begin{equation}
+S\left( \rho \right) = \opn{tr}\left( - \rho \log_2 \rho \right)~.
+\end{equation}
+
+如果$\left\{ \lambda_1,~\lambda_2,~\cdots \lambda_N \right\}$是$\rho$的本征值，那么：
+
+\begin{equation}
+S\left(\rho\right) = \sum_i^N \lambda_i \log_2 \lambda_i~.
+\end{equation}
+
+上式中应注意我们定义$0\log_20 = 0$来规避发散。
+
+\end{definition}
+
+值得注意的是，\autoref{def_vonNE_1} 中 von Neumann 熵的底数是$2$，而在部分文献或书籍中采取底数$\E$，二者相差常数倍数$\ln 2$，应注意不要混淆。
+
+von Neumann 度量了一个混态的密度矩阵的“混乱程度”，正如\upref{partra}中提到，如果一个大系统的纯态对其中的某一个子系统取偏迹，同时如果得到了一个混态而非纯态，那么代表该子系统与剩余部分存在纠缠，这时求完偏迹的密度矩阵的von Neumann 熵就给出了一个度量纠缠的方法，这既是其纠缠熵名字的由来。
+
+\subsection{von Neumann熵的性质}
+
+von Neumann熵有以下几条性质：
+
+\begin{enumerate}
+\item 密度矩阵$\rho$的von Neumann熵当且仅当$\rho$表示纯态时为0。
+\item $d$维希尔伯特空间中的von Neumann熵最多为$\log_2 d$，当且仅当$\rho = \frac{1}{d}I$，$S(\rho) = \log_2 d$。
+\item 若复合系统$AB$处于纯态，子系统$A$熵的约化密度矩阵$\rho_A$和子系统$B$上的约化密度矩阵$\rho_B$的 von Neumann熵相等，即$S\left(\rho_A\right) = S\left(\rho_B\right)$。
+\item 若$\left\{p_i\right\}$是概率，且密度矩阵$\rho_i$位于$\rho$的相互正交的子空间上，那么有$S\left(\sum\limits_ip_i\rho_i\right) = \sum\limits_ip_iS\left(\rho_i\right) - \sum\limits_ip_i\log_2p_i$。
+\item 对于$\rho$和$\sigma$的直积，有$S\left(\rho\otimes\sigma\right) = S\left(\rho\right) + S\left(\sigma\right)$。
+\end{enumerate}
+
+下面我们给出这几条性质的证明：
+
+\begin{enumerate}
+\item 密度矩阵$\rho$的von Neumann熵当且仅当$\rho$表示纯态时为0。密度矩阵的本征值的本征值代表取到对应态的概率，$\forall \lambda_i ,~ 0\leqslant \lambda_i \leqslant1$，$\sum_i^N \lambda_i = 1$。所以$\lambda_i \log_2 \lambda_i$非负，且仅在$\lambda_i = 0$或$\lambda_i = 1$时为$0$，因此仅仅在所有本征值中只有一个为$1$时，即纯态时，$S\left(\rho\right) = 0$。
+\end{enumerate}
+
+
+\subsection{纠缠熵的连续性}
+
+借助迹距离\upref{Trdist}作为密度矩阵的度量，我们可以讨论纠缠熵的连续性。
+
+纠缠熵的连续性由 Fannes 不等式保证。
+
+\begin{theorem}{Fannes不等式}
+设$\rho$和$\sigma$是两个密度矩阵，$T\left(\rho,\sigma\right)$是$\rho$和$\sigma$之间的迹距离。若$T\left(\rho,\sigma\right) \leqslant \frac{1}{e}$，则有：
+
+\begin{equation}
+\abs{S\left(\rho\right) - S\left(\sigma\right)} \leqslant 2T\left(\rho,\sigma\right)\log_2 d - 2T\left(\rho,\sigma\right) \log_2\left[ 2 T\left(\rho,\sigma\right)\right]~.
+\end{equation}
+其中$d$表示希尔伯特空间的维度。
+
+\end{theorem}
+
+而对于更大的$T\left(\rho,\sigma\right)$，有弱化版的不等式：
+
+\begin{equation}
+\abs{S\left(\rho\right) - S\left(\sigma\right)} \leqslant 2 T\left(\rho,\sigma\right)\log d + \frac{1}{e\ln 2}~.
+\end{equation}
+
+在\cite{量子信息}中给出了证明，而在\href{https://arxiv.org/pdf/quant-ph/0610146.pdf}{论文}中给出了该不等式更强的形式：
+
+\begin{equation}
+\abs{S\left(\rho\right) - S\left(\sigma\right)} \leqslant T\left(\rho,\sigma\right)\log_2\left(d-1\right) + H\left(\left(T\left(\rho,\sigma\right),1-T\left(\rho,\sigma\right)\right)\right)~.
+\end{equation}
+
+其中$H(p)$是香农熵。
+
+可见由Fannes不等式可得，在$\forall 0<\epsilon,~\exists \delta>0$，当$T\left(\rho,\sigma\right)<\delta$时，有$\abs{S\left(\rho\right) - S\left(\sigma\right)}<\epsilon$，
+其中，$\delta$取$\epsilon = x\log_2\left(d-1\right) + H\left(\left(x,1-x\right)\right)$的较小的解，当解不存在时，取$f(x)=x\log_2\left(d-1\right) + H\left(\left(x,1-x\right)\right)$的极值点横坐标。
+
+由此可以说Fannes不等式给出了在迹距离的度量下，纠缠熵的连续性。

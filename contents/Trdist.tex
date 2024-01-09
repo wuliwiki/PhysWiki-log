@@ -1,0 +1,173 @@
+% 迹距离
+% keys 迹距离|Kolmogorov距离|L_1距离
+% license Usr
+% type Tutor
+
+
+
+\footnote{本节参考\cite{量子信息}和\href{https://en.wikipedia.org/wiki/Trace_distance}{Wikipedia界面}}
+\footnote{本节中部分证明参考\href{https://github.com/goropikari/SolutionQCQINielsenChuang}{项目}}
+
+\pentry{密度矩阵\upref{denMat}}
+
+在很多时候我们需要去探讨如何计算两个量子态究竟有多么相近，在态矢量的语言下这个答案是很简单的，我们可以使用两个态矢量的内积的模方来描述其二者是否相同或有多么不同。但对于两个密度矩阵来说这个问题并没有那么简单，\textbf{迹距离}和\textbf{保真度}给出了两种度量方法，我们在这里首先介绍\textbf{迹距离}。
+
+\begin{definition}{迹距离}\label{def_Trdist_1}
+两密度矩阵$\rho$和$\sigma$之间的迹距离$T\left(\rho,~\sigma\right)$定义如下：
+
+\begin{equation}
+T\left(\rho,~\sigma\right) \equiv \frac{1}{2} \opn{tr}\abs{\rho - \sigma}~.
+\end{equation}
+
+其中，$\abs{A} = \sqrt{A^\dagger A}$
+
+\end{definition}
+
+\subsection{概率分布的全变差距离}
+
+为了引入密度矩阵之间的迹距离的概念，我们首先从概率分布的全变差距离开始介绍。
+
+\begin{definition}{概率分布的全变差距离}
+对于两个样本空间是可数集的概率分布$\left\{ p_x \right\}$和$\left\{q_x\right\}$，定义其全变差距离为：
+
+\begin{equation}\label{eq_Trdist_1}
+T\left( p_x,~q_x \right) = \frac{1}{2}\sum_x\abs{p_x - q_x}~.
+\end{equation}
+
+\end{definition}
+
+\subsubsection{全变差距离是一种度量}
+
+对于\autoref{def_Trdist_1} ，从定义式中可以看到$T\left(p_x,~q_x\right) = T\left(q_x,~p_x\right)\geqslant 0$，即其是对称且非负的。且对三个概率分布$\left\{p_x^{(1)}\right\}$，$\left\{p_x^{(2)}\right\}$和$\left\{p_x^{(3)}\right\}$有：
+
+\begin{equation}
+\begin{aligned}
+T\left(p_x^{(1)},~p_x^{(2)}\right) &= \frac{1}{2}\sum_x\opn{tr}\abs{p_x^{(1)} - p_x^{(2)}} \\
+&= \frac{1}{2}\sum_x\opn{tr}\abs{\left(p_x^{(1)} - p_x^{(3)}\right) - \left(p_x^{(2)} - p_x^{(3)}\right)} \\
+&\leqslant\frac{1}{2}\sum_x\opn{tr}\abs{p_x^{(1)} - p_x^{(3)}} + \frac{1}{2}\sum_x\opn{tr}\abs{p_x^{(2)} - p_x^{(3)}} \\
+&=T\left(p_x^{(1)},~p_x^{(3)}\right)+T\left(p_x^{(2)},~p_x^{(3)}\right)~,
+\end{aligned}~
+\end{equation}
+由此可见其的确构成一个度量。
+
+\subsubsection{全变差距离的另一种等价形式}
+
+接下来，我们将证明对于指标集$U = \left\{x\right\}$和概率分布$\left\{p_x\right\}$和$\left\{q_x\right\}$，有
+\begin{equation}\label{eq_Trdist_2}
+T\left(p_x,~q_x\right) = \max_{S \subseteq U}\left(\sum_{x\in S}p_x - \sum_{x\in S}q_x\right)~.
+\end{equation}
+
+定义 $r_x = p_x - q_x$，由于概率的归一性，有
+\begin{equation}
+\sum\limits_{x\in U}r_x = 0~.
+\end{equation}
+
+
+记$S_+ = \left\{x \in U | r_x \geqslant 0\right\}$，$S_- = \left\{x \in U | r_x < 0\right\}$。则有：
+\begin{equation}
+\sum_{x\in S_+}r_x + \sum_{x\in S_-}r_x = 0~.
+\end{equation}
+进而：
+
+\begin{equation}
+\sum_{x\in S_+}r_x = -\sum_{x\in S_-}r_x~.
+\end{equation}
+
+综上所述，有：
+
+\begin{equation}
+\begin{aligned}
+T\left(p_x,~q_x\right) &= \frac{1}{2}\sum_{x\in U}\abs{p_x - q_x} \\
+&= \frac{1}{2}\sum_{x\in U}\abs{r_x} \\
+&= \frac{1}{2}\sum_{x\in S_+}r_x - \frac{1}{2}\sum_{x\in S_-}r_x \\
+&= \sum_{S\in S_+}r_x \\
+&= \max_{S \subseteq U}\sum_{x\in S}r_x \\
+&= \max_{S\subseteq U}\left(\sum_{x\in S}p_x - \sum_{x\in S}q_x\right)
+\end{aligned}~
+\end{equation}
+
+\subsection{密度矩阵的迹距离}
+
+从\autoref{eq_Trdist_1} 和\autoref{eq_Trdist_2} 都可以过度得到密度矩阵的迹距离的表达形式：
+
+\begin{equation}\label{eq_Trdist_4}
+T\left(\rho,~\sigma\right) = \frac{1}{2} \opn{tr}\abs{\rho - \sigma}~.
+\end{equation}
+
+\begin{equation}\label{eq_Trdist_3}
+T\left(\rho,~\sigma\right) = \max_{ P } \opn{tr}\left[P\left(\rho - \sigma\right)\right]~.
+\end{equation}
+
+其中$P$代表任意本征值小于$1$的半正定算子，我们首先证明\autoref{eq_Trdist_3} 与\autoref{eq_Trdist_4} 的等价性。
+
+$\left(\rho - \sigma\right)$是一个厄米矩阵，那么有：
+\begin{equation}
+\begin{aligned}
+\rho - \sigma &= \sum_i \lambda_i \ketbra{i}{i} \\
+&= \sum_{\lambda_i \geqslant 0}\lambda_i \ketbra{i} + \sum_{\lambda_i<0}\lambda_i\ketbra{i} \\
+&= M_1 - M_2~.
+\end{aligned}~
+\end{equation}
+其中$M_1$，$M_2$都是半正定算符。
+
+同时：
+
+\begin{equation}
+\begin{aligned}
+\abs{\rho - \sigma} &= \sqrt{\left( \rho - \sigma \right)^\dagger \left( \rho - \sigma \right)} \\
+&= \sqrt{\sum_i \lambda_i^2\ketbra{i}} \\
+&= \sum_i\abs{\lambda_i}\ketbra{i} \\
+&= M_1 + M_2~,
+\end{aligned}~
+\end{equation}
+则有$T\left(\rho,~\sigma\right) = \frac{1}{2}\left(\opn{tr}M_1 + \opn{tr}M_2\right)$。
+
+考虑$\opn{tr}\rho = \opn{tr}\sigma = 1$，则$\opn{tr}M_1 - \opn{tr}M_2 = \opn{tr}\left(\rho - \sigma\right) = 0$，即$\opn{tr}M_1 = \opn{tr}M_2$，$T\left(\rho,~\sigma\right) = \opn{tr}M_1$。
+
+设$P$为任意本征值小于$1$的半正定算子，则：
+
+\begin{equation}
+\begin{aligned}
+\opn{tr} \left[ P\left(\rho - \sigma\right) \right] &= \opn{tr}\left[ P\left(M_1 - M_2\right) \right] \\
+&= \opn{tr}\left(PM_1\right) - \opn{tr}\left(PM_2\right) \\
+&\leqslant \opn{tr}\left(PM_1\right) \\
+&\leqslant \opn{tr}M_1 \\
+&= T\left( \rho,~\sigma \right)~.
+\end{aligned}~
+\end{equation}
+
+所以有$T\left(\rho,~\sigma\right) = \max_{ P } \opn{tr}\left[P\left(\rho - \sigma\right)\right]$。
+
+\subsubsection{单量子比特的密度矩阵的迹距离}
+
+考虑单qubit的密度矩阵的好处是此时密度矩阵可以写成\autoref{eq_Qubit_2}~\upref{Qubit}$\rho = \frac{1}{2}I + \frac{1}{2}\bvec{n}\cdot \bvec{\sigma}$。
+
+设$\rho = \frac{1}{2}I + \frac{1}{2}\bvec{n}_1\cdot \bvec{\sigma}$，$\delta = \frac{1}{2}I + \frac{1}{2}\bvec{n}_2\cdot \bvec{\sigma}$，那么有：
+
+\begin{equation}
+\begin{aligned}
+T\left(\rho,~\delta\right) &= \frac{1}{2}\opn{tr}\abs{\rho - \delta} \\
+&= \frac{1}{4}\opn{tr}\abs{\left(\bvec{n}_1 - \bvec{n}_2\right) \cdot \bvec{\sigma}}~,
+\end{aligned}~
+\end{equation}
+考虑$\left(\bvec{n}_1 - \bvec{n}_2\right) \cdot \bvec{\sigma}$的本征值是$\pm \abs{\bvec{n}_1 - \bvec{n}_2}$，则：
+\begin{equation}
+\begin{aligned}
+T\left(\rho,~\delta\right) 
+&= \frac{1}{4}\opn{tr}\abs{\left(\bvec{n}_1 - \bvec{n}_2\right) \cdot \bvec{\sigma}} \\ 
+&= \frac{1}{2}\abs{\bvec{n}_1 - \bvec{n}_2}~.
+\end{aligned}~
+\end{equation}
+
+这也就是说，对于单量子比特的密度矩阵，迹距离就是其 Bloch 矢量的差的模长的一半。
+
+\subsubsection{迹距离的性质}
+
+\begin{itemize}
+\item 迹距离是密度矩阵空间的度量，满足非负，对称和三角不等式，且当且仅当$\rho$和$\sigma$相等的时候$T\left(\rho,~\sigma\right) = 0$。
+\item $0 \leqslant T\left(\rho,~\sigma\right) \leqslant 1$。
+\item $T\left(\rho,~\sigma\right)$在酉元作用下保持不变，$T\left(U^\dagger\rho U,~U^\dagger\sigma U\right) = T\left(\rho,~\sigma\right)$。
+\item $T\left(\varepsilon(\rho),~\varepsilon(\sigma)\right) \leqslant T\left(\rho,~\sigma\right)$，其中$\varepsilon$是一个保迹算子，$\opn{tr}\varepsilon(\rho) = \opn{tr}\rho$。
+\item 对输入保持下凸，即$T\left(\sum_i p_i\rho_i,~\sigma\right) \leqslant \sum_i p_iT\left(\rho_i,~\sigma\right)$。
+\item 对于纯态满足$T(\ketbra{\psi},~\ketbra{\phi}) = \sqrt{1 - \abs{\braket{\psi}{\phi}}^2}$。
+\end{itemize}

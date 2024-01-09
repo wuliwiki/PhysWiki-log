@@ -3,7 +3,7 @@
 % type Tutor
 
 \begin{issues}
-\issueDraft
+\issueTODO
 \end{issues}
 
 \pentry{线性映射的张量积\upref{linSW}，行列式\upref{Deter}，对偶空间\upref{DualSp}，向量空间的对称/反对称幂\upref{vecSAS}}
@@ -18,9 +18,11 @@
 % \addTODO{在合适的文章中添加这个证明}
 % \textbf{证明：}全体反对称 $k$-形式构成的向量空间自然同构于 $({\large \wedge}^k V)^*$\autoref{the_vecSAS_1}~\upref{vecSAS}，它自然同构于 ${\large \wedge}^k V^*$（TODO：证明）。
 
-% 全体体积形式构成的向量空间 ${\large \wedge}^n V^* \cong \mathbb{F}$\footnote{有时候我们要求体积形式非零。}。
+% 全体体积形式构成的向量空间 ${\large \wedge}^k V^* \cong \mathbb{F}$\footnote{有时候我们要求体积k式非零。}。
 
-我们把 $n$ 维向量空间 $V$ 上的反对称 $n$-形式称为\textbf{体积形式}。这里的体积指的是定向平行多胞体的有向体积（signed volume）。
+我们把 $n$ 维向量空间 $V$ 上的反对称 $n$-形式称为\textbf{体积形式}。
+
+当$\mathbb{F} = \mathbb{R}$时，这个定义符合我们的直觉，体积指的是定向平行多胞体的有向体积（signed volume）。
 
 \begin{definition}{平行多胞体}
 $n$ 维向量空间 $V$ 的一个 $k$ 维\textbf{平行多胞体}（又称\textbf{超平行体}）简称\textbf{平行 $k$-胞体}，是由 $k$ 个向量 $v_1, \cdots, v_k$ 生成的闭子集
@@ -39,6 +41,7 @@ P: = \left\{ \sum_i a_i v_i \mid a_i \in [0, 1] \right\}~.
 \includegraphics[width=6cm]{./figures/67dd2ddf5f1abfaa.png}
 \caption{平行四边性} \label{fig_APdet_3}
 \end{figure}
+% 如果上下白边太宽可以切掉，但我不知道怎么操作
 
 \begin{figure}[ht]
 \centering
@@ -46,22 +49,29 @@ P: = \left\{ \sum_i a_i v_i \mid a_i \in [0, 1] \right\}~.
 \caption{平行六面体} \label{fig_APdet_2}
 \end{figure}
 
-\begin{example}{}
-$V$ 上的一个反对称 $1$-形式
+\begin{example}{有向长度}
+$V$ 上的一个反对称 $1$-形式（即线性函数） $l: V \to \mathbb{F}$ 给每个定向平行 $1$-胞体 $(P, v_1)$ 定义了一个有向长度 $l(v_1)$。
 \end{example}
+更一般的，反对称 $k$-形式 $\omega$ 给每个定向平行 $k$-胞体定义了一个有向 $k$ 维体积：
+\begin{equation}
+\opn{vol}_k(P, v_1, \cdots, v_k): = \omega(v_1, \cdots, v_k)~.
+\end{equation}
 
-
+\addTODO{画图}
+\begin{example}{}
+我们以三维空间的正方体 $P: = [0, 1]^3 \subseteq \mathbb{R}^3$ 为例，定向平行六面体 $(P, e_1, e_2, e_3)$ 和 $(P, e_2, e_1, e_3)$ 是关于平面 $x = y$ 对称的，因此我们把它们的体积是为相反的（一正一负）。
+\end{example}
 
 
 \subsection{行列式}
 
-$f$ 的 $k$ 阶张量幂$f^{\otimes k}: V^{\otimes k} \to W^{\otimes k}$ 保留了 $V^{\otimes k}$ 元素的对称/反对称性，
-\begin{equation}
-\begin{aligned}
-f(v_1 \cdots v_k) &= \sum_{\sigma \in S_n} f(v_{\sigma(1)}) \otimes \cdots \otimes f(v_{\sigma(k)}) \\
-&= f(v_1) \cdots f(v_k)~,
-\end{aligned}~
-\end{equation}
+$f$ 的 $k$ 阶张量幂$f^{\otimes k}: V^{\otimes k} \to W^{\otimes k}$ 保留了 $V^{\otimes k}$ 元素的反对称性，
+% \begin{equation}
+% \begin{aligned}
+% f(v_1 \cdots v_k) &= \sum_{\sigma \in S_n} f(v_{\sigma(1)}) \otimes \cdots \otimes f(v_{\sigma(k)}) \\
+% &= f(v_1) \cdots f(v_k)~,
+% \end{aligned}~
+% \end{equation}
 
 \begin{equation}
 \begin{aligned}
@@ -74,5 +84,20 @@ f(v_1 \wedge \cdots \wedge v_k) &= \sum_{\sigma \in S_n} \opn{sign}(\sigma) f(v_
 
 如果 $f$ 是一个线性算子，即 $f: V \to V$，我们发现 $k$ 阶反对称幂子空间 ${\large \wedge}^k V$ 是 $f^{\otimes k}$ 的不变子空间\upref{InvSP}，因此 ${\large \wedge}^k f$ 是 ${\large \wedge}^k V$ 上的线性算子。
 
+特别的记 $V$ 的维度为 $n$，我们有 $\dim({\large \wedge}^n V) = 1$，因此
+\begin{equation}
+{\large \wedge}^k f: {\large \wedge}^n V \to {\large \wedge}^n V~
+\end{equation}
+是一个一维到一维的映射，此时存在 $\lambda \in \mathbb{F}$ 满足
+\begin{equation}
+({\large \wedge}^k f)(v) = \lambda v~
+\end{equation}
+$\lambda$ 就是我们想要的 $f$ 的行列式。
 
+\begin{definition}{行列式}
+线性算子 $f: V \to V$ 被定义为 $\lambda$。
+\end{definition}
+
+\addTODO{证明1：线性算子的行列式等于它对应的矩阵的行列式}
+\addTODO{证明2：线性算子的行列式等于体积形式的变化因子}
 
