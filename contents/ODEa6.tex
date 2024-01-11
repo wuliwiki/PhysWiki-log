@@ -4,10 +4,91 @@
 % type Wiki
 
 \begin{issues}
-\issueDraft
+\issueOther{需要补充习题}
+\issueOther{或许和 包络和奇解\upref{EnvSol} 重复？这里写的做法与证明更多一些。}
 \end{issues}
 
-\pentry{一阶隐式常微分方程的存在唯一性定理\upref{ODEa5}}
-\subsection{$p$-判别曲线法}\label{sub_ODEa6_1}
+\pentry{包络和奇解\upref{EnvSol}，一阶隐式常微分方程的存在唯一性定理\upref{ODEa5}}
+一般的一阶隐式常微分方程，往往可能会出现对于一阶隐式常微分方程的存在唯一性定理\upref{ODEa5}的判定中，条件 $(3)$ 的不满足。也就是可能出现 $F(x,y,y'), F'_y(x,y,y'), F'_{y'}(x,y,y')$ 连续，但在某处 $F(x,y,y')=0$ 的情况。在这一点处解的唯一性\textbf{可能}不成立，从而 $F(x,y,y')=0$ 可能有奇解产生。
 
+由奇解性质可以知道，奇解就是由通解构成的曲线族的包络线，由包络线的求法引出了求一阶隐式常微分方程的奇解的以下两种求法。
+\subsection{$p$-判别曲线法}\label{sub_ODEa6_1}
+$p$-判别曲线法的思路是直接求包络线，再检验包络线是否是原方程的解。
+\begin{definition}{$p$-判别曲线}
+若方程 $F(x,y,y')=0$ 有奇解，则这奇解必定满足两方程：
+\begin{equation}\label{eq_ODEa6_1}
+F(x,y,y')=0, F'_{y'}(x,y,y')=0 ~.
+\end{equation}
+记 $y'=p$，有方程组：
+\begin{equation}\label{eq_ODEa6_2}
+\left \{
+\begin{aligned}
+F(x,y,p) &= 0~, \\
+F'_{p}(x,y,p) &= 0~.
+\end{aligned}
+\right .
+\end{equation}
+由这方程组确定的曲线（其中 $p$ 为参数，可以消元），称为方程 $F(x,y,y')=0$ 的 \textbf{$p$-判别曲线}。
+\end{definition}
+显然，若原方程有奇解，则一定包含在方程组 \autoref{eq_ODEa6_2} 所确定的 $p$-判别曲线中，但 $p$-判别曲线不一定是原方程的解。求解出 $p$-判别曲线后应当做以下两个检验：
+\begin{itemize}
+\item 检验某条 $p$-判别曲线是否是原方程的解；
+\item 检验这条曲线上的各点，是否至少有原方程的另一条积分曲线相切。
+\end{itemize}
+若两项\textbf{都}成立，那么这条 $p$-判别曲线就\textbf{是}原方程的奇解。两项中\textbf{任意一项不成立}都将使得这条 $p$-判别曲线\textbf{不是}原方程的奇解。
 \subsection{$c$-判别曲线法}\label{sub_ODEa6_2}
+$c$-判别曲线法的思路是先求出通解的曲线族，再求这曲线族的包络。
+\begin{definition}{$c$-判别曲线}
+设已求出原方程组的通解为曲线族 $V(x,y,c)=0$，其中 $c$ 为参数，每条曲线都是连续可微的。$\Gamma$ 为单参数曲线族 $V(x,y,c)=0$ 的包络，则 $\Gamma$ 是由下列方程组
+\begin{equation}\label{eq_ODEa6_3}
+\left \{
+\begin{aligned}
+V(x,y,c) &= 0~,\\
+V'_c(x,y,c) &= 0~
+\end{aligned}
+\right .
+\end{equation}
+确定的曲线中的一条。称这些 $\Gamma$ 为曲线族 $V(x,y,c)=0$ 的 \textbf{$c$-判别曲线}。
+\end{definition}
+下面给出曲线族 $V(x,y,c)=0$ 的包络必然是 $\Gamma$ 中的一条的简单证明：
+可以将 $\Gamma$ 上的点 $(x, y)$ 视为单参数曲线族 $V(x,y,c)=0$ 中某条以 $c$ 为参数的曲线上的点，从而 $\Gamma$ 为一条以 $c$ 为参数的曲线，即其具有下列参数形式：
+\begin{equation}
+\Gamma: x=x(c), y=y(c), (c \in A) ~.
+\end{equation}
+而参数 $c$ 对应的点在曲线 $V(x,y,c)=0$ 上，故有：
+\begin{equation}\label{eq_ODEa6_4}
+V(x(c), y(c), c) \equiv 0, (c \in A) ~.
+\end{equation}
+包络是连续可微的，故不妨设 $x(c), y(c)$ 也是关于 $c$ 连续可微的，将 \autoref{eq_ODEa6_4} 对 $c$ 求导可以得到：
+\begin{equation}\label{eq_ODEa6_5}
+V'_x(x(c), y(c), c) \cdot x'(c) + V'_y(x(c), y(c), c) \cdot y'(c) + V'_c(x(c), y(c), c) \equiv 0 (c \in A)~.
+\end{equation}
+$\forall c \in A$，因曲线 $\Gamma$ 与曲线族中某条曲线 $V(x,y,c)=0$ 切于某点 $(x(c), y(c))$，从而有：
+\begin{equation}\label{eq_ODEa6_6}
+\frac{y'(c)}{x'(c)} = -\frac{V'_x(x(c), y(c), c)}{V'_y(x(c), y(c), c)} ~.
+\end{equation}
+代入 \autoref{eq_ODEa6_5} 就可以得到 $V'_c(x, y, c)=0$。也就得到了证明。
+
+\begin{theorem}{$c$-判别曲线是否是包络的充分条件}
+若对于曲线族 $V(x,y,c)=0$ 的 $c$-判别曲线 
+$$\Gamma: x=x(c), y=y(c), (c \in A) ~,$$
+连续可微，并且沿 $\Gamma$ 满足
+$$(V'_x)^2 + (V'_y)^2 \neq 0 ~.$$
+那么曲线 $\Gamma$ 是曲线族的包络。
+\end{theorem}
+\textbf{证明：}对于 $\Gamma$ 上的点 $(x(c), y(c))$，则根据定义满足
+\begin{equation}
+\left \{
+\begin{aligned}
+V(x(c), y(c), c) &= 0~, \\
+V'_c(x(c), y(c), c) &=  0~.
+\end{aligned}
+\right .
+\end{equation}
+再由 \autoref{eq_ODEa6_5} 可以得到
+$$V'_x(x(c), y(c), c) \cdot x'(c) + V'_y(x(c), y(c), c) \cdot y'(c) \equiv 0 ~,$$
+由条件 $(V'_x)^2 + (V'_y)^2 \neq 0$ 可知沿 $\Gamma$，$V'_x$ 与 $V'_y$ 不同时为 $0$，不妨设 $V'_y \neq 0$，则有
+\begin{equation}
+\frac{y'(c)}{x'(c)} = -\frac{V'_x(x(c), y(c), c)}{V'_y(x(c), y(c), c)} ~,
+\end{equation}
+于是 $\Gamma$ 与曲线族 $V(x, y, c)=0$ 中的某条曲线在这点 $(x(c), y(c))$ 处相切。就完成了证明。

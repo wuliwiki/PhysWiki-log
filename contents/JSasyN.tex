@@ -1,0 +1,89 @@
+% JavaScript Async 笔记
+% license Usr
+% type Note
+
+
+\begin{issues}
+\issueDraft
+\end{issues}
+
+\pentry{JavaScript 入门笔记\upref{JS}}
+
+\subsection{异步处理}
+\begin{itemize}
+\item JS 本身是单线程的， 但是可以通过调用 Web API 来同步执行下载等任务， 如
+\end{itemize}
+\begin{lstlisting}[language=js]
+function loadXMLDoc(url) {
+    let xmlhttp = new XMLHttpRequest();
+
+    xmlhttp.onreadystatechange = function() {
+        if (this.readyState == 4 && this.status == 200) {
+            // Here you can handle the XML data
+            let xmlDoc = this.responseXML;
+            console.log(xmlDoc);
+        }
+    };
+
+    xmlhttp.open("GET", url, true);
+    xmlhttp.send();
+}
+
+loadXMLDoc(myURL);
+// 其他命令
+\end{lstlisting}
+当此时浏览器会单独开一个线程用于下载 \verb`url` 中的文件， 但在下载完以前 \verb`loadXMLDoc(myURL);` 语句就会结束然后开始 \verb`其他命令`。 只有 \verb`其他命令` 全部都执行完了， 才会开始 \textbf{event loop}， 如果下载已经完成， 就会把这个事件放到执行队列里面。 \verb`其他命令` 执行完了下载还没完成， 就会一直做 \textbf{event loop} 检查事件， 如果发生了别的事件（例如用户按下按钮）就会先去处理该事件，这样就不会出现等到下载完页面才有反应的尴尬现象。
+
+所以可能一些从来没见过异步编程的程序员很不习惯的地方就在于 \verb`其他命令` 中是不可能获取到下载的任何数据的。 下载的数据只能在回调函数 \verb`xmlhttp.onreadystatechange` 中处理！
+
+这就是事件导向的编程思路！
+
+\subsection{Promise}
+\begin{lstlisting}[language=js]
+console.log("Before Promise");
+
+let myPromise = new Promise((resolve, reject) => {
+    console.log("Inside Promise executor");
+    resolve("Operation successful");
+});
+
+myPromise.then(
+    (value) => { console.log(value); },  // Executed asynchronously
+    (error) => { console.log(error); }
+);
+
+console.log("After Promise");
+\end{lstlisting}
+输出：
+\begin{lstlisting}[language=none]
+Before Promise
+Inside Promise executor
+After Promise
+Operation successful
+\end{lstlisting}
+
+\begin{itemize}
+\item \verb`Promise` 是内建类型， 生成时会马上执行第一个 arg 提供的函数（叫做 Promise executor）， \verb`resolve, reject` 函数也同样由系统提供，用于承诺完成或出错时告知系统。 在这个例子中， 在生成器中， \verb`resolve()` 马上被调用了。
+\item 在上例中，我们说 \verb`myPromise` 立即被 \verb`resolve` 成了一个字符串 \verb`"Operation successful"`。
+\item \verb`resolve, reject` 也可以延迟调用， 例如：
+\end{itemize}
+\begin{lstlisting}[language=js]
+let myPromise = new Promise((resolve, reject) => {
+        setTimeout(() => {
+            resolve('Completed!');
+        }, milliseconds);
+    });
+\end{lstlisting}
+\begin{itemize}
+\item 在该例中， \verb`setTimeout` 马上会执行完毕（浏览器会使用另一个线程打开一个计时器）， 然后 \verb`myPromise` 就处于一个没有 resolve 的状态。
+\end{itemize}
+\begin{itemize}
+\item 现在来讨论 \verb`myPromise.then(handler1, handler2)`。 这个命令并不会立即执行 \verb`handler1, handler2`， 只是告诉 \verb`myPromise` 应该怎么处理 resolve 后的结果。 该命令后面的东西会马上继续运行直到结束。 注意即使 \verb`Promise executor` 执行完了， 也需要等到后面的所有代码运行结束了， 进入 event loop 才能执行 handler。
+\item 所以无论 \verb`new Promise` 语句中，是否立即调用该了 \verb`resolve` 或 \verb`reject`， handler 都会在当前所有代码执行完以后，且承诺 resolve 了以后才执行。
+\end{itemize}
+
+\subsubsection{连续的 .then()：}
+\begin{itemize}
+\item \verb`.then()` 方法返回什么呢？ 返回一个新的承诺， resolve 到 \verb`handler` 返回的值！ 于是这个新的 promise 等到完成后又可以被另一个 \verb`.then()` 处理。
+\item 如果每个 \verb`.then()` 都没有 \verb`handler2`， 那么系统会提供默认的， 它的行为就是把错误信息传给新生成的 promise， 并立即调用 \verb`reject()` 把这个信息放进去， 不断传给新的 \verb`.then()` 生成的 promise， 直到遇到 \verb`.catch(handler2)`， 用用户提供的 \verb`handler2` 来处理这个错误。
+\end{itemize}

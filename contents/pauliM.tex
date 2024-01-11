@@ -2,19 +2,28 @@
 % keys 泡利矩阵|自旋算符
 % license Xiao
 % type Tutor
+
+
+
 \pentry{幺正变换\upref{Unitar}，爱因斯坦求和约定\upref{EinSum}}
+
 \begin{definition}{泡利矩阵}\label{def_pauliM_1}
-泡利矩阵为 $2\times 2$ 幺正厄米矩阵：
+泡利矩阵$\hat{\sigma}_i$为 $2\times 2$ 幺正厄米矩阵，与自旋矩阵的关系为：
 \begin{equation}
-\sigma_1 = \begin{pmatrix}
+S_i=\frac{\hbar}{2}\hat{\sigma}_i~.
+\end{equation}
+\end{definition}
+在$\hat{\sigma}_z$表象下，泡利矩阵的一般形式为：
+\begin{equation}
+\hat{\sigma}_1 = \begin{pmatrix}
 0 & 1\\
 1 & 0
 \end{pmatrix},\quad 
-\sigma_2 = \begin{pmatrix}
+\hat{\sigma}_2 = \begin{pmatrix}
 0 & -i\\
 i & 0
 \end{pmatrix},\quad 
-\sigma_3 = 
+\hat{\sigma}_3 = 
 \begin{pmatrix}
 1 & 0\\
 0 & -1
@@ -23,33 +32,50 @@ i & 0
 \end{equation}
 有时也定义零号泡利矩阵为单位矩阵：
 \begin{equation}
-\sigma_0 = \pmat{1&0\\0&1}~.
+\hat{\sigma}_0 = I=\pmat{1&0\\0&1}~.
 \end{equation}
 
-\end{definition}
-
-\subsection{泡利矩阵的性质}
-泡利矩阵是 $2\times 2$ 幺正厄米矩阵，它们有以下的性质
+根据定义，我们可以直接得到泡利矩阵的对易关系：
 \begin{equation}
-\sigma_i\cdot \sigma_i = \begin{pmatrix}1&0\\0&1\end{pmatrix},\quad \sigma_i = {\sigma_i}^\dagger~.
+[\hat{\sigma}_i,\hat{\sigma}_j]=2\mathrm {i}\epsilon ^{\,\,\, k}_{ij}\hat{\sigma}_k,\quad\{\hat{\sigma}_i,\hat{\sigma}_j\}=2\delta_{ij}I~,
 \end{equation}
-即每个泡利矩阵的平方都是单位矩阵。又可以得到 $\sigma_i \cdot  \sigma_i{}^\dagger = I$，所以泡利矩阵也是幺正矩阵。
+其中$i,j,k\in\{1,2,3\}$。$\delta_{ij}$是克罗内克函数，$\epsilon ^{\,\,\, k}_{ij}$是列维-奇维塔符号（Levi-Civita symbol）,由对易运算的反对称性可知，这是一个关于下标的反对称张量。
 
-泡利矩阵有以下性质：
+\subsection{泡利矩阵的其他性质}
+由泡利矩阵的一般形式得：
+\begin{equation}
+\hat{\sigma}_i\cdot \hat{\sigma}_i = \begin{pmatrix}1&0\\0&1\end{pmatrix}~,
+\end{equation}
+即每个泡利矩阵的平方都是单位矩阵，则 $\hat{\sigma}_i \cdot  \hat{\sigma}_i{}^\dagger = I$，所以泡利矩阵也是幺正矩阵。
+\begin{exercise}{}
+证明在别的角动量分量表象下，我们依然有：$\hat{\sigma}_i^2=I$
+\end{exercise}
+
+由泡利矩阵的对易关系可得：
 \begin{theorem}{}
 \begin{equation}\label{eq_pauliM_1}
-\sigma_a\sigma_b = \delta_{ab}\sigma_0 + \mathrm{i}\epsilon_{abc}\sigma_c~.
+\hat{\sigma}_i\hat{\sigma}_j = \delta_{ij}I + \epsilon ^{\,\,\, k}_{ij}\hat{\sigma}_k~.
 \end{equation}
 \end{theorem}
-由这条性质可以推出
-\begin{lemma}{}
+Proof.
+
+$i=j$时，显然成立。
+$i\neq j$时，利用$\epsilon ^{\,\,\, k}_{ij}=-\epsilon ^{\,\,\, k}_{ji}$及对易关系得证。
+
+
+\begin{exercise}{}
+证明：
+$\mathrm{tr}[\hat{\sigma}_i \hat{\sigma}_j]= 2\delta_{ij}$。
+\end{exercise}
+\subsection{泡利矩阵与四元数}
+特殊酉群$SU(2)$可以看作\textbf{实数域}上的四维线性空间，可以验证泡利矩阵为该线性空间的一组基——通过泡利矩阵的任意线性组合，我们可以得到该线性空间的任意元素，也即$SU(2)$上的任意元素。四元数与$SU(2)$是同构的，一般同构方式为以下两种：
 \begin{equation}
-[\sigma_a,\sigma_b] = \mathrm{i}2\epsilon_{abc}\sigma_c,\quad \{\sigma_a,\sigma_b\}=2\delta_{ab}\sigma^0~.
+\begin{aligned}
+1\rightarrow I,\,\bvec{\mathrm i}\rightarrow \mathrm i \hat{\sigma}_3,\,\bvec j\rightarrow \mathrm i\hat{\sigma}_2,\,\bvec k\rightarrow \mathrm i\hat{\sigma}_1.\\
+1\rightarrow I,\,\bvec{\mathrm i}\rightarrow -\mathrm i\hat{\sigma}_1,\,\bvec j\rightarrow -\mathrm i\hat{\sigma}_2,\,\bvec k\rightarrow -\mathrm i\hat{\sigma}_3~.
+\end{aligned}
 \end{equation}
-\end{lemma}
-对 \autoref{eq_pauliM_1} 两边求迹，还可以得到
-\begin{lemma}{}
-\begin{equation}
-\mathrm{tr}[\sigma_a \sigma_b]= 2\delta_{ab} ~
-\end{equation}
-\end{lemma}
+
+\begin{exercise}{}
+验证泡利矩阵保四元数乘法。
+\end{exercise}

@@ -7,9 +7,14 @@
 \item \verb|#include <thread>|， \verb|#include <mutex>|
 \item \verb|std::thread th(函数, arg1, arg2, ...)|; 创建一个线程， 调用\verb|函数|（可以是函数指针， 函数对象， lambda）， \verb|arg| 是\verb|函数|的变量。
 \item \verb|th.join()| 可以让主程序等待某个线程自己退出。
-\item 声明一个全局变量 \verb|std::mutex m| 相当于 openmp 的 atomic 操作， 可以避免多个线程操作同一数据。 \verb|m.lock()| 给 mutex 上锁， 如果已经被别人上锁就暂停该线程并等待解锁。 \verb|m.try_lock()| 试图上锁， 如果已经被别人上锁就返回 \verb|false|。 \verb|m.unlock()| 解锁。
-\item 为了避免在 \verb|m.lock()| 和 \verb|m.unlock()| 之间发生 throw， 通常不直接调用他们， 而是用 \verb|std::lock_guard<std::mutex> guard(m)| （相当于 lock）， 当 \verb|guard| 被 destroy 时， 会自动 unlock。
-\item \verb|std::this_thread::sleep_for(std::chrono::seconds(2));| 可以让某个线程暂停。
+\item 声明一个全局变量 \verb|std::mutex m| 相当于 openmp 的 atomic 操作， 可以避免多个线程操作同一数据。
+\item \verb|m.lock()| 给 mutex 上锁， 如果已经被别人上锁就暂停该线程并等待解锁。 \verb|m.try_lock()| 试图上锁， 如果已经被别人上锁就返回 \verb|false|。
+\item \verb|m.unlock()| 解锁，以便别的线程上锁。
+\item 为了避免在 \verb|m.lock()| 和 \verb|m.unlock()| 之间发生 throw（这样就无法自动解锁）， 通常不直接调用他们， 而是用 \verb|std::lock_guard<std::mutex> guard(m)|。 constructor 相当于 lock， destructor 相当于 unlock。
+\item \verb`unique_lock<>` 类似于 \verb`lock_guard` 但更灵活。
+\item \verb|std::this_thread::sleep_for(std::chrono::seconds(2));| 可以让某个线程暂停
+\item \verb`sleep_for` 不是 busy wait 而是像 \verb`cin` 等待时一样运行 cpu 执行别的东西，也就是让系统接管，直到某个事件发生然后再继续。
+\item 相比之下， \textbf{自旋锁}就是指一个线程一直用一个空循环不断检查锁的状态直到解锁。
 \end{itemize}
 
 例程（编译时要给 linker 加上 \verb|-l pthread|）：
