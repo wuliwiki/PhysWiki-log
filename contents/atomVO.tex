@@ -1,0 +1,114 @@
+% C++ 原子变量原子操作笔记
+% keys 原子变量|原子操作|C++|多线程|并发
+% license Usr
+% type Tutor
+
+\begin{issues}
+\issueDraft
+\issueTODO
+\end{issues}
+
+
+C++ 11 中引入的原子变量（atomic）是在多线程编程中的常用同步机制。它可以避免竟态条件（race condition）和死锁（dead lock）问题。它可以保证对共享变量的操作在执行时不会被其他线程的操作干扰。
+
+举个例子，以下 C++ 代码：
+\begin{lstlisting}[language=cpp]
+// C++ 11
+#include <iostream>
+#include <thread>
+using namespace std;
+int n(0);
+
+void cnt1e4() {
+	for(int i(1); i <= 1e4; ++i) ++ n;
+}
+
+int main() {
+	thread ths[100];
+	for(thread &thr: ths) thr = thread(cnt1e4);
+	for(thread &thr: ths) thr.join();
+	cout << n << endl;
+	return 0;
+}
+\end{lstlisting}
+理论输出应为 $10^4 \times 100 = 1000000$，而实际输出总小一些，例如在某计算机上运行三次结果分别为：
+\begin{figure}[ht]
+\centering
+\includegraphics[width=10cm]{./figures/a6a955b5d96c1353.png}
+\caption{第一次运行结果} \label{fig_atomVO_1}
+\end{figure}
+\begin{figure}[ht]
+\centering
+\includegraphics[width=10cm]{./figures/5000b1ff19d8f7a3.png}
+\caption{第二次运行结果} \label{fig_atomVO_2}
+\end{figure}
+\begin{figure}[ht]
+\centering
+\includegraphics[width=10cm]{./figures/bf4fe703627db114.png}
+\caption{第三次运行结果} \label{fig_atomVO_3}
+\end{figure}
+这类问题尤其在大量不同线程对于同一变量进行操作时出现，更多的线程数量可能导致更大的误差。以两个线程为例，从计算机对变量的操作的角度来考虑这个问题：
+对于某一个线程，电脑此时要对 $n$ 执行 $+1$ 操作，顺序为：
+\begin{enumerate}
+\item 从主内存中加载 $n$ 的值到线程工作内存；
+\item 执行 $+1$ 操作；
+\item 把第二步的执行结果从工作内存写入到主内存。
+\end{enumerate}
+而当有两个线程或是更多个线程的时候，可能会出现以下情况：
+\begin{enumerate}
+\item 线程 1 从主内存中加载 $n$ 的值 $n_{old}$ 到线程 1 到工作内存；
+\item 线程 2 从主内存中加载 $n$ 的值 $n_{old}$ 到线程 2 到工作内存；
+\item 线程 1 执行 $+1$ 运算得到结果 $n_{old}+1$；
+\item 线程 2 执行 $+1$ 运算得到结果 $n_{old}+1$；
+\item 线程 1 把 $n_{old}+1$ 写入主内存中的 $n$ 变量；
+\item 线程 2 把 $n_{old}+1$ 写入主内存中的 $n$ 变量；
+\end{enumerate}
+此时 $n$ 的值本应为 $n_{old} + 2$，实际却是 $n_{old}+1$，当大量不同线程同时对 $n$ 进行类似操作时更容易出现这类问题，所以引入了原子变量与原子操作的概念。
+
+\subsection{原子变量}
+\verb`atomic` 是一个模板类，可以通过 \verb`atomic<_typName> varName;` 来声明类型为 \verb`_typName` 的、变量名为 \verb`varName` 的原子变量，前提是 \verb`_typName` 类型合法。
+
+对于所有的原子变量都有以下四个常用的公开成员函数：
+\begin{enumerate}
+\item \verb`store`：原子地以非原子对象替换原子对象的值；
+\item \verb`load`：原子地获得原子对象的值；
+\item \verb`is_lock_free`：检查原子对象是否免锁；
+\item \verb`compare_exchange_weak`、\verb`compare_exchange_strong`：原子地比较原子对象与非原子参数的值，若相等则进行交换，若不相等则进行加载。
+\end{enumerate}
+
+对于大部分情况下，要对原子变量操作，一般
+
+下面通过介绍一些使用 \verb`atomic` 类型的例子来介绍其用法，并给出一些例程。
+
+\subsubsection{对整数类型的特化}
+原子变量对整数类型进行了特化，具体的有：
+\begin{enumerate}
+\item 字符类型 \verb`char`、\verb`char8_t` (C++20 起)、\verb`char16_t`、\verb`char32_t` 和 \verb`wchar_t`；
+\item 标准有符号整数类型：\verb`signed char`、\verb`short`、\verb`int`、\verb`long` 和 \verb`long long`；
+\item 标准无符号整数类型：\verb`unsigned char`、\verb`unsigned short`、\verb`unsigned int`、\verb`unsigned long` 和 \verb`unsigned long long`。
+\end{enumerate}
+这些类型可以直接使用 \verb`atomic_类型` 的方式直接声明变量。
+其中，\verb`unsigned` 的类型加前缀 \verb`u`，\verb`long long` 缩写为 \verb`llong`。
+例如：\verb`atomic_ullong a;`。
+对于这些整数变量，提供了专门的 \verb`fetch_add`，\verb`fetch_sub`、\verb`fetch_or` 等函数可以直接进行原子操作。例如：\verb`a.fetch_add(3);` 可以对原子变量 \verb`a` 原子地加 $3$ 并赋值给它。
+
+\subsubsection{C++ 标准}
+关于原子变量，有下列相关的 C++ 标准：
+C++ 标准在头文件（标头）中提供了以下关于 \verb`atomic` 的定义：
+\begin{enumerate}
+\item (C++11 起) \verb`template< class T > struct atomic;`
+\item (C++11 起) 在标头 <memory> 定义：\verb`template< class U > struct atomic<U*>;`
+\item (C++20 起) \verb`template<class U> struct atomic<std::shared_ptr<U>>;`
+\item (C++20 起) 在标头 <stdatomic.h> 定义：\verb`template<class U> struct atomic<std::weak_ptr<U>>;`
+\end{enumerate}
+
+原子类型要求是满足可复制构造 (CopyConstructible) 、可复制赋值 (CopyAssignable) 的可平凡复制 (TriviallyCopyable) 类型。
+其中，可复制构造是指该类型的实例可以从左值表达式进行复制构造，可复制赋值是指该类型的实例可以从左值表达式复制赋值，可平凡复制类型有下表的要求。
+\begin{enumerate}
+\item 至少有一个合格的复制构造函数，移动构造函数，复制赋值运算符或移动赋值运算符；
+\item 每个合格的复制构造函数都是平凡的；
+\item 每个合格的移动构造函数都是平凡的;
+\item 每个合格的复制赋值运算符都是平凡的；
+\item 每个合格的移动赋值运算符都是平凡的；
+\item 有一个未被弃置的平凡析构函数。
+\end{enumerate}

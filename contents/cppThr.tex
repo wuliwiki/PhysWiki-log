@@ -7,8 +7,9 @@
 \item \verb|#include <thread>|， \verb|#include <mutex>|
 \item \verb|std::thread th(函数, arg1, arg2, ...)|; 创建一个线程， 调用\verb|函数|（可以是函数指针， 函数对象， lambda）， \verb|arg| 是\verb|函数|的变量。
 \item \verb|th.join()| 可以让主程序等待某个线程自己退出。
-\item 声明一个全局变量 \verb|std::mutex m| 相当于 openmp 的 atomic 操作， 可以避免多个线程操作同一数据。
+\item 声明一个全局变量 \verb|std::mutex m| 可以避免多个线程操作同一数据。 该类型不可以 copy 只能通过 reference 传参。
 \item \verb|m.lock()| 给 mutex 上锁， 如果已经被别人上锁就暂停该线程并等待解锁。 \verb|m.try_lock()| 试图上锁， 如果已经被别人上锁就返回 \verb|false|。
+\item 如果同一个线程试图给 mutex 连续上锁两次， 结果未定义， 但通常会导致该线程卡住且一直锁下去（dead lock）。
 \item \verb|m.unlock()| 解锁，以便别的线程上锁。
 \item 为了避免在 \verb|m.lock()| 和 \verb|m.unlock()| 之间发生 throw（这样就无法自动解锁）， 通常不直接调用他们， 而是用 \verb|std::lock_guard<std::mutex> guard(m)|。 constructor 相当于 lock， destructor 相当于 unlock。
 \item \verb`unique_lock<>` 类似于 \verb`lock_guard` 但更灵活。
@@ -62,3 +63,79 @@ int main()
 \begin{itemize}
 \item 在全局变量， 以及函数和类中的 static 变量的声明前面加 \verb|thread_local|，可以让其在每个线程中保持自己独立的 copy， 使函数变得 thread safe。 例如上面的 \verb|myfun| 中如果声明了 \verb|thread_local static vector<int> a;|， 那么每个线程第一次调用该函数时就会生成一个独立的变量 \verb|a|， 若一个线程多次调用该函数， 那么每次调用时 \verb|a| 都会有上次调用结束前的值。
 \end{itemize}
+
+\subsection{std::condition\_variable}
+\verb`condition_variable` 用于 block 一个或者多个线程，直到某个另外的线程发送一个信号。
+
+\begin{lstlisting}[language=cpp]
+#include <iostream>
+#include <thread>
+#include <mutex>
+#include <condition_variable>
+
+// 把 condition_variable 需要 bool 变量一起封装起来更方便使用
+class ConditionVar {
+private:
+    std::condition_variable cv;
+    bool ready = false;
+
+public:
+    // 暂停一些线程
+    void wait(std::mutex &mtx) {
+        std::unique_lock<std::mutex> lock(mtx); // 上锁
+        cv.wait(lock, [this]{ return ready; }); // 在线程休眠以前解锁，在唤醒时再次上锁
+        // 注意如果在 wait 以前 ready=true，那么 wait 什么都不做。
+        // 解锁
+    }
+    // 唤醒所有线程
+    void notify_all(std::mutex &mtx) {
+        std::lock_guard<std::mutex> lock(mtx);
+        ready = true;
+        cv.notify_all();
+    }
+    // 随机唤醒一个线程
+    void notify_one(std::mutex &mtx) {
+        std::lock_guard<std::mutex> lock(mtx);
+        ready = true;
+        cv.notify_one();
+    }
+};
+
+std::mutex mtx;
+ConditionVar cv;
+
+void wait(int id) {
+	printf("Thread %d started.\n", id);
+    cv.wait();
+	printf("Thread %d is resumed.\n", id);
+}
+
+void resume() {
+    std::this_thread::sleep_for(std::chrono::seconds(1)); // 模拟一些工作
+    cv.notify_all(); // 全部唤醒
+    printf("resume signal sent!\n");
+}
+
+int main() {
+    std::thread threads[3];
+    
+    // 注意这里任何一个线程都可能先开启
+    for (int i = 0; i < 2; ++i)
+        threads[i] = std::thread(wait, i);
+
+    threads[2] = std::thread(resume);
+
+    for (auto &th : threads)
+        th.join();
+}
+\end{lstlisting}
+运行结果
+\begin{lstlisting}[language=cpp]
+Thread 0 started.
+Thread 1 started.
+resume signal sent!
+Thread 0 is resumed.
+Thread 1 is resumed.
+\end{lstlisting}
+
+这有什么应用呢？ 比如说一个线程要准备一个全局的 string 变量给所有其他线程用。 那么所有其他线程在使用该 string 之前就要 wait， 而准备 string 的线程准备好之后就要 notify_all。
