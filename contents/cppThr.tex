@@ -65,7 +65,7 @@ int main()
 \end{itemize}
 
 \subsection{std::condition\_variable}
-\verb`condition_variable` 用于 block 一个或者多个线程，直到某个另外的线程发送一个信号。
+\verb`condition_variable` 用于 block 一个或者多个线程（也就是让它睡觉，腾出算力做别的事情），直到某个另外的线程发送一个信号。
 
 \begin{lstlisting}[language=cpp]
 #include <iostream>
@@ -106,13 +106,13 @@ ConditionVar cv;
 
 void wait(int id) {
 	printf("Thread %d started.\n", id);
-    cv.wait();
+    cv.wait(mtx); // 休眠
 	printf("Thread %d is resumed.\n", id);
 }
 
 void resume() {
     std::this_thread::sleep_for(std::chrono::seconds(1)); // 模拟一些工作
-    cv.notify_all(); // 全部唤醒
+    cv.notify_all(mtx); // 全部唤醒
     printf("resume signal sent!\n");
 }
 
@@ -128,6 +128,7 @@ int main() {
     for (auto &th : threads)
         th.join();
 }
+
 \end{lstlisting}
 运行结果
 \begin{lstlisting}[language=cpp]
@@ -139,3 +140,44 @@ Thread 1 is resumed.
 \end{lstlisting}
 
 这有什么应用呢？ 比如说一个线程要准备一个全局的 string 变量给所有其他线程用。 那么所有其他线程在使用该 string 之前就要 wait， 而准备 string 的线程准备好之后就要 notify_all。
+
+\subsection{自旋锁}
+c++ 没有定义自旋锁，我们可以简单实现一个：
+\begin{lstlisting}[language=cpp]
+#include <atomic>
+#include <thread>
+#include <iostream>
+
+class SpinLock {
+private:
+    std::atomic_flag lockFlag = ATOMIC_FLAG_INIT;
+
+public:
+    void lock() {
+        while (lockFlag.test_and_set(std::memory_order_acquire)) {
+            // Spin-wait (busy wait) until the lock is released
+        }
+    }
+
+    void unlock() {
+        lockFlag.clear(std::memory_order_release);
+    }
+};
+
+void exampleFunction(SpinLock& spinLock) {
+    spinLock.lock();
+    std::cout << 123 << "234" << std::endl;
+    spinLock.unlock();
+}
+
+int main() {
+    SpinLock spinLock;
+    std::thread t1(exampleFunction, std::ref(spinLock));
+    std::thread t2(exampleFunction, std::ref(spinLock));
+
+    t1.join();
+    t2.join();
+
+    return 0;
+}
+\end{lstlisting}

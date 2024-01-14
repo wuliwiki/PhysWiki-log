@@ -3,13 +3,9 @@
 % license Usr
 % type Tutor
 
-\begin{issues}
-\issueDraft
-\issueTODO
-\end{issues}
 
 
-C++ 11 中引入的原子变量（atomic）是在多线程编程中的常用同步机制。它可以避免竟态条件（race condition）和死锁（dead lock）问题。它可以保证对共享变量的操作在执行时不会被其他线程的操作干扰。
+C++ 11 中引入的原子变量（atomic）是在多线程编程中的常用同步机制。它可以避免竟态条件（race condition）和死锁（dead lock）问题。它可以保证对共享变量的操作在执行时不会被其他线程的操作干扰。同时，性能也要高于使用锁的实现。
 
 举个例子，以下 C++ 代码：
 \begin{lstlisting}[language=cpp]
@@ -63,7 +59,7 @@ int main() {
 \item 线程 1 把 $n_{old}+1$ 写入主内存中的 $n$ 变量；
 \item 线程 2 把 $n_{old}+1$ 写入主内存中的 $n$ 变量；
 \end{enumerate}
-此时 $n$ 的值本应为 $n_{old} + 2$，实际却是 $n_{old}+1$，当大量不同线程同时对 $n$ 进行类似操作时更容易出现这类问题，所以引入了原子变量与原子操作的概念。
+此时 $n$ 的值本应为 $n_{old} + 2$，实际却是 $n_{old}+1$，当大量不同线程同时对 $n$ 进行类似操作时更容易出现这类问题，所以引入了原子变量与原子操作的方法。这个方法的实现性能要远高于使用锁的实现。
 
 \subsection{原子变量}
 \verb`atomic` 是一个模板类，可以通过 \verb`atomic<_typName> varName;` 来声明类型为 \verb`_typName` 的、变量名为 \verb`varName` 的原子变量，前提是 \verb`_typName` 类型合法。
@@ -76,9 +72,53 @@ int main() {
 \item \verb`compare_exchange_weak`、\verb`compare_exchange_strong`：原子地比较原子对象与非原子参数的值，若相等则进行交换，若不相等则进行加载。
 \end{enumerate}
 
-对于大部分情况下，要对原子变量操作，一般
+对于大部分情况下，要对原子变量操作，一般方法是先通过 \verb`load` 加载原子变量目前存储的值，然后操作后执行 \verb`compare_exchange`，特别注意，这里\textbf{不使用 \verb`store` 函数}。\verb`store` 函数是不安全的。
+
+在一些平台，弱形式的 CAS（Compare And Set）函数，也就是 \verb`compare_exchange_weak` 函数性能可能更高。两个 CAS 函数均建议使用 do-while 循环进行操作。但是弱形式的函数可能会有“出乎意料（Unexpected）”的返回，比如在字段值和期待值一样的时候却返回了 \verb`false`。
 
 下面通过介绍一些使用 \verb`atomic` 类型的例子来介绍其用法，并给出一些例程。
+
+\subsection{自定义类型的原子化}
+对于合法的自定义类，例如下面的 \verb`counter`，可以直接使用模板类声明原子类型。进行操作时使用 CAS 函数，也就是 \verb`compare_exchange_strong` 或 \verb`compare_exchange_weak` 进行保存。
+
+\begin{lstlisting}[language=cpp]
+// C++ 11
+#include <iostream>
+#include <thread>
+#include <atomic>
+using namespace std;
+
+struct counter {
+	int a{};
+	int b{};
+};
+
+atomic<counter> cnt;
+
+void cnt1e4() {
+	for(int i(1); i <= 1e4; ++i) {
+		counter desired, expected;
+		desired = cnt.load();
+		do {
+			expected = desired;
+			
+			// then do some thing...
+			expected.a ++;
+			expected.b += 2;
+			
+		} while(! cnt.compare_exchange_strong(desired, expected)) ;
+		// while(! cnt.compare_exchange_weak(desired expected)) ;
+	}
+}
+
+int main() {
+	thread ths[100];
+	for(thread &thr: ths) thr = thread(cnt1e4);
+	for(thread &thr: ths) thr.join();
+	cout << cnt.load().a << ' ' << cnt.load().b << endl;
+	return 0;
+}
+\end{lstlisting}
 
 \subsubsection{对整数类型的特化}
 原子变量对整数类型进行了特化，具体的有：
@@ -112,3 +152,12 @@ C++ 标准在头文件（标头）中提供了以下关于 \verb`atomic` 的定�
 \item 每个合格的移动赋值运算符都是平凡的；
 \item 有一个未被弃置的平凡析构函数。
 \end{enumerate}
+对于以下任意值为 \verb`false` 的类型，
+\begin{enumerate}
+\item \verb`std::is_trivially_copyable<T>::value`；
+\item \verb`std::is_copy_constructible<T>::value`；
+\item \verb`std::is_move_constructible<T>::value`；
+\item \verb`std::is_copy_assignable<T>::value`；
+\item \verb`std::is_move_assignable<T>::value`。
+\end{enumerate}
+都是不合法的。这些模板类定义在标头文件 \verb`<type_traits>` 中。

@@ -1,0 +1,48 @@
+% C++ 异步编程
+% license Usr
+% type Note
+
+
+\begin{issues}
+\issueDraft
+\end{issues}
+
+和 JavaScript 类似， c++ 使用异步编程可以
+
+\begin{lstlisting}[language=cpp]
+#include <iostream>
+#include <future>
+#include <thread>
+#include <chrono>
+
+// Asynchronous function
+int DoubleValue(std::future<int>& fut) {
+    int value = fut.get(); // get the value from future
+    // simulate some work
+    std::this_thread::sleep_for(std::chrono::seconds(2));
+    return 2 * value;
+}
+
+int main() {
+    // Create a promise
+    std::promise<int> prom;
+
+    // Get future from the promise
+    std::future<int> fut = prom.get_future();
+
+    // Start the asynchronous task
+    std::future<int> result =
+        std::async(std::launch::async, DoubleValue, std::ref(fut));
+
+    // Set value in promise (sends data to the asynchronous task)
+    prom.set_value(10);
+
+    // Wait for the result from the asynchronous task
+    int doubledValue = result.get();
+
+    std::cout << "Doubled Value: " << doubledValue << std::endl;
+
+    return 0;
+}
+\end{lstlisting}
+其中的 \verb`std::launch::async` 让系统用另一个线程马上开始处理 \verb`DoubleValue`， 而如果换成 \verb`std::launch::deferred`， 则只用一个线程，只是等到 \verb`.get()` 的时候再处理（基本想不到使用场景）。
