@@ -89,6 +89,11 @@ MyPool/fs2  7.24T  13.8T   7.24T  /MyPool/fs2
 \item 亲测 4 盘 8TB 希捷 exos， RAID-z1，lz4 压缩， 关闭 dedup， 大 mp4 文件写入平均 50-70MB/s，比较稳定。 一开始复制文件可以达到 100MB/s 以上，但这应该主要是在写入缓存。
 \end{itemize}
 
+\subsubsection{已知问题}
+\begin{itemize}
+\item ubuntu22.04 中，无法用 \verb`updatedb` 和 \verb`plocate` 搜索 ZFS 中的文件。
+\end{itemize}
+
 \subsection{压缩}
 \begin{itemize}
 \item \verb|sudo zfs set compression=lz4 pool名/fs名| 开启 lz4 压缩（cpu 会间断性占用 70\% 左右， 8 核 16 线程）。 可以\textbf{随时打开或者关闭}，只对新数据生效。 \verb|lz4| 是 zfs 最流行的压缩算法。 压缩会占用 cpu 但反而有可能会让读写变快！ 因为真正需要读写的数据少了。 实测在我的 8cpu 电脑上开启最高压缩率算法 \verb|gzip-9| 并不会让写入变慢。 其实如果大文件主要是视频啥的，压缩率其实非常小（我的当前平均压缩率只有 1.04x）。
