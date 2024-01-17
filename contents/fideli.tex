@@ -3,3 +3,63 @@
 % license Xiao
 % type Tutor
 
+\footnote{本节参考\cite{量子信息}和\href{https://en.wikipedia.org/wiki/Trace_distance}{Wikipedia界面}}
+\pentry{密度矩阵\upref{denMat}}
+
+在很多时候我们需要去探讨如何计算两个量子态究竟有多么相近，在态矢量的语言下这个答案是很简单的，我们可以使用两个态矢量的内积的模方来描述其二者是否相同或有多么不同。但对于两个密度矩阵来说这个问题并没有那么简单，\textbf{迹距离}和\textbf{保真度}给出了两种度量方法，我们在这里介绍\textbf{保真度}。
+
+\subsection{定义}
+
+\begin{definition}{保真度}\label{def_fideli_1}
+对于状态$\rho$和$\sigma$，保真度的定义为：
+
+\begin{equation}
+F\left(\rho, \sigma\right)\equiv\opn{tr}\sqrt{\rho^{\frac{1}{2}}\sigma\rho^{\frac{1}{2}}}~.
+\end{equation}
+
+\end{definition}
+
+在一些文献中的保真度会采用另外一种定义:
+
+\begin{definition}{保真度}
+对于状态$\rho$和$\sigma$，保真度的定义为：
+
+\begin{equation}
+F_1\left(\rho, \sigma\right)\equiv\left(\opn{tr}\sqrt{\rho^{\frac{1}{2}}\sigma\rho^{\frac{1}{2}}}\right)^2~.
+\end{equation}
+\end{definition}
+
+由于\autoref{def_fideli_1} 有更好的经典对应，因此我们此处选取第一种定义，在使用和阅读保真度相关内容时，应注意究竟采用的是哪种定义。
+
+值得注意的是，保真度并不是数学意义上的度量，因为当$\sigma = \rho$时候，$F\left(\rho, \sigma\right) = \opn{tr}\sqrt{\rho^{\frac{1}{2}}\rho\rho^{\frac{1}{2}}} = \opn{tr}\rho = 1 \neq 0$。
+
+我们从经典信息的角度定义来阐释保真度的含义，考虑经典概率的归一性限制，对于两个概率分布$\left\{p_i\right\}$和$\left\{q_i\right\}$，有$\sum\limits_i p_i = \sum\limits_i q_i = 1$。由于概率的性质$p_i,q_i\geqslant 0$，考虑向量$\bvec{v}_p = \left( \sqrt{p_1},\sqrt{p_2},\cdots\sqrt{p_N}\right)$和$\bvec{v}_q = \left( \sqrt{q_1},\sqrt{q_2},\cdots\sqrt{q_N}\right)$，那么他们就是模长为$1$的单位向量，可以视为$N$维单位球面上的单位向量。而他们的内积为$\left(\bvec{v}_p,\bvec{v}_q\right) = \sum\limits_i\sqrt{p_iq_i}$。
+
+接下来我们从保真度的定义出发，如果$\rho$和$\sigma$可以在同一组基$\left\{\ket{i}\right\}$下写成对角矩阵的形式，$\rho = \sum\limits_ip_i\ketbra{i}$，$\sigma = \sum\limits_iq_i\ketbra{i}$，那么可以计算：
+
+\begin{equation}
+\begin{aligned}
+F\left(\rho,\sigma\right) &= \opn{tr}\sqrt{\sum_{i} \sqrt{p_i}\ketbra{i}\sum_{j}q_j\ketbra{j}\sum_k\sqrt{p_k}\ketbra{k}} \\
+&= \opn{tr}\sqrt{\sum_{i,j,k}\sqrt{p_ip_k}q_j\ket{i}\braket{i}{j}\braket{j}{k}\bra{k}} \\
+&= \opn{tr}\sqrt{\sum_ip_iq_i\ketbra{i}} \\
+&= \sum_i\sqrt{p_iq_i}~.
+\end{aligned}~
+\end{equation}
+由此可见保真度概念实际上是我们在经典信息中考虑的$\bvec{v}_p$和$\bvec{v}_q$的量子力学推广。
+
+\subsubsection{讨论：为什么定义不是$F\left(\rho,\sigma\right) = \opn{tr}\sqrt{\rho\sigma}~$？}
+\footnote{参考\href{https://physics.stackexchange.com/questions/532223/why-is-the-standard-definition-of-fidelity-unnecessarily-complicated}{网站}}
+我们可以很容易的验证如果$\rho = \sum\limits_i p_i\ketbra{i}$，$\sigma = \sum\limits_i q_i \ketbra{i}$，有:
+
+\begin{equation}
+\begin{aligned}
+\opn{tr}\sqrt{\rho\sigma} &= \opn{tr}\sqrt{\sum_{i,j}p_iq_j\ket{i}\braket{i}{j}\bra{j}} \\
+&= \opn{tr}\sqrt{\sum_ip_iq_i\ketbra{i}} \\&=\sum_i\sqrt{p_iq_i}~.
+\end{aligned}~
+\end{equation}
+
+貌似通过这种定义也可以实现$\bvec{v}_p$和$\bvec{v}_q$的量子力学推广，那我们为什么一定要选择看起来较为麻烦的\autoref{def_fideli_1} 呢？
+
+回忆矩阵的函数的定义，我们是通过幂级数的方法定义的，而$\sqrt{x}$在$0$处没有泰勒展开，那我们为什么可以写$\sqrt{\rho}$呢？这是因为$\rho$是密度矩阵，所以是一个厄密矩阵，是必定可对角化且本征值为正数的，我们可以通过$\rho = \sum\limits_ip_i\ketbra{i},\sqrt{\rho} = \sum\limits_i\sqrt{p_i}\ketbra{i}$来定义（注意，这个定义针对厄密矩阵，因为任意矩阵本征值不一定为正实数，这会引入根号的多值问题，而且甚至任意矩阵不一定可以相似对角化）。考虑$\rho\sigma$，$\left(\rho\sigma\right)^\dagger = \sigma^\dagger \rho^\dagger = \sigma\rho$，除非$\rho$和$\sigma$对易，否则其乘积就不是厄密矩阵，因此我们直接对其乘积开根号是一个很危险的行为。因此我们选择\autoref{def_fideli_1} 的形式，其中所有在根号下的内容的厄密性都很容易验证。
+
+注：事实上也可以拓展开根号的定义来使得$\sqrt{\rho\sigma}$合法化，这样得到的结果是和\autoref{def_fideli_1} 等价的。

@@ -71,7 +71,7 @@ password=smb密码
 \end{lstlisting}
 \item 为了安全起见， 可以 \verb|sudo chmod 600 /root/.SMBcredentials| 只允许管理员读写。
 \item 临时 mount： 用 \verb|sudo mount -t cifs -o rw,vers=3.0,credentials=/root/.SMBcredentials,port=端口号 //ip地址/共享名称 /mount文件夹|。 \verb|port=端口号| 可以省略。
-\item 要开机自动 mount， 在 \verb|/etc/fstab| 加入一行： \verb|//ip地址/共享名称 /mount文件夹 cifs vers=3.0,credentials=/.SMBcredentials,file_mode=0777,dir_mode=0777|
+\item 要开机自动 mount， 在 \verb|/etc/fstab| 加入一行： \verb|//ip地址/共享名称 /mount文件夹 cifs vers=3.0,credentials=/root/.SMBcredentials,file_mode=0777,dir_mode=0777|
 \item 修改了 \verb|fstab| 以后， 就可以用 \verb|sudo mount /mount文件夹| 测试是否成功。
 \end{itemize}
 
@@ -82,8 +82,9 @@ password=smb密码
 
 \subsubsection{Windows 客户端}
 \begin{itemize}
-\item Windows 客户端： 在文件夹的地址中填写： \verb|\\ip地址\共享名称|。 在 Windows 中， 软链会显示为正常文件。 也可以在文件浏览器中打开我的电脑， 然后上面的选项中映射网络硬盘， 可以选择开机自动连接。
+\item Windows 客户端： 在文件夹的地址中填写： \verb|\\ip地址\共享名称|。选 connect using different credential, 在 Windows 中， 软链会显示为正常文件。 也可以在文件浏览器中打开我的电脑， 然后上面的选项中映射网络硬盘， 可以选择开机自动连接。
 \item 如果要指定端口， 用 \verb|\\ip地址@端口号\共享名称|
+\item 如果已知转圈的话可能重启几次就行了，或者试试关闭局域网防火墙
 \end{itemize}
 
 \subsubsection{Mac 客户端}

@@ -1,0 +1,41 @@
+% 在老 Ubuntu 上安装新版本 gcc 笔记
+% license Usr
+% type Note
+
+\begin{itemize}
+\item \href{https://askubuntu.com/questions/815331/updating-to-latest-gcc-and-g-on-ubuntu-16-04}{reference}
+\item this worked for both g++-8 and g++-9
+\begin{lstlisting}[language=none]
+sudo add-apt-repository ppa:ubuntu-toolchain-r/test
+sudo apt-get update
+sudo apt-get install gcc-snapshot
+# 这里可能会提示有 package 版本冲突， 用 aptitude 就可以了
+sudo apt-get install gcc-9 g++-9
+\end{lstlisting}
+\item \href{https://askubuntu.com/questions/26498/how-to-choose-the-default-gcc-and-g-version}{reference}
+\item however, \verb`g++ --version` still gives the old version, because \verb`/usr/bin/gcc` and \verb`/usr/bin/g++` are symbolic links. To check the links, use
+\begin{lstlisting}[language=none]
+ls -la /usr/bin | grep gcc
+ls -la /usr/bin | grep g++
+\end{lstlisting}
+Then remove and create new links
+\begin{lstlisting}[language=none]
+sudo rm /usr/bin/gcc
+sudo rm /usr/bin/g++
+sudo ln -s /usr/bin/gcc-9 /usr/bin/gcc
+sudo ln -s /usr/bin/g++-9 /usr/bin/g++
+\end{lstlisting}
+now \verb`g++ --version` should return \verb`g++ 9`.
+\end{itemize}
+
+\subsection{ubuntu 22.04 升级 gcc 11.3.0 失败}\label{sub_gccIns_1}
+上面的办法没用， 因为 ppa ubuntu-toolchain-r 找不到 gcc 11.3.0
+
+参考\href{https://askubuntu.com/questions/1481354/install-a-specific-gcc-version-to-match-the-version-the-kernel-was-compiled-with}{这里}，直接手动下载 deb 包！ 分别三个文件：
+\begin{itemize}
+\item \href{http://mirrors.kernel.org/ubuntu/pool/main/g/gcc-11/gcc-11-base_11.3.0-6ubuntu1_amd64.deb}{gcc-11-base_11.3.0-6ubuntu1_amd64.deb}
+\item \href{http://mirrors.kernel.org/ubuntu/pool/main/g/gcc-11/libgcc-11-dev_11.3.0-6ubuntu1_amd64.deb}{libgcc-11-dev_11.3.0-6ubuntu1_amd64.deb}
+\item \href{http://mirrors.kernel.org/ubuntu/pool/universe/g/gcc-11/gcc-11_11.3.0-6ubuntu1_amd64.deb}{gcc-11_11.3.0-6ubuntu1_amd64.deb}
+\end{itemize}
+
+但是依赖远不止这三个！ 太多了，这些页面上面提供的 asan 什么的包也都需要重新装兼容的版本。

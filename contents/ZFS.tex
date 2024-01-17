@@ -103,6 +103,7 @@ MyPool/fs2  7.24T  13.8T   7.24T  /MyPool/fs2
 \subsection{快照和克隆}
 \begin{itemize}
 \item 由于 zfs 使用 copy-on-write， 制作快照非常轻量。
+\item \verb`zfs snapshot -r pool名@快照名` 可以对整个 pool 的所有 dataset 做快照
 \item 可以把快照挂在到一个指定的文件夹中（只读）。
 \item \verb|zfs list -t snapshot| 查看所有快照。
 \item 删除快照会自动释放不需要的空间（哪怕是删除中间的快照）。
@@ -118,7 +119,8 @@ MyPool/fs2  7.24T  13.8T   7.24T  /MyPool/fs2
 \item 然后用秘钥文件创建加密的 fs：\verb`zfs create -o encryption=on -o keyformat=raw -o keylocation=file:///path/to/keyfile pool/dataset`
 \item 要查看文件系统是否加密， 用 \verb`zfs get all pool名/fs名 | grep encrypt`。 如果不 grep 则显示所有信息。
 \item 每次重启以后应该需要输入密码。也可以用一个秘钥文件，但可能会有安全隐患。
-\item 4 盘 raid1 从非加密的文件系统迁移到新的加密系统， 28MB/s，还算满意。
+\item 4 盘 raid1 从非加密的文件系统迁移到新的加密系统， 22MB/s，勉强还行。
+\item 每次 \verb`import` 以后只会自动挂载非加密文件系统， 要用 \verb`sudo zfs load-key pool名/fs名` 命令解密，会提示手动输入密码。 然后再用 \verb`sudo zfs mount pool名/fs名` 才可以挂载加密文件系统。
 \end{itemize}
 
 \subsection{RAM 缓存}
