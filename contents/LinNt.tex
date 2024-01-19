@@ -100,6 +100,8 @@
 \item 如果在不同文件系统之间， 用了 \verb|sudo| 也还是显示 \verb|Operation not permitted|， 可以把 \verb|-a| 选项改为 \verb|-rl|，其中 \verb|r| 是 recursive， \verb|l| 是复制软链而不是复制软链指向的目标。
 \item \verb|–dry-run| 可以看看哪些文件会修改而不修改任何东西
 \item \verb|--progress| 选项（相当于 \verb|info=progress2|）可以显示传输速率，进度等详细信息。 其他的一些选项如 \verb|info=stats| 显示总体的统计而不是单个文件。 如果需要多个选项，可以用逗号隔开例如 \verb|info=progress2,stats|
+\item \verb`--ignore-existing` 会跳过 \verb`dest` 中原本需要替换掉的文件。
+\item \verb`--update` 会跳过 \verb`dest` 中修改日期较新的文件。
 \item \verb|--partial| 选项可以支持中断续传。
 \item 若要在每个文件传输完成之后从原来文件夹删除， 用 \verb`--remove-source-files`。 注意不会删除任何目录。 可以另外用 \verb|find src -type d -empty -delete| 删除空目录。如果目标文件夹中已经有相同的文件（默认用修改时间和文件大小判断），也会删除源文件。
 \item 同步文件夹时， 用 \verb|src/| 不会包括 \verb|src| 本身， 而去掉斜杠就会。 \verb`dest` 文件夹则没有这种区别。
@@ -110,8 +112,6 @@
 \item 当两个文件只有部分不同时， rsync 会用 delta-transfer algorithm， 只传输不同的部分。 \verb|--whole-file| 可以取消这个功能。
 \item \verb`--exclude='foo/'` 会忽略 \verb`src` 中的所有名为 \verb`foo` 的文件夹。 \verb`--exclude='/src/foo/'` 会忽略指定的那个 \verb`foo` 文件夹。
 \item 要只同步文件夹和子文件夹而不同步文件， 用 \verb`rsync -av --include='*/' --exclude='*' --dirs src/ dest/`
-\item \verb`--ignore-existing` 会跳过 \verb`dest` 中原本需要替换掉的文件。
-\item \verb`--update` 会跳过 \verb`dest` 中修改日期较新的文件。
 \end{itemize}
 
 \subsubsection{find}

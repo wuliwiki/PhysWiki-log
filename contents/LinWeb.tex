@@ -2,17 +2,30 @@
 % license Xiao
 % type Note
 
-\begin{issues}
-\issueDraft
-\end{issues}
-
 \begin{itemize}
 \item \href{https://itsfoss.com/basic-linux-networking-commands/}{21 个 Linux 常用网络命令}
-\item \verb`sudo ifconfig` 显示网卡信息， 以及 ip 地址 （inet addr）
+\item \verb`sudo ifconfig` 显示\textbf{网卡（network interface card, NIC, 也简称 interface）}信息， 以及 ip 地址 （输出中的 inet addr）
 \item \verb|ip -4 addr show scope global| 也可以。 \verb|ifconfig| 现在已经有点过时了（但仍然很多人和教材在用）， 可以用 \verb|ip| 代替。
-\item 不同的网卡有不同的 ip 地址， 通常有一张网卡是连互联网的， 其他网卡都是局域网， 甚至虚拟网卡（例如虚拟机， docker 等）。 每个局域网的 ip 范围由子网掩码决定。 对这些不同的局域网来说， 当前电脑就是一个\textbf{网关（gateway）}把它们连起来。
-\item 可以想象每张网卡上都长了很多\textbf{端口（port）}， 用于给不同的应用收发各种消息。 例如 http 协议的默认端口是 80， https 是 443
+\item 不同的网卡有不同的 ip 地址， 通常有一张网卡是连互联网的， 其他网卡都是局域网， 甚至虚拟网卡（例如虚拟机， docker 等）。 每个局域网的 ip 范围由子网掩码决定。 对这些不同的局域网来说， 当前电脑就是一个\textbf{网关（gateway）}把它们连起来， 如果当前电脑会在不同局域网/网卡之间转发包，这个电脑也可以看作是路由（器）。
+\item 可以想象每张网卡上都长了很多\textbf{端口（port）}， 用于给不同的应用收发各种消息。 例如 http 协议的默认端口是 80， https 是 443， ssh 是 22。
+\item 注意端口的概念是基于 tcp 或 udp 等协议的，有些协议没有端口（例如 \verb`ping` 使用的 icmp 协议）
 \item 要找到公网网卡， 用 \verb`ip route show | grep default` 找默认网卡， 默认网卡几乎肯定是公网网卡。
+\begin{lstlisting}[language=none]
+default via 10.150.0.1 dev wlo1 proto dhcp metric 600
+10.150.0.0/17 dev wlo1 proto kernel scope link src
+(不换行) 10.150.61.141 metric 600
+169.254.0.0/16 dev enp3s0 scope link metric 1000
+192.168.137.0/24 dev enp3s0 proto kernel scope link src
+(不换行)192.168.137.1 metric 100
+\end{lstlisting}
+\item 其中 default 是默认网卡用于访问 internet， \verb`via 10.150.0.1` 是网关 ip， \verb`dev wlo1` 是说该网卡的名字是 \verb`wlo1` 这样的名字一般是 wifi 网卡。
+\item \verb`proto dhcp` 是说当前这行是通过 dhcp 协议自动配置的
+\item \verb`metric 600` 是优先级，越低越优先。
+\item \verb`proto` 其他可能的结果： \verb`static`（使用 \verb`ip route add` 手动添加的）, \verb`kernel`（Linux 内核自动配置的）, \verb`boot` system boot process 配置的（常见于老 Linux）。
+\item \verb`scope link` 表示该行适用于 link layer， 也就是第二层， MAC 地址工作的 layer， 在第三层 ip (network layer) 的下一层。 第一层是物理层。 也就是说该条规则只适用于直接和本网卡相连的 ip （也包括通过交换机相连）。
+\item \verb`169.254.0.0/16` 是专用于 link-local ip 地址。 插入局域网时如果没有找到 DHCP 就会自动配置， 而 \verb`192.168.137.0/24` 子网是手动配置的， 也就是说 \verb`enp3s0` 这个网卡有两个 ip 和子网， 通常不会冲突， 使用时无视自动配置的即可，删掉也没什么关系： \verb`sudo ip route del 169.254.0.0/16 dev enp3s0`。
+\item \verb`enp3s0` 这个名字符合 Predictable Network Interface Names， \verb`en` 表示 ethernet， \verb`p3` 是 bus number， \verb`s0` 是 slot number。
+\item 注意 \verb`169.254...` 这行没有 \verb`src` 指定该网卡的 ip。 这是因为用了 ZEROCONF route。
 \item \verb`ifconfig 网卡名 up` 启动网卡， \verb`ifconfig 网卡名 down` 关闭网卡， 可以用这两个命令重启网卡（要防止 ssh 被中断，两个命令用分号写到一行）
 \item \verb`ifoncig` 用于查看网络相关信息： 其中 \verb`Link encap:Ethernet` 表示在使用 Ethernet， \verb`HWaddr` 是硬件地址， 即 MAC 地址， \verb`inet addr` 网卡的 IP 地址， \verb`Bcast` broadcast 地址， \verb`Mask` 掩码， \verb`UP` 表示 Ethernet 的 kernel module 被加载， \verb`BROADCAST` 支持 broadcasting， 从 \textbf{DHCP} 获取 IP 的必要条件， \verb`RUNNING` 准备好传输数据， \verb`mtu` (\textbf{Maximum Transmission Unit})， 就是 packet 的最大尺寸
 \item \verb`netplan` 是 ubuntu 18.04 的默认管理网络设置的程序， 比如设置 DHCP， 静态 ip， 掩码， 网关等， 设置完成以后用 \verb`sudo netplan apply` 可以生效。 但有时候还需要重启网卡才能成功。
@@ -28,6 +41,7 @@
 \item 其实本来 \verb|telnet| 是一个远程命令行，也像 \verb|ssh| 一样有一个服务监听一个特定的端口。 但因为不安全，已经被 \verb|ssh| 代替。
 \item 除了 \verb|telnet|， 也可以用 \verb|nc -v <ip> <port>| （netcat） 或者 \verb|nmap -p <port> <ip>| 测试 tcp 连接。
 \item \verb|nmap| 也被用于测试某个接口是否开启， 以及是否在使用某个 app （如 ssh, ftp, 等）
+\item \verb`nmap` 还可以用于扫描局域网中有哪些机器如 \verb`nmap -sn 192.168.1.0/24` 也可以用 \verb`sudo arp-scan --localnet`， \verb`arp -a` 或者 ping 广播 \verb`ping -b 192.168.1.255`。
 \item 如果想获得某个 ip 的子网掩码， 用 \verb`whois 66.220.156.68 | grep CIDR` 输出如 \verb|CIDR: 66.220.144.0/20|
 \item \verb|traceroute 域名或者ip| 可以查看从当前机器出发到某个机器所经过的网关的 ip （有些会隐藏）。 例如局域网里面的某台机器 traceroute 到外网的某个网址， 那么第一条显示的是当前局域网的网关（用于该局域网的网卡）的 ip， 如果该网关仍然没有处于公网， 那么第二条会显示第一条中网关所在的另一个局域网的网关的 ip…… 直到公网 ip， 然后各种互联网上的公网 ip， 最终达到网址的服务器的 ip。 注意每条中只会显示进入某个机器所用网卡的 ip， 不会显示出去时所用网卡的 ip。
 \item \verb|cat /sys/class/net/enp5s0/speed| 可以查看以太网的连接速度（即是否是 Gigabit。 在 GUI 的网络设置里面也可以看到）
@@ -37,7 +51,7 @@
 \item 现在的网卡一般都支持自动跳线，也就是说两台电脑直接用网线连接没什么问题。
 \end{itemize}
 
-\subsection{ip}
+\subsection{ip 命令}
 \verb|ip a| （或者 \verb|ip addr|） 输出的的一个例子如下：
 \begin{lstlisting}[language=none]
 1: lo: <LOOPBACK,UP,LOWER_UP> mtu 65536 qdisc noqueue state 
@@ -84,10 +98,32 @@ dynamic noprefixroute wlo1
 \begin{itemize}
 \item 参考 \href{https://www.tecmint.com/linux-iptables-firewall-rules-examples-commands/}{25 Useful IPtable Firewall Rules Every Linux Administrator Should Know}。
 \item 注意与 routing table 区分
-\item \verb|iptables| 是一个命令行防火墙， 它不是一个 service 而是个命令， 所以不能 turn on/off。
-\item 但是可以关闭 ufw 服务： \verb|sudo ufw status|， \verb|sudo ufw disable|（马上关闭，且关机不自动开启）， \verb|sudo ufw enable| （马上打开，且开机自动开启）。 disable 是最方便的， 但会使 NAT 失效， 所以要用 NAT 的话可以允许需要的端口而不 disable。
-\item 要重启， 用 \verb|sudo systemctl restart ufw|
-\item \textbf{table} 的种类有 \verb|FILTER|， \verb|NAT|， \verb|MANGLE|， 每种又有不同的 \textbf{chain}， 例如 \verb|INPUT|， \verb|OUTPUT|， \verb|FORWARD|,  \verb|PREROUTING|， \verb|POSTROUTING| 等。
+\item \verb|iptables| 是一个命令行防火墙， 它不是一个 service 而是个命令， 所以不能 turn on/off。 它直接跟 Linux 内核的 netfilter 打交道，在开机时、用户直接输入相关命令时，或者被其他服务如 \verb`ufw` 调用时才会跟跟内核沟通。
+\item iptables 和 netfilter 在重启后都不会保留任何设置。
+\item \textbf{UFW（uncomplicated firewall）} 是 iptable 的一个用户友好的前端。 用户可以直接使用 iptable， 但操作起来较为复杂， 所以直接用 UFW 比较方便。 UFW 是有服务的。 UFW 可以通过服务在每次开机自动恢复用户设置的规则。
+\item 要关闭防火墙可以关闭 UFW 服务（如果有其他程序自动设置 iptable 或 netfilter 也需要关闭）： \verb|sudo ufw status|， \verb|sudo ufw disable|（立即取消通过 ufw 设置的所有规则，且重启后不自动开启）， \verb|sudo ufw enable| （马上恢复之前设置的 ufw 规则，且开机自动开启）。
+\item 如果不考虑安全因素，disable 是最方便的，但会使 NAT （见下文）失效， 所以要用 NAT 的话可以允许需要的端口而不 disable。
+\item 要重启 UFW， 用 \verb|sudo systemctl restart ufw|
+\item \verb`sudo ufw status numbered` 可以看到当前的 ufw 规则。 \verb`numbered` 用于显示编号便于删除。
+\begin{figure}[ht]
+\centering
+\includegraphics[width=14.25cm]{./figures/311c4378275ef480.png}
+\caption{} \label{fig_LinWeb_2}
+\end{figure}
+\item \verb`sudo ufw delete 1` 删除第 1 条规则。
+\item \verb`sudo ufw default allow` 允许一切流入和流出通信，除非被别的规则允许
+\item \verb`default deny` 允许一切流出，但禁止一切流入，除非被别的规则允许
+\item \verb`sudo ufw allow 22/tcp`， 这等效于 \verb`sudo ufw allow from any to any port 22 proto tcp` 允许任何来源对端口 22 进行 tcp 协议访问。
+\item 但其实还需要 \verb`sudo ufw allow out 22/tcp` 要不然只进不出 ssh 也连不上！
+\item \verb`sudo ufw reset` 重置所有 ufw 规则
+\end{itemize}
+
+\subsubsection{直接操作 iptable}
+\begin{itemize}
+\item 参考\href{https://www.cyberciti.biz/faq/how-to-save-iptables-firewall-rules-permanently-on-linux/}{这篇}。
+\item 除了上面的 ufw， \verb`iptables-persistent` 也能让 iptable 重启后保留设置。 安装 \verb|sudo apt install iptables-persistent|。 安装过程中会把当前的所有 rule 保存到设置文件 \verb|/etc/iptables/rules.v4| 和 \verb|v6| 里面， 对应 ipv4 和 ipv6。 然后为了安全期间可以复制一个备份 \verb|rules.v4.backup|
+\item 现在修改规则以后， 用 \verb|sudo iptables-save -f /etc/iptables/rules.v4| 把修改后的规则保存到设置文件中。 这样重启以后会自动按照配置文件设置。
+\item \textbf{iptable} 的种类有 \verb|FILTER|， \verb|NAT|， \verb|MANGLE|， 每种又有不同的 \textbf{chain}， 例如 \verb|INPUT|， \verb|OUTPUT|， \verb|FORWARD|,  \verb|PREROUTING|， \verb|POSTROUTING| 等。
 \item 查看所有防火墙规则 \verb|sudo iptables -L -n -v|
 \item 查看某个 table 的规则用 \verb|-t|， 如 \verb|sudo iptables -t nat -L -n -v|
 \item 屏蔽某个 ip： \verb|sudo iptables -A INPUT -s xxx.xxx.xxx.xxx -j DROP|。
@@ -103,14 +139,6 @@ dynamic noprefixroute wlo1
 \item 以上操作默认对所有网卡进行， 如果要指定某个网卡， 用 \verb|-i 网卡名|。
 \item Port Forwarding： \verb|sudo iptables -t nat -A PREROUTING -i eth0 -p tcp --dport 25 -j REDIRECT --to-port 2525| 就是网卡 eth0, 从端口 25 到端口 2525
 \item 屏蔽某个 mac 地址 \verb|sudo iptables -A INPUT -m mac --mac-source 00:00:00:00:00:00 -j DROP|
-\end{itemize}
-
-\subsubsection{让 iptables 规则永久生效}
-\begin{itemize}
-\item 参考\href{https://www.cyberciti.biz/faq/how-to-save-iptables-firewall-rules-permanently-on-linux/}{这篇}。
-\item 以上对 iptables 的所有改变重启后都会抹掉。 以下介绍如何让规则永久生效。
-\item 在对 iptables 做出任何改变以前， 安装 \verb|sudo apt install iptables-persistent|。 安装过程中会把当前的所有 rule 保存到设置文件 \verb|/etc/iptables/rules.v4| 和 \verb|v6| 里面， 对应 ipv4 和 ipv6。 然后为了安全期间可以复制一个备份 \verb|rules.v4.backup|
-\item 现在修改规则以后， 用 \verb|sudo iptables-save -f /etc/iptables/rules.v4| 把修改后的规则保存到设置文件中。 这样重启以后会自动按照配置文件设置。
 \end{itemize}
 
 \subsection{调试工具}

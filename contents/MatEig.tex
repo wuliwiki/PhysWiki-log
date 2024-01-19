@@ -3,6 +3,10 @@
 % license Xiao
 % type Tutor
 
+\begin{issues}
+\issueDraft  矩阵替换，相似不变量。
+\end{issues}
+
 \pentry{线性方程组与矢量空间\upref{LinEq}}
 
 若已知矩阵 $\mat A$， 我们把线性方程组
@@ -25,12 +29,13 @@
 \begin{equation}\label{eq_MatEig_4}
 \abs{\mat A - \lambda\mat I} = 0~.
 \end{equation}
-这是一个关于 $\lambda$ 的 $N$ 阶多项式， 称为\textbf{特征多项式（characteristic polynomial）}。 特征多项式必存在 $N$ 个复数根（包括重根），% 链接未完成
-记为 $\lambda_i$ （$i = 1, 2\dots N$）。 将它们依次代入\autoref{eq_MatEig_2}， 就可以分别解出对应的本征矢。 考虑到\autoref{eq_MatEig_2} 是一个齐次方程， 所以 $\mat A - \lambda_i\mat I$ 的零空间中所有矢量都是本征矢， 且零空间至少是一维的。 我们把这个空间叫做 $\lambda_i$ 的\textbf{本征矢空间}， 是 $\bvec v$ 所在的 $N$ 维矢量空间的子空间。 所以 1. 任何本征矢乘以非零常数都是本征矢； 2. 本征值相同的一组本征矢的任意线性组合都仍然是本征矢。
+这是一个关于 $\lambda$ 的 $N$ 阶多项式， 称为\textbf{特征多项式（characteristic polynomial）}。 并不是所有矩阵都有特征向量和相应特征值，比如非特殊角的旋转变换并不能把任意矢量旋转到与原矢量平行。但是根据代数学基本定理，复数域上的特征多项式（一元n次方程）必有n个根（重根的重数包括在内），即有$n$个特征值。对于$n$阶矩阵$A$，如果$\lambda$为特征方程的单根，称$\lambda$为$A$的\textbf{单特征值}；如果$\lambda$是$k$重根，称之为$A$的\textbf{$k$重特征值}，并称$k$为$\lambda$的代数重数。
 
-\addTODO{正文引用矩阵版本的零空间}
+把特征值记为 $\lambda_i$ （$i = 1, 2\dots N$）。 将它们依次代入\autoref{eq_MatEig_2}， 就可以分别解出对应的本征矢。通常把\autoref{eq_MatEig_2} 的解空间称为矩阵$A$对应于特征值$\lambda$的\textbf{特征子空间}，记为$V_{\lambda}$，称该子空间的维数为\textbf{几何重数}，即线性无关的特征向量。根据方程的线性可知，特征子空间的任意矢量都是特征矢。
 
-令 $\lambda_i$ 的本征矢空间的维度是 $n_i$， 若 $n_i = 1$， 我们说 $\lambda_i$ 是\textbf{非简并（non-degenerate）}的， 若 $n_i > 1$ 就说 $\lambda_i$ 是 $n_i$ 重\textbf{简并（degenerate）}的， 把 $n_i$ 叫做\textbf{简并数（degeneracy）}。
+在物理上，如果特征子空间维度是$1$，我们称相应的特征值是\textbf{非简并（non-degenerate）}的，若几何重数$n_i$大于1，则称 $\lambda_i$  是$n_i$ 重\textbf{简并（degenerate）}的， 把 几何重数$n_i$ 叫做\textbf{简并数（degeneracy）}。
+可以证明，任意特征值的几何重数不大于代数重数。
+
 
 \begin{example}{二维矩阵的本征方程}
 给出任意二维实数矩阵
@@ -55,20 +60,20 @@
 \end{example}
 
 \begin{theorem}{}
-方阵 $\mat A$ 若存在两个不同的本征值 $\lambda_i, \lambda_j$， 那么它们所对应的本征矢 $\bvec v_i, \bvec v_j$ 不共线。
+设$\lambda_1,\lambda_2...\lambda_m$是方阵 $\mat A$的$m$个互不相同的特征值，分别对应特征向量$\bvec {x_1},\bvec {x_2}...\bvec{x_m}$。则$\bvec {x_1},\bvec {x_2}...\bvec{x_m}$线性无关。
 \end{theorem}
-证明： 可以用反证法。 若共线， 则 $\bvec v_j = C \bvec v_i$， 带入 $\mat A \bvec v_j = \lambda_j \bvec v_j$ 后消去 $C$ 得 $\mat A \bvec v_i = \lambda_j \bvec v_i$， 这与 $\mat A \bvec v_i = \lambda_i \bvec v_i$ 矛盾。 证毕。
+证明： 
 
-可见， 对于一般 $N$ 维方阵， 若特征多项式不存在重根， 则复数域中必有 $N$ 个线性无关的特征矢量， 每个构成一维特征子空间的基底。 若存在重根， 则线性无关的本征矢的个数小于等于 $N$ 个。
 
-\begin{theorem}{一些简单性质}
-若矩阵 $\mat A$ 的本征值和一组本征矢为 $\lambda_i,\ \bvec v_i$（$i=1,\dots,N$）， 则以下成立：
-\begin{itemize}
-\item 令 $c$ 为常数， 则 $c\mat A$ 的本征值和一组本征矢为 $c\lambda_i,\ \bvec v_i$（$i=1,\dots,N$）。
-\item 令 $\mat I$ 为同尺寸的单位矩阵， 那么 $\mat A + c\mat I$ 的本征值和一组本征矢为 $\lambda_i + c,\ \ \bvec v_i$。
-\end{itemize}
+上述定理可以推广为几何重数大于$1$的情况，即：
+\begin{corollary}{}
+设$\lambda_1,\lambda_2...\lambda_m$是方阵 $\mat A$的$m$个互不相同的特征值，分别对应特征向量组$\{\bvec{x_{1i}}\},\{\bvec{x_{1i}}\}...\{\bvec {x_{mi}}\}$，$i$的最大值取遍几何重数。则$\{\bvec{x_{1i}}\},\{\bvec{x_{1i}}\}...\{\bvec {x_{mi}}\}$线性无关。
+\end{corollary}
+证明：
+\begin{theorem}{相似不变量}
+
 \end{theorem}
-根据\autoref{eq_MatEig_2} 易证。
+。
 
 \subsection{对角化与相似变换}
 求解矩阵的本征方程的过程有时候也叫做矩阵的\textbf{对角化（diagonalization）}， 原因如下： 若 $N$ 维矩阵 $\mat A$ 存在 $N$ 个线性无关的本征矢（列矢量） $\bvec v_i$， 对应本征值 $\lambda_i$， 如果把本征值按顺序组成对角矩阵 $\mat \Lambda$， 把 $\bvec v_i$ 按顺序从左到右组成方阵 $\mat P$， 那么根据矩阵乘法\upref{Mat}的定义， $\mat A \mat P$ 相当于分别计算 $\mat A\bvec v_i$ 再从左到右排成方阵。 而 $\mat P\mat\Lambda$ 相当于把 $\lambda_i\bvec v_i$ 从左到右排成方阵。 二者应该相等， 所以有

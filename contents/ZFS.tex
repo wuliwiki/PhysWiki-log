@@ -55,13 +55,16 @@ MyPool/fs1  256K   13.8T   256K   /MyPool/fs1
 MyPool/fs2  7.24T  13.8T   7.24T  /MyPool/fs2
 \end{lstlisting}
 \item \verb|zpool iostat -v 2| 可以不断刷新实时数据如读写速率。
-\item \verb|sudo zpool import| 可以查看所有可以用于挂载的 pool。
+\item \verb|sudo zpool import| 可以查看所有可以用于挂载的 pool。 有时候这会需要很久，需要耐心等待！
 \item 只要把一个 pool 的所有盘让 linux 识别到， 那么用 \verb|zpool import pool名| 就会挂载这个 pool。
 \item 改变文件系统的挂载目录： \verb|sudo zfs set mountpoint=/挂载/目录 pool名/fs名|。
+\item 设置开机自动 mount （不用 fstab）： 
 \item \verb|sudo zpool export pool名| 可以安全弹出 pool，然后可以拔出硬盘或断电。
 \item \verb|sudo zfs get all pool名/fs名| 可以列出所有当前选项。 把 \verb|all| 换成 \verb|选项名| 可以列出制定选项。
 \item \verb|sudo zfs set 选项=on pool名/fs名| 设置某个选项的值。
-\item 把 \verb|set| 改成 \verb|inherit| 就相当于关闭这些选项。
+\item 把 \verb|set| 改成 \verb|inherit| 就相当于关闭这些选项
+\item 重命名 dataset 用 \verb`zfs rename poolname/old_datasetname pool名/dataset名`， 需要先 \verb`zfs umount pool名/dataset名`。
+\item 删除 dataset 用 \verb`zfs destroy -r pool名/dataset名`
 \end{itemize}
 
 
