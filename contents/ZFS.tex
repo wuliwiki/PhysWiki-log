@@ -58,12 +58,13 @@ MyPool/fs2  7.24T  13.8T   7.24T  /MyPool/fs2
 \item \verb|sudo zpool import| 可以查看所有可以用于挂载的 pool。 有时候这会需要很久，需要耐心等待！
 \item 只要把一个 pool 的所有盘让 linux 识别到， 那么用 \verb|zpool import pool名| 就会挂载这个 pool。
 \item 改变文件系统的挂载目录： \verb|sudo zfs set mountpoint=/挂载/目录 pool名/fs名|。
-\item 设置开机自动 mount （不用 fstab）： 
+\item 设置了 mountpoint 以后就已经开启自动 mount 了。
+\item \verb`zfs get mounted,mountpoint pool名/mydataset名` 查看是否已经挂载以及挂载目录
 \item \verb|sudo zpool export pool名| 可以安全弹出 pool，然后可以拔出硬盘或断电。
 \item \verb|sudo zfs get all pool名/fs名| 可以列出所有当前选项。 把 \verb|all| 换成 \verb|选项名| 可以列出制定选项。
 \item \verb|sudo zfs set 选项=on pool名/fs名| 设置某个选项的值。
 \item 把 \verb|set| 改成 \verb|inherit| 就相当于关闭这些选项
-\item 重命名 dataset 用 \verb`zfs rename poolname/old_datasetname pool名/dataset名`， 需要先 \verb`zfs umount pool名/dataset名`。
+\item 重命名 dataset 用 \verb`zfs rename pool名/old_datasetname pool名/dataset名`， 需要先 \verb`zfs umount pool名/dataset名`。
 \item 删除 dataset 用 \verb`zfs destroy -r pool名/dataset名`
 \end{itemize}
 
@@ -78,6 +79,20 @@ MyPool/fs2  7.24T  13.8T   7.24T  /MyPool/fs2
 \item \verb|vdev| 一旦加入 pool 就不能删除。 但可以更换（下文 \verb|zpool replace|）。
 \item \verb|zpool scrub pool名| 可以马上检查整个 pool 的 checksum 是否一致。 几秒钟后会在后台开始 scrub， 用 \verb|sudo zpool status| 查看进度和错误数据。 期间就算弹出硬盘或者关机，下次挂载还是会继续。
 \item \verb`scrub` 以后如果有任何错误 \verb`zpool status` 会报告如 \verb`scan: scrub repaired 8K in 12:34:17 with 0 errors on Sun Dec 10 12:58:22 2023` 这说明用了 12 个小时， 修复了 8k 数据，最后给出完成时间。
+\item Ubuntu 20.04 装机时可以选择 ZFS， 但没有加密选项。 Ubuntu 22.04 有加密。
+\item 如果根目录是 ZFS， 那么直接创建 swapfile 将会出问题（提示文件有 hole， 意思是在磁盘上不连续），需要专门用 ZFS 创建一个指定大小的 swap dataset 作为 swap：
+\begin{lstlisting}[language=none]
+sudo zfs create -V 8G pool名/swap # 创建一个 8GB 大小的 swap dataset
+sudo zfs set primarycache=none pool名/swap # 关闭 RAM 缓存（避免造成死循环！）
+sudo zfs set secondarycache=none pool名/swap # 关闭 SSD 缓存
+sudo zfs set com.sun:auto-snapshot=false pool名/swap # 关闭自动快照
+sudo mkswap -f /dev/zvol/pool名/swap # 初始化 swap
+sudo swapon /dev/zvol/pool名/swap # 开启 swap
+# 开机加载 swap
+sudo echo "/dev/zvol/pool名/swap none swap defaults 0 0" >> /etc/fstab
+swapon --show # 列出所有 swap
+free -h # 查看 RAM 和 swap 的使用情况
+\end{lstlisting}
 \end{itemize}
 
 \subsection{RAID 实测}
@@ -117,13 +132,14 @@ MyPool/fs2  7.24T  13.8T   7.24T  /MyPool/fs2
 \subsection{加密和迁移（实测）}
 \begin{itemize}
 \item 现在有一个文件系统但没有加密，pool 实际使用容量小于一半，希望可以再建一个加密的文件系统然后把原文件系统迁移过去再删掉。
-\item 添加加密的文件系统： \verb`zfs create -o encryption=on -o keyformat=passphrase -o keylocation=prompt poolname/newfilesystem` 该命令以后命令行会提示你设置新密码并重复确认。
+\item 添加加密的文件系统： \verb`zfs create -o encryption=on -o keyformat=passphrase -o keylocation=prompt pool名/newfilesystem` 该命令以后命令行会提示你设置新密码并重复确认。
 \item 除用手动密码创建加密 fs， 也可以用 \verb`dd if=/dev/urandom of=/path/to/keyfile bs=1 count=32` 生成一个随机秘钥
 \item 然后用秘钥文件创建加密的 fs：\verb`zfs create -o encryption=on -o keyformat=raw -o keylocation=file:///path/to/keyfile pool/dataset`
 \item 要查看文件系统是否加密， 用 \verb`zfs get all pool名/fs名 | grep encrypt`。 如果不 grep 则显示所有信息。
 \item 每次重启以后应该需要输入密码。也可以用一个秘钥文件，但可能会有安全隐患。
 \item 4 盘 raid1 从非加密的文件系统迁移到新的加密系统， 22MB/s，勉强还行。
 \item 每次 \verb`import` 以后只会自动挂载非加密文件系统， 要用 \verb`sudo zfs load-key pool名/fs名` 命令解密，会提示手动输入密码。 然后再用 \verb`sudo zfs mount pool名/fs名` 才可以挂载加密文件系统。
+\item 要开机自动 load-key 解锁，用 \verb`zfs set keylocation=file:///key/文件 pool名/dataset名`。
 \end{itemize}
 
 \subsection{RAM 缓存}

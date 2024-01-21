@@ -3,44 +3,96 @@
 % license Xiao
 % type Tutor
 
-\pentry{酉矩阵\upref{UniMat}}
-本文只讨论使用酉矩阵的相似变换。
+\begin{issues}
+\issueDraft 欠缺线性映射的矩阵表示eq。
+\end{issues}
+注：本篇使用爱因斯坦求和约定。
 
-\begin{definition}{相似变换（酉矩阵）}\label{def_MatSim_1}
-令 $\mat U$ 为 $N$ 维酉矩阵。 $N$ 维方阵 $\mat A$ 的\textbf{相似变换}为
+矩阵是线性映射在特定基下的表示，每一列表示基向量被映射后的结果。即$f(\bvec e^i)=a^j_i\bvec e_j$，对任意向量作用输出一个向量，是一个$(1,1)$型张量：
 \begin{equation}
-\mat B = \mat U\Her \mat A \mat U~.
+f(b^i\bvec e_i)=b^ia^j_i\bvec e_j~.
 \end{equation}
-\end{definition}
+或者写成矩阵形式，令$b^i$表示基向量组为$\{\bvec e_i\}$下的任意向量$\bvec x$：
+\begin{equation}
+A\bvec x= a^j_i b^i~.
+\end{equation}
+最后一项为确定一组基后矩阵作用在向量下的简化表达。
 
-注意酉矩阵满足 $\mat U\Her = \mat U^{-1}$（链接未完成）。 一般的相似变换是 $\mat B = \mat P^{-1} \mat A \mat P$ ， 其中 $\mat P$ 是任意可逆矩阵。
-
-由于酉矩阵乘以酉矩阵还是酉矩阵， 多次相似变换可以看作一次相似变换。
-\addTODO{相似变换相当于基底变换， 因为相似变换 $\mat U \mat\Her \mat A \mat U$ 矩阵元是 $\mel{u_i}{A}{u_j}$， $\mat U$ 的每一列就是 $u_i$。}
-
-\subsection{对角化}
-\pentry{厄米矩阵的本征问题\upref{HerEig}}
-\addTODO{该内容应该移动到 厄米矩阵的本征问题\upref{HerEig}}
-若相似变换可以使矩阵变为对角矩阵， 我们把这个过程称为对角化。
-
-一个 $N$ 维矩阵可以被对角化当且仅当它是（实）对称矩阵或厄米矩阵。
+因此我们可以改变空间的基向量组，从而得到线性映射的不同表示。比如令$\{\bvec e_i\},\{\bvec \theta_i\}$为同一线性空间下的两组基，$A=(a^i_j),B=(b^i_j)$分别为同一线性映射在不同基下的表示。这两组基通过矩阵$Q$联系在一起：
 \begin{equation}\label{eq_MatSim_1}
-\mat U\Her \mat A \mat U = \mat \Lambda~.
+\bvec \theta_i=q^j_i\bvec e_j~,
 \end{equation}
-
-对角化后， 对角矩阵 $\mat \Lambda$ 的对角元就是矩阵 $\mat A$ 的本征值 $\lambda_i$， $\mat U$ 的第 $i$ 列矢量就是 $\lambda_i$ 对应的本征矢。 所以我们时常把 “对角化” 作为 “解矩阵的本征方程” 的同义词。
-
-（未完成）
-
-\begin{example}{由本征值和本征矢求矩阵}
-已知本征方程
+那么我们可以找到两个矩阵的关系：
 \begin{equation}
-\mat A \bvec v = \lambda \bvec v~.
+\begin{aligned}
+f(\bvec {\theta}_i)&=b^j_i\bvec {\theta}_j\\
+&=b^j_i  q^k_j\bvec e_k\\
+&=f( a^j_i\bvec e_j)=a^j_iq^k_j\bvec e_k
+\end{aligned}~.
 \end{equation}
-的 $N$ 个本征值和本征矢为 $\lambda_i$ 和 $\bvec v_i$， 求矩阵 $\bvec A$。
-
-把\autoref{eq_MatSim_1} 两边分别左乘 $\mat U$， 右乘 $\mat U\Her$， 得
+即：$QB=AQ$。
+\begin{definition}{相似变换}\label{def_MatSim_1}
+设$A,B$为$n$阶矩阵，若存在$n$阶可逆方阵$Q$，使得
 \begin{equation}
-\mat A = \mat U \mat \Lambda \mat U\Her~.
+Q^{-1}AQ=B~,
 \end{equation}
-\end{example}
+则称$A$\textbf{相似}于$B$，该运算称为对$A$进行相似变换，可逆矩阵$Q$称为过渡矩阵。
+\end{definition}
+\autoref{eq_MatSim_1} 实际上是：
+\begin{equation}
+\begin{pmatrix}
+  \bvec e_1&  \bvec e_2&\bvec e_3&...  &\bvec e_n
+\end{pmatrix}
+\begin{pmatrix}
+  q^1_1& q^1_2 &q^1_3  & ...&q^1_n\\
+  q^2_1& q^2_2 &q^2_3  & ...&q^2_n \\
+  ...& ... &  ...&...&... \\
+ q^n_1& q^n_2 &q^n_3  & ...&q^n_n
+\end{pmatrix}=\begin{pmatrix}\bvec {\theta}_1&  \bvec {\theta}_2&\bvec {\theta}_3&... &\bvec {\theta}_n\end{pmatrix}~.
+\end{equation}
+相似关系是同阶矩阵群的等价关系(等价关系用$\sim $表示)，这种关系具有下列性质：
+
+\begin{enumerate}
+\item 反身性 $A\sim A$ 
+\item 对称性 若$A\sim B$，则$B\sim A$
+\item 传递性 若$A\sim B\,,B\sim C$，则$A\sim C$
+\end{enumerate}
+由于相似变换是对同一空间的不同基向量组进行一一映射，因而相似变换是矩阵乘法群上的自同构，并具有如下性质（假设$A\sim B$）：
+\begin{enumerate}
+\item $\opn{R}(A)=\opn{R}(B)$；
+\item $A$与$B$的行列式相同：$|A|=|B|$；
+\item $A$与$B$的迹相同：$\opn{Tr}A=\opn{Tr}B$；
+\item 若$A$可逆，则$B$也可逆，且$A^{-1}\sim B^{-1}$；
+\item $kA\sim kB\,,A^m\sim B^m$，其中$k$为任意常数，$m\in \mathbb Z^{+}$；
+\item 若$f(x)$是任意多项式，则$f(A)\sim f(B)$。
+\end{enumerate}
+以上六点性质在线性映射的角度上看都是很好理解的，只要抓住相似矩阵是同一线性映射在不同基下的表示这一意义即可。在矩阵角度上也非常好证，比如第五点的$A^m\sim B^m$：\begin{equation}
+B^m=(Q^{-1}AQ)^m=Q^{-1}AQQ^{-1}AQ...Q^{-1}AQ=Q^{-1}A^mQ~.
+\end{equation}
+
+在量子力学中，相似变换也无处不在，我们一般称之为\textbf{表象变换}。由于量子力学中的矩阵定义在复数域上，且基向量组都满足正交归一关系，因此相似变换是保距变换（正交变换），且过渡矩阵$Q$是酉矩阵，满足：$Q^{\dagger}=Q^{-1}$\footnote{由复数域上的保距关系：$\bvec x^{\dagger}Q^{\dagger}Q\bvec x=\bvec x^{\dagger}\bvec x$得。}。
+
+由于相似变换改变了空间的基，因此向量的坐标表示也发生了变化。设相似变换前后的基向量组分别为$\{\bvec e_i\}$与$\{\bvec {\theta}_i\}$，且对于任意向量有：
+\begin{equation}
+\bvec x=x^i\bvec e_i=x'^i\bvec {\theta}_i~.
+\end{equation}
+设过渡矩阵为$Q$，即$\bvec{\theta}_i=Q^j_i\bvec e_j$，代入上式得：
+\begin{equation}
+x'^i\bvec {\theta}_i=x'^iQ^j_i\bvec e_j=x^i\bvec e_i~.
+\end{equation}
+即$\bvec x'=Q^{-1}\bvec x$。由这个关系，我们可以进一步证明一个直觉上的常识：\textbf{相似变换不改变矩阵的特征值和特征向量}。
+\subsection{对角化}
+\pentry{矩阵的本征问题\upref{MatEig}}
+
+若相似变换可以使矩阵变为对角矩阵， 我们把这个过程称为对角化，并称$A$\textbf{可对角化}。从\autoref{the_MatEig_1}~\upref{MatEig}可知，$A$可对角化的充要条件是$A$有$n$个线性无关的特征向量。结合\autoref{the_MatEig_2}~\upref{MatEig}“不同特征值的特征向量线性无关”和\autoref{cor_MatEig_1}~\upref{MatEig}“不同特征值的特征向量组线性无关”可知，如果$A$满足以下两种情况，则$A$可对角化。
+\begin{corollary}{}
+如果$n$阶矩阵$A$有$n$个不同的特征值，则$A$一定可以对角化。
+\end{corollary}
+\begin{corollary}{}
+$n$阶方阵$A$可对角化当且仅当$A$有$n$个特征值（包括重根），且每个特征值的几何重数等于代数重数。
+\end{corollary}
+
+
+
+可以证明，实对称矩阵一定可以对角化。\footnote{参见合同变换一节。}
+

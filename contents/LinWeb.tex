@@ -101,7 +101,7 @@ dynamic noprefixroute wlo1
 \item \verb|iptables| 是一个命令行防火墙， 它不是一个 service 而是个命令， 所以不能 turn on/off。 它直接跟 Linux 内核的 netfilter 打交道，在开机时、用户直接输入相关命令时，或者被其他服务如 \verb`ufw` 调用时才会跟跟内核沟通。
 \item iptables 和 netfilter 在重启后都不会保留任何设置。
 \item \textbf{UFW（uncomplicated firewall）} 是 iptable 的一个用户友好的前端。 用户可以直接使用 iptable， 但操作起来较为复杂， 所以直接用 UFW 比较方便。 UFW 是有服务的。 UFW 可以通过服务在每次开机自动恢复用户设置的规则。
-\item 要关闭防火墙可以关闭 UFW 服务（如果有其他程序自动设置 iptable 或 netfilter 也需要关闭）： \verb|sudo ufw status|， \verb|sudo ufw disable|（立即取消通过 ufw 设置的所有规则，且重启后不自动开启）， \verb|sudo ufw enable| （马上恢复之前设置的 ufw 规则，且开机自动开启）。
+\item 要关闭防火墙可以关闭 UFW 服务（如果有其他程序自动设置 iptable 或 netfilter 也需要关闭）： \verb|sudo ufw disable|（立即取消通过 ufw 设置的所有规则，且重启后不自动开启）， \verb|sudo ufw enable| （马上恢复之前设置的 ufw 规则，且开机自动开启）。
 \item 如果不考虑安全因素，disable 是最方便的，但会使 NAT （见下文）失效， 所以要用 NAT 的话可以允许需要的端口而不 disable。
 \item 要重启 UFW， 用 \verb|sudo systemctl restart ufw|
 \item \verb`sudo ufw status numbered` 可以看到当前的 ufw 规则。 \verb`numbered` 用于显示编号便于删除。
@@ -110,12 +110,16 @@ dynamic noprefixroute wlo1
 \includegraphics[width=14.25cm]{./figures/311c4378275ef480.png}
 \caption{} \label{fig_LinWeb_2}
 \end{figure}
+\item \verb`ufw` 的命令行设置都会立即生效， 但如果改变了设置文件，要用 \verb`sudo ufw reload` 才能立即生效。
 \item \verb`sudo ufw delete 1` 删除第 1 条规则。
-\item \verb`sudo ufw default allow` 允许一切流入和流出通信，除非被别的规则允许
-\item \verb`default deny` 允许一切流出，但禁止一切流入，除非被别的规则允许
+\item \verb`sudo ufw default allow` 允许一切流入和流出通信，除非被别的规则禁止（这是最省心的做法，但注意安全）
+\item \verb`sudo ufw default deny` 允许一切流出，但禁止一切流入，除非被别的规则允许
+\item \verb`sudo ufw status verbose numbered` 可以看到所有设置包括默认行为
 \item \verb`sudo ufw allow 22/tcp`， 这等效于 \verb`sudo ufw allow from any to any port 22 proto tcp` 允许任何来源对端口 22 进行 tcp 协议访问。
 \item 但其实还需要 \verb`sudo ufw allow out 22/tcp` 要不然只进不出 ssh 也连不上！
-\item \verb`sudo ufw reset` 重置所有 ufw 规则
+\item \verb`sudo ufw reset` 重置所有 ufw 规则。 一般默认： \verb`Default: deny (incoming), allow (outgoing), allow (routed)`。
+\item 用上述命令修改规则，和直接修改设置文件然后 reload 等效。 设置文件在 \verb`/etc/ufw/` 常用的有 \verb`ufw.conf`， \verb`before.rules`， \verb`after.rules`。 另外还有 \verb`/etc/default/ufw`
+\item log 文件在 \verb`/var/log/ufw.log`
 \end{itemize}
 
 \subsubsection{直接操作 iptable}
@@ -248,7 +252,7 @@ network:
 \item 所以两个不同的 NAT 后面的电脑是可以 P2P 连接的， 但是首先要通过一个公网服务器建立连接， 这几乎是常规操作了（猜测 teamviewer 应该就是这个原理）
 \item 具体设置见下文
 \item 比如说网关主机（Ubuntu 22.04）上有两张网卡， 一个 ethernet 连接 LAN， 一个 wifi 网卡连接外网。 要使 LAN 中的主机可以访问 internet， 需要在网关主机上设置 NAT， 参考\href{https://unix.stackexchange.com/questions/575178/sharing-wifi-internet-through-ethernet-interface}{这里}的 Setup a NAT 步骤（亲测成功）：
-\item \verb|/etc/ufw/sysctl.conf| 中注释 \verb|net/ipv4/ip_forward=1|.
+\item \verb|/etc/ufw/sysctl.conf| 中取消注释 \verb|net.ipv4.ip_forward=1| 或者 \verb|net/ipv4/ip_forward=1|（\verb`/` 和 \verb`.` 是等效的）.
 \item \verb|/etc/default/ufw| 中设置 \verb|DEFAULT_FORWARD_POLICY="ACCEPT"|
 \item \verb|/etc/ufw/before.rules| 中在 \verb`*filter` 之前添加如下几行：
 \begin{lstlisting}[language=none]
@@ -257,7 +261,7 @@ network:
 -A POSTROUTING -o 链接互联网的网卡名如wlo1或enp3s0 -j MASQUERADE
 COMMIT
 \end{lstlisting}
-\item \verb|sudo systemctl restart ufw|， \verb|sudo ufw enable|。 注意如果 disable 的话， 就访问不了外网了。
+\item \verb|sudo ufw enable|， \verb|sudo systemctl restart ufw|。用 \verb`sudo ufw reload` 使设置文件生效。 注意如果 disable 的话， 就访问不了外网了。
 \end{itemize}
 
 \subsubsection{Ubuntu 20.04}
