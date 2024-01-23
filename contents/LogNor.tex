@@ -1,0 +1,53 @@
+% 对数正态分布
+% keys 统计学|正态分布|概率论
+% license Usr
+% type Wiki
+
+\textbf{对数正态分布} (
+Log-normal distribution) 是一种概率分布，它的特点是其对数服从正态分布。对数正态分布常用于描述那些取值范围为正数的随机变量，如金融领域的股票价格、收益率等。它具有右偏（正偏）的特性，即分布的尾部向右延伸。对数正态分布在统计学、金融学和生物学等领域有广泛应用，特别是当研究对象的增长是指数型的时候，对数正态分布常常能够提供较好的拟合。
+
+对数正态分布的概率密度函数（PDF）可以表示为：
+
+\begin{equation}
+f(x) = \frac{1}{x} \frac{1}{\sqrt{2 \pi \sigma^2}} \exp \left(-\frac{(\log (x)-\mu)^2}{2 \sigma^2}\right)~.
+\end{equation}
+
+其中，\( x > 0 \) 是随机变量，\( \mu \) 是对数正态分布的均值，\( \sigma \) 是标准差，\( \ln \) 表示自然对数。
+
+\begin{example}{计算推导对数正态分布的最大值时 \( x \) 的值}
+我们需要求导数并令导数等于零来找到极值点。为了方便导数的计算，首先计算 $\ln(f(x))$，
+\begin{equation}
+    \ln(f(x)) = -\frac{(\mu-\log (x))^2}{2 \sigma^2}-\log (\sigma x)-\frac{1}{2} \log (2 \pi)~.
+\end{equation}
+对 $\ln(f(x))$ 求导得到如下结果，
+\begin{equation}
+\frac{\partial}{\partial x}\left(-\frac{(\mu-\log (x))^2}{2 \sigma^2}-\log (\sigma x)-\frac{1}{2} \log (2 \pi)\right) = -\frac{-\mu+\sigma^2+\log (x)}{\sigma^2 x}~.
+\end{equation}
+然后解 $\ln(f(x))'=0$ 得到 $x$ 的值，
+\begin{equation}
+    \exp \left({-\mu+\sigma^2+\log (x)}\right) = 0 \rightarrow x = \E^{\mu}\E^{-\sigma^2}~.
+\end{equation}
+\end{example}
+\begin{example}{对数正态分布的矩（Moments）}
+第 $r$ 阶原始矩表示 $X$ 的随机变量的 $r$ 次方的期望值。对于具有概率密度函数 $f(y)$ 的随机变量 $X$，第 $r$ 阶原始矩为，
+
+\begin{equation}
+E\left[X^r\right]=\int_{-\infty}^{\infty} \frac{1}{\sqrt{2 \pi \sigma^2}} \exp \left(r \mu+r y-y^2 / 2 \sigma^2\right)dy ~.
+\end{equation}
+
+首先，我们计算前述积分表达式的不定积分得到，
+\begin{equation}
+\int \frac{\exp \left(r \mu+r y-\frac{y^2}{2 \sigma^2}\right)}{\sqrt{2 \pi \sigma^2}} d y=\frac{\sigma e^{\left(r^2 \sigma^2\right) / 2+\mu r} erf\left(\frac{y-r \sigma^2}{\sqrt{2} \sigma}\right)}{2 \sqrt{\sigma^2}}~.
+\end{equation}
+
+这里特殊函数 $erf$ 是误差函数。然后，我们代入 $+\infty$ 和 $-\infty$，注意到 $erf(+\infty)=1$ 和 $erf(-\infty)=-1$，所以
+\begin{equation}
+E\left[X^r\right]=\frac{\sigma e^{\left(r^2 \sigma^2\right) / 2+\mu r}}{2 \sqrt{\sigma^2}}-\left(-\frac{\sigma e^{\left(r^2 \sigma^2\right) / 2+\mu r}}{2 \sqrt{\sigma^2}}\right) = e^{r\mu+\frac{1}{2}\sigma^2}~.
+\end{equation}
+
+当 $r=1$ 时，我们有 $E\left[X\right]=e^{\mu+\frac{1}{2}\sigma^2}$，$Var[X] = E\left[X^2\right] - \left(E\left[X\right]\right)^2$ 是
+\begin{align}
+Var[X] &= \E^{2\mu+2\sigma^2} - \E^{2\mu+\sigma^2} \\
+&= \E^{2\mu+\sigma^2}(\E^{2\mu+2\sigma^2-2\mu-\sigma^2}- 1) = \E^{2\mu+\sigma^2}(\E^{\sigma^2}- 1)~.
+\end{align}
+\end{example}

@@ -1,0 +1,63 @@
+% 约定式提交
+% keys 约定式提交
+% license Usr
+% type Wiki
+
+
+约定式提交规范是一种在进行代码变更时的轻量级约定。约定式提交制定了一组简单的规则来创建清晰的提交历史，便于编写自动化工具。通过在提交信息中描述功能、修复和\textbf{破坏性变更}（Breaking Change）（下文会对破坏性变更做出解释），使这种惯例与语义化版本相互对应。
+
+\subsection{简介}
+对于每次提交的代码变更，说明结构：
+\begin{lstlisting}[language=none]
+<type>[optional scope]: <description>
+
+[optional body]
+
+[optional footer(s)]
+\end{lstlisting}
+可以对应翻译为，
+\begin{lstlisting}[language=none]
+<类型>[（可选）范围]: <描述>
+
+[（可选）正文]
+
+[（可选）脚注]
+\end{lstlisting}
+提交说明描述了下列内容，可以向使用者与协同编辑者说明本次变更的内容：
+\begin{enumerate}
+\item \verb`fix`：这代表本次提交修复了一些 bug（对于修复多个 bug，建议多次提交）。这对应语义化版本的 \verb`PATCH`。
+\item \verb`feat`：这代表本次提交实现了新的功能（对于实现多个功能，也建议多次提交）。这对应语义化版本的 \verb`MINOR`。
+\item \verb`BREAKING CHANGE`：一般在类型后面加感叹号表示本次提交是一个破坏性变更，表示引入了\textbf{破坏性 API 变更}，破坏性变更可以是任意类型的提交的一部分。这对应语义化版本的 \verb`MAJOR`。可以将破坏性变更理解为，进行了某些重大更新，使旧版本\textbf{不再兼容}（有时重大更新，对用户使用有严重影响的，也可以使用破坏性变更表示）。\textbf{破坏性变更应在脚注中标注内容}。
+\end{enumerate}
+除了 \verb`fix(!)` 与 \verb`feat(!)` 以外，类型也可以是 \href{https://github.com/conventional-changelog/commitlint/tree/master/\%2540commitlint/config-conventional}{@commitlint/config-conventional} 中推荐的任意一个，下面给出一些另外常用的类型：
+\begin{enumerate}
+\item \verb`build`: 用于修改项目构建系统，例如修改依赖库、外部接口或者升级 Node 版本等；
+\item \verb`chore`: 用于对非业务性代码进行修改，例如修改构建流程或者工具配置等；
+\item \verb`ci`: 用于修改持续集成流程，例如修改 Travis、Jenkins 等工作流配置；
+\item \verb`docs`: 用于修改文档，例如修改 README 文件、API 文档等；
+\item \verb`style`: 用于修改代码的样式，例如调整缩进、空格、空行等；
+\item \verb`refactor`: 用于重构代码，例如修改代码结构、变量名、函数名等但不修改功能逻辑；
+\item \verb`perf`: 用于优化性能，例如提升代码的性能、减少内存占用等；
+\item \verb`test`: 用于修改测试用例，例如添加、删除、修改代码的测试用例等。
+\end{enumerate}
+其它提交类型在约定式提交规范中并没有强制限制，并且在语义化版本中没有隐式影响（除非它们包含破坏性变更）。 可以为提交类型添加一个围在圆括号内的范围，以为其提供额外的上下文信息。例如 \verb`feat(console): adds ability to active console in game.`。当然，描述也可以是中文的，但是描述是必要的，且\textbf{破坏性变更的脚注也是必要的}。
+
+如果一次变更符合多种类型，应当予以拆分，并多次提交。
+
+\subsection{FAQ}
+1. 类型打错了怎么办？写错了怎么办？
+例如本身是 \verb`feat`，不小心打成了 \verb`faat` 或者 \verb`fix`。
+
+在发布或合并之前，可以采用 \verb`git` 提供的 \verb`git rebase -i` 来修改历史功能。
+
+2. 在约定式提交规范下，还原怎么办？
+特别规定还原为 \verb`revert` 类型，并且建议在正文中进行描述。下面有一个例子：
+\begin{lstlisting}[language=none]
+revert: the cake is a lie.
+
+Refs: 1298560a, c9012783
+\end{lstlisting}
+
+3. 变更范围涉及多个怎么办？
+如果是全局，可以使用 \verb`*` 或 \verb`all`（推荐）来表示；如果是主体、主逻辑，可以使用 \verb`main` 来表示。
+如果修改了多个文件导致范围涉及广，建议拆分为多次提交。对于单次修改的，可以在描述中指出变更范围而在括弧内写 \verb`*`。

@@ -2,18 +2,18 @@
 % license Xiao
 % type Tutor
 
-网页版百科分为两个界面：\textbf{原界面} \verb|wuli.wiki/online| 由静态 html 网页构成，每个词条的网址如 \verb|wuli.wiki/online/AU.html| 其中 AU 是词条的 id， 每个词条都用固定不变的 id， 即使词条被重命名也不会变。  \textbf{新界面} \verb|wuli.wiki/book| 相当于在原界面上套壳，每天爬取 \verb|wuli.wiki/online/| 中的内容进行更新， 增加了评论，搜索等功能， 目录也更为美观。 新界面中词条的网址如 \verb|wuli.wiki/book/AU|。
+网页版百科分为两个界面：\textbf{原界面} \verb|wuli.wiki/online| 由静态 html 网页构成，每个词条的网址如 \verb|wuli.wiki/online/AU.html| 其中 AU 是词条的 id， 每个词条都有唯一的 id， 即使词条被重命名也不会变。  \textbf{新界面} \verb|wuli.wiki/book| 相当于在原界面上套壳，每天准点爬取 \verb|wuli.wiki/online/| 中的内容进行更新， 增加了评论，搜索等功能， 目录也更美观。 新界面中词条的网址如 \verb|wuli.wiki/book/AU|。
 词条编辑器 \verb|wuli.wiki/editor| 是一个相对独立的模块，百科词条的作者使用编辑器用 LaTeX 语言写作， 编辑器把 LaTeX 源码转为 \verb|wuli.wiki/online/| 目录中的 html 页面。
 
 所有代码通过 \href{https://github.com/wuliwiki}{GitHub 账号}管理。 以下是各个仓库的功能
 \begin{itemize}
-\item \href{https://github.com/MacroUniverse/littleshi.cn}{littleshi.cn}： 网站中所有静态页面， 服务器路径 \verb|/var/www/littleshi.cn|
-\item \href{https://github.com/MacroUniverse/PhysWiki}{PhysWiki}： 百科词条的源代码， 使用 LaTeX 语言， 支持用 TeXlive 直接编译 pdf， 服务器路径 \verb|/var/www/PhysWiki|
+\item \href{https://github.com/MacroUniverse/littleshi.cn}{littleshi.cn}： 网站中所有静态页面， 服务器路径 \verb|/var/www/littleshi.cn|， 其中的 \verb`online` 子目录就是所有词条的静态 html 放置的地方， 通过 url \verb`wuli.wiki/online/xxx.html` 直接访问。
+\item \href{https://github.com/MacroUniverse/PhysWiki}{PhysWiki}： 百科词条的源代码， 使用 LaTeX 语言， 支持用 TeXlive 直接编译 pdf， 服务器路径 \verb|/var/www/PhysWiki|。 编辑器 \verb`wuli.wiki/editor` 编辑词条后， 把 LaTeX 源码保存到 \verb`PhysWiki/contents/xxx.tex` 文件， 其中 \verb`xxx` 就是每个词条的 id。 然后编辑器调用一个 C++ 命令行程序 \verb`PhysWikiScan` 把 tex 文件转换为 \verb`online` 目录的 html 文件。
 \item \href{https://github.com/MacroUniverse/PhysWikiScan}{PhysWikiScan}： 一个后台 C++ 命令行程序， 用于把 PhysWiki 中的 LaTeX 源码文件转为 littleshi.cn 中的静态的百科 html 页面， 可以单个转换也可以批量转换。服务器路径 \verb|/var/www/PhysWikiScan|
-\item \href{https://github.com/MacroUniverse/littleshi.cn-server}{littleshi.cn-server}： 百科编辑器 wuli.wiki/editor 的源码， 调用 PhysWikiScan 程序。 服务器路径 \verb|/var/www/editor|， 使用 node.js 开发。
+\item \href{https://github.com/MacroUniverse/littleshi.cn-server}{littleshi.cn-server}： 百科编辑器 \verb`wuli.wiki/editor` 的源码， 调用 PhysWikiScan 程序。 服务器路径 \verb|/var/www/editor|， 使用 node.js 开发， 已封装到 docker 中运行。
 \item \href{https://github.com/MacroUniverse/PhysWiki-backup}{PhysWiki-backup}： 用于存放百科词条备份，每个词条页面根据该备份记录给作者排序。服务器路径 \verb|/var/www/PhysWiki-backup|
 \item \href{https://github.com/MacroUniverse/wuliwiki-web}{wuliwiki-web}：网站中除了词条编辑器外的所有动态页面，以及后台。 当前在服务器中用 docker 运行。
-\item \href{https://github.com/MacroUniverse/wuliwiki-app}{wuliwiki-app}： 百科移动端 app， 用 flutter 开发， 支持安卓、iPhone、iPad
+\item \href{https://github.com/MacroUniverse/wuliwiki-app}{wuliwiki-app}： 百科移动端 app， 用 flutter 开发， 支持安卓、iPhone、iPad。 经费不足已经停止开发。
 \end{itemize}
 
 \subsection{框架}

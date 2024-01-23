@@ -1,0 +1,70 @@
+% 零化多项式
+% license Usr
+% type Tutor
+
+
+\begin{issues}
+\issueDraft 
+\end{issues}
+
+\begin{definition}{}
+设$f(x)$是以域$\mathbb F$中元素为系数的一元多项式，$A$是线性空间$V$上的线性变换。若$f(A)=0$（即零变换），则称$f$是$A$的一个\textbf{零化多项式}（null polynomial）。
+\end{definition}
+可以验证，若$f$是线性变换$A$的零化多项式，那么也是其任意基下矩阵所对应的零化多项式，即无论选取什么基底，代入多项式的最终结果为零矩阵。这是因为若$A=Q^{-1}BQ$，我们有$f(A)=Q^{-1}f(B)Q$。
+
+
+下面一条定理及其推论表明了寻找零化多项式的重要意义。
+\begin{theorem}{}
+给定域$\mathbb F$上的线性空间$V$，域上的多项式$h$可以分解为互素多项式：$h=fg$。对于定义在该线性空间的线性变换$A$，我们有：
+\begin{equation}
+\opn{ker}h(A)=\opn{ker}f(A)\oplus\opn{ker}g(A)~.
+\end{equation}
+\end{theorem}
+Proof.
+
+首先证明$\opn{ker}f\cap \opn{ker}g=0$。由互素得，存在多项式$u,v$使得$uf+vg=I$。设$\bvec x\in \opn{ker}f\cap \opn{ker}g$，则$(uf+vg)\bvec x=0=\bvec x$。矛盾，因而$f,g$无交集，和为直和。
+
+下证$\opn{ker}h=\opn{ker}f\oplus\opn{ker}g$。
+第一步，先证$\opn{ker}h\subset\opn{ker}f\oplus\opn{ker}g$。设$\{\bvec x_i\}$和$\{\bvec y_i\}$分别是$\opn{ker}f$和$\opn{ker}g$的基，则$fg(a^i\bvec x_i+b^i \bvec y_i)=a^igf(\bvec x_i)+b^ifg(\bvec y_i)=0$，第一步得证。
+
+第二步证明$\opn{ker}h\supset\opn{ker}f\oplus\opn{ker}g=\opn{ker}f+\opn{ker}g$。设$\bvec x\in \opn{ker}h$，由之前的证明过程知：$\bvec x=(uf+vg)\bvec x$，只要把这两项分配给$f,g$的核即可。显然，$g(uf\bvec x)=f(vg\bvec x) =0$，得证。
+
+\begin{corollary}{}\label{cor_nullpl_1}
+$\mathbb F,V,A,h$同上设。$h$可以分解为\textbf{两两互素}的多项式乘积：$h=h_1h_2...h_n$，则：
+\begin{equation}
+\opn{ker}h(A)=\opn{ker}h_1(A)\oplus\opn{ker}h_2(A)\oplus...\oplus\opn{ker}h_n(A)~.
+\end{equation}
+\end{corollary}
+
+若$h(A)=0$，则$\opn{ker} h=V$，该条定理意味着若我们找到任意线性变换$A$的零化多项式，则可以把线性空间分解为互素多项式的核。若$f$是$A$的零化多项式，且$\bvec x\in \opn{ker}f(A)$，则$f(A)A x=0$，即任意多项式的核都是对应线性变换的不变子空间。综合前文，这意味着我们可以把$A$分解为\textbf{块对角矩阵}。
+在达到这个目的之前，我们还需要两个准备工作：找到零化多项式以及分解互素多项式的简便方法。
+
+Cayley-Hamilton定理告诉我们，线性变换的特征多项式就是一个零化多项式。
+\begin{theorem}{Cayley-Hamilton定理}
+给定复线性空间$V$上的线性变换$A$，若$f(\lambda)=\opn{det}(A-\lambda I)$为其特征多项式，则$f(A)=0$
+\end{theorem}
+证明思路是利用复线性空间的任意矩阵都可相似于上三角矩阵，上三角矩阵的零化多项式即特征多项式,以及零化多项式不随基的改变而改变（$f(A)=Q^{-1}f(B)Q=0$）。现在只证明第二点，其余读者可自证。
+
+设线性变换$\mathcal A$在基向量组$\{\bvec e_1,\bvec e_2,...,\bvec e_n\}$下的表示为$n$阶上三角矩阵$A=(a^i_j)$，由矩阵表示可知：$\mathcal A(\bvec e_k)=\opn{span}(\bvec e_1,\bvec e_2...\bvec e_k)$。具体来说是：
+\begin{equation}
+\begin{aligned}
+\mathcal A(\bvec e_1)&=a^1_1 \bvec e_1,\\
+\mathcal A(\bvec e_2)&=a^1_2 \bvec e_1+a^2_2\bvec e_2,\\
+&...\\
+\mathcal A(\bvec e_n)&=a^1_n \bvec e_1+a^2_n\bvec e_2+...a^n_n\bvec e_n,\\
+\end{aligned}~
+\end{equation}
+因此，对于$A$的特征多项式，代入$A$后$f(A)=(A-\lambda_1)(A-\lambda_2)...(A-\lambda_n)=(A-a^1_1)(A-a^2_2)...(A-a^n_n)$\footnote{上三角矩阵的对角元为其特征值}，利用多项式对易，可证该线性空间中的任意矢量被该多项式作用后结果都为$0$。因此，上三角矩阵的特征多项式为其零化多项式。
+\begin{theorem}{线性空间第一分解定理}
+设$V$为\textbf{复数域}上的线性空间，$A$为该空间中的线性变换，且特征多项式可以写为：
+\begin{equation}
+f(\lambda)=(\lambda-\lambda_1)^{k_1}(\lambda-\lambda_2)^{k_2}...(\lambda-\lambda_m)^{k_m}~,
+\end{equation}
+若设$f_i(A)=(A-\lambda_i)^{k_i}$，则有：
+\begin{equation}
+V=\opn{ker}f(A)=\opn{ker}f_1(A)\oplus\opn{ker}f_2(A)...\oplus\opn{ker}f_m(A)~.
+\end{equation}
+\end{theorem}
+Proof.
+
+由于$f_i$的$\lambda_i$彼此不同，因此互素，由\autoref{cor_nullpl_1} 可证明该定理。

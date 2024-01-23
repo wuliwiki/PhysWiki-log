@@ -1,0 +1,95 @@
+% 马尔可夫链蒙特卡洛
+% keys 马尔可夫链|蒙特卡洛方法|计算统计学
+% license Usr
+% type Wiki
+
+\textbf{马尔可夫链蒙特卡洛}（Markov Chain Monte Carlo，简称MCMC）是一种用于从概率分布中抽样的统计方法。这种方法结合了马尔可夫链和蒙特卡洛模拟的思想，被广泛应用于贝叶斯统计、统计物理学、天文学、机器学习等领域。
+
+\subsection{动机}
+\subsubsection{贝叶斯推断 Bayesian Inference}
+
+贝叶斯推断的主要目标是通过结合先验分布和观测数据，利用贝叶斯定理推导参数的后验分布。在观测到数据\(D\)后，更新我们对参数\(\theta\)的信念。这一过程通过贝叶斯定理实现，其中先验概率分布 \(P(\theta)\) 表达了我们在看到数据之前对参数的信念，似然函数 \(P(D|\theta)\) 表达了在给定参数情况下观测到实际数据的可能性，而后验概率分布 \(P(\theta|D)\) 则是我们在看到数据后对参数的更新信念。该定理建立了先验概率 \(P(\theta)\)、似然函数 \(P(D|\theta)\) 和得到的后验概率 \(P(\theta|D)\) 之间的关系。
+
+\begin{equation}
+P(\theta|D) = \frac{P(D|\theta) \times P(\theta)}{P(D)} = \frac{P(D|\theta) \times P(\theta)}{\int P(D|\hat{\theta}) \times P(\hat{\theta}) \, d\hat{\theta}}~.
+\end{equation}
+
+然而，在计算分母中的证据 \(P(D)\) 时可能具有挑战性，特别是在涉及高维空间或复杂的多峰模型的情况下。这种计算需要在整个参数空间上进行积分，这可能非常耗费资源。因此，当面临没有解析解或共轭先验不可用的情况时，使用蒙特卡洛积分等数值积分方法变得至关重要。
+
+\subsubsection{蒙特卡罗积分 Monte Carlo Integration}
+
+蒙特卡罗积分是一种通过随机抽样来估计复杂积分的数值近似方法。均值估计法包括通过随机抽样在定义域内生成大量均匀分布的随机点。随后，它计算这些随机点对应的函数值的平均值，并乘以定义域的总体积，以得到函数积分的估计值。对于利用均值估计方法计算 \(I = \int_a^b h(x) \,dx\)，其中 \(X \sim \text{D}(a,b)\)，
+\begin{align} 
+E [h(X)] =& \  \frac{1}{b-a} \int_a^b h(x) \ dx = \frac{I}{b-a}~.
+\end{align}
+
+考虑到 \(\{ X_i\} \ \text{i.i.d.}  \sim \text{D}(a,b), \ i=1,\ldots,N \)，使得 \(Y_i = h(X_i)\) 表示一组独立同分布的随机变量，大数定律使我们能够推断：
+\begin{align} 
+\frac{1}{N} \sum_{i=1}^N h(X_i) & \to E [h(X)] = \frac{I}{b-a}, \ (N \to \infty)\\
+\tilde I &= \frac{b-a}{N} \sum_{i=1}^N h(X_i)~.
+\end{align}
+
+该方法的误差可以使用中心极限定理确定：
+\begin{align} \sqrt{N}(\tilde I - I) \stackrel{\mbox{d}}{\longrightarrow} N\big(0, (b-a)^2 \ \text{Var}(h(X)) \big)~.\end{align}
+因此，我们得到 \(\tilde I - I = O(1/\sqrt{N})\)，这意味着每增加一位小数的精度计算，所需的样本数需要增加 $100$ 倍。
+
+该方法的实现非常直接简单。例如，要使用 $1000$ 个样本计算 \(I = E [|X|^{3/2}]\)，给定 \(X \sim N(0,1)\)，只需一行 Python 代码即可完成：
+\begin{lstlisting}[language=python]
+np.mean(np.abs(np.random.normal(size=1000)) ** 1.5)
+\end{lstlisting}
+然而，显而易见的是，我们认为这种方法简单是因为在numpy中有针对正态分布的内置随机抽样函数。但实际上，从分布中抽样存在相当大的复杂性并遇到许多挑战。这种复杂性凸显了我们即将介绍的抽样方法。
+
+\subsubsection{抽样方法 Sampling Method }
+\textbf{逆变换抽样 Inverse transform sampling }利用累积分布函数（CDF）依赖于从均匀分布中抽取的随机数来产生符合期望概率分布的随机变量。
+
+本质上，给定累积分布函数 \(\Phi(X) \)，如果 \( Y \sim \text{Uniform}(0, 1) \)，使用逆变换 \( X = \Phi^{-1}(Y) \) 将产生一个随机变量 \( X \)，它符合概率分布 \(\Phi(x)\)，其中 \( \Phi^{-1} \) 表示 \(\Phi\) 的逆函数。为了表明 \(Y\) 在 \([0, 1]\) 上均匀分布，我们需要证明对于任意 \(0 \leq u \leq 1\)，\(P(Y \leq u) = u\)。
+
+\begin{align}
+P(Y \leq u) &= P(\Phi(X) \leq u) \\
+&= P(X \leq \Phi^{-1}(u)) \quad \text{(使用 } \Phi \text{ 的逆函数)} \\
+&= \Phi(\Phi^{-1}(u)) \quad \text{(根据CDF的定义)} \\
+&= u
+~.
+\end{align}
+
+然而，这种方法存在显著的局限性。计算概率密度函数的积分通常是非常困难的，这也是我们需要使用蒙特卡洛积分方法的原因。此外，需要注意的是 \( \Phi(x) \) 可能没有逆函数。
+
+\textbf{拒绝抽样 Rejection sampling }通过使用简单的提议分布生成样本，根据接受或拒绝的标准保留符合目标分布的样本。考虑到生成概率密度函数 \(f(x)\) 的样本的目标，令 \(g(x)\) 表示一个易于抽样的已知分布，并假设存在一个常数 \(M\)，使得对所有 \(x\)，都有 \(M \cdot g(x) \geq f(x)\)。
+
+该过程从提议分布 \(g(x)\) 中抽取样本 \(x\) 开始，随后从区间 \([0, M \cdot g(x)]\) 中选择一个随机数 \(u\)。如果 \(u \leq f(x)\)，则接受样本 \(x\)；否则拒绝样本，并重新开始抽样过程。通过这个迭代过程，最终获得符合目标分布 \(f(x)\) 的一组随机样本。重要的是，拒绝抽样的有效性取决于选择一个适当的提议分布 \(g(x)\)，该分布紧密围绕目标分布，并最小化被拒绝的样本数量，从而提高抽样效率。
+
+\textbf{重要性抽样Importance sampling } 为了计算 \(I = \int_\Omega h(x) \,dx\)，在域 \(\Omega\) 内 \(h(x)\) 值的变异性可能很大，导致采用直接的均值估计方法会导致许多样本点聚集在零附近。因此，可以通过非均匀抽样的方法进行改进：在 \(|h(x)|\) 较大的地方密集分配点，在 \(|h(x)|\) 较小的地方稀疏分布点。令 \(g(x)\) 与 \(|h(x)|\) 的形状相似，当 \(g(x) = 0\) 时，\(h(x) = 0\)，且当 \(|x| \to \infty\) 时，\(h(x)\) 行为类似于 \(o\)-阶无穷小相比于 \(g(x)\)。令 \( X_i \ \text{i.i.d.}  \sim g(x), \ i=1,\ldots,N \)，使得 $\eta_i = h(X_i)/g(X_i)$，因此，
+\begin{align}
+    E[\eta] = \int_\Omega \frac{h(x)}{g(x)} g(x) \,d x = \int_\Omega h( x) \,d  x = I~.
+\end{align}
+
+因此，$\{\eta_i\}$ 的样本均值可用于估计 $I$，即，
+\begin{align}
+    \hat I  = \frac{1}{N} \sum_{i=1}^N \frac{h(X_i)}{g(X_i)}~.
+\end{align}
+重要性抽样的核心在于将积分 \(I\) 重新定义为期望，
+
+\begin{align}
+    I &= \int h(x) f(x) \, dx = \mathbb{E}_{f}[h(X)]\\
+    I &= \int h(x) \frac{f(x)}{g(x)} g(x) \, dx = \mathbb{E}_{g}\left[\frac{h(X)f(X)}{g(X)}\right]~.
+\end{align}
+表达式 \(\frac{h(X)f(X)}{g(X)}\) 包含了重要性抽样权重。积分 \(I\) 可以使用以下方式估计，
+
+\begin{align}
+    \hat I  = \frac{1}{N} \sum_{i=1}^{N} \frac{h(x_i)f(x_i)}{g(x_i)}~.
+\end{align}
+然而，当重要性分布 \(g(x)\) 在 \(h(x)\) 对积分贡献较大的区域与 \(f(x)\) 显著偏离时，估计器可能表现出较高的方差，导致不准确性。
+
+因此，我们希望确定一个最优的重要性分布 \(g(x)\) 来最小化方差或增强收敛性。理论上，以方差为标准的最优重要性分布具有以下形式：
+\begin{align}
+    g^{*}(x)=\frac{|h(x)|f(x)}{\int|h(s)f(s)d s|}~.
+\end{align}
+最优重要性的证明：
+\begin{align}
+\text{Var}\left[\frac{f(x)h(x)}{g^{*}(x)}\right]&=\int\frac{h(x)^{2}f(x)^{2}}{g^{*}(x)}d x+\left(\int h(x) f(x)\right)^{2} \\ 
+\text{Var}\left[\frac{f(x)h(x)}{g^{*}(x)}\right]&-\left(\int h(x) f(x)\right)^{2}=\int\frac{h(x)^{2}f(x)^{2}}{\frac{|h(x)|f(x)}{\int|h(x)f(x)dx|}}d x \\
+    &=\int|h(x)f(x)d x|\int|h(x)|f(x)d x\\
+    &=\left(\frac{\int|h(x)|f(x)}{g(x)}  g(x) d x\right)^2\\
+    &\leq \frac{\int h(x)^2f(x)^2}{g(x)^2}  g(x) d x \text{, Cauchy Schwarz inequality }\\
+    &=\int\frac{h(x)^{2}f(x)^{2}}{g(x)}d x\\~.
+\end{align}
