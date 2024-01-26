@@ -1,6 +1,6 @@
 % 马尔可夫链蒙特卡洛
 % keys 马尔可夫链|蒙特卡洛方法|计算统计学
-% license Usr
+% license Xiao
 % type Wiki
 
 \textbf{马尔可夫链蒙特卡洛}（Markov Chain Monte Carlo，简称MCMC）是一种用于从概率分布中抽样的统计方法。这种方法结合了马尔可夫链和蒙特卡洛模拟的思想，被广泛应用于贝叶斯统计、统计物理学、天文学、机器学习等领域。
@@ -93,3 +93,50 @@ P(Y \leq u) &= P(\Phi(X) \leq u) \\
     &\leq \frac{\int h(x)^2f(x)^2}{g(x)^2}  g(x) d x \text{, Cauchy Schwarz inequality }\\
     &=\int\frac{h(x)^{2}f(x)^{2}}{g(x)}d x\\~.
 \end{align}
+
+这个结果在实践中并不十分实用，因为我们首先不知道 $\int h(x) f(x)$，大多数情况下我们需要找到 $\int|h(x)f(x)dx|$。此外，在分布密度 $h(x)$ 是多峰的情况下，很难确定一个合适的 $g(x)$。
+
+\subsubsection{高维局限性}
+在拒绝抽样中的接受概率由以下公式确定：
+\begin{align}   
+    p(\text{接受}) &=  \int\frac{f(x)}{M \ g(x)} \ g(x) \ d x \\
+    &=\frac{1}{M}\int f(x) \ d x~.
+\end{align}
+
+考虑分布 $f(x) \sim N(0, I)$ 和 $g(x)\sim N(0, \sigma^2 I)$，注意 $\sigma \geq 1$ 以确保 $g(x)$ 足够涵盖 $f(x)$，记得 $f(x) \leq Mg(x)$，在 $d$ 维空间中有，
+\begin{align}
+    g(0) = \frac{1}{(\sqrt{2\pi}\sigma)^d}, \ \ f(0) = \frac{1}{(2\pi)^{d/2}}~.
+\end{align}
+因此，常数 $M$ 需要满足，
+\begin{align}
+   M \geq \frac{f(0)}{g(0)} = \frac{(\sqrt{2\pi}\sigma)^d}{(2\pi)^{d/2}} = \sigma^d~.
+\end{align}
+因此，当 $d \to \infty$ 时，$p(\text{接受})\to 0$。在高维场景中，拒绝抽样的接受率显著降低。因此，在 $N$ 个样本中，找到一个落在 $f(x)$ 内的点变得极为困难。以下是一个使用拒绝抽样计算超球体体积的 Python 代码，使用了 $10000$ 个样本。偶尔在第 $13$ 维时失败，无法找到落在超球体内的点。
+
+\begin{lstlisting}[language=python]
+def hypersphere_volume(dimensions, samples):
+    count_inside = 0
+    for _ in range(samples):
+        point = np.random.uniform(low=-1, high=1, size=dimensions)
+        if np.linalg.norm(point) <= 1:
+            count_inside += 1
+    volume = (count_inside / samples) * (2 ** dimensions)
+    return volume
+print('dim = n estimated volume = '+ str(hypersphere_volume(n, 10000)))
+dim = 3 estimated volume = 4.1568,   dim = 13 estimated volume = 0.0 
+\end{lstlisting}
+
+\subsection{马尔可夫链蒙特卡洛 (MCMC)}
+MCMC 是一种高维随机抽样方法，解决了先前的抽样方法在处理高维和复杂分布时的困难。该方法模拟了一个马尔可夫链，使马尔可夫链的稳定分布成为目标分布，从而生成大量大致符合目标分布的样本，但这些样本彼此之间并不独立。
+
+\subsubsection{马尔可夫链 Markov Chain }
+随机过程 $\{X_t, t=0, 1, \dots \}$ 在有限状态空间 $S=\{1,2, \dots,m\}$ 中运行，其中 $X_t\in S$ 表示时间 $t$ 系统的状态。如果 $\{X_t\}$ 遵循仅依赖于其前一状态的概率转移，表示为，
+
+\begin{align}
+   & P(X_{t+1} = j | X_0=k_0, \dots X_{t-1}=k_{t-1}, X_t=i) \nonumber\\
+   =& P(X_{t+1} = j | X_t=i)
+   = p_{ij},
+   \quad t=0,1,\dots, \ k_0, \dots, k_{t-1}, \ i, j \in S~.
+\end{align}
+
+那么 $\{X_t\}$ 构成一个马尔可夫链，其中 $p_{ij}$ 表示转移概率。值得注意的是，$\sum_{j=1}^m p_{ij}=1$。转移概率矩阵 $P = (p_{ij})_{m\times m}$ 记录了系统中任意两个状态之间的转移可能性。

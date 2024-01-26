@@ -126,6 +126,20 @@ sub_filter 'https://wikipedia.org' '$scheme://$host';
 sub_filter 'https://www.wikipedia.org' '$scheme://$host';
 \end{lstlisting}
 
+注意 nginx 存在客户端单文件上传大小限制（默认不足 100M）， 要修改全局限制， 在 \verb`http {` 后面的设置中加上 \verb`client_max_body_size 10000M;`。
+\begin{lstlisting}[language=none]
+http {
+
+        ##
+        # Basic Settings
+        ##
+
+        sendfile on;
+        tcp_nopush on;
+        types_hash_max_size 2048;
+        client_max_body_size 10000M;
+\end{lstlisting}
+
 \subsection{多个域名和网站}
 \begin{itemize}
 \item 如果你只使用 ip 访问一个服务器， 那么常用的像 80, 433 端口只能用一次。

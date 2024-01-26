@@ -219,3 +219,22 @@ fi
 \item 参考\href{https://opendata-forum.cern.ch/t/x11-forwarding-with-docker/31}{这篇文章}。
 \item 以及\href{https://www.howtogeek.com/devops/how-to-run-gui-applications-in-a-docker-container/}{这篇文章}。
 \end{itemize}
+
+\subsection{docker 迁移数据文件夹}
+\begin{itemize}
+\item \verb`Ubuntu 18.04 服务器版测试成功`
+\item 服务器系统盘被 nginx 占用太多了，尝试移动到挂载硬盘
+\item \verb`sudo systemctl stop docker`
+\item \verb`sudo rsync -avh /var/lib/docker/ /路径/docker`
+\item 修改 docker 服务文件如 \verb`sudo vim /etc/systemd/system/docker.service.d/10-machine.conf`。 记得先备份！
+\item 在 \verb`ExecStart=/usr/bin/dockerd` 后面加上 \verb`--data-root /路径/docker/`， 添加完成后完整文件如
+\begin{figure}[ht]
+\centering
+\includegraphics[width=14.25cm]{./figures/d75c22353888f5db.png}
+\caption{} \label{fig_Docker_1}
+\end{figure}
+\item 加载服务 config \verb`sudo systemctl daemon-reload`
+\item 开启 docker 服务 \verb`sudo systemctl start docker`
+\item 检查所有镜像 \verb`sudo docker images` 和容器 \verb`sudo docker ps -a`
+\item \verb`sudo rm -rf /var/lib/docker` 也可以移动到一个备份文件夹。
+\end{itemize}

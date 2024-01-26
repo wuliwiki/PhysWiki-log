@@ -6,7 +6,7 @@
 \issueDraft
 \end{issues}
 
-\pentry{秩\upref{MatRnk}}
+\pentry{秩\upref{MatRnk}，行列式的性质\upref{DetPro}}
 
 \footnote{参考 Wikipedia \href{https://en.wikipedia.org/wiki/Vandermonde_matrix}{相关页面}。}\textbf{范德蒙矩阵（Vandermonde matrix）}是一种特殊的行列式和多项式相关。
 
@@ -32,4 +32,60 @@
 当 $m \le n$ 时， 矩阵的秩\upref{MatRnk}为 $m$ 当且仅当所有的 $x_i$ 各不相等。
 
 当 $m \ge n$ 时， 矩阵的秩为 $n$ 当且仅当至少 $n$ 个 $x_i$ 各不相等。
-\addTODO{证明}
+\subsubsection{证明}
+先证明 $m = n$ 时范德蒙矩阵满秩，即行列式不为零。
+
+大小为 $n \times n$ 的范德蒙矩阵 $\mat V_n $的行列式：
+\begin{equation}
+\vmat {\mat V_n} = \vmat{1 & x_1 & x_1^2 & \dots & x_1^{m-1}\\
+1 & x_2 & x_2^2 & \dots & x_2^{m-1}\\
+1 & x_3 & x_3^2 & \dots & x_3^{m-1}\\
+\vdots & \vdots & \vdots & \ddots & \vdots\\
+1 & x_n & x_n^2 & \dots & x_n^{m-1}}~.  
+\end{equation}
+将 $\mat V_n$ 的每一列记成 $V_j $。
+
+根据行列式的性质\upref{DetPro}，从第 $n$ 列开始，对每一列依次进行列变换 $V_{j}\rightarrow \ V_{j}-x_1V_{j-1}  $ ：
+\begin{equation}
+\vmat{\mat{V}_n} =
+\vmat{1 & x_1-x_1 & x_1^2-x_1^2 & \dots & x_1^{m-1}-x_1^{m-1}\\
+1 & x_2-x_1 & x_2^2-x_1x_2 & \dots & x_2^{m-1}-x_1x_2^{m-2}\\
+\vdots & \vdots & \vdots & \ddots & \vdots \\
+1 & x_n-x_1 & x_n^2-x_1x_n & \dots & x_n^{m-1}-x_1x_n^{m-2}}
+=
+\vmat{1 & 0 & 0 & \dots & 0\\
+1 & x_2-x_1 & x_2(x_2-x_1) & \dots & x_2^{m-2}(x_2-x_1)\\
+\vdots & \vdots & \vdots & \ddots & \vdots \\
+1 & x_n-x_1 & x_n(x_n-x_1) & \dots & x_n^{m-2}(x_n-x_1)}
+=\vmat{\mat{V^\prime}_{n-1}}\prod_\limits{j=2}^n (x_j-x_1) ~.
+\end{equation}
+其中，
+\begin{equation}
+\mat V^\prime_{n-1} = 
+\pmat{
+    1 & x_2 & x_2^2 & \dots & x_2^{m-2}\\
+1 & x_3 & x_3^2 & \dots & x_3^{m-2}\\
+\vdots & \vdots & \vdots & \ddots & \vdots\\
+1 & x_n & x_n^2 & \dots & x_n^{m-2}
+}~.
+\end{equation}
+也是一个范德蒙矩阵，只不过 $ x$ 的下标是从 $2$ 到 $n$。
+
+由于 $x_i \neq x_j(i \neq j)$，我们知道只要 $\vmat{\mat V^\prime_{n-1}}\neq 0$ ，就有 $\vmat {\mat V_n}\neq 0$ 。因此，要证明 $\vmat {\mat V_n} \neq 0$，只需要证明 $\vmat {\mat V^\prime_2} \neq 0$。
+而
+\begin{equation}
+\vmat{\mat V^\prime_2}=\vmat {
+    1 & x_{n-1} \\
+    1 & x_n
+}= x_n - x_{n-1} \neq 0 ~.
+\end{equation}
+因此，我们证明了 $\vmat{\mat V_n}\neq 0$，甚至得到了其表达式：
+\begin{equation}
+\vmat{\mat V_n}=\prod_\limits{1\le i < j \le n }(x_j-x_i)~.
+\end{equation}
+
+当 $m \neq n$ 时，容易知道，矩阵的秩 $= \min \{m,n\}$。因此原命题得证。
+
+
+
+
