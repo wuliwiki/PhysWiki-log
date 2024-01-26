@@ -1,0 +1,174 @@
+% Python RoboMaster EP 教程—与机器人建立连接
+% keys 机器人|Robomaster
+% license Usr
+% type Tutor
+
+\begin{issues}
+\issueDraft
+\end{issues}
+
+\pentry{Python 基础\upref{PyFi}}
+
+Robomaster EP 支持3种与计算机连接的方式：WiFi 直连模式，WiFi 组网模式和 USB(RNDIS) 连接模式。
+
+\begin{itemize}
+\item \autoref{sub_PyRM2_1} WIFI直连
+\item \autoref{sub_PyRM2_2} USB连接
+\item \autoref{sub_PyRM2_3} 组网连接
+\end{itemize}
+
+\subsection{WIFI直连}\label{sub_PyRM2_1}
+
+通过将机器人设置为直连模式，并连接机器人的 Wi-Fi 热点进行接入（智能中控顶部有热点名称与密码），Wi-Fi 直连模式下，机器人默认 IP 为 192.168.2.1。
+
+开启机器人电源，切换智能中控的连接模式开关至 直连模式，如图1所示：
+
+\begin{figure}[ht]
+\centering
+\includegraphics[width=4cm]{./figures/bde4a2d47ab0cf95.png}
+\caption{直连模式} \label{fig_PyRM2_1}
+\end{figure}
+
+输入以下代码，可以测验是否连接
+
+\begin{lstlisting}[language=python]
+from robomaster import robot
+
+import robomaster
+
+if __name__ == '__main__':
+    # 如果本地IP 自动获取不正确，手动指定本地IP地址
+    # robomaster.config.LOCAL_IP_STR = "192.168.2.20"
+    
+    # 在程序内实例化Robot对象
+    ep_robot = robot.Robot()
+
+    # 程序与机器人联网并指定连接方式为AP 直连模式
+    ep_robot.initialize(conn_type='ap')
+
+    version = ep_robot.get_version()
+    # 输出机器人固件版本号信息
+    print("Robot version: {0}".format(version))
+    # 关闭机器人
+    ep_robot.close()
+\end{lstlisting}
+
+运行结果:
+\begin{lstlisting}[language=pythonC]
+Robot Version: xx.xx.xx.xx
+\end{lstlisting}
+
+\subsection{USB连接}\label{sub_PyRM2_2}
+
+通过机器人的智能中控上的 USB 端口接入（机器人默认 IP 为 192.168.42.2）
+
+USB 连接模式，实质上是使用 RNDIS 协议，将机器人上的 USB 设备虚拟为一张网卡设备， 通过 USB 发起 TCP/IP 连接更多 RNDIS 内容请参见\href{https://www.wikipedia.org/wiki/RNDIS}{RNDIS Wikipedia} 。
+
+\begin{figure}[ht]
+\centering
+\includegraphics[width=12cm]{./figures/a8f72935358fa80b.png}
+\caption{树莓派连接示意图} \label{fig_PyRM2_2}
+\end{figure}
+
+\begin{lstlisting}[language=python]
+from robomaster import robot
+
+import robomaster
+
+if __name__ == '__main__':
+    # 在程序内实例化Robot对象
+    ep_robot = robot.Robot()
+
+    # 程序与机器人联网并指定连接方式为USB RNDIS模式
+    ep_robot.initialize(conn_type='rndis')
+
+    version = ep_robot.get_version()
+    # 输出机器人固件版本号信息
+    print("Robot version: {0}".format(version))
+    # 关闭机器人
+    ep_robot.close()
+\end{lstlisting}
+
+运行结果:
+\begin{lstlisting}[language=pythonC]
+Robot Version: xx.xx.xx.xx
+\end{lstlisting}
+
+\subsection{组网连接}\label{sub_PyRM2_3}
+
+通过将机器人设置为组网模式，并将计算设备与机器人加入到同一个局域网内，实现组网连接。
+
+开启机器人电源，切换智能中控的连接模式开关至 组网模式，如图3所示：
+
+\begin{figure}[ht]
+\centering
+\includegraphics[width=4cm]{./figures/6a3c7581be4b6cc2.png}
+\caption{组网模式} \label{fig_PyRM2_3}
+\end{figure}
+
+安装myqr库生成二维码，按 win+r，在弹出窗口中输入 cmd 打开命令提示符界面，在命令行里面输入:
+
+\begin{lstlisting}[language=bash]
+pip install myqr
+\end{lstlisting}
+
+生成图片：
+
+\begin{lstlisting}[language=python]
+from robomaster import conn
+from MyQR import myqr
+from PIL import Image
+
+import time
+import robomaster
+
+QRCODE_NAME = "qrcode.png"
+
+if __name__ == '__main__':
+
+    helper = conn.ConnectionHelper()
+    info = helper.build_qrcode_strin(ssid="Wifi 名称", password="Wifi 密码")
+    myqr.run(words=info)
+    time.sleep(1)
+    img = Image.open(QRCODE_NAME)
+    img.show()
+    if helper.wait_for_connection():
+        print("Connected!")
+    else:
+        print("Connect failed!")
+\end{lstlisting}
+
+按下机器人智能中控上的扫码连接按键，扫描二维码进行组网连接。
+
+\begin{figure}[ht]
+\centering
+\includegraphics[width=8cm]{./figures/8f3d943c7e5f948e.png}
+\caption{} \label{fig_PyRM2_4}
+\end{figure}
+
+成功连接时，运行结果:
+\begin{lstlisting}[language=pythonC]
+Connected!
+\end{lstlisting}
+
+同时机器人的灯效变为白色呼吸变为青绿色常亮。
+
+% 未完成
+
+% 支持在组网模式下通过SN连接指定的机器人，用户通过在初始化时给 sn 参数赋值完成对机器人 sn 的输入。在不指定 sn 时，SDK默认与搜索到的第一台机器人建立连接。
+
+% \begin{lstlisting}[language=python]
+% from robomaster import robot
+% from robomaster import config
+
+
+% if __name__ == '__main__':
+%     ep_robot = robot.Robot()
+%     # 指定机器人的 SN 号
+%     ep_robot.initialize(conn_type="sta", sn="3JKDH2T001ULTD")
+
+%     ep_version = ep_robot.get_version()
+%     print("Robot Version: {0}".format(ep_version))
+
+%     ep_robot.close()
+% \end{lstlisting}
