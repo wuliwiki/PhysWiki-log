@@ -3,10 +3,6 @@
 % license Usr
 % type Tutor
 
-\begin{issues}
-\issueDraft
-\end{issues}
-
 \pentry{Python 基础\upref{PyFi}}
 
 Robomaster EP 支持3种与计算机连接的方式：WiFi 直连模式，WiFi 组网模式和 USB(RNDIS) 连接模式。
@@ -43,7 +39,7 @@ if __name__ == '__main__':
     # 在程序内实例化Robot对象
     ep_robot = robot.Robot()
 
-    # 程序与机器人联网并指定连接方式为AP 直连模式
+    # 程序与机器人联网，并指定连接方式为AP 直连模式
     ep_robot.initialize(conn_type='ap')
 
     version = ep_robot.get_version()
@@ -79,7 +75,7 @@ if __name__ == '__main__':
     # 在程序内实例化Robot对象
     ep_robot = robot.Robot()
 
-    # 程序与机器人联网并指定连接方式为USB RNDIS模式
+    # 程序与机器人联网，并指定连接方式为USB RNDIS模式
     ep_robot.initialize(conn_type='rndis')
 
     version = ep_robot.get_version()
@@ -153,22 +149,24 @@ Connected!
 
 同时机器人的灯效变为白色呼吸变为青绿色常亮。
 
-% 未完成
+支持在组网模式下通过SN连接指定的机器人，用户通过在初始化时给 sn 参数赋值完成对机器人 sn 的输入。在不指定 sn 时，SDK默认与搜索到的第一台机器人建立连接。
 
-% 支持在组网模式下通过SN连接指定的机器人，用户通过在初始化时给 sn 参数赋值完成对机器人 sn 的输入。在不指定 sn 时，SDK默认与搜索到的第一台机器人建立连接。
-
-% \begin{lstlisting}[language=python]
-% from robomaster import robot
-% from robomaster import config
+\begin{lstlisting}[language=python]
+from robomaster import robot
+from robomaster import config
 
 
-% if __name__ == '__main__':
-%     ep_robot = robot.Robot()
-%     # 指定机器人的 SN 号
-%     ep_robot.initialize(conn_type="sta", sn="3JKDH2T001ULTD")
+if __name__ == '__main__':
+    # 在程序内实例化Robot对象
+    ep_robot = robot.Robot()
 
-%     ep_version = ep_robot.get_version()
-%     print("Robot Version: {0}".format(ep_version))
+    # 程序与机器人联网，并指定连接方式为组网连接，且指定机器人的 SN 号
+    ep_robot.initialize(conn_type="sta", sn="3JKDH2T001ULTD")
 
-%     ep_robot.close()
-% \end{lstlisting}
+    # 输出机器人固件版本号信息
+    ep_version = ep_robot.get_version()
+    print("Robot Version: {0}".format(ep_version))
+
+    # 关闭机器人
+    ep_robot.close()
+\end{lstlisting}
