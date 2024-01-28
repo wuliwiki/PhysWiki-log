@@ -122,11 +122,17 @@ free -h # 查看 RAM 和 swap 的使用情况
 \begin{itemize}
 \item 由于 zfs 使用 copy-on-write， 制作快照非常轻量。
 \item \verb`zfs snapshot -r pool名@快照名` 可以对整个 pool 的所有 dataset 做快照
-\item 可以把快照挂在到一个指定的文件夹中（只读）。
 \item \verb|zfs list -t snapshot| 查看所有快照。
+\item 输出如
+\begin{lstlisting}[language=none]
+NAME               USED  AVAIL   REFER  MOUNTPOINT
+pool名/fs名@快照1   0B      -     7.84T  -
+\end{lstlisting}
+其中 \verb`USED` 初始是 0， 会随着 copy-on-write 慢慢增加
 \item 删除快照会自动释放不需要的空间（哪怕是删除中间的快照）。
-\item 可以直接把快照挂载到某个目录： \verb|zfs mount -o ro -t snapshot pool名/fs名@快照名 /快照挂载目录|
+\item 可以直接把快照挂载到某个目录（只读）： \verb|zfs mount -o ro -t snapshot pool名/fs名@快照名 /快照挂载目录|
 \item 挂载后的快照是只读的， 如果要写入， 可以先对快照做一个克隆： \verb|zfs clone pool名/fs名@快照名 pool名/fs克隆名|。 挂载克隆也是一样的语法： \verb|zfs mount pool名/fs克隆名 /快照克隆挂载目录|
+\item 删除快照用 \verb`zfs destroy pool名/dataset名@快照名`
 \end{itemize}
 
 \subsection{加密和迁移（实测）}
