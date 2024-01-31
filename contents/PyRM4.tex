@@ -1,0 +1,72 @@
+% Python RoboMaster EP 教程—通讯方式
+% keys Robomaster|机器人|Python
+% license Usr
+% type Tutor
+
+\pentry{Python 基础\upref{PyFi}}
+
+与RoboMaster EP的3种连接方式在通讯协议上支持 TCP 和 UDP 通讯（实时的控制运动建议用 UDP, 事件型控制建议用 TCP）。
+
+(TCP通讯内容可以参考：\href{https://en.wikipedia.org/wiki/Transmission_Control_Protocol}{TCP Wikipedia} ，UDP通讯可以参考：\href{https://en.wikipedia.org/wiki/User_Datagram_Protocol}{UDP Wikipedia})
+
+\begin{itemize}
+\item \autoref{sub_PyRM4_1} TCP 通讯
+\item \autoref{sub_PyRM4_2} UDP 通讯
+\end{itemize}
+
+\subsection{TCP 通讯}\label{sub_PyRM4_1}
+
+输入以下代码，可以测验:
+
+\begin{lstlisting}[language=python]
+from robomaster import robot
+
+import robomaster
+
+if __name__ == '__main__':
+    # 在程序内实例化Robot对象
+    ep_robot = robot.Robot()
+
+    # 指定连接方式为STA 组网模式, 网络通讯方式 tcp
+    ep_robot.initialize(conn_type='sta', proto_type='tcp')
+
+    version = ep_robot.get_version()
+    # 输出机器人固件版本号信息
+    print("Robot version: {0}".format(version))
+    # 关闭机器人
+    ep_robot.close()
+
+\end{lstlisting}
+
+运行结果:
+\begin{lstlisting}[language=pythonC]
+Robot Version: xx.xx.xx.xx
+\end{lstlisting}
+
+\subsection{UDP 通讯}\label{sub_PyRM4_2}
+
+输入以下代码，可以测验:
+
+\begin{lstlisting}[language=python]
+import robomaster
+from robomaster import robot
+
+
+if __name__ == '__main__':
+    # 在程序内实例化Robot对象
+    ep_robot = robot.Robot()
+    
+    # 指定连接方式为AP 直连模式, 网络通讯方式 udp
+    ep_robot.initialize(conn_type='ap', proto_type='udp')
+
+    version = ep_robot.get_version()
+    # 输出机器人固件版本号信息
+    print("Robot version: {0}".format(version))
+    # 关闭机器人
+    ep_robot.close()
+\end{lstlisting}
+
+运行结果:
+\begin{lstlisting}[language=pythonC]
+Robot Version: xx.xx.xx.xx
+\end{lstlisting}

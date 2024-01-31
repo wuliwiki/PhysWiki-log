@@ -3,20 +3,15 @@
 % type Tutor
 
 
-\begin{issues}
-\issueDraft 全文替换x。
-\end{issues}
-
-\pentry{零化多项式\upref{nullpl}}
 尽管复数域可以保证$n$阶矩阵的特征多项式都有$n$个解，但依然不是所有矩阵都有$n$个线性无关的特征向量从而可以对角化。为了简化问题，我们需要“简化”矩阵（找一组基，使得矩阵在该基下有比较简单的形式，比较多$0$）。\autoref{the_nullpl_1}~\upref{nullpl}保证我们线性变换都有分块对角矩阵的形式。更进一步，通过在根子空间的相似变换，我们可以把每一个“对角块”上三角化。
 
 与之比较，“Jordan标准形”是更加简化的形式。为拓展至任意线性变换，本节先从较为简单的幂零线性变换入手。
 \subsection{循环子空间}
-设矩阵$B$为线性空间$V$上的\textbf{幂零线性变换}，即对于任意\textbf{非零}向量$x$，总存在非负整数$k$使得$B^{k}(x)=\bvec 0$且$B^{k-1}(x)\neq \bvec 0$。可以证明，$\{x,Bx,B^2x,...B^{k-1}x\}$线性无关。
+设矩阵$B$为线性空间$V$上的\textbf{幂零线性变换}，即对于任意\textbf{非零}向量$\bvec x$，总存在非负整数$k$使得$B^{k}(\bvec x)=\bvec 0$且$B^{k-1}(\bvec x)\neq \bvec 0$。可以证明，$\{\bvec x,B\bvec x,B^2\bvec x,...B^{k-1}\bvec x\}$线性无关。
 \begin{exercise}{}
-证明：$\opn{Span}\{x,Bx,B^2x,...B^{k-1}x\}$张成线性空间，并证明这是$B$的不变子空间。
+证明：$\opn{Span}\{\bvec x,B\bvec x,B^2\bvec x,...B^{k-1}\bvec x\}$张成线性空间，并证明这是$B$的不变子空间。
 \end{exercise}
-设$W=\opn{Span}\{x,Bx,B^2x,...B^{k-1}x\}$，将幂零变换$B$限制在该不变子空间上，记为$B|_W$。则每一列可表示为：$(Bx,B^2x,...B^{k-1}x,B^kx)$，即：
+设$W=\opn{Span}\{\bvec x,B\bvec x,B^2\bvec x,...B^{k-1}\bvec x\}$，将幂零变换$B$限制在该不变子空间上，记为$B|_W$。则每一列可表示为：$(B\bvec x,B^2\bvec x,...B^{k-1}\bvec x,B^k\bvec x)$，即：
 \begin{equation}\label{eq_Jordan_1}
 \left(\begin{array}{cccccc}
 0 & 0 & 0 & \cdots & 0 & 0 \\
@@ -27,7 +22,7 @@
 \end{array}\right)~.
 \end{equation}
 
-假设该子空间为4维。输入$x=(1\,0\,0\,0)^T$，得到$Bx=(0\,1\,0\,0)^T$。输入$Bx=(0\,1\,0\,0)^T$，得到$B^2x=(0\,0\,1\,0)^T$。显然，$B$可以对基进行循环，因此把这种形式的基向量组$\opn{Span}\{x,Bx,B^2x,...B^{k-1}x\}$称为\textbf{循环基（cyclic basis）}，$W$为$B$的\textbf{循环子空间（cyclic subspace）}。
+假设该子空间为4维。输入$\bvec x=(1\,0\,0\,0)^T$，得到$B\bvec x=(0\,1\,0\,0)^T$。输入$B\bvec x=(0\,1\,0\,0)^T$，得到$B^2\bvec x=(0\,0\,1\,0)^T$。显然，$B$可以对基进行循环，因此把这种形式的基向量组$\opn{Span}\{\bvec x,B\bvec x,B^2\bvec x,...B^{k-1}\bvec x\}$称为\textbf{循环基（cyclic basis）}，$W$为$B$的\textbf{循环子空间（cyclic subspace）}。
 
 称形如\autoref{eq_Jordan_1} 的矩阵为\textbf{Jordan（若当）块}，由若当块直和而成的矩阵为\textbf{ Jordan(若当)形矩阵}。本节的主要目的便是证明：复数域上的幂零变换总可以表示为Jordan矩阵。下面的讨论默认在复数域上。
 
@@ -37,18 +32,45 @@
 
 由于Jordan表示是分块对角矩阵，对角块（Joradan块）是循环子空间，则$B$有Jordan形表示等价于$V$可分解为$B$的循环子空间之直和。因此我们需要证明：
 
-\begin{theorem}{}
+\begin{theorem}{}\label{the_Jordan_1}
 若$B$是$V$上的幂零线性变换，则$V$总可以分解为$B$的循环子空间之直和。
 \end{theorem}
 Proof.
 
-用归纳法证明。当线性空间维度为1时，由$B$的定义可知定理显然成立。现设定理对维度小于$n$时成立，设$\opn{dim}V=n$，需要利用该假设证明定理在此维度下成立。
+用归纳法证明\footnote{引自Jier Peter的《代数学基础》}。当线性空间维度为1时，由$B$的定义可知定理显然成立。现设定理对维度小于$n$时成立，设$\opn{dim}V=n$，需要利用该假设证明定理在此维度下成立。
 
 由于$B$可以在$\opn{Im}B$上分解为循环子空间的直和，即：
 \begin{equation}
 \opn{Im}B=W_1\oplus W_2\oplus...\oplus W_k~,
 \end{equation}
-令$W_i=\opn{Span}\{x_i,B(x_i),B^2(x_i)...B^{l_i-1}(x_i)\}$，有$B^{l_i}|_{W_i}=0,i=1,2...k$。由于$B^{l_i-1}(x_i)\in \opn{ker}B$，因此可以扩充$\{B^{l_i-1}(x_i)\}^k_{i=1}$至$\opn{ker}B$的一组基，设其余线性无关部分为$\{\bvec v\}^m_{i=1}$。接下来我们证明$\{\bvec v\}^m_{i=1}\cup \{x_i,B(x_i),B^2(x_i)...B^{l_i-1}(x_i)\}^{k}_{i=1}$为$V$的基。由于
 
+令$W_i=\opn{Span}\{\bvec x_i,B(\bvec x_i),B^2(\bvec x_i)...B^{l_i-1}(\bvec x_i)\}$，有$B^{l_i}|_{W_i}=0,i=1,2...k$。由于$B^{l_i-1}(\bvec x_i)\in \opn{ker}B$，因此可以扩充$\{B^{l_i-1}(\bvec x_i)\}^k_{i=1}$至$\opn{ker}B$的一组基：
+
+\begin{equation}
+\opn{ker}B=\opn{Span}\{\bvec v\}^m_{i=1}\cup \{B^{l_i-1}(\bvec x_i)\}^k_{i=1}~,
+\end{equation}
+
+则对于任意$\bvec x_i\in V$，都可以由$\{\bvec v\}^m_{i=1}\cup \{\bvec x_i,B(\bvec x_i),B^2(\bvec x_i)...B^{l_i-1}(\bvec x_i)\}^{k}_{i=1}$表示。接下来我们证明：
+\begin{equation}
+V=\bigoplus ^m_{i=1}\opn{Span}\bvec v_i\oplus W_1\oplus W_2\oplus...\oplus W_n~.
+\end{equation}
+
+
+设$\{a_i\}^m_{i=1},\{b^i_1,b^i_2...b^i_{l_{i-1}}\}^{k}_{i=1}\in\mathbb F$，且
+\begin{equation}\label{eq_Jordan_2}
+a_i\bvec v_i+b^i_jB^{j}(\bvec x_i)=\bvec 0~.
+\end{equation}
+
+如前所叙，$j\in[1,l_{i-1}],i\in[1,k]$。两边各乘以$B$，则有：
+\begin{equation}
+b^i_jB^{j}(\bvec x_i)=\bvec 0~,
+\end{equation}
+此时$j\in[1,l_{i-2}]$。由题设知$B^j(\bvec x_i)$线性无关，则系数为$0$，代入\autoref{eq_Jordan_2} 得：
+\begin{equation}
+a_i\bvec v_i+b^i_{l_{i-1}}B^{l_{i-1}}(\bvec x_i)=\bvec 0~.
+\end{equation}
+
+这是$\opn{ker}B$的basis，所以系数为$0$。因此\autoref{eq_Jordan_2} 的所有系数为0，所证向量组线性无关，和为直和。
+由于$B\bvec v_i=0$，则$\opn{Span}\bvec v_i$都是$B$的一维循环子空间，定理得证。
 
 

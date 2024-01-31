@@ -3,6 +3,7 @@
 % type Tutor
 
 \begin{issues}
+\issueOther{和拉格朗日插值法\upref{LagraP} 是否需要合并？}
 \issueTODO
 \end{issues}
 \pentry{范德蒙德行列式\upref{Sample}}
@@ -32,6 +33,7 @@ p(x_i) = f(x_i)\qquad (i = 1,2, \dots, n)~,
 
 由 \autoref{the_PolyIP_1} 可知，对一组给定的插值点以及对应的函数值，由插值法得到的多项式\textbf{存在且唯一}。因此，下面介绍的两种插值方法只是推导不同，但其最终得到的插值多项式是一致的。
 \subsubsection{Lagrange插值}
+
 \begin{definition}{Lagrange基函数}
 设 $l_k(x)$是 $n$ 次多项式，在节点 $x_0, x_1,\cdots,x_n$ 上满足：
 \begin{equation}
@@ -75,6 +77,102 @@ plot(x,f,x,y);
 \end{lstlisting}
 \subsubsection{Newton插值}
 
-\subsubsection{龙格现象}
+\subsubsection{Runge 现象}
+如果想要使得在取无限密的\textbf{等分点}时，拉格朗日插值得到的函数能够最终趋于原函数，拉格朗日插值要求函数不仅仅在这插值范围内解析，还要求在复数域上解析，否则在函数边界就会出现\textbf{Runge 现象（龙格现象）}。解决这个问题的方法是不采用等间隔插值点，而是其他取点方法，例如\textbf{切比雪夫点}。
 
+以函数
+$$y = f(x) = \frac1{1+16 x^2} ~,$$
+举例，该函数本身图像为：
+\begin{figure}[ht]
+\centering
+\includegraphics[width=6cm]{./figures/78c869353bce9d97.png}
+\caption{$f(x)$ 之图像} \label{fig_PolyIP_1}
+\end{figure}
+在其中等间隔取点，随着点数的变多，插值函数在边缘的“抖动”越来越剧烈，如下图：
+\begin{figure}[ht]
+\centering
+\includegraphics[width=6cm]{./figures/1941d5aa89ad4887.png}
+\caption{取 $4$ 个红色点位插值得到图像} \label{fig_PolyIP_2}
+\end{figure}
+\begin{figure}[ht]
+\centering
+\includegraphics[width=6cm]{./figures/2ee81c4a4e2c5103.png}
+\caption{取 $7$ 个红色点位插值得到图像} \label{fig_PolyIP_3}
+\end{figure}
+\begin{figure}[ht]
+\centering
+\includegraphics[width=6cm]{./figures/7034ddb6c52000bc.png}
+\caption{取 $10$ 个红色点位插值得到图像} \label{fig_PolyIP_4}
+\end{figure}
+这现象便是龙格现象，原因是刚才提到的，该函数在插值区间附近的复数域不解析。生成这图像使用的是 python 的 matplotlib 库，代码如下：
+
+\begin{lstlisting}[language=python]
+import numpy as np
+from tqdm import tqdm
+from sympy import Symbol as symSym
+from sympy import Poly as symPoly
+from sympy import expand as polyExpand
+from matplotlib import pyplot as plt
+
+
+
+class LagrangeInter:
+    def __init__(self, xs: [list, np.array], ys: [list, np.array]):
+        self.x = np.asarray(xs, dtype=np.float64)
+        self.y = np.asarray(ys, dtype=np.float64)
+        
+        if len(self.x) > 1:
+            if len(self.x) == len(self.y):
+                self.n = len(self.x)
+            else:
+                raise Exception("不能对空点集进行 Lagrange 插值")
+        else:
+            raise Exception("x, y 数量不对应")
+        
+        self.poly = None
+        self.polyCoff = None
+        self.coffOrder = None
+    
+    def interp(self):
+        t = symSym("t")
+        self.poly = 0
+        for i in tqdm(range(self.n)):
+            basis_fun = self.y[i]
+            for j in range(0, i):
+                basis_fun *= (t - self.x[j]) / (self.x[i] - self.x[j])
+            for j in range(i + 1, self.n):
+                basis_fun *= (t - self.x[j]) / (self.x[i] - self.x[j])
+            self.poly += basis_fun
+            self.poly = polyExpand(self.poly)
+            poly = symPoly(self.poly, t)
+            self.polyCoff = poly.coeffs()
+            self.coffOrder = poly.monoms()
+    
+    def calc(self, x0: [list, np.array]):
+        x0 = np.asarray(x0, dtype=np.float64)
+        y0 = np.zeros(len(x0))
+        t = self.poly.free_symbols.pop()
+        
+        for i in tqdm(range(len(x0))):
+            y0[i] = self.poly.evalf(subs={t: x0[i]})
+        return y0
+
+
+
+def func(x: float) -> float:
+    return 1/(1+ 16*x*x)
+
+
+
+if __name__ == "__main__":
+    a = np.linspace(-3, 3, 10, endpoint=True)# 将这行的 10 替换成插值多项式的选点数量（即阶数）
+    b = [func(x) for x in a]
+    x0 = np.arange(-3, 3, 0.01)
+    lagInterp = LagrangeInter(a, b)
+    lagInterp.interp()
+    y0 = lagInterp.calc(x0)
+    plt.plot(x0, y0, 'bo')
+    plt.plot(a, b, 'ro')
+    plt.show()
+\end{lstlisting}
 

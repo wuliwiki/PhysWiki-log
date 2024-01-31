@@ -140,3 +140,48 @@ MCMC 是一种高维随机抽样方法，解决了先前的抽样方法在处理
 \end{align}
 
 那么 $\{X_t\}$ 构成一个马尔可夫链，其中 $p_{ij}$ 表示转移概率。值得注意的是，$\sum_{j=1}^m p_{ij}=1$。转移概率矩阵 $P = (p_{ij})_{m\times m}$ 记录了系统中任意两个状态之间的转移可能性。
+
+以下是一个 Python 代码示例，展示了状态转移矩阵对初始状态的影响。此外，在 $t_{30}$ 处不同的初始概率分布最终收敛到相同的稳定概率分布。
+
+\begin{lstlisting}[language=python]
+transfer_matrix = np.array([[0.5, 0.3, 0.2], [0.2, 0.5, 0.3],
+                                             [0.1, 0.2, 0.7]])
+start_matrixs = [np.array([[0.7, 0.1, 0.2]]), np.array([[0.4, 0.2, 0.4]])]
+for start_matrix in start_matrixs:
+  values = [[] for _ in range(start_matrix.shape[1])]
+  num_iterations = 30
+  for i in range(num_iterations):
+      start_matrix = np.dot(start_matrix, transfer_matrix)
+      for j in range(start_matrix.shape[1]):
+          values[j].append(start_matrix[0][j])
+\end{lstlisting}
+
+然后，本文将从数学角度进行探讨。对于任意的 $i,j\in S$，其中 $i \neq j$，如果存在 $k\geq 1$ 使得 $p_{ij}^k > 0$，则 $\{X_t\}$ 是一个不可约链 (\textbf{irreducible chain})。在这样的链中，所有状态都是相互连接的，在多个步骤后可以进行状态之间的转移。如果 $\{X_t\}$ 中的状态 $i$ 被称为 \textbf{非周期性  aperiodic}，如果存在 $k\geq 0$ 使得 $p_{ii}^{(k)} > 0$ 并且 $p_{ii}^{(k+1) } > 0$。如果一个马尔可夫链的所有状态都具有这个特性，则称其为非周期性 。如果不可约马尔可夫链中的一个状态是非周期性  ，则该链中的所有状态都是 非周期性 。
+
+对于具有有限状态空间的 非周期性 不可约马尔可夫链，存在以下极限：
+\begin{align}
+   \lim_{n\to\infty} P(X_n = j | X_0=i) = \pi_j~.
+\end{align}
+在这里，$\{\pi_j\}$ 表示 $\{X_t\}$ 的极限分布。要使 $\{\pi_j\}$ 成为极限分布，必须满足 $\sum_{j=1}^m \pi_j=1$。如果在具有有限状态空间的 非周期性  不可约马尔可夫链中，极限分布和稳态分布是存在且相等的。这种等价性来源于方程：
+\begin{equation} 
+P(X_{t+1}=j)=\sum_{i=1}^{m}P(X_{t}=i)P(X_{t+1}=j|X_ {t}=i)=\sum_{i=1}^{m}P(X_{t}=i)p_{i j}~.
+\end{equation}
+
+对两边取极限，可得到关系式 $\sum_{i=1}^m \pi_i p_{ij} = \pi_j$。 
+
+\textbf{为什么在蒙特卡洛积分中我们可以模拟一个马尔科夫链来进行采样？该马尔科夫链需要满足那些性质？}在马尔可夫链中，状态的性质包括常返和正常返。
+
+状态$i$若从该状态出发总能再次返回，则称其为常返。对于常返状态$i$，若从$i$出发首次返回$i$的时间的期望是有限的，则称其为正常返。在不可约的马尔可夫链中，只要存在正常返状态，所有状态都是正常返的。此时，存在唯一的平稳分布$\pi$。
+
+对于非周期且正常返的不可约马尔可夫链，它具有极限分布，即当$n$趋向于无穷时，状态转移概率矩阵的$n$次幂趋近于平稳分布$\pi$：
+\begin{align}
+    \lim_{n\to\infty} p_{ij}^{(n)} = \pi_j, \ \forall i, j \in S ~.
+\end{align}
+
+假设不可约马尔可夫链的平稳分布为$\pi$，并且$h$是状态空间$S$上的有界函数，那么当模拟马尔可夫链并从某个初始分布出发时，函数$h$关于马尔可夫链样本路径的平均值将趋近于$\sum_{x \in S} \pi_x h(x)$：
+
+\begin{align}
+P\left( \lim_{n\to\infty} \frac{1}{n} \sum_{k=0}^n h(X_k) = \sum_{x \in S} \pi_x h(x) \right) = 1~.
+\end{align}
+
+这类似于独立同分布随机变量平均值的强大数律。当马尔可夫链按照平稳分布$\pi$的转移概率模拟时，上述极限等同于$E[h(Y)]$，其中$Y$服从平稳分布$\pi$。

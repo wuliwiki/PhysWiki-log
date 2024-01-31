@@ -1,0 +1,41 @@
+% Python RoboMaster EP 教程—初始化机器人
+% keys Robomaster|机器人
+% license Usr
+% type Tutor
+
+\pentry{Python 基础\upref{PyFi}}
+
+在进行与机器人相关的操作之前，需要先初始化机器人对象
+
+首先从 robomaster 包中导入 robot 模块：
+
+\begin{lstlisting}[language=python]
+from robomaster import robot
+\end{lstlisting}
+
+当SDK运行在多网卡同时使用的设备时（自动获取的ip可能不是与机器人进行连接的ip）需要手动指定 RoboMaster SDK 的本地ip地址
+
+指定ip使用以下语句:
+
+\begin{lstlisting}[language=python]
+robomaster.config.LOCAL_IP_STR = "ip地址"
+\end{lstlisting}
+
+创建 Robot 类的实例对象 ep_robot， ep_robot 即一个机器人的对象：
+
+\begin{lstlisting}[language=python]
+ep_robot = robot.Robot()
+\end{lstlisting}
+
+初始化机器人，如果调用初始化方法时不传入任何参数，则使用config.py中配置的默认连接方式（WIFI直连模式） 以及默认的通讯方式（udp通讯）对机器人进行初始化:
+
+\begin{lstlisting}[language=python]
+ep_robot.initialize(conn_type="连接方式", proto_type='通讯方式')
+\end{lstlisting}
+
+可以通过以下语句设置默认的连接方式与通讯方式:
+
+\begin{lstlisting}[language=python]
+config.DEFAULT_CONN_TYPE = "连接方式"
+config.DEFAULT_PROTO_TYPE = "通讯方式"
+\end{lstlisting}

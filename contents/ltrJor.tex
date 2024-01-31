@@ -1,0 +1,80 @@
+% 一般线性变换的 Jordan（若尔当）标准形
+% license Usr
+% type Tutor
+
+
+\begin{issues}
+\issueTODO
+\end{issues}
+
+利用幂零变换的结论（\autoref{the_Jordan_1}~\upref{Jordan}），本节进一步证明，任意线性变换都能化为类似的Jordan形，并且Jordan形是唯一的。
+\subsection{线性变换的Jordan形}
+由\autoref{the_nullpl_1}~\upref{nullpl}可知，任意线性空间都可以分解为任意线性变换的不变子空间之直和，例如对于线性变换$A$,我们有：
+\begin{equation}
+V=\opn{ker}f(A)=\opn{ker}f_1(A)\oplus\opn{ker}f_2(A)...\oplus\opn{ker}f_m(A)~,
+\end{equation}
+其中$f(A)$是$A$的特征多项式，$f_i(A)$是特征值相关的互素项：$f_i(A)=(A-\lambda_i)^{k_i}$。为方便计，设$\opn{ker}f_i(A)=W_i,f_i(A)=B_i$，则$A=A|_{W_1}\oplus A|_{W_2}\oplus...\oplus A|_{W_n}=\bigoplus^n_{i=1}(B_i+\lambda_iI)$
+
+由\autoref{the_Jordan_1}~\upref{Jordan}可知，幂零变换意味着在$W_i$的某组基上，$B_i$都是Jordan形矩阵，称对应的$A|_{W_i}$为一般线性变换的Jordan形。归纳此段讨论为下述定理：
+\begin{theorem}{}\label{the_ltrJor_1}
+设$A$为域$\mathbb F$上$n$维线性空间$V$内的一个线性变换，其特征多项式的所有根$\lambda\in\mathbb F$，则在$V$内存在一组基，使线性变换$A$在这组基下可以表示为如下块对角矩阵：
+\begin{equation}
+J=\left(\begin{array}{cccc}
+J_1 & & & 0 \\
+& J_2 & & \\
+& & \ddots & \\
+0 & & & J_s
+\end{array}\right), \quad J_i=\left(\begin{array}{cccc}
+\lambda_i & 1 & & 0 \\
+& \lambda_i & \ddots & \\
+& & \ddots & 1 \\
+0 & & & \lambda_i
+\end{array}\right)~.
+\end{equation}
+\end{theorem}
+$A|_{W_i}$由若干个Jordan块直和而成，每块对应一个特征向量，不同块的特征数量线性无关，因此块数就是几何重数。实数域上不能保证根都在域内，因而线性变换未必有Jordan形，而复数域上的线性变换总能表示为该形式。
+\subsubsection{另一种证明思路}
+对于具有特征值$\lambda$的线性变换$A$而言，我们有如下基本结论：
+\begin{equation}\label{eq_ltrJor_1}
+\begin{aligned}
+&\opn{ker}B\subseteq\opn{ker}B^2\subseteq...\subseteq\opn{ker}B^k\\
+&\opn{Im}B\supseteq\opn{Im}B^2\supseteq...\supseteq\opn{Im}B^k~,
+\end{aligned}
+\end{equation}
+其中$B=A-\lambda A$。\textbf{在这两个序列中，一旦有两个子空间相等，后续序列中的子空间都相等。}
+\begin{lemma}{}
+设$\opn{ker}B^k=\opn{ker}B^{k+1}$，对于任意$m>k$，有\begin{equation}
+\opn{ker}B^{k+m}=\opn{ker}B^{k+m+1},\quad\opn{Im}B^{k+m}=\opn{Im}B^{k+m+1}~.
+\end{equation}
+\end{lemma}
+Proof.
+
+由\autoref{eq_ltrJor_1} 知，我们只需要证明$\opn{ker}B^{k+m+1}\supseteq \opn{ker}B^{k+m}$即可。设任意$\bvec x\in \opn{ker}B^{k+m+1}$，则
+\begin{equation}
+B^{k+m+1}\bvec x=B^{k+1}B^m\bvec x=\bvec 0~,
+\end{equation}
+因此可知$B^m\bvec x\in\opn{ker}B^{k+1}$。由题设得：$B^{k}B^m\bvec x=\bvec 0$，遂$\bvec x\in\opn{ker}B^{k+m}$，得证。
+
+接下来我们证明：$V=\opn{ker}B^k\oplus\opn{Im}B^k$，由于$\opn{dim}V=\opn{dim}\opn{ker}B^k+\opn{dim}\opn{Im}B^k$，因此只需要证明两个子空间无交集即可。
+
+由于$\opn{ker}B^k,\opn{Im}B^k$与$A$可交换，所以是$A$的不变子空间。设$K=\opn{ker}B^k,I=\opn{Im}B^k$，则有：
+\begin{equation}
+A=A|_K\oplus A|_I~,
+\end{equation}
+
+接下来我们就可以用归纳法证明\autoref{the_ltrJor_1} 了。依然设$\lambda$为$A$的一个本征值，且$B=A-\lambda I,n=\opn{dim}V$。
+
+维度为$1$时$A$是一阶方阵所以该定理成立。假设定理对维度$<n$的线性空间都成立，只要我们推出对$n$维线性空间$V$成立则得证。由于$B|_K$是幂零变换，因此$A|_K$可化为Jordan形，$A|_I$由题设也有Jordan形，定理得证。
+\subsection{Jordan形的唯一性}
+当$A$有Jordan形时，其对应$V$上的一个幂等变换。因此，只要证明$B$的Jordan形是唯一的\footnote{该证明引用Jier Peter的《代数学基础》}，则$A$自然也有唯一的Jordan表示。（只改变以不同$\lambda$区分的Jordan矩阵顺序视为一种表示。）
+
+$B$的Jordan形是唯一的，等价于说$V$关于$B$的循环子空间分解方式唯一。用归纳法证明，并设定理对于$Im B$成立。反设不唯一，即：
+\begin{equation}
+V=V_1\oplus V_2\oplus...\oplus V_k=W_1\oplus W_2\oplus...\oplus W_s~.
+\end{equation}
+用$B$作用两端后得：
+\begin{equation}
+\opn{Im}B=B(V_1)\oplus B(V_2)\oplus...\oplus B(V_k)=B(W_1)\oplus B(W_2)\oplus...\oplus B(W_s)~.
+\end{equation}
+由于在像上分解唯一，则上述两种分解之间必然有指定同构。比如：$B(V_r)=B(W_s)$。由维度关系知：$V_r=W_s$
+\subsection{Jordan矩阵的计算方法}
