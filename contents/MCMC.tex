@@ -185,3 +185,47 @@ P\left( \lim_{n\to\infty} \frac{1}{n} \sum_{k=0}^n h(X_k) = \sum_{x \in S} \pi_x
 \end{align}
 
 这类似于独立同分布随机变量平均值的强大数律。当马尔可夫链按照平稳分布$\pi$的转移概率模拟时，上述极限等同于$E[h(Y)]$，其中$Y$服从平稳分布$\pi$。
+
+因此，可以通过设计满足不可约、非周期、正常返性质的马尔可夫链，并使用其模拟平稳分布$\pi$，从而估计关于$Y \sim \pi$的随机变量的函数期望$E[h(Y)]$。
+
+\textbf{如何得到有平稳分布的转移概率矩阵？}
+
+一个充分条件是转移概率满足\textbf{细致平衡条件}。如果存在 $\{ \pi_j, j \in S \}, \ \pi_j\geq 0, \ \sum_{j\in S} \pi_j = 1$，使得：
+\begin{align} 
+\pi_i p_{ij} = \pi_j p_{ji}, \ \forall i \neq j ~.
+\end{align}
+
+那么这些马尔可夫链被称为满足细致平衡条件，如果 $P(X_{t+1} = j) = \pi_i$，那么
+\begin{align} 
+P(X_{t+1} = j) = \sum_i \pi_i p_{ij} = \sum_i \pi_j p_{ji} = \pi_j \sum_i p_{ji} = \pi_j, \ \forall j \in S. ~.
+\end{align}
+
+因此 $\{\pi_j\}$ 是 $\{X_t\}$ 的稳态分布。 
+
+\subsection{马尔可夫链抽样算法}
+通过马尔可夫链抽样进行蒙特卡洛模拟，需要具有稳态分布样本的转移概率矩阵。然而，通常情况下，目标稳态分布 $\{\pi_j\}$ 和状态转移矩阵 $P$ 不满足详细平衡条件：
+
+
+\begin{align} 
+\pi_i p_{ij} \neq \pi_j p_{ji}, \ \forall i \neq j ~.
+\end{align}
+
+令 $\alpha$ 表示接受概率，使得：
+\begin{align} 
+\pi_i p_{ij}\alpha(i, j) = \pi_j p_{ji} \alpha(j, i), \ \forall i \neq j  ~.
+\end{align}
+
+因此，如果 $\alpha(i, j) = \pi_j p_{ji}$ 且 $\alpha(j, i) = \pi_j p_{ij}$，则可以获得满足详细平衡条件的转移矩阵 $P_d = P \alpha(i,j)$。然而，在这个抽样算法中，$\alpha(i, j)$ 的值可能会非常小，导致拒绝的样本值较多，并且抽样效率大幅降低。
+
+\subsubsection{Metropolis–Hastings 算法}
+
+Metropolis–Hastings 算法通过将 $\alpha(i, j)$ 缩放到 $ C\alpha(i, j) = 1$ 来解决抽样接受率低的问题。因此，可以定义：
+
+\begin{equation}
+\alpha(i, j) = \min \left\{ 1, \frac{\pi(j)P(j, i)}{\pi(i)P(i, j)} \right\}~.
+\end{equation}
+
+这种调整加速了收敛速度。假设随机变量 $X$ 服从分布 $\pi(x), x\in \mathcal{X}$。该算法需要一个提议转移概率函数 $T(y, x),\ x,y \in \mathcal {X}$，满足 $0 \leq T(y, x) \leq 1$，$\sum_y T(y, x) = 1$，且 $ T(y, x)>0 \Leftrightarrow T(x, y) >0 $。
+
+从 $\mathcal{X}$ 中选择任意初始值 $X^0$。在当前状态 $X^t$ 经过 $t$ 步之后，下一步涉及从提议转移分布 $T(y, X^t)$ 中提取 $Y$ 并生成 $u\sim U (0,1)$。随后是非常关键的步骤：
+
