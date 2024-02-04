@@ -3,7 +3,7 @@
 % license Xiao
 % type Tutor
 
-\pentry{类氢原子的定态波函数\upref{HWF}， Wigner 3j 符号\upref{ThreeJ}}{nod_456b}
+\pentry{类氢原子的定态波函数\nref{nod_HWF}， Wigner 3j 符号\nref{nod_ThreeJ}}{nod_456b}
 
 本文使用原子单位制\upref{AU}。 我们希望求解氢原子在电场中的薛定谔方程\upref{TDSE}
 \begin{equation}\label{eq_HyTDSE_7}
@@ -130,7 +130,7 @@ H_0 \psi_{l} + E(t)r\sum_{l' = 0}^{\infty} F_{l, l'} \psi_{l'} + \sum_{l'=0}^\in
 在下面介绍的算符拆分中， 若把 $F'$ 矩阵对角线上的元合并到 $H_0$ 中很可能会减小误差。
 
 \subsection{算符拆分}
-\pentry{算符的指数函数、波函数传播子\upref{OpExp}}{nod_60f3}
+\pentry{算符的指数函数、波函数传播子\nref{nod_OpExp}}{nod_60f3}
 在实际的程序中， 我们可以把演化子 $\exp(-\I H \Delta t)$ 拆成 3 项。 虽然这么做会引入一定的误差（$H_0$ 和 $\bvec E\vdot\bvec r$ 不对易）， 但是却大大提高了效率
 \begin{equation}\label{eq_HyTDSE_2}
 \exp(-\I H \Delta t) = \exp(-\I H_0 \frac{\Delta t}{2}) \exp(-\I H_1 \Delta t)\exp(-\I H_0 \frac{\Delta t}{2}) + \order{\Delta t^3}~.
@@ -149,7 +149,7 @@ H_0 \psi_{l} = \I \pdv{\psi_{l}}{t}~.
 至于相邻两步之间产生的 $\exp(-\I H_0 {\Delta t}/{2})\exp(-\I H_0 {\Delta t}/{2})$ 是否可以合并为 $\exp(-\I H_0 {\Delta t})$， 取决于所使用的算法这么做以后是否会引入额外误差（例如 Crank-Nicolson 算法\upref{CraNic} 就不宜这么做）。
 
 \subsection{网格和演化算法}
-\pentry{Crank-Nicolson 算法（一维）\upref{CraNic}}{nod_5b3a}
+\pentry{Crank-Nicolson 算法（一维）\nref{nod_CraNic}}{nod_5b3a}
 \addTODO{以下内容应该放在一维薛定谔方程里面讲解}
 
 可以使用二维数组储存波函数， 每一列（或行）是一个分波的 $\psi_l(r)$。 径向网格可以使用等间距网格， 但 FEDVR 网格\upref{FEDVR}效率要更高。
@@ -159,7 +159,7 @@ H_0 \psi_{l} = \I \pdv{\psi_{l}}{t}~.
 拆分后的每个算符（矩阵）演化的算法可以一样或不一样。
 
 \subsection{电场演化的直接计算}
-\pentry{平面波的球谐展开\upref{Pl2Ylm}}{nod_32c4}
+\pentry{平面波的球谐展开\nref{nod_Pl2Ylm}}{nod_32c4}
 事实上，注意到 $\exp(\I q\bvec E\vdot\bvec r\dd t)$ 不过是一个普通的平面波函数而不是微分算符， 所以我们只需要把它和波函数相乘： $\exp(\I q\bvec E\vdot\bvec r\dd t)\Psi$。 为了使相乘后的函数仍然具有\autoref{eq_HyTDSE_3} 的形式， 可以先根据\autoref{eq_Pl2Ylm_1}~\upref{Pl2Ylm} 对其进行分波展开（$\exp(\I q\bvec E\vdot\bvec r\dd t) = \sum_{l'',m''}R_{l'',m''}Y_{l'',m''}$）。 所以演化后的每个分波的径向波函数就是
 \begin{equation}\label{eq_HyTDSE_24}
 \begin{aligned}
@@ -175,7 +175,7 @@ H_0 \psi_{l} = \I \pdv{\psi_{l}}{t}~.
 一种看似可能的近似方法是把 $\exp(\I q\bvec E\vdot\bvec r\dd t)$ 展开为前两三项。但这样一来其实和直接求 $\mat F$ 矩阵进而 $\mat F^2$ 没有什么区别了。 事实上保留两三项并不稳定，不然也不需要用 Crank-Nicolson 或者 Lanczos 这么费时的办法了。 所以还是老老实实把平面波展开成贝塞尔函数。
 
 \subsection{速度规范}\label{sub_HyTDSE_1}
-\pentry{速度规范\upref{LVgaug}}{nod_e7b3}
+\pentry{速度规范\nref{nod_LVgaug}}{nod_e7b3}
 在速度规范下， 当矢势不为零时， 长度规范波函数乘以 $\exp(\I \bvec A \vdot \bvec r)$ 就是速度规范波函数（\autoref{eq_LVgaug_6}~\upref{LVgaug}）。 这导致不同分波的概率不同。 考虑到强场下矢势就是波包的速度， 这个相位因子有助于让波函数的波长变长， 使所需的分波大大减少（频率高的平面波需要更多球谐函数展开\upref{Pl2Ylm}）。
 
 \textbf{特别注意}：在速度规范下即使只考虑从基态的单光子电离，也需要好几个分波，因为电矢势不为零时，波函数比起长度规范叠乘了一个平面波，而这个平面波需要更多分波才能展开。

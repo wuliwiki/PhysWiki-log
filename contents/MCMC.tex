@@ -229,3 +229,121 @@ Metropolis–Hastings 算法通过将 $\alpha(i, j)$ 缩放到 $ C\alpha(i, j) =
 
 从 $\mathcal{X}$ 中选择任意初始值 $X^0$。在当前状态 $X^t$ 经过 $t$ 步之后，下一步涉及从提议转移分布 $T(y, X^t)$ 中提取 $Y$ 并生成 $u\sim U (0,1)$。随后是非常关键的步骤：
 
+随后的关键步骤是基于以下规则更新 $X^{t+1}$：
+
+\begin{align}
+   X^{(t+1)} = \begin{cases}
+     Y & \text{若 } u \leq \alpha(X^{(t)}, Y) \\
+     X^{(t)} & \text{其他情况} 
+   \end{cases} ~.
+\end{align}
+
+\textsl{\textbf{证明：}MH 抽样的转移概率 $A(x,y) = P(X^{(t+1)} = y | X^{(t)} = x)$ 满足详细平衡条件。 } 当 $x\neq y$ 时，我们有
+
+\begin{align}
+\pi(x) A(x,y) =& \pi(x) T(y , x) \min \left\{ 1, \frac{\pi(y)T(x , y)}{\pi(x)T(y , x)} \right\}\\
+=& \min \left\{ \pi(x)T(y , x), \pi(y)T(x , y) \right\}\\
+=&\pi(y) T(x, y) \min \left\{ 1, \frac{\pi(x)T(y , x)}{\pi(y)T(x, y)} \right\}\\
+=& \pi(y) A(y,x)~.
+\end{align}
+
+下面的 Python 代码演示了 MH 算法的实现，包括示例和绘制双峰分布的抽样图。这个例子双峰比较靠近彼此，实际上若是\textbf{双峰分开的比较远}，那么有时该算法就不能很好的进行抽样，也就是抽样集中在一个峰上而忽略了另一个，这时就需要我们选择一个\textbf{方差大}的提议分布。
+
+\begin{lstlisting}[language=python]
+from scipy.integrate import quad
+def target_distribution(x):
+    return 0.5 * np.exp(-0.2 * (x + 2)**2) + 0.5 * np.exp(-0.2 * (x - 2)**2)
+def normalized_target_distribution(x):
+    normalization_factor, _ = quad(target_distribution, -np.inf, np.inf)
+    return target_distribution(x) / normalization_factor
+def gaussian_proposal(current_state, std_dev=1.0):
+    return np.random.normal(current_state, std_dev)
+def metropolis_hastings_sampling(target, proposal, 
+                                num_samples, initial_state=0):
+    samples = [initial_state]
+    current_state = initial_state
+    for i in range(num_samples):
+        proposed_state = proposal(current_state)
+        acceptance_ratio = min(1, 
+                    target(proposed_state) / target(current_state))
+        if np.random.rand() < acceptance_ratio:
+            current_state = proposed_state
+        samples.append(current_state)
+    return samples
+    
+num_samples = 20000
+samples = metropolis_hastings_sampling(target_distribution, 
+    gaussian_proposal, num_samples)
+
+plt.hist(samples, bins=100, density=True,
+         alpha=0.7, label='Sampled Distribution')
+x = np.linspace(-7, 7, 1000)
+plt.plot(x, normalized_target_distribution(x),
+        label='True Distribution')
+\end{lstlisting}
+
+\begin{figure}[ht]
+\centering
+\includegraphics[width=12cm]{./figures/733c66f838c07a3c.png}
+\caption{Metropolis-Hastings Sampling of Bimodal Distribution} \label{fig_MCMC_1}
+\end{figure}
+
+\subsubsection{Gibbs采样}
+
+MH采样方法包括多个步骤，尝试从先前状态转移到新状态。随后，根据样本提议与目标分布的接近程度接受或拒绝提议样本。拒绝导致保留先前状态，从而增强了效率。相比之下，Gibbs采样仅致力于沿着坐标轴移动，并利用当前点的条件分布确定后续的试验抽样分布。该方法接受所有试验样本，无需拒绝，从而可能提高效率。具体而言，在Gibbs采样中，指定 $T(y, x)$ 确保了 $A(x,y) = 1$ 的恒定真值，促进了加速收敛和抽样率。
+
+Gibbs采样器通过在每个步骤中仅抽样一个变量（坐标轴）来更新完整的变量集，并利用条件分布从联合分布中抽样。在数学上，假设一个多维概率分布 $p(x_1, x_2, ..., x_n)$，Gibbs采样算法的操作如下：首先，从当前状态 $(x_1^{(t)}, x_2^{(t)}, ..., x_n^{(t)})$ 中随机选择一个变量 $x_i$。随后，基于其他变量的当前值，从条件概率分布 $p(x_i | x_1^{(t)}, x_2^{(t)}, ..., x_{i-1}^{(t)}, x_{i+1}^{( t)}, ..., x_n^{(t)})$ 中提取新值 $x_i^{(t+1)}$。这个迭代过程持续进行，直到满足收敛条件的样本被获得。
+
+Gibbs采样通过在每个步骤中基于条件概率进行迭代抽样，逐渐使样本序列朝向目标分布收敛。类似于前述解释，证明Gibbs采样满足详细平衡条件涉及考虑 $\boldsymbol x = (x_1, x_2, \dots, x_n)$ 和选择 $x_i$ 的概率作为 $q(i)$。如果 $\boldsymbol x$ 和 $\boldsymbol y$ 仅在恰好一个变量 $x_i$ 的状态上不同，其中 $y_j = x_j$ 对于 $j\neq i$，$y_i\neq x_i$，则有：
+
+\begin{align}
+\pi(\boldsymbol x) A(\boldsymbol x,\boldsymbol y) =& \pi(\boldsymbol x ) q(i) p(y_i, \boldsymbol x_{j\neq i})\\
+=& p(x_i, \boldsymbol x_{j\neq i})q(i)\frac{p(y_i, \boldsymbol x_{j\neq i})}{p(\boldsymbol x_{j\neq i})}\\
+=&p(y_i, \boldsymbol x_{j\neq i})q(i)\frac{p(x_i, \boldsymbol x_{j\neq i})}{p(\boldsymbol x_{j\neq i})}\\
+=& \pi(\boldsymbol y ) q(i) p(x_i, \boldsymbol x_{j\neq i}) = \pi(\boldsymbol x) A(\boldsymbol y,\boldsymbol x)
+~.
+\end{align}
+
+以下Python代码演示了Gibbs算法的实现，包括用于对二维正态分布进行抽样的示例和绘图：
+
+\begin{figure}[ht]
+\centering
+\includegraphics[width=12cm]{./figures/c42e4380acfe50f1.png}
+\caption{2D Gibbs Sampling with True Distribution Contour} \label{fig_MCMC_2}
+\end{figure}
+
+\begin{lstlisting}[language=python]
+from scipy.stats import multivariate_normal
+
+mean = [2, 3]
+cov = [[1, 0.5], [0.5, 2]]
+rv = multivariate_normal(mean, cov)
+
+def gibbs_sampling(num_samples, init=(0, 0)):
+    samples = np.zeros((num_samples, 2))
+    samples[0] = init
+    for i in range(1, num_samples):
+        x = samples[i - 1, 0]
+        y = samples[i - 1, 1]
+        x = np.random.normal(mean[0] + cov[0][1] * 
+        (y - mean[1]) / cov[1][1], 
+        np.sqrt(cov[0][0] - (cov[0][1] ** 2) / cov[1][1]))
+        y = np.random.normal(mean[1] + 
+        cov[0][1] * (x - mean[0]) / cov[0][0],
+        np.sqrt(cov[1][1] - (cov[0][1] ** 2) / cov[0][0]))
+        samples[i] = [x, y]
+    return samples
+
+num_samples = 5000
+samples = gibbs_sampling(num_samples)
+
+x = np.linspace(-2, 6, 100)
+y = np.linspace(-2, 8, 100)
+X, Y = np.meshgrid(x, y)
+pos = np.dstack((X, Y))
+Z = rv.pdf(pos)
+
+plt.figure(figsize=(10, 6))
+plt.contour(X, Y, Z, levels=15)
+plt.scatter(samples[:, 0], samples[:, 1], alpha=0.2, label='Gibbs Samples')
+\end{lstlisting}
