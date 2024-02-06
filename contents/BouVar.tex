@@ -1,0 +1,109 @@
+% 有界变差
+% keys 实分析|数学分析|黎曼－斯蒂尔杰斯积分
+% license Usr
+% type Wiki
+
+有界变差（Bounded Variation）函数的总变差是有限的。这一概念是后面学习黎曼－斯蒂尔杰斯积分的关键基础。有界变差是描述实数轴上函数变化幅度的一种度量方式。
+
+考虑一个实值函数$f(x)$，在闭区间$a\leq x\leq b$上定义并有限。我们将这个区间分成一些小区间，形成一个分割
+\begin{align} 
+\Gamma=\{x_{0},\,x_{1},\,\ldots,\,x_{m}\} ~.
+\end{align}，也就是$\Gamma$是点$x_{i}$的集合，满足$x_{0}=a$，$x_{m}=b$，且$x_{i-1}<x_{i}$。
+
+对于每个分割$\Gamma$，我们计算一种和$S_{\Gamma}$，表示相邻点$f(x_{i})$和$f(x_{i-1})$的绝对差的总和。也就是，
+\begin{align} 
+S_{\Gamma}=S_{\Gamma}[f;a,b]=\sum_{i=1}^{m}|f(x_{i})-f(x_{i-1})|~.
+\end{align}
+函数$f$在$[a,b]$上的变差定义为
+\begin{align} 
+V=V[f;a,b]=\sup_{\Gamma}S_{\Gamma}~, 
+\end{align}
+其中$\sup$取遍$[a,b]$的所有分割$\Gamma$。由于$0\leq S_{\Gamma}<+\infty$，我们有$0\leq V\leq+\infty$。如果$V$有限，那么$f$在$[a,b]$上的变差有界；如果$V$是无穷大，那么$f$在$[a,b]$上的变差无界。
+
+下面列举几个简单有界变差函数的例子：
+
+\textbf{例子 1}：假设$f$在$[a,b]$上单调。那么，显然，每个$S_{\tau}$都等于$|f(b)-f(a)|$，因此$V=|f(b)-f(a)|$。
+
+\textsl{证明}：设${x_{i}:1\leq i\leq n}$是$[a,b]$的一个分割。考虑
+
+\begin{align} \sum_{i=1}^{n}|f(x_{i})-f(x_{i-1})|=\sum_{i=1}^{n}\left(f(x_{i})-f(x_{i-1})\right)=f(b)-f(a)~. \end{align}
+
+由于这个和的抵消性质，它对$[a,b]$的任何分割都是相同的。因此我们可以看到$V(f,[a,b])=f(b)-f(a)<\infty$。因此$f$在$[a,b]$上是有界变差的。
+
+类似地，如果$f$在$[a,b]$上是递减的，则$V(f,[a,b])=f(a)-f(b)$。
+
+\textbf{例子 2}：假设$f$的图形可以分为有限数量的单调弧段；即假设$[a,b]=\bigcup_{i=1}^{k}[a_{i}a_{i+1}]$，并且$f$在每个$[a_{i}a_{i+1}]$上是单调的。那么$V=\sum_{i=1}^{k}|f(a_{i+1})-f(a_{i})|$。
+
+\textbf{例子 3}：设$f$是狄利克雷函数，定义为$f(x)=1$对于有理数$x$，$f(x)=0$对于无理数$x$。那么，显然，对于任何区间$[a,b]$，$V[a,b]=+\infty$。
+
+\textsl{证明}：设$n\in\mathbb{Z}$，$n>0$。设$[a,b]$是$\mathbb{R}$中的闭区间。我们构造一个分割$P={x_{0},x_{1},...,x_{n+2}}$，使得$V(f,[a,b])\geq\sum_{i=1}^{n+2}|f(x_{i})-f(x_{i-1})|>n$，具体步骤如下。根据定义，$x_{0}=a$。由下面定理：
+\begin{theorem}{在任意两个不同的实数之间，存在一个有理数和一个无理数。}
+\end{theorem}
+可取$x_{1}$为介于$a$和$b$之间的一个无理数。然后取$x_{2}$为介于$x_{1}$和$b$之间的一个有理数。以此类推，取$x_{2i+1}$为介于$x_{2i}$和$b$之间的一个无理数，取$x_{3i}$为介于$x_{2i-1}$和$b$之间的一个有理数。最后，$x_{n+2}=b$。因此，我们已经创建了一个从$a$开始并且在有理数和无理数之间交替的分割，直到最后以$b$结束。现在考虑和$\sum_{i=1}^{n+2}|f(x_{i})-f(x_{i-1})|$，我们知道它至多等于$f$在$[a,b]$上的变差。因此：
+\begin{align} 
+V(f,[a,b])&\geq\sum_{i=1}^{n+2}|f(x_{i})-f(x_{i-1})| \\ &\geq\sum_{i=2}^{n+1}|f(x_{i})-f(x_{i-1})| \\ &=|f(x_{2})-f(x_{1})|+\cdots+|f(x_{n+1})-f(x_{n})| \\ &=|1-0|+|0-1|+\cdots+|1-0| \\ &=1+1+1+\cdots+1=n ~. 
+\end{align}
+因此$V(f,[a,b])$是任意大的，因此$V(f,[a,b])=\infty$。
+
+\textbf{例子 4}：定义在$[a,b]$上的函数$f$被称为在$[a,b]$上满足Lipschitz条件，如果存在常数$C$使得
+\begin{align} 
+|f(x)-f(y)|\leq C|x-y|, \
+\forall x,y\in[a,b]~.
+\end{align}
+这样的函数显然是有界变差的，$V[f;a,b]\leq C(b-a)$。例如，如果$f$在$[a,b]$上有连续的导数，那么（根据中值定理）$f$在$[a,b]$上满足Lipschitz条件。
+
+\begin{example}{设 $f(x)=x\sin\left(1/x\right)$ 为 $0<x\leq1$ 且 $f(0)=0$。 证明 $f$ 在 $[0,1]$ 上有界且连续，但不是有界变差$V[f;0,1]=+\infty$。}
+
+对于 $0 < x \leq 1$，我们知道 $-1 \leq \sin\left(\frac{1}{x}\right) \leq 1$，因此 $-x \leq x\sin\left(\frac{1}{x}\right) \leq x$，在 $[0,1]$ 上 $f(x)$ 有界。
+
+考虑 $x \neq 0$ 的情况。在这种情况下， $f(x) = x \sin(1/x)$ 是两个连续函数的乘积，其中 $x$ 是一个连续函数，而 $\sin(1/x)$ 也是连续的。因此，它们的乘积 $f(x)$ 在 $x \neq 0$ 的情况下是连续的。在 $x = 0$ 处，有
+\begin{equation}
+\lim_{{x \to 0}} f(x) = \lim_{{x \to 0}} x \sin\left(\frac{1}{x}\right) = 0~.
+\end{equation}
+
+因此，$f(x)$ 在 $[0,1]$ 上是连续的。
+
+注意到分割 $\Gamma = \{x_n\}=\{\frac{1}{n\pi+\pi/2}\}$ 我们有,  
+\begin{align} f(x_n)=x_n\sin(1/x_n)=\left\{\begin{matrix}x_n& \ \text{even}\\ -x_n& \ \text{odd}\end{matrix}\right.\qquad\text{for}\ n\geq0 ~.
+\end{align}
+带入计算变差的公式$2$，可得：
+\begin{align}
+\sum_{n=1}^m|f(x_n)-f(x_{n-1})|&=\sum_{n=1}^m|(-1)^n(x_n+x_{n-1})|\\
+&= \sum_{n=1}^m(x_n+x_{n-1})\\&=x_m+x_0+2\sum_{n=1}^{m-1}x_n\\\geq \sum_{n=1}^{m-1} x_n&=\sum_{n=1}^{m-1} \frac{1}{n\pi+\pi/2}~.
+\end{align}
+根据极限比较审敛法对比调和级数可得：
+\begin{align} 
+\sum_{n=1}^{m-1}\frac{1}{n\pi+\pi/2}\to\infty\qquad\mathrm{as}\qquad m\to\infty~. 
+\end{align}
+\end{example}
+
+\begin{exercise}{设 $f(x)=x\cos\left(\pi/x\right)$ 为 $0<x\leq1$ 且 $f(0)=0$。 证明 $f$ 在 $[0,1]$ 上有界且连续，但不是有界变差$V[f;0,1]=+\infty$。}
+\end{exercise}
+
+\begin{theorem}{}
+\begin{enumerate}
+\item 如果$f$在$[a,b]$上的变差有界，那么$f$在$[a,b]$上有界。
+\item 设$f$和$g$在$[a,b]$上的变差有界。那么对于任意实常数$c$，$cf$，$f+g$和$fg$在$[a,b]$上的变差也有界。此外，如果存在$\varepsilon>0$使得对于$[a,b]$中的$x$，$|g(x)|\geq\varepsilon$，那么$f/g$在$[a,b]$上的变差也有界。
+\end{enumerate}
+\end{theorem}
+
+\begin{example}{证明：}
+
+\end{example}
+\begin{theorem}{}
+\begin{enumerate}
+\item 如果$[a^{\prime},b^{\prime}]$是$[a,b]$的子区间，则$V[a^{\prime},b^{\prime}]\leq V[a,b]$；即，随着区间的增加，变差也增加。
+\item 如果$a<c<b$，则$V[a,b]=V[a,c]+V[c,b]$；即，相邻区间上的变差是可加的。
+\end{enumerate}
+\end{theorem}
+开始证明之前，注意到如果$\Gamma$是$\Gamma$的细分，即$\Gamma$包含了$\Gamma$的所有分割点以及一些额外的点，那么$S_{\Gamma}\leq S_{\bar{\Gamma}}$。这是在$\bar{\Gamma}$包含$\Gamma$的所有点加上一个额外点的情况下，由三角不等式得出的。
+
+\begin{example}{证明：}
+
+\end{example}
+
+\begin{example}{如果 $[a^{\prime},b^{\prime}]$ 是 $[a,b]$ 的子区间，则证明 $P[a^{\prime},b^{\prime}]\leq P[a,b]$ 和 $N[a^{\prime},b^{\prime}]\leq N[a,b]$。}
+
+\end{example}
+
+

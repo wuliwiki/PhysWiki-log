@@ -3,6 +3,7 @@
 % license Xiao
 % type Tutor
 
+
 \addTODO{预备知识待确定}
 
 \pentry{本原多项式（线性代数）\nref{nod_PPlyR}，Galois扩张\nref{nod_GExt}}{nod_9a52}
@@ -47,22 +48,23 @@ $n$次\textbf{单位根}即形如$x^n-1$的多项式在$\mathbb{C}$中的根，�
 \Phi_1(x) = x-1~,
 \end{equation}
 
-\begin{equation}\label{eq_Cycltm_2}~,
-\Phi_2(x) = x+1
+\begin{equation}\label{eq_Cycltm_2}
+\Phi_2(x) = (x^2-1)/\Phi_1(x) =  x+1~,
 \end{equation}
 
 \begin{equation}
-\Phi_3(x) = (x^3-1)/(x-1) = x^2+x+1~,
+\Phi_3(x) = (x^3-1)/\Phi_1(x) = x^2+x+1~,
 \end{equation}
 
 \begin{equation}
-\Phi_4(x) = (x^4-1)/(x^2-1) = x^2+1~,
+\Phi_4(x) = (x^4-1)/\left(\Phi_1(x) \times \Phi_2(x)\right) = x^2+1~,
 \end{equation}
 
 \begin{equation}
-\Phi_5(x) = (x^5-1)/(x-1) = x^4+x^3+x^2+x+1~.
+\Phi_5(x) = (x^5-1)/\Phi_1(x) = x^4+x^3+x^2+x+1~.
 \end{equation}
 
+后面几个分圆多项式的构造，实际上运用到了\autoref{the_Cycltm_1} 。
 % 注意后三个例子里，都除以了一个多项式。为什么这么做？
 
 \end{example}
@@ -140,7 +142,7 @@ x^{2d}-1 = f(x)\Phi_d(x)~,
 
 \textbf{证毕}。
 
-
+一个有趣的事实是，小于 $105$ 次的分圆多项式的系数都来自 $\{-1,0,1\}$，而 $105$ 次分圆多项式的系数第一次超出 $\{-1, 0, 1\}$。它的七次项系数为 $-2$。
 
 
 \begin{theorem}{}\label{the_Cycltm_5}
@@ -192,6 +194,22 @@ x^{2d}-1 = f(x)\Phi_d(x)~,
 
 
 
+\begin{theorem}{}\label{the_Cycltm_6}
+对于奇整数 $n>1$，有 $\Phi_{2n}(x) = \Phi_n(-x)$。
+\end{theorem}
+
+\textbf{证明}：
+
+设 $\varepsilon$ 是某 $2n$ 次本原单位根。
+
+因为 $(\varepsilon^n)^2 = 1$，则 $\varepsilon^n = \pm 1$。考虑到 $n$ 是奇整数，就有 $\varepsilon^n = -1$，从而 $(-\varepsilon)^n = 1$，所以 $-\varepsilon$ 是 $n$ 次本原单位根。
+这使得有映射：
+$$\theta: P_{2n} \rightarrow P_n, z \rightarrow -z ~.$$
+这显然是单射，而欧拉函数 $\varphi(2n) = \varphi(2)\varphi(n) = \varphi(n)$。这使得 $\theta$ 一一对应。从而
+$$\Phi_{2n}(x) = \prod_{z \in P_{2n}} (x-z) = \prod_{z \in P_n} (x-(-z)) = \prod_{z \in P_n} (x+z) = \Phi_n(-x)~.$$
+这里 $P_n$ 代表所有 $n$ 次本原单位根组成的集合。
+\textbf{证毕}。
+
 
 
 
@@ -208,7 +226,6 @@ $\Phi_n(0)$就是全体$n$次本原单位根的积。记$\varepsilon=\exp{2\pi\I
 由于$k$与$n$互素当且仅当$n-k$与$n$互素，故本原单位根的还是本原单位根。当$n>1$时，要么$n$为奇数，则$(-1)^n\neq 0$；要么$n$为偶数，则$2$和$n$不互素，故$-1$不是$n$次本原单位根。所以$n>1$时$-1$不是$n$次本原单位根。于是本原单位根以共轭形式成对出现，每对的乘积都是$1$。
 
 \textbf{证毕}。
-
 
 
 
@@ -369,6 +386,71 @@ x^n-1 = \prod_{d\mid n}\Phi_d(x)~.
 \end{example}
 
 
+\begin{theorem}{}\label{the_Cycltm_7}
+对于素数 $p$，$n, k \in \mathbb N$，若 $p$ 与 $n$ 互质，则 $\Phi_{p^k n}(x) = (\Phi_n(x^{p^k}))/(\Phi_n(x^{p^{k-1}}))$。
+\end{theorem}
+
+
+
+\begin{theorem}{}
+若存在整数 $x$ 满足 $\left(\Phi_{a}(x) , \Phi_b(x)\right) > 1$，则 $\frac{a}{b}$ 为一个素数幂。
+\end{theorem}
+
+\textbf{证明}：
+
+取素数 $p | (\Phi_a(x), \Phi_b(x))$，令 $a=p^u A, b=p^v B$，$u, v \in \mathbb N$，$(A,p)=(B,p)=1$。那么只需证 $A=B$。
+
+考虑到 $\Phi_a(x) | (x^a-1)$，从而 $p | (x^a-1)$，故 $(x, p) = 1$，即 $x$ 与 $p$ 互质。
+
+考虑 $p$ 与 $\Phi_A(x)$ 的数论关系。
+\begin{enumerate}
+\item 当 $u = 0$ 时，$A = a$，显然 $p | \Phi_A(x)$。
+\item 当 $u = 1$ 时，$\Phi_A(x^p)=\Phi_a(x)\Phi_A(x)$。由费马小定理，$\Phi_A(x) \equiv \Phi_A(x^p)\equiv 0\pmod p$。
+\item 当 $u > 1$ 时，由\autoref{the_Cycltm_7}，$\Phi_{A}(x) = (\Phi_A(x^{p^a}))/(\Phi_A(x^{p^{a-1}})) = \Phi_a(x) \equiv 0 \pmod p$。故 $\phi_A(x^{p^a}) \equiv 0 \pmod p$。对这式应用费马小定理可以得到，$x^{p^a} \equiv x \pmod p$，也就得到 $\Phi_A(x) \equiv 0 \pmod p$。
+\end{enumerate}
+故 $p | \Phi_A(x)$。同理可得 $p | \Phi_B(x)$。
+
+反证，若 $A \neq B$，不失一般性地设 $A > B$，设 $d = (A, B) < A$。
+那么 $(x^A-1, x^B-1)=x^d-1$，而 $p | (x^d-1)$。这说明存在 $t$ 使得 $p | \Phi_t(x)$。而 $p|\Phi_A(x)$，故必然有 $t | A$，可以证明 $p | A$，矛盾！
+
+\textbf{证毕}。
+
+\begin{theorem}{}
+若 $n=p^m > 1$，其中 $p$ 为素数，则 $\Phi_n(1) = p$；否则 $\Phi_n(1) = 1$。当 $n=1$ 的时候 $\Phi_1(1) = 0$。
+\end{theorem}
+\textbf{证明}：
+
+由\autoref{the_Cycltm_4}，对等式两侧都取对数，可以得到
+$$\log \Phi_n(x) = \sum_{d | n} \left(\mu(n/d) \cdot \log(x^d-1) \right)~.$$
+
+而考虑到 $x^d-1 = (x-1)(x^{d-1}+x^{d-2}+\dots+x^2+x+1)$，
+$$\log \Phi_n(x) = \sum_{d|n} \left(\mu(n/d) \cdot [\log(x-1)+\log(x^{d-1}+x^{d-2}+\dots+x^2+x+1)]\right) ~.$$
+
+当 $x\rightarrow 1$ 时，这式求极限可化为
+$$\log \Phi_n(1) = \sum_{d|n} \left(\mu(n/d) \log d\right)~,$$
+
+这其实是狄利克雷卷积，并且结果为\autoref{the_MbusF_4}~\upref{MbusF}中提到的 von Mangoldt 函数（求狄利克雷卷积这对应于求逆变换，即反演）。
+
+由 von Mangoldt 函数的性质，有：
+\begin{equation}
+\Lambda(n) =
+\left\{\begin{aligned}
+\log p, &n = p^m, m\ge 1, p \in \mathbb P\\
+0, &\text{otherwise} 
+\end{aligned}\right . ~
+\end{equation}
+两边取指数即证。（这里 $\mathbb P$ 代表全体素数组成的集合。）
+
+\textbf{证毕}。
+
+下面提供一个另思路，具体证明过程留给读者进行练习。
+
+当 $n$ 为素数时，$\Phi_n(1) = n$，即证。
+当 $n$ 非素数时，利用数学归纳法可以证明。值得注意的是，当 $p=2$ 的时候应当单独讨论。
+
+特别的，如果还想计算 $\Phi_n(-1)$，可以利用 $\Phi_n(-x) = \Phi_{2n}(x)$。(这里利用\autoref{the_Cycltm_6} ，要求 $n>1$ 是奇整数。)
+
+
 
 
 \subsection{分圆域}
@@ -399,9 +481,6 @@ $\Phi_n$的根的置换，必是$C$到自身的一个自同构。又因为$C$到
 则$\sigma\in \opn{Aut}C$当且仅当$k$与$n$互素（保证$\varepsilon_n^k$是本原单位根）。于是各$\sigma_k$对应各$\bar{k}\in\mathbb{Z}/n\mathbb{Z}$，而“$k$与$n$互素”当且仅当$\bar{k}$有乘法逆元。从而得证$\opn{Aut}C=U_n$。
 
 \textbf{证毕}。
-
-
-
 
 
 
