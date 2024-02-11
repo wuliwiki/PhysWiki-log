@@ -1,10 +1,10 @@
-% 一阶不含时微扰理论（量子力学）
+% 不含时微扰理论（量子力学）
 % license Xiao
 % type Tutor
 
 \pentry{定态薛定谔方程（单粒子多维）\nref{nod_QMndim}， 厄米矩阵的本征问题\nref{nod_HerEig}， 子空间\nref{nod_SubSpc}}{nod_7312}
 
-\footnote{参考 \cite{GriffQ} \cite{Shankar} \cite{Sakurai} \cite{Merzbacher} 相关章节。}量子力学中的不含时微扰理论实际上是线性代数中求解厄米矩阵本征值问题的一种近似方法， 无需任何量子力学知识， 笔者建议完全从线性代数的角度理解该理论而不考虑量子力学。
+\footnote{参考 \cite{GriffQ} \cite{Shankar} \cite{Sakurai} \cite{Merzbacher} 相关章节。}量子力学中的不含时微扰理论实际上是线性代数中求解厄米矩阵本征值问题的一种近似方法， 无需任何量子力学知识， 笔者建议完全从线性代数的角度理解该理论而不考虑量子力学（见\autoref{sub_TIPT_3}）。
 
 我们只讨论量子力学中束缚态， 因为它们的本征值和厄米矩阵的本征值一样是离散的。 唯一需要注意的是， 线性代数中的厄米矩阵是有限维的（即行数和列数有限）， 而量子力学中的厄米矩阵可能是无穷维的（例如量子简谐振子\upref{SHO}），但这一般不会导致什么问题。
 
@@ -61,6 +61,52 @@ E_n^1 = \mel{\psi_n^0}{H^1}{\psi_n^0}~,
 加入了微扰后，每个简并空间可能会分裂成多个不同能级的简并子空间\upref{SubSpc}，甚至使简并会完全消失。这也叫做\textbf{能级分裂（energy splitting）}。
 
 应用实例见氢原子斯塔克效应\upref{HStark}和塞曼效应\upref{ZemEff}。
+
+\subsection{矩阵描述}\label{sub_TIPT_3}
+\pentry{泰勒展开\nref{nod_Tayl}}{nod_44a7}
+为了读者们不在推导中迷失。 我们可以从矩阵的角度来看看不含时微扰究竟在解决什么问题。 若我们使用线性厄米算符 $H^0$ 的正交归一本征矢 $\psi_n^0$ 作为基底， 那么 $H^0$ 就可以表示为一个对角矩阵
+\begin{equation}\label{eq_TIPT_13}
+\mat H^0 = \pmat{E_1^0 & 0 & 0 & \dots\\ 0 & E_2^0 & 0  & \dots\\
+0 & 0 & E_3^0 & \dots\\
+\vdots & \vdots & \vdots & \ddots}~.
+\end{equation}
+若我们把基底的本征值从小到大排列， 那么 $E_1^0, E_2^0, \dots$ 也会按从小到大排列。 若没有简并， 则 $E_n^0$ 各不相同， 若存在简并， 则相邻的若干个 $E_n^0$ 的值可能相同。 使用同样的基底把 $H^1$ 表示为矩阵 $\mat H^1$， 则矩阵元为
+\begin{equation}
+H^1_{m,n} = \mel{\psi_m^0}{H^1}{\psi_n^0}~.
+\end{equation}
+一般来说该矩阵任何元都可能为非零。
+
+总哈密顿矩阵为 $\mat H = \mat H^0 + \lambda\mat H^1$。 注意这三者都往往是无穷大的矩阵（例如量子简谐振子），但在实际计算中我们往往会把它截断为有限维的，并通过增加矩阵大小来逼近精确结果。
+
+理论上，通过直接求解矩阵的本征方程
+\begin{equation}
+(\mat H^0 + \lambda\mat H^1)\bvec{v}_n = E_n \bvec{v}_n~.
+\end{equation}
+就可以精确得到任意 $\lambda$ 的 $E_n$ 和 $\bvec{v}_n$ 而无需任何阶的微扰修正
+\begin{equation}
+\psi_n = \sum_i v_{n,i} \psi_i~.
+\end{equation}
+
+注意 $E_n$ 和 $\bvec{v}_n$ 其实都是 $\lambda$ 的函数， 且 $\lambda = 0$ 时
+\begin{equation}
+E_n(0) = E_n^0~.
+\end{equation}
+\begin{equation}
+\bvec v_n(0) = (\dots, 0, 1, 0, \dots) \quad (\text{第 $n$ 个数是 $1$})~.
+\end{equation}
+当 $\lambda$ 绝对值逐渐变大时， $E_n(\lambda)$ 一般会发生非线性的变化， 可以泰勒展开\upref{Tayl}为 $\lambda$ 的多项式：
+\begin{equation}\label{eq_TIPT_14}
+E_n(\lambda) = \sum_{m=0}^\infty \lambda^m E_n^m~.
+\end{equation}
+而其中 $E_n^m \lambda^m$ 就是第 $n$ 个本征值的 $m$ 阶修正 $E_n^m$。 同理， $\bvec v_n(\lambda)$ 也是关于 $\lambda$ 的非线性函数， 泰勒展开为
+\begin{equation}
+\bvec v_n(\lambda) = \sum_{m=0}^\infty \lambda^m \bvec v_n^m~.
+\end{equation}
+
+\subsubsection{本征值的简并与分裂}
+若 $\lambda = 0$ 时存在简并， 即\autoref{eq_TIPT_13} 中若干相邻的 $E_n^0$ 相等， 那么随着 $\lambda$ 增加， 它们可能会变得不同， 这是因为\autoref{eq_TIPT_14} 中它们的高阶系数 $E_n^m$ 未必相等。
+\addTODO{讨论简并情况，画能级随 $\lambda$ 增加而分裂的图}
+\addTODO{当 $H^1$ 是块对角矩阵时， 可以视为每个子空间中的本征方程，子空间之间没有耦合。 例如氢原子中 $H^1\propto z$ 时不同的 $m$。}
 
 \subsection{一阶微扰推导：准备}
 \pentry{对易厄米矩阵与共同本征矢\nref{nod_Commut}}{nod_5985}

@@ -7,11 +7,16 @@
 \subsection{$z$ 方向跃迁偶极子矩阵元}
 \autoref{tab_HDipM_1} 给出了核电荷数 $Z=1$ 时的 $\mel{\psi_{n',l',m'}}{z}{\psi_{n,l,m}}$， 由于这\textbf{是一个实对称矩阵}\upref{SymMat}， 只给出矩阵的下半三角。 当 $Z > 1$ 时把表中每个矩阵元除以 $Z$ 即可。 这是因为 $\psi_{n,l,m}$ 与 $Z$ 成反比进行缩放（保持归一化）， 导致 $\abs{\psi_{n,l,m}}^2$ 和 $z$ 的平均值也是如此。另外注意 $\mel{\psi_{n',l',m'}}{z}{\psi_{n,l,m}} = \mel{\psi_{n',l',-m'}}{z}{\psi_{n,l,-m}}$。
 
-根据\autoref{eq_SelRul_1}~\upref{SelRul} 可以用 3j 系数表示角向积分，仅留下径向积分：
+根据\autoref{eq_SelRul_1}~\upref{SelRul} 可以用 3j 系数表示角向积分，进而化简为\autoref{eq_HyTDSE_11}~\upref{HyTDSE}
+\begin{equation}
+\mathcal C_{l,m} = \mel{Y_{l,m}}{\cos\theta}{Y_{l+1,m}} = \sqrt{\frac{(l+1)^2-m^2}{(2l+1)(2l+3)}}~.
+\end{equation}
+仅留下径向积分：
 \begin{equation}\ali{
 &\quad \mel{\psi_{n',l',m'}}{r\cos\theta}{\psi_{n,l,m}}\\
-&= (-1)^m\sqrt{(2l+1)(2l'+1)} \pmat{l & 1 & l'\\ 0 & 0 & 0}\pmat{l & 1 & l'\\ -m & 0 & m'}\\
-&\quad\times \int_0^\infty R_{n',l'}(r)R_{n,l}(r)r^2\dd{r}~.
+&= (-1)^m\sqrt{(2l+1)(2l'+1)} \pmat{l' & 1 & l\\ 0 & 0 & 0}\pmat{l' & 1 & l\\ -m' & 0 & m}\\
+&\quad\times \int_0^\infty R_{n',l'}(r)R_{n,l}(r)r^2\dd{r}\\
+&= \delta_{l\pm 1,l'}\delta_{m,m'}\int_0^\infty R_{n',l'}(r)R_{n,l}(r)r^2\dd{r}~.
 }\end{equation}
 
 \begin{table}[ht]
@@ -68,17 +73,20 @@ Print[d // MatrixForm];
 Matlab 代码如下（请自行修改矩阵尺寸和循环范围）， \verb`hydrogen_Rnl` 函数见类氢原子的束缚态\upref{HWF}。
 \begin{lstlisting}[language=matlab,caption=h\_dipole\_z.m]
 % hydrogen polarizability of good eigen states
-function h_dipole_z
+function d_z = h_dipole_z
 % === params ===
 Z = 1;
 m = 0;
 % ==============
 
-d_z = zeros(2,2);
+d_z = 1;
+k1 = 0;
 for n1 = 1:4
     for l1 = 0:n1-1
+        k1 = k1 + 1; k2 = 0;
         for n2 = 1:4
             for l2 = 0:n2-1
+                k2 = k2 + 1;
                 d_z(k1,k2) = h_dipole_z1(Z,n1,l1,n2,l2,m);
             end
         end
@@ -87,8 +95,11 @@ end
 end
 
 function d_z = h_dipole_z1(Z,n1,l1,n2,l2,m)
+if (abs(l1-l2) ~= 1)
+    d_z = 0; return;
+end
 integrand = @(r) hydrogen_Rnl(Z,n1,l1,r) ...
-    .*hydrogen_Rnl(Z,n2,l2,r).*r.^2;
+    .* hydrogen_Rnl(Z,n2,l2,r) .* r.^3;
 % radial integral
 I_r = integral(integrand, 0, inf);
 % angular integral
