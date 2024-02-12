@@ -24,7 +24,7 @@
 \begin{equation}\label{eq_HWF_3}
 \psi_{nlm} (r,\theta ,\phi) = R_{nl}(r) Y_{l,m}(\theta, \phi)~.
 \end{equation}
-其中 $n$ 是\textbf{主量子数}（$n = 1, 2, \dots$）， $l$ 是\textbf{角量子数}（$l = 0, 1, \dots, n - 1$）， $m$ 是\textbf{磁量子数}（$m = -l, -l+1, \dots, l$）。 $R_{nl}(r)$ 是归一化的\textbf{径向波函数}（见下文）， $Y_{l,m}(\theta, \phi)$ 是归一化的\textbf{球谐函数}（见“球谐函数列表\upref{YlmTab}”）。 波函数概率密度的截面图如\autoref{fig_HWF_2}。\footnote{为什么图中用 95\% 而不是 100\%？ 因为无论离原子核多远电子出现的概率都不会完全等于零，而是一个指数下降的尾巴（exponential tail）。}
+其中 $n$ 是\textbf{主量子数}（$n = 1, 2, \dots$）， $l$ 是\textbf{角量子数}（$l = 0, 1, \dots, n - 1$）， $m$ 是\textbf{磁量子数}（$m = -l, -l+1, \dots, l$）。 $R_{nl}(r)$ 是归一化的\textbf{径向波函数}（见下文）， $Y_{l,m}(\theta, \phi)$ 是归一化的\textbf{球谐函数}（见“球谐函数列表\upref{YlmTab}”）。 波函数概率密度的截面图如\autoref{fig_HWF_2}。
 
 波函数 $\psi_{nlm}$ 对应的能级为
 \begin{equation}\label{eq_HWF_5}
@@ -48,7 +48,7 @@ $M, W$ 分别是 Whittacker M 和 W 函数， $x = 0$ 时， $M$ 函数总是为
 \begin{equation}\label{eq_HWF_2}
 R_{nl}(r) = \sqrt{\qty(\frac{2 Z}{n})^3 \frac{(n - l - 1)!}{2n (n + l)!}} \qty(\frac{2Zr}{n})^l  L_{n-l-1}^{2l+1}\qty(\frac{2Zr}{n}) \E^{-Zr/n}~,
 \end{equation}
-其中 $L_n^l(x)$ 是\textbf{连带拉盖尔多项式（associated Laguerre polynomial）}。 注意 $Z$ 的作用是把径向波函数关于原点缩小 $Z$ 倍， 并保持波函数归一化。
+其中 $L_n^l(x)$ 是\textbf{连带拉盖尔多项式（associated Laguerre polynomial）}。 注意 $Z$ 的作用是把径向波函数关于原点收缩 $Z$ 倍， 并保持波函数归一化。
 
 $Z = 1$ 时 $r R_{n,l}(r)$ 的函数图\footnote{我们以后会看到 $r R_{l,m}(r)$ 比 $R_{l,m}(r)$ 更常用}如\autoref{fig_HWF_1}
 \begin{figure}[ht]
@@ -96,24 +96,15 @@ end
 \end{lstlisting}
 
 \subsection{性质}
-我们要求氢原子每个束缚态满足正交归一化条件
-\begin{equation}\label{eq_HWF_10}\ali{
-&\int \Psi_{n',l',m'}\Cj(\bvec r)\Psi_{n,l,m}(\bvec r) \dd[3]{r}\\
-= &\int \int_0^\infty R_{n',l'}\Cj(r) Y_{l',m'}(\uvec r)R_{n,l}(r) Y_{l,m}(\uvec r) r^2 \dd{r}\dd{\Omega} = \delta_{n,n'}\delta_{l,l'}\delta_{m,m'}~.
-}\end{equation}
+我们要求氢原子每个束缚态满足归一化条件
+\begin{equation}
+\int \abs{\Psi_{n,l,m}(\bvec r)} \dd[3]{r} = \int \int_0^\infty \abs{R_{n,l}(r) Y_{l,m}(\uvec r)}^2 r^2 \dd{r}\dd{\Omega} = 1~.
+\end{equation}
 根据\autoref{eq_RadSE_5}~\upref{RadSE} 和\autoref{eq_RadSE_7}~\upref{RadSE} 有
 \begin{equation}
-\int_0^\infty R_{n', l}(r) R_{n,l}(r) r^2 \dd{r} = \delta_{n,n'}~.
+\int_0^\infty R_{n', l}\Cj(r) R_{n,l}(r) r^2 \dd{r} = \delta_{n,n'}~.
 \end{equation}
 注意对不同的 $l$， 无论 $n,n'$ 相同或不同， 径向波函数都未必正交。
-
-Mathematica 代码如（\autoref{eq_HWF_10} 中 $(2,1,0)$ 和 $(3,1,0)$ 态的积分）
-\begin{lstlisting}[language=mma]
-Z = 1; Integrate[
- Conjugate[HydrogenPsi[Z, 2, 1, 0, r, th, phi]] HydrogenPsi[
-   Z, 3, 1, 0, r, th, phi] r^2 Sin[th], {r, 
-  0, Infinity}, {th, 0, Pi}, {phi, 0, 2 Pi}]
-\end{lstlisting}
 
 \subsection{径向概率分布}
 我们来求径向概率分布 $P(r)$。 $P(r)$ 的定义为： 发现粒子在 $r \in [a, b]$ （厚球壳）内的概率为 $\int_a^b P(r) \dd{r}$。 由于波函数的模长平方就是三维的概率密度， 有

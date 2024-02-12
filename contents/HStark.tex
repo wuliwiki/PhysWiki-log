@@ -3,7 +3,7 @@
 % type Tutor
 
 \begin{issues}
-\issueTODO
+\issueDraft
 \end{issues}
 
 \pentry{不含时微扰理论\nref{nod_TIPT}}{nod_8e0d}
@@ -19,12 +19,12 @@ H'_{l',l} = \mathcal{E_z}\mel{\psi_{n,l',m}}{z}{\psi_{n,l,m}}~.
 
 但事实上氢原子加上匀强电场后是不存在数学上严格的束缚态的，因为无论电场多弱，在电场反方向的某个距离外，势能都会小于基态能量，使波函数变为散射态。在含时薛定谔方程中，波函数可能会有长时间处于微扰理论给出的 “束缚态”，但这只能算是一种\textbf{亚稳态（metastable state）}，仍会有不为零的隧道电离概率。
 
-\begin{example}{类氢原子 $n=2$ 的斯塔克效应}
+\begin{example}{氢原子 $n=2$ 的斯塔克效应}
 先考虑 $n=2$， $m=0$ 的情况， 这是一个二维希尔伯特子空间，基底为 $\ket{2,0,0}$ 和 $\ket{2,1,0}$。 根据\autoref{tab_HDipM_1}~\upref{HDipM}， \autoref{eq_HStark_1} 为
 \begin{equation}
-\mat H' = -\frac{3}{Z}\mathcal{E_z}\pmat{0 & 1\\ 1 & 0}~.
+\mat H' = -3\mathcal{E_z}\pmat{0 & 1\\ 1 & 0}~.
 \end{equation}
-本征值为 $E_{\pm}^1 = \mp \frac{3}{Z}\mathcal{E}_z$， 好本征态为 $\ket{2\pm 0} = (\ket{200} \pm \ket{210})/{\sqrt 2}$， 也被称为 \textbf{Stark 态}。
+本征值为 $E_{\pm}^1 = \mp 3\mathcal{E_z}$， 好本征态为 $\ket{2\pm 0} = (\ket{200} \pm \ket{210})/{\sqrt 2}$， 也被称为 \textbf{Stark 态}。
 
 \begin{figure}[ht]
 \centering
@@ -40,62 +40,4 @@ d_z^{(\pm)} = \mel{2\pm}{z}{2\pm} = \pm 3~.
 \end{equation}
 \end{example}
 
-\begin{example}{氢原子斯塔克效应（能级截断）}\label{ex_HStark_2}
-事实上，在\autoref{ex_HStark_1} 中使用\autoref{eq_HStark_2} 计算二阶微扰十分繁琐，通常需要编程来数值计算。 除了按不同阶来计算微扰外，还有一个更直接的近似方法就是直接把总哈密顿 $H = H^0+H^1$ 用有限个 $\ket{n,l,m}$ （可以用 $n_\text{max}$ 作为截断条件）完整表示（例如\autoref{tab_HDipM_1}~\upref{HDipM}），然后数值将其对角化。 当 $n_\text{max}$ 无穷大，结果就是精确的（包含任意阶微扰）。若使用编程，该算法将比\autoref{ex_HStark_1} 更容易实现。
-
-首先可以用 “氢原子的跃迁偶极子矩阵元列表\upref{HDipM}” 中的 \verb`h_dipole_z.m` 程序生成 $\mat H^1$ 矩阵， 然后用 Matlab 自带的 \verb`eigen()` 函数求 $\mat H^0+\mat H^1$ 的本征值， 画出每个能级关于电场强度的曲线。
-\begin{figure}[ht]
-\centering
-\includegraphics[width=10cm]{./figures/25a24dd0ef58b912.png}
-\caption{当电场（横坐标）增加时， 氢原子 $n=2,3,4$ 的能级分裂（使用原子单位）} \label{fig_HStark_2}
-\end{figure}
-从这里我们肉眼只能看出 $E_n^1$ 随电场的线性变化， 但曲线中包含了任意 $E_n^m$。
-\end{example}
-
-\begin{example}{氢原子的极化率（二阶微扰）}\label{ex_HStark_1}
-若氢原子处于某个好量子态，使用一阶微扰求其极化率（polarizability） $\alpha$，定义为 $\bvec p_z = \alpha \bvec{\mathcal E_z}$，其中 $\bvec p_z$ 为 $z$ 方向的电偶极子， $\bvec{\mathcal E_z}$ 为电场强度。（实验数据参考\href{https://physicspages.com/pdf/Electrodynamics/Polarizability\%20of\%20hydrogen.pdf}{这篇}）
-
-该问题中， $H^1 = \mathcal{E}_z z$， $p_z = -\mel{\psi_n}{z}{\psi_n}$。 使用波函数的一阶修正 $\psi_n \approx \psi_n^0 + \psi_n^1$， 有
-\begin{equation}\ali{
-p_z &\approx -\mel{\psi_n^0 + \psi_n^1}{z}{\psi_n^0 + \psi_n^1}\\
-&= -\mel{\psi_n^0}{z}{\psi_n^0} - 2\Re[\mel{\psi_n^0}{z}{\psi_n^1}] - \mel{\psi_n^1}{z}{\psi_n^1}~.
-}\end{equation}
-其中第一项就是 $E_n^1/\mathcal{E}_z$。 第二项第三项分别是二阶和三阶小量，所以第三项可忽略。 根据\autoref{eq_TIPT2_4}~\upref{TIPT2}， 第二项的 $\mel{\psi_n^0}{z}{\psi_n^1}$ 对应二阶能量修正 $E_n^2/\mathcal{E}_z$，所以
-\begin{equation}
-p_{n,z} \approx p_{n,z}^1 + p_{n,z}^2 = -\frac{1}{\mathcal{E}_z}(E_n^1 + 2E_n^2)~.
-\end{equation}
-其中一阶能量修正
-\begin{equation}
-E_n^1 = \mel{\psi_n^0}{H^1}{\psi_n^0}~
-\end{equation}
-和电场成正比，而二阶能量修正（\autoref{eq_TIPT2_2}~\upref{TIPT2}）
-\begin{equation}\label{eq_HStark_2}
-E_n^2 = \sum_{m}^{E_m\ne E_n} \frac{\abs{\mel{\psi_m^0}{H^1}{\psi_n^0}}^2}{E_n^0-E_m^0}~.
-\end{equation}
-正比于电场平方。
-
-可见 $p_{n,z}^1$ 是一个常数， 而 $p_{n,z}^2$ 正比于电场，并决定极化率 $\alpha_n$。
-\addTODO{计算 $E_n^2$，参考\autoref{sub_HDipM_1}~\upref{HDipM}，但太复杂了，还是应该用\autoref{ex_HStark_2} 的方法}
-\end{example}
-
-\subsection{含时问题}
-以上我们讨论的都是不含时问题。 但是在真正的斯塔克效应实验中， 电场是对时间慢慢增加的。 如果初始时， 波函数处于 $n=2$ 子空间的任意状态， 例如 $\ket{20}$， 那么当缓慢施加电场后， 波函数会如何变化？ 这可以参考 “绝热近似（量子力学）\upref{AdiaQM}”。
-
-\begin{example}{$\ket{n,l,m}$ 的极化率}
-那么如何确定非好本征态如 $\ket{n,l,m}$ 的极化率呢？ 考虑 TDSE， 根据绝热近似\upref{AdiaQM}，若波函数初始处于 $\ket{n,l,m}$，需要先分解为好本征态的线性组合，
-\begin{equation}
-\ket{n,l,m} = \sum_\alpha c_{n,l,\alpha,m} \ket{n,\alpha,m}~.
-\end{equation}
-然后再考虑每个好本征态在电场中的变化。 把经过电场扭曲后的 $\ket{n,l,m}$ 记为 $\ket{n,l,m,*}$，则
-\begin{equation}
-\ket{n,l,m,*} = \sum_\alpha c_{n,l,\alpha,m} \ket{n,\alpha,m,*}~.
-\end{equation}
-\begin{equation}
-p_{(n,l,m),z} = -\mel{n,l,m,*}{z}{n,l,m,*} = -\sum_\alpha \abs{c_{n,l,\alpha,m}}^2\mel{n,\alpha,m,*}{z}{n,\alpha,m,*}~.
-\end{equation}
-其中近似认为 $\alpha\ne\alpha'$， $\mel{n,\alpha',m,*}{z}{n,\alpha,m,*} = 0$（\autoref{sub_TIPT_2}~\upref{TIPT}）。在电场为零时， 任意 $p_{(n,l,m),z} = 0$， 所以只有二阶修正起作用：
-\begin{equation}
-p_{(n,l,m),z} = \sum_\alpha \abs{c_{n,l,\alpha,m}}^2 p_{(n,\alpha,m),z}^2~.
-\end{equation}
-注意和电场成正比。
-\end{example}
+\addTODO{如果初始时， 波函数处于 $n=2$ 子空间的任意状态， 例如 $\ket{20}$， 那么当逐渐施加电场后， 波函数会如何变化？}
