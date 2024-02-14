@@ -1,11 +1,25 @@
-% 氢原子的跃迁偶极子矩阵元列表
+% 氢原子的跃迁偶极子矩阵元计算（束缚态之间）
 % license Xiao
 % type Tutor
 
 \pentry{氢原子的跃迁偶极子矩阵元和选择定则\nref{nod_SelRul}}{nod_4d67}
+本文使用原子单位制\upref{AU}。
 
-\subsection{$z$ 方向跃迁偶极子矩阵元}
-\autoref{tab_HDipM_1} 给出了核电荷数 $Z=1$ 时的 $\mel{\psi_{n',l',m'}}{z}{\psi_{n,l,m}}$， 由于这\textbf{是一个实对称矩阵}\upref{SymMat}， 只给出矩阵的下半三角。 当 $Z > 1$ 时把表中每个矩阵元除以 $Z$ 即可。 这是因为 $\psi_{n,l,m}$ 与 $Z$ 成反比进行缩放（保持归一化）， 导致 $\abs{\psi_{n,l,m}}^2$ 和 $z$ 的平均值也是如此。
+\subsection{$z$ 方向电场，束缚态到束缚态}
+\autoref{tab_HDipM_1} 给出了核电荷数 $Z=1$ 时的 $\mel{\psi_{n',l',m'}}{z}{\psi_{n,l,m}}$， 由于这\textbf{是一个实对称矩阵}\upref{SymMat}， 只给出矩阵的下半三角。 当 $Z > 1$ 时把表中每个矩阵元除以 $Z$ 即可。 这是因为 $\psi_{n,l,m}$ 与 $Z$ 成反比进行缩放（保持归一化）， 导致 $\abs{\psi_{n,l,m}}^2$ 和 $z$ 的平均值也是如此。另外注意 $\mel{\psi_{n',l',m'}}{z}{\psi_{n,l,m}} = \mel{\psi_{n',l',-m'}}{z}{\psi_{n,l,-m}}$。
+
+根据\autoref{eq_SelRul_1}~\upref{SelRul} 可以用 3j 系数表示角向积分，进而化简为\autoref{eq_HyTDSE_14}~\upref{HyTDSE}
+\begin{equation}
+\mathcal C_{l,m} = \mel{Y_{l,m}}{\cos\theta}{Y_{l+1,m}} = \sqrt{\frac{(l+1)^2-m^2}{(2l+1)(2l+3)}}~.
+\end{equation}
+仅留下径向积分：
+\begin{equation}\label{eq_HDipM_1}\ali{
+&\quad \mel{\psi_{n',l',m'}}{r\cos\theta}{\psi_{n,l,m}}\\
+&= (-1)^m\sqrt{(2l+1)(2l'+1)} \pmat{l' & 1 & l\\ 0 & 0 & 0}\pmat{l' & 1 & l\\ -m' & 0 & m}
+\int_0^\infty R_{n',l'}(r)R_{n,l}(r)r^2\dd{r}\\
+&= \delta_{m,m'}(\delta_{l+1,l'}\mathcal C_{l,m} + \delta_{l,l'+1}C_{l',m'})\int_0^\infty R_{n',l'}(r)R_{n,l}(r)r^3\dd{r}~.
+}\end{equation}
+
 \begin{table}[ht]
 \centering
 \caption{$\mel{\psi_{n',l',0}}{z}{\psi_{n,l,0}}$ 的下半三角， $Z=1$}\label{tab_HDipM_1}
@@ -37,8 +51,8 @@ $\ket{4,3,0}$ & 0 & 0 & 0 & 0 & 0 & $\frac{191102976}{40353607}\sqrt{\frac 65}$ 
 \end{table}
 这可以用于计算类氢原子斯塔克效应\upref{HStark}以及跃迁率（未完成）等。
 
-Mathematica 代码（请自行修改矩阵尺寸和循环范围）， \verb|HydrogenR| 函数见类氢原子的束缚态\upref{HWF}。
-\begin{lstlisting}[language=mma]
+Mathematica\upref{Mma} 代码如下（请自行修改矩阵尺寸和循环范围）， \verb|HydrogenR| 函数见类氢原子的束缚态\upref{HWF}。
+\begin{lstlisting}[language=mma,caption=DipoleZ.m]
 DipoleZ[Z_, n1_, l1_, m1_, n2_, l2_, 
    m2_] := (-1)^
     m1 Sqrt[(2 l1 + 1) (2 l2 + 1)] ThreeJSymbol[{l1, 0}, {1, 0}, {l2, 
@@ -57,3 +71,225 @@ For[n1 = 1, n1 <= 4, n1++, For[l1 = 0, l1 < n1, l1++,
 ]];
 Print[d // MatrixForm];
 \end{lstlisting}
+顺便给出 $x,y,z$ 三个方向的矩阵元的代码
+\begin{lstlisting}[language=mma, caption=Dipole.m]
+(* eq_SelRul_1 *)
+Dipole[Z_, n1_, l1_, m1_, n2_, l2_, m2_] :=\
+(-1)^m1 Sqrt[(2 l1 + 1) (2 l2 + 1)]\
+  ThreeJSymbol[{l1, 0}, {1, 0}, {l2, 0}] Integrate[\
+  HydrogenR[Z, n1, l1, r]\[Conjugate] HydrogenR[Z, n2, l2, r] r^3, {r,\
+    0, +∞}] {(ThreeJSymbol[{l1, -m1}, {1, -1}, {l2, m2}] - \
+     ThreeJSymbol[{l1, -m1}, {1, 1}, {l2, m2}])/Sqrt[\
+   2], (ThreeJSymbol[{l1, -m1}, {1, -1}, {l2, m2}] + \
+     ThreeJSymbol[{l1, -m1}, {1, 1}, {l2, m2}])/Sqrt[2], \
+  ThreeJSymbol[{l1, -m1}, {1, 0}, {l2, m2}]}
+\end{lstlisting}
+
+Matlab 代码如下（请自行修改矩阵尺寸和循环范围）， \verb`hydrogen_Rnl` 函数见类氢原子的束缚态\upref{HWF}。
+\begin{lstlisting}[language=matlab,caption=hydrogen\_dipole\_z.m]
+% hydrogen <n1,l1,m1|z|n2,l2,m2>
+% r_max is upper bound of r integral
+function d_z = hydrogen_trans_dipole_z(Z,n1,l1,m1,n2,l2,m2,r_max)
+if (n1 <= 0 || l1 < 0 || l1 >= n1 || abs(m1) > l1)
+    error('illegal n1,l1,m1');
+end
+if (n2 <= 0 || l2 < 0 || l2 >= n2 || abs(m2) > l2)
+    error('illegal n2,l2,m2');
+end
+if (abs(l1-l2) ~= 1 || m1 ~= m2)
+    d_z = 0; return;
+end
+integrand = @(r) hydrogen_Rnl(Z,n1,l1,r) ...
+    .* hydrogen_Rnl(Z,n2,l2,r) .* r.^3;
+% radial integral
+% change of variable r = tan(x) to avoid infinite upperbound
+I_r = integral(integrand, 0, r_max);
+if isnan(I_r) || isinf(I_r)
+    error('integral failed!');
+end
+% angular integral
+I_th = (-1)^m2 * sqrt((2*l1+1)*(2*l2+1)) ...
+    * ThreeJ(l1,0,1,0,l2,0) * ThreeJ(l1,-m1,1,0,l2,m2);
+d_z = I_r * I_th;
+end
+\end{lstlisting}
+
+以下函数需要 parallel toolbox 加速，如果没有可能会较慢（\verb`parfor` 自动变为 \verb`for`）。
+% 已验证：氢原子 |1,0,0> |2,0,0> polarizability
+\begin{lstlisting}[language=matlab,caption=hydrogen\_dipole\_z\_mat.m]
+% hydrogen <n1,l1,m1|z|n2,l2,m2> matrix
+% n_l(i,:) = [n, l] for each basis
+function [d_z, n_l] = hydrogen_trans_dipole_z_mat(Z, m, n_max, r_max)
+if nargin == 0
+% === params ===
+Z = 1;
+m = 0;
+n_max = 5;
+% ==============
+end
+Ndim = (n_max-abs(m))*(n_max-abs(m)+1)/2;
+n_l = zeros(Ndim, 2);
+n1l1_n2l2_k1k2 = zeros(Ndim*(Ndim-1)/2, 6);
+k1 = 0; k = 0;
+for n1 = 1:n_max
+    for l1 = m:n1-1
+        k1 = k1 + 1; k2 = 0;
+        n_l(k1, :) = [n1, l1];
+        for n2 = 1:n_max
+            for l2 = m:n2-1
+                k2 = k2 + 1;
+                if (k2 >= k1)
+                    continue;
+                end
+                k = k + 1;
+                n1l1_n2l2_k1k2(k, :) = [n1, l1, n2, l2, k1, k2];
+            end
+        end
+    end
+end
+if k ~= Ndim*(Ndim-1)/2 || k1 ~= Ndim
+    error('error!')
+end
+
+Nlist = size(n1l1_n2l2_k1k2, 1);
+d_val = zeros(1, Nlist);
+parfor i = 1:Nlist
+    n1 = n1l1_n2l2_k1k2(i,1); l1 = n1l1_n2l2_k1k2(i,2);
+    n2 = n1l1_n2l2_k1k2(i,3); l2 = n1l1_n2l2_k1k2(i,4);
+    disp(n1l1_n2l2_k1k2(i,1:4));
+    d_val(i) = hydrogen_trans_dipole_z(Z,n1,l1,m,n2,l2,m,r_max);
+end
+
+d_z = zeros(Ndim, Ndim);
+for i = 1:Nlist
+    k1 = n1l1_n2l2_k1k2(i,5); k2 = n1l1_n2l2_k1k2(i,6);
+    d_z(k1, k2) = d_val(i);
+end
+% copy to upper triangle
+d_z = d_z + d_z.';
+end
+\end{lstlisting}
+
+\subsection{好本征态列表（z 方向电场）}\label{sub_HDipM_1}
+注意第 $n$ 能级有 $n^2$ 基底。
+
+【$n=2, m=0$】
+\begin{equation}
+\ket{2,0,0},\ket{2,1,0} \Rightarrow-\frac{3}{Z}\pmat{0 & 1\\ 1 & 0}~.
+\end{equation}
+\begin{equation}
+\mp\frac{3}{Z} \Rightarrow \frac{1}{\sqrt{2}}(1, \pm1)~.
+\end{equation}
+
+【$n=3, m=0$】
+\begin{equation}
+\ket{3,0,0},\ket{3,1,0},\ket{3,2,0}\Rightarrow
+-\frac{3\sqrt{3}}{Z}\pmat{0 & \sqrt{2} & 0\\ \sqrt{2} & 0 & 1\\ 0 & 1 & 0}~.
+\end{equation}
+\begin{equation}
+\mp\frac{9}{Z} \Rightarrow \qty(\frac{1}{\sqrt{3}}, \pm \frac{1}{\sqrt{2}}, \frac{1}{\sqrt{6}})~.
+\end{equation}
+\begin{equation}
+\frac{0}{Z} \Rightarrow \qty(\frac{1}{\sqrt{3}}, 0, -\sqrt{\frac{2}{3}})~.
+\end{equation}
+
+【$n=3, m=1$】
+\begin{equation}
+\ket{3,1,\pm1},\ket{3,2,\pm1} \Rightarrow
+-\frac{9}{2Z}\pmat{0 & 1\\1 & 0}~.
+\end{equation}
+\begin{equation}
+\mp\frac{9}{2Z} \Rightarrow \frac{1}{\sqrt 2}(1, \pm 1)~.
+\end{equation}
+
+【$n=4, m=0$】
+\begin{equation}
+\ket{4,0,0},\ket{4,1,0},\ket{4,2,0},\ket{4,3,0} \Rightarrow -\frac{6}{\sqrt{5}Z}\pmat{0 & 5 & 0 & 0\\ 5 & 0 & 4 & 0\\ 0 & 4 & 0 & 3\\ 0 &0 &3 &0}~.
+\end{equation}
+
+\begin{equation}
+\mp\frac{18}{Z} \Rightarrow \frac{1}{2\sqrt{5}}(\sqrt{5},3,\pm\sqrt{5},1)~.
+\end{equation}
+\begin{equation}
+\mp\frac{6}{Z} \Rightarrow \frac{1}{3\sqrt{14}}\qty(\pm\sqrt{5}, 1,\mp\sqrt{5},-3)~.
+\end{equation}
+
+【$n=4, m=1$】
+\begin{equation}
+\ket{4,1,\pm1},\ket{4,2,\pm1},\ket{4,3,\pm1} \Rightarrow -\frac{12}{\sqrt{5}Z}\pmat{0 & \sqrt{3} & 0\\ \sqrt{3} & 0 & \sqrt{2}\\ 0 & \sqrt{2} &0}~.
+\end{equation}
+\begin{equation}
+\mp\frac{12}{Z} \Rightarrow \frac{1}{2\sqrt{5}}\qty(\sqrt{3},\pm\sqrt{5},\sqrt{2})~.
+\end{equation}
+\begin{equation}
+\frac{0}{Z} \Rightarrow \frac{1}{\sqrt{5}}\qty(-\sqrt{2},0,\sqrt{3})~.
+\end{equation}
+
+【$n=4, m=2$】
+\begin{equation}
+\ket{4,2,\pm2},\ket{4,3,\pm2} \Rightarrow -\frac{6}{Z}\pmat{0 & 1\\1 & 0}~.
+\end{equation}
+\begin{equation}
+\mp\frac{6}{Z} \Rightarrow \frac{1}{\sqrt{2}}(1,\pm 1)~.
+\end{equation}
+
+【$n=5, m=0$】
+\begin{equation}
+\ket{5,0,0},\dots,\ket{5,4,0} \Rightarrow -\frac{3}{\sqrt{7}}\pmat{
+    0 & 5\sqrt{14} & 0 & 0 & 0\\
+    5\sqrt{14} & 0 & 7\sqrt{5} & 0 & 0\\
+    0 & 7\sqrt{5} & 0 & 6\sqrt{5} & 0\\
+    0 & 0 & 6\sqrt{5} & 0 & 10\\
+    0 & 0 & 0 & 10 & 0}~.
+\end{equation}
+\begin{equation}
+\pm30 \Rightarrow \frac{1}{\sqrt{70}}\qty(\sqrt{14},\pm 2\sqrt{7},2 \sqrt{5},\pm\sqrt{7},1)~.
+\end{equation}
+\begin{equation}
+\mp 15 \Rightarrow \frac{1}{\sqrt{70}}\qty(-\sqrt{14},\mp\sqrt{7},\sqrt{5},\pm 2\sqrt{7},4)~.
+\end{equation}
+\begin{equation}
+0 \Rightarrow \frac{1}{\sqrt{35}}\qty(\sqrt{7},0,-\sqrt{10},0,3 \sqrt{2})~.
+\end{equation}
+
+【$n=5, m=1$】
+\begin{equation}
+\ket{5,1,1},\dots,\ket{5,4,1} \Rightarrow
+-\frac{3\sqrt{5}}{2\sqrt{7}}\pmat{
+ 0 & 7 \sqrt{3} & 0 & 0 \\
+ 7 \sqrt{3} & 0 & 8 \sqrt{2} & 0 \\
+ 0 & 8 \sqrt{2} & 0 & 5 \sqrt{3} \\
+ 0 & 0 & 5 \sqrt{3} & 0
+}~.
+\end{equation}
+\begin{equation}
+\mp\frac{45}{2}\Rightarrow\frac{1}{\sqrt{70}}\qty(\pm\sqrt{14},\sqrt{30},\pm\sqrt{21},\sqrt{5})~.
+\end{equation}
+\begin{equation}
+\mp\frac{15}{2}\Rightarrow\frac{1}{\sqrt{70}}\qty(\mp\sqrt{21},-\sqrt{5},\pm\sqrt{14},\sqrt{30})~.
+\end{equation}
+
+【$n=5, m=2$】
+\begin{equation}
+\ket{5,2,2},\dots,\ket{5,4,2}\Rightarrow
+-\frac{15}{\sqrt{7}}\pmat{
+ 0 & 2 & 0 \\
+ 2 & 0 & \sqrt{3} \\
+ 0 & \sqrt{3} & 0
+}~.
+\end{equation}
+\begin{equation}
+\mp 15 \Rightarrow \frac{1}{\sqrt{14}}\qty(2,\sqrt{7},\sqrt{3})~.
+\end{equation}
+\begin{equation}
+0 \Rightarrow \frac{1}{\sqrt{14}}\qty(-\sqrt{6},0,2 \sqrt{2})~.
+\end{equation}
+
+【$n=5, m=3$】
+\begin{equation}
+\ket{5,3,3},\dots,\ket{5,4,3} \Rightarrow
+-\frac{15}{2}\pmat{0 & 1\\1 & 0}~.
+\end{equation}
+\begin{equation}
+\mp\frac{15}{2} \Rightarrow \frac{1}{\sqrt{2}}(1,\pm 1)~.
+\end{equation}

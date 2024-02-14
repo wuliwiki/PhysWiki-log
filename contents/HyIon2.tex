@@ -1,4 +1,4 @@
-% 氢原子电离计算（一阶微扰，Matlab）
+% 氢原子的跃迁偶极子矩阵元（束缚态到连续态）
 % keys 氢原子|偶极子|跃迁|微扰
 % license Xiao
 % type Tutor
@@ -13,8 +13,8 @@
 
 \begin{figure}[ht]
 \centering
-\includegraphics[width=10cm]{./figures/8c447ae6faf8e45c.pdf}
-\caption{偶极子绝对值， 线：平面波近似， 点： 无近似（代码： \verb|plot_hydrogen_trans_dipole.m|）} \label{fig_HyIon2_1}
+\includegraphics[width=10cm]{./figures/a540cf946ddeffb6.pdf}
+\caption{$\abs{\mel{k_z}{z}{1,0,0}}$， 实线、虚线：平面波近似， 点： 无近似（代码： \verb|plot_hydrogen_trans_dipole.m|）} \label{fig_HyIon2_1}
 \end{figure}
 
 \subsection{长度规范（平面波近似）}
@@ -36,13 +36,14 @@
 }\end{equation}
 注意这是一个纯虚数。 Matlab 代码如下：
 
-\begin{lstlisting}[language=matlab, caption=hydrogen\_trans\_dipole0.m]
+\begin{lstlisting}[language=matlab, caption=hydrogen\_trans\_dipole\_plane\_approx\_z.m]
 % hydrogen transition dipole, approximate Coulomb plane wave with plane wave
 % since middle and right parts are symmetric,
 %     assuming \bvec k in z+ direction
 % <\bvec k|\bvec r|n,0,0> = [0, 0, <\bvec k|z|n,0,0>]
 % output numerical integration and analytical result (eq_HyIon2_1)
-function [dipole_z, dipole_analy_z] = hydrogen_trans_dipole0(kz, ZZ, n)
+function [dipole_z, dipole_analy_z] = ...
+    hydrogen_trans_dipole_plane_approx_z(kz, Z, n)
 % === params ===
 rmax = 20; Nr = 200; Nth = 100;
 % ==============
@@ -51,11 +52,11 @@ r = linspace(0, rmax, Nr); dr = rmax / (Nr-1);
 th = linspace(0, pi, Nth); dth = pi / (Nth-1);
 ph = 0;
 [R, Th] = ndgrid(r, th);
-Z = R .* cos(Th);
-Psi_n = hydrogen_Psi(ZZ, n, 0, 0, r', th, ph);
+zz = R .* cos(Th);
+Psi_n = hydrogen_Psi(Z, n, 0, 0, r', th, ph);
 % <\bvec k|\bvec r|0>
-Psi_k = 1/(2*pi)^(3/2) * exp(1i*kz.*Z);
-dipole_z = sum(sum(conj(Psi_k).*Z.*Psi_n .*R.^2.*sin(Th))) ...
+Psi_k = 1/(2*pi)^(3/2) * exp(1i*kz.*zz);
+dipole_z = sum(sum(conj(Psi_k).*zz.*Psi_n .*R.^2.*sin(Th))) ...
     * dr * dth * 2*pi;
 % eq_HyIon2_1
 if n == 1
@@ -111,64 +112,100 @@ end
 \subsection{使用库仑平面波}
 \subsubsection{长度规范}
 
-理论上若把上面的平面波换成库仑平面波（库仑势能中的精确散射态\upref{CulmWf}）， 那么理论上用不同的规范结果是一样的。
-\begin{equation}
-\begin{aligned}
-&\quad\mel*{\psi_{\bvec k}^{(-)}}{z}{\psi_{n,l,m}} = \int \psi_{\bvec k}^{(-)}(\bvec r)^* z \psi_{nlm}(r,\theta,\phi) r^2 \dd{r}\dd{\Omega}\\
-&= \sum_{l',m'} \frac{\I^{-l'}}{k} \E^{\I\sigma_{l'}} Y_{l',m'}(\uvec k) \int \frac{1}{r} \sqrt{\frac{2}{\pi}} F_{l'}\qty(\eta, kr) Y_{l',m'}^*(\uvec r) \qty(r \sqrt{\frac{4\pi}{3}} Y_{1,0}(\uvec r))R_{n,l}(r) Y_{l,m}(\bvec r) r \dd{r}\dd{\Omega}\\
-&= \sqrt{\frac{8}{3}}\sum_{l',m'} \frac{\I^{-l'}}{k} \E^{\I\sigma_{l'}} Y_{l',m'}(\uvec k) \int F_{l'}\qty(\eta, kr) R_{n,l}(r) r \dd{r} \int Y_{l',m'}^*(\uvec r)Y_{1,0}(\uvec r)Y_{l,m}(\bvec r) \dd{\Omega}\\
-&= \sqrt{\frac{2}{\pi}} \sum_{l'} \sqrt{(2l'+1)(2l+1)} \frac{\I^{-l'}}{k} \E^{\I\sigma_{l'}} \int_0^\infty F_{l'}\qty(\eta, kr) R_{n,l}(r) r\dd{r}\times\\
-& \qquad \sum_{m'}  (-1)^{m'} Y_{l',m'}(\uvec k) \pmat{l'& 1& l\\ 0 & 0 & 0}\pmat{l' & 1 & l\\  -m' & 0 & m}~.
-\end{aligned}
+理论上若把上面的平面波换成库仑平面波（库仑势能中的精确散射态\upref{CulmWf}）， 那么理论上用不同的规范结果是一样的。先看球面波投影（类比\autoref{eq_HDipM_1}~\upref{HDipM}）：
+\begin{equation}\label{eq_HyIon2_3}\ali{
+&\quad \mel{C_{l',m'}(k)}{r\cos\theta}{\psi_{n,l,m}}\\
+&= \delta_{m,m'}(\delta_{l+1,l'}\mathcal C_{l,m} + \delta_{l,l'+1}\mathcal{C}_{l',m'})
+\sqrt{\frac{2}{\pi}}\int_0^\infty F_{l'}(\eta, kr)(\uvec r) R_{n,l}(r)r^2\dd{r}~.
+}\end{equation}
+库仑平面波投影（\autoref{eq_CulmWf_9}~\upref{CulmWf}）：
+\begin{equation}\label{eq_HyIon2_4}
+\mel*{\psi_{\bvec k}^{(-)}}{z}{\psi_{n,l,m}} = \sum_{l'} \frac{\I^{-l'}}{k} \E^{\I\sigma_{l'}} Y_{l',m}(\uvec k) \int \mel{C_{l',m}(k)}{z}{n,l,m}~.
 \end{equation}
 其中 $\eta = -Z/k$。 对 $l=0$ 有
-\begin{equation}
-\mel*{\psi_{\bvec k}^{(-)}}{z}{\psi_{n00}} = \frac{1}{\sqrt{2}\pi k\I} \E^{\I\sigma_1} \cos\theta \int_0^\infty F_1\qty(\eta, kr) rR_{n,0}(r) \dd{r}~.
-\end{equation}
-
 
 笔者没有见过该积分的解析解， 长度规范的 Matlab 数值积分代码如下：
+% 已验证：氢原子 |1,0,0> |2,0,0> polarizability
+\begin{lstlisting}[language=matlab, caption=hydrogen\_trans\_dipole\_sph.m]
+% <C_{l1,m1}(k1)|z|n2,l2,m2>
+% eq_HyIon2_3
+function ret = hydrogen_trans_dipole_sph(Z, k1, l1, m1, ...
+                                          n2, l2, m2, r_max)
+if m1 ~= m2 || abs(l1 - l2) ~= 1
+    ret = 0; return;
+end
+eta = -Z/k1;
+f = @(r) coulombF_sym(l1, eta, k1*r) .* hydrogen_Rnl(Z, n2, l2, r) .* r.^2;
+I_r = sqrt(2/pi)*integral(f, 0, r_max);
+l_ = min(l1, l2);
+I_ang = sqrt(((l_+1)^2-m2^2)/((2*l_+1)*(2*l_+3)));
+ret = I_r * I_ang;
+end
+\end{lstlisting}
 
-\begin{lstlisting}[language=matlab, caption=hydrogen\_trans\_dipole.m]
-function dipole_z = hydrogen_trans_dipole(kz, ZZ, n)
-eta = -ZZ/kz;
-f = @(r) coulombF_sym(1, eta, kz*r) .* r .* hydrogen_Rnl(ZZ, n, 0, r);
-dipole_z = exp(1i*coulomb_sigma(1,eta)) / (sqrt(2)*pi*kz*1i) ...
-    * integral(f, 0, Inf, 'AbsTol',1e-10) ;
+\begin{lstlisting}[language=matlab, caption=hydrogen\_trans\_dipole\_plane.m]
+% <\bvec k|z|n,l,m>
+% eq_HyIon2_4
+% 未验证
+function ret = hydrogen_trans_dipole_plane(...
+    Z, k1, th1, ph1, n2, l2, m2, r_max)
+if n2 <= 0 || l2 < 0 || l2 >= n2 || abs(m2) > l2
+    error('illegal n2,l2,m2');
+end
+ret = 0;
+for l1 = [l2-1, l2+1]
+    m1 = m2;
+    if l1 < 0 || abs(m1) > l1
+        continue;
+    end
+    mel_sph = hydrogen_trans_dipole_sph(...
+        Z, k1, l1, m1, n2, l2, m2, r_max);
+    ret = ret + (1i^(-l1))/k1 * exp(1i*coulomb_sigma(l1, -Z/k1))...
+        * SphHarm(l1,m1,th1,ph1) * mel_sph;
+end
 end
 \end{lstlisting}
 
 \subsubsection{速度规范}
 \addTODO{速度规范数值积分，验证和长度规范一样}
 
-画图代码：
+\subsubsection{画图代码}
 \begin{lstlisting}[language=matlab,caption=plot\_hydrogen\_trans\_dipole.m]
+% plot hydrogen transition dipole
+% compare different methods
+
 % == params ==
-n = 1; ZZ = 1;
-kmin = 1; kmax = 3; Nk = 50;
+Z = 1;
+n = 1; l = 0; m = 0;
+kmin = 0.01; kmax = 3; Nk = 51;
+r_max = 100;
 % ============
 
 kz = linspace(kmin, kmax, Nk);
-dipole_z0 = zeros(1, Nk);
+dipole_z0_appr = zeros(1, Nk);
 dipole_z0_ana = dipole_z0;
 dipole_z = dipole_z0;
 
 % plane wave approx
 for i = 1:Nk
-    [dipole_z0(i), dipole_z0_ana(i)]
-        = hydrogen_trans_dipole0(kz(i), ZZ, n);
+    [dipole_z0_appr(i), dipole_z0_ana(i)]...
+        = hydrogen_trans_dipole_plane_approx_z(kz(i), Z, n);
 end
 
 % Coulomb wave
 parfor i = 1:Nk
     disp(i);
-    dipole_z(i) = hydrogen_trans_dipole(kz(i), ZZ, n);
+    dipole_z(i) = hydrogen_trans_dipole_plane(...
+        Z, kz(i), 0, 0, n, l, m, r_max);
 end
 
-figure; plot(kz, abs(dipole_z0)); hold on;
+figure; plot(kz, abs(dipole_z0_appr)); hold on;
 plot(kz, abs(dipole_z0_ana), '--');
-plot(kz, abs(dipole_z), '.');
-legend({'dipole0', 'dipole0-analy', 'dipole'});
-grid on;
+plot(kz, abs(dipole_z), '.-k');
+
+legend({'plane wave approx', ...
+    'plane wave approx (analytical)', 'exact (Coulomb plane wave)'});
+grid on; axis([0, 3, 0, 2.5]);
+
 xlabel 'k [au]'; ylabel 'abs dipole';
 \end{lstlisting}

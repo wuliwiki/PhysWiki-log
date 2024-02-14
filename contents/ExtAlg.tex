@@ -4,7 +4,7 @@
 % type Tutor
 
 \pentry{基（线性代数）\nref{nod_VecSpn}， 域上的代数\nref{nod_AlgFie}}{nod_61f4}
-外代数是一种利用已有线性空间构造“代数”这一对象的通用方法，同时蕴含了对三维矢量分析中代数结构的本质解释。
+外代数是Clifford代数的一个特例，也可视为交错张量。
 
 \subsection{外代数的概念}
 
@@ -14,13 +14,21 @@
 
 $\bigwedge^1 V$ 和 $\bigwedge^2 V$ 之间也可以进行楔积，并且满足\textbf{结合律}：$x\wedge(y\wedge z)=(x\wedge y)\wedge z$，由此可以拿掉结合括号，定义 $x\wedge y\wedge z=x\wedge(y\wedge z)=(x\wedge y)\wedge z$。集合 $\{x\wedge y\wedge z|x, y, z\in V\}$ 张成的线性空间，记为 $\bigwedge^3 V$。
 
-同理，我们可以构造出任意阶的 $\bigwedge^k V$。要注意的是，如果 $k>\opn{dim} V$，那么 $\bigwedge^k V=\{0\}$。另外，把 $V$ 的基本域 $\mathbb{F}$ 看成一个一维线性空间，记 $\mathbb{F}=\bigwedge^0 V$。
+同理，我们可以构造出任意阶的 $\bigwedge^k V$。要注意的是，如果 $k>\opn{dim} V$，那么 $\bigwedge^k V=\{0\}$（幂零性使然）。另外，把 $V$ 的基本域 $\mathbb{F}$ 看成一个一维线性空间，记 $\mathbb{F}=\bigwedge^0 V$。
 
-不同线性空间之间可以用直和组合在一起，因此以上这些空间也都可以作直和，得到一个 $\bigwedge V=\bigoplus_k\bigwedge^k V=\mathbb{F}\oplus\bigwedge^1V\oplus\bigwedge^2V\cdots$。这个 $\bigwedge V$，就被称作 $V$ 上的\textbf{外积空间（exterior product space）}或\textbf{楔积空间（wedge product space）}。$\mathbb{F}$ 是 $V$ 的基域，视为 $\mathbb{F}$ 自身上的一维线性空间。
+不同线性空间之间可以用直和组合在一起，因此以上这些空间也都可以作直和，得到一个 $\bigwedge V=\bigoplus^{\opn{dim}V}_{k=0}\bigwedge^k V=\mathbb{F}\oplus\bigwedge^1V\oplus\bigwedge^2V\cdots$。这个 $\bigwedge V$，就被称作 $V$ 上的\textbf{外积空间（exterior product space）}或\textbf{楔积空间（wedge product space）}。总结上述限制条件，我们便得到了外代数的运算结构。
+\begin{definition}{外代数}
+任给域 $\mathbb{F}$ 上的线性空间 $V$，定义向量之间的乘法为外积 $\wedge$ 。对于任意$\bvec x,\bvec y,\bvec z\in V$及任意$a,b,c\in \mathbb F$，外积具有如下性质：
+\begin{enumerate}
+\item \textbf{结合性：}$\bvec x\wedge (\bvec y\wedge \bvec z)=(\bvec x\wedge \bvec y)\wedge \bvec z$；
+\item \textbf{线性性：}$a\bvec x\wedge(b\bvec y+c\bvec z)=ab\bvec x\wedge \bvec y+ac\bvec x\wedge\bvec z$；
+\item \textbf{反对称性：} $\bvec x\wedge \bvec y=-\bvec y\wedge\bvec z$；
+\item \textbf{非平凡性：} 若$\bvec x\neq\bvec y$，则$x\wedge y\neq \bvec 0 $。
+\end{enumerate}
 
-\begin{theorem}{外代数}
-任给域 $\mathbb{F}$ 上的线性空间 $V$，则外积 $\wedge$ 是一个 $\bigwedge V$ 上的向量乘法，并且满足结合性，有单位元 $1\in \bigwedge^0 V$，故构成一个 $\mathbb{F}$ 上的代数。称这个代数为 $V$ 上的\textbf{外代数（exterior algebra）}或\textbf{格拉斯曼代数（Grassmann algebra）}。
-\end{theorem}
+故构成 $\mathbb{F}$ 上的有限维结合代数。称之为 $V$ 上的\textbf{外代数（exterior algebra）}、\textbf{楔积（wedge product）}或\textbf{格拉斯曼代数（Grassmann algebra）}。
+\end{definition}
+
 
 外代数中的元素可以有形象的几何理解。$\bigwedge^1 V$ 中的元素就是 $V$ 中的元素，我们可以想象成箭头。$\bigwedge^2 V$ 中的元素可以看成箭头对，或者是箭头对表示的平行四边形。同样，$\bigwedge^k V$ 中的元素都可以看成是 $k$ 个箭头张成的一个 $k$ 维对象。
 
@@ -29,14 +37,15 @@ $\bigwedge^1 V$ 和 $\bigwedge^2 V$ 之间也可以进行楔积，并且满足\t
 \begin{exercise}{}\label{exe_ExtAlg_1}
 证明：如果 $k>\opn{dim} V$，那么 $\bigwedge^kV=\{0\}$。
 \end{exercise}
+设$\{\bvec e_i\}^n_{i=0}$为线性空间$V$的基。则$\bigwedge ^k V$的基由$k$个基向量外积得到，维度为$C_n^k$。比如对于基矢组为$\{\bvec e_i\}^3_{i=1}$的三维向量空间，$\bigwedge^2 V $上的基为$\{\bvec e_1\wedge \bvec e_2,\bvec e_2\wedge \bvec e_3,\bvec e_1\wedge \bvec e_3\}$。
 
 \begin{exercise}{}\label{exe_ExtAlg_2}
 证明：对于 $\opn{dim} V=k$，有 $\opn{dim} \bigwedge V=2^k$。思路提示：考虑各 $\opn{dim}\bigwedge^iV$ 的值，再对比 $(1+1)^k$ 的二项式展开。
 \end{exercise}
+
 \begin{example}{张量的外代数}
 若令 $\bigwedge^k V=\Lambda^k_0 T$，其中 $\Lambda^k_0(V)$ 是所以 $(0,p)$ 型的斜对称张量（\upref{SIofTe}）构成的集合。那么此时得到的外代数便和张量里的外代数\upref{WegofT}一致。而外积 $\wedge$ 由张量的交错化映射定义，它满足这里外积的一切性质。
 \end{example}
-
 
 
 三维欧几里得空间 $\mathbb{R}^3$ 中的叉乘实际上就是外积。这是因为，$\opn{dim}\mathbb{R}^3=\opn{dim}\bigwedge^2\mathbb{R}^3$，这样一来，如果给定 $\mathbb{R}^3$ 的标准正交基 $\{x, y, z\}$，那么我们可以建立同构 $*: \bigwedge^2\mathbb{R}\rightarrow\mathbb{R}^3$，使得 $*(x\wedge y)=z, *(y\wedge z)=x, *(z\wedge x)=y$，这样就可以通过这个同构来把外积变成 $\mathbb{R}^3$ 内部的向量积。这一映射也是叉乘的“右手定则”的来源，我们也完全可以规定 $*(x\wedge y)=-z, *(y\wedge z)=-x, *(z\wedge x)=-y$，这样定义出来的叉乘就是符合左手定则的了。

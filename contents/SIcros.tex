@@ -54,7 +54,7 @@ E = \iint \omega(k) P_{j\to {\bvec k}} \cdot k^2 \dd{k}\dd{\Omega}~.
 \end{equation}
 
 长度规范下有（\autoref{eq_HionCr_6}~\upref{HionCr}）
-\begin{equation}
+\begin{equation}\label{eq_SIcros_2}
 \pdv{\sigma}{\Omega} = \frac{4\pi^2 m\omega k q^2}{c} \abs{\mel{\bvec k}{\uvec e \vdot\bvec r}{j}}^2~.
 \end{equation}
 速度规范下有（\autoref{eq_HionCr_5}~\upref{HionCr}）
@@ -62,3 +62,23 @@ E = \iint \omega(k) P_{j\to {\bvec k}} \cdot k^2 \dd{k}\dd{\Omega}~.
 \pdv{\sigma}{\Omega} = \frac{4\pi^2 k q^2}{c m \omega} \abs{\mel{\bvec k}{\uvec e \vdot \bvec p}{j}}^2~.
 \end{equation}
 这与 \cite{Merzbacher} 的式 19.86 完全相同。
+
+\begin{lstlisting}[language=matlab, caption=hydrogen\_ioniz\_dif\_cross\_section\_z.m]
+% hydrogen single ionization differential cross section
+% use <Coulomb plane wave|z|n,l,m> as transition matrix
+% eq_SIcros_2
+function [ret, mel] = hydrogen_ioniz_dif_cross_section_z(Z,n,l,m,k,r_max)
+% fine structure constant = 1/(speed of light) in a.u.
+alpha = 0.007297352569278;
+mel = zeros(size(k));
+parfor i = 1:numel(k)
+    mel(i) = hydrogen_trans_dipole_plane(Z, k(i), 0, 0, n, l, m, r_max);
+end
+ret = (4*pi^2*(k.^2/2+0.5*Z^2/n^2).*k)*alpha .* abs(mel).^2;
+end
+\end{lstlisting}
+
+\addTODO{单位能量的总截面是多少？}
+% \begin{equation}
+% \sigma = \int \pdv{\sigma}{\Omega}\dd{\Omega}~.
+% \end{equation}
