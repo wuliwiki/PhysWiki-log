@@ -14,44 +14,164 @@
 \footnote{参考了\cite{量子信息}和Wikipedia\href{https://en.wikipedia.org/wiki/Von_Neumann_entropy}{相关界面}}
 von Neumann 熵的形式来自于 Shannon 熵。
 
+\subsection{von Neumann 熵和量子相对熵}
+
 \begin{definition}{von Neumann熵}\label{def_vonNE_1}
 对于一个给定的密度矩阵，von Neumann熵 $S\left(\rho\right)$的定义为：
 
 \begin{equation}
-S\left( \rho \right) = \opn{tr}\left( - \rho \log_2 \rho \right)~.
+S\left( \rho \right) = \opn{tr}\left( - \rho \log \rho \right)~.
 \end{equation}
 
 如果$\left\{ \lambda_1,~\lambda_2,~\cdots \lambda_N \right\}$是$\rho$的本征值，那么：
 
 \begin{equation}
-S\left(\rho\right) = \sum_i^N \lambda_i \log_2 \lambda_i~.
+S\left(\rho\right) = \sum_i^N \lambda_i \log \lambda_i~.
 \end{equation}
 
-上式中应注意我们定义$0\log_20 = 0$来规避发散。
+上式中应注意我们定义$0\log0 = 0$来规避发散。
 
 \end{definition}
 
-值得注意的是，\autoref{def_vonNE_1} 中 von Neumann 熵的底数是$2$，而在部分文献或书籍中采取底数$\E$，二者相差常数倍数$\ln 2$，应注意不要混淆。
+值得注意的是，\autoref{def_vonNE_1} 中 von Neumann 熵的底数并未指明，在某些文献中底数被定义为$2$，在某些文献中底数则被定义为$\E$，请读者在阅读相关文献时自行判断，在大多数情况下两者并无任何本质区别，仅仅相差一个倍数，所以我们仅在涉及到von Neumann熵的具体数值的时候，比如讨论纠缠熵的连续性时指明底数。
 
 von Neumann 度量了一个混态的密度矩阵的“混乱程度”，正如\upref{partra}中提到，如果一个大系统的纯态对其中的某一个子系统取偏迹，同时如果得到了一个混态而非纯态，那么代表该子系统与剩余部分存在纠缠，这时求完偏迹的密度矩阵的von Neumann 熵就给出了一个度量纠缠的方法，这既是其纠缠熵名字的由来。
+
+\subsubsection{量子相对熵}
+
+量子相对熵类似于经典相对熵，$\rho$到$\sigma$的量子相对熵定义为：
+
+\begin{equation}
+S\left(\rho || \sigma\right) = \opn{tr}\left(\rho \log \rho\right) - \opn{tr}\left(\rho \log \sigma\right)~.
+\end{equation}
+
+接下来我们证明 Klein 不等式，也就是量子相对熵非负：$S\left(\rho || \sigma\right) \geqslant 0$。
+
+假设$\rho = \sum\limits_ip_i\ketbra{u_i}{u_i}$，$\sigma = \sum\limits_jq_j\ketbra{v_j}{v_j}$。
+
+带入量子相对熵的表达式：
+
+\begin{equation}
+\begin{aligned}
+S\left(\rho || \sigma\right) &= \sum_k \bra{u_k}\left( \sum_ip_i\ketbra{u_i}{u_i}\sum_j\log p_j\ketbra{u_j}{u_j} - \sum_ip_i\ketbra{u_i}{u_i}\sum_j\log q_j\ketbra{v_j}{v_j} \right)\ket{u_k} \\
+&= \sum_{i,j,k}\left(\delta_{ik}\delta_{ij}\delta_{jk}p_i\log p_j - \delta_{ik}p_i \braket{u_i}{v_j}\braket{v_j}{u_k}\log q_j \right) \\
+&= \sum_i\left( p_i\log p_i - \sum_jp_i\braket{u_i}{v_j}\braket{v_j}{u_i}\log q_j  \right) \\
+&= \sum_i\left(p_i\log p_i - \sum_j p_i\abs{\braket{u_i}{v_j}}^2\log q_j \right) \\
+&= \sum_ip_i\left(\log p_i - \sum_j P_{ij}\log q_j\right)~.
+\end{aligned}~
+\end{equation}
+
+其中$P_{ij} = \abs{\braket{u_i}{v_j}}^2 \geqslant 0$。易得$\sum\limits_i P_{ij} = \sum\limits_j P_{ij} = 1$（$u_i$在另一组标准正交基$\left\{v_j\right\}$下展开系数模方和为1）。
+
+考虑对数函数的凹凸性，则$\sum\limits_j P_{ij}\log q_j \leqslant \log\left(\sum\limits_j P_{ij}q_j\right) = \log \left(r_i\right)$。当且仅当$P$矩阵为置换阵时，不等式取等号。
+
+且$\sum\limits_i r_i = \sum\limits_{ij}P_{ij}q_j = \sum\limits_jq_j = 1$，即$\left\{r_i\right\}$可视作一概率分布。
+
+则有：
+
+\begin{equation}\label{eq_vonNE_1}
+\begin{aligned}
+S\left(\rho || \sigma\right) &= \sum_i p_i\left(\log p_i - \sum_j P_{ij}\log q_j\right) \\ 
+&\geqslant\sum_i p_i\left(\log p_i - \log r_i\right) \\
+&= \sum_i p_i\log\frac{p_i}{r_i}~.
+\end{aligned}~
+\end{equation}
+
+可以看出\autoref{eq_vonNE_1} 最后的形式是概率分布$\left\{p_i\right\}$对概率分布$\left\{r_i\right\}$的经典相对熵，由经典相对熵的非负性有$\sum\limits_i p_i \log\frac{p_i}{r_i}\geqslant 0$。
+
+则$S\left(\rho || \sigma\right)\geqslant 0$。由此我们证明了量子相对熵是非负的。
 
 \subsection{von Neumann熵的性质}
 
 von Neumann熵有以下几条性质：
 
-\begin{enumerate}
-\item 密度矩阵$\rho$的von Neumann熵当且仅当$\rho$表示纯态时为0。
-\item $d$维希尔伯特空间中的von Neumann熵最多为$\log_2 d$，当且仅当$\rho = \frac{1}{d}I$，$S(\rho) = \log_2 d$。
-\item 若复合系统$AB$处于纯态，子系统$A$熵的约化密度矩阵$\rho_A$和子系统$B$上的约化密度矩阵$\rho_B$的 von Neumann熵相等，即$S\left(\rho_A\right) = S\left(\rho_B\right)$。
-\item 若$\left\{p_i\right\}$是概率，且密度矩阵$\rho_i$位于$\rho$的相互正交的子空间上，那么有$S\left(\sum\limits_ip_i\rho_i\right) = \sum\limits_ip_iS\left(\rho_i\right) - \sum\limits_ip_i\log_2p_i$。
-\item 对于$\rho$和$\sigma$的直积，有$S\left(\rho\otimes\sigma\right) = S\left(\rho\right) + S\left(\sigma\right)$。
-\end{enumerate}
+\subsubsection{纯态密度矩阵的von Neumann熵为0}
+密度矩阵$\rho$的von Neumann熵当且仅当$\rho$表示纯态时为0。我们在定义量子态的 von Neumann熵时\autoref{def_vonNE_1} ，规定了$0\log 0 = 0$，纯态在计算von Neumann熵时仅会出现$1\log 1$和$0\log 0$项，均为0，则纯态的纠缠熵也为0。
 
-下面我们给出这几条性质的证明：
+\subsubsection{von Neumann熵存在上限}
 
-\begin{enumerate}
-\item 密度矩阵$\rho$的von Neumann熵当且仅当$\rho$表示纯态时为0。密度矩阵的本征值的本征值代表取到对应态的概率，$\forall \lambda_i ,~ 0\leqslant \lambda_i \leqslant1$，$\sum_i^N \lambda_i = 1$。所以$\lambda_i \log_2 \lambda_i$非负，且仅在$\lambda_i = 0$或$\lambda_i = 1$时为$0$，因此仅仅在所有本征值中只有一个为$1$时，即纯态时，$S\left(\rho\right) = 0$。
-\end{enumerate}
+von Neumann熵存在上限，$d$维的希尔伯特空间中的量子态的von Neumann熵的最大值为为$\log d$，当且仅当$\rho = \frac{1}{d}I$时取到最大值。
+
+对于这个上限的证明并不复杂，得益于我们已经在前文中证明了量子相对熵非负，所以我们仅需要计算一个量子态与$\frac{1}{d}I$之间的量子相对熵即可。
+\begin{equation}
+\begin{aligned}
+S\left(\rho \left|\left| \frac{1}{d}I\right.\right.\right) &= \opn{tr}\left(\rho\log\rho\right) - \opn{tr}\left( \rho\log\left(\frac{1}{d}I\right) \right) \\
+&= -S\left(\rho\right) + \log d \opn{tr}\left(\rho\right) \\
+&= \log d - S\left(\rho\right)  \\
+&\geqslant 0
+\end{aligned}~
+\end{equation}
+
+所以我们可以得到$S\left(\rho\right) \leqslant \log d$
+
+\subsubsection{纯态在两个子区域上的约化密度矩阵的von Neumann熵相等}
+
+如果复合系统$AB$总体处于纯态，$\rho_A$和$\rho_B$分别为其在$A$区域和在$B$区域分别的约化密度矩阵，那么其von Neumann熵相等。
+
+对于定义在$AB$两区域上的纯态$\ket{\psi}$，我们取维数较大的$N$维子空间称为空间$A$，我们总可以取$A$区域的一组正交基将其展开，写成：
+$$\ket{\psi} = \sum\limits_i^N\ket{a_i}\ket{u_i} = \begin{pmatrix}
+\ket{a_1}&\ket{a_2}&\cdots&\ket{a_N}
+\end{pmatrix}\begin{pmatrix}
+\ket{u_1}\\ \ket{u_2}\\ \vdots\\ \ket{u_M}
+\end{pmatrix}~.$$
+上式中$\left\{\ket{a_i}\right\}$是$A$区域上的一组正交归一基矢量，而$\left\{\ket{u_i}\right\}$则是一组定义在$B$区域上的，不一定正交也不一定归一的矢量。而我们总可以通过$\left\{\ket{u_i}\right\}$来张成一个$N$维线性空间（如果矢量不足$N$个，则需引入额外的基矢量来补足），我们将这组新的基地记作$\left\{\ket{b_i}\right\}$。则存在$N\times N$的$A$矩阵，使得：
+$$\begin{pmatrix}
+\ket{u_1}\\ \ket{u_2}\\ \vdots\\ \ket{u_N}
+\end{pmatrix} = A
+\begin{pmatrix}
+\ket{b_1}\\ \ket{b_2}\\ \vdots\\ \ket{b_N}
+\end{pmatrix}~.$$
+因此有：
+$$\ket{\psi} = \begin{pmatrix}
+\ket{a_1}&\ket{a_2}&\cdots&\ket{a_N}
+\end{pmatrix}A\begin{pmatrix}
+\ket{b_1} \\ \ket{b_2} \\ \vdots \\ \ket{b_N}
+\end{pmatrix}~.$$
+考虑矩阵$A$的奇异值分解，$A = U\Sigma D^\dagger$，其中，$U$和$D$为幺正矩阵，而$\Sigma$为半正定对角矩阵，则有：
+$$\ket{\psi} = \begin{pmatrix}
+\ket{a_1}&\ket{a_2}&\cdots&\ket{a_N}
+\end{pmatrix}U \Sigma D^\dagger\begin{pmatrix}
+\ket{b_1} \\ \ket{b_2} \\ \vdots \\ \ket{b_N}
+\end{pmatrix}~.$$
+由于$U$和$D$的幺正特性，则其于原本的标准正交基相乘之后得到的仍然是一组标准正交基，即
+$$\begin{pmatrix}
+\ket{\tilde{a}_1}&\ket{\tilde{a}_2} & \cdots & \ket{\tilde{a}_N}
+\end{pmatrix} = 
+\begin{pmatrix}
+\ket{a_1}&\ket{a_2}&\cdots &\ket{a_N}
+\end{pmatrix}U~$$
+和
+$$\begin{pmatrix}
+\ket{\tilde{b}_1} & \ket{\tilde{b}_2} & \cdots & \ket{\tilde{b}_N}
+\end{pmatrix} = \begin{pmatrix}
+\ket{b_1}&\ket{b_2}& \cdots &\ket{b_N}
+\end{pmatrix}D~$$
+都是标准正交基，那么我们记$\Sigma$的第$i$个对角元是$\sigma_i$，那么我们则可以写出：
+$$\ket{\psi} = \sum_i \sigma_i \ket{\tilde{a}_i}\ket{\tilde{b}_i}~.$$
+写道这里已经很容易看到，$\ket{\psi}$在以$\left\{\ket{\tilde{a}_i}\right\}$和$\left\{\ket{\tilde{b}_i}\right\}$为基矢分别求取约化密度矩阵时，得到的是相同的对角矩阵的形式，因此自然von Neumann熵也相同。
+
+\subsubsection{加和的密度矩阵的von Neumann熵}
+
+若$\left\{p_i\right\}$是概率分布，而$\rho_i$位于相互正交的空间上，那么有：
+$$S\left(\sum\limits_i p_i\rho_i\right) = \sum\limits_i p_i S\left(\rho_i\right) - \sum\limits_i p_i \log p_i~.$$
+
+由于$\rho_i$都是位于相互正交的空间上，所以其均是相互对易的，可同时对角化的，记$\rho_i$的第$j$个本征值为$\lambda_i^j$，有$\sum\limits_j \lambda_i^j = 1$，同时由于$\sum\limits_i p_i = 1$，则$\sum\limits_{ij}p_i\lambda_i^j = 1$，则事实上，$\sum\limits_i p_i\rho_i$实际上得到了一个本征值为$p_i\lambda_i^j$（i，j任意取值）的密度矩阵，所以有：
+
+\begin{equation}
+\begin{aligned}
+S\left( \sum_i p_i\rho_i \right) &= -\sum_{i,j}p_i\lambda_i^j\log\left(p_i \lambda_i^j\right) \\
+&= -\sum_{i,j}p_i\lambda_i^j\log p_i - \sum_{i,j}p_i\lambda_i^j\log\lambda_i^j \\
+&= -\sum_i p_i\log p_i - \sum_i p_i\sum_j\lambda_i^j\log\lambda_i^j \\
+&= \sum_i p_i S\left(\rho_i\right) - \sum_i p_i\log p_i~.
+\end{aligned}~
+\end{equation}
+
+
+\subsubsection{直积态的von Neumann熵}
+
+对于$\rho$和$\sigma$的直积态$\rho\otimes\sigma$，其纠缠熵为$S\left(\rho\otimes \sigma\right) = S\left(\rho\right) + S\left(\sigma\right)$。
+
+这一条性质的证明较为简单，因为我们可以在不影响$\sigma$的情况下对角化$\rho$，也可以在不影响$\rho$的情况下对角化$\sigma$，我们得到两个对角化的密度矩阵后就可以直接套用上一条性质来计算了。
 
 
 \subsection{纠缠熵的连续性}

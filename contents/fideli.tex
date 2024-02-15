@@ -13,7 +13,7 @@
 \begin{definition}{保真度}\label{def_fideli_1}
 对于状态$\rho$和$\sigma$，保真度的定义为：
 
-\begin{equation}
+\begin{equation}\label{eq_fideli_1}
 F\left(\rho, \sigma\right)\equiv\opn{tr}\sqrt{\rho^{\frac{1}{2}}\sigma\rho^{\frac{1}{2}}}~.
 \end{equation}
 
@@ -47,6 +47,16 @@ F\left(\rho,\sigma\right) &= \opn{tr}\sqrt{\sum_{i} \sqrt{p_i}\ketbra{i}\sum_{j}
 \end{equation}
 由此可见保真度概念实际上是我们在经典信息中考虑的$\bvec{v}_p$和$\bvec{v}_q$的量子力学推广。
 
+\subsubsection{保真度的另一种表达形式}
+
+保真度可以由另一种表达形式给出:
+
+\begin{equation}\label{eq_fideli_2}
+F\left(\rho, \sigma\right) = \opn{tr}\abs{\sqrt{\rho}\sqrt{\sigma}}~,
+\end{equation}
+其中，$\abs{A} = \sqrt{AA^\dagger}$，证明十分简单，直接将绝对值的定义式代入\autoref{eq_fideli_2} 中即可得到原本的定义式。
+
+
 \subsubsection{讨论：为什么定义不是$F\left(\rho,\sigma\right) = \opn{tr}\sqrt{\rho\sigma}~$？}
 \footnote{参考\href{https://physics.stackexchange.com/questions/532223/why-is-the-standard-definition-of-fidelity-unnecessarily-complicated}{网站}}
 我们可以很容易的验证如果$\rho = \sum\limits_i p_i\ketbra{i}$，$\sigma = \sum\limits_i q_i \ketbra{i}$，有:
@@ -63,3 +73,43 @@ F\left(\rho,\sigma\right) &= \opn{tr}\sqrt{\sum_{i} \sqrt{p_i}\ketbra{i}\sum_{j}
 回忆矩阵的函数的定义，我们是通过幂级数的方法定义的，而$\sqrt{x}$在$0$处没有泰勒展开，那我们为什么可以写$\sqrt{\rho}$呢？这是因为$\rho$是密度矩阵，所以是一个厄密矩阵，是必定可对角化且本征值为正数的，我们可以通过$\rho = \sum\limits_ip_i\ketbra{i},\sqrt{\rho} = \sum\limits_i\sqrt{p_i}\ketbra{i}$来定义（注意，这个定义针对厄密矩阵，因为任意矩阵本征值不一定为正实数，这会引入根号的多值问题，而且甚至任意矩阵不一定可以相似对角化）。考虑$\rho\sigma$，$\left(\rho\sigma\right)^\dagger = \sigma^\dagger \rho^\dagger = \sigma\rho$，除非$\rho$和$\sigma$对易，否则其乘积就不是厄密矩阵，因此我们直接对其乘积开根号是一个很危险的行为。因此我们选择\autoref{def_fideli_1} 的形式，其中所有在根号下的内容的厄密性都很容易验证。
 
 注：事实上也可以拓展开根号的定义来使得$\sqrt{\rho\sigma}$合法化，这样得到的结果是和\autoref{def_fideli_1} 等价的。
+
+\subsection{性质}
+
+\subsubsection{保真度在幺正变换下是不变的}
+
+保真度在幺正变换下是不变的，也就是对于任意给定幺正矩阵$U$，有$F\left(\rho,\sigma\right) = F\left(U \rho U^\dagger, U\sigma U^\dagger\right)$。
+
+证明是较为直接的，考虑密度矩阵都是半正定矩阵，考虑半正定矩阵的性质：$\sqrt{U \rho U^\dagger} = U \sqrt{\rho} U^\dagger$。
+
+那么可以写出：
+
+\begin{equation}
+\begin{aligned}
+F\left(U \rho U^\dagger, U \sigma U^\dagger\right) &= \opn{tr}\sqrt{\sqrt{U \rho U^\dagger}U \sigma U^\dagger \sqrt{U \rho U^\dagger}} \\
+&= \opn{tr}\sqrt{U\sqrt{\rho}U^\dagger U \sigma U^\dagger U \sqrt{\rho}U^\dagger} \\
+&= \opn{tr}\left(U\sqrt{\sqrt{\rho}\sigma\sqrt{\rho}}U^\dagger\right) \\
+&= \opn{tr}\left(U^\dagger U \sqrt{\sqrt{\rho}\sigma\sqrt{\rho}}\right) \\
+&= F\left(\rho, \sigma\right)~.
+\end{aligned}~
+\end{equation}
+
+\subsubsection{保真度的对称性}
+
+保真度对其输入具有对称性，即$F\left(\rho,\sigma\right) = F\left(\sigma,\rho\right)$。
+
+一种证明方法是通过 Uhlmann 定理的推论来进行证明的，但我们在此给出一个更加简洁的证明方法，在后续介绍Uhlmann 定理时，我们将重新提及这个问题。 
+
+考虑保真度$F\left(\rho,\sigma\right)$的表达式\autoref{eq_fideli_2} ，考虑$\sqrt{\rho}$和$\sqrt{\sigma}$均为半正定矩阵，而两半正定矩阵的乘积可相似对角化，而通过矩阵的绝对值的运算性质可知对于一个可以相似对角化的矩阵$M$，有$\opn{tr}\abs{M} = \opn{tr}\abs{M^\dagger}$。那么有：
+
+\begin{equation}
+\begin{aligned}
+F\left(\rho,\sigma\right) &= \opn{tr}\abs{\sqrt{\rho}\sqrt{\sigma}} \\
+&= \opn{tr}\abs{\left(\sqrt{\rho}\sqrt{\sigma}\right)^\dagger} \\
+&= \opn{tr}\abs{\left(\sqrt{\sigma}\right)^\dagger\left(\sqrt{\rho}\right)^\dagger} \\
+&= \opn{tr}\abs{\sqrt{\sigma}\sqrt{\rho}}  \\
+&= F\left(\sigma,\rho\right)~.
+\end{aligned}~
+\end{equation}
+
+$\rho$和$\sigma$的半正定性可以保证最后一步等式的成立。

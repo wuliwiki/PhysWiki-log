@@ -5,23 +5,23 @@
 
 \subsection{Editor 使用数据库 TODO}
 \begin{itemize}
-\item 给词条加一个上锁功能，在修改词条信息里面管理员可以上锁和解锁，不能修改任何信息包括内容。如果 occupied 的词条被上锁，就从 occupied 表中删除。
+\item 给文章加一个上锁功能，在修改文章信息里面管理员可以上锁和解锁，不能修改任何信息包括内容。如果 occupied 的文章被上锁，就从 occupied 表中删除。
 \item 根据数据库里面对审稿的设计，做一个审稿按钮和面板。
 \item 用 salary.value 代替authors.salary,  discount 表整合到了 salary.scale
-\item stat.html 页面加一列 “时薪”显示所有 salary 规则下该词条该作者该时段最高的那个时薪，加一列 “调整”显示 salary_change 里面的调整， 最后 时薪*折扣*时间+调整=补贴，如果 stat.html 所选时段内有规则生效或者失效，就分割成多行，每行显示不同的 “时薪”
+\item stat.html 页面加一列 “时薪”显示所有 salary 规则下该文章该作者该时段最高的那个时薪，加一列 “调整”显示 salary_change 里面的调整， 最后 时薪*折扣*时间+调整=补贴，如果 stat.html 所选时段内有规则生效或者失效，就分割成多行，每行显示不同的 “时薪”
 \item salary.html 给管理员添加删除规则用。如果是作者但非管理员，可以查看但不能修改关于自己的规则,或者关于所有人的规则（salary.author 为空）
 salary 表的规则大概一共就这么三种,
 -- rule: 作者 + 协议 -> 时薪
--- rule: 作者 + 词条 -> 缩放
--- rule: 词条 -> 缩放 其中第二个比第三个有更高的优先级
+-- rule: 作者 + 文章 -> 缩放
+-- rule: 文章 -> 缩放 其中第二个比第三个有更高的优先级
 \item right 表，应用编辑器相关权限
 \end{itemize}
 
 \subsubsection{图片相关}
 \begin{itemize}
-\item 【进行中】如果上传时发现图片文件的 hash 已存在于 \verb|images.hash|， 则检查该文件的 \verb|images.figure和figures_aka| 中 \verb|figures.deleted==0| 的图片环境， 有就提示图片已存在，列出所有标签（\verb|fig_| 加 \verb|figures.id|）和图片标题和它们所在的词条 id 和 caption 让用户选择引用（\verb|\autoref{}|）或者选择重复使用图片。 如果 \verb|images.figure和figures_aka| 中没有 \verb|figures.deleted==0| 的图片环境（也就不用选了）或者用户选择重复使用图片， 就检查 \verb|images.figure和figures_aka| 中 \verb|figures.deleted==1| 的环境中有没有属于当前词条的（若有多个就选第一个）， 如果有就更新 \verb|figures.deleted=0| 然后根据该记录中的信息插入图片环境代码，否则新建标签和环境并在 \verb|figures| 表中插入新的记录， \verb|aka| 指向 \verb|images.figure|。
+\item 【进行中】如果上传时发现图片文件的 hash 已存在于 \verb|images.hash|， 则检查该文件的 \verb|images.figure和figures_aka| 中 \verb|figures.deleted==0| 的图片环境， 有就提示图片已存在，列出所有标签（\verb|fig_| 加 \verb|figures.id|）和图片标题和它们所在的文章 id 和 caption 让用户选择引用（\verb|\autoref{}|）或者选择重复使用图片。 如果 \verb|images.figure和figures_aka| 中没有 \verb|figures.deleted==0| 的图片环境（也就不用选了）或者用户选择重复使用图片， 就检查 \verb|images.figure和figures_aka| 中 \verb|figures.deleted==1| 的环境中有没有属于当前文章的（若有多个就选第一个）， 如果有就更新 \verb|figures.deleted=0| 然后根据该记录中的信息插入图片环境代码，否则新建标签和环境并在 \verb|figures| 表中插入新的记录， \verb|aka| 指向 \verb|images.figure|。
 \item 【完成】按下 “上传图片并创建新标签” 按钮弹出一个窗口。窗口中有“上传图片”按钮，按下后弹出文件浏览器仅限选择一张 png 或者 pdf 图片（若该图的 hash 已经存在则见下文）。 另设一个“上传其他格式”按钮，按下后可以选择一张或多张常见格式图片，可以按多次，若第一个按钮上传的是 pdf，上传的其他格式图片中必须要有 svg 格式否则无法确定。 设一个“上传附件（源码或项目文件等）”按钮，用于上传附件，功能和 “上传其他格式” 一样，上传到 \verb|PhysWiki/files/|。另外可以在窗口提供输入 \verb|figures.caption|（必填） 和 \verb|width|（默认 6） 和 \verb|source|（选填） 和 \verb|images.license|（必填，默认和 \verb|entries.license| 一样）。
-\item 【完成】上传新的图片时， \verb|PhysWiki/figures/| 中的文件使用 \verb|images.hash| + 拓展名命名。 \verb|\label{}| 格式为 \verb|fig_词条名_序号|。这里的\verb|序号|可以由小到大逐个查看数据库中存不存在 \verb|figures.id=词条名_序号|，使用第一个不存在的。
+\item 【完成】上传新的图片时， \verb|PhysWiki/figures/| 中的文件使用 \verb|images.hash| + 拓展名命名。 \verb|\label{}| 格式为 \verb|fig_文章名_序号|。这里的\verb|序号|可以由小到大逐个查看数据库中存不存在 \verb|figures.id=文章名_序号|，使用第一个不存在的。
 \item 【完成】首先插入 \verb|images| 表的 \verb|hash, ext, figure, author, time|（此时如果有 foreign key 报错，需要 \verb|PRAGMA foreign_keys = OFF;|，完了再 \verb|ON|）， 再插入 \verb|figures| 表的 \verb|id, caption, authors, entry, image|， 再修改 \verb|entries| 表格的 \verb|figures|。 注意的格式，不要把已有的数据覆盖。 一个示例：
 \begin{lstlisting}[language=none]
 PRAGMA foreign_keys = OFF;
@@ -43,7 +43,7 @@ UPDATE "entries" SET "figures" = "figures" || ' test_10' WHERE "id"='test';
 \item 若上传 pdf + svg 图片， 更新 \verb|figures.image_alt|。 同时支持上传其他文件（如果后缀名是 \verb|gif, eps 等|， 同样更新到 \verb|figures.image_alt|。
 \item 【先不做】上传或替换图片时弹出窗口让用户填写版权信息。
 \item 【先不做】上传或替换图片时允许上传附件
-\item 【先不做】在图片的下拉菜单中做一个图片浏览器按钮， 打开一个面板可以浏览所有图片。 选中图片后可以查看在哪个词条被使用。
+\item 【先不做】在图片的下拉菜单中做一个图片浏览器按钮， 打开一个面板可以浏览所有图片。 选中图片后可以查看在哪个文章被使用。
 \item 【先不做】若替换图片， 则把替换前的 \verb|figures.image| 和 \verb|.image_alt| 都移动到 \verb|figures.image_old|。 
 \end{itemize}
 
@@ -64,13 +64,13 @@ UPDATE "entries" SET "figures" = "figures" || ' test_10' WHERE "id"='test';
 
 \item 到了自动备份的时间， 如果编辑器中有修改但没保存的内容， 则应该自动保存并自动备份， 并将 tab 左上角的小红点去掉。
 
-\item 有时候打开词条列表中显示 “没有记录”， 需要刷新页面才可以。 估计是因为连接异常
+\item 有时候打开文章列表中显示 “没有记录”， 需要刷新页面才可以。 估计是因为连接异常
 
-\item 有时候笔记页面登录后会弹出百科的词条列表， 甚至可以打开词条， 这比较严重
+\item 有时候笔记页面登录后会弹出百科的文章列表， 甚至可以打开文章， 这比较严重
 
 \item 编辑器可以读取网站用户的编辑权限（等健叔更新 api）
 
-\item 【进行中】在编辑器中 Ctrl+点击 \verb|\autoref{ex_AMLaw_2}~\upref{AMLaw}| 中的 \verb|ex_AMLaw_2|， 提示 \verb|打开文件失败：词条"ex_AMLaw_2"不存在|。
+\item 【进行中】在编辑器中 Ctrl+点击 \verb|\autoref{ex_AMLaw_2}~\upref{AMLaw}| 中的 \verb|ex_AMLaw_2|， 提示 \verb|打开文件失败：文章"ex_AMLaw_2"不存在|。
 
 \item main.tex 按发布按钮不会自动 \verb|git add|。
 
@@ -80,17 +80,17 @@ UPDATE "entries" SET "figures" = "figures" || ' test_10' WHERE "id"='test';
 
 \item 在 Ubuntu 20.04 和 22.04 的 chrome 浏览器中（通过官方 deb 安装）， 任意找一个网页复制一些代码， 粘贴到编辑器中会变为复杂的 html 而不是复制的内容。 例如 \verb|<pre id="script-box" class="code" style="box-sizing: border-box; ...|。 用右键菜单粘贴则没有这个问题。
 
-\item 【进行中】把词条保存，撤销（Ctrl+Z）然后重做（Ctrl+Z），会出现错误： \verb|请使用重命名按钮修改标题。|
+\item 【进行中】把文章保存，撤销（Ctrl+Z）然后重做（Ctrl+Z），会出现错误： \verb|请使用重命名按钮修改标题。|
 
 \item 【完成】每次关掉最后一个 tab 就会没有响应。
 
 \item 【完成】编辑器预览中， 凡是其他页面的连接点击以后都需要在浏览器上新开一个 tab， 如果直接在预览窗口里面跳到其他页面就会出问题。
 
-\item 【完成】如果当前词条有未保存的内容， 切换词条 tab 或者打开新词条的时候， 预览会跳回之前词条的预览。 这应该是因为离开一个 tab 的时候的自动保存引起的， 所以离开 tab 只保存就好不要刷新预览（还能节约流量提高速度）。
+\item 【完成】如果当前文章有未保存的内容， 切换文章 tab 或者打开新文章的时候， 预览会跳回之前文章的预览。 这应该是因为离开一个 tab 的时候的自动保存引起的， 所以离开 tab 只保存就好不要刷新预览（还能节约流量提高速度）。
 
-\item 【完成】Ctrl+点击 autoref 跳转到其他词条（已经打开）的公式时，光标不会自动跳转
+\item 【完成】Ctrl+点击 autoref 跳转到其他文章（已经打开）的公式时，光标不会自动跳转
 
-\item 【完成】如果甲在编辑词条 A， 乙在词条 B 里面用外部引用按钮，需要给词条 A 添加一个 label， 会发生冲突吗？ 甲的编辑器会实时更新吗？ 要不这样，当乙外部引用 A 时，检查 A 是否被其他人编辑过还未发布， 如果是则提示 “A 正在被 xxx 编辑， 请与管理员协商”。 当然这仅限于需要插入 label 的情况，如果 label 已经存在就不需要管了。 scan 中添加了选项 \verb|--autoref-dry|
+\item 【完成】如果甲在编辑文章 A， 乙在文章 B 里面用外部引用按钮，需要给文章 A 添加一个 label， 会发生冲突吗？ 甲的编辑器会实时更新吗？ 要不这样，当乙外部引用 A 时，检查 A 是否被其他人编辑过还未发布， 如果是则提示 “A 正在被 xxx 编辑， 请与管理员协商”。 当然这仅限于需要插入 label 的情况，如果 label 已经存在就不需要管了。 scan 中添加了选项 \verb|--autoref-dry|
 
 \item 【完成】版本对比无法对比 \verb|HsSeFu - 版本对比 （2021年09月21日 00:59 → 2022年01月21日 17:00）|，是否是中文用户名导致的？
 
@@ -102,19 +102,19 @@ UPDATE "entries" SET "figures" = "figures" || ' test_10' WHERE "id"='test';
 
 \item 【完成】有时候笔记页面登录后编辑器窗口不显示任何内容
 
-\item 【完成】引用其他词条内容后， 点击预览中的链接有误。 应该使用 scan 输出的链接。 例如 \verb|https://wuli.wiki/editor/Resist.html#sub1| 中 \verb|editor| 应该是 \verb|online|。
+\item 【完成】引用其他文章内容后， 点击预览中的链接有误。 应该使用 scan 输出的链接。 例如 \verb|https://wuli.wiki/editor/Resist.html#sub1| 中 \verb|editor| 应该是 \verb|online|。
 
 \item 【完成】引用文献的按钮图标改成 \verb|[1]|
 
 \item 【完成】个人笔记无法下载文件。 错误 \verb|{"status":"error","message":"The header content contains invalid characters"}|。
 
-\item 【完成】新用户的个人笔记若开启实时预览， 打开任意词条后会不停 html 分段和取回 html 文件。 已经把实时预览默认关闭。 解决方法：编辑器不应该依赖服务器上原有的 html， 打开以前可以先在服务器上编译一次 html 再取回。
+\item 【完成】新用户的个人笔记若开启实时预览， 打开任意文章后会不停 html 分段和取回 html 文件。 已经把实时预览默认关闭。 解决方法：编辑器不应该依赖服务器上原有的 html， 打开以前可以先在服务器上编译一次 html 再取回。
 
 \item 【完成】转出 md 文件后， 公式链接等全部错误， 应该用 \verb|http://wuli.wiki/online/xxx.html| 绝对链接。
 
 \item 【完成】实时预览模式下， 重命名后预览中标题不会更新。
 
-\item 【完成】实时预览关闭时， 打开词条图片显示不出
+\item 【完成】实时预览关闭时， 打开文章图片显示不出
 
 \item 【完成】section label 的 autoref 显示不出来
 
@@ -146,7 +146,7 @@ UPDATE "entries" SET "figures" = "figures" || ' test_10' WHERE "id"='test';
 
 \item 【完成】重新打开编辑器的时候， \verb|是否打开上次的 xxx.tex?| 即使选了 cancel 仍然会打开
 
-\item 【完成】如果 \verb|main.tex| 中词条标题含有反斜杠， 则高亮不正常
+\item 【完成】如果 \verb|main.tex| 中文章标题含有反斜杠， 则高亮不正常
 
 \item 【完成】两个 “重新编译” 按钮， 如果程序出现 segmentation fault 等致命错误， 不会显示在输出窗口， 而且仍然显示 “编译成功”。
 
@@ -158,9 +158,9 @@ UPDATE "entries" SET "figures" = "figures" || ' test_10' WHERE "id"='test';
 
 \item 【完成】\verb|verb| 命令和 \verb|lstinline| 命令中的内容不可以影响高亮。 例如 \verb|%| 后面的内容就都成了绿色。 delimiter 可以是两个任意的相同符号， 例如 \verb*123* 或者 \verb+|||+ 也是合法的。 
 
-\item 【完成】wuli.wiki/note 中创建新词条显示 \verb|读取词条文件 /user/xxx/changed/xxx.html 失败，服务器找不到该文件|。
+\item 【完成】wuli.wiki/note 中创建新文章显示 \verb|读取文章文件 /user/xxx/changed/xxx.html 失败，服务器找不到该文件|。
 
-\item 【完成】wuli.wiki/note 中保存或删除 test 用户的词条显示 \verb|j is not defined|。
+\item 【完成】wuli.wiki/note 中保存或删除 test 用户的文章显示 \verb|j is not defined|。
 
 \item 【完成】“重新编译并发布” 按钮没有成功调用 scan 程序， 也没有显示命令行的结果（应该指定 online 路径重新运行 \verb|./PhysWikiScan .|）
 
@@ -172,15 +172,15 @@ UPDATE "entries" SET "figures" = "figures" || ' test_10' WHERE "id"='test';
 
 \item 【完成】普通用户（如 test5）使用 “下载变更文件” 按钮时出错： \verb|下载已更改文件失败：Error in api "/editor/api/download-files": findLines is not defined|
 
-\item 【完成】预览窗口有时候会把词条显示两次， 关闭后再打开可解决
+\item 【完成】预览窗口有时候会把文章显示两次， 关闭后再打开可解决
 
 \item 【完成】自动备份对 \verb|FnalNt.tex| 停止了。
 
-\item 【完成】在 “打开文件” 窗口输入 \lstinline|t.tex|， 不会出现在第一个， 是不是排序算法有问题？ 其他词条也有类似的情况。
+\item 【完成】在 “打开文件” 窗口输入 \lstinline|t.tex|， 不会出现在第一个， 是不是排序算法有问题？ 其他文章也有类似的情况。
 
 \item 【完成】自动引用一条没有 label 的公式时候只会添加 label 不会添加 \lstinline|\autoref| 命令（是否表格，图片等也有类似问题？）（在关闭符号替换模式发现的， 不确定是否和这个有关）
 
-\item 【完成】打开词条有一定概率提示 “PhysWikiScan” 无响应
+\item 【完成】打开文章有一定概率提示 “PhysWikiScan” 无响应
 
 \item 【完成】已经注册的用户（如 admin）使用编辑器时不应该出现 “修改密码” 按钮
 
@@ -233,13 +233,13 @@ UPDATE "entries" SET "figures" = "figures" || ' test_10' WHERE "id"='test';
 \subsection{Editor TODO}
 按优先级排序
 \begin{itemize}
-\item 新词条选择付费创作协议或者把已有词条改成付费创作协议，需要管理员权限。 如果不是管理员，就提示 “该协议需要管理员权限，请先选择志愿创作协议，并向管理员申请”
-\item 给词条加一个上锁功能，在修改词条信息里面管理员可以上锁和解锁
+\item 新文章选择付费创作协议或者把已有文章改成付费创作协议，需要管理员权限。 如果不是管理员，就提示 “该协议需要管理员权限，请先选择志愿创作协议，并向管理员申请”
+\item 给文章加一个上锁功能，在修改文章信息里面管理员可以上锁和解锁
 \item 在编辑器的 “修改文章信息” 中，如果协议是付费协议，那么再显示一个 “补贴折扣”，如果没有折扣就显示无，管理员可以输入一个 0-99 的整数
 \item 根据数据库里面对审稿的设计，搞一个审稿按钮和面板
 \item 需要做一个 api 提供数据库的 \verb`entries.id`，只提供 \verb`entries.deleted=0` 的那些。\verb`wuli.wiki/book` 那边需要爬取。另外 book 还需要获取 \verb`entries.type entries.draft`
-\item 【完成】创建词条时增加一个 “协议” 栏（末尾加一个 🛈 图标，链接到 \verb|wuli.wiki/online/licens.html|）， 点击可以有下拉菜单， 每一行显示 \verb|licenses.id|（空字符串不显示） 和 \verb|.caption| 和 \verb|.intro|（每列对齐）， 以及一个链接按钮，链接到 \verb|.url| 。 若作者的 \verb|authors.salary| 大于零， 则默认选择 \verb|Xiao|，否则默认选 \verb|Usr|。 创建后， 在 tex 文件第三行注释 \verb|license: 协议id|。 若没有输入关键词， 则第二行插入 \verb|%| 和一个空格即可。
-\item 【完成】创建词条时加一个 “文章类型” 栏, 点击可以有下拉菜单， 每一行显示 \verb|types.id|（空字符串不显示）和 \verb|.caption| 和 \verb|.intro|（每列对齐）。 
+\item 【完成】创建文章时增加一个 “协议” 栏（末尾加一个 🛈 图标，链接到 \verb|wuli.wiki/online/licens.html|）， 点击可以有下拉菜单， 每一行显示 \verb|licenses.id|（空字符串不显示） 和 \verb|.caption| 和 \verb|.intro|（每列对齐）， 以及一个链接按钮，链接到 \verb|.url| 。 若作者的 \verb|authors.salary| 大于零， 则默认选择 \verb|Xiao|，否则默认选 \verb|Usr|。 创建后， 在 tex 文件第三行注释 \verb|license: 协议id|。 若没有输入关键词， 则第二行插入 \verb|%| 和一个空格即可。
+\item 【完成】创建文章时加一个 “文章类型” 栏, 点击可以有下拉菜单， 每一行显示 \verb|types.id|（空字符串不显示）和 \verb|.caption| 和 \verb|.intro|（每列对齐）。 
 \item 【完成】注意由于历史原因，关键词必须在第二行，剩下的 \verb|license|， \verb|type| 顺序可以随意。
 \item 【完成】tex 文件开头的连续若干行若都有行首注释， 那么都不允许手动修改。
 \item 【完成】重命名按钮改为 🛈 图标， 名字改为 “修改文章信息”。
@@ -247,24 +247,24 @@ UPDATE "entries" SET "figures" = "figures" || ' test_10' WHERE "id"='test';
 \item 为了防止同昵称用户的笔记文件夹冲突，使用数据库的 \verb|authors.id| 作为用户笔记文件夹的名称， 如果不存在就在数据库新建一个作者。
 \item 【完成】editor 对 \verb|PhysWikiScan| 的所有调用都要检查是有 \verb|cerr| 输出， 以及 exit code 是否为零。 如果有错误应该在编辑器前端提示。
 \item 【完成】更新数据库时， 需要尽量开启 \verb|PRAGMA foreign_keys = ON;| 检查 foreign key 是否存在。
-\item 【完成】使用 \verb|occupied| 表格标记词条占用状态（包括被谁占用）， 不要记录到其他任何地方。 “查看词条占用状态” 按钮使用该数据， 发布或者使用解除占用按钮都重置该数据。
-\item 【完成】打开词条后如果有一次备份（见下文\textbf{新备份算法}）则在数据库 \verb|occupied| 表标记占用。 如果不产生新的备份（即新的文件 hash）则不要占用。
+\item 【完成】使用 \verb|occupied| 表格标记文章占用状态（包括被谁占用）， 不要记录到其他任何地方。 “查看文章占用状态” 按钮使用该数据， 发布或者使用解除占用按钮都重置该数据。
+\item 【完成】打开文章后如果有一次备份（见下文\textbf{新备份算法}）则在数据库 \verb|occupied| 表标记占用。 如果不产生新的备份（即新的文件 hash）则不要占用。
 \item 【完成】标记占用（也就是产生新的备份）后更新 \verb|authors.recent_entries|。 “打开文件” 按钮中的 “我的编辑” 使用这里的数据。
 \item 【完成】引用文献按钮使用数据库 \verb|bibliography| 中的信息。 不要包括 id 为 \verb|''| 的条目。
-\item 百科创建词条以后， 自动按下 “标记词条：草稿”（用户笔记不需要）， 并更新 \verb|entries.draft = 1|， 用户笔记不需要。
-\item 【完成】创建词条或者重命名时需要更新 \verb|entries.caption|
-\item 【完成】创建词条时需要可以选择协议， 选项见数据库的 \verb|entries.license|（不要包含方括号）， 选择后更新数据库。 打开词条后也要允许在菜单中修改。
-\item 【完成】创建词条时需要可以选择文章类型， 选项见数据库的 \verb|entries.type|（不要包含方括号）， 默认选 \verb|Tutor|。 选择后更新数据库。 打开词条后也要允许在菜单中修改。
+\item 百科创建文章以后， 自动按下 “标记文章：草稿”（用户笔记不需要）， 并更新 \verb|entries.draft = 1|， 用户笔记不需要。
+\item 【完成】创建文章或者重命名时需要更新 \verb|entries.caption|
+\item 【完成】创建文章时需要可以选择协议， 选项见数据库的 \verb|entries.license|（不要包含方括号）， 选择后更新数据库。 打开文章后也要允许在菜单中修改。
+\item 【完成】创建文章时需要可以选择文章类型， 选项见数据库的 \verb|entries.type|（不要包含方括号）， 默认选 \verb|Tutor|。 选择后更新数据库。 打开文章后也要允许在菜单中修改。
 \item 【完成】编辑器不应该使用任何 \verb|data/*.txt|， 将删除。 \verb|data/autoref.txt| 中的信息会直接输出到 stdout。
 
 
-\item 【完成】删除词条以前运行 \verb|./PhysWikiScan --delete 词条id|。 运行成功后再修改 \verb|main.tex| （scan 会删除词条 tex 文件）， 否则提示 \verb`cerr` 中的错误， 不删除词条。
+\item 【完成】删除文章以前运行 \verb|./PhysWikiScan --delete 文章id|。 运行成功后再修改 \verb|main.tex| （scan 会删除文章 tex 文件）， 否则提示 \verb`cerr` 中的错误， 不删除文章。
 \item 【先不做】发布按钮改成 “审稿”， 弹出窗口， 给用户选择 \verb|review.action| 和 \verb|review.comment|。 插入数据库（补全其他列）， 确保审稿的 hash 存在于 \verb|history| 表。 如果选择发布， 则行为和现在的发布按钮相同。 若选择撤回， 则撤回到上次发布的内容。
 \item 【完成】editor 备份步骤： 更新 \verb|contents/文件名.tex|， 然后运行 \verb|PhysWikiScan --backup 文件名|，不需要修改数据库（具体行为见 \verb|README.md|）。 注意输出中 \verb|exist| 不应该出现，因为编辑器前端应该检测到内容改变才进行备份。
 \item 【完成】编辑器出现任何内容改动（即使不手动保存）都必须做一次自动备份（不使用 scan 更新 html， 只有手动按保存才更新）。 两次备份之间不少于 20s （这个参数需要以后可以调整）。
-\item 【完成】手动保存或关闭词条时， 如果内容有改变， 也备份一次。
-\item 【不做】这些步骤由 scan 的 \verb|--backup| 完成：词条备份文件确保使用 utf8 编码， 换行符使用 LF 而不是 CRLF。 保存前先计算文件内容 SHA1 的前 16 位， 确保数据库中 \verb|history.hash| 不存在（否则不备份）。 然后保存到 \verb|PhysWiki-backup/YYYYMMDDHHMM_authorID_entry.tex|， 其中 \verb|authorID| 是数据库的 \verb|authors.id| （非负整数）， 如果此时发现作者是新作者， 则将其先插入到 \verb|authors| 表格。
-\item 【不做】由 scan 的 \verb|--backup| 完成：上一条中的 \verb|YYYYMMDDHHMM| 如果距离同一词条同一作者的上一个 \verb|YYYYMMDDHHMM| 少于 30 分钟（这个参数需要以后可以调整）但不是五分钟的整数倍， 则补全到五分钟的整数倍（到未来）。 补全后若文件文件名已存在则覆盖。
+\item 【完成】手动保存或关闭文章时， 如果内容有改变， 也备份一次。
+\item 【不做】这些步骤由 scan 的 \verb|--backup| 完成：文章备份文件确保使用 utf8 编码， 换行符使用 LF 而不是 CRLF。 保存前先计算文件内容 SHA1 的前 16 位， 确保数据库中 \verb|history.hash| 不存在（否则不备份）。 然后保存到 \verb|PhysWiki-backup/YYYYMMDDHHMM_authorID_entry.tex|， 其中 \verb|authorID| 是数据库的 \verb|authors.id| （非负整数）， 如果此时发现作者是新作者， 则将其先插入到 \verb|authors| 表格。
+\item 【不做】由 scan 的 \verb|--backup| 完成：上一条中的 \verb|YYYYMMDDHHMM| 如果距离同一文章同一作者的上一个 \verb|YYYYMMDDHHMM| 少于 30 分钟（这个参数需要以后可以调整）但不是五分钟的整数倍， 则补全到五分钟的整数倍（到未来）。 补全后若文件文件名已存在则覆盖。
 \item 【完成】前端历史版本按钮中的字符数加减使用 \verb|history.add/del| 中的数据。 注意要显示用户名而不是 \verb|authors.id|。
 \item 【完成】Mac 上编辑器的快捷键应该符合 Mac 用户的习惯，例如保存用 \verb|Cmd+S|，\textbf{其他请自行搜索}。
 \item 【完成】选中若干行代码按 \verb|Tab| 应该用 tab 缩进， 按 \verb|Shift + Tab| 应该删除一个缩进。
@@ -283,13 +283,13 @@ $$a^2 + b^2 = c^2$$
 行间公式也用两个美元符号， 而且前后都要有额外的空行， 否则视为行内公式。 注意 latex 代码还是要使用 html 中的而不是 tex 中的。
 \end{lstlisting}
 
-\item 凡是显示所有词条的列表， 每次只加载 50 个， 翻到最后再继续加载。
+\item 凡是显示所有文章的列表， 每次只加载 50 个， 翻到最后再继续加载。
 
 \item 【进行中】当粘贴 url 到 \verb|\href{}| 命令中（就是插入链接按钮的那个命令）时， 自动把 url 中的百分号字符转换为 utf-8。 例如\href{https://www.webatic.com/url-convertor}{这个网站做的那样}。
 
 \item 编辑器的预览中， 如果有 \verb|wuli.wiki/changed/xxxx.html| 的链接， 点击以后在编辑器中打开 \verb|xxxx.tex|（相当于在 tex 代码中 Shift+Click 橙色下划线的链接）。 如果有 \verb|wuli.wiki/changed/xxxx.html#eq_xxxx|， 点击以后自动在编辑器中跳转到对应公式。 其他的链接也类推。
 
-\item 【先不做】在笔记功能中添加一个重置按钮， 按了之后提示两次 \verb|你确定要重置笔记吗？ 所有词条将被删除且原则上无法恢复（仍然可联系管理员恢复，但管理员一般很忙）！ 请确保你已经通过下载按钮下载最新源码！ 该功能主要用于解决历史用户的某些严重的 bug， 恢复后可以手动把备份的词条重新逐一手动复制上来|。
+\item 【先不做】在笔记功能中添加一个重置按钮， 按了之后提示两次 \verb|你确定要重置笔记吗？ 所有文章将被删除且原则上无法恢复（仍然可联系管理员恢复，但管理员一般很忙）！ 请确保你已经通过下载按钮下载最新源码！ 该功能主要用于解决历史用户的某些严重的 bug， 恢复后可以手动把备份的文章重新逐一手动复制上来|。
 
 \item 插入代码块时， 如果不指定， 声明 \verb`begin{lstlisting}[language=none]`
 
@@ -297,17 +297,17 @@ $$a^2 + b^2 = c^2$$
 
 \item 在 Mac 上， 提示以及使用 Mac 习惯的快捷方式（如保存用 \verb|Cmd+S|）
 
-\item 【不做】每五分钟的备份也要包括图片和源文件（即 figures 文件夹中所有格式为 \verb|词条名_数字.任意拓展名| 的文件）， 命名规则和 tex 文档一样。 只有图片文件内容被改变时才备份（可以通过 hash 判断或者逐字节对比）。
+\item 【不做】每五分钟的备份也要包括图片和源文件（即 figures 文件夹中所有格式为 \verb|文章名_数字.任意拓展名| 的文件）， 命名规则和 tex 文档一样。 只有图片文件内容被改变时才备份（可以通过 hash 判断或者逐字节对比）。
 
-\item （先完成新要求文档中的图片备份功能再做这个）每次保存时检查该词条对应的图片文件 \verb|figures/词条名_编号.拓展名| 中的 \verb|词条名_编号| 是否在代码中出现（包括注释掉的代码）， 如果没有， 就把该图片（可能不止一个）删除。
+\item （先完成新要求文档中的图片备份功能再做这个）每次保存时检查该文章对应的图片文件 \verb|figures/文章名_编号.拓展名| 中的 \verb|文章名_编号| 是否在代码中出现（包括注释掉的代码）， 如果没有， 就把该图片（可能不止一个）删除。
 
-\item 【完成】编辑器的浏览器 tab 上应该有百科的 logo （详见任意 wuli.wiki/online/ 词条页面的 html 代码）
+\item 【完成】编辑器的浏览器 tab 上应该有百科的 logo （详见任意 wuli.wiki/online/ 文章页面的 html 代码）
 
 \item 按下插入代码按钮时， 弹出提示框输入标题（可选）， 并插入到 \verb|begin{lstlisting}[language=语言, caption=标题]| 中
 
-\item 【完成】创建词条时， 标题中的中文字符和英文/数字之间需要有空格， 没有就自动插入。
+\item 【完成】创建文章时， 标题中的中文字符和英文/数字之间需要有空格， 没有就自动插入。
 
-\item 【完成】\verb|wuli.wiki/editor| 页面的 html title 应该改为 \verb|小时百科编辑器 x.x.x\n 用户： xxx|， 不需要显示正在编辑的词条名。
+\item 【完成】\verb|wuli.wiki/editor| 页面的 html title 应该改为 \verb|小时百科编辑器 x.x.x\n 用户： xxx|， 不需要显示正在编辑的文章名。
 
 \item 【完成】\verb|wuli.wiki/note| 页面的 html title 应该改为 \verb|小时云笔记 x.x.x\n 用户： xxx|
 
@@ -323,42 +323,42 @@ $$a^2 + b^2 = c^2$$
 
 \item 【进行中】用户笔记按保存时， \verb|PhysWikiScan| 命令中的 url 设为空， 发布时 url 不变
 
-\item 作为一个内容冲突的检查机制， 每次以任何形式保存词条（包括自动备份）后， 前端记录下后台词条文件的 hash， 下次保存前检查该文件的 hash。 如果和记录的不同， 那么提示 \verb|服务器上该词条文件发生了改变， 和这里的内容冲突， 这是一个 bug， 请立即停止编辑， 手动保存这里的内容到您的电脑， 并联系管理员|。
+\item 作为一个内容冲突的检查机制， 每次以任何形式保存文章（包括自动备份）后， 前端记录下后台文章文件的 hash， 下次保存前检查该文件的 hash。 如果和记录的不同， 那么提示 \verb|服务器上该文章文件发生了改变， 和这里的内容冲突， 这是一个 bug， 请立即停止编辑， 手动保存这里的内容到您的电脑， 并联系管理员|。
 
 \item 上传图片的时候允许额外上传一个其他格式的文件（例如源码文件）， 重命名为和图片文件相同。 允许 \verb|.m|， \verb|.py|， \verb|.agx|。
 
 \item 考虑接入一个语法检查的 api， 并在编辑器里面实时标记出来。
 
-\item 编辑器应该有一个内部的通知系统， 制定一定的规则， 例如自己编写过的词条被别人修改了会得到通知。 又例如某人负责的部分中词条被修改了也收到通知。
+\item 编辑器应该有一个内部的通知系统， 制定一定的规则， 例如自己编写过的文章被别人修改了会得到通知。 又例如某人负责的部分中文章被修改了也收到通知。
 
 \item 【完成】在代码按钮旁边添加一个按钮， 插入 \verb`\verb|...|` 命令。 如果选中一段文字再按， 就把文字放在它里面。 如果选中的文字中含有 \verb`|`， 就改为 \verb|\verb`...`|， 如果也有 \verb|`|， 就改为 \verb|\verb+...+|。
 
-\item 【完成】Ctrl + 单击外部引用 autoref， 可以直接打开链接到的词条并跳转到对应的 label。 预览窗口也跳转到相应的 id （和 label 同名）。
+\item 【完成】Ctrl + 单击外部引用 autoref， 可以直接打开链接到的文章并跳转到对应的 label。 预览窗口也跳转到相应的 id （和 label 同名）。
 
 \item 【完成】\verb|wuli.wiki/history| 和 \verb|wuli.wiki/diff| 页面不应该要求登录就可以使用
 
 \item 【完成】全局搜索功能： 弹出一个窗口， 输入一行文字（安全起见命令中不允许有分号或者 \verb|&|）， 在 PhysWiki/contents 目录运行 \verb`git grep --no-index 输入的文字` 然后在下面返回命令行的输出结果
 
-\item 【完成】发布词条的同时， 在 \verb|PhysWiki/| 中 \verb|git add| 该词条的 tex 文件和图片。
+\item 【完成】发布文章的同时， 在 \verb|PhysWiki/| 中 \verb|git add| 该文章的 tex 文件和图片。
 
-\item 【完成】编辑器的 “打开词条” 窗口需要添加 “最近编辑” 按钮支持浏览当前用户编辑过的所有文件， 时间从新到老排序。
+\item 【完成】编辑器的 “打开文章” 窗口需要添加 “最近编辑” 按钮支持浏览当前用户编辑过的所有文件， 时间从新到老排序。
 
 \item 【完成】备份 tex 时， 若与上一个备份文件相同（无论是否同一作者）， 则不备份（或者说把新文件删除）。
 \item 当正文插入的 \verb|$| 被自动补全后， 立即用退格键删除 \verb|$| 时补全的 \verb|$| 也需要自动删除
 
 \item 【完成】若剪贴板中有 png 图片， 则可以直接在编辑器中粘贴以插入图片环境并上传图片。
 
-\item 【完成】把 “修改词条标题” 按钮的 tip 改成 “重命名”； “插入词条引用” 改成 “引用其他词条”； “插入外部引用” 改成 “引用其他词条内容”； “插入内部引用” 改成 “引用本词条内容”；
+\item 【完成】把 “修改文章标题” 按钮的 tip 改成 “重命名”； “插入文章引用” 改成 “引用其他文章”； “插入外部引用” 改成 “引用其他文章内容”； “插入内部引用” 改成 “引用本文章内容”；
 
-\item 【完成】按钮放到 “引用其他词条” 后面的按钮依次应该是：“引用文献”、 “插入链接”。
+\item 【完成】按钮放到 “引用其他文章” 后面的按钮依次应该是：“引用文献”、 “插入链接”。
 
 \item 【完成】编辑器预览的初始页面插入小时百科 logo 以及文字， 设计图见聊天记录。
 
 \item 【完成】“插入脚注” 按钮放到 “注释” 后面； “插入代码” 放到 “插入多个公式” 后面； “插入预备知识” 放到 “插入小标题” 后面; “插入推论” 后面加一条竖线。
 
-\item 【完成】把 “词条已被他人修改” 的提示改为 “词条已被 xxx 修改”， xxx 为用户名。
+\item 【完成】把 “文章已被他人修改” 的提示改为 “文章已被 xxx 修改”， xxx 为用户名。
 
-\item 【完成】具有管理员权限的人在打开他人编辑过的词条后， 弹出提示 “词条已被 xxx 修改， 是否以只读模式打开？” 可以选择 “只读模式” 或者 “强制修改”。
+\item 【完成】具有管理员权限的人在打开他人编辑过的文章后， 弹出提示 “文章已被 xxx 修改， 是否以只读模式打开？” 可以选择 “只读模式” 或者 “强制修改”。
 
 \item 【完成】鼠标右键菜单需要添加 “粘贴”。 剪切复制粘贴需要放到右键菜单顶部
 
@@ -370,17 +370,17 @@ $$a^2 + b^2 = c^2$$
 
 \item 【完成】在百科或笔记中打开 \verb|bibliography.tex| 时会提示 \verb|备份失败： 源文件 "contents/bibliography.tex" 不存在。|
 
-\item 【完成】删除一个文件时， 图片和源文件也要一并删除（包括 figures 中所有格式为 \verb|词条名_数字.任意拓展名| 的文件， online, changed 中对应的 svg 和 png 文件。
+\item 【完成】删除一个文件时， 图片和源文件也要一并删除（包括 figures 中所有格式为 \verb|文章名_数字.任意拓展名| 的文件， online, changed 中对应的 svg 和 png 文件。
 
-\item 【完成】删除词条时同时删除 \verb|changed/| 和 \verb|online/| 目录中对应的 html 和图片文件 （图片名格式为 \verb|词条名_编号.拓展名|）
+\item 【完成】删除文章时同时删除 \verb|changed/| 和 \verb|online/| 目录中对应的 html 和图片文件 （图片名格式为 \verb|文章名_编号.拓展名|）
 
-\item 【先不处理】保存时， 检查所有 \verb|\label{词条名_类型序号}| （如 \verb|\label{eq_Sample_1}|）是否正确， 如果不正确， 提示 \verb|检查到 xx 个 label 与词条名不匹配， 是否批量替换？：xxx, xxx, xxx| 如果选是， 则将 contents 目录中的所有词条中 \verb|\label{}| 和 \verb|\autoref{}| 中出现的该标签都替换成符合要求的。 注意每个 label 在词条中都必须是独一无二的。
+\item 【先不处理】保存时， 检查所有 \verb|\label{文章名_类型序号}| （如 \verb|\label{eq_Sample_1}|）是否正确， 如果不正确， 提示 \verb|检查到 xx 个 label 与文章名不匹配， 是否批量替换？：xxx, xxx, xxx| 如果选是， 则将 contents 目录中的所有文章中 \verb|\label{}| 和 \verb|\autoref{}| 中出现的该标签都替换成符合要求的。 注意每个 label 在文章中都必须是独一无二的。
 
-\item 【先不处理】上一条中批量替换时会产生一个和空心引号按钮类似的问题， 就是如果有其他人正在编辑需要添加或修改 label 的词条怎么办？ 是否考虑采用新提出的 “介入” 机制？ 还是可以做到实时刷新这些人打开的词条？
+\item 【先不处理】上一条中批量替换时会产生一个和空心引号按钮类似的问题， 就是如果有其他人正在编辑需要添加或修改 label 的文章怎么办？ 是否考虑采用新提出的 “介入” 机制？ 还是可以做到实时刷新这些人打开的文章？
 
-\item 【完成】如果没有词条打开， 预览区显示百科图标\upref{xwLogo}的扁平化 logo （注意大小合适美观）。
+\item 【完成】如果没有文章打开， 预览区显示百科图标\upref{xwLogo}的扁平化 logo （注意大小合适美观）。
 
-\item 【完成】在 main.tex 中， “插入词条引用” 按钮改为插入 \verb|\entry{词条名}{文件名（不含拓展名）}|
+\item 【完成】在 main.tex 中， “插入文章引用” 按钮改为插入 \verb|\entry{文章名}{文件名（不含拓展名）}|
 
 \item 【完成】引用 subsection 按钮的 tip 改成 “子节”
 
@@ -388,7 +388,7 @@ $$a^2 + b^2 = c^2$$
 
 \item 【完成】如果某个 tab 中有未保存到服务器的内容， tab 的左上角加一个小红点。
 
-\item 【完成】“改进意见” 按钮的 tip 改为 “标记词条： xxx”
+\item 【完成】“改进意见” 按钮的 tip 改为 “标记文章： xxx”
 
 \item 【完成】百分号图标有点太大了跟周围的图标不协调， 适当调小一点。
 
@@ -398,7 +398,7 @@ $$a^2 + b^2 = c^2$$
 
 \item 【完成】增加一个 “引用文献” 按钮， 图标为 \verb|[1]|， 点击以后弹出文献列表（从 \verb|data/bib_label.txt| 和 \verb|bib_detail.txt| 中每行分别读取 \verb|标签| 和 \verb|内容|）， 每一行的格式为 \verb|[行号 标签] 内容| 支持搜索， 点击以后在光标处插入 \verb|\cite{标签}|
 
-\item 【完成】设置每个词条第一行为只读（除了 \verb|main.tex| 以及 \verb|bibliography.tex|）， 如果试图直接修改， 就提示 “请使用重命名按钮修改标题”。
+\item 【完成】设置每个文章第一行为只读（除了 \verb|main.tex| 以及 \verb|bibliography.tex|）， 如果试图直接修改， 就提示 “请使用重命名按钮修改标题”。
 
 \item 【先不做】当编辑器提示 PhysWikiScan 输出的 cerr 时， 文字需要可以复制， 如果 chrome 本身的弹窗不支持， 就用自己的弹窗。
 
@@ -416,19 +416,19 @@ $$a^2 + b^2 = c^2$$
 \subsubsection{【方案 1】只占用子节}
 \begin{itemize}
 \item 这是现有方案的一个小改进， 开发成本非常低。
-\item 每个作者都可以看到当前未通过审核的所有改变（无论哪种方案这都是应该的）， 鼓励同时编辑同一个词条的人进行沟通。
-\item 编辑器通过作者修改的内容决定占用哪些子节， 可以允许不同作者修改同一个词条的不同子节。
+\item 每个作者都可以看到当前未通过审核的所有改变（无论哪种方案这都是应该的）， 鼓励同时编辑同一个文章的人进行沟通。
+\item 编辑器通过作者修改的内容决定占用哪些子节， 可以允许不同作者修改同一个文章的不同子节。
 \end{itemize}
 
 \subsubsection{【方案 2】使用 Git 的方式协同编辑}
 \begin{itemize}
 \item 这个方案是最理想的， 但需要较大开发成本。 当然也可以不严格实现取个折中。也可以完全用 github 管理， 0 成本。 还可以在自己服务器上搭建 GitLab。
-\item 使用 git 的方式管理协作。 从概念上每个人的每次新编辑（可以修改多个词条）都创建整个百科的一个新分支（以账号 ID 命名）。 完成后提交 pull request（PR）。 审稿人同意后 merge 到 master。 每个新分支都有自己的数据库（概念上）。
+\item 使用 git 的方式管理协作。 从概念上每个人的每次新编辑（可以修改多个文章）都创建整个百科的一个新分支（以账号 ID 命名）。 完成后提交 pull request（PR）。 审稿人同意后 merge 到 master。 每个新分支都有自己的数据库（概念上）。
 \item 每个作者都可以看到当前未通过审核的所有改变。
-\item 为避免冲突每个词条一次只能有一个 PR， 这样抢锁就成了抢 PR。 与其让审稿人解决冲突， 需要作者自己解决冲突（把自己的更改 rebase 到 master 的最新 commit， 并确保可以编译成功）。
+\item 为避免冲突每个文章一次只能有一个 PR， 这样抢锁就成了抢 PR。 与其让审稿人解决冲突， 需要作者自己解决冲突（把自己的更改 rebase 到 master 的最新 commit， 并确保可以编译成功）。
 \item 鼓励尽量把非 trivial 的公式用公式按钮创建， 按钮自动生成 label。 其他环境一律强制要求有 label。
 \item 用户可以直接申请在 master 分支中添 label， 自动通过（为了防止捣乱可以限制数量）然后 pull 到自己的分支。
-\item 数据库的实现上， 给每个分支新建一个临时数据库， 但每个表格只保存变化、删除和新添加的记录（但为了偷懒也可以先复制整个数据库）。 PR 通过以后删除数据库。 文件也是只有改变的才进行复制（为了偷懒也可以先复制所有词条文件）。
+\item 数据库的实现上， 给每个分支新建一个临时数据库， 但每个表格只保存变化、删除和新添加的记录（但为了偷懒也可以先复制整个数据库）。 PR 通过以后删除数据库。 文件也是只有改变的才进行复制（为了偷懒也可以先复制所有文章文件）。
 \item 作者可以向管理员申请重命名 label（某些自动生成的 label 可能希望改成有意义的缩写）， 可以自动把所有分支的某个 label 都重命名（要确保都没有冲突）。
 \end{itemize}
 
@@ -443,9 +443,9 @@ $$a^2 + b^2 = c^2$$
 
 \subsubsection{历史版本}
 \begin{itemize}
-\item 【完成】做一个历史版本页面（考虑支持移动端）， 网址使用 \verb|wuli.wiki/history/|。 直接打开网页显示搜索框， 里面提示搜索词条标题或文件名， 搜索规则和编辑器的 “打开词条” 相同。 搜索点击以后， 网址变为 \verb|wuli.wiki/history/?词条文件名|， 也可以不搜索直接用 \verb|wuli.wiki/history/?词条文件名| 查看该词条的历史。
+\item 【完成】做一个历史版本页面（考虑支持移动端）， 网址使用 \verb|wuli.wiki/history/|。 直接打开网页显示搜索框， 里面提示搜索文章标题或文件名， 搜索规则和编辑器的 “打开文章” 相同。 搜索点击以后， 网址变为 \verb|wuli.wiki/history/?文章文件名|， 也可以不搜索直接用 \verb|wuli.wiki/history/?文章文件名| 查看该文章的历史。
 
-\item 【完成】\verb|wuli.wiki/history/| 打开某词条后， 提供历史版本的列表， 功能和编辑器中的 “历史版本” 窗口类似（该窗口的新要求见下文）。 列表上方显示 \verb|请点击要查看的历史版本， 或选中两个历史版本进行对比|。 点击一个历史版本可以浏览网页（即时用 PhysWikiScan 编译）， 勾选两个历史版本可以点击列表上方 “对比” 按钮查看二者区别。 列表上方同样需要 “只显示每次编辑的最后版本” 按钮（见下文）， 默认选中。
+\item 【完成】\verb|wuli.wiki/history/| 打开某文章后， 提供历史版本的列表， 功能和编辑器中的 “历史版本” 窗口类似（该窗口的新要求见下文）。 列表上方显示 \verb|请点击要查看的历史版本， 或选中两个历史版本进行对比|。 点击一个历史版本可以浏览网页（即时用 PhysWikiScan 编译）， 勾选两个历史版本可以点击列表上方 “对比” 按钮查看二者区别。 列表上方同样需要 “只显示每次编辑的最后版本” 按钮（见下文）， 默认选中。
 
 \item 【完成】\verb|wuli.wiki/history/| 使用 \verb|diff2html| 对比两个版本。 注意页面上需要可以选择 \verb|diff2html| 程序的 \verb|diffStyle| （char, word, line 等， 其中 char 非常重要， 否则连续的中文字符都会被看成一个 word）。
 
@@ -485,15 +485,15 @@ $$a^2 + b^2 = c^2$$
 
 \item 【完成】“导出 md 文件” 按钮中， 不需要包括标题图和标题
 
-\item 【完成】创建词条的窗口在文件名下方添加一个选填栏 “关键词”，在上方的说明改为 \lstinline+请输入标题（如“角动量守恒”），文件名（如"AngMom"）和关键词。文件名不能超过 6 个字符，只能含有字母或数字，不能以数字开头； 关键词格式如 “关键词1|关键词2|关键词3”， 建议填写以方便检索。+
+\item 【完成】创建文章的窗口在文件名下方添加一个选填栏 “关键词”，在上方的说明改为 \lstinline+请输入标题（如“角动量守恒”），文件名（如"AngMom"）和关键词。文件名不能超过 6 个字符，只能含有字母或数字，不能以数字开头； 关键词格式如 “关键词1|关键词2|关键词3”， 建议填写以方便检索。+
 
-\item 【完成】创建词条后， 在文件第二行注释关键词， 如 \lstinline+% 关键词1|关键词2|关键词3+， 光标停留在第四行。 如果创建时没有填写关键词， 则第二行为空， 光标停在第三行
+\item 【完成】创建文章后， 在文件第二行注释关键词， 如 \lstinline+% 关键词1|关键词2|关键词3+， 光标停留在第四行。 如果创建时没有填写关键词， 则第二行为空， 光标停在第三行
 
 \item 【完成】菜单上的 “上传图片并创建新标签” 按钮应该始终保持为默认， 而不是保持上次的选择。
 
 \item 【完成】在编辑百科时， 禁止关闭 “自动替换空心句号为实心” 功能（把开关锁定）
 
-\item 【完成】在 “打开词条” 列表的第二行插入 \verb|bibliography.tex|， 编译该词条时， 使用 \verb|PhysWikiScan --bib| 而不是 \verb|PhysWikiScan --entry bibliography|， 后面的 \verb|--path-in-out-data-url| 选项不变
+\item 【完成】在 “打开文章” 列表的第二行插入 \verb|bibliography.tex|， 编译该文章时， 使用 \verb|PhysWikiScan --bib| 而不是 \verb|PhysWikiScan --entry bibliography|， 后面的 \verb|--path-in-out-data-url| 选项不变
 
 \item 【完成】插入美元符号时， 如果后面有字符（非空格，tab，或回车等）， 那么只插入一个， 小中大括号同理。
 
@@ -527,7 +527,7 @@ $$a^2 + b^2 = c^2$$
 
 \item 【完成】禁止创建文件名为 \lstinline|index.tex| 的文件
 
-\item 【完成】打开词条页面的 “i” 图标和后面的提示可以删掉， 然后把搜索框里面的英文改成 “搜索标题或文件名……”
+\item 【完成】打开文章页面的 “i” 图标和后面的提示可以删掉， 然后把搜索框里面的英文改成 “搜索标题或文件名……”
 
 \item 【完成】设置菜单中 “恢复默认设置” 时， 恢复到 note-template 中的设置
 
@@ -535,11 +535,11 @@ $$a^2 + b^2 = c^2$$
 
 \item 【完成】增加一个代码按钮， 图标为 \lstinline|</>|， 按下以后弹出输入框 “请指定语言（不指定则没有高亮）” \verb|"\\begin{lstlisting}[language=输入的语言]\n${1}\n\\end{lstlisting}"|
 
-\item 【完成】“插入词条引用按钮” 同时也插入词条的中文名， 且自动选中中文名以便修改。 例如 “词条示例\upref{Sample}”
+\item 【完成】“插入文章引用按钮” 同时也插入文章的中文名， 且自动选中中文名以便修改。 例如 “文章示例\upref{Sample}”
 
 \item 【完成】保存缓慢时区分是因为网络缓慢还是 PhysWikiScan 无响应。 如果是前者， 就一直尝试连接直到手动关闭提示框。
 
-\item 【完成】上传的图片保存文件名的格式为 \verb|词条名_序号.后缀名|
+\item 【完成】上传的图片保存文件名的格式为 \verb|文章名_序号.后缀名|
 
 \item 【完成】选中一段文字后点击链接按钮， 插入 \lstinline|\href{http://www.example.com}{被选中的文字}|， 自动选中网址
 
@@ -563,16 +563,16 @@ $$a^2 + b^2 = c^2$$
 
 \item 移动端下不能显示 “确定” 和 “取消” 按钮
 
-\item TODO：对公式编辑器支持插入的符号进行完善，已经按照百科词条加了一些常用符号，看还有什么需求（是否需要一个复制 LaTeX 而不关闭编辑器的按钮？）
+\item TODO：对公式编辑器支持插入的符号进行完善，已经按照百科文章加了一些常用符号，看还有什么需求（是否需要一个复制 LaTeX 而不关闭编辑器的按钮？）
 
-\item 【暂时不需要】TODO：因该插件不支持 physics 宏包，选中大多数词条中现有公式的 LaTeX 打开编辑器，是无法正确显示的（如 $I = \int\bvec j \vdot \dd{\bvec S}$ 选中这段打开编辑器），并且由编辑器生成的 LaTeX 也不符合百科的命令规范（但显示效果基本一致），需编写 processor 对命令进一步转换，如将$\frac{\partial^{n}{\cdot}}{\partial{\cdot}^{n}}$ 转换成 $\pdv[n]{\cdot}{\cdot}$，$\left\langle{\cdot}\vert{\cdot}\right\rangle$ 转换成 $\braket{\cdot}{\cdot}$ etc.
+\item 【暂时不需要】TODO：因该插件不支持 physics 宏包，选中大多数文章中现有公式的 LaTeX 打开编辑器，是无法正确显示的（如 $I = \int\bvec j \vdot \dd{\bvec S}$ 选中这段打开编辑器），并且由编辑器生成的 LaTeX 也不符合百科的命令规范（但显示效果基本一致），需编写 processor 对命令进一步转换，如将$\frac{\partial^{n}{\cdot}}{\partial{\cdot}^{n}}$ 转换成 $\pdv[n]{\cdot}{\cdot}$，$\left\langle{\cdot}\vert{\cdot}\right\rangle$ 转换成 $\braket{\cdot}{\cdot}$ etc.
 \end{itemize}
 
 \subsection{PhysWikiScan BUG}
 
 \subsubsection{changed}
 \begin{itemize}
-\item 【完成】changed.txt 中只有一个词条的时候， 发布词条会提示错误。 为空时也会错误？
+\item 【完成】changed.txt 中只有一个文章的时候， 发布文章会提示错误。 为空时也会错误？
 \end{itemize}
 
 \subsubsection{表格标签多次定义}
@@ -605,7 +605,7 @@ $$a^2 + b^2 = c^2$$
 
 \item 【完成】（已在 latex 模板中基本解决）编译 pdf 时， 特殊字符（如希腊字母等）会无法显示。 如果有无法显示的字符， 在编译的 \verb|.log| 文件里面（或者 console）就会出现 \verb|Missing character: There is no ...| 的提示。 这时最好的办法就是替换成公式环境中的命令。 如希腊字母 $\alpha$。 参考 \href{https://www.overleaf.com/learn/how-to/What_file_encodings_and_line_endings_should_I_use\%3F}{overleaf 的这篇文章}。 另外可以 google 一下 \href{https://tug.ctan.org/info/symbols/comprehensive/symbols-a4.pdf}{symbols-a4.pdf}， 上面提供相近的符号命令对照表。 另外\href{https://www.johndcook.com/unicode_latex.html}{这个}网页可以把 utf 字符转换为 latex 命令。 另外， 在 pdf 编译和百科编辑器的编译结果中， 都实现了行内公式和汉字之间自动插入空格， 和英文字母或数字间不插入空格。
 
-\item 【完成】在每个词条底部加上目录树的链接
+\item 【完成】在每个文章底部加上目录树的链接
 \end{itemize}
 
 \subsubsection{改用 MathJax2}

@@ -3,22 +3,24 @@
 % license Xiao
 % type Tutor
 
-\pentry{点电荷的拉格朗日和哈密顿量\nref{nod_EMLagP}， 量子化\nref{nod_QMPos}， 原子单位制\nref{nod_AU}}{nod_3411}
+\pentry{点电荷的拉格朗日和哈密顿量\nref{nod_EMLagP}， 量子化\nref{nod_QMPos}， 原子单位制\nref{nod_AU}，电磁场的规范变换\nref{nod_Gauge}}{nod_3411}
 
-本文使用原子单位制\upref{AU}。 电动力学中，电磁场中电荷量为 $q$ 的粒子的哈密顿量为
+\footnote{本文参考 \cite{Bransden}。}本文如无特殊说明使用原子单位制\upref{AU}。 电动力学中，电磁场中电荷量为 $q$ 的粒子的哈密顿量为（\autoref{eq_EMLagP_3}~\upref{EMLagP}）
 \begin{equation}\label{eq_QMEM_1}
-H = \frac{1}{2m} (\bvec p - q\bvec A)^2 + q\varphi~.
+H = \frac{1}{2m} (\bvec p - q\bvec A)^2 + q\varphi + V(\bvec r)~.
 \end{equation}
 其中 $\varphi$ 和 $\bvec A$ 分别是电磁场的标势和矢势\upref{EMPot}，都是位置 $\bvec r$ 和时间的函数。 $\bvec p$ 是 $\bvec r$ 的广义动量\upref{HamCan}，
 \begin{equation}\label{eq_QMEM_6}
 \bvec p = m \bvec v + q\bvec A~.
 \end{equation}
-使用长度规范（一般来说除非特殊声明，否则长度规范以及后将遇见的速度规范等都是）， 将 ${\bvec p} = -\I\grad$， 代入得量子化后的哈密顿算符为
+其中 $V(\bvec r)$ 是系统的所有其他势能。 在原子分子物理中，\autoref{eq_QMEM_1} 可以计算氢原子在外部电磁场中的变化， 此时原子核对电子的作用通常被包含在 $V(\bvec r)$ 中， 而 \textbf{$\bvec A, \varphi$ 仅表示外部电磁场的作用}。
+
+现在要把经典的 $H$ 做量子化，也就是将 ${\bvec p} = -\I\grad$ 代入得量子哈密顿算符为
 \begin{equation}\label{eq_QMEM_2}
 \ali{
 H &= \frac{\bvec p^2}{2m} - \frac{q}{2m} (\bvec A \vdot \bvec p + \bvec p \vdot \bvec A)
-+ \frac{q^2}{2m} \bvec A^2 + q \varphi\\
-&= -\frac{1}{2m} \laplacian + \I \frac{q}{2m} (\bvec A \vdot \Nabla + \Nabla \vdot \bvec A) + \frac{q^2}{2m} \bvec A^2 + q\varphi~,
++ \frac{q^2}{2m} \bvec A^2 + q \varphi + V(\bvec r)\\
+&= -\frac{1}{2m} \laplacian + \I \frac{q}{2m} (\bvec A \vdot \Nabla + \Nabla \vdot \bvec A) + \frac{q^2}{2m} \bvec A^2 + q\varphi + V(\bvec r)~,
 }\end{equation}
 注意算符 $\Nabla \vdot \bvec A$ 是指先把波函数乘以矢势再取散度而不是直接对 $\bvec A$ 取散度（想想量子力学中算符相乘的定义）。
 
@@ -34,59 +36,67 @@ E = \frac{(\bvec k - q\bvec A)^2}{2m}~.
 \qquad
 \varphi = \varphi' - \pdv{\chi}{t}~.
 \end{equation}
-定义哈密顿算符 $H'$ 为\autoref{eq_QMEM_1} 中给 $\bvec A, \varphi$ 也分别加上撇。 为了仍然满足含时薛定谔方程 $H'\Psi' = \I \dot \Psi'$， 波函数需要乘以一个相位因子， 但物理观测结果却不会改变
+其中 $\chi$ 是\autoref{eq_Gauge_3}~\upref{Gauge} 中的任意标量函数 $\lambda$。 规范变换后的哈密顿算符哈密顿量为
+\begin{equation}\label{eq_QMEM_8}
+H' = \frac{1}{2m} (\bvec p - q\bvec A')^2 + q\varphi' + V(\bvec r)~.
+\end{equation}
+考虑变换前后的含时薛定谔方程，
+\begin{equation}\label{eq_QMEM_9}
+H\Psi = \I \pdv{t}\Psi~,
+\end{equation}
+\begin{equation}\label{eq_QMEM_10}
+H'\Psi' = \I \pdv{t}\Psi'~.
+\end{equation}
+
+那么 $\Psi$ 和 $\Psi'$ 之间要如何做规范变换才能使两个方程都成立呢？可以证明该变换为 
 \begin{equation}\label{eq_QMEM_3}
 \Psi(\bvec r, t) = \exp(\I \frac{q}{\hbar}\chi) \Psi'(\bvec r, t)~,
 \end{equation}
-其中 $\chi$ 是\autoref{eq_Gauge_3}~\upref{Gauge} 中的任意标量函数 $\lambda$。 将以上三式代入含时薛定谔方程并化简后， 等于把 $\bvec A, \varphi, \Psi$ 分别直接加上一撇。 所以对于任意规范， \autoref{eq_QMEM_2} 都保持相同的形式（gauge invariant）。证明见下文。
+证明见下文。 所以对于任意规范， \autoref{eq_QMEM_2} 和\autoref{eq_QMEM_8} 都保持相同的形式（gauge invariant）。
 
-常见的规范如库仑规范\upref{CouGau}， 以及偶极子近似\upref{DipApr}下的长度规范\upref{LenGau}和速度规范\upref{LVgaug}。
+在量子力学中，常见的规范如库仑规范\upref{CouGau}， 以及偶极子近似\upref{DipApr}下的长度规范\upref{LenGau}和速度规范\upref{LVgaug}。
 
-\subsection{高斯单位制下的公式}
-电磁场中单个粒子的哈密顿量变为
+\subsection{高斯单位制}
+\pentry{高斯单位制\nref{nod_GaussU}}{nod_71e8}
+注意高斯单位制中 $\hbar$ 不是 1， 不可省略。 电磁场中单个粒子的哈密顿量变为
 \begin{equation}
-H = \frac{(\bvec p - \frac{q}{c}\bvec A)^2}{2m} + q\varphi~.
+H = \frac{\hbar^2(\bvec p - q\bvec A/c)^2}{2m} + q\varphi + V(\bvec r)~.
 \end{equation}
-$\bvec p$ 是广义动量 $\bvec p=m\bvec v+\frac{q}{c}\bvec A$。
+$\bvec p$ 是广义动量 $\bvec p=m\bvec v+q\bvec A/c$。
 如果对电磁场进行规范变换
 \begin{equation}
 \bvec A=\bvec A'+\grad \chi,\qquad \varphi =\varphi' - \pdv{\chi}{t}~.
 \end{equation}
 波函数也要乘一个相位因子：
 \begin{equation}
-\Psi(\bvec r,t)=\exp(\I\frac{q}{\hbar c} \chi)\Psi'(\bvec r,t)~.
+\Psi(\bvec r,t)=\exp(\I\frac{q}{c\hbar} \chi)\Psi'(\bvec r,t)~.
 \end{equation}
 
-\subsection{证明（原子单位）}
-现在证明若 $H\Psi = \I \dot\Psi$ 成立， 且 $H', \Psi'$ 由\autoref{eq_QMEM_5} \autoref{eq_QMEM_3} 定义， 那么 $H'\Psi = \I \dot\Psi'$ 也成立。
+\subsection{多粒子薛定谔方程}
+电磁场中多个带电粒子的含时薛定谔方程
+\begin{equation}
+H = \sum_i \frac{(-\I\Nabla_i - q\bvec A)^2}{2m_i} + q_i\varphi + \sum_i V(\bvec r_i) + \sum_{i,j}\frac{q_iq_j}{\abs{\bvec r_i-\bvec r_j}}~.
+\end{equation}
+不难证明
+\begin{equation}
+\Psi(\bvec r_1, \dots,t)= \prod_i \exp[\I q\chi(\bvec r_i, t)]\Psi'(\bvec r_1, \dots,t)~.
+\end{equation}
+
+\subsection{证明}\label{sub_QMEM_1}
+现在证明若\autoref{eq_QMEM_9} 成立， 且 $H', \Psi'$ 由\autoref{eq_QMEM_8} \autoref{eq_QMEM_3} 定义， 那么\autoref{eq_QMEM_10} 也成立。
 
 这个证明并没有想象中那么复杂。 首先证明
 \begin{equation}
-(-\I\Nabla - q\bvec A)\Psi = \exp(\I \frac{q}{\hbar}\chi)(-\I\Nabla - q\bvec A')\Psi'~.
+(-\I\Nabla - q\bvec A)\Psi = \exp(\I q\chi)(-\I\Nabla - q\bvec A')\Psi'~.
 \end{equation}
 同理
 \begin{equation}\label{eq_QMEM_4}
-\frac{(-\I\Nabla - q\bvec A)^2}{2m}\Psi = \exp(\I \frac{q}{\hbar}\chi)\frac{(-\I\Nabla - q\bvec A')^2}{2m}\Psi'~.
+\frac{(-\I\Nabla - q\bvec A)^2}{2m}\Psi = \exp(\I q\chi)\frac{(-\I\Nabla - q\bvec A')^2}{2m}\Psi'~.
 \end{equation}
 然后证明
 \begin{equation}\label{eq_QMEM_7}
-\qty(q\varphi - \I \pdv{t})\Psi= \exp(\I \frac{q}{\hbar}\chi)\qty(q\varphi' - \I \pdv{t})\Psi'~
+\qty(q\varphi - \I \pdv{t})\Psi= \exp(\I q\chi)\qty(q\varphi' - \I \pdv{t})\Psi'~
 \end{equation}
-\autoref{eq_QMEM_4} 和\autoref{eq_QMEM_7} 相加可证 $H'\Psi = \I \dot\Psi'$。
+\autoref{eq_QMEM_4} 和\autoref{eq_QMEM_7} 相加可证\autoref{eq_QMEM_10}。
 
-\subsection{多粒子薛定谔方程}
-以上只讨论了单个粒子的含时薛定谔方程和规范变换。 对多粒子有
-\begin{equation}
-H = \sum_i H_i = \sum_i \frac{(-\I\Nabla_i - q\bvec A)^2}{2m_i} + q_i\varphi~.
-\end{equation}
-虽然对电磁场来说 $\chi(\bvec r, t)$ 都是一个函数， 这样就有
-\begin{equation}
-\bvec A(\bvec r_i, t) = \bvec A'(\bvec r_i, t) + \Nabla_i \chi(\bvec r_i, t)~.
-\end{equation}
-\begin{equation}
-\varphi(\bvec r_i, t) = \varphi'(\bvec r_i, t) - \pdv{\chi(\bvec r_i, t)}{t}~.
-\end{equation}
-于是不难证明
-\begin{equation}
-\Psi(\bvec r,t)= \prod_i \exp[\I\frac{q}{\hbar}\chi(\bvec r_i, t)]\Psi'(\bvec r,t)~.
-\end{equation}
+该推导容易拓展到多粒子的情况。 另外，无论使用库仑\upref{CouGau}、长度\upref{LenGau}、速度\upref{LVgaug}中哪种常见的规范，把原子核与电子间的库仑作用包含在 $\varphi$ 中还是分离到 $V$ 中都不影响上述推导。 我们一般选择后者。
