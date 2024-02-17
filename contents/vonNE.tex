@@ -45,7 +45,10 @@ von Neumann 度量了一个混态的密度矩阵的“混乱程度”，正如\u
 S\left(\rho || \sigma\right) = \opn{tr}\left(\rho \log \rho\right) - \opn{tr}\left(\rho \log \sigma\right)~.
 \end{equation}
 
-接下来我们证明 Klein 不等式，也就是量子相对熵非负：$S\left(\rho || \sigma\right) \geqslant 0$。
+接下来我们证明 \textbf{Klein 不等式}，也就是量子相对熵非负：
+\begin{equation}\label{eq_vonNE_2}
+S\left(\rho || \sigma\right) \geqslant 0~.
+\end{equation}
 
 假设$\rho = \sum\limits_ip_i\ketbra{u_i}{u_i}$，$\sigma = \sum\limits_jq_j\ketbra{v_j}{v_j}$。
 
@@ -171,8 +174,75 @@ S\left( \sum_i p_i\rho_i \right) &= -\sum_{i,j}p_i\lambda_i^j\log\left(p_i \lamb
 
 对于$\rho$和$\sigma$的直积态$\rho\otimes\sigma$，其纠缠熵为$S\left(\rho\otimes \sigma\right) = S\left(\rho\right) + S\left(\sigma\right)$。
 
-这一条性质的证明较为简单，因为我们可以在不影响$\sigma$的情况下对角化$\rho$，也可以在不影响$\rho$的情况下对角化$\sigma$，我们得到两个对角化的密度矩阵后就可以直接套用上一条性质来计算了。
+假设$\rho$的本征值为$\lambda_i^1,~i\in \left\{1,2,\cdots N^1\right\}$，$\sigma$的本征值为$\lambda_i^2,~i \in \left\{1,2,\cdots N^2\right\}$。那么直积态$\rho\otimes \sigma$的本征值就为$\lambda_i^1\lambda_j^2,~i\in\left\{1,2,\cdots N^1\right\},~j\in\left\{1,2,\cdots N^2\right\}$共$N^1\times N^2$个本征值。
 
+那么类似上一条性质的，我们有:
+\begin{equation}
+\begin{aligned}
+S\left(\rho\otimes\sigma\right) &= -\sum_{i,j}\lambda_i^1\lambda_j^2\log\lambda_i^1\lambda_j^2 \\
+&= -\sum_{i,j}\lambda_i^1\lambda_j^2\log\lambda_i^1 - \sum_{i,j}\lambda_i^1\lambda_j^2\log\lambda_j^2 \\
+&= -\sum_i \lambda_i^1\log\lambda_i^1 - \sum_i\lambda_i^2\log\lambda_i^2 \\
+&= S\left(\rho\right) + S\left(\sigma\right)~.
+\end{aligned}~
+\end{equation}
+由此得证。
+
+\subsubsection{纠缠熵的次可加性}
+
+纠缠熵的次可加性说的是不等式：
+
+\begin{equation}
+S\left(A,B\right) \leqslant S\left(A\right) + S\left(B\right) ~.
+\end{equation}
+他的证明是 klein 不等式\autoref{eq_vonNE_2} 的简单应用。 记AB总系统上密度矩阵为$\rho_{AB}$，$A$
+和$B$分别两个子系统上的密度矩阵为$\rho_A$和$\rho_B$，我们令 klein 不等式中的$\rho = \rho_{AB}$，$\sigma = \rho_A\otimes \rho_B$。那么有：
+
+\begin{equation}
+\begin{aligned}
+S\left(\rho_{AB}\left|\left|\rho_A\otimes\rho_B\right.\right.\right)&= \opn{tr}\left(\rho_{AB}\log\rho_{AB}\right) - \opn{tr}\left(\rho_{AB}\log\left(\rho_A\otimes\rho_B\right)\right) \\
+&= -S\left(A,B\right) - \opn{tr}\left(\rho_{AB}\log\left(\rho_A\otimes I_B\right) + \rho_{AB}\log\left(I_A\otimes\rho_B\right)\right) \\
+&= -S\left(A,B\right) - \opn{tr}\left(\rho_A\log\rho_A\right) - \opn{tr}\left(\rho_B\log\rho_B\right) \\
+&= -S\left(A,B\right) + S\left(A\right) + S\left(B\right) \\
+&\geqslant 0~.
+\end{aligned}~
+\end{equation}
+由此可证$S\left(A,B\right)\leqslant S\left(A\right) + \left(B\right)$，其取等号的条件也即是 klein 不等式取等号的条件，即$\rho_{AB} = \rho_A\otimes \rho_B$，总系统是子系统的直积态时取等号，这恰好与上一条性质相符。
+
+\subsubsection{纠缠熵的三角不等式}
+
+纠缠熵的三角不等式，也被称为 Araki-Lieb 不等式，指的是：
+\begin{equation}
+S\left(A,B\right)\geqslant\abs{S\left(A\right) - S\left(B\right)}~.
+\end{equation}
+除$A$，$B$系统外，我们额外引入系统$C$来纯化系统$A$和$B$。此时由于总系统是纯态，$S\left(A,B,C\right) = 0$，则有$S\left(A\right) = S\left(B,C\right)$和$S\left(B\right) = S\left(A,C\right)$。
+
+分别考虑$A$，$C$区域的次可加性和$B$，$C$区域的次可加性，则有：
+\begin{equation}
+\begin{aligned}
+S\left(A,C\right)&\leqslant S\left(A\right)+S\left(C\right) \\
+S\left(B,C\right)&\leqslant S\left(B\right)+S\left(C\right)~.
+\end{aligned}~
+\end{equation}
+
+也可写作：
+
+\begin{equation}
+\begin{aligned}
+S\left(B\right)&\leqslant S\left(A\right) + S\left(A,B\right) \\
+S\left(A\right)&\leqslant S\left(B\right) + S\left(A,B\right)~.
+\end{aligned}~
+\end{equation}
+
+整理得：
+
+\begin{equation}
+\begin{aligned}
+S\left(A,B\right)&\geqslant S\left(B\right) - S\left(A\right) \\
+S\left(A,B\right)&\geqslant S\left(A\right) - S\left(B\right)~.
+\end{aligned}~
+\end{equation}
+
+写在一起就是$S\left(A,B\right)\geqslant\abs{S\left(A\right) - S\left(B\right)}$。
 
 \subsection{纠缠熵的连续性}
 
