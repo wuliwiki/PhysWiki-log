@@ -1,4 +1,4 @@
-% 线性方程组解的结构
+% 线性方程组的解
 % keys 线性方程组|矢量空间|秩|矩阵
 % license Xiao
 % type Tutor
@@ -7,22 +7,22 @@
 \issueDraft
 \end{issues}
 
-\pentry{矩阵与线性变换\nref{nod_MatLS}， 高斯消元法\nref{nod_GAUSS}， 矩阵的秩\nref{nod_MatRnk}}{nod_1edb}
+\pentry{线性方程组\nref{nod_LinEqu}，矩阵与线性变换\nref{nod_MatLS}， 高斯消元法\nref{nod_GAUSS}， 矩阵的秩\nref{nod_MatRnk}}{nod_1edb}
 
 线性方程组可以记为
 \begin{equation}\label{eq_LinEq_1}
-\mat A \bvec x = \bvec y~,
+\mat A \bvec x = \bvec b~,
 \end{equation}
-其中 $\mat A$ 是 $M \times N$ 的矩阵， $\bvec x$ 是 $N$ 维列矢量， $\bvec y$ 是 $M$ 维列矢量， $\mat A \bvec x$ 表示矩阵与列矢量相乘（\autoref{eq_Mat_4}~\upref{Mat}）。 $\mat A$ 和 $\bvec y$ 是已知的， $\bvec x$ 是未知的， 被称为方程组的\textbf{解（solution）}。
+其中 $\mat A$ 是 $M \times N$ 的矩阵， $\bvec x$ 是 $N$ 维列矢量， $\bvec b$ 是 $M$ 维列矢量， $\mat A \bvec x$ 表示矩阵与列矢量相乘（\autoref{eq_Mat_4}~\upref{Mat}）。 $\mat A$ 和 $\bvec b$ 是已知的， $\bvec x$ 是未知的， 被称为方程组的\textbf{解（solution）}。
 
-正如你所知道的那样\upref{LinEqu}，线性方程组$\mat A \bvec x=\bvec y$可以有零个解（无解）、一个解（唯一解）或无数解；但不可能只有 $2,3,4,\dots$ 个解。
+线性方程组$\mat A \bvec x=\bvec b$可以有零个解（无解）、一个解（唯一解）或无数解；但不可能只有 $2,3,4,\dots$ 个解。
 
-% 求解$\mat A x = y$即相当于求解一组线性方程：
+% 求解$\mat A x = b$即相当于求解一组线性方程：
 % \begin{equation}
 % \begin{cases}
-% A_{11}x_1+A_{12}x_2+A_{13}x_3+...&=y_1\\
-% A_{21}x_1+A_{22}x_2+A_{23}x_3+...&=y_2\\
-% A_{31}x_1+A_{32}x_2+A_{33}x_3+...&=y_3\\
+% A_{11}x_1+A_{12}x_2+A_{13}x_3+...&=b_1\\
+% A_{21}x_1+A_{22}x_2+A_{23}x_3+...&=b_2\\
+% A_{31}x_1+A_{32}x_2+A_{33}x_3+...&=b_3\\
 % ...
 % \end{cases}
 % \end{equation}
@@ -32,7 +32,7 @@
 
 \subsubsection{行视角}
 $$
-\ali{\mat A \bvec x=\bvec y &\Longleftrightarrow 
+\ali{\mat A \bvec x=\bvec b &\Longleftrightarrow 
 \begin{pmatrix}
 A_{11}&A_{12}&A_{13}&...\\
 A_{11}&A_{12}&A_{13}&...\\
@@ -47,22 +47,22 @@ x_{3}\\
 \end{pmatrix}
 =
 \begin{pmatrix}
-y_{1}\\
-y_{2}\\
-y_{3}\\
+b_{1}\\
+b_{2}\\
+b_{3}\\
 ...\\
 \end{pmatrix}\\
 &\Longleftrightarrow
 \begin{cases}
-y_1&=A_{11}x_1+A_{12}x_2+A_{13}x_3+...\\
-y_2&=A_{21}x_1+A_{22}x_2+A_{23}x_3+...\\
-y_3&=A_{31}x_1+A_{32}x_2+A_{33}x_3+...\\
+b_1&=A_{11}x_1+A_{12}x_2+A_{13}x_3+...\\
+b_2&=A_{21}x_1+A_{22}x_2+A_{23}x_3+...\\
+b_3&=A_{31}x_1+A_{32}x_2+A_{33}x_3+...\\
 ...&\\
 \end{cases}}
 ~
 $$
 
-这相当于求解一组线性方程。其中每一条方程可以看作某种（高维）直线，方程组的解就是这些直线的交点。
+这相当于求解一组线性方程。其中每一条方程可以看作 $N$ 维欧几里得空间中的 $N-1$ 维平面（一维平面就是直线，二维平面是通常的平面等），方程组的解就是这些平面的交点的集合。
 
 \begin{example}{}
 例如，求解
@@ -103,34 +103,34 @@ $$
 
 或者用分块矩阵\upref{BlkMat}的视角，将$\mat A$划分为若干行向量$\bvec \alpha_1, \bvec \alpha_2,\bvec \alpha_3...$，让表述变得更加简洁。
 $$
-\mat A \bvec x=\bvec y \Leftrightarrow 
+\mat A \bvec x=\bvec b \Leftrightarrow 
 \begin{pmatrix}
 \bvec \alpha_1\\
 \bvec \alpha_2\\
 \bvec \alpha_3\\
-...
+\vdots
 \end{pmatrix}
 \bvec x
 =
 \begin{pmatrix}
-y_{1}\\
-y_{2}\\
-y_{3}\\
-...\\
+b_{1}\\
+b_{2}\\
+b_{3}\\
+\vdots
 \end{pmatrix}
 \Leftrightarrow 
 \begin{cases}
-y_1&=\bvec \alpha_1 \bvec x\\
-y_2&=\bvec \alpha_2 \bvec x\\
-y_3&=\bvec \alpha_3 \bvec x\\
-...&\\
+b_1&=\bvec \alpha_1 \bvec x\\
+b_2&=\bvec \alpha_2 \bvec x\\
+b_3&=\bvec \alpha_3 \bvec x\\
+&\vdots
 \end{cases}~
 $$
 
 \subsubsection{列视角}
 运用分块矩阵\upref{BlkMat}的视角，将$\mat A$划分为若干列向量$\bvec \alpha_1, \bvec \alpha_2,\bvec \alpha_3...$
 $$
-\mat A \bvec x=\bvec y \Leftrightarrow 
+\mat A \bvec x=\bvec b \Leftrightarrow 
 \begin{pmatrix}
 \bvec \alpha_1& \bvec \alpha_2& \bvec \alpha_3&...
 \end{pmatrix}
@@ -141,11 +141,11 @@ x_{3}\\
 ...\\
 \end{pmatrix}
 =
-\bvec y
+\bvec b
 \Leftrightarrow 
-\bvec y = \bvec \alpha_1 x_1+\bvec \alpha_2 x_2+\bvec \alpha_3 x_3+...~
+\bvec b = \bvec \alpha_1 x_1+\bvec \alpha_2 x_2+\bvec \alpha_3 x_3+...~
 $$
-此时，$\bvec y$可以看作是一系列$\bvec \alpha_i$的线性组合，而解$\bvec x$是各个列向量的“系数”。方程组无解的含义即为“$\bvec y$不能由$\bvec \alpha_i$线性组合得到”，无数解的含义即为“有无数种方法线性组合$\bvec \alpha_i$以得到$\bvec y$”，这暗示了这一系列$\bvec \alpha_i$中存在线性相关的项。
+此时，$\bvec b$可以看作是一系列$\bvec \alpha_i$的线性组合，而解$\bvec x$是各个列向量的“系数”。方程组无解的含义即为“$\bvec b$不能由$\bvec \alpha_i$线性组合得到”，无数解的含义即为“有无数种方法线性组合$\bvec \alpha_i$以得到$\bvec b$”，这暗示了这一系列$\bvec \alpha_i$中存在线性相关的项。
 
 \begin{example}{}
 还是例如求解
@@ -191,10 +191,10 @@ $$
 \end{example}
 看起来，在线性方程组中，矩阵$\mat A$的行向量与列向量存在一种微妙的关联。
 
-\subsection{线性方程组的解的结构}
+\subsection{判断线性方程组解的个数}
 \begin{figure}[ht]
 \centering
-\includegraphics[width=14cm]{./figures/0cb8501eb2baf4ae.pdf}
+\includegraphics[width=14.25cm]{./figures/0cb8501eb2baf4ae.pdf}
 \caption{$Ax=b$ 的解} \label{fig_LinEq_1}
 \end{figure}
 
@@ -202,33 +202,33 @@ $$
 
 关于线性方程组的解，我们有如下定理。记m为$\mat A$的行数，n为$\mat A$的列数，r为$\mat A$的矩阵的秩\upref{MatRnk}。可参考\autoref{fig_LinEq_1} 的分类。
 
-\begin{theorem}{$\mat A \bvec x=\bvec y$解的唯一性}
+\begin{theorem}{$\mat A \bvec x=\bvec b$解的唯一性}
 若 $n-r=0$，若解存在，则解唯一。
 
 若 $n-r>0$，若解存在，则解不唯一。
 \end{theorem}
-n-r事实上是$\mat A$的零空间的基个数$dim(Nul(\mat A))=n-r$。
+n-r事实上是 $\mat A$ 的零空间的基个数 $\opn{dim}(\opn{Nul}(\mat A))=n-r$。
 
-\begin{theorem}{$\mat A \bvec x=\bvec y$解的存在性}
+\begin{theorem}{$\mat A \bvec x=\bvec b$解的存在性}
 若 $m-r=0$，则解一定存在。
 
 若 $m-r>0$，则解可能不存在。
 \end{theorem}
 m-r事实上是$\mat A$的左零空间的基个数$dim(Nul(\mat A^T))=m-r$。
 
-\begin{theorem}{$\mat A \bvec x=\bvec y$解的存在性2}
-若$\bvec y$是$\mat A$的列向量的线性组合（$\bvec y \in Col(\mat A)$)，则$\mat A \bvec x=\bvec y$一定存在解；否则无解。
+\begin{theorem}{$\mat A \bvec x=\bvec b$ 解的存在性 2}
+若$\bvec b$是$\mat A$的列向量的线性组合（$\bvec b \in Col(\mat A)$)，则$\mat A \bvec x=\bvec b$一定存在解；否则无解。
 \end{theorem}
 由列视角（\autoref{sub_LinEq_2} ）看，这是显然的。
 
 \begin{corollary}{}
-设 $\overline{\mat A} = [\mat A | \bvec y] $ 为A的增广矩阵。
+设 $\overline{\mat A} = [\mat A | \bvec b] $ 为A的增广矩阵。
 
-$\mat A \bvec x=\bvec y$无解：$rank(\overline{\mat A})=rank(\mat A)+1$
+$\mat A \bvec x=\bvec b$无解：$\opn{rank}(\overline{\mat A})=\opn{rank}(\mat A)+1$
 
-唯一解：$rank(\overline{\mat A})=rank(\mat A)=n$
+唯一解：$\opn{rank}(\overline{\mat A})=\opn{rank}(\mat A)=n$
 
-无数解：$rank(\overline{\mat A})=rank(\mat A)<n$
+无数解：$\opn{rank}(\overline{\mat A})=\opn{rank}(\mat A)<n$
 \end{corollary}
 考虑到秩的含义，结合上述定理，也容易理解该推论。
 
@@ -244,36 +244,36 @@ $\mat A \bvec x=\bvec y$无解：$rank(\overline{\mat A})=rank(\mat A)+1$
 \end{theorem}
 
 \begin{theorem}{解的结构}
-$\mat A \bvec x=\bvec y$的通解等于$\mat A \bvec x=\bvec y$的一个特解加上$\mat A \bvec x=0$的各个线性无关的解的线性组合，即$\bvec x = \bvec x_p +k_1\bvec x_{n1}+k_2\bvec x_{n2}+...$
+$\mat A \bvec x=\bvec b$的通解等于$\mat A \bvec x=\bvec b$的一个特解加上$\mat A \bvec x=0$的各个线性无关的解的线性组合，即$\bvec x = \bvec x_p +k_1\bvec x_{n1}+k_2\bvec x_{n2}+...$
 
-因此，通常的解题套路是先求解$\mat A \bvec x=\bvec y$的一个特解，再求解$\mat A \bvec x=0$的各个线性无关的解。
+因此，通常的解题套路是先求解$\mat A \bvec x=\bvec b$的一个特解，再求解$\mat A \bvec x=0$的各个线性无关的解。
 
-(若n-r=0，则$\mat A \bvec x=0$仅有解$\bvec x_n=0$，$\mat A \bvec x=\bvec y$自然只有一个解$\bvec x = \bvec x_p$)
+(若n-r=0，则$\mat A \bvec x=0$仅有解$\bvec x_n=0$，$\mat A \bvec x=\bvec b$自然只有一个解$\bvec x = \bvec x_p$)
 \end{theorem}
 
 更深入的探讨详见下文：
 
-从矢量空间\upref{LSpace}的角度来看， $\bvec x$ 是一个 $N$ 维矢量空间（以下称为 $X$ 空间）中一个矢量关于某组基底的坐标， $\bvec y$ 是一个 $M$ 维矢量空间（以下称为 $Y$ 空间）中一个矢量关于某组基底的坐标。 矩阵 $\mat A$ 可以将 $X$ 空间中的任意矢量映射到 $Y$ 后的坐标。
+从矢量空间\upref{LSpace}的角度来看， $\bvec x$ 是一个 $N$ 维矢量空间（以下称为 $X$ 空间）中一个矢量关于某组基底的坐标， $\bvec b$ 是一个 $M$ 维矢量空间（以下称为 $Y$ 空间）中一个矢量关于某组基底的坐标。 矩阵 $\mat A$ 可以将 $X$ 空间中的任意矢量映射到 $Y$ 后的坐标。
 
 我们知道 $\mat A$ 的第 $i$ 列代表的矢量就是 $X$ 空间中的第 $i$ 个基底映射到 $Y$ 空间的对应矢量。 我们把 $A$ 的 $N$ 列对应的 $N$ 个矢量记为 $\{\bvec \alpha_i\}$。 先来看一个定理
 
 \subsection{满秩方阵}
 我们知道矩阵的秩 $R$ 等于线性无关的行数或列数\upref{MatRnk}， 下面来根据秩来分类讨论方程组的解空间结构。 最简单的情况是 $\mat A$ 为满秩， 即 $R = M = N$。 这时由于 $\{\bvec \alpha_i\}$ 两两线性无关， 它们可以作为 $Y$ 空间的一组基底， 与 $X$ 空间的基底一一对应。 那么这个映射既是单射又是满射。%未完成：引用
-对于 $Y$ 空间的任意矢量 $\bvec y$， $X$ 空间都存在唯一的解 $\bvec x$。 特殊地，当 $\bvec y = \bvec 0$ 时（即方程是\textbf{齐次}的），唯一解就是 $\bvec x = \bvec 0$。
+对于 $Y$ 空间的任意矢量 $\bvec b$， $X$ 空间都存在唯一的解 $\bvec x$。 特殊地，当 $\bvec b = \bvec 0$ 时（即方程是\textbf{齐次}的），唯一解就是 $\bvec x = \bvec 0$。
 
 \subsection{$R = M < N$}\label{sub_LinEq_1}
 
-当 $\mat A$ 的秩等于 $M$ 且小于 $N$ 时， 映射变为从 $N$ 维空间到更小的 $M$ 维空间。 即非单射： 虽然任意的 $\bvec x$ 仍然映射到唯一的 $\bvec y$， 但任意的 $\bvec y$ 却对应无穷多个 $\bvec x$。 
+当 $\mat A$ 的秩等于 $M$ 且小于 $N$ 时， 映射变为从 $N$ 维空间到更小的 $M$ 维空间。 即非单射： 虽然任意的 $\bvec x$ 仍然映射到唯一的 $\bvec b$， 但任意的 $\bvec b$ 却对应无穷多个 $\bvec x$。 
 
 % 举例未完成：三维矢量投影到二维矢量
 
 \addTODO{引用矩阵版本的零空间}
 当方程是齐次的时候， 零空间$X_0$ 是 $N- M$ 维的（为什么？）。 这种情况下，我们希望能解出零空间的 $N - M$ 个基底，使得这组基底的任意线性组合都是齐次方程的解。
 
-对于非齐次方程， 我们可以先求对应的齐次方程组的零空间的一组基底，再求出非齐次方程的任意一个解（\textbf{特解}）， 那么非齐次方程组的\textbf{解集}（所有解的集合）就等于零空间中的所有矢量与特解相加。 注意非齐次方程的解集并不构成一个矢量空间， 因为它不包含零矢量（$\bvec x = \bvec 0$ 总是对应 $\bvec y = \bvec 0$， 所以不可能是非齐次方程组的解），解集中若干矢量的线性组合也不一定仍然属于解集。
+对于非齐次方程， 我们可以先求对应的齐次方程组的零空间的一组基底，再求出非齐次方程的任意一个解（\textbf{特解}）， 那么非齐次方程组的\textbf{解集}（所有解的集合）就等于零空间中的所有矢量与特解相加。 注意非齐次方程的解集并不构成一个矢量空间， 因为它不包含零矢量（$\bvec x = \bvec 0$ 总是对应 $\bvec b = \bvec 0$， 所以不可能是非齐次方程组的解），解集中若干矢量的线性组合也不一定仍然属于解集。
 \addTODO{证明}
 
 \subsection{$R < M$}
-当 $R < M$ 时， $\{\bvec \alpha_i\}$ 中只有 $R$ 个线性无关， 它们在 $Y$ 空间中张成\upref{VecSpn}一个 $R$ 维子空间 $Y_0$。 如果 $\bvec y$ 在 $Y_0$ 中（可以通过 $\bvec y$ 是否与 $\{\bvec \alpha_i\}$ 线性无关来判断）， 方程组就存在解， 如果落在子空间外， 方程组就无解。
+当 $R < M$ 时， $\{\bvec \alpha_i\}$ 中只有 $R$ 个线性无关， 它们在 $Y$ 空间中张成\upref{VecSpn}一个 $R$ 维子空间 $Y_0$。 如果 $\bvec b$ 在 $Y_0$ 中（可以通过 $\bvec b$ 是否与 $\{\bvec \alpha_i\}$ 线性无关来判断）， 方程组就存在解， 如果落在子空间外， 方程组就无解。
 
 \footnote{另见 “线性变换与矩阵的代数关系\upref{linmat}” 的 \autoref{the_linmat_2}。}
