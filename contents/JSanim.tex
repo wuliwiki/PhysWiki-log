@@ -1,0 +1,65 @@
+% JS 互动程序
+% license Usr
+% type Tutor
+
+\begin{issues}
+\issueDraft
+\end{issues}
+
+\begin{figure}[ht]
+\centering
+\includegraphics[width=6cm]{./figures/7389a4b2daf30b37.png}
+\caption{运行效果} \label{fig_JSanim_3}
+\end{figure}
+
+以下程序可以在网页上（非 canvas）画一个圆并实现鼠标拖动。 小时百科的知识树底层就是用这种方式实现的。
+
+\begin{lstlisting}[language=js,caption=drag\_ball.html]
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Draggable Ball</title>
+<style>
+	#ball {
+		width: 50px;
+		height: 50px;
+		background-color: blue;
+		border-radius: 50%;
+		position: absolute;
+		cursor: pointer;
+	}
+</style>
+</head>
+
+<body>
+
+<div id="ball"></div>
+
+<script>
+	let ball = document.getElementById('ball');
+	let isDragging = false;
+	let diffX = 0, diffY = 0;
+	function onMouseDown(e) {
+		isDragging = true;
+		diffX = e.clientX - ball.getBoundingClientRect().left;
+		diffY = e.clientY - ball.getBoundingClientRect().top;	
+	}
+	function onMouseMove(e) {
+		if (isDragging) {
+			ball.style.left = e.clientX - diffX + 'px';
+			ball.style.top = e.clientY - diffY + 'px';
+		}
+	}
+	function onMouseUp() {
+		isDragging = false;
+	}
+	ball.addEventListener('mousedown', onMouseDown);
+	document.addEventListener('mousemove', onMouseMove);
+	document.addEventListener('mouseup', onMouseUp);
+</script>
+</body>
+</html>
+\end{lstlisting}
