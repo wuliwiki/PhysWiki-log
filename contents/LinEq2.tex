@@ -1,4 +1,4 @@
-% 线性方程组的解集
+% 线性方程组与增广矩阵
 % keys 线性映射|齐次方程|解集|零空间
 % license Xiao
 % type Tutor
@@ -6,58 +6,61 @@
 \begin{issues}
 \issueDraft
 \end{issues}
-% 应当修改成矩阵的版本
 
-\pentry{线性方程组\nref{nod_LinEqu}，矩阵的零空间\nref{nod_Mat0s}}{nod_e021}
+\pentry{线性方程组\nref{nod_LinEqu}}{nod_e021}
 
-\footnote{参考 Wikipedia \href{https://en.wikipedia.org/wiki/Kernel_(linear_algebra)}{相关页面}。}下面我们从线性代数（矩阵）的角度理解线性方程组。
+\subsection{增广矩阵}
 
-考虑 $n$ 元一次方程组：
+下面我们从线性代数（矩阵）的角度理解线性方程组。
+
+考虑 $m$ 个 $n$ 元一次方程构成的线性方程组：
 \begin{equation}
 \leftgroup{
-a_{1,1}x_1 + a_{1,2}x_2 + \dots + a_{1,n}x_n &= y_1~,\\
-a_{2,1}x_1 + a_{2,2}x_2 + \dots + a_{2,n}x_n &= y_2~,\\
+a_{1 1}x_1 + a_{1 2}x_2 + \dots + a_{1 n}x_n &= y_1, \\
+a_{2 1}x_1 + a_{2 2}x_2 + \dots + a_{2 n}x_n &= y_2, \\
 \vdots \\
-a_{m,1}x_1 + a_{m,2}x_2 + \dots + a_{m,n}x_n &= y_m~.}
+a_{m 1}x_1 + a_{m 2}x_2 + \dots + a_{m n}x_n &= y_m~.}
 \end{equation}
 
 我们可以把他改写成矩阵与列向量的等式：
-\begin{equation}\label{eq_LinEq2_2}
+\begin{equation}
 \mat{A} \bvec{x} = \bvec{b} ~,
 \end{equation}
 
-
-
-\begin{definition}{线性方程}
-对给定的线性映射 $A:X\to Y$ 和 $b \in Y$， \textbf{线性方程}为
-
-所有满足该式的 $x \in X$ 的集合 $X_s$ 叫做方程的\textbf{解集}。
-\end{definition}
-
-首先注意 $A$ 未必把 $Y$ 中的每个元素都射中， 即值空间\upref{LinMap} $Y_1 = A(X) \subseteq Y$ 只是 $Y$ 的一个子空间。 所以只有 $b \in Y_1$ 时\autoref{eq_LinEq2_2} 有解， 否则无解（解集为空集）。 用映射的语言， 解集 $X_s$ 就是集合 $\qty{b}$ 的逆像\upref{map} $A^{-1}(\qty{b})$。
-
-当\autoref{eq_LinEq2_2} 中 $b = 0$ 时方程叫做算符 $A$ 的\textbf{齐次方程}。根据定义，齐次方程的解就是映射的零空间（\autoref{def_LinMap_2}~\upref{LinMap}）。
-
-\begin{theorem}{}\label{the_LinEq2_1}
-线性方程\autoref{eq_LinEq2_2} 的解集可以表示为
-\begin{equation}\label{eq_LinEq2_1}
-X_s = X_0 + x_1~.
-\end{equation}
-其中 $x_1$ 为 $X_s$ 中的任意元素，  $X_0$ 为映射的零空间。
-\end{theorem}
-说明： $X_0 + x_1$ 表示把 $X_0$ 中的每一个向量与 $x_1$ 相加得到的集合。 易证当 $x_1 \ne 0$ 时解集 $X_s$ 不是一个向量空间（例如不存在零向量）。
-
-首先证明集合 $X_0 + x_1$ 中的元素满足 $Ax = b$。 令任意 $x_0 \in X_0$
+其中
 \begin{equation}
-A(x_0 + x_1) = Ax_0 + Ax_1 = 0 + b = b~,
+\mat{A} = \bmat{
+a_{1 1} & a_{1 2} & \dots & a_{1 n} \\
+a_{2 1} & a_{2 2} & \dots & a_{2 n} \\
+\vdots & \vdots & \ddots & \vdots \\
+a_{m 1} & a_{m 2} & \dots & a_{m n}
+}, \bvec{b} = \bmat{
+    y_1 \\
+    y_2 \\
+    \vdots \\
+    y_m
+}~.
 \end{equation}
-证毕。 再来证明解集中不存在 $X_0 + x_1$ 之外的向量。 令 $x_2 \in X_S$ 且 $x_2 \ne x_1$， 那么
+
+更近一步的，我们会使用\textbf{增广矩阵} $\bmat{\bvec{A} \mid \bvec{b}}$，即
 \begin{equation}
-A(x_2 - x_1) = Ax_2 - Ax_1 = b - b = 0~,
+\left[{\begin{array}{cccc|c}
+a_{1 1} & a_{1 2} & \dots & a_{1 n} & y_1 \\
+a_{2 1} & a_{2 2} & \dots & a_{2 n} & y_2 \\
+\vdots & \vdots & \ddots & \vdots & \vdots \\
+a_{m 1} & a_{m 2} & \dots & a_{m n} & y_m 
+\end{array}}\right]~
 \end{equation}
-即 $x_2 - x_1 \in X_0$， 即 $x_2 \in x_1 + X_0$。 证毕。
+来表示一个线性方程组。
 
-% \subsection{线性映射的结构}
-% 到此为止我们就可以非常清晰地勾画出多对一线性映射的结构了 $A:X\to Y$。 我们先找到\autoref{the_MatLS2_1}~\upref{MatLS2} 中的零空间 $X_0$ 和它的补空间 $X_1$， 其中 $X_1$ 的元素和值域空间 $Y_1 = A(X)$ 一一对应。 那么对每个 $x_1 \in X_1$， 线性映射就会把集合 $x_1 + X_0$ 所有元素映射到 $Y_1$ 中的同一个元素 $y_1 = Ax_1$ 上。
+\subsection{超定、恰定、不定方程组}
 
-% \addTODO{需要一个 3 维几何向量空间的真实例子， 零空间 1 维， 补空间 2 维}
+我们称 $m$ 个 $n$ 元一次方程构成的线性方程组为
+\begin{enumerate}
+\item \textbf{超定的}（overdetermined），如果 $m > n$；
+\item \textbf{恰定的}，如果 $m = n$；
+\item \textbf{不定的/欠定的}（underdetermined），如果 $m < n$；
+\end{enumerate}
+
+
+
