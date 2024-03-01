@@ -2,35 +2,201 @@
 % license Usr
 % type Tutor
 
-本文用“$(x,y)$”表示对任意两个向量作内积。
-\subsubsection{正交变换}
+本文用“$(\bvec x,\bvec y)$”表示对任意两个向量作内积。
+\subsection{正交变换}
 \begin{definition}{}
-定义实内积空间$V$上的满射$\mathcal A$。对于任意$(x,y)\in V$，若有：
+定义实内积空间$V$上的满射$\mathcal A$。对于任意$\bvec x,\bvec y\in V$，若有：
 \begin{equation}
-(x,y)=(\mathcal A x,\mathcal A y)~,
+(\bvec x,\bvec y)=(\mathcal A \bvec x,\mathcal A \bvec y)~,
 \end{equation}
 则称$\mathcal A$是$V$上的\textbf{正交变换}。也就是说，正交变换是保内积不变的满射，从而保向量长度和向量之间的夹角不变。
 \end{definition}
 实际上，正交变换是线性变换。
-\begin{theorem}{}
-实内积空间$V$上的正交变换$A$一定是线性映射。
+\begin{theorem}{}\label{the_ortho_1}
+实内积空间$V$上的正交变换$\mathcal A$一定是线性映射。
 \end{theorem}
 \textbf{证明：}
 \begin{equation}
 \begin{aligned}
-|A(x+y)-(Ax+Ay)|^2&=(x+y)^2+x^2+y^2-2\left(A(x+y),Ax+Ay\right)\\
-&=(x+y)^2+x^2+y^2-2(x+y,x)-2(x+y,y)\\
+|\mathcal A(\bvec x+\bvec y)-(\mathcal A\bvec x+\mathcal A\bvec y)|^2&=(\bvec x+\bvec y)^2+\bvec x^2+\bvec y^2-2\left(\mathcal A(\bvec x+\bvec y),\mathcal A\bvec x+\mathcal A\bvec y\right)\\
+&=(\bvec x+\bvec y)^2+\bvec x^2+\bvec y^2-2(\bvec x+\bvec y,\bvec x)-2(\bvec x+\bvec y,\bvec y)\\
 &=0
 \end{aligned}
 ~,\end{equation}
 
-因而$A(x+y)=Ax+Ay$。同理可得$A(kx)=kA(x)$。
+因而$\mathcal A(\bvec x+\bvec y)=\mathcal A\bvec x+\mathcal A\bvec y$。同理可得$\mathcal A(k\bvec x)=k\mathcal A(\bvec x)$。
 
-设$\{\bvec e_i\}^k_{i=1}$是$V$上的一组基，由线性性可知，$\{A\bvec e_i\}^k_{i=1}$也是线性无关组。又因为$A$是满射，所以$\{A\bvec e_i\}^k_{i=1}$是$V$上的一组基，则该线性映射既单又满，是“同构映射”。由正交变换保内积可知，$A$\textbf{把标准正交基映射为标准正交基。}
+设$\{\bvec e_i\}$是$V$上的一组基，由线性性可知，$\{\mathcal A\bvec e_i\}$也是线性无关组。又因为$\mathcal A$是满射，所以$\{\mathcal A\bvec e_i\}$是$V$上的一组基，则该线性映射既单又满，是“同构映射”。由正交变换保内积可知，$\mathcal A$\textbf{把标准正交基映射为标准正交基。}
 
-总结上述讨论，易证：$A$是正交变换$\Longleftrightarrow A$\textbf{把标准正交基映射为标准正交基。}后者是正交矩阵的定义，可见正交矩阵是正交变换的矩阵表示。\textbf{正交矩阵保二次型不变即正交变换的内积定义。}
+总结上述讨论，易证：$\mathcal A$是正交变换$\Longleftrightarrow \mathcal A$\textbf{把标准正交基映射为标准正交基。}后者是正交矩阵的定义，可见正交矩阵是正交变换的矩阵表示。\textbf{正交矩阵保二次型不变的性质等价于正交变换的内积定义，}\footnote{广义内积即二次型决定的对称双线性函数：$(\bvec x,\bvec y)\equiv \frac{1}{2}(q(\bvec x+\bvec y)-q(\bvec x)-q(\bvec y))$}或者说——
+
+$\mathcal A$是正交变换$\Longleftrightarrow $对任意$\bvec x\in V,|\mathcal A\bvec x|=|\bvec x|$。
+
+令$O(n)$表示$n$维线性空间$V$上全体正交变换的集合。由定义可知，该集合具有如下性质：
+\begin{enumerate}
+\item 封闭性。若$A,B\in O(n)$，则$AB\in O(n)$；
+\item 结合性。若$A,B,C\in O(n)$，则$A(BC)=(AB)C$；
+\item 单位元存在性。$I\in O(n)$；
+\item 逆元存在性。若$A\in O(n)$，则$A^{-1}\in O(n)$；
+\end{enumerate}
+所以，正交变换构成一个群。
 
 在欧几里得空间中，正交矩阵的行列式为$1$或者$-1$，常称行列式为$1$的正交变换为\textbf{第一类的（旋转）}；行列式为$-1$的正交变换则是\textbf{第二类的}。
-\subsubsection{对称变换}
+\subsubsection{正交变换的本征值}
+由上述讨论可知，正交变换若有本征向量，则本征值的模长为$1$，从而保证向量的模长不变。
+\begin{corollary}{}
+ 设$\lambda$为正交变换$A$的本征值，则$|\lambda|=1$。若$V$定义在实数域上，$\lambda=\pm 1$。
+\end{corollary}
+\begin{corollary}{}
+若$V$是奇数维线性空间，$A$必有本征值$1$。
+\end{corollary}
+\textbf{证明：}
+实数域上易证推论2，下面讨论复数域的情况。由于本征值是本征多项式的根，且一元多项式方程里复根成对出现（若$\lambda_0$为本征值，则$\lambda_0^{*}$也为本征值），所以$A$有偶数个模为$1$的复根，这些本征值连乘为$1$。结合行列式等于本征值连乘这一\autoref{the_MatEig_3}~\upref{MatEig}，可知剩下奇数个连乘结果为1的实本征值，得证。
+\subsubsection{正交变换的块对角形式}
+为了简化正交矩阵的形式，我们先来证明两个常用结论。
+\begin{lemma}{}\label{lem_ortho_1}
+设$f$为\textbf{实线性空间}$V$上的线性映射，存在$f$的不变子空间$W\subseteq V$，且$\opn{dim}W\in\{1,2\}$。
+\end{lemma}
+\textbf{证明：\footnote{参考Jier Peter的《代数学基础》}}
 
+若$f$有若干个实本征值，则其对应的本征向量是$V$上的一维不变子空间。
 
+将$n$维$V$复化为$U$。若$\{\bvec e_i\}$为$V$上的一组基，则任意$\bvec x\in U$可表示为：
+\begin{equation}
+\bvec x=a^i\bvec e_i+\mathrm i b^j\bvec e_j=\bvec u+\mathrm i\bvec v~.
+\end{equation}
+其中$a^i,b^i\in \mathbb R,\bvec u,\bvec v\in V$。显然$U\supseteq V$。
+在复数域上，$f$有$n$个本征值。设有$k$个实本征值，则对应的本征向量是$V$上的一维不变子空间。设复本征值表示为$a+\mathrm ib$，对应本征向量表示为$\bvec x+\mathrm i \bvec y\,(\bvec x,\bvec y\in V)$。利用$f$的线性可得：
+\begin{equation}
+\begin{aligned}
+f(\bvec x+\mathrm i \bvec y)&=(a+\mathrm i b)(\bvec x+\mathrm i \bvec y)\\
+&=(a\bvec x-b\bvec y)+\mathrm i(a\bvec y+b\bvec x)\\
+&=f(\bvec x)+\mathrm if(\bvec y)
+\end{aligned}~.
+\end{equation}
+即：
+\begin{equation}\label{eq_ortho_1}
+\begin{aligned}
+f(\bvec x)&=a\bvec x-b\bvec y\\
+f(\bvec y)&=a\bvec y+b\bvec x
+\end{aligned}~,
+\end{equation}
+所以$\opn{Span}\{\bvec x,\bvec y\}$为$f$在$V$上的一个二维不变子空间。
+\begin{lemma}{}\label{lem_ortho_3}
+若正交变换$A$有复根，对应本征向量$\bvec x=\bvec u+\mathrm i\bvec v$。则$\bvec u,\bvec v$是相互正交的本征向量。令$W=\opn{Span}\{\bvec u,\bvec v\}$，则有：
+\begin{equation}\label{eq_ortho_2}
+A|_W=\left[\begin{array}{rr}
+\cos \phi & \sin \phi \\
+-\sin \phi & \cos \phi
+\end{array}\right]~.
+\end{equation}
+\end{lemma}
+\textbf{证明：}
+设复本征值$\lambda=a+b\mathrm i=\opn{cos}\phi+\mathrm i \opn{sin}\phi$，代入\autoref{eq_ortho_1} 便可得形式为\autoref{eq_ortho_2} 的$A|_W$。接下来只需要证明实部和虚部分量是标准正交即可。为方便计，把转置操作表示为'。
+
+由于$kx$依然是$A$的本征向量，我们可以归一化其\textbf{实部分量}，使得$\bvec u^2=1$。则
+\begin{equation}\label{eq_ortho_3}
+\begin{aligned}
+\bvec x^2&=(\bvec u+\mathrm i\bvec v)^2\\
+&=1-\bvec v^2+2\mathrm i \bvec u\cdot\bvec v
+\end{aligned}~.
+\end{equation}
+
+由于$A'=A^{-1}$且$Ax=\lambda \bvec x$，则$A'\bvec x=A^{-1}\bvec x=\frac{1}{\lambda}\bvec x=\lambda^* \bvec x$。左乘本征向量的转置得：
+\begin{equation}
+\bvec x'A'\bvec x=\lambda^* \bvec x'\bvec x=(Ax)'\bvec x=\lambda \bvec x'\bvec x~,
+\end{equation}
+因此$\bvec x^2=\bvec x'\bvec x=0$。代入\autoref{eq_ortho_3} 可得：
+\begin{equation}
+\bvec v^2=1,\,\bvec u\cdot \bvec v=0~,
+\end{equation}
+得证。
+这两条引理说明，正交变换$A$的每个复本征值都对应一个二维不变子空间，且$A$限制在该子空间上的形式总如\autoref{eq_ortho_2} 所示。若$A$为二阶矩阵且实数域上无特征根，则$A$唯一表示为该形式，乘以任意向量相当于旋转该向量。
+\begin{exercise}{}
+写出二阶正交矩阵的所有可能形式。
+\end{exercise}
+\begin{lemma}{}\label{lem_ortho_2}
+设$A$为$V$上的正交变换，若$W$为其不变子空间，则$W^{\bot}$也是其不变子空间。
+\end{lemma}
+设$\{\bvec e_i\}$为$W$上的一组标准正交基，并扩展到全空间，使得$\opn{Span}\{\bvec {\theta}_i\}$张成$W^{\bot}$。由题设知$\{A\bvec e_i\}$依然张成$W$，由于$(A\bvec {\theta}_i,A\bvec e_i)=0$，因此$A\bvec{\theta}_i\in W^{\bot}$，得证。
+
+由定理3可知，在$\{\bvec e_i\}\cup\{\bvec {\theta}_i\}$下，$A$有块对角形式：$A=A|_W\oplus A|_{W^{\bot}}$。实际上，该块对角形式可以进一步“细化”。
+\begin{theorem}{}
+设$A$为n维\textbf{实线性空间}$V$上的正交变换。则在$V$内存在一组\textbf{标准正交基}，使得$A$具有如下块对角形式：
+\begin{equation}
+A=\left[\begin{array}{lllllll}
+\lambda_1 & & & & & & \\
+& \lambda_2 & & & & & \\
+& & \ddots & & & 0 & \\
+& & & \lambda_k & & & \\
+& & & & S_1 & & \\
+& & 0 & & & \ddots & \\
+& & & & & & S_l
+\end{array}\right]~,
+\end{equation}
+其中$\lambda_i=\pm 1(i=1,2...k)$，$S_i$为\autoref{eq_ortho_2} ，$\phi$由$\phi_i$代替。
+\end{theorem}
+\textbf{证明：}
+若$n=1$，矩阵为一实数，设为a。由$(a\bvec x,a\bvec x)=\bvec x^2$可得，$a=\pm 1$。
+
+若$n=2$且$A$没有本征值，由\autoref{lem_ortho_1} 可知，$A$在$V$上必有一二维不变子空间，$A$的形式就是旋转矩阵。
+如果$A$有一本征值$\lambda_1$且$Ax=\lambda_1 \bvec x$，设单位向量$\bvec y\cdot \bvec x=0$，由\autoref{lem_ortho_2} 知，$\bvec y$也是$A$的本征向量。设$Ay=\lambda_2 \bvec y$，则
+\begin{equation}
+A=\left[\begin{array}{rr}
+\lambda_1&0\\
+0&\lambda_2
+\end{array}
+\right]~.
+\end{equation}
+
+若$A$无本征值，由\autoref{lem_ortho_3} 知其形式即旋转矩阵。
+
+接下来设$n>2$。若$A$无本征值，则必有一二维不变子空间，设为$S$,$A|_{S}$为\autoref{eq_ortho_2}。$A|_{S^{\bot}}$为正交矩阵，若$\lambda_1$为其本征值，则必定有一维不变子空间，设对应的本征向量为$\bvec x_1$，则可以扩展为$S^{\bot}$上的标准正交基，设$\bvec x_2$的正交补为$S_1$，则
+\begin{equation}
+\left[\begin{array}{rrr}
+A|_{S}&0&0\\
+0&\lambda_1&0\\
+0&0&A|_{S_1}
+\end{array}
+\right]~.
+\end{equation}
+则$\lambda_1$也是$A$的本征值，矛盾。故$A$由若干个形式如\autoref{eq_ortho_2} 的二阶矩阵直和而成。
+
+若$A$有本征值，令其为$\lambda'_1$，则其本征向量可以扩展为全空间的标准正交基。在该本征向量的正交补空间讨论，若可以找到另一本征值$\lambda'_2$，则对应的本征向量又可以扩展为该正交补上的基矢组，经过相似变换得到$A$的新形式，$\lambda'_1$和$\lambda'_2$为对角元。以此类推，最后得到该定理的形式，$k$为$A$的本征值数量。
+\subsection{对称变换}
+\begin{definition}{}
+设$\mathcal B$为实线性空间上的线性变换，若对于任意$\bvec x,\bvec y\in V$有
+\begin{equation}\label{eq_ortho_4}
+(\bvec x,\mathcal B\bvec y)=(\mathcal B\bvec x,\bvec y)~,
+\end{equation}
+则称$B$为对称变换。
+\end{definition}
+
+若$V$为n维实线性空间，$B$为对称变换的矩阵表示，则由\autoref{eq_ortho_4} 得：
+\begin{equation}
+\bvec x^TB\bvec y=\bvec x^TB^T\bvec y~.
+\end{equation}
+左乘$\bvec x$可得，
+\begin{equation}
+B\bvec y=B^T\bvec y~.
+\end{equation}
+因此，$B=B^T$，对称变换的矩阵表示是对称矩阵。
+\begin{theorem}{}
+$n$维欧式空间上的线性变换$\mathcal B$是对称变换当且仅当$\mathcal B$在任意标准正交基下的矩阵表示为对称矩阵。
+\end{theorem}
+前文的推导只要求基矢标准正交，因此该定理成立。
+
+对称变换有类似正交变换的结论：
+\begin{theorem}{}
+若$U$是$B$的不变子空间，则$U^{\bot}$也是$B$的不变子空间。
+\end{theorem}
+\textbf{证明：}
+
+任选$\bvec x\in U,\bvec y\in U^{\bot}$，则
+\begin{equation}
+(B\bvec y,\bvec x)=(\bvec y,B\bvec x)=0~,
+\end{equation}
+因而$B\bvec y\in U^{\bot}$，$ U^{\bot}$是$B$的不变子空间。
+\begin{exercise}{}
+设$\mathcal B$为$n$维欧式空间上的线性变换，则$\mathcal B$是正交变换$\Longleftrightarrow$存在一组标准正交基，使得$\mathcal B$在该基下的表示为对角矩阵。
+\end{exercise}
