@@ -4,28 +4,82 @@
 % type Tutor
 
 \begin{issues}
-\issueDraft
+\issueTODO
 \end{issues}
 
-\pentry{向量空间\nref{nod_LSpace}}{nod_6f36}
+\pentry{向量子空间\nref{nod_SubSpc}}{nod_6f36}
+
+\addTODO{增加一个简介}
 
 \begin{definition}{仿射组合与仿射集}
-取向量空间 $V$ (记其域为 $\mathbb{F}$) 中的两点 $x_1, x_2 \in V$ 的线性组合 $a_1 x_1 + a_2 x_2$
+取向量空间 $V$ (记其域为 $\mathbb{F}$) 中的两点 $x_1, x_2 \in V$ 的线性组合 $\theta x_1 + (1 - \theta) x_2$ 被称为 $x_1, x_2$ 的\textbf{仿射组合}；更一般的，系数和为一（即$\sum_i a_i = 1$）的线性组合 $\sum_i a_i x_i$ 被称为 $x_1, \dots, x_n$ 的\textbf{仿射组合}。
 
-
-
-的一个子集 $C \subseteq V$，当过$C$中任意不同的两点的直线仍然在$C$中时，$C$为\textbf{仿射集}（Affine set），此时，对于任意$x_1,x_2 \in C$，$\theta \in \mathbb{F}$,有$\theta x_1+(1-\theta)x_2 \in C$.换句话说，$C$中任意两点的线性组合仍然在$C$内，线性组合的系数之和为$1$.
-
+向量空间的子集 $C \subseteq V$ 被称为\textbf{仿射集}（affine set），意味着 $C$ 中的任意仿射组合都在 $C$ 中；等价的，我们只需要考虑任意两个向量的仿射组合即可（和向量子空间的情况一样）。
 \end{definition}
 
 \begin{figure}[ht]
 \centering
 \includegraphics[width=12cm]{./figures/a3c7ce94fa5d9e0a.png}
-\caption{仿射集定义示意图} \label{fig_AffSet_1}
+\caption{仿射集示意图} \label{fig_AffSet_1}
 \end{figure}
 
-图$1$表示的是一条直线穿过$x_1,x_2$两点，也即$x_1,x_2$两点的仿射组合$\theta x_1+(1-\theta)x_2$的全体形成了该直线。根据仿射集的定义，该条直线就是一个仿射集。当$0<\theta<1$，形成图中直线加粗的部分；反之，形成直线上细线表示的部分。
+图$1$表示的是一条穿过$x_1,x_2$两点的直线。当$0 \leq \theta \leq 1$，形成图中直线加粗的部分；反之，形成直线上细线表示的部分。
 
-仿射集上述定义可以推广到多点的情形。我们把$\theta_1x_1+\theta_2x_2+...+\theta_kx_k$称为点$x_1,x_2,...,x_k$的\textbf{仿射组合}（Affine combination），其中$\theta_1+\theta_2+...+\theta_k=1$。
+从几何上看，仿射集仍然是平直的，或者说“线性的”：
 
-基于仿射组合的概念，仿射集有性质：若集合$C$是仿射集，有点$x_1,x_2,...,x_k \in C$，且$\theta_1+\theta_2+...+\theta_k=1$，则$\theta_1x_1+\theta_2x_2+...+\theta_kx_k$也在集合$C$内。
+\begin{theorem}{}
+对任意的仿射集 $C \subseteq V$，存在唯一的向量子空间 $U \subseteq V$，使得对任意的 $x \in C$，我们有
+\begin{equation}
+C = x + U = \{ x + v \mid v \in U\}~.
+\end{equation}
+\end{theorem}
+
+\textbf{证明：}第一步，取一点 $x_0 \in C$，我们定义
+\begin{equation}
+U_0: = \{ x - x_0 \mid x \in C \}~,
+\end{equation}
+要证明它是一个向量子空间：
+\begin{enumerate}
+\item $0_V = x_0 - x_0 \in U$，
+\item 对任意的 $a, b \in \mathbb{F}$，$x, y \in C$，
+    \begin{equation}
+    \begin{aligned}
+    a (x - x_0) + b (y - x_0) &= a x + b y - (a + b - 1) x_0 - x_0 \\
+    &= a x + b y + (1 - (a + b)) x_0 - x_0 \\
+    \end{aligned}~
+    \end{equation}
+$a x + b y + (1 - (a + b)) x_0$ 是 $x, y, x_0$ 的仿射组合，因此 $a (x - x_0) + b (y - x_0) \in U$，证得。
+\end{enumerate}
+
+第二步，要证明对任意的 $x \in C$，$C = x + U$：首先证明 $\subseteq$，对任意的 $y \in C$，我们有
+\begin{equation}
+y = x + (y - x_0) - (x - x_0); ~
+\end{equation}
+现在证明 $\supseteq$，对任意的$u  = z - x_0 \in U$，我们有
+\begin{equation}
+x + u = x + z + (-1) x_0 ~
+\end{equation}
+是 $x, z, x_0$ 得仿射组合，证得。
+
+第三步，要证明 $U$ 不依赖于 $x_0$ 的选取——对任意的 $x' \in C$，定义 $U': = \{x - x' \mid x \in C\}$，我们要证明 $U' = U$，处于对称性我们只需要证明 $U' \subseteq U$：取 $x \in C$，
+\begin{equation}
+x - x' = (x + x_0 - x') - x_0 ~
+\end{equation}
+$x + x_0 - x'$ 是 $x, x_0, x'$的仿射组合，因此证得。
+
+第四步，证明$U$的唯一性：假设 $V$ 存在另外一个向量子空间 $U'$ 满足对任意 $x \in C$，$C = x + U'$，取 $x = x_0$，那么 $x_0 + U' = x_0 + U \implies U' = U$。
+
+\textbf{证毕！}
+
+因此我们可以定义仿射集的维度
+\begin{definition}{维度}
+对于仿射集 $C \subseteq V$，我们定义它的\textbf{维度}为它对应的向量空间的维度。
+
+特别的，一维的仿射集被称为\textbf{仿射直线}，二维的被称为\textbf{仿射平面}，余一维的被称为\textbf{仿射超平面}。
+\end{definition}
+
+在向量空间中谈直线、平面、超平面时，我们有时指的是向量子空间，有时指的是仿射子空间，要注意分辨。
+
+\begin{theorem}{}
+对于向量空间的子集 $C \subseteq V$，$C$为仿射集当且仅当过 $C$ 中任意不同的两点的（仿射）直线仍然在 $C$ 中。
+\end{theorem}

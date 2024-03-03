@@ -60,22 +60,32 @@ g(k) = \sqrt{\frac{2}{\pi}} \frac{\sin(lk)}{k}~.
 
 \subsection{证明}
 \pentry{狄拉克 delta 函数\nref{nod_Delta}}{nod_debb}
-
+\addTODO{以下证明可能存在问题，需要专业人士审核}
 以下的证明可以用矢量空间和基底的概念得到更深刻的理解， 详见 “傅里叶变换与连续正交归一基底\upref{COrNoB}”。
 
 我们把\autoref{eq_FTExp_1} 看作定义， 用狄拉克 $\delta$ 函数\upref{Delta}来证明\autoref{eq_FTExp_6}， 反之同理。 把\autoref{eq_FTExp_1} 代入\autoref{eq_FTExp_6} 得
 \begin{equation}
 g(k) = \frac{1}{2\pi} \int_{-\infty}^{+\infty} \qty[ \int_{-\infty}^{+\infty} g(k') \E^{\I k' x} \dd{k'}] \E^{-\I k x} \dd{x}~.
 \end{equation}
-交换积分顺序， 先对 $x$ 积分得
-\begin{equation}
-g(k) = \frac{1}{2\pi} \int_{-\infty}^{+\infty} \qty[ \int_{-\infty}^{+\infty}  \E^{\I (k'-k) x} \dd{x}]  g(k')\dd{k'}~.
-\end{equation}
-由\autoref{ex_Delta_1}~\upref{Delta}， 里面的积分变为 $2\pi\delta(k'-k)$， 现在只需证明
-\begin{equation}
-g(k) = \int_{-\infty}^{+\infty} \delta(k'-k)  g(k')\dd{k'}~,
-\end{equation}
-而这就是\autoref{eq_Delta_7}~\upref{Delta}。 证毕。
+这就是我们需要证明的。 我们把无穷的积分上下限改写为极限，即
+\begin{equation}\ali{
+g(k) = \frac{1}{2\pi} \lim_{n\to\infty}\int_{-n}^{n} \qty[\lim_{m\to\infty} \int_{-m}^{m} g(k') \E^{\I k' x} \dd{k'}] \E^{-\I k x} \dd{x}~.
+}\end{equation}
+如果内极限可以移动到两个积分外，有
+\addTODO{极限和积分交换的条件是什么？是否满足？}
+\begin{equation}\ali{
+g(k) = \frac{1}{2\pi} \lim_{n\to\infty} \lim_{m\to\infty} \int_{-n}^{n}\int_{-m}^{m} g(k') \E^{\I (k'-k) x} \dd{k'}\dd{x}~.
+}\end{equation}
+我们假设 $g(k')$ 在 $[-m,m]$ 内绝对值可积， 那么\upref{Fubin0}有限区间的重积分可以交换顺序，变为
+\begin{equation}\ali{
+&\quad\frac{1}{2\pi} \lim_{n\to\infty} \lim_{m\to\infty} \int_{-m}^{m} g(k') \int_{-n}^{n}\E^{\I (k'-k) x} \dd{x} \dd{k'}\\
+&= \lim_{n\to\infty} \lim_{m\to\infty} \int_{-m}^{m} g(k') \delta_n(k'-k) \dd{k'}\\
+&= \lim_{n\to\infty} \int_{-\infty}^{\infty} g(k') \delta_n(k'-k) \dd{k'}\\
+&= g(k)~.
+}\end{equation}
+第二个等号中， $\delta_n$ 是\autoref{ex_Delta_1}~\upref{Delta} 中的 delta 函数列， 最后一步使用了其性质\autoref{eq_Delta_7}~\upref{Delta}。 证毕。
+
+注意这里要求对每个 $n=1,2,\dots$ 积分 $\int_{-\infty}^{\infty} g(k') \delta_n(k'-k) \dd{k'}$ 都收敛。 只有满足该要求的函数才适用该证明。
 
 \subsection{性质}
 为了书写方便我们用\textbf{算符} $\mathcal F$ 和 $\mathcal F^{-1}$ 表示傅里叶变换和反变换， 即 $\mathcal F f = g$ 以及 $\mathcal F^{-1} g = f$。 算符在这里可以看作 “函数的函数”， 即自变量和函数值都是函数。
