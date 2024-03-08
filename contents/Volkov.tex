@@ -3,15 +3,141 @@
 % license Xiao
 % type Tutor
 
-\pentry{速度规范\nref{nod_LVgaug}， 加速度规范\nref{nod_AccGau}}{nod_f8ad}
+\pentry{一维自由高斯波包（量子）\nref{nod_GausWP}}{nod_2d77}
+本文使用原子单位制\upref{AU}。 若初始时刻 $t_0$ 一个自由粒子的三维空间波函数 $\Psi(\bvec r,t)$ 已知，接下来空间中出现了随时间变化的电场 $\bvec {\mathcal E}(t)$ （我们采用偶极子近似\upref{DipApr}， 即假设电场不随位置变化， 感生磁场可以忽略）\upref{DipApr}， 那么接下来波函数会如何变化呢？
 
-本文使用原子单位制\upref{AU}。 若初始时刻 $t_0$ 一个自由粒子的波函数是平面波， 波数为 $\bvec k_0$。 接下来空间中出现了随时间变化的电场 $\bvec {\mathcal E}(t)$ （我们采用偶极子近似\upref{DipApr}， 即假设电场不随位置变化， 感生磁场可以忽略）， 那么我们把该电场中的含时波函数称为 \textbf{Volkov 波函数}。
+要求解该问题， 可以用 “一维自由粒子高斯波包\upref{GausWP}” 相似的思路，先把初始波函数拆解为无数平面波， 再分别把每个平面波在电场 $\bvec {\mathcal E}(t)$ 中演化到任意时间 $t$， 最后重新组合成为 $\Psi(\bvec r,t)$。 该过程中，把平面波在电场中演化到某时刻的结果就称为 \textbf{Volkov 波函数}。
 
-以下我们分别在长度规范\upref{LenGau}、速度规范\upref{LVgaug}、加速度规范\upref{AccGau}中求解 Volkov 波函数。 在 $t \le t_0$ 时， 令 $\bvec {\mathcal E}(t) = \bvec A(t) = \bvec 0$。 令三种规范下 $t \le t_0$ 的波函数都是平面波（不同规范仅当非零电场出现后才有区别）
+在 $t \le t_0$ 时， 令 $\bvec {\mathcal E}(t) = \bvec 0$， 且波函数是如下平面波
 \begin{equation}\label{eq_Volkov_3}
-\Psi_{\bvec k_0}(\bvec r, t \le t_0) = (2\pi)^{-3/2} \exp\qty(\I\bvec k_0 \vdot \bvec r - \I E_0 t)~,
+\Psi_{\bvec k_0}(\bvec r, t \le t_0) = (2\pi)^{-3/2} \exp\qty(\I\bvec k_0 \vdot \bvec r - \I E_0 t) \qquad (t \le t_0)~,
 \end{equation}
-其中 $E_0 = \bvec k_0^2/(2m)$ 是初始动能（下同）。 注意以下所有规范中， 算符 $\bvec p = -\I \grad$ 都是广义动量\upref{QMEM}。
+其中 $E_0 = \bvec k_0^2/(2m)$ 是初始动能。那么施加电场后，
+波函数阿那照薛定谔方程（\autoref{eq_LenGau_3}~\upref{LenGau}）
+\begin{equation}
+\qty[-\frac{\grad^2}{2m} - q \bvec {\mathcal E}(t) \vdot \bvec r] \Psi(\bvec r,t) = \I \pdv{t} \Psi(\bvec r,t)~
+\end{equation}
+演化，解得 Volkov 波函数为
+\begin{equation}\label{eq_Volkov_4}
+% 已代入薛定谔方程验证
+\Psi_{\bvec k_0}(\bvec r, t) = (2\pi)^{-3/2} \exp\qty[\I \bvec k(t)\vdot \bvec r - \I\int_{t_0}^t E(t') \dd{t'} - \I E_0 t_0] \qquad (t > t_0)~.
+\end{equation}
+其中
+\begin{equation}\label{eq_Volkov_5}
+\bvec k(t) = \bvec k_0 + q\int_{t_0}^t \bvec {\mathcal E}(t') \dd{t'}~,
+\qquad
+E(t) = \frac{\bvec k^2(t)}{2m}
+\end{equation}
+是一个初始动量为 $\bvec k_0$ 的经典的点电荷在同一电场下的动量和动能。 可见， 平面波经过电场作用后，仍然是平面波，只是波矢和相位都会发生相应的改变。
+
+一维 Volkov 函数的 Matlab 代码如下，需要提供 \verb`t` 和一列 \verb`x`， 以及 $k(t)$ 的函数句柄 \verb`k_fun`。
+\begin{lstlisting}[language=matlab, caption=volkov\_1d.m]
+% Volkov wave function in 1D
+% supports 1d vector x and t
+% output psi(i,j), k(j), E(j), phi(j) for x(i), t(j)
+function [psi, k, E, phi] = volkov_1d(k_fun, x, t)
+Nt = numel(t);
+x = x(:); t = t(:).';
+k = k_fun(t);
+E_fun = @(t) 0.5*k_fun(t).^2;
+E = E_fun(t);
+phi = zeros(1, Nt); phi(1) = E(1)*t(1);
+for i = 2:Nt
+    phi(i) = phi(i-1) + integral(E_fun, t(i-1), t(i));
+end
+psi = (2*pi)^(-1.5) .* exp(1i*k.*x - 1i*phi);
+end
+\end{lstlisting}
+
+下面是一个做简谐运动的小球对应的 Volkov 波函数的动画程序
+\addTODO{插入动画截图，链接到动画}
+\begin{lstlisting}[language=matlab, caption=volkov\_test.m]
+% === params ===
+tmin = 0; tmax = 2*pi; Nt = 201;
+xmin = -15; xmax = 20; Nx = 1000;
+x00 = -5;
+k00 = 0; % center of wave packet
+sigma_x = 1; % width of wave packet
+Nk0 = 101; % # of Volkov waves
+% ==============
+
+sigma_k = 1/(2*sigma_x);
+k0min = k00-4*sigma_k;
+k0max = k00+4*sigma_k;
+
+k0 = linspace(k0min, k0max, Nk0);
+dk0 = (k0max-k0min) / Nk0;
+coeffs = 1/(2*pi*sigma_k^2)^0.25 *...
+    exp(-(k0-k00).^2./(2*sigma_k).^2) .*...
+    exp(-1i*x00*(k0-k00))* dk0;
+
+x = linspace(xmin, xmax, Nx);
+t = linspace(tmin, tmax, Nt);
+force = 5*cos(t);
+x_ball = x00 + 5*(1-cos(t));
+psi_v = zeros(Nx, Nt, Nk0);
+for i0 = 1:Nk0
+    k_fun = @(t) k0(i0) + 5*sin(t);
+    psi_v(:,:,i0) = volkov_1d(k_fun, x, t);
+end
+
+% wave packet
+psi = zeros(Nx, Nt);
+for it = 1:Nt
+    for ik0 = 1:Nk0
+        psi(:, it) = psi(:, it) + ...
+            coeffs(ik0) * psi_v(:, it, ik0);
+    end
+end
+
+% plot animation
+i0 = (Nk0+1)/2;
+for i = 1:Nt
+    % central Volkov wave
+    figure(1); clf;
+    subplot(2, 1, 1);
+    y = psi_v(:,i,i0);
+    plot(x, [real(y), imag(y)]);
+    hold on;
+    axis([xmin,xmax,[-1,1]*0.08]);
+    grid on;
+    title('central Volkov wave');
+
+    % Wave packet
+    subplot(2, 1, 2);
+    y = psi(:,i);
+    plot(x, [real(y), imag(y)]); hold on;
+    plot(x, abs(y), 'k');
+    axis([xmin,xmax,-0.11,0.15]);
+    grid on;
+    title('Wave packet');
+
+    % electric field
+    plot([0, force(i)], [1,1]*0.13, 'LineWidth', 3);
+    % classical ball
+    scatter(x_ball(i), 0.11, 'k');
+
+    saveas(gcf, [sprintf('%03d', i) '.png']);
+end
+\end{lstlisting}
+
+\addTODO{不要引用\autoref{eq_LenGau_3}~\upref{LenGau} ，预备知识太多，需要一个信仰版}
+
+\subsubsection{速度规范和加速度规范}
+\pentry{速度规范\nref{nod_LVgaug}， 加速度规范\nref{nod_AccGau}}{nod_f8ad}
+注意以下所有规范中， 算符 $\bvec p = -\I \grad$ 都是广义动量\upref{QMEM}。
+
+注意本文中的 $\bvec A(t)$ 都是指速度规范中的矢势， 长度规范下的矢势恒为零（\autoref{eq_LenGau_4}~\upref{LenGau}），广义动量就是 $m\bvec v$（\autoref{eq_LenGau_6}~\upref{LenGau}）。
+
+========== 回收 ==============
+
+
+（不同规范仅当电场出现后才会不同）
+
+以下我们分别在长度规范\upref{LenGau}、速度规范\upref{LVgaug}、加速度规范\upref{AccGau}中求解 Volkov 波函数。 在 $t \le t_0$ 时， 令 $\bvec {\mathcal E}(t) = \bvec A(t) = \bvec 0$。 令三种规范下 
+
+
+
 
 \subsection{加速度规范}
 求解 Volkov 波函数最容易的方法就是使用所谓加速度规范， 由于空间中没有净电荷， 薛定谔方程（\autoref{eq_AccGau_4}~\upref{AccGau}）中 $V(\bvec r) = 0$
@@ -45,7 +171,7 @@
 \I \pdv{t} \Psi^V = \qty[\frac{\bvec p^2}{2m} - \frac{q}{m}\bvec A(t) \vdot \bvec p] \Psi^V~.
 \end{equation}
 注意 $E_0$ 只是初始时间的动能 $E(t_0)$， 电场中的粒子能量不守恒。 任意时刻， 波函数都是 $m\bvec v(t)$ 和动能 $E(t)$ 的本征矢， 本征值和经典粒子的动量动能相同。
-\begin{equation}\label{eq_Volkov_5}
+\begin{equation}
 m\bvec v(t) = \bvec k_0 - q\bvec A(t)~,
 \end{equation}
 \begin{equation}
@@ -54,14 +180,4 @@ E(t) = \frac{\qty[\bvec k_0 - q\bvec A(t)]^2}{2m}~.
 初始时刻有 $\bvec A(0) = \bvec 0$， $m\bvec v(t_0) = \bvec k_0$。
 
 \subsection{长度规范}
-要求长度规范长度规范下的 Volkov 波函数只需要对\autoref{eq_Volkov_1} 再次做规范变换即可（\autoref{eq_LVgaug_6}~\upref{LVgaug}）， 得\footnote{如果不在乎波函数的全局相位， 可以把\autoref{eq_Volkov_4} 方括号最后的常数项去掉。}
-\begin{equation}\label{eq_Volkov_4}
-% 已代入薛定谔方程验证
-\Psi_{\bvec k_0}^L(\bvec r, t) = (2\pi)^{-3/2} \exp\qty[\I m\bvec v(t)\vdot \bvec r - \I\int_{t_0}^t E(t') \dd{t'} - \I E t_0]~.
-\end{equation}
-注意本文中的 $\bvec A(t)$ 都是指速度规范中的矢势， 长度规范下的矢势恒为零（\autoref{eq_LenGau_4}~\upref{LenGau}），广义动量就是 $m\bvec v$（\autoref{eq_LenGau_6}~\upref{LenGau}）。
-
-容易验证\autoref{eq_Volkov_4} 是长度规范薛定谔方程的解（\autoref{eq_LenGau_3}~\upref{LenGau}）
-\begin{equation}
-\qty[\frac{\bvec p^2}{2m} - q \bvec {\mathcal E}(t) \vdot \bvec r] \Psi^L = \I \pdv{t} \Psi^L~.
-\end{equation}
+要求长度规范长度规范下的 Volkov 波函数只需要对\autoref{eq_Volkov_1} 再次做规范变换即可（\autoref{eq_LVgaug_6}~\upref{LVgaug}）， 得\autoref{eq_Volkov_4}。\footnote{如果不在乎波函数的全局相位， 可以把\autoref{eq_Volkov_4} 方括号最后的常数项去掉。}

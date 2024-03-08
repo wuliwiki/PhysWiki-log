@@ -9,11 +9,99 @@
 \issueDraft
 \end{issues}
 
-特征线法又被称为达朗贝尔法和行波法，一般适用于解初值问题的一阶 PDE，对二阶 PDE 的分类也颇有帮助。
+特征线法又被称为达朗贝尔法和行波法，一般适用于解初值问题的一阶 PDE，对二阶 PDE 的分类也颇有帮助。本文默认 PDE 的范围是 $-\infty < x, y, \dots < +\infty, t>0$，用 $u'_t$ 表示 $\pdv{u}{t}$，用 $u'_x$ 表示 $\pdv{u}{x}$。。
+
+特征线有如下性质，
+\begin{enumerate}
+\item 对于 $n$ 维（这里包含时间维）的 PDE，其特征线总是 $n-1$ 维的。
+\item 解的“间断”性质通过、且仅能通过特征线传播。
+\item 特征线上 PDE 的解是一样的，特征线的斜率是解“传播”的速度。
+\end{enumerate}
+其中性质 $2$ 对应着如果不存在特征线（特征线不是实的，类似一元二次方程没有实数根称为根不存在），那么 PDE 的解连续（这就是 elliptic PDE）。
+
+
+
+
+
+
 
 \subsection{一维一阶 PDE}
+\begin{theorem}{}
+对于关于 $u(x, t)$ 的 PDE：
+\begin{equation}
+\pdv{u}{t} + A(x, t) \pdv{u}{x} + B(x, t) u = f(x, t) ~,
+\end{equation}
+初值条件 $u(x, 0) = \phi(x), -\infty < x < +\infty$。
 
+设特征线族为 $x = x(t, \tau)$ 是下面 ODE 的解，
+\begin{equation}
+\left\{
+\begin{aligned}
+\dv{x}{t} &= A(x, t), \\
+x(0) &= \tau ~.
+\end{aligned}
+\right .
+\end{equation}
+考虑 $v(t) = u(x(t), t)$，由全微分与偏导的关系，
+$$\dv{v}{t} = \pdv{u}{x} \dv{x}{t} + \pdv{u}{t} \dv{t}{t} = \pdv{u}{x} \cdot A(x, t) + \pdv{u}{t} ~,$$
+这便是特征线的解。若再要求解原方程组，又有：
+\begin{equation}
+\left\{
+\begin{aligned}
+\dv{v}{t} + B(x, t) v &= f(x(t), t) ~, \\
+v(0) = u(x(0), 0) &= u(\tau, 0) = \phi(x) ~.
+\end{aligned}
+\right.
+\end{equation}
+\end{theorem}
+
+
+
+
+
+
+
+
+下面利用两个一维一阶的 PDE 举例来说明如何求解 PDE 的特征线。
+\begin{example}{}
+求解这 PDE 的特征曲线与其本身：
+\begin{equation}
+\left \{ 
+\begin{aligned}
+u'_t + (x + t) u'_x + u &= x ~, \\
+\eval{u}_{t=0} &= x ~.
+\end{aligned}
+\right .
+\end{equation}
+
+\textbf{解}：特征曲线 $x=x(t)$ 对应下面 ODE，
+\begin{equation}
+\left \{ 
+\begin{aligned}
+\dv{x}{t} &= x+t ~, \\
+x(0) &= \tau ~.
+\end{aligned}
+\right .
+\end{equation}
+可以解得 $x(t) = e^t - t - 1 + \tau \cdot e^t$。
+
+
+\end{example}
 % todo
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 很多人都对偏微分方程为什么用圆锥曲线来分类有疑惑，一个偏微分方程为什么会跟平面上曲线的分类有关呢？对 PDE（偏微分方程）进行分类又对解其有何帮助？下面来讨论这些问题。
 
@@ -21,6 +109,6 @@
 在一般的数理方程或介绍 PDE 的书籍中，会把二阶线性 PDE 作为着重点来讲并一般将之分为三类，分别是
 \begin{enumerate}
 \item 椭圆类（elliptic PDE），例如泊松方程 $\laplacian u = f(x,y,z)$；
-\item 抛物线类（parabolic PDE），例如热传导方程 $\frac{\partial T}{\partial t} = k \laplacian T$；
+\item 抛物线类（parabolic PDE），例如热传导方程 $k \laplacian T = \frac{\partial T}{\partial t}$；
 \item 双曲类（hyperbolic PDE），例如波动方程 $\laplacian u = \frac{1}{c^2} \frac{\partial^2 u}{\partial t^2}$。
 \end{enumerate}
