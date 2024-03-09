@@ -3,18 +3,30 @@
 % license Xiao
 % type Tutor
 
+\subsection{网站开发 TODO}
+\begin{itemize}
+\item 把访客统计数据可视化：数据基于 \verb`https://wuli.wiki/admin/system/logs/access-logs`
+\item 画出随时间变化的趋势图以及总计， 手动限制条件，例如某篇文章，部分，章，统计时间段，登录或未登录
+\item 网页 AI 助手充值包
+\item 用户历史捐款兑换积分（支付宝 2024 账单还没下载导入）
+\end{itemize}
+
 \subsection{Editor 使用数据库 TODO}
 \begin{itemize}
+\item 用 salary.value 代替 authors.salary,  discount 表整合到了 salary.scale
 \item 给文章加一个上锁功能，在修改文章信息里面管理员可以上锁和解锁，不能修改任何信息包括内容。如果 occupied 的文章被上锁，就从 occupied 表中删除。
 \item 根据数据库里面对审稿的设计，做一个审稿按钮和面板。
-\item 用 salary.value 代替authors.salary,  discount 表整合到了 salary.scale
 \item stat.html 页面加一列 “时薪”显示所有 salary 规则下该文章该作者该时段最高的那个时薪，加一列 “调整”显示 salary_change 里面的调整， 最后 时薪*折扣*时间+调整=补贴，如果 stat.html 所选时段内有规则生效或者失效，就分割成多行，每行显示不同的 “时薪”
 \item salary.html 给管理员添加删除规则用。如果是作者但非管理员，可以查看但不能修改关于自己的规则,或者关于所有人的规则（salary.author 为空）
 salary 表的规则大概一共就这么三种,
+\begin{lstlisting}[language=none]
 -- rule: 作者 + 协议 -> 时薪
 -- rule: 作者 + 文章 -> 缩放
--- rule: 文章 -> 缩放 其中第二个比第三个有更高的优先级
+-- rule: 文章 -> 缩放
+其中第二个比第三个有更高的优先级
+\end{lstlisting}
 \item right 表，应用编辑器相关权限
+\item 网站首页的全文搜索需要记录到数据库（记录每次的搜索内容、用户和时间，如果未登录则不用记录用户），不要记录编辑器中的全文搜索。
 \end{itemize}
 
 \subsubsection{图片相关}
@@ -48,7 +60,7 @@ UPDATE "entries" SET "figures" = "figures" || ' test_10' WHERE "id"='test';
 \end{itemize}
 
 \subsubsection{关于权限}
-会员制需要考虑一个问题就是， 如果大家都可以用编辑器， 那不开会员也可以打开编辑器查看所有内容。 所以编辑者必须开通会员， 有足够的贡献才能抵扣会员。
+会员制需要考虑一个问题就是， 如果大家都可以用编辑器， 那不开会员也可以打开编辑器查看所有内容。 所以编辑者必须开通会员， 有足够的贡献才能报销会员。
 
 \subsubsection{PhysWikiScan TODO}
 \begin{itemize}
