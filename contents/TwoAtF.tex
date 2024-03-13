@@ -12,12 +12,12 @@
 
 在更深入的研究之前，我们先回顾一下两体散射过程的量子力学（场论下的散射问题我们这里不详细谈）。 我们很显然可以通过并非二次量子化而是基于波函数的量子力学来处理。
 
-散射问题的一般解法是分波法，也就是
+三维散射问题的一般解法是分波法，也就是将波函数按照动能算符$\nabla^2$在球坐标下，角向部分的本征态展开
 
 \begin{equation}
 \Psi(r) = \sum_{l=0}^{+\infty}\frac{\chi_{kl}(r)}{kr}P_l(\cos\theta) ~,
 \end{equation}
-其中呢，$\chi_{kl}$ 是分波之后的成分，需要进一步求解，而 $P_l(\cos\theta)$ 则是勒让德函数。 $k$ 是受能量调控的。 $E=\hbar^2 k^2/(2m)$。 很容易的写出径向薛定谔方程：
+其中呢，$\chi_{kl}$ 是分波之后的成分，需要进一步求解，而 $P_l(\cos\theta)$ 则是勒让德函数。 $k$ 是受能量调控的。 $E=\hbar^2 k^2/(2m)$。 很容易的写出径向本征态薛定谔方程：
 \begin{equation}
 \dv[2]{\chi_{kl}(r)}{r} - \frac{l(l+1)}{r^2}\chi_{kl}(r) + \frac{m}{\hbar^2}(E-V(r))\chi_{kl}(r) = 0~.
 \end{equation}
@@ -27,7 +27,7 @@
 \dv[2]{\chi_{k0}(r)}{r}+ \frac{m}{\hbar^2}(E-V(r))\chi_{k0}(r) = 0~.
 \end{equation}
 
-这个的解在大于我们的截止半径 $r_0$ 的时候一目了然，就是简单地 $\sin(kr + \delta_k)$ 嘛；然而这个 $\delta$ 究竟是多少呢？这就要取决于在小于截止半径内的具体势能形式了。 不过要注意，这里的这个截止半径确实是很关键的一个要求；但是，有的时候即使并不是 $\E^{-kr}$ 而是 $r^{-\alpha}$ 的形式的势能，在某些情况下我们的分析也是正确的，在本文的后半部分会涉及这一点。
+根据对short range相互作用势的一般假设，我们假定当$r>r_0$时，$V(r)$几乎等于0。对于一个散射态本征态来说，$E>0$,这个的解在大于我们的截止半径 $r_0$ 的时候一目了然，就是简单地 $\sin(kr + \delta_k)$ 嘛；然而这个 $\delta$ 究竟是多少呢？这就要取决于在小于截止半径内的具体势能形式了。 不过要注意，这里的这个截止半径确实是很关键的一个要求；但是，有的时候即使并不是 $\E^{-kr}$ 而是 $r^{-\alpha}$ 的形式的势能，在某些情况下我们的分析也是正确的，在本文的后半部分会涉及这一点。
 
 关于这个 $\delta_k$ 的研究，我们实际上可以通过一个与归一化系数无关的办法，亦即
 
@@ -35,7 +35,7 @@
 \frac{\chi'(r_0^+)}{\chi(r_0^+)} = \frac{k}{\tan(k r_0 +\delta_k)} \sim \frac{k}{\tan(\delta_k)} \overset{def}{\equiv} -\frac{1}{a_s} ~.
 \end{equation}
 
-其中，这个 $a_s$ 是人为定义的一个参数，叫做散射长度；其一个很直观的物理意义就是：在远处波函数的行为可以认为与一个半径为 $a_s$ 的硬球模型一样（其势能为 $V(r) = (1-\theta(r-a_s)) \times +\infty$）。
+这个表达式可以在球方势阱的例子中通过势阱边界两端的连续性条件得到。其中，这个 $a_s$ 是人为定义的一个参数，叫做散射长度；其一个很直观的物理意义就是：在远处波函数的行为可以认为与一个半径为 $a_s$ 的硬球模型一样（其势能为 $V(r) = (1-\theta(r-a_s)) \times +\infty$）。
 
 显然，对于低能散射（小的 $k$）， $-ka_s = \tan\delta_k \sim \delta_k$，也就是说，phase shift $\delta_k \propto k$。 当然随着 $k$ 变得不那么小，这一现象也逐渐偏离；这里大家需要有一个数量级的感觉，也就是说，在 $\delta_k$ 接近饱和（趋近于 $\pi/2$）的时候， $k$ 仍然是相对来说很低能的一个效应。
 
@@ -50,7 +50,9 @@
 
 可以看到，$\Psi(a_s)=0$。 这对不同的 $k$ 都是一样的。 这是一个散射长度的物理意义。
 
-之前我们也提到过，只要有相同的 $\delta_k$，那么对于不同的势能形式，其原子远处的性质也是一样的。 于是我们来研究一个很有趣的toy model：
+\subsection{三维球方势阱}
+
+之前我们也提到过，只要有相同的 $\delta_k$，那么对于不同的势能形式，其原子远处的性质也是一样的。 于是我们来研究一个很有趣的toy model，三维球方势阱：
 
 \begin{equation}
 V(r)=\begin{cases}
@@ -58,13 +60,20 @@ V(r)=\begin{cases}
 0 & (r\geqslant r_0)~.
 \end{cases}
 \end{equation}
-于是 Schrödinger 方程就是
+于是，对于s波的 Schrödinger 方程就是
 
 \begin{align}
-\chi'' + \frac{m}{\hbar^2}(E+V_0)\chi &= 0\quad (r < r_0)~,\\
-\chi'' + \frac{m}{\hbar^2}(E)\chi &= 0\quad (r \geqslant r_0)~.
+\chi'' + \frac{2m}{\hbar^2}(E+V_0)\chi &= 0\quad (r < r_0)~,\\
+\chi'' + \frac{2m}{\hbar^2}(E)\chi &= 0\quad (r \geqslant r_0)~.
 \end{align}
-其中，$E$ 表示由于是低能散射，所以能量很小可以忽略。 如此我们就可以写出连接条件
+对于散射态，$E>0$,因此方程的解必定是$\sin (\omega x+\phi)$或$\cos(\omega x+\phi)$这样的形式。但考虑到我们在最初变量代换时有$\Psi(r) \sim \frac{\chi(r)}{r}$，因此为确保波函数在$r=0$时不发散，就要求有$\chi(0) = 0$。因此这个方程的解就确定了，
+\begin{align}
+\chi(r) = A\sin k' r \quad (k' = \sqrt{\frac{2m(E+V_0)}{\hbar^2}},0 \leq r \leq r_0)~,\\
+\chi(r) = B\sin (k r+ \delta_k)\quad  (k = \sqrt{\frac{2mE}{\hbar^2}}, r\geq r_0)~.
+\end{align}
+
+
+其中，$E$ 表示由于是低能散射，所以能量很小,与球方势阱的深度$V_0$相比可以忽略，因此在势阱内可以近似写为$k'\approx \sqrt{2mV_0/\hbar^2}$。 如此我们就可以写出连接条件
 \begin{equation}
 \sqrt{\frac{V_0 m}{\hbar^2}}\cot\left(\sqrt{\frac{V_0 m}{\hbar^2}}r_0\right) = -\frac{1}{a_s}~.
 \end{equation}
