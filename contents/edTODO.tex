@@ -3,71 +3,17 @@
 % license Xiao
 % type Tutor
 
-\subsection{网站开发 TODO}
+\textbf{目录：}
 \begin{itemize}
-\item 把访客统计数据可视化：数据基于 \verb`https://wuli.wiki/admin/system/logs/access-logs`
-\item 画出随时间变化的趋势图以及总计， 手动限制条件，例如某篇文章，部分，章，统计时间段，登录或未登录
-\item 网页 AI 助手充值包
-\item 用户历史捐款兑换积分（支付宝 2024 账单还没下载导入）
+\item \autoref{sub_edTODO_1}：Editor BUG
+\item \autoref{sub_edTODO_2}：Editor TODO
+\item \autoref{sub_edTODO_3}：Forum Bug
+\item \autoref{sub_edTODO_4}：Forum TODO
+\item \autoref{sub_edTODO_5}：PhysWikiScan BUG
+\item \autoref{sub_edTODO_6}：PhysWikiScan TODO
 \end{itemize}
 
-\subsection{Editor 使用数据库 TODO}
-\begin{itemize}
-\item 用 salary.value 代替 authors.salary,  discount 表整合到了 salary.scale
-\item 给文章加一个上锁功能，在修改文章信息里面管理员可以上锁和解锁，不能修改任何信息包括内容。如果 occupied 的文章被上锁，就从 occupied 表中删除。
-\item 根据数据库里面对审稿的设计，做一个审稿按钮和面板。
-\item stat.html 页面加一列 “时薪”显示所有 salary 规则下该文章该作者该时段最高的那个时薪，加一列 “调整”显示 salary_change 里面的调整， 最后 时薪*折扣*时间+调整=补贴，如果 stat.html 所选时段内有规则生效或者失效，就分割成多行，每行显示不同的 “时薪”
-\item salary.html 给管理员添加删除规则用。如果是作者但非管理员，可以查看但不能修改关于自己的规则,或者关于所有人的规则（salary.author 为空）
-salary 表的规则大概一共就这么三种,
-\begin{lstlisting}[language=none]
--- rule: 作者 + 协议 -> 时薪
--- rule: 作者 + 文章 -> 缩放
--- rule: 文章 -> 缩放
-其中第二个比第三个有更高的优先级
-\end{lstlisting}
-\item right 表，应用编辑器相关权限
-\item 网站首页的全文搜索需要记录到数据库（记录每次的搜索内容、用户和时间，如果未登录则不用记录用户），不要记录编辑器中的全文搜索。
-\end{itemize}
-
-\subsubsection{图片相关}
-\begin{itemize}
-\item 【进行中】如果上传时发现图片文件的 hash 已存在于 \verb|images.hash|， 则检查该文件的 \verb|images.figure和figures_aka| 中 \verb|figures.deleted==0| 的图片环境， 有就提示图片已存在，列出所有标签（\verb|fig_| 加 \verb|figures.id|）和图片标题和它们所在的文章 id 和 caption 让用户选择引用（\verb|\autoref{}|）或者选择重复使用图片。 如果 \verb|images.figure和figures_aka| 中没有 \verb|figures.deleted==0| 的图片环境（也就不用选了）或者用户选择重复使用图片， 就检查 \verb|images.figure和figures_aka| 中 \verb|figures.deleted==1| 的环境中有没有属于当前文章的（若有多个就选第一个）， 如果有就更新 \verb|figures.deleted=0| 然后根据该记录中的信息插入图片环境代码，否则新建标签和环境并在 \verb|figures| 表中插入新的记录， \verb|aka| 指向 \verb|images.figure|。
-\item 【完成】按下 “上传图片并创建新标签” 按钮弹出一个窗口。窗口中有“上传图片”按钮，按下后弹出文件浏览器仅限选择一张 png 或者 pdf 图片（若该图的 hash 已经存在则见下文）。 另设一个“上传其他格式”按钮，按下后可以选择一张或多张常见格式图片，可以按多次，若第一个按钮上传的是 pdf，上传的其他格式图片中必须要有 svg 格式否则无法确定。 设一个“上传附件（源码或项目文件等）”按钮，用于上传附件，功能和 “上传其他格式” 一样，上传到 \verb|PhysWiki/files/|。另外可以在窗口提供输入 \verb|figures.caption|（必填） 和 \verb|width|（默认 6） 和 \verb|source|（选填） 和 \verb|images.license|（必填，默认和 \verb|entries.license| 一样）。
-\item 【完成】上传新的图片时， \verb|PhysWiki/figures/| 中的文件使用 \verb|images.hash| + 拓展名命名。 \verb|\label{}| 格式为 \verb|fig_文章名_序号|。这里的\verb|序号|可以由小到大逐个查看数据库中存不存在 \verb|figures.id=文章名_序号|，使用第一个不存在的。
-\item 【完成】首先插入 \verb|images| 表的 \verb|hash, ext, figure, author, time|（此时如果有 foreign key 报错，需要 \verb|PRAGMA foreign_keys = OFF;|，完了再 \verb|ON|）， 再插入 \verb|figures| 表的 \verb|id, caption, authors, entry, image|， 再修改 \verb|entries| 表格的 \verb|figures|。 注意的格式，不要把已有的数据覆盖。 一个示例：
-\begin{lstlisting}[language=none]
-PRAGMA foreign_keys = OFF;
-
-INSERT INTO "images"
-("hash", "ext", "figures", "author", "time")
-VALUES ('3173003649033a60', 'png', 'test_10', 0, '202307121114');
-
-PRAGMA foreign_keys = ON;
-
-INSERT INTO "figures"
-("id", "caption", "authors", "entry", "image")
-VALUES ('test_10', '请输入图片描述', '0', 'test', '3173003649033a60');
-
--- 这个最好还是 parse 一下，保证没有重复，排个序，不要直接 append，这里只是图方便
-UPDATE "entries" SET "figures" = "figures" || ' test_10' WHERE "id"='test';
-\end{lstlisting}
-\item 【完成】上传的 \verb|svg| 做 hash 以前要把 CRLF 替换为 LF（保存到服务器的文件也使用 LF）。
-\item 若上传 pdf + svg 图片， 更新 \verb|figures.image_alt|。 同时支持上传其他文件（如果后缀名是 \verb|gif, eps 等|， 同样更新到 \verb|figures.image_alt|。
-\item 【先不做】上传或替换图片时弹出窗口让用户填写版权信息。
-\item 【先不做】上传或替换图片时允许上传附件
-\item 【先不做】在图片的下拉菜单中做一个图片浏览器按钮， 打开一个面板可以浏览所有图片。 选中图片后可以查看在哪个文章被使用。
-\item 【先不做】若替换图片， 则把替换前的 \verb|figures.image| 和 \verb|.image_alt| 都移动到 \verb|figures.image_old|。 
-\end{itemize}
-
-\subsubsection{关于权限}
-会员制需要考虑一个问题就是， 如果大家都可以用编辑器， 那不开会员也可以打开编辑器查看所有内容。 所以编辑者必须开通会员， 有足够的贡献才能报销会员。
-
-\subsubsection{PhysWikiScan TODO}
-\begin{itemize}
-\item 支持编译历史版本， 使用最新的数据库， 如果 label 找不到就显示找不到。
-\end{itemize}
-
-\subsection{Editor BUG}
+\subsection{Editor BUG}\label{sub_edTODO_1}
 按优先级排序
 \begin{itemize}
 \item 【完成】内部和外部引用按钮又失灵了（提示 scan 没有相应）。
@@ -242,9 +188,53 @@ UPDATE "entries" SET "figures" = "figures" || ' test_10' WHERE "id"='test';
 \item 公式调换位置后， \verb|\autoref| 显示的序号不会自动更新
 \end{itemize}
 
-\subsection{Editor TODO}
+\subsection{Editor TODO}\label{sub_edTODO_2}
 按优先级排序
 \begin{itemize}
+\item 编辑器光标停留在一个括号上，另一半括号需要高亮
+\item 【进行中】如果上传时发现图片文件的 hash 已存在于 \verb|images.hash|， 则检查该文件的 \verb|images.figure和figures_aka| 中 \verb|figures.deleted==0| 的图片环境， 有就提示图片已存在，列出所有标签（\verb|fig_| 加 \verb|figures.id|）和图片标题和它们所在的文章 id 和 caption 让用户选择引用（\verb|\autoref{}|）或者选择重复使用图片。 如果 \verb|images.figure和figures_aka| 中没有 \verb|figures.deleted==0| 的图片环境（也就不用选了）或者用户选择重复使用图片， 就检查 \verb|images.figure和figures_aka| 中 \verb|figures.deleted==1| 的环境中有没有属于当前文章的（若有多个就选第一个）， 如果有就更新 \verb|figures.deleted=0| 然后根据该记录中的信息插入图片环境代码，否则新建标签和环境并在 \verb|figures| 表中插入新的记录， \verb|aka| 指向 \verb|images.figure|。
+\item 【完成】按下 “上传图片并创建新标签” 按钮弹出一个窗口。窗口中有“上传图片”按钮，按下后弹出文件浏览器仅限选择一张 png 或者 pdf 图片（若该图的 hash 已经存在则见下文）。 另设一个“上传其他格式”按钮，按下后可以选择一张或多张常见格式图片，可以按多次，若第一个按钮上传的是 pdf，上传的其他格式图片中必须要有 svg 格式否则无法确定。 设一个“上传附件（源码或项目文件等）”按钮，用于上传附件，功能和 “上传其他格式” 一样，上传到 \verb|PhysWiki/files/|。另外可以在窗口提供输入 \verb|figures.caption|（必填） 和 \verb|width|（默认 6） 和 \verb|source|（选填） 和 \verb|images.license|（必填，默认和 \verb|entries.license| 一样）。
+\item 【完成】上传新的图片时， \verb|PhysWiki/figures/| 中的文件使用 \verb|images.hash| + 拓展名命名。 \verb|\label{}| 格式为 \verb|fig_文章名_序号|。这里的\verb|序号|可以由小到大逐个查看数据库中存不存在 \verb|figures.id=文章名_序号|，使用第一个不存在的。
+\item 【完成】首先插入 \verb|images| 表的 \verb|hash, ext, figure, author, time|（此时如果有 foreign key 报错，需要 \verb|PRAGMA foreign_keys = OFF;|，完了再 \verb|ON|）， 再插入 \verb|figures| 表的 \verb|id, caption, authors, entry, image|， 再修改 \verb|entries| 表格的 \verb|figures|。 注意的格式，不要把已有的数据覆盖。 一个示例：
+\begin{lstlisting}[language=none]
+PRAGMA foreign_keys = OFF;
+
+INSERT INTO "images"
+("hash", "ext", "figures", "author", "time")
+VALUES ('3173003649033a60', 'png', 'test_10', 0, '202307121114');
+
+PRAGMA foreign_keys = ON;
+
+INSERT INTO "figures"
+("id", "caption", "authors", "entry", "image")
+VALUES ('test_10', '请输入图片描述', '0', 'test', '3173003649033a60');
+
+-- 这个最好还是 parse 一下，保证没有重复，排个序，不要直接 append，这里只是图方便
+UPDATE "entries" SET "figures" = "figures" || ' test_10' WHERE "id"='test';
+\end{lstlisting}
+\item 【完成】上传的 \verb|svg| 做 hash 以前要把 CRLF 替换为 LF（保存到服务器的文件也使用 LF）。
+\item 若上传 pdf + svg 图片， 更新 \verb|figures.image_alt|。 同时支持上传其他文件（如果后缀名是 \verb|gif, eps 等|， 同样更新到 \verb|figures.image_alt|。
+\item 【先不做】上传或替换图片时弹出窗口让用户填写版权信息。
+\item 【先不做】上传或替换图片时允许上传附件
+\item 【先不做】在图片的下拉菜单中做一个图片浏览器按钮， 打开一个面板可以浏览所有图片。 选中图片后可以查看在哪个文章被使用。
+\item 【先不做】若替换图片， 则把替换前的 \verb|figures.image| 和 \verb|.image_alt| 都移动到 \verb|figures.image_old|。
+\item “当地时间” 替换为 “本地时间”， 冬令时和夏令时的说明删除
+\item 用 salary.value 代替 authors.salary,  discount 表整合到了 salary.scale
+\item 给文章加一个上锁功能，在修改文章信息里面管理员可以上锁和解锁，不能修改任何信息包括内容。如果 occupied 的文章被上锁，就从 occupied 表中删除。
+\item 根据数据库里面对审稿的设计，做一个审稿按钮和面板。
+\item stat.html 页面加一列 “时薪”显示所有 salary 规则下该文章该作者该时段最高的那个时薪，加一列 “调整”显示 salary_change 里面的调整， 最后 时薪*折扣*时间+调整=补贴，如果 stat.html 所选时段内有规则生效或者失效，就分割成多行，每行显示不同的 “时薪”
+\item salary.html 给管理员添加删除规则用。如果是作者但非管理员，可以查看但不能修改关于自己的规则,或者关于所有人的规则（salary.author 为空）
+salary 表的规则大概一共就这么三种,
+\begin{lstlisting}[language=none]
+-- rule: 作者 + 协议 -> 时薪
+-- rule: 作者 + 文章 -> 缩放
+-- rule: 文章 -> 缩放
+其中第二个比第三个有更高的优先级
+\end{lstlisting}
+\item right 表，应用编辑器相关权限
+\item 网站首页的全文搜索需要记录到数据库（记录每次的搜索内容、用户和时间，如果未登录则不用记录用户），不要记录编辑器中的全文搜索。
+\item 百科符号替换功能还是有意义的，应该有空修复一下
+\item \textbf{中文模式}：把不能替换成符号的英文命令使用中文命令如 \verb`\subsection` 命令显示为 \verb`\子标题`， \verb`\textbf` 命令显示为 \verb`\粗体`， \verb`\bvec` 显示为 \verb`\粗向量` 等。 为了输入方便，中文模式下输入 \verb`\` 后支持拼音输入弹出对应的中文命令。
 \item 新文章选择付费创作协议或者把已有文章改成付费创作协议，需要管理员权限。 如果不是管理员，就提示 “该协议需要管理员权限，请先选择志愿创作协议，并向管理员申请”
 \item 给文章加一个上锁功能，在修改文章信息里面管理员可以上锁和解锁
 \item 在编辑器的 “修改文章信息” 中，如果协议是付费协议，那么再显示一个 “补贴折扣”，如果没有折扣就显示无，管理员可以输入一个 0-99 的整数
@@ -419,20 +409,25 @@ $$a^2 + b^2 = c^2$$
 \item 【完成】要求：如果在论坛上面已经登录了， 编辑器页面应该也可以自动登录（应该是用 cookie 实现的吧？）
 
 \item 【完成】每个 \verb|\subsection| 需要可以折叠， 像环境一样
+
+【完成】MathJax3 在 iOS 的 Safari 上显示有时候公式上半部分消失。 注意当前的 MathJax3 文件夹复制一个备份
+
+\item 【完成】而是直接进行命令替换， 从而增加公式代码在其他网站的兼容性
+
+\item 【完成】参考维基百科和知乎。 或者是否可以做成点了以后直接弹出一个子窗口而不是跳到底部？ 如何实现？
 \end{itemize}
 
-\subsection{编辑冲突解决方案}
-
+\subsubsection{编辑冲突方案}
 以下任何这些方案， 都等现在的方案足够稳定了再说吧。
 
-\subsubsection{【方案 1】只占用子节}
+\textbf{方案 1： 只占用子节}
 \begin{itemize}
 \item 这是现有方案的一个小改进， 开发成本非常低。
 \item 每个作者都可以看到当前未通过审核的所有改变（无论哪种方案这都是应该的）， 鼓励同时编辑同一个文章的人进行沟通。
 \item 编辑器通过作者修改的内容决定占用哪些子节， 可以允许不同作者修改同一个文章的不同子节。
 \end{itemize}
 
-\subsubsection{【方案 2】使用 Git 的方式协同编辑}
+\textbf{方案 2：使用 Git 的方式协同编辑}
 \begin{itemize}
 \item 这个方案是最理想的， 但需要较大开发成本。 当然也可以不严格实现取个折中。也可以完全用 github 管理， 0 成本。 还可以在自己服务器上搭建 GitLab。
 \item 使用 git 的方式管理协作。 从概念上每个人的每次新编辑（可以修改多个文章）都创建整个百科的一个新分支（以账号 ID 命名）。 完成后提交 pull request（PR）。 审稿人同意后 merge 到 master。 每个新分支都有自己的数据库（概念上）。
@@ -580,7 +575,23 @@ $$a^2 + b^2 = c^2$$
 \item 【暂时不需要】TODO：因该插件不支持 physics 宏包，选中大多数文章中现有公式的 LaTeX 打开编辑器，是无法正确显示的（如 $I = \int\bvec j \vdot \dd{\bvec S}$ 选中这段打开编辑器），并且由编辑器生成的 LaTeX 也不符合百科的命令规范（但显示效果基本一致），需编写 processor 对命令进一步转换，如将$\frac{\partial^{n}{\cdot}}{\partial{\cdot}^{n}}$ 转换成 $\pdv[n]{\cdot}{\cdot}$，$\left\langle{\cdot}\vert{\cdot}\right\rangle$ 转换成 $\braket{\cdot}{\cdot}$ etc.
 \end{itemize}
 
-\subsection{PhysWikiScan BUG}
+\subsection{论坛 Bug}\label{sub_edTODO_3}
+\begin{itemize}
+\item 消息通知中光标移动会发生上下抖动
+\item book 页面不可以依赖 mathjax 的 cdn， 和 online 页面一样使用 wuli.wiki 自己的。
+\end{itemize}
+
+\subsection{论坛 TODO}\label{sub_edTODO_4}
+\begin{itemize}
+\item 百科页面和编辑器中的历史版本按钮中需要支持浏览历史每个历史版本的网页版，这首先需要 scan 支持，对历史版本中的坏链接和找不到的图片，不进行报错而是显示占位图片和链接。
+\item 内容付费需要考虑一个问题就是， 如果大家都可以用编辑器， 那不开会员也可以打开编辑器查看所有内容。 所以编辑者必须开通会员， 有足够的贡献才能报销会员。
+\item 把访客统计数据可视化：数据基于 \verb`https://wuli.wiki/admin/system/logs/access-logs`
+\item 画出随时间变化的趋势图以及总计， 手动限制条件，例如某篇文章，部分，章，统计时间段，登录或未登录
+\item 网页 AI 助手充值包
+\item 用户历史捐款兑换积分（支付宝 2024 账单还没下载导入）
+\end{itemize}
+
+\subsection{PhysWikiScan BUG}\label{sub_edTODO_5}
 
 \subsubsection{changed}
 \begin{itemize}
@@ -593,8 +604,10 @@ $$a^2 + b^2 = c^2$$
 \subsubsection{表格标题}
 【完成】第二个表格会具有第一个表格的标题
 
-\subsection{PhysWikiScan TODO}
+\subsection{PhysWikiScan TODO}\label{sub_edTODO_6}
 \begin{itemize}
+\item 目录类型的文章中包含的词条， 在 \verb|PhysWikiScan .| 一开始不应该警告不包含在目录中。
+\item 支持编译历史版本， 使用最新的数据库， 如果 label 找不到就显示找不到。
 \item 把作者显示和排序的问题交给健叔和欧阳完成， \verb|wuli.wiki/online| 页面无需显示作者。
 
 \item 编译 pdf 时， 正文中的 \verb|href| 中的 url 完全不需要 escape， 但是 \verb|footnote| 中的 \verb|href| 需要。 所以为了保守起见 scan 还是只要碰到没有 escape 就报错比较好。 字符： \verb|%, #|
@@ -619,14 +632,3 @@ $$a^2 + b^2 = c^2$$
 
 \item 【完成】在每个文章底部加上目录树的链接
 \end{itemize}
-
-\subsubsection{改用 MathJax2}
-【完成】MathJax3 在 iOS 的 Safari 上显示有时候公式上半部分消失。 注意当前的 MathJax3 文件夹复制一个备份
-
-\subsubsection{不要使用 MathJax 的 newcommand}
-\begin{itemize}
-\item 【完成】而是直接进行命令替换， 从而增加公式代码在其他网站的兼容性
-\end{itemize}
-
-\subsubsection{脚注加上返回链接}
-【完成】参考维基百科和知乎。 或者是否可以做成点了以后直接弹出一个子窗口而不是跳到底部？ 如何实现？
