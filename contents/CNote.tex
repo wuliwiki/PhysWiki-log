@@ -8,6 +8,12 @@
 \issueDraft
 \end{issues}
 
+\begin{itemize}
+\item \verb`gcc` 的 C 语言标准有 \verb`-std=c90`， \verb`c99`， \verb`c11`， \verb`c17`， \verb`c2x` 若要使用 GNU 拓展， 也可以用 \verb`gnu99` 等。
+\item 宏 \verb`__STDC_VERSION__` 可以在程序中判断编译器的 C 标准。例如 \verb`199901L` 就是 \verb`c99` 标准， \verb`201112L` 就是 \verb`c11` 标准。 \verb`L` 表示 \verb`long int` 的 literal。 打印如 \verb`printf("C version: %ld\n", __STDC_VERSION__);`
+\end{itemize}
+
+
 \subsection{常用的字符串处理}
 \begin{lstlisting}[language=cpp]
 #include "string.h"
@@ -101,17 +107,37 @@ void main()
 }
 \end{lstlisting}
 
-\subsection{struct 和 union}
-
+\subsection{enum、 struct 和 union}
+\verb`union` 和 \verb`struct` 类似， 但变量共用内存
 \begin{lstlisting}[language=cpp]
 struct 名称 {} // 声明变量： struct 名称 变量
+enum 名称 {}   // 声明变量： enum   名称 变量
+union 名称 {}  // 声明变量： union  名称 变量
 typedef struct {} 名称 // 声明变量： 名称 变量
 typedef enum {} 名称 // 同理
 typedef union {} 名称 // 同理
 \end{lstlisting}
 
+两种定义方式的使用方法并不完全等效（该代码已使用 \verb`g++` 和 \verb`gcc` 的不同标准测试）。最简单的记忆方法就是第一种声明在使用时需要加 \verb`enum`， 第二种声明不用。
 \begin{lstlisting}[language=cpp]
-union {} // 和 struct 类似， 但变量共用内存
+enum B {B1, B2};
+
+enum B b1; // GOOD in c++ and c
+// B b2; // good in c++, error in c: unknown type name ‘B’
+
+typedef enum B BB; // GOOD in c++ and c
+// typedef B BBB; // good in c++, error in c
+
+// ==========================
+
+typedef enum {A1, A2} A;
+
+A a1; // GOOD in c++ and c
+// enum A a2; // error in c++ and c
+//     error: using typedef-name ‘A’ after ‘enum’
+
+typedef A AA; // GOOD in c++ and c
+// typedef enum A C; // error in c++, good in c
 \end{lstlisting}
 
 \subsection{函数指针}

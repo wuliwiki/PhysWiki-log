@@ -1,30 +1,56 @@
-% 偏微分方程的分类与特征线
+% （低阶）偏微分方程的分类与特征线
 % keys 特征线|PDE|偏微分方程
 % license Usr
 % type Tutor
 
 \begin{issues}
 \issueMissDepend
-\issueTODO
-\issueDraft
 \end{issues}
 
-特征线法又被称为达朗贝尔法和行波法，一般适用于解初值问题的一阶 PDE，对二阶 PDE 的分类也颇有帮助。本文默认 PDE 的范围是 $-\infty < x, y, \dots < +\infty, t>0$，用 $u'_t$ 表示 $\pdv{u}{t}$，用 $u'_x$ 表示 $\pdv{u}{x}$。。
+特征线法又被称为达朗贝尔法和行波法，一般适用于解初值问题的一阶 PDE，对二阶 PDE 的分类也颇有帮助。本文默认 PDE 的范围是 $-\infty < x, y, \dots < +\infty, t>0$，用 $u'_t$ 表示 $\pdv{u}{t}$，用 $u'_x$ 表示 $\pdv{u}{x}$。默认二阶导连续，即 $u''_{xy} = u''_{yx} = \pdv{}{y}\left(\pdv{u}{x}\right) = \pdv{}{x}\left(\pdv{u}{y}\right)$。
 
 特征线有如下性质，
 \begin{enumerate}
 \item 对于 $n$ 维（这里包含时间维）的 PDE，其特征线总是 $n-1$ 维的。
-\item 解的“间断”性质通过、且仅能通过特征线传播。
+\item 解的“间断”性质通过、且仅能通过特征线传播。（也就是说，不同时刻，同一特征线上的解相同，但有时数值会沿特征线衰减。）
 \item 特征线上 PDE 的解是一样的，特征线的斜率是解“传播”的速度。
 \end{enumerate}
 其中性质 $2$ 对应着如果不存在特征线（特征线不是实的，类似一元二次方程没有实数根称为根不存在），那么 PDE 的解连续（这就是 elliptic PDE）。
 
+同时求出特征线还有助于解决诸如影响区域、依赖区域一类的问题（这是由解信息沿特征线传播决定的）。
 
 
 
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+%=====================================================
 \subsection{一维一阶 PDE}
 \begin{theorem}{}
 对于关于 $u(x, t)$ 的 PDE：
@@ -62,9 +88,13 @@ v(0) = u(x(0), 0) &= u(\tau, 0) = \phi(x) ~.
 
 
 
+
+
+
+%========================================================举例
 下面利用两个一维一阶的 PDE 举例来说明如何求解 PDE 的特征线。
 \begin{example}{}
-求解这 PDE 的特征曲线与其本身：
+求解这 PDE 的特征曲线：
 \begin{equation}
 \left \{ 
 \begin{aligned}
@@ -84,10 +114,69 @@ x(0) &= \tau ~.
 \right .
 \end{equation}
 可以解得 $x(t) = e^t - t - 1 + \tau \cdot e^t$。
-
-
 \end{example}
-% todo
+
+
+
+
+
+
+
+
+
+%========================================另一个方法
+另一个方法则是考虑特征线下的坐标系 $(s, \tau)$，其中 $\tau$ 仍是某个常数，由选择的“哪条”特征线而定，而 $s \ge 0$ 是代表在某条特征线上的位置。
+\begin{figure}[ht]
+\centering
+\includegraphics[width=12em]{./figures/0a3f5c2a3d19bed0.png}
+\caption{$s-\tau$ 坐标系\cite{SJFPDE}} \label{fig_chacur_1}
+\end{figure}
+
+
+\begin{example}{}
+通过特征线法求这 pde 的解：
+$$
+\left\{
+\begin{aligned}
+{u_t'} + {u_x'} &= -u, -\infty < x < +\infty, t > 0, \\
+u(x, 0) &= \sin x, -\infty < x < +\infty .
+\end{aligned}
+\right.
+~~
+$$
+
+\textbf{解}：考虑将原 PDE 转化到 $s-\tau$} 坐标系下的 ODE。由全微分与偏微分的关系：
+$$
+\dv{u}{s} = \pdv{u}{x} \dv{x}{s} + \pdv{u}{t} \dv{t}{s}~,
+$$
+则由 $u_t' + u_x' = -u$，因而 $u_t' + u_x' + u = 0$，就有
+$$\dv{u}{s} + u = \pdv{u}{x} \dv{x}{s} + \pdv{u}{t} \dv{t}{s} + u = 0 ~.$$
+对比系数，得到特征线方程：
+$$\dv{x}{s} = 1, \dv{t}{s} = 1~, s>0$$
+故 $x(s) = s+C_1, t(s) = s+C_2$。
+
+令 $s=0$，得到 $x(0) = C_1, t(0) = C_2$。结合 $s-\tau$ 坐标系的意义，$x(0)$ 是由 $\tau$ 决定的初值 $x(0) = \tau$，$t(0)=0$。故 $x(s) = s+\tau, t(s)=s$。则特征线方程就是 $x = t+\tau$。
+
+下面利用上面求出的特征线将原 pde 转化为 ode 求解：
+$$
+\left\{
+\begin{aligned}
+\dv{u}{s} +u &= 0, s>0, \\
+\eval{u}_{s=0} &= u(\eval{x}_{s=0}, \eval{t}_{s=0}) = u(\tau, 0) = \sin \tau .
+\end{aligned}    
+\right.~~$$
+故 $u(s,\tau) = \exp(-s) \sin \tau$。
+
+下面将 $u(s, \tau)$ 转化回到 $x-t$ 坐标系下：
+$x(s) = s + \tau, t(s) = s$，故 $u(x, t) = \exp(-t)\sin(x-t) $。
+
+\begin{figure}[ht]
+\centering
+\includegraphics[width=10cm]{./figures/95de5a725503dc36.png}
+\caption{解的示意} \label{fig_chacur_2}
+\end{figure}
+可以发现解沿着特征线有衰减的传播。图中画出了 $0\le t\le3$, $0\le x \le 4 \pi$ 的情况。
+\end{example}
 
 
 
@@ -103,12 +192,98 @@ x(0) &= \tau ~.
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+%======================================
 很多人都对偏微分方程为什么用圆锥曲线来分类有疑惑，一个偏微分方程为什么会跟平面上曲线的分类有关呢？对 PDE（偏微分方程）进行分类又对解其有何帮助？下面来讨论这些问题。
 
 \subsection{二阶线性 PDE 的分类}
-在一般的数理方程或介绍 PDE 的书籍中，会把二阶线性 PDE 作为着重点来讲并一般将之分为三类，分别是
+在一般的数理方程或介绍 PDE 的书籍中，会把二阶线性 PDE 作为着重点来讲并一般将之主要分为以下三类，分别是
 \begin{enumerate}
-\item 椭圆类（elliptic PDE），例如泊松方程 $\laplacian u = f(x,y,z)$；
-\item 抛物线类（parabolic PDE），例如热传导方程 $k \laplacian T = \frac{\partial T}{\partial t}$；
-\item 双曲类（hyperbolic PDE），例如波动方程 $\laplacian u = \frac{1}{c^2} \frac{\partial^2 u}{\partial t^2}$。
+\item 椭圆类（elliptic PDE），例如泊松方程 $\laplacian u = f$；
+\item 抛物类（parabolic PDE），例如热传导方程 $k \laplacian T = \frac{\partial T}{\partial t}$；
+\item 双曲类（hyperbolic PDE），例如波动方程 $\laplacian w = \frac{1}{c^2} \frac{\partial^2 w}{\partial t^2}$。
 \end{enumerate}
+这三类的解信息沿特征线传播，有性质与对应的物理问题：
+\begin{enumerate}
+\item 椭圆类：解的信息以无限速度传播，且解不应当存在间断。适用于\textbf{平衡}问题（静态或准静态，例如无源力场）。
+\item 抛物类：解的信息以无限速度传播，适用于\textbf{扩散}问题（例如热传导）。
+\item 双曲类：解的信息以有限速度传播，且能保留间断信息，适用于\textbf{波动}问题。
+\end{enumerate}
+另外还有一类 PDE 被称为 ultrahyperbolic PDE（超双曲类）。下面将讲解是如何分类的。
+
+\subsubsection{二元二阶线性 PDE}
+首先保持二阶导连续的假设，即 $\pdv{}{x}\pdv{u}{y} = \pdv{}{y}\pdv{u}{x}$。则偏微分方程具有一般形式：
+$$Au''_{xx} + Bu''_{xy} + Cu''_{yy} + Du'_{x} + Eu'_{y} + F = 0 ~,$$
+与一阶线性 PDE 对比，可以得到特征线应当满足方程：
+$$
+\left\{
+\begin{aligned}
+\dd{(u'_{x})} &= u''_{xx} \dd x + u''_{xy} \dd y,\\
+\dd{(u'_{y})} &= u''_{xy} \dd x + u''_{yy} \dd y.
+\end{aligned}
+\right. ~~$$
+联立这三式，令有三个矩阵：
+\begin{equation}
+\mat M= 
+\begin{pmatrix}
+A & B & C \\
+\dd x & \dd y & 0 \\
+0 & \dd x & \dd y 
+\end{pmatrix}, 
+\mat p= 
+\begin{pmatrix}
+u''_{xx} \\
+u''_{xy} \\
+u''_{yy}
+\end{pmatrix},
+\mat N = 
+\begin{pmatrix}
+-D u'_{x} - E u'_{y} - F\\
+\dd{(u'_{x})}\\
+\dd{(u'_{y})}
+\end{pmatrix}
+~~
+\end{equation}
+则这三式可转化为 $\mat{Mp}=\mat N$。
+显然，$u$ 的各个二阶偏导项不是唯一确定的，所以  $\det \mat M = 0$，也就是需要：
+\begin{equation}
+A\left(\mathrm{d} y\right)^2 - B\left(\mathrm{d} x \mathrm{d} y\right) + C\left(\mathrm{d} x\right)^2 =0
+~,
+\end{equation}
+也就是：
+\begin{equation}
+A\left(\dv{y}{x}\right)^2 - B\left(\dv{y}{x}\right) + C = 0 ~,
+\end{equation}
+发现是一个关于 $\dd y/\dd x$ 的二次方程，判别式 $\Delta = B^2-4AC$。对比一般利用二次表达式的圆锥曲线定义，可以将特征线分类如下。
+\begin{enumerate}
+\item $\Delta < 0$，存在虚特征线（即无特征线），称这种为\textbf{椭圆类 PDE}；
+\item $\Delta = 0$，存在一族特征线，称这种为\textbf{抛物类 PDE}；
+\item $\Delta > 0$，存在两族不同的特征线，称这种为\textbf{双曲类 PDE}。
+\end{enumerate}
+这就是分类的依据。
+
+值得注意的是，PDE 可能在不同区域有不同分类。例如 $y u''_{xx} - u''_{yy} = 0$，在 $y> 0$ 时是双曲类；在 $y=0$ 时是抛物类，在 $y<0$ 时是椭圆类。
+\subsubsection{多元二阶线性 PDE}
+考虑线性微分算符 $\hat L$：
+\begin{equation}
+\hat L u = \sum_{i, j}\left(\mat A_{i, j} \cdot \pdv{}{x_i}\left(\pdv{u}{x_j}\right)\right) + \sum_{i}\left(\mat B_{i} \pdv{u}{x_i}\right) + F~,
+\end{equation}
+忽略低阶项（一阶的 $\mat B_{i}$ 与 $F$），考虑系数矩阵 $\mat A_{i,j}$ 的特征值，我们将 $\hat Lu=0$ 分类如下。
+\begin{enumerate}
+\item 当特征值均大于 $0$ 或均小于 $0$，即特征值全部同号且都非零，归类为\textbf{椭圆类}；
+\item 当特征值有一个为 $0$，其余均大于 $0$ 或均小于 $0$，即特征值除有一 $0$ 外均同号，归类为\textbf{抛物类}；
+\item 当特征值一个为正数，其他为负数；或一个为负数，其他为正数。即特征值均非 $0$，并且有仅有一非 $0$ 特征值与其他非 $0$ 特征值符号相反，归类为\textbf{双曲类}；
+\item 正特征值和负特征值的个数都均大于一，且特征值均非 $0$，归类为\textbf{超双曲类}。
+\end{enumerate}
+一般来说，对于一个有物理意义的 PDE，特征值有一个为 $0$ 的归类为抛物类，其余全同号为椭圆类，否则大概率为双曲类。
