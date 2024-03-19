@@ -3,12 +3,21 @@
 % license Xiao
 % type Tutor
 
-\begin{issues}
-\issueTODO
-\end{issues}
+\pentry{施密特正交化\nref{nod_SmdtOt}， 幺正变换\nref{nod_Unitar}，量子散射（一维）\nref{nod_Sca1D}， 狄拉克 delta 函数\nref{nod_Delta}， 零函数（列）\nref{nod_F0}，定态薛定谔方程（单粒子一维）\nref{nod_SchEq}，一维自由高斯波包（量子）\nref{nod_GausWP}}{nod_d908}
 
-\pentry{施密特正交化\nref{nod_SmdtOt}， 幺正变换\nref{nod_Unitar}，量子散射（一维）\nref{nod_Sca1D}， 零函数（列）\nref{nod_F0}}{nod_d908}
 本文使用原子单位制\upref{AU}。 类似于平面波的归一化\upref{EngNor}， 一维散射态也有不同的归一化方式， 但情况要更为复杂。
+
+先来回顾为什么要把散射态做正交归一化。 若我们给定一个势能 $V(x)$， 知道粒子的初态波函数 $\psi(x, 0)$（通常是一个波包）， 要求解接下来波函数如何演化，一种比较解析的办法就是类似自由粒子\upref{GausWP}那样，先把它投影并拆解成不同散射态和束缚态（如果存在），也就是定态薛定谔方程的能量本征态。我们知道这些能量本征态关于时间的演化只是乘以一个相位因子 $\E^{-\I Et}$，所以让它们分别演化一段时间后，再重新组合成波函数 $\psi(x, t)$， 就是 $\psi(x, 0)$ 演化的结果。 使用该方法的具体例子见 “高斯波包的方势垒散射数值计算（Matlab）\upref{FSBsct}”。
+
+但要使这个拆解再组合的方法成立，需要满足一些前提条件：初态波函数必须分解到一组\textbf{完备}、\textbf{正交}、\textbf{归一}的散射态上。如果不满足，那么即使拆解后马上直接组合也可能无法准确还原初始波包。这就类似于几何向量\upref{GVec}在正交归一基底上的投影和组合。
+
+\begin{itemize}
+\item \textbf{完备性}：在一维势能问题中，完备性要求我们必须使用所有的散射态和束缚态（如果存在）来拆解初始波函数。 但有时候初始波包和束缚态不重叠，则投影自动为零，不需要考虑。 另外初始波包在散射态上的投影系数会随着散射态能量的增加趋近于零，所以实际操作中可以只考虑某个能量以下的散射态。
+\item \textbf{正交性}：一维势阱的束缚态不存在简并，自动两两正交\upref{SchEq}，且自动与所有散射态正交。 但散射态存在二重简并，也就是对于定态薛定谔方程的某个能量 $E$，存在两个线性无关的解，选取时有一定的自由度。本文讨论的就是如何选取这两个线性无关的解使它们正交。
+\item \textbf{归一性}：归一性通常和正交性一起讨论，统称为正交归一。我们知道定态薛定谔方程的解如果乘以一个常数仍然是一个解，对于束缚态或者波包我们可以用波函数总概率为 1 作为归一化条件来确定这个常数，但散射态本身不可归一化，或者说不满足 “传统” 的归一化条件，所以系数的绝对值如何选取也是本文需要讨论的。
+\end{itemize}
+
+以上拆分组合的过程可以看作是傅里叶变换的拓展。 傅里叶变换可以看作把一个函数拆解成平面波后各个平面波的系数，而反变换就是由这些系数还原出拆解以前的函数\upref{COrNoB}。而这些正交归一化后的平面波就是 $\E^{\I k x}/\sqrt{2\pi}$。
 
 \subsection{对称势能}
 为简单起见先假设 $V(x)$ 关于原点对称， 且 $V(x)$ 是短程的， 即只在区间 $[-L,L]$ 内不为零。 定态薛定谔方程（\autoref{eq_SchEq_1}~\upref{SchEq}）
@@ -19,9 +28,9 @@
 \begin{equation}\label{eq_ScaNrm_3}
 \psi_k(x) = \leftgroup{
 &A\sin(kx + \phi) && (x > L)\\
-&\pm \psi_k(-x) && (x < L)~,
+&\pm \psi_k(-x) && (x < -L)~,
 }\end{equation}
-其中 $A$ 为实数， $\phi$ 是 $k$ 的函数， 称为\textbf{相移（phase shift）}。 为方便书写下文把 $\phi(k),\phi(k')$ 分别记为 $\phi, \phi'$。
+其中 $A$ 为实数常数， $\phi$ 是 $k$ 的函数， 称为\textbf{相移（phase shift）}。 为方便书写下文把 $\phi(k),\phi(k')$ 分别记为 $\phi, \phi'$。
 
 记奇函数和偶函数散射态分别为实函数 $\psi_{k,1}(x)$ 和 $\psi_{k,2}(x)$ 我们希望通过指定适当的归一化系数后， 波函数能满足正交归一化条件（\autoref{eq_EngNor_3}~\upref{EngNor}）
 \begin{equation}\label{eq_ScaNrm_1}
@@ -30,11 +39,12 @@
 \begin{equation}\label{eq_ScaNrm_6}
 \int_{-\infty}^{+\infty} \psi_{k',1}^*(x) \psi_{k,2}(x) \dd{x} = z(k' - k) \qquad (k > 0)~.
 \end{equation}
-其中 $\delta$ 理解为 $\delta$ 函数列\upref{Delta}， $z$ 是零函数（列）\upref{F0}， 以避免积分不收敛的问题。
+其中 $\delta$ 理解为 $\delta$ 函数列\upref{Delta}， $z$ 是零函数列\upref{F0}， 以避免积分不收敛的问题。
 
 \begin{theorem}{}\label{the_ScaNrm_1}
-\autoref{eq_ScaNrm_1} 和\autoref{eq_ScaNrm_6} 对所有性质良好的偶函数 $V(x)$ 都成立， 且\autoref{eq_ScaNrm_3} 中\textbf{归一化系数和平面波相同}， 即 $A = 1/\sqrt{\pi}$（\autoref{eq_EngNor_5}~\upref{EngNor}）。
+当\autoref{eq_ScaNrm_3} 中\textbf{归一化系数和平面波相同}， 即 $A = 1/\sqrt{\pi}$（\autoref{eq_EngNor_5}~\upref{EngNor}）时， \autoref{eq_ScaNrm_1} 和\autoref{eq_ScaNrm_6} 对所有性质良好的偶函数 $V(x)$ 都成立。
 \end{theorem}
+注意奇函数和偶函数之间是自动正交归一的，因为根据对称性，任意有限区间都有 $\int_{-a}^{a} \psi_{k,1}^*(x) \psi_{k,2}(x) \dd{x} = 0$。
 
 \subsection{不对称势能}
 由于势能 $V(x)$ 不对称， 我们仍然可以求出\textbf{两组线性无关的实函数解} $\psi_{k,1},\psi_{k,2}$， 却无法自动保证它们的奇偶性， 所以需要额外进行正交化以满足\autoref{eq_ScaNrm_6}。
@@ -176,7 +186,7 @@ A_a = \frac{1}{\sqrt{2\pi}}~.
 \end{equation}
 也就是说\textbf{反射波和透射波的相位总是相差 $\pi/2$}。
 
-\addTODO{有没有可能，即使是不对称势能，从势能两边入射时，反射和透射系数也是一样的？或者是自动正交的？为什么会有这个猜测呢？因为在三维散射问题中，即使势能是不对称的，也应该有 $\delta(\bvec k-\bvec k')$ 正交归一吧。}
+% \addTODO{有没有可能，即使是不对称势能，从势能两边入射时，反射和透射系数也是一样的？或者是自动正交的？为什么会有这个猜测呢？因为在三维散射问题中，即使势能是不对称的，也应该有 $\delta(\bvec k-\bvec k')$ 正交归一吧。}
 
 \subsection{对称势能的部分证明}
 这里给出\autoref{the_ScaNrm_1} 的部分证明。 对于奇偶性不同的两个函数， 他们显然式正交的（\autoref{ex_F0_2}~\upref{F0}）。 对奇偶性相同的， 首先（参考\autoref{exe_Delta_3}~\upref{Delta}）
@@ -228,4 +238,4 @@ I(k,k') = \frac{\sin(\phi'-\phi)}{2\pi(k'-k)} - \frac{\sin(\phi'+\phi)}{2\pi(k'+
 \end{equation}
 其中 $I_{\pm}(k,k')$ 的定义和\autoref{eq_ScaNrm_8} 类似。 第二个等号的具体过程笔者同样不会。
 
-\addTODO{正交化：证明\autoref{eq_ScaNrm_15} 得结果符合零函数正交条件\autoref{eq_ScaNrm_6} }
+% \addTODO{正交化：证明\autoref{eq_ScaNrm_15} 得结果符合零函数正交条件\autoref{eq_ScaNrm_6} }

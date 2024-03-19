@@ -1,0 +1,63 @@
+% 样本均值与方差
+% license Usr
+% type Tutor
+
+\begin{issues}
+\issueDraft
+\issueMissDepend
+\end{issues}
+（需要前置知识：期望和方差的基本性质；协方差与独立）
+
+在实际场景中，我们经常需要测量某一个量的分布情况。例如，如果我们想要知道上海市所有人的身高分布情况，进行一次像人口普查一样大规模的调研显然是不现实的（上海人口已经来到接近2500万人）。更实际的做法是在虹桥火车站或者外滩附近随机采访100个人，统计他们的身高情况，并以此来\textbf{估计}上海市民身高的分布情况。如果将所有上海人的身高作为\textbf{总体}，我们随机调查得到的数据就是一个\textbf{样本}。而我们想要知道，样本数据可以在多大的程度上反映全体数据的分布情况。
+
+假设总体数据满足分布 $X\sim(\mu, \tau^2)$，我们从中抽取的样本 $\{X_i \}_{i=1}^n$，并满足 $\forall i,j,\ X_i,X_j$ 相互独立。对于样本数据，可以计算其均值：\begin{equation}
+\bar X=\frac{\sum_{i=1}^n X_i}{n}~.
+\end{equation}
+
+我们当然希望样本均值总等于总体的均值： $\bar X=\mu$，但显然这是不可能的。事实上， $\bar X$ 也是一个统计量，其取值会随着选取样本的变化而变化。
+
+\begin{theorem}{}
+若总体满足分布 $X\sim (\mu, \tau^2)$，则其一组互相独立的样本 $\{X_i \}_{i=1}^n$ 的均值 $\bar X$ 满足分布 $\bar X\sim (\mu, \frac{\tau^2}{n})$
+\end{theorem}
+\textbf{证明}
+
+期望：
+\begin{equation}
+E(\bar X) =E(\frac{\sum_{i=1}^n X_i}{n}) 
+        =\frac 1 n \sum_{i=1}^n E(X_i)=\mu~.
+\end{equation}
+
+方差：
+\begin{equation}
+\begin{aligned}
+D(\bar X) &=E((\frac{\sum_{i=1}^n X_i}{n}-\mu)^2)\\
+&= E(\frac{(\sum_{i=1}^n X_i-n \mu)^2}{n^2}) \\
+&=\frac {1} {n^2} E(\sum_{i=1}^n (X_i-\mu)^2) \\
+&=\frac {\tau^2}{n}~.
+\end{aligned}
+\end{equation}
+
+同样的，我们希望样本的方差 $S^2$ 可以反映总体方差： $E(S^2)=\tau^2$。基于此，可以给出样本方差的计算方法和证明。
+\begin{theorem}{}
+若总体满足分布 $X\sim (\mu, \tau^2)$，对于一组相互独立的样本 $\{X_i \}_{i=1}^n$，其统计方差：
+\begin{equation}
+S^2 = \frac{\sum_{i=1}^n (X_i-\bar X)^2}{n-1}~.
+\end{equation}
+满足 $E(S^2) = \tau^2$
+\end{theorem}
+\textbf{证明}
+
+\begin{equation}
+\begin{aligned}
+E(S^2) &= \frac {1}{n-1}E(\sum_{i=1}^n(X_i-\bar X)^2) \\
+&= \frac {1}{n-1}E(\sum_{i=1}^n(X_i^2-2X_i\bar X+\bar X^2))\\
+&= \frac {1}{n-1}E(\sum_{i=1}^nX_i^2-n\bar X^2)\\
+&= \frac {1}{n-1} (\sum_{i=1}^nE(x_i^2)-nE(\bar X^2))\\
+&= \frac {1}{n-1}(\sum_{i=1}^n(\mu^2+\tau^2)-n(\mu^2+\frac{\tau^2}{n}))\\
+&= \frac {(n-1)\tau^2}{n-1}\\
+&= \tau^2~.
+\end{aligned}
+\end{equation}
+
+统计量的方差计算最大的不同是分母是 $n-1$ 而不是 $n$，这可以理解为：由于我们在计算中用统计量的均值来“代替”总体分布的均值，这会使数据减少一个自由度。
+

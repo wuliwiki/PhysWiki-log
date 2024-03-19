@@ -1,0 +1,107 @@
+% cos2 波包
+% license Usr
+% type Tutor
+
+\subsection{cos2 波包}
+$\cos^2$ 波包也叫 $\sin^2$ 波包，比起高斯波包，它的优点是存在明确的范围。 它的函数形式为
+\begin{equation}\label{eq_cos2wp_5}
+f(x) = \leftgroup{
+&A\cos^2\qty(\frac{\pi x}{L}) \E^{\I k_0x} && (\abs{x} < L/2)\\
+&0 && (\text{otherwise})~.
+}\end{equation}
+其中 $L$ 是波包的总长度。 它的 FWHMI 为
+\begin{equation}\label{eq_cos2wp_4} % 已数值验证
+\text{FWHMI} = \frac{2}{\pi}\opn{acos}(2^{-1/4}) L \approx 0.3640567 L~.
+\end{equation}
+满足 $f^2(\text{FWHMI/2}) = f^2(0)/2$。
+
+积分为（令 $a = \pi/L$）
+\begin{equation}\label{eq_cos2wp_2} % Mathematica 已验证 (原 eq_GausPk_2)
+\begin{aligned}
+\int A\cos^2\qty(a x) \E^{\I k_0x} \dd{x} &= -\I\frac{A}{4}\E^{\I kx}\qty(\frac{2}{k} +\frac{\E^{2\I ax}}{2a+k} -\frac{\E^{-2\I ax}}{2a-k}) + C\\
+&= \frac{A}{4} \qty(\frac{2\sin(k x)}{k} +\frac{\sin[(2 a+k)x]}{2 a+k} +\frac{\sin[(2 a-k)x]}{2 a-k})\\
+&+\I\frac{A}{4} \qty(-\frac{2\cos(k x)}{k} -\frac{\cos[(2 a+k)x]}{2 a+k} +\frac{\cos[(2 a-k)x]}{2 a-k}) + C~.
+\end{aligned}
+\end{equation}
+$C$ 前面的部分在 $x = \pm\infty$ 处分别为 $-2\I A\frac{a^2}{k(4 a^2 -k^2)}\E^{-\I{\pi k}/{(2a)}}$。
+
+傅里叶变换：
+\begin{equation} % Mathematica 已验证 + 数值已验证
+\tilde f(k) = \frac{1}{\sqrt{2\pi}} \int_{-\infty}^{+\infty} f(x) \E^{-\I k x} \dd{x}
+= \frac{\sqrt{2} \pi ^{3/2} A L}{4 \pi ^2-L^2 (k-k_0)^2} \sinc[L(k-k_0)/2]~.
+\end{equation}
+零点的位置为
+\begin{equation} % 数值已验证
+k = k_0 \pm 2n\pi/L \qquad (n=2,3,\dots)~.
+\end{equation}
+标准差约为 $2.92544/L$， 方差 $13.15947/L^2$， FWHMI $9.05144/L$。
+
+画图对比如下（代码见文末）：
+\begin{figure}[ht]
+\centering
+\includegraphics[width=13cm]{./figures/77264c5d4c0cdbd0.png}
+\caption{高斯波包和 cos2 波包的对比} \label{fig_cos2wp_1}
+\end{figure}
+
+\subsection{附：Matlab 代码}
+\begin{lstlisting}[language=matlab, caption=cos2\_spec.m]
+% properties of cos2 wave packet spectra
+
+A = 0.9; L = 1.12;
+g = @(k) (sqrt(2)*pi^1.5*A*L)./(4*pi^2-L^2*k.^2) .* sinc(L*k/2);
+
+k = linspace(-40, 40, 1000);
+figure; plot(k, g(k));
+grid on;
+xlabel k;
+hold on;
+scatter((2:6)*2*pi/L, 0, 'k');
+scatter((-6:-2)*2*pi/L, 0, 'k');
+axis([-40, 40, -0.02, 0.21]);
+
+A = 1/sqrt(integral(@(k)g(k).^2, -inf, inf));
+integral(@(k)g(k).^2.*abs(k).*A^2, -inf, inf)
+
+\end{lstlisting}
+
+\begin{lstlisting}[language=matlab, caption=sin2\_gaussian\_compare.m]
+% plot Gaussian vs cos2 profile
+
+% gaussian
+FWHMI = 1;
+a = iFWHMIexp(FWHMI);
+x = linspace(-2*FWHMI, 2*FWHMI, 1000);
+field_gauss = exp(-a.*x.^2);
+
+% cos2
+field_cos2  = zeros(size(x));
+dur_cos2 = FWHMI / FWHMIsin2;
+mark = abs(x) < dur_cos2/2;
+field_cos2(mark) = cos((pi/2)*x(mark)/(dur_cos2/2)).^2;
+
+% plot field profile
+figure;
+subplot(2, 1, 1); hold on;
+axis([min(x), max(x), 0, 1.1]);
+plot_vert(-FWHMI/2, 'c--');
+plot_vert(FWHMI/2, 'c--');
+plot_hori(sqrt(1/2), 'c--');
+plot(x, field_gauss, 'r');
+plot(x, field_cos2, 'b--');
+legend({'', '', '', 'Gaussian', 'cos2'});
+% xlabel('t [FWHM]');
+ylabel('field');
+title('Gaussian vs cos2 profile (lines show FWHMI)');
+
+% plot intensity profile
+subplot(2, 1, 2); hold on;
+axis([min(x), max(x), 0, 1.1]);
+plot_vert(-FWHMI/2, 'c--');
+plot_vert(FWHMI/2, 'c--');
+plot_hori(1/2, 'c--');
+plot(x, field_gauss.^2, 'r');
+plot(x, field_cos2.^2, 'b--');
+xlabel('t [FWHM]');
+ylabel('intensity');
+\end{lstlisting}
+

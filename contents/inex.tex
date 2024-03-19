@@ -1,0 +1,42 @@
+% 容斥原理
+% keys 容斥原理|组合数学|概率论
+% license Xiao
+% type Wiki
+
+% \pentry{对立事件\nref{}}{nod_b221}
+% \pentry{二项式定理\nref{nod_Sample}}{nod_f716}
+
+\subsection{容斥原理}
+
+容斥原理是组合数学中的一个重要原理，是用于计算多个集合的并集中元素数量时的一种简化计数的方法。
+
+首先,我们考虑\textbf{两个集合}的情形。设有两个集合 \(A\) 和 \(B\)，我们要计算这两个集合的并集 \(A \cup B\) 的元素数量。如果直接将两个集合的元素数量相加，\( |A| + |B| \)，会重复计算 \(A\) 和 \(B\) 的交集 \(A \cap B\) 中的元素。因此，为了得到准确的元素数量，需要减去这个交集的大小，即：
+$|A \cup B| = |A| + |B| - |A \cap B|$
+
+当涉及到\textbf{三个集合} \(A\)、\(B\) 和 \(C\) 时，如下图所示，首先直观地将每个集合的大小相加，再减去两两交集的大小，但我们再次重复计算了三个集合共同部分的元素。因此，需要加回一次这个三个集合的交集的大小：
+$|A \cup B \cup C| = |A| + |B| + |C| - |A \cap B| - |A \cap C| - |B \cap C| + |A \cap B \cap C|$
+
+\begin{figure}[ht]
+\centering
+\includegraphics[width=6cm]{./figures/63e024de279edcb6.png}
+\caption{三个集合的情况} \label{fig_inex_1}
+\end{figure}
+
+
+推广到\textbf{任意 \(n\) 个集合}的情况：
+
+使用$|S|$ 来表示集合S 的元素个数, 并把S的概率记作Pr(S). 对于集合 \(A_1, A_2, \ldots, A_n\)。容斥原理可以用来计算这些集合并集的大小或这个集合所对应的事件的概率概率。
+
+\begin{equation}\label{eq_inex_1}
+\left|\bigcup_{i=1}^{n} A_i\right| = \sum_{i=1}^{n} |A_i| - \sum_{1 \leq i < j \leq n} |A_i \cap A_j| + \sum_{1 \leq i < j < k \leq n} |A_i \cap A_j \cap A_k| - \cdots + (-1)^{n-1} |A_1 \cap A_2 \cap \cdots \cap A_n|~.
+\end{equation}
+
+如果将集合的大小 \(|S|\) 替换为集合的概率 \(\text{Pr}(S)\)，则上述公式仍然成立。因此，对于计算概率的情况，公式可以表示为：
+
+\begin{equation}\label{eq_inex_2}
+\text{Pr}\left(\bigcup_{i=1}^{n} A_i\right) = \sum_{i=1}^{n} \text{Pr}(A_i) - \sum_{1 \leq i < j \leq n} \text{Pr}(A_i \cap A_j) + \sum_{1 \leq i < j < k \leq n} \text{Pr}(A_i \cap A_j \cap A_k) - \cdots + (-1)^{n-1} \text{Pr}(A_1 \cap A_2 \cap \cdots \cap A_n)
+~.
+\end{equation}
+
+这个公式通过交替添加和减去所有可能的交集的大小来准确计数，从而消除了重复计数的问题。每个交集只计算一次，并且根据它涉及的集合数量的奇偶性，决定是加上还是减去这个数值。这样，最终得到的结果就是所有集合的并集的准确大小，从而简化分解了多个集合重叠时的计数问题。（等价于求解“多个事件中至少有一个发生”的概率问题）
+
