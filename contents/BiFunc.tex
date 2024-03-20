@@ -1,0 +1,119 @@
+% 双线性函数
+% license Usr
+% type Tutor
+本文采用爱因斯坦求和约定。
+
+\begin{definition}{}
+设$V$是域$\mathbb F$上的线性空间，映射$f:V\times V\rightarrow\mathbb F$若满足对于任意$\bvec x,\bvec y,\bvec z \in V,a,b\in \mathbb F$有：
+\begin{equation}
+\begin{aligned}
+f(a\bvec x+b\bvec y,\bvec z)&=af(\bvec x,\bvec z)+bf(\bvec y,\bvec z)=0\\
+f(\bvec z,a\bvec x+b\bvec y)&=af(\bvec z,\bvec  x)+bf(\bvec z,\bvec y)=0
+\end{aligned}~,
+\end{equation}
+则称$f$是$V$上的一个双线性函数。
+\end{definition}
+
+显然，当固定一个向量不变时，双线性函数就是$V$上的一个线性函数。
+
+双线性函数可以用矩阵表示。设$\{\bvec e_i\}$为$V$上的一组基，任意向量$\bvec x=a^i\bvec e_i,\bvec y=b^i\bvec e_i$，则$f(a^i\bvec e_i,b^j\bvec e_j)=a^ib^jf(\bvec e_i,\bvec e_j)=\bvec x^TA\bvec y$。称$A$是$f$在基$\{\bvec e_i\}$下的\textbf{度量矩阵}。
+\begin{example}{}
+\begin{equation}
+\bvec x^TA\bvec y=\begin{pmatrix}
+ a_1 &a_2  &a_3
+\end{pmatrix}
+\begin{pmatrix}
+  f(\bvec e_1,\bvec e_1)& f(\bvec e_1,\bvec e_2) &f(\bvec e_1,\bvec e_3) \\
+ f(\bvec e_2,\bvec e_1) &f(\bvec e_2,\bvec e_2)  &f(\bvec e_2,\bvec e_3) \\
+ f(\bvec e_3,\bvec e_1) & f(\bvec e_3,\bvec e_2) &f(\bvec e_3,\bvec e_3)
+\end{pmatrix}
+ \begin{pmatrix}
+ b^1 &b^2  &b^3
+\end{pmatrix}~.
+\end{equation}
+\end{example}
+\begin{example}{}
+欧几里得内积是特殊的度量矩阵，表示为单位矩阵$\boldsymbol E$。
+\end{example}
+内积具有双线性、正定性和对称性。我们可以把只保留双线性的度量矩阵看作广义内积。
+在前文我们已经知道，相似变换可以改变线性映射和向量的表示。度量矩阵的意义便在于保持向量内积在新基下不变。
+
+设$Q$为过渡矩阵，$B$为$f$在新基下的表示，由内积不变得$\bvec x^TA\bvec y=x^T(Q^{-1})^TBQ^{-1}\bvec y$，则$B=Q^{T}AQ$。也就是说，合同变换实际上是改变双线性函数的度量矩阵表示。由于合同变换不改变矩阵的秩，因此把秩称作$f$的\textbf{矩阵秩}。
+\begin{definition}{}
+设$f$是域$f$上线性空间$V$的双线性函数，称$V$的下述子集
+\begin{equation}
+\{\bvec x \in V \mid f(\bvec x, \bvec y)=0, \forall \bvec y\in V\}~
+\end{equation}
+为$f$在$V$上的\textbf{左根}，类似于群论中的左零因子。同理，“右零因子”被称作\textbf{右根}。
+\end{definition}
+易见，左根和右根在数乘和加法下封闭，是$V$的子空间。
+\begin{definition}{}
+若$f$在$V$上的左根和有根都为${\bvec 0}$，则称$f$在$V$上\textbf{非退化}。称不满足该条件的$f$是退化的。
+\end{definition}
+$f$的矩阵秩是判断其退化性的直接依据。
+\begin{theorem}{}
+$f$在$V$上非退化$\Leftrightarrow f$满秩。
+\end{theorem}
+\textbf{证明：}
+
+非退化意味着左根和右根都为$\bvec 0$。
+
+设任意向量$\bvec y=b^j\bvec e_j$，左根$\bvec x=a^i\bvec e_i$满足$f(a^i\bvec e_i,b^j\bvec e_j)=b^ja^if(\bvec e_i,\bvec e_j)=0$，则必有$a^if(\bvec e_i,\bvec  e_j)=\bvec x^T A=(A^Tx)^T=\bvec 0$。解集为$\bvec 0$意味着$f$是个单射，即满秩。同理可证，右根为$\bvec 0$当且仅当$f$满秩。
+\subsubsection{$f$的对称性}
+\begin{definition}{}
+$f,V,\bvec x,\bvec y$同上设。
+\begin{itemize}
+\item 若满足$f(\bvec x,\bvec y)=f(\bvec y,\bvec x)$，则称$f$是\textbf{对称的}，；
+\item 若满足$f(\bvec x,\bvec y)=-f(\bvec y,\bvec x)$，则称$f$是\textbf{反对称（斜对称）}的；
+\item 若满足$f(\bvec x,\bvec x)=0$则称$f$是\textbf{交错的}。
+\end{itemize}
+\end{definition}
+交错性相当于幂零性，在特征不为$2$的域下是可以推出反对称性的，由$f(\bvec x+\bvec y,\bvec x+\bvec y)=0$可得。而在特征为$2$的域下相当于是对称性。因此，本篇下述只研究对称性和反对称性双线性函数的性质。
+
+如果$f$是对称的，则有$f(a^i\bvec e_i,b^j\bvec e_j)=a^ib^jf(\bvec e_i,\bvec e_j)=f(b^j\bvec e_j,a^i\bvec e_i)=a^ib^jf(\bvec e_j,\bvec e_i)$，则其度量矩阵是对称的。
+同理可证，若$f$是反对称的，则其度量矩阵是反对称的。
+\begin{itemize}
+\item $f$是对称的$\Leftrightarrow$其度量矩阵是对称的。
+\item $f$是反对称的$\Leftrightarrow$其度量矩阵是反对称的。
+\end{itemize}
+
+由于对称矩阵相似于对角矩阵，且其过渡矩阵是正交矩阵，因此这也是个合同变换的过程。所以对于线性空间$V$上的对称双线性函数$f$，我们总能找到一组基，使其度量矩阵在该基下为对角矩阵。
+
+反对称双线性函数也有较为简单的度量矩阵形式。
+\begin{theorem}{}
+设域$K$的特征不为$2$，$V$是域$K$的$n$维线性空间，$f$是$V$上的反对称双线性函数。则存在一组基$\bvec \varepsilon_1,\bvec \varepsilon_2,\bvec \eta'_3...\bvec \eta'_n$，使得$f$的度量矩阵具有如下形式：
+\begin{equation}
+\operatorname{diag}\left\{\left(\begin{array}{rr}
+0 & 1 \\
+-1 & 0
+\end{array}\right), \cdots,\left(\begin{array}{rr}
+0 & 1 \\
+-1 & 0
+\end{array}\right), 0, \cdots, 0\right\} \text {, }
+~.\end{equation}
+\end{theorem}
+\textbf{证明：}\footnote{引自丘维声《抽象代数》}
+
+由对称矩阵的性质可知，$n< 3$时定理自然成立。下面假设维度小于$n$时成立，需要证明维度为$n$时定理依然成立。
+
+由于$f$是反对称的，因此必然至少有两个向量其内积不为$0$，如$f(\bvec {\varepsilon}_1,\bvec x_2)=k\neq 0$，设$\bvec {\varepsilon}_2=k^{-1}\bvec x_2$，则可得$f(\bvec\varepsilon_1,\bvec\varepsilon_2)=1$。拓展这两个向量至$V$上的一组基：
+\begin{equation}
+\bvec {\varepsilon}_1,\bvec \varepsilon_2,\bvec\eta_3,...\bvec\eta_n~,
+\end{equation}
+设$f(\bvec \eta_i,\bvec\varepsilon_1)=k_i,f(\bvec \eta_i,\bvec\varepsilon_2)=k'_i$，并令
+\begin{equation}
+\bvec\eta'_i=\bvec \eta_i-k'_i\bvec\varepsilon_1+k_i\bvec\varepsilon_2,i=3...n~,
+\end{equation}
+则有：
+\begin{equation}
+\begin{aligned}
+f(\bvec \eta'_i,\bvec\varepsilon_1)&=f(\bvec\eta_i,\bvec\varepsilon_1)+k_if(\bvec\varepsilon_2,\varepsilon_1)\\
+&=k_i-k_i=0\\
+f(\bvec \eta'_i,\bvec\varepsilon_2)&=f(\bvec\eta_i,\bvec\varepsilon_2)-k'_if(\bvec\varepsilon_1,\varepsilon_2)\\
+&=k'_i-k'_i=0
+\end{aligned}~.
+\end{equation}
+因此$\bvec \eta'_i\in \left(\opn{Span}\{\bvec\varepsilon_1,\bvec\varepsilon_2\}\right)^{\bot}$。
+可以证明$\{\bvec\varepsilon_1,\bvec\varepsilon_2,\bvec\eta'_3...\bvec\eta'_n\}$依然构成$V$上的一组基。因此$V=\{\bvec\varepsilon_1,\bvec\varepsilon_2\}\oplus \opn{Span}\{\bvec\eta'_i\}_{i=3}^n$。
+由题设可知，$f$在$ \opn{Span}\{\bvec\eta'_i\}_{i=3}^n$上存在一组基，使得在该子空间上的度量矩阵为定理所示形式，又因$f(\bvec \eta'_i,\varepsilon_1)=f(\bvec \eta'_i,\varepsilon_2)=0$及$f(\bvec\varepsilon_1,
+\bvec\varepsilon_2)=1$，定理得证。

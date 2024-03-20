@@ -1,0 +1,52 @@
+% 蒙特卡洛树搜索算法
+% keys 蒙特卡洛|搜索
+% license Usr
+% type Tutor
+
+\begin{issues}
+\issueDraft
+\issueTODO
+\end{issues}
+
+% 暂且把 UCB 与 蒙特卡洛树搜索算法 合并，如果需要可以单开一篇详细介绍 UCB。
+
+蒙特卡洛树是一种不同于 Alpha-Beta 剪枝的优化搜索方法。他与 Alpha-Beta 剪枝相比，更好的适用于诸如围棋一类的大型对弈游戏（即搜索空间过大，但搜索过程需要兼顾“探索”与“最优化”，尽量得到全局最优解，避免陷入局部最优解）。但与 Alpha-Beta 剪枝相比，由于过程中采用蒙特卡洛方法（可以理解为抽样检测），搜索的结果并不保证一定是最优解。
+
+值得一提的是，\textbf{蒙特卡洛树搜索算法不是蒙特卡洛算法}。
+
+蒙特卡洛树搜索限定于解决 Combinatorial Game，例如一般的围棋、象棋等等。
+
+\subsection{UCB 算法}
+UCB，upper confidence bound，置信度上界，是蒙特卡洛树搜索中启发式搜索的一种常用方式，下面先来考察 UCB 算法。
+
+
+
+
+
+UCB 算法是用来评估多臂老虎机问题的，这个问题一般描述如下：
+
+你面前有 $n$ 个老虎机，每个老虎机都有一个拉杆，每次可以拉下一个老虎机的拉杆，一共可以拉 $A\times n$ 下拉杆（$A \gg n$）。每次拉下拉杆都有一定的概率获得 $1$ 块钱，每个拉杆获得奖金的概率不同（这概率是不知道的）。我们的目标是最小化\textbf{后悔（regret）}，后悔值是在这 $A\times n$ 次拉下的过程中积累的，每次的后悔值是拉下最优拉杆获得奖金的概率减去本次拉下的拉杆的获奖概率，当然后悔值在拉完这一共 $A\times n$ 次后才知道。当然由于我们知道之前拉拉杆的过程，我们也可以积累一些\textbf{经验（experience）}。
+
+这个问题就是一个典型的要兼顾“探索”和“优化”的例子。我们需要给每次拉拉杆时的每个拉杆赋分，选择分值最高的拉杆拉下（如果遇到分值一样则随机选取一个）。一个容易想到的赋分方式是：
+$$\text{Score} = P_{maybe} + \lambda u ~~$$
+其中，$P_{maybe}$ 是根据历史拉拉杆情况估计的这个拉杆会获奖的概率（用于“优化”），而 $u$ 则衡量不确定度（用于兼顾“探索”）。$\lambda$ 是某权重因子。
+
+首先我们考虑 Chernoff-Hoeffding Bound。
+\begin{theorem}{Chernoff-Hoeffding Bound}
+假设 $\{X_i\}, i=1, 2, \cdots, n$ 是 $n$ 个取值均在 $[0, 1]$ 间的独立分布的随机变量，用 $\widetilde \mu = \left(\sum_{i} X_i\right)/n$ 表示实际样本中的均值，$\mu$ 表示理论上分布的均值，则有概率不等式
+$$P\left(\widetilde \mu + u \le \mu\right) \le \exp\left(\frac{-n u^2}{2 \sigma^2}\right) ~~$$
+成立。这被称为 Chernoff-Hoeffding Bound。
+\end{theorem}
+考虑假设在标准正态分布下，$\sigma^2=1$（这最终还可以体现在 $\lambda$ 中，现在不妨先让 $\sigma^2=1$），再令 $\delta = \exp\left(-nu^2/2\right)$，可以发现 $u=\sqrt{[2 \ln(1/\delta)]/n}$。实际应用中一般可以令 $1/\delta=N$，$N$ 为目前的总轮数。所以置信上界就是 $\widetilde \mu + \sqrt{\left(2 \ln N \right)/n}$。
+
+对于实际应用情况，一般取一 $\lambda$ 使置信上界为
+$$\frac{N_r}{N+1} + C \cdot \sqrt{\frac{\ln N}{2n+1}} ~.$$
+其中 $N_r$ 是这 $N$ 次模拟中“抽中”的次数，$N_r/(N+1)$ 就是前面积累的“经验”，即 $P_{maybe}$（使用 $N+1$ 是为了避免分母为 $0$，后面根号内同理)；$C$ 是某用于优化的可调参数，即 $\lambda$；$\sqrt{\ln N/(2n+1)}$ 即为不确定度 $u$。
+
+\subsubsection{适用于树搜索的 UCB}
+采用 UCB 的蒙特卡洛树（一般这种对于树的 UCB 还被称为 UCT，Upper Confidence Bounds for Trees）搜索是一种（类）启发式的搜索，大体思路是：在选择子节点的时候，
+\begin{enumerate}
+\item 优先考虑未搜索过的；
+\item 如果都搜索过就根据给每个节点的“赋分”来选择，这个“赋分”是与这个节点的最终获胜概率正相关、与这个子节点访问的的次数负相关的。
+\end{enumerate}
+我们可以看到第 $2$ 条就是为了兼顾“探索”与“优化”。与最终获胜概率正相关为了保证“优化”、与访问次数负相关为了兼顾“探索”。
