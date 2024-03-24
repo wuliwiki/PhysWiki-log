@@ -2,11 +2,7 @@
 % license Usr
 % type Tutor
 
-
-\begin{issues}
-\issueDraft 预备知识为双线性函数
-\end{issues}
-
+\pentry{双线性函数\nref{nod_BiFunc}}{nod_eae4}
 \begin{definition}{}
 设$V$是域$\mathbb F$上的线性空间，$f$是$V$上的双线性函数，
 \begin{itemize}
@@ -18,7 +14,9 @@ $f$则为\textbf{广义内积}，$(V,f)$为广义内积空间。对任意$\bvec 
 引入广义内积的概念后，向量关系不再是直观的几何关系。在欧几里得空间下，由于内积是正定对称双线性型，我们可以定义两个点之间的距离，向量长度和角度。然而在广义内积下，这些概念无法再定义。譬如一般定义长度$l_{\bvec x}=\sqrt{\bvec x^2}\ge 0$，但在辛空间内向量内积都为0，不再具有区分性，所以没有这个概念。
 同理，正交性不再由角度定义，而是采取内积为$0$的定义。由于正交关系是对称的，左根和右根等同，统称为根，以$\opn{Rad}$表示。
 
-需要注意的是，在平面几何里，两向量正交则线性无关。但在广义内积空间内并不一定成立，比如退化的正交空间内总有与自身内积为0的向量。称与自身正交为$0$的向量为\textbf{迷向向量}。
+需要注意的是，在平面几何里，两向量正交则线性无关。但在广义内积空间内并不一定成立，比如退化的正交空间内总有与自身内积为0的向量，因此“正交基”要严格保证既是线性无关也是相互正交。
+
+一般称与自身正交为$0$的向量为\textbf{迷向向量}。
 
 \begin{definition}{}
 设$V$是域$F$的内积空间，$S,T$为其子空间。若对于任意$\bvec x\in S,\bvec  y\in T$有$(\bvec x.\bvec y)$，则称这两个空间互相垂直。若任意与$S$垂直的向量都在$T$内，则可以表示$T=S^{\bot}$。
@@ -33,11 +31,57 @@ $f$则为\textbf{广义内积}，$(V,f)$为广义内积空间。对任意$\bvec 
 若$V$有非退化子空间，则该子空间上的正交基可以扩展为全空间的正交基。或者说：
 
 \begin{theorem}{}
-$F,V,f,A$同上设。子空间$W$非退化$\Longleftrightarrow  W^{\bot}$非退化$\Longleftrightarrow A|_{W}$满秩$\Longleftrightarrow V=W\oplus W^{\bot}$
+$(V,f)$是正交空间，A是$f$的度量矩阵表示，则有子空间$W$非退化$\Longleftrightarrow  W^{\bot}$非退化$\Longleftrightarrow A|_{W}$满秩$\Longleftrightarrow V=W\oplus W^{\bot} $
 \end{theorem}
 \textbf{证明：}
 
 $W$非退化$\Longleftrightarrow \opn{Rad}W=W\cap W^{\bot}=0\Longleftrightarrow  W^{\bot}$非退化。前两条得证。
 
-根据定义，$W$非退化又意味着
+设任意$\bvec x\in \opn{Rad} W,\bvec y\in W$，$W$的退化性意味着$(\bvec x^{T}A|_{W})\bvec  y=0$只有$\bvec 0$解，因此$A|_{W}$是单射，满秩。
 
+接下来证明最后一条。$W\cap W^{\bot}=0$，只需证明$V=W+W^{\bot}$即可。正交空间必有正交基，设$\{\bvec e_i\}_{i=1}^k$是$W$上的一组由非迷向向量组成的正交基，任意$\bvec z\in V$，$\bvec z'$为任意向量在$W$上的分量。剩余分量为
+\begin{equation}
+\bvec z-\bvec z'=\bvec z-\sum\limits_{i=1}^k\frac{f(\bvec z,\bvec e_i)}{f(\bvec e_i,\bvec e_i)}\bvec e_i~.
+\end{equation}
+若剩余分量属于$W$的正交补，则必然与$W$上的基向量内积为$0$。验证有：
+\begin{equation}
+f(\bvec z-\bvec z',\bvec e_j)=f(\bvec z,\bvec e_j)-\sum\limits_{i=1}^k\frac{f(\bvec z,\bvec e_i)}{f(\bvec e_i,\bvec e_i)}f(\bvec e_i,\bvec e_j)=0~,
+\end{equation}
+得证。
+
+实际上，该定理也适用于辛空间：
+\begin{theorem}{}
+$(V,f)$是有限维辛空间，$W$是其非退化的子空间，则$V=W\oplus W^{\bot}$
+\end{theorem}
+\textbf{证明：}
+
+由于$W$非退化，所以$\opn{Rad} W=W\cap W^{\bot}={\bvec 0}$且$W$是偶数维的辛空间。设$\{\bvec \theta_i,\bvec \theta_{-i}\}_{i=1}^k$是$W$的一组基并满足$f(\bvec \theta_i,\bvec\theta_{-i})=1$，若$i\neq t$则有$f(\bvec\theta_i,\bvec\theta_{\pm t})= 0$\footnote{有限维辛空间总可以找到这么一组基。}。扩展其为$V$上的一组基：$\{\bvec \theta_i,\bvec \theta_{-i}\}_{i=1}^k\cup\{\bvec \eta_i\}_{i=1}^{t}$。
+
+设$\bvec \eta'_i=\bvec\eta_i-\sum\limits_{t=1}^kf(\bvec \eta_i,\bvec \theta_{-t})\bvec\theta_t+\sum\limits_{t=1}^kf(\bvec\eta_i,\bvec\theta_t)\bvec\theta_{-t}$，则有：
+\begin{equation}
+\begin{aligned}
+f(\bvec \eta'_j,\bvec  \theta_i)&=f(\bvec \eta_j,\bvec  \theta_i)-f(\bvec\eta_j,\bvec  \theta_{-i})\bvec f(\bvec \theta_i,\bvec \theta_i)+f(\bvec\eta_j,\bvec \theta_i)\bvec f(\bvec \theta_{-i},\bvec \theta_{i})=0\\
+f(\bvec \eta'_j,\bvec  \theta_{-i})&=f(\bvec \eta_j,\bvec  \theta_{-i})-f(\bvec\eta_j,\bvec  \theta_{-i})\bvec f(\bvec \theta_i,\bvec \theta_{-i})+f(\bvec\eta_j,\bvec \theta_i)\bvec f(\bvec \theta_{-i},\bvec \theta_{-i})=0~.
+\end{aligned}
+\end{equation}
+因而$\{\bvec \eta'_i\}_{i=1}^t\in W^{\bot}$，可以证明$\{\bvec \theta_i,\bvec \theta_{-i}\}_{i=1}^k\cup\{\bvec \eta'_i\}_{i=1}^t$是$V$上的一组基，得证。
+
+
+由\autoref{the_BiFunc_1}~\upref{BiFunc}可知，总可以找到一组基使得辛空间的度量矩阵为：
+\begin{equation}
+\operatorname{diag}\left\{\left(\begin{array}{rr}
+0 & 1 \\
+-1 & 0
+\end{array}\right), \cdots,\left(\begin{array}{rr}
+0 & 1 \\
+-1 & 0
+\end{array}\right), 0, \cdots, 0\right\} \text {, }
+~.\end{equation}
+这组基又称为\textbf{辛基}。改变基的顺序，从满足上述形式的${\bvec \theta_1,\bvec\theta_{-1},\bvec\theta_2,\bvec\theta_{-2}...\bvec \theta_k,\bvec\theta_{-k}...\bvec\eta_1...\bvec\eta_t}$变为${\bvec \theta_1,\bvec\theta_2,\bvec \theta_k,\bvec\theta_{-k}...\bvec\theta_{-1}\bvec\theta_{-2}\bvec\theta_{-k}...\bvec\eta_1...\bvec\eta_t}$。则可以证明在这组基下度量矩阵的形式为：
+\begin{equation}
+\begin{pmatrix}
+ 0 & \boldsymbol E_k & 0\\
+  -\boldsymbol E_k&  0& 0\\
+ 0&  0&0
+\end{pmatrix}~.
+\end{equation}
