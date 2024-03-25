@@ -15,7 +15,7 @@ ZFS 是一个现代化的文件系统，一些特色功能如下。
 \item 若 pool 的空间不足，随时可以加入新的虚拟设备扩充容量。
 \end{itemize}
 
-ZFS 对 Windows 的支持还很低， 可能可以在 WSL2\upref{WSLnt} 中实现， 但更好的方法还是直接用 Linux 挂载 ZFS 然后通过网络硬盘\upref{NFS}分享。
+\textbf{Windows 对 ZFS 的支持还很低}， 可能可以在 WSL2\upref{WSLnt} 中实现， 但更好的方法还是直接用 Linux 挂载 ZFS 然后通过网络硬盘\upref{NFS}分享。
 
 本文在 Ubuntu 22.04 中测试。 ZFS 版本为 \verb`zfs-2.1.2-1ubuntu3`， \verb`zfs-kmod-2.1.4-0ubuntu0.1`。
 
@@ -121,8 +121,8 @@ free -h # 查看 RAM 和 swap 的使用情况
 \subsection{快照和克隆}
 \begin{itemize}
 \item 由于 zfs 使用 copy-on-write， 制作快照非常轻量。
-\item \verb`zfs snapshot -r pool名@快照名` 可以对整个 pool 的所有 dataset 做快照
-\item \verb|zfs list -t snapshot| 查看所有快照。
+\item \verb`zfs snapshot -r pool名@快照名` 可以对整个 pool 做快照，也可以对某个 dataset 做快照
+\item \verb|zfs list -t snapshot| 查看所有快照。\verb|zfs list pool名/ds名 -t snapshot| 查看 pool 或者某个 dataset 的快照， 注意如果省略 \verb`/ds名`，只会显示 pool 级别的快照不会显示包含的 dataset 的快照！
 \item 输出如
 \begin{lstlisting}[language=none]
 NAME               USED  AVAIL   REFER  MOUNTPOINT
