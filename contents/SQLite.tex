@@ -189,3 +189,70 @@ ALTER TABLE 新表名 RENAME TO 旧表名;
 \item 使用读写模式打开数据库并不会给数据库上锁， 只有当 \verb|BEGIN TRANSACTION| 到 \verb|COMMIT| 之间会上锁。 如果没有使用 transaction， 就只有执行写入命令的时候会上锁。
 \item 事实上 sqlite 鼓励整个程序只打开一次数据库， 程序结束再关上。 中见需要写入的时候就开 transaction， 每次用完马上 commit。
 \end{itemize}
+
+\subsection{CRUD 之繁琐}
+\textbf{CRUD（create, read, update, delete）} 总的来说是一件很繁琐的事情。
+
+例如很常见的一个情况是，想把数据库的某个表中所有（或满足某个条件的）记录删除再重新写入新的版本。 但这样会导致程序很慢，尤其是如果有很多记录且新版本只修改了少数几条记录。另一个坏处就是会导致 dump 出来的 sql 文本文件有大量改动，即使一模一样的记录 dump 后位置也会改变，不利于版本管理。 sqlite 没有一个稳定的 dump 算法，需要借助第三方工具。
+
+高性能的做法需要复杂得多的编程： 首先把整个表读到程序中（读比写快得多）， 在程序中鉴定三种情况：\textbf{新记录}、\textbf{要更改的记录}、\textbf{要删除的记录}。 然后把使用 \verb`INSERT`， \verb`UPDATE`， \verb`DELETE` 三种不同的命令分别处理。 如果要把这个过程通过函数模板实现则更难。
+
+更优化的做法是先读所有 primary key 用于判断哪些被删除，检查记录是否改变时再读其他字段进行对比。
+
+sqlite 提供 \verb`INSERT OR UPDATE`， 但没有做优化，以至于即使记录一模一样也会重新写一遍数据，速度仍然慢且同样导致 dump 不稳定。 而且无法判断哪些记录被删除。
+
+一个伪代码草稿（使用 SQLiteCPP）：
+\begin{lstlisting}[language=cpp]
+// delete a table (or sub table satisfying a condition)
+    // and insert new records are slow, when there are lots of
+	// unchanged records
+// this is a optimized version
+
+template <class Tdat, class Trec, class Tpk>
+// Trec is a tuple, one element of Tdat
+inline void update_table(
+	Str_I table, vecStr_I columns, Str_I condition,
+	Long_I primary_key1, Long_I primary_key2,
+	const Tdat &data, // new records: container of tuple that's iterable
+	// (e.g. unordered_map, map, vector, set, ...)
+	// assuming `data` doesn't have repeated primary keys
+	// assuming `data` satisfy `condition`
+	SQLite::Database &db_rw
+) {
+	SQLite::Statement stmt_select(db_rw,
+		R"(SELECT primary_key1, primary_key2 FROM table WHERE condition;)");
+	SQLite::Statement stmt_insert(db_rw,
+		R"(INSERT INTO table (col1, col2, ...) VALUES (val1, val2, ...);)");
+	SQLite::Statement stmt_update(db_rw,
+	    R"(UPDATE table SET col1=?, col2=?, ...;)");
+	SQLite::Statement stmt_delete(db_rw,
+	    R"(DELETE FROM table WHERE primary_key1=? AND primary_key2=?;)");
+
+	unordered_set<Tpk> deleted;
+	unordered_map<Trec> data_db;
+	
+	while (stmt_select.executeStep()) {
+		deleted.insert(make_tuple(stmt_select.getColumn(primary_key1_ind), 
+			stmt_select.getColumn(primary_key2_ind)))
+	}
+
+	for (auto &record : data) {
+		Tpk pk = make_tuple(record.key1, record.key2);
+		if (!deleted.count(pk)) {
+			// insert
+		}
+		else { // record exist
+			deleted.erase(pk);
+			// get all columns of record
+			// check change
+			if (/*changed*/) {
+				// update record
+			}
+		}
+	}
+
+	for (auto &pk : deleted) {
+		// delete record
+	}
+}
+\end{lstlisting}

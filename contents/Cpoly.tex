@@ -1,0 +1,42 @@
+% C 语言的多态
+% license Usr
+% type Tutor
+
+\pentry{C 语言笔记\nref{nod_CNote}}{nod_0f91}
+
+C 语言的多态可以通过函数指针实现。 什么是多态？ 简单来说就是根据运行时的不同类型数据来决定调用什么函数。
+
+例如从概念上，我们需要一个数组，但每个元素都可能是不同的类型，且这些类型只有在运行时知道。 那么如何写一个函数，对数组的每个元素调用不同的函数呢？ 且这些函数需要由用户提供。 我们可以用 \verb`void *` 来储存元素数据， 再用 \verb`int` 数组动态表示每个元素的类型。
+
+\begin{lstlisting}[language=cpp]
+#include <stdio.h>
+
+typedef void (*Operation)(void*);
+
+void processInt(void* data) {
+    int* p = (int*)data;
+    printf("Processing int: %d\n", *p);
+}
+
+void processFloat(void* data) {
+    float* p = (float*)data;
+    printf("Processing float: %f\n", *p);
+}
+
+void applyFunctions(Operation functions[], int types[], void* data[], int n) {
+    for (int i = 0; i < n; i++)
+        functions[types[i]](data[i]);
+}
+
+int main() {
+    int i = 42;
+    float f = 3.14;
+
+    void* data[] = {&i, &f};
+    int types[] = {0, 1};
+    Operation ops[] = {processInt, processFloat};
+    applyFunctions(ops, types, data, 2);
+
+    return 0;
+}
+\end{lstlisting}

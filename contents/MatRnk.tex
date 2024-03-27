@@ -3,23 +3,52 @@
 % license Xiao
 % type Tutor
 
+
 \pentry{行列式\nref{nod_Deter}， 线性相关、线性无关（简介）\nref{nod_linDpe}}{nod_5f15}
 
-\begin{definition}{矩阵的秩}
+\begin{definition}{矩阵的行秩、列秩}
 定义矩阵\upref{Mat}的\textbf{列秩（column rank）}等于其线性无关\upref{linDpe}的列数， \textbf{行秩（row rank）}等于线性无关的行数。
 \end{definition}
-
-\begin{theorem}{行、列秩相等}
-任意的矩阵的行秩和列秩相等， 因此一般情况下无需区分行秩或列秩，可以直接称为矩阵的\textbf{秩（rank）}，记为 $\opn{rank}(\mat A)$。
-
-该定理也可写为$\opn{rank}(\mat A\Tr)=\opn{rank}(\mat A)$。
+\begin{theorem}{}
+初等变换不改变矩阵的行秩与列秩。
 \end{theorem}
-行秩和列秩相等的证明见\autoref{cor_RCrank_1}~\upref{RCrank}。
+\textbf{证明：}
+
+转置矩阵后有：初等行变换不改变行秩$\Leftrightarrow$初等列变换不改变列秩，以及初等行变换不改变列秩$\Leftrightarrow$初等列变换不改变矩阵行秩。因此我们只需要分别证明一种情况。
+
+首先证明初等行变换不改变行秩。易知交换若干行不改变行秩。设行秩为$m$，这意味着有$m$行线性无关，设这部分行向量组为$\bvec e_1,\bvec e_2...\bvec e_m$。则i行的k倍加到j行后行向量组为$\bvec e_1...\bvec e_i,...k\bvec e_i+\bvec e_j$，合并$\bvec e_i$项，则行变换不改变$\{\bvec e_i\}^m_{i=1}$的线性相关性。易证将某行乘以$k$倍也不改变行秩。
+
+然后证明初等行变换不改变列秩。设该初等变换矩阵为$M$，列向量组为$\{\bvec{\theta}_i\}$，列秩为$n$相当于有$n$列线性无关，设为前n列并取这部分进行观察。
+
+则对该向量组进行初等行变换相当于：$M(\bvec{\theta}_1,\bvec{\theta}_2...\bvec{\theta}_n)=(A\bvec{\theta}_1,A\bvec{\theta}_2...A\bvec{\theta}_n...)$。由于初等变换可逆，则这是一个一一映射，$\{A\bvec{\theta}_i\}_{i=1}^n$依然线性无关。所以初等行变换不改变列秩。
+
+经过初等变换，我们总可以把任意矩阵$M$变换为对角矩阵，这个过程为：
+\begin{equation}\label{eq_MatRnk_2}
+P_i...P_2P_1MQ_1,Q_2...Q_s=
+\left(\begin{array}{lllll}
+1 & & & & \\
+& 1 & & & \\
+& & 1 & & \\
+& & & \ddots & \\
+& & & & 0
+\end{array}\right)~.
+\end{equation}
+
+
+
+则可知矩阵的行秩等于列秩，因此可以被定义为矩阵的秩。
+
+\begin{definition}{}
+由于任意的矩阵的行秩和列秩相等， 因此可以直接称之为矩阵的\textbf{秩（rank）}，记为 $\opn{rank}(\mat A)$。由于矩阵是线性映射在特定基下的表示，设任意向量$\bvec x=x^i\bvec e_i$，矩阵为线性映射$f$的表示，则第$j$列为$f(\bvec e_j)$且有$M\bvec x=f(x^i\bvec  e_i)=x^if(\bvec e_i)$。所以矩阵的秩等价于\textbf{象的维度}。
+\end{definition}
+
+
+
 
 \begin{theorem}{}
-根据定义， 一个矩阵的秩 $R$ 必定小于或等于矩阵的行数 $M$ 以及列数 $N$（取较小者）：
+根据定义， 一个矩阵的秩 $\mathcal R$ 必定小于或等于矩阵的行数 $M$ 以及列数 $N$（取较小者）：
 \begin{equation}
-R\leq \min (M, N)~.
+\mathcal R\leq \min (M, N)~.
 \end{equation}
 \end{theorem}
 
@@ -38,12 +67,34 @@ R\leq \min (M, N)~.
 \begin{equation}
 \sum_i c_i \bvec v_i = \bvec 0 \qquad (c_i \ne 0)~.
 \end{equation}
-我们就可以把任意一个 $\bvec v_i$ 排除， 再次求解上式， 直到上式无解， 那么可以确定剩下的矢量就是线性无关的， 他们的数量就是矩阵的秩。 这种方法计算量过大， 下文我们会介绍更简单的方法。
+我们就可以把任意一个 $\bvec v_i$ 排除， 再次求解上式， 直到上式无解， 那么可以确定剩下的矢量就是线性无关的， 他们的数量就是矩阵的秩。 这种方法计算量过大， 后面我们会介绍更简单的方法。
 \end{example}
+关于秩，有两个常用性质：
+\begin{theorem}{}
+对于矩阵$A,B$有：
+\begin{equation}
+\mathcal R(AB)\le\opn{min}\{\mathcal R(A),\mathcal R(B)\}~.
+\end{equation}
+\end{theorem}
+\textbf{证明：}\footnote{另一种思路的证明可见Jier Peter的《代数学基础》，把$A,B$都表示为包含初等变换及对角矩阵的形式即可。$A=...P^{-1}_iI_AQ^{-1}_s...$。}
+
+设行秩为$L_r$，列秩为$L_c$。
+设$\bvec x$为任意列向量，任意列向量$\bvec y\in \opn{Im}AB$，即$\bvec y=AB\bvec x$。所以$\bvec y\in \opn{Im}{A}$（象空间为列空间），则$ L_c(AB)\leq L_c(A)$。
+
+设$\bvec z$为任意行向量，同理得：$\bvec z AB=\bvec y^T\in \opn {Im}B$（象空间为行空间），所以$L_r(AB)\leq L_r(B)$。
+又因为$L_c=L_r=\mathcal R$，综合上述得：$\mathcal R(AB)\le\opn{min}\{\mathcal R(A),\mathcal R(B)\}$。
+
+\begin{theorem}{}
+对于方阵$A,B$，若有$AB=0$，则$\mathcal R(A)+\mathcal R(B)\le n$。
+\end{theorem}
+\textbf{证明：}
+
+设$\bvec x$为任意向量，则$AB\bvec x=\bvec 0$，也就是说$\opn{Im}B=\opn{ker}A$。结合秩定理：$\opn{dim}V=\opn{dim}\opn{Im}f+\opn{ker}f$及象维度等于矩阵的秩便可得该定理。
 
 \begin{definition}{满秩矩阵}
-对于方阵， 若$M = N = R$， 我们就称其为\textbf{满秩矩阵（full rank matrix）}。 满秩矩阵意味着矩阵中所有行（列）都线性无关。
+若$n$阶方阵的秩为$n$， 我们就称其为\textbf{满秩矩阵（full rank matrix）}。 满秩矩阵意味着矩阵中所有行（列）都线性无关。
 \end{definition}
+从运算可知，n阶方阵是n维空间的线性变换，因此若方阵满秩，也可称该\textbf{线性变换}满秩。
 
 判断一个方阵是否为满秩矩阵的一种常见方法是计算方阵的行列式\upref{Deter}， 若结果不为零， 则矩阵是满秩的， 否则不是（\autoref{the_DetPro_2}~\upref{DetPro}）。 注意非满秩的情况下行列式并不能判断秩具体是多少。 另一种更简单的方法是使用下面的高斯消元法。
 
@@ -62,3 +113,5 @@ R\leq \min (M, N)~.
 \end{example}
 
 同理，我们也可以把矩阵先做转置再用高斯消元法计算其线性无关的列。 这么做可以验证给定矩阵的行秩等于列秩。
+
+

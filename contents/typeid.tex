@@ -11,8 +11,10 @@
 \item \href{https://en.cppreference.com/w/cpp/language/typeid}{参考}
 \item 使用 \verb|typeid| 关键字必须使用 \verb|<typeinfo>| 头文件
 \item 用法： \verb|const std::type_info &tid = typeid(变量名或类型)|
+\item \verb`sizeof(std::type_info)` 用 g++ 测试是 16 字节。
 \item 用 \verb|tid.name()| 会返回一个表示该类型的字符串， 取决于编译器， 且不一定是 human readable 的（例如 g++）。
 \item \verb|tid.hash_code()| 返回类型的 hash， 类型是 \verb|size_t|
+\item \verb`typedef` 和 \verb`using` 都不会改变 typeid， 也就是 \verb`typeid(A) == typeid(B)`。
 \item 所以检查变量类型最好的办法还是在 \verb|gdb|\upref{gdbNt} 用 \verb|p 变量| 显示类型和值， \verb|ptype 变量| 或 \verb|pt 变量| 显示类型。 检查长度用 \verb|p sizeof(变量)|。 \verb|typeid| 一般只用于检查两个类型是否相同或者一个变量是否是某个类型。
 \item \verb|tid1 == tid2| 可以判断是否是同一类型。 这里加上 \verb|const| 或者 \verb|&| （或者两者）视为同一类型。 但加上 \verb|*| （指针）不是同一类型。
 \end{itemize}
