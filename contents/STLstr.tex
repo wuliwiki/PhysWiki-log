@@ -16,6 +16,21 @@
 \item (C++17 开始) \verb|auto [x, y] = p| 也可以。
 \end{itemize}
 
+\subsection{tuple}
+\begin{itemize}
+\item \verb`std::tuple_size<>::value`
+\end{itemize}
+
+\begin{lstlisting}[language=cpp]
+auto myTuple = std::make_tuple(1, "Hello", 3.14);
+// tuple size
+cout << "size = " << std::tuple_size<decltype(myTuple)>::value << endl;
+// print values
+std::apply([](auto&&... args) {
+    (... , ([]{ std::cout << args << std::endl; }()));
+}, myTuple);
+\end{lstlisting}
+
 \subsection{vector}
 \begin{itemize}
 \item constructor： \verb|v(N)| （default val）， \verb|v(N,val)|， \verb|v({1,2,3})|
@@ -102,6 +117,7 @@ struct hash_pair { // similar to std::hash, for pair<>
 \begin{itemize}
 \item \href{https://cplusplus.com/reference/deque/deque/}{double ended queue}： \verb|deque<class T, class Alloc = allocator<T> >|
 \item 直接用 \verb|deque| 比 \verb|stack| 和 \verb|queue| 功能都要更多。
+\item 一般来说光 \verb`push` 和 \verb`pop` 不会改变已存在元素的地址，但 C++ 标准不保证这点。
 \item 成员函数（基本是 \verb|vector| 的拓展版）： \verb|begin, end, operator[], size, max_size, resize, empty, front, back, push_front, pop_back, pop_front, pop_back, insert, erase, swap, clear, emplace, emplace_front, emplace_back|
 \end{itemize}
 

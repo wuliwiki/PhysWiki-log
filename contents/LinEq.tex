@@ -6,87 +6,96 @@
 \begin{issues}
 \issueDraft
 \end{issues}
-% Giacomo：应该拆散进不同文字中
+% Giacomo：TODO: 拆解成《线性方程组的几何含义》和《线性方程组解的个数》
 
-\pentry{线性方程组\nref{nod_LinEqu}，矩阵与线性变换\nref{nod_MatLS}， 高斯消元法\nref{nod_GAUSS}， 矩阵的秩\nref{nod_MatRnk}}{nod_1edb}
+\pentry{线性方程组与增广矩阵\nref{nod_LinEq2}，秩—零化度定理（矩阵）\nref{nod_rnMat}}{nod_1edb}
 
-线性方程组可以记为
+线性方程组
+\begin{equation}
+\begin{cases}
+A_{11} x_1 + A_{12} x_2 + \cdots + A_{1N} x_N &= b_1 \\
+A_{21} x_1 + A_{22} x_2 + \cdots + A_{2N} x_N &= b_2 \\
+&\vdots \\
+A_{M1} x_1 + A_{M2} x_2 + \cdots + A_{MN} x_N &= b_M
+\end{cases} ~
+\end{equation}
+可以记为
 \begin{equation}\label{eq_LinEq_1}
 \mat A \bvec x = \bvec b~,
 \end{equation}
-其中 $\mat A$ 是 $M \times N$ 的矩阵， $\bvec x$ 是 $N$ 维列矢量， $\bvec b$ 是 $M$ 维列矢量， $\mat A \bvec x$ 表示矩阵与列矢量相乘（\autoref{eq_Mat_4}~\upref{Mat}）。 $\mat A$ 和 $\bvec b$ 是已知的， $\bvec x$ 是未知的， 被称为方程组的\textbf{解（solution）}。
+或者增广矩阵 $\pmat{\mat A \mid \bvec b}$；其中 $\mat A$ 是 $M \times N$ 的矩阵， $\bvec x$ 是 $N$ 维列矢量， $\bvec b$ 是 $M$ 维列矢量， $\mat A \bvec x$ 表示矩阵与列矢量相乘（\autoref{eq_Mat_4}~\upref{Mat}）。 $\mat A$ 和 $\bvec b$ 是已知的， $\bvec x$ 是未知的， 被称为方程组的\textbf{解（solution）}。
 
-线性方程组$\mat A \bvec x=\bvec b$可以有零个解（无解）、一个解（唯一解）或无数解；但不可能只有 $2,3,4,\dots$ 个解。
+线性方程组可以有零个解（无解）、一个解（唯一解）或无数解；但不可能只有 $2,3,4,\dots$ 个解。
 
-% 求解$\mat A x = b$即相当于求解一组线性方程：
-% \begin{equation}
-% \begin{cases}
-% A_{11}x_1+A_{12}x_2+A_{13}x_3+...&=b_1\\
-% A_{21}x_1+A_{22}x_2+A_{23}x_3+...&=b_2\\
-% A_{31}x_1+A_{32}x_2+A_{33}x_3+...&=b_3\\
-% ...
-% \end{cases}
-% \end{equation}
 
 \subsection{线性方程组的几何含义}\label{sub_LinEq_2}
 可以分别从行与列的角度来理解线性方程组的几何含义。\footnote{本文参考了Gilbert Strang的《线性代数》课程，J. Leon 的Linear Algebra with Applications，以及李永乐等的线代考研课程}更深刻、数学的表示可以见线性方程组的仿射解释\upref{AS2LF}。
 
 \subsubsection{行视角}
-$$
-\ali{\mat A \bvec x=\bvec b &\Longleftrightarrow 
-\begin{pmatrix}
-A_{11}&A_{12}&A_{13}&...\\
-A_{11}&A_{12}&A_{13}&...\\
-A_{11}&A_{12}&A_{13}&...\\
-...
-\end{pmatrix}
-\begin{pmatrix}
-x_{1}\\
-x_{2}\\
-x_{3}\\
-...\\
-\end{pmatrix}
-=
-\begin{pmatrix}
-b_{1}\\
-b_{2}\\
-b_{3}\\
-...\\
-\end{pmatrix}\\
-&\Longleftrightarrow
-\begin{cases}
-b_1&=A_{11}x_1+A_{12}x_2+A_{13}x_3+...\\
-b_2&=A_{21}x_1+A_{22}x_2+A_{23}x_3+...\\
-b_3&=A_{31}x_1+A_{32}x_2+A_{33}x_3+...\\
-...&\\
-\end{cases}}
-~
-$$
+% $$
+% \ali{\mat A \bvec x=\bvec b &\Longleftrightarrow 
+% \begin{pmatrix}
+% A_{11} & A_{12} & A_{13} & \cdots \\
+% A_{11} & A_{12} & A_{13} & \cdots \\
+% A_{11} & A_{12} & A_{13} & \cdots \\
+% \vdots
+% \end{pmatrix}
+% \begin{pmatrix}
+% x_{1} \\
+% x_{2} \\
+% x_{3} \\
+% \vdots
+% \end{pmatrix}
+% =
+% \begin{pmatrix}
+% b_{1} \\
+% b_{2} \\
+% b_{3} \\
+% \vdots
+% \end{pmatrix} \\
+% &\Longleftrightarrow
+% \begin{cases}
+% b_1 &= A_{11} x_1 + A_{12} x_2 + A_{13} x_3 + \cdots \\
+% b_2 &= A_{21} x_1 + A_{22} x_2 + A_{23} x_3 + \cdots \\
+% b_3 &= A_{31} x_1 + A_{32} x_2 + A_{33} x_3 + \cdots \\
+% &\vdots
+% \end{cases}}
+% ~
+% $$
 
-这相当于求解一组线性方程。其中每一条方程可以看作 $N$ 维欧几里得空间中的 $N-1$ 维平面（一维平面就是直线，二维平面是通常的平面等），方程组的解就是这些平面的交点的集合。
+线性方程组
+\begin{equation}
+\begin{cases}
+A_{11} x_1 + A_{12} x_2 + \cdots + A_{1N} x_N &= b_1 \\
+A_{21} x_1 + A_{22} x_2 + \cdots + A_{2N} x_N &= b_2 \\
+&\vdots \\
+A_{M1} x_1 + A_{M2} x_2 + \cdots + A_{MN} x_N &= b_M
+\end{cases} ~
+\end{equation}
+的每一行方程的解集是 $N$ 维空间中的 $N-1$ 维子空间，称为\textbf{超平面}（比如二维空间中的超平面就是直线，三维空间中的超平面是通常的平面等），方程组的解就是这些超平面的交集。
 
 \begin{example}{}
 例如，求解
-$$
-\begin{pmatrix}
-2&-1\\
--1&2\\
-\end{pmatrix}
-\begin{pmatrix}
-x_1\\
-x_2\\
-\end{pmatrix}
-=
-\begin{pmatrix}
-0\\
-3\\
-\end{pmatrix}~.
-$$
-即
+% $$
+% \begin{pmatrix}
+% 2&-1 \\
+% -1&2
+% \end{pmatrix}
+% \begin{pmatrix}
+% x_1 \\
+% x_2
+% \end{pmatrix}
+% =
+% \begin{pmatrix}
+% 0 \\
+% 3
+% \end{pmatrix}~.
+% $$
+% 即
 $$
 \begin{cases}
-2x_1-x_2=0\\
--x_1+2_2=3~.\\
+2x_1-x_2=0 \\
+-x_1+2_2=3~. \\
 \end{cases}
 $$
 \begin{figure}[ht]
@@ -102,94 +111,71 @@ $$
 \caption{“无解(没有交点)”、“唯一解（有唯一交点）”、“无数解（有无数交点）”} \label{fig_LinEq_3}
 \end{figure}
 
-或者用分块矩阵\upref{BlkMat}的视角，将$\mat A$划分为若干行向量$\bvec \alpha_1, \bvec \alpha_2,\bvec \alpha_3...$，让表述变得更加简洁。
+另一方面，从用分块矩阵\upref{BlkMat}的视角，我们可以将$\mat A$划分为 $M$ 个 $N$ 维行向量$\bvec \alpha_1, \bvec \alpha_2, \cdots, \bvec \alpha_M$，
 $$
 \mat A \bvec x=\bvec b \Leftrightarrow 
 \begin{pmatrix}
-\bvec \alpha_1\\
-\bvec \alpha_2\\
-\bvec \alpha_3\\
-\vdots
+\bvec \alpha_1 \\
+\bvec \alpha_2 \\
+\vdots \\
+\bvec \alpha_M
 \end{pmatrix}
 \bvec x
 =
 \begin{pmatrix}
-b_{1}\\
-b_{2}\\
-b_{3}\\
-\vdots
+b_1 \\
+b_2 \\
+\vdots \\
+b_M
 \end{pmatrix}
 \Leftrightarrow 
 \begin{cases}
-b_1&=\bvec \alpha_1 \bvec x\\
-b_2&=\bvec \alpha_2 \bvec x\\
-b_3&=\bvec \alpha_3 \bvec x\\
-&\vdots
+b_1 &= \bvec \alpha_1 \bvec x \\
+b_2 &= \bvec \alpha_2 \bvec x \\
+&\vdots \\
+b_M &= \bvec \alpha_M \bvec x
 \end{cases}~
 $$
+这样表述更加简洁。
 
 \subsubsection{列视角}
-运用分块矩阵\upref{BlkMat}的视角，将$\mat A$划分为若干列向量$\bvec \alpha_1, \bvec \alpha_2,\bvec \alpha_3...$
+运用分块矩阵\upref{BlkMat}的视角，将$\mat A$划分为 $N$ 个 $M$ 维列向量$\bvec \alpha_1, \bvec \alpha_2, \cdots \bvec \alpha_N$，
 $$
-\mat A \bvec x=\bvec b \Leftrightarrow 
+\ali{
+\mat A \bvec x = \bvec b &\Leftrightarrow 
 \begin{pmatrix}
-\bvec \alpha_1& \bvec \alpha_2& \bvec \alpha_3&...
+\bvec \alpha_1 & \bvec \alpha_2 & \cdots & \bvec \alpha_N
 \end{pmatrix}
 \begin{pmatrix}
-x_{1}\\
-x_{2}\\
-x_{3}\\
-...\\
-\end{pmatrix}
-=
-\bvec b
-\Leftrightarrow 
-\bvec b = \bvec \alpha_1 x_1+\bvec \alpha_2 x_2+\bvec \alpha_3 x_3+...~
+x_{1} \\
+x_{2} \\
+\vdots \\
+x_{N}
+\end{pmatrix} = \bvec b \\
+&\Leftrightarrow 
+\bvec \alpha_1 x_1 + \bvec \alpha_2 x_2 + \cdots + \bvec \alpha_N x_N = \bvec b
+}~
 $$
 此时，$\bvec b$可以看作是一系列$\bvec \alpha_i$的线性组合，而解$\bvec x$是各个列向量的“系数”。方程组无解的含义即为“$\bvec b$不能由$\bvec \alpha_i$线性组合得到”，无数解的含义即为“有无数种方法线性组合$\bvec \alpha_i$以得到$\bvec b$”，这暗示了这一系列$\bvec \alpha_i$中存在线性相关的项。
 
 \begin{example}{}
 还是例如求解
 $$
-\begin{pmatrix}
-2&-1\\
--1&2\\
-\end{pmatrix}
-\begin{pmatrix}
-x_1\\
-x_2\\
-\end{pmatrix}
-=
-\begin{pmatrix}
-0\\
-3\\
-\end{pmatrix}~,
+\pmat{ 2 & -1 \\ -1 & 2 } \pmat{ x_1 \\ x_2 } = \pmat{ 0 \\ 3 }~,
 $$
 即
 $$
-\begin{pmatrix}
-2\\
--1\\
-\end{pmatrix}
-x_1
-+
-\begin{pmatrix}
--1\\
-2\\
-\end{pmatrix}
-x_2
-=
-\begin{pmatrix}
-0\\
-3\\
-\end{pmatrix}~.
+\pmat{ 2 \\ -1 } x_1 + \pmat{ -1 \\ 2 } x_2 = \pmat{ 0 \\ 3 }~.
 $$
 \begin{figure}[ht]
 \centering
 \includegraphics[width=8cm]{./figures/a340417f57880d30.pdf}
 \caption{列视角下的线性方程组。解可理解为各列向量的“系数”。仿自Strang的《线性代数》} \label{fig_LinEq_4}
 \end{figure}
+
+可见任意向量都能由 $\pmat{ 2 \\ -1 }$ 和 $\pmat{ -1 \\ 2 }$ 的线性组合得到，包括了 $\pmat{ 0 \\ 3 }$。
 \end{example}
+% Giacomo: 第一种角度似乎非常粗浅，可以在《线性方程组（高中）》中讲？
 看起来，在线性方程组中，矩阵$\mat A$的行向量与列向量存在一种微妙的关联。
 
 \subsection{判断线性方程组解的个数}
@@ -199,7 +185,9 @@ $$
 \caption{$Ax=b$ 的解} \label{fig_LinEq_1}
 \end{figure}
 
-\addTODO{需要补充证明}%我不会证明QAQ
+% \addTODO{需要补充证明}%我不会证明QAQ
+\addTODO{需要引用《秩—零化度定理（矩阵）》} % Giacomo
+
 
 关于线性方程组的解，我们有如下定理。记m为$\mat A$的行数，n为$\mat A$的列数，r为$\mat A$的矩阵的秩\upref{MatRnk}。可参考\autoref{fig_LinEq_1} 的分类。
 
@@ -245,7 +233,7 @@ $\mat A \bvec x=\bvec b$无解：$\opn{rank}(\overline{\mat A})=\opn{rank}(\mat 
 \end{theorem}
 
 \begin{theorem}{解的结构}
-$\mat A \bvec x=\bvec b$的通解等于$\mat A \bvec x=\bvec b$的一个特解加上$\mat A \bvec x=0$的各个线性无关的解的线性组合，即$\bvec x = \bvec x_p +k_1\bvec x_{n1}+k_2\bvec x_{n2}+...$
+$\mat A \bvec x=\bvec b$的通解等于$\mat A \bvec x=\bvec b$的一个特解加上$\mat A \bvec x=0$的各个线性无关的解的线性组合，即$\bvec x = \bvec x_p +k_1\bvec x_{n1}+k_2\bvec x_{n2}+\cdots$
 
 因此，通常的解题套路是先求解$\mat A \bvec x=\bvec b$的一个特解，再求解$\mat A \bvec x=0$的各个线性无关的解。
 

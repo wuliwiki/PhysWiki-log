@@ -6,7 +6,7 @@
 \pentry{开普勒问题\nref{nod_CelBd}， 柱坐标系\nref{nod_Cylin}}{nod_dd98}
 
 在开普勒问题% 未完成：什么是开普勒问题？
-中， 我们定义\textbf{拉普拉斯—龙格—楞次矢量（Laplace-Runge-Lenz Vector）} （缩写为 \textbf{LRL 矢量}）为
+中，我们定义\textbf{拉普拉斯—龙格—楞次矢量（Laplace-Runge-Lenz Vector）} （缩写为 \textbf{LRL 矢量}）为
 \begin{equation}\label{eq_LRLvec_1}
 \bvec A = \bvec p \cross \bvec L - mk \uvec r~.
 \end{equation}
@@ -44,4 +44,49 @@
 % \bvec A = \bvec A_B - \bvec A_A
 % 其中 \bvec A 是等效天体（质量为 mu）的 LRL 矢量。
 
-% 未完成： LRL 矢量的模长和方向？
+\subsection{如何发现 LRL 矢量}
+\pentry{运动积分\nref{nod_415a}}{nod_07b6}
+根据分析力学的理论，一个有 $s$ 自由度的系统应当有 $2s-1$ 个运动积分，也就是对时间有 $2s-1$ 个守恒量。而开普勒问题本质是在空间内的三维问题（我们可以降维到二维是因为角动量守恒，使得运动轨迹在同一平面内），有 $s=3$ 的自由度，也就应当有 $2s-1=5$ 个运动积分。容易发现系统能量 $E$、角动量在各方向的分量 $L_x, L_y, L_z$ 共 $4$ 个守恒量，仍然差一个，所以需要考虑构造一个守恒量。
+
+\subsubsection{猜测}
+这个方法有一些很巧妙的成分在内。我们首先通过“猜测”考虑 LRL 矢量是由 $\bvec r \cross \bvec L$ 与 $\bvec p \cross \bvec L$ 构成。$\bvec L$ 守恒，考虑坐标 $\bvec r$ 与动量 $\bvec p=m\bvec v$ 与其的叉积
+$\bvec r \cross \bvec L, \bvec p \cross \bvec L$，两者对于时间的全微分
+$$\bvec P= \dv{\left(\bvec r \cross \bvec L\right)}{t}, \bvec Q =\dv{\left(\bvec p \cross \bvec L\right)}{t} ~,$$
+可以计算得到
+$$\begin{aligned}
+\bvec P &= \bvec p \cross \bvec L/m, \\
+\bvec Q &= - \frac{1}{r} \pdv{V(r)}{r} \bvec r \cross \bvec L ~.
+\end{aligned}$$
+而对于开普勒问题，$V(r) = -k/r$，这样就不难得到
+\begin{equation}
+\dv{\left(\bvec p \cross \bvec L - \frac{m k \bvec r}{r}\right)}{t}=0 ~.
+\end{equation}
+
+% int256: 添加诺特定理推导 LRL 矢量的内容？
+% \subsubsection{诺特定理推到 LRL 矢量}
+
+\subsection{LRL 矢量的模长与方向}
+将 LRL 矢量除以 $mk$ 可以得到一个无量纲矢量 $\bvec e$ 与 LRL 矢量 $\bvec A$ 同向（下面会看到为什么这个矢量叫 $\bvec e$）
+$$\bvec e = \frac{\bvec A}{mk} = \frac{m}{k} \left(\bvec v \cross \bvec L \right)- \hat{\bvec{r}} ~.$$
+考虑到 $\bvec p = m \bvec v = m \dot{\bvec r}$，将其代入 $\bvec A$ 的表达式就会有
+$$\bvec A = m^2 (\dot{\bvec r})^2 \bvec r - m^2(\dot{\bvec r} \cdot \bvec r)\dot{\bvec r} - km \bvec r/r ~.$$
+所以 $\bvec A \cdot \bvec L = 0, \bvec A \cdot \bvec r = \bvec L^2 - kmr$。后面一个式子可以化为 $Ar\cos \phi = L^2-kmr$，$\phi$ 是轨道的夹角，于是
+$$r(\phi) = L^2/(km + A \cos \phi) ~,$$
+也就是 $r(\phi) = (L^2/km)/(1+ (A/km) \cos \phi)$，发现 $A/km$ 就是离心率。这就是 $\bvec e$ 得名的原因。
+
+而另外的，$\bvec A$ 的方向与 $\bvec L$ 垂直。将 $\bvec A$ 置于椭圆的几何中心可以发现其与椭圆的长轴是同方向的。所以另外有一有趣推论如下：
+\begin{corollary}{}
+LRL 矢量的变化对应轨道方向的变化。对于进动问题来说进动角就是 LRL 矢量变化的角。
+\end{corollary}
+
+刚才另外提到了，运动积分应当有 $5$ 个，但是 LRL 矢量有三个分量 $A_x, A_y, A_z$，为什么只对应一个呢？我们发现，有两个约束条件：
+\begin{equation}
+\left\{
+\begin{aligned}
+\bvec A \cdot \bvec L &= 0 ~, \\
+|\bvec A| &= kme = \sqrt{m^2k^2 + 2m E L^2} ~. 
+\end{aligned}
+\right.
+\end{equation}
+所以实际仅提供了一个运动积分。
+

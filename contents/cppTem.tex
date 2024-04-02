@@ -45,6 +45,8 @@ constexpr int factorial(int n) {
 \end{lstlisting}
 但是别高兴得太早，这个函数要求能 100\% 在编译时执行（虽然运行时也能执行，但输出就不是 \verb`constexpr` 了）。 所以别想用它来给 \verb`tuple` 写一个循环。
 
+另见 \verb`SLISC` 中如何实现 \verb`std::hash<tuple<...>>`。
+
 \subsection{Template Function Overloading}
 【这里的笔记过时了， 用 SFINAE 就好】
 在普通的 function overloading 的基础上：
@@ -121,3 +123,22 @@ std::common_type<T1, T2, ...>::type myplus(const T1 &x, const T2 &y)
 该函数 argument 如果输入 \verb`complex <double>` 和 \verb`double` 就可以返回前者, 输入 \verb`double` 和 \verb`int` 也可以返回前者.
 \item 模板也可以有默认变量， 或者任意个数变量 \verb|...|
 \end{itemize}
+
+\subsection{variadic template}
+\textbf{variadic template lambda}
+
+\begin{lstlisting}[language=cpp]
+template<typename Func, typename... Args>
+auto callGenericLambda(Func&& func, Args&&... args) -> decltype(auto) {
+    return func(std::forward<Args>(args)...);
+}
+
+int main() {
+    auto lambda = [](auto&&... args) {
+        // A fold expression to print all arguments.
+        ((std::cout << args << ' '), ...);
+    };
+
+    callGenericLambda(lambda, 42, "Hello", 3.14);
+}
+\end{lstlisting}

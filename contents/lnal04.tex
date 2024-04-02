@@ -1,28 +1,86 @@
-% 线性映射的核与象
+% 矩阵与映射
 % license Xiao
 % type Tutor
 
-\begin{issues}
-\issueDraft
-\end{issues}
 
-线性映射是线性空间之间的同态映射，因此我们可以研究其核与象。
+注：为方便计，本篇采取爱因斯坦求和约定。即$a^i\bvec x_i=a^1\bvec x_1+a^2\bvec x_2+...$
+\subsection{线性映射及其矩阵表示}
+$V$和$W$是域$\mathbb F$上的两个线性空间。若映射$f:V\rightarrow W$保加法和数乘运算（即“线性”），即对于任意$\bvec x,\bvec y \in V,,a,b\in\mathbb F$有：
+\begin{equation}
+f(a\bvec x+b\bvec y)=af(\bvec x)+bf(\bvec y)
+~,\end{equation}
+则称$f$是\textbf{线性映射}（linear map），以$\mathcal L(V,W)$表示所有$V\rightarrow W$上的线性映射。可以验证，该集合是一个线性空间。一般称$f\in \mathcal L(V,V)$为\textbf{为线性变换}（linear transformation），全体\textbf{可逆线性变}换用$GL(V)$表示。
+
+由于矩阵对向量作用，也是保线性运算不变的，因此矩阵和映射之间可以一一对应起来。矩阵的乘法就是映射的复合。
+具体怎么对应呢，设$\{\bvec e_i\}$为$V$上的一组基，$f\in\mathcal L(V,W)$，其矩阵表示为$M$\footnote{$m^i_j$表示第$i$行$j$列的矩阵元}。对于任意向量$\bvec x=a^i\bvec e_i\in V$有：
+\begin{equation}
+f(a^i\bvec e_i)=a^if(\bvec e_i)=m^j_i a^i~.
+\end{equation}
+因此，矩阵的第$i$列是$f(\bvec e_i)$。选定$W$的一组基，那么$f(\bvec e_i)$总可以表示为$W$里基向量的线性组合。
+\begin{example}{}
+$\{\bvec x_1,\bvec x_2\}$是$V$上的一组基，$\{\bvec y_1,\bvec y_2,\bvec y_3\}$为$W$上的一组基。线性映射$f:V\rightarrow W$对基向量的作用为：$f(\bvec x_1)=2\bvec y_2+\bvec y_3\,,f(\bvec x_2)=2\bvec y_1-3\bvec y_3$，则有
+\begin{equation}
+f(2\bvec  x_1-\bvec x_2)=-2\bvec y_1+4\bvec y_2+5\bvec y_3~,
+\end{equation}其矩阵表示为
+\begin{equation}
+\begin{pmatrix}
+  0& 2\\
+  2& 0\\
+ 1 &-3
+\end{pmatrix}\times \begin{pmatrix}
+ 2 &-1
+\end{pmatrix}=\begin{pmatrix}
+-2 \\
+ 4\\
+5
+\end{pmatrix}~.
+\end{equation}
+\end{example}
+\subsection{矩阵的坐标变换}
+在矩阵论里，我们已经学过用相似变换得到线性变换在不同基下的表示。现在用矩阵表示不同线性空间之间的线性映射，我们依然可以得到矩阵在不同基下的表示。
+
+设$V,W$的旧基分别为$\{\bvec e_i\},\{\bvec{\theta}_i\}$；新基分别为$\{\bvec{x}_i\},\{\bvec{y}_i\}$；$f:V\rightarrow W$在旧基下的表示为$M$，在新基下的表示为$N$；从$V$的旧基到其新基的过渡矩阵为$Q$，$W$的则为$S$。现在推导$M,N$的联系。
+
+对于任意向量$\bvec v=b^i\bvec x_i\in V$，我们有：
+\begin{equation}\label{eq_lnal04_1}
+\begin{aligned}
+f(b^i\bvec x_i)&=b^if(\bvec x_i)\\
+&=b^iN^j_i\bvec y_j\\
+&=b^iN^j_iS^a_j\bvec\theta_a~,
+\end{aligned}
+\end{equation}
+由于对于$\bvec x_i$有：$\bvec x_i=Q_i^q\bvec e_i$，代入第一行，则得：
+\begin{equation}
+\begin{aligned}
+b^if(\bvec x_i)&=b^if(Q_i^q\bvec e_q)\\
+&=Q_i^qb^if(\bvec e_q)\\
+&=Q_i^qb^iM^a_q\bvec \theta_a~.
+\end{aligned}
+\end{equation}
+$b^i\theta_a$前的系数必相等，综合\autoref{eq_lnal04_1} 得：
+\begin{equation}
+SN=MQ~,
+\end{equation}
+即$N=S^{-1}MQ$。
+\subsection{线性映射的核与象}
+
 \begin{definition}{}
 设$V,W$为域$\mathbb F$上的线性空间，$f:V\rightarrow W$为线性映射。
 
-记$ker\,f=\{\boldsymbol x\in V|f(\boldsymbol x)=\boldsymbol 0\}$，称作线性映射$f$的核（kernel）。记$Im\,f=\{f(\boldsymbol x)|\boldsymbol x\in V\}$，称作线性映射$f$的象（Image）
+记$\opn{ker}f=\{\boldsymbol x\in V|f(\boldsymbol x)=\boldsymbol 0\}$，称作线性映射$f$的核（kernel）。记$\opn{Im}f=\{f(\boldsymbol x)|\boldsymbol x\in V\}$，称作线性映射$f$的象（image）
 \end{definition}
 \begin{exercise}{}
 $f,V,W$的定义同上。验证核与象分别是$V$及$W$的子空间。
 \end{exercise}
 关于核与象，有两个好用的结论。
 \begin{itemize}
-\item 核$ker\,f=\{\boldsymbol 0\}\Longleftrightarrow f$是单射。
-\item 若象$Im\,f=W\Longleftrightarrow f$是满射
+\item 核$\opn{ker}f=\{\boldsymbol 0\}\Longleftrightarrow f$是单射。
+\item 若象$\opn{Im}f=W\Longleftrightarrow f$是满射
 \end{itemize}
 在此只证明第一个结论。
 
 proof.
+
 先验证充分条件。反证该映射并非单射，及至少存在两个向量映射到同一个向量，设为$\boldsymbol{x,y}$，那么我们有
 \begin{equation}
 f(\boldsymbol{x}-\boldsymbol{y})=f(\boldsymbol x)-f(\boldsymbol y)=\boldsymbol 0~,
@@ -32,21 +90,24 @@ f(\boldsymbol{x}-\boldsymbol{y})=f(\boldsymbol x)-f(\boldsymbol y)=\boldsymbol 0
 再验证必要条件。假设存在一个非$0$向量映射到$0$，即$f(a^i\boldsymbol x_i)=0$，则$-f(a^i\boldsymbol x_i)=f(-a^i\boldsymbol x_i)=0$，与假设矛盾，证毕。
 可见，第一条结论能成立多亏了该同态映射是线性的，这也是线性空间的一个好处。
 
-线性空间的向量构成加法群，因而也有同态结构定理：
+线性空间的向量构成加法群，因而也有同态定理：
 \begin{theorem}{}
-设$V,W$是域$\mathbb F$上的线性空间。$f:V\rightarrow W$为线性映射。则有：
+设$V,W$是域$\mathbb F$上的有限维线性空间。$f:V\rightarrow W$为线性映射。则有：
 \begin{equation}
-V/ker \,f\cong Im\,f~,
+V/\opn{ker}f\cong \opn{Im} f~,
 \end{equation}
 \end{theorem}
 Proof.
-由于线性空间的同构只需要维度相同，所以我们只需要构建基之间的映射即可。
 
-设$\{\boldsymbol e_i\}$为$ker\,f$上的一组基，扩充为$V$上全空间的基：$\{\boldsymbol e_i\}\cup \{\boldsymbol \theta_i\}$。由于核中元素都被映射为0.只要证明象的维度与$|\{\boldsymbol \theta_i\}|$一致即可。由于$f(a^i\boldsymbol e_i+b^i\boldsymbol \theta_i)=b^if(\boldsymbol \theta_i)$,而$f(\boldsymbol \theta_i)$是线性无关的，不然$span\{\boldsymbol \theta_i\}$就会有$ker\,f$的元素，与假设矛盾。证毕。
+由于有限维线性空间的同构只需要维度相同，所以我们只需要构建基之间的映射即可。
+
+设$\{\boldsymbol e_i\}$为$\opn{ker}f$上的一组基，扩充为$V$上全空间的基：$\{\boldsymbol e_i\}\cup \{\boldsymbol \theta_i\}$。由于核中元素都被映射为0.只要证明象的维度与$|\{\boldsymbol \theta_i\}|$一致即可。由于$f(a^i\boldsymbol e_i+b^i\boldsymbol \theta_i)=b^if(\boldsymbol \theta_i)$,而$f(\boldsymbol \theta_i)$是线性无关的，不然$\opn{span}\{\boldsymbol \theta_i\}$就会有$\opn{ker}f$的元素，与假设矛盾。证毕。
 该证明同时也引出了以下定理：
 \begin{lemma}{}
 对于线性空间$V$和其上的线性映射$f$,我们有
-$$\mathrm{dim}V=\mathrm{dim}\,ker\,f+\mathrm {dim}\,Im\,f~,$$
+\begin{equation}
+\mathrm{dim}V=\mathrm{dim}\,\opn{ker}f+\mathrm {dim}\,\opn{Im}f~,
+\end{equation}
 \end{lemma}
 利用该定理，我们可以证明一条关于秩的定理：
 \begin{theorem}{}
@@ -57,6 +118,25 @@ rank\,A+rank\,B\le n~,
 \end{theorem}
 proof.
 
-设$A,B$对应线性空间$V$的线性变换为$f_A,f_B$，该定理又可理解为$Im\,f_A+Im\,f_B\le n$。
+设$A,B$对应线性空间$V$的线性变换为$f_A,f_B$，该定理又可理解为$\opn{Im}f_A+\opn{Im}f_B\le n$。
 
-$AB=0$意味着$Im\,f_B\le ker\,f_A$，由定理2得：$ker\,f_A=n-Im\,f_A$，移项证毕。
+$AB=0$意味着$\opn{Im}f_B\le \opn{ker}f_A$，由定理2得：$\opn{ker}f_A=n-\opn{Im}f_A$，移项证毕。
+\subsection{矩阵的秩}
+由前文知，若$f$是一个把$n$维向量映射到$m$维向量的线性映射，那么该线性映射可以表示为一个$m$行$n$列的矩阵。由于象的维度=矩阵的列秩=行秩，因此线性映射的性质与矩阵的行向量组、列向量组的秩紧密关联。
+\begin{theorem}{}
+$f:V\rightarrow W$，对应$x\rightarrow Ax$。则：
+\begin{itemize}
+\item $f$是单射$\Leftrightarrow\,A$的列向量组线性无关。
+\item $f$是满射$\Leftrightarrow\,A$的行向量组线性无关。
+\item $f$是双射$\Leftrightarrow\,A$是可逆矩阵。
+\end{itemize}
+\end{theorem}
+proof.
+
+设$\opn{dim}V=n,\opn{dim}W=m$，${\bvec e_i}$为$V$的一组基，任意向量$\bvec x=a^i\bvec e_i\in V$，则：
+
+$f$是单射$\Leftrightarrow\opn{ker}f=0\Leftrightarrow a^if(\bvec e_i)=\bvec 0$只有零解$\Leftrightarrow a^i=0$，得证。
+
+$f$是单射$\Leftrightarrow \opn{dim}\opn{Im}f=m\Leftrightarrow$行秩为$m$，得证。
+
+结合上述两点可证第三点。

@@ -7,15 +7,19 @@
 \begin{figure}[ht]
 \centering
 \includegraphics[width=14cm]{./figures/33f9bcef260fd2db.png}
-\caption{gdb 调试最痛苦的地方：调试时调用函数。 解决办法：用 IDE} \label{fig_gdbNt_1}
+\caption{gdb 调试最痛苦的地方：调试时调用函数。 解决办法：\verb`set print pretty on` 或者直接用 IDE。 如果调试显示函数不存在，那就是被优化掉了，无解，只能查看数据成员。} \label{fig_gdbNt_1}
 \end{figure}
 
 \subsection{笔记}
 \begin{itemize}
 \item \verb|g++/gcc| 编译时用 \verb`-g` 选项以用于 debug
 \item \verb|r|， \verb|p|， \verb|f|， \verb|s|， \verb|n|， \verb|ptype| （检查 typename 或者变量的类型）
+\item \verb`print &变量` 可以显示变量地址
+\item \verb`p/r 变量` 或者 \verb`ptype/r 变量` 可以输出非常详细的信息。
+\item 调试 \verb`std::tuple` 时只能按顺序列出每个值，无法直接 \verb`get<>()` 查看每个元的详情。
 \item \verb|catch throw| 可以在任何异常发生时暂停
 \item 要 debug 某程序， 用 \verb`gdb <exename>`， 无需 \verb`./`。 也可以先进入 \verb`gdb` 然后用 \verb`file <exename>`
+\item 如果可执行文件被更新了， 再次用 \verb`file <execname>` 即可重新加载，不用退出 gdb，这样可以保留 breakpoint 和其他设置等。 但这时 gdb 调试时显示的源码不会更新，要更新，用 \verb`directory` 或者 \verb`directory <源码路径>`
 \item \verb`gdb -w` 开启 gdb 自带 gui, 如果存在。 强烈推荐 \verb`guigdb` 项目（见我的相关笔记）， 可以在浏览器中显示一个 gdb 的 gui， 也支持 intel 的 \verb`gdb-ia`
 \item gdb 中的命令可以被缩写为前几个字母， 如果没有歧义
 \item \verb`quit` or \verb`q` 退出 gdb
@@ -35,6 +39,7 @@
 \item \verb`print <var/expr>` (快捷键 \verb`p`) 来显示某个变量或执行某个命令， 只有在没有被优化掉的函数才可以在调试时执行， 所以为了使函数可以被执行， 可以把函数定义放到单独的 cpp 文件中， 而不要用 \verb`inline`
 \item \verb`print` 调用的函数不能有默认变量， 函数 overload 大部分情况也不行。
 \item \verb`print` 字符串的时候会打出一堆东西不方便， 用 \verb`p str.c_str()` 和 \verb`p str.size()` 即可
+\item 如果 \verb`p` 是一个 \verb`char *`， \verb`printf "%s\n", p+2` 可以打印 \verb`p[2]` 和之后的所有字符， \verb`printf "%.3s\n", p+2` 可以从 \verb`p[2]` 打印 3 个字符。
 \item \verb`where` 用于询问当前执行到哪里（等效于 \verb`backtrace` 即 \verb`bt`）
 \item \verb`list` （快捷键 \verb`l`） 显示 10 行周围的代码， 反复使用可以连续列出下文代码
 \item \verb`continue` （快捷键 \verb`c`）， 继续运行直到遇到 breakpoint
