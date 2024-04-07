@@ -84,9 +84,9 @@
 \item 文件批量重命名 \verb|rename 's/老名字/新名字/' *|。 \verb|-n| 选项显示重命名的预览， 不真的重命名
 \item \verb|sudo swapoff -a| 不使用 swap file， \verb|sudo swapon -a| 恢复使用。 可能还需要在 \verb|/etc/fstab| 里面注释掉相应的行。
 \item 要改变 swap 文件的尺寸： \verb|sudo swapoff /swapfile|， \verb|sudo dd if=/dev/zero of=/swapfile bs=1M count=1024|（如果写入比较慢也可以 append： \verb|sudo dd ... oflag=append conv=notrunc|）， \verb|sudo mkswap /swapfile|， \verb|sudo swapon /swapfile| 一般无需重启， 但如果系统不允许关闭 swap， 也可以考虑用多个 swap 文件。有些系统中 \verb|/swapfile| 也命名为 \verb|/swap| 。
-\item \verb`cat /proc/sys/vm/swappiness` check swapiness, the larger, the more aggressive swap usage
-\item \verb`sudo sysctl vm.swappiness=90` (value 0-100) adjusts swapiness immediately, but will be cleared after reboot
-\item to adjust swapiness after every reboot, use \verb`sudo vim /etc/sysctl.conf`, add \verb`vm.swappiness=90` to the end of the file. To apply the config file imediately, use \verb`sudo sysctl -p`
+\item \verb`cat /proc/sys/vm/swappiness` 检查 swapiness， 值越大系统越倾向于使用更多 swap
+\item \verb`sudo sysctl vm.swappiness=90` 更改 swapiness (范围 0-100) 但是重启后会失效
+\item 要永久修改 swapiness， \verb`sudo vim /etc/sysctl.conf`, 在最后加上 \verb`vm.swappiness=90` 要立即生效用 \verb`sudo sysctl -p`
 \item 用 \verb|free -h| 可以查看当前 RAM 和 swap 的大小和使用情况。
 \item 如果要开机自动使用 swapfile， 用 \verb|/swapfile none swap sw 0 0|
 \item \verb|tree| （非系统自带） 可以显示当前目录的树状图， \verb|tree -a| 也显示隐藏文件。

@@ -1,10 +1,12 @@
 % 拉回映射
-% license Usr
+% license Xiao
 % type Tutor
+
 \pentry{伴随映射\nref{nod_AdjMap}}{nod_712c}
 
 \begin{issues}
-\issueDraft 需新增余切向量的外积
+\issueDraft 
+1.预备知识需新增余切向量的外积。2.最后一条定理待证。
 \end{issues}
 
 设$f:M\rightarrow N$是光滑映射，则可以定义切空间之间前推映射：
@@ -46,7 +48,7 @@ f^*(g\sigma)|_pX&=(g\sigma)|_{f(p)}f_*(X)\\
 \begin{theorem}{}
 伴随\textbf{光滑映射}的拉回映射把\textbf{光滑余切场}映射为光滑余切场。
 \end{theorem}
-\textbf{proof:}
+\textbf{proof.}
 
 设$f:M\rightarrow N$为光滑映射，$\sigma$为$N$上的光滑余切场，$\{dy^i\}$为$N$上的局部余切基\footnote{$y^i:V\subset N\rightarrow R$是对应坐标卡的坐标函数}。则可以将光滑余切场表示为$\sigma=\sum_i\sigma_idy^i $，分量均为光滑函数。
 由\autoref{lem_PullBk_1} 得：
@@ -62,19 +64,53 @@ f^*(\omega)(X_1,X_2...X_k)=\omega(f_*(X_1),f_*(X_2)...f_*(X_k))~.
 \end{equation}
 \end{definition}
 由于微分形式的外积依然是微分形式，因此也可以被“拉回”。
-\begin{theorem}{}
+\begin{theorem}{}\label{the_PullBk_1}
 若$f:M\rightarrow N$是光滑的，$\omega,\eta$是$N$上的微分形式。那么有：
 \begin{enumerate}
 \item $f^*(\omega\wedge \eta)=f^*(\omega)\wedge f^*(\eta)$，即保微分形式的外代数同态。
-\item 给定一个$N$上的一个局部坐标系$\{dy^{i_1}\}$，定义$k$形式$\omega$为$\omega=\sum_I\omega_I dy^{i_1}\wedge dy^{i_2}...\wedge dy^{i_k}$，则有：
+\item 给定一个$N$上的一个局部余切基$\{dy^{i_1}\}$，定义$k$形式$\omega$为$\omega=\sum_I\omega_I dy^{i_1}\wedge dy^{i_2}...\wedge dy^{i_k}$，则有：
 \begin{equation}
 f^*(\omega)=\sum_I (\omega_I\circ f)d(y^{i_1}\circ f)\wedge...d(y^{i_k}\circ f)~.
 \end{equation}
 \end{enumerate}
 \end{theorem}
+\textbf{proof.}
+
+因为楔积是双线性的，因此我们只需要证明第一条对微分形式的基成立即可。设$\omega$是$k$形式，对应的基为$\{\varepsilon^I\},I=\{i_1,i_2...i_k\}$，$\eta$是$l$形式，对应的基为$\{\varepsilon^J\},J=\{j_1,j_2...j_l\}$。简化左侧表达式为：
+\begin{equation}
+f^*(\varepsilon^I\wedge \varepsilon^J)(X_{1},X_{2}...X_{k+l})=\varepsilon^I\wedge \varepsilon^J(f_*(X_{1}),f_*(X_{2})...f_*(X_{k+l}))~.
+\end{equation}
+根据张量的外积定义，可简化右侧的表达式为：
+\begin{equation}
+\begin{aligned}
+f^*(\varepsilon^I)\wedge f^*(\varepsilon^J)(X_{1},X_{2}...X_{k+l})&=\frac{(k+l)!}{k!l!}\opn{Alt}(f^*(\varepsilon^I)\otimes f^*(\varepsilon^J))(X_{1},X_{2}...X_{k+l})\\
+&=\frac{1}{k!l!}\opn{sgn}\sigma^I\opn{sgn}\sigma^Jf^*(\varepsilon^I)(X_1,X_2...X_k)f^*(\sigma^J)(X_{k+1},X_{K+2}...X_{k+l})\\
+&=\opn{Alt}\varepsilon^I(f_*(X_1),f_*(X_2)...f_*(X_k))\opn{Alt}\varepsilon^J(f_*(X_1),f_*(X_2)...f_*(X_{k+l}))\\
+&=\varepsilon^I\wedge\varepsilon^J(f_*(X_{1}),f_*(X_{2})...f_*(X_{k+l}))~.
+\end{aligned}
+\end{equation}
+现证第二条。由第一条得：
+\begin{equation}
+f^*(\omega)=\sum_If^*(\omega_I dy^{i_1} )\wedge f^*(dy^{i_2})...\wedge f^*(dy^{i_k})~.
+\end{equation}
+
+因为$dy^{i_k}$是光滑余切场，由\autoref{lem_PullBk_1} 得：$f^*(\omega_I)dy^{i_1}=(\omega\circ f)d(y^{i_1}\circ f)$
+且$f^*(dy^{i_k})=d(y^{i_k}\circ f)$，代入上式即可得证。
+
 \begin{theorem}{}
 令$f:M\rightarrow N$是n维微分流形之间的光滑映射。设$\{x_i\}$为$U\subset M$上的局部坐标系，$\{y_i\}$是$V\subset N$上的局部坐标系，$u$是$V$上的光滑函数。那么在$U\cap F^{-1}(V)$上有：
 \begin{equation}
 f^*\left(u d y^1 \wedge \cdots \wedge d y^n\right)=(u \circ f) \operatorname{det}\left(\frac{\partial f^j}{\partial x^i}\right) d x^1 \wedge \cdots \wedge d x^n~.
 \end{equation}
 \end{theorem}
+\textbf{proof.}
+
+由\autoref{the_PullBk_1} 得：
+\begin{equation}\label{eq_PullBk_1}
+f^*\left(u d y^1 \wedge \cdots \wedge d y^n\right)=(u \circ f) df^1\wedge df^2\wedge ...\wedge  df^n~,
+\end{equation}
+又因为$df^i=\frac{\partial y^i}{\partial x^j}dx^j$，结合楔积的反对称性可知：
+\begin{equation}
+df^1\wedge df^2\wedge ...\wedge  df^n=\operatorname{det}\left(\frac{\partial f^j}{\partial x^i}\right) d x^1 \wedge \cdots \wedge d x^n~.
+\end{equation}
+代入\autoref{eq_PullBk_1} 得证。
