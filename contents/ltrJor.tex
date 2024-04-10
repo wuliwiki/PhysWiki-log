@@ -13,9 +13,9 @@
 \begin{equation}
 V=\opn{ker}f(A)=\opn{ker}f_1(A)\oplus\opn{ker}f_2(A)...\oplus\opn{ker}f_m(A)~,
 \end{equation}
-其中$f(A)$是$A$的特征多项式，$f_i(A)$是本征值相关的互素项：$f_i(A)=(A-\lambda_i)^{k_i}$。为方便计，设$\opn{ker}f_i(A)=W_i,f_i(A)=B_i$，则$A=A|_{W_1}\oplus A|_{W_2}\oplus...\oplus A|_{W_n}=\bigoplus^n_{i=1}(B_i+\lambda_iI)$
+其中$f(A)$是$A$的特征多项式，$f_i(A)$是本征值相关的互素项：$f_i(A)=(A-\lambda_iI)^{k_i}$。为方便计，设$\opn{ker}f_i(A)=W_i,A-\lambda_iI=B_i$，则$A=A|_{W_1}\oplus A|_{W_2}\oplus...\oplus A|_{W_n}=\bigoplus^n_{i=1}(B_i+\lambda_iI)$
 
-由\autoref{the_Jordan_1}~\upref{Jordan}可知，幂零变换意味着在$W_i$的某组基上，$B_i$都是Jordan形矩阵，称对应的$A|_{W_i}$为一般线性变换的Jordan形。归纳此段讨论为下述定理：
+由\autoref{the_Jordan_1}~\upref{Jordan}可知，幂零变换意味着$W_i$存在某组基，使得$B_i$在该基下都是Jordan形矩阵，称对应该基的$A|_{W_i}$为一般线性变换的Jordan形。归纳此段讨论为下述定理：
 \begin{theorem}{}\label{the_ltrJor_1}
 设$A$为域$\mathbb F$上$n$维线性空间$V$内的一个线性变换，其特征多项式的所有根$\lambda\in\mathbb F$，则在$V$内存在一组基，使线性变换$A$在这组基下可以表示为如下块对角矩阵：
 \begin{equation}
@@ -25,10 +25,10 @@ J_1 & & & 0 \\
 & & \ddots & \\
 0 & & & J_s
 \end{array}\right), \quad J_i=\left(\begin{array}{cccc}
-\lambda_i & 1 & & 0 \\
-& \lambda_i & \ddots & \\
-& & \ddots & 1 \\
-0 & & & \lambda_i
+\lambda_i & 0 & & 0 \\
+1& \lambda_i &  & \\
+\vdots& 1& \ddots & 0 \\
+0 &\cdots &1 & \lambda_i
 \end{array}\right)~.
 \end{equation}
 \end{theorem}
@@ -42,13 +42,13 @@ $A|_{W_i}$由若干个Jordan块直和而成，每块对应一个本征向量，�
 &\opn{Im}B\supseteq\opn{Im}B^2\supseteq...\supseteq\opn{Im}B^k~,
 \end{aligned}
 \end{equation}
-其中$B=A-\lambda A$。\textbf{在这两个序列中，一旦有两个连续的子空间相等，后续序列中的子空间都相等。}
+其中$B=A-\lambda I$。\textbf{在这两个序列中，一旦有两个连续的子空间相等，后续序列中的子空间都相等。}
 \begin{lemma}{}
 设$\opn{ker}B^k=\opn{ker}B^{k+1}$，对于任意$m>k$，有\begin{equation}
 \opn{ker}B^{k+m}=\opn{ker}B^{k+m+1},\quad\opn{Im}B^{k+m}=\opn{Im}B^{k+m+1}~.
 \end{equation}
 \end{lemma}
-Proof.
+Proof.\footnote{参考蓝以中《高等代数简明教程》}
 
 由\autoref{eq_ltrJor_1} 知，我们只需要证明$\opn{ker}B^{k+m+1}\supseteq \opn{ker}B^{k+m}$即可。设任意$\bvec x\in \opn{ker}B^{k+m+1}$，则
 \begin{equation}
@@ -56,9 +56,13 @@ B^{k+m+1}\bvec x=B^{k+1}B^m\bvec x=\bvec 0~,
 \end{equation}
 因此可知$B^m\bvec x\in\opn{ker}B^{k+1}$。由题设得：$B^{k}B^m\bvec x=\bvec 0$，遂$\bvec x\in\opn{ker}B^{k+m}$，得证。
 
+由于$V$有限维，象空间或者核空间不可能无限“扩大”，因而满足上述条件的$k$总是存在的。
+
 接下来我们证明：$V=\opn{ker}B^k\oplus\opn{Im}B^k$，由于$\opn{dim}V=\opn{dim}\opn{ker}B^k+\opn{dim}\opn{Im}B^k$，因此只需要证明两个子空间无交集即可。
 
-由于$\opn{ker}B^k,\opn{Im}B^k$与$A$可交换，所以是$A$的不变子空间。设$K=\opn{ker}B^k,I=\opn{Im}B^k$，则有：
+设任意$\bvec v\in \opn{ker}B^k\cap\opn{Im}B^k$，可令$\bvec v=B^k\bvec u$。则有$B^k\bvec v=B^2k\bvec u=\bvec 0$，则$\bvec u\in \opn{ker}B^{2k}=\opn{B^k}$，那么我们有$\bvec v=B^k\bvec u=\bvec 0$，得证。
+
+由于$B^k$与$A$可交换，所以$\opn{ker}B^k,\opn{Im}B^k$是$A$的不变子空间。设$K=\opn{ker}B^k,I=\opn{Im}B^k$，则有：
 \begin{equation}
 A=A|_K\oplus A|_I~,
 \end{equation}

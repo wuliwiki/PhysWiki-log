@@ -39,12 +39,13 @@ std::apply([](auto&&... args) {
 \item 成员函数 \verb|erase(iter)| 删掉一个元素， \verb|erase(iter_beg, iter_end)| 删掉一段元素。
 \item \verb|.resize()| 不会改变原来元素的值， 新的值会 value-initialized。
 \item \verb|vector<> v(N)| 也是 value-initialized。
+\item 如果事先 \verb|reserve| 好，且保证 \verb|push_back()| 不超出预留的大小，c++ 标准就可以保证元素的地址不变。
 \end{itemize}
 
 \subsection{unordered\_map}
 \begin{itemize}
 \item \href{https://cplusplus.com/reference/unordered_map/unordered_map/}{unordered\_map}
-\item \verb|unordered_map<key类型, val类型>|
+\item \verb|unordered_map<key类型, val类型, hasher=...>|， 要求元素可以被 hash， 可以比较是否相等。
 \item \verb|umap.count(key)| 如果存在返回 1， 否则返回 0。
 \item \verb|unordered_map<>::value_type| 是一个 \verb|pair<>(key, value)|
 \item \verb|key| 如果不存在， 调用 \verb|umap[key]| 会生成一个新的 \verb|pair|， 其 value 是默认值 （例如 \verb|int| 初始化为 \verb|0|）， 并返回该 value 的左值。 如果 \verb|key| 存在， \verb|umap[key]| 也返回左值。
@@ -78,6 +79,7 @@ struct hash_pair { // similar to std::hash, for pair<>
 \begin{itemize}
 \item \href{https://cplusplus.com/reference/map/map/}{map}
 \item \verb|map<key类型, val类型, 比较函数（可选）, allocator（可选）>|
+\item 要求元素可以用 \verb|<| 比较大小。
 \item 不需要 hash 函数， 会按照 key 自动排序， key 需要可以比较大小。 不允许有重复的 key。
 \item 具有双向 iterator
 \end{itemize}
@@ -117,7 +119,7 @@ struct hash_pair { // similar to std::hash, for pair<>
 \begin{itemize}
 \item \href{https://cplusplus.com/reference/deque/deque/}{double ended queue}： \verb|deque<class T, class Alloc = allocator<T> >|
 \item 直接用 \verb|deque| 比 \verb|stack| 和 \verb|queue| 功能都要更多。
-\item 一般来说光 \verb`push` 和 \verb`pop` 不会改变已存在元素的地址，但 C++ 标准不保证这点。
+\item 一般来说光在两端 \verb`push` 和 \verb`pop` 不会改变已存在元素的地址，但 C++ 标准不保证这点。要保证用 \verb|list| 或者 \verb|forward_list|。 也可以用 \verb|vector| 事先 \verb|reserve| 好，保证 \verb|push_back()| 不超出预留的大小。
 \item 成员函数（基本是 \verb|vector| 的拓展版）： \verb|begin, end, operator[], size, max_size, resize, empty, front, back, push_front, pop_back, pop_front, pop_back, insert, erase, swap, clear, emplace, emplace_front, emplace_back|
 \end{itemize}
 
@@ -134,7 +136,8 @@ struct hash_pair { // similar to std::hash, for pair<>
 \subsection{forward\_list}
 \begin{itemize}
 \item \href{https://cplusplus.com/reference/forward_list/forward_list/}{单链表}
-\item 成员函数： \verb|sort()|（升序排序）, \verb|merge(list2)| （合并两个升序的 list， 结果仍然是升序）， \verb|insert_after(iter, val)|，  \verb|insert_after(iter, iter2_beg, iter2_end)|， \verb|erase_after(iter)|， \verb|erase_after(iter_beg, iter_end)|。
+\item 成员函数： \verb|sort()|（升序排序）, \verb|merge(list2)| （合并两个升序的 list， 结果仍然是升序）， \verb|push_front()|， \verb|front()|， \verb|insert_after(iter, val)|，  \verb|insert_after(iter, iter2_beg, iter2_end)|， \verb|erase_after(iter)|， \verb|erase_after(iter_beg, iter_end)|。
+\item 每一新元素都会单独 allocate， \verb|clear()| 会销毁所有元素。 \verb|forward_list| 和 \verb|list| 元素地址保证不变。
 \end{itemize}
 
 \subsection{list}
