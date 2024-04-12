@@ -80,6 +80,13 @@ fi
 \begin{itemize}
 \item 类似于 \verb|-f, -d|， 还有 \verb|-z|（判断字符串是否为空）， \verb|-n|（判断字符串是否为非空）， 例如 \verb`if [ -n $(git remote | grep github) ]`。  \verb|-e| 判断是否是文件（包括文件夹和特殊文件）， \verb|-h| 判断是否为 symlink， \verb|file1 -nt file2| （newer than）， \verb|file1 -ot file2| （older than）， \verb|-r, -w, -x| 是否是文件且具有读写执行权限。
 \item \verb|if [ string1 = string2 ]| 判断字符串是否相等， \verb|string1 != string2| 判断是否不相等。
+\end{itemize}
+
+\subsubsection{双方括号判断}
+
+双方括号不属于 POSIX 标准而是 bash 和 zsh 等特有的。 语法更为现代
+\begin{itemize}
+\item \verb`if [[ $a == $b ]]; then` 判断相等， 另有 \verb`!=`, \verb`<`, \verb`>` 等。 注意 \verb`<=` 注意比较的不是数值大小而是字符串排序大小。
 \item \verb|if [[ "字符串" =~ 正则表达式 ]]| 可以判断字符串是否匹配正则表达式。 其中正则表达式的格式和 \verb|grep -E| 中的是一样的。 例如 \verb|if [[ "$var" =~ ^-?[0-9]+$ ]]| 判断变量是否表示整数。
 \begin{lstlisting}[language=bash]
 # 判断文件是否为空
@@ -185,6 +192,19 @@ greeting "Joe"
 \end{itemize}
 
 \verb|$0| 是调用脚本的命令（也就是 \verb|argv[0]|）。 \verb|$#| 可以查看 args 的总个数
+
+一个用于确保执行成功的函数：
+\begin{lstlisting}[language=bash]
+check_failure() {
+    if [ $1 -ne 0 ]; then
+        echo "Error! Exiting..."
+        exit 1
+    fi
+}
+
+cmd1 arg1 && cmd2 arg2
+check_failure $?
+\end{lstlisting}
 
 \subsection{获取系统信息}
 \begin{itemize}
