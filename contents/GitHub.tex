@@ -1,55 +1,87 @@
-% GitHub Desktop 的简单使用
+% Git 和 GitHub 入门
+% keys 代码管理|Github|git|Github Desktop
 % license Xiao
 % type Tutor
 
-% GitHub Desktop 的简单使用
-% 代码管理|Github|git|Github Desktop
+Git 是一个文件版本控制程序， 常用于管理程序代码， 也可以用来管理任何文件。 下面简单介绍它的主要功能。
 
-\begin{issues}
-\issueTODO
-\end{issues}
+\subsection{Git 的版本管理}
+通俗来说， Git 的版本管理功能类似于一个备份软件， 它可以保存一个指定的文件夹在许多不同时间点的快照，而且可以浏览、对比、恢复这些快照或者其中的指定文件。 这样一个被 Git 管理的文件夹叫做 \textbf{Git 仓库（repository）}， 简称 \textbf{repo}，他的每个快照叫做一个\textbf{提交（commit）}。你可以给每次 commit 起一个标题，并添加一段描述。
 
-\subsection{Git 和 GitHub}
-要了解 GitHub 首先要知道什么是 Git。 Git 是一个文件版本控制程序， 通常用于管理程序代码， 但也可以用来管理任何文件。 从某种意义上来讲， Git 相当于一个强大的备份软件， 它可以保存一个文件夹（这个文件夹叫做 \textbf{仓库（repository）}， 简称 \textbf{repo}）内所有文件在许多不同时间的快照（叫做 \textbf{commit}）， 即所有文件某时刻的内容， 而且可以浏览，恢复某文件的某个版本。 也可以对比出当前文件夹中内容和上一次快照的任何改动， 或每个快照相对上一个的变化。 注意可查看变化的仅限文本文档（例如 txt 文件，以及代码源文件等）， 二进制文件如 word 和 excel 等可以通过插件先自动转换为文本文档再做对比。
+% \addTODO{注意可查看变化的仅限文本文档（例如 txt 文件，以及代码源文件等）， 二进制文件如 word 和 excel 等可以通过插件先自动转换为文本文档再做对比。}
 
-Git 还可以给仓库创造不同的\textbf{分支（branch）}， 例如一个程序写到一定的阶段后， 我们希望一边开发一个新功能， 一边维护现有的稳定版程序， 那么我们就给这个新功能创建一个分支， 开发该功能时对代码做出的改变不会影响稳定分支， 两个分支都可以有一些列快照（commit）。 等到新功能测试无误后， 再把新功能分支对代码做出的改变\textbf{合并（merge）}到稳定分支。
+Git 一旦 commit，它将可以保证仓库中每个文件的任何细微的改变（包括文件名、文件位置）都可以被检测到。你可以用 Git 实时查看相对于最近一次 commit 哪些文件发生了改变，以及改变了什么内容，并选择把哪些文件 comit，把哪些修改丢弃等。这样的好处是每次 commit 前你都有机会再次确认所有更改，避免发生误改误触等情况。这对程序代码来说尤为重要。
 
-GitHub （\href{https://github.com}{github.com}）是目前世界最大的 Git 仓库托管网站，主要用于编程项目的合作开发和下载（但也会有人用它分享整理一些文档和资料，或者作为个人网盘）。 虽然 Git 程序会把一个仓库的所有的数据保存在你的电脑上， 但它也可以设置一个或多个\textbf{服务器（remote）}， 并可以把该仓库的数据与服务器同步， 而 GitHub 就提供这样一个服务器。 把仓库托管到服务器上可以使数据在不同设备上同步， 进而可以方便不同的用户合作开发一个项目。 合作编辑时，每个设备上都保存该仓库， 且把服务器设置为 GitHub 上的同一仓库即可。 出于众所周知的原因， GitHub 在中国大陆经常无法正常访问， 但程序员通常有自己的方法。 另外国内也有类似的平台如\href{https://gitee.com/}{码云（Gitee）}， 但无论是开源代码的数量和质量都还有较大差距。
+\subsection{Git 的协作编辑}
+很多时候，一个项目往往需要多人合作。 如果一个 Git 仓库需要多人分别在自己的电脑上修改，或者同一人在不同电脑上修改，那么就需要使用协作的相关功能。 这时 Git 可以发挥类似于同步网盘的作用。例如你在电脑上创建了一个 Git 仓库并进行了若干次 commit，你可以让 Git 把该仓库和它的所有 commit 上传到一个配置好的 \textbf{Git 服务器}。 然后其他电脑如有需要可以把该仓库从服务器上\textbf{克隆（clone）}到硬盘。从此以后，无论哪台电脑产生新的 commit，都可以将其\textbf{推（push）}到服务器，然后在其他电脑将其\textbf{拉（pull）}下来。这样就实现了内容同步。
 
-严格来说 Git 本身是一个基于命令行的程序， 只能手动输入命令操作（详见 Git 命令行教程\upref{Git0}）。 虽然 Git 现在已经有了各种各样的图形界面（GUI）， 但命令行版本的功能仍然是最齐全的。 为了快速入门我们以下介绍 \textbf{GitHub Desktop}， 也就是 GitHub 官方推出的一个 GUI 客户端。 虽然目前官方只发布 Windows 和 Mac 的\href{https://desktop.github.com/}{安装包}， 但 Linux 系统也可以下载\href{https://github.com/shiftkey/desktop/releases}{第三方安装包}。
- 
-\subsection{用 GitHub Desktop 创建第一个仓库}
-在\href{https://desktop.github.com/}{官网}下载 GitHub Desktop 并安装打开， 可以登录或注册 GitHub 账号（如果你只想把它用于本地的仓库，则不需要账号或登录）。 注意 GitHub Enterprise 是企业账号， 个人账号是免费注册的。 % 注意免费账号只能建立公开仓库（public repo， 任何人都能访问或下载）， 创建私密仓库需要会员。
+通常来说，每次 push 和 pull 是手动的，这样的设计可以有效解决冲突问题： 例如 A 电脑和 B 电脑在某次共同的 commit 后， 分别 commit 了不同的内容，如果 A 电脑先把新 commit 推到服务器，当 B 电脑试图推送时，就会得到服务器返回的错误提示，这时通常的做法是先把本地的 commit 撤销并备份修改的文件，从服务器 pull 下最新 commit，在该基础上更新仓库，再次 commit 并 push 到服务器。这里最简单的情况是 A 和 B 的新 commit 分别修改的是不同的文件，那么当 B 得到服务器错误后，只需要 pull 一次， git 就会自动完成后面的过程，直接生成以后\textbf{融合（merge）}后的新 commit。
+
+由于 Git 是一个开源免费的软件，并不存在一个 “官方” 的服务器。 要实现联网，要么自己搭建服务器，要么使用第三方的\textbf{代码托管平台}。 \href{https://github.com/}{GitHub} 是世界最大的代码托管平台，但因为某些原因它经常无法从中国大陆正常访问。 而后者当前最大的托管平台是\href{https://gitee.com/}{码云（Gitee）}，由于起步较晚，其规模和质量都和 GitHub 存在较大差距。
+
+% 回收：主要用于编程项目的合作开发和下载（但也会有人用它分享整理一些文档和资料，或者作为个人网盘）。 虽然 Git 程序会把一个仓库的所有的数据保存在你的电脑上， 但它也可以设置一个或多个\textbf{服务器（remote）}， 并可以把该仓库的数据与服务器同步， 而 GitHub 就提供这样一个服务器。 把仓库托管到服务器上可以使数据在不同设备上同步， 进而可以方便不同的用户合作开发一个项目。 合作编辑时，每个设备上都保存该仓库， 且把服务器设置为 GitHub 上的同一仓库即可。
+
+\subsection{Git 的分支}
+Git 还可以给仓库创造不同的\textbf{分支（branch）}，例如你创建一个 Git 仓库管理自己的程序代码。每更新一点就做一次 commit，这些 commit 按时间顺序连成一串就是一个分支（\autoref{fig_GitHub_4}）。通常第一个分支默认的名称是 \verb`master`。 但一段时间后如果你需要把程序修改出稍有不同版本（例如儿童版、标准版、免费版等）。如果没有 Git，一般的做法是把文件或文件夹复制粘贴多个， 然后逐一修改。 但如果你每个版本都需要不断继续更新并保存历史快照，或者你需要给所有版本都做某种统一修改，将很容易产生混乱。 如果你用 Git，那么你可以基于某次 commit 创建多个分支。每个分支从此以后都会拥有只属于自己的一串 commit。一个分支也可以把别的分支发生的部分改变直接\textbf{融合（merge）}到自己当前分支的 commit 而不需要手动再改一次。在你电脑上，具有多个分支的仓库仍然只是一个文件夹，但你可以随时把文件夹中的内容从一个分支切换到另一个分支。
 
 \begin{figure}[ht]
 \centering
-\includegraphics[width=13cm]{./figures/175f00b22d270213.png}
+\includegraphics[width=14.25cm]{./figures/da6114f17235e267.png}
+\caption{基于 commit 2，仓库在默认的 master 分支外新增了两个分支 a 和 b，每个分支以后的 commit 都只属于该分支} \label{fig_GitHub_4}
+\end{figure}
+
+由于 Git 的分支非常轻量级，这使得用户时常会创建一些临时分支作为草稿使用。例如一个程序仓库的 master 分支只用于储存比较重要的 commit， 而日常修改程序时创建一个草稿分支，里面的每次 commit 可能都是一些微小的修改，等到这些修改告一段落，再把该分支最后一次 commit 并入到 master 的一次 commit 并分支删除。
+
+\begin{figure}[ht]
+\centering
+\includegraphics[width=14.25cm]{./figures/3eb87de7625b81d6.png}
+\caption{使用临时分支作为草稿，让主分支的历史版本更 “干净”} \label{fig_GitHub_6}
+\end{figure}
+
+当多人协同编辑时，为了避免冲突，不同的合作者也可以选择创建并修改不同的分支，再定期把这些分支的变化\textbf{融合（merge）}到主分支上。
+
+\subsection{Git 的不足}
+既然 Git 这么强大，为什么没有被大众广泛使用呢？
+\begin{itemize}
+\item 作为程序员用于管理代码的工具，有一定学习曲线，使用以前要理解一些概念和术语。
+\item Git 本来是 Linux 操作系统的一个命令行工具，只能通过手动输入指令来操作。 虽然现在有了不少图形界面程序帮用户输入这些命令，但它们很多只实现了常用的功能，高级功能往往仍然需要手敲命令。
+\item 第三是这些图形界面软件往往不直接支持中文，想要中文还需要自己去找汉化版。
+\item Git 的文件内容对比功能往往只支持类似 txt 的文本文件\upref{encode}（毕竟程序员代码几乎都是文本文件），像 pdf, office 文档等二进制格式的文档虽然也可以用 Git 管理，但是无法显示版本之间的具体区别。 虽然有第三方的插件可以把 pdf 等文档自动转换为文本文件供 Git 进行版本对比，但需要自己下载配置，效果也差强人意。二进制文件在版本对比上的困难很大程度上也导致程序员偏爱文本文件格式（即使只是写文档或博客）。
+\end{itemize}
+
+\subsection{用 GitHub Desktop 创建第一个仓库}
+为了快速入门我们以下介绍 \textbf{GitHub Desktop}， 也就是 GitHub 官方的客户端的使用。 虽然目前官方只发布 Windows 和 MacOS 的\href{https://desktop.github.com/}{安装包}， 但 Linux 系统也可以下载\href{https://github.com/shiftkey/desktop/releases}{第三方安装包}。 GitHub Desktop 是一个免费开源软件，源码见 \href{https://github.com/desktop/desktop}{GitHub}。
+
+在\href{https://desktop.github.com/}{官网}下载 GitHub Desktop 并安装打开， 可以登录或注册 GitHub 账号（如果你只想把它用于本地的仓库，则不需要账号或登录）。 注意 GitHub Enterprise 是企业账号， 个人账号是免费注册的。
+
+\begin{figure}[ht]
+\centering
+\includegraphics[width=14.25cm]{./figures/175f00b22d270213.png}
 \caption{GitHub Desktop 登录} \label{fig_GitHub_1}
 \end{figure}
 
-登录以后可以选择新建一个 repo 或者从 github 上 clone， 我们这里选择新建（如\autoref{fig_GitHub_2}）。 根据提示输入 repo 的名称 \verb|test|， 描述 \verb|learn to use GitHub Desktop|， 文件夹储存目录（默认是 \verb|Documents/GitHub/|）。 勾选 Initialize this repository with a README。 然后就可以确定了。
+登录以后可以选择新建一个 repo 或者从 github 上 clone， 我们这里选择新建（如\autoref{fig_GitHub_2}）。 根据提示输入 repo 的名称 \verb|test|， 描述 \verb|learn to use Git|， 文件夹储存目录（默认是 \verb|Documents/GitHub/|）。 勾选 Initialize this repository with a README。 然后就可以确定了。
 
 \begin{figure}[ht]
 \centering
-\includegraphics[width=8cm]{./figures/7accfb368360ec66.png}
+\includegraphics[width=10cm]{./figures/7accfb368360ec66.png}
 \caption{新建仓库} \label{fig_GitHub_2}
 \end{figure}
 
 创建完后界面如\autoref{fig_GitHub_3} 所示
 \begin{figure}[ht]
 \centering
-\includegraphics[width=14cm]{./figures/3ce87c8e4529502d.png}
+\includegraphics[width=14.25cm]{./figures/3ce87c8e4529502d.png}
 \caption{repo 主界面} \label{fig_GitHub_3}
 \end{figure}
 
-单击 History 可以看到左下角已经有一个 Initial commit 了， 所有的 commit 的历史可以在左上角的 History 找到。 点击 History 可以看到 Initial commit 中添加了两个文件， \verb|README.md| 和 \verb|.gitattributes|。 其中 \verb|README.md| 是一个文本文档， 可以添加 repo 的描述， 使用说明等。 \verb|.gitattributes| 文件用于对 Git 做一些设置， 例如如何处理换行\footnote{Windows 系统的换行使用 CR 和 LF 两个字符， 而 Linux 系统中只用一个 LF 字符。}。 如果新建 repo 的时候没有勾选 Initialize this repository with a README， 就不会有 Initial commit。 点击左上角的 Changes 返回刚才的界面。
+单击 History 可以看到左下角已经有一个 Initial commit 了，这是因为刚才勾选了那个选项。 所有的 commit 的历史可以在左上角的 History 找到。 点击 History 可以看到 Initial commit 中添加了两个文件， \verb|README.md| 和 \verb|.gitattributes|。 其中 \verb|README.md| 是一个文本文档， 可以添加 repo 的描述， 使用说明等。 \verb|.gitattributes| 文件用于对 Git 做一些设置， 例如如何处理换行\footnote{Windows 系统的换行使用 CR 和 LF 两个字符， 而 Linux 系统中只用一个 LF 字符。}。 如果新建 repo 的时候没有勾选刚才的选项， 就不会有 Initial commit。 点击左上角的 Changes 返回刚才的界面。
 
 注意左下角有一个 Undo 按钮。 如果按下， Initial commit 将被撤销。 再来看右上角的 Push 按钮， 这个按钮用于把新增的 commit 上传（即 push）到 GitHub。 由于我们从来没有 push 过， 现在打开 GitHub 网站是看不到刚刚创建的项目的。 按下 push， 完成后再刷新浏览器就可以在 GitHub 看到了。
 \begin{figure}[ht]
 \centering
-\includegraphics[width=14cm]{./figures/28b0de3d116e69b6.png}
+\includegraphics[width=14.25cm]{./figures/28b0de3d116e69b6.png}
 \caption{GitHub 网站上查看 repo} \label{fig_GitHub_5}
 \end{figure}
 
-\subsection{Commit}
-\addTODO{基本操作和概念}
+\addTODO{简单介绍 commit 等操作。 更详细的教程可以参考 Git 的官方教材 Pro Git，有中文版。}
