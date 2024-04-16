@@ -17,7 +17,7 @@
 \item 要指定路径， 用 \verb|cmake -S CMakeList的路径 -B 生成Makefile的路径|， 然后再到 Makefile 的路径 \verb|make -j12| 即可。 cmake 会自动生成 \verb|生成Makefile的路径|。 如果要清理 cmake 生成的文件以及所有编译出来的文件， 直接把第二个路径清空即可。
 \item 当然， 也不是什么平台都可以用 \verb|make|， 所以也可以用 \verb|cmake --build 生成Makefile的路径 [--target 可执行文件] -- -j 12| 其中 \verb|--| 后面的选项会传给 \verb|make| 或者别的具体用于编译的程序。
 \item Cmake 的基本语法是 \verb`命令(arg1 arg2 ...)` 其中 \verb|命令| 不区分大小写， \verb`arg` 用空格隔开也可以换行， 如果 \verb|arg| 本身有空格， 用双引号即可
-\item \verb|cmake| 中的变量本质上都是字符串。 即使是 list， 也不过是特殊的字符串（\verb|str1;str2;str3|）。 所谓的 \verb|bool| 类型不过是 \verb|ON| 和 \verb|OFF| 字符串。 数字也一样，并不是真正的数字。
+\item \verb|cmake| 中的变量本质上都是字符串。 即使是 list， 也不过是特殊的字符串 \verb|str1;str2;str3|。 所谓的 \verb|bool| 类型不过是 \verb|ON| 和 \verb|OFF| 字符串。 数字也一样，并不是真正的数字。
 \item 获取变量值用 \verb`${变量}`。 注意不能用 \verb|$变量|。
 \item 如果字符串 literal 中没有空格或者特殊符号，两边的双引号可以省略。 例如 \verb|set(my_var abc123)|。
 \item \verb`message(STATUS "...")` 可以输出到 stdout。 如果 \verb`message(STATUS ${变量})` 中的变量是 list， 那么输出中 \verb|;| 会消失。 应该用 \verb`message(STATUS "${变量}")`， 输出的格式为 \verb|str1;str2;str3|。 \verb`message(STATUS ${变量1} ${变量2} ...)` 相当于把若干变量合成 list。
@@ -85,20 +85,22 @@
 \item \verb|add_dependencies(目标名 依赖1 [依赖2 ...])| 可以给 target（例如可执行文件）添加依赖。
 \item \verb|check_symbol_exists("符号名字" "路径/头文件1;头文件2" 变量)| 可以检查 \verb|符号名字| 是否有定义， 包括函数名， 变量名， 以及宏。
 \item \verb|check_symbol_exists| 的实现使用了 \verb|try_compile()| 和 \verb|try_run()| 函数， 试图编译和运行一个测试程序， 从运行结果来判断是否存在符号。
-\item \verb|find_library(变量 NAMES 库名 PATHS /usr/lib /usr/local/lib HINTS $ENV{LIBRARY_PATH} $ENV{LD_LIBRARY_PATH})| 可以寻找 \verb|lib库名.so或a[.版本号]|。 若要指定版本可以用例如 \verb|gfortran.3|， 也可以指定 \verb|gfortran.so或a|。
-\item \verb|set(CMAKE_FIND_LIBRARY_SUFFIXES ".a或.so或.lib")| 可以让 \verb|find_library()| 更倾向于某种类型的 lib。 也可以用 \verb|".a;.so"| 来指定优先级。
+\item \verb|find_library(变量 NAMES 库名1 库名2 PATHS /usr/lib /usr/local/lib HINTS $ENV{LIBRARY_PATH} $ENV{LD_LIBRARY_PATH})| 可以寻找 \verb|lib库名.so或a[.版本号]|。 若要指定版本可以用例如 \verb|gfortran.3|， 也可以指定 \verb|gfortran.so或a|。 注意指定目录的子目录不会被搜索。
+\item \verb|set(CMAKE_FIND_LIBRARY_SUFFIXES ".a或.so或.lib")| 可以让 \verb|find_library()| 只寻找某种类型的 lib。 也可以用 \verb|".a;.so"| 来指定优先级。
+\item \verb|find_library()| 的默认搜索路径如 \verb`/usr/lib`，\verb`/usr/local/lib`，以及环境变量 \verb`LD_LIBRARY_PATH` 中的路径。 
+\item \verb`CMAKE_LIBRARY_PATH` 变量可以指定 \verb`find_library` 的更多默认搜索路径，且会优先搜索。
 \end{itemize}
 
 \subsection{依赖}
 \begin{itemize}
 \item \verb|find_package(包名)|
+\item \verb`find_package(包名 REQUIRED)` 如果找不到就报错终止
 \item \verb|包名| 会在 \verb|CMAKE_MODULE_PATH| 的路径里面搜索名为 \verb|Find包名.cmake| 的文件。 该文件通常会设置一些变量， 可以在 \verb|find_package| 结束后访问。
 \end{itemize}
 
-
 \subsection{内置变量}
 \begin{itemize}
-\item \verb|PROJECT_NAME| 是 \verb|project()| 设置的项目名称
+\item \verb|PROJECT_NAME| 是 \verb|project(项目名)| 设置的\verb`项目名`
 \item \verb`PROJECT_SOURCE_DIR` 是源文件的根路径， 就是传给 \verb`cmake` 的路径
 \item \verb`PROJECT_BINARY_DIR` 是 Cmake 的输出路径， 临时文件， Makefile 等都在这个路径。 这就是运行 \verb`cmake` 的路径
 \item \verb|CMAKE_CURRENT_LIST_DIR| 当前在处理的 \verb|CMakeLists.txt| 的路径。
