@@ -1,4 +1,4 @@
-% 蒙特卡洛树搜索算法
+% 蒙特卡洛树搜索算法（理论）
 % keys 蒙特卡洛|搜索
 % license Usr
 % type Tutor
@@ -6,7 +6,7 @@
 
 % 暂且把 UCB 与 蒙特卡洛树搜索算法 合并，如果需要可以单开一篇详细介绍 UCB。
 
-蒙特卡洛树是一种不同于 Alpha-Beta 剪枝的优化 Min-Max 搜索方法。他与 Alpha-Beta 剪枝相比，更好的适用于诸如围棋一类的大型对弈游戏（即搜索空间过大，但搜索过程需要兼顾“探索”与“最优化”，尽量得到全局最优解，避免陷入局部最优解），而 Alpha-Beta 剪枝的 Min-Max 搜索需要扩展几乎整个搜索树。但与 Alpha-Beta 剪枝相比，由于过程中采用蒙特卡洛方法（可以理解为抽样检测），搜索的结果并不保证一定是最优解。
+蒙特卡洛树是一种不同于 Alpha-Beta 剪枝的优化 Min-Max 搜索方法\upref{mmsab}。他与 Alpha-Beta 剪枝相比，更好的适用于诸如围棋一类的大型对弈游戏（即搜索空间过大，但搜索过程需要兼顾“探索”与“最优化”，尽量得到全局最优解，避免陷入局部最优解），而 Alpha-Beta 剪枝的 Min-Max 搜索需要扩展几乎整个搜索树。但与 Alpha-Beta 剪枝相比，由于过程中采用蒙特卡洛方法（可以理解为抽样检测），搜索的结果并不保证一定是最优解。
 
 值得一提的是，\textbf{蒙特卡洛树搜索算法不是蒙特卡洛算法}。
 
@@ -36,14 +36,16 @@ $$P\left(\widetilde \mu + u \le \mu\right) \le \exp\left(\frac{-n u^2}{2 \sigma^
 考虑假设在标准正态分布下，$\sigma^2=1$（这最终还可以体现在 $\lambda$ 中，现在不妨先让 $\sigma^2=1$），再令 $\delta = \exp\left(-nu^2/2\right)$，可以发现 $u=\sqrt{[2 \ln(1/\delta)]/n}$。实际应用中一般可以令 $1/\delta=N$，$N$ 为目前的总轮数。所以置信上界就是 $\widetilde \mu + \sqrt{\left(2 \ln N \right)/n}$。
 
 对于实际应用情况，一般取一 $\lambda$ 使置信上界为
-$$\frac{N_r}{N+1} + C \cdot \sqrt{\frac{\ln N}{2n+1}} ~.$$
+\begin{equation}\label{eq_MCTS_1}
+\frac{N_r}{N+1} + C \cdot \sqrt{\frac{\ln N}{2n+1}} ~.
+\end{equation}
 其中 $N_r$ 是这 $N$ 次模拟中“抽中”的次数，$N_r/(N+1)$ 就是前面积累的“经验”，即 $P_{maybe}$（使用 $N+1$ 是为了避免分母为 $0$，后面根号内同理)；$C$ 是某用于优化的可调参数，即 $\lambda$；$\sqrt{\ln N/(2n+1)}$ 即为不确定度 $u$。
 
 \subsubsection{适用于树搜索的 UCB}
-采用 UCB 的蒙特卡洛树（一般这种对于树的 UCB 还被称为 UCT，Upper Confidence Bounds for Trees）搜索是一种（类）启发式的搜索，大体思路是：在选择子节点的时候，
+采用 UCB 的蒙特卡洛树（一般这种对于树的 UCB 还被称为 UCT，Upper Confidence Bounds for Trees）搜索是一种（类）启发式的搜索，大体思路是：在选择子结点的时候，
 \begin{enumerate}
 \item 优先考虑未搜索过的；
-\item 如果都搜索过就根据给每个节点的“赋分”来选择，这个“赋分”是与这个节点的最终获胜概率正相关、与这个子节点访问的的次数负相关的。
+\item 如果都搜索过就根据给每个结点的“赋分”来选择，这个“赋分”是与这个结点的最终获胜概率正相关、与这个子结点访问的的次数负相关的。
 \end{enumerate}
 我们可以看到第 $2$ 条就是为了兼顾“探索”与“优化”。与最终获胜概率正相关为了保证“优化”、与访问次数负相关为了兼顾“探索”。
 
@@ -56,11 +58,39 @@ $$\frac{N_r}{N+1} + C \cdot \sqrt{\frac{\ln N}{2n+1}} ~.$$
 \end{figure}
 可以发现整体过程主要是重复以下 $4$ 步：
 \begin{enumerate}
-\item 选择（Selection）：根据刚才提到的 UCT 算法，找到一个叶子节点。
-\item 拓展（Expansion）：对当前叶子节点进行扩展。
-\item 模拟（Simulation）：对当前叶子节点的局势进行蒙特卡洛模拟。
+\item 选择（Selection）：根据刚才提到的 UCT 算法，找到一个叶子结点。
+\item 拓展（Expansion）：对当前叶子结点进行扩展。
+\item 模拟（Simulation）：对当前叶子结点的局势进行蒙特卡洛模拟。
 \item 反向传播（Back propagation）：根据蒙特卡洛模拟的结果更新 UCT 的信息与记录的分数。
 \end{enumerate}
-一般的来说，蒙特卡洛树搜索的过程中 $2$ 与 $3$ 两操作是类似于交替进行的。对于全新的叶子节点（未经 Expansion），我们进行 Simulation 操作，如果已经被 Simulation 过，我们进行 Expansion 操作。
+一般的来说，蒙特卡洛树搜索的过程中 $2$ 与 $3$ 两操作是类似于交替进行的。对于全新的叶子结点（未经 Expansion），我们进行 Simulation 操作，如果已经被 Simulation 过，我们进行 Expansion 操作。
 
-对于反向传播操作，从当前叶子节点到根节点的这条链上的所有节点的信息。
+对于反向传播操作，从当前叶子结点到根结点的这条链上的所有结点的信息。
+
+Simulation 操作在实现中又被称为 Rollout。一般是使用一个棋力不强（甚至可以是较弱）的模拟走子程序，一路走到底，模拟出胜负。原因是这样棋力弱的程序一般耗时很短，可以在单位时间内搜索更多，性能更良好。像 AlphaGo 这样的程序在这一步利用了策略网络，虽然更慢了，但是棋力更强，使得结果更准确。
+
+\subsection{代码实现}
+蒙特卡洛树搜索算法可以用于实现类似于下面的这种问题。
+\begin{example}{}
+使用蒙特卡洛树搜索算法实现一个\textbf{机器 vs. 机器}的 Tic-Tac-Toe 井字棋对战游戏。Tic-Tac-Toe 有以下规则：
+\begin{enumerate}
+\item 井字棋棋盘是 $n \times n$ 的正方形网格棋盘，例如下面是一个有一些棋子的 $7 \times 7$ 的棋盘：
+\begin{figure}[ht]
+\centering
+\includegraphics[width=6cm]{./figures/4d8426da153f2ff1.png}
+\caption{棋盘例} \label{fig_MCTS_2}
+\end{figure}
+\item 游戏的下法是有 $\cross$、$\bigcirc$ 两方，每次都可以在没有棋子的正方形内部落子。输赢定义为：最先有\textbf{连续} $m$ 个我方棋子出现的一方获胜。
+\item \textbf{连续}的定义是：横向、纵向，或两个 $45^\circ$ 对角线方向。
+\end{enumerate}
+
+你需要使得以下内容是\textbf{可以自定义}的：
+\begin{enumerate}
+\item $n$ ，即棋盘大小可以自定义。
+\item $m$ ，即输赢的（棋子连续数）条件可以自定义。
+\item 先下棋的一方可以自定义。也就是谁第一步下棋可以自定义。
+\end{enumerate}
+
+这是一个工程问题，不用考虑时间限制。你需要输出机器对战的中间过程、最终的结果棋盘与谁赢得了这场对战。
+\end{example}
+对于这个例题，实现代码可以参考文章《蒙特卡洛树搜索算法（实现 TicTacToe 机-机对战）》\upref{MCTSci}，该篇文章使用 python 3.7 + numpy 实现。建议读者先自己尝试实现，遇到困难再学习这篇文章。
