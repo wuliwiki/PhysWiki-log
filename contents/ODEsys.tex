@@ -3,34 +3,52 @@
 % license Xiao
 % type Tutor
 
+\begin{issues}
+\issueOther{和一阶常系数线性微分方程组（常微分方程）\upref{ODEb3}部分内容重复}
+\end{issues}
+
 \pentry{一阶线性微分方程\nref{nod_ODE1}}{nod_d622}
 
-\subsection{解析解}
-形式为
-\addTODO{一般一阶线性微分方程组如何化成该形式？}
+\subsection{常系数情况}
+一阶常微分方程组
+% \addTODO{一般一阶线性微分方程组如何化成该形式？}
 \begin{equation}\label{eq_ODEsys_1}
 \dv{\bvec v}{t} = \mat A \bvec v~
 \end{equation}
-的一阶偏微分方程组的解析解（先假设 $\mat A$ 为常矩阵）为
+的解析解（先假设 $\mat A$ 为常矩阵）为
 \begin{equation}\label{eq_ODEsys_2}
 \bvec v(t) = \exp(\mat At) \bvec v(0)~.
 \end{equation}
-其中矩阵的指数函数由矩阵的泰勒级数\upref{Taylor}定义
+其中矩阵（这里是方阵）的指数函数也是一个大小相同的矩阵，有类似于泰勒级数\upref{Taylor}定义
 \begin{equation}\label{eq_ODEsys_4}
-\exp(\mat A) = 1 + \mat A + \frac1{2!} \mat A^2 + \dots~
+\exp(\mat At) = 1 + \mat At + \frac1{2!} (\mat At)^2 + \dots~
 \end{equation}
-将\autoref{eq_ODEsys_2} 写成矩阵级数的形式即可验证\autoref{eq_ODEsys_1}。
+代入即可验证\autoref{eq_ODEsys_1}。这类似于一阶常系数常微分方程的解（未完成），即 $\mat A$ 是一个常数而不是矩阵的情况。
 
-\subsection{形式解}
-当\autoref{eq_ODEsys_1} 中的 $\mat A$ 是 $t$ 的函数 $\mat A(t)$ 时， 我们可以取微小时间步长 $\Delta t$， 在每个 $\Delta t$ 内近似认为 $\mat A(t_i)$ 为常数， 再取极限
+但\autoref{eq_ODEsys_4} 不方便直接计算。此时如果 $\mat A$ 可以对角化为（链接未完成；任何矩阵都可以对角化吗？）
+\begin{equation}
+\mat A = \mat U\mat\Lambda\mat U^{-1}~,
+\end{equation}
+其中 $\mat U$ 是本征列向量排成的矩阵， $\mat\Lambda$ 是对应本征值 $\lambda_1, \lambda_2, \dots$ 排成的对角矩阵，
+代入\autoref{eq_ODEsys_4} 就有
+\begin{equation}\ali{
+\exp(\mat At) &= \mat U\mat U^{-1} + \mat U\mat\Lambda\mat U^{-1} t + \frac1{2!} (\mat U\mat\Lambda\mat U^{-1} t)^2 + \dots\\
+&= \mat U\qty(1 + \mat\Lambda t + \frac1{2!} (\mat\Lambda t)^2 + \dots)\mat U^{-1}\\
+&= \mat U\exp(\mat\Lambda t)\mat U^{-1}\\
+&= \mat U \pmat{\E^{\lambda_1 t} & 0 & \dots\\ 0 & \E^{\lambda_2 t} &\dots\\ \vdots & \vdots & \ddots} \mat U^{-1}~.
+}\end{equation}
+代入\autoref{eq_ODEsys_2} 就是方程组的解。
+
+\subsection{含时系数情况的形式解}
+当\autoref{eq_ODEsys_1} 中的系数矩阵 $\mat A$ 是 $t$ 的函数 $\mat A(t)$ 时，一般没有解析解。 我们可以取微小时间步长 $\Delta t$， 在每个 $\Delta t$ 内近似认为 $\mat A(t_i)$ 为常数， 再取极限
 \begin{equation}
 \bvec v(t) = \lim_{\Delta t \to 0} \prod \exp\qty[\mat A(t_i)\Delta t] \bvec v(0)~,
 \end{equation}
-如果两个矩阵 $\mat P, \mat Q$ 对易， 就有
+如果两个矩阵 $\mat P, \mat Q$ 对易\upref{Commu}， 就有
 \begin{equation}
-\exp(\mat P)\exp(\mat Q) = \exp(\mat P + \mat Q)~,
+\exp(\mat P + \mat Q) = \exp(\mat P)\exp(\mat Q)~,
 \end{equation}
-但一般来说 $\mat A(t_i)$ 之间不对易， 所以我们定义一个时间排序算符 $\Q{\mathcal T}$ 使例如
+但一般来说 $\mat A(t_i)$ 之间不对易， 所以我们形式上定义一个时间排序算符 $\Q{\mathcal T}$ 使例如
 \begin{equation}
 \Q {\mathcal T} [\mat A(t_1) \mat A(t_3) \mat A(k_2)] = \mat A(t_3) \mat A(t_2) \mat A(t_1) \qquad ( t_1 < t_2 < t_3 )~,
 \end{equation}
@@ -40,21 +58,24 @@
 \end{equation}
 然而这么做对于数值计算并没有太大意义。
 
-\subsection{厄米矩阵}
-如果 $\mat H$ 是厄米矩阵， 那么 $\E^{\I \mat H t}$ （$t\in \mathbb R$）是一个酉矩阵（幺正矩阵）\upref{UniMat}。 所以 $\bvec v(t)$ 的模 $\abs{\bvec v(t)} = \sum \abs{v_i}^2$ 将不随时间变化。
-
-证明： 把\autoref{eq_ODEsys_4} 两边取厄米共轭得
+\subsection{厄米矩阵、反厄米矩阵}
+量子力学中经常需要求解矩阵形式的薛定谔方程（链接未完成）
 \begin{equation}
-(\E^{\I \mat H t})\Her = \E^{-\I \mat H\Her t} = \E^{-\I \mat H t}~,
+\I \dv{t} \bvec v = \mat H \bvec v~.
+\end{equation}
+其中 $\mat H$ 是厄米矩阵（哈密顿矩阵）。 若把两边同除以 $\I$，则系数矩阵 $-\I\mat H$ 就是一个反厄米矩阵。 如果 $\mat H$ 不随时间变化，那么 $\E^{\I \mat H t}$ （$t\in \mathbb R$）是一个酉矩阵（幺正矩阵）\upref{UniMat}（链接未完成）。 所以 $\bvec v(t)$ 的模 $\norm{\bvec v(t)} = \sum \abs{v_i}^2$ 将不随时间变化。
+
+证明：
+\begin{equation}
+\norm{\bvec v(t)} = \bvec v(t)\Her\bvec v(t) = \qty(\E^{-\I\mat H t})\Her\E^{-\I\mat H t}\bvec v(0)\norm{\bvec v(0)}~.
+\end{equation}
+两边取厄米共轭得
+\begin{equation}
+\qty(\E^{-\I \mat H t})\Her = \E^{\I \mat H\Her t} = \E^{\I \mat H t}~,
 \end{equation}
 由于 $[H,H] = 0$， 有 $(\E^{\I \mat H t})\Her \E^{\I \mat H t} = \E^{-\I \mat H t}\E^{\I \mat H t} = \mat I$。证毕。
 
 \subsection{数值计算}
-如果矩阵 $\bvec M$ 是厄米矩阵， 则可以先做对角化 $\mat M = \mat U \mat \Lambda \mat U\Her$， 其中 $\mat \Lambda$ 是对角矩阵， $\mat U$ 是酉矩阵。 这样就有
-\begin{equation}
-\exp(\mat M) = \mat U \mat U\Her + \mat U\mat \Lambda\mat U\Her + \mat U\frac1{2!} \mat \Lambda^2 \mat U\Her + \dots = \mat U \exp(\mat \Lambda) \mat U\Her~,
-\end{equation}
-由于对角矩阵相乘等于每个对角元分别相乘， 把 $\mat\Lambda$ 的每个矩阵元求指数函数就可以得到 $\exp(\mat \Lambda)$。 这样做可以减少计算量。
 
 事实上， 以上做法相当于分离变量， 当 $\mat A$ 是厄米矩阵时， 令 $\bvec v(t) = f(t)\bvec u$， 代入方程得 
 \begin{equation}
@@ -65,10 +86,7 @@
 &\mat A \bvec u = \lambda \bvec u~,\\
 & f(t)' = \lambda f(t)~.
 }\end{equation}
-其中第一个方程是 $\mat A$ 的本征方程， 解为 $N$ 个本征矢 $\bvec u_i$ （即 $\mat U$ 的第 $i$ 列） 和 $N$ 个本征值 $\lambda_i$ （即 $\mat \Lambda$ 的第 $i$ 个对角元）。 第二条方程的解为 $f(t) = \exp(\lambda t)$。 所以方程的通解为
-\begin{equation}
-\bvec v(t) = \sum_{i = 1}^N c_i f_i(t) \bvec u_i = \sum_{i = 1}^N \mat u_i\Her  \bvec v(0) \exp(\lambda_i t) \bvec u_i = \mat U \exp(\Lambda t) \mat U\Her \bvec v(0)~.
-\end{equation}
+其中第一个方程是 $\mat A$ 的本征方程， 解为 $N$ 个本征矢 $\bvec u_i$ （即 $\mat U$ 的第 $i$ 列） 和 $N$ 个本征值 $\lambda_i$ （即 $\mat \Lambda$ 的第 $i$ 个对角元）。 第二条方程的解为 $f(t) = \exp(\lambda t)$。 
 
 在此基础上使用 Lanczos 算法\upref{Lanc}可以进一步提高效率。
 
