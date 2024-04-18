@@ -3,33 +3,41 @@
 % license Xiao
 % type Tutor
 
-\pentry{微分\nref{nod_Diff}}{nod_9099} % 是否应该讲完这个再讲微分？
-若有两个一元函数 $f(x)$ 和 $g(x)$， 我们可以把 $g$ 的函数值作为 $f$ 的自变量， 得到一个新的函数称为 $f(x)$ 和 $g(x)$ 的\textbf{复合函数}， 记为 $f[g(x)]$。
+\pentry{导数\nref{nod_Der}，一元函数的微分（简明微积分）\nref{nod_Diff}}{nod_9099}
 
-如果我们已知两个函数 $f(x)$ 和 $g(x)$ 的导函数 $f'(x)$ 和 $g'(x)$， 那么我们可以通过以下公式求复合函数 $f[g(x)]$ 的导数。
+若有两个一元函数 $f(x)$ 和 $g(x)$， 我们可以把 $g$ 的函数值作为 $f$ 的自变量， 得到一个新的函数称为 $f(x)$ 和 $g(x)$ 的\textbf{复合函数}， 记为 $(f \circ g)(x) = f(g(x))$。
+
+为了让问题更加清晰，我们引入变量 $u = g(x)$，之后会用 $f(u)$ 替代 $f(x)$，引入 $y = f(u)$；换言之，我们把 $g$ 的函数值和 $f$ 的自变量记为 $u$， 把 $f$ 的函数值记为 $y$。
+
+如果我们已知两个函数 $f(u)$ 和 $g(x)$ 的导函数 $f'(u)$ 和 $g'(x)$， 那么我们可以通过以下公式求复合函数 $f(g(x))$ 的导数。
 \begin{equation}\label{eq_ChainR_1}
-f[g(x)]' = f'[g(x)]g'(x)~.
+f(g(x))' = f'(u) g'(x) = f'(g(x))g'(x)~.
 \end{equation}
 对于多个函数的复合函数， 我们也有类似的公式， 例如
-\begin{equation}
-f[g(h(x))]' = f'[g(h(x))]g'[h(x)]h'(x)~.
+\begin{equation}\label{eq_ChainR_5}
+h(f(g(x)))' = h'(f(g(x)))f'(g(x))g'(x)~.
 \end{equation}
 
 \begin{example}{基本初等函数的复合函数求导}
-我们已经知道基本初等函数的导数\upref{FunDer}的导函数， 下面对它们的一些常见的复合函数进行求导。
+我们已经知道基本初等函数的导数\upref{FunDer}的导函数， 下面对它们的一些常见的复合函数进行求导：
 
-$\sin^2 x$ 可以看作幂函数 $f(x) = x^2$ 和 $g(x) = \sin x$ 的复合函数， 已知 $f'(x) = 2x$， $g'(x) = \cos x$， 代入\autoref{eq_ChainR_1} 得
+$\sin^2 u$ 可以看作幂函数 $f(u) = u^2$ 和 $g(x) = \sin x$ 的复合函数， 已知 $f'(u) = 2u$， $g'(x) = \cos x$， 代入\autoref{eq_ChainR_1} 得
 \begin{equation}
 (\sin^2 x)' = 2\sin x \cos x~.
 \end{equation}
 
-% $\sqrt{x^2 + a^2}$ （$a$ 为常数）可以看作幂函数 $f(x) = \sqrt{x}$ 和多项式 $g(x) = x^2 + a^2$ 的复合函数， $f'(x) = 1/(2\sqrt x)$ $\frac{1}{2}$ （未完成！）
+$\sqrt{x^2 + a^2}$ （$a$ 为常数）可以看作幂函数 $f(u) = \sqrt{u}$ 和多项式 $g(x) = x^2 + a^2$ 的复合函数， $f'(u) = 1/(2\sqrt u)$，$g'(x) = 2 x$，代入\autoref{eq_ChainR_1} 得
+\begin{equation}
+1/(2\sqrt{x^2 + a^2}) \cdot 2 x = \frac{x}{x^2 + a^2}~.
+\end{equation}
 \end{example}
 
 \subsection{几何理解}
-为了方便表示，我们把 $g$ 的函数值和 $f$ 的自变量记为 $u$， 把 $f$ 的函数值记为 $y$。
+以下推导用到了微分\upref{Diff}的记号。
 
-\begin{figure}[ht]
+\textbf{推导开始}
+
+\begin{figure}(ht)
 \centering
 \includegraphics[width=11cm]{./figures/6997d0c908178e4c.pdf}
 \caption{可以将 $\sin^2 x$ 看做 $f(u) = u^2$ 和 $g(x) = \sin x$ 的复合函数}\label{fig_ChainR_1}
@@ -37,16 +45,16 @@ $\sin^2 x$ 可以看作幂函数 $f(x) = x^2$ 和 $g(x) = \sin x$ 的复合函�
 
 我们可以用类似\autoref{fig_ChainR_1} 的图像来直观地理解复合函数。 先画出 $y = f(u)$ 和 $u = g(x)$ 的图像，并将 $f(u)$ 的图像逆时针旋转 $90^\circ$ 使得两图的 $u$ 轴对齐。这样对于任何定义域中的自变量 $x$， 我们只需要先在 $g(x)$ 的图中画出 $u$ 的位置， 再对应到 $f(u)$ 的图像中求出 $y$ 的位置即可。 
 
-现在我们要讨论的问题是，若已知两函数的导函数 $f'(x)$ 和 $g'(u)$（假设它们在定义域内处处可导）如何求复合函数 $f[g(x)]$ 的导数。
+现在我们要讨论的问题是，若已知两函数的导函数 $f'(x)$ 和 $g'(u)$（假设它们在定义域内处处可导）如何求复合函数 $f(g(x))$ 的导数。
 
 对于给定的 $x$，我们先来看当 $x$ 增加 $\Delta x$ 时 $y$ 的增量 $\Delta y$ 的大小。我们可以使用与\autoref{fig_ChainR_1} 类似的方法画出\autoref{fig_ChainR_2}，然后只需要令 $\Delta x \to 0$， 就可以根据定义求出复合函数的导数
 \begin{equation}
-f[g(x)]' = \dv{x} f[g(x)] = \lim_{\Delta x\to 0} \frac{\Delta y}{\Delta x}~.
+f(g(x))' = \dv{x} f(g(x)) = \lim_{\Delta x\to 0} \frac{\Delta y}{\Delta x}~.
 \end{equation}
 
-\begin{figure}[ht]
+\begin{figure}(ht)
 \centering
-\includegraphics[width=10.5cm]{./figures/a014079975dda7da.pdf}
+\includegraphics(width=10.5cm){./figures/a014079975dda7da.pdf}
 \caption{用\autoref{fig_ChainR_1} 中的方法求出任意 $\Delta x$ 对应的 $\Delta y$} \label{fig_ChainR_2}
 \end{figure}
 
@@ -64,69 +72,74 @@ f[g(x)]' = \dv{x} f[g(x)] = \lim_{\Delta x\to 0} \frac{\Delta y}{\Delta x}~.
 \end{equation}
 将上式中的左边代入右边得
 \begin{equation}
-\dd{y} = f'(u) g'(x) \dd{x} = f'[g(x)]g'(x) \dd{x}~.
+\dd{y} = f'(u) g'(x) \dd{x} = f'(g(x))g'(x) \dd{x}~.
 \end{equation}
 而复合函数的微分是
 \begin{equation}
-\dd{y} = f[g(x)]' \dd{x}~.
+\dd{y} = f(g(x))' \dd{x}~.
 \end{equation}
 对比以上两式（微分和导数的关系）得
-\begin{equation}\label{eq_ChainR_4}
-f[g(x)]' = f'[g(x)]g'(x)~,
+\begin{equation}
+f(g(x))' = f'(g(x))g'(x)~,
 \end{equation}
 这就是复合函数的求导公式。
 
-在上面的例子中 
-\begin{equation}
-g(x) = \sin x ~,\qquad
-g'(x) = \cos x~, \qquad %链接未完成，引用基本函数求导公式
-f(u) = u^2 ~,\qquad
-f'(u) = 2u ~.\qquad
-\end{equation}
-代入上式得
-\begin{equation}
-\dv{x} \sin^2 x = 2\sin x \cos x~.
-\end{equation}
+\textbf{推导完毕！}
 
 复合函数的求导公式也叫\textbf{链式法则}， 原因是我们可以把以上推导过程用导数的另外一种符号表示如下。
 \begin{equation}
-\dd{y} = \dv{y}{u} \dd{u} = \dv{y}{u} \dv{u}{x} \dd{x}~,
+\dd{y} = \left.\dv{y}{u}\right|_u \dd{u} = \left.\dv{y}{u}\right|_u \left.\dv{u}{x}\right|_x \dd{x}~,
 \end{equation}
 得
-\begin{equation}
-\dv{y}{x} = \dv{y}{u} \dv{u}{x}~.
+\begin{equation}\label{eq_ChainR_3}
+\left.\dv{y}{x}\right|_{x} = \left.\dv{y}{u}\right|_{u = g(x)} \left.\dv{u}{x}\right|_{x}~,
 \end{equation}
-这种书写方式让人不禁想把 $\dv*{y}{x}$ 看做是 $\dd{y}$ 和 $\dd{x}$ 相除，这样的符号分割是错误的，尤其是在以后学习高阶导数和偏导数时。%链接未完成
+这种书写方式让人不禁想把 $\dv*{y}{x}$ 看做是 $\dd{y}$ 和 $\dd{x}$ 相除，这样的符号分割是错误的，但这个巧合背后蕴含着更深刻的原理。
+% 尤其是在以后学习高阶导数和偏导数时。%链接未完成
+
+注意：\autoref{eq_ChainR_3} 常常被简写成
+\begin{equation}
+\dv{y}{x} = \dv{y}{u} \dv{u}{x}~,
+\end{equation}
+容易造成进一步的误解。
 
 \subsection{多重复合函数}
-要对多重复合函数如 $f[g(h(x))]$ 求导， 可以先对 $g[h(x)]$ 求导得 $g'[h(x)]h'(x)$ 再得到
+要对多重复合函数如 $h(f(g(x)))$ 求导， 可以先对 $f(g(x))$ 求导得 $f'(g(x))g'(x)$ 再得到
 \begin{equation}
-f[g(h(x))]' = f'[g(h(x))]g'[h(x)]h'(x)~.
+h(f(g(x)))' = h'(f(g(x)))f'(g(x))g'(x)~.
 \end{equation}
-令 $v = h(x)$， 用微分符号可以表示为
+令 $v = h(y)$， 用微分符号可以表示为
 \begin{equation}
-\dv{y}{x} = \dv{y}{u}\dv{u}{v}\dv{v}{x}~,
+\dv{v}{x} = \dv{v}{y}\dv{y}{u}\dv{u}{x}~,
 \end{equation}
 任意多重的复合函数求导同理可得。
 
-\begin{example}{对函数求导}
+\begin{example}{}
 \begin{equation}
 \frac{1}{\sqrt{x^2+a^2}}~.
 \end{equation}
-首先令 $f(x) = 1/\sqrt{x}$ 再令 $g(x) = x^2+a^2$， 上式等于 $f[g(x)]$。 由基本初等函数的导数\upref{FunDer}，
+首先令 $h(y) = 1/y$，$f(u) = \sqrt{u}$ 再令 $g(x) = x^2+a^2$， 上式等于 $h(f(g(x)))$。 由基本初等函数的导数\upref{FunDer}，
 \begin{equation}
-f'(x) = -\frac{1}{2\sqrt{x^3}} ~, \qquad g'(x) = 2x~.
+\begin{aligned}
+h'(y) &= - 1/y^2 \\
+f'(u) &=  \frac{1}{2 \sqrt{u}}, \\
+g'(x) &= 2x.
+\end{aligned}~
 \end{equation}
-代入\autoref{eq_ChainR_4}， 得
+代入\autoref{eq_ChainR_5} ， 得
 \begin{equation}
-\dv{x} \frac{1}{\sqrt{x^2+a^2}} =  f'[g(x)] g'(x) = -\frac{x}{\sqrt{(x^2+a^2)^3}}~.
+\begin{aligned}
+\dv{x} \frac{1}{\sqrt{x^2+a^2}} &= \left(- {1 \over x^2 + a^2}\right) \cdot \left( {1 \over 2 \sqrt{x^2 + a^2}} \right) \cdot \left( 2 x \right) \\
+&= -\frac{x}{\sqrt{(x^2+a^2)^3}}~.
+\end{aligned}~
 \end{equation}
+
 \end{example}
 
 一种较灵活的情况是，当三个变量只有一个自由度\footnote{即任何一个变量值确定后，另外两个变量也随之确定。}时，任何一个变量都可以看做任何另外两个变量的函数\footnote{姑且假设在所考虑的区间内不会出现一个自变量对应两个函数值的情况。}，这时可以根据需要灵活运用链式法则，如\autoref{ex_ChainR_3}。
 
 \begin{example}{加速运动公式}\label{ex_ChainR_3}
-假设质点做一维运动，位移、速度和加速度分别记为 $x(t)$，  $v(t) = \dv*{x}{t}$，  $a(t) = \dv*{v}{t}$， 但若把速度 $v$ 看做复合函数 $v[x(t)]$， 根据链式法则有
+假设质点做一维运动，位移、速度和加速度分别记为 $x(t)$，  $v(t) = \dv*{x}{t}$，  $a(t) = \dv*{v}{t}$， 但若把速度 $v$ 看做复合函数 $v(x(t))$， 根据链式法则有
 \begin{equation}
 a = \dv{v}{t} = \dv{v}{x}\dv{x}{t} = \dv{v}{x}v~.
 \end{equation}
@@ -134,7 +147,7 @@ a = \dv{v}{t} = \dv{v}{x}\dv{x}{t} = \dv{v}{x}v~.
 \begin{equation}\label{eq_ChainR_2}
 \dd(v^2) = 2a \dd{x}~.
 \end{equation}
-若质点做匀加速运动，该式的物理意义是在任何一段微小时间内，速度平方的增量正比于这段时间内的位移增量。在一段时间 $[t_1,t_2]$ 内把这些增量累加起来，就得到高中熟悉的运动学公式
+若质点做匀加速运动，该式的物理意义是在任何一段微小时间内，速度平方的增量正比于这段时间内的位移增量。在一段时间 $(t_1,t_2)$ 内把这些增量累加起来，就得到高中熟悉的运动学公式
 \begin{equation}
 v_2^2-v_1^2 = 2a(x_2-x_1)~,
 \end{equation}
