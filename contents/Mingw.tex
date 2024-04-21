@@ -1,10 +1,29 @@
-% Mingw-w64 和 MSYS2 笔记
+% MinGW-w64 和 MSYS2 笔记
 % license Xiao
 % type Note
 
+\subsection{不同工具的比较}
 \begin{itemize}
-\item 据说 Mingw 只是 GCC 和 GNU Binutils， 而 MSYS 的目标是提供其他的类似 linux 的环境。
-\item Mingw 仅支持 32-bit 程序， 现在一般用 \href{https://www.mingw-w64.org/}{Mingw-w64}， 既支持 32 也支持 64-bit
+\item \href{https://www.msys2.org/docs/what-is-msys2/}{MSYS 和 WSL， Cygwin 等的对比}
+\item 无论是 MinGW 还是 MSYS，二进制可执行文件都是 Windows 原生的 exe/dll 等文件，可以使用 \verb`Windows.h` 调用 Windows API，在 Linux 上无法运行。
+\item WSL1/2 的可执行文件都是 Linux 的 ELF 文件，可以直接在 Linux 系统上运行，调用 Unix API （WSL1 相当于 Linux 和 Windows 之间的二进制兼容层，WSL2 是彻底的虚拟机），不能直接在 Windows 运行。
+\item 所以选用哪个取决于你开发出来的软件最终要在 Windows 系统还是 Linux 系统或 WSL 上跑。
+\item \verb`MinGW` 加 \verb`MSYS` 相当于一个轻量级的 \verb`Cygwin`，后者编译的软件需要链接到 \verb`cygwin1.dll`，它可以把对 Unix API 的调用转换成对 Windows API 的调用（但应该不在二进制层面）。
+\end{itemize}
+
+\subsubsection{POSIX API 是什么？}
+\begin{itemize}
+\item \textbf{文件系统}: Functions for creating, reading, writing, and closing files, as well as manipulating directories.
+\item \textbf{进程管理}: Capabilities for process creation, execution, and synchronization, including fork, exec, and various forms of inter-process communication (IPC) like pipes and message queues.
+\item \textbf{线程管理}: Standards for multithreading support, including thread creation, synchronization primitives like mutexes, and condition variables.
+\item \textbf{网络接口}: APIs for socket-based communication, allowing for the implementation of client-server models and network communication.
+\item \textbf{System Calls}: Standardized system calls for resource management, including memory allocation and device control.
+\end{itemize}
+
+\subsection{MinGW}
+\begin{itemize}
+\item MinGW 只是在 Windows 上提供 GCC 和 GDB 等工具， 不包括 bash shell，\verb`cat, echo` 等命令。 MSYS 提供 bash shell 和 \verb`cat, echo` 等命令但本身不提供编译器。 所以二者通常一起使用。 建议直接安装 MSYS，然后用 pacman 安装 MinGW 的 gcc 编译器等。
+\item MinGW 仅支持 32-bit 程序， 现在一般用 \href{https://www.mingw-w64.org/}{MinGW-w64}， 既支持 32 也支持 64-bit
 \item 一个\href{https://www3.ntu.edu.sg/home/ehchua/programming/howto/Cygwin_HowTo.html}{教程}。
 \item \href{https://www.msys2.org/}{MSYS2} 是一个 windows 上的 bash shell 调用 MinGW-W64 来实现编译。 MSYS 最早是 Cygwin 的一个分支。
 \item 双击 \verb|mingw64.exe| 即可打开 mingw 命令行。 \verb|mingw64.exe| 所在的目录就是命令行的根目录。
@@ -24,13 +43,41 @@ g++ -o main.x main.o -l1 -L./ -Wl,-rpath,./
 \end{lstlisting}
 \end{itemize}
 
-\subsection{MSYS2 笔记}
+\subsection{MSYS2}
 \begin{itemize}
-\item \href{https://www.msys2.org/}{官网}， \href{https://www.msys2.org/docs/what-is-msys2/}{msys 和 WSL， cygwin 等的对比}
-\item MSYS 让 linux 开发者可以开发在 Windows 上运行的软件。 WSL 制作的软件不能不安装 WSL 直接在 Windows 上运行。
-\item MSYS2 使用 Pacman\upref{pacman} 进行包管理， 和 Arch linux 一样。
-\item 所有可用的包在\href{https://packages.msys2.org/queue}{这里}查找。 名字一般和 \verb|apt| 命令中的不一样。
+\item \href{https://www.msys2.org/}{官网}
+\item MSYS2 使用 \verb`pacman`\upref{pacman} 进行包管理， 和 Arch linux 一样。
+\item 安装后无需另外安装 MinGW，直接用 pacman 就可以安装 mingw 版的 g++ 等编译工具。
+\item \href{https://packages.msys2.org/queue}{所有可用的包在这里}查找。 名字一般和 \verb|apt| 命令中的不一样。
+\item 这个页面里面有 4 种 Repository：\textbf{Clang、UCRT、MinGW、MSYS}（例如 gcc 编译器有这些不同 repo 的版本）我们稍后讨论。现在可以先安装 MinGW 版本的。
 \item 根目录在 \verb|C:\msys64\|， 和 mingw 一样可以用 \verb|/c| 访问 C 盘。
+\item 安装 gcc： \verb`pacman -S mingw-w64-x86_64-gcc` （UCRT 版的是 \verb`mingw-w64-ucrt-x86_64-gcc`，MSYS 版的是 \verb`gcc`）。
+\item 安装目录是 \verb`/mingw64/bin`， 要把它默认添加到 PATH，用 \verb` echo 'export PATH=$PATH:/mingw64/bin' >> ~/.bashrc; source ~/.bashrc`
+\item 现在应该就可以 \verb`g++ --version` 查看版本，愉快编译程序了。
 \item 用 \verb|g++| 编译时， 宏 \verb|__MSYS__| 有定义， 而 \verb|__MINGW32__| 和 \verb|__MINGW64__| 没定义。
-\item \verb|pacman -S base-devel|
+\item （看起来好像用处不大可以先不装）\verb|pacman -S base-devel| 包含\verb`binutils bison diffstat diffutils dos2unix flex m4 make patch pkgconf texinfo texinfo-tex base-devel`
+\item 现在可以写一个简单的 c++ 程序并编译，默认可执行文件是 \verb`a.exe`。 直接在 MSYS2 中运行没问题，但是如果在 Windows 中双击就会找不到 dll。
+\item 这时可以在 MSYS2 中用 \verb`ldd a.exe` 看看需要什么动态库。其中 \verb`/c/WINDOWS/SYSTEM32` 类似的目录不需要管，因为它们已经在 PATH 中且是 Windows 系统提供的。
+\item 如果你装的是 UCRT 版本的 gcc，那额外 dll 将会在 \verb`/ucrt64/bin/` 中（也就是 \verb`C:\msys64\ucrt64\bin\` 中）。 UCRT 是 Windows 的 \textbf{Unified C Runtime}。
+\item 如果你装的是 MinGW 非 UCRT 版本的 gcc， 那额外依赖的 dll 是 \verb`/mingw64/bin/` 中的 \verb`libgcc_s_seh-1.dll  libstdc++-6.dll  libwinpthread-1.dll`
+\item 解决 Windows 找不到 dll 的一个简单的方法就是把额外需要的依赖库文件直接拷贝到和 exe 同一个目录中。
+\item 双击 exe 成功运行后，窗口会迅速闪退，在 \verb`main()` 函数退出前用一个 \verb`getchar();` 即可实现任意键退出。
+\item 是否可以在编译时使用 rpath 把依赖库的相对目录直接写进 exe 中（这样就可以把库放到子文件夹）？ GPT 说这是不行的。 要么修改系统路径，要么创建一个 XML\upref{XML} 文件指定依赖路径，命名为 \verb`可执行文件名.exe.manifest`，和 exe 文件放在一起即可（文件具体内容可以问 GPT）。
+\item 如果程序中使用了 \verb`system()`，那么当它在 MSYS2 命令行中运行时可以调用 Unix 命令例如 \verb`mkdir`，但双击运行时调用的应该是 \verb`cmd`。
+\end{itemize}
+
+\subsubsection{MSYS 的 Clang、UCRT、MinGW、MSYS 仓库}
+\begin{itemize}
+\item MinGW 仓库是最经典最成熟历史最久的仓库，编译出的 exe 只依赖于 Windows 提供的 dll
+\item Clang 类似于 MinGW 但用的不是 gcc 编译器而是 clang
+\item UCRT 仓库更现代兼容更多新的 Windows API，例如 Windows 10 或以上的，但生成的 exe 依赖于额外的 ucrt dll。
+\item MSYS 版本编译出的 exe 运行时依赖于 Unix 兼容层 dll，不能直接发布。 Windows 原生软件，通途有点类似于 WSL。
+\end{itemize}
+
+\subsection{MinTTY}
+\begin{itemize}
+\item MinTTY 是 MinGW 和 MSYS2 默认的命令行窗口，Git Bash 用的也是这个。
+\item \verb`Ctrl+Ins` 复制，\verb`Shift+Ins` 粘贴。
+\item \verb`Ctrl+=` 放大 \verb`Ctrl+-` 缩小。滚轮也可以。
+\item \verb`Alt+F3` 搜索
 \end{itemize}
