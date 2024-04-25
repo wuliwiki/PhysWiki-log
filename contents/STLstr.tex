@@ -35,6 +35,8 @@ std::apply([](auto&&... args) {
 \begin{itemize}
 \item constructor： \verb|v(N)| （default val）， \verb|v(N,val)|， \verb|v({1,2,3})|
 \item ini list 赋值： \verb|v = {1,2,3}|， （\verb|vector<vector<int>> vv;|）\verb|vv = {{1,2,3},{2,3},{4,5,6}}|。
+\item 成员函数 \verb`data()` 返回第一个元素的指针，如果容器为空，那么不会报错且指针未必是 NULL，但被 deference 将出现未定义行为。
+\item 若容器为 const，那么就意味着元素不能修改（不区分 lower level const！） \verb`data()`将返回 const 指针， \verb`v[i]` 也是 const reference。其他容器也同理。
 \item 成员函数 \verb|insert(iter, val)| 在指定位置插入一个元素（原来 \verb|iter| 处的元素向后移动）。 \verb|insert(iter, n, val)| 插入多个元素。 \verb|insert(iter, iter2_begin, iter2_end)| 第二个 vector 的第一个元素会插入到第一个 vector 的 \verb|iter| 位置。 \verb|insert(iter, initializer_list)| 插入 \verb|initializer_list|
 \item 成员函数 \verb|erase(iter)| 删掉一个元素， \verb|erase(iter_beg, iter_end)| 删掉一段元素。
 \item \verb|.resize()| 不会改变原来元素的值， 新的值会 value-initialized。

@@ -106,17 +106,25 @@
 \item 菜单中的 \verb`Go > Go to folder` 可以输入绝对或相对路径打开文件夹，快捷键 \verb`Cmd + Shift + G`
 \end{itemize}
 
+\subsubsection{.DS_Store 和 ._XXX 文件}
+苹果会像在外部硬盘或网络硬盘生成大量 \verb`.DS_Store` 和 \verb`._XXX`（这是为了使 metadata 兼容， \verb`XXX` 是对应的正常文件名），这些文件在 Finder 中默认隐藏，但其他系统可以看到。 这有时候会让人非常恼火。
+\begin{itemize}
+\item 其他系统中可以指定一个全局的 gitignore 文件， 如 \verb|git config --global core.excludesfile ~/.gitignore_global|，然后把的 \verb`.DS_Store` 放进去。
+\item 要停止在网络硬盘和 USB 盘自动生成 \verb`.DS_Store` 文件，用 \verb`defaults write com.apple.desktopservices DSDontWriteNetworkStores true` 和 \verb`defaults write com.apple.desktopservices DSDontWriteUSBStores true`。
+\item 要停止在非苹果文件系统的硬盘生成 \verb`._XXX` 文件，用 \verb`defaults write com.apple.desktopservices AppleDouble false`
+\item 要清除某个路径中已经生成的 \verb`._XXX` 文件，用 \verb`dot_clean 路径`（包括所有子文件夹）
+\end{itemize}
+
 \subsection{Terminal}
 \begin{itemize}
+\item 苹果自带的 terminal 比较古老，快捷键也比较奇怪， 很多人喜欢用 \verb`item2`
 \item \verb`open 目录或文件` 可以打开 finder 或用默认 app 打开文件
 \item 强制重启（用 GUI 重启可能会有一些软件不能正常退出） \verb|sudo shutdown -r now|
 \item 要默认使用 bash 并得到类似 Linux 的体验，参考\href{https://medium.com/@geraldcroes/the-good-tweak-the-bad-mac-and-the-ugly-terminal-8f18b3c3d687}{这里}。
 \item Oh My ZSH 是很流行的 zsh 插件， 可以加强自动补全等功能。 \verb`sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"`
-\item 可以指定一个全局的 gitignore 文件， 如 \verb|git config --global core.excludesfile ~/.gitignore_global|，然后把恶心的 \verb`.DS_Store` 放进去。
-\item 要停止在网络硬盘自动生成 \verb`.DS_Store` 文件，用 \verb`defaults write com.apple.desktopservices DSDontWriteNetworkStores -bool true`。
 \item \verb`Cmd + C` 和 \verb`Cmd + V` 复制粘贴
 \item 选中一段文字，按下鼠标中键可以直接粘贴。
-\item Application 目录是 \verb`/Applications`， 里面每个 app 都是一个文件夹。 例如 julia 的执行文件在 \verb`sudo ln -s /Applications/Julia-1.10.app/Contents/Resources/julia/bin/julia /usr/local/bin/julia`
+\item Application 目录是 \verb`/Applications`， 里面每个 app 都是一个文件夹。用右键应该可以看到里面的内容，或者用 terminal 直接 cd 进去。 例如 julia 的执行文件在 \verb`sudo ln -s /Applications/Julia-1.10.app/Contents/Resources/julia/bin/julia /usr/local/bin/julia`
 \end{itemize}
 
 \subsection{一些好用的小 app}
