@@ -4,18 +4,115 @@
 
 \begin{issues}
 \issueDraft
+\addTODO{ 零点的数量， 应用： 定态薛定谔方程（束缚态） 为什么不能应用到散射态？ 等}
 \end{issues}
 
 \pentry{二阶常系数齐次微分方程\nref{nod_Ode2}}{nod_c960}
 
-\textbf{施图姆—刘维尔定理（Sturm–Liouville theorem）} 简称施—刘定理或 S-L 定理。
 
-\begin{theorem}{施图姆—刘维尔定理}
+% 研究 S-L 定理前，模仿向量、我们先讨论函数有关的一些定义。
+% \begin{definition}{函数的内积}
+% 对于在 $[a, b]$ 上的函数 $f(x)$、$g(x)$，定义他们的内积：
+% \begin{equation}
+% (f, g) = \int_a^b f(x) g(x) \dd x ~.
+% \end{equation}
+% 若积分存在，则内积存在。
+% \end{definition}
+
+% \begin{definition}{函数正交}
+% 两个函数正交定义为他们的内积为 $0$。
+% \end{definition}
+
+\textbf{施图姆—刘维尔定理（Sturm–Liouville theorem）} 简称施—刘定理或 S-L 定理。提供了一种找到一类正交函数集，使得能将一个函数展开为这一类正交函数集所构成的级数的方法。
+
+\begin{definition}{}
+从数学物理偏微分方程分离变量法引出的常微分方程往往还附有边界条件，这些边界条件可以是明确写出来 的，也可以是没有写出来的所谓自然边界条件（或自然周期条件）。满足这些边界条件的非零解使得方程的参数只能取某些特定值，这些\textbf{特定值}叫做\textbf{本征值}（或特征值、或固有值），相应的\textbf{非零解}叫做\textbf{本征函数}（特征函数、固有 函数)。
+求\textbf{本征值}和\textbf{本征函数}的问题叫做\textbf{本征值问题}。
+\end{definition}
+
+\begin{definition}{施图姆—刘维尔型方程（S-L 方程）}
 微分方程
-\begin{equation}
+\begin{equation}\label{eq_SLthrm_1}
 \dv{x}\qty[p(x)\dv{y}{x}] + q(x) y = -\lambda w(x) y~.
 \end{equation}
-\addTODO{不同本征值的解正交， 零点的数量， 等}
-\end{theorem}
+被称为 S-L 方程，限制 $x \in [a, b]$。其中 $w(x)$ 又被称为权函数，又写作 $\rho(x)$。
+\end{definition}
 
-应用： 定态薛定谔方程（束缚态） 为什么不能应用到散射态？
+根据 S-L 方程的形式，有一简单推论：对于一般的二阶常微分方程的特征值问题，都可以规约到 S-L 方程。
+\begin{corollary}{}
+研究二阶常微分方程的本征值问题时，对于一般的二阶常微分方程：
+$$y'' + a(x) y' +b(x) y + \lambda c(x) y = 0 ~,$$
+乘以 $\exp(\int a(x) \dd x)$ 就可以化为 S-L 型方程：
+$$\dv{x} \left[e^{\int a(x) \dd x} \dv{y}{x}\right]  + [b(x) e^{\int a(x) \dd x}]y +\lambda[c(x) e^{\int a(x) \dd x}] y = 0~.$$
+\end{corollary}
+
+S-L 问题根据边界条件分为“正则的”与“奇异的”两类，下面分别讨论这两类。
+\subsection{正则 S-L 问题}
+规定在 $[a, b]$ 上，$p(x)$、$p'(x)$、$q(x)$、$w(x)$ 都是连续（实值）函数，在 $[a, b]$ 上总有 $p(x) > 0, w(x)> 0$。限制边界条件为：
+\begin{equation}\label{eq_SLthrm_2}
+\alpha_ay(a) + \beta_a y'(a) = 0, 
+\alpha_b y(b) + \beta_b y'(b) = 0 ~.
+\end{equation}
+其中，$\lambda$ 是方程中的任意常数，而不是给定常数。边界条件的四个常数 $\alpha_a, \alpha_b, \beta_a, \beta_b$ 也都是独立的。要求 $\alpha_a, \beta_a$ 不全为 $0$、$\alpha_b, \beta_b$ 不全为 $0$。
+
+不难发现总有平凡解 $y=0$。
+
+正则 S-L 问题有以下性质：
+\begin{enumerate}
+\item 每个特征值对应一个特征函数（及其常数倍）；
+\item 不同特征值对应的特征函数线性无关；
+\item 存在无穷多个特征值 $\{\lambda_i\}$，且这集合无上界；
+\item 特征函数集合关于权函数 $w(x)$ 在 $[a,b]$ 上正交。即对于每两特征函数 $f \neq g$，总有 $\int_a^b w(x)f(x)g(x) \dd x = 0$。 
+\end{enumerate}
+下面证明第四条性质（也是 S-L 问题最重要的性质）：
+考虑对于任意两组特征值与对应的解 $(\lambda_i, y_i=y_i(x))$ 与 $(\lambda_j, y_j=y_j(x))$，应满足\autoref{eq_SLthrm_1}：
+\begin{equation}
+\begin{aligned}
+\dv x [p(x) y'_i] + [q(x) + \lambda_i w(x)] y_i &= 0 ~,\\
+\dv x [p(x) y'_j] + [q(x) + \lambda_j w(x)] y_j &= 0 ~.
+\end{aligned} ~~
+\end{equation}
+为了化简，可以考虑抵消 $q(x)$ 项，将上式乘以 $y_j$、下式乘以 $y_i$ 后相减可得：
+\begin{equation}
+(\lambda_i - \lambda_j)w(x) y_i y_j = y_i \dv x [p(x) y'_j] - y_j \dv x [p(x) y'_i] ~.
+\end{equation}
+$w(x)y_i(x) y_j(x)$ 在 $[a, b]$ 上积分，考虑 IBP（分部积分）：
+\begin{equation}\label{eq_SLthrm_3}
+\begin{aligned}
+(\lambda_i - \lambda_j) \int_a^b w(x) y_i y_j \dd x &= \eval{y_i w(x) y'_j}_a^b - \int_a^b w(x) y'_i y'_j \dd x - \eval{y_j w(x) y'_i}_a^b + \int_a^b w(x) y'_i y'_j \dd x\\
+&= w(b) [y_i(b) y'_j(b) - y'_i(b) y_j(b)] - w(a) [y_i(a) y'_j(a) - y'_i(a) y_j(a)] 
+\end{aligned} ~.
+\end{equation}
+考虑到约束条件\autoref{eq_SLthrm_2} 中 $\alpha_a, \beta_a$ 不全为 $0$、$\alpha_b, \beta_b$ 不全为 $0$，这要求行列式：
+\begin{equation}
+\begin{vmatrix}
+y_i(b) & y'_i(b) \\
+y_j(b) & y'_j(b)
+\end{vmatrix} = 0~.
+\end{equation}
+类似的，在 $x=a$ 也满足。故可以得到\autoref{eq_SLthrm_3} 的值为 $0$，而 $\lambda_i \neq \lambda_j$，故积分值为 $0$，两解关于权函数 $w(x)$ 在 $[a, b]$ 上正交。
+
+
+\subsection{奇异 S-L 问题}
+此时约定权函数 $w(x)$ 在边界处，即 $w(a)$ 或 $w(b)$ 可以等于 $0$。
+
+观察\autoref{eq_SLthrm_3}，发现正交条件还可以要求 $w(a) = 0$ 或 $w(b) = 0$ 且后面的值（行列式）不为 $+\infty$。故仅需要解\textbf{有界}即可仍满足正交条件。
+
+
+
+\subsection{例子}
+下面从一经典例子入手分析 S-L 问题。
+
+\begin{example}{}
+对于经典的常微分方程：$y'' + \lambda y = 0$, $y(0) = y(L) = 0$, $(L > 0)$，考虑求解其特征值。
+\end{example}
+解：首先把这 S-L 问题化为\autoref{eq_SLthrm_1} 的标准形式：
+$$\dv x (1 \cdot \dv{y}{x}) + (0 + 1 \cdot \lambda) y = 0~.$$
+限定条件：$ 1\cdot y(0) + 0 \cdot y'(0) = 0$、$1 \cdot y(L) + 0 \cdot y'(L) = 0$。
+考虑到 $\lambda$ 是任意常数，其符号会影响这微分方程的解，对其分类。
+
+i) 当 $\lambda = 0$ 时。方程仅有平凡解 $y = 0$。
+
+ii) 当 $\lambda < 0$ 时。此时通解为 $y = C_1 \cos(\sqrt{\lambda} x) + C_2 \sin(\sqrt{\lambda} x)$ 即 $y= C_1 \cosh(\sqrt{-\lambda} x) + C_2 \sinh(\sqrt{-\lambda} x)$。考虑到 $y(0)=0$ 故 $C_1 = 0$，代入 $y(L) = 0$ 可得：$C_2 \sinh(\sqrt{-\lambda} L) = 0$，故对于非平凡解 $y \not \equiv 0$，即 $C_2 \neq 0$，$\sinh(\sqrt{-\lambda} L) = 0$。但在 $L>0$ 时，$\sqrt{-\lambda} > 0$，此时 $\sinh(\sqrt{-\lambda} L) > 0$，故无非平凡解。
+
+iii) $\lambda > 0$ 时。此时通解为 $y = C_1 \cos(\sqrt{\lambda} x) + C_2 \sin(\sqrt{\lambda} L)$。类似的可以得到对于非平凡解要求 $\sin(\sqrt \lambda L) = 0$，故 $\lambda = k^2 \pi^2/L^2$, $k \in \mathbb Z$。对应各 $y = C \sin(x k\pi/L )$。
