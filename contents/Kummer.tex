@@ -1,20 +1,55 @@
 % Kummer 函数（1F1）
+% keys 合流超几何函数
 % license Xiao
 % type Tutor
-
 \begin{issues}
 \issueDraft
 \end{issues}
 
-\footnote{见 NIST \href{https://dlmf.nist.gov/13.2}{相关页面}。}\textbf{Kummer 函数} $M(a, b, z)$， 也叫合流超几何函数 $_1F_1(a, b, z)$， 是以下微分方程的解
+\footnote{见 NIST \href{https://dlmf.nist.gov/13.2}{相关页面}。}\textbf{Kummer 函数} $M(a, b, z)$， 也叫合流超几何函数 $_1F_1(a, b; z)$（有时省略两个“$1$” 的下标，直接写作 $F(a, b; z)$）， 是以下微分方程的解
 \begin{equation}\label{eq_Kummer_1}
 z\dv[2]{f}{z} + (b-z)\dv{f}{z} - a f = 0~.
 \end{equation}
+特别的，当 $1 - b \neq \mathbb Z$ 时方程有另一解
+$$z^{1-b} {_1F1}(a-b+1, 2-b; z)~.$$
 
 Kummer 函数是超几何函数\upref{HypGeo}的一个特例， 
 \begin{equation}
-M(a, b, z) = {_1F_1}(a; b; z) = \sum_{n=0}^\infty \frac{(a)_n}{(b)_n} \frac{z^n}{n!}~.
+M(a, b, z) = {_1F_1}(a, b; z) = \sum_{n=0}^\infty \frac{(a)_n}{(b)_n} \frac{z^n}{n!}~.
 \end{equation}
-其中 $(a)_n = a(a+1)\dots(a+n-1)$， 叫做 \textbf{Pochhammer 符号}。
+其中 $(a)_n = a(a+1)\dots(a+n-1)$， 叫做 \textbf{Pochhammer 符号}（等价于上升幂）。
 
+${_1F_1}$ 还存在一个积分表示
+\begin{equation}
+{_1F_1}(a, b; z) = \frac{\Gamma(b)}{\Gamma(a) \Gamma(b-a)} \int_0^1 {e^{zt} t^{a-1} (1-t)^{b-a-1}\dd t} ~,
+\end{equation}
+其中 $\Re b > \Re a > 0$。
 
+\subsection{合流超几何函数的应用}
+合流超几何函数在类氢原子束缚态的薛定谔方程的\textbf{径向波函数}的解中很常见，例如\autoref{eq_HWF_11}~\upref{HWF}：
+\begin{equation}
+\dv[2]{u}{\rho} + \qty[-1 - \frac{2\eta}{\rho} - \frac{l(l+1)}{\rho^2}]u = 0~.
+\end{equation}
+考察这微分方程在 $\rho \rightarrow 0$ 时的情形。此时变为
+\begin{equation}
+\dv[2]{u}{\rho} - \frac{l(l+1)}{\rho^2} u = 0 ~.
+\end{equation}
+从而 $u$ 的通解是 $u(\rho) = C_1 \rho^{l+1} + C_2 \rho^{-l}$ 的形式。而在 $\rho \rightarrow 0$ 时 $\rho^{-l} \rightarrow \infty$，故必然有 $C_2 = 0$。类似地，考察其在 $\rho \rightarrow \infty$ 时的情形有渐进解 $\exp(-\rho/2)$。故可以将 $u$ 的解写作
+\begin{equation}
+u(\rho) = \rho^{l+1} \exp(-\rho/2) y(\rho) ~,
+\end{equation}
+的形式。
+
+将 $y$ 代入会发现新大陆：
+\begin{equation}
+\rho \dv[2]{y}{\rho} + (c-\rho)\dv{y}{\rho} -ay = 0 ~.
+\end{equation}
+$a$ 和 $c$ 是带入后计算出的常数。这微分方程恰好符合\autoref{eq_Kummer_1} 的形式。这方程有通解
+\begin{equation}
+y(\rho) = A_{} {}_{1}F_1(a, c; \rho) + B \rho^{1-c}{}  _{1}F_{1}(a-c+1, 2-c; \rho) ~.
+\end{equation}
+类似的考虑 $\rho\rightarrow \infty$ 时的情况，应有 $B=0$。从而有 $u$ 的解可以表示为
+\begin{equation}
+u(\rho) = A \rho^{l+1} \exp(-\rho/2) {_1F_1}(a, c; \rho) ~~
+\end{equation}
+的形式。
