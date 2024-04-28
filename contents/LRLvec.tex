@@ -5,13 +5,12 @@
 
 \pentry{开普勒问题\nref{nod_CelBd}， 柱坐标系\nref{nod_Cylin}}{nod_dd98}
 
-在开普勒问题% 未完成：什么是开普勒问题？
+在开普勒问题% \addTODO{什么是开普勒问题？}
 中，我们定义\textbf{拉普拉斯—龙格—楞次矢量（Laplace-Runge-Lenz Vector）} （缩写为 \textbf{LRL 矢量}）为
 \begin{equation}\label{eq_LRLvec_1}
 \bvec A = \bvec p \cross \bvec L - mk \uvec r~.
 \end{equation}
-其中 $\bvec p$ 为质点动量， $\bvec L$ 为轨道角动量， $\cross$ 表示矢量叉乘\upref{Cross}， $k$ 是一个常数（对万有引力\upref{Gravty} $k = GMm$， 对库仑力\upref{ClbFrc} $k = -Qq/(4\pi\epsilon_0)$。 $\uvec r$ 为质点位矢 $\bvec r$ 的单位矢量。 在开普勒问题% 未完成：什么是开普勒问题？
-中， 可以证明 $\bvec A$ 是一个守恒量。
+其中 $\bvec p$ 为质点动量， $\bvec L$ 为轨道角动量， $\cross$ 表示矢量叉乘\upref{Cross}， $k$ 是一个常数（对万有引力\upref{Gravty} $k = GMm$， 对库仑力\upref{ClbFrc} $k = -Qq/(4\pi\epsilon_0)$。 $\uvec r$ 为质点位矢 $\bvec r$ 的单位矢量。 在开普勒问题中， 可以证明 $\bvec A$ 是一个守恒量。
 
 \subsection{守恒证明}
 我们下面证明 $\dot{\bvec A} = \bvec 0$。 对\autoref{eq_LRLvec_1} 求时间导数， 考虑到中心力场中质点角动量 $\bvec L$ 守恒， 有
@@ -38,11 +37,11 @@
 \end{equation}
 最后一个等号成立是因为 $\uvec r\cross\uvec z = -\uvec\theta$， 可以类比直角坐标系中的 $\uvec x\cross\uvec z = -\uvec y$。 证毕。
 
-% 未完成： 习题：证明二体问题中
+% \addTODO{习题：证明二体问题中
 % \bvec A_B = \frac{mu}{m_B} \bvec A
 % \bvec A_A = -\frac{mu}{m_A} \bvec A
 % \bvec A = \bvec A_B - \bvec A_A
-% 其中 \bvec A 是等效天体（质量为 mu）的 LRL 矢量。
+% 其中 \bvec A 是等效天体（质量为 mu）的 LRL 矢量。}
 
 \subsection{如何发现 LRL 矢量}
 \pentry{运动积分\nref{nod_415a}}{nod_07b6}
@@ -61,8 +60,6 @@ $$\begin{aligned}
 \begin{equation}
 \dv{\left(\bvec p \cross \bvec L - \frac{m k \bvec r}{r}\right)}{t}=0 ~.
 \end{equation}
-
-% int256: 添加诺特定理推导 LRL 矢量守恒性质的内容。
 
 \subsection{LRL 矢量的模长与方向}
 将 LRL 矢量除以 $mk$ 可以得到一个无量纲矢量 $\bvec e$ 与 LRL 矢量 $\bvec A$ 同向（下面会看到为什么这个矢量叫 $\bvec e$）
@@ -89,3 +86,50 @@ LRL 矢量的变化对应轨道方向的变化。对于进动问题来说进动�
 \end{equation}
 所以实际仅提供了一个运动积分。
 
+\subsection{LRL 矢量对应的系统对称性}
+\pentry{经典场论基础\nref{nod_classi}}{nod_8991}
+\autoref{the_classi_1}~\upref{classi} 诺特定理指出，任意一个系统对称性对应一个守恒律，其逆定理一个守恒律也对应一个系统的对称性也总是成立。特别的，LRL 矢量的对称性来源是平方反比力，不同于其他的对称性来源于几何对称性。
+
+实际上对应的对称性是：
+\begin{equation}
+\begin{pmatrix}
+-y\dot y-z\dot z+2\dot x y -x \dot y +2\dot x z-x\dot z \\
+-x \dot x - z \dot z + 2 \dot y z - y \dot z + 2 \dot y x - y \dot x \\
+-x \dot x - y \dot y + 2 \dot z x - z \dot x + 2 \dot z y - z \dot y 
+\end{pmatrix} ~.
+\end{equation}
+
+对于开普勒问题的总能量即哈密顿量 $H = p^2/(2m) + \alpha/r$，不难推导得到以下对称性：
+\begin{enumerate}
+\item $H < 0$，$\{$角动量 $,$ LRL 矢量 $\}$ 张成的李群 $\sim SO(4)$；
+\item $H = 0 $，张成的李群 $\sim$ $\mathbb R^3$ 空间中运动群的李代数；
+\item $H > 0$，张成的李群 $\sim SO(1, 3)$。
+\end{enumerate}
+下面提供一个思路：
+
+角动量的运动积分是 $\bvec J_1 = [\bvec r, \bvec p]$，其中 $[\bvec a, \bvec b]$ 是相空间的交换子，这对应角动量守恒。
+而 LRL 矢量的运动积分是 $\bvec{B_1} = [\bvec p/m, \bvec{J_1}] + \alpha \bvec r / r$。考虑物理量间的泊松括号：
+\begin{equation}
+\{p_i, {J_1}_{j}\} = \begin{pmatrix}
+0 & p_3 & -p_2 \\
+-p_3 & 0 & p_1 \\
+p_2 & -p_1 & 0
+\end{pmatrix}~.
+\end{equation}
+从而角动量的运动积分与 LRL 矢量的运动积分的泊松括号
+\begin{equation}
+\{{J_1}_i, {B_1}_j\} = \begin{pmatrix}
+0 & {B_1}_3 & -{B_1}_2 \\
+-{B_1}_3 & 0 & {B_1}_1 \\
+{B_1}_2 & -{B_1}_1 & 0 
+\end{pmatrix} ~.
+\end{equation}
+不妨再考虑 $\{{B_1}_i, {B_1}_j\}$，
+\begin{equation}
+\{{B_1}_i, {B_1}_j\} = \begin{pmatrix}
+0 & \lambda {J_1}_3 & -\lambda {J_1}_2 \\
+-\lambda {J_1}_3 & 0 & \lambda {J_1}_1 \\
+\lambda {J_1}_2 & -\lambda {J_1}_1 & 0 
+\end{pmatrix}~,\ \lambda = -2H/m ~.
+\end{equation}
+就不难得到结论。
