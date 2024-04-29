@@ -49,7 +49,8 @@ int main()
 \end{lstlisting}
 
 \subsection{文件格式}
-我们先介绍二进制格式 matb。 matb 文件使用 little endian 储存（链接未完成， 通常的 x86 处理器都满足）。 所有整数都用 \verb|long long| （8 字节有符号整型）储存，  每个变量的前 8 个字节是变量名的长度 \verb|Nname|， 然后是 \verb|Nname| 字节的变量名， 紧接着是 8 个字节的矩阵元类型编号（对照表未完成， 见 \verb|SLISC/preprocessor/type_num.m|）， 8 个字节的矩阵维度 \verb|Ndim| （标量的维数是 0， 向量维度是 1） 接着 \verb|8*Ndim| 字节记录每个维度的长度（标量不需要）。 最后， 再记录 \verb|N * sizeof(元素类型)|， 其中 \verb|N| 是元素个数， 等于各个维度的长度相乘。
+我们先介绍二进制格式 matb。 matb 文件使用 little endian 储存（通常的 x86 处理器都满足）。% \addTODO{链接}
+所有整数都用 \verb|long long| （8 字节有符号整型）储存，  每个变量的前 8 个字节是变量名的长度 \verb|Nname|， 然后是 \verb|Nname| 字节的变量名， 紧接着是 8 个字节的矩阵元类型编号（对照表未完成， 见 \verb|SLISC/preprocessor/type_num.m|）， 8 个字节的矩阵维度 \verb|Ndim| （标量的维数是 0， 向量维度是 1） 接着 \verb|8*Ndim| 字节记录每个维度的长度（标量不需要）。 最后， 再记录 \verb|N * sizeof(元素类型)|， 其中 \verb|N| 是元素个数， 等于各个维度的长度相乘。
 
 在文件的最后， 若一共有 \verb|Nvar| 个变量， 那么就用 \verb|Nvar*8| 字节记录下每个变量的第一个字节在文件中的字节数（第一个变量总是从第 0 个字节开始）（未完成：目前是倒序的）（另外这些信息只对 matt 有必要）， 然后再用 8 字节记录下 \verb|Nvar|， 这是为了读取时查找方便。 最后为了验证文件的完整性， 用 16 字节写入字符串 \verb|"Matb_End_of_File"|。 该字符串用于读取时验证文件的完整性， 若不存在则说明文件写入没有完成。 事实上 \verb|matb| 不需要记录该信息， 因为逐个变量跳查已经足够快了。 \verb|matt| 使用该信息则可以加快查找变量的速度（因为每个矩阵元在文件中的长度是不等的）。
 
