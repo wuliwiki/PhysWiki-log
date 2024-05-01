@@ -16,6 +16,7 @@ JavaScript 常见于网页中， 一般浏览器都可以运行。 我们以 Chr
 			document.getElementById("a").innerHTML = "hello world 3";
             document.write("hello world 4");
 		</script>
+    <script src="mycode.js"></script>
 	</body>
 </html>
 \end{lstlisting}
@@ -33,14 +34,14 @@ JavaScript 常见于网页中， 一般浏览器都可以运行。 我们以 Chr
 
 \subsection{用 VScode 调试 Javascript}
 \begin{itemize}
-\item 先用 VScode 打开文件夹， 按左边的 debuug 图标 （小虫子）， 弹出来的窗口中按齿轮按钮， 会自动创建 \verb`.vscode/launch.json` 设置文件， 不用做任何改动，现在就可以 debug 了。
+\item 先用 VScode 打开文件夹， 按左边的 debug 图标 （小虫子）， 弹出来的窗口中按齿轮按钮， 会自动创建 \verb`.vscode/launch.json` 设置文件， 不用做任何改动，现在就可以 debug 了。
 \item 可以在行号左边点击添加 break point， 快捷键 \verb`F5，F10，F11` 是连续执行，下一行，步入（step in）。
 \item 菜单 View 里面可以打开 Debug Console， 相当于 python REPL， 可以输入任何命令。
 \end{itemize}
 
 \subsection{常识}
 \begin{itemize}
-\item ECMAScript 是这种语言的规范或标准，而 JavaScript 是该标准的实现。JavaScript 包括所有 ECMAScript 的功能加上对 Web 开发有用的附加功能，这些附加功能不属于 ECMAScript 规范，例如 Web API
+\item \textbf{ECMAScript} 是这种语言的规范或标准，而 JavaScript 是该标准的实现。JavaScript 包括所有 ECMAScript 的功能加上对 Web 开发有用的附加功能，这些附加功能不属于 ECMAScript 规范，例如 Web API
 \item 其他语言也遵循 ECMAScript 标准，如 JScript（微软的实现）和 ActionScript（用于 Adobe Flash），但 JavaScript 是最突出和广泛使用的
 \item 当人们谈论学习 JavaScript 时，他们通常是指 ECMAScript 的核心功能以及 JavaScript 环境（如 Web 浏览器和 Node.js）中可用的扩展功能。
 \item JS 最新一次中大更新是版本 \textbf{ES6} 或者 \textbf{ECMAScript 2015}，也是考虑兼容性时的标志性版本，后续的更新幅度较小。大部分现代浏览器兼容 ES6 及以上。
@@ -49,6 +50,7 @@ JavaScript 常见于网页中， 一般浏览器都可以运行。 我们以 Chr
 \item 用 \verb|<script src="路径/文件名.js 或者 url.js"></script>| 插入代码文件
 \item 在 js 代码第一行插入 \verb|'use strict'| 后使用严格语法。 例如不声明的变量会出错， 又例如不能使用 \verb|with|。
 \item 注释和 C 语言一样用 \verb|// 注释| 或 \verb|/*注释*/|
+\item 每行末尾的 \verb`;` 可以省略（取决于代码风格）
 \item \verb|$| 在变量/函数名中相当于一个字母， 单独一个或几个 \verb|$| 可以作为变量/函数名
 \item 命令后的 \verb|;| 不是必须的， 可用于在同一行中分隔两个命令。
 \item 弹出输入框如 \verb|person = prompt("提示", "默认");|
@@ -71,14 +73,16 @@ JavaScript 常见于网页中， 一般浏览器都可以运行。 我们以 Chr
 \begin{itemize}
 \item 声明变量 \verb|let a = 1, b = 2| 或者用 \verb|const| 和 \verb|var|
 \item \verb|var| 是全局变量， 且可以重新声明， \verb|let| 和 \verb|const| 是局部的
-\item \verb|typeof| 获取变量类型
-\item 自带类型有 \verb|number| （不区分整数和浮点数，浮点是双精度）， \verb|string| （单引号双引号通用， 没有 char）
+\item \verb|typeof()| 获取变量类型
+\item 自带类型有 \verb|number| （不区分整数和浮点数，浮点是双精度）， \verb|string| （单引号双引号通用， 没有 \verb`char` 类型）
 \item 所有自定义的类型都叫做 \verb|object|
 \end{itemize}
 
 \subsubsection{字符串}
 \begin{itemize}
 \item \verb|str[ind]| 或 \verb|.charAt(ind)| 可以获取字符串的某个字符
+\item \verb`slice(startIndex, endIndex)` 可以或取子串（不包括 \verb`endIndex`）
+\item \verb`str.slice(-N);` 可以获取最后 \verb`N` 个字符。
 \item 合并字符串用 \verb|字符串 + 字符串|， 也可以 \verb|字符串 + 数字|
 \item \verb|num.toString()| 可以数字变字符串， \verb|num.toPrecision(有效数字)| 可以四舍五入到有效数字
 \item 可以字符串变数字如 \verb|parseInt("123")|， \verb|parseFloat("12.3e2")|
@@ -118,9 +122,11 @@ for (const item of array)
 \item 一个函数中可以调用在它之后定义的函数，但在函数所在的 scope 中，不能直接在函数定义之前调用该函数。
 \item 调用函数必须要有括号， 没有括号返回函数定义。
 \item 数组作为函数变量是 pass by reference
-\item \verb|myfun = function(){...}| 是一个（匿名）函数的定义， 可以作为另一个函数的变量， 相当于把某个函数名作为变量。 类型为 \verb|function|。
-\item \verb|(function(){...})()| 叫做 Immediately-Invoked Function Expression (IIFE)， 可以立即执行 \verb|...| 中的代码而避免污染当前范围的变量名
+\item \verb|let myfun = function(){...}| 是一个（匿名）函数的定义， 可以作为另一个函数的变量， 相当于把某个函数名作为变量。 \verb`myfun` 的类型为 \verb|function|。
+\item \verb|(function(){...})()| 叫做 \textbf{Immediately-Invoked Function Expression (IIFE)}， 可以立即执行 \verb|...| 中的代码而避免污染当前范围的变量名。
+\item 如果 IIFE 有返回值，可以用 \verb`let myvar = (function(){...})()`。 注意 \verb`myvar` 是返回值不是函数句柄！
 \item 普通函数中，\verb`arguments` 是一个类似于数组的对象， \verb`arguments[i]` 是每个函数参数， \verb`arguments.length` 是实际输入参数的个数。
+\item \verb`(arg1, arg2) => { ... }` 或者 \verb`arg1 => {...}` 也可以定义匿名函数。只有 \verb`...` 中的 \verb`this` 会有区别。
 \end{itemize}
 
 \subsection{常用函数}
