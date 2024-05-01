@@ -188,6 +188,8 @@ function Person(first, last, age, eyecolor) {
 
 
 \subsection{math.js}
+\href{https://github.com/josdejong/mathjs}{github 仓库}
+
 \verb|math.js| 和内建的 Math 库兼容（可以一起用）。 注意这不是一个模块， 不需要 import， 可以用 \verb|file://| 协议。
 
 在代码前面插入 \verb|<script src="math.js"></script>|， 也可以是 url 如 \verb|https://cdnjs.cloudflare.com/ajax/libs/mathjs/10.0.2/math.js|
@@ -217,4 +219,17 @@ function Person(first, last, age, eyecolor) {
 \item 行列式 \verb|det(矩阵)|
 \item 矩阵乘法 \verb|multiply(矩阵1, 矩阵2)|
 \item \verb|lusolve(A, b)| 解线性方程组
+\end{itemize}
+
+\subsection{minify 和 concatenation}
+\begin{itemize}
+\item 很多网站的 js 如果直接打开会发现类似于密密麻麻的乱码。 这是因为 minify 和 concatenation。
+\item minify 就是把多余的空格，回车，注释等都删掉，保持功能不变。 concatenation 是把多个 js 文件合并为一个。 对于闭源项目，这也可以用于保护源码。
+\item 一个流行 minify 工具是 Terser （UglifyJS 的 fork，更好支持 ES6+）
+\item Webpack 功能更多，包括 minify，concatenation，等等。
+\item 在浏览器中调试时，调试界面会自动把 minify 的代码换行和缩进，但这样行号就改变了
+\item 要把 js 代码直接自动格式化（换行和缩进），可以用一个在线工具 \href{https://prettier.io/playground/}{Prettier}，也可以用 VScode 右键菜单的 format 功能。 保存文件后，行号就稳定了。但简化的文件名和变量名是不可能找回来的。
+\item 一些开源项目也会同时提供一个 source map， 文件名例如 \verb`xxx.js.map`。浏览器的开发者工具可以根据该文件自动把 minify 的 js 显示为原来的源码。 要使用 source map， 一般 js 文件的最后会有一行类似于 \verb`//# sourceMappingURL=app.min.js.map` 的注释，指定 source map 的位置，浏览器会根据这个读取 map 文件。
+\item 许多大型的 js 项目会提供用户定制的方法，例如你只需要使用 \href{https://mathjs.org/docs/custom_bundling.html}{math.js 的一小部分功能}，或者 \href{https://prismjs.com/download.html#themes=prism&languages=markup+css+clike+javascript}{prism.js 的个别语言}，就可以获得定制化的 minified 文件，比完整文件要小很多。
+\item 项目文件夹中， \verb`src/` 文件夹一般是源代码， \verb`dist/` （distribution）文件夹一般是 minify 的生产环境代码。
 \end{itemize}

@@ -63,12 +63,12 @@ p(x) u'(x) &= \rho_u(x) \cos(\theta_u(x)) ~.
 \end{equation}
 另外 $\theta_u$ 被要求为正的且
 \begin{equation}
-\theta_u(x) = \arctan\left(\frac{u(x)}{p(x) u'(x)}\right) = \operatorname{arccot}\left(\frac{p(x) u'(x)}{u(x)}\right) ~.
+\theta_u(x) = \operatorname{atan2}(p(x)u'(x), u(x)) \mod (2\pi) ~.
 \end{equation}
-是根据 $u(x)$ 与 $p(x) u'(x)$ 的是否为 $0$ 决定取哪者的。
+这里 $\operatorname{atan2}$ 是四象限 Arctan 函数\upref{Arctan}。
 
 从而 $\hat L u = \lambda u$ 可以化为
-\begin{equation}
+\begin{equation}\label{eq_SLzPro_2}
 \left\{
     \begin{aligned}
     \theta_u' &= \frac{\cos(\theta_u)^2}{p} + (\lambda r - q) \sin(\theta_u)^2 ~,\\
@@ -76,3 +76,24 @@ p(x) u'(x) &= \rho_u(x) \cos(\theta_u(x)) ~.
     \end{aligned}
 \right.
 \end{equation}
+从而可解得
+\begin{equation}
+\rho_u(x) = \rho_u(c) \exp(\frac{1}{2} \int_c^x \left[p^{-1}(t) + q(t) - \lambda r(t)\right]\sin\left(2 \theta_u(x)\right) \dd t) ~.
+\end{equation}
+其中利用了三角恒等变换。
+
+同时，若 $\theta_u$ 对应 $u(x)$，则 $\theta_u + n \pi$，$n \in \mathbb Z$ 对应解 $\left(-1\right)^{n} u(x)$。
+
+现在，我们考虑\autoref{eq_SLzPro_2} 中 $\theta_u$ 的微分方程的右侧。对于解 $u$ 而言，显然有
+\begin{equation}
+u(x_0) = 0 \Leftrightarrow \theta_u(x_0) = 0 \mod \pi \Rightarrow \theta'_u(x_0) = p(x_0)^{-1} > 0~.
+\end{equation}
+
+而，$\theta_u$ 的两连续 $\operatorname{mod} \pi = 0$ 的点间总相差 $\pi$（这是显然的），故，若用 $\#_{(a, b)}(f)$ 表示 $f$ 的在 $(a, b)$ 内的零点的数量，则有
+\begin{equation}
+\#_{(a, b)} (u) = \#_{(a, b)} (\theta_u) = \lceil \theta_u(b)/\pi \rceil - \lceil \theta_u(a)/\pi \rceil -1~,
+\end{equation}
+
+我们已经几乎得到了解 $u$ 的零点数量。下面更深一步，讨论特征值与零点数量的关系。
+仍考察 $\theta_u$ 的微分方程。由于 $r(x)$ 总正，故 $\theta_u$ 应随着 $\lambda$ 的增加而增加。
+\pentry{李普希茨条件\nref{nod_LipCon}}{nod_f30e}
