@@ -11,7 +11,7 @@
 \subsection{直接使用头文件}
 和 C++ 标准库一样， SLISC 一般无需编译。 如果你不想修改 SLISC 源码， 只需要把 \verb|SLISC| 文件夹复制到项目文件夹中， 并在 C++ 源码中使用相应的头文件即可。
 
-下载 SLISC 源码， 创建 “SLISC 库概述\upref{SLISC}” 中的 \verb|intro.cpp|。 注意如果 \verb|intro.cpp| 和 \verb|SLISC| 文件夹不在同一个目录， 那么你需要修改 \verb|#include| 中的相对路径， 也可以用绝对路径。
+下载 SLISC 源码， 创建 “\enref{SLISC 库概述}{SLISC}” 中的 \verb|intro.cpp|。 注意如果 \verb|intro.cpp| 和 \verb|SLISC| 文件夹不在同一个目录， 那么你需要修改 \verb|#include| 中的相对路径， 也可以用绝对路径。
 
 要编译， 用 \verb|g++ intro.cpp -o intro.x|。 编译成功后， 运行程序就得到输出结果
 \begin{lstlisting}[language=none]
@@ -24,14 +24,14 @@ a 有 2 行和 3 列, 共计 6 个元素。
 \end{lstlisting}
 以及两个输出文件 \verb|data0.matb| 和 \verb|data.matb|。
 
-另外也推荐使用 Jupyter Notebook 和 Cling\upref{Cling}， 无需编译， 交互运行代码。
+另外也推荐使用 Jupyter Notebook 和 \enref{Cling}{Cling}， 无需编译， 交互运行代码。
 
 \subsection{使用 64 位索引}
 若使用默认选项， \verb|Long| 类型的最大值（也就是数组最多的元素个数）是 $2^{31}-1 = 2147483647$。 也就是 SLISC 只能处理大约 2.1GB 的 \verb|char| 数组或者 16.8GB 的 \verb|double| 数组。 这在一般情况下是够用的， 但如果要数组可能会更大， 那么就不能定义该选项， 且需要使用 64 位版本的头文件， 位于 \verb|SLISC-64| 目录下。 我们可以直接把 \verb|SLISC-64/*.h| 复制并覆盖到 \verb|SLISC| 中。
 
 \subsection{生成头文件}
 
-注意如果头文件 \verb|SLISC/xxx.h| 有对应的 \verb|SLISC/xxx.h.in| 模板文件， 那么这些头文件都是自动生成的。 要重新生成 64 位版本的头文件， 首先确保你的机器上安装了 \verb|octave 4.1| 或以上的版本以及 \verb|make|\upref{Make}， 然后在 \verb|SLISC| 目录下运行 \verb|make [选项] h| 即可。 例如 \verb|SLISC| 中的被生成的头文件是使用 \verb|make h| 生成的， \verb|SLISC-64| 中的则是使用 \verb|make opt_long32=false h| 生成到 \verb|SLISC| 并复制过去的。 \verb|SLISC-64q| 则使用 \verb|make opt_long32=false opt_quadmath=true h| 生成， 支持 4 精度浮点数\upref{FltCpp}。
+注意如果头文件 \verb|SLISC/xxx.h| 有对应的 \verb|SLISC/xxx.h.in| 模板文件， 那么这些头文件都是自动生成的。 要重新生成 64 位版本的头文件， 首先确保你的机器上安装了 \verb|octave 4.1| 或以上的版本以及 \verb|make|\upref{Make}， 然后在 \verb|SLISC| 目录下运行 \verb|make [选项] h| 即可。 例如 \verb|SLISC| 中的被生成的头文件是使用 \verb|make h| 生成的， \verb|SLISC-64| 中的则是使用 \verb|make opt_long32=false h| 生成到 \verb|SLISC| 并复制过去的。 \verb|SLISC-64q| 则使用 \verb|make opt_long32=false opt_quadmath=true h| 生成， 支持 \enref{4 精度浮点数}{FltCpp}。
 
 \subsection{编译测试}
 SLISC 中几乎每个头文件都有对应的测试代码， 在 \verb|test/test_xxx.cpp| 中， 一般对应同名的 \verb|SLISC/xxx.h|。 为了测试代码在你使用的环境（CPU 架构和操作系统）中能正常运行， 强烈建议编译并运行测试。
@@ -66,14 +66,14 @@ SLISC 中几乎每个头文件都有对应的测试代码， 在 \verb|test/test
 
 可以用以下选项开始或关闭第三方库。
 \begin{itemize}
-\item \verb|opt_lapack|： \verb|reference|（默认）使用 Netlib 的基准版 BLAS\upref{BLAS} 和 LAPACK\upref{Lapack}， \verb|openblas| 使用 OpenBlas 和基于它的 LAPACK （性能较高）， \verb|mkl| 使用 Intel 的 MKL （性能最高）。
+\item \verb|opt_lapack|： \verb|reference|（默认）使用 Netlib 的基准版 \enref{BLAS}{BLAS} 和 \enref{LAPACK}{Lapack}， \verb|openblas| 使用 OpenBlas 和基于它的 LAPACK （性能较高）， \verb|mkl| 使用 Intel 的 MKL （性能最高）。
 \item \verb|opt_mplapack|： \verb|true| 或 \verb|false|， 默认取 \verb|opt_quadmath| 的值。 四精度版本的 BLAS 和 LAPACK。 如果编译时提示 \verb|_Float128| 未定义， 需要开启选项 \verb|opt_no__Float128|
-\item \verb|opt_boost|： \verb|true|（默认） 或 \verb|false|， 使用 Boost 库\upref{Boost}。
-\item \verb|opt_gsl|： \verb|true|（默认） 或 \verb|false|， 使用 GSL 库\upref{GSL}。
-\item \verb|opt_eigen|： \verb|true|（默认） 或 \verb|false|， 使用 Eigen 库\upref{Eigen}。
-\item \verb|opt_arb|： \verb|true|（默认） 或 \verb|false|， 使用 Arb 库\upref{ArbLib}。
-\item \verb|opt_arpack|： \verb|true|（默认） 或 \verb|false|， 使用 Arpack++ 库\upref{Arpkpp}
-\item \verb|opt_sqlite|： \verb|true|（默认） 或 \verb|false|， 使用 SqLite 3 库\upref{SQLite}。
+\item \verb|opt_boost|： \verb|true|（默认） 或 \verb|false|， 使用 \enref{Boost 库}{Boost}。
+\item \verb|opt_gsl|： \verb|true|（默认） 或 \verb|false|， 使用 \enref{GSL 库}{GSL}。
+\item \verb|opt_eigen|： \verb|true|（默认） 或 \verb|false|， 使用 \enref{Eigen 库}{Eigen}。
+\item \verb|opt_arb|： \verb|true|（默认） 或 \verb|false|， 使用 \enref{Arb 库}{ArbLib}。
+\item \verb|opt_arpack|： \verb|true|（默认） 或 \verb|false|， 使用 \enref{Arpack++ 库}{Arpkpp}
+\item \verb|opt_sqlite|： \verb|true|（默认） 或 \verb|false|， 使用 \enref{SqLite 3 库}{SQLite}。
 \item \verb|opt_matfile|： \verb|true| 或 \verb|false|（默认）， 读写 Matlab 文件（已停止维护）。
 \end{itemize}
 

@@ -5,13 +5,13 @@
 
 \pentry{C++ 基础\nref{nod_Cpp0}}{nod_d183}
 
-相对于 Fortran\upref{Fortra} 或者 Matlab\upref{Matlab} 等， 用 C++ 做数值计算的一个缺陷就是语言本身没有矩阵以及高维矩阵类。 但我们可以用第三方库或者自己写一个。 我们选择后者， 原因是为了教学需要我们需要保持代码的简单易读， 避免复杂的 C++ 语法。
+相对于 \enref{Fortran}{Fortra} 或者 \enref{Matlab}{Matlab} 等， 用 C++ 做数值计算的一个缺陷就是语言本身没有矩阵以及高维矩阵类。 但我们可以用第三方库或者自己写一个。 我们选择后者， 原因是为了教学需要我们需要保持代码的简单易读， 避免复杂的 C++ 语法。
 
 本部分中我们将大量使用自编的 \textbf{SLISC（Scientific Library in Simple C++）} 矩阵库。 代码可以从 \href{https://github.com/MacroUniverse/SLISC}{GitHub 仓库}下载， 另外提供英文说明。 该库的特点是尽量不使用 C++ 的复杂语法（如模板）和复杂的类结构， 使代码便于阅读学习和修改， 同时又保持相对较高的性能。 SLISC 使用兼容性较高的 C++11 标准。
 
-SLISC 库在矩阵类的基础上还实现了一些科学计算常用的功能， 如线性代数运算、 插值、 微分方程、 计时\upref{SliTim}、 文件和目录操作\upref{Sfile}、 矩阵文件读写\upref{matb}、 字符串处理、 特殊函数、 任意精度计算、 量子力学计算等。 当然， 一些功能基于其他项目如 Blas\upref{BLAS}、 Lapack\upref{Lapack}、 Intel MKL\upref{OneAPI}、 Arb\upref{ArbLib}、 GSL\upref{GSL}、 Eigen\upref{Eigen} 和 Arpack\upref{Arpkpp}。 在编译时可以通过选项来决定是否使用这些依赖。
+SLISC 库在矩阵类的基础上还实现了一些科学计算常用的功能， 如线性代数运算、 插值、 微分方程、 \enref{计时}{SliTim}、 \enref{文件和目录操作}{Sfile}、 \enref{矩阵文件读写}{matb}、 字符串处理、 特殊函数、 任意精度计算、 量子力学计算等。 当然， 一些功能基于其他项目如 \enref{Blas}{BLAS}、 \enref{Lapack}{Lapack}、 \enref{Intel MKL}{OneAPI}、 \enref{Arb}{ArbLib}、 \enref{GSL}{GSL}、 \enref{Eigen}{Eigen} 和 \enref{Arpack}{Arpkpp}。 在编译时可以通过选项来决定是否使用这些依赖。
 
-一个例子（编译方法见 “SLISC 的编译和测试\upref{SLScom}”）：
+一个例子（编译方法见 “\enref{SLISC 的编译和测试}{SLScom}”）：
 \begin{lstlisting}[language=cpp, caption=intro.cpp]
 #include "SLISC/arithmetic.h"
 #include "SLISC/disp.h"
@@ -60,7 +60,7 @@ int main()
 \begin{itemize}
 \item 全部定义使用 \verb|namespace slisc|， 所有宏以 \verb|SLS_| 开头。
 \item 尽量不使用模板（尤其是高级的模板技巧）， 用 Matlab/Octave 生成代码。 初学用户不需要了解代码如何生成， 可以直接阅读或使用生成后的代码。
-\item 实现了密矩阵\upref{MatSto}和一些稀疏矩阵\upref{SprMat}。 以对列主序的支持为主。
+\item 实现了\enref{密矩阵}{MatSto}和一些\enref{稀疏矩阵}{SprMat}。 以对列主序的支持为主。
 \item 实现了密矩阵的切割，并用于函数接口。 这会有少量的额外运算， 但使用起来却比指针方便得多。 用户可以自行选择使用哪种接口。
 \item Debug 模式实现了详尽的尺寸和指标越界检查， 可以及时发现指标超出长度等错误。
 \item 函数尽量首先使用和 Lapack 类似的指针接口实现， 然后再封装一层更友好的接口。
@@ -94,7 +94,7 @@ m_storage = {m_data = 0x855ceb0, m_rows = 2, m_cols = 2}}, <No data fields>
 \item \verb|Float| 是 \verb|float|（4 字节浮点数）
 \item \verb|Doub| 是 \verb|double|（8 字节浮点数）
 \item \verb|Ldoub| 是 \verb|long double| （16 字节浮点数， 但并不一定是四精度， 取决于机器和编译器）
-\item \verb|Qdoub| 是 16 字节浮点数， 标准的四精度\upref{FltCpp}（需要在编译时打开 \verb|quadmath| 选项）。
+\item \verb|Qdoub| 是 16 字节浮点数， 标准的\enref{四精度}{FltCpp}（需要在编译时打开 \verb|quadmath| 选项）。
 \item \verb|Fcomp| 是 \verb|std::complex<float>| （8 字节复数）
 \item \verb|Comp| 是 \verb|std::complex<double>| （16 字节复数）
 \item \verb|Lcomp| 是 \verb|std::complex<long double>| （32 字节复数）

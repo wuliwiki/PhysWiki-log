@@ -23,8 +23,23 @@ sudo apt-get install -y nodejs
 curl -fsSL https://deb.nodesource.com/setup_21.x | bash - &&\
 apt-get install -y nodejs
 \end{lstlisting}
+如果有依赖问题，可以把上面的 \verb`21.x` 改成 \verb`20.x` 或更低。
 
-\subsection{hello world}
+在 Ubuntu 18.04 上以上方法全部失败，因为 GLibC 版本过低，node 11.15.0 以上都用不了。 而 node 官网下载的 11.15.0 二进制包（如 node-v11.15.0-linux-x64.tar.xz）的 \verb`npm -v` 又提示 \verb`ERROR: npm is known not to run on Node.js v11.15.0`。 Ubuntu 很难支持多版本 GLibC 或者将其升级。 解决办法只有更新 Ubuntu 或用 docker 了。
+
+\href{https://docs.npmjs.com/downloading-and-installing-node-js-and-npm}{npm 的下载页面}强烈建议使用 \verb`nvm`（Node Version Manager）来管理 nodejs 和 npm 的版本（可以随时切换不同版本）。
+
+\subsection{node}
+\begin{itemize}
+\item 如果不需要 npm 包管理，node 可以直接把 js 程序像 python 脚本一样运行：
+\begin{lstlisting}[language=js,caption=test.js]
+#!/usr/bin/env node
+console.log("Hello, world!");
+\end{lstlisting}
+\end{itemize}
+然后直接用 \verb`./test.js` 即可。 这里的 \verb`console.log` 输出到 \verb`stdout`。 或者直接 \verb`node test.js`（会自动忽略第一行）。
+
+\subsection{npm}
 \begin{itemize}
 \item 参考\href{https://medium.com/@adnanrahic/hello-world-app-with-node-js-and-express-c1eb7cfa8a30}{这篇文章}。
 \item node.js 可以在服务器端运行 javascript。 \textbf{npm} 是 node package manager

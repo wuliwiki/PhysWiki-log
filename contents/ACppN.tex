@@ -7,42 +7,47 @@
 \issueDraft
 \end{issues}
 
-和 JavaScript 类似， c++ 使用异步编程可以
+和 \enref{JavaScript 异步编程}{JSasyN}类似， c++ 使用异步编程可以执行某个任务而不等其返回就继续执行其他任务。 例如读写文件。
 
 \begin{lstlisting}[language=cpp]
 #include <iostream>
+#include <fstream>
+#include <string>
 #include <future>
-#include <thread>
-#include <chrono>
 
-// Asynchronous function
-int DoubleValue(std::future<int>& fut) {
-    int value = fut.get(); // get the value from future
-    // simulate some work
-    std::this_thread::sleep_for(std::chrono::seconds(2));
-    return 2 * value;
+// Function to write data to a file
+void writeFile(const std::string& filename, const std::string& data) {
+    std::ofstream file(filename);
+    if (file.is_open()) {
+        file << data;
+        file.close();
+    } else {
+        throw std::runtime_error("Unable to open file");
+    }
 }
 
 int main() {
-    // Create a promise
-    std::promise<int> prom;
+    std::string filename = "example.txt";
+    std::string data =
+        "Hello, this is some text to write in the file asynchronously.";
 
-    // Get future from the promise
-    std::future<int> fut = prom.get_future();
+    // Launch writeFile in an asynchronous manner
+    std::future<void> result = std::async(std::launch::async, writeFile,
+        filename, data);
 
-    // Start the asynchronous task
-    std::future<int> result =
-        std::async(std::launch::async, DoubleValue, std::ref(fut));
+    // Do other stuff here if needed
+    std::cout << "Writing to the file asynchronously..." << std::endl;
 
-    // Set value in promise (sends data to the asynchronous task)
-    prom.set_value(10);
-
-    // Wait for the result from the asynchronous task
-    int doubledValue = result.get();
-
-    std::cout << "Doubled Value: " << doubledValue << std::endl;
+    // Wait for the async task to finish and handle exceptions
+    try {
+        // This will rethrow any exception caught in the async task
+        result.get();
+        std::cout << "File written successfully." << std::endl;
+    } catch (const std::exception& e) {
+        std::cerr << "Exception: " << e.what() << std::endl;
+    }
 
     return 0;
 }
 \end{lstlisting}
-其中的 \verb`std::launch::async` 让系统用另一个线程马上开始处理 \verb`DoubleValue`， 而如果换成 \verb`std::launch::deferred`， 则只用一个线程，只是等到 \verb`.get()` 的时候再处理（基本想不到使用场景）。
+其中的 \verb`std::launch::async` 让系统用另一个线程马上开始处理 \verb`writeFile`， 而如果换成 \verb`std::launch::deferred`， 则只用一个线程，只是等到 \verb`.get()` 的时候再处理（类似 JS）。 无论哪种， \verb`std::async()` 都会立即返回（non-blocking）而不是任务完成再返回。

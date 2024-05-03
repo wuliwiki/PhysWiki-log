@@ -10,19 +10,19 @@
 \subsubsection{个人数据}
 \begin{itemize}
 \item 对大部分人来说，把所有个人文件放在一个文件夹，使用某种云同步软件（最好可以保留多版本），这就够了
-\item 本地增量备份：计算机文件备份基础（附 python 多版本增量备份脚本）\upref{SimBac}。 或者用商业软件。
-\item 使用 RAID\upref{RAIDnt} 作为系统盘和数据盘提供冗余。 最好使用更现代的文件系统例如 ZFS\upref{ZFS} 或者 BTRFS。 可惜对 Windows 不太友好（一般的解决办法是做成 NAS 以网络硬盘挂载）。
-\item 代码和非常重要的数据可以用 Git\upref{Git} 进行管理。
+\item 本地增量备份：\enref{计算机文件备份基础（附 python 多版本增量备份脚本）}{SimBac}。或者用商业软件。
+\item 使用 \enref{RAID}{RAIDnt} 作为系统盘和数据盘提供冗余。 最好使用更现代的文件系统例如 \enref{ZFS}{ZFS} 或者 BTRFS。 可惜对 Windows 不太友好（一般的解决办法是做成 NAS 以网络硬盘挂载）。
+\item 代码和非常重要的数据可以用 \enref{Git}{Git}  进行管理。
 \end{itemize}
 
 \subsubsection{系统备份}
 \begin{itemize}
-\item 有不少系统自带的或者免费的软件可以完整备份你的操作系统或整个磁盘（或分区）。为了节约空间你可以把系统和个人文件放在不同的分区中。 例如 Clonezilla\upref{Clonez}。
+\item 有不少系统自带的或者免费的软件可以完整备份你的操作系统或整个磁盘（或分区）。为了节约空间你可以把系统和个人文件放在不同的分区中。 例如 \enref{Clonezilla}{Clonez}。
 \end{itemize}
 
 \subsection{防泄露}
 \begin{itemize}
 \item 使用操作系统自带的磁盘加密（如果你不用，即使你有登录密码，别人把你的硬盘拆出来差进别的电脑也可以访问你的文件）。 Windows 磁盘可以开启 bitlocker， MacOS 和 Linux 也有类似功能。 手机一般默认开启磁盘加密。
 \item 如果一个磁盘被 bitlocker 加密， 那么在 Linux 上只需要安装 \verb`sudo apt install dislocker` 然后用 \verb`sudo dislocker -V /dev/sd?1 -u密钥 -- /挂载/dislocker目录`， 注意 \verb`sd?1` 必须是分区而不是硬盘本身，也就是后面要有数字。  注意这只是在 \verb`dislocker目录` 中显示一个 \verb`dislockerdislocker-file`，相当于一个硬盘镜像文件， 还要制作通过 loop 再 mount 一次到真正的挂载路径： \verb`sudo mount -o loop,rw /挂载/dislocker目录/dislocker-file /最终/挂载目录`
-\item 如何给文件加密（含 python 加密脚本）\upref{encryp}
+\item \enref{如何给文件加密（含 python 加密脚本）}{encryp}
 \end{itemize}
