@@ -3,9 +3,6 @@
 % license Usr
 % type Wiki
 
-\begin{issues}
-\issueTODO
-\end{issues}
 
 \subsection{背景介绍}
 Ginzburg 谈到，最初他想要解决在超导体中出现的温差电现象。当超导体出现温度梯度时，导体中会出现特殊的超导电流，并且涌现出电磁场。当时的伦敦方程仅仅能解释其中的部分现象，而且伦敦方程预测普通金属与超导金属的界面能是负的，因此当时急需一个非电磁场起源的界面能来解决温差电现象。到1950年，Landau-Ginzburg 理论解决了这一问题。\footnote{Ginzburg, Vitaly L. "Nobel Lecture: On superconductivity and superfluidity (what I have and have not managed to do) as well as on the “physical minimum” at the beginning of the XXI century." Reviews of Modern Physics 76.3 (2004): 981.}
@@ -27,7 +24,7 @@ f_s = f_n + \alpha(T) |\psi|^2 + \frac{\beta(T)}{2} |\psi|^4 ~.
 \begin{figure}[ht]
 \centering
 \includegraphics[width=6cm]{./figures/e5e1ece79b1db971.png}
-\caption{相变图示，红色曲线代表$\alpha>0$时的自由能随序参量的变化，此事随着序参量增加，自由能单调递增，因此自由能最低点取到序参量为0，无超导电子。黑色曲线代表$\alpha<0$时的情形，自由能极小值点出现在了一个非零的序参量处，系统处在超导态。} \label{fig_LanGin_1}
+\caption{相变图示，红色曲线代表$\alpha>0$时的自由能随序参量的变化，此事随着序参量增加，自由能单调递增，因此自由能最低点取到序参量为0，无超导电子。黑色曲线代表$\alpha<0$时的情形，自由能极小值点出现在了一个非零的序参量处，系统处在超导态。原则上序参量的模长只能取正值，但我们在这里同时画了负值，便于理解。} \label{fig_LanGin_1}
 \end{figure}
 \subsection{有效质量与有效电荷}
 Landau-Ginzburg理论的提出在超导微观理论BCS理论之前，因此这套唯象理论的参数含义并不是个显而易见的事。根据各参数与实验的关系，有效质量不出现在可观测量中。这里的有效电荷的选取是一个有趣且深刻的问题。Ginzburg一开始认为$e^*$作为某些激发的有效电荷，应该跟电子电荷不同，甚至有可能依赖于材料的具体参数，比如压强、温度等等，然而Landau不觉得$e^*$应该与电子电荷$e$有任何的不同。因为电子电荷出现在诸如Landau参数$\kappa$（这一参数会出现在界面能$\sigma_{ns}$中），透射深度$\delta_0$以及临界磁场$H_c$中，而这些物理量在实验上可观测，所以Ginzburg通过对比实验数据得出结论，$e^* = (2-3)e$。到了1957年，Bardeen-Cooper-Schrieffer(BCS)理论出现后，大家意识到在超导中应该由cooper对来扮演传导电荷的角色，因此应该有$e^* = 2e$, $m^* = 2m_e$。 1959年Gor'kov从BCS理论推导出Landau-Ginzburg方程后严格证明了这件事。
@@ -38,9 +35,9 @@ Landau-Ginzburg理论的提出在超导微观理论BCS理论之前，因此这�
 \end{equation}
 其中$M = (H-H_0)/4\pi = -H_0/4\pi$。展开后得到
 \begin{equation}
-\Delta F = -\frac{\alpha^2}{\beta} + \frac{H_0^2}{8\pi}~.
+\Delta F = -\frac{\alpha^2}{2\beta} + \frac{H_0^2}{8\pi}~.
 \end{equation}
-可以看到，当$H_0^2/8\pi > \alpha^2/\beta$时，体系倾向于普通金属态，而$H_0^2/8\pi<\alpha^2/\beta$时，体系倾向于形成超导态。因此临界磁场$H_C$的大小满足$H_C^2/8\pi = \alpha^2/\beta$。
+可以看到，当$H_0^2/8\pi > \alpha^2/\beta$时，体系倾向于普通金属态，而$H_0^2/8\pi<\alpha^2/\beta$时，体系倾向于形成超导态。因此临界磁场$H_C$的大小满足$H_C^2/8\pi = \alpha^2/2\beta$。
 \subsection{临界电流}
 根据连续性方程，$e^*\partial_t n = e^*\nabla \cdot J$, 给出电流的表达式为
 \begin{equation}
@@ -89,10 +86,41 @@ Landau-Ginzburg理论解释了超导电流的参数依赖问题，在Landau-Ginz
 根据$\curl \curl B = \nabla (\nabla \cdot B) - \nabla^2 B$得到
 \begin{equation}
 \nabla^2 B - \frac{4\pi (e^*)^2}{m^* c^2}|\psi|^2 B =0 ~,
+\label{eq_magnetization}
 \end{equation}
 这一方程的解是指数衰减，给出磁场在超导体内的透射深度表达式为
 \begin{equation}
 \lambda^2 = \frac{m^* c^2}{4\pi (e^*)^2 |\psi|^2}~.
 \end{equation}
 \subsection{界面能}
-在计算界面能之前我们需要引入一个概念，相干长度。
+在计算界面能之前我们需要引入一个概念，相干长度。对自由能关于$\psi^*$变分，得到无电磁场时的Landau方程为
+\begin{equation}
+\frac{-\hbar^2}{2m^*}\nabla^2 \psi + \alpha(T)\psi + \beta(T)|\psi|^2 \psi = 0~,
+\end{equation}
+这一方程确定序参量能随空间的变化。随着进入超导内部，序参量趋近于$\psi_{\infty}$，对该方程进行归一化，进行变量替换$f= \psi/\psi_{\infty}$，得到一个关于$f$的方程为
+\begin{equation}
+-\frac{\hbar^2}{2m^* \alpha(T)} \nabla^2 f + f - |f|^2 f =0 ~,
+\end{equation}
+注意到$\alpha(T)$是能量量纲，这里的$\hbar^2/2m \alpha(T)$是长度平方量纲，因此定义相干长度为
+\begin{equation}
+\xi(T)^2 =\frac{\hbar^2}{2m^* |\alpha(T)|}~,
+\end{equation}
+并进行变量代换$x' = x/\xi(T)$，就完成了对朗道方程的参数无量纲化。因此$\xi(T)$就是序参量随空间变化的特征长度。可以看到，在相变温度附近，相干长度发散，且随温度发散形式为$(T_c-T)^{1/2}$。现在我们考虑简单的一维情形，通常我们在阅读文献时会遇到一个参数$\kappa \equiv \lambda/\xi$,成为Ginzburg-Landau参数，用于区分Type-I超导体与Type-II超导体。注意到这里的$\lambda$是透射系数，也即磁场进入超导体的深度，$\kappa$非常大时，意味着磁场可以很深地穿入超导体内部，而当$\kappa$非常小时，磁场就大部分地被超导体排除出去\autoref{fig_LanGin_2}。当$0<\kappa<1/\sqrt{2}$时，超导体就被分类为Type-I超导体，而当$\kappa>1/\sqrt{2}$时，就被分类为Type-II超导体。这种分类与界面能的计算有关，Landau与Ginzburg计算得到，当$0<\kappa<1/\sqrt{2}$时，超导体与正常金属态之间的界面能为正，而当$\kappa>1/\sqrt{2}$时，超导体与正常金属态之间的界面能为负。
+\begin{figure}[ht]
+\centering
+\includegraphics[width=14cm]{./figures/7826f029e0aa3c45.png}
+\caption{超导态与正常金属态界面示意图，图源自Micheal Tinkham的《Introduction to superconductivitt》。} \label{fig_LanGin_2}
+\end{figure}
+界面能的具体计算想法如下，在正常金属态内部添加磁场$H=H_C$，因为当磁场大小达到临界磁场时，在超导体内部，超导态自由能加上抗磁能的大小与正常金属态自由能加上磁场能量大小相同，也就是说，此时正常金属态内部与超导体内部的自由等相同。此时计算体系整个的自由能再减去当体系全都是正常金属态的自由能，
+\begin{equation}
+\sigma_{ns} = \int \left( F_{sH}(x) - \frac{H(x)H_c}{4\pi} + \frac{H_c^2}{4\pi} -F_{n0} - \frac{H_c^2}{8\pi}\right)dx~.
+\label{eq_free_energy}
+\end{equation}
+于是可以看到，这一自由能贡献对于超导态内部与正常金属态内部而言都是0，只有在边界处有贡献。下面我们考虑两个极端情形的例子。
+\begin{example}{$\lambda =0$ 时的情形}
+当$\lambda=0$时，$\xi$为有限值，此时对应$\kappa \rightarrow 0$的情形，磁场完全无法进入超导体内部。给定边界条件，$f(z=0)=0, f(z=+\infty) = 1$，对应无量纲的Ginzburg-Landau方程的解为$f=\tanh x' = \tanh x/\xi$。这一解的形式是常见的非线性方程的解，将这一序参量的解代入到\autoref{eq_free_energy} 中，计算得到界面能为$-\alpha \hbar^2/2m \beta\xi$。注意到$\alpha<0,\beta>0$，因此界面能为正。
+\end{example}
+\begin{example}{$\xi = 0$ 时的情形}
+当$\xi = 0$时，我们可以认为在界面处序参量没有平缓的变化，对于$x>0,\psi(x) = \psi_{\infty}$，对于$x<0,\psi(x)=0$。根据\autoref{eq_magnetization} (这里有一点不同单位制之间的混用，但可以看到$H$也是指数衰减，且衰减的特征长度也是$\lambda$)，可以得到当$x>0$时，磁场强度的解为$H(x) = H_c e^{-x/\lambda}$。同样将这一解带入到\autoref{eq_free_energy} 中，计算得到界面能为$-3H_c^2 \lambda/16\pi$，此时界面能为负。
+\end{example}
+在最初Landau时代的超导实验室中，大部分的超导体都满足$\kappa <<1$，因此Landau最初认为界面能为负并不值得仔细研究，后来合金超导体被发现了，它们的性质与纯超导体有很大的不同，正如后来Landau指出的，这些类型超导体恰是界面能为负的超导体，也即Type-II超导体，而之后发现的大部分超导体都是Type-II。
