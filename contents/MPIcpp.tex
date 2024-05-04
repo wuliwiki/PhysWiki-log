@@ -18,7 +18,7 @@
 \subsection{安装 OpenMPI}
 \begin{itemize}
 \item 检查 OpenMPI 版本用 \verb|mpiexec --version|， 目前是 4.1.x， \verb|mpicxx --version| 只会给出 g++ 的版本号。
-\item \verb|sudo apt install openmpi-bin libopenmpi-dev| 然而 apt 的版本是非常老的， \verb|2.x.x|， 目前的版本是 \verb|4.1.4|。 笔者用 \verb|2.x.x| 在多台机器上从来没成功过。 其实 \verb|4.1.4| 也没有成功\footnote{WARNING: Open MPI accepted a TCP connection from what appears to be a another Open MPI process but cannot find a corresponding process entry for that peer.}\footnote{WARNING: Open MPI failed to TCP connect to a peer MPI process.  This should not happen. ... connect() to 10.0.2.4:1024 failed}。
+\item \verb|sudo apt install openmpi-bin libopenmpi-dev| 然而 apt 的版本是非常老的， \verb|2.x.x|， 目前的版本是 \verb|4.1.4|。 笔者用 \verb|2.x.x| 在多台机器上从来没成功过。 其实 \verb|4.1.4| 也没有成功\footnote{\verb`WARNING: Open MPI accepted a TCP connection from what appears to be a another Open MPI process but cannot find a corresponding process entry for that peer.`}\footnote{\verb`WARNING: Open MPI failed to TCP connect to a peer MPI process.  This should not happen. ... connect() to 10.0.2.4:1024 failed`}。
 \item 要安装比 apt 更新的版本， 复制 \verb|https://www.open-mpi.org/software/ompi/v4.1/| 里面的压缩包链接， 用 \verb|wget| 下载， 然后解压如 \verb|tar -xzvf openmpi-4.1.4.tar.gz| （要几分钟）。 进入解压文件夹， \verb|./configure|， \verb|make all -j20|， \verb|sudo make install| 即可。 如果 \verb|mpicxx --version| 说找不到 so 文件， 就用 \verb|sudo ldconfig| 即可。
 \item \verb|sudo make uninstall| 卸载
 \end{itemize}
@@ -40,7 +40,7 @@
 \item \verb|# include <mpi.h>|
 \item 编译完以后， 如果直接运行程序只会有一个 process， 需要用例如 \verb|mpiexec -np 4 ./main.x| 指定进程数量。 \verb|mpirun| 也基本一样， 但并不在 MPI 标准中。 运行这个命令后，所有进程就都开始了。
 \item 如果程序有参数以及 stdin 的文件， 用 \verb`mpiexec -np 4 ./main.x [参数1] [参数2] < 输入文件` 即可。 每一个进程都会获得完全一样的参数和独立的标准输入（不存在抢读输入文件的情况）。
-\item \verb|MPI_Init(&argc, &argv);| 开始 MPI， \verb|MPI_Finalize();| 结束。 初始化会占用一些时间，可以留到程序中真的需要用到 MPI 的时候才使用，在这之前每个进程可以各自执行自己的事情。
+\item \verb|MPI_Init(&argc, &argv);| 开始 MPI， \verb|MPI_Finalize();| 结束。 初始化会占用一些时间，可以留到程序中真的需要用到 MPI 的时候才使用，在这之前每个进程可以各自执行自己的事情（但是无法获取节点编号，所以一般在 init 前的计算都是完全相同的）。
 \item \verb|MPI_Comm_size(MPI_Comm comm, &size);| 获取指定 communicator 的进程数
 \item \verb|MPI_Comm_rank(MPI_Comm comm, &rank);|获取当前进程的 id， 称为 rank。
 \item \verb|int MPI_Send(const void *buf, int count, MPI_Datatype datatype, int dest, int tag, MPI_Comm comm)| 其中 \verb|dest| 是进程 \verb|id|， \verb|tag| 是一个编号用于区分不同的消息， \verb|comm| 一般是 \verb|MPI_COMM_WORLD| （所有进程）。
@@ -58,7 +58,17 @@
 
 \subsection{配置集群}
 \begin{itemize}
-\item 配置 host 文件（给每个 ip 一个名称）， 设置免密码 ssh\upref{SSH}。
+\item 配置 \verb`~/.ssh/config` 或者 host 文件（给每个 ip 一个名称）， 设置免密码 ssh\upref{SSH}。
 \item 设置一个共享网络文件夹\upref{NFS}（应该方法不限）， 把 mpicxx 编译的可执行文件放到里面
-\item \verb|mpirun -np 5 -host localhost,worker1,... ./可执行文件|
+\item \verb|mpirun -np 5 -host localhost,worker1,worker2,... ./可执行文件|。 其中 \verb`localhost` 是本机，\verb`worker1,worker2` 是 ssh config 中的其他机器的名称。 如果不指定 \verb`-host`， 所有进程将在本机运行。
+\item 注意进程和线程是两回事。 \verb`-np` 指定的是进程。
+\item 注意虽然 \verb`mpirun` 依赖 \verb`ssh` 在其他主机运行进程等，但在真正的通讯中一般使用 MPI 自己的通讯协议（基于 \verb`TCP/IP` 或 InfiniBand 等）
+\item 也可以用文件指定机器，以及每个机器运行几个进程（\verb`slots`）： \verb`mpiexec -np 12 -machinefile machines.txt ./main.x`
+\begin{lstlisting}[language=none,caption=machines.txt]
+localhost slots=2
+machine1 slots=4
+machine2 slots=4
+machine3 slots=2
+\end{lstlisting}
+其中也可以不包含 \verb`localhost`，那么所有进程将远程运行。
 \end{itemize}

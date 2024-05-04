@@ -10,7 +10,7 @@
 
 \pentry{施图姆—刘维尔理论\nref{nod_SLthrm}，阿贝尔微分方程恒等式\nref{nod_AbelID}}{nod_2f44}
 
-\begin{definition}{三角函数形式边界条件的 S-L 问题}
+\begin{definition}{三角函数形式边界条件的 S-L 问题}\label{def_SLzPro_1}
 对于微分算子
 \begin{equation}
 \hat L = \frac{1}{r(x)} \left[-\dv{}{x}\left(p(x)\dv{}{x}\right) + q(x)\right] ~,
@@ -98,9 +98,44 @@ u(x_0) = 0 \Leftrightarrow \theta_u(x_0) = 0 \mod \pi \Rightarrow \theta'_u(x_0)
 仍考察 $\theta_u$ 的微分方程。由于 $r(x)$ 总正，故 $\theta_u$ 应随着 $\lambda$ 的增加而增加。
 \pentry{李普希茨条件\nref{nod_LipCon}}{nod_f30e}
 \begin{lemma}{}
-设 $f$ 是关于 $x$、$t$ 满足局部 Lipschitz 连续的，而 $x(t)$、$y(t)$ 是可微函数，满足
+设 $f$ 是满足局部 Lipschitz 连续的的，$x$ 对 $t$ 一致。即意味着对于每个紧集 $V \subset U$
 \begin{equation}
+L = \sup_{(t, x) \neq (t, y) \in V} \frac{|f(t, x) - f(t, y)|}{|x-y|} ~,
+\end{equation}
+有限。
+而 $x(t)$、$y(t)$ 是可微函数，满足
+\begin{equation}\label{eq_SLzPro_3}
 x(t_0) \le y(t_0), \dot x(t)-f(t, x (t)) \le \dot y(t) - f(t, y(t)), t \in [t_0, T) ~,
 \end{equation}
 则对于 $t \in [t_0, T)$ 总有 $x(t) \le y(t)$。
 \end{lemma}
+证明考虑反证法，先假设\autoref{eq_SLzPro_3} 中第一个条件不正确，这将使得我们可以找到一些 $t_1$ 有 $x(t_1) = y(t_1)$ 而 $x(t) > y(t)$ 对于 $t \in (t_1, t_1 + \varepsilon)$。 考虑引入 $\Delta(t) = x(t) - y(t)$ 就有，
+\begin{equation}
+\dot \Delta(t) = \dot x(t) - \dot y(t) \le f(t, x(t)) - f(t, y(t)) \le L\Delta(t), t \in [t_1, t_1 + \varepsilon) ~,
+\end{equation}
+其中第一个不等式是因为我们假设第一个条件不正确，第二个是利用了局部 Lipschitz 连续的性质。但是这就意味着 $\widetilde \Delta(t) = \Delta(t) e^{-Lt}$ 满足 $\dot{\widetilde \Delta}(t) \le 0$ 从而 $\widetilde \Delta(t)\le \widetilde \Delta(t_1) = 0$。也就是说，对于 $t \in[t_0, T)$，$x (t)\le y (t)$ 与假设相矛盾。
+
+同样的假设第二个条件不正确，反之取 $\Delta(t) = y(t)-x(t)$，类似的 $\dot{\widetilde \Delta}(t) \ge 0$，有类似的证明。
+
+接下来我们继续考虑 $\theta_u$ 的问题：$\theta_u$ 应该随 $\lambda$ 增加。所以我们考虑 $\hat Lu = \lambda u$ 的解 $u (\lambda, x)$ ，并沿用 Prufer 变量的记号 $\rho_u (\lambda, x)$，$\theta_u (\lambda, x)$。若 $u(\lambda, x)$ 是 $\hat Lu = \lambda u$ 的解，对于 $\lambda_1 > \lambda_0$，有 $\theta_u (\lambda_1, x) > \theta_u (\lambda_0, x)$ 对于 $x > c$（这是由刚才的引理，$\theta_u (\lambda_1, c)\ge \theta_u (\lambda_0,c)$）。对于 $x < c$，颠倒不等号方向。
+
+现在回顾三角函数形式的边界条件\autoref{def_SLzPro_1} ，代入 $\theta$ 将会有
+\begin{equation}
+\theta_a(\lambda, a) = \alpha\in [0, \pi), -\theta_b(\lambda,  b) = \pi-\beta \in [0,\pi) ~.
+\end{equation}
+而这两函数 $\theta_a(..., a)$ 与 $\theta_b(..., b)$ 总有界（大于 $0$）而递增。同时可以证明以下引理
+\begin{lemma}{}
+\begin{equation}
+\lim_{\lambda \rightarrow -\infty} \theta_b(\lambda, x) = \lim_{\lambda \rightarrow -\infty} \theta_a(\lambda, x) = 0, x \in [a, b) ~.
+\end{equation}
+
+\end{lemma}
+这使得可以证明，对于 $u_a(\lambda)$，其是一个本征解，当且仅当在 $b$ 处满足条件，即 $\theta_a(\lambda, b) = \beta \mod \pi$。而当 $\lambda \rightarrow -\infty$ 时 $\theta_a \rightarrow 0$，这就使得可以取到一个最小 $\beta \in (0, \pi]$，而对应一个最小的本征值。这就使得可以有
+\begin{theorem}{}
+\begin{equation}
+\#_{(-\infty, \lambda)}(\hat L) = \left\lceil \frac{\theta_a(\lambda, b) - \beta}{\pi}\right\rceil = \left\lfloor \frac{\alpha - \theta_b(\lambda, a)}{\pi}\right\rfloor~.
+\end{equation}
+
+\end{theorem}
+
+这就可以轻而易举地证明，本征值可以从小到大排序而零点个数与其本征值的序数相关是第 $\lambda_i$ 个本征值恰好有 $i$ 个零点的。
