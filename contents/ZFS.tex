@@ -7,7 +7,7 @@
 \subsection{简介}
 ZFS 是一个现代化的文件系统，一些特色功能如下。
 \begin{itemize}
-\item 自带指纹检查\upref{chkSum}， 也就是说它在读取数据的时候（或者直接让它检查完整性的时候）会自动检测 checksum 是否一致， 若不一致， 若有数据冗余， 则会自动修复数据。
+\item 自带\enref{指纹检查}{chkSum}，也就是说它在读取数据的时候（或者直接让它检查完整性的时候）会自动检测 checksum 是否一致， 若不一致， 若有数据冗余， 则会自动修复数据。
 \item 支持把多个硬盘作为一个虚拟设备， 每个虚拟设备自带冗余，也就是说如果一个虚拟设备中某个硬盘坏了数据不会丢失。
 \item 一个或多个虚拟设备组成 pool（储存池），池中可以由多个文件系统（相当于分区）。 文件系统按需动态调节大小直到 pool 用完。
 \item 每个文件系统支持压缩、加密、去重、做快照（快照本身几乎不占用额外空间，相当于把文件系统的一部分冻结，对文件做出的修改不会抹掉快照中的数据而是保存在别的位置）。
@@ -15,7 +15,7 @@ ZFS 是一个现代化的文件系统，一些特色功能如下。
 \item 若 pool 的空间不足，随时可以加入新的虚拟设备扩充容量。
 \end{itemize}
 
-\textbf{Windows 对 ZFS 的支持还很低}， 可能可以在 WSL2\upref{WSLnt} 中实现， 但更好的方法还是直接用 Linux 挂载 ZFS 然后通过网络硬盘\upref{NFS}分享。
+\textbf{Windows 对 ZFS 的支持还很低}， 可能可以在 \enref{WSL2}{WSLnt} 中实现， 但更好的方法还是直接用 Linux 挂载 ZFS 然后通过\enref{网络硬盘}{NFS}分享。
 
 本文在 Ubuntu 22.04 中测试。 ZFS 版本为 \verb`zfs-2.1.2-1ubuntu3`， \verb`zfs-kmod-2.1.4-0ubuntu0.1`。
 
@@ -74,7 +74,7 @@ MyPool/fs2  7.24T  13.8T   7.24T  /MyPool/fs2
 \item \textbf{Dataset} 是一个比 filesystem 更广的概念， 是 Pool 的下一层。 既可以是一个 filesystem， 也可以是 snapshot， Zvols 等。
 \item \verb|zfs| 的程序是非常底层的，系统甚至不知道这些硬盘已经被挂载了。 Ubuntu 的 \verb|Disk| 软件会显示未挂载。 System Monitor 也不会显示磁盘的读写速度。
 \item \verb|vdev| 是 virtual device， 一个 pool 中的数据在所有 vdev 上面 strip。 也就是说写入一个文件，这个文件的数据会分布在所有 vdev 上。 这样可以提高读写速度。
-\item 每个 \verb|vdev| 可以有不同的 RAID\upref{RAIDnt} （zfs 自带 RAID， 不使用标准 RAID），RAID-z1 代表一个冗余相当于普通的 RAID5 至少需要三个 vdev， \verb|z2| 代表两个冗余至少需要 4 个 vdev，等），也可以是单个盘。 但是一个 pool 中\textbf{只要有一个 vdev 数据丢失，那么就会导致数据彻底无法恢复}。
+\item 每个 \verb|vdev| 可以有不同的 \enref{RAID}{RAIDnt} （zfs 自带 RAID， 不使用标准 RAID），RAID-z1 代表一个冗余相当于普通的 RAID5 至少需要三个 vdev， \verb|z2| 代表两个冗余至少需要 4 个 vdev，等），也可以是单个盘。 但是一个 pool 中\textbf{只要有一个 vdev 数据丢失，那么就会导致数据彻底无法恢复}。
 \item \verb|vdev| 可以有不同的大小，可以不断往 pool 中加入。 zfs 会根据每个 vdev 剩余的容量按比例 strip。
 \item \verb|vdev| 一旦加入 pool 就不能删除。 但可以更换（下文 \verb|zpool replace|）。
 \item \verb|zpool scrub pool名| 可以马上检查整个 pool 的 checksum 是否一致。 几秒钟后会在后台开始 scrub， 用 \verb|sudo zpool status| 查看进度和错误数据。 期间就算弹出硬盘或者关机，下次挂载还是会继续。

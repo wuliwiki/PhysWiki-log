@@ -8,7 +8,7 @@
 
 重要提示：截至到 2023 年 8 月，WSL 在中国大陆的安装过程中可能会遇到某种网络问题。
 
-重要提示：WSL1 用于 NTFS 文件系统最合适，包括移动硬盘。 exFAT 兼容性较差（不兼容软链， git 也会有权限 bug）。 NTFS 用 WSL1 也不完美， 有时候 \verb|chmod -R| 不能真正的深入到每个子目录，还可能要 cd 进去再次用 \verb|chmod -R|，或者直接 \verb|find . -type f -exec sudo chmod 777 {} \;|（巨慢）。且这么做只能临时有效，打开另一个命令行就没用了。 GDB\upref{gdbNt}也不能用（设置断点失败）。
+重要提示：WSL1 用于 NTFS 文件系统最合适，包括移动硬盘。 exFAT 兼容性较差（不兼容软链， git 也会有权限 bug）。 NTFS 用 WSL1 也不完美， 有时候 \verb|chmod -R| 不能真正的深入到每个子目录，还可能要 cd 进去再次用 \verb|chmod -R|，或者直接 \verb|find . -type f -exec sudo chmod 777 {} \;|（巨慢）。且这么做只能临时有效，打开另一个命令行就没用了。 \enref{GDB}{gdbNt} 也不能用（设置断点失败）。
 
 所以，有条件用双系统或者 Virtualbox 还是建议尽量用它们。
 
@@ -39,7 +39,7 @@
 \subsection{WSL1 还是 WSL2}
 \begin{itemize}
 \item WSL1 是 Windows 套壳， system call 都是通过调用 Windows 的 system call 来实现的。
-\item WSL2 是虚拟机， 兼容性是最好的， Windows 上的 docker\upref{Docker} 的新版本就是基于 WSL2。
+\item WSL2 是虚拟机， 兼容性是最好的， Windows 上的 \enref{docker}{Docker} 的新版本就是基于 WSL2。
 \item WSL 的网络是直接使用 Windows 的， 而 WSL2 的网络是基于虚拟机的虚拟网卡。
 \item WSL 即使使用 NTFS 也可以支持 symlink。
 \item （待重新测试新版本）目前来说 WSL 在 NTFS 文件系统中的读写速度比 WSL 2 快很多
@@ -95,7 +95,7 @@ command="命令1; 命令2"
 \item \verb|cmd| 中 \verb|wsl -l -v| 必须要显示 running， WSL 才有可能执行任何东西包括 service。
 \item 可以在最后执行一个永不结束的命令（就不用配置 service 这么麻烦）， 如 \verb|frp|\upref{NATthr}
 \item WSL1 不支持 systemd，只有 WSL2 支持。
-\item 笔者的设置为： \verb|command="date >> /home/addis/WSL-start-log.txt; service ssh --full-restart; mount -o uid=xxx -t drvfs e: /mnt/e; /home/用户名/frp/frpc -c /home/addis/frp/frpc.ini > /home/用户名/frp/frpc.log;"|。 其中 \verb|frpc| 见这里\upref{NATthr}。
+\item 笔者的设置为： \verb|command="date >> /home/addis/WSL-start-log.txt; service ssh --full-restart; mount -o uid=xxx -t drvfs e: /mnt/e; /home/用户名/frp/frpc -c /home/addis/frp/frpc.ini > /home/用户名/frp/frpc.log;"|。 其中 \verb|frpc| 见\enref{这里}{NATthr}。
 \end{itemize}
 
 \subsection{Bug 和兼容问题}

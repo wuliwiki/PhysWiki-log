@@ -47,7 +47,8 @@
 \item 常用的 \verb|MPI_Datatype| 有 \verb|MPI_CHAR|， \verb|MPI_UNSIGNED_CHAR|， \verb|MPI_INT|， \verb|MPI_UNSIGNED|， \verb|MPI_LONG|， \verb|MPI_LONG_LONG|， \verb|MPI_FLOAT|， \verb|MPI_DOUBLE|， \verb|MPI_LONG_DOUBLE|， \verb|MPI_COMPLEX|， \verb|MPI_REAL16|， \verb|MPI_COMPLEX32|。
 \item \verb|count| 是 \verb|buf| 中有几个数据， 即数组的长度。
 \item \verb|int MPI_Recv(void *buf, int count, MPI_Datatype datatype, int source, int tag, MPI_Comm comm, MPI_Status *status)|， 接收信息。 \verb|status| 可以用于获取更多信息， 其他参数同理。
-\item \verb|int MPI_Bcast(void *buffer, int count, MPI_Datatype datatype, int root,  MPI_Comm comm)| 只从 id 为 root 的进程调用， 对所有其他进程中的 buffer 赋值。 这相当于分别对每个进程用 \verb|MPI_Send()| 和 \verb|MPI_Recv()|。
+\item 事实上，\verb`MPI_Send` 和 \verb`MPI_Send` 之前还是必须要 \verb`MPI_Bcast` 让所有的节点都知道接收者是谁。 如果信息量不大，还不如把信息和接收者一起直接广播。例如每个节点有一个数，要找到最大的数所在的节点并通知它，就直接用下面的 \verb`MPI_Allreduce` 和 \verb`MPI_MAXLOC` 即可。 这样编程起来也会简单的多。
+\item \verb|int MPI_Bcast(void *buffer, int count, MPI_Datatype datatype, int root,  MPI_Comm comm)| 从所有进程调用， 把所有进程中的 buffer 同步为 \verb`root` 的。 这相当于分别对每个进程用 \verb|MPI_Send()| 和 \verb|MPI_Recv()|。 注意如果 root 节点是运行时才确定的，那所有节点都要事先知道 root 是谁（要不然怎么确定自己要不要发送呢？）。
 \item \verb|double MPI_Wtime()| 返回当前进程的时间（从任意起点开始， 单位秒）。
 \item \verb|int MPI_Reduce(const void* send_buffer, void* receive_buffer, int count, MPI_Datatype datatype, MPI_Op operation, int root, MPI_Comm communicator);| 把每个进程中的某个变量相加或相乘等， 赋值给 id 为 \verb|root| 的某个变量。 其中 \verb|operation| 可以是 \verb|MPI_MAX, MPI_MIN, MPI_SUM, MPI_PROD|
 \item \verb|int MPI_Allreduce(void *sendbuf, void *recvbuf, int count, MPI_Datatype datatype, MPI_Op op, MPI_Comm comm);| 和 \verb|MPI_Reduce| 一样， 但结果会返回到所有进程。
