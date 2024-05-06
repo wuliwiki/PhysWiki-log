@@ -30,7 +30,7 @@
 \item 如果已经安装了 MKL， 可能会提示目录已经存在（不确定 MKL 是否已经包含 MPI）
 \item 安装好以后同样需要在 \verb`~/.bashrc` 中添加路径， 即在文件最后加入命令 \verb`source /opt/intel/compilers_and_libraries_2020.1.217/linux/mpi/intel64/bin/mpivars.sh`
 \item 重启一下 shell， 运行 \verb`mpicxx --help`， 如果进入帮助页面就说明成功了
-\item \verb`mpicxx` 或者 \verb`mpigxx` 都是 g++ 的一个 wraper， 和 g++ 一样使用即可
+\item \verb`mpicxx` 或者 \verb`mpigxx` 都是 g++ 的一个 wraper， 和 g++ 一样使用即可。如果编译和链接分开也都要用。
 \item 所有的机器都需要使用同一个版本的 MPI。
 \end{itemize}
 
@@ -43,18 +43,20 @@
 \item \verb|MPI_Init(&argc, &argv);| 开始 MPI， \verb|MPI_Finalize();| 结束。 初始化会占用一些时间，可以留到程序中真的需要用到 MPI 的时候才使用，在这之前每个进程可以各自执行自己的事情（但是无法获取节点编号，所以一般在 init 前的计算都是完全相同的）。
 \item \verb|MPI_Comm_size(MPI_Comm comm, &size);| 获取指定 communicator 的进程数
 \item \verb|MPI_Comm_rank(MPI_Comm comm, &rank);|获取当前进程的 id， 称为 rank。
-\item \verb|int MPI_Send(const void *buf, int count, MPI_Datatype datatype, int dest, int tag, MPI_Comm comm)| 其中 \verb|dest| 是进程 \verb|id|， \verb|tag| 是一个编号用于区分不同的消息， \verb|comm| 一般是 \verb|MPI_COMM_WORLD| （所有进程）。
+\item \verb|int MPI_Send(const void *buf, int count, MPI_Datatype datatype, int dest, int tag, MPI_Comm comm)| 其中 \verb|dest| 是进程 \verb|id|， \verb|tag| 是一个编号用于区分不同的消息（只需要区分来源和目标相同的多条消息）， \verb|comm| 一般是 \verb|MPI_COMM_WORLD| （所有进程）。
+\item \verb`MPI_Send` 执行完以后，修改 \verb`buf` 是安全的。
 \item 常用的 \verb|MPI_Datatype| 有 \verb|MPI_CHAR|， \verb|MPI_UNSIGNED_CHAR|， \verb|MPI_INT|， \verb|MPI_UNSIGNED|， \verb|MPI_LONG|， \verb|MPI_LONG_LONG|， \verb|MPI_FLOAT|， \verb|MPI_DOUBLE|， \verb|MPI_LONG_DOUBLE|， \verb|MPI_COMPLEX|， \verb|MPI_REAL16|， \verb|MPI_COMPLEX32|。
 \item \verb|count| 是 \verb|buf| 中有几个数据， 即数组的长度。
-\item \verb|int MPI_Recv(void *buf, int count, MPI_Datatype datatype, int source, int tag, MPI_Comm comm, MPI_Status *status)|， 接收信息。 \verb|status| 可以用于获取更多信息， 其他参数同理。
+\item \verb|int MPI_Recv(void *buf, int count, MPI_Datatype datatype, int source, int tag, MPI_Comm comm, MPI_Status *status)|， 接收信息。 \verb|status| 可以用于获取更多信息， 其他参数同理。 注意如果没有收到信息就会一直等待。
 \item 事实上，\verb`MPI_Send` 和 \verb`MPI_Send` 之前还是必须要 \verb`MPI_Bcast` 让所有的节点都知道接收者是谁。 如果信息量不大，还不如把信息和接收者一起直接广播。例如每个节点有一个数，要找到最大的数所在的节点并通知它，就直接用下面的 \verb`MPI_Allreduce` 和 \verb`MPI_MAXLOC` 即可。 这样编程起来也会简单的多。
 \item \verb|int MPI_Bcast(void *buffer, int count, MPI_Datatype datatype, int root,  MPI_Comm comm)| 从所有进程调用， 把所有进程中的 buffer 同步为 \verb`root` 的。 这相当于分别对每个进程用 \verb|MPI_Send()| 和 \verb|MPI_Recv()|。 注意如果 root 节点是运行时才确定的，那所有节点都要事先知道 root 是谁（要不然怎么确定自己要不要发送呢？）。
 \item \verb|double MPI_Wtime()| 返回当前进程的时间（从任意起点开始， 单位秒）。
-\item \verb|int MPI_Reduce(const void* send_buffer, void* receive_buffer, int count, MPI_Datatype datatype, MPI_Op operation, int root, MPI_Comm communicator);| 把每个进程中的某个变量相加或相乘等， 赋值给 id 为 \verb|root| 的某个变量。 其中 \verb|operation| 可以是 \verb|MPI_MAX, MPI_MIN, MPI_SUM, MPI_PROD|
+\item \verb|int MPI_Reduce(const void* send_buffer, void* receive_buffer, int count, MPI_Datatype datatype, MPI_Op operation, int root, MPI_Comm communicator);| 把每个进程中的某个变量（或数组）相加或相乘等， 赋值给 id 为 \verb|root| 的某个变量（或数组，即每个元素分别相加）。 其中 \verb|operation| 可以是 \verb|MPI_MAX, MPI_MIN, MPI_SUM, MPI_PROD|
 \item \verb|int MPI_Allreduce(void *sendbuf, void *recvbuf, int count, MPI_Datatype datatype, MPI_Op op, MPI_Comm comm);| 和 \verb|MPI_Reduce| 一样， 但结果会返回到所有进程。
 \item \verb|int MPI_Barrier(MPI_Comm comm)| 可以同步所有的进程到某个点。
 \item \verb|Scatter()| （未完成）
 \item \verb|Gather()| （未完成）
+\item 如果每个节点有一个数字，而我们希望每个节点都可以获得一个一样的数组，装有每个节点的数字，那么用 \verb`MPI_Allgather(&my_number, 1, MPI_DOUBLE, all_numbers, 1, MPI_DOUBLE, MPI_COMM_WORLD);` 其中 \verb`my_number` 是双精度数字， \verb`all_numbers` 是双精度数组的指针。
 \end{itemize}
 
 \subsection{配置集群}

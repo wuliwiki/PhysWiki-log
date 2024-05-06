@@ -106,3 +106,17 @@ for(int i = 0; i < size; i++) {
 #pragma omp atomic
 counter++;
 \end{lstlisting}
+
+若想把每个线程中的一个数加到一起，除了 atomic 也有现成的办法（\verb`reduction`）：
+\begin{lstlisting}[language=cpp]
+// sum a 2d array
+#pragma omp parallel for reduction(+:s2)
+for (Long j = 0; j < a.n1(); ++j) {
+	const double *p = &a(0, j);
+	double s = 0;
+	for (Long i = 0; i < Nr; ++i)
+		s += p[i];
+	s2 += s;
+}
+\end{lstlisting}
+这种把每个线程中的数据累计到一个数中的过程就叫做 \textbf{reduction}，其他并行计算框架也使用这个词。 类似的，还有 \verb`reduction(max:my_var)` 用于计算最大值。

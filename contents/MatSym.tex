@@ -5,7 +5,7 @@
 
 \pentry{Matlab 的程序调试及其他功能\nref{nod_MatOtr}}{nod_7d4e}
 
-Matlab 的符号计算需要符号计算工具箱， 取决于你的证书类型， 可能需要额外购买。 另外需要提醒的是， 虽然 Matlab 和 Python 都有符号计算功能， 但在符号计算领域 Mathemtica\upref{Mma} 才更为主流， 其默认界面也更适合符号计算。
+Matlab 的符号计算需要符号计算工具箱， 取决于你的证书类型， 可能需要额外购买。 另外需要提醒的是， 虽然 Matlab 和 Python 都有符号计算功能， 但在符号计算领域 \enref{Mathemtica}{Mma} 才更为主流， 其默认界面也更适合符号计算。
 
 \subsection{符号变量和符号表达式}
 \begin{itemize}
@@ -23,7 +23,7 @@ Matlab 的符号计算需要符号计算工具箱， 取决于你的证书类型
 
 \item  \verb|sym(数值)| 会自动\textbf{猜测} \verb|数值| 所代表的根式， 例如 \verb|sym(0.866025403784439)| 的结果是表达式 $\sqrt{3}/2$， 又例如 \verb|sym(pi)| 的结果是精确的圆周率符号 $\pi$。 注意在较新版的 Matlab 中， \verb|sym('pi')| 将得到名为 \verb|pi| 的普通变量， 而不是圆周率。
 
-\item 如果不希望猜测， 那么可以用 “双精度和变精度浮点数测试（Matlab）\upref{FltMat}” 中的 \verb|num2sym(双精度)|。
+\item 如果不希望猜测， 那么可以用 “\enref{双精度和变精度浮点数测试（Matlab）}{FltMat}” 中的 \verb|num2sym(双精度)|。
 
 \item 若 \verb|sym(...)| 作用在一个数组上（可以是任何上述类型）， 那么则逐个元素作用， 并生成 \verb|sym| 类型的数组。
 
@@ -63,7 +63,7 @@ Matlab 的变精度计算并不自带误差追踪功能， 例如两个十分相
 
 \item 如果猜测没有发生， 那么 \verb|vpa(双精度)| 会先把 \verb|双精度| 变为 ieee 二进制表示， 然后在后面添零拓展精度。 验证： \verb|num2bin2(vpa(1.234567890223456789))| 和 \verb|num2bin2(1.234567890223456789)| 结果相同。
 
-\item 如果不希望猜测， 那么可以用 “双精度和变精度浮点数测试（Matlab）\upref{FltMat}” 中的 \verb|num2vpa(双精度, 有效数字)|。
+\item 如果不希望猜测， 那么可以用 “\enref{双精度和变精度浮点数测试（Matlab）}{FltMat}” 中的 \verb|num2vpa(双精度, 有效数字)|。
 
 \item 符号工具箱自带的函数（如 \verb|gamma|， \verb|hypergeom|）会保证输出结果的最后一位正确（可以对比 Mathematica 结果）， 但由于上一条中误差， 自己写的函数则无法保证。
 
@@ -71,7 +71,7 @@ Matlab 的变精度计算并不自带误差追踪功能， 例如两个十分相
 
 \item 和双精度变量一样， 若把变精度浮点数进行运算， 则其本身的误差会在运算中传递， 且在计算中会产生新的截断误差。 举例： \verb|1 + sym('1e-40') - 1| 的结果显示为 \verb|0.0|， 而 \verb|1 + sym(10)^(-40) - 1| 的结果显示 \verb|1/10000....|（40 个 0）。
 
-\item 变精度浮点数的运算的默认位数可以用 \verb|digits(整数)| 设置， 如果不设置， 则默认是 32 位。 也可以使用不含自变量的 \verb|digits()| 查看当前设置的位数。 实际上的有效位数比设置的要多 8 位， 所以默认是 40 位。 这可以用 “双精度和变精度浮点数测试（Matlab）\upref{FltMat}” 中的 \verb|digits2| 验证。
+\item 变精度浮点数的运算的默认位数可以用 \verb|digits(整数)| 设置， 如果不设置， 则默认是 32 位。 也可以使用不含自变量的 \verb|digits()| 查看当前设置的位数。 实际上的有效位数比设置的要多 8 位， 所以默认是 40 位。 这可以用 “\enref{双精度和变精度浮点数测试（Matlab）}{FltMat}” 中的 \verb|digits2| 验证。
 
 \item \verb|digits| 函数是控制全局的， 如果设置了 \verb|digits| 以后调用某函数， 那么函数内部的变精度计算也都会采用同样精度。
 
