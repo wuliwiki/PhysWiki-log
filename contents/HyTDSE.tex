@@ -5,7 +5,7 @@
 
 \pentry{类氢原子的定态波函数\nref{nod_HWF}， Wigner 3j 符号\nref{nod_ThreeJ}}{nod_456b}
 
-本文使用\enref{原子单位制}{AU}。 我们希望求解氢原子在电场中的薛定谔方程\upref{TDSE}
+本文使用\enref{原子单位制}{AU}。 我们希望求解氢原子在电场中的\enref{薛定谔方程}{TDSE}
 \begin{equation}\label{eq_HyTDSE_7}
 -\frac{1}{2m}\laplacian \Psi -\frac{Z}{r}+ V(\bvec r, t)\Psi = \I \pdv{t}\Psi~.
 \end{equation}
@@ -17,9 +17,9 @@ V(\bvec r, t) =  - q\bvec E(t) \vdot \bvec r~.
 \begin{equation}
 V(\bvec r, t) =  -\frac{q}{m} \bvec A\vdot\bvec p~.
 \end{equation}
-在原子单位中电子电荷 $q = -1$， 该势能使用了长度规范\upref{LenGau}， 此外我们还可以使用速度规范速度规范\upref{LVgaug}， 也是等效的。 在长度规范中， 我们近似认为原子的长度远小于电磁波的波长， 所以电磁波不随位置变化。
+在原子单位中电子电荷 $q = -1$， 该势能使用了\enref{长度规范}{LenGau}，此外我们还可以使用\enref{速度规范}{LVgaug}，也是等效的。 在长度规范中， 我们近似认为原子的长度远小于电磁波的波长， 所以电磁波不随位置变化。
 
-虽然求解方程最直观的方法是使用直角坐标， 但计算效率很低。 实际中一般使用球坐标系， 用球谐函数展开波函数（参考球坐标系中的定态薛定谔方程\upref{RadSE}）。
+虽然求解方程最直观的方法是使用直角坐标， 但计算效率很低。 实际中一般使用球坐标系， 用球谐函数展开波函数（参考球坐标系中的\enref{定态薛定谔方程}{RadSE}）。
 \begin{equation}\label{eq_HyTDSE_3}
 \Psi(\bvec r, t) = \frac{1}{r}\sum_{l,m} \psi_{l,m}(r, t) Y_{l,m}(\bvec r)~.
 \end{equation}
@@ -95,7 +95,7 @@ F_{\lambda,\lambda'}^{(z)} = \mel{Y_{l,m}}{\cos\theta}{Y_{l',m'}}
 \begin{equation}
 \mel{Y_{l,m}}{Y_{1,m_1}}{Y_{l',m'}} = (-1)^m\sqrt{\frac{3(2l+1)(2l'+1)}{4\pi}} \pmat{l & 1 & l'\\ 0 & 0 & 0}\pmat{l & 1 & l'\\ -m & m_1 & m'}~.
 \end{equation}
-这在 “氢原子的跃迁偶极子\upref{SelRul}” 也有出现。 当 $m_1=0$ 时，使用（\autoref{eq_SphHar_20}~\upref{SphHar}）令\autoref{eq_HyTDSE_10} 为
+这在 “\enref{氢原子的跃迁偶极子}{SelRul}” 也有出现。 当 $m_1=0$ 时，使用（\autoref{eq_SphHar_20}~\upref{SphHar}）令\autoref{eq_HyTDSE_10} 为
 \begin{equation}\label{eq_HyTDSE_11}
 \mathcal C_{l,m} = \mel{Y_{l,m}}{\cos\theta}{Y_{l+1,m}} = \sqrt{\frac{(l+1)^2-m^2}{(2l+1)(2l+3)}}~.
 \end{equation}
@@ -152,15 +152,15 @@ H_0 \psi_{l} = \I \pdv{\psi_{l}}{t}~.
 \end{equation}
 演化 $\Delta t$。 最后再根据\autoref{eq_HyTDSE_1} 演化 $\Delta t/2$。 具体演化算法有多种， 将在下面介绍。
 
-至于相邻两步之间产生的 $\exp(-\I H_0 {\Delta t}/{2})\exp(-\I H_0 {\Delta t}/{2})$ 是否可以合并为 $\exp(-\I H_0 {\Delta t})$， 取决于所使用的算法这么做以后是否会引入额外误差（例如 Crank-Nicolson 算法\upref{CraNic} 就不宜这么做）。
+至于相邻两步之间产生的 $\exp(-\I H_0 {\Delta t}/{2})\exp(-\I H_0 {\Delta t}/{2})$ 是否可以合并为 $\exp(-\I H_0 {\Delta t})$， 取决于所使用的算法这么做以后是否会引入额外误差（例如 \enref{Crank-Nicolson 算法}{CraNic} 就不宜这么做）。
 
 \subsection{网格和演化算法}
 \pentry{Crank-Nicolson 算法（一维）\nref{nod_CraNic}}{nod_5b3a}
 \addTODO{以下内容应该放在一维薛定谔方程里面讲解}
 
-可以使用二维数组储存波函数， 每一列（或行）是一个分波的 $\psi_l(r)$。 径向网格可以使用等间距网格， 但 FEDVR 网格\upref{FEDVR}效率要更高。
+可以使用二维数组储存波函数， 每一列（或行）是一个分波的 $\psi_l(r)$。 径向网格可以使用等间距网格， 但 \enref{FEDVR 网格}{FEDVR}效率要更高。
 
-演化可以并使用 Crank-Nicolson 算法Crank-Nicolson 算法（一维）\upref{CraNic}演化。 但是 Lanczos 算法\upref{Lanc}效率更高， 而且可以实时判断误差改变步长。
+演化可以并使用 Crank-Nicolson 算法\enref{Crank-Nicolson 算法（一维）}{CraNic}演化。但是 \enref{Lanczos 算法}{Lanc}效率更高，而且可以实时判断误差改变步长。
 
 拆分后的每个算符（矩阵）演化的算法可以一样或不一样。
 
@@ -174,7 +174,7 @@ H_0 \psi_{l} = \I \pdv{\psi_{l}}{t}~.
 &= \sum_{l',m'} \qty[\sum_{l'',m''}R_{l'',m''}  \mel{Y_{l,m}}{Y_{l'',m''}}{Y_{l',m'}}]\psi_{l',m'}~.
 \end{aligned}
 \end{equation}
-现在和上文一样，可以用\autoref{eq_SphHar_5}~\upref{SphHar} 把三个球谐函数的积分变为两个 3j 符号\upref{ThreeJ} 的乘积，再根据选择定则，排除两个求和中等于零的项。 另外如果电场只沿 $z$ 方向， 那么式中所有 $m$ 为零。
+现在和上文一样，可以用\autoref{eq_SphHar_5}~\upref{SphHar} 把三个球谐函数的积分变为两个 \enref{3j 符号}{ThreeJ}的乘积，再根据选择定则，排除两个求和中等于零的项。 另外如果电场只沿 $z$ 方向， 那么式中所有 $m$ 为零。
 
 \autoref{eq_HyTDSE_24} 相当于对每个 $r$ 处不同分波的波函数进行一个矩阵乘法， 但每个 $r$ 处的矩阵是不同的。
 
@@ -182,7 +182,7 @@ H_0 \psi_{l} = \I \pdv{\psi_{l}}{t}~.
 
 \subsection{速度规范}\label{sub_HyTDSE_1}
 \pentry{速度规范\nref{nod_LVgaug}}{nod_e7b3}
-在速度规范下， 当矢势不为零时， 长度规范波函数乘以 $\exp(\I \bvec A \vdot \bvec r)$ 就是速度规范波函数（\autoref{eq_LVgaug_6}~\upref{LVgaug}）。 这导致不同分波的概率不同。 考虑到强场下矢势就是波包的速度， 这个相位因子有助于让波函数的波长变长， 使所需的分波大大减少（频率高的平面波需要更多球谐函数展开\upref{Pl2Ylm}）。
+在速度规范下， 当矢势不为零时， 长度规范波函数乘以 $\exp(\I \bvec A \vdot \bvec r)$ 就是速度规范波函数（\autoref{eq_LVgaug_6}~\upref{LVgaug}）。 这导致不同分波的概率不同。 考虑到强场下矢势就是波包的速度， 这个相位因子有助于让波函数的波长变长， 使所需的分波大大减少（频率高的平面波需要更多\enref{球谐函数展开}{Pl2Ylm}）。
 
 \textbf{特别注意}：在速度规范下即使只考虑从基态的单光子电离，也需要好几个分波，因为电矢势不为零时，波函数比起长度规范叠乘了一个平面波，而这个平面波需要更多分波才能展开。
 

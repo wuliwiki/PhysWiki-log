@@ -8,7 +8,7 @@
 
 \pentry{哈密顿正则方程\nref{nod_HamCan}， 偏导与差分\nref{nod_ParDf}}{nod_68ce}
 
-若程序中给出拉格朗日量拉格朗日方程\upref{Lagrng}的数值函数 $L(q, \dot q, t)$， 输入和输出均为数值（例如双精度实数）， 那么如何数值求解运动方程呢？
+若程序中给出拉格朗日量\enref{拉格朗日方程}{Lagrng}的数值函数 $L(q, \dot q, t)$， 输入和输出均为数值（例如双精度实数）， 那么如何数值求解运动方程呢？
 
 问题的关键是如何列出一个一阶常微分方程组。 如果可以给出系统哈密顿量的数值函数， 那么数值解哈密顿正则方程是首选的做法， 因为它本身已经是一阶常微分方程组， 可以直接用解算器进行数值解。 但对于较复杂的系统， 哈密顿量比拉格朗日量难算得多， 甚至可能没有解析表达式。
 
@@ -19,7 +19,7 @@
 \dv{t} \pdv{L}{\dot q_i} = \pdv{L}{q_i} + Q_i
 \quad (i=1,\dots,N)~.
 \end{equation}
-根据全微分\upref{TDiff}， 左边有
+根据\enref{全微分}{TDiff}，左边有
 \begin{equation}
 \dv{t} \pdv{L}{\dot q_i} = \sum_j\pdv{\dot q_j}\pdv{L}{\dot q_i}\ddot q_j + \sum_j\pdv{q_j}\pdv{L}{\dot q_i}\dot q_j + \pdv{t}\pdv{L}{\dot q_i} \quad (i,j=1,\dots,N)~.
 \end{equation}
@@ -27,16 +27,16 @@
 \begin{equation}
 \sum_j\pdv{\dot q_j}\pdv{L}{\dot q_i}\ddot q_j = \pdv{L}{q_i} - \sum_j\pdv{q_j}\pdv{L}{\dot q_i}\dot q_j - \pdv{t}\pdv{L}{\dot q_i} + Q_i~.
 \end{equation}
-这样， 二阶导数只存在于左边的 $\ddot q_j$， 其他项都只是 $q,\dot q, t$ 的函数。 该式中的偏微最好计算出解析表达式， 但也可以通过差分来计算\upref{ParDf}（会引入更多误差）。 数值解线性方程\footnote{如果 $N$ 不大可以直接用克拉默法则\upref{kramer}， 甚至写出解析解。}， 就可以得到（令 $v_i = \dot q_i$）（\autoref{the_GO2SOD_2}~\upref{GO2SOD}）
+这样， 二阶导数只存在于左边的 $\ddot q_j$， 其他项都只是 $q,\dot q, t$ 的函数。 该式中的偏微最好计算出解析表达式， 但也可以通过差分来计算\upref{ParDf}（会引入更多误差）。 数值解线性方程\footnote{如果 $N$ 不大可以直接用\enref{克拉默法则}{kramer}，甚至写出解析解。}， 就可以得到（令 $v_i = \dot q_i$）（\autoref{the_GO2SOD_2}~\upref{GO2SOD}）
 \begin{equation}
 \leftgroup{
 &\dot v_i = f_i(q, v_i, t)\\
 &\dot q_i = v_i
 }\qquad (i = 1,\dots,N)~.
 \end{equation}
-就得到了 $2N$ 条方程组成的一阶常微分方程组， 变量一共有 $2N$ 个。 可以使用四阶龙格库塔法\upref{OdeRK4} 等方法求解。
+就得到了 $2N$ 条方程组成的一阶常微分方程组， 变量一共有 $2N$ 个。 可以使用\enref{四阶龙格库塔法}{OdeRK4}等方法求解。
 
-代码依赖 “偏导与差分\upref{ParDf}” 中的 \verb|D2_ij.m|， 以及 “导数与差分\upref{DerDif}” 的 \verb|D_i.m|。
+代码依赖 “\enref{偏导与差分}{ParDf}” 中的 \verb|D2_ij.m|， 以及 “\enref{导数与差分}{DerDif}” 的 \verb|D_i.m|。
 \addTODO{dL, d2L, Q 参数未测试}
 \begin{lstlisting}[language=matlab, caption=lagr\_solve.m]
 % 数值解拉格朗日方程
@@ -122,7 +122,7 @@ ret = (L2 - L1) / h;
 end
 \end{lstlisting}
 
-用双摆的例子来测试， 比较 “双摆的数值计算（Matlab）\upref{DbPend}” 的结果：
+用双摆的例子来测试， 比较 “\enref{双摆的数值计算（Matlab）}{DbPend}” 的结果：
 \begin{lstlisting}[language=matlab, caption=lagr\_solve\_demo.m]
 % lagr_solve_demo
 function lagr_solve_demo

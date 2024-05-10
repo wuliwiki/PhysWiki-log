@@ -3,19 +3,91 @@
 % license Usr
 % type Tutor
 
-\begin{issues}
-\issueTODO
-\end{issues}
 
 \subsection{非线性薛定谔方程}
 在实际某些科研方向的问题中我们会遇到需要求解非线性薛定谔方程的例子，或者著名的Gross-Pitaevskii方程，不同于薛定谔方程，非线性方程的求解在数值上更有难度。方程的一般形式是
 \begin{equation}
 i \frac{\partial}{\partial t} \psi = -\frac{1}{2}\nabla^2 \psi + g |\psi|^2 \psi + V(r)\psi~,
 \end{equation}
-其中的$V(r)$是外势。注意到这一方程通常描述多粒子体系的性质，例如Landau-Ginburg理论中描述超导序参量或者超流等，所以波函数并不总是满足归一化，即$\int \psi(x)^*\psi(x) dx \neq 1$。而且由于非线性项的出现，破坏了线性叠加原理，所以直接的虚时演化也不显然地适用与这个方程的求解。读者可能会考虑诸如有限差分法等数值方法求解，我们在这里介绍一些其它的数值计算方法，通常运算速度要优于有限差分法，且精度也更好。
+其中的$V(r)$是外势。注意到这一方程通常描述多粒子体系的性质，例如Landau-Ginburg理论中描述超导序参量或者超流等，所以波函数并不总是满足归一化，即$\int \psi(r)^*\psi(r) dr \neq 1$。而且由于非线性项的出现，破坏了线性叠加原理，所以直接的虚时演化也不显然地适用与这个方程的求解。读者可能会考虑诸如有限差分法等数值方法求解，我们在这里介绍一些其它的数值计算方法，通常运算速度要优于有限差分法，且精度也更好。
 \subsection{求解基态：梯度下降法}
-寻找基态的过程等价于对能量函数进行优化的过程，找到能量的极小值，这里的能量就是损失函数，见梯度下降\upref{GraDec} 。能量表达式为
+现在我们以一维情形为例，寻找基态的过程等价于对能量函数进行优化的过程，找到能量的极小值，这里的能量就是损失函数，见梯度下降\upref{GraDec} 。能量表达式为
 \begin{equation}
 E = \int \frac{1}{2}|\frac{d \psi}{dx}|^2 + V(x)|\psi|^2 + \frac{g}{2}|\psi|^4~.
 \end{equation}
-在势阱中或自由体系，一般取$V(x)\ge 0$. 实际上在这一表达式下，基态可以一眼看出来是$\psi(x) = 0$。因为三项的贡献全部为正。但我们并不想要这样的基态，更一般情形下，我们想要给定一个有限粒子数时的基态
+基态波函数一般而言是实数，在势阱中或自由体系，一般取$V(x)\ge 0$. 实际上在这一表达式下，基态可以一眼看出来是$\psi(x) = 0$。因为三项的贡献全部为正。但我们并不想要这样的基态，更一般情形下，我们想要给定一个有限粒子数时的基态，或者说给定平均粒子数密度时的基态。这样的解可以通过引入拉格朗日参数来求解，重新定义损失函数为
+\begin{equation}
+E' = \int \frac{1}{2}|\frac{d\psi}{dx}|^2 + V(x)|\psi|^2 + \frac{g}{2}|\psi|^4 -\mu |\psi|^2 dx ~,
+\end{equation}
+令$\mu>0$，是一可调参数，可以看到$|\psi|^2$大的态会贡献负值，于是我们能够通过调节$\mu$来得到一个有限粒子数的基态。现在将波函数在空间上离散化，$x\rightarrow x_1,x_2,...,x_N$, 记$\psi_i = \psi(x_i),V_i = V(x_i)$,并择周期边界条件，$x_0 = x_N, x_{N+1}= x_1$。 损失函数变为
+\begin{equation}
+E' =\sum_{i=1}^N (\frac{-1}{2} \frac{\psi_i(\psi_{i+1}+\psi_{i-1}-2\psi_i)}{\Delta x^2} + V_i\psi_{i}^2 + \frac{g}{2}\psi_i^4 - \mu \psi_i^2) \Delta x~.
+\end{equation}
+这里可以把每个$\psi_i$都看做是一个独立变量，$E'$的梯度为
+\begin{equation}
+(\nabla E')_i = \Delta x (\frac{-1}{2}\frac{2(\psi_{i+1}+\psi_{i-1}-2\psi_i)}{\Delta x^2} + 2V_i \psi_i + 2g \psi_i^3 - 2\mu \psi_i ) ~,
+\end{equation}
+则根据梯度更新波函数，迭代方程就有
+\begin{equation}
+\psi_i(t+1) = \psi_i(t) -dt [\frac{-1}{2}\frac{(\psi_{i+1} +\psi_{i-1}-2\psi_i )}{\Delta x^2} + V_i \psi_i + g_i \psi_i^3 -\mu \psi_i](t) ~.
+\end{equation}
+这一迭代格式从形式上等同于在中心差分格式下的虚时演化，只不过最后添加了一项$\mu$。
+
+\subsection{实时演化：时间切割谱方法}
+
+注意到实时求解非线性薛定谔方程时不能够再假定波函数是实数了，这里我们采用一种很具有启发意义的算法，称作Time-splitting spectral method(TSSP)，\footnote{Numerical Solution of the Gross-Pitaevskii Equation for Bose-Einstein Condensation, Weizhu Bao et.}，我们把一个方程拆成两部分，第一部分只演化动能项，
+\begin{equation}
+i\frac{\partial}{\partial t} \psi(x,t) = -\frac{d^2}{2dx^2} \psi(x,t)~,
+\end{equation}
+第二部分演化方程中其它的项，
+\begin{equation}
+i\frac{\partial}{\partial t}\psi(x,t) = V(x)\psi(x,t) + g |\psi(x,t)|^2\psi(x,t) ~.
+\end{equation}
+这两部分单独求解都是容易的，这一方法的核心就是在$\Delta t$时间内，让波函数先根据第一个方程演化，然后再在同样的$\Delta t$时间段内，让波函数根据第二个方程演化，让这两段分别演化后得到的结果作为总的方程演化结果的近似。第一个方程的解在$k$空间中是容易的，
+\begin{equation}
+i\frac{\partial}{\partial t}\psi(k,t) = -\frac{k^2}{2}\psi(k,t) ~,
+\end{equation}
+$\psi(k,t) = e^{itk^2/2}\psi(k,0)$。 而第二个方程的演化有很好的局域粒子数守恒，即$|\psi(x,t)|^2 = |\psi(x,0)|^2$,则第二个方程的解可以直接写出来为$\psi(x,t) = e^{-iV(x)t-ig n(x,0)t}\psi(x,0)$综合两部分，我们就得到
+\begin{equation}
+\psi(x,\Delta t) \approx e^{-iV(x)\Delta t - ig n(x,0)\Delta t}\mathcal{F}^{-1}e^{i\Delta t k^2/2}\mathcal{F}\psi(x,0)~.
+\end{equation}
+其中$\mathcal{F}$代表傅里叶变换，将波函数从实空间变换为动量空间，$\mathcal{F}^{-1}$对应逆傅里叶变换，将波函数从动量空间变回实空间。下面附上TSSP的julia代码
+\begin{lstlisting}[language=julia,caption=TSSP.jl]
+using FFTW
+using PyPlot
+#Set parameters
+Lx = 30
+N = 1024
+x_grid = range(-Lx,Lx,length=N)
+dx = x_grid[2]-x_grid[1]
+dk = 2*pi/Lx
+ω=0.5
+V = @. 0.5*ω^2*x_grid^2
+gn = 1.0
+k_grid =(collect(0:N-1).-N/2)*dk
+k_grid = fftshift(k_grid);
+
+
+function evolve(psi0,parMat;dt = 1e-5,times = 1000)
+    imaginary_time_switch = parMat["imaginary_time_switch"]
+    Dt = imaginary_time_switch ? -1im : 1
+    Dt = Dt*dt
+    psi = copy(psi0)
+    gn = parMat["gn"]
+    μ = parMat["μ"]
+    for i = 1:times
+        psik = fft(psi)
+        Operator_k = @. exp(-1im*k_grid^2*Dt/2)
+        psik = @. psik*Operator_k
+        psi = ifft(psik)
+        density = abs2.(psi)
+        Operator_x = @. exp(-1im*(V+gn*density-μ)*Dt)
+        psi = @. psi*Operator_x
+    end
+    psi
+end
+psi0 = rand(N);
+parMat = Dict(["V"=>V,"imaginary_time_switch"=>false,"gn"=>gn,"μ"=>60.0])
+psi0 = evolve(psi0,parMat,dt=1e-4,times=1000)
+plot(abs2.(psi0))
+\end{lstlisting}

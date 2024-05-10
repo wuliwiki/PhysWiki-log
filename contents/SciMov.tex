@@ -1,0 +1,21 @@
+% Matlab 数理教学动画制作笔记
+% license Usr
+% type Note
+
+\subsection{背景和大小}
+\begin{itemize}
+\item \verb`saveas()` 使用的画幅是 figures 中的 \verb`Position` 尺寸。
+\item figure 的 \verb`Position` 属性和 axis 的 \verb`InnerPosition` 属性可以都设为一样的像素，这样就会有 “全屏” 效果。
+\item \verb`set(gca, 'XTick', []);` 可以删除坐标点和数字。
+\end{itemize}
+
+\subsection{导出透明背景图片}
+\begin{itemize}
+\item figure 中， \verb`set(gcf, 'Color', 'none');` 以及 \verb`set(gca, 'Color', 'none');` 就会移除背景，显示为黑色。
+\item Windows 10/11 中，透明 png 在桌面的 icon 也是透明的。或者在 paint 画图软件中透明的部分是方格。
+\item 例如用 \verb`plot()` 在 figure 中画了一个函数图，如何保存为背景透明的图片呢？ Matlab 这方面的支持并不怎么好。
+\item \verb`saveas(gcf, '...svg')` 和 \verb`print()` 无论是 svg 还是 png 都无法导出透明背景。 目前的方法是导出 svg 然后用一个脚本移除 \verb`<g><rect ... /></g>` 元素，另外也可以移除边框。
+\item \verb`exportgraphics(gcf,'transparent.eps', 'ContentType','vector', 'BackgroundColor','none')` 据说可以导出透明矢量图（未测试）。
+\item \verb`[I,map,alpha] = imread()` 可以检查 png 是否含有透明部分（\verb`map` 默认输出空矩阵）。
+\item \verb`imshow()` 然后 \verb`set(gca, 'AlphaData', alpha)` 可以显示透明效果（透明部分是棋盘格）
+\end{itemize}

@@ -48,7 +48,7 @@ docker run --name filebrowser -d --restart always \
 
 如果你在带有公共 ip 的服务器上使用 filebrowser， 且把所有需要访问的文件都放在该服务器上， 那么你在任何能正常访问互联网的地方都可以访问服务器上的文件。
 
-但如果你有很多文件， 而服务器的储存空间太贵， 那么你可以在自己家的一台能上网的电脑上部署 filebrowser， 然后使用 FRP\upref{NATthr} 把 filebrowser 在你家电脑上监听的端口代理到服务器公共 ip 的某个端口。 这样， 你访问服务器的 \verb|ip:端口| 就可以访问你的所有文件。 但由于流量仍然经过服务器， 所以仍需支付服务器的流量费。
+但如果你有很多文件， 而服务器的储存空间太贵， 那么你可以在自己家的一台能上网的电脑上部署 filebrowser， 然后使用 \enref{FRP}{NATthr} 把 filebrowser 在你家电脑上监听的端口代理到服务器公共 ip 的某个端口。 这样， 你访问服务器的 \verb|ip:端口| 就可以访问你的所有文件。 但由于流量仍然经过服务器， 所以仍需支付服务器的流量费。
 
 你甚至可以把很多不同的内网中的装有 filebrowser 的电脑都映射到服务器的不同端口。
 
@@ -59,7 +59,7 @@ docker run --name filebrowser -d --restart always \
 
 如果你想要 https 协议就必须拥有一个域名。 你可以把域名解析到公网 ip 上， 但如果你只是做到这一步， 你仍然需要在 url 后面指定端口号， 例如 \verb|https://example.com:5000|。 通过不同的端口号连接到不同的内网服务器。 这并不优雅。
 
-一种解决方案就是使用 nginx\upref{nginxN} 进行端口转发， 把你服务器的不同端口转发到 80 或者 443 端口， 即 http 和 https 的默认端口。 但这个转发是多对一的， nginx 怎么知道应该转发哪个呢？ 这就是域名相对于 ip 的另一个优越性（不光是方便记忆）： 在你的 http 请求中， 除了 ip 地址外也会包含你请求的域名。 nginx 可以通过请求域名的不同来选择在和你连接时把同一服务器的不同转口转发到 80 或者 443。 注意这并不意味着你需要有多个域名， 你只需要在域名记录中添加不同的子域名即可， 例如 \verb|files1.example.com|， \verb|files2.example.com|。
+一种解决方案就是使用 \enref{nginx}{nginxN} 进行端口转发， 把你服务器的不同端口转发到 80 或者 443 端口， 即 http 和 https 的默认端口。 但这个转发是多对一的， nginx 怎么知道应该转发哪个呢？ 这就是域名相对于 ip 的另一个优越性（不光是方便记忆）： 在你的 http 请求中， 除了 ip 地址外也会包含你请求的域名。 nginx 可以通过请求域名的不同来选择在和你连接时把同一服务器的不同转口转发到 80 或者 443。 注意这并不意味着你需要有多个域名， 你只需要在域名记录中添加不同的子域名即可， 例如 \verb|files1.example.com|， \verb|files2.example.com|。
 
 这时 nginx 设置文件的一个例子（包含 http 和 https）：
 \begin{lstlisting}[language=none]
