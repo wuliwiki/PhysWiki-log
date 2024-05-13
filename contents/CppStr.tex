@@ -3,14 +3,14 @@
 % type Note
 
 \pentry{C++ 基础\nref{nod_Cpp0}}{nod_9e49}
-可以用 C++ 解释器 Cling\upref{Cling} 方便测试。 \verb|printf| 参考 C 语言笔记\upref{CNote}。
+可以用 \enref{C++ 解释器 Cling}{Cling} 方便测试。 \verb|printf| 参考 \enref{C 语言笔记}{CNote}。
 
 \subsection{常识}
 \begin{itemize}
 \item 任意两个 string literal 出现在一起会自动拼接： \verb`"abc" "def"`（中间可以换行） 相当于 \verb|"abcdef"|。
 \item \verb|u8"..."| 指定对字符串使用 UTF-8 编码（一些编译器不加 \verb|u8| 也默认使用 UTF-8）， \verb|U"..."| 用于把字符串转换为 UTF-32 编码（\verb|basic_string<char32_t>| 类型）。 这和源码文件的字符编码无关（首先确保你的文本文件使用编译器指定的编码）。
 \item \verb|R"(一些字符串)"| 是 raw string \verb|R"delimiter(一些字符串)delimiter"| 是更安全的裸字符串。
-\item C++ 对 UTF-8 的支持非常有限， 甚至没有一个 iterator 可以对每个字符进行循环。 见 SLISC\upref{SLISC} 中的 \verb|u8_iter|。
+\item C++ 对 UTF-8 的支持非常有限， 甚至没有一个 iterator 可以对每个字符进行循环。 见 \enref{SLISC}{SLISC} 中的 \verb|u8_iter|。
 \item 普通字符串中可以用 \verb|\0数字| （8 进制） 或 \verb|\x数字| （16 进制） 来指定某个不好表示的字符。
 \item 裸字符串： \verb|R"(一些字符)"|。 里面的字符不会被 escape。 若要更裸一点， 还可以用 \verb|R"自定义标志(一些字符)自定义标志"|。 中间的 \verb|一些字符| 可以换行。
 \item 如果需要高性能， 函数还得是用 \verb|const char *| 输入字符串（会需要手打很多 \verb|.c_str()|）。 或者其次用 \verb|const string&| 加上一个 index 指明起始位置， 或者用 C++17 的 \verb|string_view|。
@@ -45,7 +45,7 @@
 \item \verb|size_t string::find(char或const string&, size_t start)|； 若找不到， 返回 \verb|string::npos|（no position 的缩写）， 这和 \verb|numeric_limits<size_t>::max()| 是一样的。 若嫌麻烦也可以 \verb|using string::npos|。
 \item \verb|str.erase(ind,len)| 可以删除一个子串， \verb|str.erase(ind)| 可以删除 \verb|ind| 开始的所有东西。 \verb|ind+len| 可以超出边界。
 \item \verb|str.replace(ind,len,new_str)| 可以替换子字符串，同样 \verb|ind+len| 可以超出边界。
-\item 无法替换字符串中的所有 \verb|key|，见 SLISC\upref{SLISC} 的 \verb|replace(str,key,new_str)|。
+\item 无法替换字符串中的所有 \verb|key|，见 \enref{SLISC}{SLISC} 的 \verb|replace(str,key,new_str)|。
 \item C++20： \verb|str.starts_with("abc")| 和 \verb|str.ends_with("abc")| 可以检查字符串开头和结尾。 也可以自己写一个：
 \begin{lstlisting}[language=cpp]
 bool startsWith(const string& fullString, const string& starting) {
@@ -95,7 +95,7 @@ bool startsWith(const string& fullString, const string& starting) {
 \item \verb|string::find_first_of()| 这样的函数就用不了了。 因为单个字符一般也要用字符串来表示。
 \item 跳到上一个下一个字符也要用 iterator， 而不是直接用 index。
 \item STL 不提供这样的功能， 常用的第三方库有 \href{https://github.com/nemtrif/utfcpp}{utfcpp （header only）} 以及 \href{https://tzlaine.github.io/text/doc/html/index.html}{Boost.TexT}。 utfcpp 支持在三种不同 Unicode 之间转换。
-\item SLISC\upref{SLISC} 提供一个 UTF-8 iterator， 也包含 utfcpp 库
+\item \enref{SLISC}{SLISC} 提供一个 UTF-8 iterator， 也包含 utfcpp 库
 \item 如果不追求性能， 在程序内部还是直接用 \verb|basic_string<char32_t>| 和 \verb|U"字符串"| 最容易， 体验和 python 差不多。 但许多人还是喜欢 utf-8 （甚至微软的 utf-16）。
 \end{itemize}
 

@@ -46,7 +46,7 @@ k = k_0 \pm 2n\pi/L \qquad (n=2,3,\dots)~.
 \caption{高斯波包和 cos2 波包的对比} \label{fig_cos2wp_1}
 \end{figure}
 
-\subsection{附：Matlab 代码}
+\subsection{附：Matlab 画图代码}
 \begin{lstlisting}[language=matlab, caption=cos2\_spec.m]
 % properties of cos2 wave packet spectra
 
@@ -64,10 +64,20 @@ axis([-40, 40, -0.02, 0.21]);
 
 A = 1/sqrt(integral(@(k)g(k).^2, -inf, inf));
 integral(@(k)g(k).^2.*abs(k).*A^2, -inf, inf)
-
 \end{lstlisting}
 
-\begin{lstlisting}[language=matlab, caption=sin2\_gaussian\_compare.m]
+\begin{lstlisting}[language=matlab,caption=FWHMIsin2]
+% FWHMI of wave packets
+% FWHMI: full width half maximum intensity
+% return the ratio of FWHMI of sin2 (field) wave v.s. total duration
+% satisfy: |cos(pi/2 * FWHMIsin2)^2|^2 == 1/2
+
+function ret = FWHMIsin2
+    ret = 2*acos(2^(-1/4))/pi;
+end
+\end{lstlisting}
+
+\begin{lstlisting}[language=matlab, caption=cos2\_gaussian\_compare.m]
 % plot Gaussian vs cos2 profile
 
 % gaussian

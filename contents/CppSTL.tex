@@ -3,10 +3,10 @@
 % type Note
 
 \subsection{string}
-详见 “C++ 字符串笔记\upref{CppStr}”。
+详见 “\enref{C++ 字符串笔记}{CppStr}”。
 
 \subsection{vector}
-更多容器详见 “C++ 标准库常用容器\upref{STLstr}”
+更多容器详见 “\enref{C++ 标准库常用容器}{STLstr}”
 \begin{itemize}
 \item \verb`v.size()` 检查大小
 \item \verb`v.empty()` 检查是否为空
@@ -99,5 +99,5 @@ Operand performOperation(const Operand& left,
 \item 获取指针 \verb|any_cast<int>(&a)|， 若错误返回 \verb|nullptr|。
 \item 支持 \verb|=| 赋值， 不支持比较算符。
 \item 支持 move construc/assign。
-\item \verb|any| 的一个用处就是给一固定类型的函数指针提供用户参数。写一个微分方程解算器，用户需要提供求导函数，但如何给该函数传递参数呢（例如设置弹簧劲度系数等）？ 这些参数用户未必可以写死到函数中，又不想使用全局变量。 一个方法是使用 functor，也就是含参对象的 \verb|operator()|，但这样就需要解算器使用模板。但万一解算器很大不值得为了一点小小的接口变化编译多个不同的版本呢？万一源码保密不能放在头文件只能编译成二进制 library 呢？ 除了模板，就是传递一个最后一个参数是 \verb|any| 的函数的指针（没有 \verb|any| 以前一般使用 \verb|void *| 但这不怎么安全）。这样就可以保持函数指针类型不变，且可以传递用户想要的任何参数了。相当于用 ”不必要“ 的动态类型的一点性能代价让 C++ 用起来更像动态语言。 虽然理论上这可以用静态方法实现，但比起编程的巨大难度（尤其是 \verb|tuple| 相关的东西）， 损失一点可以忽略不计的性能反而是最佳方案。 另一个例子是如何在 C++ 中表示数据库表中的一行？ 并作为参数传递给一个函数。 最高性能的方法是用 \verb|tuple|， 但变参数个数的 \verb|tuple| 相关的编程真的很麻烦很抽象，哪怕使用模板生成都很麻烦。 用 \verb|vector<variant<...>>| 或者 \verb|vector<any>| 会大大方便编程。 详见 SLISC\upref{SLISC} 的 \verb|update_sqlite_table()| 的两种实现方法。
+\item \verb|any| 的一个用处就是给一固定类型的函数指针提供用户参数。写一个微分方程解算器，用户需要提供求导函数，但如何给该函数传递参数呢（例如设置弹簧劲度系数等）？ 这些参数用户未必可以写死到函数中，又不想使用全局变量。 一个方法是使用 functor，也就是含参对象的 \verb|operator()|，但这样就需要解算器使用模板。但万一解算器很大不值得为了一点小小的接口变化编译多个不同的版本呢？万一源码保密不能放在头文件只能编译成二进制 library 呢？ 除了模板，就是传递一个最后一个参数是 \verb|any| 的函数的指针（没有 \verb|any| 以前一般使用 \verb|void *| 但这不怎么安全）。这样就可以保持函数指针类型不变，且可以传递用户想要的任何参数了。相当于用 ”不必要“ 的动态类型的一点性能代价让 C++ 用起来更像动态语言。 虽然理论上这可以用静态方法实现，但比起编程的巨大难度（尤其是 \verb|tuple| 相关的东西）， 损失一点可以忽略不计的性能反而是最佳方案。 另一个例子是如何在 C++ 中表示数据库表中的一行？ 并作为参数传递给一个函数。 最高性能的方法是用 \verb|tuple|， 但变参数个数的 \verb|tuple| 相关的编程真的很麻烦很抽象，哪怕使用模板生成都很麻烦。 用 \verb|vector<variant<...>>| 或者 \verb|vector<any>| 会大大方便编程。 详见 \enref{SLISC}{SLISC} 的 \verb|update_sqlite_table()| 的两种实现方法。
 \end{itemize}
