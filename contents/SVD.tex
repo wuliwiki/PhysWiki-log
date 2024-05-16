@@ -3,12 +3,14 @@
 % license Xiao
 % type Tutor
 
+\begin{issues}
+\issueTODO 引用酉矩阵对角化定理。
+\end{issues}
 
 
 
+本节默认在复数域下讨论。
 \subsection{定理陈述}
-
-
 \begin{theorem}{SVD}
 给定复数域$\mathbb{C}$上的$n$行$m$列矩阵$\bvec{M}$，则存在$n$行$m$列对角矩阵$\bvec{D}$和酉矩阵$\bvec{P}$、$\bvec{Q}$，使得
 \begin{equation}
@@ -18,11 +20,40 @@
 \end{theorem}
 
 
+\subsection{证明过程}
+我们先从\textbf{可逆方阵}证起，然后再过渡到不要求可逆的\textbf{任意复矩阵}。
+\begin{theorem}{}
+对于$n$阶\textbf{可逆方阵}$M$，存在\textbf{酉方阵}$P,Q$和\textbf{可逆对角矩阵}$D$使得
+\begin{equation}\label{eq_SVD_1}
+M=P^{\dagger}DQ~.
+\end{equation}
+
+\end{theorem}
+\textbf{证明：}因为$M^{\dagger}M$是半正定厄米矩阵，必存在一组标准正交基使之对角化，设为$A$，对应的过渡矩阵为酉方阵$Q$，则该过程表示为$QM^{\dagger}MQ^{\dagger}=A$。左右取行列式可证$A$是可逆矩阵。在这组基下，对对角元计算后，我们可以得到$A^{\frac{1}{2}},A^{-\frac{1}{2}}$，显然互逆。
+
+我们可以把$M$表示为$MQ^{\dagger}A^{-\frac{1}{2}}A^{\frac{1}{2}}Q$，和\autoref{eq_SVD_1} 比较，我们需要验证$MQ^{\dagger}A^{-\frac{1}{2}}$是酉方阵。
+
+设$P^{\dagger}=MQ^{\dagger}A^{-\frac{1}{2}}$，则$P=A^{-\frac{1}{2}}QM^{\dagger}$，则
+\begin{equation}
+\begin{aligned}
+P^{\dagger}P&=MQ^{\dagger}A^{-\frac{1}{2}}A^{-\frac{1}{2}}QM^{\dagger}\\
+&=MQ^{\dagger}(Q^{\dagger})^{-1}(M)^{-1}(M^{\dagger})^{-1}Q^{-1}QM^{\dagger}\\
+&=E~,
+\end{aligned}
+~.
+\end{equation}
+得证。
 
 
-
-
-
+\begin{lemma}{}
+对于任意矩阵$M$，存在酉矩阵$Q,S$和\textbf{满秩}矩阵$N$，使得
+\begin{equation}
+M=S^{\dagger}\left(\begin{array}{cc}
+N & 0 \\
+0 & 0
+\end{array}\right) Q~.
+\end{equation}
+\end{lemma}
 
 
 

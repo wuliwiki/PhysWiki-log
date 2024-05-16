@@ -14,8 +14,17 @@ f(x) = \frac{1}{\sqrt{2\pi }} \int_{-\infty }^{+\infty } g(k)\E^{\I kx} \dd{k}~.
 \end{equation}
 当 $f(x)$ 为实函数时，$g(k)$ 的实部是偶函数，虚部是奇函数。
 
-\subsection{实数函数的傅里叶变换}
-上述傅里叶变换中， $g(k)$ 需要满足什么条件才能使 $f(x)$ 是实函数呢？实函数的充要条件是 $f(x) = f^*(x)$， 代入\autoref{eq_FTExp_6} 得
+\begin{theorem}{实函数、奇函数、偶函数的傅里叶变换}\label{the_FTExp_1}
+\begin{enumerate}
+\item $f(x)$ 是实函数，当且仅当 $g^*(k) = g(-k)$。
+\item $g(x)$ 是实函数，当且仅当 $f^*(x) = f(-x)$。
+\item 如果 $f(x)$ 是奇（偶）函数，当且仅当 $g(x)$ 是奇（偶）函数。
+\item $f(x)$ 同时是实函数和偶函数，当且仅当 $g(x)$ 同时是实函数和偶函数。
+\end{enumerate}
+\end{theorem}
+证明第 1 条：
+
+实函数的充要条件是 $f(x) = f^*(x)$， 代入\autoref{eq_FTExp_6} 得
 \begin{equation}
 g(k) = \frac{1}{\sqrt{2\pi }} \int_{-\infty }^{+\infty } f^*(x)\E^{-\I kx} \dd{x}~.
 \end{equation}
@@ -23,7 +32,7 @@ g(k) = \frac{1}{\sqrt{2\pi }} \int_{-\infty }^{+\infty } f^*(x)\E^{-\I kx} \dd{x
 \begin{equation}\label{eq_FTExp_5}
 g^*(k) = g(-k)~.
 \end{equation}
-所以对于实数函数的傅里叶变换， 往往只需要 $k$ 的正半轴。 上式就是 $f(x)$ 为实函数的充要条件， 要证明充分性， 将其代入\autoref{eq_FTExp_1} 可得 $f(x) = f^*(x)$。
+注意 $g(k)$ 的实部是偶函数，虚部是奇函数，因此往往只需要 $k$ 的正半轴即可得到所有信息。 上式就是 $f(x)$ 为实函数的充要条件， 要证明充分性， 将其代入\autoref{eq_FTExp_1} 可得 $f(x) = f^*(x)$。 证毕。（其余证明留做习题：提示，偶函数的傅里叶变换相当于 $\cos$ 变换）
 
 \begin{example}{高斯分布的傅里叶变换}\label{ex_FTExp_1}
 要计算高斯函数
@@ -90,7 +99,7 @@ g(k) = \frac{1}{2\pi} \lim_{n\to\infty} \lim_{m\to\infty} \int_{-n}^{n}\int_{-m}
 \subsection{性质}
 为了书写方便我们用\textbf{算符} $\mathcal F$ 和 $\mathcal F^{-1}$ 表示傅里叶变换和反变换， 即 $\mathcal F f = g$ 以及 $\mathcal F^{-1} g = f$。 算符在这里可以看作 “函数的函数”， 即自变量和函数值都是函数。
 
-平移性质：
+\textbf{平移}：
 \begin{equation}\label{eq_FTExp_4}
 \mathcal F [f(x) \E^{\I k_0 x}] = g(k - k_0)~.
 \end{equation}
@@ -99,18 +108,18 @@ g(k) = \frac{1}{2\pi} \lim_{n\to\infty} \lim_{m\to\infty} \int_{-n}^{n}\int_{-m}
 \end{equation}
 也就是说， 给函数乘以 $\E^{\I k_0 x}$ 因子再做傅里叶变换， 等于先对函数做傅里叶变换， 再向右平移 $k_0$； 给函数再向右平移 $x_0$ 再做反傅里叶变换， 等于先对函数做傅里叶变换， 再乘以 $\E^{-\I x_0 k}$。 证明留做习题。
 
-变换前后模长不变：
+\textbf{模长不变性}：
 \begin{equation}\label{eq_FTExp_2}
 \int_{-\infty}^{+\infty} g(k)^* g(k) \dd{k} = \int_{-\infty}^{+\infty} f(x)^* f(x) \dd{x}~.
 \end{equation}
 
-函数拉伸的傅里叶变换：
+\textbf{拉伸}：
 \begin{equation}
 \mathcal F[f(ax)] = \frac{1}{a} g\qty(\frac{k}{a})~.
 \end{equation}
 也就是说把函数在 $x$ 方向压缩 $a$ 倍后， 各个频率都变大 $a$ 倍， 所以傅里叶变换会在 $k$ 方向拉伸 $a$ 倍， 另外归一化不变性易得系数 $1/a$。
 
-导数的傅里叶变换：
+\textbf{导数}：
 \begin{equation}\label{eq_FTExp_3}
 \mathcal F [f'(x)] = \I k g(k)~,
 \end{equation}
@@ -135,7 +144,7 @@ g(k) = \frac{1}{2\pi} \lim_{n\to\infty} \lim_{m\to\infty} \int_{-n}^{n}\int_{-m}
 \end{equation}
 注意\autoref{eq_FTExp_3} 和\autoref{eq_FTExp_10} 是该性质的特殊情况（令\autoref{eq_FTExp_8} 中 $f_1(x) = x$， \autoref{eq_FTExp_9} 中 $g_1(k) = k$）。 记忆方法： 在傅里叶变换外面的 $\I\pdv*{k}$ 相当于傅里叶变换里面的 $x$， 反傅里叶变换外面的 $-\I\pdv*{x}$ 相当于反傅里叶变换里面的 $k$。
 
-平均值：
+\textbf{平均值}：
 \begin{equation}
 \ev{k} = \int_{-\infty}^{+\infty} k\abs{g(k)}^2 \dd{x} = \int_{-\infty}^{+\infty} f^*(x)\qty(-\I \dv{x}) f(x) \dd{x}~.
 \end{equation}
@@ -144,7 +153,7 @@ g(k) = \frac{1}{2\pi} \lim_{n\to\infty} \lim_{m\to\infty} \int_{-n}^{n}\int_{-m}
 \end{equation}
 推导参考 “\enref{平均值（量子力学）}{QMavg}”。
 
-不确定性原理：
+\textbf{不确定性原理}：
 \begin{equation}
 \sigma_x \sigma_k \geqslant \frac{1}{2}~.
 \end{equation}

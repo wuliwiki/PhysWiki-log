@@ -6,7 +6,7 @@
 \issueDraft
 \end{issues}
 
-\pentry{量子散射的延迟\nref{nod_tDelay}， 库仑函数\nref{nod_CulmF}， 选择定则\nref{nod_SelRul}， 含时微扰理论\nref{nod_TDPTc}}{nod_2298}
+\pentry{波包的延迟（量子力学）\nref{nod_tDelay}， 库仑函数\nref{nod_CulmF}， 选择定则\nref{nod_SelRul}， 含时微扰理论\nref{nod_TDPTc}}{nod_2298}
 
 本文使用\enref{原子单位制}{AU}。 例如一个有限深势阱（短程势）中有一个束缚态， 被一个电场波包电离之后， 光电子波包逃出势阱。 那么光电子波包的延迟是多少呢？ 我们以下使用\enref{一阶含时微扰理论}{TDPT}来分析。
 
@@ -23,19 +23,19 @@ c(k) = -\I \sqrt{2\pi} \mel{\psi_k}{H'}{\psi_0} \tilde f(-\omega)~.
 \end{equation}
 电离波包可以由末态展开：
 \begin{equation}
-\psi(x, t) = \int_{-\infty}^{\infty} c(k) \psi_k(x)\E^{-\I E t} \dd{k}~.
+\psi(x, t) = \int_{-\infty}^{\infty} C(k) \psi_k(x)\E^{-\I E t} \dd{k}~.
 \end{equation}
 那么根据\autoref{eq_tDelay_4}~\upref{tDelay} 延迟为（$k$ 视为 $E$ 的函数）
 \begin{equation}\label{eq_HeAna2_3}
-t = \pdv{E} \arg (c(k))~.
+t = \pdv{E} \arg C(k)~.
 \end{equation}
-对于没有 chirp 的电场波包， $\tilde f(-\omega)$ 相位恒定（想象一个高斯波包乘以正弦函数的傅里叶变换）。 所以随 $E$ 变化的相位只有矩阵元， 绝对时间延迟为
+对于没有 chirp 的电场波包， $\tilde f(-\omega)$ 相位恒定（实对称函数的傅里叶变换也是实对称的，乘以 $\sin$，$\cos$ 也只是左右平移一下）。 所以随 $E$ 变化的相位只有矩阵元， 绝对时间延迟为
 \begin{equation}\label{eq_HeAna2_1}
 t = \pdv{E} \arg \mel{\psi_k}{H'}{\psi_0}~,
 \end{equation}
 这个延迟是相对与 $t = 0$ 也就是电磁波包到达原点的时间。
 
-\subsection{氢原子的光电离延迟}\label{sub_HeAna2_1}
+\subsection{氢原子的光电离延迟：库仑球面波基底}\label{sub_HeAna2_1}
 还是考虑类氢原子， 库仑球面波（\autoref{eq_CulmWf_11}~\upref{CulmWf}）记为 $\ket{C_{l,m}(k)}$， 包含球谐函数 $Y_{l,m}(\uvec r)$。 含时微扰得（$E = k^2/2$）
 \begin{equation}\label{eq_HeAna2_4}
 \ket{\psi(t)} = \sum_{l,m} \int c_{l,m}(k) \ket{C_{l,m}(k)} \E^{-\I E t} \dd{k}~,
@@ -44,24 +44,19 @@ t = \pdv{E} \arg \mel{\psi_k}{H'}{\psi_0}~,
 \begin{equation}
 c_{l,m}(k) = -\sqrt{2\pi}\I \mel{C_{l,m}(k)}{z}{i} \tilde f(-\omega)~.
 \end{equation}
-相位不随 $k$ 或 $E$ 变化。 注意对于氢原子束缚态作为初始态， 由于\enref{选择定则}{SelRul} $\Delta m = 0$， $\Delta l = \pm 1$ （只有这时 $\mel{C_{l,m}(k)}{z}{i}$ 不为零）， 只有最多两个 $c_{l,m}$ 不为零。 如果从基态电离就只有 $c_{1,0} = 1$（线偏振光）。
-
-库仑平面波为 $\ket{C(\bvec k)} = \sum_{l,m} a_{l,m}^{(-)}(\bvec k) \ket{C_{l,m}}$， 把 $\ket{\psi(t)}$ 投影到 $\ket{C(\bvec k)}$ 上有（\autoref{eq_CulmWf_10}~\upref{CulmWf}）
 \begin{equation}
-\braket{C(\bvec k)}{\psi(t)} = \sum_{l,m} a_{l,m}^{(-)*}(\bvec k) c_{l,m}(k) \E^{-\I E t} 
-= \sum_{l,m} \frac{\I^{-l}}{k} \E^{\I\sigma_l} Y_{l,m} (\uvec k) c_{l,m}(k) \E^{-\I E t}~.
-\end{equation}
-求和中每一项可以看作一个独立的波包， 具有不同的延迟。 所以和\autoref{eq_HeAna2_3} 同理， 每一项的延迟仅由库仑相移贡献（$\mel{C_{l,m}(k)}{z}{i}$ 是实数， $c_{l,m}(k)$ 不贡献相位变化）
-\begin{equation}
-t_{EWS}^C = \pdv{E} \braket{C(\bvec k)}{\psi(t)} = \pdv{\sigma_l}{E}~.
+\pdv{E}\arg c_{l,m} = \pdv{E} \arg \mel{C_{l,m}(k)}{z}{i} = 0~.
 \end{equation}
 
-但是\autoref{eq_HeAna2_4} 中库仑平面波本身还存在关于 $r$ 不收敛的相移 $-\eta\ln (2kr)$， 这对能量求导以后是一个负的， 会带来一个负延迟， 即提前。 从经典物理的角度来看， 提前是因为一开始电子在势阱中移动的速度比无穷远处更快，节约了一些时间。 重申，对于氢原子基态的线性光电离， 只需要 $l = 1$， 结果与方向无关。 所以氢原子 streaking 电离的角向变化完全是由 $t_{CLC}$ 决定的。
 
-库仑渐进相位为（\autoref{eq_CulmF_7}~\upref{CulmF}）
+注意对于氢原子束缚态作为初始态， 由于\enref{选择定则}{SelRul} $\Delta m = 0$， $\Delta l = \pm 1$ （只有这时 $\mel{C_{l,m}(k)}{z}{i}$ 不为零）， 只有最多两个 $c_{l,m}$ 不为零。 如果从基态电离就只有 $c_{1,0} = 1$（线偏振光）。 
+
+既然系数相位不随能量变化，那么延迟从哪来呢？ 从基底！
+库仑渐进形式为（\autoref{eq_CulmF_7}~\upref{CulmF}）
 \begin{equation}
 F_l(k, r) \overset{r\to \infty}{\longrightarrow} \sin\qty[kr - \frac{\pi l}{2} + \frac{Z}{k}\ln(2kr) + \sigma_l(k)]~, % Z > 0
 \end{equation}
+库仑相移为
 \begin{equation}
 \sigma_l(k) = \arg[\Gamma(l+1-\I Z/k)] = \Im\ln\Gamma(l+1-\I Z/k) \qquad (Z > 0)~.
 \end{equation}
@@ -70,11 +65,23 @@ F_l(k, r) \overset{r\to \infty}{\longrightarrow} \sin\qty[kr - \frac{\pi l}{2} +
 \includegraphics[width=10cm]{./figures/bbe2fecdf936361f.png}
 \caption{库仑相移 $\sigma_l(k)$} \label{fig_HeAna2_1}
 \end{figure}
+但这也是一个实函数，怎么办？可以把它看成向内和和向外的行波叠加！各形成一个波包，叠加以后初始波包也是实函数，但向左的消失了，向右的出现了，所以一小段时间后就会出现一个向右的波包，完全由向右的行波贡献。 所以可以直接把 $\sin$ 看成 $\frac{1}{2\I}\E^{\I kx + \dots}$。 现在就和一维散射情况一样了，但注意径向波函数需要考虑离心势能 $l(l+1)/(2mr^2)$。这也是为什么经典轨迹模拟中不能用直线而是用具有角动量的双曲线。 这个离心势能，对应的就是氢原子的 $t_\text{EWS}^\text{H}$！
+\begin{equation}
+t_{EWS}^l = \pdv{E} \arg\braket{C_{l,m}(k)}{\psi(t)} = \pdv{\sigma_l}{E}~.
+\end{equation}
+根据\autoref{fig_HeAna2_1} 它恒大于零，随能量单调递减。
+\begin{figure}[ht]
+\centering
+\includegraphics[width=12cm]{./figures/cd0a33d6ef1fcfb1.png}
+\caption{\autoref{eq_HeAna2_6} } \label{fig_HeAna2_2}
+\end{figure}
+
+但是\autoref{eq_HeAna2_4} 中库仑球面波本身还存在关于 $r$ 不收敛的相移 $-\eta\ln (2kr)$， 这对能量求导以后对足够大的 $r$ 会得到小于零的延迟， 即提前。 从经典物理的角度来看， 提前是因为一开始电子在势阱中移动的速度比无穷远处更快，节约了一些时间。 重申，对于氢原子基态的线性光电离， 只需要 $l = 1$， 结果与方向无关。 所以氢原子 streaking 电离的角向变化完全是由 $t_{CLC}$ 决定的。
 
 所以
 \begin{equation}\label{eq_tEWS}
 \begin{aligned}
-t_{EWS}^C &= \frac{1}{k} \Im\dv{k}\ln\Gamma(l+1-\I Z/k) = \frac{1}{k} \Im\frac{\dv{k}\Gamma(l+1-\I Z/k)}{\Gamma(l+1-\I Z/k)}\\
+t_{EWS}^l &= \frac{1}{k} \Im\dv{k}\ln\Gamma(l+1-\I Z/k) = \frac{1}{k} \Im\frac{\dv{k}\Gamma(l+1-\I Z/k)}{\Gamma(l+1-\I Z/k)}\\
 &= \frac{Z}{k^3} \Re\frac{\Gamma'(l+1-\I Z/k)}{\Gamma(l+1-\I Z/k)}~.
 \end{aligned}
 \end{equation}
@@ -82,13 +89,28 @@ t_{EWS}^C &= \frac{1}{k} \Im\dv{k}\ln\Gamma(l+1-\I Z/k) = \frac{1}{k} \Im\frac{\
 
 其中 $\sigma_l(k)$ 产生的相移与距离无关， 可以单纯看作是非直线轨道带来的延迟（不确定）， 并且是 XUV 波包一瞬间带来的。 $kr\ln(2kr)$ 只和距离有关， 带来的延迟是库仑力产生的， 而且关于 $r$ 并不收敛。 那么光电离的总延迟就是
 \begin{equation}\label{eq_HeAna2_5}
-t = \pdv{E} \arg\qty[\sigma_l(k) + \frac{Z}{k}\ln(2kr)]~. % Z > 0
+t_\text{XUV} = t_\text{EWS}^l + t_\text{C} = \pdv{E}\sigma_l(k) + \pdv{E}\frac{Z}{k}\ln(2kr)~. % Z > 0
 \end{equation}
-第一项是瞬间的， 而第二项是波包移动过程中缓慢积累且不收敛的。
+第一项是瞬间的， 而第二项是波包移动过程中缓慢积累且不收敛的：
+\begin{equation}\label{eq_t_C_def}
+t_\text{C}(k, r) = \frac{Z}{k^3}[1-\ln(2kr)]~.
+\end{equation}
 
 一定要强调光电离延迟 $\tau$ 和 streaking 延迟是不一样的。 在 Streaking 实验中， 前两项都会直接转换为 streaking 延迟（因为电离瞬间产生）。 第三项在上式中不收敛， 但 streaking 延迟却总是收敛的。 配合 IR 的扰动就变为了 $t_{CLC}$ 项。
 
-\subsection{氢原子使用库仑平面波基底}\label{sub_HeAna2_2}
+\subsubsection{局部延迟}
+那么如果波包不是在无穷远而是在某个不太远的 $r$ 处，又当如何应对？ 这是参考的直线轨迹到底是取当前位置的，还是无穷远处的？还是都不行？ 我们不妨把 $1/r$ 势能在变化足够缓慢的时候近似为一些阶梯。 每个阶梯内都是
+\begin{equation}
+\exp[\I k_i x + \sigma_l(k) + (Z/k) \ln 2kr_i]\qquad (k_i^2 - Z/r_i = k^2)~.
+\end{equation}
+（$r_i$ 在每个阶梯内是常数）。 那么结论是显然的，如果只保留波包
+\begin{equation}
+\int A(k) \exp(\I k_i x) \dd{k} = \int \frac{k_i}{k}A(k)\exp(\I k_i x) \dd{k_i} ~,
+\end{equation}
+把 $A(k_i)$ 的中心变为了 $k_i$，还出现小小的扭曲（假设可以忽略），但总体来说，现在 $A(k_i)$ 具有以当前阶梯势能为准的中心动量，所以波包轨迹是以该局部动量为斜率的直线。 而加上两个相位后， 延迟也是相对这条直线而言的， 而不是相对于末动量的直线。
+
+
+\subsection{氢原子的光电离延迟：库仑平面波基底} \label{sub_HeAna2_2}
 对于氢原子， 一阶微扰也可以直接投影到库仑平面波（\autoref{eq_CulmWf_7}~\upref{CulmWf}， 取减号） $\ket{C(\bvec k)}$ （$E = k^2/2$）
 \begin{equation}
 \ket{\psi(t_f)} = \int c(\bvec k)\ket{C(\bvec k)} \E^{-\I E t} \dd[3]{k}~,
@@ -96,14 +118,70 @@ t = \pdv{E} \arg\qty[\sigma_l(k) + \frac{Z}{k}\ln(2kr)]~. % Z > 0
 \begin{equation}
 c(\bvec k) = -\sqrt{2\pi}\I\mel{C(\bvec k)}{z}{i} \tilde f(-\omega)~.
 \end{equation}
-这相对于\autoref{eq_HeAna2_4} 不过是变换了一下基底。 根据边界条件\autoref{eq_CulmWf_4}~\upref{CulmWf}， $C(\bvec k)$ 本身也自带一个不收敛的相位 $-\eta \ln 2kr$， 而电场的傅里叶变换 $\tilde f(-\omega)$ 相位恒定， 所以对某个方向 $\uvec k$， 有
+这相对于\autoref{eq_HeAna2_4} 不过是变换了一下基底。 其中库仑平面波为
 \begin{equation}
-\tau = \pdv{E} \arg\qty[\mel{C(\bvec k)}{z}{i} + \frac{Z}{k}\ln(2kr)]~.
+\ket{C(\bvec k)} = \sum_{l,m} a_{l,m}^{(-)}(\bvec k) \ket{C_{l,m}}~,
+\end{equation}
+把 $\ket{\psi(t)}$ 投影到 $\ket{C(\bvec k)}$ 上有（\autoref{eq_CulmWf_10}~\upref{CulmWf}）
+\begin{equation}
+\braket{C(\bvec k)}{\psi(t)} = \sum_{l,m} a_{l,m}^{(-)*}(\bvec k) c_{l,m}(k) \E^{-\I E t} 
+= \sum_{l,m} \frac{\I^{-l}}{k} \E^{\I\sigma_l} Y_{l,m} (\uvec k) c_{l,m}(k) \E^{-\I E t}~.
+\end{equation}
+求和中每一项可以看作一个独立的波包， 具有不同的延迟。 所以和\autoref{eq_HeAna2_3} 同理， 每一项的延迟仅由库仑相移贡献（$\mel{C_{l,m}(k)}{z}{i}$ 是实数， $c_{l,m}(k)$ 不贡献相位变化）
+\begin{equation}\label{eq_HeAna2_6}
+t_{EWS}^l = \pdv{E} \arg\braket{C(\bvec k)}{\psi(t)} = \pdv{\sigma_l}{E}~.
+\end{equation}
+可见使用平面波和球面波计算延迟是一样的。
+
+根据边界条件\autoref{eq_CulmWf_4}~\upref{CulmWf}， $\ket{C(\bvec k)}$ 的无穷远平面波是不含库仑相移的（已经在系数中抵消掉了）， 但自带一个不收敛的相位 $-\eta \ln 2kr$， 而电场的傅里叶变换 $\tilde f(-\omega)$ 相位恒定， 所以对某个方向 $\uvec k$， 有
+\begin{equation}
+t_\text{XUV} = \pdv{E} \arg\qty[\mel{C(\bvec k)}{z}{i} + \frac{Z}{k}\ln(2kr)]~.
 \end{equation}
 这和\autoref{eq_HeAna2_5} 只是使用的基底不同， 所以是等价的。
-\addTODO{用 Matlab 的数值计算验证}
 
-注意\autoref{eq_HeAna2_5} 和初态无关， 所以这里同样无关。 但实际上 TDSE 的结果是有关系的， 要考虑初态， 只有使用 Pazourek 的 dDLC 修正项。
+\subsection{经典力学直线轨迹延迟}
+如果考虑光电子的经典力学直线轨迹，那么它的延迟是多少呢？ 注意直线轨迹虽然简单，但氢原子单光子电离以后只有 $l=1$，角动量不为零。 所以用径向直线的经典轨迹（角动量为零）来类比是不太准确的。正确的做法应该是使用双曲线轨道（[PazoTh]）。
+
+\begin{equation}\ali{
+\int \frac{1}{\sqrt{2(k^2/2+Z/r)}} \dd{r} &= \frac{r}{k}\sqrt{\frac{2 Z}{k^2 r}+1}-\frac{2 Z}{k^3}\tanh ^{-1}\qty(\sqrt{\frac{2 Z}{k^2 r}+1}) + C\\
+&=\frac{r}{k}\sqrt{\frac{2 Z}{k^2 r}+1}-\frac{Z}{k^3}\ln(\frac{\sqrt{\frac{2 Z}{k^2 r}+1}+1}{\sqrt{\frac{2 Z}{k^2 r}+1}-1})+ C'~.
+}\end{equation}
+其中 $C' = C + \I \pi/2$。 这是因为（\autoref{eq_atanh}~\upref{TrigH}）
+\begin{equation}
+\tanh ^{-1}\qty(x)
+= \frac12 \ln(\frac{x+1}{x-1})+\I \frac{\pi}{2} \qquad (x > 1)~.
+\end{equation}
+令 $C'$ 前面的部分为 $F(x)$， 那么当粒子从 $r=a$ 运动到 $r=b$，比起 $k$ 速直线运动的时间，多了
+\begin{equation}
+\Delta t = \eval{\qty[F(x)-\frac{r}{k}]}_{r=a}^{r=b} < 0~.
+\end{equation}
+当 $r\to \infty$， 有
+\begin{equation}\ali{
+F(x)-\frac{r}{k} \to
+\frac{Z}{k^3}\qty[1-\ln(\frac{2k^2 r}{Z})]~.
+}\end{equation}
+当 $r\to 0$， 有
+\begin{equation}\ali{
+F(x)-\frac{r}{k} \to
+\frac{\sqrt{2Zr}}{k^2} \to 0~.
+}\end{equation}
+所以，当一个粒子从 $r\to 0$ 出发，到一个很大的距离，当对于匀速直线运动，产生的延迟就是
+\begin{equation}
+t_\text{C}^{cl} = \eval{\qty[F(x)-\frac{r}{k}]}_{r\to0}^{r\to\infty} = \frac{Z}{k^3}\qty[1-\ln(2kr)-\ln\frac{k}{Z}]~.
+\end{equation}
+这与\autoref{eq_t_C_def} 只相差一个常数以及库仑相位对能量偏导。
+
+库仑相位的来源是径向方程中的 $l(l+1)/(2mr^2)$ 项，我们在直线轨迹中并没有考虑！ 如果使用双曲线轨道，经典力学也会有这一项。% \addTODO{推导一下？}
+
+如果使用\autoref{eq_CelBd_1}~\upref{CelBd}，那么可以得到离心率
+\begin{equation}
+e = \sqrt{1 + l(l+1)k^2/Z^2}~.
+\end{equation}
+以及
+\begin{equation}
+\tan(\theta/2) = b/a = \frac{k}{Z}\sqrt{l(l+1)} = \frac{kL}{Z}~.
+\end{equation}
+也就是说双曲线的偏转角为 $35.6^\circ$ 左右，还是不小的（数值模拟中为什么没有发现？）。
 
 \subsection{氦原子}
 \pentry{角动量的叠加 2（量子力学）\nref{nod_AMAdd}}{nod_c791}
@@ -150,14 +228,3 @@ t = \pdv{E} \arg\qty[\delta_{l_2} + \sigma_{l_2} + \frac{Z}{k_2}\ln(2k_2 r_2)]~,
 
 \subsubsection{选择定则}
 但氦原子的本征态是 $L,M$ 算符的本征态， 而且从基态的一阶微扰是 $L = 1, M = 0$。所以根据三角形法则（\autoref{fig_AMAdd_2}~\upref{AMAdd}）， 可以支持 $\abs{l_2 - l_1} \le 1$ 除了 $(0,0)$ 的所有分波。
-
-\subsection{回收的内容}
-\addTODO{如果是长程库仑势能， 延迟就会取决于距离而不收敛。 但动量却收敛， 所以使用 streaking 仍然会获得一个延迟， 但这个延迟和上面的是两码事， 然而 Pazourek 仍然使用\autoref{eq_HeAna2_1}， 这里面还有更深的奥妙……}
-
-如果\autoref{eq_HeAna2_2} 中本来就有额外的取决于能量的相位 $\delta(E)$ 那么同样需要加到\autoref{eq_HeAna2_1} 中
-\begin{equation}
-\tau = \pdv{E} \arg \mel{\psi_E}{H'}{\psi_0} + \pdv{E} \delta(E)~.
-\end{equation}
-并且这个相位可能还会取决于距离和其他参数 $\delta(E, x)$。 例如库仑相移中， 这个相位产生的延迟并不随距离收敛。
-
-\addTODO{另一个问题是， 延迟不仅和 He+ 的 $n$ 有关还与 $l$ 有关， 或者说还与 Stark 效应的好量子数有关， 那么 Pazourek 使用的是哪个呢？ 还是说取平均呢？ 还是要仔细看 Pazo12}

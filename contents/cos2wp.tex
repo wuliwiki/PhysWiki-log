@@ -6,7 +6,7 @@
 $\cos^2$ 波包也叫 $\sin^2$ 波包，比起\enref{高斯波包}{GausPk}，它的优点是存在明确的范围。 它的函数形式为
 \begin{equation}\label{eq_cos2wp_5}
 f(x) = \leftgroup{
-&A\cos^2\qty(\frac{\pi x}{L}) \E^{\I k_0x} && (\abs{x} < L/2)\\
+&A\cos^2\qty(\frac{\pi x}{L}) \E^{\I k x} && (\abs{x} < L/2)\\
 &0 && (\text{otherwise})~.
 }\end{equation}
 其中 $L$ 是波包的总长度。 它的 FWHMI 为
@@ -18,20 +18,21 @@ f(x) = \leftgroup{
 积分为（令 $a = \pi/L$）
 \begin{equation}\label{eq_cos2wp_2} % Mathematica 已验证 (原 eq_GausPk_2)
 \begin{aligned}
-&\quad \int A\cos^2\qty(a x) \E^{\I k_0x} \dd{x} = -\I\frac{A}{4}\E^{\I kx}\qty(\frac{2}{k} +\frac{\E^{2\I ax}}{2a+k} -\frac{\E^{-2\I ax}}{2a-k}) + \frac{2\I Aa^2\cos[{\pi k}/{(2a)}]}{k(4 a^2 -k^2)} + C\\
-&= \frac{A}{4} \qty(\frac{2\sin(k x)}{k} +\frac{\sin[(2 a+k)x]}{2 a+k} +\frac{\sin[(2 a-k)x]}{2 a-k})\\
+&\quad \int A\cos^2\qty(a x) \E^{\I kx} \dd{x} = -\I\frac{A}{4}\E^{\I kx}\qty(\frac{2}{k} +\frac{\E^{2\I ax}}{2a+k} -\frac{\E^{-2\I ax}}{2a-k}) + \frac{2\I Aa^2\cos[{\pi k}/{(2a)}]}{k(4 a^2 -k^2)} + C\\
+&= \frac{Ax}{4} \qty(2\sinc(k x) + \sinc[(2 a+k)x] + \sinc[(2 a-k)x])\\
 &\quad + \I\frac{A}{4} \qty(-\frac{2\cos(k x)}{k} -\frac{\cos[(2 a+k)x]}{2 a+k} +\frac{\cos[(2 a-k)x]}{2 a-k}) + \frac{2\I Aa^2\cos[{\pi k}/{(2a)}]}{k(4 a^2 -k^2)} + C~.
 \end{aligned}
 \end{equation}
-$C$ 前面的部分在 $x = \pm\pi/(2a)$ 处分别为 $\frac{\pm 2 Aa^2\sin[{\pi k}/{(2a)}]}{k(4 a^2 -k^2)}$，易得定积分
+$C$ 前面的部分在 $x = \pm\pi/(2a)$ 处分别为 $\frac{\pm 2 Aa^2\sin[{\pi k}/{(2a)}]}{k(4 a^2 -k^2)}$，易得无穷定积分只有实部
 \begin{equation}% Mathematica 已验证
-\int_{-\pi/(2a)}^{\pi/(2a)} A\cos^2\qty(a x)\E^{\I k_0x} \dd{x} = \frac{4 Aa^2\sin[{\pi k}/{(2a)}]}{k(4 a^2 -k^2)}~.
+\int_{-\infty}^{+\infty} f(x) \dd{x} = \int_{-\pi/(2a)}^{\pi/(2a)} A\cos^2\qty(a x)\E^{\I k x} \dd{x} = \frac{4 Aa^2\sin[{\pi k}/{(2a)}]}{k(4 a^2 -k^2)}~.
 \end{equation}
+另外，实部是奇函数，虚部是偶函数。
 
-傅里叶变换：
+傅里叶变换（注意是实数）：
 \begin{equation} % Mathematica 已验证 + 数值已验证
-\tilde f(k) = \frac{1}{\sqrt{2\pi}} \int_{-\infty}^{+\infty} f(x) \E^{-\I k x} \dd{x}
-= \frac{\sqrt{2} \pi ^{3/2} A L}{4 \pi ^2-L^2 (k-k_0)^2} \sinc[L(k-k_0)/2]~.
+\tilde f(k) = \frac{1}{\sqrt{2\pi}} \int_{-\infty}^{+\infty} f(x) \E^{-\I \omega x} \dd{x}
+= \frac{\sqrt{2} \pi ^{3/2} A L}{4 \pi ^2-L^2 (\omega-k)^2} \sinc[L(\omega-k)/2]~.
 \end{equation}
 零点的位置为
 \begin{equation} % 数值已验证

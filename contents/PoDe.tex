@@ -1,0 +1,164 @@
+% 极分解
+% license Usr
+% type Tutor
+本篇的目的是证明酉空间上任意线性变换都可以分解为半正定厄米变换与酉变换的乘积。更进一步，该酉变换可以表示为厄米变换的指数表示。
+\begin{theorem}{}\label{the_PoDe_2}
+给定酉空间$V$及其上的线性变换$A$，则存在$V$上的半正定厄米变换$H_1,H_2$和酉变换$U_1,U_2$使得
+\begin{equation}
+A=H_1U_1=H_2U_2~,
+\end{equation}
+\end{theorem}
+\textbf{证明\footnote{引自Jier Peter《代数学基础》}：}
+我们可以利用$A^{\dagger}$来构造半正定的厄米变换。
+注意到$AA^{\dagger}$是厄米矩阵，则$V$存在某组标准正交基$\{\bvec e_i\}$，使得$AA^{\dagger}$为对角矩阵，且特征值都是实数，设为$\lambda_i$。
+
+设任意$\bvec x\in V$，由酉内积的正定性得：$\ev{A^{\dagger}\bvec x,A^{\dagger}\bvec x}=\ev{\bvec x,AA^{\dagger}\bvec x}\ge 0$
+，在$\{\bvec e_i\}$下讨论，易见该正定性要求$AA^{\dagger}$是半正定矩阵，其对角元大于或等于0。
+
+设$H=\sqrt{AA^{\dagger}}$，即对角元为$\sqrt{\lambda_i}$的半正定矩阵，以下简写为$\lambda'_i$。
+
+由于$\ev{A^{\dagger}\bvec e_i,A^{\dagger}\bvec e_j}=\ev{\bvec e_i,AA^{\dagger}\bvec e_j}=\delta_{ij}\lambda'^2_j$，因此$A^{\dagger}\bvec e_i$相互正交。用$\bvec y_i$代替$\{A\bvec e_i|\lambda_i=0\}$，保证模为1且依然与$\{A\bvec e_i|\lambda_i\neq 0\}$相互正交。
+
+定义线性变换$H',A'$分别满足：
+\begin{equation}
+\left\{
+    \begin{aligned}
+    H'\bvec e_i&=\frac{1}{\lambda_i}\bvec e_i,\quad\lambda_i\neq 0\\
+    H'\bvec e_i&=\bvec e_i,\quad\lambda_i\neq 0
+    \end{aligned}
+    \right.~.
+\end{equation}
+和
+\begin{equation}
+\left\{
+    \begin{aligned}
+    A'^{\dagger}\bvec e_i&=A^{\dagger}\bvec e_i,\quad\lambda_i\neq 0\\
+    A'\bvec e_i&=\bvec y_i,\quad\lambda_i= 0
+    \end{aligned}
+    \right.~.
+\end{equation}
+设$U=H'A'$。在$\{\bvec e_i\}$下，$A'A'^{\dagger}$为对角矩阵，对于$\lambda_i\neq 0$，第$i$个对角元为$\lambda_i^2$，反之则为1。$H'$从定义看也是对角矩阵，对角元为$\frac{1}{\lambda_i}$或$1$，取决于$\lambda_i$是否为0。
+
+因此易证，$UU^{\dagger}=H'A'A'^{\dagger}H'^{\dagger}=E$，且$HU=HH'A'=A$。$A^{\dagger}$同理有对应的表示：$A^{\dagger}=H_2U_2$，两边取伴随则得到$A=U_2^{\dagger}H^{\dagger}_2$，是定理所求。
+
+
+\begin{theorem}{}\label{the_PoDe_1}
+给定酉空间$V$及其上的线性变换$A$，若半正定厄米变换$H$和酉变换$U$使得$A=HU$，则$UH=HU$当且仅当$A$是正规变换。
+\end{theorem}
+\textbf{证明：}若$A$是正规变换，则
+\begin{equation}
+\begin{aligned}
+AA^{\dagger}&=HUU^{\dagger}H^{\dagger}\\
+&=AA^{\dagger}\\
+&=U^{\dagger}H^{\dagger}HU~.
+\end{aligned}
+\end{equation}
+代入酉变换定义：$UU^{\dagger}=E$，厄米变换定义：$H=H^{\dagger}$后得：
+\begin{equation}\label{eq_PoDe_1}
+H^2=U^{\dagger}H^2U~.
+\end{equation}
+易见，若$UH=HU$，$A$为正规变换。
+
+若$A$为正规变换，\autoref{eq_PoDe_1} 左右两边都左乘$U$后得：$UH^2=H^2U$。选定某组标准正交基，使得$H$为对角矩阵。将$H$分块，相同对角元为一块，$U$也表示为相应的分块对角矩阵。为证明方便，以$4\times 4$矩阵为例，$\lambda_i$为$H$的特征值。
+\begin{equation}
+\begin{aligned}
+H&=\begin{pmatrix}
+  \lambda_1&0  & 0 & 0\\
+  0& \lambda_2 & 0 & 0\\
+ 0 &0 &  \lambda_2&0 \\
+  0& 0 &0  &\lambda_2
+\end{pmatrix}\Rightarrow \begin{pmatrix}
+ 0&  \begin{pmatrix}
+ 0 &0
+\end{pmatrix}& 0\\
+ \begin{pmatrix}
+ 0\\
+0
+\end{pmatrix} & \begin{pmatrix}
+ \lambda _2 & 0\\
+  0& \lambda _2 
+\end{pmatrix}  & \begin{pmatrix}
+ 0\\
+0
+\end{pmatrix}\\
+ 0 & \begin{pmatrix}
+  0&0
+\end{pmatrix} &\lambda_3
+\end{pmatrix}=\begin{pmatrix}
+ \lambda _1 & 0 &0 \\
+ 0 & \lambda _2E & 0\\
+ 0 & 0 &\lambda _3
+\end{pmatrix}\\
+U&=\begin{pmatrix}
+  a& b &c  &d \\
+  e&f  &g  &h \\
+  i&j  &k  &l \\
+  m&n  &r  &q
+\end{pmatrix}\Rightarrow \begin{pmatrix}
+ a&  \begin{pmatrix}
+ b &c
+\end{pmatrix}& d\\
+ \begin{pmatrix}
+ e\\
+i
+\end{pmatrix} & \begin{pmatrix}
+ f& g\\
+  j& k 
+\end{pmatrix}  & \begin{pmatrix}
+ h\\
+l
+\end{pmatrix}\\
+ m & \begin{pmatrix}
+  n&r
+\end{pmatrix} &q
+\end{pmatrix}=\begin{pmatrix}
+  A&  B&C \\
+ D & E &F \\
+ G &  H& I
+\end{pmatrix}
+\end{aligned}~,
+\end{equation}
+则\begin{equation}
+H^2U=\begin{pmatrix}
+ \lambda^2_1\begin{pmatrix}
+ A &B  &C
+\end{pmatrix}\\
+ \lambda^2_2\begin{pmatrix}
+ D &E  &F\end{pmatrix}\\
+\lambda^2_3\begin{pmatrix}
+ G &H  &I
+\end{pmatrix}
+\end{pmatrix},
+U^2H=\begin{pmatrix}
+ \lambda_1^2\begin{pmatrix}
+ A\\
+ D\\
+G
+\end{pmatrix} &\lambda_2^2 \begin{pmatrix}
+ B\\
+ E\\
+H
+\end{pmatrix} &\lambda_3^2\begin{pmatrix}
+ C\\
+ F\\
+I
+\end{pmatrix}
+\end{pmatrix}~.
+\end{equation}
+因此，$U$必为对角矩阵，则$HU=UH$。同理，可证其他维度的情况。
+\begin{theorem}{}\label{the_PoDe_3}
+给定$n$维酉空间$V$上的酉变换$U$，存在半正定的厄米变换$H$使得\footnote{在物理上，称酉变换为幺正变换。在量子力学里，这条定理的应用使得幺正变换总可以表示为厄米算符的指数函数，称厄米算符为生成元。}$U=\E^{\I H}$。
+\end{theorem}
+\textbf{证明：}由\autoref{the_PoDe_1} 得，$V$中存在一组正交基使得$U$为对角矩阵。由$UU^{\dagger}=E$可知，$U$的对角元是模为1的复数，我们将其表示为$U(i)=\E^{\I\theta_i}$，则$U=\E^{\I H},H=\opn{diag}(\theta_1,\theta_2...\theta_n)$。
+\begin{example}{}
+\begin{enumerate}
+\item 用转动生成元$\hat{L_i}$生成使系统绕$i$轴转动的幺正变换$\hat U=\E^{\I\hat{L}_i\theta}$，其中$\theta$表示转动角度。
+\end{enumerate}
+\end{example}
+结合\autoref{the_PoDe_2} ，\autoref{the_PoDe_3} ，我们可以对酉空间上的任意线性变换进行“极分解”，类似于把复数表示为模乘以$\E^{\I\theta}$。
+\begin{corollary}{}
+给定酉空间$V$及其上的线性变换$A$，则存在$V$上的半正定厄米变换$H_1,H_2,F_1,F_2$，使得
+\begin{equation}
+A=H_1\E^{\I F_1}=\E^{\I F_2}H_2~.
+\end{equation}
+\end{corollary}

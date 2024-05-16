@@ -4,7 +4,7 @@
 
 \pentry{C++ 基础\nref{nod_Cpp0}}{nod_81f0}
 
-Arb 是一个支持任意精度计算的 C/C++ 库（也提供 python 接口\upref{PyFlnt}）， 支持对计算进行严谨的误差估计， 即每个任意精度浮点数 $z$ 都会伴随一个误差半径 $r$， 使得精确结果必定落在复平面上以 $z$ 为圆心半径为 $r$ 的圆盘中。 通过增加浮点数的精度， 就可以用数值方法无限逼近理论值。 Arb 还提供了许多特殊函数的计算， 例如 $\Gamma$ 函数\upref{Gamma}， 超几何函数\upref{HypGeo} 等， 以及常用的线性代数功能和离散傅里叶变换\upref{DFT}等。 官方主页 \href{https://arblib.org/}{arblib.org} 包含详细的文档。
+Arb 是一个支持任意精度计算的 C/C++ 库（也提供 \enref{python 接口}{PyFlnt}）， 支持对计算进行严谨的误差估计， 即每个任意精度浮点数 $z$ 都会伴随一个误差半径 $r$， 使得精确结果必定落在复平面上以 $z$ 为圆心半径为 $r$ 的圆盘中。 通过增加浮点数的精度， 就可以用数值方法无限逼近理论值。 Arb 还提供了许多特殊函数的计算， 例如 \enref{$\Gamma$ 函数}{Gamma}， \enref{超几何函数}{HypGeo} 等，以及常用的线性代数功能和\enref{离散傅里叶变换}{DFT}等。官方主页 \href{https://arblib.org/}{arblib.org} 包含详细的文档。
 
 \subsection{安装}
 以 Ubuntu 为例， 最方便的安装方式就是使用 \verb|apt| 安装。 首先安装 dependency
@@ -16,7 +16,7 @@ sudo apt install libmpfr-dev libflint-dev
 sudo apt install libflint-arb-dev libflint-arb2
 \end{lstlisting}
 
-但目前这并不是 Arb 的最新版本（例如没有实现库仑函数\upref{CulmF}）。 要获得最新版本， 可以直接从 \href{https://github.com/fredrik-johansson/arb/}{GitHub} 下载源码编译即可（默认使用 gcc 编译器）。 目前笔者使用的版本是 release 2.19.0 （ubuntu 20.04 和 22.04 均可直接用 apt 安装更高版本）。
+但目前这并不是 Arb 的最新版本（例如没有实现\enref{库仑函数}{CulmF}）。要获得最新版本， 可以直接从 \href{https://github.com/fredrik-johansson/arb/}{GitHub} 下载源码编译即可（默认使用 gcc 编译器）。 目前笔者使用的版本是 release 2.19.0 （ubuntu 20.04 和 22.04 均可直接用 apt 安装更高版本）。
 
 可以用 \verb|./configure --help| 查看编译选项， 若所有的包都安装在默认目录则不需要编译选项。
 \begin{lstlisting}[language=bash]
@@ -31,7 +31,7 @@ sudo make install;
 \subsection{编译}
 在 Ubuntu 中如果你使用 \verb|apt| 安装， 在编译程序是需要加 \verb|-lflint-arb| 选项。 如果你直接从源码编译， 则需要加 \verb|-larb| 选项。 对一些编译器（例如 intel 的 \verb|icpc|）， 可能还需要加上 \verb|-lflint, -lmpfr, -lgmp|， 如果 link 阶段遇到问题可以试试加上。
 
-一个 C++ 例程： 该程序用 80 bit 初始精度计算复参数的超几何函数\upref{HypGeo} $_1F_1$ 并于 Mathematica 的结果比较。 如果 Arb 估计的结果精度小于 16 位有效数字则显示警告。 初始精度越高， 结果的有效数字也越高， 具体取决于 $_1F_1$ 的参数。 读者可以尝试在程序内加入一个循环， 若结果有效数字不够， 则把初始精度加倍再次计算， 直到达到精度为止。
+一个 C++ 例程： 该程序用 80 bit 初始精度计算复参数的\enref{超几何函数}{HypGeo} $_1F_1$ 并于 Mathematica 的结果比较。 如果 Arb 估计的结果精度小于 16 位有效数字则显示警告。 初始精度越高， 结果的有效数字也越高， 具体取决于 $_1F_1$ 的参数。 读者可以尝试在程序内加入一个循环， 若结果有效数字不够， 则把初始精度加倍再次计算， 直到达到精度为止。
 
 \begin{lstlisting}[language=cpp, caption=test.cpp]
 #include "arb_hypgeom.h"
@@ -109,7 +109,7 @@ g++ -o test.x test.cpp -larb -lflint
 \subsection{内部实现}
 \pentry{FLINT 库笔记\nref{nod_Flint}}{nod_a4d0}
 \begin{itemize}
-\item 要配合 gdb 学习可以自己编译一个 debug 版本的 libarb 库， 见 Automake 笔记\upref{automk}。
+\item 要配合 gdb 学习可以自己编译一个 debug 版本的 libarb 库， 见 \enref{Automake 笔记}{automk}。
 \item \verb|ARF_PREC_EXACT| 的定义是 \verb|std::numeric_limits<slong>::max()|
 \end{itemize}
 
