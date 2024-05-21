@@ -32,6 +32,7 @@ Git for Windows 的 Git bash 是不支持 symlink 的， symlink clone 下来以
 \item 为了防止大文件传服务器失败， 使用例如 \verb|git config --global http.postBuffer 2000000000| （字节）
 \item 要关闭 CRLF 即将变为 LF 警告， 用 \verb|git config --global core.safecrlf false| （不会改变功能）
 \item 如果提示 https 证书有问题， 用 \verb|git config --global http.sslverify false| 忽略
+\item git 在 pull 的时候如果本地和上有有不同的 commit， 通常会默认自动 merge 并产生新的 commit 让你填写信息。 若要默认报错什么都不做，用 \verb`git config --global pull.rebase false; git config --global merge.ff only`
 \end{itemize}
 
 \subsection{基础}
@@ -173,48 +174,6 @@ git config --global pack.threads 2 # 使用多少线程压缩 pack
 \item \verb|git index-pack -v path/to/packfile.pack| 
 \end{itemize}
 
-
-\subsection{分支}
-\begin{itemize}
-\item \verb|git branch <branch>| 创造一个 new branch.
-\item \verb|git branch <branch> <hash>| 用于从指定的 commit 创建 branch.
-\item \verb|git branch -m 新名字| 重命名当前的 branch。
-\item \verb|git branch -d <branch>| 用于删除某个 branch.
-\item \verb|git branch -r| 显示 remote 的所有 branch。
-\item \verb|git branch --set-upstream-to=<remote>/<branch>| 用于设置 pull 和 push 的默认 remote 和 branch
-\item \verb|git branch --set-upstream-to <remote>/<branch>| 可以将某个 remote 作为默认
-\item \verb|git branch| 显示本地 checkout 过的 branch。 \verb|-vv| 显示更多信息， 包括 hash， remote， 最后 commit 标题。 前面有星号的是当前的 branch （\verb|git status| 也会显示）。
-\item \verb|git clone| 下载一个完整的 repo 以后， 是包含所有 branch 的， 可以 \verb|git checkout <branch>|。 但开始 \verb|git branch [-vv]| 并不会显示， 只会显示 checkout 过的。
-\item \verb|git clone ... --depth = 1| 后不能 checkout 其他 branch。 因为它包含一个默认的 \verb|--single-branch| 选项。 默认下载的是 \verb|master|， 如果要指定， 用 \verb|git clone --depth 1  --branch <branch> url|
-\item \verb|git checkout <branch> -- <file1> <file2>...| 可以把某个 branch 的指定文件还原到当前 branch。
-\item \verb|git fetch <remote> <branch>| 可以下载一个指定的 branch。 注意不要用 \verb|pull|， 会试图和当前 branch 合并。
-\item fetch 完了以后用 \verb|git checkout <branch>| 就在本地创建刚 fetch 的 branch。
-\item \verb|git pull| 只是从服务器下载当前 branch 的变化。
-\item \verb|git diff branchA branchB -- 文件| 用于比较两个 branch 中同一个文件。
-\item \verb|git checkout <branch> -- 文件| 可以从别的 branch 里面 checkout 一个文件到当前 branch。
-
-\item \verb|git show-branch| 可以查看已有的 branch 
-\item \verb|git checkout <branch>| 把文件夹中的文件切换成某个 branch 中的文件。 但是新的修改和 staging area 中的修改也会移植到该 branch 中。 如果不想移植， 就先 commit.
-\item \verb|git switch <branch>| 也可以用于切换 branch。
-\item \verb|git checkout <name>| 也可以用于从服务器上下载本地不存在的 branch.
-\item \verb|git merge <branch>| 把某个 branch 并入到当前 branch 中并 commit。 用 \verb|--no-commit| 不 commit。
-\item 如果 \verb`<branch>` 有多个新的 commit， 则 merge 后也会产生多个。 若要合并为一个， 用 \verb`git merge --squash <branch>`， 默认不 commit（相当于把 \verb`<branch>` 里面的文件直接替换到当前 branch。
-\item 如果 merge 的过程中出现 conflict, 用 \verb|git merge --abort| 可以恢复到 merge 以前。
-\item 只要两个 branch 修改的不是同一个文件的同一行， merge 都不会有问题。 如果是， 就会产生 conflict
-
-
-
-\item \verb|git push <remote> --delete <branch>| 用于删除 server 上的 branch.
-\item \verb|git push --set-upstream <server> <branch>| 用于把某个 branch 推送到 server 上并 track.
-
-
-\item \verb|git clone -b <branch> --single-branch <url>| 用于从 url 克隆一个指定的 branch.
-\item \verb|git push| 后面可以加某次 commit 的 hash 和 branch 如 \verb|abcd:master|， 或者如 \verb|HEAD~1:master|.
-
-\item \verb|git cherry-pick <hash> --no-commit| 可以把任意 branch 的某次 commit 的改变应用到当前 branch， 但是不 commit。 也可以用 \verb|<hash1>...<hash2>| 指定一个范围。
-\item \verb|git blame -L 开始行号,结束行号 文件|  可以查看某个文件的某个范围被哪次 commit 修改。
-\end{itemize}
-
 \subsection{tag 和 release}
 \begin{itemize}
 \item \verb|git tag| 可以显示所有 tag。
@@ -249,3 +208,58 @@ do
 	fi
 done
 \end{lstlisting}
+
+\subsection{分支}
+\begin{itemize}
+\item \verb|git branch <branch>| 创造一个 new branch.
+\item \verb|git branch <branch> <hash>| 用于从指定的 commit 创建 branch.
+\item \verb|git branch -m 新名字| 重命名当前的 branch。
+\item \verb|git branch -d <branch>| 用于删除某个 branch.
+\item \verb|git branch -r| 显示 remote 的所有 branch。
+\item \verb|git branch --set-upstream-to=<remote>/<branch>| 用于设置 pull 和 push 的默认 remote 和 branch
+\item \verb|git branch --set-upstream-to <remote>/<branch>| 可以将某个 remote 作为默认
+\item \verb|git branch| 显示本地 checkout 过的 branch。 \verb|-vv| 显示更多信息， 包括 hash， remote， 最后 commit 标题。 前面有星号的是当前的 branch （\verb|git status| 也会显示）。
+\item \verb|git clone| 下载一个完整的 repo 以后， 是包含所有 branch 的， 可以 \verb|git checkout <branch>|。 但开始 \verb|git branch [-vv]| 并不会显示， 只会显示 checkout 过的。
+\item \verb|git clone ... --depth = 1| 后不能 checkout 其他 branch。 因为它包含一个默认的 \verb|--single-branch| 选项。 默认下载的是 \verb|master|， 如果要指定， 用 \verb|git clone --depth 1  --branch <branch> url|
+\item \verb|git checkout <branch> -- <file1> <file2>...| 可以把某个 branch 的指定文件还原到当前 branch。
+\item \verb|git fetch <remote> <branch>| 可以下载一个指定的 branch。 注意不要用 \verb|pull|， 会试图和当前 branch 合并。
+\item fetch 完了以后用 \verb|git checkout <branch>| 就在本地创建刚 fetch 的 branch。
+\item \verb|git pull| 只是从服务器下载当前 branch 的变化。
+\item \verb|git diff branchA branchB -- 文件| 用于比较两个 branch 中同一个文件。
+\item \verb|git checkout <branch> -- 文件| 可以从别的 branch 里面 checkout 一个文件到当前 branch。
+
+\item \verb|git show-branch| 可以查看已有的 branch 
+\item \verb|git checkout <branch>| 把文件夹中的文件切换成某个 branch 中的文件。 但是新的修改和 staging area 中的修改也会移植到该 branch 中。 如果不想移植， 就先 commit.
+\item \verb|git switch <branch>| 也可以用于切换 branch。
+\item \verb|git checkout <name>| 也可以用于从服务器上下载本地不存在的 branch.
+\item \verb|git push <remote> --delete <branch>| 用于删除 server 上的 branch.
+\item \verb|git push --set-upstream <server> <branch>| 用于把某个 branch 推送到 server 上并 track.
+\item \verb|git clone -b <branch> --single-branch <url>| 用于从 url 克隆一个指定的 branch.
+\item \verb|git push| 后面可以加某次 commit 的 hash 和 branch 如 \verb|abcd:master|， 或者如 \verb|HEAD~1:master|.
+\item \verb|git cherry-pick <hash> --no-commit| 可以把任意 branch 的某次 commit 的改变应用到当前 branch， 但是不 commit。 也可以用 \verb|<hash1>...<hash2>| 指定一个范围。
+\item \verb|git blame -L 开始行号,结束行号 文件|  可以查看某个文件的某个范围被哪次 commit 修改。
+\end{itemize}
+
+\subsection{merge}
+\begin{itemize}
+\item \verb|git merge <branch>| 把某个 branch 并入到当前 branch 中并 commit。 用 \verb|--no-commit| 不 commit。
+\item 如果 \verb`<branch>` 有多个新的 commit， 则 merge 后也会产生多个。 若要合并为一个， 用 \verb`git merge --squash <branch>`， 默认不 commit（相当于把 \verb`<branch>` 里面的文件直接替换到当前 branch。
+\item 如果 merge 的过程中出现 conflict, 用 \verb|git merge --abort| 可以恢复到 merge 以前。
+\item 只要两个 branch 修改的不是同一个文件的同一行， merge 都不会有问题。 如果是， 就会产生 conflict
+\item 如果 merge 出现 conflict， 可以用 \verb`git merge --abort` 解决
+\end{itemize}
+
+
+\subsection{rebase}
+\begin{itemize}
+\item 如果有两个分支 \verb`master` 和 \verb`draft`， 在分叉后都有自己的若干 commit。 那么在 \verb`git checkout draft` 以后，如果用 \verb`git rebase master`， 那么就相当于把这个分支产生后的所有修改都重新基于 \verb`master` 的最新 commit， 并把应用后的结果在该分支修改。 如果发生冲突， \verb`git status` 会提示一些文件 \verb`both modified`。 这时如果要取消 rebase 就用 \verb`git rebase --abort`， 如果要手动修改就打开这些文件编辑，会看到类似于一些这样的格式
+\begin{lstlisting}[language=none]
+<<<<<<< HEAD
+modified by master
+=======
+modified by draft
+>>>>>>> latest commit title of draft
+\end{lstlisting}
+同时显示了不同版本的内容，需要手动把这部分解决，例如只保留其中之一。 注意这个显示的不同版本是当前分支第一个与 master 最新版的冲突的 commit，只要把这个解决，之后 commit 中对该文件的修改都会自动应用。 解决所有冲突后对这些文件用 \verb`git add` 标记冲突已经解决，再用 \verb`git rebase --continue` 即可。
+\item rebase 以后该分支发生了什么变化呢？ 它会变得好像当前分支是直接从 \verb`master` 的最新 commit 产生的一样！查看该分支的 \verb`git log` 会先给出 master 分支从头到尾的 commit， 然后再列出该分支的所有 commit，但是这些 commit 修改的内容是基于 master 的最新 commit 的。
+\end{itemize}
