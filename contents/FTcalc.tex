@@ -1,0 +1,144 @@
+% 微积分基本定理
+% keys 微积分基本定理|牛顿莱布尼茨公式
+% license Xiao
+% type Tutor
+
+\begin{issues}
+\issueTODO
+\issueMissDepend
+\issueNeedCite
+\issueDraft
+\end{issues}
+
+\textbf{微积分基本定理}是微积分领域的一个非常重要的定理，从它的名字你就可以看出来，他叫“基本定理”。而如此重要的原因是它将原本分开进行研究的微分和积分联系了起来，使得人们有了一个新的视角来统一审视这两种运算。而对于二者早已融合的当下，接触微积分的学习者往往在接触了这个定理的时候，早已接受了 “微分与积分互为逆运算” 的观念，也养成了不定积分与定积分符号书写的习惯，这个定理令他们感到困惑：“这不是显然的吗？”
+\addTODO{在接触这个定理之前为何会认为是 “显然” 的？ 是通过死记硬背？还是什么其他的不严谨推导方法（例如简明微积分中的）？}
+因此，现在请暂时忘记关于微分和积分的联系，回到尚未发现这个基本定理的时候，通过穿越建立这个基本定理的过程，来感受它的奇妙。
+
+\subsection{准备工作}
+\pentry{函数连续， 夹逼定理， 导数，积分中值定理}{nod_5d98}
+\addTODO{nref 链接，有了再加，不要用 nref{Sample}。另外一个预备知识列表代表新开了一个节点，这里用一个 pentry 就可以了}
+
+假设现在已经知道的内容只包括：极限运算中的夹逼定理；微分运算中导数和原函数的定义；积分运算中关于上下限的运算和积分第一中值定理。没有人知道它们之间有什么联系。由于本文的目标并非这些涉及的定理，为方便查看，均摘录到下方作为引理。具体的定义说明或定理证明，参见目标即可。
+\addTODO{以下总结如果在别处已经有了，直接用 autoref 引用即可（空心引号按钮），无需占用太多篇幅。}
+
+\subsubsection{极限部份}
+\begin{lemma}{夹逼定理}\label{lem_FTcalc_3}
+若$g(x)\leq f(x)\leq h(x),\lim _{x\to x_0}h(x)=\lim _{x\to x_0}g(x)=a$，则
+$$\lim _{x\to x_0}f(x)=a~.$$
+\end{lemma}
+
+\begin{definition}{函数连续}\label{def_FTcalc_1}
+若函数$f(x)$在$x_0$处的极限值与函数值相等，即：$\lim_{x\to x_0}f(x)=f(x_0)$，则称$f(x)$在$x_0$处连续。
+\end{definition}
+\autoref{the_contin_1}~\upref{contin}
+\subsubsection{微分部份}
+\begin{definition}{导数}\label{def_FTcalc_2}
+函数$f(x)$在某一点$x_0$附近的变化率称为在这一点的导数（derivative），一般记作$f'(x_0)$。
+$$f'(x_0):=\lim_{\Delta x\to0}{\frac{f(x_0+\Delta x)-f(x_0)}{\Delta x}}~$$
+$f':x\mapsto f'(x)$称作函数$f(x)$的导函数。
+\end{definition}
+
+\begin{definition}{原函数}\label{def_FTcalc_3}
+若函数$f(x)$是函数$F(x)$的导数，即$F'(x)=f(x)$，则称$F(x)$是$f(x)$的一个原函数。
+\end{definition}
+
+请注意，这时的“原函数”还是一个微分学概念，还没有“不定积分”这个概念。如果想称呼所有的原函数构成的集合，会称为“原函数族”。这时已经知道所有的原函数之间只相差一个常数项$C$。
+
+\subsubsection{积分部份}
+
+\begin{lemma}{积分上下限运算}\label{lem_FTcalc_1}
+若$f(x)$在$[a,b]$上可积，则存在$c\in[a,b]$，使得
+$$\int_{a}^{b} f(x)g(x)dx=\int_{a}^{c} f(x)g(x)dx+\int_{c}^{b} f(x)g(x)dx~$$
+\end{lemma}
+
+\begin{lemma}{积分第一中值定理}
+若$f(x)$在$[a,b]$上连续，$g(x)$在$[a,b]$上不变号且可积，则存在$\xi\in[a,b]$，使得
+$$\int_{a}^{b} f(x)g(x)dx=f(\xi)\int_{a}^{b} g(x)dx~$$
+\end{lemma}
+
+由于证明中实际使用的是$g(x)=1$的特例，因此一并列出。
+
+\begin{lemma}{积分中值定理}\label{lem_FTcalc_2}
+若$f(x)$在$[a,b]$上连续，则存在$\xi\in[a,b]$，使得
+$$\int_{a}^{b} f(x)dx=f(\xi)(b-a)~$$
+\end{lemma}
+
+\subsection{定理内容}
+
+\begin{theorem}{微积分第一基本定理}
+若$f(x)$在$[a,b]$上连续，则$f(x)$在$[a,b]$上的变上限积分是$f(x)$的一个原函数，即：
+$${d\over\mathrm {d}x}\int_{a}^{x}f(t)\mathrm {d}t=f(x)~$$
+\end{theorem}
+
+\begin{theorem}{微积分第二基本定理}
+若$f(x)$在$[a,b]$上连续，则对$f(x)$的任意一个原函数$F(x)$，$f(x)$在$[a,b]$上的定积分的值为$F(x)$在区间端点处的函数值的差，即：
+$$\int_{a}^{b} f(x)\mathrm {d}x=F(b)-F(a)~$$
+\end{theorem}
+
+注意这里有几点需要注意的内容：
+\begin{enumerate}
+\item 证明的过程中没有针对特定的积分定义（如黎曼积分、勒贝格积分等），因此这个定理其实是对这些定义下的积分都成立的。
+\item 定理指出的是$f(x)$在$[a,b]$上是连续函数的情况，也即只有$f(x)$在$[a,b]$上连续，微分与积分才有此关系，否则仍需要按照定义去计算。
+\item 微积分第二基本定理一般也称作\textbf{牛顿-莱布尼茨公式}（Newton–Leibniz formula）。它也是斯托克斯定理在一维情况下的特例。
+\end{enumerate}
+
+\subsection{证明过程}
+
+通过观察可以看到，微积分第一基本定理给出的条件只有$f(x)$连续，而想证明一个函数$f$是另一个函数$g$的原函数，最好的方法便是证明。证明的思路是，先来证明微积分第一基本定理，基于此可以得到微积分第二基本定理。
+
+\subsubsection{证明微积分第一基本定理}
+
+取$f(x)$在$[a,b]$上的变上限积分$f_0(x)=\int_{a}^{x} f(t)\, \mathrm {d}t$，则：
+$$\begin{align*}f_0'(x) &\overset{\mathrm{1}}{=} \lim_{\Delta x\to0}{\int_{a}^{x+\Delta x} f(t)\, \mathrm {d}t-\int_{a}^{x} f(t)\, \mathrm {d}t\over\Delta x}\\ 
+&\overset{\mathrm{2}}{=}\lim_{\Delta x\to0}{\int_{x}^{x+\Delta x} f(t)\, \mathrm {d}t\over\Delta x}\\
+&\overset{\mathrm{3}}{=}\lim_{\Delta x\to0}{\Delta xf(\xi)\over\Delta x} \\ 
+&=\lim_{\Delta x\to0}f(\xi)\\ 
+&\overset{\mathrm{4}}{=}f(x)\end{align*}~$$
+
+下面来分别阐述为什么这些等号成立：
+\begin{enumerate}
+\item 根据导数的定义（\autoref{def_FTcalc_2} ）并代入了$f_0(x)$的表达式。
+\item 使用了积分上下限运算（\autoref{lem_FTcalc_1} ）。
+\item 使用了积分中值定理（\autoref{lem_FTcalc_2} ）。
+\item 由于之前使用的积分中值定理，可以知道$x\leq\xi(\Delta x)\leq x+\Delta x$，即$\xi$是$\Delta x$的函数，又$\lim_{\Delta x\to0}x=x$，$\lim_{\Delta x\to0}(x+\Delta x)=x$，由夹逼定理（\autoref{lem_FTcalc_3} ）可知：$\lim_{\Delta x\to0}\xi=x$。由于$f(x)$在$[a,b]$上连续，$x\in[a,b]$，由连续的定义（\autoref{def_FTcalc_1}）可得。
+\end{enumerate}
+
+因此，由上面的推导得到了$f_0'(x)=f(x)$，根据原函数的定义（\autoref{def_FTcalc_3}），$f_0(x)$是$f(x)$的一个原函数。证毕。
+
+\subsubsection{证明微积分第二基本定理}
+
+% \addTODO{}
+
+从此，微分与积分联系了起来。下面以一个简单的例题来直观体会一下微积分基本定理如何降低了运算要求。
+
+\begin{example}{}
+计算$f(x)=x$在$[0,1]$上的定积分（黎曼积分）。
+\end{example}
+
+使用定义计算：
+
+将区间$[0, 1]$分成$n$个等长的小区间，每个小区间的长度为$\Delta x = \frac{1 - 0}{n} = \frac{1}{n}$。选择每个小区间的右端点作为取样点。因此，第$i$个小区间的右端点是：$x_i = \frac{i}{n}, \quad i = 1, 2, \ldots, n$。
+函数$f(x) = x$在右端点$x_i$处的取值为$f\left(\frac{i}{n} \right)=\frac{i}{n}$。因此，黎曼和为：
+$$S_n = \sum_{i=1}^n f\left( \frac{i}{n} \right) \Delta x = \sum_{i=1}^n \frac{i}{n} \cdot \frac{1}{n} = \sum_{i=1}^n \frac{i}{n^2}=\frac{n(n+1)}{2}{1\over n^2} = \frac{n+1}{2n}~$$
+当 $ n \to \infty $ 时，
+$\lim_{n \to \infty} S_n = \lim_{n \to \infty} \frac{n+1}{2n}= \frac{1}{2}$
+因此，$$\int_0^1 x \, dx = \frac{1}{2}~$$
+
+使用微积分基本定理：
+
+找到$f(x) = x$的一个原函数$F(x)=\frac{x^2}{2}$。计算原函数在端点的值$F(1) =\frac{1}{2}$，$F(0) = 0$。代入微积分第二基本定理：
+$$\int_0^1 x \, dx = F(1) - F(0) = \frac{1}{2} - 0 = \frac{1}{2}~$$
+
+可以看到，在实际求取$f(x)$定积分时，使用微积分基本定理使得不再需要根据定积分的定义去分割求取极限，而是将这些过程全部转化为了直接去寻找$f(x)$的原函数的过程。这使得求解那些容易得到原函数的连续函数的积分的过程变得很容易。
+
+另外，根据微积分第二基本定理，得到了如下的概念。
+
+\begin{definition}{不定积分}
+$f(x)$所有的原函数构成的原函数族唯一，称为$f(x)$的\textbf{不定积分}，记作：
+$$\int f(x)\mathrm {d}x:=F(x)+C~$$
+\end{definition}
+
+因此，微积分第二基本定理也可以得到如下的表达方式。
+$$\int_{a}^{b} f(x)\mathrm {d}x=\int f(x)\mathrm {d}x\big{|}_{a}^{b}~$$
+
+这样的表达方式使得定积分仿佛就是不定积分取到上、下限时，代入得到的结果，而正是微积分基本定理保证着这个记号带来的书写习惯如此自然。

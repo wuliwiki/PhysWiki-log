@@ -20,7 +20,8 @@
 
 \subsection{格式转换}
 \begin{itemize}
-\item 要从视频中提取音频并保持音频编码不变， 用 \verb|ffmpeg -i input_video.mp4 -vn -acodec copy output_audio.mp3|
+\item 要从视频中提取音频并保持音频编码不变， 用 \verb|ffmpeg -i input_video.mp4 -vn -acodec copy output_audio.mp3| （出错，用 \verb`ffmpeg -i input.mp4 -vn -acodec copy output.aac
+` 或者 \verb`ffmpeg -i input_video.mp4 -vn -acodec libmp3lame -q:a 0 output_audio.mp3`)
 \item 要导出一段时间内的一些列的帧到图片，用 \verb|ffmpeg -i input_video.mp4 -ss start_time -t duration -vf fps=1 output_%03d.jpg|
 \item 不同的视频格式（mp4, mov, mkv，ts）只是外面的 container 不同， 编码可能是相同的（例如最常用的 H264）。 所以转换格式的时候只需要让 ffmpeg 把容器换壳即可： \verb|ffmpeg -y -i 输入视频 -c copy 输出视频|。 这样的转换是完全无损的。
 \end{itemize}

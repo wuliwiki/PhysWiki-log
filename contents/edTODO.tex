@@ -216,7 +216,7 @@ UPDATE "entries" SET "figures" = "figures" || ' test_10' WHERE "id"='test';
 \item 若上传 pdf + svg 图片， 更新 \verb|figures.image_alt|。 同时支持上传其他文件（如果后缀名是 \verb|gif, eps 等|， 同样更新到 \verb|figures.image_alt|。
 \item 【先不做】上传或替换图片时弹出窗口让用户填写版权信息。
 \item 【先不做】上传或替换图片时允许上传附件
-\item 【先不做】在图片的下拉菜单中做一个图片浏览器按钮， 打开一个面板可以浏览所有图片。 选中图片后可以查看在哪个文章被使用。
+\item 【先不做】在图片的下拉菜单中做一个图片浏览器按钮， 打开一个面板可以浏览所有图片。 选中图片后可以查看在哪篇文章被使用。
 \item 【先不做】若替换图片， 则把替换前的 \verb|figures.image| 和 \verb|.image_alt| 都移动到 \verb|figures.image_old|。
 \item “当地时间” 替换为 “本地时间”， 冬令时和夏令时的说明删除
 \item 用 salary.value 代替 authors.salary,  discount 表整合到了 salary.scale
@@ -400,7 +400,7 @@ $$a^2 + b^2 = c^2$$
 
 \item 【完成】增加一个 “引用文献” 按钮， 图标为 \verb|[1]|， 点击以后弹出文献列表（从 \verb|data/bib_label.txt| 和 \verb|bib_detail.txt| 中每行分别读取 \verb|标签| 和 \verb|内容|）， 每一行的格式为 \verb|[行号 标签] 内容| 支持搜索， 点击以后在光标处插入 \verb|\cite{标签}|
 
-\item 【完成】设置每个文章第一行为只读（除了 \verb|main.tex| 以及 \verb|bibliography.tex|）， 如果试图直接修改， 就提示 “请使用重命名按钮修改标题”。
+\item 【完成】设置每篇文章第一行为只读（除了 \verb|main.tex| 以及 \verb|bibliography.tex|）， 如果试图直接修改， 就提示 “请使用重命名按钮修改标题”。
 
 \item 【先不做】当编辑器提示 PhysWikiScan 输出的 cerr 时， 文字需要可以复制， 如果 chrome 本身的弹窗不支持， 就用自己的弹窗。
 
@@ -423,16 +423,16 @@ $$a^2 + b^2 = c^2$$
 \textbf{方案 1： 只占用子节}
 \begin{itemize}
 \item 这是现有方案的一个小改进， 开发成本非常低。
-\item 每个作者都可以看到当前未通过审核的所有改变（无论哪种方案这都是应该的）， 鼓励同时编辑同一个文章的人进行沟通。
-\item 编辑器通过作者修改的内容决定占用哪些子节， 可以允许不同作者修改同一个文章的不同子节。
+\item 每个作者都可以看到当前未通过审核的所有改变（无论哪种方案这都是应该的）， 鼓励同时编辑同一篇文章的人进行沟通。
+\item 编辑器通过作者修改的内容决定占用哪些子节， 可以允许不同作者修改同一篇文章的不同子节。
 \end{itemize}
 
 \textbf{方案 2：使用 Git 的方式协同编辑}
 \begin{itemize}
 \item 这个方案是最理想的， 但需要较大开发成本。 当然也可以不严格实现取个折中。也可以完全用 github 管理， 0 成本。 还可以在自己服务器上搭建 GitLab。
-\item 使用 git 的方式管理协作。 从概念上每个人的每次新编辑（可以修改多个文章）都创建整个百科的一个新分支（以账号 ID 命名）。 完成后提交 pull request（PR）。 审稿人同意后 merge 到 master。 每个新分支都有自己的数据库（概念上）。
+\item 使用 git 的方式管理协作。 从概念上每个人的每次新编辑（可以修改多篇文章）都创建整个百科的一个新分支（以账号 ID 命名）。 完成后提交 pull request（PR）。 审稿人同意后 merge 到 master。 每个新分支都有自己的数据库（概念上）。
 \item 每个作者都可以看到当前未通过审核的所有改变。
-\item 为避免冲突每个文章一次只能有一个 PR， 这样抢锁就成了抢 PR。 与其让审稿人解决冲突， 需要作者自己解决冲突（把自己的更改 rebase 到 master 的最新 commit， 并确保可以编译成功）。
+\item 为避免冲突每篇文章一次只能有一个 PR， 这样抢锁就成了抢 PR。 与其让审稿人解决冲突， 需要作者自己解决冲突（把自己的更改 rebase 到 master 的最新 commit， 并确保可以编译成功）。
 \item 鼓励尽量把非 trivial 的公式用公式按钮创建， 按钮自动生成 label。 其他环境一律强制要求有 label。
 \item 用户可以直接申请在 master 分支中添 label， 自动通过（为了防止捣乱可以限制数量）然后 pull 到自己的分支。
 \item 数据库的实现上， 给每个分支新建一个临时数据库， 但每个表格只保存变化、删除和新添加的记录（但为了偷懒也可以先复制整个数据库）。 PR 通过以后删除数据库。 文件也是只有改变的才进行复制（为了偷懒也可以先复制所有文章文件）。
@@ -615,7 +615,7 @@ $$a^2 + b^2 = c^2$$
 
 \subsubsection{changed}
 \begin{itemize}
-\item 【完成】changed.txt 中只有一个文章的时候， 发布文章会提示错误。 为空时也会错误？
+\item 【完成】changed.txt 中只有一篇文章的时候， 发布文章会提示错误。 为空时也会错误？
 \end{itemize}
 
 \subsubsection{表格标签多次定义}
@@ -657,5 +657,5 @@ $$a^2 + b^2 = c^2$$
 
 \item 【完成】（已在 latex 模板中基本解决）编译 pdf 时， 特殊字符（如希腊字母等）会无法显示。 如果有无法显示的字符， 在编译的 \verb|.log| 文件里面（或者 console）就会出现 \verb|Missing character: There is no ...| 的提示。 这时最好的办法就是替换成公式环境中的命令。 如希腊字母 $\alpha$。 参考 \href{https://www.overleaf.com/learn/how-to/What_file_encodings_and_line_endings_should_I_use\%3F}{overleaf 的这篇文章}。 另外可以 google 一下 \href{https://tug.ctan.org/info/symbols/comprehensive/symbols-a4.pdf}{symbols-a4.pdf}， 上面提供相近的符号命令对照表。 另外\href{https://www.johndcook.com/unicode_latex.html}{这个}网页可以把 utf 字符转换为 latex 命令。 另外， 在 pdf 编译和百科编辑器的编译结果中， 都实现了行内公式和汉字之间自动插入空格， 和英文字母或数字间不插入空格。
 
-\item 【完成】在每个文章底部加上目录树的链接
+\item 【完成】在每篇文章底部加上目录树的链接
 \end{itemize}

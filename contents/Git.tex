@@ -11,7 +11,7 @@ Git for Windows 的 Git bash 是不支持 symlink 的， symlink clone 下来以
 
 但新的问题是，WSL 用 git 经常会有权限不足问题\upref{WSLnt}。 所以 git bash 和 WSL 可以结合起来用。
 
-如果 repo 非常大（几 G 到几百 G）， 可以考虑用 \href{https://git-scm.com/docs/scalar}{Scalar}
+如果 repo 非常大（十几 G 到几百 G）， 可以考虑用 \href{https://git-scm.com/docs/scalar}{Scalar}
 
 \subsection{新安装设置}
 \begin{itemize}
@@ -32,7 +32,7 @@ Git for Windows 的 Git bash 是不支持 symlink 的， symlink clone 下来以
 \item 为了防止大文件传服务器失败， 使用例如 \verb|git config --global http.postBuffer 2000000000| （字节）
 \item 要关闭 CRLF 即将变为 LF 警告， 用 \verb|git config --global core.safecrlf false| （不会改变功能）
 \item 如果提示 https 证书有问题， 用 \verb|git config --global http.sslverify false| 忽略
-\item git 在 pull 的时候如果本地和上有有不同的 commit， 通常会默认自动 merge 并产生新的 commit 让你填写信息。 若要默认报错什么都不做，用 \verb`git config --global pull.rebase false; git config --global merge.ff only`
+\item git 在 pull 的时候如果本地和上有有不同的 commit， 通常会默认自动 merge 并产生新的 commit 让你填写信息。 若要默认报错什么都不做，用 \verb`git config --global pull.rebase false; git config --global merge.ff only` （注意这并不会影响 \verb`git merge` 命令）
 \end{itemize}
 
 \subsection{基础}
@@ -85,7 +85,7 @@ Git for Windows 的 Git bash 是不支持 symlink 的， symlink clone 下来以
 \item \verb|git log -S'字符串' -- 文件| 可以在一个文件所有历史版本中搜索 \verb|字符串|，且该字符串在改 commit 中发生了改变（变成别的或者由别的变成？）。 \verb|-G| 也类似，但支持 regex 搜索。
 \item \verb|git log --reverse --oneline -n 20|
 \item 要浏览某个文件的历史， 用 \verb|git log -- 文件|， 
-\item 如果本地和上游 diverge 了，要查看上游最近的 commit， 先 \verb`git fetch origin`， 然后 \verb`git log HEAD..origin/master`
+\item 如果本地和上游 diverge 了，要查看上游最近的 commit， 先 \verb`git fetch origin`， 然后 \verb`git log origin/main`， 后者只读取本地的 cache，不联网，所以要先 \verb`fetch`。
 \item \verb|git commit --amend| 可以覆盖上一次 commit (如果上一次 commit 忘了做什么事情).
 \item \verb|git reset| 可以 unstage 所有文件， \verb|git reset HEAD <file>| 可以 unstage 一个文件。
 \item \verb|git checkout -- <file>| 可以撤销一个文件从上次 commit 后的变化 （危险操作!）. \verb|git checkout .| 可以撤销所有文件从上次 commit 后的变化 （危险操作!） 但是他们不会影响 untracked files

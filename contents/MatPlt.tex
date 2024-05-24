@@ -70,3 +70,27 @@ set(gca,'XTickLabel',{'0','\pi/2','\pi','3\pi/2','2\pi'});
 \includegraphics[width=9cm]{./figures/5283caea47d60abd.pdf}
 \caption{设置坐标点和显示文字} \label{fig_MatPlt_4}
 \end{figure}
+
+\subsection{pdf 导出}
+% \addTODO{[shi24] 中的图片代码可以参照}
+如果直接用 Figure 窗口中的另存为或者命令 \verb`saveas()`，那么导出的 pdf 可能有非常宽的白边。 这时可以通过 Figure 的 \verb`Paper*` 属性来控制页面的大小以及 pdf 在页面上的位置。
+\begin{lstlisting}[language=matlab]
+figure;
+plot(1:10, rand(1, 10));
+
+% Set the desired paper size (in inches)
+paperWidth = 6;
+paperHeight = 4;
+set(gcf, 'PaperUnits', 'inches');
+set(gcf, 'PaperSize', [paperWidth paperHeight]);
+
+% Set the position and size of the figure on the paper
+left = 0.5; % left margin (in inches)
+bottom = 0.5; % bottom margin (in inches)
+width = paperWidth - 1; % width of the figure (in inches)
+height = paperHeight - 1; % height of the figure (in inches)
+set(gcf, 'PaperPosition', [left bottom width height]);
+
+% Save the figure as a PDF
+saveas(gcf, 'figure.pdf');
+\end{lstlisting}
