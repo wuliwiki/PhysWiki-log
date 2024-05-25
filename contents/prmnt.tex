@@ -1,0 +1,61 @@
+% 素数与合数
+% keys 数论|素数|质数
+% license Usr
+% type Tutor
+
+\pentry{整除\nref{nod_divisb}}{nod_7083}
+\begin{definition}{素数}
+若对于一个正整数 $p > 1$，满足 $p$ 除了 $1$ 与 $p$ 自己以外没有其他因子。也就是说：
+\begin{equation}
+\forall n \in (1,p) \cap \mathbb Z, n \not{\mid} ~ p ~,
+\end{equation}
+就称 $p$ 是\textbf{素数（prime）}，又称质数。往往用符号 $p_n$ 表示第 $n$ 个素数。
+\end{definition}
+
+\begin{definition}{合数}
+大于 $1$ 且不是素数的整数称为\textbf{合数（composite）}。
+\end{definition}
+
+由定义可以立即得到推论。
+\begin{corollary}{}
+对于所有大于 $1$ 的正整数，其要么是质数，要么是合数。
+\end{corollary}
+\begin{corollary}{}
+合数必定有大于 $1$ 且小于其本身的因子。也就是说对于合数 $m > 1$，必定存在 $1 < l < m$，$l | m$。
+\end{corollary}
+
+
+
+在定义了素数后我们可以引入一个定理。
+\begin{theorem}{}\label{the_prmnt_1}
+对于所有大于 $1$ 的正整数都是素数的乘积。
+\end{theorem}
+\textbf{证明}：$n$ 要么自己本身就是素数，否则 $n$ 就有大于 $1$ 且小于 $n$ 的因子。不失一般性的，考虑 $n$ 的大于 $1$ 且小于 $n$ 的最小因子 $a$，则 $a$ 要么是素数，要么 $a$ 是合数。对于 $a$ 是合数的时候，则必定存在 $1 < l < a$ 使得 $l | a$，而 $a | m$，故 $l|m$（整除的传递性）。这使得 $l$ 是更小的一个 $n$ 的大于 $1$ 的因子，矛盾！故 $a$ 必定是素数。
+
+这指出，$n$ 要么本身就是素数，要么可以被一个小于 $n$ 的素数 $p_1$ 整除。而 $n / p_1$ 又是一个数，要么本身是素数，要么可以被一个小于 $n / p_1$ 的素数 $p_2$ 整除，依次类推...... 最终终将得到一个 $p_{m+1} = n/ p_1 / p_2 / \cdots / p_m$ 是一个素数。这就使得 $n$ 可以表示为各个素数 $p_1, p_2, \dots, p_{m+1}$ 的乘积。证毕。
+
+\begin{theorem}{欧几里得第二定理}
+有无限个素数。
+\end{theorem}
+这个证明非常简单，考虑若有有限个素数，则存在一个最大的素数 $p$，取所有小于等于 $p$ 的素数的乘积 $q = 2 \times 3 \times \cdots \times p$，则 $q+1$ 不是任何一个小于等于 $p$ 的素数的倍数，这说明 $q+1$ 是一个新的素数，故总可以根据已有的素数得到一个新的素数，这就说明有无限个素数。
+
+我们定义符号 $\pi(n)$ 表示小于等于 $n$ 的素数的个数。
+\begin{definition}{素数个数函数}
+$\pi(n)$ 表示小于等于 $n$ 的素数个数。
+\end{definition}
+
+\begin{theorem}{}
+\begin{equation}
+\pi(x) \ge \ln \ln (x), ~ (x \ge 2) ~.
+\end{equation}
+\end{theorem}
+\textbf{证明}：假设对于 $n = 1, 2, \cdots, N$ 有 $p_n < 2^{2^n}$，则
+\begin{equation}
+p_{N+1} \leq (p_{1} \times p_2 \times \cdots \times p_N) + 1 < 2^{2+4+\cdots+2^N}+1 ~.
+\end{equation}
+也就有，$p_{N+1} < 2^{2^{N+1}}+1 $。由归纳法得到对于任意 $n$ 都有 $p_n < 2^{2^n}$。
+
+而对于 $n \ge 4$ 的情况，考虑 $e^{e^{n-1}} <x \le e^{e^n}$，通过不等式的技巧可以得到 $e^{n-1} > 2^n$ 且 $e^{e^{n-1}} > 2^{2^n}$。从而 $\pi(x) \ge \pi(e^{e^{n-1}}) \ge \pi(2^{2^n}) \ge n$。故对于足够大的 $x$（$x > e^{e^3}$） 有 $\pi(x) \ge \ln \ln x$。
+
+而对于“不足够大”的 $x$，可以证明不等式 $\pi(x) \ge \ln \ln x$ 都成立。证毕！
+

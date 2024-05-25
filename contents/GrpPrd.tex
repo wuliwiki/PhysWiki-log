@@ -42,6 +42,58 @@
 \includegraphics[width=14cm]{./figures/7576f29d8bc51df2.pdf}
 \caption{\autoref{the_GrpPrd_1} 的示意图。群 $G$ 和 $K$ 被表示为两条相互垂直的虚线，$G\times K$ 就是它们生成的平面。$H$ 和 $J$ 被表示为两条线段，$H\times J$ 就是作图中间那个方形区域。右图用垂直的虚线把 $G$ 区分成若干区域，就是 $G/H$ 的元素；同理，水平虚线划分出了 $K/J$ 的元素。从图示可以很容易看出，$(G\times K)/(H\times J)$ 的元素就是虚线划分出来的矩形区域们，而这些矩形区域正好是线段的笛卡尔积，也就是 $G/H\times K/J$。} \label{fig_GrpPrd_1}
 \end{figure}
+\subsection{内直积与外直积}
+在引入内直积的概念之前，我们先看一个例子。
+
+设$G=G_1\times G_2$，对于任意$g_i\in G_1,h_i\in G_2$，可以验证$N_1=(g_i,e_2)\vartriangleleft G_1,N_2=(e_1,h_i)\vartriangleleft G_2$，其中$e_1,e_2$分别是$G_1,G_2$的单位元。易见$N_1\cap N_2=\{e\}$，且从运算角度上看$G=N_1N_2$，因此称$N_1N_2$是$G$的内直积，所选取的元素为$G$的“分解”表示。
+
+又比如三维线性空间$V$，任意向量都可以分解为基矢组的线性表示，以$\{\bvec i,\bvec j,\bvec k\}$为基矢组，则三个正规子群分别为$(x,0,0),(0,y,0)$和$(0,0,z)$。
+\begin{definition}{}
+设$N_i(i=1,2...k)$是群$G$的\textbf{正规子群},且满足
+\begin{itemize}
+\item $G=N_1N_2...N_k$；
+\item $N_i\cap N_1N_2...N_{i-1}N_{i+1}..N_k=\{e\}$对一切$i=1,2...k$都成立；
+\end{itemize}
+则称$G$是$N_i(i=1,2...k)$的内直积。
+\end{definition}
+在满足题设和条件一的前提下，\textbf{条件二}分别等价于下面两种情况：
+\begin{enumerate}
+\item \textbf{$G$的单位元有唯一分解表示}，即若存在$g_i\in N_i$且$g_1g_2...g_k=e$，则$g_i=e_i$。
+\item \textbf{$G$的任意群元都有唯一表示}，即若$g_1g_2...g_k=h_1h_2...h_k$则$g_i=h_i$对任意$g_i,h_i\in N_i$恒成立。
+\end{enumerate}
+我们来尝试证明这一点。
+
+首先证明条件二能推出情况一。
+由于对于$i\neq j$有$N_i\cap N_j\subset N_j\cap N_1N_2...N_{j-1}N_j...N_k=\{e\}$，则任意两个不同的正规子群其交集只有单位元，且有$g_ig_j=g_jg_i$\footnote{根据消去律只需要证明$g_ig_jg_i^{-1}g_j^{-1}=e$，而左边元素属于$N_i\cap N_j$，得证。}。因此若$g_1g_2...g_k=e$，我们有
+\begin{equation}
+g_1=g_k^{-1}g_{k-1}^{-1}...g_2^{-1}=N_1\cap N_2N_3...N_k=e~,
+\end{equation}
+，其余元素同理可证。在这个证明里，我们可以看到关键利用的是元素可交换性。
+
+条件二也能推出情况二。若$g_1g_2...g_k=h_1h_2...h_k$，我们有
+\begin{equation}
+g_1h_1^{-1}=(h_2g_2^{-1})(h_3g_3^{-1})...h_kg_k^{-1}=N_1\cap N_2N_3...N_K=\{e\}~.
+\end{equation}
+
+然后我们来证明情况二能推出情况一。因为$e\in N_i$，则$g_1g_2...g_k=e=e^k$，因此由情况二可知$g_i=e$。
+
+最后，我们来证明情况一能推出条件二。
+设存在$g_i$使得$g_1=g_2g_3...g_k$，则$e=g_1^{-1}g_2...g_k$。由情况一立刻就得到$g_i=e$，同理得证条件二对其余任意$i$成立。
+
+实际上，\textbf{内直积与外直积在同构意义上是相同的，}内直积实际上是构建了以若干不相交子群为正规子群的群。
+\begin{theorem}{}
+若$N_i\triangleleft G(i=1,2...k)$，且$G$是$N_i$的内直积，则$G\cong N_1\times N_2...N_k$。
+\end{theorem}
+\textbf{证明：}
+依旧设$g_i\in N_i$，由于$G=N_1N_2...N_k$，我们可以构建映射使得$f(g_1g_2...g_k)=(g_1,g_2,...,g_k)$，易见这是一个满射。由内直积的定义可知，对于$i\neq j$，有$g_ig_j=g_jg_i$。因而，$(g_1g_2...g_k)(h_1h_2...h_k)=(g_1h_1)(g_2h_2)...(g_nh_n)$，所以
+\begin{equation}
+\begin{aligned}
+f\qty((g_1g_2...g_k)(h_1h_2...h_k))&=f((g_1h_1)(g_2h_2)...(g_nh_n))\\
+&=(g_1h_1,g_2h_2,...,g_nh_n)\\
+&=f(g_1g_2...g_k)f(h_1h_2...h_k)~.
+\end{aligned}
+\end{equation}
+，因此$f$确实是同态映射。由单位元的分解唯一性可知$\opn{ker}f=\{e\}$，因此$f$是单射。综上所述，$f$是同构映射，定理得证。
 
 
 \subsection{半直积}

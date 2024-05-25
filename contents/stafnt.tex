@@ -1,0 +1,69 @@
+% 标准型与唯一分解定理
+% keys 数论|标准型|分解|唯一分解定理|算数基本定理|欧几里得第一定理|Euclid 第一定理
+% license Usr
+% type Tutor
+
+\pentry{素数与合数\nref{nod_prmnt}，整除\nref{nod_divisb}}{nod_8c50}
+我们对素数与合数一节中讨论到的\autoref{the_prmnt_1}~\upref{prmnt}中的分解结果 $n = p_1 \times p_2\times \cdots \times p_{m+1}$，进行合并，使得相同的 $p_i$ 表示为次方的形式，就得到了 $n$ 的标准型。
+\begin{definition}{标准型}
+对于任意大于 $1$ 的正整数 $n$，将其表示为各个素数的次方的乘积的形式
+\begin{equation}
+n = p_1^{a_1} \times p_2^{a_2} \times \cdots \times p_k^{a_k}, ~ (a_1 > 0, a_2 > 0 , \dots, p_1 < p_2<\dots) ~,
+\end{equation}
+其中各个 $p$ 都是素数。这就称 $n$ 被表示为了\textbf{标准型（standard form）}，而这个乘积表示 $p_1^{a_1} \times p_2^{a_2} \times \cdots \times p_k^{a_k}$ 就称为 $n$ 的\textbf{标准型}。
+\end{definition}
+
+而标准型是唯一的，这被是唯一分解定理，又称算术基本定理。
+\begin{theorem}{唯一分解定理（算术基本定理）}
+对于任意大于 $1$ 的正整数，其标准型都是唯一的。即忽略各素数顺序的前提下， $n$ 只能用唯一一种方式表示为各个素数的乘积。
+\end{theorem}
+
+而唯一分解定理是欧几里得第一定理的推论。
+\begin{theorem}{欧几里得第一定理}\label{the_stafnt_1}
+对于素数 $p$ 与两正整数 $a$、$b$，若 $p|ab$，则 $p|a$ 或 $p|b$，即 $p|a$ 与 $p|b$ 中至少一者成立。
+\end{theorem}
+
+先不证明欧几里得第一定理（将在整数模与裴蜀定理\upref{mobezt}一文中证明），但先假设其成立。接下来从其推导出算数基本定理。
+
+由欧几里得第一定理，可以得到推论，若
+\begin{equation}
+p | (a_1 a_2 \cdots a_n) ~,
+\end{equation}
+则 $p | a_1$ 或 $p | a_2$ 或 $p|a_3$ 或... 或 $p|a_n$。由素数的定义可以立刻得出，若各 $a_i$ 都是素数，则 $p$ 是 $a_i$ 中的一者。
+
+考虑 $n$ 有标准型 $\{(p_i, a_i)\}$ 与  $\{(q_j, b_j)\}$：
+\begin{equation}
+n = p_1^{a_1}\times p_2^{a_2} \times \cdots \times p_k^{a_k} = q_1^{b_1} \times q_2^{b_2} \times \cdots \times q_l^{b_l} ~,
+\end{equation}
+这使得对于每个 $p_i$ 都有 $p_i | (q_1^{b_1} \times q_2^{b_2} \times \cdots \times q_l^{b_l})$。这说明每个 $p_i$ 都是某个 $q_j$。类似的，可以得到每个 $q_j$ 都是某个 $p_i$。这就说明 $k = l$。而由于都是按递增的顺序排序的，则对于 $i = 1,2,\dots, k$ 都有 $p_i = q_i$。
+
+下面考虑若 $a_i > b_i$，则除以 $p_i^{b_i}$，并利用 $p_i = q_i$ 得到：
+\begin{equation}
+p_1^{a_1} \times p_2^{a_2} \times \cdots \times p_i^{a_i - b_i} \times \cdots \times p_k^{a_k} = p_1^{b_1} \times p_2^{b_2} \times \cdots \times p_i^{b_i - b_i} \times \cdots \times p_k^{b_k} ~,
+\end{equation}
+也就是
+\begin{equation}
+p_1^{a_1} \times p_2^{a_2} \times \cdots \times p_i^{a_i - b_i} \times \cdots \times p_k^{a_k} = p_1^{b_1} \times p_2^{b_2} \times \cdots \times p_{i-1}^{b_{i-1}} \times p_{i+1}^{b_{i+1}} \times \cdots \times p_k^{b_k} ~,
+\end{equation}
+此时由于 $a_i > b_i$，等式左侧是 $p_i$ 的倍数，而右边并不是 $p_i$ 的倍数，矛盾！故 $a_i > b_i$ 不成立。类似的，可以证明，$b_i > a_i$ 也不成立，故 $a_i = b_i$，这就证明了算术基本定理。
+
+\pentry{级数\nref{nod_Series}}{nod_9f02}
+\begin{theorem}{素数倒数和发散}
+级数 $\sum \frac1p = \frac 12 + \frac 13 + \frac 15 + \cdots$ 发散。
+\end{theorem}
+\textbf{证明}：考虑若级数收敛，则存在某 $j$ 使得 $j$ 项以后的余项和小于 $\frac 12$，即
+\begin{equation}
+\frac{1}{p_{j+1}} + \frac{1}{p_{j+2}} + \cdots < \frac 12 ~,
+\end{equation}
+而满足 $n \le x$ 且能被某素数 $p$ 整除的正整数 $n$ 至多有 $x/p$ 个。考虑 $n \le x$ 且能被 $p_{j+1}, p_{j+2}, \dots$ 中至少一者整除的正整数 $n$ 的个数记为 $D(x)$，则 $x-D(x)$ 必不多于
+\begin{equation}
+\frac{x}{p_{j+1}} + \frac{x}{p_{j+2}} + \cdots < \frac{1}{2} x ~,
+\end{equation}
+
+下面估计 $D(x)$。而 $D(x)$ 就代表不超过 $x$ 且不能被任何素数 $p > p_j$ 整除的数 $n$ 的个数。显然可以把 $n$ 表示为 $n = k^2 m$，其中 $m$ 无平方因子，也就是说利用算术基本定理将 $m$ 表示为
+\begin{equation}
+m = 2^{a_1} \times 3^{a_2} \times \cdots \times p_{j}^{a_j } ~,
+\end{equation}
+则各 $a_i$ 要么为 $0$，要么为 $1$。而 $k$ 必定有 $k \le \sqrt n \le \sqrt x$。故 $m$ 至多有 $2^j$ 种取值而 $k$ 至多有 $\sqrt x$ 种取值，故 $D(x) \le 2^j \sqrt x$。
+
+综上，应当有 $x/2 \le N(x) \le 2^j \sqrt x$，而这对于 $x \ge 2^{2j+2}$ 不成立。矛盾！故该级数发散。
