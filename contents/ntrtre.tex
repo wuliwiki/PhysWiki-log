@@ -1,0 +1,63 @@
+% 数论三角和与高斯和
+% keys 三角和
+% license Usr
+% type Tutor
+
+\pentry{同余与剩余类\nref{nod_modres}，指数函数（复数）\nref{nod_CExp}}{nod_521a}
+
+\subsection{数论三角和}
+由于 $e^{\pi \I} = -1$，利用 $e^{2\pi \I} = 1$ 可以构造出诸多三角和。在数论中我们记
+\begin{equation}
+e(t) := e^{2\pi \I t} ~,
+\end{equation}
+则对于 $t$ 的有理值，当 $x \equiv y \pmod m$ 时，将有
+\begin{equation}
+e\left(\frac{x}{m}\right) = e\left(\frac{y}{m}\right) ~.
+\end{equation}
+这是数论三角和的重要性质。
+
+\subsection{Gauss 和}
+\begin{definition}{Gauss 数论三角和}
+定义 $S(m, n)$ 为\textbf{高斯（数论三角）和}，\footnote{在数论中，求和取遍剩余系时，一般都用字母 $h$ 而非其他字母。}
+\begin{equation}
+S(m, n) := \sum_{h = 0}^{n-1} e\left(\frac{h^2m}{n}\right) ~.
+\end{equation}
+
+\end{definition}
+Gauss 和在二次剩余中应用较多。
+
+考虑对于任意 $r$，
+\begin{equation}
+e\left(\frac{(h + rn)^2m}{n}\right) = e\left(\frac{h^2m}{n}\right) ~,
+\end{equation}
+故我们可以不将 $h$ 限定在从 $0$ 到 $(n-1)$ 取遍，而只要 $h$ 取遍一个完全剩余系即可。此时用记号 $h(n)$ 表示取遍一个 $n$ 的完全剩余系。
+\begin{corollary}{}
+\begin{equation}
+S(m, n) := \sum_{h(n)} e\left(\frac{h^2 m}{n}\right) ~.
+\end{equation}
+
+\end{corollary}
+
+\pentry{线性同余\nref{nod_linmod}}{nod_d40a}
+下面引出由线性同余中的\autoref{the_linmod_3}~\upref{linmod}的一个推论。
+\begin{corollary}{}
+若 $(n, n') = 1$，则
+\begin{equation}
+S(m, nn') = S(mn', n) \times S(mn, n') ~.
+\end{equation}
+
+\end{corollary}
+\textbf{证明}：考虑 $h$ 取遍 $n$ 的一个完全剩余系而 $h'$ 取遍 $n'$ 的一个完全剩余系，则由\autoref{the_linmod_3}~\upref{linmod}将立刻得到 $h_0 = hn' +h'n$ 取遍 $nn'$ 的完全剩余系。而
+\begin{equation}
+mh_0^2 = m(h'n + hn')^2 \equiv mh^2n'^2 + mh'^2n^2 \pmod{nn'} ~,
+\end{equation}
+故
+\begin{equation}
+\begin{aligned}
+S(mn', n) \times S(mn, n') &= \left[ \sum_{h(n)} e\left(\frac{h^2mb'}{n}\right) \right] \times \left[\sum_{h'(n')} e\left(\frac{h'^2mn}{n'}\right)\right] \\
+&= \sum_{h(n), h'(n')} \left[ e\left(\frac{h^2 mn'}{n} + \frac{h'^2 mn}{n'}\right)\right] \\
+&= \sum_{h(n), h'(n')} \left[ e\left( \frac{m(h^2 n'^2 + h'^2 n^2)}{nn'} \right)\right]\\
+&= \sum_{h_0(nn')} e\left( \frac{m h_0^2}{nn'} \right) = S(m, nn')~.
+\end{aligned}
+\end{equation}
+证毕！

@@ -1,0 +1,86 @@
+% 线性同余
+% keys 线性同余
+% license Usr
+% type Tutor
+
+\pentry{同余与剩余类\nref{nod_modres}，最大公约数与最小公倍数\nref{nod_gcdlcm}}{nod_8e3a}
+
+类比普通代数的解方程，同余式也有类似方程的问题，例如：
+\begin{equation}
+ka \equiv ka' \xrightarrow{?} a \equiv a'  ~.
+\end{equation}
+显然这不一定是成立的，例如 $2 \times 2 \equiv 2 \times 4 \pmod 4$，但 $2 \not \equiv 4 \pmod 4$。线性同余就是讨论类似这样的问题。
+
+\begin{theorem}{}\label{the_linmod_1}
+若 $(k, m) = d$，则
+\begin{equation}
+ka \equiv ka' \pmod m \Leftrightarrow a \equiv a' \pmod{\frac{m}{d}} ~.
+\end{equation}
+\end{theorem}
+\textbf{证明}：考虑 $k = k_0 d$ 而 $m = m_0 d$，则 $(k_0, m_0) = 1$。由
+\begin{equation}
+\frac{ka - ka'}{m} = \frac{k_0(a - a')}{m_0} ~,
+\end{equation}
+而 $(k_0, m_0) = 1$，故 $m | (k a - k a')$ 当且仅当 $m_0 | (a - a')$，证毕！
+
+\begin{theorem}{}\label{the_linmod_2}
+若 $a_1, a_2, \dots, a_m$ 是模 $m$ 的一个完全剩余系，且整数 $k$ 满足 $(k, m) =1$，则 $ka_1, ka_2, \dots, ka_m$ 也是模 $m$ 的一个完全剩余系。
+\end{theorem}
+\textbf{证明}：对\autoref{the_linmod_1} 取 $d=1$ 时的情况，则由 $ka_i - ka_j \equiv 0 \pmod m$ 可以得到 $a_i - a_j \equiv 0 \pmod m$。而这仅当 $i = j$ 时才可能成立，故各 $ka_i$ 与 $ka_j$ 当 $i \neq j$ 时模 $m$ 不同余，而一共有 $m$ 个数，故必然构成一个 $m$ 的完全剩余系，证毕！
+
+\begin{theorem}{}\label{the_linmod_3}
+设 $(m_1, m_2) = 1$，而 $a_1$ 取遍模 $m_1$ 的一个完全剩余系，$a_2$ 取遍模 $m_2$ 的一个完全剩余系，则 $(a_1 m_2 + a_2 m_1)$ 将取遍模 $m_1 \times m_2$ 的一个完全剩余系。
+\end{theorem}
+\textbf{证明}：由于 $a_1$ 有 $m_1$ 种取值而 $a_2$ 有 $m_2$ 种取值，$a_1m_2+a_2m_1$ 将有 $m_1 \times m_2$ 种取值。考虑若存在某两对 $a_1, a_2$ 与 $a_1', a_2'$ 使得
+\begin{equation}
+a_1 m_2 + a_2 m_1 \equiv a_1' m_2+ a_2' m_1 \pmod{m_1 m_2} ~,
+\end{equation}
+可以考虑若
+\begin{equation}
+a_1 m_2 + a_2 m_1= r(m_1 \times m_2) + a_1' m_2 + a_2' m_1 ~,
+\end{equation}
+而两边同时对 $m_1$ 取模，将得到
+\begin{equation}
+a_1 m_2 + a_2 m_1 \equiv r(m_1 \times m_2) + a_1' m_2 + a_2' m_1  \pmod{m_1} ~,
+\end{equation}
+而含 $m_1$ 的项在模 $m_1$ 的意义下为 $0$，也就是说，
+\begin{equation}
+a_1 m_2 \equiv a_1' m_2 \pmod{m_1} ~.
+\end{equation}
+而由于 $(m_1, m_2) = 1$，利用\autoref{the_linmod_1} 可以得到 $a_1 \equiv a_1' \pmod{m_1}$。类似的，将有 $a_2 \equiv a_2' \pmod{m_2}$。
+
+从而这 $m_1m_2$ 个数都将是两两不同余的，否则 $a_1$ 或 $a_2$ 将不取遍完全剩余系。故 $a_1m_2+a_2m_1$ 构成了模 $m_1\times m_2$ 的完全剩余系。证毕！
+
+\begin{theorem}{\autoref{the_linmod_3} 在缩系的拓展}
+若 $(m, m') = 1$，而 $a_1$ 取遍一个 $m_1$ 的缩系，$a_2$ 取遍一个 $m_2$ 的缩系，则 $(a_1m_2 + a_2 m_1)$ 取遍一个 $m_1m_2$ 的缩系。
+\end{theorem}
+\textbf{证明}：考虑 $(a_1m_2 + a_2m_1, m_1m_2) = 1$ 当且仅当 $(a_1m_2 + a_2m_1, m_1) = 1$ 并且 $(a_1m_2 + a_2m_1, m_2) = 1$。
+
+而由于辗转相除（\autoref{the_gcdlcm_1}~\upref{gcdlcm}），则 $(a_1m_2 + a_2m_1, m_1) = 1$ 并且 $(a_1m_2 + a_2m_1, m_2) = 1$ 等价于说 $(a_1m_2, m_1) = 1$ 且 $(a_2m_1, m_2) = 1$。
+
+而由于 $(m_1, m_2)=1$，故这又等价于说 $(a_1, m_1) = 1$ 且 $(a_2, m_2) = 1$。
+
+故当 $a_1$ 取遍 $m_1$ 的缩系且 $a_2$ 取遍 $m_2$ 的缩系时，$a_1m_2+a_2m_1$ 取遍 $m_1m_2$ 的缩系。证毕！
+
+
+\pentry{整数模与裴蜀定理\nref{nod_mobezt}}{nod_72e0}
+\begin{theorem}{}
+若 $(k, m) = d$，则同余方程 $kx \equiv l \pmod m$ 有解，当且仅当 $d | l$。且有解时，若考虑同余的解是相同的一组解，则其恰有 $d$ 组不同的解。
+\end{theorem}
+\textbf{证明}：这同余式 $kx \equiv l \pmod m$ 等价于解 $kx - my = l$，而由裴蜀定理可以知道其有解当且仅当 $d | l$。
+
+现在，我们考虑解的个数。若 $d=1$，则可以直接由刚才的\autoref{the_linmod_2} 得到，仅有一组同余的解。若 $d > 1$，考虑有解时，则 $d|l$，设 $m = m_0 d$，$k = k_0 d$，$l = l_0 d$，则此时 $(k_0, m_0) = 1$，且 $kx \equiv l \pmod m$ 等价于解（直接运用刚才的\autoref{the_linmod_1} 即可得到）
+\begin{equation}
+k_0 x \equiv l_0 \pmod {m_0} ~.
+\end{equation}
+而此时 $(k_0, m_0) = 1$，故这仅有一组解。考虑设这组解是 $x \equiv x_0 \pmod {m_0}$，则 $\forall c \in \mathbb Z$，$x = x_0 + c m_0$ 都是解。
+
+而原方程 $kx \equiv l \pmod m$ 就是遍历所有整数 $c$ 得到的。而
+\begin{equation}
+x_0 + c m_0 \equiv x_0 + b m_0 \pmod m ~~
+\end{equation}
+当且仅当 $m | (m_0 (c - b))$，也就是 $d | (c - b)$。从而恰有 $d$ 组解
+\begin{equation}
+x_0, x_0 + m_0, x_0 + 2 m_0, \dots, x_0 + (d-1) m_0 ~.
+\end{equation}
+证毕！

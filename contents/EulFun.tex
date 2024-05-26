@@ -3,15 +3,15 @@
 % license Usr
 % type Tutor
 
-\pentry{数论函数\nref{nod_NumFun}，积性函数\nref{nod_MulFun}}{nod_24cb}
+\pentry{素数与合数\nref{nod_prmnt}}{nod_24cb}
 
-前面在数论函数中已经提到过欧拉函数，但欧拉函数相关内容很丰富，下面做一些展开。
-首先回顾欧拉函数（Euler's Function/Euler's Totient Function）的定义：
 \begin{definition}{欧拉函数}
 欧拉函数 $\varphi(n)$ 表示 $n$ 以内的非零自然数中与 $n$ 互质的数的个数。也可以表示为，
 $$\varphi(n) = \sum_{1 \le d \le n, \gcd(d, n) = 1} 1  ~.$$
 其中 $\gcd$ 为求最大公约数，故可以用 $\gcd(d, n)=1$ 表示要求 $d$ 与 $n$ 互质。
 \end{definition}
+
+
 
 考察一个数论函数，我们经常按素数——素数幂次——非零自然数的顺序去考察。先探讨前两个的性质。
 
@@ -21,7 +21,7 @@ $$\varphi(n) = \sum_{1 \le d \le n, \gcd(d, n) = 1} 1  ~.$$
 
 \begin{corollary}{任意非零自然数 $n$ 的欧拉函数}\label{cor_EulFun_1}
 \begin{equation}
-\varphi(n) = n \cdot \prod_i \left( 1 - \frac1{p_i}\right)~.
+\varphi(n) = n \cdot \prod_{i, p_i | n} \left( 1 - \frac1{p_i}\right)~.
 \end{equation}
 \end{corollary}
 \textbf{证明}：可以利用容斥原理：
@@ -35,13 +35,15 @@ $$\varphi(n) = \sum_{1 \le d \le n, \gcd(d, n) = 1} 1  ~.$$
 \end{enumerate}
 我们发现这表达式可以将欧拉函数表示为：
 $$\varphi(n) = n - \sum(n/p_i) + \sum_{i\le j} (n/(p_i p_j)) \cdots  ~, $$
-恰好与下面的展开式对应：
+恰好与下面的展开式对应（之后默认的情况下忽略 $p_i | n$ 的条件不写）：
 $$\varphi(n) = n \cdot \prod_i \left( 1 - \frac1{p_i}\right)~.$$
 这就是计算某任意数的欧拉函数的方法。
 
+
+
 \subsection{积性函数}
 \begin{theorem}{}
-欧拉函数有非常良好的性质，他是一个积性函数。
+欧拉函数是一个积性函数。
 \end{theorem}
 \textbf{证明}：
 回顾积性函数的定义，对于互质的 $n, m$，要求 $\varphi(n m ) = \varphi(n) \varphi(m)$。将 $n$、$m$ 的质因子列出，假设 $n$、$m$ 分别有质因子 $p_i$、$q_i$，则 $nm$ 的所有质因子为 $p_i, q_i$（$p_i \neq q_j, \forall (i, j)$，因为 $n$ 与 $m$ 互质）。从而利用上面的\autoref{cor_EulFun_1}，他们的积的欧拉函数可以表示为，
@@ -54,11 +56,18 @@ $$\varphi(n) = n \cdot \prod_i \left( 1 - \frac1{p_i}\right)~.$$
 \end{equation}
 这就完成了证明。
 
-\subsection{数论卷积性质}
-\pentry{狄利克雷卷积（数论）\nref{nod_DirCon}}{nod_86ec}
-\begin{theorem}{}
-\begin{equation}
-\varphi(n) * 1 = \sum_{d | n} \varphi(d) = \operatorname{id}(n) = n ~~
-\end{equation}
+% \subsection{数论卷积性质}
+% \pentry{狄利克雷卷积（数论）\nref{nod_DirCon}}{nod_86ec}
+% \begin{theorem}{}
+% \begin{equation}
+% \varphi(n) * 1 = \sum_{d | n} \varphi(d) = \operatorname{id}(n) = n ~~
+% \end{equation}
 
-\end{theorem}
+% \end{theorem}
+
+\subsection{缩系}
+\pentry{同余与剩余类\nref{nod_modres}}{nod_d150}
+此外，由欧拉函数的定义，我们可以立刻得知一个推论：
+\begin{corollary}{}
+$m$ 的缩系的元素个数是 $\varphi(m)$。
+\end{corollary}
