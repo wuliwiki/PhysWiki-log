@@ -3,14 +3,9 @@
 % license Xiao
 % type Tutor
 
-\begin{issues}
-\issueMissDepend
-\end{issues}
-
-\addTODO{梳理预备知识}
 \pentry{列向量\nref{nod_colVec}}{nod_e0a2}
 
-小时百科中\textbf{矩阵}符号用加粗的正体字母来表示，而对应的\textbf{矩阵元}一般用斜体加\textbf{行标}和\textbf{列标}表示。例如矩阵 $\mat A$ 的第 $i$ 行第 $j$ 列的的\textbf{矩阵元}表示为 $A_{ij}$。 特殊地， 行数等于列数的矩阵叫做\textbf{方矩阵}或者\textbf{方阵}。 只有一行的矩阵和只有一列的矩阵分别叫做\textbf{行矢量}和\textbf{列矢量}。
+小时百科中\textbf{矩阵}符号用加粗的正体字母来表示，而对应的\textbf{矩阵元}一般用正常斜体加\textbf{行标}和\textbf{列标}表示。例如矩阵 $\mat A$ 的第 $i$ 行第 $j$ 列的的\textbf{矩阵元}表示为 $A_{ij}$。 特殊地， 行数等于列数的矩阵叫做\textbf{方矩阵}或者\textbf{方阵}。 只有一行的矩阵和只有一列的矩阵分别叫做\textbf{行向量}和\textbf{列向量}。
 
 \subsection{矩阵的概念}
 
@@ -21,13 +16,15 @@
 4&5&6
 \end{pmatrix}~
 \end{equation}
-就是一个由数字作为矩阵元的矩阵，其第二行第一列的元素为$4$。
+就是一个由数字作为矩阵元的矩阵，其第二行第一列的元素为$4$。 有一些文献也会用方括号表示矩阵（和向量）如
+\begin{equation}
+\begin{bmatrix}
+1&2&3\\
+4&5&6
+\end{bmatrix}~.
+\end{equation}
 
-矩阵概念最早出现于\textbf{线性方程组}中，因此其概念不可避免地涉及矩阵元素之间相乘、相加的运算，即矩阵乘法，见本文\autoref{sub_Mat_1} 。事实上，矩阵的威力正来自矩阵乘法运算，因此即便某个矩阵的元素不是数字，我们也希望这些元素能拿有乘法、加法等运算。目前，我们先默认矩阵的元素都是数字。
-
-
-延伸阅读：\enref{指标与求和约定}{EinSum}（这是矩阵的另一种表达方式）。
-
+矩阵概念最早出现于\textbf{线性方程组}中，因此其概念不可避免地涉及矩阵元素之间相乘、相加的运算，即矩阵乘法，见本文\autoref{sub_Mat_1} 。事实上，矩阵的威力正来自矩阵的乘法运算，因此即便某个矩阵的元素不是数字，我们也希望这些元素能拿有乘法、加法等运算。目前，我们先默认矩阵的元素都是数字。\footnote{延伸阅读：\enref{指标与求和约定}{EinSum}（这是矩阵的另一种表达方式）。}
 
 \subsection{矩阵的对角线}
 我们先定义矩阵的\textbf{对角线（diagonal）}是行标等于列标的所有矩阵元（\autoref{fig_Mat_2} ）， 称为\textbf{对角元（diagonal element）}， 左上角的对角元是第一个。 对角线的概念常在讨论方阵时使用， 但严格来说也适用于长方形矩阵。 方阵从右上角到左下角的所有矩阵元则称为\textbf{反对角线（anti-diagonal）}。 另外，把对角线向上或向下平移一个元素也称为\textbf{副对角线（subdiagonal）}， 所以对角线也称为\textbf{主对角线（main diagonal）}。
@@ -43,23 +40,43 @@
 \begin{equation}\label{eq_Mat_3}
 A\Tr_{ij} = A_{ji}~,
 \end{equation}
-注意转置操作不影响对角线上的矩阵元。 另外行矢量转置后变为列矢量，反之亦然。
+注意转置操作不影响对角线上的矩阵元。 另外行向量转置后变为列向量，反之亦然。
 \begin{equation}\label{eq_Mat_2}
 \pmat{x_1& x_2& \dots& x_n}\Tr = \begin{pmatrix} x_1\\x_2\\ \vdots\\x_n \end{pmatrix}~.
 \end{equation}
-为了排版方便，小时百科在正文中通常用 $\pmat{x_1 &x_2& \dots& x_n}\Tr$ 表示列矢量。
+为了排版方便，小时百科在正文中通常用 $\pmat{x_1 &x_2& \dots& x_n}\Tr$ 表示列向量。
 
-\subsection{矩阵的乘法}\label{sub_Mat_1}
+\subsection{零矩阵、单位矩阵}
+\textbf{零矩阵（unit matrix）}是所有矩阵元都为 $0$ 的矩阵。
 
-矩阵最常见的运算是矩阵的乘法。 矩阵乘法表示从 $(x_1, \dots, x_n) \in \mathbb R^n$ 到 $(y_1, \dots, y_m) \in \mathbb R^m$ 的\enref{线性映射}{LinMap}
+\textbf{单位矩阵（unit matrix）}是对角线上的元素全为 1， 非对角线上的元素全为 0 的方阵。 通常记为通常记为$\mat I$。 为了强调矩阵的维数 $N$， 也可记为 $\mat I_N$。 单位矩阵的矩阵元可用克罗内克 $\delta$ 函数（\autoref{eq_OrNrB_2}~\upref{OrNrB}）表示为
+\begin{equation}
+I_{ij} = \delta_{ij}~.
+\end{equation} 
+
+任何矩阵左乘或右乘单位矩阵， 仍然得到矩阵本身$\mat I \mat A = \mat A \mat I = \mat A$。 
+
+单位矩阵的转置仍为单位矩阵 $\mat I^T = \mat I$。
+
+\subsection{对角矩阵}
+对角元以外的矩阵元都为零的矩阵叫做\textbf{对角矩阵（diagonal matrix）}（对角元也可以部分为零）， 相应的也有\textbf{反对角矩阵（anti-diagonal matrix）}。 对角矩阵和反对角矩阵通常是指方阵。
+
+根据上述矩阵乘法的定义， 对角矩阵 $\mat\Lambda$ 左乘任意矩阵 $\mat A$ （即 $\mat\Lambda\mat A$）相当于把 $\mat A$ 阵的第 $i$ 行乘以 $\mat\Lambda$ 的第 $i$ 个对角元； 右乘（即 $\mat A\mat\Lambda$）相当于把第 $j$ 列乘以第 $j$ 个对角元。 另外，两个对角矩阵相乘就是把它们的对角元分别相乘。
+
+\subsection{矩阵和列向量的乘法}
+矩阵 $\mat A$ 乘以列向量 $\bvec x$ 表示从 $(x_1, \dots, x_n) \in \mathbb R^n$ 到 $(y_1, \dots, y_m) \in \mathbb R^m$ 的\enref{线性映射}{LinMap}
 \begin{equation}
 \leftgroup{
 y_1 &= A_{11}x_1 + A_{12}x_2 + \ldots + A_{1n}x_n\\
 y_2 &= A_{21}x_1 + A_{22}x_2 + \ldots + A_{2n}x_n\\
 &\;\;\vdots \\
-y_m &= A_{m1}x_1 + A_{m2}x_2 + \ldots + A_{mn}x_n
-}~.\end{equation}
-可用矩阵与列矢量的乘法表示为（有时候也会用方括号表示矩阵和矢量）
+y_m &= A_{m1}x_1 + A_{m2}x_2 + \ldots + A_{mn}x_n~.
+}\end{equation}
+令列向量 $\mat x = \pmat{x_1& \dots& x_n}\Tr $，  $\mat y = \pmat{y_1&y_2& \dots& y_n}\Tr$， 系数矩阵为 $\mat A$， 上式可用矩阵与列向量的乘法表示为
+\begin{equation}\label{eq_Mat_5}
+\mat y = \mat A\mat x~.
+\end{equation} 
+或者具体来说，就是
 \begin{equation}\label{eq_Mat_4}
 \begin{pmatrix} y_1 \\ y_2\\ \vdots \\ y_m \end{pmatrix}
 = \begin{pmatrix}
@@ -71,11 +88,7 @@ A_{m1}  & A_{m2} & \ldots & A_{mn}
 \begin{pmatrix} x_1 \\ x_2 \\ \vdots \\ x_n \end{pmatrix}~.
 \end{equation}
 
-令列矢量 $\mat x = \pmat{x_1& \dots& x_n}\Tr $，  $\mat y = \pmat{y_1&y_2& \dots& y_n}\Tr$， 系数矩阵为 $\mat A$， 上式可记为
-\begin{equation}\label{eq_Mat_5}
-\mat y = \mat A\mat x~.
-\end{equation} 
-注意 $\mat A$ 的列数必须和 $\mat x$ 的行数相等。由此可以定义\textbf{矩阵乘以列矢量}的运算规则：$m \times n$ 矩阵乘以 $n \times 1$ 列矢量会得到 $m \times 1$ 的列矢量。要计算 $y_i$， 就用 $m \times n$ 矩阵的第 $i$ 行的 $n$ 个数和 $x_1 \dots x_n$ 分别相乘再相加（即\enref{内积}{Dot}）
+注意 $\mat A$ 的列数必须和 $\mat x$ 的行数相等。由此可以定义\textbf{矩阵乘以列向量}的运算规则：$m \times n$ 矩阵乘以 $n \times 1$ 列向量会得到 $m \times 1$ 的列向量。要计算 $y_i$， 就用 $m \times n$ 矩阵的第 $i$ 行的 $n$ 个数和 $x_1 \dots x_n$ 分别相乘再相加（即\enref{内积}{Dot}）
 \begin{equation}\label{eq_Mat_6}
 y_i = \sum_{j = 1}^n A_{ij} x_j ~.
 \end{equation}
@@ -90,7 +103,23 @@ A_{m1}  & A_{m2} & \ldots & A_{mn}
 \end{pmatrix}
 \begin{pmatrix} x_{1k} \\ x_{2k} \\ \vdots \\ x_{nk} \end{pmatrix}~.
 \end{equation}
-可以将所有的 $\bvec x_k$ 和 $\bvec y_k$ 分别横向拼成 $n \times l$ 和 $m \times l$ 的矩阵
+
+\subsection{矩阵的乘法}\label{sub_Mat_1}
+\begin{figure}[ht]
+\centering
+\includegraphics[width=7cm]{./figures/d6c0c5889fb3e0c0.pdf}
+\caption{矩阵乘法的示意图： $\mat C$ 的 $(i, j)$ 矩阵元等于 $\mat A$ 的第 $i$ 行和 $\mat B$ 的第 $j$ 列逐个元素相乘再相加} \label{fig_Mat_1}
+\end{figure}
+
+矩阵最常见的运算是矩阵的乘法。 事实上，上面的 “矩阵乘以列向量” 就是矩阵乘法的一种特殊情况。 如果我们分别把同一矩阵乘以多个列向量
+\begin{equation}
+\bvec y_i = \mat A \bvec x_i \qquad (i=1,\dots, l)~,
+\end{equation}
+那么把所有列向量 $\bvec y_i$ 从左到右排列得到矩阵 $\mat Y$，把所有 $\bvec y_i$ 从左到右排列得到 $\mat X$，就得到了\textbf{矩阵乘法}的一般定义
+\begin{equation}\label{eq_Mat_7}
+\mat Y=\mat A\mat X~.
+\end{equation}
+其中 $\mat X$，$\mat Y$ 分别为 $n \times l$ 和 $m \times l$ 的矩阵
 \begin{equation}
 \mat X =
 \begin{pmatrix}
@@ -106,7 +135,7 @@ y_{11} & \cdots & y_{1l} \\
 y_{m1} & \cdots & y_{ml}
 \end{pmatrix}~.
 \end{equation}
-现在把 $l$ 组线性变换用一条式子表示为
+\autoref{eq_Mat_7} 可以详细写为
 \begin{equation}
 \begin{pmatrix}
 y_{11} & \cdots & y_{1l} \\
@@ -126,23 +155,15 @@ x_{n1} & \cdots & x_{nl}
 \end{pmatrix}~.
 \end{equation}
 由此，可以定义一般的矩阵乘法： $m \times n$ 的矩阵 $\mat A$ 和 $n \times l$ 的矩阵 $\mat X$ 相乘得到 $m \times l$ 的矩阵 $\mat Y$，  $Y_{ij}$ 等于 $\mat A$ 的第 $i$ 行和 $\mat X$ 的第 $j$ 列内积。
-\begin{equation}
-\mat Y=\mat A\mat X~.
-\end{equation}
-矩阵元公式为
+
+计算矩阵的乘法的公式为
 \begin{equation}
 Y_{ij} = \sum_{k = 1}^n A_{ik} X_{kj}~.
 \end{equation}
 再次注意两个相乘的矩阵，左边矩阵的列数必须等于右边矩阵的行数。 我们可以用\autoref{fig_Mat_1} 来记忆矩阵乘法。
 
-\begin{figure}[ht]
-\centering
-\includegraphics[width=7cm]{./figures/d6c0c5889fb3e0c0.pdf}
-\caption{矩阵乘法的示意图： $\mat C$ 的 $(i, j)$ 矩阵元等于 $\mat A$ 的第 $i$ 行和 $\mat B$ 的第 $j$ 列逐个元素相乘再相加} \label{fig_Mat_1}
-\end{figure}
-
-\subsection{矩阵乘法没有交换律}
-请注意矩阵一般\textbf{没有}“乘法交换律”，即一般情况下$\mat A \mat B \ne \mat B \mat A$。举一个例子：
+\subsubsection{矩阵乘法不满足交换律}
+请注意矩阵一般不满足 “乘法交换律”，即一般情况下 $\mat A \mat B \ne \mat B \mat A$。 举一个例子：
 \begin{equation}
 \pmat{ 1 & 1\\ 0 & 0 }
 \pmat{ 1 & 0\\ 1 & 0 } =
@@ -151,6 +172,7 @@ Y_{ij} = \sum_{k = 1}^n A_{ik} X_{kj}~.
 \pmat{ 1 & 0\\ 1 & 0 }
 \pmat{ 1 & 1\\ 0 & 0 }~.
 \end{equation}
+但我们有时候也可以找到满足交换律的两个矩阵，我们就说这样两个矩阵\textbf{对易（commute）}。
 
 \subsection{矩阵的乘法分配律}
 矩阵的乘法满足分配律
@@ -170,11 +192,11 @@ D_{ij} = \sum_k A_{ik}B_{kj} + \sum_k A_{ik}C_{kj}~.
 \end{equation}
 而这恰好是 $\mat A \mat B + \mat A \mat C$ 的矩阵元。 证毕。\autoref{eq_Mat_14} 的证明类似。
 
-现在我们可以得出线性变换（\autoref{eq_Mat_5}）的一个重要性质。 对若干列矢量 $\bvec v_1, \bvec v_2, \dots$
+现在我们可以得出线性变换（\autoref{eq_Mat_5}）的一个重要性质。 对若干列向量 $\bvec v_1, \bvec v_2, \dots$
 \begin{equation}\label{eq_Mat_17}
 \mat A \qty(\sum_i c_i \bvec v_i) = \sum_i c_i \mat A \bvec v_i~.
 \end{equation}
-也就是说若干列矢量的线性组合的线性变换等于每个列矢量分别进行线性变换再进行同样的线性组合。
+也就是说若干列向量的线性组合的线性变换等于每个列向量分别进行线性变换再进行同样的线性组合。
 
 \subsection{矩阵乘法的结合律}
 我们希望证明三个矩阵的乘法满足结合律
@@ -207,42 +229,20 @@ D_{ij} = \sum_k (AB)_{ik} C_{kj}~.
 \end{equation}
 证毕。
 
-\subsection{矩阵的等式性质}
-%不知道正式的名称...
-若$\mat A=\mat B$，那么$\mat A \mat C = \mat B \mat C$，或$\mat C \mat A = \mat C \mat B~.$
-
-但是除非$\mat C$可逆，否则\textbf{该结论反之不成立}。$\mat A \mat C = \mat B \mat C$推不出$\mat A = \mat B~.$
-
-推论：若$\mat A \mat B= \mat O$ (零矩阵)，也不能推出$\mat A = \mat O$或$\mat B = \mat O~.$
-
-\subsection{单位矩阵}
-\textbf{单位矩阵（unit matrix）}是对角线上的元素全为 1， 非对角线上的元素全为 0 的方阵。 通常记为通常记为$\mat I$。 为了强调矩阵的维数 $N$， 也可记为 $\mat I_N$。 单位矩阵的矩阵元可用克罗内克 $\delta$ 函数（\autoref{eq_OrNrB_2}~\upref{OrNrB}）表示为
-\begin{equation}
-I_{ij} = \delta_{ij}~.
-\end{equation} 
-
-任何矩阵左乘或右乘单位矩阵， 仍然得到矩阵本身$\mat I \mat A = \mat A \mat I = \mat A$。 
-
-单位矩阵的转置仍为单位矩阵 $\mat I^T = \mat I$。
-
-\subsection{对角矩阵}
-对角元以外的矩阵元都为零的矩阵叫做\textbf{对角矩阵（diagonal matrix）}（对角元也可以部分为零）， 相应的也有\textbf{反对角矩阵（anti-diagonal matrix）}。 对角矩阵和反对角矩阵通常是指方阵。
-
-根据上述矩阵乘法的定义， 对角矩阵 $\mat\Lambda$ 左乘任意矩阵 $\mat A$ （即 $\mat\Lambda\mat A$）相当于把 $\mat A$ 阵的第 $i$ 行乘以 $\mat\Lambda$ 的第 $i$ 个对角元； 右乘（即 $\mat A\mat\Lambda$）相当于把第 $j$ 列乘以第 $j$ 个对角元。 另外，两个对角矩阵相乘就是把它们的对角元分别相乘。
-
 \subsection{逆矩阵}
 详见\enref{逆矩阵}{InvMat}。 记方阵 $\mat M$ 的\textbf{逆矩阵}为 $\mat M^{-1}$， 且满足
 \begin{equation}
 \mat M^{-1} \mat M = \mat I~.
 \end{equation}
-其中 $\mat I$ 是单位矩阵。 也就是说， 任意一个矩阵（或列矢量） $\mat A$ 乘以矩阵 $\mat M$ 再乘以其逆矩阵 $\mat M^{-1}$ 仍然得到 $\mat A$ 本身。
+其中 $\mat I$ 是单位矩阵。 也就是说， 任意一个矩阵（或列向量） $\mat A$ 乘以矩阵 $\mat M$ 再乘以其逆矩阵 $\mat M^{-1}$ 仍然得到 $\mat A$ 本身。
 
-虽然矩阵乘法一般不满足交换律， 但矩阵和对应的逆矩阵满足\footnote{这个定理暂时不证}， 即
+虽然矩阵乘法一般不满足交换律， 但矩阵和对应的逆矩阵满足\footnote{这个定理暂时不证} % \addTODO{链接}
+， 即
 \begin{equation}
 \mat M\mat M^{-1} = \mat M^{-1} \mat M = \mat I~.
 \end{equation}
 
-逆矩阵 $\mat M^{-1}$ 所代表的线性变换就是 $\mat M$ 代表的线性变换的逆变换， 令 $\bvec x$ 和 $\bvec y$ 为列矢量， 如果有
+逆矩阵 $\mat M^{-1}$ 所代表的线性变换就是 $\mat M$ 代表的线性变换的逆变换， 令 $\bvec x$ 和 $\bvec y$ 为列向量， 如果有
 \begin{equation}\label{eq_Mat_25}
 \bvec y = \mat M \bvec x~.
 \end{equation}
@@ -261,3 +261,13 @@ I_{ij} = \delta_{ij}~.
 \begin{equation}
 (\mat A \mat B)\Tr=\mat B\Tr \mat A\Tr~.
 \end{equation}
+
+证明留作习题。
+
+\subsection{矩阵的等式性质}
+%不知道正式的名称...
+若$\mat A=\mat B$，那么$\mat A \mat C = \mat B \mat C$，或$\mat C \mat A = \mat C \mat B~.$
+
+但是除非$\mat C$可逆，否则\textbf{该结论反之不成立}。$\mat A \mat C = \mat B \mat C$推不出$\mat A = \mat B~.$
+
+推论：若$\mat A \mat B= \mat O$ (零矩阵)，也不能推出$\mat A = \mat O$或$\mat B = \mat O~.$

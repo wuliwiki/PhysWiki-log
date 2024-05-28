@@ -8,7 +8,7 @@
 \begin{equation}\label{eq_Diff_4}
 f'(x) = \dv{y}{x} = \lim_{\Delta x\to 0} \frac{\Delta y}{\Delta x}~.
 \end{equation}
-这告诉我们， 当 $\Delta x$ 越小， 以下近似就越精确
+这告诉我们， 当 $\Delta x$ 越小， 以下近似就在某种意义上越精确
 \begin{equation}\label{eq_Diff_2}
 \Delta y \approx f'(x) \Delta x~.
 \end{equation}
@@ -18,7 +18,9 @@ f'(x) = \dv{y}{x} = \lim_{\Delta x\to 0} \frac{\Delta y}{\Delta x}~.
 \begin{equation}\label{eq_Diff_1}
 \dd{y} = f'(x)\dd{x}~.
 \end{equation}
-并把它叫做函数 $f(x)$ 的\textbf{微分}。 要特别注意该式只是\autoref{eq_Diff_4} 的另一种方便的\textbf{书写形式}。而不可以理解为等号左边的无穷小等于右边的无穷小。 因为无穷小并不是具体的实数，无法比较是否精确相等。
+并把它叫做函数 $f(x)$ 的\textbf{微分}。 要特别注意在 “极简微积分” 部分中，该式只是\autoref{eq_Diff_4} 的另一种方便的\textbf{书写形式}。而不可以理解为等号左边的无穷小等于右边的无穷小。 因为无穷小并不是具体的实数而是一个过程，无法比较是否精确相等。\footnote{但如果你把 $\dd{x}$ 和 $\dd{y}$ 理解成非常小的具体实数，那严格来说又只能写成\autoref{eq_Diff_2}，因为严格来说等号必须是精确的且它的含义需要明确定义。}
+
+从\autoref{eq_Diff_4} 到\autoref{eq_Diff_1} 你可能会误以为我们可以把第一个等号两边同时乘以 $\dd{x}$，且把 $\dv*{y}{x}$ 中的分母 “约去”。 这只是一种形式上的操作，可以帮助理解和记忆，但不能过度解读。毕竟 $\dv*{y}{x}$ 是一个整体符号而不表示除法。
 
 \subsection{微分近似}\label{sub_Diff_1}
 % 类似\autoref{eq_Diff_1} 的微分关系式默认取极限 $\dd{x} \to 0$ 才能写成等号， 但只要在一定范围 $\Delta x$ 内导函数 $f'(x)$ 的变化非常小， 就可以将函数值的变化量 $\Delta y = f(x+\Delta x)-f(x)$ 近似为（\autoref{fig_Diff_1}）
@@ -57,16 +59,19 @@ f'(x) = \dv{y}{x} = \lim_{\Delta x\to 0} \frac{\Delta y}{\Delta x}~.
 2. 球的体积关于其半径的函数为 $V(r) = 4\pi r^3/3$， 求微分得 $\dd{V} = 4\pi r^2 \dd{r}$。 注意到 $4\pi r^2$ 为 $r$ 对应的球表面积， 所以微分近似告诉我们， 半径为 $r$， 厚度为 $\Delta r \ll r$ 的球壳的体积等于该球壳的表面积乘以球壳厚度。
 
 注意这两个近似成立的前提都是在 $\Delta r$ 的范围内， $A'(r)$ 或 $V'(r)$ 变化得足够慢。 也就是需要满足
-\begin{equation}
+\begin{equation}\label{eq_Diff_5}
 \Delta r \ll r~,
 \end{equation}
-即厚度远小于半径。 你可以给 $r$ 和 $\Delta r$ 取不同的具体数值，验证以上近似的误差有多大。
+即厚度\textbf{远小于}半径。\footnote{远小于只是一个模糊的说法，具体需要小多少倍，还是取决于你对误差的要求。} 你可以给 $r$ 和 $\Delta r$ 取不同的具体数值，验证以上近似的误差有多大。
 \end{example}
 
 \begin{example}{失败的例子}
 作为一个失败的例子，我们对 $y = x^2$ 以及 $x=0$ 使用\autoref{eq_Diff_3}。 由于 $f'(x) = 2x$， 有 $f'(0) = 0$，也就是说无论 $\Delta x$ 多小都会估计出 $\Delta y = 0$。
 
 但若 $\Delta x = x - 0$，则精确来说 $\Delta y = x^2 - 0^2 = \Delta x^2$。 所以该近似的相对误差达到了 $-100\%$。
+
+为什么会失败呢？还记得我们上文说过，该近似要求斜率在 $\Delta x$ 范围内变化很小。 但该例中 $x=0$ 处的斜率为 0， 而 $x=\Delta x$ 处斜率为 $2\Delta x$，导致后者的斜率的相对增长是无穷大。 这也是为什么上例中我们要求\autoref{eq_Diff_5}（试想如果 $\Delta r$ 的区间取 $[0, \Delta r]$ 会发生什么）。
 \end{example}
 
-要得到更好的近似公式，就需要了解之后我们要学习的\enref{泰勒展开}{Taylor}。
+该例中要得到更好的近似公式或理解，就需要了解之后我们要学习的\textbf{二阶无穷小}和\enref{泰勒展开}{Taylor}。 但暂时你只需要知道\textbf{当斜率接近 0 时，该近似很可能失效}。
+% \addTODO{高阶无穷小未完成}
