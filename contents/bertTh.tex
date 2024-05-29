@@ -1,0 +1,73 @@
+% Bertrand 定理
+% keys Bertrand 定理|Bertrand 猜想|Bertrand 假设
+% license Usr
+% type Tutor
+
+\pentry{数论函数 theta 与 psi 的阶\nref{nod_tpont}，二项式定理\nref{nod_BiNor}}{nod_61f5}
+
+\begin{theorem}{Bertrand 定理}
+对于足够大的 $n$，那么至少存在一个素数 $p$ 使得
+\begin{equation}\label{eq_bertTh_1}
+n < p \le 2n ~,
+\end{equation}
+或者等价地说，若 $p_m$ 为第 $m$ 个素数，则对于每个足够大的 $m$ 都有
+\begin{equation}
+p_{m+1} < 2 p_m ~.
+\end{equation}
+
+\end{theorem}
+
+\textbf{证明}：这两个命题是等价的。我们考虑\autoref{eq_bertTh_1} 的证明。我们取足够大的 $n$，不妨令 $n > 2^9 = 512$，假设没有满足 $n < p \le 2n$ 的素数存在，沿用\enref{数论函数 theta 与 psi 的阶}{tpont}中\autoref{eq_tpont_4}~\upref{tpont}的记号，设 $p$ 是 $N$ 的一个素因子，就有 $\alpha_p \ge 1$，而由于假设，$p \ge n$，若 $\frac 23 n < p \le n$ 则
+\begin{equation}
+2p \le 2n < 3p, ~ p^2  > \frac 49 n^2 > 2n~,
+\end{equation}
+从而 $\alpha_p$ 可以表示为
+\begin{equation}
+\alpha_p = \left\lfloor \frac{2n}p \right\rfloor - 2 \left \lfloor \frac np \right \rfloor = 2 - 2 = 0 ~,
+\end{equation}
+从而对于 $N$ 的每个素因子 $p$ 都有 $p \le \frac23 n$。利用\autoref{cor_tpont_1}~\upref{tpont}可以得到
+\begin{equation}\label{eq_bertTh_2}
+\sum_{p | N} \ln p \le \sum_{p\le \frac 23 n} \ln p = \vartheta(\frac 23 n) \le \frac 43 n \ln 2 ~.
+\end{equation}
+若 $\alpha_p \ge 2$ 则利用\autoref{eq_tpont_5}~\upref{tpont}可以得到
+\begin{equation}
+2 \ln p \le \alpha_p \ln p \le \ln (2n), ~ p \le \sqrt{2n } ~,
+\end{equation}
+因此最多有 $\sqrt{2n}$ 个这样的 $p$，从而
+\begin{equation}
+\sum_{\alpha_p \ge 2} \alpha_p \ln p \le \sqrt{2n} \ln(2n) ~,
+\end{equation}
+而利用\autoref{eq_bertTh_2} 可以得到
+\begin{equation}\label{eq_bertTh_3}
+\begin{aligned}
+\ln N &\le \sum_{\alpha_p = 1} \ln p + \sum_{\alpha_p \ge 2} \alpha_p \ln p ~\\
+& \le \sum_{p | N} \ln p + \sqrt{2n} \ln(2n) ~\\
+& \le \frac43 n \ln 2 + \sqrt{2n} \ln(2n) ~.
+\end{aligned}
+\end{equation}
+而 $N$ 是 $2^{2n} = (1+1)^{2n}$ 的二项式系数展开式中最大的一项，故
+\begin{equation}\label{eq_bertTh_4}
+2^{2n} = 2 + \binom{2n}{1} + \binom{2n}{2} + \cdots + \binom{2n}{2n-1} \le 2nN ~.
+\end{equation}
+其中 $\binom{a}{b}  = C^b_a$ 就是二项式系数。
+
+联立\autoref{eq_bertTh_3} 与\autoref{eq_bertTh_4} 会得到
+\begin{equation}
+2n \ln 2 \le \ln(2n) + \ln N \le \frac43 n \ln 2 + (1+\sqrt{2n}) \ln(2n) ~.
+\end{equation}
+
+而可以简化为 $2n\ln2\le3(1+\sqrt{2n})\ln(2n)$。记
+\begin{equation}
+j = \frac{\ln(n/512)}{10 \ln 2} ~,
+\end{equation}
+则 $2n = 2^{10(1+j)}$，由于 $n  > 512$，$j > 0$，可以再把不等式化为
+\begin{equation}
+2^{10 (1+j)} \le 30(2^{5+5j} + 1)(1+j) ~,
+\end{equation}
+从而
+\begin{equation}
+2^{5j} \le 30 \times 2^{-5} (1 + 2^{-5 - 5j})(1+j) < (1-2^{-5})(1+2^{-5})(1+j) < 1+j ~,
+\end{equation}
+而 $2^{5j} = \exp(5j\ln2)>1+5j\ln2>1+j$，矛盾！
+
+综上，对于大 $n$（$n > 512$），必定存在这样的素数。而对于小 $n$ 可以直接证明也成立。这就完成了证明！

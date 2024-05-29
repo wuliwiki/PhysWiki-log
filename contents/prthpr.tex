@@ -1,0 +1,79 @@
+% 素数定理的证明
+% keys 素数定理
+% license Usr
+% type Tutor
+
+\pentry{素数定理\nref{nod_prithy}，数论函数 theta 与 psi 的阶\nref{nod_tpont}，渐进估计与阶\nref{nod_asymeq}}{nod_6a5d}
+
+\begin{theorem}{素数个数函数的阶}
+\begin{equation}
+\pi(x) \sim \frac{\vartheta(x)}{\ln x} \sim \frac{\psi(x)}{\ln x} ~.
+\end{equation}
+
+\end{theorem}
+\textbf{证明}：我们利用 $\vartheta(x)$ 与 $\psi(x)$ 的阶的估计可以导出素数定理的证明。首先指出
+\begin{equation}
+\vartheta(x) = \sum_{p \le x} \ln p \le \ln x \sum_{p \le x} 1 = \pi(x) \ln x ~,
+\end{equation}
+从而直接得到了
+\begin{equation}\label{eq_prthpr_1}
+\pi(x) \ge \vartheta(x)/\ln x > Ax / \ln x ~.
+\end{equation}
+而若 $0 < \delta < 1$，
+\begin{equation}
+\begin{aligned}
+\vartheta(x) &\ge \sum_{x^{1-\delta} < p \le x} \ln p ~\\
+&\ge (1-\delta) \ln x \sum_{x^{1-\delta} < p \le x} 1 ~\\
+&= (1-\delta) \ln x \left( \pi(x) - \pi(x^{1-\delta}) \right) ~\\
+&\ge (1-\delta) \ln x \left( \pi(x) - x^{1-\delta} \right) ~.
+\end{aligned}
+\end{equation}
+
+这就是说，
+\begin{equation}\label{eq_prthpr_2}
+\pi(x) \le x^{1-\delta} + \frac{\vartheta(x)}{(1-\delta) \ln x} < Bx/\ln x ~.
+\end{equation}
+
+而利用\autoref{the_tpont_1}~\upref{tpont}与\autoref{lem_tpont_1}~\upref{tpont}，只需要证明 $\pi(x) \sim \vartheta(x)/\ln x$ 即可。利用\autoref{eq_prthpr_1} 与\autoref{eq_prthpr_2} 就直接有
+\begin{equation}
+1 \le \frac{\pi(x) \ln x}{\vartheta(x)} \le \frac{x^{1-\delta} \ln x}{\vartheta(x)} + \frac{1}{1-\delta} ~.
+\end{equation}
+
+对于任意的 $\varepsilon > 0$，可以选取 $\delta = \delta(\varepsilon) > 0$ 使得 $1/(1-\delta) < 1+ (\varepsilon/2)$，而选取 $N = N(\delta, \varepsilon) = N(\varepsilon)$ 使得对于所有的 $x > N$ 均有
+\begin{equation}
+\frac{x^{1-\delta}\ln x}{\vartheta(x)} < \frac{C \ln x}{x^\delta} < \varepsilon/2 ~.
+\end{equation}
+从而对于所有 $x>N$ 都有
+\begin{equation}
+1 \le \frac{\pi(x) \ln x}{\vartheta(x)} < 1+ \varepsilon ~.
+\end{equation}
+而 $\varepsilon$ 可以任意小，就证明了第一部分。也就完成了这个定理的证明！
+
+而我们已经证明了，$\vartheta(x)$ 与 $\psi(x)$ 的阶都是 $x$，故 $\pi(x)$ 的阶是 $x/\ln x$ 也就被成功证明！
+
+\begin{corollary}{素数定理的推论}
+\begin{equation}
+p_n \asymp n \ln n ~.
+\end{equation}
+\end{corollary}
+\textbf{证明}：我们用 $A$ 表示待定常数，但特别的，$A$ 之间可以互不相等，而仅用 $A$ 来估计阶。
+
+利用素数定理，
+\begin{equation}
+n = \pi(p_n) < \frac{A p_n}{\ln p_n}, ~ p_n > An\ln p_n > An \ln n ~.
+\end{equation}
+而
+\begin{equation}
+n = \pi(p_n) > \frac{Ap_n}{\ln p_n} ~,
+\end{equation}
+从而
+\begin{equation}
+\sqrt{p_n} < \frac{A p_n}{\ln p_n} < A n, ~ p_n < A n^2 ~,
+\end{equation}
+这指出，
+\begin{equation}
+p_n < A n \ln p_n < An \ln n ~.
+\end{equation}
+就完成证明。
+
+
