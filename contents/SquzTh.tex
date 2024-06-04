@@ -1,0 +1,84 @@
+% 夹逼定理
+% keys 极限|函数|数列|序列
+% license Usr
+% type Tutor
+
+\begin{issues}
+\issueDraft
+\end{issues}
+\pentry{极限定义 \nref{nod_Lim}，极限运算法则 \nref{nod_LimOp}}{nod_014c}
+\textbf{夹逼定理}（Squeeze Theorem，或称夹挤定理）
+
+之前在学习重要极限（参见\autoref{ex_FunLim_1}~\upref{FunLim}）时，只是形象地将这个概念给出，事实上，它可以由夹逼定理得到。
+\begin{example}{证明：$\lim_{x\to0}{\sin(x)\over x}=1$}
+构造函数$g(x)=\cos(x)$，$f(x)={\sin(x)\over x}$，$h(x)=1$，
+\end{example}
+
+\subsection{数列极限}
+
+\subsection{函数极限}
+
+若$g(x)\leq f(x)\leq h(x)$，且$\lim _{x\to x_0}h(x)=\lim _{x\to x_0}g(x)=a$，则
+\begin{equation}
+\lim _{x\to x_0}f(x)=a~.
+\end{equation}
+
+\begin{lemma}{不等式一端为0时的极限}\label{lem_SquzTh_1}
+\begin{equation}
+0\leq f(x)\leq h(x),\lim _{x\to x_0}h(x)=0\implies\lim _{x\to x_0}f(x)=0~.
+\end{equation}
+
+证明：
+
+由函数极限定义，$\forall\varepsilon>0$，$\exists\delta>0$，$0<|x-x_0|<\delta\implies|h(x)|<\varepsilon$。
+
+由于$0\leq f(x)\leq h(x)$，所以对$0<|x-x_0|<\delta$，有$|f(x)|\leq |h(x)|<\varepsilon$，即$|f(x)|<\varepsilon$。根据极限定义可知：$\lim _{x\to x_0}f(x)=0$。
+
+\end{lemma}
+
+证明：
+
+由$g(x)\leq f(x)\leq h(x)$，有$0\leq f(x)-g(x)\leq h(x)-g(x)$。为了求取$\lim _{x\to x_0}(f(x)-g(x))$，需要使用\autoref{lem_SquzTh_1} ，下面求$\lim _{x\to x_0}(h(x)-g(x))$。
+$$
+\begin{align*}
+\lim _{x\to x_0}(h(x)-g(x))&\overset{\mathrm{1}}{=}\lim _{x\to x_0}h(x)-\lim _{x\to x_0}g(x)\\
+&=a-a\\
+&=0~.
+\end{align*}
+$$
+
+因此，由\autoref{lem_SquzTh_1} 可知$\lim _{x\to x_0}(f(x)-g(x))=0$。现在已经求得了$\lim _{x\to x_0}(f(x)-g(x))$，又已知$\lim _{x\to x_0}g(x)$，剩下的就是：
+$$
+\begin{align*}
+\lim _{x\to x_0}f(x) &= \lim _{x\to x_0}[(f(x)-g(x))+g(x)] \\ 
+&\overset{\mathrm{1}}{=} \lim _{x\to x_0}(f(x)-g(x))+\lim _{x\to x_0}g(x)\\ 
+&= 0+a\\ 
+&=a~.\end{align*}
+$$
+上面的推导过程中，所有等号1的地方都使用了极限运算法则的\autoref{the_LimOp_1}~\upref{LimOp}。
+
+证毕。
+
+\subsection{使用技巧}
+
+在面对不太容易通过极限运算得到结果的极限时，尤其是涉及到复合、求和等场景或存在比较显然的不等关系时，记得使用夹逼定理，可以收获奇效。事实上，在使用夹逼定理时，其实是把复杂的对极限的运算转移到了构造不等式上来。而且，就像乱拳打死老师傅，由于不需要考虑中间的极限是否存在，也能够避免一些需要讨论存在性的场景，避免出错（说的就是你，洛必达法则）。
+
+当然，这里对于不等式的构造会有一定的要求，所以下面会提供一些常用的不等关系，一起服用，效果极佳。
+
+\begin{itemize}
+\item $\sin x < x < \tan x, \quad x \in \left(0, \frac{\pi}{2}\right)$
+\item $\sin x \leq x, \quad x \in (0, +\infty)$
+\item $\arctan x \leq x \leq \arcsin x, \quad x \in [0, 1] $
+\item $x + 1\leq e^x$
+\item $\ln x\leq x - 1 , \quad x \in (0, +\infty)$
+\item $\frac{1}{1 + x} \leq \ln\left(1 + \frac{1}{x}\right) \leq \frac{1}{x}, \quad x \in (0, +\infty)$
+\item $\sqrt{xy} \leq \frac{x + y}{2} \leq \sqrt{\frac{x^2 + y^2}{2}}, \quad (x, y > 0)$
+\end{itemize}
+
+\begin{example}{\addTODO{应用上述不等式的例题}}
+
+\end{example}
+另外，在处理求和的极限时，将与n相关的分子或分母进行放大或缩小，使其能够消去或易于计算，也是一个好方法。
+\begin{example}{$\lim_{n\to \infty}\sum_{i=1}^n{i\over n^2+n+i}$}
+\addTODO{求和的例题}
+\end{example}

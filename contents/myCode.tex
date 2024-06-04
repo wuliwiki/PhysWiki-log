@@ -2,6 +2,7 @@
 % license Xiao
 % type Tutor
 
+\subsection{概述}
 网页版百科分为两个界面：
 \begin{itemize}
 \item \textbf{原界面} \verb|wuli.wiki/online|，以html格式存储的文章，每篇文章都有唯一的ID，例如：文章 \verb|wuli.wiki/online/AU.html| 中的`AU`。 
@@ -22,15 +23,42 @@
 \item \href{https://github.com/MacroUniverse/wuliwiki-app}{wuliwiki-app}： 百科移动端 app， 用 flutter 开发， 支持安卓、iPhone、iPad。 经费不足已经停止开发。
 \end{itemize}
 
-\subsection{框架}
+\subsubsection{框架}
 \begin{itemize}
 \item 编辑器和论坛前端都是 React 的 MUI
 \item 后端 Python/Django/Redis/PostgreSQL/RESTful/RabbitMQ
 \end{itemize}
 
-\subsection{网络配置}
+\subsection{阿里云全站加速（DCDN）}
 \begin{itemize}
-\item 阿里云 DCDN
-\item Nginx 配置（\verb`/etc/nginx/sites-available/`）
-\item 证书：Lets Encrypt （\verb`/etc/letsencrypt/live/wuli.wiki/*.pem`）（每三个月更新，需要手动 \verb`nginx -s reload`）
+\item 加速区域：全球
+\item 端口：443；
+\item DNS 解析：CNAME 记录添加，A 记录暂停；
+\item 回源配置：全部关闭
+\item 静态文件类型：全部选中
+\item 自适应缓存：开
+\item 缓存配置：无
+\item https 配置：见下文
+\item 访问控制：无
+\item 性能优化： html,css,js 全开， Gzip 开， Brotli 关
+\item Websocket： 开
+\item 静态路径：
+\begin{lstlisting}[language=none]
+/apps/*
+/assets/*
+/images/*
+/MathJax3/*
+/media/*
+/online/*
+/statics/*
+/tree/*
+\end{lstlisting}
+\end{itemize}
+
+\subsubsection{https 配置}
+\begin{itemize}
+\item Nginx 配置（\verb`/etc/nginx/sites-available/wuli.wiki/`）
+\item 从 Nginx 配置可以查到证书路径：当前使用 Lets Encrypt （\verb`/etc/letsencrypt/live/wuli.wiki/*.pem`）（每三个月更新，需要手动 \verb`nginx -s reload`）
+\item \verb`cert.pem`, \verb`chain.pem`， \verb`fullchain.pem` 都是证书， \verb`privkey.pem` 是私钥。 \verb`fullchain.pem` 是 \verb`cert.pem` 和 \verb`chain.pem` 的合并， 一般情况都是使用 \verb`fullchain.pem`（例如配置 DCDN 的 https 时）。
+\item 当每三个月证书更新后， DCDN 也需要重新设置新的证书。把 \verb`fullchain.pem` 和 \verb`privkey.pem` 的文本手动复制粘贴到 https 设置里面即可。
 \end{itemize}

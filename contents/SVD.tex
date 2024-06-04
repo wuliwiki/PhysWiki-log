@@ -4,16 +4,16 @@
 % type Tutor
 
 
-\pentry{正规算子\nref{nod_NmOpt}}{nod_98b8}
-\pentry{相似变换和相似矩阵\nref{nod_MatSim}}{nod_907b}
+\pentry{正规算子\nref{nod_NmOpt}， 相似变换和相似矩阵\nref{nod_MatSim}}{nod_98b8}
+
 本节默认在\textbf{复数域及酉空间}下讨论。
-\subsection{定理陈述}
+\subsection{定理陈述} 
 \begin{theorem}{SVD}
-给定复数域$\mathbb{C}$上的$n$行$m$列矩阵$\bvec{M}$，则存在$n$行$m$列对角矩阵$\bvec{D}$和酉矩阵$\bvec{P}$、$\bvec{Q}$，使得
+给定复数域$\mathbb{C}$上的矩阵 $\mat M}$，则存在同样尺寸的对角矩阵$\mat D$和酉矩阵$\mat P$、$\mat Q$，使得
 \begin{equation}
-\bvec{M} = \bvec{P^{\dagger}DQ}~. 
+\mat{M} = \mat{P\Her DQ}~. 
 \end{equation}
-称$\bvec{D}$的对角元为$\bvec{M}$的\textbf{奇异值（singular value）}，$\bvec{P^{\dagger}DQ}$为$\bvec{M}$的\textbf{奇异值分解（singular value decomposition）}，简称为\textbf{SVD}。
+称$\mat{D}$的对角元为$\mat{M}$的\textbf{奇异值（singular value）}，$\mat{P\Her DQ}$为$\mat{M}$的\textbf{奇异值分解（singular value decomposition）}，简称为 \textbf{SVD}。
 \end{theorem}
 
 
@@ -21,42 +21,42 @@
 
 我们先从\textbf{可逆方阵}证起，然后再过渡到不要求可逆的\textbf{任意复矩阵}。
 \begin{theorem}{}\label{the_SVD_1}
-对于$n$阶\textbf{可逆方阵}$M$，存在\textbf{酉方阵}$P,Q$和\textbf{可逆对角矩阵}$D$使得
+对于$n$阶\textbf{可逆方阵}$\mat M$，存在\textbf{酉方阵}$\mat P,\mat Q$和\textbf{可逆对角矩阵}$\mat D$使得
 \begin{equation}\label{eq_SVD_1}
-M=P^{\dagger}DQ~.
+\mat M=\mat P\Her \mat D\mat Q~.
 \end{equation}
 
 \end{theorem}
-\textbf{证明：}因为$M^{\dagger}M$是半正定厄米矩阵，必存在一组标准正交基使之对角化，设为$A$，对应的过渡矩阵为酉方阵$Q$，则该过程表示为$QM^{\dagger}MQ^{\dagger}=A$。左右取行列式可证$A$是可逆矩阵。在这组基下，对对角元计算后，我们可以得到$A^{\frac{1}{2}},A^{-\frac{1}{2}}$，显然互逆。
+\textbf{证明：}因为$\mat M\Her \mat M$是半正定厄米矩阵，必存在一组标准正交基使之对角化，设为$\mat  A$，对应的过渡矩阵为酉方阵 $\mat Q$，则该过程表示为$\mat {Q}\mat M\Her \mat{MQ}\Her=\mat{A}$。左右取行列式可证$\mat A$是可逆矩阵。在这组基下，对对角元计算后，我们可以得到$\mat A^{\frac{1}{2}},\mat A^{-\frac{1}{2}}$，显然互逆。
 
-我们可以把$M$表示为$MQ^{\dagger}A^{-\frac{1}{2}}A^{\frac{1}{2}}Q$，和\autoref{eq_SVD_1} 比较，我们需要验证$MQ^{\dagger}A^{-\frac{1}{2}}$是酉方阵。
+我们可以把$\mat M$表示为$\mat {MQ}\Her \mat{A}^{-\frac{1}{2}}\mat A^{\frac{1}{2}}Q$，和\autoref{eq_SVD_1} 比较，我们需要验证$\mat {MQ}\Her \mat A^{-\frac{1}{2}}$是酉方阵。
 
-设$P^{\dagger}=MQ^{\dagger}A^{-\frac{1}{2}}$，则$P=A^{-\frac{1}{2}}QM^{\dagger}$，则
+设$\mat P\Her =\mat M\mat Q\Her \mat A^{-\frac{1}{2}}$，则$\mat P=\mat A^{-\frac{1}{2}}\mat Q\mat M\Her $，则
 \begin{equation}
 \begin{aligned}
-P^{\dagger}P&=MQ^{\dagger}A^{-\frac{1}{2}}A^{-\frac{1}{2}}QM^{\dagger}\\
-&=MQ^{\dagger}(Q^{\dagger})^{-1}(M)^{-1}(M^{\dagger})^{-1}Q^{-1}QM^{\dagger}\\
-&=E~,
+\mat P\Her \mat P&=\mat {MQ}\Her  \mat A^{-\frac{1}{2}}\mat A^{-\frac{1}{2}}\mat Q\mat M\Her \\
+&=\mat M\mat Q\Her (\mat Q\Her )^{-1}(\mat M)^{-1}(\mat M\Her )^{-1}\mat Q^{-1}\mat Q\mat M\Her \\
+&=\mat E~,
 \end{aligned}
 ~.
 \end{equation}
 定理得证。
 
-在\autoref{the_SVD_1} 的陈述里$D$也是可逆矩阵，这并非偶然。考虑到$P^{-1}=P^{\dagger}$，该定理实际上是$M$的广义相似变换。如下图所示，线性映射$f:V\rightarrow W$在不同基下有不同表示。设$\{\bvec e_i\},\{\bvec \theta_i\}$是$V,W$的旧基，且$f$在该基下的表示为$M$。$P,Q$是对应$W,V$的从旧基到新基的过渡矩阵，则$D$就自然是$f$在新基下的表示了。作为$f$的不同表示，$M$与$N$的行列数相同，秩也相同。
+在\autoref{the_SVD_1} 的陈述里$\mat D$也是可逆矩阵，这并非偶然。考虑到$\mat P^{-1}=\mat P\Her $，该定理实际上是$\mat M$的广义相似变换。如下图所示，线性映射$f:V\rightarrow W$在不同基下有不同表示。设$\{\bvec e_i\},\{\bvec \theta_i\}$是$V,W$的旧基，且$f$在该基下的表示为$\mat M$。$\mat P,\mat Q$是对应$W,V$的从旧基到新基的过渡矩阵，则$\mat D$就自然是$f$在新基下的表示了。作为$f$的不同表示，$\mat M$与$\mat N$的行列数相同，秩也相同。
 \begin{figure}[ht]
 \centering
 \includegraphics[width=6cm]{./figures/d1e0436da4c251f4.png}
 \caption{} \label{fig_SVD_2}
 \end{figure}
-如此一来，我们似乎可以拓展该定理至$M$不可逆的情况。
+如此一来，我们似乎可以拓展该定理至$\mat M$不可逆的情况。
 
 \begin{lemma}{}\label{lem_SVD_1}
-对于任意矩阵$M$，存在酉矩阵$Q',S$和\textbf{满秩}矩阵$N$，使得
+对于任意矩阵$\mat M$，存在酉矩阵$\mat Q',\mat S$和\textbf{满秩}矩阵$\mat N$，使得
 \begin{equation}\label{eq_SVD_2}
-M=S^{\dagger}\left(\begin{array}{cc}
+\mat M=\mat S\Her \left(\begin{array}{cc}
 N & 0 \\
 0 & 0
-\end{array}\right) Q'~.
+\end{array}\right) \mat Q'~.
 \end{equation}
 \end{lemma}
 
@@ -66,30 +66,19 @@ N & 0 \\
 
 考虑到$\opn{dim}V=\opn{dim}\opn{ker}f+\opn{dim}\opn{Im}f$，我们可以在$\opn{ker}f$内选一组标准正交基，然后扩展到全空间。设$k=\opn{dim}\opn{ker}f,s=\opn{dim}\opn{Im}f$。则在该组基下，$f$的后$k$列必为$0$。
 
-同理，$\opn{Im}f$作为$W$的子空间，也可以找到一组标准正交基，并拓展到其正交补。因而除去前$s$行，其他行都为$0$。如此我们就证明了$f$具有\autoref{eq_SVD_2} 所示的块对角形式，其中$N$必为满秩的$s\times s$\textbf{方阵}，即其可逆。如若不然，$\opn{Im}f\cap\opn{ker}f\neq\{\bvec 0\}$。
+同理，$\opn{Im}f$作为$W$的子空间，也可以找到一组标准正交基，并拓展到其正交补。因而除去前$s$行，其他行都为$0$。如此我们就证明了$f$具有\autoref{eq_SVD_2} 所示的块对角形式，其中$\mat N$必为满秩的$s\times s$\textbf{方阵}，即其可逆。如若不然，$\opn{Im}f\cap\opn{ker}f\neq\{\bvec 0\}$。
 
 现在我们来证明奇异值分解定理。
-对于\textbf{任意复矩阵}$M$，我们可以分解为\autoref{lem_SVD_1} 的形式。那么对于\textbf{满秩}$N$矩阵，自然而然的，我们可以利用\autoref{the_SVD_1} 进行进一步的分解。设该分解表示为$N=T^{\dagger}D'F$，其中$D'$为可逆对角矩阵。
+对于\textbf{任意复矩阵}$\mat M$，我们可以分解为\autoref{lem_SVD_1} 的形式。那么对于\textbf{满秩}$\mat N$矩阵，自然而然的，我们可以利用\autoref{the_SVD_1} 进行进一步的分解。设该分解表示为$\mat N=\mat T\Her \mat D'\mat F$，其中$\mat D'$为可逆对角矩阵。
 
-构造复矩阵$T_1,S_1$，其中$E_1,E_2$是用作填充的单位矩阵，比如$E_1$使得$T_1$的行数等于$S^{\dagger}$的列数。
+构造复矩阵$\mat T_1,\mat S_1$，其中$\mat E_1,\mat E_2$是用作填充的单位矩阵，比如$\mat E_1$使得$\mat T_1$的行数等于$\mat S\Her $的列数。
 \begin{equation}
-T_1^{\dagger}=\pmat{T^{\dagger}&0\\0&E_1},\quad F_1=\pmat{F&0\\0&E_2}
+\mat T_1\Her =\pmat{\mat T\Her &0\\0&\mat E_1},\quad \mat F_1=\pmat{\mat F&0\\0&\mat E_2}
 ~.
 \end{equation}
 该定义是合理的，因为
 \begin{equation}
-\pmat{N&0\\0&0}=\pmat{T^{\dagger}&0\\0&E_1}\pmat{D'&0\\0&0}\pmat{S&0\\0&E_2}\equiv T_1^{\dagger}DF_1~.
+\pmat{\mat  N&0\\0&0}=\pmat{\mat  T\Her &0\\0&\mat E_1}\pmat{\mat D'&0\\0&0}\pmat{\mat S&0\\0&\mat  E_2}\equiv \mat T_1\Her\mat  D\mat F_1~.
 \end{equation}
 
-易证$T_1^{\dagger},F_1$是酉矩阵，可见$D$便是定理里要求的对角矩阵，$P^{\dagger}=S^{\dagger}T_1^{\dagger},Q=F_1Q'$。
-
-
-
-
-
-
-
-
-
-
-
+易证$\mat T_1\Her ,\mat F_1$是酉矩阵，可见$\mat D$便是定理里要求的对角矩阵，$\mat P\Her =\mat S\Her \mat T_1\Her ,\mat Q=\mat  F_1\mat Q'$。
