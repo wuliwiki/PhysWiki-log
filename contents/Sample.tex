@@ -16,11 +16,10 @@
 
 \pentry{二项式定理\nref{nod_BiNor}， LaTeX 结构简介\nref{nod_latxIn}，原子单位的第二个节点（自动跳到预备知识 2）\nref{nod_a8e9}， 原子单位的默认节点（依赖整篇文章，相当于依赖最后一个节点）\nref{nod_AU}，原子单位第一个节点（变灰是因为是多余的，多余是因为原子单位第二个节点默认依赖第一个节点）\nref{nod_48f1}}{nod_44a1}
 
-这里的\verb`nod_af87` 是本文第一个节点的 label，可以在别的文章的 \verb`\pentry{\nref{...}}{}` 中引用。
-
 本文需要与 LaTeX 源码对照阅读， 请使用\href{https://wuli.wiki/editor}{在线编辑器}打开 \verb`Sample.tex`。
 
-文件开头可以用注释声明一些元数据：
+\subsection{文章信息}\label{sub_Sample_1}
+文件开头可以用注释声明一些文章信息，但这些信息只能用 “\textbf{修改文章信息}” 按钮修改
 \begin{itemize}
 \item \textbf{关键词}，格式为 \verb`keys 关键词1|关键词2|...`。
 \item 本文使用的\textbf{协议}， 格式为 \verb|license 协议id|（协议类型详见 “\enref{小时百科创作协议}{licens}”)。 \verb|协议 id| 有： \verb|Usr|（用户版权，无偿创作）, \verb|Xiao|（小时科技版权，有偿创作），\verb|CCBY3|，\verb|CCBYSA3|，\verb|CCBY4|，\verb|CCBYSA4|，\verb|Copy|（转载，只读）, \verb|Adap|（转载，可修改）, \verb|GPL3|, \verb|MIT|，\verb|Pub|（公有领域）。
@@ -28,31 +27,44 @@
 \item \verb|% keys|， \verb|% license|， \verb|% type| 三行注释必须紧接标题的注释， 中间不能有空行， 顺序不限。
 \end{itemize}
 
+\subsection{存在的问题}
 接下来可以用 \verb`issue` 环境列出当前所有存在的问题。 支持的所有类型已在上方列出。
 
-\subsubsection{预备知识}
-我们非常重视预备知识，几乎任何文章都需要预备知识。如果百科暂时没有所需文章，那么可以只列出标题不添加链接，并提供一些参考文献。 一个文章可以有多个预备知识列表， 默认读者看某个内容时，已经掌握了其上方所有列出的预备知识。在\href{https://wuli.wiki/tree/}{知识树}中，每个节点代表一个预备列表到下一个之间的内容。 预备知识的命令是 \verb`\pentry{}{}`，可以通过菜单上的 “插入预备知识” 按钮自动插入。 \verb`\pentry{}{}` 的第二个参数是该节点的 label， 格式为 \verb`nod_节点id`。 注意任何文章都有一个不出现在代码中的默认节点， label 为 \verb`nod_文章id`。 同一篇文章的每个节点默认依赖上一个节点， 默认节点依赖最后一个 \verb`\pentry{}{}` 定义的节点。 \verb`\pentry{}{}` 中第一个参数中可以用 \verb`\nref{}` 引用其他文章的节点， 可以通过 “引用其他文章内容” 按钮中的 “点” 插入，若不填节点编号则引用整篇文章。
+\subsection{预备知识}
+\begin{itemize}
+\item 预备知识是构建\href{https://wuli.wiki/tree/}{知识树}的重要部分，我们非常重视预备知识，几乎任何百科文章都需要预备知识，相关概念详见\enref{关于小时百科（白皮书）}{about}。
+\item 如果读者学习某节点前\textbf{必须}先弄懂一些\textbf{其他文章}中的节点，就在 \verb`\pentry{}{}` 的第一个花括号中把它们列出来，并使用 \verb`\nref{}` 引用它们的 ID。
+\item 例如上文中的预备知识的 ID 是 \verb`nod_af87`，可以在别的文章的 \verb`\pentry{\nref{...}}{}` 中引用。
+\item 菜单的\textbf{预备知识}按钮可以插入预备知识列表 \verb`\pentry{知识点1\nref{节点id1}，知识点2\nref{节点id2}}{节点id}`。 所有的 \verb`节点id` 都以 \verb`nod_` 开头。
+\item 一个预备知识列表定义了\href{https://wuli.wiki/tree/}{知识树}中的一个节点（简单说就是知识点），它的范围是它到下该文章的下一个预备知识列表之间（如果没有下一个就到文末）的全部内容。 该节点的 ID 就是 \verb`节点id`。
+\item 每篇文章无论是否存在预备知识列表，都会有一个\textbf{默认的节点} \verb`nod_文章id` 其中 \verb`文章id` 是该文章的文件名。
+\item 文章的每个节点默认依赖该文章的上一个节点，默认节点依赖最后一个节点（如果有）。
+\item \verb`\nref{}` 命令可以通过 “外部引用” 按钮中的 “节点” 按钮来插入。 在提示 “输入序号” 时，如果不输入，则引用一篇文章的默认节点（即依赖于整篇文章）。 注意该命令暂时只能在 \verb`\pentry` 内部使用。
+\item 如果需要的预备知识暂时不存在，可以先列出标题但不添加 \verb`\nref{}`，并注释具体需要什么（在注释中使用 \verb`\addTODO{描述}`），也可以先通过 \verb`\cite{}` 引用参考文献。
+\end{itemize}
 
-\subsection{蓝色的小节标题}
-这是正文。
-\subsubsection{黑色的子节标题}
-正文的任何地方可以用 \verb|\addTODO{}| 命令插入未完成提示。
-\addTODO{这里可以填写未完成提示}
+\subsection{蓝色的子节标题}\label{sub_Sample_2}
+可以通过内部或外部引用按钮引用， 如\autoref{sub_Sample_2}。 引用其他文章的子节如\autoref{sub_BiNor_5}~\upref{BiNor}，注意后面多了一个图标用于区分。
+
+\subsubsection{黑色的子子节标题}
+目前子子节标题无法引用。
 
 \subsection{正文}\label{sub_Sample_16}
 正文必须使用中文的括号，逗号，引号，冒号，分号，问号，感叹号，以及空心句号\footnote{《GB\_T15834\_2011 中华人民共和国国家标准标点符号用法》标准中允许科技文献中使用实心句号， 但 GB\_T15834\_2011 版的新标准规定都用空心。}， 禁止使用英文标点。 但为了打字方便， 行间公式最后仍允许英文逗号和句号（例如 \verb|~,| 和 \verb|~.|）， 且逗号后面需要有足够的空白（\verb|\quad| 或者 \verb|\qquad|）， 例如
 \begin{equation}\label{eq_Sample_2}
 a + b = c~, \quad d + e = f~.
 \end{equation}
-正文中空行代表分段， 所以\textbf{不要为了代码好看在公式前后习惯性加上一个空行}。 另外行间公式同样属于句子的一部分，需要在中间和末尾加上适当的标点符号，否则会提示错误。 如果根据语法，的确不需要加标点，可以在 \verb|\end{equation}| 之前加一个 \verb|~| 防止报错。 严禁批量对所有公式加 \verb|~|，小心被骂。 公式中标点的用法参考本文。
+正文中\textbf{空行代表分段}， 所以\textbf{不要为了代码好看在公式前后习惯性加上一个空行}。 另外行间公式同样属于句子的一部分，需要在中间和末尾加上适当的标点符号，否则会提示错误。 如果根据语法，的确不需要加标点，可以在 \verb|\end{equation}|（或者结束的 \verb`$$` 或 \verb`\]`）之前加一个 \verb|~| 防止报错。 禁止批量对所有公式加 \verb|~|。 公式中标点的用法参考本文。
 
 像 “牛顿—莱布尼兹公式” 中的横线必须用中文单破折号。 所有的标点符号前面不能有空格， 后面尽量有空格。 正文粗体如\textbf{粗体}。 正文中禁止使用 \verb|\\| 换行， 以及 \verb|\noindent|， \verb|\phantom| 等命令强制修改格式。
 
 如果把 \verb|\footnote| 加在一个名词或者短语后面，意思是对它们做注释。 如果放在一个句号后面，就是对整句话做注释。
 
-引用 subsection 如\autoref{sub_Sample_16}， 又如\autoref{sub_BiNor_5}~\upref{BiNor}。
+正文的任何地方可以用 \verb|\addTODO{}| 命令插入未完成提示。
+\addTODO{填写未完成的内容}
 
 \subsection{公式}
+\addTODO{这里许多内容应该移动到 \enref{LaTeX 常用符号对照表}{TeXSym}}
 行内公式用 \verb|$...$| 或者 \verb|\(...\)|， 两边需要有空格， 例如 $a^2+b^2=c^2$， 后面有标点符号的除外。 行间公式如
 \begin{equation}\label{eq_Sample_1}
 (a+b)^n = \sum_{i=0}^n C_n^i a^i b^{n-i} \quad (\text{$n$ 为整数})~.
