@@ -1,0 +1,193 @@
+% 小时百科常用 LaTeX 公式
+% license Usr
+% type Tutor
+
+单个参数的命令若只有一个字符， 那么不需要加花括号， 例如 $\mathrm a$ 等效于 $\mathrm{a}$。 如果参数是数字甚至也不需要空格， 例如 $\frac12$。
+
+公式中的空格从小到大如 $a\, b\; c\quad d\qquad e$。 公式中三点省略号用 $\dots$， 如果要强制在下方， 用 $\ldots$。 实部和虚部如 $\Re[z], \Im[z]$。 双重极限如
+\begin{equation}
+\lim_{\substack{\Delta x_i\to 0\\ \Delta y_i\to 0}} \sum_{i, j} f(x_i,y_i) \Delta x_i \Delta y_j~.
+\end{equation}
+注意行内公式的 \verb|\lim| 和 \verb|\sum| 如果要在正上方或正下方写东西， 需要加 \verb|\limits|， 如 $\lim\limits_{x\to 0}$。 但是 \verb|\limits| 只能给算符使用， 如果要对任意符号使用可以用 \verb|\underset| 或者 \verb|\overset|， 例如 $\underset{i \ge 0}{\bigcup}$。
+
+上下方的花括号例如
+\begin{equation}
+\overbrace{n(n-1)(n-2)\dots}^{\text{共 $m$ 项}} \qquad \underbrace{n(n-1)(n-2)\dots}_{\text{共 $m$ 项}}~
+\end{equation}
+方括号用 \verb|\overbracket| 和 \verb|\underbracket|。
+
+如果要强制分式正常大小显示， 用 \verb|\dfrac| 命令， 如果 \verb|\frac| 后面只有两个字符的代码，可以写成如 \verb|\frac12|， \verb|\frac ab|， \verb|\frac1a| 等。 斜分数线后面若多于一个变量需要加括号， 如 $ab/(cd)$。
+
+行内分式如 $a/b$， 不允许行内用立体分式。 几何矢量如 $\bvec a$， 不要使用带箭头的矢量如 $\vec a$。 
+
+行间公式换行及对齐用 aligned 环境（可以选中一段公式代码然后按菜单的 “对齐” 按钮）， 注意该环境可嵌套。
+\begin{equation}
+\begin{aligned}
+(a-b)^2 &= a^2+b^2 - 2ab \\
+& = a^2+b^2+2ab-4ab\\
+& = (a+b)^2-4ab~.
+\end{aligned}
+\end{equation}
+
+用 \verb|\begin{enumerate}[resume]|  来继续上一个 enumerate 的编号。
+
+可变化尺寸的斜分数线如下
+\begin{equation}
+\left. \pdv[2]{X}{x} \middle/ X + \pdv[2]{Y}{y} \middle/ Y + \pdv[2]{Z}{z} \middle/ Z  = \frac{1}{c^2}  \pdv[2]{T}{t} \middle/ T\right.~.
+\end{equation}
+左大括号用 \verb|cases| 环境， 如
+\begin{equation}
+\begin{cases}
+d+e+f = \int \frac{a}{b} \dd{x} &(a > 0)\\
+a+b = c &(b > 0)~.
+\end{cases}
+\end{equation}
+但是注意 \verb|cases| 环境里面的符号都是小尺寸的（与行内公式相同）， 且每行只能用一次 \verb|&|。 若需要全尺寸公式可以用下文定义的 \verb|\leftgroup| 命令。
+
+反斜杠有两种形式：$\backslash$和$\setminus$。前者在一般需要斜杠时用，而集合减法应该用后者。使用实例：$A\backslash B$，$A\setminus B$。
+
+\subsubsection{字母样式}
+希腊字母如下
+\begin{equation}
+\begin{aligned}
+&\alpha (a), \beta (b), \chi (c), \Delta\delta (d), \epsilon/\varepsilon (e), \Phi\phi (f), \Gamma\gamma (g),
+\eta (h), \iota (i), \varphi (j), \kappa (k), \Lambda\lambda (l), \mu (m),\\
+& \nu (n), o (o),\Pi\pi (p), \Theta\theta (q), \rho (r), \Sigma\sigma (s), \tau (t), \upsilon (u), \varpi (v), \Omega\omega (w), \Xi\xi (x), \Psi\psi (y), \zeta (z)~.
+\end{aligned}
+\end{equation}
+普朗克常数为 $\hbar$。 另外我们自定义了 $\lambdabar$， 相当于 $\mkern-0.25mu {\bar{\phantom{a}}} \mkern -10.2mu\lambda$。
+
+双线字母如下
+\begin{equation}
+\begin{aligned}
+&\mathbb{a\, b\, c\, d\, e\, f\, g\, h\, i\, j\, k\, l\, m\, n\, o\, p\, q\, r\, s\, t\, u\, v\, w\, x\, y\, z}~,\\
+&\mathbb{A\, B\, C\, D\, E\, F\, G\, H\, I\, J\, K\, L\, M\, N\, O\, P\, Q\, R\, S\, T\, U\, V\, W\, X\, Y\, Z}~,
+\end{aligned}
+\end{equation}
+几种花体字母如下
+\begin{equation}
+\mathcal{A\, B\, C\, D\, E\, F\, G\, H\, I\, J\, K\, L\, M\, N\, O\, P\, Q\, R\, S\, T\, U\, V\, W\, X\, Y\, Z}~,
+\end{equation}
+\begin{equation}
+\begin{aligned}
+&\mathscr{a\, b\, c\, d\, e\, f\, g\, h\, i\, j\, k\, l\, m\, n\, o\, p\, q\, r\, s\, t\, u\, v\, w\, x\, y\, z}~,\\
+&\mathscr{A\, B\, C\, D\, E\, F\, G\, H\, I\, J\, K\, L\, M\, N\, O\, P\, Q\, R\, S\, T\, U\, V\, W\, X\, Y\, Z}~,
+\end{aligned}
+\end{equation}
+\begin{equation}
+\begin{aligned}
+&\mathfrak{a\, b\, c\, d\, e\, f\, g\, h\, i\, j\, k\, l\, m\, n\, o\, p\, q\, r\, s\, t\, u\, v\, w\, x\, y\, z}~,\\
+&\mathfrak{A\, B\, C\, D\, E\, F\, G\, H\, I\, J\, K\, L\, M\, N\, O\, P\, Q\, R\, S\, T\, U\, V\, W\, X\, Y\, Z}~.
+\end{aligned}
+\end{equation}
+
+\subsubsection{使用 physics 宏包}
+MathJax 本身不支持 physics 宏包（更新：后来支持了）， 我们进行了一定的改进\footnote{后台程序在把 tex 文件翻译成 html 页面时， 把 physics 宏包或者我们自定义的命令翻译成了 MathJax 兼容的代码。 如果对 html 的公式点击右键获取公式代码， 得到的仍然是兼容 MathJax 的代码。}。 Physics 宏包的文档见\href{http://mirrors.ibiblio.org/CTAN/macros/latex/contrib/physics/physics.pdf}{这里}， 目前仅支持 Physics 宏包的以下命令。
+
+绝对值如 $\abs{y}$ （自动尺寸，如果不需要自动尺寸用 $\abs*{y}$ 下同），范数如 $\norm*{x}$， 微分符号如 $\dd{x}$， 可变尺寸的小中大括号可以用 \verb|\qty|， 如
+\begin{equation}
+\qty(\frac ab)^2~, \qquad \qty[\frac ab]^2~, \qquad \qty{ \frac ab}~.
+\end{equation}
+矢量内积如 $\bvec A \vdot \bvec B$ （\verb|\vdot| 不可省略， 不要用 \verb|\cdot|），矢量叉乘如 $\bvec A\cross\bvec B$。
+
+常用三角函数和对数函数后面的小括号会自动改变尺寸（中括号不可以），若要给他们加幂，用中括号
+\begin{equation}
+\sin(\frac ab)~, \qquad \sin[2](\frac ab)~.
+\end{equation}
+自然指数后面的小括号和中括号都可以自动尺寸
+\begin{equation}
+\exp(\frac12)~, \qquad \exp[\frac12]~.
+\end{equation}
+支持同样用法的还有 \verb`\arccos`， \verb`arcsin`， \verb`arctan`， \verb`\cos`， \verb`\cosh`， \verb`\cot`， \verb`\csc`， \verb`\log`， \verb`\ln`。
+
+无穷小的阶数如 $\order{x^2}$， 导数和偏导可以用
+\begin{equation}
+\dv{x}~, \quad \dv{f}{x}~, \quad \dv[2]{f}{x}~, \quad \dv*[2]{f}{x}~, \quad
+\pdv{x}~, \quad \pdv{f}{x}~, \quad \pdv[2]{f}{x}~, \quad \pdv{f}{x}{y}~, \quad \pdv*[2]{f}{x}~.
+\end{equation}
+要写到行内可以加 \verb|*|， 如 $\pdv*[2]{f}{x}$。
+
+定积分求值如 $\eval{x^2}_0^1$ （自动尺寸）。
+
+对易算符如 $\comm{\Q A}{\Q B}$ 或 $\comm*{\Q A}{\Q B}$， 前者自动尺寸， 后者强制小尺寸。 泊松括号同理： $\pb{\frac12}{B}$， $\pb*{\frac12}{B}$。
+
+梯度散度旋度拉普拉斯如 $\grad V$，$\div\bvec A$， $\curl\bvec A$， $\laplacian V$。
+
+狄拉克符号（加 \verb|*| 号强制小尺寸）如 $\bra{a}, \ket{b}, \braket{a}, \braket{a}{b}, \mel{a}{Q}{b}$。 平均值（加 \verb|*| 号强制小尺寸）如 $\ev*{Q}, \ev{Q}{\psi}$。 同理也有 $\ketbra*{a}{b}$， $\ketbra{a}{b}$， $\ketbra{a}$。
+
+\subsubsection{交换图：amsCD包}
+
+amsCD 包只支持方形的交换图；示例
+\begin{equation}
+\begin{CD}
+A @>>> B @= E \\
+@VVV @AAA @| \\
+C @<<< D @. F
+\end{CD}~.
+\end{equation}
+
+amsCD包使用\verb|CD|环境，其中使用\verb|\\|换行，支持7种箭头：
+
+3种水平箭头，水平向右\verb|@>>>|、水平向左\verb|@<<<|和水平等于\verb|@=|；
+
+3种竖直箭头，竖直向下\verb|@VVV|、竖直向上\verb|@AAA|和竖直等于\verb!@|!；
+
+以及水平竖直皆可的无箭头\verb|@.|。
+
+上下左右箭头支持标签\verb|A @>{上标签}>{下标签}> B|
+\begin{equation}
+\begin{CD}
+A @>{\text{上标签}}>{\text{下标签}}> B \\
+@V{\text{左标签}}V{\text{右标签}}V @A{\text{左标签}}A{\text{右标签}}A \\
+C @<{\text{上标签}}<{\text{下标签}}< D
+\end{CD}~~~~~~,
+\end{equation}
+
+最右边的右标签可能会和公式最后的标点重叠，需要特别注意。
+
+\subsection{小时百科自定义的公式命令}
+
+小时百科和云笔记的模板的自定义的命令如下， 如果不使用， 要保证编译后效果相同。 如果想新添加定义， 请联系管理员。
+
+科学计数法如 $1.2\e3$ 或 $1.2\e{34}$， 单位矢量如 $\uvec a$， 自然对数底如 $\E$， 复数如 $u+\I v$ 虚数单位不能用斜体 $i$，复共轭如 $z\Cj$。
+
+定义 \verb|\opn{}| 和 \verb|\operatorname{}| 等效。 自定义的 operator 或者函数名（如 \verb|\sinc| 相当于 \verb|\operatorname{sinc}| 或者 \verb|\opn{sinc}|）有： \verb|\Arctan|, \verb|\sinc|，\verb|\erf|，\verb|\erfi|， \verb|\Im|， \verb|\Re|。
+
+\verb`\begin{aligned}...\end{aligned}` 环境可以用 \verb`ali{...}` 命令代替。
+
+写量纲用 \verb|\Si{}| 命令， 如 $100\Si{m/s^2}$， 这个命令只能出现在公式环境内。 这相当于 \verb|\mathrm{}|。
+
+矩阵 $\mat A$， 转置 $\mat A\Tr$， 厄米共轭用 $\mat A\Her$。 常见的几种矩阵括号如
+\begin{equation}
+\pmat{1&2\\3&4}~, \quad
+\vmat{1&2\\3&4}~, \quad 
+\bmat{1&2\\3&4}~, \quad
+\Bmat{1&2\\3&4}~, \quad
+\pmat{1&2\\3&4}\Tr~, \quad
+\pmat{1&2\\3&4}\Her~.
+\end{equation}
+行内的列矢量用行矢量的转置表示，如 $\pmat{1& 2& 3& \dots}\Tr$。 张量如 $\ten T$， 效果同 \verb|\mat|。
+
+单独一个粗体的 $\nabla$ 用 $\Nabla$。
+
+自定义的 \verb|\leftgroup{}| 命令， 相当于 \verb|\left\{\begin{aligned}... \end{aligned}\right.|
+\begin{equation}
+\leftgroup{
+&d+e+f = \int \frac{a}{b} \dd{x} &&(a > 0)\\
+&a+b = c &&(b > 0)~.
+}
+\end{equation}
+这相当于一个可变尺寸的 \verb|{| 加上 \verb|aligned| 环境
+\begin{equation}
+\left\{
+\begin{aligned}
+&d+e+f = \int \frac{a}{b} \dd{x} &&(a > 0)\\
+&a+b = c &&(b > 0)~.
+\end{aligned}
+\right.
+\end{equation}
+注意百科中我们用圆括号表示条件， 而不是逗号。 另外这种公式的标点加在最后一行末。
+
+表格中若用 \verb|\dfrac|， 需要在行首加上 \verb|\dfracH| 命令。% 未完成： 为什么？
+
+量子力学算符如 $\Q a$（一般可以不加， 只有必要的时候加）， 矢量量子算符如 $\Qv p$ （效果同 \verb|\uvec|）。

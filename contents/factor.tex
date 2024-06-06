@@ -7,21 +7,70 @@
 \issueDraft
 \end{issues}
 
-\pentry{\enref{求积符号（累乘）}{ProdSy}}{nod_fe64}
+%\pentry{\enref{求积符号（累乘）}{ProdSy}}{nod_fe64}
+%933：不需要预备知识
 
-对正整数 $N > 0$， \textbf{阶乘（factorial）}定义为小于等于 $N$ 且大于零的所有整数相乘
-\begin{equation}\label{eq_factor_1}
-N! \equiv 1 \cdot 2 \cdot 3 \dots (N - 2) (N - 1)N~.
-\end{equation}
-例如 $3! = 1\times 2\times 3 = 6$， 又例如 $5! = 1\times 2\times 3\times 4\times 5 = 120$。
+在排列组合的学习中，经常会出现多个连续的整数相乘的情形。
 
-特殊地， 我们定义
+\begin{example}{求：从7名学生中，选出3名学生前后站成一列的方法数}\label{ex_factor_1}
+由于三人前后站成一列，所以对确定的三个人A、B、C，“ABC”和“CBA”是两种站法。因此，分别对三个位置进行考虑，第一个位置可以任选一个人，第二个位置可以从剩下的学生里再选一个人，第三个位置再从剩下的学生里选一个人。由乘法原理，共有$7\times6\times5=210$种方法。
+\end{example}
+
+数字少一点还好说，如果数字过多，要么要写一堆的数字和乘号，要么每次都要写$\cdots$。鉴于这个连续相乘的使用次数太多，数学家们发明了一种用来表示连乘的运算：阶乘。当然，虽然说是新运算，也不用太有压力。只要保证见到了能认识，那么觉得“我多写几遍数字也没事”的话，自然可以展开来写。事实上，在计算的时候往往是展开来算的，阶乘的出现更多是为了语言表达和书写上的方便。
+
+\subsection{阶乘}
+
+\begin{definition}{阶乘}
+对自然数 $n$\footnote{拓展知识：阶乘的定义本身只限于自然数。但随着研究深入，偶尔会出现使用分数等数值的阶乘的场景，为此，欧拉推导了\enref{Gamma 函数}{Gamma}$\Gamma(x)$实现了对阶乘的解析延拓，即：1.保证它的函数值与阶乘对应$\Gamma(n)=(n-1)!$；2.保证自变量取其他实数值（如：部分负数、分数、和无理数等）时也可以有结果；3.函数的性质满足特定条件。于是，数学中也经常会用“Gamma函数”来代替需要表达“阶乘”概念的场合。}， 所有小于等于 $n$ 的正整数的乘积称为$n$的\textbf{阶乘}（factorial），记作\footnote{$\prod_{i = 1}^n i$是使用\enref{求积符号}{ProdSy}来简写乘积，它和阶乘一样是一个简记符号，如果觉得复杂先忽略也不影响。}：
 \begin{equation}
-0! = 1~.
+n! := 1 \times 2 \times 3 \times \cdots \times(n - 2)\times(n - 1)\times n=\prod_{i = 1}^n i ~.
 \end{equation}
-注意这里暂时不定义负数或非整数的阶乘。\footnote{学习微积分以后， 阶乘可以拓展到半整数甚至大部分实数， 见 “\enref{Gamma 函数}{Gamma}”（确切的说，Gamma 函数是阶乘的解析延拓，也就是我们通过找到一个函数使之满足原阶乘函数在各已知点处的取值而值域广于原来的阶乘函数，但不能简单的认为 Gamma 函数就是阶乘或者阶乘就是 Gamma 函数）。}
-
-\autoref{eq_factor_1} 也可以用\enref{求积符号}{ProdSy}表示为
+特殊地，约定
 \begin{equation}
-N! \equiv \prod_{k = 1}^N k~.
+0! := 1~.
 \end{equation}
+\end{definition}
+
+注意，在记录时，这个叹号是英文标点，所以形如“120等于5！”的玩笑其实是有问题的。下面根据定义来小试牛刀：
+
+\begin{example}{求从1到5的正整数的乘积}
+根据定义，这个乘积的结果是5的阶乘，因此结果是：
+$$5! = 120~.$$
+\end{example}
+
+可以看到，使用阶乘后，再也不用一遍遍地写那一长串的数字了。这是节省时间和手力的一大步！
+
+常用的阶乘数值如下\begin{table}[ht]
+\centering
+\caption{常用阶乘值}\label{tab_factor1}
+\begin{tabular}{|c|c|c|c|c|c|c|c|c|}
+\hline
+n & 0 & 1 & 2 & 3 & 4 & 5 & 6 & 7\\
+\hline
+n！ & 1 & 1 & 2 & 6 & 24 & 120 & 720 & 5040\\
+\hline
+\end{tabular}
+\end{table}
+
+\subsection{不从1开始的连续乘积}
+
+从最开始的例题可以看到，其实只有从1开始的连乘的场景还不够，我们更多使用的是某几个连续数字的乘积。巧了，利用除法，就可以让两个阶乘做除法来约掉那些不需要的项。下面的两道例题是比较常遇到的情景。
+
+\begin{example}{用阶乘表示"从某个自然数m到另一个自然数n的连续整数的乘积"}
+\begin{align*}
+m\times(m+1)\times\cdots \times(n-1)\times n&={1\times\cdots \times(m-1)\times m\times(m+1)\cdots \times(n-1)\times n\over 1\times\cdots \times(m-1)}\\
+&={n!\over (m-1)!}~.
+\end{align*}
+\end{example}
+
+\begin{example}{用阶乘表示"从自然数n开始依次递减的m个数的乘积"}
+\begin{align*}
+n\times(n-1)\times\cdots \times[n-(m-2)]\times [n-(m-1)]&={n\times\cdots \times [n-(m-1)]\times(n-m)\times\cdots\times1\over (n-m)\times\cdots \times1}\\
+&={n!\over (n-m)!}~.
+\end{align*}
+\end{example}
+
+因此，\autoref{ex_factor_1} 表示的就是“从自然数7开始依次递减的3个数的乘积”，可以简单写为：
+$${7!\over (7-3)!}={7!\over 4!}={5040\over 24}=210.~$$
+
+当然，我知道，在计算的时候，因为小学口算能力练的太溜了，展开来算要快得多。但自此，所有的连续正整数的乘积我们都能够快速表示出来了，至于算的事，要是太大的话未来交给计算器就好了。

@@ -9,57 +9,43 @@
 \pentry{极限定义 \nref{nod_Lim}，极限运算法则 \nref{nod_LimOp}}{nod_014c}
 \textbf{夹逼定理}（Squeeze Theorem，或称夹挤定理）
 
+本文会先讨论一下一般使用夹逼定理时会遇到的问题。最后会针对两个情况下的夹逼定理给出证明。
+
+
+
+\begin{theorem}{数列极限的夹逼定理}\label{the_SquzTh_1}
+若数列$\{a_n\}$,$\{b_n\}$以及$\{x_n\}$满足：
+\begin{enumerate}
+\item $\exists N_0\in \mathbb{N}$，$\forall n>N_0$，$a_n\leq x_n\leq b_n$；
+\item $n$趋于无穷时，$\{a_n\}$和$\{b_n\}$的极限存在且相等，即$\lim_{n\to\infty}\{a_n\}=\lim_{n\to\infty}\{b_n\}=m$。
+\end{enumerate}
+则$n$趋于无穷时，数列$\{x_n\}$的极限存在且
+\begin{equation}
+\lim_{n\to\infty}x_n =m.~
+\end{equation}
+\end{theorem}
+
+\begin{theorem}{函数极限的夹逼定理}\label{the_SquzTh_2}
+若函数$f(x)$、$g(x)$以及$h(x)$满足：
+\begin{enumerate}
+\item 存在确定的$\delta>0$，使得对任意符合$0<|x-x_0|<\delta$的$x$，都有$g(x)\leq f(x)\leq h(x)$；
+\item $x$趋于$x_0$时，$h(x)$和$g(x)$的极限存在且相等，即$\lim _{x\to x_0}h(x)=\lim _{x\to x_0}g(x)=a$。
+\end{enumerate}
+则函数$f(x)$在$x_0$处的极限存在且
+\begin{equation}
+\lim _{x\to x_0}f(x)=a~.
+\end{equation}
+\end{theorem}
+
+\subsection{小试牛刀——一个重要极限}
+
 之前在学习重要极限（参见\autoref{ex_FunLim_1}~\upref{FunLim}）时，只是形象地将这个概念给出，事实上，它可以由夹逼定理得到。
 \begin{example}{证明：$\lim_{x\to0}{\sin(x)\over x}=1$}
 构造函数$g(x)=\cos(x)$，$f(x)={\sin(x)\over x}$，$h(x)=1$，
 \end{example}
 
-\subsection{数列极限}
 
-\subsection{函数极限}
-
-若$g(x)\leq f(x)\leq h(x)$，且$\lim _{x\to x_0}h(x)=\lim _{x\to x_0}g(x)=a$，则
-\begin{equation}
-\lim _{x\to x_0}f(x)=a~.
-\end{equation}
-
-\begin{lemma}{不等式一端为0时的极限}\label{lem_SquzTh_1}
-\begin{equation}
-0\leq f(x)\leq h(x),\lim _{x\to x_0}h(x)=0\implies\lim _{x\to x_0}f(x)=0~.
-\end{equation}
-
-证明：
-
-由函数极限定义，$\forall\varepsilon>0$，$\exists\delta>0$，$0<|x-x_0|<\delta\implies|h(x)|<\varepsilon$。
-
-由于$0\leq f(x)\leq h(x)$，所以对$0<|x-x_0|<\delta$，有$|f(x)|\leq |h(x)|<\varepsilon$，即$|f(x)|<\varepsilon$。根据极限定义可知：$\lim _{x\to x_0}f(x)=0$。
-
-\end{lemma}
-
-证明：
-
-由$g(x)\leq f(x)\leq h(x)$，有$0\leq f(x)-g(x)\leq h(x)-g(x)$。为了求取$\lim _{x\to x_0}(f(x)-g(x))$，需要使用\autoref{lem_SquzTh_1} ，下面求$\lim _{x\to x_0}(h(x)-g(x))$。
-$$
-\begin{align*}
-\lim _{x\to x_0}(h(x)-g(x))&\overset{\mathrm{1}}{=}\lim _{x\to x_0}h(x)-\lim _{x\to x_0}g(x)\\
-&=a-a\\
-&=0~.
-\end{align*}
-$$
-
-因此，由\autoref{lem_SquzTh_1} 可知$\lim _{x\to x_0}(f(x)-g(x))=0$。现在已经求得了$\lim _{x\to x_0}(f(x)-g(x))$，又已知$\lim _{x\to x_0}g(x)$，剩下的就是：
-$$
-\begin{align*}
-\lim _{x\to x_0}f(x) &= \lim _{x\to x_0}[(f(x)-g(x))+g(x)] \\ 
-&\overset{\mathrm{1}}{=} \lim _{x\to x_0}(f(x)-g(x))+\lim _{x\to x_0}g(x)\\ 
-&= 0+a\\ 
-&=a~.\end{align*}
-$$
-上面的推导过程中，所有等号1的地方都使用了极限运算法则的\autoref{the_LimOp_1}~\upref{LimOp}。
-
-证毕。
-
-\subsection{使用技巧}
+\subsection{夹逼定理的奇技淫巧}
 
 在面对不太容易通过极限运算得到结果的极限时，尤其是涉及到复合、求和等场景或存在比较显然的不等关系时，记得使用夹逼定理，可以收获奇效。事实上，在使用夹逼定理时，其实是把复杂的对极限的运算转移到了构造不等式上来。而且，就像乱拳打死老师傅，由于不需要考虑中间的极限是否存在，也能够避免一些需要讨论存在性的场景，避免出错（说的就是你，洛必达法则）。
 
@@ -82,3 +68,90 @@ $$
 \begin{example}{$\lim_{n\to \infty}\sum_{i=1}^n{i\over n^2+n+i}$}
 \addTODO{求和的例题}
 \end{example}
+
+
+
+\begin{example}{设a是一个正整数，$\lim_{n\to\infty}\sqrt[n]{1^n+2^n+\cdots+a^n}$}
+a
+\end{example}
+\begin{example}{设a是一个正整数，$\lim_{n\to\infty}{a^n\over n!}$}
+0
+\end{example}
+\begin{example}{$\lim_{n\to\infty}\sum_{i=1}^n{n\over n^2+i\pi}$}
+1
+\end{example}
+\begin{example}{$\lim_{n\to\infty}\sum_{i=1}^n{1\over\sqrt{n^2+i}}$}
+1
+\end{example}
+
+\begin{example}{$\lim_{n\to\infty}\sqrt[n]{1^3+2^3+\cdots+n^3}$}
+1
+\end{example}
+\subsection{数列极限的夹逼定理证明}
+
+先回顾一下\autoref{the_SquzTh_1} 内容，下面给出证明：
+
+已知$\lim_{n \to \infty} a_n = \lim_{n \to \infty} b_n = m$，由极限定义可知，对于给定的 $\varepsilon > 0$，存在一个正整数 $N_1$，使得当 $n > N_1$ 时，$|a_n - m| < \varepsilon$。同理，存在一个正整数 $N_2$，使得当 $n > N_2$ 时，$|b_n - m| < \varepsilon$。取$N_m = \max(N_1, N_2)$。当 $n > N_m$ 时，以上两不等式同时成立，即：
+\begin{equation}
+- \varepsilon < a_n-m <\varepsilon.~
+\end{equation}
+\begin{equation}
+-\varepsilon < b_n-m <\varepsilon.~
+\end{equation}
+
+又已知$\exists N_0\in \mathbb{N}$，$\forall n>N_0$，$a_n\leq x_n\leq b_n$，因此，取$N=\max(N_0, N_m)$，当 $n > N$ 时，三个不等式均成立，有：
+\begin{equation}
+- \varepsilon < a_n-m \leq x_n-m \leq b_n-m <\varepsilon\implies |x_n-m|<\varepsilon.~
+\end{equation}
+
+根据极限的定义，可知极限存在且为$m$，即 $\lim_{n \to \infty} x_n = m$。
+
+证毕。
+
+
+\subsection{函数极限的夹逼定理证明}
+
+
+先回顾一下\autoref{the_SquzTh_2} 的内容，下面会先证明一个引理，然后再给出证明。
+
+\begin{lemma}{不等式一端为0时的极限}\label{lem_SquzTh_1}
+若函数$f(x)$、$h(x)$满足：
+\begin{enumerate}
+\item 存在确定的$\delta>0$，使得对任意符合$0<|x-x_0|<\delta$的$x$，都有$0\leq f(x)\leq h(x)$；
+\item $\lim _{x\to x_0}h(x)=0$。
+\end{enumerate}
+则函数$f(x)$在$x_0$处的极限存在且
+\begin{equation}
+\lim _{x\to x_0}f(x)=0~.
+\end{equation}
+
+证明：
+
+由函数极限定义，取某个$\varepsilon>0$，满足$\delta>\delta_1>0$，$0<|x-x_0|<\delta_1\implies|h(x)|<\varepsilon$。
+
+由于$0\leq f(x)\leq h(x)$，所以对$0<|x-x_0|<\delta_1$，有$|f(x)|\leq |h(x)|<\varepsilon$，即$|f(x)|<\varepsilon$。根据极限定义可知：$\lim _{x\to x_0}f(x)=0$。
+
+\end{lemma}
+
+证明：
+
+由存在确定的$\delta>0$，使得对任意符合$0<|x-x_0|<\delta$的$x$，都有$g(x)\leq f(x)\leq h(x)$，变形可得$0\leq f(x)-g(x)\leq h(x)-g(x)$。目标是使用\autoref{lem_SquzTh_1} 来求取$\lim _{x\to x_0}(f(x)-g(x))$，因此，下面求$\lim _{x\to x_0}(h(x)-g(x))$。
+$$
+\begin{align*}
+\lim _{x\to x_0}(h(x)-g(x))&\overset{\mathrm{1}}{=}\lim _{x\to x_0}h(x)-\lim _{x\to x_0}g(x)\\
+&=a-a\\
+&=0~.
+\end{align*}
+$$
+
+因此，由\autoref{lem_SquzTh_1} 可知$\lim _{x\to x_0}(f(x)-g(x))=0$。现在已经求得了$\lim _{x\to x_0}(f(x)-g(x))$，又已知$\lim _{x\to x_0}g(x)$，剩下的就是：
+$$
+\begin{align*}
+\lim _{x\to x_0}f(x) &= \lim _{x\to x_0}[(f(x)-g(x))+g(x)] \\ 
+&\overset{\mathrm{1}}{=} \lim _{x\to x_0}(f(x)-g(x))+\lim _{x\to x_0}g(x)\\ 
+&= 0+a\\ 
+&=a~.\end{align*}
+$$
+上面的推导过程中，所有等号1的地方都使用了极限运算法则的\autoref{the_LimOp_1}~\upref{LimOp}。
+
+证毕。

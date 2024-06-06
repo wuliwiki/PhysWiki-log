@@ -61,214 +61,26 @@ a + b = c~, \quad d + e = f~.
 如果把 \verb|\footnote| 加在一个名词或者短语后面，意思是对它们做注释。 如果放在一个句号后面，就是对整句话做注释。
 
 正文的任何地方可以用 \verb|\addTODO{}| 命令插入未完成提示。
-\addTODO{填写未完成的内容}
+\addTODO{在这里提示未完成的内容，如果不希望公开，注释掉即可，但仍然需要 \verb`\addTODO` 命令}
+
+\subsection{引用}
+引用公式和图表都统一使用 \verb|\autoref{标签}| 命令， \verb|\autoref| 和 \verb|\label{标签}| 都无需手动插入， 可以用菜单栏中的 “内部引用” 和 “外部引用” 按钮（实心和空心的双引号图标）。 注意 \verb|\autoref{}| 前面不加空格后面要加空格（后面是标点符号除外）， 例如\autoref{eq_Sample_1}。 如果要引用其他文章中的公式，可以引用 “\enref{其他文章}{BiNor}” 的\autoref{eq_BiNor_1} 也可以用 “\autoref{eq_BiNor_1}~\upref{BiNor}”， 为了区分内部和外部引用， \verb|\upref| 不能忽略。 在 pdf 上， \verb|\upref{}| 会显示为页码。
+
+一个升级版的 \verb`\upref{文章id}` 命令是 \verb`\enref{文字}{文章id}`， 可以把 \verb`文字` 直接链接到文章。 例如\enref{一篇测试}{test}。 新内容建议使用后者。
+
+行间公式的 label （标签）必须要按照 \verb|eq_公式id| 的格式， 只有需要引用的公式才加标签。 图、表的标签分别以 \verb|fig_| 和 \verb|tab_| 开头，例题用 \verb|ex_|， 习题用 \verb|exe_|，子节用 \verb`sub_`。凡是有 \verb|\caption| 命令的环境（图、表），\verb|\label| 需要紧接其后。 事实上标签不建议手动添加， 可以用菜单栏上的 “内部引用” 和 “外部引用” 按钮在引用时同时自动插入 \verb|\label| 和 \verb|\autoref|， 详见\enref{编辑器使用说明}{EditRM}。
 
 \subsection{公式}
-\addTODO{这里许多内容应该移动到 \enref{LaTeX 常用符号对照表}{TeXSym}}
 行内公式用 \verb|$...$| 或者 \verb|\(...\)|， 两边需要有空格， 例如 $a^2+b^2=c^2$， 后面有标点符号的除外。 行间公式如
 \begin{equation}\label{eq_Sample_1}
 (a+b)^n = \sum_{i=0}^n C_n^i a^i b^{n-i} \quad (\text{$n$ 为整数})~.
 \end{equation}
 
-LaTeX 中各种符号的命令见\href{https://tug.ctan.org/info/symbols/comprehensive/symbols-a4.pdf}{官方对照表}。
+百科中常用公式的示例（包括支持的宏包和自定义的命令）见\enref{小时百科常用 LaTeX 公式}{XStexE}。
 
-行间公式的 label （标签）必须要按照 \verb|文章标签_eq编号| 的格式， 只有需要引用的公式才加标签， 标签编号无需和编译后的编号相同， 保证标签不重复即可。 图、表的标签分别把 \verb|eq| 改成 \verb|fig| 和 \verb|tab| 即可，例题用 \verb|ex|， 习题用 \verb|exe|。但凡是有 \verb|\caption| 命令的，\verb|\label| 需要紧接其后。 事实上标签不建议手动添加， 可以用菜单栏上的按钮在引用时同时自动插入 \verb|\label| 和 \verb|\autoref|， 详见\enref{编辑器使用说明}{EditRM}。
+LaTeX 中各种符号的命令见\href{https://tug.ctan.org/info/symbols/comprehensive/symbols-a4.pdf}{官方符号对照表（pdf）}。
 
-行间公式如果不需要编号， 可以用 \verb|$$...$$| 或者 \verb|\[...\]|。
-
-
-单个参数的命令若只有一个字符， 那么不需要加花括号， 例如 $\mathrm a$ 等效于 $\mathrm{a}$。 如果参数是数字甚至也不需要空格， 例如 $\frac12$。
-
-公式中的空格从小到大如 $a\, b\; c\quad d\qquad e$。 公式中三点省略号用 $\dots$， 如果要强制在下方， 用 $\ldots$。 实部和虚部如 $\Re[z], \Im[z]$。 双重极限如
-\begin{equation}
-\lim_{\substack{\Delta x_i\to 0\\ \Delta y_i\to 0}} \sum_{i, j} f(x_i,y_i) \Delta x_i \Delta y_j~.
-\end{equation}
-注意行内公式的 \verb|\lim| 和 \verb|\sum| 如果要在正上方或正下方写东西， 需要加 \verb|\limits|， 如 $\lim\limits_{x\to 0}$。 但是 \verb|\limits| 只能给算符使用， 如果要对任意符号使用可以用 \verb|\underset| 或者 \verb|\overset|， 例如 $\underset{i \ge 0}{\bigcup}$。
-
-上下方的花括号例如
-\begin{equation}
-\overbrace{n(n-1)(n-2)\dots}^{\text{共 $m$ 项}} \qquad \underbrace{n(n-1)(n-2)\dots}_{\text{共 $m$ 项}}~
-\end{equation}
-方括号用 \verb|\overbracket| 和 \verb|\underbracket|。
-
-如果要强制分式正常大小显示， 用 \verb|\dfrac| 命令， 如果 \verb|\frac| 后面只有两个字符的代码，可以写成如 \verb|\frac12|， \verb|\frac ab|， \verb|\frac1a| 等。 斜分数线后面若多于一个变量需要加括号， 如 $ab/(cd)$。
-
-行内分式如 $a/b$， 不允许行内用立体分式。 几何矢量如 $\bvec a$， 不要使用带箭头的矢量如 $\vec a$。 
-
-行间公式换行及对齐用 aligned 环境（可以选中一段公式代码然后按菜单的 “对齐” 按钮）， 注意该环境可嵌套。
-\begin{equation}
-\begin{aligned}
-(a-b)^2 &= a^2+b^2 - 2ab \\
-& = a^2+b^2+2ab-4ab\\
-& = (a+b)^2-4ab~.
-\end{aligned}
-\end{equation}
-
-用 \verb|\begin{enumerate}[resume]|  来继续上一个 enumerate 的编号。
-
-可变化尺寸的斜分数线如下
-\begin{equation}
-\left. \pdv[2]{X}{x} \middle/ X + \pdv[2]{Y}{y} \middle/ Y + \pdv[2]{Z}{z} \middle/ Z  = \frac{1}{c^2}  \pdv[2]{T}{t} \middle/ T\right.~.
-\end{equation}
-左大括号用 \verb|cases| 环境， 如
-\begin{equation}
-\begin{cases}
-d+e+f = \int \frac{a}{b} \dd{x} &(a > 0)\\
-a+b = c &(b > 0)~.
-\end{cases}
-\end{equation}
-但是注意 \verb|cases| 环境里面的符号都是小尺寸的（与行内公式相同）， 且每行只能用一次 \verb|&|。 若需要全尺寸公式可以用下文定义的 \verb|\leftgroup| 命令。
-
-反斜杠有两种形式：$\backslash$和$\setminus$。前者在一般需要斜杠时用，而集合减法应该用后者。使用实例：$A\backslash B$，$A\setminus B$。
-
-\subsubsection{字母样式}
-希腊字母如下
-\begin{equation}
-\begin{aligned}
-&\alpha (a), \beta (b), \chi (c), \Delta\delta (d), \epsilon/\varepsilon (e), \Phi\phi (f), \Gamma\gamma (g),
-\eta (h), \iota (i), \varphi (j), \kappa (k), \Lambda\lambda (l), \mu (m),\\
-& \nu (n), o (o),\Pi\pi (p), \Theta\theta (q), \rho (r), \Sigma\sigma (s), \tau (t), \upsilon (u), \varpi (v), \Omega\omega (w), \Xi\xi (x), \Psi\psi (y), \zeta (z)~.
-\end{aligned}
-\end{equation}
-普朗克常数为 $\hbar$。 另外我们自定义了 $\lambdabar$， 相当于 $\mkern-0.25mu {\bar{\phantom{a}}} \mkern -10.2mu\lambda$。
-
-双线字母如下
-\begin{equation}
-\begin{aligned}
-&\mathbb{a\, b\, c\, d\, e\, f\, g\, h\, i\, j\, k\, l\, m\, n\, o\, p\, q\, r\, s\, t\, u\, v\, w\, x\, y\, z}~,\\
-&\mathbb{A\, B\, C\, D\, E\, F\, G\, H\, I\, J\, K\, L\, M\, N\, O\, P\, Q\, R\, S\, T\, U\, V\, W\, X\, Y\, Z}~,
-\end{aligned}
-\end{equation}
-几种花体字母如下
-\begin{equation}
-\mathcal{A\, B\, C\, D\, E\, F\, G\, H\, I\, J\, K\, L\, M\, N\, O\, P\, Q\, R\, S\, T\, U\, V\, W\, X\, Y\, Z}~,
-\end{equation}
-\begin{equation}
-\begin{aligned}
-&\mathscr{a\, b\, c\, d\, e\, f\, g\, h\, i\, j\, k\, l\, m\, n\, o\, p\, q\, r\, s\, t\, u\, v\, w\, x\, y\, z}~,\\
-&\mathscr{A\, B\, C\, D\, E\, F\, G\, H\, I\, J\, K\, L\, M\, N\, O\, P\, Q\, R\, S\, T\, U\, V\, W\, X\, Y\, Z}~,
-\end{aligned}
-\end{equation}
-\begin{equation}
-\begin{aligned}
-&\mathfrak{a\, b\, c\, d\, e\, f\, g\, h\, i\, j\, k\, l\, m\, n\, o\, p\, q\, r\, s\, t\, u\, v\, w\, x\, y\, z}~,\\
-&\mathfrak{A\, B\, C\, D\, E\, F\, G\, H\, I\, J\, K\, L\, M\, N\, O\, P\, Q\, R\, S\, T\, U\, V\, W\, X\, Y\, Z}~.
-\end{aligned}
-\end{equation}
-
-\subsubsection{使用 physics 宏包}
-MathJax 本身不支持 physics 宏包（更新：后来支持了）， 我们进行了一定的改进\footnote{后台程序在把 tex 文件翻译成 html 页面时， 把 physics 宏包或者我们自定义的命令翻译成了 MathJax 兼容的代码。 如果对 html 的公式点击右键获取公式代码， 得到的仍然是兼容 MathJax 的代码。}。 Physics 宏包的文档见\href{http://mirrors.ibiblio.org/CTAN/macros/latex/contrib/physics/physics.pdf}{这里}， 目前仅支持 Physics 宏包的以下命令。
-
-绝对值如 $\abs{y}$ （自动尺寸，如果不需要自动尺寸用 $\abs*{y}$ 下同），范数如 $\norm*{x}$， 微分符号如 $\dd{x}$， 可变尺寸的小中大括号可以用 \verb|\qty|， 如
-\begin{equation}
-\qty(\frac ab)^2~, \qquad \qty[\frac ab]^2~, \qquad \qty{ \frac ab}~.
-\end{equation}
-矢量内积如 $\bvec A \vdot \bvec B$ （\verb|\vdot| 不可省略， 不要用 \verb|\cdot|），矢量叉乘如 $\bvec A\cross\bvec B$。
-
-常用三角函数和对数函数后面的小括号会自动改变尺寸（中括号不可以），若要给他们加幂，用中括号
-\begin{equation}
-\sin(\frac ab)~, \qquad \sin[2](\frac ab)~.
-\end{equation}
-自然指数后面的小括号和中括号都可以自动尺寸
-\begin{equation}
-\exp(\frac12)~, \qquad \exp[\frac12]~.
-\end{equation}
-支持同样用法的还有 \verb`\arccos`， \verb`arcsin`， \verb`arctan`， \verb`\cos`， \verb`\cosh`， \verb`\cot`， \verb`\csc`， \verb`\log`， \verb`\ln`。
-
-无穷小的阶数如 $\order{x^2}$， 导数和偏导可以用
-\begin{equation}
-\dv{x}~, \quad \dv{f}{x}~, \quad \dv[2]{f}{x}~, \quad \dv*[2]{f}{x}~, \quad
-\pdv{x}~, \quad \pdv{f}{x}~, \quad \pdv[2]{f}{x}~, \quad \pdv{f}{x}{y}~, \quad \pdv*[2]{f}{x}~.
-\end{equation}
-要写到行内可以加 \verb|*|， 如 $\pdv*[2]{f}{x}$。
-
-定积分求值如 $\eval{x^2}_0^1$ （自动尺寸）。
-
-对易算符如 $\comm{\Q A}{\Q B}$ 或 $\comm*{\Q A}{\Q B}$， 前者自动尺寸， 后者强制小尺寸。 泊松括号同理： $\pb{\frac12}{B}$， $\pb*{\frac12}{B}$。
-
-梯度散度旋度拉普拉斯如 $\grad V$，$\div\bvec A$， $\curl\bvec A$， $\laplacian V$。
-
-狄拉克符号（加 \verb|*| 号强制小尺寸）如 $\bra{a}, \ket{b}, \braket{a}, \braket{a}{b}, \mel{a}{Q}{b}$。 平均值（加 \verb|*| 号强制小尺寸）如 $\ev*{Q}, \ev{Q}{\psi}$。 同理也有 $\ketbra*{a}{b}$， $\ketbra{a}{b}$， $\ketbra{a}$。
-
-\subsubsection{交换图：amsCD包}
-
-amsCD 包只支持方形的交换图；示例
-\begin{equation}
-\begin{CD}
-A @>>> B @= E \\
-@VVV @AAA @| \\
-C @<<< D @. F
-\end{CD}~.
-\end{equation}
-
-amsCD包使用\verb|CD|环境，其中使用\verb|\\|换行，支持7种箭头：
-
-3种水平箭头，水平向右\verb|@>>>|、水平向左\verb|@<<<|和水平等于\verb|@=|；
-
-3种竖直箭头，竖直向下\verb|@VVV|、竖直向上\verb|@AAA|和竖直等于\verb!@|!；
-
-以及水平竖直皆可的无箭头\verb|@.|。
-
-上下左右箭头支持标签\verb|A @>{上标签}>{下标签}> B|
-\begin{equation}
-\begin{CD}
-A @>{\text{上标签}}>{\text{下标签}}> B \\
-@V{\text{左标签}}V{\text{右标签}}V @A{\text{左标签}}A{\text{右标签}}A \\
-C @<{\text{上标签}}<{\text{下标签}}< D
-\end{CD}~~~~~~,
-\end{equation}
-
-最右边的右标签可能会和公式最后的标点重叠，需要特别注意。
-
-\subsection{自定义的命令}
-小时百科和云笔记的模板的自定义的命令如下， 如果不使用， 要保证编译后效果相同。 如果想新添加定义， 请联系管理员。
-
-引用公式和图表都统一使用 \verb|\autoref{标签}| 命令， \verb|\autoref| 和 \verb|\label| 都无需手动插入， 可以用在线编辑器菜单栏中的 “内部引用” 和 “外部引用” 按钮（实心和空心的双引号图标）。 注意 \verb|\autoref{}| 前面不加空格后面要加空格（后面是标点符号除外）， 例如\autoref{eq_Sample_1}。 如果要引用其他文章中的公式，可以引用 “\enref{其他文章}{BiNor}” 的\autoref{eq_BiNor_1} 也可以用 “\autoref{eq_BiNor_1}~\upref{BiNor}”， 为了区分内部和外部引用 \verb|\upref| 不能忽略。 在 pdf 上， \verb|\upref{}| 会显示为页码。
-
-一个升级版的 \verb`\upref{文章id}` 命令是 \verb`\enref{文字}{文章id}`， 可以把 \verb`文字` 直接链接到文章。 例如\enref{一篇测试}{test}。 新内容建议使用后者。
-
-科学计数法如 $1.2\e3$ 或 $1.2\e{34}$， 单位矢量如 $\uvec a$， 自然对数底如 $\E$， 复数如 $u+\I v$ 虚数单位不能用斜体 $i$，复共轭如 $z\Cj$。
-
-定义 \verb|\opn{}| 和 \verb|\operatorname{}| 等效。 自定义的 operator 或者函数名（如 \verb|\sinc| 相当于 \verb|\operatorname{sinc}| 或者 \verb|\opn{sinc}|）有： \verb|\Arctan|, \verb|\sinc|，\verb|\erf|，\verb|\erfi|， \verb|\Im|， \verb|\Re|。
-
-\verb`\begin{aligned}...\end{aligned}` 环境可以用 \verb`ali{...}` 命令代替。
-
-写量纲用 \verb|\Si{}| 命令， 如 $100\Si{m/s^2}$， 这个命令只能出现在公式环境内。 这相当于 \verb|\mathrm{}|。
-
-矩阵 $\mat A$， 转置 $\mat A\Tr$， 厄米共轭用 $\mat A\Her$。 常见的几种矩阵括号如
-\begin{equation}
-\pmat{1&2\\3&4}~, \quad
-\vmat{1&2\\3&4}~, \quad 
-\bmat{1&2\\3&4}~, \quad
-\Bmat{1&2\\3&4}~, \quad
-\pmat{1&2\\3&4}\Tr~, \quad
-\pmat{1&2\\3&4}\Her~.
-\end{equation}
-行内的列矢量用行矢量的转置表示，如 $\pmat{1& 2& 3& \dots}\Tr$。 张量如 $\ten T$， 效果同 \verb|\mat|。
-
-单独一个粗体的 $\nabla$ 用 $\Nabla$。
-
-自定义的 \verb|\leftgroup{}| 命令， 相当于 \verb|\left\{\begin{aligned}... \end{aligned}\right.|
-\begin{equation}
-\leftgroup{
-&d+e+f = \int \frac{a}{b} \dd{x} &&(a > 0)\\
-&a+b = c &&(b > 0)~.
-}
-\end{equation}
-这相当于一个可变尺寸的 \verb|{| 加上 \verb|aligned| 环境
-\begin{equation}
-\left\{
-\begin{aligned}
-&d+e+f = \int \frac{a}{b} \dd{x} &&(a > 0)\\
-&a+b = c &&(b > 0)~.
-\end{aligned}
-\right.
-\end{equation}
-注意百科中我们用圆括号表示条件， 而不是逗号。 另外这种公式的标点加在最后一行末。
-
-表格中若用 \verb|\dfrac|， 需要在行首加上 \verb|\dfracH| 命令。% 未完成： 为什么？
-
-量子力学算符如 $\Q a$（一般可以不加， 只有必要的时候加）， 矢量量子算符如 $\Qv p$ （效果同 \verb|\uvec|）。
+行间公式如果确定以后都不需要被引用， 可以用无编号的公式环境 \verb|$$...$$| 或者 \verb|\[...\]|。
 
 \subsection{图表}
 
@@ -442,7 +254,7 @@ mäthμ≥≤
 % \addoTODO{这个还是编程实现比较好}
 
 \subsection{文献引用}
-目前整个百科公用一个参考文献列表的文章。 文章中引用文献格式如 \cite{PhysWiki}， 引用缺失如 “地球是圆的\needCite”。 但是由于 PhysWikiScan 还未实现该命令， 目前还是应该使用脚注。
+目前整个百科公用一个参考文献列表的文章。 文章中引用文献格式如 \cite{GriffE}， 引用缺失如 “地球是圆的\needCite”。 但是由于 PhysWikiScan 还未实现该命令， 目前还是应该使用脚注。
 \addTODO{needCite 还不能正常在 html 中显示}
 
 网址的超链接如\href{https://wuli.wiki}{小时百科}。 注意 \verb|\href| 命令中的网址如果存在百分号， 需要在前面加反斜杠， 否则会被当做注释。另一种方法是，将其解码（url 中的百分号后面两个一定是 hex，表示 utf-8 的一个字节）。 这里列举一个\href{https://www.webatic.com/url-convertor}{在线解码网站}。
