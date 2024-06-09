@@ -4,7 +4,7 @@
 % type Tutor
 
 \begin{issues}
-\issueDraft
+\issueTODO
 \end{issues}
 
 
@@ -12,31 +12,60 @@
 % Giacomo：几何向量这个板块的基本思路应该是，先用“几何”性质来定义向量的性质，再用向量的“代数性质”给出等价条件。
 % 
 % 因此我们要把线性相关/无关的定义改成不共线/共面，在进一步证明这等价于线性组合版本的定义
-\addTODO{改写定义}
 
-如果存在至少一组\textbf{不全为零}系数 $c_i$ 使几个向量的线性组合等于零， 即
+\begin{definition}{线性相关/无关}\label{def_linDpe_1}
+两个三维几何向量\textbf{线性相关}当且仅当它们共线，三个三维几何向量线性相关当且仅当它们共面，四个即以上个三维几何向量永远线性相关。
+
+$n$个几何向量是\textbf{线性无关}的当且仅当它们不是线性相关的。
+\end{definition}
+
+如果是三个二维几何向量，因为它们共面，所以它们一定线性相关，而两个而维几何向量线性相关当且仅当它们共线。
+\addTODO{补图}
+
+我们也可以从代数的角度思考什么是线性相关/无关。
+
+两个几何向量 $\bvec v_1, \bvec v_2$ 共线意味着存在系数 $c$ 使得
+$$
+\bvec v_1 = c \bvec v_2~
+$$
+或者
+$$
+c' \bvec v_1 = \bvec v_2~,
+$$
+
+这意味着存在\textbf{不全为零}系数 $c_1, c_2$ 使两个向量的线性组合等于零， 即
 \begin{equation}\label{eq_linDpe_2}
-\sum_i^N c_i \bvec v_i = \bvec 0~,
-\end{equation}
-那这些向量就被称为\textbf{线性相关（linearly dependent）}的。 这是因为对于任何一个 $c_j$ 不为零的项， 向量 $\bvec v_j$ 都可以表示为其他向量的线性组合。 只需把上式除以 $c_j$ 即可
-\begin{equation}\label{eq_linDpe_3}
-\bvec v_j = -\sum_{i \ne j} c_i' \bvec v_i~,
-\end{equation}
-其中 $c_i' = \frac{c_i}{c_j}$。如果不存在满足\autoref{eq_linDpe_2} 的系数 $c_i$， 这些向量就是\textbf{线性无关（linearly independent）}的， 即任何向量都不可能被其他向量的线性组合表示。
-
-\begin{example}{ }\label{ex_linDpe_1}
-我们来看在三维几何向量空间中， 线性无关有什么几何意义。 若两个向量 $\bvec v_1$ 和 $\bvec v_2$ 线性相关， 意味着存在不全为零实数 $c_1, c_2$ 使
-\begin{equation}
 c_1 \bvec v_1 + c_2 \bvec v_2 = \bvec 0~.
 \end{equation}
-假设 $c_1$ 不为零， 则 $\bvec v_1 = (c_2 / c_1) \bvec v_2$。 这个推导可逆， 所以\textbf{两个几何向量线性相关当且仅当它们共线}， 或者说两个几何向量线性无关当且仅当它们不共线。
 
-再来看三个向量的情况。 类比两个向量的情况， 则线性相关意味着
+对于三个几何向量 $\bvec v_1, \bvec v_2, \bvec v_3$，它们共面意味着其中一个几何向量在另外两个几何向量生成的平面上（或者直线，如果它们共线的话），即
 \begin{equation}
-\bvec v_3 = \frac{c_1}{c_3} \bvec v_1 +  \frac{c_2}{c_3} \bvec v_2~.
+\bvec v_3 = c \bvec v_1 + c' \bvec v_2~,
 \end{equation}
-由几何向量加法的（几何）定义， 要么这三个向量都共线， 要么 $\bvec v_3$ 落在 $\bvec v_1$ 和 $\bvec v_2$ 所在的平面上。 该过程的逆过程也成立， 所以\textbf{三个几何向量线性相关当且仅当它们都共线或者共面}， 或者说三个几何向量线性无关当且仅当它们不共面且两两不共线。
-\end{example}
+这同样可以写成更对称的形式———存在\textbf{不全为零}系数 $c_1, c_2, c_3$ 使三个向量的线性组合等于零， 即
+\begin{equation}
+c_1 \bvec v_1 + c_2 \bvec v_2 + c_3 \bvec v_3 = \bvec 0~.
+\end{equation}
+
+% 那这些向量就被称为\textbf{线性相关（linearly dependent）}的。 这是因为对于任何一个 $c_j$ 不为零的项， 向量 $\bvec v_j$ 都可以表示为其他向量的线性组合。 只需把上式除以 $c_j$ 即可
+% \begin{equation}\label{eq_linDpe_3}
+% \bvec v_j = -\sum_{i \ne j} c_i' \bvec v_i~,
+% \end{equation}
+% 其中 $c_i' = \frac{c_i}{c_j}$。如果不存在满足\autoref{eq_linDpe_2} 的系数 $c_i$， 这些向量就是\textbf{线性无关（linearly independent）}的， 即任何向量都不可能被其他向量的线性组合表示。
+
+% \begin{example}{ }\label{ex_linDpe_1}
+% 我们来看在三维几何向量空间中， 线性无关有什么几何意义。 若两个向量 $\bvec v_1$ 和 $\bvec v_2$ 线性相关， 意味着存在不全为零实数 $c_1, c_2$ 使
+% \begin{equation}
+% c_1 \bvec v_1 + c_2 \bvec v_2 = \bvec 0~.
+% \end{equation}
+% 假设 $c_1$ 不为零， 则 $\bvec v_1 = (c_2 / c_1) \bvec v_2$。 这个推导可逆， 所以\textbf{两个几何向量线性相关当且仅当它们共线}， 或者说两个几何向量线性无关当且仅当它们不共线。
+
+% 再来看三个向量的情况。 类比两个向量的情况， 则线性相关意味着
+% \begin{equation}
+% \bvec v_3 = \frac{c_1}{c_3} \bvec v_1 +  \frac{c_2}{c_3} \bvec v_2~.
+% \end{equation}
+% 由几何向量加法的（几何）定义， 要么这三个向量都共线， 要么 $\bvec v_3$ 落在 $\bvec v_1$ 和 $\bvec v_2$ 所在的平面上。 该过程的逆过程也成立， 所以\textbf{三个几何向量线性相关当且仅当它们都共线或者共面}， 或者说三个几何向量线性无关当且仅当它们不共面且两两不共线。
+% \end{example}
 
 如果一个向量集合中的向量是线性相关的，那么这个集合被称为一个\textbf{线性相关组}；反之，若线性无关，则称为一个\textbf{线性无关组}。
 

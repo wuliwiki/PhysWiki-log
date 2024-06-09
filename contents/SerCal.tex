@@ -7,9 +7,9 @@
 \issueDraft
 \end{issues}
 
-\pentry{小角极限（极简微积分）\nref{nod_LimArc}， 复数\nref{nod_CplxNo}}{nod_f32c}
+\pentry{数列的极限（极简微积分）\nref{nod_Lim0}}{nod_a0d0}
 
-一个实数或复数数列 $a_1,a_2,\dots$，形式表达式
+对于一个数列 $a_1,a_2,\dots$，形式表达式
 \begin{equation}\label{eq_SerCal_1}
 \sum_{n=1}^\infty a_n~
 \end{equation}
@@ -23,4 +23,89 @@ S_N:=\sum_{n=1}^N a_n~
 \end{equation}
 则称级数\autoref{eq_SerCal_1} 收敛到 $S$ \textbf{（converges to $S$）}, $S$ 称为它的\textbf{和（sum）}。 如果部分和序列不存在极限， 则称级数\textbf{不收敛}或\textbf{发散（divergent）}。
 
+一个简单的收敛的例子是
+\begin{example}{几何级数}
+当$q > 1$的时候，几何级数
+$$
+\sum_{n=0}^\infty \frac1{q^n} = 1 + \frac1{q} + \frac1{q^2} + \cdots~,
+$$
+按照等比数列的求和公式，它的部分和为
+$$
+\sum_{n=0}^N \frac1{q^n} =\frac{1 - \frac1{q^{N+1}}}{1 - \frac1{q}}~.
+$$
+由此可见它收敛到 $\frac{q}{q - 1}$。
+\end{example}
+
+级数收敛的有一个很简单的必要条件：
+\begin{theorem}{}
+如果级数 $\sum_{n=1}^\infty a_n$ 收敛，那么数列 $a_1, a_2, \dots$ 收敛到 $0$。
+\end{theorem}
+如果数列 $a_n$ 不收敛，或者收敛到一个非零的数字，就会导致它们的部分和“震荡”。
+% Giacomo：我也不知道怎么简单的表述这个现象，难道直接说显然吗？
+
+这个定理不是充分的，我们有反例：
+\begin{example}{调和级数}
+调和级数
+$$
+\sum_{n=1}^\infty\frac{1}{n} = 1 + \frac12 + \frac13 + \cdots~
+$$
+不收敛，具体证明可以参考\autoref{ex_Series_1}~\upref{Series}。
+\end{example}
+
+另一方面我们也可以给出两个充分条件：
+\begin{theorem}{}
+如果级数 $\sum_{n=1}^\infty |a_n|$ 收敛，那么级数 $\sum_{n=1}^\infty a_n$ 收敛，而且我们有
+$$
+\left| \sum_{n=1}^\infty a_n \right| \leq \sum_{n=1}^\infty |a_n| ~.
+$$
+\end{theorem}
+这是因为我们有
+$$
+\left|\sum_{n=1}^N a_n\right| \leq \sum_{n=1}^N |a_n|~.
+$$
+
+这个条件不是必要的，反例是 $\sum_{n = 1}^\infty (-1)^n\frac1{n}$ 收敛到 $-\ln(2)$。
+\addTODO{在分析或者微积分板块证明它。}
+
+另外一个是
+\begin{theorem}{}\label{the_SerCal_1}
+已知级数 $\sum_{n=1}^\infty b_n$ 收敛，如果我们有 $|a_n| \leq b_n$，那么级数 $\sum_{n=1}^\infty a_n$ 收敛，而且我们有
+$$
+\sum_{n=1}^\infty a_n \leq \sum_{n=1}^\infty b_n ~.
+$$
+\end{theorem}
+
+
+
 \addTODO{可以看看\enref{级数（分析）}{Series}里还有什么东西可以搬过来}
+
+\subsection{级数的应用}
+
+% Giacomo：为啥要引用这个？
+% 小角极限（极简微积分）\nref{nod_LimArc}， 复数\nref{nod_CplxNo}
+
+\pentry{自然对数底（极简微积分）\nref{nod_E}}{nod_f32c}
+
+自然常数 $\E$ 有一个等价定义为
+\begin{equation}
+\sum_{n=0}^\infty \frac{1}{n!} = 1 + 1 + \frac{1}{2} + \frac{1}{6} + \frac{1}{24} + \dots~,
+\end{equation}
+这是一个收敛的级数，因为当 $n \geq 4$ 的时候
+$$
+\frac1{n!} \leq \frac1{n^2}~
+$$
+根据\autoref{the_SerCal_1} 
+$$
+\begin{aligned}
+\sum_{n=0}^\infty \frac{1}{n!} &= 1 + 1 + \frac{1}{2} + \frac{1}{6} + \sum_{n=4}^\infty \frac{1}{n!} \\
+&\leq 1 + 1 + \frac{1}{2} + \frac{1}{6} + \sum_{n=4}^\infty \frac{1}{n^2} \\
+\end{aligned}~
+$$
+后者是收敛的。
+% $$
+% \begin{aligned}
+% \phantom{=}& 1 + 1 + \frac{1}{2} + \frac{1}{6} + \frac{1}{24} + \dots \\
+% =& 1 + 1 + \frac{1}{2} + \frac{1}{3!} + \frac{1}{3! \cdot 4} + \frac{1}{4! \cdot 5} + \dots \\
+% =& 1 + 1 + \frac{1}{2} + \frac{1}{3!} + \frac{1}{3! \cdot 4} + \frac{1}{4! \cdot 5} + \frac{1}{5! \cdot 6} + \frac{1}{5! \cdot 6} + \dots
+% \end{aligned}~
+% $$

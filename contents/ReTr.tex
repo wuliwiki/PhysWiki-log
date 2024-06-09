@@ -1,7 +1,7 @@
 % 反射变换（高等代数）
 % license Usr
 % type Tutor
-反射变换的概念来源于平面上的轴反射。根据初中几何学里就已接触的轴反射定义，我们可以用矩阵表示该二维空间中的线性变换。
+反射变换的概念来源于平面上的轴反射。根据初中几何学里就已接触的轴反射定义，我们可以用矩阵表示关于$y$轴的线性变换。
 \begin{equation}
 \mat M=\pmat{0&1\\-1&0}~.
 \end{equation}
@@ -9,7 +9,7 @@
 
 任意图像在轴反射后形状不变，也就是说，这是一个保距变换。同理，我们也可以对任意向量作关于平面的反射，或者更延伸一些，在$\mathbb R^n$中作关于超平面$\mathbb R^{n-1}$的反射。（下文将超平面简称为平面）
 \begin{definition}{}
-设$S$是$n$维向量空间$\mathbb R^n$中的平面，$\bvec n$是其单位法向量，对于任意$\bvec x\in \mathbb R^n$，定义其\textbf{反射（reflection）}$R:\mathbb R^n\rightarrow \mathbb R^n$为
+设$S$是$n$维向量空间$\mathbb R^n$中的平面，$\bvec n$是其\textbf{单位法向量}，对于任意$\bvec x\in \mathbb R^n$，定义其\textbf{反射（reflection）}$R:\mathbb R^n\rightarrow \mathbb R^n$为
 \begin{equation}
 R(\bvec x)=\bvec x-2(\bvec x,\bvec n)\bvec n~.
 \end{equation}
@@ -17,3 +17,24 @@ R(\bvec x)=\bvec x-2(\bvec x,\bvec n)\bvec n~.
 可以验证，$R$是保距变换。
 
 
+\begin{theorem}{}
+保距变换一定是反射变换的复合。
+\end{theorem}
+\textbf{证明：\footnote{参考来源：\href{https://kconrad.math.uconn.edu/blurbs/grouptheory/isometryRn.pdf}{Notes of KEITH CONRAD}。}}
+
+在$n=1$的时候，保距变换要么是恒等变换，要么是反射变换，因为只有这两种变换不改变基向量的范数。因此，定理自然成立。
+
+假设定理对$1<n<k$成立，设$\mathbb R^{k-1}$上的保距变换可以写为至多$m$个反射变换的复合。 
+
+假设$f$是$\mathbb R^k$中的保距变换，且不是恒等变换。设$f(\bvec x)=\bvec y,\bvec z=\bvec y-\bvec x$，$S_z$为以$\bvec z$为法向量的超平面，并用$R_z$表示关于该超平面的反射变换。不失一般性，设$\bvec z$为单位法向量，可以验证：$R_z\circ f(\bvec x)=\bvec x$且$R_z\circ f(\bvec y)=x$\footnote{也就是$R_z(\bvec x)=\bvec y$，可直接验证得到。}，则$R_z\circ f(\bvec z)=\bvec z$。即$\bvec z$是$R_z\circ f$的不变子空间。在欧几里得空间中，保距变换即为正交变换，且其复合依然保距，根据\autoref{lem_ortho_2}~\upref{ortho}，$S_z$也为$R_z\circ f$的不变子空间。
+
+根据假设，$R_z\circ f|_{S_z}$可写为最多$m$个反射变换的复合。设为
+\begin{equation}
+R_z\circ f|_{S_z}=R_1R_2...R_{m}~,
+\end{equation}
+设$\bvec e_i\in S_z$，是对应超平面的单位法向量。
+
+拓展$R_i$为对全空间向量作用的$R'_i$，各单位法向量对应的超平面从$n-2$维变为$n-1$维，且$R'_i(\bvec z)=\bvec z$，容易验证该定义是自洽合理的\footnote{即保持在超平面上的限制形式依旧。}。
+
+现在我们有$R_z \circ f=R'_1R'_2...R'_{m}$，则$f=R_zR'_1R'_2...R'_{m}$，所以不仅定理成立，而且\textbf{$n$维欧几里得空间中保持原点不变的保距变换是最多$n$个反射变换的复合\footnote{从$n=1$开始推导，可知非平凡的保距变换必是反射变换，且次数小于或等于空间维数。}}。
+\addTODO{还需要增加一些实例}
