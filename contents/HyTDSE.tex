@@ -3,152 +3,20 @@
 % license Xiao
 % type Tutor
 
-\pentry{类氢原子的定态波函数\nref{nod_HWF}， Wigner 3j 符号\nref{nod_ThreeJ}}{nod_456b}
-
-本文使用\enref{原子单位制}{AU}。 我们希望求解氢原子在电场中的\enref{薛定谔方程}{TDSE}
-\begin{equation}\label{eq_HyTDSE_7}
--\frac{1}{2m}\laplacian \Psi -\frac{Z}{r}+ V(\bvec r, t)\Psi = \I \pdv{t}\Psi~.
-\end{equation}
-$V(\bvec r, t)$ 是电磁波对电子的作用， 长度规范下
-\begin{equation}\label{eq_HyTDSE_8}
-V(\bvec r, t) =  - q\bvec E(t) \vdot \bvec r~.
-\end{equation}
-速度规范下（见\autoref{sub_HyTDSE_1}）
-\begin{equation}
-V(\bvec r, t) =  -\frac{q}{m} \bvec A\vdot\bvec p~.
-\end{equation}
-在原子单位中电子电荷 $q = -1$， 该势能使用了\enref{长度规范}{LenGau}，此外我们还可以使用\enref{速度规范}{LVgaug}，也是等效的。 在长度规范中， 我们近似认为原子的长度远小于电磁波的波长， 所以电磁波不随位置变化。
-
-虽然求解方程最直观的方法是使用直角坐标， 但计算效率很低。 实际中一般使用球坐标系， 用球谐函数展开波函数（参考球坐标系中的\enref{定态薛定谔方程}{RadSE}）。
-\begin{equation}\label{eq_HyTDSE_3}
-\Psi(\bvec r, t) = \frac{1}{r}\sum_{l,m} \psi_{l,m}(r, t) Y_{l,m}(\bvec r)~.
-\end{equation}
-其中 $\psi_{l,m}(r, t)$ 是\textbf{约化径向波函数（scaled radial wave function）}， 式中每一项叫做一个\textbf{分波（partial wave）}。 如果哈密顿算符是关于 $z$ 轴对称的（例如线偏振电场）， 且初始波函数也轴对称， 那么波函数将始终保持轴对称。 这时只需要 $m = 0$ 的球谐函数， 即勒让德多项式（见\autoref{eq_SphHar_11}~\upref{SphHar}）。
-
-\subsection{线偏振光}
-若我们取电场极化方向为 $\uvec z$， 则角动量 $L_z$ 是一个守恒量。 假设初始波函数关于 $\uvec z$ 轴对称， 那么在波函数的整个演化（propagation）过程中， 我们只需要 $m=0$ 的球谐函数展开波函数， 即
-\begin{equation}
-\Psi(\bvec r, t) = \frac{1}{r}\sum_{l'} \psi_{l'}(r, t) Y_{l', 0}(\uvec r)~.
-\end{equation}
-另外薛定谔方程中 $V(\bvec r, t) = \bvec E(t) \vdot \bvec r = E(t) z$， 进而可以用球谐函数表示（\autoref{eq_SphHar_4}~\upref{SphHar}）
-\begin{equation}
-V(\bvec r, t) = E(t) r \cos\theta = \sqrt{\frac{4\pi}{3}} E(t) r \cdot Y_{1,0}(\uvec r)~.
-\end{equation}
-以上两式代入\autoref{eq_HyTDSE_7}， 再把每一项与 $Y_{l,0}(\uvec r)$ 做内积（放入积分 $\int Y_{1,0}^*(\uvec r) \dd{\Omega}$ 中）可得一系列耦合的方程
-\begin{equation}\label{eq_HyTDSE_4}
-H_0 \psi_{l} + E(t)r\sum_{l' = 0}^{\infty} F_{l, l'} \psi_{l'} = \I \pdv{\psi_{l}}{t} \quad (l=0,1,\dots)~.
-\end{equation}
-其中无场哈密顿算符为
-\begin{equation}
-H_0 = -\frac{1}{2m} \dv[2]{r} -\frac{Z}{r} + \frac{l(l+1)}{2mr^2}~.
-\end{equation}
-矩阵 $\mat F$ 就是跃迁偶极子矩阵的角向积分（\autoref{eq_SphHar_5}~\upref{SphHar}）
-\begin{equation}
-\begin{aligned}
-F_{l,l'} &= \mel{Y_{l,0}}{\cos\theta}{Y_{l',0}} = \sqrt{\frac{4\pi}{3}} \mel{Y_{l,0}}{Y_{1,0}}{Y_{l',0}}\\
-&= \sqrt{(2l+1)(2l'+1)} \pmat{l & 1 & l'\\ 0 & 0 & 0}^2\\
-&= \sqrt{\frac{2l+1}{2l'+1}} \bmat{l & 1 & l'\\ 0 & 0 & 0}^2~.
-\end{aligned}
-\end{equation}
-可见， 当没有外场的时候每一个项（即每一个分波）都可以独立演化， 而电场将不同的分波耦合起来。 根据氢原子的选择定则 $\Delta l = \pm 1$（\autoref{eq_SelRul_2}~\upref{SelRul}）， 矩阵 $\mat F$ 中除了两条副对角线上的元都为零。 另外由\autoref{eq_ThreeJ_2}~\upref{ThreeJ} 易得 $\mat F$ 是一个对称矩阵。
-
-\subsection{任意偏振光}
-将所有 $(l,m)$ 按某种顺序排列，例如
-\begin{equation}
-(0, 0),\ (1,-1),\ (1,0),\ (1,1),\ (2,-2), \dots~
-\end{equation}
-并将他们编号为 $\lambda = 1,2, \dots$， 那么可以把\autoref{eq_HyTDSE_3} 记为
-\begin{equation}
-\Psi(\bvec r, t) = \frac{1}{r}\sum_\lambda \psi_\lambda(r) Y_\lambda(\bvec r)~.
-\end{equation}
-势能函数为 $V(\bvec r, t) = \bvec E(t) \vdot \bvec r  = E_x x + E_y y + E_z z$。 其中 $x,y,z$ 可以用球谐函数表示为（\autoref{eq_SphHar_4}~\upref{SphHar}）
-\begin{equation}
-x = \sqrt{\frac{2\pi}{3}} r (Y_{1,-1} - Y_{1,1})~, \qquad
-y = \I \sqrt{\frac{2\pi}{3}} r (Y_{1,-1}+Y_{1,1})~, \qquad
-z = \sqrt{\frac{4\pi}{3}} rY_{1,0}~.
-\end{equation}
-\autoref{eq_HyTDSE_4} 的耦合方程拓展为
-\begin{equation}
-\begin{aligned}
-H_0 \psi_{\lambda}(r) + r \sum_{\lambda'} \qty[E_x(t) F_{\lambda, \lambda'}^{x} + E_y(t) F_{\lambda, \lambda'}^{y} + E_z(t) F_{\lambda, \lambda'}^{z}] \psi_{\lambda'}(r) \\
-= \I \pdv{\psi_{\lambda}}{t} \quad (\lambda=0,1,\dots)~.
-\end{aligned}
-\end{equation}
-三个耦合矩阵分别为
-\begin{equation}
-\begin{aligned}
-F_{\lambda,\lambda'}^{(x)} = \sqrt{\frac{2\pi}{3}} \qty(\mel{Y_{l,m}}{Y_{1,-1}}{Y_{l',m'}} - \mel{Y_{l,m}}{Y_{1,1}}{Y_{l',m'}})~,
-\end{aligned}
-\end{equation}
-\begin{equation}
-\begin{aligned}
-F_{\lambda,\lambda'}^{(y)} = \I\sqrt{\frac{2\pi}{3}} \qty(\mel{Y_{l,m}}{Y_{1,-1}}{Y_{l',m'}} + \mel{Y_{l,m}}{Y_{1,1}}{Y_{l',m'}})~,
-\end{aligned}
-\end{equation}
-\begin{equation}\label{eq_HyTDSE_10}
-\begin{aligned}
-F_{\lambda,\lambda'}^{(z)} = \mel{Y_{l,m}}{\cos\theta}{Y_{l',m'}}
-= \sqrt{\frac{4\pi}{3}} \mel{Y_{l,m}}{Y_{1,0}}{Y_{l',m'}}~.
-\end{aligned}
-\end{equation}
-其中（\autoref{eq_SphHar_5}~\upref{SphHar}）
-\begin{equation}
-\mel{Y_{l,m}}{Y_{1,m_1}}{Y_{l',m'}} = (-1)^m\sqrt{\frac{3(2l+1)(2l'+1)}{4\pi}} \pmat{l & 1 & l'\\ 0 & 0 & 0}\pmat{l & 1 & l'\\ -m & m_1 & m'}~.
-\end{equation}
-这在 “\enref{氢原子的跃迁偶极子}{SelRul}” 也有出现。 当 $m_1=0$ 时，使用（\autoref{eq_SphHar_20}~\upref{SphHar}）令\autoref{eq_HyTDSE_10} 为
-\begin{equation}\label{eq_HyTDSE_11}
-\mathcal C_{l,m} = \mel{Y_{l,m}}{\cos\theta}{Y_{l+1,m}} = \sqrt{\frac{(l+1)^2-m^2}{(2l+1)(2l+3)}}~.
-\end{equation}
-则
-\begin{equation}
-\mat F^{(z)}
-=\pmat{
-0 & \mathcal C_{0m} & 0 & 0 & \dots\\
-\mathcal C_{0m} & 0 & \mathcal C_{1m} & 0 &\dots\\
-0 & \mathcal C_{1m} & 0 & \mathcal C_{2m} &\dots\\
-0 & 0 & \mathcal C_{2m} & 0 & \dots\\
-\vdots & \vdots & \vdots & \vdots & \ddots}~.
-\end{equation}
-也就是
-\begin{equation}\label{eq_HyTDSE_14}
-\mel{Y_{l,m}}{\cos\theta}{Y_{l',m'}} = \delta_{m,m'}(\delta_{l+1,l'}\mathcal C_{l,m} + \delta_{l,l'+1}C_{l',m'})~.
-\end{equation}
-
-\subsection{任意含时势能}
-如果要给\autoref{eq_HyTDSE_8} 加上一个额外的势能项 $V'(\bvec r, t)$， 首先需要用球谐函数进行分解
-\begin{equation}\label{eq_HyTDSE_6}
-V'(\bvec r, t) = \sum_{l,m} V'_{l,m}(r, t) Y_{l,m}(\uvec r)~.
-\end{equation}
-那么耦合矩阵元为（\autoref{eq_SphHar_5}~\upref{SphHar}）
-\begin{equation}\label{eq_HyTDSE_5}
-F'_{\lambda,\lambda'}(r, t) = \mel{Y_{l'',m''}}{V'(\bvec r, t)}{Y_{l',m'}} = \sum_{l,m} V'_{l,m}(r, t) \mel{Y_{l'',m''}}{Y_{l,m}}{Y_{l',m'}}~,
-\end{equation}
-\begin{equation}
-\mel{Y_{l'',m''}}{Y_{l,m}}{Y_{l',m'}} = (-1)^{m''}\sqrt{\frac{(2l''+1)(2l+1)(2l'+1)}{4\pi}} \pmat{l''& l& l'\\ 0 & 0 & 0}\pmat{l'' & l & l'\\  -m'' & m & m'}~.
-\end{equation}
-在程序中， 可以把 $\mel{Y_{l'',m''}}{Y_{l,m}}{Y_{l',m'}}$ 表示为三维数组 \verb|F1(λ'', λ', λ)|， 然后在每个 $r$ 格点对 \verb|λ| 加权求和得到二维方阵。
-
-对 $m = 0$ 的对称情况， $\mel{Y_{l'',m''}}{Y_{l,m}}{Y_{l',m'}}$ 在 $l = 0$ 时是一个对角矩阵， $l = 1$ 时只有两个 1-副对角线不为零， $l = 2$ 时只有对角线和两个 2-副对角线不为零， 以此类推。 左上角的三角形也会等于零（见\autoref{fig_AMAdd_2}~\upref{AMAdd}）。 耦合薛定谔方程变为
-\begin{equation}
-H_0 \psi_{l} + E(t)r\sum_{l' = 0}^{\infty} F_{l, l'} \psi_{l'} + \sum_{l'=0}^\infty F'_{l,l'}(r, t)\psi_{l'} = \I \pdv{\psi_{l}}{t} \quad (l=0,1,\dots)~.
-\end{equation}
-
-在下面介绍的算符拆分中， 若把 $F'$ 矩阵对角线上的元合并到 $H_0$ 中很可能会减小误差。
-
 \subsection{算符拆分}
-\pentry{算符的指数函数、波函数传播子\nref{nod_OpExp}}{nod_60f3}
-在实际的程序中， 我们可以把演化子 $\exp(-\I H \Delta t)$ 拆成 3 项。 虽然这么做会引入一定的误差（$H_0$ 和 $\bvec E\vdot\bvec r$ 不对易）， 但是却大大提高了效率
+\pentry{氢原子的含时薛定谔方程（球坐标）\nref{nod_RYTDSE}，算符的指数函数、波函数传播子\nref{nod_OpExp}}{nod_60f3}
+本文使用\enref{原子单位制}{AU}。在实际的程序中， 我们可以把演化子 $\exp(-\I H \Delta t)$ 拆成 3 项。 虽然这么做会引入一定的误差（$H_0$ 和 $\bvec{\mathcal E}\vdot\bvec r$ 不对易）， 但是却大大提高了效率
 \begin{equation}\label{eq_HyTDSE_2}
 \exp(-\I H \Delta t) = \exp(-\I H_0 \frac{\Delta t}{2}) \exp(-\I H_1 \Delta t)\exp(-\I H_0 \frac{\Delta t}{2}) + \order{\Delta t^3}~.
 \end{equation}
 
-例如对于线偏振光（\autoref{eq_HyTDSE_4}）， 在每个时间步长 $\Delta t$ 中， 我们可以把波函数先根据方程
+例如对于线偏振光（\autoref{eq_HyTDSE_4}~\upref{RYTDSE}）， 在每个时间步长 $\Delta t$ 中， 我们可以把波函数先根据方程
 \begin{equation}\label{eq_HyTDSE_1}
 H_0 \psi_{l} = \I \pdv{\psi_{l}}{t}~.
 \end{equation}
 演化 $\Delta t/2$， 其中 $t_{mid}$ 取这段时间的中点。 再对每个 $r$ 根据方程
 \begin{equation}\label{eq_HyTDSE_9}
-\sum_{l'} E(t_{mid})rF_{l, l'} \psi_{l'} = \I \pdv{\psi_{l}}{t}~,
+\sum_{l'} \mathcal E(t_{mid})rF_{l, l'} \psi_{l'} = \I \pdv{\psi_{l}}{t}~,
 \end{equation}
 演化 $\Delta t$。 最后再根据\autoref{eq_HyTDSE_1} 演化 $\Delta t/2$。 具体演化算法有多种， 将在下面介绍。
 
@@ -166,10 +34,10 @@ H_0 \psi_{l} = \I \pdv{\psi_{l}}{t}~.
 
 \subsection{电场演化的直接计算}
 \pentry{平面波的球谐展开\nref{nod_Pl2Ylm}}{nod_32c4}
-事实上，注意到 $\exp(\I q\bvec E\vdot\bvec r\dd t)$ 不过是一个普通的平面波函数而不是微分算符， 所以我们只需要把它和波函数相乘： $\exp(\I q\bvec E\vdot\bvec r\dd t)\Psi$。 为了使相乘后的函数仍然具有\autoref{eq_HyTDSE_3} 的形式， 可以先根据\autoref{eq_Pl2Ylm_1}~\upref{Pl2Ylm} 对其进行分波展开（$\exp(\I q\bvec E\vdot\bvec r\dd t) = \sum_{l'',m''}R_{l'',m''}Y_{l'',m''}$）。 所以演化后的每个分波的径向波函数就是
+事实上，注意到 $\exp(\I q\bvec{\mathcal E}\vdot\bvec r\dd t)$ 不过是一个普通的平面波函数而不是微分算符， 所以我们只需要把它和波函数相乘： $\exp(\I q\bvec{\mathcal E}\vdot\bvec r\dd t)\Psi$。 为了使相乘后的函数仍然具有\autoref{eq_HyTDSE_3} 的形式， 可以先根据\autoref{eq_Pl2Ylm_1}~\upref{Pl2Ylm} 对其进行分波展开（$\exp(\I q\bvec{\mathcal E}\vdot\bvec r\dd t) = \sum_{l'',m''}R_{l'',m''}Y_{l'',m''}$）。 所以演化后的每个分波的径向波函数就是
 \begin{equation}\label{eq_HyTDSE_24}
 \begin{aligned}
-\psi_{l,m} &= r\braket{Y_{l,m}}{\exp(\I q\bvec E\vdot\bvec r\dd t)\Psi} =
+\psi_{l,m} &= r\braket{Y_{l,m}}{\exp(\I q\bvec{\mathcal E}\vdot\bvec r\dd t)\Psi} =
 \braket{Y_{l,m}}{\sum_{l'',m''} R_{l'',m''} Y_{l'',m''} \sum_{l',m'} \psi_{l',m'} Y_{l',m'}}\\
 &= \sum_{l',m'} \qty[\sum_{l'',m''}R_{l'',m''}  \mel{Y_{l,m}}{Y_{l'',m''}}{Y_{l',m'}}]\psi_{l',m'}~.
 \end{aligned}
@@ -178,46 +46,5 @@ H_0 \psi_{l} = \I \pdv{\psi_{l}}{t}~.
 
 \autoref{eq_HyTDSE_24} 相当于对每个 $r$ 处不同分波的波函数进行一个矩阵乘法， 但每个 $r$ 处的矩阵是不同的。
 
-一种看似可能的近似方法是把 $\exp(\I q\bvec E\vdot\bvec r\dd t)$ 展开为前两三项。但这样一来其实和直接求 $\mat F$ 矩阵进而 $\mat F^2$ 没有什么区别了。 事实上保留两三项并不稳定，不然也不需要用 Crank-Nicolson 或者 Lanczos 这么费时的办法了。 所以还是老老实实把平面波展开成贝塞尔函数。
+一种看似可能的近似方法是把 $\exp(\I q\bvec{\mathcal E}\vdot\bvec r\dd t)$ 展开为前两三项。但这样一来其实和直接求 $\mat F$ 矩阵进而 $\mat F^2$ 没有什么区别了。 事实上保留两三项并不稳定，不然也不需要用 Crank-Nicolson 或者 Lanczos 这么费时的办法了。 所以还是老老实实把平面波展开成贝塞尔函数。
 
-\subsection{速度规范}\label{sub_HyTDSE_1}
-\pentry{速度规范\nref{nod_LVgaug}}{nod_e7b3}
-在速度规范下， 当矢势不为零时， 长度规范波函数乘以 $\exp(\I \bvec A \vdot \bvec r)$ 就是速度规范波函数（\autoref{eq_LVgaug_6}~\upref{LVgaug}）。 这导致不同分波的概率不同。 考虑到强场下矢势就是波包的速度， 这个相位因子有助于让波函数的波长变长， 使所需的分波大大减少（频率高的平面波需要更多\enref{球谐函数展开}{Pl2Ylm}）。
-
-\textbf{特别注意}：在速度规范下即使只考虑从基态的单光子电离，也需要好几个分波，因为电矢势不为零时，波函数比起长度规范叠乘了一个平面波，而这个平面波需要更多分波才能展开。
-
-要使用速度规范（注意仍然是位置表象而不是动量表象）， $H_0$ 算符的计算是一样的， 唯一不同的是把 $\bvec E\vdot \bvec r$ 换成了 $\bvec A\vdot \bvec p$。
-
-先把电场限制在 $z$ 方向， 所以场的作用主要就是（\autoref{eq_SphNab_5}~\upref{SphNab}）
-\begin{equation}\label{eq_HyTDSE_25}
-\pdv{z} = \cos\theta\pdv{r} - \frac{\sin\theta}{r}\pdv{\theta}~.
-\end{equation}
-第二项只耦合不同的分波。 但第一项要更为复杂，它耦合不同分波中同一有限元中的不同基底。 所以 $\exp(-\I \lambda \pdv{z})$ 需要把 $\pdv*{z}$ 作用在整个波函数上面， 然后用 lanczos 这样的整体方法来演化。
-
-在 FEDVR 中， $\pdv*{r}$ 可以用矩阵 $\mat D$ 精确表达， $\cos\theta$ 也在上文中可以表示为分波耦合矩阵。 所以 $\pdv*{z}$ 就是把这两个矩阵相乘即可。
-
-要注意第一项的角向并不是 $\mel{Y_{l,m}}{\cos\theta}{Y_{l',m}}$，而是要同时考虑径向
-\begin{equation}
-\begin{aligned}
-&\quad r\mel{Y_{l,m}}{\cos\theta\pdv{r}}{\frac{\psi_{l',m}}{r}Y_{l',m}}\\
-&= \dv{r}\psi_{l',m}\mel{Y_{l,m}}{\cos\theta}{Y_{l',m}}
--\frac{\psi_{l',m}}{r}\mel{Y_{l,m}}{\cos\theta}{Y_{l',m}}~.
-\end{aligned}
-\end{equation}
-所以\autoref{eq_HyTDSE_25} 的第一项实际上需要拆分成两项， 没有导数的那个合并到第二项中去。 另外由\autoref{eq_SphHar_18}~\upref{SphHar} 得
-\begin{equation}\label{eq_HyTDSE_13} % 和 Qprop [Baue06] 论文中一样
-F^{(vz)}_{l,l'} = -\mel{Y_{l,m}}{\cos\theta + \sin\theta\pdv{\theta}}{Y_{l',m}}
-= \delta_{l',l+1} l'\mathcal C_{l,m} - \delta_{l,l'+1} l \mathcal C_{l',m}~.
-\end{equation}
-\begin{equation}
-\mat F^{(v2)}
-=\pmat{
-0 & \mathcal C_{0m} & 0 & 0 & \dots\\
--\mathcal C_{0m} & 0 & 2\mathcal C_{1m} & 0 &\dots\\
-0 & -2\mathcal C_{1m} & 0 & 3\mathcal C_{2m} &\dots\\
-\vdots & 0 & -3\mathcal C_{2m} & 0 & \dots}~.
-\end{equation}
-所以\autoref{eq_HyTDSE_25} 的矩阵元为
-\begin{equation}\label{eq_HyTDSE_12}
-\mel{Y_{l,m}}{\pdv{z}}{Y_{l',m}} = F_{l,l'}^{(z)}\pdv{r} + \frac{F_{l,l'}^{(vz)}}{r}~.
-\end{equation}

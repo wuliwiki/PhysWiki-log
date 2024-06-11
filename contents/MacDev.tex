@@ -14,13 +14,16 @@
 
 \begin{itemize}
 \item 命令行的许多命令不是完全相同的，会有很多兼容问题，脚本或者 makefile 是大坑
-\item 要用 C++， 先安装 xcode， \item \verb`g++` 实际上是 Xcode 提供的 Clang++，而且不是满血的，例如不支持 OpenMP。 GPT 说用 OpenMP 需要装 brew 版的 llvm
+\item 【必备】\href{https://orbstack.dev/}{orbstack} 相当于 macOS 上的 WSL1。
+\item 要用 C++， 先安装 xcode， \item \verb`g++` 实际上是 Xcode 提供的 Clang++，而且不是满血的，例如不支持 OpenMP。 GPT 说用 OpenMP 需要装 brew 版的 \verb`llvm`，使用其中的 \verb`clang++`
 \item \verb`CPATH` 和 \verb`LD_LIBRARY_PATH` 都有效
+\item \verb`clang++ ... -l:lib库名.a或.so` 无效， 会提示 \verb`ld` 找不到库 \verb`:lib库名.a或.so`。说明 \verb`ld` 不支持 \verb`-l:` 这种语法。 如果要指定具体 \verb`.a` 文件可以直接不用 \verb`-l` 给出 \verb`lib库名.a` 的完整路径（把它当成 \verb`.o` 文件来用），但该方法不支持 \verb`.dylib` 动态库。 一般来说用 \verb`-l库名` 让链接器决定用静态还是动态库即可。
 \item \verb`file 文件` 可以判断文件类型包括二进制可执行文件
 \item \verb`otool -L 可执行文件` 可以查看它使用的动态链接库
 \item Linux 二进制文件和动态库文件都是 EFL 格式， macOS 对应的是 \verb`mach-o`
 \item \verb`BLAS` 和 \verb`LAPACK` 都是 apple acceleration framework 最专业
 \item \enref{HomeBrew}{Homebr} 是必备
+\item m1 芯片的 Mac 中， Docker 只能运行 arm64 的容器。 可以用 \href{https://orbstack.dev/}{orbstack} 解决。 许多 HomeBrew 也不兼容的软件也可以用！
 \item 用于管理服务的命令是 \verb`launchctl`
 \item \verb`locate` 命令有自带，但不是 linux 的，初次运行提示运行一个 \verb`launchctl` 命令创建数据库
 \end{itemize}

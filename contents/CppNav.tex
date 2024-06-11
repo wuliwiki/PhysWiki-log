@@ -2,44 +2,60 @@
 % license Usr
 % type Map
 
-
-\begin{issues}
-\issueDraft
-\end{issues}
-
 \subsection{C++ 可以做什么}
-C++ 属于较为底层的语言。 适合执行对性能要求较高的任务。 例如 Linux 本身是 C 写的（C 基本可以看做是 C++ 的一个子集）。 \enref{Python}{Python} 和 \enref{Matlab}{Matlab} 的解释器也是 C++ 写的。 网站服务器（Nginx，Apache），数据库程序也一般是 C++ 写的。
-\addTODO{一般来说，相当长一段时间内你都做不出任何图形界面，也就是你打交道的都是命令行输入和输出。甚至许多应用根本不需要图形界面，只使用命令行。}
+C++ 属于较为底层的语言。 适合执行对性能要求较高的任务。 例如 Linux （内核）是 C 写的（C 基本可以看做是 C++ 的一个子集）， \enref{Python}{Python} 和 \enref{Matlab}{Matlab} 的解释器也是 C++ 写的， 网站服务器（如 Nginx，Apache），数据库也一般是 C++ 写的。
 
-\subsection{环境设置}
+一般来说，学习 C++ 的相当长一段时间内你都做不出任何图形界面，也就是你打交道的都是命令行（主要是 \enref{Linux 命令行}{LinNt}）输入和输出。甚至许多应用（尤其是科学计算）根本不需要图形界面，只使用命令行。 在科学计算中，如果你需要画图，一般是用 C++ 导出数据文件，然后用其他工具画图（如 \enref{Matplotlib}{PyPlot}，\enref{Matlab}{MatPlt}，\enref{gnuplot}{gnuplo} 等）。
 
-要学习 C++，首先需要选择一个用于编译和运行你的 C++ 程序的环境。 而选择环境的第一步是选择一个操作系统。 对于小时百科的绝大部分使用 C++ 的场景（主要是科学计算）来说，强烈推荐你使用 \enref{Linux}{Linux} 系统。 如果你一般使用 Windows 且不想装一个完整的操作系统，那么也可以在 Windows 中安装 \enref{Mingw-w64}{Mingw} 或者 \enref{WSL2}{WSLnt}， 又或者使用 \enref{VirtualBox}{VirBox} 虚拟机安装 Linux 系统（我们提供一个部署好 C++ 和其他百科常用软件的 Ubuntu 22.04 镜像，下载见\href{https://wuli.wiki}{网站首页}的附件下载）。 三者所占用的资源从少到多，兼容性也从弱到强。
+即使要做图形界面，也会有许多人为了开发更方便使用动态语言，而只把性能需求较大的部分用 C++ 实现。 如果要用 C++ 实现图形界面一般是用 \enref{Qt 笔记}{QtInt}。
+
+\subsection{开发环境}
+要学习 C++，首先需要选择一个用于编译和运行你的 C++ 程序的环境。 而选择环境的第一步是选择一个操作系统。 对于小时百科的绝大部分使用 C++ 的场景（主要是科学计算），强烈推荐你使用 \enref{Linux}{Linux} 系统例如 \enref{Ubuntu}{Ubuntu}。 如果你一般使用 Windows 且不想装一个完整的操作系统，那么也可以在 Windows 中安装 \enref{Mingw}{Mingw} 或者 \enref{WSL2}{WSLnt}， 又或者使用 \enref{VirtualBox}{VirBox} 虚拟机安装 Linux 系统（我们提供一个部署好 C++ 和其他百科常用软件的 Ubuntu 22.04 镜像，下载见\href{https://wuli.wiki}{网站首页}的附件下载）。 三者所占用的资源从少到多，兼容性也从弱到强。
 
 \subsubsection{简单环境}
-一个强烈推荐的学习 C++ 的工具是 \enref{Cling}{Cling}。 它可以让你像使用 Python 一样互动地运行一些简单的 C++ 代码，可以逐行运行。 它可以在 \enref{Jupyter Notebook}{jupyNb} 中运行， 也同时提供一个命令行版本。 你可以通过 Jupyter Notebook 的\href{https://jupyter.org/}{官网}直接使用也可以在本地安装\upref{Cling}。
+一个强烈推荐的学习 C++ 的工具是 \enref{Cling}{Cling}。 它可以让你像使用 Python 一样互动地运行一些简单的 C++ 代码，可以逐行运行。 它可以在 \enref{Jupyter Notebook}{jupyNb} 中运行， 也同时提供一个命令行版本。 你可以通过 Jupyter Notebook 的\href{https://jupyter.org/}{官网}直接使用也可以在\enref{本地安装}{Cling}。
 
-如果你不想在自己电脑上部署环境，那么网上也有一些在线的 C++ 编译器， 例如 \href{https://wandbox.org/}{Wandbox} 可以直接在服务器上编译运行简单的 C++ 代码。 你也可以使用一些算法题网站如 \href{https://leetcode.com/}{LeetCode} 或者\href{https://www.nowcoder.com/}{牛客网}，它们甚至还提供逐行调试功能（下面会介绍）。但这种网站只能运行一些简单的测试代码，一般不支持安装和使用编译好的第三方库。
+如果你不想在自己电脑上部署环境，那么网上也有一些在线的 C++ 编译器， 例如 \href{https://wandbox.org/}{Wandbox} 可以直接在服务器上编译运行简单的 C++ 代码。 你也可以使用一些算法题网站如 \href{https://leetcode.com/}{LeetCode} 或者\href{https://www.nowcoder.com/}{牛客网}，它们甚至还提供逐行调试功能（下面会介绍）。但这种网站只能运行一些简单的测试代码，一般不支持安装和使用编译好的第三方库。 而配置第三方库通常是 C++ 环境配置中最繁琐的一环。
 
 \subsubsection{Linux 命令行环境}
-如果你属于相对硬核的用户，那么你使用 C++ 的整个过程中需要的就只需要一个文本编辑器（如 Visual Studio Code 甚至 \enref{vim}{Vim}）以及一个类 Linux 命令行窗口（一般是 \enref{bash}{Bash}）。 该做法的一个入门教程见 “在 \enref{Linux 上编译 C/C++ 程序}{linCpp}”， 你需要在上面安装一个 C++ 编译器， 比较流行的有 \enref{g++}{gpp}， \enref{clang++}{clangp} 和 \enref{icpc}{icpcNt}（前两个开源，icpc 闭源）。
+如果你属于相对硬核的用户，那么你使用 C++ 的整个过程中需要的就只需要一个文本编辑器（如 Visual Studio Code 甚至 \enref{vim}{Vim}）以及一个类 Linux 命令行窗口（一般是 \enref{bash}{Bash}）。 该做法的一个入门教程见 “在 \enref{Linux 上编译 C/C++ 程序}{linCpp}”， 你需要在上面安装一个 C++ 编译器， 比较流行的有 \enref{g++}{gpp}， \enref{clang++}{clangp} 和 \enref{icpc}{icpcNt}（前两个开源免费，icpc 免费但闭源）。
 
-\subsubsection{IDE：集成开发环境}
+\subsubsection{集成开发环境（IDE）}
 如果你还想要更多的功能，例如变量和函数的跳查，用\textbf{图形界面（GUI）}进行调试， 那么你需要一个 \textbf{IDE （Integrated Development Environment， 集成开发环境）}：
 
-Visual Studio 是 Windows 的官方 IDE， 无法在其他系统中使用， 且社区版的 Visual Studio 免费。 老版本的 Visual Studio 只能使用 Windows 专有的 Visual C++ 编译器进行 C++ 开发， 但新版本的 Visual Studio 支持使用 WSL 中的其他编译器。 由于不能跨平台，我们\textbf{不推荐使用}。 许多 Linux 环境下可以轻易安装的软件包（尤其是科学计算需要的），在 Windows 上都需要寻找第三方专门为 Windows 适配的版本，比较麻烦。
+Visual Studio 是 Windows 的官方 IDE， \textbf{无法在其他操作系统中使用}， 且社区版免费。 老版本的 Visual Studio 只能使用 Windows 专有的 Visual C++ 编译器进行 C++ 开发， 但新版本的 Visual Studio 开始支持使用 WSL 中的其他编译器。 许多 Linux 环境下可以轻易安装的软件包（尤其是科学计算需要的），在 Windows 上都需要寻找第三方专门为 Windows 适配的版本，比较麻烦。 综上，我们\textbf{强烈不推荐使用}。
 
-另一个流行的 IDE 是 JetBrain 推出的 \href{https://www.jetbrains.com/clion/}{CLion}。 CLion 是跨平台的，在 Windows，Mac，Linux 上都能使用。 CLion 功能较多较完善，学生可以免费使用，但对其他用户收费。 我们\textbf{推荐 CLion}。
+另一个流行的 IDE 是 JetBrain 公司的 \href{https://www.jetbrains.com/clion/}{CLion}。 CLion 是跨平台的，在 Windows，Mac，Linux 上都能使用，支持主流编译器。 CLion 功能较多较完善，学生可以免费使用，但对其他用户收费。 我们\textbf{推荐 CLion}。
 
-另外也有一些完全免费的 IDE 如 Eclipse，NetBeans，Code::Blocks，Qt Creator 等。 事实上不同的 IDE 在基本功能上使用起来大同小异。
+另外也有一些完全免费的 IDE 如 \href{https://eclipseide.org/}{Eclipse}，\href{https://netbeans.apache.org/front/main/index.html}{NetBeans}，\href{https://www.codeblocks.org/}{Code::Blocks}，\href{https://www.qt.io/product/development-tools}{Qt Creator} （主要用于 Qt 编程） 等。 这些不同的 IDE 在基本功能上使用起来大同小异，可以自行选择。
 
-IDE 的部署通常要比直接使用命令行麻烦得多。 它们通常需要通过 “工程” 来进行项目管理， 工程文件通常是 \enref{CMake}{CMakeN}。
+IDE 的部署通常要比直接使用命令行麻烦一些。 它们通常需要通过 “工程” 来进行项目管理， 工程文件通常是 \enref{CMake}{CMakeN}。
 
 \subsubsection{调试程序}
 初学者使用（尤其是 IDE 中的）调试器会大大降低调试难度， 详见 “\enref{调试 C++ 程序}{gdbcpp}”。 当然有许多用户选择完全不使用调试器。 除了 IDE 中的调试器，也有命令行调试器。 g++ 和 icpc 编译器对应的命令行调试器是 \enref{gdb}{gdbNt}， clang++ 编译器对应的是 \enref{lldb}{LLDB}， 二者的用法几乎一样。
 
 \subsection{C++ 语法}
 有了基本的环境以后， 就可以着手学习 C++ 语法了。 “\enref{C++ 基础}{Cpp0}” 中列出了小时百科最常用的一些语法。
-\addTODO{。。。}
 
-\subsection{构建工具}
-\addTODO{\enref{Makefile 简介}{Make0}， \enref{Makefile 笔记}{Make}，\enref{CMake 笔记}{CMakeN}}
+一般来说，科研人员倾向于使用最简单的语法特性，即使使用 C++ 也还是经常用 C 语言的模式写代码，例如直接使用裸指针，直接用 \verb`new` 和 \verb`delete` 分配堆中的内存。 又例如尽量少地使用面对对象编程等复杂结构。
+
+需要提醒的是，C++ 的每一个功能都有其存在的原因， 如果你的代码变得越来越复杂，但仍然使用类似 C 的方式写代码，将可能大大增加调试、维护、以及拓展新功能的难度。
+
+许多科研人员为了方便倾向于使用单个 cpp 文件实现所有功能。 我们鼓励把复杂的代码分类放置在多个 cpp 文件或者头文件中以方便查找和复用，这时可能就需要了解 \enref{C/C++ 多文件编译}{cppFil}。
+
+\subsection{库的使用、构建工具}
+对于一个简单的 C++ 程序，你可能编译时只需要手敲 \verb`g++` 命令即可， 对稍微长一些的命令， 你或许也可以把它存到一个 \enref{bash 脚本}{Bash}中方便调用。 但如果你开始使用第三方程序库，那么问题将变得更复杂。
+
+配置第三方库通常是 C++ 环境配置中最繁琐的一环。 C++ 语言本身自带的功能非常有限，许多功能都需要你把自己的程序链接到第三方库中。 在 python 这样的语言中可能你只需要一个 \verb`import` 就可以导入库，也可以用 \enref{pip}{pip} 或者 \enref{conda}{CondaN} 来管理库的版本和依赖。 但在 C++ 中你除了需要在你的程序中用 \verb`#include` 导入相应的头文件，还可能需要设置各种环境变量和编译器命令行选项让编译器找到这些头文件，以及对应的二进制文件。 C++ 的大部分库都由头文件和二进制文件构成，只有少部分 \textbf{header only} 的库只有头文件。 库的二进制文件分为静态链接库（拓展名 \verb`.a`）和动态链接库（拓展名 \verb`.so`）。
+
+此外，当你使用的库越来越多，库之间还会存在复杂的依赖关系，每个库都有不同版本，每个版本依赖的库也可能会有版本限制。
+
+C++ 没有一个广泛使用的包管理工具（一个相对流行的工具是 \enref{Conan}{ConanN}），大部分人还是直接用操作系统自带的包管理工具（如 Ubuntu 的 \enref{apt}{snap}），又或是直接从官网下载二进制文件或下载源码重新编译并把文件和编译好的二进制文件拷贝到常见的目录。
+
+此外，如果你需要在不同的环境（例如不同的 Linux 发行版，不同的编译器和版本等）编译你的程序，即使在这些平台上都安装了所需的库，它们的安装位置和版本也会有一些细微的差异。
+
+要解决上面这些问题，构建工具就是必不可少的。 构建工具可以对你当前的编译环境进行详细的测试，检查所需的库是否符合条件，并且自动生成最终的编译命令。
+
+最初，广泛使用的构建工具是 \enref{Makefile}{Make0}，Makefile 的配置文件类似于 \enref{bash 脚本}{Bash}，但语法上有许多细微差异，且功能较为简单。 后来对于更复杂的开源工程，大家基于 Makefile 发展出了 \enref{autotool}{automk} 中的一些列工具，但却由于历史包袱使其并没有那么现代（目前许多 GNU 的开源项目仍然主要使用 autotool 构建）。 如果你使用 autotool， 仍然建议了解 Makefile 的基本语法。
+
+现在最广泛使用的 C++ 构建工具非 \enref{CMake}{CMakeN} 莫属，它具有广泛的生态（例如几乎所有主流 IDE 都支持用 CMake 作为工程文件）。
