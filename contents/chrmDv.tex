@@ -1,0 +1,51 @@
+% Chrome 开发工具笔记
+% license Usr
+% type Note
+
+
+\begin{issues}
+\issueDraft
+\end{issues}
+
+\begin{itemize}
+\item \verb`F12` 打开开发笔记，许多分界线都可以拖动，可以 \verb`Ctrl` + \verb`+` 控制字体大小。
+\item 主要面板有 \verb`Elements, Console, Sources, Network, ...`
+\item \verb`Elements` 就是当前 DOM 树，其中很多元素可能是 js 运行后的结果，所以跟直接看页面的 source 可能是不一样的。
+\item 打开开发截面以后，在页面任何地方右键 Inspect 都可以直接跳到 \verb`Elements` 的对应元素中。
+\item \verb`Sources` 里面会显示加载的所有源文件，按照 URL 中的层级来分类（云朵图标），如果是方框图标就说明是浏览器插件或者 Chrome 自带的东西。
+\end{itemize}
+
+\subsubsection{Network 面板}
+在 \verb`Network` 面板中选中一个文件
+\begin{itemize}
+\item 在 \verb`General` 里面可以看到 url，ip，端口， http 方法，状态等
+\item \verb`Header` 子面板里面可以看到 http 的请求头和返回头（包括使用的 http 版本，所有的 header 包括 cache 管理等）。
+\item \verb`Payload` 里面有请求中的 \verb`query`， 就是 \verb`?` 后面的东西。
+\item \verb`Initiator` 可以看到这个请求是什么文件发起的（因为最开始在浏览器输入的就是一个 URL，所有其他的文件都是可以追溯来源的）。
+\item \verb`Timing` 可以看到详细的用时，包括什么时候开始请求，等待服务器响应多久，下载多久。
+\item 点漏斗图标可以展开和隐藏 Filter 面板
+\begin{figure}[ht]
+\centering
+\includegraphics[width=10cm]{./figures/559c8eb603a4edcb.png}
+\caption{Filter 面板} \label{fig_chrmDv_1}
+\end{figure}
+\item Filter 中的 \verb`fetch/XHR` 是 javascript 向服务器请求资源的两个常用函数。 前者比较新，支持 \verb`async, promise`。 \verb`XHR` 是 \verb`XMLHttpRequest` 的缩写。
+\item \verb`fetch` 有更好的 \textbf{Cross-Origin Resource Sharing (CORS)}
+\end{itemize}
+
+\subsubsection{CORS}
+\begin{itemize}
+\item 当浏览器加载一个网站的页面，请求获取另一个网站的资源时，浏览器对另一个网站发出的请求中会包含名为 \verb`Origin` 的 http 头。 如果第二个网站返回的 http 头中有 \verb`Access-Control-Allow-` 开头的字段， 那么浏览器就会用其判断该请求是否时第二个网站所允许的。 如果不允许则请求失败。
+\item 这里 \textbf{Origin} 的定义是协议（http/https/file）， 域名（或IP）， 和端口（如果有指定）
+\item CORS 有什么好处呢？ 比如说我网站上有一些自用的开源库例如 MathJax，如果没有 CORS，别的网站就可以蹭这些资源，那么流量费就要算到我头上了。如果我在网站设置了 CORS，就可以只允许我网站的页面使用这些资源。
+\item 一个例子是，如果把小时百科一篇文章的 html 下载到桌面然后双击打开（或者用本地的 web server 通过 localhost 打开），那么里面 font-awesome 将无法加载。
+\item 但一些\textbf{简单}的资源例如图片即使没有明确放行 CORS 也会被浏览器允许加载。
+\end{itemize}
+
+\subsection{简单 Web Server}
+\begin{itemize}
+\item 可以用 python \verb`python -m http.server`
+\item 也可以用 \verb`node.js` 的 express （设置起来稍微复杂一点）
+\item \verb`http://localhost` 等效于 \verb`http://127.0.0.1`
+\item 也可以在 url 后面用 \verb`:端口号` 指定端口。
+\end{itemize}
