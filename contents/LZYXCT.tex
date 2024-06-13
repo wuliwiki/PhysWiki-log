@@ -44,7 +44,7 @@
 
 \begin{enumerate}
 \item 产生一个EPR对，一个量子比特发送到位置A，另一个发送到位置B。
-\item 在位置A，EPR对量子比特和要传送的量子比特(量子态 {\displaystyle |\phi \rangle } {\displaystyle |\phi \rangle })执行贝尔测量，产生四个测量结果之一，这些结果可以用两个经典信息比特编码。然后，位置A的两个量子比特都被丢弃。
+\item 在位置A，EPR对量子比特和要传送的量子比特(量子态$\displaystyle |\phi \rangle $ $\displaystyle |\phi \rangle$ )执行贝尔测量，产生四个测量结果之一，这些结果可以用两个经典信息比特编码。然后，位置A的两个量子比特都被丢弃。
 \item 使用经典信道，两个比特从A发送到B(考虑到光速，这是步骤1之后唯一可能耗时的步骤。)
 \item 由于在位置A进行的测量，位置B的EPR对量子比特处于四种可能状态之一。在这四种可能的状态中，有一种与原始量子状态相同 $\left| \phi \right\rangle$ ，和其他三个密切相关。这四种可能性中的其中一种实际上是用两个经典比特编码的。知道了这一点，位置B处的EPR对量子比特以三种方式之一修改，或者根本不修改，以产生与$\left| \phi \right\rangle$相同的量子比特，即被选择传输的量子比特。
 \end{enumerate}
@@ -110,4 +110,206 @@ $ |\Phi^{+}\rangle_{AC}, |\Phi^{-}\rangle_{AC}, |\Psi^{+}\rangle_{AC}, |\Psi^{-}
 
 实际上，这种测量可以通过一系列指向两个粒子的激光脉冲来实现\\footnote{来源请求}。鉴于上述表达式，显然爱丽丝（局部）测量的结果是，三粒子状态将坍缩为以下四种状态之一（获得每种状态的概率相等）：
 
+\begin{itemize}
+\item $|\Phi^+\rangle_{AC} \otimes (\alpha|0\rangle_B + \beta|1\rangle_B)$\\\\
+\item $|\Phi^-\rangle_{AC} \otimes (\alpha|0\rangle_B - \beta|1\rangle_B)$\\\\
+\item $|\Psi^+\rangle_{AC} \otimes (\alpha|1\rangle_B + \beta|0\rangle_B)$\\\\
+\item $|\Psi^-\rangle_{AC} \otimes (\alpha|1\rangle_B - \beta|0\rangle_B)$
+\end{itemize}
 
+爱丽丝的两个粒子现在处于四种贝尔态中的一种相纠缠，而爱丽丝和鲍勃的粒子之间原本共享的纠缠现在被打破了。鲍勃的粒子呈现上述四种叠加态之一。注意鲍勃的量子比特现在处于一种类似于被传输的状态。鲍勃的量子比特的四种可能状态是等待传输的单一图像。
+
+爱丽丝的贝尔测量结果告诉她系统处于上述四种状态中的哪一种。她现在可以通过一个经典频道把结果发送给鲍勃。两个经典比特可以传达她获得的四个结果中的任意一个。
+
+鲍勃收到爱丽丝的信息后，他将知道他的粒子处于上述四种状态中的哪一种。利用这些信息，他对他的粒子执行一个适当的单位运算，以将其转换为期望的状态 $\alpha|0\rangle_B + \beta|1\rangle_B$:
+
+\begin{itemize}
+  \item 如果爱丽丝指出她的结果是 $\Phi^+\rangle_{AC}$，鲍勃知道他的量子比特已经处于期望的状态，并且什么也不做。这相当于简单的单位运算，即恒等算子。
+  \item 如果消息指示 $\Phi^-\rangle_{AC}$，鲍勃会通过通用矩阵单位运算 $\sigma_3$ 发送他的量子比特
+\end{itemize}
+
+$\sigma_3 = \begin{pmatrix}1 & 0 \\0 & -1\end{pmatrix}$
+
+来恢复状态。
+
+\begin{itemize}
+  \item 如果爱丽丝的信息对应于 $\left|\Psi^{+}\right\rangle_{AC}$，鲍勃把量子门
+ $\sigma_{1}=\begin{bmatrix}  0 & 1 \\  1 & 0  \end{bmatrix}$
+  应用到他的量子比特。
+  \item 最后，对于剩余的情况，由下式给出适当的量子门
+ $\sigma_{1}\sigma_{3}=-\sigma_{3}\sigma_{1}=-i\sigma_{2}=\begin{bmatrix}  0 & -1 \\  1 & 0  \end{bmatrix}$.
+\end{itemize}
+
+这样就实现了传输。上述三个量子门对应于π角度(180°)围绕坐标轴(X, Y和Z)的旋转。
+
+\begin{figure}[ht]
+\centering
+\includegraphics[width=6cm]{./figures/42a8681ebd23b385.png}
+\caption{用 Q-Kit演示单个量子比特的量子传输} \label{fig_LZYXCT_4}
+\end{figure}
+
+一些备注:
+
+\begin{itemize}
+\item 本次操作后，鲍勃的量子比特将接管状态 $|\psi\rangle_B = \alpha|0\rangle_B + \beta|1\rangle_B$ ，爱丽丝的量子比特成为纠缠态的一部分(未定义)。量子传输不会导致量子比特的复制，因此符合不克隆定理。
+\item 不涉及物质或能量的转移。爱丽丝的粒子没有被物理移动给鲍勃；只有它的状态被转移了。由班尼特、布拉萨尔、克雷波、约瑟夫、佩雷斯和伍特创造的术语“量子传输”反映了量子力学粒子的不可区分性。
+\item 每传送一个量子比特，爱丽丝需要给鲍勃发送两个经典信息。这两个经典比特并不携带量子比特被传送的完整信息。如果窃听者截获了这两个比特，她可能确切知道鲍勃需要做什么来恢复想要的状态。然而，如果她不能与鲍勃占有的纠缠粒子相互作用，这些信息就没有用了。
+\end{itemize}
+
+利用量子电路模拟器Q-Kit，用图形界面演示了单量子比特量子隐形传输的量子电路。 爱丽丝在量子比特2中的状态通过爱丽丝与鲍伯、量子比特1和0之间的一对先前纠缠的量子比特被转移到鲍勃的量子比特0。
+
+\subsection{替代符号}
+
+有各种不同的符号用于描述传输协议。一个常见的方法是使用量子门的符号。在上面的推导中，可以用量子门写出基的幺正变换(从标准乘积基到贝尔基)。直接计算表明，该量子门由下式给出
+
+$G=(H\otimes I)C_N$
+
+其中，$H$是沃尔什-哈达玛门的一个量子比特；$C_N$ 是受控反闸。
+
+\begin{figure}[ht]
+\centering
+\includegraphics[width=6cm]{./figures/c2ff8b218d039505.png}
+\caption{量子隐形传态的图解形式。[1] 采用彭罗斯图形符号。[2] 在形式上，这种计算是在匕首紧凑类别中进行的。这导致了量子隐形传态在分类量子力学中的抽象描述。} \label{fig_LZYXCT_5}
+\end{figure}
+
+\begin{figure}[ht]
+\centering
+\includegraphics[width=6cm]{./figures/d8eeffe9a7921e75.png}
+\caption{量子传输的量子电路示意} \label{fig_LZYXCT_6}
+\end{figure}
+
+\subsection{纠缠交换}
+
+量子传输不仅可以应用于纯态，也可以应用于混合态，这种混合态可以被视为纠缠对的单个子系统的状态。所谓的纠缠交换是一个简单的且具有说明性的例子。
+
+如果爱丽丝有一个粒子与鲍勃拥有的粒子纠缠在一起，鲍勃将它传送给卡罗尔，然后，爱丽丝的粒子与卡罗尔的粒子纠缠在一起。
+
+描述这种情况的更对称的方式如下：爱丽丝有一个粒子，鲍勃有两个，卡罗尔有一个。爱丽丝的粒子和鲍勃的第一粒子纠缠在一起，鲍勃的第二粒子和卡罗尔的粒子纠缠在一起：
+
+        ___
+                     /   \
+ 爱丽丝-:-:-:-:-:-:-鲍勃1 -:-鲍勃2-:-:-:-:-:-:-:-卡罗尔
+                     \ _ _ _ _ _ _/
+
+                     此时，如果鲍勃在贝尔态的基础上对他的两个粒子进行投影测量，并将结果传送给卡罗尔，根据上述传送方案，鲍勃的第一粒子的状态可以传送给卡罗尔。虽然爱丽丝和卡罗尔从来没有相互作用过，但他们的粒子现在已经纠缠在一起了。
+
+鲍勃·科克尔根据范畴量子力学给出了纠缠交换的详细图解推导。
+
+\subsection{传输协议的推广}
+
+上述量子比特的基本传输协议已经在几个方向上进行了推广，特别是关于传输的系统的维度和参与方(作为发送方、控制方或接收方)的数量。
+
+\textbf{三维系统}
+
+对三维系统的概括(所谓的量子比特)是直截了当的，班尼特等人在原始论文中已经讨论过 。[35] 两个量子比特的最大纠缠态必须用两个量子比特的最大纠缠态来代替，而贝尔测量必须用最大纠缠标准正交基定义的测量来代替。沃纳在2001年讨论了所有可能的这种概括。[35] 无穷维连续变量系统的推广 [36] ，导致了第一个无条件运作的量子传输实验。[37]
+
+\textbf{多部分版本}
+
+使用多部分纠缠态而不是双部分最大纠缠态，可以实现以下几个新功能：发送者可以传送信息给几个接收者，或者发送相同的状态给所有接收者(这样可以减少过程所需的纠缠量) [38] 或者传输多部分状态 [39] 或者以接收方需要合作来提取信息的方式发送单个状态。[40] 查看后一种设置的另一种方式是，某些参与方可以控制其他参与方是否可以传输。
+
+\subsection{逻辑门传输}
+
+一般来说，可以传输混合态ρ，并且在传输期间应用线性变换ω，从而允许对量子信息进行数据处理。这是量子信息处理的基础构件之一。如下所示。
+
+\subsubsection{8.1 概述}
+
+一般的传输方案可以描述如下。传输方案涉及三个量子系统，系统1是爱丽丝传输的(未知)状态$\rho$，系统2和3处于最大纠缠状态 $\omega$ ，分别分配给爱丽丝与鲍伯。整个系统就处于这种状态：
+
+\begin{align}
+\rho \otimes \omega.~
+\end{align}
+
+一个成功的隐形传态过程是LOCC量子信道$\varphi$，它满足
+\begin{align}
+\left(\mathrm{Tr}_{12} \otimes \Phi \right) (\rho \otimes \omega) = \rho,~
+\end{align}
+其中，$\mathrm{Tr}_{12}$是针对系统1和系统2的部分跟踪操作；$\circ$ 表示地图的组成。这描述了萨丁格绘景的频道。
+
+对于所有可观察到的$O$论饱动体系，取海森堡绘景的伴随映射，其成功条件为：
+\begin{align}
+\left\langle \Phi (\rho \otimes \omega) \left| I \otimes O \right| \Phi (\rho \otimes \omega) \right\rangle = \left\langle \\rho \left| O \right| \rho \right\rangle~
+\end{align}
+$I \otimes O$中的张量因子为$1_2 \otimes 3$，而$\rho \otimes \omega$中的张量因子为$1 \otimes 2_3$。
+
+\subsubsection{8.2 更多详情}
+
+可以更明确地描述建议的信道φ。为了开始传送，爱丽丝对她所拥有的两个子系统(1和2)进行局部测量。假设本地测量有影响
+
+$F_i = M_i^2.$
+
+如果测量记录了第 $i$ 个结果, 则整体状态将坍缩为
+$(M_i \otimes I)(\rho \otimes \omega)(M_i \otimes I).$
+
+$(M_i \otimes I)$ 中的张量因子为 $12 \otimes 3$, 而 $\rho \otimes \omega$ 中的张量因子为 $1 \otimes 23$。然后饱和在系统3上应用相应的本地操作$\psi_i$。在组合系统中，这由
+$(\text{Id} \otimes \Psi_i)(M_i \otimes I)(\rho \otimes \omega)(M_i \otimes I).$
+
+其中，Id是复合系统 $12$ 上的标识映射。
+
+因此，通过$\phi$定义为
+$\Phi(\rho \otimes \omega) = \sum_i (\text{Id} \otimes \Psi_i)(M_i \otimes I)(\rho \otimes \omega)(M_i \otimes I)$
+
+注意$\phi$满足LOCC的定义。如上所述，如果在饱和的系统中，所有可观察到的 $O$ 都是相等的，那么就可以认为传输是成功的。
+
+$\langle \Phi(\rho \otimes \omega), I \otimes O \rangle = \langle \rho, O \rangle$
+
+等式的左边是:
+\begin{equation}
+\sum_{i} \langle (\text{Id} \otimes \Psi_{i})(M_{i} \otimes I)(\rho \otimes \omega)(M_{i} \otimes I), I \otimes \Psi_{i}^{*}(O) \rangle
+= \sum_{i} \langle (M_{i} \otimes I)(\rho \otimes \omega)(M_{i} \otimes I), I \otimes \Psi_{i}^{*}(O) \rangle~
+\end{equation}
+式中，$\Psi_{i}^{*}$ 是海森堡绘景中 $\psi$ 的伴随。假设所有物体都是有限维的，则
+$\sum_{i} \text{Tr} \left( (\rho \otimes \omega)(F_{i} \otimes \Psi_{i}^{*}(O)) \right).$
+
+传输的成功标准有以下表达式:
+
+$\sum_{i} \text{Tr} \left( (\rho \otimes \omega)(F_{i} \otimes \Psi_{i}^{*}(O)) \right) = \text{Tr} \\ \rho \cdot O.$
+
+\subsection{对这一现象的局部解释}
+
+针对量子力学的多世界解释，大卫·多伊奇和帕特里克·海登提出了量子传输的局部解释。他们的论文断言爱丽丝发送给鲍勃的两个比特包含“局部不可访问的信息”，导致量子态的量子传输。“量子信息流经经典通道的能力...，幸存的退相干，是...量子传输的基础。”[41]
+
+\subsection{参考文献}
+
+\begin{enumerate}
+\item Deutsch, David; Hayden, Patrick (2017-03-16). "How Quantum Teleportation Actually Works". Proceedings of the Royal Society of London, Series A. 456 (1999): 1759. arXiv:quant-ph/9906007. doi:10.1098/rspa.2000.0585..
+\item A. Zeilinger, Dance of the Photons, Farrar, Straus and Giroux, New York, 2010, p. 46. ("The quantum mechanical solution [to teleportation] was proposed in 1993 by an international collaboration of six theoretical physicists: Charles Bennett of IBM; Gilles Brassard, Claude Crépeau, and Richard Jozsa of the University of Montreal; Asher Peres of the Technion (the Israel Institute of Technology in Haifa), and William K. Wootters of Williams College... The Bennett-Brassard-Crépeau-Jozsa-Peres-Wootters paper has the title 'Teleporting an Unknown Quantum State via Dual Classical and Einstein-Podolsky-Rosen channels.' To have the word 'teleporting' in the title of a physics paper was quite unusual at the time, since teleportation was considered to be part of science fiction and a somewhat shaky topic. But apparently, there was no better name for the interesting theoretical discovery these scientists made, and it was a very fitting name indeed.").
+\item Bouwmeester, D.; et al. (1997). "Experimental quantum teleportation". Nature. 390 (6660): 575–579. arXiv:1901.11004. Bibcode:1997Natur.390..575B. doi:10.1038/37539..
+\item Ren, Ji-Gang; Xu, Ping; Yong, Hai-Lin; Zhang, Liang; Liao, Sheng-Kai; Yin, Juan; Liu, Wei-Yue; Cai, Wen-Qi; Yang, Meng (2017). "Ground-to-satellite quantum teleportation". Nature. 549 (7670): 70–73. arXiv:1707.00934. Bibcode:2017Natur.549...70R. doi:10.1038/nature23675. PMID 28825708..
+\item Kluger, Jeffrey. "A 'Teleportation' to Outer Space". Time. Retrieved 2017-07-16..
+\item "Scientists Teleport A Photon From Earth To Orbit For The First Time". Huffington Post (in 英语). 2017-07-12. Retrieved 2017-07-16..
+\item Kimble, H. J. (2008). "The quantum internet". Nature. 453 (7198): 1023–1030. arXiv:0806.4195. Bibcode:2008Natur.453.1023K. doi:10.1038/nature07127. PMID 18563153..
+\item Michael Lucy (2018-04-13). "The quantum internet is already being built". Cosmos (78). Retrieved 2018-10-08..
+\item S. Pirandola, J. Eisert, C. Weedbrook, A. Furusawa, and S. L. Braunstein (2015). "Advances in quantum teleportation". Nature Photonics. 9 (10): 641–652. arXiv:1505.07831. Bibcode:2015NaPho...9..641P. doi:10.1038/nphoton.2015.154.CS1 maint: Uses authors parameter (link).
+\item New York Times, Scientists Teleport Not Kirk, but an Atom (2004).
+\item D. Boschi; S. Branca; F. De Martini; L. Hardy; S. Popescu (1998). "Experimental Realization of Teleporting an Unknown Pure Quantum State via Dual Classical and Einstein-Podolsky-Rosen Channels". Physical Review Letters. 80 (6): 1121–1125. arXiv:quant-ph/9710013. Bibcode:1998PhRvL..80.1121B. doi:10.1103/PhysRevLett.80.1121..
+\item Rupert Ursin (August 2004). "Quantum teleportation across the Danube". Nature. 430. Retrieved 2010-05-22..
+\item Jin, Xian-Min; Ren, Ji-Gang; Yang, Bin; Yi, Zhen-Huan; Zhou, Fei; Xu, Xiao-Fan; Wang, Shao-Kai; Yang, Dong; Hu, Yuan-Feng; Jiang, Shuo; Yang, Tao; Yin, Hao; Chen, Kai; Peng, Cheng-Zhi; Pan, Jian-Wei (16 May 2010). "Experimental free-space quantum teleportation". Nature Photonics. 4 (6): 376. Bibcode:2010NaPho...4..376J. doi:10.1038/nphoton.2010.87..
+\item Ma, Xiao-Song; Herbst, Thomas; Scheidl, Thomas; Wang, Daqing; Kropatschek, Sebastian; Naylor, William; Wittmann, Bernhard; Mech, Alexandra; Kofler, Johannes; Anisimova, Elena; Makarov, Vadim; Jennewein, Thomas; Ursin, Rupert; Zeilinger, Anton (5 September 2012). "Quantum teleportation over 143 kilometres using active feed-forward". Nature. 489 (7415): 269–73. Bibcode:2012Natur.489..269M. doi:10.1038/nature11472. PMID 22951967..
+\item Ma, X. S.; Herbst, T.; Scheidl, T.; Wang, D.; Kropatschek, S.; Naylor, W.; Wittmann, B.; Mech, A.; et al. (2012). "Quantum teleportation over 143 kilometres using active feed-forward". Nature. 489 (7415): 269–273. Bibcode:2012Natur.489..269M. doi:10.1038/nature11472. PMID 22951967..
+\item Takesue, Hiroki; et al. (2015-10-20). "Quantum teleportation over 100 km of fiber using highly efficient superconducting nanowire single-photon detectors". Optica. 2 (10): 832–835. arXiv:1510.00476. doi:10.1364/OPTICA.2.000832. Retrieved 2016-07-26..
+\item Nölleke, Christian; Neuzner, Andreas; Reiserer, Andreas; Hahn, Carolin; Rempe, Gerhard; Ritter, Stephan (2013). "Efficient Teleportation between Remote Single-Atom Quantum Memories". Physical Review Letters. 110 (14): 140403. arXiv:1212.3127. Bibcode:2013PhRvL.110n0403N. doi:10.1103/PhysRevLett.110.140403. PMID 25166964..
+\item Nature 430, 54-58 (1 July 2004) http://www.nature.com/nature/journal/v430/n6995/full/nature02643.html.
+\item Experimental quantum teleportation of a two-qubit composite system Qiang Zhang, Alexander Goebel, Claudia Wagenknecht, Yu-Ao Chen, Bo Zhao, Tao Yang, Alois Mair, Jörg Schmiedmayer & Jian-Wei Pan Nature Physics 2, 678–682.
+\item Lee, Noriyuki; Hugo Benichi; Yuishi Takeno; Shuntaro Takeda; James Webb; Elanor Huntington; Akira Furusawa (April 2011). "Teleportation of Nonclassical Wave Packets of Light". Science. 332 (6027): 330–333. arXiv:1205.6253. Bibcode:2011Sci...332..330L. CiteSeerX 10.1.1.759.1059. doi:10.1126/science.1201034. PMID 21493853..
+\item Trute, Peter. "Quantum teleporter breakthrough". The University Of New South Wales. Retrieved 17 April 2011..
+\item Takeda et al., "Deterministic quantum teleportation of photonic quantum bits by a hybrid technique", Nature, August 2013..
+\item Markoff, John (29 May 2014). "Scientists Report Finding Reliable Way to Teleport Data". The New York Times. Retrieved 29 May 2014..
+\item Pfaff, W.; et al. (29 May 2014). "Unconditional quantum teleportation between distant solid-state quantum bits". Science. 345 (6196): 532–535. arXiv:1404.4369. Bibcode:2014Sci...345..532P. doi:10.1126/science.1253512. PMID 25082696..
+\item "Two quantum properties teleported together for first time". PhysicsWorld.com. 27 February 2015..
+\item Wang, Xi-Lin; Xin-Dong Cai; Zu-En Su; Ming-Cheng Chen; Dian Wu; Li Li; Nai-Le Liu; Chao-Yang Lu; Jian-Wei Pan (26 February 2015). "Quantum teleportation of multiple degrees of freedom of a single photon". Nature. 518 (7540): 516–519. Bibcode:2015Natur.518..516W. doi:10.1038/nature14246. PMID 25719668..
+\item Xia, Xiu-Xiu; Qi-Chao Sun; Qiang Zhang; Jian-Wei Pan (2018). "Long distance quantum teleportation". Quantum Science and Technology. 3 (1): 014012. Bibcode:2018QS&T....3a4012X. doi:10.1088/2058-9565/aa9baf..
+\item Sun, Qi-Chao; Mao, Ya-Li; Chen, Sijing; Zhang, Wei; Jiang, Yang-Fan; Zhang, Yanbao; Zhang, Weijun; Miki, Shigehito; Yamashita, Taro; Terai, Hirotaka; Jiang, Xiao; Chen, Teng-Yun; You, Lixing; Chen, Xianfeng; Wang, Zhen; Fan, Jingyun; Zhang, Qiang; Pan, Jian-Wei (2016-09-19). "Quantum teleportation with independent sources and prior entanglement distribution over a network". Nature Photonics (in 英语). 10 (10): 671–675. arXiv:1602.07081. doi:10.1038/nphoton.2016.179. ISSN 1749-4893..
+\item Valivarthi, Raju; Puigibert, Marcel.li Grimau; Zhou, Qiang; Aguilar, Gabriel H.; Verma, Varun B.; Marsili, Francesco; Shaw, Matthew D.; Nam, Sae Woo; Oblak, Daniel (2016-09-19). "Quantum teleportation across a metropolitan fibre network". Nature Photonics. 10 (10): 676–680. arXiv:1605.08814. Bibcode:2016NaPho..10..676V. doi:10.1038/nphoton.2016.180. ISSN 1749-4885..
+\item "Quantum teleportation between atomic systems over long distances". Phys.Org..
+\item Krauter, H.; Salart, D.; Muschik, C. A.; Petersen, J. M.; Shen, Heng; Fernholz, T.; Polzik, E. S. (2 June 2013). "Deterministic quantum teleportation between distant atomic objects". Nature Physics. 9 (7): 400. arXiv:1212.6746. Bibcode:2013NatPh...9..400K. doi:10.1038/nphys2631..
+\item K.S. Chou et al., Deterministic teleportation of a quantum gate between two logical qubits. https://arxiv.org/abs/1801.05283.
+\item Chuang, Nielsen. Quantum Computation and Quantum Information. pp. 26–27..
+\item Bob Coecke, "The logic of entanglement". Research Report PRG-RR-03-12, 2003. arXiv:quant-ph/0402014 (8 page shortversion) (full 160 page version).
+\item C. H. Bennett, G. Brassard, C. Crépeau, R. Jozsa, A. Peres, W. K. Wootters (1993). "Teleporting an Unknown Quantum State via Dual Classical and Einstein–Podolsky–Rosen Channels". Phys. Rev. Lett. 70 (13): 1895–1899. Bibcode:1993PhRvL..70.1895B. CiteSeerX 10.1.1.46.9405. doi:10.1103/PhysRevLett.70.1895. PMID 10053414.CS1 maint: Uses authors parameter (link).
+\item Braunstein, S. L.; Kimble, H. J. (1998). "Teleportation of Continuous Quantum Variables" (PDF). Phys. Rev. Lett. 80 (4): 869–872. Bibcode:1998PhRvL..80..869B. doi:10.1103/PhysRevLett.80.869..
+\item Furusawa, A.; Sørensen, J. L.; Braunstein, S. L.; Fuchs, C. A.; Kimble, H. J.; Polzik, E. S. (1998). "Unconditional Quantum Teleportation". Science. 282 (5389): 706–709. Bibcode:1998Sci...282..706F. doi:10.1126/science.282.5389.706..
+\item W. Dür and J. I. Cirac (2000). "Multiparty teleportation". J. Mod. Opt. 47 (2–3): 247–255. Bibcode:2000JMOp...47..247D. doi:10.1080/09500340008244039..
+\item Yeo, Ye; Chua, Wee Kang (2006). "Teleportation and Dense Coding with Genuine Multipartite Entanglement". Phys. Rev. Lett. 96 (6): 060502. arXiv:quant-ph/0510029. Bibcode:2006PhRvL..96f0502Y. doi:10.1103/PhysRevLett.96.060502. PMID 16605974..
+\item Karlsson, Anders; Bourennane, Mohamed (1998). "Quantum teleportation using three-particle entanglement". Phys. Rev. A. 58 (6): 4394–4400. Bibcode:1998PhRvA..58.4394K. doi:10.1103/PhysRevA.58.4394..
+\item Deutsch, David; Hayden, Patrick (1999). "Information Flow in Entangled Quantum Systems". Proceedings of the Royal Society A: Mathematical, Physical and Engineering Sciences. 456 (1999): 1759–1774. arXiv:quant-ph/9906007. Bibcode:2000RSPSA.456.1759H. doi:10.1098/rspa.2000.0585..
+\end{enumerate}
