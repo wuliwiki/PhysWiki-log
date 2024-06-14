@@ -38,10 +38,10 @@
 \item \verb`cmake_minimum_required(VERSION x.x)` 要求 cmake 最小版本（必须有）
 \item \verb`project(project_name)` 指定项目名称（必须有）
 \item \verb|set(CMAKE_CXX_COMPILER "/usr/bin/g++")| 设置 compiler
-\item \verb|set(CMAKE_CXX_FLAGS "-选项 -选项")| 设置 flag， 包括 c++ 标准。 注意这不是一个 list。 如果要在后面添加选项， 就用 \verb|set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -选项1 -选项2")|。
-\item 用 \verb|set(CMAKE_CXX_STANDARD 11)| 设置 c++ 标准
+\item \verb|set(CMAKE_CXX_FLAGS "-选项 -选项")| 设置 flag， 包括 C++ 标准。 注意这不是一个 list。 如果要在后面添加选项， 就用 \verb|set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -选项1 -选项2")|。
+\item 用 \verb|set(CMAKE_CXX_STANDARD 11)| 设置 C++ 标准
 \item 用 \verb|set(CMAKE_CXX_STANDARD_REQUIRED ON)| （默认关）如果编译器不支持该标准就报错
-\item \verb|set(CMAKE_CXX_EXTENSIONS OFF)| （默认开）不使用 c++ 标准拓展， 例如 \verb|-std=gnu11|。 后者并不完全兼容标准，一些情况会出错。
+\item \verb|set(CMAKE_CXX_EXTENSIONS OFF)| （默认开）不使用 C++ 标准拓展， 例如 \verb|-std=gnu11|。 后者并不完全兼容标准，一些情况会出错。
 \item 添加 debug 模式的 flag 如 \verb|set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -fsanitize=address")| 或者下面的 \verb`list(APPEND ...)`
 \item 同理， \verb|CMAKE_CXX_FLAGS_RELEASE| 可以设置 release 模式下的 flag。
 \item \verb`set(变量 str1 [str2] ...)` 对变量赋值（若有多个值就生成 list）
@@ -56,7 +56,7 @@
 \item \verb|string(REPLACE "老词" "新词" 变量 "字符串")| 做字符串替换。
 \item \verb|add_definitions(-D FOO -D BAR)| 给编译器添加宏定义
 \item \verb|add_compile_options(-Wall -fopenmp)| 给编译器添加选项（注意不能用 \verb|-D| 定义宏）， 该命令不受 \verb|CMAKE_BUILD_TYPE| 的影响。
-\item \verb`add_executable(目标名 源码1 源码2)` 前者是可执行文件名， 后者是所有需要 link 的 \verb|c/c++| 文件名，不需要头文件。 cmake 会自动分析代码得到哪个 cpp 调用哪个头文件， 如果头文件改变了， 只有调用它的 cpp 会重新编译。 注意 \verb|目标名| 可以是任意名字不一定是可执行文件名。
+\item \verb`add_executable(目标名 源码1 源码2)` 前者是可执行文件名， 后者是所有需要 link 的 \verb|c/C++| 文件名，不需要头文件。 cmake 会自动分析代码得到哪个 cpp 调用哪个头文件， 如果头文件改变了， 只有调用它的 cpp 会重新编译。 注意 \verb|目标名| 可以是任意名字不一定是可执行文件名。
 \item 要指定可执行文件的名字， 用 \verb|set_target_properties(exe_targ_name PROPERTIES OUTPUT_NAME 可执行文件的名字)|
 \item 一般来说 \verb|add_executable| 指定的源码不需要包含头文件， 但如果头文件需要由其他 rule 来生成， 那就需要包含。 所以最保险还是把所有头文件都包含。
 \item \verb`configure_file(file_in file_out)` 将文件中 \verb`@变量@` 替换为变量 \verb`变量` 的字符串。

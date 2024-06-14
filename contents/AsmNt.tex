@@ -75,7 +75,7 @@ message:
 \begin{itemize}
 \item 函数调用时， 寄存器用于储存自变量。
 \item 整数或指针参数顺序： \verb|rdi, rsi, rdx, rcx, r8, r9|
-\item 浮点参数顺序： \verb|xmm0, xmm1, xmm2, xmm3, xmm4, xmm5, xmm6, xmm7|
+\item 浮点参数顺序： \verb|xmm0, xmm1, ..., xmm7|
 \end{itemize}
 
 \subsubsection{system call 调用}
@@ -98,7 +98,7 @@ message:
 \item \verb|jnz 标签| 是条件跳转。 当 \verb|ecx| 为 0 时就不跳。
 \item \verb|add %xxx, %yyy| 把两个值相加， 存到第一个。
 \item \verb|sub %xxx, %yyy| 同理，相减。
-\item \verb|and %xxx, %yyy| 逐 bit 相 \&
+\item \verb|and %xxx, %yyy| 逐 bit 相与。
 \end{itemize}
 
 \subsubsection{gdb 调试}
@@ -106,13 +106,13 @@ message:
 \item 编译时加上选项 \verb|-g|， 就可以用 \verb|gdb ./hello.x| 来调试程序。
 \item \verb|b main| 可以在 main 的第一行设置 break point， \verb|r| 跑程序。
 \item \verb|p $xxx| 可以查看 register 的值。 注意不是 \verb|%|
-\item 在用 gdb 调试 c/c++ 语言时， \verb|disassemble| 命令可以看到当前的汇编码。
-\item 要直接把 c 编译成汇编码， 用 \verb|gcc -S main.c|， 但是生成汇编码的可读性比较差（比手写的复杂）。
+\item 在用 gdb 调试 C/C++ 语言时， \verb|disassemble| 命令可以看到当前的汇编码。
+\item 要直接把 C 编译成汇编码， 用 \verb|gcc -S main.c|， 但是生成汇编码的可读性比较差（比手写的复杂）。
 \end{itemize}
 
 \subsection{Fibonacci 数列}
 \begin{lstlisting}[language=none, caption=fib.s]
-# # A 64-bit Linux application that writes the first 90 Fibonacci numbers.
+# A 64-bit Linux application that writes the first 90 Fibonacci numbers.
 # gcc -no-pie -g fib.s -o fib.x && ./fib.x
 
 .global main
