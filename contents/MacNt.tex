@@ -55,6 +55,7 @@
 \subsubsection{文件浏览器}
 \begin{itemize}
 \item Goto \verb`Cmd + Shift + G` 输入要打开的路径
+\item \verb`Cmd + Shift + .` 显示隐藏文件和目录（文件名以 \verb`.` 开头的）
 \item \verb|Cmd + Del| 把文件移动到回收站
 \item \verb|Cmd + Delete| 删除
 \item \verb|Fn + Delete| 向右删除文本（相当于 Windows 的 \verb|Delete|）
@@ -110,6 +111,9 @@
 \item 菜单中的 \verb`Go > Go to folder` 可以输入绝对或相对路径打开文件夹，快捷键 \verb`Cmd + Shift + G`（一些时候只能用快捷键，例如 app 打开文件时）
 \item 复制文件后粘贴到文本框可以粘贴绝对路径。
 \item 要在当前路径打开 Terminal，鼠标右键点 finder 最下面的任何当前文件夹，点 New Terminal at Folder 即可。
+\item 要改变文件的默认打开方式，右键文件 info，然后选软件，全部生效。 右键 \verb`Open With...` 里面选 always 可能无效（效果飘忽不定）。
+\item 双击图片默认使用 Preview 打开，无法左右滑动。 建议用 XnViewMP，并把所有图片格式用它默认打开。
+\item 要让 Finder 默认显示隐藏文件， 用 \verb`defaults write com.apple.finder AppleShowAllFiles TRUE`。 要恢复默认隐藏，改成 \verb`FALSE` 即可。 要让改变生效，用 \verb`killall Finder` 重启 finder。
 \end{itemize}
 
 \subsection{外观}
@@ -129,6 +133,7 @@
 \subsection{Terminal}
 \begin{itemize}
 \item 苹果自带的 terminal 比较古老，快捷键也比较奇怪， 很多人喜欢用 \verb`iTem2`
+\item iTem2 默认支持 Home End 按键，在键盘设置中也可以设置为支持 Cmd 左右键。
 \item 虽然 \enref{Homebrew}{Homebr} 提供了许多 Linux 工具，但仍然不完全兼容。
 \item 【必备】\href{https://orbstack.dev/}{orbstack} 相当于 macOS 上的 WSL1。
 \item \verb`open 目录或文件` 可以打开 finder 或用默认 app 打开文件
@@ -182,9 +187,10 @@ vmotion.svga.maxTextureAnisotropy, and change it to "2"
 \subsection{挂载网络硬盘}
 \begin{itemize}
 \item 在 Finder 菜单中， 选择 \verb`Go -> Connect to Server`，填写 \verb`smb://ip地址/分享名`
+\item Finder 里面输入 \verb`sftp://user@host:port/some/path/`（亲测无效）。
 \item 一个流行的第三方 sftp 客户端是 \href{https://cyberduck.io/}{Cyberduck}。
-\item 也会支持 sftp， 如 \verb`sftp://user@host:port/some/path/`（亲测无效）
-\item macOS 也支持 sshfs，参考\href{https://www.petergirnus.com/blog/how-to-use-sshfs-on-macos}{这里}（未测试）。
+\item macOS 也支持 sshfs，不能用 homebrew 里面的版本，需要先安装 \href{https://osxfuse.github.io/}{macFUSE（File System in Userspace）}（官网也提供 sshfs 下载）（亲测有效）。
+\item macFUSE 需要允许 system extension，简单来说就是 kernal 补丁，需要根据提示关机，长按开机键，然后修改安全设置。
 \end{itemize}
 
 \subsection{文件服务器}
