@@ -1,4 +1,4 @@
-% JavaScript 入门笔记
+% JavaScript 笔记
 % license Xiao
 % type Note
 
@@ -37,6 +37,8 @@ JavaScript 常见于网页中， 一般浏览器都可以运行。 我们以 Chr
 \item 先用 VScode 打开文件夹， 按左边的 debug 图标 （小虫子）， 弹出来的窗口中按齿轮按钮， 会自动创建 \verb`.vscode/launch.json` 设置文件， 不用做任何改动，现在就可以 debug 了。
 \item 可以在行号左边点击添加 break point， 快捷键 \verb`F5，F10，F11` 是连续执行，下一行，步入（step in）。
 \item 菜单 View 里面可以打开 Debug Console， 相当于 python REPL， 可以输入任何命令。
+\item 如果你安装了 \enref{Node.JS}{NodeJS}，那么也可以直接在命令行打 \verb`node` 进入 REPL。
+\item 注意浏览器中和 \verb`node` 中的 JS 是有许多不一样的（例如 \verb`window` 对象只有浏览器才有）。
 \end{itemize}
 
 \subsection{常识}
@@ -57,7 +59,7 @@ JavaScript 常见于网页中， 一般浏览器都可以运行。 我们以 Chr
 \item 按钮如 \verb|<button onclick="函数名()">按钮文字</button>|
 \item 输入框如 \verb|<input id="b"><br>|
 \item 获取或更改网页上的文字用 \verb|document.getElementById('b').value|
-\item 当一个项目有多个文件时（例如 json 文件，多个 js 脚本），往往浏览器不允许在本地运行，需要搭建一个本地 Web Server 或者直接上传到服务器进行调试。 这叫做 \textbf{Same-Origin Policy} 以及  \textbf{CORS (Cross-Origin Resource Sharing)}。 浏览器打开本地文件用的 protocol 是 \verb`file:///`。 \textbf{严重不推荐通过降低浏览器安全选项来解决}。
+\item 当一个项目有多个文件时（例如 json 文件，多个 js 脚本），往往浏览器不允许在本地运行，需要搭建一个本地 Web Server （如 Express.js）或者直接上传到服务器进行调试。 这叫做 \textbf{Same-Origin Policy} 以及  \textbf{CORS (Cross-Origin Resource Sharing)}。 浏览器打开本地文件用的 protocol 是 \verb`file:///`。 \textbf{严重不推荐通过降低浏览器安全选项来解决}。
 \end{itemize}
 
 \subsubsection{算符}
@@ -80,6 +82,7 @@ JavaScript 常见于网页中， 一般浏览器都可以运行。 我们以 Chr
 
 \subsubsection{字符串}
 \begin{itemize}
+\item \verb`'...'` 和 \verb`"..."` 是完全等效的字符串。 唯一的区别是 \verb`'...'` 中允许直接使用双引号， \verb`"..."` 中允许直接使用单引号。 如果你在里面的引号前面加上反斜杠则无论外面是什么都可以， 如 \verb`"ab'cde\'fg\"hi"` 表示 \verb`ab'cde'fg"hi`。
 \item \verb|str[ind]| 或 \verb|.charAt(ind)| 可以获取字符串的某个字符
 \item \verb`slice(startIndex, endIndex)` 可以或取子串（不包括 \verb`endIndex`）
 \item \verb`str.slice(-N);` 可以获取最后 \verb`N` 个字符。
@@ -101,6 +104,7 @@ JavaScript 常见于网页中， 一般浏览器都可以运行。 我们以 Chr
 \item \verb|a.shift()| 删除第一个元素， \verb|a.unshift(元素)| 新增元素到第一个
 \item 子数组如 \verb|v.slice(i, j)|， 复制从 \verb|i| 到 \verb|j-1| 个元素， 注意没有 view
 \item \verb|a = [1,2,3]; b = a; c = [1,2,3]| 会有 \verb|a == b|， \verb|a === b|， \verb|c| 永远不等于 \verb|a| 和 \verb|b|。 改变 \verb|a| 的一个元素 \verb|b| 也会变， 
+\item \verb`[a,b] = [1.1, 'hi']` 可以分别对逐个元素赋值。 如果左边要忽略哪个元素，直接不写即可，如 \verb`[, b]` 或 \verb`[a, ]`。
 \end{itemize}
 
 \subsection{判断循环}
@@ -117,16 +121,18 @@ for (const item of array)
 
 \subsection{函数}
 \begin{itemize}
-\item 定义函数如 \verb|function myFunction(p1, p2) {return p1 * p2;}|， 可以在定义之前调用函数。 \verb|return| 可选
+\item 定义函数如 \verb|function myFunction(p1, p2) {return p1 * p2;}|， \verb|return| 可选
 \item 不存在函数重载，如果定义的函数和之前的名字冲突，那么之后会用新的名字覆盖，不会报错。
-\item 一个函数中可以调用在它之后定义的函数，但在函数所在的 scope 中，不能直接在函数定义之前调用该函数。
-\item 调用函数必须要有括号， 没有括号返回函数定义。
+\item 如果 \verb`funA` 调用 \verb`funB`，那么 \verb`funA` 仍然可以在 \verb`funB` 前面定义。 可以理解为解释器从上到下一边读代码一边执行，读函数定义的以后并不会执行， 一个函数真正被执行的时候需要保证解释器已经读过它的定义。
+\item 调用函数必须要有括号， 没有括号则返回函数定义。
 \item 数组作为函数变量是 pass by reference
 \item \verb|let myfun = function(){...}| 是一个（匿名）函数的定义， 可以作为另一个函数的变量， 相当于把某个函数名作为变量。 \verb`myfun` 的类型为 \verb|function|。
 \item \verb|(function(){...})()| 叫做 \textbf{Immediately-Invoked Function Expression (IIFE)}， 可以立即执行 \verb|...| 中的代码而避免污染当前范围的变量名。
 \item 如果 IIFE 有返回值，可以用 \verb`let myvar = (function(){...})()`。 注意 \verb`myvar` 是返回值不是函数句柄！
 \item 普通函数中，\verb`arguments` 是一个类似于数组的对象， \verb`arguments[i]` 是每个函数参数， \verb`arguments.length` 是实际输入参数的个数。
-\item \verb`(arg1, arg2) => { ... }` 或者 \verb`arg1 => {...}` 也可以定义匿名函数。只有 \verb`...` 中的 \verb`this` 会有区别。
+\item \verb`(arg1, arg2) => { ... }` 或者 \verb`arg1 => {...}` 也可以定义匿名函数，或者叫箭头函数。 比起普通函数，只有 \verb`...` 中的 \verb`this` 会有区别。
+\item 如果在一个函数内定义另一个函数（包括箭头函数），那么内部的函数可以访问外层函数的变量（这跟全局变量原理类似）。
+\item 如果函数想返回多个值，返回数组 \verb`[var1,var2,...]` 即可。 调用函数时可以用 \verb`[a,b] = myfun()`。
 \end{itemize}
 
 \subsection{常用函数}
@@ -134,6 +140,26 @@ for (const item of array)
 \item \verb|var d = new Date()| 用于获取当前日期和时间 object， 成员函数有 \verb|.getDay()| (获取星期几)， \verb|.getMonth()|， \verb|.getFullYear()|， \verb|.getHours()|， \verb|.getMinutes|，
 \item \verb|.getSeconds()|， \verb|.getMilliseconds|， \verb|.getTime()| （返回从 1970/01/01/0:00 到当前的时长）
 \end{itemize}
+
+\subsubsection{调用命令行}
+\begin{lstlisting}[language=js]
+const { exec } = require('child_process');
+
+# 第二个参数是可选的，连逗号一起删掉即可
+exec('命令 参数1 参数2', { shell: '/bin/bash' }, (error, stdout, stderr) => {
+  if (error) {
+    console.error(`Error executing command: ${error}`);
+    return;
+  }
+
+  if (stderr) {
+    console.error(`stderr: ${stderr}`);
+    return;
+  }
+
+  console.log(`stdout: ${stdout}`);
+});
+\end{lstlisting}
 
 \subsection{对象}
 \begin{itemize}
@@ -149,6 +175,7 @@ const person = {
   lastName : "Doe",
   id       : 5566,
   fullName : function() {
+    // this 不可省略
     return this.firstName + " " + this.lastName;
   }
 };
@@ -166,6 +193,16 @@ function Person(first, last, age, eyecolor) {
   };
 }
 \end{lstlisting}
+要用该 constructor 创建对象，调用时必须用 \verb`new`， 如 \verb`let person1 = new Person('1','2',3,'4')`。
+
+\subsubsection{关于 this}
+\begin{itemize}
+\item 成员函数中的 \verb`this` 最好理解，就是指当前对象。
+\item global scope 中的 \verb`this` 在 \verb`'use strict'` 时是 \verb`undefined`。 否则在浏览器中是 \verb`windows`，而在 node 中是 \verb`global`
+\item 在 constructor 函数中，指新创建的对象。
+\item 在匿名函数（箭头函数）中， 等效于函数外的 \verb`this`。
+\item 在浏览器的回调函数中， \verb`button.addEventListener('click', function() {...})`， 函数中的 \verb`this` 指的是 DOM 中的对象（即 \verb`button`）。
+\end{itemize}
 
 \subsection{模块}
 \begin{itemize}
@@ -173,8 +210,13 @@ function Person(first, last, age, eyecolor) {
 \item 从电脑上打开的 html 文件就是 file 协议， 如 \verb|file:///C:/路径/diffus.html| 但浏览器上可能不会显示 \verb|file://|。 注意第三个 \verb|/| 表示电脑的根目录。
 \item 在 html 中加载模块 \verb|<script type="module"> import message from "./message.js"; </script>|
 \item \textbf{named export} 如 \verb|const name = "Jesse"; const age = 40; export {name, age};|
-\item 加载如 \verb|import { name, age } from "路径/文件.js";|
-\item \textbf{default export} 如 \verb|export default message;|。 一个模块文件中之能有一个 default export。
+\item 也可以在定义的时候直接 export 如 \verb`export const age = 40;` \verb`export function myfun() {...};`
+\item 加载如 \verb|import { name, age } from "路径/文件.js";|，其中 \verb`.js` 拓展名可以省略
+\item \textbf{default export} 只能有一个变量或函数，如 \verb|export default age;| 也可以在定义前面直接用 \verb`export default const age = 40;`。
+\item 要加载 defualt export， 用 \verb`import 重命名 from './myModule.js';`
+\item 也可以个变量或函数重命名 \verb`import { greet as sayHello, age as hisAge } from './myModule.js';`
+\item import 一切用 \verb`import * as MyModule from './myModule.js';`，所有的名字前面需要加 \verb`MyMOdule.`。
+\item 禁止直接用 \verb`import * from ...`， 必须要有 namespace
 \end{itemize}
 
 \subsection{容器}
