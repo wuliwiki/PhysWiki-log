@@ -7,7 +7,7 @@
 
 \footnote{参考 Wikipedia \href{https://en.wikipedia.org/wiki/Runge\%E2\%80\%93Kutta_methods}{相关页面}。}\textbf{龙格库塔法（Runge-Kutta）}是一类数值解\enref{微分方程}{ODE}或方程组的算法， 其中较常见的是\textbf{四阶龙格库塔法}。 这里不进行推导， 仅仅给出算法。 如果你不想了解算法只想用 Matlab 自带的解算器直接求解方程，见“\enref{Matlab 解常微分方程组（ode45）}{MatODE}”。
 
-公式如下（$y_n, t_n, h$ 的定义类比\autoref{eq_OdeNum_5}~\upref{OdeNum}）
+公式如下（$y_n, t_n, h$ 的定义类比\autoref{eq_OdeNum_5}）
 \begin{equation}\label{eq_OdeRK4_1}
 y_{n+1} = y_n + \frac h6 (k_1 + 2k_2 + 2k_3 + k_4)~,
 \end{equation}
@@ -69,7 +69,7 @@ end
 
 我们先来看第 1 行的函数声明， 输入变量中，\verb|f| 是\autoref{eq_OdeRK4_4} 中 $\bvec f(\bvec y, t)$ 的\enref{函数句柄}{MatFun}， \verb|tspan| 是一个 \verb|2×1| 的列矢量， \verb|tspan(1)| 是初始时间， \verb|tspan(2)| 是终止时间， \verb|Y0| 是一个列矢量， \verb|Y0(ii)| 是第 \verb|ii| 个因变量的初始值， \verb|Nt| 是 $t_n$ 的个数， \verb|tspan| 定义的时间区间被等分为 \verb|Nt - 1| 个小区间。 因变量中， \verb|Y| 的行数是因变量的个数， 列数是 \verb|Nt|， \verb|t| 是一个行矢量， 由第 6 行定义， \verb|Y(ii, jj)| 就是第 \verb|ii| 个变量在 \verb|t(jj)| 时刻的值。 第 5 行把初值 \verb|Y0| 赋给 \verb|Y| 的第 1 列， 第 8-14 行的循环根据\autoref{eq_OdeRK4_1} 和\autoref{eq_OdeRK4_2} 的矢量形式由 \verb|Y| 的第 \verb|ii| 列（$\bvec y_i$）求第 \verb|ii+1| 列（$\bvec y_{i+1}$）。
 
-我们先来用这个函数来计算“\enref{天体运动的简单数值计算}{KPNum0}” 中的问题。 我们令因变量 $\bvec y$ 的四个分量依次为一阶方程组（\autoref{eq_OdeNum_4}~\upref{OdeNum}）
+我们先来用这个函数来计算“\enref{天体运动的简单数值计算}{KPNum0}” 中的问题。 我们令因变量 $\bvec y$ 的四个分量依次为一阶方程组（\autoref{eq_OdeNum_4}）
 \begin{equation}\label{eq_OdeRK4_5}
 \begin{cases}
 x' = v_x\\

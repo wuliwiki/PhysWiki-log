@@ -44,9 +44,26 @@
 \end{itemize}
 
 \subsection{蓝色的子节标题}\label{sub_Sample_2}
-可以通过内部或外部引用按钮引用， 如\autoref{sub_Sample_2}。 引用其他文章的子节如\autoref{sub_BiNor_5}~\upref{BiNor}，注意后面多了一个图标用于区分。
+可以通过内部或外部引用按钮引用， 如\autoref{sub_Sample_2}。 引用其他文章的子节如\autoref{sub_BiNor_5}，注意后面会自动添加一个图标表示是其他文章的链接。
 
-任何 \verb`\autoref{标签}` （无论本文还是其他文章）都可以用 \verb`\aref{链接文字}{标签}`， 如\aref{这个子节}{sub_Sample_2}， 和\aref{那个子节}{sub_BiNor_5}。
+任何 \verb`\autoref{标签}` （无论本文还是其他文章）都支持对应的 \verb`\aref{链接文字}{标签}`， 如\aref{这个子节}{sub_Sample_2}， 和\aref{那个子节}{sub_BiNor_5}。
+\addTODO{计划：所有标签（\verb`\label{标签}`）的引用，无论标签类型是什么（文章，公式，图片等），应该都支持三个命令：
+\begin{itemize}
+\item \verb`\upref{标签}` 显示为书签图标\upref{test}
+\item \verb`\aref{任意文字}{标签}` 给\aref{任意文字}{sub_Sample_2}加链接到\verb`标签`定义处。
+\item \verb`\autoref{标签}` 自动生成文字加链接，如\autoref{eq_Sample_2}（本文）或\autoref{eq_AU_10}（其他文章）。
+\end{itemize}
+
+在 pdf 中，需要考虑打印会使链接失效，所以变为以下效果：
+\begin{itemize}
+\item \verb`\upref{标签}` 变为一个脚注如 “见 103 页《向量空间》定义 2。”
+\item \verb`\aref{任意文字}{标签}` 相当于给\verb`任意文字` 加下划线然后使用 \verb`\upref{标签}`
+\item \verb`\autoref{标签}` 显示效果如 \verb`式 1`（本文）或 \verb`式 1` $^{\color{green}\small[103]}$（其他文章）
+\end{itemize}
+
+其他命令合并到这三个之中：\verb`\enref` 并入 \verb`\aref`， \verb`\nref` 并入 \verb`\upref`。
+
+一个细节问题：\verb`\autoref` 这个命令有点长而且经常使用，是否要改成 \verb`\tref`。同理 \verb`\upref` 也可以改成 \verb`\uref`}
 
 \subsubsection{黑色的子子节标题}
 目前子子节标题无法引用。
@@ -66,7 +83,7 @@ a + b = c~, \quad d + e = f~.
 \addTODO{在这里提示未完成的内容，如果不希望公开，注释掉即可，但仍然需要 \verb`\addTODO` 命令}
 
 \subsection{引用}
-引用公式和图表都统一使用 \verb|\autoref{标签}| 命令， \verb|\autoref| 和 \verb|\label{标签}| 都无需手动插入， 可以用菜单栏中的 “内部引用” 和 “外部引用” 按钮（实心和空心的双引号图标）。 注意 \verb|\autoref{}| 前面不加空格后面要加空格（后面是标点符号除外）， 例如\autoref{eq_Sample_1}。 如果要引用其他文章中的公式，可以引用 “\enref{其他文章}{BiNor}” 的\autoref{eq_BiNor_1} 也可以用 “\autoref{eq_BiNor_1}~\upref{BiNor}”， 为了区分内部和外部引用， \verb|\upref| 不能忽略。 在 pdf 上， \verb|\upref{}| 会显示为页码。
+引用公式和图表都统一使用 \verb|\autoref{标签}| 命令， \verb|\autoref| 和 \verb|\label{标签}| 都无需手动插入， 可以用菜单栏中的 “内部引用” 和 “外部引用” 按钮（实心和空心的双引号图标）。 注意 \verb|\autoref{}| 前面不加空格后面要加空格（后面是标点符号除外）， 例如\autoref{eq_Sample_1}。 如果要引用其他文章中的公式，可以引用 “\enref{其他文章}{BiNor}” 的\autoref{eq_BiNor_1} 也可以用 “\autoref{eq_BiNor_1} ”， 为了区分内部和外部引用， \verb|\upref| 不能忽略。 在 pdf 上， \verb|\upref{}| 会显示为页码。
 
 一个升级版的 \verb`\upref{文章id}` 命令是 \verb`\enref{文字}{文章id}`， 可以把 \verb`文字` 直接链接到文章。 例如\enref{一篇测试}{test}。 新内容建议使用后者。
 

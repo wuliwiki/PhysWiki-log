@@ -20,7 +20,7 @@ H'_{l',l} = \mathcal{E_z}\mel{\psi_{n,l',m}}{z}{\psi_{n,l,m}}~.
 但事实上氢原子加上匀强电场后是不存在数学上严格的束缚态的，因为无论电场多弱，在电场反方向的某个距离外，势能都会小于基态能量，使波函数变为散射态。在含时薛定谔方程中，波函数可能会有长时间处于微扰理论给出的 “束缚态”，但这只能算是一种\textbf{亚稳态（metastable state）}，仍会有不为零的隧道电离概率。
 
 \begin{example}{类氢原子 $n=2$ 的斯塔克效应}
-先考虑 $n=2$， $m=0$ 的情况， 这是一个二维希尔伯特子空间，基底为 $\ket{2,0,0}$ 和 $\ket{2,1,0}$。 根据\autoref{tab_HDipM_1}~\upref{HDipM}， \autoref{eq_HStark_1} 为
+先考虑 $n=2$， $m=0$ 的情况， 这是一个二维希尔伯特子空间，基底为 $\ket{2,0,0}$ 和 $\ket{2,1,0}$。 根据\autoref{tab_HDipM_1}， \autoref{eq_HStark_1} 为
 \begin{equation}
 \mat H' = -\frac{3}{Z}\mathcal{E_z}\pmat{0 & 1\\ 1 & 0}~.
 \end{equation}
@@ -34,7 +34,7 @@ H'_{l',l} = \mathcal{E_z}\mel{\psi_{n,l',m}}{z}{\psi_{n,l,m}}~.
 
 不要以为\autoref{fig_HStark_1} 是外电场扭曲波函数的结果， $\ket{2\pm}$ 本身就是无电场的氢原子 $n=2$ 本征态。 施加了电场后波函数反而需要进一步修正。
 
-从经典电磁学角度来理解， 电偶极子在电场中的能量（\autoref{eq_eleDP2_1}~\upref{eleDP2}）等于 $-d_z \mathcal{E}_z$， 其中 $d_z$ 是 $z$ 方向电偶极子
+从经典电磁学角度来理解， 电偶极子在电场中的能量（\autoref{eq_eleDP2_1}）等于 $-d_z \mathcal{E}_z$， 其中 $d_z$ 是 $z$ 方向电偶极子
 \begin{equation}
 d_z^{(\pm)} = \mel{2\pm}{z}{2\pm} = \pm \frac{3}{Z}~.
 \end{equation}
@@ -43,7 +43,7 @@ d_z^{(\pm)} = \mel{2\pm}{z}{2\pm} = \pm \frac{3}{Z}~.
 
 \begin{example}{氢原子斯塔克效应（能级截断）}\label{ex_HStark_2}
 \addTODO{这不太可行！如果把 $n_\text{max}$ 增加到 5-15，就会得到奇怪的结果（尤其是直接计算 $\mel{\psi_n}{H^1/\mathcal{E}}{\psi_n}$，\autoref{fig_HStark_2} 也会出现奇怪的 avoided crossing。 这是因为，波函数被电场扭曲以后并不完全能够用束缚态展开，而是同时\textbf{需要许多连续态}！从数值方法上，我们可以规定给一个 $r_\text{max}$ 把氢原子束缚到一个盒子中，用离散的 $E>0$ 盒子束缚态来近似连续态。所以还是先看\autoref{ex_HStark_1} 吧。}
-事实上，在\autoref{ex_HStark_1} 中使用\autoref{eq_HStark_2} 计算二阶微扰十分繁琐，通常需要编程来数值计算。 除了按不同阶来计算微扰外，还有一个更直接的近似方法就是直接把总哈密顿 $H = H^0+H^1$ 用有限个 $\ket{n,l,m}$ （可以用 $n_\text{max}$ 作为截断条件）完整表示（例如\autoref{tab_HDipM_1}~\upref{HDipM}），然后数值将其对角化。 当 $n_\text{max}$ 无穷大，结果就是精确的（包含任意阶微扰）。若使用编程，该算法将比\autoref{ex_HStark_1} 更容易实现。
+事实上，在\autoref{ex_HStark_1} 中使用\autoref{eq_HStark_2} 计算二阶微扰十分繁琐，通常需要编程来数值计算。 除了按不同阶来计算微扰外，还有一个更直接的近似方法就是直接把总哈密顿 $H = H^0+H^1$ 用有限个 $\ket{n,l,m}$ （可以用 $n_\text{max}$ 作为截断条件）完整表示（例如\autoref{tab_HDipM_1}），然后数值将其对角化。 当 $n_\text{max}$ 无穷大，结果就是精确的（包含任意阶微扰）。若使用编程，该算法将比\autoref{ex_HStark_1} 更容易实现。
 
 首先可以用 “\enref{氢原子的跃迁偶极子矩阵元列表}{HDipM}” 中的 \verb`h_dipole_z.m` 程序生成 $\mat H^1$ 矩阵， 然后用 Matlab 自带的 \verb`eigen()` 函数求 $\mat H^0+\mat H^1$ 的本征值， 画出每个能级关于电场强度的曲线。
 \begin{figure}[ht]
@@ -56,7 +56,7 @@ d_z^{(\pm)} = \mel{2\pm}{z}{2\pm} = \pm \frac{3}{Z}~.
 
 
 \begin{example}{氢原子的极化率（二阶微扰）}\label{ex_HStark_1}
-在二阶微扰公式\autoref{eq_TIPT2_2}~\upref{TIPT2} 中， 类氢原子的 $E_n^0 \propto Z^2$， 分子中的\enref{跃迁矩阵元}{HDipM} $\propto 1/Z$， 所以二阶能量修正 $E_n^2 \propto 1/Z^4$（参考 \cite{bookAMO}）。
+在二阶微扰公式\autoref{eq_TIPT2_2}  中， 类氢原子的 $E_n^0 \propto Z^2$， 分子中的\enref{跃迁矩阵元}{HDipM} $\propto 1/Z$， 所以二阶能量修正 $E_n^2 \propto 1/Z^4$（参考 \cite{bookAMO}）。
 
 若氢原子处于某个好量子态，使用一阶微扰求其\textbf{极化率（polarizability）} $\alpha$，定义为 $\bvec p_z = \alpha \bvec{\mathcal E_z}$，其中 $\bvec p_z$ 为 $z$ 方向的电偶极子， $\bvec{\mathcal E_z}$ 为电场强度。 如果系统不是关于 $z$ 轴对称， 极化率一般是一个 $3\times 3$ 张量（矩阵）。%（实验数据参考\href{https://physicspages.com/pdf/Electrodynamics/Polarizability\%20of\%20hydrogen.pdf}{这篇}（资源比较随意））
 
@@ -65,7 +65,7 @@ d_z^{(\pm)} = \mel{2\pm}{z}{2\pm} = \pm \frac{3}{Z}~.
 p_z &\approx -\mel{\psi_n^0 + \psi_n^1}{z}{\psi_n^0 + \psi_n^1}\\
 &= -\mel{\psi_n^0}{z}{\psi_n^0} - 2\Re[\mel{\psi_n^0}{z}{\psi_n^1}] - \mel{\psi_n^1}{z}{\psi_n^1}~.
 }\end{equation}
-其中第一项就是 $E_n^1/\mathcal{E}_z$。 第二项第三项分别是二阶和三阶小量，所以第三项可忽略。 根据\autoref{eq_TIPT2_4}~\upref{TIPT2}， 第二项的 $\mel{\psi_n^0}{z}{\psi_n^1}$ 对应二阶能量修正 $E_n^2/\mathcal{E}_z$，所以
+其中第一项就是 $E_n^1/\mathcal{E}_z$。 第二项第三项分别是二阶和三阶小量，所以第三项可忽略。 根据\autoref{eq_TIPT2_4}， 第二项的 $\mel{\psi_n^0}{z}{\psi_n^1}$ 对应二阶能量修正 $E_n^2/\mathcal{E}_z$，所以
 \begin{equation}
 p_{n,z} \approx p_{n,z}^1 + p_{n,z}^2 = -\frac{1}{\mathcal{E}_z}(E_n^1 + 2E_n^2)~.
 \end{equation}
@@ -74,7 +74,7 @@ p_{n,z} \approx p_{n,z}^1 + p_{n,z}^2 = -\frac{1}{\mathcal{E}_z}(E_n^1 + 2E_n^2)
 \begin{equation}
 E_n^1 = \mel{\psi_n^0}{H^1}{\psi_n^0}~
 \end{equation}
-和电场成正比和 $Z$ 成反比，而二阶能量修正（\autoref{eq_TIPT2_2}~\upref{TIPT2}）
+和电场成正比和 $Z$ 成反比，而二阶能量修正（\autoref{eq_TIPT2_2}）
 \begin{equation}\label{eq_HStark_2}
 E_n^2 = \sum_{m}^{E_m\ne E_n} \frac{\abs{\mel{\psi_m^0}{H^1}{\psi_n^0}}^2}{E_n^0-E_m^0}~.
 \end{equation}
@@ -85,23 +85,23 @@ E_n^2 = \sum_{m}^{E_m\ne E_n} \frac{\abs{\mel{\psi_m^0}{H^1}{\psi_n^0}}^2}{E_n^0
 \alpha_n = -2 E_n^2/\mathcal{E}_z^2~.
 \end{equation}
 
-\addTODO{计算 $E_n^2$，参考\autoref{sub_HDipM_1}~\upref{HDipM}，但太复杂了，还是应该用\autoref{ex_HStark_2} 的方法}
-球面波基底为（\autoref{eq_CulmWf_1}~\upref{CulmWf}）
+\addTODO{计算 $E_n^2$，参考\autoref{sub_HDipM_1}，但太复杂了，还是应该用\autoref{ex_HStark_2} 的方法}
+球面波基底为（\autoref{eq_CulmWf_1}）
 \begin{equation}
 \ket{C_{l,m}(k)} = \frac{1}{r} \sqrt{\frac{2}{\pi}} F_l(\eta, kr) Y_{l,m}(\uvec r)~,
 \end{equation}
-\autoref{eq_TIPTc_1}~\upref{TIPTc} 在 Stark 效应中就是
+\autoref{eq_TIPTc_1}  在 Stark 效应中就是
 % 代码见 FEDVR-TDSE/hydrogen_polarizability_z.m % \addTODO{整理上传代码}
 \begin{equation}\label{eq_HStark_3} % 已验证：氢原子 |1,0,0> polarizability = -4.5
 E_n^2 = \sum_{n',l'}^{n'\ne n} \frac{\abs{\mel{n',l',m}{H^1}{n,\alpha,m}}^2}{E_n^0-E_{n'}^0}
 + \sum_{l'}\int_0^\infty \frac{\abs{\mel{C_{l',m}(k)}{H^1}{n,\alpha,m}}^2}{E_n^0-k^2/2}\dd{k}~.
 \end{equation}
-其中 $\ket{n,\alpha,m}$ 不过是 $\ket{n,l,m}$ 的线性组合。 第一个矩阵元为（\autoref{eq_HDipM_1}~\upref{HDipM}）
+其中 $\ket{n,\alpha,m}$ 不过是 $\ket{n,l,m}$ 的线性组合。 第一个矩阵元为（\autoref{eq_HDipM_1}）
 \begin{equation}\ali{ % 已验证：氢原子 |1,0,0> |2,0,0> polarizability
 &\quad \mel{\psi_{n',l',m'}}{r\cos\theta}{\psi_{n,l,m}}\\
 &= \delta_{m,m'}(\delta_{l+1,l'}\mathcal C_{l,m} + \delta_{l,l'+1}\mathcal{C}_{l',m'})\int_0^\infty R_{n',l'}(r)R_{n,l}(r)r^3\dd{r}~.
 }\end{equation}
-而第二个也是大同小异（\autoref{eq_HyIon2_3}~\upref{HyIon2}），
+而第二个也是大同小异（\autoref{eq_HyIon2_3}），
 \begin{equation}\ali{ % 已验证：氢原子 |1,0,0> |2,0,0>polarizability
 &\quad \mel{C_{l',m}(k)}{r\cos\theta}{\psi_{n,l,m}}\\
 &= \delta_{m,m'}(\delta_{l+1,l'}\mathcal C_{l,m} + \delta_{l,l'+1}C_{l',m'})
@@ -126,7 +126,7 @@ E_n^2 = \sum_{n',l'}^{n'\ne n} \frac{\abs{\mel{n',l',m}{H^1}{n,\alpha,m}}^2}{E_n
 \begin{equation}
 p_{(n,l,m),z} = -\mel{n,l,m,*}{z}{n,l,m,*} = -\sum_\alpha \abs{c_{n,l,\alpha,m}}^2\mel{n,\alpha,m,*}{z}{n,\alpha,m,*}~.
 \end{equation}
-其中近似认为 $\alpha\ne\alpha'$， $\mel{n,\alpha',m,*}{z}{n,\alpha,m,*} = 0$（\autoref{sub_TIPT_2}~\upref{TIPT}）。在电场为零时， 任意 $p_{(n,l,m),z} = 0$， 所以只有二阶修正起作用：
+其中近似认为 $\alpha\ne\alpha'$， $\mel{n,\alpha',m,*}{z}{n,\alpha,m,*} = 0$（\autoref{sub_TIPT_2}）。在电场为零时， 任意 $p_{(n,l,m),z} = 0$， 所以只有二阶修正起作用：
 \begin{equation}
 p_{(n,l,m),z} = \sum_\alpha \abs{c_{n,l,\alpha,m}}^2 p_{(n,\alpha,m),z}^2~.
 \end{equation}

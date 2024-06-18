@@ -31,7 +31,7 @@ F(r) = \frac{k}{r^2}~.
 \end{equation}
 其中 $k$ 为非零实常数。 由于质点的运动只和初始位置、初始速度和 $k$ 有关， 与质点的质量无关， 所以我们令 $m=1$ 并不影响一般性。 令发射位置的\enref{极坐标}{Polar}为 $(R,\alpha)$， 初速度为 $v_0$， 发射仰角为 $\beta$ （顺时针增量为正， $\beta=0$ 时质点延逆时针方向水平发射）。
 
-所以质点机械能为动能加势能 $E = v_0^2/2 + k/R$， 角动量（逆时针为正）为 $L = v_0 R\cos\beta$。 于是离心率 $e$ 可由\autoref{eq_CelBd_2}~\upref{CelBd} 计算， 半通径 $p$ 由\autoref{eq_CelBd_3}~\upref{CelBd}计算。 然后代入圆锥曲线的极坐标方程（\autoref{eq_Cone_5}~\upref{Cone}） 即可得到轨道方程。 然而由于发射点已经选好， 实际的轨道还需要旋转一个角度 $\theta_0$ （逆时针为正）， 即轨道方程变为
+所以质点机械能为动能加势能 $E = v_0^2/2 + k/R$， 角动量（逆时针为正）为 $L = v_0 R\cos\beta$。 于是离心率 $e$ 可由\autoref{eq_CelBd_2}  计算， 半通径 $p$ 由\autoref{eq_CelBd_3} 计算。 然后代入圆锥曲线的极坐标方程（\autoref{eq_Cone_5}） 即可得到轨道方程。 然而由于发射点已经选好， 实际的轨道还需要旋转一个角度 $\theta_0$ （逆时针为正）， 即轨道方程变为
 \begin{equation}\label{eq_KepNum_1}
 r(\theta)  = \frac{-s p}{1 + s e\cos (\theta-\theta_0)} \qquad (r > 0)~.
 \end{equation}
@@ -44,15 +44,15 @@ r(\theta)  = \frac{-s p}{1 + s e\cos (\theta-\theta_0)} \qquad (r > 0)~.
 \subsection{运动的计算}
 我们使用 “\enref{开普勒问题的运动方程}{EqMoKp}” 给出的方法求解三种圆锥曲线的含时运动。 沿用其中的符号定义， 令 $t=0$ 时质点位于近日点，  近日点对应极角 $\theta_0 + \pi$， 令相对近日点的极角增量为 $\Delta\theta = \theta - \theta_0 - \pi$。 接下来， 先计算函数 $t(\Delta\theta)$， 默认逆时针旋转， 然后数值求解反函数 $\Delta\theta(t)$ 即可。 若要考虑顺时针旋转， 函数值乘以 $-1$ 即可。 易得 $\cos\beta > 0$ 时质点绕中心天体逆时针运动， $\cos\beta < 0$ 时顺时针运动。
 
-\textbf{抛物线}： 时间 $t$ 在 $(-\infty,\infty)$ 取值， \autoref{eq_EqMoKp_3}~\upref{EqMoKp}就是 $t(\Delta\theta)$。
+\textbf{抛物线}： 时间 $t$ 在 $(-\infty,\infty)$ 取值， \autoref{eq_EqMoKp_3} 就是 $t(\Delta\theta)$。
 
-\textbf{椭圆}： 时间 $t$ 在 $[-T/2,T/2]$ 取值， 周期 $T$ 由\autoref{eq_Keple2_1}~\upref{Keple2} 计算。 由于这是周期运动， 其他任意时间都可以加减整数个周期后落到 $[-T/2,T/2]$ 中。 由\autoref{eq_EqMoKp_1}~\upref{EqMoKp} 和\autoref{eq_EqMoKp_5}~\upref{EqMoKp} 计算 $t(\Delta\theta)$。
+\textbf{椭圆}： 时间 $t$ 在 $[-T/2,T/2]$ 取值， 周期 $T$ 由\autoref{eq_Keple2_1}  计算。 由于这是周期运动， 其他任意时间都可以加减整数个周期后落到 $[-T/2,T/2]$ 中。 由\autoref{eq_EqMoKp_1}  和\autoref{eq_EqMoKp_5}  计算 $t(\Delta\theta)$。
 
-\textbf{双曲线}： 时间 $t$ 在 $(-\infty,\infty)$ 取值， 使用\autoref{eq_EqMoKp_2}~\upref{EqMoKp} 到\autoref{eq_EqMoKp_6}~\upref{EqMoKp} 可得 $k<0$ 和 $k>0$ 两种情况时的 $t(\Delta\theta)$。
+\textbf{双曲线}： 时间 $t$ 在 $(-\infty,\infty)$ 取值， 使用\autoref{eq_EqMoKp_2}  到\autoref{eq_EqMoKp_6}  可得 $k<0$ 和 $k>0$ 两种情况时的 $t(\Delta\theta)$。
 
 求出发射质点的初始时刻为 $t_0 = t(\alpha - \theta_0 - \pi)$， 然后生成等间距时间格点 $t_i$ （$i=0,1,2,\dots$）， 用二分法解方程得到对应的 $\theta_i$ 即可。
 
-以下 Matlab 程序支持对同一发射位置画出多组不同初速度和仰角的轨道。 相比于使用解微分方程的方法（\autoref{sub_OdeRK4_1}~\upref{OdeRK4}）计算轨道和运动， 该程序计算的轨道和运动都可以达到 13 位有效数字以上。 然而缺点是只能计算理想的开普勒问题， 无法拓展到非平方反比力， 也无法拓展到三体乃至多体运动。 程序会在当前目录中生成 \verb|Nt| 张图片， 完成后使用 “\enref{用 Matlab 制作 gif 动画}{MatGif}” 中给出的代码可以制作成 gif 动画。
+以下 Matlab 程序支持对同一发射位置画出多组不同初速度和仰角的轨道。 相比于使用解微分方程的方法（\autoref{sub_OdeRK4_1}）计算轨道和运动， 该程序计算的轨道和运动都可以达到 13 位有效数字以上。 然而缺点是只能计算理想的开普勒问题， 无法拓展到非平方反比力， 也无法拓展到三体乃至多体运动。 程序会在当前目录中生成 \verb|Nt| 张图片， 完成后使用 “\enref{用 Matlab 制作 gif 动画}{MatGif}” 中给出的代码可以制作成 gif 动画。
 
 \begin{lstlisting}[language=matlab,caption=kepler.m]
 % 已知初始位置、发射速度、发射方向， 求轨道以及运动方程
@@ -227,7 +227,7 @@ end
 end
 \end{lstlisting}
 
-运行结果见\autoref{fig_KepNum_1}。 这里给出另一组参数，计算以 $45^\circ$ 仰角和不同初速度发射的情况，替换到以上代码中即可， 结果见\autoref{fig_KepNum_2} 。
+运行结果见\autoref{fig_KepNum_1}。 这里给出另一组参数，计算以 $45^\circ$ 仰角和不同初速度发射的情况，替换到以上代码中即可， 结果见\autoref{fig_KepNum_2}。
 \begin{lstlisting}[language=matlab]
 % === 参数设置 ===
 k = -1; % -GMm, (m=1)
