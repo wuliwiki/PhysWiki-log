@@ -1,0 +1,178 @@
+% 马尔可夫链蒙特卡罗
+% license CCBYSA3
+% type Wiki
+
+（本文根据 CC-BY-SA 协议转载自原搜狗科学百科对英文维基百科的翻译）
+
+在统计学中，\textbf{马尔可夫链蒙特卡罗方法(MCMC)}包括一类从概率分布中抽样的算法。通过构造一个具有期望分布作为其平衡分布的马尔可夫链，人们可以通过在多个步骤之后观察链，来获得期望分布的样本。步骤越多，样本的分布就越接近实际的期望分布
+
+\subsection{应用程序域}
+
+马尔可夫链蒙特卡罗方法主要用于计算多维积分的数值逼近，例如在贝叶斯估计、计算物理学、计算生物学、[1]和计算语言学中。[2][3]
+
+在贝叶斯估计中，马尔可夫链蒙特卡罗方法的最新发展是使计算大型分层模型成为可能的关键一步，这些大型分层模型需要数百甚至数千个未知参数的积分。[4]
+
+在罕见事件采样中, 马氏链蒙特卡罗方法用于生成逐渐填充罕见失效区域的样本。
+
+\subsection{一般性解释}
+
+马尔可夫链蒙特卡罗方法从可能的多维连续随机变量中创建样本，其概率密度与已知函数成比例。这些样本可用于评估这些随机变量的积分，将评估值作为样本的期望值或方差。
+
+实际上，通常会从一组任意选择且彼此距离足够远的点开始，开发一个链集合。这些链是“游走者”的随机过程。这些“游走者”根据一种算法随机移动，该算法寻找对积分贡献较大的位置，然后移动到下一个位置，给它们分配较高的概率。
+
+随机游走蒙特卡罗方法是一种随机模拟或蒙特卡罗方法。然而，传统蒙特卡罗积分中使用的被积函数的随机样本在统计学上是独立的，而马尔可夫链蒙特卡罗方法中使用的随机样本是自相关的。
+
+这些算法创建马尔可夫链，使得这些链具有与给定函数成比例的平衡分布。
+
+\begin{figure}[ht]
+\centering
+\includegraphics[width=8cm]{./figures/8db876a3323a5ea6.png}
+\caption{梅特罗波利斯— 黑斯廷斯（Metropolis–Hastings）算法的收敛性。马尔可夫链蒙特卡罗试图用橙色的分布图来近似蓝色的分布图。} \label{fig_MCMC1_1}
+\end{figure}
+
+\subsection{降低相关性}
+
+虽然创建MCMC方法比简单的蒙特卡罗算法更好地解决多维问题，但当维数增加时，它们也容易受到维数灾难的影响:概率较高的区域，在对期望积分贡献很小的不断增加的空间中，伸展和丢失。解决这个问题的一种方法是缩短游走者的步骤，这样它就不会不断试图退出最高概率区域，尽管这种方法的过程将是高度自相关的并且非常无效(即，为了获得准确的结果需要许多步骤)。更多复杂的方法使用各种方式降低自相关，同时设法将过程保持在对积分贡献较大的区域。这些算法通常依赖于更复杂的理论，并且可能更难实现，但是它们通常表现出更快的收敛性(需要更少的步骤)。
+
+\subsection{例子}
+
+随机游走蒙特卡罗方法的例子包括以下内容：
+
+\begin{itemize}
+\item 梅特罗波利斯— 黑斯廷斯（Metropolis–Hastings）算法:该方法使用新步骤的建议密度和拒绝某些建议移动的方法生成马尔可夫链。它实际上是一个通用框架，包括作为特殊情况的第一个和更简单的MCMC(梅特罗波利斯算法)和下面列出的许多最近的替代方案。
+\item 吉布斯采样(Gibbs sampling)：这种方法要求对目标分布的所有条件分布进行精确采样。当从全条件分布中绘制时，并非直截了当地使用吉布斯内部的其他采样器。 [5][6][7]吉布斯采样很受欢迎，部分原因是它不需要任何“调整”。
+\item 调整的梅特罗波利斯朗之万算法（Metropolis-adjusted Langevin algorithm ）和其他依赖对数目标密度梯度(以及可能的二阶导数)的方法，以提出更有可能朝向更高概率密度方向的步骤。[8]
+\end{itemize}
+
+\begin{itemize}
+\item切片取样：这种方法依赖于这样一个原理，即通过从密度函数曲线下的区域均匀取样，可以从分布中取样。这个方法将垂直方向的均匀采样与当前垂直位置定义的水平“切片”的均匀采样交替进行。
+\item多次试验的梅特罗波利斯：这种方法是梅特罗波利斯-黑斯廷斯算法的变体，允许在每个点进行多次试验。通过在每次迭代中采取更大的步骤，它有助于解决维数灾难。 [9][10]
+\item可逆跳跃：这种方法是梅特罗波利斯-黑斯廷斯算法的变体，它允许改变空间维度的提议。[11]改变维度的马尔可夫链蒙特卡罗方法长期以来被用于统计物理应用，在这些应用中，对于一些问题，使用了一个大正则系综的分布(例如，当盒子中的分子数量是可变的时)。但是可逆跳跃变体在对非参数贝叶斯模型进行马尔可夫链蒙特卡罗或吉布斯抽样时是有用的，例如涉及狄利克雷过程或中国餐馆过程的模型，其中混合成分/聚类等的数量是从数据中自动推断得来的。
+\item哈密顿(或混合)蒙特卡罗(HMC)：试图通过引入辅助动量矢量和实现哈密顿动力学来避免随机游走行为，所以势能函数是目标密度。动量样本在采样后被丢弃。混合蒙特卡罗的最终结果是建议以更大的步长在样本空间中移动；因此，它们不太相关，并且更快地收敛到目标分布。
+\end{itemize}
+
+\subsubsection{4.1 基于训练的马尔可夫链蒙特卡罗}
+
+与目前大多数忽略先前试验的马尔可夫链蒙特卡罗方法不同，使用新算法，马尔可夫链蒙特卡罗算法能够使用先前的步骤并生成下一个候选。这种基于训练的算法能够将马尔可夫链蒙特卡罗算法加速一个数量级。[12]
+
+相互作用的马尔可夫链蒙特卡罗方法是一类平均场粒子方法，用于从一系列概率分布中获得随机样本，其采样复杂度越来越高。[13]这些概率模型包括具有增加的时间范围的路径空间状态模型、部分观测序列的后验分布、增加条件分布的约束水平集、与一些玻尔兹曼-吉布斯分布相关联的降低的温度时间表以及许多其他模型。原则上，任何马尔可夫链蒙特卡罗采样器都可以变成相互作用的马尔可夫链蒙特卡罗采样器。这些相互作用的马尔可夫链蒙特卡罗采样器可以被解释为并行运行一系列马尔可夫链蒙特卡罗采样器的一种方式。例如，交互模拟退火算法基于独立的梅特罗波利斯-黑斯廷斯移动，它们与选择-重采样类型机制顺序交互。与传统的马尔可夫链蒙特卡罗方法相比，这类相互作用的马尔可夫链蒙特卡罗采样器的精度参数只与相互作用的马尔可夫链蒙特卡罗采样器的数量有关。这些高级粒子方法属于费曼-卡奇粒子模型类，[14][15] 也称为贝叶斯推理和信号处理共同体中的顺序蒙特卡罗或粒子滤波方法。[16]相互作用的马尔可夫链蒙特卡罗方法也可以解释为带有马尔可夫链蒙特卡罗突变的突变-选择遗传粒子算法。
+
+马尔可夫链准蒙特卡罗(MCQMC)[17][18]对于简单的独立蒙特卡罗采样，低差异序列代替随机数的优势是众所周知的。[19]这个过程被称为准蒙特卡罗方法(QMC)，[20]产生一个积分误差，其衰减速度优于通过科克斯玛-赫拉卡不等式IID采样获得的衰减速度。根据经验，它允许估计误差和收敛时间减少一个数量级。阵列-RQMC方法[21]以一种方式同时模拟n个链结合了随机准蒙特卡罗和马尔可夫链模拟，这种方式在任意给定步骤的n个状态的经验分布都比用普通MCMC更接近链的真实分布。在经验实验中，状态函数平均值的方差有时会以 $O(n^{-2})$  的速率收敛或者更快，而不是 $O(n^{-1})$  的蒙特卡洛速率。 [22]
+
+\subsection{收敛性}
+
+通常，构造一个具有期望性质的马尔可夫链并不难。更困难的问题是确定在可接受的误差范围内需要多少步才能收敛到平稳分布。[23]一条好的链会有快速的混合:从任意位置开始，很快就会达到稳定的分布。评估收敛的标准经验方法是运行几个独立的模拟马尔可夫链，并检查所有采样参数的链间方差与链内方差之比是否接近1。 [23][24]
+
+通常，马尔可夫链蒙特卡罗采样只能近似目标分布，因为起始位置总是有一些剩余效应。更复杂的基于马尔可夫链蒙特卡罗的算法，如来自过去的耦合可以产生精确的样本，代价是额外的计算和无限的(尽管预期是有限的)运行时间。
+
+许多随机游走蒙特卡罗方法以相对较小的步长围绕平衡分布移动，步长没有朝同一方向前进的趋势。这些方法易于实现和分析，但不幸的是，游走者可能需要很长时间才能探索所有的空间。游走者通常会后退一步，覆盖已经覆盖的地面。
+
+\subsection{软件}
+
+几个软件程序提供MCMC采样功能，例如：
+
+\begin{itemize}
+\item · 使用BUGS模型语言的方言的包:
+\end{itemize}
+
+\begin{itemize}
+\item WinBUGS / OpenBUGS/ MultiBUGS
+\item JAGS
+\item NIMBLE
+\end{itemize}
+
+\begin{itemize}
+\item greta一个贝叶斯统计建模语言/ R包，在幕后使用TensorFlow，[25] 类似于PyMC3使用Theano作为计算后端
+\item MCSim
+\item PyMC3
+\item pymcmcstat
+\item R(编程语言)与软件包adaptMCMC、atmcmc、BRugs、MCMC、MCMCpack、ramcmc、rjags、rstan等。
+\item Stan
+\item · TensorFlow概率(建立在TensorFlow基础上的概率编程库)
+\item MCL (图的聚类算法)[26] 和 HipMCL (并行版本)[27]
+\item emcee(麻省理工学院许可的古德曼&威尔仿射不变马尔可夫链蒙特卡罗集成采样器的纯Python实现)
+\item MacMCMC(独立、全功能的Mac OS应用程序) 
+\end{itemize}
+
+\subsection{参考文献}
+
+[1]
+^Gupta, Ankur; Rawlings, James B. (April 2014). "Comparison of Parameter Estimation Methods in Stochastic Chemical Kinetic Models: Examples in Systems Biology". AIChE Journal. 60 (4): 1253–1268. doi:10.1002/aic.14409. PMC 4946376. PMID 27429455..
+
+[2]
+^See Gill 2008..
+
+[3]
+^See Robert & Casella 2004..
+
+[4]
+^Banerjee, Sudipto; Carlin, Bradley P.; Gelfand, Alan P. (2014-09-12). Hierarchical Modeling and Analysis for Spatial Data (Second ed.). CRC Press. p. xix. ISBN 978-1-4398-1917-3..
+
+[5]
+^Gilks, W. R.; Wild, P. (1992-01-01). "Adaptive Rejection Sampling for Gibbs Sampling". Journal of the Royal Statistical Society. Series C (Applied Statistics). 41 (2): 337–348. doi:10.2307/2347565. JSTOR 2347565..
+
+[6]
+^Gilks, W. R.; Best, N. G.; Tan, K. K. C. (1995-01-01). "Adaptive Rejection Metropolis Sampling within Gibbs Sampling". Journal of the Royal Statistical Society. Series C (Applied Statistics). 44 (4): 455–472. doi:10.2307/2986138. JSTOR 2986138..
+
+[7]
+^Martino, L.; Read, J.; Luengo, D. (2015-06-01). "Independent Doubly Adaptive Rejection Metropolis Sampling Within Gibbs Sampling". IEEE Transactions on Signal Processing. 63 (12): 3123–3138. arXiv:1205.5494. Bibcode:2015ITSP...63.3123M. doi:10.1109/TSP.2015.2420537. ISSN 1053-587X..
+
+[8]
+^See Stramer 1999..
+
+[9]
+^Liu, Jun S.; Liang, Faming; Wong, Wing Hung (2000-03-01). "The Multiple-Try Method and Local Optimization in Metropolis Sampling". Journal of the American Statistical Association. 95 (449): 121–134. doi:10.1080/01621459.2000.10473908. ISSN 0162-1459..
+
+[10]
+^Martino, Luca; Read, Jesse (2013-07-11). "On the flexibility of the design of multiple try Metropolis schemes". Computational Statistics. 28 (6): 2797–2823. arXiv:1201.0646. doi:10.1007/s00180-013-0429-2. ISSN 0943-4062..
+
+[11]
+^See Green 1995..
+
+[12]
+^Tahmasebi, Pejman; Javadpour, Farzam; Sahimi, Muhammad (August 2016). "Stochastic shale permeability matching: Three-dimensional characterization and modeling". International Journal of Coal Geology. 165: 231–242. doi:10.1016/j.coal.2016.08.024..
+
+[13]
+^Del Moral, Pierre (2013). Mean field simulation for Monte Carlo integration. Chapman & Hall/CRC Press. p. 626. Monographs on Statistics & Applied Probability.
+
+[14]
+^Del Moral, Pierre (2004). Feynman-Kac formulae. Genealogical and interacting particle approximations. Springer. p. 575. Series: Probability and Applications.
+
+[15]
+^Del Moral, Pierre; Miclo, Laurent (2000). Branching and Interacting Particle Systems Approximations of Feynman-Kac Formulae with Applications to Non-Linear Filtering (PDF). Lecture Notes in Mathematics. 1729. pp. 1–145. doi:10.1007/bfb0103798. ISBN 978-3-540-67314-9..
+
+[16]
+^Del Moral, Pierre (2006). "Sequential Monte Carlo samplers - P. Del Moral - A. Doucet - A. Jasra - 2006 - Journal of the Royal Statistical Society: Series B (Statistical Methodology) - Wiley Online Library". Journal of the Royal Statistical Society. Series B (Statistical Methodology). 68 (3): 411–436. arXiv:cond-mat/0212648. doi:10.1111/j.1467-9868.2006.00553.x..
+
+[17]
+^Chen, S., Josef Dick, and Art B. Owen. "Consistency of Markov chain quasi-Monte Carlo on continuous state spaces." The Annals of Statistics 39.2 (2011): 673-701..
+
+[18]
+^Tribble, Seth D. Markov chain Monte Carlo algorithms using completely uniformly distributed driving sequences. Diss. Stanford University, 2007..
+
+[19]
+^Papageorgiou, Anargyros, and J. F. Traub. "Beating Monte Carlo." Risk 9.6 (1996): 63-65..
+
+[20]
+^Sobol, Ilya M (1998). "On quasi-monte carlo integrations". Mathematics and Computers in Simulation. 47 (2): 103–112. doi:10.1016/s0378-4754(98)00096-2..
+
+[21]
+^L'Ecuyer, P., C. Lécot, and B. Tuffin. "A Randomized Quasi-Monte Carlo Simulation Method for Markov Chains." Operations Research 56, 4 (2008): 958-975..
+
+[22]
+^L'Ecuyer, P., D. Munger, C. Lécot, and B. Tuffin. "Sorting Methods and Convergence Rates for Array-RQMC: Some Empirical Comparisons." Mathematics and Computers in Simulation 143 (2018), 191-201..
+
+[23]
+^Gelman, A.; Rubin, D.B. (1992). "Inference from iterative simulation using multiple sequences (with discussion)". Statistical Science. 7 (4): 457–511. Bibcode:1992StaSc...7..457G. doi:10.1214/ss/1177011136..
+
+[24]
+^Cowles, M.K.; Carlin, B.P. (1996). "Markov chain Monte Carlo convergence diagnostics: a comparative review". Journal of the American Statistical Association. 91 (434): 883–904. CiteSeerX 10.1.1.53.3445. doi:10.1080/01621459.1996.10476956..
+
+[25]
+^"greta's software dependencies and inspirations". greta-dev.github.io. Retrieved 2018-10-02..
+
+[26]
+^Enright, AJ; Van Dongen, S; Ouzounis, CA (1 April 2002). "An efficient algorithm for large-scale detection of protein families". Nucleic Acids Research. 30 (7): 1575–84. doi:10.1093/nar/30.7.1575. PMC 101833. PMID 11917018..
+
+[27]
+^Azad, A; Pavlopoulos, GA; Ouzounis, CA; Kyrpides, NC; Buluç, A (6 April 2018). "HipMCL: a high-performance parallel implementation of the Markov clustering algorithm for large-scale networks". Nucleic Acids Research. 46 (6): e33. doi:10.1093/nar/gkx1313. PMC 5888241. PMID 29315405..

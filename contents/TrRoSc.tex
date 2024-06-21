@@ -1,0 +1,54 @@
+% 平移、旋转与缩放的组合变换
+% license Usr
+% type Tutor
+
+\pentry{平面旋转矩阵\nref{nod_Rot2D}}{nod_0d06}
+
+\subsection{主动理解}
+主动理解即坐标系只有一个， $\bvec r = (x, y)$ 变换后得到另一个向量 $\bvec r' = (x',y')$。
+
+\begin{itemize}
+\item 旋转矩阵（逆时针为正）为 $\mat R(\theta)$， 即 $\bvec r' = \mat R(\theta)\bvec r$ 把 $\bvec r$ 关于坐标原点旋转 $\theta$ 弧度得到 $\bvec r'$。
+\item 缩放常数 $s$ 可以把一点关于原点收缩： $\bvec r' = s\bvec r = (sx, sy)$。
+\item 平移向量 $\bvec d = (d_x,d_y)$ 可以描述平移 $\bvec r' = \bvec r + \bvec d = (x+d_x,y+d_y)$。
+\end{itemize}
+
+如果三种变换依次作用在 $\bvec r$ 上，但顺序不同，会导致最终结果相差一个平移。例如：
+
+“平移，旋转，缩放” 为
+\begin{equation}
+\bvec r' = s\mat R (\bvec r + \bvec d) = s\mat R\bvec r + s\mat R\bvec d~.
+\end{equation}
+
+“旋转，平移，缩放” 为
+\begin{equation}
+\bvec r' = s(\mat R\bvec r + \bvec d) = s\mat R\bvec r + s\bvec d~.
+\end{equation}
+
+“缩放，平移，旋转” 为
+\begin{equation}\label{eq_TrRoSc_1}
+\bvec r' = \mat R(s\bvec r + \bvec d) = s\mat R\bvec r + \mat R\bvec d~.
+\end{equation}
+可见使用\aref{矩阵乘法分配律}{eq_Mat_13}拆括号后，得到 “旋转，缩放，平移” 变换。第一项的旋转缩放都是相同的，只有平移常数不同。 也就是说，\textbf{任何一种顺序都可以覆盖所有可能组合变换}。
+
+另外注意旋转和缩放都是\enref{线性变换}{LTrans}，且二者顺序可交换，即 $s(\mat R\bvec r) = \mat R (s \bvec r)$，但平移并不是线性变换。
+
+\subsection{逆变换}
+容易发现，这三个变换的逆变换分别为 $\mat R^{-1}$，$1/s$ 和 $-\bvec d$。 组合变换的逆变换就是按照相反的顺序依次做逆变换。 例如\autoref{eq_TrRoSc_1} 中 “缩放，平移，旋转” 的逆变换为 “逆旋转，逆平移，逆缩放”
+\begin{equation}
+\bvec r= \frac1s (\mat R^{-1}\bvec r' - \bvec d)~.
+\end{equation}
+
+\subsection{关于任意点旋转}
+一些初学者在学习旋转矩阵时会疑惑为什么只能关于原点旋转。 因为矩阵只能表示线性变换， 而关于\textbf{任意点的旋转不是线性变换}。
+
+假设旋转中心为 $\bvec c$， 那么要关于该点旋转可以表示为（\autoref{eq_Rot2D_4}）
+\begin{equation}
+\bvec r' = \mat R(\bvec r-\bvec c) + \bvec c = \mat R\bvec r + (\bvec c-\mat R\bvec c)~.
+\end{equation}
+第一个等号是说，要关于某点旋转，我们可以先用平移把旋转中心移动到原点， 旋转完成后再移回去。 而第二个等号告诉我们，\textbf{关于某点旋转等效于关于原点旋转再进行一个平移}。 这就是为什么我们在讨论三种变换的组合时只需要默认旋转是关于原点就可以包含所有情况。
+
+\subsection{被动理解}
+被动理解的意思是，存在两个坐标系 $S,S'$， 当 $S'$ 相对 $S$ 旋转，缩放或平移后， $S$ 中一个向量 $\bvec r$ 在 $S'$ 中的坐标是什么。 也就是同一个向量在不同坐标系中的坐标如何变换。
+
+\addTODO{用 $\bvec R^{-1}$，$1/s$ 和 $-\bvec d$ 即可！}
