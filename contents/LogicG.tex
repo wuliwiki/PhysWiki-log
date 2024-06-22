@@ -6,36 +6,45 @@
 \issueDraft
 \end{issues}
 
-\footnote{参考 Wikipedia \href{https://en.wikipedia.org/wiki/Boolean_algebra}{相关页面}。}参考。
+\footnote{参考 Wikipedia \href{https://en.wikipedia.org/wiki/Boolean_algebra}{相关页面}。}大家有没有想过，计算机的 CPU 是如何进行运算的呢？我们知道 CPU 使用的主要是逻辑电路，逻辑电路中所有的数据都是通过 $0$ 和 $1$ 来表示的，例如当一根导线处于高电平就代表 $1$ 否则代表 $0$。 那如果 8 根导线表示一个二进制整数，而另外 8 根表示另一个，那么如何通设计一个逻辑电路可以输出它们相加的结果呢？ 答案就是使用逻辑门。 除此之外，逻辑门还可以实现数据的储存等功能，电脑中的固态硬盘通常就是大量使用下文的 NAND 门实现的。
 
 \begin{itemize}
-\item \textbf{与、或、非（AND, OR, NOT）}是三种最常见的逻辑门
-\item CPU 里面所有功能都是逻辑门构成的。 例如做整数加法的电路。
-\item 一个\textbf{布尔变量}的值只能是 0 或 1。
-\item OR, AND, NOT 运算可以表示为 $A + B$， $A\cdot B$， $\overline A$
-\item 另一种常用的符号是 $A\lor B$（或）， $A\land B$（与）， $\neg A$（非）。 这类似于并集、交集和补集。
-\item \textbf{结合律（associative laws）} $A\cdot(B\cdot C) = (A\cdot B)\cdot C$， $A+(B+C)=(A+B)+C$
-\item \textbf{交换律（commutative laws）} $A+B=B+A$，$A\cdot B=B\cdot A$
-\item \textbf{有界律（identity laws）} $A+0=A$，$A\cdot 1=A$，$A\cdot 0 = 0$，$A+1=1$（这就是为什么要用加号和乘号，很多性质都很相似）
-\item \textbf{幂等律（idempotent laws）} $A+A=A$，$A\cdot A=A$
-\item \textbf{互补律（complement laws）} $A+\overline A = 1$， $A\cdot \overline A = 0$
-\item \textbf{分配律（distributive laws）} $A\cdot(B+C)=A\cdot B+A\cdot C$， $A+(B\cdot C) = (A+B)\cdot(A+C)$
-\item \textbf{吸收律（absorption laws）} $A\cdot(A+B) = A$， $A+A\cdot B = A$ （分配律的特殊情况）
+\item 数学上来说，一个\textbf{布尔变量（boolean variable）}的值只能是 $0$ 或 $1$。例如下面的 $A,B,C$ 就是布尔变量。
+\item \textbf{与、或、非（AND, OR, NOT）}是三种最常见的逻辑门。
+\item 与运算：两个输入都是 $1$ 时输出 $1$，否则输出 $0$。
+\item 或运算：两个输入都是 $0$ 时输出 $0$，否则输出 $1$。
+\item 非运算：只有一个输入，输出 $0$ 时输出 $1$， 否则输出 $0$。
+\item 与、或、非运算可以用符号表示为 $A + B$， $A\cdot B$， $\overline A$
+\item 另一种常用的符号是 $A\lor B$（或）， $A\land B$（与）， $\neg A$（非）。 这类似于\enref{并集、交集、补集}{HsSet}的符号。
+\item CPU 里面几乎所有功能都是逻辑门实现的。 例如做整数加法的电路。
+\item （私货）强烈推荐游戏：\href{https://turingcomplete.game/}{图灵完备}——从逻辑门开始搭 CPU，实现汇编码编程。
+\item 类比数学公式，如果有一个比较复杂的逻辑运算表达式，如何把它变形和化简，而不影响计算结果呢？这就需要以下定理的帮助。
+\item \textbf{结合律（associative laws）} $A\cdot(B\cdot C) = (A\cdot B)\cdot C$； $A+(B+C)=(A+B)+C$
+\item \textbf{交换律（commutative laws）} $A+B=B+A$；$A\cdot B=B\cdot A$
+\item \textbf{有界律（identity laws）} $A+0=A$；$A\cdot 1=A$；$A\cdot 0 = 0$；$A+1=1$（这就是为什么要用加号和乘号，很多性质都很相似）
+\item \textbf{幂等律（idempotent laws）} $A+A=A$；$A\cdot A=A$
+\item \textbf{互补律（complement laws）} $A+\overline A = 1$； $A\cdot \overline A = 0$
+\item \textbf{分配律（distributive laws）} $A\cdot(B+C)=A\cdot B+A\cdot C$； $A+(B\cdot C) = (A+B)\cdot(A+C)$
+\item \textbf{吸收律（absorption laws）} $A\cdot(A+B) = A$； $A+A\cdot B = A$ （分配律的特殊情况）
 \item \textbf{德摩根律（De Morgan's laws）}又称\textbf{对偶律} $\overline{A+B} = \overline A \cdot \overline B$； $\overline{A \cdot B} = \overline A + \overline B$
-\item 德摩根律可拓展到多个变量如 $\overline{A+B+C} = \overline A \cdot \overline B \cdot \overline C$， $\overline{A \cdot B\cdot C} = \overline A + \overline B + \overline C$
+\item 德摩根律可拓展到多个变量如 $\overline{A+B+C} = \overline A \cdot \overline B \cdot \overline C$； $\overline{A \cdot B\cdot C} = \overline A + \overline B + \overline C$
 \item \textbf{两边取 NOT} 等式依然成立。
-\item 德摩根定律两边取 NOT，就有 $A+B = \overline{\overline A \cdot \overline B}$； $A \cdot B = \overline{\overline A + \overline B}$。 这说明\textbf{与或非中只有两个是必须的}。
+\item 德摩根定律两边取 NOT，就有 $A+B = \overline{\overline A \cdot \overline B}$； $A \cdot B = \overline{\overline A + \overline B}$。 这说明\textbf{与或非中，与和或有一个是多余的}。
+\item \textbf{与或非中，非门是必须的}（无法用 AND 和 OR 构成）。
 \item \textbf{共识定理（consensus theorem）} $A + \overline A \cdot B = A + B$
-\item \textbf{与或非中非门是必须的}（无法用 AND 和 OR 构成）。
-\item \textbf{与非门 （NAND，NOT AND）} $\overline{A\cdot B}$ 可以构成任意门（两个输入相连就是 NOT 门）
-\item \textbf{或非门（NOR，NOT OR）} $\overline{A+B}=\overline A\cdot\overline B$ 检查是否输入都为零，也可以构成任意门（两个输入相连就是 NOT 门）。
-\item \textbf{异或门（XOR）} 当两个输入不同时输出 1，$A\cdot\overline B+\overline A\cdot B$。
-\item \textbf{同或门（XNOR）} 当两个输入相同时输出 1，即异或取非。
-\item NAND 闪存的名字就是 NAND 门命名的。
-\item 任意个输入变量，经过逻辑运算得到一个输出变量。 如果已知每种输入值对应的输出，那么可以用 NOT 把每种输出为 1 的情况都做 OR 即可。但复杂情况下初始表达式可能较为复杂，化简也麻烦，所以设计电路还是需要一些技巧。
-\item 例如要 $ABC$ 中是否只有一个 1，就写出 $A\cdot\overline B\cdot\overline C + \overline A\cdot B\cdot\overline C + \overline A\cdot\overline B\cdot C$
-\item NOR，XOR，AND 可以分别检测两个输入之和是否为 0，1，2，可以用于加法电路或计数电路。
+\item \textbf{与非门 （NAND，NOT AND）} $\overline{A\cdot B}$ 可以构成任意门（例如两个输入相连就是 NOT 门）
+\item \textbf{或非门（NOR，NOT OR）} $\overline{A+B}=\overline A\cdot\overline B$ 检查是否输入都为零，也可以构成任意门（例如两个输入相连就是 NOT 门）。
+\item \textbf{异或门（XOR）} 当两个输入不同时输出 $1$，否则输出 $0$。 $A\cdot\overline B+\overline A\cdot B$。
+\item \textbf{同或门（XNOR）} 当两个输入相同时输出 $1$，即异或门取非。
+\item 构建一般电路：若干个输入变量经过一系列逻辑运算得到一个输出变量。 如果已知每种输入组合对应的输出结果，那么可以用 NOT 把每种输入的组合都整理为全 1 并做 AND， 再把所有 AND 的结果做 OR 即可（例如上面的 XOR 表达式就是这么写出来的）。但复杂情况下，该方法的初始表达式可能较为复杂，化简也麻烦，所以设计电路还是需要一些技巧和试错。
+\item 例如要检查 $A,B,C$ 中是否只有一个 1，就写出 $A\cdot\overline B\cdot\overline C + \overline A\cdot B\cdot\overline C + \overline A\cdot\overline B\cdot C$ 再根据喜好进行某种变形或化简。
+\item NOR，XOR，AND 可以分别检测两个输入之和是否为 $0$，$1$，$2$，可以用于加法电路或计数电路。
+\end{itemize}
+
+\begin{exercise}{}
+\begin{itemize}
 \item 如何创建 2 或 3 个变量的计数电路（也就是加法电路）？（结果分别是 4 或 5 bit）
 \item 如何创建两个 $N$ 位二进制数的加法电路？（每个数的每 bit 是一个变量）
 \item 如何创建 $2^N$ 个变量的计数电路？（结果表示为二进制数，每个 bit 一个变量）
 \end{itemize}
+\end{exercise}
