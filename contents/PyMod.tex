@@ -5,9 +5,9 @@
 
 \pentry{Python 入门\nref{nod_Python}}{nod_323d}
 
-在 “\enref{Python 入门}{Python}” 中， 我们示范了如何从 \verb|math| 模块中引入一些变量和函数（如 \verb|pi| 和 \verb|sin|）。 现在我们来学习 Python 模块的原理。
+在 “\enref{Python 入门}{Python}” 中， 我们示范了如何从 \verb`math` 模块中引入一些变量和函数（如 \verb`pi` 和 \verb`sin`）。 现在我们来学习 Python 模块的原理。
 
-事实上， Python 的模块可以是任意一个普通的 \verb|.py| 拓展名的文件。 这个文件中可以定义全局变量， 函数， 类， 甚至是可执行的命令。 当我们要在其他 \verb|.py| 文件中使用这个文件中的函数或全局变量， 只需要声明把前者作为模块使用即可。
+事实上， Python 的模块可以是任意一个普通的 \verb`.py` 拓展名的文件。 这个文件中可以定义全局变量， 函数， 类， 甚至是可执行的命令。 当我们要在其他 \verb`.py` 文件中使用这个文件中的函数或全局变量， 只需要声明把前者作为模块使用即可。
 
 例如创建模块文件
 \begin{lstlisting}[language=python,caption=mymodule.py]
@@ -20,10 +20,10 @@ num2 = plus1(num)
 # 执行一些命令
 print('欢迎使用 mymodule.py')
 \end{lstlisting}
-在该模块中定义了一个函数和两个全局变量。 注意在定义第二个变量时执行了函数 \verb|plus1|， 这个命令和下面的 \verb|print()| 都会在模块被 \verb|import| 时执行。 关于创建模块的更多细节详见 “\enref{Python 创建模块笔记}{PyMod2}”。
+在该模块中定义了一个函数和两个全局变量。 注意在定义第二个变量时执行了函数 \verb`plus1`， 这个命令和下面的 \verb`print()` 都会在模块被 \verb`import` 时执行。 关于创建模块的更多细节详见 “\enref{Python 创建模块笔记}{PyMod2}”。
 
 \subsection{使用模块}
-现在，我们我们在同一文件夹中新建如下文件， 就可以用 \verb|import| 语句来使用我们刚刚创建的模块。
+现在，我们我们在同一文件夹中新建如下文件， 就可以用 \verb`import` 语句来使用我们刚刚创建的模块。
 \begin{lstlisting}[language=python,caption=test.py]
 import mymodule
 print('num = ', mymodule.num)
@@ -32,31 +32,31 @@ print('num2 + 1 = ', mymodule.plus1(mymodule.num2))
 \end{lstlisting}
 在 “\enref{Python 入门}{Python}” 中我们还介绍了模块的不同导入方法， 这里不再赘述。
 
-除了内建模块外， Python 默认只会在当前文件夹（即路径）下搜索模块文件。 若要添加其他搜索路径， 可以在 \verb|import| 命令之前使用
+除了内建模块外， Python 默认只会在当前文件夹（即路径）下搜索模块文件。 若要添加其他搜索路径， 可以在 \verb`import` 命令之前使用
 \begin{lstlisting}[language=python]
 import sys
 sys.path.insert(1, 路径)
 \end{lstlisting}
-其中 \verb|路径| 既可以是绝对路径也可以是相对路径。 % 未完成：介绍当前路径
-例如要指定当前路径的子文件夹 \verb|modules|， 则使用 \verb|'modules/'| 即可； 如果是上层文件夹中的子文件夹， 可用 \verb|'../modules/'|。
+其中 \verb`路径` 既可以是绝对路径也可以是相对路径。 % 未完成：介绍当前路径
+例如要指定当前路径的子文件夹 \verb`modules`， 则使用 \verb`'modules/'` 即可； 如果是上层文件夹中的子文件夹， 可用 \verb`'../modules/'`。
 
-\verb|import module名字| 以后， 可以用 \verb|module名字.__file__| 查看 module 的文件路径。
+\verb`import module名字` 以后， 可以用 \verb`module名字.__file__` 查看 module 的文件路径。
 
 \subsection{模块嵌套}
-在上面的例子中， 如果在 \verb|mymodule.py| 文件中使用了 \verb|import| 语句导入其他模块中的函数和变量等， 那么在其 \verb|test.py| 中也可以使用这些函数和变量。 例如在 \verb|mymodule.py| 第一行插入
+在上面的例子中， 如果在 \verb`mymodule.py` 文件中使用了 \verb`import` 语句导入其他模块中的函数和变量等， 那么在其 \verb`test.py` 中也可以使用这些函数和变量。 例如在 \verb`mymodule.py` 第一行插入
 \begin{lstlisting}[language=python]
 from math import pi
 \end{lstlisting}
-那么在 \verb|test.py| 中就可以使用 \verb|mymodule.pi| 获取这个变量。 但如果把这行改为
+那么在 \verb`test.py` 中就可以使用 \verb`mymodule.pi` 获取这个变量。 但如果把这行改为
 \begin{lstlisting}[language=python]
 import math
 \end{lstlisting}
-那么在 \verb|test.py| 中要使用 \verb|mymodule.math.pi| 才能获取这个变量。
+那么在 \verb`test.py` 中要使用 \verb`mymodule.math.pi` 才能获取这个变量。
 
 \subsection{模块目录}
 \begin{itemize}
-\item \verb|__init__.py| 文件（内容通常为空）用于把所在目录标记为模块目录。 例如创建 \verb|mymod/__init__.py| 以及 \verb|mymod/mod1.py| 后， 如果 \verb|mymod| 在搜索路径下， 那么就可以 \verb|import mymod.mod1| 或者 \verb|from mymod import mod1|。 例如： \verb|import matplotlib.pyplot as plt| 对应的文件就是 \verb|matplotlib/pyplot.py|
-\item \verb|__init__.py| 也可以存在于子文件夹中。
+\item \verb`__init__.py` 文件（内容通常为空）用于把所在目录标记为模块目录。 例如创建 \verb`mymod/__init__.py` 以及 \verb`mymod/mod1.py` 后， 如果 \verb`mymod` 在搜索路径下， 那么就可以 \verb`import mymod.mod1` 或者 \verb`from mymod import mod1`。 例如： \verb`import matplotlib.pyplot as plt` 对应的文件就是 \verb`matplotlib/pyplot.py`
+\item \verb`__init__.py` 也可以存在于子文件夹中。
 \end{itemize}
 
 \addTODO{另一种情况是 mymod 的子文件夹下面也有 \_\_init\_\_.py}
@@ -68,14 +68,14 @@ Python 中有几个\textbf{内建模块（built-in module）}，可以随时导�
 （未完成）
 
 \subsubsection{time 模块}
-在 Python 中，通常有这几种方式来表示时间（\verb|import time|）：
+在 Python 中，通常有这几种方式来表示时间（\verb`import time`）：
 
-\textbf{时间戳（timestamp）}： 通常来说，时间戳表示的是从 1970 年 1 月 1 日 00:00 (UTC)\footnote{这个时刻也叫 epoch} 开始按秒计算的偏移量（不包括闰秒）。我们运行 \verb|type(time.time())|， 返回的是 \verb|float| 类型精确到 \verb|1e-6| 秒。
+\textbf{时间戳（timestamp）}： 通常来说，时间戳表示的是从 1970 年 1 月 1 日 00:00 (UTC)\footnote{这个时刻也叫 epoch} 开始按秒计算的偏移量（不包括闰秒）。我们运行 \verb`type(time.time())`， 返回的是 \verb`float` 类型精确到 \verb`1e-6` 秒。
 
 格式化的时间字符串
 \begin{itemize}
-\item \verb|localtime()| 返回当地时间， 返回类型为 \verb|time.struct_time|， 类共有9个成员：（年：\verb|tm_year|，月：\verb|tm_mon|，日：\verb|tm_mday|，时：\verb|tm_hour|，分：\verb|tm_min|，秒：\verb|tm_sec|， 周几：\verb|tm_wday|（周 1 是 0），一年中第几天：\verb|tm_yday|， 是否夏令时：\verb|tm_isdst|）
-\item \verb|gmtime()| 返回 GMT 时间， 返回类型同样为 \verb|time.struct_time|
+\item \verb`localtime()` 返回当地时间， 返回类型为 \verb`time.struct_time`， 类共有9个成员：（年：\verb`tm_year`，月：\verb`tm_mon`，日：\verb`tm_mday`，时：\verb`tm_hour`，分：\verb`tm_min`，秒：\verb`tm_sec`， 周几：\verb`tm_wday`（周 1 是 0），一年中第几天：\verb`tm_yday`， 是否夏令时：\verb`tm_isdst`）
+\item \verb`gmtime()` 返回 GMT 时间， 返回类型同样为 \verb`time.struct_time`
 \end{itemize}
 
 \subsubsection{random 模块}

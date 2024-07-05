@@ -42,12 +42,12 @@ stop = clock();
 \subsection{std::variant}
 \begin{itemize}
 \item 需要 c++17 标准
-\item \verb|sizeof(variant)| 会比类型列表中最大的 sizeof 稍大。
-\item \verb|if (std::holds_alternative<int>(变量))| 用于判断 \verb|variant| 的类型。
-\item 获取 reference： \verb|std::get<int>(变量)| 或者 \verb|std::get<2>(变量)| （数字表示第几个类型），可以对该 reference 赋值。 型检查失败会抛出 \verb|std::bad_variant_access|。
-\item \verb|std::get_if<int>(&v)| 可以返回特定类型的指针， 如果不是 \verb|int| 则返回 \verb|nullptr|。
-\item 如果用 \verb|if (holds_alternative<int>(变量)) get<int>(...);| 那么会检查两次类型，所以 \verb|get_if| 是更好的选择，后者是 \verb|noexcept|，抛出错误也会让程序变慢。
-\item 支持 \verb|=| 赋值， \verb|>,<,==,>=| 等比较算符。
+\item \verb`sizeof(variant)` 会比类型列表中最大的 sizeof 稍大。
+\item \verb`if (std::holds_alternative<int>(变量))` 用于判断 \verb`variant` 的类型。
+\item 获取 reference： \verb`std::get<int>(变量)` 或者 \verb`std::get<2>(变量)` （数字表示第几个类型），可以对该 reference 赋值。 型检查失败会抛出 \verb`std::bad_variant_access`。
+\item \verb`std::get_if<int>(&v)` 可以返回特定类型的指针， 如果不是 \verb`int` 则返回 \verb`nullptr`。
+\item 如果用 \verb`if (holds_alternative<int>(变量)) get<int>(...);` 那么会检查两次类型，所以 \verb`get_if` 是更好的选择，后者是 \verb`noexcept`，抛出错误也会让程序变慢。
+\item 支持 \verb`=` 赋值， \verb`>,<,==,>=` 等比较算符。
 \item 支持 move construc/assign。
 \end{itemize}
 \begin{lstlisting}[language=cpp]
@@ -78,9 +78,9 @@ Operand performOperation(const Operand& left,
 }
 \end{lstlisting}
 \begin{itemize}
-\item \verb|lambda| 函数被调用的时候， \verb|arg1, arg2| 的类型会是 \verb|variant| 的具体类型。
-\item 为什么不用 \verb`visit` 直接写 lambda 里面的东西？ 因为这些代码编译时，stack 中的每个变量类型和长度都是确定的，\verb|+-*/| 调用的具体算法也是确定的，不可能同一个机器码在运行时用不同的类型。 所以不用 \verb|visit| 就必须手写 \verb|if, else|， 以及手动把 \verb|variant| cast 成不同的类型。\upref{StaDyn}
-\item 而 \verb|std::visit| 相当于用 \verb|if, else if| 遍历 lambda 中的所有组合，并自动把变量 cast 成动态的类型。 lambda 中的操作需要适用与所有组合或者使用静态类型判断，否则就会编译报错。
+\item \verb`lambda` 函数被调用的时候， \verb`arg1, arg2` 的类型会是 \verb`variant` 的具体类型。
+\item 为什么不用 \verb`visit` 直接写 lambda 里面的东西？ 因为这些代码编译时，stack 中的每个变量类型和长度都是确定的，\verb`+-*/` 调用的具体算法也是确定的，不可能同一个机器码在运行时用不同的类型。 所以不用 \verb`visit` 就必须手写 \verb`if, else`， 以及手动把 \verb`variant` cast 成不同的类型。\upref{StaDyn}
+\item 而 \verb`std::visit` 相当于用 \verb`if, else if` 遍历 lambda 中的所有组合，并自动把变量 cast 成动态的类型。 lambda 中的操作需要适用与所有组合或者使用静态类型判断，否则就会编译报错。
 \end{itemize}
 
 \subsection{std::any}
@@ -88,16 +88,16 @@ Operand performOperation(const Operand& left,
 \item 需要 c++17 标准
 \end{itemize}
 \begin{itemize}
-\item \verb|any| 可以是任何类型， 所以不可能用 \verb|std::visit| 遍历，需要自己手动判断。
-\item \verb|sizeof(any)| g++ 测试是 16 字节，但也可能更多。
-\item \verb|any::reset()| 可以清空它的值
-\item \verb|any::operator=()| 对其赋值。
-\item \verb|any::emplace<类型>(...)| 可以使用某类型的 constructor
-\item \verb|any::has_value()| 判断是否有值
-\item 判断类型： \verb|if (a.type() == typeid(int))|
-\item 获取值 \verb|any_cast<int>(a)|，若错误抛出 \verb|bad_any_cast|
-\item 获取指针 \verb|any_cast<int>(&a)|， 若错误返回 \verb|nullptr|。
-\item 支持 \verb|=| 赋值， 不支持比较算符。
+\item \verb`any` 可以是任何类型， 所以不可能用 \verb`std::visit` 遍历，需要自己手动判断。
+\item \verb`sizeof(any)` g++ 测试是 16 字节，但也可能更多。
+\item \verb`any::reset()` 可以清空它的值
+\item \verb`any::operator=()` 对其赋值。
+\item \verb`any::emplace<类型>(...)` 可以使用某类型的 constructor
+\item \verb`any::has_value()` 判断是否有值
+\item 判断类型： \verb`if (a.type() == typeid(int))`
+\item 获取值 \verb`any_cast<int>(a)`，若错误抛出 \verb`bad_any_cast`
+\item 获取指针 \verb`any_cast<int>(&a)`， 若错误返回 \verb`nullptr`。
+\item 支持 \verb`=` 赋值， 不支持比较算符。
 \item 支持 move construc/assign。
-\item \verb|any| 的一个用处就是给一固定类型的函数指针提供用户参数。写一个微分方程解算器，用户需要提供求导函数，但如何给该函数传递参数呢（例如设置弹簧劲度系数等）？ 这些参数用户未必可以写死到函数中，又不想使用全局变量。 一个方法是使用 functor，也就是含参对象的 \verb|operator()|，但这样就需要解算器使用模板。但万一解算器很大不值得为了一点小小的接口变化编译多个不同的版本呢？万一源码保密不能放在头文件只能编译成二进制 library 呢？ 除了模板，就是传递一个最后一个参数是 \verb|any| 的函数的指针（没有 \verb|any| 以前一般使用 \verb|void *| 但这不怎么安全）。这样就可以保持函数指针类型不变，且可以传递用户想要的任何参数了。相当于用 ”不必要“ 的动态类型的一点性能代价让 C++ 用起来更像动态语言。 虽然理论上这可以用静态方法实现，但比起编程的巨大难度（尤其是 \verb|tuple| 相关的东西）， 损失一点可以忽略不计的性能反而是最佳方案。 另一个例子是如何在 C++ 中表示数据库表中的一行？ 并作为参数传递给一个函数。 最高性能的方法是用 \verb|tuple|， 但变参数个数的 \verb|tuple| 相关的编程真的很麻烦很抽象，哪怕使用模板生成都很麻烦。 用 \verb|vector<variant<...>>| 或者 \verb|vector<any>| 会大大方便编程。 详见 \enref{SLISC}{SLISC} 的 \verb|update_sqlite_table()| 的两种实现方法。
+\item \verb`any` 的一个用处就是给一固定类型的函数指针提供用户参数。写一个微分方程解算器，用户需要提供求导函数，但如何给该函数传递参数呢（例如设置弹簧劲度系数等）？ 这些参数用户未必可以写死到函数中，又不想使用全局变量。 一个方法是使用 functor，也就是含参对象的 \verb`operator()`，但这样就需要解算器使用模板。但万一解算器很大不值得为了一点小小的接口变化编译多个不同的版本呢？万一源码保密不能放在头文件只能编译成二进制 library 呢？ 除了模板，就是传递一个最后一个参数是 \verb`any` 的函数的指针（没有 \verb`any` 以前一般使用 \verb`void *` 但这不怎么安全）。这样就可以保持函数指针类型不变，且可以传递用户想要的任何参数了。相当于用 ”不必要“ 的动态类型的一点性能代价让 C++ 用起来更像动态语言。 虽然理论上这可以用静态方法实现，但比起编程的巨大难度（尤其是 \verb`tuple` 相关的东西）， 损失一点可以忽略不计的性能反而是最佳方案。 另一个例子是如何在 C++ 中表示数据库表中的一行？ 并作为参数传递给一个函数。 最高性能的方法是用 \verb`tuple`， 但变参数个数的 \verb`tuple` 相关的编程真的很麻烦很抽象，哪怕使用模板生成都很麻烦。 用 \verb`vector<variant<...>>` 或者 \verb`vector<any>` 会大大方便编程。 详见 \enref{SLISC}{SLISC} 的 \verb`update_sqlite_table()` 的两种实现方法。
 \end{itemize}

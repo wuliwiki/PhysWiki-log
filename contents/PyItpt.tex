@@ -25,7 +25,7 @@ Python解释器由编译器和虚拟机构成，编译器将源代码转换成�
 \end{enumerate}
 
 \subsection{调用解释器}
-Python 解释器在其被使用的机器上通常安装为 \verb|/usr/local/bin/python3.8|；将 \verb|/usr/local/bin| 加入你的 Unix 终端的搜索路径就可以通过键入以下命令来启动它：
+Python 解释器在其被使用的机器上通常安装为 \verb`/usr/local/bin/python3.8`；将 \verb`/usr/local/bin` 加入你的 Unix 终端的搜索路径就可以通过键入以下命令来启动它：
 
 \begin{lstlisting}[language=bash]
 python3.8
@@ -35,24 +35,24 @@ python3.8
 
 在 Windows 机器上当你从 Microsoft Store 安装 Python 之后，python3.8 命令将可使用。 如果你安装了 py.exe 启动器，你将可以使用 py 命令。
 
-在主提示符中输入文件结束字符（在 Unix 系统中是 Control-D，Windows 系统中是 Control-Z）就退出解释器并返回退出状态为0。如果这样不管用，你还可以写这个命令退出：\verb|quit()|。
+在主提示符中输入文件结束字符（在 Unix 系统中是 Control-D，Windows 系统中是 Control-Z）就退出解释器并返回退出状态为0。如果这样不管用，你还可以写这个命令退出：\verb`quit()`。
 
-解释器的行编辑功能在支持 GNU Readline 库的系统中也包括交互式编辑，历史替换和代码补全等。检测是否支持行编辑最快速的方式是在首次出现 Python 提示符时输入 Control-P。 如果听到“哔”提示音，就说明支持行编辑。如果什么都没发生，或是回显了 \verb|^P|，说明不支持行编辑；你只能用退格键从当前行中删除字符。
+解释器的行编辑功能在支持 GNU Readline 库的系统中也包括交互式编辑，历史替换和代码补全等。检测是否支持行编辑最快速的方式是在首次出现 Python 提示符时输入 Control-P。 如果听到“哔”提示音，就说明支持行编辑。如果什么都没发生，或是回显了 \verb`^P`，说明不支持行编辑；你只能用退格键从当前行中删除字符。
 
 解释器运行的时候有点像 Unix 命令行：在一个标准输入 tty 设备上调用，它能交互式地读取和执行命令；调用时提供文件名参数，或者有个文件重定向到标准输入的话，它就会读取和执行文件中的 脚本。
 
-另一种启动解释器的方式是 \verb|python -c command [arg] ...|，其中 command 要换成想执行的指令，就像命令行的 -c 选项。由于 Python 代码中经常会包含对终端来说比较特殊的字符，通常情况下都建议用英文单引号把 command 括起来。
+另一种启动解释器的方式是 \verb`python -c command [arg] ...`，其中 command 要换成想执行的指令，就像命令行的 -c 选项。由于 Python 代码中经常会包含对终端来说比较特殊的字符，通常情况下都建议用英文单引号把 command 括起来。
 
-有些 Python 模块也可以作为脚本使用。可以这样输入：\verb|python -m module [arg] ...|，这会执行 module 的源文件，就跟你在命令行把路径写全了一样。
+有些 Python 模块也可以作为脚本使用。可以这样输入：\verb`python -m module [arg] ...`，这会执行 module 的源文件，就跟你在命令行把路径写全了一样。
 
-在运行脚本的时候，有时可能也会需要在运行后进入交互模式。这种时候在文件参数前，加上选项 \verb|-i| 就可以了。
+在运行脚本的时候，有时可能也会需要在运行后进入交互模式。这种时候在文件参数前，加上选项 \verb`-i` 就可以了。
 
 \subsubsection{1.1. 传入参数}
-如果可能的话，解释器会读取命令行参数，转化为字符串列表存入 \verb|sys| 模块中的 \verb|argv| 变量中。执行命令 \verb|import sys| 你可以导入这个模块并访问这个列表。这个列表最少也会有一个元素；如果没有给定输入参数，\verb|sys.argv[0]| 就是个空字符串。如果给定的脚本名是 \verb|'-'| (表示标准输入)，\verb|sys.argv[0]| 就是 \verb|'-'|。使用 \verb|-c| command 时，\verb|sys.argv[0]| 就会是 \verb|'-c'|。如果使用选项 \verb|-m| module，\verb|sys.argv[0]| 就是包含目录的模块全名。在 \verb|-c| command 或 \verb|-m| module 之后的选项不会被解释器处理，而会直接留在 \verb|sys.argv| 中给命令或模块来处理。
+如果可能的话，解释器会读取命令行参数，转化为字符串列表存入 \verb`sys` 模块中的 \verb`argv` 变量中。执行命令 \verb`import sys` 你可以导入这个模块并访问这个列表。这个列表最少也会有一个元素；如果没有给定输入参数，\verb`sys.argv[0]` 就是个空字符串。如果给定的脚本名是 \verb`'-'` (表示标准输入)，\verb`sys.argv[0]` 就是 \verb`'-'`。使用 \verb`-c` command 时，\verb`sys.argv[0]` 就会是 \verb`'-c'`。如果使用选项 \verb`-m` module，\verb`sys.argv[0]` 就是包含目录的模块全名。在 \verb`-c` command 或 \verb`-m` module 之后的选项不会被解释器处理，而会直接留在 \verb`sys.argv` 中给命令或模块来处理。
 
 \subsubsection{1.2. 交互模式}
 
-在终端（tty）输入并执行指令时，我们说解释器是运行在 交互模式（interactive mode）。在这种模式中，它会显示 主提示符（primary prompt），提示输入下一条指令，通常用三个大于号（\verb|>>>|）表示；连续输入行的时候，它会显示 次要提示符，默认是三个点（\verb|...|）。进入解释器时，它会先显示欢迎信息、版本信息、版权声明，然后就会出现提示符：
+在终端（tty）输入并执行指令时，我们说解释器是运行在 交互模式（interactive mode）。在这种模式中，它会显示 主提示符（primary prompt），提示输入下一条指令，通常用三个大于号（\verb`>>>`）表示；连续输入行的时候，它会显示 次要提示符，默认是三个点（\verb`...`）。进入解释器时，它会先显示欢迎信息、版本信息、版权声明，然后就会出现提示符：
 
 \begin{lstlisting}[language=none]
 :python3.8
@@ -61,7 +61,7 @@ Python 3.8 (default, Sep 16 2015, 09:25:04)
 Type "help", "copyright", "credits" or "license" for more information.
 >>>
 \end{lstlisting}
-多行指令需要在连续的多行中输入。比如，以 \verb|if| 为例：
+多行指令需要在连续的多行中输入。比如，以 \verb`if` 为例：
 \begin{lstlisting}[language=none]
 >>>
 >>> the_world_is_flat = True
@@ -97,18 +97,18 @@ Be careful not to fall off!
 \end{lstlisting}
 
 \subsection{Shebang}
-\verb|#!/usr/bin/python3| 仅仅在\textbf{linux}或\textbf{unix}系统下有作用，在\textbf{windows}下无论在代码里加什么都无法直接运行一个文件名后缀为.py的脚本，因为在windows下文件名对文件的打开方式起了决定性作用。
+\verb`#!/usr/bin/python3` 仅仅在\textbf{linux}或\textbf{unix}系统下有作用，在\textbf{windows}下无论在代码里加什么都无法直接运行一个文件名后缀为.py的脚本，因为在windows下文件名对文件的打开方式起了决定性作用。
 \begin{lstlisting}[language=python]
 #!/usr/bin/env python
 或者
 #!/usr/bin/python
 \end{lstlisting}
 \begin{itemize}
-\item 考虑到代码的可移植性，还是建议加上这句话,并且用 \verb|#!/usr/bin/env python|。
+\item 考虑到代码的可移植性，还是建议加上这句话,并且用 \verb`#!/usr/bin/env python`。
 \end{itemize}
 
 \subsubsection{如何理解}
-把这一行语句拆成两部分。第一部分是 \verb|#!|；第二部分是 \verb|/usr/bin/python| 或者 \verb|/usr/bin/env python|。关于 \verb|#!| 这个符号，其实它是有名字的，叫做 Shebang 或者Sha-bang ，有的翻译组将它译作 释伴，即 “解释伴随行” 的简称，同时又是 Shebang 的音译。
+把这一行语句拆成两部分。第一部分是 \verb`#!`；第二部分是 \verb`/usr/bin/python` 或者 \verb`/usr/bin/env python`。关于 \verb`#!` 这个符号，其实它是有名字的，叫做 Shebang 或者Sha-bang ，有的翻译组将它译作 释伴，即 “解释伴随行” 的简称，同时又是 Shebang 的音译。
 
 Shebang 通常出现在类Unix系统的脚本中第一行，作为前两个字符。在Shebang之后，可以有一个或数个空白字符，后接解释器的绝对路径，用于指明执行这个脚本文件的解释器
 \begin{lstlisting}[language=bash]
@@ -117,7 +117,7 @@ Shebang 通常出现在类Unix系统的脚本中第一行，作为前两个字�
 ... # usr/bin/python
 \end{lstlisting}
 
-如果不加 \verb|#!| 的话，你每次执行这个脚本时，都得这样 python xx.py
+如果不加 \verb`#!` 的话，你每次执行这个脚本时，都得这样 python xx.py
 \begin{lstlisting}[language=bash]
 ... # python hellp.py
 hello
@@ -125,19 +125,19 @@ hello
 
 有没有一种方式？可以省去每次都加 python 呢？
 
-当然有，在文件头里加上 \verb|#!/usr/bin/python|， 那么当这个文件有可执行权限 时，只直接写这个脚本文件，就像下面这样
+当然有，在文件头里加上 \verb`#!/usr/bin/python`， 那么当这个文件有可执行权限 时，只直接写这个脚本文件，就像下面这样
 \begin{lstlisting}[language=bash]
 ... # ./hellp.py
 hello
 \end{lstlisting}
 
-\textbf{那么 \verb|!/usr/bin/env python| 是什么意思？}
+\textbf{那么 \verb`!/usr/bin/env python` 是什么意思？}
 
 当执行 env python 时，自动进入了 python console 的模式。
 
-当你执行 env python 时，它其实会去 env | grep PATH 里（也就是\verb| /usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/root/bin| ）这几个路径里去依次查找名为 python 的可执行文件，并且找到一个就直接执行。上面我们的 python 路径是在 /usr/bin/python 里，在 PATH 列表里倒数第二个目录下，所以当我在 /usr/local/sbin 下创建一个名字也为 python 的可执行文件时，就会执行 /usr/bin/python 了。
+当你执行 env python 时，它其实会去 env | grep PATH 里（也就是\verb` /usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/root/bin` ）这几个路径里去依次查找名为 python 的可执行文件，并且找到一个就直接执行。上面我们的 python 路径是在 /usr/bin/python 里，在 PATH 列表里倒数第二个目录下，所以当我在 /usr/local/sbin 下创建一个名字也为 python 的可执行文件时，就会执行 /usr/bin/python 了。
 
-个人感觉应该优先使用 \verb|#!/usr/bin/env python|，因为不是所有的机器的 python 解释器都是 /usr/bin/python 。
+个人感觉应该优先使用 \verb`#!/usr/bin/env python`，因为不是所有的机器的 python 解释器都是 /usr/bin/python 。
 
 \subsection{coding = utf-8 }
 \begin{lstlisting}[language=python]

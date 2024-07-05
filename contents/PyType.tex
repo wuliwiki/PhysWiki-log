@@ -17,27 +17,27 @@ c = 3
 volumn = a*b*c
 \end{lstlisting}
 
-要强调的是， 这里的等号并不是数学上的等于， 而是\textbf{赋值}， 即把等号右边得到的数值储存在左边的变量中。 在第 4 行执行时， 计算机会先计算等号右边表达式的结果 6， 然后将 6 储存在变量 \verb|volumn| 中。 \verb|volumn| 这个变量中并不会包含 \verb|a*b*c| 这个信息， 只储存 6 这个数值。 所以改变 \verb|a, b, c| 后 \verb|volumn| 的值并不会自动改变。
+要强调的是， 这里的等号并不是数学上的等于， 而是\textbf{赋值}， 即把等号右边得到的数值储存在左边的变量中。 在第 4 行执行时， 计算机会先计算等号右边表达式的结果 6， 然后将 6 储存在变量 \verb`volumn` 中。 \verb`volumn` 这个变量中并不会包含 \verb`a*b*c` 这个信息， 只储存 6 这个数值。 所以改变 \verb`a, b, c` 后 \verb`volumn` 的值并不会自动改变。
 
 如果要让长方形的某个边长增加 1， 我们可以执行
 \begin{lstlisting}[language=python]
 a = a + 1
 \end{lstlisting}
-如果将等号理解为数学上的等于， 这个式子显然是错的。 但正确的理解是， 先把 \verb|a| 当前的值 1 加上 1 得到 2， 然后把 2 \textbf{赋值}给 \verb|a|。 由于我们没有给 \verb|volumn| 重新赋值， 它仍然是 6， 要更新 \verb|volumn|， 只需要重新执行
+如果将等号理解为数学上的等于， 这个式子显然是错的。 但正确的理解是， 先把 \verb`a` 当前的值 1 加上 1 得到 2， 然后把 2 \textbf{赋值}给 \verb`a`。 由于我们没有给 \verb`volumn` 重新赋值， 它仍然是 6， 要更新 \verb`volumn`， 只需要重新执行
 \begin{lstlisting}[language=python]
 volumn = a*b*c
 \end{lstlisting}
-并用 \verb|print(volumn)| 显示新的值。
+并用 \verb`print(volumn)` 显示新的值。
 
-等效地， 我们也可以用\textbf{自加运算} \verb|+=|， 将 \verb|a = a + 1| 记为
+等效地， 我们也可以用\textbf{自加运算} \verb`+=`， 将 \verb`a = a + 1` 记为
 \begin{lstlisting}[language=python]
 a += 1
 \end{lstlisting}
-注意 \verb|+=| 是一个整体的算符， 中间不能有空格。 类似的运算还有 \verb|-=|， \verb|*=|， \verb|/=| 等。
+注意 \verb`+=` 是一个整体的算符， 中间不能有空格。 类似的运算还有 \verb`-=`， \verb`*=`， \verb`/=` 等。
 
 \subsection{Python 基本变量类型}
 
-\verb|bool|（布尔型）， \verb|int|（整型）（长度不限）， \verb|float|（浮点型）（双精度浮点）， \verb|complex| （复数， 如 \verb|2+3j|）， \verb|str|（字符串）。 注意 python 本身没有定义单精度浮点数， 但在 \verb|numpy| 库中有 \verb|float32| 类型。 我们可以用 \verb|type()| 函数查看某个变量的类型。 例如执行
+\verb`bool`（布尔型）， \verb`int`（整型）（长度不限）， \verb`float`（浮点型）（双精度浮点）， \verb`complex` （复数， 如 \verb`2+3j`）， \verb`str`（字符串）。 注意 python 本身没有定义单精度浮点数， 但在 \verb`numpy` 库中有 \verb`float32` 类型。 我们可以用 \verb`type()` 函数查看某个变量的类型。 例如执行
 \begin{lstlisting}[language=python]
 n = 123; x = 3.14; print(type(n)); print(type(x))
 \end{lstlisting}
@@ -51,19 +51,19 @@ n = 123; x = 3.14; print(type(n)); print(type(x))
 type(i) == int # true
 \end{lstlisting}
 
-用 \verb|is| 判断两个变量是否是同一个对象， 例如 \verb|a = [1,2,3]; b = [1,2,3];|， 那么 \verb|a == b| 返回 \verb|True| 而 \verb|a is b| 返回 \verb|False|。 此时改变 \verb|a| 的元素， \verb|b| 不会改变。 但若令 \verb|b = a;|， 那么 \verb|a, b| 会同时改变， 此时 \verb|a is b| 和 \verb|a == b| 都返回 \verb|True|。
+用 \verb`is` 判断两个变量是否是同一个对象， 例如 \verb`a = [1,2,3]; b = [1,2,3];`， 那么 \verb`a == b` 返回 \verb`True` 而 \verb`a is b` 返回 \verb`False`。 此时改变 \verb`a` 的元素， \verb`b` 不会改变。 但若令 \verb`b = a;`， 那么 \verb`a, b` 会同时改变， 此时 \verb`a is b` 和 \verb`a == b` 都返回 \verb`True`。
 
 \subsection{整数}
 与一些编译语言不同， Python 的整数类型（integer）没有长度限制（除超出了内存大小）。 例如
 \begin{lstlisting}[language=python]
 print(12345678901234567890123456789 + 1)
 \end{lstlisting}
-的结果为 \verb|12345678901234567890123456790|。
+的结果为 \verb`12345678901234567890123456790`。
 
-默认情况下整数用十进制表示， 如果需要输入 \textbf{2 进制（binary）}， 可以在前面加 \verb|0b| 或 \verb|0B|， 例如 \verb|0b1001| 表示 10 进制的 \verb|9|。 类似地， \verb|0o| 或 \verb|0O| 开头表示 \textbf{8 进制（octal）}； \verb|0x| 或 \verb|0X| 开头的表示 \textbf{16 进制（hexadecimal）}， 16 进制中的 10 到 15 分别用大写或小写字母 \verb|a| 到 \verb|f| 表示。 例如 \verb|0xff| 表示十进制的 \verb|255|。 不同进制的整数同样 \verb|int|， 同样没有长度限制。
+默认情况下整数用十进制表示， 如果需要输入 \textbf{2 进制（binary）}， 可以在前面加 \verb`0b` 或 \verb`0B`， 例如 \verb`0b1001` 表示 10 进制的 \verb`9`。 类似地， \verb`0o` 或 \verb`0O` 开头表示 \textbf{8 进制（octal）}； \verb`0x` 或 \verb`0X` 开头的表示 \textbf{16 进制（hexadecimal）}， 16 进制中的 10 到 15 分别用大写或小写字母 \verb`a` 到 \verb`f` 表示。 例如 \verb`0xff` 表示十进制的 \verb`255`。 不同进制的整数同样 \verb`int`， 同样没有长度限制。
 
 \subsection{类型转换}
-转换格式为 \verb|类型(变量)|。 例如 \verb|int('123')| 会把字符串 \verb|'123'| 变为整数 \verb|123|。
+转换格式为 \verb`类型(变量)`。 例如 \verb`int('123')` 会把字符串 \verb`'123'` 变为整数 \verb`123`。
 \begin{lstlisting}[language=python]
 "'我们在这里完整列举一下'"
 a = "小时百科"  # str 字符串
@@ -79,14 +79,14 @@ bool(c) # 返回 True （只有 0.0 返回 False）
 \end{lstlisting}
 
 \subsection{字符串}
-raw string： \verb|r'foo\nbar'| 其中 \verb|\n| 会被当成两个字符。
+raw string： \verb`r'foo\nbar'` 其中 \verb`\n` 会被当成两个字符。
 
 \subsection{变量和对象}
-和 C 语言类似的语言不同， Python 中的变量和对象（object）是分开考虑的。 对象可以理解为内存上的一小段某类型的数据， 而变量是指向对象的一个名称。 例如两个变量可以指向同一个对象， 要判断变量 \verb|a| 和 \verb|b| 是否指向同一个对象， 用 \verb|a is b|， 返回一个 \verb|bool|。
+和 C 语言类似的语言不同， Python 中的变量和对象（object）是分开考虑的。 对象可以理解为内存上的一小段某类型的数据， 而变量是指向对象的一个名称。 例如两个变量可以指向同一个对象， 要判断变量 \verb`a` 和 \verb`b` 是否指向同一个对象， 用 \verb`a is b`， 返回一个 \verb`bool`。
 
 \subsection{变量的范围}
 \begin{itemize}
-\item \verb|dir()| 列出 in scope 变量， 返回类型 \verb|list|
-\item \verb|globals()| 列出全局变量， 返回类型 \verb|dict|
-\item \verb|locals()| 列出本地变量， 返回类型 \verb|dict|
+\item \verb`dir()` 列出 in scope 变量， 返回类型 \verb`list`
+\item \verb`globals()` 列出全局变量， 返回类型 \verb`dict`
+\item \verb`locals()` 列出本地变量， 返回类型 \verb`dict`
 \end{itemize}

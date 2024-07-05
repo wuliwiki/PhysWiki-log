@@ -19,7 +19,7 @@ BLAS 的官网是 \href{http://www.netlib.org/blas/}{Netlib}， 可以浏览完�
 \subsection{使用 CBLAS}
 \pentry{矩阵的储存\nref{nod_MatSto}}{nod_e22a}
 
-我们这里介绍一个 CBLAS 的例子\footnote{要在 Linux 上编译， 见 “在 Linux 上编译第一个 \enref{C++ 程序}{linCpp}”}。 我们来测试矩阵和矢量的乘法函数 \verb|gemv|， 参考文档见\href{https://software.intel.com/en-us/node/834919#88940C4E-0889-46C3-B6CF-F8B6EA6CF4BC}{这里}。
+我们这里介绍一个 CBLAS 的例子\footnote{要在 Linux 上编译， 见 “在 Linux 上编译第一个 \enref{C++ 程序}{linCpp}”}。 我们来测试矩阵和矢量的乘法函数 \verb`gemv`， 参考文档见\href{https://software.intel.com/en-us/node/834919#88940C4E-0889-46C3-B6CF-F8B6EA6CF4BC}{这里}。
 
 BLAS 可以分为四种类型和三个级别
 
@@ -39,9 +39,9 @@ BLAS 可以分为四种类型和三个级别
 \end{enumerate}
 
 根据上述的类型和级别，BLAS 有一套系统的命名规则，
-我们需要的函数名格式为 \verb|cblas_?gemv|， 其中 \verb|cblas_| 是固定前缀， 问号表示 \verb|s|, \verb|d|, \verb|c|, \verb|z|, 中的一个， 分别代表单精度（\verb|float|）， 双精度（\verb|double|）， 单精度复数和双精度复数\footnote{注意 C 语言中内置的复数类型和 C++ 标准库中的 \lstinline|std::complex<>| 不同， 但由于 CBLAS 用指针 \lstinline|void *| 传递复数（任何指针都可以自动转换）， 所以只要内存中用两个连续的 \lstinline|float| 或 \lstinline|double| 表示一个复数即可}。 \verb|ge| 表示输入的矩阵是一个一般的矩阵\footnote{而不是对称矩阵或者厄米矩阵等， 后者可以使用专门的函数使性能提升， 例如 \href{https://software.intel.com/en-us/node/834934}{symv}}， 以行主序或者\enref{列主序}{MatSto}线性储存， \lstinline|mv| 表示矩阵与向量操作。 
+我们需要的函数名格式为 \verb`cblas_?gemv`， 其中 \verb`cblas_` 是固定前缀， 问号表示 \verb`s`, \verb`d`, \verb`c`, \verb`z`, 中的一个， 分别代表单精度（\verb`float`）， 双精度（\verb`double`）， 单精度复数和双精度复数\footnote{注意 C 语言中内置的复数类型和 C++ 标准库中的 \lstinline|std::complex<>| 不同， 但由于 CBLAS 用指针 \lstinline|void *| 传递复数（任何指针都可以自动转换）， 所以只要内存中用两个连续的 \lstinline|float| 或 \lstinline|double| 表示一个复数即可}。 \verb`ge` 表示输入的矩阵是一个一般的矩阵\footnote{而不是对称矩阵或者厄米矩阵等， 后者可以使用专门的函数使性能提升， 例如 \href{https://software.intel.com/en-us/node/834934}{symv}}， 以行主序或者\enref{列主序}{MatSto}线性储存， \lstinline|mv| 表示矩阵与向量操作。 
 
-我们接下来以 \verb|cblas_zgemv| 为例， 先来看函数声明。
+我们接下来以 \verb`cblas_zgemv` 为例， 先来看函数声明。
 \begin{lstlisting}[language=cpp]
 void cblas_zgemv (const CBLAS_LAYOUT Layout, const CBLAS_TRANSPOSE trans,
 const MKL_INT m, const MKL_INT n, const void *alpha, const void *a,
@@ -51,7 +51,7 @@ void *y, const MKL_INT incy);
 
 BLAS 接口给人的第一感觉就是冗长， 为什么实现一个简单的功能需要这么多变量？ 因为这个接口具有相当大的灵活性。 例如可以使用一个列主序（行主序）矩阵的子矩阵作为矩阵， 又例如可以使用一个列主序（行主序）矩阵的某一行（列）作为矢量； 例如可以在做乘法以前对矩阵进行转置\footnote{其实这个转置操作实现起来并不需要额外的运算， 在函数的代码中只需要把列主序（行主序）矩阵看作是行主序（列主序）的即可。 所以这么做比事先在内存中将矩阵元调换的方法快许多}； 又例如可以把相乘的结果累加到输出矢量已有的值上， 而不是直接覆盖。
 
-作为一个最简单的例子， 我们可以用以下测试函数， 在这个例子中， 我们只需要关心几个变量， 即 \verb|Layout| （一个 \verb|enum| 类型）指定行主序（\verb|CblasRowMajor|）还是列主序（\verb|CblasColMajor|）， \verb|m| 和 \verb|n| 分别指定矩阵的行数和列数， \verb|a, x, y| 分别是矩阵第一个元的指针。
+作为一个最简单的例子， 我们可以用以下测试函数， 在这个例子中， 我们只需要关心几个变量， 即 \verb`Layout` （一个 \verb`enum` 类型）指定行主序（\verb`CblasRowMajor`）还是列主序（\verb`CblasColMajor`）， \verb`m` 和 \verb`n` 分别指定矩阵的行数和列数， \verb`a, x, y` 分别是矩阵第一个元的指针。
 \begin{lstlisting}[language=cpp, caption=blas\_demo.cpp]
 // 计算矩阵—矢量乘法 y = a * x
 #include <iostream>
@@ -109,16 +109,16 @@ $ ./a.out
 \end{lstlisting}
 
 \subsubsection{64位整数}
-注意使用 64bit 时， 头文件不需要改变， 而是在 \verb|#include <cblas.h>| 之前定义 \verb|#define CBLAS_INT long long|。
+注意使用 64bit 时， 头文件不需要改变， 而是在 \verb`#include <cblas.h>` 之前定义 \verb`#define CBLAS_INT long long`。
 
-另外在 ubuntu 上需要安装 \verb|libblas64-dev|。
+另外在 ubuntu 上需要安装 \verb`libblas64-dev`。
 
 \subsubsection{其他参数}
 \begin{itemize}
-\item \verb|trans| （也是 \verb|enum|）指定预先转置矩阵（\verb|CblasTrans|）或不转置（\verb|CblasNoTrans|）
-\item \verb|alpha, beta| 用于计算 \verb|y = alpha * a * x + beta y|， 上例中我们使用了 \verb|alpha = 1, beta = 0|
-\item \verb|lda| 叫做 leading dimension， 在列主元的情况下用于指定从某一列第 $i$ 个元的索引（index）减去上一列第 $i$ 元的索引。 在上例中 \verb|lda| 就是行数。 但如果我们需要在一个更大的列（行）主元矩阵中截取一个小矩阵进行计算， 那么 \verb|lda| 就是大矩阵的行（列）数。
-\item \verb|incx| 和 \verb|incy| 用于指定两个矢量的步长（increment）， 由于上例中两矢量在内存中是连续的， 所以步长为 1。 但若某个矢量是行（列）主元矩阵中的一列（行）， 那么步长就是矩阵的列（行）数。
+\item \verb`trans` （也是 \verb`enum`）指定预先转置矩阵（\verb`CblasTrans`）或不转置（\verb`CblasNoTrans`）
+\item \verb`alpha, beta` 用于计算 \verb`y = alpha * a * x + beta y`， 上例中我们使用了 \verb`alpha = 1, beta = 0`
+\item \verb`lda` 叫做 leading dimension， 在列主元的情况下用于指定从某一列第 $i$ 个元的索引（index）减去上一列第 $i$ 元的索引。 在上例中 \verb`lda` 就是行数。 但如果我们需要在一个更大的列（行）主元矩阵中截取一个小矩阵进行计算， 那么 \verb`lda` 就是大矩阵的行（列）数。
+\item \verb`incx` 和 \verb`incy` 用于指定两个矢量的步长（increment）， 由于上例中两矢量在内存中是连续的， 所以步长为 1。 但若某个矢量是行（列）主元矩阵中的一列（行）， 那么步长就是矩阵的列（行）数。
 \end{itemize}
 
 \subsection{XBLAS}
@@ -135,14 +135,14 @@ $ ./a.out
 \begin{itemize}
 \item openblas 是一个比较快的实现， 也包含 lapack。
 \item 源码和文档都见 \href{https://github.com/xianyi/OpenBLAS}{github}。
-\item Ubuntu 中 \verb|apt install openblas| 会安装 \verb|cblas.h|， 但没有 \verb|lapacke.h|， 自己重新编译会更好。
+\item Ubuntu 中 \verb`apt install openblas` 会安装 \verb`cblas.h`， 但没有 \verb`lapacke.h`， 自己重新编译会更好。
 \item 注意 CMakeList.txt 只处于实验阶段， 最好用 automake
-\item 自己编译的命令： \verb|cmake -DBUILD_STATIC_LIBS=OFF -DBUILD_TESTING=OFF -DCMAKE_BUILD_TYPE=Release 源码路径|
-\item 其中 \verb|BUILD_STATIC_LIBS| 只编译静态链接库， \verb|BUILD_TESTING| 安装测试。 用 \verb|cmake -LH| 查看所有编译选项和说明。
-\item 自己编译后安装的文件： \verb|/usr/local/lib/libopenblas.a| 以及 \verb|/usr/local/include/openblas/| 中的 \verb|cblas.h|， \verb|lapack.h|， \verb|lapacke.h|， \verb|lapacke_config.h|， \verb|lapacke_mangling.h|， \verb|lapacke_utils.h|， \verb|openblas_config.h|， \verb|f77blas.h|
-\item \verb|Makefile.rule| 中比较重要的编译选项： \verb|USE_THREAD| （强制单线程或多线程）， \verb|NO_STATIC| （不编译静态库），\verb|NO_SHARED| （不编译动态库）， \verb|ONLY_CBLAS| （不支持 fortran）， \verb|PREFIX| （安装目录）， \verb|COMMON_OPT| （编译器优化选项）
-\item 设置好以后， \verb|make -j12| 即可编译。
-\item 默认安装目录是 \verb|/opt/OpenBLAS|
-\item blas 安装文件： \verb|lib/libopenblas.a或so|（软链）， \verb|lib/libopenblas_skylakex-r0.3.21.a或so| （同时包括 (c)blas 以及 lapack(e)， 支持 32 和 64bit 整数）， \verb|include/cblas.h|， \verb|openblas_config.h|， \verb|f77blas.h|
-\item lapack 头文件： \verb|include/lapack.h|， \verb|lapacke.h|， \verb|lapacke_config.h|， \verb|lapacke_mangling.h|， \verb|lapacke_utils.h|
+\item 自己编译的命令： \verb`cmake -DBUILD_STATIC_LIBS=OFF -DBUILD_TESTING=OFF -DCMAKE_BUILD_TYPE=Release 源码路径`
+\item 其中 \verb`BUILD_STATIC_LIBS` 只编译静态链接库， \verb`BUILD_TESTING` 安装测试。 用 \verb`cmake -LH` 查看所有编译选项和说明。
+\item 自己编译后安装的文件： \verb`/usr/local/lib/libopenblas.a` 以及 \verb`/usr/local/include/openblas/` 中的 \verb`cblas.h`， \verb`lapack.h`， \verb`lapacke.h`， \verb`lapacke_config.h`， \verb`lapacke_mangling.h`， \verb`lapacke_utils.h`， \verb`openblas_config.h`， \verb`f77blas.h`
+\item \verb`Makefile.rule` 中比较重要的编译选项： \verb`USE_THREAD` （强制单线程或多线程）， \verb`NO_STATIC` （不编译静态库），\verb`NO_SHARED` （不编译动态库）， \verb`ONLY_CBLAS` （不支持 fortran）， \verb`PREFIX` （安装目录）， \verb`COMMON_OPT` （编译器优化选项）
+\item 设置好以后， \verb`make -j12` 即可编译。
+\item 默认安装目录是 \verb`/opt/OpenBLAS`
+\item blas 安装文件： \verb`lib/libopenblas.a或so`（软链）， \verb`lib/libopenblas_skylakex-r0.3.21.a或so` （同时包括 (c)blas 以及 lapack(e)， 支持 32 和 64bit 整数）， \verb`include/cblas.h`， \verb`openblas_config.h`， \verb`f77blas.h`
+\item lapack 头文件： \verb`include/lapack.h`， \verb`lapacke.h`， \verb`lapacke_config.h`， \verb`lapacke_mangling.h`， \verb`lapacke_utils.h`
 \end{itemize}

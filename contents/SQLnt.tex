@@ -20,9 +20,9 @@
 \subsection{SQL Basics}
 \begin{itemize}
 \item 显示数据库 \verb`SHOW DATABASES;`
-\item 用 \verb|--| 注释直到行末， 用 \verb|/*   */| 注释块
+\item 用 \verb`--` 注释直到行末， 用 \verb`/*   */` 注释块
 \item 大部分操作都通过 \textbf{SQL statement} 完成， 如 \verb`SELECT * FROM 表名;`
-\item 命令可以随意换行，两个命令之间必须用 \verb|;| 隔开（即使不在一行）
+\item 命令可以随意换行，两个命令之间必须用 \verb`;` 隔开（即使不在一行）
 \item SQL 关键字， 表格名， 列名都不区分大小写，一般关键词用大写
 \item 数据中的字符串用单引号，大部分数据库双引号也行（但不是标准），字符串区分大小写
 \item 一些最重要的关键字如
@@ -41,11 +41,11 @@
 
 \subsubsection{SELECT}
 \begin{itemize}
-\item \verb`SELECT 列1, 列2, ... FROM 表格名;` 获取的数据表叫做 \textbf{result-set}。 如果要选取所有列， 用 \verb`*` 即可 e.g. \verb`SELECT * FROM 表格名;` 显示名为 \verb|表格名| 的表格中全部内容
+\item \verb`SELECT 列1, 列2, ... FROM 表格名;` 获取的数据表叫做 \textbf{result-set}。 如果要选取所有列， 用 \verb`*` 即可 e.g. \verb`SELECT * FROM 表格名;` 显示名为 \verb`表格名` 的表格中全部内容
 \item \verb`SELECT DISTINCT 列1, 列2, ... FROM 表格名;` 仅列出（输出中）不完全相同的行， 例如 \verb`SELECT DISTINCT Country FROM 表格名;`
 \item 获取表格行数： \verb`SELECT COUNT(*) FROM 表格名`
-\item \verb`SELECT COUNT(DISTINCT Country) FROM 表格名;` 显示表格中有多少不同的国家。 （这个命令在 Microsoft Access 里面没用）， 除了 \verb|COUNT| 还有 \verb|AVG| 和 \verb|SUM|
-\item \verb|SELECT MIN(列) FROM 表格名;|
+\item \verb`SELECT COUNT(DISTINCT Country) FROM 表格名;` 显示表格中有多少不同的国家。 （这个命令在 Microsoft Access 里面没用）， 除了 \verb`COUNT` 还有 \verb`AVG` 和 \verb`SUM`
+\item \verb`SELECT MIN(列) FROM 表格名;`
 \end{itemize}
 
 \subsubsection{WHERE}
@@ -60,8 +60,8 @@
 \item \verb`SELECT 列1, 列2, ... FROM 表格名 WHERE NOT condition;`
 \item \verb`SELECT * FROM 表格名 WHERE City='Berlin' OR City='München';`
 \item \verb`SELECT OCTET_LENGTH(列名) FROM 表名 WHERE ...;` 可以返回 blob 的大小
-\item \verb|SELECT EXISTS(SELECT 1 FROM 表格名 WHERE 条件);| 可以检查表格中是否有满足条件的行。 其中 \verb|SELECT 1| 并不返回任意表格中的数据而是如果改行存在就返回 \verb|1|（一行一列的数据）。 而 \verb|SELECT EXISTS()| 如果接收到任何返回值就返回 \verb|1|， 否则返回 \verb|0|。
-\item \verb|SELECT * FROM 表格名 WHERE 列名 LIKE '%字符%';| 可以搜索某列中是否包含 \verb|字符|。
+\item \verb`SELECT EXISTS(SELECT 1 FROM 表格名 WHERE 条件);` 可以检查表格中是否有满足条件的行。 其中 \verb`SELECT 1` 并不返回任意表格中的数据而是如果改行存在就返回 \verb`1`（一行一列的数据）。 而 \verb`SELECT EXISTS()` 如果接收到任何返回值就返回 \verb`1`， 否则返回 \verb`0`。
+\item \verb`SELECT * FROM 表格名 WHERE 列名 LIKE '%字符%';` 可以搜索某列中是否包含 \verb`字符`。
 \end{itemize}
 
 \subsubsection{ORDER BY}
@@ -72,7 +72,7 @@
 
 \subsubsection{GROUP BY}
 \begin{itemize}
-\item 假如要从一个购买记录表中选中某个顾客最后一次购买每件商品的记录，用 \verb|SELECT MAX("time") as max_time, "order_id" FROM "orders" WHERE "customer"='david' GROUP BY "item" ORDER BY max_time DESC;|
+\item 假如要从一个购买记录表中选中某个顾客最后一次购买每件商品的记录，用 \verb`SELECT MAX("time") as max_time, "order_id" FROM "orders" WHERE "customer"='david' GROUP BY "item" ORDER BY max_time DESC;`
 \end{itemize}
 
 \subsubsection{INSERT INTO}
@@ -86,37 +86,37 @@
 
 \subsubsection{UPDATE}
 \begin{itemize}
-\item 改变已经存在的 record. \verb|WHERE| 可以选择一条或多条 record
+\item 改变已经存在的 record. \verb`WHERE` 可以选择一条或多条 record
 \item 如果不用 \verb`WHERE`， 所有行的指定列都会被更新
 \item \verb`UPDATE 表格名 SET 列1 = 值1, ..., 列n = 值n WHERE condition;`
 \item 例如 \verb`UPDATE 表格名 SET ContactName = 'Alfred Schmidt', City= 'Frankfurt' WHERE CustomerID = 1;`
-\item \verb|UPDATE 表格名 SET 列名 = 列名 + 1 WHERE ...| 数值加 1。
+\item \verb`UPDATE 表格名 SET 列名 = 列名 + 1 WHERE ...` 数值加 1。
 \end{itemize}
 
 \subsubsection{DELETE}
 \begin{itemize}
 \item \verb`DELETE FROM 表格名 WHERE condition;` 删除符合条件的行
-\item \verb|DELETE FROM 表格名;| 删除表格的所有数据（表格还在）。
+\item \verb`DELETE FROM 表格名;` 删除表格的所有数据（表格还在）。
 \item e.g. \verb`DELETE FROM 表格名 WHERE CustomerName='Alfreds Futterkiste';`
 \end{itemize}
 
 \subsubsection{ALTER}
 \begin{itemize}
-\item 给表格重命名 \verb|ALTER TABLE 旧名字 RENAME TO 新名字;|
-\item 从表格中删除一列 \verb|ALTER TABLE 表名 DROP COLUMN 列名;|
-\item 给表格一列重命名 \verb|ALTER TABLE 表名 RENAME COLUMN 列名 TO 新列名;|
+\item 给表格重命名 \verb`ALTER TABLE 旧名字 RENAME TO 新名字;`
+\item 从表格中删除一列 \verb`ALTER TABLE 表名 DROP COLUMN 列名;`
+\item 给表格一列重命名 \verb`ALTER TABLE 表名 RENAME COLUMN 列名 TO 新列名;`
 \end{itemize}
 
 \subsubsection{CREATE}
 \begin{itemize}
-\item \verb|CREATE TABLE Person (列1名称 类型 选项1 选项2 ... , 列2名称 类型 选项1 选项2 ... , ...)|
-\item 强烈不建议用 SQL 命令的关键字作为表名列名等（大小写都不行）， 例如 \verb|add|。 因为为了区分关键字， 在命令中需要使用 \verb|"add", [add]| 或者 \verb|`add`| 来 escape。 普通列名则不需要 escape。
-\item 数据类型详见\href{https://www.w3schools.com/sql/sql_datatypes.asp}{这里}， 注意一般来说 \verb|INT| 就是 \verb|INTEGER|。
-\item sqlite 支持的类型为 \verb|NULL, INT, REAL, TEXT, BLOB|
-\item 选项 \verb|PRIMARY KEY| 可以使表格的某一列不出现重复的值且不能为 \verb|NULL|。 一个表格中只能有一个 \verb|PRIMARY KEY|， 但可以是多行。
-\item \verb|列名称 类型 UNIQUE| 可以保证该列没有重复数据。
-\item \verb|AUTO_INCREMENT| 选项可以在新增一行时（如果不提供）自动比该列当前的最大值加 1， 例如 ID 号。 在 sqlite 中叫做 \verb|AUTOINCREMENT| 且只能出现在 \verb|INT PRIMARY KEY AUTOINCREMENT| 中。
-\item 如果要在一个 table 中的某列指定另一个 table 中的某个 \verb|PRIMARY KEY|， 那就使用 \verb|FOREIGN KEY (本表列名) REFERENCES 别的表名 (别的表的列名)|。 例如在 \verb|Orders| 表中链接 \verb|Persons| 表中名为 \verb|PersonID| 的 primary key：
+\item \verb`CREATE TABLE Person (列1名称 类型 选项1 选项2 ... , 列2名称 类型 选项1 选项2 ... , ...)`
+\item 强烈不建议用 SQL 命令的关键字作为表名列名等（大小写都不行）， 例如 \verb`add`。 因为为了区分关键字， 在命令中需要使用 \verb`"add", [add]` 或者 \verb|`add`| 来 escape。 普通列名则不需要 escape。
+\item 数据类型详见\href{https://www.w3schools.com/sql/sql_datatypes.asp}{这里}， 注意一般来说 \verb`INT` 就是 \verb`INTEGER`。
+\item sqlite 支持的类型为 \verb`NULL, INT, REAL, TEXT, BLOB`
+\item 选项 \verb`PRIMARY KEY` 可以使表格的某一列不出现重复的值且不能为 \verb`NULL`。 一个表格中只能有一个 \verb`PRIMARY KEY`， 但可以是多行。
+\item \verb`列名称 类型 UNIQUE` 可以保证该列没有重复数据。
+\item \verb`AUTO_INCREMENT` 选项可以在新增一行时（如果不提供）自动比该列当前的最大值加 1， 例如 ID 号。 在 sqlite 中叫做 \verb`AUTOINCREMENT` 且只能出现在 \verb`INT PRIMARY KEY AUTOINCREMENT` 中。
+\item 如果要在一个 table 中的某列指定另一个 table 中的某个 \verb`PRIMARY KEY`， 那就使用 \verb`FOREIGN KEY (本表列名) REFERENCES 别的表名 (别的表的列名)`。 例如在 \verb`Orders` 表中链接 \verb`Persons` 表中名为 \verb`PersonID` 的 primary key：
 \begin{lstlisting}[language=none]
 CREATE TABLE Orders (
     OrderID INT NOT NULL,
@@ -126,17 +126,17 @@ CREATE TABLE Orders (
     FOREIGN KEY (PersonID) REFERENCES Persons (PersonID)
 );
 \end{lstlisting}
-\item 一般如果没有指定 \verb|NOT NULL| 或者 \verb|NULL|， 那就默认 \verb|NULL|， 也就是该列是 optional 的， 允许 NULL 值。
+\item 一般如果没有指定 \verb`NOT NULL` 或者 \verb`NULL`， 那就默认 \verb`NULL`， 也就是该列是 optional 的， 允许 NULL 值。
 \end{itemize}
 
 \subsubsection{DROP}
 \begin{itemize}
-\item \verb|DROP TABLE 表名| 删除表。
+\item \verb`DROP TABLE 表名` 删除表。
 \end{itemize}
 
 
 \subsection{关联两个表格}
-可以在条件前面加上 \verb|JOIN 另一个表的一行 ON 当前表.列 = 另一个表.列|， 然后在这个命令的任何地方，就可以使用 \verb|当前表.列| 和 \verb|另一个表.列|。 注意如果 \verb|WHERE| 中的条件满足但 \verb|JOIN| 中的条件不满足， 那么该条记录将不会输出也不会报错。
+可以在条件前面加上 \verb`JOIN 另一个表的一行 ON 当前表.列 = 另一个表.列`， 然后在这个命令的任何地方，就可以使用 \verb`当前表.列` 和 \verb`另一个表.列`。 注意如果 \verb`WHERE` 中的条件满足但 \verb`JOIN` 中的条件不满足， 那么该条记录将不会输出也不会报错。
 
 一个例子：
 \begin{lstlisting}[language=sql]

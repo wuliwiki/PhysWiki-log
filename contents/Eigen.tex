@@ -7,7 +7,7 @@ Eigen 的\href{http://eigen.tuxfamily.org/index.php?title=Main_Page}{主页}。
 \begin{enumerate}
 \item 首先\href{http://eigen.tuxfamily.org/index.php?title=Main_Page#Documentation}{下载} Eigen, 只有头文件，不需要任何安装。（如果要做一些跑分等则需要编译自带的测试程序）
 \item 把解压后的文件夹加入 include 路径。
-\item 在使用 Eigen 的代码中加入 \verb|#include <Eigen/Dense>| 等头文件即可。
+\item 在使用 Eigen 的代码中加入 \verb`#include <Eigen/Dense>` 等头文件即可。
 \item 当然也可以直接 \verb`apt install libeigen3-dev`
 \end{enumerate}
 
@@ -15,7 +15,7 @@ Eigen 的\href{http://eigen.tuxfamily.org/index.php?title=Main_Page}{主页}。
 \begin{itemize}
 \item 与 Matlab 的\href{https://eigen.tuxfamily.org/dox/AsciiQuickReference.txt}{语法对照表}。
 \item \href{https://eigen.tuxfamily.org/dox/AsciiQuickReference.txt}{ascii 快速参考}
-\item 所有的 Eigen 名字都有 namespace \verb|Eigen|
+\item 所有的 Eigen 名字都有 namespace \verb`Eigen`
 \end{itemize}
 
 \begin{lstlisting}[language=cpp]
@@ -39,39 +39,39 @@ a.setZero(m,n); 把矩阵赋值为 m*n 的 0 矩阵;
 \end{lstlisting}
 
 以下函数用法类似
-\verb|setOnes(); setConstant(); setIdentity();（单位矩阵） setRandom(); setLinSpaced();（等间距赋值）|
-注意其中 \verb|setConstant()| 输入 1 个变量时与 \verb|fill()| 功能相同， 输入 3 个变量时最后一个为常数。 \verb|setLinSpaced(size, val1, val2)| 只能对 Vector 或者 RowVector 使用。 如果想赋值给 \verb|MatrixXd|, 可以用 \verb|MatrixXd a = VectorXd::LinSpaced(3, 3, 4)|; 对于整型， \verb|setLinSpaced| 不保证最后一个值等于 val2, 而是保证间隔相等。 这时候只能先生成 Xd, 然后 .cast<int>.
+\verb`setOnes(); setConstant(); setIdentity();（单位矩阵） setRandom(); setLinSpaced();（等间距赋值）`
+注意其中 \verb`setConstant()` 输入 1 个变量时与 \verb`fill()` 功能相同， 输入 3 个变量时最后一个为常数。 \verb`setLinSpaced(size, val1, val2)` 只能对 Vector 或者 RowVector 使用。 如果想赋值给 \verb`MatrixXd`, 可以用 \verb`MatrixXd a = VectorXd::LinSpaced(3, 3, 4)`; 对于整型， \verb`setLinSpaced` 不保证最后一个值等于 val2, 而是保证间隔相等。 这时候只能先生成 Xd, 然后 .cast<int>.
 * 逗号赋值都是 RowMaor 的， 无论 a 是什么 major.
 a << 1,2,3,4;
 
 \subsection{operations}
 获取信息
 \begin{itemize}
-\item \verb|Matrix<>::size()| 相当于 Matlab 的 \verb|numel()|, 另外， \verb|rows()| 和 \verb|cols()| 分别是行数和列数。
-\item \verb|Matrix<>::data()| 可以获得 Matrix 数据的指针， 用于直接读写矩阵数据。 注意 rowwise 需要专门声明。 也可以用 \verb|&| 来获取矩阵元的地址。
-\item 矩阵转置用 \verb|Matrix<>::transpose()| 复数矩阵共轭用 \verb|conjugate()|, 共轭转置用 \verb|adjoint()|
-\item 矩阵元求和， \verb|Matrix<>::sum(); Matrix<>::colwise().sum(); Matrix<>::rowwise().sum()|
-\item 点乘和叉乘如 \verb|v.dot(w), v.cross(w)|
-类似的有 \verb|mean(), prod(), all(), any(), maxCoeff(), minCoeff()|
+\item \verb`Matrix<>::size()` 相当于 Matlab 的 \verb`numel()`, 另外， \verb`rows()` 和 \verb`cols()` 分别是行数和列数。
+\item \verb`Matrix<>::data()` 可以获得 Matrix 数据的指针， 用于直接读写矩阵数据。 注意 rowwise 需要专门声明。 也可以用 \verb`&` 来获取矩阵元的地址。
+\item 矩阵转置用 \verb`Matrix<>::transpose()` 复数矩阵共轭用 \verb`conjugate()`, 共轭转置用 \verb`adjoint()`
+\item 矩阵元求和， \verb`Matrix<>::sum(); Matrix<>::colwise().sum(); Matrix<>::rowwise().sum()`
+\item 点乘和叉乘如 \verb`v.dot(w), v.cross(w)`
+类似的有 \verb`mean(), prod(), all(), any(), maxCoeff(), minCoeff()`
 获取子矩阵
-对 Vector, 有 \verb|Matrix<>::head(n), tail(n), segment(n)|. 对 Matrix, 有 \verb|block(i,j,rows,cols)|, 有 \verb|row(i), col(j), topRows(n), middleRows(i, rows), bottomRows(n), leftCols(n), middleCols(j, cols), rightCols(n), topLeftCorner(rows,cols), bottomRightCorner(rows,cols)| 等。
+对 Vector, 有 \verb`Matrix<>::head(n), tail(n), segment(n)`. 对 Matrix, 有 \verb`block(i,j,rows,cols)`, 有 \verb`row(i), col(j), topRows(n), middleRows(i, rows), bottomRows(n), leftCols(n), middleCols(j, cols), rightCols(n), topLeftCorner(rows,cols), bottomRightCorner(rows,cols)` 等。
 \end{itemize}
 
 
 \subsubsection{逐个矩阵元的运算}
 \begin{itemize}
-\item \verb|Matrix<>::cwiseAbs()|
-\item 类似的有 \verb|cwiseInverse(); cwiseMax(); cwiseMin(); cwiseSign(); cwiseSqrt(); Matrix<>::array()| 用于把 Matrix 转换为 array, 逐个元素运算， 或加减一个常数。 如 \verb|Matrix<>::array().square()|
-\item 类似的有 \verb|round(); pow(); sqrt();| 注意 array 可以直接赋值给 matrix.
-\item 复制 vector 给矩阵的每一列 \verb|mat.colwise() = v;| 类似地， \verb|+=, -=| 等也可以使用。
+\item \verb`Matrix<>::cwiseAbs()`
+\item 类似的有 \verb`cwiseInverse(); cwiseMax(); cwiseMin(); cwiseSign(); cwiseSqrt(); Matrix<>::array()` 用于把 Matrix 转换为 array, 逐个元素运算， 或加减一个常数。 如 \verb`Matrix<>::array().square()`
+\item 类似的有 \verb`round(); pow(); sqrt();` 注意 array 可以直接赋值给 matrix.
+\item 复制 vector 给矩阵的每一列 \verb`mat.colwise() = v;` 类似地， \verb`+=, -=` 等也可以使用。
 \end{itemize}
 
 
 \subsubsection{Aliasing}
-如果矩阵同时出现在等号两边， 就有可能出现 Aliasing. 例如 \verb|MatrixXi mat(3,3);  mat.bottomRightCorner(2,2) = mat.topLeftCorner(2,2);| 这时， 要在等号右边的加上 \verb|.eval()|. 特殊地， 对于转置等， 可以直接用 \verb|mat = mat.transposeInPlace()|. 类似地有 \verb|adjointInPlace()|.
+如果矩阵同时出现在等号两边， 就有可能出现 Aliasing. 例如 \verb`MatrixXi mat(3,3);  mat.bottomRightCorner(2,2) = mat.topLeftCorner(2,2);` 这时， 要在等号右边的加上 \verb`.eval()`. 特殊地， 对于转置等， 可以直接用 \verb`mat = mat.transposeInPlace()`. 类似地有 \verb`adjointInPlace()`.
 
 \subsubsection{SVD (支持 complex)}
-要用 SVD, 要 \verb|#include<Eigen/SVD>|, 例程：
+要用 SVD, 要 \verb`#include<Eigen/SVD>`, 例程：
 \begin{lstlisting}[language=cpp]
 MatrixXd  A(3,3), U, V, X;
 A << 1, 2, 3, 4, 5, 6, 7, 8, 9;
@@ -80,24 +80,24 @@ U = svd.matrixU(); V = svd.matrixV(); X = svd.singularValues();
 \end{lstlisting}
 
 \subsection{外部接口}
-这里介绍如何直接操作 \verb|Matrix<>| 底层的数据， 以及如何将内存中已有的数据直接给 Eigen 使用而无需复制。
+这里介绍如何直接操作 \verb`Matrix<>` 底层的数据， 以及如何将内存中已有的数据直接给 Eigen 使用而无需复制。
 
 \subsubsection{访问底层数据}
 \begin{itemize}
-\item \verb|Matrix<>::data()| 可以返回第一个矩阵元的指针。 然后就可以当做矩阵来用了。
-\item 查看了一下源码， \verb|Matrix<>::innerStride()| 一律返回 1, \verb|outerStride()| 返回 \verb|innerSize()|, 而 \verb|innerSize| 对于 c-major 是 \verb|rows()|, 对于 r-major 是 \verb|cols()|. 这就说明矩阵的内存显然是连续的（无论怎么优化）, 可以放心使用。
-\item 要注意 \verb|Matrix<> |到底是 col-major 还是 row-major, 默认是 col-major. 不推荐用 \verb|#define EIGEN_DEFAULT_TO_ROW_MAJOR| 将默认改为 row-major. 建议用例如 \verb`typedef Matrix<double, Dynamic, Dynamic, Aligned | RowMajor> RMatrixXd.`
+\item \verb`Matrix<>::data()` 可以返回第一个矩阵元的指针。 然后就可以当做矩阵来用了。
+\item 查看了一下源码， \verb`Matrix<>::innerStride()` 一律返回 1, \verb`outerStride()` 返回 \verb`innerSize()`, 而 \verb`innerSize` 对于 c-major 是 \verb`rows()`, 对于 r-major 是 \verb`cols()`. 这就说明矩阵的内存显然是连续的（无论怎么优化）, 可以放心使用。
+\item 要注意 \verb`Matrix<> `到底是 col-major 还是 row-major, 默认是 col-major. 不推荐用 \verb`#define EIGEN_DEFAULT_TO_ROW_MAJOR` 将默认改为 row-major. 建议用例如 \verb`typedef Matrix<double, Dynamic, Dynamic, Aligned | RowMajor> RMatrixXd.`
 \end{itemize}
 
 \subsubsection{使用内存数据}
 \begin{itemize}
-\item 创建 \verb|Map<>| 类即可， 所有接受 \verb|Matrix<>| 的函数同样也接受 \verb|Map<>| (除了自己写的函数)
-\item \verb|Map<>| 有三个模板参数， 但是只需要用一个， 即 \verb|Map<Matrix<>>|.
-\item 创建 Map object 如 \verb|Map<MatrixXf> a(duuble* pa, rows,cols);|
+\item 创建 \verb`Map<>` 类即可， 所有接受 \verb`Matrix<>` 的函数同样也接受 \verb`Map<>` (除了自己写的函数)
+\item \verb`Map<>` 有三个模板参数， 但是只需要用一个， 即 \verb`Map<Matrix<>>`.
+\item 创建 Map object 如 \verb`Map<MatrixXf> a(duuble* pa, rows,cols);`
 \end{itemize}
 
 \subsection{其他标量类型}
-Eigen 使用模板变成的巨大优势就是可以使用自定义标量类型。 代码已经默认支持 \verb|float,double,long double| 以及对应的复数。 要让矩阵元支持其他类型（如 g++ 的 \verb|__float128|，甚至 GMP 的任意精度类型）， 只需要告诉 Eigen 新增标量的特性即可：
+Eigen 使用模板变成的巨大优势就是可以使用自定义标量类型。 代码已经默认支持 \verb`float,double,long double` 以及对应的复数。 要让矩阵元支持其他类型（如 g++ 的 \verb`__float128`，甚至 GMP 的任意精度类型）， 只需要告诉 Eigen 新增标量的特性即可：
 \begin{lstlisting}[language=cpp]
 namespace Eigen {
 template<> struct NumTraits<Qdoub> : GenericNumTraits<Qdoub>
@@ -149,43 +149,43 @@ typedef Matrix<Qcomp, Dynamic, 1> VectorXqc;
 
 参考：\href{https://eigen.tuxfamily.org/dox/group__TutorialSparse.html}{稀疏矩阵文档主页}， \href{https://eigen.tuxfamily.org/dox/classEigen_1_1SparseMatrix.html}{SparseMatrix 类文档}，\href{https://eigen.tuxfamily.org/dox/group__TopicSparseSystems.html}{解稀疏线性方程文档}。
 
-\verb|Eigen::SparseMatrix<Scalar_, Options_, StorageIndex_>| 模板中，\verb|Scalar_| 是矩阵元的类型， \verb|Options_| 只能是 \verb|Eigen::ColMajor| 或 \verb|Eigen::RowMajor|，默认是 \verb|ColMajor|。 \verb|StorageIndex_| 是内部数组的 index 的类型，必须是有符号整数，默认 \verb|int|。 注意这不是成员函数中行标和列表的 index 类型（\verb|Eigen::Index|）。
+\verb`Eigen::SparseMatrix<Scalar_, Options_, StorageIndex_>` 模板中，\verb`Scalar_` 是矩阵元的类型， \verb`Options_` 只能是 \verb`Eigen::ColMajor` 或 \verb`Eigen::RowMajor`，默认是 \verb`ColMajor`。 \verb`StorageIndex_` 是内部数组的 index 的类型，必须是有符号整数，默认 \verb`int`。 注意这不是成员函数中行标和列表的 index 类型（\verb`Eigen::Index`）。
 
-除非特殊说明，我们下面都以 \verb|RowMajor| 为例。
+除非特殊说明，我们下面都以 \verb`RowMajor` 为例。
 
 \subsubsection{内部结构}
 \begin{itemize}
-\item Eigen 中 \verb|RowMajor| 的稀疏矩阵类似 CSR（\autoref{sub_SprMat_3}），但允许储存矩阵元的数组 \verb|Values| 中有一些预留的空位。
-\item \verb|RowMajor| 的 \textbf{inner dimension} 是行的方向， \textbf{outer dimmension} 是列。 ColMajor 则相反。
-\item \verb|InnerIndices| 是非零矩阵元的列标， 大小元素都和 \verb|Values| 一一对应，空位处的值无意义。
-\item \verb|OuterStarts|： \verb|Values[OuterStarts[i]]| 是第 \verb|i| 行的第一个非零元。如果该行为零，那就和下一个非零元的 \verb|OuterStarts| 相同。 \verb|OuterStarts| 的尺寸比列数多 1，最后一个元素是 \verb|Values| 的长度。
-\item \verb|InnerNNZs| 是每一列非零元素的个数（不包含空位）， 长度和列数相同。
+\item Eigen 中 \verb`RowMajor` 的稀疏矩阵类似 CSR（\autoref{sub_SprMat_3}），但允许储存矩阵元的数组 \verb`Values` 中有一些预留的空位。
+\item \verb`RowMajor` 的 \textbf{inner dimension} 是行的方向， \textbf{outer dimmension} 是列。 ColMajor 则相反。
+\item \verb`InnerIndices` 是非零矩阵元的列标， 大小元素都和 \verb`Values` 一一对应，空位处的值无意义。
+\item \verb`OuterStarts`： \verb`Values[OuterStarts[i]]` 是第 \verb`i` 行的第一个非零元。如果该行为零，那就和下一个非零元的 \verb`OuterStarts` 相同。 \verb`OuterStarts` 的尺寸比列数多 1，最后一个元素是 \verb`Values` 的长度。
+\item \verb`InnerNNZs` 是每一列非零元素的个数（不包含空位）， 长度和列数相同。
 \end{itemize}
 
 \subsubsection{常用成员函数}
 \begin{itemize}
-\item \verb|Scalar coeff(Index row, Index col) const|
-\item \verb|Scalar &coeffRef(Index row, Index col)|
-\item \verb|Index cols() const| 列数
-\item \verb|Index rows() const| 行数
-\item \verb|void conservativeResize(Index rows, Index cols)| 改变矩阵尺寸，保留原来的值。
-\item \verb|StorageIndex *innerIndexPtr()| 返回 \verb|InnerIndices| 数组的指针
-\item \verb|StorageIndex *innerNonZeroPtr()| 返回 \verb|InnerNNZs| 数组的指针
-\item \verb|Scalar &insert(Index row, Index col)| 返回一个引用，用于插入一个值。该矩阵元之前不能存在值
-\item \verb|bool isCompressed() const| 是否是 CSR 格式
-\item \verb|void makeCompressed()| 变为 CSR 格式
-\item \verb|sqeeze()| 类似 \verb|makeCompressed()|， 但仍然会保留少量空位。
-\item \verb|Index nonZeros() const| 非零元的总个数
-\item \verb|StorageIndex *outerIndexPtr()| 返回 \verb|OuterStarts| 数组的指针
+\item \verb`Scalar coeff(Index row, Index col) const`
+\item \verb`Scalar &coeffRef(Index row, Index col)`
+\item \verb`Index cols() const` 列数
+\item \verb`Index rows() const` 行数
+\item \verb`void conservativeResize(Index rows, Index cols)` 改变矩阵尺寸，保留原来的值。
+\item \verb`StorageIndex *innerIndexPtr()` 返回 \verb`InnerIndices` 数组的指针
+\item \verb`StorageIndex *innerNonZeroPtr()` 返回 \verb`InnerNNZs` 数组的指针
+\item \verb`Scalar &insert(Index row, Index col)` 返回一个引用，用于插入一个值。该矩阵元之前不能存在值
+\item \verb`bool isCompressed() const` 是否是 CSR 格式
+\item \verb`void makeCompressed()` 变为 CSR 格式
+\item \verb`sqeeze()` 类似 \verb`makeCompressed()`， 但仍然会保留少量空位。
+\item \verb`Index nonZeros() const` 非零元的总个数
+\item \verb`StorageIndex *outerIndexPtr()` 返回 \verb`OuterStarts` 数组的指针
 
-\item \verb|void setFromTriplets(const InputIterators &begin, const InputIterators &end)| 从 \verb|vector<Eigen::Triplet<Scalar>>| 给稀疏矩阵赋值（不一定是 \verb|vector|）。
-\item \verb|Scalar *valuePtr()| 返回 \verb|Values| 数组的指针
+\item \verb`void setFromTriplets(const InputIterators &begin, const InputIterators &end)` 从 \verb`vector<Eigen::Triplet<Scalar>>` 给稀疏矩阵赋值（不一定是 \verb`vector`）。
+\item \verb`Scalar *valuePtr()` 返回 \verb`Values` 数组的指针
 \end{itemize}
 
 \subsubsection{解线性方程组}
-\addTODO{见 \verb|SLISC/tests/eigen.cpp|}
+\addTODO{见 \verb`SLISC/tests/eigen.cpp`}
 \begin{itemize}
 \item \verb`ConjugateGradient<SparseMatrix<Comp>, Lower|Upper> solver(H);`
-\item \verb|solver.make(H)|
-\item 要验证精度，可以用 \verb|(A*x - b).norm()/b.norm()|。
+\item \verb`solver.make(H)`
+\item 要验证精度，可以用 \verb`(A*x - b).norm()/b.norm()`。
 \end{itemize}

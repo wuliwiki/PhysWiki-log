@@ -17,7 +17,7 @@
 \item 但是如果 apt 不能用的话， 也可以下载 deb 文件离线安装
 \item 安装包\href{https://download.docker.com/linux/ubuntu/dists/}{下载链接}， 选择系统版本代号， 然后 pool/stable/amd64/
 \item 选好了以后需要下载三个安装包， 依次安装（如果次序不对也问题不大，会提示 dependency 找不到的错误）
-\item 三个安装包依次是 \verb|containerd.io|, \verb|docker-ce-cli|, \verb|docker-ce|, 用 \verb`dpkg -i xxx.deb` 安装即可
+\item 三个安装包依次是 \verb`containerd.io`, \verb`docker-ce-cli`, \verb`docker-ce`, 用 \verb`dpkg -i xxx.deb` 安装即可
 \end{itemize}
 
 \subsection{基础}
@@ -31,48 +31,48 @@
 \item 最新的 windows docker 默认使用 WSL2 运行。
 \item 重启以后启动 docker， 登录， 用 powershell \verb`docker --version` 检查版本
 \item \verb`sudo docker run hello-world` 测试最简单的 image （镜像）。
-\item 所有 \verb|docker| 命令前面都默认需要 \verb|sudo|， 以下省略。 如果不加， 会有错误 \verb|Cannot connect to the Docker daemon...|。 也可以通过用户组来设置不需要 sudo 的 user， 例如 \verb|sudo usermod -aG docker 用户名|（见\href{https://docs.docker.com/engine/install/linux-postinstall/}{文档}）。
-\item 在超算上一般使用 \verb|singularity| 而不是 \verb|docker|。 前者不需要 \verb|sudo| 权限。 \verb|docker| 倒出的 \verb|tar.gz| 文件可以直接上传到超算上，然后用 \verb|singularity| 导入。
+\item 所有 \verb`docker` 命令前面都默认需要 \verb`sudo`， 以下省略。 如果不加， 会有错误 \verb`Cannot connect to the Docker daemon...`。 也可以通过用户组来设置不需要 sudo 的 user， 例如 \verb`sudo usermod -aG docker 用户名`（见\href{https://docs.docker.com/engine/install/linux-postinstall/}{文档}）。
+\item 在超算上一般使用 \verb`singularity` 而不是 \verb`docker`。 前者不需要 \verb`sudo` 权限。 \verb`docker` 倒出的 \verb`tar.gz` 文件可以直接上传到超算上，然后用 \verb`singularity` 导入。
 \item 注意区分容器（container）和镜像（image）和仓库（repo）。 仓库相当于 VirtualBox 虚拟机， 镜像相当于增量备份点（snapshot）， 而容器相当于虚拟机的目前状态。 容器也有运行和非运行的状态。
-\item \verb`docker images` 可以检查本地所被 tag 的镜像。 加上 \verb|-a| 选项也显示所有没有 tag 的镜像（有时候似乎也被成为 layer）。 这些没名字的镜像可能是用 Dockerfile 生成镜像时的中间步骤。
+\item \verb`docker images` 可以检查本地所被 tag 的镜像。 加上 \verb`-a` 选项也显示所有没有 tag 的镜像（有时候似乎也被成为 layer）。 这些没名字的镜像可能是用 Dockerfile 生成镜像时的中间步骤。
 \item \verb`docker ps` 可以检查本地所有容器信息。
-\item \verb|docker container ls| 也可以， 但区别是什么？
-\item 要下载镜像用 \verb`docker pull hub用户名/repo名:TAG` 其中 \verb|hub用户名/| 对于一些官方镜像可以忽略， 例如 \verb`docker pull ubuntu:22.04` 中， \verb|ubuntu| 是 repo， \verb|22.04| 是 TAG。 \verb|docker pull hello-world| 中， tag 也忽略了， 使用默认的 tag \verb|latest|
-\item \verb|docker run [选项] 镜像 [命令]| 从镜像创建容器并运行。 反复使用会创建多个容器。 如果不设置 \verb|[命令]|， 则运行 image 的默认命令。
-\item 这里的 \verb|镜像| 是指 \verb|用户/repo名:TAG| 或者镜像 ID（用 \verb|docker images| 查看）， 下同。
-\item \verb|docker run -it 镜像 bash| 会创建容器并进入其命令行。 \verb|-i| 表示 interactive， \verb|-t| 表示 tty 即远程命令行（不加的话也能用但是没有 bash prompt）。 退出该命令行后， 容器停止运行。 需要用下文的 \verb|docker start| 启动， 再 \verb|docker exec -it 容器 bash|。
-\item \verb|docker run -i 镜像 某个命令| 可以创建容器，执行某个命令， 并把 stdin，stdout，stderr 等转接到当前 shell。 运行完成或出错后，容器停止。
-\item 更简单的方法是用 \verb|docker run -itd 镜像 bash|， 其中 \verb|-d| 表示 detached 即后台运行。 然后再 \verb|docker exec -it 容器 bash| 进入命令行， 退出后容器仍在后台运行不会自动停止， 需要手动用下文的 \verb|docker stop 容器|。
-\item \verb|docker run ... --name 容器名 ...| 可以指定容器的名字， 如果不指定则会随机生成一个（用 \verb|ps| 查看）。 下文的 \verb|容器| 都是指容器名或者容器 ID（用 \verb|ps| 查看）。
-\item \verb`docker exec [选项] 容器 命令` 让某个运行中容器执行命令， 选项 \verb|-it| 可以交互式执行， 例如 \verb|docker exec -it 容器 bash|。 如果该镜像的默认 user 不是 root， 那么在 \verb|-it| 后面加上 \verb|-u 0| 选项可以以 root 的身份 login。
+\item \verb`docker container ls` 也可以， 但区别是什么？
+\item 要下载镜像用 \verb`docker pull hub用户名/repo名:TAG` 其中 \verb`hub用户名/` 对于一些官方镜像可以忽略， 例如 \verb`docker pull ubuntu:22.04` 中， \verb`ubuntu` 是 repo， \verb`22.04` 是 TAG。 \verb`docker pull hello-world` 中， tag 也忽略了， 使用默认的 tag \verb`latest`
+\item \verb`docker run [选项] 镜像 [命令]` 从镜像创建容器并运行。 反复使用会创建多个容器。 如果不设置 \verb`[命令]`， 则运行 image 的默认命令。
+\item 这里的 \verb`镜像` 是指 \verb`用户/repo名:TAG` 或者镜像 ID（用 \verb`docker images` 查看）， 下同。
+\item \verb`docker run -it 镜像 bash` 会创建容器并进入其命令行。 \verb`-i` 表示 interactive， \verb`-t` 表示 tty 即远程命令行（不加的话也能用但是没有 bash prompt）。 退出该命令行后， 容器停止运行。 需要用下文的 \verb`docker start` 启动， 再 \verb`docker exec -it 容器 bash`。
+\item \verb`docker run -i 镜像 某个命令` 可以创建容器，执行某个命令， 并把 stdin，stdout，stderr 等转接到当前 shell。 运行完成或出错后，容器停止。
+\item 更简单的方法是用 \verb`docker run -itd 镜像 bash`， 其中 \verb`-d` 表示 detached 即后台运行。 然后再 \verb`docker exec -it 容器 bash` 进入命令行， 退出后容器仍在后台运行不会自动停止， 需要手动用下文的 \verb`docker stop 容器`。
+\item \verb`docker run ... --name 容器名 ...` 可以指定容器的名字， 如果不指定则会随机生成一个（用 \verb`ps` 查看）。 下文的 \verb`容器` 都是指容器名或者容器 ID（用 \verb`ps` 查看）。
+\item \verb`docker exec [选项] 容器 命令` 让某个运行中容器执行命令， 选项 \verb`-it` 可以交互式执行， 例如 \verb`docker exec -it 容器 bash`。 如果该镜像的默认 user 不是 root， 那么在 \verb`-it` 后面加上 \verb`-u 0` 选项可以以 root 的身份 login。
 \item docerk 镜像没有简单的上锁设置，就算修改了 passwd。 能执行 \verb`sudo docker...` 命令的人都可以自由访问本地的任何容器
 \item \verb`docker stop 容器` 停止容器
-\item \verb`docker start 容器` 开始容器， 默认后台运行 （注意区分 \verb|start| 和 \verb|run|）。 用 \verb|docker start -i 容器| 可以转发 stdout （和 stdin？）到当前 shell。
-\item 要改变容器在 \verb|start| 时执行的命令， 只能先 \verb|commit|， 再用不同的命令 \verb|run| 一次。
+\item \verb`docker start 容器` 开始容器， 默认后台运行 （注意区分 \verb`start` 和 \verb`run`）。 用 \verb`docker start -i 容器` 可以转发 stdout （和 stdin？）到当前 shell。
+\item 要改变容器在 \verb`start` 时执行的命令， 只能先 \verb`commit`， 再用不同的命令 \verb`run` 一次。
 \item \verb`docker rm [-f] 容器` 删除容器
-\item \verb`docker image rm [-f] 镜像` 删除镜像。 如果该镜像有容器就要 \verb|-f|。 如果该镜像有基于它的子镜像， \verb|-f| 也没用。
-\item \verb|docker image prune| 用于移除没有被使用的镜像， 具体呢？
-\item \verb|docker system prune -a| 会移除所有停止的容器， 所有没有关联容器的镜像， 所有 build cache。 运行后会给出确认提示。
+\item \verb`docker image rm [-f] 镜像` 删除镜像。 如果该镜像有容器就要 \verb`-f`。 如果该镜像有基于它的子镜像， \verb`-f` 也没用。
+\item \verb`docker image prune` 用于移除没有被使用的镜像， 具体呢？
+\item \verb`docker system prune -a` 会移除所有停止的容器， 所有没有关联容器的镜像， 所有 build cache。 运行后会给出确认提示。
 \item 如果一个镜像 ID 有多个 tag， 那么无法直接删除 ID， 需要具体指定 tag。
-\item \verb`docker commit 容器 [repo名][:tag名]` 会将容器 commit， 如果不指定 \verb|[repo名]| 或 \verb|[tag名]| 那么二者都会是 \verb|<none>| （和 Dockerfile 中间步骤产生的那些镜像一样）。 如果不指定 \verb|tag名| 则 tag 默认为 \verb|latest|。 如果 \verb|repo名:tag名| 和已经存在则会覆盖， 之前镜像会变为 \verb|<none>:<none>|。
-\item 即使容器不发生改变， \verb|commit| 多次也会产生多个镜像。
+\item \verb`docker commit 容器 [repo名][:tag名]` 会将容器 commit， 如果不指定 \verb`[repo名]` 或 \verb`[tag名]` 那么二者都会是 \verb`<none>` （和 Dockerfile 中间步骤产生的那些镜像一样）。 如果不指定 \verb`tag名` 则 tag 默认为 \verb`latest`。 如果 \verb`repo名:tag名` 和已经存在则会覆盖， 之前镜像会变为 \verb`<none>:<none>`。
+\item 即使容器不发生改变， \verb`commit` 多次也会产生多个镜像。
 \item \verb`sudo docker login` 用于登录 docker hub
-\item \verb|docker save -o image.tar 镜像| 可以把镜像保存为文件。
-\item \verb|docker load -i image.tar| 或者 \verb|docker load < image.tar| 可以恢复保存的镜像文件。 也可以用 \verb|image.tar.gz|。
+\item \verb`docker save -o image.tar 镜像` 可以把镜像保存为文件。
+\item \verb`docker load -i image.tar` 或者 \verb`docker load < image.tar` 可以恢复保存的镜像文件。 也可以用 \verb`image.tar.gz`。
 \item 如果要压缩，用 \verb`docker save 镜像 | gzip > image.tar.gz`
-\item 重命名容器：\verb|docker rename 旧容器名字 新容器名字|
-\item 从容器（不必正在运行）里面拷贝文件到外面 \verb|docker cp 容器:/容器内某路径/ 本地某路径|
-\item 也可以从外面拷到里面 \verb|docker cp 本地某路径 容器:/容器内某路径/|
-\item \verb|docker save -o 备份文件.tar 镜像|
+\item 重命名容器：\verb`docker rename 旧容器名字 新容器名字`
+\item 从容器（不必正在运行）里面拷贝文件到外面 \verb`docker cp 容器:/容器内某路径/ 本地某路径`
+\item 也可以从外面拷到里面 \verb`docker cp 本地某路径 容器:/容器内某路径/`
+\item \verb`docker save -o 备份文件.tar 镜像`
 \end{itemize}
 
 \subsubsection{dockerd 设置}
 \begin{itemize}
-\item docker 镜像默认存在 \verb|/var/lib/docker/|
+\item docker 镜像默认存在 \verb`/var/lib/docker/`
 \item 容器的根目录大小默认是 10GB
-\item \verb|sudo service docker stop|
-\item \verb|sudo rm -rf /var/lib/docker| 注意这会删掉所有镜像！ 但不这么做好像 daemon 不能正常启动。
-\item \verb|sudo vim /etc/docker/daemon.json| 设置镜像的默认保存路径以及容器根目录大小
+\item \verb`sudo service docker stop`
+\item \verb`sudo rm -rf /var/lib/docker` 注意这会删掉所有镜像！ 但不这么做好像 daemon 不能正常启动。
+\item \verb`sudo vim /etc/docker/daemon.json` 设置镜像的默认保存路径以及容器根目录大小
 \begin{lstlisting}[language=json]
 {
   "data-root": "/path/to/your/docker",
@@ -80,8 +80,8 @@
   "storage-opts": ["dm.basesize=30G"]
 }
 \end{lstlisting}
-\item \verb|sudo service docker start| 即可。
-\item 现在可以试一下 \verb|sudo docker run -it ubuntu:20.04 bash| 然后 \verb|df -h| 看看根目录是否有 30G。
+\item \verb`sudo service docker start` 即可。
+\item 现在可以试一下 \verb`sudo docker run -it ubuntu:20.04 bash` 然后 \verb`df -h` 看看根目录是否有 30G。
 \end{itemize}
 
 
@@ -100,7 +100,7 @@ RUN echo "hello world!" > hello.txt
 
 CMD ["cat", "hello.txt"]
 \end{lstlisting}
-\item \verb|docker build -t 容器名:tag名 路径| 使用指定路径下的 \verb|Dockerfile| 创建 image 并命名。
+\item \verb`docker build -t 容器名:tag名 路径` 使用指定路径下的 \verb`Dockerfile` 创建 image 并命名。
 \item 输出：
 \begin{lstlisting}[language=none]
 Sending build context to Docker daemon  2.048kB
@@ -126,7 +126,7 @@ Step 6/6 : CMD ["cat", "hello.txt"]
 Successfully built 2dc75e84a18a
 Successfully tagged docker_test:Dockerfile
 \end{lstlisting}
-\item 用 \verb|docker images -a| 查看， 所有镜像。 Dockerfile 中 2-6 步结束后各生成一个镜像， 但只有最后一步的镜像有 repo 和 tag。
+\item 用 \verb`docker images -a` 查看， 所有镜像。 Dockerfile 中 2-6 步结束后各生成一个镜像， 但只有最后一步的镜像有 repo 和 tag。
 \begin{lstlisting}[language=none]
 REPOSITORY    TAG          IMAGE ID       CREATED   SIZE
 docker_test   Dockerfile   2dc75e84a18a   49 seconds ago       192MB
@@ -136,29 +136,29 @@ docker_test   Dockerfile   2dc75e84a18a   49 seconds ago       192MB
 <none>        <none>       ad6eefc640eb   About a minute ago   117MB
 ubuntu        22.04        a8780b506fa4   4 days ago           77.8MB
 \end{lstlisting}
-\item 如果想指定其他的 Dockerfile 文件名， 用 \verb|-f 文件|
-\item 一个例子是 mplapack 的 \verb|sudo docker build -t mplapack:ubuntu2204  .|。 其中 \verb|-t| 命名一个 tag， \verb|-f| 指定 dockerfile， \verb|.| 指定某个路径为当前路径， \verb|tee| 把 stdout 输出到命令行以及指定的文件。
+\item 如果想指定其他的 Dockerfile 文件名， 用 \verb`-f 文件`
+\item 一个例子是 mplapack 的 \verb`sudo docker build -t mplapack:ubuntu2204  .`。 其中 \verb`-t` 命名一个 tag， \verb`-f` 指定 dockerfile， \verb`.` 指定某个路径为当前路径， \verb`tee` 把 stdout 输出到命令行以及指定的文件。
 \item 每个命令会建立一个 \textbf{layer}， 应该相当于 git 的一次 commit。 每个 layer 保存两个 image 之间的差别， 可以从任意 layer 建立容器。
 \item 不一定每个 layer 都有 tag， 但都会有 id。
-\item \verb|CMD["命令", "参数1", "参数2", ...]| 或者 \verb|CMD 命令 参数1 参数2， ...| 可以在每次容器开始运行时都执行一次某个命令。
-\item \verb|docker run| 执行 \verb|CMD| 中命令时， 会把命令行输出转到 host 的命令行。
-\item \verb|docker build| 会自动检查 Dockerfile 和之前的变化， 把前面相同的步骤略过， 所以还是不要把所有命令都放在同一个 \verb|RUN| 里面。
-\item 如果用 \verb|docker build --no-cache|， 可以强制重新开始 build， 不跳过重复的步骤。
+\item \verb`CMD["命令", "参数1", "参数2", ...]` 或者 \verb`CMD 命令 参数1 参数2， ...` 可以在每次容器开始运行时都执行一次某个命令。
+\item \verb`docker run` 执行 \verb`CMD` 中命令时， 会把命令行输出转到 host 的命令行。
+\item \verb`docker build` 会自动检查 Dockerfile 和之前的变化， 把前面相同的步骤略过， 所以还是不要把所有命令都放在同一个 \verb`RUN` 里面。
+\item 如果用 \verb`docker build --no-cache`， 可以强制重新开始 build， 不跳过重复的步骤。
 \end{itemize}
 
 \subsubsection{具体命令}
 \begin{itemize}
 \item 这里参考 github 上 mplapack 中的 Dockerfiles
-\item \verb|# Comment| 写注释
+\item \verb`# Comment` 写注释
 \item dockerfile 命令一般用大写（但严格来说不区分大小写）
-\item 第一个除了 \verb|ARG| 的命令必须是 \verb|FROM|， 例如 \verb|FROM image:tag|， 这和 \verb|docker pull repo:tag| 一样。 例如 \verb|FROM ubuntu:22.04|。
-\item \verb|RUN 命令| 可以在容器的 shell 中执行命令。
-\item 用 \verb|\| 给命令换行
-\item 也可以用 \verb|RUN 命令1 && 命令2 ...| 执行多个命令
-\item \verb|COPY 本地相对于当前路径的文件文件(夹) 容器内绝对路径/重命名的文件(夹)| 可以从外面到里面复制文件。 注意第一个路径必须是当前文件夹的某个子文件夹或其中的文件。
-\item \verb|ARG| 命令基本是定义容器中的环境变量。 例如 \verb|ARG ver="2.0.1"|， 之后可以用例如 \verb|RUN ... myapp-${ver}| 来获替换成值（双引号不会包含， 花括号有时候可以省略）。 在 bash session 中不会有该环境变量。
-\item \verb|ENV| 和 \verb|ARG| 有什么不同？
-\item docker 默认的 shell 是 \verb|sh|， 用 \verb|SHELL| 来修改 Dockerfile 之后的 shell， 这个只对 Dockerfile 有用。
+\item 第一个除了 \verb`ARG` 的命令必须是 \verb`FROM`， 例如 \verb`FROM image:tag`， 这和 \verb`docker pull repo:tag` 一样。 例如 \verb`FROM ubuntu:22.04`。
+\item \verb`RUN 命令` 可以在容器的 shell 中执行命令。
+\item 用 \verb`\` 给命令换行
+\item 也可以用 \verb`RUN 命令1 && 命令2 ...` 执行多个命令
+\item \verb`COPY 本地相对于当前路径的文件文件(夹) 容器内绝对路径/重命名的文件(夹)` 可以从外面到里面复制文件。 注意第一个路径必须是当前文件夹的某个子文件夹或其中的文件。
+\item \verb`ARG` 命令基本是定义容器中的环境变量。 例如 \verb`ARG ver="2.0.1"`， 之后可以用例如 \verb`RUN ... myapp-${ver}` 来获替换成值（双引号不会包含， 花括号有时候可以省略）。 在 bash session 中不会有该环境变量。
+\item \verb`ENV` 和 \verb`ARG` 有什么不同？
+\item docker 默认的 shell 是 \verb`sh`， 用 \verb`SHELL` 来修改 Dockerfile 之后的 shell， 这个只对 Dockerfile 有用。
 \end{itemize}
 
 \subsubsection{创建一个新用户}
@@ -176,31 +176,31 @@ USER ${DOCKER_USER} # 指定用户， 对 dockerfile 下面命令生效， 对 b
 
 \subsection{本地镜像 push 到服务器}
 \begin{itemize}
-\item 首先在 dockerhub 上面登录并创建新的 repo： \verb|hub用户名/repo名|
-\item retag 镜像： \verb|docker tag 本地镜像 hub用户名/repo名:tag|
-\item push： \verb|sudo docker push hub用户名/repo名:tag|
-\item pull： \verb|sudo docker pull hub用户名/repo名:tag|
-\item 如果用 Dockerfile 生成镜像时存在许多没有 tag 的镜像， 这些不会被 push。 如果把所有镜像删掉再 pull， \verb|docker images -a| 只会显示一个。
+\item 首先在 dockerhub 上面登录并创建新的 repo： \verb`hub用户名/repo名`
+\item retag 镜像： \verb`docker tag 本地镜像 hub用户名/repo名:tag`
+\item push： \verb`sudo docker push hub用户名/repo名:tag`
+\item pull： \verb`sudo docker pull hub用户名/repo名:tag`
+\item 如果用 Dockerfile 生成镜像时存在许多没有 tag 的镜像， 这些不会被 push。 如果把所有镜像删掉再 pull， \verb`docker images -a` 只会显示一个。
 \item 如果镜像是通过 dockerfile 生成的， 那么 push 以后在 dockerhub 上面会看到每个 layer 的生成命令。
-\item 如果相同的 \verb|hub用户名/repo名:tag| 重复 push， 会进行覆盖。
+\item 如果相同的 \verb`hub用户名/repo名:tag` 重复 push， 会进行覆盖。
 \end{itemize}
 
 \subsection{docker 文件夹映射}
 \begin{itemize}
-\item 如果想从 docker 中访问本地文件夹， 就用 \verb|docker run -v 本地绝对路径:容器中的目录|。 注意 \verb|容器中的目录| 如果不存在， 会自动创建（多层目录也支持）。
+\item 如果想从 docker 中访问本地文件夹， 就用 \verb`docker run -v 本地绝对路径:容器中的目录`。 注意 \verb`容器中的目录` 如果不存在， 会自动创建（多层目录也支持）。
 \end{itemize}
 
 \subsection{docker 网络端口映射}
 \begin{itemize}
 \item \href{https://www.freecodecamp.org/news/how-to-get-a-docker-container-ip-address-explained-with-examples/}{简单介绍}
 \item 容器自己的 ip 默认为 \verb`172.17.xxx.xxx`
-\item 如果要把容器的端口映射到 host 的端口， 使用 \verb`docker run -p HOST_PORT:CONTAINER_PORT 镜像`， 这样如果 docker 有一个 web server 就可以从外面访问了。 也可使用多次 \verb|-p|。
+\item 如果要把容器的端口映射到 host 的端口， 使用 \verb`docker run -p HOST_PORT:CONTAINER_PORT 镜像`， 这样如果 docker 有一个 web server 就可以从外面访问了。 也可使用多次 \verb`-p`。
 \end{itemize}
 
 \subsection{ubuntu image 缺少的功能}
 \begin{itemize}
-\item \verb|docker pull ubuntu| 安装官方 ubuntu docker 镜像， 这是一个非常精简的系统， 比 ubuntu server 还精简， 只有 30 多 M。
-\item \verb|apt update|
+\item \verb`docker pull ubuntu` 安装官方 ubuntu docker 镜像， 这是一个非常精简的系统， 比 ubuntu server 还精简， 只有 30 多 M。
+\item \verb`apt update`
 \item \verb`apt install sudo`
 \item \verb`apt install bash-completion`, 然后在 bashrc 中加上
 \begin{lstlisting}[language=bash]

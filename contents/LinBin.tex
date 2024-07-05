@@ -13,16 +13,16 @@
 \begin{itemize}
 \item 参考 \href{https://en.wikipedia.org/wiki/Binary-code_compatibility}{Wikipedia}。
 \item 注意即使都是 x86-64 架构， 也可能有不同的拓展命令， 例如 AVX。 例如\href{https://stackoverflow.com/questions/50945287/illegal-instruction-when-run-precompiled-program-on-other-machine}{这个帖子}。
-\item 如果指令集不支持， 会在运行时出现 \verb|Illegal Instruction| 错误， 也就是 \verb|SIGILL| 信号\upref{LinSig}。
-\item gcc 编译器会默认使用 \verb|-march=native|， 也就是针对当前 cpu 的指令集编译， 这里面就可能包含一些其他 cpu 没有的拓展。 所以为了保证兼容性， 应该用 \verb|-march=x86-64|。 详见 gcc \href{https://gcc.gnu.org/onlinedocs/gcc/x86-Options.html}{文档}。
-\item 如果想知道 \verb|-march=native| 具体用的是什么设置， 用 \verb`gcc -march=native -Q --help=target | grep march` 即可。
+\item 如果指令集不支持， 会在运行时出现 \verb`Illegal Instruction` 错误， 也就是 \verb`SIGILL` 信号\upref{LinSig}。
+\item gcc 编译器会默认使用 \verb`-march=native`， 也就是针对当前 cpu 的指令集编译， 这里面就可能包含一些其他 cpu 没有的拓展。 所以为了保证兼容性， 应该用 \verb`-march=x86-64`。 详见 gcc \href{https://gcc.gnu.org/onlinedocs/gcc/x86-Options.html}{文档}。
+\item 如果想知道 \verb`-march=native` 具体用的是什么设置， 用 \verb`gcc -march=native -Q --help=target | grep march` 即可。
 \item 如果是编译别人的 lib， 不好设置， 那可以试试在比较老的机器上面编译。
 \end{itemize}
 
 \subsection{库兼容性}
 参考这里的\href{https://stackoverflow.com/questions/20183883/determining-binary-compatibility-under-linux}{回答}。
 
-静态链接的程序一般\href{https://stackoverflow.com/questions/31801824/is-static-linking-in-linux-portable}{没什么问题}。 但对于动态链接的程序， 可以把所有非基础的 so 依赖库打包到一个文件夹里面并设置 \verb|rpath/runpath| 或者 \verb|LD_LIBRARY_PATH|。 但是这里面不能包括一些基础的系统库例如
+静态链接的程序一般\href{https://stackoverflow.com/questions/31801824/is-static-linking-in-linux-portable}{没什么问题}。 但对于动态链接的程序， 可以把所有非基础的 so 依赖库打包到一个文件夹里面并设置 \verb`rpath/runpath` 或者 \verb`LD_LIBRARY_PATH`。 但是这里面不能包括一些基础的系统库例如
 \begin{itemize}
 \item \verb`linux-vdso.so` 直接由内核提供，不存在于文件系统， 见\href{https://unix.stackexchange.com/questions/476971/ldd-shows-no-location-after-arrow-library-does-not-exist-on-system}{这里} 和 \href{https://en.wikipedia.org/wiki/VDSO}{vDSO - Wikipedia}。
 \item \verb`libc.so`（\verb`GLIBC`） 是操作系统的核心库，如果不兼容比较难办。Ubuntu 只有升级版本才能升级 GLIBC 版本，一般是向下兼容的，所以只要保证足够新即可。 GLIBC 是 GNU C library， 提供 C 语言支持， 包括 system call 的 wrapper。 可以用 \verb`ldd --version` 或者 \verb`ldconfig -v | grep libc` 查看版本。
@@ -35,4 +35,4 @@
 \item \verb`libquadmath.so` 是和 G++ 一起安装的四精度计算库。
 \end{itemize}
 
-最兼容的方法大概使用 chroot 或者 \enref{docker}{Docker}， 可以把除了 \verb|vdso| 以外的所有动态库都放到 fake root 文件夹里面。
+最兼容的方法大概使用 chroot 或者 \enref{docker}{Docker}， 可以把除了 \verb`vdso` 以外的所有动态库都放到 fake root 文件夹里面。

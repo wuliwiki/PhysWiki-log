@@ -8,56 +8,56 @@
 
 \subsection{文件操作}
 \begin{itemize}
-\item \verb|sudo dd| 是一个很危险的命令， 它直接操作硬盘上的任意位置的数据， 无论是否被挂载。 \verb|sudo dd if=/dev/random of=/dev/sda| 会把整个硬盘包括分区方式（MBR，GPT）等所有信息抹掉
+\item \verb`sudo dd` 是一个很危险的命令， 它直接操作硬盘上的任意位置的数据， 无论是否被挂载。 \verb`sudo dd if=/dev/random of=/dev/sda` 会把整个硬盘包括分区方式（MBR，GPT）等所有信息抹掉
 \item \textbf{MBR (Master Boot Record)} 和 \textbf{GPT (GUID Partition Table)} 几乎是唯一两种硬盘的\textbf{分区方式（partition schemes）}
-\item 要备份 MBR，用 \verb|dd if=/dev/sda of=/data/disk.img bs=446 count=1| ， 还原同理， 但还原最好只用 440 字节
-\item 用 \verb|dd| 把一个硬盘的分区克隆的另一个硬盘的分区后（两个分区大小必须完全相同）， 再 clone MBR 用 \verb|dd if=/dev/sda of=/dev/sdc bs=440 count=1|
-\item 要擦除 MBR 中的 grub， 首先备份！ 然后用 \verb|sudo dd if=/dev/zero of=/dev/sdx bs=440 count=1|
+\item 要备份 MBR，用 \verb`dd if=/dev/sda of=/data/disk.img bs=446 count=1` ， 还原同理， 但还原最好只用 440 字节
+\item 用 \verb`dd` 把一个硬盘的分区克隆的另一个硬盘的分区后（两个分区大小必须完全相同）， 再 clone MBR 用 \verb`dd if=/dev/sda of=/dev/sdc bs=440 count=1`
+\item 要擦除 MBR 中的 grub， 首先备份！ 然后用 \verb`sudo dd if=/dev/zero of=/dev/sdx bs=440 count=1`
 \item 不同的分区当然可以有不同的文件系统
-\item \verb|Gparted| 是一个 GUI 硬盘分区工具， 在 Ubuntu live CD 中自带
-\item \verb|GParted| 使用 \verb|e2image -ra -p /dev/sda1 /dev/sdb1| 来复制分区， 没有数据的部分不会复制，Arch Wiki 中的 \href{https://wiki.archlinux.org/title/disk_cloning}{disk cloning} 文章列出了很多工具。 用 \verb|e2image| 来备份和恢复参考\href{https://stackoverflow.com/questions/51755887/backup-and-restore-e2image-how-do-i-properly-pipe-the-output-from-lzop}{这里}。
-\item \verb|sda, sdb| 等编号是不稳定的， 可能重启等操作之后会变
-\item \verb|fdisk -l| 查看所有挂载的硬盘
-\item \verb|lsblk| 也可以查看
-\item 用 \verb|sudo e2fsck -f test.img| 可以检查并自动修复文件系统。
-\item \verb|resize2fs -p /dev/sd? ???K| 可以改变 ext4 文件系统的大小， Gparted 用的就是这个命令。 这个命令需要很长时间。
-\item \verb|mklabel| 修改分区的 label， \verb|ntfslabel /dev/nvme0n1p3 win| 改变 ntfs 分区的 label， 还有 \verb|e2label| 用法一样。 注意用 \verb|gparted| 里面的 label 功能似乎并不是真正的 label， \verb|/etc/fstab| 识别不出后者。 用 \verb|e2label /dev/sda1| 可以查看某个分区的 label。
-\item \verb|mkfs.ext4 /dev/sdx1| 或者 \verb|mke4fs -t ext4 /dev/sdb1| 把某个分区格式化为 \verb|ext4|
+\item \verb`Gparted` 是一个 GUI 硬盘分区工具， 在 Ubuntu live CD 中自带
+\item \verb`GParted` 使用 \verb`e2image -ra -p /dev/sda1 /dev/sdb1` 来复制分区， 没有数据的部分不会复制，Arch Wiki 中的 \href{https://wiki.archlinux.org/title/disk_cloning}{disk cloning} 文章列出了很多工具。 用 \verb`e2image` 来备份和恢复参考\href{https://stackoverflow.com/questions/51755887/backup-and-restore-e2image-how-do-i-properly-pipe-the-output-from-lzop}{这里}。
+\item \verb`sda, sdb` 等编号是不稳定的， 可能重启等操作之后会变
+\item \verb`fdisk -l` 查看所有挂载的硬盘
+\item \verb`lsblk` 也可以查看
+\item 用 \verb`sudo e2fsck -f test.img` 可以检查并自动修复文件系统。
+\item \verb`resize2fs -p /dev/sd? ???K` 可以改变 ext4 文件系统的大小， Gparted 用的就是这个命令。 这个命令需要很长时间。
+\item \verb`mklabel` 修改分区的 label， \verb`ntfslabel /dev/nvme0n1p3 win` 改变 ntfs 分区的 label， 还有 \verb`e2label` 用法一样。 注意用 \verb`gparted` 里面的 label 功能似乎并不是真正的 label， \verb`/etc/fstab` 识别不出后者。 用 \verb`e2label /dev/sda1` 可以查看某个分区的 label。
+\item \verb`mkfs.ext4 /dev/sdx1` 或者 \verb`mke4fs -t ext4 /dev/sdb1` 把某个分区格式化为 \verb`ext4`
 \item Clonezilla 的分区备份对 GPT 和 MBR 都是通用的， 如果发生任何问题， 用 live cd 重装系统，确保能正常启动， 然后还原对应的分区就行，无需任何额外设置。
 \item 之前 SMART 提示 threshold exceeded，但并没有看到那一项有问题，现在重新写 GPT，安装，clonezilla 还原， 又可以正常用了。
 \item  正常的 ext4 系统分区用 Gparted 缩小以后， 突然就不能启动了！貌似并不是 grub 的问题，内核已经加载然后弄出一堆错误。
 \item 有一个工具叫做 \href{https://help.ubuntu.com/community/Boot-Repair}{boot-repair} 可能可以用来修复 bootloader 的问题
-\item \verb|extFAT| 在 Ubuntu 中并不怎么支持 resize 和移动， 还是用 windows 的傲梅比较好
+\item \verb`extFAT` 在 Ubuntu 中并不怎么支持 resize 和移动， 还是用 windows 的傲梅比较好
 \end{itemize}
 
 \subsubsection{fstab （File System Table）}
 \begin{itemize}
-\item \verb|/etc/fstab| 用于设置如何把不同的分区或网络硬盘挂载到不同文件夹。
-\item 格式为 \verb|<file system> <mount point> <type> <options> <dump> <pass>|
-\item \verb|uid=1000,gid=1000| 是当前登录用户的 user/group id，也可以直接把数字换成用户名和组名。
-\item \verb|NTFS| 的设置是 \verb|LABEL=mydrive2 /mnt/drive2 ntfs-3g nofail,x-gvfs-show,uid=1000,gid=1000 0 0|
-\item \verb|LABEL=win /mnt/win ntfs defaults,auto,rw,nofail,umask=000,uid=addis,gid=addis 0 0|
-\item \verb|exFAT| 的设置是 \verb|LABEL=mydrive1 /mnt/drive1 exfat nofail,x-gvfs-show,uid=1000,gid=1000 0 0|
-\item 第一列可以是 \verb|LABEL=| 或者 \verb|UUID=|， 第二列是 mount point， 第三列是文件系统， 用 \verb|auto| 可以自动检测。 第四列是一些选项， \verb|nofail| 是即使硬盘没有插入也不会报错， \verb|x-gvfs-show| 是在 gnome 文件浏览器和 taskbar 中显示。 \verb|uid| 和 \verb|gid| 是挂载后文件的 owner， \verb|1000| 是当前用户。 \verb|auto| 是开机的时候自动挂载。
-\item \verb|defaults| 选项相当于 \verb|rw, suid, dev, exec, auto, nouser, async|.
-\item \verb|rw| 是支持读写， \verb|suid| 支持 SetUID 权限， \verb|exec| 支持可执行文件。 \verb|dev| 选项可以支持挂载文件夹中的设备文件（block device 和 character device）, \verb|nodev| 则禁止。 \verb|nouser| 只允许管理员挂载或弹出硬盘。 \verb|user| 允许任何用户挂载或弹出硬盘。 \verb|users| 允许任何用户挂载，但只有挂载的用户可以弹出某个硬盘。
-\item \verb|user| 和 \verb|users| 自动开启 \verb|noexec|， 除非明确指定 \verb|exec| 选项。 此时即使文件显示有 \verb|x| 权限也无法执行（但 script 仍然可以用 \verb|source| 执行）。
-\item \verb|sudo mount -a| 会挂载 \verb|fstab| 中的所有硬盘（如果没有已经挂载）。 \verb|sudo umount -a| 同理（如果被占用则不会弹出）。
-\item \verb|mount| 未必需要 sudo， 如果被挂载的目录不需要管理员权限。
-\item \verb|sudo mount 挂载目录| 可以根据 \verb|fstab| 中该目录的设置挂载。 \verb|umount 挂载目录| 同理。 可以是相对或绝对目录。
-\item 注意如果某个目录中有打开的 bash （包括当前正在用的）， 那么 \verb|umount| 就会失败（\verb|target is busy|）。
+\item \verb`/etc/fstab` 用于设置如何把不同的分区或网络硬盘挂载到不同文件夹。
+\item 格式为 \verb`<file system> <mount point> <type> <options> <dump> <pass>`
+\item \verb`uid=1000,gid=1000` 是当前登录用户的 user/group id，也可以直接把数字换成用户名和组名。
+\item \verb`NTFS` 的设置是 \verb`LABEL=mydrive2 /mnt/drive2 ntfs-3g nofail,x-gvfs-show,uid=1000,gid=1000 0 0`
+\item \verb`LABEL=win /mnt/win ntfs defaults,auto,rw,nofail,umask=000,uid=addis,gid=addis 0 0`
+\item \verb`exFAT` 的设置是 \verb`LABEL=mydrive1 /mnt/drive1 exfat nofail,x-gvfs-show,uid=1000,gid=1000 0 0`
+\item 第一列可以是 \verb`LABEL=` 或者 \verb`UUID=`， 第二列是 mount point， 第三列是文件系统， 用 \verb`auto` 可以自动检测。 第四列是一些选项， \verb`nofail` 是即使硬盘没有插入也不会报错， \verb`x-gvfs-show` 是在 gnome 文件浏览器和 taskbar 中显示。 \verb`uid` 和 \verb`gid` 是挂载后文件的 owner， \verb`1000` 是当前用户。 \verb`auto` 是开机的时候自动挂载。
+\item \verb`defaults` 选项相当于 \verb`rw, suid, dev, exec, auto, nouser, async`.
+\item \verb`rw` 是支持读写， \verb`suid` 支持 SetUID 权限， \verb`exec` 支持可执行文件。 \verb`dev` 选项可以支持挂载文件夹中的设备文件（block device 和 character device）, \verb`nodev` 则禁止。 \verb`nouser` 只允许管理员挂载或弹出硬盘。 \verb`user` 允许任何用户挂载或弹出硬盘。 \verb`users` 允许任何用户挂载，但只有挂载的用户可以弹出某个硬盘。
+\item \verb`user` 和 \verb`users` 自动开启 \verb`noexec`， 除非明确指定 \verb`exec` 选项。 此时即使文件显示有 \verb`x` 权限也无法执行（但 script 仍然可以用 \verb`source` 执行）。
+\item \verb`sudo mount -a` 会挂载 \verb`fstab` 中的所有硬盘（如果没有已经挂载）。 \verb`sudo umount -a` 同理（如果被占用则不会弹出）。
+\item \verb`mount` 未必需要 sudo， 如果被挂载的目录不需要管理员权限。
+\item \verb`sudo mount 挂载目录` 可以根据 \verb`fstab` 中该目录的设置挂载。 \verb`umount 挂载目录` 同理。 可以是相对或绝对目录。
+\item 注意如果某个目录中有打开的 bash （包括当前正在用的）， 那么 \verb`umount` 就会失败（\verb`target is busy`）。
 \end{itemize}
 
 \subsubsection{挂载文件作为硬盘}
 \begin{itemize}
 \item 参考\href{https://www.tecmint.com/create-virtual-harddisk-volume-in-linux/}{这个教程}。
-\item 先随便创建一个文件， 文件大小就是硬盘的初始大小（下面可以 resize）。 如 \verb|sudo dd if=/dev/zero of=/路径/虚拟硬盘名.img bs=1M count=100|。 其中镜像文件 \verb|.img| 是不必须的。
-\item 格式化为 ext4： \verb|sudo mkfs -t ext4 /路径/虚拟硬盘名.img|。 注意运行完以后， 镜像文件会自动缩小的刚好够用， 所以第一步中不需要弄太大的文件。
-\item 临时挂载： \verb|sudo mount -t auto -o loop /路径/虚拟硬盘名.img 挂载目录| 其中 \verb|-t| 是文件系统类型。 镜像文件甚至可以存在于 \verb|挂载目录| 中。 但是挂载以后并不能看到该文件。
-\item 要永久挂载， 可以用 \verb|/路径/虚拟硬盘名.img /挂载目录 ext4 nofail 0 0|
-\item 使用 \verb|df -h| 查看文件系统会看到例如 \verb|/dev/loop13 488M  24K  452M  1% /mnt/test_dir|
-\item \verb|resize2fs 虚拟硬盘名.img 1G| 可以改变分区大小。
-\item 如果文件在 \verb|ext4| 系统中 \verb|du| 镜像文件， 那么 resize 后所占硬盘空间仍然会是刚好够用。 这只是 ext4 特有的优化， 实际上文件的大小的确是 \verb|resize2fs| 的目标大小（可以用 \verb|stat 文件| 确认）。 如果把这个文件移动到比如说 exFat 文件系统中， 那么占用空间就会变成后者的大小。
+\item 先随便创建一个文件， 文件大小就是硬盘的初始大小（下面可以 resize）。 如 \verb`sudo dd if=/dev/zero of=/路径/虚拟硬盘名.img bs=1M count=100`。 其中镜像文件 \verb`.img` 是不必须的。
+\item 格式化为 ext4： \verb`sudo mkfs -t ext4 /路径/虚拟硬盘名.img`。 注意运行完以后， 镜像文件会自动缩小的刚好够用， 所以第一步中不需要弄太大的文件。
+\item 临时挂载： \verb`sudo mount -t auto -o loop /路径/虚拟硬盘名.img 挂载目录` 其中 \verb`-t` 是文件系统类型。 镜像文件甚至可以存在于 \verb`挂载目录` 中。 但是挂载以后并不能看到该文件。
+\item 要永久挂载， 可以用 \verb`/路径/虚拟硬盘名.img /挂载目录 ext4 nofail 0 0`
+\item 使用 \verb`df -h` 查看文件系统会看到例如 \verb`/dev/loop13 488M  24K  452M  1% /mnt/test_dir`
+\item \verb`resize2fs 虚拟硬盘名.img 1G` 可以改变分区大小。
+\item 如果文件在 \verb`ext4` 系统中 \verb`du` 镜像文件， 那么 resize 后所占硬盘空间仍然会是刚好够用。 这只是 ext4 特有的优化， 实际上文件的大小的确是 \verb`resize2fs` 的目标大小（可以用 \verb`stat 文件` 确认）。 如果把这个文件移动到比如说 exFat 文件系统中， 那么占用空间就会变成后者的大小。
 \end{itemize}
 
 \subsubsection{逻辑卷管理（LVM）}
@@ -66,32 +66,32 @@
 \subsection{Bootloader}
 \begin{itemize}
 \item 开机的时候，BIOS/UEFI 会先启动 bootloader 然后再由 bootloader 加载系统（也就是按 F2 或 Del 以后进入的那个界面选择的其实是 bootloader)
-\item 有一个设置 Grub 的 GUI 软件叫做 \verb|grub-customizer|, 可以设置 grub 菜单， 记住上次的选择， 检测新系统， 等。
-\item \verb|os-prober| 也可以发现新系统并加入 grub 菜单（会被 grub-customizer 使用）
+\item 有一个设置 Grub 的 GUI 软件叫做 \verb`grub-customizer`, 可以设置 grub 菜单， 记住上次的选择， 检测新系统， 等。
+\item \verb`os-prober` 也可以发现新系统并加入 grub 菜单（会被 grub-customizer 使用）
 \item grub 可以装在和系统不同的盘上
-\item MBR 的 grub 设置文件在 \verb|/boot/grub/grub.cfg| ， GPT 的在 \verb|/boot/efi/EFI/ubuntu/grub.cfg|
-\item \verb|lilo| 是一个可以安装 generic windows boot loader on MBR 的命令
-\item \verb|sda, sdb| 等在 grub2 命令行里面的 ls 名字叫做 \verb|hd1, hd2...|
+\item MBR 的 grub 设置文件在 \verb`/boot/grub/grub.cfg` ， GPT 的在 \verb`/boot/efi/EFI/ubuntu/grub.cfg`
+\item \verb`lilo` 是一个可以安装 generic windows boot loader on MBR 的命令
+\item \verb`sda, sdb` 等在 grub2 命令行里面的 ls 名字叫做 \verb`hd1, hd2...`
 \item windows的bootloader自动加载windows，而grub会搜索每个硬盘和分区，并列出所有选项
 \item 在GPT中，bootloader总是会在EFI分区，而在MBR中，bootloader在masterrecord中
-\item \verb|sudo grub-install /dev/sd#| 可以在某个硬盘中安装 grub (注意如果硬盘只有一个分区的话， 分区名和硬盘名相同， 安装可能就会出错)
-\item 注意 \verb|grub-install| 可能使用 \verb|grub-pc| 包也可能使用 \verb|grub-efi-amd64| 包。 前者给 MBR 硬盘安装， 后者给 GPT 硬盘安装。 它们可以同时安装。
-\item 如果遇到 \verb|failed to get canonical path of...| 就用 \verb|sudo grub-install /dev/sdX --root-directory=/mnt/[mount point directory]|
-\item 如果安装遇到 \verb|will not proceed with blocklist|， 就在安装命令后面加 \verb|--force|。
-\item \verb|df| 只会显示已挂载的硬盘， 而 \verb|fdisk| 或者 \verb|disk, gparted| 软件才会显示所有连接的硬盘
-\item 要安装 ubuntu live 镜像到 disk, 用 \verb|sudo dd bs=4M if=/path/to/ISOfile of=/dev/sda status=progress oflag=sync| 注意 \verb|sda| 后面不能有数字！ 这样 \verb|dd| 会把整个硬盘克隆成 iso 的内容而无视之前的任何 partition table 和分区。 此时 u 盘和光盘完全等效，都是只读的（亲测成功）.
+\item \verb`sudo grub-install /dev/sd#` 可以在某个硬盘中安装 grub (注意如果硬盘只有一个分区的话， 分区名和硬盘名相同， 安装可能就会出错)
+\item 注意 \verb`grub-install` 可能使用 \verb`grub-pc` 包也可能使用 \verb`grub-efi-amd64` 包。 前者给 MBR 硬盘安装， 后者给 GPT 硬盘安装。 它们可以同时安装。
+\item 如果遇到 \verb`failed to get canonical path of...` 就用 \verb`sudo grub-install /dev/sdX --root-directory=/mnt/[mount point directory]`
+\item 如果安装遇到 \verb`will not proceed with blocklist`， 就在安装命令后面加 \verb`--force`。
+\item \verb`df` 只会显示已挂载的硬盘， 而 \verb`fdisk` 或者 \verb`disk, gparted` 软件才会显示所有连接的硬盘
+\item 要安装 ubuntu live 镜像到 disk, 用 \verb`sudo dd bs=4M if=/path/to/ISOfile of=/dev/sda status=progress oflag=sync` 注意 \verb`sda` 后面不能有数字！ 这样 \verb`dd` 会把整个硬盘克隆成 iso 的内容而无视之前的任何 partition table 和分区。 此时 u 盘和光盘完全等效，都是只读的（亲测成功）.
 \end{itemize}
 
 \begin{itemize}
 \item grub 在菜单中按 c 进入命令行模式， 然后 ls 可以看见有哪些硬盘和分区， 例如 （hd0,msdos1）， 然后继续 ls (hd0,msdos1)/ 按 tab，就会提示该目录下有什么
 \item grub 在菜单中按 e 就可以编辑临时的 grub config 文件，填入 ls 获得的信息即可
-\item grub 的菜单是由 \verb|/boot/grub/grub.cfg| 或者 \verb|grub.config| 定义的
+\item grub 的菜单是由 \verb`/boot/grub/grub.cfg` 或者 \verb`grub.config` 定义的
 \item 如何克隆 MBR 硬盘上安装的 Ubuntu?
-\item 如果克隆 MBR 硬盘的分区， 那么 grub 并不会一起克隆过去， 所以还需要 \verb|sudo grub-install ...| 在新硬盘上面安装 grub （如果说什么不推荐用啥不稳定的，就在后面加 --force）. 然后再把原来的 grub.cfg 拷贝到新硬盘就好了（不确定新安装 grub 会不会把 cfg 重置）.
+\item 如果克隆 MBR 硬盘的分区， 那么 grub 并不会一起克隆过去， 所以还需要 \verb`sudo grub-install ...` 在新硬盘上面安装 grub （如果说什么不推荐用啥不稳定的，就在后面加 --force）. 然后再把原来的 grub.cfg 拷贝到新硬盘就好了（不确定新安装 grub 会不会把 cfg 重置）.
 \item 注意克隆分区以后， 目标分区的 uuid 会和原来的 uuid 一模一样，如果拔掉原来的硬盘没什么问题， 但如果要一起插的话还是需要改一下
-\item \verb|blkid| 可以查看所有分区的 uuid
-\item uuid 需要 umount 才可以修改， 随机生成 uuid 用 \verb|tune2fs -U random /dev/sdb?| , disk 中会看到变化， 如果 blkid 看见 uuid 没有变化， 就 mount 再 umount 即可刷新
-\item \verb|fdisk| 也可以改变 uuid, \verb|sudo fdisk /dev/sd?| 然后按 x 再按 i 即可
+\item \verb`blkid` 可以查看所有分区的 uuid
+\item uuid 需要 umount 才可以修改， 随机生成 uuid 用 \verb`tune2fs -U random /dev/sdb?` , disk 中会看到变化， 如果 blkid 看见 uuid 没有变化， 就 mount 再 umount 即可刷新
+\item \verb`fdisk` 也可以改变 uuid, \verb`sudo fdisk /dev/sd?` 然后按 x 再按 i 即可
 \item 理论上 GPT 是可以在 BIOS 主板上 boot 的（实际上对大部分 linux 可以）， 见\href{https://superuser.com/questions/1337344/is-it-possible-to-boot-linux-from-a-gpt-disk-on-a-bios-system}{这里}。
 \end{itemize}
 
@@ -101,9 +101,9 @@
 \item 启动 Ubuntu 的 live cd 的 usb
 \item 如果目标硬盘/分区比原硬盘/分区小， 那么用 GParted 缩小原分区。
 \item 用 GParted 把每个分区逐一复制粘贴， 分区尺寸要一模一样。
-\item 如果 part table 是 MBR， 用上面的 \verb|dd| 命令备份并拷贝 MBR
+\item 如果 part table 是 MBR， 用上面的 \verb`dd` 命令备份并拷贝 MBR
 \item 用 GParted 把目标分区的 UUID 随机生成新的， 避免两个分区具有一样的 UUID 发生冲突
-\item 用 \verb|grub-install /dev/sd?| 重新安装 grub， 确认目标硬盘中 \verb|/boot/grub/grub.cfg| 配置文件中所有 UUID 都是新分区的 UUID 而不是老的。 如果是老的就全部替换。
+\item 用 \verb`grub-install /dev/sd?` 重新安装 grub， 确认目标硬盘中 \verb`/boot/grub/grub.cfg` 配置文件中所有 UUID 都是新分区的 UUID 而不是老的。 如果是老的就全部替换。
 \end{itemize}
 
 \subsection{常见文件系统}

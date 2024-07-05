@@ -11,34 +11,34 @@
 \subsubsection{double}
 \begin{itemize}
 \item 根据 IEEE 754\footnote{参考 Wikipedia \href{https://en.wikipedia.org/wiki/IEEE_754}{相关页面}。} 标准， 双精度的格式是 1 bit 符号 + 11 bit 指数 + 52 bit 小数（mantissa）。
-\item 符号位也用于区分 \verb|0.| （普通的 \verb|0.| 就是 \verb|+0.|）和 \verb|-0.|， 注意一定要有 “\verb|.|”， 整数零不区分正负）， 例如 \verb|1/0., 1/(-0.)| 分别得到 \verb|inf, -inf|， 反之亦然。 另外一些函数也对 \verb|-0.| 敏感， 例如 \verb|atan2|。
-\item \verb|0. == -0.|， \verb|-2*0.| 得 \verb|-0.|， \verb|inf == inf|， \verb|-inf == -inf|， \verb|inf * 2 == inf|， \verb|inf * 0 == nan|。
-\item 无论哪种 \verb|nan| 和自身都不相等， 可以用这种方法来判断一个浮点数是否是 \verb|nan|。 也可以用 \verb|isnan()|。
+\item 符号位也用于区分 \verb`0.` （普通的 \verb`0.` 就是 \verb`+0.`）和 \verb`-0.`， 注意一定要有 “\verb`.`”， 整数零不区分正负）， 例如 \verb`1/0., 1/(-0.)` 分别得到 \verb`inf, -inf`， 反之亦然。 另外一些函数也对 \verb`-0.` 敏感， 例如 \verb`atan2`。
+\item \verb`0. == -0.`， \verb`-2*0.` 得 \verb`-0.`， \verb`inf == inf`， \verb`-inf == -inf`， \verb`inf * 2 == inf`， \verb`inf * 0 == nan`。
+\item 无论哪种 \verb`nan` 和自身都不相等， 可以用这种方法来判断一个浮点数是否是 \verb`nan`。 也可以用 \verb`isnan()`。
 \end{itemize}
 
 C++ 浮点相关函数：
 \begin{itemize}
-\item \verb|bool signbit(x)| 获取符号位（对于 \verb|-0| 来说， 这不同于 \verb|(x < 0)|）
-\item \verb|ldexp(x, n)| 计算 $x \times 2^n$； 
-\item \verb|double man = frexp(x, &exp2)| 可以拆分 mantissa 和 exp。 其中 \verb|0.5 <= man < 1|； 
-\item \verb|int fpclassify(x)| 可以用来给浮点数归类（返回 \verb|FP_NORMAL, FP_SUBNORMAL, FP_ZERO, FP_INFINITE, FP_NAN| 之一）。 
-\item \verb|bool isfinite(x)| 检查是否是 \verb|FP_NORMAL, FP_SUBNORMAL, FP_ZERO| 之一。
-\item \verb|bool isnormal(x)| 检查 \verb|fpclassify| 是否返回 \verb|FP_NORMAL|。 
+\item \verb`bool signbit(x)` 获取符号位（对于 \verb`-0` 来说， 这不同于 \verb`(x < 0)`）
+\item \verb`ldexp(x, n)` 计算 $x \times 2^n$； 
+\item \verb`double man = frexp(x, &exp2)` 可以拆分 mantissa 和 exp。 其中 \verb`0.5 <= man < 1`； 
+\item \verb`int fpclassify(x)` 可以用来给浮点数归类（返回 \verb`FP_NORMAL, FP_SUBNORMAL, FP_ZERO, FP_INFINITE, FP_NAN` 之一）。 
+\item \verb`bool isfinite(x)` 检查是否是 \verb`FP_NORMAL, FP_SUBNORMAL, FP_ZERO` 之一。
+\item \verb`bool isnormal(x)` 检查 \verb`fpclassify` 是否返回 \verb`FP_NORMAL`。 
 \end{itemize}
 
 
 \subsubsection{ULP}
-\textbf{unit in the last place (ULP)} 就是 mantissa 增加 1 bit 时表示的数增加多少。 这等于 $2^{-52}\times 2^{e}$。 $e$ 是双精度的指数（以 2 为底）。 其中 $2^{-52}$ 一般记为 \verb|eps|。
+\textbf{unit in the last place (ULP)} 就是 mantissa 增加 1 bit 时表示的数增加多少。 这等于 $2^{-52}\times 2^{e}$。 $e$ 是双精度的指数（以 2 为底）。 其中 $2^{-52}$ 一般记为 \verb`eps`。
 
-所以双精度的 mantissa 表示 1 时， 相对精度就是 \verb|eps|， 表示 \verb|1-eps| 时， 相对精度就非常接近 \verb|eps/2|（\textbf{最小相对误差}）。 所以一般来说相对精度在二者之间。 但一个例外就是当绝对值非常小时（小于 $2^{-1022}$） 也就是 $2.225\e{-308}$）， 也就是 \textbf{subnormal}， mantissa 的第一 bit 可能并不是默认的 1， 此时相对误差可能会变得很大。
+所以双精度的 mantissa 表示 1 时， 相对精度就是 \verb`eps`， 表示 \verb`1-eps` 时， 相对精度就非常接近 \verb`eps/2`（\textbf{最小相对误差}）。 所以一般来说相对精度在二者之间。 但一个例外就是当绝对值非常小时（小于 $2^{-1022}$） 也就是 $2.225\e{-308}$）， 也就是 \textbf{subnormal}， mantissa 的第一 bit 可能并不是默认的 1， 此时相对误差可能会变得很大。
 
 \subsubsection{需要多少位十进制数}
-需要多少位十进制数可以通过四舍五入精确表示任意的双精度数呢？ $N$ 位有效数字的十进制数的相对误差介于 $10^{-N}$ （前几位是 999... 时）和 $10^{-N+1}$ （前几位是 1000... 时）之间。 所以为了满足 \verb|eps/2|（$1.11\e{-16}$） 的相对误差， \textbf{最多需要 17 位有效数字}。
+需要多少位十进制数可以通过四舍五入精确表示任意的双精度数呢？ $N$ 位有效数字的十进制数的相对误差介于 $10^{-N}$ （前几位是 999... 时）和 $10^{-N+1}$ （前几位是 1000... 时）之间。 所以为了满足 \verb`eps/2`（$1.11\e{-16}$） 的相对误差， \textbf{最多需要 17 位有效数字}。
 
-那么一个 double 能不能精确地用十进制表示呢？ 可以的， 因为 \verb|eps| 可以， 但可能需要非常多的位数尤其是 2 的指数非常大或者非常小的时候可能会需要几百位， 没有太大必要。
+那么一个 double 能不能精确地用十进制表示呢？ 可以的， 因为 \verb`eps` 可以， 但可能需要非常多的位数尤其是 2 的指数非常大或者非常小的时候可能会需要几百位， 没有太大必要。
 
 \subsubsection{long double}
-在 x86 机器上， \verb|long double| 一般是 1 bit 符号 + 15 bit 指数 + 64 bit 小数 = 80 bit， 十进制大约是 18-19 位有效数字\footnote{Visual Studio 中据说 long double 和 double 是一样的。}。 虽然 \verb|sizeof| 是 16 字节， 但实际上只使用了 10 字节\footnote{详见\href{https://en.wikipedia.org/wiki/Extended_precision}{这里} 的 x86 extended precision format 一节}。 \verb|long double| 的运算是硬件支持的， 所以比较快。
+在 x86 机器上， \verb`long double` 一般是 1 bit 符号 + 15 bit 指数 + 64 bit 小数 = 80 bit， 十进制大约是 18-19 位有效数字\footnote{Visual Studio 中据说 long double 和 double 是一样的。}。 虽然 \verb`sizeof` 是 16 字节， 但实际上只使用了 10 字节\footnote{详见\href{https://en.wikipedia.org/wiki/Extended_precision}{这里} 的 x86 extended precision format 一节}。 \verb`long double` 的运算是硬件支持的， 所以比较快。
 
 \begin{lstlisting}[language=none]
 sizeof(Doub) = 8
@@ -60,22 +60,22 @@ std::numeric_limits<Doub>::digits10 = 15
 std::numeric_limits<Ldoub>::digits10 = 18
 \end{lstlisting}
 
-然而 \verb|sqrt| 函数似乎并不会提高精度（仍然是 16 位）：
+然而 \verb`sqrt` 函数似乎并不会提高精度（仍然是 16 位）：
 \begin{lstlisting}[language=none]
 sqrt(2.)       = 1.4142135623730951454
 sqrt(Ldoub(2)) = 1.4142135623730951454
 precise val    = 1.4142135623730950488...
 \end{lstlisting}
 
-另外测试一下双精度的二进制表示（\autoref{fig_CmArit_3}）， 例如双精度的 \verb|10| 表示为
+另外测试一下双精度的二进制表示（\autoref{fig_CmArit_3}）， 例如双精度的 \verb`10` 表示为
 \begin{lstlisting}[language=none]
 01000000 00100100 (后面省略 48 个 0)
 \end{lstlisting}
-第一位 0 说明是正数， 1 是负数。 接下来 11 bit 先看成 unsigned， 然后再减 $2^{10}-1 = 1023$， 这里指数 \verb|10000000010| 表示 $1026-1023 = 3$， 于是指数项为 $2^{3} = 8$。 所以要表示 10， 小数项应该是 $10/8 = 1+1/4$。 第 13 bit 表示 1/2， 14 bit 表示 1/4， 所以第 14 bit 是 1， 后面的小数全是零。 另外， 由于 intel 的 \enref{x86 和 x86-64}{x86} 都使用 little endian， 所以在内存中实际上 byte 的顺序是相反的。
+第一位 0 说明是正数， 1 是负数。 接下来 11 bit 先看成 unsigned， 然后再减 $2^{10}-1 = 1023$， 这里指数 \verb`10000000010` 表示 $1026-1023 = 3$， 于是指数项为 $2^{3} = 8$。 所以要表示 10， 小数项应该是 $10/8 = 1+1/4$。 第 13 bit 表示 1/2， 14 bit 表示 1/4， 所以第 14 bit 是 1， 后面的小数全是零。 另外， 由于 intel 的 \enref{x86 和 x86-64}{x86} 都使用 little endian， 所以在内存中实际上 byte 的顺序是相反的。
 
-理论上指数部分可以表示 $-1023$ 到 $1024$ 之间的数， 但首尾两个数有特殊用途， 所以只能表示 $-1022$ 到 $1023$。 当指数为 $-1023$ 时， 仍然相当于指数为 $-1022$ 但小数部分前面不加 1（如果小数也都是零， 那就表示 0， 所以 \verb|0| 除了第一 bit 其他都必须是 0）。 当指数为 $1024$ 时， 表示 \verb|inf|（要求小数部分都是零， 正负号仍然有效）或者 \verb|nan| （\verb|0b1...| 表示安静的 \verb|qNaN|， \verb|0b0..1..| 表示会发错误信号的 \verb|sNaN|）。
+理论上指数部分可以表示 $-1023$ 到 $1024$ 之间的数， 但首尾两个数有特殊用途， 所以只能表示 $-1022$ 到 $1023$。 当指数为 $-1023$ 时， 仍然相当于指数为 $-1022$ 但小数部分前面不加 1（如果小数也都是零， 那就表示 0， 所以 \verb`0` 除了第一 bit 其他都必须是 0）。 当指数为 $1024$ 时， 表示 \verb`inf`（要求小数部分都是零， 正负号仍然有效）或者 \verb`nan` （\verb`0b1...` 表示安静的 \verb`qNaN`， \verb`0b0..1..` 表示会发错误信号的 \verb`sNaN`）。
 
-双精度类型可以表示 \verb|-2e53| 到 \verb|2e53| 的每一个整数， 更小或更大的整数有的也可以表示（事实上此时只可以表示整数）， 只是不连续。
+双精度类型可以表示 \verb`-2e53` 到 \verb`2e53` 的每一个整数， 更小或更大的整数有的也可以表示（事实上此时只可以表示整数）， 只是不连续。
 
 \begin{lstlisting}[language=none]
 std::numeric_limits<double>::max() = 1.797693135e+308
@@ -97,12 +97,12 @@ double -max()*2 (负无穷):
 double sqrt(-1.) (NaN):
 11111111 11111000 00000000 00000000 00000000 00000000 00000000 00000000
 \end{lstlisting}
-其中 \verb|denorm_min()| 比较特殊， 当指数 bit 全为 0 的时候， 指数为 \verb|-1022| 而不是 \verb|-1023|， 且小数部分前面不加 1。 这叫做 \verb|denominize|。
+其中 \verb`denorm_min()` 比较特殊， 当指数 bit 全为 0 的时候， 指数为 \verb`-1022` 而不是 \verb`-1023`， 且小数部分前面不加 1。 这叫做 \verb`denominize`。
 
 \subsection{四精度}
 \footnote{参考 Wikipedia \href{https://en.wikipedia.org/wiki/Quadruple-precision_floating-point_format}{相关页面}。}使用四精度比使用任意精度类型（如 MPFR 或 Flint 库）要快得多， 因为任意精度浮点数是动态分配内存的。
 
-如果想完全利用 16 字节， 见 GCC/g++ 编译器的 \verb|__float128| 类型（\href{https://gcc.gnu.org/onlinedocs/gcc-8.1.0/libquadmath.pdf}{文档}）。 相当于 FORTRAN 的 \verb|QUAD real|。 有 112 bit 小数， 15 bit 指数和 1 bit 正负号（\autoref{fig_FltCpp_1}）。 实测的 bit 表示和上面二进制的同理（也存在两个奇怪的地方）。
+如果想完全利用 16 字节， 见 GCC/g++ 编译器的 \verb`__float128` 类型（\href{https://gcc.gnu.org/onlinedocs/gcc-8.1.0/libquadmath.pdf}{文档}）。 相当于 FORTRAN 的 \verb`QUAD real`。 有 112 bit 小数， 15 bit 指数和 1 bit 正负号（\autoref{fig_FltCpp_1}）。 实测的 bit 表示和上面二进制的同理（也存在两个奇怪的地方）。
 
 \begin{figure}[ht]
 \centering
@@ -111,9 +111,9 @@ double sqrt(-1.) (NaN):
 \end{figure}
 
 
-加上头文件 \verb|#include <quadmath.h>|， 使用 \verb|g++| 编译， 编译时加上选项 \verb|-lquadmath| 和 \verb|-fext-numeric-literals| 即可。
+加上头文件 \verb`#include <quadmath.h>`， 使用 \verb`g++` 编译， 编译时加上选项 \verb`-lquadmath` 和 \verb`-fext-numeric-literals` 即可。
 
-\verb|__complex128| 是对应的四精度复数类型， 相当于两个 \verb|__float128|。
+\verb`__complex128` 是对应的四精度复数类型， 相当于两个 \verb`__float128`。
 
 \begin{lstlisting}[language=none]
 FLT128_MAX = 1.1897e+4932
@@ -127,12 +127,12 @@ M_PIq = 3.141592653589793238462643383279503 // 精确到最后一位
 sqrtq(3) = 1.732050807568877293527446341505872 // 精确到最后一位
 \end{lstlisting}
 
-给 \verb|__complex128| 的实部和虚部分别赋值：
+给 \verb`__complex128` 的实部和虚部分别赋值：
 \begin{lstlisting}[language=cpp]
 __complex128 y;
 __real__ y = 实部;
 __imag__ y = 虚部;
 \end{lstlisting}
-看来还是用 \verb|std::complex<__real128>| 比较好。
+看来还是用 \verb`std::complex<__real128>` 比较好。
 
 另见 “\enref{C++ 高精度计算资源列表}{CppMp}”。

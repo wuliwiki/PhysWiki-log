@@ -15,104 +15,104 @@ sudo apt install julia
 # 或者
 sudo snap install Julia --classic
 \end{lstlisting}
-如果版本较老， 最好还是从\href{https://julialang.org/downloads}{官网下载安装包}， 直接解压即可使用 \verb|bin/julia| 执行文件。 也可以创建软链 \verb|sudo ln -s /home/用户名/julia-xxx/bin/julia /usr/bin/julia|
+如果版本较老， 最好还是从\href{https://julialang.org/downloads}{官网下载安装包}， 直接解压即可使用 \verb`bin/julia` 执行文件。 也可以创建软链 \verb`sudo ln -s /home/用户名/julia-xxx/bin/julia /usr/bin/julia`
 
-另外本地的 Jupyter Notebook 也支持 Julia。 在 julia 命令行里面运行 \verb|import Pkg|， \verb|Pkg.add("IJulia")|。 现在打开 Jupyter notebook 就可以新建 julia 文档了。
+另外本地的 Jupyter Notebook 也支持 Julia。 在 julia 命令行里面运行 \verb`import Pkg`， \verb`Pkg.add("IJulia")`。 现在打开 Jupyter notebook 就可以新建 julia 文档了。
 
 至于 IDE， Juno 和 JuliaPro 都已经停止更新， 当前（2023-3）最热门的 IDE 环境是 Julia 的 \href{https://www.julia-vscode.org}{VScode 拓展}， 应该支持逐行调试。
 
 \subsection{命令行}
 \begin{itemize}
-\item 最简单的 Hello World 程序如 \verb|println("hello world")| 会自动换行。 \verb|print| 则没有自动换行。
+\item 最简单的 Hello World 程序如 \verb`println("hello world")` 会自动换行。 \verb`print` 则没有自动换行。
 
 \item Julia 的命令行环境叫做 \textbf{REPL (read-eval-print-loop)}
-\item 注释用 \verb|#|， 或者 \verb|#=一些注释=#|， 多行注释也可以和 python 一样用 \verb|"""..."""|
-\item \verb|Ctrl + D| 退出或者 \verb|exit()| 退出
-\item \verb|ans| 变量和 Matlab 一样， 用于显示上一次运算的输出结果（结果赋值给变量的除外）
+\item 注释用 \verb`#`， 或者 \verb`#=一些注释=#`， 多行注释也可以和 python 一样用 \verb`"""..."""`
+\item \verb`Ctrl + D` 退出或者 \verb`exit()` 退出
+\item \verb`ans` 变量和 Matlab 一样， 用于显示上一次运算的输出结果（结果赋值给变量的除外）
 \item 在一行中运行多个命令， 用分号隔开
 \item 要清空 workspace 中的变量只能重启
-\item \verb|println("$var1 some words $var2")| 中 \verb|var1, var2| 可以是数字、字符串等， 这和 \verb|println(var1, " some words ", var2)| 等效。 其实这是字符串的功能而不是 \verb|println| 特有的。 要避免混淆用 \verb|$(var)|。
+\item \verb`println("$var1 some words $var2")` 中 \verb`var1, var2` 可以是数字、字符串等， 这和 \verb`println(var1, " some words ", var2)` 等效。 其实这是字符串的功能而不是 \verb`println` 特有的。 要避免混淆用 \verb`$(var)`。
 \end{itemize}
 
 \subsection{计算器}
 \begin{itemize}
-\item \verb|b = 2a| 和 \verb|c = 2(b+3)| 都可以省略乘号。 注意 \verb|1/2a| 相当于 \verb|1/(2a)|
-\item \verb|2/3| 返回双精度类型 \verb|Float64| 而不是整数
-\item \verb|2//3| 返回 \verb|Rational{Int64}| 类型， 相当于用两个 \verb|Int64| 整数来表示分数， 分数之间的运算没有误差
-\item 表示复数如 \verb|1 + 2im|， 相当于 \verb|ComplexF64(0,2)|。 又例如 \verb|1//2 + (3//4)im| 的类型是 \verb|Complex{Rational{Int64}}|
+\item \verb`b = 2a` 和 \verb`c = 2(b+3)` 都可以省略乘号。 注意 \verb`1/2a` 相当于 \verb`1/(2a)`
+\item \verb`2/3` 返回双精度类型 \verb`Float64` 而不是整数
+\item \verb`2//3` 返回 \verb`Rational{Int64}` 类型， 相当于用两个 \verb`Int64` 整数来表示分数， 分数之间的运算没有误差
+\item 表示复数如 \verb`1 + 2im`， 相当于 \verb`ComplexF64(0,2)`。 又例如 \verb`1//2 + (3//4)im` 的类型是 \verb`Complex{Rational{Int64}}`
 \end{itemize}
 
 \subsection{变量}
 \begin{itemize}
-\item 用 \verb|typeof()| 查看某个变量的类型
-\item 类型完全是动态的， 但可以在表达式或者函数定义后面加上 \verb|::类型| 限制变量类型
+\item 用 \verb`typeof()` 查看某个变量的类型
+\item 类型完全是动态的， 但可以在表达式或者函数定义后面加上 \verb`::类型` 限制变量类型
 \item 字符串用双引号， 单个字符用单引号
-\item 感叹号 \verb|!| 可用于变量名或函数名的非首字符。 一般来说，在函数名最后加 \verb|!| 用于表示该函数的参数会被修改。
-\item 查看类型的最大和最小值如 \verb|typemax(Int64)|， \verb|typemin(Int64)|
-\item 标准库提供任意精度类型 \verb|BigInt| 和 \verb|BigFloat| （底层是 GMP）
+\item 感叹号 \verb`!` 可用于变量名或函数名的非首字符。 一般来说，在函数名最后加 \verb`!` 用于表示该函数的参数会被修改。
+\item 查看类型的最大和最小值如 \verb`typemax(Int64)`， \verb`typemin(Int64)`
+\item 标准库提供任意精度类型 \verb`BigInt` 和 \verb`BigFloat` （底层是 GMP）
 \item 变量名可以用 UTF-8 字符， 在一些编辑器中可以用反斜杠 latex 命令打出对应的字符
 \item 注意和 C++ 不同， Julia 中的变量名只是 object 的标签
-\item 要释放一个变量所占的内存， 把它赋值为 \verb|nothing|， 然后运行垃圾回收 \verb|GC.gc()| 即可。
-\item 类型的名称也可以作为值来使用， \verb|typeof(Float64)| 是 \verb|DataType|。
+\item 要释放一个变量所占的内存， 把它赋值为 \verb`nothing`， 然后运行垃圾回收 \verb`GC.gc()` 即可。
+\item 类型的名称也可以作为值来使用， \verb`typeof(Float64)` 是 \verb`DataType`。
 \end{itemize}
 
 \subsection{数组和矩阵}
 \begin{itemize}
 \item 索引从 1 开始， 和 Matlab 一样
 \item 矩阵（数组）使用\enref{列主序}{MatSto}， 和 Matlab 一样
-\item 一维数组 \verb|Array{类型,1}| 也叫 \verb|Vector{类型}|， 不区分行和列； \verb|Array{类型,2}| 也叫 \verb|Matrix{类型}|， 区分行向量和列向量。
-\item \verb|[1, 2]| 和 \verb|[1; 2]| 的类型是 \verb|Array{Int64,1}|， 但 \verb|[1 2]| 的类型是 \verb|Array{Int64,2}|
-\item \verb|类型[1,2,3]| 可以创建指定类型的数组。
-\item \verb|a = [1 2; 3 4]| 得到 \verb|Array{Float64,2}| 注意不能用逗号， 但可以不写 \verb|;| 而使用换行。
-\item \verb|[1, "abc", 1.2]| 的类型是 \verb|Vector{Any}|。
-\item \verb|[2^i for i = 1:10]| 可以用通项公式快速生成一个数组。
-\item \verb|push!(v, 元素)| 可以在 \verb|Vector| 后面增加一个元素，同时也会返回新的 \verb|v|。 \verb|pop!(v)| 移除最后的元素， 返回最后一个元素。
-\item \verb|splice!(v, 3:5)| 可以删除 \verb|v[3:5]|
-\item \verb|A .= 值| 或者 \verb|fill!(v, 值)| 可以把 \verb|v| 的每个元素赋值。
-\item 矩阵切割如 \verb|a[:, j, :]|
-\item 矩阵尺寸 \verb|size(矩阵, 维度)|， 元素个数 \verb|length()|， \verb|isempty()| 检查空矩阵， \verb|reverse()| 元素倒序排序
-\item \verb|findmax(), findmin()| 找到矩阵的最大最小元素。
-\item \verb|Array{Float64,2}(undef, 2, 3)| 创建矩阵， 矩阵元不初始化。
-\item 零向量矩阵 \verb|zeros(整数)| 或 \verb|zeros(整数, 整数)| 分别返回 \verb|Array{Float64,1}| 和 \verb|Array{Float64,2}|。 也可以用 \verb|zeros(类型, 整数, 整数)| 指定类型。
-\item 随机矩阵如 \verb|rand(N1, N2, ...)| 或者 \verb|rand(类型, N1, N2, ...)|。
-\item 求矩阵的哈希值如 \verb|hash(矩阵)|， 类型为 \verb|UInt64|。 把运算结果的 hash 输出可以保证计算过程不被优化掉。 事实上可以作用于任何对象（包括自定义类型）。
-\item 64 位机器上， 整数 literal 的类型默认是 \verb|Int64|
-\item \verb|a[:, 1]| 或者 \verb|a[1, :]| 仍然得到 \verb|Array{Int64,2}|
-\item \verb|a[:, 1] = [3; 4]| 可以修改 \verb|a| 的值
-\item \verb|a = b| 是浅复制， \verb|a| 改变了 \verb|b| 也会改变（同一对象）。
-\item \verb|a = copy(b)| 是真复制， 新生成一个对象。
-\item 可以用 \verb|a === b| 来判断是否是同一对象。
-\item \verb|b = a[:, 1]| 也是真复制。
-\item \verb|a| 作为参数传给函数是 pass by reference， 相当于 C 语言传递指针（有例外， 见 \enref{Julia 的函数}{JuFunc}）
-\item 方括号前面可以指定类型， 如 \verb|Float32[1, 4, 5]|。
-\item 数组的类型也可以是抽象类型甚至任意类型 \verb|Any|。 例如 \verb|["a", 1.23]| 的类型就是 \verb|Vector{Any}| 即 \verb|Array{Any, 1}|
-\item \verb|函数.(数组)| 可以对数组内的每个元素分别作用， 返回数组。 例如 \verb|sin.([1,2,3])|。 \verb|sin([1,2,3])| 是错误的用法。
-\item \verb|exp([1 2;3 4])| 是矩阵的指数， \verb|exp.([1 2;3 4])| 是逐个元素做指数。
-\item \verb|collect(1:5)| 可以把类似 range 的类型变为 \verb|Vector{}| 类型。
-\item \verb|v .+ 标量| 可以把数组的每一个元素加上标量。 如果用 \verb|+| 会出错。 同理也有 \verb|.+=|。 其他算符同理。
-\item \verb|矩阵 .+ 行向量| 可以对每一行都加行向量。
-\item \verb|B = [A; A]| 可以拼接矩阵
-\item \verb|resize!(矢量, N)| 可以用于改变矢量长度， 已有的元素值不会改变， 新增的元素不初始化。
-\item \verb|A = reshape(数组, N1, N2, ...)| 或者 \verb|A = reshape(数组, (N1, N2, ...))| 可以改变数组的形状甚至维度。 但改变前后元素个数必须不变。 注意 \verb|A| 和 \verb|数组| 共享内存， 改变一个另一个也会变。
-\item \verb|A'| 是厄密共轭， 转置再取共轭， 相当于 \verb|conj(transpose(A))|
-\item \verb|maximum(v)| 求最大值， \verb|maximum(A,2)| 求第二个维度的最大值。
-\item \verb|argmax(v)| 同理， 返回 index。
+\item 一维数组 \verb`Array{类型,1}` 也叫 \verb`Vector{类型}`， 不区分行和列； \verb`Array{类型,2}` 也叫 \verb`Matrix{类型}`， 区分行向量和列向量。
+\item \verb`[1, 2]` 和 \verb`[1; 2]` 的类型是 \verb`Array{Int64,1}`， 但 \verb`[1 2]` 的类型是 \verb`Array{Int64,2}`
+\item \verb`类型[1,2,3]` 可以创建指定类型的数组。
+\item \verb`a = [1 2; 3 4]` 得到 \verb`Array{Float64,2}` 注意不能用逗号， 但可以不写 \verb`;` 而使用换行。
+\item \verb`[1, "abc", 1.2]` 的类型是 \verb`Vector{Any}`。
+\item \verb`[2^i for i = 1:10]` 可以用通项公式快速生成一个数组。
+\item \verb`push!(v, 元素)` 可以在 \verb`Vector` 后面增加一个元素，同时也会返回新的 \verb`v`。 \verb`pop!(v)` 移除最后的元素， 返回最后一个元素。
+\item \verb`splice!(v, 3:5)` 可以删除 \verb`v[3:5]`
+\item \verb`A .= 值` 或者 \verb`fill!(v, 值)` 可以把 \verb`v` 的每个元素赋值。
+\item 矩阵切割如 \verb`a[:, j, :]`
+\item 矩阵尺寸 \verb`size(矩阵, 维度)`， 元素个数 \verb`length()`， \verb`isempty()` 检查空矩阵， \verb`reverse()` 元素倒序排序
+\item \verb`findmax(), findmin()` 找到矩阵的最大最小元素。
+\item \verb`Array{Float64,2}(undef, 2, 3)` 创建矩阵， 矩阵元不初始化。
+\item 零向量矩阵 \verb`zeros(整数)` 或 \verb`zeros(整数, 整数)` 分别返回 \verb`Array{Float64,1}` 和 \verb`Array{Float64,2}`。 也可以用 \verb`zeros(类型, 整数, 整数)` 指定类型。
+\item 随机矩阵如 \verb`rand(N1, N2, ...)` 或者 \verb`rand(类型, N1, N2, ...)`。
+\item 求矩阵的哈希值如 \verb`hash(矩阵)`， 类型为 \verb`UInt64`。 把运算结果的 hash 输出可以保证计算过程不被优化掉。 事实上可以作用于任何对象（包括自定义类型）。
+\item 64 位机器上， 整数 literal 的类型默认是 \verb`Int64`
+\item \verb`a[:, 1]` 或者 \verb`a[1, :]` 仍然得到 \verb`Array{Int64,2}`
+\item \verb`a[:, 1] = [3; 4]` 可以修改 \verb`a` 的值
+\item \verb`a = b` 是浅复制， \verb`a` 改变了 \verb`b` 也会改变（同一对象）。
+\item \verb`a = copy(b)` 是真复制， 新生成一个对象。
+\item 可以用 \verb`a === b` 来判断是否是同一对象。
+\item \verb`b = a[:, 1]` 也是真复制。
+\item \verb`a` 作为参数传给函数是 pass by reference， 相当于 C 语言传递指针（有例外， 见 \enref{Julia 的函数}{JuFunc}）
+\item 方括号前面可以指定类型， 如 \verb`Float32[1, 4, 5]`。
+\item 数组的类型也可以是抽象类型甚至任意类型 \verb`Any`。 例如 \verb`["a", 1.23]` 的类型就是 \verb`Vector{Any}` 即 \verb`Array{Any, 1}`
+\item \verb`函数.(数组)` 可以对数组内的每个元素分别作用， 返回数组。 例如 \verb`sin.([1,2,3])`。 \verb`sin([1,2,3])` 是错误的用法。
+\item \verb`exp([1 2;3 4])` 是矩阵的指数， \verb`exp.([1 2;3 4])` 是逐个元素做指数。
+\item \verb`collect(1:5)` 可以把类似 range 的类型变为 \verb`Vector{}` 类型。
+\item \verb`v .+ 标量` 可以把数组的每一个元素加上标量。 如果用 \verb`+` 会出错。 同理也有 \verb`.+=`。 其他算符同理。
+\item \verb`矩阵 .+ 行向量` 可以对每一行都加行向量。
+\item \verb`B = [A; A]` 可以拼接矩阵
+\item \verb`resize!(矢量, N)` 可以用于改变矢量长度， 已有的元素值不会改变， 新增的元素不初始化。
+\item \verb`A = reshape(数组, N1, N2, ...)` 或者 \verb`A = reshape(数组, (N1, N2, ...))` 可以改变数组的形状甚至维度。 但改变前后元素个数必须不变。 注意 \verb`A` 和 \verb`数组` 共享内存， 改变一个另一个也会变。
+\item \verb`A'` 是厄密共轭， 转置再取共轭， 相当于 \verb`conj(transpose(A))`
+\item \verb`maximum(v)` 求最大值， \verb`maximum(A,2)` 求第二个维度的最大值。
+\item \verb`argmax(v)` 同理， 返回 index。
 \end{itemize}
 
 \subsection{子数组}
 \begin{itemize}
-\item \verb|a[:, 1]| 作为参数传给函数是 pass by value， 如果需要 by reference， 使用 \verb|view| 函数获取 \verb|SubArray| 类
-\item \verb|SubArray| 不存数据， 可以用来给函数参数 pass by reference
-\item \verb|SubArray| 类型的 5 个参数 \verb|SubArray{标量类,维数,矩阵类,Tuple{各维度索引类型},是否支持快速索引}|
-\item \verb|view(a, :, 1)| 的类型是 \verb|SubArray{Int64,1,Matrix{Int64},Tuple{Base.Slice{Base.OneTo{Int64}},Int64},true}|
-\item \verb|view(a, 1, :)| 的类型是 \verb|SubArray{Int64,1,Matrix{Int64},Tuple{Int64,Base.Slice{Base.OneTo{Int64}}},true}|
-\item \verb|view(a, 1:2, 2:3)| 的类型是 \verb|SubArray{Int64,2,Matrix{Int64},Tuple{UnitRange{Int64},UnitRange{Int64}},false}|
-\item \verb|SubArray <: AbstractArray{T,Ndim} <: Any|
-\item \verb|Array{T,Ndim} <: DenseArray{T,Ndim} <: AbstractArray{T,Ndim} <: Any|
-\item 所以只要函数参数接受 \verb|AbstractArray|， 就可以同时接受 \verb|Array, SubArray|。
+\item \verb`a[:, 1]` 作为参数传给函数是 pass by value， 如果需要 by reference， 使用 \verb`view` 函数获取 \verb`SubArray` 类
+\item \verb`SubArray` 不存数据， 可以用来给函数参数 pass by reference
+\item \verb`SubArray` 类型的 5 个参数 \verb`SubArray{标量类,维数,矩阵类,Tuple{各维度索引类型},是否支持快速索引}`
+\item \verb`view(a, :, 1)` 的类型是 \verb`SubArray{Int64,1,Matrix{Int64},Tuple{Base.Slice{Base.OneTo{Int64}},Int64},true}`
+\item \verb`view(a, 1, :)` 的类型是 \verb`SubArray{Int64,1,Matrix{Int64},Tuple{Int64,Base.Slice{Base.OneTo{Int64}}},true}`
+\item \verb`view(a, 1:2, 2:3)` 的类型是 \verb`SubArray{Int64,2,Matrix{Int64},Tuple{UnitRange{Int64},UnitRange{Int64}},false}`
+\item \verb`SubArray <: AbstractArray{T,Ndim} <: Any`
+\item \verb`Array{T,Ndim} <: DenseArray{T,Ndim} <: AbstractArray{T,Ndim} <: Any`
+\item 所以只要函数参数接受 \verb`AbstractArray`， 就可以同时接受 \verb`Array, SubArray`。
 \end{itemize}
 
-\verb|SubArray| 的结构
+\verb`SubArray` 的结构
 \begin{lstlisting}[language=julia]
 struct SubArray{T,N,P,I,L} <: AbstractArray{T,N}
     parent::P
@@ -124,51 +124,51 @@ end
 \end{lstlisting}
 
 \begin{itemize}
-\item \verb|1:5| 等效于 \verb|range(1,5)|， 类型是 \verb|UnitRange{Int64}|
-\item 要转换成普通数组用 \verb|Vector(3:5)|。
-\item \verb|1:3:9| 等效于 \verb|StepRange(1, 3, 9)|， 类型是 \verb|StepRange{Int64, Int64}| 注意 \verb|StepRange| 类型的参数只能是整数。 \verb|StepRange(1, Int8(3), 9)| 的类型是 \verb|StepRange{Int64, Int8}|
-\item \verb|1.2:5.1| （等效于 \verb|range(1.2,5.1)|）和 \verb|1:0.2:4.1| （等效于 \verb|1:0.2:4| 和 \verb|range(1,4,16)|）的类型是 \verb|StepRangeLen{Float64, Base.TwicePrecision{Float64}, Base.TwicePrecision{Float64}, Int64}|。 \verb|range(2,4,3)| 虽然每个元素都是整数， 但类型也是一样的。
-\item \verb|LinRange(初始值,终止值,个数)| 概念上是等间距数组， 相当于 Matlab 的 \verb|linspace|。 但类型为 \verb|LinRange{Float64, Int64}|。
-\item \verb|range(1,2,length=3)| 等效于 \verb|1.0:0.5:2.0|。
-\item 所有这些 range 类型的抽象类都是 \verb|AbstractRange <: AbstractVector <: Any|， 都可以像数组一样用 \verb|size(x, dim)| 来获取尺寸， \verb|length()| 获取元素个数， 可以用 \verb|x[i]| 获取元素。
+\item \verb`1:5` 等效于 \verb`range(1,5)`， 类型是 \verb`UnitRange{Int64}`
+\item 要转换成普通数组用 \verb`Vector(3:5)`。
+\item \verb`1:3:9` 等效于 \verb`StepRange(1, 3, 9)`， 类型是 \verb`StepRange{Int64, Int64}` 注意 \verb`StepRange` 类型的参数只能是整数。 \verb`StepRange(1, Int8(3), 9)` 的类型是 \verb`StepRange{Int64, Int8}`
+\item \verb`1.2:5.1` （等效于 \verb`range(1.2,5.1)`）和 \verb`1:0.2:4.1` （等效于 \verb`1:0.2:4` 和 \verb`range(1,4,16)`）的类型是 \verb`StepRangeLen{Float64, Base.TwicePrecision{Float64}, Base.TwicePrecision{Float64}, Int64}`。 \verb`range(2,4,3)` 虽然每个元素都是整数， 但类型也是一样的。
+\item \verb`LinRange(初始值,终止值,个数)` 概念上是等间距数组， 相当于 Matlab 的 \verb`linspace`。 但类型为 \verb`LinRange{Float64, Int64}`。
+\item \verb`range(1,2,length=3)` 等效于 \verb`1.0:0.5:2.0`。
+\item 所有这些 range 类型的抽象类都是 \verb`AbstractRange <: AbstractVector <: Any`， 都可以像数组一样用 \verb`size(x, dim)` 来获取尺寸， \verb`length()` 获取元素个数， 可以用 \verb`x[i]` 获取元素。
 \end{itemize}
 
 \subsection{指针}
 \begin{itemize}
-\item \verb|p = pointer(v)| 可以获取一个数组第一个元素的指针， 类型是 \verb|Ptr{元素类型}|。 \verb|unsafe_load(p)| 可以获得第一个元素的值 \verb|p + sizeof(元素类型)| 可以获得下一个元素的指针。
-\item \verb|unsafe_store!(p, 值)| 可以给指针的元素赋值。
+\item \verb`p = pointer(v)` 可以获取一个数组第一个元素的指针， 类型是 \verb`Ptr{元素类型}`。 \verb`unsafe_load(p)` 可以获得第一个元素的值 \verb`p + sizeof(元素类型)` 可以获得下一个元素的指针。
+\item \verb`unsafe_store!(p, 值)` 可以给指针的元素赋值。
 \end{itemize}
 
 \subsection{线性代数}
 \begin{itemize}
-\item 迹 \verb|tr(A)|， 行列式 \verb|det(A)|， 逆 \verb|inv(A)|， 本征值 \verb|eigvals(A)|， 本征矢 \verb|eigvecs(A)|， 本征对 \verb|tmp = eigen(A)|（\verb|tmp.vectors, tmp.values|）， LU 分解%（\addTODO{链接}）
-\verb|factorize(A)|
+\item 迹 \verb`tr(A)`， 行列式 \verb`det(A)`， 逆 \verb`inv(A)`， 本征值 \verb`eigvals(A)`， 本征矢 \verb`eigvecs(A)`， 本征对 \verb`tmp = eigen(A)`（\verb`tmp.vectors, tmp.values`）， LU 分解%（\addTODO{链接}）
+\verb`factorize(A)`
 \item \enref{带对角矩阵}{BanDmt}没有专门的类型， 直接把每一列压缩存到普通矩阵中（列主序）。
 \end{itemize}
 
 \subsubsection{特殊矩阵类}
 \begin{itemize}
-\item \verb|Symmetric|， \verb|Hermitian|， \verb|UpperTriangular|， \verb|LowerTriangular|， \verb|Tridiagonal|， \verb|SymTridiagonal|， \verb|Bidiagonal|， \verb|Diagonal|
-\item 稀疏矩阵： \verb|using SparseArrays|， 然后 \verb|S = sparse(行标矢量,列标矢量,非零元矢量)| 可以创建 \enref{CSC 格式}{SprMat}的矩阵： \verb|SparseMatrixCSC{矩阵元类型, 指标类型}|
+\item \verb`Symmetric`， \verb`Hermitian`， \verb`UpperTriangular`， \verb`LowerTriangular`， \verb`Tridiagonal`， \verb`SymTridiagonal`， \verb`Bidiagonal`， \verb`Diagonal`
+\item 稀疏矩阵： \verb`using SparseArrays`， 然后 \verb`S = sparse(行标矢量,列标矢量,非零元矢量)` 可以创建 \enref{CSC 格式}{SprMat}的矩阵： \verb`SparseMatrixCSC{矩阵元类型, 指标类型}`
 \end{itemize}
 
 \subsection{BLAS 和 Lapack}
 \begin{itemize}
 \item \href{https://docs.julialang.org/en/v1/stdlib/LinearAlgebra/}{参考文档}。
-\item 带对角矩阵的矩阵乘法 $y = Ax+b$ 如 \verb|using LinearAlgebra.BLAS;m=3;n=4;kl=1;ku=1;alpha=1.;beta=0.;A=rand(kl+ku+1,n);x=rand(Float64,n); y=zeros(Float64,m); gbmv!('N', m, kl, ku, alpha, A, x, beta, y)| 其中矩阵尺寸为 \verb|m| 乘 \verb|n|，上下子对角线数量 \verb|ku, kl|。
+\item 带对角矩阵的矩阵乘法 $y = Ax+b$ 如 \verb`using LinearAlgebra.BLAS;m=3;n=4;kl=1;ku=1;alpha=1.;beta=0.;A=rand(kl+ku+1,n);x=rand(Float64,n); y=zeros(Float64,m); gbmv!('N', m, kl, ku, alpha, A, x, beta, y)` 其中矩阵尺寸为 \verb`m` 乘 \verb`n`，上下子对角线数量 \verb`ku, kl`。
 \item 在 Julia 中， 函数后面有感叹号一般表面该函数会改变它的参数。
-\item 普通矩阵本征问题 \verb|geev!(jobvl, jobvr, A)|； 对称矩阵本征问题 \verb|syev!(jobz, uplo, A)|； 对称三对角矩阵本征问题 \verb|stev!(job, dv, ev)|
+\item 普通矩阵本征问题 \verb`geev!(jobvl, jobvr, A)`； 对称矩阵本征问题 \verb`syev!(jobz, uplo, A)`； 对称三对角矩阵本征问题 \verb`stev!(job, dv, ev)`
 \end{itemize}
 
 \subsection{脚本}
 \begin{itemize}
-\item 在系统命令行用 \verb|julia <file>| 运行脚本， 用 \verb|julia <file> <arg1> <arg2>| 给出 arguments
-\item 在 REPL 中运行脚本如 \verb|include("/Users/addis/Desktop/main.jl")|（windows 路径不区分大小写）， 也支持反斜杠， 但要转义成 \verb|\\|
-\item 在文件中， 如果要确定当前文件是不是主文件， 用 \verb|abspath(PROGRAM_FILE) == @__FILE__|
+\item 在系统命令行用 \verb`julia <file>` 运行脚本， 用 \verb`julia <file> <arg1> <arg2>` 给出 arguments
+\item 在 REPL 中运行脚本如 \verb`include("/Users/addis/Desktop/main.jl")`（windows 路径不区分大小写）， 也支持反斜杠， 但要转义成 \verb`\\`
+\item 在文件中， 如果要确定当前文件是不是主文件， 用 \verb`abspath(PROGRAM_FILE) == @__FILE__`
 \end{itemize}
 
 \subsection{画图}
-第三方画图包 \verb|Plots|， 无需安装
+第三方画图包 \verb`Plots`， 无需安装
 \begin{lstlisting}[language=Julia]
 using Plots
 x = 1:10; y = rand(10); # These are the plotting data
@@ -188,11 +188,11 @@ for a = 1:5
     end
 end
 \end{lstlisting}
-其中 \verb|1:5| 的类型是 \verb|UnitRange{Int64}|。 若令 \verb|a = 1:5|， 可以使用 \verb|a[i]| 获取 “元素”。 类似地， \verb|1:2:5| 的类型是 \verb|StepRange{Int64, Int64}|。
+其中 \verb`1:5` 的类型是 \verb`UnitRange{Int64}`。 若令 \verb`a = 1:5`， 可以使用 \verb`a[i]` 获取 “元素”。 类似地， \verb`1:2:5` 的类型是 \verb`StepRange{Int64, Int64}`。
 
 \begin{itemize}
-\item for 循环也可以使用 \verb|for i in [1,4,0]|
-\item if 也可以写成一行 \verb|if 条件; 命令; end|
+\item for 循环也可以使用 \verb`for i in [1,4,0]`
+\item if 也可以写成一行 \verb`if 条件; 命令; end`
 \end{itemize}
 
 \subsection{函数}
@@ -212,7 +212,7 @@ end
 
 \subsection{常用函数}
 \begin{itemize}
-\item 当前时间 \verb|time()|
+\item 当前时间 \verb`time()`
 \end{itemize}
 
 \subsection{异常处理}
@@ -228,12 +228,12 @@ catch y
 end
 \end{lstlisting}
 \begin{itemize}
-\item 一些常见的错误类型如 \verb|DomainError|（例如 \verb|sqrt(-1)|）， \verb|BoundsError|（数组指标超出范围）。
+\item 一些常见的错误类型如 \verb`DomainError`（例如 \verb`sqrt(-1)`）， \verb`BoundsError`（数组指标超出范围）。
 \end{itemize}
 
 
 \subsection{储存变量}
-要把任意变量存到文件， 用 \verb|using Serialization|， 除此之外常用的还有 \verb|using JLD2|。
+要把任意变量存到文件， 用 \verb`using Serialization`， 除此之外常用的还有 \verb`using JLD2`。
 \begin{lstlisting}[language=julia]
 using Serialization
 a = randn(100,100)
@@ -244,26 +244,26 @@ println(a == a1)
 
 \subsection{文件读写}
 \begin{itemize}
-\item 当前路径 \verb|pwd()|， 更改路径 \verb|cd()|
-\item \verb|readdir()| 返回当前路径或指定路径中的文件和文件夹
-\item \verb|f = open("文件名", "r")| 打开文件读取， \verb|close(f)| 关闭文件。
-\item \verb|eof(f)| 用于判断是否到达文件末尾
-\item \verb|s = readline(f)| 读取下一行
-\item \verb|s = read(f, String)| 整个文件读入字符串
-\item \verb|using DelimitedFiles; m = readdlm("文件名")| 从文本文件中读取矩阵
-\item \verb|write(file, str)| 把字符串写入文本文件
-\item \verb|using DelimitedFiles; writedlm("文件名", 矩阵)| 把矩阵写入文本文件（用空格与回车）
+\item 当前路径 \verb`pwd()`， 更改路径 \verb`cd()`
+\item \verb`readdir()` 返回当前路径或指定路径中的文件和文件夹
+\item \verb`f = open("文件名", "r")` 打开文件读取， \verb`close(f)` 关闭文件。
+\item \verb`eof(f)` 用于判断是否到达文件末尾
+\item \verb`s = readline(f)` 读取下一行
+\item \verb`s = read(f, String)` 整个文件读入字符串
+\item \verb`using DelimitedFiles; m = readdlm("文件名")` 从文本文件中读取矩阵
+\item \verb`write(file, str)` 把字符串写入文本文件
+\item \verb`using DelimitedFiles; writedlm("文件名", 矩阵)` 把矩阵写入文本文件（用空格与回车）
 \end{itemize}
 
 \subsection{模块}
 \begin{itemize}
-\item 定义模块 \verb|module 模块名; 定义变量、类型、函数; end|。
-\item \verb|import 模块名| 后， 调用函数（或变量）用 \verb|模块名.函数名|， 但 \verb|using 模块名| 后， 可以省略 \verb|模块名.|
-\item 要 \verb|using| 指定内容， 用 \verb|using 模块名: 函数1, 函数2, 变量3|。
-\item \verb|import 模块名: 函数1, 函数2, 变量3| 应该和上一条等效。
-\item \verb|import 模块名 as 自定义名| 和 python 一样。
-\item \verb|@edit 命令| 可以查看函数的定义代码， 例如 \verb|1+1|， \verb|sin(1)|。
-\item 最上层的模块名叫做 \verb|Main|， 在最上层定义的名字（变量，函数等）都可以记为 \verb|Main.名字|。
+\item 定义模块 \verb`module 模块名; 定义变量、类型、函数; end`。
+\item \verb`import 模块名` 后， 调用函数（或变量）用 \verb`模块名.函数名`， 但 \verb`using 模块名` 后， 可以省略 \verb`模块名.`
+\item 要 \verb`using` 指定内容， 用 \verb`using 模块名: 函数1, 函数2, 变量3`。
+\item \verb`import 模块名: 函数1, 函数2, 变量3` 应该和上一条等效。
+\item \verb`import 模块名 as 自定义名` 和 python 一样。
+\item \verb`@edit 命令` 可以查看函数的定义代码， 例如 \verb`1+1`， \verb`sin(1)`。
+\item 最上层的模块名叫做 \verb`Main`， 在最上层定义的名字（变量，函数等）都可以记为 \verb`Main.名字`。
 \end{itemize}
 
 \subsection{调用 C/C++/Fortran 函数}
@@ -288,7 +288,7 @@ macro mymacro()
     end
 end
 \end{lstlisting}
-\item \verb|quote ... end| 结构用于把若干命令打包成一个类型为 \verb|Expr| 的对象。
-\item 运行 \verb|@mymacro|， 如果当前的 \verb|x| 有定义就会打出它的值。
-\item 可以用 \verb|@macroexpand @mymacro| 来查看宏展开后的代码。
+\item \verb`quote ... end` 结构用于把若干命令打包成一个类型为 \verb`Expr` 的对象。
+\item 运行 \verb`@mymacro`， 如果当前的 \verb`x` 有定义就会打出它的值。
+\item 可以用 \verb`@macroexpand @mymacro` 来查看宏展开后的代码。
 \end{itemize}

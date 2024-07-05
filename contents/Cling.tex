@@ -12,17 +12,17 @@
 \item \href{https://root.cern/cling/}{Cling} 是一个 C++ 解释器， 可以直接像动态语言那样逐行运行 C++ 代码无需预先编译。
 你可以在 \href{https://jupyter.org/try}{jupyter notebook 的 C++ 页面}在线使用 cling（具体来说是 \href{https://xeus-cling.readthedocs.io/en/latest/index.html}{Xeus-Cling}）。
 \item 如果想在本地使用 Jupyter Notebook 中的 Cling （推荐）， 用 \enref{conda}{CondaN} 安装即可。 Xeus-Cling 不支持 Windows 版的 conda（2023/8/13）。可以用 WSL2 安装 conda 再装 Cling。 WSL1 不行，安装成功，但启动 jupyter notebook 失败（2023/8/13）。
-\item 新建环境（可选）\verb|conda create -n cling|； 安装 Jupyter Notebooko：\verb|conda install notebook|； 安装 Xeus Cling： \verb|conda install xeus-cling -c conda-forge|； 初始化： \verb|conda activate cling|。 运行： \verb|jupyter notebook|。
-\item 在 \verb|conda| 中安装 Cling 后， 也可以在命令行运行： 可执行文件的路径如 \verb|~/miniconda3/pkgs/cling-0.8-hf817b99_1/bin/cling|， 在 \verb|/usr/bin| 里面创建一个 symlink 即可。
+\item 新建环境（可选）\verb`conda create -n cling`； 安装 Jupyter Notebooko：\verb`conda install notebook`； 安装 Xeus Cling： \verb`conda install xeus-cling -c conda-forge`； 初始化： \verb`conda activate cling`。 运行： \verb`jupyter notebook`。
+\item 在 \verb`conda` 中安装 Cling 后， 也可以在命令行运行： 可执行文件的路径如 \verb`~/miniconda3/pkgs/cling-0.8-hf817b99_1/bin/cling`， 在 \verb`/usr/bin` 里面创建一个 symlink 即可。
 \item Cling 基于 \enref{LLVM}{LLVMnt}， \enref{Clang}{clangp} 能编译的 C++ 代码 Cling 都支持。
-\item linux 暂时不支持 \verb|apt| 安装， 安装方法参考\href{https://kaustubh13.medium.com/how-to-install-cling-on-linux-or-wsl-8125798ed9b9}{这里}。 推荐直接 \href{https://root.cern/download/cling/}{download binary}。 解压： \verb|bzip2 -d ???.bz2|， \verb|tar -xvf ???.tar|。 解压以后可以直接进入到 \verb|bin| 文件夹运行 \verb|./cling| 看看是否成功。 如果成功， 可以添加一个软链 \verb|sudo ln -s /abs/path/to/cling /usr/bin/|。
-\item 文件夹解压后不到 1GB， 如果想节约空间可以删掉所有 \verb|.a| 文件以及体积最大的几个没有后缀名的二进制文件， 剩下 100MB 左右， 貌似不影响 Cling 运行。
+\item linux 暂时不支持 \verb`apt` 安装， 安装方法参考\href{https://kaustubh13.medium.com/how-to-install-cling-on-linux-or-wsl-8125798ed9b9}{这里}。 推荐直接 \href{https://root.cern/download/cling/}{download binary}。 解压： \verb`bzip2 -d ???.bz2`， \verb`tar -xvf ???.tar`。 解压以后可以直接进入到 \verb`bin` 文件夹运行 \verb`./cling` 看看是否成功。 如果成功， 可以添加一个软链 \verb`sudo ln -s /abs/path/to/cling /usr/bin/`。
+\item 文件夹解压后不到 1GB， 如果想节约空间可以删掉所有 \verb`.a` 文件以及体积最大的几个没有后缀名的二进制文件， 剩下 100MB 左右， 貌似不影响 Cling 运行。
 \item CLion 可以使用 Cling， 但如果在 WSL 中安装貌似会出问题。
-\item 用 \verb|cling| 进入 Cling 命令行， 用 \verb|.q| 退出。或者 \verb|cling '命令1' '命令2'| 单独执行几个命令。 也可以用 \verb|cling < test.cpp| 执行一个文件。
-\item 在打开 notebook 以前设置 \verb|CPATH| 环境变量， 可以添加头文件搜索路径。 但貌似添加了某些目录以后， 会导致 Cling kernel 无法启动。
-\item 也可以在代码中使用 \verb|#pragma cling add_include_path("路径")| 添加头文件路径。
-\item \verb|#include| 的相对路径是相对于当前路径的。
-\item 要设置当前路径， 用 \verb|#include <unistd.h>|， 然后 \verb|chdir("路径");| 即可。 要查看当前路径， 可以用 \verb|char *getcwd(char *buf, size_t size);| 返回 \verb|buf|。
-\item \verb|#pragma cling add_library_path("路径")| 可以添加动态链接库的搜索路径。
-\item \verb|#pragma cling load("动态库")| 可以\enref{加载动态库}{gppLib}。
+\item 用 \verb`cling` 进入 Cling 命令行， 用 \verb`.q` 退出。或者 \verb`cling '命令1' '命令2'` 单独执行几个命令。 也可以用 \verb`cling < test.cpp` 执行一个文件。
+\item 在打开 notebook 以前设置 \verb`CPATH` 环境变量， 可以添加头文件搜索路径。 但貌似添加了某些目录以后， 会导致 Cling kernel 无法启动。
+\item 也可以在代码中使用 \verb`#pragma cling add_include_path("路径")` 添加头文件路径。
+\item \verb`#include` 的相对路径是相对于当前路径的。
+\item 要设置当前路径， 用 \verb`#include <unistd.h>`， 然后 \verb`chdir("路径");` 即可。 要查看当前路径， 可以用 \verb`char *getcwd(char *buf, size_t size);` 返回 \verb`buf`。
+\item \verb`#pragma cling add_library_path("路径")` 可以添加动态链接库的搜索路径。
+\item \verb`#pragma cling load("动态库")` 可以\enref{加载动态库}{gppLib}。
 \end{itemize}

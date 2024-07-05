@@ -31,10 +31,10 @@
 \item Frobenius-范数：  $\|A\|_F=(\sum_{i=1}^m\sum_{j=1}^n|a_{ij}|^2)^{\frac{1}{2}}~.$
 \end{itemize}
 
-这些范数可以用 Matlab 的 \verb|norm()| 函数或者用 Python 中的 \href{https://docs.scipy.org/doc/numpy/reference/generated/numpy.linalg.norm.html}{numpy.linalg.norm} 函数进行计算。 那么绝对误差的用范数表达式为 $\epsilon=\|x-\hat{x}\|$，相对误差为  $\tau={\|x-\hat{x}\|}/{\|x\|}$。
+这些范数可以用 Matlab 的 \verb`norm()` 函数或者用 Python 中的 \href{https://docs.scipy.org/doc/numpy/reference/generated/numpy.linalg.norm.html}{numpy.linalg.norm} 函数进行计算。 那么绝对误差的用范数表达式为 $\epsilon=\|x-\hat{x}\|$，相对误差为  $\tau={\|x-\hat{x}\|}/{\|x\|}$。
 
 \subsection{例 1}
-\verb|absrelerror(corr, approx)| 函数使用默认的2-范数，计算 \verb|corr| 和 \verb|approx| 之间的绝对和相对误差。
+\verb`absrelerror(corr, approx)` 函数使用默认的2-范数，计算 \verb`corr` 和 \verb`approx` 之间的绝对和相对误差。
 
 \begin{lstlisting}[language=python]
 import numpy as np
@@ -86,7 +86,7 @@ def absrelerror(corr=None, approx=None):
 
 \subsubsection{例子 2： 机器精度}
 
-使用之前定义的 \verb|absrelerror()| 函数，在 Python3 环境下，运行下面的程序。
+使用之前定义的 \verb`absrelerror()` 函数，在 Python3 环境下，运行下面的程序。
 \begin{lstlisting}[language={}]
 a = 4/3
 b = a-1
@@ -121,11 +121,11 @@ print(1e-20+1e-37)
 1e-20
 \end{lstlisting}
 
-由上面两个例子可以观察到，机器精度约为  $10^{-16}$。 值得注意的是，在例子2中， 如果我们直接令 \verb|b=1/3| ，再求和，则不会得到任何误差。 事实上，这个舍入误差出现在 \verb|b=a-1| 时，并且延续到了后面的求和计算。 而对于例子3，求和时当两个数的相对大小差距超过  $10^{-16}$  （或  $10^{16}$）时，较小的数的贡献会消失。这种现象在有些地方也被称作cancellation error。 事实上，它只是舍入误差的一种表现。 至于具体的原理，也会在后面计算机算术这一章和浮点数标准中详细介绍。
+由上面两个例子可以观察到，机器精度约为  $10^{-16}$。 值得注意的是，在例子2中， 如果我们直接令 \verb`b=1/3` ，再求和，则不会得到任何误差。 事实上，这个舍入误差出现在 \verb`b=a-1` 时，并且延续到了后面的求和计算。 而对于例子3，求和时当两个数的相对大小差距超过  $10^{-16}$  （或  $10^{16}$）时，较小的数的贡献会消失。这种现象在有些地方也被称作cancellation error。 事实上，它只是舍入误差的一种表现。 至于具体的原理，也会在后面计算机算术这一章和浮点数标准中详细介绍。
 
 \subsubsection{例子4： 矩阵运算中的误差}
 
-下面定义一个测试函数 \verb|testErrA(n)| ，随机生成  $n\times n$  矩阵  $A$  ，然后计算  $A^{-1}A$  与单位矩阵  $I$  之间的误差。
+下面定义一个测试函数 \verb`testErrA(n)` ，随机生成  $n\times n$  矩阵  $A$  ，然后计算  $A^{-1}A$  与单位矩阵  $I$  之间的误差。
 
 理论上，这两个值应该完全相等，但是由于存在舍入误差， $A^{-1}A$ 并不完全等于单位矩阵。
 \begin{lstlisting}[language=python]

@@ -58,7 +58,7 @@ int main()
 \subsection{主要特点}
 以下列出 SLISC 的一些特性， 我们以后会详细介绍。
 \begin{itemize}
-\item 全部定义使用 \verb|namespace slisc|， 所有宏以 \verb|SLS_| 开头。
+\item 全部定义使用 \verb`namespace slisc`， 所有宏以 \verb`SLS_` 开头。
 \item 尽量不使用模板（尤其是高级的模板技巧）， 用 Matlab/Octave 生成代码。 初学用户不需要了解代码如何生成， 可以直接阅读或使用生成后的代码。
 \item 实现了\enref{密矩阵}{MatSto}和一些\enref{稀疏矩阵}{SprMat}。 以对列主序的支持为主。
 \item 实现了密矩阵的切割，并用于函数接口。 这会有少量的额外运算， 但使用起来却比指针方便得多。 用户可以自行选择使用哪种接口。
@@ -67,7 +67,7 @@ int main()
 \item 为了保证性能， 函数内部尽量不改变矩阵尺寸， 这是因为内存的动态分配往往耗时较多。
 \end{itemize}
 
-在 SLISC 中， 我们希望把矩阵进行一定程度的封装， 但又几乎不损失性能。 许多人使用流行的矩阵库例如 Eigen， 但是其代码复杂， 错误信息不容易懂， 代码修改起来非常困难。 例如 Eigen 的 \verb|MatrixXd| 矩阵类有 6 次继承， 一个 2x2 的矩阵在 gdb 里面调试的时候显示出来的变量信息是这样的：
+在 SLISC 中， 我们希望把矩阵进行一定程度的封装， 但又几乎不损失性能。 许多人使用流行的矩阵库例如 Eigen， 但是其代码复杂， 错误信息不容易懂， 代码修改起来非常困难。 例如 Eigen 的 \verb`MatrixXd` 矩阵类有 6 次继承， 一个 2x2 的矩阵在 gdb 里面调试的时候显示出来的变量信息是这样的：
 \begin{lstlisting}[language=cpp]
 <Eigen::PlainObjectBase<Eigen::Matrix<double,-1,-1,0,-1,-1>>> = 
 {<Eigen::MatrixBase<Eigen::Matrix<double,-1,-1,0,-1,-1>>> = 
@@ -80,26 +80,26 @@ int main()
 <No data fields>}, <No data fields>}, <No data fields>}, <No data fields>},
 m_storage = {m_data = 0x855ceb0, m_rows = 2, m_cols = 2}}, <No data fields>
 \end{lstlisting}
-实际上这里面的重点只有最后一行， 显示了矩阵在内存中的地址 \verb|m_data|， 行数 \verb|m_rows| 以及列数 \verb|m_cols|。 这样的库只适合直接拿来用， 不适合阅读、学习和修改， 尤其是对非计算机专业的同学来说。
+实际上这里面的重点只有最后一行， 显示了矩阵在内存中的地址 \verb`m_data`， 行数 \verb`m_rows` 以及列数 \verb`m_cols`。 这样的库只适合直接拿来用， 不适合阅读、学习和修改， 尤其是对非计算机专业的同学来说。
 
 \subsubsection{重新定义类型名称}
-在 C++ 标准中， 一些基本类型在内存中的长度在不同计算机上可能会不同。 例如 \verb|long| 有时候和 \verb|int| 一样是 4 字节， 而另一些时候则和 \verb|long long| 一样是 8 字节。 因此， SLISC 仿照 Numerical Recipe \cite{NR3} 的方式， 定义自己的类型名称。
+在 C++ 标准中， 一些基本类型在内存中的长度在不同计算机上可能会不同。 例如 \verb`long` 有时候和 \verb`int` 一样是 4 字节， 而另一些时候则和 \verb`long long` 一样是 8 字节。 因此， SLISC 仿照 Numerical Recipe \cite{NR3} 的方式， 定义自己的类型名称。
 \begin{itemize}
-\item \verb|Char| 是 \verb|char|， 即 1 字节字符或整数
-\item \verb|Uchar| 是 \verb|unsigned char|， 即 1 字节无符号整数
-\item \verb|Short| 是 2 字节整数
-\item \verb|Int| 是 4 字节整数
-\item \verb|Long| 是 \verb|Int| 或者 \verb|Llong|， 取决于宏 \verb|SLS_USE_INT_AS_LONG| 是否定义。 SLISC 库中， \verb|Long| 被用来作为矩阵的索引类型。
-\item \verb|Llong| 是 8 字节整数
-\item \verb|Float| 是 \verb|float|（4 字节浮点数）
-\item \verb|Doub| 是 \verb|double|（8 字节浮点数）
-\item \verb|Ldoub| 是 \verb|long double| （16 字节浮点数， 但并不一定是四精度， 取决于机器和编译器）
-\item \verb|Qdoub| 是 16 字节浮点数， 标准的\enref{四精度}{FltCpp}（需要在编译时打开 \verb|quadmath| 选项）。
-\item \verb|Fcomp| 是 \verb|std::complex<float>| （8 字节复数）
-\item \verb|Comp| 是 \verb|std::complex<double>| （16 字节复数）
-\item \verb|Lcomp| 是 \verb|std::complex<long double>| （32 字节复数）
-\item \verb|Qcomp| 是 \verb|std::complex<Qdoub>| 32 字节复数， 标准的四精度。
+\item \verb`Char` 是 \verb`char`， 即 1 字节字符或整数
+\item \verb`Uchar` 是 \verb`unsigned char`， 即 1 字节无符号整数
+\item \verb`Short` 是 2 字节整数
+\item \verb`Int` 是 4 字节整数
+\item \verb`Long` 是 \verb`Int` 或者 \verb`Llong`， 取决于宏 \verb`SLS_USE_INT_AS_LONG` 是否定义。 SLISC 库中， \verb`Long` 被用来作为矩阵的索引类型。
+\item \verb`Llong` 是 8 字节整数
+\item \verb`Float` 是 \verb`float`（4 字节浮点数）
+\item \verb`Doub` 是 \verb`double`（8 字节浮点数）
+\item \verb`Ldoub` 是 \verb`long double` （16 字节浮点数， 但并不一定是四精度， 取决于机器和编译器）
+\item \verb`Qdoub` 是 16 字节浮点数， 标准的\enref{四精度}{FltCpp}（需要在编译时打开 \verb`quadmath` 选项）。
+\item \verb`Fcomp` 是 \verb`std::complex<float>` （8 字节复数）
+\item \verb`Comp` 是 \verb`std::complex<double>` （16 字节复数）
+\item \verb`Lcomp` 是 \verb`std::complex<long double>` （32 字节复数）
+\item \verb`Qcomp` 是 \verb`std::complex<Qdoub>` 32 字节复数， 标准的四精度。
 \end{itemize}
-另外我们还定义一些附加类型， 用于声明函数的参数。 例如 \verb|Doub_I| 是 \verb|const Doub|， 表示函数的输入参数。 又如 \verb|Doub_O| 是 \verb|Doub &|， 表示函数的输出参数（原来的值不会被使用）。 \verb|Doub_IO| 也是 \verb|Doub &|， 但表示既作为输入也作为输出（原来的值会被使用且被覆盖）。 以上的标量类型都同理， 在后面加 \verb|_I|， \verb|_O|， \verb|_IO| 分别表示 in， out， in-out。
+另外我们还定义一些附加类型， 用于声明函数的参数。 例如 \verb`Doub_I` 是 \verb`const Doub`， 表示函数的输入参数。 又如 \verb`Doub_O` 是 \verb`Doub &`， 表示函数的输出参数（原来的值不会被使用）。 \verb`Doub_IO` 也是 \verb`Doub &`， 但表示既作为输入也作为输出（原来的值会被使用且被覆盖）。 以上的标量类型都同理， 在后面加 \verb`_I`， \verb`_O`， \verb`_IO` 分别表示 in， out， in-out。
 
-以后还会看到矢量类和矩阵类， 但和标量不同， 为了避免不必要的复制， 它们都必须 pass by reference 而不是 pass by value。 例如矩阵类 \verb|CmatDoub| 的 \verb|CmatDoub_I| 是 \verb|const CmatDoub &|， \verb|CmatDoub_O| 和 \verb|CmatDoub_IO| 都是 \verb|CmatDoub &|。
+以后还会看到矢量类和矩阵类， 但和标量不同， 为了避免不必要的复制， 它们都必须 pass by reference 而不是 pass by value。 例如矩阵类 \verb`CmatDoub` 的 \verb`CmatDoub_I` 是 \verb`const CmatDoub &`， \verb`CmatDoub_O` 和 \verb`CmatDoub_IO` 都是 \verb`CmatDoub &`。

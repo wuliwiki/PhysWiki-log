@@ -9,7 +9,7 @@
 
 \pentry{SLISC 库简介\nref{nod_SLISC}， 数据结构：密矩阵\nref{nod_MatSto}}{nod_7869}
 
-我们先以双精度类型 \verb|Doub| （即 \verb|double|）来举例介绍 SLISC 中的密矩阵。 我们习惯上也把 1 维的矩阵称为矢量。
+我们先以双精度类型 \verb`Doub` （即 \verb`double`）来举例介绍 SLISC 中的密矩阵。 我们习惯上也把 1 维的矩阵称为矢量。
 
 先来看一个基本的使用的例子
 \begin{lstlisting}[language=cpp]
@@ -52,7 +52,7 @@ int main()
 \end{lstlisting}
 
 \subsection{Vbase 类}
-所有密矩阵都继承于 \verb|VbaseDoub|， \verb|VbaseDoub| 不直接使用， 仅用于被继承。 这里使用继承主要是为了避免在每个密矩阵中都重复定义这些基础功能。
+所有密矩阵都继承于 \verb`VbaseDoub`， \verb`VbaseDoub` 不直接使用， 仅用于被继承。 这里使用继承主要是为了避免在每个密矩阵中都重复定义这些基础功能。
 \begin{lstlisting}[language=cpp]
 class VbaseDoub
 {
@@ -79,10 +79,10 @@ public:
 };
 \end{lstlisting}
 
-简单来说， \verb|VbaseDoub| 就是一个简单的 \verb|std::vector|， 负责内存管理， 用方括号 \verb|[i]| 获取第 \verb|i| 个矩阵元， 用 \verb|end()| 获取最后一个元， \verb|end(i)| 获取第 \verb|N-i| 个元。 用 \verb|.size()| 获取元素长度， \verb|.resize(N)| 释放内存并重新分配 \verb|N| 个元素的新内存。 \verb|<<| 用于把一个对象所分配的内存转移到另一个对象中。 所有继承 \verb|VbaseDoub| 的密矩阵都具有这些功能， 也会增加新的功能。
+简单来说， \verb`VbaseDoub` 就是一个简单的 \verb`std::vector`， 负责内存管理， 用方括号 \verb`[i]` 获取第 \verb`i` 个矩阵元， 用 \verb`end()` 获取最后一个元， \verb`end(i)` 获取第 \verb`N-i` 个元。 用 \verb`.size()` 获取元素长度， \verb`.resize(N)` 释放内存并重新分配 \verb`N` 个元素的新内存。 \verb`<<` 用于把一个对象所分配的内存转移到另一个对象中。 所有继承 \verb`VbaseDoub` 的密矩阵都具有这些功能， 也会增加新的功能。
 
 \subsection{矢量}
-\verb|VecDoub| 矢量继承 \verb|VbaseDoub|， 为了避免歧义， 任何两个容器之间禁止使用等号。 如果要复制使用 \verb|copy(a, b)| 函数把 \verb|b| 复制给 \verb|a|。
+\verb`VecDoub` 矢量继承 \verb`VbaseDoub`， 为了避免歧义， 任何两个容器之间禁止使用等号。 如果要复制使用 \verb`copy(a, b)` 函数把 \verb`b` 复制给 \verb`a`。
 \begin{lstlisting}[language=cpp]
 class VecDoub : public VbaseDoub
 {
@@ -97,7 +97,7 @@ public:
 \end{lstlisting}
 
 \subsection{矩阵}
-\enref{列主序矩阵}{MatSto} \verb|CmatDoub| 和行主序矩阵 \verb|MatDoub| 同样继承 \verb|VbaseDoub|。 在此基础上增加一个行数 \verb|m_N0|， 列数 \verb|m_N1|， 双索引 \verb|a(i, j)|。以 \verb|CmatDoub| 定义为例：
+\enref{列主序矩阵}{MatSto} \verb`CmatDoub` 和行主序矩阵 \verb`MatDoub` 同样继承 \verb`VbaseDoub`。 在此基础上增加一个行数 \verb`m_N0`， 列数 \verb`m_N1`， 双索引 \verb`a(i, j)`。以 \verb`CmatDoub` 定义为例：
 \begin{lstlisting}[language=cpp]
 class CmatDoub : public VbaseDoub
 {
@@ -119,7 +119,7 @@ public:
 \end{lstlisting}
 
 \subsection{高维数组}
-三维数组同样分为列主序的 \verb|Cmat3Doub| 和行主序的 \verb|Mat3Doub|， 功能和 \verb|CmatDoub| 大同小异
+三维数组同样分为列主序的 \verb`Cmat3Doub` 和行主序的 \verb`Mat3Doub`， 功能和 \verb`CmatDoub` 大同小异
 \begin{lstlisting}[language=cpp]
 class Cmat3Doub : public VbaseDoub
 {

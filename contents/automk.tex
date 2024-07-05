@@ -16,17 +16,17 @@ make [-j4]
 make check # （可选）跑一些测试
 make install
 \end{lstlisting}
-其中的选共享可以通过 \verb|.configure --help| 查看。 例如 \verb|--prefix=绝对安装路径|， 编译后 \verb|make install| 后头文件库文件等都会放到这个路径。 当然还会有一些包作者定义的选项， 例如如果依赖于第三方的包且没有安装在默认路径，会要求提供安装路径（即使输入相对路径，编译出来 so 的 rpath 也会是绝对路径）。
+其中的选共享可以通过 \verb`.configure --help` 查看。 例如 \verb`--prefix=绝对安装路径`， 编译后 \verb`make install` 后头文件库文件等都会放到这个路径。 当然还会有一些包作者定义的选项， 例如如果依赖于第三方的包且没有安装在默认路径，会要求提供安装路径（即使输入相对路径，编译出来 so 的 rpath 也会是绝对路径）。
 
-如果依赖别的包， 选项一般是 \verb|--with-包名=绝对路径|。 如果用了没用，可能还需要设置环境变量 \verb|LIBRARY_PATH|， 相当于 \verb|g++| 的 \verb|-L| 选项。 如果要跑 \verb|make check|， 最好也添加相同的路径到 \verb|LD_LIBRARY_PATH|， 否则测试时链接不上会 fail。
+如果依赖别的包， 选项一般是 \verb`--with-包名=绝对路径`。 如果用了没用，可能还需要设置环境变量 \verb`LIBRARY_PATH`， 相当于 \verb`g++` 的 \verb`-L` 选项。 如果要跑 \verb`make check`， 最好也添加相同的路径到 \verb`LD_LIBRARY_PATH`， 否则测试时链接不上会 fail。
 
 注意许多库直接把头文件库文件安装到标准目录而不是子文件夹。 为了避免冲突， 以及区分哪些文件是哪些库安装的， 强烈建议自定义安装路径。 另外如果没有管理员权限， 也只能安装到自定义路径。
 
 \begin{itemize}
-\item 在安装目录中， \verb|lib/pkgconfig/*.pc| 文件中会给出一些 configure 时的选项。 以及编译新程序需要的 \verb|-I| 命令和 \verb|-l| 命令。
+\item 在安装目录中， \verb`lib/pkgconfig/*.pc` 文件中会给出一些 configure 时的选项。 以及编译新程序需要的 \verb`-I` 命令和 \verb`-l` 命令。
 \end{itemize}
 
-若要 build 一个 debug 版本， 参考\href{https://stackoverflow.com/questions/4553735/gnu-autotools-debug-release-targets}{这里}的高赞。 例如 \enref{arb}{ArbLib} 中（注意 \verb|./config --help| 中只有 \verb|CFLAGS| 没有 \verb|CPPFLAGS|）， 用
+若要 build 一个 debug 版本， 参考\href{https://stackoverflow.com/questions/4553735/gnu-autotools-debug-release-targets}{这里}的高赞。 例如 \enref{arb}{ArbLib} 中（注意 \verb`./config --help` 中只有 \verb`CFLAGS` 没有 \verb`CPPFLAGS`）， 用
 \begin{lstlisting}[language=bash]
 ./configure --prefix=/安装路径 \
      CFLAGS=-DDEBUG CFLAGS="-g3 -O0"
@@ -47,6 +47,6 @@ make install
 \caption{autotools 的结构（来自\href{https://www.zhihu.com/question/22644913/answer/141475420}{知乎}）} \label{fig_automk_1}
 \end{figure}
 \item automake 是 autotools 的一部分， 也叫做 \textbf{GNU Build System}
-\item autotools 主要包含 autoconf（用于生成 \verb|configure| 脚本），automake（用于生成 \verb|Makefile.in|），libtool（用于制作 shared library）
+\item autotools 主要包含 autoconf（用于生成 \verb`configure` 脚本），automake（用于生成 \verb`Makefile.in`），libtool（用于制作 shared library）
 \end{itemize}
 

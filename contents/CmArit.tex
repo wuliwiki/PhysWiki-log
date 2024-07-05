@@ -9,7 +9,7 @@
 
 \subsection{整数}
 
-很自然的，对于一个给定的十进制整数，可以将它转换为二进制数，从而在计算机中表示。 下图中的8位（8 bits）二进制数 \verb|0 1 0 1 1 1 0 1| 表示
+很自然的，对于一个给定的十进制整数，可以将它转换为二进制数，从而在计算机中表示。 下图中的8位（8 bits）二进制数 \verb`0 1 0 1 1 1 0 1` 表示
 
 \begin{equation}
 (01011101)2=0\cdot2^7+1\cdot2^6+0\cdot2^5+1\cdot2^4+1\cdot2^3+1\cdot2^2+0\cdot2^1+1\cdot2^0=(93)_{10}~.
@@ -21,9 +21,9 @@
 
 \subsubsection{例子 1 ： 大整数及其运算}
 
-\textbf{注1}： 普通除法运算  \verb|/|  在Python中会默认转换为浮点数，因此并不能保证完全精确。
+\textbf{注1}： 普通除法运算  \verb`/`  在Python中会默认转换为浮点数，因此并不能保证完全精确。
 
-\textbf{注2}： 整数除法 \verb|//| 可以保证精确，但是结果只有商，余数可以用 \verb|%|  求得。
+\textbf{注2}： 整数除法 \verb`//` 可以保证精确，但是结果只有商，余数可以用 \verb`%`  求得。
 
 \begin{lstlisting}[language=python]
 a = 135791113151719
@@ -60,7 +60,7 @@ a÷b=550184810......195619
 
 \subsubsection{简单的二进制表达浮点数}
 
-类似二进制以 \verb|2| 为基的方式，我们也可以用 $1/2$ 为基，那么 8 位二进制数 \verb|0 1 0 1 1 1 0 1| 就表示
+类似二进制以 \verb`2` 为基的方式，我们也可以用 $1/2$ 为基，那么 8 位二进制数 \verb`0 1 0 1 1 1 0 1` 就表示
 
 \begin{equation}
 \begin{aligned}
@@ -86,7 +86,7 @@ a÷b=550184810......195619
 
 延续上面的思路，我们可以用乘以多个不同的倍数的方法来控制所扩大的范围。 也就是说，从8位二进制中拿出2位（下面的例子中用的是最后两位，但也可以是前面两位），用来记录扩大的倍数，而前面的 6 位同之前一样用作表达0到1之间的实数，这6位被称作尾数位（mantissa）。 
 
-为了进一步扩大范围，取出的2位从二进制转化为十进制后，被放在以 \verb|2| 为基（basis）的指数位置上形成放大的倍数，因此这2位在这个系统中被称为\textbf{指数位（exponent）}。
+为了进一步扩大范围，取出的2位从二进制转化为十进制后，被放在以 \verb`2` 为基（basis）的指数位置上形成放大的倍数，因此这2位在这个系统中被称为\textbf{指数位（exponent）}。
 
 如下图，我们继续使用同样的8位二进制数，在经过标准化过程后，表达的数为
 
@@ -132,7 +132,7 @@ a÷b=550184810......195619
 
 \subsection{IEEE 浮点数标准}
 
-现在的计算机系统采用的是 \href{https://ieeexplore.ieee.org/document/8766229}{IEEE 浮点数标准}。 每一个浮点数（Python 中的 \verb|float| 类型）占用 64 位。如下图所示，其中第 1 位为符号位，下面 11 位为\textbf{指数位}，最后 52 位为\textbf{尾数位（mantissa）}。
+现在的计算机系统采用的是 \href{https://ieeexplore.ieee.org/document/8766229}{IEEE 浮点数标准}。 每一个浮点数（Python 中的 \verb`float` 类型）占用 64 位。如下图所示，其中第 1 位为符号位，下面 11 位为\textbf{指数位}，最后 52 位为\textbf{尾数位（mantissa）}。
 
 \begin{figure}[ht]
 \centering
@@ -145,11 +145,11 @@ a÷b=550184810......195619
 由此，我们可以求得：
 
 \begin{itemize}
-\item 机器精度 \verb|eps| 为  $\frac{1}{2^{52}}\approx 2.220446049250313\times10^{-16}$。
-\item 最小的正浮点数 \verb|realmin| 为  $2^{-1022}\approx2.2251\times10^{-308}$  ，在python中可以通过 \verb|numpy.finfo(float).tiny| 获得。
-\item 最大的浮点数 \verb|realmax| 为 $(2-2^{-52})\times2^{1023}\approx1.7977\times10^{308}$  ，在python中可以通过 \verb|numpy.finfo(float).max| 获得。
-\item 令  $e=1024$  和  $f=0$  ，表示无穷大  $\infty$  ，即任何大于 \verb|realmax| 的数，在python中可以通过 \verb|numpy.inf| 得到。
-\item 令  $e=1024$  且  $f\neq0$  ，则表示这不是一个数（NaN，Not a Number）。通常出作为 \verb|0/0| 或者 \verb|numpy.inf-numpy.inf| 的结果。我们也可以通过 \verb|numpy.nan| 表达它。
+\item 机器精度 \verb`eps` 为  $\frac{1}{2^{52}}\approx 2.220446049250313\times10^{-16}$。
+\item 最小的正浮点数 \verb`realmin` 为  $2^{-1022}\approx2.2251\times10^{-308}$  ，在python中可以通过 \verb`numpy.finfo(float).tiny` 获得。
+\item 最大的浮点数 \verb`realmax` 为 $(2-2^{-52})\times2^{1023}\approx1.7977\times10^{308}$  ，在python中可以通过 \verb`numpy.finfo(float).max` 获得。
+\item 令  $e=1024$  和  $f=0$  ，表示无穷大  $\infty$  ，即任何大于 \verb`realmax` 的数，在python中可以通过 \verb`numpy.inf` 得到。
+\item 令  $e=1024$  且  $f\neq0$  ，则表示这不是一个数（NaN，Not a Number）。通常出作为 \verb`0/0` 或者 \verb`numpy.inf-numpy.inf` 的结果。我们也可以通过 \verb`numpy.nan` 表达它。
 \end{itemize}
 
 \subsubsection{例子 2： numpy 中查看浮点数标准}
@@ -175,7 +175,7 @@ not a number: nan
 
 在很多计算系统中，除了上面的标准浮点数以外，还存在着\textbf{亚标准浮点数（subnormal floating point numbers）}。 
 
-它们是比最小的标准浮点数 \verb|realmin|（  $2.2251\times10^{-308}$  ）还要小的正实数。
+它们是比最小的标准浮点数 \verb`realmin`（  $2.2251\times10^{-308}$  ）还要小的正实数。
 
 我们先来看一下下面这个例子：
 
@@ -212,10 +212,10 @@ realmin x 10^-17 = 0.0
 可以看到
 
 \begin{itemize}
-\item 我们能够表示比最小标准数 \verb|realmin| 更小的一些正实数；
-\item 它们的精度随着我们远离 \verb|realmin| 而降低；
-\item 最终，当这个数与 \verb|realmin| 的比小于约  $10^{-16}$  时，它变成了0。
+\item 我们能够表示比最小标准数 \verb`realmin` 更小的一些正实数；
+\item 它们的精度随着我们远离 \verb`realmin` 而降低；
+\item 最终，当这个数与 \verb`realmin` 的比小于约  $10^{-16}$  时，它变成了0。
 \end{itemize}
-这是因为，我们是用保留位  $e=-1023$  来表示这类亚标准浮点数，它们范围为 \verb|realmin|   $\times$   \verb|eps| 到realmin（eps为机器精度）。也就是说，我们能表示的最最小的正实数为  $2^{-(1022+52)}\approx 0.494\times10^{-323}$  ，但这个数的精度非常低。
+这是因为，我们是用保留位  $e=-1023$  来表示这类亚标准浮点数，它们范围为 \verb`realmin`   $\times$   \verb`eps` 到realmin（eps为机器精度）。也就是说，我们能表示的最最小的正实数为  $2^{-(1022+52)}\approx 0.494\times10^{-323}$  ，但这个数的精度非常低。
 
 \textbf{注}：这里尽管  $e=-1023$  ，但我们并不是用标准浮点数的转换规则进行运算的，同时在尾数前面加的1也并没有在这出现。

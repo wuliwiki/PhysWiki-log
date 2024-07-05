@@ -11,9 +11,9 @@
 这里介绍官方的 C API， 可以在 C 或者 C++ 中调用。 如果想要更方便的 C++ wrapper， 可以见 \href{https://github.com/SRombauts/SQLiteCpp}{SQLiteCpp}。
 
 \subsection{安装}
-ubuntu 上用 \verb|sudo apt install libsqlite3-dev| 安装
+ubuntu 上用 \verb`sudo apt install libsqlite3-dev` 安装
 
-另外安装命令行工具 \verb|sudo apt install sqlite3|
+另外安装命令行工具 \verb`sudo apt install sqlite3`
 
 \subsection{例子}
 参考\href{https://www.tutorialspoint.com/sqlite/sqlite_c_cpp.htm}{这里}。 注意所有的数据必须先转换成字符串才能加到数据库中。
@@ -69,7 +69,7 @@ void test_sqlite()
 }
 \end{lstlisting}
 
-另一个挺有用的小程序是（修改自\href{https://www.sqlite.org/quickstart.html}{官方教程}）， 可以在命令行对任意数据库文件执行任意 SQL 命令。 编译： \verb|g++ -o sqcmd sqcmd.cpp -l sqlite3|。 使用方法如 \verb|./sqcmd example.db "SELECT * FROM PERSON"|
+另一个挺有用的小程序是（修改自\href{https://www.sqlite.org/quickstart.html}{官方教程}）， 可以在命令行对任意数据库文件执行任意 SQL 命令。 编译： \verb`g++ -o sqcmd sqcmd.cpp -l sqlite3`。 使用方法如 \verb`./sqcmd example.db "SELECT * FROM PERSON"`
 \begin{lstlisting}[language=cpp]
 #include <stdio.h>
 #include <sqlite3.h>
@@ -108,7 +108,7 @@ int main(int argc, char **argv){
 }
 \end{lstlisting}
 
-sqlite3 的数据库文件是二进制的， 可以用 \verb|sqlite3| 命令行 dump 出一个通用的文本文件
+sqlite3 的数据库文件是二进制的， 可以用 \verb`sqlite3` 命令行 dump 出一个通用的文本文件
 \begin{lstlisting}[language=none]
 sqlite> .output example.sql
 sqlite> .dump
@@ -123,45 +123,45 @@ sqlite> .exit
 \subsection{binding}
 当然也不需要把所有数据类型都转换成 string 那么蠢。 这就要用到 binding， 参考\href{https://www.sqlite.org/c3ref/bind_blob.html}{这里}。
 \begin{itemize}
-\item 事实上 \verb|sqlite3_exec()| 命令是调用一系列命令， 如果用 binding， 就必须把它们分开用。
-\item 首先用 \verb|sqlite3_stmt stmt;| 创建一个 statement object。
-\item 然后把 sql 命令 \verb|str| parse 为 \verb|stmt|： \verb|ret = sqlite3_prepare_v2(db, str.c_str(), str.size()+1, &stmt, NULL);|。 这里 \verb|str| 中的数据可以用 \verb|?| 或者 \verb|?编号| 代替， 以后再 bind 到不同的数据上。 这样就不需要每换一次数据都要重新 parse 一次。
-\item 注意只有数据可以用 \verb|?| 代替， \verb|表名| 和 \verb|列名| 不可以。
-\item 不可以对字符串用 \verb|'?'|， \verb|sqlite3_prepare| 会自己添加。 如果用了就会错。
-\item \verb|int sqlite3_bind_parameter_count(stmt)| 可以返回 \verb|?| 的个数。
-\item \verb|ret = sqlite3_bind_text(stmt, 问号的编号, names[i].c_str(), names[i].size(), SQLITE_STATIC);| 用于把字符串 bind 到指定的问号上。 如果问号没有指定编号则从左到右从 1 开始。
-\item \verb|SQLITE_STATIC| 的意思是假设字符串写入数据库之前都不会改变， 如果会， 就用 \verb|SQLITE_TRANSIENT|， 这样 \verb|stmt| 会立即把字符串复制下来。
-\item \verb|ret = sqlite3_bind_text(stmt, 问号的编号, int);| 用于把整数 bind 到指定的问号上。
-\item bind 好之后用 \verb|ret = sqlite3_step(stmt)| 来执行， 当 statement 不是 query 时返回 \verb|SQLITE_DONE|； 是 query 时返回 \verb|SQLITE_ROW|， 每调用一次返回一行。
-\item \verb|int sqlite3_column_type(stmt, 从0开始的列编号)| 可以查看类型， 类型有 \verb|SQLITE_INTEGER, SQLITE_FLOAT, SQLITE_TEXT, SQLITE_BLOB, SQLITE_NULL|。
-\item 要查看 query 的结果， \verb|sqlite3_column_int(stmt, 从0开始的列编号)| 获取当前返回行的某个整数类型的列
-\item \verb|(char*)sqlite3_column_text(stmt, 从0开始的列编号)| 同理获得字符串类型
-\item 最后用 \verb|sqlite3_finalize(stmt);| 释放内存。
-\item 每次操作完， \verb|int sqlite3_changes(db)| 可以获取改变的行数。
+\item 事实上 \verb`sqlite3_exec()` 命令是调用一系列命令， 如果用 binding， 就必须把它们分开用。
+\item 首先用 \verb`sqlite3_stmt stmt;` 创建一个 statement object。
+\item 然后把 sql 命令 \verb`str` parse 为 \verb`stmt`： \verb`ret = sqlite3_prepare_v2(db, str.c_str(), str.size()+1, &stmt, NULL);`。 这里 \verb`str` 中的数据可以用 \verb`?` 或者 \verb`?编号` 代替， 以后再 bind 到不同的数据上。 这样就不需要每换一次数据都要重新 parse 一次。
+\item 注意只有数据可以用 \verb`?` 代替， \verb`表名` 和 \verb`列名` 不可以。
+\item 不可以对字符串用 \verb`'?'`， \verb`sqlite3_prepare` 会自己添加。 如果用了就会错。
+\item \verb`int sqlite3_bind_parameter_count(stmt)` 可以返回 \verb`?` 的个数。
+\item \verb`ret = sqlite3_bind_text(stmt, 问号的编号, names[i].c_str(), names[i].size(), SQLITE_STATIC);` 用于把字符串 bind 到指定的问号上。 如果问号没有指定编号则从左到右从 1 开始。
+\item \verb`SQLITE_STATIC` 的意思是假设字符串写入数据库之前都不会改变， 如果会， 就用 \verb`SQLITE_TRANSIENT`， 这样 \verb`stmt` 会立即把字符串复制下来。
+\item \verb`ret = sqlite3_bind_text(stmt, 问号的编号, int);` 用于把整数 bind 到指定的问号上。
+\item bind 好之后用 \verb`ret = sqlite3_step(stmt)` 来执行， 当 statement 不是 query 时返回 \verb`SQLITE_DONE`； 是 query 时返回 \verb`SQLITE_ROW`， 每调用一次返回一行。
+\item \verb`int sqlite3_column_type(stmt, 从0开始的列编号)` 可以查看类型， 类型有 \verb`SQLITE_INTEGER, SQLITE_FLOAT, SQLITE_TEXT, SQLITE_BLOB, SQLITE_NULL`。
+\item 要查看 query 的结果， \verb`sqlite3_column_int(stmt, 从0开始的列编号)` 获取当前返回行的某个整数类型的列
+\item \verb`(char*)sqlite3_column_text(stmt, 从0开始的列编号)` 同理获得字符串类型
+\item 最后用 \verb`sqlite3_finalize(stmt);` 释放内存。
+\item 每次操作完， \verb`int sqlite3_changes(db)` 可以获取改变的行数。
 \end{itemize}
 
 
 \subsection{sqlite3 命令}
 \begin{itemize}
-\item \verb|.headers on| 可以让 \verb|SELECT| 的结果显示各列名称。
-\item \verb|.mode column| 可以更好的对齐列。
+\item \verb`.headers on` 可以让 \verb`SELECT` 的结果显示各列名称。
+\item \verb`.mode column` 可以更好的对齐列。
 \item \verb`PRAGMA integrity_check;` 可以检查数据库完整性。一般都是完整的，因为 transaction 发生错误会自动回滚，一般程序崩溃不会影响数据库完整性。
-\item \verb|.tables| 列出所有表， 也可以用 \verb|SELECT name FROM sqlite_master WHERE type='table';|
+\item \verb`.tables` 列出所有表， 也可以用 \verb`SELECT name FROM sqlite_master WHERE type='table';`
 \item 字符串列若超出长度会被截断， 用 \verb`.width 20 20 20 ...` 可以规定每列的显示宽度。
-\item 给表改名 \verb|ALTER TABLE "表名" RENAME TO "新表名"|
-\item 迁移数据 \verb|INSERT INTO "新表" SELECT * FROM "老表" WHERE ...;| \verb`INSERT INTO "新表" (id, column1, column2, new_column) SELECT id, column1, column2, NULL FROM "老表";`
-\item 结合以上两条可以给表增添或者删除列（老版本 \verb|sqlite| 不支持）
-\item \verb|sqlite3| 查看表的命令 \verb|.schema original_table|
+\item 给表改名 \verb`ALTER TABLE "表名" RENAME TO "新表名"`
+\item 迁移数据 \verb`INSERT INTO "新表" SELECT * FROM "老表" WHERE ...;` \verb`INSERT INTO "新表" (id, column1, column2, new_column) SELECT id, column1, column2, NULL FROM "老表";`
+\item 结合以上两条可以给表增添或者删除列（老版本 \verb`sqlite` 不支持）
+\item \verb`sqlite3` 查看表的命令 \verb`.schema original_table`
 \item SQL 命令查看表的信息， \verb`SELECT sql FROM sqlite_master WHERE tbl_name = '表名' AND type = 'table';
 `
-\item \verb|sqlite3| 是一个命令行程序， 可以手动输入 SQL 命令来操作 sqlite 数据库。
-\item \verb|sqlite3 文件.db| 可以打开二进制的 sqlite3 数据库文件。
-\item \verb|sqlite3| 命令行中的 \verb|VACUUM| 命令可以重建数据库， 让它尺寸更小， 一些操作更快。
-\item \verb|Ctrl+D| 或者 \verb|.quit| 可以退出。 \verb|.| 开头的命令是 \verb|sqlite3| 自己的命令而不是 SQL 命令。
-\item 更简单地也可以用 \verb|sqlite3 文件.db "命令; 命令;..."| 直接执行命令不进入 sqlite3 命令行。
-\item \verb|sqlite3 文件.db .dump > 文件.sql| 可以把二进制数据库 dump 成 SQL 命令的文本文件。 用这些命令可以重建该数据库。
-\item 相反， 可以 \verb|sqlite3 文件.db < 文件.sql| 由 \verb|sql| 命令生成数据库（如果 \verb|文件.db| 不存在）。 如果存在， 就打开 \verb|文件.db| 运行 \verb|文件.sql| 中的命令。 等效地也可以用 \verb|sqlite3 文件.db "命令"|。
-\item \verb|SQLite| 不支持删除一列， 需要重新创建新表格， 把需要的列复制进去然后删除旧表格再重命名。
+\item \verb`sqlite3` 是一个命令行程序， 可以手动输入 SQL 命令来操作 sqlite 数据库。
+\item \verb`sqlite3 文件.db` 可以打开二进制的 sqlite3 数据库文件。
+\item \verb`sqlite3` 命令行中的 \verb`VACUUM` 命令可以重建数据库， 让它尺寸更小， 一些操作更快。
+\item \verb`Ctrl+D` 或者 \verb`.quit` 可以退出。 \verb`.` 开头的命令是 \verb`sqlite3` 自己的命令而不是 SQL 命令。
+\item 更简单地也可以用 \verb`sqlite3 文件.db "命令; 命令;..."` 直接执行命令不进入 sqlite3 命令行。
+\item \verb`sqlite3 文件.db .dump > 文件.sql` 可以把二进制数据库 dump 成 SQL 命令的文本文件。 用这些命令可以重建该数据库。
+\item 相反， 可以 \verb`sqlite3 文件.db < 文件.sql` 由 \verb`sql` 命令生成数据库（如果 \verb`文件.db` 不存在）。 如果存在， 就打开 \verb`文件.db` 运行 \verb`文件.sql` 中的命令。 等效地也可以用 \verb`sqlite3 文件.db "命令"`。
+\item \verb`SQLite` 不支持删除一列， 需要重新创建新表格， 把需要的列复制进去然后删除旧表格再重命名。
 \begin{lstlisting}[language=none]
 CREATE TABLE 新表名 (...);
 
@@ -171,8 +171,8 @@ SELECT 列1, 列2, ... FROM 旧表名;
 DROP TABLE 旧表名;
 ALTER TABLE 新表名 RENAME TO 旧表名;
 \end{lstlisting}
-\item 默认情况下， sqlite3 的 \verb|INSERT| 命令不检查 \verb|FOREIGN KEY| 是否存在。 要检查， 每次打开文件都要用 \verb|PRAGMA foreign_keys = ON;|
-\item \verb|PRAGMA busy_timeout = 5000;| 可以在数据库被占用时等待 5 秒。
+\item 默认情况下， sqlite3 的 \verb`INSERT` 命令不检查 \verb`FOREIGN KEY` 是否存在。 要检查， 每次打开文件都要用 \verb`PRAGMA foreign_keys = ON;`
+\item \verb`PRAGMA busy_timeout = 5000;` 可以在数据库被占用时等待 5 秒。
 \end{itemize}
 
 \subsection{GUI 浏览器}
@@ -186,16 +186,16 @@ ALTER TABLE 新表名 RENAME TO 旧表名;
 \begin{itemize}
 \item Cpp 推荐使用这个，比 C 接口方便很多。
 \item \href{https://github.com/SRombauts/SQLiteCpp}{GitHub 官网}。
-\item 打开数据库，若只读用 \verb|SQLite::Database db_rw(文件路径, SQLite::OPEN_READONLY);|
+\item 打开数据库，若只读用 \verb`SQLite::Database db_rw(文件路径, SQLite::OPEN_READONLY);`
 \item 若读写， 用 \verb`SQLite::OPEN_READWRITE`。 若用 \verb`SQLite::OPEN_READWRITE | SQLite::OPEN_CREATE`， 则当文件不存在时会自动创建。
-\item \verb|SQLite::Transaction transaction(database);| 开始 deferred transaction。 \verb|transaction.commit();| 结束。
+\item \verb`SQLite::Transaction transaction(database);` 开始 deferred transaction。 \verb`transaction.commit();` 结束。
 \end{itemize}
 
 \subsection{关于锁}
 \begin{itemize}
-\item 使用读写模式打开数据库并不会给数据库上锁， 只有当 \verb|BEGIN TRANSACTION| 到 \verb|COMMIT| 之间会上锁。 如果没有使用 transaction， 就只有执行写入命令的时候会上锁。
+\item 使用读写模式打开数据库并不会给数据库上锁， 只有当 \verb`BEGIN TRANSACTION` 到 \verb`COMMIT` 之间会上锁。 如果没有使用 transaction， 就只有执行写入命令的时候会上锁。
 \item 事实上 sqlite 鼓励整个程序只打开一次数据库， 程序结束再关上。 中见需要写入的时候就开 transaction， 每次用完马上 commit。
-\item C 代码中要检查数据库是否正在 transaction 中， 用 \verb|sqlite3_get_autocommit(db);| 返回 0 说明正在 transaction。
+\item C 代码中要检查数据库是否正在 transaction 中， 用 \verb`sqlite3_get_autocommit(db);` 返回 0 说明正在 transaction。
 \end{itemize}
 
 \subsection{CRUD 之繁琐}\label{sub_SQLite_1}

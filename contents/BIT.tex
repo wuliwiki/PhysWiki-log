@@ -38,7 +38,7 @@ int lowbit(x)
 }
 \end{lstlisting}
 
-拿 $(20)_{10}$ 来举例，二进制表示下为 $(10100)_2$，最后一位 $1$ 及其后边的所有的 $0$ 就是 $(100)_2$，转化为十进制后就是 $4$，所以若调用 \verb|lowbit(20)|，则会返回 $4$。
+拿 $(20)_{10}$ 来举例，二进制表示下为 $(10100)_2$，最后一位 $1$ 及其后边的所有的 $0$ 就是 $(100)_2$，转化为十进制后就是 $4$，所以若调用 \verb`lowbit(20)`，则会返回 $4$。
 
 树状数组就是基于上述的思想的数据结构，一般是拿树状数组维护一个序列的前缀和。令 $tr_x$ 维护区间 $\texttt{[x-lowbit(x)+1, x]}$ 的和。其结构可以用下图表示出来：
 
@@ -70,7 +70,7 @@ int ask(int x)
 }
 \end{lstlisting}
 
-涉及到的结点最多为 $\log_2 n$，所以时间复杂度最坏为 $\mathcal{O}(\log_2 n)$。若要求 $\sum\limits^r_{i = l}a_i$，类似于前缀和，则直接输出 \verb|ask(r) - ask(l - 1)|。
+涉及到的结点最多为 $\log_2 n$，所以时间复杂度最坏为 $\mathcal{O}(\log_2 n)$。若要求 $\sum\limits^r_{i = l}a_i$，类似于前缀和，则直接输出 \verb`ask(r) - ask(l - 1)`。
 
 \subsubsection{操作二：单点修改}
 
@@ -154,7 +154,7 @@ for (int i = n; i; i -- )
 
 可以发现，对于 $l$ 前面的数，$b$ 的前缀和不变，$[l \sim r]$ 的数，$b$ 的前缀和加了 $x$，$r$ 后边的数，$b$ 的前缀和加了先 $x$ 又减了 $x$，相当于没变。这样 $b$ 的前缀和就成了 $a$ 数组的增量。
 
-所以对于区间修改，每次只需执行 \verb|add(l, x), add(r + 1, -x)|。对于单点查询，只需输出 \verb|a[x] + ask(x)|。
+所以对于区间修改，每次只需执行 \verb`add(l, x), add(r + 1, -x)`。对于单点查询，只需输出 \verb`a[x] + ask(x)`。
 
 \begin{lstlisting}[language=cpp]
 原数组：    1 3 4 2 5
@@ -177,8 +177,8 @@ b 数组：    0 1 0 0 -1
 给定一个长度为 $n$ 的数列 $a$，以及 $m$ 条指令，每条指令可能是以下两种之一：
 
 \begin{itemize}
-\item \verb|C l r d|，表示把 $a[l],a[l+1], \cdots , a[r]$ 都加上 $d$。
-\item \verb|Q l r|，表示询问数列中第 $l \sim r$ 个数的和。
+\item \verb`C l r d`，表示把 $a[l],a[l+1], \cdots , a[r]$ 都加上 $d$。
+\item \verb`Q l r`，表示询问数列中第 $l \sim r$ 个数的和。
 \end{itemize}
 
 对于每个询问，输出一个整数表示答案。
@@ -229,7 +229,7 @@ b 数组：    0 1 0 0 -1
 对于查询操作，因为树状数组维护的是 $[1, x]$ 的和，所以先计算 $[1, r]$ 减去 $[1, l - 1]$，因为 $b$ 数组还是对数组 $a$ 的前缀和的增量，还需加上原数组 $a$ 的前缀和。
 
 所以最后的式子就为：
-\verb|(s[r] + (r + 1) * ask(0, r) - ask(1, r)) - (s[l - 1] + l * ask(0, l - 1) - ask(1, l - 1))|。
+\verb`(s[r] + (r + 1) * ask(0, r) - ask(1, r)) - (s[l - 1] + l * ask(0, l - 1) - ask(1, l - 1))`。
 
 \begin{lstlisting}[language=cpp]
 #include <iostream>

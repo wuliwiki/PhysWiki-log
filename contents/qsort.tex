@@ -13,7 +13,7 @@
 
 快排的主要思想是基于分治。分治的大概流程可以分为三步：分解 -> 解决 -> 合并，快排大致也是这么实现的，我们这里不详细介绍分治算法，着重讨论一下排序算法。
 
-快速排序的期望时间复杂度为 $\mathcal{O}(n \log_2 n)$，最坏时间复杂度为 $\mathcal{O}(n^2)$，因为快速排序的常数非常小，所以实际效率很高。快速排序是\textbf{不稳定}的。稳定的概念：如果在原序列中有两个相等的数 \verb|q[i], q[j]| 且 $i < j$ ，排序之后，先后顺序不变，即排序之后也满足 $i < j$，说明这个排序算法是稳定的。
+快速排序的期望时间复杂度为 $\mathcal{O}(n \log_2 n)$，最坏时间复杂度为 $\mathcal{O}(n^2)$，因为快速排序的常数非常小，所以实际效率很高。快速排序是\textbf{不稳定}的。稳定的概念：如果在原序列中有两个相等的数 \verb`q[i], q[j]` 且 $i < j$ ，排序之后，先后顺序不变，即排序之后也满足 $i < j$，说明这个排序算法是稳定的。
 
 快速排序一般分为 $3$ 步：
 \begin{enumerate}
@@ -50,9 +50,9 @@ void quick_sort(int q[], int l, int r)
 
 这里使用算法导论中的\textbf{循环不变式}简单的证明一下快速排序的正确性：
 
-待证问题：\verb|while| 循环结束后，\verb|q[l..j] <= mid| 并且 \verb|q[j + 1..r] >= mid|。
+待证问题：\verb`while` 循环结束后，\verb`q[l..j] <= mid` 并且 \verb`q[j + 1..r] >= mid`。
 
-循环不变式：\verb|q[l...i] <= mid| 并且 \verb|q[j ... r] >= mid|。
+循环不变式：\verb`q[l...i] <= mid` 并且 \verb`q[j ... r] >= mid`。
 
 需要证明这个循环不变式在第一轮迭代之前是成立的，并且在每一轮迭代后也是成立的。在循环结束之后，可以证明出待证问题。
 
@@ -60,14 +60,14 @@ void quick_sort(int q[], int l, int r)
 \begin{itemize}
 \item 
 
-\textbf{初始化：} 循环的第一轮迭代开始之前，\verb|i = l - 1, j = r + 1|。所以 \verb|q[l...i]| 和 \verb|q[j ... r]| 都为空，循环不变式显然成立。\\\\
+\textbf{初始化：} 循环的第一轮迭代开始之前，\verb`i = l - 1, j = r + 1`。所以 \verb`q[l...i]` 和 \verb`q[j ... r]` 都为空，循环不变式显然成立。\\\\
 
 \item \textbf{保持：}需要考虑两种情况：
-当对于 $i$ 指针的 $\text{do while}$ 循环结束后，有：\verb|q[l...i - 1] <= mid, q[i] >= mid|。当对于 $j$ 指针的 $\text{do while}$ 循环结束后，有：\verb|q[j + 1...r] >= mid, q[j] <= mid|。进行交换操作后，会使得：\verb|q[l...i] <= mid, q[j...r] >= mid|。所以再下次迭代开始之前，循环不变式同样得到保持。\\\\
+当对于 $i$ 指针的 $\text{do while}$ 循环结束后，有：\verb`q[l...i - 1] <= mid, q[i] >= mid`。当对于 $j$ 指针的 $\text{do while}$ 循环结束后，有：\verb`q[j + 1...r] >= mid, q[j] <= mid`。进行交换操作后，会使得：\verb`q[l...i] <= mid, q[j...r] >= mid`。所以再下次迭代开始之前，循环不变式同样得到保持。\\\\
 
 \item \textbf{终止：}
 
-当终止时，\verb|i >= j|，由于最后的一轮迭代中的 if 判断不一定执行，所以，只能得到：\verb|i >= j| 和 \verb|q[l...i - 1] <= mid, q[i] >= mid| 和 \verb|q[j + 1...r] >= mid, q[j] <= mid|。因为有：\verb|i >= j|，显然有：\verb|i - 1 >= j - 1|。根据：\verb|q[l...i - 1] <= mid，q[j] <= mid| 可以得到：\verb|q[l...j] <= mid|。又因为 \verb|q[j + 1...r] >= mid|，所以问题得证。
+当终止时，\verb`i >= j`，由于最后的一轮迭代中的 if 判断不一定执行，所以，只能得到：\verb`i >= j` 和 \verb`q[l...i - 1] <= mid, q[i] >= mid` 和 \verb`q[j + 1...r] >= mid, q[j] <= mid`。因为有：\verb`i >= j`，显然有：\verb`i - 1 >= j - 1`。根据：\verb`q[l...i - 1] <= mid，q[j] <= mid` 可以得到：\verb`q[l...j] <= mid`。又因为 \verb`q[j + 1...r] >= mid`，所以问题得证。
 
 \end{itemize}
 

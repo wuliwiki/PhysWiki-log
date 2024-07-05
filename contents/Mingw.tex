@@ -26,15 +26,15 @@
 \item MinGW 仅支持 32-bit 程序， 现在一般用 \href{https://www.mingw-w64.org/}{MinGW-w64}， 既支持 32 也支持 64-bit
 \item 一个\href{https://www3.ntu.edu.sg/home/ehchua/programming/howto/Cygwin_HowTo.html}{教程}。
 \item \href{https://www.msys2.org/}{MSYS2} 是一个 windows 上的 bash shell 调用 MinGW-W64 来实现编译。 MSYS 最早是 Cygwin 的一个分支。
-\item 双击 \verb|mingw64.exe| 即可打开 mingw 命令行。 \verb|mingw64.exe| 所在的目录就是命令行的根目录。
-\item 可以检查 \verb|g++| 的版本。
-\item 用 \verb|g++| 编译程序以后， 会出现 \verb|a.exe| 而不是 \verb|a.out|。 这个执行文件是可以双击执行的， 但是运行完会马上退出。 可以在程序最后用 \verb|getchar()|。 也可以打开一个 cmd 命令行然后运行 \verb|a.exe|。 当然在 \verb|mingw64| 的命令行也可以执行。 另外执行时 \verb|.exe| 拓展名可以省略。
-\item mingw 不能使用 \verb|apt| 或类似的包管理软件， 一切库都要自己手动编译。 或者用 MinGW instellation 安装 32-bit 版本。 MSYS 上可以用 \verb|pacman|\upref{pacman}。
-\item \verb|MinGW instellation manager| 是一个 GUI 界面，可以下载安装编译好的 mingw 程序。 例如安装 \verb|mingw32-make|， 安装以后就和 \verb|make| 的用法一样。 注意该 manager 并不是一个通用的包管理软件， 里面的包基本还是围绕 GCC 的。
-\item \verb|c| 盘的目录为 \verb|/c|
+\item 双击 \verb`mingw64.exe` 即可打开 mingw 命令行。 \verb`mingw64.exe` 所在的目录就是命令行的根目录。
+\item 可以检查 \verb`g++` 的版本。
+\item 用 \verb`g++` 编译程序以后， 会出现 \verb`a.exe` 而不是 \verb`a.out`。 这个执行文件是可以双击执行的， 但是运行完会马上退出。 可以在程序最后用 \verb`getchar()`。 也可以打开一个 cmd 命令行然后运行 \verb`a.exe`。 当然在 \verb`mingw64` 的命令行也可以执行。 另外执行时 \verb`.exe` 拓展名可以省略。
+\item mingw 不能使用 \verb`apt` 或类似的包管理软件， 一切库都要自己手动编译。 或者用 MinGW instellation 安装 32-bit 版本。 MSYS 上可以用 \verb`pacman`\upref{pacman}。
+\item \verb`MinGW instellation manager` 是一个 GUI 界面，可以下载安装编译好的 mingw 程序。 例如安装 \verb`mingw32-make`， 安装以后就和 \verb`make` 的用法一样。 注意该 manager 并不是一个通用的包管理软件， 里面的包基本还是围绕 GCC 的。
+\item \verb`c` 盘的目录为 \verb`/c`
 \item 如果创建 symlink 会直接复制文件（夹）而不是真的 link。
-\item \verb|g++| 中定义的宏有 \verb|__GNUC__|， \verb|__MINGW32__|， \verb|__MINGW64__|
-\item \enref{编译动态链接库}{gppLib}的方法和 linux 中一样， 同样支持用 \verb|ldd| 查看动态程序的库依赖（\verb|dll| 和 \verb|so| 拓展名都会搜索到， 但建议用 \verb|dll|， 让其他 windows 程序也可以使用）。
+\item \verb`g++` 中定义的宏有 \verb`__GNUC__`， \verb`__MINGW32__`， \verb`__MINGW64__`
+\item \enref{编译动态链接库}{gppLib}的方法和 linux 中一样， 同样支持用 \verb`ldd` 查看动态程序的库依赖（\verb`dll` 和 \verb`so` 拓展名都会搜索到， 但建议用 \verb`dll`， 让其他 windows 程序也可以使用）。
 \begin{lstlisting}[language=bash]
 g++ -shared -o lib0.dll lib0.o
 g++ -shared -o lib1.dll lib1.o -L . -l 0
@@ -48,14 +48,14 @@ g++ -o main.x main.o -l1 -L./ -Wl,-rpath,./
 \item \href{https://www.msys2.org/}{官网}
 \item MSYS2 使用 \verb`pacman`\upref{pacman} 进行包管理， 和 Arch linux 一样。
 \item 安装后无需另外安装 MinGW，直接用 pacman 就可以安装 mingw 版的 g++ 等编译工具。
-\item \href{https://packages.msys2.org/queue}{所有可用的包在这里}查找。 名字一般和 \verb|apt| 命令中的不一样。
+\item \href{https://packages.msys2.org/queue}{所有可用的包在这里}查找。 名字一般和 \verb`apt` 命令中的不一样。
 \item 这个页面里面有 4 种 Repository：\textbf{Clang、UCRT、MinGW、MSYS}（例如 gcc 编译器有这些不同 repo 的版本）我们稍后讨论。现在可以先安装 MinGW 版本的。
-\item 根目录在 \verb|C:\msys64\|， 和 mingw 一样可以用 \verb|/c| 访问 C 盘。
+\item 根目录在 \verb`C:\msys64\`， 和 mingw 一样可以用 \verb`/c` 访问 C 盘。
 \item 安装 gcc： \verb`pacman -S mingw-w64-x86_64-gcc` （UCRT 版的是 \verb`mingw-w64-ucrt-x86_64-gcc`，MSYS 版的是 \verb`gcc`）。
 \item 安装目录是 \verb`/mingw64/bin`， 要把它默认添加到 PATH，用 \verb` echo 'export PATH=$PATH:/mingw64/bin' >> ~/.bashrc; source ~/.bashrc`
 \item 现在应该就可以 \verb`g++ --version` 查看版本，愉快编译程序了。
-\item 用 \verb|g++| 编译时， 宏 \verb|__MSYS__| 有定义， 而 \verb|__MINGW32__| 和 \verb|__MINGW64__| 没定义。
-\item （看起来好像用处不大可以先不装）\verb|pacman -S base-devel| 包含\verb`binutils bison diffstat diffutils dos2unix flex m4 make patch pkgconf texinfo texinfo-tex base-devel`
+\item 用 \verb`g++` 编译时， 宏 \verb`__MSYS__` 有定义， 而 \verb`__MINGW32__` 和 \verb`__MINGW64__` 没定义。
+\item （看起来好像用处不大可以先不装）\verb`pacman -S base-devel` 包含\verb`binutils bison diffstat diffutils dos2unix flex m4 make patch pkgconf texinfo texinfo-tex base-devel`
 \item 现在可以写一个简单的 c++ 程序并编译，默认可执行文件是 \verb`a.exe`。 直接在 MSYS2 中运行没问题，但是如果在 Windows 中双击就会找不到 dll。
 \item 这时可以在 MSYS2 中用 \verb`ldd a.exe` 看看需要什么动态库。其中 \verb`/c/WINDOWS/SYSTEM32` 类似的目录不需要管，因为它们已经在 PATH 中且是 Windows 系统提供的。
 \item 如果你装的是 UCRT 版本的 gcc，那额外 dll 将会在 \verb`/ucrt64/bin/` 中（也就是 \verb`C:\msys64\ucrt64\bin\` 中）。 UCRT 是 Windows 的 \textbf{Unified C Runtime}。

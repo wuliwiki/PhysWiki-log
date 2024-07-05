@@ -13,85 +13,85 @@ C++ 的特征实在多不胜数， 事实上无论是什么语言， 做计算�
 
 \subsection{基础语法}
 \begin{itemize}
-\item 基本类型 （\verb|bool|, \verb|char|, \verb|int|, \verb|long|, \verb|long| \verb|long|, \verb|float|, \verb|double|， \verb|long double|） \verb|char, short, int| 几乎总是 8, 16, 32 bit 的， 虽然标准没这么规定。
+\item 基本类型 （\verb`bool`, \verb`char`, \verb`int`, \verb`long`, \verb`long` \verb`long`, \verb`float`, \verb`double`， \verb`long double`） \verb`char, short, int` 几乎总是 8, 16, 32 bit 的， 虽然标准没这么规定。
 \item \enref{C 和 C++ 的整数（笔记）}{cppInt}
-\item 基本算符 （\verb|=, +, -, *, /, %, ++, --, +=, -=, *=, /=, ?:|) 以及优先级
-\item 求值顺序没有定义： 例如 \verb|f1() + f2() + f3()| 等效于 \verb|(f1() + f2()) + f3()|， 但是三个函数被调用的顺序是没有定义的。
-\item 算符 \verb|%| 的定义使 \verb|(m / n) * n + m % n == m| 成立。
-\item 比特算符（\verb|&|, \verb+|+, \verb|^|, \verb|~|, \verb|<<|， \verb|>>|）
-\item 格式输出（\verb|printf, cout|）
+\item 基本算符 （\verb`=, +, -, *, /, %, ++, --, +=, -=, *=, /=, ?:`) 以及优先级
+\item 求值顺序没有定义： 例如 \verb`f1() + f2() + f3()` 等效于 \verb`(f1() + f2()) + f3()`， 但是三个函数被调用的顺序是没有定义的。
+\item 算符 \verb`%` 的定义使 \verb`(m / n) * n + m % n == m` 成立。
+\item 比特算符（\verb`&`, \verb`|`, \verb`^`, \verb`~`, \verb`<<`， \verb`>>`）
+\item 格式输出（\verb`printf, cout`）
 \item scope （scope 内的名字在 scope 外没有定义， scope 内可以定义与 scope 外相同的名字并覆盖， 类的 destructor 会在 scope 结束时自动调用）
-\item 判断（\verb|if|, \verb|else if|, \verb|else|）
-\item 循环 （\verb|for(;;)|, \verb|while|， \verb|do while|， \verb|break|， \verb|continue|）
-\item \verb|goto|， \verb|label:| 几乎不使用。
-\item 函数（函数名重载， 变量默认值， 算符函数， \verb|inline| 函数， \verb|static| 变量，pass by value/reference）
-\item \verb|const|
+\item 判断（\verb`if`, \verb`else if`, \verb`else`）
+\item 循环 （\verb`for(;;)`, \verb`while`， \verb`do while`， \verb`break`， \verb`continue`）
+\item \verb`goto`， \verb`label:` 几乎不使用。
+\item 函数（函数名重载， 变量默认值， 算符函数， \verb`inline` 函数， \verb`static` 变量，pass by value/reference）
+\item \verb`const`
 \item 指针， reference， pass by reference/value
 \item 引用
-\item 头文件机制 （相当于原地插入头文件中的代码） \verb|#include <>| 和 \verb|""| 的区别
+\item 头文件机制 （相当于原地插入头文件中的代码） \verb`#include <>` 和 \verb`""` 的区别
 \item 多文件编译
 \item one definition rule （ODR)
 \item 内存的栈（stack）和堆（heap）（不是数据结构）
-\item \verb|typedef|
+\item \verb`typedef`
 \item 数组： 不指定个数的数组作为函数参数和指针是完全等效的。
 \item 运行时，编译时（例如数组的长度是编译时决定的，运行时不能修改）
-\item 动态内存管理 \verb|new|, \verb|delete|。
-\item 异常处理 \verb|throw|, \verb|try|, \verb|catch|， \verb|std::runtime_error|， \verb|out_of_range| 等。
+\item 动态内存管理 \verb`new`, \verb`delete`。
+\item 异常处理 \verb`throw`, \verb`try`, \verb`catch`， \verb`std::runtime_error`， \verb`out_of_range` 等。
 \item \textbf{undefined behavior} 和 \textbf{implementation defined behavior} 有什么不同？ 前者编译器不需要诊断不需要有确定的行为，任何事情都可能发生（包括程序整个 crash）。 后者需要编译器或者操作系统等有自己的统一定义， 需要写入文档并遵守。 作为程序员， 前者坚决不要使用， 后者也最好不要使用。
 \end{itemize}
 
 \subsubsection{explicit 类型转换}
 \begin{itemize}
-\item \verb|static_cast<新类型>(变量)| 和 \verb|(新类型)变量| 效果相同， 但有一些转换不允许。
-\item \verb|reinterpret_cast<新类型*>(变量指针)| 和 \verb|reinterpret_cast<新类型&>(变量)| 并不会检查 \textbf{strict aliasing rule}， 需要用户自己保证。
-\item \textbf{strict aliasing rule}： 不允许不同类型的指针或索引指向同一个对象， 可能导致优化时出错。 但是有例外， 例如用 \verb|char*| 和 \verb|(un)signed char*| 指向任何地址， 用 base type 的指针指向对象等。
+\item \verb`static_cast<新类型>(变量)` 和 \verb`(新类型)变量` 效果相同， 但有一些转换不允许。
+\item \verb`reinterpret_cast<新类型*>(变量指针)` 和 \verb`reinterpret_cast<新类型&>(变量)` 并不会检查 \textbf{strict aliasing rule}， 需要用户自己保证。
+\item \textbf{strict aliasing rule}： 不允许不同类型的指针或索引指向同一个对象， 可能导致优化时出错。 但是有例外， 例如用 \verb`char*` 和 \verb`(un)signed char*` 指向任何地址， 用 base type 的指针指向对象等。
 \item standard-layout 类型 (e.g., structs without virtual functions or private members) 的指针可以互相转换， 如果他们前几个成员是一样的。
 \end{itemize}
 
 \subsection{标准库}
 \begin{itemize}
-\item \verb|cmath|
-\item \verb|complex|
-\item \verb|vector| （包括内存管理机制、 改变长度可能使指针失效）
-\item \verb|string|, \verb|u32string|
-\item \verb|iostream| （\verb|cin|， \verb|cout|， \verb|<<| 算符， \verb|>>| 算符， \verb|cin| 可以放在判断语句中， 如 \verb|if (cin >> a)|。）
-\item \verb|ifstream|， \verb|ofstream|
-\item 如何判断 \verb|cin| 或 \verb|fin| 读到了文件末尾（文件末尾允许任意多空格/空行）？ 不要用 \verb|cin.eof| 判断， 例如读 int， 可以先初始化为 \verb|INT_MAX|， 然后读完以后判断是否仍为 \verb|INT_MAX|。
-\item 换行： \verb|cin.ignore(numeric_limits<int>::max(), '\n');|
-\item C 语言的 \verb|#include <climits>| 中的常数（\verb|INT_MIN|， \verb|INT_MAX|， \verb|DBL_MAX|， \verb|DBL_EPSILON|）， 以及 \verb|std::numeric_limits<>::max()| 等。
-\item 其他数据结构如 \verb|unordered_set, set, unordered_map, map, list, dequeue, stack| 等。
+\item \verb`cmath`
+\item \verb`complex`
+\item \verb`vector` （包括内存管理机制、 改变长度可能使指针失效）
+\item \verb`string`, \verb`u32string`
+\item \verb`iostream` （\verb`cin`， \verb`cout`， \verb`<<` 算符， \verb`>>` 算符， \verb`cin` 可以放在判断语句中， 如 \verb`if (cin >> a)`。）
+\item \verb`ifstream`， \verb`ofstream`
+\item 如何判断 \verb`cin` 或 \verb`fin` 读到了文件末尾（文件末尾允许任意多空格/空行）？ 不要用 \verb`cin.eof` 判断， 例如读 int， 可以先初始化为 \verb`INT_MAX`， 然后读完以后判断是否仍为 \verb`INT_MAX`。
+\item 换行： \verb`cin.ignore(numeric_limits<int>::max(), '\n');`
+\item C 语言的 \verb`#include <climits>` 中的常数（\verb`INT_MIN`， \verb`INT_MAX`， \verb`DBL_MAX`， \verb`DBL_EPSILON`）， 以及 \verb`std::numeric_limits<>::max()` 等。
+\item 其他数据结构如 \verb`unordered_set, set, unordered_map, map, list, dequeue, stack` 等。
 \end{itemize}
 
 \subsubsection{高级}
 \begin{itemize}
-\item \verb|__cplusplus| 用于检测 cpp 版本。
-\item linux 中用 \verb|<bits/stdc++.h>| 快速 include 所有 C 头文件和 STL 头文件。
-\item \verb|pair|
-\item \verb|unordered_set|， \verb|set|
-\item \verb|unordered_map|， \verb|ordered_map|
-\item \verb|stack|
-\item \verb|queue|， \verb|deque|， \verb|priority_que|
+\item \verb`__cplusplus` 用于检测 cpp 版本。
+\item linux 中用 \verb`<bits/stdc++.h>` 快速 include 所有 C 头文件和 STL 头文件。
+\item \verb`pair`
+\item \verb`unordered_set`， \verb`set`
+\item \verb`unordered_map`， \verb`ordered_map`
+\item \verb`stack`
+\item \verb`queue`， \verb`deque`， \verb`priority_que`
 \end{itemize}
 
 \subsection{较高级的功能}
 \begin{itemize}
-\item \verb|for(auto &e : v)|， 需要定义 \verb|v.begin()|， \verb|v.end()|， iterator 需要支持 \verb|++|， \verb|!=|， \verb|*p|。
-\item 类（constructor, destructor, \verb|public|, \verb|private|， 数据成员， 函数成员， \verb|operator+, -, *, /, (), []|）
-\item POD （plain old data）， \verb|类名() = default;| （可以有其他 constructor）， 没有 destructor， 没有 virtual function。 可以用 \verb|std::is_pod<类名>::value| 来判断。
-\item 宏 （\verb|#include|, \verb|#define|, \verb|#if|, \verb|#ifdef|, \verb|#ifndef|, \verb|#else|, \verb|#endif|）
-\item 宏函数， \verb|var|（变量）， \verb|#var|（字符串）， 以及 \verb|...##...| 用于连接变量\footnote{例如 \verb|#define MYFUN1(x) x*x|， 那么 \verb|MYFUN1(abcd)| 就展开为 \verb|abcd*abcd|。 \verb|#define MYFUN2(x) #x|， 那么 \verb|MYFUN2(abcd)| 就展开为 \verb|"abcd"|。\verb|#define MYFUN3(x,y) a##x##y##f|， 那么 \verb|MYFUN3(bc,de)| 展开为 \verb|abcdef|。 注意作为宏函数自变量的宏名不会\textbf{先}展开， 例如 \verb|#define NUM 5|， 那么 \verb|MYFUN1(NUM)| 先展开为 \verb|NUM*NUM| 再进一步展开为 \verb|5*5|。 又例如 \verb|MYFUN2(NUM)| 会展开为 \verb|"NUM"|， 但字符串不会作为宏进一步展开。 宏函数体中双引号内的东西都不会展开， 例如 \verb|#define MYFUN4(x) "x"|， 那么 \verb|MYFUN4(abc)| 仍然展开为 \verb|"x"|}。
-\item \verb|#define ... do {} while(0)| 避免多个语句不加花括号带来的错误。
-\item \verb|namespace|
-\item \verb|constexpr|
-\item \verb|decltype| （\verb|double x; decltype(x) y;|）
+\item \verb`for(auto &e : v)`， 需要定义 \verb`v.begin()`， \verb`v.end()`， iterator 需要支持 \verb`++`， \verb`!=`， \verb`*p`。
+\item 类（constructor, destructor, \verb`public`, \verb`private`， 数据成员， 函数成员， \verb`operator+, -, *, /, (), []`）
+\item POD （plain old data）， \verb`类名() = default;` （可以有其他 constructor）， 没有 destructor， 没有 virtual function。 可以用 \verb`std::is_pod<类名>::value` 来判断。
+\item 宏 （\verb`#include`, \verb`#define`, \verb`#if`, \verb`#ifdef`, \verb`#ifndef`, \verb`#else`, \verb`#endif`）
+\item 宏函数， \verb`var`（变量）， \verb`#var`（字符串）， 以及 \verb`...##...` 用于连接变量\footnote{例如 \verb`#define MYFUN1(x) x*x`， 那么 \verb`MYFUN1(abcd)` 就展开为 \verb`abcd*abcd`。 \verb`#define MYFUN2(x) #x`， 那么 \verb`MYFUN2(abcd)` 就展开为 \verb`"abcd"`。\verb`#define MYFUN3(x,y) a##x##y##f`， 那么 \verb`MYFUN3(bc,de)` 展开为 \verb`abcdef`。 注意作为宏函数自变量的宏名不会\textbf{先}展开， 例如 \verb`#define NUM 5`， 那么 \verb`MYFUN1(NUM)` 先展开为 \verb`NUM*NUM` 再进一步展开为 \verb`5*5`。 又例如 \verb`MYFUN2(NUM)` 会展开为 \verb`"NUM"`， 但字符串不会作为宏进一步展开。 宏函数体中双引号内的东西都不会展开， 例如 \verb`#define MYFUN4(x) "x"`， 那么 \verb`MYFUN4(abc)` 仍然展开为 \verb`"x"`}。
+\item \verb`#define ... do {} while(0)` 避免多个语句不加花括号带来的错误。
+\item \verb`namespace`
+\item \verb`constexpr`
+\item \verb`decltype` （\verb`double x; decltype(x) y;`）
 \item 类的继承
-\item lambda 表达式， \verb|[=] [&]| 
+\item lambda 表达式， \verb`[=] [&]` 
 \end{itemize}
 
 \subsection{高级功能}
 \begin{itemize}
-\item \verb|extern "C"| \href{https://www.geeksforgeeks.org/extern-c-in-c/}{参考}
-\item \verb|#ifdef __cplusplus| 用于判断是否在用 C++ 编译器， 还可以判断版本： \verb|#if __cplusplus >= 201103L|， \verb|201402L|， \verb|201703L|
+\item \verb`extern "C"` \href{https://www.geeksforgeeks.org/extern-c-in-c/}{参考}
+\item \verb`#ifdef __cplusplus` 用于判断是否在用 C++ 编译器， 还可以判断版本： \verb`#if __cplusplus >= 201103L`， \verb`201402L`， \verb`201703L`
 \item 类模板
 \item 函数模板
 \item \enref{SFINAE}{SFINAE}

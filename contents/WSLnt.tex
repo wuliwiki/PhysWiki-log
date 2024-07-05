@@ -8,7 +8,7 @@
 
 重要提示：截至到 2023 年 8 月，WSL 在中国大陆的安装过程中可能会遇到某种网络问题。
 
-重要提示：WSL1 用于 NTFS 文件系统最合适，包括移动硬盘。 exFAT 兼容性较差（不兼容软链， git 也会有权限 bug）。 NTFS 用 WSL1 也不完美， 有时候 \verb|chmod -R| 不能真正的深入到每个子目录，还可能要 cd 进去再次用 \verb|chmod -R|，或者直接 \verb|find . -type f -exec sudo chmod 777 {} \;|（巨慢）。且这么做只能临时有效，打开另一个命令行就没用了。 \enref{GDB}{gdbNt} 也不能用（设置断点失败）。
+重要提示：WSL1 用于 NTFS 文件系统最合适，包括移动硬盘。 exFAT 兼容性较差（不兼容软链， git 也会有权限 bug）。 NTFS 用 WSL1 也不完美， 有时候 \verb`chmod -R` 不能真正的深入到每个子目录，还可能要 cd 进去再次用 \verb`chmod -R`，或者直接 \verb`find . -type f -exec sudo chmod 777 {} \;`（巨慢）。且这么做只能临时有效，打开另一个命令行就没用了。 \enref{GDB}{gdbNt} 也不能用（设置断点失败）。
 
 所以，有条件用双系统或者 Virtualbox 还是建议尽量用它们。
 
@@ -22,7 +22,7 @@
 \item \verb`wsl --set-default-version 1或2` 切换新安装 wsl 的默认的版本
 \item \verb`wsl --set-version Ubuntu-22.04 1或2` 把某个已安装的 distro 在 WSL1 和 2 之间转换， 如果 Turn Windows Features On or OFF 中没有开 Virtual Machine Platform， 会提示错误且不做转换， 打开这个和 Hyper-V，重启即可。 转换需要两三分钟。 注意这并不会把整个 linux 的文件系统都变成 ext4 的虚拟硬盘（可以用 WinDirStat 验证）。 其实还是另外新装 wsl2 版本的 ubuntu 比较好， 因为 WSL1 没有 snap store 和正常的 systemd systemctl 等。 可以用下面的方法把某个 WSL1 distro 重命名， 再安装相同的 WSL2 distro （没试过）。
 \item \verb`wsl --set-default [distro]` 选择默认的 distro
-\item \verb`wsl --list` 列出所有 distro \verb`wsl --list --verbose`（\verb|-l -v|） 显示详细信息
+\item \verb`wsl --list` 列出所有 distro \verb`wsl --list --verbose`（\verb`-l -v`） 显示详细信息
 \item \verb`wsl --list --online` 列出所有可下载的 distro
 \item \verb`wsl --install -d` 安装某个 distro
 \item WSL 虚拟机的默认路径是 \verb`C:/Users/用户名/AppData/Local/Packages/CanonicalGroup...distro版本号/`
@@ -43,20 +43,20 @@
 \item WSL 的网络是直接使用 Windows 的， 而 WSL2 的网络是基于虚拟机的虚拟网卡。
 \item WSL 即使使用 NTFS 也可以支持 symlink。
 \item （待重新测试新版本）目前来说 WSL 在 NTFS 文件系统中的读写速度比 WSL 2 快很多
-\item WSL2 无论在 Win 10 还是 11 都支持 GUI。 可以用 \verb|xeyes| 测试， 而 WSL1 不行。
+\item WSL2 无论在 Win 10 还是 11 都支持 GUI。 可以用 \verb`xeyes` 测试， 而 WSL1 不行。
 \item WSL1 和 2 是可以互相转换的，所以选错了也没关系。
 \end{itemize}
 
 \subsection{ssh 到 WSL}
 \begin{itemize}
-\item WSL1 中 ssh 似乎需要自己重新安装一下才行。 每次开机都需要 \verb|sudo service ssh --full-restart| 才会运行。
+\item WSL1 中 ssh 似乎需要自己重新安装一下才行。 每次开机都需要 \verb`sudo service ssh --full-restart` 才会运行。
 \item 很容易可以从其他机器通过 ip 地址和端口 22 ssh 到 WSL1
 \item WSL1 是 windows 开机就运行的， 而不是打开 terminal 才开始运行。 所以只要 windows 开着就可以 ssh 连接
 \item WSL 的 IP 地址 (用 \verb`ifconfig` 查看) 和 windows 的 IP 地址 (在 cmd 中用 \verb`ipconfig`) 是一样的， 而不是像虚拟机一样使用 NAT
 \item 所以设置 sshd 的方法基本上和任何 linux 主机一样， 安装 \verb`openssh-server` 即可
 \item 重启 windows 以后貌似 service 会停止， 要自动还需要一些设置
-\item 不行的话就重装一下 \verb|openssh-server|
-\item 如果说 \verb|sshd: no hostkeys available -- exiting.|， 那就用 \verb|sudo ssh-keygen -A|
+\item 不行的话就重装一下 \verb`openssh-server`
+\item 如果说 \verb`sshd: no hostkeys available -- exiting.`， 那就用 \verb`sudo ssh-keygen -A`
 \end{itemize}
 
 \subsection{WSL 内挂载 windows 硬盘}
@@ -82,28 +82,28 @@
 使用以下方法， 可以在第一次手动打开 WSL 或者在 windows 登录后自动运行一些 WSL 程序。
 
 \begin{itemize}
-\item 创建 \verb|/etc/wsl.conf|， 内容如下即可。
+\item 创建 \verb`/etc/wsl.conf`， 内容如下即可。
 \begin{lstlisting}[language=none]
 [boot]
 command="命令1; 命令2"
 \end{lstlisting}
-其中的命令会直接使用 sudo 权限运行。 这些命令会在 WSL 启动时执行（注意不是每次打开 WSL 命令行，而是第一次打开时执行）。 输出不会显示在命令行中。 也会在 cmd 中输入 \verb|wsl --shutdown| 然后再打开 WSL 命令行时运行。
-\item 若想开机自动运行， 可以把 \verb|wsl.exe| （任务管理器里面可以找到进程的可执行文件的位置）创建一个快捷方式到启动文件夹 \verb|C:\ProgramData\Microsoft\Windows\Start Menu\Programs\StartUp|。
-\item \verb`command` 中不可以使用 \verb|&| 后台执行， 相当于有一个看不见的命令行窗口在执行这些。
-\item 例如可以用这个自动挂载硬盘： \verb|mount -o uid=addis -t drvfs g: /mnt/g;|
-\item 可以执行 \verb|service| 命令。 例如用于开启 sshd： \verb|service ssh --full-restart;|
-\item \verb|cmd| 中 \verb|wsl -l -v| 必须要显示 running， WSL 才有可能执行任何东西包括 service。
-\item 可以在最后执行一个永不结束的命令（就不用配置 service 这么麻烦）， 如 \verb|frp|\upref{NATthr}
+其中的命令会直接使用 sudo 权限运行。 这些命令会在 WSL 启动时执行（注意不是每次打开 WSL 命令行，而是第一次打开时执行）。 输出不会显示在命令行中。 也会在 cmd 中输入 \verb`wsl --shutdown` 然后再打开 WSL 命令行时运行。
+\item 若想开机自动运行， 可以把 \verb`wsl.exe` （任务管理器里面可以找到进程的可执行文件的位置）创建一个快捷方式到启动文件夹 \verb`C:\ProgramData\Microsoft\Windows\Start Menu\Programs\StartUp`。
+\item \verb`command` 中不可以使用 \verb`&` 后台执行， 相当于有一个看不见的命令行窗口在执行这些。
+\item 例如可以用这个自动挂载硬盘： \verb`mount -o uid=addis -t drvfs g: /mnt/g;`
+\item 可以执行 \verb`service` 命令。 例如用于开启 sshd： \verb`service ssh --full-restart;`
+\item \verb`cmd` 中 \verb`wsl -l -v` 必须要显示 running， WSL 才有可能执行任何东西包括 service。
+\item 可以在最后执行一个永不结束的命令（就不用配置 service 这么麻烦）， 如 \verb`frp`\upref{NATthr}
 \item WSL1 不支持 systemd，只有 WSL2 支持。
-\item 笔者的设置为： \verb|command="date >> /home/addis/WSL-start-log.txt; service ssh --full-restart; mount -o uid=xxx -t drvfs e: /mnt/e; /home/用户名/frp/frpc -c /home/addis/frp/frpc.ini > /home/用户名/frp/frpc.log;"|。 其中 \verb|frpc| 见\enref{这里}{NATthr}。
+\item 笔者的设置为： \verb`command="date >> /home/addis/WSL-start-log.txt; service ssh --full-restart; mount -o uid=xxx -t drvfs e: /mnt/e; /home/用户名/frp/frpc -c /home/addis/frp/frpc.ini > /home/用户名/frp/frpc.log;"`。 其中 \verb`frpc` 见\enref{这里}{NATthr}。
 \end{itemize}
 
 \subsection{Bug 和兼容问题}
 \begin{itemize}
 \item WSL1 不支持 systemd， WSL2 目前支持。
 \item WSL1 + NTFS 在同一个文件夹中不支持用大小写区分不同的文件和文件夹
-\item 【可绕过】WSL1 在外挂 exFAT 硬盘中用 git 还是会有权限\href{https://github.com/microsoft/WSL/issues/5179}{错误}。 但实际上整个 .git 的任何文件都可以读写（可以把 \verb|.git| 文件夹复制一份都没问题）。 经测试，重新格式化为 NTFS 文件系统即可。
+\item 【可绕过】WSL1 在外挂 exFAT 硬盘中用 git 还是会有权限\href{https://github.com/microsoft/WSL/issues/5179}{错误}。 但实际上整个 .git 的任何文件都可以读写（可以把 \verb`.git` 文件夹复制一份都没问题）。 经测试，重新格式化为 NTFS 文件系统即可。
 \item  exFAT 无论在哪里都不支持 symlink， 但 NTFS 对 WSL 和 Ubuntu 都支持 symlink！
-\item 用 Ubuntu 操作过的 NTFS 磁盘在 WSL1 中可能会出现权限问题， 但用 \verb|sudo chmod -R 755 .| 就没问题了。
+\item 用 Ubuntu 操作过的 NTFS 磁盘在 WSL1 中可能会出现权限问题， 但用 \verb`sudo chmod -R 755 .` 就没问题了。
 \item 在 U 盘中实测 NTFS 的小文件写入速度比 exFAT 还要快 30\% 左右。
 \end{itemize}

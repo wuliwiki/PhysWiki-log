@@ -4,7 +4,7 @@
 
 \pentry{Lapack 笔记\nref{nod_Lapack}}{nod_b5e9}
 
-如果要旧的 icc/icpc\footnote{注意 icc/icpc (Intel C++ Compiler Classic) 将在 2023 年被淘汰， 被 oneAPI DPC++/C++ Compiler 代替， 命令是 \verb|icx/icpx|， 编译选项有略微的差异。} 以及 mkl， 可以\textbf{先用 oneAPI BASE 只安装 mkl （intel gdb， python 可能也有用）， 然后再安装 oneAPI HPC 中的 DPC++ 编译器（MPI 可能也有用）}。
+如果要旧的 icc/icpc\footnote{注意 icc/icpc (Intel C++ Compiler Classic) 将在 2023 年被淘汰， 被 oneAPI DPC++/C++ Compiler 代替， 命令是 \verb`icx/icpx`， 编译选项有略微的差异。} 以及 mkl， 可以\textbf{先用 oneAPI BASE 只安装 mkl （intel gdb， python 可能也有用）， 然后再安装 oneAPI HPC 中的 DPC++ 编译器（MPI 可能也有用）}。
 装错了有没关系， 可以随时添加或者删除组件。 安装的 GUI 界面可以通过 \enref{X11}{x11} 传输， 所以远程 ssh 也有 GUI 安装。 如果系统不支持 GUI 会自动切换到 TUI。
 
 也可以通过命令行选项进行非交互的安装， 详见\href{https://www.intel.com/content/www/us/en/develop/documentation/installation-guide-for-intel-oneapi-toolkits-linux/top/installation/install-with-command-line.html#install-with-command-line}{这里}。 运行以下命令后，会把安装包解压到当前目录，当前目录的文件系统必须支持 symbolik link。
@@ -18,16 +18,16 @@ sudo sh ./l_HPCKit_p_*.sh -a --silent --action install \
     intel.oneapi.lin.dpcpp-cpp-compiler-pro:intel.oneapi.lin.mpi.devel
 \end{lstlisting}
 
-安装目录是 \verb`/opt/intel/`， 安装完以后需要在 \verb|~/.bashrc| 中加上 \verb|source /opt/intel/oneapi/setvars.sh|，这样每次打开 bash 就会自动添加环境变量。 重启 terminal， 如果 \verb`icpc --version` 输出版本号，就说明可以正常用了。
+安装目录是 \verb`/opt/intel/`， 安装完以后需要在 \verb`~/.bashrc` 中加上 \verb`source /opt/intel/oneapi/setvars.sh`，这样每次打开 bash 就会自动添加环境变量。 重启 terminal， 如果 \verb`icpc --version` 输出版本号，就说明可以正常用了。
 
-注意在编程中，分配内存时，对齐可以让 SIMD 优化得更好。 MKL 提供自己版本的 \verb|malloc|，也可以用 STL 的对齐机制（\verb|std::align|）。
+注意在编程中，分配内存时，对齐可以让 SIMD 优化得更好。 MKL 提供自己版本的 \verb`malloc`，也可以用 STL 的对齐机制（\verb`std::align`）。
 
 \subsection{oneAPI BASE}
 \begin{itemize}
 \item 注意所有 oneAPI 都只提供最\href{https://www.intel.com/content/www/us/en/developer/tools/oneapi/base-toolkit-download.html?operatingsystem=linux&distributions=webdownload&options=offline}{新版本的下载}， 所以尽量把离线安装包保存到本地
 \item 安装和卸载都用 \verb`sudo sh ./l_BaseKit_p_2022.2.0.262_offline.sh` 在 WSL2 中会弹出 GUI。 光 MKL 需要 7.4GB。
 \item 注意 WSL1 用 .sh 安装包安装会出错。 WSL2 成功。
-\item 注意 \verb|oneAPI_BASE| 不包括 icpc 和 icc 编译器！ 他们并不包含在 \verb`DPC++` 里面。 \href{https://stackoverflow.com/questions/66527842/can-not-find-the-icc-compiler-after-having-installed-intel-oneapi-invoking-from}{详见这里}。
+\item 注意 \verb`oneAPI_BASE` 不包括 icpc 和 icc 编译器！ 他们并不包含在 \verb`DPC++` 里面。 \href{https://stackoverflow.com/questions/66527842/can-not-find-the-icc-compiler-after-having-installed-intel-oneapi-invoking-from}{详见这里}。
 \item MKL 和 icpc 安装完需要 8.6G。
 \item 目前 20220807 最新版仅支持 ubuntu 的 20.04 以及一些更早版本
 \end{itemize}

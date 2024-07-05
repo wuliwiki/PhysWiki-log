@@ -4,14 +4,14 @@
 
 \subsection{密码连接 ssh}
 \begin{itemize}
-\item ssh 连接服务器： \verb|ssh name@111.222.333.444 -p 端口号|。 不指定端口的话默认 22
+\item ssh 连接服务器： \verb`ssh name@111.222.333.444 -p 端口号`。 不指定端口的话默认 22
 \item \verb`sudo apt-get install ssh` 会安装 ssh server 用于远程控制。 确保 port22 是打开的
-\item 检查本机 ip 地址， \verb`hostname -I`, 或者 \verb`ip addr show`， 或者 \verb|ifconfig|.
+\item 检查本机 ip 地址， \verb`hostname -I`, 或者 \verb`ip addr show`， 或者 \verb`ifconfig`.
 \item 服务器端安装 openssh-server \verb`sudo apt install openssh-server`
 \item 修改 sshd 设置文件 \verb`/etc/ssh/sshd_config` (注意不是 \verb`ssh_config`)： 将 \verb`PasswordAuthentication` 改为 \verb`yes`， 最后一行加上 \verb`AllowUsers 用户名`， 用户名是 linux 的用户名
 \item 改完设置文件后用 \verb`sudo systemctl restart sshd` 重启才会生效
-\item \verb|sudo service ssh --full-restart| 也可以重启（\enref{WSL1}{WSLnt} 上没有 \verb|systemctl| 或者 \verb|systemd|）
-\item 查看 service 是否在运行用  \verb`sudo systemctl status ssh`， 或者 \verb|sudo service ssh status|
+\item \verb`sudo service ssh --full-restart` 也可以重启（\enref{WSL1}{WSLnt} 上没有 \verb`systemctl` 或者 \verb`systemd`）
+\item 查看 service 是否在运行用  \verb`sudo systemctl status ssh`， 或者 \verb`sudo service ssh status`
 \item 可以试试自己连接自己， 即 \verb`ssh localhost`， 如果成功， 就可以了
 \end{itemize}
 
@@ -31,8 +31,8 @@
 \item 如果网络断开， 用 restart session 选项即可。
 \item connection -> data 里面有 Auto-login username 可以填 linux 的用户名
 \item 在命令行中， 用鼠标选中的内容会自动复制到剪切板， 鼠标右键用于粘贴! 命令行的任何能输入的地方都有效! 所以在 Vim 中根本不需要用 visual 来粘贴! 除非不想用鼠标。
-\item 要保存密码， 给 putty.exe 创建快捷方式， 右键属性， 把 target 改成 \verb|"...\putty.exe" user@server.com -pw password| 即可（不安全）。
-\item 其实 putty 的自动登录是要使用 key 文件的， 见下一节。 把生成的 \verb|id_rsa| 私钥文件用 \verb|puttygen.exe|， 选择菜单 Conversions->Import key 然后 save private key 就可以用这个 private key 设置 putty 自动登录了。
+\item 要保存密码， 给 putty.exe 创建快捷方式， 右键属性， 把 target 改成 \verb`"...\putty.exe" user@server.com -pw password` 即可（不安全）。
+\item 其实 putty 的自动登录是要使用 key 文件的， 见下一节。 把生成的 \verb`id_rsa` 私钥文件用 \verb`puttygen.exe`， 选择菜单 Conversions->Import key 然后 save private key 就可以用这个 private key 设置 putty 自动登录了。
 \end{itemize}
 
 \subsection{使用 key 连接 ssh}
@@ -40,14 +40,14 @@
 \item 参考\href{https://www.digitalocean.com/community/tutorials/ssh-essentials-working-with-ssh-servers-clients-and-keys}{这个教程}
 \item 用 \verb`ssh-keygen` 生成 key， 使用默认路径 \verb`~/.ssh/`， 会生成 \verb`id_rsa` 和 \verb`id_rsa.pub` 两个文件。 后者用于加密而不能解密， 是 public key， 可以给任何人。 前者是 private key， 用于解密， 绝对不能给别人。
 \item 要先登录 host， 要把 public key （只有一行内容） append 到服务器中的 \verb`~/.ssh/authorized_keys` 文件。
-\item 如果使用 \verb|sudo ssh|， 那么设置文件就在 \verb|/root/.ssh/| 下， 可以把 \verb|~/.ssh| 中的文件 copy 过去。
+\item 如果使用 \verb`sudo ssh`， 那么设置文件就在 \verb`/root/.ssh/` 下， 可以把 \verb`~/.ssh` 中的文件 copy 过去。
 \item 一般来说如果用 key 的话 server 的 \verb`/etc/ssh/sshd_config` 是不需要设置的
-\item 其中 append 的操作也可以用 \verb`ssh-copy-id -i /path/to/key.pub SERVERNAME` 会更方便， 如果事先允许密码登录的话。 省略 \verb|-i /path/to/key.pub| 的话默认就用 \verb|~/.ssh/id_rsa.pub|
+\item 其中 append 的操作也可以用 \verb`ssh-copy-id -i /path/to/key.pub SERVERNAME` 会更方便， 如果事先允许密码登录的话。 省略 \verb`-i /path/to/key.pub` 的话默认就用 \verb`~/.ssh/id_rsa.pub`
 \item ssh 用 key 来登录的原理大概就是， client 告诉 server 我要用哪个用户名登录， server 去用户名的 \verb`~/.ssh/authorized_keys` 中寻找 public key， 然后用其加密一个随机字符串给 client， client 用 private key 解密， 将字符串的 MD5 hash 发给 server， server 一对照 MD5 如果吻合， 开始连接。  (其实我猜 host 还需要发送一个密钥用于 ssh 通讯， 要不然 client 发给 host 的东西就无法加密了)
 \item 现在 ssh 的话应该就不需要密码了
-\item 如果 key 怎么都不成功，很可能是文件夹和文件权限的问题， 确保 \verb|用户文件夹|， \verb|.ssh| 文件夹和里面的所有文件具有恰当的（不要太开放）权限， 具体自行 google。
-\item 如果想不写 ip 而是写名字， 那么在 \verb|/etc/hosts| 中添加 ip 和对应的名字即可。
-\item 如果没有管理员权限， 那么可以在用户文件夹创建 \verb|~/.hosts|， 然后在 \verb|~/.bashrc| 修改环境变量 \verb|export HOSTALIASES=~/.hosts|
+\item 如果 key 怎么都不成功，很可能是文件夹和文件权限的问题， 确保 \verb`用户文件夹`， \verb`.ssh` 文件夹和里面的所有文件具有恰当的（不要太开放）权限， 具体自行 google。
+\item 如果想不写 ip 而是写名字， 那么在 \verb`/etc/hosts` 中添加 ip 和对应的名字即可。
+\item 如果没有管理员权限， 那么可以在用户文件夹创建 \verb`~/.hosts`， 然后在 \verb`~/.bashrc` 修改环境变量 \verb`export HOSTALIASES=~/.hosts`
 \item 另一种方法是， 在 client 上可以写一个设置文件 \verb`~/.ssh/config`， 设置 host 的名字， 就可以用名字而不是 ip 登录了
 \begin{lstlisting}[language=bash]
 Host 别名
@@ -62,11 +62,11 @@ Host myserver1
 Hostname 10.0.2.101
 User addis
 \end{lstlisting}
-\verb|PubKeyAuthentication| 强制使用 key 登录而不用密码。
+\verb`PubKeyAuthentication` 强制使用 key 登录而不用密码。
 
-\item 如果遇到错误 \verb|Unable to negotiate with 40.74.28.9 port 22: no matching host key type found. Their offer: ssh-rsa|， 就在 config 中加上两行 \verb|HostkeyAlgorithms +ssh-rsa| 和 \verb|PubkeyAcceptedAlgorithms +ssh-rsa|。
+\item 如果遇到错误 \verb`Unable to negotiate with 40.74.28.9 port 22: no matching host key type found. Their offer: ssh-rsa`， 就在 config 中加上两行 \verb`HostkeyAlgorithms +ssh-rsa` 和 \verb`PubkeyAcceptedAlgorithms +ssh-rsa`。
 
-\item 如果要设置 tunnel （也就是 ssh 到一个机器再 ssh 到另一个）， 就先在 \verb|.ssh/config| 中设置好第一个机器的自动登录，再设置第二个机器如下（参考\href{https://askubuntu.com/questions/311447/how-do-i-ssh-to-machine-a-via-b-in-one-command}{这里}）
+\item 如果要设置 tunnel （也就是 ssh 到一个机器再 ssh 到另一个）， 就先在 \verb`.ssh/config` 中设置好第一个机器的自动登录，再设置第二个机器如下（参考\href{https://askubuntu.com/questions/311447/how-do-i-ssh-to-machine-a-via-b-in-one-command}{这里}）
 \begin{lstlisting}[language=bash]
 Host server1
   Hostname server1.example.com
@@ -79,23 +79,23 @@ Host server2
   IdentityFile ~/.ssh/id_rsa
   ProxyJump server1
 \end{lstlisting}
-注意第二个 \verb|IdentityFile| 应该也是本机的， 如果服务器不认识仍然会索取密码。 用 \verb|ssh-copy-id server2| 即可。
+注意第二个 \verb`IdentityFile` 应该也是本机的， 如果服务器不认识仍然会索取密码。 用 \verb`ssh-copy-id server2` 即可。
 
-\item \verb|ssh| 的客户端和服务器端对 \verb|.ssh| 文件夹和其中文件权限都有很高的要求。 如果说用 key \verb`ssh` 的时候说 \verb`permission id_rsa too open`， 把 \verb|.ssh| 文件夹的权限修改为 \verb|700|， 里面的 \verb|id_rsa| 和 \verb|authorized_keys| 修改为 \verb|600|， \verb|id_rsa.pub| 和 \verb|known_host| 改为 \verb|644|。 \verb|.ssh| 文件夹以及其中文件的 owner 都必须是登录者的。 如果服务器端文件的权限不对会提示 \verb|permission denied|。
+\item \verb`ssh` 的客户端和服务器端对 \verb`.ssh` 文件夹和其中文件权限都有很高的要求。 如果说用 key \verb`ssh` 的时候说 \verb`permission id_rsa too open`， 把 \verb`.ssh` 文件夹的权限修改为 \verb`700`， 里面的 \verb`id_rsa` 和 \verb`authorized_keys` 修改为 \verb`600`， \verb`id_rsa.pub` 和 \verb`known_host` 改为 \verb`644`。 \verb`.ssh` 文件夹以及其中文件的 owner 都必须是登录者的。 如果服务器端文件的权限不对会提示 \verb`permission denied`。
 \item 其中 7 变为二进制是 \verb`111` 对应 \verb`rwx` 的三个开关都打开， 0 对应 \verb`000` 没有任何权限， 所以 700 就是 owner 有所有权限， 其他用户没有任何权限
 \item 虽然 public key 中最后有 \verb`用户名@主机`， 其实这个好像没有任何影响， private key 和 public key 都可以复制到许多不同的机器中， 让这些机器两两之间互相 ssh， 而它们的 \verb`~/.ssh/authorized_keys` 中只需要有一条
 \item ssh 登录一个新主机时， 如果 \verb`known_host` 没有， 就会让确认， 确认以后就会把新主机的 id 加入该文件， 如果这个 id 以后变了（例如主机重装了 \verb`openssh-server`） 再登录就会出错（为了安全）， 这时只需要将 \verb`known_host` 中该主机的记录删除即可。 也可以直接把整个文件删除， 但这样就所有 ssh 登录都要再确认一次了。
-\item \verb|ssh-keygen -R [ip 或者 alias]| 可以删除该 server 在 \verb|known_host| 中的记录。
+\item \verb`ssh-keygen -R [ip 或者 alias]` 可以删除该 server 在 \verb`known_host` 中的记录。
 \end{itemize}
 
 \subsection{ssh 和 sshd 的 authentication 调试}
 \begin{itemize}
-\item 如果想重置设置文件， 就重装 \verb|openssh-server|。
+\item 如果想重置设置文件， 就重装 \verb`openssh-server`。
 \item 另外参考\href{https://medium.com/ci-cd-devops/ssh-receive-packet-type-51-154288e46609}{这篇文章}。
-\item 首先可以用 \verb|ssh -vvv ...| 来输出非常多的 debug 信息， 看具体哪一步出的问题
-\item 其次可以在服务器上 \verb|sudo vi /etc/ssh/sshd_config| 中打开 sshd 的 log 功能， \verb|SyslogFacility AUTH|， \verb|LogLevel DEBUG|
+\item 首先可以用 \verb`ssh -vvv ...` 来输出非常多的 debug 信息， 看具体哪一步出的问题
+\item 其次可以在服务器上 \verb`sudo vi /etc/ssh/sshd_config` 中打开 sshd 的 log 功能， \verb`SyslogFacility AUTH`， \verb`LogLevel DEBUG`
 \item 服务器重启 \verb`sudo systemctl restart sshd`， 尝试重新链接 ssh
-\item 失败后在服务器上的 \verb|/var/log/auth.log| 底部查看日志看看具体问题。
+\item 失败后在服务器上的 \verb`/var/log/auth.log` 底部查看日志看看具体问题。
 \end{itemize}
 
 \subsection{ssh 传文件}
@@ -114,7 +114,7 @@ Host server2
 \item 执行以后可以在浏览器输入 \verb`localhost:6600`， 就相当于输入了 \verb`120.79.212.166:80`
 \item 注意一些网站禁止 ip 访问， 或者 ip 访问和域名访问有不同的结果
 
-\item 作为第二个测试， 我们需要一台中转服务器， 例如要从本地通过中转 ssh 到 \verb|120.79.212.166:80| (wuli.wiki)， 就在本地执行 \verb`ssh -L 6500:wuli.wiki:22 用户名@中转服务器`
+\item 作为第二个测试， 我们需要一台中转服务器， 例如要从本地通过中转 ssh 到 \verb`120.79.212.166:80` (wuli.wiki)， 就在本地执行 \verb`ssh -L 6500:wuli.wiki:22 用户名@中转服务器`
 \item 再打开另一个 shell， 执行 \verb`ssh -p 6500 root@localhost`， 其中 \verb`-p` 选项用于指定端口， 就相当于先 ssh 到中转服务器再 ssh 到 wuli.wiki
 
 \item 转发后， 如果要使用 git， 可以用 \verb`:` 指定端口， 注意前面要加上 \verb`ssh://`。  例如 \verb`git clone ssh://root@localhost:6500/root/github/PhysWikiScan`
@@ -124,5 +124,5 @@ Host server2
 \begin{itemize}
 \item 用途： 例如校内网的服务器想让外网访问， 那就把外网一台有公共 ip 的转发服务器的某个端口和内网的服务器的某个端口链接。 “\enref{内网穿透笔记}{NATthr}” 中会提供更常用的办法。
 \item \verb`ssh -R 转发服务器端口号:localhost:本地端口号 用户名@转发服务器`
-\item 【亲测失败】\verb|ssh -N -R 中转端口:github.com:443 用户名@中转服务器| 可以在本地机器上运行， 也可以在中转服务器上运行。 运行后， 任意浏览器打开 \verb|https://中转服务器域名:中转端口| 都可以访问 github。
+\item 【亲测失败】\verb`ssh -N -R 中转端口:github.com:443 用户名@中转服务器` 可以在本地机器上运行， 也可以在中转服务器上运行。 运行后， 任意浏览器打开 \verb`https://中转服务器域名:中转端口` 都可以访问 github。
 \end{itemize}

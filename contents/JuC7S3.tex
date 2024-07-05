@@ -34,11 +34,11 @@ Tuple{Bool,Bool}
 julia> 
 \end{lstlisting}
 
-我在这里输入的第一行代码是我们之前展示过的一个例子。这行代码包含了两个表达式，并以英文逗号分隔。REPL 环境回显给我们的求值结果是\verb|(false, false)|。这个结果值实际上就是一个元组。第二行代码的求值结果\verb|Tuple{Bool,Bool}|就是它的类型。
+我在这里输入的第一行代码是我们之前展示过的一个例子。这行代码包含了两个表达式，并以英文逗号分隔。REPL 环境回显给我们的求值结果是\verb`(false, false)`。这个结果值实际上就是一个元组。第二行代码的求值结果\verb`Tuple{Bool,Bool}`就是它的类型。
 
 当我们像上面这样让 REPL 环境同时对多个表达式求值时，该环境就会把求值结果都塞入到一个元组值中并回显给我们。这种元组值总是由圆括号包裹，并以英文逗号分隔其中的多个元素值。
 
-此外，我们还可以看到，元组类型\verb|Tuple{Bool,Bool}|中有两个参数值。它们依次反映了其实例中的每一个元素值的类型。不过由于\verb|(false, false)|中的两个元素值类型相同，所以在视觉上没有显现出来。但我们要记住，元组类型不但会确定其所有元素的类型，还会体现元素的顺序。
+此外，我们还可以看到，元组类型\verb`Tuple{Bool,Bool}`中有两个参数值。它们依次反映了其实例中的每一个元素值的类型。不过由于\verb`(false, false)`中的两个元素值类型相同，所以在视觉上没有显现出来。但我们要记住，元组类型不但会确定其所有元素的类型，还会体现元素的顺序。
 
 \textbf{7.3.2 普通的元组}
 
@@ -55,9 +55,9 @@ julia> sum1(1.2, 5)
 julia> 
 \end{lstlisting}
 
-函数\verb|sum1|拥有一个参数列表。这个参数列表由圆括号包裹，其中定义了两个参数。在调用\verb|sum1|函数的时候，我们需要传给它两个符合定义的参数值。在它下面的调用表达式中，我给出的参数值是用\verb|(1.2, 5)|来呈现的。这其实就是一种元组。
+函数\verb`sum1`拥有一个参数列表。这个参数列表由圆括号包裹，其中定义了两个参数。在调用\verb`sum1`函数的时候，我们需要传给它两个符合定义的参数值。在它下面的调用表达式中，我给出的参数值是用\verb`(1.2, 5)`来呈现的。这其实就是一种元组。
 
-元组类型与一般的参数化类型有着一个很明显的不同——它具有协变的特性。我们在前面解释过什么是协变。举个例子，有两个确定的元组类型\verb|Tuple{Real}|和\verb|Tuple{Integer}|。由于它们的类型参数值\verb|Real|和\verb|Integer|之间存在继承关系，所以\verb|Tuple{Real}|和\verb|Tuple{Integer}|之间也有着相同的继承关系。验证的代码如下：
+元组类型与一般的参数化类型有着一个很明显的不同——它具有协变的特性。我们在前面解释过什么是协变。举个例子，有两个确定的元组类型\verb`Tuple{Real}`和\verb`Tuple{Integer}`。由于它们的类型参数值\verb`Real`和\verb`Integer`之间存在继承关系，所以\verb`Tuple{Real}`和\verb`Tuple{Integer}`之间也有着相同的继承关系。验证的代码如下：
 \begin{lstlisting}[language=julia]
 julia> Tuple{Real} >: Tuple{Integer}
 true
@@ -96,7 +96,7 @@ Tuple{Int64,Float64,Char,String}
 julia> 
 \end{lstlisting}
 
-那么，索引表达式\verb|tuple1[1]|的求值结果就是\verb|Int64|类型的\verb|125|，而表达式\verb|tuple1[2]|的求值结果则是\verb|Float64|类型的\verb|3.1|，以此类推。注意，这里的索引号依然是从\verb|1|开始的。与字符串值类似，我们不能通过索引表达式替换元组中的任何元素值。因为Julia中的元组也都是不可变的！
+那么，索引表达式\verb`tuple1[1]`的求值结果就是\verb`Int64`类型的\verb`125`，而表达式\verb`tuple1[2]`的求值结果则是\verb`Float64`类型的\verb`3.1`，以此类推。注意，这里的索引号依然是从\verb`1`开始的。与字符串值类似，我们不能通过索引表达式替换元组中的任何元素值。因为Julia中的元组也都是不可变的！
 
 我们还可以用范围索引表达式截取元组中的某一段：
 \begin{lstlisting}[language=julia]
@@ -111,7 +111,7 @@ julia>
 
 这种表达式的求值结果也会是一个元组，而且那些被截取到的元素值的类型也都不会改变。
 
-我们之前讲过的那 4 个用于搜索的函数，即：\verb|findfirst|、\verb|findlast|、\verb|findprev|和\verb|findnext|，都可以被用来搜索元组中的元素值。只不过，对于元组，我们传给它们的第一个参数值必须是一个用来做条件判断的函数。也就是说，这个函数的结果值必须是\verb|Bool|类型的。下面是一些示例：
+我们之前讲过的那 4 个用于搜索的函数，即：\verb`findfirst`、\verb`findlast`、\verb`findprev`和\verb`findnext`，都可以被用来搜索元组中的元素值。只不过，对于元组，我们传给它们的第一个参数值必须是一个用来做条件判断的函数。也就是说，这个函数的结果值必须是\verb`Bool`类型的。下面是一些示例：
 \begin{lstlisting}[language=julia]
 julia> findfirst(isequal('中'), tuple1)
 3
@@ -133,7 +133,7 @@ julia>
 
 另外，比较操作符也可以直接用于元组之间的比较。在这种情况下，Julia 会依次比较两个元组中的每一个元素值，直到足以做出判断为止。
 
-对于元组的拼接，操作符\verb|+|和\verb|*|都是无能为力的。这时我们可以使用\verb|tuple|函数和符号\verb|...|。它们的用法如下：
+对于元组的拼接，操作符\verb`+`和\verb`*`都是无能为力的。这时我们可以使用\verb`tuple`函数和符号\verb`...`。它们的用法如下：
 \begin{lstlisting}[language=julia]
 julia> tuple(tuple1..., tuple1...)
 (125, 3.1, '中', "编程", 125, 3.1, '中', "编程")
@@ -141,7 +141,7 @@ julia> tuple(tuple1..., tuple1...)
 julia> 
 \end{lstlisting}
 
-我们在前面说过，符号\verb|...|的作用就是，把紧挨在它左边的那个值中的所有元素值都平铺开来，并让它们都成为独立的参数值。所以，上面的这个表达式与如下的表达式等价：
+我们在前面说过，符号\verb`...`的作用就是，把紧挨在它左边的那个值中的所有元素值都平铺开来，并让它们都成为独立的参数值。所以，上面的这个表达式与如下的表达式等价：
 \begin{lstlisting}[language=julia]
 julia> tuple(tuple1[1], tuple1[2], tuple1[3], tuple1[4], 
 tuple1[1], tuple1[2], tuple1[3], tuple1[4])
@@ -169,7 +169,7 @@ julia> tuple2_2 = (tuple2..., tuple2...)
 julia> 
 \end{lstlisting}
 
-元组\verb|tuple2|包含了两个元素值。这两个元素值都是数组（由方括号包裹，并以英文逗号分隔其包含的多个元素值）。而元组\verb|tuple2_2|则是两个\verb|tuple2|的拼接。
+元组\verb`tuple2`包含了两个元素值。这两个元素值都是数组（由方括号包裹，并以英文逗号分隔其包含的多个元素值）。而元组\verb`tuple2_2`则是两个\verb`tuple2`的拼接。
 
 对于一个确定的元组类型来说，只要它的参数值都属于位类型，那么这个元组类型就一定属于位类型，如：
 \begin{lstlisting}[language=julia]
@@ -185,7 +185,7 @@ false
 julia> 
 \end{lstlisting}
 
-但数组类型与之不同，它的任何确定类型都不属于位类型。并且，它的值都是可变的。所以，如果我们改变了元组\verb|tuple2|包含的某个数组中的元素值，那么这种改变就会立即反映到元组\verb|tuple2_2|中。例如：
+但数组类型与之不同，它的任何确定类型都不属于位类型。并且，它的值都是可变的。所以，如果我们改变了元组\verb`tuple2`包含的某个数组中的元素值，那么这种改变就会立即反映到元组\verb`tuple2_2`中。例如：
 \begin{lstlisting}[language=julia]
 julia> tuple2[2][1] = tuple2[2][1] * 10
 40
@@ -199,7 +199,7 @@ julia> tuple2_2
 julia> 
 \end{lstlisting}
 
-我用链式的索引表达式\verb|tuple2[2][1]|改变了\verb|tuple2|所包含的数组\verb|[4, 5, 6, 7]|中的第1个元素值。可以看到，\verb|tuple2_2|中的两个对应的元素值都有了同样的改变。
+我用链式的索引表达式\verb`tuple2[2][1]`改变了\verb`tuple2`所包含的数组\verb`[4, 5, 6, 7]`中的第1个元素值。可以看到，\verb`tuple2_2`中的两个对应的元素值都有了同样的改变。
 
 \textbf{7.3.3 有名的元组}
 
@@ -225,11 +225,11 @@ ERROR: UndefVarError: reg_year not defined
 julia> 
 \end{lstlisting}
 
-表达式\verb|named_tuple1[:reg_year]|是普通的索引表达式的一种变体。在它的中括号里的不是一个索引号，而是一个\verb|Symbol|类型的值。\verb|Symbol|的值必须要以英文冒号\verb|:|开头，并后跟一个符合变量命名规则的标识符。
+表达式\verb`named_tuple1[:reg_year]`是普通的索引表达式的一种变体。在它的中括号里的不是一个索引号，而是一个\verb`Symbol`类型的值。\verb`Symbol`的值必须要以英文冒号\verb`:`开头，并后跟一个符合变量命名规则的标识符。
 
-\verb|Symbol|本来是元编程中的一个概念，它的值可用于表示对变量的访问。在有名元组的上下文中，其值的含义就是指代某个元素值的名称，而在\verb|:|后面的就是那个名称。又由于这里的\verb|Symbol|类型值与索引号的作用是相同的，因此前述表达式的求值结果就是与\verb|reg_year|对应的那个元素值。
+\verb`Symbol`本来是元编程中的一个概念，它的值可用于表示对变量的访问。在有名元组的上下文中，其值的含义就是指代某个元素值的名称，而在\verb`:`后面的就是那个名称。又由于这里的\verb`Symbol`类型值与索引号的作用是相同的，因此前述表达式的求值结果就是与\verb`reg_year`对应的那个元素值。
 
-有名元组的类型是\verb|NamedTuple|。该类型也是一个参数化类型，但它只有固定个数的类型参数。元组\verb|named_tuple1|的类型如下：
+有名元组的类型是\verb`NamedTuple`。该类型也是一个参数化类型，但它只有固定个数的类型参数。元组\verb`named_tuple1`的类型如下：
 \begin{lstlisting}[language=julia]
 julia> typeof(named_tuple1)
 NamedTuple{(:name, :reg_year, :extra),Tuple{String,Int64,String}}
@@ -237,9 +237,9 @@ NamedTuple{(:name, :reg_year, :extra),Tuple{String,Int64,String}}
 julia> 
 \end{lstlisting}
 
-可以看到，这个类型的第一个参数值是一个普通的元组。在这个元组里，包含了一些\verb|Symbol|类型的值，这些值与\verb|named_tuple1|中的元素名称逐一对应。该类型的第二个参数值是一个确定的元组类型。它精确地体现了\verb|named_tuple1|中的各个元素值的类型。或者说，如果\verb|named_tuple1|中只有元素值而没有元素名，那么它的类型就会如上述示例中的第二个类型参数值。总之，一个有名元组的类型几乎确定了其实例的方方面面，除了元素的值。
+可以看到，这个类型的第一个参数值是一个普通的元组。在这个元组里，包含了一些\verb`Symbol`类型的值，这些值与\verb`named_tuple1`中的元素名称逐一对应。该类型的第二个参数值是一个确定的元组类型。它精确地体现了\verb`named_tuple1`中的各个元素值的类型。或者说，如果\verb`named_tuple1`中只有元素值而没有元素名，那么它的类型就会如上述示例中的第二个类型参数值。总之，一个有名元组的类型几乎确定了其实例的方方面面，除了元素的值。
 
-还记得吗？对于确定的参数化类型，Julia会为它自动生成一个全名（即携带花括号的名称）相同的构造函数。这就意味着，\verb|NamedTuple|类型的构造函数名往往很长，如\verb|NamedTuple{(:name, :reg_year, :extra),Tuple{String,Int64,String}}|。幸好，Julia允许我们在这里走一个小捷径，不必写出那么长的构造函数名，就像这样：
+还记得吗？对于确定的参数化类型，Julia会为它自动生成一个全名（即携带花括号的名称）相同的构造函数。这就意味着，\verb`NamedTuple`类型的构造函数名往往很长，如\verb`NamedTuple{(:name, :reg_year, :extra),Tuple{String,Int64,String}}`。幸好，Julia允许我们在这里走一个小捷径，不必写出那么长的构造函数名，就像这样：
 \begin{lstlisting}[language=julia]
 julia> NamedTuple{(:name, :reg_year, :extra)}(("Robert", 2020, "something"))
 (name = "Robert", reg_year = 2020, extra = "something")
@@ -247,7 +247,7 @@ julia> NamedTuple{(:name, :reg_year, :extra)}(("Robert", 2020, "something"))
 julia> 
 \end{lstlisting}
 
-我在这里使用的构造函数名为\verb|NamedTuple{(:name, :reg_year, :extra)}|。虽然也不算短，但是比前面的那个全名要好多了。这个函数名只体现了有名元组中的各个元素值的名称，而没有体现它们的类型。不过不用担心，Julia会根据我们给予的参数值推断出元素值的类型。不知道你注意到没有，我们传给上述构造函数的参数值就是一个普通的元组。
+我在这里使用的构造函数名为\verb`NamedTuple{(:name, :reg_year, :extra)}`。虽然也不算短，但是比前面的那个全名要好多了。这个函数名只体现了有名元组中的各个元素值的名称，而没有体现它们的类型。不过不用担心，Julia会根据我们给予的参数值推断出元素值的类型。不知道你注意到没有，我们传给上述构造函数的参数值就是一个普通的元组。
 
 由此可见，有名元组实际上是对普通元组的一种再封装。这从有名元组的类型字面量上也可以看出端倪。这种再封装让元组中的每一个元素值都有了自己的名字，就像我们传给函数的参数值都有对应的参数名那样。另外，顺便说一句，有名元组的类型是非转化的。
 
@@ -265,9 +265,9 @@ Tuple{Vararg{String,N} where N}
 julia> 
 \end{lstlisting}
 
-其中的\verb|Vararg{String}|就是那个特殊的类型参数值。它是\verb|Vararg{String,N} where N|的简写形式。而\verb|Vararg|是一个直接继承自\verb|Any|的抽象类型，同时也是一个参数化类型。它拥有两个类型参数，其占位符分别是\verb|T|和\verb|N|。因此，类型\verb|Vararg{T,N}|表达的就是\verb|N|个\verb|T|类型的参数。若放到元组类型的上下文中，它则表示该元组类型的所有实例都要有\verb|N|个\verb|T|类型的元素值。
+其中的\verb`Vararg{String}`就是那个特殊的类型参数值。它是\verb`Vararg{String,N} where N`的简写形式。而\verb`Vararg`是一个直接继承自\verb`Any`的抽象类型，同时也是一个参数化类型。它拥有两个类型参数，其占位符分别是\verb`T`和\verb`N`。因此，类型\verb`Vararg{T,N}`表达的就是\verb`N`个\verb`T`类型的参数。若放到元组类型的上下文中，它则表示该元组类型的所有实例都要有\verb`N`个\verb`T`类型的元素值。
 
-我们可以用一个确切的整数替换掉这里的\verb|N|，也可以放任不管。如果放任不管，那么就表示参数的数量是任意的。比如\verb|Vararg{String}|就表示可以有任意个\verb|String|类型的参数。所以，元组类型\verb|Tuple{Vararg{String}}|代表的就是那些包含了任意个字符串值的元组。验证的代码如下：
+我们可以用一个确切的整数替换掉这里的\verb`N`，也可以放任不管。如果放任不管，那么就表示参数的数量是任意的。比如\verb`Vararg{String}`就表示可以有任意个\verb`String`类型的参数。所以，元组类型\verb`Tuple{Vararg{String}}`代表的就是那些包含了任意个字符串值的元组。验证的代码如下：
 \begin{lstlisting}[language=julia]
 julia> isa((), Tuple{Vararg{String}})
 true
@@ -281,7 +281,7 @@ true
 julia> 
 \end{lstlisting}
 
-可以看到，不论这些元组中的字符串值有多少个，它们都是\verb|Tuple{Vararg{String}}|类型的实例。请注意，上述示例中的\verb|()|表示的是空元组，也就是不包含任何元素值的元组。而\verb|("Julia",)|表示的则是只包含了一个元素值（即\verb|"Julia"|）的元组。为了避免歧义，我们若要表示只有一个元素值的元组，就需要在该元素值的后面添加一个英文逗号。否则，Julia就可能会把圆括号识别为包裹高优先级操作的符号，从而将其忽略掉。示例如下：
+可以看到，不论这些元组中的字符串值有多少个，它们都是\verb`Tuple{Vararg{String}}`类型的实例。请注意，上述示例中的\verb`()`表示的是空元组，也就是不包含任何元素值的元组。而\verb`("Julia",)`表示的则是只包含了一个元素值（即\verb`"Julia"`）的元组。为了避免歧义，我们若要表示只有一个元素值的元组，就需要在该元素值的后面添加一个英文逗号。否则，Julia就可能会把圆括号识别为包裹高优先级操作的符号，从而将其忽略掉。示例如下：
 \begin{lstlisting}[language=julia]
 julia> ("Julia",)
 ("Julia",)
@@ -298,9 +298,9 @@ String
 julia> 
 \end{lstlisting}
 
-回到可变参数的话题。如果我们把\verb|Vararg{T,N}|中的\verb|N|也确定下来，比如\verb|Vararg{String,2}|，那么它表达的参数数量就是固定的了。这种类型字面量肯定不能用于表示可变参数的元组。不过它们仍然是很有用处的。请思考一下，如果我们要写出一个类型字面量，它需要代表包含了10个整数值的元组，那么应该怎样写呢？
+回到可变参数的话题。如果我们把\verb`Vararg{T,N}`中的\verb`N`也确定下来，比如\verb`Vararg{String,2}`，那么它表达的参数数量就是固定的了。这种类型字面量肯定不能用于表示可变参数的元组。不过它们仍然是很有用处的。请思考一下，如果我们要写出一个类型字面量，它需要代表包含了10个整数值的元组，那么应该怎样写呢？
 
-实际上，我们不必写出包含10个类型参数值的元组类型，只需要像下面这样利用\verb|Vararg|类型来编写就可以了：
+实际上，我们不必写出包含10个类型参数值的元组类型，只需要像下面这样利用\verb`Vararg`类型来编写就可以了：
 \begin{lstlisting}[language=julia]
 julia> Tuple{Vararg{Int,10}}
 NTuple{10,Int64}
@@ -314,8 +314,8 @@ true
 julia> 
 \end{lstlisting}
 
-示例中的\verb|Tuple{Vararg{Int,10}}|就是答案。它等价于长长的拥有10个\verb|Int|的元组类型。另外，\verb|NTuple{10,Int64}|是\verb|Tuple{Vararg{Int,10}}|类型的别名。更宽泛地讲，\verb|NTuple{N,T}|总是\verb|Tuple{Vararg{T,N}}|类型的别名。这显然可以让我们少写一些代码。
+示例中的\verb`Tuple{Vararg{Int,10}}`就是答案。它等价于长长的拥有10个\verb`Int`的元组类型。另外，\verb`NTuple{10,Int64}`是\verb`Tuple{Vararg{Int,10}}`类型的别名。更宽泛地讲，\verb`NTuple{N,T}`总是\verb`Tuple{Vararg{T,N}}`类型的别名。这显然可以让我们少写一些代码。
 
-最后，关于在元组类型中使用\verb|Vararg|，我们还有两点需要注意。第一，在编写元组类型时，\verb|Vararg|类型的字面量只能作为它的最后一个类型参数值，否则Julia就会直接报错。第二，虽然\verb|Vararg|类型在一些时候可以为我们提供便利，但由于它只能表示\verb|N|个同类型的参数，所以它的实际应用场景还是相对有限的。要知道，元组类型中的每一个类型参数值都可以是任意的类型。因此，我们应该在考虑使用它的时候认真地权衡一下利弊，不要滥用。
+最后，关于在元组类型中使用\verb`Vararg`，我们还有两点需要注意。第一，在编写元组类型时，\verb`Vararg`类型的字面量只能作为它的最后一个类型参数值，否则Julia就会直接报错。第二，虽然\verb`Vararg`类型在一些时候可以为我们提供便利，但由于它只能表示\verb`N`个同类型的参数，所以它的实际应用场景还是相对有限的。要知道，元组类型中的每一个类型参数值都可以是任意的类型。因此，我们应该在考虑使用它的时候认真地权衡一下利弊，不要滥用。
 
 无论是普通的元组还是有名的元组，又或是我们刚刚讲的可变参数的元组，都是非常灵活的容器。原则上，它们都可以用于保存任意数量、任意类型的值。而且，由于它们都是不可修改的，所以我们既不用担心它们保存的值被篡改，也不用担心并发访问的问题。这也是不可变对象的最大优势，可以显著地减少对象创建者和使用者的心智负担。但要注意，元组中的元素值不一定都是不可变的，所以一个元组可能无法做到完全的不可变。

@@ -22,31 +22,31 @@ ZFS 是一个现代化的文件系统，一些特色功能如下。
 \subsection{用虚拟硬盘测试 ZFS}\label{sub_ZFS_1}
 \begin{itemize}
 \item 为了方便起见，我们并不需要用真正的硬盘去测试 zfs， 只需要创建虚拟硬盘文件然后作为 loopback 设备挂载即可：
-\item Ubuntu/Debian 安装 zfs： \verb|sudo apt install zfsutils-linux|
-\item 创建一个 500MB 虚拟硬盘文件： \verb|dd if=/dev/zero of=虚拟硬盘文件 bs=1M count=500|
-\item 制作 loopback 设备 \verb|sudo losetup -fP --show 虚拟硬盘文件|。会返回设备路径如 \verb|/dev/loop0|
-\item 创建一个 pool \verb|sudo zpool create pool名 /dev/loop0|
-\item 检查状态： \verb|sudo zpool status|； \verb|sudo zpool list|（\verb|-v| 显示详情）
-\item 创建文件系统（文件系统属于 \textbf{dataset} 的一种，类似于硬盘分区）： \verb|sudo zfs create pool名/fs名|（\verb|fs| 是文件系统 file system 的缩写）。创建以后会自动挂载到 \verb`/pool名/fs名/`
-\item 创建测试文件： \verb|echo "This is a test file." > /pool名/fs名/文件|
-\item 创建文件系统快照： \verb|sudo zfs snapshot pool名/fs名@快照1|
-\item 改变测试文件（在最后添加一行）： \verb|echo "This is some additional data." >> /pool名/fs名/文件|
-\item 对比当前文件系统和上一次快照 \verb|sudo zfs diff pool名/fs名@快照1 pool名/fs名|。 输出如 \verb|M	/pool名/fs名/文件|。 其中 \verb|M| 表示 modified。
-\item 恢复快照： \verb|sudo zfs rollback pool名/fs名@快照1|。现在可以检查 \verb|文件| 恢复到了之前的版本。
-\item 添加另一个 loopback 设备： \verb|dd if=/dev/zero of=虚拟硬盘文件2 bs=1M count=500|
-\item \verb|sudo losetup -fP --show 虚拟硬盘文件2|， 输出例如 \verb|loop1|
-\item 添加硬盘到已有的 pool 中： \verb|sudo zpool add pool名 /dev/loop1|
+\item Ubuntu/Debian 安装 zfs： \verb`sudo apt install zfsutils-linux`
+\item 创建一个 500MB 虚拟硬盘文件： \verb`dd if=/dev/zero of=虚拟硬盘文件 bs=1M count=500`
+\item 制作 loopback 设备 \verb`sudo losetup -fP --show 虚拟硬盘文件`。会返回设备路径如 \verb`/dev/loop0`
+\item 创建一个 pool \verb`sudo zpool create pool名 /dev/loop0`
+\item 检查状态： \verb`sudo zpool status`； \verb`sudo zpool list`（\verb`-v` 显示详情）
+\item 创建文件系统（文件系统属于 \textbf{dataset} 的一种，类似于硬盘分区）： \verb`sudo zfs create pool名/fs名`（\verb`fs` 是文件系统 file system 的缩写）。创建以后会自动挂载到 \verb`/pool名/fs名/`
+\item 创建测试文件： \verb`echo "This is a test file." > /pool名/fs名/文件`
+\item 创建文件系统快照： \verb`sudo zfs snapshot pool名/fs名@快照1`
+\item 改变测试文件（在最后添加一行）： \verb`echo "This is some additional data." >> /pool名/fs名/文件`
+\item 对比当前文件系统和上一次快照 \verb`sudo zfs diff pool名/fs名@快照1 pool名/fs名`。 输出如 \verb`M	/pool名/fs名/文件`。 其中 \verb`M` 表示 modified。
+\item 恢复快照： \verb`sudo zfs rollback pool名/fs名@快照1`。现在可以检查 \verb`文件` 恢复到了之前的版本。
+\item 添加另一个 loopback 设备： \verb`dd if=/dev/zero of=虚拟硬盘文件2 bs=1M count=500`
+\item \verb`sudo losetup -fP --show 虚拟硬盘文件2`， 输出例如 \verb`loop1`
+\item 添加硬盘到已有的 pool 中： \verb`sudo zpool add pool名 /dev/loop1`
 \item 添加硬盘后， pool 中的所有文件系统会自动按需使用新增到 pool 中的设备，无需手动 resize。
 \item 所以 zfs 不需要再给硬盘分区，而是把硬盘加入 pool， 再在 pool 中创建文件系统。
 \item 每个文件系统都是按照需要自动改变大小的，只要 pool 没有满，任何一个文件系统都不会满。
 每个文件系统有自己的属性，有自己的快照。 当然，作为高级功能， zfs 也允许不把整块硬盘加入 pool 而是把一个分区加入 pool（不推荐）。
-\item 用完以后，删除 pool： \verb|sudo zpool destroy pool名|， \verb|sudo losetup -d /dev/loop0|
+\item 用完以后，删除 pool： \verb`sudo zpool destroy pool名`， \verb`sudo losetup -d /dev/loop0`
 \end{itemize}
 
 \subsection{常用命令}
 \begin{itemize}
-\item 检查状态： \verb|sudo zpool status pool名| 可以查看各种状态以及 RAID 设置， 以及读写错误。
-\item 另一个检查命令是 \verb|sudo zpool list|（\verb|-v| 显示详情）
+\item 检查状态： \verb`sudo zpool status pool名` 可以查看各种状态以及 RAID 设置， 以及读写错误。
+\item 另一个检查命令是 \verb`sudo zpool list`（\verb`-v` 显示详情）
 \item \verb`zfs list` 可以显示 pool 以及文件系统/dataset。 结果如：
 \begin{lstlisting}[language=none]
 NAME        USED   AVAIL   REFER  MOUNTPOINT
@@ -54,16 +54,16 @@ MyPool      7.25T  13.8T   140K   /MyPool
 MyPool/fs1  256K   13.8T   256K   /MyPool/fs1
 MyPool/fs2  7.24T  13.8T   7.24T  /MyPool/fs2
 \end{lstlisting}
-\item \verb|zpool iostat -v 2| 可以不断刷新实时数据如读写速率。
-\item \verb|sudo zpool import| 可以查看所有可以用于挂载的 pool。 有时候这会需要很久，需要耐心等待！
-\item 只要把一个 pool 的所有盘让 linux 识别到， 那么用 \verb|zpool import pool名| 就会挂载这个 pool。
-\item 改变文件系统的挂载目录： \verb|sudo zfs set mountpoint=/挂载/目录 pool名/fs名|。
+\item \verb`zpool iostat -v 2` 可以不断刷新实时数据如读写速率。
+\item \verb`sudo zpool import` 可以查看所有可以用于挂载的 pool。 有时候这会需要很久，需要耐心等待！
+\item 只要把一个 pool 的所有盘让 linux 识别到， 那么用 \verb`zpool import pool名` 就会挂载这个 pool。
+\item 改变文件系统的挂载目录： \verb`sudo zfs set mountpoint=/挂载/目录 pool名/fs名`。
 \item 设置了 mountpoint 以后就已经开启自动 mount 了。
 \item \verb`zfs get mounted,mountpoint pool名/mydataset名` 查看是否已经挂载以及挂载目录
-\item \verb|sudo zpool export pool名| 可以安全弹出 pool，然后可以拔出硬盘或断电。
-\item \verb|sudo zfs get all pool名/fs名| 可以列出所有当前选项。 把 \verb|all| 换成 \verb|选项名| 可以列出制定选项。
-\item \verb|sudo zfs set 选项=on pool名/fs名| 设置某个选项的值。
-\item 把 \verb|set| 改成 \verb|inherit| 就相当于关闭这些选项
+\item \verb`sudo zpool export pool名` 可以安全弹出 pool，然后可以拔出硬盘或断电。
+\item \verb`sudo zfs get all pool名/fs名` 可以列出所有当前选项。 把 \verb`all` 换成 \verb`选项名` 可以列出制定选项。
+\item \verb`sudo zfs set 选项=on pool名/fs名` 设置某个选项的值。
+\item 把 \verb`set` 改成 \verb`inherit` 就相当于关闭这些选项
 \item 重命名 dataset 用 \verb`zfs rename pool名/old_datasetname pool名/dataset名`， 需要先 \verb`zfs umount pool名/dataset名`。
 \item 删除 dataset 用 \verb`zfs destroy -r pool名/dataset名`
 \end{itemize}
@@ -72,12 +72,12 @@ MyPool/fs2  7.24T  13.8T   7.24T  /MyPool/fs2
 \subsection{常识}
 \begin{itemize}
 \item \textbf{Dataset} 是一个比 filesystem 更广的概念， 是 Pool 的下一层。 既可以是一个 filesystem， 也可以是 snapshot， Zvols 等。
-\item \verb|zfs| 的程序是非常底层的，系统甚至不知道这些硬盘已经被挂载了。 Ubuntu 的 \verb|Disk| 软件会显示未挂载。 System Monitor 也不会显示磁盘的读写速度。
-\item \verb|vdev| 是 virtual device， 一个 pool 中的数据在所有 vdev 上面 strip。 也就是说写入一个文件，这个文件的数据会分布在所有 vdev 上。 这样可以提高读写速度。
-\item 每个 \verb|vdev| 可以有不同的 \enref{RAID}{RAIDnt} （zfs 自带 RAID， 不使用标准 RAID），RAID-z1 代表一个冗余相当于普通的 RAID5 至少需要三个 vdev， \verb|z2| 代表两个冗余至少需要 4 个 vdev，等），也可以是单个盘。 但是一个 pool 中\textbf{只要有一个 vdev 数据丢失，那么就会导致数据彻底无法恢复}。
-\item \verb|vdev| 可以有不同的大小，可以不断往 pool 中加入。 zfs 会根据每个 vdev 剩余的容量按比例 strip。
-\item \verb|vdev| 一旦加入 pool 就不能删除。 但可以更换（下文 \verb|zpool replace|）。
-\item \verb|zpool scrub pool名| 可以马上检查整个 pool 的 checksum 是否一致。 几秒钟后会在后台开始 scrub， 用 \verb|sudo zpool status| 查看进度和错误数据。 期间就算弹出硬盘或者关机，下次挂载还是会继续。
+\item \verb`zfs` 的程序是非常底层的，系统甚至不知道这些硬盘已经被挂载了。 Ubuntu 的 \verb`Disk` 软件会显示未挂载。 System Monitor 也不会显示磁盘的读写速度。
+\item \verb`vdev` 是 virtual device， 一个 pool 中的数据在所有 vdev 上面 strip。 也就是说写入一个文件，这个文件的数据会分布在所有 vdev 上。 这样可以提高读写速度。
+\item 每个 \verb`vdev` 可以有不同的 \enref{RAID}{RAIDnt} （zfs 自带 RAID， 不使用标准 RAID），RAID-z1 代表一个冗余相当于普通的 RAID5 至少需要三个 vdev， \verb`z2` 代表两个冗余至少需要 4 个 vdev，等），也可以是单个盘。 但是一个 pool 中\textbf{只要有一个 vdev 数据丢失，那么就会导致数据彻底无法恢复}。
+\item \verb`vdev` 可以有不同的大小，可以不断往 pool 中加入。 zfs 会根据每个 vdev 剩余的容量按比例 strip。
+\item \verb`vdev` 一旦加入 pool 就不能删除。 但可以更换（下文 \verb`zpool replace`）。
+\item \verb`zpool scrub pool名` 可以马上检查整个 pool 的 checksum 是否一致。 几秒钟后会在后台开始 scrub， 用 \verb`sudo zpool status` 查看进度和错误数据。 期间就算弹出硬盘或者关机，下次挂载还是会继续。
 \item \verb`scrub` 以后如果有任何错误 \verb`zpool status` 会报告如 \verb`scan: scrub repaired 8K in 12:34:17 with 0 errors on Sun Dec 10 12:58:22 2023` 这说明用了 12 个小时， 修复了 8k 数据，最后给出完成时间。
 \item Ubuntu 20.04 装机时可以选择 ZFS， 但没有加密选项。 Ubuntu 22.04 有加密。
 \item 如果根目录是 ZFS， 那么直接创建 swapfile 将会出问题（提示文件有 hole， 意思是在磁盘上不连续），需要专门用 ZFS 创建一个指定大小的 swap dataset 作为 swap：
@@ -97,13 +97,13 @@ free -h # 查看 RAM 和 swap 的使用情况
 
 \subsection{RAID 实测}
 \begin{itemize}
-\item 设置 RAID-Z1（一个冗余）： \verb|sudo zpool create pool名 raidz1 /dev/sdb /dev/sdc ...|。 这会自动挂载到 \verb|/pool名| 目录。
-\item 创建文件系统： \verb|sudo zfs create pool名/fs名|。
-\item 4 块 8TB 硬盘用 \verb|raidz1| 组合后 \verb|zpool list -v| 显示 \verb|29.1TB| 容量。
-\item \verb|sudo zfs unmount pool名| 弹出 pool， 用 \verb|zfs mount| 重新挂载。
+\item 设置 RAID-Z1（一个冗余）： \verb`sudo zpool create pool名 raidz1 /dev/sdb /dev/sdc ...`。 这会自动挂载到 \verb`/pool名` 目录。
+\item 创建文件系统： \verb`sudo zfs create pool名/fs名`。
+\item 4 块 8TB 硬盘用 \verb`raidz1` 组合后 \verb`zpool list -v` 显示 \verb`29.1TB` 容量。
+\item \verb`sudo zfs unmount pool名` 弹出 pool， 用 \verb`zfs mount` 重新挂载。
 \item RAID-z1 的写入速度其实比使用单个硬盘更慢。 但是读取速度通常会更快。
 \item 由于磁盘碎片， 数据占总容量 80\% 的时候就会导致性能下降。
-\item \verb|zpool replace pool名 /dev/sda /dev/sdb| 可以把 pool 中的某块磁盘（可以离线）替换成一块新的。 新磁盘将没有任何碎片。 这种方法理论上可以用来去碎片化（但有可能花很长时间）。
+\item \verb`zpool replace pool名 /dev/sda /dev/sdb` 可以把 pool 中的某块磁盘（可以离线）替换成一块新的。 新磁盘将没有任何碎片。 这种方法理论上可以用来去碎片化（但有可能花很长时间）。
 \item 亲测 4 盘 8TB 希捷 exos， RAID-z1，lz4 压缩， 关闭 dedup， 大 mp4 文件写入平均 50-70MB/s，比较稳定。 一开始复制文件可以达到 100MB/s 以上，但这应该主要是在写入缓存。
 \end{itemize}
 
@@ -114,15 +114,15 @@ free -h # 查看 RAM 和 swap 的使用情况
 
 \subsection{压缩}
 \begin{itemize}
-\item \verb|sudo zfs set compression=lz4 pool名/fs名| 开启 lz4 压缩（cpu 会间断性占用 70\% 左右， 8 核 16 线程）。 可以\textbf{随时打开或者关闭}，只对新数据生效。 \verb|lz4| 是 zfs 最流行的压缩算法。 压缩会占用 cpu 但反而有可能会让读写变快！ 因为真正需要读写的数据少了。 实测在我的 8cpu 电脑上开启最高压缩率算法 \verb|gzip-9| 并不会让写入变慢。 其实如果大文件主要是视频啥的，压缩率其实非常小（我的当前平均压缩率只有 1.04x）。
-\item \verb|compressratio| 属性可以显示当前的平均压缩率， 这只用于查看不能手动设置。
+\item \verb`sudo zfs set compression=lz4 pool名/fs名` 开启 lz4 压缩（cpu 会间断性占用 70\% 左右， 8 核 16 线程）。 可以\textbf{随时打开或者关闭}，只对新数据生效。 \verb`lz4` 是 zfs 最流行的压缩算法。 压缩会占用 cpu 但反而有可能会让读写变快！ 因为真正需要读写的数据少了。 实测在我的 8cpu 电脑上开启最高压缩率算法 \verb`gzip-9` 并不会让写入变慢。 其实如果大文件主要是视频啥的，压缩率其实非常小（我的当前平均压缩率只有 1.04x）。
+\item \verb`compressratio` 属性可以显示当前的平均压缩率， 这只用于查看不能手动设置。
 \end{itemize}
 
 \subsection{快照和克隆}
 \begin{itemize}
 \item 由于 zfs 使用 copy-on-write， 制作快照非常轻量。
 \item \verb`zfs snapshot -r pool名@快照名` 可以对整个 pool 做快照，也可以对某个 dataset 做快照
-\item \verb|zfs list -t snapshot| 查看所有快照。\verb|zfs list pool名/ds名 -t snapshot| 查看 pool 或者某个 dataset 的快照， 注意如果省略 \verb`/ds名`，只会显示 pool 级别的快照不会显示包含的 dataset 的快照！
+\item \verb`zfs list -t snapshot` 查看所有快照。\verb`zfs list pool名/ds名 -t snapshot` 查看 pool 或者某个 dataset 的快照， 注意如果省略 \verb`/ds名`，只会显示 pool 级别的快照不会显示包含的 dataset 的快照！
 \item 输出如
 \begin{lstlisting}[language=none]
 NAME               USED  AVAIL   REFER  MOUNTPOINT
@@ -130,8 +130,8 @@ pool名/fs名@快照1   0B      -     7.84T  -
 \end{lstlisting}
 其中 \verb`USED` 初始是 0， 会随着 copy-on-write 慢慢增加
 \item 删除快照会自动释放不需要的空间（哪怕是删除中间的快照）。
-\item 可以直接把快照挂载到某个目录（只读）： \verb|zfs mount -o ro -t snapshot pool名/fs名@快照名 /快照挂载目录|
-\item 挂载后的快照是只读的， 如果要写入， 可以先对快照做一个克隆： \verb|zfs clone pool名/fs名@快照名 pool名/fs克隆名|。 挂载克隆也是一样的语法： \verb|zfs mount pool名/fs克隆名 /快照克隆挂载目录|
+\item 可以直接把快照挂载到某个目录（只读）： \verb`zfs mount -o ro -t snapshot pool名/fs名@快照名 /快照挂载目录`
+\item 挂载后的快照是只读的， 如果要写入， 可以先对快照做一个克隆： \verb`zfs clone pool名/fs名@快照名 pool名/fs克隆名`。 挂载克隆也是一样的语法： \verb`zfs mount pool名/fs克隆名 /快照克隆挂载目录`
 \item 删除快照用 \verb`zfs destroy pool名/dataset名@快照名`
 \end{itemize}
 
@@ -165,13 +165,13 @@ pool名/fs名@快照1   0B      -     7.84T  -
 
 \subsection{dedup （不推荐）}
 \begin{itemize}
-\item \verb|sudo zfs set dedup=on pool名/fs名| 开启查重（重复文件可以节约空间，但会使写入速度严重变慢——实测慢一半）。 可以随时打开或者关闭，只对新数据生效。
-\item 的确，以上设置（无论是否开启 \verb|dedup|）都需要 \verb|1GB/1TB| 的内存。
+\item \verb`sudo zfs set dedup=on pool名/fs名` 开启查重（重复文件可以节约空间，但会使写入速度严重变慢——实测慢一半）。 可以随时打开或者关闭，只对新数据生效。
+\item 的确，以上设置（无论是否开启 \verb`dedup`）都需要 \verb`1GB/1TB` 的内存。
 \end{itemize}
 
 \subsubsection{测试 dedup}
 \begin{itemize}
-\item 2TB 的备份文件拷进去， 开启 \verb|dedup|， 然后再把其中的 1.5TB 拷进另一个文件夹。 开始时的 \verb|zfs list -v|（省略了一些空白列）：
+\item 2TB 的备份文件拷进去， 开启 \verb`dedup`， 然后再把其中的 1.5TB 拷进另一个文件夹。 开始时的 \verb`zfs list -v`（省略了一些空白列）：
 \begin{lstlisting}[language=none]
 (9:55am)
 NAME        SIZE  ALLOC   FREE  FRAG    CAP  DEDUP
@@ -187,5 +187,5 @@ NAME        SIZE  ALLOC   FREE  FRAG    CAP  DEDUP
 pool名        29.1T  6.64T  22.5T  0%    22%  1.05x   
   raidz1   29.1T  6.64T  22.5T  0%  22.8%      - 
 \end{lstlisting}
-\item 彻底弃坑 dedup， 传输文件期间几乎无响应， 各种卡死不能动， 完了一看 \verb|ALLOC| 的增加跟拷贝文件的大小还差不多。
+\item 彻底弃坑 dedup， 传输文件期间几乎无响应， 各种卡死不能动， 完了一看 \verb`ALLOC` 的增加跟拷贝文件的大小还差不多。
 \end{itemize}

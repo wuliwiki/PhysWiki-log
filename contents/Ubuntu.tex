@@ -11,42 +11,42 @@
 
 \subsection{改主机名}
 \begin{itemize}
-\item \verb|hostname 新主机名| 可以临时改变 hostname
-\item \verb|hostnamectl set-hostname 新主机名| 可以永久改变 hostname
+\item \verb`hostname 新主机名` 可以临时改变 hostname
+\item \verb`hostnamectl set-hostname 新主机名` 可以永久改变 hostname
 \end{itemize}
 
 
 \subsection{改键位}\label{sub_Ubuntu_1}
-注意 Ubuntu （20.04 亲测， 参考\href{https://manpages.ubuntu.com/manpages/focal/en/man5/keyboard.5.html}{这里}）设置 xkb config 文件无效的！ 需要在 \verb|/etc/default/keyboard| 里面设置（同样重新 login 以后生效）。 例如添加一行 \verb|XKBOPTIONS=ctrl:swapcaps| 对调 Ctrl 和 Capslock 按键。
+注意 Ubuntu （20.04 亲测， 参考\href{https://manpages.ubuntu.com/manpages/focal/en/man5/keyboard.5.html}{这里}）设置 xkb config 文件无效的！ 需要在 \verb`/etc/default/keyboard` 里面设置（同样重新 login 以后生效）。 例如添加一行 \verb`XKBOPTIONS=ctrl:swapcaps` 对调 Ctrl 和 Capslock 按键。
 
 \subsection{系统版本升级}
 \begin{itemize}
 \item 参考\href{https://www.cyberciti.biz/faq/upgrade-ubuntu-18-04-to-20-04-lts-using-command-line/#Make_a_backup}{这里}。
-\item \verb|sudo apt update && sudo apt upgrade|
-\item \verb|sudo reboot|
-\item \verb|sudo apt install update-manager-core|
-\item \verb|sudo do-release-upgrade|
-\item \verb|sudo reboot|
+\item \verb`sudo apt update && sudo apt upgrade`
+\item \verb`sudo reboot`
+\item \verb`sudo apt install update-manager-core`
+\item \verb`sudo do-release-upgrade`
+\item \verb`sudo reboot`
 \end{itemize}
 
 \subsection{取消 Alt+F5 快捷键}
 \begin{itemize}
-\item \verb|gsettings set org.gnome.desktop.wm.keybindings unmaximize "['<Super>Down']"|
+\item \verb`gsettings set org.gnome.desktop.wm.keybindings unmaximize "['<Super>Down']"`
 \item 参考\href{https://askubuntu.com/questions/1322105/cant-find-alt-f5-in-settings-keyboard-shortcuts}{这里}。
 \end{itemize}
 
 \subsection{Xorg / Wayland}
-用 \verb|echo $XDG_SESSION_TYPE| 可以判断显示服务用的是 xorg 还是 wayland。 新版本 ubuntu 会默认用后者， 但远程桌面软件可能无法正常工作。 可以在 login 的时候在右下角的小齿轮中选择 xrog。
+用 \verb`echo $XDG_SESSION_TYPE` 可以判断显示服务用的是 xorg 还是 wayland。 新版本 ubuntu 会默认用后者， 但远程桌面软件可能无法正常工作。 可以在 login 的时候在右下角的小齿轮中选择 xrog。
 
 \subsection{自定义屏幕分辨率}
 \begin{itemize}
-\item 在 22.04 下， 例如要定义 1368x912 的分辨率， 先用 \verb|cvt 1368 912|， 输出第二行为 \verb|Modeline "1368x912_60.00"  103.00  1368 1448 1592 1816  912 915 925 947 -hsync +vsync|
-\item 执行 \verb|xrandr --newmode "1368x912"  103.00  1368 1448 1592 1816  912 915 925 947 -hsync +vsync|， 后面的数据是复制过来的。 双引号中的名字可以随意。
-\item 执行 \verb|xrandr|， 找到 connected 的显示器名称， 如 \verb|eDP-1 connected primary 1368x912+0+0 ...|
-\item 执行 \verb|xrandr --addmode eDP-1 "1368x912"| 即可添加分辨率。
+\item 在 22.04 下， 例如要定义 1368x912 的分辨率， 先用 \verb`cvt 1368 912`， 输出第二行为 \verb`Modeline "1368x912_60.00"  103.00  1368 1448 1592 1816  912 915 925 947 -hsync +vsync`
+\item 执行 \verb`xrandr --newmode "1368x912"  103.00  1368 1448 1592 1816  912 915 925 947 -hsync +vsync`， 后面的数据是复制过来的。 双引号中的名字可以随意。
+\item 执行 \verb`xrandr`， 找到 connected 的显示器名称， 如 \verb`eDP-1 connected primary 1368x912+0+0 ...`
+\item 执行 \verb`xrandr --addmode eDP-1 "1368x912"` 即可添加分辨率。
 \item 现在打开 setting 中的 display 就可以看到这个分辨率的选项了。
 \item 重启以后， 这些设置都会消失。 要永久生效参考\href{https://askubuntu.com/questions/1376391/how-to-permanently-save-an-xrandr-configuration-for-a-monitor-even-after-reboot}{这里}。
-\item 创建设置文件 \verb|sudo vim /usr/share/X11/xorg.conf.d/10-monitor.conf|， 内容如下
+\item 创建设置文件 \verb`sudo vim /usr/share/X11/xorg.conf.d/10-monitor.conf`， 内容如下
 \begin{lstlisting}[language=none]
 Section "Monitor"
   Identifier "Monitor0"
@@ -68,41 +68,41 @@ EndSection
 
 \subsection{笔记本合上盖子不作为}
 \begin{itemize}
-\item \verb|sudo vim /etc/systemd/logind.conf|， 找到所有包含 \verb|LidSwitch| 的选项， 取消注释， 值改成 \verb|ignore|
-\item 然后运行 \verb|systemctl restart systemd-logind.service| 生效。 注意系统会重新 login
+\item \verb`sudo vim /etc/systemd/logind.conf`， 找到所有包含 \verb`LidSwitch` 的选项， 取消注释， 值改成 \verb`ignore`
+\item 然后运行 \verb`systemctl restart systemd-logind.service` 生效。 注意系统会重新 login
 \end{itemize}
 
 \subsection{自定义桌面、下载等目录}
 \begin{itemize}
-\item 修改设置文件 \verb|~/.config/user-dirs.dirs| 即可
+\item 修改设置文件 \verb`~/.config/user-dirs.dirs` 即可
 \end{itemize}
 
 \subsection{编辑器}
 \begin{itemize}
 \item （貌似没用）默认文本编辑器从 gedit 替换为 vscode： 修改 \verb`/usr/bin/gnome-text-editor` 软链指向 \verb`code` 即可
-\item 第二种方法： \verb|sudo update-alternatives --install /usr/bin/editor editor /usr/bin/code 100| 然后 \verb|sudo update-alternatives --config editor| 选择 \verb|code| 即可。
-\item 第三种方法： 在 \verb|~/.bashrc| 中添加一行 \verb|export EDITOR="/usr/bin/code"|。
+\item 第二种方法： \verb`sudo update-alternatives --install /usr/bin/editor editor /usr/bin/code 100` 然后 \verb`sudo update-alternatives --config editor` 选择 \verb`code` 即可。
+\item 第三种方法： 在 \verb`~/.bashrc` 中添加一行 \verb`export EDITOR="/usr/bin/code"`。
 \end{itemize}
 
 \subsection{安装搜狗输入法}
 \begin{itemize}
 \item \href{https://shurufa.sogou.com/linux}{官网}说支持 Ubuntu 16.04 到 20.04 亲测 22.04 也可成功。 下载安装包。
-\item \href{https://shurufa.sogou.com/linux/guide}{安装说明}， 可以直接搜索 \verb|Ubuntu20.04|。
+\item \href{https://shurufa.sogou.com/linux/guide}{安装说明}， 可以直接搜索 \verb`Ubuntu20.04`。
 \item 先把系统切换成中文， 完了可以再切换回英文。
-\item \verb|sudo apt update && sudo apt install fcitx -y|
+\item \verb`sudo apt update && sudo apt install fcitx -y`
 \item 语言设置中， 语言支持， 将语言选择为 fcitx
-\item fcitx 开机自启动： \verb|sudo cp /usr/share/applications/fcitx.desktop /etc/xdg/autostart/|
-\item \verb|sudo apt purge ibus|
-\item \verb|sudo dpkg -i 安装包名|
-\item \verb|sudo apt install libqt5qml5 libqt5quick5 libqt5quickwidgets5 qml-module-qtquick2|
-\item \verb|sudo apt install libgsettings-qt1|
+\item fcitx 开机自启动： \verb`sudo cp /usr/share/applications/fcitx.desktop /etc/xdg/autostart/`
+\item \verb`sudo apt purge ibus`
+\item \verb`sudo dpkg -i 安装包名`
+\item \verb`sudo apt install libqt5qml5 libqt5quick5 libqt5quickwidgets5 qml-module-qtquick2`
+\item \verb`sudo apt install libgsettings-qt1`
 \item 重启电脑， 右上角菜单栏就可以找到搜狗。
 \item 如果系统中还有一些 UI 中残留有中文， 就在语言设置里面 Manage Installed Language， 然后按 apply system-wide。
 \end{itemize}
 
 \subsection{应用图标}
 \begin{itemize}
-\item Launcher 中的应用图标都是 \verb|/usr/share/applications| 中的文本设置文件， 例如
+\item Launcher 中的应用图标都是 \verb`/usr/share/applications` 中的文本设置文件， 例如
 \begin{lstlisting}[language=none,caption=xxx.desktop]
 [Desktop Entry]
 Version=1.0
@@ -115,16 +115,16 @@ Categories=Development;IDE;
 Terminal=false
 StartupNotify=true
 \end{lstlisting}
-\item 创建以后一定要确保具有可执行权限！ \verb|chmod +x xxx.desktop| 否则普通用户将无法点击运行。
-\item 其中 \verb|%f| 是， 比如说用这个 app 打开一个或者多个文件， \verb|%f| 就会替换为文件列表
-\item 注意执行程序的环境不会先跑 \verb|~/.bashrc|， 比如从 Launcher 中打开 CLion， \verb|~/.bashrc| 中设置的环境变量并不会生效。 要解决这个问题， 可以自己另外创建一个脚本
+\item 创建以后一定要确保具有可执行权限！ \verb`chmod +x xxx.desktop` 否则普通用户将无法点击运行。
+\item 其中 \verb`%f` 是， 比如说用这个 app 打开一个或者多个文件， \verb`%f` 就会替换为文件列表
+\item 注意执行程序的环境不会先跑 \verb`~/.bashrc`， 比如从 Launcher 中打开 CLion， \verb`~/.bashrc` 中设置的环境变量并不会生效。 要解决这个问题， 可以自己另外创建一个脚本
 \begin{lstlisting}[language=none,caption=clion.sh]
 #!/bin/bash
 source xxx_setup.sh # 注意直接 \verb`source ~/.bashrc` 貌似无效不知道为什么
 sh /home/addis/clion-*/bin/clion.sh
 \end{lstlisting}
-\item 现在再把 \verb|Exec| 设置为 \verb|/路径/clion.sh| 即可。
-\item 如果要 debug， 可以在 \verb|clion.sh| 中输出一些信息， 然后把上面的 \verb|Terminal| 选项变为 \verb|true|。
+\item 现在再把 \verb`Exec` 设置为 \verb`/路径/clion.sh` 即可。
+\item 如果要 debug， 可以在 \verb`clion.sh` 中输出一些信息， 然后把上面的 \verb`Terminal` 选项变为 \verb`true`。
 \end{itemize}
 
 

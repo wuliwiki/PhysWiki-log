@@ -37,42 +37,42 @@
 \begin{itemize}
 \item 超出范围的任何类型整数值转换为无符号整型时， 将其模 $2^n$ （$n$ 是目标类型的比特数）， 例如 $n = 8$ 时 -1 转换为 255。
 \item 超出范围的任何值转换为有符号整型， 结果无定义。
-\item 如果你想要把一个变量转换为另一个同长度变量并保持每个 bit 不变， 用 \verb|memcpy()| 函数。
+\item 如果你想要把一个变量转换为另一个同长度变量并保持每个 bit 不变， 用 \verb`memcpy()` 函数。
 \end{itemize}
 其他基本类型转换规则：
 \begin{itemize}
-\item 其他类型转换为 \verb|bool|： 0 变为 \verb|false|， 否则变为 \verb|true|
-\item \verb|bool| 转换为其他类型： \verb|true| 变为 1， \verb|false| 变为 0
+\item 其他类型转换为 \verb`bool`： 0 变为 \verb`false`， 否则变为 \verb`true`
+\item \verb`bool` 转换为其他类型： \verb`true` 变为 1， \verb`false` 变为 0
 \item 浮点类型转换为整数类型： 向 0 取整
 \item 整型转为浮点： 如果位数太多会不精确
-\item \verb|signed| 和 \verb|unsigned| 整数之间比较大小或相等或时（如果开了 \verb|-Wall|， 编译器会给出警告）， 前者会先转换为后者。 这就导致负数有可能大于正数。做加减乘除时也一样， 这叫做 \textbf{usual arithmetic conversions}。
+\item \verb`signed` 和 \verb`unsigned` 整数之间比较大小或相等或时（如果开了 \verb`-Wall`， 编译器会给出警告）， 前者会先转换为后者。 这就导致负数有可能大于正数。做加减乘除时也一样， 这叫做 \textbf{usual arithmetic conversions}。
 \end{itemize}
 
 \subsection{Integral Promotion}
 \begin{itemize}
-\item 当较短的整型（\verb|bool, char, signed char, unsigned char, short, unsigned short| 等， 包括 11 以后的新标准加入的一些类型）参与二元运算如
+\item 当较短的整型（\verb`bool, char, signed char, unsigned char, short, unsigned short` 等， 包括 11 以后的新标准加入的一些类型）参与二元运算如
 \begin{lstlisting}[language=cpp]
 +, -, *, /, %, &, |, ^, <<, >>, ==,
 !=, <, >, <=, >=, +=, -=, *=, /=, %=,
 &=, |=, ^=, <<=, >>=
 \end{lstlisting}
 以及 \verb`:?` 的第二和第三个参数， 会先转换为较大的整型， 这就叫 \textbf{integral promotion} 或 \textbf{integer promotion}
-\item 如果 \verb|int| 可以表示该类型的全部范围， 那么转换为 \verb|int|
-\item 否则如果 \verb|unsigned int| 可以表示该类型的全部范围， 那么转换为 \verb|unsigned int|
+\item 如果 \verb`int` 可以表示该类型的全部范围， 那么转换为 \verb`int`
+\item 否则如果 \verb`unsigned int` 可以表示该类型的全部范围， 那么转换为 \verb`unsigned int`
 \item 否则不发生 integral promotion。
 \end{itemize}
 
 \subsection{Usual Arithmetic Conversion}
 \begin{itemize}
-\item 当使用上述二元运算时， 如果 integral promotion 以后仍然不是同一个类型， 那么就用 usual arithmetic conversion 确保转换为同一个类型。 如果两个整型有 \verb|unsigned| 类型， 那么就转换为 \verb|unsigned| 类型， 否则转换为 \verb|signed| 类型。
+\item 当使用上述二元运算时， 如果 integral promotion 以后仍然不是同一个类型， 那么就用 usual arithmetic conversion 确保转换为同一个类型。 如果两个整型有 \verb`unsigned` 类型， 那么就转换为 \verb`unsigned` 类型， 否则转换为 \verb`signed` 类型。
 \end{itemize}
 
 \subsection{Integer Literal}
-\footnote{参考 \href{https://en.cppreference.com/w/cpp/language/integer_literal}{cppreference}。}这里讨论 c++11 标准。 literal 中的字母不区分大小写， \verb|0| 开头表示 8 进制，  \verb|0x| 开头表示 16 进制， 数字后面可以加 \verb|u|， 以及 \verb|l| 或 \verb|ll| 的一个（可以是大写）。 literal 的类型会根据数值的大小而变化。
+\footnote{参考 \href{https://en.cppreference.com/w/cpp/language/integer_literal}{cppreference}。}这里讨论 c++11 标准。 literal 中的字母不区分大小写， \verb`0` 开头表示 8 进制，  \verb`0x` 开头表示 16 进制， 数字后面可以加 \verb`u`， 以及 \verb`l` 或 \verb`ll` 的一个（可以是大写）。 literal 的类型会根据数值的大小而变化。
 
 \begin{itemize}
-\item 最小是 \verb|int|， 最大是 \verb|long long int| 每一种前面都可以加 \verb|unsigned|
-\item 有后缀 \verb|u| 必定是 \verb|unsigned|
-\item 没有 \verb|u| 的十进制必定是 signed， 其他进制可以是 signed 或 unsigned （首选 signed）
-\item 后缀 \verb|l| 和 \verb|ll| 分别规定类型至少为 \verb|long| 和 \verb|long long|， 如果数值超出就不断升级
+\item 最小是 \verb`int`， 最大是 \verb`long long int` 每一种前面都可以加 \verb`unsigned`
+\item 有后缀 \verb`u` 必定是 \verb`unsigned`
+\item 没有 \verb`u` 的十进制必定是 signed， 其他进制可以是 signed 或 unsigned （首选 signed）
+\item 后缀 \verb`l` 和 \verb`ll` 分别规定类型至少为 \verb`long` 和 \verb`long long`， 如果数值超出就不断升级
 \end{itemize}

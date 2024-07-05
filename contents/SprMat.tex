@@ -27,12 +27,12 @@
 \textbf{带对角矩阵（Banded Matrix）}只储存矩阵主对角线上下的若干条对角线， 上带宽和下带宽分别指定主对角线上面和下面有几条对角线， 例如三对角矩阵的上带宽和下带宽都是 1。 带内即使有矩阵元为零也必须储存。 这样就可以按照 row major 或者 column major 来储存。 详见 “\enref{数据结构：带对角矩阵}{BanDmt}”。
 
 \subsection{Coordinate List （COO）}
-COO 格式列出非零矩阵元和对应的行标列标。 通常将它们储存为三个数组 \verb|a|， \verb|ia|， \verb|ja|， 顺序任意。 除此之外， 有时还需要储存三个数组的长度 \verb|nnz| （none zero） 以及矩阵的尺寸。
+COO 格式列出非零矩阵元和对应的行标列标。 通常将它们储存为三个数组 \verb`a`， \verb`ia`， \verb`ja`， 顺序任意。 除此之外， 有时还需要储存三个数组的长度 \verb`nnz` （none zero） 以及矩阵的尺寸。
 
 \subsection{Compressed Sparse Row （CSR）}\label{sub_SprMat_3}
 也叫 \textbf{Compressed Row Storage （CRS）}， 这种格式做矩阵与矢量相乘较快，因为需要逐行获取矩阵的值。
 
-CRS 格式储存为三个一维数组 \verb|a|， \verb|ia|， \verb|ja|， 想象 COO 格式的矩阵元按照行主序排列后储存， 那么行标将会出现类似 \verb|0,0,1,1,1,1,2,2,3,3,3| 这样的重复。 所以为了提高效率可以把行标矩阵 \verb|ia| 的信息压缩， 令 \verb|ia[i]| 表示第 \verb|i| 行上方所有行的矩阵元个数， \verb|ia| 的长度是矩阵行数加一。 所以 \verb|ia[0]| 恒为零， 且最后一个元素就是非零元的个数 \verb|Nnz|。 第 \verb|i| 行矩阵元从 \verb|a[ia[i]]| 一直到 \verb|a[ia[i+1]-1]|。 注意如果矩阵的第 \verb|i| 行是空的， 那么 \verb|ia[i+1]| 等于 \verb|ia[i]|， \verb|ia[i+1]-1| 反而比 \verb|ia[i]| 要小， 于是循环 \verb|for(n=ia[i]; n<ia[i+1]; ++n)| 不执行。 \verb|ja| 和 COO 一样仍然是对应矩阵元的列标。
+CRS 格式储存为三个一维数组 \verb`a`， \verb`ia`， \verb`ja`， 想象 COO 格式的矩阵元按照行主序排列后储存， 那么行标将会出现类似 \verb`0,0,1,1,1,1,2,2,3,3,3` 这样的重复。 所以为了提高效率可以把行标矩阵 \verb`ia` 的信息压缩， 令 \verb`ia[i]` 表示第 \verb`i` 行上方所有行的矩阵元个数， \verb`ia` 的长度是矩阵行数加一。 所以 \verb`ia[0]` 恒为零， 且最后一个元素就是非零元的个数 \verb`Nnz`。 第 \verb`i` 行矩阵元从 \verb`a[ia[i]]` 一直到 \verb`a[ia[i+1]-1]`。 注意如果矩阵的第 \verb`i` 行是空的， 那么 \verb`ia[i+1]` 等于 \verb`ia[i]`， \verb`ia[i+1]-1` 反而比 \verb`ia[i]` 要小， 于是循环 \verb`for(n=ia[i]; n<ia[i+1]; ++n)` 不执行。 \verb`ja` 和 COO 一样仍然是对应矩阵元的列标。
 
 \subsection{Compressed Sparse Column （CSC）}
 也叫 \textbf{Compressed Column Storage （CCS）}， 与 CRS 一样， 只是改为 column major。
