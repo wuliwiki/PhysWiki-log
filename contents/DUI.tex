@@ -1,0 +1,196 @@
+% 堆（综述）
+% license CCBYSA3
+% type Wiki
+
+（本文根据 CC-BY-SA 协议转载自原搜狗科学百科对英文维基百科的翻译）
+
+\begin{figure}[ht]
+\centering
+\includegraphics[width=6cm]{./figures/03f9b937228dc998.png}
+\caption{二叉堆的示例，其中节点为1到100之间的整数。} \label{fig_DUI_3}
+\end{figure}
+在计算机科学中，堆是一种特殊的基于树的数据结构，本质上是一棵几乎完全的[1]树， 它满足堆属性：在最大堆中，对于任意给定的节点C，如果P是C的父节点，那么P的键（值）大于或等于C的键。在最小堆中，P的键小于或等于C的键。堆“顶部”的节点（没有父节点）称为根节点。
+
+堆是称为优先队列的抽象数据类型的最有效实现，事实上优先队列通常被称为“堆”，不管它们是如何实现的。在堆中，最高（或最低）优先级的元素总是存储在根节点。然而，堆不是排序结构，它可以被认为是部分有序的。当需要重复移除优先级最高（或最低）的对象时，堆是一种有用的数据结构。
+
+堆的一个常见实现是二叉堆，其中树是二叉树（见图）。堆数据结构，特别是二叉堆，是由J. W. J. Williams在1964年引入的，作为堆排序算法的数据结构。[2] 堆在一些高效的图算法中也很重要，比如Dijkstra算法。当堆是一棵完全二叉树时，它有一个最小的可能高度——一个有N个节点的堆，对于每个节点，一个分支总是有loga N 的高度。
+
+注意，如图所示，兄弟和堂兄弟之间没有隐含的排序，也没有有序遍历的隐含序列（例如，在二叉搜索树中）。上面提到的堆关系仅适用于节点和它们的父亲、祖父等之间。每个节点可以拥有的最大子节点数取决于堆的类型。
+
+\subsection{操作}
+涉及堆的常见操作有:
+
+基础
+\begin{itemize}
+\item 查找最大值(或查找最小值):分别查找最大堆的最大项或最小堆的最小项(也称为peek)
+插入:向堆中添加一个新键(也可称push[3])
+\item 提取最大值(或提取最小值):从堆中移除节点后，返回最大堆的最大值[或最小堆的最小值](也称为pop)[4])
+\item 删除-最大(或删除-最小):分别删除最大堆(或最小堆)的根节点
+\item 替换:弹出根节点并压入新键。比先进行pop,后进行push更有效，因为只需要平衡一次，而不是两次，并且适合固定大小的堆。[5]
+\end{itemize}
+
+创建
+\begin{itemize}
+\item 创建堆:创建一个空堆
+\item 堆化:用给定的元素数组创建一个堆
+\item 合并（merge、union):连接两个堆，形成一个包含两个堆的所有元素的有效新堆，保留原始堆。
+\item 合并（meld）:连接两个堆，形成一个包含两个堆的所有元素的有效新堆，销毁原始堆。
+\end{itemize}
+
+检查
+\begin{itemize}
+\item 大小（size）:返回堆中的项数。
+\item 判空（is-empty）:如果堆为空，则返回true，否则返回false。
+\end{itemize}
+
+内部的
+\begin{itemize}
+\item 增加键或减少键:分别更新最大堆或最小堆中的键
+\item 删除:删除任意节点(随后移动最后一个节点并筛选以维护堆)
+\item 向上筛选:根据需要在树中向上移动一个节点；用于在插入后恢复堆状态。之所以被称为“筛选”，是因为节点在树中向上移动，直到达到正确的水平，就像在筛子中一样。
+\item 向下筛选:在树中向下移动一个节点，类似于向上筛选；用于在删除或替换后恢复堆状态。
+\end{itemize}
+
+\subsection{实现}
+\begin{figure}[ht]
+\centering
+\includegraphics[width=10cm]{./figures/1e47b4130d0c5882.png}
+\caption{一个完全二叉最大堆的例子，节点是从1到100之间的整数。图示了它将如何存储在数组中。} \label{fig_DUI_1}
+\end{figure}
+堆通常在数组(固定大小或动态数组)中实现，并且不需要元素之间的指针。元素插入堆或从堆中删除后，可能会违反堆性质，必须通过内部操作来平衡堆。
+
+二叉堆可以用单独使用数组的非常节省空间的方式来表示。第一个(或最后一个)元素将包含根元素。数组接下来两个元素包含根元素的孩子。接下来的四个包含两个子节点的四个子节点，等等。因此，在位置n的节点的子节点将在以1为起点编号数组的2n和2n+1位置，或者“以0为起点编号数组的2n+1和2n+2位置。这允许通过简单的索引计算来向上或向下移动树。允许通过向上筛选或向下筛选操作（交换无序元素）来完成平衡堆。因为我们可以从一个数组构建一个堆，而不需要额外的内存(例如，对于节点)，所以heapsort可以用来就地排序一个数组。
+
+不同类型的堆以不同的方式实现操作，但值得注意的是，插入通常是通过在堆的末尾第一个可用空间中添加新元素来完成的。这通常会违反堆性质，因此元素会被向上筛选，直到堆性质被重新建立。类似地，删除根元素是通过移动根元素，然后将最后一个元素放入根并向下筛选以重新平衡。因此，替换是通过删除根并将新元素放入根并向下筛选来完成的，和先pop(向下筛选最后一个元素）,再push（向上筛选新元素）后相比，避免了向上筛选步骤。
+
+从给定的元素数组中构造二叉(或d叉)堆可以使用经典弗洛伊德算法在线性时间内执行，最差情况下的比较次数等于2N − 2s2(N) − e2(N) (对于二叉堆)，其中 s2(N)是N的二进制表示的所有数字的总和，e2(N)是N的素数因子分解中的2的指数，[6] 这比连续插入原始空堆的序列更快，该操作是对数线性的。
+
+\subsection{变体}
+\begin{itemize}
+\item 2–3堆
+\item b堆
+\item Beap
+\item 二进制堆
+\item 二项式堆
+\item Brodal队列
+\item d-ary堆
+\item 斐波那契堆
+\item 树叶堆
+\item 左翼堆
+\item 配对堆
+\item 基数堆
+\item 随机可融合堆
+\item 倾斜堆
+\item 软堆
+\item 三元堆
+\item Treap
+\item 弱势群体
+\end{itemize}
+
+\subsection{变体理论界限的比较}
+以下是各种堆数据结构的时间复杂度。 函数名假设一个最小堆。
+
+In the following time complexities[7] O(f) is an asymptotic upper bound and Θ(f) is an asymptotically tight bound (see Big O notation). Function names assume a min-heap.
+\begin{figure}[ht]
+\centering
+\includegraphics[width=14.25cm]{./figures/0667843450a522fc.png}
+\caption\label{fig_DUI_2}
+\end{figure}
+\begin{enumerate}
+    \item Each insertion takes $O(\log(k))$ in the existing size of the heap, thus $$\sum_{k=1}^N O(\log k).~$$ Since 
+   $$\log \frac{n}{2} = (\log n) - 1,~$$
+    a constant factor (half) of these insertions are within a constant factor of the maximum, so asymptotically we can assume $k = n$; formally the time is 
+   $$ n O(\log n) - O(n) = O(n \log n).~$$
+    This can also be readily seen from Stirling's approximation.
+    
+    \item Brodal and Okasaki later describe a persistent variant with the same bounds except for decrease-key, which is not supported. Heaps with $n$ elements can be constructed bottom-up in $O(n)$.
+    
+    \item Amortized time.
+    
+    \item Lower bound of $\Omega(\log \log n)$, upper bound of $O(2^{2\sqrt{\log \log n}})$.
+    
+    \item $n$ is the size of the larger heap.
+\end{enumerate}
+\begin{enumerate}
+    \item 在堆的现有大小中，每次插入的时间复杂度为 $O(\\log(k))$，因此由于这些插入的常数薪资（一半）在最大常数因子内，因此我们可以渐进地假设；形式上的时间是。这也可以从弗斯特林公式中很容易看出。
+    \item 跳到：$a b c d e f g h i$ 摆平时间
+    \item $n$ 是较大堆的大小。
+    \item 下界 上界
+    \item Brodal 和 Okasaki 后来描述了一个具有相同边界的持久变体，除了 \textbf{reduce-key}，这是不受支持的。具有 $n$ 个元素的堆可以在 $O(n)$ 中自下而上地构建。
+\end{enumerate}
+
+\subsection{应用}
+堆数据结构有许多应用。
+\begin{itemize}
+\item Heapsort:最好的就地排序算法之一，并且最坏的情况也低于O(n2)。
+\item 选择算法:堆允许在常量时间内访问最小或最大元素，其他选择(如中值或第k个元素)可以在次线性时间内对堆中的数据进行。[16]
+\item 图算法:通过使用堆作为内部遍历数据结构，运行时间将按多项式阶减少。这类问题的例子有Prim的最小生成树算法和Dijkstra的最短路径算法。
+\item 优先队列(Priority Queue):优先队列是像“列表”或“地图”这样的抽象概念；正如列表可以用链表或数组来实现一样，优先队列也可以用堆或各种其他方法来实现。
+\item $k$路合并:堆数据结构有助于将许多已经排序的输入流合并成单个排序的输出流。需要合并的例子包括外部排序和来自分布式数据（例如日志结构的合并树）流式结果。内部循环正在获取最小元素，用对应输入流的下一个元素替换，然后执行向下筛选堆操作。(或者替换功能。)(使用优先级队列的提取最大元素和插入函数效率要低得多。)
+\item 顺序统计:堆数据结构可以用来有效地找到数组中第k个最小(或最大)的元素。
+\end{itemize}
+
+\subsection{实现_F}
+\begin{itemize}
+\item C++标准库为堆(通常实现为二叉堆)提供了make_heap、push_heap和pop_heap算法，这些算法在任意随机访问迭代器上运行。它将迭代器视为对数组的引用，并使用数组到堆的转换。它还提供了容器适配器priority_queue，它将这些工具包装在一个类似容器的类中。但是，对于替换、向上筛选/向下筛选或减少/增加键操作没有标准支持。
+\item Boost C++库包括一个堆库。与STL不同，它支持减少和增加操作，并支持额外类型的堆:具体来说，它支持d叉堆、二项式堆、斐波那契堆、配对堆和斜堆。
+\item C和C++有一个通用的堆实现，支持D叉堆和B-heap。它提供了一个类似STL的应用程序接口。
+\item D编程语言的标准库包括std.container.BinaryHeap，它是根据D的范围实现的。实例可以从任意随机访问范围构建。二叉堆(BinaryHeap)公开了一个输入范围接口，该接口允许用D的内置foreach语句进行迭代，并与std.algorithm包的基于范围的应用编程接口进行集成。
+\item java平台(从1.5版开始)提供了一个二叉堆实现，该二叉堆是通过在Java集合框架中使用类java.util.PriorityQueue来实现。默认情况下，该类实现最小堆；为了实现最大堆，程序员应该编写一个自定义比较器。不支持替换、向上筛选/向下筛选或减少/增加键操作。
+\item Python有一个heapq模块，它使用二叉堆实现优先队列。该库公开了一个heapreplace函数来支持k路合并。
+\item 在标准PHP库中，从5.3版开始，PHP同时具有最大堆(SplMaxHeap)和最小堆(SplMinHeap)。
+\item Perl在堆分布中实现了二叉堆、二项式堆和斐波那契堆，这些实现的堆可在CPAN上获得。
+\item Go语言包含一个heap包，heap包中的堆算法在满足给定接口的任意类型上运行。该包不支持替换、向上筛选/向下筛选或减少/增加键操作。
+\item 苹果的核心基础库包含一个CFBinaryHeap结构。
+\item Pharo在Collections-Sequenceable包中实现了一个堆以及一组测试用例。堆用于定时器事件循环的实现。
+\item Rust编程语言在其标准库的collections模块中有一个二叉最大堆实现BinaryHeap。
+\end{itemize}
+
+\subsection{参考文献}
+[1]
+^CORMEN, THOMAS H. (2009). INTRODUCTION TO ALGORITHMS. United States of America: The MIT Press Cambridge, Massachusetts London, England. pp. 151–152. ISBN 978-0-262-03384-8..
+
+[2]
+^Williams, J. W. J. (1964), "Algorithm 232 - Heapsort", Communications of the ACM, 7 (6): 347–348, doi:10.1145/512274.512284.
+
+[3]
+^The Python Standard Library, 8.4. heapq — Heap queue algorithm, heapq.heappush.
+
+[4]
+^The Python Standard Library, 8.4. heapq — Heap queue algorithm, heapq.heappop.
+
+[5]
+^The Python Standard Library, 8.4. heapq — Heap queue algorithm, heapq.heapreplace.
+
+[6]
+^Suchenek, Marek A. (2012), "Elementary Yet Precise Worst-Case Analysis of Floyd's Heap-Construction Program", Fundamenta Informaticae, IOS Press, 120 (1): 75–92, doi:10.3233/FI-2012-751..
+
+[7]
+^Cormen, Thomas H. （英语：Thomas H. Cormen）; Leiserson, Charles E. ; Rivest, Ronald L. (1990). Introduction to Algorithms (1st ed.). MIT Press and McGraw-Hill. ISBN 0-262-03141-8.CS1 maint: Multiple names: authors list (link).
+
+[8]
+^Fredman, Michael Lawrence; Tarjan, Robert E. (July 1987). "Fibonacci heaps and their uses in improved network optimization algorithms" (PDF). Journal of the Association for Computing Machinery. 34 (3): 596–615. doi:10.1145/28869.28874..
+
+[9]
+^Iacono, John (2000), "Improved upper bounds for pairing heaps", Proc. 7th Scandinavian Workshop on Algorithm Theory (PDF), Lecture Notes in Computer Science, 1851, Springer-Verlag, pp. 63–77, arXiv:1110.4428, doi:10.1007/3-540-44985-X_5, ISBN 3-540-67690-2.
+
+[10]
+^Brodal, Gerth S. (1996), "Worst-Case Efficient Priority Queues" (PDF), Proc. 7th Annual ACM-SIAM Symposium on Discrete Algorithms, pp. 52–58.
+
+[11]
+^Haeupler, Bernhard; Sen, Siddhartha; Tarjan, Robert E. (November 2011). "Rank-pairing heaps" (PDF). SIAM J. Computing: 1463–1485. doi:10.1137/100785351..
+
+[12]
+^Brodal, G. S. L.; Lagogiannis, G.; Tarjan, R. E. (2012). Strict Fibonacci heaps (PDF). Proceedings of the 44th symposium on Theory of Computing - STOC '12. p. 1177. doi:10.1145/2213977.2214082. ISBN 9781450312455..
+
+[13]
+^Goodrich, Michael T.; Tamassia, Roberto (2004). "7.3.6. Bottom-Up Heap Construction". Data Structures and Algorithms in Java (3rd ed.). pp. 338–341. ISBN 0-471-46983-1..
+
+[14]
+^Fredman, Michael Lawrence (July 1999). "On the Efficiency of Pairing Heaps and Related Data Structures" (PDF). Journal of the Association for Computing Machinery. 46 (4): 473–501. doi:10.1145/320211.320214..
+
+[15]
+^Pettie, Seth (2005). Towards a Final Analysis of Pairing Heaps (PDF). FOCS '05 Proceedings of the 46th Annual IEEE Symposium on Foundations of Computer Science. pp. 174–183. CiteSeerX 10.1.1.549.471. doi:10.1109/SFCS.2005.75. ISBN 0-7695-2468-0..
+
+[16]
+^Frederickson, Greg N. (1993), "An Optimal Algorithm for Selection in a Min-Heap", Information and Computation (PDF), 104 (2), Academic Press, pp. 197–214, doi:10.1006/inco.1993.1030.

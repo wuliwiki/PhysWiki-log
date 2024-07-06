@@ -19,15 +19,17 @@
 \item \verb`-O3` 是最优化， \verb`-g` 是调试， 如果不调试， 需要手动定义 \verb`-D NDEBUG`
 \item \verb`-g` 不包含一些信息如宏定义， 需要用 \verb`-g3`， 要打出 Macro 的位置和定义， 用 \verb`info macro 宏名`
 \item static link 时候， .o 文件或者库只能调用它后面的 .o 文件或者库。 因为 linker 按顺序搜索， 从 \verb`main()` 函数开始， 如果有未定义的 symbol 就留到以后再找， 而把没有用的 symbol 抛弃。 这样能提高效率。
-\item 如果有多个 .o 或者库互相依赖， 就用括号括起来， 例如 \verb`g++ hello.cpp -L. -( -la -lb -)`
+\item 如果有多个 .o 或者库互相依赖， 就用括号括起来， 例如 \verb`g++ hello.cpp -L. -( -la -lb -)`。 \verb`-(...-)` 是 \verb`--start-group ... --end-group` 的简写。
 \item 检查内存泄露可以用 Address Sanitizer： \verb`g++ main.cpp -fsanitize=address -static-libasan -g`。 注意仅适用于动态编译。
-\item 检查 signed 整数加减乘的溢出可以用 \verb`-ftrapv`， 亲测支持 \verb`int, long, long long` （其他类型貌似不行）， 运行时会终止程序， 可以用 gdb 找到位置， 不能在程序中 \verb`catch`。如果想支持所有整数类型， 可以用 \verb`SafeInt` 库。
+\item 自动检查 signed 整数加减乘的溢出可以用 \verb`-ftrapv`， 亲测支持 \verb`int, long, long long` （其他类型貌似不行）， 运行时会终止程序， 可以用 gdb 找到位置， 不能在程序中 \verb`catch`。如果想支持所有整数类型， 可以用 \verb`SafeInt` 库。
 \item \verb`g++` 的默认输出是 stderr 而不是 stdout， 所以如果 pipe 的时候要指定 stderr
 \end{itemize}
 
 \subsection{linker (ld)}
 \begin{itemize}
-\item \verb`g++` 在链接阶段就是调用 \verb`ld` 命令
+\item \verb`g++` 在链接阶段就是调用 \verb`ld` 命令，也就是 GNU Linker
+\item 例如 \verb`ld -o my_program file1.o file2.o -L/path/to/libs -lmylib -lc -dynamic-linker /lib64/ld-linux-x86-64.so.2`
+\item 如果所有的 o 文件中有重复的 symbol （函数/变量）链接时就会触发 ODR 错误， \verb`--allow-multiple-definition` （危险）会忽略错误并使用第一个看到的定义。
 \item \verb`-L` 指定添加 \verb`-l` 的搜索路径
 \item \verb`ld --verbose | grep SEARCH_DIR | tr -s ' ;' \\012` 可以查看 \verb`linker` 的默认搜索路径
 \end{itemize}
@@ -41,7 +43,7 @@
 \subsection{编译警告}
 \begin{itemize}
 \item 详见\href{https://gcc.gnu.org/onlinedocs/gcc/Warning-Options.html}{文档}。
-\item 在编译输出的警告中一般会有 \verb`[-Wxxx]`， 如果不需要警告， 就用 \verb`-Wno-xxx`。
+\item 在编译输出的警告中一般会提示 \verb`[-Wxxx]`， 如果不需要警告， 就用 \verb`-Wno-xxx`。
 \end{itemize}
 
 \subsection{宏}
@@ -58,7 +60,7 @@
 \item \verb`LD_LIBRARY_PATH` 是运行时搜索动态链接库的路径。 相当于 \verb`rpath`（详见 “\enref{g++ 编译器创建静态和动态链接库}{gppLib}”）。
 \end{itemize}
 
-\subsection{标准}
+\subsection{C++ 标准}
 \begin{itemize}
 \item 参考\href{https://gcc.gnu.org/onlinedocs/gcc/Standards.html}{文档}。
 \item 目前（2022-11-23）， \verb`g++` 的默认标准是 \verb`-std=gnu++17` 这是 \verb`-std=c++17` 加上 GNU 的一些拓展。
@@ -66,7 +68,7 @@
 \item 如果要严格符合标准（去除所有 gnu 拓展）， 用 \verb`-pedantic` 给出警告，或者 \verb`-pedantic-errors` 给出错误。
 \end{itemize}
 
-\subsection{依赖}
+\subsection{头文件依赖}
 \begin{itemize}
 \item \verb`g++ -H xxx.cpp` 可以列出所有头文件的路径，尤其是 \verb`#include <...>` 中的有时候很难判断用的是哪里的头文件另见（\verb`CPATH` 环境变量和 \verb`-I` 选项）。
 \item \verb`g++` 的 \verb`-MM` 选项可以生成某个 cpp 文件或者 h 文件的所有依赖（包括依赖的依赖）。 \verb`-MM -nostdinc++` 则可以在依赖中去掉标准库中的头文件。

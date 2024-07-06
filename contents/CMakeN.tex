@@ -25,7 +25,7 @@
 \item Cmake 3.0 开始支持 raw string， 格式为 \verb`[=[字符串]=]` 等号可以有一个也可以有多个。
 \item \verb`set` 可以对变量赋值， 例如 \verb`set(变量 123)`。
 \item 变量是区分大小写的。
-\item \verb`set` 也可以把许多变量变成一个 list， 如 \verb`set(Foo aaa bbb ccc)` 等效于 \verb`set(Foo "aaa" "bbb" "ccc")` 等效于 \verb`set(Foo "aaa;bbb;ccc")` 等效于 \verb`set(Foo aaa;bbb;ccc)`。
+\item \verb`set` 也可以把许多变量变成一个 \textbf{list}， 如 \verb`set(Foo aaa bbb ccc)` 等效于 \verb`set(Foo "aaa" "bbb" "ccc")` 等效于 \verb`set(Foo "aaa;bbb;ccc")` 等效于 \verb`set(Foo aaa;bbb;ccc)`。
 \item 把 list 作为 \verb`命令()` 的参数相当于多个 \verb`arg`。 例如 \verb`命令(${Foo})` 相当于 \verb`命令(aaa bbb ccc)`。
 \item 所以 \verb`命令("${Foo}")` 相当于 \verb`命令("aaa;bbb;ccc")` 也就是说命令的第一个参数是一个 list。
 \item linux 环境变量和 windows 注册表变量可以直接作为变量使用， 格式如 \verb`$EVN{变量}`。 例子： \verb`message(STATUS $ENV{PWD})`。 注意 cmake 看到的环境变量未必和 bash 中的相同， 可以用 \verb`cmake -E environment` 检查。
@@ -87,16 +87,62 @@
 \item \verb`check_symbol_exists` 的实现使用了 \verb`try_compile()` 和 \verb`try_run()` 函数， 试图编译和运行一个测试程序， 从运行结果来判断是否存在符号。
 \end{itemize}
 
-\subsection{依赖}
+\subsection{链接库}
 \begin{itemize}
-\item \verb`find_package(包名)`
-\item \verb`find_package(包名 REQUIRED)` 如果找不到就报错终止
-\item \verb`包名` 会在 \verb`CMAKE_MODULE_PATH` 的路径里面搜索名为 \verb`Find包名.cmake` 或者 \verb`包名Config.cmake` 的文件。 该文件通常会设置一些变量， 可以在 \verb`find_package` 结束后访问。
-\item \verb`find_library(变量 NAMES 库名1 库名2 PATHS /usr/lib /usr/local/lib HINTS $ENV{LIBRARY_PATH} $ENV{LD_LIBRARY_PATH})` 可以寻找 \verb`lib库名.so或a[.版本号]`。 若要指定版本可以用例如 \verb`gfortran.3`， 也可以指定 \verb`gfortran.so或a`。 注意指定目录的子目录不会被搜索。
+\item \verb`find_library()` 的默认搜索路径如 \verb`/usr/lib`，\verb`/usr/local/lib`， \verb`/usr/[local/]share/cmake/Modules/`， \verb`/usr/lib/x86_64-linux-gnu/cmake/` 以及环境变量 \verb`LD_LIBRARY_PATH` 中的路径。
+\item \verb`find_library(变量 NAMES 库名1 库名2 PATHS /usr/lib /usr/local/lib HINTS $ENV{LIBRARY_PATH} $ENV{LD_LIBRARY_PATH})` 可以寻找 \verb`lib库名.so或a[.版本号]`，然后把路径写入 \verb`变量`（不做其他事情）。 若要指定版本可以用例如 \verb`gfortran.3`， 也可以指定 \verb`gfortran.so或a`。 注意指定目录的子目录不会被搜索。
 \item \verb`set(CMAKE_FIND_LIBRARY_SUFFIXES ".a或.so或.lib")` 可以让 \verb`find_library()` 只寻找某种类型的 lib。 也可以用 \verb`".a;.so"` 来指定优先级。
-\item \verb`find_library()` 的默认搜索路径如 \verb`/usr/lib`，\verb`/usr/local/lib`， \verb`/usr/[local/]share/cmake/Modules/` 以及环境变量 \verb`LD_LIBRARY_PATH` 中的路径。 
 \item \verb`CMAKE_LIBRARY_PATH` 变量可以指定 \verb`find_library` 的更多默认搜索路径，且会优先搜索。
 \end{itemize}
+
+\subsection{CMake Package}
+\begin{itemize}
+\item \verb`find_package` 是一个更高级的命令， 找到某个 cmake 包的设置文件，这个文件负责把一切设置好，包括 include，如何 link 等，以及 import 一些变量。 而不是像 \verb`find_library` 那样简单地找到一个包所在的路径。
+\item \verb`find_package(包名 [版本] [REQUIRED] [COMPONENTS 组件1 组件2...])`
+\item \verb`REQUIRED`： 如果找不到就报错终止
+\item \verb`包名` 会在默认路径或者 \verb`CMAKE_MODULE_PATH` 的路径里面搜索名为 \verb`Find包名.cmake`（Module Mode，该文件通常由 cmake 提供或用户自己写） 或者 \verb`包名Config.cmake`（Config Mode，该文件通常由 package 作者提供，更高级和智能）的文件。 该文件通常会设置一些变量， 可以在 \verb`find_package` 结束后访问。
+\item Module Mode 的使用例子：
+\begin{lstlisting}[language=cmake]
+find_package(Boost 1.71 REQUIRED COMPONENTS filesystem system)
+if(Boost_FOUND)
+  include_directories(${Boost_INCLUDE_DIRS})
+  add_executable(myapp main.cpp)
+  target_link_libraries(myapp ${Boost_LIBRARIES})
+endif()
+\end{lstlisting}
+\item Config Mode 的使用例子：
+\begin{lstlisting}[language=cmake]
+find_package(Boost 1.71 REQUIRED COMPONENTS filesystem)
+if(Boost_FOUND)
+    add_executable(my_app main.cpp)
+    target_link_libraries(my_app Boost::filesystem)
+endif()
+\end{lstlisting}
+\item 其中 \verb`Boost::filesystem` 就是 \verb`find_package` 导入的一个 \textbf{imported target}，\verb`::` 只是名字的一部分并没有特别的 namespace 机制。 \verb`Boost_FOUND` 是导入的变量，显示 \verb`Boost` 是否被找到.
+\end{itemize}
+
+\subsubsection{如何写 \verb`包名Config.cmake` （Config Mode）}
+如果要写 \verb`Find包名.cmake`，其实只需要使用 \verb`set()` 设置若干路径变量即可。 一般只有库的作者没有提供 config mode 的 cmake 时才需要用户写这个文件。 用 \verb`apt` 安装的包如果提供了该 cmake 一般也会被搜到。
+
+要写 \verb`包名Config.cmake`，需要给 \verb`add_library` 定义要导出的 target， 以及用 \verb`set_target_properties` 指定库文件和头文件的路径，这样用户导入的时候就不需要再设置一次了。
+\begin{lstlisting}[language=cmake]
+# MyLibraryConfig.cmake
+# Define the paths to the library and include directories
+set(MyLibrary_LIBRARIES "${CMAKE_CURRENT_LIST_DIR}/lib/file.a")
+set(MyLibrary_INCLUDE_DIRS "${CMAKE_CURRENT_LIST_DIR}/include")
+# Create an imported target for MyLibrary
+add_library(MyLibrary STATIC IMPORTED)
+# Set the properties for the imported target
+set_target_properties(MyLibrary PROPERTIES
+  # set lib files location so that user can import the target
+  IMPORTED_LOCATION "${MyLibrary_LIBRARIES}"
+  # set header files location so that user can import the target
+  INTERFACE_INCLUDE_DIRECTORIES "${MyLibrary_INCLUDE_DIRS}"
+)
+# Optionally, set the MyLibrary_FOUND variable
+# to indicate the library was found
+set(MyLibrary_FOUND TRUE)
+\end{lstlisting}
 
 \subsection{内置变量}
 \begin{itemize}
