@@ -19,3 +19,75 @@
 \includegraphics[width=14cm]{./figures/fb2f020a34d5bc5b.png}
 \caption{留出法示意图} \label{fig_holdou_1}
 \end{figure}
+
+
+\subsection{知识要点}
+\subsubsection{步骤：}
+将所收集到的完整数据集随机划分为训练集和测试集。
+在训练集上训练模型，然后在在测试集上评估模型性能。
+
+\subsubsection{优点：}
+\begin{itemize}
+\item 简单易用：实际实现起来十分简单。
+\item 计算速度快：相比于交叉验证，模型训练和评估时间较短。
+\end{itemize}
+
+\subsubsection{缺点：}
+\begin{itemize}
+\item 结果可靠性较弱：由于只进行一次划分，结果依赖于划分方式，可能不够稳定。
+\item 数据利用率低：只使用部分数据进行训练，未充分利用全部数据。
+\end{itemize}
+
+\subsubsection{改进方法：}
+考虑到留出法的结果可能受数据划分的影响。人们提出了几种常见的改进方法：
+
+\begin{enumerate}
+\item 多次重复划分数据集：多次随机划分数据集并计算平均性能，以减少单次划分带来的不确定性。
+\item 分层抽样：确保训练集和测试集中各类别样本的比例与原始数据集一致，特别适用于类别不平衡的数据集。
+\end{enumerate}
+
+\subsection{编程实战}
+给出一个用留出法验证线性回归模型的程序示例。逻辑归回算法基于scikit-learn库实现。数据存储与表示基于numpy库。
+\subsubsection{代码示例}
+\begin{lstlisting}[language=python]
+from sklearn.datasets import load_iris
+from sklearn.model_selection import train_test_split
+from sklearn.linear_model import LogisticRegression
+from sklearn.metrics import accuracy_score
+import numpy as np
+
+# 加载iris数据集
+data = load_iris()
+X = data.data
+y = data.target
+
+# 定义逻辑模型
+model = LogisticRegression(max_iter=200)
+
+# 重复Holdout Method的次数
+n_splits = 10
+accuracies = []
+
+# 反复执行留出法，训练并评估模型，求出分类准确率。
+for _ in range(n_splits):
+    # 将数据集划分为训练集和测试集
+    X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2)
+    
+    # 训练模型
+    model.fit(X_train, y_train)
+    
+    # 评估模型
+    y_pred = model.predict(X_test)
+    accuracies.append(accuracy_score(y_test, y_pred))
+
+# 输出平均准确率
+print("平均准确率：", np.mean(accuracies))
+\end{lstlisting}
+
+\subsubsection{结果与说明}
+以上示例程序，对iris数据集做n_splits（=10）次随机划分，每次划分均训练一个逻辑回归模型，，并测试模型分类准确率。最后求出10次的平均分类准确率。输出结果如下：
+\begin{lstlisting}[language=python]
+平均准确率： 0.9400000000000001
+\end{lstlisting}
+
+注意，由于训练集和测试集是随机划分，因此上述程序每次执行的结果可能不同。
