@@ -1,0 +1,31 @@
+% md_latex_测试
+% license Usr
+% type Test
+
+\subsubsection{md 模式}
+\begin{itemize}
+\item 仅在前端实现，读取 latex 时转成 md， 保存时转成 latex。 完全不影响后端。
+\item 菜单栏中的按钮和高亮算法也要做相应的修改
+\item \verb`\subsection{标题}\label{标签}` 变为 \verb`## 标题 {#标签}` 其中标签的定义是可选的。
+\item \verb`\subsubsection` 也同理，用 \verb`###`。 注意转换成 latex 时， \verb`标题` 两边的空格不要包含进去， \verb`{#标签}` 里面不能有空格。
+\item 不仅是标题，所有地方的 \verb`\label{标签}` 都转换为 \verb`{#标签}`
+\item 所有 \verb`\autoref{标签}` 变为 \verb`@标签`，后面加一个空格（无论 \verb`\autoref{标签}` 后面是否已经有空格）。 转换回去的时候后面的空格删掉。 如果 md 的 \verb`标签` 中出现了非字母数字和下划线的字符， 就报错并提示是否忘了加空格。
+\item 所有 \verb`\upref{标签}` 变为 \verb`@^标签`，后面加一个空格。
+\item 所有 \verb`\aref{文字}{标签}` 变为 \verb`[文字](#标签)`
+\item 所有 \verb`\cite{标签}` 变为 \verb`[@标签]`
+\item 所有 \verb`\footnote{文字}` 变为 \verb`[^数字]`，代码最后用 \verb`[^数字] 文字` （每个占一行或多行）。 每个数字唯一即可，且只能被定义和引用一次。 latex 转 md 时从 1 开始按顺序生成。
+\item 粗体 \verb`\textbf{文字}` 变为 \verb`**文字**`
+\item \verb|\verb`代码`|（注意 delimiter 也可能是其他任意单个符号如 \verb`\verb+代码+` 变为 \verb|`代码`|， 如果\verb`代码`中已经有 \verb|`| 符号， 就使用多个作为 delimiter 如 \verb|``代码``|。 如果 \verb`代码` 的第一个或最后一个字符是 \verb|`|， 就用一个空格和 delimiter  隔开， 但转换回 latex 时删掉。
+\item 【先不做】\verb`itemize` 环境转换时直接把 \verb`\begin{itemize}` 和 \verb`\end{itemize}` 去掉，并把中间的 \verb`\item` 替换为 \verb`-` 即可。 中间如果有空行不要管。
+\item 【先不做】\verb`enumerate` 环境转换时也类似，但是把 \verb`\item` 替换为数字。 如果能做到的话，如果两个数字之间按下了回车，那就自动插入适当的数字并把后面的连续数字都加一。
+\item \verb`lstlisting` 环境（见 \enref{Sample.tex}{Sample}）转换后开头为：\verb|```语言 标题|（占一行），结尾 \verb|```|（占一行）。 其中 \verb`标题` 可选。
+\item \verb`\begin{equation}\begin{aligned} ... \end{aligned}\end{equation}` 环境变为 \verb`:::a ... :::` 注意两个相邻命令之间可能有空格或回车。
+\item \verb`equation` 环境（如果内部不直接嵌套 \verb`aligned` 环境）变为 \verb`::: ... :::`。
+\item \verb`figure` 环境变为 \verb`![标题](文件名){#标签}{width=8cm}`，其中 \verb`文件名` 不要包含路径，但包含拓展名。
+\item 其他环境如 \verb`example`，\verb`exercise`，\verb`lemma`， 开头用 \verb`:::环境名 标题 {#标签}`，结尾用 \verb`:::`。 标签可选。
+\end{itemize}
+
+
+\subsection{标题}\label{abc} 
+
+## 标题 {#标签}

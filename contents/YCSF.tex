@@ -1,0 +1,375 @@
+% 遗传算法
+% license CCBYSA3
+% type Wiki
+
+（本文根据 CC-BY-SA 协议转载自原搜狗科学百科对英文维基百科的翻译）
+
+\begin{figure}[ht]
+\centering
+\includegraphics[width=6cm]{./figures/a3118c2671ac7fca.png}
+\caption{2007年美国宇航局ST5航天器天线。这一复杂的形状是通过一个寻找最佳的辐射方向图的进化算法程序发现的。它也被称为演化天线。} \label{fig_YCSF_1}
+\end{figure}
+在计算机科学和运筹学中，遗传算法是一种受自然选择过程启发的元启发式算法，属于进化算法大类。遗传算法通常依赖于生物启发的算子，如变异、交叉和选择，来生成高质量的优化和搜索问题的解决方案[1]。John Holland在1960年提出了基于达尔文进化论概念的遗传算法；后来，他的学生David E. Goldberg在1989年扩展了遗传算法。[2]
+
+\subsection{方法}
+\subsubsection{1.1 优化问题}
+在遗传算法中，优化问题的一组候选解（称为个体、生物或表型）向更好的解进化。每个候选解都有一组可以突变和改变的特性（染色体或基因型）；传统上，解决方案用二进制表示为0和1的字符串，但也可以使用其他编码。[3]
+
+进化通常从随机生成的个体种群开始，是一个迭代过程，每次迭代中的种群称为一代。在每一代中，评估种群中每个个体的适应度；适应度通常是被求解优化问题中目标函数的值。更合适的个体是从当前种群中随机选择的，每个个体的基因组被改性（重组，可能随机突变）以形成新一代。新一代候选解随后被用于算法的下一次迭代。通常，当生成的代数达到最大，或者种群达到满意的适应度水平时，算法终止。
+
+典型的遗传算法需要：
+
+1.    解域的遗传表示。
+
+2.    解域的适应度函数。
+
+每个候选解决方案的标准表示是位数组。[3]其他类型和结构的阵列可以以基本相同的方式使用。使这些基因表达变得方便的主要特性是，它们的组成部分由于其固定的大小而容易对齐，这便于简单的交叉操作。也可以使用可变长度表示，但是在这种情况下，交叉实现更加复杂。在遗传规划中研究树状表示，在进化规划中研究图形形式表示；基因表达规划研究了线性染色体和树的混合。
+
+一旦定义了遗传表示和适应度函数，遗传算法就开始初始化一组解，然后通过重复应用变异、交叉、反演和选择算子来改进它。
+
+\textbf{初始化}
+
+人口规模取决于问题的性质，但通常包含数百或数千种可能的解决方案。通常，初始种群是随机生成的，允许所有可能的解决方案范围（搜索空间）。有时，解决方案可能被“播种”到可能找到最佳解决方案的区域。
+
+\textbf{选择}
+
+在每一连续世代中，现有种群的一部分被挑选出来繁殖新一代。通过基于适应度的过程选择个体解决方案，其中更适合的解决方案（由适应度函数度量）通常更有可能被选择。某些选择方法会对每个解决方案的适应度进行评级，并优先选择最佳解决方案。其他方法只对种群的随机样本进行评级，因为前者可能非常耗时。
+
+适应度函数是在遗传表示上定义的，并用来度量表示解的质量。适应度函数总是与问题相关的。例如，在背包问题中，人们想要最大化可以放在某个固定容量背包中的物品的总价值。解决方案的表示可以是位数组，其中每个位代表不同的对象，位的值（0或1）代表对象是否在背包中。不是每一个这样的表示都是有效的，因为物体的大小可能超过背包的容量。如果表示有效，解的适应度是背包中所有对象的值之和，否则为0。
+
+在一些问题中，很难甚至不可能定义适应度表达式；在这些情况下，可以使用模拟来确定表型的适应度函数值（例如，使用计算流体动力学来确定其形状被编码为表型的车辆的空气阻力），或者使用交互式遗传算法。
+
+\textbf{遗传算子}
+
+下一步是从通过遗传算子交叉（也称为重组）和变异的组合选择的解中产生第二代解种群。
+
+对于要生成的每种新解，从之前选择的池中选择一对“亲本”解进行繁殖。通过使用上述交叉和变异方法产生一个“子”解，就产生了一个新的解，它通常具有其“父”的许多特征。为每个新的孩子选择新的父母，并且该过程继续进行，直到产生适当规模的新的解决方案种群。尽管基于双亲使用的繁殖方法更受“生物学启发”，但一些研究[4][5]表明，超过两个父母会产生更高质量的染色体。
+
+这些过程最终导致不同于最初一代的下一代染色体群体。一般来说，通过这一程序，种群的平均适应度会有所提高，因为只有第一代中最好的生物体被挑选出来进行繁殖，还有一小部分不太适应的解决方案。这些不太合适的解决方案确保了父母基因库中的遗传多样性，从而确保了后代的遗传多样性。
+
+对于交叉和变异的重要性，人们意见不一。Fogel （2006）中有许多参考文献支持基于的搜索的重要性。
+
+虽然交叉和变异被认为是主要遗传算子，但也可以在遗传算法中使用其他算子，如重组、殖民灭绝或迁移。[6]
+
+有必要调整突变概率、交叉概率和种群大小等参数，以便为正在处理的问题类找到合理的设置。非常小的突变率可能导致遗传漂移（本质上是非遍历性的）。重组率过高可能导致遗传算法过早收敛。除非采用精英选择，否则过高的突变率可能会导致失去好的解决方案。
+
+\textbf{启发式算法}
+
+除了上面的主要算子之外，可以采用其他启发式算法来使计算更快或更鲁棒。物种形成启发式惩罚过于相似的候选解之间的交叉；这鼓励了种群多样性，并有助于防止过早收敛到不太理想的解决方案。[7][8]
+
+\textbf{终止}
+
+重复这一世代过程，直到达到终止条件。常见的终止条件是：
+\begin{itemize}
+\item 找到了满足最低标准的解决方案
+\item 达到固定的世代数
+\item 已达到分配的预算（计算时间/资金）
+\item 最高等级的解决方案的适应度正在达到或已经达到一个平稳状态，以致连续的迭代不再产生更好的结果
+\item 手动检查
+\item 以上各项的组合
+\end{itemize}
+
+\subsection{积木块假设}
+遗传算法易于实现，但其行为难以理解。特别难以理解的是，为什么这些算法在应用于实际问题时经常能够成功地生成高适应性的解决方案。 积木块假设包括：
+
+1.    通过识别和重组“积木块”（即具有高于平均适应度的低阶、低定义长度图式）来执行自适应的启发式描述。
+
+2.    一种假设，即遗传算法通过隐式和有效地实现这种启发式算法来执行自适应。
+
+Goldberg将启发式描述如下：
+
+“短的、低阶的和高度适合的图式被采样，重新组合（交叉），并被重新采样以形成具有更高潜在适应度的字符串。在某种程度上，通过使用这些特定的图式（积木块），我们降低了问题的复杂性；我们不是通过尝试每一种可能的组合来构建高性能字符串，而是从过去采样的最佳局部解决方案中构建越来越好的字符串。 “因为低定义长度和低阶的高度匹配图式在遗传算法的表现中起着如此重要的作用，我们已经给它们起了一个特殊的名字：积木块。正如一个孩子通过排列简单的木块来建造宏伟的堡垒一样，遗传算法也通过并列排列短的、低阶的、高性能的图式或积木来寻求接近最佳的性能。” [9]
+尽管对积木块假设的有效性缺乏共识，但多年来它一直被评估和用作参考。例如，许多分布算法的估计已被提出，试图提供一个假设成立的环境。[10][11]尽管已经报道了某些类型问题的良好结果，但是对于作为遗传算法效率解释的积木块假设的普遍性和/或实用性的怀疑仍然存在。事实上，有相当多的工作试图从分布算法估计的角度来理解它的局限性。[12][13][14]
+
+\subsection{限制}
+与其他可选的优化算法相比，遗传算法的使用存在局限性：
+\begin{itemize}
+\item 复杂问题的重复适应度函数评估通常是人工进化算法中最具禁止性和限制性的部分。寻找复杂高维多模态问题的最佳解决方案通常需要非常昂贵的适应度函数评估。在实际问题中，例如结构优化问题，单个函数评估可能需要几个小时到几天的完整模拟。典型的优化方法不能处理这类问题。在这种情况下，可能有必要放弃精确的评估，而使用计算效率高的近似适应度。显然，融合近似模型可能是令人信服地使用遗传算法解决复杂现实生活问题的最有前途的方法之一。
+\item 遗传算法不能随着复杂性而很好地扩展。也就是说，当暴露于突变的元素数量很大时，搜索空间的大小通常会呈指数级增长。这使得在设计引擎、房子或飞机等问题上使用这项技术变得极其困难。为了使这些问题易于进化搜索，它们必须被分解成尽可能简单的表示。因此，我们通常会看到进化算法为风扇叶片而不是发动机编码设计，构建形状而不是详细的构建计划，设计机翼而不是设计整架飞机。复杂性的第二个问题是如何保护已经进化为代表好的解决方案的部件免受进一步破坏性突变的影响，特别是当它们的适应度评估要求它们与其他部件很好地结合时。
+\item “更好”的解决方案只是与其他解决方案相比。因此，并不是每个问题都有明确的停止标准。
+\item 在许多问题中，遗传算法倾向于收敛于局部最优甚至任意点，而不是问题的全局最优。这意味着它不“知道如何”牺牲短期适应度来获得长期适应度。这种情况发生的可能性取决于适应度地貌的形状：某些问题可能提供一个容易上升到全局最优的途径，其他问题可能使函数更容易找到局部最优。这个问题可以通过使用不同的适应度函数，增加突变率，或者通过使用保持种群解决方案多样性的选择技术来缓解，[15]尽管“没有免费的午餐”定理[16]证明了这个问题没有通用的解决方案。保持多样性的一种常见技术是施加“生态位惩罚”，其中，任何具有足够相似性（生态位半径）的个体群体都增加了惩罚，这将减少该群体在后代中的代表性，从而允许群体中保持其他（不太相似的）个体。然而，这种技巧可能并不有效，这取决于问题的情况。当种群里的大多数彼此过于相似时，另一种可能的技术是简单地用随机产生的个体替换部分群体。多样性在遗传算法（和遗传编程）中很重要，因为交叉同质群体不会产生新的解决方案。在进化策略和进化规划中，多样性并不重要，因为它更依赖于突变。
+\item 在动态数据集上操作是困难的，因为基因组很早就开始向对以后的数据不再有效的解决方案收敛。已经有人提出了几种方法来弥补这一缺陷，包括以某种方式增加遗传多样性并防止早期收敛，或者是通过在解决方案质量下降时增加突变的概率（称为触发超突变），又或者通过偶尔将全新的随机产生的元素引入基因库（称为随机移民）。同样，进化策略和进化规划可以用所谓的“逗号策略”来实现，即不维持父母，只从后代中选择新父母。这在动态问题上更有效。
+\item 遗传算法不能有效地解决只有一个正确/错误度量的问题（如决策问题），因为没有办法收敛到解决方案上（没有要爬的山）。在这些情况下，随机搜索可能会像遗传算法一样快地找到解决方案。然而，如果情况允许成功/失败试验重复进行，给出（可能）不同的结果，那么成功与失败的比率就提供了一个合适的适应度度量。
+\item 对于特定的优化问题和问题实例，就收敛速度而言，其他优化算法可能比遗传算法更有效。替代和互补算法包括进化策略、进化规划、模拟退火、高斯自适应、爬山算法和群体智能（例如蚁群优化、粒子群优化）以及基于整数线性规划的方法。遗传算法的适用性取决于问题的知识量；众所周知的问题通常有更好、更专业的方法。
+\end{itemize}
+
+\subsection{变异体}
+\subsubsection{4.1 染色体表示}
+最简单的算法将每个染色体表示为一个位串。通常，数字参数可以用整数表示，不过也可以使用浮点表示。浮点表示对于进化策略和进化规划来说是自然的。有人提出了实值遗传算法的概念，但实际上用词不当，因为它并不真正代表John Henry Holland在20世纪70年代提出的积木块理论。然而，基于理论和实验结果（见下文），这一理论并非没有支持。基本算法在位级别执行交叉和变异。其他变体将染色体视为数字列表，这些数字是指令表、链表中的节点、散列、对象或任何其他可想象的数据结构的索引。执行交叉和变异为的是尊重数据元素边界。对于大多数数据类型，可以设计特定的变异算子。不同的染色体数据类型似乎对不同的特定问题域起着更好或更坏的作用。
+
+当使用整数的位串表示时，通常使用灰色编码。这样，整数的微小变化就很容易受到突变或交叉影响。已经发现这有助于防止所谓的汉明壁的过早收敛，在汉明壁中，为了将染色体改变为更好的解决方案，必须同时发生很多的突变（或交叉事件）。
+
+其他方法包括使用实数数组而不是位串来表示染色体。图式理论的结果表明，通常字母的值越小，表现越好，但最初令研究者惊讶的是，使用实值染色体获得了良好的结果。这被解释为有限染色体群体中的一组实值形成了一个虚拟字母表（当选择和重组占主导地位时），其基数比浮点表示预期的要低得多。[17][18]
+
+遗传算法可访问问题域的扩展可以通过将几种不同类型的异源编码基因连接到一条染色体上，对解池进行更复杂的编码来实现。[19]这种特殊的方法允许解决需要对问题参数有完全不同的定义域的优化问题。例如，在级联控制器调优的问题中，内部环路控制器结构可以属于三个参数的常规调节器，而外部环路可以实现具有本质不同描述的语言控制器（例如模糊系统）。这种特殊的编码形式需要一种专门的交叉机制，它可以逐段重组染色体，对于复杂适应系统，特别是进化过程建模和仿来说真的是一种有用的工具。
+
+\subsubsection{4.2 精英主义}
+构建一个新种群的一般过程中，一个实际变体允许当代的最佳生物体不变地延续到下一代。这种策略被称为精英选择，保证遗传算法获得的解决方案质量不会从一代传到下一代而降低。[20]
+
+\subsubsection{4.3 并行实现}
+遗传算法的并行实现有两种类型。粗粒度并行遗传算法假设每个计算机节点上有一个种群，并且个体在节点之间迁移。细粒度并行遗传算法假设每个处理器节点上有一个个体，该个体与相邻个体一起进行选择和繁殖。其他变体，如在线优化问题的遗传算法，在适应度函数中引入了时间依赖性或噪声。
+
+\subsubsection{4.4 自适应遗传算法}
+具有自适应参数的遗传算法（自适应遗传算法，AGAs）是遗传算法的另一个重要且发展前景巨大的变体。交叉概率和变异概率极大地决定了遗传算法的求解精度和收敛速度。自适应遗传算法不使用固定的交叉概率和变异概率值，而是利用每一代的种群信息，自适应地调整交叉概率和变异概率，以保持种群多样性和收敛能力。在自适应遗传算法中，[21]交叉概率和变异概率的调整取决于解的适应度值。在基于聚类的自适应遗传算法中，[22]通过使用聚类分析来判断种群的优化状态，交叉概率和变异概率的调整依赖于这些优化状态。将遗传算法与其他优化方法相结合是非常有效的。遗传算法倾向于擅长寻找总体上好的全局解，但在寻找最后几个突变以找到绝对最优解方面效率很低。其他技术（如简单的爬山算法）在有限的区域内能非常有效地找到绝对最优解。交替使用遗传算法和爬山算法可以提高遗传算法效率[需要标注引用]，同时克服爬山算法缺乏鲁棒性的缺点。
+
+这意味着遗传变异的规则在自然情况下可能有不同的含义。例如——假设步骤是以连续的顺序存储的——交叉可能会将母体基因的许多步骤与父代基因的许多步骤相加，以此类推。这就像在表型地貌中添加更可能沿着山脊的向量。因此，该过程的效率可以提高许多数量级。此外，反演算子有机会以连续顺序或任何其他有利于生存或效率的合适顺序放置步骤。[23]
+
+一种变异，即种群作为一个整体而不是其个体成员进行进化，被称为基因库重组。
+
+已经有人开发了许多变体来尝试改进遗传算法在具有高度适应度上位性的问题上的性能，即，其中解的适应度由它的变量的交互子集组成。这样的算法旨在学习（在开发之前）这些有益的表型相互作用。因此，它们在适应性地减少破坏性重组方面与积木块假设一致。这种方法的突出例子包括mGA、[24]GEMGA[25]和LLGA。[26]
+
+\subsection{问题域}
+显示为特别适合用遗传算法解决的问题包括时间表和调度问题，许多调度软件包都是基于遗传算法。遗传算法也被应用于工程。[27]遗传算法经常被用作解决全局优化问题的一种方法。
+
+一般而言，在经验法则中，遗传算法可能在具有复杂适应度的问题域中有用，因为混合，即结合交叉的变异，被设计成使种群远离传统爬山算法可能陷入的局部最优。注意，常用的交叉算子不能改变任何均匀稳定的种群。突变本身可以提供整个遗传算法过程的遍历性（被视为马尔可夫链）。
+
+遗传算法解决的问题的例子包括：设计成将阳光汇聚到太阳能收集器的镜子[28]，设计成在空间接收无线电信号的天线[29]，计算机图形的行走方法[29]，复杂流场中空气动力体的优化设计[30]。
+
+在他的算法设计手册中，Skiena建议任何任务都不要使用遗传算法：
+
+根据遗传算子（如位串上的突变和交叉）来建模应用程序是非常不自然的。伪生物学在你和你的问题之间增加了另一个层次的复杂性。其次，遗传算法在非平凡的问题上需要很长时间。[...]与进化类比——重大的进步需要[原文如此]几百万年的时间——可能非常恰当。[...]我从未遇到过任何问题，在我看来，遗传算法正是攻击这一点的方法。此外，我从未见过任何使用遗传算法的计算结果给我留下良好印象。为了满足你的启发式搜索的迷信需求，请坚持使用模拟退火算法。
+
+— Steven Skiena
+
+\subsection{历史}
+1950年，Alan Turing提出了一种“学习机”，这种学习机将与进化论有平等地位。[31]计算机模拟进化早在1954年就开始了，当时Nils Aall Barricelli正在新泽西州普林斯顿高等研究院使用计算机。[32][33]他1954年的出版物没有引起广泛注意。从1957年开始，[34]澳大利亚定量遗传学家Alex Fraser发表了一系列论文，内容是模拟人工选择具有控制可测量性状的多个基因座的生物体。从这些开始，生物学家对进化的计算机模拟在20世纪60年代初变得更加普遍，Fraser和 Burnell （1970[35]）和 Crosby （1973）在书中描述了这些方法[36]。Fraser的模拟包括了现代遗传算法的所有基本要素。此外， Hans-Joachim Bremermann在20世纪60年代发表了一系列论文，这些论文也采用了一组优化问题的解决方案，经历了重组、突变和选择。Bremermann的研究也包括现代遗传算法的要素。[37]其他值得注意的早期先驱包括Richard Friedberg、George Friedman和Michael Conrad。 Fogel （1998）再版了许多早期的论文。[38]
+
+尽管Barricell在他1963年报道的工作中模拟了玩简单游戏能力的进化[39]，但由于Ingo Rechenberg和Hans-Paul Schwefel在20世纪60年代和70年代初的工作，人工进化成为一种被广泛认可的优化方法——Rechenberg的团队能够通过进化策略解决复杂的工程问题。[40][41][42][43] 另一种方法是Lawrence J. Fogel的进化规划技术，它是为产生人工智能而提出的。进化规划最初使用有限状态机来预测环境，并使用变异和选择来优化预测逻辑。遗传算法尤其在20世纪70年代早期通过John Holland的工作变得流行起来，尤其是他的书《自然和人工系统中的适应》（1975）。他的工作源于自己和他在密歇根大学的学生对细胞自动机的研究。Holland引入了一个预测下一代质量的形式化框架，称为Holland模式定理。直到20世纪80年代中期第一次国际遗传算法会议在宾夕法尼亚州匹兹堡举行，遗传算法的研究基本上还是理论性的。
+
+\subsubsection{6.1 商业产品}
+20世纪80年代末，通用电气开始销售世界上第一款遗传算法产品，这是一款为工业流程设计的基于大型机的工具包。[44]1989年，Axcelis公司发布了Evolver，这是世界上第一款用于台式计算机的商用遗传算法产品。《纽约时报》科技专栏作家John Markoff在1990年给写了[45]关于Evolver的文章，直到1995年，它仍然是唯一的交互式商业遗传算法。[46] Evolver于1997年出售给Palisade，被翻译成多种语言，目前已是第六版。[47]
+
+\subsection{相关技术}
+\subsubsection{7.1 父领域}
+遗传算法是一个子领域：
+\begin{itemize}
+\item 进化算法
+\item 进化计算
+\item 元启发式
+\item 随机优化
+\item 最佳化
+\end{itemize}
+\subsubsection{7.2 相关领域}
+
+\textbf{进化算法}
+
+进化算法是进化计算的一个子领域。
+\begin{itemize}
+\item 进化策略（ES，参见Rechenberg, 1994）通过突变和中间体或离散重组来进化个体。进化策略算法是专门为解决实值领域的问题而设计的。[48]它们使用自适应来调整搜索的控制参数。自适应的去随机化导致了当代协方差矩阵自适应进化策略。
+\item 进化规划涉及主要具有突变和选择以及任意表示的解的群体。它们使用自适应来调整参数，并且可以包括其他变化操作，例如组合来自多个父代的信息。
+\item 分布估计算法用模型引导算子代替传统的复制算子。这种模型通过使用机器学习技术从人群中学习，并表示为概率图形模型，从该模型中可以对新的解采样[11][49] 或从引导交叉中产生新的解。[50]
+\item 基因表达式编程（GEP）也使用大量的计算机程序。这些复杂的计算机程序被编码在固定长度的简单线性染色体中，这些染色体随后被表示为表达式树。表达式树或计算机程序进化是因为染色体以类似于典型遗传算法的方式经历突变和重组。但是由于基因表达式编程染色体的特殊组织，这些遗传改性总是产生有效的计算机程序。[51]
+\item 遗传规划是John Koza推广的一种相关技术，在这种技术中，它是对计算机程序而不是函数参数进行了优化。遗传程序设计通常使用基于树的内部数据结构来表示计算机程序的适应性，而不是典型的遗传算法的列表结构。
+\item 分组遗传算法是遗传算法的一种发展，它的焦点从单个项目，如经典遗传算法，转移到项目的组或子集。[52] Emanuel Falkenauer提出的遗传算法进化背后的理念是，解决一些复杂的问题，即聚类或划分问题，其中一组项目必须以最佳方式分割成不相交的项目组，最好通过使项目组的特征等价于基因来实现。这些类型的问题包括装箱问题、生产线平衡、关于距离度量的聚类、等桩问题等。经典遗传算法在这方面表现不佳。使基因等价于群体意味着染色体以及操纵整组项目的特殊遗传算子通常是可变长度的。特别是对于装箱问题来说，与Martello和Toth的优势标准杂交的分组遗传算法可以说是迄今为止最好的技术。
+\item 交互式进化算法是使用人类评估的进化算法。它们通常应用于难以设计计算适应度函数的领域，例如，进化图像、音乐、艺术设计和形式，以适应用户的审美偏好。
+\end{itemize}
+
+\textbf{群体智能}
+
+群体智能是进化计算的一个子领域。
+\begin{itemize}
+\item 蚁群算法使用许多配有信息素模型的蚂蚁（或代理）来遍历解空间并找到局部生产区域。然而被认为是分布估计算法。[53]
+\item 粒子群优化算法是一种多参数优化的计算方法，也采用了基于种群的方法。候选解（粒子）的群体（群）在搜索空间中移动，并且粒子的移动受到它们自己的最佳已知位置和群体的全局最佳已知位置的影响。像遗传算法一样，粒子群算法依赖于群体成员之间的信息共享。在某些问题中，粒子群算法通常比遗传算法计算效率更高，尤其是在具有连续变量的无约束问题中。[54]
+\end{itemize}
+
+\textbf{其他进化计算算法}
+
+进化计算是元启发式方法的一个子领域。
+\begin{itemize}
+\item 电子优化算法是一种模拟电子流和电导率现象的进化算法。目前的一些研究表明，在求解非确定性多项式困难优化问题时，电子优化算法比传统的进化算法更有效。该算法在广泛搜索解空间和识别全局最优解方面具有较高的能力。与其他进化算法不同，电子优化算法独立评估解决方案字符串中值的质量。[55]
+\item 模因算法通常被称为混合遗传算法，是一种基于种群的方法，其中解也经历局部改进阶段。模因算法的概念来自模因，模因不同于基因，能够自我适应。在一些问题领域，它们被证明比传统的进化算法更有效。
+\item 细菌学算法的灵感来自进化生态学，尤其是细菌学适应。进化生态学是在生物环境中对生物体进行的研究，目的是发现它们是如何适应环境的。它的基本概念是，在异构环境中，没有一个个体适合整个环境。因此，我们需要在人口层面进行推理。人们还认为细菌学算法可以成功地应用于复杂的定位问题（手机天线、城市规划等）或数据挖掘。[56]
+\item 文化算法由与遗传算法几乎相同的种群组成，另外还有一个称为信念空间的知识组成。
+\item 受超个体迁移启发的差分搜索算法。[57]
+\item 高斯自适应算法（正常或自然自适应，缩写为NA以避免与遗传算法混淆）旨在最大化信号处理系统的制造产量。它也可以用于普通的参数优化。它依赖于对所有可接受区域和所有高斯分布有效的某个定理。高斯自适应算法的效率依赖于信息论和一定的效率定理。它的效率被定义为信息除以获取信息所需的工作量。[58]因为高斯自适应算法最大化的是平均适应度，而不是个体的适应度，所以地貌变得平滑，山峰之间的山谷可能会消失。因此，它有一定的“野心”来避免适应度地貌中的局部高峰。高斯自适应算法擅长通过调整矩矩阵来攀登尖峰，因为高斯自适应算法可以最大化高斯函数的无序度（平均信息），同时保持平均适应度不变。
+\end{itemize}
+
+\textbf{其他元启发式方法}
+
+元启发式方法大体上属于随机优化方法。
+\begin{itemize}
+\item 模拟退火是一种相关的全局优化技术，它通过测试单个解的随机突变来遍历搜索空间。增加适应度的突变总是被接受的。基于适应度的差异和降低的温度参数，降低适应度的突变可能被接受。用模拟退火的说法，就是寻求最低的能量而不是最大的适应度。模拟退火也可以在标准遗传算法中使用，从相对较高的变异率开始，并随着时间的推移按照给定的时间表降低变异率。
+\item 禁忌搜索与模拟退火相似，两者都通过测试单个解的突变来遍历解空间。模拟退火只产生一个突变解，禁忌搜索产生许多突变解，并移动到产生的解中能量最低的解。为了防止循环并鼓励在解决方案空间中更大的移动，部分或完整解决方案的禁忌列表会被维护。禁止移动到包含禁忌列表元素的解决方案，该列表会在解决方案遍历解决方案空间时更新。
+\item 极值优化不同于遗传算法，遗传算法处理大量候选解，极值优化演化为单一解，并对最差部分进行局部修改。这要求选择合适的表示法，允许为单个解决方案组件分配质量度量（“适应度”）。该算法背后的指导原则是通过选择性地移除低质量组件并用随机选择的组件替换它们来进行紧急改进。这显然与遗传算法不一致，遗传算法选择好的解决方案，试图做出更好的解决方案。
+\end{itemize}
+
+\textbf{其他随机优化方法}
+\begin{itemize}
+\item 交叉熵方法通过参数化概率分布生成候选解。通过交叉熵最小化更新参数，以便在下一次迭代中生成更好的样本。
+\item 反应搜索优化提倡将子符号机器学习技术集成到搜索启发式中，以解决复杂的优化问题。“反应”一词表示在搜索过程中，通过内部在线反馈回路对事件做出快速响应，以便对关键参数进行自调整。反应搜索可应用的方法领域包括机器学习和统计，特别是强化学习、主动或查询学习、神经网络和元启发式。
+\end{itemize}
+
+\subsection{参考文献}
+[1]
+^Mitchell 1996, p. 2..
+
+[2]
+^Sadeghi, Javad; Sadeghi, Saeid; Niaki, Seyed Taghi Akhavan (2014-07-10). "Optimizing a hybrid vendor-managed inventory and transportation problem with fuzzy demand: An improved particle swarm optimization algorithm". Information Sciences (in 英语). 272: 126–144. doi:10.1016/j.ins.2014.02.075. ISSN 0020-0255..
+
+[3]
+^Whitley 1994, p. 66..
+
+[4]
+^Eiben, A. E. et al (1994). "Genetic algorithms with multi-parent recombination". PPSN III: Proceedings of the International Conference on Evolutionary Computation. The Third Conference on Parallel Problem Solving from Nature: 78–87. ISBN 3-540-58484-6..
+
+[5]
+^Ting, Chuan-Kang (2005). "On the Mean Convergence Time of Multi-parent Genetic Algorithms Without Selection". Advances in Artificial Life: 403–412. ISBN 978-3-540-28848-0..
+
+[6]
+^Akbari, Ziarati (2010). "A multilevel evolutionary algorithm for optimizing numerical functions" IJIEC 2 (2011): 419–430 [1].
+
+[7]
+^Deb, Kalyanmoy; Spears, William M. (1997). "C6.2: Speciation methods" (PDF). Handbook of Evolutionary Computation. Institute of Physics Publishing..
+
+[8]
+^Shir, Ofer M. (2012). "Niching in Evolutionary Algorithms". In Rozenberg, Grzegorz; Bäck, Thomas; Kok, Joost N. Handbook of Natural Computing (in 英语). Springer Berlin Heidelberg. pp. 1035–1069. doi:10.1007/978-3-540-92910-9_32. ISBN 9783540929093..
+
+[9]
+^Goldberg 1989, p. 41..
+
+[10]
+^Harik, Georges R.; Lobo, Fernando G.; Sastry, Kumara (1 January 2006). Linkage Learning via Probabilistic Modeling in the Extended Compact Genetic Algorithm (ECGA). Scalable Optimization Via Probabilistic Modeling. Studies in Computational Intelligence (in 英语). 33. pp. 39–61. doi:10.1007/978-3-540-34954-9_3. ISBN 978-3-540-34953-2..
+
+[11]
+^Pelikan, Martin; Goldberg, David E.; Cantú-Paz, Erick (1 January 1999). BOA: The Bayesian Optimization Algorithm. Proceedings of the 1st Annual Conference on Genetic and Evolutionary Computation - Volume 1. Gecco'99. pp. 525–532. ISBN 9781558606111..
+
+[12]
+^Coffin, David; Smith, Robert E. (1 January 2008). Linkage Learning in Estimation of Distribution Algorithms. Linkage in Evolutionary Computation. Studies in Computational Intelligence (in 英语). 157. pp. 141–156. doi:10.1007/978-3-540-85068-7_7. ISBN 978-3-540-85067-0..
+
+[13]
+^Echegoyen, Carlos; Mendiburu, Alexander; Santana, Roberto; Lozano, Jose A. (8 November 2012). "On the Taxonomy of Optimization Problems Under Estimation of Distribution Algorithms". Evolutionary Computation. 21 (3): 471–495. doi:10.1162/EVCO_a_00095. ISSN 1063-6560. PMID 23136917..
+
+[14]
+^Sadowski, Krzysztof L.; Bosman, Peter A.N.; Thierens, Dirk (1 January 2013). On the Usefulness of Linkage Processing for Solving MAX-SAT. Proceedings of the 15th Annual Conference on Genetic and Evolutionary Computation. Gecco '13. pp. 853–860. doi:10.1145/2463372.2463474. hdl:1874/290291. ISBN 9781450319638..
+
+[15]
+^Taherdangkoo, Mohammad; Paziresh, Mahsa; Yazdi, Mehran; Bagheri, Mohammad Hadi (19 November 2012). "An efficient algorithm for function optimization: modified stem cells algorithm". Central European Journal of Engineering. 3 (1): 36–50. doi:10.2478/s13531-012-0047-8..
+
+[16]
+^Wolpert, D.H., Macready, W.G., 1995. No Free Lunch Theorems for Optimisation. Santa Fe Institute, SFI-TR-05-010, Santa Fe..
+
+[17]
+^Goldberg, David E. (1991). The theory of virtual alphabets. Parallel Problem Solving from Nature, Lecture Notes in Computer Science. Lecture Notes in Computer Science. 496. pp. 13–22. doi:10.1007/BFb0029726. ISBN 978-3-540-54148-6..
+
+[18]
+^Janikow, C. Z.; Michalewicz, Z. (1991). "An Experimental Comparison of Binary and Floating Point Representations in Genetic Algorithms" (PDF). Proceedings of the Fourth International Conference on Genetic Algorithms: 31–36. Retrieved 2 July 2013..
+
+[19]
+^Patrascu, M.; Stancu, A.F.; Pop, F. (2014). "HELGA: a heterogeneous encoding lifelike genetic algorithm for population evolution modeling and simulation". Soft Computing. 18 (12): 2565–2576. doi:10.1007/s00500-014-1401-y..
+
+[20]
+^Baluja, Shumeet; Caruana, Rich (1995). Removing the genetics from the standard genetic algorithm (PDF). ICML..
+
+[21]
+^Srinivas, M.; Patnaik, L. (1994). "Adaptive probabilities of crossover and mutation in genetic algorithms" (PDF). IEEE Transactions on System, Man and Cybernetics. 24 (4): 656–667. doi:10.1109/21.286385..
+
+[22]
+^Zhang, J.; Chung, H.; Lo, W. L. (2007). "Clustering-Based Adaptive Crossover and Mutation Probabilities for Genetic Algorithms". IEEE Transactions on Evolutionary Computation. 11 (3): 326–335. doi:10.1109/TEVC.2006.880727..
+
+[23]
+^See for instance Evolution-in-a-nutshell or example in travelling salesman problem, in particular the use of an edge recombination operator..
+
+[24]
+^Goldberg, D. E.; Korb, B.; Deb, K. (1989). "Messy Genetic Algorithms : Motivation Analysis, and First Results". Complex Systems. 5 (3): 493–530..
+
+[25]
+^Gene expression: The missing link in evolutionary computation.
+
+[26]
+^Harik, G. (1997). Learning linkage to efficiently solve problems of bounded difficulty using genetic algorithms (PhD). Dept. Computer Science, University of Michigan, Ann Arbour..
+
+[27]
+^Tomoiagă B, Chindriş M, Sumper A, Sudria-Andreu A, Villafafila-Robles R. Pareto Optimal Reconfiguration of Power Distribution Systems Using a Genetic Algorithm Based on NSGA-II. Energies. 2013; 6(3):1439-1455..
+
+[28]
+^Gross, Bill. "A solar energy system that tracks the sun". TED. Retrieved 20 November 2013..
+
+[29]
+^"Flexible Muscle-Based Locomotion for Bipedal Creatures"..
+
+[30]
+^Evans, B.; Walton, S.P. (December 2017). "Aerodynamic optimisation of a hypersonic reentry vehicle based on solution of the Boltzmann–BGK equation and evolutionary optimisation". Applied Mathematical Modelling. 52: 215–240. doi:10.1016/j.apm.2017.07.024. ISSN 0307-904X..
+
+[31]
+^Turing, Alan M. (October 1950). "Computing machinery and intelligence". Mind. LIX (238): 433–460. doi:10.1093/mind/LIX.236.433..
+
+[32]
+^Barricelli, Nils Aall (1957). "Symbiogenetic evolution processes realized by artificial methods". Methodos: 143–182..
+
+[33]
+^Barricelli, Nils Aall (1954). "Esempi numerici di processi di evoluzione". Methodos: 45–68..
+
+[34]
+^Fraser, Alex (1957). "Simulation of genetic systems by automatic digital computers. I. Introduction". Aust. J. Biol. Sci. 10 (4): 484–491. doi:10.1071/BI9570484..
+
+[35]
+^Fraser, Alex; Burnell, Donald (1970). Computer Models in Genetics. New York: McGraw-Hill. ISBN 978-0-07-021904-5..
+
+[36]
+^Crosby, Jack L. (1973). Computer Simulation in Genetics. London: John Wiley & Sons. ISBN 978-0-471-18880-3..
+
+[37]
+^02.27.96 - UC Berkeley's Hans Bremermann, professor emeritus and pioneer in mathematical biology, has died at 69.
+
+[38]
+^Fogel, David B. (editor) (1998). Evolutionary Computation: The Fossil Record. New York: IEEE Press. ISBN 978-0-7803-3481-6.CS1 maint: Extra text: authors list (link).
+
+[39]
+^Barricelli, Nils Aall (1963). "Numerical testing of evolution theories. Part II. Preliminary tests of performance, symbiogenesis and terrestrial life". Acta Biotheoretica. 16 (16): 99–126. doi:10.1007/BF01556602..
+
+[40]
+^Rechenberg, Ingo (1973). Evolutionsstrategie. Stuttgart: Holzmann-Froboog. ISBN 978-3-7728-0373-4..
+
+[41]
+^Schwefel, Hans-Paul (1974). Numerische Optimierung von Computer-Modellen (PhD thesis)..
+
+[42]
+^Schwefel, Hans-Paul (1977). Numerische Optimierung von Computor-Modellen mittels der Evolutionsstrategie : mit einer vergleichenden Einführung in die Hill-Climbing- und Zufallsstrategie. Basel; Stuttgart: Birkhäuser. ISBN 978-3-7643-0876-6..
+
+[43]
+^Schwefel, Hans-Paul (1981). Numerical optimization of computer models (Translation of 1977 Numerische Optimierung von Computor-Modellen mittels der Evolutionsstrategie. Chichester ; New York: Wiley. ISBN 978-0-471-09988-8..
+
+[44]
+^Aldawoodi, Namir (2008). An Approach to Designing an Unmanned Helicopter Autopilot Using Genetic Algorithms and Simulated Annealing. ProQuest. p. 99. ISBN 978-0549773498 – via Google Books..
+
+[45]
+^Markoff, John (29 August 1990). "What's the Best Answer? It's Survival of the Fittest". New York Times. Retrieved 2016-07-13..
+
+[46]
+^Ruggiero, Murray A.. (2009-08-01) Fifteen years and counting. Futuresmag.com. Retrieved on 2013-08-07..
+
+[47]
+^Evolver: Sophisticated Optimization for Spreadsheets. Palisade. Retrieved on 2013-08-07..
+
+[48]
+^Cohoon, J; et al. (2002-11-26). Evolutionary algorithms for the physical design of VLSI circuits (PDF). Advances in Evolutionary Computing: Theory and Applications. Springer, pp. 683-712, 2003. ISBN 978-3-540-43330-9..
+
+[49]
+^Pelikan, Martin (2005). Hierarchical Bayesian optimization algorithm : toward a new generation of evolutionary algorithms (1st ed.). Berlin [u.a.]: Springer. ISBN 978-3-540-23774-7..
+
+[50]
+^Thierens, Dirk (11 September 2010). The Linkage Tree Genetic Algorithm. Parallel Problem Solving from Nature, PPSN XI (in 英语). pp. 264–273. doi:10.1007/978-3-642-15844-5_27. ISBN 978-3-642-15843-8..
+
+[51]
+^Ferreira, C. "Gene Expression Programming: A New Adaptive Algorithm for Solving Problems" (PDF). Complex Systems, Vol. 13, issue 2: 87-129..
+
+[52]
+^Falkenauer, Emanuel (1997). Genetic Algorithms and Grouping Problems. Chichester, England: John Wiley & Sons Ltd. ISBN 978-0-471-97150-4..
+
+[53]
+^Zlochin, Mark; Birattari, Mauro; Meuleau, Nicolas; Dorigo, Marco (1 October 2004). "Model-Based Search for Combinatorial Optimization: A Critical Survey". Annals of Operations Research (in 英语). 131 (1–4): 373–395. CiteSeerX 10.1.1.3.427. doi:10.1023/B:ANOR.0000039526.52305.af. ISSN 0254-5330..
+
+[54]
+^Rania Hassan, Babak Cohanim, Olivier de Weck, Gerhard Vente r (2005) A comparison of particle swarm optimization and the genetic algorithm.
+
+[55]
+^Khalafallah Ahmed; Abdel-Raheem Mohamed (2011-05-01). "Electimize: New Evolutionary Algorithm for Optimization with Application in Construction Engineering". Journal of Computing in Civil Engineering. 25 (3): 192–201. doi:10.1061/(ASCE)CP.1943-5487.0000080..
+
+[56]
+^Baudry, Benoit; Franck Fleurey; Jean-Marc Jézéquel; Yves Le Traon (March–April 2005). "Automatic Test Case Optimization: A Bacteriologic Algorithm" (PDF). IEEE Software. 22 (2): 76–82. doi:10.1109/MS.2005.30. Retrieved 9 August 2009..
+
+[57]
+^Civicioglu, P. (2012). "Transforming Geocentric Cartesian Coordinates to Geodetic Coordinates by Using Differential Search Algorithm". Computers &Geosciences. 46: 229–247. doi:10.1016/j.cageo.2011.12.011..
+
+[58]
+^Kjellström, G. (December 1991). "On the Efficiency of Gaussian Adaptation". Journal of Optimization Theory and Applications. 71 (3): 589–597. doi:10.1007/BF00941405..
