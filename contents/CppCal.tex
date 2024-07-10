@@ -11,6 +11,9 @@
 lambda 函数是 C++11 引入的。 除了语法更简洁， 好处主要在于可以修改函数的接口， 预先填装一些参数或者改变参数的顺序或类型。 例如一个积分函数 \verb`integral(T integrand, double start, doube end)` 若要求 \verb`integrand` 只接收一个 \verb`double` 返回一个 \verb`double`， 但我们想要积分的函数还需要其他若干参数。 这时就可以直接 capture： \verb`auto integral = [&param1, &param2](double x) { return fun1(param1, param2, x); }`。 其中 \verb`&` 是 capture by reference。 也就是说 lambda 定义以后，仍然可以改变它们的值。 不加 \verb`&` 就是 capture by value， 复制定义时的值。
 
 \begin{itemize}
+\item 如果没有参数，可以直接省略小括号写成 \verb`[...]{...}`
+\item \verb`[&](...){...}` 表示函数体所有用到的变量都是 capture by reference。 \verb`[=]` 是全部 by value。
+\item 注意在类的成员函数中，如果 lambda 函数的函数体中只用了类的数据成员 \verb`m_data`，那么可以用 \verb`[this]`， \verb`[&this]` 或者等效地， \verb`[&](...){...}` \verb`[=]`。 这其中无论哪种， \verb`m_data` 都不会真正被 copy。 如果要 capture by value， 那就直接 \verb`[m_data]` 才可以。
 \item lambda 函数的 \verb`sizeof()` 通常是函数指针的函数， 但如果有 capture， 就会相应增加每个 capture 变量的 \verb`sizeof`。
 \item 普通 capture 的参数默认都是 \verb`const`， 如果想改变可以用 \verb`[...](...) mutable {...}` 但这不会影响被 capture 参数在函数外的值。 capture by reference 的参数， 在 lambda 函数中可以修改， 修改后也会影响它在 lambda 外面的值。
 \item lambda 的返回值只能有一种类型， 它会自动推导返回值的类型。 如果要明确指定返回类型， 用 \verb`[...](...) -> 类型 {...}`， 此时返回值会试图 cast 成该类型。

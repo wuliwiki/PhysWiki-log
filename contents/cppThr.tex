@@ -5,14 +5,14 @@
 \begin{itemize}
 \item 在 Linux 或其他 POSIX 系统上 \verb`std::thread` 底层通常使用 \enref{pthread}{pthred}。
 \item \verb`#include <thread>`， \verb`#include <mutex>`
-\item \verb`std::thread th(函数, arg1, arg2, ...)`; 创建一个线程， 调用\verb`函数`（可以是函数指针， 函数对象， lambda）， \verb`arg` 是\verb`函数`的变量。
-\item \verb`th.join()` 可以让当前线程等待某个线程自己退出再让当前线程继续运行。
+\item \verb`std::thread th(函数, arg1, arg2, ...)`; 创建一个线程， 调用\verb`函数`（可以是函数指针， 函数对象， lambda）， \verb`arg` 是\verb`函数`的变量。 但如果 \verb`函数` 有参数是 reference， 对应的 \verb`arg1` 等需要用 \verb`std::ref(变量)` 或者 \verb`std::cref(变量)`
+\item \verb`th.join()` 可以让当前线程休眠等待某个线程自己退出再让当前线程继续运行。
 \item 声明一个全局变量 \verb`std::mutex m` 可以避免多个线程操作同一数据。 该类型不可以 copy 只能通过 reference 传参。
 \item \verb`m.lock()` 给 mutex 上锁， 如果已经被别人上锁就暂停该线程并等待解锁。 \verb`m.try_lock()` 试图上锁， 如果已经被别人上锁就返回 \verb`false`。
 \item 如果同一个线程试图给 mutex 连续上锁两次， 结果未定义， 但通常会导致该线程卡住且一直锁下去（dead lock）。
 \item \verb`m.unlock()` 解锁，以便别的线程上锁。
 \item 为了避免在 \verb`m.lock()` 和 \verb`m.unlock()` 之间发生 throw（这样就无法自动解锁）， 通常不直接调用他们， 而是用 \verb`std::lock_guard<std::mutex> guard(m)`。 constructor 相当于 lock， destructor 相当于 unlock。
-\item \verb`unique_lock<>` 类似于 \verb`lock_guard` 但更灵活。 可以用 \verb`.lock()` 和 \verb`.unlock()` 多次手动上锁和解锁。
+\item \verb`unique_lock<std::mutex>` 类似于 \verb`lock_guard` 但更灵活。 可以用 \verb`.lock()` 和 \verb`.unlock()` 多次手动上锁和解锁。
 \item \verb`std::this_thread::sleep_for(std::chrono::seconds(2));` 可以让某个线程休眠若干时间
 \item \verb`sleep_for` 不是 busy wait 而是像 \verb`cin` 等待时一样运行 cpu 执行别的东西，也就是让系统接管，直到某个事件发生然后再继续。
 \item 相比之下， \textbf{自旋锁}就是指一个线程一直用一个空循环不断检查锁的状态直到解锁。
@@ -65,81 +65,65 @@ int main()
 \end{itemize}
 
 \subsection{std::condition\_variable}
-\verb`condition_variable` 用于 block 一个或者多个线程（也就是让它睡觉，腾出 CPU 算力做别的事情），直到某个另外的线程发送一个信号。
+\begin{itemize}
+\item \verb`condition_variable` 用于 block 一个或者多个线程（也就是让它睡觉，腾出 CPU 算力做别的事情），直到某个另外的线程发送一个信号，可以由操作系统唤醒其中一个或全部。 每个线程被 block 以前需要检查某个条件是否满足，如果已经满足就不会被 block， 不满足就 block， 直到被某个 notify 唤醒。 但唤醒可能是假唤醒（跟操作系统有关，即使不 notify 也可能会唤醒），所以唤醒以后还要再确认一遍条件。
+\item 每次确认条件需要使用 mutex 确保条件不会被中途改变。 所以需要检查前手动锁 mutex， \verb`wait()` 在 block 开始时会释放 mutex。 唤醒后（包括假唤醒）会重新锁 mutex 再退出 \verb`wait()`（如果没有第二个参数）， 手动检查完条件后还可以手动对条件变量做一些更改，完了再手动释放 mutex。
+\item \verb`wait()` 的第二个可选参数可以直接把一个 lambda 函数放进去，用于返回条件，这相当于把 \verb`wait()` 手动放入一个 \verb`while(条件)` 循环。
+\item 一个著名的应用是 producer/consumer 问题，也就是一个队列，若干 producer 线程往里添加，若干 consumer 处理队列中的元素，处理完的元素删掉：
+\end{itemize}
 
 \begin{lstlisting}[language=cpp]
 #include <iostream>
 #include <thread>
 #include <mutex>
 #include <condition_variable>
-
-// 把 condition_variable 需要 bool 变量一起封装起来更方便使用
-class ConditionVar {
-private:
-    std::condition_variable cv;
-    bool ready = false;
-
-public:
-    // 暂停一些线程
-    void wait(std::mutex &mtx) {
-        std::unique_lock<std::mutex> lock(mtx); // 上锁
-        cv.wait(lock, [this]{ return ready; }); // 在线程休眠以前解锁，在唤醒时再次上锁
-        // 注意如果在 wait 以前 ready=true，那么 wait 什么都不做。
-        // 解锁
-    }
-    // 唤醒所有线程
-    void notify_all(std::mutex &mtx) {
-        std::lock_guard<std::mutex> lock(mtx);
-        ready = true;
-        cv.notify_all();
-    }
-    // 随机唤醒一个线程
-    void notify_one(std::mutex &mtx) {
-        std::lock_guard<std::mutex> lock(mtx);
-        ready = true;
-        cv.notify_one();
-    }
-};
+#include <queue>
 
 std::mutex mtx;
-ConditionVar cv;
+std::condition_variable cv_producer;
+std::condition_variable cv_consumer;
+std::queue<int> buffer;
+const unsigned int max_buffer_size = 10;
 
-void wait(int id) {
-	printf("Thread %d started.\n", id);
-    cv.wait(mtx); // 休眠
-	printf("Thread %d is resumed.\n", id);
+void producer(int id) {
+    for (int i = 0; i < 20; ++i) {
+        std::unique_lock<std::mutex> lck(mtx);
+        // Wait until buffer is not full
+        cv_producer.wait(lck, []{ return buffer.size() < max_buffer_size; });
+        buffer.push(i);
+        std::cout << "Producer " << id << " produced " << i << "\n";
+        cv_consumer.notify_one(); // Notify one consumer
+    }
 }
 
-void resume() {
-    std::this_thread::sleep_for(std::chrono::seconds(1)); // 模拟一些工作
-    cv.notify_all(mtx); // 全部唤醒
-    printf("resume signal sent!\n");
+void consumer(int id) {
+    for (int i = 0; i < 10; ++i) {
+        std::unique_lock<std::mutex> lck(mtx);
+        // Wait until buffer is not empty
+        cv_consumer.wait(lck, []{ return !buffer.empty(); });
+        int item = buffer.front();
+        buffer.pop();
+        std::cout << "Consumer " << id << " consumed " << item << "\n";
+        cv_producer.notify_one(); // Notify one producer
+    }
 }
 
 int main() {
-    std::thread threads[3];
-    
-    // 注意这里任何一个线程都可能先开启
+    std::thread producers[2];
+    std::thread consumers[4];
+
     for (int i = 0; i < 2; ++i)
-        threads[i] = std::thread(wait, i);
+        producers[i] = std::thread(producer, i);
 
-    threads[2] = std::thread(resume);
+    for (int i = 0; i < 4; ++i)
+        consumers[i] = std::thread(consumer, i);
 
-    for (auto &th : threads)
-        th.join();
+    for (auto& p : producers) p.join();
+    for (auto& c : consumers) c.join();
+
+    return 0;
 }
-
 \end{lstlisting}
-运行结果
-\begin{lstlisting}[language=cpp]
-Thread 0 started.
-Thread 1 started.
-resume signal sent!
-Thread 0 is resumed.
-Thread 1 is resumed.
-\end{lstlisting}
-
-这有什么应用呢？ 比如说一个线程要准备一个全局的 string 变量给所有其他线程用。 那么所有其他线程在使用该 string 之前就要 wait， 而准备 string 的线程准备好之后就要 notify_all。
 
 \subsection{自旋锁}
 c++ 没有定义自旋锁，我们可以简单实现一个：
