@@ -5,23 +5,65 @@
 
 \pentry{分类\nref{nod_Class}}{nod_554a}
 
-在机器学习中，\textbf{混淆矩阵}（Confusion Matrix）是一种通过表格可视化的方式呈现分类模型性能的常用工具。
+在机器学习中，\textbf{混淆矩阵}（Confusion Matrix）是一种通过表格可视化的方式呈现分类模型性能的常用工具，能够显示出模型预测值与实际标签之间的对应关系。顾名思义，混淆矩阵能够方便地看出模型是否将两个不同的类混淆了（比如把一个类错误地判定为另一类）以及混淆的数量有多少。
 
-对于二分类问题而言，混淆矩阵包含两行、两列，一共四个单元格。列（行）分别表示分类器预测的值，行（列）分别表示实际的值。基本模式如下表：
+要弄清楚混淆矩阵，首先必须了解以下基本概念。
+
+\begin{enumerate}
+\item True Positive（TP）：真正类。样本的真实类别是正类，并且模型也将其判定为正类。
+\item False Negative（FN）：假负类。样本的真实类别是正类，但模型将其判定为负类。
+\item False Positive（FP）：假正类。样本的真实类别是负类，但模型将其判定为正类。
+\item True Negative（TN）：真负类。样本的真实类别是负类，并且模型将其判定为负类。 
+\end{enumerate}
+
+对于二分类问题而言，混淆矩阵包含两行、两列，一共四个单元格。列（行）分别表示分类器预测的值，行（列）分别表示实际的值。如\autoref{tab_ConMat_1} 所示。
+
 \begin{table}[ht]
 \centering
 \caption{混淆矩阵基本模式}\label{tab_ConMat_1}
 \begin{tabular}{|c|c|c|}
 \hline
- & 预测为阳性 & 预测为阴性 \\
+ & 预测为正类 & 预测为负类 \\
 \hline
-实际为阳性 & 真阳性的数量 & 假阴性的数量 \\
+实际为正类 & 真正类 & 假负类 \\
 \hline
-实际为阴性 & 假阳性的数量 & 真阴性的数量 \\
+实际为负类 & 假正类 & 假负类 \\
 \hline
 \end{tabular}
 \end{table}
-举个例子，现在有一个训练好的二元分类器，用于判断给定图片上的动物是马还是羊。假设，有一个图片数据集，一共14张图片，其中9只为羊，5只为马。现在用训练好的分类器来做判断，有可能产生下面的结果。
+
+举个例子，现在有一个训练好的二元分类器，用于判断给定图片上的动物是马还是羊。假设，有一个图片数据集，一共14张图片，其中9只为羊，5只为马。假设用0表示羊，1表示马。样本情况可以表示为\autoref{tab_ConMat1} 。
+
+\begin{table}[ht]
+\centering
+\caption{样本表}\label{tab_ConMat1}
+\begin{tabular}{|c|c|c|c|c|c|c|c|c|c|c|c|c|c|c|}
+\hline
+样本编号 & 1 & 2 & 3 & 4 & 5 & 6 & 7 & 8 & 9 & 10 & 11 & 12 & 13 & 14 \\
+\hline
+实际类别 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 1 & 1 & 1 & 1 & 1 \\
+\hline
+\end{tabular}
+\end{table}
+
+现在用训练好的分类器来做判断，有可能产生下面的结果（如\autoref{tab_ConMat2} 所示）。
+
+\begin{table}[ht]
+\centering
+\caption{样本分类表}\label{tab_ConMat2}
+\begin{tabular}{|c|c|c|c|c|c|c|c|c|c|c|c|c|c|c|}
+\hline
+样本编号 & 1 & 2 & 3 & 4 & 5 & 6 & 7 & 8 & 9 & 10 & 11 & 12 & 13 & 14 \\
+\hline
+实际类别 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 1 & 1 & 1 & 1 & 1 \\
+\hline
+预测类别 & 0 & 1 & 0 & 1 & 0 & 1 & 0 & 0 & 0 & 1 & 1 & 1 & 0 & 1 \\
+\hline
+\end{tabular}
+\end{table}
+
+
+（如\autoref{tab_ConMat_2} 所示）。
 \begin{table}[ht]
 \centering
 \caption{混淆矩阵例子}\label{tab_ConMat_2}
@@ -29,9 +71,9 @@
 \hline
  & 预测为马 & 预测为羊 \\
 \hline
-实际为马 & 5 & 3 \\
+实际为马 & 4 & 1 \\
 \hline
-实际为羊 & 2 & 4 \\
+实际为羊 & 3 & 6 \\
 \hline
 \end{tabular}
 \end{table}
