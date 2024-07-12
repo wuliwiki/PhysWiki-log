@@ -23,11 +23,11 @@
 \caption{混淆矩阵基本模式}\label{tab_ConMat_1}
 \begin{tabular}{|c|c|c|}
 \hline
- & 预测为正类 & 预测为负类 \\
+ & 预测为正类 (Positive)& 预测为负类 (Negative)\\
 \hline
-实际为正类 & 真正类 & 假负类 \\
+实际为正类（Positive） & 真正类 (TP)& 假负类 (FN) \\
 \hline
-实际为负类 & 假正类 & 假负类 \\
+实际为负类 （Negative）& 假正类 (FP) & 真负类 (TN)\\
 \hline
 \end{tabular}
 \end{table}
@@ -46,7 +46,7 @@
 \end{tabular}
 \end{table}
 
-现在用训练好的分类器来做判断，有可能产生下面的结果（如\autoref{tab_ConMat2} 所示）。
+现在用训练好的分类器来做判断，有可能产生下面的结果。
 
 \begin{table}[ht]
 \centering
@@ -62,8 +62,7 @@
 \end{tabular}
 \end{table}
 
-
-（如\autoref{tab_ConMat_2} 所示）。
+从\autoref{tab_ConMat2} 中可以看出，实际有9只羊，模型预测正确了6只（预测为羊），预测错了3只（预测为马）。马实际上有5匹，模型预测正确了4只（预测为马），预测错了1匹（预测为羊）。把结论写下来，就形成了如\autoref{tab_ConMat_2} 所示的混淆矩阵。
 \begin{table}[ht]
 \centering
 \caption{混淆矩阵例子}\label{tab_ConMat_2}
@@ -77,3 +76,106 @@
 \hline
 \end{tabular}
 \end{table}
+
+设样本总数用N表示，本例中N=14。显然，当只给定混淆矩阵时，也可以从中算出样本总数：N=TP+FN+FP+TN=14。由混淆矩阵，我们可以得出对于模型的多个常规的评价指标。
+
+\textbf{精确率}（Accuracy），或者称\textbf{精度}\upref{Accu}：最常用的分类性能指标。可以用来表示模型的分类精度，即模型识别正确的个数/样本的总个数。
+
+本例模型精度 = (TP+TN)/N=(4+6)/14=10/14
+
+\textbf{准确率}（Precision），又称\textbf{查准率}：表示在模型判定为正类的样本中，真正为正类的样本所占的比例。
+
+本例准确率 = TP/(TP+FP)=4/(4+3)=4/7
+
+\textbf{召回率}（Recall），又称\textbf{查全率}：在实际正样本中，模型判定正确的数量。
+
+本例召回率=TP/(TP+FN)=4/(4+1)=4/5
+
+\textbf{特异度}（Specificity）：实际为负类的样本中被模型正确判定为负类的比例。
+
+本例特异度=TN/(TN+FP)=6/(6+3)=2/3
+
+\textbf{F1分数}（F1 score）：准确率和召回率的调和平均数。
+
+本例F1分数 = $ 2 \times \frac{Precision \times Recall}{Precision + Recall} = 2 \times \frac{(4/7) \times (4/5)}{4/7+4/5}$
+
+\subsection{程序实战}
+
+给出一段求混淆矩阵和各个量化评价指标的示例程序。该程序基于scikit-learn机器学习库，数据表示基于numpy库。
+
+\subsubsection{代码示例}
+
+\begin{lstlisting}[language=python]
+from sklearn.datasets import load_iris
+from sklearn.linear_model import LogisticRegression
+from sklearn.metrics import confusion_matrix, 
+accuracy_score, precision_score, recall_score, f1_score
+from sklearn.model_selection import train_test_split
+
+import matplotlib.pyplot as plt
+import numpy as np
+import seaborn as sns
+
+
+# 加载数据集
+data = load_iris()
+X = data.data
+y = data.target
+
+# 将数据集划分为训练集和测试集
+X_train, X_test, y_train, y_test = train_test_split
+(X, y, test_size=0.2, random_state=42)
+
+# 定义和训练模型
+model = LogisticRegression(max_iter=200)
+model.fit(X_train, y_train)
+
+# 在测试集上预测
+y_pred = model.predict(X_test)
+
+# 计算混淆矩阵
+cm = confusion_matrix(y_test, y_pred)
+
+# 打印混淆矩阵
+print("混淆矩阵：")
+print(cm)
+
+# 可视化混淆矩阵
+plt.figure(figsize=(10,7))
+sns.heatmap(cm, annot=True, fmt='d', cmap='Blues', 
+xticklabels=data.target_names, yticklabels=data.target_names)
+plt.xlabel('Predicted')
+plt.ylabel('Actual')
+plt.title('Confusion Matrix')
+plt.show()
+
+# 计算其他评价指标
+accuracy = accuracy_score(y_test, y_pred)
+precision = precision_score(y_test, y_pred, average='weighted')
+recall = recall_score(y_test, y_pred, average='weighted')
+f1 = f1_score(y_test, y_pred, average='weighted')
+
+# 打印评价指标
+print(f"准确率：{accuracy}")
+print(f"精确率：{precision}")
+print(f"召回率：{recall}")
+print(f"F1得分：{f1}")
+\end{lstlisting}
+
+\subsubsection{结果与说明}
+程序首先下载读取公开的iris数据集，然后训练一个逻辑回归模型来做分类。训练方法采用\enref{留出法}{holdou}。模型训练完成之后，计算混淆矩阵，并计算几个常用的评价指标。
+
+由于数据集有三个类别标签，因此本例是一个三分类问题。混淆矩阵是一个$3 \times 3$方阵，如\autoref{fig_ConMat_1} 所示：
+\begin{figure}[ht]
+\centering
+\includegraphics[width=14cm]{./figures/579bcc7bd5d25192.png}
+\caption{执行结果：混淆矩阵} \label{fig_ConMat_1}
+\end{figure}
+
+量化评价指标结果如下：
+\begin{lstlisting}[language=python]
+准确率：1.0
+精确率：1.0
+召回率：1.0
+F1得分：1.0
+\end{lstlisting}

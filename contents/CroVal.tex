@@ -20,3 +20,70 @@
 交叉验证法的优势是使得训练数据中的每一个样本都被用于训练模型。弥补了\enref{留出法}{holdou}通常只能使用一部分数据用于训练的不足。
 
 特别地，如果每次训练和测试时，只留一个样本作为测试，其余样本全部用于模型训练，那么，此时的交叉验证方式就称为\textbf{留一法}（leave-one-out, LOO）。留一法的优势是最大可能地使用了原始数据集来训练模型，使得训练出来的模型能够更好地拟合原数据。但是，这会带来一个问题，就是该模型的测试准确度可能有较大偏差，因为每次只有一个测试样本。
+
+
+\subsection{知识要点}
+\subsubsection{目的}
+交叉验证的目的是评估模型在未见过的数据上的性能表现。
+
+\subsubsection{方法}
+将数据集划分为多个子集，多个子集依次作为验证集，其余子集作为训练集，重复训练和评估过程，最终通过平均各次评估结果来估计模型性能。
+
+\subsubsection{k折交叉验证（k-Fold Cross-Validation）}
+
+将数据集分为k个子集（折）。进行k次训练，每次使用k-1个子集训练模型，剩下的1个子集验证模型。最终的性能指标取k次评估结果的平均值。
+
+\subsubsection{留一法交叉验证（Leave-One-Out Cross-Validation, LOOCV）}
+
+特殊的k折交叉验证，其中k等于样本数量。每次用一个样本作为验证集，其余样本作为训练集。非常耗时，适用于小数据集。
+
+\subsubsection{交叉验证的优点}
+\begin{enumerate}
+\item 有效防止过拟合：通过多次训练和验证，模型评估更稳定。
+\item 更好利用数据：相比简单的训练-测试划分，交叉验证充分利用了数据集。
+\item 评估更可靠：提供了模型在不同数据划分下的性能估计，减少了训练集测试机划分的偶然性对模型性能评估的影响。
+\end{enumerate}
+
+\subsubsection{交叉验证的缺点}
+\begin{enumerate}
+\item 计算成本高：特别是对于大型数据集和复杂模型，计算时间较长。
+\item 实现复杂：相比简单的训练-测试划分，实现交叉验证稍显复杂。
+\end{enumerate}
+
+\subsection{编程实战}
+
+给出一段实现了5折交叉验证的示例程序。程序训练了一个逻辑回归分类器，然后用5折交叉验证的方法评价了模型的分类准确率。算法基于scikit-learn机器学习库实现。
+
+\subsubsection{代码示例}
+\begin{lstlisting}[language=python]
+from sklearn.datasets import load_iris
+from sklearn.linear_model import LogisticRegression
+from sklearn.model_selection import KFold, cross_val_score
+
+
+# 加载数据集
+data = load_iris()
+X = data.data
+y = data.target
+
+# 定义模型
+model = LogisticRegression(max_iter=200)
+
+# 定义k折交叉验证
+kf = KFold(n_splits=5, shuffle=True, random_state=42)
+
+# 评估模型性能
+scores = cross_val_score(model, X, y, cv=kf, scoring='accuracy')
+
+# 输出结果
+print("交叉验证的准确率：", scores)
+print("平均准确率：", scores.mean())
+\end{lstlisting}
+
+
+\subsubsection{结果与说明}
+程序执行结果如下：
+\begin{lstlisting}[language=none]
+交叉验证的准确率： [1. 1. 0.93333333 0.96666667 0.96666667]
+平均准确率： 0.9733333333333334
+\end{lstlisting}

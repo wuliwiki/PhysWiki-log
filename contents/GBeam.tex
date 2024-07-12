@@ -10,7 +10,7 @@
 你可能在很多地方都听说过高斯光束，例如在光学课上，或者激光器的说明书里，但它们不会完整介绍高斯光束，因为这是高等光学的内容，即使高斯光束的应用非常普遍。本文将介绍高斯光束最重要的特性，也就是经过透镜等光学器件后，光斑的空间分布维持不变的这一特性，涉及近轴近似和惠更斯定理。%本文的主要参考是Svelto、Orazio等人的著作《Principles of Lasers》，以及汪凯戈的著作《高等物理光学》。
 
 \subsubsection{前言}
-光斑当然是应该有空间分布的。一开始学习的平面波的表达式是$\bvec E(x,y,z,t)=\bvec {E_0}\E^{-\I\omega t}$，你可能觉得$\bvec E_0$可能是个常数，这显然是错误的，因为根据\enref{电场的能量}{EEng}，单位空间内平面波的能量是$u=\frac{1}{2}\epsilon_0 \bvec E_0^{\;2}$，这是个常数，那么对$u$全空间积分之后，就能得知该平面波携带了无穷大的能量，这显然是不合理的。那么$\bvec E_0$会不会只局限在某个局域呢？比如光斑只在一个圆形的截面里，就像我们日常看到的那样？这也是不行的，因为光会衍射，如果某个截面的光是局域的，那么就相当于在光路上放一个小孔，光就会在孔后形成衍射图样，当然，衍射图样是全空间的。这说明真实情况下光一定会有一个全空间分布。
+光斑当然是应该有空间分布的。一开始学习的平面波的表达式是$\bvec E(x,y,z,t)=\bvec {E_0}\E^{-\I\omega t}$，你可能觉得$\bvec E_0$可能是个常数，这显然是错误的，因为根据隔壁词条\enref{电场的能量}{EEng}，单位空间内平面波的能量是$u=\frac{1}{2}\epsilon_0 \bvec E_0^{\;2}$，这是个常数，那么对$u$全空间积分之后，就能得知该平面波携带了无穷大的能量，这显然是不合理的。那么$\bvec E_0$会不会只局限在某个局域呢？比如光斑只在一个圆形的截面里，就像我们日常看到的那样？这也是不行的，因为光会衍射，如果某个截面的光是局域的，那么就相当于在光路上放一个小孔，光就会在孔后形成衍射图样，当然，衍射图样是全空间的。这说明真实情况下光一定会有一个全空间分布。
 
 \subsection{近轴近似和ABCD矩阵}
 在谈论高斯光束之前需要先谈到一般情况下光线如何在光学器件上传播。为简单起见，这里只涉及几何光学的内容，也就是先忽略光斑的空间分布，把光看成是一条光线。如\autoref{fig_GBeam_1} 是一个任意的光学器件，例如是凸透镜，玻璃片或者什么都没有。
@@ -19,15 +19,76 @@
 \includegraphics[width=12cm]{./figures/d7d39c0c7c232184.png}
 \caption{光学器件的定义。光线在$z_1$平面以$\bvec r_1$角度入射，在$z_2$平面以$\bvec r_2$角度出射。} \label{fig_GBeam_1}
 \end{figure}
-我们定义了几个参数以表示这些光学器件对光线的作用，也就是图中的$r_1,\theta_1$和$r_2,\theta_2$（这里的$r$是图中的那个标量）。后者和前者是有线性关系的，也就是有：
-\begin{equation}
-r_2=Ar_1+B\theta_1~,
-\theta_2=Cr_1+D\theta_1~
-\end{equation}
+我们定义了几个参数以表示这些光学器件对光线的作用，也就是图中的$r_1,\theta_1$和$r_2,\theta_2$（这里的$r$是图中的那个标量。注意，我们需要标记一下标量的符号，图中$r_1$和$r_2$是正的，图中注明了$r$轴；角度以旋转顺逆时针为准，所以图中$\theta_1$是正的，$\theta_2$则是负的）。
 
+我们认为$r_2,\theta_2$和$r_1,\theta_1$是有线性关系的，也就是有：
+
+\begin{equation}
+\begin{cases}
+r_2=Ar_1+B\theta_1\\
+\theta_2=Cr_1+D\theta_1~
+\end{cases},
+\quad\text{即：}\quad\pmat{r_2\\ \theta_2}=\pmat{A&B\\C&D}\pmat{r_1\\ \theta_1}~.
+\end{equation}
+这里就出现了所谓的ABCD矩阵（这命名有点随意）。对于特定的光学器件，A、B、C、D都是常数。为什么会有这样的关系？这需要用到近轴近似，或者说，\enref{小角极限}{LimArc}。我们举例解释。
+\begin{example}{}\label{ABCD_Sample_1}
+\begin{figure}[ht]
+\centering
+\includegraphics[width=11cm]{./figures/f9fab19a959a860f.png}
+\caption{举例，一块“玻璃”} \label{fig_GBeam_2}
+\end{figure}
+这是一块折射率$n$的介质，长度为$L$，那么就应当有：
+\begin{equation}
+r_2=r_1+L\cdot\tan\varphi\approx r_1+L\varphi\approx r_1+\frac{L}{n}\theta_1,\quad\theta_2=\theta_1~.
+\end{equation}
+所以该光学器件的ABCD矩阵就是：
+\begin{equation}
+\pmat{1&L/n\\0&1}~.
+\end{equation}
+\end{example}
+
+\begin{example}{}\label{ABCD_Sample_2}
+\begin{figure}[ht]
+\centering
+\includegraphics[width=11cm]{./figures/a63b61aceb8114af.png}
+\caption{举例，一块理想薄透镜} \label{fig_GBeam_3}
+\end{figure}
+这是一块焦距为$f$的薄透镜。它很薄，所以有$r_2=r_1$，同时，根据隔壁词条\enref{薄透镜}{ThnLen}，还有（不要忘记正负号）：
+\begin{equation}
+\frac{1}{p}+\frac{1}{q}=\frac{1}{f}\quad\text{即：}\quad\frac{\theta_1}{r_1}+\frac{-\theta_2}{r_2}=\frac{1}{f}\quad\text{即：}\quad\theta_2=\theta_1-\frac{r_1}{f}~
+\end{equation}
+所以理想薄透镜的ABCD矩阵即为：
+\begin{equation}
+\pmat{1&0\\-1/f&1}~.
+\end{equation}
+\end{example}
+
+\begin{exercise}{}\label{ABCD_Sample_3}
+\begin{figure}[ht]
+\centering
+\includegraphics[width=10cm]{./figures/a4463c38ba9f9416.png}
+\caption{举例，一块球面反射镜} \label{fig_GBeam_4}
+\end{figure}
+证明曲率半径为$R$的球面反射镜的ABCD矩阵为：
+\begin{equation}
+\pmat{1&0\\-2/R&1}~.
+\end{equation}
+\end{exercise}
+
+有了ABCD矩阵我们就可以很容易描述光学过程。显然，如果光线穿过了多个光学组件，那就相当于将它们的矩阵相乘。例如光线先穿过了长度为$L_1$，折射率为$n$的玻璃，接着又马上穿过了另一块长度为$L_2$，折射率也为$n$的玻璃，那么新的ABCD矩阵就是：
+\begin{equation}
+\pmat{1&L_2/n\\0&1}\pmat{1&L_1/n\\0&1}=\pmat{1&(L_1+L_2)/n\\0&1}~.
+\end{equation}
+太好了，两块一样的玻璃拼起来就相当于一块更长的玻璃！这说明我们的理论暂时还没有出错！
 
 \subsection{近轴近似下的衍射}
-占位符。
+ABCD矩阵可以用在更多地方，比如衍射理论里。纯色光的传播的方程是亥姆霍兹方程，你可以从隔壁词条\enref{麦克斯韦方程组}{MWEq}里轻易推导出来，它是：
+\begin{equation}\label{eq_HHeq}
+(\nabla^2+k^2)\bvec E=0~.
+\end{equation}
+这里的$\bvec E$是指电场的空间分量，即$\bvec E(x,y,z)$。完整的表达式是$\bvec E(x,y,z,t)=\bvec E(x,y,z)\E^{\I \omega t}$，但我们研究的是空间分布，所以不需要管电场随时间的变化，下文中的$\bvec E$均指得是不带时间分量的那个，即$\bvec E(x,y,z)$。
+
+原则上根据\autoref{eq_HHeq} 就可以推导出高斯光束的表达形式，但是过程太抽象也太不物理了，后面我们再介绍这个方法。使用惠更斯-菲涅尔定律可以更形象地推导出高斯光束的空间分布方程。
 
 \subsection{低模高斯光束}
 占位符。
