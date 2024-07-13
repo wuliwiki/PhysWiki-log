@@ -14,10 +14,11 @@ E_n^2 = \sum_{m}^{E_m\ne E_n} \frac{\abs{\mel{\psi_m^0}{H^1}{\psi_n^0}}^2}{E_n^0
 注意 $\psi_n^0$ 必须取好量子态。
 
 \subsection{推导}
+类似于一阶微扰的推导（\autoref{sub_TIPT_4}）， 若\autoref{eq_TIPT_10} 展开括号后仅保留 $\lambda^2$ 的项，得
 \begin{equation}
 H^0\psi_n^2 + H^1\psi_n^1 = E_n^0\psi_n^2 + E_n^1\psi_n^1 + E_n^2\psi_n^0~.
 \end{equation}
-左乘任意 $\psi_m^0$ 得
+两边左乘任意 $\psi_m^0$ 得
 \begin{equation}\label{eq_TIPT2_1}
 \mel{\psi_m^0}{H^0}{\psi_n^2} + \mel{\psi_m^0}{H^1}{\psi_n^1} = E_n^0\braket{\psi_m^0}{\psi_n^2} + E_n^1\braket{\psi_m^0}{\psi_n^1} + \delta_{m,n}E_n^2~.
 \end{equation}
@@ -29,26 +30,53 @@ H^0\psi_n^2 + H^1\psi_n^1 = E_n^0\psi_n^2 + E_n^1\psi_n^1 + E_n^2\psi_n^0~.
 \begin{equation}\label{eq_TIPT2_3}
 \mel{\psi_m^0}{H^1}{\psi_n^1} = (E_n^0-E_m^0)\braket{\psi_m^0}{\psi_n^2} + E_n^1\braket{\psi_m^0}{\psi_n^1} + \delta_{m,n}E_n^2~.
 \end{equation}
-结合一阶微扰得结论（\autoref{eq_TIPT_2}）
-\begin{equation}
-\mel{\psi_m^0}{H^1}{\psi_n^0} = (E_n^0 - E_m^0) \braket{\psi_m^0}{\psi_n^1} + E_n^1 \delta_{m,n}~.
-\end{equation}
+我们要求该式对所有可能的 $m,n$ 都成立。
 
 \subsubsection{非简并}
-考虑对角元（$m=n$），\autoref{eq_TIPT2_3} 化为
+考虑对角元（$m=n$），\autoref{eq_TIPT2_3} 要求
 \begin{equation}\label{eq_TIPT2_4}
 E_n^2 = \mel{\psi_n^0}{H^1}{\psi_n^1} - E_n^1\braket{\psi_n^0}{\psi_n^1}~.
 \end{equation}
-一阶微扰有（\autoref{eq_TIPT_5}）
-\begin{equation}
+把波函数的一阶微扰（\autoref{eq_TIPT_5}）
+\begin{equation}\label{eq_TIPT2_6}
 \psi_n^1 = \sum_m^{E_m\ne E_n} \frac{\mel{\psi_m^0}{H^1}{\psi_n^0}}{E_n^0 - E_m^0}\psi_m^0~.
 \end{equation}
-代入\autoref{eq_TIPT2_4} 发现第二项为 0， 得\autoref{eq_TIPT2_2}。
+代入\autoref{eq_TIPT2_4} 发现第二项为 0， 得二阶能量修正（\autoref{eq_TIPT2_2}）
+\begin{equation}\label{eq_TIPT2_5}
+E_n^2 = \mel{\psi_n^0}{H^1}{\psi_n^1} = \sum_{m}^{E_m\ne E_n} \frac{\abs{\mel{\psi_m^0}{H^1}{\psi_n^0}}^2}{E_n^0-E_m^0}~.
+\end{equation}
 
-考虑非对角元（$m\ne n$）\autoref{eq_TIPT2_3} 化为
-\addTODO{待验证}
-\begin{equation}
+\autoref{eq_TIPT2_3} 要求所有非对角元（$m\ne n$）满足
+\begin{equation} % 验证：不同时间独立推导过两次，结果相同
 \braket{\psi_m^0}{\psi_n^2} =
 \frac{1}{E_n^0-E_m^0}\sum_{m'}^{E_{m'}\ne E_n}\frac{\mel{\psi_m^0}{H^1}{\psi_{m'}^0}\mel{\psi_{m'}^0}{H^1}{\psi_n^0}}{E_n^0 - E_{m'}^0} - \frac{E_n^1\mel{\psi_m^0}{H^1}{\psi_n^0}}{(E_n^0 - E_m^0)^2}~.
 \end{equation}
 同样假设 $m=n$ 时上式为 0，就得到了二阶波函数修正 $\psi_n^2$。
+
+\subsubsection{二阶能量修正的意义}
+根据\autoref{eq_TIPT_10} 有
+\begin{equation}
+\begin{aligned}
+E_n &= E_n^0 + \lambda E_n^1 + \lambda^2 E_n^2 + \dots \\
+&=\mel{\psi_n^0 + \lambda\psi_n^1 + \lambda^2\psi_n^2 + \dots}{H^0 + \lambda H^1}{\psi_n^0 + \lambda\psi_n^1 + \lambda^2 \psi_n^2 + \dots}~.
+\end{aligned}
+\end{equation}
+右边展开后如果按 $\lambda$ 的幂合并同类项，是否会和左边的各项对应？ 容易验证这对 $E_n^0$ 和 $E_n^1$ 来说都是正确的。 但对 $\lambda^2$ 有
+\begin{equation}\label{eq_TIPT2_7}
+E_n^2 = 2\mel{\psi_n^0}{H^1}{\psi_n^1} + \mel{\psi_n^1}{H^0}{\psi_n^1} + 2\mel{\psi_n^0}{H^0}{\psi_n^2}~.
+\end{equation}
+如果这成立， 那么对比\autoref{eq_TIPT2_5}，就意味着
+\begin{equation}
+E_n^2 + \mel{\psi_n^1}{H^0}{\psi_n^1} + 2\mel{\psi_n^0}{H^0}{\psi_n^2} = 0~.
+\end{equation}
+这是否可以证明成立？ 把\autoref{eq_TIPT2_6} 代入可得
+\begin{equation}
+\begin{aligned}
+\mel{\psi_n^1}{H^0}{\psi_n^1} &= \sum_{m}^{E_m\ne E_n} \frac{\abs{\mel{\psi_m^0}{H^1}{\psi_n^0}}^2}{E_n^0 - E_m^0} \frac{E_m^0}{E_n^0 - E_m^0} = -E_n^2 + E_n^0\braket{\psi_n^2}{\psi_n^2}~.
+\end{aligned}
+\end{equation}
+最后一项
+\begin{equation}
+\mel{\psi_n^0}{H^0}{\psi_n^2} = E_n^0 \braket{\psi_n^0}{\psi_n^2} = 0~.
+\end{equation}
+也就是说\autoref{eq_TIPT2_7} 右边多出了一个 $E_n^0\braket{\psi_n^2}{\psi_n^2}$ 项，属于 $\lambda^4$ 数量级。
