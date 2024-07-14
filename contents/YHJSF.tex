@@ -1,0 +1,243 @@
+% 银行家算法
+% license CCBYSA3
+% type Wiki
+
+（本文根据 CC-BY-SA 协议转载自原搜狗科学百科对英文维基百科的翻译）
+
+\textbf{银行家算法}算法(有时称为\textbf{检测算法})是由Edsger Dijkstra开发的资源分配和死锁避免算法，它通过模拟所有资源的预定最大可能量的分配来测试安全性，然后在决定是否允许继续分配之前进行“s状态” ，检查以测试所有其他待处理活动的可能死锁条件。该算法是在THE操作系统的设计过程中开发的，最初在EWD108中以荷兰语描述。[1] 当新进程进入系统时，它必须声明它可能需要的每种资源类型的最大实例数; 显然，该数字可能不会超过系统中的资源总数。 此外，当进程获取其所有请求的资源时，它必须在有限的时间内返回它们。
+
+\subsection{资源}
+银行家算法要发挥作用，需要知道三件事:
+\begin{itemize}
+\item 每个进程可以请求每个资源的最大值
+\item 每个进程目前拥有多少分配的资源
+\item 系统目前有多少资源可用
+\end{itemize}
+只有当请求的资源量小于或等于可用的资源量时，才能将资源分配给进程；否则，该过程将一直等到资源可用。
+
+在实际系统中跟踪的一些资源是内存，信号量和接口访问。
+
+银行家算法的名称源于这样一个事实，即该算法可用于银行系统，以确保银行不会耗尽资源，因为银行永远不会以不再满足资金的方式分配资金。 所有客户的需求[2]。 通过使用银行家的算法，银行确保当客户要求资金时，银行永远不会离开安全状态。 如果客户的请求不会导致银行离开安全状态，则会分配现金，否则客户必须等到其他客户存款足够。
+
+实施银行家算法需要维护的基本数据结构:
+
+设 n 是系统中的进程数, m 是资源类型的数量。那么我们需要以下数据结构:
+
+\begin{itemize}
+    \item \textbf{可用}: 长度为 m 的向量表示每种资源类型的可用资源数。如果 $\text{Available}[j] = k$, 则有 k 个资源类型为 $R_j$ 的实例可用。
+    \item \textbf{最多}: $n \times m$矩阵定义每个进程的最大需求。如果 $\text{Max}[i, j] = k$, 则 $P_i$ 可以请求最多 k 个资源类型 $R_j$ 的实例。
+    \item \textbf{分配}: $n \times m$ 矩阵定义当前分配给每个进程的每种类型的资源数。如果 $\text{Allocation}[i, j] = k$, 则过程 $P_i$ 当前被分配 k 个资源类型 $R_j$ 的实例。
+    \item \textbf{需求}: $n \times m$ 矩阵表示每个进程的剩余资源需求。如果 $\text{Need}[i, j] = k$, 则 $P_i$ 可能需要 k 个或更多的资源类型 $R_j$ 实例来完成任务。注意: 需要 $\text{Need}[i, j] = \text{Max}[i, j] - \text{Allocation}[i, j]$。N = M - A。
+\end{itemize}
+
+注:$\text{Need}[i, j] = \text{Max}[i, j] - \text{Allocation}[i, j].n=m-a.$
+\subsubsection{1.1 例子}
+\begin{lstlisting}[language=cpp]
+总系统资源为:
+A B C D
+6 5 7 6
+\end{lstlisting}
+\begin{lstlisting}[language=cpp]
+可用的系统资源有:
+A B C D
+3 1 1 2
+\end{lstlisting}
+\begin{lstlisting}[language=cpp]
+流程(当前分配的资源):
+   A B C D
+P1 1 2 2 1
+P2 1 0 3 3
+P3 1 2 1 0
+\end{lstlisting}
+\begin{lstlisting}[language=cpp]
+流程(最大资源):
+   A B C D
+P1 3 3 2 2
+P2 1 2 3 4
+P3 1 3 5 0
+\end{lstlisting}
+\begin{lstlisting}[language=cpp]
+需求=最大资源-当前分配的资源
+流程(可能需要的资源):
+   A B C D
+P1 2 1 0 1
+P2 0 2 0 1
+P3 0 1 4 0
+\end{lstlisting}
+\subsubsection{1.2 安全和不安全状态}
+如果所有进程都有可能完成执行(终止)，则状态(如上例所示)被认为是安全的。 由于系统无法知道一个进程何时终止，或者到那时它将请求多少资源，所以系统假设所有进程最终将尝试获取它们所声明的最大资源，并在不久之后终止。 在大多数情况下，这是一个合理的假设，因为系统并不特别关注每个进程运行多长时间(至少从死锁避免的角度来看不是这样)。 此外，如果一个进程在没有获得最大资源的情况下终止，它只会使系统变得更简单。 如果在安全状态要处理就绪队列，安全状态被认为是决策者。
+
+在给定该假设的情况下，该算法通过尝试找到允许每个请求获取其最大资源然后终止（将其资源返回到系统）的过程的假设请求集来确定状态是否安全。 任何没有这样的集合的状态都是不安全的状态。
+
+我们可以通过显示每个进程有可能获取其最大资源然后终止来显示前面示例中给出的状态是安全状态。
+
+1. P1需要更多的2 A、1 B和1 D资源，以实现其最大化
+    \begin{itemize}
+        \item [可用资源: $\langle 3\ 1\ 1\ 2\rangle - \langle 2\ 1\ 0\ 1\rangle = \langle 1\ 0\ 1\ 1\rangle$]
+        \item $\text{该系统现在仍然有1 A、无B、1 C和1 D资源可用}$
+    \end{itemize}
+
+2. P1终止，向系统返回3 A、3 B、2 C和2 D资源
+    \begin{itemize}
+        \item [可用资源: $\langle 1\ 0\ 1\ 1\rangle + \langle 3\ 3\ 2\ 2\rangle = \langle 4\ 3\ 3\ 3\rangle$]
+        \item $\text{该系统现在有4 A、3 B、3 C和3 D可用资源}$
+    \end{itemize}
+
+3. P2需要2 B和1 D的额外资源，然后终止，返回其所有资源
+    \begin{itemize}
+        \item [可用资源: $\langle 4\ 3\ 3\ 3\rangle - \langle 0\ 2\ 0\ 1\rangle + \langle 1\ 2\ 3\ 4\rangle = \langle 5\ 3\ 6\ 6\rangle$]
+        \item $\text{该系统现在有5 A、3 B、6 C和6 D资源}$
+    \end{itemize}
+
+4. P3获得1 B和4 C资源并终止
+    \begin{itemize}
+        \item [可用资源: $\langle 5\ 3\ 6\ 6\rangle - \langle 0\ 1\ 4\ 0\rangle + \langle 1\ 3\ 5\ 0\rangle = \langle 6\ 5\ 7\ 6\rangle$]
+        \item $\text{该系统现在拥有所有资源: 6 A、5 B、7 C和6 D}$
+    \end{itemize}
+
+5. 因为所有进程都能够终止，所以这种状态是安全的
+
+举一个不安全状态的例子，考虑如果进程2在开始时持有2个单元的资源B会发生什么。
+\subsubsection{1.3 要求}
+当系统收到资源请求时，它运行银行家算法来确定批准该请求是否安全。 一旦理解了安全和不安全状态之间的区别，该算法就相当简单了。
+
+1. 请求能被批准吗？
+\begin{itemize}
+\item 如果没有，请求是不可能的，必须拒绝或列入等候名单
+\end{itemize}
+
+2. 假设请求被批准
+
+3.新的状态安全吗？
+\begin{itemize}
+\item 如果是，批准请求
+\item 如果没有，要么拒绝请求，要么将其列入等待名单
+\end{itemize}
+
+\textsl{系统是拒绝还是推迟一个不可能的或不安全的请求是操作系统特有的决定。}
+
+\textbf{例子}
+
+从与上一个示例相同的状态开始，假设进程3请求2个单位的资源C
+\begin{enumerate}
+\item 没有足够的资源来批准请求
+\item 请求被拒绝
+\end{enumerate}
+
+另一方面，假设进程3请求1个单位的资源C
+
+\begin{enumerate}
+\item 有足够的资源来批准请求
+\item 假设请求被批准
+\end{enumerate}
+\begin{itemize}
+\item 该系统的新状态将是:
+\end{itemize}
+\begin{lstlisting}[language=cpp]
+流程(最大资源):
+    可用系统资源
+     A B C D
+空闲 3 1 0 2
+\end{lstlisting}
+\begin{lstlisting}[language=cpp]
+    流程(当前分配的资源):
+     A B C D
+P1   1 2 2 1
+P2   1 0 3 3
+P3   1 2 2 0
+\end{lstlisting}
+\begin{lstlisting}[language=cpp]
+    流程(最大资源):
+     A B C D
+P1   3 3 2 2
+P2   1 2 3 4
+P3   1 3 5 0
+\end{lstlisting}
+
+1.确定这个新状态是否安全
+\begin{enumerate}
+\item P1可以获得2 A、1 B和1 D资源并终止
+\item 然后，P2可以获得2 B和1 D资源并终止
+\item 最后，P3可以获得1 B和3 C资源并终止
+\item 因此，这种新状态是安全的
+\end{enumerate}
+
+2.由于新状态是安全的，请批准请求
+
+最后一个例子:从我们开始的状态，假设进程2请求1个单位的资源b
+\begin{enumerate}
+\item 有足够的资源
+\item 假设请求被批准，新的状态将是:
+\end{enumerate}
+\begin{lstlisting}[language=cpp]
+    可用系统资源:
+     A B C D
+空闲 3 0 1 2
+\end{lstlisting}
+\begin{lstlisting}[language=cpp]
+    流程(当前分配的资源):
+     A B C D
+P1   1 2 5 1
+P2   1 1 3 3
+P3   1 2 1 0
+\end{lstlisting}
+\begin{lstlisting}[language=cpp]
+    流程(最大资源):
+     A B C D
+P1   3 3 2 2
+P2   1 2 3 4
+P3   1 3 5 0
+\end{lstlisting}
+
+1.这个状态安全吗？ 假设P1、P2和P3请求更多的资源
+\begin{itemize}
+\item P1无法获得足够的最佳资源
+\item P2无法获得足够的最佳资源
+\item P3无法获得足够的最佳资源
+\item 没有进程可以获得足够的资源来终止，因此这种状态是不安全的
+\end{itemize}
+
+2.由于状态不安全，拒绝请求
+\begin{lstlisting}[language=cpp]
+import numpy as np
+
+n_processes = int(input('Number of processes? '))
+n_resources = int(input('Number of resources? '))
+
+available_resources = [int(x) for x in input('Claim vector? ').split(' ')]
+
+currently_allocated = np.
+array([[int(x) for x in input('Currently allocated for process ' 
++ str(i + 1) + '? ').
+split(' ')] for i in range(n_processes)])
+max_demand = np.
+array([[int(x) for x in input('Maximum demand from process ' 
++ str(i + 1) + '? ').split(' ')] for i in range(n_processes)])
+
+total_available = 
+available_resources - np.
+sum(currently_allocated, axis=0)
+
+running = np.
+ones(n_processes) # An array with n_processes 1's to 
+indicate if process is yet to run
+
+while np.count_nonzero(running) > 0:
+	at_least_one_allocated = False
+	for p in range(n_processes):
+		if running[p]:
+			if all(i >= 0 for i in total_available 
+            - (max_demand[p] - currently_allocated[p])):
+				at_least_one_allocated = True
+				print(str(p) + ' is running')
+				running[p] = 0
+				total_available += currently_allocated[p]
+	if not at_least_one_allocated:
+		print('Unsafe')
+		exit()
+				
+print('Safe')
+\end{lstlisting}
+
+\subsection{限制}
+和其他算法一样，银行家算法在实现时也有一些局限性。 具体来说，它需要知道一个进程可能请求多少资源。 在大多数系统中，这种信息是不可用的，因此不可能实现银行家算法。此外，假设进程的数量是静态的是不现实的，因为在大多数系统中，进程的数量是动态变化的。此外，一个进程最终将释放其所有资源的要求(当该进程终止时)足以保证算法的正确性，然而对于一个实际的系统来说却是不够的。等待数小时(甚至数天)的资源释放通常是不可接受的。

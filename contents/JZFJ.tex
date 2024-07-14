@@ -1,0 +1,91 @@
+% 矩阵分解
+% license CCBYSA3
+% type Wiki
+
+（本文根据 CC-BY-SA 协议转载自原搜狗科学百科对英文维基百科的翻译）
+
+矩阵分解是推荐系统中使用的一类协同过滤算法。矩阵分解算法通过将用户-项目交互矩阵分解成两个低维矩形矩阵的乘积来工作[1]。 由于西蒙·芬克在他2006年的博客文章中报道了这一系列方法的有效性，并与研究团体分享了他的发现[2]，从而这一系列方法在Netflix奖挑战赛中广为人知。
+
+\subsection{技术}
+矩阵分解背后的思想是在较低维度的隐空间中表示用户和物品。自从Funk在2006年的第一次工作以来，业界已经为推荐系统提出了许多矩阵分解方法。下面列出了一些最常用和最简单的方法。
+\subsubsection{1.1 Funk SVD}
+西蒙·芬克(Simon Funk)在其博客中提出的原始算法是将用户-物品评分矩阵分解为两个较低维矩阵的乘积，第一个矩阵为每个用户一行，第二个矩阵为每个物品一列。与特定用户或物品相关联的行或列称为隐因子。
+
+请注意，尽管它的名字叫做SVD，但是在FunkSVD中并没有应用奇异值分解。预测评分可以通过公式计算：$\tilde{\mathbf{R}} = \mathbf{H} \mathbf{W}$，其中 $\tilde{\mathbf{R}} \in \mathbb{R}^{\text{users} \times \text{items}}$ 是用户-物品评分矩阵，$\mathbf{H} \in \mathbb{R}^{\text{users} \times \text{latent factors}}$ 包含用户的隐因子和 $\mathbf{W} \in \mathbb{R}^{\text{latent factors} \times \text{items}}$ 该物品的隐因子。
+
+具体地来说，用户 $u$ 对物品 $i$ 给出的预测评分计算如下：
+$$\tilde{r}_{ui} = \sum_{f=0}^{n_{\text{factors}}} H_{u,f} W_{f,i}~$$
+可以通过改变隐因子的数量来调整模型的表达能力。已经证明 [4] 具有一个潜在因素的矩阵分解相当于“最受欢迎”的推荐器(例如，推荐具有最多交互而没有任何个性化的项目)。增加潜在因素的数量将提高个性化，从而提高推荐质量，直到因素的数量变得过高，这时模型开始溢出，推荐质量将下降。避免过度拟合的常见策略是在目标函数中添加正则项。FunkSVD是作为一个评分预测问题开发的，因此它使用明确的数字评分作为用户-项目交互信息。
+
+综上所述，FunkSVD最小化以下目标函数:
+\begin{equation}
+\arg \min_{H, W} \|\mathbf{R} - \tilde{\mathbf{R}}\|_F + \alpha \|\mathbf{H}\| + \beta \|\mathbf{W}\|~
+\end{equation}
+
+其中 \(\|\cdot\|_F\) 被定义为 Frobenius 范数，而其余的范数可能是 Frobenius 范数，也可能是其他范数，这取决于具体的推荐问题。
+\subsubsection{1.2 SVD++}
+虽然FunkSVD能够提供非常好的推荐质量，但它在表示用户-物品交互时仅使用明确的数字评级这一方法具有局限性。现代推荐系统应该利用所有可用的交互信息，包括显式的(例如数字评分)和隐式的(例如喜欢、购买、跳过、书签)。为此，SVD++被设计成考虑隐式交互的模型[6][7]。与FunkSVD相比，SVD++还考虑了用户和物品偏好。
+
+用户 $u$ 对项目 $i$ 的预测评分计算如下：
+
+$$\tilde{r}_{ui} = \mu + b_i + b_u + \sum_{f=0}^{n_{\text{factors}}} H_{u,f} W_{f,i}~$$
+
+然而，SVD++也有一些缺点，主要缺点是这种方法不是基于模型的。这意味着，如果添加了一个新用户，除非重新训练整个模型，否则算法无法对其建模。尽管系统可能已经为该新用户收集了一些与物品的交互信息，但其隐因子不可用，因此无法给出任何推荐。这是冷启动问题的一个例子，即推荐者不能有效地处理新用户或项目，应该制定具体的策略来处理这一缺点[8]。
+
+解决这种冷启动问题的一个可能的方法是修改SVD++使其成为一个基于模型的算法，从而可以轻松地管理新项目和新用户。
+
+正如前面在SVD++中提到的，我们没有新用户的隐因子，因此有必要用不同的方式来表示它们。用户的隐因子表示该用户对相应物品的隐因子的偏好，因此可以通过过去的用户交互信息来估计用户的隐因子。如果系统能够为新用户收集一些交互信息，就有可能估计其隐因子。请注意，这并不能完全解决冷启动问题，因为推荐器仍然需要新用户进行一些可靠的交互，但至少没有必要每次都重新计算整个模型。已经证明，该公式几乎等同于基于物品-物品模型的推荐器的SLIM模型[9] 。
+$$\tilde{r}_{ui} = \mu + b_i + b_u + \sum_{f=0}^{\text{nfactors}} \left( \sum_{j=0}^{\text{nitems}} r_{uj} W_{j,f} \right) W_{f,i}~$$
+使用此公式，等效的物品-物品推荐器将是：
+$\tilde{\mathbf{R}} = \mathbf{R} \mathbf{S} = \mathbf{R} \mathbf{W}^\top \mathbf{W}$因此其相似矩阵是对称的。
+\subsubsection{1.3 非对称SVD}
+非对称SVD的目的是结合SVD++基于模型的优点，因此能够考虑新用户的几个评级，而不需要重新训练整个模型。与此处基于模型的SVD相反，用户隐因子矩阵H被Q代替，Q根据用户的评分来学习用户的偏好[10]。
+
+用户u对物品I的预测评分计算如下:
+$$\tilde{r}_{ui} = \mu + b_i + b_u + \sum_{f=0}^{\text{nfactors}} \sum_{j=0}^{\text{nitems}} r_{uj} Q_{j,f} W_{f,i}~$$
+使用此公式，等效的项目推荐器将是：$\tilde{\mathbf{R}} = \mathbf{R} \mathbf{S} = \mathbf{R} \mathbf{Q}^\top \mathbf{W}$由于矩阵 $\mathbf{Q}$ 和 $\mathbf{W}$ 是不同的，因此相似矩阵是非对称的，因此模型得以命名。
+\subsubsection{1.4 混合矩阵分解}
+近年来，已经开发了许多其他矩阵分解模型来利用不断增加的可用交互数据和用例的数量和种类。混合矩阵分解算法能够合并显式和隐式交互 [11] 或内容和协同数据 [12][13][14]。
+
+\subsection{参考文献}
+[1]
+^Koren, Yehuda; Bell, Robert; Volinsky, Chris (August 2009). "Matrix Factorization Techniques for Recommender Systems". Computer. 42 (8): 30–37. CiteSeerX 10.1.1.147.8295. doi:10.1109/MC.2009.263..
+
+[2]
+^Funk, Simon. "FunkSVD proposal"..
+
+[3]
+^Agarwal, Deepak; Chen, Bee-Chung (28 June 2009). "Regression-based latent factor models". Proceedings of the 15th ACM SIGKDD international conference on Knowledge discovery and data mining - KDD '09. ACM. pp. 19–28. doi:10.1145/1557019.1557029. ISBN 9781605584959..
+
+[4]
+^Jannach, Dietmar; Lerche, Lukas; Gedikli, Fatih; Bonnin, Geoffray (2013). What Recommenders Recommend – An Analysis of Accuracy, Popularity, and Sales Diversity Effects. User Modeling, Adaptation, and Personalization. Lecture Notes in Computer Science (in 英语). 7899. Springer Berlin Heidelberg. pp. 25–37. CiteSeerX 10.1.1.465.96. doi:10.1007/978-3-642-38844-6_3. ISBN 978-3-642-38843-9..
+
+[5]
+^Paterek, Arkadiusz (2007). "Improving regularized singular value decomposition for collaborative filtering" (PDF). Proceedings of KDD Cup and Workshop..
+
+[6]
+^Cao, Jian; Hu, Hengkui; Luo, Tianyan; Wang, Jia; Huang, May; Wang, Karl; Wu, Zhonghai; Zhang, Xing (2015). Distributed Design and Implementation of SVD++ Algorithm for E-commerce Personalized Recommender System. Communications in Computer and Information Science (in 英语). 572. Springer Singapore. pp. 30–44. doi:10.1007/978-981-10-0421-6_4. ISBN 978-981-10-0420-9..
+
+[7]
+^Jia, Yancheng (September 2014). Users' brands preference based on SVD++ in recommender systems. 2014 IEEE Workshop on Advanced Research and Technology in Industry Applications (WARTIA). IEEE. pp. 1175–1178. doi:10.1109/wartia.2014.6976489. ISBN 978-1-4799-6989-0..
+
+[8]
+^Kluver, Daniel; Konstan, Joseph A. (6 October 2014). "Evaluating recommender behavior for new users". Proceedings of the 8th ACM Conference on Recommender systems - Rec Sys '14. ACM. pp. 121–128. doi:10.1145/2645710.2645742. ISBN 9781450326681..
+
+[9]
+^Zheng, Yong; Mobasher, Bamshad; Burke, Robin (6 October 2014). "CSLIM". CSLIM: contextual SLIM recommendation algorithms. ACM. pp. 301–304. doi:10.1145/2645710.2645756. ISBN 9781450326681..
+
+[10]
+^Pu, Li; Faltings, Boi (12 October 2013). "Understanding and improving relational matrix factorization in recommender systems". Proceedings of the 7th ACM conference on Recommender systems - Rec Sys '13. ACM. pp. 41–48. doi:10.1145/2507157.2507178. ISBN 9781450324090..
+
+[11]
+^Zhao, Changwei; Sun, Suhuan; Han, Linqian; Peng, Qinke (2016). "HYBRID MATRIX FACTORIZATION FOR RECOMMENDER SYSTEMS IN SOCIAL NETWORKS". Neural Network World. 26 (6): 559–569. doi:10.14311/NNW.2016.26.032..
+
+[12]
+^Zhou, Tinghui; Shan, Hanhuai; Banerjee, Arindam; Sapiro, Guillermo (26 April 2012). Kernelized Probabilistic Matrix Factorization: Exploiting Graphs and Side Information. Proceedings of the 2012 SIAM International Conference on Data Mining. Society for Industrial and Applied Mathematics. pp. 403–414. doi:10.1137/1.9781611972825.35. ISBN 978-1-61197-232-0..
+
+[13]
+^Adams, Ryan Prescott; Dahl, George E.; Murray, Iain (25 March 2010). "Incorporating Side Information in Probabilistic Matrix Factorization with Gaussian Processes 1003.4944". arXiv:1003.4944 [stat.ML]..
+
+[14]
+^Fang, Yi; Si, Luo (27 October 2011). "Matrix co-factorization for recommendation with rich side information and implicit feedback". Proceedings of the 2nd International Workshop on Information Heterogeneity and Fusion in Recommender Systems - Het Rec '11. ACM. pp. 65–69. doi:10.1145/2039320.2039330. ISBN 9781450310277..
