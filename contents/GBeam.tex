@@ -88,10 +88,12 @@ r_2=r_1+L\cdot\tan\varphi\approx r_1+L\varphi\approx r_1+\frac{L}{n}\theta_1,\qu
 \end{equation}
 这里的$\bvec E$是指电场的空间分量，即$\bvec E(x,y,z)$。完整的表达式是$\bvec E(x,y,z,t)=\bvec E(x,y,z)\E^{\I \omega t}$，但我们研究的是空间分布，所以不需要管电场随时间的变化，下文中的$\bvec E$均指得是不带时间分量的那个，即$\bvec E(x,y,z)$。
 
+此外，在我们的推导中，光线都是在均匀介质中的，没有色散，也没有非线性，所以\autoref{eq_HHeq} 成立，并且适用于电场任何一个空间分量，下文中将用$E$来指代$\bvec E$的其中一个空间分量。
+
 原则上根据\autoref{eq_HHeq} 就可以推导出高斯光束的表达形式，但是过程太抽象也太不物理了，后面我们再介绍这个方法。使用惠更斯-菲涅尔定律可以更形象地推导出高斯光束的空间分布方程，关于惠更斯定理的简明描述，可以参考隔壁词条\enref{惠更斯原理}{Huygen}。我们需要用到它的数学形式，也就是：
 
 \begin{equation}\label{eq_HF}
-\bvec{E}(x,y,z)=\frac{\I}{\lambda}\iint_s\bvec{E}\left(x_1,y_1,z_1\right)\frac{\E^{-\I kr}}{r}\cos\theta\, dx_1 dy_1~
+E(x,y,z)=\frac{\I}{\lambda}\iint_s E\left(x_1,y_1,z_1\right)\frac{\E^{-\I kr}}{r}\cos\theta\, dx_1 dy_1~
 \end{equation}
 
 该式子描述了$z_1$平面的光斑，传播到$z$平面时的电场的演化，也就是下图：
@@ -112,18 +114,36 @@ r=&\sqrt{\left(x-x_1\right)^2+\left(y-y_1\right)^2+\left(z-z_1\right)^2}\\
 
 将这些近似代入，就可以化简为（不需要对$z_1$积分）：
 \begin{equation}\label{eq_HFappr}
-\bvec{E}(x,y,z)=\frac{\I\E^{-\I k(z-z_1)}}{\lambda(z-z_1)}\iint_s\bvec{E}\left(x_1,y_1,z_1\right)\E^{-\I k\left(\frac{(x-x_1)^2+(y-y_1)^2}{2(z-z_1)}\right)}\,dx_1dy_1~
+E(x,y,z)=\frac{\I\E^{-\I k(z-z_1)}}{\lambda(z-z_1)}\iint_s E\left(x_1,y_1,z_1\right)\E^{-\I k\frac{(x-x_1)^2+(y-y_1)^2}{2(z-z_1)}}\,dx_1dy_1~
 \end{equation}
-简便起见令$L=z-z_1$，
-\begin{equation}
-\bvec{E}(x,y,z)=\frac{\I\E^{-\I kL}}{\lambda L}\iint_s\bvec{E}\left(x_1,y_1,z_1\right)\E^{-\I k\left(\frac{(x-x_1)^2+(y-y_1)^2}{2L}\right)}\,dx_1dy_1~
-\end{equation}
+%简便起见令$L=z-z_1$，
+%\begin{equation}
+%\bvec{E}(x,y,z)=\frac{\I\E^{-\I kL}}{\lambda L}\iint_s\bvec{E}\left(x_1,y_1,z_1\right)\E^{-\I k\left(\frac{(x-x_1)^2+(y-y_1)^2}{2L}\right)}\,dx_1dy_1~
+%\end{equation}
 
 \begin{example}{用亥姆霍兹方程的推导}
-从\autoref{eq_HFappr} 就可以看出，$\bvec E$的函数表达式中应该含有$\E^{-\I kz}$这一项，我们把它提取出来，并令：
+从\autoref{eq_HFappr} 就可以看出，$E$的函数表达式中应该含有$\E^{-\I kz}$这一项，我们把它提取出来，并令：
+\begin{equation}\label{eq_EandU}
+E(x,y,z)=u(x,y,z)\E^{-\I kz}~.
+\end{equation}
+将\autoref{eq_EandU} 代入到\autoref{eq_HHeq} 中去，就能得到：
+\begin{equation}
+\left(\frac{\partial^2}{\partial x^2}+\frac{\partial^2}{\partial y^2}\right)u+\frac{\partial^2}{\partial z^2}u-2\I k\frac{\partial}{\partial z}u=0~.
+\end{equation}
+中间的$\frac{\partial^2}{\partial z^2}u$被认为由于$u$是关于$z$的缓变函数，所以可以舍去二阶项，只保留一阶项，也就是：
+\begin{equation}\label{eq_u}
+\left(\frac{\partial^2}{\partial x^2}+\frac{\partial^2}{\partial y^2}\right)u-2\I k\frac{\partial}{\partial z}u=0~.
+\end{equation}
 
+这个说法可能不是很好理解，但是\autoref{eq_u} 和\autoref{eq_HFappr} 本质上是一样的，我们可以如下验证：首先，用\autoref{eq_EandU} 改写\autoref{eq_HFappr} 得到：
+\begin{equation}\label{eq_HFinU}
+u(x,y,z)=\frac{\I}{\lambda(z-z_1)}\iint_s u\left(x_1,y_1,z_1\right)\E^{-\I k\frac{(x-x_1)^2+(y-y_1)^2}{2(z-z_1)}}\,dx_1dy_1~
+\end{equation}
+接下来，把\autoref{eq_HFinU} 代入到\autoref{eq_u} 即可验证。
 \end{example}
-
+\begin{exercise}{}
+把\autoref{eq_HFinU} 代入到\autoref{eq_u} ，验证缓变函数的假设。
+\end{exercise}
 \subsection{低模高斯光束}
 占位符。
 
