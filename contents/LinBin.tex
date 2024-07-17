@@ -25,7 +25,8 @@
 静态链接的程序一般\href{https://stackoverflow.com/questions/31801824/is-static-linking-in-linux-portable}{没什么问题}。 但对于动态链接的程序， 可以把所有非基础的 so 依赖库打包到一个文件夹里面并设置 \verb`rpath/runpath` 或者 \verb`LD_LIBRARY_PATH`。 但是这里面不能包括一些基础的系统库例如
 \begin{itemize}
 \item \verb`linux-vdso.so` 直接由内核提供，不存在于文件系统， 见\href{https://unix.stackexchange.com/questions/476971/ldd-shows-no-location-after-arrow-library-does-not-exist-on-system}{这里} 和 \href{https://en.wikipedia.org/wiki/VDSO}{vDSO - Wikipedia}。
-\item \verb`libc.so`（\verb`GLIBC`） 是操作系统的核心库，如果不兼容比较难办。Ubuntu 只有升级版本才能升级 GLIBC 版本，一般是向下兼容的，所以只要保证足够新即可。 GLIBC 是 GNU C library， 提供 C 语言支持， 包括 system call 的 wrapper。 可以用 \verb`ldd --version` 或者 \verb`ldconfig -v | grep libc` 查看版本。
+\item \verb`libc.so/.a`（\verb`GLIBC`） 是操作系统的核心库，如果不兼容比较难办。Ubuntu 只有升级版本才能升级 GLIBC 版本，一般是向下兼容的，所以只要保证足够新即可。 GLIBC 是 GNU C library， 提供 C 语言支持， 包括 system call 的 wrapper。 可以用 \verb`ldd --version` 或者 \verb`ldconfig -v | grep libc` 查看版本。
+\item 为了提高 glibc 兼容性，可以选择在比较老的系统上面编译库文件，那么在更新的系统上 link 也应该会兼容。
 \item \verb`libm.so` 是 GNU C library 的一部分， 提供数学函数。
 \item \verb`libgcc_s.so` 是 GCC runtime library 例如在 32bit 系统中提供 64bit 整数运算。
 \item \verb`ld-linux-x86-64.so` 是 dynamic linker
