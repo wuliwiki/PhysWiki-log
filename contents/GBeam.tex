@@ -148,7 +148,7 @@ u(x,y,z)=\frac{\I}{\lambda(z-z_1)}\iint_s u\left(x_1,y_1,z_1\right)\E^{-\I k\fra
 \subsection{光学器件中的衍射}
 上述的衍射是发生在自由空间上的，也就是真空中。那么当光通过光学器件时，衍射公式会发生相应的变化，我们接下来将讨论衍射公式与ABCD矩阵的结合，最重要的就是得到\autoref{eq_HHeq} 中的相位项$\E^{-\I kr}$。
 
-如\autoref{fig_GBeam_6}（图片来自\footnote{A.E. Siegman, Lasers (Oxford University Press, Oxford, U. K.), Chapt. 20.}。对参数的定义不同，所以图中的标注会有些许区别），假设衍射光中的一束光从点$p_1$出发，在$z_1$平面在$r_1$出以$\theta_1$角度入射，在$z_2$平面以$r_2,\theta_2$出射，最后到达点$p_2$。
+如\autoref{fig_GBeam_6}（图片来自\footnote{A.E. Siegman, Lasers (Oxford University Press, Oxford, U. K.), Chapt. 20.}。对参数的定义不同，所以图中的标注会有些许区别），假设衍射光中的一束光从点$p_1$出发，在$z_1$平面在$r_1$处以$\theta_1$角度入射，在$z_2$平面以$r_2,\theta_2$出射，最后到达点$p_2$。
 \begin{figure}[ht]
 \centering
 \includegraphics[width=10cm]{./figures/3ab969bd13c685de.png}
@@ -183,11 +183,65 @@ AD-BC=1~,
 \begin{equation}
 r\approx L_0+\frac{Ar_1^2-2r_1r_2+Dr_2^2}{2B}~
 \end{equation}
+这是二维时的推导，在这里我们直接写出三维时的表达式：
+\begin{equation}
+r\approx L_0+\frac{A(x_1^2+y_1^2)-2x_1x-2y_1y+D(x^2+y^2)}{2B}~
+\end{equation}
+那么，类似的我们就可以直接写出$u(x,y,z)$形式的经过光学器件的衍射方程：
+\begin{equation}\label{eq_uABCD}
+u(x,y,z)=\frac{\I}{B\lambda }\iint_s u\left(x_1,y_1,z_1\right)\E^{-\I k\frac{A(x_1^2+y_1^2)-2x_1x-2y_1y+D(x^2+y^2)}{2B}}\,dx_1dy_1~
+\end{equation}
 
+可以简单进行一下验证。真空其实是玻璃的“一种”，其折射率为1，那么它的ABCD矩阵也就是：
+\begin{equation}
+\pmat{1&L\\0&1}~.
+\end{equation}
+将它代入到\autoref{eq_uABCD} 里，就能得到：
+\begin{equation}
+u(x,y,z)=\frac{\I}{L\lambda }\iint_s u\left(x_1,y_1,z_1\right)\E^{-\I k\frac{(x-x_1)^2+(y-y_1^2)}{2L}}\,dx_1dy_1~
+\end{equation}
+鉴于$L=z-z_0$，所以上式实际上就是\autoref{eq_HFinU} 。所以\autoref{eq_HFinU} 其实是\autoref{eq_uABCD} 的一种特例。
 
 \subsection{低模高斯光束}
-占位符。
+回想最开始时的描述，高斯光束通过光学器件时，光斑的空间分布不变，也就是说\autoref{eq_uABCD} 中的$u(x,y,z)$应该和$u(x_1,y_1,z_1)$具有类似的函数表达式。我们现在需要找到这样一个合适的函数。%鉴于物理学家都是失败的考不上数学系的半吊子，解微积分方程基本是不可能的，我们现在只能猜一个答案。
+观察\autoref{eq_uABCD} ：
+\begin{equation}
+u(x,y,z)=\frac{\I}{B\lambda }\iint_s u\left(x_1,y_1,z_1\right)\E^{-\I k\frac{A(x_1^2+y_1^2)-2x_1x-2y_1y+D(x^2+y^2)}{2B}}\,dx_1dy_1~
+\end{equation}
 
+一般来说光学器件的通光孔径一般都能覆盖绝大多数的光斑，所以积分区域$s$可以改成全空间，那么此时式中的$\E^{-\I kx_1}dx_1$就相当于给函数做傅里叶变换，而高斯曲线（正态分布标准曲线）在傅里叶变换后函数形式是基本不变的，可以参考词条\enref{傅里叶变换}{FTExp}。同时式中的$\E^{-\I kD(x^2+y^2)}$也给出了类似的提示。那么我们就可以猜测$u$的一种可能的形式：
+\begin{equation}\label{eq_Gbeam}
+u(x,y,z)=\E^{-\I k\frac{x^2+y^2}{2q}}~
+\end{equation}
+其中的$q=q(z)$，是关于$z$的函数。这里的$u$没有归一化处理。把它代回到\autoref{eq_uABCD} 中的$u(x_1,y_1,z_1)$，进行一些简单的重新排列式子，就能得到:
+\begin{equation}
+\ali{
+u(x,y,z)&=\frac{\I}{B\lambda }\int_{-\infty}^{+\infty}\int_{-\infty}^{+\infty}dx_1dy_1\,\E^{-\I k\frac{x_1^2+y_1^2}{2q_1}}\E^{-\I k\frac{A(x_1^2+y_1^2)-2x_1x-2y_1y+D(x^2+y^2)}{2B}}\\
+&=\frac{\I}{B\lambda }\E^{-\I k\frac{D}{2B}(x^2+y^2)}\times \int_{-\infty}^{+\infty}dx_1\,\E^{-\I k\frac{x_1^2}{2q_1}}\E^{-\I k\frac{Ax_1^2-2x_1x}{2B}}\\
+&\times \int_{-\infty}^{+\infty}dy_1\,\E^{-\I k\frac{y_1^2}{2q_1}}\E^{-\I k\frac{Ay_1^2-2y_1y}{2B}}\\
+&=\frac{\I}{B\lambda }\E^{-\I k\frac{D}{2B}(x^2+y^2)}\times \int_{-\infty}^{+\infty}dx_1\,\E^{-\I k(\frac{1}{2q_1}+\frac{A}{2B})x_1^2}\E^{\I k\frac{x}{B}x_1}\\
+&\times \int_{-\infty}^{+\infty}dy_1\,\E^{-\I k(\frac{1}{2q_1}+\frac{A}{2B})y_1^2}\E^{\I k\frac{y}{B}y_1}~
+}~
+\end{equation}
+积分符号内都是傅里叶变换，所以可以直接带入公式，公式来源是隔壁词条\enref{傅里叶变换}{FTExp} ，即：
+\begin{equation}
+\int_{-\infty}^{+\infty}dx_1\,\E^{-\I k(\frac{1}{2q_1}+\frac{A}{2B})x_1^2}\E^{\I k\frac{x}{B}x_1}=\frac{1}{\sqrt{-2jk(\frac{1}{2q_1}+\frac{A}{2B})}}\exp{\frac{\I k\frac{x^2}{B^2}}{2(\frac{1}{q_1}+\frac{A}{B})}}~
+\end{equation}
+也就是：
+\begin{equation}\label{eq_GbeamABCD}
+u(x,y,z)=\frac{-1}{2\pi B (\frac{1}{q_1}+\frac{A}{B})}\E^{-\I k\frac{x^2+y^2}{2q_2}}~
+\end{equation}
+其中$q_2=\frac{D}{B}-\frac{1}{\frac{1}{q_1}+\frac{A}{B}}$，再次利用$AD-BC=1$，可以得到：
+\begin{equation}\label{eq_qABCD}
+q_2=\frac{Aq_1+B}{Cq_1+D}~.
+\end{equation}
+
+\autoref{eq_GbeamABCD} 的函数形式与\autoref{eq_Gbeam} 一致，这证明了我们的猜测是正确的：\autoref{eq_Gbeam} 这样一个分布的光就是我们要找的，通过光学元件后光斑分布不变的一种光，写回成$E$的形式，也就是：
+\begin{equation}\label{eq_GbeamE}
+E(x,y,z)=A\E^{-\I k(z+\frac{x^2+y^2}{2q(z)})}\qquad (A\text{是归一化系数})~
+\end{equation}
+
+继续深入。观察上式，可以发现相位$z+\frac{x^2+y^2}{2q(z)}$非常类似于我们之前经常使用的近轴近似的结果。联想到球面波的形式$E=A\E^{-\I kR}$，对相位的$R$进行近轴近似可以得到$R\approx z+\frac{x^2+y^2}{2R}$，两者的形式非常类似。我们有理由认为\autoref{eq_Gbeam} 所代表的光也是一种球面波，但球面半径
 
 \subsection{低模高斯光束的传播}
 占位符。
