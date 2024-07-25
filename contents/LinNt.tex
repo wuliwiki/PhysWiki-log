@@ -70,7 +70,8 @@
 \item \verb`realpath 路径`
 \item \verb`dirname 相对或绝对路径/文件名或文件夹` 返回 \verb`相对或绝对路径` （最后没有 \verb`/`）。
 \item \verb`mkdir` 新建文件夹, \verb`rmdir` 删除空文件夹, \verb`rmdir -r` (recursive) 删除所包含的文件夹（其实不用 \verb`rmdir` 用 \verb`rm` 也可以但有点危险）， \verb`-P` 选项可以一次创建多层目录
-\item \verb`dos2unix 文件1 文件2...` 可以把 Windows 文件中的 CRLF 转换为 Linux 中的 LF 换行。 
+\item \verb`dos2unix 文件1 文件2...` 可以把 Windows 文件中的 CRLF 转换为 Linux 中的 LF 换行。会自动忽略二进制文件。 和 git 一样通过 NUL 字符判断二进制。
+\item \verb`dos2unix -ih 文件1 文件2...` 可以显示文件信息，每个文件一行，格式为 \verb`DOS UNIX MAC BOM TXTBIN FILE`，分别是 \verb`CRLF的个数 LF的个数 CR的个数 是否有BOM 文本还是二进制 文件名`
 \item \verb`dd` 命令可以直接在当前位置生成一个大小为 100 MB 的文件， 内容为随机， 还会显示写入速度
 \verb`dd if=/dev/urandom of=./dump.txt bs=1M count=1024` 写 1024Mb 随机文件
 \item \verb`/dev/random` 使用系统信息生成随机数，但有可能当 entropy 不足的时候会让 \verb`dd` 终端。 而 \verb`/dev/urandom` 不会中断，应该是使用伪随机数，稍微可能没有那么安全。

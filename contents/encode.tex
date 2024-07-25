@@ -28,12 +28,19 @@
 \end{figure}
 如果这时编辑器中仍然显示乱码， 说明自动检测失败， 可以尝试手动切换不同编码打开文件： 点击状态栏上显示的编码， 选择 “Reopen with Encoding”， 选择需要的编码即可。 以正确的编码打开后， 如果想改为别的编码， 就选 “Save with Encoding”。
 
+如果你使用 \enref{Linux 命令行}{Linux}，那么 \verb`dos2unix` 命令也常用于检测换行符和 BOM 等信息，以及是文本文件还是二进制文件。 用法是 \verb`dos2unix -ih 文件1 文件2...`， 输出结果每个文件一行，格式为 \verb`DOS UNIX MAC BOM TXTBIN FILE`，分别是 \verb`CRLF的个数 LF的个数 CR的个数 是否有BOM 文本还是二进制 文件名`。 \verb`dos2unix 文件1 文件2...` 还可以自动删除 BOM。
+
+\subsection{判断文本文件和二进制文件}
+如果一个文件中出现了任意 \verb`NUL` 字符，那么它很有可能是二进制文件。 如果出现了许多 \verb`NUL` 字符，那么几乎肯定是二进制文件。 \verb`NUL` 字符是 \aref{ascii}{sub_encode_2} 表中编号为 0 的字符，也就是说在该子节中，所有的比特都为零。 \verb`NUL` 字符通常用于 C 语言的字符串的最后代表字符串结束，但几乎不用于文本文件中（无论使用哪种编码）。
+
+许多计算机程序以此为标准区分文本文件和二进制文件。
+
 \subsection{换行符}\label{sub_encode_1}
 除了编码外， 文本文件的换行符使用也有不同的规范。 历史上， 人们在使用机械打字机时， 当一行打完， 打字头停留在页面某一行的最右端。 回车键（\textbf{carrage return}， 简写为 \textbf{CR}）用于将打字头移动到页面的最左端， 而 \textbf{LF （line feed）}键用于将纸张上移一行。 在 ASCII 编码中， CR 和 LF 分别对应 13 和 10。 Windows 系统沿用了这个传统， 所以当我们在写字板程序中按下回车时， 分别会在文件中插入 CR 和 LF 两个字符。 Linux 系统默认使用单个 LF 换行， 而老版本的 Mac 则默认用单个 CR 换行（OS X 及以后也用单个 LF）。 所以同一个文件在不同系统的默认编辑器中可能会出现换行符识别不出导致全部文字排成一行的情况。 一般来说， 同一个文本文件应该使用同一个规范。
 
 无论在哪个系统中使用 VScode， 它在打开文本文件时都会自动检测换行符并显示在\autoref{fig_encode_1} 的状态栏中\footnote{一般不会检测失败， 除非不同的换行符格式混用}。 若要将改变换行符， 点击当前显示的换行符并选择想要的即可。
 
-\subsection{ASCII 编码}
+\subsection{ASCII 编码}\label{sub_encode_2}
 \begin{figure}[ht]
 \centering
 \includegraphics[width=14.25cm]{./figures/b7284fbe97ca01f5.pdf}

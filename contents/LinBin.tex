@@ -22,11 +22,11 @@
 \subsection{库兼容性}
 参考这里的\href{https://stackoverflow.com/questions/20183883/determining-binary-compatibility-under-linux}{回答}。
 
-静态链接的程序一般\href{https://stackoverflow.com/questions/31801824/is-static-linking-in-linux-portable}{没什么问题}。 但对于动态链接的程序， 可以把所有非基础的 so 依赖库打包到一个文件夹里面并设置 \verb`rpath/runpath` 或者 \verb`LD_LIBRARY_PATH`。 但是这里面不能包括一些基础的系统库例如
+静态链接的程序一般\href{https://stackoverflow.com/questions/31801824/is-static-linking-in-linux-portable}{没什么问题}（除了 GLIBC）。 但对于动态链接的程序， 可以把所有非基础的 so 依赖库打包到一个文件夹里面并设置 \verb`rpath/runpath` 或者 \verb`LD_LIBRARY_PATH`。 但是这里面不能包括一些基础的系统库例如
 \begin{itemize}
 \item \verb`linux-vdso.so` 直接由内核提供，不存在于文件系统， 见\href{https://unix.stackexchange.com/questions/476971/ldd-shows-no-location-after-arrow-library-does-not-exist-on-system}{这里} 和 \href{https://en.wikipedia.org/wiki/VDSO}{vDSO - Wikipedia}。
-\item \verb`libc.so/.a`（\verb`GLIBC`） 是操作系统的核心库，如果不兼容比较难办。Ubuntu 只有升级版本才能升级 GLIBC 版本，一般是向下兼容的，所以只要保证足够新即可。 GLIBC 是 GNU C library， 提供 C 语言支持， 包括 system call 的 wrapper。 可以用 \verb`ldd --version` 或者 \verb`ldconfig -v | grep libc` 查看版本。
-\item 为了提高 glibc 兼容性，可以选择在比较老的系统上面编译库文件，那么在更新的系统上 link 也应该会兼容。
+\item \verb`glibc` 不兼容是链接时和运行时都很常见的问题，详见下文。
+\item 动态链接到 glibc 会提高不同 glibc 版本的兼容性。
 \item \verb`libm.so` 是 GNU C library 的一部分， 提供数学函数。
 \item \verb`libgcc_s.so` 是 GCC runtime library 例如在 32bit 系统中提供 64bit 整数运算。
 \item \verb`ld-linux-x86-64.so` 是 dynamic linker
@@ -36,4 +36,19 @@
 \item \verb`libquadmath.so` 是和 G++ 一起安装的四精度计算库。
 \end{itemize}
 
-最兼容的方法大概使用 chroot 或者 \enref{docker}{Docker}， 可以把除了 \verb`vdso` 以外的所有动态库都放到 fake root 文件夹里面。
+最兼容的方法大概使用 \enref{chroot}{chroot} 或者 \enref{docker}{Docker}， 可以把除了 \verb`vdso` 以外的所有动态库都放到 fake root 文件夹里面。
+
+\subsubsection{关于 GLIBC 兼容性}
+
+\begin{itemize}
+\item \verb`libc.so/.a`（\verb`GLIBC`） 是操作系统的核心库，如果不兼容比较难办。Ubuntu 只有升级版本才能升级 GLIBC 版本，一般是向下兼容的，所以只要保证足够新即可。 GLIBC 是 GNU C library， 提供 C 语言支持， 包括 system call 的 wrapper。 可以用 \verb`ldd --version` 或者 \verb`ldconfig -v | grep libc` 查看版本。
+\item 为了提高 glibc 兼容性，可以选择在比较老的系统上面编译库文件，那么在更新的系统上 link 也应该会兼容。
+\item 静态链接程序时，GCC 编译器经常会给出经典警告： \verb`warning: Using 'dlopen' in statically linked applications requires at runtime the shared libraries from the glibc version used for linking`。 其中 \verb`dlopen` 是 C 语言中用于动态加载动态链接库的函数。 有可能你的代码中没有直接调用 \verb`dlopen`，但可能一些库的 .a 文件会使用， 例如 \verb`sqlite3.a`。 而且也并不是说运行时一定需要完全相同版本的 glibc 才可以兼容， 由于 glibc 向后兼容一般只需要运行时 glibc 版本高于编译时即可。
+\item 如果想要动态链接到 glibc，而其他所有库都静态链接， 那么这要求 \verb`其他库.a` 文件不直接静态链接 glibc，而是等到你的程序最终链接时再一次性动态链接到 glibc。 所以可能需要一些 hacking 重新编译 \verb`其他库.a`。
+\end{itemize}
+
+\begin{figure}[ht]
+\centering
+\includegraphics[width=9cm]{./figures/61d60b50884455c9.png}
+\caption{当你使用 C/C++ 头文件时一般就默认链接 GLIBC，当然也可以选 MUSL} \label{fig_LinBin_1}
+\end{figure}
