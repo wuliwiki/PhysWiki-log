@@ -7,7 +7,7 @@
 \begin{issues}
 \issueDraft
 \end{issues}
-相信此刻的你，已经基本了解了集合的基础知识。就像小学接触数字那样，认识了十以内的数字，就要开始接触他们的加减乘除了，“加减乘除”被称为\textbf{运算}（Operations），本文介绍的就是集合的基本运算。另外，强烈建议先行学习数理逻辑部分，会加深对这部分内容的理解。当然，以防你不熟悉逻辑符号，本文也会在符号出现时予以说明。
+相信此刻的你，已经基本了解了集合的基础知识。就像小学接触数字那样，认识了十以内的数字，就要开始接触他们的加减乘除了，“加减乘除”被称为\textbf{运算}（operations），本文介绍的就是集合的基本运算。另外，强烈建议先行学习数理逻辑部分，可以加深对这部分内容的理解。当然，以防你不熟悉逻辑符号，本文也会在逻辑符号出现时予以说明。
 
 \subsection{三种基础运算}
 
@@ -22,8 +22,9 @@ A\cap B = \begin{Bmatrix} x|x\in A\land x\in B \end{Bmatrix}~.
 \end{equation}
 其中，$\land$表示逻辑上的“且”。
 \end{definition}
+\addTODO{交集维恩图}
+简单来讲，集合$A$和集合$B$的公共元素组成的集合就是集合$A$与$B$的交集。某种意义上，“交集”就好像两个集合做了一个“乘法”，而做乘法的是元素的存在性，假设存在是“$1$”而不存在是“$0$”，则只有两个集合中都存在的时候才有$1\times 1=1$，其他情况结果都是“$0$”。而交集的结果就是保留乘积结果为“$1$”的那些元素。
 
-简单来讲，集合$A$和集合$B$的公共元素组成的集合就是集合$A$与$B$的交集。
 \begin{example}{求集合$A=\{1,2,3,4,5\}$和集合$B=\{2,4,6,8,10\}$的交集。}
 集合$A$的元素有$1,2,3,4,5$，其中$2,4\in B$，而$1,3,5\notin B$，因此：
 $$
@@ -41,9 +42,10 @@ A\cup B = \begin{Bmatrix}x|x\in A \lor x\in B\end{Bmatrix}~.
 \end{equation}
 其中，$\lor$表示逻辑上的“或”。
 \end{definition}
+\addTODO{并集维恩图}
+简单来讲，集合$A$和集合$B$的全部元素组成的集合就是集合$A$与$B$的并集。某种意义上，并集就好像两个集合做了一个“加法”，加法的过程是把所有的元素都放在一起，只不过由于\aref{集合}{def_HsSet_2}的性质比较特殊，导致并集的结果中，重复的元素只能存在一个。另外，就像多项式可以作为运算结果一样，一般集合运算的结果也写成多个交集、补集（下面会介绍）的并集的形式，如$A\cup B\cup (C\cap D)$等。
 
-简单来讲，集合$A$和集合$B$的全部元素组成的集合就是集合$A$与$B$的并集。
-\begin{example}{求集合$A=\{1,2,3,4,5\}$和集合$B=\{2,4,6,8,10\}$的并集。}
+\begin{example}{求集合$A=\{1,2,3,4,5\}$和集合$B=\{2,4,6,8,10\}$的并集。}\label{ex_HsSeOp_1}
 集合$A$的元素有$1,2,3,4,5$，集合$B$的元素有$2,4,6,8,10$，他们并集的元素有$1,2,3,4,5,2,4,6,8,10$，根据集合中元素的互异性：
 $$
 A\cup B=\{1,2,3,4,5,6,8,10\}.~
@@ -54,26 +56,75 @@ $$
 这里需要特别提醒，在生活中，经常会出现用“和”这个字来连接两个概念来描述一个集合。但是，在使用时，它有时代表“并集”，有时代表“交集”，在使用时要注意。比如：在“由男性和女性组成的集合”这句话中，描述的是“男性的集合”与“女性的集合”的“并集”；而在“同时满足未成年和男性的人组成的集合”这句话中，描述的是“未成年人的集合”与“男性的集合”的交集。这个例子也表现出，日常生活中使用的语言是不严谨的，甚至是带有歧义的，很多时候需要使用数学语言来描述才会明晰、准确。当然，上面的例子中还没有掺杂如：“数$2$和$3$的和是$5$”、“$\{2\}$和$\{3\}$的元素构成了$\{2,3\}$”等情况。
 
 \begin{example}{*用“并集”来表示“全集”的概念}
-根据全集的概念（参见\autoref{def_HsSet_1}），假设研究范围的所有集合是一组以$i$为下标的集合$A_i$，其中$i$是从$1$到$n$的整数。那么由于研究范围内的任意一个集合都是它的子集，那么满足要求的最小集合就是他们的并集，而又由于不在研究范围内的元素不在全集中，因此，全集就是这些集合的并集，即\footnote{可以利用类似求和运算的表达来记录，$\displaystyle U=\bigcup_{i=1}^n A_i$，此处展示只作为拓展视野。}：
+根据\aref{全集}{def_HsSet_1}的概念，假设研究范围的所有集合是一组以$i$为下标的集合$A_i$，其中$i$是从$1$到$n$的整数。那么由于研究范围内的任意一个集合都是它的子集，那么满足要求的最小集合就是他们的并集，而又由于不在研究范围内的元素不在全集中，因此，全集就是这些集合的并集，即\footnote{可以利用类似求和运算的表达来记录，$\displaystyle U=\bigcup_{i=1}^n A_i$，此处展示只作为拓展视野。}：
 $$
 U=A_1\cup A_2\cup \cdots \cup A_{n-1}\cup A_n.~
 $$
 \end{example}
+
+
 \subsubsection{补集}
 
-\begin{definition}{补集}
+“除了这些，我全都要。”补集的概念就是这么简单。设想一下，你有一个装满各种水果的篮子，你只想要苹果和香蕉。那么除了苹果和香蕉之外的所有水果就组成了篮子的补集。
+
+\begin{definition}{补集}\label{def_HsSeOp_1}
 设 $U$ 是全集，$A$ 是 $U$ 的一个子集（即$A\subseteq U$），则由 $U$ 中所有不属于 $A$ 的元素组成的集合，称作 $A$在$U$ 中的\textbf{补集}\footnote{也称为\textbf{余集}}（complementary set），记作$\complement_UA$，即
 \begin{equation}
 \complement_UA = \begin{Bmatrix}x|x\in U \wedge x\notin A\end{Bmatrix}~.
 \end{equation}
 \end{definition}
 
-\subsection{区间的“交”、“并”、“补”}
+\addTODO{补集维恩图}
+
+某种意义上，补集就好像全集“减去”某个集合\footnote{当然，这是比较特殊的情况，如果被减的集合不是全集，那么称为两个集合的\textbf{差集}，但这个概念在高中阶段没有介绍，此处提及以拓展视野。}，请务必注意这里的“被减集合”是全集，所以补集的运算就像相反数一样是一个一元运算。
+
+\begin{example}{设全集为$U=\{1,2,3,4,5,6,8,10\}$，求集合$A=\{1,2,3,4,5\}$的补集。}\label{ex_HsSeOp_2}
+集合$A$的元素有$1,2,3,4,5$，全集$U$的元素有$1,2,3,4,5,6,8,10$，因此不在$A$中但是在$U$中的元素有$6,8,10$，即：
+$$
+\complement_UA=\{6,8,10\}.~
+$$
+\end{example}
+
+下面的内容是在$U=A\cup B$的前提下进行讨论：
+
+把\autoref{ex_HsSeOp_2} 的结果与\autoref{ex_HsSeOp_1} 中的结果进行比较，$B\neq\complement_UA$。可以看出，之前说的“加法”与“减法”的概念，并不完全与数的加减法完全相同，只是可以类比，“补集”与“并集”也并非互为逆运算。更进一步，你可以发现：$\displaystyle B=\complement_{U}A\cup(A\cap B)$，请注意这个等式总是成立。
+
+\subsubsection{区间的“交”、“并”、“补”}
+
+由于在高中阶段主要接触的集合形式是区间，也即研究的全集是实数${\bf R}$，下面会特别介绍一下处理区间的“交”、“并”、“补”运算的注意事项：
+
+\begin{itemize}
+\item 对运算不熟悉或存在多个区间之间的运算时，利用图示法会非常有效。
+\item 在处理区间关系时，尤其要注意区间端点是否包含在结果中，一般而言，不论交、并都会保留端点的开、闭属性，而补集则会相反。
+\item 区间的并集可以作为结果，即$x\in[-2,-1]\cup[1,2]$是可以作为取值范围的计算结果呈现的。
+\end{itemize}
+\begin{exercise}{}
+Q：求下列区间的运算结果：
+\begin{enumerate}
+\item $[3,5]\cup(2,4)$
+\item $[3,5]\cap(2,4)$
+\item $[2,3]\cap(4,5)$
+\item $[2,3]\cup(4,5)$的补集
+\end{enumerate}
+A：结果如下：
+\begin{enumerate}
+\item $(2,5]$
+\item $[3,4)$
+\item $\varnothing$
+\item $(-\infty,2)\cup(3,4]\cup[5,+\infty)$
+\end{enumerate}
+\end{exercise}
+
+\subsubsection{*集合运算与逻辑运算的关系}
+
+集合运算和逻辑运算之间存在着紧密的联系，定义中就已初现端倪，在交集和并集的定义中，使用了逻辑运算中的“且”和“或”。事实上，如果将集合看成命题为真的情况，那么二者几乎可以等同。交集与且（AND）自不必说。为了维持并集与或（OR）的一致性，逻辑运算中的或也选择了“至少有一个命题为真”的情况而不是日常生活常使用的另一种“二选一”的情况。集合的补集和逻辑非（NOT）都是一种“反转”操作，即选择相反的或者说不在其中的内容。在后面介绍的\aref{德摩根定律}{sub_HsSeOp_1}也是对两个领域均成立的。
+
+提及这些对应关系，是希望能够帮助你更好地理解集合运算与逻辑运算的共性以及它们在不同领域中的应用，甚至通过二者的对应关系，也能使用对方的方法来思考或解决问题。
 
 \subsection{运算性质与运算律}
 
 
-下面的性质都是可以从定义中直接推知的，因此不加证明地给出。由于交集和并集是\textbf{对偶}（duality）的，因此他们在性质上互相类似。在下表中会并行给出，方便观察规律：
+下面的性质都是可以从定义中直接推知的，因此不加证明地给出。注意：由于交集和并集是\textbf{对偶}（duality）的，因此他们在性质上互相类似，可以对照着理解和记忆。在下表中会并行给出，方便观察规律：
 \begin{table}[ht]
 \centering
 \caption{交集与并集的性质}\label{tab_HsSeOp1}
@@ -91,34 +142,74 @@ $$
 \hline
 5 & $A\cap A = A$ & $A\cup A = A$ & 幂等律（Idempotent laws）\\
 \hline
-6 & $(A\cap B) \subseteq A$<br> $(A\cap B) \subseteq B$& $(A\cup B) \supseteq A$<br>$(A\cup B) \supseteq B$ & * \\
+6 & $ A \cap \complement_U( A) = \varnothing $ &$ A \cup \complement_U( A) = U $  & 排中律（Laws of the excluded middle） \\
 \hline
 7 & $A\cap \varnothing = \varnothing$ & $A\cup \varnothing = A$ & 与空集的关系 \\
 \hline
 8 & $ A \cap U = A $  &$ A \cup U = U $ & 与全集的关系 \\
 \hline
-9 & $ A \cap \complement_U( A) = \varnothing $ &$ A \cup \complement_U( A) = U $  & 排中律（Laws of the excluded middle） \\
+9 & $(A\cap B) \subseteq A$<br> $(A\cap B) \subseteq B$& $(A\cup B) \supseteq A$<br>$(A\cup B) \supseteq B$ &  \\
 \hline
 \end{tabular}
 \end{table}
 
-这些内容不必死记硬背，建议先使用维恩图，理解它成立的原理。就像加减乘除里面的那些运算律一样，随着使用次数的增加，自然就会熟练了。哪怕一时想不起来，用维恩图和原理去现场推导也是可以的。
+这些内容不必死记硬背，给出的备注名称也只是用于辅助理解，建议先使用维恩图，理解它成立的原理。就像加减乘除里面的那些运算律一样，随着使用次数的增加，自然就会熟练了。哪怕一时想不起来，用维恩图和原理去现场推导也是可以的，以下是一些提示：
+\begin{itemize}
+\item 交换律、结合律、分配律与熟悉的加法和乘法的运算规则很像。
+\item 吸收率和幂等律常出现在证明之中。
+\item 排中律表达的观点有点类似于“不重不漏”（MECE）。
+\end{itemize}
+下面的例题仅作为证明的展示，你可以按照类似的方法去证明上面的运算定律，而不仅依靠维恩图去作定性的理解。当然，哪怕现在不阅读这部分也是没问题的，仅作拓展视野。
+\begin{example}{*证明并集的结合律}
+命题：对于任意的集合 $ A $、$ B $、$ C $，有：
+$$ A \cup (B \cup C) = (A \cup B) \cup C .~$$
 
-\subsection{*德摩根定律}
+证明：
+
+1. 证明 $A \cup (B \cup C) \subseteq (A \cup B) \cup C $。
+
+$\forall x \in A \cup (B \cup C) $，有两种情况：如果 $ x \in A $，那么根据\aref{并集}{def_HsSeOp_1}的定义 $ x \in A \cup B $ ，进而 $ x \in (A \cup B) \cup C $。如果 $ x \notin A $，则必有 $ x \in B \cup C $，那么又有两种情况：
+
+如果 $ x \in B $，那么 $ x \in A \cup B $，因此 $ x \in (A \cup B) \cup C $。如果 $ x \in C $，那么 $ x \in (A \cup B) \cup C $。
+
+综上所述，无论哪种情况，$ x \in (A \cup B) \cup C $。根据\aref{子集}{def_HsSet_3}的定义，$ A \cup (B \cup C) \subseteq (A \cup B) \cup C $。
+
+2. 证明 $ (A \cup B) \cup C \subseteq A \cup (B \cup C) $。
+
+$\forall y \in (A \cup B) \cup C $，有两种情况：
+
+如果 $ y \in (A \cup B) $，那么 $ y \in A $ 或 $ y \in B $。如果 $ y \in A $，那么 $ y \in A \cup (B \cup C) $。如果 $ y \in B $，那么 $ y \in B \cup C $，因此 $ y \in A \cup (B \cup C) $。
+
+如果 $ y \in C $，那么 $ y \in B \cup C $，因此 $ y \in A \cup (B \cup C) $。
+
+综上所述，无论哪种情况，$ y \in A \cup (B \cup C) $。根据子集的定义，$ (A \cup B) \cup C \subseteq A \cup (B \cup C) $。
+
+3.证明相等
+
+由1、2可知 $ A \cup (B \cup C) \subseteq (A \cup B) \cup C $ 以及 $ (A \cup B) \cup C \subseteq A \cup (B \cup C) $，根据\aref{互为子集的集合相等}{eq_HsSet_1}可知：
+
+$$ A \cup (B \cup C) = (A \cup B) \cup C .~$$
+
+证毕。
+\end{example}
+
+
+\subsection{*德摩根定律}\label{sub_HsSeOp_1}
 
 下面的内容在部分高中教材中已经移除，但由于其功能强大，且在未来的学习中会经常使用，因此在此处予以介绍。
 
-\textbf{德摩根定律}（De Morgan’s Laws）是同时蕴含了交集、并集、补集运算的定律。
+\textbf{德摩根定律}（De Morgan’s Laws）是19世纪英国数学家奥古斯都·德摩根（Augustus De Morgan）提出的一条定律。它同时蕴含了交集、并集、补集运算，为简化复杂表达式提供了有力的工具。这条定律不仅在集合论中出现，也是逻辑学的一条重要定律。
 
+\begin{theorem}{德摩根定律}
+只有两个集合进行运算的情况：
 \begin{equation}
 \begin{array}{c} 
- \complement_U(A \cup B) = \complement_U A \cap \complement_U B \\  
+\complement_U(A \cup B) = \complement_U A \cap \complement_U B \\  
 \complement_U(A \cap B) = \complement_U A \cup \complement_U B
 \end{array}.~
 \end{equation}
 
-这个关系对多个集合的运算也成立\footnote{可以利用类似求和运算的表达来记录，$\displaystyle\complement_U(\bigcup_{i\in I} A_i)=\bigcap_{i\in I} {\complement_UA_i}$，$\displaystyle\complement_U(\bigcap_{i\in I} A_i)=\bigcup_{i\in I} {\complement_UA_i}$，此处展示只作为拓展视野。}。
-
+多个集合运算的情况\footnote{可以利用类似求和运算的表达来记录，$\displaystyle\complement_U(\bigcup_{i\in I} A_i)=\bigcap_{i\in I} {\complement_UA_i}$，$\displaystyle\complement_U(\bigcap_{i\in I} A_i)=\bigcup_{i\in I} {\complement_UA_i}$，此处展示只作为拓展视野。}：
 \begin{equation}
 \begin{array}{c} 
 \displaystyle
@@ -127,9 +218,20 @@ $$
 \complement_U(A_1\cap A_2\cap\cdots\cap A_n)=(\complement_UA_1)\cup (\complement_UA_2)\cup\cdots\cup(\complement_UA_n)\\  
 \end{array}.~
 \end{equation}
+\end{theorem}
 
+这个定律可以简单记作“交的补等于补的并，并的补等于补的交”。
 
-\subsection{*集合运算与逻辑运算的关系}
+\begin{example}{设有两个集合$A,B$，化简$\complement_U(A \cap B)\cup (\complement_UA \cap C)$}
+$$
+\begin{align*} 
+\complement_U(A \cap B)\cup (\complement_UA \cap C) &= \complement_UA \cup \complement_UB\cup (\complement_UA \cap C) \\ 
+&= \complement_UA\cup (\complement_UA \cap C)  \cup \complement_UB\\ 
+&=\complement_UA\cup \complement_UB
+\end{align*}.~
+$$
+其中：第一个等号使用了德摩根定律，第二个等号使用了交换律，第三个等号使用了吸收律。
+\end{example}
 
 
 \addTODO{下面的内容移动至本科内容中}

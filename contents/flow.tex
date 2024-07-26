@@ -1,0 +1,62 @@
+% 流
+% license Usr
+% type Tutor
+我们知道，对切向量场积分可以得到一族曲线，比如地球的一系列纬线。如果加上初始条件，便可以确定具体是哪一条曲线。因此，流形$M$上的积分曲线实际上有两个含参变量，设其为$\theta(t,p),\forall p\in M$。我们可以固定$p$点为曲线的初始位置，得到一条曲线：$\theta_p(t)$，亦可以固定$t$，得到$\theta_t(p):M\rightarrow M$。
+\subsection{全局流}
+令$p\in M$为曲线的初始位置，即$\theta(0,p)=p$。若$t\in\mathbb R$，我们称曲线族$\theta(t,p):\mathbb R\times M\rightarrow M$为\textbf{全局流（global flow）}。
+
+可以证明\footnote{translation lemma proved in \textsl{introduction to smooth maniflod}}，对于$\theta_t(p)$,如果$q=\theta_p(s)$，则$\theta^{(q)}(t)=\theta^{(p)}(t+s)$，所以该光滑映射满足：
+\begin{equation}\label{eq_flow_1}
+\begin{aligned}
+\theta(t, \theta(s, p)) & =\theta(t+s, p) \\
+\theta(0, p) & =p~.
+\end{aligned}
+\end{equation}
+上式的结合律也可以表示为$\theta_t \circ \theta_s(p)=\theta_{t+s}(p)$。因此$\theta$可看作加法群$\mathbb R$对流形$M$的作用，\autoref{eq_flow_1} 便等价于群作用定律：
+\begin{equation}
+\begin{aligned}
+\theta_t \circ \theta_s & =\theta_{t+s}, \\
+\theta_0 & =\operatorname{Id}_M~.
+\end{aligned}
+\end{equation}
+所以全局流又称作\textbf{单参量群作用（one-parameter group action）}。可以证明，$\theta_t:M\rightarrow M$是微分同胚映射\footnote{只要证明该映射是双向光滑双射即可。因为是群作用，由消去律可知是单射，又因为$\theta^{-1}_t=\theta_{-t}$，因此逆映射也是光滑的}。在后续章节里，我们将利用该映射的前推，以得到光滑切场的李导数。
+
+
+从另一个角度来看，当我们固定$p$时，光滑曲线$\theta_p(t)$便是$\mathbb R$对$p$作用的轨道。由于轨道是等价类划分，因而不同轨道相交为空集，这与我们的直觉是符合的。
+
+下面我们来证明，全局流都是光滑切场的积分曲线。
+\begin{theorem}{}
+设$\theta$是全局流，对于任意$p\in M$，定义切向量$V_p\in T_p M$为
+\begin{equation}
+V_p=\theta^{(p) \prime}(0)=\left.\frac{\partial}{\partial t}\right|_{t=0} \theta(t, p) ~,
+\end{equation}
+则该切向量集合构成$M$上的光滑切场$V$，并且$\theta^p(t)$都是$V$的积分曲线。一般称对应于全局流的光滑切场为该曲线的\textbf{最小生成元（infinitesimal
+generator）}。
+\end{theorem}
+\textbf{证明：}
+
+首先我们来证明，如上定义的切场是光滑的，即对于任意光滑函数$f\in C^{\infty}M$，$Vf\in C^{\infty}M$。
+
+对于任意$p\in M$，我们有：
+
+\begin{equation}
+Vf(p)=V_pf=\theta^{(p)\prime}(0)f=\left.\frac{\dd}{\dd t}\right|_{t=0} f\left(\theta^{(p)}(t)\right)=\left.\frac{\dd}{\dd t}\right|_{t=0} f(\theta(t, p)) ~,
+\end{equation}
+求导之外是光滑函数的复合，因此结果也是光滑函数。
+接下来我们只需证明，$\theta^{(p) \prime}(t)=V_{\theta^{p}(t)}$即可。
+
+设$q=\theta_p(t_0),t_0\in \mathbb R$，则我们需要证明$V_q=\theta^{(p)\prime}(t_0)$。
+\begin{equation}
+\begin{aligned}
+V_qf&=\theta^{(q)\prime}(0)f\\
+&=\left.\frac{\dd}{\dd t}\right|_{t=0} f(\theta(t, q))\\
+&=\left.\frac{\dd}{\dd t}\right|_{t=0} f(\theta(t+t_0, p))\\
+&=\left.\frac{\dd}{\dd t}\right|_{t=0} f(\theta^p(t+t_0))\\
+&=\theta^{(p)\prime}(t_0)f~,
+\end{aligned}
+\end{equation}
+定理得证。
+
+因为$\theta_t$为微分同胚映射，因此其对应的前推$\theta_{t*}$可以把切场映射为切场。如果存在切场$S$使得$\theta_*S=S$，则称该切场是不变的。
+\subsection{局域流}
+\subsection{流的基本定理}
