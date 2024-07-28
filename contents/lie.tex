@@ -1,7 +1,7 @@
 % 李导数
 % license Usr
 % type Tutor
-\pentry{流\nref{nod_flow}}{nod_fbf5}\pentry{前推\nref{nod_pfw}}{nod_a77f}
+\pentry{流\nref{nod_flow}，拉回\nref{nod_PullBk}，前推\nref{nod_pfw}}{nod_5fa4}
 
 \begin{issues}
 \issueTODO 场不变
@@ -10,7 +10,7 @@
 区别于仿射联络，\textbf{李导数（Lie derivative）}$\mathcal{L}:\mathfrak{X}(M)\times\mathfrak{X}(M)\to\mathfrak{X}(M)$是对向量场微分的另一种思路。
 
 \begin{definition}{}
-设$V$为任意光滑向量场，令$\theta_t:M\rightarrow M$为该向量场的流，定义对$W$关于$V$的李导数为
+设$V,W$为$M$上的任意光滑向量场，令$\theta_t:M_t\rightarrow M$为$V$的流，定义$W$关于$V$的李导数为
 \begin{equation}(\mathcal{L}_VW)_p=\left.\frac{d}{dt}\right|_{t=0}(\theta_{-t})_*W_{\theta_t(p)}=\lim_{t\to0}\frac{(\theta_{-t})_*W_{\theta_t(p)}-W_p}{t}~.\end{equation}
 \end{definition}
 由前推定义可知，$\theta_{t*}W_q\in T_{\theta_t(q)}M$，因而$(\theta_{-t})_*W_{\theta_t(p)}\in T_p M$，所以该定义是合理的，我们利用前推得到了同一切空间的两个向量并进行微分。
@@ -49,5 +49,38 @@ F_*[X_1,X_2]f&=(Y_1Y_2f-Y_2Y_1f)\circ F\\
 定理得证。
 
 \subsection{对张量场作用}
+同样设$\theta$是光滑切场$X$的流，对于任意$p\in M$，$\theta_t$是$p$点附近一邻域与$\theta_t(p)$附近一邻域的微分同胚——这意味着前推和拉回都是有意义的。于是根据拉回对张量场的定义可知，若设$\tau$是$k$阶张量场，则$(\theta_t^*\tau)_p=\theta_t^*\tau_{\theta_t(p)}$，依然得到$p$点上的一个$k$阶张量场。因此我们可以定义$\tau$关于$X$的李导数为：
+\begin{equation}
+\left(\mathcal{L}_X \tau\right)_p=\left.\frac{\partial}{\partial t}\right|_{t=0}\left(\theta_t^* \tau\right)_p=\lim _{t \rightarrow 0} \frac{\theta_t^* \tau_{\theta_t(p)}-\tau_p}{t}~.
+\end{equation}
+
+\textbf{可以证明，李导数对光滑张量场作用，依然得到光滑张量场。}
+
+接下来，我们罗列一些李导数的常见性质。
+\begin{theorem}{}
+在光滑流形$M$上讨论。设$\sigma,\tau$为协变张量场，$f$为光滑函数，$\omega,\eta$为微分形式，$X,Y_i$是光滑向量场。
+\begin{enumerate}
+\item  $\mathcal{L}_X f=X f$.
+\item  $\mathcal{L}_X(f \sigma)=\left(\mathcal{L}_X f\right) \sigma+f \mathcal{L}_X \sigma$.
+\item  $\mathcal{L}_X(\sigma \otimes \tau)=\left(\mathcal{L}_X \sigma\right) \otimes \tau+\sigma \otimes \mathcal{L}_X \tau$.
+\item  $\mathcal{L}_X(\omega \wedge \eta)=\mathcal{L}_X \omega \wedge \eta+\omega \wedge \mathcal{L}_X \eta$.
+\item  $\left.\left.\left.\mathcal{L}_X(Y\lrcorner \omega\right)=\left(\mathcal{L}_X Y\right)\right\lrcorner \eta+Y\right\lrcorner \mathcal{L}_X \omega$.
+\item 设 $Y_1, \ldots, Y_k$是光滑向量场，则
+\begin{equation}
+\begin{aligned}
+\mathcal{L}_X\left(\sigma \left(Y_1, \ldots,\right.\right. & \left.\left.Y_k\right)\right)=\left(\mathcal{L}_X \sigma\right)\left(Y_1, \ldots, Y_k\right) \\
+& +\sigma\left(\mathcal{L}_X Y_1, \ldots, Y_k\right)+\cdots+\sigma\left(Y_1, \ldots, \mathcal{L}_X Y_k\right)~.
+\end{aligned}
+\end{equation}
+\end{enumerate}
+\end{theorem}
+\textbf{证明：}
+
+$f$可看作$0$阶张量场，因此其李导数亦可使用本节定义，
+\begin{equation}
+\left(\mathcal{L}_X f\right)_p=\left.\frac{\partial}{\partial t}\right|_{t=0}\left(\theta_t^* f\right)_p=\left.\frac{\partial}{\partial t}\right|_{t=0}(f\circ\theta_t(p))=X_pf~.
+\end{equation}
+最后一个等号来自于$X$是$\theta$最小生成元的定义。
+
 \subsection{对微分形式作用}
 \subsection{李导数的基本性质}
