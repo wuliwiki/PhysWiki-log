@@ -57,7 +57,7 @@ F_*[X_1,X_2]f&=(Y_1Y_2f-Y_2Y_1f)\circ F\\
 \textbf{可以证明，李导数对光滑张量场作用，依然得到光滑张量场。}
 
 接下来，我们罗列一些李导数的常见性质。
-\begin{theorem}{}
+\begin{theorem}{}\label{the_lie_1}
 在光滑流形$M$上讨论。设$\sigma,\tau$为协变张量场，$f$为光滑函数，$\omega,\eta$为微分形式，$X,Y_i$是光滑向量场。
 \begin{enumerate}
 \item  $\mathcal{L}_X f=X f$.
@@ -66,7 +66,7 @@ F_*[X_1,X_2]f&=(Y_1Y_2f-Y_2Y_1f)\circ F\\
 \item  $\mathcal{L}_X(\omega \wedge \eta)=\mathcal{L}_X \omega \wedge \eta+\omega \wedge \mathcal{L}_X \eta$.
 \item  $\left.\left.\left.\mathcal{L}_X(Y\lrcorner \omega\right)=\left(\mathcal{L}_X Y\right)\right\lrcorner \eta+Y\right\lrcorner \mathcal{L}_X \omega$.
 \item 设 $Y_1, \ldots, Y_k$是光滑向量场，则
-\begin{equation}
+\begin{equation}\label{eq_lie_2}
 \begin{aligned}
 \mathcal{L}_X\left(\sigma \left(Y_1, \ldots,\right.\right. & \left.\left.Y_k\right)\right)=\left(\mathcal{L}_X \sigma\right)\left(Y_1, \ldots, Y_k\right) \\
 & +\sigma\left(\mathcal{L}_X Y_1, \ldots, Y_k\right)+\cdots+\sigma\left(Y_1, \ldots, \mathcal{L}_X Y_k\right)~.
@@ -82,5 +82,39 @@ $f$可看作$0$阶张量场，因此其李导数亦可使用本节定义，
 \end{equation}
 最后一个等号来自于$X$是$\theta$最小生成元的定义。
 
+$3-5$条可视作李导数的莱布尼兹律，在这里只证第三条，，其余同理可得。
+
+\begin{equation}\begin{aligned}
+(\mathcal{L}_X(\sigma\otimes\tau))_p& =\lim_{t\to0}\frac{\theta_t^*(\sigma\otimes\tau)_{\theta_t(p)}-(\sigma\otimes\tau)_p}t \\
+&=\lim_{t\to0}\frac{\theta_t^*\sigma_{\theta_t(p)}\otimes\theta_t^*\tau_{\theta_t(p)}-\sigma_p\otimes\tau_p}t \\
+&=\lim_{t\to0}\frac{\theta_t^*\sigma_{\theta_t(p)}\otimes\theta_t^*\tau_{\theta_t(p)}-\theta_t^*\sigma_{\theta_t(p)}\otimes\tau_p}t \\
+&+\lim_{t\to0}\frac{\theta_t^*\sigma_{\theta_t(p)}\otimes\tau_p-\sigma_p\otimes\tau_p}t \\
+&=\lim_{t\to0}\theta_t^*\sigma_{\theta_t(p)}\otimes\frac{\theta_t^*\tau_{\theta_t(p)}-\tau_p}t+\lim_{t\to0}\frac{\theta_t^*\sigma_{\theta_t(p)}-\sigma_p}t\otimes\tau_p \\
+&=\sigma_{p}\otimes(\mathcal{L}_{X}\tau)_{p}+(\mathcal{L}_{X}\sigma)_{p}\otimes\tau_{p}~.
+\end{aligned}\end{equation}
+\begin{theorem}{}
+设$f \in C^{\infty}(M)$，则$ \mathcal{L}_X(\dd f)=\dd(\mathcal{L} _X f)$
+\end{theorem}
+$\dd f$是一阶张量场，因此我们可以利用\autoref{the_lie_1} 第六条。两边作用在任意光滑向量场$Y$上，得
+\begin{equation}
+\mathcal (L_X\dd f)(Y)=X(\dd f(Y))-\dd f([X,Y])~.
+\end{equation}
+并利用余切场的定义，即$\dd f(X)\equiv Xf$，代入上式得：
+\begin{equation}
+\begin{aligned}
+X(\dd f(Y))-\dd f([X,Y])&=XYf-(XY-YX)f\\
+&=YXf=\dd(Xf)(Y)\\
+&=\dd(\mathcal L_Xf)(Y)~,
+\end{aligned}
+\end{equation}
+因此得证。
+
 \subsection{对微分形式作用}
-\subsection{李导数的基本性质}
+尽管我们可以利用\autoref{eq_lie_2} 第六条来得到李导数对微分形式的作用结果，然而这样的成本是不可忽视的。对于任意$p\in M$，我们需要引入定义在该点邻域的数个向量场$(Y_1,Y_2...Y_k)$才能达到目的。所以说，微分形式阶数越高越麻烦。因此，我们需要寻求更便携的方法。
+\begin{theorem}{}
+设$X$为流形$M$上的任意矢量场，$\omega$是$k$微分形式。那么我们有
+\begin{equation}
+\mathcal L_X\omega=i_X(\dd \omega)+\dd(i_X\omega)~.
+\end{equation}
+\end{theorem}
+\subsection{李导数的其它基本性质}

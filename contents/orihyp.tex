@@ -1,0 +1,64 @@
+% 超平面的定向
+% license Usr
+% type Tutor
+
+
+\begin{issues}
+\issueTODO
+\end{issues}
+\addTODO{需新增条目：流形上的定向}
+假设现在我们有一$n$维光滑流形$M$，超平面则是其余维数为1的子流形。为了得到超平面上的定向，我们首先需要设计一种能把$n$形式映射到超平面上$n-1$形式的方法。缩并映射就是符合我们需求的线性映射。
+\subsection{缩并}
+\begin{definition}{}
+设$V$为有限维线性空间，$X\in V$，定义线性映射$i_X:\Gamma^n V\rightarrow\Gamma^{n-1}V$，使得\footnote{因为微分形式有两种定义，因此缩并的另一种定义是：$\overline{i}_X\omega(Y_1,\ldots,Y_{k-1})=k\omega(X,Y_1,\ldots,Y_{k-1}).$}
+\begin{equation}
+i_X\omega(Y_1,\ldots,Y_{k-1})=\omega(X,Y_1,\ldots,Y_{k-1})~,
+\end{equation}
+则称$i_X$为内乘或缩并映射（interior multiplication or contraction），有时为了表示简洁，也用$X\lrcorner$表示。
+\end{definition}
+其线性是显而易见的，我们还可以证明缩并映射满足以下性质：
+\begin{lemma}{}
+$x\in V$，$V$为有限维线性空间，则
+\begin{enumerate}
+\item $i_X\circ i_X=0$.
+\item $i_X$有与外代数类似的反对称性质。若$\omega$是$k$阶余切向量，$\eta$是$l$阶余切向量，则
+\begin{equation}\label{eq_orihyp_1}
+i_X(\omega\wedge\eta)=(i_X\omega)\wedge\eta+(-1)^k\omega\wedge(i_X\eta)~.
+\end{equation}
+\end{enumerate}
+\end{lemma}
+\textbf{证明：}
+
+第一条利用交错张量的性质即可得。
+
+对于第二条，令$\omega=\omega_1\wedge...\omega_k$，$\eta=\eta_1\wedge...\eta_l$。那么下式可以保证\autoref{eq_orihyp_1} 成立：
+\begin{equation}\label{eq_orihyp_2}
+\begin{aligned}
+i_X(\omega^1\wedge\cdots\wedge\omega^k)=\sum_{i=1}^k(-1)^{i-1}\omega^i(X)\omega^1\wedge\cdots\wedge\hat{\omega}^i\wedge\cdots\wedge\omega^k~,
+\end{aligned}
+\end{equation}
+其中$\hat\omega^i$表示排列中已删掉$\omega_i$。
+因为如果\autoref{eq_orihyp_2} 成立，则
+\begin{equation}
+\begin{aligned}
+i_X(\omega\wedge\eta)&=i_X(\omega^1\wedge...\wedge\omega^k\wedge\eta^1\wedge...\wedge\eta^l)\\
+&=\sum_{i=1}^k(-1)^{i-1}\omega^{i}(X)\omega^1\wedge...\wedge\hat\omega^i\wedge...\wedge\omega^k\wedge\eta^1\wedge...\wedge\eta^i\wedge...\wedge\eta^l\\
+&+(-1)^k\sum_{i=1}^l(-1)^{i-1}\eta^{i}(X)\omega^1\wedge...\wedge\omega^k\wedge\eta^1\wedge...\wedge\hat\eta^i\wedge...\wedge\eta^l~,
+\end{aligned}
+\end{equation}
+整理一下即为\autoref{eq_orihyp_1} 。
+
+现在证明\autoref{eq_orihyp_2} 确实成立。
+
+设$X_i\in V,X=X_1$。两边同时作用$(X_2,X_3...X_k)$，则有
+\begin{equation}
+i_X(\omega^1\wedge\cdots\wedge\omega^k)(X_2,X_3...X_k)=\omega^1\wedge\cdots\wedge\omega^k(X,X_2...X_k)~.
+\end{equation}
+由外代数定义可知，上式结果为行列式，$i$行$j$列的矩阵元为$\omega^i(X_j)$，设对应的矩阵为$M$。现在我们再来看\autoref{eq_orihyp_2} 右侧，
+\begin{equation}
+\begin{aligned}
+\sum_{i=1}^k(-1)^{i-1} \omega^i(X) \omega^1 \wedge \cdots \wedge \hat{\omega}^i \wedge \cdots \wedge \omega^k(X_2,...X_k)=\sum_{i=1}^k(-1)^{i-1} \omega^i(X) \opn{det}X^i_j~,
+\end{aligned}
+\end{equation}
+其中$\opn{det}X^i_j$赫然是$M$中去掉$i$行$1$列的行列式，整个式子为$M$的代数余子式展开，于是得证。
+\subsection{诱导超平面的定向}
