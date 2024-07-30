@@ -231,7 +231,7 @@ u(x,y,z)&=\frac{\I}{B\lambda }\int_{-\infty}^{+\infty}\int_{-\infty}^{+\infty}dx
 \begin{equation}\label{eq_GbeamABCD}
 u(x,y,z)=\frac{1}{\frac{B}{q_1}+A}\E^{-\I k\frac{x^2+y^2}{2q}}~
 \end{equation}
-其中$q=\frac{D}{B}-\frac{1}{\frac{1}{q_1}+\frac{A}{B}}$，再次利用$AD-BC=1$，可以得到：
+其中$1/q=\frac{D}{B}-\frac{1}{\frac{B}{q_1}+{A}}$，再次利用$AD-BC=1$，可以得到：
 \begin{equation}\label{eq_qABCD}
 q=\frac{Aq_1+B}{Cq_1+D}~.
 \end{equation}
@@ -249,7 +249,8 @@ E(x,y,z)=A\E^{-\I k(z+\frac{x^2+y^2}{2q(z)})}\qquad (A\text{是归一化系数})
 \begin{equation}\label{eq_Gbeam0}
 E(x,y,z)=A\E^{-\I k(z+\frac{x^2+y^2}{2R})}\E^{-\frac{x^2+y^2}{w^2}}~
 \end{equation}
-现在一切都明了了。\autoref{eq_Gbeam0} 所代表的就是零阶高斯光束，其相位项是和球面波一致的，相位项前面乘上了一个高斯分布的因子。
+
+现在一切都明了了。\autoref{eq_Gbeam0} 所代表的就是零阶高斯光束，其相位项是和球面波一致的，但相位项前面乘上了一个高斯分布的因子。$R$即为球面半径，如果$R$足够大，相位项就退化为平面波；而$w$代表的就是高斯分布的腰宽，绝大多数的光都聚集在该范围内，形成我们看到的光斑。
 
 可以做出在某一截面（$z=z_0$）上的光强分布以及相位变化，能更加提示出其特点：
 \begin{figure}[ht]
@@ -261,7 +262,82 @@ E(x,y,z)=A\E^{-\I k(z+\frac{x^2+y^2}{2R})}\E^{-\frac{x^2+y^2}{w^2}}~
 \subsection{零模高斯光束的传播}
 如果你经常做光学实验，你就会发现其实即使不加透镜，激光器的出射光也会自己聚焦，或者以一个比例将光斑按传播距离发散；对激光使用透镜，光斑也不会像理想情况那样在某个位置聚焦成一个无限小的点。有了前面的理论基础，我们现在就能好好解释一下这个现象了。
 
-激光器的出射光一般都是零模的
+激光器的出射光一般都是零模的高斯光。假设一束零模高斯光在空气中传播，也就是$A=D=1,B=z,C=0$，那么根据和\autoref{eq_qABCD} ：
+\begin{equation}
+q=q_1+z~
+\end{equation}
+假设在$z=0$处$R=+\infty$：
+\begin{equation}
+\frac{1}{q_1}=-\I \frac{\lambda}{\pi w_0^2}~
+\end{equation}
+可以验证，这个假设相当于认为$z=0$的光束类似平面波。
+根据\autoref{eq_GbeamABCD} ,经过简单的计算，就有：%缺乏过程，但计算其实不是很难。
+\begin{equation}
+u(x,y,z)=\frac{w_0}{w}\exp-\frac{x^2+y^2}{w^2}\exp-\I k\frac{x^2+y^2}{2R}\exp \I\phi ~
+\end{equation}
+其中：
+\begin{equation}
+w^2(z)=w_0^2\left[1+\left(\frac{\lambda z}{\pi w_0^2}\right)^2\right]~
+\end{equation}
+\begin{equation}
+R(z)=z\left[1+\left(\frac{\pi w_0^2}{\lambda z}\right)^2\right]~
+\end{equation}
+\begin{equation}
+\phi=\tan^{-1}\left(\frac{\lambda z}{\pi w_0^2}\right)~
+\end{equation}
+令：
+\begin{equation}
+z_R=\frac{\pi w_0^2}{\lambda}~
+\end{equation}
+可以简化这三条式子：
+\begin{equation}
+\begin{aligned}
+&w^{2}(z) =w_{0}^{2}\left[1+(z/z_{R})^{2}\right] \\
+&R(z) =z\begin{bmatrix}1+(z_R/z)^2\end{bmatrix} \\
+&\phi(z) =\tan^{-1} (z/z_{R}) ~
+\end{aligned}~
+\end{equation}
+
+做出$R$和$w/w_0$随$z$的变化图：
+\begin{figure}[ht]
+\centering
+\includegraphics[width=14cm]{./figures/133c3c592b79ffb8.png}
+\caption{} \label{fig_GBeam_12}
+\end{figure}
+
+可以看到，$z=0$处$R=+\infty$，这是我们所假设的，此时光束的相位项是平面波，在$z$足够大时（注意，一般的红色激光笔的$z_R$大约是5m），$R\approx z$，$z=+\infty$时可以再次转为平面波；$w$在$z=0$处有最小值，此后随$z$均匀增大，也就是$w\approx w_0 \,z/z_R$，那么就可以定义发散角：
+\begin{equation}
+\theta_d=w_0/z_R=\frac{\lambda}{\pi w_0}~
+\end{equation}
+根据以上信息可以作图：
+\begin{figure}[ht]
+\centering
+\includegraphics[width=12cm]{./figures/9ccffa03dd2872e0.png}
+\caption{实线是腰宽，虚线是等相位面} \label{fig_GBeam_13}
+\end{figure}
+从这张图就可以看到高斯光束的“自聚焦效应”，同时，在光斑“最小处”，等相位面是平面。
+
+如果在光路中放置一个透镜，光束的聚集位置和光斑大小会发生更加复杂的变化。同样假设$z=0$处光束的光斑最小，也就是$R=+\infty$，在$z=L_1$处放置一个透镜，光束通过透镜后传播了$L_2$距离重新达到光斑最小状态，也就是在$L_2$处聚焦。则ABCD矩阵为：
+\begin{equation}
+\pmat{1&L_2\\0&1}\pmat{1&0\\-1/f&1}\pmat{1&L_1\\0&1}~
+\end{equation}
+将矩阵代入到\autoref{eq_qABCD} 中，并且令$\Re{q}=0$，就可以得到$L_2$的具体数值；将计算到的$L_2$代入到$q$的虚部中，就可以得到$w$。可以绘制出$L_2$和$w$随透镜位置$L_1$的变化（在具体的计算中，令$z_R=5m,f=1m,\lambda=700nm$，也就是最常见的红色激光笔和透镜）：
+\begin{figure}[ht]
+\centering
+\includegraphics[width=14cm]{./figures/6a49ada375aaa38e.png}
+\caption{} \label{fig_GBeam_14}
+\end{figure}
+观察计算结果可以发现，对于聚焦位置，似乎放置在$z=0$处的透镜的效果最接近理想情况，也就是$L_2=f$，因为此时入射到透镜的高斯光束接近平面波。但实际是$L_2=f$的点与$z=0$处有非常细微的差别，只有当$L_1\to \pm\infty$时$L_2$才趋于$f$，因为此时高斯光才退化成平面波；同样的，在$L_1\to \pm\infty$时高斯光才能被透镜聚焦成无限小的光斑，也就是$w\to 0$。你可能以为$L_1=0$时$w$最大，不符合常理，但更不符合常理的是，其实它们也偏了一点。
+
+\begin{example}{}
+为什么激光器总是打出高斯光束？这个问题很复杂，简单解释的话就是激光器的核心组件之一是谐振腔，激光需要在谐振腔中多次反射和传播。只有高斯光束这种经过光学器件而保持光斑分布不变的激光能通过谐振腔。高斯光就像是量子力学里的本征态，光学器件像是算符，只有本征态才能保证算符作用后形式不变。
+
+\begin{figure}[ht]
+\centering
+\includegraphics[width=8cm]{./figures/3d0b8ea59c1ef81a.png}
+\caption{谐振腔中的高斯光} \label{fig_GBeam_15}
+\end{figure}
+\end{example}
 
 \subsection{高模高斯光束}
 占位符。
