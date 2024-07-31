@@ -3,14 +3,60 @@
 % license Usr
 % type Art
 
-\begin{issues}
-\issueDraft
-\end{issues}
+%预备知识应该有傅里叶变换，麦克斯韦方程组，惠更斯定理和波面、光线和光束。但预备知识改版后的新格式实在是不好懂，所以就先留空吧。在每一处提到额外知识的地方，我都提到并引用了“隔壁词条某某某”，读者不懂的话应该会去看看。
 
 你可能在很多地方都听说过高斯光束，例如在光学课上，或者激光器的说明书里，但它们不会完整介绍高斯光束，因为这是高等光学的内容，即使高斯光束的应用非常普遍。本文将介绍高斯光束最重要的特性，也就是经过透镜等光学器件后，光斑的空间分布维持不变的这一特性，涉及近轴近似和惠更斯定理。%本文的主要参考是Svelto、Orazio等人的著作《Principles of Lasers》，以及汪凯戈的著作《高等物理光学》。
 
 \subsubsection{前言}
 光斑当然是应该有空间分布的。一开始学习的平面波的表达式是$\bvec E(x,y,z,t)=\bvec {E_0}\E^{-\I\omega t}$，你可能觉得$\bvec E_0$可能是个常数，这显然是错误的，因为根据隔壁词条\enref{电场的能量}{EEng}，单位空间内平面波的能量是$u=\frac{1}{2}\epsilon_0 \bvec E_0^{\;2}$，这是个常数，那么对$u$全空间积分之后，就能得知该平面波携带了无穷大的能量，这显然是不合理的。那么$\bvec E_0$会不会只局限在某个局域呢？比如光斑只在一个圆形的截面里，就像我们日常看到的那样？这也是不行的，因为光会衍射，如果某个截面的光是局域的，那么就相当于在光路上放一个小孔，光就会在孔后形成衍射图样，当然，衍射图样是全空间的。这说明真实情况下光一定会有一个全空间分布。
+\subsubsection{结论}
+把一些结论和公式放在前面以供查阅：
+\begin{itemize}
+\item 高斯光束表达式：
+\begin{equation}
+E(x,y,z)=A\,H_l\left[\sqrt{2}x/w\right]H_m\left[\sqrt{2}y/w\right]\exp\left[-\I k\left(z+(x^2+y^2)/2q\right)\right]~
+\end{equation}
+其中$H_n(x)$是厄米（Hermite）多项式（物理学版）
+\item $q$的展开：
+\begin{equation}
+\frac{1}{q}=\frac{1}{R}-\I\frac{\lambda}{\pi w^2}~
+\end{equation}
+\item $q$的变换：
+\begin{equation}
+q=\frac{Aq_1+B}{Cq_1+D}~.
+\end{equation}
+\item 当光学器件两端的界面一致时：
+\begin{equation}
+AD-BC=1~
+\end{equation}
+
+\item 零阶高斯光束
+\begin{equation}
+E(x,y,z)=A\E^{-\I k(z+\frac{x^2+y^2}{2R})}\E^{-\frac{x^2+y^2}{w^2}}~
+\end{equation}
+\item 零阶高斯光束在空气、真空中的传播：
+\begin{equation}
+E(x,y,z)=\frac{w_0}{w}\exp-\frac{x^2+y^2}{w^2}\exp-\I k(z+\frac{x^2+y^2}{2R})\exp \I\phi ~
+\end{equation}
+
+\begin{equation}
+\begin{aligned}
+&w^{2}(z) =w_{0}^{2}\left[1+(z/z_{R})^{2}\right] \\
+&R(z) =z\begin{bmatrix}1+(z_R/z)^2\end{bmatrix} \\
+&\phi(z) =\tan^{-1} (z/z_{R}) ~
+\end{aligned}~
+\end{equation}
+其中瑞利长度（Rayleigh range）$z_R$：
+\begin{equation}
+z_R=\frac{\pi w_0^2}{\lambda}~
+\end{equation}
+发散角：
+\begin{equation}
+\theta_d=w_0/z_R=\frac{\lambda}{\pi w_0}~
+\end{equation}
+
+\end{itemize}
+
 
 \subsection{近轴近似和ABCD矩阵}
 在谈论高斯光束之前需要先谈到一般情况下光线如何在光学器件上传播。为简单起见，这里只涉及几何光学的内容，也就是先忽略光斑的空间分布，把光看成是一条光线。如\autoref{fig_GBeam_1} 是一个任意的光学器件，例如是凸透镜，玻璃片或者什么都没有。
@@ -146,7 +192,7 @@ u(x,y,z)=\frac{\I}{\lambda(z-z_1)}\iint_s u\left(x_1,y_1,z_1\right)\E^{-\I k\fra
 \end{exercise}
 
 \subsection{光学器件中的衍射}
-上述的衍射是发生在自由空间上的，也就是真空中。那么当光通过光学器件时，衍射公式会发生相应的变化，我们接下来将讨论衍射公式与ABCD矩阵的结合，最重要的就是得到\autoref{eq_HHeq} 中的相位项$\E^{-\I kr}$。
+上述的衍射是发生在自由空间上的，也就是真空中。那么当光通过光学器件时，衍射公式会发生相应的变化，我们接下来将讨论衍射公式与ABCD矩阵的结合，最重要的就是得到\autoref{eq_HF} 中的相位项$\E^{-\I kr}$。
 
 如\autoref{fig_GBeam_6}（图片来自\footnote{A.E. Siegman, Lasers (Oxford University Press, Oxford, U. K.), Chapt. 20.}。对参数的定义不同，所以图中的标注会有些许区别），假设衍射光中的一束光从点$p_1$出发，在$z_1$平面在$r_1$处以$\theta_1$角度入射，在$z_2$平面以$r_2,\theta_2$出射，最后到达点$p_2$。
 \begin{figure}[ht]
@@ -202,7 +248,7 @@ u(x,y,z)=\frac{\I}{L\lambda }\iint_s u\left(x_1,y_1,z_1\right)\E^{-\I k\frac{(x-
 \end{equation}
 鉴于$L=z-z_0$，所以上式实际上就是\autoref{eq_HFinU} 。所以\autoref{eq_HFinU} 其实是\autoref{eq_uABCD} 的一种特例。
 
-\subsection{零模高斯光束}
+\subsection{零阶高斯光束}
 回想最开始时的描述，高斯光束通过光学器件时，光斑的空间分布不变，也就是说\autoref{eq_uABCD} 中的$u(x,y,z)$应该和$u(x_1,y_1,z_1)$具有类似的函数表达式。我们现在需要找到这样一个合适的函数。%鉴于物理学家都是失败的考不上数学系的半吊子，解微积分方程基本是不可能的，我们现在只能猜一个答案。
 观察\autoref{eq_uABCD} ：
 \begin{equation}
@@ -259,7 +305,7 @@ E(x,y,z)=A\E^{-\I k(z+\frac{x^2+y^2}{2R})}\E^{-\frac{x^2+y^2}{w^2}}~
 \caption{} \label{fig_GBeam_11}
 \end{figure}
 
-\subsection{零模高斯光束的传播}
+\subsection{零阶高斯光束的传播}
 如果你经常做光学实验，你就会发现其实即使不加透镜，激光器的出射光也会自己聚焦，或者以一个比例将光斑按传播距离发散；对激光使用透镜，光斑也不会像理想情况那样在某个位置聚焦成一个无限小的点。有了前面的理论基础，我们现在就能好好解释一下这个现象了。
 
 激光器的出射光一般都是零模的高斯光。假设一束零模高斯光在空气中传播，也就是$A=D=1,B=z,C=0$，那么根据和\autoref{eq_qABCD} ：
@@ -321,7 +367,7 @@ z_R=\frac{\pi w_0^2}{\lambda}~
 \begin{equation}
 \pmat{1&L_2\\0&1}\pmat{1&0\\-1/f&1}\pmat{1&L_1\\0&1}~
 \end{equation}
-将矩阵代入到\autoref{eq_qABCD} 中，并且令$\Re{q}=0$，就可以得到$L_2$的具体数值；将计算到的$L_2$代入到$q$的虚部中，就可以得到$w$。可以绘制出$L_2$和$w$随透镜位置$L_1$的变化（在具体的计算中，令$z_R=5m,f=1m,\lambda=700nm$，也就是最常见的红色激光笔和透镜）：
+将矩阵代入到\autoref{eq_qABCD} 中，并且令$\Re{q}=0$，就可以得到$L_2$的具体数值；将计算到的$L_2$代入到$q$的虚部中，就可以得到$w$。可以绘制出$L_2$和$w$随透镜位置$L_1$的变化（在具体的计算中，令$z_R=5m,f=1m,\lambda=700nm$，也就是最常见的红色激光笔和透镜的参数）：
 \begin{figure}[ht]
 \centering
 \includegraphics[width=14cm]{./figures/6a49ada375aaa38e.png}
@@ -339,5 +385,31 @@ z_R=\frac{\pi w_0^2}{\lambda}~
 \end{figure}
 \end{example}
 
-\subsection{高模高斯光束}
-占位符。
+\subsection{高阶高斯光束}
+在4节我们提到衍射方程中含有傅里叶变换，而零阶高斯光束就是傅里叶变换前后函数形式不变的一个函数。除此之外，厄米（Hermite）多项式与高斯函数的乘积也可以做到傅里叶变换前后函数的形式不变。比较容易证明的是：
+\begin{equation}
+\mathcal F[H_n(x)\E^{-x^2/2}]=(-\I)^nH_n(k)\E^{-k^2/2}~
+\end{equation}
+证明这个需要用到厄米多项式的生成函数，也就是：
+\begin{equation}
+\sum_n H_n(x)\frac{t^n}{n!}=\E^{2xt-t^2}~
+\end{equation}
+\addTODO{继续推导需要更多的证明。}
+我们直接给出高阶的厄米高斯光束的函数形式：
+\begin{equation}
+u(x_1,y_1,z_1)=H_l\left[\sqrt{2}x_1/w_1\right]H_m\left[\sqrt{2}y_1/w_1\right]\exp\left[-\I k\left(x_1^2+y_1^2\right)/2q_1\right]~
+\end{equation}
+代入\autoref{eq_uABCD} 中，能得到：
+\begin{equation}
+u(x,y,z)=\left[\frac{1}{A+(B/q_1)}\right]^{1+l+m}H_l\left(\frac{\sqrt{2}x}{w}\right)H_m\left(\frac{\sqrt{2}y}{w}\right)\times\exp-\I k\frac{\left(x^2+y^2\right)}{2q}~
+\end{equation}
+其中$q$的变化和展开均与零阶高斯光束一致。
+可以作出各个模式的高斯光束的光强分布图：
+
+\begin{figure}[ht]
+\centering
+\includegraphics[width=14cm]{./figures/6eb9adc34a403180.png}
+\caption{} \label{fig_GBeam_16}
+\end{figure}
+
+一般的激光器都被设定成发出零阶的高斯光束，如果你看到了其他模式的光，那么就应该考虑考虑维修激光器了。
