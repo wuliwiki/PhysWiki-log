@@ -110,7 +110,7 @@ X(\dd f(Y))-\dd f([X,Y])&=XYf-(XY-YX)f\\
 因此得证。
 
 \subsection{对微分形式作用}
-尽管我们可以利用\autoref{eq_lie_2} 第六条来得到李导数对微分形式的作用结果，然而这样的成本是不可忽视的。对于任意$p\in M$，我们需要引入定义在该点邻域的数个向量场$(Y_1,Y_2...Y_k)$才能达到目的。所以说，微分形式阶数越高越麻烦。因此，我们需要寻求更便携的方法。
+尽管我们可以利用\autoref{eq_lie_2} 第六条来得到李导数对微分形式的作用结果，然而其成本是不可忽视的。对于任意$p\in M$，我们需要引入定义在该点邻域的数个向量场$(Y_1,Y_2...Y_k)$，还要算得微分形式的作用结果。为了避免这样的麻烦，本节介绍一个便携的计算方法。
 \begin{theorem}{}
 设$X$为流形$M$上的任意矢量场，$\omega$是$k$微分形式。那么我们有
 \begin{equation}\label{eq_lie_3}
@@ -144,7 +144,7 @@ i_X(\dd \omega)&=i_X(\dd (u\dd v))=i_X(\dd u\wedge\dd v)\\
 \end{equation}
 代入\autoref{eq_lie_3} 显然成立。
 
-假设定理对$1<n<k$成立，且$\omega=\sum_{I}\omega_I\dd x^{i_1}\wedge\dd x^{i_2}...\wedge \dd x^{i_k}$。那么可以设$\alpha=\omega_I\dd x^{i_1},\beta=\dd x^{i_2}\wedge...\wedge\dd x^{i_k}$，则$\omega=\sum_I\alpha\wedge\beta$。只需要证明定理对其中一个排列成立即可。下面为表示方便，用$X\lrcorner$来表示缩并。利用李导数、缩并和$\dd$算符的莱布尼兹律，我们可以得到：
+假设定理对$1<n<k$成立，且$\omega=\sum_{I}\omega_I\dd x^{i_1}\wedge\dd x^{i_2}...\wedge \dd x^{i_k}$。那么可以设$\alpha=\omega_I\dd x^{i_1},\beta=\dd x^{i_2}\wedge...\wedge\dd x^{i_k}$，则$\omega=\sum_I\alpha\wedge\beta$。只需要证明定理对其中一个排列成立即可。下面为表示方便，用$X\lrcorner$来表示缩并。利用$\dd,\mathcal L$和缩并算符的性质，我们可以得到：
 \begin{equation}
 \begin{aligned}
 \mathcal L_X\omega&=L_X(\alpha\wedge\beta)\\
@@ -165,7 +165,51 @@ i_X(\dd \omega)&=i_X(\dd (u\dd v))=i_X(\dd u\wedge\dd v)\\
 
 得证。
 
+\begin{corollary}{}
+设$X$是光滑向量场，$\omega$是$k$形式，则
+\begin{equation}\label{eq_lie_4}
+\mathcal L_X(\dd\omega)=\dd(\mathcal L_X\omega)~.
+\end{equation}
+\end{corollary}
+\textbf{证明：}
 
+代入\autoref{eq_lie_3} ，我们得
 
+\begin{equation}
+\begin{aligned}
+\dd(\mathcal L_X\omega)&=\dd(X\lrcorner\dd\omega+\dd(X\lrcorner\omega))\\
+&=\dd(X\lrcorner\dd\omega)\\
+\mathcal L_X\dd \omega&=X\lrcorner\dd\dd\omega+\dd(X\lrcorner\dd\omega)\\
+&=\dd(X\lrcorner\dd\omega)~,
+\end{aligned}
+\end{equation}
+因此得证。
 
-\subsection{李导数的其它基本性质}
+至此，利用上述结论，我们可以简便地计算微分形式的李导数，不再需要引入向量场并计算微分形式和向量场作用的结果。
+\subsection{Killing 方程}
+依旧默认$X$为光滑向量场而$\tau$是光滑张量场。由李导数对张量场作用的定义可知，若$\tau$在$X$的积分曲线流下不变，即$\theta_t^*\tau_{\theta_t(p)}=\tau_p$，则张量场关于$X$的李导数不变。实际上反向也是成立的。
+
+\begin{theorem}{}
+$X$是光滑流形$M$上的光滑切场。任意光滑张量场$\tau$在$X$的流下不变当且仅当$\mathcal L_X\tau=0$。
+\end{theorem}
+可以这样理解，设被李导数作用后的张量场为$\xi$，则对于任意$p\in M$，$\xi_p=\tau_p=\theta_t^*\tau_{\theta_t(p)}$。
+
+最常见的张量场是度规张量$g$，若度规张量在某光滑向量场下不变，我们便把该光滑向量场称作$Killing$矢量场。$Killing$方程是等价于$\mathcal L_X\tau=0$的若干方程。
+\begin{enumerate}
+\item $Xg_{ij}+g_{jk}\frac{\partial X^k}{\partial x^i}+g_{ik}\frac{\partial X^k}{\partial x^j}=0$。
+
+因为$g=g_{ij}\dd x^i\otimes\dd x^j$，利用\autoref{eq_lie_4} ，我们有：
+
+\begin{equation}
+\begin{aligned}
+\mathcal L_X g&=(\mathcal L_Xg_{ij})\dd x^i\otimes \dd x^j+
+g_{ij}(\mathcal L_X\dd x^i)\otimes\dd x^j+g_{ij}\dd x^i\otimes \mathcal L_X\dd x^j\\
+&= Xg_{ij}+g_{ij}\dd X^i\otimes \dd x^j+g_{ij}\dd x^i\otimes \dd X^j\\
+&=Xg_{ij}+g_{kj}\pdv{X^k}{x^i}\dd x^i\otimes\dd x^j+g_{ik}\dd x^i\otimes \pdv{X^k}{x^j}\dd x^j\\
+&=(Xg_{ij}+g_{jk}\pdv{X^k}{x^i}+g_{ik}\pdv{X^k}{x^j})\dd x^i\otimes \dd x^j~.
+\end{aligned}
+\end{equation}
+
+\item $(\nabla_iX)_j+(\nabla_j X)_i=0$
+\item 对于任意向量$Y,Z$有$g\left(\nabla_YX,Z\right)+g\left(Y,\nabla_ZX\right)=0$。
+\end{enumerate}
