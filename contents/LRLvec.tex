@@ -13,6 +13,7 @@
 其中 $\bvec p$ 为质点动量， $\bvec L$ 为轨道角动量， $\cross$ 表示\enref{矢量叉乘}{Cross}， $k$ 是一个常数（对\enref{万有引力}{Gravty} $k = GMm$， 对\enref{库仑力}{ClbFrc} $k = -Qq/(4\pi\epsilon_0)$。 $\uvec r$ 为质点位矢 $\bvec r$ 的单位矢量。 在开普勒问题中， 可以证明 $\bvec A$ 是一个守恒量。
 
 \subsection{守恒证明}
+\subsubsection{求导法}
 我们下面证明 $\dot{\bvec A} = \bvec 0$。 对\autoref{eq_LRLvec_1} 求时间导数， 考虑到中心力场中质点角动量 $\bvec L$ 守恒， 有
 \begin{equation}\label{eq_LRLvec_2}
 \dot{\bvec A} = \dot{\bvec p}\cross \bvec L  - mk\dot{\uvec r}~.
@@ -36,6 +37,69 @@
 = \bvec 0~.
 \end{equation}
 最后一个等号成立是因为 $\uvec r\cross\uvec z = -\uvec\theta$， 可以类比直角坐标系中的 $\uvec x\cross\uvec z = -\uvec y$。 证毕。
+\subsubsection{定义法}
+通过类似比耐公式的方法，可以直接计算出\textbf{LRL矢量}的具体值，借此来说明其守恒。
+由平方反比力
+\begin{equation}
+\begin{cases}
+F_{r}=-\frac{k}{r^{2}} = m\left(\ddot r -\dot \theta ^{2}r\right)~，\\
+L = mr^{2}\dot \theta ~.\\
+\end{cases}
+\end{equation}
+进行变换$u = \frac{1}{r} \Longleftrightarrow r = \frac{1}{u}$
+得到
+\begin{equation}
+\begin{cases}
+F_{r}= -ku^{2} ~,\\
+L = \frac{m\dot \theta}{u^{2}}\Rightarrow \dot \theta = \frac{Lu^2}{m} ~.\\
+\end{cases}
+\end{equation}
+将r关于时间的导数替换为u关于时间的导数
+\begin{equation}
+\dot r = \frac{dr}{dt}= \frac{d \frac{1}{u}}{d\theta}\dot \theta =-\frac{1}{u^{2} } \frac{du}{d\theta} \dot \theta = -\frac{L}{m}\frac{du}{d\theta}~,\\
+\ddot r = \frac{d \dot r}{d t} =-\frac{L}{m} \frac{d^{2}u}{d \theta^{2}} \dot \theta = -\frac{L^{2}u^{2}}{m^{2}}\frac{d^{2}u}{d \theta^{2}}~.\\
+\end{equation}
+带入F的表达式
+\begin{align}
+-ku^{2}
+&=m\left(-\frac{L^{2}u^{2}}{m^{2}}\frac{d^{2}u}{d \theta^{2}}-\frac{L^{2}u^{4}}{m^{2}}\frac{1}{u}\right)~,\\
+&= -\frac{L^{2}u^{2}}{m}\frac{d^{2}u}{d \theta^{2}}-\frac{L^{2}u^{3}}{m}~.\\
+\end{align}
+整理得到$\frac{d^{2}u}{d\theta^{2}} = \frac{mk}{L^{2}}-u$
+解得（选取特殊的$\theta$起点）$u = \frac{mk}{L^{2}} + A \cos \theta$，即$r = \frac{1}{u} = \frac{1}{\frac{mk}{L^{2}} + A \cos \theta} = \frac{\frac{L^2}{mk}}{1 + \frac{L^2}{mk} A \cos \theta}$
+借此我们可以表示出速度
+\begin{align}
+\vec v &= \dot r \hat r + r \dot \theta \hat \theta ~,\\
+&=-\frac{L}{m}\frac{du}{d\theta} \hat r + \frac{1}{u} \frac{Lu^{2}}{m} \hat \theta ~,\\
+&=-\frac{L}{m}\frac{du}{d\theta} \hat r +  \frac{Lu}{m} \hat \theta ~.\\
+\end{align}
+\begin{align}
+\vec p &= m \vec v = -L\frac{du}{d\theta}\hat r + Lu \hat \theta ~,\\
+&=L A \sin \theta \hat r + L \left(\frac{mk}{L^{2}} + A \cos \theta \right)\hat \theta ~,\\
+&=L A \sin \theta \hat r + \left(\frac{mk}{L} +L A \cos \theta \right)\hat \theta ~.\\
+\end{align}
+\begin{align}
+\vec R &= \vec p \times \vec L - mk \hat r ~,\\
+&=\left(L A \sin \theta \hat r + \left(\frac{mk}{L} +L A \cos \theta \right)\hat \theta \right) \times L \hat k -mk\hat r ~,\\
+&=\left(-L^{2} A \sin \theta \hat \theta + \left(mk +L^{2} A \cos \theta \right)\hat r \right) \times L \hat k -mk\hat r ~,\\
+&= L^{2}A\left(-\sin \theta \hat \theta+\cos \theta \hat r \right) ~.\\
+\end{align}
+将极坐标转换为平面直角坐标系
+\begin{equation}
+\begin{cases}
+$$\hat r = \cos \theta \hat{x} + \sin \theta \hat{y} ~,\\
+$$\hat \theta = -\sin \theta \hat{x} +\cos \theta \hat{y} ~.\\
+\end{cases}
+\end{equation}
+故有
+\begin{align}
+&\phantom{=} -\sin \theta \hat \theta+\cos \theta \hat r ~,\\
+&=-\sin \theta \left(-\sin \theta \hat{x} +\cos \theta \hat{y}\right)+ \cos \theta \left(\cos \theta \hat{x} + \sin \theta \hat{y} \right)~,\\
+&= \left(\sin^{2}\theta + \cos^{2}\theta\right)\hat x + \left(-\sin \theta \cos \theta +\sin \theta \cos \theta \right)\hat y ,\\
+&= \hat x ~.\\
+\end{align}
+即$\vec R = L^{2}A \hat x$与$r$和$\theta$无关
+% \刚刚学会一点点latex，如有错误请多包涵
 
 % \addTODO{习题：证明二体问题中
 % \bvec A_B = \frac{mu}{m_B} \bvec A
