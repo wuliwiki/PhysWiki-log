@@ -13,9 +13,14 @@
 \begin{equation}\label{ham1}
 \hat{H}=  \sum_j^{N}V_j c_j^{\dagger}c_j.~
 \end{equation}
+$N$ 是系统中的粒子数，$V_j$ 是势能项，$c_j^{\dagger}$ 和 $c_j$ 分别是产生和湮灭算符。产生算符 $c_j^{\dagger}$ 在位置 $j$ 创建一个粒子，湮灭算符 $c_j$ 在位置 $j$ 湮灭一个粒子。$c_j^{\dagger}c_j$是表示$\hat{n}$粒子数算符，其定义为：
+\begin{equation}
+\hat{n}_j = c_j^{\dagger} c_j~.
+\end{equation}
+在没有相互作用的情况下，哈密顿量 $\hat{H}$ 是对角化的，这意味着哈密顿量的矩阵形式 $\hat{H}$ 是对角矩阵。这样我们就可以直接得到系统的能量本征值，它们对应于对角矩阵 $\hat{H}$ 的对角元素 $V_j$。因此，系统的能量本征值 ${E_j}$ 就是 ${V_j}$。
 设N=4,可以在这里哈密顿量可以直接写为一个4*4的对角矩阵：
 \begin{equation}
-\mathcal{H}=\left(
+\hat{H}=\left(
 \begin{matrix}
 V_1 & 0& 0&0\\
 0 &V_2&0&0\\
@@ -24,4 +29,92 @@ V_1 & 0& 0&0\\
 \end{matrix}
 \right)~.
 \end{equation}
-这里的$V_j$是表示势能项，$c_j^{\dagger}c_j$是表示$\hat{n}$粒子数算符。
+
+对于有相互作用的系统，哈密顿量通常不是对角化的。一个简单的例子是带有跃迁项的哈密顿量：
+\begin{equation}\label{ham2}
+\hat{H} = \sum_{j=1}^{N} V_j c_j^{\dagger} c_j + \sum_{i \ne j} t_{ij} c_i^{\dagger} c_j~,
+\end{equation}
+其中 $t_{ij}$ 表示从位置 $j$ 到位置 $i$ 的跃迁振幅。
+
+对于 $N=4$ 的情况，哈密顿量矩阵 $\hat{H}$ 可能具有如下形式：
+\begin{equation}
+\hat{H}=\left(
+\begin{matrix}
+V_1 & t_{12} & t_{13} & t_{14} \\
+t_{21} & V_2 & t_{23} & t_{24} \\
+t_{31} & t_{32} & V_3 & t_{34} \\
+t_{41} & t_{42} & t_{43} & V_4 \\
+\end{matrix}
+\right)~.
+\end{equation}
+为了找到哈密顿量矩阵 $\mathcal{H}$ 的本征值和本征态，我们需要对其进行对角化。这可以通过数值方法实现，例如用线性代数库（如 Python 的 NumPy，MATLAB，或 Fortran 的 LAPACK）来计算。
+以下是一个使用 Python 和 NumPy 进行矩阵对角化的示例代码：
+
+\begin{lstlisting}[language=python]
+import numpy as np
+
+# 定义哈密顿量矩阵
+H = np.array([[V1, t12, t13, t14],
+              [t21, V2, t23, t24],
+              [t31, t32, V3, t34],
+              [t41, t42, t43, V4]])
+
+# 计算本征值和本征向量
+eigenvalues, eigenvectors = np.linalg.eigh(H)
+
+print("本征值: ", eigenvalues)
+print("本征向量: ", eigenvectors)
+
+\end{lstlisting}
+在 MATLAB 中，可以使用内置的 eig 函数对矩阵进行对角化。这个函数可以计算矩阵的特征值和特征向量。下面是一个详细的例子，展示如何在 MATLAB 中对一个哈密顿量矩阵进行对角化。
+
+以下是完整的 MATLAB 代码，展示如何定义这个矩阵并对其进行对角化：
+
+\begin{lstlisting}[language=matlab]
+% 定义哈密顿量矩阵的元素
+V1 = 1.0;
+V2 = 2.0;
+V3 = 3.0;
+V4 = 4.0;
+t12 = 0.1;
+t13 = 0.2;
+t14 = 0.3;
+t21 = 0.1;
+t23 = 0.4;
+t24 = 0.5;
+t31 = 0.2;
+t32 = 0.4;
+t34 = 0.6;
+t41 = 0.3;
+t42 = 0.5;
+t43 = 0.6;
+
+% 构造哈密顿量矩阵
+H = [
+    V1, t12, t13, t14;
+    t21, V2, t23, t24;
+    t31, t32, V3, t34;
+    t41, t42, t43, V4
+];
+
+% 计算哈密顿量矩阵的特征值和特征向量
+[eigenvectors, eigenvalues] = eig(H);
+
+% 显示特征值和特征向量
+disp('特征值:');
+disp(diag(eigenvalues));
+disp('特征向量:');
+disp(eigenvectors);
+
+\end{lstlisting}
+注意
+
+eigenvalues：
+是一个对角矩阵，其对角元素是哈密顿量矩阵的特征值。
+如果原始哈密顿量矩阵是N×N 的，那么 eigenvalues 也是 N×N 的对角矩阵。
+
+eigenvectors：
+是一个矩阵，其列向量是对应于特征值的特征向量。
+如果原始哈密顿量矩阵是 N×N 的，那么 eigenvectors 也是 N×N 的矩阵。
+
+我们可以发现其实精确对角化其实是一个很简单的事情，就是一个指令就能做到，但是做数值主要是需要对这个模型的本征值和本征态进行进一步的解析，例如求解保真度\autoref{def_fideli_1}、纠缠熵等对这个模型的物理进行深层次的分析。
