@@ -7,10 +7,10 @@
 \issueDraft
 \end{issues}
 
-这篇文章会介绍大型运算符，他们往往代表了一个过程。
+这篇文章会介绍大型运算符，他们往往代表了一个过程。下面会主要介绍他们的过程、记法以及一些常用的性质。
 
 \subsection{累计运算过程}
-\subsubsection{离散}
+
 累计运算过程一般包括：
 \begin{itemize}
 \item 析取符号：$\bigvee$
@@ -20,9 +20,97 @@
 \item 求和符号：$\sum$
 \item 求积符号：$\prod$
 \item 上积符号：$\coprod$
+\item 积分符号：$\int$
 \end{itemize}
-\subsubsection{连续}
-积分符号：$\int$
+
+
+\subsubsection{记法}
+
+\subsubsection{无穷情况}
+
+有时会出现，下限位置为$-\infty$，上限位置为$+\infty$等情况，比如级数等情况。这种情况并非实指去到对应点，而是指取相应极限，即：
+
+\begin{equation}
+\sum_{i=-\infty}^n a_i:= \lim_{a\to-\infty}\sum_{i=a}^n a_i.~
+\end{equation}
+
+\begin{equation}
+\sum_{i=0}^{+\infty} a_i:= \lim_{a\to+\infty}\sum_{i=0}^a a_i.~
+\end{equation}
+
+特殊地：
+\begin{equation}
+\sum_{i=-\infty}^{+\infty} a_i:= \lim_{a\to+\infty\atop b\to-\infty}\sum_{i=b}^a a_i.~
+\end{equation}
+
+\begin{example}{设等比级数通项$a_n=a_1q^{n-1}$，用求和符号表示等比级数和}
+$$
+\sum_{i=1}^{+\infty} a_i=
+\leftgroup{
+{a_1\over 1-q},\qquad |q|<1\\  
+\text{发散},\qquad |q|\geq1
+} ~.
+$$
+\end{example}
+
+\subsubsection{指标集记法}
+
+上面介绍的求和过程，指标集都是$\mathbb{Z}$与某个区间的交集（这样可以保证自增），对于某些不需要自增或无法使用自增的场合，可以直接给定指标集，求和过程记作：
+
+\begin{equation}
+\sum_{i\in I} a_i~.
+\end{equation}
+其中，$I$为指标集。特别的，若$I$为空集，一般称为“空和”，并定义为0，即：
+\begin{equation}
+\sum_{i\in \varnothing} a_i=0~.
+\end{equation}
+
+同时，若通过上下文可以明确指标集$I$或只为表述记号的运算特点而不强调指标集时，在不引起歧义的情况下，为了方便可以直接记作：
+
+\begin{equation}
+\sum_i a_i.~
+\end{equation}
+
+这样使用时通常不会涉及指标的运算。
+
+
+\subsection{求和运算}
+\subsubsection{积分近似}
+
+对于求和项数量非常多的情况，可以利用黎曼和的思想来近似化简，将求和过程转化成\enref{定积分}{DefInt}。
+
+\begin{equation}
+\sum_{i=a}^b f(i) \approx \int_a^b f(x) \, dx.~
+\end{equation}
+
+
+\subsubsection{多个求和符号的运算技巧}
+
+有一些场合会出现一个表达式中出现多个求和符号的情形。一如上面所说，展开仍然是通用的方法，但过于复杂会让人望而却步。下面的运算技巧绝对会让化简过程如虎添翼。
+
+交换求和次序
+
+类似于一个表格中，不论是先求行和再求和，还是先求列和再求和，结果都是将所有的数字求一遍。
+
+\begin{equation}
+\sum_{i,j} a_{ij}=\sum_{i} \sum_{j} a_{ij} = \sum_{j} \sum_{i} a_{ij}.~
+\end{equation}
+其中 $\sum\limits_{i,j}$ 表示按任意顺序遍历所有$(i,j)$。
+
+双重求和
+
+两个求和符号的积可以展开为它们每一项组合的积的和。
+
+\begin{equation}
+\qty(\sum_i a_i) \qty(\sum_j b_j) = \sum_{i,j} a_i b_j = \sum_i \qty(a_i \sum_j b_j) = \sum_j \qty(b_j \sum_i a_i)~.
+\end{equation}
+
+注意：第一个等号从左到右没有条件，但从右到左时需要保证每个变量的独立性，即$a_i$中不包含$j$，$b_j$中不包含$i$。
+
+\begin{example}{用求和符号计算数列$\{a_n\}$的和的平方}
+$$\qty(\sum_i a_i)^2 = \sum_{i,j} a_i a_j = \sum_i a_i^2 + 2\sum_{i<j} a_i a_j~.$$
+注意区分求和指标，第二步如果写成 $\sum\limits_{i,i} a_i a_i$ 将产生混乱。
+\end{example}
 \subsection{极限运算过程}
 
 $\lim$
