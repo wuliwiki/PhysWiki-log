@@ -1,11 +1,12 @@
-% 搭建 OpenVPN 服务器
+% OpenVPN 笔记
 % license Xiao
-% type Tutor
+% type Note
 
 \begin{issues}
 \issueDraft
 \end{issues}
 
+\subsection{搭建服务器}
 \begin{itemize}
 \item bandwagon 服务器亲测成功
 \item 注意以下脚本需要访问 github， 如果在国内可能用不了（需要手动修改脚本）
@@ -13,6 +14,14 @@
 \item 如果跑成功， 会生成一个 \verb`.ovpn` 配置文件（文本文件）。 在命令行中 \verb`cat` 出来， 然后复制下来创建新文件即可。
 \item 在 Ubuntu 的 VPN 设置中， 导入该文件， 开关打开即可开心上网。可以在线搜索一下自己的 ip 地址是否是服务器的。
 \item 在服务器检查 vpn 服务状态 \verb`sudo systemctl status openvpn`
+\end{itemize}
+
+\subsection{客户端}
+\begin{itemize}
 \item 在 Windows 上， 需要下载 OpenVPN 的客户端才可以导入文件。
 \item Windows 客户端的设置文件默认路径为 \verb`C:\Program Files\OpenVPN\config\`
+\item Ubuntu Desktop 设置中原生支持通过 \verb`.ovpn` 文件设置 VPN
+\item Ubuntu 命令行（未测试）：\verb`sudo apt install openvpn`， \verb`sudo openvpn --config your-vpn-file.ovpn`， 要断开连接直接 \verb`Ctrl+C` 即可。 这个命令只在前台运行，运行后可以另外开一个 ssh 用于做其他事情。 ssh 断开后 vpn 也会自动断开。
+\item 要验证连接成功，可以用 \verb`curl -4 ifconfig.me` 查看公网 ip 地址。
+\item 使用 ubuntu vpn clien 不会影响局域网 ssh 连接到这台电脑。
 \end{itemize}

@@ -29,6 +29,8 @@
 \item 第三方的 source 保存在 \verb`sudo sh -c 'echo "deb http://apt.postgresql.org/pub/repos/apt $(lsb_release -cs)-pgdg main" > /etc/apt/sources.list.d/pgdg.list'`
 \item \verb`apt upgrade` 自动更新所有包， 但并不删除已存在的包， \verb`apt dist-upgrade` 或者等效的 \verb`apt full-upgrade` 更激进， 会删除已有的包， 可能会更新内核， 可能造成一些破坏。
 \verb`apt download 包` 可以不安装只下载某个包的 deb （但不会下载它的依赖！）
+\item \verb`sudo apt-mark hold 包名` 可以在 \verb`apt upgrade` 的时候不更新一些包，会显示 \verb`The following packages have been kept back`，要 unhold，用 \verb`sudo apt-mark unhold 包名`
+\item 如果由其他包被 \verb`The following packages have been kept back`，可以用 \verb`apt install ...` 手动更新他们
 \item 事实上， \verb`apt install` 命令也是先下载所有需要的以及依赖的 deb 包然后再安装， 这些 deb 包存在 \verb`/var/cache/apt/archives` 目录中。
 \item \verb`apt clean` 和 \verb`apt autoclean` 可以清除缓存（例如下载的 deb 安装包等， 后者清的没那么干净）
 \end{itemize}
