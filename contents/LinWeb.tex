@@ -86,6 +86,18 @@ dynamic noprefixroute wlo1
 \item 加括号里 \verb`LOOPBACK` 表示 loop back （例如 localhost 127.0.0.1）
 \item \verb`qlen`： default transmit queue length。
 \item \verb`inet` ipv4 地址， \verb`inet6` ipv6 地址
+\item 在 linux 停用 ipv6 如下
+\begin{lstlisting}[language=bash]
+sudo vim /etc/sysctl.conf
+# 添加如下几行
+net.ipv6.conf.all.disable_ipv6 = 1
+net.ipv6.conf.default.disable_ipv6 = 1
+net.ipv6.conf.lo.disable_ipv6 = 1
+# 保存然后
+sudo sysctl -p
+# 验证（无返回就是关闭了）
+ip a | grep inet6
+\end{lstlisting}
 \item \verb`brd` 广播（broadcast）地址
 \item \verb`mtu` maximum transmission unit （ethernet 都是 1500 字节）
 \item \verb`valid_lft`： valid life time
