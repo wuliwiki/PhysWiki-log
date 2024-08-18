@@ -81,7 +81,7 @@ Host server2
 \end{lstlisting}
 注意第二个 \verb`IdentityFile` 应该也是本机的， 如果服务器不认识仍然会索取密码。 用 \verb`ssh-copy-id server2` 即可。
 
-\item \verb`ssh` 的客户端和服务器端对 \verb`.ssh` 文件夹和其中文件权限都有很高的要求。 如果说用 key \verb`ssh` 的时候说 \verb`permission id_rsa too open`， 把 \verb`.ssh` 文件夹的权限修改为 \verb`700`， 里面的 \verb`id_rsa` 和 \verb`authorized_keys` 修改为 \verb`600`， \verb`id_rsa.pub` 和 \verb`known_host` 改为 \verb`644`。 \verb`.ssh` 文件夹以及其中文件的 owner 都必须是登录者的。 如果服务器端文件的权限不对会提示 \verb`permission denied`。
+\item \verb`ssh` 的客户端和服务器端对 \verb`.ssh` 文件夹和其中文件权限都有很高的要求。 如果说用 key \verb`ssh` 的时候说 \verb`permission id_rsa too open`， 把 \verb`.ssh` 文件夹的权限修改为 \verb`700`， 里面的 \verb`id_rsa` 和 \verb`authorized_keys` 和 \verb`config` 修改为 \verb`600`， \verb`id_rsa.pub` 和 \verb`known_host` 改为 \verb`644`。 \verb`.ssh` 文件夹以及其中文件的 owner 都必须是登录者的。 如果服务器端文件的权限不对会提示 \verb`permission denied`。
 \item 如果反复检查 \verb`id_rsa` 的确是对的，那么有可能是换行符的问题，最后必须换行，且必须使用 LF 而不是 CRLF。 可以用 \verb`dos2unix -ih 文件名` 检查。
 \item 其中 7 变为二进制是 \verb`111` 对应 \verb`rwx` 的三个开关都打开， 0 对应 \verb`000` 没有任何权限， 所以 700 就是 owner 有所有权限， 其他用户没有任何权限
 \item 虽然 public key 中最后有 \verb`用户名@主机`， 其实这个好像没有任何影响， private key 和 public key 都可以复制到许多不同的机器中， 让这些机器两两之间互相 ssh， 而它们的 \verb`~/.ssh/authorized_keys` 中只需要有一条
