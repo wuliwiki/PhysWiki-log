@@ -35,12 +35,12 @@ docker run --name filebrowser -d --restart always \
    -v /mnt/drive/filebrowser/database.db:/etc/database.db \
    -p 5000:80 filebrowser/filebrowser
 \end{lstlisting}
-其中 \verb`本地网盘文件目录` 里面 symlink 用不了。
 
 \begin{itemize}
 \item 设置好后， 浏览器访问 \verb`网站域名:端口` 就可以看到初始页面了， 用户名和密码都是 \verb`admin`
 \item 也可以直接用 sftp 把文件同步到 \verb`本地网盘文件目录` 可能会更稳定和方便。
 \item \verb`本地网盘文件目录` 本身不支持 symlink 和 mount， 但它的子目录可以， 但注意如果 symlink 的目标不是 \verb`本地网盘文件目录` 的内部， 则会在网盘页面显示 bad link。
+\item 如果 filebrowser 运行以后再挂载子目录，需要重启 filebrowser 服务（如 docker）才能看到挂载的文件。
 \item \verb`filebrowserconfig.json` 好像并没有什么用， 重新创建镜像仍然会所有设置初始化。 要保留设置， 可以先把容器停止， commit 到自己的镜像， 然后调整以上参数再次创建容器即可。
 \end{itemize}
 

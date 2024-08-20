@@ -108,6 +108,7 @@
 \item \verb`--update` 会跳过 \verb`dest` 中修改日期较新的文件。
 \item \verb`--partial` 选项可以支持中断续传。
 \item 若要在每个文件传输完成之后从原来文件夹删除， 用 \verb`--remove-source-files`。 注意不会删除任何目录。 可以另外用 \verb`find src -type d -empty -delete` 删除空目录。如果目标文件夹中已经有相同的文件（默认用修改时间和文件大小判断），也会删除源文件。
+\item \verb`--remove-source-files` 并不会真正的使用移动，即使目标目录在同一个文件系统也不会。 可以使用我的脚本 \verb`mv_merge.py`
 \item 同步文件夹时， 用 \verb`src/` 不会包括 \verb`src` 本身， 而去掉斜杠就会。 \verb`dest` 文件夹则没有这种区别。
 \item 若要删除目标文件夹中， 源文件夹不存在的内容， 用 \verb`--delete`。
 \item 常用的同步命令： \verb`rsync -avh --delete 目录1/ 目录2/`。 完成后， 两个目录的内容将一模一样。
@@ -368,11 +369,14 @@ sudo echo umask 002 >> /home/用户2/.bashrc
 \begin{itemize}
 \item SFTP 其实是 ssh 的一个子功能， 通过 ssh 协议传输文件， 只要能 ssh 到某个机器， 就可以 sftp
 \item 连接方法为 \verb`sftp [usr@][url]` 就和 \verb`ssh [usr@][url]` 一样。 成功以后会出现提示符 \verb`sftp>`， 可以进行下一步操作
-\item \verb`sftp>` 环境下同样可以用 \verb`cd`, \verb`ls`, \verb`pwd` 等命令
+\item \verb`sftp>` 环境下同样可以用 \verb`cd`, \verb`ls`, \verb`pwd` 等命令。 在这些命令前面加 \verb`l`（local）可以获取本地文件信息， 如 \verb`lcd`，\verb`lls`，\verb`lpwd`
 \item \verb`get /path/to/file` 可以传输某个文件到本地（进入 sftp 时的目录）
 \item \verb`get /remote/file /local/file` 可以传输某个文件到本地指定的目录和文件名， 但该目录必须存在
+\item \verb`mget 文件1 文件2` 可以下载多个文件
+\item \verb`put` 和 \verb`mput` 用法也类似
 \item \verb`get -r 文件夹` 可以传送整个文件夹
 \item 如果要指定端口用 \verb`sftp -oPort=xxx xxx@xxx.xxx.xxx.xxx`
+\item 另外还支持 \verb`mkdir, rmdir, rename, chown, chmod`
 \end{itemize}
 
 \subsubsection{curl}
