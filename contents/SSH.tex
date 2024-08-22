@@ -81,8 +81,20 @@ Host server2
 \end{lstlisting}
 注意第二个 \verb`IdentityFile` 应该也是本机的， 如果服务器不认识仍然会索取密码。 用 \verb`ssh-copy-id server2` 即可。
 
-\item \verb`ssh` 的客户端和服务器端对 \verb`.ssh` 文件夹和其中文件权限都有很高的要求。 如果说用 key \verb`ssh` 的时候说 \verb`permission id_rsa too open`， 把 \verb`.ssh` 文件夹的权限修改为 \verb`700`， 里面的 \verb`id_rsa` 和 \verb`authorized_keys` 和 \verb`config` 修改为 \verb`600`， \verb`id_rsa.pub` 和 \verb`known_host` 改为 \verb`644`。 \verb`.ssh` 文件夹以及其中文件的 owner 都必须是登录者的。 如果服务器端文件的权限不对会提示 \verb`permission denied`。
-\item 如果反复检查 \verb`id_rsa` 的确是对的，那么有可能是换行符的问题，最后必须换行，且必须使用 LF 而不是 CRLF。 可以用 \verb`dos2unix -ih 文件名` 检查。
+\item \verb`ssh` 的客户端和服务器端对 \verb`.ssh` 文件夹和其中文件权限都有很高的要求。 如果说用 key \verb`ssh` 的时候说 \verb`permission id_rsa too open`， 使用以下代码即可：
+\begin{lstlisting}[language=none]
+cd ~/.ssh
+chown 用户名 -R .
+chmod 700 .
+chmod 600 id_rsa
+chmod 600 authorized_keys
+chmod 600 config
+chmod 644 id_rsa.pub
+chmod 644 known_host
+dos2unix *
+\end{lstlisting}
+如果服务器端文件的权限不对会提示 \verb`permission denied`。
+\item 如果反复检查 \verb`id_rsa` 的确是对的，那么有可能是换行符的问题，\textbf{文件最后必须换行}，且必须使用 LF 而不是 CRLF。 可以用 \verb`dos2unix -ih 文件名` 检查。
 \item 其中 7 变为二进制是 \verb`111` 对应 \verb`rwx` 的三个开关都打开， 0 对应 \verb`000` 没有任何权限， 所以 700 就是 owner 有所有权限， 其他用户没有任何权限
 \item 虽然 public key 中最后有 \verb`用户名@主机`， 其实这个好像没有任何影响， private key 和 public key 都可以复制到许多不同的机器中， 让这些机器两两之间互相 ssh， 而它们的 \verb`~/.ssh/authorized_keys` 中只需要有一条
 \item ssh 登录一个新主机时， 如果 \verb`known_host` 没有， 就会让确认， 确认以后就会把新主机的 id 加入该文件， 如果这个 id 以后变了（例如主机重装了 \verb`openssh-server`） 再登录就会出错（为了安全）， 这时只需要将 \verb`known_host` 中该主机的记录删除即可。 也可以直接把整个文件删除， 但这样就所有 ssh 登录都要再确认一次了。
