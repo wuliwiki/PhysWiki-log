@@ -77,7 +77,8 @@ MyPool/fs2  7.24T  13.8T   7.24T  /MyPool/fs2
 \item 每个 \verb`vdev` 可以有不同的 \enref{RAID}{RAIDnt} （zfs 自带 RAID， 不使用标准 RAID），RAID-z1 代表一个冗余相当于普通的 RAID5 至少需要三个 vdev， \verb`z2` 代表两个冗余至少需要 4 个 vdev，等），也可以是单个盘。 但是一个 pool 中\textbf{只要有一个 vdev 数据丢失，那么就会导致数据彻底无法恢复}。
 \item \verb`vdev` 可以有不同的大小，可以不断往 pool 中加入。 zfs 会根据每个 vdev 剩余的容量按比例 strip。
 \item \verb`vdev` 一旦加入 pool 就不能删除。 但可以更换（下文 \verb`zpool replace`）。
-\item \verb`zpool scrub pool名` 可以马上检查整个 pool 的 checksum 是否一致。 几秒钟后会在后台开始 scrub， 用 \verb`sudo zpool status` 查看进度和错误数据。 期间就算弹出硬盘或者关机，下次挂载还是会继续。
+\item \verb`sudo zpool scrub pool名` 可以马上检查整个 pool 的 checksum 是否一致。 几秒钟后会在后台开始 scrub， 用 \verb`sudo zpool status` 查看进度和错误数据。 期间就算弹出硬盘或者关机，下次挂载还是会继续。
+\item \verb`sudo zpool scrub -p pool名` 可以暂停 scrub。 再次 \verb`sudo zpool scrub pool名` 可以继续。
 \item \verb`scrub` 以后如果有任何错误 \verb`zpool status` 会报告如 \verb`scan: scrub repaired 8K in 12:34:17 with 0 errors on Sun Dec 10 12:58:22 2023` 这说明用了 12 个小时， 修复了 8k 数据，最后给出完成时间。
 \item Ubuntu 20.04 装机时可以选择 ZFS， 但没有加密选项。 Ubuntu 22.04 有加密。
 \item 如果根目录是 ZFS， 那么直接创建 swapfile 将会出问题（提示文件有 hole， 意思是在磁盘上不连续），需要专门用 ZFS 创建一个指定大小的 swap dataset 作为 swap：
@@ -131,8 +132,10 @@ pool名/fs名@快照1   0B      -     7.84T  -
 其中 \verb`USED` 初始是 0， 会随着 copy-on-write 慢慢增加
 \item 删除快照会自动释放不需要的空间（哪怕是删除中间的快照）。
 \item 可以直接把快照挂载到某个目录（只读）： \verb`zfs mount -o ro -t snapshot pool名/fs名@快照名 /快照挂载目录`
-\item 挂载后的快照是只读的， 如果要写入， 可以先对快照做一个克隆： \verb`zfs clone pool名/fs名@快照名 pool名/fs克隆名`。 挂载克隆也是一样的语法： \verb`zfs mount pool名/fs克隆名 /快照克隆挂载目录`
 \item 删除快照用 \verb`zfs destroy pool名/dataset名@快照名`
+\item 挂载后的快照是只读的， 如果要写入， 可以先对快照做一个克隆： \verb`zfs clone pool名/fs名@快照名 pool名/fs克隆名`。 挂载克隆也是一样的语法： \verb`zfs mount pool名/fs克隆名 /快照克隆挂载目录`， 其实不挂载也可以直接在 \verb`/pool名/fs克隆名/` 访问。
+\item 克隆并不会马上复制数据，所以是很快的，只有修改里面的文件时才会 copy on write， 也就是先复制文件再修改。
+\item 删除克隆用 \verb`zfs destroy pool名/fs克隆名`。
 \end{itemize}
 
 \subsection{加密和迁移（实测）}

@@ -5,7 +5,7 @@
 
 \pentry{正规子群\nref{nod_NormSG}}{nod_28ef}
 
-\addTODO{群的直积和半直积都应该分为“内”（子群间的运算）和“外”（两个群间的运算）}
+\addTODO{群的半直积尚未分为“内”（子群间的运算）和“外”（两个群间的运算）}
 
 \subsection{直积}
 
@@ -45,7 +45,7 @@
 \subsection{内直积与外直积}
 在引入内直积的概念之前，我们先看一个例子。
 
-设$G=G_1\times G_2$，对于任意$g_i\in G_1,h_i\in G_2$，可以验证$N_1=(g_i,e_2)\vartriangleleft G_1,N_2=(e_1,h_i)\vartriangleleft G_2$，其中$e_1,e_2$分别是$G_1,G_2$的单位元。易见$N_1\cap N_2=\{e\}$，且从运算角度上看$G=N_1N_2$，因此称$N_1N_2$是$G$的内直积，所选取的元素为$G$的“分解”表示。
+设$G=G_1\times G_2$，对于任意$g_i\in G_1,h_i\in G_2$，可以验证$N_1=(g_i,e_2)\vartriangleleft G,N_2=(e_1,h_i)\vartriangleleft G$，其中$e_1,e_2$分别是$G_1,G_2$的单位元。易见$N_1\cap N_2=\{e\}$，且从运算角度上看$G=N_1N_2$，因此称$N_1N_2$是$G$的内直积，所选取的元素为$G$的“分解”表示。
 
 又比如三维线性空间$V$，任意向量都可以分解为基矢组的线性表示，以$\{\bvec i,\bvec j,\bvec k\}$为基矢组，则三个正规子群分别为$(x,0,0),(0,y,0)$和$(0,0,z)$。
 \begin{definition}{}
@@ -64,13 +64,13 @@
 我们来尝试证明这一点。
 
 首先证明条件二能推出情况一。
-由于对于$i\neq j$有$N_i\cap N_j\subset N_j\cap N_1N_2...N_{j-1}N_j...N_k=\{e\}$，则任意两个不同的正规子群其交集只有单位元，且有$g_ig_j=g_jg_i$\footnote{根据消去律只需要证明$g_ig_jg_i^{-1}g_j^{-1}=e$，而左边元素属于$N_i\cap N_j$，得证。}。因此若$g_1g_2...g_k=e$，我们有
+由于对于$i\neq j$有$N_i\cap N_i\subset N_{i-1}\cap N_1N_2...N_{i+1}N_j...N_k=\{e\}$，则任意两个不同的正规子群其交集只有单位元，且有$g_ig_j=g_jg_i$\footnote{根据消去律只需要证明$g_ig_jg_i^{-1}g_j^{-1}=e$，而左边元素属于$N_i\cap N_j$，得证。}。因此若$g_1g_2...g_k=e$，我们有
 \begin{equation}
 g_1=g_k^{-1}g_{k-1}^{-1}...g_2^{-1}=N_1\cap N_2N_3...N_k=e~,
 \end{equation}
 ，其余元素同理可证。在这个证明里，我们可以看到关键利用的是元素可交换性。
 
-然后证明情况一能推出情况二。设$i\neq j,g\in N_i\cap N_j=g'_i=g'_j$，其中$g'_i\in N_i,g'_j\in N_j$，则$g_ig_j^{-1}=e$，填充该等式后我们有$e...g_i...g_j^{-1}...e=e$，则由单位元的分解唯一性得$g_i=g_j=e$，即$N_i\cap N_j=e$，于是$g_ig_j=g_jg_i$。
+然后证明情况一能推出情况二。设$i\neq j,g\in N_i\cap N_j=g_i=g_j$，其中$g_i\in N_i,g_j\in N_j$，则$g_ig_j^{-1}=e$，填充该等式后我们有$e...g_i...g_j^{-1}...e=e$，则由单位元的分解唯一性得$g_i=g_j=e$，即$N_i\cap N_j=e$，于是$g_ig_j=g_jg_i$。
 
 
 若$g_1g_2...g_k=h_1h_2...h_k$，我们有
@@ -82,9 +82,28 @@ g_1=g_k^{-1}g_{k-1}^{-1}...g_2^{-1}=N_1\cap N_2N_3...N_k=e~,
 然后我们来证明情况二能推出条件二。设$g=N_i\cap N_1N_2...N_{i-1}N_{i+1}...N_k$，则设存在一系列群元使得$g=g_i=g_1g_2...g_{i-1}g_{i+1}...g_k$。左右填充单位元后，利用表示的唯一性可得：任意群元都为单位元，于是条件二得证。
 
 
-实际上，\textbf{内直积与外直积在同构意义上是相同的，}内直积实际上是构建了以若干不相交子群为正规子群的群。
+从上述推导过程可知，内直积表示实际上是寻求\textbf{若干特殊的正规子群，彼此相交元素只有单位元}。
+
+内直积和外直积并非泾渭分明的关系。回顾最初的例子，对于外直积，我们可以构建若干正规子群，使之同构于这些子群的内直积。
+
 \begin{theorem}{}
-若$N_i\triangleleft G(i=1,2...k)$，且$G$是$N_i$的内直积，则$G\cong N_1\times N_2...N_k$。
+$G_1,G_2...G_n$是一系列群，设$G=G_1\times G_2...\times G_n$。定义
+\begin{equation}
+N_i=\left\{\left(e_1, \cdots, e_{i-1}, a_i, e_{i+1}, \cdots, e_n\right) \mid a_i \in G_i\right\}~,
+\end{equation}
+则有
+\begin{enumerate}
+\item $N_i\vartriangleleft G,N_i\simeq G_i$。
+\item 对于任意$g\in G$，都有$G=N_1N_2...N_k$，且该分解结果是唯一的。
+\end{enumerate}
+\end{theorem}
+\textbf{证明：}第一点略，我们主要证明第二点。（待补充）
+
+
+
+反过来，这些特殊正规子群的内直积也可以写为外直积形式。
+\begin{theorem}{}
+若$N_i\triangleleft G(i=1,2...k)$，且$G$是$N_i$的内直积，则$G\cong N_1\times N_2...\times N_k$。
 \end{theorem}
 \textbf{证明：}
 依旧设$g_i\in N_i$，由于$G=N_1N_2...N_k$，我们可以构建映射使得$f(g_1g_2...g_k)=(g_1,g_2,...,g_k)$，易见这是一个满射。由内直积的定义可知，对于$i\neq j$，有$g_ig_j=g_jg_i$。因而，$(g_1g_2...g_k)(h_1h_2...h_k)=(g_1h_1)(g_2h_2)...(g_nh_n)$，所以
@@ -95,7 +114,7 @@ f\qty((g_1g_2...g_k)(h_1h_2...h_k))&=f((g_1h_1)(g_2h_2)...(g_nh_n))\\
 &=f(g_1g_2...g_k)f(h_1h_2...h_k)~.
 \end{aligned}
 \end{equation}
-，因此$f$确实是同态映射。由单位元的分解唯一性可知$\opn{ker}f=\{e\}$，因此$f$是单射。综上所述，$f$是同构映射，定理得证。
+，因此$f$确实是同态映射。由于$\opn{ker}f=\{e\}$，因此$f$是单射。综上所述，$f$是同构映射，定理得证。
 
 
 \subsection{半直积}

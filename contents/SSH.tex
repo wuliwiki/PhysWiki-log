@@ -94,6 +94,8 @@ chmod 644 known_host
 dos2unix *
 \end{lstlisting}
 如果服务器端文件的权限不对会提示 \verb`permission denied`。
+\item 如果本地的公钥和私钥不匹配， ssh 会明确说
+\item 如果 ssh 看起来进去了，有欢迎提示，但是卡住了，很可能是卡在了 \verb`~/.bashrc` 或 \verb`~/.profile` 上面。 可以用以下命令绕过： \verb`ssh 用户名@主机名 -t "bash --noprofile --norc"` 登进去以后可以调试修改这两个文件， 再退出再正常 ssh。
 \item 如果反复检查 \verb`id_rsa` 的确是对的，那么有可能是换行符的问题，\textbf{文件最后必须换行}，且必须使用 LF 而不是 CRLF。 可以用 \verb`dos2unix -ih 文件名` 检查。
 \item 其中 7 变为二进制是 \verb`111` 对应 \verb`rwx` 的三个开关都打开， 0 对应 \verb`000` 没有任何权限， 所以 700 就是 owner 有所有权限， 其他用户没有任何权限
 \item 虽然 public key 中最后有 \verb`用户名@主机`， 其实这个好像没有任何影响， private key 和 public key 都可以复制到许多不同的机器中， 让这些机器两两之间互相 ssh， 而它们的 \verb`~/.ssh/authorized_keys` 中只需要有一条
