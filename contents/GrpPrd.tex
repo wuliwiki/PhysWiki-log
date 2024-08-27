@@ -5,7 +5,7 @@
 
 \pentry{正规子群\nref{nod_NormSG}}{nod_28ef}
 
-\addTODO{群的半直积尚未分为“内”（子群间的运算）和“外”（两个群间的运算）}
+
 
 \subsection{直积}
 
@@ -86,7 +86,7 @@ g_1=g_k^{-1}g_{k-1}^{-1}...g_2^{-1}=N_1\cap N_2N_3...N_k=e~,
 
 内直积和外直积并非泾渭分明的关系。回顾最初的例子，对于外直积，我们可以构建若干正规子群，使之同构于这些子群的内直积。
 
-\begin{theorem}{}
+\begin{theorem}{}\label{the_GrpPrd_2}
 $G_1,G_2...G_n$是一系列群，设$G=G_1\times G_2...\times G_n$。定义
 \begin{equation}
 N_i=\left\{\left(e_1, \cdots, e_{i-1}, a_i, e_{i+1}, \cdots, e_n\right) \mid a_i \in G_i\right\}~,
@@ -97,8 +97,9 @@ N_i=\left\{\left(e_1, \cdots, e_{i-1}, a_i, e_{i+1}, \cdots, e_n\right) \mid a_i
 \item 对于任意$g\in G$，都有$G=N_1N_2...N_k$，且该分解结果是唯一的。
 \end{enumerate}
 \end{theorem}
-\textbf{证明：}第一点略，我们主要证明第二点。（待补充）
+\textbf{证明：}第一点略。
 
+由结论一可知，$G$总可以分解为这些正规子群之积。设$g=(g_1,g_2...g_k),(e_1,e_2...g_i,e_{i+1}...e_k)=n_i$，则$g=n_1n_2...n_k$。如若分解不唯一，则有$g=n_1'n_2'...n_k'=(g_1',g_2'...g_k')$，与题设矛盾，所以分解表示是唯一的。
 
 
 反过来，这些特殊正规子群的内直积也可以写为外直积形式。
@@ -121,27 +122,35 @@ f\qty((g_1g_2...g_k)(h_1h_2...h_k))&=f((g_1h_1)(g_2h_2)...(g_nh_n))\\
 
 群的直积可以推广为以下概念：
 
-\begin{definition}{半直积}
-给定群 $G$，如果有 $G$ 的一个\textbf{正规子群}$N$ 和一个\textbf{子群}$H$，使得 $G = N H$\footnote{就是说，集合 $G= \{n h \mid n \in N, h\in H\}$。}，并且 $N \cap H = \{e\}$，那么我们称 $G$ 是 $N$ 和 $H$ 的\textbf{半直积（semi-direct product）}，记为 $G = N \rtimes H$。
+\begin{definition}{内半直积}
+给定群 $G$，如果有 $G$ 的一个\textbf{正规子群}$N$ 和一个\textbf{子群}$H$，使得 $G = N H$\footnote{就是说，集合 $G= \{n h \mid n \in N, h\in H\}$。}，并且 $N \cap H = \{e\}$，那么我们称 $G$ 是 $N$ 和 $H$ 的\textbf{内半直积（semi-direct product）}，记为 $G = N \rtimes H$。
 \end{definition}
 
 可以注意到，直积是半直积的一种，只要把 $\{(g, e)\}$ 和 $\{g\}$ 等同、把 $\{(e, h)\}$ 和 $\{h\}$ 等同即可。这样，尽管本节中直积是用“运算的笛卡尔积”来定义的，而半直积是用“已有的群运算”来定义的，这两个在特定情况下是等价的。
 
-半直积不一定是内直积，这是因为定义中我们只要求参与运算的两个群中的一个为正规子群，而如果两个群 $G$ 和 $H$ 进行直积，那么容易证明它们俩都是群 $G\times H$ 的正规子群。从这也可以看出来为什么此处半直积的定义要先给出 $G$，而不是像直积的定义一样直接用两个群的乘积得到 $G\times H$。
+内半直积不一定是内直积，这是因为定义中我们只要求参与运算的两个群中的一个为正规子群，而如果两个群 $G$ 和 $H$ 进行直积，那么容易证明它们俩都是群 $G\times H$ 的正规子群。从这也可以看出来为什么此处半直积的定义要先给出 $G$，而不是像直积的定义一样直接用两个群的乘积得到 $G\times H$。
 
-事实上，我们也可以用以上定义半直积的语言来描述直积：给定群 $G$，如果有 $G$ 的两个正规子群 $H$ 和 $N$，满足 $H\cap N=\{e\}$，并且 $G=NH$，那么称 $G$ 是 $N$ 和 $H$ 的直积，记为 $G=N\times H$。
+事实上，我们也可以用以上定义内半直积的语言来描述直积：给定群 $G$，如果有 $G$ 的两个正规子群 $H$ 和 $N$，满足 $H\cap N=\{e\}$，并且 $G=NH$，那么称 $G$ 是 $N$ 和 $H$ 的内直积，记为 $G=N\times H$。
 
 半直积的定义也可以不依赖于预先给定的 $G$，只是这样会稍显复杂一些：
 
-\begin{definition}{半直积}
-给定群 $N$ 和 $H$，并且有同态：$f:H\rightarrow \opn{Aut}N$。在笛卡尔积集合 $N\times H$ 上定义运算：对于 $n_i\in N, h_i\in H$，有 $(n_1, h_1)\cdot(n_2, h_2)=(n_1\cdot f_{h_1}(n_2), h_1\cdot h_2)$。集合 $N\times H$ 配合这个运算可以得到一个群，称为\textbf{群}$N$\textbf{和群}$H$\textbf{关于同态}$f$\textbf{的半直积}，记为 $N\rtimes_fH$。
+\begin{definition}{外半直积}
+给定群 $N$ 和 $H$，并且有同态：$f:H\rightarrow \opn{Aut}N$。在笛卡尔积集合 $N\times H$ 上定义运算：对于 $n_i\in N, h_i\in H$，有 $(n_1, h_1)\cdot(n_2, h_2)=(n_1\cdot f_{h_1}(n_2), h_1\cdot h_2)$。集合 $N\times H$ 配合这个运算可以得到一个群，称为\textbf{群}$N$\textbf{和群}$H$\textbf{关于同态}$f$\textbf{的外半直积}，记为 $N\rtimes_fH$。
 \end{definition}
 
-我们梳理一下这个定义。为了定义半直积，我们要用到三个部分，即两个群 $N$ 和 $H$，再加上一个同态 $f$。要注意，$f$ 不是 $H$ 到 $N$ 的同态，而是到 $\opn{Aut} N$ 的，后者是 $N$ 的\textbf{自同构群}。也就是说，每个 $f(h)$ 表示一个 $N\rightarrow N$ 的自同构映射，为了方便，简写为 $f_h$。
-
-\addTODO{如何理解两个 半直积 之间的一致性？}
+我们梳理一下这个定义。为了定义半直积，我们要用到三个部分，即两个群 $N$ 和 $H$，再加上一个同态 $f$。要注意，$f$ 不是 $H$ 到 $N$ 的同态，而是到 $\opn{Aut} N$ 的，后者是 $N$ 的\textbf{自同构群}。也就是说，每个 $f(h)$ 表示一个 $N\rightarrow N$ 的自同构映射\footnote{因此$f(h)$实际上是$H$对$N$的群作用。}，为了方便，简写为 $f_h$。
 
 
+
+类似于内直积和外直积，内半直积和外半直积也没有本质区别。设$G$是$N,H$的内半直积，$N$是正规子群，则对于任意$g_1=n_1h_1,g_2=n_2h_2$，我们有
+\begin{equation}
+\begin{aligned}
+g_1g_2&=n_1h_1n_2h_2\\
+&=n_1h_1n_2h_1h_1^{-1}h_2\\
+&=(n_1f_{h_1}(n_2),h_1h_2)~.
+\end{aligned}
+\end{equation}
+可见$f_h$是伴随作用，内半直积的运算可以用外半直积的形式表示。和\autoref{the_GrpPrd_2} 类似，对于外半直积，定义一个与正规子群之间的同构，再加上定义伴随作用为同态$f$，便能得到$G$的内半直积分解表示。
 
 
 
