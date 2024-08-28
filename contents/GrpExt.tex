@@ -6,6 +6,8 @@
 
 \pentry{直积和半直积（群）\nref{nod_GrpPrd}}{nod_4306}
 
+注：本节参考《代数学基础》，本节主要编辑即是此书作者。
+
 如果说求商群的过程是在“模糊化”一个群，那么直积可以理解为“精细化”一个群。
 
 具体地，考虑群直积$G\times H$，则$\{e\}\times H$是其一个正规子群，于是求商群$G\times H/\{e\}\times H$的过程就是把第一分量相同的元素$(g, h_1)$和$(g, h_2)$都视为同一个元素，即模糊了它们之间的差别。反之，已知群$G$和$H$，则求直积的过程可以理解为把每个元素$g\in G$细化为集合$\{(g, h)\mid h\in H\}$，从一个点变成更多点。
@@ -15,15 +17,106 @@
 
 
 
-\begin{example}{}
-考虑循环群$\mathbb{Z}/4\mathbb{Z}$和Klein群$K_4=\mathbb{Z}/2\mathbb{Z}\times \mathbb{Z}/2\mathbb{Z}$。二者都含$4$个元素，都有正规子群$\mathbb{Z}/2\mathbb{Z}$，但
+\begin{example}{}\label{ex_GrpExt_1}
+考虑循环群$\mathbb{Z}/4\mathbb{Z}$和Klein群$K_4=\mathbb{Z}/2\mathbb{Z}\times \mathbb{Z}/2\mathbb{Z}$。二者都含$4$个元素，都有正规子群$\mathbb{Z}/2\mathbb{Z}$，但$\mathbb{Z}/4\mathbb{Z}\neq \mathbb{Z}/2\mathbb{Z}\times \mathbb{Z}/2\mathbb{Z}$，故不能循环群$\mathbb{Z}/4\mathbb{Z}$写成它的商群和正规子群的直积。
 \end{example}
 
 
 
 
+如何正确表达求商群的逆运算呢？如果说求商群$G/N$是把正规子群$N$的每个左陪集都看成一个元素，抹去其运算细节，那么反过来，把$G/N$中的每个元素都扩张为一个群，就能得到$G$，我们称这个过程为\textbf{群的扩张}。
 
 
+
+\begin{definition}{群的扩张}\label{def_GrpExt_1}
+给定群$K$和$N$，如果存在一个群$G$和群同态$f:G\to K$，使得$\opn{ker}f\cong N$，则称$G$为群$K$过群$N$的\textbf{扩张（extension）}。
+
+称$N$为该扩张的\textbf{扩张核}，或简称为核。
+\end{definition}
+
+
+
+
+群的扩张还可以用一种更简洁的语言来表达。
+
+
+
+\begin{definition}{正合序列}
+
+给定群$G_i$，如果存在同态$f_i:G_i\to G_{i+1}$，使得$\opn{Im}f_i=\opn{ker}f_{i+1}$，则称如下的序列
+\begin{equation}
+    \cdots \xrightarrow{f_{i-2}} G_{i-1} \xrightarrow{f_{i-1}} G_i \xrightarrow{f_i} G_{i+1} \xrightarrow{f_{i+1}}\cdots~
+\end{equation}
+为一个\textbf{正合序列（exact sequence）}。
+
+不至于混淆时，也可以省略不写箭头上方的同态。
+
+令$1$表示平凡群，则称
+\begin{equation}
+    1\xrightarrow{}H\xrightarrow{\lambda}G\xrightarrow{\mu}K\xrightarrow{}1~
+\end{equation}
+为一个\textbf{短正合序列（short exact sequence）}。
+
+\end{definition}
+
+
+按照正合序列的定义，短正合序列中$\lambda$必是单射，这意味着$H$同构于$G$的某个子群；同时根据\textbf{群同态基本定理}（\autoref{exe_Group2_1}），$K\cong G/H$，这意味着我们可以用短正合序列来定义群的扩张：
+
+
+
+
+\begin{exercise}{群的扩张（另一定义）}
+证明：“群$G$是群$K$过群$H$的扩张”当且仅当“存在短正合序列$1\xrightarrow{}H\xrightarrow{\lambda}G\xrightarrow{\mu}K\xrightarrow{}1$”。
+\end{exercise}
+
+
+
+接下来，我们看一些群扩张的例子，加深体会。
+
+
+
+\begin{example}{}
+
+\autoref{ex_GrpExt_1} 中的两个群，分别可以写成以下扩张：
+\begin{equation}
+\left\{
+\begin{aligned}
+    &1\xrightarrow{}\mathbb{Z}/2\mathbb{Z}\xrightarrow{\lambda_1}K_4\xrightarrow{\mu_1}\mathbb{Z}/2\mathbb{Z}\xrightarrow{}1, \\
+    &1\xrightarrow{}\mathbb{Z}/2\mathbb{Z}\xrightarrow{\lambda_2}K_4\xrightarrow{\mu_2}\mathbb{Z}/2\mathbb{Z}\xrightarrow{}1~. 
+\end{aligned}
+\right. 
+\end{equation}
+
+这个例子说明，同一个群过同一个群的扩张，方式不唯一。
+
+\end{example}
+
+
+
+
+\begin{example}{}
+考虑\textbf{满同态}$\mu:\opn{S}_3\to\mathbb{Z}/2\mathbb{Z}$，其中奇置换都映射到$1$，偶置换映射到$0$。考虑$\opn{ker}\mu=\{(1), (1\ 2\ 3), (1\ 3\ 2)\}=\mathbb{Z}/3\mathbb{Z}$，易得短正合序列：
+\begin{equation}
+1\xrightarrow{}\mathbb{Z}/3\mathbb{Z}\xrightarrow{\lambda}\opn{S}_3\xrightarrow{\mu}\mathbb{Z}/2\mathbb{Z}\xrightarrow{}1~. 
+\end{equation}
+
+这个序列说明，结构简单的阿贝尔群也能扩张出结构复杂的非阿贝尔群。
+\end{example}
+
+
+\begin{example}{}
+从群扩张的角度，可以清晰地看出正交群和自旋群的结构差异：
+
+\begin{equation}
+    1\xrightarrow{}\opn{SO}_3\xrightarrow{}\opn{O}_n\xrightarrow{}\mathbb{Z}/2\mathbb{Z}\xrightarrow{}1~. 
+\end{equation}
+\begin{equation}
+    1\xrightarrow{}\mathbb{Z}/2\mathbb{Z}\xrightarrow{}\opn{Spin}_n\xrightarrow{}\opn{SO}_3\xrightarrow{}1~. 
+\end{equation}
+
+直观来说，正交群$\opn{O}_n$可以看成是给特殊正交群加了一个“镜像”，自旋群$\opn{Spin}_n$则是把二元群的每个元素扩张为一个特殊正交群。
+
+\end{example}
 
 
 
