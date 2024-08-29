@@ -1,5 +1,5 @@
 % 单群
-% keys 单群|正规子群|有限单群|正规子群列|合成序列|composition sequence
+% keys 单群|正规子群|有限单群|正规子群列|合成序列|composition sequence|Jordan-Hölder定理
 % license Xiao
 % type Tutor
 
@@ -21,35 +21,174 @@
 
 每一个非平凡整数都可以通过因子分解，一步步拆成素因子更少的数，直到得到素数。比如说，$120$ 可以拆成 $4 \times 30$， $30$ 可以拆成 $2 \times 15$， $15$ 再拆成 $3 \times 5$， $3$ 和 $5$ 就无法再拆了。群也类似，可以把群拆成自己的正规子群和子群的半直积。
 
-\begin{definition}{正规子群列}
-给定群 $G$，如果有 $n+1$ 个群 $\{G_i\}_{i = 1}^n$，满足 $\{e\} = G_0 \triangleleft G_1 \triangleleft \cdots \triangleleft G_n = G$，即满足 $G_{i}$ 都是 $G_{i+1}$ 的正规子群，称之为一个\textbf{正规子群序列（subnormal series）}，$G_{i+1} / G_{i}$ 被称为该序列的\textbf{因子群（factor group）}， $n$被称为该序列的\textbf{长度（length）}。
+\begin{definition}{次正规序列}
+给定群 $G$，如果有 $n+1$ 个群 $\{G_i\}_{i = 1}^n$，满足 $\{e\} = G_0 \triangleleft G_1 \triangleleft \cdots \triangleleft G_n = G$，即满足 $G_{i}$ 都是 $G_{i+1}$ 的正规子群，称之为$G$的一个\textbf{次正规序列（subnormal series）}，$G_{i+1} / G_{i}$ 被称为该序列的\textbf{合成因子（factor group或composition factor）}， $n$被称为该序列的\textbf{长度（length）}。
 \end{definition}
 
 我们有 $G_{i + 1} = G_{i} \rtimes (G_{i+1} / G_{i})$.
 
-\addTODO{factor group的翻译待定}
-\addTODO{统一一下“正规子群列”和“正规子群序列”，我更倾向序列，不过如果有官方翻译更好}
+
+%注释原因：已修正为“合成因子（composition factor）”、“次正规序列”，参考朱富海《抽象代数》的称呼
+%\addTODO{factor group的翻译待定}
+%\addTODO{统一一下“正规子群列”和“正规子群序列”，我更倾向序列，不过如果有官方翻译更好}
 
 注意，正规子群列只要求相邻的两个群具有“正规子群”的关系，而 $G_{i+2}$ 不一定是 $G_i$ 的正规子群。
 
-如果序列满足任意的 $G_{i} \neq G_{i+1}$，（等价的，所有因子群 $G_{i+1} / G_{i}$ 非平凡），该序列被称为\textbf{无重复的}。
+如果序列满足任意的 $G_{i} \neq G_{i+1}$，（等价的，所有合成因子 $G_{i+1} / G_{i}$ 非平凡），该序列被称为\textbf{无重复的}。
 
 \addTODO{“无重复的”不确定是否为官方翻译}
 
-有时候，无重复的正规子群列的相邻两项中间可以再插入一个群，使之仍然成为一个正规子群列。这样的行为有时被称为“加细”。如果一个正规子群列已经无法加细，那么我们称之为群 $G$ 的一个\textbf{合成序列（composition sequence）}。
+有时候，无重复的正规子群列的相邻两项中间可以再插入一个群，使之仍然成为一个正规子群列。这样的行为有时被称为“加细”。如果一个正规子群列已经无法加细，那么我们称之为群 $G$ 的一个\textbf{合成序列}。或者说，合成序列是按如下方法定义的：
 
-\begin{theorem}{}
-合成序列的任何一个因子群都是单群
+\begin{definition}{}
+
+如果次正规序列的每一个合成因子都是单群，则称之为一个\textbf{合成序列（composition sequence）}。
+
+\end{definition}
+
+
+类比到非负整数的质因数分解，合成序列就好比是每次只拿走一个质因子（单群）。非负整数“合成序列”的分解顺序不一定唯一，比如$60$可以写成$2\times 3\times 2\times 5$，也可以写成$5\times 3\times 2\times 2$，但是任何一个“合成序列”里的元素一定是一样的（计入重数）\footnote{计入重数的意思，就是比如$60$的因子里出现了两次$2$，那么两个$2$都要算进去，而不是把相同元素视为同一个。比如说，$5\times 3 \times 2$的因子里只出现了一个$2$，它就和$5\times 3\times 2\times 2$不是同一个“合成序列”。}。群的合成序列也类似，合成序列不唯一，但其合成因子集合一样（计入重数）。这就是以下Jordan-Hölder定理在群论中的情形。
+
+
+
+
+
+
+\subsection{Jordan-Hölder定理\footnote{本节摘自《代数学基础》。}}
+
+
+
+
+\begin{theorem}{Jordan-Hölder定理}
+如果群$G$有合成序列，则所有合成序列同构。进而，如果$G$有主序列，则所有主序列同构。
 \end{theorem}
 
 
-类比到非负整数的质因数分解，合成序列就好比是每次只拿走一个质因子（单群）。非负整数的“合成序列”不一定唯一，但是所有“合成序列”的长度一定是一样的。群的合成序列也类似，合成序列不唯一，但其长度必然是一样的。这就是以下Jordan-Holder定理在群论中的情形：
+\textbf{证明}：
 
-\begin{theorem}{Jordan-Holder定理（有限群）}
-若一个群 $G$ 有两合成序列 $\{e\} = G_0 \triangleleft G_1 \triangleleft \cdots \triangleleft G_r = G$ 和 $\{e\} = H_0 \triangleleft  H_1 \triangleleft \cdots \triangleleft H_s = G$，那么必有 $r=s$。
-\end{theorem}
+主序列都是合成序列，从而如果命题第一句成立则第二句自然成立。只需证明合成序列同构即可。
 
-因此我们可以把群 $G$ 的\textbf{长度（length）}定义成它的合成序列的长度。
+给定群$G$的两个合成序列
+\begin{equation}
+    G= K_1\rhd K_2\rhd \cdots \rhd K_r\rhd \{e\}, 
+~\end{equation}
+和
+\begin{equation}
+    G= H_1\rhd H_2\rhd \cdots \rhd H_s\rhd \{e\}. 
+~\end{equation}
+
+
+
+取$H_i$，考虑它的一个次正规序列\footnote{对群$A$的任意子群$B$和正规子群$N$，有$B\cap A=B\rhd B\cap N$。}
+\begin{equation}
+    H_i\cap K_1\rhd H_i\cap K_2\rhd \cdots \rhd H_i\cap K_r\rhd \{e\}. 
+~\end{equation}
+已知$H_{i+1}$是$H_i$的一个极大正规真子群，我们可以把它利用起来，乘进上述次正规序列里
+\footnote{$H_{i+1}(H_i\cap K_j)H_{i+1}\rhd H_{i+1}(H_i\cap K_{j+1})H_{i+1}$的证明见定理证明后的讨论。}
+\footnote{别忘了群中集合的运算表达：$AB=\{ab\mid a\in A, b\in B\}$。}：
+\begin{equation}\label{eq_SemGrp_1}
+    (H_i\cap K_1)H_{i+1}\rhd (H_i\cap K_2)H_{i+1}\rhd \cdots \rhd (H_i\cap K_r)H_{i+1}\rhd H_{i+1}. 
+~\end{equation}
+
+考虑到$H_i\cap K_1=H_i$，以及$H_{i+1}$是$H_i$的极大正规真子群，故存在\textbf{唯一的}$j$使得$(H_i\cap K_j)H_{i+1}=H_i$，而$(H_i\cap K_{j+1})H_{i+1}=H_{i+1}$。
+
+反过来同理，存在\textbf{唯一的}$m$使得$(K_j\cap H_m)K_{j+1}=K_j$，而$(K_j\cap H_{m+1})K_{j+1}=K_{j+1}$。
+
+
+
+
+
+
+\textbf{下证}$m=i$，即$H_i$和$K_j$相互对应。
+
+%由于$(H_i\cap K_j)H_{i+1}=H_i$，故$H_i\cap K_j - H_{i+1}$非空，即图\ref{JordanHolderTheoremProof1}中的阴影区域非空。又因为$(H_i\cap K_{j+1})H_{i+1}=H_{i+1}$，故$(H_i\cap K_{j+1})\subseteq H_{j+1}$，同样如图所示。
+
+
+
+% \begin{figure}[htbp]
+%     \centering
+%     \includegraphics[scale=0.6]{figures/Group/JordanHolderTheoremProof1.pdf}
+%     \caption{Jordan-Hölder定理证明过程配图。根据证明过程中$j$的选择，阴影区域$H_i\cap K_j - H_{j+1}$非空，而$(H_i\cap K_{j+1})\subseteq H_{j+1}$。注意$K_{j+1}$不一定是$H_{j+1}$的子集，所以图中$K_{j+1}$表示为两个区域。}\label{JordanHolderTheoremProof1}
+%     \end{figure} 
+
+
+
+反过来，$(K_j\cap H_i)K_{j+1}$要么是$K_j$，要么是$K_{j+1}$，但是阴影区域非空意味着它不是$K_{j+1}$，故必有
+\begin{equation}
+    (K_j\cap H_i)K_{j+1} = K_j. 
+~\end{equation}
+
+同样，$(K_j\cap H_{i+1})K_{j+1}$要么是$K_j$，要么是$K_{j+1}$。因为$(K_j\cap H_{i+1})(K_{j+1}\cap H_i)\subseteq H_{i+1}$，而群运算的唯一性和封闭性使得$(K_j\cap H_{i+1})(K_{j+1} - H_i)\subseteq K_j-H_i$，于是非空阴影区域\textbf{不包含于}$(K_j\cap H_{i+1})K_{j+1}$。于是$(K_j\cap H_{i+1})K_{j+1}$不是$K_j$，故必有
+\begin{equation}
+    (K_j\cap H_{i+1})K_{j+1} = K_{j+1}. 
+~\end{equation}
+这就证明了那个唯一的$m$就是$i$。
+
+
+
+
+
+
+
+
+
+\textbf{最后证明}$H_i/H_{i+1}$和对应的$K_j/K_{j+1}$同构。
+
+由一个定理\footnote{此定理出自《代数学基础》，与百科系统不兼容从而不便引用，故在此处复述：若$H$是$G$的子群且$N\lhd G$，则$HN/N\cong H/(H\cap N)$。此处代入$G=H_i, N=(H_i\cap K_{j+1})H_{i+1}, H=H_i\cap K_j$即可。}知\footnote{最后一个等号应用了这个原理：给定某群的子群$A, B, C$，则$B\subseteq A \iff A\cap(BC)=(A\cap C)B$。因为$A\cap (BC)$是$\{bc\mid b\in B, c\in C, bc\in A\}$，而$(A\cap C)B$是$\{bc\mid b\in B, c\in C, c\in A\}$，故两个集合相等相当于说$bc\in A\iff c\in A$，从而$b\in A$。}
+\begin{equation}
+    \begin{aligned}
+    H_i/H_{i+1} ={}& (H_i\cap K_j)H_{i+1} / (H_i\cap K_{j+1})H_{i+1}\\
+    ={}& (H_i\cap K_j)(H_i\cap K_{j+1})H_{i+1} / (H_i\cap K_{j+1})H_{i+1}\\
+    \cong{}& (H_i\cap K_j) / (H_i\cap K_j)\cap[(H_i\cap K_{j+1})H_{i+1}]\\
+    ={}& (H_i\cap K_j) / K_j\cap[(H_i\cap K_{j+1})H_{i+1}]\\
+    ={}& (H_i\cap K_j) / (K_j\cap H_{i+1})(H_i\cap K_{j+1}). 
+    \end{aligned}
+~\end{equation}
+同理
+\begin{equation}
+    K_j/K_{j+1} \cong (K_j\cap H_i)/(H_i\cap K_{j+1})(K_j\cap H_{i+1}). 
+~\end{equation}
+比较即可得$H_i/H_{i+1} \cong K_j/K_{j+1}$。
+
+
+
+\textbf{证毕}。
+
+
+
+上述证明中没有展开讨论为什么
+\footnote{证明中此构造启发自朱富海老师的《抽象代数》中Jordan-Hölder定理的证明，我觉得很有创意，比常见的归纳法要漂亮。}
+$H_{i+1}(H_i\cap K_j)H_{i+1}\rhd H_{i+1}(H_i\cap K_{j+1})H_{i+1}$，也没有据此证明$(H_i\cap K_{j})H_{i+1}\rhd (H_i\cap K_{j+1})H_{i+1}$，我们现在讨论。
+
+先证明一个简化问题：给定$G$的子群$K, H, N$，若$K\rhd H$，且对任意$k\in K$都有$kHk^{-1}\subseteq H$\footnote{注意，$H$不一定要求是$K$的子群。}，则$HKH\rhd HNH$。
+
+任取$h\in H, k\in K$，则$hkh^{-1} H hk^{-1}h^{-1}=H$，$kNk^{-1}=N$且$hkh^{-1}k^{-1}$，从而
+\begin{equation}
+    \begin{aligned}
+    hkh^{-1} HNH hk^{-1}h^{-1} ={}&  H\qty(hkh^{-1} N hk^{-1}h^{-1})H\\
+    ={}& H\qty(hkh^{-1} k^{-1} )k N k^{-1} (k hk^{-1}h^{-1})H\\
+    ={}& HNH. 
+    \end{aligned}~
+\end{equation}
+
+最后，据一个引理\footnote{此引理也出自《代数学基础》，不方便引用，在此简述：给定$G\rhd N$，则$\forall g\in G, NgN=gN$。}，考虑到$H_{i+1}\lhd H_i$，可知
+\begin{equation}
+H_{i+1}(H_i\cap K_j)H_{i+1}=(H_i\cap K_j)H_{i+1}. ~
+\end{equation}
+
+
+这样，取$K=H_i\cap K_j$，$H=H_{i+1}$和$N=H_i\cap K_{j+1}$，即可得证原定理证明中\autoref{eq_SemGrp_1} 是次正规序列。
+
+
+
+
+
+
+
+
+
+
+我们可以把群 $G$ 的\textbf{长度（length）}定义成它的任意合成序列的长度。
 
 \addTODO{此处Jordan-Holder定理没有证明和引申}
 \subsection{有限单群}

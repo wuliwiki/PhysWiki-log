@@ -3,9 +3,7 @@
 % license Usr
 % type Tutor
 
-\begin{issues}
-\issueDraft
-\end{issues}
+%存在内容移动自充分必要条件，并加以调整，原文已无存在必要。
 
 \pentry{命题与推理\nref{nod_HsLogi}，集合的基本运算\nref{nod_HsSeOp}}{nod_acc5}
 
@@ -220,96 +218,109 @@ $A$ & $\lnot A$<br>（非$A$） \\
 
 \subsubsection{量词命题的否定}
 
-一般我们说一个人说话太绝对了，想要反驳他时，就会去找一个特例来反驳他，就像\aref{反证法}{sub_HsCoPr_1}的精髓就是找到反例。这个“绝对”一般就是指“全称量词”，而想要否定全称量词，只要存在一个反例就够了。同样，如果有人说存在某个特别奇怪的事情，想要反驳他，一般会把所有的情况都列出来，证明这件事不会发生。
+在生活中，我们经常听到一些非常“绝对”的说法，比如“所有人都喜欢吃巧克力”，这个“绝对”一般就是指“全称量词”。想要反驳他时，一般会去找一个特例来反驳他，比如：“王某就不喜欢吃巧克力”，就像\aref{反证法}{sub_HsCoPr_1}的精髓就是找到反例，只需要找到一个不喜欢吃巧克力的人，这样就能证明这个说法是错误的，所以否定“全称量词”的方法就是存在一个反例。
+
+相反，如果有人说存在某个特别奇怪的事情，比如有人说“某个地方有会飞的猪”，你可能会觉得这不可能。为了反驳这种说法，一般会尝试列出所有已知的情况，证明“所有地方都没有会飞的猪”。这就是否定“存在量词”的方法：证明在所有情况下，这种情况都不可能发生。
+
+通过将上面两个情况作对比，可以看出，其实“全称量词$\forall$”与“存在量词$\exists$”之间互为否定，即：
+\begin{definition}{量词命题的否定}
+若命题$A$为“$\forall x\in M,P(x)$”，则命题$A$的否定$\lnot A$为：
+\begin{equation}
+\exists x\in M,\lnot P(x)~.
+\end{equation}
+
+若命题$B$为“$\exists x\in M,P(x)$”，则命题$B$的否定$\lnot B$为
+\begin{equation}
+\forall x\in M,\lnot P(x)~.
+\end{equation}
+\end{definition}
+
+看上去需要记两个，但其实对量词命题进行否定时，需要做两件事：
+\begin{enumerate}
+\item 将$\forall$换成$\exists$，$\exists$换成$\forall$；
+\item 将原本量词限定的开放命题$P(x)$变成它的否定$\lnot P(x)$。
+\end{enumerate}
+
+注意，由于开放命题只要求存在未知量，因此，$P(x)$本身也可能是复合命题，在实际操作时，要一层层根据命题的特性来处理命题的否定。
+\begin{exercise}{求命题$A$：“$\forall x\in X,\exists y\in Y,G(x,y)$”的否定。}
+这里的命题$A$可以看成是由两个命题得到的，分别是：
+\begin{itemize}
+\item $A:\forall x\in X,P(x)$
+\item $P(x):\exists y\in Y,G(x,y)$
+\end{itemize}
+按照否定规则一步一步来：
+\begin{itemize}
+\item $\lnot A:\exists x\in X,\lnot P(x)$
+\item $\lnot P(x):\forall y\in Y,\lnot G(x,y)$
+\end{itemize}
+于是，把他们合并在一起就可以知道结果是：
+$$
+\lnot A:\exists x\in X,\forall y\in Y,\lnot G(x,y)~.
+$$
+\end{exercise}
 
 \subsection{条件命题}\label{sub_HsCoPr_1}
 
-\textbf{条件命题}（conditional proposition或\textbf{蕴含命题}，implication）用于表达两个命题之间的条件关系，通常形如“若 $P$ ，则 $Q$ ” ，由一个前件（antecedent）$P$和一个后件（consequent）$Q$组成，通过“如果……那么……”（if…then…）的形式来连接。条件命题在计算机领域广泛使用。
+在日常生活和学习中，我们经常会遇到“如果…那么…”这样的表达方式。比如：
+\begin{itemize}
+\item 如果天气晴朗，那么我们就去郊游
+\item 若一个数能被4整除，则它能被2整除
+\item 三角形内角和180°，即“如果一个多边形是三角形，那么它的内角和是180度”
+\end{itemize}
+这些表达方式实际上都涉及到一个重要的逻辑概念：条件命题。条件命题不仅在生活中十分常见，在计算机领域也被广泛使用。
 
-“若 $P$ ，则 $Q$ ”表示如果命题 $P$ 为真，那么命题 $Q$ 也为真。条件命题通常用符号$P\Rightarrow Q$或$P\rightarrow Q$表示，也读作“$P$蕴含$Q$”\footnote{事实上，用逻辑连接词表示的蕴含的定义是$\lnot P\lor Q$。但涉及这个定义的讨论，已超出高中的范畴，关于蕴含还有很多知识，可以参考\enref{命题及其表示法}{Propos}。}。
+\begin{definition}{条件命题}\label{def_HsCoPr_3}
+形如“若$P$，则$Q$”，用于表达两个命题之间的条件关系的命题，称为\textbf{条件命题}（conditional proposition或\textbf{蕴含命题}，implication），通常记作：
+\begin{equation}
+P\Rightarrow Q\qquad\text{或}\qquad P\rightarrow Q~.
+\end{equation}
+其中：命题$P$称为\textbf{前件}（antecedent，或\textbf{条件}），命题$Q$称为\textbf{后件}（consequent，或\textbf{结论}），读作“若$P$，则$Q$”、“如果$P$，那么$Q$”或者“$P$蕴含$Q$”、“$P$能推出$Q$”。
+\end{definition}
 
-\subsubsection{充分与必要}
+在高中阶段\footnote{事实上，使用逻辑连接词来定义的“蕴含”为：$\lnot P\lor Q$，它与\aref{演绎推理}{sub_HsLogi_1}的三段论是完全等同的。但涉及这个定义的讨论，已超出高中的范畴，关于蕴含还有很多知识，可以参考\enref{命题及其表示法}{Propos}。}，将“$P\Rightarrow Q$”理解为表示“如果命题$P$为真，那么命题$Q$也为真”就可以了。
 
-如果这个条件命题成立，则$P$称为$Q$的充分条件，反过来看则$Q$称为$P$的必要条件。
-当且仅当
-%移动自充分必要条件，并加以调整
-若由命题 $A$ 能推导出命题 $B$， 则 $A$ 是 $B$ 的充分条件， $B$ 是 $A$ 的必要条件。如何理解这个定义呢？下面举两个例子。
+\begin{definition}{条件命题的否定}
+若命题$A$为“$P\Rightarrow Q$”，则命题$A$的否定$\lnot A$，也记作$P\not\Rightarrow Q$，等价于：
+\begin{equation}
+P\Rightarrow \lnot Q~.
+\end{equation}
+读作“若$P$，则非$Q$”或者“$P$不能推出$Q$”、“$P$推不出$Q$”。
+\end{definition}
 
-\begin{example}{}
-命题 $A$：四边形 $ABCD$ 是一个正方形。
+总的说来，否定条件命题时，只需要否定后件，而前件则不用动。另外，“$P$不能推出$Q$”是一种符合语言习惯的表达，但很多同学会因为这个表达而对条件命题的否定造成混淆，不知道应该否定哪个部分。其实在前面的讨论中，我们给出的命题并未涉及其真值的判定。实际上，条件命题既可以是真命题，也可以是假命题。然而，在高中教材中，有时对这些概念的表达不够明确，容易导致初学者在理解条件命题的否定以及充分条件和必要条件时产生困惑。因此，请务必注意本文和教材在表达上的区别。具体说来：
+\begin{itemize}
+\item 在教材中，如果$P$能够推出$Q$，通常记作$P\Rightarrow Q$；否则，记作$P\not\Rightarrow Q$。在这种表达中，$P\Rightarrow Q$或$\Rightarrow$符号已经隐含了真值的判断，即认为“$P$能推出$Q$”这一命题本身就包含了真假判定。
+\item 在本文中，我们将命题“如果$P$能推出$Q$”记作$P\Rightarrow Q$，其否定形式记作$P\not\Rightarrow Q$。然后，我们再对命题的真值进行讨论：如果$P\Rightarrow Q$是真命题，那么$P\not\Rightarrow Q$为假；反之，如果$P\Rightarrow Q$是假命题，那么$P\not\Rightarrow Q$为真。同时，在不引起歧义的情况下才认为“$P$能推出$Q$”这一句话包含真假判定。
+\end{itemize}
 
-命题 $B$：四边形 $ABCD$ 的四条边相等。
+\subsubsection{*逆命题与否命题}
 
-首先我们考虑 $A$ 对 $B$ 的关系。显然，由 $A$ 可以推出 $B$， 说明 $A$ 中有充分的信息能得到 $B$， 所以叫做 $B$ 的\textbf{充分条件}。 $A$ 中包括得到 $B$ 所必要的信息，还\textbf{可能}包括一些其他信息，例如由命题 $A$ 可以得出四边形任意两条临边垂直。 这些多出来的信息并不一定是得到 $B$ 所必须的，因为还有许多其他的四边形四条边相等但并不是正方形。
+其实，通过\aref{条件命题的概念}{def_HsCoPr_3}，你可以注意到，条件命题由于其特殊的形式，尽管研究的也是两个命题的关系，但是它和“且”、“或”不同，$\Rightarrow$符号的左右两个命题并不满足交换律，也就是$P$（前件）和$Q$（后件）不能随意互换，这使得二者地位并不“平等”。下面研究条件命题的前后件改变时的不同的形态。
 
-那如何判断 $A$ 中有没有多余的信息呢？我们可以反过来试图用 $B$ 推导命题 $A$， 若原则上得不出 $A$ （而不是因为我们逻辑水平不够），则证明 $A$ 中有多余的条件。这时我们说 $A$ 不是 $B$ 的\textbf{必要条件}，因为 $A$ 中的一些信息是多余的，也就是没有必要的。综上， $A$ 是 $B$ 的\textbf{充分非必要条件}。
+想象一下，你在和朋友讨论天气。你说：“如果今天下雨，那么我们就不去公园。”这时路人A过来说说：“如果你们不去公园，那么今天就一定下雨了吗？”路人B过来说：“如果今天不下雨，那你们就一定会去公园吗？”尽管这两个人的语气听起来蛮气人，但这两个问题却是研究中经常会遇到的，与你最开始的表达密切相关的。如果将疑问句改成陈述句，那么就变成了：
+\begin{itemize}
+\item A：如果我们不去公园，那么今天就一定下雨了。
+\item B：如果今天不下雨，那我们就一定会去公园。
+\end{itemize}
 
-现在我们从 $B$ 的角度考虑。虽然由条件 $B$ 不能推导出条件 $A$， 但是 $B$ 是 $A$ 中信息的一部分， $B$ 必须要成立才有可能使 $A$ 成立，也就是说如果 $B$ 不成立 $A$ 就不可能成立（四条边不全相等的四边形一定不是正方形）。所以说 $B$ 是 $A$ 的必要条件。另外，由 $B$ 中的少量信息不能得到 $A$， 所以 $B$ 不是 $A$ 的充分条件。 综上， $B$ 是 $A$ 的\textbf{必要非充分条件}。
-\end{example}
+很显然，如果令命题$P$为“今天下雨”，命题$Q$为“我们不去公园”，则：
+\begin{itemize}
+\item 你的话：若$P$，则$Q$。
+\item A的话：若$Q$，则$P$。
+\item B的话：若$\lnot P$，则$\lnot Q$。
+\end{itemize}
 
+显然，这些话之间存在着一些关系，下面针对这些内容给出定义：
 
-\begin{example}{}
-命题 $A$ ：三角形 $X$ 的其中两内个角分别为 $90^\circ$ 和 $45^\circ$。
+\begin{definition}{逆命题与否命题}\label{def_HsCoPr_4}
+对命题$P$和$Q$，若二者构成条件命题$P \Rightarrow Q$，则：
 
-命题 $B$ ：三角形 $X$ 有两个 $45^\circ$ 的内角。
+$P \Rightarrow Q$称为\textbf{原命题}（original proposition）；$Q \Rightarrow P$ 称为\textbf{逆命题} （converse）；$\neg P \Rightarrow \neg Q $称为\textbf{否命题} （inverse）
+\end{definition}
 
-利用三角形三个内角和为 $180^\circ$ 的事实，可以从 $A$ 推出 $B$， 说明 $A$ 是 $B$ 的充分条件， $B$ 是 $A$ 的必要条件。但也可以从 $B$ 推出 $A$， 说明 $B$ 是 $A$ 的充分条件， $A$ 是 $B$ 的必要条件。所以 $A$ 和 $B$ 既是彼此的充分条件也是彼此的必要条件。所以我们说 $A$ 和 $B$ \textbf{互为充分必要条件}。若 $A$ 是 $B$ 的充分必要条件， $B$ 一定也是 $A$ 的充分必要条件。因为两种表述都意味着 $A$，  $B$ 命题\textbf{等效}，所提供的信息都是一样的，两者都没有任何多余的或者缺失的信息。
-\end{example}
+注意逆命题和否命题都是针对原命题而言的，描述的是两个条件命题间的关系，这个关系是相对的，会随着原命题的不同而产生变化，比如，如果认为$P \Rightarrow Q$是原命题，则$Q \Rightarrow P$是它的逆命题。反过来，如果认为$Q \Rightarrow P$是原命题，则$P \Rightarrow Q$是它的逆命题，对于否命题也存在这种情况，因此也常说两个命题“互为逆命题”或“互为否命题”。另外，命题的否定和否命题造成很多人的困惑，无法分清。其实，二者只是在中文翻译上，都使用了“否”字，造成了理解上的混淆，事实上看二者的英文名称就不易混淆了，下面给出二者的对比：
 
-需要注意的是：
-\begin{enumerate}
-\item 充分/必要条件是两个命题之间的关系，若只说一个命题是充分/必要条件没有意义。
-\item 讨论充分/必要条件需要在一定的前提下进行。以上两个例子中的前提如： 我们讨论的是欧几里得几何中的平面四边形和三角形。 当然，我们也可以把这个前提直接写在每个命题中。
-\item 在证明 $A$ 是 $B$ 的充分必要条件时，需要分别证明 $A$ （相对于 $B$）的充分性和必要性。充分性需要由 $A$ 证明 $B$， 必要性需要由 $B$ 证明 $A$。 
-\item 在证明 $A$ 是 $B$ 的充分非必要条件时，除了需要证明 $A$ 的充分性，还需非必要性，即 $B$ 不能推出 $A$。 只要我们可以举出一个 $B$ 成立 $A$ 不成立的反例，就立刻证明了不可能由 $B$ 推出 $A$。 
-\end{enumerate}
-
-简要说明：
-
-有命题 $A$ 和 $B$ 
-\begin{enumerate}
-\item $A$ 推出 $B$ ， $B$ 推不出 $A$ ，则为充分不必要，如图：
-\begin{figure}[ht]
-\centering
-\includegraphics[width=5cm]{./figures/813479566ad8bd27.png}
-\caption{充分不必要} \label{fig_SufCnd_2}
-\end{figure}
-口诀：有之必然，无之未必不然
-\item $A$ 推出 $B$ ， $B$ 推出 $A$ ，则为充要，如图：\begin{figure}[ht]
-\centering
-\includegraphics[width=5cm]{./figures/977aec7c48daaeea.png}
-\caption{充要} \label{fig_SufCnd_3}
-\end{figure}
-\item $A$ 推不出 $B$ ， $B$ 推不出 $A$ ，则既不充分也不必要，如图：\begin{figure}[ht]
-\centering
-\includegraphics[width=5cm]{./figures/72797bcad5cfcfdc.png}
-\caption{既不充分也不必要} \label{fig_SufCnd_4}
-\end{figure}
-\item $A$ 推不出 $B$ ， $B$ 推出 $A$ ，则必要不充分，如图：\begin{figure}[ht]
-\centering
-\includegraphics[width=5cm]{./figures/b8c97ea69e5f63a9.png}
-\caption{必要不充分} \label{fig_SufCnd_5}
-\end{figure}
-口诀：有之未必然，无之必不然
-\end {enumerate}
-
-%以上移动自充分必要条件，并加以调整
-
-
-
-
-\subsubsection{逆命题与否命题}
-
-原命题（Original Proposition）:  $P \Rightarrow Q $
-
-逆命题 （Converse）:  $Q \Rightarrow P$ 
-
-否命题 （Inverse）:  $\neg P \Rightarrow \neg Q $
-
-
-\begin{example}{区分命题的否定和否命题}
-命题的否定和否命题造成很多人的困惑，无法分清。其实，二者只是在中文翻译上，都使用了“否”字，造成了理解上的混淆，事实上看二者的英文名称就不易混淆了，下面给出二者的对比。
-
+\begin{example}{对比命题的否定和否命题}\label{ex_HsCoPr_1}
 \textbf{否命题}
 
 只有条件命题才有否命题。得到否命题的过程需要分别对原命题的条件和结论两个命题进行否定。否命题与原命题的真值无关：
@@ -321,16 +332,128 @@ $A$ & $\lnot A$<br>（非$A$） \\
 \textbf{命题的否定}
 
 所有命题都有否定。获得命题的否定时，需要对整个命题进行否定。命题的否定的真值一定与原本的命题完全相反。
-针对条件命题“若p，则q”它的否定是“p且非q”\footnote{也就是$P\Rightarrow Q$的否定是$P\land\neg Q$，这与上一个脚注中的定义也可互相印证。}
-比如：“如果一个整数是偶数，那么它能被2整除。”的否定是“一个整数是偶数且不能被2整除。”
 
+针对条件命题“若p，则q”它的否定是“p且非q”\footnote{也就是$P\Rightarrow Q$的否定是$P\land\neg Q$，这与上一个脚注中的定义也可互相印证。}比如：“如果一个整数是偶数，那么它能被2整除。”的否定是“一个整数是偶数且不能被2整除。”
+
+当然，由于（原命题的）否命题也是一个命题，因此也可以对它否定，比如之前的例子：原命题是“如果一个整数是偶数，那么它能被2整除。”，否命题是“如果一个整数不是偶数，那么它不能被2整除。”，这个否命题的否定是“如果一个整数不是偶数，那么它能被2整除。”原命题与否命题都是真命题，否命题的否定是假命题。
 \end{example}
 
-\subsubsection{逆否命题}
+你应该注意到刚才的例子中，原命题的真值与否命题的真值无关，事实上，原命题的真值与逆命题的真值也无关。这和否定不一样，可以明确知道两个命题的真值关系，给研究带来了一些麻烦。不过，下面这个关系可以保证真值相同。
 
-逆否命题 （Contrapositive）:  $\neg Q \Rightarrow \neg P $
-原命题与逆否命题相等，而逆命题与否命题互为逆否命题，因此二者也相等。
+研究\autoref{def_HsCoPr_4} 可以发现，如果把逆命题$Q \Rightarrow P$ 当作原命题，则它的否命题是$\neg Q \Rightarrow \neg P $，而如果把否命题$\neg P \Rightarrow \neg Q $当作原命题，则它的逆命题也是$\neg Q \Rightarrow \neg P $，二者相同，数学上称为逆否命题。
 
+\begin{definition}{逆否命题}
+对命题$P$和$Q$，若二者构成条件命题$P \Rightarrow Q$为原命题，则称：
+\begin{equation}
+\neg Q \Rightarrow \neg P~.
+\end{equation}
+为原命题的\textbf{逆否命题} （Contrapositive）。
+\end{definition}
+
+逆否命题具有一个性质，就是原命题与逆否命题真值相等。而通过之前的论证其实你也能发现，逆命题与否命题也互为逆否命题，因此二者真值也相等。这就为数学研究提供了一个强有力的工具，如果你发现一个命题难以证明，可以先求其逆否命题，再进行证明。当然，前提是能够准确地求得逆否命题，而这往往成为这种证明方式的隐患。因此，熟练地掌握各个概念，在进行操作时能够准确地对命题进行变形和判断，是非常重要的基本功。
+
+\subsubsection{充分条件与必要条件}
+
+下面我们来研究一下条件命题中，两个命题（前件、后件）的关系。请注意本节使用的“$P$能推出$Q$”和“$P$不能推出$Q$”的表述均是包含了判定的，即表达命题$P$的“能力”。
+
+下面的例子有点绕，阅读时请注意前提和视角，不要彼此混淆。
+
+\begin{example}{充分条件与必要条件}
+\begin{itemize}
+\item 命题 $P$：四边形 $ABCD$ 是一个正方形。
+\item 命题 $Q$：四边形 $ABCD$ 的四条边相等。
+\end{itemize}
+
+根据初中几何知识，$P\Rightarrow Q$是真命题（$P$能推出$Q$）。
+
+从$P$的角度考虑：$P$能推出$Q$，说明$P$中提供了\textsl{充分}的信息能得到$Q$，也就是说$P$不仅包含了$Q$所需要全部信息，还或许包括了一些其他信息，这些多出来的信息与得到$Q$无关。在这里，命题$P$就可以得出四边形任意两条邻边垂直的信息，但这与四边形的四条边相等毫无关系。
+
+从$Q$的角度考虑：$Q$是$P$中信息的一部分，$Q$为真对$P$成立是\textsl{必要}的，也就是说$Q$不成立$P$就不可能成立，在这里就是四条边不全相等的四边形一定不是正方形。
+
+又因为，$Q\Rightarrow P$是假命题（$Q\not\Rightarrow P$是真命题，$Q$不能推出$P$）。
+
+从$Q$的角度考虑：$Q$不能推出$P$，说明$Q$中提供的信息\textsl{不够充分}，不足以得到$P$，也就是说$Q$中欠缺了一些$P$所需要信息，在这里就是还欠缺边之间垂直的条件。
+
+从$P$的角度考虑：$P$为真对$Q$成立并\textsl{不是必要}的。也就是说，哪怕$P$不为真，$Q$也可以为真，在这里就是说，哪怕一个四边形不是正方形，它的四条边也可相等。
+\end{example}
+
+恭喜你读到了这里！希望你依然清晰，不会感到困惑。在分析问题时，我们经常会将以上的思考过程总结为充分条件和必要条件的概念。
+
+\begin{definition}{充分条件与必要条件}
+如果$P\Rightarrow Q$是真命题（$P$能推出$Q$），则$P$称为$Q$的充分条件，$Q$称为$P$的必要条件。
+
+如果$P\Rightarrow Q$是假命题（$P\not\Rightarrow Q$是真命题，$P$不能推出$Q$），则$P$称为$Q$的不充分条件，$Q$称为$P$的不必要条件。
+\end{definition}
+
+需要注意的是：
+\begin{enumerate}
+\item 充分/必要条件是两个命题之间的关系，若只说一个命题是充分/必要条件没有意义。
+\item 讨论充分/必要条件需要在一定的前提下进行。以上两个例子中的前提如：我们讨论的是欧几里得几何中的平面四边形和三角形。
+\end{enumerate}
+
+通常在实际解决问题时，需要你先清晰命题$P$和$Q$是什么，然后由于逆命题与原命题的真值关系不确定，还需要分别判定$P\Rightarrow Q$和$Q\Rightarrow P$的真值（即P、Q互相能否推出），然后才能得到完整的$P$与$Q$的条件关系。一般题目中如果出现$P$与$Q$的条件关系，指的就是$P$是$Q$的什么条件。完整的关系一共有四种可能\footnote{表中的“不”有时也称为“非”。}：
+
+\begin{table}[ht]
+\centering
+\caption{$P$与$Q$的条件关系}\label{tab_HsCoPr5}
+\begin{tabular}{|c|c|c|}
+\hline
+& 充分条件 & 不充分条件 \\
+\hline
+必要条件& 充分必要条件 & 必要不充分条件 \\
+\hline
+不必要条件 & 充分不必要条件 & 既不充分也不必要条件 \\
+\hline
+\end{tabular}
+\end{table}
+
+用维恩图来表示命题的“信息量”的话，如下图所示：
+
+\begin{figure}[ht]
+\centering
+\includegraphics[width=8cm]{./figures/977aec7c48daaeea.png}
+\caption{充分必要条件} \label{fig_HsCoPr_1}
+\end{figure}
+\begin{figure}[ht]
+\centering
+\includegraphics[width=6cm]{./figures/b8c97ea69e5f63a9.png}
+\caption{必要不充分条件} \label{fig_HsCoPr_2}
+\end{figure}
+\begin{figure}[ht]
+\centering
+\includegraphics[width=6cm]{./figures/813479566ad8bd27.png}
+\caption{充分不必要条件} \label{fig_HsCoPr_3}
+\end{figure}
+\begin{figure}[ht]
+\centering
+\includegraphics[width=8cm]{./figures/72797bcad5cfcfdc.png}
+\caption{既不充分也不必要条件} \label{fig_HsCoPr_4}
+\end{figure}
+\aref{上面的表格}{tab_HsCoPr5}中，必要非充分条件和充分非必要条件都是单向的，非充分非必要条件说明没什么关系，只有充分必要条件是双向的，很特殊，这个时候，$P$和$Q$将既是彼此的充分条件，也是彼此的必要条件，这意味着$P$，$Q$命题等价，所提供的信息都一样，两者都没有任何多余的或者缺失的信息。
+
+\begin{definition}{充要条件}
+如果$P$既是$Q$的充分条件，也是$Q$的必要条件，则称$P$和$Q$互为\textbf{充分必要条件}（necessary and sufficient condition），简称\textbf{充要条件}，记作：
+\begin{equation}
+P\Leftrightarrow Q~.
+\end{equation}
+读作“$P$和$Q$互为充要条件”（P is a necessary and sufficient condition for B）或“$P$当且仅当$Q$”（P if and only if Q/P iff Q）。
+\end{definition}
+
+这里“当且仅当”的表达可能会比较陌生，出现的场合就理解为二者能够互相推出或者说二者等价就好。此外，我们还可以将“充要条件”作为一个代表，与之前学习过的“逆否命题”作为另一个代表进行对比，从而区分条件命题研究中的两个主题。
+
+\begin{table}[ht]
+\centering
+\caption{对比充要条件和逆否命题}\label{tab_HsCoPr6}
+\begin{tabular}{|c|c|c|c|}
+\hline
+概念 & 定义要点 & 符号表示 & 关键点  \\
+\hline
+充要条件 & 表达的是两个命题$P$和$Q$的关系 & $P \Leftrightarrow Q$ & $P$能推出$Q$，且$Q$也能推出$P$。$P$和$Q$之间的关系是双向的，缺一不可。 \\ 
+\hline
+逆否命题 & 表达的是从一个命题$P \Rightarrow Q$得到的另一个命题$\neg Q \Rightarrow \neg P$ & $\neg Q \Rightarrow \neg P$ & 逆否命题与原命题具有相同的真值，即原命题为真，则逆否命题也为真，反之亦然。 \\ 
+\hline
+\end{tabular}
+\end{table}
 
 \subsection{总结}
 
