@@ -10,6 +10,9 @@
 可解群在Galois理论中起到关键作用，用于判断代数方程的根式可解性，由此而得名。由于我们现在尚未深入Galois理论，就不讨论何谓“可解”，而仅仅从群结构的角度研究这种群的性质。
 
 
+\subsection{可解群的定义}
+
+
 \begin{definition}{可解群}\label{def_SlvbGp_1}
 给定群$G$，定义$G^{(0)}=G$且对于任意正整数$k$，$G^{(k)}=[G^{(k-1)}, G^{(k-1)}]$。
 
@@ -33,33 +36,117 @@ G^{(0)}\rhd G^{(1)}\rhd G^{(2)}\rhd \cdots~
 
 
 \begin{definition}{（次）正规序列}
-
 给定群$G$，称序列
 \begin{equation}
 G=G_1\rhd G_2\rhd\cdots G_n=\{e\}~
 \end{equation}
 为$G$的一个\textbf{次正规序列（subnormal series）}。若该序列还满足$\forall k\in \mathbb{Z}\cap\{1, n\}, G_k\lhd G$，则称之为一个\textbf{正规序列（normal series）}。
-
 \end{definition}
 
 
 
+\begin{theorem}{可解群的另一定义}\label{the_SlvbGp_1}
+给定群$G$，则$G$是可解群，当且仅当存在$G$的正规序列$G=G_1\rhd G_2\rhd\cdots G_n=\{e\}$，且对于任意正整数$k$，$G_k/G_{k+1}$都是阿贝尔群。
+\end{theorem}
+
+
+\textbf{证明}：
+
+\textbf{必要性}：
+
+设$G$可解，即存在非负整数$n$使得$G^{(n)}=\{e\}$。令$G_k=G^{(k-1)}$，则对于任意正整数$k$，$G_{k+1}\subseteq [G_k, G_k]$，于是由\autoref{the_CmtGrp_1} 可知，$G_k/G_{k+1}$都是\textbf{阿贝尔群}。又由\autoref{the_CmtGrp_2}，可知各$G_k\lhd G$，因此
+\begin{equation}
+G=G_1\rhd G_2\rhd\cdots\rhd G_{n+1}=\{e\}~
+\end{equation}
+是一个\textbf{正规序列}。
+
+\textbf{充分性}：
+
+设存在$G$的正规序列$G=G_1\rhd G_2\rhd\cdots G_n=\{e\}$，且对于任意正整数$k$，$G_k/G_{k+1}$都是阿贝尔群。
+
+由\autoref{the_CmtGrp_1} 可知，$G_{k+1}\supseteq [G_k, G_k]$对任意正整数$k$成立。考虑到$G_2\supseteq[G_1, G_1]=G^{(1)}$，从而$G_3\supseteq[G_2, G_2]\supseteq [G^{(1)}, G^{(1)}]=G^{(2)}$；以此类推，$G_{k}\supseteq G^{(k-1)}$对任意正整数$k$成立。
+
+因此，$G_n=\{e\}\implies G^{(n-1)}=\{e\}$。
+
+\textbf{证毕}。
+
+
+
+
+\subsection{可解群的结构}
+
+
+
+\begin{lemma}{}
+可解群的子群和商群都可解。
+\end{lemma}
+
+
+
+\textbf{证明}：
+
+给定可解群$G$。
+
+设$H$是$G$的子群，则$[H, H]\subseteq [G, G]$，以此类推得$H^{(k)}\subseteq G^{(k)}$对任意非负整数$k$成立。因此$G^{(n)}=\{e\}\implies H^{(n)}=\{e\}$。
+
+设$N\lhd G$。
+
+若$[G, G]\subseteq N$，则任取$g_1, g_2\in G$有$[g_1, g_2]\in N$，于是$[g_1N, g_2N]\subseteq N$，即$[G/N, G/N]=N$。
+
+若$N\subseteq [G, G]$，则类似可得$[G/N, G/N]=G^{(1)}/N$。
+
+以此类推，由$G^{(n)}=\{e\}$即可推出$\qty(G/N)^{(n)}=\{e\}$。
+
+
+\textbf{证毕}。
 
 
 
 
 
 
+\begin{lemma}{}
+给定群$G$及其正规子群$N$，若$N$和$G/N$均可解，则$G$可解。
+\end{lemma}
 
 
+\textbf{证明}\footnote{此证明照搬自《代数学基础》。}：
+
+设$G/N$和$N$分别有正规序列
+\begin{equation}
+    \left\{
+    \begin{aligned}
+        G/N ={}& Q_0\rhd Q_1\rhd Q_2\rhd\cdots\rhd Q_s=N, \\
+        N ={}& N_0\rhd N_1\rhd N_2\rhd\cdots\rhd N_t=\{e\}. 
+    \end{aligned}
+    \right. ~
+\end{equation}
+
+对于$0\leq k\leq s$，令$G_k=\pi^{-1}\qty(Q_k)$；对于$s<k\leq s+t+1$，令$G_k=N_{k-s-1}$。则可以构造序列
+\begin{equation}
+    G=G_0\rhd G_1\rhd\cdots\rhd G_{s+t+1}=\{e\}. ~
+\end{equation}
+其中，$G_s$到$G_{s+t+1}$自然构成一个正规序列。而$G_0$到$G_s$也依然满足“全是$G_0$的正规子群，$G_{k-1}/G_{k}$是阿贝尔群”，证明如下：
+
+\begin{equation}
+\begin{aligned}
+    \forall g\in G, \qty(Q_k\lhd G/N) \iff{}& \qty(\qty(g^{-1}N)\qty(Q_k)\qty(gN)=Q_k)\\
+    \iff{}& \qty(g^{-1}N)\qty(\pi^{-1}\qty(Q_k))\qty(gN)=\qty\pi^{-1}\qty(Q_k)\\
+    \implies{}& \qty(g^{-1}\pi^{-1}\qty(Q_k)g\subseteq \pi^{-1}\qty(Q_k)). 
+\end{aligned}~
+\end{equation}
+此即证明了$\pi^{-1}\qty(Q_k)\lhd G=G_0$。注意$\pi: G\to G/N$是自然同态。
+
+又根据\autoref{exe_NormSG_2}，
+\begin{equation}
+    \begin{aligned}
+        Q_k/Q_{k+1} \cong G_k/G_{k+1}. 
+    \end{aligned}~
+\end{equation}
+故由$Q_k/Q_{k+1}$是阿贝尔群，得证$G_k/G_{k+1}$是阿贝尔群。
 
 
-
-
-
-
-
-
+\textbf{证毕}。
 
 
 
