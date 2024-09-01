@@ -72,7 +72,7 @@ password=smb密码
 \item 为了安全起见， 可以 \verb`sudo chmod 600 /root/.SMBcredentials` 只允许管理员读写。
 \item 临时 mount： 用 \verb`sudo mount -t cifs -o rw,vers=3.0,credentials=/root/.SMBcredentials,port=端口号 //ip地址/共享名称 /mount文件夹`。 \verb`port=端口号` 可以省略。 \verb`共享名称` 是一定要写的，否则提示格式错误。
 \item 要扫描某个机器的 \verb`共享名称`， 用 \verb`sudo apt-get install smbclient`。 然后 \verb`smbclient -L ip地址 -U 用户名` 然后可能会提示输入密码，完了以后会列出所有共享名
-\item \textbf{开机自动 mount}： 在 \verb`/etc/fstab` 加入一行： \verb`//ip地址/共享名称 /mount文件夹 cifs vers=3.0,credentials=/root/.SMBcredentials,file_mode=0777,dir_mode=0777`
+\item \textbf{开机自动 mount}： 在 \verb`/etc/fstab` 加入一行： \verb`//ip地址/共享名称 /mount文件夹 cifs vers=3.0,credentials=/root/.SMBcredentials,file_mode=0777,dir_mode=0777,nofail`
 \item 修改了 \verb`fstab` 以后， 就可以用 \verb`sudo mount /mount文件夹` 测试是否成功。
 \end{itemize}
 
