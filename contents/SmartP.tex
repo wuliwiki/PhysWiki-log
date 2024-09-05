@@ -32,4 +32,33 @@
 \item 可以从 \verb`shared_ptr`， 或者 \verb`weak_ptr` 初始化
 \item \verb`p.lock()` 创建出管理对象的一个新的 \verb`shared_ptr`
 \item \verb`p.expired()` 可以检查对象是否已经被删除。
+\item 可用于防止循环依赖导致的内存泄漏， 例如：
+\begin{lstlisting}[language=cpp]
+#include <iostream>
+#include <memory>
+
+class Node {
+public:
+    std::shared_ptr<Node> next;
+    std::weak_ptr<Node> prev; // weak_ptr to avoid circular reference
+
+    ~Node() {
+        std::cout << "Node destroyed" << std::endl;
+    }
+};
+
+int main() {
+    std::shared_ptr<Node> node1 = std::make_shared<Node>();
+    std::shared_ptr<Node> node2 = std::make_shared<Node>();
+
+    node1->next = node2;
+    // This would create a circular reference if prev were a shared_ptr
+    node2->prev = node1;
+
+    std::cout << "node1 use count: " << node1.use_count() << std::endl;  // 1
+    std::cout << "node2 use count: " << node2.use_count() << std::endl;  // 2
+
+    return 0;
+}
+\end{lstlisting}
 \end{itemize}

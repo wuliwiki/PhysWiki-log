@@ -1,4 +1,4 @@
-% Julia 解释器笔记
+% Julia 开发笔记
 % license Xiao
 % type Note
 
@@ -9,8 +9,9 @@
 本文是关于 Julia 解释器的原理： 它使用了哪些技术， 可以使得它作为一门动态语言能达到编译语言的性能。
 
 \begin{itemize}
+\item \href{https://docs.julialang.org/en/v1/devdocs/init/}{Julia 开发者文档}
 \item C 语言这样的叫做 \textbf{Ahead of Time（AOT）} 编译。
-\item Julia 完全使用 \textbf{Just-Ahead-of-Time（JIT）}。 并不是把部分代码使用该优化，而是（几乎?）全部。Julia （几乎?）不能直接理解并执行高级语言。 每个重载的函数第一次被调用的时候， julia 都会先给它生成专门的 llvm 机器码。 这个过程还有一个不那么正规的名字叫做 \textbf{Just Ahead-of-Time（JAOT）}。
+\item Julia 完全使用 \textbf{Just-Ahead-of-Time（JIT）}。 并不是把部分代码使用该优化，而是全部。Julia 默认不直接理解并执行高级语言（一个理解器见\href{https://juliadebug.github.io/JuliaInterpreter.jl/stable/}{这里}）。 每个重载的函数第一次被调用的时候， julia 都会先给它生成专门的 llvm 机器码。 这个过程还有一个不那么正规的名字叫做 \textbf{Just Ahead-of-Time（JAOT）}。
 \item \textbf{Multiple Dispatch （MD）}： 可以基于参数的类型生成不同的专门代码。
 \item \textbf{Type Inference}： 自动推导变量类型。
 \item 内建并行， 包括分布计算
