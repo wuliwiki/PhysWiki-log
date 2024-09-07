@@ -1,0 +1,142 @@
+% 凸集和凸体
+% keys 凸集|凸体|凸包|单纯形
+% license Usr
+% type Tutor
+\pentry{向量空间\nref{nod_LSpace}}{nod_573c}
+凸性是向量空间理论中许多重要部分的基础概念。它不仅是直观的几何概念，也允许纯粹解析的叙述。
+
+\subsection{凸集的引入}
+设 $L$ 是一实向量空间，$x_1,x_2$ 是它的两点。那么过 $x_1,x_2$ 的直线方向与矢量 $x_2-x_1$ 平行，因此该直线可表示为
+\begin{equation}\label{eq_ConSet_1}
+x_1+k(x_2-x_1).~
+\end{equation}
+或写为
+\begin{equation}\label{eq_ConSet_2}
+(1-k)x_1+kx_2.~
+\end{equation}
+明显的，当 $k\geq0$ 时，矢量 $k(x_2-x_1)$ 的模（长度）随 $k$ 的增大而增大。即 $\{x_1+k(x_2-x_1)|k\geq0\}$ 是以 $x_1$ 为原点的正方向（由 $x_1$ 指向 $x_2$ 的方向）的直线部分；反之，$\{x_1+k(x_2-x_1)|k<0\}$ 是以 $x_1$ 为原点的负方向部分。明显的，$0\leq k\leq 1$ 时是直线 $x_1+k(x_2-x_1)$ 的 $x_1$ 到 $x_2$ 之间的部分。
+
+注意\autoref{eq_ConSet_1} 等价于\autoref{eq_ConSet_2} ，因此可得下面的定义。
+\begin{definition}{线段}
+设 $L$ 是实向量空间，$x_1,x_2\in L$，则称
+\begin{equation}
+\alpha x_1+\beta x_2, \quad\alpha,\beta\geq0,\alpha+\beta=1~
+\end{equation}
+的所有元素的全体为连接点 $x_1$ 与 $x_2$ 的\textbf{闭线段}（close segment）。而闭线段去掉端点 $x_1,x_2$ 后叫做\textbf{开线段}（open segment）。
+\end{definition}
+
+\begin{definition}{凸集}
+设 $M\subset L$，若对 $M$ 上的任意两点 $x_1,x_2\in M$，$M$ 都包含连接它们的线段，则称 $M$ 是\textbf{凸的}（convex）。 
+\end{definition}
+
+\begin{definition}{核}
+设 $E\subset L$ 是任意集，则称
+\begin{equation}
+\{x|x\in L,\text{且}\forall y\in L,\exists \epsilon(y)>0, \text{使得只要} \abs{t}<\epsilon,\text{就有} x+ty\in E\}~
+\end{equation}
+为 $E$ 的\textbf{核}（kernel），记作 $J(E)$。
+\end{definition}
+也就是说，集 $E$ 的核是那些拥有包含在 $E$ 中的邻域的点的全体。
+\begin{definition}{凸体}
+核为非空集的凸集称为\textbf{凸体}（convex body）。
+\end{definition}
+
+\begin{example}{}
+三维欧氏空间中的多面体、球、半空间和全空间本身都是凸体。同一空间中的线段、平面、三角形都是凸集，但不是凸体。
+\end{example}
+
+\begin{example}{}
+考察闭区间 $[a,b]$ 上的连续函数空间 $C([a,b])$ 中满足条件 $\abs{f(t)}\leq1$ 的函数构成的集。这个集是凸的。事实上，若 $\abs{f(t)}\leq1,\abs{g(t)}\leq1$，则对 $\alpha+\beta=1,\alpha,\beta\geq0$，成立
+\begin{equation}
+\abs{\alpha f(t)+\beta g(t)}\leq\alpha+\beta=1.~
+\end{equation}
+
+\end{example}
+
+
+
+
+\begin{theorem}{凸集的性质}\label{the_ConSet_1}
+任意多个凸集的交仍是凸集。
+\end{theorem}
+\textbf{证明：} 设 $M$ 是任意多个凸集 $M_i$ 的交，那么任意 $x_1,x_2\in M$，$x_1,x_2$ 必属于每一凸集 $M_i$。从而由凸集的定义，连接 $x_1,x_2$ 的线段都属于每一个 $M_i$，从而该线段属于它们的交 $M$。
+
+\textbf{证毕！} 
+
+\subsection{凸包}
+任意线性空间的集，全空间是包含它的凸集，而\autoref{the_ConSet_1} 表明任意多个闭集的交仍是闭的，所有包含该集的凸集的交是包含该集的最小凸集。事实上，这样定义的最小凸集都包含在每一包含该集的凸集中，而其本身也是凸集。
+\begin{definition}{凸包}
+设 $L$ 是实线性空间，$E\subset L$，则称
+\begin{equation}
+\overline{E}:=\bigcap_{\alpha}E_\alpha~
+\end{equation}
+是 $E$ 的\textbf{凸包}（convex hull），其中 $\{E_\alpha\}$ 是所有包含 $E$ 的凸集。
+\end{definition}
+
+\begin{example}{单纯形}
+设 $x_1,\ldots,x_{n+1}$ 是某一线性空间的点。若向量 $x_2-x_1,\ldots,x_{n+1}-x_1$ 是线性无关的，则称点 $x_1,\ldots,x_{n+1}$ 占有\textbf{最广位置}。占有最广位置的点 $x_1,\ldots,x_{n+1}$ 的凸包叫做\textbf{n-维单纯性}(simplex)。我们证明这一 $n$ 维单纯性刚好好就是以 $x_1,\ldots,x_{n+1}$ 为顶点的多面体。证明如下：
+
+由凸集的定义，包含 $x_1,\ldots,x_{n+1}$ 的凸集必然包含 $x_1,\ldots,x_{n+1}$ 之间的两两连线段，特别包含以它们为顶点的多面体的边。因此必然包含每一顶点与该顶点所在多面体表面的边上任一点的连线，即必然包含以它们为顶点的多面体的表面。而多面体的每一内点必然在某一两端点在多面体表面的线段上，因此包含点 $x_1,\ldots,x_{n+1}$ 的凸集必然包含以它们为顶点的多面体。由于多面体必然是凸集，因而
+ $n$ 维单纯性刚好好就是以 $x_1,\ldots,x_{n+1}$ 为顶点的多面体。证毕！
+
+若点 $x_1,\ldots,x_{n+1}$ 占有最广位置，则任何 $k+1$ ($k<n$)个点也占有最广位置（因为它们相应的矢量仍线性无关），从而生成某一 $k$ 维单纯性，称为给定 $n$ 维单纯性的 $k$ 维\textbf{边界}。
+\end{example}
+
+\begin{theorem}{}
+顶点为  $x_1,\ldots,x_{n+1}$ 的单纯性是所有可以表为
+\begin{equation}\label{eq_ConSet_3}
+s=\sum_{k=1}^{n+1} \alpha_k x_k\geq0,\sum_{k=1}^{n+1}\alpha_k=1~
+\end{equation}
+的点组成的。
+\end{theorem}
+
+\textbf{证明：}
+首先证明满足\autoref{eq_ConSet_3} 的点的全体 $S$ 是凸集。设 $y_1,y_2$ 满足\autoref{eq_ConSet_3}，且记
+\begin{equation}
+y_1=\sum_{k=1}^{n+1} \alpha_k x_k,y_2=\sum_{k=1}^{n+1} \beta_k x_k.~
+\end{equation}
+则 $\sum_{k=1}^{n+1}\alpha_k=1,\sum_{k=1}^{n+1}\beta_k=1$。则连接 $y_1,y_2$ 的线段是
+\begin{equation}
+\{py_1+qy_2|p+q=1,p,q\geq0\}.~
+\end{equation}
+由于 $p\sum_{k=1}^{n+1}\alpha_k=p,q\sum_{k=1}^{n+1}\beta_k=q$，则 $\sum_{k=1}^{n+1}(p\alpha_k +q\beta_k)=p+q=1$，于是
+\begin{equation}
+\begin{aligned}
+py_1+qy_2=&p\sum_{k=1}^{n+1} \alpha_k x_k+q\sum_{k=1}^{n+1} \beta_k x_k\\
+=&\sum_{k=1}^{n+1}(p\alpha_k +q\beta_k) x_k,
+\end{aligned}~
+\end{equation}
+其中，$\sum_{k=1}^{n+1}(p\alpha_k +q\beta_k)=1$ 且系数 $p\alpha_k +q\beta_k\geq0$（因为都是非负的），因此线段 $\{py_1+qy_2|p+q=1,p,q\geq0\}$ 满足\autoref{eq_ConSet_3}。从而 $S$ 是凸集。
+
+其次，任一包含 $x_1,\ldots,x_{n+1}$ 的凸集应当包含形如\autoref{eq_ConSet_3} 的点。事实上，\autoref{eq_ConSet_3} 可改写为
+\begin{equation}
+x=\sum_{k=2}^{n+1}\alpha_kx_k+(1-\sum_{k=2}^{n+1}\alpha_k)x_1=\sum_{k=2}^{n+1}\alpha_k(x_k-x_1)+x_1~
+\end{equation}
+由于 $0\leq\alpha_k\leq1$，所以 $x$ 在方向 $x_k-x_1$ 的投影分量在连接 $x_1,x_k$ 的线段上。这正好属于以点 $x_1,\ldots,x_{n+1}$ 为顶点的单纯性，因此包含点 $x_1,\ldots,x_{n+1}$ 的凸集必然包含形如\autoref{eq_ConSet_3} 的点。
+
+因而， $S$ 是包含点 $x_1,\ldots,x_{n+1}$ 的最小凸集。
+
+\textbf{证毕！}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
