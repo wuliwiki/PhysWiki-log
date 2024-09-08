@@ -8,11 +8,12 @@
 
 \addTODO{参考 GitHub 的 \href{https://github.com/MacroUniverse/MyPythonLibrary}{MyPythonLibrary}， 还有以前 computational physics 课的作业等}
 
-\subsection{语法}
+\subsection{常识}
 \begin{itemize}
 \item 严格区分大小写
 \item 不需要声明变量
-\item 每一个 block 前面的空格数需要一致
+\item 每一个 block 前面的空格数需要一致（缩进一般用四个空格）
+\item 缩进的个数很重要, python 用缩进来区分不同的 scope。 一般建议用四个空格
 \item 用 \verb`#` 号进行注释
 \item 用 \verb`\` 把一行长代码转移到下一行. (相当于Matlab里面的省略号)
 \item 逗号赋值 \verb`a,b,c=1,2,3`。 这其实是 tuple 赋值， 即 \verb`(a,b,c)=(1,2,3)`。 等号右边也可以是一个 list。
@@ -21,66 +22,62 @@
 \item \verb`locals()` 和 \verb`globals()` 查看所有变量
 \item \verb`if 'a' in locals()` 用于查询变量 a 是否存在
 \item 上一次输出储存在变量 \verb`_` 中
+\item \verb`import sys`， 可以获得命令行的 arguments 数组（list of string）， \verb`sys.argv[0]` 是调用程序的命令， 剩下的是跟随的 arguments
+\item 见\enref{路径处理笔记}{PyPath}。
+\item \verb`from math import *` 用这个格式可以在代码中直接输入 math 包里面的函数名, sin, cos, 而不用 \verb`math.sin`
+\item \verb`print()` 相当于 Matlab 的 \verb`disp()`, \verb`print(string,end=' ')` 可在输出后面用空格隔离, 默认为回车. 
 \end{itemize}
 
 \subsection{变量类型}
 \begin{itemize}
 \item 用 \verb`type()` 可以检查任意变量的类型
 \item 有一类变量叫做 \verb`type`, 例如 float, bool, int 等.
-\item 强制类型转换 \verb`int()` \verb`float()` 等等
+\item 强制类型转换 \verb`int()`， \verb`float()` 等等
 \item \verb`float` 就是 C 的双精度 \verb`double`, 有 16 位有效数字
 \item \verb`int` 类型可以储存任意位数的整数, 不会溢出
-\item \verb`1+2j` 或者 \verb`1+2J` 表示复数
-\item 在最外层 scope 定义的变量就是全局变量。 例如在函数外定义的变量可以在函数内使用。
-\item 用 \verb`global 变量名` 可以声明全局变量， 相当于在 global scope 中定义。
+\item \verb`1+2j` 或者 \verb`1+2J` 表示复数，不能用 \verb`i`
+\item 在最外层 scope 定义的变量就是全局变量。 例如在函数外定义的变量可以在函数内读取。
+\item 一旦试图在函数内修改全局变量， 它马上就会在整个函数内部视为另一个局部变量，如果修改之前试图读取就会报错。
+\item 函数内用 \verb`global 变量1, 变量2` 可以声明需要修改的全局变量， 也就是函数外定义的变量。 如果只用于读取则无需声明
 \end{itemize}
 
 \subsection{字符串类 (str)}
 \begin{itemize}
-\item raw string：在字符串的第一个单引号前面加 \verb`r`，可以把字符串原样输出，不做任何转义
-\item str 类型, \verb`a='word';` 也可以 \verb`a="""word"""` 后者可以输入多行字符, 可以用加号合并两个字符串.
+\item \verb`'...'` 和 \verb`"..."` 都是字符串，只是里面对 \verb`'` 和 \verb`"` 的转义不同。
+\item 可以用加号 \verb`+` 合并两个字符串。
+\item raw string：\verb`r'...'`，\verb`r"..."`，\verb`r"""..."""` 可以把字符串原样输出，不做任何转义。 \verb`r"""..."""` 内支持换行。
+\item str 类型, \verb`a='word';` 也可以 \verb`a="""word"""` 后者可以输入多行字符
 \item \verb`str*10`, 就是 \verb`'strstrstrstrstrstrstrstrstrstr'`.
 \item string 类型不是 list，不支持索引修改
+\item \verb`str(a)` 可以把其他类型变为字符串
 \item \verb`sep='00'; sep.join(['1','2','3'])` 可以生成 \verb`'1002003'`
+\item \verb`str.find('key', ind)` 可以从某个位置开始搜索下一个 \verb`key`。 搜不到返回 \verb`-1`。 例如 \verb`str[:str.find('.')]` 可以获取句号之前的内容。
+\item \verb`str.replace('key', 'new_key')` 把所有的 \verb`key` 替换成 \verb`new_key` 并输出。 \verb`str` 本身不会被改变。
+\end{itemize}
+
+\subsection{常用容器}
+\begin{itemize}
+\item list 相当于数组, \verb`listA + listB` 操作合并两个 \verb`list`。 \verb`list.append()` 可以把输入的东西变成一个元素加入到 list 最后。 \verb`list.reverse()` 可以颠倒 list 的顺序。
+\item \verb`listA.append(listB)`
+\item dictionary 类.  \verb`dict={"a":"b", "c":"d", "e":"f"}`
+\item unordered set： \verb`my_set = {"a", b, 2}`。 空集用 \verb`my_set = set()`
+\item \verb`my_set.add(元素)` 可以添加元素， \verb`my_set.remove(元素)` 删除元素
+\item \verb`if key in 容器:` 可以用于检查 \verb`key` 是否在容器中， 几乎所有容器都适用
 \end{itemize}
 
 \subsection{逻辑类 (bool)}
 \begin{itemize}
 \item 逻辑变量是 \verb`True` 和 \verb`False`, 注意大写
 \item 逻辑与是 \verb`and`, 或是 \verb`or`, 非是 \verb`not`, 异或是 \verb`^`
-\item NoneType, 当函数没有输出的时候返回.
-\item list 相当于数组, "listA+listB" 操作合并两个 \verb`list. list.append()` 可以把输入的东西变成一个元素
-    加入到 list 最后.  \verb`list.reverse()` 可以颠倒 list 的顺序.
-\item \verb`listA.append(listB)`
-\item dictionary 类.  \verb`dict={"a":"b", "c":"d", "e":"f"}`
-\end{itemize}
-
-\subsection{Import}
-\begin{itemize}
-\item \verb`from math import *` 用这个格式可以在代码中直接输入 math 包里面的函数名, sin, cos, 而不用 \verb`math.sin`
-\item indentation 很重要, 用四个空格
-\item \verb`print()` 相当于 Matlab 的 \verb`disp()`, \verb`print(string,end=' ')` 可在输出后面用空格隔离, 默认为回车. 
+\item \verb`NoneType`, 当函数没有输出的时候返回.
 \end{itemize}
 
 \subsection{Math}
 \begin{itemize}
 \item 牢记指数是 \verb`**` 不是 \verb`^` !!
 \item 有些版本中 \verb`3/4=0`, 因为 \verb`int` 相除输出 \verb`int`, 向下取整. 这时把任意一个转换成 float 即可. \verb`3.0/4=0.75`
-\item 整除是 \verb`//`
+\item 整除是 \verb`//`，总是向负无穷取整（C 语言向 0 取整）。 如果其中一个参数是浮点数，那么结果也会是浮点数。 如果两边都是整数输出才是整数。
 \item 求余是 \verb`%`
-\end{itemize}
-
-\subsection{循环}
-\begin{itemize}
-\item while 循环的例子  \verb`while a > b :`
-\item for 循环的例子 \verb`for i in range(inta, intb):`
-\item python 表示范围的第二个索引 intb 在执行的时候会减 1。
-\item \verb`for i in range(0,5):` 或 "for ii in range(5) 和 \verb`for ii in [0,1,2,3,4]:` 等效
-\item \verb`range(inta,intb)` 实际上不是数组, 输出的数据类型叫做 \verb`range`.
-\item \verb`break` 跳出任意循环 (for/while), \verb`continue` 跳到下一个循环.
-\item \verb`pass` 是一个用来填充格式的语句, 不做任何事情, 可以放在循环中或函数定义中.
-\item \verb`for` 或 \verb`while` 下面可以加上一个 \verb`else`, 如果循环没有被 \verb`break` 打断, 则会执行 \verb`else`.
-\item \verb`range()` 函数可以有 1 到 3 个变量, \verb`range(n)` 相当于 \verb`[0, … , n-1]`, \verb`range(n1,n2,step)` 相当于 \verb`[n1, …, n2-1]` 步长为 step 
 \end{itemize}
 
 \subsection{判断}
@@ -89,6 +86,24 @@
 \item \verb`if a in (b,c,d,e)`:   一定记住加冒号!
 \item \verb`elseif` 要写成 \verb`elif`
 \item \verb`if` 后面加非零整数是 \verb`false`，加零是 \verb`true`，单元素的空 list 是 false，否则是 true
+\item 如果某个分支中定义了某个变量且被执行， 分支结束后它仍有定义
+\end{itemize}
+
+\subsection{循环}
+\begin{itemize}
+\item while 循环的例子  \verb`while a > b :`
+\item for 循环的例子 \verb`for i in range(inta, intb):`， 注意 \verb`i` 最大值是 \verb`intb-1`
+\item 循环结束后， \verb`i` 仍然有定义， 值为最后一次循环中的值。
+\item 循环体中新定义的其他变量在循环结束后也同样还有定义
+\item \verb`for i in range(0,5):` 或 \verb`for i in range(5):` 和 \verb`for i in [0,1,2,3,4]:` 等效
+\item \verb`range(inta,intb)` 实际上不是数组， 输出的数据类型叫做 \verb`range`.
+\item \verb`for i, arg in enumerate(容器): ...` 可以在遍历容器的同时添加一个计数变量 \verb`i`。 也可以用 \verb`enumerate(容器, start=N)` 指定第一个循环中的计数
+\item 用 \verb`for key in 字典: ...` 可以只遍历 \verb`key`， \verb`for key,val in 字典.values(): ...` 可以遍历值，\verb`for key,val in 字典.items(): ...` 可以遍历 \verb`(key, val)`。
+\item \verb`break` 跳出任意循环 (for/while), \verb`continue` 跳到下一个循环。
+\item \verb`pass` 是一个用来填充格式的语句, 不做任何事情, 可以放在循环中或函数定义中。
+\item \verb`for` 或 \verb`while` 下面可以加上一个 \verb`else`, 如果循环没有被 \verb`break` 打断, 则会执行 \verb`else`。
+\item \verb`range()` 函数可以有 1 到 3 个变量, \verb`range(n)` 相当于 \verb`[0, … , n-1]`, \verb`range(n1,n2,step)` 相当于 \verb`[n1, …, n2-1]` 步长为 step 
+\item \verb`for ... else ...` 结构中， 如果循环中没有出发 \verb`break`， \verb`else` 就会被执行。
 \end{itemize}
 
 \subsection{数组(list)}
@@ -117,6 +132,7 @@
 \end{itemize}
 
 \subsection{函数}
+
 \begin{itemize}
 \item 基本格式
 \begin{lstlisting}[language=python]
@@ -153,9 +169,9 @@ def FunctionName(a,b,c):
 \subsection{杂}
 \begin{itemize}
 \item Python 完全是面对对象的
-\item Spyder 的强项是科学计算
+\item \verb`os.system('clear')` 或 Windows 中 \verb`os.system('cls')` 可以清空 REPL
+\item \enref{Spyder}{spyder} 的强项是科学计算
 \item Anaconda 清洁地装在一个单独的目录, 不需要系统权限, 不影响其他目录下的安装
 \item 常用的 IDE 有, Spyder, Wing IDE, PyCharm, Python Tools for Visual Studio.
 \item 其实 Jupiter 并不比 Spyder 要慢, 前者具有格式优势, 后者具有调试优势.
-\item \verb`from sys import argv`， 可以获得命令行的 arguments 数组（list of string）， \verb`argv[0]` 是调用程序的命令， 剩下的是跟随的 arguments
 \end{itemize}

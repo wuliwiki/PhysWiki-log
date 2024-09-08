@@ -2,22 +2,26 @@
 % license Usr
 % type Note
 
-\begin{issues}
-\issueDraft
-\end{issues}
-
 \begin{itemize}
-\item \verb`os.getcwd()` 获取当前路径
-\item \verb`os.chdir('路径')` 改变当前路径 
-\item \verb`for root, dirs, files in os.walk('文件夹'): ...` 可以在 \verb`文件夹` 中遍历整个文件树。 默认从顶到底一层层遍历， 如果添加参数 \verb`topdown=False` 则从底到顶。
-\item 如果从顶到低，重命名文件夹后该文件夹不会被 walk， 所以要在循环内部重命名文件夹要从底到顶（例如切割限制文件夹名称长度）
-\item \verb`root,dirs,files` 分别是当前处理的路径、 该路径下的所有文件夹和所有文件。 其中 \verb`root` 开始的部分和 \verb`'文件夹'` 相同。 如果后者是相对路径前者也会是。
-\item \verb`os.path.basename('路径')` 获取路径中的文件或最后的文件夹的名字。 \verb`os.path.dirname('路径')` 获取前面部分
-\item \verb`os.path.abspath('路径')` 获取绝对路径
-\item \verb`os.path.realname('路径')` 获取正则化的路径，也就是不含任何软链以及 \verb`.` 和 \verb`..` 的绝对路径。
-\item \verb`os.path.relpath(路径2, 路径1)` 可以显示 \verb`路径2` 相对 \verb`路径1` 的相对路径
-\item \verb`os.path.join(路径1, 路径2)` 可以把两个路径合并，后者必须是相对路径。
-\item \verb`root, ext = os.path.splitext(字符串)` 可以把 \verb`字符串` 根据最后一个英文句号拆分成 \verb`root` 和 \verb`ext` 两部分（不含句号），如果没有英文句号，则 \verb`ext` 为空。
+\item \verb`os.getcwd()` 获取当前路径， 也就是运行 python 时命令行的 \verb`pwd`。
+\item \verb`os.chdir(路径)` 改变当前路径 
+\item \verb`路径` 在 Windows 中默认用 \verb`\\` 也可以用 \verb`/` 分割路径， 但 Linux 中只能用 \verb`/`。 \verb`os.getcwd()` 返回的路径 Windows 使用 \verb`\\`。 可以用 \verb`os.sep` 表示不同系统的默认分隔符
+\item \verb`for items in os.listdir(路径): ...` 列出路径下所有文件和文件夹名（仅一层）
+\item \verb`os.path.isfile(路径)` 和 \verb`os.path.isdir(路径)` 可以判断某个路径是文件还是文件夹，如果不存在，同样返回 \verb`False`。 如果 \verb`路径` 是 symlink， 则判断指向的目标。
+\item \verb`for root,dirs,files in os.walk(路径): ...` 可以在 \verb`路径` 中遍历整个文件树。 默认从顶到底一层层遍历， 如果添加参数 \verb`topdown=False` 则从底到顶。
+\item \verb`root,dirs,files` 分别是当前处理的路径、 该路径下的所有文件夹、所有文件。 其中 \verb`root` 开始的部分和 \verb`os.walk(路径)` 的 \verb`路径` \textbf{完全相同}（斜杠也相同）。 如果后者是相对路径前者也会是。 \verb`root` 在 \verb`路径` 后面的部分仍然会使用 \verb`os.sep` 分隔。
+\item \verb`os.path.normpath(路径)` 会处理掉所有的 \verb`.`， \verb`..` 和重复的斜杠如 \verb`//`， 把所有分隔符替换为 \verb`os.sep`， 把开头的 \verb`./` 和结尾的 \verb`/` 都删掉。 例如 \verb`/home//user/../Documents/./myfolder/` 变为 \verb`/home/Documents/myfolder`。
+\item \verb`os.path.normpath(路径).split(os.sep)` 可以把路径根据斜杠分成若干部分
+\item 如果要计算 \verb`root` 关于 \verb`路径` 的相对路径， 最好还是用 \verb`os.relpath()`。 虽然可以直接用 \verb`root[len(路径):]`， 但如果 \verb`路径` 不以 \verb`/` 或 \verb`\\` 结尾， 那么 \verb`root[len(路径):]` 会以 \verb`/` 开头， 可能会被误以为是绝对路径。
+\item 想知道当前遍历的层数，可以在 \verb`os.walk(路径)` 的循环中用 \verb`depth = root[len(路径):].count(os.sep)`。
+\item \verb`os.walk` 一开始就扫描所有路径，不会在循环中动态更新。如果从顶到低，重命名或新建文件夹不会被自动 walk， 所以要在循环内部重命名文件夹要从底到顶（例如切割限制文件夹名称长度）。
+\item \verb`dir,path = os.path.split(路径)` 可以把路径划分成前面部分和最后的文件名或文件夹名， 这相当于分别使用 \verb`os.path.dirname(路径)` 和 \verb`os.path.basename(路径)`。
+\item \verb`os.path.abspath(路径)` 获取绝对路径（可能包含软链）
+\item \verb`os.path.realpath(路径)` 获取\textbf{正则化路径}，也就是不含任何\textbf{软链}以及 \verb`.` 和 \verb`..` 的\textbf{绝对}路径。
+\item \verb`os.path.relpath(路径2, 路径1)` 可以显示 \verb`路径2` 相对 \verb`路径1` 的相对路径。
+\item \verb`os.path.join(路径1, 路径2)` 可以把两个路径拼接，后者必须是相对路径。
+\item \verb`root, ext = os.path.splitext(字符串)` 可以把 \verb`字符串` 根据最后一个英文句号拆分成 \verb`root` 和 \verb`ext` （含前面的句号）两部分，如果 \textbf{basename} 中没有英文句号，则 \verb`ext` 为空（前面路径名中的句号不算）。
 \item \verb`os.path.exists(路径)` 可以判断文件或文件夹是否存在
-\item \verb`os.path.isfile(路径)` 和 \verb`os.path.isdir(路径)` 可以判断某个路径是文件还是文件夹。
+\item \verb`os.mkdir(目录)` 可以创建一个文件夹， 如果已经存在则会报错。 在前面加上 \verb`os.path.exists(目录):` 即可避免报错
+\item 要创建多层目录， 用 \verb`os.makedirs('目录1/目录2', exist_ok=True)` 可以创建多层目录， \verb`exist_ok=True` 可以使存在在路径也不报错。
 \end{itemize}
