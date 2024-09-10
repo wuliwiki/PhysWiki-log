@@ -13,6 +13,8 @@
 \item 在 \verb`CMakeLists.txt` 的路径下， \verb`cmake .` 生成 \verb`Makefile`， 然后 \verb`make -j12` 多线程编译。 \verb`make VERBOSE=1 -j12` 输出编译命令。 cmake 会在当前路径生成 \verb`Makefile` 和一些临时文件和文件夹， 清理麻烦， 所以还是建议输出到子文件夹。
 \item \verb`CMakeLists.txt` 中， 注释如 \verb`#[[一些注释]]` 或者 \verb`#一些注释` 直到行末
 \item 如果不想改变源码路径， 就用在别的文件夹 \verb`cmake CMakeList的路径` 即可。
+\item \verb`cmake -G 生成器 CMakeList的路径` 可以指定生成器， \verb`生成器` 如 \verb`Unix Makefiles`， \verb`MinGW Makefiles`， \verb`Ninja`
+\item ninja 的用法和 make 一样， \verb`ninja` 编译（默认使用当前路径的 \verb` build.ninja` 文件）， \verb`ninja install` 安装
 \item \verb`cmake -L CMakeList的路径` 列出编译选项， \verb`-LH` 列出选项以及帮助说明。 \verb`-LAH` 列出所有选项（会多出很多 \verb`CMAKE_` 开头的， 不是作者提供的选项）， 用 \verb`cmake -D 选项1=值1 -D 选项2=值2 CMakeList的路径` 来设置选项（\verb`-D` 后面可以没有空格）。
 \item 要指定路径， 用 \verb`cmake -S CMakeList的路径 -B 生成Makefile的路径`， 然后再到 Makefile 的路径 \verb`make -j12` 即可。 cmake 会自动生成 \verb`生成Makefile的路径`。 如果要清理 cmake 生成的文件以及所有编译出来的文件， 直接把第二个路径清空即可。
 \item 当然， 也不是什么平台都可以用 \verb`make`， 所以也可以用 \verb`cmake --build 生成Makefile的路径 [--target 可执行文件] -- -j 12` 其中 \verb`--` 后面的选项会传给 \verb`make` 或者别的具体用于编译的程序。
@@ -94,6 +96,21 @@
 \item \verb`set(CMAKE_FIND_LIBRARY_SUFFIXES ".a或.so或.lib")` 可以让 \verb`find_library()` 只寻找某种类型的 lib。 也可以用 \verb`".a;.so"` 来指定优先级。
 \item \verb`CMAKE_LIBRARY_PATH` 变量可以指定 \verb`find_library` 的更多默认搜索路径，且会优先搜索。
 \end{itemize}
+
+\subsection{函数}
+自定义函数如
+\begin{lstlisting}[language=cmake]
+# 计算一个数的平方
+function(compute_square number result_var)
+    math(EXPR result "${number} * ${number}")
+    set(${result_var} ${result} PARENT_SCOPE)
+endfunction()
+
+# 函数调用
+set(my_number 5)
+compute_square(${my_number} my_result)
+message(STATUS "The square of ${my_number} is ${my_result}")
+\end{lstlisting}
 
 \subsection{CMake Package}
 \begin{itemize}

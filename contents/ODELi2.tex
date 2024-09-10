@@ -1,0 +1,77 @@
+% Liapunov 函数（稳定性直接法）
+% keys Liapunov 函数|V函数
+% license Usr
+% type Tutor
+
+\pentry{Liapunov 稳定性（常微分方程）\nref{nod_ODELia}}{nod_fcab}
+Liapunov 对于非线性的问题又提出了“V 函数法”，又称 Liapunov 函数法、Liapunov 直接法。这个方法借助一个辅助函数直接从微分方程的动力性质研究，所以若知道这辅助函数之后研究稳定性将比较简单，只不过对于给定系统构造一个这样的函数是比较难的。
+
+
+
+\subsection{函数“符号”}
+\begin{definition}{}
+对于一个函数 $ V(\bvec x)$ 在原点 $O$ 的某一邻域内有连续的一阶偏导数，同时 $ V(\bvec 0 ) = 0$，定义：
+\begin{enumerate}
+\item 若存在 $h>0$，当 $\Vert \bvec x \Vert < h$ 时，$V(\bvec x) \ge 0$（$\le 0$），则称 $V$ 是常正（常负）函数，统称常号函数；
+\item 若存在 $h > 0$，当 $0 < \Vert \bvec x \Vert < h$ 时，$V(\bvec x) > 0$（$< 0$），则称 $V$ 是定正（定负）函数，统称定号函数；
+\item 若无论 $h > 0$ 多么小，当 $\Vert \bvec x \Vert < h$ 时，$V(\bvec x)$ 都既可以取到正值、又可以取到负值，就称 $V$ 是变号函数。
+\end{enumerate}
+
+\end{definition}
+
+例如，$V(x_1, x_2) = (x_1 + x_2)^2$ 是常正函数，$V(x_3, x_4) = 2 x_3^2 + x_4^2$ 是定正函数，而 $V(x_5, x_6) = x_5^2 - x_6^2$ 是变号函数。
+
+\subsection{$V$ 函数法}
+考虑一个非线性定常系统 
+\begin{equation}\label{eq_ODELi2_1}
+\dv{t} \bvec x = \bvec f(\bvec x) ~.
+\end{equation}
+约定 $\bvec f(x)$ 在包含坐标原点的某区域 $G \subseteq \mathbb R^n$ 内有连续的一阶偏导数，且 $\bvec f(0) = 0$。其中 $\bvec x = (x_1, x_2, \dots, x_n)$，$\bvec f = (f_1, f_2, \dots, f_n)$。
+
+我们研究 $V$ 函数关于时间的全导数：
+\begin{equation}
+\dv{V(\bvec x(t))}{t} = \sum_{i=1}^n \pdv{V(\bvec x(t))}{x_i} \dv{x_i}{t} = \sum_{i=1}^n \pdv{V(\bvec x(t))}{x_i} f_i(\bvec x(t)) ~,
+\end{equation}
+就称 
+\begin{equation}
+\sum_{i=1}^n \pdv{V(\bvec x)}{x_i} f_i(\bvec x) ~~
+\end{equation}
+是 $V$ 关于系统 \autoref{eq_ODELi2_1} 对于 $t$ 的全导数。直接记
+\begin{equation}
+\dv{V}{t} = \sum_{i=1}^n \pdv{V(\bvec x)}{x_i} f_i(\bvec x) ~.
+\end{equation}
+
+$V$ 函数的符号可以有一个几何解释。不妨考虑 $V$ 是定正函数，且 $V(\bvec 0) = 0$。我们可以在平面画出 $V$ 函数的“等高线”。若此时 
+\begin{equation}
+\dv{V}{t} < 0 ~,
+\end{equation}
+则沿着系统在原点附近的轨线 $\Gamma$，当 $t$ 增大时，$V$ 函数的值将严格减小，即 $\Gamma$ 将从外向内穿入层层等高线，而趋向原点；而若全导数
+\begin{equation}
+\dv{V}{t} > 0 ~,
+\end{equation}
+则当 $t$ 增大时，$V$ 函数的值将严格增大，即轨线将从内向外穿出层层等高线，而向外发散，远离原点。
+
+根据几何意义就可以利用 $V$ 函数判别稳定性。
+
+\begin{theorem}{$V$ 函数判断稳定性}
+对于系统 \autoref{eq_ODELi2_1} ，若存在一个定号函数 $V(\bvec x)$，使得全导数 
+\begin{equation}
+\dv{V}{t} ~~
+\end{equation}
+是常号函数，且正负号与 $V(\bvec x)$ 相反或恒等于 $0$，则系统的零解是稳定的。
+\end{theorem}
+\begin{theorem}{$V$ 函数判断渐进稳定性}
+对于系统 \autoref{eq_ODELi2_1} ，若存在一个定正（负）函数 $V(\bvec x)$，使得全导数 
+\begin{equation}
+\dv{V}{t} ~~
+\end{equation}
+是定正（负）函数，则系统的零解是渐进稳定的。
+\end{theorem}
+\begin{theorem}{$V$ 函数判断不稳定性}
+对于系统 \autoref{eq_ODELi2_1} ，若存在一个函数 $V(\bvec x)$，$V(\bvec 0) = 0$，使得全导数 
+\begin{equation}
+\dv{V}{t} ~~
+\end{equation}
+是定正（负）函数，且在原点的任一邻域内至少有一点 $\bvec x_0$，$V(\bvec x_0) > 0$（$<0$），则系统的零解是不稳定的。
+\end{theorem}
+

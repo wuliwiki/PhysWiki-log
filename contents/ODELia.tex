@@ -1,0 +1,84 @@
+% Liapunov 稳定性（常微分方程）
+% keys Liapunov|混沌|稳定性
+% license Usr
+% type Tutor
+
+\pentry{李普希茨条件\nref{nod_LipCon}}{nod_d374}
+\begin{issues}
+\issueMissDepend
+\end{issues}
+
+微分方程中经常出现混沌系统，而讨论稳定性的问题直到现在都是较有难度的一件事。李雅普诺夫（Liapunov）稳定性是现在较为成熟的一套理论方法。
+
+\subsection{Liapunov 稳定}
+考虑微分方程组 
+\begin{equation}
+\dv{t} \bvec{x}(t) = \bvec{F}(t, \bvec x) ~,
+\end{equation}
+其中 $t \in \mathbb R$，$\bvec x \in D \subseteq \mathbb R^n$，$\bvec F$ 在 $\mathbb R \times D$ 上连续且关于 $\bvec x$ 满足李普希兹条件。若该方程组有解 $\bvec x = \bvec \varphi(t)$，$t \in [t_0, +\infty)$。
+
+\begin{definition}{Liapunov 稳定}
+若 $\forall \varepsilon > 0$， $\exists \delta > 0$，使得对任意满足 
+\begin{equation}
+\Vert \bvec x_0 - \bvec \varphi(t_0)\Vert < \delta ~~
+\end{equation}
+的 $\bvec x_0$，方程组以 $(t_0, \bvec x_0)$ 为初值的解 $\bvec x= \bvec x(t, t_0, \bvec x_0)$ 在区间 $[t_0, +\infty)$ 上有定义，且 $\forall t \ge t_0$，
+\begin{equation}
+\Vert  \bvec x(t, t_0, \bvec x_0) - \bvec \varphi(t) \Vert < \varepsilon ~,
+\end{equation}
+就称解 $\bvec \varphi(t)$ 是（在 Liapunov 意义下）\textbf{稳定的}，否则称为（在 Liapunov 意义下）\textbf{不稳定的}。
+
+\end{definition}
+
+\begin{definition}{渐进稳定}
+假设 $\bvec x = \bvec \varphi(t)$ 是稳定的，且存在 $\delta_1$（$0 < \delta_1 < \delta$）使得只要
+\begin{equation}
+\Vert \bvec x_0 - \bvec \varphi(t_0) \Vert < \delta_1 ~~
+\end{equation}
+就有
+\begin{equation}
+\lim_{t \to +\infty} \Vert  \bvec x(t, t_0, \bvec x_0) - \bvec \varphi(t) \Vert = 0 ~~
+\end{equation}
+则称解 $\bvec x = \bvec \varphi(t)$ 是（在 Liapunov 意义下）\textbf{渐近稳定的}。
+
+\end{definition}
+
+\subsection{零解的稳定性}
+实际研究过程中，对于任意一个解 $\bvec x = \bvec \varphi(t)$ 的研究，可以通过代换 $\bvec y = \bvec x - \bvec \varphi(t)$ 转化为研究方程 
+\begin{equation}
+\dv{t} \bvec y(t) = \bvec F(t, \bvec y + \bvec \varphi(t)) ~~
+\end{equation}
+的零解的稳定性。因为 $\bvec x = \bvec \varphi(t)$ 就对应这方程的零解 $\bvec y= 0$。
+
+\begin{example}{}
+讨论方程 
+\begin{equation}
+\dv{t} x = Cx ~,
+\end{equation}
+的零解 $x = 0$ 的稳定性。其中 $C$ 是一常数。
+\end{example}
+
+方程满足初始条件 $x(t_0) = x_0$ 的解是 
+\begin{equation}
+x(t) = x_0 \exp(C (t - t_0)) ~.
+\end{equation}
+
+i）当 $a<0$ 时，$\forall \varepsilon > 0$，选 $\delta = \varepsilon$，当 $|x_0| < \delta$ 时，$\forall t \ge t_0$，
+\begin{equation}
+|x(t)| = |x_0 \exp(C (t-t_0))| < \varepsilon \exp(C(t-t_0)) < \varepsilon ~,
+\end{equation}
+故零解是稳定的。同时容易证明也是渐近稳定的。
+
+ii）当 $a=0$ 时，选 $\delta = \varepsilon$ 可类似的证明零解是稳定的，但由于 
+\begin{equation}
+\lim_{t \to +\infty} |x(t)| = |x_0| \neq 0 ~,
+\end{equation}
+故并不是渐近稳定的。
+
+iii）当 $a > 0$ 时，无论 $x_0$ 多小，总有 
+\begin{equation}
+\lim_{t \to +\infty} |x(t)| = \lim_{t \to +\infty} |x_0| \exp(C(t-t_0)) = +\infty ~,
+\end{equation}
+故零解是不稳定的。
+
+
