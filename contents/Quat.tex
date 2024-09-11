@@ -7,7 +7,7 @@
 
 %未完成： 在“域”的文章出现时需要在预备知识里补充相关链接
 %基本完成
-\addTODO{补充单位四元数的伴随表示反射，四元数与$S0(4),SO(3)$关系。}
+\addTODO{补充四元数与$S0(4),SO(3)$关系。新增覆叠映射的词条}
 \subsection{四元数的历史}
 
 复数可以定义为具有特定乘法有序实数对，也可以看成是在实数域上添加一个新的元素 $\I$ 所得到的扩域。
@@ -103,7 +103,7 @@ ab = (ab, \bvec 0) = (a,\bvec 0)(b,\bvec 0) = (b,\bvec 0)(a,\bvec 0)~.
 AA^{-1} = A^{-1}A = 1 \qquad (A \ne 0)~.
 \end{equation}
 易得每个非零四元数都有唯一的逆
-\begin{equation}
+\begin{equation}\label{eq_Quat_4}
 A^{-1} = \frac{\tilde A}{\abs{A}^2} \qquad (A \ne 0)~.
 \end{equation}
 代入\autoref{eq_Quat_3} 即可证明。 证明\textbf{逆元的唯一性}： 假设 $B_1, B_2$ 都是 $A$ 的逆元， 那么 $AB_1 = AB_2$， 等式两边左乘 $B_1$， 得 $B_1 = B_2$。 证毕。
@@ -204,6 +204,7 @@ b_3 & -b_2 & b_1 & b_0
 
 
 \subsection{四元数的矩阵表示}
+\subsubsection{四元数与$SU(2)$}
 
 如果将四元数的四个基 $1, \uvec i, \uvec j$ 和 $\uvec k$ 分别对应到以下四个矩阵
 
@@ -218,8 +219,10 @@ b_3 & -b_2 & b_1 & b_0
 \end{equation}
 那么一个任意的四元数或双四元数 $A=a_0+\bvec{a}$ 可以用矩阵表示为
 \begin{equation}
-\begin{pmatrix}a_0+\I a_1&a_2+\I a_3\\-a_2+\I a_3&a_0-\I a_1 \end{pmatrix} ~.
+f(A)=\begin{pmatrix}a_0+\I a_1&a_2+\I a_3\\-a_2+\I a_3&a_0-\I a_1 \end{pmatrix} ~.
 \end{equation}
+
+若$A$是单位四元数，则$\opn{det}f(A)=1$，且$f(A)^{\dagger}=f(A)^{-1}$。也就是说$f$将单位四元数映射到$SU(2)$中。容易验证，四元数的加法和乘法运算，与把基分别换成这四个矩阵以后的矩阵加法和乘法运算是同构的。在群意义上，四元数与$SU(2)$同构。
 
 \begin{example}{矩阵表示的例子}\label{ex_Quat_1}
 \begin{equation}
@@ -233,6 +236,21 @@ v=-\frac{1}{2}(\uvec j+\I\uvec k)=\begin{pmatrix}0&0\\1&0\end{pmatrix} ~.
 \end{equation}
 \end{example}
 
-容易验证，四元数的加法和乘法运算，与把基分别换成这四个矩阵以后的矩阵加法和乘法运算是同构的。
-
 在矩阵表示中，$A$ 的转置共轭就是矩阵 $A$ 的转置，复共轭就是 $A$ 的各矩阵元取复共轭，厄密共轭就是 $A$ 的厄密共轭矩阵（矩阵转置后再取各矩阵元的复共轭），而四元数的模方就是其矩阵表示的行列式：$||A||=\opn{det}A$。因此，模方不为零的（双）四元数对应的矩阵是可逆的，其逆矩阵所表示的就是该四元数的逆。
+\subsubsection{四元数与$SO(3)$}
+设单位四元数$q=\left(\cos\frac{\theta}{2},\hat{\mathbf{n}}\sin\frac{\theta}{2}\right),\bvec v$为任意向量，则$q\bvec vq^{-1}$表示$\bvec v$绕$\hat {\bvec n}$旋转$\theta$\footnote{证明见\href{https://wuli.wiki/online/QuatN.html}{四元数与旋转矩阵}一节。}。易证，$q$与$-q$都代表同一个旋转，因此这是一个二对一的覆叠映射。设
+又因为$(q_1q_2)\bvec v (q_1q_2)^{-1}=q_1(q_2\bvec v q_2^{-1})q_1^{-1}$，因此四元数同态于$SO(3)$。
+\begin{corollary}{}
+
+\begin{equation}
+SU(2)/\mathbb{Z}_2\cong SO(3)~.
+\end{equation}
+\end{corollary}
+\textbf{证明：}
+
+设所有单位四元数构成的子群为$Q$，$f:Q\to SU(2)$代表\autoref{eq_Quat_4} 的同构映射。对于任意$q\in Q$，$g:Q\to SO(3)$表示$q$对应的三维旋转,由前文讨论可知，这是一个同态映射。
+
+若$q\bvec vq^{-1}=\bvec v$，则$\theta=0,2\pi$。代入单位四元数的表示可得：$q=1,-1$。因此$\ker g=\{1,-1\}$。
+
+又因为$Q\cong SU(2)$，易证$f(\ker g)$也是$SU(2)$的正规子群。所以$Q/\{1,-1\}\cong SU(2)/\mathbb Z_2\cong SO(3)$，得证。
+\subsubsection{四元数与$SO(4)$}

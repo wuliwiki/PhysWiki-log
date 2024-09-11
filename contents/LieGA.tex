@@ -3,7 +3,7 @@
 % license Xiao
 % type Tutor
 
-\pentry{李群\nref{nod_LieGrp}，李代数\nref{nod_LieAlg}}{nod_4184}
+\pentry{李群\nref{nod_LieGrp}，李代数\nref{nod_LieAlg}，前推\nref{nod_pfw}}{nod_4184}
 
 \subsection{光滑向量场}
 
@@ -16,7 +16,7 @@
 \begin{equation}\label{eq_LieGA_1}
 (Xf)\circ F^{-1}=F_*(X)(f\circ F^{-1})~,
 \end{equation}
-其中 $F_*:TM\to TN$ 是 $F$ 的微分。
+其中 $F_*:TM\to TN$ 是 $F$ 的微分，或称为切映射，前推映射。
 \end{lemma}
 
 \autoref{lem_LieGA_1} 根据“向量场对光滑函数作用”的定义就可以证出。
@@ -48,12 +48,12 @@ F_*(XY)(f\circ F^{-1})&=(XYf)\circ F^{-1}\\
 \begin{definition}{左不变向量场}\label{def_LieGA_1}
 给定李群 $G$，对于任意 $g\in G$，定义映射 $l_g:G\to G$ 为\textbf{左平移映射}，即对于任意 $p\in G$，都有 $l_g(p)=gp$。
 
-根据李群的定义，$l_g$ 是一个光滑映射，因此可以求其微分 $l_{g}^*:TG\to TG$，该微分把一个 $p\in G$ 处的切向量映射为 $gp$ 处的切向量。
+根据李群的定义，$l_g$ 是一个光滑映射，因此可以求其微分 $l_{g*}:TG\to TG$，该微分把一个 $p\in G$ 处的切向量映射为 $gp$ 处的切向量。
 
-如果存在 $G$ 上的切向量场 $X$\footnote{注意，只要求是切向量场，没有要求连续性，更没有要求光滑性。但是稍后我们会看到，所谓的左不变向量场必然是光滑的。}，使得对于\textbf{任意}$g\in G$，都有$l_{g}^*(X_p)=X_{gp}$ ；换句话说，就是$l^*_g(X)=X$ ，那么称 $X$ 为 $G$ 上的一个\textbf{左不变切向量场（left-invariant tangent vector field）}。
+如果存在 $G$ 上的切向量场 $X$\footnote{注意，只要求是切向量场，没有要求连续性，更没有要求光滑性。但是稍后我们会看到，所谓的左不变向量场必然是光滑的。}，使得对于\textbf{任意}$g\in G$，都有$l_{g*}(X_p)=X_{gp}$ ；换句话说，就是$l_{g*}(X)=X$ ，那么称 $X$ 为 $G$ 上的一个\textbf{左不变切向量场（left-invariant tangent vector field）}。
 \end{definition}
 
-\autoref{def_LieGA_1} 已经直白地说明了，一个左不变向量场 $X$ 唯一地由其在单位元处的取值 $X_e$ 决定的，即 $X_p=l_{p}^*(X_e)$。同时，任意给定 $X_e$，都能由此生成唯一的左不变向量场 $X$。这样，左不变向量场的性质被其在单位元处的取值完全决定，单位元就好像存储了全息信息一样，局部就可以描述整体。
+\autoref{def_LieGA_1} 已经直白地说明了，一个左不变向量场 $X$ 唯一地由其在单位元处的取值 $X_e$ 决定的，即 $X_p=l_{p*}(X_e)$。同时，任意给定 $X_e$，都能由此生成唯一的左不变向量场 $X$。这样，左不变向量场的性质被其在单位元处的取值完全决定，单位元就好像存储了全息信息一样，局部就可以描述整体。
 
 \begin{theorem}{}
 左不变切向量场必为光滑向量场。
@@ -122,10 +122,12 @@ F_*(XY)(f\circ F^{-1})&=(XYf)\circ F^{-1}\\
 \begin{equation}
 [X_p, Y_p]=[X, Y]_p~.
 \end{equation}
-因此 $T_p G$ 是一个李代数，即\textbf{李群的李代数}。
+可以代入切场计算得证，这样定义的李括号具有双线性和Jacobi 结合性。由习题1可知，李括号运算对左不变切场是封闭的，因此 $T_p G$ 是一个李代数，即\textbf{李群的李代数}。由于左不变切场同构于切空间，且$l_p^*(X_q)=X_{pq}$，因此无论$p$点取何值，都不改变左不变切场之间的李代数关系。一般我们用$\opn{Lie}(G)$表示李群上全体左不变切场构成的李代数。
 \end{definition}
 
 %是否需要讨论矩阵李群上的李代数呢？恰好就是矩阵乘法的李代数。
+
+
 
 \begin{theorem}{复李群的复李代数}
 复李群\autoref{def_LieGrp_6} 的李代数是复李代数。
@@ -144,8 +146,47 @@ S = \{ \mathcal{X}\in \opn{GL}(n, \mathbb{C}) \mid \E^{t\mathcal{X}}\in M, \fora
 事实上，$\E^{t\mathcal{X}}$是由切向量$\mathcal{X}\in\opn{T}_e M$生成的左不变切向量场的\textbf{积分曲线}。
 
 \end{example}
+\subsection{诱导的李代数同态}
+%覆叠映射诱导的同态代补充%
+如果$G,H$都是李群，且有李群同态关系$f:G\to H$，那么$f_*$可以诱导李群上的李代数同态。
+\begin{theorem}{}
+设$\opn{Lie}G=\mathfrak g,\opn{Lie}H=\mathfrak h$，且$f:G\to H$是李群同态。对于任意$X\in \mathfrak g$，都有唯一$Y\in \mathfrak h$与之$f-$关联。进而$f_*:\mathfrak g\to h$是李代数同态。
+\end{theorem}
+\textbf{证明：}
 
+对于任意$X_e$，我们有$Y_e=f_*X_e$。利用左平移映射的切映射，延拓$Y_e$为左不变切向量场，即定义里的$Y_p=l_{p*}Y_e$。接下来我们只需证明$Y$确实与$X$有$f$关联即可。
 
+由李群同态关系得
+\begin{equation}
+\begin{aligned}
+f(g_1g_2)&=f(g_1)f(g_2)\\
+f\circ l_{g_1}(g_2)&=l_{f(g_1)}\circ f(g_2)~,
+\end{aligned}
+\end{equation}
+则$f_*\circ l_{g*}=l_{f(g)*}\circ f_*$。
+
+又因为
+\begin{equation}
+\begin{aligned}
+f_*X_p&=f_*\circ l_{p*}X_e\\
+&=l_{f(p)*}\circ f_*X_e\\
+&=Y_{f(p)}~,
+\end{aligned}
+\end{equation}
+所以$Y$与$X$有$f-$关联。定理的第一部分得证。
+
+接下来证明，若任意$Y_i,Y_j\in \mathfrak{X}(H)$与任意$X_i,X_j\in \mathfrak{X}(G)$分别有$f$关联，即$f_*X_i=Y_i$，则对应李括号也有$f$关联，满足$f_*[X_i,X_j]=[f_*X_i,f_*X_j]=[Y_i,Y_j]$。
+
+设$h\in C^{\infty} (H)$，由\autoref{the_pfw_1} 得，
+\begin{equation}
+\begin{aligned}
+(f_*[X_1,X_2])h&=[X_1,X_2](h\circ f)\\
+&=(X_1X_2-X_2X_1)(h\circ f)\\
+&=X_1(Y_2h)\circ f-X_2(Y_1h)\circ f\\
+&=([Y_1,Y_2]h)\circ f~.
+\end{aligned}
+\end{equation}
+因此，$[X_i,X_j]$与$[Y_i,Y_j]$有$f-$关联。代入我们定理中的情况，便是李代数同态关系。定理第二部分得证。
 
 
 
