@@ -117,25 +117,9 @@ A^{-1} = \frac{\tilde A}{\abs{A}^2} \qquad (A \ne 0)~.
 
 根据以上讨论不难发现， 所有的非零四元数及其乘法运算构成一个\textbf{体}（\autoref{def_field_1}）。
 
-\subsubsection{四元数乘法的矩阵表示}
-四元数乘法 $(a_0,\bvec a)(a_0,\bvec b) = (a_0,a_1,a_2,a_3)(b_0,b_1,b_2,b_3)$ 可以看作是一个线性变换， 用矩阵乘法表示为
-\begin{equation}
-\begin{aligned}
-(a_0,\bvec a)(a_0,\bvec b) &= \pmat{
-a_0 & -a_1 & -a_2 & -a_3\\
-a_1 & a_0 & -a_3 & a_2\\
-a_2 & a_3 & a_0 & -a_1\\
-a_3 & -a_2 & a_1 & a_0
-}\pmat{
-b_0\\b_1\\b_2\\b_3}\\
-&= \qty[\pmat{a_0& a_1 & a_2& a_3}\pmat{
-b_0 & -b_1 & -b_2 & -b_3\\
-b_1 & b_0 & -b_3 & b_2\\
-b_2 & b_3 & b_0 & -b_1\\
-b_3 & -b_2 & b_1 & b_0
-}]\Tr~,
-\end{aligned}
-\end{equation}
+
+
+
 
 \subsection{四元数的指数表示}
 
@@ -237,8 +221,8 @@ v=-\frac{1}{2}(\uvec j+\I\uvec k)=\begin{pmatrix}0&0\\1&0\end{pmatrix} ~.
 \end{example}
 
 在矩阵表示中，$A$ 的转置共轭就是矩阵 $A$ 的转置，复共轭就是 $A$ 的各矩阵元取复共轭，厄密共轭就是 $A$ 的厄密共轭矩阵（矩阵转置后再取各矩阵元的复共轭），而四元数的模方就是其矩阵表示的行列式：$||A||=\opn{det}A$。因此，模方不为零的（双）四元数对应的矩阵是可逆的，其逆矩阵所表示的就是该四元数的逆。
-\subsubsection{四元数与$SO(3)$}
-设单位四元数$q=\left(\cos\frac{\theta}{2},\hat{\mathbf{n}}\sin\frac{\theta}{2}\right),\bvec v$为任意向量，则$q\bvec vq^{-1}$表示$\bvec v$绕$\hat {\bvec n}$旋转$\theta$\footnote{证明见\href{https://wuli.wiki/online/QuatN.html}{四元数与旋转矩阵}一节。}。易证，$q$与$-q$都代表同一个旋转，因此这是一个二对一的覆叠映射。设
+\subsubsection{单位四元数与$SO(3)$}
+设单位四元数$q=\left(\cos\frac{\theta}{2},\hat{\mathbf{n}}\sin\frac{\theta}{2}\right),\bvec v$为任意向量，则$q\bvec vq^{-1}$表示$\bvec v$绕$\hat {\bvec n}$旋转$\theta$\footnote{证明见\href{https://wuli.wiki/online/QuatN.html}{四元数与旋转矩阵}一节。}。易证，$q$与$-q$都代表同一个旋转，因此这是一个二对一的覆叠映射。当我们讨论单位四元数同态于$SO(3)$时，$q\bvec v q^{-1}$所代表的旋转过程实际上是把四元数的矢量部分$\opn{Im}\mathbb H=\{a_1\uvec i+a_2\uvec j+ a_3\uvec k\}$同构为一般意义上的矢量空间$\mathbb R^3$。
 又因为$(q_1q_2)\bvec v (q_1q_2)^{-1}=q_1(q_2\bvec v q_2^{-1})q_1^{-1}$，因此四元数同态于$SO(3)$。
 \begin{corollary}{}
 
@@ -248,9 +232,40 @@ SU(2)/\mathbb{Z}_2\cong SO(3)~.
 \end{corollary}
 \textbf{证明：}
 
-设所有单位四元数构成的子群为$Q$，$f:Q\to SU(2)$代表\autoref{eq_Quat_4} 的同构映射。对于任意$q\in Q$，$g:Q\to SO(3)$表示$q$对应的三维旋转,由前文讨论可知，这是一个同态映射。
+设所有单位四元数构成的集合为$Q$，$f:Q\to SU(2)$代表\autoref{eq_Quat_4} 的同构映射。对于任意$q\in Q$，$g:Q\to SO(3)$表示$q$对应的三维旋转,由前文讨论可知，这是一个同态映射。
 
 若$q\bvec vq^{-1}=\bvec v$，则$\theta=0,2\pi$。代入单位四元数的表示可得：$q=1,-1$。因此$\ker g=\{1,-1\}$。
 
 又因为$Q\cong SU(2)$，易证$f(\ker g)$也是$SU(2)$的正规子群。所以$Q/\{1,-1\}\cong SU(2)/\mathbb Z_2\cong SO(3)$，得证。
-\subsubsection{四元数与$SO(4)$}
+\subsubsection{单位四元数与$SO(4)$}
+因为四元数乘法是$\mathbb R$线性的，因此对于任意$a,b\mathbb H$，$ab$可视作对$a$或者对$b$的线性变换。设$a=(a_0,\bvec a)=(a_0,a_1,a_2,a_3),b=(b_0,\bvec b)=(b_0,b_1,b_2,b_3)$，这两种线性变换可以分别对应
+\begin{equation}
+\begin{aligned}
+ab &=L_ab= \pmat{
+a_0 & -a_1 & -a_2 & -a_3\\
+a_1 & a_0 & -a_3 & a_2\\
+a_2 & a_3 & a_0 & -a_1\\
+a_3 & -a_2 & a_1 & a_0
+}\pmat{
+b_0\\b_1\\b_2\\b_3}\\
+&= R_ba=\pmat{b_0 & -b_1 & -b_2 & -b_3\\
+b_1 & b_0 & -b_3 & b_2\\
+b_2 & b_3 & b_0 & -b_1\\
+b_3 & -b_2 & b_1 & b_0}\pmat{a_0\\a_1\\a_2\\a_3}~.
+\end{aligned}
+\end{equation}
+显然，无论$L_a$还是$R_b$，不同列和不同行都是相互正交的，而且行列式和列矢量平方都对应为四元数的模方。所以映射是$SO(4)$的群元当且仅当对应的四元数是单位四元数。
+
+利用$L_{ab}=L_aL_b,\,R_{ab}=R_bR_a$，我们可以诱导$Q\times Q\to SO(4)$的同态。
+
+为满足群直积运算$(q_1,q_2)(q_3,q_4)=(q_1q_2,q_3q_4)$和运算保同态，旋转$u$对应的四元数乘法为
+\begin{equation}\label{eq_Quat_5}
+L_{q_1}R_{q_2^{-1}}u=q_1uq_2^{-1}~.
+\end{equation}
+\begin{theorem}{}\label{the_Quat_1}
+存在2对1的覆叠同态$\phi:SU(2)\times SU(2)\to SO(4)$，核元素为$\mathbb Z_2$\footnote{可以证明，本节的同态关系都是李群同态。}。
+\end{theorem}
+
+由于$SU(2)\cong Q$，且\autoref{eq_Quat_5} 满足$\phi:Q\times Q\to SO(4)$，我们只需证明核元素只有2个即可。
+
+设$(p,q)\in \opn{ker}Q\times Q$，则对于任意$u\in \mathbb H$都有$puq^{-1}=u$，对应单位矩阵。代入特例$u=1$得：$p=q$。结合前面的讨论易证，$pup^{-1}$代表的是固定$u$的实轴部分，只对$\opn{Im}\mathbb H$部分进行旋转的线性变换。因此，若$pup^{-1}=u$，则$p=1,-1$，所以$\opn{ker}Q=(1,1),(-1,-1)$。证毕。
