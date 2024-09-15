@@ -65,7 +65,7 @@
 
 \subsection{Bootloader}
 \begin{itemize}
-\item 开机的时候，BIOS/UEFI 会先启动 bootloader 然后再由 bootloader 加载系统（也就是按 F2 或 Del 以后进入的那个界面选择的其实是 bootloader)
+\item 开机的时候，BIOS/UEFI 会先启动 bootloader 然后再由 bootloader 加载系统（F2 或 Del 以后进入的那个界面选择的其实是 bootloader)
 \item 有一个设置 Grub 的 GUI 软件叫做 \verb`grub-customizer`, 可以设置 grub 菜单， 记住上次的选择， 检测新系统， 等。
 \item \verb`os-prober` 也可以发现新系统并加入 grub 菜单（会被 grub-customizer 使用）
 \item grub 可以装在和系统不同的盘上
@@ -80,9 +80,6 @@
 \item 如果安装遇到 \verb`will not proceed with blocklist`， 就在安装命令后面加 \verb`--force`。
 \item \verb`df` 只会显示已挂载的硬盘， 而 \verb`fdisk` 或者 \verb`disk, gparted` 软件才会显示所有连接的硬盘
 \item 要安装 ubuntu live 镜像到 disk, 用 \verb`sudo dd bs=4M if=/path/to/ISOfile of=/dev/sda status=progress oflag=sync` 注意 \verb`sda` 后面不能有数字！ 这样 \verb`dd` 会把整个硬盘克隆成 iso 的内容而无视之前的任何 partition table 和分区。 此时 u 盘和光盘完全等效，都是只读的（亲测成功）.
-\end{itemize}
-
-\begin{itemize}
 \item grub 在菜单中按 c 进入命令行模式， 然后 ls 可以看见有哪些硬盘和分区， 例如 （hd0,msdos1）， 然后继续 ls (hd0,msdos1)/ 按 tab，就会提示该目录下有什么
 \item grub 在菜单中按 e 就可以编辑临时的 grub config 文件，填入 ls 获得的信息即可
 \item grub 的菜单是由 \verb`/boot/grub/grub.cfg` 或者 \verb`grub.config` 定义的
@@ -93,6 +90,7 @@
 \item uuid 需要 umount 才可以修改， 随机生成 uuid 用 \verb`tune2fs -U random /dev/sdb?` , disk 中会看到变化， 如果 blkid 看见 uuid 没有变化， 就 mount 再 umount 即可刷新
 \item \verb`fdisk` 也可以改变 uuid, \verb`sudo fdisk /dev/sd?` 然后按 x 再按 i 即可
 \item 理论上 GPT 是可以在 BIOS 主板上 boot 的（实际上对大部分 linux 可以）， 见\href{https://superuser.com/questions/1337344/is-it-possible-to-boot-linux-from-a-gpt-disk-on-a-bios-system}{这里}。
+\item 若有多个操作系统，要开机默认进入上次的， 在 \verb`/etc/default/grub` 文件中设置 \verb`GRUB_DEFAULT=saved` （\verb`GRUB_DEFAULT=0` 设置第一个操作系统） 还需要在下面加一行 \verb`GRUB_SAVEDEFAULT=true`。 保存了以后运行命令 \verb`sudo update-grub` 即可。
 \end{itemize}
 
 \subsection{Clone Ubuntu 硬盘}
