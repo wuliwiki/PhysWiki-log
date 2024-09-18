@@ -3,7 +3,7 @@
 % type Tutor
 
 
-\pentry{循环群\nref{nod_cyclic}}{nod_54be}
+\pentry{循环群\nref{nod_cyclic}，直积和半直积（群）\nref{nod_GrpPrd}}{nod_54be}
 利用商群列的思路，我们可以证明一个阿贝尔群的常用性质：\textbf{阿贝尔群都是循环群的直积。
 }要得到这个推论，我们还需要引入2个定理。
 \begin{theorem}{}
@@ -37,19 +37,96 @@
 
 该定理实际上表明的是——阿贝尔群总可以分解为若干阶数为素因子幂的子群内直积，即$G\cong G_{l_1}\times G_{l_2}...G_{l_k}$。对于任意$x\in G$，可同构为$f(x)=(x_1,x_2,...,x_k)$。
 
-在这基础上，我们只需要证明素数阶交换群总可以分解为有限个循环群内直积即可证明阿贝尔群的核心性质。
-\begin{example}{素数阶循环群的分解}
+在这基础上，我们只需要证明素数阶交换群总可以分解为有限个循环群内直积即可证明阿贝尔群的核心性质。为了让逻辑不至于臃肿，我们先把一部分内容写为如下引理：
+% \begin{example}{素数阶循环群的分解}
 
-\end{example}
+% \end{example}
 \addTODO{需要更多解释}
+
+
+\begin{lemma}{}\label{lem_Albert_1}
+设$G$是$p^n$阶\textbf{阿贝尔群}。
+
+取$G$的非平凡子群$H$，使得：$H=\langle h_1 \rangle\times\langle h_2 \rangle\times\cdots\times\langle h_k \rangle$，其中$h_i\in H$，$(h_1, h_2, \cdots, h_k)=h_1h_2\cdots h_k$；$G/H$是循环群；$\abs{\langle h_i \rangle}=p^{r_i}$和$\abs{G/H}=p^s$，且对于任意$g\in G-H$，$\opn{ord}g\leq \opn{min}\{p^{r_i}\}$。
+
+则存在$x_0\in G-H$，使得$G/H=\langle x_0H \rangle$且$x_0^{p^s}=e$。
+\end{lemma}
+
+\textbf{证明}：
+
+取$G/H$的生成元$xH$，则存在$m_i\in \mathbb{Z}^+$使得$x^{p^s}=h_1^{m_1}h_2^{m_2}\cdots h_k^{m_k}$。\textbf{如果}$p\nmid m_1$，则$\langle x^{p^s} \rangle$是一个\textbf{至少}$p^{r_1}$阶循环群，于是$\langle x \rangle$是一个\textbf{至少}$p^{r_1}p^s$阶群，或者说$\opn{ord}x=p^{r_1}p^s>p^{r_1}$，这与上一段的设定矛盾，因此“如果”不成立，即$p\mid m_i$对各$i$都成立。于是，不妨令
+\begin{equation}
+    x^{p^s}=h_1^{w_1p^{t_1}}h_2^{w_2p^{t_2}}\cdots h_k^{w_kp^{t_k}}, ~
+\end{equation}
+其中各$w_i\in[0, p-1]$。
+
+如果$w_1\not=0$，则$x^{p^s}$的阶数至少是$p^{r_1}/w_1p^{t_1}$。同样由$\opn{ord}x\leq p^{r_1}$可知\footnote{注意$\opn{ord}g=\abs{\langle g \rangle}$，因此这些比较的过程也可以理解为比较循环群里元素的数量。}，
+\begin{equation}
+    \frac{p^{r_1}}{w_1p^{t_1}}\cdot p^s\leq p^{r_1}, ~
+\end{equation}
+即
+\begin{equation}
+    p^{s-t_1}\leq w_1. ~
+\end{equation}
+结合$w_i<p$可知$s\leq t_1$。同理，$s\leq t_i$对各$i$都成立，这意味着$t_1-s$总是非负整数。
+
+令
+\begin{equation}
+    x_0 = x h_1^{-w_1p^{t_1-s}}, ~
+\end{equation}
+
+则显然$x_0$即为所求。
+
+
+\textbf{证毕}。
+
+
+
 \begin{theorem}{}
-给定$p^k$阶阿贝尔群$G$（$p$为素数），则它可以表示为循环子群的直积。
+给定$p^k$阶\textbf{阿贝尔群}$G$（$p$为素数），则它可以表示为循环子群的直积。
 \end{theorem}
-当$G$是循环群时，定理自然成立（待证），下面证明$G$并非循环群的一般情况。
 
-设$G_1$是$G$的一个非平凡极大循环子群，再取另一个极大循环子群的形式为$\ev x G_1$，其中$\ev x$是$G$的一个循环群。由\autoref{the_NormSG_1} 和\autoref{the_NormSG_2} 可知，$\ev{x}G_1/G_1\cong \ev{x}/(\ev{x}\cap G_1)$，且若$\ev{x}\cap G_1\neq {e}$，总可以找到$y\in \ev x$使得$\ev y\cap G_1={e}$，同时满足$\ev xG_1=\ev y G_1$。
 
-易证$\ev yG_1\cong \ev{y}\times G_1$\footnote{由于$G_1$是不变的，验证该性质时使之为$e$即可。画出韦恩图，你会发现，该同构实际上是把陪集映射到对应的点上，这也是我们要找到$\ev y$的原因，使得每个陪集只包含$\ev{y}$的一个点。}。然后我们来看$G/G_1\ev{y}$，若结果是$\{e\}=eG_1\ev{y}$，定理自然得证。若结果并不是这个极大循环子群，那么我们可以用$G$继续商去$G_1\ev{y}$，在商群里找到另一个元素$y_2$，重复上述过程，不断扩充正规子群，在有限步后$G/{\ev y_n}=\{e\}$，相应的，我们就成功把该阿贝尔群分解为循环子群的直积。
+\textbf{证明}：
+
+如果$G$是循环群，则定理成立。下设$G$不是循环群。
+
+取$G$中阶数最大的一个元素$x_1$，设$\opn{ord}x_1=p^{r_1}$。记$H_1=\langle x_1 \rangle$，再取$G/H_1$中阶数最大的元素$x_2H_1$，设$\opn{ord}\qty(x_2H_1) = p^{r_2}$。用$\pi$表示任何自然同态，记$H_2=\pi^{-1}\qty(\langle x_2\langle x_1 \rangle \rangle)$。
+
+显然，$r_1\geq r_2$\footnote{否则$\opn{ord}x_2\geq \opn{ord}\qty(x_2\langle x_1 \rangle)>p^{r_1}$就与“$x_1$阶数最大”矛盾了。}。
+
+
+
+显然，$H_1$是循环群的直积，$H_2/H_1$是循环群，且对于任意$g\in H_2-H_1$都有$\opn{ord}g\leq p^{r_1}$。于是由\autoref{lem_Albert_1} ，若设$\abs{H_2/H_1}=p^{r_2}$则存在$h_2\in H_2-H_1$使得$h_2^{p^{r_2}}=e$。
+
+
+构造映射$f_2:\langle x_1 \rangle\times \langle h_2 \rangle\to H_2$，使得$f_2(a, b)=ab$，则显然$f_2$是一个群同态。由于$h_2^{p^{r_2}}=e$，可知$ab=e\implies a=b=e$\footnote{若$h_2^{p^{r_2}}\not=e$，则存在$z\in\mathbb{Z}$使得$h_2^{p^{r_2}}=a^z$，于是$f(a^{-z}, h_2^{p^{r_2}})=e$。}。由此可知$f_2$是群同构。
+
+因此，$H_2$是循环群的直积。
+
+接下来，取$G/H_2$中阶数最大的元素$x_3H_2$，设$\opn{ord}\qty(x_3H_2)=p^{r_3}$，则类似地有：$\forall g\in H_3-H_2 \opn{ord}g\leq p^{r_2}\leq p^{r_1}$\footnote{否则与“$x_2H_1$是$G/H_1$中阶数最大的元素”矛盾。}，且$H_3/H_2$是循环群。于是和$H_2$同理，$H_3$也是循环群的直积。以此类推，可得$G$是循环群的直积。
+
+\textbf{证毕}。
+
+
+
+
+
+
+
+
+
+
+
+
+% \begin{theorem}{}
+% 给定$p^k$阶阿贝尔群$G$（$p$为素数），则它可以表示为循环子群的直积。
+% \end{theorem}
+% 当$G$是循环群时，定理自然成立（待证），下面证明$G$并非循环群的一般情况。
+
+% 设$G_1$是$G$的一个非平凡极大循环子群，再取另一个极大循环子群的形式为$\ev x G_1$，其中$\ev x$是$G$的一个循环群。由\autoref{the_NormSG_1} 和\autoref{the_NormSG_2} 可知，$\ev{x}G_1/G_1\cong \ev{x}/(\ev{x}\cap G_1)$，且若$\ev{x}\cap G_1\neq {e}$，总可以找到$y\in \ev x$使得$\ev y\cap G_1={e}$，同时满足$\ev xG_1=\ev y G_1$。
+
+% 易证$\ev yG_1\cong \ev{y}\times G_1$\footnote{由于$G_1$是不变的，验证该性质时使之为$e$即可。画出韦恩图，你会发现，该同构实际上是把陪集映射到对应的点上，这也是我们要找到$\ev y$的原因，使得每个陪集只包含$\ev{y}$的一个点。}。然后我们来看$G/G_1\ev{y}$，若结果是$\{e\}=eG_1\ev{y}$，定理自然得证。若结果并不是这个极大循环子群，那么我们可以用$G$继续商去$G_1\ev{y}$，在商群里找到另一个元素$y_2$，重复上述过程，不断扩充正规子群，在有限步后$G/{\ev y_n}=\{e\}$，相应的，我们就成功把该阿贝尔群分解为循环子群的直积。
 
 结合上述定理，我们就得到了这节的重要推论。
 
@@ -67,6 +144,6 @@
 反过来需要证明$G$是循环群。若存在$a\in G$且$O(a)=|G|$，则$G$包含$\ev{a}$，又因为$|\ev{a}|=|G|$，因此$G=\ev{a}$。假若不存在阶数为$|G|$的群元，则假设$a'$的阶数$m$最大，设任意群元$b$的阶数为$k\neq m$，则$k$必须是$m$的因子。如若不然，可以证明，群元交换的性质会使得$G$存在一个阶数为$mk$最小公倍数的群元，违背了群元阶数小于或等于$m$的题设，证毕。
 
 \begin{corollary}{}
-$\mathbb{Z} / m \mathbb{Z} \times \mathbb{Z} / n \mathbb{Z}$是循环群当且仅当$gcd(m,n)=1$
+$\mathbb{Z} / m \mathbb{Z} \times \mathbb{Z} / n \mathbb{Z}$是循环群当且仅当$\opn{gcd}(m,n)=1$
 \end{corollary}
 \textbf{证明：}设$G=\mathbb{Z} / m \mathbb{Z} \times \mathbb{Z} / n \mathbb{Z}$，由直积定义可知$|G|=mn$。对于任意群元$a\in \mathbb{Z} / m \mathbb{Z},b\in \mathbb{Z} / m \mathbb{Z}$,存在$m,n$的公倍数$k$使得$(a,b)^k=(e,e)$，则$k$最小为$m,n$的最小公倍数，即$mn/\qty(gcd(m,n))$。所以由\autoref{the_cyclic_5}  可知，$G$是循环群当且仅当$gcd(m,n)=1$。
