@@ -1,0 +1,24 @@
+% Windows 开发笔记
+% license Usr
+% type Note
+
+\subsection{动态链接库 dll}
+
+\begin{itemize}
+\item dll 的默认搜索路径和 exe 一样，都存在系统 \verb`PATH` 中。
+\item 使用配置文件 \verb`文件名.exe.manifest`， 和 \verb`文件名.exe` 放在同一目录。
+\item 也可以用 Windows SDK 把 \verb`文件名.exe.manifest` 嵌入 \verb`文件名.exe` 中： \verb`mt.exe -manifest 文件名.exe.manifest -outputresource:文件名.exe;1
+`
+\begin{lstlisting}[language=none,caption=sample.exe.manifest]
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<assembly xmlns="urn:schemas-microsoft-com:asm.v1" manifestVersion="1.0">
+  <dependency>
+    <dependentAssembly>
+      <assemblyIdentity type="win32" name="MyLibrary" version="1.0.0.0"/>
+      <file name="mylibrary.dll" path="C:\path\to\dll_directory"\>
+    </dependentAssembly>
+  </dependency>
+</assembly>
+\end{lstlisting}
+\item 如果使用 CLion 调试， 可以在 Run/Debug Configuration 里面的环境变量添加 PATH。
+\end{itemize}
