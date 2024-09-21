@@ -15,5 +15,94 @@
 (f*g)(t)=\int_{-\infty}^{+\infty}f(\tau)g(t-\tau)~.
 \label{juanji}
 \end{equation}
+在CNN中，卷积操作主要用于特征提取。它通过滑动一个称为“卷积核”（或“滤波器”）的小型矩阵窗口在输入数据（如图像）上，进行元素级别的乘法并求和，从而生成新的特征图（Feature Map）。
 
+假设我们有一个简单的3x3的输入矩阵（图像的一个局部区域）和一个2x2的卷积核：
+输入矩阵（Input Matrix）:
+\begin{table}[ht]
+\centering
+\caption{输入矩阵F}\label{tab_CNN21}
+\begin{tabular}{|c|c|c|}
+\hline
+1 & 0 & 1 \\
+\hline
+2 & 1 & 0 \\
+\hline
+0 & 1 & 1 \\
+\hline
+\end{tabular}
+\end{table}
+卷积核（Kernel）（只是方便演示，一般卷积核是奇数，方便确定中心）:
+\begin{table}[ht]
+\centering
+\caption{卷积核G（Kernel)}\label{tab_CNN22}
+\begin{tabular}{|c|c|}
+\hline
+1 & 0 \\
+\hline
+0 & 1 \\
+\hline
+\end{tabular}
+\end{table}
+卷积操作的过程如下：
+
+1.定位初始位置：首先，将卷积核放置在输入矩阵的左上角（或指定的起始位置）。
+进行元素级乘法并求和：将卷积核中的每个元素与输入矩阵中对应位置的元素相乘，然后将所有乘积相加。在本例中，卷积核与输入矩阵左上角2x2区域的乘积之和为 1∗1+0∗2+0∗1+1∗0=1。这里注意对应的下标是不同的，是F(1,1)对应G(2,2),F(1,2)对应G(2,1)...这在前面数学表达式有体现。
+
+2.滑动卷积核：按照指定的步长（Stride）将卷积核向右滑动（通常是1个单位），然后重复步骤2，直到卷积核无法再向右滑动为止。之后，将卷积核回到最左边，向下移动一个步长，继续向右滑动，直到遍历完整个输入矩阵。
+
+3.记录输出：每次卷积操作的结果都会被记录下来，形成新的特征图的一个元素。在本例中，由于步长为1且没有填充（Padding），所以输出特征图的大小会比输入矩阵小（具体取决于卷积核大小、步长和填充方式）。
+
+步长（Stride）：卷积核在输入矩阵上滑动的距离。步长越大，输出特征图越小。
+填充（Padding）：在输入矩阵的边界外添加额外的值（通常是0），以便在卷积过程中保持输入和输出的尺寸相同或按预期变化。
+卷积核大小：卷积核的维度决定了每次卷积操作覆盖的输入矩阵的区域大小，也影响了特征图的尺寸和提取的特征类型。
 ​
+最后输出是：\begin{table}[ht]
+\centering
+\caption{输出矩阵}\label{tab_CNN24}
+\begin{tabular}{|c|c|}
+\hline
+2 & 0 \\
+\hline
+3 & 2 \\
+\hline
+\end{tabular}
+\end{table}
+
+把这个在PyTorch中写出来，可以使用torch.nn.Conv2d来定义一个二维卷积层，该层可以应用于图像等二维数据上。对于给出的例子（输入矩阵为3x3，卷积核为2x2，步长为1，无填充），可以这样定义卷积层并应用它：
+
+
+\begin{lstlisting}[language=python]
+import torch  
+import torch.nn as nn  
+  
+# 定义一个输入张量，形状为[batch_size, channels, height, width]
+#这里假设batch_size=1, channels=1  
+# 注意PyTorch中的输入张量通常需要加上一个批次维度和一个通道维度  
+input_tensor = torch.tensor([[[[1, 0, 1],  
+                               [2, 1, 0],  
+                               [0, 1, 1]]]], dtype=torch.float32)  
+  
+# 定义一个2x2的卷积核
+# 这里out_channels=1（输出通道数）
+#in_channels=1（输入通道数）
+#kernel_size=2（卷积核大小）  
+conv_layer = nn.Conv2d(in_channels=1, out_channels=1,
+ kernel_size=2, stride=1, padding=0)  
+  
+# 应用卷积层  
+output_tensor = conv_layer(input_tensor)  
+  
+# 输出结果，注意输出张量也会包含批次维度和通道维度  
+print(output_tensor)  
+  
+# 如果你只想看到卷积后的结果数组，可以这样做：  
+print(output_tensor.squeeze().detach().numpy())  
+# squeeze()去掉批次和通道维度（如果它们为1）
+#detach()是为了从计算图中分离，numpy()转换为numpy数组
+\end{lstlisting}
+
+注意，这个函数并没有直接设置卷积核矩阵中的具体元素值，这些值是在训练过程中通过反向传播算法自动学习的。
+具体来说，当你创建一个Conv2d层的实例时，PyTorch会为该层随机初始化一组权重（即卷积核中的矩阵元素）。这些权重的初始值通常是小的随机数，可以是均匀分布或正态分布中抽取的。然后，在训练过程中，这些权重会根据损失函数对模型输出的梯度进行更新，以最小化损失函数。
+
+另外，Conv2d层还有一个bias属性，它表示每个输出通道的可选偏置项。与权重类似，偏置项也是随机初始化的，并在训练过程中进行更新。如果你想要设置偏置项的初始值，你可以通过访问bias属性来实现。但是，同样地，在大多数情况下，你应该让PyTorch自动为你初始化偏置项.
