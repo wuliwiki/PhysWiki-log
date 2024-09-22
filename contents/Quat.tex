@@ -120,26 +120,67 @@ A\times B ={}& (a, \bvec{a})\times(x\bvec{x})\\
 
 
 \begin{theorem}{四元数结合性}
-给定四元数$A, B, C$，则$A(BC)=(AB)C$。
+
+给定四元数$A=a_0+a_1\I+a_2\mathrm{j}+a_3\mathrm{k}$、$B=b_0+b_1\I+b_2\mathrm{j}+b_3\mathrm{k}$和$C=c_0+c_1\I+c_2\mathrm{j}+c_3\mathrm{k}$，则有
+\begin{equation}
+    A(B+C) = AB+AC, ~
+\end{equation}
+以及
+\begin{equation}
+    A(BC) = (AB)C. ~
+\end{equation}
+
 \end{theorem}
 
 \textbf{证明}：
 
-设$A=\qty(a, \bvec{x})$，$B=\qty(b, \bvec{y})$和$C=\qty(c, \bvec{z})$。于是按四元数的乘法定义，
 \begin{equation}
-\begin{aligned}
-A(BC) ={}& (a, \bvec{x})\times \qty((b, \bvec{y})\times(c, \bvec{z}))\\
-={}& (a, \bvec{x})\times (bc-\bvec{y}\cdot\bvec{z}, b\bvec{z}+c\bvec{y}+\bvec{y}\times\bvec{z})\\
-={}& abc-\bvec{x}\cdot(b\bvec{z}+c\bvec{y}+\bvec{y}\times\bvec{z})+\\
-&ab\bvec{z}+ac\bvec{y}+a\bvec{y}\times\bvec{z}+bc\bvec{x}-(\bvec{y}\cdot\bvec{z})\bvec{x}+\bvec{x}\times(b\bvec{z}+c\bvec{y}+\bvec{y}\times\bvec{z})
-\end{aligned}~
+    \begin{aligned}
+        &A(B+C) \\
+        ={}& (a_0+a_1\I+a_2\mathrm{j}+a_3\mathrm{k})\times\\
+        &\qty((b_0+c_0)+(b_1+c_1)\I+(b_2+c_2)\mathrm{j}+(b_3+c_3)\mathrm{k})\\
+        ={}& \qty(a_0(b_0+c_0)-a_1(b_1+c_1)-a_2(b_2+c_2)-a_3(b_3+c_3))+\\
+           & \qty(a_0(b_1+c_1)+a_1(b_0+c_0)+a_2(b_3+c_3)-a_3(b_2+c_2))\I+\\
+           & \qty(a_0(b_2+c_2)+a_2(b_0+c_0)+a_3(b_1+c_1)-a_1(b_3+c_3))\mathrm{j}+\\
+           & \qty(a_0(b_3+c_3)+a_3(b_0+c_0)+a_1(b_2+c_2)-a_2(b_1+c_1))\mathrm{k}\\
+        ={}& \qty(a_0b_0-a_1b_1-a_2b_2-a_3b_3)+\\
+           & \qty(a_0b_1+a_1b_0+a_2b_3-a_3b_2)\I+\\
+           & \qty(a_0b_2+a_2b_0+a_3b_1-a_1b_3)\mathrm{j}+\\
+           & \qty(a_0b_3+a_3b_0+a_1b_2-a_2b_1)\mathrm{k}+\\
+           & \qty(a_0c_0-a_1c_1-a_2c_2-a_3c_3)+\\
+           & \qty(a_0c_1+a_1c_0+a_2c_3-a_3c_2)\I+\\
+           & \qty(a_0c_2+a_2c_0+a_3c_1-a_1c_3)\mathrm{j}+\\
+           & \qty(a_0c_3+a_3c_0+a_1c_2-a_2c_1)\mathrm{k}\\
+        ={}& AB+AC. 
+    \end{aligned}~
 \end{equation}
+由此得证分配性。
+
+由于每个四元数都可以写成$1, \I, \mathrm{j}, \mathrm{k}$四个元素分别乘以一个实数后相加，且四元数乘法具有分配性，故要证明结合性，只需要证明这四个元素的乘法总满足结合性即可；又因为$1$是乘法单位元，与任何其它两个四元数做乘法的时候必定满足结合性，故我们只需要证明$\I, \mathrm{j}, \mathrm{k}$之间有结合性即可。最后，因为$\I\mathrm{j}=\mathrm{k}$、$\mathrm{j}\mathrm{k}=\I$和$\mathrm{k}\I=\mathrm{j}$的“\textbf{$3$-轮换对称性}”\footnote{即把$\I, \mathrm{j}, \mathrm{k}$放在等边三角形的三个顶点上，通过逆时针\textbf{旋转}三角形$0^\circ$、$60^\circ$或$120^\circ$来改变这几个元素的名字，其乘法结构不变。比如，如果$\I, \mathrm{j}, \mathrm{k}$依次按逆时针排列，则三角形逆时针旋转$60^\circ$后，$\I$变为$\mathrm{k}$，$\mathrm{k}$变为$\mathrm{j}$，而$\mathrm{j}$变为$\I$，此时$\I\mathrm{j}=\mathrm{k}$就变成了$\mathrm{k}\I=\mathrm{j}$，变换结果依然是成立的。}，我们只需要证明以下$9$个结合性：
+\begin{equation}
+\left\{
+    \begin{aligned}
+        \I(\mathrm{j}\mathrm{j}) ={}& \I\times(-1) = \mathrm{k}\I = (\I\mathrm{j})\mathrm{j}; \\
+        \mathrm{j}(\I\mathrm{j}) ={}& \mathrm{j}\mathrm{k} = -\mathrm{k}\mathrm{j} = (\mathrm{j}\I)\mathrm{j}; \\
+        \mathrm{j}(\mathrm{j}\I) ={}& \mathrm{j}\times(-\mathrm{k}) = -\I = (\mathrm{j}\mathrm{j})\I; \\
+        \I(\I\mathrm{j}) ={}& \I\mathrm{k} = -\mathrm{j} = (\I\I)\mathrm{j}; \\
+        \I(\mathrm{j}\I) ={}& \I\times(-\mathrm{k}) = \mathrm{k}\I = (\I\mathrm{j})\I; \\
+        \mathrm{j}(\I\I) ={}& -\mathrm{j} = \mathrm{k}\I = (\mathrm{j}\I)\I; \\
+        \I(\mathrm{j}\mathrm{k}) ={}& \I\I = -1 = \mathrm{k}\mathrm{k} = (\I\mathrm{j})\mathrm{k}; \\
+        \I(\mathrm{k}\mathrm{j}) ={}& \I\times(-\I) = 1 = -\mathrm{j}\mathrm{j} = (\I\mathrm{k})\mathrm{j}; \\
+        \I(\I\I) ={}& -\I = (\I\I)\I. 
+    \end{aligned}
+\right. ~
+\end{equation}
+即可得证四元数乘法的结合性\footnote{比如说，要证明$\mathrm{k}(\mathrm{k}\mathrm{j})=(\mathrm{k}\mathrm{k})\mathrm{j}$，只需要利用轮换对称性，把$\I$变为$\mathrm{k}$、$\mathrm{j}$变为$\I$、$\mathrm{k}$变为$\mathrm{j}$，即可将问题化为证明$\mathrm{j}(\mathrm{j}\I)=(\mathrm{j}\mathrm{j})\I$即可。}。
+
 \textbf{证毕}。
 
 
 
 
-如果我们把四元数的矢部限制在一个方向上，那么得到的运算结构实际上就是复数。你可以通过比较四元数乘法规则和复数乘法规则来看出这一点——注意在限制条件下任何矢部的向量积都是 $\bvec{0}$。
+
+如果我们把四元数的矢部限制在一个方向上，那么得到的运算结构实际上就是复数。你可以通过比较四元数乘法规则和复数乘法规则来看出这一点——注意在此限制下任何矢部的向量积都是 $\bvec{0}$。
 
 除了把四元数看成一个标量加一个三维矢量以外，我们也可以把四元数看成一个四维矢量， 就像复数既可以看成一个实数配上一个一维矢量， 也可以看成一个二维矢量一样。这种情况下，四元数实际上就是实数域上的一个四维\enref{代数}{AlgFie}\footnote{从代数角度来说，Hamilton爵士当年苦苦思索多年的问题就是“是否存在实数域上的三维代数”，今天我们已经知道，实数域上只存在一维、二维、四维和八维的“具有积性的可除代数”，分别对应实数、复数、四元数和八元数，其中四元数已经不具有交换性，而八元数连结合性都丢了。这里的“积性”是指 $\abs{a}\abs{b}=\abs{ab}$，而“可除性”就是“乘法单位元存在性”。}。
 
