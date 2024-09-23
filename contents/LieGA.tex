@@ -137,15 +137,69 @@ F_*(XY)(f\circ F^{-1})&=(XYf)\circ F^{-1}\\
 
 \begin{example}{矩阵李群的李代数}
 
-设$M$是一个$\mathbb{C}$上的$n$阶矩阵李群，那么其李代数作为集合是
-\begin{equation}
-S = \{ \mathcal{X}\in \opn{GL}(n, \mathbb{C}) \mid \E^{t\mathcal{X}}\in M, \forall t\in\mathbb{R} \}~.
+设$M(n,\mathbb R)$是一个$\mathbb{R}$上的$n$阶矩阵李群，同时也可视作一个李代数，李括号由矩阵乘法导出。可以证明其李代数$\mathfrak gl(n,R)$同构于$\opn{Lie}GL(n,\mathbb R)$。
+\begin{equation}\label{eq_LieGA_3}
+\mathfrak gl(n,\mathbb R) = \{ \mathcal{X} \mid \E^{t\mathcal{X}}\in GL(n,\mathbb R), \forall t\in\mathbb{R} \}~.
 \end{equation}
-这个李代数可以直接理解为单位元$e$处的切空间，其李括号由矩阵乘法导出。
+这个李代数可以直接理解为单位元$e$处的切空间。
 
-事实上，$\E^{t\mathcal{X}}$是由切向量$\mathcal{X}\in\opn{T}_e M$生成的左不变切向量场的\textbf{积分曲线}。
+事实上，$\E^{t\mathcal{X}}$可对应由切向量$\mathcal{X}\in\opn{T}_e GL(n,\mathbb R)$生成的左不变切向量场的\textbf{积分曲线}。
 
 \end{example}
+\subsubsection{常见李群的李代数}%考虑搬到新词条。
+在物理上，除了一般线性群$GL(n,\mathbb R)$，我们还经常用到特殊正交群$SO(n)$及特殊酉群$SU(n)$。下面简单推导它们的李代数。
+
+由于$SO(n)$是$GL(n,\mathbb R)$的子流形，因此把李代数视作单位元的切空间时，前者的李代数$\mathfrak {so}(n,\mathbb R)$\footnote{$\mathbb R$表示基的线性组合是实系数，以区别复化的李代数。}亦是后者$\mathfrak gl(n,\mathbb R)$的子集。设任意$X\in \mathfrak {so}(n,\mathbb R)$，我们有：
+\begin{equation}
+\begin{aligned}
+(\E^{X})^T&=\E^{X^T}=(\E^{X})^{-1}=\E^{-X}\\
+~,
+\end{aligned}
+\end{equation}
+因此$\mathfrak {so}(n,\mathbb R)$由\textbf{n阶实反对称矩阵}构成。对于三维实正交矩阵，常约定李代数的基为
+\begin{equation}J_1=\pmat{0&0&0\\0&0&-1\\0&1&0},\quad J_2=\pmat{0&0&1\\0&0&0\\-1&0&0},\quad J_3=\pmat{0&-1&0\\1&0&0\\0&0&0}~,\end{equation}
+读者可验证，上述基的线性组合确实能导出所有的n阶实反对称矩阵。$\{c_i(t)=\E^{tX_i}\mid t\in \mathbb R\}$为$SO(n)$的光滑曲线，分别代表绕$x,y,z$轴的旋转，$t$为对应的旋转角，这可以通过指数函数的级数展开来验证。比如验证
+\begin{equation}
+\E^{\I J_3}=\pmat{\cos t&-\sin t&0\\\sin t&\cos t&0\\0&0&1}~.
+\end{equation}
+
+
+于是，我们可以得到基的李括号关系：
+\begin{equation}\label{eq_LieGA_5}
+[J_i,J_j]=\epsilon_{ijk}J_k~.
+\end{equation}
+%su2和so3关系待补充，与角动量生成元常用形式的联系待补充。
+
+同样地，我们利用指数映射来观察$\mathfrak {su}(n,\mathbb R)$的结构。首先设任意$Y\in \mathfrak {su}(n,\mathbb R)$，利用$SU(n,\mathbb R)$的定义得：
+\begin{equation}
+\begin{aligned}
+(\E^Y)^{\dagger}&=\E^{Y^{\dagger}}=\E^{-Y}\\
+\opn{det}\E^{Y}&=\E^{\opn{Tr}Y}=1\\
+~.
+\end{aligned}
+\end{equation}
+于是$n$阶\textbf{无迹}\textbf{反厄米矩阵}构成$\mathfrak {su}(n,\mathbb R)$。以二维为例，无迹反厄米矩阵的一般形式为
+\begin{equation}\label{eq_LieGA_6}
+\pmat{a\I&b+c\I\\-b+c\I&-a\I},\quad\forall a,b,c\in \mathbb R~.
+\end{equation}
+
+因此，$\mathfrak su(2,\mathbb R)$的基为
+\begin{equation}\label{eq_LieGA_7}
+J'_1=\pmat{0&1\\-1&0},\quad J'_2=\pmat{0&\I\\\I&0},\quad J'_3=\pmat{\I&0\\0&-\I}~.
+\end{equation}
+相应的，我们可以得到李括号关系为
+\begin{equation}\label{eq_LieGA_4}
+[J'_i,J'_j]=2\epsilon_{ijk} J'_k~.
+\end{equation}
+为了表示起来更加简洁，重定义李代数的基，使得$S_i=1/2J'_i$，可以得到与\autoref{eq_LieGA_5} 相同的李括号关系。
+\begin{equation}
+[S_i,S_j]=\epsilon_{ijk} S_k~.
+\end{equation}
+
+可见，$SU(2)$与$SO(3)$有同构的李代数。
+
+在物理上，为了让以上李代数的基有物理意义，通常乘以$-\I$，使得结果为厄米矩阵，此时指数映射为$\E^{\I t X}$，$X$为左不变切场，于是\autoref{eq_LieGA_7} 便变为泡利矩阵。
+
 \subsection{诱导的李代数同态}
 %覆叠映射诱导的同态代补充%
 如果$G,H$都是李群，且有李群同态关系$f:G\to H$，那么$f_*$可以诱导李群上的李代数同态。
@@ -194,7 +248,6 @@ f_*X_p&=f_*\circ l_{p*}X_e\\
 $\mathfrak {su}(2)\oplus \mathfrak {su}(2)\cong \mathfrak{so}(4)$
 \end{example}
 由\autoref{cor_LieGA_1} 和\autoref{the_Quat_1} 得：
-
 
 
 
