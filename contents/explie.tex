@@ -2,24 +2,98 @@
 % license Usr
 % type Tutor
 
-%预备知识需要添加.exp全文替换
+%预备知识需要添加.
 \pentry{李群的李代数\nref{nod_LieGA}，流\nref{nod_flow}}{nod_016b}
-（本文默认左不变切场都是从切空间的切向量开始延拓得到）
+（本文默认左不变切场都是切空间的切向量经左平移映射延拓得到。即$\widetilde X_g=L_g X_e$。）
 \begin{definition}{}
-设$\mathfrak g$是李群$G$的李代数。定义指数映射$exp:\mathfrak g\to G$，对于任意$X_e\in \mathfrak g$ 有$exp(X_e)=c_X(1)$。其中$c_X$正是左不变切场$X$的积分流。
+设$\mathfrak g$是李群$G$的李代数。定义指数映射$\exp :\mathfrak g\to G$，对于任意$X_e\in \mathfrak g$ 有$\exp (X_e)=c_X(1)$。其中$c_X$正是左不变切场$X$的积分流。
 \end{definition}
 在物理上，我们经常要用到矩阵李群。可以证明，对于矩阵李群，指数映射恰为矩阵的指数函数，可说是名副其实了。
 
 \begin{theorem}{指数映射的性质}
 \begin{enumerate}
-\item 对于任意$X_e\in \mathfrak g$，积分曲线为$\theta_t(e)=c_X(t)=exp(tX_e)$。
-\item 对于任意$x,t\in\mathbb R,X_e\mathfrak g$，指数映射是$\mathbb R\to G$的群同态，满足$exp((s+t)X_e)=(expsX_e)(exptX_e)$。
+\item 对于任意$X_e\in \mathfrak g$，$X$的开始于$e$的积分曲线为$c_X(t)\equiv\theta_t(e)=\exp (tX_e)$。
+\item 对于任意$X_e\in \mathfrak g$，左不变切场$X$开始于$g$的积分曲线为$g\exp (tX_e)$。
+\item 对于任意$x,t\in\mathbb R,X_e\mathfrak g$，指数映射是$\mathbb R\to G$的群同态，满足$\exp ((s+t)X_e)=(\exp sX_e)(\exp tX_e)$。
+
 \item 指数映射是光滑的。
 \item 指数映射在$t=0$处的切映射是单位映射。
 \item 对于一般线性群$GL(n,\mathbb R)$，有
 \begin{equation}
-\exp A=\sum_{k=0}^\infty\frac{A^k}{k!},\quad \forall A\in\mathfrak{gl}(n,\mathbb{R})~.
+\exp  A=\sum_{k=0}^\infty\frac{A^k}{k!},\quad \forall A\in\mathfrak{gl}(n,\mathbb{R})~.
 \end{equation}
 \end{enumerate}
 \end{theorem}
 
+\textbf{证明：}
+
+（1）设任意$t\in \mathbb R$，$s$是可变参量，$c_X(s)$为$X$的开始于$e$的积分曲线$\theta_t(e)$。定义$\tau(s)=c_X(ts)$。则
+\begin{equation}
+\dv{c_X(ts)}{s}=\tau'(s)=tc'_X(ts)=tX_{\tau (s)}~.
+\end{equation}
+因为$\tau(0)=e$并且每一处的切向量场都是$tX$，由极大积分曲线的唯一性得$\tau(s)=c_{tX}(s)=c_X(ts)$。代入$s=1$得$c_{tX}(1)=\exp(tX_e)=c_X(t)$。
+
+（2）由（1）知，我们需要证明对于任意$X_e\in \mathfrak g$，左不变切场$X$开始于$g$的积分曲线为$gc(t)$。
+因为
+\begin{equation}
+\begin{aligned}
+\dv{(gc(t))}{t}&=\dv{L_gc(t)}{t}\\
+&=L_{g*}\dv{c(t)}{t}\\
+&=X_{gc(t)}~.
+\end{aligned}
+\end{equation}
+
+因此$gc(t)$确实是$X$开始于$g$的积分曲线。
+
+
+（3）由题意知，我们需要证明$c(s+t)=c(s)c(t)$。依然设$s$为变化参量，$t$为任意固定的常数，$c(t)$为$X$开始于$e$的积分曲线，问题转化为需证等式两端是相同的积分曲线。
+因为
+\begin{equation}
+\dv{c(s+t)}{s}=X_{c(s+t)}~,
+\end{equation}
+所以$c(s+t)$为$X$开始于$c(s)$的积分曲线。由上题知，$c(s)c(t)$亦是如此。由极大积分曲线的唯一性知这是同一条积分曲线，所以得证。
+
+（4）
+
+（5）因为$\exp_*(tX_e)|_{t=0}=c'(0)=X_e$，因此得证。
+
+（6）只要证明$c(t)=\sum^{\infty}_{k=0}(tA)^k/(k!)$确实是左不变切场$\widetilde A$开始于$e$的积分曲线即可。易见$c(0)=I=e$，又因为
+\begin{equation}
+\begin{aligned}
+c'(t)&=\sum_{k=1}^\infty\frac{kA^kt^{k-1}}{k!}\\
+&=\sum_{k=1}^\infty\frac{A^{k-1}t^{k-1}A}{(k-1)!}\\
+&=c(t)A=L_{c(t)}A=\widetilde A_{c(t)}~,
+\end{aligned}
+\end{equation}
+因此得证。
+
+\begin{theorem}{}
+设$f:H\to G$为李群同态映射，对于任意$X\in T_e H$有
+\begin{equation}\label{eq_explie_1}
+\exp(f_*X)=f(\exp X)~.
+\end{equation}
+\end{theorem}
+\textbf{证明：}
+首先我们来证明一个很有用的引理。题设不变，并设任意$h\in H$，我们有
+\begin{equation}
+f\circ L_{h}=L_{f(h)}\circ f~.
+\end{equation}
+两边对任意$h_1\in H$作用，由同态性质即可得$f\circ L_h(h_1)=f(hh_1)=L_{f(h)}\circ f(h_1)$。更进一步，结合前推映射的结合性得：
+\begin{equation}
+f_*\circ L_{h*}=L_{f(h)*}\circ f_*~.
+\end{equation}
+
+为了证明\autoref{eq_explie_1} ，我们证明对于$t\in \mathbb R$都有$\exp (tf_*X)=f(\exp tX)$，最后令$t=1$即可。
+
+那么要验证的式子实际上为
+\begin{equation}
+f\circ c(t)=c_{f_*(X)}(t)~.
+\end{equation}
+因为
+\begin{equation}
+\begin{aligned}
+(f\circ c)'(t)=f_*[c'(t)]&=f_*\circ L_{c(t)*}(X)\\
+&=L_{f\circ c(t)*}(f_*X)\\&=\widetilde {(f_*X)}_{f\circ c(t)}=c'_{f_*(X)}(t)~,
+\end{aligned}
+\end{equation}
+且$f\circ c(0)=c_{f_*(X)}(0)$，因此确实是同一条积分曲线，交换性得证。
