@@ -4,9 +4,140 @@
 % type Tutor
 
 \pentry{电磁力和引力\nref{nod_EleGra}}{nod_9484}
-本节将说明电磁场和引力场的作用量是如何引入的。
 
-从协变
+由“电磁力和引力\upref{EleGra}”一节，我们得到了处于外场中的粒子的作用量的两种情况：
+\begin{equation}
+\begin{aligned}
+S_E=&\int \left\{-m\sqrt{-\eta_{\mu\nu} \,\mathrm{d}{x} ^\mu \,\mathrm{d}{x} ^\nu}+A_\mu(x) \,\mathrm{d}{x} ^\mu \right\} ,\\
+S_G=&-m\int\sqrt{-g_{\mu\nu}(x) \,\mathrm{d}{x} ^\mu \,\mathrm{d}{x} ^\nu}.
+\end{aligned}~
+\end{equation}
+ $S_E,S_G$ 分别对应于磁场和引力场中的粒子的作用量。
+
+自然会出现这样的问题：场 $A_\mu$ 和 $g_{\mu\nu}$ 是怎样产生的?
+
+物理学应当是粒子和场之间的共舞。场告诉粒子如何运动，粒子反过来产生场。我们已经在“电磁力和引力\upref{EleGra}”一节中描述了粒子在场中的运动，本节将寻找主宰场 $A_\mu(x),g_{\mu\nu}(x)$ 动力学的作用量。
+
+由\autoref{def_CoIn_1}，物理应当是关于某一变换不变的。因此找到相关的不变性是首要的。Lorentz不变性必须是满足的（这仅仅是说我们有选择经过（四维）旋转变换下的坐标描述物理的自由）。
+
+
 \subsection{电磁场的作用量}
+\subsubsection{规范不变性}
+注意 $S_E$ 中关于 $A_\mu$ 的项
+\begin{equation}
+\int A_\mu(x) \dd x^\mu.~ 
+\end{equation}
+若进行下列变换
+\begin{equation}\label{eq_EGA_1}
+A_\mu(x)\mapsto A_\mu(x)+\partial_\mu\Lambda(x)~,
+\end{equation}
+则 $S_E$ 改变量为
+\begin{equation}
+\begin{aligned}
+\Delta S_E=&\int\partial_\mu\Lambda(x)\dd x^\mu=\int_{\tau_i}^{\tau_f}\dd \tau\partial_\mu\Lambda(x)\dv{x^\mu}{\tau}\\
+=&\int_{\tau_i}^{\tau_f}\dv{\Lambda(x)}{\tau}\\
+=&\Lambda(x(\tau_f))-\Lambda(x(\tau_i)).
+\end{aligned}~
+\end{equation}
+取粒子轨迹的端点在远远的过去和未来，并假设 $\Lambda(x)$ 在无穷远处为0（注意 $x$ 无穷远意味着 $t=\int_0^t\dd\tau=\int\sqrt{-\eta_{\mu\nu}\dd x^\mu \dd x^\nu}\rightarrow\infty$，因此 $\tau_f,\tau_i\rightarrow\infty$ 位于无穷远处 ），则 $\Delta S_E=0$。即作用量在变换\autoref{eq_EGA_1} 下不变，\autoref{eq_EGA_1} 称为场 $A_\mu(x)$ 的\textbf{规范变换}。因此，我们发现了作用量在规范变换下具有对称性，称为\textbf{规范不变}。
+
+严格来说，这里讨论的规范对称性并不是一个对称性，而是描述的赘余。$A_\mu(x)$ 和 $A_\mu(x)+\partial_\mu\Lambda(x)$ 描述的是相同的物理。换句话说 $A_\mu(x)$ 包含有非物理的自由的，这可以通过适当的选取 $\Lambda(x)$ 删除。
+
+\subsubsection{Maxwell作用量出现}
+
+既然关于 $A_\mu(x)$ 的作用量是规范不变的，那么描述 $A_\mu$ 的作用量就应当由规范不变的量来构造。显然 $A_\mu$ 本身不是规范不变的，但是场强 $F_{\mu\nu}=\partial_\mu A_\nu-\partial_\nu A_\mu$ 是规范不变的：
+\begin{equation}
+F_{\mu\nu}\mapsto \partial_\mu[ A_\nu+\partial_\nu\Lambda(x)]-\partial_\nu[ A_\mu+\partial_\nu\Lambda(x)]=F_{\mu\nu}.~
+\end{equation}
+因此，我们可以通过 $F_{\mu\nu}$ 来构造电动力学的作用量。同时注意构造作用量时，应当包含 $\partial_t$ 的二次幂，因为只有这样运动方程才是二阶的（这当然是一个人为的限制，可以认为场运动方程应当满足和粒子一样的二阶微分方程）。同时往往不应包含 $\partial_t$ 的更高阶幂，否者通过分部积分在大多数情形将等价于包含时间的二阶以上的高阶导数，这会是系统产生内在的（Ostrogradsky）不稳定性，而使得难以处理（当然，这也只是人为的限制）。
+
+为确保Lorentz不变性，最简单的可能就是 $F^2=F_{\mu\nu}F^{\mu\nu}$。这刚好包含时间偏导算子的二次幂，因此符合需要。
+
+在主导粒子作用量中，动力学变量是粒子的位置 $\vec x(t)$，或更好的记法 $\vec X(t)$，在多粒子情形，则用 $\vec X_a(t)$ 标记，其中 $a$ 是识别不同粒子的标记。因此，主导场 $A_\mu$ 动力学的作用量中，动力学变量是场 $A_\mu(x)=A_\mu(\vec x,t)$ 本身，而 $\vec x$ 仅仅是识别场的不同点的记号。正如在多粒子情形作用量是对 $a$求和，场情形则应是对 $\vec x$ 求和。离散的求和号 $\sum$ 对应连续情形的积分号 $\int\dd{}^3 x$。因此，场 $A_\mu(x)$ 的作用量可写为（为了场运动方程简便起见，往往人们引入 $-\frac{1}{4}$ 的因子）
+\begin{equation}
+-\frac{1}{4}\int\dd{}^4 x F_{\mu\nu}F^{\mu\nu}.~
+\end{equation}
+
+\subsubsection{粒子和电磁场的总作用量}
+
+把电磁场的作用量加入到主导多粒子在场 $A_\mu$ 中的作用量中，便得到粒子和场 $A_\mu$ 的总作用量
+\begin{equation}
+ S=\left\{\int\sum_a\qty(-m_a\sqrt{-\eta_{\mu\nu} \,\mathrm{d} X_a ^\mu \,\mathrm{d}X_a ^\nu}+e_aA_\mu(X_a) \,\mathrm{d}X_a ^\mu) \right\}-\frac{1}{4}\int\dd{}^4 x F_{\mu\nu}F^{\mu\nu}.~
+\end{equation}
+其中，第一项代表自由粒子的作用量，第三项代表场 $A_\mu(x)$ 的作用量，而第二项代表场和粒子耦合的作用量。
+
+
+
+
+
+
+
+
+
+\subsection{引力场的作用量}
+
+\subsubsection{微分同胚不变性}
+注意粒子和引力场耦合的作用量为
+\begin{equation}
+-m\int\sqrt{-g_{\mu\nu}(x) \,\mathrm{d}{x} ^\mu \,\mathrm{d}{x} ^\nu}~.
+\end{equation}
+其中 $x$ 的是粒子在时空中的位置。注意到在微分同胚(任意导数存在连续)的坐标变换 $x^\mu(x) \mapsto x^\mu(x')$ 下，张量的缩并不变，因此
+\begin{equation}
+g_{\mu\nu}(x) \dd x^\mu \dd{x} ^\nu=g_{\rho\sigma}(x') \dd{x'} ^\rho \dd{x'} ^{\sigma}~.
+\end{equation}
+因此，描述引力场的 $g_{\mu\nu}(x)$ 的作用量应当在坐标的微分同胚变换下不变。这一不变性称为\textbf{微分同胚不变性}。
+
+因此，和电磁场一样，现在我们需要寻求由 $g_{\mu\nu}(x)$ 构造的具有微分同胚不变性的量作为被积函数加入到积分号 $\int\sqrt{-g(x)}\dd{}^4x$ 中（$\sqrt{-g(x)}\dd{}^4$ 而不是 $\dd{}^4x$ 的原因在于（直角坐标下）欧氏空间的体积元是在一般空间下由 $\sqrt{-g(x)}\dd{}^4 x$ 取代），以得到引力场的作用量。在微分同胚坐标变换下不变的量是一个标量，因此引力场的作用量具有如下形式
+\begin{equation}
+S=\int\dd{}^4x\sqrt{-g(x)}A(x)~.
+\end{equation}
+其中 $A$ 是一个标量，换句话说 $A'(x')=A(x)$。
+
+现在我们需要通过 $g_{\mu\nu}$ 构造一个包含时间二次导数的坐标变换不变量。坐标变换不变的导数建议我们使用协变导数 $\nabla_\lambda$，但是对度规恒有 $\nabla_\lambda g_{\mu\nu}=0$。因此，我们唯一的选择是通过普通导数 $\partial$ 作用在度规上，并以合适的组合使得整个量是坐标变换不变的。Riemann曲率张量 $R_{\mu\nu\rho\sigma}$ 刚好含有时间偏导的二次幂，因此可以试着通过其来构造。
+
+要坐标变换不变，我们可以通过一些张量和Riemann张量的指标缩并得到。由于我们不要含有时间偏导的高次幂并且缩并的张量只能由 $g^{\mu\nu}$ 构造的，因此，只能通过多个 $g^{\mu\nu}$ 来缩并。
+
+因为Riemann张量 $R_{\mu\nu\rho\sigma}$ 中前两个指标和后两个指标都是反对称的，所以不为0的缩并组合只有：
+\begin{equation}
+g^{\mu\nu}g^{\rho\sigma}R_{\mu\rho\nu\sigma},g^{\mu\nu}g^{\rho\sigma}R_{\mu\rho\sigma\nu}.~
+\end{equation}
+然而
+$g^{\mu\nu}g^{\rho\sigma}R_{\mu\rho\nu\sigma}=-g^{\mu\nu}g^{\rho\sigma}R_{\mu\rho\sigma\nu}$，因此实际上只有一种可能。这一缩并得到的量正是Ricc标量，用 $R$ 表示。因此我们得到引力场的作用量具有下面的形式
+\begin{equation}
+k\int\dd{}^4x\sqrt{-g(x)}R(x)~,
+\end{equation}
+其中 $k$ 是一常数。
+
+为了得到正确的作用量，我们分析量纲：作用量的量纲为质量乘长度 $ML$（只需注意 $S_{\text{粒子}}=-m\int\dd\tau$，当然这里选定了 $c=1$）。度规无量纲，$R$ 由度规和两个导数缩并构造，因此量纲为 $1/L^2$，所以 $\int\dd{}^4x\sqrt{-g(x)}R(x)$ 的量纲为 $L^4/L^2=L^2$。因此 $k$ 的量纲需要为 $M/L$，注意到引力常数 $G$ 的量纲为 $L/M$ （只需注意Newton引力势能 $V=-\frac{GMm}{r}$），所以无需引入任何新的基本常数，$k$ 的具体取值由Newton引力极限确定，最后可得如下作用量
+\begin{equation}
+S_{EH}=\frac{1}{16\pi G}\int\dd{}^4x\sqrt{-g}R~,
+\end{equation}
+这被称为\textbf{Einstein-Hilbert作用量}。
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
