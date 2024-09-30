@@ -13,4 +13,58 @@
 \includegraphics[width=13cm]{./figures/bfaa89d38baa2c9a.png}
 \caption{目录} \label{fig_yolov5_1}
 \end{figure}
-对于github文件夹是放配置文件的，这个不重要，可以忽略。对于data文件是放一些超参数的配置文件(如.yaml)，是用来配置训练集、测试集、验证集的路径的。还有一些官方提供的测试的图片。特别注意，如果训练自己的数据集的话需要修改这里的yaml文件。但是自己的数据集最好在外面新建一个dataset的文件夹。models文件夹里放的是yaml文件，里面的模型文件有s,m,l,x，训练速度从快到慢，精确的从低到高，这个参数是表示模型参数量的大小的。
+对于github文件夹是放配置文件的，这个不重要，可以忽略。
+
+对于data文件是放一些超参数的配置文件(如.yaml)，是用来配置训练集、测试集、验证集的路径的。还有一些官方提供的测试的图片。特别注意，如果训练自己的数据集的话需要修改这里的yaml文件。但是自己的数据集最好在外面新建一个dataset的文件夹。
+
+models文件夹里放的是yaml文件，里面的模型文件有s,m,l,x，训练速度从快到慢，精确的从低到高，这个参数是表示模型参数量的大小的。
+
+runs文件夹里放的是我们运行时的一些输出的文件，每次运行都会生成一个exp的文件夹。其中的detect文件是测试模型，输出图片并在图片中标注出物体和概率。，train文件夹里是训练模型，有模型的权重文件、混淆矩阵、F1曲线、超参数文件、P曲线、R曲线、PR曲线、结果文件等expn。
+
+utils文件，存放的是工具类函数，里面有loss函数，metrics函数，plot函数等等。
+
+\begin{enumerate}
+\item detect代码详细分析
+\end{enumerate}
+首先导入python的包。
+\begin{lstlisting}[language=python]
+import argparse # 解析命令行参数的库
+import os # 与操作系统进行交互的文件库 包含文件路径操作与解析
+import sys # sys模块包含了与python解释器和它的环境有关的函数。
+from pathlib import Path # Path能够更加方便得对字符串路径进行处理
+ 
+import cv2 # sys模块包含了与python解释器和它的环境有关的函数。
+import torch #pytorch 深度学习库
+import torch.backends.cudnn as cudnn #让内置的cudnn的 auto-tuner 自动寻找最
+#适合当前配置的高效算法，来达到优化运行效率的问题
+\end{lstlisting}
+因为有第一个库，我们可以直接在命令行里输入相关参数，而不用进py文件里一个个去修改，具体后面来介绍。接着获取当前文件的绝对路径。
+\begin{lstlisting}[language=python]
+FILE = Path(__file__).resolve() 
+ # __file__指的是当前文件(即detect.py),FILE
+#最终保存着当前文件的绝对路径,比如D://yolov5/detect.py
+ROOT = FILE.parents[0] 
+ # YOLOv5 root directory  ROOT保存着当前项目的父目录,#比如 D://yolov5
+if str(ROOT) not in sys.path:  # sys.path即当前python环境可以运行的路径,
+#假如当前项目不在该路径中,就无法运行其中的模块,所以就需要加载路径
+    sys.path.append(str(ROOT)) 
+     # add ROOT to PATH  把ROOT添加到运行路径上
+ROOT = Path(os.path.relpath(ROOT, Path.cwd()))
+# relative ROOT设置为相对路径
+\end{lstlisting}
+这个resolve()方法是Path类的一个方法，它返回当前路径的绝对路径。如果路径是相对的，resolve()会将其转换为绝对路径。此外，它还会解析路径中的任何符号链接（在支持符号链接的操作系统上
+
+\begin{lstlisting}[language=python]
+from models.common import DetectMultiBackend
+from utils.datasets import IMG_FORMATS,
+ VID_FORMATS, LoadImages, LoadStreams
+from utils.general 
+import (LOGGER, check_file, check_img_size, 
+check_imshow, check_requirements, colorstr,
+ increment_path, 
+  non_max_suppression,
+ print_args, scale_coords, 
+strip_optimizer, xyxy2xywh)
+from utils.plots import Annotator, colors, save_one_box
+from utils.torch_utils import select_device, time_sync
+\end{lstlisting}
