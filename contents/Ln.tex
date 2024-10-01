@@ -5,23 +5,111 @@
 \begin{issues}
 \issueDraft
 \end{issues}
+\pentry{函数\nref{nod_functi}，函数的性质\nref{nod_HsFunC}，指数函数\nref{nod_HsExpF}}{nod_c094}
+\subsection{引入对数运算}
+
+与早已烂熟于胸的加、减、乘、除和乘方、开方，对数是一个陌生的运算。很多教材会从指数运算的前提下去介绍，说他是指数运算的逆运算。但对数运算本身是远早于指数运算出现的，直接从指数去介绍或许会降低陌生的感觉，但很容易造成理解上的困惑。下面会从对数运算诞生的思路去介绍它。
+
+对数运算最早是为了算两个数的乘法而创造出来的。那时还没有计算器，小一点的数当然可以用乘法口诀，但如果想要计算两个位数特别多的数相乘，比如两个四位数相乘，列竖式的方法需要计算四次乘法和四次加法，这显然太麻烦，而且太容易出错了。
+
+John Napier 考虑了这样一个场景：一个点沿着直线在匀速运动，另一个点在线段上运动，它运动的速度与剩下到终点的距离正相关。这样两个点是一一对应的，假设与点 $n$ 对应的另一个点是 $L_n$，线段的长度是$L$，认为在单位时间内点是匀速的，也就是单位时间内运动的长度树枝上等于这段时间内的速度$v_n$，即将到来的这一段的速度与此时剩下的距离成正比$\displaystyle v_{n}=\frac{L_{n-1}}{L}$，从而有：
+
+\begin{equation}
+L_{n}=L_{n-1}-v_{n}=L_{n-1}(1-\frac{1}{L})\implies\frac{L_{n}}{L_{n-1}}= \frac{L-1}{L}~.
+\end{equation}
+这个比例和$n$无关，也就是说每一段已走过的长度与上一段都是等比例变化的。设初始长度为$L_{0}=L$，从而根据现在熟悉的幂运算有：
+
+\begin{equation}\label{eq_Ln_1}
+L_n={L_{n}\over L_{n-1}}\cdot{L_{n}\over L_{n-1}}\cdots{L_{2}\over L_{1}}\cdot{L_{1}\over L_{0}}\cdot L_0=L\cdot(1 - \frac{1}{L})^n~.
+\end{equation}
+
+实际使用时，比如要计算两个数$L_n,L_m$的乘积，只需要根据他的表格找到对应的$n,m$，求和后再反查找到对应的$L_{n+m}$就可以得到计算的积了，根据指数运算法则，也就是：
+
+\begin{equation}\label{eq_Ln_2}
+L_nL_m=L^2(1 - \frac{1}{L})^{n+m}~.
+\end{equation}
+这里看上去$L^2$使得右侧的表达式并不符合$L_{n+m}$的表达式。John Napier根据自己的思路提出了他的对数表，顺带还正式使用了小数点。在制作表时，为了使精度提高，他选择取$L=10^7$，得到了六位数乘法的结果，也避免了\autoref{eq_Ln_2} 中$L^2$带来的问题，因为此时只是小数点的区别而非数值上的区别。另外，根据\autoref{eq_Ln_1} 可以得到：
+
+\begin{equation}
+{L_n\over L}=((1-{1\over L})^{-L})^{-{n\over L}}~.
+\end{equation}
+选择取$L=10^7$也无意中使得，$(1-{1\over L})^{-L}$的数值非常接近$\E$，进而让他的对数表几乎就是自然对数表。而“对数”其实是“比例对数”的简称，指的就是“按照\textbf{比例}制作的，\textbf{对}着查表的\textbf{数}”。也就是上面右边的指数$n$是等式左边的数$L_n$的对数，指数运算中，结果称为真数，或者说下面介绍的对数运算中的真数，之所以称为真数，也是因为它是原本要进行乘法计算的“\textbf{真}的\textbf{数}字”。当然，Napier实际制作表的考量很多，这里给出的只是主要思想。
 
 \subsection{对数运算}
 
+相信上面的例子已经让你察觉了，指数运算中的指数是真数的对数。而现代数学中的对数也不再是如当初一样查表来定义的，现在对数运算的定义是基于幂运算的。
 
-\subsection{自然对数函数}
-以 $\E$ 为底的对数函数 $\log_{\E} x$ 叫做\textbf{自然对数}， 通常记为
+\begin{definition}{对数运算}
+形如
 \begin{equation}
-\ln x \qquad \text{或} \qquad \log x~.
+b=\log_ac~.
 \end{equation}
+的运算称为对数运算。$\log$称为对数运算符。这里的变量与\autoref{def_power_1} 处是一样的。其中$a$称为\textbf{底数}，$b$称为\textbf{指数}，而$c$称为\textbf{真数}。另外：
+\begin{itemize}
+\item $\E$ 为底的对数 $\log_{\E} c$ 称为\textbf{自然对数}，记作$\ln c$\footnote{在实际使用时，尽管它不叫常用对数，但它其实是理论推导时最常用的，以至于在很多大学教材或论文中如果不写底数则默认是指自然对数，即$\log c$一般是指$\ln c$}；
+\item $10$ 为底的对数 $\log_{10} c$ 称为\textbf{常用对数}，记作$\lg c$\footnote{生活中常见的分贝、地震级别等都使用常用对数}；
+\item $2$ 为底的对数 $\log_{2} c$在计算机科学中经常使用 。
+\end{itemize}
+\end{definition}
+
+对数符号的写法与已有的所有写法都不太像，需要习惯一下。由于上面定义中的$a,b,c$与指数运算对应，将对数代入$c=a^b$的指数之后可以发现：
+\begin{equation}
+a^{\log_a c}=c\qquad \log_a a^b=b~.
+\end{equation}
+
+这说明对数运算和指数运算互为逆运算。如果觉得一会是$c$，一会是$b$和以往的逆运算感觉不一样，是因为加、乘都有交换律，而对数和指数运算都没有交换律（即交换底数和真数仍然成立）。建议这样理解：对于乘除法，$m$乘上$a$再除以$a$，原本的数$m$不变，因为二者互为逆运算消掉了因子$a$。而这里，$m$给一个数$a$做指数再取$a$的对数，因为指数和对数互为逆运算，“消掉”了底数$a$ 。反过来，对$m$取$\log a$，再令它作为$a$的指数，也是因为对数和指数互为逆运算，“消掉”了底数$a$。即：对数是指数的逆运算，而非幂的逆运算，作为因子的是底数。运算始终是指数和真数的事。
+
+定义要求$a\in\mathbb (0,1)\cup(1,+\infty),c>0$，这样的要求是因为：
+\begin{itemize}
+\item 当底数  $a = 1$  时，指数运算$a^x$会始终等于 $1$，无法满足对数的是指数的逆运算的需求。
+\item 如果底数为负数，乘方的结果在实数范围内可能会得到负数甚至复数，这样的运算结果无法在实数范围内定义。
+\item 指数运算的结果总是正数，因此真数  $c$  也必须是正数。
+\end{itemize}
+总的说来，就是为了满足指数与对数的互逆关系。
+
+根据指数函数可以得到，对数运算有两个特殊的计算结果：$\log_a a=1,\log_a1=0$。下面给出对数运算的法则，仍然不需要考虑怎么证明，实际使用时，可以将某个变量代入幂运算的结果，可以得到倒数、减法等形式：
+
+\begin{theorem}{对数运算法则}
+\begin{itemize}
+\item 乘法法则$\log_a(xy)=\log_ax+\log_ay$
+\item 换底公式：$\displaystyle \log_a b=\frac{\log_cb}{\log_ca}$
+\item 幂法则：$\displaystyle \frac{m}{n}\log_a b=\log_{a^n} b^m$
+\end{itemize}
+\end{theorem}
+
+这三个公式非常重要，几乎所有的对数运算都离不开它们，请务必熟练使用。
+
+\subsection{对数函数}
+
 函数图如\autoref{fig_Ln_2}。
 \begin{figure}[ht]
 \centering
 \includegraphics[width=7cm]{./figures/ce690bcbd8c28a93.png}
 \caption{几种不同底的对数函数} \label{fig_Ln_2}
 \end{figure}
-回忆对数函数的性质
+
+
+\subsection{指数函数与对数函数的相似性}
+
+\pentry{函数的变换（高中）\nref{nod_FunTra}，导数（高中）\nref{nod_HsDerv}}{nod_a54a}
+
+根据\aref{幂运算}{the_power_1}和对数运算的法则，任意$f(x)=a^x$都可以变形，得到：
+
 \begin{equation}
-\log_a x = \frac{\log_c x}{\log_c a}~.
+f(x)=e^{x\ln a}~.
 \end{equation}
-所以不同底的对数函数是成比例的。
+
+即，所有的指数函数都可以由$\E^x$通过在$x$方向上伸缩或关于$y$轴对称（$\ln a<0$时）得到，或者所有的指数函数$a^x$都可认为是$f(x)=e^x$与$g(x)=x\ln a$复合得到的$f(g(x))$。
+
+同理，根据对数运算的性质，任意$f(x)=\log_ax$都可以变形，得到：
+
+\begin{equation}
+f(x)=\frac{1}{\ln a}\ln x\iff f(x)\ln a=\ln x~.
+\end{equation}
+
+即，所有的对数函数都可以由$\ln x$通过在$y$方向上伸缩或关于$x$轴对称（$\ln a<0$时）得到，或者所有的对数函数$\log_ax$都可认为是$f(x)=\ln x$与$\displaystyle g(x)=\frac{x}{\ln a}$复合得到的$g(f(x))$。同时，这个结论也可由指数函数和对数函数在参数相同时互为反函数验证。
+
+综上，所有的指数函数、对数函数之间都是相似的。根据上述关系，已知$\left(\E^x\right)'=\E^x,\left(\ln x\right)'=\frac{1}{x}$，根据复合函数求导法则，可知：
+\begin{equation}
+\left(a^x\right)'=\ln a\cdot\E^x~,\left(\log_a x\right)'=\frac{1}{x\ln a}.
+\end{equation}
