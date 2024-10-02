@@ -52,7 +52,12 @@ if str(ROOT) not in sys.path:  # sys.path即当前python环境可以运行的路
 ROOT = Path(os.path.relpath(ROOT, Path.cwd()))
 # relative ROOT设置为相对路径
 \end{lstlisting}
-这个resolve()方法是Path类的一个方法，它返回当前路径的绝对路径。如果路径是相对的，resolve()会将其转换为绝对路径。此外，它还会解析路径中的任何符号链接（在支持符号链接的操作系统上
+这个resolve()方法是Path类的一个方法，它返回当前路径的绝对路径。如果路径是相对的，resolve()会将其转换为绝对路径。此外，它还会解析路径中的任何符号链接（在支持符号链接的操作系统上。
+对于ROOT = FILE.parents[0]，这一行
+FILE：这是一个变量，代表了一个文件的路径。这个路径可以是绝对路径（从根目录开始的完整路径），也可以是相对路径（相对于当前工作目录的路径）。
+.parents：这是pathlib.Path对象的一个属性，它返回一个包含当前路径所有父目录的迭代器。例如，如果FILE是'/home/user/documents/file.txt'，那么FILE.parents将会是一个迭代器，包含'/home/user/documents'、'/home/user'、'/home'等目录路径。
+[0]：通过对parents迭代器使用索引[0]，我们获取了FILE路径的第一个父目录，也就是最直接的父目录。在上面的例子中，就是'/home/user/documents'。
+ROOT =：这是将获取到的父目录路径赋值给变量ROOT的操作。之后，ROOT就可以用来引用这个父目录路径了。
 
 \begin{lstlisting}[language=python]
 from models.common import DetectMultiBackend
