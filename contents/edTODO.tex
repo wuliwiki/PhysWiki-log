@@ -13,7 +13,7 @@
 \item \autoref{sub_edTODO_6}：PhysWikiScan TODO
 \end{itemize}
 
-\subsection{Editor Bug}\label{sub_edTODO_1}
+\subsection{Editor Bug\label{sub_edTODO_1}}
 按优先级排序
 \begin{itemize}
 \item 【完成】内部和外部引用按钮又失灵了（提示 scan 没有相应）。
@@ -188,11 +188,11 @@
 \item 公式调换位置后， \verb`\autoref` 显示的序号不会自动更新
 \end{itemize}
 
-\subsection{Editor TODO}\label{sub_edTODO_2}
+\subsection{Editor TODO\label{sub_edTODO_2}}
 按优先级排序
 \begin{itemize}
 \item 编辑器光标停留在一个括号上，另一半括号需要高亮
-\item 【进行中】如果上传时发现图片文件的 hash 已存在于 \verb`images.hash`， 则检查该文件的 \verb`images.figure和figures_aka` 中 \verb`figures.deleted==0` 的图片环境， 有就提示图片已存在，列出所有标签（\verb`fig_` 加 \verb`figures.id`）和图片标题和它们所在的文章 id 和 caption 让用户选择引用（\verb`\autoref{}`）或者选择重复使用图片。 如果 \verb`images.figure和figures_aka` 中没有 \verb`figures.deleted==0` 的图片环境（也就不用选了）或者用户选择重复使用图片， 就检查 \verb`images.figure和figures_aka` 中 \verb`figures.deleted==1` 的环境中有没有属于当前文章的（若有多个就选第一个）， 如果有就更新 \verb`figures.deleted=0` 然后根据该记录中的信息插入图片环境代码，否则新建标签和环境并在 \verb`figures` 表中插入新的记录， \verb`aka` 指向 \verb`images.figure`。
+\item 【进行中】如果上传时发现图片文件的 hash 已存在于 \verb`images.hash`， 则检查该文件的 \verb`images.figure和figures_aka` 中 \verb`figures.deleted==0` 的图片环境， 有就提示图片已存在，列出所有标签（\verb`fig_` 加 \verb`figures.id`）和图片标题和它们所在的文章 id 和 caption 让用户选择引用（\verb`@ `）或者选择重复使用图片。 如果 \verb`images.figure和figures_aka` 中没有 \verb`figures.deleted==0` 的图片环境（也就不用选了）或者用户选择重复使用图片， 就检查 \verb`images.figure和figures_aka` 中 \verb`figures.deleted==1` 的环境中有没有属于当前文章的（若有多个就选第一个）， 如果有就更新 \verb`figures.deleted=0` 然后根据该记录中的信息插入图片环境代码，否则新建标签和环境并在 \verb`figures` 表中插入新的记录， \verb`aka` 指向 \verb`images.figure`。
 \item 【完成】按下 “上传图片并创建新标签” 按钮弹出一个窗口。窗口中有“上传图片”按钮，按下后弹出文件浏览器仅限选择一张 png 或者 pdf 图片（若该图的 hash 已经存在则见下文）。 另设一个“上传其他格式”按钮，按下后可以选择一张或多张常见格式图片，可以按多次，若第一个按钮上传的是 pdf，上传的其他格式图片中必须要有 svg 格式否则无法确定。 设一个“上传附件（源码或项目文件等）”按钮，用于上传附件，功能和 “上传其他格式” 一样，上传到 \verb`PhysWiki/files/`。另外可以在窗口提供输入 \verb`figures.caption`（必填） 和 \verb`width`（默认 6） 和 \verb`source`（选填） 和 \verb`images.license`（必填，默认和 \verb`entries.license` 一样）。
 \item 【完成】上传新的图片时， \verb`PhysWiki/figures/` 中的文件使用 \verb`images.hash` + 拓展名命名。 \verb`\label{}` 格式为 \verb`fig_文章名_序号`。这里的\verb`序号`可以由小到大逐个查看数据库中存不存在 \verb`figures.id=文章名_序号`，使用第一个不存在的。
 \item 【完成】首先插入 \verb`images` 表的 \verb`hash, ext, figure, author, time`（此时如果有 foreign key 报错，需要 \verb`PRAGMA foreign_keys = OFF;`，完了再 \verb`ON`）， 再插入 \verb`figures` 表的 \verb`id, caption, authors, entry, image`， 再修改 \verb`entries` 表格的 \verb`figures`。 注意的格式，不要把已有的数据覆盖。 一个示例：
@@ -276,7 +276,7 @@ salary 表的规则大概一共就这么三种,
 \begin{lstlisting}[language=markdown]
 # 大标题
 
-## 小标题
+\subsection{小标题}
 
 正文， $$a^2 + b^2 = c^2$$ 正文公式也用两个美元符号， 后面必须要有空格。
 
@@ -333,7 +333,7 @@ $$a^2 + b^2 = c^2$$
 
 \item 编辑器应该有一个内部的通知系统， 制定一定的规则， 例如自己编写过的文章被别人修改了会得到通知。 又例如某人负责的部分中文章被修改了也收到通知。
 
-\item 【完成】在代码按钮旁边添加一个按钮， 插入 \verb`\verb|...|` 命令。 如果选中一段文字再按， 就把文字放在它里面。 如果选中的文字中含有 \verb`|`， 就改为 \verb|\verb`...`|， 如果也有 \verb|`|， 就改为 \verb`\verb+...+`。
+\item 【完成】在代码按钮旁边添加一个按钮， 插入 ``...`` 命令。 如果选中一段文字再按， 就把文字放在它里面。 如果选中的文字中含有 \verb`|`， 就改为 ``...``， 如果也有 ```， 就改为 ``...``。
 
 \item 【完成】Ctrl + 单击外部引用 autoref， 可以直接打开链接到的文章并跳转到对应的 label。 预览窗口也跳转到相应的 id （和 label 同名）。
 
@@ -376,7 +376,7 @@ $$a^2 + b^2 = c^2$$
 
 \item 【完成】删除文章时同时删除 \verb`changed/` 和 \verb`online/` 目录中对应的 html 和图片文件 （图片名格式为 \verb`文章名_编号.拓展名`）
 
-\item 【先不处理】保存时， 检查所有 \verb`\label{文章名_类型序号}` （如 \verb`\label{eq_Sample_1}`）是否正确， 如果不正确， 提示 \verb`检查到 xx 个 label 与文章名不匹配， 是否批量替换？：xxx, xxx, xxx` 如果选是， 则将 contents 目录中的所有文章中 \verb`\label{}` 和 \verb`\autoref{}` 中出现的该标签都替换成符合要求的。 注意每个 label 在文章中都必须是独一无二的。
+\item 【先不处理】保存时， 检查所有 \verb`\label{文章名_类型序号}` （如 \verb`\label{eq_Sample_1}`）是否正确， 如果不正确， 提示 \verb`检查到 xx 个 label 与文章名不匹配， 是否批量替换？：xxx, xxx, xxx` 如果选是， 则将 contents 目录中的所有文章中 \verb`\label{}` 和 \verb`@ ` 中出现的该标签都替换成符合要求的。 注意每个 label 在文章中都必须是独一无二的。
 
 \item 【先不处理】上一条中批量替换时会产生一个和空心引号按钮类似的问题， 就是如果有其他人正在编辑需要添加或修改 label 的文章怎么办？ 是否考虑采用新提出的 “介入” 机制？ 还是可以做到实时刷新这些人打开的文章？
 
@@ -421,23 +421,31 @@ $$a^2 + b^2 = c^2$$
 \begin{itemize}
 \item 仅在前端实现，读取 latex 时转成 md， 保存时转成 latex。 完全不影响后端。
 \item 菜单栏中的按钮和高亮算法也要做相应的修改
-\item \verb`\subsection{标题}\label{标签}` 变为 \verb`## 标题 {#标签}` 其中标签的定义是可选的。
-\item \verb`\subsubsection` 也同理，用 \verb`###`。 注意转换成 latex 时， \verb`标题` 两边的空格不要包含进去， \verb`{#标签}` 里面不能有空格。
-\item 不仅是标题，所有地方的 \verb`\label{标签}` 都转换为 \verb`{#标签}`
-\item 所有 \verb`\autoref{标签}` 变为 \verb`@标签`，后面加一个空格（无论 \verb`\autoref{标签}` 后面是否已经有空格）。 转换回去的时候后面的空格删掉。 如果 md 的 \verb`标签` 中出现了非字母数字和下划线的字符， 就报错并提示是否忘了加空格。
+\item \verb`## 标题\label{标签}` 变为 \verb`## 标题 \label{标签}` 其中标签的定义是可选的。
+\item \verb`\subsubsection` 也同理，用 \verb`###`。 注意转换成 latex 时， \verb`标题` 两边的空格不要包含进去， \verb`\label{标签}` 里面不能有空格。
+\item 不仅是标题，所有地方的 \verb`\label{标签}` 都转换为 \verb`\label{标签}`
+\item 所有 \verb`@标签 ` 变为 \verb`@标签`，后面加一个空格（无论 \verb`@标签 ` 后面是否已经有空格）。 转换回去的时候后面的空格删掉。 如果 md 的 \verb`标签` 中出现了非字母数字和下划线的字符， 就报错并提示是否忘了加空格。
 \item 所有 \verb`\upref{标签}` 变为 \verb`@^标签`，后面加一个空格。
-\item 所有 \verb`\aref{文字}{标签}` 变为 \verb`[文字](#标签)`
-\item 所有 \verb`\cite{标签}` 变为 \verb`[@标签]`
+\item 所有 \verb`\aref{文字}{标签}` 变为 \verb`\aref{文字}{标签}`
+\item 所有 \verb`\cite{标签}` 变为 \verb`\cite{标签}`
 \item 所有 \verb`\footnote{文字}` 变为 \verb`[^数字]`，代码最后用 \verb`[^数字] 文字` （每个占一行或多行）。 每个数字唯一即可，且只能被定义和引用一次。 latex 转 md 时从 1 开始按顺序生成。
-\item 粗体 \verb`\textbf{文字}` 变为 \verb`**文字**`
-\item \verb|\verb`代码`|（注意 delimiter 也可能是其他任意单个符号如 \verb`\verb+代码+` 变为 \verb|`代码`|， 如果\verb`代码`中已经有 \verb|`| 符号， 就使用多个作为 delimiter 如 \verb|``代码``|。 如果 \verb`代码` 的第一个或最后一个字符是 \verb|`|， 就用一个空格和 delimiter  隔开， 但转换回 latex 时删掉。
+\item 粗体 \verb`\textbf{文字}` 变为 \verb`\textbf{文字}`
+\item ``代码``（注意 delimiter 也可能是其他任意单个符号如 ``代码`` 变为 ``代码``， 如果\verb`代码`中已经有 ``` 符号， 就使用多个作为 delimiter 如 ```代码```。 如果 \verb`代码` 的第一个或最后一个字符是 ```， 就用一个空格和 delimiter  隔开， 但转换回 latex 时删掉。
 \item 【先不做】\verb`itemize` 环境转换时直接把 \verb`\begin{itemize}` 和 \verb`\end{itemize}` 去掉，并把中间的 \verb`\item` 替换为 \verb`-` 即可。 中间如果有空行不要管。
 \item 【先不做】\verb`enumerate` 环境转换时也类似，但是把 \verb`\item` 替换为数字。 如果能做到的话，如果两个数字之间按下了回车，那就自动插入适当的数字并把后面的连续数字都加一。
-\item \verb`lstlisting` 环境（见 \enref{Sample.tex}{Sample}）转换后开头为：\verb|```语言 标题|（占一行），结尾 \verb|```|（占一行）。 其中 \verb`标题` 可选。
-\item \verb`\begin{equation}\begin{aligned} ... \end{aligned}\end{equation}` 环境变为 \verb`:::a ... :::` 注意两个相邻命令之间可能有空格或回车。
-\item \verb`equation` 环境（如果内部不直接嵌套 \verb`aligned` 环境）变为 \verb`::: ... :::`。
-\item \verb`figure` 环境变为 \verb`![标题](文件名){#标签}{width=8cm}`，其中 \verb`文件名` 不要包含路径，但包含拓展名。
-\item 其他环境如 \verb`example`，\verb`exercise`，\verb`lemma`， 开头用 \verb`:::环境名 标题 {#标签}`，结尾用 \verb`:::`。 标签可选。
+\item \verb`lstlisting` 环境（见 \enref{Sample.tex}{Sample}）转换后开头为：````语言 标题`（占一行），结尾 `````（占一行）。 其中 \verb`标题` 可选。
+\item \verb`\begin{equation}
+\begin{aligned}
+...
+:::` 环境变为 \verb`\begin{equation}
+\begin{aligned} ... :::` 注意两个相邻命令之间可能有空格或回车。
+\item \verb`equation` 环境（如果内部不直接嵌套 \verb`aligned` 环境）变为 \verb`\end{equation}\end{aligned} ... :::`。
+\item \verb`figure` 环境变为 \verb`\begin{figure}[ht]
+\centering
+\includegraphics[width=8cm]{./figures/文件名}
+\caption{标题}\label{标签}
+\end{figure}`，其中 \verb`文件名` 不要包含路径，但包含拓展名。
+\item 其他环境如 \verb`example`，\verb`exercise`，\verb`lemma`， 开头用 \verb`:::环境名 标题 \label{标签}`，结尾用 \verb`:::`。 标签可选。
 \end{itemize}
 
 \subsubsection{编辑冲突方案}
@@ -533,7 +541,7 @@ $$a^2 + b^2 = c^2$$
 
 \item 【完成】定义，定理，itemize 等环境中（不包括 equation） 高亮效果应该和正文一样（现在全都是绿的）。
 
-\item 【完成】插入 \verb`\autoref{}` 的时候在后面多加一个空格（前面不需要）。
+\item 【完成】插入 \verb`@ ` 的时候在后面多加一个空格（前面不需要）。
 
 \item 【完成】code 按钮支持新语言： python, pythonC（python 命令行）, julia, markdown, bash, makefile, json, git, cmake, regex, latex
 
@@ -563,13 +571,14 @@ $$a^2 + b^2 = c^2$$
 
 \item 【完成】增加一个脚注按钮， 插入 \lstinline|\footnote{脚注}|， 并自动选中 “脚注”
 
-\item 【完成】增加一个代码按钮， 图标为 \lstinline|</>|， 按下以后弹出输入框 “请指定语言（不指定则没有高亮）” \verb`"\\begin{lstlisting}[language=输入的语言]\n${1}\n\\end{lstlisting}"`
+\item 【完成】增加一个代码按钮， 图标为 \lstinline|</>|， 按下以后弹出输入框 “请指定语言（不指定则没有高亮）” `"\```输入的语言\n${1}\n\
+```"\verb`
 
 \item 【完成】“插入文章引用按钮” 同时也插入文章的中文名， 且自动选中中文名以便修改。 例如 “\enref{文章示例}{Sample}”
 
 \item 【完成】保存缓慢时区分是因为网络缓慢还是 PhysWikiScan 无响应。 如果是前者， 就一直尝试连接直到手动关闭提示框。
 
-\item 【完成】上传的图片保存文件名的格式为 \verb`文章名_序号.后缀名`
+\item 【完成】上传的图片保存文件名的格式为 `文章名_序号.后缀名\verb`
 
 \item 【完成】选中一段文字后点击链接按钮， 插入 \lstinline|\href{http://www.example.com}{被选中的文字}|， 自动选中网址
 
@@ -598,7 +607,7 @@ $$a^2 + b^2 = c^2$$
 \item 【暂时不需要】TODO：因该插件不支持 physics 宏包，选中大多数文章中现有公式的 LaTeX 打开编辑器，是无法正确显示的（如 $I = \int\bvec j \vdot \dd{\bvec S}$ 选中这段打开编辑器），并且由编辑器生成的 LaTeX 也不符合百科的命令规范（但显示效果基本一致），需编写 processor 对命令进一步转换，如将$\frac{\partial^{n}{\cdot}}{\partial{\cdot}^{n}}$ 转换成 $\pdv[n]{\cdot}{\cdot}$，$\left\langle{\cdot}\vert{\cdot}\right\rangle$ 转换成 $\braket{\cdot}{\cdot}$ etc.
 \end{itemize}
 
-\subsection{论坛 Bug}\label{sub_edTODO_3}
+\subsection{论坛 Bug\label{sub_edTODO_3}}
 \begin{itemize}
 \item 【完成】用户信息，修改时，可能没有邮箱，应该去除前端的非空检查
 \item 【完成】用户信息，修改时，不应该强制填写简介
@@ -609,7 +618,7 @@ $$a^2 + b^2 = c^2$$
 \item book 页面不可以依赖 mathjax 的 cdn， 和 online 页面一样使用 wuli.wiki 自己的。
 \end{itemize}
 
-\subsection{论坛 TODO}\label{sub_edTODO_4}
+\subsection{论坛 TODO\label{sub_edTODO_4}}
 \begin{itemize}
 \item 【完成】首页，在百科下面加一个 “AI 问答”，设置一个合适的图标
 \item 【完成】百科，右侧搜索，支持多个关键字并高亮，关键词用空格分隔，各关键词是与关系
@@ -626,7 +635,7 @@ $$a^2 + b^2 = c^2$$
 \item 用户，个人首页，参考知乎个人动态
 \item 百科页面和编辑器中的历史版本按钮中需要支持浏览历史每个历史版本的网页版，这首先需要 scan 支持，对历史版本中的坏链接和找不到的图片，不进行报错而是显示占位图片和链接。
 \item 内容付费需要考虑一个问题就是， 如果大家都可以用编辑器， 那不开会员也可以打开编辑器查看所有内容。 所以编辑者必须开通会员， 有足够的贡献才能报销会员。
-\item 把访客统计数据可视化：数据基于 \verb`https://wuli.wiki/admin/system/logs/access-logs`
+\item 把访客统计数据可视化：数据基于 `https://wuli.wiki/admin/system/logs/access-logs\verb`
 \item 画出随时间变化的趋势图以及总计， 手动限制条件，例如某篇文章，部分，章，统计时间段，登录或未登录
 \item 网页 AI 助手充值包
 \item 用户历史捐款兑换积分（支付宝 2024 账单还没下载导入）
@@ -634,7 +643,7 @@ $$a^2 + b^2 = c^2$$
 \item 目录菜单弹出后，需要有一个定位按钮和一个搜索按钮。 搜索按钮快速搜索文章标题或部分章节，定位按钮在目录定位当前文章并展开所在部分章节。
 \end{itemize}
 
-\subsection{PhysWikiScan BUG}\label{sub_edTODO_5}
+\subsection{PhysWikiScan BUG\label{sub_edTODO_5}}
 
 \subsubsection{changed}
 \begin{itemize}
@@ -647,23 +656,23 @@ $$a^2 + b^2 = c^2$$
 \subsubsection{表格标题}
 【完成】第二个表格会具有第一个表格的标题
 
-\subsection{PhysWikiScan TODO}\label{sub_edTODO_6}
+\subsection{PhysWikiScan TODO\label{sub_edTODO_6}}
 \begin{itemize}
 \item （大方向）确保只用命令行操作也可以很舒服地维护本地笔记。
-\item 所有标签的引用，无论标签的类型是什么，应该都支持三种命令： \verb`\upref{标签}`（显示为书签），\verb`\aref{链接文字}{标签}`（给指定文字加链接）， \verb`\autoref{标签}`（自动生成文字加链接）
-\item 主要目标是最终完全不需要使用 \verb`./PhysWikiScan .` 命令， 每次用 `--entry` 都更新数据库中所有必要的数据。
-\item 做一个 \verb`\file` 命令或环境用于展示附件，显示为 \verb`附件：文件名` 点击可下载。 由编辑器在上传附件时自动插入。（暂时用 \verb`\link`）
+\item 所有标签的引用，无论标签的类型是什么，应该都支持三种命令： `\upref{标签}\verb`（显示为书签），`\aref{链接文字}{标签}\verb`（给指定文字加链接）， `@标签 \verb`（自动生成文字加链接）
+\item 主要目标是最终完全不需要使用 `./PhysWikiScan .\verb` 命令， 每次用 `--entry\verb` 都更新数据库中所有必要的数据。
+\item 做一个 `\file\verb` 命令或环境用于展示附件，显示为 `附件：文件名\verb` 点击可下载。 由编辑器在上传附件时自动插入。（暂时用 `\link\verb`）
 \item 检查目录 parts 标题是否重复
 \item 【完成】取消限制 label 根据文章 id 命名
 \item 转载的文章要如何显示原作者而不是贡献者？
 \item pdf 图片环境移动到另一篇文章会出错
-\item 中文之间有若干空格或者一个空行不应该影响排版。 \verb`\upref` 后面如果有空格也不应该。
+\item 中文之间有若干空格或者一个空行不应该影响排版。 `\upref\verb` 后面如果有空格也不应该。
 \item 粗体和非粗体文字之间的数字和中文也同样需要显示空格。
-\item 目录类型的文章中包含的文章， 在 \verb`PhysWikiScan .` 一开始不应该警告不包含在目录中。
+\item 目录类型的文章中包含的文章， 在 `PhysWikiScan .\verb` 一开始不应该警告不包含在目录中。
 \item 支持编译历史版本， 使用最新的数据库， 如果 label 找不到就显示找不到。
-\item 把作者显示和排序的问题交给健叔和欧阳完成， \verb`wuli.wiki/online` 页面无需显示作者。
+\item 把作者显示和排序的问题交给健叔和欧阳完成， `wuli.wiki/online\verb` 页面无需显示作者。
 
-\item 编译 pdf 时， 正文中的 \verb`href` 中的 url 完全不需要 escape， 但是 \verb`footnote` 中的 \verb`href` 需要。 所以为了保守起见 scan 还是只要碰到没有 escape 就报错比较好。 字符： \verb`%, #`
+\item 编译 pdf 时， 正文中的 `href\verb` 中的 url 完全不需要 escape， 但是 `footnote\verb` 中的 `href\verb` 需要。 所以为了保守起见 scan 还是只要碰到没有 escape 就报错比较好。 字符： `%, #\verb`
 
 \item 定义环境的抬头颜色，应与引理、定理、推论作区分。引理、定理、推论之间也建议作区分，但考虑到它们都是“真命题”，建议区分度不要太大，即色相差不要太明显。
 
@@ -681,21 +690,21 @@ $$a^2 + b^2 = c^2$$
 
 \item 不要试图追踪错误的行号！太难了，不值得。 用内容定位足够了。（浪费了一天）
 
-\item 原来的 \verb`PhysWikiCheck()` 去哪了？
+\item 原来的 `PhysWikiCheck()\verb` 去哪了？
 
 \item 代码块应该也像公式一样可以拖动， 而且需要可以上下拖动。 每行长度不应该有限制（研究一下 pdf 里面的代码块能否自动换行）。
 
 \item 想想怎样编译历史版本或已删除文章（或者可以用 git 的历史 html）。
 
-\item \verb`\eentry` 和 \verb`\rentry` 没有处理
+\item `\eentry\verb` 和 `\rentry\verb` 没有处理
 
-\item \verb`\begin{example}{}` 或类似环境下面如果多空一行， html 也会空间过大。如果有 \verb`\addTODO` 和会有很大空间。
+\item `\begin{example}{}\verb` 或类似环境下面如果多空一行， html 也会空间过大。如果有 `\addTODO\verb` 和会有很大空间。
 
-\item \verb`findNormalText()` 函数不应该包含 subtitle，subsubtitle 等
+\item `findNormalText()\verb` 函数不应该包含 subtitle，subsubtitle 等
 
 \item 【完成】html 每个 subsection 蓝色标题前面加上序号。
 
-\item 【完成】（已在 latex 模板中基本解决）编译 pdf 时， 特殊字符（如希腊字母等）会无法显示。 如果有无法显示的字符， 在编译的 \verb`.log` 文件里面（或者 console）就会出现 \verb`Missing character: There is no ...` 的提示。 这时最好的办法就是替换成公式环境中的命令。 如希腊字母 $\alpha$。 参考 \href{https://www.overleaf.com/learn/how-to/What_file_encodings_and_line_endings_should_I_use\%3F}{overleaf 的这篇文章}。 另外可以 google 一下 \href{https://tug.ctan.org/info/symbols/comprehensive/symbols-a4.pdf}{symbols-a4.pdf}， 上面提供相近的符号命令对照表。 另外\href{https://www.johndcook.com/unicode_latex.html}{这个}网页可以把 utf 字符转换为 latex 命令。 另外， 在 pdf 编译和百科编辑器的编译结果中， 都实现了行内公式和汉字之间自动插入空格， 和英文字母或数字间不插入空格。
+\item 【完成】（已在 latex 模板中基本解决）编译 pdf 时， 特殊字符（如希腊字母等）会无法显示。 如果有无法显示的字符， 在编译的 `.log\verb` 文件里面（或者 console）就会出现 `Missing character: There is no ...` 的提示。 这时最好的办法就是替换成公式环境中的命令。 如希腊字母 $\alpha$。 参考 \href{https://www.overleaf.com/learn/how-to/What_file_encodings_and_line_endings_should_I_use\%3F}{overleaf 的这篇文章}。 另外可以 google 一下 \href{https://tug.ctan.org/info/symbols/comprehensive/symbols-a4.pdf}{symbols-a4.pdf}， 上面提供相近的符号命令对照表。 另外\href{https://www.johndcook.com/unicode_latex.html}{这个}网页可以把 utf 字符转换为 latex 命令。 另外， 在 pdf 编译和百科编辑器的编译结果中， 都实现了行内公式和汉字之间自动插入空格， 和英文字母或数字间不插入空格。
 
 \item 【完成】在每篇文章底部加上目录树的链接
 \end{itemize}

@@ -1,0 +1,144 @@
+% 柯西序列的等价
+% keys 柯西序列|等价
+% license Usr
+% type Tutor
+
+\pentry{柯西序列、完备度量空间\nref{nod_cauchy}，二元关系\nref{nod_Relat}}{nod_70ae}
+在柯西序列上可以定义等价关系（\autoref{def_Relat_1}），而通过等价关系可以从柯西序列构成的集合上得到一个商集。下面将表明，这个由柯西序列得到的商集也具有度量空间的结构，并且原度量空间可看作这一商空间的子空间，且原空间在该商空间上是稠密的。
+
+\begin{theorem}{}
+设 $(X,d)$ 是任一度量空间， $\{x_n\},\{x'_n\}$ 是 $X$ 上的两个柯西序列（\autoref{def_cauchy_3}）。定义柯西序列上的二元关系 $R$：即若
+\begin{equation}
+\lim_{n\rightarrow\infty}d(x_n,x_n')=0,~
+\end{equation}
+则称 $\{x_n\},\{x_n'\}$ 具有关系 $R$，并记为 $\{x_n\}R\{x_n'\}$。那么关系 $R$ 是等价关系。
+\end{theorem}
+\textbf{证明：}
+自反性 $\{x_n\}R\{x_n\}$：由于 $d(x_n,x_n)=0$ 对所有 $n$ 成立，因此 $\lim\limits_{n\rightarrow\infty}d(x_n,x_n)=0$ 成立。
+
+对称性 $\{x_n\}R\{x_n'\}\Rightarrow\{x_n'\}R\{x_n\}$：由 $d$ 的对称性，$d(x_n,x_n')=d(x_n',x_n)$，因此由 $\{x_n\}R\{x_n'\}$ 得 
+\begin{equation}
+\lim_{n\rightarrow\infty}d(x_n',x_n)=\lim_{n\rightarrow\infty}d(x_n,x_n')=0.~
+\end{equation}
+
+传递性 $\{x_n\}R\{x_n'\},\{x'_n\}R\{y_n\}\Rightarrow\{x_n\}R\{y_n\}$：因为 $\{x_n\}R\{x_n'\},\{x'_n\}R\{y_n\}$，所以对任一 $\epsilon>0$，存在 $N,N'$，使得只要 $n\geq N,n'\geq N'$，就有
+\begin{equation}
+d(x_n,x_n')<\epsilon/2,\quad d(x_{n'}',y_{n'})<\epsilon/2.~
+\end{equation}
+取 $N_1=\max\{N,N'\}$，则只要 $n>N_1$，就有
+\begin{equation}
+d(x_n,y_n)<d(x_n,x'_n)+d(x'_n,y_n)<\epsilon/2+\epsilon/2=\epsilon.~
+\end{equation}
+即 $\lim\limits_{n\rightarrow\infty}d(x_n,y_n)=0$。
+
+\textbf{证毕！}
+
+由上面的定理，可以定义柯西序列的等价关系。
+\begin{definition}{}\label{def_CauEq_1}
+设 $(X,d)$ 是任一度量空间， $\{x_n\},\{x'_n\}$ 是 $X$ 上的两个柯西序列（\autoref{def_cauchy_3}）。称 $\{x_n\}$ 和 $\{x_n'\}$ 是\textbf{等价}的，并记作 $\{x_n\}\sim\{x'_n\}$ 若
+\begin{equation}
+\lim_{n\rightarrow\infty}d(x_n,x_n')=0.~
+\end{equation}
+\end{definition}
+
+\begin{theorem}{}\label{the_CauEq_1}
+设 $C_X$ 是度量空间 $X$ 上的所有柯西序列构成的集族，则由等价关系 $\sim$ 定义的商集 $X^*:=C_X/\sim$ 上通过如下定义的距离 $d^*$ 是良好的：
+\begin{equation}
+d^*(x^*,y^*):=\lim_{n\rightarrow\infty} d(x_n,y_n),\quad x^*,y^*\in X^*,\{x_n\}\in x^*,\{y_n\}\in y^*.~
+\end{equation}
+即 $d^*(x^*,y^*)$ 的取值不依赖于 $\{x_n\},\{y_n\}$ 的选取且存在。
+\end{theorem}
+\textbf{证明：}由不等式\autoref{eq_ConIso_1} 以及序列 $\{x_n\},\{y_n\}$ 是柯西序列知，对于充分大的 $n,m$，成立
+\begin{equation}
+\abs{d(x_n,y_n)-d(x_m,y_m)}\leq d(x_n,x_m)+d(y_n,y_m)<\epsilon.~
+\end{equation}
+于是序列 $\{s_n\}$ 是实数构成的柯西序列，其中 $s_n:=d(x_n,y_n)$。由Cauchy准则（\autoref{the_CauSeq_1}），$\{s_n\}$ 有极限。这个极限不依赖于 $\{x_n\}\in x^*,\{y_n\}\in y^*$ 的选取。事实上，设
+\begin{equation}
+\{x_n\},\{x_n'\}\in x^*,\quad \{y_n\},\{y_n'\}\in y^*.~
+\end{equation}
+则有
+\begin{equation}
+\abs{d(x_n,y_n)-d(x'_n,y'_n)}\leq d(x_n,x_n')+d(y_n,y'_n).~
+\end{equation}
+因为 $\{x_n\}\sim\{x_n'\},\{y_n\}\sim\{y_n'\}$，因此
+\begin{equation}
+\lim_{n\rightarrow\infty}d(x_n,y_n)=\lim_{n\rightarrow\infty}d(x'_n,y'_n).~
+\end{equation}
+
+\textbf{证毕！}
+
+\begin{theorem}{}\label{the_CauEq_2}
+设 $(X,d)$ 是度量空间，$X^*,d^*$ 如\autoref{the_CauEq_1} 定义，则 $(X^*,d^*)$ 是度量空间。
+\end{theorem}
+
+\textbf{证明：}
+正定性：
+\begin{equation}
+d^*(x^*,y^*)=\lim_{n\rightarrow\infty} d(x_n,y_n)\geq0.~
+\end{equation}
+设 $d^*(x^*,y^*)=0$，并取恒等序列 $\{x_n\}\in x^*,\{y_n\}\in y^*$，则
+\begin{equation}
+\lim_{n\rightarrow\infty} d(x_n,y_n)=0\Rightarrow d(x_n,y_n)=0\Rightarrow x_n=y_n\Rightarrow x^*=y^*.~
+\end{equation}
+
+
+对称性：
+\begin{equation}
+d^*(x^*,y^*)=\lim_{n\rightarrow\infty} d(x_n,y_n)=\lim_{n\rightarrow\infty} d(y_n,x_n)=d^*(y^*,x^*).~
+\end{equation}
+
+三角不等式：设 $\{x_n\}\in x^*,\{y_n\}\in y^*,\{z_n\}\in Z^*$，则
+\begin{equation}
+d(x_n,z_n)\leq d(x_n,y_n)+d(y_n,z_n).~
+\end{equation}
+上式取极限得
+\begin{equation}
+\begin{aligned}
+\lim_{n\rightarrow\infty}d(x_n,z_n)&\leq \lim_{n\rightarrow\infty}d(x_n,y_n)+\lim_{n\rightarrow\infty}d(y_n,z_n),\\
+&\Downarrow\\
+d^*(x^*,z^*)&\leq d^*(x^*,y^*)+d^*(y^*,z^*).
+\end{aligned}
+~
+\end{equation}
+\textbf{证毕！}
+
+\begin{theorem}{}\label{the_CauEq_3}
+设 $(X,d),(X^*,d^*)$ 如\autoref{the_CauEq_2} 定义，则 $(X,d)$ 和 $(X^*,d^*)$ 的某一子空间等距（\autoref{def_ConIso_2}）。这一等距可由将 $x\in X$ 映射到收敛于 $x$ 的类 $x^*\in X^*$ 指定。
+\end{theorem}
+
+\textbf{证明：}设定理中描述的映射为 $f$，则我们只需证明 $f$ 是等距的，单的，且对任一 $x\in X$， $f(x)\in X^*$。
+
+
+任一 $x\in X$， $f(x)\in X^*$：实数上，任一 $x\in X$，$\{x_n\},x_n\equiv x$ 是柯西序列，因此等价类 $[\{x_n\}]\in X^*$，即 $f(x)\in X^*$。
+
+单射性：设 $x, y\in X$，且 $f(x)\neq f(y)$。取恒等序列 $\{x_n\},\{y_n\}$，其中 $x_n\equiv x_1,y_n\equiv x_2$。那么由 $f(x_1)\neq f(x_2)$，得（根据柯西序列等价的定义（\autoref{def_CauEq_1}） ）
+\begin{equation}
+\begin{aligned}
+\lim_{n\rightarrow\infty}d(x_n,y_n)&\neq 0,\\
+&\Downarrow\\
+d(x,y)&\neq0,\\
+&\Downarrow\\
+x&\neq y.
+\end{aligned}~
+\end{equation}
+
+等距性：取满足 $x_n\equiv x_1,y_n\equiv x_2$ 的等距序列 $\{x_n\}\in f(x),\{y_n\}\in f(y)$，则
+\begin{equation}
+d^*(f(x),f(y))=\lim_{n\rightarrow\infty}d(x_n,y_n)=d(x,y).~
+\end{equation}
+\textbf{证毕！}
+
+由\autoref{the_CauEq_3} ，我们可以把 $X$ 看作 $X^*$ 的子空间。
+
+\begin{theorem}{}\label{the_CauEq_4}
+设 $(X,d),(X^*,d^*)$ 如\autoref{the_CauEq_2} 定义，则 $X$ 在 $X^*$ 中稠密（\autoref{def_MaDen_2}），即 $[X]=X^*$。
+\end{theorem}
+
+\textbf{证明：}
+如前所述， $X$ 可看出 $X^*$ 的子空间，因此我们将直接记 $x$ 为 $X^*$ 中收敛到 $x$ 的等价类。设 $x^*$ 是 $R^*$ 中任一点且 $\epsilon>0$是任意的。取 $\{x_n\}\in x^*$。设 $N$ 是使得对一切 $n,m>N$，$\rho(x_n,x_m)<\epsilon$ 的数。则当 $n>N$ 时，
+\begin{equation}\label{eq_CauEq_1}
+d^*(x_n,x^*)=\lim_{m\rightarrow\infty} d(x_n,x_m)<\epsilon.~
+\end{equation}
+上式我们已经取了 $x_n\in X^*$（严格说是 $f(x_n)$） 中收敛于 $x_n$ 的恒等代表元。 由\autoref{eq_CauEq_1} ，$x^*$ 的任意领域都包含 $X$ 中的某一点。因此 $X^*\subset [X]$ ，又 $[X]\subset X^*$（因为 $X$ 是度量空间 $X^*$ 的子集，$X$ 的极限点按定义都在 $X^*$ 中），所以 $[X]=X^*$。
+
+\textbf{证毕！}
