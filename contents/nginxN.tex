@@ -239,3 +239,18 @@ server {
 }
 \end{lstlisting}
 \end{itemize}
+
+\subsection{端口被占用}
+如果端口被占用，那么 nginx service 将无法启动
+\begin{lstlisting}[language=none]
+Oct 04 10:41:33 bandwagon2 nginx[1955]: nginx: [emerg] bind() to [::]:80
+failed (98: Unknown error)
+Oct 04 10:41:33 bandwagon2 nginx[1955]: nginx: [emerg] still could not bind()
+Oct 04 10:41:33 bandwagon2 systemd[1]: nginx.service: Control process exited,
+code=exited, status=1/FAILURE
+Oct 04 10:41:33 bandwagon2 systemd[1]: nginx.service: Failed with result
+'exit-code'. Oct 04 10:41:33 bandwagon2 systemd[1]: Failed to start
+A high performance
+web server and a reverse proxy server.
+\end{lstlisting}
+此时可以用 \verb`sudo lsof -i :80` 查看端口被什么进程占用，如果这是某个子进程，也可以用 \verb`ps -o ppid= -p 进程id` 查看其父进程

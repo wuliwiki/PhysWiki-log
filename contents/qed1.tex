@@ -4,7 +4,7 @@
 % type Tutor
 
 \begin{issues}
-\issueTODO
+\issueTODO 正交群，微分几何内容待引用。补充Cartan decomposition词条。
 \end{issues}
 
 \pentry{群\nref{nod_Group}， 李群， 算符对易与共同本征函数\nref{nod_Commut}， 闵可夫斯基空间\nref{nod_MinSpa}，协变和逆变\nref{nod_CoCon}}{nod_6ce8}
@@ -88,15 +88,33 @@ g&=\Lambda^Tg\Lambda
 其他列（行）同理，只不过等式右边改为$1$。
 
 经验事实告诉我们，一个物理事件的因果性不随坐标系的改变而改变。比如$A$点发射信号，$B$点接收信号，换一个坐标系描述也是一个信号从$A$至$B$的匀速方程。用光锥来表示便是，一个\textbf{有物理意义的}洛伦兹变换必然不改变类时矢量的\textbf{时间分量符号}，使得上光锥内的矢量始终在上光锥内，此为绝对未来；下光锥的类时矢量同理，称之为绝对过去。可以证明，这样有物理意义的洛伦兹变换要求$\Lambda^0_0>0$。
-\begin{theorem}{}
+\begin{theorem}{}\label{the_qed1_1}
 洛伦兹变换保持类时矢量的时间分量符号不变当且仅当$\Lambda^0_0>0$。
 \end{theorem}
+\textbf{证明：}
+
+设$v^i$为任意类时矢量，$\Lambda^i_j$为任意洛伦兹变换且$v'=\Lambda^i_jv^j$。则
+\begin{equation}
+v'^{0}=\Lambda^0_0v^0+\Lambda^0_av^a,\,a=1,2,3~.
+\end{equation}
+由Cauchy-Schwarz不等式知$|\Lambda^0_av^a|\le \sqrt{\sum^{3}_{a=1}(\Lambda^0_a)^2}\sqrt{\sum^{3}_{a=1}(v^a)^2}$。则
+\begin{equation}
+v'^0\ge \Lambda^0_0v^0-\sqrt{\sum^{3}_{a=1}(\Lambda^0_a)^2}\sqrt{\sum^{3}_{a=1}(v^a)^2}~.
+\end{equation}
+又因为$|v^0|> \sqrt{\sum^{3}_{a=1}(v^a)^2},|\Lambda^0_0|>\sqrt{\sum^{3}_{a=1}(\Lambda^0_a)^2}$，定理得证。
+
 \begin{corollary}{}
 设满足$\Lambda^0_0\ge1$的洛伦兹分支为$O^+(1,3)$，则这一分支是$O(1,3)$的子群。
 \end{corollary}
+\textbf{证明：}
 
-\addTODO{正交群引用}
+结合性承袭矩阵乘法，单位元显然在正时分支里，因此我们只需证明封闭性与逆元存在性。
 
+设$\Lambda',\Lambda$为任意的正时洛伦兹变换，$v$为任意类时矢量。由\autoref{the_qed1_1} 可知$\Lambda'\Lambda$与$v$先后作用不改变类时分量符号，所以显然在类时分支里。
+
+$\Lambda^{-1}\Lambda v=v$，不改变类时分量符号，所以$\Lambda^{-1}$也必然不改变类时分类符号，因此在正时分支里。
+
+推论得证。
 \subsection{分类}
 对\autoref{eq_qed1_3} 两边取行列式后立刻得 $\det \Lambda=\pm1$。“+1”表示坐标系定向在洛伦兹变换后依然不变。%需要略谈一下意义吧
 
@@ -112,9 +130,11 @@ g&=\Lambda^Tg\Lambda
 \item 非正规、非正时（improper non-orthochronous）以$\Lambda_{+}^{\downarrow}$表示，对应 $\det\Lambda=-1 \quad\Lambda_{0}^{0}\leqslant-1$。
 \end{enumerate}
 
-在这四个互不相交的分类中，$SO^+(1,3)$最为特殊。首先，容易证明任意洛伦兹变换都可以写成该分支与时间反演变换 $ \Lambda_{T}$ 以及宇称变换 $\Lambda_{P}$ 的乘积。即
-$$\mathcal{O}(3,1)=\left\{SO^+(1,3), \Lambda_{P} SO^+(1,3), \Lambda_{T} SO^+(1,3), \Lambda_{P} \Lambda_{T} SO^+(1,3)\right\}~.
-$$
+在这四个互不相交的分类中，$SO^+(1,3)$最为特殊，首先，容易证明任意洛伦兹变换都可以写成该分支与时间反演变换 $ \Lambda_{T}$ 以及宇称变换 $\Lambda_{P}$ 的乘积。即
+\begin{equation}\label{eq_qed1_4}
+\mathcal{O}(3,1)=\left\{SO^+(1,3), \Lambda_{P} SO^+(1,3), \Lambda_{T} SO^+(1,3), \Lambda_{P} \Lambda_{T} SO^+(1,3)\right\}~.
+\end{equation}
+
 
 实际上，这不仅是“看起来”大大减轻了对洛伦兹变换的研究负担。在进一步分析$SO^+(1,3)$的特殊性之前，我们先来看一下这四个分支的例子。
 \subsection{举例}
@@ -163,36 +183,38 @@ x^{\prime 2}=x^{2}, \quad x^{\prime 3}=x^{3}~.
  $\Lambda=\opn{diag}(1,-1,-1,-1)$。易见这是非正规、正时的。
 \end{enumerate}
 
+\subsection{狭义洛伦兹群的分解}
+\subsection{狭义洛伦兹群的李代数}
+\addTODO{李群子群的条件待补充}%不知道微分几何相关是作为前置知识还是简单叙述。
 
-\subsection{洛伦兹群的李代数}
-\addTODO{李群子群的条件待补充}
-\pentry{洛伦兹群的李代数\nref{nod_lielot}}{nod_c126}
 \subsubsection{$SO^+(1,3)$的特殊性}
 $O(1,3)$群有两个特殊子群，一是能保持坐标系定向的正规群，二则是正时群，正时群能保证类时矢量的时间分量不变，这实际上是保证了事件的因果性。一个有物理意义的洛伦兹变换必然是正时的。
-实际上，洛伦兹群的四个分支里只有$SO^+(1,3)$是子群。我们来简单证明一下。首先，非正规的洛伦兹分支总是违背封闭性的，因为两个行列式为$-1$的相乘结果是行列式为$1$的矩阵。其次，由于非正时的洛伦兹变换会改变类时矢量的时间分量符号，所以被两个非正时的洛伦兹变换作用后，类时矢量的时间分量符号会恢复。所以非正时的洛伦兹矩阵相乘结果必为正时矩阵。相较之下，由于子群相交结果是子群，作为正规与正时群的交集，$SO^+(1,3)$必为$O(1,3)$的子群。
 
-行列式的限定使得$SO^+(1,3)$在拓扑意义上是闭集，因此$SO^+(1,3)$还是一个子流形，所以还是一个李群。
-\subsubsection{洛伦兹变换的群元形式}
-上述小节已证明，洛伦兹群有6个参数，是反对称矩阵 $\omega_{\mu\nu}$ 的六个独立元素，对应着六个独立生成元。把生成元表示为 $J^{\mu\nu}$，因为有反对称指标 $(\mu,\nu)$ 则有 $J^{\mu\nu}=-J^{\nu\mu}$。根据李群理论，一个广义的洛伦兹群元 $\Lambda$ 可以写为
+实际上，洛伦兹群的四个分支里只有$SO^+(1,3)$是子群。我们来简单证明一下。首先，非正规的洛伦兹分支总是违背封闭性的，因为两个行列式为$-1$的相乘结果是行列式为$1$的矩阵。其次，由于非正时的洛伦兹变换会改变类时矢量的时间分量符号，所以被两个非正时的洛伦兹变换作用后，类时矢量的时间分量符号会恢复。所以非正时的洛伦兹矩阵相乘结果必为正时矩阵。相较之下，由于子群相交结果是子群，作为正规与正时群的交集，$SO^+(1,3)$必为$O(1,3)$的子群，实际上还是一个李子群。%补充是李群的证明
+因此我们可以用指数映射表示该李子群的“部分”群元。设任意$X\in \mathfrak{so}^+(1,3)\equiv\opn{Lie} SO^+(1,3),t\in \mathbb R$，则$\E^{tX_e}$表示一条从单位元切空间$T_eSO^+(1,3)$出发的左不变切场的积分曲线。那么该曲线经过的点都能被指数映射所表示。由此观之，其他连通分支的元素均不能被指数映射所表示，毕竟单位元$I$是正规正时矩阵，在$SO^+(1,3)$内，而不同连通分支是彼此不相交的。或者从另一个角度上看，$\E^{tX_e}$的行列式永远是正的，\textbf{所以$O(1,3)$的李代数就是$SO^+(1,3)$的李代数。}
+%最好补充指数映射是满射的证明。
+
+有意思的是，虽然指数映射并非总是满射，但可以证明在$SO^+(1,3)$上是满的。
+\textbf{所以该群群元都可以被指数映射所表示}。因此，研究$SO^+(1,3)$上的李代数是非常有实践意义的，借由\autoref{eq_qed1_4} ，我们便得到$O(1,3)$的所有群元。由于$SO^+(1,3)$群包含了通俗的洛伦兹变换，即旋转和推促，所以也有学者称其为\textbf{狭义洛伦兹群（restricted lorentz group）}的。为了叙述简洁，下面我们沿用这一称呼。
+
+\subsubsection{狭义洛伦兹群的群元形式}
+对于任意$\Lambda\in SO^+(1,3)$，总存在$t\in \mathbb R,X\in \mathfrak so^+(1,3)$，使得$\Lambda=\E^{tX}$，因此找到$\mathfrak so^+(1,3)$的基尤为重要。
+
+考虑到$SL(2,\mathbb R)$是$SO^+(1,3)$的双覆盖，因此它们的李代数同构，所以$\mathfrak{so}(1,3)$是六维线性空间。
+
+又因为$SO^+(1,3)$的旋转部分同构于$SO(3)$，所以旋转部分包含了三个线性无关的生成元。分别是\footnote{推导见\href{https://wuli.wiki/online/lielot.html}{洛伦兹群的李代数}}
 \begin{equation}
-\Lambda=e^{-\frac{\I}{2} \omega_{\mu\nu}J^{\mu\nu}}~.
+J_{1}=\begin{pmatrix}0&0&0&0\\0&0&0&0\\0&0&0&-1\\0&0&1&0\end{pmatrix},\quad J_{2}=\begin{pmatrix}0&0&0&0\\0&0&0&1\\0&0&0&0\\0&-1&0&0\end{pmatrix},\quad J_{3}=\begin{pmatrix}0&0&0&0\\0&0&-1&0\\0&1&0&0\\0&0&0&0\end{pmatrix}~,
 \end{equation}
+对于任意$t,a^i\in\mathbb R$，$\E^{ta^iJ_i}$便是$SO(3)$直和上时间分量的“1”。
 
-\subsubsection{四矢量表象下的生成元}
-在四矢量表象下，生成元由 4×4 矩阵 $(J^{\mu\nu})_\sigma^\rho$ 表示。
-可以证明，
-\begin{equation}\left(J^{\mu \nu}\right)_{\sigma}^{\rho}=\I\left(g^{\mu \rho} \delta_{\sigma}^{\nu}-g^{\nu \rho} \delta_{\sigma}^{\mu}\right)~.\end{equation}
-\subsubsection{洛伦兹群的李代数}
-可以证明，洛伦兹群的李代数为：
-\begin{equation}\left[J^{\mu \nu}, J^{\rho \sigma}\right]=\I\left(g^{\nu \rho} J^{\mu \sigma}-g^{\mu \rho} J^{\nu \sigma}-g^{\nu \sigma} J^{\mu \rho}+g^{\mu \sigma} J^{\nu \rho}\right)~.\end{equation}
-通过重组 $J^{\mu\nu}$，可以得到两类空间矢量
-\begin{equation}\label{eq_qed1_5}J^{i}=\frac{1}{2} \epsilon^{i j k} J^{j k}, \quad K^{i}=J^{i 0}~.\end{equation}
-在这个角度上， 可以写为
-\begin{equation}\begin{aligned}
-\left[J^{i}, J^{j}\right] &=\I \epsilon^{i j k} J^{k}~, \\
-\left[J^{i}, K^{j}\right] &=\I \epsilon^{i j k} K^{k}~, \\
-\left[K^{i}, K^{j}\right] &=-\I \epsilon^{i j k} J^{k}~.
-\end{aligned}\end{equation}
-第一个对易子是 $SU(2)$ 的李代数，这意味着\autoref{eq_qed1_5} 中 $\bvec J$ 是角动量矢量（角动量李代数和它是同构的，这是\enref{角动量 2（量子力学）}{QMAM}的基本知识），它也同样对应着\textbf{旋转}变换的生成元。而 $\bvec K$ 实际上对应着\textbf{推促}变换的生成元。
+同理，我们也可从推促变换反向得到三个线性无关的生成元。分别为
+\begin{equation}
+K_1=\begin{pmatrix}0&1&0&0\\1&0&0&0\\0&0&0&0\\0&0&0&0\end{pmatrix},\quad K_2=\begin{pmatrix}0&0&1&0\\0&0&0&0\\1&0&0&0\\0&0&0&0\end{pmatrix},\quad K_3=\begin{pmatrix}0&0&0&1\\0&0&0&0\\0&0&0&0\\1&0&0&0\end{pmatrix}~.
+\end{equation}
+所以任一狭义洛伦兹群的群元都可以写为$\E^{t(a^iJ_i+b^iK_i)}$，其中$t,a^i,b^i\in\mathbb R$。
 
-这里李代数生成元的定义与数学中的定义有一些细节上的不同。具体地可以参考\enref{洛伦兹群的李代数}{lielot}，在那里的生成元对应的是这里的 $-iJ^1,-iJ^2,-iJ^3,-iK^1,-iK^2,-iK^3$，那么相应的指数映射就变为了 $\exp(\frac{1}{2}\omega_{\mu\nu}J^{\mu\nu})$。
+
+
+
+
