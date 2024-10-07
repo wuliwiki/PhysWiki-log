@@ -1,0 +1,53 @@
+% 进程和子进程笔记（Linux/C++）
+% license Usr
+% type Note
+
+如果不改变环境变量也可以用 \verb`execv()`，完整的例子如
+\begin{lstlisting}[language=cpp]
+#include <unistd.h>    // For execv()
+#include <sys/wait.h>  // For wait()
+#include <iostream>    // For std::cout
+#include <cstdio>      // For perror()
+
+int main() {
+    // Define the command and its arguments
+    char *args[] = {(char *)"/bin/ls",
+        (char *)"-l", (char *)NULL};
+
+    // Fork a new process
+    pid_t pid = fork();
+
+    if (pid == -1) {
+        // Fork failed
+        perror("fork failed");
+        return 1;
+    } else if (pid == 0) {
+        std::cout << "running ls command" << std::endl;
+        // Replace the child process with a new program (ls -l)
+        execv("/bin/ls", args);
+        // If execv() returns, an error occurred
+        perror("execv failed");
+        return 1;
+    } else {
+        // Parent process
+        int status;
+        // Wait for the child to complete. pid is now of the child process
+        waitpid(pid, &status, 0);
+        std::cout << "Child process finished with status: "
+            << status << std::endl;
+    }
+}
+\end{lstlisting}
+该程若运行成功会把 \verb`ls` 的输出打到 stdout。
+
+\begin{itemize}
+\item C/C++ 中最万能的子进程函数是 \verb`int execve(const char *path, char *const argv[], char *const envp[]);`
+\begin{lstlisting}[language=cpp]
+char *args[] = {"/bin/ls", "-l", NULL};
+char *env[] = {"HOME=/usr/home", "LOGNAME=home", NULL};
+execve("/bin/ls", args, env);
+\item \verb`getpid()` 可以获取当前进程的 pid
+\item 子进程中用 \verb`getppid()` 获取父进程的 pid
+\item 对子进程和父进程， \verb`pid_t pid = fork()` 分别返回 0 和子进程的 pid。
+\end{lstlisting}
+\end{itemize}

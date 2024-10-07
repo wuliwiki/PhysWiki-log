@@ -1,0 +1,145 @@
+% C 语言文件处理笔记
+% license Usr
+% type Note
+
+\begin{itemize}
+\item \verb`FILE *fopen(const char *filename, const char *mode);` 创建新文件，读取失败返回 \verb`NULL`。
+\item \verb`int fgetc(FILE *stream)` 读取一个字符
+\item \verb`int fgets(FILE *stream)` 读取一个字符
+\item \verb`fscanf, fgets` 读取文件
+\item \verb`size_t fwrite(const void *ptr, size_t size, size_t nmemb, FILE *stream)` 把字符串写入文件
+\item \verb`fprintf` 写文件（具有类似 \verb`printf` 的格式化）
+\item \verb`fseek(file, start_ind, SEEK_SET)` 把文件指针移动到文件的某个位置。
+\item \verb`long ftell(FILE *stream)` 获取文件指针
+\item \verb`int fclose(FILE *stream)` 关闭文件（成功返回 0，否则返回 EOF）
+\item \verb`fopen()` 模式如下：
+\item \verb`"r"`: 只读 (文件必须存在).
+\item \verb`"w"`: 只写 (新建或覆盖文件).
+\item \verb`"a"`: 最后写 (不存在则新建).
+\item \verb`"r+"`: 读写 (文件必须存在).
+\item \verb`"w+"`: 读写 (新建或覆盖文件).
+\item \verb`"a+"`: 最后写和读 (不存在则新建).
+\item 所有模式可以在后面加 \verb`b`，意思是二进制文件，对 Linux 没有任何作用，对 Windows，如果不加，写入 \verb`\n` 时实际上写入的是 \verb`\r\n`。
+\item \verb`r+` 模式的例子：
+\begin{lstlisting}[language=cpp]
+#include <stdio.h>
+#include <stdlib.h>
+
+int main() {
+    FILE *file;
+    char *buffer;
+    // start index (will start from the 6th char)
+    int start_ind = 5;
+    // Length of the string to read
+    int length = 10;
+
+    // Open the file in read mode
+    file = fopen("example.txt", "r+");
+    if (file == NULL) {
+        perror("Error opening file");
+        return 1;
+    }
+
+    // Allocate memory for the string
+    buffer = (char *)malloc((length + 1) * sizeof(char));
+    if (buffer == NULL) {
+        perror("Memory allocation error");
+        fclose(file);
+        return 1;
+    }
+
+    // Move the file pointer to the start index
+    fseek(file, start_ind, SEEK_SET);
+
+    // Read the bytes from start_ind
+    size_t bytesRead = fread(buffer, sizeof(char), length, file);
+
+    // Null-terminate the buffer if any data was read
+    if (bytesRead > 0)
+        buffer[bytesRead] = '\0';
+
+    if (bytesRead != length) {
+        // Check if we reached EOF
+        if (feof(file))
+            printf("End of file reached.\n");
+        // Check for read errors
+        else if (ferror(file))
+            perror("Error reading file");
+    }
+
+    // Print the string
+    printf("Read string: %s\n", buffer);
+
+    // Write to middle of file
+    fseek(file, start_ind, SEEK_SET);
+    size_t bytesWritten = fwrite("abcde", sizeof(char), 5, file);
+
+    // Free the allocated memory and close the file
+    free(buffer);
+    fclose(file);
+
+    return 0;
+}
+\end{lstlisting}
+\item \verb`size_t fread(void *ptr, size_t size, size_t nmemb, FILE *stream)` 读取指定 \verb`size*nmemb` 字节的内容到 \verb`ptr`（不会在结尾写 \verb`\0`！需要手动添加）。 函数返回成功读取的元素个数，如果返回值小于 \verb`nmemb`，说明达到了文件末尾，或发生了错误。 读完后，当前位置会指向下一个未读的字符。
+\item \verb`char *fgets(char *str, int n, FILE *stream)` 是 \verb`fread()` 的简化版，仅读取文件的一行。 对 \verb`str` 写入 \verb`\0` 结尾的字符串，返回其指针。 如果错误则返回 \verb`NULL`。
+\item \verb`int puts(const char *str)` 把字符串输出到 \verb`stdout`，并自动添在最后加一个 \verb`\n`。
+\item \verb`size_t fwrite(const void *ptr, size_t size, size_t nmemb, FILE *stream)`
+\item \verb`w+` 模式的例子：
+\begin{lstlisting}[language=cpp]
+#include <stdio.h>
+#include <stdlib.h>
+
+int main() {
+    FILE *file;
+    
+    // Open the file in "w+" mode
+    // (write and read, truncate if exists)
+    file = fopen("example.txt", "wb+");
+    if (file == NULL) {
+        printf("Error opening file!\n");
+        return 1;
+    }
+
+    // Step 1: Write to the file
+    fputs("Hello, World!\n", file);
+    fputs("This is a test file.\n", file);
+    fputs("End of writing.\n", file);
+
+    // Step 2: Jump to the beginning of the file using fseek()
+    fseek(file, 0, SEEK_SET);
+
+    // Step 3: Read from the file and print its
+    // contents to the console
+    char buffer[100];
+    printf("Reading the file contents:\n");
+    while (fgets(buffer, sizeof(buffer), file) != NULL) {
+        printf("%s", buffer);
+    }
+
+    // Step 4: Move the file pointer to a specific location, modify contents
+    fseek(file, 7, SEEK_SET); // Jump to the 8th character
+    fputs("Universe", file);  // Overwrite "World" with "Universe"
+
+    // Step 5: Jump to the beginning again to read the updated content
+    fseek(file, 0, SEEK_SET);
+    printf("\nUpdated file contents:\n");
+    while (fgets(buffer, sizeof(buffer), file) != NULL) {
+        printf("%s", buffer);
+    }
+
+    // Close the file
+    fclose(file);
+    return 0;
+}
+\end{lstlisting}
+\item \verb`int fseek(FILE *stream, long offset, int whence);` 可以跳到文件的某个位置。 例如 \verb`fseek(file, 7, SEEK_SET);` 相对于文件开头， \verb`fseek(file, -7, SEEK_CUR);` 相对当前位置， \verb`SEEK_END` 相对于文件 EOF。 如果成功，\verb`fseek()` 返回 0。如果返回非 0 则失败（例如超出范围）。
+\item \verb`offset` 可以叫做\textbf{文件位置指示器 file position indicator}，也称为\textbf{文件指针}， 但 \verb`FILE *` 也叫做文件指针（为了区分应该叫做\textbf{文件流指针 file stream pointer}）， 需要根据语境区分！
+\item \verb`void perror(const char *str)` 打印错误信息到 \verb`stderr` 并根据全局变量 \verb`errno` 在后面附上 \verb`: 具体错误原因(如文件不存在，权限不够)`。
+\item \verb`int fgetc(file)` 获取一个字节。 如果因为超出文件结尾没有获取到，则返回 EOF。
+\item \verb`EOF` 是 \verb`stdio.h` 中的一个宏，通常是 -1 但不能保证。
+\item 例如要获取文件最后的三个字节，用 \verb`fseek(file, -3, SEEK_END)` 然后 \verb`fgetc(file)` 三次即可。
+\item ASCII 表不存在 EOF，EOF 是一个概念不是一个字符。
+\item \verb`long ftell(FILE *stream)` 可以查看当前位置，会返回 \verb`fseek(file, 位置, SEEK_SET)` 设置的位置。
+\item 每个 \verb`FILE *` 都有两个指示器： End-of-File (EOF) Indicator 和 Error Indicator。 分别由 \verb`int feof(FILE *)` 和 \verb`int ferror(FILE *)` 检查， 如果没有则返回 0。
+\end{itemize}
