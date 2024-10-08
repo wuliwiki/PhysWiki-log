@@ -3,15 +3,12 @@
 % license Xiao
 % type Tutor
 
-\begin{issues}
-\issueTODO
-\end{issues}
 
 \pentry{基底（线性代数）\nref{nod_VecSpn}}{nod_6f36}
 
-\addTODO{增加一个简介}
+仿射集是矢量空间中的一类子集，它起源于线性代数和几何学的共同发展。它是研究向量空间中点的集合性质的一种方式。在更广泛的背景下，其所对应的仿射几何已经成为几何学的一个重要分支。本文将介绍其基本概念和一些相关的定理。
 
-\begin{definition}{仿射组合与仿射集}
+\begin{definition}{仿射组合与仿射集}\label{def_AffSet_1}
 取向量空间 $V$ (记其域为 $\mathbb{F}$) 中的两点 $x_1, x_2 \in V$ 的线性组合 $\theta x_1 + (1 - \theta) x_2$ 被称为 $x_1, x_2$ 的\textbf{仿射组合}；更一般的，系数和为一（即$\sum_i a_i = 1$）的线性组合 $\sum_i a_i x_i$ 被称为 $x_1, \dots, x_n$ 的\textbf{仿射组合}。
 
 向量空间的子集 $C \subseteq V$ 被称为\textbf{仿射集}（affine set），意味着 $C$ 中的任意仿射组合都在 $C$ 中；等价的，我们只需要考虑任意两个向量的仿射组合即可（和向量子空间的情况一样）。
@@ -27,7 +24,7 @@
 
 从几何上看，仿射集仍然是平直的，或者说“线性的”：
 
-\begin{theorem}{}
+\begin{theorem}{}\label{the_AffSet_2}
 对任意的仿射集 $C \subseteq V$，存在唯一的向量子空间 $U \subseteq V$，使得对任意的 $x \in C$，我们有
 \begin{equation}
 C = x + U = \{ x + v \mid v \in U\}~.
@@ -36,7 +33,7 @@ C = x + U = \{ x + v \mid v \in U\}~.
 
 \textbf{证明：}第一步，取一点 $x_0 \in C$，我们定义
 \begin{equation}
-U_0: = \{ x - x_0 \mid x \in C \}~,
+U: = \{ x - x_0 \mid x \in C \}~,
 \end{equation}
 要证明它是一个向量子空间：
 \begin{enumerate}
@@ -80,6 +77,33 @@ $x + x_0 - x'$ 是 $x, x_0, x'$的仿射组合，因此证得。
 
 在向量空间中谈直线、平面、超平面时，我们有时指的是向量子空间，有时指的是仿射子空间，要注意分辨。
 
-\begin{theorem}{}
+\begin{theorem}{}\label{the_AffSet_1}
 对于向量空间的子集 $C \subseteq V$，$C$为仿射集当且仅当过 $C$ 中任意不同的两点的（仿射）直线仍然在 $C$ 中。
 \end{theorem}
+
+\textbf{证明：}\textbf{必要性：}假设 $C$ 是仿射集。那么任意由 $x_1,x_2\in C$ 确定的直线为 $x_1+(1-k)x_2,k\in\mathbb F$，即是 $x_1,x_2$ 的仿射组合，因此由仿射集的定义（\autoref{def_AffSet_1} ），该直线属于 $C$。
+
+\textbf{充分性：}设 $C$ 是过其上任意两点的直线都在 $C$ 中的集。那么任意 $x_i\in C,i=1,\cdots ,n$，对任意满足 $\sum_{i}a_i=1$ 的 $a_i\in\mathbb F$，成立（不失一般性，设 $a_1\neq1$）
+\begin{equation}\label{eq_AffSet_1}
+\sum_{i=1}^n a_ix_i=(1-a_1)\sum_{i=2}^n \frac{a_i}{1-a_1}x_i+a_1x_1~.
+\end{equation}
+设 $n-1$ 时充分性成立。那么 $\sum_{i=2}^n \frac{a_i}{1-a_1}x_i\in C$，又\autoref{eq_AffSet_1} 是 $\sum_{i=2}^n \frac{a_i}{1-a_1}x_i$ 和 $x_1$ 的仿射组合，因此 $\sum_{i=1}^n a_ix_i\in C$，即 对 $n$ 时充分性成立。根据数学归纳法和仿射集的定义，$C$ 是仿射集。
+
+\textbf{证毕！}
+
+
+\begin{corollary}{}\label{cor_AffSet_1}
+设 $U\subset V$ 是线性空间 $V$ 的子空间，$x\in V$，则 $x+U$ 是仿射集。 
+\end{corollary}
+
+\textbf{证明：}任意 $x_1,x_2\in x+U$，设 $x_1=x+y_1,x_2=x+y_2$，其中 $y_1,y_2\in U$。则过 $x_1,x_2$ 的直线为
+\begin{equation}
+\{x_1+k(x_2-x_2)|k\in\mathbb F\}=\{x+(y_1+k(y_2-y_1))|k\in\mathbb F\}\subset x+U~.
+\end{equation}
+因为 $x_1,x_2$ 任意，所以由\autoref{the_AffSet_1} ，命题得证！
+
+\textbf{证毕！}
+
+
+
+

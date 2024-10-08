@@ -3,38 +3,136 @@
 % license Xiao
 % type Tutor
 
-\begin{issues}
-\issueDraft
-\end{issues}
+
 
 \pentry{二元关系\nref{nod_Relat}，仿射集\nref{nod_AffSet}，直和与补空间（线性代数）\nref{nod_DirSum}}{nod_f4b0}
 
-原作者：FFjet
 
-\addTODO{用仿射集的语言重写}
+
+%原作者：FFjet
+
+%\addTODO{用仿射集的语言重写}
 
 % Giacomo：还不如参考wikipedia。。。
 % \footnote{参考《物理学中的几何方法》} % Giacomo：改成cite
+%设 $A$ 是向量空间 $V$ 的一个\enref{仿射集}{AffSet}。于是我们可以通过 $A$ 来定义 $V$ 上的一个等价关系（\autoref{def_Relat_1}），并由此得到 $V$ 的一个划分（商集）。这一商集在特定的加法核数乘之下构成一个向量空间，其被称为原空间 $V$ 的商空间。
+\footnote{该词条由FFjet和叶月2_两位作者创作过，然而为了完善起见经过了大幅改动，然而由于某些原因，贡献者里面没有显示两位创作者，因此在此向两位创作者的付出表示感谢}通过矢量空间的子空间可以定义一个等价关系，由该等价关系可以从原矢量空间得到一个商集，这一商集在原空间的加法和数乘下是一矢量空间，这就是所谓的商空间。
 
-设 $W$ 是向量空间 $V$ 的一个子空间。我们想通过 $W$ 来定义 $V$ 中元素的一个等价关系，并由此得到 $V$ 的一个划分（商集）。对于 $v \in V$，$v + W$ 是 $V$ 的一个仿射集，全体（关于 $W$ 的）仿射集的集合构成里一个划分（商集），定义了一个等价关系——对于 $v_1, v_2\in V$，如果 $v_1 - v_2\in W$，则称它们是关于 $W$ 等价的，记为 $v_1 \sim v_2$。我们把这个划分（商集）记为$V / W: = V / \sim$，包含 $v$ 的等价类记为 $[v]: = v + W$.
+
+\begin{definition}{通过仿射集构造的等价关系}\label{def_QuoSpa_1}
+设 $U$ 是向量空间 $V$ 的一个子空间。则称 $v_1,v_2\in V$ （关于 $U$ ）是\textbf{等价}的，若 $v_1,v_2$ 同属于一个与 $U$ 相伴的\enref{仿射集}{AffSet}。即存在 $x\in V$，使得 $v_1,v_2\in x+U$。若 $v_1,v_2$ 等价，则记 $v_1\overset{U}{\sim}v_2$。 
+\end{definition}
+定义中之所以称为等价，是因为这一关系满足自反性，对称性和传递性，这由下面的定理得到保证。
+\begin{theorem}{}
+\autoref{def_QuoSpa_1} 定义的等价关系满足自反性，对称性和传递性。
+\end{theorem}
+
+\textbf{证明：}
+\textbf{自反性：} 任一$v_1\in V$ 自身显然属于同一个仿射集。所以 $v_1\overset{U}{\sim} v_1$。
+
+\textbf{对称性：} 设 $v_1\overset{U}{\sim} v_2$，那么 $v_2,v_1$ 属于同一个仿射集，因此 $v_2\overset{U}{\sim} v_1$。
+
+
+\textbf{传递性：}设 $v_1\overset{U}{\sim} v_2,v_2\overset{U}{\sim} v_3$，那么由于它们都属于同一个仿射集，因此 $v_1\overset{U}{\sim} v_3$。
+
+\textbf{证毕！}
+
+
+%设 $W$ 是向量空间 $V$ 的一个子空间。我们想通过 $W$ 来定义 $V$ 中元素的一个等价关系，并由此得到 $V$ 的一个划分（商集）。对于 $v \in V$，$v + W$ 是 $V$ 的一个仿射集（\autoref{cor_AffSet_1}），全体（关于 $W$ 的）仿射集的集合构成里一个划分（商集），
+
+%定义了一个等价关系——对于 $v_1, v_2\in V$，如果 $v_1 - v_2\in W$，则称它们是关于 $W$ 等价的，记为 $v_1 \sim v_2$。我们把这个划分（商集）记为$V / W: = V / \sim$，包含 $v$ 的等价类记为 $[v]: = v + W$.
 % Giacomo: 从来没见过用`( )`表示等价类的，感觉不是很标准的记号，改了。
 
 % 不难证明这是一个等价关系。因此，它就确定了 $V$ 的一个分类。元素 $v$ 的等价类，即 $V$ 中所有与 $v$ 的等价的元的全体，用符号 $[v] $ 标记。这样，有等价类为元素的商集
 % \begin{equation}
 % V / W=\{[v] | v \in V\}~.
 % \end{equation}
+\begin{theorem}{}\label{the_QuoSpa_1}
+ $v_1\overset{U}{\sim} v_2$ 的充要条件是 $v_1-v_2\in U$。
+\end{theorem}
+\textbf{证明：}\textbf{必要性:}假设 $v_1\overset{U}{\sim} v_2$，于是存在 $x\in V$，使得 $v_1,v_2\in x+U$，于是可记 $v_1=x+u_1,v_2=x+u_2$，其中 $u_1,u_2\in U$。那么 $v_1-v_2=u_1-u_2\in U$。
 
-现在我们在商集 $V / W$ 中引入线性运算，使它也成为一个线性空间。当然这种线性运算应与 $V$ 中原有的线性运算要有联系。为此，对于等价类的加法和数乘，我们自然采用下列定义
+\textbf{充分性：}假设 $v_1-v_2\in U$。设 $v_1=x+u_1,v_1-v_2=u$，其中 $u_1,u\in U$，那么 $v_2=v_1-u=x+u_1-u\in x+U$。即 $v_1\overset{U}{\sim} v_2$。
+
+\textbf{证毕！}
+
+\autoref{the_QuoSpa_1} 表明，我们还可以将\autoref{def_QuoSpa_1} 的等价定义为 $v_1-v_2\in U$，而不使用仿射集的概念。但是在证明所定义的等价是等价关系是\autoref{def_QuoSpa_1} 最方便，因为等价的元素都在同一个集中。
+\begin{definition}{剩余类，商空间}\label{def_QuoSpa_2}
+在向量空间 $V$ 上（关于子空间 $U$）等价的元素构成的类称为（关于子空间 $U$）\textbf{剩余类}，与 $v_1\in V$ 对应的剩余类记作 $[v_1]$。所有的类的全体称为 $V$ 关于 $U$ 的\textbf{商空间}，记作 $V/U$。
+\end{definition}
+
+下面的定理表明利用原空间上的加法和数乘可以定义商空间上的加法和数乘，而使得商空间为矢量空间。这也是称之为“商空间”的原因。
+
+\begin{theorem}{商空间是矢量空间}\label{the_QuoSpa_2}
+设 $U$ 是矢量空间 $V$ 的子空间，则 $V/U$ 在如下加法和数乘下构成一矢量空间：
+\begin{enumerate}
+\item \textbf{加法：}
+$[v_1] + [v_2] := [v_1 + v_2]~;$
+\item \textbf{数乘：} $a [v] := [a v]\qquad (a \in \mathbb F)~.$
+\end{enumerate}
+\end{theorem}
+
+\textbf{证明：}\textbf{加群：}\textbf{交换性}来源于 $[v_1] + [v_2]= [v_1 + v_2]=[v_2+v_1]=[v_2] + [v_1]$；
+
+\textbf{封闭性}来源于 $[v_1]+[v_2]=[v_1+v_2]\in V/U$；
+
+\textbf{结合性}来源于 $[v_1] + ([v_2]+[v_3])= [v_1 + v_2+v_3]=([v_1]+[v_2])+[v_3]$；
+
+\textbf{零元}来源于 $[0]+[v]=[0+v]=[v]$；
+
+\textbf{逆元}来源于 $[v_1]+[-v_1]=[v_1-v_1]=[0]$
+
+\textbf{数乘：}
+\textbf{分配律}来源于 
 \begin{equation}
-\begin{array}{l}
-[v_1] + [v_2] = [v_1 + v_2]~, \\
-a \cdot [v] = [a v]\qquad (a \in K)~.
-\end{array}
+\begin{aligned}
+\lambda([v_1]+[v_2])=&[\lambda v_1+\lambda v_2]=[\lambda v_1]+[\lambda v_2]=\lambda[v_1]+\lambda[v_2];\\
+(\lambda_1+\lambda_2)[v]=&[(\lambda_1+\lambda_2)v]=[\lambda_1v+\lambda_2 v]=\lambda_1[v]+\lambda_2[v].
+\end{aligned}~
 \end{equation}
-\addTODO{证明下述论断}
-这里的定义与等价类的代表的选取无关，故是有意义的，容易证明 $V/W $ 在这些运算下构成体 $K $ 上的向量空间。$V/W $ 称为 $V$ 关于子空间 $W$ 的\textbf{商空间}，$[0] = W$ 是它的零元。
+
+\textbf{结合律}来源于 $\lambda_1(\lambda_2[v])=\lambda_1[\lambda_2 v]=[\lambda_1\lambda_2 v]=(\lambda_1\lambda_2)[v]$
+
+\textbf{证毕！}
+
+虽然\autoref{the_QuoSpa_2} 表明商空间是矢量空间，但是不代表它上面的加法和数乘定义就是良定义的，即可能依赖于剩余类的代表元。下面定理表明上面在商空间中定义的加法和数乘是良定义的。
+
+\begin{theorem}{}
+\autoref{the_QuoSpa_2} 中定义的加法和数乘是良定义的，即不依赖于剩余类中的代表元。
+\end{theorem}
+\textbf{证明：}我们需要证明对任意的 $v_1,v_1'\in[v_1],v_2,v_2'\in [v_2]$，成立
+\begin{equation}\label{eq_QuoSpa_1}
+[v_1]+[v_2]=[v_1']+[v_2'],\quad \lambda [v_1]=\lambda [v_1'].~
+\end{equation}
+事实上，由 $v_1'-v_1\in U,v_2-v_2'\in U$，成立
+\begin{equation}
+\begin{aligned}
+&(v_1'+v_2')-(v_1+v_2)=(v_1'-v_1)+(v_2-v_2')\in U,\\
+&\lambda v_1-\lambda v_1=\lambda (v_1-v_1')\in U.
+\end{aligned}~
+\end{equation}
+因此，由\autoref{the_QuoSpa_1} ，$[v_1+v_2]\overset{U}{\sim}[v_1'+v_2'],[\lambda v_1]=[\lambda v_1']$。从而\autoref{eq_QuoSpa_1} 成立。
+
+\textbf{证毕！}
+
+
+
+%通过原空间 $V$ 上的加法，可以得到
+%现在我们在商集 $V / W$ 中引入线性运算，使它也成为一个线性空间。当然这种线性运算应与 $V$ 中原有的线性运算要有联系。为此，对于等价类的加法和数乘，我们自然采用下列定义
+%\begin{equation}
+%\begin{array}{l}
+%[v_1] + [v_2] = [v_1 + v_2]~, \\
+%a \cdot [v] = [a v]\qquad (a \in K)~.
+%\end{array}
+%\end{equation}
+%\addTODO{证明下述论断}
+%这里的定义与等价类的代表的选取无关，故是有意义的，容易证明 $V/W $ 在这些运算下构成体 $K $ 上的向量空间。$V/W $ 称为 $V$ 关于子空间 $W$ 的\textbf{商空间}，$[0] = W$ 是它的零元。
 
 \subsection{商空间的维度}
+既然\autoref{the_QuoSpa_2} 表明商空间 $V/U$ 是个矢量空间，因此其就有维度的定义。
+\begin{definition}{余维数}
+设 $V$ 是矢量空间，$U$ 是 $V$ 的子空间，则称商空间 $V/U$ 的维度为（$V$ 中） $U$ 的\textbf{余维数}，记作 $\mathrm{codim}_V U$，即 $\mathrm{codim}_V U:=\mathrm{dim} V/U$。
+\end{definition}
 
 % 下面我们再来分析一下 $V, W$ 和 $V/W $ 三者的基底之间的关系。设 $\{u_1, u_2, \cdots, u_m\}$ 是 $W $ 的一个基底。我们再补充 $n - m$ 个向量 ${u}_{m+1}, \cdots {u}_n$ 使 $\{u_1, u_2, \cdots, u_n\}$ 成为 $V$ 的一个基底。由于 $u_1, u_2, \cdots, u_m \in W$，我们有 $[u_1], [u_2], \cdots, [u_n] = [0]$，因此我们考虑 $V / W$ 的向量组 $\mathcal{B}: = \{[u_{m + 1}], \cdots, [u_n]\}$，我们要证明 $\mathcal{B}$
 % \begin{itemize}
@@ -70,23 +168,69 @@ a \cdot [v] = [a v]\qquad (a \in K)~.
 %这些概念和结构，我们将在讨论同调群和上同调群时用到。
 
 
-\addTODO{待整理}
-原作者：叶月2_
-利用商空间的概念也能证明线性空间的任意子空间都有补空间。
-\begin{theorem}{}\label{the_lnal06_1}
-给定域 $\mathbb F$ 上的线性空间 $V$，设 $W$ 是其子空间，则 $W$必有补空间。
-\end{theorem}
+\begin{example}{}%原作者：叶月2_
+试用商空间的概念证明线性空间的任意子空间都有补空间：即若 $V$是域 $\mathbb F$ 上的线性空间， $W$ 是其子空间，则 $W$必有补空间（\autoref{def_DirSum_1}）。
+
 从$W$的左陪集${S_{\alpha}}$里各选一个元素$v_a$，$\opn{Span} \{v_{\alpha}\}$构成商空间$V/W$的一组基\footnote{尽管$kv_\alpha$为不同于$v_\alpha$的等价类，但这里取张成，不影响后续定理2这一推论}，张成的也是$W$的补空间。由等价类划分可知，$\opn{Span} \{v_{\alpha}\}$与$W$没有交集，因此我们只需要证明所有元素都可以表示为$b_{\alpha}v_{\alpha} + W$即可。
 
 设$v$为任意元素，则有$v + W=b_{\alpha} S_{\alpha}$，由于$v_{\alpha} \in S_{\alpha}$，所以$b_{\alpha} v_{\alpha} \in v + W$。也就是说，总可以找到一个元素$v_1 \in W$，使得$v=bv_{\alpha} + v_1$，由于左陪集与子空间互不包含，因而和是直和，证毕。
-\begin{exercise}{例子}
-设$V$是一个平面，$W$是$x$轴，那么$V/W$是什么呢？该商空间的元素，即每一个等价类为无数平行于该直线的直线。设$x$和$y$等价，由等价条件知$x-y \in W$。
-\end{exercise}
-\autoref{the_lnal06_1} 的证明过程同时明示着商空间维数和子空间的关系。
 
-\begin{theorem}{商空间的维度}
-对于有限维度向量空间 $V$,
+该例子的证明过程同时明示着商空间维数和子空间的关系。
+\end{example}
+
+%在目前的体系下下面的例子已经明显的了。
+%\begin{exercise}{例子}
+%设$V$是一个平面，$W$是$x$轴，那么$V/W$是什么呢？该商空间的元素，即每一个等价类为无数平行于该直线的直线。设$x$和$y$等价，由等价条件知$x-y \in W$。
+%\end{exercise}
+
+
+\begin{theorem}{}\label{the_QuoSpa_3}
+设 $V=U\oplus W$，那么映射 
 \begin{equation}
-\dim(V/W) = \dim V - \dim W~.
+f:W\rightarrow V/U, u\mapsto u+U.~  
 \end{equation}
+是同构（向量空间中线性的双射）。
 \end{theorem}
+
+\textbf{证明：}\textbf{线性：} 设 $\alpha,\beta\in\mathbb F,u,v\in W$，则
+\begin{equation}
+\begin{aligned}
+f(\alpha u+\beta v)=&\alpha u+\beta v+U\\
+=&\alpha (u+U)+\beta(v+U)\\
+=&\alpha f(u)+\beta f(v).
+\end{aligned}~
+\end{equation}
+第二个等式用到 $U+U=U,\alpha U=U$（见\autoref{def_SubSpc_1}）。 
+
+\textbf{满射性：}设 $v+U\in V/U$。由于 $V=U\oplus W$，所以 $v=x+y,x\in U,y\in W$（见直和的定义（\autoref{def_DirSum_1}））。于是
+\begin{equation}
+v+U=x+y+U=(x+U)+(y+U)=U+(y+U)=y+U=f(y).~
+\end{equation}
+上面第三个等式用到 $x\in U\Rightarrow x+U=U$。
+
+\textbf{Ker f=0：}由于 $\ker f:=\{x|f(x)=0,x\in W\}$，其中 $0$ 代表 $V/U$ 的零元，由\autoref{the_QuoSpa_2} 中的证明可知这个零元就是 $[0]=0+U=U$。因此若 $u\in\ker f$，则 $f(u+U)=u+U=U$，进而 $u\in U$。但是 $u\in W,U\cap W=0$，所以只能是 $u=0$。这表明 $\ker f=0$。
+
+由 $f$ 的满射性和 $\ker f=0$（链接），得 $f$ 是双射。
+
+\textbf{证毕！}
+
+\begin{corollary}{商空间的维度}
+对于有限维度向量空间 $V$,
+\begin{equation}\label{eq_QuoSpa_2}
+\dim(V/U) = \dim V - \dim U~.
+\end{equation}
+\end{corollary}
+
+\textbf{证明：}由\autoref{the_QuoSpa_3} 和（直和的维度关系）可得。
+
+\textbf{证毕！}
+
+
+
+
+
+
+
+
+
+

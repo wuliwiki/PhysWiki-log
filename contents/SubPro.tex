@@ -2,6 +2,7 @@
 % license Usr
 % type Note
 
+\subsection{exec 系列命令}
 如果不改变环境变量也可以用 \verb`execv()`，完整的例子如
 \begin{lstlisting}[language=cpp]
 #include <unistd.h>    // For execv()
@@ -51,3 +52,36 @@ execve("/bin/ls", args, env);
 \item 对子进程和父进程， \verb`pid_t pid = fork()` 分别返回 0 和子进程的 pid。
 \end{lstlisting}
 \end{itemize}
+
+\subsection{pipe 管道编程}
+\begin{itemize}
+\item \verb`popen()` 可以读或写入管道，但不能又读又写
+\end{itemize}
+
+写管道
+\begin{lstlisting}[language=cpp]
+#include <cstdio>
+#include <cstdlib>
+int main() {
+    FILE* fp = popen("wc -w", "w");
+    if (fp == nullptr) {
+        perror("popen failed");
+        exit(EXIT_FAILURE);
+    }
+    const char* input = "Hello, how many words are here?\n";
+    fprintf(fp, "%s", input);
+    pclose(fp);
+    return 0;
+}
+\end{lstlisting}
+读管道
+\begin{lstlisting}[language=cpp]
+FILE* fp = popen("ls -l", "r");
+if (fp) {
+    char buffer[128];
+    while (fgets(buffer, sizeof(buffer), fp) != nullptr) {
+        printf("%s", buffer);
+    }
+    pclose(fp);
+}
+\end{lstlisting}

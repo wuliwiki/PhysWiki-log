@@ -134,12 +134,23 @@ int main() {
 }
 \end{lstlisting}
 \item \verb`int fseek(FILE *stream, long offset, int whence);` 可以跳到文件的某个位置。 例如 \verb`fseek(file, 7, SEEK_SET);` 相对于文件开头， \verb`fseek(file, -7, SEEK_CUR);` 相对当前位置， \verb`SEEK_END` 相对于文件 EOF。 如果成功，\verb`fseek()` 返回 0。如果返回非 0 则失败（例如超出范围）。
+\item 例如要获取文件最后的三个字节，用 \verb`fseek(file, -3, SEEK_END)` 然后 \verb`fgetc(file)` 三次即可。
+\item 例如要在文件最后写入新内容，用
+\begin{lstlisting}[language=cpp]
+// Move the file pointer to the end of the file
+fseek(file, 0, SEEK_END);
+// Data to be appended
+const char *text = "This is appended text.\\n";
+// Write the data to the file (append it at the end)
+fwrite(text, sizeof(char), strlen(text), file);
+\end{lstlisting}
 \item \verb`offset` 可以叫做\textbf{文件位置指示器 file position indicator}，也称为\textbf{文件指针}， 但 \verb`FILE *` 也叫做文件指针（为了区分应该叫做\textbf{文件流指针 file stream pointer}）， 需要根据语境区分！
 \item \verb`void perror(const char *str)` 打印错误信息到 \verb`stderr` 并根据全局变量 \verb`errno` 在后面附上 \verb`: 具体错误原因(如文件不存在，权限不够)`。
 \item \verb`int fgetc(file)` 获取一个字节。 如果因为超出文件结尾没有获取到，则返回 EOF。
 \item \verb`EOF` 是 \verb`stdio.h` 中的一个宏，通常是 -1 但不能保证。
-\item 例如要获取文件最后的三个字节，用 \verb`fseek(file, -3, SEEK_END)` 然后 \verb`fgetc(file)` 三次即可。
 \item ASCII 表不存在 EOF，EOF 是一个概念不是一个字符。
 \item \verb`long ftell(FILE *stream)` 可以查看当前位置，会返回 \verb`fseek(file, 位置, SEEK_SET)` 设置的位置。
 \item 每个 \verb`FILE *` 都有两个指示器： End-of-File (EOF) Indicator 和 Error Indicator。 分别由 \verb`int feof(FILE *)` 和 \verb`int ferror(FILE *)` 检查， 如果没有则返回 0。
+\item \verb`clearerr(FILE *)` 把两个指示器都重置为正常。
+\item \verb`rewind(FILE *)` 相当于 \verb`clearerr(file)` 和 \verb`fseek(file, 0, SEEK_SET);`
 \end{itemize}
