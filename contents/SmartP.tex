@@ -10,9 +10,9 @@
 \begin{itemize}
 \item \href{https://en.cppreference.com/w/cpp/memory/unique_ptr}{文档}。
 \item \verb`unique_ptr<类> p(类指针)`， 其中 \verb`类指针 = new 类` 指向一个需要 \verb`delete` 的对象。
-\item \verb`unique_ptr<类，删除函数类> p(类指针， 删除函数)`。 \verb`删除函数` 是 \verb`删除函数类` 的一个对象。
+\item \verb`unique_ptr<类，删除函数类> p(类指针， 删除函数)`。 \verb`删除函数` 是 \verb`删除函数类` 的一个对象（例如 C 函数指针）。
 \item \verb`删除函数类` 和 \verb`删除函数` 可以省略， 省略后默认用 \verb`delete 类指针`。
-\item \verb`删除函数` 需要具有算符 \verb`void operator()(类* p) const` 用于释放内存。
+\item \verb`删除函数` 需要可以像 \verb`void 函数名(类* p)` 一样使用。 它几乎可以是任何 callable（例如具有 \verb`operator()` 的对象）
 \item \verb`unique_ptr` 的 destructor 会调用 \verb`删除函数(类指针)` 释放内存。
 \item 一般指针的操作 \verb`*, ->, []`， 也可以对 \verb`unique_ptr` 使用。
 \item 必须初始化， 不存在 copy assignment， 只有 move assignment。 \verb`p2 = move(p1)` 可以转移。

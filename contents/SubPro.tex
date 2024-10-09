@@ -51,11 +51,32 @@ execve("/bin/ls", args, env);
 \item 子进程中用 \verb`getppid()` 获取父进程的 pid
 \item 对子进程和父进程， \verb`pid_t pid = fork()` 分别返回 0 和子进程的 pid。
 \end{lstlisting}
+\item 如果需要等待多个子进程结束， 可以在循环中用 \verb`pid_t wait(int *status);` 返回结束的子进程的 pid， 如果子进程都结束了， 返回 -1。
+\item \verb`status` 是个 bit field， 不同范围的 bit 用于表示不同信息，可以判断 exit code （即 \verb`exit()` 的参数）， 或者各种 signal。
+\item \verb`WIFEXITED(status)`: Returns true if the child exited normally (i.e., via \verb`exit()` or \verb`_exit()`).
+\item \verb`WEXITSTATUS(status)`: Returns the exit status of the child if \verb`WIFEXITED(status)` is true. This is the value that the child passed to \verb`exit()` or \verb`_exit()`.
+\item \verb`WIFSIGNALED(status)`: Returns true if the child process was terminated by a signal.
+\item \verb`WTERMSIG(status)`: Returns the signal number that caused the child to terminate if \verb`WIFSIGNALED(status)` is true.
+\item \verb`WIFSTOPPED(status)`: Returns true if the child process was stopped (but not terminated) by a signal.
+\item \verb`WSTOPSIG(status)`: Returns the signal number that caused the child to stop if \verb`WIFSTOPPED(status)` is true.
+\item \verb`WCOREDUMP(status)`: (Non-standard, but common) Returns true if the child process produced a core dump when it terminated.
+\item 这些都是宏函数，如 \verb`#define WEXITSTATUS(status) (((status) & 0xff00) >> 8)`
+\item \verb`_exit()` 比 \verb`exit()` 更低级，没有任何 cleanup。 无论 \verb`exit()` 参数是什么数字，都叫做 \textbf{Normal Exit}
+\item \verb`Signal Termination` 见 \enref{Linux 进程的信号（笔记）}{LinSig}
+\item 绝大部分时候， core dump 是被 signal 触发的。 最常见的如 segmentation fault
+\item \verb`int kill(pid_t pid, int sig);` 给某个 pid 或则进程组发送信号。 \verb`pid > 0` 时发送给指定进程， \verb`pid == 0` 时发送给当前程序的进程组的所有进程。 \verb`pid == -1` 发给所有有权限发送的进程。 \verb`pid < -1` 发给 \verb`gpid` 为 \verb`-pid` 进程组中的所有进程。 返回 0 则成功，否则返回 -1 并设置 \verb`errno`。
+\item 最通常来说，一个进程只有给相同 User ID （UID）的进程发 signal 的权限。
+\item 一个进程组中的所有进程具有相同的 pgid。 例如 \verb`fort()` 产生的子进程默认具有和主进程相同的进程组。
+\item 命令行用 \verb`ps -o pgid -p <PID>` 可以查看一个进程的 \verb`pgid`
+\item 在命令行运行一个单独的命令， 它的 \verb`pgid` 会等于 \verb`pid`。 所以二者相等时，通常意味着该进程是进程组中的第一个进程。
+\item 例如 \verb`ls | grep foo` 的两个命令也是一个进程组。
+\item 命令行用 \verb`Ctrl+Z`
+\item \verb`int setpgid(pid_t pid, pid_t pgid)` 可以设置指定进程的 pgid。如果 \verb`pid` 或 \verb`pgid` 为 0， 代表当前进程的 pid。 所以 \verb`setpgid(0, 0)` 把当前进程的 pgid 设置为 pid。 例如在 \verb`fork()` 之后可以对子进程这么做。
 \end{itemize}
 
 \subsection{pipe 管道编程}
 \begin{itemize}
-\item \verb`popen()` 可以读或写入管道，但不能又读又写
+\item \verb`popen()` 可以用管道读或写入 stdin/stdout，但不能又读又写，也不能直接读 stderr（需要在命令中用 \verb`2>&1`）
 \end{itemize}
 
 写管道
@@ -82,6 +103,93 @@ if (fp) {
     while (fgets(buffer, sizeof(buffer), fp) != nullptr) {
         printf("%s", buffer);
     }
-    pclose(fp);
+    int ret = pclose(fp);
+    if (ret == -1) {
+        perror("pclose failed");
+        return -1;
+    }
+    int ret = WEXITSTATUS(ret);
+}
+\end{lstlisting}
+
+如果要同时读写管道，需要用 \verb`pipe()` 和 \verb`dup2()`
+\begin{itemize}
+\item \verb`int pipe(int pipefd[2]);` 可以创建一个管道，使一个进程可以从 \verb`pipefd[1]` 写入，另一个进程从 \verb`pipefd[0]` 读取。
+\item \verb`dup2(源fd，目标fd)` （fd 是 file descriptor），把 \verb`目标fd` 打开的文件（如果有）先关掉，然后将其指向 \verb`源fd` 的文件。 成功后， 两个 fd 就指向同一个内核中的 file description，包括错误状态，文件中的当前位置全部都共享。
+\item \verb`close(fd)` 并不一定会删除内核中的 file description， 只会解绑 file descriptor。 只有当所有指向它的 descriptor 都被 \verb`close()` 才会释放（类似于 \verb`shared_ptr`）。
+\item \verb`pclose()` 和 \verb`wait()` 类似，同样等待子进程结束，返回相同的 bit field，要用 \verb`WEXITSTATUS()` 等宏函数翻译。
+\end{itemize}
+
+\begin{lstlisting}[language=cpp]
+#include <unistd.h>
+#include <sys/wait.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+
+int main() {
+    int pipe_stdin[2];  // Pipe for child's stdin
+    int pipe_stdout[2]; // Pipe for child's stdout
+    pid_t pid;
+
+    // Create pipes
+    if (pipe(pipe_stdin) == -1 || pipe(pipe_stdout) == -1) {
+        perror("pipe failed");
+        exit(EXIT_FAILURE);
+    }
+    // Fork a child process
+    pid = fork();
+    if (pid == -1) {
+        perror("fork failed");
+        exit(EXIT_FAILURE);
+    }
+    if (pid == 0) {
+        // Child process
+
+        // Redirect child's stdin to pipe_stdin[0]
+        dup2(pipe_stdin[0], STDIN_FILENO);
+        close(pipe_stdin[0]);
+        close(pipe_stdin[1]);  // Close unused write end
+
+        // Redirect child's stdout to pipe_stdout[1]
+        dup2(pipe_stdout[1], STDOUT_FILENO);
+        close(pipe_stdout[0]); // Close unused read end
+        close(pipe_stdout[1]);
+
+        // Execute the command
+        // Replace 'cat' with your command
+        execl("/bin/sh", "sh", "-c", "cat", NULL);
+
+        // If execl fails
+        perror("execl failed");
+        exit(EXIT_FAILURE);
+    }
+    else {
+        // Parent process
+        close(pipe_stdin[0]);  // Close unused read end of stdin pipe
+        close(pipe_stdout[1]); // Close unused write end of stdout pipe
+
+        // Write to the child's stdin
+        const char* input = "Hello, child process!\n";
+        write(pipe_stdin[1], input, strlen(input));
+
+        // Close stdin write end after writing
+        close(pipe_stdin[1]);
+
+        // Read the child's stdout
+        char buffer[128];
+        ssize_t count;
+        while ((count = read(pipe_stdout[0],
+            buffer, sizeof(buffer) - 1)) > 0) {
+            buffer[count] = '\0';  // Null-terminate the buffer
+            printf("Child output: %s", buffer);
+        }
+
+        close(pipe_stdout[0]); // Close stdout read end
+
+        // Wait for the child to terminate
+        wait(NULL);
+    }
+    return 0;
 }
 \end{lstlisting}
