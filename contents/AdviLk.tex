@@ -1,0 +1,72 @@
+% 文件 Advisory Lock 笔记（Linux）
+% license Usr
+% type Note
+
+如果希望一个文件一次之被一个进程写入，且进程因任何原因中断时锁会自动释放，那么可以用 Advisory Lock （咨询锁/顾问锁），该锁由系统管理，所以即使进程崩溃也会解锁。
+
+\begin{lstlisting}[language=cpp]
+#include <iostream>
+#include <fcntl.h>
+#include <unistd.h>
+#include <cstring>
+#include <sys/types.h>
+#include <sys/stat.h>
+
+int main() {
+    const char* filename = "example.txt";
+    
+    // Open the file for reading and writing; create it if it doesn't exist
+    int fd = open(filename, O_RDWR | O_CREAT, 0666);
+    if (fd == -1) {
+        std::cerr << "Error opening file: " << strerror(errno) << std::endl;
+        return 1;
+    }
+
+    // Set up the file lock structure
+    struct flock lock;
+    memset(&lock, 0, sizeof(lock));
+    lock.l_type = F_WRLCK; // Write lock
+    lock.l_whence = SEEK_SET;
+    lock.l_start = 0;      // Start of the file
+    lock.l_len = 0;        // Lock the whole file (0 means entire file)
+
+    // Try to acquire the write lock
+    if (fcntl(fd, F_SETLK, &lock) == -1) {
+        std::cerr << "Unable to lock file: " << strerror(errno) << std::endl;
+        close(fd);
+        return 1;
+    }
+    
+    std::cout << "File locked successfully. You can now read and write." << std::endl;
+    
+    // Write to the file
+    const char* message = "Hello, world!\\n";
+    if (write(fd, message, strlen(message)) == -1) {
+        std::cerr << "Error writing to file: " << strerror(errno) << std::endl;
+    }
+
+    // Reading from the file (rewind to the beginning)
+    lseek(fd, 0, SEEK_SET);
+    char buffer[256];
+    ssize_t bytesRead = read(fd, buffer, sizeof(buffer) - 1);
+    if (bytesRead == -1) {
+        std::cerr << "Error reading from file: " << strerror(errno) << std::endl;
+    } else {
+        buffer[bytesRead] = '\\0';
+        std::cout << "Content of file:\\n" << buffer;
+    }
+
+    // Unlock the file
+    lock.l_type = F_UNLCK;
+    if (fcntl(fd, F_SETLK, &lock) == -1) {
+        std::cerr << "Unable to unlock file: " << strerror(errno) << std::endl;
+    } else {
+        std::cout << "File unlocked successfully." << std::endl;
+    }
+
+    // Close the file descriptor
+    close(fd);
+    return 0;
+}
+
+\end{lstlisting}
