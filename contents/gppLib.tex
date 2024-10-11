@@ -72,8 +72,8 @@ g++ main.cpp -o main.x -L./ -l 1
 \item 关于 so 动态链接库和 ELF 的一个\href{https://amir.rachum.com/blog/2016/09/17/shared-libraries/}{详细教程}（强烈推荐）。 另一个\href{https://holtstrom.com/michael/blog/post/446/Shared-Library-Symbol-Conflicts-(on-Solaris).html}{教程}（没看）。
 \item 要强制 \verb`g++` 进行动态链接， 可以用 \verb`-l` 的另一种形式 \verb`-l :libXXX.so`。 其中 \verb`:文件名` 直接搜索 \verb`文件名`， 而不是 \verb`lib文件名.so或a`。
 \verb`-Wl,--start-group 文件1 文件2 ... -Wl,--end-group`， 这样 linker 找不到 symbol 时就会在 group 内的文件中反复搜索（编译速度会降低）。
-\item 注意 \verb`ldd` 未必会显示所有依赖的库（不包含用 \verb`dlopen()` 函数直接从代码中加载的， 因为很有可能会根据用户输入来加载， 无法预判）。
-\item 另外 \verb`ldd` 不会列出依赖树， 如果想要依赖树， 用 \verb`lddtree` （\verb`apt install pax-utils`）
+\item 注意 \verb`ldd` 仅列出直接依赖的库文件（不包含用 \verb`dlopen()` 函数直接从代码中加载的， 因为很有可能会根据用户输入来加载， 无法预判）。
+\item 如果想要获取依赖树， 用 \verb`lddtree` （\verb`apt install pax-utils`）
 \item \verb`stdc++.so.6` 即使同名，也不一定是正确的版本， 见\href{https://unix.stackexchange.com/questions/458659/what-do-the-multiple-glibc-versions-mean-in-the-output-of-ldd}{这里}。 如果不同路径都有这个文件， 似乎会自动加载正确的版本。
 \end{itemize}
 

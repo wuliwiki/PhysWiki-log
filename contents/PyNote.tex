@@ -177,4 +177,26 @@ def FunctionName(a,b,c):
 \item Anaconda 清洁地装在一个单独的目录, 不需要系统权限, 不影响其他目录下的安装
 \item 常用的 IDE 有, Spyder, Wing IDE, PyCharm, Python Tools for Visual Studio.
 \item 其实 Jupiter 并不比 Spyder 要慢, 前者具有格式优势, 后者具有调试优势.
+\item \verb`with` 需要某个对象定义了析构函数：
+\begin{lstlisting}[language=python]
+class MyResource:
+    def __enter__(self):
+        print("Resource acquired")
+        return self
+    
+    def __exit__(self, exc_type, exc_value, traceback):
+        print("Resource released")
+
+# Using the custom context manager
+# resource 是 MyResource() 返回的对象
+# MyResource() 也可以是一个普通函数
+with MyResource() as resource:
+    print("Inside the block")
+\end{lstlisting}
+输出：
+\begin{lstlisting}[language=none]
+Resource acquired
+Inside the block
+Resource released
+\end{lstlisting}
 \end{itemize}
