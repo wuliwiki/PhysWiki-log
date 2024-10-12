@@ -76,7 +76,99 @@ if __name__ == "__main__":
     opt = parse_opt() # 解析参数
     main(opt) # 执行主函数
 \end{lstlisting}
-
  
-命令使用是这样的
-# python detect.py --weights runs/train/exp_yolov5s/weights/best.pt --source  data/images/fishman.jpg 
+命令使用是这样的：
+python detect.py --weights runs/train/exp_yolov5s/weights/best.pt --source  data/images/fishman.jpg 
+
+这里调用了check_requirements()和run()函数。把命令行参数opt转化为字典传输给run()函数。
+check requirements(exclthop')):检查程序所需的依赖项是否已安装。
+run(**vars(opt)): 将 opt 变量的属性和属性值作为关键字参数传递给 run() 函数。
+
+if name =='main’:的作用:
+一个python文件通常有两种使用方法，第一是作为脚本直接执行，第二是import 到其他的 python 脚本中被调用(模块重用)执行。因此,ifname ='main’:的作用就是控制这两种情况执行代码的过程，在 if name = 'main':下的代码只有在第一种情况下(即文件作为脚本直接执行)才会被执行，而impon 到其他脚本中是不会被执行的。
+
+opt= parse opt0: 解析命令行传进的参数。该段代码分为三部分，第一部分定义了一些可以传导的参数类型，第二部分对于imgsize部分进行了额外的判断(640*640)，第三部分打印所有参数信息，opt变量存储所有的参数信息，并返回。main(opt): 执行命令行参数。该段代码分为两部分，第一部分首先完成对于requirements.txt的检查，检测这些依赖包有没有安装;第二部分，将opt变量参数传入，执行run函数。
+
+接着设置参数。\begin{lstlisting}[language=none]
+
+def parse_opt():
+   
+    parser = argparse.ArgumentParser()
+
+    parser.add_argument('--weights', nargs='+',
+     type=str, default=ROOT / 'yolov5s.pt',
+      help='model path(s)')
+ 
+    parser.add_argument('--source', type=str, 
+    default=ROOT / 'data/images', help=
+    'file/dir/URL/glob,
+     0 for webcam')
+  
+    parser.add_argument('--imgsz', '--img',
+     '--img-size', nargs='+', type=int, default=[640],
+      help='inference size h,w')
+    parser.add_argument('--conf-thres', type=float,
+     default=0.5, help='confidence threshold')
+    parser.add_argument('--iou-thres', type=float,
+     default=0.45, help='NMS IoU threshold')
+    parser.add_argument('--max-det', type=int,
+     default=1000, help='maximum detections per image')
+    parser.add_argument('--device', default='',
+     help='cuda device, i.e. 0 or 0,1,2,3 or cpu')
+    parser.add_argument('--view-img', 
+    action='store_true', help='show results')
+    parser.add_argument('--save-txt', 
+    action='store_true', help='save results to *.txt')
+    parser.add_argument('--save-conf',
+     action='store_true', help='save confidences
+      in --save-txt labels')
+    parser.add_argument('--save-crop',
+     action='store_true', help='save cropped
+      prediction boxes')
+    parser.add_argument('--nosave',
+     action='store_true', help='do not save
+      images/videos')
+    parser.add_argument('--classes',
+     nargs='+', type=int, help='filter by class:
+      --classes 0, or --classes 0 2 3')
+    parser.add_argument('--agnostic-nms',
+     action='store_true', help='class-agnostic NMS')
+    parser.add_argument('--augment',
+     action='store_true', help='augmented
+      inference')
+    parser.add_argument('--visualize',
+     action='store_true', help='visualize features')
+    parser.add_argument('--update',
+     action='store_true', help='update all models')
+    parser.add_argument('--project',
+     default=ROOT / 'runs/detect',
+      help='save results to project/name')
+    parser.add_argument('--name',
+     default='exp', help='save results to project/name')
+    parser.add_argument('--exist-ok',
+     action='store_true', help=
+     'existing project/name ok, do not increment')
+    parser.add_argument('--line-thickness',
+     default=3, type=int, help=
+     'bounding box thickness (pixels)')
+    parser.add_argument('--hide-labels',
+     default=False, action='store_true',
+     help='hide labels')
+    parser.add_argument('--hide-conf',
+     default=False, action='store_true',
+      help='hide confidences')
+    parser.add_argument('--half',
+     action='store_true', help=
+     'use FP16 half-precision inference')
+    parser.add_argument('--dnn',
+     action='store_true', help=
+     'use OpenCV DNN for ONNX inference')
+ 
+   
+ 
+    opt = parser.parse_args() # 扩充维度
+    opt.imgsz *= 2 if len(opt.imgsz) == 1 else 1  # expand
+    print_args(FILE.stem, opt) # 打印所有参数信息
+    return opt
+\end{lstlisting}
+这里代码过长有点变形了，看github上的源文件吧。
