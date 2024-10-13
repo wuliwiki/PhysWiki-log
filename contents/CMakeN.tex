@@ -59,6 +59,44 @@
 \item \verb`string(REPLACE "老词" "新词" 变量 "字符串")` 做字符串替换。
 \item \verb`add_definitions(-D FOO -D BAR)` 给编译器添加宏定义
 \item \verb`add_compile_options(-Wall -fopenmp)` 给编译器添加选项（注意不能用 \verb`-D` 定义宏）， 该命令不受 \verb`CMAKE_BUILD_TYPE` 的影响。
+\item 注意不同编译器有不同 option，所以可以判断语句给不同编译器 \verb`CMAKE_CXX_COMPILER_ID` 加不同 option
+\begin{lstlisting}[language=cmake]
+# Define flags for different compilers
+if(CMAKE_CXX_COMPILER_ID STREQUAL "GNU"
+    OR CMAKE_CXX_COMPILER_ID STREQUAL "Clang")
+    # GCC and Clang specific flags
+    add_compile_options(
+        -Wall                 # Enable all warnings
+        # Disable warning for constructor initialization order
+        -Wno-reorder
+        # Disable warning for misleading indentation
+        -Wno-misleading-indentation
+        -O3                   # High-level optimization
+        -fopenmp              # Enable OpenMP
+        -fmax-errors=1        # Limit the number of errors
+        -D NDEBUG             # Disable debugging macros
+    )
+elseif(CMAKE_CXX_COMPILER_ID STREQUAL "MSVC")
+    # MSVC specific flags
+    add_compile_options(
+        /W4                  # Enable high warning level
+        /O2  # High-level optimization (equivalent to -O3 in g++)
+        /openmp              # Enable OpenMP
+        /DNDEBUG             # Disable debugging macros
+    )
+endif()
+\end{lstlisting}
+\item 另外还可以用 \verb`CMAKE_SYSTEM_NAME` 判断当前的系统
+\begin{lstlisting}[language=cmake]
+if(CMAKE_SYSTEM_NAME STREQUAL "Linux")
+    ....
+elseif(CMAKE_SYSTEM_NAME STREQUAL "Windows")
+    ....
+elseif(CMAKE_SYSTEM_NAME STREQUAL "Darwin")
+    ....
+endif()
+\end{lstlisting}
+\item cmake 还提供了关于系统的更多具体变量如 \verb`MINGW`，\verb`CYGWIN`, \verb`MSYS`, \verb`IOS`, 等（\href{https://cmake.org/cmake/help/latest/manual/cmake-variables.7.html}{文档}）
 \item \verb`add_executable(目标名 源码1 源码2)` 前者是可执行文件名， 后者是所有需要 link 的 \verb`c/C++` 文件名，不需要头文件。 cmake 会自动分析代码得到哪个 cpp 调用哪个头文件， 如果头文件改变了， 只有调用它的 cpp 会重新编译。 注意 \verb`目标名` 可以是任意名字不一定是可执行文件名。
 \item 要指定可执行文件的名字， 用 \verb`set_target_properties(exe_targ_name PROPERTIES OUTPUT_NAME 可执行文件的名字)`
 \item 一般来说 \verb`add_executable` 指定的源码不需要包含头文件， 但如果头文件需要由其他 rule 来生成， 那就需要包含。 所以最保险还是把所有头文件都包含。
