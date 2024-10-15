@@ -1,0 +1,64 @@
+% 线性泛函的延拓
+% keys 延拓|泛函|Hahn-Banach定理
+% license Usr
+% type Tutor
+
+\pentry{齐次凸泛函\nref{nod_ConFul}}{nod_4b3f}
+\cite{Ke1}在分析学中函数的延拓是一类重要的问题，而函数空间可以用线性空间来描述，因此函数的延拓是对线性泛函的延拓。本文将讲述在线性泛函延拓的一般概念，及在线性泛函延拓的整个问题中起着重要作用的定理——Hahn-Banach定理。
+
+\begin{definition}{延拓}
+设 $L$ 是实线性空间，而 $L_0$ 是它的某一子空间，$f_0$ 是在 $L_0$ 上定义的线性泛函。若 $f$ 是在 $L$ 上定义的线性泛函，且对 $\forall x\in L_0$，成立 $f(x)=f(x_0)$，则称 $f$ 是 $f_0$ （在全空间 $L$ 上）的\textbf{延拓}。
+\end{definition}
+
+
+\begin{theorem}{Hahn-Banach}
+设 $p$ 是线性空间 $L$ 上的\enref{齐次凸泛函}{ConFul}，$L_0$ 是 $L$ 中的线性子空间。如果 $f_0$ 是 $L_0$ 上的线性泛函，且从属于 $p$ 在 $L_0$ 上的限制，即在 $L_0$ 上
+\begin{equation}\label{eq_ExLina_1}
+f_0(x)\leq p(x),~
+\end{equation}
+则 $f_0$ 在 $L$ 上的延拓 $f$ 存在，且 $f$ 从属于 $p$。
+\end{theorem}
+
+\textbf{证明：}\textbf{首先证明}，若 $L_0\neq L$，则 $f_0$ 可以从 $L_0$ 延拓到保持\autoref{eq_ExLina_1} 的某一更广的子空间上：事实上，设 $z\in L$ 且 $z\notin L_0$，$L'$ 是 $L_0$ 和 $z$ 生成的子空间（即包含 $L_0$ 和 $z$ 的最小子空间）。于是 $L'$ 中的每一元素都具有 $tz+x$ 的形式，其中 $x\in L_0$（试证明）。
+
+若 $f'$ 是 $L'$ 上 $f_0$ 的延拓，则
+\begin{equation}
+f'(tz+x)=tf'(z)+f_0(x),~
+\end{equation}
+现在选取 $f'(z)$ 使得在 $L'$ 上\autoref{eq_ExLina_1} 成立，即 $tf'(z)+f_0(x)\leq p(x+tz)$ 对一切 $x\in L_0$ 及一切实数 $t$ 恒成立。这等价于
+\begin{equation}\label{eq_ExLina_2}
+f_0\qty(\frac{x}{t})+f'(z)\left\{\begin{aligned}
+&\leq p\qty(\frac{x}{t}+z),\quad t\geq 0;\\
+&\geq -p\qty(-\frac{x}{t}-z),\quad t\leq 0.
+\end{aligned}\right.
+~
+\end{equation}
+因此我们只要验证恒有满足\autoref{eq_ExLina_2} 的 $f'(z)$ 存在即可。设 $y,y'\in L_0$，则由\autoref{eq_ExLina_1} ，成立
+\begin{equation}\label{eq_ExLina_3}
+-f_0(y')+p(y'+z)\geq -f_0(y)-p\qty(-y-z).~
+\end{equation}
+ 令 
+ \begin{equation}
+ \begin{aligned}
+ c'=\inf_{y'}\qty{f_0(y')+p(y'+z)},\\
+ c=\sup_y\qty{-f_0(y)-p\qty(-y-z)}.
+ \end{aligned}~
+ \end{equation}
+ 由 $y,y'$ 的任一性，据\autoref{eq_ExLina_3} ，得 $c'\geq c$。选取 $f'(z)$ 使得 $c'\geq f'(z)\geq c$，并注意到\autoref{eq_ExLina_3} 中 $y'=y=x/t$ 时就是\autoref{eq_ExLina_2}，因此如下定义的泛函 
+ \begin{equation}
+ f'(tz+x)=tf'(tz+x)+f_0(x)~
+ \end{equation}
+ 满足\autoref{eq_ExLina_2} ，其中 $c'\geq f'(z)\geq c$。
+
+\textbf{其次}，若在 $L$ 中可以选取生成 $L$ 的可数个元素 $x_1,\dots,x_n,\cdots$。则考虑递增序列
+\begin{equation}
+L^{(1)}=\{L_0,x_1\},L^{(2)}=\{L^{(1)},x_2\},\cdots,~
+\end{equation}
+其中 $\{L^{(k)},x_{k+1}\}$ 表示 $L$ 中包含 $L^{(k)}$ 与 $x^{k+1}$ 的最小线性子空间。于是可按归纳法构造 $L$ 上的泛函，这时，每一元素 $x\in L$ 属于某个 $L^{(k)}$，从而泛函可延拓到全空间 $L$。
+
+不可数情形下需要佐恩引理（一种选择公理）和偏序的概念进行证明，本节略去。
+
+\textbf{证毕！}
+
+
+
