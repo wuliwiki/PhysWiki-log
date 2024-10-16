@@ -1,0 +1,108 @@
+% 共轭空间中的强拓扑
+% keys 强拓扑|完备
+% license Usr
+% type Tutor
+\pentry{共轭空间与代数共轭空间\nref{nod_ConSpa}，线性算子的范数\nref{nod_ONorm}}{nod_0a2f}
+
+在共轭空间中可以定义拓扑使之成为拓扑线性空间，一种最自然的方法就是从赋范空间获得启示，由之在共轭空间上定义的拓扑便是强拓扑。
+
+\subsection{赋范空间中的强拓扑}
+
+由\autoref{ex_tvs_1} 可知，赋范空间是一个拓扑线性空间，因此其上自然由\enref{线性连续泛函}{LinCon}的定义。而赋范空间上根据
+\begin{equation}\label{eq_STop_1}
+\norm{f}:=\sup_{x\neq0}\frac{\abs{f(x)}}{\norm{x}}~
+\end{equation}
+可引入线性连续泛函的范数，证明\autoref{eq_STop_1} 满足\enref{范数}{norm}的定义和\autoref{ex_ONorm_1} 的证明完全一样。因此赋范空间的共轭空间可赋予赋范空间的自然结构。范数可以用来定义度量，度量有一个自然定义开集的方式，即在赋范空间上有一个自然定义的拓扑，在赋范空间的共轭空间中这样定义的拓扑就是强拓扑。
+\begin{definition}{强拓扑}
+设 $E$ 是赋范空间，则其\enref{共轭空间}{ConSpa} $E^*$ 上由\autoref{eq_STop_1} 定义的范数相应的拓扑称为 $E^*$ 的\textbf{强拓扑}。
+\end{definition}
+
+当希望把 $E^*$ 当作赋范空间时，我们将其写作 $(E^*,\norm{*})$。
+
+\begin{theorem}{}
+设 $E$ 是赋范空间，则 $(E^*,\norm{*})$ 是\enref{完备}{ComSpa}的。
+\end{theorem}
+
+\textbf{证明：}设 $\{f_n\}$ 是线性连续泛函的柯西序列（\autoref{def_ComSpa_1}）。那么对任意 $\epsilon>0$，存在 $N$，使得对所有的 $n,m>N$ 有 $\norm{f_n-f_m}<\epsilon$。由此，对任意 $x\in E$ 得到
+\begin{equation}\label{eq_STop_2}
+\abs{f_n(x)-f_m(x)}\leq\norm{f_n-f_m}\cdot\norm{x}<\epsilon\norm{x},~
+\end{equation}
+即对任意 $x\in E$，数列 $\{f_n(x)\}$ 收敛（$\norm{x}$ 是某一确定的实数，而 $\epsilon$ 任意）。
+
+令 $f(x):=\lim\limits_{n\rightarrow\infty}f_n(x)$。则由
+\begin{equation}
+\begin{aligned}
+f(\alpha x+\beta y)=&\lim_{n\rightarrow\infty}(\alpha x+\beta y)\\
+=&\lim_{n\rightarrow\infty}\qty[\alpha f_n(x)+\beta f_n(y)]\\
+=&\alpha f(x)+\beta f(y),
+\end{aligned}~
+\end{equation}
+得 $f$ 是线性的。此外，取\autoref{eq_STop_2} 的 $m\rightarrow\infty$，则 
+\begin{equation}\label{eq_STop_3}
+\abs{f(x)-f_n(x)}\leq \epsilon\norm{x}.~
+\end{equation}
+由此得 $f-f_n$ 有界（$\norm{x}$ 有限，$\epsilon>0$ 任意）。因而 $f=f_n+(f-f_n)$ 有界（$\{f_n(x)\}$ 对任意 $x$ 收敛）。由\autoref{the_LinCon_2} ， $f$ 连续。 另外，由\autoref{eq_STop_3} 得 $\norm{f-f_n}\leq\epsilon$，即 $\{f_n\}$ 收敛于 $f$。
+
+
+\textbf{证毕！}
+
+该定理表明，无论赋范空间是否完备，其共轭空间都完备。
+
+\begin{theorem}{}
+若赋范空间 $E$ 不完备，而 $\bar{E}$ 是 $E$ 的完备化空间，则 $E^*,\bar{E}^*$ 同构。
+\end{theorem}
+
+\textbf{证明：} 因为 $\bar{E}$ 是 $E$ 的完备化空间，所以对任一 $x\in \bar{E}$，存在 $E$ 中的收敛于 $x$ 的序列 $\{x_n\}$ （由\autoref{the_cauchy_2}，它是柯西序列）。设 $f$ 是 $E$ 上的线性连续泛函，则 $\{f(x_n)\}$ 是柯西数列，因而必收敛（实数集上的柯西序列必收敛），定义 $\bar f(x):=\lim\limits_{n\rightarrow\infty}f(x_n)$，则 $\bar f$ 就是 $f$ 在 $\bar E$ 上的连续延拓。
+
+该延拓是唯一的，否则存在 $x\in \bar E\backslash E$，使得 $\bar f(x)\neq g(x)$，而由 $E$ 中收敛到 $x$ 的柯西序列 $\{x_n\}$，恒有 $\bar f(x_n)=g(x_n)$，取极限就是 $\bar f(x)=g(x)$，这一矛盾就说明连续延拓是唯一的。显然 $\bar f\in(\bar E)^*$，且 $\norm{\bar f}=\norm{f}$（由\autoref{eq_STop_1} 推得）。
+
+另外，任一 $(\bar E)^*$ 中的线性连续泛函是其在 $E$ 上限制得到的泛函的延拓，因此，映射 $f\mapsto\bar f$ 是 $E$ 到 $(\bar E)^*$ 的同构映射。事实上，$f\mapsto\bar f$ 的线性性质可通过 
+\begin{equation}
+\begin{aligned}
+&f(x_n)+g(x_n)-(\bar f(x)+\bar g(x))\\
+&=(f(x_n)-\bar f(x))+(g(x_n)-\bar g(x))\\
+&<\epsilon/2+\epsilon/2=\epsilon
+\end{aligned}~
+\end{equation}
+获得。
+
+\textbf{证毕！}
+
+
+
+\subsection{拓扑线性空间的强拓扑}
+
+我们看到，赋范空间中的强拓扑是由于\autoref{eq_STop_1} 定义了其共轭空间上的范数引进的。在强拓扑下，赋范空间的共轭空间也是拓扑线性空间。赋范空间的共轭空间的零邻域自然定义为满足条件
+\begin{equation}
+\norm{f}<\epsilon~
+\end{equation}
+的泛函的集合。
+
+由\autoref{eq_STop_1} $\norm{f}\norm{x}\geq\abs{f(x)},x\neq0$。因此，零邻域的定义相当于说：当 $x$ 遍历单位球 $\norm{x}=1$ 时，我们把 $\abs{f(x)}<\epsilon$ 的线性泛函取为赋范空间的共轭空间的零邻域。取所有可能的 $\epsilon$，便得到确定零邻域系\footnote{即任一包含零的开集，都有该邻域系的一个包含在该开集中，由于范数定义的开集必然包含某一开球，所以文中所有可能的 $\epsilon$ 对应的系确实是确定邻域系}。由于拓扑线性空间的拓扑由零邻域系完全确定（\autoref{the_tvs_1}），所以这一确定零邻域系给出了赋范空间的共轭空间的拓扑。
+
+对应到一般的拓扑线性空间 $E$，单位球面自然被任意有界集 $A$ 代替，而 $E^*$ 的零邻域则定义为满足 $\abs{f(x)}<\epsilon,x\in A$ 的线性泛函的集合。 
+
+\begin{definition}{共轭空间的零邻域}
+设 $E^*$ 是拓扑线性空间 $E$ 的共轭空间，$A\subset E$ 中的有界集，$\epsilon>0$ 是任一数，则称
+\begin{equation}
+U_{\epsilon,A}=\{f|f\text{是 $E$ 的线性连续泛函且}\abs{f(x)}<\epsilon\}~
+\end{equation}
+ 是 $E^*$ 的（在 $A$ 上的 $\epsilon$）\textbf{零邻域}。
+\end{definition}
+
+类似的，采用不同的 $\epsilon,A$，变得到了共轭空间中的确定零邻域系，它们可以确定共轭空间的拓扑，这一拓扑称为共轭空间的强拓扑。 
+
+\begin{definition}{强拓扑}
+设 $E^*$ 是拓扑线性空间 $E$ 的共轭空间，$A\subset E$ 中的有界集。则称
+\begin{equation}
+\{U_{\epsilon,A}|A\text{有界},\epsilon>0\}~
+\end{equation}
+确定的 $E^*$ 上的拓扑为 $E^*$ 的\textbf{强拓扑}。
+\end{definition}
+
+
+\begin{theorem}{强拓扑满足第一分离公理与局部凸}
+$E^*$ 的强拓扑必定满足\enref{第一分离公理}{DisAx} $T_1$和\enref{局部凸性}{tvs}。
+\end{theorem}
+
+

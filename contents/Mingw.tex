@@ -62,6 +62,7 @@ g++ -o main.x main.o -l1 -L./ -Wl,-rpath,./
 \item 如果你装的是 UCRT 版本的 gcc，那额外 dll 将会在 \verb`/ucrt64/bin/` 中（也就是 \verb`C:\msys64\ucrt64\bin\` 中）。 UCRT 是 Windows 的 \textbf{Unified C Runtime}。
 \item 如果你装的是 MinGW 非 UCRT 版本的 gcc， 那额外依赖的 dll 是 \verb`/mingw64/bin/` 中的 \verb`libgcc_s_seh-1.dll  libstdc++-6.dll  libwinpthread-1.dll`
 \item 解决 Windows 找不到 dll 的一个简单的方法就是把额外需要的依赖库文件直接拷贝到和 exe 同一个目录中。
+\item 如果 \verb`.dll` 文件的目录中有同名的 \verb`.dll.a` 文件，那么编译器会链接后者的符号
 \item 双击 exe 成功运行后，窗口会迅速闪退，在 \verb`main()` 函数退出前用一个 \verb`getchar();` 即可实现任意键退出。
 \item 是否可以在编译时使用 rpath 把依赖库的相对目录直接写进 exe 中（这样就可以把库放到子文件夹）？ GPT 说这是不行的。 要么修改系统路径，要么创建一个 \enref{XML}{XML} 文件指定依赖路径，命名为 \verb`可执行文件名.exe.manifest`，和 exe 文件放在一起即可（\enref{详见}{WinDev}）。
 \item 如果程序中使用了 \verb`system()`，那么当它在 MSYS2 命令行中运行时可以调用 Unix 命令例如 \verb`mkdir`，但双击运行时调用的应该是 \verb`cmd`。

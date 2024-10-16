@@ -240,6 +240,49 @@ void base() { cout << "base() in libbase.2" << endl; }
 void conflict() { cout << "conflict() in libbase2" << endl; }
 \end{lstlisting}
 
+\subsection{运行时动态链接（dlopen）}
+\begin{lstlisting}[language=cpp]
+#include <iostream>
+#include <dlfcn.h>  // Required for dlopen, dlsym, and dlclose
+#include <cstdlib>  // For exit()
+
+typedef int (*processFunc)(double, const char*);
+
+int main() {
+    // Load the shared library
+    void* handle = dlopen("./libexample.so", RTLD_LAZY);
+    if (!handle) {
+        std::cerr << "Error: " << dlerror() << std::endl;
+        exit(EXIT_FAILURE);
+    }
+
+    // Reset errors
+    dlerror();
+
+    // Get the function symbol from the library
+    processFunc process = (processFunc) dlsym(handle, "process");
+    const char* dlsym_error = dlerror();
+    if (dlsym_error) {
+        std::cerr << "Error: " << dlsym_error << std::endl;
+        dlclose(handle);
+        exit(EXIT_FAILURE);
+    }
+
+    // Call the function with sample arguments
+    double num = 42.5;
+    const char* str = "Hello, world!";
+    int result = process(num, str);
+    
+    std::cout << "Result: " << result << std::endl;
+
+    // Close the library
+    dlclose(handle);
+
+    return 0;
+}
+
+\end{lstlisting}
+
 \subsection{如何把一个动态程序变得 portable}
 \begin{itemize}
 \item 首先可以自己写脚本复制所有 so 文件到某个文件夹中然后修改所有东西的 rpath。 缺点： 像 \verb`libc.so` 这样的东西可能会和系统本身的发生冲突， 所以这个方法并不总是 work， 应该只对相同发行版的相同版本相同 cpu 架构有效。 然而静态链接的程序就没有这个问题。
