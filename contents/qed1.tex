@@ -18,7 +18,7 @@ t^{\prime 2}-(x^{\prime 2}+y^{\prime 2}+z^{\prime 2})=0~.
 \end{equation}
 
 对于一般的两个事件，它们之间可能并不是用光信号联系，甚至可以没有联系。所以以上两个二次式的\textbf{结果取值是任意的}。通过线性变换，可以把上述方程里参考系 $A'$ 中的二次式变为关于 $(t,x,y,z)$ 的二次式。然而由于初始事件在原点重合，这个线性变换只能是
-\begin{equation}
+\begin{equation}\label{eq_qed1_8}
 t^{2}-(x^{2}+y^{2}+z^{2})=C\left[(t^{\prime 2}-(x^{\prime 2}+y^{\prime 2}+z^{\prime 2})\right]~,
 \end{equation}
 其中 $C$ 是常数因子。由于空间中不存在特殊方向，所以 $C$ 只与两惯性系的相对速度大小有关。反过来，我们也有
@@ -45,7 +45,7 @@ x^{\mu} &=\left(x^{0}, x^{i}\right)^T \quad(i=1,2,3)\\
 s^{2} &=x^{0} x^{0}-x^{i} x^{i}=x^{\mu} x^{\nu} g_{\mu \nu} \\
 &=x^{\prime 0} x^{\prime 0}-x^{\prime i} x^{\prime i}=x^{\prime \mu} x^{\prime \nu} g_{\mu \nu}~.\end{aligned}\end{equation}
 
-通常，我们还把行矢量表示为$x_{\mu}$，于是你会发现$x_{\mu}=g_{\mu\nu}x^{\nu}$。当我们想用矩阵表示度规相关的一系列运算时，通常把闵氏度规表示为矩阵形式$g^{\mu}_{\nu}$，此时有
+定义$x_{\mu}=g_{\mu\nu}x^{\nu}$，利用爱因斯坦求和约定，可把模方表示为$s^2=x_{\mu}x^{\mu}$。当我们想用矩阵表示度规相关的一系列运算时，通常把闵氏度规表示为矩阵形式$g^{\mu}_{\nu}$，此时有
 \begin{equation}
 s^2=x^Tgx,\,g=\opn{diag(1,-1,-1,-1)}~.
 \end{equation}
@@ -225,14 +225,67 @@ K_1=\begin{pmatrix}0&1&0&0\\1&0&0&0\\0&0&0&0\\0&0&0&0\end{pmatrix},\quad K_2=\be
 \begin{theorem}{}
 $SL(2,\mathbb C)$是$SO^+(1,3)$的双覆盖。
 \end{theorem}
-\begin{lemma}{}
-$PGL(2,\mathbb C)\equiv GL(2,\mathbb C)/Z$，$Z$为一般线性群的群中心。$PSL(2,\mathbb C)\equiv SL(2,\mathbb C)/(I,-I)$。
+\textbf{证明：}
+首先证明，存在同态映射$f:SL(2,\mathbb C)\to O(1,3)$。为此，我们引入$\mathbb R^{1,3}$与厄米矩阵的同构映射。设全体厄米矩阵的集合为$G$。把任意$A\in G$写为如下形式：
+\begin{equation}\label{eq_qed1_5}
+A=\pmat{x+z&t+\I y\\t-\I y& x-z}~.
+\end{equation}
+对于任意矩阵$W\in SL(2,\mathbb C)$，$WAW^{\dagger}$是个保$\opn{det} A$不变的作用，由于该行列式等于$(t,x,y,z)$在$\mathbb R^{1,3}$中的内积，因此相当于该矢量被$O(1,3)$中的一个矩阵作用。即存在映射$f(W)=L\in O(1,3)$。容易验证对于任意$W_1,W_2$有$f(W_1W_2)=f(W_1)f(W_2)$，所以该映射就是我们需要的同态映射。
+
+下面来检查该同态映射的核。由于厄米矩阵与$\mathbb R^{1,3}$同构。因此
+\begin{equation}
+\opn{ker} f=\{W\in SL(2,\mathbb C)|WAW^{\dagger}=A,\forall A\in G \}~.
+\end{equation}
+令$A=I$，得$W^{\dagger}=W^{-1}$。所以任意$W$都满足$AW=WA$，则$\opn{ker} f=\{I,-I\}$。
+
+由群同态定理知：$SL(2,\mathbb C)/(I,-I)\cong \opn{Im}f\subset O(1,3)$，因此该同态映射是二对一的。
+
+下面证明该同态映射是连续的。从\autoref{eq_qed1_5} 可知，厄米矩阵的基为$\{I,\sigma_i\},i=1,2,3$，其中$\sigma_i$为$\sigma_z$表象下的泡利矩阵。定义$\sigma_0=I$，基分别为
+\begin{equation}
+\sigma_0=I,\sigma_1=\pmat{0&1\\1&0},\sigma_2=\pmat{0&\I\\-\I&0},\sigma_3=\pmat{1&0\\0&-1}~.
+\end{equation}
+所以任意厄米矩阵$A=x^{\mu}\sigma_{\mu},\mu=\{0,1,2,3\}$。在这个以矩阵为基的线性空间中，利用求迹运算的线性与对称性，定义向量内积为：
+\begin{equation}
+(A,B)=\frac{1}{2}\opn{Tr}(AB),\forall A,B\in G~.
+\end{equation}
+系数取$1/2$的目的是归一化基。可验证此时基是正交归一的，即
+\begin{equation}
+(\sigma_{\mu},\sigma_{\nu})=\delta_{\mu\nu}~,
+\end{equation}
+则$x^{\mu}=(A,\sigma_{\mu})$。定义$A'=WAW^{\dagger}=x'^{\mu}\sigma_{\mu}$，则
+\begin{equation}
+\begin{aligned}
+x'^{\mu}&=(WAW^{\dagger},\sigma
+_{\mu})\\
+&=\frac{1}{2}\opn{Tr}(Wx^{\nu}\sigma_{\nu}W^{\dagger}\sigma_{\mu})\\
+&=\frac{1}{2}\opn{Tr}(W\sigma_{\nu}W^{\dagger}\sigma_{\mu})x^{\nu}\equiv L^{\mu}_{\nu}x^{\nu}~.
+\end{aligned}
+\end{equation}
+所以$[f(W)]^{\mu}_{\nu}=(W\sigma_{\nu}W^{\dagger},\sigma_{\mu})$。由于这些运算是连续的，因此同态映射是连续的。连续映射保证了连通性，所以$\opn{Im}f\subset SO^+(1,3)\subset O(1,3)$。
+
+%欠缺证明这是微分流形意义上的覆叠映射。证明$\opn{Im}f=SO^+(1,3)
+
+\begin{lemma}{}\label{lem_qed1_1}
+$PGL(2,\mathbb C)\equiv GL(2,\mathbb C)/Z$，$Z$为该一般线性群的群中心。$PSL(2,\mathbb C)\equiv SL(2,\mathbb C)/(I,-I)$。
 
 我们有：$PGL(2,\mathbb C)\cong PSL(2,\mathbb C)$。
+
+\textbf{证明：}
+
+$Z$由单位矩阵的标量倍构成，因此$PGL(2,\mathbb C)$的每个陪集里，不同元素都是彼此的标量倍，我们可以“归一化”这些陪集。具体到二阶群，对于任意$A\in GL(2,\mathbb C)$，设$f(A)=A/(\opn{det A})$，则$f(A)\in SL(2,\mathbb C)$。显然，这是一个满同态，于是我们再复合一个到商群的自然同态：$\pi\circ f: GL(2,\mathbb C)\to SL(2,\mathbb C)\to PSL(2,\mathbb C)$。易证这是一个同态映射。
+
+由定义知该同态映射的核就是$Z$。由群同态定理得证$PGL(2,\mathbb C)\cong PSL(2,\mathbb C)$。
+
 \end{lemma}
 \begin{theorem}{}
 指数映射$exp:\mathfrak {so}^+(1,3)\to SO^+(1,3)$是满射。
 \end{theorem}
 
 
+\textbf{证明：}
+
+由\autoref{lem_qed1_1} 和\autoref{eq_qed1_8} 得：
+\begin{equation}
+PGL(2,\mathbb C)\cong PSL(2,\mathbb C)\cong SO^+(1,3)~.
+\end{equation}
 

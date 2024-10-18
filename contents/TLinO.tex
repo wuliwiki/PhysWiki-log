@@ -16,12 +16,90 @@
   
 \end{definition}
 
+由线性算子的定义，\enref{线性泛函}{Funal}显然是一类特殊的线性算子。
+
 \textbf{注意：}一般地，不能假定 $D_A=E$，然而总可以假定 $D_A$ 是线性流形，即 $x,y\in D_A$，则 $\alpha x+\beta y\in D_A$ 对任意 $\alpha,\beta\in\mathbb F$ 恒成立（因为总可以通过 $A(\alpha x+\beta y)=\alpha A(x)+\beta A(y)$定义 $A$ 在 $\alpha x+\beta y$ 的值）。
 
+对算子而言，通常记 $Ax:=A(x)$。
+
+\subsection{性质}
 \begin{definition}{连续}
 设 $A:D_A\rightarrow E_1$ 是 $E$ 到 $E_1$ 的线性算子，若对 $y_0=Ax_0$ （$x_0\in D_A$） 的任意邻域 $V$，存在 $x_0$ 的邻域 $U$，使得 $A(U\cap D_A)\subset V$，则称 $A$ 在 $x_0$ 是\textbf{连续的}。若 $A$ 在 $D_A$ 上处处连续，则称 $A$ \textbf{连续}。
 \end{definition}
 
+
+\begin{definition}{核、象}
+设 $A:D_A\rightarrow E_1$ 是 $E$ 到 $E_1$ 的线性算子。称 $\ker A:=\{x|Ax=0,x\in E\}$ 是 $A$ 的\textbf{核}（kernel），而 称 $\Im A:=\{y|y=Ax,x\in D_A\}$ 为 $A$ 的\textbf{象}（image）。 
+\end{definition}
+
+线性算子的象显然也是线性流形，因为 $Ax_1,Ax_2\in \Im A$，则 $\alpha Ax_1+\beta Ax_2=A(\alpha x_1+\beta x_2)$，而 $D_A$ 是线性流形，所以 $\alpha x_1+\beta x_2\in D_A$，从而 $\alpha Ax_1+\beta Ax_2\in\Im A$。 
+
+\begin{theorem}{}
+设 $A$ 是连续线性算子，则 $\ker A$ 是闭的。
+\end{theorem}
+\textbf{证明：}设 $x\in[\ker A]$，则存在 $\ker A$ 中的收敛到 $x$ 的序列 $\{x_n\}$。于是对所有的 $n$ 成立：
+\begin{equation}
+Ax_n=0.~
+\end{equation}
+ 上面两边取极限，并由连续性，得 \begin{equation}
+ Ax=A\lim_{n\rightarrow\infty}x_n\overset{A\text{连续}}{=}\lim_{n\rightarrow\infty}A x_n=\lim_{n\rightarrow\infty}0=0.~
+ \end{equation}
+ 因此 $x\in\ker A$。即 $[\ker A]\subset\ker A$，从而 $[\ker A]=\ker A$。因此 $\ker A$ 闭。
+
+\textbf{证毕！}
+
+然而对 $\Im A$ ,即使当 $D_A=E$ 时，也不一定在 $E_1$ 中是闭的。
+
+
+\subsection{例子}
+
+\begin{example}{}
+在闭区间 $[a,b]$ 上连续函数的空间内考虑由如下公式定义的算子
+\begin{equation}
+\phi(s)=\int_a^bK(s,t)\varphi(t)\dd t,~
+\end{equation}
+其中 $K(s,t)$ 是在 $[a,b]\times[a,b]$ 上固定的二元连续函数。由积分的定义，$\phi(s)$ 对任意连续的函数 $\varphi(t)$ 是连续的。所以该算子实际上把连续函数空间变到自身上。线性性质是显然的。为了讨论它的连续性，必须预先指出连续函数空间上有怎样的拓扑。建议读者证明下述情况下的连续性：
+\begin{enumerate}
+\item 考虑连续函数空间 $C[a,b]$ 其范数为 $\norm{\varphi}=\max{\abs{\varphi(t)}}$；
+\item 考虑二阶连续函数空间 $C_2[a,b]$ 其范数为 $\norm{\varphi}=\qty(\int_a^b\varphi^2(t)\dd t)^{1/2}$。
+\end{enumerate}
+
+\end{example}
+
+\begin{example}{微分算子}
+对于分析学而言，一个重要的例子是微分算子。可以在不同空间来研究这个算子。
+
+\begin{enumerate}
+\item 考虑连续函数空间 $C[a,b]$ 与其上的算子 
+\begin{equation}
+Df(t)=f'(t).~
+\end{equation}
+这个算子显然不能定义在整个 $C[a,b]$ 上，而仅能在具有连续导数的函数的线性流形上定义。算子 $D$ 是线性的，但不是连续的。例如序列
+\begin{equation}
+\varphi_n(t)=\frac{\sin(nt)}{n}~
+\end{equation}
+收敛于0（在 $C[a,b]$ 的度量下），而序列
+\begin{equation}
+D\varphi_n=\cos(nt)~
+\end{equation}
+不收敛；
+\item 可以把微分算子考虑为在范数为
+\begin{equation}
+\norm{\varphi}_1=\max\abs{\varphi(t)}+\max\abs{\varphi'(t)},~
+\end{equation}
+区间 $[a,b]$ 上连续可微函数空间 $C_1[a,b]$ 到空间 $C[a,b]$ 上的算子。此时 $D$ 是线性、连续的，且把整个 $C_1[a,b]$ 映到整个 $C[a,b]$。\\
+事实上，对对任意 $\epsilon>0$，则任意 $\norm{\varphi'-\varphi}_1<\epsilon$ 的 $\varphi'$，都有 $\max\abs{\varphi'-\varphi}\leq \norm{\varphi'-\varphi}_1<\epsilon$。这证明了连续性。而任意 $\varphi\in C[a,b]$，$\int_a^b[\varphi(t)+c]\dd t\in C_1[a,b]$ 是对应的算子；
+
+\item 把微分算子考虑为从 $C_1[a,b]$ 到空间 $C[a,b]$ 上的算子不很方便，因为虽然这时我们得到了定义在整个 $C_1[a,b]$ 上的连续算子，但是并非对 $C_1[a,b]$ 中的任意函数都可应用 $D$ 两次。在比 $C_1[a,b]$ 还窄的无穷次可微函数空间 $C_\infty[a,b]$ 上，考虑微分算子是方便的。在此空间上，拓扑由可数范数系
+\begin{equation}
+\norm{\varphi}_n=\sup_{\begin{aligned}
+0\leq k\leq n\\a\leq t\leq b
+\end{aligned}}\abs{\varphi^{(k)}(t)}~
+\end{equation}
+给定。即零邻域定义为 $U(n,\epsilon)=\{\varphi|\norm{\varphi}_n<\epsilon\}$。而零邻域系则由所有可能的 $n$ 和 $\epsilon$定义；
+\item 无穷次可微函数构成极其窄的类。广义函数本质上使得更宽的空间中把微分算子同时考虑为连续线性算子成为可能。
+\end{enumerate}
+\end{example}
 
 
 
