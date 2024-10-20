@@ -3,6 +3,72 @@
 % type Note
 
 \begin{itemize}
+\item 官方文档在\href{https://ch.mathworks.com/help/coder/index.html?s_tid=CRUX_lftnav}{这里}
 \item 首先要安装 Matlab Coder 工具箱
-\item 说明在\href{https://ch.mathworks.com/help/coder/index.html?s_tid=CRUX_lftnav}{这里}
+\item 当前使用 Matlab 2024b 进行测试
+\item 还需要独立编译器，Windows 上这里用 MinGW，在 Home 菜单中选 \verb`Add-Ons > Get Add-Ons` 即可。这里可以安装和卸载不同官方工具箱（无需安装包），也可以装 MinGW。按照提示下载安装即可。
+\item 命令行运行 \verb`mex -setup`， \verb`mex -setup C++`， \verb`mex -setup FORTRAN`。会提示如 \verb`MEX configured to use 'MinGW64 Compiler (C++)' for C++ language compilation.`
+\item 现在就可以在 \verb`APPS` 菜单里面搜索 \verb`Matlab Coder`，会有 GUI 引导进行代码生成。需要选择入口函数，入口函数参数类型。
+\item 使用以下简单的单文件代码测试
+\begin{lstlisting}[language=matlab,caption=test1.m]
+% 代码生成的入口函数，arg* 限制为字符串，ret 限制为非负整数
+function ret = test1(a, b)
+
+% 输出
+disp('hello, world');
+
+% 修改入参
+b = b+1;
+
+% 简单表达式
+c = a + b;
+
+ret = "";
+disp('a = '); ret = ret + 'a = ' + newline;
+disp(a); ret = ret + sprintf('%0.5e',a) + newline;
+disp('b = '); ret = ret + 'b = ' + newline;
+disp(b); ret = ret + sprintf('%0.5e',b) + newline;
+disp('c = '); ret = ret + 'c = ' + newline;
+disp(c); ret = ret + sprintf('%0.5e',c) + newline;
+
+% 判断
+if c < 0
+    d = b + sqrt(-c);
+elseif c > 0
+    d = a + sqrt(c);
+else
+    % 异常退出
+    error('c = 0.');
+end
+
+disp('d = '); ret = ret + 'd = ' + newline;
+disp(d); ret = ret + sprintf('%0.5e',d) + newline;
+
+% 循环
+for n = 1:5
+    c = c + n;
+end
+
+disp('c = '); ret = ret + 'c = ' + newline;
+disp(c); ret = ret + sprintf('%0.5e',c) + newline;
+
+% 子函数调用
+e = f1(a, b);
+
+disp('e = '); ret = ret + 'e = ' + newline;
+disp(e); ret = ret + sprintf('%0.5e',e) + newline;
+
+% 正常退出
+end
+
+% 子函数
+function z = f1(x, y)
+z = x^2 + y^2;
+end
+\end{lstlisting}
+\item 有几个问题要注意就是，代码生成是经过优化的。 例如如果不把 \verb`a, b` 作为参数而是直接在代码内赋值，它们很可能就会被优化掉，例如直接在 c++ 生成 \verb`c = 3`。
+\item 非整数的 \verb`num2str()` 提示不支持生成代码
+\item \verb`disp()` 似乎会被忽略，把每个中间变量 \verb`disp()` 似乎不能防止被优化，测试中的 \verb`sprintf()` 可以， 可以猜测 \verb`printf()` 也行。
+\item 在生成路径下 \verb`mex` 路径是用于测试的编译好的 mex 文件 \verb`test1_mex.mexw64` 和编译所需的 cpp 和头文件。 \verb`lib` 路径是给终端用户生成的 cpp 和头文件。
+\item \verb`mex` 模式下的 cpp 源码非常类似于我们的兼容模式，例如 \verb`disp()` 是支持的，其入参的确是 \verb`bxArray`，另外两个入参应该是 m 文件中的具体行号列号，以及调用栈信息？ 另外
 \end{itemize}
