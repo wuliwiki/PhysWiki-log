@@ -1,0 +1,126 @@
+% 逆算子
+% keys 逆算子|可逆性
+% license Usr
+% type Tutor
+
+\pentry{拓扑线性空间中的线性算子\nref{nod_TLinO}}{nod_d7fd}
+
+逆算子是双射的算子的逆。当算子可逆时，在某些情形下逆算子和算子有很多相同的性质，比如，线性算子的逆算子时线性的，而完备赋范空间之间的线性有界算子的逆是有界的。
+
+
+\begin{definition}{逆算子}
+设 $D_A$ 是拓扑线性空间的子集，$A:D_A\rightarrow E_1$ 是其上的算子（映射），$\Im A$ 是 $A$ 的象。其对任意 $y\in\Im A$，方程
+\begin{equation}
+Ax=y~
+\end{equation}
+ 有唯一解，则称算子 $A$ \textbf{可逆}。此时映射
+ \begin{equation}
+ \Im A\rightarrow E,Ax\mapsto x~  
+ \end{equation}
+ 称为 $A$ 的\textbf{逆算子}，记作 $A^{-1}$。
+
+\end{definition}
+
+\subsection{性质}
+下面定理表明，线性算子的逆算子是线性的。
+
+\begin{theorem}{}
+\enref{线性算子}{TLinO} $A$ 的逆算子 $A^{-1}$ 是线性的。
+\end{theorem}
+
+\textbf{证明：}
+任意 $\Im A$ 中的 $y_1=A x_1,y_2=Ax_2$，因为
+\begin{equation}
+A(\alpha x_1+\beta x_2)=\alpha Ax_1+\beta Ax_2=\alpha y_1+\beta y_2.~
+\end{equation}
+所以
+\begin{equation}
+A^{-1}(\alpha y_1+\beta y_2)=\alpha x_1+\beta x_2=\alpha A^{-1}y_1+\beta A^{-1}y_2.~
+\end{equation}
+
+
+\textbf{证毕！}
+
+下面定理表明，在完备赋范空间（Banach空间）之间的线性有界算子的逆算子是有界的。
+
+\begin{theorem}{逆算子的Banach定理}\label{the_InvOp_1}
+设 $E,E_1$ 是\enref{完备赋范空间}{banach}，$A$ 是 $E$ 到 $E_1$ 的可逆线性算子，则其逆算子 $A^{-1}$ \enref{有界}{BoundO}。
+\end{theorem}
+
+为证明它，需要如下引理。
+\begin{lemma}{}\label{lem_InvOp_1}
+设 $M$ 是Banach空间 $E$ 中的\enref{处处稠密集}{MaDen}。则任意非零元 $y\in E$ 可展开成级数：
+\begin{equation}
+y=y_1+\cdots+y_n+\cdots,~
+\end{equation}
+其中 $y_k\in M$ 且 $\norm{y_k}\leq 3\norm{y}/2^k$。
+\end{lemma}
+\textbf{证明：}下面用逐次构造 $y_k$ 进行证明。选择 $y_1$ 使得
+\begin{equation}
+\norm{y-y_1}\leq\norm{y}/2.~
+\end{equation}
+这是一个半径为 $\norm{y}/2$ 中心在 $y$ 的球，由于 $M$ 在 $E$ 中处处稠密，因此在该球内任一点的邻域都有 $M$ 的点，因此这样的选择是可能的。
+
+同样由于 $M$ 在 $E$ 中处处稠密，可选 $y_n$ 使得 $\norm{y-y_1-\cdots-y_n}\leq\norm{y}/2^n$。根据 $y^k$ 的选择，
+\begin{equation}
+\norm{y-\sum_{k=1}^n y_k}\rightarrow0.~
+\end{equation}
+即级数 $\sum_{k=1}^\infty y_k$ 收敛于 $y$。此外
+\begin{equation}
+\begin{aligned}
+\norm{y_n}=&\norm{y_n+y_{n-1}+\cdots+y_1-y+y-y_1-\cdots-y_{n-1}}\\
+\leq&\norm{y-y_1-\cdots-y_{n}}+\norm{y-y_1\cdots-y_{n-1}}\\
+\leq&\norm{y}/2^n+\norm{y}/2^{n-1}=3\norm{y}/2^n.
+\end{aligned}~
+\end{equation}
+
+\textbf{证毕！}
+
+\textbf{\autoref{the_InvOp_1} 的证明：}
+证明的思路是这样的：通过证明 $E_1$ 中存在稠密集，从而可由\autoref{lem_InvOp_1} 展开 $E_1$ 的任意非零元 $y$，这一级数在逆算子作用下对应 $E$ 中的级数，并且通过构造这一级数收敛点某个 $x$，进而由 $A$ 的线性和连续性可知 $Ax=y$，且 $x$ 的范数恒小于某个常数乘以对应的 $y$ 的范数，从而表明 $A$ 有界。
+
+\textbf{稠密集的构造：}\enref{Baire定理}{Baire}断定完备赋范空间不能表为可数无处稠密集的并，因此若能构造 $E_1$ 为可数个集的并，则这其中一定有一个集不是无处稠密的，即有一个集在某一球上稠密。由于 $\frac{\norm{y}}{\norm{A^{-1}y}}$ 对具体的 $y\in E_1$ 必定小于某个正整数，因此若令 $M_k$ 为所有满足 $\norm{A^{-1}y}\leq k\norm{y}$ 的 $y\in E$ 的全体，则 $E_1=\bigcup\limits_{k=1}^\infty M_k$。即 $E_1$ 可表为可数集的并，因为可设其中的 $M_n$ 在某个球 $B$ 中稠密。
+
+在 $B$ 中选择中心在 $M_n$ 中的球层 $P$：满足不等式 $\beta<\norm{z-y_0}<\alpha$ 的 $z$ 的全体，其中 $0<\beta<\alpha,y_0\in M_n$。若把该球层中心移到原点便得球层 $P_0=\{z|0<\beta<\norm{z}<\alpha\}$。下面将表明，有某个 $M_N$ 在 $P_0$ 中稠密，且在 $E_1$ 中稠密：设 $z\in P\cap M_n$，则 $z-y_0\in P_0$，且
+\begin{equation}
+\begin{aligned}
+\norm{A^{-1}(z-y_0)}\leq&\norm{A^{-1}z}+\norm{A^{-1}y_0}\leq n(\norm{z}+\norm{y_0})\\
+\leq&n(\norm{z-y_0}+2\norm{y_0})\\
+=&n\norm{z-y_0}\qty(1+\frac{2\norm{y_0}}{\norm{z-y_0}})\\
+\leq& n\norm{z-y_0}(1+2\norm{y_0}/\beta).
+\end{aligned}~
+\end{equation}
+量 $n(1+2\norm{y_0}/\beta)$ 不依赖于 $z$。令 $N:=1+n[1+2\norm{y_0}/\beta]$（其中 $[\cdot]$ 是高斯记号，表示一个数的整数部分）。因而由我们的构造 $z-y_0\in M_N$。进而由 $M_n$ 在 $P$ 中稠密知 $M_N$ 在 $P_0$ 中稠密（$P\subset[M_n]\Rightarrow P_0=P-y_0\subset[M_n]-y_0\subset[M_N]$）。
+
+任意非零元 $y\in E_1$，总有 $\lambda$ ，使得 $\beta<\norm{\lambda y}<\alpha$，即 $\lambda<P_0$。因为 $M_N$ 在 $P_0$ 中稠密，可以构造收敛于 $\lambda y$ 的序列 $y_k\in M_N$。于是序列 $\frac{1}{\lambda}y_k$ 收敛于 $y$。由于对任意的 $\lambda\neq0$，成立 $\norm{A^{-1}\qty(\frac{1}{\lambda}y_k)}=\frac{1}{\lambda}\norm{A^{-1}y_k}\leq\frac{1}{\abs{\lambda}}N\norm{y_k}=N\norm{\frac{y_k}{\lambda}}$，因此 $\frac{y_k}{\lambda}\in M_N$ 对任意的 $\lambda\neq0$ 成立。
+这样一来，任意 $y\in E_1$ 都有 $M_N$ 的收敛到它序列，即 $y\in[M_N]$，从而 $E_1\subset [M_N]$。因此 $M_N$ 在 $E_1/0$ 中稠密，所以 $M_N$ 在 $E_1$ 中稠密（$0\in M_N$）。
+
+\textbf{级数收敛和算子有界：}考虑非零元 $y\in E_1$，由\autoref{lem_InvOp_1} ，
+\begin{equation}
+y=\sum_{k=1}^\infty y_k,~
+\end{equation}
+其中 $\norm{y_k}<3\norm{y}/2^k$。令
+\begin{equation}
+x_k:=A^{-1}y_k.~
+\end{equation}
+
+因为
+\begin{equation}
+\norm{x_k}=\norm{A^{-1}y_k}\leq N\norm{y_k}<3N\norm{y}/2^k,~
+\end{equation}
+所以  $\sum\limits_{k=m}^n x_k=3\norm{y}\frac{1}{2^{m-1}}\qty(1-\frac{1}{2^{n-m+1}})$，对充分大的 $N$，可使 $\sum\limits_{k=m}^n x_k$ 对任意 $n,m\geq N$ 成立，即 $\{s_n|s_n:=\sum\limits_{k=1}^n x_k\}$ 是柯西序列，由 $E$ 的完备性，级数 $\sum\limits_{n=1}^\infty x_k$ 收敛到某一 $x$。从而由 $A$ 的连续性
+\begin{equation}
+Ax=A\sum\limits_{n=1}^\infty x_k=\sum\limits_{n=1}^\infty Ax_k=y~.
+\end{equation}
+此外
+\begin{equation}
+\norm{A^{-1}y}=\norm{x}\leq\sum_{n=1}^\infty\norm{x_k}=3N\norm{y}.~
+\end{equation}
+因为上式对任意 $y\neq0$ 成立，因此算子 $A^{-1}$ 有界。
+
+
+
+\textbf{证毕！}
+
+
+

@@ -15,47 +15,69 @@
 function ret = test1(a, b)
 
 % 输出
+% disp('hello, world');
 disp('hello, world');
 
 % 修改入参
+% b = b+1;
 b = b+1;
 
 % 简单表达式
+% c = a + b;
 c = a + b;
 
 ret = "";
+% disp('a = '); ret = ret + 'a = ' + newline;
 disp('a = '); ret = ret + 'a = ' + newline;
+% disp(a); ret = ret + sprintf('%0.5e',a) + newline;
 disp(a); ret = ret + sprintf('%0.5e',a) + newline;
+% disp('b = '); ret = ret + 'b = ' + newline;
 disp('b = '); ret = ret + 'b = ' + newline;
+% disp(b); ret = ret + sprintf('%0.5e',b) + newline;
 disp(b); ret = ret + sprintf('%0.5e',b) + newline;
+% disp('c = '); ret = ret + 'c = ' + newline;
 disp('c = '); ret = ret + 'c = ' + newline;
+% disp(c); ret = ret + sprintf('%0.5e',c) + newline;
 disp(c); ret = ret + sprintf('%0.5e',c) + newline;
 
 % 判断
+% if c < 0
 if c < 0
+    % d = b + sqrt(-c);
     d = b + sqrt(-c);
+% elseif c > 0
 elseif c > 0
+    % d = a + sqrt(c);
     d = a + sqrt(c);
 else
-    % 异常退出
+    % error('c = 0.');
     error('c = 0.');
 end
 
+% disp('d = '); ret = ret + 'd = ' + newline;
 disp('d = '); ret = ret + 'd = ' + newline;
+% disp(d); ret = ret + sprintf('%0.5e',d) + newline;
 disp(d); ret = ret + sprintf('%0.5e',d) + newline;
 
 % 循环
+% for n = 1:5
 for n = 1:5
+    % c = c + n;
     c = c + n;
 end
 
+% disp('c = '); ret = ret + 'c = ' + newline;
 disp('c = '); ret = ret + 'c = ' + newline;
+% disp(c); ret = ret + sprintf('%0.5e',c) + newline;
 disp(c); ret = ret + sprintf('%0.5e',c) + newline;
 
 % 子函数调用
+% e = f1(a, b);
 e = f1(a, b);
 
+% disp('e = '); ret = ret + 'e = ' + newline;
 disp('e = '); ret = ret + 'e = ' + newline;
+% disp(e); ret = ret + sprintf('%0.5e',e) + newline;
 disp(e); ret = ret + sprintf('%0.5e',e) + newline;
 
 % 正常退出
@@ -63,6 +85,7 @@ end
 
 % 子函数
 function z = f1(x, y)
+% z = x^2 + y^2;
 z = x^2 + y^2;
 end
 \end{lstlisting}
@@ -70,5 +93,122 @@ end
 \item 非整数的 \verb`num2str()` 提示不支持生成代码
 \item \verb`disp()` 似乎会被忽略，把每个中间变量 \verb`disp()` 似乎不能防止被优化，测试中的 \verb`sprintf()` 可以， 可以猜测 \verb`printf()` 也行。
 \item 在生成路径下 \verb`mex` 路径是用于测试的编译好的 mex 文件 \verb`test1_mex.mexw64` 和编译所需的 cpp 和头文件。 \verb`lib` 路径是给终端用户生成的 cpp 和头文件。
-\item \verb`mex` 模式下的 cpp 源码非常类似于我们的兼容模式，例如 \verb`disp()` 是支持的，其入参的确是 \verb`bxArray`，另外两个入参应该是 m 文件中的具体行号列号，以及调用栈信息？ 另外
+\item \verb`mex` 模式下的 cpp 源码非常类似于我们的兼容模式，例如 \verb`disp()` 是支持的，其入参的确是 \verb`bxArray`，另外两个入参应该是 m 文件中的具体行号列号，以及调用栈信息？
+\item 另外做一些矩阵和线性代数运算
+\begin{lstlisting}[language=matlab]
+function ret = test2
+
+% 简单矩阵操作
+% h = 1e-5; ret = "";
+h = 1e-5; ret = "";
+% a = rand(2,2)*h+1;
+a = rand(2,2)*h+1;
+% ret=ret+ sprintf('sum(a) = %0.5e\n', sum(a(:)));
+ret=ret+ sprintf('sum(a) = %0.5e\n', sum(a(:)));
+% b = rand(2,3)*h+2;
+b = rand(2,3)*h+2;
+% ret=ret+ sprintf('sum(b) = %0.5e\n', sum(b(:)));
+ret=ret+ sprintf('sum(b) = %0.5e\n', sum(b(:)));
+% c = rand(2,5)*h+3;
+c = rand(2,5)*h+3;
+% ret=ret+ sprintf('sum(c) = %0.5e\n', sum(c(:)));
+ret=ret+ sprintf('sum(c) = %0.5e\n', sum(c(:)));
+% d = [a b; c];
+d = [a b; c];
+% ret=ret+ sprintf('sum(d) = %0.5e\n', sum(d(:)));
+ret=ret+ sprintf('sum(d) = %0.5e\n', sum(d(:)));
+% d([2,4], 1:2:5) = 4;
+d([2,4], 1:2:5) = 4;
+% d1 = [...]
+d1 = rand(4,5)*h + ...
+    [1     1     2     2     2
+     4     1     4     2     4
+     3     3     3     3     3
+     4     3     4     3     4];
+% ret=ret+ sprintf('sum(d1) = %0.5e\n', sum(d1(:)));
+ret=ret+ sprintf('sum(d1) = %0.5e\n', sum(d1(:)));
+% max_abs = max(abs(d(:) - d1(:)));
+max_abs = max(abs(d(:) - d1(:)));
+% if max_abs > 1e-4
+if max_abs > 1e-4
+    % ret=ret+ sprintf('error: max_abs = %0.5e\n', max_abs);
+    ret=ret+ sprintf('error: max_abs = %0.5e\n', max_abs);
+end
+
+% 加减乘除、取矩阵元
+% a = rand(3, 4);
+a = rand(3, 4);
+% ret=ret+ sprintf('sum(a) = %0.5e\n', sum(a(:)));
+ret=ret+ sprintf('sum(a) = %0.5e\n', sum(a(:)));
+% b = rand(3, 4);
+b = rand(3, 4);
+% ret=ret+ sprintf('sum(b) = %0.5e\n', sum(b(:)));
+ret=ret+ sprintf('sum(b) = %0.5e\n', sum(b(:)));
+% c = sqrt(a.^2 + b.^2);
+c = sqrt(a.^2 + b.^2);
+% ret=ret+ sprintf('sum(c) = %0.5e\n', sum(c(:)));
+ret=ret+ sprintf('sum(c) = %0.5e\n', sum(c(:)));
+% for i = 1:3
+for i = 1:3
+    % for j = 1:4
+    for j = 1:4
+        % if c(i, j) ~= sqrt(a(i,j)^2 + b(i, j)^2)
+        if c(i, j) ~= sqrt(a(i,j)^2 + b(i, j)^2)
+            ret=ret+ sprintf('error: c(i, j) = %0.5e\n', c(i, j));
+        end
+    end
+end
+
+% 解线性方程组
+% A = rand(30,30);
+A = rand(30,30);
+% ret=ret+ sprintf('sum(A) = %0.5e\n', sum(A(:)));
+ret=ret+ sprintf('sum(A) = %0.5e\n', sum(A(:)));
+% X = rand(30,100);
+X = rand(30,100);
+% ret=ret+ sprintf('sum(X) = %0.5e\n', sum(X(:)));
+ret=ret+ sprintf('sum(X) = %0.5e\n', sum(X(:)));
+% B = A * X;
+B = A * X;
+% ret=ret+ sprintf('sum(B) = %0.5e\n', sum(B(:)));
+ret=ret+ sprintf('sum(B) = %0.5e\n', sum(B(:)));
+% X1 = A \ B;
+X1 = A \ B;
+% ret=ret+ sprintf('sum(X1) = %0.5e\n', sum(X1(:)));
+ret=ret+ sprintf('sum(X1) = %0.5e\n', sum(X1(:)));
+% if norm(X-X1) > 1e-10
+if norm(X-X1) > 1e-10
+    % ret=ret+ sprintf('error: norm(X-X1) = %0.5e\n', norm(X-X1));
+    ret=ret+ sprintf('error: norm(X-X1) = %0.5e\n', norm(X-X1));
+end
+
+% 本征问题
+% A = A + A.';
+A = A + A.';
+% ret=ret+ sprintf('sum(A) = %0.5e\n', sum(A(:)));
+ret=ret+ sprintf('sum(A) = %0.5e\n', sum(A(:)));
+% [V, D] = eig(A);
+[V, D] = eig(A);
+% err = max(max(abs(A*V - V*D)));
+err = max(max(abs(A*V - V*D)));
+% if err > 1e-10
+if err > 1e-10
+    % ret=ret+ sprintf('error: err = %0.5e\n', err);
+    ret=ret+ sprintf('error: err = %0.5e\n', err);
+end
+end
+\end{lstlisting}
+\item 由于生成的 c++ 代码和 m 代码肉眼对应较复杂，建议每行都注释一下，注释会生成到正确的位置
+\item 默认把矩阵乘法直接生成循环
+\item 默认把 block 操作也都生成循环
+\item 线性代数运算如 \verb`\`， 即 \href{https://www.mathworks.com/help/releases/R2024b/matlab/ref/double.mldivide.html}{mldivide}，文档里面有 \textbf{C/C++ Code Generation} 字样的，就是支持直接生成源码，但可能有一些限制。
+\item 从 \verb`namespace` 来看，好些代码应该是直接从 reference lapack 的源码里面摘抄过来的，剥离出来的好处就是不用把整个 lapack 编译成 dll，所以预期编译出来的 exe 体积会非常小
+\begin{lstlisting}[language=matlab]
+// Function Definitions
+namespace coder {
+namespace internal {
+namespace reflapack {
+double xzlarfg(int n, double &alpha1, double x[3])
+\end{lstlisting}
+\item 关于临时变量的优化：例如计算 \verb`A-B`，如果 \verb`A` 不再被使用，那么会直接用循环中用 \verb`A[i] -= B[i]`
 \end{itemize}
