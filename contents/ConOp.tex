@@ -8,7 +8,7 @@
 设 $E,E_1$ 是拓扑线性空间， $A$ 是 $E$ 到 $E_1$ 的\enref{线性连续算子}{TLinO}，$g$ 是 $E_1$ 上的\enref{线性连续泛函}{LinCon}，即 $g\in$ \enref{$ E_1^*$}{ConSpa}，则由映射连续和线性的传递性，$gA$ 是 $E$ 上的线性连续泛函，即 $gA\in E^*$。因此，在线性连续算子 $A$ 的作用下，每一 $E_1$ 上的线性连续泛函 $g\in E_1^*$ 都对应一个泛函 $gA\in E^*$。即得从 $E_1^*$ 到 $E^*$ 的某个算子，这就是所谓的算子 $A$ 的共轭算子。
 
 \begin{definition}{共轭算子}\label{def_ConOp_1}
-设 $A$ 是线性拓扑空间 $E$ 到 $E_1$ 的线性连续算子，则称映射 $E^*\rightarrow  E_1^*:g\mapsto gA$ 为 $A$ 的\textbf{共轭算子}，记作 $A^*$。
+设 $A$ 是线性拓扑空间 $E$ 到 $E_1$ 的线性连续算子，则称映射 $E_1^*\rightarrow  E^*:g\mapsto gA$ 为 $A$ 的\textbf{共轭算子}，记作 $A^*$。
 \end{definition}
 
 \begin{definition}{符号约定}
@@ -36,5 +36,104 @@ A^*g=gA.~
  
 \autoref{eq_ConOp_1} 往往被用作共轭算子的定义。
 
+
+\begin{example}{有限维空间的共轭算子}
+设 $A:\mathbb R^n\rightarrow\mathbb R^m$ 是线性连续算子，则 
+\begin{equation}
+A(E_1 X)=A(E_1)X=E_2 \bar AX.~
+\end{equation}
+其中 $E_1=(e_1,\cdots,e_n)$ 是 $\mathbb R^n$ 的基， $E_2=(e'_1,\cdots,e'_n)$ 是 $\mathbb R^m$ 的基，$X=(x_1,\cdots,x_n)^T$ 是矢量 $E_1X\in\mathbb R^n$ 在基 $E_1$ 下的坐标，$\bar A$ 为算子 $A$ 在两基底下对应的矩阵。设 $f$ 是 $\mathbb R^m$ 上的线性连续泛函，则由共轭算子定义，
+\begin{equation}
+A^*f=fA.~
+\end{equation}
+因此
+\begin{equation}
+\begin{aligned}
+(A^*f)(E_1)X&=A^*f(E_1X)=(fA)(E_1X)\\
+&=f(E_2 \bar AX)=f(E_2)\bar AX
+\end{aligned}.~
+\end{equation}
+从而 $(A^*f)(E_1)=f(E_2)\bar A=\bar A^T f(E_2)^T$，注意 $f(E_2)^T$ 是 $f$ 在 ${\mathbb R^m}^*$ 中的坐标，因此该式表明在 $A^*$ 的作用下，$f$ 的坐标变换由矩阵 $\bar A^T$ 作用，即 $A^*$ 对应的矩阵是 $A$ 矩阵的转置。
+
+\end{example}
+
+
+\subsection{性质}
+
+\begin{theorem}{}
+设 $A,B$ 是连续线性算子，则成立：
+\begin{enumerate}
+\item $A^*$ 是线性的；
+\item $(A+B)^*=A^*+B^*$；
+\item $(\alpha A)^*=\alpha A^*$。
+\end{enumerate}
+
+\end{theorem}
+
+\textbf{证明：}由\autoref{def_ConOp_1} ，
+\begin{equation}
+\begin{aligned}
+A^*(\alpha f+\beta g)&=(\alpha f+\beta g)A\\
+&=\alpha fA+\beta gA\\
+&=\alpha A^*f+\beta A^*g.
+\end{aligned}~
+\end{equation}
+\begin{equation}
+\begin{aligned}
+(A+B)^*(f)&=f(A+B)=fA+fB\\
+&=A^*f+B^*f=(A^*+B^*)f.
+\end{aligned}~
+\end{equation}
+
+\begin{equation}
+\begin{aligned}
+(\alpha A)^*(f)&=f(\alpha A)=\alpha fA=\alpha A^*f.
+\end{aligned}~
+\end{equation}
+其中用到了 $f(\alpha A+\beta B)=\alpha fA+\beta fB$，这是因为
+\begin{equation}
+\begin{aligned}
+f(\alpha A+\beta B)(x)&=f(\alpha A(x)+\beta B(x))\\
+&=\alpha fA(x)+\beta fB(x)\\
+&=(\alpha fA+\beta fB)(x).
+\end{aligned}~
+\end{equation}
+
+\textbf{证毕！}
+
+
+
+\begin{theorem}{}
+若 $A$ 是\enref{\enref{\enref{赋范空间}{NormV}}{banach}}{NormV}之间的有界线性算子，则
+\begin{equation}
+\norm{A^*}=\norm{A}.~
+\end{equation}
+
+\end{theorem}
+
+\textbf{证明：}根据\autoref{the_BoundO_1} 和赋范空间满足第一可数性，可知线性有界算子必定是线性连续算子，因此线性有界算子可以讨论共轭性。根据算子\enref{范数的性质}{ONorm}，
+\begin{equation}\label{eq_ConOp_2}
+\abs{(A^*g,x)}=\abs{(g,Ax)}\leq\norm{g}\cdot\norm{A}\cdot\norm{x}.~
+\end{equation}
+而 
+\begin{equation}
+\norm{A^*g}=\sup_{x\neq0} \frac{\abs{(A^*g,x)}}{\norm{x}}\leq\norm{g}\cdot\norm{A}.~
+\end{equation}
+因此，
+\begin{equation}\label{eq_ConOp_3}
+\frac{\norm{A^*g}}{\norm{g}}\leq\norm{A}\quad\Rightarrow\quad \norm{A^*}=\sup_{g\neq0}\frac{\norm{A^*g}}{\norm{g}}\leq\norm{A}.~
+\end{equation}
+
+设 $x\in E,Ax\neq0$。令 $y_0=\frac{Ax}{\norm{Ax}}\in E_1$。显然，$\norm{y_0}=1$。由\autoref{cor_CNE_1}，存在全空间上的线性连续泛函 $g$，使得 
+\begin{equation}
+\norm{g}=1,(g,y_0)=\norm{y_0}=1.~
+\end{equation}
+即 $(g,Ax)=\norm{Ax}$（由 $y_0$ 的定义）。因此
+\begin{equation}
+\norm{Ax}=(g,Ax)=\abs{(A^*g,x)}\leq\norm{A^*}\cdot\norm{x}.~
+\end{equation}
+和\autoref{eq_ConOp_2} 得到\autoref{eq_ConOp_3} 一样，有 $\norm{A}\leq\norm{A^*}$。从而命题得证。
+
+\textbf{证毕！}
 
 
