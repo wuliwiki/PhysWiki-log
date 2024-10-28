@@ -1,0 +1,61 @@
+% C++ 文件处理笔记
+% license Usr
+% type Note
+
+\begin{lstlisting}[language=cpp]
+#include <iostream>
+#include <filesystem>
+#include <fstream>
+
+namespace fs = std::filesystem;
+
+int main() {
+    // Define a path for a new directory and a file inside it
+    fs::path dirPath = "example_dir";
+    fs::path filePath = dirPath / "example_file.txt";
+
+    // 1. Create a directory
+    if (!fs::exists(dirPath)) {
+        fs::create_directory(dirPath);
+        std::cout << "Directory created: " << dirPath << std::endl;
+    }
+
+    // 2. Create a file and write to it
+    std::ofstream file(filePath);
+    if (file.is_open()) {
+        file << "This is a sample file.\\n";
+        file.close();
+        std::cout << "File created and written to: " << filePath << std::endl;
+    } else {
+        std::cerr << "Failed to create the file!" << std::endl;
+    }
+
+    // 3. Check file properties
+    if (fs::exists(filePath)) {
+        std::cout << "File exists: " << filePath << std::endl;
+        std::cout << "File size: " << fs::file_size(filePath)
+            << " bytes" << std::endl;
+    }
+
+    // 4. Copy the file to a new location
+    fs::path copiedFilePath = dirPath / "copied_file.txt";
+    fs::copy(filePath, copiedFilePath);
+    std::cout << "File copied to: " << copiedFilePath << std::endl;
+
+    // 5. Rename the copied file
+    fs::path renamedFilePath = dirPath / "renamed_file.txt";
+    fs::rename(copiedFilePath, renamedFilePath);
+    std::cout << "File renamed to: " << renamedFilePath << std::endl;
+
+    // 6. Delete the original file
+    fs::remove(filePath);
+    std::cout << "Original file deleted: " << filePath << std::endl;
+
+    // 7. Remove the directory and all contents
+    fs::remove_all(dirPath);
+    std::cout << "Directory and all contents removed: "
+        << dirPath << std::endl;
+
+    return 0;
+}
+\end{lstlisting}

@@ -200,6 +200,47 @@ set_target_properties(MyLibrary PROPERTIES
 set(MyLibrary_FOUND TRUE)
 \end{lstlisting}
 
+\begin{lstlisting}[language=cmake]
+# Minimum CMake version
+cmake_minimum_required(VERSION 3.10)
+
+# Project name
+project(MyLibrary)
+
+# Set the version (optional)
+set(MYLIBRARY_VERSION_MAJOR 1)
+set(MYLIBRARY_VERSION_MINOR 0)
+
+# Define the library target
+add_library(MyLibrary SHARED IMPORTED)
+
+# Specify the directories for header files
+target_include_directories(MyLibrary
+    INTERFACE
+    # Replace with actual path
+    ${CMAKE_CURRENT_SOURCE_DIR}/include
+)
+
+# Link the library files (use separate statements
+#     for different OSes if needed)
+set_target_properties(MyLibrary PROPERTIES
+    # Linux
+    IMPORTED_LOCATION "${CMAKE_CURRENT_SOURCE_DIR}/lib/mylibrary.so"
+    # Windows
+    IMPORTED_IMPLIB "${CMAKE_CURRENT_SOURCE_DIR}/lib/mylibrary.dll"
+)
+
+# Define macros required by the library
+target_compile_definitions(MyLibrary
+    INTERFACE
+    MYLIBRARY_DEFINE_1
+    MYLIBRARY_DEFINE_2=VALUE  # Example with a value
+)
+
+# Export the library target for use in other projects
+export(TARGETS MyLibrary FILE MyLibraryConfig.cmake)
+\end{lstlisting}
+
 \subsection{内置变量}
 \begin{itemize}
 \item \verb`PROJECT_NAME` 是 \verb`project(项目名)` 设置的\verb`项目名`

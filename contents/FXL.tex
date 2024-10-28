@@ -273,3 +273,111 @@ R = \mathbf{p} \cdot \mathbf{\dot{q}} - L(\mathbf{q}, \mathbf{p}, \boldsymbol{\z
 \mathbf{a}_k = \ddot{\mathbf{r}}_k = \frac{d^2 \mathbf{r}_k}{dt^2}~
 \]
 是第 \( k \) 个粒子的加速度，即其位置矢量的二阶时间导数。每个加速度 \( \mathbf{a}_k \) 都用广义加速度 \( \alpha_r \) 表示，同样每个位置 \( \mathbf{r}_k \) 都用广义坐标 \( q_r \) 表示。
+\subsection{经典场论}  
+\subsubsection{拉格朗日场论}  
+广义坐标适用于离散粒子。对于 \( N \) 个标量场 \( \phi_i(r, t) \)（其中 \( i = 1, 2, \dots, N \)），拉格朗日密度是这些场及其空间和时间导数的函数，可能还包括空间和时间坐标本身：
+\[
+\mathcal{L} = \mathcal{L}(\phi_1, \phi_2, \dots, \nabla \phi_1, \nabla \phi_2, \dots, \partial_t \phi_1, \partial_t \phi_2, \dots, \mathbf{r}, t) ~.
+\]
+欧拉-拉格朗日方程在场的情况下有对应的形式：
+\[
+\partial_\mu \left( \frac{\partial \mathcal{L}}{\partial (\partial_\mu \phi_i)} \right) = \frac{\partial \mathcal{L}}{\partial \phi_i} ~,
+\]
+其中 \( \partial_\mu \) 表示四维梯度，并使用了求和约定。对于 \( N \) 个标量场，这些拉格朗日场方程构成了场的 \( N \) 个二阶偏微分方程组，通常是耦合的非线性方程。
+
+此标量场表述可扩展至矢量场、张量场和旋量场。
+
+拉格朗日量为拉格朗日密度的体积分：【12】【16】
+\[
+L = \int_{\mathcal{V}} \mathcal{L} \, dV ~.
+\]
+该表述最初为经典场发展，但适用于所有物理场，包括经典、量子和相对论情形，如牛顿引力、经典电磁学、广义相对论和量子场论。关键在于确定正确的拉格朗日密度以生成正确的场方程。
+\subsubsection{哈密顿场论}  
+与 \( N \) 个标量场 \( \phi_i(r, t) \) 共轭的对应“动量”场密度为：【12】
+\[
+\pi_i(\mathbf{r}, t) = \frac{\partial \mathcal{L}}{\partial \dot{\phi}_i} \,, \quad \dot{\phi}_i \equiv \frac{\partial \phi_i}{\partial t}~
+\]
+在此上下文中，上标点表示偏时间导数，而非总时间导数。哈密顿密度 \( \mathcal{H} \) 类似于力学定义为：
+\[
+\mathcal{H}(\phi_1, \phi_2, \dots, \pi_1, \pi_2, \dots, \mathbf{r}, t) = \sum_{i=1}^N \dot{\phi}_i(\mathbf{r}, t) \pi_i(\mathbf{r}, t) - \mathcal{L} ~.
+\]
+运动方程为：
+\[
+\dot{\phi}_i = +\frac{\delta \mathcal{H}}{\delta \pi_i} \,, \quad \dot{\pi}_i = -\frac{\delta \mathcal{H}}{\delta \phi_i} ~,
+\]
+其中变分导数
+\[
+\frac{\delta}{\delta \phi_i} = \frac{\partial}{\partial \phi_i} - \partial_\mu \frac{\partial}{\partial (\partial_\mu \phi_i)}~
+\]
+必须替代单纯的偏导数。对于 \( N \) 个场，这些哈密顿场方程构成了一组 \( 2N \) 个一阶偏微分方程，通常是耦合且非线性的。
+
+同样，哈密顿密度的体积分为哈密顿量：
+\[
+H = \int_{\mathcal{V}} \mathcal{H} \, dV ~.
+\]
+\subsection{对称性、守恒与诺特定理}  
+\textbf{经典空间和时间中的对称变换}  
+
+每种变换都可以通过一个算符来描述（即作用于位置 \( \mathbf{r} \) 或动量 \( \mathbf{p} \) 变量的函数，以改变它们）。以下是算符不改变 \( \mathbf{r} \) 或 \( \mathbf{p} \) 的情况，即对称性。【11】
+\begin{table}[ht]
+\centering
+\caption{表格}\label{DCX}
+\begin{tabular}{|c|c|c|c|}
+\hline
+\textbf{变换} & \textbf{算符} & \textbf{位置} & \textbf{动量} \\
+\hline
+平移对称性 & \( X(\mathbf{a}) \) & \( \mathbf{r} \to \mathbf{r} + \mathbf{a} \) & \( \mathbf{p} \to \mathbf{p} \) \\
+\hline
+时间平移 & \( U(t_0) \) & \( \mathbf{r}(t) \to \mathbf{r}(t + t_0) \) & \( \mathbf{p}(t) \to \mathbf{p}(t + t_0) \) \\
+\hline
+旋转不变性 & \( R(\hat{\mathbf{n}}, \theta) \) & \( \mathbf{r} \to R(\hat{\mathbf{n}}, \theta) \mathbf{r} \) & \( \mathbf{p} \to R(\hat{\mathbf{n}}, \theta) \mathbf{p} \) \\
+\hline
+伽利略变换 & \( G(\mathbf{v}) \) & \( \mathbf{r} \to \mathbf{r} + \mathbf{v}t \) & \( \mathbf{p} \to \mathbf{p} + m \mathbf{v} \) \\
+\hline
+奇偶性（反演对称） & \( P \) & \( \mathbf{r} \to -\mathbf{r} \) & \( \mathbf{p} \to -\mathbf{p} \) \\
+\hline
+时间反演对称性 & \( T \) & \( \mathbf{r} \to \mathbf{r}(-t) \) & \( \mathbf{p} \to -\mathbf{p}(-t) \) \\
+\hline
+\end{tabular}
+\end{table}
+其中 \( R(\hat{\mathbf{n}}, \theta) \) 是绕由单位向量 \( \hat{\mathbf{n}} \) 定义的轴和角度 \( \theta \) 的旋转矩阵。
+
+\textbf{诺特定理}  
+
+诺特定理指出，作用量的连续对称变换对应于一个守恒定律，即在由参数 \( s \) 参数化的变换下，作用量（以及拉格朗日量）不变：
+\[
+L[q(s, t), \dot{q}(s, t)] = L[q(t), \dot{q}(t)]~
+\]
+拉格朗日量描述了与 \( s \) 无关的相同运动，其中 \( s \) 可以是长度、旋转角度或时间。与 \( q \) 对应的动量将守恒。【5】
+\subsection{参见}  
+\begin{itemize}
+\item 拉格朗日力学  
+\item 哈密顿力学  
+\item 理论力学  
+\item 经典力学  
+\item 哈密顿-雅可比方程  
+\item 哈密顿原理  
+\item 运动学  
+\item 动力学（物理学）  
+\item 非自治力学  
+\item Udwadia–Kalaba 方程【中立性存疑】
+\end{itemize}
+\subsection{参考文献和注释}
+\begin{enumerate}
+\item Lanczos, Cornelius (1970). *The Variational Principles of Mechanics* (4th ed.). New York: Dover Publications Inc. Introduction, pp. xxi–xxix. ISBN 0-486-65067-7.
+\item Lanczos, Cornelius (1970). *The Variational Principles of Mechanics* (4th ed.). New York: Dover Publications Inc. pp. 3–6. ISBN 978-0-486-65067-8.
+\item Synge, J. L. (1960). "Classical Dynamics". In Flügge, S. (ed.). *Principles of Classical Mechanics and Field Theory / Prinzipien der Klassischen Mechanik und Feldtheorie*. *Encyclopedia of Physics / Handbuch der Physik*. Vol. 2 / 3 / 1. Berlin, Heidelberg: Springer Berlin Heidelberg. doi:10.1007/978-3-642-45943-6. ISBN 978-3-540-02547-4. OCLC 165699220.
+\item Kibble, Tom, and Berkshire, Frank H. *Classical Mechanics* (5th Edition). Singapore: World Scientific Publishing Company, 2004.
+\item Analytical Mechanics*, L.N. Hand, J.D. Finch, Cambridge University Press, 2008, ISBN 978-0-521-57572-0
+\item Torby, Bruce (1984). "Energy Methods". *Advanced Dynamics for Engineers*. HRW Series in Mechanical Engineering. United States of America: CBS College Publishing. ISBN 0-03-063366-4.
+\item McGraw Hill Encyclopaedia of Physics* (2nd Edition), C.B. Parker, 1994, ISBN 0-07-051400-3
+\item Classical Mechanics*, T.W.B. Kibble, European Physics Series, McGraw-Hill (UK), 1973, ISBN 0-07-084018-0
+\item Penrose, R. (2007). *The Road to Reality*. Vintage Books. p. 474. ISBN 978-0-679-77631-4.
+\item Encyclopaedia of Physics* (2nd Edition), R.G. Lerner, G.L. Trigg, VHC Publishers, 1991, ISBN (Verlagsgesellschaft) 3-527-26954-1, ISBN (VHC Inc.) 0-89573-752-3
+\item \textbf{量子力学}，E. Abers，Pearson Ed.，Addison Wesley，Prentice Hall Inc，2004，ISBN 978-0-13-146100-0  
+\item \textbf{量子场论}，D. McMahon，McGraw Hill（美国），2008，ISBN 978-0-07-154382-8  
+\item \textbf{相对论、引力与宇宙学}，R.J.A. Lambourne，开放大学，剑桥大学出版社，2010，ISBN 978-0-521-13138-4  
+\item Arnolʹd, V.I. (1989). \textbf{经典力学的数学方法} (第2版). Springer. 第8章. ISBN 978-0-387-96890-2.  
+\item Doran, C.; Lasenby, A. (2003). \textbf{物理学家的几何代数}. 剑桥大学出版社. §12.3，页432–439. ISBN 978-0-521-71595-9.  
+\item \textbf{引力}，J.A. Wheeler，C. Misner，K.S. Thorne，W.H. Freeman & Co，1973，ISBN 0-7167-0344-0
+\end{enumerate}
