@@ -198,3 +198,341 @@ f(a, b, c) = f(a, b)~
 \[
 \frac{\partial f(a, b, c)}{\partial c} = 0~
 \]
+\textbf{证明}
+
+从具有 \( n \) 个自由度系统的哈密顿量、广义动量和拉格朗日量的定义开始：
+\[
+\mathcal{H} = \sum_{i=1}^{n} \left( p_{i} \dot{q}_{i} \right) - \mathcal{L}(\boldsymbol{q}, \boldsymbol{\dot{q}}, t)~
+\]
+广义动量的定义为：
+\[
+p_{i}(\boldsymbol{q}, \boldsymbol{\dot{q}}, t) = \frac{\partial \mathcal{L}(\boldsymbol{q}, \boldsymbol{\dot{q}}, t)}{\partial \dot{q}_{i}}~
+\]
+拉格朗日量表示为：
+\[
+\mathcal{L}(\boldsymbol{q}, \boldsymbol{\dot{q}}, t) = T(\boldsymbol{q}, \boldsymbol{\dot{q}}, t) - V(\boldsymbol{q}, \boldsymbol{\dot{q}}, t)~
+\]
+其中 \( T \) 是系统的动能，\( V \) 是势能。
+
+将广义动量代入哈密顿量得到：
+\[
+\mathcal{H} = \sum_{i=1}^{n} \left( \frac{\partial \mathcal{L}(\boldsymbol{q}, \boldsymbol{\dot{q}}, t)}{\partial \dot{q}_{i}} \dot{q}_{i} \right) - \mathcal{L}(\boldsymbol{q}, \boldsymbol{\dot{q}}, t)~
+\]
+将拉格朗日量代入结果得到：
+\[
+\mathcal{H} = \sum_{i=1}^{n} \left( \frac{\partial \left(T(\boldsymbol{q}, \boldsymbol{\dot{q}}, t) - V(\boldsymbol{q}, \boldsymbol{\dot{q}}, t)\right)}{\partial \dot{q}_{i}} \dot{q}_{i} \right) - \left(T(\boldsymbol{q}, \boldsymbol{\dot{q}}, t) - V(\boldsymbol{q}, \boldsymbol{\dot{q}}, t)\right)~
+\]
+\[
+= \sum_{i=1}^{n} \left( \frac{\partial T(\boldsymbol{q}, \boldsymbol{\dot{q}}, t)}{\partial \dot{q}_{i}} \dot{q}_{i} - \frac{\partial V(\boldsymbol{q}, \boldsymbol{\dot{q}}, t)}{\partial \dot{q}_{i}} \dot{q}_{i} \right) - T(\boldsymbol{q}, \boldsymbol{\dot{q}}, t) + V(\boldsymbol{q}, \boldsymbol{\dot{q}}, t)~
+\]
+现在假设：
+\[
+\frac{\partial V(\boldsymbol{q}, \boldsymbol{\dot{q}}, t)}{\partial \dot{q}_{i}} = 0, \quad \forall i~
+\]
+并且假设：
+\[
+\frac{\partial T(\boldsymbol{q}, \boldsymbol{\dot{q}}, t)}{\partial t} = 0~
+\]
+应用这些假设得到：
+\begin{equation}
+\begin{aligned}
+\mathcal{H} &= \sum_{i=1}^{n} \left( \frac{\partial T(\boldsymbol{q}, \boldsymbol{\dot{q}})}{\partial \dot{q}_{i}} \dot{q}_{i} - \frac{\partial V(\boldsymbol{q}, t)}{\partial \dot{q}_{i}} \dot{q}_{i} \right) - T(\boldsymbol{q}, \boldsymbol{\dot{q}}) + V(\boldsymbol{q}, t)\\
+&= \sum_{i=1}^{n} \left( \frac{\partial T(\boldsymbol{q}, \boldsymbol{\dot{q}})}{\partial \dot{q}_{i}} \dot{q}_{i} \right) - T(\boldsymbol{q}, \boldsymbol{\dot{q}}) + V(\boldsymbol{q}, t)
+\end{aligned}~
+\end{equation}
+接下来假设 \( T \) 的形式为：
+\[
+T(\boldsymbol{q}, \boldsymbol{\dot{q}}) = \sum_{i=1}^{n} \sum_{j=1}^{n} \left( c_{ij}(\boldsymbol{q}) \dot{q}_{i} \dot{q}_{j} \right)~
+\]
+其中每个 \( c_{ij}(\boldsymbol{q}) \) 是关于 \( \boldsymbol{q} \) 的任意标量函数。
+
+对 \( \dot{q}_{l} \) 求导，其中 \( l \in [1, n] \)，得到：
+\begin{equation}
+\begin{aligned}
+\frac{\partial T(\boldsymbol{q}, \boldsymbol{\dot{q}})}{\partial \dot{q}_{l}} &= \sum_{i=1}^{n} \sum_{j=1}^{n} \left( \frac{\partial \left[ c_{ij}(\boldsymbol{q}) \dot{q}_{i} \dot{q}_{j} \right]}{\partial \dot{q}_{l}} \right)\\ 
+&= \sum_{i=1}^{n} \sum_{j=1}^{n} \left( c_{ij}(\boldsymbol{q}) \frac{\partial \left[ \dot{q}_{i} \dot{q}_{j} \right]}{\partial \dot{q}_{l}} \right)
+\end{aligned}~
+\end{equation}
+将求和拆分、计算偏导数并重新组合求和，得到：
+\begin{equation}
+\begin{aligned}
+\frac{\partial T(\boldsymbol{q}, \boldsymbol{\dot{q}})}{\partial \dot{q}_{l}} 
+&= \sum_{i \neq l}^{n} \sum_{j \neq l}^{n} \left( c_{ij}(\boldsymbol{q}) \frac{\partial \left[\dot{q}_{i} \dot{q}_{j}\right]}{\partial \dot{q}_{l}} \right) + \sum_{i \neq l}^{n} \left( c_{il}(\boldsymbol{q}) \frac{\partial \left[\dot{q}_{i} \dot{q}_{l}\right]}{\partial \dot{q}_{l}} \right) + \sum_{j \neq l}^{n} \left( c_{lj}(\boldsymbol{q}) \frac{\partial \left[\dot{q}_{l} \dot{q}_{j}\right]}{\partial \dot{q}_{l}} \right) + c_{ll}(\boldsymbol{q}) \frac{\partial \left[\dot{q}_{l}^{2}\right]}{\partial \dot{q}_{l}}\\
+&= \sum_{i \neq l}^{n} \sum_{j \neq l}^{n} (0) + \sum_{i \neq l}^{n} \left( c_{il}(\boldsymbol{q}) \dot{q}_{i} \right) + \sum_{j \neq l}^{n} \left( c_{lj}(\boldsymbol{q}) \dot{q}_{j} \right) + 2c_{ll}(\boldsymbol{q}) \dot{q}_{l}\\
+&= \sum_{i=1}^{n} \left( c_{il}(\boldsymbol{q}) \dot{q}_{i} \right) + \sum_{j=1}^{n} \left( c_{lj}(\boldsymbol{q}) \dot{q}_{j} \right)
+\end{aligned}~
+\end{equation}
+
+将上述结果乘以 \(\dot{q}_{l}\) 并对 \(l\) 求和，得到：
+\begin{equation}
+\begin{aligned}
+\sum_{l=1}^{n} \left( \frac{\partial T(\boldsymbol{q}, \boldsymbol{\dot{q}})}{\partial \dot{q}_{l}} \dot{q}_{l} \right) &= \sum_{l=1}^{n} \left( \left( \sum_{i=1}^{n} \left( c_{il}(\boldsymbol{q}) \dot{q}_{i} \right) + \sum_{j=1}^{n} \left( c_{lj}(\boldsymbol{q}) \dot{q}_{j} \right) \right) \dot{q}_{l} \right)\\
+&= \sum_{l=1}^{n} \sum_{i=1}^{n} \left( c_{il}(\boldsymbol{q}) \dot{q}_{i} \dot{q}_{l} \right) + \sum_{l=1}^{n} \sum_{j=1}^{n} \left( c_{lj}(\boldsymbol{q}) \dot{q}_{j} \dot{q}_{l} \right)\\
+&= \sum_{i=1}^{n} \sum_{l=1}^{n} \left( c_{il}(\boldsymbol{q}) \dot{q}_{i} \dot{q}_{l} \right) + \sum_{l=1}^{n} \sum_{j=1}^{n} \left( c_{lj}(\boldsymbol{q}) \dot{q}_{l} \dot{q}_{j} \right)\\
+&= T(\boldsymbol{q}, \boldsymbol{\dot{q}}) + T(\boldsymbol{q}, \boldsymbol{\dot{q}})\\
+&= 2T(\boldsymbol{q}, \boldsymbol{\dot{q}})
+\end{aligned}~
+\end{equation}
+这个简化是欧拉齐次函数定理的结果。
+
+因此，哈密顿量变为
+
+\begin{equation}
+\begin{aligned}
+{\mathcal {H}} &= \sum_{i=1}^{n} \left( \frac{\partial T(\boldsymbol{q}, \boldsymbol{\dot{q}})}{\partial \dot{q}_{i}} \dot{q}_{i} \right) - T(\boldsymbol{q}, \boldsymbol{\dot{q}}) + V(\boldsymbol{q}, t) \\
+&= 2T(\boldsymbol{q}, \boldsymbol{\dot{q}}) - T(\boldsymbol{q}, \boldsymbol{\dot{q}}) + V(\boldsymbol{q}, t)\\
+&= T(\boldsymbol{q}, \boldsymbol{\dot{q}}) + V(\boldsymbol{q}, t)
+\end{aligned}~
+\end{equation}
+\subsubsection{在质点系统中的应用}
+对于质点系统，广义速度的平方项满足于 \( T(\mathbf{q}, \mathbf{\dot{q}}, t) = T(\mathbf{q}, \mathbf{\dot{q}}) \) 的情况，这也是 \( \mathcal{H} = T + V \) 成立的一个必要条件。
+
+\textbf{证明}
+
+考虑一个由 \( N \) 个点质量构成的系统的动能。如果假设 \( T(\boldsymbol{q}, \boldsymbol{\dot{q}}, t) = T(\boldsymbol{q}, \boldsymbol{\dot{q}}) \)，则可以证明 \( \dot{\mathbf{r}}_k(\boldsymbol{q}, \boldsymbol{\dot{q}}, t) = \dot{\mathbf{r}}_k(\boldsymbol{q}, \boldsymbol{\dot{q}}) \)（参见 Scleronomous 的应用部分）。因此，动能可以表示为
+
+\[
+T(\boldsymbol{q}, \boldsymbol{\dot{q}}) = \frac{1}{2} \sum_{k=1}^{N} \left( m_k \dot{\mathbf{r}}_k(\boldsymbol{q}, \boldsymbol{\dot{q}}) \cdot \dot{\mathbf{r}}_k(\boldsymbol{q}, \boldsymbol{\dot{q}}) \right)~
+\]
+
+对于多变量的链式法则，可以用来展开速度：
+
+\begin{equation}
+\begin{aligned}
+\dot{\mathbf{r}}_k(\boldsymbol{q}, \boldsymbol{\dot{q}}) &= \frac{d\mathbf{r}_k(\boldsymbol{q})}{dt}\\ 
+&= \sum_{i=1}^{n} \left( \frac{\partial \mathbf{r}_k(\boldsymbol{q})}{\partial q_i} \dot{q}_i \right)
+\end{aligned}~
+\end{equation}
+结果为
+\begin{equation}
+\begin{aligned}
+T(\boldsymbol{q}, \boldsymbol{\dot{q}}) &= \frac{1}{2} \sum_{k=1}^{N} \left( m_k \left( \sum_{i=1}^{n} \left( \frac{\partial \mathbf{r}_k(\boldsymbol{q})}{\partial q_i} \dot{q}_i \right) \cdot \sum_{j=1}^{n} \left( \frac{\partial \mathbf{r}_k(\boldsymbol{q})}{\partial q_j} \dot{q}_j \right) \right) \right)\\
+&= \sum_{k=1}^{N} \sum_{i=1}^{n} \sum_{j=1}^{n} \left( \frac{1}{2} m_k \frac{\partial \mathbf{r}_k(\boldsymbol{q})}{\partial q_i} \cdot \frac{\partial \mathbf{r}_k(\boldsymbol{q})}{\partial q_j} \dot{q}_i \dot{q}_j \right)\\
+&= \sum_{i=1}^{n} \sum_{j=1}^{n} \left( \sum_{k=1}^{N} \left( \frac{1}{2} m_k \frac{\partial \mathbf{r}_k(\boldsymbol{q})}{\partial q_i} \cdot \frac{\partial \mathbf{r}_k(\boldsymbol{q})}{\partial q_j} \right) \dot{q}_i \dot{q}_j \right)\\
+&= \sum_{i=1}^{n} \sum_{j=1}^{n} \left( c_{ij}(\boldsymbol{q}) \dot{q}_i \dot{q}_j \right)
+\end{aligned}~
+\end{equation} 
+此形式符合要求。 
+\subsubsection{能量守恒}
+如果满足 \( \mathcal{H} = T + V \) 的条件，则哈密顿量的守恒意味着能量守恒。这要求额外满足条件，即势能 \( V \) 不包含时间作为显式变量。
+\[
+\frac{\partial V(\boldsymbol{q}, \boldsymbol{\dot{q}}, t)}{\partial t} = 0~
+\]
+在扩展的欧拉-拉格朗日方程形式下（参见拉格朗日力学 § 包含非保守力的扩展），瑞利耗散函数表示由于自然原因产生的能量耗散。因此，当 \( R \neq 0 \) 时，能量不再守恒。这与速度相关的势能相似。
+
+总结而言，对于非相对论系统满足 \( \mathcal{H} = T + V = \text{时间常数} \) 的要求是：
+\begin{enumerate}
+\item \( V = V(\boldsymbol{q}) \)
+\item \( T = T(\boldsymbol{q}, \boldsymbol{\dot{q}}) \)
+\item \( T \) 是 \( \boldsymbol{\dot{q}} \) 的齐次二次函数。
+\end{enumerate}
+\subsection{带电粒子在电磁场中的哈密顿量}
+带电粒子在电磁场中的哈密顿力学的一个足够的例子是带电粒子的哈密顿量。在笛卡尔坐标系下，非相对论经典粒子在电磁场中的拉格朗日函数（采用 SI 单位）为：
+\[
+\mathcal{L} = \sum_{i} \frac{1}{2} m \dot{x}_i^2 + \sum_{i} q \dot{x}_i A_i - q \varphi,~
+\]
+其中 \( q \) 是粒子的电荷，\( \varphi \) 是电标势，而 \( A_i \) 是磁矢势的分量，可能显式地依赖于 \( x_i \) 和 \( t \)。
+
+该拉格朗日函数结合欧拉-拉格朗日方程得出洛伦兹力定律：
+\[
+m \ddot{\mathbf{x}} = q \mathbf{E} + q \dot{\mathbf{x}} \times \mathbf{B} ~,
+\]
+被称为最小耦合。
+
+正则动量由以下公式给出：
+\[
+p_i = \frac{\partial \mathcal{L}}{\partial \dot{x}_i} = m \dot{x}_i + q A_i.~
+\]
+哈密顿量作为拉格朗日函数的勒让德变换，因此为：
+\[
+\mathcal{H} = \sum_{i} \dot{x}_i p_i - \mathcal{L} = \sum_{i} \frac{\left( p_i - q A_i \right)^2}{2m} + q \varphi.~
+\]
+该方程在量子力学中经常使用。
+
+在规范变换下：
+\[
+\mathbf{A} \rightarrow \mathbf{A} + \nabla f \,, \quad \varphi \rightarrow \varphi - \dot{f},~
+\]
+其中 \( f(\mathbf{r}, t) \) 是空间和时间的任意标量函数。上述的拉格朗日函数、正则动量和哈密顿量变换如下：
+\[
+L \rightarrow L' = L + q \frac{df}{dt} \,, \quad \mathbf{p} \rightarrow \mathbf{p}' = \mathbf{p} + q \nabla f \,, \quad H \rightarrow H' = H - q \frac{\partial f}{\partial t} ,~
+\]
+这仍然会产生相同的哈密顿方程：
+\begin{equation}
+\begin{aligned}
+\left. \frac{\partial H'}{\partial {x_i}} \right|_{p'_i} &= \left. \frac{\partial}{\partial {x_i}} \right|_{p'_i} ({\dot{x}}_i p'_i - L') = - \left. \frac{\partial L'}{\partial {x_i}} \right|_{p'_i}\\
+&= - \left. \frac{\partial L}{\partial {x_i}} \right|_{p'_i} - q \left. \frac{\partial}{\partial {x_i}} \right|_{p'_i} \frac{df}{dt} \\
+&= - \frac{d}{dt} \left( \left. \frac{\partial L}{\partial {\dot{x}_i}} \right|_{p'_i} + q \left. \frac{\partial f}{\partial {x_i}} \right|_{p'_i} \right)\\ 
+&= - \dot{p}'_i
+\end{aligned}~
+\end{equation} 
+
+在量子力学中，波函数在规范变换过程中也会经历一个局部 \( U(1) \) 群变换，这意味着所有物理结果必须在局部 \( U(1) \) 变换下保持不变。 
+\subsubsection{在电磁场中的相对论性带电粒子}
+带电粒子（静止质量为 \( m \) ，电荷为 \( q \)）的相对论拉格朗日函数为：
+\[
+\mathcal{L}(t) = -mc^2 \sqrt{1 - \frac{\dot{\mathbf{x}}(t)^2}{c^2}} + q \dot{\mathbf{x}}(t) \cdot \mathbf{A}(\mathbf{x}(t), t) - q \varphi(\mathbf{x}(t), t)~
+\]
+因此，粒子的正则动量为
+\[
+\mathbf{p}(t) = \frac{\partial \mathcal{L}}{\partial \dot{\mathbf{x}}} = \frac{m \dot{\mathbf{x}}}{\sqrt{1 - \frac{\dot{\mathbf{x}}^2}{c^2}}} + q \mathbf{A}~
+\]
+也就是说，它是动量和势动量的总和。
+
+求解速度，得到
+\[
+\dot{\mathbf{x}}(t) = \frac{\mathbf{p} - q \mathbf{A}}{\sqrt{m^2 + \frac{1}{c^2} (\mathbf{p} - q \mathbf{A})^2}}~
+\]
+因此，哈密顿量为
+\[
+\mathcal{H}(t) = \dot{\mathbf{x}} \cdot \mathbf{p} - \mathcal{L} = c \sqrt{m^2 c^2 + (\mathbf{p} - q \mathbf{A})^2} + q \varphi~
+\]
+这导致力方程（等同于欧拉-拉格朗日方程）
+\[
+\dot{\mathbf{p}} = -\frac{\partial \mathcal{H}}{\partial \mathbf{x}} = q \dot{\mathbf{x}} \cdot (\nabla \mathbf{A}) - q \nabla \varphi = q \nabla (\dot{\mathbf{x}} \cdot \mathbf{A}) - q \nabla \varphi~
+\]
+由此可以推导出 
+\begin{equation}
+\begin{aligned}
+\frac{d}{dt} \left( \frac{m \dot{\mathbf{x}}}{\sqrt{1 - \frac{\dot{\mathbf{x}}^2}{c^2}}} \right) &= \frac{d}{dt} (\mathbf{p} - q \mathbf{A}) = \dot{\mathbf{p}} - q \frac{\partial \mathbf{A}}{\partial t} - q (\dot{\mathbf{x}} \cdot \nabla) \mathbf{A}\\
+&= q \nabla (\dot{\mathbf{x}} \cdot \mathbf{A}) - q \nabla \varphi - q \frac{\partial \mathbf{A}}{\partial t} - q (\dot{\mathbf{x}} \cdot \nabla) \mathbf{A}\\
+&= q \mathbf{E} + q \dot{\mathbf{x}} \times \mathbf{B}
+\end{aligned}~
+\end{equation} 
+
+上述推导使用了矢量运算的恒等式：
+\[
+\frac{1}{2} \nabla (\mathbf{A} \cdot \mathbf{A}) = \mathbf{A} \cdot \mathbf{J}_{\mathbf{A}} = \mathbf{A} \cdot (\nabla \mathbf{A}) = (\mathbf{A} \cdot \nabla) \mathbf{A} + \mathbf{A} \times (\nabla \times \mathbf{A}).~
+\]
+哈密顿量的等价表达式（作为相对论动量 \( \mathbf{P} = \gamma m \dot{\mathbf{x}}(t) = \mathbf{p} - q \mathbf{A} \) 的函数）为：
+\[
+\mathcal{H}(t) = \dot{\mathbf{x}}(t) \cdot \mathbf{P}(t) + \frac{mc^2}{\gamma} + q \varphi(\mathbf{x}(t), t) = \gamma mc^2 + q \varphi(\mathbf{x}(t), t) = E + V~
+\]
+这样表达的优势在于动量 \( \mathbf{P} \) 可以通过实验测量，而正则动量 \( \mathbf{p} \) 则不能。请注意，哈密顿量（总能量）可以视为相对论能量（动能+静能）\( E = \gamma mc^2 \) 与势能 \( V = q \varphi \) 的总和。
+\subsection{从辛几何到哈密顿方程}
+\subsubsection{哈密顿系统的几何结构}
+哈密顿量可以在一个光滑的偶数维流形 \( M_{2n} \) 上诱导出一种辛结构，有几种等价的方法，最著名的如下：
+
+作为一个闭合的非退化辛 2-形式 \( \omega \)。根据达布定理，在流形 \( M \) 上的任意一点的一个小邻域内，存在适当的局部坐标 \( p_{1}, \cdots, p_{n}, q_{1}, \cdots, q_{n} \)（正则坐标或辛坐标），使得辛形式变为：
+\[
+\omega = \sum_{i=1}^{n} dp_{i} \wedge dq_{i} \,.~
+\]
+形式 \( \omega \) 诱导了切空间与余切空间的自然同构：\( T_x M \cong T_x^* M \)。这是通过将一个向量 \( \xi \in T_x M \) 映射到一个 1-形式 \( \omega_\xi \in T_x^* M \)，其中对所有 \( \eta \in T_x M \)，有 \( \omega_\xi(\eta) = \omega(\eta, \xi) \)。由于 \( \omega \) 的双线性和非退化性以及 \( \dim T_x M = \dim T_x^* M \)，映射 \( \xi \to \omega_\xi \) 确实是一个线性同构。这个同构是自然的，即它在 \( M \) 上的坐标变换下不变。对于所有 \( x \in M \)，重复这一过程，我们得到一个从平滑向量场空间到平滑 1-形式空间的同构 \( J^{-1}: \text{Vect}(M) \to \Omega^1(M) \)。对于任意 \( f, g \in C^{\infty}(M, \mathbb{R}) \) 和 \( \xi, \eta \in \text{Vect}(M) \)，
+\[
+J^{-1}(f \xi + g \eta) = f J^{-1}(\xi) + g J^{-1}(\eta).~
+\]
+（用代数术语来说，这表明 \( C^{\infty}(M, \mathbb{R}) \)-模 \( \text{Vect}(M) \) 和 \( \Omega^1(M) \) 是同构的。）如果 \( H \in C^{\infty}(M \times \mathbb{R}_t, \mathbb{R}) \)，则对任意固定的 \( t \in \mathbb{R}_t \)，有 \( dH \in \Omega^1(M) \)，且 \( J(dH) \in \text{Vect}(M) \)。\( J(dH) \) 称为哈密顿向量场。对应的微分方程
+\[
+\dot{x} = J(dH)(x)~
+\]
+称为哈密顿方程。这里 \( x = x(t) \)，\( J(dH)(x) \in T_x M \) 是在 \( x \in M \) 处向量场 \( J(dH) \) 的（时间相关的）值。
+
+哈密顿系统可以理解为一个时间 \( \mathbb{R} \) 上的纤维丛 \( E \)，其中纤维 \( E_t \) 是在时间 \( t \in \mathbb{R} \) 处的位置空间。因此，拉格朗日函数是定义在 \( E \) 上的射丛 \( J \) 上的一个函数；对拉格朗日函数进行纤维方向的勒让德变换生成一个时间上的对偶丛上的函数，其在 \( t \) 处的纤维是余切空间 \( T^* E_t \)，配备了一个自然的辛形式，这后一函数即为哈密顿量。拉格朗日力学和哈密顿力学之间的对应关系通过自明的 1-形式实现。
+
+任何在辛流形上的光滑实值函数 \( H \) 都可以用于定义一个哈密顿系统。该函数 \( H \) 称为“哈密顿量”或“能量函数”。此时，辛流形称为相空间。哈密顿量在辛流形上诱导一个特殊的向量场，称为哈密顿向量场。
+
+哈密顿向量场在流形上诱导一个哈密顿流。这是一个关于流形的单参数变换族（曲线的参数通常称为“时间”）；换句话说，它是以恒等变换为起点的一个辛同胚的同伦。根据刘维尔定理，每个辛同胚保持相空间上的体积形式。由哈密顿流诱导的这些辛同胚的集合通常称为哈密顿系统的“哈密顿力学”。
+
+辛结构诱导了一个泊松括号。泊松括号赋予流形上函数空间一个李代数的结构。
+
+如果 \( F \) 和 \( G \) 是 \( M \) 上的光滑函数，那么光滑函数 \( \omega(J(dF), J(dG)) \) 被适当地定义为函数 \( F \) 和 \( G \) 的泊松括号，记作 \( \{F, G\} \)。泊松括号具有以下性质：
+\begin{enumerate}
+\item 双线性
+\item 反对称性
+\item 莱布尼兹规则：\(\{F_1 \cdot F_2, G\} = F_1 \{F_2, G\} + F_2 \{F_1, G\}\)
+\item 雅可比恒等式：\(\{\{H, F\}, G\} + \{\{F, G\}, H\} + \{\{G, H\}, F\} \equiv 0\)
+\item 非退化性：如果 \( M \) 上的点 \( x \) 对 \( F \) 不是临界点，则存在一个光滑函数 \( G \)，使得 \( \{F, G\}(x) \neq 0 \)。
+\end{enumerate}
+给定一个函数 \( f \)，
+\[
+\frac{d}{dt} f = \frac{\partial}{\partial t} f + \{f, \mathcal{H}\},~
+\]
+如果存在一个概率分布 \( \rho \)，那么（由于相空间速度 \( (\dot{p}_i, \dot{q}_i) \) 的散度为零且概率守恒），其对流导数可以证明为零，因此
+\[
+\frac{\partial}{\partial t} \rho = -\{\rho, \mathcal{H}\}~
+\]
+这被称为刘维尔定理。辛流形上的每一个光滑函数 \( G \) 都生成一个单参数辛同胚族，如果 \( \{G, H\} = 0 \)，则 \( G \) 是守恒的，这些辛同胚是对称变换。
+
+一个哈密顿量可能具有多个守恒量 \( G_i \)。如果辛流形的维数为 \( 2n \)，且存在 \( n \) 个函数独立且彼此交换的守恒量 \( G_i \)（即 \( \{G_i, G_j\} = 0 \)），则该哈密顿量是刘维尔可积的。刘维尔-阿诺德定理指出，局部上，任何刘维尔可积的哈密顿量可以通过一个辛同胚变换为一个新的哈密顿量，其中守恒量 \( G_i \) 成为坐标；这些新坐标称为作用–角坐标。变换后的哈密顿量仅依赖于 \( G_i \)，因此运动方程形式简化为
+\[
+\dot{G}_i = 0, \quad \dot{\varphi}_i = F_i(G)~
+\]
+对于某些函数 \( F \)【9】。有一个完整的研究领域专注于由KAM定理描述的可积系统的微小偏离。
+
+哈密顿向量场的可积性是一个未解决的问题。一般而言，哈密顿系统是混沌的；测度、完备性、可积性和稳定性的概念定义不明确。 
+\subsubsection{黎曼流形}
+一个重要的特例是二次型的哈密顿量，即可以表示为
+\[
+\mathcal{H}(q, p) = \frac{1}{2} \langle p, p \rangle_q~
+\]
+其中 \( \langle , \rangle_q \) 是纤维 \( T^*_q Q \) 上平滑变化的内积，即构型空间中点 \( q \) 的余切空间，有时称为共度量。这种哈密顿量完全由动能项组成。
+
+如果考虑一个黎曼流形或伪黎曼流形，黎曼度量在切丛和余切丛之间引入了一个线性同构。（参见 Musical isomorphism）。利用这个同构，可以定义一个共度量。（在坐标中，定义共度量的矩阵是定义度量的矩阵的逆矩阵。）这种哈密顿量的哈密顿-雅可比方程的解与流形上的测地线相同。特别地，在这种情况下，哈密顿流就是测地流。有关此类解的存在性及其解集的完备性，在测地线上有详细讨论。另请参见测地线作为哈密顿流。 
+\subsubsection{次黎曼流形}
+当共度量是退化的时，它不可逆。在这种情况下，由于没有度量，便没有黎曼流形。然而，哈密顿量仍然存在。如果在构型空间流形 \( Q \) 的每个点 \( q \) 上共度量都是退化的，使得共度量的秩小于流形 \( Q \) 的维数，则称其为次黎曼流形。
+
+在这种情况下的哈密顿量称为次黎曼哈密顿量。每个这样的哈密顿量唯一地决定了共度量，反之亦然。这意味着每个次黎曼流形都由其次黎曼哈密顿量唯一确定，反之亦然：每个次黎曼流形都有一个唯一的次黎曼哈密顿量。根据 Chow–Rashevskii 定理，次黎曼测地线的存在性得以保证。
+
+连续实值的海森堡群提供了一个次黎曼流形的简单例子。对于海森堡群，哈密顿量为
+\[
+\mathcal{H}(x, y, z, p_x, p_y, p_z) = \frac{1}{2} (p_x^2 + p_y^2).~
+\]
+其中 \( p_z \) 不参与哈密顿量。
+\subsubsection{泊松代数}
+哈密顿系统可以通过多种方式进行推广。除了仅仅研究辛流形上的光滑函数代数外，哈密顿力学还可以在一般的交换幺半实泊松代数上进行表述。一个状态是泊松代数上的一个连续线性泛函（配备适当的拓扑），使得对于代数中的任意元素 \( A \)，\( A^2 \) 映射到一个非负实数。
+
+进一步的推广是南部动力学。
+\subsubsection{通过泊松括号向量子力学的推广}
+以上的哈密顿方程在经典力学中运作良好，但在量子力学中却不适用，因为这些微分方程假设可以在任意时刻同时精确地指定粒子的位置和动量。然而，这些方程可以进一步推广，使其不仅适用于经典力学，还适用于量子力学，通过将 \( p \) 和 \( q \) 上的泊松代数变形为莫oyal括号代数来实现。
+
+更一般形式的哈密顿方程为
+\[
+\frac{d f}{d t} = \{f, \mathcal{H}\} + \frac{\partial f}{\partial t},~
+\]
+其中 \( f \) 是 \( p \) 和 \( q \) 的某个函数，\( H \) 是哈密顿量。要了解评估泊松括号的规则而不借助微分方程，请参见李代数；泊松括号是泊松代数中的李括号的名称。然后可以将这些泊松括号扩展为与非等价李代数相符合的莫oyal括号，这一点由 Hilbrand J. Groenewold 证明，从而描述相空间中的量子力学扩散（参见相空间表述和 Wigner–Weyl 变换）。这种更代数化的方法不仅最终允许将相空间中的概率分布扩展到 Wigner 准概率分布，而且在纯泊松括号的经典设置中，也更有助于分析系统中的相关守恒量。
+\subsection{另见}
+\begin{itemize}
+\item 正则变换
+\item 经典场论
+\item 哈密顿场论
+\item 哈密顿光学-力学类比
+\item 协变哈密顿场论
+\item 经典力学
+\item 动力系统理论
+\item 哈密顿系统
+\item 哈密顿-雅可比方程
+\item 哈密顿-雅可比-爱因斯坦方程
+\item 拉格朗日力学
+\item 麦克斯韦方程
+\item 哈密顿量（量子力学）
+\item 量子哈密顿方程
+\item 量子场论
+\item 哈密顿光学
+\item De Donder–Weyl 理论
+\item 几何力学
+\item Routhian 力学
+\item 南部力学
+\item 哈密顿流体力学
+\item 哈密顿向量场
+\end{itemize}
+\subsection{参考文献}
+\begin{enumerate}
+\item Hamilton, William Rowan, Sir (1833). *On a general method of expressing the paths of light, & of the planets, by the coefficients of a characteristic function.* Printed by P.D. Hardy. OCLC 68159539.
+\item Landau & Lifshitz 1976, 第33–34页
+\item 该推导参考了 Arnol'd 1989, 第65–66页
+\item Goldstein, Poole & Safko 2002, 第347–349页
+\item Malham 2016, 第49–50页
+\item Landau & Lifshitz 1976, 第14页
+\item Zinn-Justin, Jean; Guida, Riccardo (2008-12-04). "Gauge invariance". \textbf{Scholarpedia.} 3 (12): 8287. Bibcode:2008SchpJ...3.8287Z. doi:10.4249/scholarpedia.8287. ISSN 1941-6016.
+\item Arnol'd, Kozlov & Neĩshtadt 1988, §3. \textbf{Hamiltonian mechanics.}
+\item Arnol'd, Kozlov & Neĩshtadt 1988.
+\end{enumerate}.
+\subsection{延伸阅读}
+\begin{itemize}
+\item Landau, Lev Davidovich；Lifshitz, Evgenii Mikhailovich（1976）。*力学*。《理论物理学教程》。第1卷。Sykes, J. B.（John Bradbury），Bell, J. S.（第3版）。牛津。ISBN 0-08-021022-8。OCLC 2591126。
+\item Abraham, R.; Marsden, J.E.（1978）。*力学的基础*（第2版，修订、扩展版）。马萨诸塞州雷丁：Benjamin/Cummings出版社。ISBN 0-8053-0102-X。OCLC 3516353。
+\item Arnol'd, V. I.; Kozlov, V. V.; Neĩshtadt, A. I.（1988）。*经典力学和天体力学的数学方面*。《数学科学百科全书》，动力系统 III。第3卷。Anosov, D. V. 主编。柏林：Springer-Verlag。ISBN 0-387-17002-2。OCLC 16404140。
+\item Arnol'd, V. I.（1989）。*经典力学的数学方法*（第2版）。纽约：Springer-Verlag。ISBN 0-387-96890-3。OCLC 18681352。
+\item Goldstein, Herbert；Poole, Charles P. Jr.；Safko, John L.（2002）。*经典力学*（第3版）。旧金山：Addison Wesley。ISBN 0-201-31611-0。OCLC 47056311。
+\item Vinogradov, A. M.; Kupershmidt, B. A.（1977年8月31日）。《哈密顿力学的结构》。*俄罗斯数学概览*。32 (4): 177–243。Bibcode: 1977RuMaS..32..177V。doi:10.1070/RM1977v032n04ABEH001642。ISSN 0036-0279。S2CID 250805957。
+\end{itemize}
