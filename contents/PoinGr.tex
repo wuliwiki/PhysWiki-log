@@ -20,7 +20,7 @@ G= \mathrm{O}(1,3) \ltimes\mathbb{R}^{1,3}~,
 \end{equation}
 显然与半直积的乘法运算自洽。此外，半直积的符号表明$(I,\mathbb R^{1,3})\vartriangleleft G$。接下来我们证明庞家莱群满足群定义，且时空平移群是正规子群。
 
-显然庞家莱群的单位元为$(I,0)$，设任意$(\Lambda,a)\in G$，设其逆元素为$(\Lambda^{-1},b)$，对任意坐标矢量$x$作用，有
+显然庞家莱群的单位元为$(I,0)$，设任意$(\Lambda,a)\in G$，设其逆元素为$(\Lambda^{-1},b)$，对任意坐标矢量$x$作用表示为
 \begin{equation}
 (\Lambda^{-1},b)(\Lambda,a)x=\Lambda^{-1}(\Lambda x+a)+b=x~,
 \end{equation}
@@ -39,12 +39,72 @@ G= \mathrm{O}(1,3) \ltimes\mathbb{R}^{1,3}~,
 
 
 \subsubsection{庞家莱群的李代数}
-庞家莱群的李代数，即单位元处的切空间，由洛伦兹群的切空间$\mathfrak {so}(1,3)$与时空平移群的切空间直和而成。由洛伦兹群一节可知，$\mathfrak {so}(1,3)$的基由$x,y,z$方向的boost及旋转的生成元构成，即$J^i,K^i,i=1,2,3$，可以验证。这部分的李代数为：
+庞家莱群的李代数，即单位元处的切空间，由洛伦兹群的切空间$\mathfrak {so}(1,3)$与时空平移群的切空间直和而成。为了得到李代数的形式，我们需要找到这两个群的共同表示空间。
+
+假设这两个群的群元都有线性算符形式，分别表示为$\Q L(\Lambda),\Q L(a)$，且共同作用在标量函数上。在坐标系进行洛伦兹变换后，
+\begin{equation}\label{eq_PoinGr_1}
+\begin{aligned}
+\phi'(x')&=\phi(x)\\
+\phi'(x)&=\phi(\Lambda^{-1}x)\equiv \Q L(\Lambda)\phi(x)~.
+\end{aligned}
+\end{equation}
+
+这个定义自然满足对标量函数线性性以及群同态定义。因为对于任意$\Lambda_1,\Lambda_2\in SO^+(1,3)$，我们有$\Q L(\Lambda_1\Lambda_2)=\Q L(\Lambda_1)\Q L(\Lambda_2)$。由洛伦兹群一节可知，任意洛伦兹群元都可以表示为$\E^{-\I t(\bvec a^i\bvec J_i+\bvec b^i\bvec K_i)}$。为了方便，我们引入物理上另一种常见的表示方式：
+\begin{equation}
+\Lambda=\E^{-\frac{i}{2} \omega_{\mu \nu} J^{\mu \nu}}
+~,
+\end{equation}
+其中$\omega_{\mu\nu}$与$J^{\mu\nu}$皆为反对称张量，且\footnote{下列定义中，定义等号取的是张量的矩阵形式。}
+\begin{equation}\label{eq_PoinGr_2}
+\begin{aligned}
+J_i&=(J_1,J_2,J_3)\equiv(J^{23},J^{31},J^{12});a^i=(a^1,a^2,a^3)\equiv(\omega_{23},\omega_{31},\omega_{12}).\\
+K_i&=(K_1,K_2,K_3)\equiv(J^{01},J^{02},J^{03});b^i=(b^1,b^2,b^3)\equiv(\omega_{01},\omega_{02},\omega_{03})~.
+\end{aligned}
+\end{equation}
+
+
+同态对$\Lambda$而言是线性的，意味着$\Q L(\Lambda)$也有这样满的指数映射。令$\Q L(J^{\mu \nu})=L^{\mu \nu}$，则任意$\Q L(\Lambda)=\E^{-\frac{i}{2} \omega_{\mu \nu} L^{\mu \nu}}$，代入\autoref{eq_PoinGr_1} 后作泰勒展开并保留一阶项——
 \begin{equation}
 \begin{aligned}
-\left[J^i,J^j\right]&=\I\epsilon^{ijk}J^k\\
-\left[K^i, K^j\right]&=-\I \epsilon^{i j k} J^k\\
-\left[J^i, K^j\right]&=\I \epsilon^{i j k} K^k~.
+\Q L(\Lambda)\phi(x)&=\phi(\Lambda^{-1}x)\\
+&=\phi(x-\delta x)\\
+&= \phi(x)-\delta x^{\mu} \partial_{\mu} \phi(x) \\
+&= \phi(x)-\omega^{\mu}{ }_{\nu} x^{\nu} \partial_{\mu} \phi(x) \\
+&=\phi(x)-\omega_{\mu \nu} x^{\nu} \partial^{\mu} \phi(x) \\
+&= \phi(x)-\frac{i}{2} \omega_{\mu \nu} L^{\mu \nu} \phi(x)~.
 \end{aligned}
+\end{equation}
+其中$L^{\mu\nu}\equiv=\I(x^{\mu}\partial^{\nu}-x^{\nu}\partial^{\mu})$。显然这就是我们需要的，$SO^+(1,3)$线性算符表示的李代数。我们还需要验证一下李括号关系。类似\autoref{eq_PoinGr_2}  ，$L_i=(L_1,L_2,L_3)\equiv(L^{23},L^{31},L^{12})$，$K'_i=L^{0i}$。则
+\begin{equation}
+\begin{aligned}
+~[L_1,L_2]~&=-[x^{2}\partial^{3}-x^{3}\partial^{2},x^{3}\partial^{1}-x^{1}\partial^{3}]\\
+&=-[x^2\partial^3,x^3\partial^1]-[x^3\partial^2,x^1\partial^3]\\
+&=-x^2[\partial^3,x^3]\partial^1-x^1[x^3,\partial^3]\partial^2\\
+&=\I L_3~.
+\end{aligned}
+\end{equation}
+其他同理亦然。关键是利用$[x^{\mu},\partial^{\nu}]=\eta^{\mu\nu}$，$\eta^{\mu\nu}$的矩阵形式为$\opn{diag}(-1,1,1,1)$。
+
+设$\Q L(a)$为时空平移群的线性算符表示，假设同样可以用指数映射表示对坐标系平移任意时空四矢量，即$\Q L(a)=\E^{\I a^{\mu}P_{\mu}},L(a)\phi(x)\equiv \phi(x-a)$，都进行泰勒展开并保留一阶项——
+\begin{equation}\begin{aligned}
+\Q L(a)\phi(x)& =\phi(x-a) \\
+&=\phi(x)-a^{\mu}\partial_{\mu}\phi(x)~.
+\end{aligned}\end{equation}
+又因为
+\begin{equation}
+\begin{aligned}
+\Q L(a)\phi(x)& = \E^{ia^{\mu}P_{\mu}}\phi(x) \\
+&=\phi(x)+\I a^{\mu}P_{\mu}\phi(x)~.
+\end{aligned}
+\end{equation}
+所以$P_{\mu}=\I\partial_{\mu}$。这是和经典力学自洽的，也和量子力学里的算符形式一致，动量是空间平移的生成元，能量是时间平移的生成元（$P_0\equiv H$）。
+
+可以验证，庞加莱群的李代数有如下李括号关系：
+\begin{equation}
+\begin{aligned}
+& {\left[L_i, L_j\right]=\I \varepsilon_{i j k} L_k, \quad\left[L_i, K'_j\right]=\I \varepsilon_{i j k} K_k, \quad\left[L_i, P^j\right]=\I \varepsilon^{i j k} P^k} \\
+& {\left[K'_i, K'_j\right]=-\I \varepsilon_{i j k} J_k, \quad\left[P^i, P^j\right]=0, \quad\left[P^i, K'_j\right]=-\I \delta^i_j H} \\
+& {\left[L_i, H\right]=0, \quad\left[P^i, H\right]=0, \quad\left[H, K'_i\right]=-\I P^i}
+\end{aligned}~.
 \end{equation}
 

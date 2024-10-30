@@ -63,3 +63,302 @@ T = \frac{1}{2} \sum_{k=1}^{N} m_k v_k^2~
 当约束方程是不可积的、约束具有不等式、或存在诸如摩擦之类复杂的非保守力时，需要特殊处理非完整约束，可能需要回归到牛顿力学或使用其他方法【13】。
 
 如果由于时间变化的约束或外部影响使得 \( T \) 或 \( V \) 或两者都显式地依赖于时间，则拉格朗日量 \( L(r_1, r_2, \dots, v_1, v_2, \dots, t) \) 显式地依赖于时间。如果势能和动能都不依赖于时间，那么拉格朗日量 \( L(r_1, r_2, \dots, v_1, v_2, \dots) \) 显式地与时间无关。在这两种情况下，拉格朗日量始终通过广义坐标隐含地依赖于时间。
+
+根据这些定义，拉格朗日第一类方程为[14]：
+
+\textbf{拉格朗日方程（第一类）}
+\[
+\frac{\partial L}{\partial \mathbf{r}_{k}} - \frac{\mathrm{d}}{\mathrm{d}t} \frac{\partial L}{\partial \dot{\mathbf{r}}_{k}} + \sum_{i=1}^{C} \lambda_{i} \frac{\partial f_{i}}{\partial \mathbf{r}_{k}} = 0,~
+\]
+其中 \( k = 1, 2, \ldots, N \) 表示粒子，\(\lambda_{i}\) 是每个约束方程 \( f_{i} \) 的拉格朗日乘子，且
+\[
+\frac{\partial }{\partial \mathbf{r}_{k}} \equiv \left(\frac{\partial }{\partial x_{k}}, \frac{\partial }{\partial y_{k}}, \frac{\partial }{\partial z_{k}}\right), \quad \frac{\partial }{\partial \dot{\mathbf{r}}_{k}} \equiv \left(\frac{\partial }{\partial \dot{x}_{k}}, \frac{\partial }{\partial \dot{y}_{k}}, \frac{\partial }{\partial \dot{z}_{k}}\right)~
+\]
+是对指定变量的偏导数的简写（而不是对整个向量的导数）。每个点上方的符号表示时间导数。与牛顿定律相比，这种方法确实增加了需要解决的方程数量，从 \( 3N \) 增加到 \( 3N + C \)，因为在位置坐标和乘子中有 \( 3N \) 个耦合的二阶微分方程，以及 \( C \) 个约束方程。然而，当与粒子的位置信息一起求解时，乘子可以提供关于约束力的信息。坐标不需要通过求解约束方程来消去。
+
+在拉格朗日函数中，位置坐标和速度分量都是独立变量，拉格朗日函数的导数是根据通常的微分规则分别对这些变量进行求导的（例如，对于粒子2的z方向速度分量，定义为 \(v_{z,2} = \frac{dz_2}{dt}\)，其偏导数 \(\frac{\partial L}{\partial v_{z,2}}\) 就是所需的；不需要使用复杂的链式法则或全导数来将速度分量与相应的坐标 \(z_2\) 关联）。
+
+在每个约束方程中，一个坐标是多余的，因为它是由其他坐标确定的。因此，独立坐标的数量为 \(n = 3N - C\)。我们可以将每个位置向量转换为一组公共的 \(n\) 个广义坐标，方便地写成 \(n\)-元组 \(q = (q_1, q_2, ... q_n)\)，通过将每个位置向量，进而每个位置坐标，表示为广义坐标和时间的函数：
+\[
+\mathbf{r}_{k} = \mathbf{r}_{k}(\mathbf{q}, t) = {\big (}x_{k}(\mathbf{q}, t), y_{k}(\mathbf{q}, t), z_{k}(\mathbf{q}, t), t{\big )}.~
+\]
+根据这些定义，欧拉–拉格朗日方程，或称为第二类拉格朗日方程[15][16][17]：
+
+\textbf{拉格朗日方程（第二类）}
+\[
+\frac{\mathrm{d}}{\mathrm{d}t}\left(\frac{\partial L}{\partial \dot{q}_j}\right) = \frac{\partial L}{\partial q_j}~
+\]
+是变分法的数学结果，也可以应用于力学。将拉格朗日函数 \(L(q, \frac{dq}{dt}, t)\) 代入其中，可以得到系统的运动方程。与牛顿力学相比，方程的数量从 \(3N\) 减少到 \(n = 3N - C\) 个耦合的二阶微分方程，采用广义坐标。这些方程完全不包括约束力，仅需考虑非约束力。
+
+虽然运动方程包含偏导数，但这些偏导数的结果仍然是粒子位置坐标的常微分方程。表示为 \(\frac{d}{dt}\) 的全时间导数通常涉及隐式微分。这两个方程在拉格朗日函数中是线性的，但在坐标中通常是非线性耦合方程。
+\subsection{从牛顿力学到拉格朗日力学}  
+\subsubsection{牛顿定律}
+\begin{figure}[ht]
+\centering
+\includegraphics[width=6cm]{./figures/2ea329296b50037e.png}
+\caption{艾萨克·牛顿（1642–1727）} \label{fig_LGL_4}
+\end{figure}
+为了简单起见，牛顿定律可以在不失一般性的情况下针对一个粒子进行说明（对于一个由 \(N\) 个粒子组成的系统，这些方程同样适用于系统中的每个粒子）。对于质量为 \(m\) 的粒子，其运动方程是1687年牛顿的第二定律，用现代向量符号表示为
+\[
+\mathbf{F} = m \mathbf{a},~
+\]
+其中 \(a\) 是加速度，\(F\) 是作用在其上的合力。当质量变化时，该方程需要推广，以考虑动量的时间导数。在三维空间中，这是一个由三个耦合的二阶常微分方程组成的系统，因为这个向量方程中有三个分量。其解为粒子在时间 \(t\) 的位置向量 \(r\)，受初始条件 \(r\) 和 \(v\) 在 \(t = 0\) 时的约束。
+
+牛顿定律在笛卡尔坐标系中容易使用，但笛卡尔坐标并不总是方便，对于其他坐标系，运动方程可能变得复杂。在一组曲线坐标 \(\xi = (\xi_1, \xi_2, \xi_3)\) 中，以张量指标符号表示的定律是“拉格朗日形式”[18][19]：
+\[
+F^{a} = m\left(\frac{\mathrm{d}^{2}\xi^{a}}{\mathrm{d}t^{2}} + \Gamma^{a}{}_{bc} \frac{\mathrm{d}\xi^{b}}{\mathrm{d}t} \frac{\mathrm{d}\xi^{c}}{\mathrm{d}t}\right) = g^{ak}\left(\frac{\mathrm{d}}{\mathrm{d}t} \frac{\partial T}{\partial \dot{\xi}^{k}} - \frac{\partial T}{\partial \xi^{k}}\right), \quad \dot{\xi}^{a} \equiv \frac{\mathrm{d}\xi^{a}}{\mathrm{d}t},~
+\]
+其中 \(F^{a}\) 是作用在粒子上的合力的第 \(a\) 个协变分量，\(\Gamma^{abc}\) 是第二类克里斯托费尔符号，
+\[
+T = \frac{1}{2}mg_{bc} \frac{\mathrm{d}\xi^{b}}{\mathrm{d}t} \frac{\mathrm{d}\xi^{c}}{\mathrm{d}t}~
+\]
+是粒子的动能，\(g_{bc}\) 是曲线坐标系的度量张量的协变分量。所有指标 \(a, b, c\) 都取值 1, 2, 3。曲线坐标与广义坐标并不相同。
+
+将牛顿定律表达成这种形式似乎有些复杂，但这有其优势。通过评估动能的导数，可以避免以克里斯托费尔符号表示的加速度分量。如果作用在粒子上的合力为零，即 \(F = 0\)，那么粒子不会加速，而是以恒定速度沿直线运动。从数学上讲，微分方程的解是测地线，即空间中两个点之间的极值长度曲线（这些曲线可能是最短路径，但不一定）。在平坦的三维真实空间中，测地线只是直线。因此，对于自由粒子，牛顿的第二定律与测地线方程一致，表明自由粒子遵循测地线，即它能够沿其移动的极值轨迹。如果粒子受到 \(F \neq 0\) 的力作用，粒子会因作用在其上的力而加速，并偏离它如果是自由粒子时所遵循的测地线。将这里给出的平坦三维空间中的量适当扩展到四维曲率时空，上述形式的牛顿定律也适用于爱因斯坦的广义相对论，在这种情况下，自由粒子在曲率时空中遵循的测地线不再是普通意义上的“直线”[20]。
+
+然而，我们仍需要知道作用在粒子上的总合力 \(F\)，这反过来需要非约束力的合力 \(N\) 加上约束力的合力 \(C\)，
+\[
+\mathbf{F} = \mathbf{C} + \mathbf{N}.~
+\]
+约束力可能很复杂，因为它们通常依赖于时间。此外，如果存在约束，曲线坐标并不是独立的，而是通过一个或多个约束方程相互关联。
+
+可以通过将约束力从运动方程中消除，使得只剩下非约束力，或者通过在运动方程中包含约束方程来包含约束力。
+\subsubsection{达朗贝尔原理}
+\begin{figure}[ht]
+\centering
+\includegraphics[width=6cm]{./figures/2ae163ebf41389ea.png}
+\caption{让·达朗贝尔（1717—1783）} \label{fig_LGL_5}
+\end{figure}
+分析力学中的一个基本结果是达朗贝尔原理，该原理由雅克·伯努利于1708年提出，用于理解静态平衡，并由达朗贝尔于1743年发展以解决动力学问题[21] 。该原理断言，对于 \(N\) 个粒子，虚功，即沿虚位移 \(\delta \mathbf{r}_k\) 的功，为零[9]：
+\[
+\sum_{k=1}^{N}(\mathbf{N}_{k}+\mathbf{C}_{k}-m_{k}\mathbf{a}_{k}) \cdot \delta \mathbf{r}_{k} = 0.~
+\]
+\begin{figure}[ht]
+\centering
+\includegraphics[width=14cm]{./figures/4c098c351c13f52a.png}
+\caption{约束力 \(C\) 和位于曲线上的质量为 \(m\) 的粒子的虚位移 \(\delta \mathbf{r}\)。合成的非约束力为 \(N\)。} \label{fig_LGL_6}
+\end{figure}
+虚位移 \(\delta \mathbf{r}_k\) 根据定义是与在某一时刻作用于系统的约束力一致的系统配置的微小变化[22]，即以这样的方式，使得约束力维持受约束的运动。它们与系统中的实际位移不同，实际位移是由作用在粒子上的合成约束力和非约束力引起的，以使其加速并移动。虚功是沿虚位移所做的功，无论是对于约束力还是非约束力。
+
+由于约束力作用于系统中每个粒子的运动方向垂直，以维持约束，因此作用于系统的约束力所做的总虚功为零：
+\[
+\sum_{k=1}^{N} \mathbf{C}_{k} \cdot \delta \mathbf{r}_{k} = 0,~
+\]
+因此有
+\[
+\sum_{k=1}^{N} (\mathbf{N}_{k} - m_{k} \mathbf{a}_{k}) \cdot \delta \mathbf{r}_{k} = 0.~
+\]
+因此，达朗贝尔原理使我们能够只关注施加的非约束力，并在运动方程中排除约束力[24][25]。所示的形式也独立于坐标的选择。然而，它不能直接用于在任意坐标系中建立运动方程，因为虚位移 \(\delta \mathbf{r}_k\) 可能通过约束方程相连，这阻止我们将 \(N\) 个单项和设为零。因此，我们将寻求一组相互独立的坐标，对于这些坐标，只有当每个单项和为零时，总和才为零。将每个单项和设为零最终将给我们分开的运动方程。
+\subsubsection{从达朗贝尔原理得到的运动方程}  
+如果对粒子 \(k\) 存在约束，那么由于位置坐标 \( \mathbf{r}_k = (x_k, y_k, z_k) \) 通过约束方程相互关联，虚位移 \( \delta \mathbf{r}_k = (\delta x_k, \delta y_k, \delta z_k) \) 也是如此。由于广义坐标是独立的，我们可以通过转换为广义坐标中的虚位移来避免与 \( \delta \mathbf{r}_k \) 相关的复杂性。这些虚位移以与全导数相同的形式相关联,[9]：
+\[
+\delta \mathbf{r}_k = \sum_{j=1}^{n} \frac{\partial \mathbf{r}_k}{\partial q_j} \delta q_j.~
+\]
+这里没有相对于时间的偏导数与时间增量相乘，因为这是一个虚位移，沿着约束在某一时刻的位移。
+
+达朗贝尔原理中的第一项是非约束力 \( \mathbf{N}_k \) 沿虚位移 \( \delta \mathbf{r}_k \) 所做的虚功，可以在不失一般性的情况下通过广义力的定义转换为广义模拟：
+\[
+Q_j = \sum_{k=1}^{N} \mathbf{N}_k \cdot \frac{\partial \mathbf{r}_k}{\partial q_j},~
+\]
+因此有
+\[
+\sum_{k=1}^{N} \mathbf{N}_k \cdot \delta \mathbf{r}_k = \sum_{k=1}^{N} \mathbf{N}_k \cdot \sum_{j=1}^{n} \frac{\partial \mathbf{r}_k}{\partial q_j} \delta q_j = \sum_{j=1}^{n} Q_j \delta q_j.~
+\]
+这是转换为广义坐标的一半。接下来需要将加速度项转换为广义坐标，这一点并不明显。回想牛顿第二定律的拉格朗日形式，可以找到动能对广义坐标和速度的偏导数，以得到所需的结果[9]：
+\[
+\sum_{k=1}^{N} m_k \mathbf{a}_k \cdot \frac{\partial \mathbf{r}_k}{\partial q_j} = \frac{\mathrm{d}}{\mathrm{d} t} \frac{\partial T}{\partial \dot{q}_j} - \frac{\partial T}{\partial q_j}.~
+\]
+现在，达朗贝尔原理已经转换为所需的广义坐标：
+\[
+\sum_{j=1}^{n}\left[Q_j - \left(\frac{\mathrm{d}}{\mathrm{d} t} \frac{\partial T}{\partial \dot{q}_j} - \frac{\partial T}{\partial q_j}\right)\right]\delta q_j = 0,~
+\]
+由于这些虚位移 \(\delta q_j\) 是独立且非零的，因此可以将系数设为零，结果得到\textbf{拉格朗日方程}[26][27]或\textbf{广义运动方程}[28]：
+\[
+Q_{j} = \frac{\mathrm{d}}{\mathrm{d} t} \frac{\partial T}{\partial \dot{q}_{j}} - \frac{\partial T}{\partial q_{j}}.~
+\]
+这些方程等同于非约束力的牛顿定律。该方程中的广义力仅来源于非约束力——约束力已被排除在达朗贝尔原理之外，无需计算。只要满足达朗贝尔原理，广义力可能是非保守的[29]。
+\subsubsection{欧拉-拉格朗日方程和汉密尔顿原理}
+\begin{figure}[ht]
+\centering
+\includegraphics[width=8cm]{./figures/620c7ae07b281461.png}
+\caption{随着系统的演变，\( q \) 在配置空间中描绘了一条路径（仅显示了一部分）。系统所经过的路径（红色）在系统配置的小变化（\(\delta q\)）下具有一个驻留的作用量（\(\delta S = 0\)）。[30]} \label{fig_LGL_7}
+\end{figure}
+对于依赖于速度的非保守力，可能找到一个依赖于位置和速度的势能函数 \( V \)。如果广义力 \( Q_i \) 可以通过一个势能 \( V \) 得到，使得：[31][32]
+\[
+Q_{j} = \frac{\mathrm{d}}{\mathrm{d} t} \frac{\partial V}{\partial \dot{q}_{j}} - \frac{\partial V}{\partial q_{j}},~
+\]
+将其与拉格朗日方程相等，并定义拉格朗日量为 \( L = T - V \)，得到第二类拉格朗日方程或欧拉-拉格朗日运动方程：
+\[
+\frac{\partial L}{\partial q_{j}} - \frac{\mathrm{d}}{\mathrm{d} t} \frac{\partial L}{\partial \dot{q}_{j}} = 0.~
+\]
+然而，欧拉-拉格朗日方程只能在能够找到势能的情况下考虑非保守力。对于非保守力，这并不总是可能的，因此拉格朗日方程不涉及任何势能，仅涉及广义力；因此它们比欧拉-拉格朗日方程更为一般。
+
+欧拉-拉格朗日方程也源于变分法。拉格朗日量的变化为：
+\[
+\delta L = \sum_{j=1}^{n} \left( \frac{\partial L}{\partial q_{j}} \delta q_{j} + \frac{\partial L}{\partial \dot{q}_{j}} \delta \dot{q}_{j} \right), \quad \delta \dot{q}_{j} \equiv \delta \frac{\mathrm{d} q_{j}}{\mathrm{d} t} \equiv \frac{\mathrm{d} (\delta q_{j})}{\mathrm{d} t},~
+\]
+这具有类似于 \( L \) 的全微分的形式，但虚位移及其时间导数替代了微分，且根据虚位移的定义，没有时间增量。对时间进行分部积分可以将 \( \delta q_{j} \) 的时间导数转移到 \( \frac{\partial L}{\partial (\frac{dq_{j}}{dt})} \) 上，在此过程中，将 \( \frac{d(\delta q_{j})}{dt} \) 替换为 \( \delta q_{j} \)，从而使独立的虚位移可以从拉格朗日量的导数中提取出来：
+\[
+\begin{aligned}
+\int_{t_{1}}^{t_{2}} \delta L \, \mathrm{d} t &= \int_{t_{1}}^{t_{2}} \sum_{j=1}^{n} \left( \frac{\partial L}{\partial q_{j}} \delta q_{j} + \frac{\mathrm{d}}{\mathrm{d} t} \left( \frac{\partial L}{\partial \dot{q}_{j}} \delta q_{j} \right) - \frac{\mathrm{d}}{\mathrm{d} t} \frac{\partial L}{\partial \dot{q}_{j}} \delta q_{j} \right) \, \mathrm{d} t,\\
+&= \sum_{j=1}^{n} \left[ \frac{\partial L}{\partial \dot{q}_{j}} \delta q_{j} \right]_{t_{1}}^{t_{2}} + \int_{t_{1}}^{t_{2}} \sum_{j=1}^{n} \left( \frac{\partial L}{\partial q_{j}} - \frac{\mathrm{d}}{\mathrm{d} t} \frac{\partial L}{\partial \dot{q}_{j}} \right) \delta q_{j} \, \mathrm{d} t.
+\end{aligned}~
+\]
+现在，如果对所有 \( j \) 都满足条件 \( \delta q_{j}(t_{1}) = \delta q_{j}(t_{2}) = 0 \)，则未积分的项为零。如果此外整个 \( \delta L \) 的时间积分为零，那么由于 \( \delta q_{j} \) 是独立的，唯一使定积分为零的方式是被积函数等于零，因此每个 \( \delta q_{j} \) 的系数也必须为零。这样我们就得到了运动方程。这可以通过哈密顿原理来总结：
+\[
+\int_{t_{1}}^{t_{2}} \delta L \, \mathrm{d} t = 0.~
+\]
+拉格朗日函数的时间积分是另一个称为作用量的量，定义为[33]
+\[
+S = \int_{t_{1}}^{t_{2}} L \, \mathrm{d} t,~
+\]
+这是一个泛函；它接收在 \( t_{1} \) 和 \( t_{2} \) 之间所有时刻的拉格朗日函数，并返回一个标量值。它的维度与 [角动量]、[能量]·[时间] 或 [长度]·[动量] 相同。根据这个定义，哈密顿原理为
+\[
+\delta S = 0.~
+\]
+与其考虑粒子对施加力的响应而加速，不如将其视为选择具有静止作用的路径，其中路径在配置空间的端点在初始和最终时刻保持固定。哈密顿原理是几种作用原理之一。[34]
+
+历史上，寻找粒子在受力情况下可以遵循的最短路径的想法促使了变分法在机械问题中的首次应用，例如让·伯努利在1696年解决的最速降线问题，以及莱布尼茨、丹尼尔·伯努利、洛必达等人大约在同一时期的研究，牛顿在次年也对此进行了思考。[35] 牛顿本人也是在变分法的思路上进行思考，但并未发表。[35] 这些思想进而引出了费马、莫佩尔蒂斯、欧拉、哈密顿等人的力学变分原理。
+
+哈密顿原理可以应用于非保守约束，如果约束方程可以以某种形式表达，即坐标的一阶微分的线性组合。得到的约束方程可以重新排列成一阶微分方程。[36] 这里不再赘述。
+\subsubsection{拉格朗日乘子和约束}
+
+拉格朗日量 \( L \) 可以在 \( N \) 个粒子的笛卡尔坐标 \( \mathbf{r}_k \) 中变化，
+\[
+\int_{t_{1}}^{t_{2}} \sum_{k=1}^{N} \left( \frac{\partial L}{\partial \mathbf{r}_{k}} - \frac{\mathrm{d}}{\mathrm{d} t} \frac{\partial L}{\partial \dot{\mathbf{r}}_{k}} \right) \cdot \delta \mathbf{r}_{k} \,\mathrm{d} t = 0.~
+\]
+哈密尔顿原理仍然有效，即使拉格朗日量 \( L \) 所表达的坐标 \( \mathbf{r}_k \) 不是独立的，但仍假设约束是全能的。[37] 像往常一样，端点是固定的 \( \delta \mathbf{r}_k(t_1) = \delta \mathbf{r}_k(t_2) = 0 \) 对所有 \( k \) 都成立。不能简单地将 \( \delta \mathbf{r}_k \) 的系数置为零，因为 \( \delta \mathbf{r}_k \) 不是独立的。相反，可以使用拉格朗日乘子法来包含约束。将每个约束方程 \( f_i(\mathbf{r}_k, t) = 0 \) 乘以拉格朗日乘子 \( \lambda_i \) （对于 \( i = 1, 2, \ldots, C \)），并将结果添加到原始拉格朗日量中，得到新的拉格朗日量
+\[
+L' = L(\mathbf{r}_{1}, \mathbf{r}_{2}, \ldots, \dot{\mathbf{r}}_{1}, \dot{\mathbf{r}}_{2}, \ldots, t) + \sum_{i=1}^{C} \lambda_{i}(t) f_{i}(\mathbf{r}_{k}, t).~
+\]
+
+拉格朗日乘子是时间 \( t \) 的任意函数，但不是坐标 \( \mathbf{r}_k \) 的函数，因此乘子与位置坐标处于同等地位。对这个新的拉格朗日量进行变分并对时间积分，得到
+\[
+\int_{t_{1}}^{t_{2}} \delta L' \, \mathrm{d} t = \int_{t_{1}}^{t_{2}} \sum_{k=1}^{N} \left( \frac{\partial L}{\partial \mathbf{r}_{k}} - \frac{\mathrm{d}}{\mathrm{d} t} \frac{\partial L}{\partial \dot{\mathbf{r}}_{k}} + \sum_{i=1}^{C} \lambda_{i} \frac{\partial f_{i}}{\partial \mathbf{r}_{k}} \right) \cdot \delta \mathbf{r}_{k} \, \mathrm{d} t = 0.~
+\]
+引入的乘子可以被选择，使得 \( \delta \mathbf{r}_k \) 的系数为零，即使 \( \mathbf{r}_k \) 不是独立的。由此得到运动方程。从前面的分析可知，求解这个积分等价于以下陈述：
+\[
+\frac{\partial L'}{\partial \mathbf{r}_{k}} - \frac{\mathrm{d}}{\mathrm{d} t} \frac{\partial L'}{\partial \dot{\mathbf{r}}_{k}} = 0 \Rightarrow \frac{\partial L}{\partial \mathbf{r}_{k}} - \frac{\mathrm{d}}{\mathrm{d} t} \frac{\partial L}{\partial \dot{\mathbf{r}}_{k}} + \sum_{i=1}^{C} \lambda_{i} \frac{\partial f_{i}}{\partial \mathbf{r}_{k}} = 0,~
+\]
+这就是拉格朗日的第一类方程。同时，针对新的拉格朗日量的 \( \lambda_i \) 欧拉-拉格朗日方程返回约束方程：
+\[
+\frac{\partial L'}{\partial \lambda_{i}} - \frac{\mathrm{d}}{\mathrm{d} t} \frac{\partial L'}{\partial \dot{\lambda}_{i}} = 0 \Rightarrow f_{i}(\mathbf{r}_{k}, t) = 0.~
+\]
+对于由某个势能 \( V \) 的梯度给出的保守力，该势能仅依赖于 \( \mathbf{r}_k \) 坐标，将拉格朗日量 \( L = T - V \) 代入，得到
+\[
+\underbrace{{\frac {\partial T}{\partial \mathbf{r}_{k}}}-{\frac {\mathrm{d}}{\mathrm{d} t}}{\frac {\partial T}{\partial \dot{\mathbf{r}}_{k}}}}_{-\mathbf{F}_{k}} + \underbrace{-{\frac {\partial V}{\partial \mathbf{r}_{k}}}}_{\mathbf{N}_{k}} + \sum_{i=1}^{C} \lambda_{i} \frac{\partial f_{i}}{\partial \mathbf{r}_{k}} = 0,~
+\]
+并将动能的导数识别为（负的）合力，而势能的导数等于非约束力，因此可以得出约束力为
+\[
+\mathbf{C}_{k} = \sum_{i=1}^{C} \lambda_{i} \frac{\partial f_{i}}{\partial \mathbf{r}_{k}},~
+\]
+从而明确给出约束力以约束方程和拉格朗日乘子的形式表示。
+\subsection{拉格朗日量的性质}
+\subsubsection{非唯一性}
+
+给定系统的拉格朗日量并不是唯一的。一个拉格朗日量 \( L \) 可以乘以一个非零常数 \( a \) 并加上一个任意常数 \( b \)，新的拉格朗日量 \( L' = aL + b \) 将描述与 \( L \) 相同的运动。如果在给定的时间区间 \([t_{\text{st}}, t_{\text{fin}}]\) 上，并且固定端点 \( P_{\text{st}} = q(t_{\text{st}}) \) 和 \( P_{\text{fin}} = q(t_{\text{fin}}) \)，则描述相同系统的两个拉格朗日量可以通过一个函数 \( f(q, t) \) 的“总时间导数”相差：[38]
+\[
+L'(\mathbf{q}, \dot{\mathbf{q}}, t) = L(\mathbf{q}, \dot{\mathbf{q}}, t) + \frac{\mathrm{d} f(\mathbf{q}, t)}{\mathrm{d} t},~
+\]
+其中 
+\[
+\frac{\mathrm{d} f(\mathbf{q}, t)}{\mathrm{d} t} \text{ 表示 } \frac{\partial f(\mathbf{q}, t)}{\partial t} + \sum_{i} \frac{\partial f(\mathbf{q}, t)}{\partial q_{i}} \dot{q}_{i}.~
+\]
+两个拉格朗日量 \( L \) 和 \( L' \) 产生相同的运动方程[39][40]，因为对应的作用量 \( S \) 和 \( S' \) 通过以下关系相连：
+\[
+\begin{aligned}
+S'[\mathbf{q}] &= \int_{t_{\text{st}}}^{t_{\text{fin}}} L'(\mathbf{q}(t), \dot{\mathbf{q}}(t), t) \, dt \\
+&= \int_{t_{\text{st}}}^{t_{\text{fin}}} L(\mathbf{q}(t), \dot{\mathbf{q}}(t), t) \, dt + \int_{t_{\text{st}}}^{t_{\text{fin}}} \frac{\mathrm{d} f(\mathbf{q}(t), t)}{\mathrm{d} t} \, dt \\
+&= S[\mathbf{q}] + f(P_{\text{fin}}, t_{\text{fin}}) - f(P_{\text{st}}, t_{\text{st}}),
+\end{aligned}~
+\]
+最后两个项 \( f(P_{\text{fin}}, t_{\text{fin}}) \) 和 \( f(P_{\text{st}}, t_{\text{st}}) \) 与 \( q \) 无关。
+\subsubsection{在点变换下的不变性}
+给定一组广义坐标 \( q \)，如果我们根据可逆的点变换 \( Q = Q(q, t) \) 将这些变量更改为一组新的广义坐标 \( Q \)，即 \( q = q(Q, t) \)，则新的拉格朗日量 \( L' \) 是新坐标的函数：
+\[
+L'(\mathbf{Q}, \dot{\mathbf{Q}}, t) = L(\mathbf{q}(\mathbf{Q}, t), \dot{\mathbf{q}}(\mathbf{Q}, \dot{\mathbf{Q}}, t), t),~
+\]
+根据偏微分的链式法则，拉格朗日方程在此变换下是不变的；[41]
+\[
+\frac{\mathrm{d}}{\mathrm{d} t} \frac{\partial L'}{\partial \dot{Q}_{i}} = \frac{\partial L'}{\partial Q_{i}}.~
+\]
+这可能简化运动方程。
+
+\textbf{证明}
+
+对于坐标变换 
+\({\displaystyle Q_{i}=Q_{i}(\mathbf {q} ,t)}\)，我们有
+\[{\displaystyle d{Q_{i}}=\sum _{k}{\frac {\partial Q_{i}}{\partial q_{k}}}d{q_{k}}+{\frac {\partial Q_{k}}{\partial t}}dt,}~\]
+这意味着 
+\[{\displaystyle {\dot {Q_{i}}}=\sum _{k}{\frac {\partial Q_{i}}{\partial q_{k}}}(\mathbf {q} ,t)\,{\dot {q}}_{k}+{\frac {\partial Q_{k}}{\partial t}}(\mathbf {q} ,t)}~,\]
+这意味着
+\[{\displaystyle {\frac {\partial {\dot {Q_{i}}}}{\partial {\dot {q}}_{k}}}={\frac {\partial Q_{i}}{\partial q_{k}}}}~.\]
+还可以得出：
+\[{\displaystyle {\frac {\partial {\dot {Q_{i}}}}{\partial q_{j}}}=\sum _{k}{\frac {\partial ^{2}Q_{i}}{\partial q_{j}\partial q_{k}}}(\mathbf {q} ,t)\,{\dot {q}}_{k}+{\frac {\partial ^{2}Q_{k}}{\partial q_{j}\partial t}}(\mathbf {q} ,t)}~\]
+同样地：
+\[{\displaystyle {\frac {d}{dt}}\left({\frac {\partial {Q_{i}}}{\partial q_{j}}}\right)=\sum _{k}{\frac {\partial ^{2}Q_{i}}{\partial q_{k}\partial q_{j}}}(\mathbf {q} ,t)\,{\dot {q}}_{k}+{\frac {\partial ^{2}Q_{k}}{\partial t\partial q_{j}}}(\mathbf {q} ,t)}~\]。 
+这意味着  
+\[
+\frac{d}{dt}\left(\frac{\partial Q_{i}}{\partial q_{k}}\right)=\frac{\partial \dot{Q}_{i}}{\partial q_{k}}.~
+\]
+这两个推导的关系可以用于证明。
+
+从初始的广义坐标的欧拉-拉格朗日方程出发，我们有：
+\[
+\frac{\partial L}{\partial \dot{q}} - \frac{\partial L}{\partial q} = 0~
+\]
+\[
+\sum_{k}\left(\frac{d}{dt}\left(\frac{\partial L}{\partial \dot{Q}_{k}}\right) - \frac{\partial L}{\partial Q_{k}} \frac{\partial Q_{k}}{\partial q} - \frac{\partial L}{\partial \dot{Q}_{k}} \frac{\partial \dot{Q}_{k}}{\partial q}\right) = 0~
+\]
+\[
+\sum_{k}\left(\frac{d}{dt}\left(\frac{\partial L}{\partial \dot{Q}_{k}}\right)\frac{\partial \dot{Q}_{k}}{\partial \dot{q}} + \frac{\partial L}{\partial \dot{Q}_{k}} \frac{d}{dt}\left(\frac{\partial \dot{Q}_{k}}{\partial \dot{q}}\right) - \frac{\partial L}{\partial Q_{k}} \frac{\partial \dot{Q}_{k}}{\partial \dot{q}} - \frac{\partial L}{\partial \dot{Q}_{k}} \frac{d}{dt}\left(\frac{\partial Q_{k}}{\partial q}\right)\right) = 0~
+\]
+\[
+\sum_{k}\left(\frac{d}{dt}\left(\frac{\partial L}{\partial \dot{Q}_{k}}\right) - \frac{\partial L}{\partial \dot{Q}_{k}}\right) \frac{\partial Q_{k}}{\partial q} = 0~
+\]
+由于从 \( q \rightarrow Q \) 的变换是可逆的，因此欧拉-拉格朗日方程的形式是不变的，即：
+\[
+\frac{d}{dt}\frac{\partial L}{\partial \dot{Q}_{i}} - \frac{\partial L}{\partial Q_{i}} = 0.~
+\]
+\subsubsection{循环坐标与守恒动量}
+拉格朗日的一个重要属性是，守恒量可以很容易地从中读出。与坐标 \( q_i \) '正则共轭' 的广义动量定义为
+\[
+p_{i} = \frac{\partial L}{\partial \dot{q}_{i}}.~
+\]
+如果拉格朗日量 \( L \) 不依赖于某个坐标 \( q_i \)，那么根据欧拉-拉格朗日方程可以立即得出
+\[
+\dot{p}_{i} = \frac{d}{dt} \frac{\partial L}{\partial \dot{q}_{i}} = \frac{\partial L}{\partial q_{i}} = 0~
+\]
+并且积分显示对应的广义动量等于一个常数，这是一个守恒量。这是诺特定理的一个特例。这种坐标称为“循环”或“可忽略”的坐标。
+
+例如，一个系统可能具有拉格朗日量
+\[
+L(r, \theta, \dot{s}, \dot{z}, \dot{r}, \dot{\theta}, \dot{\phi}, t),~
+\]
+其中 \( r \) 和 \( z \) 是沿直线的长度，\( s \) 是沿某条曲线的弧长，而 \( \theta \) 和 \( \phi \) 是角度。注意，尽管 \( z \)、\( s \) 和 \( \phi \) 的速度不为零，但它们在拉格朗日量中是缺失的。那么动量
+\[
+p_{z} = \frac{\partial L}{\partial \dot{z}}, \quad p_{s} = \frac{\partial L}{\partial \dot{s}}, \quad p_{\phi} = \frac{\partial L}{\partial \dot{\phi}},~
+\]
+都是守恒量。每个广义动量的单位和性质将依赖于相应的坐标；在这种情况下，\( p_z \) 是沿 \( z \) 方向的平动动量，\( p_s \) 也是沿测量曲线 \( s \) 的平动动量，而 \( p_{\phi} \) 是在测量角度 \( \phi \) 的平面中的角动量。无论系统的运动多么复杂，所有坐标和速度都将以一种方式变化，使得这些动量是守恒的。
+\subsubsection{能量}
+给定一个拉格朗日量 \( L \)，相应机械系统的哈密顿量定义为
+\[
+H = \left(\sum_{i=1}^{n} \dot{q}_{i} \frac{\partial L}{\partial \dot{q}_{i}}\right) - L.~
+\]
+如果广义坐标是自然坐标，即在表达位置向量时没有显式的时间依赖性：\(\mathbf{r} = \mathbf{r}(q_{1}, \cdots, q_{n}),\)那么这个量将等于能量。从：
+\[
+T = \frac{m}{2} v^{2} = \frac{m}{2} \sum_{i,j} \left(\frac{\partial \mathbf{r}}{\partial q_{i}} \dot{q}_{i}\right) \cdot \left(\frac{\partial \mathbf{r}}{\partial q_{j}} \dot{q}_{j}\right) = \frac{m}{2} \sum_{i,j} a_{ij} \dot{q}_{i} \dot{q}_{j}~
+\]
+可以得出：
+\[
+\sum_{k=1}^{n} \dot{q}_{k} \frac{\partial L}{\partial \dot{q}_{k}} = \sum_{k=1}^{n} \dot{q}_{k} \frac{\partial T}{\partial \dot{q}_{k}} = \frac{m}{2} \left(2\sum_{i,j} a_{ij} \dot{q}_{i} \dot{q}_{j}\right) = 2T.~
+\]
+因此：
+\[
+H = \left(\sum_{i=1}^{n} \dot{q}_{i} \frac{\partial L}{\partial \dot{q}_{i}}\right) - L = 2T - (T - V) = T + V = E,~
+\]
+其中
+\[
+a_{ij} = \frac{\partial \mathbf{r}}{\partial q_{i}} \cdot \frac{\partial \mathbf{r}}{\partial q_{j}}~
+\]
+是一个对称矩阵，为推导而定义。
