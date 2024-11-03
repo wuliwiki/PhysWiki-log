@@ -1,0 +1,92 @@
+% 刚体动力学 （综述）
+% license CCBYSA3
+% type Wiki
+
+本文根据 CC-BY-SA 协议转载翻译自维基百科\href{https://en.wikipedia.org/wiki/Rigid_body_dynamics}{相关文章}）
+
+\begin{figure}[ht]
+\centering
+\includegraphics[width=6cm]{./figures/de33499aa26ca4e3.png}
+\caption{波尔顿和瓦特蒸汽机（1784年）各组成部件的运动可以通过一组运动学和动力学方程来描述。} \label{fig_GTDL_1}
+\end{figure}
+在动力学的物理科学中，刚体动力学研究在外力作用下互连体系统的运动。假设这些物体是刚体（即在外力作用下不发生变形），这简化了分析，因为系统的配置仅需通过每个物体附加的参考框架的平移和旋转来描述。[1][2]这排除了表现出流体、高弹性和塑性行为的物体。
+
+刚体系统的动力学由运动学定律以及牛顿第二定律（动力学）或其导数形式——拉格朗日力学来描述。这些运动方程的解提供了系统中各个组成部分的位置、运动和加速度的描述，以及整个系统随时间的变化。刚体动力学的公式化和求解是机械系统计算机仿真中的重要工具。
+\subsection{平面刚体动力学}
+如果一个粒子系统平行于固定平面运动，则称该系统受到平面运动的约束。在这种情况下，刚体系统中 \( N \) 个粒子 \( P_i \) （\( i=1,...,N \)）的牛顿定律（动力学）简化了，因为在 \( k \) 方向上没有运动。可在参考点 \( R \) 处确定合力和力矩，得到：
+\[
+\mathbf{F} = \sum_{i=1}^{N} m_{i} \mathbf{A}_{i}, \quad \mathbf{T} = \sum_{i=1}^{N} (\mathbf{r}_{i} - \mathbf{R}) \times m_{i} \mathbf{A}_{i},~
+\]
+其中，\( \mathbf{r}_i \) 表示每个粒子的平面轨迹。
+
+刚体运动学给出了粒子 \( P_i \) 的加速度公式，表示为参考点位置 \( \mathbf{R} \) 和加速度 \( \mathbf{A} \)，以及刚体系统的角速度向量 \( \boldsymbol{\omega} \) 和角加速度向量 \( \boldsymbol{\alpha} \)：
+\[
+\mathbf{A}_i = \boldsymbol{\alpha} \times (\mathbf{r}_i - \mathbf{R}) + \boldsymbol{\omega} \times (\boldsymbol{\omega} \times (\mathbf{r}_i - \mathbf{R})) + \mathbf{A}.~
+\]
+对于约束在平面运动的系统，角速度和角加速度向量沿着垂直于运动平面的 \( k \) 方向，使得此加速度方程简化。在这种情况下，可以通过从参考点 \( R \) 到点 \( r_i \) 的单位向量 \( \mathbf{e}_i \) 以及单位向量 \( \mathbf{t}_i = \mathbf{k} \times \mathbf{e}_i \) 来简化加速度向量，因此有：
+\[
+\mathbf{A}_i = \alpha (\Delta r_i \mathbf{t}_i) - \omega^2 (\Delta r_i \mathbf{e}_i) + \mathbf{A}.~
+\]
+这给出了系统的合力为：
+\[
+\mathbf{F} = \alpha \sum_{i=1}^{N} m_{i} \left( \Delta r_{i} \mathbf{t}_{i} \right) - \omega^2 \sum_{i=1}^{N} m_{i} \left( \Delta r_{i} \mathbf{e}_{i} \right) + \left( \sum_{i=1}^{N} m_{i} \right) \mathbf{A},~
+\]
+而力矩为：
+\begin{equation}
+\begin{aligned}
+\mathbf{T} &= \sum_{i=1}^{N} (m_{i} \Delta r_{i} \mathbf{e}_{i}) \times \left( \alpha (\Delta r_{i} \mathbf{t}_{i}) - \omega^2 (\Delta r_{i} \mathbf{e}_{i}) + \mathbf{A} \right) \\
+&= \left( \sum_{i=1}^{N} m_{i} \Delta r_{i}^{2} \right) \alpha \mathbf{k} + \left( \sum_{i=1}^{N} m_{i} \Delta r_{i} \mathbf{e}_{i} \right) \times \mathbf{A},
+\end{aligned}~
+\end{equation}
+其中 \( \mathbf{e}_{i} \times \mathbf{e}_{i} = 0 \) 且 \( \mathbf{e}_{i} \times \mathbf{t}_{i} = \mathbf{k} \)，即垂直于平面的单位向量，适用于所有粒子 \( P_i \)。
+
+使用质心 \( C \) 作为参考点，这些方程在牛顿定律中的简化形式为：
+\[
+\mathbf{F} = M \mathbf{A}, \quad \mathbf{T} = I_C \alpha \mathbf{k},~
+\]
+其中 \( M \) 为总质量，\( I_C \) 为绕刚体系统运动平面垂直轴且穿过质心的转动惯量。
+\subsection{三维空间中的刚体}
+\subsubsection{方向或姿态描述}    
+已经开发了几种方法来描述三维空间中刚体的方向。这些方法将在以下部分中进行总结。
+
+\textbf{欧拉角}
+  
+最早用来表示方向的方法归功于莱昂哈德·欧拉。他设想了三个可以相互旋转的参考框架，并意识到通过从一个固定参考框架开始执行三次旋转，可以得到空间中的任何其他参考框架（使用两次旋转来固定垂直轴，再用一次旋转来固定另外两个轴）。这三次旋转的值称为欧拉角。通常，\(\psi\) 用来表示进动，\(\theta\) 表示章动，而 \(\phi\) 表示固有旋转。
+\begin{figure}[ht]
+\centering
+\includegraphics[width=14.25cm]{./figures/cfb73da182a2834f.png}
+\caption{欧拉角示意图/球体围绕固定轴的固有旋转/陀螺在欧拉角中的运动} \label{fig_GTDL_3}
+\end{figure}
+\textbf{泰特–布莱恩角}
+
+这些是三个角，也被称为偏航、俯仰和滚转角，导航角和卡丹角。从数学上来说，它们在十二种可能的欧拉角组合中构成了六种可能性，这种顺序最适合描述如飞机等载具的方向。在航空航天工程中，它们通常被称为欧拉角。
+
+\textbf{方向向量} 
+ 
+欧拉还意识到，两次旋转的组合等效于绕另一个不同固定轴的单次旋转（欧拉旋转定理）。因此，前面三个角的组合必须等同于仅一次旋转，其轴的计算在引入矩阵之前相当复杂。基于这一事实，欧拉引入了一种描述任意旋转的矢量方法，使用旋转轴上的一个矢量，其模等于旋转角度的大小。因此，任何方向都可以通过一个旋转向量（也称为欧拉向量）来表示，该向量从参考框架导向该方向。当用于表示方向时，旋转向量通常称为方向向量或姿态向量。
+
+一种类似的方法称为轴角表示，使用一个与旋转轴对齐的单位向量和一个单独的值来表示旋转角度（参见图示）。
+\begin{figure}[ht]
+\centering
+\includegraphics[width=6cm]{./figures/98dac08a11e6403d.png}
+\caption{泰特–布莱恩角，另一种描述方向的方法} \label{fig_GTDL_4}
+\end{figure}
+\textbf{方向矩阵}
+
+随着矩阵的引入，欧拉定理被重新表述。旋转被用正交矩阵描述，这些矩阵称为旋转矩阵或方向余弦矩阵。当用于表示方向时，旋转矩阵通常称为方向矩阵或姿态矩阵。
+
+上述的欧拉向量是旋转矩阵的特征向量（旋转矩阵有唯一的实特征值）。两个旋转矩阵的乘积即为旋转的组合。因此，和之前一样，方向可以表示为从初始参考系到达所需参考系的旋转。
+
+在 \( n \) 维空间中，非对称物体的配置空间为 \( \text{SO}(n) \times \mathbb{R}^n \)。可以通过将切向量的基附加到物体上来可视化方向，每个向量指向的方向决定了物体的方向。
+
+\textbf{方向四元数}
+
+另一种描述旋转的方法是使用旋转四元数，也称为单位四元数。它们等价于旋转矩阵和旋转向量。与旋转向量相比，它们可以更容易地与矩阵相互转换。当用于表示方向时，旋转四元数通常称为方向四元数或姿态四元数。
+\subsubsection{三维空间中的牛顿第二定律}  
+要在三维空间中考虑刚体动力学，必须扩展牛顿第二定律，以定义刚体的运动与作用在其上的力和力矩系统之间的关系。
+
+牛顿为单个粒子制定了他的第二定律，内容是：“物体的运动变化与所施加的力成正比，并且沿着施力的直线方向。”[3] 由于牛顿通常将质量乘以速度称为粒子的“运动”，因此“运动变化”指的是粒子的质量乘以加速度，所以这条定律通常写作：
+\[
+\mathbf{F} = m \mathbf{a},~
+\]
+其中 \( \mathbf{F} \) 被理解为作用在粒子上的唯一外力，\( m \) 是粒子的质量，\( \mathbf{a} \) 是其加速度向量。将牛顿第二定律扩展到刚体的方法是考虑一个刚性粒子系统。
