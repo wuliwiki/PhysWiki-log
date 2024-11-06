@@ -1,0 +1,57 @@
+% GitLab CI/CD 笔记
+% license Usr
+% type Note
+
+\verb`.gitlab-ci.yml` 文件用于设置 CI/CD
+
+环境变量
+\begin{lstlisting}[language=none]
+# 设置环境变量
+variables:
+  MY_NAME: "codegen"
+  MY_LIB_VERSION: "3.5.5"
+  PACKAGE_VERSION: $CI_COMMIT_TAG
+
+# 如果这些条件不满足，将直接跳过整个 pipeline（下面的东西不会执行）
+workflow:
+  rules:
+    - if: ... && ...
+    - if: ...
+      when: never
+    - if: ...
+    - if: ...
+
+
+# 定义不同阶段（按照顺序）
+stages:
+  - build
+  - upload
+  - deploy
+
+# 一个 build 阶段的 job，（每个阶段可以有多个 job，例如编译到不同平台）
+build-ubuntu22.04: # job 的名称
+  stage: build # 指定执行的阶段
+  image: runner/builtin:ubuntu22.04 # docker 容器
+  rules: # 该 job 运行的触发条件
+    - if: $CI_PIPELINE_SOURCE == 'merge_request_event' # merge request 时
+    - if: $CI_COMMIT_BRANCH == 'master' # 如果是 master 分支
+    - if: $CI_COMMIT_TAG # 如果 commit 有 tag
+    - when: manual # 即使条件满足，也要手动确认才会运行
+  script: # 运行的代码（相当于依次粘贴到命令行运行）
+    - .build-tools/build.sh ubuntu22.04
+  artifacts:
+    expire_in: 1 day
+    paths:
+      - build/*.zip
+  tags:
+    - linux
+\end{lstlisting}
+
+\subsection{如果需要从 Package Registry 下载依赖}
+可以在 \verb`.gitlab-ci.yml` 脚本中从 api 下载安装包（例如使用 \verb`curl`）：
+\begin{lstlisting}[language=none]
+variables:
+  PACKAGE_REGISTRY_URL: "${CI_API_V4_URL}/projects/${CI_PROJECT_ID}/
+    packages/generic/仓库名/${CI_COMMIT_TAG}/文件名"
+\end{lstlisting}
+其中 \verb`项目id` 可以在仓库首页右上角的三个点里面复制。

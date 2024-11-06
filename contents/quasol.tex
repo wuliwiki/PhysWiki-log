@@ -1,47 +1,172 @@
-% 二次方程求根公式
+% 因式分解与一元二次方程（高中）
 % license Xiao
 % type Tutor
+\pentry{函数回顾\nref{nod_HsFunB}}{nod_b9ee}
 
-\subsection{求根公式}
-解决二次方程最常规的方法是运用求根公式。
-对于二次方程
-$$ax^2+bx+c=0 \qquad (a\neq 0)~,$$
-定义判别式
-$$\Delta = b^2-4ac~,$$
-那么方程的两个根分别为
-$$
-\begin{aligned}
-x_1&=\frac{-b+\sqrt{\Delta}}{2a}~,\\
-x_2&=\frac{-b-\sqrt{\Delta}}{2a}~.
-\end{aligned}
-$$
-可见，当
-$$
-\begin{aligned}
-\Delta &> 0 \Rightarrow \text{方程有两个不同的根}\\
-\Delta &= 0 \Rightarrow \text{方程有两个相同的根}\\
-\Delta &< 0 \Rightarrow \text{方程无实数根（但有两个共轭的复数根）}\\
-\end{aligned}~
-$$
+本篇将回顾初中阶段学习的代数运算，包括\textbf{因式分解（factorization）}和\textbf{一元二次方程（quadratic equation）}的内容。这些知识构成了高中数学的重要基础，是理解更复杂代数运算和解析几何的关键。高中学习中，因式分解帮助理解多项式的结构，简化复杂表达式，而一元二次方程则用于解决一系列涉及二次关系的函数、解析几何问题。
 
-\subsubsection{几何含义}
-假设$f(x)=ax^2+bx+c$，那么求解方程$ax^2+bx+c=0$即化为寻找函数$f(x)$的所有零点$f(x)=0$。
+\subsection{因式分解}
+
+\textbf{单项式（monomial）}是由常数系数与变量的非负整数次幂的乘积构成的数学表达式。一个单项式可能包含一个变量或多个变量，但它们的幂次必须是非负整数。例如，$3x^2y$ 和 $7z$ 是单项式，而包含其他运算（如 $\sin x$、$\cos x$、$2^x$）或非整数次幂（如 $\displaystyle x^{1/2} = \sqrt{x}$、$\displaystyle x^{-1} = \frac{1}{x}$）的表达式均不是单项式。\textbf{多项式（polynomial）}是由一个或多个单项式通过加法连接组成的表达式。不含变量的单项式称为\textbf{常数项}，如 $5$ 或 $-3$，这类单项式在表达式中不会随变量的变化而变化。
+
+\textbf{因式分解（factorization）}是将一个多项式分解为多个多项式或单项式的乘积的操作，这些构成乘积的式子称为\textbf{因式（factor）}。因式分解是解决多项式方程的一个重要工具，因为多项式方程可以转化为“多项式 = 0”的形式。利用因式分解，方程可以进一步简化为多个因式的乘积等于零，而乘积为零的情况下，任一因式可以等于零，从而降低了方程求解的难度。
+
+通常，分解所得的每个因式应为\textbf{不可约的（irreducible）}，即不能进一步分解。高中阶段常见的不可约的因式包括：单项式、一次多项式（形如$ax+b$）以及符合\aref{条件}{eq_quasol_4}的二次多项式（形如$ax^2+bx+c$）。其余的因式可以通过\textbf{爱森斯坦判别法（Eisenstein's criterion）}来判定：
+对多项式$a_n x^n + a_{n-1}x^{n-1} + \cdots + a_0$  ，若存在一个素数  $p$  使得 ：
+\begin{itemize}
+\item $a_{n-1},a_{n-2},\dots,a_0$能被$p$整除；
+\item $a_n$不能被$p$整除；
+\item $a_0$不能被$p^2$整除。
+\end{itemize}
+则这个多项式在有理数范围内是不可约的。这个判别法本身只作为扩展视野，但它揭示了因式分解与质数计算的重要关系。这使得因式分解本质上和质因数分解分不开，是一个比较困难的问题。在高中阶段一般只会涉及到简单的分解，这是基本功需要非常熟练。因式分解的方法包括：
+\begin{itemize}
+\item 提取公因式，如：$4x^2+2x\to2x(2x+1)$；
+\item 分组分解，有时需要添项或拆项，如：$ x^3 + x^2 + x + 1\to (x^3  + x) + (x^2+ 1)\to(x^2 + 1)(x + 1) $
+\item 十字相乘法
+\item \aref{恒等变换公式}{sub_HsIden_1}
+\end{itemize}
+
+\textbf{十字相乘法（cross method）}是一种用于分解三项式的方法。以二次三项式$ax^2 + bx + c$为例，它的核心在于将 $a,c$ 分别分解成两个数的乘积，然后交叉相乘，使得交叉相乘的结果之和等于中间项的系数$b$。\addTODO{原理图}
+
+它背后的依据是：
+\begin{equation}
+(ax+b)(cx+d)=acx^2+(ad+bc)x+bd~.
+\end{equation}
+
+一般地，若$a,b,c,d$分别代表一个单项式而非常数，那么有
+\begin{equation}
+ac+(ad+bc)+bd=(a+b)(c+d)~.
+\end{equation}
+这时就可分解二次三项式以外的三项式，如：$3x^4+7x^2y+2y^2$，首项分为$3x^2,x^2$，末项分为$2y,y$，从而有$3x^2\cdot2y+x^2\cdot y=7x^2y$，因此可以分解为$(3x^2+y)(x^2+2y)$。
+
+\subsection{一元二次方程的根}
+
+一元二次方程指形如
+\begin{equation}
+ax^2+bx+c=0 \qquad (a\neq 0)~.
+\end{equation}
+的方程，它可以通过“配平方”得到如下形式：
+\begin{equation}\label{eq_quasol_3}
+\begin{split}
+ & ax^2+bx+c = 0 \\ 
+\iff&x^2+2{b\over 2a} x+\left({b\over 2a}\right)^2 = \left({b\over 2a}\right)^2-{c\over a} \\ 
+\iff&\left(x+{b\over 2a}\right)^2 = {b^2-4ac\over 4a^2} \\ 
+\end{split}~.
+\end{equation}
+
+从函数的视角来看，如果设函数$y=ax^2+bx+c$，那么求解方程$ax^2+bx+c=0$即化为寻找所有使$y=0$成立的点。
+
+\subsubsection{存在性判定}
+
+由于\autoref{eq_quasol_3} 左侧及右侧分母是一个平方形式，因此$x$的值只与右侧分子的符号相关，定义其为判别式：
+\begin{equation}\label{eq_quasol_4}
+\Delta = b^2-4ac~.
+\end{equation}
+
+则：
+\begin{itemize}
+\item $\Delta > 0$时，方程有实数解，为两个不同的实根。
+\item $\Delta = 0$时，方程有实数解，为两个相同的实根。\footnote{这里称两个相同实根而非一个实根，是根据\aref{代数基本定理}{the_HsEquN_1}。}
+\item $\Delta < 0$时，方程无实数解。
+\end{itemize}
+
+从函数的视角看\autoref{eq_quasol_3} 的变化，其实就是相当于将函数水平平移到了以$y$轴为对称轴的位置上。而方程左侧是一个开口向上，对称轴为$y$轴的二次函数，右侧则是它与$y$轴的交点。那么交点的正负自然意味着函数与$x$轴交点的性质。
+
 \begin{figure}[ht]
 \centering
 \includegraphics[width=14cm]{./figures/652b2f4efe76656f.pdf}
 \caption{$f(x)$示意图。从左到右为$\Delta > 0, \Delta = 0, \Delta < 0$} \label{fig_quasol_1}
 \end{figure}
-可见，$x=-\frac{b}{2a}$ 为函数$f(x)$的对称轴，两个零点（如果存在）关于该轴对称。
 
-\subsection{配方法}
-对于一些特定的问题，可以将方程配方并求解，有时这比直接使用求根公式更为简便。
+\subsubsection{求根公式}
 
-例如，可以将方程配方为如下形式：
-$$(x-a)(x-b)=0\Rightarrow x_1=a, x_2=b~.$$
+对于\autoref{eq_quasol_3} ，方程有解时，两个根分别为：
+\begin{equation}\label{eq_quasol_1}
+x_1=\frac{-b+\sqrt{\Delta}}{2a}\qquad x_2=\frac{-b-\sqrt{\Delta}}{2a}~.
+\end{equation}
+或统一写作
+\begin{equation}
+x_{1,2} = \frac{-b \pm \sqrt{b^2 - 4ac}}{2a}~.
+\end{equation}
+这被称为\textbf{二次方程的求根公式（quadratic formula）}。
+
+\autoref{eq_quasol_1} 中，若$\Delta = 0$，则$\displaystyle x_1=x_2=-\frac{b}{2a}$与之前推理的结论相符。$\displaystyle x=-\frac{b}{2a}$也正是二次函数的对称轴，两个零点如果存在则一定关于该轴对称。
+
+
+\subsubsection{快速解法}
+
+求根公式尽管能适用于所有一元二次方程，且形式固定，但由于其计算过程繁琐，实际做题中可以根据具体情况简化操作。
+
+对于可以快速因式分解的方程，可直接得到：
+$$k(x-a)(x-b)=0\Rightarrow x_1=a, x_2=b~.$$
 \begin{figure}[ht]
 \centering
 \includegraphics[width=5cm]{./figures/fe527c666ebfd775.pdf}
 \caption{$f(x)=(x-a)(x-b)$示意图} \label{fig_quasol_2}
 \end{figure}
-或者
-$$(x-a)^2=b\Rightarrow x_1=\sqrt{b}+a, x_2=-\sqrt{b}+a~.$$
+
+对于$a=1$，$b=2n$为偶数的一元二次方程$x^2+2nx+c=0$，可以直接配方得到：
+\begin{equation}
+(x+n)^2=m\qquad(m=n^2-c)~.
+\end{equation}
+自然两个根就是
+\begin{equation}
+x_1=\sqrt{m}-n\qquad x_2=-\sqrt{m}-n~.
+\end{equation}
+这与求根公式的推导过程相同，但计算上利用特殊条件快一些。
+
+\subsection{韦达定理}
+
+\textbf{韦达定理（Vieta's formulas）}是法国数学家弗朗索瓦·韦达（François Viète）发现的一组描述代数方程的根和方程系数的关系的公式，因此也称\textbf{根与系数关系}。
+
+\begin{theorem}{韦达定理（二次情况）}
+设方程 $a x^2 + b x + c = 0\quad(a \neq 0)$的两个根为 $x_1$ 和 $x_2$，则它们满足：
+$$\begin{aligned}
+x_1 + x_2 &= -\frac{b}{a} ~,\\
+x_1 x_2 &= \frac{c}{a}~.
+\end{aligned}$$
+\end{theorem}
+
+下面给出证明：
+
+对方程 $a x^2 + b x + c = 0\quad(a \neq 0)$，设其有两个根 $x_1$ 和 $x_2$，则有：
+\begin{equation}\label{eq_quasol_2}
+\begin{split}
+ax^2+bx+c &= 0 \\ 
+&=a(x-x_1)(x-x_2)\\
+&=ax^2-a(x_1+x_2)x+ax_1x_2
+\end{split}~.
+\end{equation}
+由于\autoref{eq_quasol_2} 为恒成立的代数式，所以两侧对应变量的系数相等，从而有：
+\begin{equation}
+\begin{cases}
+-a(x_1+x_2)=b\\
+ax_1x_2=c
+\end{cases}
+\implies
+\begin{cases}
+x_1 + x_2 &= \displaystyle-\frac{b}{a} \\
+x_1 x_2 &= \displaystyle\frac{c}{a}
+\end{cases}.~
+\end{equation}
+
+证毕。
+
+这是一种常用的证明方法，即恒成立的代数方程，两侧对应位置的系数相等。韦达定理使得面对方程时，即使不求解具体的解的形式，也可以描述两个解之间的关系，这在\enref{解析几何}{JXJH}部分会有非常重要的应用。另外，对于任意$n$次代数方程的情况，有：
+\begin{theorem}{韦达定理}
+对于$n$次代数方程$a_0x^n+a_1x^{n-1}+\cdots+a_n=0\quad(a_0\neq0)$，若存在$n$个根$x_1,x_2,\cdots,x_n$，则有：
+\begin{equation}
+\begin{split}
+&x_1+x_2+\cdots +x_n=-{a_1\over a_0}\\
+&(x_1x_2+x_1x_3+\cdots+ x_1x_n)+(x_2x_3+\cdots +x_2x_n)+\cdots+x_{n-1}x_n={a_2\over a_0}\\
+&\vdots\\
+&x_1x_2\cdots x_n=(-1)^n{a_n\over a_0}
+\end{split}~.
+\end{equation}
+也可以统一记作\footnote{此处使用的是\enref{求和符号}{SumSym}和\enref{求积符号}{ProdSy}。如果不理解可以跳过。}：
+\begin{equation}
+\sum_{1\le i_1 < i_2 < \cdots < i_k\le n} \left(\prod_{j = 1}^k r_{i_j}\right)=(-1)^k\frac{a_{n-k}}{a_n}~.
+\end{equation}
+\end{theorem}
+
+它的证明方式与之前完全相同，可以自己尝试做一下，在计数原理部分会有更透彻的讲解。
