@@ -87,6 +87,129 @@ $\E^{(\bvec{M}\Tr)}=(\E^{\bvec{M}})\Tr$，$\E^{(\bvec{M}^\dagger)}=({\E^{\bvec{M
 
 
 
+\subsection{对角化计算矩阵指数}
+
+
+
+最容易计算指数的矩阵，是对角矩阵。由于两个对角矩阵相乘后还是对角矩阵，结果矩阵的第$i$个对角元就是两个矩阵的第$i$个对角元相乘，因此对于任意非负整数$k$有
+\begin{equation}
+\qty(\opn{diag}(a_1, a_2, \cdots, a_n))^k = \opn{diag}(a_1^k, a_2^k, \cdots, a_n^k)~. 
+\end{equation}
+于是易得
+\begin{equation}
+\E^{\opn{diag(a_1, a_2, \cdots, a_n)}} = \opn{diag}(\E^{a_1}, \E^{a_2}, \cdots, \E^{a_n})~. 
+\end{equation}
+
+
+如果矩阵不是对角的，则计算会麻烦很多。但是，如果矩阵能通过相似变换化为对角矩阵，那么根据\autoref{eq_MatExp_1} 即可大大简化计算。对于任意矩阵$\bvec{M}$，如果存在可逆矩阵$\bvec{Q}$使得$\bvec{Q}^{-1}\bvec{MQ}$是对角矩阵，那么$\E^{\bvec{Q}^{-1}\bvec{MQ}}$非常容易计算，从而容易计算出
+\begin{equation}
+\E^{\bvec{M}} = \bvec{Q}\E^{\bvec{Q}^{-1}\bvec{MQ}}\bvec{Q}^{-1}~. 
+\end{equation}
+利用可逆矩阵得到对角矩阵$\bvec{Q}^{-1}\bvec{MQ}$的过程，称为矩阵$\bvec{M}$的对角化。
+
+并不是所有矩阵都能对角化，但复数域上的矩阵一定可以。我们可以利用特征方程来做对角化。求解特征方程
+\begin{equation}
+\det\qty(\bvec{M}-\lambda\bvec{E})=0~, 
+\end{equation}
+这个方程是关于$\lambda$的$n$次多项式方程，其中$n$是$\bvec{M}$的阶数。根据\enref{代数学基本定理}{BscAlg}，此方程一定有$n$个解（计入重数），记为$\lambda_1, \cdots, \lambda_n$，它们就是$\bvec{M}$的特征值。接下来，求解线性方程组（向量的线性方程）
+\begin{equation}
+\bvec{M}\bvec{X} = \lambda_i\bvec{X}~, 
+\end{equation}
+每个这样的方程组一定有\textbf{非零解}（为什么？），这些解即为$\bvec{M}$的特征向量。每个非零解作为列向量，排成一排，所得的矩阵便是$\bvec{Q}$。
+
+
+\begin{example}{复矩阵对角化}
+
+给定复矩阵
+\begin{equation}
+\pmat{
+    1&-1\\
+    1&1
+}~, 
+\end{equation}
+其特征方程为
+\begin{equation}
+(1-\lambda)(1-\lambda)+1=0~, 
+\end{equation}
+解为
+\begin{equation}
+\lambda_1 = 1-\I, \lambda_2 = 1+\I~. 
+\end{equation}
+
+对特征值$1-\I$求特征向量：
+\begin{equation}
+\pmat{
+    1&-1\\
+    1&1
+}
+\pmat{
+    x\\y
+}
+=
+(1-\I)
+\pmat{
+    x\\y
+}~, 
+\end{equation}
+得到非零解
+\begin{equation}
+\pmat{
+1\\ \I
+}~. 
+\end{equation}
+同理，对特征值$1+\I$求特征向量，得到非零解
+\begin{equation}
+\pmat{
+1\\ -\I
+}~. 
+\end{equation}
+于是可以令
+\begin{equation}
+\bvec{Q} = 
+\pmat{
+    1&1\\
+    \I&-\I
+}~, 
+\end{equation}
+从而得到对角矩阵
+\begin{equation}
+\bvec{Q}^{-1}\bvec{QM} = 
+\frac{1}{2}
+\pmat{
+1&-\I\\
+1&\I
+}
+\pmat{
+1&-1\\
+1&1
+}
+\pmat{
+    1&1\\
+    \I&-\I
+}
+=
+\pmat{
+    1-\I&0\\
+    0&1+\I
+}
+~. 
+\end{equation}
+
+\end{example}
+
+
+由于实数是复数的子集，故实矩阵也可以在复数域上对角化，虽然对角化后的结果可能不再是实矩阵，但依然可以计算其矩阵指数后再做逆相似变换，还原回实矩阵。
+
+
+
+
+
+
+
+
+
+
+
 
 
 
