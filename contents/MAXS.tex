@@ -167,7 +167,12 @@ I = \iint_{\Sigma} \mathbf{J} \cdot \mathrm{d} \mathbf{S},~
 进一步的简化可以通过吸收 \( 4\pi \) 的因子来实现。这个过程称为“有理化”，会影响库仑定律或高斯定律是否包含此类因子（参见主要用于粒子物理的海维赛德-洛伦兹单位制）。
 \subsection{微分形式和积分形式之间的关系}  
 微分形式和积分形式的等价性是高斯散度定理和开尔文–斯托克斯定理的结果。
-\subsection{通量与散度}
+\subsubsection{通量与散度}
+\begin{figure}[ht]
+\centering
+\includegraphics[width=7cm]{./figures/73fbd305a7520400.png}
+\caption{体积 Ω 及其封闭边界 ∂Ω，包含（或包围）一个矢量场 F 的源（+）和汇（−）。在这里，F 可以是带有源电荷的电场 E，但不是磁场 B，因为如图所示，B 没有磁荷。向外的单位法向量为 n。} \label{fig_MAXS_7}
+\end{figure}
 根据纯粹的数学高斯散度定理，边界面 ∂Ω 上的电通量可以重写为：
 
 \[\Oiint_{\scriptstyle \partial \Omega} \mathbf{E} \cdot \mathrm{d} \mathbf{S} = \iiint_{\Omega} \nabla \cdot \mathbf{E} \, \mathrm{d} V~\]
@@ -183,3 +188,231 @@ I = \iint_{\Sigma} \mathbf{J} \cdot \mathrm{d} \mathbf{S},~
 \[\oiint_{\scriptstyle \partial \Omega} \mathbf{B} \cdot \mathrm{d} \mathbf{S} = \iiint_{\Omega} \nabla \cdot \mathbf{B} \, \mathrm{d} V = 0.~\]
 
 对于所有的 Ω，当且仅当 \(\nabla \cdot \mathbf{B} = 0\) 在各处成立时，这个等式才成立。
+\subsubsection{环量与旋度}
+\begin{figure}[ht]
+\centering
+\includegraphics[width=6cm]{./figures/ef55f4e5093d9fc3.png}
+\caption{曲面 Σ 具有封闭边界 ∂Σ。F 可以是 E 或 B 场。同样，n 是单位法向量。（向量场的旋度并不真正表现为“环量”，这只是一个启发性描述。）} \label{fig_MAXS_8}
+\end{figure}
+根据开尔文-斯托克斯定理，我们可以将围绕封闭边界曲线 ∂Σ 的场的线积分重写为其环量（即它们的旋度）在该曲线所包围的表面上的积分，即
+\[
+\oint _{\partial \Sigma }\mathbf {B} \cdot \mathrm {d} {\boldsymbol {\ell }}=\iint _{\Sigma }(\nabla \times \mathbf {B} )\cdot \mathrm {d} \mathbf {S} ,~
+\]
+因此，安培-麦克斯韦定律（安培回路定律的修正版本）的积分形式可以重写为
+\[
+\iint _{\Sigma }\left(\nabla \times \mathbf {B} -\mu _{0}\left(\mathbf {J} +\varepsilon _{0}{\frac {\partial \mathbf {E} }{\partial t}}\right)\right)\cdot \mathrm {d} \mathbf {S} =0.~
+\]
+由于可以任意选择 Σ，例如作为任意小、任意取向、任意中心的圆盘，我们得出结论，只有当微分形式的安培-麦克斯韦定律满足时，积分形式才成立。类似地，法拉第定律的微分和积分形式的等价性也是如此。
+
+线积分和旋度与经典流体力学中的量类似：流体的环量是流体流速场沿封闭回路的线积分，而流体的涡度是速度场的旋度。
+\subsection{电荷守恒}
+电荷不变性可以作为麦克斯韦方程组的推论得出。通过散度-旋度恒等式，安培-麦克斯韦定律的左侧具有零散度。展开右侧的散度，交换导数并应用高斯定律，得到：
+\[ 0 = \nabla \cdot (\nabla \times \mathbf{B}) = \nabla \cdot \left(\mu_{0} \left(\mathbf{J} + \varepsilon_{0} \frac{\partial \mathbf{E}}{\partial t}\right)\right) = \mu_{0} \left(\nabla \cdot \mathbf{J} + \varepsilon_{0} \frac{\partial}{\partial t} \nabla \cdot \mathbf{E}\right) = \mu_{0} \left(\nabla \cdot \mathbf{J} + \frac{\partial \rho}{\partial t}\right)~\]
+即：
+\[
+\frac{\partial \rho}{\partial t} + \nabla \cdot \mathbf{J} = 0.~
+\]
+根据高斯散度定理，这意味着在固定体积内电荷的变化率等于穿过边界的净电流：
+\[
+\frac{d}{dt} Q_{\Omega} = \frac{d}{dt} \iiint_{\Omega} \rho \, \mathrm{d} V = -\oiint_{\partial \Omega} \mathbf{J} \cdot \mathrm{d} \mathbf{S} = -I_{\partial \Omega}.~
+\]
+特别是在一个孤立系统中，总电荷是守恒的。
+\subsection{真空方程、电磁波与光速}  
+\begin{figure}[ht]
+\centering
+\includegraphics[width=6cm]{./figures/be5bef61f91f6fd1.png}
+\caption{此 3D 图显示了一个从左向右传播的平面线性极化波，其定义为 \(E = E_0 \sin(-\omega t + k \cdot r)\) 和 \(B = B_0 \sin(-\omega t + k \cdot r)\)。在闪烁点处检测到振荡场。水平波长为 \(\lambda\)。满足 \(E_0 \cdot B_0 = 0\)、\(E_0 \cdot k = 0\) 和 \(B_0 \cdot k = 0\)。} \label{fig_MAXS_9}
+\end{figure}
+在没有电荷（ρ = 0）和电流（J = 0）的区域（如真空中），麦克斯韦方程简化为：
+\[
+\nabla \cdot \mathbf{E} = 0, \quad \nabla \times \mathbf{E} + \frac{\partial \mathbf{B}}{\partial t} = 0, \quad \nabla \cdot \mathbf{B} = 0, \quad \nabla \times \mathbf{B} - \mu_0 \varepsilon_0 \frac{\partial \mathbf{E}}{\partial t} = 0.~
+\]
+取旋度方程的旋度（∇×），并使用旋度的旋度恒等式，我们得到：
+\[
+\mu_0 \varepsilon_0 \frac{\partial^2 \mathbf{E}}{\partial t^2} - \nabla^2 \mathbf{E} = 0,~
+\]
+\[
+\mu_0 \varepsilon_0 \frac{\partial^2 \mathbf{B}}{\partial t^2} - \nabla^2 \mathbf{B} = 0.~
+\]
+这两个方程分别描述了电场 \(\mathbf{E}\) 和磁场 \(\mathbf{B}\) 的波动行为。
+
+该量 \(\mu_0 \varepsilon_0\) 的维度为 (T/L)\(^2\)。定义
+\[
+c = (\mu_0 \varepsilon_0)^{-1/2}~
+\]
+后，上述方程具有标准波动方程的形式：
+\[
+\frac{1}{c^2} \frac{\partial^2 \mathbf{E}}{\partial t^2} - \nabla^2 \mathbf{E} = 0,~
+\]
+\[
+\frac{1}{c^2} \frac{\partial^2 \mathbf{B}}{\partial t^2} - \nabla^2 \mathbf{B} = 0.~
+\]
+在麦克斯韦的时代，已知的 \(\varepsilon_0\) 和 \(\mu_0\) 的值给出 \(c \approx 2.998 \times 10^8\) m/s，这是当时已知的真空中光速。由此他提出光和无线电波是传播的电磁波，这一理论已被充分证实。在旧的SI单位制中，\(\mu_0 = 4\pi \times 10^{-7}\) 和 \(c = 299,792,458~\text{m/s}\) 是定义常数（这意味着定义了 \(\varepsilon_0 = 8.8541878... \times 10^{-12}~\text{F/m}\)，从而定义了安培和米）。在新的SI单位制中，只有 \(c\) 保持定义值，并且电子电荷具有定义值。
+
+在具有相对介电常数 \(\varepsilon_r\) 和相对磁导率 \(\mu_r\) 的材料中，光的相速度变为
+\[
+v_{\text{p}} = \frac{1}{\sqrt{\mu_0 \mu_r \varepsilon_0 \varepsilon_r}},~
+\]
+通常比 \(c\) 小（见注释 5）。
+
+此外，\(\mathbf{E}\) 和 \(\mathbf{B}\) 相互垂直，且与波传播方向也垂直，并且它们是相位一致的。正弦平面波是这些方程的一种特殊解。麦克斯韦方程解释了这些波如何能够物理地在空间中传播。变化的磁场通过法拉第定律产生变化的电场，反过来，这个电场通过麦克斯韦对安培环路定律的修正产生变化的磁场。这种循环使得这些波（现在称为电磁辐射）可以以速度 \(c\) 在空间中传播。
+\subsection{宏观表述}
+上述方程为麦克斯韦方程的微观版本，以（可能是原子级别的）电荷和电流来表示电场和磁场。这有时被称为“通用”形式，但下面的宏观版本同样具有通用性，不同之处在于记账方式。
+
+微观版本有时称为“真空中的麦克斯韦方程”，因为方程的结构中并未包含物质介质，而是仅在电荷和电流项中出现。微观版本由洛伦兹引入，他试图利用这一版本从微观成分推导出物质的宏观特性。
+
+“麦克斯韦的宏观方程”，也称为“物质中的麦克斯韦方程”，与麦克斯韦本人引入的方程更加相似。
+\begin{table}[ht]
+\centering
+\caption\label{MAXS2}
+\begin{tabular}{|c|c|c|c|}
+\hline
+\textbf{名称} & \textbf{积分形式方程 (SI 单位) } & \textbf{微分形式方程 (SI 单位)} & \textbf{微分形式方程 (高斯单位)} \\
+\hline 高斯定律 & $\oiint_{\partial \Omega} \mathbf{D} \cdot d\mathbf{S} = \iiint_{\Omega} \rho_f \, dV$ & $\nabla \cdot \mathbf{D} = \rho_f$ & 
+$\nabla \cdot \mathbf{D} = 4\pi \rho_f$ \\
+\hline 安培-麦克斯韦定律 & $\oint_{\partial \Sigma} \mathbf{H} \cdot d\mathbf{\ell} = \iint_{\Sigma} \mathbf{J_f} \cdot d\mathbf{S} + \frac{d}{dt} \iint_{\Sigma} \mathbf{D} \cdot d\mathbf{S}$ & $\nabla \times \mathbf{H} = \mathbf{J_f} + \frac{\partial \mathbf{D}}{\partial t}$ & $\nabla \times \mathbf{H} = \frac{1}{c} \left( 4\pi \mathbf{J_f} + \frac{\partial \mathbf{D}}{\partial t} \right)$ \\
+\hline 磁场的高斯定律 & $\oiint_{\partial \Omega} \mathbf{B} \cdot d\mathbf{S} = 0$ & $\nabla \cdot \mathbf{B} = 0$ & $\nabla \cdot \mathbf{B} = 0$ \\
+\hline 麦克斯韦-法拉第方程（法拉第感应定律） & $\oint_{\partial \Sigma} \mathbf{E} \cdot d\mathbf{\ell} = - \frac{d}{dt} \iint_{\Sigma} \mathbf{B} \cdot d\mathbf{S}$ & $\nabla \times \mathbf{E} = - \frac{\partial \mathbf{B}}{\partial t}$ & $\nabla \times \mathbf{E} = - \frac{1}{c} \frac{\partial \mathbf{B}}{\partial t}$ \\
+\hline 
+\end{tabular}
+\end{table}
+在宏观方程中，束缚电荷 \( Q_b \) 和束缚电流 \( I_b \) 的影响被包含在位移场 \( D \) 和磁化场 \( H \) 中，而方程仅依赖于自由电荷 \( Q_f \) 和自由电流 \( I_f \)。这反映了将总电荷 \( Q \) 和电流 \( I \)（及其密度 \( \rho \) 和 \( J \)）分成自由部分和束缚部分的划分：
+\[
+Q = Q_{\text{f}} + Q_{\text{b}} = \iiint _{\Omega }\left(\rho _{\text{f}}+\rho _{\text{b}}\right)\,\mathrm {d} V=\iiint _{\Omega }\rho \,\mathrm {d} V,~
+\]
+\[
+I = I_{\text{f}} + I_{\text{b}} = \iint _{\Sigma }\left(\mathbf {J} _{\text{f}}+\mathbf {J} _{\text{b}}\right)\cdot \mathrm {d} \mathbf {S} =\iint _{\Sigma }\mathbf {J} \cdot \mathrm {d} \mathbf {S} .~
+\]
+这种划分的代价是需要通过表征方程来确定额外的场 \( D \) 和 \( H \)，这些方程将这些场与电场 \( E \) 和磁场 \( B \) 及束缚电荷和电流联系起来。
+
+参见下文，了解微观方程与宏观方程的详细区别。微观方程涉及包括材料贡献的总电荷和总电流，适用于空气/真空环境；而宏观方程处理自由电荷和电流，更适合在材料中使用。
+\subsubsection{束缚电荷与电流}  
+\begin{figure}[ht]
+\centering
+\includegraphics[width=8cm]{./figures/0a210b137d14df3e.png}
+\caption{示意图展示了微观偶极子的集合如何在顶部和底部产生相反的表面电荷。右图：展示了微观电流环的集合如何组合在一起形成宏观循环电流环。在边界内部，各个部分的贡献倾向于相互抵消，但在边界处则不会发生抵消。} \label{fig_MAXS_10}
+\end{figure}
+当电场施加到介电材料上时，其分子会通过形成微观电偶极子作出响应——其原子核向电场方向移动一小段距离，而电子则向相反方向移动一小段距离。这在材料中产生了宏观的束缚电荷，尽管所有参与的电荷都束缚在各自的分子中。例如，如果每个分子都以类似图示的方式作出相同的响应，这些微小的电荷移动会合并，在材料的一侧形成一层正束缚电荷，在另一侧形成一层负束缚电荷。束缚电荷最便捷的描述方式是通过材料的极化强度 \( P \)，即其每单位体积的偶极矩。如果 \( P \) 是均匀的，则仅在 \( P \) 进入和离开材料的表面处产生宏观的电荷分离。而对于非均匀的 \( P \)，材料内部也会产生电荷。[13]
+
+在所有材料中，构成材料的原子会表现出与原子成分的角动量密切相关的磁矩，特别是电子的磁矩。这种与角动量的联系使人联想到一个微观电流环的集合。在材料外部，这样的微观电流环集合与围绕材料表面的宏观电流没有区别，尽管没有任何单个电荷在长距离上移动。这些束缚电流可以用磁化强度 \( M \) 来描述。[14]
+
+因此，非常复杂且细微的束缚电荷和束缚电流可以通过极化强度 \( P \) 和磁化强度 \( M \) 在宏观尺度上表示。\( P \) 和 \( M \) 在足够大的尺度上对这些电荷和电流进行平均，以避免观察到单个原子的细微结构，同时也足够小以在材料中随位置变化。这样，麦克斯韦的宏观方程忽略了许多微观尺度的细节，这些细节在理解宏观尺度的问题时可能并不重要，因为这些方程计算的是在某个适当体积上平均的场。
+\subsubsection{辅助场、极化与磁化}
+辅助场的定义为：
+\[
+\mathbf{D}(\mathbf{r}, t) = \varepsilon_0 \mathbf{E}(\mathbf{r}, t) + \mathbf{P}(\mathbf{r}, t),~
+\]
+\[
+\mathbf{H}(\mathbf{r}, t) = \frac{1}{\mu_0} \mathbf{B}(\mathbf{r}, t) - \mathbf{M}(\mathbf{r}, t),~
+\]
+其中 \(\mathbf{P}\) 是极化场，\(\mathbf{M}\) 是磁化场，它们分别通过微观束缚电荷和束缚电流来定义。宏观束缚电荷密度 \(\rho_b\) 和束缚电流密度 \(\mathbf{J}_b\) 关于极化 \(\mathbf{P}\) 和磁化 \(\mathbf{M}\) 定义为：
+\[
+\rho_{\text{b}} = -\nabla \cdot \mathbf{P},~
+\]
+\[
+\mathbf{J}_{\text{b}} = \nabla \times \mathbf{M} + \frac{\partial \mathbf{P}}{\partial t}.~
+\]
+如果我们定义总电荷和电流密度、束缚电荷和电流密度以及自由电荷和电流密度为：
+\[
+\rho = \rho_{\text{b}} + \rho_{\text{f}},~
+\]
+\[
+\mathbf{J} = \mathbf{J}_{\text{b}} + \mathbf{J}_{\text{f}},~
+\]
+并使用上述定义关系来消去 \(\mathbf{D}\) 和 \(\mathbf{H}\)，那么“宏观”麦克斯韦方程就会再现“微观”方程。
+\subsubsection{本构关系}  
+为了应用“麦克斯韦的宏观方程”，有必要指定位移场 \(\mathbf{D}\) 与电场 \(\mathbf{E}\) 之间的关系，以及磁化场 \(\mathbf{H}\) 与磁场 \(\mathbf{B}\) 之间的关系。等效地，我们必须指定极化 \(\mathbf{P}\)（因此束缚电荷）和磁化 \(\mathbf{M}\)（因此束缚电流）对施加的电场和磁场的依赖性。指定这种响应的方程称为本构关系。对于实际材料，本构关系很少简单，通常只能近似地描述，并且通常通过实验确定。有关本构关系的更详细描述，请参阅主条目。[15]: 44–45  
+
+对于没有极化和磁化的材料，本构关系为（按定义）[9]: 2  
+\[
+\mathbf{D} = \varepsilon_0 \mathbf{E} ,
+\quad \mathbf{H} = \frac{1}{\mu_0} \mathbf{B},~
+\]  
+其中 \(\varepsilon_0\) 是真空介电常数，\(\mu_0\) 是真空磁导率。由于没有束缚电荷，总电荷和自由电荷、电流相等。
+
+对于微观方程的另一种观点是，它们是宏观方程，再加上真空表现为一种没有额外极化和磁化的完美线性“材料”的声明。更普遍地，对于线性材料，本构关系为[15]: 44–45  
+\[
+\mathbf{D} = \varepsilon \mathbf{E}, \quad \mathbf{H} = \frac{1}{\mu} \mathbf{B},~
+\]  
+其中 \(\varepsilon\) 是材料的介电常数，\(\mu\) 是材料的磁导率。对于位移场 \(\mathbf{D}\)，线性近似通常非常精确，因为除了实验室中能获得的极端电场或温度（如高功率脉冲激光器）之外，材料的原子间电场约为 \(10^{11}\) V/m，远高于外部电场。然而，对于磁化场 \(\mathbf{H}\)，线性近似在像铁这样的普通材料中可能失效，导致诸如磁滞现象的发生。不过，即使在线性情况下，也可能存在各种复杂情况。
+\begin{itemize}
+\item 对于均匀材料，\(\varepsilon\) 和 \(\mu\) 在材料中是常量，而对于非均匀材料，它们取决于材料内部的位置（或可能随时间变化）[16]: 463。  
+\item 对于各向同性材料，\(\varepsilon\) 和 \(\mu\) 是标量，而对于各向异性材料（例如由于晶体结构），它们是张量[15]: 421 [16]: 463。  
+\item 材料通常具有色散性，因此 \(\varepsilon\) 和 \(\mu\) 依赖于任何入射电磁波的频率[15]: 625 [16]: 397。 
+\end{itemize} 
+更一般地，对于非线性材料（例如非线性光学），\(\mathbf{D}\) 和 \(\mathbf{P}\) 不一定与 \(\mathbf{E}\) 成正比，类似地，\(\mathbf{H}\) 或 \(\mathbf{M}\) 也不一定与 \(\mathbf{B}\) 成正比。通常，\(\mathbf{D}\) 和 \(\mathbf{H}\) 取决于 \(\mathbf{E}\) 和 \(\mathbf{B}\)、位置、时间以及可能的其他物理量。
+
+在实际应用中，还必须描述自由电流和电荷密度如何与 \(\mathbf{E}\) 和 \(\mathbf{B}\) 相关，可能还与其他物理量（如压力、质量、粒子数密度以及带电粒子的速度）耦合。例如，麦克斯韦给出的原始方程（参见麦克斯韦方程的历史）包括欧姆定律，形式为  
+\[
+\mathbf{J}_{\text{f}} = \sigma \mathbf{E}.~
+\]
+\subsection{替代形式}
+ 关于特殊相对论中的方程，请参见《经典电磁学和特殊相对论》以及《经典电磁学的协变形式》。\\
+ 关于广义相对论中的方程，请参见《弯曲时空中的麦克斯韦方程》。\\
+ 概述请参见《电磁场的数学描述》。\\
+ 关于量子场论中的方程，请参见《量子电动力学》。
+
+以下列出麦克斯韦方程的几种其他数学形式，列将两组无源麦克斯韦方程与两组有源方程分开。每种形式都有直接基于电场和磁场的版本，以及间接基于电势 \(\varphi\) 和矢势 \(\mathbf{A}\) 的版本。引入势函数是一种便捷的解决无源方程的方法，但一度被认为所有可观察的物理量都包含在电场和磁场中（或相对论地说，是法拉第张量）。然而，在量子力学中，势函数起着关键作用，即使在电场和磁场为零的情况下也能产生可观察的量子力学效应（阿哈罗诺夫-玻姆效应）。
+
+每个表格描述了一种形式。详情请参见主条目。
+
+直接的时空形式展示了麦克斯韦方程在相对论下的不变性，在这种形式中，空间和时间被平等对待。由于这种对称性，电场和磁场被视为法拉第张量的组成部分，从而使得四个麦克斯韦方程减少到两个，简化了方程，尽管不再使用熟悉的矢量形式。麦克斯韦方程中未显式地将空间和时间同等对待的形式中，洛伦兹不变性是一个隐藏的对称性。这也是相对论理论发展中的重要启示来源。实际上，即使是将空间和时间分开处理的形式，也并非非相对论的近似，仅通过重新命名变量来描述相同的物理现象。因此，相对论不变的方程通常仍称为麦克斯韦方程。
+
+下表描述了每种形式。
+
+\begin{table}[ht]
+\centering
+\caption{张量计算}\label{MAXS3}
+\begin{tabular}{|c|c|c|}
+\hline \textbf{形式} & \textbf{齐次方程} & \textbf{非齐次方程} \\
+\hline 场 闵可夫斯基空间 & \(\partial_{[\alpha} F_{\beta \gamma]} = 0\)& \(\partial_{\alpha} F^{\alpha \beta} = \mu_0 J^{\beta}\) \\
+\hline 势（任意规范）闵可夫斯基空间 & \({\displaystyle F_{\alpha \beta }=2\partial _{[\alpha }A_{\beta ]}}\)&\(2 \partial_{\alpha} \partial^{[\alpha} A^{\beta]} = \mu_{0} J^{\beta}\) \\
+\hline 势（洛伦兹规范）闵可夫斯基空间&\({\displaystyle F_{\alpha \beta }=2\partial _{[\alpha }A_{\beta ]}}\),\(\partial _{\alpha }A^{\alpha }=0\)&\(\partial _{\alpha }\partial ^{\alpha }A^{\beta }=\mu _{0}J^{\beta }\)\\
+\hline 场  任意时空&\(\partial_{[\alpha} F_{\beta \gamma]} =\qquad \nabla_{[\alpha} F_{\beta \gamma]} = 0\)&\(\frac{1}{\sqrt{-g}} \partial_{\alpha} (\sqrt{-g} F^{\alpha \beta}) = \nabla_{\alpha} F^{\alpha \beta} = \mu_0 J^{\beta}\)\\
+\hline 势（任意规范）任意时空（具有§拓扑限制）& \( F_{\alpha \beta }=2\partial _{[\alpha }A_{\beta ]} \)& \(\frac{2}{\sqrt{-g}} \partial_{\alpha} (\sqrt{-g} \, g^{\alpha \mu} g^{\beta \nu} \partial_{[\mu} A_{\nu]}) = 2 \nabla_{\alpha} ( \nabla^{[\alpha} A^{\beta]}) = \mu_{0} J^{\beta}\)\\
+\hline 势（洛伦兹规范）任意时空（具有拓扑限制）&\( F_{\alpha \beta }=2\partial _{[\alpha }A_{\beta ]} \)  \( \nabla _{\alpha }A^{\alpha }=0 \) & \(\nabla _{\alpha } \nabla ^{\alpha } A^{\beta } - R^{\beta }{}_{\alpha } A^{\alpha } = \mu _{0} J^{\beta }\)\\
+\hline 
+\end{tabular}
+\end{table}
+
+\begin{table}[ht]
+\centering
+\caption{微分形式}\label{MAXS4}
+\begin{tabular}{|c|c|c|}
+\hline \textbf{形式} & \textbf{齐次方程} & \textbf{非齐次方程} \\
+\hline 字段 任何时空 & \( \mathrm{d} F = 0 \) & \( \mathrm{d} \star F = \mu_0 J \)\\
+\hline 势（任意规范）任意时空（具有拓扑限制）& \( F = \mathrm{d} A \) & \( \mathrm{d} \star \mathrm{d} A = \mu_{0} J \)\\
+\hline 势（洛伦兹规范）任意时空（具有拓扑限制）& \( F = \mathrm{d} A \)\( \mathrm{d} \star A = 0 \)& \( \star \Box A = \mu_{0} J \)\\
+\hline 
+\end{tabular}
+\end{table}
+\begin{itemize}
+\item 在张量计算的表述中，电磁张量 \( F_{\alpha \beta} \) 是一个反对称的协变二阶张量；四势 \( A_{\alpha} \) 是一个协变向量；电流 \( J_{\alpha} \) 是一个向量；方括号 [ ] 表示指标的反对称化；\( \partial_{\alpha} \) 是对坐标 \( x^{\alpha} \) 的偏导。在闵可夫斯基空间中，坐标选择与惯性系有关，\( (x^{\alpha}) = (ct, x, y, z) \)，因此用于升降指标的度规张量是 \( \eta_{\alpha \beta} = \text{diag}(1, -1, -1, -1) \)。在闵可夫斯基空间上的达朗贝尔算子表示为 \( \Box = \partial_{\alpha} \partial^{\alpha} \)，如向量表述中所示。在一般的时空中，坐标系 \( x^{\alpha} \) 是任意的，协变导数 \( \nabla_{\alpha} \)、里奇张量 \( R_{\alpha \beta} \) 以及指标的升降由洛伦兹度规 \( g_{\alpha \beta} \) 定义，达朗贝尔算子定义为 \( \Box = \nabla_{\alpha} \nabla^{\alpha} \)。拓扑限制要求空间的第二实共同调群为零（详细说明参见微分形式表述）。这一条件在去掉一条直线的闵可夫斯基空间中被破坏，此空间可以模拟包含点状磁单极子的（平坦）时空，去掉的直线为其补集。
+\item 在张量计算的表述中，电磁张量 \( F_{\alpha \beta} \) 是一个反对称的协变二阶张量；四势 \( A_{\alpha} \) 是一个协变向量；电流 \( J_{\alpha} \) 是一个向量；方括号 [ ] 表示指标的反对称化；\( \partial_{\alpha} \) 是对坐标 \( x^{\alpha} \) 的偏导。在闵可夫斯基空间中，坐标选择与惯性系有关，\( (x^{\alpha}) = (ct, x, y, z) \)，因此用于升降指标的度规张量是 \( \eta_{\alpha \beta} = \text{diag}(1, -1, -1, -1) \)。在闵可夫斯基空间上的达朗贝尔算子表示为 \( \Box = \partial_{\alpha} \partial^{\alpha} \)，如向量表述中所示。在一般的时空中，坐标系 \( x^{\alpha} \) 是任意的，协变导数 \( \nabla_{\alpha} \)、里奇张量 \( R_{\alpha \beta} \) 以及指标的升降由洛伦兹度规 \( g_{\alpha \beta} \) 定义，达朗贝尔算子定义为 \( \Box = \nabla_{\alpha} \nabla^{\alpha} \)。拓扑限制要求空间的第二实共同调群为零（详细说明参见微分形式表述）。这一条件在去掉一条直线的闵可夫斯基空间中被破坏，此空间可以模拟包含点状磁单极子的（平坦）时空，去掉的直线为其补集。
+\end{itemize}
+其他表述方法包括几何代数表述和麦克斯韦方程的矩阵表示。在历史上，也曾使用过四元数表述方法。
+
+\subsection{解法}
+麦克斯韦方程是一组偏微分方程，用来描述电场与磁场之间的关系以及它们与电荷和电流的关系。通常情况下，电荷和电流本身也依赖于电场和磁场，通过洛伦兹力方程和本构关系来确定。这些方程构成了一组耦合的偏微分方程组，通常非常难以求解：它们的解包括了经典电磁学中的各种复杂现象。以下是一些相关的概述。
+
+和任何偏微分方程一样，要获得唯一解，麦克斯韦方程需要**边界条件**和**初始条件**。例如，即使时空中没有电荷和电流，也有显然的解使得 \( E \) 和 \( B \) 为零或常数，但也存在对应于电磁波的非平凡解。在一些情况下，麦克斯韦方程是在整个空间上求解，边界条件是以无限远处的渐近极限给出的。[23]在其他情况下，麦克斯韦方程是在有限空间区域中求解，并在该区域的边界上给出合适的条件，例如表示外部空间的人工吸收边界、周期性边界条件，[24][25]或将小区域与外界隔离的墙壁（如波导或腔体谐振器）等。[26]
+
+\textbf{杰菲缅科方程}（或密切相关的利纳尔–维希尔势）是麦克斯韦方程的显式解，描述了任何给定电荷和电流分布下所产生的电场和磁场。它假设特定的初始条件以得到所谓的“延迟解”，即只有电荷产生的场。然而，在电荷和电流本身受到它们所产生的场影响的情况下，杰菲缅科方程并不适用。
+
+在无法获得精确解的情况下，麦克斯韦方程可以通过\textbf{数值方法}来近似求解，例如有限元法和时域有限差分法。[19][21][27][28][29]更多细节可参考\textbf{计算电磁学}。
+\subsection{麦克斯韦方程组的超定性}
+麦克斯韦方程组似乎是超定的，因为它们涉及六个未知数（电场 \(E\) 和磁场 \(B\) 的三个分量），却有八个方程（两个高斯定律各一个方程，法拉第和安培回路定律各三个向量分量方程）。（电流和电荷不是未知数，因为它们在电荷守恒的条件下是自由指定的。）这与麦克斯韦方程组中某种有限的冗余性有关：可以证明，任何满足法拉第定律和安培回路定律的系统，只要满足系统的初始条件，并假设电荷守恒和不存在磁单极子，该系统就会自动满足两个高斯定律。[30][31] 这一解释最早由朱利叶斯·亚当斯·斯特拉顿于1941年提出。[32]
+
+尽管可以在数值算法中简单地忽略两个高斯定律（初始条件除外），但计算精度的不完美可能会导致对这些定律的逐渐违反。通过引入表征这些违反情况的虚拟变量，四个方程就不会再是超定的。得到的这种表达式可以生成更精确的算法，能够同时考虑四条定律。[33]
+
+这两个恒等式\(\nabla \cdot \nabla \times \mathbf{B} \equiv 0, \quad \nabla \cdot \nabla \times \mathbf{E} \equiv 0\)将八个方程减少到六个独立方程，是超定性的真正原因。[34][35]
+
+同样，超定性可以视作暗示了电荷和磁荷的守恒，因为在上面描述的推导中需要这些守恒性质，但它们却已由两个高斯定律隐含。
+
+对于线性代数方程，可以制定“好”的规则来重写方程和未知数。方程可以是线性相关的。但对于微分方程，特别是偏微分方程 (PDE)，需要合适的边界条件，这些条件在方程中的作用并不明显。此外，如果将它们改写为矢量和标量势的形式，由于规范固定，方程会变为欠定。
+\subsection{麦克斯韦方程组作为量子电动力学 (QED) 的经典极限}
+麦克斯韦方程组和洛伦兹力定律（连同经典电磁学的其余部分）在解释和预测各种现象方面取得了极大的成功。然而，它们未能考虑量子效应，因此其适用范围有限。麦克斯韦方程组通常被认为是量子电动力学的经典极限。
+
+一些观察到的电磁现象无法用麦克斯韦方程组解释。这些现象包括光子-光子散射，以及与光子或虚光子、“非经典光”和电磁场的量子纠缠相关的许多现象（参见量子光学）。例如，量子密码学无法用麦克斯韦理论描述，甚至无法近似描述。在极强场条件（参见欧拉-海森堡拉格朗日量）或极小尺度下，麦克斯韦方程组的近似性变得愈加明显。
+
+此外，麦克斯韦方程组无法解释涉及单个光子与量子物质相互作用的任何现象，例如光电效应、普朗克定律、杜安-亨特定律和单光子探测器。然而，许多此类现象可以通过量子物质与经典电磁场耦合的半经典理论进行近似描述，经典电磁场可以作为外场或以电荷流和密度的期望值出现在麦克斯韦方程组的右侧。
