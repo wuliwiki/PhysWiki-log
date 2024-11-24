@@ -22,7 +22,7 @@
 \item 文件第一行可以用 \textbf{shebang} \verb`#!` 指定运行使用的 shell， 如 \verb`#!/bin/bash`
 \item 用 \verb`exit` 结束 script， \verb`exit 0` 声明运行成功
 \item 用 \verb`#` 注释
-\item 赋值用 \verb`var=xxx`， 等号两边不能有空格。 \verb`$var` 或者 \verb`${var}` 获取它的值。 所有变量都是字符串，可以直接拼接， 例如 \verb`abc$var` 或者 \verb`abc${var}def`。 后者的花括号不能省略。
+\item 赋值用 \verb`var=xxx`， 等号两边不能有空格。 \verb`$var` 或者 \verb`${var}` 获取它的值。例如 \verb`abc$var` 或者 \verb`abc${var}def`。 后者的花括号不能省略。
 \item 如果变量 \verb`var` 以 \verb`字符串` 结束， \verb`${var%字符串}` 移除最后的 \verb`字符串`
 \item 如果 \verb`var` 以 \verb`字符串` 开始， \verb`${var#字符串}` 移除最前面的 \verb`字符串`
 \item 要把变量的内容作为另一个变量的名字展开， 如 \verb`varname=myvar`， 那么 \verb`${!varname}` 相当于 \verb`${myvar}`。 如果 \verb`varname` 是第一个参数， 那么就用 \verb`${!1}`
@@ -39,7 +39,9 @@
 \begin{itemize}
 \item \verb`命令 "abc def"` 或者 \verb`命令 'abc def'` 中， \verb`abc def` 是一个参数， 作为字符串传给 \verb`main()` 函数的 \verb`argv[1]`， 不包含引号。 如果不加引号， \verb`abc` 和 \verb`def` 就分别是 \verb`argv[1]` 和 \verb`argv[2]`。
 \item \verb`"..."` 中的 \verb`$变量` 会展开， 但是 \verb`'...'` 中不会
+\item \verb`'...'` 就是\textbf{绝对的 string literal}，里面不会发生任何转义
 \item 要在 \verb`'...'` 中 escape 单引号，不能直接做到，可以用 \verb`'it'\''s here.'` 其中三部分分别是 \verb`'it'`， \verb`\'`， \verb`'s here.'`。
+\item \verb`echo 'abc\'def'gh'` 会输出 \verb`abc\defgh`
 \item 单引号和双引号中间都可以换行。
 \item 如果参数中出现了引号想要传给 \verb`main()`， 那么就 escape： \verb`\"` 或者 \verb`\'`
 \item 不在引号内的 \verb`\` 可以用 \verb`\\` 来 escape
@@ -81,6 +83,9 @@ fi
 \item 一种等效于 \verb`if` 的简写如 \verb`[ -e 文件 ] && mv 文件 新文件`。 例子： \verb`for file in file1 file2 file3; do [ -e "$file" ] && mv "$file" destination_directory done`
 \item 类似于 \verb`-f, -d`， 还有 \verb`-z`（判断字符串是否为空）， \verb`-n`（判断字符串是否为非空）， 例如 \verb`if [ -n $(git remote | grep github) ]`。  \verb`-e` 判断是否是文件（包括文件夹和特殊文件）， \verb`-h` 判断是否为 symlink， \verb`file1 -nt file2` （newer than）， \verb`file1 -ot file2` （older than）， \verb`-r, -w, -x` 是否是文件且具有读写执行权限。
 \item \verb`if [ string1 = string2 ]` 判断字符串是否相等， \verb`string1 != string2` 判断是否不相等。
+\item 中括号中：\verb`-z` 检查后面的内容是否为空.
+\item \verb`-n` 检查是否为非空
+\item \verb`-v` 检查变量是否有定义（定义为空字符也算）
 \end{itemize}
 
 \subsubsection{双方括号判断}
