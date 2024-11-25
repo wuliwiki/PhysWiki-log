@@ -1,0 +1,40 @@
+% Python C API 笔记
+% license Usr
+% type Note
+
+% 参考 baltam_python_api 仓库
+
+\begin{itemize}
+\item \verb`PyObject *` 可以容纳任何 python 对象
+\item \verb`Py_Initialize()` 和 \verb`Py_Finalize()` 开始和结束 python 解释器。
+\item \verb`PyObject *pModule = PyImport_Import(pName);` 可以加载 python 模块。
+\item \verb`Py_DECREF(PyObject *obj);` 是一个宏，可以把 \verb`obj` 对象的引用计数减一， 当减少到零该对象就会自动销毁。\verb`Py_INCREF(PyObject *obj);` 把引用加一。
+\item \verb`Py_XDECREF()` 更安全，因为它会先检查 \verb`obj` 是否为 \verb`NULL`。
+\end{itemize}
+
+\subsection{对象管理}
+创建变量
+\begin{itemize}
+\item \verb`PyObject *pName = PyUnicode_DecodeFSDefault("my_python_module");` 可以创建一个 python 字符串变量。
+\item \verb`PyObject *obj = PyLong_FromLong(42);` 创建 python 整数。
+\item \verb`PyFloat_AsDouble()` 创建浮点数。
+\item \verb`PyObject *int_obj = Py_BuildValue("i", 42);` 也可以创建 python 整数，该函数更动态更灵活，例如 \verb`PyObject *tuple_obj = Py_BuildValue("(is)", 42, "Hello");` 创建一个整数和字符串的 touple。
+\item 创建 list： \verb`PyObject *arg = PyList_New(2);`， \verb`PyList_SetItem(arg, 0, PyLong_FromLong(1));`， \verb`PyList_SetItem(arg, 1, PyLong_FromLong(2));`
+\end{itemize}
+
+获取变量
+\begin{itemize}
+\item \verb`PyArg_Parse(obj, "i", &result_c);` 从 \verb`PyObject *obj` 获取整数存到 \verb`int result_c` 中。
+\item \verb`PyObject* PyObject_GetAttrString(PyObject *obj, const char *attr_name);` 获取对象的属性（attribute）。 模块也是对象，如 \verb`math.pi` 就是模块 \verb`math` 对象的 \verb`pi` 属性。 它也可以用于获取函数如 \verb`math.sin`。 如果失败，返回 \verb`NULL`， 可以用 \verb`PyErr_Print()` 打印错误信息。
+\end{itemize}
+
+检查变量
+\begin{itemize}
+\item \verb`PyLong_Check(obj)` 检查一个对象是否为 \verb`Long`， \verb`PyFloat_Check(obj)` 检查是否为浮点数， \verb`PyUnicode_Check(obj)` 检查是否为字符串， 另外有 \verb`PyList_Check(obj)`， \verb`PyDict_Check(obj)`
+\end{itemize}
+
+\subsection{函数}
+\begin{itemize}
+\item \verb`PyObject* PyObject_CallFunctionObjArgs(PyObject *callable, ...);` 可以调用函数，后面是函数的参数，以 \verb`NULL` 结尾。
+\item \verb`PyObject *result = PyNumber_Add(obj1, obj2);` 可以对两个对象使用算符 \verb`+`，如果是用户定义的对象则会调用 \verb`__add__()` 方法。
+\end{itemize}
