@@ -4,7 +4,7 @@
 % type Tutor
 
 \pentry{平均值\nref{nod_QMavg}， 无限深势阱\nref{nod_ISW}， 薛定谔方程\nref{nod_TDSE}}{nod_7bdd}
-\addTODO{推论的证明；}
+
 本文使用\enref{原子单位制}{AU}。 在经典力学中， 某个时刻测量系统的某个量 $Q$ 可以得到唯一确定的值。 如果测量值不随时间变化， 就说它\textbf{守恒（conserved）}。 而在量子力学中， 若对一个系统单次测量， 测量值是不确定的， 那守恒量由该如何理解呢？ 比如两个无限深势阱中的粒子具有相同的波函数——若干能量本征态的线性组合， 测得的能量却可能各不相同， 是否意味着能量不守恒？由于在实际测量中，有意义的物理量是算符的本征值与期待值（平均值）。受此启发，我们定义：
 \begin{definition}{守恒量（量子力学）}\label{def_QMcons_1}
 若算符$\hat Q$不显含时间，且与哈密顿算符对易，则称该力学量为守恒量。
@@ -30,8 +30,10 @@
 \end{equation}
 解得
 \begin{equation}
-c_n(t)=c_n(0)\E^{-\I E_n t/\hbar }~.
+c_n(t)=c_n(0)\E^{-\I E_n t/\hbar }~,
 \end{equation}
+因此$|c(t)|^2=|c(0)|^2$，得证。
+
 例如在无限深势阱中任意随时间变化的波包（未必是单个能量本征态， 而是任意能量本征态的线性组合， 例如 “\enref{无限深势阱中的高斯波包}{wvISW}”）， 测得每个能量本征值的概率都不随时间变化， 这就说明能量守恒。
 \subsection{能量守恒}
 
@@ -53,3 +55,29 @@ P(E_j) = \sum_{i \in D_j} \abs{C_i}^2~,
 能量守恒的简单系统如： \enref{无限深势阱}{ISW}， \enref{简谐振子}{QSHOop}，\enref{自由粒子}{FreeP1}， \enref{有限深势阱}{FiSph}等。 这些系统的哈密顿算符都不随时间变化。 将任意时刻的波函数投影到能量的本征态上， 得到的系数的模方都是相同的。
 \end{example}
 
+\begin{definition}{}
+力学量概率分布不变，则称该力学量为守恒量。
+\end{definition}
+\begin{corollary}{}
+若力学量概率分布不变，则其与哈密顿算符对易。
+\end{corollary}
+\textbf{证明：}
+
+先假设能量的本征态基底为 $\{\ket{u_i}\}$， 系统状态随时间变化为
+\begin{equation}
+\ket{v(t)} = \sum_i C_i \E^{-\I E_i t} \ket{u_i}~.
+\end{equation}
+令算符 $Q$ 任意本征值 $q_m$ 对应的本征矢子空间的一组基底为 $\{\ket{v_k}\}$， 那么任意时刻测得 $q_m$ 的概率为
+\begin{equation}
+\begin{aligned}
+P(q_m) &= \sum_k \abs{\bra{v_k} \sum_i C_i \E^{-\I E_i t} \ket{u_i}}^2\\
+&= \sum_k \qty(\sum_i C_i \E^{\I E_i t} \braket{v_k}{u_i})\Her \qty(\sum_j C_j \E^{-\I E_j t} \braket{v_k}{u_j})\\
+&= \sum_{i,j} \qty( C_i^* C_j \sum_k \braket{u_i}{v_k} \braket{v_k}{u_j}) \E^{\I (E_i - E_j) t}~,
+\end{aligned}
+\end{equation}
+若 $Q$ 守恒， 则要求对于任何 $C_i$ 可能的取值， 该式的结果都与时间无关。 所以对任意 $i \ne j$ 都有
+\begin{equation}
+\sum_k \braket{u_i}{v_k} \braket{v_k}{u_j} = 0~.
+\end{equation}
+稍加思考可以得出要么 $\ket{u_j}$ 在 $q_m$ 子空间中， 要么 $\ket{u_j}$ 在 $q_m$ 子空间上的投影为 0。 所以任何 $q_m$ 子空间（假设是 $N_m$ 维）同样可以由 $N_m$ 个 $\ket{u_i}$ 张成。 所以可以找到 $H$ 和 $Q$ 的一套共同本征矢， 所以两算符对易。 证毕。
+\addTODO{稍加思考：详细写}

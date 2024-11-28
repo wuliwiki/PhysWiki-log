@@ -31,7 +31,31 @@
 检查变量
 \begin{itemize}
 \item \verb`PyLong_Check(obj)` 检查一个对象是否为 \verb`Long`， \verb`PyFloat_Check(obj)` 检查是否为浮点数， \verb`PyUnicode_Check(obj)` 检查是否为字符串， 另外有 \verb`PyList_Check(obj)`， \verb`PyDict_Check(obj)`
+\item 查字典
+\begin{lstlisting}[language=cpp]
+PyObject* get_dict_item(PyObject* namespace, const char* name) {
+    if (!PyDict_Check(namespace)) {
+        PyErr_SetString(PyExc_TypeError, "namespace must be a dictionary");
+        return NULL;
+    }
+    // Retrieve the variable by name
+    PyObject* variable = PyDict_GetItemString(namespace, name);
+    if (variable == NULL)
+        PyErr_Format(PyExc_NameError, "name '%s' is not defined", name);
+    // Increase reference count to return a new reference
+    Py_XINCREF(variable);
+    return variable;
+}
+\end{lstlisting}
+\item 通过变量名获取指针
+\begin{lstlisting}[language=cpp]
+PyObject* globals = PyEval_GetGlobals(); // 全局变量的字典（工作区）
+PyObject* locals = PyEval_GetLocals(); // 本地变量的字典（工作区）
+PyObject* g_variable = get_variable_by_name(globals, "my_variable");
+PyObject* g_variable = get_variable_by_name(locals, "my_variable");
+\end{lstlisting}
 \end{itemize}
+
 
 \subsection{函数}
 \begin{itemize}
