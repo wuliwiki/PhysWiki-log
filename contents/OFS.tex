@@ -3,9 +3,7 @@
 % license Xiao
 % type Tutor
 \pentry{定积分（简明微积分）\nref{nod_DefInt}}{nod_3bdc}
-\begin{issues}
-例子需插入链接
-\end{issues}
+
 
 \footnote{$\Gamma$. M. 菲赫金哥尔茨。微积分学教程\;卷三[M].北京：高等教育出版社，2006:345-349}
 \footnote{斯米尔诺夫。斯米尔诺夫高等数学卷四第一分册[M].哈尔滨：哈尔滨工业大学出版社，2018:6-12}
@@ -24,7 +22,7 @@
 \right.
 \end{equation}
 则称函数系 $\qty{\varphi_n(x)}$ 为\textbf{正交函数系}。当 $\lambda_n=1(n\in\mathbb{N})$ 时，该函数系称为\textbf{正交规范系}(或\textbf{正交标准系})。显然，任意的正交函数系都可化为正交规范系 
-\begin{equation}
+\begin{equation}\label{eq_OFS_4}
 \qty{\frac{\varphi_n(x)}{\sqrt{\lambda_n}}}\quad(n\in \mathbb{N})~.
 \end{equation}
 
@@ -50,13 +48,60 @@ c_k=\frac{1}{\lambda_k}\int_a^b f(x)\varphi_k(x)\dd x\quad (k\in \mathbb{N})~
 %%\end{equation}
 %是正交函数系。
 \subsection{例子}
-可以证明：
 \begin{enumerate}
 \item 在区间 $[-\pi,\pi]$ 上，三角函数系
 \begin{equation}
 \qty{1,\cos nx,\sin nx}\quad(n\in \mathbb{Z^{+}})~
 \end{equation}
-是正交函数系。
+是正交函数系。\\
+
+\textbf{证明：}
+由于
+\begin{equation}
+\begin{aligned}
+\cos nx\cdot\cos mx&=\frac{1}{2}\qty[\cos(n+m)x+\cos(n-m)x],\\
+\cos^2 nx&=\frac{1}{2}[\cos(2nx)+1],\\
+\sin nx\cdot\sin mx&=\frac{1}{2}\qty[\cos(n-m)x-\cos(n+m)x],\\
+\sin^2 nx&=\frac{1}{2}[1-\cos(2nx)],\\
+\sin nx\cdot\cos mx&=\frac{1}{2}\qty[\sin(n+m)x+\sin(n-m)x],\\
+\sin nx\cdot\cos nx&=\frac{1}{2}\sin(2nx).
+\end{aligned}~
+\end{equation}
+所以当 $m\neq n$ 时，
+\begin{equation}
+\begin{aligned}
+&\int_{-\pi}^\pi\cos nx \cdot \cos mx\dd x\\
+&=\frac{1}{2}\qty[\frac{\sin(n+m)x}{n+m}+\frac{\sin(n-m)x}{n-m}]{\huge |}_{-\pi}^{\pi}\\
+&=0,\\
+&\int_{-\pi}^\pi\sin nx \cdot \sin mx\dd x\\
+&=\frac{1}{2}\qty[\frac{\sin(n-m)x}{n-m}-\frac{\sin(n+m)x}{n+m}]{\huge |}_{-\pi}^{\pi}\\
+&=0,\\
+&\int_{-\pi}^\pi\sin nx \cdot \cos mx\dd x\\
+&=-\frac{1}{2}\qty[\frac{\cos(n+m)x}{n+m}+\frac{\cos(n-m)x}{n-m}]{\huge |}_{-\pi}^{\pi}\\
+&=0.\\
+\end{aligned}
+~
+\end{equation}
+而 $m=n$ 时，
+\begin{equation}
+\begin{aligned}
+&\int_{-\pi}^\pi\cos^2 nx\dd x=\frac{1}{2}\qty[\frac{\sin(2nx)}{2n}+x]{\huge |}_{-\pi}^{\pi}=\pi,\\
+&\int_{-\pi}^\pi\sin^2 nx\dd x=\frac{1}{2}\qty[x-\frac{\sin(2nx)}{2n}]{\huge |}_{-\pi}^{\pi}=\pi,\\
+&\int_{-\pi}^\pi\sin nx \cdot \cos nx\dd x=-\frac{\cos(2nx)}{4n}{\huge |}_{-\pi}^{\pi}=0.
+\end{aligned}
+~
+\end{equation}
+此外 $\int_{\pi}^{\pi}\dd x=2\pi$。\\
+
+\textbf{证毕！}\\
+由\autoref{eq_OFS_4} 和证明可看出，三角正交函数系 $\{1,\cos(nx),\sin(nx)|n\in \mathbb Z^{+}\}$ 的标准系是 
+\begin{equation}
+\qty{\frac{1}{\sqrt{2\pi}},\frac{\cos(nx)}{\sqrt{\pi}},\frac{\sin(nx)}{\sqrt{\pi}}{\huge|}n\in \mathbb Z^{+}}~.
+\end{equation}
+
+
+
+
 \item 由超越方程
 \begin{equation}
 \tan\xi=c\xi \quad(c\; \mathrm{is\; a\; constant})~
@@ -145,3 +190,73 @@ c_n=\ev{\varphi_n,f}~.
  \sum_{k=1}^\infty\abs{c_k}^2\leq\int_a^b\abs{f}^2\dd x~.
  \end{equation}
  
+ \begin{example}{}\label{ex_OFS_1}
+ $\{e^{\I nx}|n\in\mathbb Z\}$ 是 $[-\pi,\pi]$ 上的正交函数系。\\
+ 
+\textbf{证明：}
+\begin{equation}
+\begin{aligned}
+\int_{-\pi}^\pi e^{\I nx}e^{-\I mx}\dd x&=\int_{-\pi}^\pi e^{\I (n-m)x}\dd x\\&=-\I\frac{e^{\I(n-m)x}}{n-m}{\huge|}_{-\pi}^{\pi}\\
+&=0,\quad n\neq m,\\
+\int_{-\pi}^\pi e^{\I nx}e^{-\I nx}\dd x&=\int_{-\pi}^\pi \dd x=2\pi.
+\end{aligned}~
+\end{equation}
+
+\textbf{证毕！}
+
+由证明还可看出，$\qty{\frac{e^{\I nx}}{\sqrt{2\pi}}{\huge|}n\in\mathbb Z}$ 是它的正交标准系。
+ \end{example}
+ \begin{example}{}\label{ex_OFS_2}
+ \autoref{ex_OFS_1} 的函数系是在 $[-\pi,\pi]$ 上的，它刚好是该函数系的函数 $e^{\I x}$ 的最小周期。然而更常见的周期往往不被限定为 $2\pi$，为此，我们希望能将它推广到周期为 $2L$ 的情形，从而积分区间为 $[-L,L]$。若将函数的定义区间 $[-L,L]$ 变到区间 $[-\pi,\pi]$，那么就可以继续使用前面的函数系。设 $f(x)$ 是定义在区间 $[-L,L]$ 上的周期为 $2L$ 的函数，那么 $F(x)=f(\frac{L}{\pi}x)$ 是定义在区间 $[-\pi,\pi]$ 上的周期函数。因此可对 $F(x)$ 使用函数系 $\{e^{\I nx}|n\in\mathbb Z\}$ 展开。若得到了 $F(x)$ 的展开式，那么 $f(x)$ 就可以利用 $f(x)=F(\frac{\pi}{L}x)$ 确定。设 
+ \begin{equation}
+ F(x)=\sum_{n=-\infty}^\infty c_ne^{\I n x},~
+ \end{equation}
+ 那么
+ \begin{equation}\label{eq_OFS_5}
+ f(x)=\sum_{n=-\infty}^\infty c_ne^{\I n\frac{\pi}{L} x}.~
+ \end{equation}
+ 因此，我们希望证明 $\{e^{\I n\frac{\pi}{L} x}|n\in\mathbb Z\}$ 是 $[-L,L]$ 上的正交函数系。\\
+\textbf{证明：}
+\begin{equation}
+\begin{aligned}
+\int_{-L}^L e^{\I n\frac{\pi}{L}x}e^{-\I m\frac{\pi}{L}x}\dd x&=\int_{-L}^L e^{\I (n-m)\frac{\pi}{L}x}\dd x\\
+&=-\I\frac{Le^{\I(n-m)\frac{\pi}{L}x}}{(n-m)\pi}{\huge|}_{-L}^{L}\\
+&=0,\quad n\neq m,\\
+\int_{-L}^L e^{\I n\frac{\pi}{L}x}e^{-\I n\frac{\pi}{L}x}\dd x&=\int_{-L}^L \dd x=2L.
+\end{aligned}~
+\end{equation}
+\textbf{证毕！}
+
+同样的，这表明 $\{\frac{1}{\sqrt{2L}}e^{\I n\frac{\pi}{L} x}|n\in\mathbb Z\}$ 是 $[-L,L]$ 上的标准正交函数系。
+ \end{example}
+
+\begin{example}{傅里叶变换}\label{ex_OFS_3}
+我们考察\autoref{ex_OFS_2} 中 $L\rightarrow\infty$ 的展开式\autoref{eq_OFS_5} 的形式。注意到
+\[
+  \sum_{n=-\infty}^\infty c_ne^{\I n\frac{\pi}{L} x}~  
+\]
+中若令 $z_n=n\frac{\pi}{L}$，那么 $\Delta z_n:=z_{n+1}-z_n=\frac{\pi}{L}$。并注意 $c_n=\frac{1}{2L}\ev{\varphi_n,f}$，其中 $\varphi_n(x):=e^{\I z_n x}$。 因此\autoref{eq_OFS_5} 可写为
+\begin{equation}\label{eq_OFS_6}
+\begin{aligned}
+f(x)&=\sum_{n=-\infty}^\infty \frac{Lc_n}{\pi}e^{\I z_n x}\Delta z_n\\
+&=\sum_{n=-\infty}^\infty \frac{1}{2\pi}\ev{\varphi_n,f}e^{\I z_n x}\Delta z_n.
+\end{aligned}~
+\end{equation}
+这恰好就是定义在区间 $[-\infty,\infty]$ 上的函数 $F_x(z):=\frac{1}{2\pi}\ev{\varphi_z,f}e^{\I z x}$ （$\varphi_z(x):=e^{\I z x}$）的积分
+\begin{equation}\label{eq_OFS_7}
+\int_{-\infty}^\infty F_x(z)\dd z~
+\end{equation}
+的近似级数和。当 $\Delta z_n=\frac{\pi}{L}\rightarrow0$ ，即 $L\rightarrow\infty$ 时，\autoref{eq_OFS_6} 就正好是\autoref{eq_OFS_7} 。因此此时有
+\begin{equation}\label{eq_OFS_8}
+\begin{aligned}
+f(x)&=\int_{-\infty}^\infty F_x(z)\dd z\\
+&=\int_{-\infty}^\infty\frac{1}{2\pi}\ev{\varphi_z,f}e^{\I z x}\dd z\\
+&=\frac{1}{2\pi}\int_{-\infty}^\infty\mathcal F(z)e^{\I z x}\dd z\\
+\end{aligned}~
+\end{equation}
+其中
+\begin{equation}
+\mathcal F(z):=\ev{\varphi_z,f}=\int_{-\infty}^\infty f(x)e^{-\I zx}\dd x.~
+\end{equation}
+$\mathcal F(z)$ 通常被称为 $f(x)$ 的傅里叶变换，而从 $\mathcal F(x)$ 到 $f(x)$ 的式\autoref{eq_OFS_8} 被称为逆傅里叶变换。明显的，$f(x)$ 的傅里叶变换 $\mathcal F(z)$ 对应 $f(x)$ 在“基矢量” $e^{izx}$ 下的“坐标”。
+\end{example}
