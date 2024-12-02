@@ -1,20 +1,278 @@
-% 无穷阶差分矩阵
+% 傅里叶变换的差分矩阵
 % keys 差分矩阵|无穷阶|傅里叶变换
 % license Usr
 % type Tutor
 
 \pentry{导数近似之差分矩阵算法\nref{nod_DifMa}}{nod_3681}
-
+\enref{差分矩阵}{DifMa} $D$ 和数据点矢量 $u$ 矩阵乘法 $Du$ 给出数据点处的近似导数。本词条将给出基于傅里叶变换给出的差分矩阵。
 \subsection{傅里叶变换回顾}
-由\enref{正交函数系}{OFS}中的\autoref{ex_OFS_3} 可知，函数 $u(x),s\in\mathbb R$ 的傅里叶变换定义为
-\begin{equation}
+\subsubsection{连续区间上的傅里叶变换}
+由\enref{正交函数系}{OFS}中的\autoref{ex_OFS_3} 可知，函数 $u(x),x\in\mathbb R$ 的傅里叶变换定义为
+\begin{equation}\label{eq_InfDM_1}
 \hat u(k):=\int_{-\infty}^{\infty} e^{-\I kx}u(x)\dd x,\quad k\in\mathbb R.~
 \end{equation}
 而从 $\hat u$ 同构逆傅里叶变换可以重构 $u$：
-\begin{equation}
+\begin{equation}\label{eq_InfDM_2}
 u(x)=\frac{1}{2\pi}\int_{-\infty}^{\infty} e^{\I kx}\hat u(k)\dd k.~
 \end{equation}
 这被称为\textbf{傅里叶合成}（Fourier synthesis），变量 $x$ 称为\textbf{物理变量}（physical variable），$k$ 称为\textbf{傅里叶变量}（Fourier variable）或\textbf{波数}（wavenumber）。
+
+\subsubsection{离散点上的傅里叶变换}
+\textbf{无界情形}
+
+当限定 $x\in h\mathbb Z$时，即此时 $x$ 只能取离散点，那么只要 $k_1-k_2=\frac{2\pi}{h}$，就有 $e^{\I k_1x}=e^{\I k_2x}$ 对所有的 $x$ 成立。这使得对任意复指数 $e^{\I kx}$，有无穷多个复指数和它在 $h\mathbb Z$ 上具有相同的值。这一现象被称为\textbf{混叠}。为了保持\autoref{eq_InfDM_1} 中傅里叶变换 $\hat u(k)$ 的单值性，需要将 $k$ 限制在长为 $\frac{2\pi}{h}$ 的区间上。因此，我们可以选择 $k$ 的取值区间为 $[-\pi/h,\pi/h]$。注意到 $x$ 是物理变量，$k$ 是傅里叶变量，因此我们可以将这些结果总结为下面的图示：
+\begin{equation}
+\begin{aligned}
+&\text{物理空间:}& \text{离散},&\qquad\text{无界:} &x\in h\mathbb Z\\
+&&\updownarrow&\qquad\updownarrow&\\
+&\text{傅里叶空间:}& \text{有界},&\qquad\text{连续:} &k\in [-\pi/h,\pi/h]
+\end{aligned}~
+\end{equation}
+因此，在无界离散的情形，傅里叶变换及其逆变换\autoref{eq_InfDM_1} 和\autoref{eq_InfDM_2} 应当写为下面的级数和：
+\begin{equation}\label{eq_InfDM_3}
+\begin{aligned}
+\hat u(k)&=h\sum_{i=-\infty}^{\infty}e^{-\I kx_i}u(x_i),\quad k\in[-\pi/h,\pi/h],\\
+u(x_j)&=\frac{1}{2\pi}\int_{-\pi/h}^{\pi/h} e^{\I kx_j}\hat u(k)\dd k,\quad x=jh,j\in \mathbb Z.
+\end{aligned}~
+\end{equation}
+这被称为\textbf{半离散傅里叶变换}。
+
+\textbf{周期性情形}
+
+当限制 $u(x_i)$ 对 $x_i$ 具有周期 $2L$ 时，即 $u(x_i+2L)=u(x_i)$，那么为了 $u$ 的单值性，限定 $x_i\in[-L,L]$。设 $x_i$ 有 $N$ 个（本词条将始终假定 $N$ 为偶数），于是 $x_j\in \{h,\cdots,Nh=2L\}$，其中 $h:=\frac{2L}{N}$。仍记 $x_j:=jh,j\in\{1,\cdots,N\}$。和无界情形一样的理由，$k$ 应当限制在 $[-\pi/h,\pi/h]=[-\frac{N\pi}{2L},\frac{N\pi}{2L}]$ 上。此外由于周期性，应当认为点 $x+2L$ 和点 $x$ 是同一个。因此 $e^{\I k(x+2L)}=e^{\I k x}$，从而
+\begin{equation}
+2Lk=2n\pi\Rightarrow k=n\frac{\pi}{L},\quad n\in\mathbb Z.~
+\end{equation}
+结合 $k\in[-\frac{N\pi}{2L},\frac{N\pi}{2L}]$，有
+\begin{equation}
+k\in\qty{\qty(-\frac{N}{2}+1)\frac{\pi}{L},\qty(-\frac{N}{2}+2)\frac{\pi}{L},\cdots,\frac{N}{2}\frac{\pi}{L}}.~
+\end{equation}
+注意这里用到了 $-\frac{N}{2}\frac{\pi}{L},\frac{N}{2}\frac{\pi}{L}$ 对应相同的 $e^{-\I kx}$。这些结果可以总结为下面的图示：
+\begin{equation}
+\begin{aligned}
+&\text{物理空间:}& \text{离散},&\qquad\text{有界:} \qquad x\in \{h,\cdots,2L\}\\
+&&\updownarrow&\qquad\updownarrow&\\
+&\text{傅里叶空间:}& \text{有界},&\qquad\text{离散:} \qquad k\in \qty{\qty(-\frac{N}{2}+1)\frac{\pi}{L},\qty(-\frac{N}{2}+2)\frac{\pi}{L},\cdots,\frac{N}{2}\frac{\pi}{L}}.
+\end{aligned}~
+\end{equation}
+相应的，傅里叶变换和逆变换的公式写为下面的级数和，
+\begin{equation}\label{eq_InfDM_7}
+\begin{aligned}
+\hat u(k)&=h\sum_{i=1}^{N}e^{-\I k\frac{\pi}{L}x_i}u(x_i),\quad k\in\qty{\qty(-\frac{N}{2}+1),\qty(-\frac{N}{2}+2),\cdots,\frac{N}{2}},\\
+u(x_j)&=\frac{1}{2L}\sum_{k=-\frac{N}{2}+1}^{\frac{N}{2}}e^{\I k\frac{\pi}{L}x_j}\hat u(k),\quad j\in\{1,\cdots,N\}.
+\end{aligned}~
+\end{equation}
+这被称为\textbf{离散傅里叶变换}。
+\subsection{插值函数}
+\subsubsection{无界情形}
+假若我们有定义在 $x_i\in h\mathbb Z$ 上的数据 $u_i=u(x_i)$，那么\autoref{eq_InfDM_3} 将会给我们插值函数：
+
+1.通过\autoref{eq_InfDM_3} 的第一式我们可以获得 $\hat u(k)$，它关于 $k$ 是可微的;
+
+2.而\autoref{eq_InfDM_3} 的第二式可以确定一个函数
+\begin{equation}\label{eq_InfDM_4}
+p(x)=\frac{1}{2\pi}\int_{-\pi/h}^{\pi/h} e^{\I kx}\hat u(k)\dd k,\quad x\in \mathbb R.~
+\end{equation}
+显然 $p(x)$ 满足 $p(x_i)=u_i$，并且 $p(x)$ 是可微的。因此可以用 $p(x)$ 的导数来近似 $u(x)$ 的导数。$p(x)$ 给了我们一个插值公式。
+
+由\autoref{eq_InfDM_4} ，只需令 $\hat u(k)$ 仅在 $[-\pi/h,\pi/h]$ 上不为零。那么\autoref{eq_InfDM_4} 的积分下限和上限就可以变到 $-\infty,\infty$。因此由\autoref{eq_InfDM_1} 和\autoref{eq_InfDM_2} 可知 $p(x)$ 的傅里叶变换为
+\begin{equation}
+\hat p(k)=\left\{\begin{aligned}
+&\hat u(k),&k\in[-\pi/h,\pi/h],\\
+&0,&k\not\in[-\pi/h,\pi/h].
+\end{aligned}\right.~
+\end{equation}
+由于这一点， \autoref{eq_InfDM_4} 的  $p(x)$ 被称为是 $v$ 的\textbf{有限带宽插值函数}。这一术语暗示着 $p$ 的傅里叶变换仅在 $[-\pi/h,\pi/h]$ 上不为0（仅在某一区域 $U$ 上不为0的函数往往称为具有支撑，$U$ 称为它的支撑集。若 $U$ 还是拓扑意义上的紧集，又被称为具有紧支撑）。
+
+\subsubsection{周期情形}
+假设数据定义在 $x_i=ih,i\in\{1,\cdots N\},h=\frac{2L}{N}$ 上，$u_i=u(x_i)$。那么：
+
+1.通过\autoref{eq_InfDM_7} 的第一式我们可以获得 $\hat u(k)$.
+
+2.而\autoref{eq_InfDM_7} 的第二式可以确定一个函数（为了更对称的处理，并考虑到 $e^{\I k\frac{\pi}{L}x}$ 在 $k=\frac{N}{2},-\frac{N}{2}$ 相等）  
+\begin{equation}\label{eq_InfDM_8}
+p(x)=\frac{1}{2L}{\sum'}\limits_{k=-\frac{N}{2}}^{\frac{N}{2}}e^{\I k\frac{\pi}{L}x}\hat u(k),~
+\end{equation}
+其中 $'$ 表示求和在 $-N/2,N/2$ 处需要乘 $1/2$。显然 $p(x)$ 满足 $p(x_i)=u_i$，并且 $p(x)$ 是可微的。因此可以用 $p(x)$ 的导数来近似 $u(x)$ 的导数。$p(x)$ 便是需要的插值公式。
+
+\subsection{导数近似算法}
+\subsubsection{无界情形}
+有了\autoref{eq_InfDM_4} 的插值函数 $p(x)$，我们就可以进行导数近似了：
+
+1.给定定义在 $h\mathbb Z$ 上的函数 $u$，利用\autoref{eq_InfDM_4} 确定它的有限带宽函数 $p(x)$；
+
+2.令 $w_j=p'(x_j)$，则 $w_j$ 就是 $u$ 在 $x_j$ 处的近似导数。
+
+当然，我们还有另一等价的方式来描述，它是在傅里叶空间中表述的：\autoref{eq_InfDM_2}  对 $x$ 微分得
+\begin{equation}
+u'(x)=\frac{1}{2\pi}\int_{-\infty}^{\infty} \I ke^{\I kx}\hat u(k)\dd k,\quad x\in \mathbb R.~
+\end{equation}
+由傅里叶正反变换的关系\autoref{eq_InfDM_1} 和\autoref{eq_InfDM_2} 可得
+\begin{equation}
+\hat{u'}(k)=ik\hat u(k).~
+\end{equation}
+因此我们得到另一等价的导数近似程序：
+
+1.给定 $u$，利用\autoref{eq_InfDM_3} 的第一式计算它的离散傅里叶变换 $\hat u$；
+
+2.定义 $\hat w(k)=\I k\hat u(k)$;
+
+3.利用\autoref{eq_InfDM_3} 的第二式从 $\hat w$ 计算 $w$。这即得到在给定点的导数近似。
+\subsubsection{周期情形}
+周期情形的程序为：
+
+1.给定定义在 $\{h,\cdots,Nh=2L\}$（$x_i=ih,i=1,\cdots,N$） 上的函数 $u$，利用\autoref{eq_InfDM_8} 确定它的插值函数 $p(x)$；
+
+2.令 $w_j=p'(x_j)$，则 $w_j$ 就是 $u$ 在 $x_j$ 处的近似导数。
+
+
+\subsection{无穷阶差分矩阵}
+\subsubsection{无界情形}
+由\autoref{eq_InfDM_3}  可知，若 $u(x)=\sum\limits_{j}a_jf_j(x)$，$a_i\in\mathbb C$， 那么
+\begin{equation}
+\begin{aligned}
+\hat u(k)&=h\sum_{i=-\infty}^{\infty}e^{-\I kx_i}\qty(\sum\limits_{j}a_jf_j(x_i))\\
+&=\sum\limits_{j}a_j\qty(h\sum_{i=-\infty}^{\infty}e^{-\I kx_i}f_j(x_i))\\
+&=\sum_{j}a_j\hat f_j(k).
+\end{aligned}~
+\end{equation}
+即傅里叶变换是线性的。而任意的离散点 $u(x_j)$ 都可以用Kronecker Delta 函数（$x_j=jh$） 
+\begin{equation}
+\delta(x)=\left\{\begin{aligned}
+&1,&x=0,\\
+&0,&x\neq0.
+\end{aligned}\right.~
+\end{equation}
+表示为 $u(x_j)=\sum\limits_{m=-\infty}^{\infty}u(x_m)\delta(x_j-x_m)$。因此，若知道 $\delta(x-x_m)$ 的傅里叶变换 $\hat\delta_m(k)$，则\autoref{eq_InfDM_3} 的第一式就为 
+\begin{equation}
+\hat u(k)=\sum\limits_{m=-\infty}^\infty u(x_m)\hat\delta_m(k).~
+\end{equation}
+从而\autoref{eq_InfDM_4} 的 $p(x)$ 成为
+\begin{equation}
+\begin{aligned}
+p(x)&=\frac{1}{2\pi}\int_{-\pi/h}^{\pi/h} e^{\I kx}\hat u(k)\dd k\\
+&=\sum\limits_{m=-\infty}^\infty u(x_m)\frac{1}{2\pi}\int_{-\pi/h}^{\pi/h} e^{\I kx}\hat\delta_m(k)\dd k.
+\end{aligned}~
+\end{equation}
+
+而
+\begin{equation}
+\begin{aligned}
+\hat\delta_m(k)=h\sum_{i=-\infty}^{\infty}e^{-\I kx_i}\delta(x_i-x_m)=he^{-\I kx_m}.
+\end{aligned}~
+\end{equation}
+所以
+\begin{equation}
+\begin{aligned}
+p(x)&=\sum\limits_{m=-\infty}^\infty u(x_m)\frac{h}{2\pi}\int_{-\pi/h}^{\pi/h} e^{\I k(x-x_m)}\dd k\\
+&=\sum\limits_{m=-\infty}^\infty u(x_m)\frac{h}{2\pi}\frac{e^{\I \frac{\pi}{h}(x-x_m)}-e^{-\I \frac{\pi}{h}(x-x_m)}}{\I (x-x_m)}\\
+&=\sum\limits_{m=-\infty}^\infty u(x_m)\frac{h}{\pi}\frac{\sin(\frac{\pi}{h}(x-x_m))}{x-x_m}\\
+&=\sum\limits_{m=-\infty}^\infty u(x_m)\sinc \qty(\frac{\pi}{h}(x-x_m)),
+\end{aligned}~
+\end{equation}
+其中 $\sinc(x):=\frac{\sin x}{x}$。从而
+\begin{equation}\label{eq_InfDM_5}
+\begin{aligned}
+w_j&=p'(x_j)=\sum\limits_{m=-\infty}^\infty u(x_m)\sinc '\qty(\frac{\pi}{h}(x-x_m))|_{x=x_j=jh}.
+\end{aligned}~
+\end{equation}
+因为 $x\neq0$ 时，
+\begin{equation}
+\sinc'(x)=\qty(\frac{\sin x}{x})'=\frac{x\cos x-\sin x}{x^2},~
+\end{equation}
+而 $\sinc'0=0$，所以 $x\neq x_m$ 时
+\begin{equation}
+\begin{aligned}
+&\sinc '\qty(\frac{\pi}{h}(x-x_m))|_{x=x_j=jh}=\frac{\pi}{h}\sinc '[(j-m)\pi]\\
+&=\frac{(-1)^{j-m}}{(j-m)h}.
+\end{aligned}~
+\end{equation}
+所以\autoref{eq_InfDM_5} 成为
+\begin{equation}\label{eq_InfDM_6}
+w_j=p'(x_j)=\sum\limits_{m=-\infty,m\neq j}^\infty \frac{(-1)^{j-m}}{(j-m)h}u(x_m).~
+\end{equation}
+该式表明，若已知数据点 $u_i=u(x_i),i\in\mathbb Z$，则其对应的导数可由上式求得。由\autoref{sub_DifMa_1}
+中差分矩阵的概念，即差分矩阵和数据点矢量的矩阵乘法给出数据点的近似导数，因此我们得到定义在 $h\mathbb Z$ 上对应的差分矩阵，其是无穷阶的（\autoref{eq_InfDM_6} 表明对应指标(i,m) 的矩阵元为 $\frac{(-1)^{j-m}}{(j-m)h}$，容易验证其是\enref{Toeplitz矩阵}{ToepM} ）：
+\begin{equation}
+h^{-1}
+\begin{pmatrix}
+&&&&&&&&\vdots&&&&&&&&\\
+&&&&&&&&1/3&&&&&&&&\\
+&&&&\ddots&&&&-1/2&&&&&&&&\\
+&&&&\ddots&&&&1&&&&&&&&\\
+&&&&\ddots&&&&0&&&&\ddots&&&&\\
+&&&&&&&&-1&&&&\ddots&&&&\\
+&&&&&&&&1/2&&&&\ddots&&&&\\
+&&&&&&&&-1/3&&&&&&&&\\
+&&&&&&&&\vdots&&&&&&
+\end{pmatrix}.~
+\end{equation}
+
+\subsubsection{周期情形}
+同样的，\autoref{eq_InfDM_8} 可以写为
+\begin{equation}
+\begin{aligned}
+p(x)&=\frac{1}{2L}{\sum'}\limits_{k=-\frac{N}{2}}^{\frac{N}{2}}e^{\I k\frac{\pi}{L}x}\hat u(k)\\
+&=\frac{1}{2L}\sum_{m=1}^{N}u(x_m){\sum'}\limits_{k=-\frac{N}{2}}^{\frac{N}{2}}e^{\I k\frac{\pi}{L}x}\hat \delta_m(k),~
+\end{aligned}~
+\end{equation}
+而
+\begin{equation}
+\hat \delta_m(k)=h\sum_{i=1}^{N}e^{-\I k\frac{\pi}{L}x_i}\delta(x_i-x_m)=he^{-\I k\frac{\pi}{L}x_m}.~
+\end{equation}
+所以
+\begin{equation}
+\begin{aligned}
+p(x)
+&=\frac{h}{2L}\sum_{m=1}^{N}u(x_m){\sum'}\limits_{k=-\frac{N}{2}}^{\frac{N}{2}}e^{\I k\frac{\pi}{L}(x-x_m)}\\
+&=\frac{h}{2L}\sum_{m=1}^{N}u(x_m)\qty(\frac{1}{2}\sum_{k=-\frac{N}{2}}^{\frac{N}{2}-1}e^{\I k\frac{\pi}{L}(x-x_m)}+\frac{1}{2}\sum_{k=-\frac{N}{2}+1}^{\frac{N}{2}}e^{\I k\frac{\pi}{L}(x-x_m)})\\
+&=\frac{h}{2L}\sum_{m=1}^{N}u(x_m)\cos\qty(\frac{\pi}{2L}(x-x_m))\sum_{k=-\frac{N}{2}+1/2}^{\frac{N}{2}-1/2}e^{\I k\frac{\pi}{L}(x-x_m)}\\
+&=\frac{h}{2L}\sum_{m=1}^{N}u(x_m)\cos\qty(\frac{\pi}{2L}(x-x_m))\frac{e^{\I (-N/2+1/2)\frac{\pi}{L}(x-x_m)}-e^{\I (N/2+1/2)\frac{\pi}{L}(x-x_m)}}{1-e^{\I \frac{\pi}{L}(x-x_m)}}\\
+&=\frac{h}{2L}\sum_{m=1}^{N}u(x_m)\cos\qty(\frac{\pi}{2L}(x-x_m))\frac{e^{-\I \frac{N\pi}{2L}(x-x_m)}-e^{\I \frac{N\pi}{2L}(x-x_m)}}{e^{-\I \frac{\pi}{2L}(x-x_m)}-e^{\I \frac{\pi}{2L}(x-x_m)}}\\
+&=\frac{h}{2L}\sum_{m=1}^{N}u(x_m)\cos\qty(\frac{\pi}{2L}(x-x_m))\frac{\sin\qty(\frac{N\pi}{2L}(x-x_m))}{\sin\qty(\frac{\pi}{2L}(x-x_m))}\\
+&=\sum_{m=1}^{N}u(x_m)\frac{\sin\qty(\frac{N\pi}{2L}(x-x_m))}{\frac{2L}{h}\tan\qty(\frac{\pi}{2L}(x-x_m))}.
+\end{aligned}~
+\end{equation}
+
+由
+\begin{equation}
+\dv{}{x}\qty(\frac{\sin\qty(\frac{N\pi}{2L}(x-x_m))}{\frac{2L}{h}\tan\qty(\frac{\pi}{2L}(x-x_m))})|_{x=x_j}=\left\{\begin{aligned}
+&0,\quad j=m\\
+&\frac{\pi}{2L}(-1)^{(j-m)}\cot[\pi(j-m)/N],j\neq m
+\end{aligned}\right.~
+\end{equation}
+
+从而
+\begin{equation}
+\begin{aligned}
+w_j=p'(x_j)=\frac{\pi}{2L}\sum_{m=1,m\neq j}^{N}(-1)^{(j-m)}\cot[\pi(j-m)/N]u(x_m)
+\end{aligned}~
+\end{equation}
+因此，差分矩阵为
+\begin{equation}
+\frac{\pi}{2L}
+\begin{pmatrix}
+0&\cot(\pi/N)&-\cot(2\pi/N)&\cdots&\cot((N-1)\pi/N)\\
+-\cot(\pi/N)&\ddots&\ddots&\ddots&\ddots\\
+\cot(2\pi/N)&\ddots&\ddots&\ddots&\ddots\\
+\vdots&\ddots&\ddots&\ddots&\ddots\\
+-\cot((N-1)\pi/N)&\ddots&\ddots&\ddots&\ddots\\
+\end{pmatrix}.~
+\end{equation}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

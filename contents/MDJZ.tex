@@ -2,4 +2,142 @@
 % license CCBYSA3
 % type Wiki
 
+本文根据 CC-BY-SA 协议转载翻译自维基百科\href{https://en.wikipedia.org/wiki/Density_matrix}{相关文章}。
 
+在量子力学中，密度矩阵（或密度算符）是描述物理系统集体（即使该集体仅包含一个系统）作为量子态的矩阵。它允许通过博恩规则计算对集体中各系统进行测量后的结果概率。密度矩阵是比常见的状态向量或波函数更一般的概念：状态向量或波函数只能表示纯态，而密度矩阵也能表示混合集体（有时模糊地称为混合态）。混合集体在量子力学中有两种情况：
+\begin{enumerate}
+\item 当系统的准备导致集体中有多个纯态时，需要处理可能准备的统计分布；
+\item 当想要描述一个与另一个系统纠缠的物理系统时，而不描述它们的组合态；这种情况通常出现在系统与某些环境交互时（例如去相干）。在这种情况下，纠缠系统的密度矩阵不同于由多个纯态组成的集体的密度矩阵，后者在测量时会给出相同的统计结果。
+\end{enumerate}
+因此，密度矩阵在处理混合集体的量子力学领域中是至关重要的工具，如量子统计力学、开放量子系统和量子信息等。
+\subsection{定义与动机}
+密度矩阵是一个线性算符的表示，称为密度算符。密度矩阵是通过在基础空间中选择一个正交规范基来从密度算符中得到的。[2]实际上，密度矩阵和密度算符这两个术语常常可以互换使用。
+
+假设选择一个基，其中有两个状态 \(|0\rangle\) 和 \(|1\rangle\) 在二维希尔伯特空间中，那么密度算符可以表示为矩阵：
+\[
+(\rho_{ij}) = \left( \begin{matrix} \rho_{00} & \rho_{01} \\ \rho_{10} & \rho_{11} \end{matrix} \right) = \left( \begin{matrix} p_0 & \rho_{01} \\ \rho_{01}^* & p_1 \end{matrix} \right)~
+\]
+其中对角元素是实数，并且它们的和为1（也称为两个状态 \(|0\rangle\) 和 \(|1\rangle\) 的占据数）。非对角元素是彼此的复共轭（也称为相干性）；它们的幅度受到密度算符是正半定算符这一要求的限制，见下文。
+
+密度算符是一个正半定的自伴算符，其迹为1，并作用于系统的希尔伯特空间。[3][4][5]这一定义可以通过考虑一个情况来动机化，其中每个纯态 \(|\psi_j\rangle\) 以概率 \(p_j\) 被准备，描述的是一个纯态的集体。在使用投影算符 \(\Pi_m\) 时，获得投影测量结果 \(m\) 的概率由以下公式给出[6]：
+\[
+p(m) = \sum_j p_j \langle \psi_j | \Pi_m | \psi_j \rangle = \operatorname{tr} \left[\Pi_m \left( \sum_j p_j |\psi_j \rangle \langle \psi_j | \right) \right]~
+\]
+这使得密度算符定义为：
+\[
+\rho = \sum_j p_j |\psi_j \rangle \langle \psi_j |~
+\]
+成为这个集体状态的一个方便表示。可以很容易地验证，这个算符是正半定的，自伴的，并且具有迹为1。反过来，根据谱定理，任何具有这些性质的算符都可以写成：\(\sum_j p_j |\psi_j \rangle \langle \psi_j |\)其中 \( |\psi_j \rangle \) 是某些状态，且系数 \(p_j\) 非负且其和为1。[7][6]然而，如施罗德–HJW 定理所示，这个表示并不唯一。
+
+密度算符定义的另一个动机来自于考虑对纠缠态的局部测量。设 \(|\Psi\rangle\) 是复合希尔伯特空间 \(\mathcal{H}_1 \otimes \mathcal{H}_2\) 中的一个纯纠缠态。当在希尔伯特空间 \(\mathcal{H}_1\) 上对投影算符 \(\Pi_m\) 进行测量时，获得测量结果 \(m\) 的概率由下式给出[6]：
+\[
+p(m) = \langle \Psi | (\Pi_m \otimes I) | \Psi \rangle = \operatorname{tr} \left[ \Pi_m \left( \operatorname{tr}_2 |\Psi \rangle \langle \Psi | \right) \right]~
+\]
+其中，\(\operatorname{tr}_2\) 表示对希尔伯特空间 \(\mathcal{H}_2\) 的部分迹运算。这使得算符：
+\[
+\rho = \operatorname{tr}_2 |\Psi \rangle \langle \Psi |~
+\]
+成为计算这些局部测量概率的一个方便工具。它被称为纯态 \(|\Psi\rangle\) 在子系统 1 上的约化密度矩阵。可以很容易地验证，这个算符具有所有密度算符的性质。反过来，施罗德–HJW定理意味着，所有密度算符都可以写成：\(\operatorname{tr}_2 |\Psi \rangle \langle \Psi |\)对于某个状态 \(|\Psi \rangle\)。
+\subsection{纯态和混合态}
+纯量子态是无法写成其他量子态的概率混合或凸组合的状态。[5]用密度算符的语言来说，纯态有几个等价的表述。[8]: 73如果密度算符满足以下条件之一，则它表示一个纯态：
+\begin{itemize}
+\item 它可以写成一个状态向量 \(|\psi \rangle\) 与其自身的外积，即： 
+  \[
+  \rho = |\psi \rangle \langle \psi |~
+  \]
+\item 它是一个投影算符，特别是一个秩为一的投影。
+\item 它是幂等的，即：
+  \[
+  \rho = \rho^2~
+  \]
+\item 它的纯度为1，即： 
+  \[
+  \operatorname{tr}(\rho^2) = 1~
+  \]
+\end{itemize}
+重要的是要强调量子态的概率混合（即集体）与两个态的叠加之间的区别。如果一个集体被准备为一半的系统处于态 \(|\psi_1\rangle\)，另一半处于态 \(|\psi_2\rangle\)，它可以通过密度矩阵描述：
+\[
+\rho = \frac{1}{2} \begin{pmatrix} 1 & 0 \\ 0 & 1 \end{pmatrix}~
+\]
+这里假设 \(|\psi_1\rangle\) 和 \(|\psi_2\rangle\) 是正交的，并且维度为2，为了简化计算。另一方面，这两种态的量子叠加，且具有相等的概率振幅，结果是纯态：\(\psi\rangle = \frac{1}{\sqrt{2}} (|\psi_1\rangle + |\psi_2\rangle)\)
+其对应的密度矩阵为：
+\[
+|\psi \rangle \langle \psi | = \frac{1}{2} \begin{pmatrix} 1 & 1 \\ 1 & 1 \end{pmatrix}~
+\]
+与概率混合不同，这种叠加态能够展示量子干涉效应。[6]: 81
+\begin{figure}[ht]
+\centering
+\includegraphics[width=6cm]{./figures/e92ed094c662719c.png}
+\caption{在量子比特的布洛赫球表示中，单位球上的每一个点代表一个纯态。所有其他的密度矩阵对应于单位球内部的点。} \label{fig_MDJZ_1}
+\end{figure}
+从几何上讲，密度算符的集合是一个凸集合，纯态是该集合的极值点。最简单的情况是二维希尔伯特空间，即量子比特（qubit）。量子比特的任意混合态可以表示为保利矩阵的线性组合，保利矩阵与单位矩阵一起提供了 \(2 \times 2\) 自伴矩阵的基：[9]: 126 
+\[
+\rho = \frac{1}{2} \left(I + r_x \sigma_x + r_y \sigma_y + r_z \sigma_z\right),~
+\]
+其中实数 \((r_x, r_y, r_z)\) 是单位球内某点的坐标，而
+\[
+\sigma_x = \begin{pmatrix} 0 & 1 \\ 1 & 0 \end{pmatrix}, \quad \sigma_y = \begin{pmatrix} 0 & -i \\ i & 0 \end{pmatrix}, \quad \sigma_z = \begin{pmatrix} 1 & 0 \\ 0 & -1 \end{pmatrix}.~
+\]
+满足 \(r_x^2 + r_y^2 + r_z^2 = 1\) 的点表示纯态，而混合态则由单位球内部的点表示。这被称为量子比特态空间的布洛赫球模型（Bloch sphere picture）。
+\subsubsection{例子：光的偏振}
+\begin{figure}[ht]
+\centering
+\includegraphics[width=6cm]{./figures/1b5b19d3d2a19211.png}
+\caption{} \label{fig_MDJZ_3}
+\end{figure}
+纯态和混合态的一个例子是光的偏振。一个单个光子可以被描述为具有右旋或左旋圆偏振，分别由正交的量子态 \( |\mathrm{R} \rangle \) 和 \( |\mathrm{L} \rangle \) 表示，或者是这两者的叠加态：它可以处于任意态 \( \alpha |\mathrm{R} \rangle + \beta |\mathrm{L} \rangle \)（其中 \( |\alpha|^2 + |\beta|^2 = 1 \)），对应于线性、圆形或椭圆偏振。现在考虑一个垂直偏振的光子，由态 \( |\mathrm{V} \rangle = (|\mathrm{R} \rangle + |\mathrm{L} \rangle)/\sqrt{2} \) 描述。如果将其通过一个圆偏振片，该偏振片只能通过 \( |\mathrm{R} \rangle \) 偏振光，或者只能通过 \( |\mathrm{L} \rangle \) 偏振光，则两种情况下有一半的光子被吸收。这可能让人觉得一半的光子处于 \( |\mathrm{R} \rangle \) 态，另一半处于 \( |\mathrm{L} \rangle \) 态，但这并不正确：如果我们将 \( (|\mathrm{R} \rangle + |\mathrm{L} \rangle)/\sqrt{2} \) 通过线性偏振片，就没有任何光子被吸收；而如果我们将 \( |\mathrm{R} \rangle \) 或 \( |\mathrm{L} \rangle \) 通过偏振片，则有一半的光子会被吸收。
+
+非偏振光（例如白炽灯发出的光）不能被描述为任何形式的 \( \alpha |\mathrm{R} \rangle + \beta |\mathrm{L} \rangle \) 态（线性、圆形或椭圆偏振）。与偏振光不同，非偏振光通过偏振片时无论偏振片的方向如何，都会以50\%的强度损失通过；并且它不能通过任何波片被偏振。然而，非偏振光可以被描述为一个统计集，比如每个光子以50\%的概率具有 \( |\mathrm{R} \rangle \) 偏振或 \( |\mathrm{L} \rangle \) 偏振。如果每个光子具有垂直偏振 \( |\mathrm{V} \rangle \) 或水平偏振 \( |\mathrm{H} \rangle \) 也有50\%的概率，情况也是一样的。这两个集在实验上是完全不可区分的，因此它们被认为是相同的混合态。对于这个非偏振光的例子，密度算符为：
+\[
+\rho = \frac{1}{2} |\mathrm{R} \rangle \langle \mathrm{R} | + \frac{1}{2} |\mathrm{L} \rangle \langle \mathrm{L} | = \frac{1}{2} |\mathrm{H} \rangle \langle \mathrm{H} | + \frac{1}{2} |\mathrm{V} \rangle \langle \mathrm{V} | = \frac{1}{2} \begin{pmatrix} 1 & 0 \\ 0 & 1 \end{pmatrix}.~
+\]
+还有其他方法可以生成非偏振光：一种可能性是通过引入光子的制备不确定性，例如将光子通过一个双折射晶体，其表面粗糙，使得光束的不同部分获得不同的偏振。另一种可能性是使用纠缠态：一个放射性衰变可以发射两个朝相反方向传播的光子，量子态为 \( (|\mathrm{R}, \mathrm{L} \rangle + |\mathrm{L}, \mathrm{R} \rangle)/\sqrt{2} \)。这两个光子的联合态是纯态，但通过对联合密度矩阵进行部分迹运算得到的每个光子的密度矩阵是完全混合的。
+\subsection{等效的集合和纯化} 
+给定的密度算符并不能唯一确定生成它的纯态集；一般来说，存在无限多种不同的集合作用生成相同的密度矩阵。这些集合作用无法通过任何测量来区分。等效集可以被完全表征：设  
+\(\{ p_j, |\psi_j\rangle \}\)  
+为一个集合。那么对于任何复矩阵 \(U\)，使得  
+\( U^\dagger U = I \)（部分酉算符），由以下定义的集合  
+\(\{ q_i, |\varphi_i\rangle \}\)  
+也会生成相同的密度算符，并且所有等效的集合作用都具有这种形式：
+\[
+\sqrt{q_i} |\varphi_i\rangle = \sum_j U_{ij} \sqrt{p_j} |\psi_j\rangle~
+\]
+一个紧密相关的事实是，给定的密度算符有无数个不同的纯化态，纯化态是那些在进行部分迹运算时生成该密度算符的纯态。设  
+\[\rho = \sum_j p_j |\psi_j\rangle \langle \psi_j|~\] 
+为由集合  
+\(\{ p_j, |\psi_j\rangle \}\)  
+生成的密度算符，其中状态  
+\( |\psi_j\rangle \) 不一定是正交的。然后对于所有部分酉算符 \( U \)，我们有：
+\[
+|\Psi\rangle = \sum_j \sqrt{p_j} |\psi_j\rangle U |a_j\rangle~
+\]
+这是一种纯化态，其中  
+\( |a_j\rangle \) 是正交基。此外，所有的纯化态都具有这种形式。
+\subsection{测量}  
+设 \(A\) 为系统的可观察量，假设集合处于混合态，使得每个纯态 \( |\psi_j\rangle \) 以概率 \( p_j \) 发生。那么，对应的密度算符为
+\[
+\rho = \sum_j p_j |\psi_j\rangle \langle \psi_j|~
+\]
+可以通过从纯态的情况推广来计算测量的期望值：
+\[
+\langle A \rangle = \sum_j p_j \langle \psi_j | A | \psi_j \rangle = \sum_j p_j \operatorname{tr} \left( |\psi_j\rangle \langle \psi_j| A \right) = \operatorname{tr} \left( \sum_j p_j |\psi_j\rangle \langle \psi_j| A \right) = \operatorname{tr} (\rho A)~
+\]
+其中，\(\operatorname{tr}\) 表示迹运算。因此，熟悉的纯态期望值表达式\(\langle A \rangle = \langle \psi | A | \psi \rangle\)被混合态下的
+\[
+\langle A \rangle = \operatorname{tr} (\rho A)~
+\]
+所替代。[8]: 73 
+
+此外，如果 \(A\) 具有谱分解
+\[
+A = \sum_i a_i P_i~
+\]
+其中，\(P_i\) 是对应于特征值 \(a_i\) 的投影算符，那么测量后的密度算符为[12][13]
+\[
+\rho_i' = \frac{P_i \rho P_i}{\operatorname{tr}[\rho P_i]}~
+\]
+当测量结果为 \(i\) 时获得。在测量结果未知的情况下，集合则描述为
+\[
+\rho' = \sum_i P_i \rho P_i~
+\]
+如果假设测量结果的概率是投影算符 \(P_i\) 的线性函数，那么它们必须通过投影算符与密度算符的迹运算给出。Gleason 定理表明，在三维或更高维的希尔伯特空间中，线性假设可以替换为非情境性假设。[14] 这种维度上的限制可以通过假设 POVM（正交投影测量算符）也具备非情境性来去除，[15][16] 但这一点被批评为在物理上缺乏动机。[17]
