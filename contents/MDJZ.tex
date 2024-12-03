@@ -141,3 +141,121 @@ A = \sum_i a_i P_i~
 \rho' = \sum_i P_i \rho P_i~
 \]
 如果假设测量结果的概率是投影算符 \(P_i\) 的线性函数，那么它们必须通过投影算符与密度算符的迹运算给出。Gleason 定理表明，在三维或更高维的希尔伯特空间中，线性假设可以替换为非情境性假设。[14] 这种维度上的限制可以通过假设 POVM（正交投影测量算符）也具备非情境性来去除，[15][16] 但这一点被批评为在物理上缺乏动机。[17]
+\subsection{熵（Entropy）}
+冯·诺依曼熵（von Neumann entropy）\( S \) 的混合态可以通过密度算符 \(\rho\) 的特征值，或者通过密度算符 \(\rho\) 的迹与对数来表示。由于密度算符 \(\rho\) 是一个半正定算符，它具有谱分解形式：\(\rho = \sum_i \lambda_i |\varphi_i \rangle \langle \varphi_i|,\)
+其中 \(|\varphi_i\rangle\) 是正交归一的向量，\(\lambda_i \geq 0\)，并且 \(\sum_i \lambda_i = 1\)。那么，量子系统的熵为：
+\[
+S = - \sum_i \lambda_i \ln \lambda_i = - \operatorname{tr}(\rho \ln \rho).~
+\]
+这个定义意味着，任何纯态的冯·诺依曼熵都是零。[18]: 217 如果 \(\rho_i\) 是支持在正交子空间上的态，那么这些态的凸组合的冯·诺依曼熵为：
+\[
+\rho = \sum_i p_i \rho_i,~
+\]
+其冯·诺依曼熵为这些态的冯·诺依曼熵和概率分布 \( p_i \) 的香农熵的和：
+\[
+S(\rho) = H(p_i) + \sum_i p_i S(\rho_i).~
+\]
+当态 \(\rho_i\) 没有正交支持时，右边的和严格大于凸组合态 \(\rho\) 的冯·诺依曼熵。[6]: 518 
+
+给定一个密度算符 \(\rho\) 和一个项目测量，如前所述，定义的态 \(\rho'\) 由如下凸组合表示：
+\[
+\rho' = \sum_i P_i \rho P_i,~
+\]
+这个可以解释为执行测量后，未记录发生了哪个结果所产生的态，[9]: 159 其冯·诺依曼熵大于 \(\rho\) 的熵，除非 \(\rho = \rho'\)。然而，通过广义测量或 POVM 所产生的 \(\rho'\) 可能会具有比 \(\rho\) 更低的冯·诺依曼熵。[6]: 514 
+\subsection{冯·诺依曼方程的时间演化}
+就像薛定谔方程描述了纯态如何随时间演化一样，冯·诺依曼方程（也称为李维尔-冯·诺依曼方程）描述了密度算符如何随时间演化。冯·诺依曼方程规定：
+\[
+i\hbar \frac{\operatorname{d} \rho}{\operatorname{d} t} = [H, \rho]~,~
+\]
+其中，方括号表示对易子。
+
+该方程仅在密度算符处于薛定谔图像下成立，尽管这个方程看起来一开始像是模拟海森堡图像中的海森堡方程，具有一个关键的符号差异：
+\[
+i\hbar \frac{\operatorname{d} A^{(\mathrm{H})}}{\operatorname{d} t} = -[H, A^{(\mathrm{H})}]~,~
+\]
+其中 \( A^{(\mathrm{H})}(t) \) 是某个海森堡图像下的算符；但在这个图像下，密度矩阵并不随时间变化，而相对符号的差异确保了期望值 \( \langle A \rangle \) 的时间导数与薛定谔图像中的结果相同。[5]
+
+如果哈密顿量是时间不变的，那么冯·诺依曼方程可以轻松求解，得到：
+\[
+\rho(t) = e^{-iHt/\hbar} \rho(0) e^{iHt/\hbar}.~
+\]
+对于更一般的哈密顿量，如果 \( G(t) \) 是某个区间内的波函数传播子，那么密度矩阵在该区间内的时间演化由以下公式给出：
+\[
+\rho(t) = G(t) \rho(0) G(t)^{\dagger}.~
+\]
+\subsection{Wigner函数和经典类比}
+密度矩阵算符也可以在相空间中实现。在Wigner映射下，密度矩阵变换为等效的Wigner函数：
+\[
+W(x,p) \stackrel{\mathrm{def}}{=} \frac{1}{\pi \hbar} \int_{-\infty}^{\infty} \psi^*(x+y)\psi(x-y) e^{2ipy/\hbar} \, dy.~
+\]
+Wigner函数的时间演化方程，被称为Moyal方程，是上述冯·诺依曼方程的Wigner变换：
+\[
+\frac{\partial W(x,p,t)}{\partial t} = -\{\{W(x,p,t), H(x,p)\}\},~
+\]
+其中 \( H(x,p) \) 是哈密顿量，\(\{\{\cdot, \cdot \}\}\) 是Moyal括号，是量子对易子的变换。
+
+Wigner函数的演化方程与其经典极限，即经典物理中的李维尔方程相似。在普朗克常数 \(\hbar\) 趋近于零的极限下，\( W(x,p,t) \) 退化为经典相空间中的李维尔概率密度函数。
+\subsection{示例应用}
+密度矩阵是量子力学的基础工具，几乎在任何类型的量子力学计算中都会至少偶尔出现。以下是一些密度矩阵特别有用且常见的具体应用示例：
+
+\begin{itemize}
+\item 统计力学使用密度矩阵，最突出的应用是表示系统在非零温度下的准备状态。通过使用典型系综构造密度矩阵得到的结果形式为：\([\rho = \frac{\exp(-\beta H)}{Z(\beta)},\)
+其中 \( \beta \) 是逆温度 \( (k_B T)^{-1} \)，而 \( H \) 是系统的哈密顿量。归一化条件要求密度矩阵的迹等于 1，这样就定义了配分函数为：\(Z(\beta) = \mathrm{tr} \exp(-\beta H).\)如果系统中粒子的数量不确定，则可以应用大正则系综，其中用来求和构造密度矩阵的状态来自于Fock空间。[22]: 174 
+\item 量子去相干理论通常涉及非孤立的量子系统与其他系统（包括测量设备）之间的纠缠发展。密度矩阵使得描述这一过程并计算其后果变得更加容易。量子去相干解释了为什么一个与环境相互作用的系统会从纯态（展示叠加态）过渡到混合态（经典选择的无序组合）。这一过渡本质上是可逆的，因为系统和环境的合成态仍然是纯态，但在实践中不可逆，因为环境是一个非常大且复杂的量子系统，无法逆转它们之间的相互作用。因此，去相干对解释量子力学的经典极限非常重要，但无法解释波函数坍缩，因为在混合态中所有经典选择仍然存在，而波函数坍缩只选择其中的一个。[23]
+\item 类似地，在量子计算、量子信息理论、开放量子系统以及其他涉及状态制备噪声和可能发生去相干的领域，密度矩阵被频繁使用。噪声通常通过去极化通道或幅度衰减通道进行建模。**量子断层扫描** 是一个过程，通过给定一组代表量子测量结果的数据，计算与这些测量结果一致的密度矩阵。[24][25]
+\item 在分析多电子系统（如原子或分子）时，一个不完全但有用的初步近似是将电子视为不相关的，或者每个电子都具有独立的单粒子波函数。这通常是构建Hartree–Fock方法中Slater行列式的起点。如果有 \( N \) 个电子填充 \( N \) 个单粒子波函数 \( |\psi_i \rangle \)，那么这 \( N \) 个电子的集合可以通过密度矩阵表示为：\(\sum_{i=1}^{N} |\psi_i \rangle \langle \psi_i |.\)
+\end{itemize}
+\subsection{C*-代数的态的表述}
+现在普遍认为，量子力学的描述中，所有自伴算符都代表可观测量的观点是不可持续的。[26][27] 因此，可观测量被确定为抽象C*-代数 \( A \) 的元素（即没有作为算符代数的特殊表示），而态则是 \( A \) 上的正线性泛函。然而，通过使用GNS构造方法，我们可以恢复出使 \( A \) 成为算符子代数的希尔伯特空间。
+
+从几何角度看，C*-代数 \( A \) 上的纯态是所有状态集合的极点。根据GNS构造的性质，这些态对应于 \( A \) 的不可约表示。
+
+紧算符代数 \( K(H) \) 的态恰好对应于密度算符，因此 \( K(H) \) 的纯态正是量子力学意义上的纯态。
+
+C*-代数的表述可以看作是包括经典和量子系统的。当系统是经典时，观测量的代数变成了阿贝尔C*-代数。在这种情况下，态变成了概率测度。
+\subsection{历史}
+密度算符和密度矩阵的形式主义由约翰·冯·诺依曼（John von Neumann）于1927年提出[28]，并且由列夫·朗道（Lev Landau）独立提出，但后者的系统性较差[29]，在1946年，费利克斯·布洛赫（Felix Bloch）也进行了相关的提出[30]。冯·诺依曼引入密度矩阵的目的是为了发展量子统计力学和量子测量理论。密度矩阵这个名字本身与它在经典统计力学中对应的相空间概率度量（位置和动量的概率分布）相关，这种度量由维格纳（Wigner）于1932年引入[3]。
+
+与此不同，朗道提出密度矩阵的动机是因为无法用态矢量描述复合量子系统的一个子系统[29]。
+\subsection{参见}
+\begin{itemize}
+\item 原子电子跃迁
+\item 密度泛函理论
+\item 格林-库博关系
+\item 格林函数（多体理论）
+\item 林布拉德方程
+\item 维格纳准概率分布
+\end{itemize}
+\subsection{注释和参考文献 } 
+\begin{enumerate}
+\item Shankar, Ramamurti (2014). *Principles of Quantum Mechanics* (第2版，[第19次修订版]). 纽约, NY: Springer. ISBN 978-0-306-44790-7.  
+\item Ballentine, Leslie (2009). "Density Matrix". *Compendium of Quantum Physics*. 柏林, 海德堡: Springer Berlin Heidelberg. 第166页. doi:10.1007/978-3-540-70626-7_51. ISBN 978-3-540-70622-9.  
+\item Fano, U. (1957). "Description of States in Quantum Mechanics by Density Matrix and Operator Techniques". *Reviews of Modern Physics*. 29 (1): 74–93. Bibcode:1957RvMP...29...74F. doi:10.1103/RevModPhys.29.74.  
+\item Holevo, Alexander S. (2001). *Statistical Structure of Quantum Theory*. Lecture Notes in Physics. Springer. ISBN 3-540-42082-7. OCLC 318268606.  
+\item Hall, Brian C. (2013). "Systems and Subsystems, Multiple Particles". *Quantum Theory for Mathematicians*. Graduate Texts in Mathematics. 第267卷. 第419–440页. doi:10.1007/978-1-4614-7116-5_19. ISBN 978-1-4614-7115-8.  
+\item Nielsen, Michael; Chuang, Isaac (2000). *Quantum Computation and Quantum Information*. 剑桥大学出版社. ISBN 978-0-521-63503-5.  
+\item Davidson, Ernest Roy (1976). *Reduced Density Matrices in Quantum Chemistry*. Academic Press, London.  
+\item Peres, Asher (1995). *Quantum Theory: Concepts and Methods*. Kluwer. ISBN 978-0-7923-3632-7. OCLC 901395752.  
+\item Wilde, Mark M. (2017). *Quantum Information Theory* (第2版). 剑桥大学出版社. arXiv:1106.1445. doi:10.1017/9781316809976.001. ISBN 978-1-107-17616-4. OCLC 973404322. S2CID 2515538.  
+\item Kirkpatrick, K. A. (2006年2月). "The Schrödinger-HJW Theorem". *Foundations of Physics Letters*. 19 (1): 95–102. arXiv:quant-ph/0305068. Bibcode:2006FoPhL..19...95K. doi:10.1007/s10702-006-1852-1. ISSN 0894-9875. S2CID 15995449.
+\item Ochs, Wilhelm (1981年11月1日). "Some comments on the concept of state in quantum mechanics". *Erkenntnis*. 16 (3): 339–356. doi:10.1007/BF00211375. ISSN 1572-8420. S2CID 119980948.  
+\item Lüders, Gerhart (1950). "Über die Zustandsänderung durch den Messprozeß". *Annalen der Physik*. 443 (5–8): 322. Bibcode:1950AnP...443..322L. doi:10.1002/andp.19504430510. 由K. A. Kirkpatrick翻译为Lüders, Gerhart (2006年4月3日). "Concerning the state-change due to the measurement process". *Annalen der Physik*. 15 (9): 663–670. arXiv:quant-ph/0403007. Bibcode:2006AnP...518..663L. doi:10.1002/andp.200610207. S2CID 119103479.  
+\item Busch, Paul; Lahti, Pekka (2009), Greenberger, Daniel; Hentschel, Klaus; Weinert, Friedel (编辑), "Lüders Rule", *Compendium of Quantum Physics*, Springer Berlin Heidelberg, 第356–358页, doi:10.1007/978-3-540-70626-7_110, ISBN 978-3-540-70622-9  
+\item Gleason, Andrew M. (1957). "Measures on the closed subspaces of a Hilbert space". *Indiana University Mathematics Journal*. 6 (4): 885–893. doi:10.1512/iumj.1957.6.56050. MR 0096113.  
+\item Busch, Paul (2003). "Quantum States and Generalized Observables: A Simple Proof of Gleason's Theorem". *Physical Review Letters*. 91 (12): 120403. arXiv:quant-ph/9909073. Bibcode:2003PhRvL..91l0403B. doi:10.1103/PhysRevLett.91.120403. PMID 14525351. S2CID 2168715.
+\item Caves, Carlton M.; Fuchs, Christopher A.; Manne, Kiran K.; Renes, Joseph M. (2004). "Gleason-Type Derivations of the Quantum Probability Rule for Generalized Measurements". *Foundations of Physics*. 34 (2): 193–209. arXiv:quant-ph/0306179. Bibcode:2004FoPh...34..193C. doi:10.1023/B:FOOP.0000019581.00318.a5. S2CID 18132256.  
+\item Andrzej Grudka; Paweł Kurzyński (2008). "Is There Contextuality for a Single Qubit?". *Physical Review Letters*. 100 (16): 160401. arXiv:0705.0181. Bibcode:2008PhRvL.100p0401G. doi:10.1103/PhysRevLett.100.160401. PMID 18518167. S2CID 13251108.  
+\item Rieffel, Eleanor G.; Polak, Wolfgang H. (2011年3月4日). *Quantum Computing: A Gentle Introduction*. MIT Press. ISBN 978-0-262-01506-6.  
+\item Breuer, Heinz; Petruccione, Francesco (2002). *The theory of open quantum systems*, Oxford University Press, 第110页, ISBN 978-0-19-852063-4.  
+\item Schwabl, Franz (2002). *Statistical mechanics*, Springer, 第16页, ISBN 978-3-540-43163-3.  
+\item Müller-Kirsten, Harald J.W. (2008). *Classical Mechanics and Relativity*, World Scientific, 第175–179页, ISBN 978-981-283-251-1.  
+\item Kardar, Mehran (2007). *Statistical Physics of Particles*. Cambridge University Press. ISBN 978-0-521-87342-0. OCLC 860391091.
+\item Schlosshauer, M. (2019). "Quantum Decoherence". *Physics Reports*. 831: 1–57. arXiv:1911.06282. Bibcode:2019PhR...831....1S. doi:10.1016/j.physrep.2019.10.001. S2CID 208006050.  
+\item Granade, Christopher; Combes, Joshua; Cory, D. G. (2016年1月1日). "Practical Bayesian tomography". *New Journal of Physics*. 18 (3): 033024. arXiv:1509.03770. Bibcode:2016NJPh...18c3024G. doi:10.1088/1367-2630/18/3/033024. ISSN 1367-2630. S2CID 88521187.  
+\item Ardila, Luis; Heyl, Markus; Eckardt, André (2018年12月28日). "Measuring the Single-Particle Density Matrix for Fermions and Hard-Core Bosons in an Optical Lattice". *Physical Review Letters*. 121 (260401): 6. arXiv:1806.08171. Bibcode:2018PhRvL.121z0401P. doi:10.1103/PhysRevLett.121.260401. PMID 30636128. S2CID 51684413.  
+\item 见附录，Mackey, George Whitelaw (1963). *Mathematical Foundations of Quantum Mechanics*, Dover Books on Mathematics, New York: Dover Publications, ISBN 978-0-486-43517-6.
+\item Emch, Gerard G. (1972). *Algebraic Methods in Statistical Mechanics and Quantum Field Theory*, Wiley-Interscience, ISBN 978-0-471-23900-0.  
+\item von Neumann, John (1927). "Wahrscheinlichkeitstheoretischer Aufbau der Quantenmechanik", *Göttinger Nachrichten*, 1: 245–272.  
+"The Damping Problem in Wave Mechanics (1927)". *Collected Papers of L.\item D. Landau*. 1965. pp. 8–18. doi:10.1016/B978-0-08-010586-4.50007-9. ISBN 978-0-08-010586-4.  
+\item Fano, Ugo (1995). "Density Matrices as Polarization Vectors". *Rendiconti Lincei*. 6 (2): 123–130. doi:10.1007/BF03001661. S2CID 128081459.
+\end{enumerate}

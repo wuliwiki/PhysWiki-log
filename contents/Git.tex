@@ -214,26 +214,27 @@ done
 
 \subsection{分支}
 \begin{itemize}
-\item \verb`git branch <branch>` 创造一个 new branch.
-\item \verb`git checkout -b <branch>` 创造一个 new branch 并切换到该 branch
-\item \verb`git branch <branch> <hash>` 用于从指定的 commit 创建 branch.
-\item \verb`git branch -m 新名字` 重命名当前的 branch。
-\item \verb`git branch -d <branch>` 用于删除某个 branch.
-\item \verb`git branch -r` 显示 remote 的所有 branch。
+\item \verb`git branch <branch>` 创造一个新分支
+\item \verb`git checkout -b <branch>` 创造一个新分支并切换到该 branch
+\item \verb`git branch <branch> <hash>` 用于从指定的 commit 创建新分支
+\item \verb`git branch -m 新名字` 重命名当前的分支
+\item \verb`git branch -d <branch>` 用于删除某个分支
+\item \verb`git branch -r` 显示 remote 的所有分支
 \item \verb`git branch --set-upstream-to=<remote>/<branch>` 可以将某个 remote 作为默认，用于设置 pull 和 push 的默认 remote 和 branch
-\item \verb`git branch -vv` 可以显示所有本地的 branch 的上游 branch
+\item \verb`git branch -vv` 可以显示所有本地和上游的分支
+\item \verb`git ls-remote <remote>` 可以列出某个 remote 的所有分支
 \item \verb`git branch` 显示本地 checkout 过的 branch。 \verb`-vv` 显示更多信息， 包括 hash， remote， 最后 commit 标题。 前面有星号的是当前的 branch （\verb`git status` 也会显示）。
-\item \verb`git clone` 下载一个完整的 repo 以后， 是包含所有 branch 的， 可以 \verb`git checkout <branch>`。 但开始 \verb`git branch [-vv]` 并不会显示， 只会显示 checkout 过的。
+\item \verb`git clone` 下载一个完整的 repo 以后， 是包含所有分支的， 可以 \verb`git checkout <branch>`。 但开始 \verb`git branch [-vv]` 并不会显示， 只会显示 checkout 过的。
 \item \verb`git clone ... --depth = 1` 后不能 checkout 其他 branch。 因为它包含一个默认的 \verb`--single-branch` 选项。 默认下载的是 \verb`master`， 如果要指定， 用 \verb`git clone --depth 1  --branch <branch> url`
 \item \verb`git checkout <branch> -- <file1> <file2>...` 可以把某个 branch 的指定文件还原到当前 branch。
 \item \verb`git fetch <remote> <branch>` 可以下载一个指定的 branch。 注意不要用 \verb`pull`， 会试图和当前 branch 合并。
 \item fetch 完了以后用 \verb`git checkout <branch>` 就在本地创建刚 fetch 的 branch。
 \item \verb`git pull` 只是从服务器下载当前 branch 的变化。
 \item \verb`git diff branchA branchB -- 文件` 用于比较两个 branch 中同一个文件。
-\item \verb`git checkout <branch> -- 文件` 可以从别的 branch 里面 checkout 一个文件到当前 branch。
+\item \verb`git checkout <branch> -- ./文件` 可以从别的分支里面 checkout 一个文件到当前 branch。
 
-\item \verb`git show-branch` 可以查看已有的 branch 
-\item \verb`git checkout <branch>` 把文件夹中的文件切换成某个 branch 中的文件。 但是新的修改和 staging area 中的修改也会移植到该 branch 中。 如果不想移植， 就先 commit.
+\item \verb`git show-branch` 可以查看已有的分支 
+\item \verb`git checkout <branch>` 把文件夹中的文件切换成某个分支中的文件。 但是新的修改和 staging area 中的修改也会移植到该分支中。 如果不想移植， 就先 commit.
 \item \verb`git switch <branch>` 也可以用于切换 branch。
 \item \verb`git checkout <name>` 也可以用于从服务器上下载本地不存在的 branch.
 \item \verb`git push <remote> --delete <branch>` 用于删除 server 上的 branch.
@@ -247,7 +248,7 @@ done
 
 \subsection{merge}
 \begin{itemize}
-\item \verb`git merge <branch>` 把某个 branch 并入到当前 branch 中并 commit。 用 \verb`--no-commit` 不 commit。
+\item \verb`git merge <branch>` 把某个分支并入到当前分支中并 commit。 用 \verb`--no-commit` 不 commit。
 \item 如果 \verb`<branch>` 有多个新的 commit， 则 merge 后也会产生多个。 若要合并为一个， 用 \verb`git merge --squash <branch>`， 默认不 commit（相当于把 \verb`<branch>` 里面的文件直接替换到当前 branch）。
 \item 如果 merge 的过程中出现 conflict, 用 \verb`git merge --abort` 可以恢复到 merge 以前。
 \item 只要两个 branch 修改的不是同一个文件的同一行， merge 都不会有问题。 如果是， 就会产生 conflict
