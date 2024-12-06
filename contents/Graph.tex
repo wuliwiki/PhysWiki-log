@@ -2,47 +2,218 @@
 % keys 图
 % license Usr
 % type Tutor
-\pentry{二元关系\nref{nod_Relat}}{nod_84d8}
+
 \begin{issues}
-\issueOther{该领域（图论）的相关概念尚不完善}
-\issueOther{缺少参考文献，}
 \issueTODO
 \end{issues}
-\subsection{1.基础定义}
-\begin{definition}{图；顶点；边}
-图$G(V,E)$是集合V上的一种二元关系$E$。
 
-集合$V$的元素称为图的顶点，若两个顶点之间有这种确定的二元关系，则称有一条边连这两个点。
+\pentry{二元关系\nref{nod_Relat}}{nod_84d8}
 
-一个图的顶点的数目称为这个图的阶,记 作$|G|$，图的边的数目称为它的度，记作$||G||$。
+\cite{graph1}\cite{graph2}直观上，图要描述的是一些带有两端点的边和一些点构成的对象。这样的对象有以下几种情况：
+
+两种可能的边：1.有方向的边，这是指边的端点有起止点之分的情形，此时的图称为有向图；2.无方向的边，这是指边的端点没有起止的差异，无论两个点在边的哪一头都被认为是相同的，这样的图叫无向图。
+
+两种可能的点：1.有边连接的点，即这样的点是某些边的端点；2.无边连接的点，即这样的点不是任何边的端点，这样的点叫做孤立点。
+
+3种可能的图：1.无点无边的图，这称为空图；2.有点无边的图；3.有点有边的图。因为边必然包含点，所以没有无点有边的图。
+
+图论的所有基本概念都是为了建立起以上图像及其运算的严格化语言。
+
+
+\subsection{图的定义}
+
+当建立起某一对象的数学语言时，我们应当首先借助集合论的基本工具。因此，图包含两个集合，它们称为点和边。而边是连接两个端点的边，因此边可以通过指定它的端点确定。也就是说，可以把边认为是点集的二元子集。当边有向时，只需用有序的点对来表示即可。为方便描述起见，我们将用一个记号来表示集合的 $n$ 元子集构成的全体。
+
+\begin{definition}{$n$ 元子集的族}
+设 $A$ 是集合，则记 $A$ 的所有 $n$ 元子集的全体为 $[A]^n$。即
+\begin{equation}
+[A]^n=\{\{x_1,\cdots,x_n\}|x_i\in A,i=1,\cdots n\}.~
+\end{equation}
 \end{definition}
-\begin{definition}{关联；相邻}
-\begin{itemize}
-\item 若有一条边连一个图的某两个顶点，则称这两个顶点相邻，并称这两个顶点为这条边的端点。
-\item 若某一顶点是某一条边的端点，则称这个顶点和这条边关联。
-\item 若两条边和同一顶点关联，则称这两条边相邻.
-\end{itemize}
+
+\begin{definition}{有序对和2元子集的族}
+设 $A$ 是集合，则记 $A$ 的所有2元子集和有序对的全体为 $P_2(A)$。即
+\begin{equation}
+P_2(A)=[A]^2\cup (A\times A).~
+\end{equation}
+
 \end{definition}
+
+
+
+
+\begin{definition}{图，顶点，边，关联函数，阶数}
+设 $V,E$ 是集合，$\varphi:E\rightarrow P_2(A)$ 是 $E$ 到 $V$ 的二元对族的映射。则称三元组 $G=(V,E,\varphi)$ 为\textbf{图}（graph）。$V$ 的元素称为 $G$ 的\textbf{顶点}（vertex），$E$ 的元素称为 $G$ 的\textbf{边}（edge）或弧 (arc)，$\varphi$ 称为\textbf{关联函数}（incidence function）。$V$ 的基数（元素个数）称为图 $G$ 的\textbf{顶点数}或\textbf{阶}（order），记作 $\abs{G}$，而 $E$ 的基数记作 $\norm{G}$。
+\end{definition}
+
+
+当然，顶点也可以称为节点（node）或点（point），边还能叫做线（line），具有顶点集 $V$ 的图也能称为 $V$ 上的图（a graph on $V$），往往图 $G$ 的顶点集记作 $G(V)$，边集记作 $G(E)$，而 $x\in G(V),e\in G(E)$ 直接记作 $x\in G,w\in G$ 等等，这都是习惯的问题，熟悉它们往往是有好处的。
+
+
+\subsection{图的分类}
+根据图的阶的分类，又将图分为有限图、可数图和无限图。
+\begin{definition}{有限图，可数图，无限图，空图，平凡图}
+设 $G$ 是图，若 $\abs{G}\in\mathbb N$，则称 $G$ 是\textbf{有限的}（finite）；若 $\abs{G}$ 和自然数集的基数相同，即 $\abs{G}=\aleph_0$（记号见\enref{集合的基数}{CardiN}），则称 $G$ 是\textbf{可数的}（countable）；否不是以上两种情况，则称 $G$ 是\textbf{无限的}（infinite）。 $\abs{G}=0,1$ 的有限图 $G$ 称为\textbf{平凡的}\footnote{数学上说某个东西平凡就是代表其仅仅起到建立严格语言的作用，而没有其它研究价值，太普通了这样的含义}（trival）。其中 $\norm{G}=0$ 的图 $G$ 称为\textbf{空图} （empty graph）。 
+\end{definition}
+
+根据边集的分类，图又可分为无向图、有向图和混合图
+\begin{definition}{无向图，有向图，混合图}
+设 $G=(V,E,\varphi)$ 是图，若 $\varphi(E)\subset[V]^2$，则称 $G$ 为\textbf{无向图}（undirected graph）；若 $\varphi(E)\subset V\times V$，则称 $G$ 为\textbf{有向图}（directed graph）；若 $\varphi(E)\cap[V]^2\neq\varnothing,\varphi(E)\cap (V\times V)\neq\varnothing$，则称 $G$ 为\textbf{混合图}（mixed graph）。
+\end{definition}
+
+\begin{definition}{边的分类，有向性}
+设 $G=(V,E,\varphi)$ 是图，$e\in E$。若 $\varphi(e)\in[V]^2$，则称 $e$ 是\textbf{无向的}（undirected）；若 $\varphi(e)\in V\times V$，则称 $e$ 是\textbf{有向的}（directed）。若 $\varphi(e)=\{v_1,v_2\}$，则简记 $e=\{v_1,v_2\}$；若 $\varphi(e)=(v_1,v_2)$，则简记 $e=(v_1,v_2)$。对有向边 $e=(v_1,v_2)$，称 $v_1$ 是 $e$ 的\textbf{起点}（origin），$v_2$ 是 $e$ 的\textbf{终点}（terminus）。起点和终点统称为\textbf{端点}（end vertex）。
+\end{definition}
+
+\begin{definition}{环，对称边，平行}
+设 $G=(V,E,\varphi)$ 是图，$e_1,e_2\in E$。若 $\varphi(e_1)=(v,v)$，则称 $e$ 为\textbf{环}（loop）。若 $\varphi(e_1)=(v_1,v_2),\varphi(e_2)=(v_2,v_1)$，则称 $e_1,e_2$ 为\textbf{对称边}（symmetric edges）。若$\varphi(e_1)=\varphi(e_2)$，则称 $e_1,e_2$ 为\textbf{平行边}（parallel edges）或\textbf{重边}（multi-edges）。
+\end{definition}
+
+有向边通常称为弧。
+
+\begin{definition}{简单图}
+设 $G=(V,E,\varphi)$ 是图。若 $G$ 中无环且无平行边，则称 $G$ 为\textbf{简单图}（simple graph）。简单图简记为 $(V,E)$。
+\end{definition}
+
+下面的概念用于表达点和边之间的关系的。
+\begin{definition}{关联，端点，连接，相邻，独立}
+设 $G=(V,E)$ 是图，$e=\{x,y\},f\in E$。则：
+
+ \begin{enumerate}
+ \item $x$（$y$ 也是同样的） 和 $e$ \textbf{关联}（incident）；
+
+   \item  $x$ 和 $y$ 称为\textbf{相邻的}(adjacent或adjacent)。
+
+   \item $v$ 称为在 $x$ 上的边。
+  
+   \item $x$ 和 $y$ 也称为 $e$ 的\textbf{端点}（endvertex）或\textbf{顶端}（end）；
+  
+  \item  $e$ 也称为\textbf{连接}（join）$x$ 和 $y$ 的边；
+
+  \item  $\{x,y\}$ 也记作 $xy$ （或 $yx$）。
+  
+   \item 若 $x\in X,y\in Y$，则称边 $xy$ 为 $X-Y$ 边（$X-Y$ edge）。
+  
+   \item 所有 $X-Y$ 边的全体记作 $E(X,Y)$。而 $E(\{x\},Y),E(X,\{y\})$ 则分别简记作 $E(x,Y),E(X,y)$。所有和 $v\in V$ 关联的边的全体记作 $E(v)$。
+
+   \item 若 $e\cap f\neq\varnothing$，则称 $e$ 和 $f$ 是\textbf{相邻的}。
+
+   \item 不相邻的点或边称为是\textbf{独立的}（independent）。
+   
+   \item 若一个点集或边集中没有两个元是相邻的，则称该集是\textbf{独立的}（或\textbf{稳定的}（stable））。
+ \end{enumerate}
+\end{definition}
+上面的概念显然反映了我们日常生活中对“关联”，“相邻"等的理解。
+
+\subsection{图的惯用表示}
+
+\begin{definition}{图的惯用表示}
+按照习惯，在绘制图的时候，用\textbf{圆圈}来代表点，而用\textbf{带箭头的线}代表有向边（箭头指向终点），用\textbf{不带箭头的线}代表无向边。
+\end{definition}
+如何绘制圆圈和线是不重要的，重要的是正确体现点对之间是否有边。
+\subsection{图的关系}
+%\begin{definition}{图；顶点；边}
+%图$G(V,E)$是集合V上的一种二元关系$E$。
+
+%集合$V$的元素称为图的顶点，若两个顶点之间有这种确定的二元关系，则称有一条边连这两个点。
+
+%一个图的顶点的数目称为这个图的阶,记 作$|G|$，图的边的数目称为它的度，记作$||G||$。
+%\end{definition}
+
+同一图不同的人有不同的画法，因为重要的仅仅是哪些点之间有边，哪些点之间没边。因此就可能有外观上有很大差异的图，但是本质上是相同的。下面我们将建立同态和同构的概念，它们所起的作用就是帮助我们识别哪些图本质是相同的。为了明白数学上建立它们的思想，这里做一个讨论：
+
+在集合中，若两个集合是一一对应的，就被称为是\textbf{对等的}。“对等”其实表达了数学的思想，这就是指表示集合的名称和元素的具体符号不重要，重要的仅仅是集合的元素的个数，我们可以完全认为它们是同一个集合，只是不同的人表达同一个东西用了不一样的符号标记而已。
+
+当集合的元素之间有某些关系的时候，关系的名称也不重要，重要的是哪些元素之间有关系，哪些元素之间没有关系。对于元素之间有某些关系的集合，不同的人\footnote{这里的“人”完全可以换成对同一事物进行反映的客体}完全可以选择不同的表达方式，即可以使用不同的符号，但应当正确表达哪些元素之间有关系，哪些没有关系。当使用不同的记号来表示元素之间具有关系的集合的时候，若它们都正确的表达了同样的关系，我们称这两种表示是同构的。也有可能，不同的人表达同一个东西，有的人只是表达了该东西的某一部分。另一个人不光表达了前一个人表达的部分，还表达了其它部分，那么就称它们是同态的。
+
+有了这一图像，容易理解下面的数学概念。
+\begin{definition}{同态，同构，自同构，抽象图}
+设 $G=(V,E),G'=(V',E')$ 是两个图。若存在映射
+\begin{equation}
+f:V\rightarrow V'~
+\end{equation}
+满足
+\begin{equation}
+\{x,y\}\in E\Rightarrow \{f(x),f(y)\}\in E',~
+\end{equation}
+就称 $G$ 和 $G'$ 是 \textbf{同态的}（homomorphism），相应的 $f$ 称为\textbf{同态映射}（简称同态）；若同态 $f$ 是双射，则称 $G$ 和 $G'$ \textbf{同构}（isomorphism），并记作 $G\cong G'$（通常我们不区分同构的图，而直接记成 $G=G'$），相应的映射 $f$ 称为\textbf{同构映射}（简称同构）。若同构映射 $f$ 的定义域和值域都是图 $G$，则称 $f$ 是\textbf{自同构映射}(automorphism)。
+
+与给定图同构的所有图的全体被非正式地称为\textbf{抽象图}（abstract graph）。
+\end{definition}
+
+
+\subsection{图的构造}
+下面的概念表达了将两个图放在一起和取公共部分的思想。
+
+\begin{definition}{图的交并}
+设 $G=(V,E),G'=(V',E')$ 是两个图。则
+\begin{equation}
+G\cap G':=(V\cap V',E\cap E')~
+\end{equation}
+称为 $G,G'$ 的\textbf{交}；而
+\begin{equation}
+G\cup G':=(V\cup V',E\cup E')~
+\end{equation}
+称为 $G,G'$ 的\textbf{并}。
+\end{definition}
+
+下面的概念是表达图之间的关系的。
+
+\begin{definition}{不交，子图，母图，真子图}
+设 $G=(V,E),G'=(V',E')$ 是两个图。若 $G\cap G'=\varnothing:=(\varnothing,\varnothing)$， 则称 $G$ 和 $G'$ 是\textbf{不交的}（disjoint）；若 $G\cap G'=G$，则称 $G$ 是 $G'$ 的\textbf{子图}（subgraph），而 $G'$ 称为 $G$ 的\textbf{母图}（supergraph），记作 $G\subset G'$。若 $G\subset G', G\neq G'$ ，则称 $G$ 是 $G'$ \textbf{真子图}（proper subgraph）。
+\end{definition}
+
+下面的概念表达了从一个图如何生成新的图。
+
+\begin{definition}{导出，支撑}
+设 $G=(V,E)$ 是图，$V'\subset V$。定义端点在 $V'$ 中的所有 $E$ 中的边全体为
+\begin{equation}
+E':=\{\{x,y\}\in E|x,y\in V'\}.~
+\end{equation}
+则称 $G'=(V',E')$ 为 $G$ （关于 $V'$）的\textbf{导出子图}（induced subgraph），或称 $V'$ 在 $G$ 中\textbf{导出}（induce）或\textbf{支撑}（span） $G'$，并记作 $G':=G[V']$。若 $H\subset G$，则记 $G[H]:=G[V(H)]$。
+
+若 $V(H)=V(G),E(H)\subset E(G)$，则称 $H$ 是 $G$ 的\textbf{支撑子图}（spanning subgraph）。
+\end{definition}
+下面的概念表达从一个图删掉一些点或边构建新的图。
+\begin{definition}{删除，增加}
+设 $G=(V,E)$ 是一个图，$V',E'$ 分别是任意的点集和边集的集合。则称 $G[V\backslash V']$ 为从 $G$ 中\textbf{删除}(delete) $V\cap V'$ 中所有点及相关联的边得到的图，记作 $G-V$；称
+ $(V,E\backslash E')$ 为从 $G$ 中\textbf{删除}$E\cap E'$（或简称 $E'$） 中所有边得到的图，记作 $G-E'$；称 $(V,[V]^2\cap E')$ 为从 $G$ 中\textbf{增加} $[V]^2\cap E'$ （或简称 $E'$）中所有边得到的图，记作 $G+E'$。当只删除一点或一边时，记 $G-v:=G-\{v\},G-e:=G-\{e\},G+e:=G+\{e\}$。
+\end{definition}
+
+
+
+
+
+\subsection{图的性质}
+既然同构的图本质是相同的，那么若某一图具有某个性质，那么真正和它“同构”的图就应当具有该性质。下面的概念表达了这一思想。
+\begin{definition}{图性质，图不变量}
+设 $\mathfrak A$ 是图 $G$ 的某种（已有定义的）特征。若与 $G$ 同构的图都有特征 $\mathfrak A$，则称 $\mathfrak A$ 是\textbf{图性质}(graph property)。定义在同构图的全体上的恒值映射被称为\textbf{图不变量}（graph invariant）。
+\end{definition}
+
+\begin{definition}{边极大}
+设图 $G$ 具有图性质 $\mathfrak A$。若 $G$ 的任意真子图都没有性质 $\mathfrak A$， 则称 $G$ 关于  $\mathfrak A$ 是\textbf{边极大的}（edge-maximal）。
+\end{definition}
+
 \subsection{2.特殊图元素}
-\begin{definition}{特殊点；特殊边}
-\begin{itemize}
-\item 两个端点是同一个顶点的边称为环。
-\item 若某条边的两个端点不是同一个顶点，且只有一条边连这两个顶点，则称这条边为杆。
-\item 以某两顶点为端点的边可能不止一条，这时称连这两个顶点的边为重边。
-\end{itemize}
-\end{definition}
-\begin{definition}{特殊图}
-\begin{itemize}
-\item 只有一个顶点而没有边的图称为平凡图，没有边的图称为孤立图。
-\item 既可以有环，也可以有重边的图称为准图.
-\\没有环而可能有重边的图称为带重图.
-\\没有重边而可能有环的图称为带环图.
-\\既没有重边也没有环的图称为简单图,每两个顶点都相邻的简单图称为完全图。n阶完全图记作$K^{n}$
-\item 若一个图的阶是有限的，则称这个图为有限图，否则称这个图为无限图。
-\item 若一个n阶图的点用 1 , 2 ， … ， n 来代表，则称它为标定图
-\\若在图的每一条边上赋以一个实数或者对于每个节点赋以一个实数，则称它为赋权图。
-\end{itemize}
-\end{definition}
+%\begin{definition}{特殊点；特殊边}
+%\begin{itemize}
+%\item 两个端点是同一个顶点的边称为环。
+%\item 若某条边的两个端点不是同一个顶点，且只有一条边连这两个顶点，则称这条边为杆。
+%\item 以某两顶点为端点的边可能不止一条，这时称连这两个顶点的边为重边。
+%\end{itemize}
+%\end{definition}
+%\begin{definition}{特殊图}
+%\begin{itemize}
+%\item 只有一个顶点而没有边的图称为平凡图，没有边的图称为孤立图。
+%\item 既可以有环，也可以有重边的图称为准图.
+%\\没有环而可能有重边的图称为带重图.
+%\\没有重边而可能有环的图称为带环图.
+%\\既没有重边也没有环的图称为简单图,每两个顶点都相邻的简单图称为完全图。n阶完全图记作$K^{n}$
+%\item 若一个图的阶是有限的，则称这个图为有限图，否则称这个图为无限图。
+%\item 若一个n阶图的点用 1 , 2 ， … ， n 来代表，则称它为标定图
+%\\若在图的每一条边上赋以一个实数或者对于每个节点赋以一个实数，则称它为赋权图。
+%\end{itemize}
+%\end{definition}
 \begin{theorem}{n阶完全图$K^{n}$的度}
 \begin{equation}
 ||K^{n}||=\frac{n(n-1)}{2}~.
