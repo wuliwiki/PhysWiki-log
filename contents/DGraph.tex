@@ -1,0 +1,138 @@
+% 图的顶点度
+% keys 顶点度
+% license Usr
+% type Tutor
+
+\pentry{图\nref{nod_Graph}}{nod_2e68}
+
+\cite{graph2}图的某一顶点的度是指与它关联的边数。由于图论的早期主要研究的是无向图，因此顶点度的概念往往专门用于无向图。然而，为了一般化起见我们将它定义在任一图上。
+
+\begin{definition}{顶点度，出度，入度，孤立点}
+设 $G=(V,E,\varphi)$ 是\enref{图}{Graph}，$v\in V$。则 $G$ 中与 $v$ \aref{关联}{def_Graph_1}的边数称为 $v$ 在 $G$ 中的\textbf{度}（degree），记作 $d_G(v)$（或简记为 $d(v)$）。$G$ 中以 $v$ 为起点的有向边数称为 $v$ 在 $G$ 中的\textbf{出度}（out degree），记作 $d_G^+(v)$。$G$ 中以 $d$ 为终点的有向边数称为 $v$ 在 $G$ 中的\textbf{入度}（in degree），记作 $d_G^-(v)$。度为 $d$ 的点称为 $d$ 度点（d degree vertex）。零度点称为\textbf{孤立点}（isolated vertex），出度等于入度的点称为\textbf{平衡点}（balanced vertex）。
+\end{definition}
+
+\begin{example}{}
+设 $G$ 是有向图。试证明 $d_G(v)=d_G^+(v)+d_G^-(v)-r$，其中 $r$ 是过 $v$ 的环数。
+
+\textbf{证明：}设 $E^+$ 是 $G$ 中以 $v$ 为起点的边集，$E^-$ 是 $G$ 中以 $v$ 为终点的边集。则 $E_0=E^+\cap E^-$ 是过 $v$ 的环集。由于
+$E^+\backslash E_0, E_0, E^-\backslash E_0$ 是 $E(v)$ 的划分，因此
+\begin{equation}
+\abs{E(v)}=\abs{E^+\backslash E_0}+\abs{E_0}+\abs{E^-\backslash E_0}.~
+\end{equation}
+又 $\abs{E(v)}=d_G(v),\abs{E^+\backslash E_0}=d_G^+(v)-r, \abs{E_0}=r, \abs{E^-\backslash E_0}=d_G^-(v)-r$，所以
+\begin{equation}
+d_G(v)=d_G^+(v)+d_G^-(v)-r.~
+\end{equation}
+\end{example}
+图的所有点当中最大的度和最小的度人们习惯用记号 $\Delta,\delta$ 分别来标记它。
+\begin{definition}{最大度，最小度，平均度}
+设 $G$ 是图。则称 $G$ 中顶点度的最大者称为 $G$ 的\textbf{最大度}（maximum degree），记作 $\Delta(G)$；而 $G$ 中顶点度的最小者称为\textbf{最小度}（minimum degree），记作 $\delta(G)$；所有点的度之和除于点数称为\textbf{平均度}（average degree），记作 $d(G)$。即
+\begin{equation}\label{eq_DGraph_2}
+\begin{aligned}
+&\Delta(G):=\max\{d_G(v)|v\in V\}, \\
+&\delta(G):=\min\{d_G(v)|v\in V\},\\
+&d(G):=\frac{1}{\abs{V(G)}}\sum_{v\in V}d_G(v).
+\end{aligned}~
+\end{equation}
+\end{definition}
+
+\begin{exercise}{}
+试证明不等式：$\delta(G)\leq d(G)\leq \Delta(G)$。
+\end{exercise}
+
+
+当所有点具有相同的度时，人们习惯用正则这个词来形容图。当所有点的出度等于入度的时候，人们习惯用平衡形容图。
+\begin{definition}{正则}
+若图 $G$ 中的所有点都具有相同的度 $k$，则称 $G$ 是 \textbf{$k$ 正则的}（$k$ regular），简称\textbf{正则的}（regular）。若图 $G$ 的所有点的出度等于入度，则称 $G$ 是\textbf{平衡}的。
+
+特别的，$3$ 正则图称为 \textbf{立方图}（cubic graph）。
+\end{definition}
+
+\begin{theorem}{}\label{the_DGraph_1}
+设 $G$ 是任一无环图，则其边集和点集个数具有如下关系：
+\begin{equation}\label{eq_DGraph_3}
+\abs{E(G)}=\frac{1}{2}d(G)\abs{V(G)}.~
+\end{equation}
+\end{theorem}
+\textbf{证明：}方法1：对所有的顶点度求和，由于无环图的每一边有两个端点，计算一个点的度计数一次边，所以每条边刚好被计算两次。因此
+\begin{equation}\label{eq_DGraph_1}
+\abs{E(G)}=\frac{1}{2}\sum_{v\in V}d_G(v)=\frac{1}{2}d(G)\abs{V}.~
+\end{equation}
+
+\textbf{方法2：}方法1具有较大的“人为”部分，或者说形式上不严谨，相当于用了一推所谓的人能思考的逻辑，直接给出了\autoref{eq_DGraph_1}。为了形式严密起见，下面使用更精细的证明。
+
+考虑边及其端点组成的偶对 $(e,v)$ 的全体
+\begin{equation}
+A=\{(e,v)|v\in e,e\in E(G)\}.~
+\end{equation}
+对每一边 $e$ 定义
+\begin{equation}
+\tilde e=\{(e,v)|v\in e,v\in V(G)\}.~
+\end{equation}
+对每一点 $v$ 定义
+\begin{equation}
+\tilde v=\{(e,v)|v\in e,e\in E(G)\}.~
+\end{equation}
+由于 
+\begin{equation}
+\bigcup_{e\in E}\tilde e=A=\bigcup_{v\in V}\tilde v,~
+\end{equation}
+且不同的 $e_1,e_2\in E(G),v_1,v_2\in V(G)$，$\tilde e_1\cap\tilde e_2=\varnothing,\tilde v_1\cap\tilde v_2=\varnothing$
+所以（不相交集合的基数和等于它们的并集的基数）
+\begin{equation}
+\sum_{e\in E}\abs{\tilde e}=\sum_{v\in V}\abs{\tilde v}.~
+\end{equation}
+对无环图而言 $\abs{\tilde e}=2,\forall e\in E$，又 $\abs{\tilde v}=d_G(v)$，将它们带入上式即得\autoref{eq_DGraph_1} 。
+
+\textbf{证毕！}
+
+\begin{corollary}{}
+任意无环图中具有奇数度的顶点的个数总是偶数。
+\end{corollary}
+\textbf{证明：}
+由\autoref{the_DGraph_1} 和\autoref{eq_DGraph_2} ，
+\begin{equation}
+\abs{E}=\frac{1}{2}\sum_{v\in V}d_G(v).~
+\end{equation}
+由于 $\abs{E}\in\mathbb N$。所以 
+\begin{equation}
+\sum_{v\in V}d_G(v)\in 2\mathbb N.~
+\end{equation}
+设全体奇数度的点为 $O=\{v\in V|d_G(v)\text{为奇数}\}$，那么
+\begin{equation}
+\sum_{v\in O}d_G(v)\in 2\mathbb N~
+\end{equation}
+上式左边是奇数之和，而右边是偶数。而只有偶数个奇数之和才能为偶数，所以 $\abs{O}$ 是偶数。
+
+\textbf{证毕！}
+
+\begin{corollary}{}
+设 $G$ 是任意图，则
+\begin{equation}
+\abs{E(G)}=\frac{1}{2}(d(G)\cdot\abs{V(G)}+r),~
+\end{equation}
+其中 $r$ 是 $G$ 中环的个数。
+\end{corollary}
+
+\textbf{证明：}
+设 $G$ 中有 $r$ 个环，则 $\abs{E}-r$ 是去掉所有环后得到的图的边数，$d(G)\abs{V(G)}-r$ 则是得到的无环图的度，而点的个数仍是 $\abs{V(G)}$，所以得到的无环图的平均度为 $d(G)-\frac{r}{V(G)}$。由\autoref{the_DGraph_1} ，得
+\begin{equation}
+\begin{aligned}
+\abs{E(G)}-r&=\frac{1}{2}\qty(d(G)-\frac{r}{V(G)})\abs{V(G)},\\
+&\Downarrow\\
+\abs{E(G)}&=\frac{1}{2}(d(G)\cdot\abs{V(G)}+r).
+\end{aligned}~
+\end{equation}
+
+\textbf{证毕！}
+
+若想使得\autoref{eq_DGraph_3} 对所有的图成立，那么由\autoref{eq_DGraph_1} 可知，若定义一个环算两条关联边，则\autoref{eq_DGraph_3} 对所有的图成立。这也是一些教材的做法，避免混淆的方法是：在特定的情形遵循约定的惯例即可。
+
+
+
+
+
+
+
+
+

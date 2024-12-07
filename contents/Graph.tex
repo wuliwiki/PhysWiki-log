@@ -3,11 +3,8 @@
 % license Usr
 % type Tutor
 
-\begin{issues}
-\issueTODO
-\end{issues}
 
-\pentry{二元关系\nref{nod_Relat}}{nod_84d8}
+\pentry{映射\nref{nod_map}}{nod_84d8}
 
 \cite{graph1}\cite{graph2}直观上，图要描述的是一些带有两端点的边和一些点构成的对象。这样的对象有以下几种情况：
 
@@ -17,12 +14,14 @@
 
 3种可能的图：1.无点无边的图，这称为空图；2.有点无边的图；3.有点有边的图。因为边必然包含点，所以没有无点有边的图。
 
-图论的所有基本概念都是为了建立起以上图像及其运算的严格化语言。
+图论的所有基本概念都是为了建立起以上图像及对图的操作的严格化语言。本文旨在建立上述图像的严格化语言。
 
 
 \subsection{图的定义}
 
-当建立起某一对象的数学语言时，我们应当首先借助集合论的基本工具。因此，图包含两个集合，它们称为点和边。而边是连接两个端点的边，因此边可以通过指定它的端点确定。也就是说，可以把边认为是点集的二元子集。当边有向时，只需用有序的点对来表示即可。为方便描述起见，我们将用一个记号来表示集合的 $n$ 元子集构成的全体。
+当建立起某一对象的数学语言时，我们应当首先借助集合论的基本工具。首先，图包含两个代表点和边的集合。而边是连接两个端点的边，因此若对不同的点最多只有一边连接它们，就可以通过指定端点确定边。这时，对于无连接顺序之分的无向边，可以用代表集合的无序符号 $"\{*\}"$ 把它们括起来；而对于有向的边，则用代表有序对的符号 $"(*)"$ 把它们括起来。然而若允许图的两点之间可以有不同的点相连时，就不能用端点来确定边了，并且边集 $\{\{x,y\},\{x,y\}\}$ 因为有重复元而不满足集合的定义。但是边始终被认为是有端点的，因此我们总可以指定边的端点。这样就在边集和点集之间建立了一个关联，因此一般的图应当包含所谓的关联函数。
+
+值得注意的是，很多教材将图定义为只有点集和边集组成的二元组对象，使得它们在建立具有相同端点的不同边的模型的时候，而在“图”的前面加上一些形容词。本文认为，图的概念应当尽可能包含充分多的图，而不限于不同边只能对应不同端点，而把众多已经建立的（带有形容词的）图概念包含在图中来，从而“某某图”只是具有“某某”限制的图。因此，我们采用文献\cite{graph2}的观点。
 
 \begin{definition}{$n$ 元子集的族}
 设 $A$ 是集合，则记 $A$ 的所有 $n$ 元子集的全体为 $[A]^n$。即
@@ -40,47 +39,44 @@ P_2(A)=[A]^2\cup (A\times A).~
 \end{definition}
 
 
-
-
 \begin{definition}{图，顶点，边，关联函数，阶数}
-设 $V,E$ 是集合，$\varphi:E\rightarrow P_2(A)$ 是 $E$ 到 $V$ 的二元对族的映射。则称三元组 $G=(V,E,\varphi)$ 为\textbf{图}（graph）。$V$ 的元素称为 $G$ 的\textbf{顶点}（vertex），$E$ 的元素称为 $G$ 的\textbf{边}（edge）或弧 (arc)，$\varphi$ 称为\textbf{关联函数}（incidence function）。$V$ 的基数（元素个数）称为图 $G$ 的\textbf{顶点数}或\textbf{阶}（order），记作 $\abs{G}$，而 $E$ 的基数记作 $\norm{G}$。
+设 $V,E$ 是集合，$\varphi:E\rightarrow P_2(A)$ 是 $E$ 到 $V$ 的二元对族的映射。则称三元组 $G=(V,E,\varphi)$ 为\textbf{图}（graph）。$V$ 的元素称为 $G$ 的\textbf{顶点}（vertex），$E$ 的元素称为 $G$ 的\textbf{边}（edge）或弧 (arc)，$\varphi$ 称为\textbf{关联函数}（incidence function）。$V$ 的基数（元素个数）称为图 $G$ 的\textbf{顶点数}或\textbf{阶}（order），记作 $\abs{G}$，而 $E$ 的基数称为 $G$ 的\textbf{边数}（size），记作 $\norm{G}$。
 \end{definition}
 
 
-当然，顶点也可以称为节点（node）或点（point），边还能叫做线（line），具有顶点集 $V$ 的图也能称为 $V$ 上的图（a graph on $V$），往往图 $G$ 的顶点集记作 $G(V)$，边集记作 $G(E)$，而 $x\in G(V),e\in G(E)$ 直接记作 $x\in G,w\in G$ 等等，这都是习惯的问题，熟悉它们往往是有好处的。
+当然，顶点也可以称为节点（node）或点（point），边还能叫做线（line），具有顶点集 $V$ 的图也能称为 $V$ 上的图（a graph on $V$），往往图 $G$ 的顶点集记作 $V(G)$，边集记作 $E(G)$，而 $x\in V(G),e\in E(G)$ 直接记作 $x\in G,e\in G$ 等等，这都是习惯的问题，熟悉它们往往是有好处的。
+
+值得强调的是，图中可能有端点相同的边出现，但是 $P_2(V)$ 中包含了 $(x,x)$，它相当于端点相同的边。因此我们无需在 $P_2(V)$ 中加入 $V$ 的单点子集来表示端点相同的边。由于代表边的序对 $(x,x)$ 交换 $x$ 不变，因此可以认为 $(x,x)$ 是无向的。
+
+\subsection{点和边的关系及分类}
 
 
-\subsection{图的分类}
-根据图的阶的分类，又将图分为有限图、可数图和无限图。
-\begin{definition}{有限图，可数图，无限图，空图，平凡图}
-设 $G$ 是图，若 $\abs{G}\in\mathbb N$，则称 $G$ 是\textbf{有限的}（finite）；若 $\abs{G}$ 和自然数集的基数相同，即 $\abs{G}=\aleph_0$（记号见\enref{集合的基数}{CardiN}），则称 $G$ 是\textbf{可数的}（countable）；否不是以上两种情况，则称 $G$ 是\textbf{无限的}（infinite）。 $\abs{G}=0,1$ 的有限图 $G$ 称为\textbf{平凡的}\footnote{数学上说某个东西平凡就是代表其仅仅起到建立严格语言的作用，而没有其它研究价值，太普通了这样的含义}（trival）。其中 $\norm{G}=0$ 的图 $G$ 称为\textbf{空图} （empty graph）。 
+下面概念给出了边的有向性。
+\begin{definition}{边的有向性，端点}
+设 $G=(V,E,\varphi)$ 是图，$e\in E$。若 $\varphi(e)\in[V]^2\cup\{(x,x)|x\in V\}$，则称 $e$ 是\textbf{无向的}（undirected）；若 $\varphi(e)\in V\times V$，则称 $e$ 是\textbf{有向的}（directed）。若 $\varphi(e)=\{v_1,v_2\}$，则简记 $e=\{v_1,v_2\}$，而 $v_1,v_2$ 称为 $e$ 的端点；若 $\varphi(e)=(v_1,v_2)$，则简记 $e=(v_1,v_2)$。对有向边 $e=(v_1,v_2)$，称 $v_1$ 是 $e$ 的\textbf{起点}（origin），$v_2$ 是 $e$ 的\textbf{终点}（terminus）。$e$ 的起点和终点也称为 $e$ 的\textbf{端点}（end vertex）。若 $x$ 是 $e$ 的端点，则记 $x\in e$。
 \end{definition}
 
-根据边集的分类，图又可分为无向图、有向图和混合图
-\begin{definition}{无向图，有向图，混合图}
-设 $G=(V,E,\varphi)$ 是图，若 $\varphi(E)\subset[V]^2$，则称 $G$ 为\textbf{无向图}（undirected graph）；若 $\varphi(E)\subset V\times V$，则称 $G$ 为\textbf{有向图}（directed graph）；若 $\varphi(E)\cap[V]^2\neq\varnothing,\varphi(E)\cap (V\times V)\neq\varnothing$，则称 $G$ 为\textbf{混合图}（mixed graph）。
+
+\begin{definition}{边的交}
+设 $e,f$ 是两个边，则它们共同的端点的全体
+\begin{equation}
+\{x|x\in e,x\in f\}~
+\end{equation}
+称为 $e,f$ 的\textbf{交}，记作 $e\cap f$。
 \end{definition}
 
-\begin{definition}{边的分类，有向性}
-设 $G=(V,E,\varphi)$ 是图，$e\in E$。若 $\varphi(e)\in[V]^2$，则称 $e$ 是\textbf{无向的}（undirected）；若 $\varphi(e)\in V\times V$，则称 $e$ 是\textbf{有向的}（directed）。若 $\varphi(e)=\{v_1,v_2\}$，则简记 $e=\{v_1,v_2\}$；若 $\varphi(e)=(v_1,v_2)$，则简记 $e=(v_1,v_2)$。对有向边 $e=(v_1,v_2)$，称 $v_1$ 是 $e$ 的\textbf{起点}（origin），$v_2$ 是 $e$ 的\textbf{终点}（terminus）。起点和终点统称为\textbf{端点}（end vertex）。
+下面的概念通过边的端点给出了边之间的关系。
+\begin{definition}{环，对称，平行}
+设 $G=(V,E,\varphi)$ 是图，$e_1,e_2\in E$。若 $\varphi(e_1)=(v,v)$，则称 $e$ 为\textbf{环}（loop）。若 $\varphi(e_1)=(v_1,v_2),\varphi(e_2)=(v_2,v_1)$，则称 $e_1,e_2$ 为\textbf{对称边}（symmetric edges）。或 $e_1,e_2$ 分别是起止点相同的有向边，则称 $e_1,e_2$ 为\textbf{平行边}（parallel edges）或\textbf{重边}（multi-edges）。
 \end{definition}
-
-\begin{definition}{环，对称边，平行}
-设 $G=(V,E,\varphi)$ 是图，$e_1,e_2\in E$。若 $\varphi(e_1)=(v,v)$，则称 $e$ 为\textbf{环}（loop）。若 $\varphi(e_1)=(v_1,v_2),\varphi(e_2)=(v_2,v_1)$，则称 $e_1,e_2$ 为\textbf{对称边}（symmetric edges）。若$\varphi(e_1)=\varphi(e_2)$，则称 $e_1,e_2$ 为\textbf{平行边}（parallel edges）或\textbf{重边}（multi-edges）。
-\end{definition}
-
-有向边通常称为弧。
-
-\begin{definition}{简单图}
-设 $G=(V,E,\varphi)$ 是图。若 $G$ 中无环且无平行边，则称 $G$ 为\textbf{简单图}（simple graph）。简单图简记为 $(V,E)$。
-\end{definition}
+显然，无向图中端点相同的边是平行的。
 
 下面的概念用于表达点和边之间的关系的。
-\begin{definition}{关联，端点，连接，相邻，独立}
-设 $G=(V,E)$ 是图，$e=\{x,y\},f\in E$。则：
+\begin{definition}{关联，端点，连接，相邻，独立}\label{def_Graph_1}
+设 $G=(V,E,\varphi)$ 是图，$x,y\in V,e,f\in E$。若 $x,y\in e$，则：
 
  \begin{enumerate}
- \item $x$（$y$ 也是同样的） 和 $e$ \textbf{关联}（incident）；
+ \item 称 $x$（$y$ 也是同样的） 和 $e$ 是\textbf{关联的}（incident）；
 
    \item  $x$ 和 $y$ 称为\textbf{相邻的}(adjacent或adjacent)。
 
@@ -89,8 +85,6 @@ P_2(A)=[A]^2\cup (A\times A).~
    \item $x$ 和 $y$ 也称为 $e$ 的\textbf{端点}（endvertex）或\textbf{顶端}（end）；
   
   \item  $e$ 也称为\textbf{连接}（join）$x$ 和 $y$ 的边；
-
-  \item  $\{x,y\}$ 也记作 $xy$ （或 $yx$）。
   
    \item 若 $x\in X,y\in Y$，则称边 $xy$ 为 $X-Y$ 边（$X-Y$ edge）。
   
@@ -105,13 +99,60 @@ P_2(A)=[A]^2\cup (A\times A).~
 \end{definition}
 上面的概念显然反映了我们日常生活中对“关联”，“相邻"等的理解。
 
+\subsection{图的分类}
+根据图的阶的分类，又将图分为有限图、可数图和无限图。
+\begin{definition}{有限图，可数图，无限图，空图，平凡图}
+设 $G$ 是图，若 $\abs{G},\norm{G}\in\mathbb N$，则称 $G$ 是\textbf{有限的}（finite）；若 $V(G),E(G)$ 有一个是可数集，另一个不是不可数集（见\enref{集合的基数}{CardiN}），则称 $G$ 是\textbf{可数的}（countable）；若不是以上两种情况，则称 $G$ 是\textbf{无限的}（infinite）。 $\abs{G}=0,1$ 的有限图 $G$ 称为\textbf{平凡的}\footnote{数学上说某个东西平凡就是代表其仅仅起到建立严格语言的作用，而没有其它研究价值，太普通了这样的含义}（trival）。其中 $\norm{G}=0$ 的图 $G$ 称为\textbf{空图} （empty graph）。 
+\end{definition}
+
+根据边集的分类，图又可分为无向图、有向图和混合图
+\begin{definition}{无向图，有向图，混合图}
+设 $G=(V,E,\varphi)$ 是图，若 $\varphi(E)\subset[V]^2$，则称 $G$ 为\textbf{无向图}（undirected graph）；若 $\varphi(E)\subset V\times V$，则称 $G$ 为\textbf{有向图}（directed graph）；若 $\varphi(E)\cap[V]^2\neq\varnothing,\varphi(E)\cap (V\times V)\neq\varnothing$，则称 $G$ 为\textbf{混合图}（mixed graph）。
+\end{definition}
+
+下面的概念将无边无环的图称为简单图
+\begin{definition}{简单图}
+设 $G=(V,E,\varphi)$ 是图。若 $G$ 中无环且无平行边，则称 $G$ 为\textbf{简单图}（simple graph）。简单图简记为 $(V,E)$。
+\end{definition}
+\begin{exercise}{}
+证明简单图的任意两点间最多有一条边。
+\end{exercise}
+
+下面的概念通过将无向图的边都换成一对对称边而得到的图称为对称有向图。
+
+\begin{definition}{对称有向图}
+设 $G=(V,E,\varphi)$ 是无向图。将 $E$ 的每一条边都用端点和它相同的一对对称边替代得到的边集记作 $E'$ ，并记 $\varphi'$ 是对应新图的关联函数。则称 $(V,E',\varphi')$ 为由 $G$ 得到的\textbf{对称有向图}（symmetric digraph）。 
+\end{definition}
+
+下面的概念将不同两个都有边相连的简单无向图称为完全图。
+\begin{definition}{完全图}
+设 $G=(V,E)$ 是简单无向图，若任意 $v_1\neq v_2\in V$，存在连接它们的边 $e\in E$，则称 $G$ 为\textbf{完全图}（complete graph）。
+\end{definition}
+
+下面的概念将完全图的对称有向图称为完全有向图。
+\begin{definition}{完全有向图}
+完全图的对称有向图称为\textbf{完全有向图}（complete diagraph）。
+\end{definition}
+
+下面的概念将点集分为 $n$ 个部分，其中每一部分的点间是互不相邻的图称为 $n$ 部分图。
+\begin{definition}{$n$ 部图}
+设 $G=(V,E,\varphi)$ 是图。若 $V$ 可分为 $n$ 个不相交的非空点集 $V_1,\cdots,V_n$，且任一边的端点在不同的 $V_i$ 中，则称 $G$ 是 $n$ \textbf{部图}（partite graph）。二部图也称为\textbf{偶图}。
+\end{definition}
+由定义可知，$n$ 部图是无环的，否则因为环的端点相同，环的端点就在同一集中。此外，同一 $V_i$ 中的点不可能相邻。
+
+\begin{definition}{完全 $n$ 部分图}
+设 $G=(V,E,\varphi)$ 是简单 $n$ 部无向图，$V_1,\cdots,V_n$ 是对应的划分。若 $\forall x\in V_i,y\in V_j,i\neq j$，都有 $e\in E$，使得 $x,y$ 相邻，则称 $G$ 为\textbf{完全 $n$ 部图}。
+\end{definition}
+
+
+
 \subsection{图的惯用表示}
 
 \begin{definition}{图的惯用表示}
 按照习惯，在绘制图的时候，用\textbf{圆圈}来代表点，而用\textbf{带箭头的线}代表有向边（箭头指向终点），用\textbf{不带箭头的线}代表无向边。
 \end{definition}
 如何绘制圆圈和线是不重要的，重要的是正确体现点对之间是否有边。
-\subsection{图的关系}
+\subsection{图的同态和同构}
 %\begin{definition}{图；顶点；边}
 %图$G(V,E)$是集合V上的一种二元关系$E$。
 
@@ -128,59 +169,23 @@ P_2(A)=[A]^2\cup (A\times A).~
 
 有了这一图像，容易理解下面的数学概念。
 \begin{definition}{同态，同构，自同构，抽象图}
-设 $G=(V,E),G'=(V',E')$ 是两个图。若存在映射
+设 $G=(V,E,\varphi),G'=(V',E',\varphi')$ 是两个图。若存在映射
 \begin{equation}
 f:V\rightarrow V'~
 \end{equation}
 满足
 \begin{equation}
-\{x,y\}\in E\Rightarrow \{f(x),f(y)\}\in E',~
+\forall\{x_1,y_1\},(x_2,y_2)\in E\Rightarrow \{f(x_1),f(y_1)\},(f(x_2),f(y_2))\in E',,~
 \end{equation}
 就称 $G$ 和 $G'$ 是 \textbf{同态的}（homomorphism），相应的 $f$ 称为\textbf{同态映射}（简称同态）；若同态 $f$ 是双射，则称 $G$ 和 $G'$ \textbf{同构}（isomorphism），并记作 $G\cong G'$（通常我们不区分同构的图，而直接记成 $G=G'$），相应的映射 $f$ 称为\textbf{同构映射}（简称同构）。若同构映射 $f$ 的定义域和值域都是图 $G$，则称 $f$ 是\textbf{自同构映射}(automorphism)。
 
 与给定图同构的所有图的全体被非正式地称为\textbf{抽象图}（abstract graph）。
 \end{definition}
 
-
-\subsection{图的构造}
-下面的概念表达了将两个图放在一起和取公共部分的思想。
-
-\begin{definition}{图的交并}
-设 $G=(V,E),G'=(V',E')$ 是两个图。则
-\begin{equation}
-G\cap G':=(V\cap V',E\cap E')~
-\end{equation}
-称为 $G,G'$ 的\textbf{交}；而
-\begin{equation}
-G\cup G':=(V\cup V',E\cup E')~
-\end{equation}
-称为 $G,G'$ 的\textbf{并}。
+容易验证，完全图及完全有向图在同构意义下是唯一的。
+\begin{definition}{记号约定 $K_n$}
+$n$ 阶完全图和完全有向图的\enref{等价类}{Relat}分别记作 $K_n,K_n^*$。特别 $K_3$ 称为\textbf{三角形}（triangle）。
 \end{definition}
-
-下面的概念是表达图之间的关系的。
-
-\begin{definition}{不交，子图，母图，真子图}
-设 $G=(V,E),G'=(V',E')$ 是两个图。若 $G\cap G'=\varnothing:=(\varnothing,\varnothing)$， 则称 $G$ 和 $G'$ 是\textbf{不交的}（disjoint）；若 $G\cap G'=G$，则称 $G$ 是 $G'$ 的\textbf{子图}（subgraph），而 $G'$ 称为 $G$ 的\textbf{母图}（supergraph），记作 $G\subset G'$。若 $G\subset G', G\neq G'$ ，则称 $G$ 是 $G'$ \textbf{真子图}（proper subgraph）。
-\end{definition}
-
-下面的概念表达了从一个图如何生成新的图。
-
-\begin{definition}{导出，支撑}
-设 $G=(V,E)$ 是图，$V'\subset V$。定义端点在 $V'$ 中的所有 $E$ 中的边全体为
-\begin{equation}
-E':=\{\{x,y\}\in E|x,y\in V'\}.~
-\end{equation}
-则称 $G'=(V',E')$ 为 $G$ （关于 $V'$）的\textbf{导出子图}（induced subgraph），或称 $V'$ 在 $G$ 中\textbf{导出}（induce）或\textbf{支撑}（span） $G'$，并记作 $G':=G[V']$。若 $H\subset G$，则记 $G[H]:=G[V(H)]$。
-
-若 $V(H)=V(G),E(H)\subset E(G)$，则称 $H$ 是 $G$ 的\textbf{支撑子图}（spanning subgraph）。
-\end{definition}
-下面的概念表达从一个图删掉一些点或边构建新的图。
-\begin{definition}{删除，增加}
-设 $G=(V,E)$ 是一个图，$V',E'$ 分别是任意的点集和边集的集合。则称 $G[V\backslash V']$ 为从 $G$ 中\textbf{删除}(delete) $V\cap V'$ 中所有点及相关联的边得到的图，记作 $G-V$；称
- $(V,E\backslash E')$ 为从 $G$ 中\textbf{删除}$E\cap E'$（或简称 $E'$） 中所有边得到的图，记作 $G-E'$；称 $(V,[V]^2\cap E')$ 为从 $G$ 中\textbf{增加} $[V]^2\cap E'$ （或简称 $E'$）中所有边得到的图，记作 $G+E'$。当只删除一点或一边时，记 $G-v:=G-\{v\},G-e:=G-\{e\},G+e:=G+\{e\}$。
-\end{definition}
-
-
 
 
 
@@ -194,7 +199,129 @@ E':=\{\{x,y\}\in E|x,y\in V'\}.~
 设图 $G$ 具有图性质 $\mathfrak A$。若 $G$ 的任意真子图都没有性质 $\mathfrak A$， 则称 $G$ 关于  $\mathfrak A$ 是\textbf{边极大的}（edge-maximal）。
 \end{definition}
 
-\subsection{2.特殊图元素}
+\subsection{图的运算}
+下面的概念表达了将两个图放在一起和取公共部分的思想。
+
+\begin{definition}{图的交并差}
+设 $G=(V,E,\varphi),G'=(V',E',\varphi')$ 是两个图。记
+\begin{equation}
+\begin{aligned}
+&E_0=\{e\in E\cap E'|\varphi(e)=\varphi'(e)\},\\
+&E_1=\{e|e\in E\cup E'\}\backslash ((E\cap E')\backslash E_0),\\
+&E_2=\{e\in E\backslash E'|\varphi(e)\in V\backslash V'\},\\
+&\varphi_0:E_0\rightarrow V\cap V',\varphi_0(e)=\varphi(e),\\
+&\varphi_1:E_1\rightarrow V\cup V',\varphi_1(e)=\left\{\begin{aligned}
+&\varphi(e),e\in E,\\
+&\varphi'(e),e\in E'.
+\end{aligned}\right. \\
+&\varphi_2:E\backslash E'\rightarrow V,\varphi_2(e)=\varphi(e).
+\end{aligned}
+~
+\end{equation}
+
+则
+\begin{equation}
+(V\cap V',E_0,\varphi_0)~
+\end{equation}
+称为 $G,G'$ 的\textbf{交}，记作 $G\cap G'$；而
+\begin{equation}
+(V\cup V',E_1,\varphi_1)~
+\end{equation}
+称为 $G,G'$ 的\textbf{并}，记作 $G\cup G'$；
+\begin{equation}
+(V\backslash V',E_2,\varphi_2)~
+\end{equation}
+称为 $G,G'$ 的\textbf{差}，记作 $G\backslash G'$。
+\end{definition}
+
+
+下面的概念表达从一个图删掉一些点或边构建新的图。
+\begin{definition}{删除，增加}
+设 $G=(V,E,\varphi)$ 是一个图，$V',E'$ 分别是任意的点集和边集。则称 $G[V\backslash V']$ 为从 $G$ 中\textbf{删除}(delete) $V\cap V'$ 中所有点及相关联的边得到的图，记作 $G-V$；称
+ $(V,E\backslash E',\varphi|_{E\backslash E'})$ 为从 $G$ 中\textbf{删除}$E\cap E'$（或简称 $E'$） 中所有边得到的图，记作 $G-E'$。
+ 
+ 设 $G'=(V',E',\varphi')$，记
+ \begin{equation}
+ \begin{aligned}
+  &E_1=\{e\in E'|\varphi'(e)\in P_2[V]\},\\
+  &\varphi_1:E\cup E_1\rightarrow P_2[V],\varphi_1(e)=\left\{\begin{aligned}
+  &\varphi(e),e\in E,\\
+  &\varphi'(e),e\in E'.
+  \end{aligned}\right.
+ \end{aligned}~
+ \end{equation}
+ 
+ 则称 $(V,E\cup E_1,\varphi_1)$ 为从 $G$ 中\textbf{增加} $[V]^2\cap E'$ （或简称 $E'$）中所有边得到的图，记作 $G+E'$。当只删除一点或一边时，记 $G-v:=G-\{v\},G-e:=G-\{e\},G+e:=G+\{e\}$。
+\end{definition}
+下面的概念将有向图变成无向图。
+\begin{definition}{无向化映射}
+设 $G=(V,E,\varphi)$ 是图。设 $\varphi(e)=\{x,y\}\text{或}(x,y)\text{或}(y,x)$，则称映射
+\begin{equation}
+\begin{aligned}
+\pi:E\rightarrow P_2(V),\pi(e)=\left\{\begin{aligned}
+\{x,y\},x\neq y,\\
+(x,y),x=y.
+\end{aligned}\right.
+\end{aligned}~
+\end{equation}
+为（关于 $G$ 的）无向化映射。
+
+\end{definition}
+
+\subsection{图的构造}
+
+通过交运算定义子母图，反映图的包含关系
+
+\begin{definition}{不交，子图，母图，真子图}
+设 $G=(V,E,\varphi),G'=(V',E',\varphi')$ 是两个图。若 $E(G\cap G')=V(G\cap G')=\varnothing$， 则称 $G$ 和 $G'$ 是\textbf{不交的}（disjoint）；若 $G\cap G'=G$，则称 $G$ 是 $G'$ 的\textbf{子图}（subgraph），而 $G'$ 称为 $G$ 的\textbf{母图}（supergraph），记作 $G\subset G'$。若 $G\subset G', G\neq G'$ ，则称 $G$ 是 $G'$ \textbf{真子图}（proper subgraph）。
+\end{definition}
+
+下面的概念表达了从一个图如何生成新的图。
+
+\begin{definition}{导出子图，支撑}
+设 $G=(V,E,\varphi)$ 是图，$V'\subset V$。定义端点在 $V'$ 中的所有 $E$ 中的边全体 $E'$ 及其上的映射 $\varphi'$ 如下，
+\begin{equation}
+\begin{aligned}
+E':=\{e\in E|\varphi(e)\in V'\},\\
+\varphi':E'\rightarrow V',\varphi'(e)=\varphi(e).
+\end{aligned}~
+\end{equation}
+则称 $(V',E',\varphi')$ 为 $G$ （关于 $V'$）的\textbf{导出子图}（induced subgraph），或称 $V'$ 在 $G$ 中\textbf{导出}（induce）或\textbf{支撑}（span） $(V',E',\varphi')$，记作 $G[V']$。若 $H\subset G$，则记 $G[H]:=G[V(H)]$。
+
+若有图 $H=(V(H),E(H),\varphi_H)$，使得 $V(H)=V(G),E(H)\subset E(G),\varphi_H=\varphi|_{E(H)}$（其中 $\varphi|_{E(H)}$ 是 $\varphi$ 在 $E(H)$ 上的\aref{限制}{def_map_3}），则称 $H$ 是 $G$ 的\textbf{支撑子图}（spanning subgraph）。
+\end{definition}
+
+下面的概念通过无向化映射可以将有向图变为无向图，通过定向操作将无向图变为有向图。
+
+\begin{definition}{基础图，定向图}
+设 $G_1=(V_1,E_1,\varphi_2)$ 是有向图，$G_2=(V_2,E_2,\varphi_2)$ 是无向图，$\pi$ 是 $G_1$ 的无向化映射。则称
+\begin{equation}
+(V_1,E_1,\pi)~
+\end{equation}
+为 $G_1$ 的\textbf{基础图}（underlying graph）。
+
+定义 $G_2$ 上（方向任意）的定向化映射
+\begin{equation}
+\begin{aligned}
+f:E_2\rightarrow P_2(V_2),f(e)=(x,y),\\
+\text{其中} \varphi_2(e)=\{x,y\}.
+\end{aligned}~
+\end{equation}
+则称图
+\begin{equation}
+(V_2,E_2,f)~
+\end{equation}
+为 $G_2$ 的一个\textbf{定向图}（oriented graph）。
+\end{definition}
+
+\begin{definition}{竞赛图}
+完全图的定向图称为\textbf{竞赛图}（tornament）。
+\end{definition}
+
+
+
+
+%\subsection{2.特殊图元素}
 %\begin{definition}{特殊点；特殊边}
 %\begin{itemize}
 %\item 两个端点是同一个顶点的边称为环。
@@ -214,31 +341,31 @@ E':=\{\{x,y\}\in E|x,y\in V'\}.~
 %\\若在图的每一条边上赋以一个实数或者对于每个节点赋以一个实数，则称它为赋权图。
 %\end{itemize}
 %\end{definition}
-\begin{theorem}{n阶完全图$K^{n}$的度}
-\begin{equation}
-||K^{n}||=\frac{n(n-1)}{2}~.
-\end{equation}
-证明：使用第一数学归纳法：
-\\当n=1时，完全图为孤立图，故||K||=0,下设n时成立，考虑n+1的情形：
-\\由于$K^{n+1}$可以由$K^{n}$添加1个顶点及n条边得到知：
-\\ $||K^{n+1}||=||K^{n}||+n=\frac{n(n-1)}{2}+n=\frac{n(n+1)}{2}$
-\\得证.
-\end{theorem}
-\subsection{3.点的性质}
-\begin{definition}{顶点的次（度）}
-设点$v \in V$,称图$G$中以顶点$v$作为端点的边数为点$v$的度，记作$d(v)$
-\\注：顶点上的环计数时计两次
-\end{definition}
-\begin{theorem}{简单图中顶点度与边数的关系}
-在简单图$G$中，有：
-$\sum_{v \in V}{d(v)}=2||G||$\footnote{有时称为握手引理(Handshaking Lemma)}
-\\证明：由简单图中的每一条边有且仅有两个端点，且两个相邻的顶点间仅有一条边立得
-\end{theorem}
-\begin{corollary}{简单图中奇度点个数}
-在简单图$G$中，有：$2\mid \sum\limits_{v\in V\atop 2\nmid d(v)}1$
-\end{corollary}
+%\begin{theorem}{n阶完全图$K^{n}$的度}
+%\begin{equation}
+%||K^{n}||=\frac{n(n-1)}{2}~.
+%\end{equation}
+%证明：使用第一数学归纳法：
+%\\当n=1时，完全图为孤立图，故||K||=0,下设n时成立，考虑n+1的情形：
+%\\由于$K^{n+1}$可以由$K^{n}$添加1个顶点及n条边得到知：
+%\\ $||K^{n+1}||=||K^{n}||+n=\frac{n(n-1)}{2}+n=\frac{n(n+1)}{2}$
+%\\得证.
+%\end{theorem}
+%\subsection{3.点的性质}
+%\begin{definition}{顶点的次（度）}
+%设点$v \in V$,称图$G$中以顶点$v$作为端点的边数为点$v$的度，记作$d(v)$
+%\\注：顶点上的环计数时计两次
+%\end{definition}
+%\begin{theorem}{简单图中顶点度与边数的关系}
+%在简单图$G$中，有：
+%$\sum_{v \in V}{d(v)}=2||G||$\footnote{有时称为握手引理(Handshaking Lemma)}
+%\\证明：由简单图中的每一条边有且仅有两个端点，且两个相邻的顶点间仅有一条边立得
+%\end{theorem}
+%\begin{corollary}{简单图中奇度点个数}
+%在简单图$G$中，有：$2\mid \sum\limits_{v\in V\atop 2\nmid d(v)}1$
+%\end{corollary}
 
-\begin{definition}{与度有关的特殊图元素}
+%\begin{definition}{与度有关的特殊图元素}
 
-\end{definition}
-注：以上内容参考了《数学辞海》卷二
+%\end{definition}
+%注：以上内容参考了《数学辞海》卷二
