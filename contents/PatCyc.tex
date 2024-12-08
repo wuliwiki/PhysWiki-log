@@ -1,21 +1,114 @@
-% 链、路和圈
-% keys 链|路|圈
+% 链、路、圈、回
+% keys 链|路|圈|回
 % license Usr
 % type Tutor
 
 \pentry{图\nref{nod_Graph}}{nod_9c36}
-本节介绍一类特殊的图——链，而路是一类特殊的链，圈是一类特殊的路。
+本节介绍图中一类特殊的结构——链，而路、圈和回都是一类特殊的链。
 
-\subsection{链}
-想象我们对链的映像，比如一个铁链，其是有两个端点的，把一端拎起，另一端就自然下降了；还有手链，项链，它们的是端点可以重合的链。对于链而言（想象铁链）它的端点可以通过一个个类似“环”的结构相扣而成。这些环可以看着点和线构成的一个封闭圈。我们的链的映像似乎可以抽象成点和线相互交叉排列称的一个结构，并且我们总是能认为它有两个（可以重合的）端点。对于那种不是点线连接的现状相似的均匀结构，我们往往称作带了。
+\subsection{定义}
+\cite{graph2}生活中我们习惯把环环相扣的东西叫做链，图论中把点边交叉组成的序列称作链（不同位置的点和边可以相同）。
 
 \begin{definition}{链}
-设 $G=(V,E,\varphi)$ 是一个\enref{图}{Graph}。若其点和边可以构成以下长为 $k$ 的序列
+设 $G=(V,E,\varphi)$ 是一个\enref{图}{Graph}， $v_i\in V,e_j\in E,i=0,\cdots,k,j=1\cdots n$ 分别是其上的 $n+1$ 个点和 $n$ 条边。若序列\footnote{注意因为点边的记号很好区分，往往省略了序列中相邻两元间的逗号}
 \begin{equation}
-v_0 e_1v_1e_2\cdots v_{k-1} e_kv_k,~
+W=v_0 e_1v_1e_2\cdots v_{k-1} e_nv_n,~
 \end{equation}
-
+对所有的 $i=0,\cdots,k$ 满足 $v_{i-1},v_{i}\in e_{i}$，则称 $W$ 是 $G$ 中的\textbf{端点}为 $v_0,v_n$ \textbf{长}为 $n$ 的\textbf{链}（chain）或\textbf{途径}（walk），并且 $W$ \textbf{连接} $v_0,v_n$。除 $v_0,v_n$ 的 $W$ 中的点称作 $W$ 的\textbf{内点}（internal vertex）。 端点为 $x,y$ 的链通长简称为 \textbf{$xy$ 链}。
 \end{definition}
+对于\aref{简单图}{def_Graph_2}而言，其链显然可以通过指定端点确定。
+
+人们习惯将不同时刻物体的位置在时空坐标系下的曲线叫做物体的轨迹，而将空间坐标系下的物体的运动曲线称为路径。尽管不同时刻物体可以在同一空间点，使得它在空间上的路径是可以相交的，但是它的轨迹始终都是不能相交的（因为时间只能往前）。在图中人们习惯将边彼此不同的链称为迹，点彼此不同的链称为路，而端点相同的“路”称为圈。
+\begin{definition}{迹，路，圈，回}\label{def_PatCyc_2}
+设 $W$ 是图 $G$ 的链，若组成 $W$ 的边彼此不同，则称 $W$ 是\textbf{迹}(trail)。若组成 $W$ 的边彼此不同，则称 $W$ 是\textbf{路}(path)。端点相同内点不同的链称为\textbf{圈}(cycle)。端点相同的迹称为\textbf{回}（circult）。对应端点 $x,y$ 的迹和路称为 $xy$ 迹，$xy$ 路。
+\end{definition}
+\textbf{注：}有的文献也会把圈称为\textbf{闭路}，这时候的路就被定义为内点互不相同的迹了。还是一样的，遇到这种情况时只需要注意文献所遵循的约定就好了。
+
+\begin{example}{无圈图无环，无回图无环}\label{ex_PatCyc_1}
+试证明：无圈图，无回图都是简单图。
+
+\textbf{证明：}
+1.设 $G$ 有环 $e$，其端点为 $x$。则 $xex$ 是 $G$ 的圈又是 $G$ 的回。与 $G$ 无圈（或无环）矛盾。
+
+2.设 $x,y\in V(G)$，且有以它们为端点的两不同边 $e_1,e_2$，那么
+$xe_1ye_2x$ 是环又是回。与 $G$ 无圈（或无环）矛盾。
+
+\textbf{证毕！}
+\end{example}
+
+
+\subsection{相关定义}
+
+\begin{definition}{独立}
+若 $W_1,W_2$ 是两条链，若  $W_1,W_2$ 的一条链不包含另一条链的内点，则称它们是\textbf{独立的}（independent）。 
+\end{definition}
+
+
+\begin{definition}{$H$-链}
+设 $H$ 是图，$W$ 是 $G$ 的链，若 $W$ 有端点属于 $H$，而内点不属于 $H$，则称 $W$ 为 \textbf{$H$-链}（H-chain）。 
+\end{definition}
+链的连续子序列称为段。
+\begin{definition}{段}
+设 $W$ 是序列为 $xe_1x_1\cdots e_ky$ 的链，则子序列 $x_ie_{i+1}\cdots x_{j-1}e_{j}x_j$ 称为 $W$ 的 $(x_i,x_j)$ \textbf{段}（section），记作 $W(x_i,x_j)$。
+\end{definition}
+
+\begin{definition}{围长，周长，弦}
+图 $G$ 中最短圈的长度叫做 $G$ 的\textbf{围长}（girth），记作 $g(G)$。最长圈的长度叫做 $G$ 的\textbf{周长}（circumference）。图中不在圈上但连接圈中两个点的边称为圈的\textbf{弦}（chord）。
+\end{definition}
+
+
+\begin{definition}{最长路，最短路}
+设 $G$ 是图，则 $G$ 中具有最大长度的路称为 $G$ 的\textbf{最长路}（longest path），具有最小长度的路称为 $G$ 的\textbf{最短路}（shortest path）。
+\end{definition}
+
+\begin{definition}{距离，直径}
+设 $G$ 是图，$x,y\in V(G)$。则称 $G$ 的最短 $xy$ 路的长度为 $x,y$ 在 $G$ 中的\textbf{距离}，记作 $d_G(x,y)$。$G$ 中点间的最大距离称为 $G$ 的\textbf{直径}（diameter），记作 diam $G$。
+\end{definition}
+
+可能有这样的情况出现，即有一条迹通过图的所有点和所有边。
+\begin{definition}{Euler 迹}
+设 $G$ 是一个图，则 $G$ 上包含 $G$ 的所有点和所有边的迹称为\textbf{$Euler$ 迹}。闭的迹称为\textbf{Euler回}。
+\end{definition}
+
+
+还可能有这样的情况出现，即有一条路（或圈）通过图的所有点。
+\begin{definition}{Hamilton 路，Hamilton圈}\label{def_PatCyc_3}
+设 $G$ 是一个图，则 $G$ 上包含 $V(G)$ 所有点的路称为\textbf{$Hamilton$ 路}， $G$ 上包含 $V(G)$ 所有点的圈称为\textbf{$Hamilton$ 圈}。
+\end{definition}
+
+
+
+可能会发生这样的情况，即链中的边都是有向的。特别，人们习惯称边方向一致的链为有向链。
+\begin{definition}{有向链}\label{def_PatCyc_1}
+设 $W$ 是 $xy$ 链，其对应序列为
+\begin{equation}
+xe_1x_1\cdots e_ky.~
+\end{equation}
+若每一 $e_i$ 都是起点为 $x_{i-1}$ 终点为 $x_i$ （$x_0=x,x_k=y$）的有向边，则称 $W$ 为从 $x$ 到 $y$ 到\textbf{有向链}。反之若每一 $e_i$ 都是起点为 $x_{i}$ 终点为 $x_{i-1}$ （$x_0=x,x_k=y$）的有向边，则称 $W$ 为从 $y$ 到 $x$ 到\textbf{有向链}。
+\end{definition}
+有了有向链的定义，自然而然就有有向迹，有向路，有向圈的定义。
+
+ 
+\subsection{相关定理}
+\begin{theorem}{}\label{the_PatCyc_1}
+设 $G$ 是图，$x\neq y\in V(G)$，$W$ 是 $G$ 的 $xy$ 链。则存在 $G$ 的 $xy$ 路，且其长度最长为 $\abs{V(G)}-1$。
+\end{theorem}
+
+\textbf{证明：}1.把 $xy$ 链的序列中相同内点之间段（保留相同点的一个）去掉，则得的仍是 $xy$链：
+
+设 $W=xe_1x_1\cdots e_n y$，$x_i=x_j\in W,j>i$。那么去掉段 $W(x_i,x_j)$ 并保留 $x_i,x_j$ 的一个之后（比如保留 $x_j$），得到形如 
+\begin{equation}
+xe_1x_1\cdots e_{i}x_j e_{j+1}\cdots e_n y~
+\end{equation}
+的序列，由于段 $W(x,x_{i-1}),W(x_j,y)$ 没变，因此只需判断 $e_i$ 两边的点是否是 $e_i$ 的端点即可，由于 $e_i$ 的两边的点也没变，因此新得到的序列仍是 $xy$ 链。
+
+2.由于链长有限，我们可以重复1操作把链变成没有相同内点的链，而仍得到端点相同的链。由于内点不同，边也就不同，而由条件链的端点不同，因而得到就是连接端点的路。而包含 $\abs{V(G)}$ 个点的路最长为 $\abs{V(G)}-1$。
+
+
+\textbf{证毕！}
+
+
+
 
 
 

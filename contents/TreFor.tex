@@ -1,0 +1,84 @@
+% 树与林
+% keys 树|林|森林
+% license Usr
+% type Tutor
+
+\pentry{图的顶点度\nref{nod_DGraph}，图的连通性\nref{nod_GraCon}}{nod_0546}
+\cite{graph2}林是不含\aref{圈}{def_PatCyc_2}的图，树是\enref{连通}{GraCon}的林。也就是说，林的\aref{连通分支}{def_GraCon_1}都是树。
+
+\begin{definition}{树，林}
+设 $G$ 是图。若 $G$ 上无圈，则称 $G$ 为\textbf{林}（forest）；若 $G$ 无圈且连通，则称 $G$ 为\textbf{树}（tree）。
+\end{definition}
+
+
+\begin{definition}{叶子，内部点}
+设 $G$ 是树，$x\in V(G)$。若 $d_G(v)=1$ （\autoref{def_DGraph_1}），则称 $x$ 是 $G$ 的\textbf{叶子}（leaf）。树中非叶子的点称为\textbf{内部点}。
+\end{definition}
+
+由\autoref{ex_PatCyc_1} 可知，林和树都是\aref{简单图}{def_Graph_2}。
+
+
+\begin{theorem}{}\label{the_TreFor_1}
+下面命题是等价的：
+\begin{enumerate}
+\item $T$ 是树；
+\item $T$ 中任意两个不同点被 $T$ 的唯一路连接；
+\item $T$ 是极小连通的，即 $T$ 是连通的，但对任一边 $e\in E(T)$，$T-e$（记号见\autoref{def_Graph_5}） 不连通；
+\item $T$ 是极大无圈的，即 $T$ 不包含圈，但任意不相邻的点 $x,y\in V(T)$，$T+xy$ 包含圈（其中 $xy$ 是连接 $xy$ 的边）。
+\end{enumerate}
+
+\end{theorem}
+
+\textbf{证明：}
+1. $1\Rightarrow 2$：设 $\forall x,y\in T$。同于树是连通的，所以存在 $x$ 到 $y$ 的（长为 $l$）路 $R=xe_1x_1\cdots y$。设 $R'=xe'_1x_1'\cdots e'_n y$ 是连接 $x,y$ 的另一（长为 $n$）路。由于 $T$ 无圈，所以链 $xe_1\cdots y|e'_n\cdots e'_1x$ 中在 $|$ 两边一定有两个内点相同，否则该链就是一个圈。由于左边和右边分别是路，因此两个内点只能一个在一边。设这两个内点是 $x_{i},x'_{j}$，于是 $W(x_{i},x'_{j})$ 是 $x_{i}x'_{j}$ 链。
+
+由于 $W(x_{i},x'_{j})$ 端点相同，我们仍可以重复上面的论述。若 $i\neq j$，不是一般性
+设 $i>j$，于是至多重复 $l-i+1$ 次后得到链 $x_{l-1}e_ly|e_n'\cdots x'_{i_{l-i+2}}$，继续重复操作，则将出现 $y=y',y'\in R'$。这和 $R'$ 是路矛盾。这一矛盾表明只能是 $x_i=x_i'$。若 $n\neq l$ 则重复 $k-l$ 次又会出现上面的情况，于是只能是 $n=l$。于是重复最多重复 $n-1$ 次，我们就会发现 $x_{n-1}=x'_{n-1}$。
+
+然后对路 $R_1=R-x_{n-1}$ 继续上述操作，可以得到 $x_{n-2}=x_{n-2}'$。如此重复，最终得到 $R=R'$。
+
+2.$2\Rightarrow 3$：由2可知 $T$ 是连通的。$\forall e\in E(T)$，设 其端点为 $x,y$，无圈表明 $x\neq y$。而 $x,y\in V(T-e)$，$xey$ 是连接 $x,y$ 的唯一路，所以 $T-e$ 中不能有连接 $x,y$ 的路了。否则这条路只能是 $xey$，但是 $e\not\in E(T-e)$。
+
+3.$3\Rightarrow 4$：a.设 $T$ 包含圈 $R=x_0e_1x_1\cdots x_0$，那么 $R-e_1=x_1e_2\cdots x_0$ 是连接 $x_1,x_0$ 的路，但这是不可能的，所以 $T$ 不包含圈。b.设 $\forall x,y\in V(T)$ 不相邻，记 $xy=e$。 那么由于 $T$ 上有连接 $xy$ 的路 $xe_1x_1\cdots y$，所以此时 $T+xy$ 包含圈 $xe_1x_1\cdots yex$。 
+
+4. $4\Rightarrow 1$：任意 $x,y\in V(T)$，记 $e=xy$。由于 $T$ 不含圈，$T+e$ 含圈，所以所含的圈必然包含 $e$，否则 $T$ 有圈。以 $x$ 作为端点，记该圈为 $xe_1x_1\cdots yex$。由于除了 $e$ 以外其它圈的元素都在 $T$ 内，因此路 $x e_1x_1\cdots y$ 属于 $T$，即 $x,y$ 连通。所以 $T$ 是树。 
+
+\textbf{证毕！}
+
+注意定理的3相当于 $T$ 连通且连通分支 $\omega(T-e)=2,\forall e\in E(T)$。于是得下面的推论。
+\begin{corollary}{}\label{cor_TreFor_1}
+若 $T$ 是树等价于 $\forall e\in E(T)$，则 $T-e$ 连通分支数为2，即 $\omega(T-e)=2$。
+\end{corollary}
+
+
+
+\subsection{支撑树与支撑林}
+
+\begin{definition}{支撑树，支撑林}
+设 $F$ 是 $G$ 的支撑子图，且它们的连通分支相同，即 $\omega(F)=\omega(G)$。若 $F$ 是林，则称 $F$ 是 $G$ 的\textbf{支撑林}（spaning forest）；若 $F$ 是树，则称 $F$ 是 $G$ 的\textbf{支撑树}（spaning tree）。
+\end{definition}
+
+\begin{theorem}{}
+每个连通图都含支撑树。
+\end{theorem}
+\textbf{证明：}
+设 $T$ 是连通图 $G$ 的边最少的连通支撑子图。那么 $\omega(T-e)=2,\forall e\in E(T)$。事实上，如若不然，则 $T-e$ 仍是连通的，且点数不变，而边数却少了1，这和 $T$ 是边最少的连通支撑子图矛盾。由\autoref{cor_TreFor_1} ，$T$ 是树。
+
+\textbf{证毕！}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
