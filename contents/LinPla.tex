@@ -1,0 +1,133 @@
+% 线性规划
+% keys 线性规划|单纯形法
+% license Usr
+% type Tutor
+\pentry{线性方程组（高中）\nref{nod_LinEqu}}{nod_9aef}
+
+1939年，苏联数学家Kantorovich出版了《生产组织与计划中的线性规划模型》一书，为列宁格勒胶合板厂的计划任务建立了一个线性规划的数学模型，为用数学方法解决管理并使二者结合做出了开创性的工作。后来，由于战争的需要，美国经济学家Koopmans重新独立地研究运输问题，并很快看到了线性规划在经济学中应用的意义。此后线性规划也被广泛应用于军事、经济等各方面。鉴于他们在线性规划方面的突出贡献，1975年的诺贝尔经济学奖授予了他们。1947年美国数学家Dantzig提出了求解一般线性规划问题的方法——单纯性法，之后线性规划问题在理论上日益成熟，并在实际中日益广泛应用。
+
+线性规划研究的是在线性不等式或等式限制下，使得某一线性目标取得最大（或最小）的问题。
+
+\subsection{线性规划}
+
+\begin{definition}{线性规划}
+若研究的问题可以归结到求解一个关于某些变量的线性函数，使得该函数在变量的某些线性限制条件下，取最大或最小的问题，则称该问题为\textbf{线性规划}模型。设变量有 $n$ 个，并记变量为 $x_1,\cdots,x_n$，所求最大或最小的线性函数为 $z=z(x_1,\cdots,x_n)$，线性限制条件为 $f_i(x_1,\cdots,x_n)\leq(\geq) 0,i=1,\dots,m$，则线性规划模型可写为（s.t. 是“使得”的意思）：
+\begin{equation}\label{eq_LinPla_1}
+\begin{aligned}
+&\min(\text{或}\max) \quad z=z(x_1,\cdots ,x_n),\\
+&s.t.\quad f_i(x_1,\cdots,x_n)\leq(\text{或}\geq) c_i,\quad i=1,\dots,m.
+\end{aligned}~
+\end{equation}
+其中，z称为\textbf{目标函数}，$x_1,\cdots,x_n$ 称为\textbf{决策变量}，关于 $f_i$ 的不等式或等式称为\textbf{约束条件}, $z,f_i$ 都要求是关于变量 $x_1,\cdots,x_n$ 的线性函数，$c_i$ 是常数。
+\end{definition}
+
+由线性规划的定义，线性规划模型\autoref{eq_LinPla_1} 具有很多形式，但是我们总可以将其转化为某一种特定的形式，并只需要对这种形式进行研究。
+
+\subsection{线性规划的标准形式}
+通常称下面定义的形式为线性规划模型的标准形式。
+\begin{definition}{标准形式}
+具有如下形式的目标函数和约束条件称为线性规划模型的\textbf{标准形式}：
+\begin{equation}\label{eq_LinPla_2}
+\begin{aligned}
+&\min  &&z=c_1x_1+\cdots +c_nx_n,\\
+&s.t. &&a_{11}x_1+\cdots+a_{1n}x_n=b_1,\\
+&&&a_{21}x_1+\cdots+a_{2n}x_n=b_2,\\
+&&&\cdots\\
+&&&a_{m1}x_1+\cdots+a_{mn}x_n=b_m,\\
+&&&x_1\geq0,\cdots,x_n\geq0.
+\end{aligned}~
+\end{equation}
+
+\end{definition}
+任何线性规划模型\autoref{eq_LinPla_1} 都可以化为标准型\autoref{eq_LinPla_2} ：若约束条件为 $\sum_{j}^na_{ij} x_i\leq b_i$，则引入 $y_{i}$，从而约束条件等价于
+\begin{equation}
+\sum_{j}^na_{ij} x_i+y_i= b_i,y_i\geq 0.~
+\end{equation}
+此时 $y_i$ 称为\textbf{松弛变量}。
+
+若约束条件为 $\sum_{j}^na_{ij} x_i\geq 0$，则引入 $y_{i}$，从而约束条件等价于
+\begin{equation}
+\sum_{j}^na_{ij} x_i-y_i= b_i,y_i\geq 0.~
+\end{equation}
+此时 $y_i$ 称为\textbf{剩余变量}。
+
+若目标函数为 $\max z$，则定义 $z'=-z$，于是目标函数等价于 $\min z'$。
+
+若某个变量 $x_i$ 无限制，则引入两个变量 $x'_i,x''_i$，从而 $x_i$ 无限制等价于 
+\begin{equation}
+x_i=x'_i-x''_i,x'_i\geq0,x''_i\geq0.~
+\end{equation}
+在标准形式下，使得目标函数最小的变量 $x_1,\cdots,x_n$ 在以变量为的坐标的坐标系下将只能在“第一象限”。
+
+
+\subsection{单纯形法}
+
+首先介绍求解线性规划常用的术语。由于任一的线性规划都可化为标准型，我们讨论标准型。
+
+\begin{definition}{可行解，最优解}
+若 $x=(x_1,\cdots,x_n)$ 满足线性规划\autoref{eq_LinPla_2} 的约束条件，则称 $x$ 是线性规划问题\autoref{eq_LinPla_2} 的\textbf{可行解}或\textbf{可行点}。可行解的全体称作\textbf{可行域}。若不存在满足约束条件的 $x$，则称问题无可行解，简称\textbf{无解}。若对称可行解 $x^*$，使得任意可行解 $x$，都有 $z(x^*)\geq z(x)$，则称 $x$ 为\textbf{最优解}或\textbf{最优点}。
+\end{definition}
+
+\begin{theorem}{典则形式}
+不失一般性，可设标准形式\autoref{eq_LinPla_2} 中的系数矩阵 $A=(a_{ij})$ 的前 $m$ 列线性无关（见证明），则标准形式等价于如下的典则形式
+\begin{equation}\label{eq_LinPla_4}
+\begin{aligned}
+\min&&z=-\lambda^T x_N+z_0,\\
+&&x_B+C x_N=c,\\
+&&x_B,x_N\text{的分量都大于}0.
+\end{aligned}~
+\end{equation}
+其中 
+\begin{aligned}
+x_B=(x_1,\cdots,x_m)^T,x_N=(x_{m+1},\cdots,x_n)^T,\lambda=(\lambda_{m+1},\cdots,\lambda_{n})^T,c=(c_1,\cdots,c_n)^T.
+\end{aligned}
+ $C$ 是形如 $m\times (n-m)$ 的矩阵。
+\end{theorem}
+
+\textbf{证明：}将\autoref{eq_LinPla_2} 写为矩阵形式：
+\begin{equation}\label{eq_LinPla_3}
+z=c^T x, Ax=b,~
+\end{equation}
+其中 $x=(x_1,\cdots,x_n)^T,A=(a_{ij}),b=(b_1,\cdots,b_n)^T,c=(c_1,\cdots,c_m)^T$。设 $A$ 的秩总为 $m$（否则可将某些约束条件去掉变成这一情形，或者由约束可知问题无解，于是不用讨论），总可以调换\autoref{eq_LinPla_2} 中 $x_i$ 之间的顺序，使得 $A$ 中 $m$ 个线性无关的列在前 $m$ 列。因此，总可以认为矩阵 $A$ 的前 $m$ 列是线性无关的。
+
+设 $B$ 是 $A$ 的前 $m$ 列构成的矩阵，$N$ 是后 $n-m$ 列构成的矩阵，$x_B=(x_1,\cdots,x_m)^T,x_N=(x_{m+1},\cdots,x_n)^T$。那么有
+\begin{equation}
+(B,N)\begin{pmatrix}
+x_B\\
+x_N
+\end{pmatrix}=b.~
+\end{equation}
+即 $Bx_B +Nx_N=b$，从而 $x_B=B^{-1}b-B^{-1}Nx_N$。于是
+\autoref{eq_LinPla_3} 等价于
+\begin{equation}
+\begin{aligned}
+&z=c_B^Tx_B+c_N^Tx_N=c_B^TB^{-1}b+(c_N^T-c_B^TB^{-1}N)x_N,\\
+&x_B+B^{-1}Nx_N=B^{-1}b.
+\end{aligned}~
+\end{equation}
+
+
+\textbf{证毕！}
+
+\begin{definition}{典则形式，基变量，基本解，检验数}
+\autoref{eq_LinPla_4} 称为\autoref{eq_LinPla_2} 的\textbf{典则形式}，其中 $x_B$ 称为\textbf{基变量}，对应 $x_N=0$ 的\autoref{eq_LinPla_4} 的解称为\textbf{基本解}，$\lambda$ 的分量称为基本解的\textbf{检验数}，对应基变量的 $A$ 的前 $m$ 列构成的矩阵称为\textbf{可行基}。 
+\end{definition}
+注意，基本解只是\autoref{eq_LinPla_4} 的约束条件的解，而不一定是可行解，除非对应的 $x_B=B^{-1}b$ 大于0。 
+\begin{corollary}{}
+线性规划的典则形式\autoref{eq_LinPla_4} 的基本可行解是最优解的充要条件是检验数恒小于等于0。
+\end{corollary}
+\textbf{证明：}\textbf{充分性：}设 $x$ 是任一可行解。那么把它带入标准式和典则式中，即得 
+\begin{equation}
+z(x)=-\lambda^T x_N+z_0.~
+\end{equation}
+而可行解意味着 $x_i\geq0$，因此所有的 $\lambda_i\geq0$ 意味着 $z(x)\geq z_0$，因而基本可行解是最优解。
+
+
+\textbf{必要性：}设基本解 $x*$ 是最优解，即 $z(x^*)=z_0$。 若 $\lambda_i>0$，则一定存在可行解 $x$，使得 $x$ 中仅 $x_i$ 分量不为0，而其它分量为0，并且 $x_i>0$（暂略）。把它带入\autoref{eq_LinPla_4} ，则得 $z(x)=-\lambda_ix_i+z_0< z_0$。这与 $z_0$ 最小矛盾。
+
+
+\textbf{证毕！}
+
+
+
+
