@@ -72,3 +72,577 @@
 为了在泛化的语境中获得最佳性能，假设的复杂性应与数据背后的函数复杂性相匹配。如果假设的复杂性低于函数的复杂性，则模型对数据拟合不足。如果响应中增加了模型的复杂性，则训练误差减少。但如果假设过于复杂，则模型容易过拟合，泛化能力会变差。[43]
 
 除了性能边界，学习理论家还研究学习的时间复杂度和可行性。在计算学习理论中，如果某个计算可以在多项式时间内完成，那么它被认为是可行的。时间复杂度的结果有两种：正向结果表明某一类函数可以在多项式时间内学习；负向结果则表明某些类的函数无法在多项式时间内学习。
+\subsection{方法}
+\begin{figure}[ht]
+\centering
+\includegraphics[width=10cm]{./figures/e1c28c1201868559.png}
+\caption{在监督学习中，训练数据会标注期望的答案，而在无监督学习中，模型会在未标注的数据中识别模式或结构。} \label{fig_JQXX_2}
+\end{figure}
+机器学习方法通常分为三大类，这些类别对应不同的学习范式，具体取决于学习系统可用的“信号”或“反馈”的性质：
+\begin{itemize}
+\item 监督学习：计算机被提供一组输入示例及其对应的期望输出，这些输出由“教师”提供，目标是学习一个通用规则，将输入映射到输出。
+\item 无监督学习：学习算法没有标签，必须自行在输入中找到结构。无监督学习可以是一个独立的目标（发现数据中的隐藏模式），也可以是实现某个目标的手段（特征学习）。
+\item 强化学习：计算机程序与一个动态环境进行交互，必须执行特定目标（例如驾驶车辆或与对手玩游戏）。在导航问题空间时，程序会收到类似奖励的反馈，它会尽量最大化这些反馈。[5]
+\end{itemize}
+尽管每种算法都有其优点和局限性，但没有一种算法适用于所有问题。[44][45][46]
+\subsubsection{监督学习}
+\begin{figure}[ht]
+\centering
+\includegraphics[width=6cm]{./figures/7c5b1f1fd0da91d3.png}
+\caption{支持向量机是一种监督学习模型，它将数据分成由线性边界分隔的区域。在这里，线性边界将黑色圆圈与白色圆圈分开。} \label{fig_JQXX_3}
+\end{figure}
+监督学习算法通过建立一个数学模型来学习一组包含输入和期望输出的数据。[47] 这些数据被称为训练数据，包含一组训练样本。每个训练样本都有一个或多个输入以及期望的输出，输出也称为监督信号。在数学模型中，每个训练样本被表示为一个数组或向量，有时称为特征向量，训练数据则表示为一个矩阵。通过对目标函数进行迭代优化，监督学习算法学习一个函数，该函数可以用来预测与新输入相关的输出。[48] 一个优化的函数可以使算法正确地确定未包含在训练数据中的输入对应的输出。当一个算法随着时间推移提高其输出或预测的准确性时，我们称其已经学会执行该任务。[18]
+
+监督学习算法的类型包括主动学习、分类和回归。[49] 分类算法用于输出被限制为一组有限值的情况，而回归算法用于输出可能具有某个范围内任意数值的情况。例如，对于一个过滤电子邮件的分类算法，输入将是一个到达的电子邮件，输出将是该邮件应该存入的文件夹名称。回归的例子包括预测一个人的身高或未来的气温。[50]
+
+相似度学习是与回归和分类密切相关的监督学习领域，其目标是通过使用相似度函数来学习如何判断两个对象的相似性或相关性。它在排名、推荐系统、视觉身份跟踪、面部验证和语音验证等领域有广泛应用。
+\subsubsection{无监督学习}  
+无监督学习算法用于发现那些没有标签、分类或归类的数据中的结构。与监督学习通过反馈来学习不同，无监督学习算法通过识别数据中的共性，并根据每个新数据中是否存在这些共性做出反应。无监督学习的核心应用包括聚类、降维和密度估计。
+
+聚类分析是将一组观察结果分配到多个子集（称为聚类）中的过程，使得同一聚类内的观察结果在一个或多个预定标准下相似，而来自不同聚类的观察结果则是不同的。不同的聚类技术对数据的结构有不同的假设，通常通过某种相似性度量来定义，并通过内部紧密度（同一聚类内成员之间的相似性）和分离度（不同聚类之间的差异）等方式来评估。其他方法则基于估计的密度和图连接性。
+
+一种特殊类型的无监督学习，称为自监督学习，涉及通过从数据本身生成监督信号来训练模型。
+\subsubsection{半监督学习}  
+半监督学习介于无监督学习（没有任何标签的训练数据）和监督学习（完全有标签的训练数据）之间。在半监督学习中，部分训练样本缺少标签，但许多机器学习研究人员发现，当无标签数据与少量有标签数据结合使用时，可以显著提高学习的准确性。
+
+在弱监督学习中，训练标签是噪声的、有限的或不精确的；然而，这些标签通常更容易获得，从而形成更大的有效训练集。
+\subsubsection{强化学习}
+\begin{figure}[ht]
+\centering
+\includegraphics[width=8cm]{./figures/2c45fd1e87c18e90.png}
+\caption{} \label{fig_JQXX_4}
+\end{figure}
+强化学习是机器学习的一个领域，关注软件代理如何在环境中采取行动，以最大化某种累积奖励的概念。由于其广泛的适用性，该领域在许多其他学科中也有研究，如博弈论、控制理论、运筹学、信息理论、基于仿真的优化、多智能体系统、群体智能、统计学和遗传算法。在强化学习中，环境通常表示为马尔可夫决策过程（MDP）。许多强化学习算法使用动态编程技术。强化学习算法不假设对MDP的精确数学模型有已知信息，当精确模型不可行时，便使用这些算法。强化学习算法被用于自动驾驶车辆或在与人类对手对战时学习游戏。
+\subsubsection{降维}
+降维是通过获得一组主变量来减少考虑的随机变量数量的过程。[56] 换句话说，它是减少特征集的维度的过程，也称为“特征数量”。大多数降维技术可以视为特征消除或特征提取。降维的常用方法之一是主成分分析（PCA）。PCA涉及将高维数据（例如，3D）转换为较小的空间（例如，2D）。流形假设提出，高维数据集沿着低维流形分布，许多降维技术都假设这一点，导致了流形学习和流形正则化的研究领域。
+\subsubsection{其他类型}
+还有一些方法并不完全符合这三种分类，有时同一个机器学习系统会使用多种方法。例如，主题建模、元学习。[57]
+
+\textbf{自学习}
+
+自学习，作为一种机器学习范式，在1982年被引入，同时提出了一种能够自学习的神经网络，名为交叉条形自适应阵列（CAA）。[58] 它是在没有外部奖励和外部教师建议的情况下进行学习。CAA自学习算法以交叉条形的方式计算关于行为和情绪（对后果情况的感受）的决策。该系统由认知与情感之间的互动驱动。[59] 自学习算法更新一个记忆矩阵 \( W = ||w(a,s)|| \)，在每次迭代中执行以下机器学习例程：
+\begin{enumerate}
+\item 在情境 \( s \) 中执行行为 \( a \)
+\item 接收后果情境 \( s' \)
+\item 计算处于后果情境中的情绪 \( v(s') \)
+\item 更新交叉条形记忆 \( w'(a,s) = w(a,s) + v(s') \)
+\end{enumerate}
+这是一个只有一个输入（情境）和一个输出（行为或动作 \( a \)）的系统。没有来自环境的单独强化输入或建议输入。反向传播的值（次级强化）是对后果情境的情绪反应。CAA存在于两个环境中，一个是行为环境，它在其中表现，另一个是遗传环境，在这里它仅仅接收一次关于将要遇到的情境的初步情绪。收到来自遗传环境的基因组（物种）向量后，CAA在一个包含既有可取又有不可取情境的环境中学习目标导向行为。[60]
+
+\textbf{特征学习}
+
+特征学习（Feature learning）是一种学习算法，旨在发现训练过程中提供的输入的更好表示。[61] 经典的例子包括主成分分析（PCA）和聚类分析。特征学习算法，也称为表示学习算法，通常试图保持输入中的信息，但也会以一种方式进行转化，使其更有用，通常作为执行分类或预测之前的预处理步骤。这种技术允许重建来自未知数据生成分布的输入，同时不一定忠实于该分布下不太可能的配置。这取代了手动特征工程，并允许机器既学习特征又使用这些特征来执行特定任务。
+
+特征学习可以是监督式学习或无监督式学习。在监督式特征学习中，特征通过标记的输入数据来学习。例子包括人工神经网络、多层感知器和监督字典学习。在无监督式特征学习中，特征通过未标记的输入数据来学习。例子包括字典学习、独立成分分析、自动编码器、矩阵分解[62]和各种形式的聚类[63][64][65]。
+
+流形学习算法试图在低维表示的约束下进行学习。稀疏编码算法试图在学习表示稀疏的约束下进行学习，这意味着数学模型有很多零值。多线性子空间学习算法旨在直接从多维数据的张量表示中学习低维表示，而无需将它们重新塑形为更高维的向量。[66] 深度学习算法发现多层次的表示，或特征的层次结构，其中更高层次、更抽象的特征是基于（或生成）较低层次特征定义的。有人认为，智能机器是指能够学习出一个表示，解开解释观察数据的潜在变化因素的机器。[67]
+
+特征学习的动机在于，机器学习任务（如分类）通常需要数学上和计算上便于处理的输入。然而，现实世界的数据（如图像、视频和传感数据）并未通过算法尝试定义特定的特征。另一种方法是通过检查来发现这些特征或表示，而不依赖于显式的算法。
+
+\textbf{稀疏字典学习}
+
+稀疏字典学习是一种特征学习方法，其中训练样本被表示为基函数的线性组合，并假设其为稀疏矩阵。这种方法是强NP难题，难以近似求解。[68] 稀疏字典学习的一个流行启发式方法是k-SVD算法。稀疏字典学习已应用于多个领域。在分类中，问题是确定一个之前未见过的训练样本属于哪个类别。对于已经构建了每个类别的字典，新训练样本会与在相应字典中稀疏表示最好的类别关联。稀疏字典学习还应用于图像去噪。其关键思想是，干净的图像补丁可以通过图像字典进行稀疏表示，而噪声则不能。[69]
+
+\textbf{异常检测}
+
+在数据挖掘中，异常检测，也称为离群点检测，是识别那些与大多数数据显著不同的稀有项、事件或观察结果的过程，这些异常引起了怀疑。[70] 通常，异常项代表一个问题，如银行欺诈、结构缺陷、医疗问题或文本中的错误。异常也被称为离群点、新奇、噪声、偏差和例外。[71]
+
+特别是在滥用和网络入侵检测的背景下，感兴趣的对象往往不是稀有的对象，而是意外的活动中断。这种模式不符合将稀有对象定义为离群点的常见统计学定义。许多离群点检测方法（特别是无监督算法）在这种数据上会失败，除非进行适当的聚合。相反，聚类分析算法可能能够检测到这些模式所形成的微聚类。[72]
+
+异常检测技术通常分为三大类。[73] 无监督异常检测技术在一个未标记的测试数据集中检测异常，假设数据集中的大多数实例是正常的，通过寻找与数据集其他部分最不匹配的实例。监督异常检测技术要求一个已经标记为“正常”和“异常”的数据集，并通过训练分类器来检测异常（与许多其他统计分类问题的主要区别在于离群点检测的固有不平衡性）。半监督异常检测技术从给定的正常训练数据集中构建一个表示正常行为的模型，然后测试测试实例是否可能由该模型生成。
+
+\textbf{机器人学习}
+
+机器人学习受到多种机器学习方法的启发，从监督学习、强化学习[74][75]到最终的元学习（例如MAML）。
+
+\textbf{关联规则}
+
+关联规则学习是一种基于规则的机器学习方法，用于发掘大规模数据库中变量之间的关系。其目的是通过某种“有趣性”度量来识别数据库中发现的强规则。[76]
+
+基于规则的机器学习是指任何识别、学习或演化“规则”的机器学习方法，用于存储、操作或应用知识。基于规则的机器学习算法的定义特征是识别和利用一组关系规则，这些规则共同代表系统所捕获的知识。这与其他常见的机器学习算法形成对比，后者通常识别一个单一的模型，这个模型可以普遍应用于任何实例，以进行预测。[77] 基于规则的机器学习方法包括学习分类系统、关联规则学习和人工免疫系统。
+
+基于强规则的概念，Rakesh Agrawal、Tomasz Imieliński 和 Arun Swami 引入了关联规则，用于发现大型事务数据（如超市销售点系统记录的数据）中产品之间的规律。[78] 例如，在超市销售数据中发现的规则 
+{
+洋葱,
+土豆
+}
+⇒
+{
+汉堡包
+}  
+表示如果顾客同时购买洋葱和土豆，他们很可能还会购买汉堡肉。此类信息可作为决定营销活动（如促销定价或产品摆放）的依据。除了市场购物篮分析，关联规则现在还广泛应用于包括网页使用挖掘、入侵检测、连续生产和生物信息学等应用领域。与序列挖掘不同，关联规则学习通常不考虑事务内或事务间项目的顺序。
+
+学习分类器系统（LCS）是一类基于规则的机器学习算法，结合了发现组件（通常是遗传算法）和学习组件，执行监督学习、强化学习或无监督学习。它们寻求识别一组上下文相关的规则，这些规则共同存储并以分段的方式应用知识，以进行预测。[79]
+
+归纳逻辑编程（ILP）是一种利用逻辑编程作为输入示例、背景知识和假设的统一表示的规则学习方法。给定已知背景知识的编码和一组作为逻辑事实数据库表示的示例，ILP系统将推导出一个假设的逻辑程序，该程序涵盖所有正例且没有负例。归纳编程是一个相关领域，它考虑任何类型的编程语言来表示假设（不仅仅是逻辑编程），如函数式程序。
+
+归纳逻辑编程在生物信息学和自然语言处理中特别有用。Gordon Plotkin 和 Ehud Shapiro 为逻辑环境中的归纳机器学习奠定了初步的理论基础。[80][81][82] Shapiro 在1981年构建了他们的第一个实现（模型推理系统）：一个Prolog程序，通过正负示例归纳推导逻辑程序。[83] 这里的“归纳”一词指的是哲学中的归纳法，指提出一个理论来解释观察到的事实，而不是数学归纳法，即证明某个属性适用于一个有序集的所有成员。
+\subsection{模型}
+机器学习模型是一种数学模型，一旦在给定的数据集上“训练”完成，就可以用于对新数据进行预测或分类。在训练过程中，学习算法通过迭代调整模型的内部参数，以最小化预测中的误差。[84] 从广义上讲，"模型"这个术语可以指代多个层次的具体性，从一类模型及其相关的学习算法，到一个完全训练的模型，其中所有的内部参数都已调优。[85]
+
+已使用并研究了多种类型的模型用于机器学习系统，选择最合适的模型来完成任务被称为模型选择。
+\subsubsection{人工神经网络}
+\begin{figure}[ht]
+\centering
+\includegraphics[width=10cm]{./figures/30018251155614e0.png}
+\caption{人工神经网络是一个互联的节点群体，类似于大脑中庞大的神经元网络。在这里，每个圆形节点代表一个人工神经元，箭头表示从一个人工神经元的输出到另一个人工神经元的输入的连接。} \label{fig_JQXX_5}
+\end{figure}
+人工神经网络（ANNs），或称连接主义系统，是一种计算系统，灵感来源于构成动物大脑的生物神经网络。这些系统通过考虑示例来“学习”执行任务，通常不需要编程任何特定任务的规则。
+
+ANN 是基于一组相互连接的单元或节点（称为“人工神经元”）的模型，这些人工神经元大致模拟生物大脑中的神经元。每个连接，类似于生物大脑中的突触，可以将信息（“信号”）从一个人工神经元传递到另一个。接收到信号的人工神经元可以处理该信号，然后向与其连接的其他人工神经元发送信号。在常见的 ANN 实现中，人工神经元之间的连接上的信号是一个实数，且每个人工神经元的输出是其输入的总和通过某个非线性函数计算得出的。人工神经元之间的连接称为“边”。人工神经元和边通常具有一个权重，在学习过程中会进行调整。权重会增加或减少连接处信号的强度。人工神经元可能具有一个阈值，只有当信号总和超过该阈值时，信号才会发送。通常，人工神经元会被聚集成层。不同的层可能会对其输入执行不同类型的变换。信号从第一层（输入层）传递到最后一层（输出层），可能在经过多个层的处理后。
+
+ANN 方法最初的目标是以与人脑相同的方式解决问题。然而，随着时间的推移，研究重点转向了执行特定任务，这导致了与生物学的偏离。人工神经网络已被应用于多种任务，包括计算机视觉、语音识别、机器翻译、社交网络过滤、棋盘游戏和视频游戏、以及医学诊断。
+
+深度学习由人工神经网络中的多个隐层组成。这种方法试图模拟人脑如何处理光和声音，转化为视觉和听觉。深度学习的一些成功应用包括计算机视觉和语音识别。[86]
+\subsubsection{决策树}
+\begin{figure}[ht]
+\centering
+\includegraphics[width=10cm]{./figures/c4bfbb6b46e01f2b.png}
+\caption{一棵显示泰坦尼克号乘客生存概率的决策树} \label{fig_JQXX_6}
+\end{figure}
+决策树学习使用决策树作为预测模型，通过观察某个项目的特征（在树枝上表示）来推导该项目的目标值（在叶子节点上表示）。它是统计学、数据挖掘和机器学习中常用的预测建模方法。目标变量可以取离散值的树模型称为分类树；在这些树结构中，叶子节点代表类别标签，树枝表示导致这些类别标签的特征组合。目标变量可以取连续值（通常是实数）的决策树称为回归树。在决策分析中，决策树可以用来直观且明确地表示决策和决策过程。在数据挖掘中，决策树描述了数据，但生成的分类树可以作为决策过程的输入。
+\subsubsection{支持向量机}   
+支持向量机（SVMs），也称为支持向量网络，是一类相关的监督学习方法，广泛应用于分类和回归任务。给定一组训练样本，每个样本被标记为属于两个类别中的一个，SVM训练算法构建一个模型，预测新的样本是否属于某一类别。SVM训练算法是一个非概率性的二元线性分类器，尽管存在像Platt缩放这样的技术，可以将SVM应用于概率分类场景。除了执行线性分类外，SVM还可以通过所谓的核技巧高效地执行非线性分类，将输入隐式映射到高维特征空间。
+\subsubsection{回归分析}
+\begin{figure}[ht]
+\centering
+\includegraphics[width=10cm]{./figures/ff90a5240f3131d3.png}
+\caption{线性回归在数据集上的示意图} \label{fig_JQXX_7}
+\end{figure}
+回归分析包含了多种统计方法，用于估计输入变量与其相关特征之间的关系。其最常见的形式是线性回归，其中绘制一条直线，以数学标准（如普通最小二乘法）最佳拟合给定的数据。后者通常通过正则化方法扩展，以减轻过拟合和偏差，例如岭回归。在处理非线性问题时，常用的模型包括多项式回归（例如，Microsoft Excel中用于趋势线拟合的回归）、逻辑回归（常用于统计分类）或甚至核回归，通过利用核技巧将输入变量隐式映射到更高维度的空间，从而引入非线性。
+\subsubsection{贝叶斯网络}
+\begin{figure}[ht]
+\centering
+\includegraphics[width=10cm]{./figures/7fa97c798801fefb.png}
+\caption{一个简单的贝叶斯网络。雨天影响洒水器是否启动，雨天和洒水器都会影响草地是否潮湿。} \label{fig_JQXX_8}
+\end{figure}
+贝叶斯网络、信念网络或有向无环图模型是一种概率图模型，通过有向无环图（DAG）表示一组随机变量及其条件独立性。例如，贝叶斯网络可以表示疾病与症状之间的概率关系。给定症状后，可以利用该网络计算各种疾病存在的概率。存在高效的算法来执行推理和学习。用于建模变量序列（如语音信号或蛋白质序列）的贝叶斯网络称为动态贝叶斯网络。能够表示并解决不确定性下决策问题的贝叶斯网络的一般化形式称为影响图。
+\subsubsection{高斯过程}
+\begin{figure}[ht]
+\centering
+\includegraphics[width=14.25cm]{./figures/a29b4ecef267e3c7.png}
+\caption{高斯过程回归（预测）与其他回归模型的比较示例[89]} \label{fig_JQXX_9}
+\end{figure}
+高斯过程是一个随机过程，其中该过程中的每一个有限随机变量集合都具有多元正态分布，并依赖于一个预定义的协方差函数或核函数，该函数用于建模点对之间的关系，具体取决于它们的位置。
+
+给定一组观察点或输入–输出示例，可以通过观察已知点及其与新点之间的协方差，直接计算新点的输出（即未观察到的输出）作为其输入数据的函数。
+
+高斯过程是贝叶斯优化中的常见替代模型，广泛应用于超参数优化。
+\subsubsection{遗传算法}  
+遗传算法（GA）是一种搜索算法和启发式技术，它模仿自然选择的过程，使用变异和交叉等方法生成新的基因型，旨在寻找给定问题的良好解。在机器学习中，遗传算法在1980年代和1990年代被使用。[90][91] 相反，机器学习技术也被用于提高遗传和进化算法的性能。[92]
+\subsubsection{信念函数}   
+信念函数理论，也称为证据理论或邓普斯特-谢弗理论，是一个用于处理不确定性的推理框架，与其他框架（如概率、可能性理论和不精确概率理论）有一定的联系。这些理论框架可以被视为一种学习器，并具有类似的属性，用于组合证据（例如，邓普斯特组合规则），就像基于概率质量函数（pmf）的贝叶斯方法将概率组合在一起一样。然而，与贝叶斯方法相比，这些信念函数方法有许多需要注意的地方，尤其是在融合无知和不确定性量化时。这些信念函数方法在机器学习领域中通常结合了各种集成方法，以更好地处理学习器的决策边界、低样本量和模糊分类问题，这是标准机器学习方法难以解决的问题。然而，这些算法的计算复杂性取决于命题（类别）的数量，与其他机器学习方法相比，可能导致更高的计算时间。
+\subsubsection{训练模型} 
+通常，机器学习模型需要大量可靠的数据来进行准确的预测。在训练机器学习模型时，机器学习工程师需要针对目标收集大量具有代表性的数据样本。训练集中的数据可以是各种类型的，例如文本语料库、一组图像、传感器数据和来自单个用户的数据。过拟合是训练机器学习模型时需要警惕的问题。由有偏或未经评估的数据训练得到的模型可能导致偏差或不期望的预测。偏差模型可能导致不利后果，进而加剧对社会或目标的负面影响。算法偏差是数据未经过充分准备时可能导致的结果。机器学习伦理学已成为一个研究领域，并逐渐融入到机器学习工程团队中。
+
+\textbf{联邦学习}  
+ 
+联邦学习是一种分布式人工智能的改编形式，用于训练机器学习模型，通过去中心化的训练过程来保护用户隐私，因为无需将数据发送到中心化服务器。通过将训练过程分散到多个设备上，这种方法还提高了效率。例如，Gboard 就使用联邦机器学习在用户的手机上训练搜索查询预测模型，而无需将单个搜索数据发送回 Google。[93]
+\subsection{应用领域}  
+机器学习有许多应用，包括：
+\begin{itemize}
+\item 农业
+\item 解剖学
+\item 自适应网站
+\item 情感计算
+\item 天文学
+\item 自动化决策
+\item 银行业
+\item 行为主义
+\item 生物信息学
+\item 脑机接口
+\item 化学信息学
+\item 公民科学
+\item 气候科学
+\item 计算机网络
+\item 计算机视觉
+\item 信用卡欺诈检测
+\item 数据质量
+\item DNA 序列分类
+\item 经济学
+\item 金融市场分析[94]
+\item 一般游戏玩法
+\item 手写识别
+\item 医疗保健
+\item 信息检索
+\item 保险
+\item 网络欺诈检测
+\item 知识图谱嵌入
+\item 语言学
+\item 机器学习控制
+\item 机器感知
+\item 机器翻译
+\item 市场营销
+\item 医学诊断
+\item 自然语言处理
+\item 自然语言理解
+\item 在线广告
+\item 优化
+\item 推荐系统
+\item 机器人运动
+\item 搜索引擎
+\item 情感分析
+\item 序列挖掘
+\item 软件工程
+\item 语音识别
+\item 结构健康监测
+\item 句法模式识别
+\item 电信
+\item 定理证明
+\item 时间序列预测
+\item 断层重建[95]
+\item 用户行为分析
+\end{itemize}
+在2006年，媒体服务提供商Netflix举办了首次“Netflix奖”竞赛，旨在寻找一种程序，更好地预测用户偏好，并将其现有的Cinematch电影推荐算法的准确性提高至少10\%。由AT&T Labs-Research的研究人员与Big Chaos和Pragmatic Theory团队合作组成的联合团队，建立了一个集成模型，赢得了2009年100万美元的大奖。[96] 在奖项颁发后不久，Netflix意识到观众的评分并不是衡量观看模式的最佳指标（“一切都是推荐”），因此他们相应地更改了推荐引擎。[97] 2010年，《华尔街日报》报道了Rebellion Research公司及其利用机器学习预测金融危机的做法。[98] 2012年，Sun Microsystems的联合创始人Vinod Khosla预测，在未来二十年内，80\%的医生职位将被自动化的机器学习医学诊断软件取代。[99] 2014年，有报道称，机器学习算法已被应用于艺术史领域，用于研究美术作品，可能揭示了艺术家之间先前未被认出的影响。[100] 2019年，Springer Nature出版了首本使用机器学习创作的研究书籍。[101] 2020年，机器学习技术被用于帮助诊断并帮助研究人员开发COVID-19的治疗方法。[102] 最近，机器学习也被应用于预测旅行者的环保行为。[103] 另外，机器学习技术也被应用于优化智能手机的性能和热行为，依据用户与手机的互动情况。[104][105][106] 当机器学习算法（MLA）正确应用时，可以利用公司特征的广泛范围来预测股票回报，而不会发生过拟合。通过有效的特征工程并结合预测，MLA可以生成远超基本线性技术（如OLS）所得结果的预测。[107]
+
+最近，机器学习的进展已经扩展到量子化学领域，现在新的算法能够预测溶剂对化学反应的影响，从而为化学家提供了新的工具，以便根据最佳结果调整实验条件。[108]
+
+机器学习正成为研究和预测大规模和小规模灾难中的撤离决策的有用工具。不同的解决方案已经被测试，以预测家庭成员在野火和飓风中何时决定撤离。[109][110][111] 其他应用则专注于建筑火灾中的撤离决策。[112][113]
+\subsection{限制}
+尽管机器学习在某些领域具有变革性，但机器学习程序往往未能交付预期的结果。[114][115][116] 造成这种情况的原因有很多：缺乏（合适的）数据、无法访问数据、数据偏差、隐私问题、任务和算法选择不当、工具和人员不合适、资源不足以及评估问题。[117]
+
+“黑箱理论”提出了另一个重大挑战。黑箱是指算法或输出生成过程完全不透明的情况，这意味着即使是算法的编码人员也无法审查机器从数据中提取出的模式。[118] 英国上议院的选择委员会曾声称，像这样的“智能系统”如果对个人生活产生“重大影响”，除非它能够提供“全面且令人满意的解释”，否则是不可接受的。[118]
+
+2018年，Uber的一辆自动驾驶汽车未能发现一名行人，导致行人被撞死。[119] 尝试在医疗健康领域应用机器学习的IBM Watson系统，在经过多年的时间和数十亿美元的投资后，依然未能取得预期效果。[120][121] 微软的Bing Chat聊天机器人被报告对用户产生敌意和冒犯性的回应。[122]
+
+机器学习已被用作更新系统评审相关证据的策略，并增加了与生物医学文献增长相关的审阅者负担。尽管随着训练集的改进，机器学习有所进步，但它仍未发展到足以在不限制研究发现所需敏感性的情况下减少工作负担的程度。[123]
+\subsubsection{可解释性}
+可解释的人工智能（XAI），也称为可解释AI或可解释机器学习（XML），是指人工智能（AI），其决策或预测可以被人类理解。[124] 这与机器学习中的“黑箱”概念相对立，在“黑箱”中，甚至连设计者也无法解释AI为何做出特定的决策。[125] 通过改进AI系统用户的心理模型并消除他们的误解，XAI有望帮助用户更有效地执行任务。XAI可能是对“社会解释权”实施的一种方式。
+\subsubsection{过拟合}
+\begin{figure}[ht]
+\centering
+\includegraphics[width=10cm]{./figures/e6cb1e6d2535e420.png}
+\caption{蓝线可能是由于随机噪声导致的线性函数过拟合的例子。} \label{fig_JQXX_10}
+\end{figure}
+将一个糟糕的、过于复杂的理论调整以适应所有过去的训练数据被称为过拟合。许多系统试图通过根据理论与数据的拟合程度来奖励该理论，同时根据理论的复杂性来惩罚该理论，从而减少过拟合。[126]
+\subsubsection{其他限制与脆弱性}
+学习系统有时会“学到错误的教训”。一个简单的例子是，如果一个图像分类器只在棕色马和黑色猫的图像上进行训练，它可能会错误地得出结论，认为所有棕色的斑点都很可能是马。[127] 一个现实世界中的例子是，与人类不同，当前的图像分类器通常不会主要根据图像组件之间的空间关系来做判断，而是学会了像素之间的关系，这些关系人类并未察觉，但仍然与某些类型的真实物体的图像相关联。在合法图像中修改这些模式可能会导致“对抗性”图像，系统可能会错误分类。[128][129]
+
+对抗性脆弱性也可能出现在非线性系统中，或者由于非模式扰动。对于某些系统，仅通过改变一个特定的对抗性选定像素，就有可能改变其输出。[130] 机器学习模型往往容易受到对抗性机器学习的操控和/或规避。[131]
+
+研究人员已经展示了如何在分类模型中无声地植入后门（例如用于“垃圾邮件”和明显的“非垃圾邮件”分类），这些模型通常是由第三方开发和/或训练的。相关方可以改变任何输入的分类，甚至在某些情况下，即使提供了数据/软件透明度（包括可能的白盒访问权限），也能改变分类结果。[132][133][134]
+\subsection{模型评估}  
+机器学习模型的分类可以通过准确性估计技术进行验证，例如保留法（holdout method），该方法将数据分为训练集和测试集（通常是2/3用于训练集，1/3用于测试集），并评估训练模型在测试集上的表现。相比之下，K折交叉验证（K-fold cross-validation）方法将数据随机划分为K个子集，然后进行K次实验，每次分别考虑1个子集用于评估，剩余的K-1个子集用于训练模型。除了保留法和交叉验证方法外，还可以使用自助法（bootstrap），通过从数据集中有放回地抽取n个实例来评估模型的准确性。[135]
+
+除了整体准确性，研究人员还经常报告敏感度和特异度，分别表示真正率（TPR）和真负率（TNR）。类似地，研究人员有时也会报告假阳性率（FPR）以及假阴性率（FNR）。然而，这些比率仅显示其比值，未揭示分子和分母。受试者工作特征（ROC）曲线及其下面积（AUC）为分类模型评估提供了额外的工具。较高的AUC通常与表现更好的模型相关。[136]
+\subsection{伦理学}  
+人工智能的伦理学涵盖了该领域内广泛的主题，这些主题被认为具有特别的伦理风险。[137] 其中包括算法偏见、公平性、自动化决策、问责制、隐私和监管等问题。它还涵盖了各种新兴或潜在的未来挑战，如机器伦理学（如何让机器表现得符合伦理）、致命自主武器系统、军备竞赛动态、AI安全与对齐、技术失业、AI推动的虚假信息、如何对待具有道德地位的AI系统（AI福利与权利）、人工超智能以及存在性风险。[137]
+
+一些应用领域可能也具有特别重要的伦理影响，比如医疗保健、教育、刑事司法或军事等领域。
+\subsubsection{偏见} 
+不同的机器学习方法可能会受到不同数据偏见的影响。一个专门训练于现有客户数据的机器学习系统，可能无法预测那些在训练数据中没有出现的新客户群体的需求。当机器学习系统训练于人为创建的数据时，往往会继承社会中已存在的结构性和无意识偏见。[138]  
+
+那些训练于带有偏见的数据集的系统，可能在使用时表现出这些偏见（算法偏见），从而数字化文化偏见。[139] 例如，1988年，英国的种族平等委员会发现，圣乔治医学院使用了一种根据先前招生人员数据训练的计算机程序，这个程序拒绝了近60名被认为是女性或具有非欧洲名字的候选人。[138] 使用来自具有种族歧视招聘政策的公司的招聘数据，可能导致机器学习系统通过与以往成功申请者的相似性来打分求职者，从而复制偏见。[140][141] 另一个例子是预测性警务公司Geolitica的预测算法，在使用历史犯罪数据训练后，导致“低收入和少数族裔社区过度警察执法水平过高”。[142]  
+
+虽然负责地收集数据和记录系统所使用的算法规则被认为是机器学习的关键部分，但一些研究人员将机器学习易受偏见影响的原因归咎于在人工智能领域中缺乏少数群体的参与和代表性。[143] 事实上，根据计算研究协会（CRA）在2021年进行的研究，“女性教师仅占全球多所大学专注于AI的教师的16.1\%。”[144] 此外，在“新美国居民AI博士毕业生”群体中，45\%为白人，22.4\%为亚洲人，3.2\%为西班牙裔，2.4\%为非裔美国人，这进一步表明人工智能领域缺乏多样性。[144]  
+
+从数据中学习的语言模型已被证明包含类人偏见。[145][146] 因为人类语言本身就包含偏见，所以在语言语料库上训练的机器也必然会学习到这些偏见。[147][148] 2016年，微软测试了Tay，一个从推特中学习的聊天机器人，结果它迅速学习了种族主义和性别歧视的语言。[149]  
+
+在调查性新闻机构ProPublica进行的一项实验中，机器学习算法对囚犯再犯率的洞察错误地将“黑人被告的高风险判定是白人被告的两倍”。[142] 2015年，谷歌照片曾将几名黑人标记为大猩猩，导致争议。大猩猩标签随后被删除，并且到2023年，系统仍无法识别大猩猩。[150] 许多其他系统也发现了识别非白人群体的问题。[151]  
+
+由于这些挑战，机器学习的有效应用可能需要更长时间才能在其他领域普及。[152] 关于机器学习中的公平性问题，减少偏见并推动其为人类福祉服务的呼声越来越高，人工智能科学家们也在表达这一关切，费菲·李（Fei-Fei Li）曾表示：“AI没有什么人工的东西。它源自于人类，由人类创造，最重要的是——它影响着人类。它是我们刚刚开始理解的强大工具，这是一个深远的责任。”[153]
+\subsubsection{财务激励}  
+医疗保健专业人士担心，这些系统可能不是为了公众利益而设计的，而是作为创造收入的机器。特别是在美国，改善医疗保健和增加利润之间存在长期的伦理困境。例如，算法可能被设计为向患者提供不必要的检查或药物，而这些算法的所有者在其中拥有利益。机器学习在医疗保健中的潜力是为专业人士提供一个额外的工具，以诊断、用药并规划患者的恢复路径，但这需要减轻这些偏见。[154]
+\subsection{硬件}  
+自2010年代以来，机器学习算法和计算机硬件的进步促使训练深度神经网络（机器学习的一个特定子领域）的方法变得更加高效，这些神经网络包含许多层非线性隐藏单元。[155] 到2019年，图形处理单元（GPU），通常具有针对AI的专门增强，已取代中央处理单元（CPU），成为训练大规模商业云AI的主流方法。[156] OpenAI估算了从AlexNet（2012）到AlphaZero（2017）期间，最大深度学习项目中使用的硬件计算量，并发现所需计算量增加了300,000倍，且其翻倍时间趋势为3.4个月。[157][158]
+\subsubsection{类脑计算}  
+类脑计算指的是一类旨在模拟生物神经网络结构和功能的计算系统。这些系统可以通过在常规硬件上的基于软件的模拟实现，也可以通过专门的硬件架构实现。[159]
+
+\textbf{物理神经网络}  
+
+物理神经网络是一种特定类型的类脑硬件，它依赖于电可调材料（如忆阻器）来模拟神经突触的功能。“物理神经网络”这一术语强调使用物理硬件进行计算，而非基于软件的实现。它广泛指代使用具有可调电阻材料来复制神经突触的人工神经网络。[160][161]
+\subsubsection{嵌入式机器学习}  
+嵌入式机器学习是机器学习的一个子领域，它将模型部署在计算资源有限的嵌入式系统上，例如可穿戴计算机、边缘设备和微控制器。[162][163][164] 直接在这些设备上运行模型消除了将数据传输和存储到云服务器进行进一步处理的需求，从而降低了数据泄露、隐私泄露以及知识产权、个人数据和商业机密被盗的风险。嵌入式机器学习可以通过多种技术实现，例如硬件加速，[165][166] 近似计算，[167] 和模型优化。[168][169] 常见的优化技术包括剪枝、量化、知识蒸馏、低秩分解、网络架构搜索和参数共享。
+\subsection{软件}  
+包含多种机器学习算法的软件套件包括以下几种：
+\subsubsection{免费和开源软件}  
+\begin{itemize}
+\item Caffe  
+\item Deeplearning4j  
+\item DeepSpeed  
+\item ELKI  
+\item Google JAX  
+\item Infer.NET  
+\item Keras  
+\item Kubeflow  
+\item LightGBM  
+\item Mahout  
+\item Mallet  
+\item Microsoft Cognitive Toolkit  
+\item ML.NET  
+\item mlpack  
+\item MXNet  
+\item OpenNN  
+\item Orange  
+\item pandas (软件)  
+\item ROOT (TMVA with ROOT)  
+\item scikit-learn  
+\item Shogun  
+\item Spark MLlib  
+\item SystemML  
+\item TensorFlow  
+\item Torch / PyTorch  
+\item Weka / MOA  
+\item XGBoost  
+\item Yooreeka
+\end{itemize}
+\subsubsection{具有免费和开源版本的专有软件 } 
+\begin{itemize}
+\item KNIME  
+\item RapidMiner
+\end{itemize}  
+\subsubsection{专有软件}  
+\begin{itemize}
+\item Amazon Machine Learning  
+\item Angoss KnowledgeSTUDIO  
+\item Azure Machine Learning  
+\item IBM Watson Studio  
+\item Google Cloud Vertex AI  
+\item Google Prediction API  
+\item IBM SPSS Modeler  
+\item KXEN Modeler  
+\item LIONsolver  
+\item Mathematica  
+\item MATLAB  
+\item Neural Designer  
+\item NeuroSolutions  
+\item Oracle Data Mining  
+\item Oracle AI Platform Cloud Service  
+\item PolyAnalyst  
+\item RCASE  
+\item SAS Enterprise Miner  
+\item SequenceL  
+\item Splunk  
+\item STATISTICA Data Miner
+\end{itemize}
+\subsection{期刊}  
+\begin{itemize}
+\item 《机器学习研究杂志》（Journal of Machine Learning Research）  
+\item 《机器学习》（Machine Learning）  
+\item 《自然机器智能》（Nature Machine Intelligence）  
+\item 《神经计算》（Neural Computation）  
+\item 《IEEE模式分析与机器智能汇刊》（IEEE Transactions on Pattern Analysis and Machine Intelligence）
+\end{itemize}  
+\subsection{会议}  
+\begin{itemize}
+\item 美国人工智能协会会议（AAAI Conference on Artificial Intelligence）  
+\item 计算语言学协会（Association for Computational Linguistics，ACL）  
+\item 欧洲机器学习与数据库知识发现原则与实践会议（European Conference on Machine Learning and Principles and Practice of Knowledge Discovery in Databases，ECML PKDD）  
+\item 生物信息学与生物统计学的计算智能方法国际会议（International Conference on Computational Intelligence Methods for Bioinformatics and Biostatistics，CIBB）  
+\item 国际机器学习会议（International Conference on Machine Learning，ICML）  
+\item 国际学习表示会议（International Conference on Learning Representations，ICLR）  
+\item 国际智能机器人与系统会议（International Conference on Intelligent Robots and Systems，IROS）  
+\item 知识发现与数据挖掘会议（Conference on Knowledge Discovery and Data Mining，KDD）  
+\item 神经信息处理系统会议（Conference on Neural Information Processing Systems，NeurIPS）  
+\end{itemize}
+\subsection{参见}  
+\begin{itemize}
+\item 自动化机器学习（Automated machine learning）— 自动化应用机器学习的过程  
+\item 大数据（Big data）— 极其庞大或复杂的数据集  
+\item 深度学习（Deep learning）— 机器学习的一个分支，关注人工神经网络  
+\item 可微编程（Differentiable programming）— 一种编程范式  
+\item 机器学习研究的数据集列表（List of datasets for machine-learning research）  
+\item M理论（学习框架）（M-theory）  
+\item 机器遗忘（Machine unlearning）
+\end{itemize}  
+\subsection{参考文献}  
+\begin{enumerate}
+\item “没有被明确编程”的定义通常归功于Arthur Samuel，他在1959年创造了“机器学习”这一术语，但这个短语并未在该出版物中逐字出现，可能是后来出现的转述。参见 Koza, John R.; Bennett, Forrest H.; Andre, David; Keane, Martin A. (1996). "使用遗传编程自动设计模拟电子电路的拓扑结构和大小"。 *Artificial Intelligence in Design '96*。荷兰多德雷赫特：Springer Netherlands。第151–170页。doi:10.1007/978-94-009-0279-4_9。ISBN 978-94-010-6610-5。  
+\item "什么是机器学习?" IBM. 2021年9月22日。原文存档于2023年12月27日。检索自2023年6月27日。  
+\item Hu, Junyan; Niu, Hanlin; Carrasco, Joaquin; Lennox, Barry; Arvin, Farshad (2020). "基于Voronoi的多机器人自主探索在未知环境中的应用：通过深度强化学习"。 *IEEE Transactions on Vehicular Technology*。69(12): 14413–14423。doi:10.1109/tvt.2020.3034800。ISSN 0018-9545。S2CID 228989788。  
+\item Yoosefzadeh-Najafabadi, Mohsen; Hugh, Earl; Tulpan, Dan; Sulik, John; Eskandari, Milad (2021). "机器学习算法在植物育种中的应用：基于高光谱反射预测大豆产量?" *Front. Plant Sci.* 11: 624273。doi:10.3389/fpls.2020.624273。PMC 7835636。PMID 33510761。  
+\item Bishop, C. M. (2006)， *模式识别与机器学习*，Springer，ISBN 978-0-387-31073-2 
+\item 机器学习与模式识别“可以视为同一领域的两个方面”。[5]: vii  
+\item Friedman, Jerome H. (1998). "数据挖掘与统计学：两者有什么关系?" *Computing Science and Statistics*。29 (1): 3–9。  
+\item Samuel, Arthur (1959). "使用跳棋游戏进行机器学习研究"。 *IBM Journal of Research and Development*。3 (3): 210–229。CiteSeerX 10.1.1.368.2254。doi:10.1147/rd.33.0210。S2CID 2126705。  
+\item R. Kohavi 和 F. Provost, "术语词汇表", *Machine Learning*，第30卷，第2–3期，第271–274页，1998年。  
+\item Gerovitch, Slava (2015年4月9日). "计算机如何报复苏联"。 *Nautilus*。原文存档于2021年9月22日。检索自2021年9月19日。
+\item Lindsay, Richard P. (1964年9月1日). "自动化对公共管理的影响"。 *Western Political Quarterly*。17(3): 78–81。doi:10.1177/106591296401700364。ISSN 0043-4078。S2CID 154021253。原文存档于2021年10月6日。检索自2021年10月6日。  
+\item "机器学习的历史与演变：时间线"。 *WhatIs*。原文存档于2023年12月8日。检索自2023年12月8日。  
+\item Milner, Peter M. (1993). "心智与唐纳德·O·赫布"。 *Scientific American*。268(1): 124–129。Bibcode:1993SciAm.268a.124M。doi:10.1038/\item scientificamerican0193-124。ISSN 0036-8733。JSTOR 24941344。PMID 8418480。原文存档于2023年12月20日。检索自2023年12月9日。  
+\item "科学：傻按钮"，《*Time*》杂志，1961年8月18日。  
+\item Nilsson N. *学习机器*，麦格劳·希尔，1965年。  
+\item Duda, R., Hart P. *模式识别与场景分析*，Wiley Interscience，1973年。  
+\item S. Bozinovski "教学空间：一种适应性模式分类的表示概念" *COINS技术报告 No. 81-28*，马萨诸塞大学阿姆赫斯特分校计算机与信息科学系，1981年。[链接](https://web.cs.umass.edu/publication/docs/1981/UM-CS-1981-028.pdf) 原文存档于2021年2月25日。  
+\item Mitchell, T. (1997). *机器学习*，麦格劳·希尔出版社，第2页。ISBN 978-0-07-042807-2。  
+\item Harnad, Stevan (2008), "注释游戏：关于图灵（1950）在计算、机器与智能中的看法"，收录于Epstein, Robert; Peters, Grace（编），*图灵测试源书：寻找思维计算机的哲学与方法论问题*，Kluwer，第23–66页，ISBN 9781402067082，原文存档于2012年3月9日，检索自2012年12月11日。  
+"AI简介 第一部分"。 *Edzion*。2020年12月8日。原文存档于2021年2月18日。检索自2020年12月9日。  
+\item Sindhu V, Nivedha S, Prakash M (2020年2月)。 "机器学习在生物信息学中的实证科学研究"。 *Journal of Mechanics of Continua and Mathematical Sciences* (7)。doi:10.26782/jmcms.spl.7/2020.02.00006。  
+\item Sarle, Warren S. (1994). "神经网络与统计模型"。 *SUGI 19：第十九届年会SAS用户组国际会议论文集*。SAS Institute，第1538–50页。ISBN 9781555446116。OCLC 35546178。
+\item Russell, Stuart; Norvig, Peter (2003) [1995]. *人工智能：现代方法*（第二版）。Prentice Hall。ISBN 978-0137903955。  
+\item Langley, Pat (2011). "机器学习的变化科学"。*Machine Learning*。82(3): 275–9。doi:10.1007/s10994-011-5242-y。  
+\item Mahoney, Matt. "大型文本压缩基准的理由"。佛罗里达理工大学。检索自2013年3月5日。  
+\item Shmilovici A.; Kahiri Y.; Ben-Gal I.; Hauser S. (2009). "使用通用数据压缩算法衡量日内外汇市场的效率"（PDF）。*Computational Economics*。33(2): 131–154。CiteSeerX 10.1.1.627.3751。doi:10.1007/s10614-008-9153-3。S2CID 17234503。原文存档（PDF）于2009年7月9日。  
+\item I. Ben-Gal (2008). "利用数据压缩度量分析鲁棒设计"（PDF）。*IEEE Transactions on Reliability*。54(3): 381–388。doi:10.1109/TR.2005.853280。S2CID 9376086。  
+\item D. Scully; Carla E. Brodley (2006). "压缩与机器学习：特征空间向量的新视角"。*数据压缩会议（DCC'06）*。第332页。doi:10.1109/DCC.2006.13。ISBN 0-7695-2545-8。S2CID 12311412。  
+\item Gary Adcock (2023年1月5日). "什么是AI视频压缩?"。*massive.io*。检索自2023年4月6日。  
+\item Mentzer, Fabian; Toderici, George; Tschannen, Michael; Agustsson, Eirikur (2020). "高保真生成图像压缩"。arXiv:2006.09965 [eess.IV]。
+\item "什么是无监督学习？| IBM"。www.ibm.com。2021年9月23日。检索于2024年2月5日。  
+\item "大规模数据集的差分隐私聚类"。blog.research.google。2023年5月25日。检索于2024年3月16日。  
+\item Edwards, Benj (2023年9月28日)。"AI语言模型在无损压缩方面可以超过PNG和FLAC，研究称"。*Ars Technica*。检索于2024年3月7日。  
+\item Le Roux, Nicolas; Bengio, Yoshua; Fitzgibbon, Andrew (2012)。 "通过建模不确定性来改善一阶和二阶方法"。在Sra, Suvrit; Nowozin, Sebastian; Wright, Stephen J.（编辑）中。《机器学习优化》。MIT出版社。第404页。ISBN 9780262016469。原文存档于2023年1月17日。检索于2020年11月12日。  
+\item Bzdok, Danilo; Altman, Naomi; Krzywinski, Martin (2018)。 "统计学与机器学习"。*Nature Methods*。15(4): 233–234。doi:10.1038/nmeth.4642。PMC 6082636。PMID 30100822。  
+\item Michael I. Jordan (2014年9月10日)。"统计学与机器学习"。reddit。原文存档于2017年10月18日。检索于2014年10月1日。  
+\item Hung等人。算法用于衡量外科医生的表现并预测机器人手术中的临床结果。*JAMA Surgery*。2018。  
+\item Cornell University Library (2001年8月)。"Breiman: 统计建模：两种文化（作者评论与答辩）"。*Statistical Science*。16(3)。doi:10.1214/ss/1009213726。S2CID 62729017。原文存档于2017年6月26日。检索于2015年8月8日。  
+\item Gareth James; Daniela Witten; Trevor Hastie; Robert Tibshirani (2013)。*统计学习导论*。Springer。第vii页。原文存档于2019年6月23日。检索于2014年10月25日。  
+\item Ramezanpour, A.; Beam, A.L.; Chen, J.H.; Mashaghi, A. (2020年11月17日)。"医学诊断中的统计物理学：学习、推断和优化算法"。*Diagnostics*。10(11): 972。doi:10.3390/diagnostics10110972。PMC 7699346。PMID 33228143。
+
+\item Mashaghi, A.; Ramezanpour, A. (2018年3月16日)。"医学诊断的统计物理学：一个概率模型的研究"。*Physical Review E*。97 (3–1): 032118。arXiv:1803.10019。Bibcode:2018PhRvE..97c2118M。doi:10.1103/PhysRevE.97.032118。PMID 29776109。S2CID 4955393。  
+\item Mohri, Mehryar; Rostamizadeh, Afshin; Talwalkar, Ameet (2012)。*机器学习基础*。美国马萨诸塞州：MIT出版社。ISBN 9780262018258。  
+\item Alpaydin, Ethem (2010)。*机器学习导论*。伦敦：MIT出版社。ISBN 978-0-262-01243-0。检索于2017年2月4日。  
+\item Jordan, M. I.; Mitchell, T. M. (2015年7月17日)。"机器学习：趋势、视角与前景"。*Science*。349 (6245): 255–260。Bibcode:2015Sci...349..255J。doi:10.1126/science.aaa8415。PMID 26185243。S2CID 677218。  
+\item El Naqa, Issam; Murphy, Martin J. (2015)。"什么是机器学习？"。*辐射肿瘤学中的机器学习*。第3–11页。doi:10.1007/978-3-319-18305-3_1。ISBN 978-3-319-18304-6。S2CID 178586107。  
+\item Okolie, Jude A.; Savage, Shauna; Ogbaga, Chukwuma C.; Gunes, Burcu (2022年6月)。"评估机器学习方法在研究使用生物炭或活性炭去除废水中药物的潜力"。*Total Environment Research Themes*。1–2: 100001。
+Bibcode:2022TERT....100001O。doi:10.1016/j.totert.2022.100001。S2CID 249022386。  
+\item Russell, Stuart J.; Norvig, Peter (2010)。*人工智能：现代方法*（第三版）。Prentice Hall。ISBN 9780136042594。  
+\item Mohri, Mehryar; Rostamizadeh, Afshin; Talwalkar, Ameet (2012)。*机器学习基础*。MIT出版社。ISBN 9780262018258。  
+\item Alpaydin, Ethem (2010)。*机器学习导论*。MIT出版社。第9页。ISBN 978-0-262-01243-0。原文存档于2023年1月17日。检索于2018年11月25日。  
+\item "Lecture 2 Notes: Supervised Learning"。www.cs.cornell.edu。检索于2024年7月1日。
+\item Jordan, Michael I.; Bishop, Christopher M. (2004)。"神经网络"。收录于 Allen B. Tucker（编）《计算机科学手册（第二版）》(第七部分：智能系统)。佛罗里达州博卡拉顿：Chapman & Hall/CRC Press LLC。ISBN 978-1-58488-360-9。  
+\item Misra, Ishan; Maaten, Laurens van der (2020)。"预训练不变表示的自监督学习"。2020年IEEE/CVF计算机视觉与模式识别会议（CVPR）。美国华盛顿州西雅图：IEEE。第6707–6717页。arXiv:1912.01991。doi:10.1109/CVPR42600.2020.00674。  
+\item Jaiswal, Ashish; Babu, Ashwin Ramesh; Zadeh, Mohammad Zaki; Banerjee, Debapriya; Makedon, Fillia (2021年3月)。"对比自监督学习的调查"。*Technologies*。9 (1): 2。arXiv:2011.00362。doi:10.3390/technologies9010002。ISSN 2227-7080。  
+\item Alex Ratner; Stephen Bach; Paroma Varma; Chris. "弱监督：机器学习的新编程范式"。hazyresearch.github.io，引用了Hazy Research团队其他成员的工作。原文存档于2019年6月6日。检索于2019年6月6日。  
+\item van Otterlo, M.; Wiering, M. (2012)。"强化学习和马尔可夫决策过程"。*强化学习：适应、学习与优化*。第12卷，第3–42页。doi:10.1007/978-3-642-27645-3_1。ISBN 978-3-642-27644-6。  
+\item Roweis, Sam T.; Saul, Lawrence K. (2000年12月22日)。"通过局部线性嵌入进行非线性降维"。*Science*。290 (5500): 2323–2326。Bibcode:2000Sci...290.2323R。doi:10.1126/science.290.5500.2323。PMID 11125150。S2CID 5987139。原文存档于2021年8月15日。检索于2023年7月17日。  
+\item Pavel Brazdil; Christophe Giraud Carrier; Carlos Soares; Ricardo Vilalta (2009)。*元学习：数据挖掘应用*（第四版）。Springer Science+Business Media。第10–14页，部分内容。ISBN 978-3540732624。  
+\item Bozinovski, S. (1982)。"一个使用次级强化的自学习系统"。收录于 Trappl, Robert（编）《控制论与系统研究：第六届欧洲控制论与系统研究会议论文集》。North-Holland。第397–402页。ISBN 978-0-444-86488-8。  
+\item Bozinovski, Stevo (2014) "人工神经网络中认知-情感交互机制建模，始于1981年"。*Procedia Computer Science* 第255–263页。  
+\item Bozinovski, S. (2001) "自学习智能体：基于交叉价值判断的情感连接主义理论"。*控制论与系统* 32(6) 637–667。
+\item Y. Bengio; A. Courville; P. Vincent (2013). "Representation Learning: A Review and New Perspectives". IEEE Transactions on Pattern Analysis and Machine Intelligence. 35 (8): 1798–1828. arXiv:1206.5538. doi:10.1109/tpami.2013.50. PMID 23787338. S2CID 393948.
+\item Nathan Srebro; Jason D. M. Rennie; Tommi S. Jaakkola (2004). Maximum-Margin Matrix Factorization. NIPS.
+\item Coates, Adam; Lee, Honglak; Ng, Andrew Y. (2011). An analysis of single-layer networks in unsupervised feature learning (PDF). Int'l Conf. on AI and Statistics (AISTATS). Archived from the original (PDF) on 2017-08-13. Retrieved 2018-11-25.
+\item Csurka, Gabriella; Dance, Christopher C.; Fan, Lixin; Willamowski, Jutta; Bray, Cédric (2004). Visual categorization with bags of keypoints (PDF). ECCV Workshop on Statistical Learning in Computer Vision. Archived (PDF) from the original on 2019-07-13. Retrieved 2019-08-29.
+\item Daniel Jurafsky; James H. Martin (2009). Speech and Language Processing. Pearson Education International. pp. 145–146.
+\item Lu, Haiping; Plataniotis, K.N.; Venetsanopoulos, A.N. (2011). "A Survey of Multilinear Subspace Learning for Tensor Data" (PDF). Pattern Recognition. 44 (7): 1540–1551. Bibcode:2011PatRe..44.1540L. doi:10.1016/j.patcog.2011.01.004. Archived (PDF) from the original on 2019-07-10. Retrieved 2015-09-04.
+\item Yoshua Bengio (2009). Learning Deep Architectures for AI. Now Publishers Inc. pp. 1–3. ISBN 978-1-60198-294-0. Archived from the original on 2023-01-17. Retrieved 2016-02-15.
+\item Tillmann, A. M. (2015). "On the Computational Intractability of Exact and Approximate Dictionary Learning". IEEE Signal Processing Letters. 22 (1): 45–49. arXiv:1405.6664. Bibcode:2015ISPL...22...45T. doi:10.1109/LSP.2014.2345761. S2CID 13342762.
+\item Aharon, M, M Elad, and A Bruckstein. 2006. "K-SVD: An Algorithm for Designing Overcomplete Dictionaries for Sparse Representation Archived 2018-11-23 at the Wayback Machine." Signal Processing, IEEE Transactions on 54 (11): 4311–4322
+\item Zimek, Arthur; Schubert, Erich (2017), "Outlier Detection", Encyclopedia of Database Systems, Springer New York, pp. 1–5, doi:10.1007/978-1-4899-7993-3_80719-1, ISBN 9781489979933
+\item Hodge, V. J.; Austin, J. (2004). "异常值检测方法学综述"（PDF）。*人工智能评论*，22 (2): 85–126。CiteSeerX 10.1.1.318.4023。doi:10.1007/s10462-004-4304-y。S2CID 59941878。原文存档（PDF）于2015年6月22日。检索于2018年11月25日。  
+\item Dokas, Paul; Ertoz, Levent; Kumar, Vipin; Lazarevic, Aleksandar; Srivastava, Jaideep; Tan, Pang-Ning (2002). "用于网络入侵检测的数据挖掘"（PDF）。*下一代数据挖掘研讨会论文集*。原文存档（PDF）于2015年9月23日。检索于2023年3月26日。  
+\item Chandola, V.; Banerjee, A.; Kumar, V. (2009). "异常检测：综述"。*ACM计算调查*，41 (3): 1–58。doi:10.1145/1541880.1541882。S2CID 207172599。  
+\item Fleer, S.; Moringen, A.; Klatzky, R. L.; Ritter, H. (2020). "通过刚性触觉传感器阵列学习高效的触觉形状探索"。*PLOS ONE*，15 (1): e0226880。arXiv:1902.07501。doi:10.1371/journal.pone.0226880。PMC 6940144。PMID 31896135。  
+\item Moringen, Alexandra; Fleer, Sascha; Walck, Guillaume; Ritter, Helge (2020), Nisky, Ilana; Hartcher-O'Brien, Jess; Wiertlewski, Michaël; Smeets, Jeroen (编)，"基于注意力的机器人触觉交互学习"，收录于*触觉：科学、技术、应用*，Lecture Notes in Computer Science，第12272卷，Cham: Springer International Publishing，第462–470页，doi:10.1007/978-3-030-58147-3_51，ISBN 978-3-030-58146-6，S2CID 220069113。  
+\item Piatetsky-Shapiro, Gregory (1991)，"强规则的发现、分析与展示"，收录于Piatetsky-Shapiro, Gregory；Frawley, William J.（编），*数据库中的知识发现*，AAAI/MIT Press，Cambridge, MA。  
+\item Bassel, George W.; Glaab, Enrico; Marquez, Julietta; Holdsworth, Michael J.; Bacardit, Jaume (2011-09-01). "在拟南芥中使用基于规则的机器学习构建功能网络"。*植物细胞*，23 (9): 3101–3116。Bibcode:2011PlanC..23.3101B。doi:10.1105/tpc.111.088153。ISSN 1532-298X。PMC 3203449。PMID 21896882。  
+\item Agrawal, R.; Imieliński, T.; Swami, A. (1993). "在大规模数据库中挖掘项集之间的关联规则"。*1993年ACM SIGMOD国际数据管理会议论文集* - SIGMOD '93，第207页。CiteSeerX 10.1.1.40.6984。doi:10.1145/170035.170072。ISBN 978-0897915922。S2CID 490415。  
+\item Urbanowicz, Ryan J.; Moore, Jason H. (2009-09-22). "学习分类器系统：完整的介绍、综述与路线图"。*人工进化与应用学报*，2009: 1–25。doi:10.1155/2009/736398。ISSN 1687-6229。  
+\item Plotkin G.D. *自动归纳推理方法*，博士论文，爱丁堡大学，1970年，原文存档于2017年12月22日。
+\item Shapiro, Ehud Y. *从事实中归纳推理理论*，存档于2021年8月21日，耶鲁大学计算机科学系研究报告192，1981年。重印于J.-L. Lassez, G. Plotkin（编），*计算逻辑*，MIT出版社，剑桥，MA，1991年，第199–254页。
+\item Shapiro, Ehud Y. (1983). *算法程序调试*。剑桥，马萨诸塞州：MIT出版社。ISBN 0-262-19218-7
+\item Shapiro, Ehud Y. "模型推理系统"。*第七届国际人工智能联合会议论文集，第2卷*。摩根·考夫曼出版社，1981年。存档于2023年4月6日。
+\item Burkov, Andriy (2019). *百页机器学习书*。波兰：Andriy Burkov。ISBN 978-1-9995795-0-0。
+\item Russell, Stuart J.; Norvig, Peter (2021). *人工智能：现代方法*。人工智能Pearson系列（第四版）。霍博肯：Pearson。ISBN 978-0-13-461099-3。
+\item Honglak Lee, Roger Grosse, Rajesh Ranganath, Andrew Y. Ng. "卷积深度信念网络用于可扩展的无监督学习分层表示"。*第26届国际机器学习年会论文集*，2009年，存档于2017年10月18日。
+\item Cortes, Corinna; Vapnik, Vladimir N. (1995). "支持向量网络"。*机器学习*，20 (3): 273–297。doi:10.1007/BF00994018。
+\item Stevenson, Christopher. "教程：Excel中的多项式回归"。facultystaff.richmond.edu。原文存档于2013年6月2日。检索于2017年1月22日。
+\item scikit-learn的文档也有类似的示例，存档于2022年11月2日。
+\item Goldberg, David E.; Holland, John H. (1988). "遗传算法与机器学习"（PDF）。*机器学习*，3 (2): 95–99。doi:10.1007/bf00113892。S2CID 35506513。原文存档（PDF）于2011年5月16日。检索于2019年9月3日。
+\item Michie, D.; Spiegelhalter, D. J.; Taylor, C. C. (1994). *机器学习、神经网络与统计分类*。Ellis Horwood人工智能系列。Bibcode:1994mlns.book.....M。
+\item Zhang, Jun; Zhan, Zhi-hui; Lin, Ying; Chen, Ni; Gong, Yue-jiao; Zhong, Jing-hui; Chung, Henry S.H.; Li, Yun; Shi, Yu-hui (2011). "进化计算与机器学习相遇：一项调查"。*计算智能杂志*，6 (4): 68–75。doi:10.1109/mci.2011.942584。S2CID 6760276。
+\item "联邦学习：无需集中训练数据的协作机器学习"。Google AI 博客，2017年4月6日。原文存档于2019年6月7日。检索于2019年6月8日。
+\item 机器学习已纳入CFA课程（讨论自上而下）；见：Kathleen DeRose 和 Christophe Le Lanno (2020). "机器学习"。存档于2020年1月13日。
+\item Ivanenko, Mikhail; Smolik, Waldemar T.; Wanta, Damian; Midura, Mateusz; Wróblewski, Przemysław; Hou, Xiaohan; Yan, Xiaoheng (2023). "使用监督学习进行胸部可穿戴电阻抗成像的图像重建"。*传感器*，23 (18): 7774。Bibcode:2023Senso..23.7774I。doi:10.3390/s23187774。PMC 10538128。PMID 37765831。
+\item "BelKor主页"。research.att.com
+\item "Netflix技术博客：Netflix推荐：超越5星（第一部分）"。2012年4月6日。原文存档于2016年5月31日。检索于2015年8月8日。
+\item Scott Patterson (2010年7月13日). "让机器来决定"。*华尔街日报*。原文存档于2018年6月24日。检索于2018年6月24日。
+\item Vinod Khosla (2012年1月10日). "我们需要医生还是算法?"。*Tech Crunch*。原文存档于2018年6月18日。检索于2016年10月20日。
+\item 当机器学习算法研究精美艺术画作时，它发现了艺术史学家从未注意到的事情。存档于2016年6月4日，*The Physics at ArXiv* 博客。
+\item Vincent, James (2019-04-10). "首本AI生成的教科书展示了机器人写手的优势"。*The Verge*。原文存档于2019年5月5日。检索于2019年5月5日。
+\item Vaishya, Raju; Javaid, Mohd; Khan, Ibrahim Haleem; Haleem, Abid (2020年7月1日). "人工智能（AI）在COVID-19大流行中的应用"。*糖尿病与代谢综合症：临床研究与评论*，14 (4): 337–339。doi:10.1016/j.dsx.2020.04.012。PMC 7195043。PMID 32305024。
+\item Rezapouraghdam, Hamed; Akhshik, Arash; Ramkissoon, Haywantee (2021年3月10日). "将机器学习应用于预测海洋保护区游客的绿色行为：来自塞浦路斯的证据"。*可持续旅游杂志*，31 (11): 2479–2505。doi:10.1080/09669582.2021.1887878。hdl:10037/24073。
+\item Dey, Somdip; Singh, Amit Kumar; Wang, Xiaohang; McDonald-Maier, Klaus (2020-06-15). "用户交互感知强化学习：针对CPU-GPU移动MPSoC的功率和热效率"。2020设计、自动化与欧洲测试会议与展览（DATE）(PDF)，pp. 1728–1733。doi:10.23919/DATE48585.2020.9116294。ISBN 978-3-9819263-4-7。S2CID 219858480。原文存档于2021年12月13日。检索于2022年1月20日。
+\item Quested, Tony. "智能手机通过埃塞克斯创新变得更加智能"。*商业周刊*。原文存档于2021年6月24日。检索于2021年6月17日。
+\item Williams, Rhiannon (2020-07-21). "未来的智能手机‘将通过监控用户行为延长自身电池寿命’"。*i*。原文存档于2021年6月24日。检索于2021年6月17日。
+\item Rasekhschaffe, Keywan Christian; Jones, Robert C. (2019-07-01). "股票选择的机器学习"。*金融分析师杂志*，75 (3): 70–88。doi:10.1080/0015198X.2019.1596678。ISSN 0015-198X。S2CID 108312507。原文存档于2023年11月26日。检索于2023年11月26日。
+\item Chung, Yunsie; Green, William H. (2024). "从量子化学到机器学习预测溶剂效应对反应速率的影响"。*化学科学*，15 (7): 2410–2424。doi:10.1039/D3SC05353A。ISSN 2041-6520。PMC 10866337。PMID 38362410。原文存档于2024年5月19日。检索于2024年4月21日。
+\item Sun, Yuran; Huang, Shih-Kai; Zhao, Xilei (2024-02-01). "使用可解释机器学习方法预测飓风撤离决策"。*国际灾难风险科学杂志*，15 (1): 134–148。arXiv:2303.06557。Bibcode:2024IJDRS..15..134S。doi:10.1007/s13753-024-00541-1。ISSN 2192-6395。
+\item Sun, Yuran; Zhao, Xilei; Lovreglio, Ruggiero; Kuligowski, Erica (2024-01-01), Naser, M. Z. (ed.), "8 - 大规模撤离建模的AI：承诺与挑战"，*可解释机器学习：基础设施分析、设计、评估与知情决策*，Woodhead出版系列（土木与结构工程），Woodhead Publishing，pp. 185–204，ISBN 978-0-12-824073-1，原文存档于2024年5月19日，检索于2024年5月19日。
+\item Xu, Ningzhe; Lovreglio, Ruggiero; Kuligowski, Erica D.; Cova, Thomas J.; Nilsson, Daniel; Zhao, Xilei (2023-03-01). "使用机器学习预测和评估野火撤离决策：基于2019年金凯德火灾的研究成果"。*消防技术*，59 (2): 793–825。doi:10.1007/s10694-023-01363-1。ISSN 1572-8099。原文存档于2024年5月19日。检索于2024年5月19日。
+\item Wang, Ke; Shi, Xiupeng; Goh, Algena Pei Xuan; Qian, Shunzhi (2019-06-01). "基于机器学习的紧急撤离下行人运动动力学研究"。*消防安全杂志*，106: 163–176。Bibcode:2019FirSJ.106..163W。doi:10.1016/j.firesaf.2019.04.008。hdl:10356/143390。ISSN 0379-7112。原文存档于2024年5月19日。检索于2024年5月19日。
+\item Zhao, Xilei; Lovreglio, Ruggiero; Nilsson, Daniel (2020-05-01). "使用机器学习建模和解释撤离前决策过程"。*建筑自动化*，113: 103140。doi:10.1016/j.autcon.2020.103140。hdl:10179/17315。ISSN 0926-5805。原文存档于2024年5月19日。检索于2024年5月19日。
+\item "Why Machine Learning Models Often Fail to Learn: QuickTake Q&A"。*Bloomberg.com*，2016-11-10。原文存档于2017年3月20日。检索于2017年4月10日。
+\item "The First Wave of Corporate AI Is Doomed to Fail"。*哈佛商业评论*，2017-04-18。原文存档于2018年8月21日。检索于2018年8月20日。
+\item "Why the A.I. euphoria is doomed to fail"。*VentureBeat*，2016-09-18。原文存档于2018年8月19日。检索于2018年8月20日。
+\item "9 Reasons why your machine learning project will fail"。*kdnuggets.com*。原文存档于2018年8月21日。检索于2018年8月20日。
+\item Babuta, Alexander; Oswald, Marion; Rinik, Christine (2018). *透明度和可理解性*（报告）。皇家联合服务研究所（RUSI），pp. 17–22。原文存档于2023年12月9日。检索于2023年12月9日。
+\item "Why Uber's self-driving car killed a pedestrian"。*经济学人*。原文存档于2018年8月21日。检索于2018年8月20日。
+\item "IBM's Watson recommended 'unsafe and incorrect' cancer treatments – STAT"。*STAT*，2018-07-25。原文存档于2018年8月21日。检索于2018年8月21日。
+\item Hernandez, Daniela; Greenwald, Ted (2018-08-11). "IBM 面临 Watson 难题"。*华尔街日报*，ISSN 0099-9660。原文存档于2018年8月21日。检索于2018年8月21日。
+\item Allyn, Bobby (2023年2月27日)。"微软在人工智能技术实验中的失败"。*美国国家公共广播电台*。原文存档于2023年12月8日。检索于2023年12月8日。
+\item Reddy, Shivani M.; Patel, Sheila; Weyrich, Meghan; Fenton, Joshua; Viswanathan, Meera (2020)。"传统的系统评价方法与综述中的综述及半自动化更新证据策略的比较"。*系统评价*，9 (1): 243。doi:10.1186/s13643-020-01450-2。ISSN 2046-4053。PMC 7574591。PMID 33076975。
+\item Rudin, Cynthia (2019)。"停止为高风险决策解释黑箱机器学习模型，改用可解释模型"。*自然机器智能*，1 (5): 206–215。doi:10.1038/s42256-019-0048-x。PMC 9122117。PMID 35603010。
+\item Hu, Tongxi; Zhang, Xuesong; Bohrer, Gil; Liu, Yanlan; Zhou, Yuyu; Martin, Jay; Li, Yang; Zhao, Kaiguang (2023)。"通过可解释人工智能和可解释机器学习预测作物产量：黑箱模型在评估气候变化对作物产量影响中的危险"。*农业与森林气象学*，336: 109458。doi:10.1016/j.agrformet.2023.109458。S2CID 258552400。
+\item Domingos 2015，第6章，第7章。
+\item Domingos 2015，第286页。
+\item "单像素变化欺骗AI程序"。*BBC新闻*，2017年11月3日。原文存档于2018年3月22日。检索于2018年3月12日。
+\item "人工智能存在幻觉问题，修复起来困难重重"。*Wired*，2018年。原文存档于2018年3月12日。检索于2018年3月12日。
+\item Madry, A.; Makelov, A.; Schmidt, L.; Tsipras, D.; Vladu, A. (2019年9月4日)。"朝着抗对抗攻击的深度学习模型迈进"。arXiv:1706.06083 [stat.ML]。
+\item "对抗性机器学习 – CLTC 加州大学伯克利分校长期网络安全中心"。CLTC。原文存档于2022年5月17日。检索于2022年5月25日。
+\item "机器学习模型易受不可检测的后门攻击"。*The Register*。原文存档于2022年5月13日。检索于2022年5月13日。
+\item "任何机器学习算法中都可以植入不可检测的后门"。*IEEE Spectrum*，2022年5月10日。原文存档于2022年5月11日。检索于2022年5月13日。
+\item Goldwasser, Shafi; Kim, Michael P.; Vaikuntanathan, Vinod; Zamir, Or (2022年4月14日)。"在机器学习模型中植入不可检测的后门"。arXiv:2204.06974 [cs.LG]。
+\item Kohavi, Ron (1995)。"交叉验证和自助法在准确性估计和模型选择中的研究"（PDF）。国际人工智能联合会议。原文存档（PDF）于2018年7月12日。检索于2023年3月26日。
+\item Catal, Cagatay (2012)。"软件故障预测研究的性能评估指标"（PDF）。*匈牙利应用技术学报*，9 (4)。检索于2016年10月2日。
+\item 引用错误：所引用的文献 Ethics of artificial intelligence Müller-2020 没有定义（参见帮助页面）。
+\item Garcia, Megan (2016)。"机器中的种族主义"。*世界政策期刊*，33 (4)：111–117。doi:10.1215/07402775-3813015。ISSN 0740-2775。S2CID 151595343。
+\item Bostrom, Nick (2011)。"人工智能的伦理"（PDF）。原文存档（PDF）于2016年3月4日。检索于2016年4月11日。
+\item Edionwe, Tolulope。 "反对种族主义算法的斗争"。*The Outline*。原文存档于2017年11月17日。检索于2017年11月17日。
+\item Jeffries, Adrianne。 "机器学习是种族主义的，因为互联网是种族主义的"。*The Outline*。原文存档于2017年11月17日。检索于2017年11月17日。
+\item Silva, Selena; Kenney, Martin (2018)。"算法、平台和种族偏见：一篇综合性论文"（PDF）。*Phylon*，55 (1 & 2)：9–37。ISSN 0031-8906。JSTOR 26545017。原文存档（PDF）于2024年1月27日。
+\item Wong, Carissa (2023年3月30日)。"AI的‘公平性’研究因缺乏多样性而受阻"。*Nature*。doi:10.1038/d41586-023-00935-z。PMID 36997714。S2CID 257857012。原文存档于2023年4月12日。检索于2023年12月9日。
+\item Zhang, Jack Clark。 "人工智能指数报告 2021"（PDF）。斯坦福人类中心人工智能研究所。原文存档（PDF）于2024年5月19日。检索于2023年12月9日。
+\item Caliskan, Aylin; Bryson, Joanna J.; Narayanan, Arvind (2017年4月14日)。"从语言语料库自动推导的语义包含人类般的偏见"。*Science*，356 (6334)：183–186。arXiv:1608.07187。Bibcode:2017Sci...356..183C。doi:10.1126/science.aal4230。ISSN 0036-8075。PMID 28408601。S2CID 23163324。
+\item Wang, Xinan; Dasgupta, Sanjoy (2016)，Lee, D. D.; Sugiyama, M.; Luxburg, U. V.; Guyon, I.（编辑），"通过单调嵌入进行L1最近邻搜索的算法"（PDF），*神经信息处理系统进展 29*，Curran Associates，Inc.，第983-991页，原文存档（PDF）于2017年4月7日，检索于2018年8月20日。
+\item M.O.R. Prates; P.H.C. Avelar; L.C. Lamb (2019年3月11日)。"评估机器翻译中的性别偏见——以Google翻译为案例"。arXiv:1809.02208 [cs.CY]。
+\item Narayanan, Arvind (2016年8月24日)。"语言必然包含人类偏见，因此机器也会从语言语料库中学习到这些偏见"。*自由探索*。原文存档于2018年6月25日。检索于2016年11月19日。
+\item Metz, Rachel (2016年3月24日)。"微软为何意外释放了一个新纳粹性爱机器人"。*MIT科技评论*。原文存档于2018年11月9日。检索于2018年8月20日。
+\item Vincent, James (2018年1月12日)。"谷歌通过从其图像标记技术中移除大猩猩‘修复’了其种族主义算法"。*The Verge*。原文存档于2018年8月21日。检索于2018年8月20日。
+\item Crawford, Kate (2016年6月25日)。"观点 | 人工智能的白人男性问题"。*纽约时报*。原文存档于2021年1月14日。检索于2018年8月20日。
+\item Simonite, Tom (2017年3月30日)。"微软：人工智能尚不够灵活，无法帮助企业"。*MIT科技评论*。原文存档于2018年11月9日。检索于2018年8月20日。
+\item Hempel, Jessi (2018年11月13日)。"费-费·李的使命：让机器更好地为人类服务"。*Wired*。ISSN 1059-1028。原文存档于2020年12月14日。检索于2019年2月17日。
+\item Char, D. S.; Shah, N. H.; Magnus, D. (2018)。"在医疗保健中实施机器学习——解决伦理挑战"。*新英格兰医学杂志*，378 (11)：981–983。doi:10.1056/nejmp1714229。PMC 5962261。PMID 29539284。
+\item Research, AI (2015年10月23日)。"用于语音识别的深度神经网络"。airesearch.com。原文存档于2016年2月1日。检索于2015年10月23日。
+\item "GPU继续主导AI加速器市场"。*InformationWeek*，2019年12月。原文存档于2020年6月10日。检索于2020年6月11日。
+\item Ray, Tiernan (2019)。"人工智能正在改变计算的整个性质"。*ZDNet*。原文存档于2020年5月25日。检索于2020年6月11日。
+\item "AI与计算"。*OpenAI*，2018年5月16日。原文存档于2020年6月17日。检索于2020年6月11日。
+\item "什么是类脑计算？它如何改变计算的未来"。*ZDNET*，2020年12月8日。检索于2024年11月21日。
+\item "康奈尔大学与NTT的物理神经网络：一种‘实现深度神经网络的激进替代方法’，可以训练任意物理系统"。*Synced*，2021年5月27日。原文存档于2021年10月27日。检索于2021年10月12日。
+\item "纳米意大利面解决神经网络的功耗问题"。*The Register*，2021年10月5日。原文存档于2021年10月6日。检索于2021年10月12日。
+\item Fafoutis, Xenofon; Marchegiani, Letizia; Elsts, Atis; Pope, James; Piechocki, Robert; Craddock, Ian (2018年5月7日)。"通过嵌入式机器学习延长可穿戴传感器的电池寿命"。2018年IEEE第四届物联网世界论坛（WF-IoT）。第269–274页。doi:10.1109/WF-IoT.2018.8355116。hdl:1983/b8fdb58b-7114-45c6-82e4-4ab239c1327f。ISBN 978-1-4673-9944-9。S2CID 19192912。原文存档于2022年1月18日。检索于2022年1月17日。
+\item "嵌入式系统的机器学习初学者指南"。*Analytics India Magazine*，2021年6月2日。原文存档于2022年1月18日。检索于2022年1月17日。
+\item Synced (2022年1月12日)。"谷歌、普渡大学与哈佛大学的开源TinyML框架在FPGA上实现高达75倍的加速"。*Synced*。原文存档于2022年1月18日。检索于2022年1月17日。
+\item Giri, Davide; Chiu, Kuan-Lin; Di Guglielmo, Giuseppe; Mantovani, Paolo; Carloni, Luca P. (2020年6月15日)。"ESP4ML：基于平台的嵌入式机器学习系统芯片设计"。2020年欧洲设计、自动化与测试会议（DATE）。第1049–1054页。arXiv:2004.03640。doi:10.23919/DATE48585.2020.9116317。ISBN 978-3-9819263-4-7。S2CID 210928161。原文存档于2022年1月18日。检索于2022年1月17日。
+\item Louis, Marcia Sahaya; Azad, Zahra; Delshadtehrani, Leila; Gupta, Suyog; Warden, Pete; Reddi, Vijay Janapa; Joshi, Ajay (2019)。"面向RISC-V上的TensorFlow Lite的深度学习"。哈佛大学。原文存档于2022年1月17日。检索于2022年1月17日。
+\item Ibrahim, Ali; Osta, Mario; Alameh, Mohamad; Saleh, Moustafa; Chible, Hussein; Valle, Maurizio (2019年1月21日)。"嵌入式机器学习的近似计算方法"。2018年第25届IEEE国际电子学、线路与系统会议（ICECS）。第845–848页。doi:10.1109/ICECS.2018.8617877。ISBN 978-1-5386-9562-3。S2CID 58670712。原文存档于2022年1月17日。检索于2022年1月17日。
+\item "dblp: TensorFlow Eager: 一个多阶段的、嵌入Python的机器学习领域特定语言"。dblp.org。原文存档于2022年1月18日。检索于2022年1月17日。
+\item Branco, Sérgio; Ferreira, André G.; Cabral, Jorge (2019年11月5日)。"资源匮乏的嵌入式系统、FPGA和终端设备中的机器学习：一项综述"。*电子学*，8 (11)：1289。doi:10.3390/electronics8111289。hdl:1822/62521。ISSN 2079-9292。
+\end{enumerate}
+\subsection{来源}  
+\begin{itemize}
+\item Domingos, Pedro (2015年9月22日)。*The Master Algorithm: How the Quest for the Ultimate Learning Machine Will Remake Our World*。Basic Books。ISBN 978-0465065707。  
+\item Nilsson, Nils (1998)。*Artificial Intelligence: A New Synthesis*。Morgan Kaufmann。ISBN 978-1-55860-467-4。原文存档于2020年7月26日。检索于2019年11月18日。  
+\item Poole, David; Mackworth, Alan; Goebel, Randy (1998)。*Computational Intelligence: A Logical Approach*。纽约：Oxford University Press。ISBN 978-0-19-510270-3。原文存档于2020年7月26日。检索于2020年8月22日。  
+\item Russell, Stuart J.; Norvig, Peter (2003)，*Artificial Intelligence: A Modern Approach*（第2版），新泽西州Upper Saddle River：Prentice Hall，ISBN 0-13-790395-2。
+\end{itemize}
+\subsection{进一步阅读}  
+\begin{itemize}
+\item Nils J. Nilsson，《Introduction to Machine Learning》，Wayback Machine 存档于2019年8月16日。  
+\item Trevor Hastie, Robert Tibshirani 和 Jerome H. Friedman (2001)。*The Elements of Statistical Learning*，Springer，ISBN 0-387-95284-5，Wayback Machine 存档于2013年10月27日。  
+\item Pedro Domingos (2015年9月)，*The Master Algorithm*，Basic Books，ISBN 978-0-465-06570-7。  
+\item Ian H. Witten 和 Eibe Frank (2011)。*Data Mining: Practical Machine Learning Tools and Techniques*，Morgan Kaufmann，664页，ISBN 978-0-12-374856-0。  
+\item Ethem Alpaydin (2004)。*Introduction to Machine Learning*，MIT Press，ISBN 978-0-262-01243-0。  
+\item David J. C. MacKay，《Information Theory, Inference, and Learning Algorithms》，Cambridge: Cambridge University Press, 2003，ISBN 0-521-64298-1，Wayback Machine 存档于2016年2月17日。  
+\item Richard O. Duda, Peter E. Hart, David G. Stork (2001)，*Pattern Classification*（第2版），Wiley, New York，ISBN 0-471-05669-3。  
+\item Christopher Bishop (1995)。*Neural Networks for Pattern Recognition*，Oxford University Press，ISBN 0-19-853864-2。  
+\item Stuart Russell 和 Peter Norvig (2009)，*Artificial Intelligence – A Modern Approach*，Pearson，ISBN 9789332543515，Wayback Machine 存档于2011年2月28日。  
+\item Ray Solomonoff，《An Inductive Inference Machine》，*IRE Convention Record*，Information Theory 章节，第二部分，第56–62页，1957年。  
+\item Ray Solomonoff，《An Inductive Inference Machine》，Wayback Machine 存档于2011年4月26日，《1956年达特茅斯夏季研究会议关于人工智能的私密报告》。  
+\item Kevin P. Murphy (2021)。*Probabilistic Machine Learning: An Introduction*，MIT Press，Wayback Machine 存档于2021年4月11日。
+\end{itemize}
+\subsection{外部链接}
+\begin{itemize}
+\item 国际机器学习学会  
+\item mloss 是一个开源机器学习软件的学术数据库。
+\end{itemize}
