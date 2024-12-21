@@ -1,0 +1,105 @@
+% 弦的作用量原理
+% license Usr
+% type Tutor
+
+对 $D$ 维平坦时空的度规取 $\eta_{\mu\nu} = \text{diag}(-, +, +, \dots, +)$。
+\subsection{点粒子的作用量}
+对于一个 $0$ 维对象（粒子），可以用一个 $(D-1)$ 维的对象（函数）以及一个参数时间来刻画运动：$\vec X(X^0)$。协变地，进行参数化，引入参数 $\tau$ 而写为 $X^\mu(\tau)$。物理真实对于参数 $\tau$ 的选取应该是不依赖的，即
+\begin{equation}
+	X^\mu(\tau) = X'~^\mu(\tau') ~.
+\end{equation}
+
+遵循庞加莱群的庞加莱对称性，作用量也要不依赖于参数选取，最简单的是选取作用量是粒子\textbf{世界线}的长度\footnote{即在 $X^0-\vec X$ 图像中运动的长度，曲线用 $\tau$ 参数化。}，即 
+\begin{equation}
+	S_{point ~particle} = S_{pp} = -m \int \dd \tau \sqrt{- \dot X^\mu \dot X_\mu} ~,
+\end{equation}
+其中 $-m$ 是为了保证作用量量纲正确。
+
+然后，定义协变速度（已归一化） $u^\mu = \dot X^\mu \sqrt{-\dot X^\nu \dot X_\nu}$。而对作用量变分的结果是 
+\begin{equation}
+	\delta S_{pp} = -m \int \dd \tau \dot u_{\mu} \delta X^\mu ~.
+\end{equation}
+
+现在，引入一个世界线上的度规 $\gamma_{\tau \tau}(\tau)$\footnote{这与世界线是无关的。}，则会有标架 $\eta(\tau) = \sqrt{- \gamma_{\tau \tau}(\tau)}$。而作用量变为
+\begin{equation}
+	S_{pp}' = \frac{1}{2} \int (\eta^{-1} \dot X^\mu \dot X_\mu - \eta m^2) \dd \tau ~.
+\end{equation}
+
+此时作用量仍然有：世界线重参数化不变性，和庞加莱对称性。$\eta$ 换系符合 $\eta'(\tau') \dd \tau' = \eta(\tau) \dd \tau$。而此时运动方程通过变分作用量\footnote{结果是 \\ $\delta S_{pp} = \frac{1}{2} \int \dd \tau (- \dot X^\mu \dot X_\mu/\eta^2 - m^2) \delta \eta$。}变为 $\eta^2 = -\dot X^\mu \dot X_\mu / m^2$。
+
+虽然 $S_{pp}$ 与 $S_{pp}'$ 等级啊，但应用上，$S_{pp}'$ 是导数的二次型，更好操作，故路径积分理论中一般使用 $S_{pp}'$。
+
+\subsection{弦的 Nambu-Goto 作用量}
+
+下面考虑一个 $1$ 维的对象的运动，将扫出一个面，这就是\textbf{世界面}（world-sheet）。用 $\sigma$ 参数衡量运动的对象的内部坐标，例如 $\sigma \in [0, l]$；而仍用 $\tau$ 作为世界面的参数。
+
+2-dim world-sheet 用 $X^\mu(\tau, \sigma)$ 记录。考虑一个 \textbf{induced metric}\footnote{induced metric：诱导度规。}：$h_{ab}$，$ab$ 在 $(\tau, \sigma)$ 取遍： $h_{ab} = \partial_a X^\mu \partial_b X_\mu$。这样就会给出 \textbf{Nambu-Goto 作用量}。\footnote{实际上类比点粒子，弦的作用量是 world-sheet 的面积。}
+\begin{theorem}{}
+	\begin{equation}
+		\begin{aligned}
+			S_{NG} &= \int \dd \tau \dd \sigma \mathcal L_{NG} \\
+			\mathcal L_{NG} &= -\frac{1}{2 \pi \alpha'} \sqrt{-\det h_{ab}} ~.
+		\end{aligned}
+	\end{equation}
+\end{theorem}
+其中，$\alpha '$ 是 \textbf{Regge 斜率}，给出弦的张力 $T = \frac{1}{2\pi \alpha'}$。事实上，一般取 $\sigma^a = (\sigma^0, \sigma^a) = (\tau, \sigma)$，则写出 
+\begin{lemma}{}
+	\begin{equation}
+		h_{\alpha \beta} = \left(\begin{matrix}
+			\dot X^2 & \dot X \cdot X' \\
+			\dot X \cdot X' & X'~^2 
+		\end{matrix}\right) ~, ~ \det(h_{\alpha \beta}) = (\dot X)^2 (X')^2 - (\dot X \cdot X')^2 ~,
+	\end{equation}
+	其中，$\dot X = \partial_\tau X$，$X' = \partial_\sigma X$。
+\end{lemma}
+
+\begin{theorem}{}
+	弦的 Nambu-Goto 作用量有以下两个对称性：
+	\begin{enumerate}
+		\item 庞加莱对称性：$X'~^\mu(\tau, \sigma) = \Lambda_\nu^\mu X^\mu(\tau, \sigma) + a^\mu$。
+		\item 微分同胚的参考系变换，称为 diff invariance，$X'~^\mu(\tau', \sigma') = X^\mu(\tau, \sigma)$。
+	\end{enumerate}
+\end{theorem}
+
+\subsection{弦的 Polyakov 作用量}
+\begin{theorem}{}
+	现在取一个有 Lorentz 符号的度规 $\gamma_{ab}(\tau, \sigma) = \text{diag}(-, +)$ 于 world-sheet 上，作用量成为 \textbf{Polyakov 作用量}：
+	\begin{equation}
+		S_P [X, \gamma] = -\frac{1}{4 \pi \alpha'} \int \dd \tau \dd \sigma \sqrt{-\gamma} \gamma^{ab} h_{ab}, ~ \gamma = \det \gamma_{ab} ~.
+	\end{equation}
+\end{theorem}
+
+这与 Einstein-Hilbert 作用量是十分相似的：
+\begin{equation}
+S_{EH}[g_{\alpha \beta}] = \int \dd{}^4 x \sqrt{-g} R = \int \dd{}^4 x \sqrt{-g} g^{\mu\nu} R_{\mu\nu} ~,
+\end{equation}
+替换 $\gamma^{ab} \leftrightarrow g^{\mu\nu}$，$R_{\mu\nu} \leftrightarrow h_{ab}$。这指出：\footnote{这里 $R_{\mu\nu}$ 是一个描述空间弯曲情况的内禀张量，仅与空间的拓扑性质有关。熟悉引力理论的人应当都知道这就是 Ricci 曲率张量。}
+	\textbf{Polyakov 作用量描述弦理论是一个与场 $X^\mu$ 耦合的二维引力理论。}
+
+\subsection{弦作用量间的关系}
+对 Polyakov 作用量变分：
+\begin{equation}
+	\delta_{\gamma} S_P = -\frac{1}{4\pi \alpha'} \int \dd \tau \dd \sigma \sqrt{-\gamma} \delta \gamma^{ab} \left(h_{ab} - \frac{1}{2} \gamma_{ab} \gamma^{cd} h_{cd}\right) ~.
+\end{equation}
+\footnote{变分过程中利用到 $\delta \gamma = \gamma \gamma^{ab} \delta \gamma_{ab} = -\gamma \gamma_{ab} \delta \gamma^{ab}$。}可以发现这与 Einstein 场方程是十分类似的。
+
+由最小作用量原理，运动方程是 $h_{ab} = \frac{1}{2} \gamma_{ab} \gamma^{cd} h_{cd}$，对这式两侧同时除以行列式的相反数的平方根，得到 $\sqrt{-h} h_{ab} = \sqrt{-\gamma} \gamma_{ab}$，指出两个度规成正比，可以得到 $S_P = S_{NG}$：
+\begin{equation}
+	\begin{aligned}
+		S_P &= -\frac{1}{4 \pi \alpha'} \int \dd \sigma \dd \tau \gamma_{ab} \gamma^{ab} \sqrt{-h} \\ 
+		&= -\frac{1}{2\pi \alpha'} \int \dd \sigma \dd\tau \sqrt{-h} \\ 
+		&= -\frac{1}{4\pi\alpha'} \int \dd \sigma \dd \tau \sqrt{-\gamma} \gamma^{ab} h_{ab} \\
+		&= S_{NG} ~.
+	\end{aligned}
+\end{equation}
+
+\subsection{Polyakov 作用量的对称性}
+\begin{theorem}{} 
+	Polyakov 作用量多一个几何的对称性，即 $2$-dim Weyl 不变性：
+	\begin{itemize}
+		\item 庞加莱对称性：$X'~ ^\mu(\tau, \sigma) = \Lambda_\nu^\mu X^\nu(\tau, \sigma) + a^\mu$, $\gamma'_{ab}(\tau, \sigma) = \gamma_{ab}(\tau, \sigma)$。
+		\item Diff-不变性：$X'~^\mu(\tau', \sigma') = X^\mu(\tau, \sigma)$，$\gamma'_{ab}(\tau', \sigma')  \pdv{\sigma'~ ^a}{\sigma^c} \pdv{\sigma'~^b}{\sigma^d} = \gamma_{cd}(\tau, \sigma)$。
+		\item Weyl-不变性：$X'~^\mu(\tau, \sigma) = X^\mu(\tau, \sigma)$，$\gamma'_{ab}(\tau, \sigma) = \exp\left(2 \omega(\tau, \sigma) \right) \gamma_{ab}(\tau, \sigma)$。其中 $\omega(\tau, \sigma)$ 任意取。
+	\end{itemize}
+	Weyl 不变性体现了世界面度规的定域（可以理解为局域的，locally的）缩放不变性。
+\end{theorem}

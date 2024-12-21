@@ -208,3 +208,383 @@ RNN（循环神经网络）的一个起源是统计力学。1972年，天野俊�
 使用人工神经网络进行物体识别，可以从图片中创建用户兴趣的个人资料[209]。
 
 除了传统的应用领域，人工神经网络在跨学科研究中也越来越受到利用，例如材料科学。例如，图神经网络（GNNs）已经证明其在新稳定材料发现中的能力，通过高效预测晶体的总能量来扩展深度学习的应用。这一应用突显了ANNs在解决复杂问题方面的适应性和潜力，超越了预测建模和人工智能的领域，为科学发现和创新开辟了新路径[210]。
+\subsection{理论属性}
+\subsubsection{计算能力}  
+多层感知机（Multilayer Perceptron, MLP）是一个通用的函数逼近器，这一点已通过普遍逼近定理得到证明。然而，这一证明并没有对所需的神经元数量、网络拓扑、权重以及学习参数提供构造性的指导。
+
+具有有理数权重（而非全精度实数权重）的特定递归架构具有通用图灵机的能力[211]，只需有限数量的神经元和标准的线性连接。此外，使用无理数作为权重值会使得机器具有超图灵能力[212][213]（未验证）。
+\subsubsection{容量} 
+一个模型的“容量”属性对应于其对任何给定函数建模的能力。它与网络中可以存储的信息量以及复杂性的概念相关。社区已知有两种容量的概念：信息容量和VC维度（Vapnik-Chervonenkis Dimension）。感知机的信息容量在Sir David MacKay的书中得到了广泛讨论[214]，该书总结了Thomas Cover的工作[215]。标准神经元（非卷积神经元）网络的容量可以通过四条规则推导出来[216]，这些规则源于将神经元理解为电气元件的理论。信息容量捕捉了给定任何输入数据时，网络能够建模的函数。第二个概念是VC维度。VC维度使用测度理论的原理，找出在最佳条件下的最大容量，即给定特定形式的输入数据。如在[214]中所述，任意输入的VC维度是感知机信息容量的一半。任意点的VC维度有时被称为“记忆容量”[217]。
+\subsubsection{收敛性}
+模型可能无法始终收敛到单一解，首先是因为存在局部最小值，这取决于代价函数和模型。其次，所使用的优化方法可能无法保证在距离任何局部最小值较远时就收敛。第三，对于足够大的数据或参数，一些方法变得不切实际。
+
+另一个值得提到的问题是，训练过程中可能会经过一些鞍点，从而导致收敛方向错误。
+
+某些类型的ANN架构的收敛行为比其他类型更为清楚。当网络的宽度趋近于无穷大时，ANN在训练过程中可以通过其一阶泰勒展开式很好地描述，因此继承了仿射模型的收敛行为[218][219]。另一个例子是当参数较小时，观察到ANN通常从低频到高频拟合目标函数。这种行为被称为神经网络的频谱偏差或频率原理[220][221][222][223]。这一现象与一些著名的迭代数值方法（如雅可比法）行为相反。深层神经网络通常对低频函数有更强的偏好[224]。
+\subsubsection{泛化与统计学}
+目标是创建一个能够很好地泛化到未见过的样本的系统的应用，面临着过度训练的可能性。这种问题出现在复杂或过度指定的系统中，当网络的容量远远超过所需的自由参数时，就会出现过度训练。解决过度训练的有两种方法。第一种方法是使用交叉验证和类似技术检查是否存在过度训练，并选择超参数以最小化泛化误差。
+
+第二种方法是使用某种形式的正则化。这个概念出现在概率（贝叶斯）框架中，在这种框架下，正则化可以通过选择对简单模型的更大先验概率来执行；它也出现在统计学习理论中，在该理论中，目标是最小化两个量：‘经验风险’和‘结构风险’，这大致对应于训练集上的误差以及由于过拟合导致在未见过的数据上的预测误差。
+\begin{figure}[ht]
+\centering
+\includegraphics[width=10cm]{./figures/40326eed14e03bb6.png}
+\caption{神经网络的置信度分析} \label{fig_RGSJ_4}
+\end{figure}
+使用均方误差（MSE）成本函数的监督神经网络可以使用正式的统计方法来确定训练模型的置信度。验证集上的MSE可以作为方差的估计值。然后，可以使用该值来计算网络输出的置信区间，假设输出符合正态分布。只要输出概率分布保持不变，并且网络没有被修改，这种置信度分析在统计学上是有效的。
+
+通过在神经网络的输出层（或在基于组件的网络中使用软最大化组件）上分配一个软最大化激活函数，这个函数是逻辑函数的广义形式，可以用于分类目标变量，输出值可以解释为后验概率。这在分类任务中非常有用，因为它提供了分类结果的确定性度量。
+
+软最大化激活函数为：
+\[
+y_i = \frac{e^{x_i}}{\sum_{j=1}^{c} e^{x_j}}~
+\]
+\subsection{批评}
+\subsubsection{训练}
+神经网络，尤其是在机器人领域，常受到批评，因为它们需要大量的训练样本才能在现实世界中运行。任何学习机器都需要足够具代表性的示例，以便捕捉到能够使其泛化到新案例的潜在结构。潜在的解决方案包括：通过随机打乱训练示例，使用数值优化算法，在更改网络连接时不会采取过大的步骤，或者使用所谓的小批量训练，将示例分组，和/或为CMAC引入递归最小二乘算法。Dean Pomerleau使用神经网络训练机器人车在多种道路类型上行驶（单车道、多车道、土路等），他的研究大部分致力于从单次训练经历中推断多个训练情景，并保持过去训练的多样性，以避免系统过度训练（例如，如果系统只被呈现连续的右转情景，它不应学会总是右转）。
+\subsubsection{理论}
+人工神经网络（ANNs）的一个核心论点是，它们体现了处理信息的新型且强大的通用原则。然而，这些原则并没有明确的定义。通常有人声称[需要引用]，这些原则是从网络本身产生的。这使得简单的统计关联（人工神经网络的基本功能）能够被描述为学习或识别。1997年，前《科学美国人》专栏作家亚历山大·杜德尼（Alexander Dewdney）评论道，人工神经网络具有“只取不舍的特性，赋予其一种懒惰的气质，并且对这些计算系统的实际效果缺乏好奇心。没有人类的手（或头脑）干预；解决方案仿佛是魔法般自然而然地出现；似乎没有人学到什么。”[227] 对杜德尼的回应之一是，神经网络已成功地应用于许多复杂多样的任务，从自主飞行的飞机[228]到信用卡欺诈检测，再到精通围棋游戏。
+
+科技作家罗杰·布里奇曼评论道：
+
+“例如，神经网络之所以被批评，不仅因为它们被炒得天花乱坠（有什么不是？），还因为你可以在不了解其工作原理的情况下创建一个成功的网络：那些捕捉其行为的一堆数字很可能会是‘一个不透明、不可读的表格……作为科学资源毫无价值’。”
+
+尽管他强调科学与技术是不同的，杜德尼似乎在这里将神经网络批判为糟糕的科学，而实际上，大多数开发神经网络的人只是试图做出好的工程设计。即使是一个不可读的表格，如果有用的机器能够读取，仍然是非常值得拥有的。[229]
+
+虽然分析人工神经网络所学到的内容确实很困难，但比分析生物神经网络所学到的内容要容易得多。此外，近年来对人工智能可解释性的重视促成了基于注意力机制的可视化方法的发展，用于解释和理解已学到的神经网络。进一步的研究者正在逐渐揭示出一些通用的原则，这些原则使得学习机器能够成功。例如，Bengio和LeCun（2007）撰写了一篇关于局部学习与非局部学习、浅层架构与深层架构的文章。[230]
+
+生物大脑使用浅层和深层电路，如大脑解剖学所报告的那样，展现出各种各样的不变性。Weng[232]认为，大脑的自我连接主要是根据信号统计进行的，因此，序列级联无法捕捉所有主要的统计依赖关系。
+\subsubsection{硬件}
+大型且高效的神经网络需要相当可观的计算资源。[233] 尽管大脑具有专门的硬件来处理通过神经元图进行信号处理，但即使在冯·诺依曼架构上模拟一个简化的神经元也可能消耗大量的内存和存储。此外，设计者通常需要通过许多连接及其相关的神经元传输信号，这需要巨大的 CPU 功率和时间。[需要引用]
+
+有人认为，神经网络在21世纪的复兴在很大程度上归功于硬件的进步：从1991年到2015年，计算能力，尤其是由 GPGPU（通用图形处理单元）提供的计算能力，已经增加了大约百万倍，使得标准的反向传播算法能够训练比以前深得多的多层网络。[38] 使用加速器，如 FPGA 和 GPU，可以将训练时间从几个月缩短到几天。[233][234]
+
+类脑工程（Neuromorphic engineering）或物理神经网络直接通过构建非冯·诺依曼芯片来解决硬件难题，从而在电路中直接实现神经网络。另一种为神经网络处理优化的芯片被称为张量处理单元（Tensor Processing Unit，TPU）。[235]
+\subsubsection{实际反例}
+分析人工神经网络（ANN）所学到的内容比分析生物神经网络所学到的内容要容易得多。此外，致力于探索神经网络学习算法的研究人员正在逐渐揭示一些通用原则，这些原则使得学习机器能够成功。例如，局部学习与非局部学习以及浅层架构与深层架构的比较。[236]
+\subsubsection{混合方法}
+混合模型（结合神经网络和符号方法）的支持者认为，这种混合能够更好地捕捉人类思维的机制。[237][238]
+\subsubsection{数据集偏差}
+神经网络依赖于其训练数据的质量，因此低质量的数据或具有不平衡代表性的数据可能导致模型学习并延续社会偏见。[239][240] 当神经网络被应用于现实场景时，这些继承的偏见尤为关键，因为训练数据可能因某一特定种族、性别或其他属性的数据稀缺而不平衡。[239] 这种不平衡可能导致模型对代表性不足群体的理解和表现不充分，从而产生歧视性结果，进一步加剧社会不平等，尤其是在面部识别、招聘流程和执法等应用中。[240][241] 例如，2018年，亚马逊不得不放弃一款招聘工具，因为该模型倾向于选择男性而非女性从事软件工程工作，这是因为该领域男性员工比例较高。[241] 该程序会惩罚任何带有“woman”一词或任何女性学院名称的简历。然而，使用合成数据可以帮助减少数据集偏差并增加数据集的代表性。[242]
+\subsection{画廊}
+\begin{figure}[ht]
+\centering
+\includegraphics[width=10cm]{./figures/3fed383b8a2c22e0.png}
+\caption{} \label{fig_RGSJ_6}
+\end{figure}
+一个单层前馈人工神经网络。为了清晰起见，箭头从 \( x_2 \) 出发的部分已省略。这个网络有 \( p \) 个输入和 \( q \) 个输出。在该系统中，第 \( q \) 个输出的值 \( y_q \) 计算公式为：
+\[
+y_q = K \times \left( \sum_i (x_i \times w_{iq}) - b_q \right)~
+\]
+\begin{figure}[ht]
+\centering
+\includegraphics[width=8cm]{./figures/2af8096c4f0fe85d.png}
+\caption{一个两层前馈人工神经网络} \label{fig_RGSJ_7}
+\end{figure}
+\begin{figure}[ht]
+\centering
+\includegraphics[width=8cm]{./figures/5e04f8e02c0e6adc.png}
+\caption{一个人工神经网络} \label{fig_RGSJ_8}
+\end{figure}
+\begin{figure}[ht]
+\centering
+\includegraphics[width=8cm]{./figures/42950136b8754f7c.png}
+\caption{一个人工神经网络依赖图} \label{fig_RGSJ_9}
+\end{figure}
+\begin{figure}[ht]
+\centering
+\includegraphics[width=8cm]{./figures/d60e0ba025c342ed.png}
+\caption{一个单层前馈人工神经网络，具有4个输入、6个隐藏节点和2个输出。给定位置状态和方向，它输出基于轮子的控制值。} \label{fig_RGSJ_10}
+\end{figure}
+\begin{figure}[ht]
+\centering
+\includegraphics[width=8cm]{./figures/906507fab48d2a3b.png}
+\caption{一个两层前馈人工神经网络，具有8个输入、2×8个隐藏节点和2个输出。给定位置状态、方向和其他环境值，它输出基于推进器的控制值。} \label{fig_RGSJ_11}
+\end{figure}
+\begin{figure}[ht]
+\centering
+\includegraphics[width=8cm]{./figures/d41278e5a1678956.png}
+\caption{CMAC神经网络的并行流水线结构。该学习算法可以在一步内收敛。} \label{fig_RGSJ_12}
+\end{figure}
+\subsection{最近的进展和未来方向}  
+人工神经网络（ANNs）已经取得了显著进展，特别是在建模复杂系统、处理大规模数据集以及适应各种应用领域的能力方面。过去几十年来，它们在图像处理、语音识别、自然语言处理、金融和医学等领域的广泛应用标志着其演变的一个重要阶段。
+\subsubsection{图像处理}  
+在图像处理领域，人工神经网络（ANNs）被广泛应用于图像分类、物体识别和图像分割等任务。例如，深度卷积神经网络（CNNs）在手写数字识别中发挥了重要作用，取得了最先进的表现。[243] 这展示了ANNs在有效处理和解读复杂视觉信息方面的能力，推动了从自动监控到医学影像等多个领域的进步。[243]
+\subsubsection{语音识别}  
+通过对语音信号的建模，ANNs被用于诸如说话人识别和语音转文本转换等任务。深度神经网络架构在大词汇量连续语音识别中引入了显著的改进，超越了传统技术。[243][244] 这些进展使得更加精确和高效的语音激活系统得以开发，增强了技术产品中的用户界面。
+\subsubsection{自然语言处理}  
+在自然语言处理领域，人工神经网络（ANNs）被用于文本分类、情感分析和机器翻译等任务。它们使得开发出能够准确进行语言间翻译、理解文本数据中的上下文和情感、以及根据内容对文本进行分类的模型成为可能。[243][244] 这些进展对自动化客服、内容审核和语言理解技术具有重要意义。
+\subsubsection{控制系统}  
+在控制系统领域，ANNs被用于建模动态系统，处理诸如系统识别、控制设计和优化等任务。例如，深度前馈神经网络在系统识别和控制应用中具有重要作用。
+\subsubsection{金融}  
+进一步信息：人工智能应用 § 交易与投资  
+ANNs（人工神经网络）被用于股市预测和信用评分：
+\begin{itemize}
+\item 在投资领域，ANNs能够处理大量的金融数据，识别复杂的模式，并预测股市趋势，从而帮助投资者和风险管理者做出更为明智的决策。[243]  
+\item 在信用评分领域，ANNs提供基于数据的个性化信用评估，提高了违约预测的准确性，并自动化了贷款过程。[244]
+\end{itemize}  
+ANNs需要高质量的数据和细致的调优，而其“黑箱”特性可能带来解释上的挑战。然而，持续的进展表明，ANNs在金融领域仍然发挥着重要作用，提供有价值的洞察力，并增强风险管理策略。
+\subsubsection{医学}  
+ANNs能够处理和分析庞大的医疗数据集。它们提高了诊断准确性，特别是在通过解读复杂的医学影像进行早期疾病检测以及预测患者的预后以进行个性化治疗计划方面。[244] 在药物发现中，ANNs加速了潜在药物候选者的识别，并预测它们的疗效和安全性，从而显著减少了开发时间和成本。[243] 此外，它们在个性化医疗和医疗数据分析中的应用，促进了定制治疗和高效的患者护理管理。[244] 当前的研究旨在解决剩余的挑战，如数据隐私和模型可解释性问题，并扩展ANNs在医学中的应用范围。[citation needed]
+
+内容创作  
+ANNs，如生成对抗网络（GAN）和变压器（transformers），广泛应用于多个行业的内容创作。[245] 这是因为深度学习模型能够从大量数据集中学习艺术家或音乐家的风格，并创作出全新的艺术作品和音乐作品。例如，DALL-E是一种深度神经网络，经过在互联网上650百万对图像和文本的训练，可以根据用户输入的文本创建艺术作品。[246] 在音乐领域，变压器被用于为广告和纪录片创作原创音乐，例如AIVA和Jukedeck等公司。[247] 在营销行业，生成模型被用于为消费者创建个性化广告。[245] 此外，主要电影公司正在与科技公司合作，分析电影的财务成功，例如2020年华纳兄弟与科技公司Cinelytic建立的合作伙伴关系。[248] 此外，神经网络还被用于视频游戏创作，在这些游戏中，非玩家角色（NPC）可以根据当前游戏中的所有角色作出决策。[249]
+\subsection{参见}
+\begin{itemize}
+\item ADALINE  
+\item 自编码器 (Autoencoder)  
+\item 仿生计算 (Bio-inspired computing)  
+\item 蓝脑计划 (Blue Brain Project)  
+\item 灾难性干扰 (Catastrophic interference)  
+\item 认知架构 (Cognitive architecture)  
+\item 连接主义专家系统 (Connectionist expert system)  
+\item 连接组学 (Connectomics)  
+\item 深度图像先验 (Deep image prior)  
+\item 数字形态发生 (Digital morphogenesis)  
+\item 高效可更新神经网络 (Efficiently updatable neural network)  
+\item 进化算法 (Evolutionary algorithm)  
+\item 遗传算法 (Genetic algorithm)  
+\item 高维计算 (Hyperdimensional computing)  
+\item 就地自适应查找表 (In situ adaptive tabulation)  
+\item 神经网络的大宽度极限 (Large width limits of neural networks)  
+\item 机器学习概念列表 (List of machine learning concepts)  
+\item 记忆电阻器 (Memristor)  
+\item 神经气体 (Neural gas)  
+\item 神经网络软件 (Neural network software)  
+\item 光学神经网络 (Optical neural network)  
+\item 并行分布式处理 (Parallel distributed processing)  
+\item 人工智能哲学 (Philosophy of artificial intelligence)  
+\item 预测分析 (Predictive analytics)  
+\item 量子神经网络 (Quantum neural network)  
+\item 支持向量机 (Support vector machine)  
+\item 脉冲神经网络 (Spiking neural network)  
+\item 随机鹦鹉 (Stochastic parrot)  
+\item 张量积网络 (Tensor product network) 
+\end{itemize} 
+\subsection{参考文献}
+\begin{enumerate}
+\item Hardesty, L. (2017年4月14日). "解释：神经网络". MIT新闻办公室. 于2024年3月18日存档. 2022年6月2日检索.
+\item Yang, Z., Yang, Z. (2014). 《综合生物医学物理学》. 卡罗林斯卡学院，瑞典斯德哥尔摩：Elsevier. 第1页. ISBN 978-0-444-53633-4. 于2022年7月28日存档. 2022年7月28日检索.
+\item Bishop, C. M. (2006年8月17日). 《模式识别与机器学习》. 纽约：Springer. ISBN 978-0-387-31073-2.
+\item Vapnik, V. N. (1998). 《统计学习理论的本质》 (修订版第2版). 纽约、柏林、海德堡：Springer. ISBN 978-0-387-94559-0.
+\item Ian Goodfellow, Yoshua Bengio, Aaron Courville (2016). 《深度学习》. MIT出版社. 于2016年4月16日存档. 2016年6月1日检索.
+\item Ferrie, C., Kaiser, S. (2019). 《神经网络给宝宝们》. Sourcebooks. ISBN 978-1-4926-7120-6.
+\item Mansfield Merriman, "最小二乘法相关文献列表"
+\item Stigler, S. M. (1981). "高斯与最小二乘法的发明". 《统计学年刊》. 9 (3): 465–474. doi:10.1214/aos/1176345451.
+\item Bretscher, O. (1995). 《线性代数与应用》 (第3版). 上萨德尔河，NJ：Prentice Hall.
+\item Schmidhuber, J. (2022). "现代人工智能与深度学习的注解历史". arXiv:2212.11279 [cs.NE].
+\item Stigler, S. M. (1986). 《统计学史：1900年之前的不确定性度量》. 剑桥：哈佛大学. ISBN 0-674-40340-1.
+\item McCulloch, W. S., Pitts, W. (1943年12月). "神经活动中固有思想的逻辑演算". 《数学生物物理学公报》. 5 (4): 115–133. doi:10.1007/BF02478259. ISSN 0007-4985.
+\item Kleene, S. (1956). "神经网络和有限自动机中的事件表示". 《数学研究年鉴》. 第34号. 普林斯顿大学出版社. 第3–41页. 2017年6月17日检索.
+\item Hebb, D. (1949). 《行为的组织》. 纽约：Wiley. ISBN 978-1-135-63190-1.
+\item Farley, B., W. A. Clark (1954). "通过数字计算机模拟自组织系统". 《信息理论IRE交易》. 4 (4): 76–84. doi:10.1109/TIT.1954.1057468.
+\item Rochester N, J.H. Holland, L.H. Habit, W.L. Duda (1956). "使用大型数字计算机对大脑细胞组理论的作用进行测试". 《信息理论IRE交易》. 2 (3): 80–93. doi:10.1109/TIT.1956.1056810.
+\item Haykin (2008). 《神经网络与学习机器》，第3版.
+\item Rosenblatt, F. (1958). "感知器：大脑中信息存储与组织的概率模型". 《心理学评论》. 65 (6): 386–408. CiteSeerX 10.1.1.588.3775. doi:10.1037/h0042519. PMID 13602029. S2CID 12781225.
+\item Werbos, P. (1975). 《超越回归：行为科学预测与分析的新工具》。
+\item Rosenblatt, F. (1957). "感知器——一种感知和识别自动机". 报告 85-460-1. 康奈尔航空实验室.
+\item Olazaran, M. (1996). "感知器争议官方历史的社会学研究". 《社会科学研究》. 26 (3): 611–659. doi:10.1177/030631296026003005. JSTOR 285702. S2CID 16786738.
+\item Joseph, R.D. (1960). 《感知器理论贡献》，康奈尔航空实验室报告 No. VG-11 96--G-7, 布法罗。
+\item Russel, Stuart, Norvig, Peter (2010). 《人工智能：一种现代方法》 (PDF) (第3版). 美国：皮尔逊教育. 第16-28页. ISBN 978-0-13-604259-4.
+\item Rosenblatt F (1962). 《神经动力学原理》。斯巴达出版社，纽约。
+\item Ivakhnenko AG, Lapa VG (1967). 《控制论与预测技术》。美国Elsevier出版公司。ISBN 978-0-444-00020-0。
+\item Ivakhnenko A (1970年3月). "工程控制论问题中的启发式自组织"。《自动化》。6 (2): 207–219. doi:10.1016/0005-1098(70)90092-0。
+\item Ivakhnenko A (1971). "复杂系统的多项式理论"（PDF）。《IEEE系统、人类与控制论学报》。SMC-1 (4): 364–378. doi:10.1109/TSMC.1971.4308320. 已归档（PDF）于2017年8月29日。检索日期：2019年11月5日。
+\item Robbins H, Monro S (1951). "随机逼近方法"。《数学统计年鉴》。22 (3): 400. doi:10.1214/aoms/1177729586。
+\item Amari S (1967). "自适应模式分类器理论"。《IEEE学报》。EC (16): 279–307。
+\item Fukushima K (1969). "通过多层模拟阈值单元的网络提取视觉特征"。《IEEE系统科学与控制论学报》。5 (4): 322–333. doi:10.1109/TSSC.1969.300225。
+\item Sonoda S, Murata N (2017). "具有无界激活函数的神经网络是通用近似器"。《应用与计算和声分析》。43 (2): 233–268. arXiv:1505.03654. doi:10.1016/j.acha.2015.12.005. S2CID 12149203。
+\item Ramachandran P, Barret Z, Quoc VL (2017年10月16日). "寻找激活函数"。arXiv:1710.05941 [cs.NE]。
+\item Minsky M, Papert S (1969). 《感知器：计算几何学导论》。麻省理工学院出版社。ISBN 978-0-262-63022-1。
+\item Bozinovski S., Fulgosi A. (1976). "模式相似性与迁移学习对基础感知器训练的影响"（克罗地亚语原文）《信息学研讨会论文集》。3-121-5，布莱德。
+\item Bozinovski S. (2020). "回顾1976年关于神经网络迁移学习的第一篇论文"。《信息学》。44: 291–302。
+\item Fukushima K (1979). "一种不受位置偏移影响的模式识别机制的神经网络模型—Neocognitron"。《IECE转录》。J62-A (10): 658–665. doi:10.1007/bf00344251. PMID 7370364. S2CID 206775608。
+\item Fukushima K (1980). "Neocognitron: 一种自组织神经网络模型，用于不受位置偏移影响的模式识别机制"。《生物控制论》。36 (4): 193–202. doi:10.1007/bf00344251. PMID 7370364. S2CID 206775608。
+\item Schmidhuber J (2015). "神经网络中的深度学习概述"。《神经网络》。61: 85–117. arXiv:1404.7828. doi:10.1016/j.neunet.2014.09.003. PMID 25462637. S2CID 11715509.
+\item Leibniz GW (1920). 《莱布尼茨早期数学手稿：从卡尔·伊曼纽尔·格哈特出版的拉丁文文本翻译，并附有批判性和历史性注释》（莱布尼茨在1676年的论文中首次发布了链式法则）。开放法院出版社。ISBN 9780598818461。
+\item Kelley HJ (1960). "最优飞行路径的梯度理论"。《ARS期刊》。30 (10): 947–954. doi:10.2514/8.5282。
+\item Linnainmaa S (1970). 《算法的累积舍入误差表示为局部舍入误差的泰勒展开》（硕士论文）（芬兰语）。赫尔辛基大学。第6–7页。
+\item Linnainmaa S (1976). "累积舍入误差的泰勒展开"。《BIT 数值数学》。16 (2): 146–160. doi:10.1007/bf01931367. S2CID 122357351。
+\item Ostrovski, G.M., Volin, Y.M., and Boris, W.W. (1971). "关于导数的计算"。《技术化学高等学校科学杂志》。13: 382–384。
+\item Schmidhuber J (2014年10月25日). "谁发明了反向传播？"。《IDSIA》，瑞士。原文归档于2024年7月30日。检索日期：2024年9月14日。
+\item Werbos P (1982). "非线性灵敏度分析进展的应用"（PDF）。《系统建模与优化》。斯普林格出版社。第762–770页。原文PDF归档于2016年4月14日。检索日期：2017年7月2日。
+\item Anderson JA, Rosenfeld E, eds. (2000). 《Talking Nets: 神经网络的口述历史》。麻省理工学院出版社。doi:10.7551/mitpress/6626.003.0016. ISBN 978-0-262-26715-1。
+\item Werbos PJ (1994). 《反向传播的根源：从有序导数到神经网络与政治预测》。纽约：约翰·威立出版社。ISBN 0-471-59897-6。
+\item Rumelhart DE, Hinton GE, Williams RJ (1986年10月). "通过反向传播误差学习表征"。《自然》。323 (6088): 533–536. Bibcode:1986Natur.323..533R. doi:10.1038/323533a0. ISSN 1476-4687。
+\item Fukushima K, Miyake S (1982年1月1日). "Neocognitron: 一种新型的容忍变形和位置偏移的模式识别算法"。《模式识别》。15 (6): 455–469. Bibcode:1982PatRe..15..455F. doi:10.1016/0031-3203(82)90024-3. ISSN 0031-3203。
+\item Waibel A (1987年12月). "使用时延神经网络进行音素识别"（PDF）。《电子信息与通信工程学会会议》。东京，日本。
+\item Alexander Waibel 等人, "使用时延神经网络进行音素识别"，《IEEE声学、语音与信号处理汇刊》，第37卷，第3期，第328–339页，1989年3月。
+\item Zhang W (1988). "位移不变模式识别神经网络及其光学架构"。《日本应用物理学会年会论文集》。
+\item LeCun 等人, "反向传播应用于手写邮政编码识别"，《神经计算》，第1期，第541–551页，1989年。
+\item Zhang W (1990). "具有局部空间不变互联的并行分布处理模型及其光学架构"。《应用光学》。29 (32): 4790–7. Bibcode:1990ApOpt..29.4790Z. doi:10.1364/AO.29.004790. PMID 20577468。
+\item Zhang W (1991). "基于学习网络的人眼角膜内皮图像处理"。《应用光学》。30 (29): 4211–7. Bibcode:1991ApOpt..30.4211Z. doi:10.1364/AO.30.004211. PMID 20706526。
+\item Zhang W (1994). "使用位移不变人工神经网络在数字乳腺X光图像中计算聚集微钙化"。《医学物理》。21 (4): 517–24. Bibcode:1994MedPh..21..517Z. doi:10.1118/1.597177. PMID 8058017。
+\item LeCun Y, Léon Bottou, Yoshua Bengio, Patrick Haffner (1998). "基于梯度学习的文档识别"（PDF）。《IEEE会议论文集》。86 (11): 2278–2324. CiteSeerX 10.1.1.32.9552. doi:10.1109/5.726791. S2CID 14542261. 检索日期：2016年10月7日。
+\item Qian, Ning, 和 Terrence J. Sejnowski. "使用神经网络模型预测球状蛋白的二级结构。"《分子生物学杂志》, 第202卷，第4期（1988年）：865–884。
+\item Bohr, Henrik, Jakob Bohr, Søren Brunak, Rodney MJ Cotterill, Benny Lautrup, Leif Nørskov, Ole H. Olsen, 和 Steffen B. Petersen. "通过神经网络预测蛋白质二级结构及同源性：视紫红质中的α-螺旋"。《FEBS 快报》, 第241期（1988年）：223–228。
+\item Rost, Burkhard, 和 Chris Sander. "以超过70\%的准确度预测蛋白质二级结构。"《分子生物学杂志》, 第232卷，第2期（1993年）：584–599。
+\item Amari SI (1972年11月). "通过自组织网络学习模式和模式序列"。《IEEE计算机汇刊》。C-21 (11): 1197–1206. doi:10.1109/T-C.1972.223477. ISSN 0018-9340。
+\item Hopfield JJ (1982). "神经网络与具有突现集体计算能力的物理系统"。《美国科学院院刊》。79 (8): 2554–2558. Bibcode:1982PNAS...79.2554H. doi:10.1073/pnas.79.8.2554. PMC 346238. PMID 6953413。
+\item Espinosa-Sanchez JM, Gomez-Marin A, de Castro F (2023年7月5日). "Cajal 和 Lorente de Nó 神经科学对控制论诞生的重要性"。《神经科学家》。doi:10.1177/10738584231179932. hdl:10261/348372. ISSN 1073-8584. PMID 37403768。
+\item “reverberating circuit”。《牛津参考书》。检索日期：2024年7月27日。
+\item Bozinovski, S. (1982). "使用二次强化的自学习系统"。在 Trappl, Robert (编)，《控制论与系统研究：第六届欧洲控制论与系统研究会议论文集》。North-Holland出版社，第397–402页。ISBN 978-0-444-86488-8。
+\item Bozinovski S. (1995) "神经遗传体与自我强化学习系统的结构理论"。CMPSCI技术报告 95-107，马萨诸塞大学阿默斯特分校。
+\item R. Zajonc (1980) "感觉与思维：偏好无需推理"。《美国心理学家》，35 (2)：151-175。
+\item Lazarus R. (1982) "情感与认知关系的思考"，《美国心理学家》，37 (9)：1019-1024。
+\item Bozinovski, S. (2014) "自1981年以来在人工神经网络中建模认知-情感交互机制"，《计算机科学学报》，第255–263页 (https://core.ac.uk/download/pdf/81973924.pdf)。
+\item Schmidhuber J (1991年4月). "神经序列分块器"（PDF）。TR FKI-148，慕尼黑工业大学。
+\item Schmidhuber J (1992). "使用历史压缩原理学习复杂的扩展序列（基于TR FKI-148，1991）"（PDF）。《神经计算》。4 (2)：234–242。doi:10.1162/neco.1992.4.2.234。S2CID 18271205。
+\item Schmidhuber J (1993). Habilitation论文：系统建模与优化（PDF）。第150页及以后展示了在展开的RNN中跨越1200层的信用分配。
+\item S. Hochreiter. "动态神经网络的研究"，2015年3月6日存档于Wayback Machine，学位论文。慕尼黑工业大学计算机科学系。导师：J. Schmidhuber，1991年。
+\item Hochreiter S 等人 (2001年1月15日)。"循环网络中的梯度流：学习长期依赖性的困难"。在 Kolen JF, Kremer SC (编辑)。《动态递归网络的现场指南》。约翰·威利父子公司。ISBN 978-0-7803-5369-5。2017年6月26日检索。
+\item Sepp Hochreiter, Jürgen Schmidhuber (1995年8月21日)，《长短期记忆》，Wikidata Q98967430。
+\item Hochreiter S, Schmidhuber J (1997年11月1日)。“长短期记忆”。《神经计算》。9 (8)：1735–1780。doi:10.1162/neco.1997.9.8.1735。PMID 9377276。S2CID 1915014。
+\item Gers F, Schmidhuber J, Cummins F (1999)。"学习遗忘：使用LSTM进行持续预测"。第9届国际人工神经网络会议：ICANN '99。第1999卷，第850–855页。doi:10.1049/cp:19991218。ISBN 0-85296-721-7。
+\item Ackley DH, Hinton GE, Sejnowski TJ (1985年1月1日)。“玻尔兹曼机的学习算法”《认知科学》。9 (1)：147–169。doi:10.1016/S0364-0213(85)80012-4。ISSN 0364-0213。
+\item Smolensky P (1986)。“第6章：动态系统中的信息处理：和谐理论的基础” (PDF)。在 Rumelhart DE, McLelland JL (编辑)，《并行分布处理：认知微观结构的探索，第1卷：基础》。麻省理工学院出版社，第194–281页。ISBN 0-262-68053-X。
+\item Peter D, Hinton GE, Neal RM, Zemel RS (1995)。“赫尔姆霍兹机”。《神经计算》。7 (5)：889–904。doi:10.1162/neco.1995.7.5.889。hdl:21.11116/0000-0002-D6D3-E。PMID 7584891。S2CID 1890561。
+\item Hinton GE, Dayan P, Frey BJ, Neal R (1995年5月26日)。“无监督神经网络的wake-sleep算法”。《科学》。268 (5214)：1158–1161。Bibcode:1995Sci...268.1158H。doi:10.1126/science.7761831。PMID 7761831。S2CID 871473。
+\item 2012年 Kurzweil AI采访，2018年8月31日存档于Wayback Machine，采访了Juergen Schmidhuber，讨论了他的深度学习团队在2009-2012年间赢得的八个竞赛。
+\item "How bio-inspired deep learning keeps winning competitions | KurzweilAI"。kurzweilai.net。2018年8月31日存档。2017年6月16日检索。
+\item Cireşan DC, Meier U, Gambardella LM, Schmidhuber J (2010年9月21日)。“深度、大型、简单的神经网络用于手写数字识别”。《神经计算》。22 (12)：3207–3220。arXiv:1003.0358。doi:10.1162/neco_a_00052。ISSN 0899-7667。PMID 20858131。S2CID 1918673。
+\item Ciresan DC, Meier U, Masci J, Gambardella L, Schmidhuber J (2011)。"灵活的高性能卷积神经网络用于图像分类"（PDF）。国际人工智能联合会议。doi:10.5591/978-1-57735-516-8/ijcai11-210。2014年9月29日存档（PDF）。2017年6月13日检索。
+\item Ciresan D, Giusti A, Gambardella LM, Schmidhuber J (2012)。Pereira F, Burges CJ, Bottou L, Weinberger KQ（编）。《神经信息处理系统进展25》（PDF）。Curran Associates, Inc.第2843–2851页。2017年8月9日存档（PDF）。2017年6月13日检索。
+\item Ciresan D, Giusti A, Gambardella L, Schmidhuber J (2013)。"利用深度神经网络在乳腺癌组织学图像中检测有丝分裂"。医学图像计算与计算机辅助干预–MICCAI 2013。Lecture Notes in Computer Science。第7908卷，第411–418页。doi:10.1007/978-3-642-40763-5_51。ISBN 978-3-642-38708-1。PMID 24579167。
+\item Ciresan D, Meier U, Schmidhuber J (2012)。"用于图像分类的多列深度神经网络"。2012 IEEE计算机视觉与模式识别会议。第3642–3649页。arXiv:1202.2745。doi:10.1109/cvpr.2012.6248110。ISBN 978-1-4673-1228-8。S2CID 2161592。
+\item Krizhevsky A, Sutskever I, Hinton G (2012)。"使用深度卷积神经网络进行ImageNet分类"（PDF）。NIPS 2012：神经信息处理系统，内华达州塔霍湖。2017年1月10日存档（PDF）。2017年5月24日检索。
+\item Simonyan K, Andrew Z (2014)。"用于大规模图像识别的非常深的卷积网络"。arXiv:1409.1556 [cs.CV]。
+\item Szegedy C (2015). "Going deeper with convolutions" (PDF). Cvpr2015. arXiv:1409.4842.
+\item Ng A, Dean J (2012). "Building High-level Features Using Large Scale Unsupervised Learning". arXiv:1112.6209 [cs.LG].
+\item Billings SA (2013). 非线性系统辨识：时间、频率和时空域中的NARMAX方法。Wiley。ISBN 978-1-119-94359-4。
+\item Goodfellow I, Pouget-Abadie J, Mirza M, Xu B, Warde-Farley D, Ozair S, 等 (2014). 生成对抗网络（PDF）。《神经信息处理系统国际会议论文集》（NIPS 2014）。第2672–2680页。2019年11月22日存档（PDF）。2019年8月20日检索。
+\item Schmidhuber J (1991). "在模型构建神经控制器中实现好奇心和厌倦感的可能性"。《SAB'1991会议论文集》。MIT Press/Bradford Books。第222–227页。
+\item Schmidhuber J (2020). "生成对抗网络是人工好奇心（1990）的特例，并且与可预测性最小化（1991）紧密相关"。《神经网络》。127：58–66。arXiv:1906.04493。doi:10.1016/j.neunet.2020.04.008。PMID 32334341。S2CID 216056336。
+\item "GAN 2.0: NVIDIA的超现实人脸生成器"。SyncedReview.com。2018年12月14日。2019年10月3日检索。
+\item Karras T, Aila T, Laine S, Lehtinen J (2018年2月26日)。"GAN的渐进式增长：改善质量、稳定性和变化"。arXiv:1710.10196 [cs.NE]。
+\item "准备好，不要惊慌：合成媒体与深度伪造"。witness.org。2020年12月2日存档。2020年11月25日检索。
+\item Sohl-Dickstein J, Weiss E, Maheswaranathan N, Ganguli S (2015年6月1日)。"使用非平衡热力学进行深度无监督学习"（PDF）。第32届国际机器学习会议论文集。37。PMLR：2256–2265。arXiv:1503.03585。
+\item Simonyan K, Zisserman A (2015年4月10日)。"用于大规模图像识别的非常深的卷积网络"。arXiv:1409.1556。
+\item He K, Zhang X, Ren S, Sun J (2016). "深入探讨整流器：在ImageNet分类中超越人类级表现"。arXiv:1502.01852 [cs.CV]。
+\item He K, Zhang X, Ren S, Sun J (2015年12月10日)。"深度残差学习用于图像识别"。arXiv:1512.03385。
+\item Srivastava RK, Greff K, Schmidhuber J (2015年5月2日)。“高速公路网络”。arXiv:1505.00387 [cs.LG]。
+\item He K, Zhang X, Ren S, Sun J (2016). "深度残差学习用于图像识别"。2016 IEEE计算机视觉与模式识别会议（CVPR）。拉斯维加斯，NV，美国：IEEE。第770–778页。arXiv:1512.03385。doi:10.1109/CVPR.2016.90。ISBN 978-1-4673-8851-1。
+\item Linn A (2015年12月10日)。“微软研究人员赢得ImageNet计算机视觉挑战”。《AI博客》。2024年6月29日检索。
+\item Vaswani A, Shazeer N, Parmar N, Uszkoreit J, Jones L, Gomez AN, 等 (2017年6月12日)。“注意力是你所需要的一切”。arXiv:1706.03762 [cs.CL]。
+\item Schmidhuber J (1992)。"学习控制快速权重记忆：递归网络的替代方案"（PDF）。《神经计算》。4 (1)：131–139。doi:10.1162/neco.1992.4.1.131。S2CID 16683347。
+\item Katharopoulos A, Vyas A, Pappas N, Fleuret F (2020)。"变压器是RNN：具有线性注意力的快速自回归变压器"。ICML 2020。PMLR。第5156–5165页。
+\item Schlag I, Irie K, Schmidhuber J (2021)。"线性变压器实际上是快速权重编程器"。ICML 2021。Springer。第9355–9366页。
+\item Wolf T, Debut L, Sanh V, Chaumond J, Delangue C, Moi A, 等 (2020)。"变压器：最先进的自然语言处理"。《2020年自然语言处理经验方法会议：系统演示论文集》。第38–45页。doi:10.18653/v1/2020.emnlp-demos.6。S2CID 208117506。
+\item Zell A (2003)。"第5.2章"。《神经网络仿真》（德文版）（第1版）。Addison-Wesley。ISBN 978-3-89319-554-1。OCLC 249017987。
+\item 《人工智能》（第3版）。Addison-Wesley出版公司。1992年。ISBN 0-201-53377-4。
+\item Abbod MF (2007)。"人工智能在泌尿系统癌症管理中的应用"。《泌尿学杂志》。178 (4)：1150–1156。doi:10.1016/j.juro.2007.05.122。PMID 17698099。
+\item Dawson CW (1998)。"人工神经网络方法用于降水-径流建模"。《水文科学杂志》。43 (1)：47–66。Bibcode:1998HydSJ..43...47D。doi:10.1080/02626669809492102。
+\item 《机器学习词典》cse.unsw.edu.au。2018年8月26日存档。2009年11月4日检索。
+\item Ciresan D, Ueli Meier, Jonathan Masci, Luca M. Gambardella, Jurgen Schmidhuber (2011)。"灵活的高性能卷积神经网络用于图像分类"（PDF）。《第22届国际人工智能联合会议论文集—第二卷》。2：1237–1242。2022年4月5日存档（PDF）。2022年7月7日检索。
+\item Zell A (1994)。《神经网络仿真》（德文版）（第1版）。Addison-Wesley。第73页。ISBN 3-89319-554-8。
+\item Miljanovic M (2012年2月至3月)。"递归神经网络与有限脉冲响应神经网络在时间序列预测中的比较分析"（PDF）。《印度计算机与工程杂志》。3 (1)。2024年5月19日存档（PDF）。2019年8月21日检索。
+\item Kelleher JD, Mac Namee B, D'Arcy A (2020)。"7-8"。《预测数据分析的机器学习基础：算法、实例与案例研究》（第2版）。剑桥，马萨诸塞：MIT出版社。ISBN 978-0-262-36110-1。OCLC 1162184998。
+\item Wei J (2019年4月26日)。"忘记学习率，衰减损失"。arXiv:1905.00094 [cs.LG]。
+\item Li Y, Fu Y, Li H, Zhang SW (2009年6月1日)。"具有自适应学习率的反向传播神经网络改进训练算法"。2009年国际计算智能与自然计算大会。第1卷。第73–76页。doi:10.1109/CINC.2009.111。ISBN 978-0-7695-3645-3。S2CID 10557754。
+\item Huang GB, Zhu QY, Siew CK (2006)。"极限学习机：理论与应用"。《神经计算》。70 (1)：489–501。CiteSeerX 10.1.1.217.3692。doi:10.1016/j.neucom.2005.12.126。S2CID 116858。
+\item Widrow B, 等（2013）。"无传播算法：一种新的多层神经网络学习算法"。《神经网络》。37：182–188。doi:10.1016/j.neunet.2012.09.020。PMID 23140797。
+\item Ollivier Y, Charpiat G (2015)。"无需回溯训练递归网络"。arXiv:1507.07680 [cs.NE]。
+\item Hinton GE (2010)。"限制玻尔兹曼机训练实用指南"。技术报告UTML TR 2010-003。2021年5月9日存档。2017年6月27日检索。
+\item ESANN。2009年。[完整引用待定]
+\item Bernard E (2021)。《机器学习导论》。香槟：Wolfram Media。第9页。ISBN 978-1-57955-048-6。2024年5月19日存档。2023年3月22日检索。
+\item Bernard E (2021)。《机器学习导论》。香槟：Wolfram Media。第12页。ISBN 978-1-57955-048-6。2024年5月19日存档。2023年3月22日检索。
+\item Bernard E (2021)。《机器学习导论》。Wolfram Media Inc. 第9页。ISBN 978-1-57955-048-6。2024年5月19日存档。2022年7月28日检索。
+\item Ojha VK, Abraham A, Snášel V (2017年4月1日)。"前馈神经网络的元启发式设计：二十年研究回顾"。《人工智能工程应用》。60：97–116。arXiv:1705.05584。Bibcode:2017arXiv170505584O。doi:10.1016/j.engappai.2017.01.013。S2CID 27910748。
+\item Dominic, S., Das, R., Whitley, D., Anderson, C. (1991年7月)。“神经网络的遗传强化学习”。IJCNN-91-西雅图国际神经网络联合会议。IJCNN-91-西雅图国际神经网络联合会议。美国华盛顿州西雅图：IEEE。第71–76页。doi:10.1109/IJCNN.1991.155315。ISBN 0-7803-0164-1。
+\item Hoskins J, Himmelblau, D.M. (1992)。"通过人工神经网络和强化学习进行过程控制"。《计算机与化学工程》。16 (4)：241–251。doi:10.1016/0098-1354(92)80045-B。
+\item Bertsekas D, Tsitsiklis J (1996)。《神经动态规划》。Athena科学出版社。第512页。ISBN 978-1-886529-10-6。2021年6月29日存档。2017年6月17日检索。
+\item Secomandi N (2000)。"比较神经动态规划算法在具有随机需求的车辆调度问题中的应用"。《计算机与运筹学研究》。27 (11–12)：1201–1225。CiteSeerX 10.1.1.392.4034。doi:10.1016/S0305-0548(99)00146-X。
+\item de Rigo, D., Rizzoli, A. E., Soncini-Sessa, R., Weber, E., Zenesi, P. (2001)。"用于有效管理水库网络的神经动态规划"。《MODSIM 2001会议论文集：国际建模与仿真大会》。MODSIM 2001，国际建模与仿真大会。澳大利亚堪培拉：澳大利亚与新西兰建模与仿真学会。doi:10.5281/zenodo.7481。ISBN 0-86740-525-2。2013年8月7日存档。2013年7月29日检索。
+\item Damas, M., Salmeron, M., Diaz, A., Ortega, J., Prieto, A., Olivares, G. (2000)。"遗传算法与神经动态规划：应用于供水网络"。《2000年进化计算大会论文集》。2000年进化计算大会。第1卷。美国加利福尼亚州La Jolla：IEEE。第7–14页。doi:10.1109/CEC.2000.870269。ISBN 0-7803-6375-2。
+\item Deng G, Ferris, M.C. (2008)。"用于分段放射治疗规划的神经动态规划"。《医学优化》。斯普林格优化及其应用。第12卷。第47–70页。CiteSeerX 10.1.1.137.8288。doi:10.1007/978-0-387-73299-2_3。ISBN 978-0-387-73298-5。
+\item Bozinovski, S. (1982)。"使用次级强化学习的自学习系统"。在R. Trappl（编）《控制论与系统研究：第六届欧洲控制论与系统研究会议论文集》中。北荷兰出版社。第397–402页。ISBN 978-0-444-86488-8。
+\item Bozinovski, S. (2014)。“自1981年以来在人工神经网络中建模认知与情感交互机制，存档于2019年3月23日。”《计算机科学学报》255-263页。
+\item Bozinovski S, Bozinovska L (2001)。"自学习代理：基于交叉条值判断的情感联结主义理论"。《控制论与系统》。32 (6)：637–667。doi:10.1080/01969720118145。S2CID 8944741。
+\item Salimans T, Ho J, Chen X, Sidor S, Sutskever I (2017年9月7日)。"进化策略作为强化学习的可扩展替代方案"。arXiv:1703.03864 [stat.ML]。
+\item Such FP, Madhavan V, Conti E, Lehman J, Stanley KO, Clune J (2018年4月20日)。"深度神经进化：遗传算法是训练深度神经网络进行强化学习的有竞争力替代方案"。arXiv:1712.06567 [cs.NE]。
+\item "人工智能可以‘进化’解决问题"。《科学 | AAAS》。2018年1月10日。2021年12月9日存档。2018年2月7日检索。
+\item Turchetti C (2004)。《神经网络的随机模型》，《人工智能前沿与应用：基于知识的智能工程系统》，第102卷，IOS出版社，ISBN 978-1-58603-388-0。
+\item Jospin LV, Laga H, Boussaid F, Buntine W, Bennamoun M (2022)。"实践指南：贝叶斯神经网络教程——深度学习用户的学习手册"。《IEEE计算智能杂志》。第17卷，第2期。第29–48页。arXiv:2007.06823。doi:10.1109/mci.2022.3155327。ISSN 1556-603X。S2CID 220514248。
+\item de Rigo, D., Castelletti, A., Rizzoli, A. E., Soncini-Sessa, R., Weber, E. (2005年1月)。"一种选择性改进技术，用于加快水资源网络管理中的神经动态规划"。在Pavel Zítek（编）《第16届IFAC世界大会论文集 – IFAC-PapersOnLine》中的论文。第16届IFAC世界大会。第16卷。捷克布拉格：IFAC。第7–12页。doi:10.3182/20050703-6-CZ-1902.02172。hdl:11311/255236。ISBN 978-3-902661-75-3。2012年4月26日存档。2011年12月30日检索。
+\item Ferreira C (2006)。"使用基因表达编程设计神经网络"。在A. Abraham, B. de Baets, M. Köppen, B. Nickolay（编）《应用软计算技术：复杂性的挑战》（PDF）中。Springer-Verlag出版社，第517–536页。2013年12月19日存档。2012年10月8日检索。
+\item Da, Y., Xiurun, G. (2005年7月)。"基于粒子群优化技术与模拟退火的改进PSO-ANN"。在T. Villmann（编）《神经计算的新视角：第11届欧洲人工神经网络研讨会》中。第63卷。Elsevier出版社，第527–533页。doi:10.1016/j.neucom.2004.07.002。2012年4月25日存档。2011年12月30日检索。
+\item Wu, J., Chen, E. (2009年5月)。"基于粒子群优化技术与人工神经网络的降水预测的新型非参数回归集成方法"。在Wang, H., Shen, Y., Huang, T., Zeng, Z.（编）《第6届国际神经网络研讨会ISNN 2009》中的论文。Lecture Notes in Computer Science。第5553卷。Springer出版社，第49–58页。doi:10.1007/978-3-642-01513-7_6。ISBN 978-3-642-01215-0。2014年12月31日存档。2012年1月1日检索。
+\item Ting Qin, Zonghai Chen, Haitao Zhang, Sifu Li, Wei Xiang, Ming Li (2004)。"基于RLS的CMAC学习算法"（PDF）。《神经处理通讯》。19 (1)：49–61。doi:10.1023/B:NEPL.0000016847.18175.60。S2CID 6233899。2021年4月14日存档（PDF）。2019年1月30日检索。
+\item Ting Qin, Haitao Zhang, Zonghai Chen, Wei Xiang (2005)。"连续CMAC-QRLS及其系统阵列"（PDF）。《神经处理通讯》。22 (1)：1–16。doi:10.1007/s11063-004-2694-0。S2CID 16095286。2018年11月18日存档（PDF）。2019年1月30日检索。
+\item LeCun Y, Boser B, Denker JS, Henderson D, Howard RE, Hubbard W, et al. (1989)。"反向传播应用于手写邮政编码识别"。《神经计算》。1 (4)：541–551。doi:10.1162/neco.1989.1.4.541。S2CID 41312633。
+\item Yann LeCun (2016)。"深度学习在线幻灯片"，2016年4月23日存档于Wayback Machine。
+\item Hochreiter S, Schmidhuber J (1997年11月1日)。"长短时记忆"。《神经计算》。9 (8)：1735–1780。doi:10.1162/neco.1997.9.8.1735。ISSN 0899-7667。PMID 9377276。S2CID 1915014。
+\item Sak H, Senior A, Beaufays F (2014)。"用于大规模声学建模的长短时记忆递归神经网络架构"（PDF）。2018年4月24日存档。
+\item Li X, Wu X (2014年10月15日)。"构建基于长短时记忆的深度递归神经网络用于大词汇量语音识别"。arXiv:1410.4281 [cs.CL]。
+\item Fan Y, Qian Y, Xie F, Soong FK (2014)。"基于双向LSTM的递归神经网络的TTS合成"。《国际语音通信协会年会论文集，Interspeech》：1964–1968。2017年6月13日检索。
+\item Schmidhuber J (2015)。"深度学习"。《学者百科全书》。10 (11)：85–117。Bibcode:2015SchpJ..1032832S。doi:10.4249/scholarpedia.32832。
+\item Zen H, Sak H (2015)。"单向长短时记忆递归神经网络与递归输出层用于低延迟语音合成"（PDF）。Google.com。ICASSP。第4470–4474页。2021年5月9日存档（PDF）。2017年6月27日检索。
+\item Bozinovski S, Bozinovska L (2001)。"自学习代理：基于交叉条值判断的情感联结主义理论"。《控制论与系统》。32 (6)：637–667。doi:10.1080/01969720118145。S2CID 8944741。
+\item Salimans T, Ho J, Chen X, Sidor S, Sutskever I (2017年9月7日)。"进化策略作为强化学习的可扩展替代方案"。arXiv:1703.03864 [stat.ML]。
+\item Such FP, Madhavan V, Conti E, Lehman J, Stanley KO, Clune J (2018年4月20日)。"深度神经进化：遗传算法是训练深度神经网络进行强化学习的有竞争力替代方案"。arXiv:1712.06567 [cs.NE]。
+\item "人工智能可以‘进化’解决问题"。《科学 | AAAS》。2018年1月10日。2021年12月9日存档。2018年2月7日检索。
+\item Turchetti C (2004)。《神经网络的随机模型》，《人工智能前沿与应用：基于知识的智能工程系统》，第102卷，IOS出版社，ISBN 978-1-58603-388-0。
+\item Jospin LV, Laga H, Boussaid F, Buntine W, Bennamoun M (2022)。"实践指南：贝叶斯神经网络教程——深度学习用户的学习手册"。《IEEE计算智能杂志》。第17卷，第2期。第29–48页。arXiv:2007.06823。doi:10.1109/mci.2022.3155327。ISSN 1556-603X。S2CID 220514248。
+\item de Rigo, D., Castelletti, A., Rizzoli, A. E., Soncini-Sessa, R., Weber, E. (2005年1月)。"一种选择性改进技术，用于加快水资源网络管理中的神经动态规划"。在Pavel Zítek（编）《第16届IFAC世界大会论文集 – IFAC-PapersOnLine》中的论文。第16届IFAC世界大会。第16卷。捷克布拉格：IFAC。第7–12页。doi:10.3182/20050703-6-CZ-1902.02172。hdl:11311/255236。ISBN 978-3-902661-75-3。2012年4月26日存档。2011年12月30日检索。
+\item Ferreira C (2006)。"使用基因表达编程设计神经网络"。在A. Abraham, B. de Baets, M. Köppen, B. Nickolay（编）《应用软计算技术：复杂性的挑战》（PDF）中。Springer-Verlag出版社，第517–536页。2013年12月19日存档。2012年10月8日检索。
+\item Da, Y., Xiurun, G. (2005年7月)。"基于粒子群优化技术与模拟退火的改进PSO-ANN"。在T. Villmann（编）《神经计算的新视角：第11届欧洲人工神经网络研讨会》中。第63卷。Elsevier出版社，第527–533页。doi:10.1016/j.neucom.2004.07.002。2012年4月25日存档。2011年12月30日检索。
+\item Wu, J., Chen, E. (2009年5月)。"基于粒子群优化技术与人工神经网络的降水预测的新型非参数回归集成方法"。在Wang, H., Shen, Y., Huang, T., Zeng, Z.（编）《第6届国际神经网络研讨会ISNN 2009》中的论文。Lecture Notes in Computer Science。第5553卷。Springer出版社，第49–58页。doi:10.1007/978-3-642-01513-7_6。ISBN 978-3-642-01215-0。2014年12月31日存档。2012年1月1日检索。
+\item Ting Qin, Zonghai Chen, Haitao Zhang, Sifu Li, Wei Xiang, Ming Li (2004)。"基于RLS的CMAC学习算法"（PDF）。《神经处理通讯》。19 (1)：49–61。doi:10.1023/B:NEPL.0000016847.18175.60。S2CID 6233899。2021年4月14日存档（PDF）。2019年1月30日检索。
+\item Ting Qin, Haitao Zhang, Zonghai Chen, Wei Xiang (2005)。"连续CMAC-QRLS及其系统阵列"（PDF）。《神经处理通讯》。22 (1)：1–16。doi:10.1007/s11063-004-2694-0。S2CID 16095286。2018年11月18日存档（PDF）。2019年1月30日检索。
+\item LeCun Y, Boser B, Denker JS, Henderson D, Howard RE, Hubbard W, et al. (1989)。"反向传播应用于手写邮政编码识别"。《神经计算》。1 (4)：541–551。doi:10.1162/neco.1989.1.4.541。S2CID 41312633。
+\item Yann LeCun (2016)。"深度学习在线幻灯片"，2016年4月23日存档于Wayback Machine。
+\item Hochreiter S, Schmidhuber J (1997年11月1日)。"长短时记忆"。《神经计算》。9 (8)：1735–1780。doi:10.1162/neco.1997.9.8.1735。ISSN 0899-7667。PMID 9377276。S2CID 1915014。
+\item Sak H, Senior A, Beaufays F (2014)。"用于大规模声学建模的长短时记忆递归神经网络架构"（PDF）。2018年4月24日存档。
+\item Li X, Wu X (2014年10月15日)。"构建基于长短时记忆的深度递归神经网络用于大词汇量语音识别"。arXiv:1410.4281 [cs.CL]。
+\item Fan Y, Qian Y, Xie F, Soong FK (2014)。"基于双向LSTM的递归神经网络的TTS合成"。《国际语音通信协会年会论文集，Interspeech》：1964–1968。2017年6月13日检索。
+\item Schmidhuber J (2015)。"深度学习"。《学者百科全书》。10 (11)：85–117。Bibcode:2015SchpJ..1032832S。doi:10.4249/scholarpedia.32832。
+\item Zen H, Sak H (2015)。"单向长短时记忆递归神经网络与递归输出层用于低延迟语音合成"（PDF）。Google.com。ICASSP。第4470–4474页。2021年5月9日存档（PDF）。2017年6月27日检索。
+\item Pasick A (2023年3月27日)。"人工智能词汇表：神经网络和其他术语解析"。《纽约时报》。ISSN 0362-4331。2023年9月1日存档。2023年4月22日检索。
+\item Schechner S (2017年6月15日)。"Facebook加强人工智能技术以封锁恐怖分子宣传"。《华尔街日报》。ISSN 0099-9660。2024年5月19日存档。2017年6月16日检索。
+\item Ciaramella A, Ciaramella M (2024)。《人工智能导论：从数据分析到生成式AI》。Intellisemantic出版社。ISBN 978-8-8947-8760-3。
+\item Ganesan N (2010)。"神经网络在使用人口数据诊断癌症中的应用"。《国际计算机应用杂志》。1 (26)：81–97。Bibcode:2010IJCA....1z..81G。doi:10.5120/476-783。
+\item Bottaci L (1997)。"应用人工神经网络预测结直肠癌患者在不同机构中的预后"（PDF）。《柳叶刀》。350 (9076)。柳叶刀：469–472。doi:10.1016/S0140-6736(96)11196-X。PMID 9274582。S2CID 18182063。2018年11月23日存档（PDF）。2012年5月2日检索。
+\item Alizadeh E, Lyons SM, Castle JM, Prasad A (2016)。"使用Zernike矩测量侵袭性癌细胞形状的系统变化"。《综合生物学》。8 (11)：1183–1193。doi:10.1039/C6IB00100A。PMID 27735002。2024年5月19日存档。2017年3月28日检索。
+\item Lyons S (2016)。"细胞形状变化与小鼠转移潜力的相关性"。《生物学开放》。5 (3)：289–299。doi:10.1242/bio.013409。PMC 4810736。PMID 26873952。
+\item Nabian MA, Meidani H (2017年8月28日)。"深度学习在基础设施网络可靠性分析加速中的应用"。《计算机辅助土木与基础设施工程》。33 (6)：443–458。arXiv:1708.08551。Bibcode:2017arXiv170808551N。doi:10.1111/mice.12359。S2CID 36661983。
+\item Nabian MA, Meidani H (2018)。"通过基于机器学习的代理加速地震后交通网络连通性的随机评估"。《交通研究委员会第97届年会》。2018年3月9日存档。2018年3月14日检索。
+\item Díaz E, Brotons V, Tomás R (2018年9月)。"利用人工神经网络预测斜坡岩床上基础的三维弹性沉降"。《土壤与基础》。58 (6)：1414–1422。Bibcode:2018SoFou..58.1414D。doi:10.1016/j.sandf.2018.08.001。hdl:10045/81208。ISSN 0038-0806。
+\item Tayebiyan A, Mohammad TA, Ghazali AH, Mashohor S. "基于人工神经网络的降雨径流建模"。《Pertanika科学与技术期刊》。24 (2)：319–330。2023年5月17日存档。2023年5月17日检索。
+\item Govindaraju RS (2000年4月1日)。"水文学中的人工神经网络 I：初步概念"。《水文工程学杂志》。5 (2)：115–123。doi:10.1061/(ASCE)1084-0699(2000)5:2(115)。
+\item Govindaraju RS (2000年4月1日)。"水文学中的人工神经网络 II：水文学应用"。《水文工程学杂志》。5 (2)：124–137。doi:10.1061/(ASCE)1084-0699(2000)5:2(124)。
+\item Peres DJ, Iuppa C, Cavallaro L, Cancelliere A, Foti E (2015年10月1日)。"通过神经网络和重分析风数据扩展显著波高记录"。《海洋建模》。94：128–140。Bibcode:2015OcMod..94..128P。doi:10.1016/j.ocemod.2015.08.002。
+\item Dwarakish GS, Rakshith S, Natesan U (2013)。"神经网络在海岸工程中的应用综述"。《人工智能系统与机器学习》。5 (7)：324–331。2017年8月15日存档。2017年7月5日检索。
+\item Ermini L, Catani F, Casagli N (2005年3月1日)。"应用人工神经网络进行滑坡易发性评估"。《地貌学》。山区环境中的地貌灾害与人类影响。66 (1)：327–343。Bibcode:2005Geomo..66..327E。doi:10.1016/j.geomorph.2004.09.025。
+\item Nix R, Zhang J (2017年5月)。"使用深度神经网络对Android应用程序和恶意软件进行分类"。2017年国际联合神经网络会议（IJCNN）。第1871–1878页。doi:10.1109/IJCNN.2017.7966078。ISBN 978-1-5090-6182-2。S2CID 8838479。
+\item "检测恶意网址"。加州大学圣地亚哥分校系统与网络组。2019年7月14日存档。2019年2月15日检索。
+\item Homayoun S, Ahmadzadeh M, Hashemi S, Dehghantanha A, Khayami R (2018)，Dehghantanha A, Conti M, Dargahi T（编），"BoTShark：一种深度学习方法用于检测僵尸网络流量"，《网络威胁情报》，《信息安全进展》，第70卷，Springer国际出版，第137–153页，doi:10.1007/978-3-319-73951-9_7，ISBN 978-3-319-73951-9
+\item Ghosh, Reilly (1994年1月)。"信用卡欺诈检测与神经网络"。《第二十七届夏威夷国际系统科学会议HICSS-94》。第3卷，第621–630页。doi:10.1109/HICSS.1994.323314。ISBN 978-0-8186-5090-1。S2CID 13260377。
+\item Ananthaswamy A (2021年4月19日)。"最新的神经网络比以往更快地解决世界上最难的方程式"。《量子杂志》。2024年5月19日存档。2021年5月12日检索。
+\item "人工智能破解了理解我们世界的关键数学难题"。《MIT技术评论》。2024年5月19日存档。2020年11月19日检索。
+\item "加州理工学院开源用于求解偏微分方程的人工智能"。《InfoQ》。2021年1月25日存档。2021年1月20日检索。
+\item Nagy A (2019年6月28日)。"具有神经网络假设的变分量子蒙特卡洛方法用于开放量子系统"。《物理评论快报》。122 (25)：250501。arXiv:1902.09483。Bibcode:2019PhRvL.122y0501N。doi:10.1103/PhysRevLett.122.250501。PMID 31347886。S2CID 119074378。
+\item Yoshioka N, Hamazaki R (2019年6月28日)。"为开放量子多体系统构建神经站态"。《物理评论B》。99 (21)：214306。arXiv:1902.07006。Bibcode:2019PhRvB..99u4306Y。doi:10.1103/PhysRevB.99.214306。S2CID 119470636。
+\item Hartmann MJ, Carleo G (2019年6月28日)。"神经网络方法用于耗散量子多体动力学"。《物理评论快报》。122 (25)：250502。arXiv:1902.05131。Bibcode:2019PhRvL.122y0502H。doi:10.1103/PhysRevLett.122.250502。PMID 31347862。S2CID 119357494。
+\item Vicentini F, Biella A, Regnault N, Ciuti C (2019年6月28日)。"用于开放量子系统稳态的变分神经网络假设"。《物理评论快报》。122 (25)：250503。arXiv:1902.10104。Bibcode:2019PhRvL.122y0503V。doi:10.1103/PhysRevLett.122.250503。PMID 31347877。S2CID 119504484。
+\item Forrest MD (2015年4月)。"基于详细的Purkinje神经元模型和一个运行速度超过400倍更快的简化代理模型的酒精作用模拟"。《BMC神经科学》。16 (27)：27。doi:10.1186/s12868-015-0162-6。PMC 4417229。PMID 25928094。
+\item Wieczorek S, Filipiak D, Filipowska A (2018)。"基于神经网络的用户兴趣语义图像分析"。《语义网络研究》。36（语义技术的前沿话题）。doi:10.3233/978-1-61499-894-5-179。2024年5月19日存档。2024年1月20日检索。
+\item Merchant A, Batzner S, Schoenholz SS, Aykol M, Cheon G, Cubuk ED (2023年12月)。"大规模深度学习用于材料发现"。《自然》。624 (7990)：80–85。Bibcode:2023Natur.624...80M。doi:10.1038/s41586-023-06735-9。ISSN 1476-4687。PMC 10700131。PMID 38030720。
+\item Siegelmann H, Sontag E (1991)。"神经网络中的图灵可计算性"（PDF）。《应用数学快报》。4 (6)：77–80。doi:10.1016/0893-9659(91)90080-F。2024年5月19日存档。2017年1月10日检索。
+\item Bains S (1998年11月3日)。"模拟计算机超越图灵模型"。《EE Times》。2023年5月11日存档。2023年5月11日检索。
+\item Balcázar J (1997年7月)。"神经网络的计算能力：Kolmogorov复杂度表征"。《IEEE信息理论汇刊》。43 (4)：1175–1183。CiteSeerX 10.1.1.411.7782。doi:10.1109/18.605580。
+\item MacKay DJ (2003)。《信息理论、推断与学习算法》 (PDF)。剑桥大学出版社。ISBN 978-0-521-64298-9。2016年10月19日存档 (PDF)。2016年6月11日检索。
+\item Cover T (1965)。"线性不等式系统的几何和统计特性及其在模式识别中的应用"（PDF）。《IEEE电子计算机汇刊》。EC-14 (3)。IEEE：326–334。doi:10.1109/PGEC.1965.264137。2016年3月5日存档 (PDF)。2020年3月10日检索。
+\item Gerald F (2019)。"音频和多媒体数据机器学习的可重复性与实验设计"。《第27届ACM国际多媒体会议论文集》。ACM。第2709–2710页。doi:10.1145/3343031.3350545。ISBN 978-1-4503-6889-6。S2CID 204837170。
+\item "停止摆弄，开始测量！神经网络实验的可预测实验设计"。《Tensorflow Meter》。2022年4月18日存档。2020年3月10日检索。
+\item Lee J, Xiao L, Schoenholz SS, Bahri Y, Novak R, Sohl-Dickstein J, 等人 (2020)。"任何深度的宽神经网络在梯度下降下演化为线性模型"。《统计力学杂志：理论与实验》。2020 (12)：124002。arXiv:1902.06720。Bibcode:2020JSMTE2020l4002L。doi:10.1088/1742-5468/abc62b。S2CID 62841516。
+\item Arthur Jacot, Franck Gabriel, Clement Hongler (2018)。《神经切线核：神经网络中的收敛性与泛化》 (PDF)。第32届神经信息处理系统会议（NeurIPS 2018），蒙特利尔，加拿大。2022年6月22日存档 (PDF)。2022年6月4日检索。
+\item Xu ZJ, Zhang Y, Xiao Y (2019)。"深度神经网络在频域中的训练行为"。在Gedeon T, Wong K, Lee M（编）《神经信息处理》一书中。计算机科学讲义笔记。第11953卷。Springer，Cham。第264–274页。arXiv:1807.01251。doi:10.1007/978-3-030-36708-4_22。ISBN 978-3-030-36707-7。S2CID 49562099。
+\item Nasim Rahaman, Aristide Baratin, Devansh Arpit, Felix Draxler, Min Lin, Fred Hamprecht, 等人 (2019)。"神经网络的频谱偏差"（PDF）。《第36届国际机器学习会议论文集》。97：5301–5310。arXiv:1806.08734。2022年10月22日存档 (PDF)。2022年6月4日检索。
+\item Zhi-Qin John Xu, Yaoyu Zhang, Tao Luo, Yanyang Xiao, Zheng Ma (2020)。"频率原理：傅里叶分析揭示深度神经网络"。《计算物理通讯》。28 (5)：1746–1767。arXiv:1901.06523。Bibcode:2020CCoPh..28.1746X。doi:10.4208/cicp.OA-2020-0085。S2CID 58981616。
+\item Tao Luo, Zheng Ma, Zhi-Qin John Xu, Yaoyu Zhang (2019)。"一般深度神经网络的频率原理理论"。arXiv:1906.09235 [cs.LG]。
+\item Xu ZJ, Zhou H (2021年5月18日)。"深度频率原理：理解为什么更深的学习更快"。《AAAI人工智能会议论文集》。35 (12)：10541–10550。arXiv:2007.14313。doi:10.1609/aaai.v35i12.17261。ISSN 2374-3468。S2CID 220831156。2021年10月5日存档。2021年10月5日检索。
+\item Parisi GI, Kemker R, Part JL, Kanan C, Wermter S (2019
+\end{enumerate}

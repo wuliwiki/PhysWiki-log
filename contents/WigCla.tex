@@ -1,0 +1,196 @@
+% 粒子的小群分类（量子场论）
+% keys 小群分类
+% license Usr
+% type Tutor
+
+\begin{issues}
+\issueMissDepend
+\end{issues}
+
+\subsection{庞加莱群}
+庞加莱群是一个极大的对称性。具体的，将一个粒子 Lorentz 变换后平移，即：
+\begin{equation}
+	x^\mu \rightarrow (x')^\mu = \Lambda_{\nu}^\mu x^\nu + a^\mu ~.
+\end{equation}
+也可以理解为整体是一个\textbf{\textbf{非齐次 Lorentz 变换}}。其中 $\Lambda_{\nu}^\mu$ 是齐次部分，平移 $a^\mu$ 造成非齐次。熟知的，要求 $\Lambda_{\nu}^\mu$ 保度规，即：
+\begin{equation}
+	\Lambda_{\sigma}^\mu \Lambda_{\rho}^\nu \eta^{\sigma \rho} = \eta^{\mu \nu} ~.
+\end{equation}
+对于 $\Lambda$ 对应的 Lorentz 变换构成 Lorentz 群。保度规直接要求 $\det \Lambda = \pm 1$，同时再根据 $\Lambda^0_0$ 的符号可以对\textbf{\textbf{Lorentz 群}}进行分类（并不是庞加莱群）。
+
+\subsection{庞加莱代数}
+下面考虑 Lie 代数，也就是无穷小变换以及矩阵表示相关。关注一个无穷小变换：
+\begin{equation}
+	\Lambda_\nu^\mu = \delta_\nu^\mu + \omega_\nu^\mu , ~ a^\mu = \varepsilon^\mu ~,
+\end{equation}
+其中 $\omega^\mu_\nu$ 和 $\varepsilon^\mu$ 都是小量。带入对度规的变换的要求会得到
+\begin{equation}
+	\eta_{\rho\sigma} = \eta_{\mu\nu}(\delta^\mu_\rho + \omega^\mu_\rho) (\delta^\nu_\sigma + \omega^\nu_\sigma) = \eta_{\rho\sigma} + \omega_{\sigma\rho} + \omega_{\rho\sigma} + \mathcal O(\omega^2) ~.
+\end{equation}
+可以发现必须要求 $\omega_{\rho \sigma}$ 是\textbf{\textbf{反对称的}}，也就是 $\omega_{\rho \sigma} = -\omega_{\sigma \rho}$。
+
+考虑庞加莱对称性诱导的变换算符 $\Psi \to \Psi' = U(\Lambda, a) \Psi$\footnote{可以考虑为，$U(?)$ 是作用到希尔伯特空间上的。}，并满足 $U(\Lambda', a') U(\Lambda, a) = U(\Lambda' \Lambda, \Lambda' a + a')$。变换算符可以根据对称性进行展开：
+\begin{equation}
+	U(1+\omega, \varepsilon) = 1 + \frac{1}{2} \mathbf{i} \omega_{\rho \sigma} J^{\rho \sigma} - \mathbf{i} \varepsilon_\rho P^\rho + \cdots ~~
+\end{equation}
+为了让其是幺正的，必须要求 $J$ 和 $P$ 都是 Hermit 的\footnote{即 $J^{\rho \sigma \dagger} = J^{\rho \sigma}, P^{\rho \dagger} = P^\rho$}。同时由于 $\omega$ 的反对称性，$J$ 也应当是反对称的。
+
+考虑对 $U(1+\omega, \varepsilon)$ 进行庞加莱变换： \footnote{$U^{-1}(\Lambda, a) = U(\Lambda^{-1}, -\Lambda^{-1}a)$}
+\begin{equation}
+	U(\Lambda, a) U(1+\omega, \varepsilon) U^{-1}(\Lambda, a) ~,
+\end{equation}
+代入可以得到 
+\begin{equation}
+	\begin{aligned}
+		U(\Lambda, a) J^{\rho \sigma} U^{-1}(\Lambda, a) &= \Lambda_{\mu}^\rho \Lambda_\nu ^\sigma(J^{\mu\nu} - a^\mu P^\nu + a^\nu P^\mu) \\ 
+		U(\Lambda, a) P^\mu U^{-1}(\Lambda, a) &= \Lambda_{\nu}^\mu P^\nu ~~
+	\end{aligned}~~
+\end{equation}
+
+若令这一步的庞加莱变换（实际上是 Lorentz 变换）也成为一个无穷小变换就得到了\textbf{\textbf{庞加莱代数}}：\footnote{值得一提，笔者的推导是在东海岸度规下进行的。}
+\begin{equation}
+	[P^\mu, P^\nu] = 0 ~,
+\end{equation}
+\begin{equation}
+	\mathbf{i} [P^\mu, J^{\rho \sigma}] = \eta^{\mu \rho} P^\sigma - \eta^{\mu \sigma} P^\rho ~,
+\end{equation}
+\begin{equation}
+	\mathbf{i} [J^{\mu\nu}, J^{\rho \sigma}] = \eta^{\nu \rho} J^{\mu \sigma} + \eta^{\sigma \nu} J^{\rho \mu} - \eta^{\mu \rho} J^{\nu \sigma} - \eta^{\sigma \mu} J^{\rho \nu} ~.
+\end{equation}
+熟知的物理意义，$P^0$ 是能量（哈密顿量），$P^{1}, P^2, P^3$ 是动量，角动量分别是 $J^{23}, J^{31}, J^{12}$，以及推促（boost）对应 $J^{01}, J^{02}, J^{03}$。
+
+\subsection{粒子是庞加莱群的表示}
+所谓群的表示，下面予以简单介绍。
+\begin{definition}{群的表示}
+	设 $G$ 是一个群，$V$ 是一个矢量空间，$\rho: G \to V$ 使得 $\forall g \in G$, $\rho(g)$ 是 $V$ 上的一个线性变换；同时 $\rho$ 保群乘法，即 $\forall g_1, g_2 \in G, \rho(g_1 g_2) = \rho(g_1) \rho(g_2)$。可以理解为 $\rho$ 将群元表示为矩阵。
+\end{definition}
+
+若考虑一个粒子有态 $\Phi_{\sigma}$，$\sigma$ 是描述粒子状态的所有指标，可以是 $p^\mu$、$J^\mu$、旋量指标等等。若对这个态进行庞加莱变换，物理过程上考虑、这个粒子应当还是原来的粒子，而且仅是对各个不同态进行叠加：
+\begin{equation}
+	U(\Lambda, a) \Phi_\sigma = \sum_{\rho }\mathcal M_{\sigma \rho} \Phi_{\rho} ~.
+\end{equation}
+此处就将群元 $U(\Lambda, a)$ 表示为了一个矩阵 $\mathcal M_{\sigma \rho}$，故说粒子是庞加莱群的一个表示。
+
+回顾\textbf{\textbf{不可约表示}}是将矩阵拆成分块矩阵，仅在对角线上有元素，显然粒子应该是一个不可约表示，才能“自己”变成“自己”，而不产生“杂化”。
+
+同时物理上很容易想到粒子应该是一个幺正的表示，故说：
+
+\textbf{\textbf{粒子是庞加莱群的幺正不可约表示}}
+
+
+
+\subsection{对粒子分类}
+对粒子进行分类，就需要找出来一组庞加莱群的幺正不可约表示。为此就需要找到一组好的基来进行分解，同时让抽象的 $\Phi_\mu$ 有实际意义。从物理上，不妨尝试用动量 $P^\mu$ 先来标记粒子。考虑一组动量的本征态 
+\begin{equation}
+	P^\mu \Phi_{p, \sigma} = p^\mu \Phi_{p, \sigma} ~,
+\end{equation}
+此处 $p^\mu$ 就是粒子真实的 $4$-动量。将庞加莱群的变换分开看，分别考虑平移和 Lorentz 变换。先看平移：\footnote{这里直接运用了 Lie 群是对应 Lie 代数的指数映射关系。}
+\begin{equation}
+	U(1, a) \Phi_{p, \sigma} = e^{-\mathbf{i} p \cdot a} \Phi_{p, \sigma} ~,
+\end{equation}
+然后是一个齐次的 Lorentz 变换 $U(\Lambda) = U(\Lambda, 0)$，给出一个 $\Lambda p$ 的本征矢：
+\begin{equation}
+	P^\mu U(\Lambda) \Phi_{p, \sigma} = U(\Lambda) [U^{-1}(\Lambda) P^\mu U(\Lambda)] \Phi_{p, \sigma} ~, 
+\end{equation}
+其中可以进行代换中括号内为 $(\Lambda^{-1})^\mu_{\nu} P^\nu$，也就是给出 
+\begin{equation}
+	P^\mu U(\Lambda) \Phi_{p, \sigma} = \Lambda_\nu^\mu p^\nu U(\Lambda) \Phi_{p, \sigma} ~,
+\end{equation}
+从而 $U(\Lambda) \Phi_{p, \sigma}$ 必须是 $\Phi_{\Lambda p, \sigma'}$ 的线性组合才可以，即 
+\begin{equation}
+	U(\Lambda) \Phi_{p, \sigma} = \sum_{\rho} C_{\rho \sigma} \Phi_{\Lambda p, \rho} ~.
+\end{equation}
+现在考虑选取合适的基 $\Phi_{p, \sigma}$ 使得表示矩阵 $C_{\rho \sigma}$ 分块对角化，也就形成了一个不可约表示。
+
+熟知的，有质量粒子和无质量粒子之间是无法通过 Lorentz 变换得到的，为此选取两个代表的动量\footnote{沿用 Weinberg 的记号，时间维在最后。}
+\begin{equation}
+	k_1^\mu = (0, 0, 0, M); ~ k_2^\mu = (0, 0, \kappa, \kappa) ~.
+\end{equation}
+然而现在并不能区分“两个自由粒子”（比如两个粒子的质心系）和单粒子态（含束缚态）。为此考虑按住粒子的动量不变，考虑 $\sigma$ 指标的变化。
+
+具体过程，先找一个“标准动量” $k^\mu$，例如 $k^\mu = (0, 0, 0, M)$，然后考虑使得 $k^\mu$ 不变的变换：$k^\mu = W^\mu_\nu k^\nu$，是\textbf{\textbf{Wigner 的“小群”}}（保这一个标准动量不变，也正是所谓“迷向子群”）。
+
+对于一个粒子，例如刚才的 $k^\mu$，小群就成为 $\text{SO}(3)$，可以约化为“自旋” $j$ 的标记；而例如对于两个粒子，体现为 $\sigma$ 连续，要先约化到每个粒子的动量 $p$ 再按 $\sigma$ 展开。
+
+最后给出分类结果：\footnote{其中 $\text{ISO}(2)$ 是 $2$ 维欧氏空间的等距变换群，由两个平动和一个转动生成元给出。}
+\begin{table}[ht]
+\centering
+\caption{小群分类结果}\label{tab_WigCla1}
+\begin{tabular}{|c|c|c|c|}
+\hline
+     &  & 标准 $k^\mu$ & 小群 \\
+    \hline
+    (a) & $p^2 = -M^2 < 0, p^0 > 0$ & $(0, 0, 0, M)$ & $\text{SO}(3)$ \\
+    \hline
+    (b) & $p^2 = -M^2 < 0, p^0 < 0$ & $(0, 0, 0, -M)$ & $\text{SO}(3)$ \\
+    \hline
+    (c) & $p^2 = 0, p^0>0$ & $(0, 0, \kappa, \kappa)$ & $\text{ISO}(2)$ \\
+    \hline
+    (d) & $p^2 = 0, p^0<0$ & $(0, 0, \kappa, -\kappa)$ & $\text{ISO}(2)$ \\ 
+    \hline
+    (e) & $p^2 = N^2 > 0$ & $(0, 0, N, 0)$ & $\text{SO}(2, 1)$ \\
+    \hline
+    (f) & $p^\mu = 0$ & $(0, 0, 0, 0)$ & $\text{SO}(3, 1)$ \\
+    \hline
+\end{tabular}
+\end{table}
+
+\footnote{其中结果只有 (a)、(c)、(f) 是物理的，(f) 是真空。}显然对于任意一个该类下的粒子的动量，可以通过该类的标准动量经过某个线性变换得到：$p^\mu = L^\mu_\nu k^\nu$。
+
+\subsection{分类结果分析}
+显然对于任意一个粒子的态 $\Phi_{p, \sigma}$，可以通过 $L(p)$ 将标准动量的态 $\Phi_{k, \sigma}$ 变换到 $\Phi_{p, \sigma} = U[L(p)] \Phi_{k,\sigma}$（未归一化）。
+
+另外若考虑一般动量态的 Lorentz 变换与标准动量的小群变换的关系：
+\begin{equation}
+	U(\Lambda) \Phi_{p, \sigma} = U[L(\Lambda p)] (U[L^{-1} (\Lambda p) \Lambda L(p)] \Phi_{k, \sigma}) ~~
+\end{equation}
+令 $w^\mu_\sigma(\Lambda, p) = [L^{-1}(p)]^\mu_\nu \Lambda^\nu_\rho L(p)^\rho_\sigma$\footnote{其中，$L(p)$ 将 $k$ 变为 $p$，$\Lambda$ 将 $p$ 变为 $\Lambda p$，$L(\Lambda p)$ 将 $k$ 变为 $\Lambda p$，故这个 $w$（即 Wigner 转动）将 $k$ 沿 $k \to p \to \Lambda p \to k$ 的路径“转动一圈”，是一个小群变换（即在小群内的）。}，则：
+\begin{equation}
+	U(w) \Phi_{k, \sigma} = \sum_{\sigma'} D_{\sigma' \sigma}(w) \Phi_{k, \sigma'} ~.
+\end{equation}
+这是 by definition 的，显然应当是个线性变换。现在，通过 $w$，可以通过 Wigner 转动将 $\Lambda p$ 与 $p$ 联系：\footnote{仍未归一化。}
+\begin{equation}
+	\begin{aligned}
+		U(\Lambda) \Phi_{p, \sigma} 
+		&= U[\Lambda L(p)] \Phi_{k, \sigma} \\
+		&= U[L(\Lambda p)] (U[L^{-1}(\Lambda p) \Lambda L(p)] \Phi_{k, \sigma}) \\
+		&= U[L(\Lambda p)] (U[w(\Lambda, p)] \Phi_{k, \sigma}) \\
+		&= U[L(\Lambda p)] \sum_{\sigma '} D_{\sigma ' \sigma}[w(\Lambda, p)] \Phi_{k, \sigma'} \\
+		&= \sum_{\sigma'} D_{\sigma' \sigma} D\left(w(\Lambda, p)\right) \Phi_{\Lambda p, \sigma'} ~.
+	\end{aligned} ~~
+\end{equation}
+
+\subsection{正质量粒子}
+在正质量粒子前提下，小群是 $\text{SO}(3)$，$D^{(j)}_{\sigma' \sigma}$ 是三维转动群的自旋为 $j$ 的不可约表示\footnote{熟知三维转动群有不等价的不可约表示，用自旋区分。}：
+
+对于无穷小转动 $R_{ik} = \delta_{ik} + \Theta_{ik}$\footnote{其中 $\Theta$ 反对称。}，有：
+\begin{equation}
+	D_{\sigma' \sigma}^{(j)} (1+\Theta) = \delta_{\sigma' \sigma} + \frac{\mathbf{i}}{2} \Theta_{ik} \left(J_{ik}^{(j)}\right)_{\sigma' \sigma} ~.
+\end{equation}
+其中 $J^{(j)}$ 满足\footnote{取沿着第三方向的转轴}：
+\begin{equation}
+	\left(J^{(j)}_{23} \pm \mathbf{i} J_{31}^{(j)}\right)_{\sigma' \sigma} = \left(J_1^{(j)} \pm \mathbf{i} J_2^{(j)}\right) = \delta_{\sigma', \sigma \pm 1} \sqrt{(j \mp \sigma)(j \pm \sigma + 1)} ~.
+\end{equation}
+\footnote{这即是上升下降算符乘以归一化因子}，以及第三方向上
+\begin{equation}
+	\left(J_{12}^{(j)}\right)_{\sigma' \sigma} = \left(J^{(j)}_3\right)_{\sigma' \sigma} = \sigma \delta_{\sigma' \sigma} ~.
+\end{equation}
+
+\subsection{无质量粒子}
+这会麻烦一些，要找到让标准动量 $(0, 0, \kappa, \kappa)$ 不变的小群是无穷小变换的哪些组合。
+
+首先，显然可以沿 $z$ 轴转 $\theta$ 角，$U(w) - 1$ 就可以包含 $\mathbf{i} \theta J_3$\footnote{$J_3$ 是沿 $z$ 轴转动的转动生成元}。
+
+其次，若可以沿 $x$ 或 $y$ 转 $\alpha$ 角，当 $\alpha$ 是无穷小转动时，不妨取 $\kappa = 1$，$(0, 0, 1, 1)$ 变为 $(\alpha, 0, 1, 1)$；而若这时候再在 $x$ 方向 boost：$(0, 0, 1, 1)$ 变为 $(-\alpha, 0, 1, 1)$，组合恰好抵消。就可令 $A = J_2 + \mathbf{i} K_1$，保标准动量。
+
+类似的，令 $B = -J_1 + K_2$，也保标准动量。故可写（无穷小变换形式下） $U(w(\theta, \alpha, \beta)) = 1 + \mathbf{i} \alpha A + \mathbf{i} \beta B + \mathbf{i} \theta J_3$。由 $J$ 和 $K$ 的 Lie 代数可以写出：$[J_3, A] = iB$，$[J_3, B] = -iA$，$[A, B] = 0$。
+
+现在考虑 $D_{\sigma' \sigma}$，由于 $A$ 与 $B$ 对易，可以同时对角化 $A$ 和 $B$；取他们的共同本征态：$A \Phi_{k, a, b, \sigma} = a \Phi_{k, a, b, \sigma}$ 且 $B \Phi_{k, a, b, \sigma} = b \Phi_{k, a, b, \sigma}$。然而实验上未发现任何 $a \neq 0$ 或 $b \neq 0$ 的粒子\footnote{若有不等于 $0$ 的，沿这方向的转动会有多余自由度。有相关研究，比如 1302.1198，以及相关文章。}
+
+现在设 $a=b=0$，并用 $J_3$ 的本征态标记粒子：$J_3 \Phi_{k, \sigma} = \sigma \Phi_{k, \sigma}$\footnote{这就是螺旋度 helicity，是角动量在动量方向上的投影}。立刻可以写：
+\begin{equation}
+	U(w) \Phi_{k, \sigma} = e^{\mathbf{i} \theta \sigma} \Phi_{k, \sigma} ~.
+\end{equation}
+此时 $D_{\sigma' \sigma} = \exp(\mathbf{i} \theta \sigma) \delta_{\sigma' \sigma}$。
+
+一些例子：$\sigma = \pm 1$ 可以由空间反演联系为同一粒子，是光子；$\sigma = \pm 2$ 将会是引力子；$\sigma = \pm 1/2$ 是在 Higgs 机制前无质量的费米子。此外，拓扑考虑下，$\sigma$ 仅能取整数或半整数。
