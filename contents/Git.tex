@@ -51,7 +51,6 @@ Git for Windows 的 Git bash 是不支持 symlink 的， symlink clone 下来以
 \item 要把某个路径变为一个 repository, 先 cd 到该路径， 然后 \verb`git init` 即可。 该命令会在当前目录创建 .git 文件夹， 里面包含所有历史信息。
 \item \verb`git clone` 时在后面加上 \verb`--depth N` 选项可以只下载最后 \verb`N` 次的 commit
 \item \verb`git clone <url> newname` 会把本地 repo 文件夹命名成 \verb`newname`
-\item git 会无视隐藏目录（\verb`.` 开头的）， \verb`git status` 也不显示
 \item \verb`git status` 只会显示 worktree 和 index 之间的区别， 而不一定是最新 commit 之间的（对于服务器上被 push 的 repo 而言）
 \item \verb`git status 目录` 可以只显示某个目录的 status
 \item 如果只想检查 staged area， 不想重新扫描一次文件， 用 \verb`diff --staged --name-status`
@@ -62,7 +61,7 @@ Git for Windows 的 Git bash 是不支持 symlink 的， symlink clone 下来以
 \item 要从服务器 clone 一个 Repository, 先获取网址， 然后用 \verb`git clone https://...` 即可。 git 会 clone 到当前目录下。
 \item 如果 clone 了以后用 \verb`git status` 发现所有的文件都改变了， 用 \verb`git config --global core.fileMode false` 即可。 如果还是不行就去掉 \verb`--global`。
 \item 注意 \verb`git` 只会追踪 \verb`x` 权限的变化（不确定是三个 \verb`x` 还是一个 \verb`x`）。
-\item \verb`git clone <folder1> <folder2>` 把 folder1 中的 repo 复制到 folder2 中。 但注意路径要用 \verb`/` 而不是 \verb`\`. 如 \verb`/C/Users/addis/Documents/GitHub/cn2D/`
+\item \verb`git clone <folder1> <folder2>` 把 folder1 中的 repo 复制到 folder2 中。 但注意路径要用 \verb`/` 而不是 \verb`\`. 如 \verb`/g/github/my_repo/`
 \item \verb`git clone --no-checkout ...` 选项可以只复制 .git 文件夹。
 \item Git bash 第一次 push 到 GitHub 的时候会弹出登录框， 密码被存在 Windows 的 Credential Manager 中的 、\verb`git:https://github.com`.
 \item 检查当前目录的 repository 的状态， 用 \verb`git status`. 
@@ -253,6 +252,7 @@ done
 \item 如果 merge 的过程中出现 conflict, 用 \verb`git merge --abort` 可以恢复到 merge 以前。
 \item 只要两个 branch 修改的不是同一个文件的同一行， merge 都不会有问题。 如果是， 就会产生 conflict
 \item 要把本分支的 tree 替换为别的分支，可以在仓库根目录下删除仓库文件夹中除了 \verb`.git` 的所有文件和文件夹（包括隐藏的），然后 \verb`git checkout <branch> -- .`
+\item 如果两个分支中一个的最新 commit 是另一个的老 commit，那么要完全同步（\verb`git merge` 会产生 merge commit），就用 \verb`git rebase 分支名` 即可。
 \end{itemize}
 
 

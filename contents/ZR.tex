@@ -1,0 +1,375 @@
+% 自然语言处理（综述）
+% license CCBYSA3
+% type Wiki
+
+本文根据 CC-BY-SA 协议转载翻译自维基百科\href{https://en.wikipedia.org/wiki/Natural_language_processing}{相关文章}。
+
+自然语言处理（NLP）是计算机科学的一个子领域，特别是人工智能领域。它主要关注赋予计算机处理自然语言编码的数据的能力，因此与信息检索、知识表示和计算语言学（语言学的一个子领域）密切相关。通常，数据通过文本语料库收集，并使用基于规则、统计方法或基于神经网络的机器学习和深度学习方法进行处理。
+
+自然语言处理的主要任务包括语音识别、文本分类、自然语言理解和自然语言生成。
+\subsection{历史} 
+更多信息：自然语言处理的历史  
+自然语言处理的根源可以追溯到20世纪50年代。[1] 早在1950年，阿兰·图灵就发表了一篇名为《计算机器与智能》的文章，提出了现在被称为图灵测试的智能标准，尽管当时这并没有被表述为一个与人工智能分开的问题。该测试提议包括一个任务，涉及自动化地解释和生成自然语言。
+\subsubsection{符号化自然语言处理（1950年代 – 1990年代初）}  
+符号化自然语言处理的前提可以通过约翰·塞尔的“中文房间”实验来简明总结：给定一组规则（例如，一本中文短语手册，包含问题及其对应的答案），计算机通过应用这些规则来模拟自然语言理解（或其他自然语言处理任务），从而应对其所遇到的数据。
+\begin{itemize}
+\item 1950年代：1954年的乔治城实验涉及将超过60个俄语句子完全自动翻译成英语。研究者声称，机器翻译将在三到五年内解决。[2] 然而，真正的进展要慢得多，在1966年发布的ALPAC报告之后，报告指出十年的研究未能实现预期目标，机器翻译的资金大幅减少。美国几乎没有再进行机器翻译的进一步研究（尽管其他地方如日本和欧洲仍有一些研究[3]），直到1980年代末，首个统计机器翻译系统的出现。
+\item 1960年代：1960年代出现了一些成功的自然语言处理系统，其中包括SHRDLU，这是一种在受限“积木世界”中工作的自然语言系统，具有受限的词汇表；以及ELIZA，这是由约瑟夫·魏岑鲍姆于1964到1966年间编写的罗杰式心理治疗师模拟系统。ELIZA几乎不涉及人类思维或情感的信息，但有时能提供惊人的人类互动。当“病人”的问题超出了非常小的知识库时，ELIZA可能会提供一个通用的回答，例如，当被问到“我的头很痛”时，它可能会回答“你为什么说你的头痛？”罗斯·奎利安（Ross Quillian）在自然语言方面的成功工作证明了仅用20个词汇就能开发出有效的系统，因为那时计算机的内存只能容纳这么多。[4]
+\item 1970年代：1970年代，许多程序员开始编写“概念本体”，将现实世界的信息结构化为计算机可理解的数据。例子包括MARGIE（Schank, 1975）、SAM（Cullingford, 1978）、PAM（Wilensky, 1978）、TaleSpin（Meehan, 1976）、QUALM（Lehnert, 1977）、Politics（Carbonell, 1979）和Plot Units（Lehnert, 1981）。在这一时期，第一批聊天机器人被编写出来（例如，PARRY）。
+\item 1980年代：1980年代和1990年代初是符号方法在自然语言处理中的黄金时代。当时的研究重点包括基于规则的解析（例如，HPSG作为生成语法的计算性实现）、形态学（例如，两级形态学[5]）、语义学（例如，Lesk算法）、指代（例如，在中心理论[6]中）以及自然语言理解的其他领域（例如，在修辞结构理论中）。其他研究方向也得到了延续，例如使用Racter和Jabberwacky开发聊天机器人。一个重要的进展（最终导致了1990年代统计方法的转向）是这一时期量化评估的重要性逐渐上升。[7]
+\end{itemize}
+\subsubsection{统计自然语言处理（1990年代–2010年代）}  
+直到1980年代，大多数自然语言处理系统都基于复杂的手写规则集。然而，自1980年代末开始，随着引入机器学习算法进行语言处理，自然语言处理领域发生了一场革命。这一变化既得益于计算能力的稳步提升（参见摩尔定律），也得益于乔姆斯基语言学理论（例如转化语法）的主导地位逐渐减弱，这些理论的理论基础阻碍了以语料库语言学为基础的机器学习方法在语言处理中的应用。[8]
+\begin{itemize}
+\item 1990年代：统计方法在自然语言处理中的一些显著早期成功，尤其是在机器翻译领域，得益于IBM研究的工作，如IBM对齐模型。这些系统能够利用现有的多语言文本语料库，这些语料库是由加拿大议会和欧盟根据相关法律产生的，这些法律要求将所有政府事务翻译成相应政府系统的所有官方语言。然而，大多数其他系统依赖于专门为这些系统实现的任务而开发的语料库，而这通常是这些系统成功的主要限制。因此，很多研究都致力于如何更有效地从有限的数据中学习。
+\item 2000年代：随着互联网的增长，自1990年代中期以来，越来越多的原始（未经标注的）语言数据变得可用。因此，研究逐渐集中在无监督和半监督学习算法上。这些算法可以从没有手动标注的、没有预定答案的数据中学习，或者从标注数据与未标注数据的组合中学习。一般来说，这一任务比有监督学习要困难得多，通常在给定输入数据的情况下会产生较不准确的结果。然而，存在大量的未标注数据（包括，除了其他内容外，整个万维网的内容），如果所用算法的时间复杂度足够低，这通常可以弥补较差的结果，从而使得其在实际应用中仍具有可行性。
+\end{itemize}
+\subsubsection{神经网络自然语言处理（现状）}  
+2003年，Yoshua Bengio及其合著者提出的多层感知器（具有单一隐层和上下文长度为数个词的语言模型，并在14百万词语的训练数据上使用CPU集群）超越了当时最好的统计算法——词n-gram模型。[9]
+
+2010年，Tomáš Mikolov（当时是布尔诺理工大学的博士生）及其合著者将一个简单的单隐层递归神经网络应用于语言建模，[10] 之后几年他又发展出了Word2vec。进入2010年代，表示学习和深度神经网络风格（具有多个隐层）的机器学习方法在自然语言处理领域变得广泛应用。其流行部分是因为一系列结果表明，这些技术[11][12]能够在许多自然语言任务中取得最先进的成绩，例如语言建模[13]和句法分析[14][15]。这一技术的应用在医学和医疗领域尤为重要，尤其是在帮助分析电子健康记录中的笔记和文本方面，这些内容本来难以进行研究，但通过NLP技术可以提供支持，从而改善医疗护理[16]或保护患者隐私[17]。
+\subsection{方法：符号方法、统计方法、神经网络方法}  
+符号方法，即手工编写一组符号操作规则，并结合字典查找，历史上是人工智能（AI）和自然语言处理（NLP）最早使用的方法之一：[18][19] 例如，通过编写语法或设计启发式规则来进行词干提取。
+
+另一方面，机器学习方法，包括统计方法和神经网络方法，相较于符号方法有许多优势：
+\begin{itemize}
+\item 统计和神经网络方法能够更专注于从文本语料库中提取的最常见情况，而基于规则的方法需要为稀有情况和常见情况提供相同数量的规则。
+\item 由统计或神经网络方法生成的语言模型在面对陌生（例如包含未见过的单词或结构）和错误输入（例如拼写错误或意外遗漏的单词）时，表现得更为健壮，相比之下，基于规则的系统更容易受到这些问题的影响，且生产成本较高。
+\item 这种（概率）语言模型的规模越大，其准确性越高，而基于规则的系统只能通过增加规则的数量和复杂性来提高准确性，这也会导致不可处理的问题。
+\end{itemize}
+尽管符号方法仍在2020年使用，但随着大型语言模型（LLMs）在2023年的发展，符号方法已变得基本过时。
+
+在此之前，它们常常用于：
+\begin{itemize}
+\item 当训练数据不足以成功应用机器学习方法时，例如用于低资源语言的机器翻译（如Apertium系统提供的翻译），
+\item 用于NLP管道中的预处理，例如分词，或者
+\item 用于NLP管道输出的后处理和转换，例如从句法分析中提取知识。
+\end{itemize}
+\subsubsection{统计方法}  
+在1980年代末到1990年代中期，统计方法结束了由基于规则方法低效性引发的AI冬天。[20][21]
+
+最早的决策树，生成硬性的“如果-那么”规则系统，仍然与旧的基于规则的方法非常相似。只有隐马尔可夫模型的引入，应用于词性标注，才宣告了旧的基于规则方法的结束。
+\subsubsection{神经网络}  
+更多信息：人工神经网络  
+统计方法的一个主要缺点是它们需要复杂的特征工程。自2015年起，[22] 统计方法已被神经网络方法取代，神经网络方法使用语义网络[23] 和词嵌入来捕捉单词的语义属性。
+
+中间任务（例如词性标注和依存解析）不再是必需的。
+
+基于新发明的序列到序列转换的神经机器翻译，淘汰了之前在统计机器翻译中必需的中间步骤，例如词对齐。
+\subsection{常见的自然语言处理任务}  
+以下是一些最常研究的自然语言处理任务的列表。部分任务具有直接的现实应用，而其他任务则通常作为子任务，帮助解决更大规模的任务。
+
+尽管自然语言处理任务密切相关，但为了方便起见，可以将其细分为几个类别。粗略的分类如下。
+\subsubsection{文本与语音处理} 
+\textbf{光学字符识别（OCR）}  
+
+给定一张表示印刷文本的图像，确定其对应的文本内容。
+
+\textbf{语音识别}  
+
+给定一段人物或多人讲话的音频剪辑，确定其文本表示。这是与文本转语音相反的过程，是一种被俗称为“AI完备”的极其困难的问题（见上文）。在自然语言中，单词之间几乎没有停顿，因此语音分割是语音识别的必要子任务（见下文）。在大多数口语语言中，表示连续字母的语音会相互融合，这一过程称为“共振”，因此将模拟信号转化为离散字符可能是一个非常困难的过程。此外，由于同一语言中的单词由不同口音的人发音，语音识别软件必须能够识别这些不同的输入，并将其与文本等价物视为相同。
+
+\textbf{语音分割}  
+
+给定一段人物或多人讲话的音频剪辑，将其分割成单个单词。这是语音识别的一个子任务，通常与语音识别一起处理。
+
+\textbf{文本转语音}  
+给定一段文本，将其转换成语音表示。文本转语音可以用于帮助视力障碍人士。[24]
+
+\textbf{词语分割（标记化）}  
+
+标记化是文本分析中用来将文本划分为单个单词或单词片段的过程。该技术产生了两个关键组件：单词索引和标记化文本。单词索引是一个将唯一单词映射到特定数字标识符的列表，标记化文本则用相应的数字标记替代每个单词。然后，这些数字标记被用在各种深度学习方法中。[25]
+
+对于像英语这样的语言，这个过程相对简单，因为单词通常由空格分隔。然而，像中文、日语和泰语等一些书面语言并没有以这种方式标记单词边界，因此在这些语言中，文本分割是一个重要的任务，需要了解语言的词汇和形态学。有时，这一过程也用于像数据挖掘中的“词袋模型”（BOW）创建等情况。
+\subsubsection{形态学分析}  
+\textbf{词形还原}  
+
+去除词尾变化，只返回词语的基础字典形式，也称为词根（lemma）。词形还原是另一种将词语还原为规范形式的技术，但与之不同的是，它实际上使用字典将单词映射到其实际形式。[26]
+
+\textbf{形态学分割}  
+
+将单词拆分为独立的语素，并识别语素的类别。此任务的难度很大程度上取决于所考虑语言的形态学复杂性（即，单词的结构）。英语的形态学相对简单，尤其是屈折形态，因此通常可以完全忽略这项任务，并简单地将一个单词的所有可能形式（例如，“open, opens, opened, opening”）视为独立的单词。然而，在像土耳其语或梅提语这样的语言中，这种方法是不可行的，因为每个字典条目都有成千上万种可能的单词形式。[27]
+
+\textbf{词性标注}  
+
+给定一个句子，为每个单词确定其词性（POS）。许多单词，尤其是常见的单词，可以充当多种词性。例如，“book”可以是名词（“the book on the table”）或动词（“to book a flight”）；“set”可以是名词、动词或形容词；而“out”至少可以是五种不同的词性之一。
+
+\textbf{词干提取}  
+
+将屈折（或有时派生）词还原为基本形式的过程（例如，“close”是“closed”、“closing”、“close”、“closer”等词的词干）。词干提取与词形还原产生类似的结果，但它是基于规则进行的，而不是基于字典。
+
+\subsubsection{句法分析}
+\textbf{语法归纳[28]}  
+
+生成描述语言语法的形式化语法。
+
+\textbf{句子分割（也称为“句子边界歧义消解”）} 
+
+给定一段文本，找出句子边界。句子边界通常由句点或其他标点符号标示，但这些符号也可以用于其他目的（例如，表示缩写）。
+
+\textbf{句法分析}  
+
+确定给定句子的句法树（语法分析）。自然语言的语法是模糊的，典型的句子有多种可能的分析方式：令人惊讶的是，对于一个典型的句子，可能有成千上万种潜在的分析（其中大多数对人类来说完全没有意义）。句法分析主要有两种类型：依存句法分析和成分句法分析。依存句法分析侧重于句子中单词之间的关系（标记主语、谓语等），而成分句法分析则侧重于使用概率上下文无关语法（PCFG）构建句法树（参见随机语法）。
+\subsubsection{词汇语义学（上下文中的单个词的语义）}
+\textbf{词汇语义学}  
+
+计算机如何理解上下文中单个词的意义？
+
+\textbf{分布式语义学}  
+
+我们如何从数据中学习语义表示？
+
+\textbf{命名实体识别（NER）} 
+
+给定一段文本，确定文本中哪些项映射到专有名词，如人物或地点，并确定每个专有名词的类型（如人物、地点、组织）。虽然在英语等语言中，大写字母有助于识别命名实体，但它不能帮助确定命名实体的类型，而且在很多情况下，大写字母信息不准确或不足。例如，句子的第一个字母也会大写，命名实体通常跨越多个词，其中只有部分单词大写。此外，许多使用非西方字母的语言（如中文或阿拉伯语）根本没有大写字母，即使是有大写字母的语言，也不一定一致地使用它来区分名称。例如，德语中所有名词都大写，而无论它们是否为专有名词，法语和西班牙语中用作形容词的专有名词通常不大写。此任务的另一个名称是“标记分类”（Token Classification）。
+
+\textbf{情感分析（见“多模态情感分析”）}  
+
+情感分析是一种计算方法，用于识别和分类文本中的情感意图。该技术通过分析文本，判断表达的情感是积极的、消极的还是中立的。情感分类模型通常利用词汇n-gram、词频-逆文档频率（TF-IDF）特征、手工生成的特征，或者使用深度学习模型来识别文本序列中的长期和短期依赖关系。情感分析的应用非常广泛，涉及诸如对各种在线平台上的客户评论进行分类等任务。
+
+\textbf{术语提取}  
+
+术语提取的目标是从给定的语料库中自动提取相关的术语。
+
+\textbf{词义消歧（WSD）}  
+
+许多词有多个意思；我们需要选择在特定上下文中最符合语义的意义。对于这个问题，通常会给定一个词列表及其关联的词义，例如来自词典或在线资源（如WordNet）。
+
+\textbf{实体链接}  
+
+许多词——通常是专有名词——指代命名实体；在这种情况下，我们需要选择上下文中指代的实体（例如知名人物、地点、公司等）。
+\subsubsection{关系语义学（单个句子的语义）}
+\textbf{关系提取}  
+
+给定一段文本，识别命名实体之间的关系（例如，谁和谁结婚了）。
+
+\textbf{语义解析}  
+
+给定一段文本（通常是一个句子），生成其语义的正式表示，可以是图形（例如，AMR解析）或按照逻辑形式化的方式（例如，DRT解析）。这个任务通常涉及语义学中的几个基础NLP任务（例如，语义角色标注、词义消歧），并且可以扩展到包括完整的语篇分析（例如，语篇分析、指代消解；见“自然语言理解”部分）。
+
+\textbf{语义角色标注（见“隐式语义角色标注”）}  
+
+给定一个句子，识别并消歧义语义谓词（例如，动词框架），然后识别并分类框架元素（语义角色）。
+\subsubsection{语篇（超越单个句子的语义）}
+\textbf{指代消解}  
+
+给定一个句子或更大段的文本，确定哪些词（“提及”）指代相同的对象（“实体”）。代词消解是这个任务的一个特定例子，特别关注将代词与其指代的名词或名称进行匹配。更一般的指代消解任务还包括识别所谓的“桥接关系”，这些关系涉及指代表达。例如，在句子“他通过前门进入了约翰的房子”中，“前门”是一个指代表达，所要识别的桥接关系是所指的门是约翰房子的前门（而不是某个可能被提及的其他结构的门）。
+
+\textbf{语篇分析}  
+
+这一范畴包含几个相关任务。一个任务是语篇解析，即识别一段连贯文本的语篇结构，即句子之间的语篇关系（例如，扩展、解释、对比）。另一个可能的任务是识别和分类文本段落中的言语行为（例如，是非问题、内容问题、陈述、断言等）。
+\subsubsection{隐式语义角色标注}  
+给定一个句子，识别并消歧义语义谓词（例如，动词框架）及其在当前句子中的显式语义角色（参见上文的语义角色标注）。然后，识别当前句子中未显式实现的语义角色，将其分类为在文本其他地方显式实现的论元和未指定的论元，并将前者与本地文本中的内容进行关联。一个紧密相关的任务是零代词消解，即将指代消解扩展到省略主语的语言（pro-drop languages）。
+
+\textbf{文本蕴含识别}  
+
+给定两个文本片段，判断一个是否为真能推导出另一个为真，是否推导出另一个的否定，或是否允许另一个为真或为假。[30]
+
+\textbf{主题分割与识别}  
+
+给定一段文本，将其分割为若干主题段落，并识别每个段落的主题。
+
+\textbf{论证挖掘}
+
+论证挖掘的目标是通过计算机程序自动从自然语言文本中提取和识别论证结构。[31] 此类论证结构包括前提、结论、论证方案以及主论点与附属论点、或主论点与反论点之间的关系。[32][33]
+\subsubsection{更高层次的 NLP 应用}
+\textbf{自动摘要（文本摘要）} 
+
+生成一段文本的可读摘要。通常用于提供已知类型文本的摘要，例如研究论文、报纸财经版的文章。
+
+\textbf{语法错误修正}  
+
+语法错误检测与修正涉及语言分析的各个层面（语音/正字法、形态学、句法、语义、语用）。语法错误修正具有重要影响，因为它涉及到数亿使用或学习英语作为第二语言的人。因此，自2011年以来，它一直是多个共享任务的研究对象。[34][35][36] 就正字法、形态学、句法及语义的某些方面而言，随着强大神经语言模型（如 GPT-2）的发展，至2019年，这一问题已经可以视为大部分解决，并且在各种商业应用中得到了推广。
+
+\textbf{逻辑翻译}  
+
+将文本从自然语言翻译为形式逻辑。
+
+\textbf{机器翻译（MT）}  
+
+自动将文本从一种人类语言翻译为另一种语言。这是最困难的问题之一，属于被称为“AI 完备”的问题类，即解决这一问题需要人类所具备的所有不同类型的知识（语法、语义、现实世界的事实等）。
+
+\textbf{自然语言理解（NLU）}  
+
+将文本块转换为更为正式的表示形式，如一阶逻辑结构，这些结构更容易被计算机程序处理。自然语言理解涉及从多种可能的语义中识别出预期的语义，这些语义通常以组织良好的自然语言概念符号的形式表达。语言元模型和本体的引入与创建是有效的经验性解决方案。为了构建语义形式化的基础，预期对自然语言语义进行明确的形式化，不应与隐性假设（如封闭世界假设（CWA）与开放世界假设、或主观的“是/否”与客观的“真/假”）混淆。[37]
+
+\textbf{自然语言生成（NLG）}  
+
+将计算机数据库或语义意图转换为可读的人类语言。
+
+\textbf{书籍生成} 
+
+这不是传统的 NLP 任务，但自然语言生成及其他 NLP 任务的延伸是生成完整的书籍。第一本机器生成的书籍是由基于规则的系统于1984年创建的（《警察的胡子是半完成的》，Racter）。[38] 第一部由神经网络发布的作品《1 the Road》于2018年发布，作为小说市场销售，包含六千万字。两者基本上都是精心设计但没有语义内容（无语义的）语言模型。第一本机器生成的科学书籍于2019年发布（《Beta Writer，锂离子电池》，Springer，Cham）。[39] 与《Racter》和《1 the Road》不同，这本书基于事实知识并以文本摘要为基础。
+
+\textbf{文档 AI}  
+
+文档 AI 平台依托于 NLP 技术，使没有人工智能、机器学习或 NLP 经验的用户也能快速训练计算机，从不同类型的文档中提取他们所需的特定数据。基于 NLP 的文档 AI 使非技术团队能够快速访问隐藏在文档中的信息，例如律师、商业分析师和会计师。[40]
+
+\textbf{对话管理}  
+
+旨在与人类对话的计算机系统。
+
+\textbf{问答系统}  
+
+给定一个人类语言的问题，确定其答案。典型问题有一个特定的正确答案（如“加拿大的首都是哪里？”），但有时也考虑开放性问题（如“生命的意义是什么？”）。
+
+\textbf{文本到图像生成} 
+
+给定一张图像的描述，生成一张符合描述的图像。[41]
+
+\textbf{文本到场景生成}  
+
+给定一段场景描述，生成该场景的 3D 模型。[42][43]
+
+\textbf{文本到视频}  
+
+给定一个视频的描述，生成符合该描述的视频。[44][45]
+\subsection{一般趋势和（可能的）未来方向}
+根据该领域长期存在的趋势，可以推测出 NLP 未来的发展方向。截至 2020年，在 CoNLL共享任务长期系列的主题中，可以观察到以下三种趋势：[46]
+\begin{itemize}
+\item 对自然语言中日益抽象的“认知”方面的兴趣 1999–2001年：浅层解析 2002–03年：命名实体识别 2006–09年/2017–18年：依赖句法 2004–05年/2008–09年：语义角色标注  2011–12年：共指消解 015–16年：话语解析 2019年：语义解析
+\item 对多语言性以及潜在的多模态性（多种感知形式的结合）日益关注 英语自1999年起； 西班牙语、荷兰语自2002年起；德语自2003年起；保加利亚语、丹麦语、日语、葡萄牙语、斯洛文尼亚语、瑞典语、土耳其语自2006年起；巴斯克语、加泰罗尼亚语、中文、希腊语、匈牙利语、意大利语、土耳其语自2007年起；捷克语自2009年起；阿拉伯语自2012年起；2017年：40多种语言；2018年：60多种/100多种语言
+\item 去除符号表示法 从基于规则的监督学习方法转向弱监督方法、表示学习和端到端系统
+\end{itemize}
+\subsubsection{认知}
+大多数高级 NLP 应用涉及模拟智能行为和表面理解自然语言的方面。从更广泛的角度来看，技术化地操作化日益复杂的认知行为方面，代表了 NLP 发展的一个轨迹（参见上面 CoNLL 共享任务中的趋势）。
+
+认知是指“通过思考、经验和感官获取知识和理解的心理过程或行为。”[47] 认知科学是跨学科的科学，研究大脑及其过程。[48] 认知语言学是语言学的一个跨学科分支，结合了心理学和语言学的知识和研究。[49] 特别是在符号 NLP 时代，计算语言学领域与认知研究保持着紧密的联系。
+
+例如，George Lakoff 提出了通过认知科学的视角，以及认知语言学的研究成果，来构建自然语言处理（NLP）算法的方法论，[50] 其具有两个关键特征：
+
+\begin{enumerate}
+\item 应用概念隐喻理论，Lakoff 解释道：“通过一种想法来理解另一种想法”，这为理解作者意图提供了线索。[51] 例如，考虑英语单词“big”。当用于比较时（“That is a big tree”），作者的意图是暗示树的大小相对于其他树或作者的经验而言是大的。而当用作隐喻时（“Tomorrow is a big day”），作者的意图则是暗示某事的重要性。“She is a big person”中的意图就比较模糊，且需要更多信息来明确。在这种情况下，无论是人类还是认知 NLP 算法都难以明确意图。
+\item 基于前后文本信息，给单词、短语、句子或文本片段分配相对的意义度量，例如通过概率上下文无关文法（PCFG）来实现。这类算法的数学方程在美国专利9269353中有所展示[52]：
+\end{enumerate}  
+   \[
+   RMM(token_{N}) = PMM(token_{N}) \times \frac{1}{2d} \left( \sum_{i=-d}^{d} \left( (PMM(token_{N}) \times PF(token_{N-i}, token_{N}, token_{N+i}))_i \right) \right)~
+   \]
+   其中：
+  \textbf{RMM} 是意义的相对度量；
+  \textbf{token} 是任何文本块、句子、短语或单词；
+  \textbf{N} 是正在分析的 token 数量；
+  \textbf{PMM} 是基于语料库的意义的概率度量；
+  \textbf{d} 是 token 在 N 个 token 序列中的非零位置；
+  \textbf{PF} 是特定语言的概率函数。
+
+认知语言学的联系是 NLP 的历史遗产的一部分，但自1990年代统计学转向以来，这些联系变得较少被关注。然而，开发认知模型并向技术上可操作化框架转化的方法仍在各种框架中得到探索，例如认知语法[53]、功能语法[54]、构式语法[55]、计算心理语言学和认知神经科学（如 ACT-R）中，尽管这些方法在主流 NLP 中的应用较少（按 ACL 主要会议的出席情况来衡量）。近年来，认知 NLP 的观点被重新振兴，作为一种实现可解释性的方法，尤其是在“认知 AI”的概念下。[57] 同样，认知 NLP 的思想本质上存在于神经模型的多模态 NLP 中（尽管很少被明确指出）[58]，并且在人工智能的最新发展中发挥了作用，特别是在使用大型语言模型的方法[59] 和基于自由能原理的人工通用智能新方向上，由英国神经科学家兼理论学家 Karl J. Friston 提出[60]。
+\subsection{另见}  
+\begin{itemize}
+\item 1. 《1 the Road》  
+\item 人工智能检测软件  
+\item 自动化作文评分  
+\item 生物医学文本挖掘  
+\item 复合术语处理  
+\item 计算语言学  
+\item 计算机辅助审阅  
+\item 受控自然语言  
+\item 深度学习  
+\item 深度语言处理  
+\item 分布式语义学  
+\item 外语阅读辅助  
+\item 外语写作辅助  
+\item 信息提取  
+\item 信息检索  
+\item 语言与通信技术  
+\item 语言模型  
+\item 语言技术  
+\item 潜在语义索引  
+\item 多智能体系统  
+\item 母语识别  
+\item 自然语言编程  
+\item 自然语言理解  
+\item 自然语言搜索  
+\item 自然语言处理概述  
+\item 查询扩展  
+\item 查询理解  
+\item 再现（语言学）  
+\item 语音处理  
+\item 语音对话系统  
+\item 文本校对  
+\item 文本简化  
+\item Transformer（机器学习模型）  
+\item 大小写恢复  
+\item 问答系统  
+\item Word2vec
+\end{itemize}
+\subsection{参考文献} 
+\begin{enumerate}
+\item "NLP".  
+\item Hutchins, J. (2005). "The history of machine translation in a nutshell" (PDF). [自出版资料]  
+\item "ALPAC: the (in)famous report", John Hutchins, MT News International, no. 14, June 1996, pp. 9–12.  
+\item Crevier 1993, pp. 146–148, 见 Buchanan 2005, p. 56: "早期程序的范围必然受到内存大小和速度的限制"  
+\item Koskenniemi, Kimmo (1983), Two-level morphology: A general computational model of word-form recognition and production (PDF), Department of General Linguistics, University of Helsinki  
+\item Joshi, A. K., & Weinstein, S. (1981, August). Control of Inference: Role of Some Aspects of Discourse Structure-Centering. In IJCAI (pp. 385–387).  
+\item Guida, G.; Mauri, G. (July 1986). "Evaluation of natural language processing systems: Issues and approaches". Proceedings of the IEEE. 74 (7): 1026–1035. doi:10.1109/PROC.1986.13580. ISSN 1558-2256. S2CID 30688575.  
+\item 乔姆斯基语言学鼓励调查“边角案例”，即那些突出其理论模型局限性的情况（类似于数学中的病态现象），这些案例通常通过思想实验创建，而不是像语料库语言学那样对现实数据中典型现象进行系统调查。创建和使用这些现实数据语料库是自然语言处理中的机器学习算法的基础部分。此外，乔姆斯基语言学的理论基础，如所谓的“刺激贫乏”论点，意味着像机器学习中典型使用的通用学习算法不能在语言处理中取得成功。因此，乔姆斯基范式抑制了将此类模型应用于语言处理的实践。  
+\item Bengio, Yoshua; Ducharme, Réjean; Vincent, Pascal; Janvin, Christian (March 1, 2003). "A neural probabilistic language model". The Journal of Machine Learning Research. 3: 1137–1155 – via ACM Digital Library.  
+\item Mikolov, Tomáš; Karafiát, Martin; Burget, Lukáš; Černocký, Jan; Khudanpur, Sanjeev (26 September 2010). "Recurrent neural network based language model" (PDF). Interspeech 2010. pp. 1045–1048. doi:10.21437/Interspeech.2010-343. S2CID 17048224. {{cite book}}: |journal= 被忽略 (帮助)
+\item Goldberg, Yoav (2016). "A Primer on Neural Network Models for Natural Language Processing". Journal of Artificial Intelligence Research. 57: 345–420. arXiv:1807.10854. doi:10.1613/jair.4992. S2CID 8273530.  
+\item Goodfellow, Ian; Bengio, Yoshua; Courville, Aaron (2016). *Deep Learning*. MIT Press.  
+\item Jozefowicz, Rafal; Vinyals, Oriol; Schuster, Mike; Shazeer, Noam; Wu, Yonghui (2016). Exploring the Limits of Language Modeling. arXiv:1602.02410. Bibcode:2016arXiv160202410J.  
+\item Choe, Do Kook; Charniak, Eugene. "Parsing as Language Modeling". EMNLP 2016. Archived from the original on 2018-10-23. Retrieved 2018-10-22.  
+\item Vinyals, Oriol; et al. (2014). "Grammar as a Foreign Language" (PDF). NIPS 2015. arXiv:1412.7449. Bibcode:2014arXiv1412.7449V.  
+\item Turchin, Alexander; Florez Builes, Luisa F. (2021-03-19). "Using Natural Language Processing to Measure and Improve Quality of Diabetes Care: A Systematic Review". *Journal of Diabetes Science and Technology*. 15 (3): 553–560. doi:10.1177/19322968211000831. ISSN 1932-2968. PMC 8120048. PMID 33736486.  
+\item Lee, Jennifer; Yang, Samuel; Holland-Hall, Cynthia; Sezgin, Emre; Gill, Manjot; Linwood, Simon; Huang, Yungui; Hoffman, Jeffrey (2022-06-10). "Prevalence of Sensitive Terms in Clinical Notes Using Natural Language Processing Techniques: Observational Study". *JMIR Medical Informatics*. 10 (6): e38482. doi:10.2196/38482. ISSN 2291-9694. PMC 9233261. PMID 35687381.  
+\item Winograd, Terry (1971). *Procedures as a Representation for Data in a Computer Program for Understanding Natural Language* (Thesis).  
+\item Schank, Roger C.; Abelson, Robert P. (1977). *Scripts, Plans, Goals, and Understanding: An Inquiry Into Human Knowledge Structures*. Hillsdale: Erlbaum. ISBN 0-470-99033-3.  
+\item Mark Johnson. How the statistical revolution changes (computational) linguistics. *Proceedings of the EACL 2009 Workshop on the Interaction between Linguistics and Computational Linguistics*.
+\item Philip Resnik. Four revolutions. *Language Log*, February 5, 2011.  
+\item Socher, Richard. "Deep Learning For NLP-ACL 2012 Tutorial". www.socher.org. Retrieved 2020-08-17. This was an early Deep Learning tutorial at the ACL 2012 and met with both interest and (at the time) skepticism by most participants. Until then, neural learning was basically rejected because of its lack of statistical interpretability. Until 2015, deep learning had evolved into the major framework of NLP. [Link is broken, try http://web.stanford.edu/class/cs224n/]  
+\item Segev, Elad (2022). *Semantic Network Analysis in Social Sciences*. London: Routledge. ISBN 9780367636524. Archived from the original on 5 December 2021. Retrieved 5 December 2021.  
+\item Yi, Chucai; Tian, Yingli (2012). "Assistive Text Reading from Complex Background for Blind Persons", *Camera-Based Document Analysis and Recognition*, Lecture Notes in Computer Science, vol. 7139, Springer Berlin Heidelberg, pp. 15–28, CiteSeerX 10.1.1.668.869, doi:10.1007/978-3-642-29364-1_2, ISBN 9783642293634.  
+\item "Natural Language Processing (NLP) - A Complete Guide". www.deeplearning.ai. 2023-01-11. Retrieved 2024-05-05.  
+\item "What is Natural Language Processing? Intro to NLP in Machine Learning". GyanSetu!. 2020-12-06. Retrieved 2021-01-09.  
+\item Kishorjit, N.; Vidya, Raj RK.; Nirmal, Y.; Sivaji, B. (2012). "Manipuri Morpheme Identification" (PDF). *Proceedings of the 3rd Workshop on South and Southeast Asian Natural Language Processing (SANLP)*. COLING 2012, Mumbai, December 2012: 95–108.  
+\item Klein, Dan; Manning, Christopher D. (2002). "Natural language grammar induction using a constituent-context model" (PDF). *Advances in Neural Information Processing Systems*.  
+\item Kariampuzha, William; Alyea, Gioconda; Qu, Sue; Sanjak, Jaleal; Mathé, Ewy; Sid, Eric; Chatelaine, Haley; Yadaw, Arjun; Xu, Yanji; Zhu, Qian (2023). "Precision information extraction for rare disease epidemiology at scale". *Journal of Translational Medicine*. 21 (1): 157. doi:10.1186/s12967-023-04011-y. PMC 9972634. PMID 36855134.  
+\item PASCAL Recognizing Textual Entailment Challenge (RTE-7) [https://tac.nist.gov//2011/RTE/](https://tac.nist.gov//2011/RTE/)
+\item Lippi, Marco; Torroni, Paolo (2016-04-20). "Argumentation Mining: State of the Art and Emerging Trends". *ACM Transactions on Internet Technology*. 16 (2): 1–25. doi:10.1145/2850417. hdl:11585/523460. ISSN 1533-5399. S2CID 9561587.  
+\item "Argument Mining – IJCAI2016 Tutorial". www.i3s.unice.fr. Retrieved 2021-03-09.  
+\item "NLP Approaches to Computational Argumentation – ACL 2016, Berlin". Retrieved 2021-03-09.  
+\item Administration. "Centre for Language Technology (CLT)". Macquarie University. Retrieved 2021-01-11.  
+\item "Shared Task: Grammatical Error Correction". www.comp.nus.edu.sg. Retrieved 2021-01-11.  
+\item "Shared Task: Grammatical Error Correction". www.comp.nus.edu.sg. Retrieved 2021-01-11.  
+\item Duan, Yucong; Cruz, Christophe (2011). "Formalizing Semantic of Natural Language through Conceptualization from Existence". *International Journal of Innovation, Management and Technology*. 2 (1): 37–42. Archived from the original on 2011-10-09.  
+\item "U B U W E B :: Racter". www.ubu.com. Retrieved 2020-08-17.  
+\item Writer, Beta (2019). *Lithium-Ion Batteries*. doi:10.1007/978-3-030-16800-1. ISBN 978-3-030-16799-8. S2CID 155818532.  
+\item "Document Understanding AI on Google Cloud (Cloud Next '19) – YouTube". www.youtube.com. 11 April 2019. Archived from the original on 2021-10-30. Retrieved 2021-01-11.  
+\item Robertson, Adi (2022-04-06). "OpenAI's DALL-E AI image generator can now edit pictures, too". *The Verge*. Retrieved 2022-06-07.  
+\item "The Stanford Natural Language Processing Group". nlp.stanford.edu. Retrieved 2022-06-07.  
+\item Coyne, Bob; Sproat, Richard (2001-08-01). "WordsEye". *Proceedings of the 28th Annual Conference on Computer Graphics and Interactive Techniques*. SIGGRAPH '01. New York, NY, USA: Association for Computing Machinery. pp. 487–496. doi:10.1145/383259.383316. ISBN 978-1-58113-374-5. S2CID 3842372.  
+\item "Google announces AI advances in text-to-video, language translation, more". *VentureBeat*. 2022-11-02. Retrieved 2022-11-09.  
+\item Vincent, James (2022-09-29). "Meta's new text-to-video AI generator is like DALL-E for video". *The Verge*. Retrieved 2022-11-09.  
+\item "Previous shared tasks | CoNLL". www.conll.org. Retrieved 2021-01-11.  
+"Cognition". *Lexico*. Oxford University Press and Dictionary.com. Archived from the original on July 15, 2020. Retrieved 6 May 2020.  
+\item "Ask the Cognitive Scientist". American Federation of Teachers. 8 August 2014. Cognitive science is an interdisciplinary field of researchers from Linguistics, psychology, neuroscience, philosophy, computer science, and anthropology that seek to understand the mind.  
+\item Robinson, Peter (2008). *Handbook of Cognitive Linguistics and Second Language Acquisition*. Routledge. pp. 3–8. ISBN 978-0-805-85352-0.  
+\item Lakoff, George (1999). *Philosophy in the Flesh: The Embodied Mind and Its Challenge to Western Philosophy; Appendix: The Neural \item Theory of Language Paradigm*. New York: Basic Books. pp. 569–583. ISBN 978-0-465-05674-3.
+
+\item Strauss, Claudia (1999). A Cognitive Theory of Cultural Meaning. Cambridge University Press. pp. 156–164. ISBN 978-0-521-59541-4.
+\item US patent 9269353
+\item "Universal Conceptual Cognitive Annotation (UCCA)". Universal Conceptual Cognitive Annotation (UCCA). Retrieved 2021-01-11.
+\item Rodríguez, F. C., & Mairal-Usón, R. (2016). Building an RRG computational grammar. Onomazein, (34), 86–117.
+\item "Fluid Construction Grammar – A fully operational processing system for construction grammars". Retrieved 2021-01-11.
+\item "ACL Member Portal | The Association for Computational Linguistics Member Portal". www.aclweb.org. Retrieved 2021-01-11.
+\item "Chunks and Rules". W3C. Retrieved 2021-01-11.
+\item Socher, Richard; Karpathy, Andrej; Le, Quoc V.; Manning, Christopher D.; Ng, Andrew Y. (2014). "Grounded Compositional Semantics for Finding and Describing Images with Sentences". Transactions of the Association for Computational Linguistics. 2: 207–218. doi:10.1162/tacl_a_00177. S2CID 2317858.
+\item Dasgupta, Ishita; Lampinen, Andrew K.; Chan, Stephanie C. Y.; Creswell, Antonia; Kumaran, Dharshan; McClelland, James L.; Hill, Felix (2022). "Language models show human-like content effects on reasoning, Dasgupta, Lampinen et al". arXiv:2207.07051 [cs.CL].
+\item Friston, Karl J. (2022). Active Inference: The Free Energy Principle in Mind, Brain, and Behavior; Chapter 4 The Generative Models of Active Inference. The MIT Press. ISBN 978-0-262-36997-8.
+\end{enumerate}
+\subsection{进一步阅读}  
+\begin{itemize}
+\item Bates, M (1995). "Models of natural language understanding". *Proceedings of the National Academy of Sciences of the United States of America*. 92 (22): 9977–9982. Bibcode:1995PNAS...92.9977B. doi:10.1073/pnas.92.22.9977. PMC 40721. PMID 7479812.  
+\item Steven Bird, Ewan Klein, and Edward Loper (2009). *Natural Language Processing with Python*. O'Reilly Media. ISBN 978-0-596-51649-9.  
+\item Kenna Hughes-Castleberry, "A Murder Mystery Puzzle: The literary puzzle *Cain's Jawbone*, which has stumped humans for decades, reveals the limitations of natural-language-processing algorithms", *Scientific American*, vol. 329, no. 4 (November 2023), pp. 81–82. "This murder mystery competition has revealed that although NLP (natural-language processing) models are capable of incredible feats, their abilities are very much limited by the amount of context they receive. This [...] could cause [difficulties] for researchers who hope to use them to do things such as analyze ancient languages. In some cases, there are few historical records on long-gone civilizations to serve as training data for such a purpose." (p. 82.)  
+\item Daniel Jurafsky and James H. Martin (2008). *Speech and Language Processing*, 2nd edition. Pearson Prentice Hall. ISBN 978-0-13-187321-6.  
+\item Mohamed Zakaria Kurdi (2016). *Natural Language Processing and Computational Linguistics: Speech, Morphology, and Syntax*, Volume 1. ISTE-Wiley. ISBN 978-1848218482.  
+\item Mohamed Zakaria Kurdi (2017). *Natural Language Processing and Computational Linguistics: Semantics, Discourse, and Applications*, Volume 2. ISTE-Wiley. ISBN 978-1848219212.  
+\item Christopher D. Manning, Prabhakar Raghavan, and Hinrich Schütze (2008). *Introduction to Information Retrieval*. Cambridge University Press. ISBN 978-0-521-86571-5. Official html and pdf versions available without charge.  
+\item Christopher D. Manning and Hinrich Schütze (1999). *Foundations of Statistical Natural Language Processing*. The MIT Press. ISBN 978-0-262-13360-9.  
+\item David M. W. Powers and Christopher C. R. Turk (1989). *Machine Learning of Natural Language*. Springer-Verlag. ISBN 978-0-387-19557-5.
+\end{itemize}
+\subsection{外部链接}  
+\begin{itemize}
+\item 与自然语言处理相关的媒体资源，见于维基共享资源
+\end{itemize}
