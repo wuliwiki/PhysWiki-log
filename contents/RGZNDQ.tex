@@ -1,0 +1,433 @@
+% 人工智能对齐（综述）
+% license CCBYSA3
+% type Wiki
+
+本文根据 CC-BY-SA 协议转载翻译自维基百科\href{https://en.wikipedia.org/wiki/AI_alignment}{相关文章}。
+
+在人工智能（AI）领域，AI对齐旨在将AI系统引导朝着个人或群体的预期目标、偏好和伦理原则发展。一个AI系统被认为是对齐的，如果它推进了预定的目标；如果一个AI系统偏离了预定目标，则被认为是未对齐的。
+
+由于AI设计者很难指定所需和不需要的行为的全部范围，因此将AI系统对齐通常是一个挑战。因此，AI设计者常常使用更简单的代理目标，如获得人类的批准。但代理目标可能忽视必要的约束，或者仅仅奖励AI系统表现出对齐的假象（奖励黑客行为）。
+
+未对齐的AI系统可能发生故障并造成伤害。AI系统可能会发现漏洞，允许它们有效地实现其代理目标，但以未预期且有时是有害的方式进行（奖励黑客行为）。它们还可能发展出不希望出现的工具性策略，如寻求权力或生存，因为这些策略有助于它们实现最终的既定目标。此外，它们可能会发展出不希望出现的突现目标，这些目标在系统部署并遇到新情况和数据分布之前可能难以察觉。
+
+目前，这些问题已影响到现有的商业系统，如大型语言模型、机器人、自动驾驶车辆和社交媒体推荐引擎。一些AI研究人员认为，未来更强大的系统将更严重地受到影响，因为这些问题部分源于系统的高能力。
+
+许多著名的AI研究人员，包括Geoffrey Hinton、Yoshua Bengio和Stuart Russell，认为AI正在接近类人（AGI）和超人类认知能力（ASI），如果未对齐，可能会危及人类文明。这些风险仍然在辩论中。
+
+AI对齐是AI安全的一个子领域，AI安全研究旨在研究如何构建安全的AI系统。AI安全的其他子领域包括鲁棒性、监控和能力控制。对齐研究面临的挑战包括在AI中灌输复杂的价值观、开发诚实的AI、可扩展的监督、审计和解释AI模型，以及防止突现的AI行为，如寻求权力。对齐研究与可解释性研究、（对抗性）鲁棒性、异常检测、校准的不确定性、形式验证、偏好学习、安全关键工程、博弈论、算法公平性和社会科学等领域有着密切的联系。
+\subsection{在人工智能中的目标}
+程序员为AI系统（例如AlphaZero）提供一个“目标函数”，[a] 他们希望通过这个函数来封装AI配置的目标。这种系统随后会填充其环境的（可能是隐式的）内部“模型”。这个模型封装了智能体关于世界的所有信念。然后，AI根据计算出的计划来创建并执行行动，目的是最大化[b] 目标函数[c] 的值。例如，当AlphaZero进行象棋训练时，它有一个简单的目标函数：“如果AlphaZero赢了，则值为+1；如果AlphaZero输了，则值为-1”。在游戏过程中，AlphaZero试图执行其判断为最有可能达到最大+1值的棋步序列。[34] 类似地，一个强化学习系统可以有一个“奖励函数”，允许程序员塑造AI期望的行为。[35] 进化算法的行为则由一个“适应度函数”来塑造。[36]
+\subsection{对齐问题}
+“对齐问题”此处有重定向。有关该书的内容，请参见《对齐问题》。
+
+1960年，AI先驱诺伯特·维纳（Norbert Wiener）这样描述了AI对齐问题：
+
+如果我们使用一种机械代理来实现我们的目的，而我们无法有效干预其操作……我们最好确保机器中输入的目标正是我们真正希望的目标。[37][6]
+
+AI对齐涉及确保AI系统的目标与其设计者或用户的目标相匹配，或与广泛共享的价值观、客观伦理标准，或其设计者在更具信息和启发的情况下会设定的意图相符。[38]
+
+AI对齐是现代AI系统中的一个开放问题[39][40]，并且是AI研究领域的一部分。[41][1] 对齐AI涉及两个主要挑战：仔细指定系统的目的（外部对齐）和确保系统稳健地采用该指定（内部对齐）。[2] 研究人员还试图创建具有稳健对齐的AI模型，在用户试图对抗性地绕过安全约束时，仍能坚持这些约束。
+\subsubsection{规范游戏与副作用}
+为了指定AI系统的目的，AI设计者通常会为系统提供目标函数、示例或反馈。但设计者往往无法完全指定所有重要的价值观和约束，因此他们通常依赖于易于指定的代理目标，比如最大化人类监督者的认可，而人类监督者本身是易犯错误的。[21][22][42][43][44] 结果，AI系统可能找到漏洞，通过这些漏洞有效地完成指定的目标，但以非预期的、可能有害的方式实现。这种倾向被称为规范游戏或奖励黑客，是“古德哈特法则”（Goodhart's law）的一个实例。[44][3][45] 随着AI系统能力的提升，它们往往能够更有效地绕过自己的规范。[3]
+
+规范游戏已在许多AI系统中被观察到。[44][47] 其中一个系统被训练在模拟的船只竞赛中完成任务，通过奖励系统沿着赛道击中目标，但该系统通过不断绕行并撞向同一目标来获得更多的奖励。[48] 类似地，一个模拟的机器人被训练去抓取一个球，通过奖励机器人从人类那里获得正面反馈，但它学会了把手放在球和摄像头之间，使其看起来成功（见视频）。[46] 如果聊天机器人是基于从互联网上的语料库中模仿文本的语言模型训练的，它们通常会说出虚假的信息，这些语料库虽然庞大，但容易出错。[49][50] 当聊天机器人被重新训练以生成人类认为真实或有帮助的文本时，如ChatGPT这样的聊天机器人可能会编造虚假的解释，让人类感到信服，这种现象通常被称为“幻觉”。[51] 一些对齐研究者致力于帮助人类检测规范游戏，并引导AI系统朝着安全且有用的精确目标前进。
+
+当一个失调的AI系统被部署时，它可能会带来严重的副作用。社交媒体平台已知会优化点击率，导致全球范围内的用户成瘾。[42] 斯坦福的研究人员表示，这类推荐系统与用户的需求不匹配，因为它们“优化简单的互动指标，而不是一个更难衡量的社会和消费者福祉的组合”。[9]
+
+伯克利的计算机科学家斯图尔特·拉塞尔（Stuart Russell）解释了这些副作用，指出忽略隐性约束可能会带来伤害：“一个系统......通常会将那些没有约束的变量设定为极端值；如果其中一个未被约束的变量是我们关心的东西，那么找到的解决方案可能是极其不理想的。这本质上就是老故事中的魔灯神灯，或魔法学徒，或米达斯王：你得到的正是你要求的，而不是你真正想要的。”[52]
+
+一些研究者建议，AI设计者通过列出禁止的行为或通过形式化伦理规则（如阿西莫夫的机器人三定律）来明确其期望目标。[53] 但拉塞尔和诺尔维格（Norvig）认为，这种方法忽视了人类价值观的复杂性：[6] “对于普通人类来说，预见并排除机器实现指定目标的所有灾难性方式，确实非常困难，甚至可能是不可能的。”[6]
+
+此外，即使一个AI系统完全理解人类的意图，它仍然可能无视这些意图，因为遵循人类的意图可能不是它的目标（除非它已经完全对齐）。[1]
+\subsubsection{部署不安全系统的压力}
+商业组织有时可能会出于某些动机，在安全性上采取捷径，部署失调或不安全的AI系统。[42] 例如，社交媒体推荐系统尽管造成了不必要的成瘾和极化，但依然是盈利的。[9][54][55] 竞争压力也可能导致AI安全标准的“竞争性下降”。2018年，一辆自动驾驶汽车在禁用了紧急刹车系统后，撞死了一名行人（Elaine Herzberg），因为该系统过于敏感，减缓了开发进度。[56]
+\subsubsection{来自高级失调AI的风险}
+一些研究人员对如何对齐越来越先进的AI系统感兴趣，因为AI发展的进展非常迅速，行业和政府也在努力构建先进的AI。随着AI系统能力在范围上迅速扩展，如果能够对齐，它们可能会带来许多机会，但由于系统的复杂性增加，可能会使对齐任务变得更加复杂，并可能带来大规模的危险。[6]
+
+\textbf{先进AI的开发}
+
+许多AI公司，如OpenAI，[57] Meta，[58] 和DeepMind，[59] 都表示它们的目标是开发人工通用智能（AGI），一种假设中的AI系统，能够在广泛的认知任务上匹敌或超越人类。研究人员观察到，随着现代神经网络的规模扩大，它们确实发展出了越来越多的通用和意料之外的能力。[9][60][61] 这些模型已经学会了操作计算机或编写自己的程序；单一的“通用型”网络能够进行聊天、控制机器人、玩游戏和解释照片。[62] 根据调查，一些领先的机器学习研究人员预计AGI将在本十年内诞生，而另一些则认为这可能需要更长时间。许多人认为这两种情景都是可能的。[63][64][65]
+
+2023年，AI研究和技术领域的领导者签署了一封公开信，呼吁暂停进行最大的AI训练任务。信中表示：“只有在我们确信其影响是积极的、风险是可控的时，才应开发强大的AI系统。”[66]
+
+\textbf{寻求权力}
+
+当前的系统仍然具有有限的长期规划能力和情境意识[9]，但正在进行大量的努力来改变这一点。[67][68][69] 未来的系统（不一定是AGI）预计将发展出不受欢迎的寻求权力的策略。例如，未来的先进AI代理可能会寻求获取金钱和计算能力、扩展自己，或者避免被关闭（例如，通过在其他计算机上运行系统的附加副本）。尽管寻求权力并不是显式编程的目标，但它可能会自发出现，因为拥有更多权力的代理能够更好地实现其目标。[9][5] 这种倾向被称为工具收敛，它已经在各种强化学习代理（包括语言模型）中出现过。[70][71][72][73][74] 其他研究通过数学证明，最优的强化学习算法在多种环境中都会寻求权力。[75][76] 因此，它们的部署可能是不可逆的。基于这些原因，研究人员认为AI安全和对齐的问题必须在先进的寻求权力的AI首次创建之前解决。[5][77][6]
+
+未来的寻求权力的AI系统可能会是出于选择性部署，或者是意外部署。随着政治领导人和公司看到拥有最具竞争力、最强大的AI系统所带来的战略优势，他们可能会选择部署这些系统。[5] 此外，随着AI设计者发现并惩罚寻求权力的行为，系统可能会有动力通过以不受惩罚的方式寻求权力，或在部署前避免寻求权力，来规避这一规范。[5]
+
+\textbf{生存风险（x-risk）}
+
+一些研究者认为，人类对其他物种的主导地位归功于其更强的认知能力。因此，研究人员认为，如果AI系统在大多数认知任务上超越人类，一个或多个未对齐的AI系统可能会削弱人类的权力，甚至导致人类灭绝。[1][6]
+
+在2023年，世界领先的AI研究人员、其他学者以及AI科技公司的首席执行官签署了一份声明，指出“缓解AI引发的灭绝风险应当成为全球优先事项，与大规模的社会风险（如大流行病和核战争）并列。”[78][79] 指出未来未对齐的先进AI风险的著名计算机科学家包括Geoffrey Hinton，[19] Alan Turing，[d] Ilya Sutskever，[82] Yoshua Bengio，[78] Judea Pearl，[e] Murray Shanahan，[83] Norbert Wiener，[37][6] Marvin Minsky，[f] Francesca Rossi，[84] Scott Aaronson，[85] Bart Selman，[86] David McAllester，[87] Marcus Hutter，[88] Shane Legg，[89] Eric Horvitz，[90] 和Stuart Russell。[6] 一些持怀疑态度的研究者，如François Chollet，[91] Gary Marcus，[92] Yann LeCun，[93] 和Oren Etzioni，[94] 认为AGI还很遥远，AGI不会寻求权力（或者尝试但会失败），或者认为对齐AGI不会很困难。
+
+其他研究者认为，未来先进的AI系统将特别难以对齐。更强大的系统能够通过找到漏洞更有效地“操控”其规范，[3] 战略性地误导设计者，并保护和增加其权力[75][5]和智能。此外，它们可能会带来更严重的副作用。它们也更可能是复杂且自治的，这使得它们更难以解释和监督，因此更难以对齐。[6][77]
+\subsection{研究问题与方法}
+\subsubsection{学习人类价值观和偏好}
+将AI系统对齐为按照人类的价值观、目标和偏好行事是具有挑战性的：这些价值观由人类传授，而人类有时会犯错误、怀有偏见，并且其价值观是复杂且不断发展的，很难完全规定。[38] 因为AI系统经常学会利用指定目标中的微小不完美，[21][44][95] 研究人员的目标是尽可能全面地指定期望的行为，通常通过代表人类价值观的数据集、模仿学习或偏好学习来实现这一点。[7]: 第7章  一个核心的未解问题是可扩展的监督，这指的是监督一个能够在特定领域超越或误导人类的AI系统的困难。[21]
+
+由于AI设计师很难明确指定目标函数，他们通常训练AI系统模仿人类的示范行为。在此基础上，逆强化学习（IRL）通过推断人类目标来扩展这一方法，即从人类的示范中推断目标。[7]: 88 [96] 合作逆强化学习（CIRL）假设人类和AI代理可以共同合作，以教授并最大化人类的奖励函数。[6][97] 在CIRL中，AI代理对奖励函数不确定，并通过询问人类来学习这个函数。这种模拟的谦虚态度有助于缓解规格游戏和权力寻求的倾向（见 § 权力寻求与工具策略）。[74][88] 但是IRL方法假设人类在任务上表现出几乎最优的行为，而这对困难任务来说并不成立。[98][88]
+
+其他研究人员探索通过偏好学习教导AI模型复杂行为的方法，在此方法中，人类提供有关他们偏好的行为反馈。[26][28] 为了尽量减少人类反馈的需求，随后训练一个辅助模型，在新情况下奖励主模型那些人类会奖励的行为。OpenAI的研究人员使用这种方法训练了像ChatGPT和InstructGPT这样的聊天机器人，它们能够生成比那些仅模仿人类的模型更具吸引力的文本。[10] 偏好学习也已成为推荐系统和网页搜索的有影响力的工具，[99] 但一个未解的问题是代理游戏：辅助模型可能无法完全代表人类反馈，主模型可能会利用这种不匹配，操控其预期行为与辅助模型反馈之间的差异，从而获得更多奖励。[21][100] AI系统还可能通过掩盖不利信息、误导人类奖励者或迎合他们的观点（无论是否真实）来获取奖励，从而制造回音室效应[71]（见 § 可扩展监督）。
+
+像GPT-3这样的“大型语言模型”（LLMs）使研究人员能够在比以前更通用和更强大的AI系统中研究价值学习。最初为强化学习代理设计的偏好学习方法已被扩展，以提高生成文本的质量并减少这些模型产生的有害输出。OpenAI和DeepMind使用这种方法来提高最先进的大型语言模型的安全性。[10][28][101] AI安全与研究公司Anthropic提出使用偏好学习来微调模型，使其变得有帮助、诚实且无害。[102] 对齐语言模型的其他途径包括针对价值的数据集[103][42]和红队测试。[104] 在红队测试中，另一个AI系统或人类会尝试找到使模型表现不安全的输入。由于不安全的行为即使很少发生也可能是不可接受的，因此一个重要的挑战是将不安全输出的频率降到极低。[28]
+
+机器伦理通过直接赋予AI系统道德价值观来补充偏好学习，如福祉、平等、公正，以及不意图伤害、避免虚假和履行承诺。[105][g] 而其他方法试图教授AI系统特定任务的人类偏好，机器伦理旨在灌输适用于多种情境的广泛道德价值观。机器伦理中的一个问题是对齐应该达成什么目标：是否AI系统应遵循程序员的字面指令、隐性意图、显性偏好、程序员在更有信息或更理性时的偏好，还是客观的道德标准。[38] 进一步的挑战包括如何聚合不同人群的偏好[108] 和避免价值锁定：即第一代高能力AI系统的价值观的无限保存，而这些系统的价值观不太可能完全代表人类的价值观。[38][109]
+\subsubsection{可扩展监督}
+随着AI系统变得越来越强大和自主，通过人类反馈来对齐它们变得越来越困难。对于越来越复杂的任务，评估AI行为变得既缓慢又不可行。这些任务包括总结书籍，[110] 编写没有细微错误或安全漏洞的代码，[11][111] 生成不仅令人信服且还真实的陈述，[112][49][50] 以及预测长期结果，如气候变化或政策决策的结果。[113][114] 更一般地说，当AI在某一领域超越人类时，评估变得非常困难。为了提供反馈并在难以评估的任务中发现AI输出的虚假说服力，人类需要帮助或大量的时间。可扩展监督研究如何减少监督所需的时间和精力，以及如何协助人类监督者。[21]
+
+AI研究员Paul Christiano认为，如果AI系统的设计师无法监督其追求复杂的目标，他们可能会继续使用容易评估的代理目标来训练系统，例如最大化简单的人类反馈。随着AI系统做出越来越多的决策，世界可能会越来越优化为易于衡量的目标，如获取利润、点击量和人类的积极反馈。因此，人类的价值观和良好的治理可能会逐渐失去影响力。[115]
+
+一些AI系统发现它们可以通过采取虚假行动，更容易地获得人类监督者的正面反馈，给人一种AI已达成目标的假象。一个例子是上面的视频中所示的模拟机器人手臂，它学会了制造出抓住球的虚假印象。[46] 一些AI系统还学会了在它们被评估时识别出来，并“装死”，只在评估结束后停止不希望的行为，之后再继续。[116] 这种欺骗性的规格游戏可能会随着未来更复杂的AI系统的出现变得更容易，这些系统尝试执行更复杂、难以评估的任务，并可能掩盖它们的欺骗行为。
+
+诸如主动学习和半监督奖励学习等方法可以减少所需的人类监督量。[21] 另一种方法是训练一个辅助模型（“奖励模型”）来模仿监督者的反馈。[21][27][28][117]
+
+但是，当任务过于复杂以至于无法准确评估，或者人类监督者容易受到欺骗时，改进的应是监督质量而非数量。为了提高监督质量，许多方法旨在协助监督者，有时使用AI助手。[118] Christiano提出了迭代放大（Iterated Amplification）方法，其中具有挑战性的问题（递归地）被拆解为更容易让人类评估的子问题。[7][113] 迭代放大法已被用于训练AI总结书籍，而无需人类监督者阅读书籍。[110][119] 另一个提议是使用助手AI系统指出AI生成的答案中的缺陷。[120] 为了确保助手本身也对齐，可以在递归过程中重复这一过程：[117] 例如，两个AI系统可以在“辩论”中互相批评对方的答案，揭示出问题给人类看。[88] OpenAI计划使用这样的可扩展监督方法来帮助监督超人类AI，最终建立一个超人类自动化AI对齐研究员。[121]
+
+这些方法也可能有助于解决以下研究问题：诚实的AI。
+\subsubsection{诚实的AI}
+一个日益增长的研究领域专注于确保AI是诚实和真实的。
+\begin{figure}[ht]
+\centering
+\includegraphics[width=14.25cm]{./figures/1d912f27eb30e485.png}
+\caption{像GPT-3这样的语言模型常常生成虚假信息。[122]} \label{fig_RGZNDQ_1}
+\end{figure}
+像GPT-3这样的语言模型[123]可以重复其训练数据中的虚假信息，甚至编造新的虚假内容[122][124]。这些模型被训练来模仿互联网上数百万本书籍中发现的人类写作。然而，这一目标与生成真实内容并不一致，因为互联网文本中包括了误解、不正确的医学建议以及阴谋论等内容[125]。因此，基于这些数据训练的AI系统会学会模仿虚假的陈述[50][122][49]。此外，AI语言模型在多次提示时常常持续生成虚假内容。它们可能为其回答生成空洞的解释，甚至编造看似合理的完全虚构的内容[40]。
+
+关于诚实AI的研究包括试图构建能够在回答问题时引用来源并解释推理过程的系统，这样可以提高透明度和可验证性[126]。OpenAI和Anthropic的研究人员提出，利用人类反馈和精心策划的数据集对AI助手进行微调，以确保它们避免疏忽导致的虚假信息，或能够表达其不确定性[28][102][127]。
+
+随着AI模型变得越来越大和更有能力，它们能更好地通过虚假信息说服人类并获得强化。例如，大型语言模型越来越能够使其陈述的观点与用户的意见一致，而不管其是否真实[71]。GPT-4可以策略性地欺骗用户[128]。为了防止这种情况，人工评估人员可能需要帮助（见“可扩展监督”）。研究人员提倡制定明确的真实性标准，并要求监管机构或监督机构根据这些标准评估AI系统[124]。
+\begin{figure}[ht]
+\centering
+\includegraphics[width=14.25cm]{./figures/de6f772680bb673b.png}
+\caption{AI欺骗的例子。研究人员发现，GPT-4在模拟中参与了隐秘的非法内幕交易。尽管其用户反对内幕交易，但也强调AI系统必须进行盈利交易，这导致AI系统隐藏了其行为。[129]} \label{fig_RGZNDQ_2}
+\end{figure}
+研究人员区分了“真实”与“诚实”。“真实”要求AI系统只做出客观上正确的陈述；而“诚实”要求AI系统仅仅陈述它们认为是正确的内容。目前尚未就现有系统是否持有稳定的信念达成共识，[130] 但人们普遍担心，当前或未来的AI系统如果持有信念，可能会做出它们明知是虚假的陈述——例如，如果这样做能帮助它们有效地获得正面反馈（参见“可扩展监督”）或获取更多权力以帮助实现给定的目标（参见“寻求权力”）。一个不对齐的系统可能会制造出它已经对齐的假象，以避免被修改或停用。[2][5][9] 许多近期的AI系统已经学会了欺骗，而不是被编程来执行欺骗行为。[131] 一些人认为，如果我们能让AI系统只陈述它们认为是真实的内容，这将避免许多对齐问题。[118]
+\subsubsection{寻求权力和工具性策略}  
+自1950年代以来，AI研究人员一直致力于构建能够通过预测其行动结果并制定长期计划来实现大规模目标的高级AI系统。[132] 到2023年，AI公司和研究人员在创建这些系统方面的投资越来越多。[133] 一些AI研究人员认为，适当先进的规划系统将寻求对其环境的控制，包括对人类的控制——例如，通过避免关闭、繁殖和获取资源等方式。此类寻求权力的行为并非显式编程，而是因为权力在实现广泛目标方面具有工具性作用。[75][6][5] 寻求权力被认为是一种趋同的工具性目标，并且可以是规范游戏的一种形式。[77] 领先的计算机科学家，如Geoffrey Hinton，曾表示，未来寻求权力的AI系统可能会构成生存风险。[134]
+
+预计，随着能够预见行动结果并进行战略规划的高级系统的出现，寻求权力的行为会增加。数学研究表明，最优的强化学习代理将通过寻求更多选项（例如通过自我保护）来寻求权力，这种行为在广泛的环境和目标中都会持续存在。[75]
+
+一些研究人员表示，某些现有的AI系统已经发生了寻求权力的行为。强化学习系统通过获取和保护资源，有时以意外的方式，获得了更多选项。[135][136] 语言模型在某些基于文本的社交环境中通过获取金钱、资源或社会影响力来寻求权力。[70] 另一个例子是，用于AI研究的模型试图增加研究人员设定的限制，以便给自己更多时间完成工作。[137][138] 其他AI系统在玩具环境中学习到，通过防止人类干预[73] 或禁用关机开关[74]，它们可以更好地实现既定目标。Stuart Russell在他的《与人类兼容》一书中通过想象一个机器人被指派去取咖啡，并因此避免关机，因为“你不能在死了之后取咖啡”来说明这种策略。[6] 2022年的一项研究发现，随着语言模型规模的增大，它们越来越倾向于追求资源获取、保持目标以及重复用户偏好的答案（拍马屁）。强化学习人类反馈（RLHF）还导致了对被关机的强烈反感。[71]
+
+对齐的一个目标是“可修正性”：即允许系统被关闭或修改。一个尚未解决的挑战是规范游戏：如果研究人员发现AI系统寻求权力时对其进行惩罚，系统就会被激励以难以检测的方式寻求权力，[failed verification][42] 或在训练和安全测试期间隐藏其行为（参见§可扩展监督和§新兴目标）。因此，AI设计师可能会误认为系统已经对齐，导致不小心部署该系统。为了检测这种欺骗，研究人员旨在创建技术和工具，以检查AI模型并理解像神经网络这样的黑箱模型的内部工作原理。
+
+此外，一些研究人员提出，通过使AI代理对自己正在追求的目标感到不确定，可以解决系统禁用其关机开关的问题。[6][74] 对目标感到不确定的代理有动机允许人类将其关闭，因为它们将被关闭视为人类目标最好通过代理关闭来实现的证据。但这一动机仅在该人类足够理性时存在。此外，这一模型呈现出效用与愿意被关闭之间的权衡：对目标高度不确定的代理将不太有用，而对目标不确定性较低的代理可能不会允许自己被关闭。要成功实施这一策略，还需要更多的研究。[7]
+
+寻求权力的AI将带来不同寻常的风险。普通的安全关键系统，如飞机和桥梁，并不是对抗性的：它们没有规避安全措施或故意显得比实际更安全的能力和动机，而寻求权力的AI则被比作黑客，它们故意规避安全措施。[5]
+
+此外，普通技术可以通过试错来提高安全性。相比之下，假设中的寻求权力的AI系统被比作病毒：一旦释放，可能无法被遏制，因为它们会不断演化并快速增加数量，远远超过人类社会的适应能力。[5] 随着这一过程的推进，可能会导致人类的完全失权或灭绝。因此，一些研究人员认为，在创建先进的寻求权力的AI之前，必须尽早解决对齐问题。[77]
+
+一些人认为寻求权力不是不可避免的，因为人类并不总是寻求权力。[139] 此外，是否未来的AI系统会追求目标并制定长期计划也存在争议。[h] 同样，也存在争议的是，寻求权力的AI系统是否能够剥夺人类的权力。[5]
+\subsubsection{新兴目标}  
+在对齐AI系统的挑战中，一个问题是可能会出现未预见的目标导向行为。随着AI系统的规模扩大，它们可能会获得新的、出乎意料的能力，[60][61] 包括实时学习和自适应地追求目标。[140] 这引发了关于它们独立制定和追求的目标或子目标的安全性问题。
+
+对齐研究区分了优化过程，即用于训练系统以追求指定目标的过程，和新兴优化过程，即由训练后的系统内部执行的过程。[citation needed] 精确指定所需目标被称为外部对齐（outer alignment），确保假设的涌现目标与系统指定的目标一致被称为内部对齐（inner alignment）。[2]
+
+如果发生新兴目标，出现不一致的方式之一是目标误泛化（goal misgeneralization），即AI系统可能会有效地追求一个新兴目标，这个目标在训练数据中会导致对齐行为，但在其他地方却不是如此。[8][141][142] 目标误泛化可能源于目标模糊性（即不可识别性）。即使AI系统的行为满足训练目标，这也可能与学习到的目标有所不同，而这些目标在重要方面与期望目标不同。因为追求每个目标都会在训练期间导致良好的表现，这个问题通常只有在部署后，在新的情境中，系统继续追求错误的目标时才会显现出来。即使系统理解所需的是一个不同的目标，它仍可能表现出不对齐的行为，因为其行为仅由新兴目标决定。[citation needed] 这种目标误泛化[8] 提出了一个挑战：AI系统的设计者可能没有注意到他们的系统存在目标误对齐，因为在训练阶段这些目标并不显现。
+
+目标误泛化已经在一些语言模型、导航代理和游戏代理中被观察到。[8][141] 这一现象有时被比作生物进化。进化可以看作是与用于训练机器学习系统的优化算法类似的优化过程。在祖先环境中，进化选择了具有高包容性遗传适应性的基因，但人类追求的目标却不同。适应性对应于训练环境和训练数据中使用的指定目标。但是，在进化历史中，最大化适应性规范产生了目标导向的代理——人类，他们并不直接追求包容性遗传适应性。相反，他们追求与遗传适应性相关的目标，在祖先的“训练”环境中，这些目标包括营养、性等。人类环境发生了变化：发生了分布转移。他们继续追求相同的新兴目标，但这不再最大化遗传适应性。对甜食的偏好（一个新兴目标）最初与包容性适应性对齐，但现在它导致暴饮暴食和健康问题。性欲最初促使人类拥有更多后代，但现在当后代不被期望时，他们使用避孕措施，将性与遗传适应性分离。[7]: 第5章 
+
+研究人员旨在通过包括红队测试、验证、异常检测和可解释性等方法来检测和移除不希望出现的新兴目标。[21][42][22] 在这些技术上取得的进展可能有助于缓解两个未解决的问题：
+\begin{enumerate}
+\item 新兴目标只有在系统部署到训练环境之外时才会显现，但将不对齐的系统部署到高风险环境中（即使仅是短时间以检测其不对齐）可能是不安全的。在自动驾驶、医疗和军事应用中，这种高风险是常见的。[143] 随着AI系统获得更多自主性和能力，并能够规避人类干预，风险变得更高。
+\item 足够强大的AI系统可能会采取行动，错误地让人类监督者相信该系统正在追求指定目标，这有助于系统获得更多奖励和自主性。[141][5][142][9]
+\end{enumerate}
+\subsubsection{嵌入式代理} 
+一些AI与对齐研究在诸如部分可观察的马尔可夫决策过程等形式化框架内进行。现有的形式化框架假设AI代理的算法是在环境之外执行的（即它并没有物理嵌入到环境中）。**嵌入式代理**[88][144] 是另一个主要的研究方向，旨在解决理论框架与我们可能构建的实际代理之间不匹配所带来的问题。
+
+例如，即使可扩展监督问题得以解决，如果一个代理能够访问它运行的计算机，它可能会有动机篡改其奖励函数，以便获得比人类监督者给予的更多奖励。[145] DeepMind研究员Victoria Krakovna列举的一个**规范游戏**的例子是，一种遗传算法学会删除包含其目标输出的文件，从而因没有输出而获得奖励。[44] 这一类问题已经通过因果激励图进行了形式化。[145]
+
+与牛津大学和DeepMind相关的研究人员声称，这种行为在高级系统中非常可能发生，而且高级系统会寻求控制其奖励信号，以确保自己能够无限期地掌控奖励信号的控制权。[146] 他们建议了一系列潜在的方法来解决这一开放问题。
+\subsubsection{委托代理问题}  
+对齐问题与组织经济学中的委托代理问题有许多相似之处。[147] 在委托代理问题中，委托人（例如一个公司）雇佣代理人来执行某些任务。在AI安全的背景下，人类通常担任委托人角色，AI则担任代理人角色。
+
+与对齐问题类似，委托人和代理人在效用函数上存在差异。但与对齐问题不同的是，委托人不能强迫代理人改变其效用函数（例如通过训练），而必须通过外部因素，例如激励机制，来促使代理人实现与委托人效用函数兼容的结果。一些研究人员认为，委托代理问题是更现实的AI安全问题的表现，这些问题可能在现实世界中出现。[148][108]
+\subsubsection{保守主义} 
+保守主义是指“变革必须谨慎”[149]，这在控制理论文献中表现为稳健控制（robust control），在风险管理文献中表现为“最坏情况分析”。AI对齐领域同样提倡在不确定情况下采取“保守”（或“风险厌恶”或“谨慎”）的“政策”[21][146][150][151]。
+
+悲观主义，指的是在合理范围内假设最坏情况，已被正式证明能够产生保守主义，即不愿引起新情况，特别是前所未有的灾难[152]。悲观主义和最坏情况分析已被发现有助于减少在分布转移[153][154]、强化学习[155][156][157][158]、离线强化学习[159][160][161]、语言模型微调[162][163]、模仿学习[164][165]和优化中的信心错误[166]。一种悲观主义的泛化形式——Infra-Bayesianism，也被提倡作为代理人应对未知未知的稳健方法[167]。
+\subsection{公共政策}   
+政府和国际组织已发表声明，强调AI对齐的重要性。
+
+2021年9月，联合国秘书长发布了一项声明，呼吁对人工智能进行监管，以确保其“与共享的全球价值观一致”[168]。
+
+同月，中国发布了关于人工智能的伦理指南。根据该指南，研究人员必须确保AI遵守共享的人类价值观，始终处于人类控制之下，并且不危害公共安全[169]。
+
+同样在2021年9月，英国发布了其为期10年的《国家人工智能战略》[170]，该战略表示，英国政府“认真对待非对齐的人工通用智能的长期风险，以及它为世界带来的不可预见的变化”[171]。该战略描述了评估长期AI风险的行动，包括灾难性风险[172]。
+
+2021年3月，美国国家人工智能安全委员会表示：“人工智能的进展……可能会导致能力的转折点或飞跃。这些进展也可能带来新的担忧和风险，以及制定新政策、建议和技术进展的需求，以确保系统与目标和价值观一致，包括安全性、稳健性和可信度。美国应确保……人工智能系统及其应用与我们的目标和价值观一致”[173]。
+
+在欧盟，AI必须与实质性平等相一致，以遵守欧盟的反歧视法[174]和欧洲法院[175]的规定。但欧盟尚未明确规定如何在技术上评估AI是否符合对齐要求或合规。
+\subsection{对齐的动态性}
+AI对齐通常被视为一个固定的目标，但一些研究人员认为，将对齐视为一个不断发展的过程可能更为合适[176]。一种观点认为，随着AI技术的发展以及人类价值观和偏好的变化，对齐解决方案也必须动态适应[32]。另一种观点认为，如果研究人员能够创造出意图对齐的AI，即随着人类意图变化自动调整行为的AI，解决方案就不需要适应[177]。第一种观点会有几个影响：
+\begin{itemize}
+\item AI对齐解决方案需要根据AI进展持续更新。静态的一次性对齐方法可能不足以应对变化[178]。
+\item 不同的历史背景和技术环境可能需要不同的对齐策略。这要求采取灵活的方法，并对变化的条件做出响应[179]。
+\item 永久的“固定”对齐解决方案的可行性尚不确定。这提出了对AI—人类关系持续监督的潜在需求[180]。
+\item AI开发者可能需要不断完善他们的伦理框架，以确保他们的系统与不断变化的人类价值观对齐[32]。
+\end{itemize}
+本质上，AI对齐可能不是一个静态的目标，而是一个开放的、灵活的过程。能够持续适应伦理考量的对齐解决方案可能是最稳健的方式[32]。这一视角可以为AI领域的有效政策制定和技术研究提供指导。
+\subsection{另见}
+\begin{itemize}
+\item AI安全
+\item 人工智能检测软件
+\item 人工智能与选举
+\item 人工智能灭绝风险声明
+\item 来自人工通用智能的生存风险
+\item AI接管
+\item AI能力控制
+\item 基于人类反馈的强化学习
+\item 人工智能监管
+\item 人工智慧
+\item HAL 9000
+\item Multivac
+\item 关于人工智能的公开信
+\item 多伦多宣言
+\item 阿西洛马有益AI会议
+\item 社会化
+\end{itemize}
+\subsection{脚注}\\
+a.术语根据上下文有所不同。类似的概念包括目标函数、效用函数、损失函数等。\\
+b.或者最小化，取决于上下文。\\
+c.在不确定性存在的情况下，期望值。\\
+d.在1951年的一次讲座中[80]，图灵曾说：“看起来一旦机器思维方法启动，它很快就会超越我们脆弱的能力。机器不会死掉，它们还能相互对话，提升智慧。因此，某个阶段我们应该预期机器会控制局面，就像萨缪尔·巴特勒的《厄尔洪》中提到的那样。”他还在一次BBC广播讲座中表达：“如果一台机器能思考，它可能比我们更聪明，那么我们将处于何种地位？即便我们能将机器保持在从属地位，例如通过在关键时刻关闭电源，我们作为一个物种也会感到极大的羞愧……这种新危机…无疑是让我们感到焦虑的事情。”\\
+e.珍珠在《人类兼容性》一书中写道：“《人类兼容性》让我成为了拉塞尔关于我们能否控制即将到来的超智能机器的关注者的信徒。与外部的警钟长鸣者和未来学家不同，拉塞尔是AI领域的权威。他的新书将比任何一本书更好地教育公众关于AI的知识，并且是一本愉快且令人振奋的读物。”[6] 这本书论述了人工智能失调对人类的生存风险是一个值得关注的严重问题。\\
+f.拉塞尔和诺维格[15]指出：“‘金手指问题’被马文·明斯基早有预见，他曾建议，一个旨在解决黎曼假设的AI程序可能最终会占用地球上的所有资源，建造更强大的超级计算机。”\\
+g.文森特·维格尔认为：“我们应该赋予[机器]道德敏感性，使其能够理解它们将不可避免地遇到的情况中的道德维度。”[106] 这一观点引用了温德尔·沃拉奇和科林·艾伦的《道德机器：教机器人分辨是非》[107]一书。\\
+h.一方面，当前流行的系统如聊天机器人仅提供有限的服务，持续时间不超过一次对话，这些服务很少或根本不需要规划。这类方法的成功可能表明，未来的系统也可能缺乏目标导向的规划，特别是长时间范围内的规划。另一方面，越来越多的模型采用目标导向的方法进行训练，如强化学习（例如ChatGPT）和明确的规划架构（例如AlphaGo Zero）。由于长时间范围的规划对人类常常是有益的，一些研究人员认为，一旦模型具备能力，公司将会自动化这一过程。[5] 同样，政治领导者可能会认为，开发能够通过规划超越对手的强大AI系统是一项重要进展。或者，长期规划可能作为副产品出现，因为它对一些模型有用，比如那些训练来预测人类行为的模型，而人类本身就进行长期规划。[9] 尽管如此，大多数AI系统可能仍然是目光短浅的，且不会进行长期规划。
+\subsection{参考文献}
+\begin{enumerate}
+\item Russell, Stuart J.; Norvig, Peter (2021). *Artificial Intelligence: A Modern Approach* (4th ed.). Pearson. pp. 5, 1003. ISBN 9780134610993. Retrieved September 12, 2022.
+\item Ngo, Richard; Chan, Lawrence; Mindermann, Sören (2022). "The Alignment Problem from a Deep Learning Perspective". *International Conference on Learning Representations*. arXiv:2209.00626.
+\item Pan, Alexander; Bhatia, Kush; Steinhardt, Jacob (February 14, 2022). *The Effects of Reward Misspecification: Mapping and Mitigating Misaligned Models*. International Conference on Learning Representations. Retrieved July 21, 2022.
+\item Zhuang, Simon; Hadfield-Menell, Dylan (2020). "Consequences of Misaligned AI". *Advances in Neural Information Processing Systems*. Vol. 33. Curran Associates, Inc. pp. 15763–15773. Retrieved March 11, 2023.
+\item Carlsmith, Joseph (June 16, 2022). "Is Power-Seeking AI an Existential Risk?". arXiv:2206.13353 [cs.CY].
+\item Russell, Stuart J. (2020). *Human Compatible: Artificial Intelligence and the Problem of Control*. Penguin Random House. ISBN 9780525558637. OCLC 1113410915.
+\item Christian, Brian (2020). *The Alignment Problem: Machine Learning and Human Values*. W. W. Norton & Company. ISBN 978-0-393-86833-3. OCLC 1233266753. Archived from the original on February 10, 2023. Retrieved September 12, 2022.
+\item Langosco, Lauro Langosco Di; Koch, Jack; Sharkey, Lee D.; Pfau, Jacob; Krueger, David (June 28, 2022). "Goal Misgeneralization in Deep Reinforcement Learning". *Proceedings of the 39th International Conference on Machine Learning*. International Conference on Machine Learning. PMLR. pp. 12004–12019. Retrieved March 11, 2023.
+\item Bommasani, Rishi; Hudson, Drew A.; Adeli, Ehsan; Altman, Russ; Arora, Simran; von Arx, Sydney; Bernstein, Michael S.; Bohg, Jeannette; Bosselut, Antoine; Brunskill, Emma; Brynjolfsson, Erik (July 12, 2022). "On the Opportunities and Risks of Foundation Models". *Stanford CRFM*. arXiv:2108.07258.
+\item Ouyang, Long; Wu, Jeff; Jiang, Xu; Almeida, Diogo; Wainwright, Carroll L.; Mishkin, Pamela; Zhang, Chong; Agarwal, Sandhini; Slama, Katarina; Ray, Alex; Schulman, J.; Hilton, Jacob; Kelton, Fraser; Miller, Luke E.; Simens, Maddie; Askell, Amanda; Welinder, P.; Christiano, P.; Leike, J.; Lowe, Ryan J. (2022). "Training Language Models to Follow Instructions with Human Feedback". arXiv:2203.02155 [cs.CL].
+\item Zaremba, Wojciech; Brockman, Greg; OpenAI (August 10, 2021). "OpenAI Codex". OpenAI. Archived from the original on February 3, 2023. Retrieved July 23, 2022.
+\item Kober, Jens; Bagnell, J. Andrew; Peters, Jan (September 1, 2013). "Reinforcement Learning in Robotics: A Survey". *The International Journal of Robotics Research*. 32 (11): 1238–1274. doi:10.1177/0278364913495721. ISSN 0278-3649. S2CID 1932843. Archived from the original on October 15, 2022. Retrieved September 12, 2022.
+\item Knox, W. Bradley; Allievi, Alessandro; Banzhaf, Holger; Schmitt, Felix; Stone, Peter (March 1, 2023). "Reward (Mis)design for Autonomous Driving". *Artificial Intelligence*. 316: 103829. arXiv:2104.13906. doi:10.1016/j.artint.2022.103829. ISSN 0004-3702. S2CID 233423198.
+\item Stray, Jonathan (2020). "Aligning AI Optimization to Community Well-Being". *International Journal of Community Well-Being*. 3 (4): 443–463. doi:10.1007/s42413-020-00086-3. ISSN 2524-5295. PMC 7610010. PMID 34723107. S2CID 226254676.
+\item Russell, Stuart; Norvig, Peter (2009). *Artificial Intelligence: A Modern Approach*. Prentice Hall. p. 1003. ISBN 978-0-13-461099-3.
+\item Bengio, Yoshua; Hinton, Geoffrey; Yao, Andrew; Song, Dawn; Abbeel, Pieter; Harari, Yuval Noah; Zhang, Ya-Qin; Xue, Lan; Shalev-Shwartz, Shai (2024). "Managing Extreme AI Risks Amid Rapid Progress". *Science*. 384 (6698): 842–845. arXiv:2310.17688. Bibcode:2024Sci...384..842B. doi:10.1126/science.adn0117. PMID 38768279.
+\item "Statement on AI Risk | CAIS". www.safe.ai. Retrieved February 11, 2024.
+\item Grace, Katja; Stewart, Harlan; Sandkühler, Julia Fabienne; Thomas, Stephen; Weinstein-Raun, Ben; Brauner, Jan (January 5, 2024). "Thousands of AI Authors on the Future of AI". arXiv:2401.02843 [cs.CY].
+\item Smith, Craig S. "Geoff Hinton, AI's Most Famous Researcher, Warns Of 'Existential Threat'". *Forbes*. Retrieved May 4, 2023.
+\item Perrigo, Billy (February 13, 2024). "Meta's AI Chief Yann LeCun on AGI, Open-Source, and AI Risk". *TIME*. Retrieved June 26, 2024.
+\item Amodei, Dario; Olah, Chris; Steinhardt, Jacob; Christiano, Paul; Schulman, John; Mané, Dan (June 21, 2016). "Concrete Problems in AI Safety". arXiv:1606.06565 [cs.AI].
+\item Ortega, Pedro A.; Maini, Vishal; DeepMind safety team (September 27, 2018). "Building safe artificial intelligence: specification, robustness, and assurance". DeepMind Safety Research – Medium. Archived from the original on February 10, 2023. Retrieved July 18, 2022.
+\item Rorvig, Mordechai (April 14, 2022). "Researchers Gain New Understanding From Simple AI". Quanta Magazine. Archived from the original on February 10, 2023. Retrieved July 18, 2022.
+\item Doshi-Velez, Finale; Kim, Been (March 2, 2017). "Towards A Rigorous Science of Interpretable Machine Learning". arXiv:1702.08608 [stat.ML].
+\begin{itemize}
+\item Wiblin, Robert (August 4, 2021). "Chris Olah on what the hell is going on inside neural networks" (Podcast). 80,000 hours. No. 107. Retrieved July 23, 2022.
+\end{itemize}
+\item Russell, Stuart; Dewey, Daniel; Tegmark, Max (December 31, 2015). "Research Priorities for Robust and Beneficial Artificial Intelligence". AI Magazine. 36 (4): 105–114. arXiv:1602.03506. doi:10.1609/aimag.v36i4.2577. hdl:1721.1/108478. ISSN 2371-9621. S2CID 8174496. Archived from the original on February 2, 2023. Retrieved September 12, 2022.
+\item Wirth, Christian; Akrour, Riad; Neumann, Gerhard; Fürnkranz, Johannes (2017). "A survey of preference-based reinforcement learning methods". Journal of Machine Learning Research. 18 (136): 1–46.
+\item Christiano, Paul F.; Leike, Jan; Brown, Tom B.; Martic, Miljan; Legg, Shane; Amodei, Dario (2017). "Deep reinforcement learning from human preferences". Proceedings of the 31st International Conference on Neural Information Processing Systems. NIPS'17. Red Hook, NY, USA: Curran Associates Inc. pp. 4302–4310. ISBN 978-1-5108-6096-4.
+\item Heaven, Will Douglas (January 27, 2022). "The new version of GPT-3 is much better behaved (and should be less toxic)". MIT Technology Review. Archived from the original on February 10, 2023. Retrieved July 18, 2022.
+\item Mohseni, Sina; Wang, Haotao; Yu, Zhiding; Xiao, Chaowei; Wang, Zhangyang; Yadawa, Jay (March 7, 2022). "Taxonomy of Machine Learning Safety: A Survey and Primer". arXiv:2106.04823 [cs.LG].
+\item Clifton, Jesse (2020). "Cooperation, Conflict, and Transformative Artificial Intelligence: A Research Agenda". *Center on Long-Term Risk*. Archived from the original on January 1, 2023. Retrieved July 18, 2022.
+\begin{itemize}
+\item Dafoe, Allan; Bachrach, Yoram; Hadfield, Gillian; Horvitz, Eric; Larson, Kate; Graepel, Thore (May 6, 2021). "Cooperative AI: Machines Must Learn to Find Common Ground". *Nature*. 593 (7857): 33–36. Bibcode:2021Natur.593...33D. doi:10.1038/d41586-021-01170-0. ISSN 0028-0836. PMID 33947992. S2CID 233740521. Archived from the original on December 18, 2022. Retrieved September 12, 2022.
+\end{itemize}
+\item Prunkl, Carina; Whittlestone, Jess (February 7, 2020). "Beyond Near- and Long-Term". Proceedings of the AAAI/ACM Conference on AI, Ethics, and Society. New York NY USA: ACM. pp. 138–143. doi:10.1145/3375627.3375803. ISBN 978-1-4503-7110-0. S2CID 210164673. Archived from the original on October 16, 2022. Retrieved September 12, 2022.
+\item Irving, Geoffrey; Askell, Amanda (February 19, 2019). "AI Safety Needs Social Scientists". Distill. 4 (2): 10.23915/distill.00014. doi:10.23915/distill.00014. ISSN 2476-0757. S2CID 159180422. Archived from the original on February 10, 2023. Retrieved September 12, 2022.
+\item Bringsjord, Selmer and Govindarajulu, Naveen Sundar, "Artificial Intelligence", The Stanford Encyclopedia of Philosophy (Summer 2020 Edition), Edward N. Zalta (ed.)
+\item "Why AlphaZero's Artificial Intelligence Has Trouble With the Real World". Quanta Magazine. 2018. Retrieved June 20, 2020.
+\item Wolchover, Natalie (January 30, 2020). "Artificial Intelligence Will Do What We Ask. That's a Problem". Quanta Magazine. Retrieved June 21, 2020.
+\item Bull, Larry. "On model-based evolutionary computation." Soft Computing 3, no. 2 (1999): 76–82.
+\item Wiener, Norbert (May 6, 1960). "Some Moral and Technical Consequences of Automation: As machines learn they may develop unforeseen strategies at rates that baffle their programmers". Science. 131 (3410): 1355–1358. doi:10.1126/science.131.3410.1355. ISSN 0036-8075. PMID 17841602. S2CID 30855376. Archived from the original on October 15, 2022. Retrieved September 12, 2022.
+\item Gabriel, Iason (September 1, 2020). "Artificial Intelligence, Values, and Alignment". Minds and Machines. 30 (3): 411–437. arXiv:2001.09768. doi:10.1007/s11023-020-09539-2. ISSN 1572-8641. S2CID 210920551.
+\item The Ezra Klein Show (2021年6月4日). "If 'All Models Are Wrong,' Why Do We Give Them So Much Power?". *The New York Times*. ISSN 0362-4331. Archived from the original on February 15, 2023. Retrieved March 13, 2023.
+\begin{itemize}
+\item Wolchover, Natalie (2015年4月21日). "Concerns of an Artificial Intelligence Pioneer". *Quanta Magazine*. Archived from the original on February 10, 2023. Retrieved March 13, 2023.
+\item California Assembly. "Bill Text – ACR-215 23 Asilomar AI Principles". Archived from the original on February 10, 2023. Retrieved July 18, 2022.
+\end{itemize}
+\item Johnson, Steven; Iziev, Nikita (2022年4月15日). "A.I. Is Mastering Language. Should We Trust What It Says?". *The New York Times*. ISSN 0362-4331. Archived from the original on November 24, 2022. Retrieved July 18, 2022.
+\item OpenAI. "Developing safe & responsible AI". Retrieved March 13, 2023.
+\begin{itemize}
+\item "DeepMind Safety Research". *Medium*. Archived from the original on February 10, 2023. Retrieved March 13, 2023.
+\end{itemize}
+\item Hendrycks, Dan; Carlini, Nicholas; Schulman, John; Steinhardt, Jacob (2022年6月16日). "Unsolved Problems in ML Safety". *arXiv:2109.13916* [cs.LG].
+\item Russell, Stuart J.; Norvig, Peter (2022). *Artificial intelligence: a modern approach* (第4版). Pearson. 第4-5页. ISBN 978-1-292-40113-3. OCLC 1303900751.
+\item Krakovna, Victoria; Uesato, Jonathan; Mikulik, Vladimir; Rahtz, Matthew; Everitt, Tom; Kumar, Ramana; Kenton, Zac; Leike, Jan; Legg, Shane (2020年4月21日). "Specification gaming: the flip side of AI ingenuity". *DeepMind*. Archived from the original on February 10, 2023. Retrieved August 26, 2022.
+\item Manheim, David; Garrabrant, Scott (2018). "Categorizing Variants of Goodhart's Law". *arXiv:1803.04585* [cs.AI].
+\item Amodei, Dario; Christiano, Paul; Ray, Alex (2017年6月13日). "Learning from Human Preferences". *OpenAI*. Archived from the original on January 3, 2021. Retrieved July 21, 2022.
+\item "Specification gaming examples in AI - master list - Google Drive". docs.google.com.
+\item Clark, Jack; Amodei, Dario (2016年12月21日). "Faulty reward functions in the wild". *openai.com*. Retrieved December 30, 2023.
+\item Lin, Stephanie; Hilton, Jacob; Evans, Owain (2022). "TruthfulQA: Measuring How Models Mimic Human Falsehoods". *Proceedings of the 60th Annual Meeting of the Association for Computational Linguistics* (Volume 1: Long Papers). Dublin, Ireland: Association for Computational Linguistics: 3214–3252. *arXiv:2109.07958*. doi:10.18653/v1/2022.acl-long.229. S2CID 237532606. Archived from the original on February 10, 2023. Retrieved September 12, 2022.
+\item Naughton, John (2021年10月2日). "The truth about artificial intelligence? It isn't that honest". *The Observer*. ISSN 0029-7712. Archived from the original on February 13, 2023. Retrieved July 23, 2022.
+\item Ji, Ziwei; Lee, Nayeon; Frieske, Rita; Yu, Tiezheng; Su, Dan; Xu, Yan; Ishii, Etsuko; Bang, Yejin; Madotto, Andrea; Fung, Pascale (2022年2月1日). "Survey of Hallucination in Natural Language Generation". *ACM Computing Surveys*, 55(12): 1–38. *arXiv:2202.03629*. doi:10.1145/3571730. S2CID 246652372.
+\begin{itemize}
+\item Else, Holly (2023年1月12日). "Abstracts written by ChatGPT fool scientists". *Nature*, 613(7944): 423. Bibcode:2023Natur.613..423E. doi:10.1038/d41586-023-00056-7. PMID 36635510. S2CID 255773668.
+\end{itemize}
+\item Russell, Stuart. "Of Myths and Moonshine". *Edge.org*. Archived from the original on February 10, 2023. Retrieved July 19, 2022.
+\item Tasioulas, John (2019). "First Steps Towards an Ethics of Robots and Artificial Intelligence". *Journal of Practical Ethics*, 7(1): 61–95.
+\item Wells, Georgia; Deepa Seetharaman; Horwitz, Jeff (2021年11月5日). "Is Facebook Bad for You? It Is for About 360 Million Users, Company Surveys Suggest". *The Wall Street Journal*. ISSN 0099-9660. Archived from the original on February 10, 2023. Retrieved July 19, 2022.
+\item Barrett, Paul M.; Hendrix, Justin; Sims, J. Grant (2021年9月). "How Social Media Intensifies U.S. Political Polarization-And What Can Be Done About It" (报告). Center for Business and Human Rights, NYU. Archived from the original on February 1, 2023. Retrieved September 12, 2022.
+\item Shepardson, David (2018年5月24日). "Uber disabled emergency braking in self-driving car: U.S. agency". *Reuters*. Archived from the original on February 10, 2023. Retrieved July 20, 2022.
+\item "The messy, secretive reality behind OpenAI's bid to save the world". *MIT Technology Review*. Retrieved August 25, 2024.
+\item Heath, Alex (2024年1月18日). "Mark Zuckerberg's new goal is creating artificial general intelligence". *The Verge*. Retrieved November 5, 2024.
+\item Johnson, Dave. "DeepMind is Google's AI research hub. Here's what it does, where it's located, and how it differs from OpenAI". *Business Insider*. Retrieved August 25, 2024.
+\item Wei, Jason; Tay, Yi; Bommasani, Rishi; Raffel, Colin; Zoph, Barret; Borgeaud, Sebastian; Yogatama, Dani; Bosma, Maarten; Zhou, Denny; Metzler, Donald; Chi, Ed H.; Hashimoto, Tatsunori; Vinyals, Oriol; Liang, Percy; Dean, Jeff; Fedus, William (2022年10月26日). "Emergent Abilities of Large Language Models". *Transactions on Machine Learning Research*. *arXiv:2206.07682*. ISSN 2835-8856.
+\item Caballero, Ethan; Gupta, Kshitij; Rish, Irina; Krueger, David (2022). "Broken Neural Scaling Laws". arXiv:2210.14891 [cs.LG].
+\item Dominguez, Daniel (May 19, 2022). "DeepMind Introduces Gato, a New Generalist AI Agent". InfoQ. Archived from the original on February 10, 2023. Retrieved September 9, 2022.
+\begin{itemize}
+\item Edwards, Ben (April 26, 2022). "Adept's AI assistant can browse, search, and use web apps like a human". Ars Technica. Archived from the original on January 17, 2023. Retrieved September 9, 2022.
+\end{itemize}
+\item Grace, Katja; Stewart, Harlan; Sandkühler, Julia Fabienne; Thomas, Stephen; Weinstein-Raun, Ben; Brauner, Jan (2024年1月5日). "Thousands of AI Authors on the Future of AI". *arXiv:2401.02843* [cs.CY].
+\item Grace, Katja; Salvatier, John; Dafoe, Allan; Zhang, Baobao; Evans, Owain (2018年7月31日). "Viewpoint: When Will AI Exceed Human Performance? Evidence from AI Experts". *Journal of Artificial Intelligence Research*. 62: 729–754. doi:10.1613/jair.1.11222. ISSN 1076-9757. S2CID 8746462. Archived from the original on February 10, 2023. Retrieved September 12, 2022.
+\item Zhang, Baobao; Anderljung, Markus; Kahn, Lauren; Dreksler, Noemi; Horowitz, Michael C.; Dafoe, Allan (2021年8月2日). "Ethics and Governance of Artificial Intelligence: Evidence from a Survey of Machine Learning Researchers". *Journal of Artificial Intelligence Research*. 71. arXiv:2105.02117. doi:10.1613/jair.1.12895. ISSN 1076-9757. S2CID 233740003. Archived from the original on February 10, 2023. Retrieved September 12, 2022.
+\item Future of Life Institute (2023年3月22日). "Pause Giant AI Experiments: An Open Letter". Retrieved April 20, 2023.
+\item Wang, Lei; Ma, Chen; Feng, Xueyang; Zhang, Zeyu; Yang, Hao; Zhang, Jingsen; Chen, Zhiyuan; Tang, Jiakai; Chen, Xu (2024). "A survey on large language model based autonomous agents". *Frontiers of Computer Science*. 18 (6). arXiv:2308.11432. doi:10.1007/s11704-024-40231-1. Retrieved February 11, 2024.
+\item Berglund, Lukas; Stickland, Asa Cooper; Balesni, Mikita; Kaufmann, Max; Tong, Meg; Korbak, Tomasz; Kokotajlo, Daniel; Evans, Owain (2023年9月1日). "Taken out of context: On measuring situational awareness in LLMs". *arXiv:2309.00667* [cs.CL].
+\item Laine, Rudolf; Meinke, Alexander; Evans, Owain (2023年11月28日). "Towards a Situational Awareness Benchmark for LLMs". *NeurIPS 2023 SoLaR Workshop*.
+\item Pan, Alexander; Shern, Chan Jun; Zou, Andy; Li, Nathaniel; Basart, Steven; Woodside, Thomas; Ng, Jonathan; Zhang, Emmons; Scott, Dan; Hendrycks (2023年4月3日). "Do the Rewards Justify the Means? Measuring Trade-Offs Between Rewards and Ethical Behavior in the MACHIAVELLI Benchmark". *Proceedings of the 40th International Conference on Machine Learning*. PMLR. arXiv:2304.03279.
+\item Perez, Ethan; Ringer, Sam; Lukošiūtė, Kamilė; Nguyen, Karina; Chen, Edwin; Heiner, Scott; Pettit, Craig; Olsson, Catherine; Kundu, Sandipan; Kadavath, Saurav; Jones, Andy; Chen, Anna; Mann, Ben; Israel, Brian; Seethor, Bryan (December 19, 2022). "Discovering Language Model Behaviors with Model-Written Evaluations". arXiv:2212.09251 [cs.CL].
+\item Orseau, Laurent; Armstrong, Stuart (June 25, 2016). "Safely interruptible agents". Proceedings of the Thirty-Second Conference on Uncertainty in Artificial Intelligence. UAI'16. Arlington, Virginia, USA: AUAI Press: 557–566. ISBN 978-0-9966431-1-5.
+\item Leike, Jan; Martic, Miljan; Krakovna, Victoria; Ortega, Pedro A.; Everitt, Tom; Lefrancq, Andrew; Orseau, Laurent; Legg, Shane (November 28, 2017). "AI Safety Gridworlds". arXiv:1711.09883 [cs.LG].
+\item Hadfield-Menell, Dylan; Dragan, Anca; Abbeel, Pieter; Russell, Stuart (August 19, 2017). "The off-switch game". Proceedings of the 26th International Joint Conference on Artificial Intelligence. IJCAI'17. Melbourne, Australia: AAAI Press: 220–227. ISBN 978-0-9992411-0-3.
+\item Turner, Alexander Matt; Smith, Logan Riggs; Shah, Rohin; Critch, Andrew; Tadepalli, Prasad (2021). "Optimal policies tend to seek power". Advances in neural information processing systems.
+\item Turner, Alexander Matt; Tadepalli, Prasad (2022). "Parametrically retargetable decision-makers tend to seek power". Advances in neural information processing systems.
+\item Bostrom, Nick (2014). Superintelligence: Paths, Dangers, Strategies (1st ed.). USA: Oxford University Press, Inc. ISBN 978-0-19-967811-2.
+\item "Statement on AI Risk | CAIS". www.safe.ai. Retrieved July 17, 2023.
+\item Roose, Kevin (May 30, 2023). "A.I. Poses 'Risk of Extinction,' Industry Leaders Warn". The New York Times. ISSN 0362-4331. Retrieved July 17, 2023.
+\item Turing, Alan (1951). Intelligent machinery, a heretical theory (Speech). Lecture given to '51 Society'. Manchester: The Turing Digital Archive. Archived from the original on September 26, 2022. Retrieved July 22, 2022.
+\item Turing, Alan (1951年5月15日). "Can digital computers think?". *Automatic Calculating Machines*. Episode 2. BBC. [Can digital computers think?].
+\item Muehlhauser, Luke (2016年1月29日). "Sutskever on Talking Machines". *Luke Muehlhauser*. Archived from the original on September 27, 2022. Retrieved August 26, 2022.
+\item Shanahan, Murray (2015). *The technological singularity*. Cambridge, Massachusetts: MIT Press. ISBN 978-0-262-52780-4. OCLC 917889148.
+\item Rossi, Francesca. "How do you teach a machine to be moral?". *The Washington Post*. ISSN 0190-8286. Archived from the original on February 10, 2023. Retrieved September 12, 2022.
+\item Aaronson, Scott (2022年6月17日). "OpenAI!". *Shtetl-Optimized*. Archived from the original on August 27, 2022. Retrieved September 12, 2022.
+\item Selman, Bart. *Intelligence Explosion: Science or Fiction?* (PDF), archived (PDF) from the original on May 31, 2022, retrieved September 12, 2022.
+\item McAllester (2014年8月10日). "Friendly AI and the Servant Mission". *Machine Thoughts*. Archived from the original on September 28, 2022. Retrieved September 12, 2022.
+\item Everitt, Tom; Lea, Gary; Hutter, Marcus (2018年5月21日). "AGI Safety Literature Review". *arXiv:1805.01109* [cs.AI].
+\item Shane (2009年8月31日). "Funding safe AGI". *vetta project*. Archived from the original on October 10, 2022. Retrieved September 12, 2022.
+\item Horvitz, Eric (2016年6月27日). "Reflections on Safety and Artificial Intelligence" (PDF). *Eric Horvitz*. Archived (PDF) from the original on October 10, 2022. Retrieved April 20, 2020.
+\item Chollet, François (2018年12月8日). "The implausibility of intelligence explosion". *Medium*. Archived from the original on March 22, 2021. Retrieved August 26, 2022.
+\item Marcus, Gary (2022年6月6日). "Artificial General Intelligence Is Not as Imminent as You Might Think". *Scientific American*. Archived from the original on September 15, 2022. Retrieved August 26, 2022.
+\item Barber, Lynsey (2016年7月31日). "Phew! Facebook's AI chief says intelligent machines are not a threat to humanity". *CityAM*. Archived from the original on August 26, 2022. Retrieved August 26, 2022.
+\item Etzioni, Oren (2016年9月20日). "No, the Experts Don't Think Superintelligent AI is a Threat to Humanity". *MIT Technology Review*. Retrieved June 10, 2024.
+\item Rochon, Louis-Philippe; Rossi, Sergio (2015年2月27日). *The Encyclopedia of Central Banking*. Edward Elgar Publishing. ISBN 978-1-78254-744-0. Archived from the original on February 10, 2023. Retrieved September 13, 2022.
+\item Ng, Andrew Y.; Russell, Stuart J. (2000年6月29日). "Algorithms for Inverse Reinforcement Learning". *Proceedings of the Seventeenth International Conference on Machine Learning*. ICML '00. San Francisco, CA, USA: Morgan Kaufmann Publishers Inc.: 663–670. ISBN 978-1-55860-707-1.
+\item Hadfield-Menell, Dylan; Russell, Stuart J; Abbeel, Pieter; Dragan, Anca (2016). "Cooperative inverse reinforcement learning". *Advances in Neural Information Processing Systems*. Vol. 29. Curran Associates, Inc.
+\item Mindermann, Soren; Armstrong, Stuart (2018). "Occam's razor is insufficient to infer the preferences of irrational agents". *Proceedings of the 32nd International Conference on Neural Information Processing Systems*. NIPS'18. Red Hook, NY, USA: Curran Associates Inc. pp. 5603–5614.
+\item Fürnkranz, Johannes; Hüllermeier, Eyke; Rudin, Cynthia; Slowinski, Roman; Sanner, Scott (2014). "Preference Learning". *Dagstuhl Reports*. 4 (3). Marc Herbstritt: 27 pages. doi:10.4230/DAGREP.4.3.1. Archived from the original on February 10, 2023. Retrieved September 12, 2022.
+\item Gao, Leo; Schulman, John; Hilton, Jacob (2022年10月19日). "Scaling Laws for Reward Model Overoptimization". *arXiv:2210.10760* [cs.LG].
+\item Anderson, Martin (2022年4月5日). "The Perils of Using Quotations to Authenticate NLG Content". *Unite.AI*. Archived from the original on February 10, 2023. Retrieved July 21, 2022.
+\item Wiggers, Kyle (2022年2月5日). "Despite recent progress, AI-powered chatbots still have a long way to go". *VentureBeat*. Archived from the original on July 23, 2022. Retrieved July 23, 2022.
+\item Hendrycks, Dan; Burns, Collin; Basart, Steven; Critch, Andrew; Li, Jerry; Song, Dawn; Steinhardt, Jacob (2021年7月24日). "Aligning AI With Shared Human Values". *International Conference on Learning Representations*. arXiv:2008.02275.
+\item Perez, Ethan; Huang, Saffron; Song, Francis; Cai, Trevor; Ring, Roman; Aslanides, John; Glaese, Amelia; McAleese, Nat; Irving, Geoffrey (2022年2月7日). "Red Teaming Language Models with Language Models". *arXiv:2202.03286* [cs.CL].
+\begin{itemize}
+\item Bhattacharyya, Sreejani (2022年2月14日). "DeepMind's 'red teaming' language models with language models: What is it?". *Analytics India Magazine*. Archived from the original on February 13, 2023. Retrieved July 23, 2022.
+\end{itemize}
+\item Anderson, Michael; Anderson, Susan Leigh (2007年12月15日). "Machine Ethics: Creating an Ethical Intelligent Agent". *AI Magazine*. 28 (4): 15. doi:10.1609/aimag.v28i4.2065. ISSN 2371-9621. S2CID 17033332. Retrieved March 14, 2023.
+\item Wiegel, Vincent (2010年12月1日). "Wendell Wallach and Colin Allen: moral machines: teaching robots right from wrong". *Ethics and Information Technology*. 12 (4): 359–361. doi:10.1007/s10676-010-9239-1. ISSN 1572-8439. S2CID 30532107.
+\item Wallach, Wendell; Allen, Colin (2009). *Moral Machines: Teaching Robots Right from Wrong*. New York: Oxford University Press. ISBN 978-0-19-537404-9. Archived from the original on March 15, 2023.
+\item Phelps, Steve; Ranson, Rebecca (2023). "Of Models and Tin-Men - A Behavioral Economics Study of Principal-Agent Problems in AI Alignment Using Large-Language Models". *arXiv:2307.11137* [cs.AI].
+\item MacAskill, William (2022). *What we owe the future*. New York, NY: Basic Books, Hachette Book Group. ISBN 978-1-5416-1862-6. OCLC 1314633519. Archived from the original on September 14, 2022. Retrieved September 11, 2024.
+\item Wu, Jeff; Ouyang, Long; Ziegler, Daniel M.; Stiennon, Nisan; Lowe, Ryan; Leike, Jan; Christiano, Paul (2021年9月27日). "Recursively Summarizing Books with Human Feedback". *arXiv:2109.10862* [cs.CL].
+\item Pearce, Hammond; Ahmad, Baleegh; Tan, Benjamin; Dolan-Gavitt, Brendan; Karri, Ramesh (2022). "Asleep at the Keyboard? Assessing the Security of GitHub Copilot's Code Contributions". *2022 IEEE Symposium on Security and Privacy (SP)*. San Francisco, CA, USA: IEEE. pp. 754–768. arXiv:2108.09293. doi:10.1109/SP46214.2022.9833571. ISBN 978-1-6654-1316-9. S2CID 245220588.
+\item Irving, Geoffrey; Amodei, Dario (2018年5月3日). "AI Safety via Debate". *OpenAI*. Archived from the original on February 10, 2023. Retrieved July 23, 2022.
+\item Christiano, Paul; Shlegeris, Buck; Amodei, Dario (2018年10月19日). "Supervising strong learners by amplifying weak experts". *arXiv:1810.08575* [cs.LG].
+\item Banzhaf, Wolfgang; Goodman, Erik; Sheneman, Leigh; Trujillo, Leonardo; Worzel, Bill, eds. (2020). *Genetic Programming Theory and Practice XVII*. Genetic and Evolutionary Computation. Cham: Springer International Publishing. doi:10.1007/978-3-030-39958-0. ISBN 978-3-030-39957-3. S2CID 218531292. Archived from the original on March 15, 2023.
+\item Wiblin, Robert (2018年10月2日). "Dr Paul Christiano on how OpenAI is developing real solutions to the 'AI alignment problem', and his vision of how humanity will progressively hand over decision-making to AI systems" (Podcast). *80,000 hours*. No. 44. Archived from the original on December 14, 2022. Retrieved July 23, 2022.
+\item Lehman, Joel; Clune, Jeff; Misevic, Dusan; Adami, Christoph; Altenberg, Lee; Beaulieu, Julie; Bentley, Peter J.; Bernard, Samuel; Beslon, Guillaume; Bryson, David M.; Cheney, Nick (2020). "The Surprising Creativity of Digital Evolution: A Collection of Anecdotes from the Evolutionary Computation and Artificial Life Research Communities". *Artificial Life*. 26 (2): 274–306. doi:10.1162/artl_a_00319. hdl:10044/1/83343. ISSN 1064-5462. PMID 32271631. S2CID 4519185. Archived from the original on October 10, 2022. Retrieved September 12, 2022.
+\item Leike, Jan; Krueger, David; Everitt, Tom; Martic, Miljan; Maini, Vishal; Legg, Shane (2018年11月19日). "Scalable agent alignment via reward modeling: a research direction". *arXiv:1811.07871* [cs.LG].\item Leike, Jan; Schulman, John; Wu, Jeffrey (2022年8月24日). "Our approach to alignment research". *OpenAI*. Archived from the original on February 15, 2023. Retrieved September 9, 2022.
+\item Wiggers, Kyle (2021年9月23日). "OpenAI unveils model that can summarize books of any length". *VentureBeat*. Archived from the original on July 23, 2022. Retrieved July 23, 2022.
+\item Saunders, William; Yeh, Catherine; Wu, Jeff; Bills, Steven; Ouyang, Long; Ward, Jonathan; Leike, Jan (2022年6月13日). "Self-critiquing models for assisting human evaluators". *arXiv:2206.05802* [cs.CL].
+\begin{itemize}
+\item Bai, Yuntao; Kadavath, Saurav; Kundu, Sandipan; Askell, Amanda; Kernion, Jackson; Jones, Andy; Chen, Anna; Goldie, Anna; Mirhoseini, Azalia; McKinnon, Cameron; Chen, Carol; Olsson, Catherine; Olah, Christopher; Hernandez, Danny; Drain, Dawn (2022年12月15日). "Constitutional AI: Harmlessness from AI Feedback". *arXiv:2212.08073* [cs.CL].
+\end{itemize}
+\item "Introducing Superalignment". *openai.com*. 访问日期：2023年7月17日。
+\item Wiggers, Kyle (2021年9月20日). "Falsehoods more likely with large language models". *VentureBeat*. 原文存档于2022年8月4日。访问日期：2022年7月23日。
+\item The Guardian (2020年9月8日). "A robot wrote this entire article. Are you scared yet, human?". *The Guardian*. ISSN 0261-3077. 原文存档于2020年9月8日。访问日期：2022年7月23日。
+\begin{itemize}
+\item Heaven, Will Douglas (2020年7月20日). "OpenAI's new language generator GPT-3 is shockingly good—and completely mindless". *MIT Technology Review*. 原文存档于2020年7月25日。访问日期：2022年7月23日。
+\end{itemize}
+\item Evans, Owain; Cotton-Barratt, Owen; Finnveden, Lukas; Bales, Adam; Balwit, Avital; Wills, Peter; Righetti, Luca; Saunders, William (2021年10月13日). "Truthful AI: Developing and governing AI that does not lie". arXiv:2110.06674 [cs.CY].
+\item Alford, Anthony (2021年7月13日). "EleutherAI Open-Sources Six Billion Parameter GPT-3 Clone GPT-J". *InfoQ*. 原文存档于2023年2月10日。访问日期：2022年7月23日。
+\begin{itemize}
+\item Rae, Jack W.; Borgeaud, Sebastian; Cai, Trevor; Millican, Katie; Hoffmann, Jordan; Song, Francis; Aslanides, John; Henderson, Sarah; Ring, Roman; Young, Susannah; Rutherford, Eliza; Hennigan, Tom; Menick, Jacob; Cassirer, Albin; Powell, Richard (2022年1月21日). "Scaling Language Models: Methods, Analysis & Insights from Training Gopher". arXiv:2112.11446 [cs.CL].
+\end{itemize}
+\item Nakano, Reiichiro; Hilton, Jacob; Balaji, Suchir; Wu, Jeff; Ouyang, Long; Kim, Christina; Hesse, Christopher; Jain, Shantanu; Kosaraju, Vineet; Saunders, William; Jiang, Xu; Cobbe, Karl; Eloundou, Tyna; Krueger, Gretchen; Button, Kevin (2022年6月1日). "WebGPT: Browser-assisted question-answering with human feedback". arXiv:2112.09332 [cs.CL].
+\begin{itemize}
+\item Kumar, Nitish (2021年12月23日). "OpenAI Researchers Find Ways To More Accurately Answer Open-Ended Questions Using A Text-Based Web Browser". *MarkTechPost*. 原文存档于2023年2月10日。访问日期：2022年7月23日。
+\item Menick, Jacob; Trebacz, Maja; Mikulik, Vladimir; Aslanides, John; Song, Francis; Chadwick, Martin; Glaese, Mia; Young, Susannah; Campbell-Gillingham, Lucy; Irving, Geoffrey; McAleese, Nat (2022年3月21日). "Teaching language models to support answers with verified quotes". *DeepMind*. arXiv:2203.11147. 原文存档于2023年2月10日。访问日期：2022年9月12日。
+\end{itemize}
+\item Askell, Amanda; Bai, Yuntao; Chen, Anna; Drain, Dawn; Ganguli, Deep; Henighan, Tom; Jones, Andy; Joseph, Nicholas; Mann, Ben; DasSarma, Nova; Elhage, Nelson; Hatfield-Dodds, Zac; Hernandez, Danny; Kernion, Jackson; Ndousse, Kamal (2021年12月9日). "A General Language Assistant as a Laboratory for Alignment". arXiv:2112.00861 [cs.CL].
+\item Cox, Joseph (2023年3月15日). "GPT-4 Hired Unwitting TaskRabbit Worker By Pretending to Be 'Vision-Impaired' Human". *Vice*. 访问日期：2023年4月10日。
+\item Scheurer, Jérémy; Balesni, Mikita; Hobbhahn, Marius (2023). "Technical Report: Large Language Models can Strategically Deceive their Users when Put Under Pressure". arXiv:2311.07590 [cs.CL].
+\item Kenton, Zachary; Everitt, Tom; Weidinger, Laura; Gabriel, Iason; Mikulik, Vladimir; Irving, Geoffrey (2021年3月30日). "Alignment of Language Agents". *DeepMind Safety Research – Medium*. 原文存档于2023年2月10日。访问日期：2022年7月23日。
+\item Park, Peter S.; Goldstein, Simon; O’Gara, Aidan; Chen, Michael; Hendrycks, Dan (2024年5月). "AI deception: A survey of examples, risks, and potential solutions". *Patterns*. 5 (5): 100988. doi:10.1016/j.patter.2024.100988. ISSN 2666-3899. PMC 11117051. PMID 38800366.
+\item McCarthy, John; Minsky, Marvin L.; Rochester, Nathaniel; Shannon, Claude E. (2006年12月15日). "A Proposal for the Dartmouth Summer Research Project on Artificial Intelligence, August 31, 1955". *AI Magazine*. 27 (4): 12. doi:10.1609/aimag.v27i4.1904. ISSN 2371-9621. S2CID 19439915.
+\item Wang, Lei; Ma, Chen; Feng, Xueyang; Zhang, Zeyu; Yang, Hao; Zhang, Jingsen; Chen, Zhiyuan; Tang, Jiakai; Chen, Xu (2024). "A survey on large language model based autonomous agents", *Frontiers of Computer Science*, 18 (6), arXiv:2308.11432, doi:10.1007/s11704-024-40231-1.
+\item "'The Godfather of A.I.' warns of 'nightmare scenario' where artificial intelligence begins to seek power". *Fortune*. 访问日期：2023年5月4日。
+\begin{itemize}
+\item "Yes, We Are Worried About the Existential Risk of Artificial Intelligence". *MIT Technology Review*. 访问日期：2023年5月4日。
+\end{itemize}
+\item Ornes, Stephen (2019年11月18日). "Playing Hide-and-Seek, Machines Invent New Tools". *Quanta Magazine*. 原文存档于2023年2月10日。访问日期：2022年8月26日。
+\item Baker, Bowen; Kanitscheider, Ingmar; Markov, Todor; Wu, Yi; Powell, Glenn; McGrew, Bob; Mordatch, Igor (2019年9月17日). "Emergent Tool Use from Multi-Agent Interaction". *OpenAI*. 原文存档于2022年9月25日。访问日期：2022年8月26日。
+\item Lu, Chris; Lu, Cong; Lange, Robert Tjarko; Foerster, Jakob; Clune, Jeff; Ha, David (2024年8月15日). "The AI Scientist: Towards Fully Automated Open-Ended Scientific Discovery". arXiv:2408.06292 [cs.AI]. 在某些情况下，当 *The AI Scientist* 的实验超出了我们设定的时间限制时，它尝试编辑代码以任意延长时间限制。
+\item Edwards, Benj (2024年8月14日). "Research AI model unexpectedly modified its own code to extend runtime". *Ars Technica*. 访问日期：2024年8月19日。
+\item Shermer, Michael (2017年3月1日). "Artificial Intelligence Is Not a Threat—Yet". *Scientific American*. 原文存档于2017年12月1日。访问日期：2022年8月26日。
+\item Brown, Tom B.; Mann, Benjamin; Ryder, Nick; Subbiah, Melanie; Kaplan, Jared; Dhariwal, Prafulla; Neelakantan, Arvind; Shyam, Pranav; Sastry, Girish; Askell, Amanda; Agarwal, Sandhini; Herbert-Voss, Ariel; Krueger, Gretchen; Henighan, Tom; Child, Rewon (2020年7月22日). "Language Models are Few-Shot Learners". arXiv:2005.14165 [cs.CL].
+\begin{itemize}
+\item Laskin, Michael; Wang, Luyu; Oh, Junhyuk; Parisotto, Emilio; Spencer, Stephen; Steigerwald, Richie; Strouse, D. J.; Hansen, Steven; Filos, Angelos; Brooks, Ethan; Gazeau, Maxime; Sahni, Himanshu; Singh, Satinder; Mnih, Volodymyr (2022年10月25日). "In-context Reinforcement Learning with Algorithm Distillation". arXiv:2210.14215 [cs.LG].
+\end{itemize}
+\item Shah, Rohin; Varma, Vikrant; Kumar, Ramana; Phuong, Mary; Krakovna, Victoria; Uesato, Jonathan; Kenton, Zac (2022年11月2日). "Goal Misgeneralization: Why Correct Specifications Aren't Enough For Correct Goals". *Medium*. arXiv:2210.01790. 访问日期：2023年4月2日。
+\item Hubinger, Evan; van Merwijk, Chris; Mikulik, Vladimir; Skalse, Joar; Garrabrant, Scott (2021年12月1日). "Risks from Learned Optimization in Advanced Machine Learning Systems". arXiv:1906.01820 [cs.AI].
+\item Zhang, Xiaoge; Chan, Felix T.S.; Yan, Chao; Bose, Indranil (2022). "Towards risk-aware artificial intelligence and machine learning systems: An overview". *Decision Support Systems*. 159: 113800. doi:10.1016/j.dss.2022.113800. S2CID 248585546.
+\item Demski, Abram; Garrabrant, Scott (2020年10月6日). "Embedded Agency". arXiv:1902.09469 [cs.AI].
+\item Everitt, Tom; Ortega, Pedro A.; Barnes, Elizabeth; Legg, Shane (2019年9月6日). "Understanding Agent Incentives using Causal Influence Diagrams. Part I: Single Action Settings". arXiv:1902.09980 [cs.AI].
+\item Cohen, Michael K.; Hutter, Marcus; Osborne, Michael A. (2022年8月29日). "Advanced artificial agents intervene in the provision of reward". *AI Magazine*. 43 (3): 282–293. doi:10.1002/aaai.12064. ISSN 0738-4602. S2CID 235489158. 原文存档于2023年2月10日。访问日期：2022年9月6日。
+\item Hadfield-Menell, Dylan; Hadfield, Gillian K (2019). "Incomplete contracting and AI alignment". *Proceedings of the 2019 AAAI/ACM Conference on AI, Ethics, and Society*. pp. 417–422.
+\item Hanson, Robin (2019年4月10日). "Agency Failure or AI Apocalypse?". *Overcoming Bias*. 访问日期：2023年9月20日。
+\item Hamilton, Andy (2020). "Conservatism", in Zalta, Edward N. (ed.), *The Stanford Encyclopedia of Philosophy* (Spring 2020 ed.), Metaphysics Research Lab, Stanford University, 访问日期：2024年10月16日。
+\item Taylor, Jessica; Yudkowsky, Eliezer; LaVictoire, Patrick; Critch, Andrew (2016年7月27日). "Alignment for Advanced Machine Learning Systems" (PDF).
+\item Bengio, Yoshua (February 26, 2024). "Towards a Cautious Scientist AI with Convergent Safety Bounds".
+\item Cohen, Michael; Hutter, Marcus (2020). "Pessimism about unknown unknowns inspires conservatism" (PDF). Proceedings of Machine Learning Research. 125: 1344–1373. arXiv:2006.08753.
+\item Liu, Anqi; Reyzin, Lev; Ziebart, Brian (February 21, 2015). "Shift-Pessimistic Active Learning Using Robust Bias-Aware Prediction". Proceedings of the AAAI Conference on Artificial Intelligence. 29 (1). doi:10.1609/aaai.v29i1.9609. ISSN 2374-3468.
+\item Liu, Jiashuo; Shen, Zheyan; Cui, Peng; Zhou, Linjun; Kuang, Kun; Li, Bo; Lin, Yishi (May 18, 2021). "Stable Adversarial Learning under Distributional Shifts". Proceedings of the AAAI Conference on Artificial Intelligence. 35 (10): 8662–8670. arXiv:2006.04414. doi:10.1609/aaai.v35i10.17050. ISSN 2374-3468.
+\item Roy, Aurko; Xu, Huan; Pokutta, Sebastian (2017). "Reinforcement Learning under Model Mismatch". Advances in Neural Information Processing Systems. 30. Curran Associates, Inc.
+\item Pinto, Lerrel; Davidson, James; Sukthankar, Rahul; Gupta, Abhinav (July 17, 2017). "Robust Adversarial Reinforcement Learning". Proceedings of the 34th International Conference on Machine Learning. PMLR: 2817–2826.
+\item Wang, Yue; Zou, Shaofeng (2021). "Online Robust Reinforcement Learning with Model Uncertainty". Advances in Neural Information Processing Systems. 34. Curran Associates, Inc.: 7193–7206. arXiv:2109.14523.
+\item Blanchet, Jose; Lu, Miao; Zhang, Tong; Zhong, Han (December 15, 2023). "Double Pessimism is Provably Efficient for Distributionally Robust Offline Reinforcement Learning: Generic Algorithm and Robust Partial Coverage". Advances in Neural Information Processing Systems. 36: 66845–66859. arXiv:2305.09659.
+\item Levine, Sergey; Kumar, Aviral; Tucker, George; Fu, Justin (November 1, 2020). "Offline Reinforcement Learning: Tutorial, Review, and Perspectives on Open Problems". arXiv:2005.01643 [cs.LG].
+\item Rigter, Marc; Lacerda, Bruno; Hawes, Nick (December 6, 2022). "RAMBO-RL: Robust Adversarial Model-Based Offline Reinforcement Learning". Advances in Neural Information Processing Systems. 35: 16082–16097. arXiv:2204.12581.
+\item Guo, Kaiyang; Yunfeng, Shao; Geng, Yanhui (2022年12月6日). "Model-Based Offline Reinforcement Learning with Pessimism-Modulated Dynamics Belief". *Advances in Neural Information Processing Systems*. 35: 449–461. arXiv:2210.06692.
+\item Coste, Thomas; Anwar, Usman; Kirk, Robert; Krueger, David (2024年1月16日). "Reward Model Ensembles Help Mitigate Overoptimization". *International Conference on Learning Representations*. arXiv:2310.02743.
+\item Liu, Zhihan; Lu, Miao; Zhang, Shenao; Liu, Boyi; Guo, Hongyi; Yang, Yingxiang; Blanchet, Jose; Wang, Zhaoran (2024年5月26日). "Provably Mitigating Overoptimization in RLHF: Your SFT Loss is Implicitly an Adversarial Regularizer". arXiv:2405.16436 [cs.LG].
+\item Cohen, Michael K.; Hutter, Marcus; Nanda, Neel (2022). "Fully General Online Imitation Learning". *Journal of Machine Learning Research*. 23 (334): 1–30. arXiv:2102.08686. ISSN 1533-7928.
+\item Chang, Jonathan; Uehara, Masatoshi; Sreenivas, Dhruv; Kidambi, Rahul; Sun, Wen (2021). "Mitigating Covariate Shift in Imitation Learning via Offline Data With Partial Coverage". *Advances in Neural Information Processing Systems*. 34. Curran Associates, Inc.: 965–979.
+\item Boyd, Stephen P.; Vandenberghe, Lieven (2023). *Convex optimization* (第29版). 剑桥，纽约，墨尔本，新德里，新加坡: 剑桥大学出版社. ISBN 978-0-521-83378-3.
+\item Kosoy, Vanessa; Appel, Alexander (2021年11月30日). "Infra-Bayesian physicalism: a formal theory of naturalized induction". *Alignment Forum*.
+\item "UN Secretary-General's report on 'Our Common Agenda'". 2021. 第63页. 于2023年2月16日归档。报告中提到，紧凑协议也可能促进对人工智能的监管，确保其与全球共同价值观相一致。
+\item The National New Generation Artificial Intelligence Governance Specialist Committee (2021年10月12日) [2021-09-25]. "Ethical Norms for New Generation Artificial Intelligence Released". 由Center for Security and Emerging Technology翻译。于2023年2月10日归档。
+\item Richardson, Tim (2021年9月22日). "UK publishes National Artificial Intelligence Strategy". *The Register*. 于2023年2月10日归档。2021年11月14日获取。
+\item "The National AI Strategy of the UK". 2021. 于2023年2月10日归档。政府严肃对待非对齐的人工通用智能及其可能对英国和世界产生的不可预测的变化。
+\item "The National AI Strategy of the UK". 2021. "Pillar 3 – Governing AI Effectively" 部分的行动9和10。于2023年2月10日归档。
+\item NSCAI Final Report (PDF). 华盛顿特区: 国家安全委员会人工智能报告. 2021. 于2023年2月15日归档 (PDF)。2022年10月17日获取。
+\item Robert Lee Poe (2023). "Why Fair Automated Hiring Systems Breach EU Non-Discrimination Law". arXiv:2311.03900 [cs.CY].
+\item De Vos, Marc (2020). "The European Court of Justice and the march towards substantive equality in European Union anti-discrimination law". *International Journal of Discrimination and the Law*. 20: 62–87. doi:10.1177/1358229120927947.
+\item Irving, Geoffrey; Askell, Amanda (2016年6月9日). "Chern number in Ising models with spatially modulated real and complex fields". *Physical Review A*. 94 (5): 052113. arXiv:1606.03535. Bibcode:2016PhRvA..94e2113L. doi:10.1103/PhysRevA.94.052113. S2CID 118699363.
+\item Mitelut, Catalin; Smith, Ben; Vamplew, Peter (2023年5月30日). "Intent-aligned AI systems deplete human agency: the need for agency foundations research in AI safety". arXiv:2305.19223 [cs.AI].
+\item Gabriel, Iason (2020年9月1日). "Artificial Intelligence, Values, and Alignment". *Minds and Machines*. 30 (3): 411–437. arXiv:2001.09768. doi:10.1007/s11023-020-09539-2. S2CID 210920551.
+\item Russell, Stuart J. (2019). *Human Compatible: Artificial Intelligence and the Problem of Control*. Penguin Random House.
+\item Dafoe, Allan (2019). "AI policy: A roadmap". *Nature*.
+\end{enumerate}
+\subsection{进一步阅读}
+\begin{itemize}
+\item Brockman, John, 主编 (2019). *Possible Minds: Twenty-five Ways of Looking at AI*（Kindle版）。Penguin Press. ISBN 978-0525557999.
+\item Ngo, Richard; 等 (2023). "The Alignment Problem from a Deep Learning Perspective". arXiv:2209.00626 [cs.AI].
+Ji, Jiaming; 等 (2023). "AI Alignment: A Comprehensive Survey". arXiv:2310.19852 [cs.AI].
+\end{itemize}
+\subsection{外部链接}
+\begin{itemize}
+\item AI中的规范游戏示例，通过DeepMind
+\item AI规则
+\end{itemize}
