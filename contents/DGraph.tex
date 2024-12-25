@@ -5,23 +5,23 @@
 
 \pentry{图\nref{nod_Graph}}{nod_2e68}
 
-\cite{graph2}图的某一顶点的度是指与它关联的边数。由于图论的早期主要研究的是无向图，因此顶点度的概念往往专门用于无向图。然而，为了一般化起见我们将它定义在任一图上。
+\cite{graph2}图的某一顶点的度反映了与该点关联的边数，过点的环被定义贡献了2度。由于图论的早期主要研究的是无向图，因此顶点度的概念往往专门用于无向图。然而，为了一般化起见我们将它定义在任一图上。
 
 \begin{definition}{顶点度，出度，入度，孤立点}\label{def_DGraph_1}
-设 $G=(V,E,\varphi)$ 是\enref{图}{Graph}，$v\in V$。则 $G$ 中与 $v$ \aref{关联}{def_Graph_1}的边数称为 $v$ 在 $G$ 中的\textbf{度}（degree），记作 $d_G(v)$（或简记为 $d(v)$）。$G$ 中以 $v$ 为起点的有向边数称为 $v$ 在 $G$ 中的\textbf{出度}（out degree），记作 $d_G^+(v)$。$G$ 中以 $d$ 为终点的有向边数称为 $v$ 在 $G$ 中的\textbf{入度}（in degree），记作 $d_G^-(v)$。度为 $d$ 的点称为 $d$ 度点（d degree vertex）。零度点称为\textbf{孤立点}（isolated vertex），出度等于入度的点称为\textbf{平衡点}（balanced vertex）。
+设 $G=(V,E,\varphi)$ 是\enref{图}{Graph}，$v\in V$。则 $G$ 中与 $v$ \aref{关联}{def_Graph_1}的边数加上以该点为端点的环数称为 $v$ 在 $G$ 中的\textbf{度}（degree），记作 $d_G(v)$（或简记为 $d(v)$）。$G$ 中以 $v$ 为起点的有向边数称为 $v$ 在 $G$ 中的\textbf{出度}（out degree），记作 $d_G^+(v)$。$G$ 中以 $d$ 为终点的有向边数称为 $v$ 在 $G$ 中的\textbf{入度}（in degree），记作 $d_G^-(v)$。度为 $d$ 的点称为 $d$ 度点（d degree vertex）。零度点称为\textbf{孤立点}（isolated vertex），出度等于入度的点称为\textbf{平衡点}（balanced vertex）。
 \end{definition}
 
 \begin{example}{}
-设 $G$ 是有向图。试证明 $d_G(v)=d_G^+(v)+d_G^-(v)-r$，其中 $r$ 是过 $v$ 的环数。
+设 $G$ 是有向图。试证明 $d_G(v)=d_G^+(v)+d_G^-(v)$。
 
 \textbf{证明：}设 $E^+$ 是 $G$ 中以 $v$ 为起点的边集，$E^-$ 是 $G$ 中以 $v$ 为终点的边集。则 $E_0=E^+\cap E^-$ 是过 $v$ 的环集。由于
 $E^+\backslash E_0, E_0, E^-\backslash E_0$ 是 $E(v)$ 的划分，因此
 \begin{equation}
 \abs{E(v)}=\abs{E^+\backslash E_0}+\abs{E_0}+\abs{E^-\backslash E_0}.~
 \end{equation}
-又 $\abs{E(v)}=d_G(v),\abs{E^+\backslash E_0}=d_G^+(v)-r, \abs{E_0}=r, \abs{E^-\backslash E_0}=d_G^-(v)-r$，所以
+设 $r$ 是过 $v$ 的环数，因为 $\abs{E(v)}=d_G(v)-r,\abs{E^+\backslash E_0}=d_G^+(v)-r, \abs{E_0}=r, \abs{E^-\backslash E_0}=d_G^-(v)-r$，所以
 \begin{equation}
-d_G(v)=d_G^+(v)+d_G^-(v)-r.~
+d_G(v)=d_G^+(v)+d_G^-(v).~
 \end{equation}
 \end{example}
 图的所有点当中最大的度和最小的度人们习惯用记号 $\Delta,\delta$ 分别来标记它。
@@ -113,20 +113,16 @@ A=\{(e,v)|v\in e,e\in E(G)\}.~
 \textbf{证毕！}
 
 \begin{corollary}{}
-设 $G$ 是任意图，则
-\begin{equation}
-\abs{E(G)}=\frac{1}{2}(d(G)\cdot\abs{V(G)}+r),~
-\end{equation}
-其中 $r$ 是 $G$ 中环的个数。
+设 $G$ 是任意图，则\autoref{eq_DGraph_3} 任成立。
 \end{corollary}
 
 \textbf{证明：}
-设 $G$ 中有 $r$ 个环，则 $\abs{E}-r$ 是去掉所有环后得到的图的边数，$d(G)\abs{V(G)}-r$ 则是得到的无环图的度，而点的个数仍是 $\abs{V(G)}$，所以得到的无环图的平均度为 $d(G)-\frac{r}{V(G)}$。由\autoref{the_DGraph_1} ，得
+设 $G$ 中有 $r$ 个环，则 $\abs{E}-r$ 是去掉所有环后得到的图的边数，$d(G)\abs{V(G)}-2r$ 则是得到的无环图的度，而点的个数仍是 $\abs{V(G)}$，所以得到的无环图的平均度为 $d(G)-\frac{2r}{V(G)}$。由\autoref{the_DGraph_1} ，得
 \begin{equation}
 \begin{aligned}
-\abs{E(G)}-r&=\frac{1}{2}\qty(d(G)-\frac{r}{V(G)})\abs{V(G)},\\
+\abs{E(G)}-r&=\frac{1}{2}\qty(d(G)-\frac{2r}{V(G)})\abs{V(G)},\\
 &\Downarrow\\
-\abs{E(G)}&=\frac{1}{2}(d(G)\cdot\abs{V(G)}+r).
+\abs{E(G)}&=\frac{1}{2}d(G)\cdot\abs{V(G)}.
 \end{aligned}~
 \end{equation}
 
