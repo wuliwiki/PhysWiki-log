@@ -1,0 +1,117 @@
+% 计算机系统结构（综述）
+% license CCBYSA3
+% type Wiki
+
+本文根据 CC-BY-SA 协议转载翻译自维基百科\href{https://en.wikipedia.org/wiki/Computer_architecture}{相关文章}。
+  
+在计算机科学和计算机工程中，计算机架构是对由组件部分组成的计算机系统结构的描述。它有时可以是忽略实现细节的高级描述。在更详细的层次上，描述可能包括指令集架构设计、微架构设计、逻辑设计和实现。
+\begin{figure}[ht]
+\centering
+\includegraphics[width=10cm]{./figures/bd6cd8f496125c45.png}
+\caption{基本计算机的框图，具有单处理器CPU。黑线表示控制流，红线表示数据流。箭头表示流动方向。} \label{fig_CORE_1}
+\end{figure}
+\subsection{历史}  
+第一个有文献记载的计算机架构出现在查尔斯·巴贝奇与阿达·洛夫莱斯的通信中，描述了分析机。在1936年建造Z1计算机时，科纳德·祖泽在两项专利申请中描述了机器指令可以存储在与数据相同的存储器中，即存储程序概念。另有两个早期且重要的例子：
+
+\begin{itemize}
+\item 约翰·冯·诺依曼1945年的论文《EDVAC报告初稿》，描述了逻辑元素的组织；  
+\item 艾伦·图灵的更详细的《自动计算引擎的提议电子计算器》，同样是1945年，并引用了约翰·冯·诺依曼的论文。
+\end{itemize}
+
+计算机文献中“架构”一词可以追溯到1959年Lyle R. Johnson和Frederick P. Brooks Jr.的工作，他们是IBM主要研究中心机器组织部门的成员。Johnson有机会撰写关于Stretch的专有研究通信，Stretch是IBM为洛斯阿拉莫斯国家实验室（当时称为洛斯阿拉莫斯科学实验室）开发的超级计算机。为了描述讨论这台奢华计算机的细节，他指出自己对格式、指令类型、硬件参数和速度增强的描述属于“系统架构”层次，这一术语比“机器组织”更有用。
+
+随后，Brooks作为Stretch设计师，在一本名为《规划计算机系统：Stretch项目》的书中开篇提到：“计算机架构，像其他建筑架构一样，是确定结构用户需求的艺术，然后在经济和技术约束内尽可能有效地设计以满足这些需求。”
+
+Brooks后来帮助开发了IBM System/360系列计算机，在这个系列中，“架构”成为了定义“用户需要知道的内容”的名词。System/360系列之后又推出了几款兼容的计算机系列，包括当前的IBM Z系列。后来，计算机用户开始以许多不那么明确的方式使用这一术语。
+
+最早的计算机架构是通过纸面设计，然后直接构建成最终硬件形式的。后来，计算机架构原型被物理构建成晶体管–晶体管逻辑（TTL）计算机形式——例如6800和PA-RISC的原型——进行测试和调整，然后才投入最终硬件形式。从1990年代开始，新型计算机架构通常在某些其他计算机架构内部的计算机架构模拟器中“构建”、测试和调整；或者作为软微处理器在FPGA中构建；或者两者结合——然后才投入最终硬件形式。
+\subsection{子类别}  
+计算机架构学科有三个主要的子类别：[14]
+\begin{itemize}
+\item 指令集架构（ISA）：定义了处理器读取和执行的机器代码，以及字长、内存地址模式、处理器寄存器和数据类型。
+\item 微架构：也称为“计算机组织”，描述了特定处理器如何实现ISA。[15] 例如，计算机CPU缓存的大小是一个通常与ISA无关的问题。
+\item 系统设计：包括计算系统中所有其他硬件组件，如除CPU外的数据处理（例如直接内存访问）、虚拟化和多处理。
+\end{itemize}
+计算机架构中还有其他技术。以下技术被像Intel这样的公司使用，估计在2002年[14]占计算机架构的1%：
+\begin{itemize}
+\item 宏架构：比微架构更抽象的架构层次。
+\item 汇编指令集架构：一个智能汇编器可以将一组机器的通用抽象汇编语言转换为略有不同的机器语言，以适应不同的实现。
+\item 程序员可见宏架构：高级语言工具如编译器可以定义一致的接口或契约，供程序员使用，抽象底层ISA和微架构之间的差异。例如，C、C++或Java标准定义了不同的程序员可见宏架构。
+\item 微代码：微代码是将指令转换为芯片上运行的软件。它像硬件的封装器，呈现硬件指令集接口的首选版本。这个指令翻译设施给芯片设计师提供了灵活的选项：例如，1. 新改进版的芯片可以使用微代码呈现与旧芯片版本完全相同的指令集，这样所有面向该指令集的软件都可以在新芯片上运行，无需更改。 例如，2. 微代码可以为相同的底层芯片呈现多种指令集，使其能够运行更多种类的软件。
+\item 引脚架构：微处理器应为硬件平台提供的硬件功能，例如x86引脚A20M、FERR/IGNNE或FLUSH等。还包括处理器应发出的消息，以便外部缓存可以被使无效（清空）。引脚架构功能比ISA功能更灵活，因为外部硬件可以适应新的编码，或将引脚功能转换为消息。这个术语“架构”适用，因为这些功能必须为兼容系统提供，即使详细的方法发生变化。”
+\end{itemize}
+\subsection{设计目标}  
+计算机系统的确切形式取决于约束条件和目标。计算机架构通常在标准、功耗与性能、成本、内存容量、延迟（延迟是信息从一个节点传输到源所需的时间）和吞吐量之间进行权衡。有时，其他考虑因素，如特性、大小、重量、可靠性和可扩展性也是因素之一。
+
+最常见的方案是进行深入的功率分析，找出在保持足够性能的同时如何保持低功耗。
+\subsubsection{性能}  
+现代计算机性能通常通过每周期指令数（IPC）来描述，这衡量了架构在任何时钟频率下的效率；更高的IPC意味着计算机更快。旧计算机的IPC计数低至0.1，而现代处理器通常可以轻松达到接近1。超标量处理器通过每个时钟周期执行多条指令，可能达到三到五个IPC。[citation needed]
+
+单纯计算机器语言指令数会产生误导，因为不同的ISA指令在工作量上有所不同。标准度量中的“指令”并不是ISA机器语言指令的计数，而是一个度量单位，通常基于VAX计算机架构的速度。
+
+许多人曾经通过时钟频率来衡量计算机的速度（通常以MHz或GHz为单位）。这指的是CPU主时钟的每秒周期数。然而，这个度量方式有点误导，因为一个具有更高时钟频率的机器不一定有更高的性能。因此，制造商已不再将时钟速度作为性能的衡量标准。
+
+其他因素也会影响速度，如功能单元的组合、总线速度、可用内存以及程序中的指令类型和顺序。
+
+速度有两种主要类型：延迟和吞吐量。延迟是指一个过程开始和完成之间的时间。吞吐量是指单位时间内完成的工作量。中断延迟是指系统对电子事件的最大响应时间（例如，当磁盘驱动器完成移动数据时）。
+
+性能受到各种设计选择的影响——例如，流水线处理器通常会使延迟变差，但能提高吞吐量。控制机器的计算机通常需要较低的中断延迟。这些计算机运行在实时环境中，如果操作没有在指定时间内完成，则会失败。例如，计算机控制的防抱死制动系统（ABS）必须在刹车踏板被检测到后，在可预测且有限的时间内开始制动，否则刹车会失效。
+
+基准测试考虑到所有这些因素，通过测量计算机运行一系列测试程序所需的时间。虽然基准测试能显示出计算机的优势，但不应作为选择计算机的唯一依据。通常，测试机器在不同的衡量标准下分数不同。例如，一个系统可能快速处理科学应用，而另一个可能更流畅地渲染视频游戏。此外，设计师可能会通过硬件或软件为他们的产品添加特定功能，允许某个特定基准测试执行得很快，但不会对一般任务提供类似的优势。
+\subsubsection{功效效率}  
+功效效率是现代计算机中的另一个重要衡量标准。较高的功效效率通常可以通过降低速度或提高成本来交换。计算机架构中功耗的典型衡量标准是MIPS/W（每瓦百万指令每秒）。
+
+随着每个芯片上的晶体管数量增加，现代电路每个晶体管所需的功率减少。[18] 这是因为每个新的芯片中加入的晶体管需要独立的电源，并需要为其建造新的电力供应路径。然而，每个芯片上的晶体管数量增长速度开始变慢。因此，功效效率开始变得和把越来越多的晶体管集成到单个芯片中的重要性相当，甚至可能更重要。最近的处理器设计已经表现出了这种趋势，更多关注功效效率，而不是将尽可能多的晶体管塞入单个芯片中。[19] 在嵌入式计算机的世界中，功效效率长期以来一直是与吞吐量和延迟并列的重要目标。
+\subsubsection{市场需求变化}  
+与功率减少的改进相比，时钟频率的提高在过去几年中增长得较慢。这是由于摩尔定律的终结，以及对更长电池寿命和移动技术尺寸缩小的需求。这种从更高时钟频率到功耗和小型化的关注焦点变化，可以通过英特尔发布Haswell微架构时报告的功耗减少体现出来；他们将功耗基准从30–40瓦降低到10–20瓦。[20] 将此与处理速度从3 GHz增加到4 GHz（2002到2006年）的情况进行比较，可以看出，研发的重点正在从时钟频率转移到减少功耗和占用更少空间。[21]
+\subsection{另见}  
+\begin{itemize}
+\item 位序列架构 (Bit-serial architecture)  
+\item CPU架构比较 (Comparison of CPU architectures)  
+\item 计算机硬件 (Computer hardware)  
+\item CPU设计 (CPU design)  
+\item 数据流架构 (Dataflow architecture)  
+\item 浮点运算 (Floating point)  
+\item 弗林分类法 (Flynn's taxonomy)  
+\item 哈佛架构（修改版）(Harvard architecture (Modified))  
+\item IBM PC对个人电脑市场的影响 (Influence of the IBM PC on the personal computer market)  
+\item 正交指令集 (Orthogonal instruction set)  
+\item 可重构计算 (Reconfigurable computing)  
+\item 软件架构 (Software architecture)  
+\item 传输触发架构 (Transport triggered architecture)  
+\item 冯·诺依曼架构 (Von Neumann architecture)  
+\end{itemize}
+\subsection{参考文献}  
+\begin{enumerate}
+\item Dragoni, Nicole (无日期). "Introduction to peer to peer computing" (PDF). DTU Compute – Department of Applied Mathematics and Computer Science. Lyngby, Denmark.  
+\item Clements, Alan. *Principles of Computer Hardware* (第四版). 第1页. 架构以抽象方式描述计算机的内部组织；即，它定义了计算机的能力及其编程模型。你可以拥有两台构建方式和技术不同但架构相同的计算机。  
+\item Hennessy, John; Patterson, David. *Computer Architecture: A Quantitative Approach* (第五版). 第11页. 该任务涉及多个方面，包括指令集设计、功能组织、逻辑设计和实现。  
+\item Williams, F. C.; Kilburn, T. (1948年9月25日), "Electronic Digital Computers", *Nature*, 162 (4117): 487, Bibcode:1948Natur.162..487W, doi:10.1038/162487a0, S2CID 4110351  
+\item Susanne Faber, "Konrad Zuses Bemühungen um die Patentanmeldung der Z3", 2000  
+\item Neumann, John (1945). *First Draft of a Report on the EDVAC*. 第9页.  
+\item 重制自 B. J. Copeland (编), *Alan Turing's Automatic Computing Engine*, Oxford University Press, 2005, 第369-454页。  
+\item Johnson, Lyle (1960). "A Description of Stretch" (PDF). 第1页. 检索自2017年10月7日。  
+\item Buchholz, Werner (1962). *Planning a Computer System*. 第5页.  
+\item "System 360, From Computers to Computer Systems". IBM100. 2012年3月7日. 原文已存档于2012年4月3日. 检索自2017年5月11日。  
+\item Hellige, Hans Dieter (2004). "Die Genese von Wissenschaftskonzeptionen der Computerarchitektur: Vom 'system of organs' zum Schichtmodell des Designraums". *Geschichten der Informatik: Visionen, Paradigmen, Leitmotive*. 第411-472页。  
+\item ACE在一年内经历了七个设计方案，直到1948年才启动原型。[B. J. Copeland (编), *Alan Turing's Automatic Computing Engine*, OUP, 2005, 第57页]  
+\item Schmalz, M.S. "Organization of Computer Systems". UF CISE. 检索自2017年5月11日。  
+\item John L. Hennessy and David A. Patterson. *Computer Architecture: A Quantitative Approach* (第三版). Morgan Kaufmann Publishers.  
+\item Laplante, Phillip A. (2001). *Dictionary of Computer Science, Engineering, and Technology*. CRC Press. 第94-95页. ISBN 0-8493-2691-5.  
+\item Null, Linda (2019). *The Essentials of Computer Organization and Architecture* (第五版). Burlington, MA: Jones & Bartlett Learning. 第280页. ISBN 9781284123036.  
+\item Martin, Milo. "What is computer architecture?" (PDF). UPENN. 检索自2017年5月11日。  
+\item "Integrated circuits and fabrication" (PDF). 检索自2017年5月8日。  
+\item "Exynos 9 Series (8895)". Samsung. 检索自2017年5月8日。  
+\item "Measuring Processor Power TDP vs ACP" (PDF). Intel. 2011年4月. 检索自2017年5月5日。  
+\item "History of Processor Performance" (PDF). cs.columbia.edu. 2012年4月24日. 检索自2017年5月5日。  
+\end{enumerate}
+\subsection{外部链接}
+\begin{itemize}
+\item ISCA: 国际计算机架构研讨会会议录  
+\item Micro: IEEE/ACM 国际微架构研讨会  
+\item HPCA: 国际高性能计算机架构研讨会  
+\item ASPLOS: 编程语言和操作系统架构支持国际会议  
+\item ACM 计算机架构与代码优化学报  
+\item IEEE 计算机学报  
+\item 计算机系统的冯·诺依曼架构（通过互联网档案馆访问，存档日期：2017年10月31日）
+\end{itemize}

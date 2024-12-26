@@ -7,40 +7,251 @@
 \issueDraft
 \end{issues}
 
+\pentry{导数\nref{nod_HsDerv}}{nod_ed15}
 
+为了更高效地计算函数的导数，数学家在实践中总结和发展了许多求导方法。这些方法不仅大大简化了计算过程，还将求导从一个过程提升为独立的数学运算。在高中阶段，能够快速且熟练地使用这些求导方法是数学学习的基础。然而，高中教材中对求导公式的处理通常是直接给出结果，供学生直接应用，而未深入说明这些公式的推导过程。这种方式虽然足以应对考试和解题，但在数学的逻辑性和严谨性上有所欠缺。
 
-\subsection{求导法则}
+为了为对数学推导感兴趣的读者提供进一步探索的机会，本文将在总结教材中公式的基础上，尝试在高中生能够接受的范围内，尽量给出这些公式的推导和证明过程。需要强调的是，这些推导并非高中学习的必备内容，而是面向那些希望了解数学本质、追求逻辑严谨性的学习者。通过这些推导，读者不仅能更深入地理解公式的来源，还能从中感受到数学推理的魅力，以及逻辑思维的力量。
 
-为记录方便，下面记$u=f(x),v=g(x),u'=f'(x),v'=g'(x)$。
+\subsection{导数计算总结对照表}
 
-\begin{itemize}
-\item 加减法：$(u\pm v)'=u'\pm v'$
-\item 乘法：$(uv)'=u'v+uv'$
-\item 除法：$\displaystyle\left(\frac{u}{v}\right)'=\frac{u'v-uv'}{v^2}$，特例是某个函数的倒数的导数：$\displaystyle\left(\frac{1}{v}\right)'=-\frac{v'}{v^2}$
-\item 复合函数：$(f(v))'=f'(v)v'$
-\end{itemize}
-
-\subsection{基本初等函数的导数推导}
-
-\subsection{对照表}
-
-这里将常见的函数与导数对照表列出如下，方便查询。具体介绍需查看每个函数自己的页面。
-
+下面先介绍导数的运算法则，为记录方便，记$f=f(x),g=g(x),f'=f'(x),g'=g'(x)$。
 \begin{table}[ht]
 \centering
-\caption{高中常见函数及其导数}\label{tab_HsDerv1}
-\begin{tabular}{|c|c|c|}
+\caption{导数运算法则}\label{tab_HsDerB1}
+\begin{tabular}{|c|c|}
 \hline
-\textbf{函数名称}     & \textbf{函数 $f(x)$}     & \textbf{导函数 $f'(x)$}     \\ \hline
-幂函数&$x^n$                    & $n x^{n-1}$                \\ \hline
-反比例函数&$\displaystyle\frac{1}{x}$             & $\displaystyle-\frac{1}{x^2}$           \\ \hline
-指数函数（e为底）&$e^x$                     & $e^x$                      \\ \hline
-对数函数（e为底）&$\ln(x)$                  & $\displaystyle\frac{1}{x}$              \\ \hline
-指数函数&$a^x$                     & $a^x\ln a $                      \\ \hline
-对数函数&$\log_a(x)$                  & $\displaystyle \frac{1}{x\ln a}$              \\ \hline
-正弦函数&$\sin(x)$                 & $\cos(x)$                  \\ \hline
-余弦函数&$\cos(x)$                 & $-\sin(x)$                 \\ \hline
-正切函数&$\tan(x)$                 & $\displaystyle \frac{1}{\cos^2(x)}$                \\ \hline
+和差 & $(f\pm g)'=f'\pm g'$ \\
+\hline
+积 & $(fg)'=f'g+fg'$ \\
+\hline
+商 & $\displaystyle\left(\frac{f}{g}\right)'=\frac{f'g-fg'}{g^2}$ \\
+\hline
+倒数 & $\displaystyle\left(\frac{1}{g}\right)'=-\frac{g'}{g^2}$ \\
+\hline
+复合函数 & $(f(g))'=f'(g)g'$ \\
+\hline
 \end{tabular}
 \end{table}
 
+关于导数的运算法则，有几点需要注意的：
+\begin{itemize}
+\item 加法法则体现了导数运算的线性特性，即两个函数的和的导数等于各函数导数的和。
+\item 初学者常因数字计算的习惯而误认为$(f  g)'= f' g'$，$\displaystyle\left(\frac{f}{g}\right)'=\frac{f'}{g'}$，事实上这两种计算方法是错误的。
+\item 商法则的适用条件是分母$g\neq0$ 且导数$g'$存在。
+\item 商法则和倒数法则中的$g^2$指的是将分母原本的函数平方，完全书写则应为$[g(x)]^2$，而非$g^2(x)$\footnote{不排除某些不严谨的场合会有人这样用。$g^2(x)$一般是表示复合函数$g\left(g(x)\right)$。}。
+\item 倒数法则是商法则的一个特例，即$f=1$。
+\item 复合函数的导数运算通常称为\textbf{链式法则（chain rule）}。在初学阶段，可以通过明确拆分内外函数并分别求导的方式来理解链式法则。熟练后，则可直接应用链式法则进行计算。$f'(g)$表示的，是以$g$作为自变量时的$f$的导数。
+\end{itemize}
+
+下面以一个例子来解释复合函数求导法则的使用。
+
+\begin{example}{求$f(2x+3)$的导数。}
+
+$f(2x+3)$是一个复合函数，可以表示为：$y = f(t) , t = 2x+3$。因此，其导数计算如下：
+
+\begin{equation}\label{eq_HsDerB_1}
+\left(f(2x+3)\right)' = f'(t)  t' = f'(2x+3)  t'~.
+\end{equation}
+
+根据后续的求导公式可知 $t' = 2$，将其代入\autoref{eq_HsDerB_1} ，得到：
+
+\begin{equation}\label{eq_HsDerB_2}
+\left(f(2x+3)\right)' = 2f'(2x+3)~.
+\end{equation}
+
+需要特别注意的是，$\left(f(2x+3)\right)'$ 和 $f'(2x+3)$ 是两个不同的表达式，初学者常常误以为二者相同，进而错误地在公式两侧约分，得出 $1 = 2$ 或 $f'(2x+3) = 0$ 的荒谬结论。事实上，$\left(f(2x+3)\right)'$ 指的是复合函数的导数，而 $f'(2x+3)$ 则仅指函数 $f$ 的导数。因此，在书写和理解时，务必要通过括号清楚地区分两者，以避免不必要的混淆和错误。
+\end{example}
+
+
+下面是常见的初等函数与导数对照表。
+
+\begin{table}[ht]
+\centering
+\caption{高中常见初等函数及其导数}\label{tab_HsDerB2}
+\begin{tabular}{|c|c|c|}
+\hline
+\textbf{函数名称}     & \textbf{函数 $f(x)$}     & \textbf{导函数 $f'(x)$}     \\ \hline
+常数&$c$                    & $0$                \\ \hline
+\enref{幂函数}{power}（$a\neq-1$）&$x^a$                    & $a x^{a-1}$                \\ \hline
+指数函数（$\E$为底）&$\E^x$                     & $\E^x$                      \\ \hline
+对数函数（$\E$为底）&$\ln(x)$                  & $\displaystyle\frac{1}{x}$              \\ \hline
+反比例函数&$\displaystyle\frac{1}{x}$             & $\displaystyle-\frac{1}{x^2}$           \\ \hline
+\enref{指数函数}{HsExpF}&$a^x$                     & $a^x\ln a $                      \\ \hline
+\enref{对数函数}{Ln}&$\log_a(x)$                  & $\displaystyle \frac{1}{x\ln a}$              \\ \hline
+\enref{正弦函数}{HsTrFu}&$\sin(x)$                 & $\cos(x)$                  \\ \hline
+\enref{余弦函数}{HsTrFu}&$\cos(x)$                 & $-\sin(x)$                 \\ \hline
+\enref{正切函数}{HsTrFu}&$\tan(x)$                 & $\displaystyle \frac{1}{\cos^2(x)}$                \\ \hline
+\end{tabular}
+\end{table}
+
+表中常数函数和反比例函数实际上可以看作幂函数的一种特例。例如，常数函数对应幂函数 $x^a$ 中 $a=0$ 的情形，而反比例函数 $\displaystyle y = \frac{1}{x}$ 则对应 $a = -1$ 的情形。而对数函数$\log_a x$和指数函数$a^x$均可以视为通过换底公式变成以$\E$为底的对应函数$\displaystyle\frac{1}{\ln a}\ln x$以及$e^{x\ln a}$，再进行运算，减少记忆量。
+
+另外，初学者在学习求导时，往往会混淆反比例函数、常数函数以及以 $\E$ 为底的对数函数：
+\begin{itemize}
+\item 对于常数函数 $f(x) = x^0 = 1$，其导数实际上为 $f'(x) = 0$。部分初学者可能因 $x^n$ 的求导公式（$n \neq 0$ 时 $f'(x) = nx^{n-1}$）的惯性，误认为 $f'(x)$ 为 $\displaystyle\frac{1}{x}$。
+\item 反比例函数 $f(x) = \displaystyle\frac{1}{x}$ 的导数为 $f'(x) = -\displaystyle\frac{1}{x^2}$，而以 $\E$ 为底的对数函数 $f(x) = \ln x$ 的导数为 $f'(x) = \displaystyle\frac{1}{x}$。初学者容易因为对数函数的导数公式中有 $\displaystyle\frac{1}{x}$ 的形式，将其与反比例函数混淆。
+\end{itemize}
+
+表格中单独列出这些函数及其导数公式，希望能够帮助读者更加清晰地理解和区分。
+
+另外，有一条规则非常重要需要在此说明：对于任意的恒等式，可以同时对等式两边求导，结果仍然相等，即对于恒等式 $f(x) = g(x)$，在 $x$ 的定义域内对两边同时求导，有：
+\begin{equation}
+f'(x) = g'(x)~.
+\end{equation}
+
+尽管这看上去像一句废话，但这一性质提供了一个强有力的工具，尤其是在处理一些复杂或难以直接求导的函数时，可以对等号两边同时进行求导运算，这样能够简化计算，尤其是隐函数的场景。这里介绍一下 \textbf{隐函数（implicit function）}。通常情况下，函数是以明确的形式给出的，例如 $y = f(x)$，表示 $y$ 是 $x$ 的明确函数。然而，有些情况下，函数的形式并不那么清晰，$y$ 不能完全独立于右侧写出，例如 $f(x, y) = 0$ 的形式，这样的函数称为隐函数。
+
+隐函数的特点是变量 $x$ 和 $y$ 之间的关系被隐藏在一个方程中，而不是通过显式表达式直接给出。例如，圆的方程 $x^2 + y^2 = 1$ 是隐函数的一个典型例子，它描述了 $x$ 和 $y$ 之间的关系，但不能直接将 $y$ 表示为 $x$ 的函数，当然这里的圆并不符合一般的函数定义，但可以通过限定它的定义域和值域，来将其看作函数。对于隐函数的求导，可以对方程两边同时求导，并利用链式法则处理含有 $y$ 的导数项。
+
+\begin{example}{求$x^2 + y^2 = 1$\footnote{这其实就是解析几何阶段会学到的单位圆方程。}上点$(x_0,y_0)$处的切线方程。}
+答：
+
+两侧同时对$x$求导有：
+\begin{equation}
+2x+2yy'=0~.
+\end{equation}
+整理有\begin{equation}
+y'=-\frac{x}{y}~.
+\end{equation}
+因此，$x^2 + y^2 = 1$上任意点$(x_0,y_0)$处的切线方程为$\displaystyle y-y_0=-\frac{x_0}{y_0}(x-x_0)$，整理后有：
+\begin{equation}
+x_0x+y_0y=1~.
+\end{equation}
+看上去就像将表达式中的一个$x,y$替换成$x_0,y_0$。
+\end{example}
+注意，尽管涉及隐函数求导的方法都是高中学过的，但是在高中阶段不允许在答题时使用，但由于其计算简便，可以作为代替求解复杂方程或验算的方法。
+
+\subsection{求导法则推导*}
+
+在所有推导之前，先回顾一下导数的\aref{定义}{def_HsDerv_1}，根据这个定义和导函数的描述，可以得到导函数的定义。
+\begin{definition}{导函数}\label{def_HsDerB_1}
+对于函数 $y=f(x)$，其导函数是在 $f(x)$ 的定义域内所有导数存在的点构成定义域，导数值作为函数值的函数，记作$f'(x)$，即：
+\begin{equation}
+f'(x)=\lim_{\Delta x\to 0}\frac{\Delta y}{\Delta x}=\lim_{\Delta x\to0}\frac{f(x+\Delta x)-f(x)}{\Delta x}~.
+\end{equation}
+\end{definition}
+
+注意这里的区别就是原本导数定义中具体数$x_0$变成了变量$x$，计算结果也就从一个数变成了函数。下面的内容在高中教材中提过不严谨的证明，因为高中阶段没有学习极限，因此下面的推导对高中生而言可能较难理解，下面的推导中使用的极限都可以建立在对极限的直观认知上，包括：
+\begin{itemize}
+\item $\displaystyle\lim_{\Delta x\to 0}f(x+\Delta x)=f(x)$
+\item $\displaystyle\lim_{\Delta x\to 0}[f(\Delta x)\pm g(\Delta x)]=\lim_{\Delta x\to 0}f(\Delta x)\pm \lim_{\Delta x\to 0}g(\Delta x)$
+\end{itemize}
+
+
+\subsubsection{和差法则}
+
+\begin{equation}
+\begin{split}
+\left[f(x)\pm g(x)\right]'&=\lim_{\Delta x\to 0}\frac{[f(x+\Delta x)\pm g(x+\Delta x)]-[f(x)\pm g(x)]}{\Delta x}\\
+&=\lim_{\Delta x\to 0}\frac{[f(x+\Delta x)-f(x)]\pm [g(x+\Delta x)]-+g(x)]}{\Delta x}\\
+&=\lim_{\Delta x\to 0}\frac{f(x+\Delta x)-f(x)}{\Delta x}\pm\lim_{\Delta x\to 0}\frac{g(x+\Delta x)-g(x)}{\Delta x}\\
+&=f'(x)\pm g'(x)~.
+\end{split}
+\end{equation}
+
+
+这个求导法则是符合生活中的直观认知的，是生活中常用的。如果两个人分别以一定的速度完成各自的任务，合起来的速度就是两者速度的相加。
+
+\subsubsection{积法则}
+\begin{equation}
+\begin{split}
+\left[f(x) g(x)\right]'&=\lim_{\Delta x\to 0}\frac{f(x+\Delta x) g(x+\Delta x)-f(x) g(x)}{\Delta x}\\
+&=\lim_{\Delta x\to 0}\frac{f(x+\Delta x) g(x+\Delta x)-f(x) g(x+\Delta x)+f(x) g(x+\Delta x)-f(x) g(x)}{\Delta x}\\
+&=\lim_{\Delta x\to 0}\frac{f(x+\Delta x)-f(x)}{\Delta x} g(x+\Delta x)+\lim_{\Delta x\to 0}f(x)\frac{g(x+\Delta x)-g(x)}{\Delta x}\\
+&=f'(x)g(x)+f(x) g'(x)~.
+\end{split}
+\end{equation}
+可以想象一个池塘，水面上漂着一片荷叶。假设池塘面积和荷叶的覆盖率都在增长，那么整个覆盖面积的变化不仅取决于池塘的变化，还取决于荷叶本身的变化。
+
+\subsubsection{商法则}
+先求倒数的导数。
+\begin{equation}
+\begin{split}
+\left[\frac{1}{g(x)}\right]'&=\lim_{\Delta x\to 0}\frac{\displaystyle\frac{1}{g(x+\Delta x)}-\frac{1}{g(x)}}{\Delta x}\\
+&=\lim_{\Delta x\to 0}\frac{g(x)-g(x+\Delta x)}{g(x+\Delta x)g(x)\Delta x}\\
+&=-\lim_{\Delta x\to 0}\frac{\frac{g(x+\Delta x)-g(x)}{\Delta x}}{g(x+\Delta x)g(x)}\\
+&=-\frac{g'(x)}{[g(x)]^2}~.
+\end{split}
+\end{equation}
+
+从而商法则为：
+\begin{equation}
+\begin{split}
+\left[f(x) \frac{1}{g(x)}\right]'&=f'(x)\frac{1}{g(x)}+f(x) [\frac{1}{g(x)}]'\\
+&=\frac{f'(x)}{g(x)}-\frac{f(x)g'(x)}{[g(x)]^2}\\
+&=\frac{f'(x)g(x)-f(x)g'(x)}{[g(x)]^2}~.
+\end{split}
+\end{equation}
+
+\subsubsection{链式法则}
+
+对于复合函数$f\left(g(x)\right)$，设$y=f(t),t=g(x)$，从而根据定义有：
+\begin{equation}
+f'(t)=\lim_{\Delta t\to 0}\frac{f(t+\Delta t)-f(t)}{\Delta t}~.
+\end{equation}
+\begin{equation}
+g'(x)=\lim_{\Delta x\to 0}\frac{\Delta t}{\Delta x}=\lim_{\Delta x\to 0}\frac{g(x+\Delta x)-g(x)}{\Delta x}~.
+\end{equation}
+
+而对$\Delta x\to 0$的情况下，根据\autoref{def_HsDerB_1} ，可知这时有$\Delta t$也趋于0\footnote{否则导数值会变成无穷大。}，而且$g(x+\Delta x)=g(x)+\Delta t=t+\Delta t$。于是有：
+
+\begin{equation}
+\begin{split}
+\left[f(g(x))\right]'&=\lim_{\Delta x\to 0}\frac{f(g(x+\Delta x))-f(g(x))}{\Delta x}\\
+&=\lim_{\Delta x\to 0}\frac{f(t+\Delta t)-f(t)}{\Delta t}\frac{\Delta t}{\Delta x}\\
+&=\lim_{\Delta t\to 0}\frac{f(t+\Delta t)-f(t)}{\Delta t}\lim_{\Delta x\to 0}\frac{\Delta t}{\Delta x}\\
+&=f'(t) g'(x)\\
+&=f'(g(x)) g'(x)~.
+\end{split}
+\end{equation}
+\subsection{基本初等函数的导数推导}
+
+\subsubsection{常数函数$f(x)=c$}
+
+\begin{equation}
+\begin{split}
+(c)'&=\lim_{\Delta x\to 0}\frac{c-c}{\Delta x}\\
+&=\lim_{\Delta x\to 0}\frac{0}{\Delta x}\\
+&=0~.
+\end{split}
+\end{equation}
+
+\subsubsection{幂函数$f(x)=x^a$}
+
+为了证明指数部分为有理数的幂函数导数，在高中阶段，可以分别证明正整数、负整数以及有理数次幂的幂函数导数公式 $f'(x) = ax^{a-1}$ 成立。对于实数指数的幂函数，因涉及到极限的高级处理以及对无理数指数的定义，高中阶段无法证明
+
+首先证明正整数指数幂函数的导数，对于函数 $f(x) = x^n$（$n \in \mathbb{Z}^+$），使用利用利用\aref{等幂差公式}{the_HsIden_2}有：
+\begin{equation}
+\begin{split}
+f'(x) &= \lim_{\Delta x \to 0} \frac{(x+\Delta x)^n - x^n}{\Delta x}\\
+&=\lim_{\Delta x \to 0} \frac{(x+\Delta x-x)[(x+\Delta x)^{n-1}+x(x+\Delta x)^{n-2}+s+x^{n-2}(x+\Delta x)+x^{n-1}]}{\Delta x}\\
+&=\lim_{\Delta x \to 0} [(x+\Delta x)^{n-1}+x(x+\Delta x)^{n-2}+s+x^{n-2}(x+\Delta x)+x^{n-1}]\\
+&=nx^{n-1}~.
+\end{split}
+\end{equation}
+
+对于负整数指数的幂函数 $f(x) = x^{-n}$（$n \in \mathbb{Z}^+$），可以将其表示为 $f(x) = \frac{1}{x^{n}}$。利用商法则计算导数：
+
+\begin{equation}
+\begin{split}
+f'(x) &= \left(\frac{1}{x^n}\right)' \\
+&=-\frac{nx^{n-1}}{x^{2n}}\\
+&=(-n)x^{(-n)-1}~.
+\end{split}
+\end{equation}
+
+由于$(x^0)'=(1)'=0$，因此，任意整数（$n\in\mathbb{Z}$）指数幂的导数都遵循$f'(x) = nx^{n-1}$。
+
+对于有理数指数的幂函数 $f(x) = x^{\frac{p}{q}}$（$p, q \in \mathbb{Z}$，$q > 0$），写成$y=x^{\frac{p}{q}}$的形式，变形可得到恒等式$y^q=x^p$，由于$p,q$均为整数，两侧同时求导有：
+\begin{equation}
+q  y^{q-1}  y' = p  x^{p-1}~.
+\end{equation}
+解出 $y'$，并代入 $\displaystyle y = x^{\frac{p}{q}}$ 还原得到：
+\begin{equation}
+y' =\frac{p}{q} x^{\frac{p}{q}-1}~.
+\end{equation}
+
+综上，$f'(x) = ax^{a-1}$对所有有理数$a$均成立。
+
+指数函数和对数函数
