@@ -4,7 +4,7 @@
 % type Tutor
 
 
-
+\pentry{振动的指数形式\nref{nod_VbExp}}{nod_67f8}
 
 菲涅尔半波带法是一种处理连续分布的波源时，简化的计算方法。
 
@@ -19,14 +19,60 @@
 
 当空间中只有一个源点时，场点的波可以理解为源点的波弱化并时间延迟后的结果。设源点为$S$，场点$P$到$S$的距离为$L$，波速为$c$，则在时间$t_0$时$P$点处的波函数，就是时间$t_0-L/c$时$S$点处的波函数乘以一个系数，此系数正比于$1/L^{n/2}$，其中$n$是波的维度\footnote{波的维度为描述波函数所需要的空间维度；这也正是介质的维度。}减一。此系数表达的是能量守恒，波随着传递而减弱\footnote{比如二维波，如水波。波源的振动在时间$t$后传播到整个半径为$ct$的圆上，振动能量均匀分布到这个圆上，因此圆上的能量密度正比于$1/ct$。由于振动所含的能量正比于振幅的平方，因此圆上振幅正比于$1/\qty(ct)^{1/2}$。}。
 
-比如说，若源点的振动为$A\cos \omega t$，那么场点的振动则为$\frac{AC}{L^n/2}\cos \omega(t-L/c)$。当然，表示
+比如说，若源点的振动为$A\cos \omega (t+\varphi_0)$，那么场点的振动则为$\frac{AC}{L^n/2}\cos \omega(t+\varphi_0-L/c)$。当然，表示
 
-当空间中有多个源点时，任意时刻场点的波即为所有源点在场点单独产生的波函数相加。为了表达干涉，最好用复数来表示简谐振动，即将源点$S_i$的振动$A_i\cos\omega_it$写为$A_i\exp\qty(\I\omega_it)$。此时$S_i$在场点$P$产生的振动为$\frac{A_iC}{L_i^{n/2}}\exp\qty(\I\omega_it)\frac{A_iC}{L_i^{n/2}}\exp\qty(\I\omega_it)$，而所有源点在$P$产生的合振动即为
+当空间中有多个源点时，任意时刻场点的波即为所有源点在场点单独产生的波函数相加。为了表达干涉，最好用复数来表示简谐振动，即将源点$S_i$的振动$A_i\cos\omega_i(t-\varphi_i)$写为$A_i\exp\qty(\I\omega_i(t-\varphi_i))$。此时$S_i$在场点$P$产生的振动为$\frac{A_iC}{L_i^{n/2}}\exp\qty(\I\omega_i(t-\varphi_i))\frac{A_iC}{L_i^{n/2}}\exp\qty(\I\omega_i(t-\varphi_i))$，而所有源点在$P$产生的合振动即为
 \begin{equation}
-\sum_i \frac{A_iC}{L_i^{n/2}}\exp\qty(\I\omega_it)~. 
+\sum_i \frac{A_iC}{L_i^{n/2}}\exp\qty(\I\omega_i(t-\varphi_i))~. 
 \end{equation}
 
-这个式子本身看起来并不直观，我们可以
+这个式子本身看起来并不直观，我们可以用复数的几何表示来直观理解计算过程：每一项$\frac{A_iC}{L_i^{n/2}}\exp\qty(\I\omega_i(t-\varphi_i))$都表示一个箭头，$\frac{A_iC}{L_i^{n/2}}$是其长度，$\omega_i(t-\varphi_i)$是其角度；每个箭头都随着时间逐渐旋转，角速度为$\omega_i$；最终的振动便是所有箭头相加的结果，随着时间变化。
+
+
+
+\begin{example}{一个合振动的计算实例}
+
+\begin{figure}[ht]
+\centering
+\includegraphics[width=10cm]{./figures/7ce4e9662e078e39.pdf}
+\caption{三个波源干涉的计算例子} \label{fig_HWBMtd_1}
+\end{figure}
+
+如图\autoref{fig_HWBMtd_1} ，空间中存在三个源点$S_1$、$S_2$和$S_3$。某一时刻，三个源点在场点$P$处分别独立产生的振动为$A_1\exp(\theta_1)$、$A_2\exp(\theta_2)$和$A_3\exp(\theta_3)$，振幅分别为$A_1$、$A_2$和$A_3$，那么点$P$处此刻的实际波函数为
+\begin{equation}
+\opn{Re}\qty(A_1\exp(\theta_1)+A_2\exp(\theta_2)+A_3\exp(\theta_3))~. 
+\end{equation}
+
+\end{example}
+
+
+
+
+现实中，波源并不是理想的一个点，而是占据了一定区域，包含无穷多个源点。此时干涉的计算就从\textbf{求和}改为\textbf{积分}：
+\begin{equation}\label{eq_HWBMtd_1}
+\int_D \frac{1}{L(s)^{n-1}}A(s)\exp\qty(\I\omega\qty(t+\varphi(s)-\frac{L(s)}{c}))\dd V~, 
+\end{equation}
+其中$s$是各源点，$A(s)\exp\qty(\I\omega\qty(t+\varphi(s)))$是源点$s$的振动函数，$L(s)$是源点$s$到场点$P$的距离，$c$是波速；$D$是源点所在的区域，当然总是可以令$D$为整个空间；$n$是波的空间维度，$\dd V$是$s$附近一小块空间的$n$维体积；整个积分的结果就正比于场点$P$处的实际振动。
+
+
+
+
+\subsection{菲涅尔半波带法}
+
+
+直接积分\autoref{eq_HWBMtd_1} 通常很麻烦，哪怕只是简单的计算。菲涅尔半波带法将积分简化为有限源点的求和，大大减少了计算量，并且在很多情况下都能提供足够精确的结果。我们从一个实例来切入，理解半波带法的计算方式。
+
+
+
+
+\begin{example}{单缝远场衍射}
+
+考虑平行平面波经过一个单缝的衍射过程。当波源很远的时候，场点处的波呈现出平行的特点，如地球表面的太阳光可以认为是平行的，因此平行平面波的衍射过程又称为“远场衍射”。
+
+设单缝的宽度为$2d$。
+
+\end{example}
+
 
 
 
