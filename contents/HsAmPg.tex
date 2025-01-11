@@ -9,7 +9,15 @@
 
 \pentry{数列（高中）\nref{nod_HsSeFu}}{nod_53a2}
 
-\subsection{定义}
+不知道你是否注意过，有些人上台阶时，总是一步一步走，每次跨一级；也有的人喜欢两步两步地跨，总是隔着一阶；还有的人更大胆，三步三步地跨。这些看似随意的方式，其实都有一个固定的模式——每次跨的台阶数是恒定的。这种固定的规律，就像一条隐形的线，把每次的动作串联在一起，形成了数学中所说的等差数列。
+
+等差数列是最简单的数列之一，早在小学阶段就已经接触过了——如果从 $1$ 开始选取到  $n$  的  $n$  个自然数，它们按顺序排列就构成了一个等差数列，而这个数列的求和方法更是耳熟能详。相传，高斯小时候被老师要求计算从 1 加到 100 的总和，他敏锐地发现了其中的规律：可以将首项和末项配对，这样所有的项都变成了相同的和，再乘以项数的一半就能快速得到结果。这种求和方式总结为一句顺口溜：“\textbf{首项加末项，乘以项数除以 2}”，至今仍为许多人津津乐道。
+
+在接下来的内容中，将探索等差数列及其相关的数学性质，有以下几点需要关注：首先是等差数列本身的结构与特性，其次是它的求和公式及相关推导过程。此外，还将探讨等差数列与函数的关系，理解它在更广泛数学背景中的地位。作为学习数列的第一步，等差数列也为研究其他数列提供了一个范例，通过它可以学习如何分析数列的构成、关注哪些信息，以及用哪些方法来进行研究。这不仅是对数列知识的学习，也是一种数学思维方式的培养。
+
+\subsection{等差数列}
+
+从台阶的故事中可以看出，不论是每次跨一步、两步还是三步，这些方式都有一个共同的特点：每次跨的台阶数是固定的，即两次动作之间的差始终相等。这种规律不仅出现在上台阶这样的情景中，还广泛存在于其他现象中，例如每天增加固定的储蓄金额，或者不断调整音量时每次调节相同的数值。无论这些场景多么不同，它们的本质都是一种“均匀增加或减少”的过程，由固定的差值串联起来。
 
 \begin{definition}{等差数列}
 如果数列 $\{a_n\}$ 满足对于 $n > 1$ 的所有项，每一项与前一项的差为同一个常数 $d$，则称 $\{a_n\}$ 为\textbf{等差数列（arithmetic sequence）}，$d$ 称为$\{a_n\}$的\textbf{公差（common difference）}，即等差数列满足递推公式
@@ -18,34 +26,97 @@ a_{n}=a_{n-1}+d\qquad(n>1)~.
 \end{equation}
 \end{definition}
 
-特别地，之前提到的常数列是 $d = 0$ 的等差数列。
+特别地，之前提到的常数列是 $d = 0$ 的等差数列。如果公差 $d$ 为负，数列的值会逐渐减少，例如 $10, 8, 6, \dots$。
 
-\subsection{通项}
-如果等差数列 $\begin{Bmatrix} a_n \end{Bmatrix}$ 的首项是 $a_1$，公差是 $d$，那么根据等差数列的定义可得
-\begin{equation}
+有了递推公式，自然要研究一下是否可以得到通项公式，下面介绍两种推导等差数列通项公式的方法：
+
+方法一：迭代递推公式
+
+当$n>1$ 时，利用递推公式  $a_n = a_{n-1} + d$ 逐步将数列的前一项用递推公式展开，可以得到：
+\begin{equation}\label{eq_HsAmPg_6}
 \begin{aligned}
-&a_1 = a_1,\\
-&a_2 = a_1 + d,\\
-&a_3 = a_2 + d = a_1 + 2d,\\
+a_n &= a_{n-1} + d \\
+&= a_{n-2}+d + d\\
 &\cdots \\
-&a_n = a_{n-1} + d = a_1 + (n - 1)d~.
+&= a_2 + (n-2)d\\
+&=  a_1 + (n-1)d~.
 \end{aligned}
 \end{equation}
 
-当 $n = 1$ 时
+方法二：错项相减法
+
+它是累加法的一个特例，核心思想是利用数列的结构性（如相邻项有规律的差或比），通过累加将多项式或等式中的部分消去，从而简化计算。实际操作时，首先根据递推公式写出$n-1$个等式：
+\begin{equation}\label{eq_HsAmPg_7}
+\begin{aligned}
+a_2-a_1 &= d,\\
+a_3-a_2 &= d,\\
+a_4-a_3 &= d,\\
+&\cdots \\
+a_n-a_{n-1} &= d,~.
+\end{aligned}
+\end{equation}
+然后把将这些等式的左侧和右侧分别相加，得到：
+\begin{equation}
+(a_2 - a_1) + (a_3 - a_2) + (a_4 - a_3) + \cdots + (a_n - a_{n-1}) = d + d +d+ \cdots + d~.
+\end{equation}
+将左侧的括号打开，这时由于相邻项的抵消，剩余的部分只有$a_n-a_1$，左侧则是$n-1$项和，即：
+\begin{equation}\label{eq_HsAmPg_8}
+a_n -a_1=(n-1)d~.
+\end{equation}
+
+\autoref{eq_HsAmPg_6} 的迭代推导与 \autoref{eq_HsAmPg_7} 通过差的累加推导，分别代表了研究数列的两种重要构造方法。前者通过递推公式逐步展开，直接得到通项公式；后者通过相邻项的差累加，从整体上揭示了数列的内在规律。这两种方法虽然路径不同，但都最终将第  $n $ 项表示为首项 $ a_1$  和公差  $d$  的线性关系。在得出这一公式后，还需要记得验证其是否符合边界条件。
+
+当  $n = 1$  时，代入\autoref{eq_HsAmPg_6} 得：
 \begin{equation}
 a_1 = a_1 + (1 - 1)d = a_1~,
 \end{equation}
-也就是说这个公式对 $n = 1$ 同样适用。
-
-综上，等差数列通项公式为
-\begin{equation}
+这个结果表明，这个关系对 $n = 1$ 的边界条件依然成立，因此最终得到等差数列的通项公式。
+\begin{corollary}{等差数列通项公式}
+对等差数列$\{a_n\}$，其通项公式为：
+\begin{equation}\label{eq_HsAmPg_5}
 a_n = a_1 + (n - 1)d~.
 \end{equation}
+其中，$a_1$ 是首项，$d$ 是公差，$n$ 是项数。
+\end{corollary}
+\addTODO{至此。}
+如果能够证明一个数列满足定义，也就是任意相邻两项的差是定值，那么就能确定他是等差数列，同时也能确定公差。对于任何等差数列，如果确定了是等差数列，那么公差和首项就能唯一确定，也就是说两个数列如果（）对应相等，那么他们就是同一个数列。而可以看出，尽管首项对确认等差数列很重要，但更重要的是公差。
+\begin{example}{证明：若$\{a_n\}$通项公式形式为$a_n=kn+b$，则其为等差数列。}
+对于$n>1$，有：
+\begin{equation}
+a_n-a_{n-1}=kn+b-k(n-1)-b=k~.
+\end{equation}
+说明$\{a_n\}$是以$k$为公差的等差数列，通项公式带入$n=1$有，$a_1=b+k$。
+\end{example}
 
-\textsl{注：这里需要说明一下，带入 $n = 1$ 验算的原因是，我们推算的是 $n > 1$ 时的通项公式，不能说明对首项成立。正如上一节所说，不是所有数列都能写出通项公式，在题目中，经常会出现首项不符合其余项通项公式的情况。}
+事实上，知道任意一项都可以通过公差来推出所有其他项，满足：
+\begin{equation}
+a_n=a_k+(n-k)d~.
+\end{equation}
+通过这个关系还可以得到另一个关系：
+\begin{equation}\label{eq_HsAmPg_1}
+d={a_n-a_k\over n-k}~.
+\end{equation}
+这像极了\aref{平均变化率}{def_HsFunC_3}或者\aref{斜率}{def_HsFunC_5}的定义。其实，如果将等差数列的通项公式变形可以得到：
+\begin{equation}
+a_n=dn+(a_1-d)~.
+\end{equation}
+在\enref{数列}{HsSeFu}中曾介绍过，这个形式，其实就是一次函数的离散形式，也就是说，在直角坐标系中，将等差数列的项数$n$作为横坐标，数列的值$a_n$作为纵坐标，点$(n,a_n)$分布在一条直线上。
 
-\subsection{等差中项}
+
+根据\autoref{eq_HsAmPg_1} 还能得到等差数列的一个重要性质，取四个整数，满足$m+n=p+q$，即$p-n=m-q$，那么根据\autoref{eq_HsAmPg_1} 有：
+\begin{equation}
+{a_p-a_n\over p-n}=d={a_m-a_q\over m-q}~.
+\end{equation}
+两侧分母相等，化简得到推论。
+\begin{corollary}{}\label{cor_HsAmPg_1}
+对于等差数列$\{a_n\}$，若满足$m+n=p+q$，则有：
+\begin{equation}
+a_m+a_n=a_p+a_q~.
+\end{equation}
+\end{corollary}
+
+\subsubsection{等差中项}
+
 如果在 $a$ 和 $b$ 中间插入一个数 $A$，使 $a,A,b$ 成等差数列，那么 $A$ 叫作 $a$ 与 $b$ 的\textbf{等差中项}.
 
 如果 $A$ 是 $a$ 与 $b$ 的等差中项，那么
@@ -56,36 +127,80 @@ A - a = b - A~,
 A = \frac{a+b}{2}~.
 \end{equation}
 
-\textsl{注：等差中项是等差数列的重要考点，大部分考察等差数列的题目都会考察等差中项。}
 
 \subsection{等差数列的数列和}
 
-等差数列求和的思路非常简单，设一个等差数列
+研究完数列的性质后，现在来研究等差数列的数列和。在学习数列时，曾提及过数列和的一个\aref{性质}{eq_HsSeFu_1}，据此将数列两次排列后相加有：
+\begin{equation}\label{eq_HsAmPg_4}
+\begin{split}
+2S_n &= (a_1 + a_2 + \cdots + a_n)+(a_n + a_{n-1} + \cdots + a_1)\\
+&=(a_1+a_{n})+(a_2+a_{n-1}) +\cdots +(a_n+a_1)~.
+\end{split}
+\end{equation}
+观察\autoref{eq_HsAmPg_4} ，每对括号中的两项下标之和均为 $n+1$，根据\autoref{cor_HsAmPg_1} ，这意味着括号内的和均等于 $a_1 + a_n$，设数列共有 $n$ 项，则共有 $n$ 对这样的和，因此：
+\begin{equation}\label{eq_HsAmPg_2}
+2S = n \cdot (a_1+a_n)\implies S = \frac{n\cdot(a_1+a_n)}{2}~.
+\end{equation}
+
+这一公式表明，等差数列的和可以通过的方法计算。这与经典的高斯求和公式完全一致。
+对于更特殊的从1开始的自然数列，（高斯求和的故事），得到的“首项加末项，乘以项数除以2”，于此处也是契合的。
+
+接下来，将\aref{等差数列的通项公式}{eq_HsAmPg_5}代入\autoref{eq_HsAmPg_2} 可以得到等差数列和的通项公式。
+\begin{corollary}{等差数列和的通项公式}
+对等差数列$\{a_n\}$，其数列和$\{S_n\}$的通项公式为：
+\begin{equation}\label{eq_HsAmPg_3}
+S_n = na_1+\frac{n(n-1)}{2}d~.
+\end{equation}
+其中，$a_1,d$ 是等差数列的首项和公差，$n$ 是项数。
+\end{corollary}
+
+\autoref{eq_HsAmPg_3} 可以变形得到
 \begin{equation}
-a_1,a_2,a_3\cdots,a_n~.
+S_n = \frac{d}{2}n^2+\left(a_1-\frac{d}{2}\right)n~.
 \end{equation}
-我们将这个数列倒序排列
+
+如果看作函数，则是一个过原点的二次函数。这与认知相符，显然如果这个和是零项和时应该为$0$。
+
+
+\begin{example}{若$\{a_n\}$的数列和为$S_n=An^2+Bn+C,(ABC\neq0)$，判断$\{a_n\}$是否为等差数列。}\label{ex_HsAmPg_1}
+答：
+
+$\{a_n\}$不是等差数列。
+
+解析：
+
+首先，由数列的和 $S_n$ 的定义可得首项为$a_1=S_1=A+B+C$。
+
+对于$n>1$，根据 $a_n = S_n - S_{n-1}$，有
 \begin{equation}
-a_n,a_{n-1},\cdots,a_1~.
+\begin{split}
+a_n &= S_n-S_{n-1}\\
+&=An^2+Bn+C-A(n-1)^2-B(n-1)-C\\
+&=(2n+1)A+B~.
+\end{split}
 \end{equation}
-则两个数列的和为
-\begin{equation}\label{eq_HsAmPg_1}
-\begin{aligned}
-S &= a_1 + a_2 + \cdots + a_{n-1} + a_n ~,\\
-S &= a_n + a_{n - 1} + \cdots + a_2 + a_1~.
-\end{aligned}
-\end{equation}
-由\autoref{eq_HsAmPg_1} 得
+
+分别计算相邻两项的差：
+
 \begin{equation}
-2S = (a_1+a_n) + (a_2+a_{n-1}) +\cdots (a_n + a_1)~.
+\begin{split}
+a_2 - a_1 &= (2A \cdot 2 + A + B) - (A + B + C) \\
+&= 4A + A + B - A - B - C \\
+&= 2A - C~.
+\end{split}
 \end{equation}
-此时我们会意识到，所有括号中的两项都具有相同的等差中项，也就是是说
+
+对$n>2$，两项之差为
 \begin{equation}
-2S = n \cdot (a_1+a_n)~,
+a_n-a_{n-1} = (2n+1)A+B-(2n-1)A-B=2A~.
 \end{equation}
-\begin{equation}
-S = \frac{n\cdot(a_1+a_n)}{2}~.
-\end{equation}
+
+由此可以看出，从 $a_2$ 开始，数列 $\{a_n\}$ 的相邻两项之间的差是固定的，即 $2A$，因此后续项构成等差数列。然而，$a_2 - a_1 = 2A - C$ 与 $a_n - a_{n-1} = 2A$ 不相等，说明首项与后续项之间的差异导致 $\{a_n\}$ 整体不构成等差数列。
+
+进一步分析，若 $\{a_n\}$ 是等差数列，则 $S_n$ 必须具有 $S_n = An^2 + Bn$ 的形式（即 $C = 0$）。由于 $C \neq 0$，因此 $\{a_n\}$ 不是等差数列。
+\end{example}
+
+在\autoref{ex_HsAmPg_1} 中，尽管数列 ${a_n}$ 的后续项具有等差性，但由于边界条件的特殊性（首项与后续项之间存在差异），整体判断表明 ${a_n}$ 并非等差数列。边界条件在问题中起到关键作用，其直接影响了解答的完整和正确。在处理计算题时，必须特别注意边界条件是否成立，以避免因忽视边界条件而导致的错误结论。
 
 \textbf{等差数列与函数}
 
