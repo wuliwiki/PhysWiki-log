@@ -3,6 +3,10 @@
 % type Tutor
 
 
+\begin{issues}
+\issueDraft
+\end{issues}
+
 \pentry{数列\nref{nod_HsSeFu}，集合\nref{nod_HsSet}，函数\nref{nod_functi}}{nod_571f}
 
 想象一下这样一个场景，老师要求你计算从1到100的所有自然数的和，这时，你旁边的一个名叫高斯的同学脱口而出5050。当然，这篇文章的内容不是介绍如何快速的计算这个和的，于是这个故事里，你不是高斯，而是他旁边那个看起来“笨笨”的同学。你和其他的同学一样，从$1$开始一个一个往上加。
@@ -110,16 +114,17 @@ $$\sum_{k=2}^{7}{2k} .~$$
 \subsection{常用的求和结论}
 
 下面给出一些常用的求和结论，感兴趣的读者可以自行证明。
-
-\begin{itemize}
-\item $\displaystyle\sum\limits_{i=a}^a f(i) = f(a)$
-\item $\displaystyle\sum\limits_{i=1}^n 1 = n$
-\item $\displaystyle\sum\limits_{i=1}^n i = \frac{n(n+1)}{2}$
-\item $\displaystyle\sum\limits_{i=1}^n i^2 = \frac{n(n+1)(2n+1)}{6}$
-\item $\displaystyle\sum\limits_{i=1}^n i^3 =\frac{n^4+2n^3+n^2}{4}= \left( \frac{n(n+1)}{2} \right)^2$
-\item $\displaystyle\sum\limits_{i=1}^n \frac{1}{i(i+1)} = 1 - \frac{1}{n+1}$
-\end{itemize}
-
+\begin{table}[ht]
+\centering
+\caption{常用的求和结论}\label{tab_SumSym2}
+\begin{tabular}{|c|c|c|c|c|c|}
+\hline
+求和式 &$\displaystyle\sum\limits_{i=a}^a f(i)$ & $\displaystyle\sum\limits_{i=1}^n 1$ & $\displaystyle\sum\limits_{i=1}^n i$ & $\displaystyle\sum\limits_{i=1}^n i^2$ & $\displaystyle\sum\limits_{i=1}^n i^3$  \\
+\hline
+化简结果 &$f(a)$ & $n$ & $\displaystyle\frac{n(n+1)}{2}$ & $\displaystyle\frac{n(n+1)(2n+1)}{6}$ & $\displaystyle\frac{n^4+2n^3+n^2}{4}= \left( \frac{n(n+1)}{2} \right)^2$ \\
+\hline
+\end{tabular}
+\end{table}
 下面以$\displaystyle\sum\limits_{i=1}^n i^2$为例，演示证明过程，过程中反复使用了立方和公式$(a+b)^3=a^3+3a^2b+3ab^2+b^3$。其实，$\displaystyle\sum\limits_{i=1}^n i^k$都可以用类似的方法来求解。注意求解时求和符号的变化。
 
 \begin{example}{求$\displaystyle\sum\limits_{i=1}^n i^2$}
@@ -140,6 +145,7 @@ $$\begin{align*}
 &={1\over6} \left(2n^3+3n^2+n\right)\\
 &=\frac{n(n+1)(2n+1)}{6}~.
 \end{align*}$$
+这里$\displaystyle\sum\limits_{i=2}^{n+1} i^3-\sum\limits_{i=1}^n i^3$的化简，使用的就是等差数列中介绍过的\aref{错位相减法}{sub_HsAmPg_1}。
 \end{example}
 
 \subsection{单个求和符号的运算技巧}
@@ -209,8 +215,38 @@ $$\sum_{i=m}^n a_i = \sum_{j=0}^{n-m} a_{j+m}~.$$
 $$\sum\limits_{i=1}^{100} i= \sum_{i=1}^{50} [i + (100+1-i)]=50\times101=5050.~$$
 \end{example}
 
+\subsubsection{裂项相消法}
 
+与\autoref{eq_HsAmPg_7} 类似，许多常见的求和问题可以通过\textbf{拆项（partial fraction decomposition）}，使得相邻项变得可以互相抵消，最终得出简洁的结果，这种方法被称为\textbf{裂项相消法}。
+\begin{example}{化简$\displaystyle\sum_{n=1}^N {1\over n(n+1)}$}\label{ex_SumSym_2}
+解：
+\begin{equation}
+\begin{split}
+\sum_{n=1}^N {1\over n(n+1)}&=\sum_{n=1}^N \left({1\over n}-{1\over n+1}\right)\\
+&=\left(1-{1\over2}\right)+\left({1\over2}-{1\over3}\right)+\cdots+\left({1\over n}-{1\over n+1}\right)\\
+&=1-{1\over2}+{1\over2}-{1\over3}+\cdots+{1\over n}-{1\over n+1}\\
+&=1-{1\over n+1}\\
+&={n\over n+1}~.\\
+\end{split}
+\end{equation}
+\end{example}
 
+如 \autoref{ex_SumSym_2} 所示，通过对每一项的拆分，使得相邻的正负项互相抵消，从而将复杂的求和过程简化为一个首尾项的差。这种方法适用于求和过程中每一项形式为分母是与 $n$ 相关的乘积的分式，且能够通过拆项的方式化为两个更简单的分式形式的情况。错位相减法是一种简洁、高效的技巧，但如何拆分成为计算的难点，这里给出一些示例，供读者参考和思考。
+\begin{table}[ht]
+\centering
+\caption{常见裂项方法}\label{tab_SumSym1}
+\begin{tabular}{|c|c|c|}
+\hline
+求和式 & 裂项方法 & 化简结果 \\
+\hline
+$\displaystyle\sum\limits_{i=1}^n \frac{1}{i(i+1)}$ & $\displaystyle\frac{1}{i(i+1)}=\frac{1}{i}-\frac{1}{i+1}$ & $\displaystyle\frac{n}{n+1}$ \\
+\hline
+* & * & * \\
+\hline
+* & * & * \\
+\hline
+\end{tabular}
+\end{table}
 总结一下，求和符号有下面几点明确的好处：
 
 \begin{enumerate}
