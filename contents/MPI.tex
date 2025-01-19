@@ -1,0 +1,40 @@
+% MPI 程序设计
+% keys 并行程序设计|MPI|多进程
+% license Usr
+% type Tutor
+
+\subsection{MPI}
+MPI(Message Passing Interface 消息传递接口)
+\begin{itemize}
+\item 是一种多进程并行编程API
+\item 使得进程间通过发送消息(Message)来进行数据通信，它：
+1.不假设进程能访问统一(逻辑)内存空间\\
+2.通常用于分布式内存环境(如hpc)
+\end{itemize}
+\begin{lstlisting}[language=c]
+#include <mpi.h> /* For MPI functions, etc */
+const int MAX STRING = 100;
+int main(void){
+    char greeting[MAX STRING];
+    int comm_sz; /* Number of processes */
+    int my_rank; /* My process rank */
+    MPI_Init(NULL, NULL);
+    MPI_Comm_size(MPI_COMM_WORLD, &comm_sz);
+    MPI_Comm_rank(MPI_COMM_WORLD, &my_rank);
+    if(my_rank != 0){
+        sprintf(greeting, "Greetings from process
+         %d of %d!", my_rank, comm sz);
+        MPI_Send(greeting, strlen(greeting)+1, 
+        MPI_CHAR, 0, 0, MPI_COMM_WORLD);
+    } else {
+        printf("Greetings from process %d of %d!\n", my_rank, comm_sz);
+        for(int q = 1; q < comm_sz; q++){
+            MPI_Recv(greeting, MAX_STRING, MPI_CHAR,
+            q, 0, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
+            printf("%s\n", greeting);
+        }
+    }
+    MPI_Finalize();
+    return 0;
+} /* main */
+\end{lstlisting}
