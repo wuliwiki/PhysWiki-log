@@ -99,6 +99,15 @@ server {
 }
 \end{lstlisting}
 
+若浏览器访问出错，可以查看日志 \verb`tail /var/log/nginx/error.log`。
+
+若浏览器访问返回 502 错误，那说明 nginx 默认 buffer 太小， 在 \verb`http {` 开头的部分添加以下设置即可
+\begin{lstlisting}[language=none]
+proxy_buffer_size   1280k;
+proxy_buffers       4 2560k;
+proxy_busy_buffers_size   2560k;
+\end{lstlisting}
+
 如果需要 https 代理， 用
 \begin{lstlisting}[language=none]
 server {

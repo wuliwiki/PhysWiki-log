@@ -7,77 +7,177 @@
 \issueDraft
 \end{issues}
 
-\pentry{数列（高中）\nref{nod_HsSeFu}}{nod_d6a2}
+\pentry{数列 \nref{nod_HsSeFu}，等差数列 \nref{nod_HsAmPg}，指数函数\nref{nod_HsExpF}}{nod_d6a2}
 
+在介绍\aref{数列和}{sub_HsSeFu_1}时，曾提到国际象棋棋盘和麦粒的故事。故事中提到：“依此类推，每一格的麦粒数量是上一格的两倍。”尽管这一描述看似简单，但敏锐的读者可能已经注意到，如果将每一格的麦粒数量视为一个数列中的一项，那么这个“二倍”实际上就是数列生成的递推规则。换句话说，数列的每一项都是前一项的若干倍，这种生成关系构成了等比数列的基本特征。与最简单的等差数列相比，等比数列的规则从“差”转变为“比”，这一变化看似微小，却使得数列的增长形式从线性变为指数。
 
-\begin{definition}{等比数列}
-如果数列 $\{a_n\}$ 满足对于 $n > 1$ 的所有项，每一项与前一项的比为同一个常数 $q(q\neq0)$，则称 $\{a_n\}$ 为\textbf{等比数列（geometric sequence）}，$q$ 称为 $\{a_n\}$ 的\textbf{公比（common ratio）}，即等比数列满足递推公式
+这一规律在自然界和生活中非常常见。例如，细胞分裂的数量倍增规律、银行存款的复利计算、声音传播中强度的逐步衰减等现象都符合相似的模式：每个阶段的变化都是在上一次的基础上按比例增加或减少。虽然这些场景的具体数值不同，但它们背后的数学本质却是一致的，都是通过固定的比值连接各阶段的变化过程。人们将具有这种倍数特征的数列称为等比数列。等比数列不仅在基础数学中具有重要地位，其延伸——等比级数，在大学数学中更是研究无限序列和收敛性的核心工具。等比级数广泛应用于物理学、经济学等领域，用于描述振荡、增长、衰减等复杂现象。
+
+在学习等差数列的过程中，读者已经熟悉了递推公式、通项公式以及数列和的推导方法，同时也了解了数列问题研究的核心内容和常见思路。在等比数列的探索中，这些经验同样可以迁移应用。接下来的研究思路，沿用了学习等差数列时的逻辑框架，相信读者一定会感到非常熟悉。但需要特别注意“比”的固定以及由此引发的性质和增长形式的差异，这也是深入理解等比数列的关键所在。
+
+\subsection{等比数列}
+
+前面提到的种种例子，无论是细胞分裂、银行存款计息，还是棋盘上的麦粒故事，其核心规律都是相同的，即“按比例增长或减少”的过程。本质上，这些现象都是通过相邻项的固定比值将整个变化过程紧密连接起来。基于这一规律，可以明确等比数列的递推定义：
+
+\begin{definition}{等比数列}\label{def_HsGmPg_1}
+如果数列 $\{a_n\}$ 满足对于 $n > 1$ 的所有项\footnote{通常对于数列而言，$n>2$才有意义，此处不讨论$n\leq2$的情况。}，每一项与前一项的比为同一个常数 $q(q\neq0)$，则称 $\{a_n\}$ 为\textbf{等比数列（geometric sequence）}\footnote{这里可以看到，等比数列的英语直译的话叫做“几何数列”，中文的名称更加直白，而英文如此称呼的原因，在后文会提及。}，$q$ 称为 $\{a_n\}$ 的\textbf{公比（common ratio）}，即等比数列满足递推公式：
 \begin{equation}
-a_{n}=a_{n-1}\cdot q\qquad(n>1)~.
+a_{n}=a_{n-1}\cdot q\qquad( a_1\neq0,q\neq0,n>1)~.
 \end{equation}
 \end{definition}
+在等比数列的递推公式中，需要注意首项 $a_1 \neq 0$。如果允许 $a_1 = 0$，根据递推公式可以推导出 $a_2 = 0$，这将会产生两个问题：
+\begin{itemize}
+\item 分母的问题：由于 $0$ 不能作为分母，这会使得数列无法满足“每一项与前一项的比为同一个常数”的定义要求。
+\item 结果的模糊性：$a_1=a_2=0$，进而推出数列中任意项 $a_n$ 都为 $0$。但在这种情况下，即使将 $a_n$ 写成倍数的形式，也无法保证比值 $q$ 是一个固定的常数。事实上，这样的数列可以得到任意的比值 $q$，从而失去了定义的严谨性。
+\end{itemize}
+此外，由于等比数列具有“任意连续部分截取出来仍满足定义”的性质，这意味着等比数列中的任何一项都不能为 $0$，否则将无法保证其满足定义。特别地，所有非零的常数列都可以看作 $q = 1$ 的等比数列。
 
-特别地，之前提到的常数列是 $q = 1$ 的等比数列。
-
-\subsubsection{通项公式}
-由定义可得，等比数列的\textbf{通项公式}
-\begin{equation}
-a_n = a_1 q^{n-1} \quad (a_1 \ne 0,\ q\ne 0,\ n=1,2,3\dots)~
+根据定义，迭代递推公式可以推导等比数列的通项公式。当 $n > 1$ 时，利用递推公式 $a_n = a_{n-1} \cdot q$，逐步展开数列的前一项，可以得到：
+\begin{equation}\label{eq_HsGmPg_3}
+\begin{aligned}
+a_n &= a_{n-1} \cdot q\\
+&= a_{n-2}\cdot q\cdot q\\
+&\cdots \\
+&= a_2\cdot q^{n-2}\\
+&=  a_1 \cdot q^{n-1}~.
+\end{aligned}
 \end{equation}
+可以看出，乘积的递推关系最终转化为公比 $q$ 的指数形式。这也解释了在麦粒故事中，为什么会提到最终的结果背后蕴含着“指数的力量”。接下来，检查边界条件，当 $n = 1$ 时，将其代入\autoref{eq_HsGmPg_3}，由于$q\neq0$显然有：
+\begin{equation}
+a_1=a_1\cdot q^{1-1}=a_1~.
+\end{equation}
+显然，边界条件与公式完全吻合。综上，可以得出等比数列的通项公式：
+\begin{corollary}{等比数列通项公式}
+对等比数列$\{a_n\}$，其通项公式为：
+\begin{equation}
+a_n = a_1 q^{n-1} \quad (a_1\neq0, q\ne 0,\ n=1,2,3\dots)~
+\end{equation}
+其中，$a_1$ 是首项，$q$ 是公比，$n$ 是项数。
+\end{corollary}
+
+与等差数列的判断方法相同，既可以利用通项公式，也检测该数列是否满足定义的条件。再次提醒，后一种方法虽然在实际应用中常被忽略，但同样有效。首项与公比可以是唯一确定一个等差数列。另外，根据前面的描述如果已知一个数列有$0$项，那么它一定不是等比数列。
+
+\subsection{等比数列的性质}
+
+其实等比数列的通项公式很显然就对应一个指数函数，根据等差数列的经验，等比数列实际上是指数函数的离散形式。换句话说，在直角坐标系中，如果将数列的项数 $n$ 作为横坐标，数列的值 $a_n$ 作为纵坐标，则点 $(n, a_n)$ 将分布在一条过$\displaystyle(0,{1\over q})$和$(1,a_1)$的指数函数的曲线上。
+
+下面讨论等比数列的增减性。根据定义\autoref{def_HsGmPg_1}，等比数列的任意两相邻项满足关系：
+\begin{equation}
+{a_{n+1}\over a_n}=q~.
+\end{equation}
+针对这个关系分以下几种情况进行讨论：
+\begin{enumerate}
+\item 当 $q < 0$ 时，$a_n a_{n+1} < 0$，说明相邻两项的符号相反，同时数列中任意相隔的项符号相同，即$a_na_{n+2}>0$。这时$\{a_n\}$是摆动数列。
+\item 当 $q > 0$ 时，所有项的符号与首项 $a_1$ 的符号一致，这时具体分以下两种情况：
+\begin{itemize}
+\item 如果 $q > 1$，则 $\displaystyle\frac{a_{n+1}}{a_n} > 1$。如果 $a_1 > 0$，两侧同乘$a_n$，可以得到 $a_{n+1} > a_n$，从而数列递增；同样，如果 $a_1 < 0$，则 $a_{n+1} < a_n$，数列递减。
+\item 如果 $0 < q < 1$，则 $\displaystyle\frac{a_{n+1}}{a_n} < 1$。如果 $a_1 > 0$，则 $a_{n+1} < a_n$，数列递减；如果 $a_1 < 0$，则 $a_{n+1} > a_n$，数列递增。
+\end{itemize}	
+\end{enumerate}
+
+基于上述分析，可以总结出以下结论：
+\begin{corollary}{等比数列的增减性}
+对于公比为 $q$ 的等比数列 $\{a_n\}$：
+\begin{itemize}
+\item 如果 $q > 1$，若$a_1>0$，则 $\{a_n\}$ 是递增数列；若$a_1<0$，则 $\{a_n\}$ 是递减数列；
+\item 如果 $0< q < 1$，若$a_1>0$，则 $\{a_n\}$ 是递减数列；若$a_1<0$，则 $\{a_n\}$ 是递增数列；
+\item 如果 $q<0$，则 $\{a_n\}$ 是摆动数列。
+\end{itemize}
+\end{corollary}
+
+这些结论同样可以从通项公式 $a_n = a_1 q^{n-1}$ 中得到验证。简单来说，判断等比数列的增减性可以按照以下步骤。先判断 $q$ 的符号：$q<0$为摆动数列；$q>0$为单调数列。已知单调则通过判断 $(q - 1)a_1$ 的符号来判断增减性：$(q - 1)a_1 > 0$，数列递增；$(q - 1)a_1 < 0$，数列递减。
+
+与等差数列类似，对于等比数列，同样可以证明，只需知道任意一项及公比，就可以确定整个数列，满足以下关系式：
+\begin{equation}
+a_n=a_k\cdot q^{n-k}~.
+\end{equation}
+基于此关系，还可以推导出等比数列的一个重要性质。设 $m, n, c, d$ 为四个整数，则有：
+\begin{equation}
+\begin{cases}
+a_c=a_n\cdot q^{c-n}\\
+a_m=a_d\cdot q^{m-d}~.
+\end{cases}
+\end{equation}
+如果进一步假设 $m+n = c+d$，即 $c-n = m-d$，那么将上述两式相除，可得以下结论：
+\begin{corollary}{}\label{cor_HsGmPg_1}
+对于等比数列$\{a_n\}$，若满足$m+n=p+q$，则有：
+\begin{equation}
+a_ma_n=a_pa_q~.
+\end{equation}
+\end{corollary}
+这一性质表明，等比数列的任意两项乘积，只要其项数之和相等，就可以通过另一对项的乘积表示，这体现了等比数列的内在对称性。
+
+类似于等差中项的概念，在等比数列中，如果在 $a$ 和 $b$ 之间插入一个数 $G$，使得 $a, G, b$ 成等比数列，即满足关系式：
+\begin{equation}
+{G\over a} = {b\over G}~.
+\end{equation}
+则称 $G$ 为 $a$ 与 $b$ 的\textbf{等比中项（median of a geometric sequence）}。由此可以推导出：
+\begin{equation}\label{eq_HsGmPg_5}
+G^2 = ab~.
+\end{equation}
+结合\autoref{cor_HsGmPg_1} 可知，对于一个等比数列，如果某两项的项数之和恰好是另一项的两倍，那么这第三项就是那两项的等比中项。不过需要注意，这要求那两项的项数和必须是偶数，否则在等比数列中无法找到符合条件的项\footnote{与此不同的是，对于函数曲线，无论什么情况下都可以找到对应的点。}。最简单的情况是在等比数列中，除首末两项外，每一项都是它前后两项的等比中项。
+
+由于等比数列中不含 $0$，因此 $ab > 0$，即条件中给出的 $a$ 和 $b$ 必须同号。另外，由\autoref{eq_HsGmPg_5} 可以得到：
+\begin{equation}
+G = \pm \sqrt{ab}~.
+\end{equation}
+这表明，对于给定的 $a$ 和 $b$，它们的等比中项并不唯一，分别对应 $q$ 为相反数的两种情况。其中，$|G|$正好是 $a$ 和 $b$ 的几何平均值\footnote{关于几何平均值参见\aref{基本不等式}{sub_HsIden_2}，这里采用了实数范围内的解释。如果是在复数域考虑，则应该是与 $a$ 和 $b$ 同号的$G$值。几何平均值的英语也与等比数列的英语使用了相同的单词“geometric”。}。
 
 \subsubsection{等比中项}
 与等差数列类似，如果在 $a$ 和 $b$ 中插入一个数 $G$，使得 $a,G,b$ 成等比数列，那么根据等比数列的定义， $\frac{G}{a} = \frac{b}{G},G^2 = ab,G = \pm \sqrt{ab}$。我们称 $G$ 为 $a,b$ 的\textbf{等比中项}。
 
-易得，在等比数列中，首末两项除外，每一项都是它前后两项的等比中项。
+
 
 \subsection{等比数列的数列和}
-等比数列求和与等差数列求和有相似之处，
+
+
+讨论完等比数列的性质后，接下来研究其数列和的计算方法。等比数列求和与等差数列求和有相似之处，都是将S展开后求和或差，然后利用数列的性质来处理展开部分中相同的内容。在学习数列时，曾提到过数列和的另一个\aref{性质}{eq_HsSeFu_3}。基于这一性质，取$k=q$可以得到：
+
 \begin{equation}\label{eq_HsGmPg_1}
-S = a_1 + a_2 + \cdots + a_n~,
-\end{equation}
-\begin{equation}
-qS = qa_1 + qa_2 + \cdots + qa_n~,
-\end{equation}
-\begin{equation}\label{eq_HsGmPg_2}
-qS= a_2 + a_3 + \cdots + qa_n~.
-\end{equation}
-\autoref{eq_HsGmPg_1} 与 \autoref{eq_HsGmPg_2} 做差
-\begin{equation}
 \begin{aligned}
-(1 - q)S &= a_1 - qa_n\\
+qS_n &= qa_1 + qa_2 + \cdots qa_{n-1}+ qa_n\\
+&=a_2 + a_3 + \cdots + a_n+qa_n~.
+\end{aligned}
+\end{equation}
+而$S_n$展开后有许多相似的部分：
+\begin{equation}\label{eq_HsGmPg_2}
+S_n = a_1 + a_2 + \cdots + a_n~,
+\end{equation}
+将\autoref{eq_HsGmPg_1} 与 \autoref{eq_HsGmPg_2} 做差，可以消掉这些相同的部分，得到：
+\begin{equation}\label{eq_HsGmPg_4}
+\begin{aligned}
+(1 - q)S_n &= a_1 - qa_n\\
 &= a_1(1 - q^n)~,
 \end{aligned}
 \end{equation}
+下面针对$q$的取值进行讨论：如果$q\neq1$，那么，将\autoref{eq_HsGmPg_4} 中的$(1-q)$除到左边就可以得到：
 \begin{equation}
-S = \frac{a_1(1-q^n)}{1-q} \quad (q\neq 1)~.
+S_n = \frac{a_1(1-q^n)}{1-q} \quad (q\neq 1)~.
 \end{equation}
-则等比数列前 $n$ 项和为
+检验边界条件，在\autoref{eq_HsGmPg_4} 中带入$n=1$，左右的$(1-q)$可以约掉，显然成立。
+如果$q=1$，则由于\autoref{eq_HsGmPg_4} 两侧均为0，无法得出$S_n$的表达式。但此时，等比数列事实上成为了常数列，即$a_n=a_1$，因此，求和结果为：
 \begin{equation}
-S = 
-\begin{cases}
-\begin{aligned}
-&na_1 &\quad &(q = 1) \\
-&\frac{a_1(1-q^n)}{1-q} &\quad &(q \neq 1)~.
-\end{aligned}
+S_n=na_n~.
+\end{equation}
+边界条件也显然成立。因此综上有：
+
+\begin{corollary}{等比数列和的通项公式}
+对等比数列$\{a_n\}$，其数列和$\{S_n\}$的通项公式为：
+\begin{equation}
+S_n = \begin{cases}
+\displaystyle\frac{a_1(1-q^n)}{1-q} ,\quad &(q \neq 1)\\
+na_1, \quad &(q = 1)~.
 \end{cases}
 \end{equation}
+其中，$a_1,q$ 是等差数列的首项和公比，$n$ 是项数。
+\end{corollary}
 
-当等比数列无穷递缩时，即 $0<q<1$， $n\rightarrow \infty$。 这里的极限详见 “\enref{数列的极限（简明微积分）}{Lim0}”。
+
+
+\subsubsection{*等比级数}
+
+如果取等比数列和的项数$n\rightarrow \infty$，就称为\textbf{等比级数}，此时如果$0<|q|<1$，则能得到收敛的结果：
 \begin{equation}
 S = \frac{a_1}{1 - q}~.
 \end{equation}
-
-\subsection{用数学归纳法证明求和公式}
-要证明求和公式
-\begin{equation}
-1 + q + q^2 + \dots + q^{n-1} = \frac{q^n - 1}{q - 1}~.
-\end{equation}
-使用数学归纳法， 当 $n = 1$ 时
-\begin{equation}
-\frac{q^n - 1}{q - 1} = 1~,
-\end{equation}
-恰好是第 1 项。 第 $n + 1$ 项为
-\begin{equation}
-\frac{q^{n+1} - 1}{q - 1} - \frac{q^n - 1}{q - 1} = q^n~.
-\end{equation}
-证毕。
+否则，这个结果会发散。这里的极限详见 “\enref{数列的极限（简明微积分）}{Lim0}”
