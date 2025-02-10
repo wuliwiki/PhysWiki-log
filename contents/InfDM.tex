@@ -3,24 +3,30 @@
 % license Usr
 % type Tutor
 
+\begin{issues}
+\issueOther{缺参考文献和傅里叶变换相关的预备知识}
+\issueOther{本文和\enref{离散傅里叶变换}{DFT}是什么关系？是否重复}
+\end{issues}
+
 \pentry{导数近似之差分矩阵算法\nref{nod_DifMa}}{nod_3681}
-\enref{差分矩阵}{DifMa} $D$ 和数据点矢量 $u$ 矩阵乘法 $Du$ 给出数据点处的近似导数。本词条将给出基于傅里叶变换给出的差分矩阵。
+
+\enref{差分矩阵}{DifMa} $D$ 和数据点矢量 $u$ 矩阵乘法 $Du$ 给出数据点处的近似导数。本文将给出基于傅里叶变换给出的差分矩阵。
 \subsection{傅里叶变换回顾}
 \subsubsection{连续区间上的傅里叶变换}
 由\enref{正交函数系}{OFS}中的\autoref{ex_OFS_3} 可知，函数 $u(x),x\in\mathbb R$ 的傅里叶变换定义为
 \begin{equation}\label{eq_InfDM_1}
-\hat u(k):=\int_{-\infty}^{\infty} e^{-\I kx}u(x)\dd x,\quad k\in\mathbb R.~
+\hat u(k):=\int_{-\infty}^{\infty} \E^{-\I kx}u(x)\dd x,\quad k\in\mathbb R.~
 \end{equation}
 而从 $\hat u$ 的逆傅里叶变换可以重构 $u$：
 \begin{equation}\label{eq_InfDM_2}
-u(x)=\frac{1}{2\pi}\int_{-\infty}^{\infty} e^{\I kx}\hat u(k)\dd k.~
+u(x)=\frac{1}{2\pi}\int_{-\infty}^{\infty} \E^{\I kx}\hat u(k)\dd k.~
 \end{equation}
 这被称为\textbf{傅里叶合成}（Fourier synthesis），变量 $x$ 称为\textbf{物理变量}（physical variable），$k$ 称为\textbf{傅里叶变量}（Fourier variable）或\textbf{波数}（wavenumber）。
 
 \subsubsection{离散点上的傅里叶变换}
 \textbf{无界情形}
 
-当限定 $x\in h\mathbb Z$时，即此时 $x$ 只能取离散点，那么只要 $k_1-k_2=\frac{2\pi}{h}$，就有 $e^{\I k_1x}=e^{\I k_2x}$ 对所有的 $x$ 成立。这使得对任意复指数 $e^{\I kx}$，有无穷多个复指数和它在 $h\mathbb Z$ 上具有相同的值。这一现象被称为\textbf{混叠}。为了保持\autoref{eq_InfDM_1} 中傅里叶变换 $\hat u(k)$ 的单值性，需要将 $k$ 限制在长为 $\frac{2\pi}{h}$ 的区间上。因此，我们可以选择 $k$ 的取值区间为 $[-\pi/h,\pi/h]$。注意到 $x$ 是物理变量，$k$ 是傅里叶变量，因此我们可以将这些结果总结为下面的图示：
+当限定 $x\in h\mathbb Z$时，即此时 $x$ 只能取离散点，那么只要 $k_1-k_2=\frac{2\pi}{h}$，就有 $\E^{\I k_1x}=\E^{\I k_2x}$ 对所有的 $x$ 成立。这使得对任意复指数 $\E^{\I kx}$，有无穷多个复指数和它在 $h\mathbb Z$ 上具有相同的值。这一现象被称为\textbf{混叠}。为了保持\autoref{eq_InfDM_1} 中傅里叶变换 $\hat u(k)$ 的单值性，需要将 $k$ 限制在长为 $\frac{2\pi}{h}$ 的区间上。因此，我们可以选择 $k$ 的取值区间为 $[-\pi/h,\pi/h]$。注意到 $x$ 是物理变量，$k$ 是傅里叶变量，因此我们可以将这些结果总结为下面的图示：
 \begin{equation}
 \begin{aligned}
 &\text{物理空间:}& \text{离散},&\qquad\text{无界:} &x\in h\mathbb Z\\
@@ -31,15 +37,15 @@ u(x)=\frac{1}{2\pi}\int_{-\infty}^{\infty} e^{\I kx}\hat u(k)\dd k.~
 因此，在无界离散的情形，傅里叶变换及其逆变换\autoref{eq_InfDM_1} 和\autoref{eq_InfDM_2} 应当写为下面的级数和：
 \begin{equation}\label{eq_InfDM_3}
 \begin{aligned}
-\hat u(k)&=h\sum_{i=-\infty}^{\infty}e^{-\I kx_i}u(x_i),\quad k\in[-\pi/h,\pi/h],\\
-u(x_j)&=\frac{1}{2\pi}\int_{-\pi/h}^{\pi/h} e^{\I kx_j}\hat u(k)\dd k,\quad x_j=jh,j\in \mathbb Z.
+\hat u(k)&=h\sum_{i=-\infty}^{\infty}\E^{-\I kx_i}u(x_i),\quad k\in[-\pi/h,\pi/h],\\
+u(x_j)&=\frac{1}{2\pi}\int_{-\pi/h}^{\pi/h} \E^{\I kx_j}\hat u(k)\dd k,\quad x_j=jh,j\in \mathbb Z.
 \end{aligned}~
 \end{equation}
 这被称为\textbf{半离散傅里叶变换}。
 
 \textbf{周期性情形}
 
-当限制 $u(x_i)$ 对 $x_i$ 具有周期 $2L$ 时，即 $u(x_i+2L)=u(x_i)$，那么为了 $u$ 的单值性，限定 $x_i\in[0,2L]$。设 $x_i$ 有 $N$ 个（本词条将始终假定 $N$ 为偶数），于是 $x_j\in \{h,\cdots,Nh=2L\}$，其中 $h:=\frac{2L}{N}$。仍记 $x_j:=jh,j\in\{1,\cdots,N\}$。和无界情形一样的理由，$k$ 应当限制在 $[-\pi/h,\pi/h]=[-\frac{N\pi}{2L},\frac{N\pi}{2L}]$ 上。此外由于周期性，应当认为点 $x+2L$ 和点 $x$ 是同一个。因此 $e^{\I k(x+2L)}=e^{\I k x}$，从而
+当限制 $u(x_i)$ 对 $x_i$ 具有周期 $2L$ 时，即 $u(x_i+2L)=u(x_i)$，那么为了 $u$ 的单值性，限定 $x_i\in[0,2L]$。设 $x_i$ 有 $N$ 个（本词条将始终假定 $N$ 为偶数），于是 $x_j\in \{h,\cdots,Nh=2L\}$，其中 $h:=\frac{2L}{N}$。仍记 $x_j:=jh,j\in\{1,\cdots,N\}$。和无界情形一样的理由，$k$ 应当限制在 $[-\pi/h,\pi/h]=[-\frac{N\pi}{2L},\frac{N\pi}{2L}]$ 上。此外由于周期性，应当认为点 $x+2L$ 和点 $x$ 是同一个。因此 $\E^{\I k(x+2L)}=\E^{\I k x}$，从而
 \begin{equation}
 2Lk=2n\pi\Rightarrow k=n\frac{\pi}{L},\quad n\in\mathbb Z.~
 \end{equation}
@@ -47,7 +53,7 @@ u(x_j)&=\frac{1}{2\pi}\int_{-\pi/h}^{\pi/h} e^{\I kx_j}\hat u(k)\dd k,\quad x_j=
 \begin{equation}
 k\in\qty{\qty(-\frac{N}{2}+1)\frac{\pi}{L},\qty(-\frac{N}{2}+2)\frac{\pi}{L},\cdots,\frac{N}{2}\frac{\pi}{L}}.~
 \end{equation}
-注意这里用到了 $-\frac{N}{2}\frac{\pi}{L},\frac{N}{2}\frac{\pi}{L}$ 对应相同的 $e^{-\I kx}$。这些结果可以总结为下面的图示：
+注意这里用到了 $-\frac{N}{2}\frac{\pi}{L},\frac{N}{2}\frac{\pi}{L}$ 对应相同的 $\E^{-\I kx}$。这些结果可以总结为下面的图示：
 \begin{equation}
 \begin{aligned}
 &\text{物理空间:}& \text{离散},&\qquad\text{有界:} \qquad x\in \{h,\cdots,2L\}\\
@@ -58,8 +64,8 @@ k\in\qty{\qty(-\frac{N}{2}+1)\frac{\pi}{L},\qty(-\frac{N}{2}+2)\frac{\pi}{L},\cd
 相应的，傅里叶变换和逆变换的公式写为下面的级数和，
 \begin{equation}\label{eq_InfDM_7}
 \begin{aligned}
-\hat u(k)&=h\sum_{i=1}^{N}e^{-\I k\frac{\pi}{L}x_i}u(x_i),\quad k\in\qty{\qty(-\frac{N}{2}+1),\qty(-\frac{N}{2}+2),\cdots,\frac{N}{2}},\\
-u(x_j)&=\frac{1}{2L}\sum_{k=-\frac{N}{2}+1}^{\frac{N}{2}}e^{\I k\frac{\pi}{L}x_j}\hat u(k),\quad j\in\{1,\cdots,N\}.
+\hat u(k)&=h\sum_{i=1}^{N}\E^{-\I k\frac{\pi}{L}x_i}u(x_i),\quad k\in\qty{\qty(-\frac{N}{2}+1),\qty(-\frac{N}{2}+2),\cdots,\frac{N}{2}},\\
+u(x_j)&=\frac{1}{2L}\sum_{k=-\frac{N}{2}+1}^{\frac{N}{2}}\E^{\I k\frac{\pi}{L}x_j}\hat u(k),\quad j\in\{1,\cdots,N\}.
 \end{aligned}~
 \end{equation}
 这被称为\textbf{离散傅里叶变换}。
@@ -71,7 +77,7 @@ u(x_j)&=\frac{1}{2L}\sum_{k=-\frac{N}{2}+1}^{\frac{N}{2}}e^{\I k\frac{\pi}{L}x_j
 
 2.而\autoref{eq_InfDM_3} 的第二式可以确定一个函数
 \begin{equation}\label{eq_InfDM_4}
-p(x)=\frac{1}{2\pi}\int_{-\pi/h}^{\pi/h} e^{\I kx}\hat u(k)\dd k,\quad x\in \mathbb R.~
+p(x)=\frac{1}{2\pi}\int_{-\pi/h}^{\pi/h} \E^{\I kx}\hat u(k)\dd k,\quad x\in \mathbb R.~
 \end{equation}
 显然 $p(x)$ 满足 $p(x_i)=u_i$，并且 $p(x)$ 是可微的。因此可以用 $p(x)$ 的导数来近似 $u(x)$ 的导数。$p(x)$ 给了我们一个插值公式。
 
@@ -89,9 +95,9 @@ p(x)=\frac{1}{2\pi}\int_{-\pi/h}^{\pi/h} e^{\I kx}\hat u(k)\dd k,\quad x\in \mat
 
 1.通过\autoref{eq_InfDM_7} 的第一式我们可以获得 $\hat u(k)$.
 
-2.而\autoref{eq_InfDM_7} 的第二式可以确定一个函数（为了更对称的处理，并考虑到 $e^{\I k\frac{\pi}{L}x}$ 在 $k=\frac{N}{2},-\frac{N}{2}$ 相等）  
+2.而\autoref{eq_InfDM_7} 的第二式可以确定一个函数（为了更对称的处理，并考虑到 $\E^{\I k\frac{\pi}{L}x}$ 在 $k=\frac{N}{2},-\frac{N}{2}$ 相等）  
 \begin{equation}\label{eq_InfDM_8}
-p(x)=\frac{1}{2L}{\sum'}\limits_{k=-\frac{N}{2}}^{\frac{N}{2}}e^{\I k\frac{\pi}{L}x}\hat u(k),~
+p(x)=\frac{1}{2L}{\sum'}\limits_{k=-\frac{N}{2}}^{\frac{N}{2}}\E^{\I k\frac{\pi}{L}x}\hat u(k),~
 \end{equation}
 其中 $'$ 表示求和在 $-N/2,N/2$ 处需要乘 $1/2$。显然 $p(x)$ 满足 $p(x_i)=u_i$，并且 $p(x)$ 是可微的。因此可以用 $p(x)$ 的导数来近似 $u(x)$ 的导数。$p(x)$ 便是需要的插值公式。
 
@@ -105,7 +111,7 @@ p(x)=\frac{1}{2L}{\sum'}\limits_{k=-\frac{N}{2}}^{\frac{N}{2}}e^{\I k\frac{\pi}{
 
 当然，我们还有另一等价的方式来描述，它是在傅里叶空间中表述的：\autoref{eq_InfDM_2}  对 $x$ 微分得
 \begin{equation}
-u'(x)=\frac{1}{2\pi}\int_{-\infty}^{\infty} \I ke^{\I kx}\hat u(k)\dd k,\quad x\in \mathbb R.~
+u'(x)=\frac{1}{2\pi}\int_{-\infty}^{\infty} \I k\E^{\I kx}\hat u(k)\dd k,\quad x\in \mathbb R.~
 \end{equation}
 由傅里叶正反变换的关系\autoref{eq_InfDM_1} 和\autoref{eq_InfDM_2} 可得
 \begin{equation}
@@ -131,8 +137,8 @@ u'(x)=\frac{1}{2\pi}\int_{-\infty}^{\infty} \I ke^{\I kx}\hat u(k)\dd k,\quad x\
 由\autoref{eq_InfDM_3}  可知，若 $u(x)=\sum\limits_{j}a_jf_j(x)$，$a_i\in\mathbb C$， 那么
 \begin{equation}
 \begin{aligned}
-\hat u(k)&=h\sum_{i=-\infty}^{\infty}e^{-\I kx_i}\qty(\sum\limits_{j}a_jf_j(x_i))\\
-&=\sum\limits_{j}a_j\qty(h\sum_{i=-\infty}^{\infty}e^{-\I kx_i}f_j(x_i))\\
+\hat u(k)&=h\sum_{i=-\infty}^{\infty}\E^{-\I kx_i}\qty(\sum\limits_{j}a_jf_j(x_i))\\
+&=\sum\limits_{j}a_j\qty(h\sum_{i=-\infty}^{\infty}\E^{-\I kx_i}f_j(x_i))\\
 &=\sum_{j}a_j\hat f_j(k).
 \end{aligned}~
 \end{equation}
@@ -150,22 +156,22 @@ u'(x)=\frac{1}{2\pi}\int_{-\infty}^{\infty} \I ke^{\I kx}\hat u(k)\dd k,\quad x\
 从而\autoref{eq_InfDM_4} 的 $p(x)$ 成为
 \begin{equation}
 \begin{aligned}
-p(x)&=\frac{1}{2\pi}\int_{-\pi/h}^{\pi/h} e^{\I kx}\hat u(k)\dd k\\
-&=\sum\limits_{m=-\infty}^\infty u(x_m)\frac{1}{2\pi}\int_{-\pi/h}^{\pi/h} e^{\I kx}\hat\delta_m(k)\dd k.
+p(x)&=\frac{1}{2\pi}\int_{-\pi/h}^{\pi/h} \E^{\I kx}\hat u(k)\dd k\\
+&=\sum\limits_{m=-\infty}^\infty u(x_m)\frac{1}{2\pi}\int_{-\pi/h}^{\pi/h} \E^{\I kx}\hat\delta_m(k)\dd k.
 \end{aligned}~
 \end{equation}
 
 而
 \begin{equation}
 \begin{aligned}
-\hat\delta_m(k)=h\sum_{i=-\infty}^{\infty}e^{-\I kx_i}\delta(x_i-x_m)=he^{-\I kx_m}.
+\hat\delta_m(k)=h\sum_{i=-\infty}^{\infty}\E^{-\I kx_i}\delta(x_i-x_m)=h\E^{-\I kx_m}.
 \end{aligned}~
 \end{equation}
 所以
 \begin{equation}
 \begin{aligned}
-p(x)&=\sum\limits_{m=-\infty}^\infty u(x_m)\frac{h}{2\pi}\int_{-\pi/h}^{\pi/h} e^{\I k(x-x_m)}\dd k\\
-&=\sum\limits_{m=-\infty}^\infty u(x_m)\frac{h}{2\pi}\frac{e^{\I \frac{\pi}{h}(x-x_m)}-e^{-\I \frac{\pi}{h}(x-x_m)}}{\I (x-x_m)}\\
+p(x)&=\sum\limits_{m=-\infty}^\infty u(x_m)\frac{h}{2\pi}\int_{-\pi/h}^{\pi/h} \E^{\I k(x-x_m)}\dd k\\
+&=\sum\limits_{m=-\infty}^\infty u(x_m)\frac{h}{2\pi}\frac{\E^{\I \frac{\pi}{h}(x-x_m)}-\E^{-\I \frac{\pi}{h}(x-x_m)}}{\I (x-x_m)}\\
 &=\sum\limits_{m=-\infty}^\infty u(x_m)\frac{h}{\pi}\frac{\sin(\frac{\pi}{h}(x-x_m))}{x-x_m}\\
 &=\sum\limits_{m=-\infty}^\infty u(x_m)\sinc \qty(\frac{\pi}{h}(x-x_m)),
 \end{aligned}~
@@ -212,23 +218,23 @@ h^{-1}
 同样的，\autoref{eq_InfDM_8} 可以写为
 \begin{equation}
 \begin{aligned}
-p(x)&=\frac{1}{2L}{\sum'}\limits_{k=-\frac{N}{2}}^{\frac{N}{2}}e^{\I k\frac{\pi}{L}x}\hat u(k)\\
-&=\frac{1}{2L}\sum_{m=1}^{N}u(x_m){\sum'}\limits_{k=-\frac{N}{2}}^{\frac{N}{2}}e^{\I k\frac{\pi}{L}x}\hat \delta_m(k),~
+p(x)&=\frac{1}{2L}{\sum'}\limits_{k=-\frac{N}{2}}^{\frac{N}{2}}\E^{\I k\frac{\pi}{L}x}\hat u(k)\\
+&=\frac{1}{2L}\sum_{m=1}^{N}u(x_m){\sum'}\limits_{k=-\frac{N}{2}}^{\frac{N}{2}}\E^{\I k\frac{\pi}{L}x}\hat \delta_m(k),~
 \end{aligned}~
 \end{equation}
 而
 \begin{equation}
-\hat \delta_m(k)=h\sum_{i=1}^{N}e^{-\I k\frac{\pi}{L}x_i}\delta(x_i-x_m)=he^{-\I k\frac{\pi}{L}x_m}.~
+\hat \delta_m(k)=h\sum_{i=1}^{N}\E^{-\I k\frac{\pi}{L}x_i}\delta(x_i-x_m)=h\E^{-\I k\frac{\pi}{L}x_m}.~
 \end{equation}
 所以
 \begin{equation}
 \begin{aligned}
 p(x)
-&=\frac{h}{2L}\sum_{m=1}^{N}u(x_m){\sum'}\limits_{k=-\frac{N}{2}}^{\frac{N}{2}}e^{\I k\frac{\pi}{L}(x-x_m)}\\
-&=\frac{h}{2L}\sum_{m=1}^{N}u(x_m)\qty(\frac{1}{2}\sum_{k=-\frac{N}{2}}^{\frac{N}{2}-1}e^{\I k\frac{\pi}{L}(x-x_m)}+\frac{1}{2}\sum_{k=-\frac{N}{2}+1}^{\frac{N}{2}}e^{\I k\frac{\pi}{L}(x-x_m)})\\
-&=\frac{h}{2L}\sum_{m=1}^{N}u(x_m)\cos\qty(\frac{\pi}{2L}(x-x_m))\sum_{k=-\frac{N}{2}+1/2}^{\frac{N}{2}-1/2}e^{\I k\frac{\pi}{L}(x-x_m)}\\
-&=\frac{h}{2L}\sum_{m=1}^{N}u(x_m)\cos\qty(\frac{\pi}{2L}(x-x_m))\frac{e^{\I (-N/2+1/2)\frac{\pi}{L}(x-x_m)}-e^{\I (N/2+1/2)\frac{\pi}{L}(x-x_m)}}{1-e^{\I \frac{\pi}{L}(x-x_m)}}\\
-&=\frac{h}{2L}\sum_{m=1}^{N}u(x_m)\cos\qty(\frac{\pi}{2L}(x-x_m))\frac{e^{-\I \frac{N\pi}{2L}(x-x_m)}-e^{\I \frac{N\pi}{2L}(x-x_m)}}{e^{-\I \frac{\pi}{2L}(x-x_m)}-e^{\I \frac{\pi}{2L}(x-x_m)}}\\
+&=\frac{h}{2L}\sum_{m=1}^{N}u(x_m){\sum'}\limits_{k=-\frac{N}{2}}^{\frac{N}{2}}\E^{\I k\frac{\pi}{L}(x-x_m)}\\
+&=\frac{h}{2L}\sum_{m=1}^{N}u(x_m)\qty(\frac{1}{2}\sum_{k=-\frac{N}{2}}^{\frac{N}{2}-1}\E^{\I k\frac{\pi}{L}(x-x_m)}+\frac{1}{2}\sum_{k=-\frac{N}{2}+1}^{\frac{N}{2}}\E^{\I k\frac{\pi}{L}(x-x_m)})\\
+&=\frac{h}{2L}\sum_{m=1}^{N}u(x_m)\cos\qty(\frac{\pi}{2L}(x-x_m))\sum_{k=-\frac{N}{2}+1/2}^{\frac{N}{2}-1/2}\E^{\I k\frac{\pi}{L}(x-x_m)}\\
+&=\frac{h}{2L}\sum_{m=1}^{N}u(x_m)\cos\qty(\frac{\pi}{2L}(x-x_m))\frac{\E^{\I (-N/2+1/2)\frac{\pi}{L}(x-x_m)}-\E^{\I (N/2+1/2)\frac{\pi}{L}(x-x_m)}}{1-\E^{\I \frac{\pi}{L}(x-x_m)}}\\
+&=\frac{h}{2L}\sum_{m=1}^{N}u(x_m)\cos\qty(\frac{\pi}{2L}(x-x_m))\frac{\E^{-\I \frac{N\pi}{2L}(x-x_m)}-\E^{\I \frac{N\pi}{2L}(x-x_m)}}{\E^{-\I \frac{\pi}{2L}(x-x_m)}-\E^{\I \frac{\pi}{2L}(x-x_m)}}\\
 &=\frac{h}{2L}\sum_{m=1}^{N}u(x_m)\cos\qty(\frac{\pi}{2L}(x-x_m))\frac{\sin\qty(\frac{N\pi}{2L}(x-x_m))}{\sin\qty(\frac{\pi}{2L}(x-x_m))}\\
 &=\sum_{m=1}^{N}u(x_m)\frac{\sin\qty(\frac{N\pi}{2L}(x-x_m))}{\frac{2L}{h}\tan\qty(\frac{\pi}{2L}(x-x_m))}.
 \end{aligned}~
