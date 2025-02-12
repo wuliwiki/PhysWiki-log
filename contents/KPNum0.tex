@@ -31,7 +31,7 @@
 }~.
 \end{equation}
  
-2。设经过一段极微小的时间步长 $\Delta t$ （例如 $0.0001$， 数值越小误差越小）， 根据微分近似（微分近似在这里的物理意义是在 $\Delta t$ 内速度和加速度都近似为常数）
+2。设经过一段极微小的时间步长 $\Delta t$ （例如 $0.0001$， 一般来说数值越小误差越小）， 根据微分近似（微分近似在这里的物理意义是在 $\Delta t$ 内速度和加速度都近似为常数）
 \begin{equation}
 \begin{cases}
 \dot x(\Delta t) \approx \ddot x(0)\Delta t + x(0)\\
@@ -44,7 +44,7 @@ y(\Delta t) \approx \dot y(0)\Delta t + y(0)
 \end{cases}~.
 \end{equation}
 
-3。把 $x(\Delta t), y(\Delta t)$ 再次代入\autoref{eq_KPNum0_3}， 得到 $x''(\Delta t), y''(\Delta t)$， 再次利用微分近似求出 $x(2\Delta t), y(2\Delta t), x'(2\Delta t), y'(2\Delta t) \dots$ 如此循环下去就可以得到每隔 $\Delta t$ 的数值解。
+3。把 $x(\Delta t), y(\Delta t)$ 再次代入\autoref{eq_KPNum0_3}， 得到 $x''(\Delta t), y''(\Delta t)$， 再次利用微分近似求出 $x(2\Delta t), y(2\Delta t), x'(2\Delta t), y'(2\Delta t) \dots$ 如此循环下去就可以得到每隔 $\Delta t$ 的数值解。这种方法是前向欧拉法，它的数值离散格式会导致舍入误差不断放大，是不稳定的求解算法，但计算速度非常快，一般用来初步观察解的形状。对于不稳定的数值格式，降低步长只能减小求解开始时的误差，但累积误差会随着步数增加不断增大。
 
 \begin{lstlisting}[language=matlab, caption=kepler0.m]
 % 参数设定
@@ -84,7 +84,7 @@ hold on; % 继续画图
 scatter(0,0); % 标出中心天体
 \end{lstlisting}
 
-程序运行结果如\autoref{fig_KPNum0_1} 所示。 注意行星轨道并不是一个闭合的椭圆， 这是由于这种算法误差较大， 为了减小误差， 可以增加程序中 \verb`Nstep` 的值。
+程序运行结果如\autoref{fig_KPNum0_1} 所示。 注意行星轨道并不是一个闭合的椭圆， 一方面这是由于这种算法精度较低，另一方面求解步数较大导致了累积误差显著增加。 为了减小误差， 可以调整程序中 \verb`Nstep` 的值。
 \begin{figure}[ht]
 \centering
 \includegraphics[width=7cm]{./figures/e6b1dba986c802df.pdf}
