@@ -60,6 +60,7 @@
 \item 【可能过时了】从 Nginx 配置可以查到证书路径：当前使用 Lets Encrypt （\verb`/etc/letsencrypt/live/wuli.wiki/*.pem`）（每三个月更新，需要手动 \verb`nginx -s reload`）
 \item 【新】更新证书按照 \enref{Nginx 笔记}{nginxN}里面的方法更新即可（\verb`sudo certbot certonly --nginx`）。
 \item \verb`cert.pem`, \verb`chain.pem`， \verb`fullchain.pem` 都是证书， \verb`privkey.pem` 是私钥。 \verb`fullchain.pem` 是 \verb`cert.pem` 和 \verb`chain.pem` 的合并， 一般情况都是使用 \verb`fullchain.pem`（例如配置 DCDN 的 https 时）。
+\item 要查看当前证书过期时间，用 \verb`sudo openssl x509 -in fullchain.pem -noout -enddate`。
 \item 当每三个月证书更新后， DCDN 也需要重新设置新的证书。把 \verb`fullchain.pem` 和 \verb`privkey.pem` 的文本手动复制粘贴到 https 设置里面即可。如果提示证书已存在，就把自定义的名字改一下即可。
 \end{itemize}
 \begin{figure}[ht]
