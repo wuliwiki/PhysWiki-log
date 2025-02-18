@@ -11,36 +11,62 @@
 \begin{itemize}
 \item \href{https://docs.julialang.org/en/v1/devdocs/init/}{Julia 开发者文档}
 \item C 语言这样的叫做 \textbf{Ahead of Time（AOT）} 编译。
-\item Julia 完全使用 \textbf{Just-Ahead-of-Time（JIT）}。 并不是把部分代码使用该优化，而是全部。Julia 默认不直接理解并执行高级语言（一个理解器见\href{https://juliadebug.github.io/JuliaInterpreter.jl/stable/}{这里}）。 每个重载的函数第一次被调用的时候， julia 都会先给它生成专门的 llvm 机器码。 这个过程还有一个不那么正规的名字叫做 \textbf{Just Ahead-of-Time（JAOT）}。
+\item Julia 完全使用 \textbf{Just-In-Time（JIT）}。 并不是把部分代码使用该优化，而是全部。Julia 默认不直接理解并执行高级语言（一个理解器见\href{https://juliadebug.github.io/JuliaInterpreter.jl/stable/}{这里}）。 每个重载的函数第一次被调用的时候， julia 都会先给它生成专门的 llvm 机器码。 这个过程还有一个不那么正规的名字叫做 \textbf{Just Ahead-of-Time（JAOT）}。
 \item \textbf{Multiple Dispatch （MD）}： 可以基于参数的类型生成不同的专门代码。
 \item \textbf{Type Inference}： 自动推导变量类型。
 \item 内建并行， 包括分布计算
 \item 高效内存管理： 减少内存分配， 增加内存重复利用。
-\item 基于 \textbf{LLVM}： Julia 编译器先把 Julia 语言变为 \textbf{Julia IR} （和 LLVM IR 相似）， 再变为 \enref{LLVM IR}{llvmIR}, 最后交给 LLVM 进行优化。
-\item Julia IR 使用 \textbf{Single Static Assignment (SSA)} 形式， 把 julia 代码的控制流表示为 \textbf{directed acyclic graph (DAG)}。 Julia IR 中的变量类型都是明确的。
+\item 基于 \textbf{LLVM}： Julia 编译器先把 Julia 语言变为 \textbf{Julia IR} （和 LLVM IR 相似，而且有若干层）， 再变为 \enref{LLVM IR}{llvmIR}, 最后交给 LLVM 进行优化。
+\item Julia IR 后期使用 \textbf{Single Static Assignment (SSA)} 形式， 把 julia 代码的控制流表示为 \textbf{directed acyclic graph (DAG)}。 Julia IR 中的变量类型都是明确的。
 \item \verb`LLVM.jl` 包可以把 julia 代码直接生成 LLVM IR， 或者把 Julia IR 转为 LLVM IR。
 \item 一些预备知识： 编译原理， 编译器设计， LLVM， Julia 背后原理。
 \end{itemize}
 
+\begin{figure}[ht]
+\centering
+\includegraphics[width=14.2cm]{./figures/7293eeb0d6cd9c43.png}
+\caption{Julia JIT 流程} \label{fig_julia0_1}
+\end{figure}
+
 \subsection{把 Julia 代码编译成 LLVM IR 代码}
-首先安装 \verb`using Pkg; Pkg.add("LLVM")`
-\begin{lstlisting}[language=julia]
-using LLVM
+首先安装 \verb`using Pkg; Pkg.add("LLVM")` （其实没必要）
+
+在 REPL 中输入如下代码
+\begin{lstlisting}[language=julia,caption=julia]
 function add(x::Int, y::Int)::Int
     return x + y
 end
+lowered_ir = @code_lowered add(1, 2) # 生成 Lowered Julia IR
+typed_ir = @code_typed add(1, 2) # 生成静态类型的 Julia IR
 llvm_ir = @code_llvm add(1, 2) # 生成 LLVM IR
 \end{lstlisting}
-生成的代码如下
-\begin{lstlisting}[language=none]
-;  @ REPL[3]:1 within `add'
-define i64 @julia_add_652(i64 signext %0, i64 signext %1) {
-top:
-;  @ REPL[3]:2 within `add'
-; ┌ @ int.jl:87 within `+'
-   %2 = add i64 %1, %0
-; └
-  ret i64 %2
-}
+
+也可以把函数定义写到 jl 脚本中，然后在 REPL 中 \verb`include("脚本名.jl")`， 再 \verb`@code_xxx add(1, 2)`。 \verb`include()` 相当于把脚本代码直接插入到该位置。
+
+注意只会生成指定函数的 IR，不会递归生成它调用的其他函数的 IR。
+
+\begin{lstlisting}[language=none,caption=julia ir]
+julia> lowered_ir = @code_lowered add(1, 2)
+CodeInfo(
+1 ─ %1  = Main.Int
+│   %2  = Main.:+
+│   %3  = (%2)(x, y)
+│         @_4 = %3
+│   %5  = @_4
+│   %6  = %5 isa %1
+└──       goto #3 if not %6
+2 ─       goto #4
+3 ─ %9  = @_4
+│   %10 = Base.convert(%1, %9)
+└──       @_4 = Core.typeassert(%10, %1)
+4 ┄ %12 = @_4
+└──       return %12
+)
 \end{lstlisting}
-所以上面参数 \verb`(1,2)` 的作用是提供自变量的类型。
+
+生成的 LLVM IR 代码如下
+\begin{figure}[ht]
+\centering
+\includegraphics[width=14.25cm]{./figures/f34505db9ea28f8f.png}
+\caption{LLVM IR} \label{fig_julia0_2}
+\end{figure}
