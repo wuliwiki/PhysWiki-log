@@ -2,10 +2,6 @@
 % license Xiao
 % type Note
 
-\begin{issues}
-\issueDraft
-\end{issues}
-
 \subsection{获取信息}
 \begin{itemize}
 \item 查看视频全部流的编码信息用 \verb`ffprobe -i 视频文件 -show_streams` 或者 \verb`ffprobe -show_streams 视频文件`。
@@ -38,9 +34,17 @@
 \item 该命令的视频压缩对 H264 编码默认使用所有 cpu 核， 要指定线程数可以用 \verb`-threads` 选项。
 \end{itemize}
 
+\subsection{时间剪切和画面变换}
+\begin{itemize}
+\item 截取视频的一段 \verb`ffmpeg -ss 00:01:00 -i 输入视频.mp4 -t 00:2:00 -c copy 输出视频.mp4` 会截取 \verb`输入视频.mp4` 的 \verb`00:01:00` 到 \verb`00:03:00`（时长两分钟）。
+\item 旋转视频 \verb`ffmpeg -i 输入视频.mp4 -vf "transpose=1" -c:a copy 输出视频.mp4`。 其中 \verb`1` 是顺时针， \verb`2` 是逆时针， \verb`3` 是旋转 180 度。
+\item 截取画面的一部分： \verb`ffmpeg -i input.mp4 -vf "crop=w:h:x:y" -c:a copy output.mp4`。 单位是像素，其中 \verb`w,h,x,y` 分别是要截取的宽度和高度， 以及左离左边的距离，和离上边的距离。
+\item 要同时旋转和截取画面， 用 \verb`-vf "transpose=...,crop=..."`
+\end{itemize}
+
 \subsection{字幕}
 \begin{itemize}
 \item 要给视频添加 \verb`srt` 字幕（可以开启关闭的）， 用 \verb`ffmpeg -i input.mp4 -scodec mov_text -i input.srt -c:v copy -c:a copy output.mp4`
 \item 如果要把字母直接刻在视频中， 用 \verb`ffmpeg -i input.mp4 -vf "subtitles=input.srt" output.mp4`
-\item 如果要不想让视频被字幕破坏， 可以在视频下面拓宽一条空间， 刻上字母： \verb`ffmpeg -i input.mp4 -vf "pad=width=iw:height=ih+120:color=black,subtitles=input.srt:force_style='MarginV=100,Alignment=10'" output.mp4`
+\item 如果要不想让视频被字幕破坏， 可以在视频下面拓宽一条空间， 刻上字母： \verb`ffmpeg -i input.mp4 -vf "pad=width=iw:height=ih+120:color=black, subtitles=input.srt:force_style='MarginV=100,Alignment=10'" output.mp4`
 \end{itemize}

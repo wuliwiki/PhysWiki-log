@@ -39,7 +39,7 @@ f(x) = A\sin(\omega x + \varphi)~.
 
 \subsection{相位}
 
-在这些新概念中，相位 $\omega x + \varphi$ 尤其值得关注。与以往的参数不同，它不是单独作为一个数值出现，而是作为整体引入，从而提供了一种新的视角来理解三角函数的变化。具体而言，由于 $\sin x$ 是一个非线性函数，直接分析其变化规律并不直观。因此，可以借鉴指数函数的处理方式，将 $\sin(\omega x + \varphi)$ 视为一个复合函数，其中 $\omega x + \varphi$ 对 $x$ 进行线性变换，作为 $\sin$ 的输入，而 $\sin$ 仅在最后起到非线性映射的作用，将输入限制在 $[-1,1]$ 之间，而不直接影响 $x$ 的变换过程。
+在上面提及的新概念中，相位 $\omega x + \varphi$ 尤其值得关注。与以往的参数不同，它不是单独作为一个数值出现，而是作为整体引入，从而提供了一种新的视角来理解三角函数的变化。具体而言，由于 $\sin x$ 是一个非线性函数，直接分析其变化规律并不直观。因此，可以借鉴指数函数的处理方式，将 $\sin(\omega x + \varphi)$ 视为一个复合函数，其中 $\omega x + \varphi$ 对 $x$ 进行线性变换，作为 $\sin$ 的输入，而 $\sin$ 仅在最后起到非线性映射的作用，将输入限制在 $[-1,1]$ 之间，而不直接影响 $x$ 的变换过程。
 
 这种分解方式将三角函数的周期性的非线性行为与输入变量的线性变化分离，使得分析更加直观，并有助于理解各参数对函数图像的影响。在数学建模中，许多非线性问题，如神经网络或回归分析，也常采用类似的方法：先处理线性部分，再通过非线性映射得到最终结果。这种思路不仅简化了分析过程，还在广泛的数学和工程领域中发挥了重要作用。
 
@@ -191,3 +191,137 @@ $f(x)$ & $b$&$b+A$&$b$&$b-A$&$b$ \\
 此时  \phi  不再是简单的平移角度，而是被频率放大了，导致波形的偏移量随着  \omega  增大而增大，这不符合物理意义。
 \addTODO{1}
 另外关于正切，重要的就是找到渐近线和对称点。
+
+
+
+\subsection{*三角函数的高阶导数}
+
+\pentry{复数\nref{nod_CplxNo}}{nod_7e14}
+
+注意本章内容在高中数学课程中并未涉及，仅作为视野拓展。之前学习过 $\sin x$ 的导数为 $\cos x$，而 $\cos x$ 的导数为 $-\sin x$，如果将其视为对 $\sin x$ 求二阶导数，可以发现 $\sin x$ 经过两次求导后变为其相反数。这启发人们进一步探究 $\sin x$ 和 $\cos x$ 的高阶导数 $(\sin x)^{(n)}$ 和 $(\cos x)^{(n)}$ 是否具有某种周期性规律。
+
+观察前几阶导数的变化情况：
+\begin{itemize}
+\item $n = 1$ 时，$\sin x$ 变为 $\cos x$，$\cos x$ 变为 $-\sin x$。
+\item $n = 2$ 时，$\sin x$ 变为 $-\sin x$，$\cos x$ 变为 $-\cos x$，二者均为原函数的相反数。
+\item $n = 3$ 时，$\sin x$ 变为 $-\cos x$，$\cos x$ 变为 $\sin x$。
+\item $n = 4$ 时，$\sin x$ 和 $\cos x$分别还是变成$\sin x$ 和 $\cos x$。
+\end{itemize}
+由此可见，$\sin x$ 和 $\cos x$ 经过四次求导后又回到了自身，再求导下去就又开始循环了，即：
+\begin{equation}\label{eq_HsSinF_2}
+(\sin x)^{(n)}  =
+\begin{cases}
+\sin x, & n \equiv 0 \pmod{4} \\
+\cos x, & n \equiv 1 \pmod{4} \\
+-\sin x, & n \equiv 2 \pmod{4} \\
+-\cos x, & n \equiv 3 \pmod{4}
+\end{cases},\quad(\cos x)^{(n)} =
+\begin{cases}
+\cos x, & n \equiv 0 \pmod{4} \\
+-\sin x, & n \equiv 1 \pmod{4} \\
+-\cos x, & n \equiv 2 \pmod{4} \\
+\sin x, & n \equiv 3 \pmod{4}
+\end{cases}~.
+\end{equation}
+其中，$n \equiv m \pmod{4}$ 表示 $n$ 除以 $4$ 余 $m$。结合诱导公式，上述周期性可进一步归纳为：
+
+\begin{corollary}{正弦函数与余弦函数的 $n$ 阶导数}
+对于任意整数 $n$，正弦函数与余弦函数的 $n$ 阶导数满足：
+\begin{equation}
+(\sin x)^{(n)} = \sin\left(x + n\frac{\pi}{2}\right), \quad
+(\cos x)^{(n)} = \cos\left(x + n\frac{\pi}{2}\right)~.
+\end{equation}
+\end{corollary}
+
+这一结果表明，$\sin x$ 和 $\cos x$ 的高阶导数呈现周期性变化。对于 $\sin x$，每求一次导数，相位都会提前 $\displaystyle\frac{\pi}{2}$\footnote{这与先前讨论的 $\cos x$ 和 $\sin x$ 之间相差 $\displaystyle\frac{\pi}{2}$ 的相位关系相一致。另外，在 \autoref{eq_HsSinF_2} 中，$\cos x$ 相对于 $\sin x$ 总是滞后 $\frac{\pi}{2}$，这一特性进一步揭示了相与相位的联系。此处指出希望能加深读者对于相和相位的理解}。由于 $\sin x$ 的周期为 $2\pi$，两次求导导致反相，而四次求导则保持同相，回归原函数。
+
+三角函数的高阶导数所展现的对称性和周期性，在数学和物理学中具有广泛的应用。特别是在信号处理、振动分析、傅里叶级数和控制理论等领域，三角函数的导数结构决定了系统的动态特性。进一步的分析可以借助指数函数的表示形式，从而更直观地揭示其周期性结构。下面对此进行一些讨论。
+
+\subsubsection{从复数的角度解释}
+
+利用\aref{欧拉公式}{the_CplxNo_3}变形可以得到：
+
+\begin{equation}
+\sin x = \frac{e^{\I x} - e^{-\I x}}{2i}, \quad \cos x = \frac{e^{\I x} + e^{-\I x}}{2}~.
+\end{equation}
+
+考虑$e^{\I x},e^{-\I x}$的$n$阶导数：
+\begin{equation}
+\left(e^{\I x}\right)^{(n)} = \I^n e^{\I x},\quad\left(e^{-\I x}\right)^{(n)} = (-\I)^n e^{-\I x}~.
+\end{equation}
+这个求导的证明比较困难，但不论是这里还是下面，都可以认为是将$\I$视作一个如实数那样的常数，然后利用求导公式或法则。于是有：
+\begin{equation}
+\begin{split}
+\left( \sin x \right)^{(n)} &= \left( \frac{e^{\I x} - e^{-\I x}}{2i} \right)^{(n)}\\
+&=\frac{\I^n e^{\I x} - (-\I)^n e^{-\I x}}{2i}\\
+&=\I^{n-1} \frac{(\cos x+\I\sin x) - (-1)^{n}(\cos x-\I\sin x )}{2}\\
+&=\frac{1+(-1)^{n-1}}{2}\I^{n-1} \cos x+\frac{1+(-1)^{n}}{2}\I^{n} \sin x~.
+\end{split}
+\end{equation}
+
+\begin{equation}
+\begin{split}
+\left( \cos x \right)^{(n)} &= \left( \frac{e^{\I x} + e^{-\I x}}{2} \right)^{(n)}\\
+&=\frac{\I^n e^{\I x} + (-\I)^n e^{-\I x}}{2}\\
+&=\I^{n} \frac{(\cos x+\I\sin x) + (-1)^{n}(\cos x-\I\sin x )}{2}\\
+&=\frac{1+(-1)^{n}}{2}\I^{n} \cos x+\frac{1+(-1)^{n+1}}{2}\I^{n+1} \sin x~.
+\end{split}
+\end{equation}
+
+分别看结果中每一项的三部分，最后一部分是三角函数自不必说，第一部分随着n取奇数或偶数，分别取$0$和$1$，理论上是存在两种状态。而巧的是第一部分为$1$时，也都对应着第二部分取到实数的场景，恰巧， $\I^n$ 也具有 $4$ 为周期的循环特性：
+
+\begin{equation}
+\I^0 = 1, \quad \I^1 = \I, \quad \I^2 = -1, \quad \I^3 = -\I, \quad \I^4 = 1~.
+\end{equation}
+
+所以 $\sin x$ 和 $\cos x$ 的高阶导数的周期性也可以从复数的角度得到解释。具体来说，（似乎对应着旋转）。
+
+
+\subsubsection{以简谐振动系统为例}
+
+在简谐振动系统中，位置 $x(t)$ 通常满足：
+\begin{equation}
+x(t) = A \sin(\omega t + \varphi)~.
+\end{equation}
+求导得到速度：
+\begin{equation}
+v(t) = A\omega \cos(\omega t + \varphi)~.
+\end{equation}
+再求导得到加速度：
+\begin{equation}
+a(t) = -A\omega^2 \sin(\omega t + \varphi)~.
+\end{equation}
+可以看到，加速度$a(t) = -\omega^2 x(t)$，这正是简谐振动的特征方程。
+
+在简谐振动中，位置、速度和加速度的相位关系如下：
+	•	速度 $v(t)$ 比位移 $x(t)$ 超前 $\frac{\pi}{2}$；
+	•	加速度 $a(t)$ 比速度 $v(t)$ 超前 $\frac{\pi}{2}$，即比位移 $x(t)$ 超前 $\pi$，与位移完全反相。
+
+这种相位关系意味着：
+	•	当物体位于最大正位移时（$x = A$），速度为零，加速度最大且指向负方向；
+	•	当物体通过平衡位置（$x = 0$）时，速度达到最大值，加速度为零；
+	•	当物体位于最大负位移时（$x = -A$），速度再次为零，加速度最大且指向正方向。
+
+角频率的物理意义
+
+在上述推导中，角频率 $\omega$ 在每次求导时都会作为系数出现，影响速度和加速度的大小：角频率 $\omega$ 的存在会导致二阶导数的\textbf{振幅因子}发生变化。这一点在振动系统中尤为关键，例如在描述弹簧振子的运动时，其加速度（即二阶导数）与位移成正比，比例系数正是 $-\omega^2$。
+
+\begin{equation}
+|v_{\max}| = A\omega, \quad |a_{\max}| = A\omega^2~.
+\end{equation}
+这说明：
+	•	角频率 $\omega$ 越大，速度变化得越快，即物体在单位时间内振动得更快；
+	•	由于加速度正比于 $\omega^2$，因此 $\omega$ 越大，回复力越强，振动的加速度越大，说明系统对位移的恢复趋势越明显。
+
+更高阶导数的物理解释
+
+如果继续求导，可以得到简谐振动系统的更高阶导数：
+\begin{align*}
+\frac{d^3x}{dt^3} &= -A\omega^3 \cos(\omega t + \varphi), \\
+\frac{d^4x}{dt^4} &= A\omega^4 \sin(\omega t + \varphi)~.
+\end{align*}
+注意到 $x(t)$ 的四阶导数等于自身乘以 $\omega^4$，即
+\begin{equation}
+\frac{d^4x}{dt^4} = \omega^4 x(t)~.
+\end{equation}
+这说明，在振动系统中，高阶导数依然遵循三角函数的周期性变化，同时 $\omega$ 的幂次决定了振动强度在高阶导数上的放大效应。例如，在某些机械振动和电路振荡系统中，四阶或更高阶导数可以用于描述系统的非线性特性或响应的复杂性。
