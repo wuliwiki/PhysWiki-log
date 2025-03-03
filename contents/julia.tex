@@ -1,4 +1,4 @@
-% Julia 入门笔记
+% Julia 笔记
 % keys Julia 语言|科学计算|数值计算|REPL
 % license Xiao
 % type Note
@@ -44,7 +44,7 @@ sudo snap install Julia --classic
 
 \subsection{变量}
 \begin{itemize}
-\item 用 \verb`typeof()` 查看某个变量的类型
+\item 用 \verb`typeof()` 查看某个变量的类型（python 是 \verb`type`）
 \item 类型完全是动态的， 但可以在表达式或者函数定义后面加上 \verb`::类型` 限制变量类型
 \item 字符串用双引号， 单个字符用单引号
 \item 感叹号 \verb`!` 可用于变量名或函数名的非首字符。 一般来说，在函数名最后加 \verb`!` 用于表示该函数的参数会被修改。
@@ -60,12 +60,15 @@ sudo snap install Julia --classic
 \begin{itemize}
 \item 索引从 1 开始， 和 Matlab 一样
 \item 矩阵（数组）使用\enref{列主序}{MatSto}， 和 Matlab 一样
-\item 一维数组 \verb`Array{类型,1}` 也叫 \verb`Vector{类型}`， 不区分行和列； \verb`Array{类型,2}` 也叫 \verb`Matrix{类型}`， 区分行向量和列向量。
-\item \verb`[1, 2]` 和 \verb`[1; 2]` 的类型是 \verb`Array{Int64,1}`， 但 \verb`[1 2]` 的类型是 \verb`Array{Int64,2}`
+\item 数组类型为 \verb`Array{类型,维数}`。 一维数组 \verb`Array{类型,1}` 也记为 \verb`Vector{类型}`， 不区分行和列； \verb`Array{类型,2}` 也记为 \verb`Matrix{类型}`， 区分行向量和列向量。
+\item \verb`[1, 2]` 和 \verb`[1; 2]` 的类型都是 \verb`Array{Int64,1}`， 但 \verb`[1 2]` 的类型是 \verb`Array{Int64,2}`
 \item \verb`类型[1,2,3]` 可以创建指定类型的数组。
 \item \verb`a = [1 2; 3 4]` 得到 \verb`Array{Float64,2}` 注意不能用逗号， 但可以不写 \verb`;` 而使用换行。
 \item \verb`[1, "abc", 1.2]` 的类型是 \verb`Vector{Any}`。
 \item \verb`[2^i for i = 1:10]` 可以用通项公式快速生成一个数组。
+\item \verb`typeof(1:3)` 是 \verb`UnitRange{Int64}`。 支持 \verb`T<:Real` 元素类。 如 \verb`UnitRange(3.3, 5.6)`。
+\item \verb`typeof(1:2:5)` 是 \verb`StepRange{Int64, Int64}`。
+\item \verb`typeof(1.1:3)` 和 \verb`typeof(1.1:2:5)` 的类型都是 \verb`StepRangeLen{T,R,S,L}`。 它的 constructor 是 \verb`a = StepRangeLen(ref::R, step::S, len::L, [offset=1])`。 其中 \verb`T` 是标量类型即 \verb`a[i]` 的类型， \verb`R` 是 \verb`ref` 即 \verb`a[offset]` 的类型， \verb`S` 是 \verb`step` 的类型， \verb`L` 是元素个数 \verb`len` 的类型。
 \item \verb`push!(v, 元素)` 可以在 \verb`Vector` 后面增加一个元素，同时也会返回新的 \verb`v`。 \verb`pop!(v)` 移除最后的元素， 返回最后一个元素。
 \item \verb`splice!(v, 3:5)` 可以删除 \verb`v[3:5]`
 \item \verb`A .= 值` 或者 \verb`fill!(v, 值)` 可以把 \verb`v` 的每个元素赋值。

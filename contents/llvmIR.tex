@@ -2,10 +2,6 @@
 % license Xiao
 % type Note
 
-\begin{issues}
-\issueDraft
-\end{issues}
-
 \pentry{LLVM 笔记\nref{nod_LLVMnt}}{nod_e723}
 
 \textbf{LLVM IR (Intermediate Representation)} 是 LLVM 的一个 portable 的中间语言。 使用 LLVM 的编译器会先把高级语言编译成 IR， 然后再做进一步优化。 LLVM IR 的语法和汇编语言类似。
@@ -87,28 +83,98 @@ define i32 @main() {
 }
 \end{lstlisting}
 
+\subsubsection{另一些例子}
+栈和堆上的矩阵：
+\begin{lstlisting}[language=none]
+define i64 @my_func(i64 signext %"my_var") #0 {
+  top:
+    ; Allocate an array of 10 doubles on the stack
+    %array = alloca [10 x double], align 8
+
+    ; Declare the malloc function
+    declare i8* @malloc(i64)
+
+    ; Allocate an array of 10 doubles on the heap
+    ; Calculate the size needed: 10 doubles * 8 bytes per double
+    %size = mul i64 10, 8
+    %malloc_result = call i8* @malloc(i64 %size)
+    %array = bitcast i8* %malloc_result to double*
+
+    ; Store a value into the array
+    %value = fadd double 0.0, 3.14  ; Example value to store
+    ; Get pointer to the 3rd element
+    %ptr = getelementptr inbounds [10 x double], \
+      [10 x double]* %array, i64 0, i64 2
+    store double %value, double* %ptr, align 8
+
+    ; Load a value from the array
+    %loaded_value = load double, double* %ptr, align 8
+}
+\end{lstlisting}
+
 \subsection{常识}
 \begin{itemize}
+\item 合法的本地变量（寄存器）名字如 \verb`%x, %var1, %my_var, %func.entry, %tmp-1`，也可以用数字开头如 \verb`%0, %1a`，甚至用字符串 \verb`%"my var", %"var@1", %"func.entry#1"`。
+\item 函数返回用 \verb`ret` 不是 \verb`return`
+\item \verb`@名字` 用于声明全局函数或变量
+\item \verb`signext`: 指定入参实参应该 sign-extended 到 64 位。一些机器上，如惨可能通过小于 64 位的寄存器上
+\item 函数定义的第一行中， \verb`#0` 是函数属性组。 \verb`#0` 代表一系列在模块中其他地方定义的属性，例如优化提示或调用规范。
+\item \verb`标签名:` 定义用于跳转的标签。
 \item 缩进不重要
 \item 名字（变量、函数、label）里面可以包含英文句号 “\verb`.`”
 \item 变量名以 \verb`%` 开始
 \item 注释用 \verb`;`
+\item 对本地变量，不存在类似 C 语言的 \verb`const`。
+\item \verb`getelementptr` （GEP）的格式为 \verb`指针 = getelementptr 基类型, 基类型* 指针, 指标类型1 ind1, 指标类型2 ind2 ...`。 在取数组第 3 个元素时，最后是 \verb`i64 0, i64 2`， 第一个从 \verb`指针` 中获取数组， 第二个从 array 中获取获取第 3 个元素。
 \end{itemize}
 
 \subsection{判断}
 \begin{itemize}
 \item \verb`br i1 条件, label %真标签, label %假标签` 用于判断， \verb`i1` 是一个 1bit 整数，也就是 bool。 如果条件为真， 就跳到标签 \verb`真标签`， 否则跳到 \verb`假标签`
+\item \verb`br label %标签` 相当于 \verb`goto`
 \item 例如， \verb`%cond = icmp eq i32 %x, %y`, 然后 \verb`br i1 %cond, label %equals, label %notequals`
 \item label 的定义： \verb`标签名:`
 \item 判断 $x < y$： \verb`icmp slt i32 %x, %y` （signed less than）， 或者 \verb`sgt`（signed greater than）
 \item \verb`ult, ugt` （unsigned less/greater than）
 \item 与： \verb`%and_result = and i1 %a, %b`
 \item 或： \verb`%result = or i1 %cond1, %cond2`
+\item phi 函数用于判断变量来自哪个分支
 \end{itemize}
+
+\begin{lstlisting}[language=cpp]
+int foo(int x) {
+    int y;
+    if (x > 0) {
+        y = 10;
+    } else {
+        y = 20;
+    }
+    return y;
+}
+\end{lstlisting}
+
+\begin{lstlisting}[language=none]
+define i32 @foo(i32 %x) {
+  entry:
+    %cmp = icmp sgt i32 %x, 0  ; Compare x > 0
+    br i1 %cmp, label %if.then, label %if.else
+
+  if.then:
+    br label %merge
+
+  if.else:
+    br label %merge
+
+  merge:
+    ; Select value based on predecessor
+    %y = phi i32 [ 10, %if.then ], [ 20, %if.else ]
+    ret i32 %y
+}
+\end{lstlisting}
 
 
 \subsection{循环}
-一个什么都不做的空循环
+一个什么都不做的空循环，注意这里循环变量 \verb`%i` 之所以能反复写入而不违反 SSA 是因为使用了 alloca 分配了栈上变量。
 \begin{lstlisting}[language=none]
 define void @countUpTo(i32 %limit) {
   entry:
@@ -203,3 +269,80 @@ define i32* @createArray() {
     ret i32* %typedArrayPtr
 }
 \end{lstlisting}
+
+
+另一个循环的例子，没有用栈变量，而是用 phi 函数解决多次写入的问题：
+\begin{lstlisting}[language=cpp]
+int sum(int n) {
+    int result = 0;
+    for (int i = 0; i < n; i++) {
+        result += i;
+        if (i % 2 == 0) {
+            result += 1;  // Modify result again
+        }
+    }
+    return result;
+}
+\end{lstlisting}
+
+\begin{lstlisting}[language=none]
+define i32 @sum(i32 %n) {
+  entry:
+    br label %loop
+
+  loop:
+    ; i = 0 (init) or i = i.next (update)
+    %i = phi i32 [ 0, %entry ], [ %i.next, %loop.end ]
+    ; result = 0 (init) or result = result.next (update)
+    %result = phi i32 [ 0, %entry ], [ %result.next, %loop.end ]
+    %i.next = add i32 %i, 1  ; i.next = i + 1
+    %result.tmp = add i32 %result, %i  ; result.tmp = result + i
+    %is_odd = and i32 %i, 1  ; Check if i is even (i % 2 == 0)
+    %cmp_even = icmp eq i32 %is_odd, 0  ; Compare is_odd == 0
+    br i1 %cmp_even, label %if.even, label %loop.end
+
+  if.even:
+    %result.even = add i32 %result.tmp, 1  ; result.even = result.tmp + 1
+    br label %loop.end
+
+  loop.end:
+    ; Select result.next based on control flow
+    %result.next = phi i32 [ %result.tmp, %loop ], [ %result.even, %if.even ]
+    %cmp = icmp slt i32 %i.next, %n  ; Compare i.next < n
+    br i1 %cmp, label %loop, label %exit
+
+  exit:
+    ret i32 %result
+}
+\end{lstlisting}
+
+\subsection{调库}
+
+\subsubsection{调用 C 标准库的 printf}
+\begin{lstlisting}[language=none]
+; Declare the printf function
+declare i32 @printf(i8*, ...)
+
+; Define the format string
+@.str = private unnamed_addr constant [14 x i8] c"Hello, World!\00", align 1
+
+define i32 @main() {
+entry:
+  ; Get a pointer to the format string
+  %str = getelementptr inbounds [14 x i8], [14 x i8]* @.str, i64 0, i64 0
+
+  ; Call printf
+  call i32 (i8*, ...) @printf(i8* %str)
+
+  ; Return 0
+  ret i32 0
+}
+\end{lstlisting}
+
+\begin{itemize}
+\item \verb`@变量名` 代表全局变量， \verb`.str` 没什么特殊的， 也可以用 \verb`@my_string`
+\item \verb`private` 说明仅限于当前 llvm 模块（module）使用
+\item \verb`constant` 不允许修改，只有全局变量有该关键字
+\item \verb`c"..."` 表示字符串常量
+\item \verb`\00` 就是 C 语言的 \verb`\0` 用于结束字符串。
+\end{itemize}
