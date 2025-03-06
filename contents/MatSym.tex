@@ -9,19 +9,25 @@ Matlab 的符号计算需要符号计算工具箱， 取决于你的证书类型
 
 \subsection{符号变量和符号表达式}
 \begin{itemize}
-\item Matlab 中用于储存符号计算表达式的变量类型为 \verb`sym`。 可以用 \verb`syms 变量1 变量2 ...` 声明变量类型为 \verb`sym`。 例如 \verb`syms x y z;`。 Matlab 的大部分自带算符和函数支持 \verb`sym` 类型的变量， 例如 \verb`x^2` 就是 \verb`sym` 类型的表达式 $x^2$， $x$ 并不是一个数值而是符号。 若此时令 \verb`expr = x^2`， 那么用 \verb`class(expr)` 可以验证 \verb`expr` 的类型也是 \verb`sym`。
+\item Matlab 中用于储存符号计算表达式的变量类型为 \verb`sym`。 可以用 \verb`syms 变量1 变量2 ...` 声明变量类型为 \verb`sym`。 例如 \verb`syms x y z;`。
+
+\item \verb`syms f(x)` 定义一个符号函数 \verb`f`。 该命令会同时创建符号变量 \verb`x` 和符号函数 \verb`f(x)`（\verb`symfun` 类型，没有具体定义）。 接下来可以用 \verb`f(x) = x^2` 对其定义， 这相当于运行 \verb`syms x; f(x) = x^2;`。
+
+\item Matlab 的大部分自带算符和函数支持 \verb`sym` 类型的变量， 例如 \verb`x^2` 就是 \verb`sym` 类型的表达式 $x^2$， $x$ 并不是一个数值而是符号。 若此时令 \verb`expr = x^2`， 那么用 \verb`class(expr)` 可以验证 \verb`expr` 的类型也是 \verb`sym`。
 
 \item 除了使用 \verb`syms` 一次声明几个符号变量， 也可以使用 \verb`sym(字符串)` 其中字符串只能是变量名或数字。 例如 \verb`syms x; expr = x^2;` 得到的 \verb`expr` 和 \verb`expr = sym('x')^2;` 得到的 \verb`expr` 是等效的。
 
-\item \verb`str2sym(字符串)` 可以把字符串转换为符号表达式。 例如 \verb`str2sym('pi')` 或 \verb`str2sym('sqrt(3)/2')`。
+\item \verb`str2sym(字符串)` 可以把字符串转换为符号表达式。 例如 \verb`str2sym('pi')` 或 \verb`str2sym('sqrt(3)/2')`。 注意在较新版的 Matlab 中， \verb`sym('pi')` 将得到名为 \verb`pi` 的符号变量， 而不是圆周率。
 
-\item  对表达式求导如 \verb`diff(sym('x')^2)`。 若要求偏导， \verb`diff(sym('x')^2 * sym('y')^3)` 默认对 \verb`x` 求偏导， 结果是 $2x y^3$。 也可以声明对 \verb`y` 求偏导， 如 \verb`diff(sym('x')^2 * sym('y')^3, sym('y'))`， 或者更简洁地， \verb`diff(sym('x')^2 * sym('y')^3, 'y')`。 这是因为， 如果函数的一个参数需要符号表达式， 但如果输入时使用了字符串或者数值， 那么 Matlab 就会自动将其用 \verb`sym()` 函数进行转换。 建议总是声明对哪个变量求偏导。
+\item  对表达式求导如 \verb`diff(sym('x')^2)`。 若要求偏导， \verb`diff(sym('x')^2 * sym('y')^3)` 默认对 \verb`x` 求偏导（\verb`x` 是通过 \verb`symvar(expr, 1)` 决定的）， 结果是 $2x y^3$。 也可以声明对 \verb`y` 求偏导， 如 \verb`diff(sym('x')^2 * sym('y')^3, sym('y'))`， 或者更简洁地， \verb`diff(sym('x')^2 * sym('y')^3, 'y')`。 这是因为， 如果若函数的一个形参需要符号表达式， 但实参使用了字符串或者数值， 那么 Matlab 就会自动将其用 \verb`sym()` 函数进行转换。 建议总是声明对哪个变量求偏导。 若不声明，则会通过 \verb`symvar(expr, 1)` 决定。 \verb`expr` 也可以是 \verb`symfun` 类型的。
 
-\item  要把一个数字作为符号， 可以使用例如 \verb`sym('2')` 或 \verb`sym('7/3')`， 但这仅限于分式， 不允许诸如 \verb`sym('sqrt(2)')` 这样的用法， 应该用 \verb`str2sym('sqrt(2)')`。
+\item \verb`diff(f, var, n)` 可以求高阶导数。 \verb`diff(f, y, z)` 求混合偏导。
 
-\item 另一种方法是使用 \verb`sym(数值)`。 例如 \verb`sqrt(sym(2))` 的结果是表达式 $\sqrt 2$， 而不同于数值计算中的 \verb`sqrt(2) = 1.414...`。 由于符号计算是精确无误差的， 无理数 $\sqrt{2}$ 并不会被自动转换为小数形式。 另一个例子， \verb`d = 3.1; sqrt(sym(d))` 得到的是表达式 $961/100$。
+\item  要把一个数字作为符号， 可以使用例如 \verb`sym('2')` 或 \verb`sym('7/3')`， 但这仅限于分式， 不允许诸如 \verb`sym('sqrt(2)')` 这样的用法， 应该用 \verb`str2sym('sqrt(2)')` 或者 \verb`sqrt(sym(2))`。
 
-\item  \verb`sym(数值)` 会自动\textbf{猜测} \verb`数值` 所代表的根式， 例如 \verb`sym(0.866025403784439)` 的结果是表达式 $\sqrt{3}/2$， 又例如 \verb`sym(pi)` 的结果是精确的圆周率符号 $\pi$。 注意在较新版的 Matlab 中， \verb`sym('pi')` 将得到名为 \verb`pi` 的普通变量， 而不是圆周率。
+\item 另一种方法是使用 \verb`sym(数值)`。 例如 \verb`sqrt(sym(2))` 的结果是表达式 $\sqrt 2$， 而不同于数值计算中的 \verb`sqrt(2) = 1.414...`。 由于符号计算是精确无误差的， 无理数 $\sqrt{2}$ 并不会被自动转换为小数形式。
+
+\item  \verb`sym(数值)` 会自动\textbf{猜测} \verb`数值` 所代表的根式， 例如 \verb`sym(0.866025403784439)` 的结果是表达式 $\sqrt{3}/2$， 又例如 \verb`sym(pi)` 的结果是精确的圆周率符号 $\pi$。 但 \verb`sym(sqrt(pi))` 就只能猜出一个近似的分数。
 
 \item 如果不希望猜测， 那么可以用 “\enref{双精度和变精度浮点数测试（Matlab）}{FltMat}” 中的 \verb`num2sym(双精度)`。
 
