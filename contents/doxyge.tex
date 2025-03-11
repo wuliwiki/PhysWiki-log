@@ -2,10 +2,66 @@
 % license Xiao
 % type Note
 
-\begin{issues}
-\issueDraft
-\end{issues}
-
 \begin{itemize}
 \item \href{https://www.doxygen.nl/}{官方网站}。
+\item \verb`@brief`: Provides a brief description of the function, class, or variable (including data member).
+\item \verb`@class`: Documents a class.
+\item \verb`@param`: Describes a function parameter.
+\item \verb`@return`: Describes the return value of a function.
+\item \verb`@details`: Provides a detailed description (optional).
+\item \verb`@note`: Adds a note or additional information.
+\item \verb`@warning`: Adds a warning message.
+\item \verb`@see`: References other related functions, classes, or documentation.
+\item \verb`@code` and \verb`@endcode`: Inserts a code block in the documentation.
+\item \verb`@enum`: Documents an enumeration.
+\item \verb`@file`: Documents a file.
+\item \verb`@namespace`: Documents a namespace.
 \end{itemize}
+
+例子
+\begin{lstlisting}[language=cpp,caption=factorial.hpp]
+/**
+ * @brief Calculates the factorial of a number.
+ *
+ * @details This function calculates the factorial of a non-negative integer
+ * using a recursive approach.
+ *
+ * @note The function does not handle negative inputs.
+ *
+ * @param n The number to calculate the factorial for.
+ * @return The factorial of the number.
+ *
+ * @code
+ * int result = factorial(5); // result will be 120
+ * @endcode
+ *
+ * @see https://en.wikipedia.org/wiki/Factorial
+ */
+inline int factorial(int n);
+
+inline int factorial(int n) {
+    if (n <= 1) return 1;
+    return n * factorial(n - 1);
+}
+\end{lstlisting}
+
+\subsection{安装使用}
+\begin{itemize}
+\item Ubuntu 可以直接 \verb`sudo apt install doxygen`。
+\item 在源码目录下， 用 \verb`doxygen -g` 生成配置文件 \verb`Doxyfile`。 It contains many configuration options. You can edit it to customize the documentation generation process. Here are some common settings you might want to change:
+\item \verb`PROJECT_NAME`: The name of your project.
+\item \verb`PROJECT_BRIEF`: A brief description of your project.
+\item \verb`OUTPUT_DIRECTORY`: The directory where the documentation will be generated.
+\item 配置完成后，用 \verb`doxygen Doxyfile` 即可生成文档。 但上面 \verb`factorial.cpp` 中的说明不会生成，因为还需要手动在 Doxyfile 中设置：
+\item \verb`EXTRACT_ALL = YES`: Set this to YES to ensure all entities (including undocumented ones) are included in the documentation.
+\item \verb`EXTRACT_STATIC = YES`: Set this to YES to document static functions and variables.
+\item \verb`RECURSIVE = YES`: If your code is in subdirectories, set this to YES to scan recursively.
+\item 如果需要中文 UI，就用 \verb`OUTPUT_LANGUAGE = Chinese`
+\item 再用 \verb`doxygen Doxyfile` 生成就有了！
+\end{itemize}
+
+\begin{figure}[ht]
+\centering
+\includegraphics[width=12cm]{./figures/ec3cf67129a07e0d.png}
+\caption{} \label{fig_doxyge_1}
+\end{figure}
