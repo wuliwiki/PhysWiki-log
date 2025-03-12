@@ -2,24 +2,38 @@
 % license Xiao
 % type Note
 
-\begin{issues}
-\issueDraft
-\end{issues}
-
 \pentry{Python 简介与安装\nref{nod_Python}}{nod_702f}
 
-\subsection{安装}
-\begin{itemize}
-\item 安装： \verb`pip3 install virtualenv`
-\item 在 ubuntu 上还需要安装 \verb`apt install python版本号-venv` 其中版本号可以用 \verb`python3 --version` 查看。
-\end{itemize}
+\verb`venv` 是最常用的 python 虚拟环境管理工具（Python 3.3+ 内置），其他还有 \verb`conda, virtualenv, pipenv`。
 
 \subsection{使用}
 \begin{itemize}
-\item \verb`venv` 类似于 \enref{conda}{CondaN} 的虚拟环境。 注意并不会像 \verb`chroot` 一样改变路径。
 \item 要在当前路径创建新环境， 用 \verb`python3 -m venv 环境名`（\verb`-m` 选项是把一个 python 包作为一个程序运）， 然后会出现一个名为 \verb`环境名` 的文件夹。
-\item 运行 \verb`source 环境名/bin/activate` 进入刚创建的虚拟环境。 此时 bash 的行首会标示当前的环境名。
+\item \verb`python3 -m venv --help` 可以显示一些额外选项，例如 \verb`--symlinks` 可以尽量用符号链接引用系统的可执行文件， \verb`--copies` 会直接把可执行文件复制到虚拟环境， \verb`--without-pip` 不在虚拟环境安装 \verb`pip`。
+\item 在 Ubuntu22.04 下， 该命令会实测失败并提示安装 \verb`sudo apt install python3.10-venv`， 装好再试即可。
+\item 运行 \verb`source 环境名/bin/activate` 进入刚创建的虚拟环境。 此时 bash 的行首会标示当前的环境名（\verb`(环境名) $`）。
 \item 此时 \verb`pip3 install ...` 就可以在当前环境安装一些包。
 \item \verb`pip3 list` 会发现当前几乎没有安装的包。 也可以安装新包。
 \item \verb`deactivate` 退出虚拟环境。 再用 \verb`pip3 list` 就会看到系统默认的包。
+\item 删掉 \verb`环境名` 文件夹即可删掉虚拟环境。
+\item \verb`pip freeze > 依赖.txt` 可以保存当前环境的所有包的版本
+\item \verb`pip install -r 依赖.txt` 可以恢复指定版本的包
+\end{itemize}
+
+\subsection{原理}
+\begin{itemize}
+\item venv 完全是通过修改环境变量实现的， 注意并不会像 \verb`chroot` 一样改变路径。
+\item \verb`activate` 是个 bash 脚本，设置如下环境变量 \verb`VIRTUAL_ENV`（\verb`环境名` 的绝对路径）， \verb`VIRTUAL_ENV_PROMPT`， \verb`PS1`（bash 提示符前标明环境名）， \verb`PATH`（添加 \verb`环境名/bin` 到最开头）。
+\item \verb`环境名/bin` 文件夹除了 activate 脚本外，还会有一些名为 \verb`python*` 的符号链接， 链接到应该是用于创建 venv 的 python 可执行文件。 另外还会有一些名为 \verb`pip*` 的内容一样的脚本文件。
+\item \verb`环境名/lib` 文件夹里面应该是标准库和 pip 安装的库。
+\item \verb`pyvenv.cfg` 文件里面有一些 venv 配置信息。
+\end{itemize}
+
+\subsection{回收}
+
+\subsubsection{【这是 virtualenv 不是 venv】安装}
+\begin{itemize}
+\item \verb`virtualenv` 比 \verb`venv` 要老，但工作原理类似。
+\item 安装： \verb`pip3 install virtualenv`
+\item 在 ubuntu 上还需要安装 \verb`apt install python版本号-venv` 其中版本号可以用 \verb`python3 --version` 查看。
 \end{itemize}

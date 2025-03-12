@@ -5,6 +5,7 @@
 
 \begin{issues}
 \issueDraft
+\issueMissDepend
 \end{issues}
 
 \pentry{平面旋转矩阵\nref{nod_Rot2D}， 自由度\nref{nod_DoF}}{nod_f7b7}
@@ -22,7 +23,7 @@
 \pmat{a_{11}\\a_{21}\\a_{31}} ~,\quad \pmat{a_{12}\\a_{22}\\a_{32}} ~,\quad \pmat{a_{13}\\a_{23}\\a_{33}}~.
 \end{equation}
 类比\enref{平面旋转矩阵}{Rot2D}，可以得到旋转矩阵为
-\begin{equation}
+\begin{equation}\label{eq_Rot3D_2}
 \mat R_3 = \begin{pmatrix}
 {a_{11}}&{a_{12}}&{a_{13}}\\
 {a_{21}}&{a_{22}}&{a_{23}}\\
@@ -32,15 +33,99 @@
 
 除了通过三个单位矢量构建旋转矩阵， 我们可以通过由转轴的方向和旋转的角度来计算每个矩阵元， 参考 “\enref{罗德里格旋转公式}{RotA}” 和 “\enref{四元数}{QuatN}”。 另一种常见的方法是使用\enref{欧拉角}{EulerA}。
 
-\addTODO{例题： 分别给出绕 $x,y,z$ 轴旋转的三维矩阵。}
+\begin{example}{分别给出绕 $x,y,z$ 轴旋转的三维矩阵。}
+
+\begin{figure}[ht]
+\centering
+\includegraphics[width=12cm]{./figures/6c4cd05249048f8f.png}
+\caption{旋转矩阵} \label{fig_Rot3D_1}
+\end{figure}
+
+出于转轴已经固定为某一条坐标轴，所以仅需要一个参量 $\theta$ 就可以确定旋转后的矩阵状态。
+
+以绕 $x$ 轴旋转的三维矩阵为例，由上图可以发现，基底 $\uvec x$ 在转轴上，不做变换；而 $\uvec y$ 与 $\uvec z$ 垂直于转轴，故其方向发生变化。
+
+设由 $y$ 轴正方向向 $z$ 轴负方向转动为正向转动，转动角为 $\theta$，我们可以知道，原基底 $\uvec y=\pmat{0\\1\\0}$ 将转变为 $\uvec y'=\pmat{0\\ \cos{\theta} \\ -\sin{\theta}}$。同理，原基底 $\uvec z=\pmat{0\\0\\1}$ 将在转动中转变为 $\uvec z'=\pmat{0\\ \sin{\theta} \\ \cos{\theta}}$。
+
+综上所述，结合转换后的基底结果，我们知道描述以 $y$ 轴正方向向 $z$ 轴负方向转动为正向转动，绕 $x$ 轴旋转的三维矩阵可以表示为
+\begin{equation}
+\mat M_x = \begin{pmatrix}
+1 & 0 & 0 \\
+0 & \cos{\theta} & -\sin{\theta} \\
+0 & \sin{\theta} & \cos{\theta}
+\end{pmatrix}~.\end{equation}
+
+同样的，绕 $y$ 轴或者绕 $z$ 轴旋转的矩阵也可以用类似的办法推出，我们也可以得到相应的矩阵为
+
+\begin{equation}
+\mat M_y = \begin{pmatrix}
+\cos{\theta} & 0 & \sin{\theta} \\
+0 & 1 & 0 \\
+-\sin{\theta} & 0 & \cos{\theta}
+\end{pmatrix}~.\end{equation}
+
+\begin{equation}
+\mat M_z = \begin{pmatrix}
+\cos{\theta} & -\sin{\theta} & 0 \\
+\sin{\theta} & \cos{\theta} & 0 \\
+0 & 0 & 1
+\end{pmatrix}~.\end{equation}
+
+\end{example}
 
 \subsection{被动理解}
+
+结合 \enref{平面旋转矩阵}{Rot2D} 中关于二维的旋转矩阵的知识，我们可以发现对二维平面做旋转相当于对当前的基做 \autoref{eq_Rot2D_5} 的矩阵变换。
+
+现在，让我们观察二维旋转矩阵的表达式
+\begin{equation}
+\pmat{x'\\ y'} =
+\begin{pmatrix}
+\cos\theta & - \sin\theta\\
+\sin\theta &\cos\theta
+\end{pmatrix}\pmat{x\\ y}~.
+\end{equation}
+
+对于矩阵的行空间，定义 $u_{x}=\pmat{\cos{\theta} \\ -\sin{\theta}}^{\top} ,\quad u_{y}=\pmat{\sin{\theta} \\ \cos{\theta}}^{\top}.$
+
+则我们可以发现变换后的新基底实际上是旋转矩阵的行空间向量与原基底的内积，如下所示
+\begin{equation}
+x' = u_{x} \cdot \pmat{x\\ y} ~;
+\end{equation}
+
+\begin{equation}
+y' = u_{y} \cdot \pmat{x\\ y} ~.
+\end{equation}
+
+相应地，这个规律可以推广到更高维度的情况，对于一个三维的旋转矩阵而言，变换后的新基底仍然是旋转矩阵的行空间向量与原基底的内积，以 \autoref{eq_Rot3D_2} 为例，对于 $\pmat{x' \\ y' \\ z'} = \mat R_3 \cdot \pmat{x \\ y \\ z}$，有以下表达式成立
+
+\begin{equation}
+x' = u_{x} \cdot \pmat{x \\ y \\ z} ~; \quad
+y' = u_{y} \cdot \pmat{x \\ y \\ z} ~; \quad
+z' = u_{z} \cdot \pmat{x \\ y \\ z} ~.
+\end{equation}
+
+其中，$u_{x} = \pmat{a_{11} \\ a_{12} \\ a_{13}}^{\top}, \quad u_{y} = \pmat{a_{21} \\ a_{22} \\ a_{23}}^{\top}, \quad u_{z} = \pmat{a_{31} \\ a_{32} \\ a_{33}}^{\top}.$
+
+所以说，像这样的变换，可以用矩阵向量空间和原向量的内积来表示。进而我们想到：任何直角坐标的变换都可以用内积来完成。这也就是矩阵乘法定义的另一种解释。
+
 \addTODO{参考 “平面旋转变换” 中的讲述}
 
 % 先解释 平面旋转矩阵中的矩阵元是 x*x' 内积得出的， 任何直角坐标的变换都可以用内积完成。
 % 顺便可以解释为什么如果所有列矢量正交归一， 所有行矢量也会正交归一。
 
 \subsection{逆矩阵}
+
+\begin{theorem}{正交矩阵的逆矩阵是它的转置矩阵}
+证明如下：
+
+要证明对于一个正交矩阵 $\mat P$ 来说，有 $\mat P^{-1} = \mat P^{\top} $ 成立。那么可以等价于证明 $\mat P^{\top} \cdot \mat P = \mat I$。
+
+设 $\mat P = \pmat{p_{1}, p_{2}}$
+\end{theorem}
+
 \addTODO{如果我们把\autoref{eq_Rot3D_1} 中的三个正交归一基底记为……}
 
 % 未完成 三维的旋转旋转矩阵与二维旋转矩阵具有许多相似的性质。
+
+% 注：上面的新编辑由half-tree于3.12完成，我的能力有限，请编辑指正
