@@ -99,7 +99,7 @@ y' = u_{y} \cdot \pmat{x\\ y} ~.
 
 相应地，这个规律可以推广到更高维度的情况，对于一个三维的旋转矩阵而言，变换后的新基底仍然是旋转矩阵的行空间向量与原基底的内积，以 \autoref{eq_Rot3D_2} 为例，对于 $\pmat{x' \\ y' \\ z'} = \mat R_3 \cdot \pmat{x \\ y \\ z}$，有以下表达式成立
 
-\begin{equation}
+\begin{equation}\label{eq_Rot3D_3}
 x' = u_{x} \cdot \pmat{x \\ y \\ z} ~; \quad
 y' = u_{y} \cdot \pmat{x \\ y \\ z} ~; \quad
 z' = u_{z} \cdot \pmat{x \\ y \\ z} ~.
@@ -109,22 +109,54 @@ z' = u_{z} \cdot \pmat{x \\ y \\ z} ~.
 
 所以说，像这样的变换，可以用矩阵向量空间和原向量的内积来表示。进而我们想到：任何直角坐标的变换都可以用内积来完成。这也就是矩阵乘法定义的另一种解释。
 
-\addTODO{参考 “平面旋转变换” 中的讲述}
+% \addTODO{参考 “平面旋转变换” 中的讲述}
 
 % 先解释 平面旋转矩阵中的矩阵元是 x*x' 内积得出的， 任何直角坐标的变换都可以用内积完成。
 % 顺便可以解释为什么如果所有列矢量正交归一， 所有行矢量也会正交归一。
 
 \subsection{逆矩阵}
 
-\begin{theorem}{正交矩阵的逆矩阵是它的转置矩阵}
+\begin{theorem}{列向量都是单位向量，且任意两向量正交的矩阵是\enref{正交矩阵}{lnal05}}
 证明如下：
 
-要证明对于一个正交矩阵 $\mat P$ 来说，有 $\mat P^{-1} = \mat P^{\top} $ 成立。那么可以等价于证明 $\mat P^{\top} \cdot \mat P = \mat I$。
+对于一个正交矩阵 $\mat P$ 来说，有 $\mat P^{-1} = \mat P^{\top} $ 成立，这也就等价于 $\mat P^{\top} \cdot \mat P = \mat I$ 成立。
 
-设 $\mat P = \pmat{p_{1}, p_{2}}$
+为了证明该定理，我们设 $\mat P = \pmat{p_{1}, p_{2} ... p_{n}}$ ，其中 $p_{i}$ 是 $\mat P$ 的列向量，满足$\forall i \ne j$，有 $p_{i} \cdot p_{j} = 0$，同时 $\forall i = j$，有 $p_{i} \cdot p_{j} = 1$。
+
+我们也可以知道其逆矩阵 $\mat P^{\top} = \pmat{p_{1}^{\top} \\ p_{2}^{\top} \\ ... \\ p_{n}^{\top}}$。
+
+为了计算 $\mat P^{\top} \cdot \mat P$，考虑我们在\aref{上文}{eq_Rot3D_3}提到的矩阵乘法等同于内积的思想，该乘法所得到的矩阵元应当是 $\mat P^{\top}$ 中对应行向量与 $\mat P$ 中对应列向量内积的值，有下方表达式成立
+
+\begin{equation}
+\mat P^{\top} \cdot \mat P = \begin{pmatrix}
+p_{1}^{\top} \cdot p_{1} & p_{1}^{\top} \cdot p_{2} & ... & p_{1}^{\top} \cdot p_{n} \\
+p_{2}^{\top} \cdot p_{1} & p_{2}^{\top} \cdot p_{2} & ... & p_{2}^{\top} \cdot p_{n} \\
+... & ... &  & ...\\
+p_{n}^{\top} \cdot p_{1} & p_{n}^{\top} \cdot p_{2} & ... & p_{n}^{\top} \cdot p_{n}
+\end{pmatrix}~.\end{equation}
+
+根据矩阵 $\mat P$ 向量的性质，有且仅有对角线上的元素（满足 $i = j$ ）为 $1$，其余位置的元素（有 $i \ne j$ ）皆为 $0$。可以推得 $\mat P^{\top} \cdot \mat P = 
+\pmat{
+1 & 0 & ... & 0 \\
+0 & 1 & ... & 0 \\
+... & ... &  & ...\\
+0 & 0 & ... & 1} = \mat I$
+
+综上所述，列向量都是单位向量，且向量之间两两正交的矩阵是正交矩阵。
+
 \end{theorem}
 
-\addTODO{如果我们把\autoref{eq_Rot3D_1} 中的三个正交归一基底记为……}
+\begin{exercise}{根据上面的证明过程，解释为什么如果所有列矢量正交归一， 所有行矢量也会正交归一。}
+注：正交归一指的是一组向量不仅两两正交，而且每个向量都是单位向量。
+
+提示：$\mat P$ 的列向量和 $\mat P^{\top}$ 的行向量是一致的。
+\end{exercise}
+
+我们可以知道，对于平面或三维的旋转矩阵，其表示的基向量应当是单位向量，且两两之间应当也是正交的。这是因为表示旋转操作的矩阵并不会拉伸空间，且其仍然保持原基底的夹角不发生变化。
+
+所以，旋转矩阵实际上也是正交矩阵，根据正交矩阵的定义，我们有 $\mat P^{\top} = \mat P^{-1}$，旋转矩阵的逆与它的转置一致。
+
+% \addTODO{如果我们把\autoref{eq_Rot3D_1} 中的三个正交归一基底记为……}
 
 % 未完成 三维的旋转旋转矩阵与二维旋转矩阵具有许多相似的性质。
 
