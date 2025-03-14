@@ -1,0 +1,102 @@
+% GCC 源码笔记
+% license Usr
+% type Note
+
+\begin{itemize}
+\item GCC 采用前后端分离，高级中间表示为 \textbf{GIMPLE（GNU SIMPLE）}， 低级中间表示为 \textbf{RTL（Register Transfer Language）}。
+\item RTL 是部分机器相关的，也就是并不是完全机器无关。
+\item GIMPLE 是 SSA（Static Single Assignment）形式的中间表示，使用 phi 函数，使用 \verb`goto` 和 basic block 进行流控制。 C 程序
+\begin{lstlisting}[language=cpp]
+int foo(int n) {
+    int sum = 0;
+    for (int i = 0; i < n; i++) {
+        if (i % 2 == 0) {
+            sum += i;
+        }
+    }
+    return sum;
+}
+\end{lstlisting}
+对应的 GIMPLE 代码是
+\begin{lstlisting}[language=cpp]
+foo (int n) {
+  int sum;
+  int i;
+  int D.1234;
+  int D.1235;
+  int D.1236;
+
+  sum = 0;
+  i = 0;
+  goto L2;
+
+L1:
+  D.1234 = i % 2;
+  if (D.1234 == 0) goto L3; else goto L4;
+
+L3:
+  sum = sum + i;
+  goto L4;
+
+L4:
+  i = i + 1;
+  goto L2;
+
+L2:
+  if (i < n) goto L1; else goto L5;
+
+L5:
+  return sum;
+}
+\end{lstlisting}
+另一个 C 源码
+\begin{lstlisting}[language=cpp]
+int bar(int x, int y) {
+    int z;
+    if (x > 0) {
+        if (y > 0) {
+            z = x + y;
+        } else {
+            z = x - y;
+        }
+    } else {
+        z = y - x;
+    }
+    return z;
+}
+\end{lstlisting}
+对应的 GIMPLE 使用了 phi 函数
+\begin{lstlisting}[language=cpp]
+bar (int x, int y) {
+  int z_1;
+  int z_2;
+  int z_3;
+  int z_4;
+  int D.1234;
+  int D.1235;
+
+  D.1234 = x > 0;
+  if (D.1234 != 0) goto L1; else goto L4;
+
+L1:
+  D.1235 = y > 0;
+  if (D.1235 != 0) goto L2; else goto L3;
+
+L2:
+  z_1 = x + y;
+  goto L5;
+
+L3:
+  z_2 = x - y;
+  goto L5;
+
+L4:
+  z_3 = y - x;
+  goto L5;
+
+L5:
+  # z_4 = PHI <z_1(L2), z_2(L3), z_3(L4)>
+  return z_4;
+}
+\end{lstlisting}
+\end{itemize}
