@@ -21,7 +21,7 @@ sudo snap install Julia --classic
 \begin{itemize}
 \item 最简单的 Hello World 程序如 \verb`println("hello world")` 会自动换行。 \verb`print` 则没有自动换行。
 \item Julia 的命令行环境叫做 \textbf{REPL (read-eval-print-loop)}
-\item 注释用 \verb`#`， 或者 \verb`#=一些注释=#`， 多行注释也可以和 python 一样用 \verb`"""..."""`， 每个 \verb`"""` 要独占一行。
+\item 注释用 \verb`#`， 或者 \verb`#=一些注释=#`， 多行注释也可以和 python 一样用 \verb`"""..."""`。
 \item \verb`Ctrl + D` 退出或者 \verb`exit()` 退出
 \item \verb`ans` 变量和 Matlab 一样， 用于显示上一次运算的输出结果（结果赋值给变量的除外）
 \item 在一行中运行多个命令， 用分号隔开
@@ -53,6 +53,44 @@ sudo snap install Julia --classic
 \item 类型的名称也可以作为值来使用， \verb`typeof(Float64)` 是 \verb`DataType`。
 \end{itemize}
 
+\subsubsection{全局变量}
+\begin{lstlisting}[language=julia]
+x = 100
+
+function qux()
+    global x  # 需要修改 x（只读无需声明）
+    x = 200
+end
+\end{lstlisting}
+
+\subsubsection{字符串}
+\begin{itemize}
+\item 每个 unicode 字符的类型是 \verb`Char`，字符串的类型是 \verb`String`。
+\item Julia 字符默认采用 UTF-8， \verb`a = "你好 Julia"` 中， \verb`a[1]` 是 \verb`你`， \verb`a[4]` 是 \verb`好`， \verb`a[8]` 是 \verb`J`。 \verb`a[2]` 会报错！
+\item 用 \verb`i = nextind(str, i)` 来获取下一个字符的合法索引！
+\item \verb`for c = str` 也可以遍历每个字符（不是每个字节）
+\item \verb`for i = eachindex(a)` 可以遍历每个字符所在的索引
+\item \verb`length(str)` 返回字符个数（不是每个字节数）
+\item \verb`bytes = Vector{UInt8}(str)` 可以把字符串转换为字节。
+\item \verb`str = raw"Hello\nJulia"` 创建裸字符串（\verb`\n` 不当作换行）
+\item \verb`str *= "字符串"` 可以 append。
+\item 字符串不能直接修改， 如 \verb`a[i] = 'b';`
+\item \verb`collect(str)` 可以得到一个字符数组，即 \verb`Vector{Char}`。
+\item \verb`"""..."""` 可以表示多行字符串
+\item \verb`str1 * str2` 拼接字符串
+\item \verb`string(str1, str2, ...)` 也可以拼接
+\item \verb`"The sum of $x and $y is $(x + y)."`
+\item 可以用 \verb`==` 或 \verb`<` 对比两个字符串。
+\item \verb`new_str = replace(str, "Julia" => "World")` 可以替换字符串。
+\item \verb`str1 = strip(str)` 可以除去两边空格。
+\item \verb`parts = split(str, ",")` 可以拆分字符串。
+\item \verb`str = join(parts, ", ")` 可以组合。
+\item \verb`startswith(str, key)` 和 \verb`endswith(str, key)` 。
+\item \verb`findfirst(str, key)` 和 \verb`findlast(str, key)`
+\item \verb`str = "Hello, Julia!"; m = match(r"Julia", str)` 正则表达式匹配
+\item 插入用 \verb`new_str = original_str[1:7] * insert_str * original_str[8:end]`
+\end{itemize}
+
 \subsection{数组和矩阵}
 \begin{itemize}
 \item 索引从 1 开始， 和 Matlab 一样
@@ -70,7 +108,7 @@ sudo snap install Julia --classic
 \item \verb`splice!(v, 3:5)` 可以删除 \verb`v[3:5]`
 \item \verb`A .= 值` 或者 \verb`fill!(v, 值)` 可以把 \verb`v` 的每个元素赋值。
 \item 矩阵切割如 \verb`a[:, j, :]`
-\item 矩阵尺寸 \verb`size(矩阵, 维度)`， 元素个数 \verb`length()`， \verb`isempty()` 检查空矩阵， \verb`reverse()` 元素倒序排序
+\item 矩阵尺寸 \verb`size(矩阵, 维度)`， 元素个数 \verb`length()`（相当于 Matlab 的 \verb`numel`）， \verb`isempty()` 检查空矩阵， \verb`reverse()` 元素倒序排序
 \item \verb`findmax(), findmin()` 找到矩阵的最大最小元素。
 \item \verb`Array{Float64,2}(undef, 2, 3)` 创建矩阵， 矩阵元不初始化。
 \item 零向量矩阵 \verb`zeros(整数)` 或 \verb`zeros(整数, 整数)` 分别返回 \verb`Array{Float64,1}` 和 \verb`Array{Float64,2}`。 也可以用 \verb`zeros(类型, 整数, 整数)` 指定类型。
@@ -160,6 +198,22 @@ end
 \item 普通矩阵本征问题 \verb`geev!(jobvl, jobvr, A)`； 对称矩阵本征问题 \verb`syev!(jobz, uplo, A)`； 对称三对角矩阵本征问题 \verb`stev!(job, dv, ev)`
 \end{itemize}
 
+\subsection{结构体}
+\begin{itemize}
+\item 定义
+\begin{lstlisting}[language=julia]
+mutable struct User
+    id::Int
+    name::String
+    email::String
+    age::Int
+end
+\end{lstlisting}
+\item 默认构造函数 \verb`user1 = User(1, "Alice", "alice@example.com", 30)`
+\item 如果没有 \verb`mutable`， 构造后将不能改变字段值。
+\item 定义后无法动态增减字段。
+\end{itemize}
+
 \subsection{脚本}
 \begin{itemize}
 \item \verb`@which 名字` 可以查看一个名字在哪里定义，如函数、宏（\verb`@which @宏名`）、模块、全局变量、类型名等。
@@ -183,7 +237,9 @@ plot(x,y)
 \subsection{控制流}
 \begin{lstlisting}[language=Julia]
 b = 3;
-for a = 1:5
+# 循环内的 `a` 的值不影响循环外的 `a` 的值
+# 循环内初次定义的其他变量在循环外也无定义
+for a = 1:5 # 也可以用 `in` 代替 `=`
     if a < b
         println(a, " < ", b)
     elseif a > b
@@ -214,6 +270,35 @@ function greet(name; greeting="Hello")
     println("$greeting, $(name)!")
 end
 \end{lstlisting}
+
+\begin{itemize}
+\item 函数最后如果没有 \verb`return` 会自动返回最后一个被赋值的变量？？
+\item 函数允许对不同类型重载（包括用户定义的 \verb`struct`）
+\begin{lstlisting}[language=julia]
+function greet(x)
+    println("x");
+end
+
+function greet(s::String)
+    println("s");
+end
+\end{lstlisting}
+现在打 \verb`greet`， 会显示 \verb`greet (generic function with 2 methods)`。 \verb`greet(1)` 会显示 \verb`x`， \verb`greet("a")` 会显示 \verb`s`。
+\end{itemize}
+
+\subsubsection{函数嵌套}
+\begin{lstlisting}[language=julia]
+function outer()
+    z = 15  # z is local to outer()
+
+    function inner()
+        println(z)  # inner() 可以访问 outer() 的变量
+    end
+
+    inner()  # Output: 15
+end
+\end{lstlisting}
+
 
 \subsection{常用函数}
 \begin{itemize}
@@ -258,6 +343,13 @@ println(a == a1)
 \item \verb`using DelimitedFiles; m = readdlm("文件名")` 从文本文件中读取矩阵
 \item \verb`write(file, str)` 把字符串写入文本文件
 \item \verb`using DelimitedFiles; writedlm("文件名", 矩阵)` 把矩阵写入文本文件（用空格与回车）
+\end{itemize}
+
+\subsection{数据结构}
+\subsubsection{字典}
+\begin{itemize}
+\item \verb`值1 => 值2` 的数据类型是 \verb`Pair{类型1, 类型2}`， 两种类型都可以是 \verb`Any`。
+\item 字典 \verb`Dict(["a"=>1, "3"=>2])`。
 \end{itemize}
 
 \subsection{模块}

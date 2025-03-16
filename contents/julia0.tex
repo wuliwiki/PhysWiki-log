@@ -2,16 +2,12 @@
 % license Xiao
 % type Note
 
-\begin{issues}
-\issueDraft
-\end{issues}
-
 本文是关于 Julia 解释器的原理： 它使用了哪些技术， 可以使得它作为一门动态语言能达到编译语言的性能。
 
 \begin{itemize}
 \item \href{https://docs.julialang.org/en/v1/devdocs/init/}{Julia 开发者文档}
 \item C 语言这样的叫做 \textbf{Ahead of Time（AOT）} 编译。
-\item Julia 完全使用 \textbf{Just-In-Time（JIT）}。 并不是把部分代码使用该优化，而是全部。Julia 默认不直接理解并执行高级语言（一个理解器见\href{https://juliadebug.github.io/JuliaInterpreter.jl/stable/}{这里}）。 每个重载的函数第一次被调用的时候， julia 都会先给它生成专门的 llvm 机器码。 这个过程还有一个不那么正规的名字叫做 \textbf{Just Ahead-of-Time（JAOT）}。
+\item Julia 完全使用 \textbf{Just-In-Time（JIT）}。 并不是把部分代码使用该优化，而是全部。Julia 默认不直接理解并执行高级语言（一个解释器见\href{https://juliadebug.github.io/JuliaInterpreter.jl/stable/}{这里}）。 每个重载的函数第一次被调用的时候， julia 都会先给它生成专门的 llvm 机器码。 这个过程还有一个不那么正规的名字叫做 \textbf{Just Ahead-of-Time（JAOT）}。
 \item \textbf{Multiple Dispatch （MD）}： 可以基于参数的类型生成不同的专门代码。
 \item \textbf{Type Inference}： 自动推导变量类型。
 \item 内建并行， 包括分布计算
@@ -72,3 +68,88 @@ CodeInfo(
 \end{figure}
 
 注意返回的 \verb`lowered_ir` 变量并不是一个字符串，而是结构化的信息。
+
+\subsubsection{如何读懂 Julia IR}
+如果 Julia IR 中的东西不懂，文档也不完善，那就直接执行试试即可， Julia IR 中的函数都是可以在 REPL 中执行的。 例如上面的 \verb`Main.Int` 执行出来就是 \verb`Int64::DataType`。 找许多 Julia 源码和 IR 对照下来基本就能明白。
+
+\subsection{循环的 IR}
+代码
+\begin{lstlisting}[language=julia]
+for n in 1:5
+    c += n
+end
+\end{lstlisting}
+对应的 IR 是
+\begin{lstlisting}[language=none]
+14 ┄ %77  = Main.:(:)                         ; for n in 1:5
+                                              ;     % ==循环准备阶段==
+│    %78  = (%77)(1, 5)                       ;     % 返回 ::UnitRange{Int64}
+│           @_4 = Base.iterate(%78)           ;     % 初始化迭代器： (值, 循环指数)
+                                              ;     % 类型 Tuple{Int64, Int64}
+                                              ;     % ， 当前为 (1, 1)
+│    %80  = @_4
+│    %81  = %80 === nothing
+│    %82  = Base.not_int(%81)                 ;     % 非运算
+└───        goto #17 if not %82
+                                              ;     % ==循环体==
+15 ┄ %84  = @_4
+│           n = Core.getfield(%84, 1)
+│    %86  = Core.getfield(%84, 2)             ;     % 循环指数（对 UnitRange{Int64}
+                                              ;     %    未必从 1 开始也未必步长为 1）
+│    %87  = Main.:+                           ;     c += n
+│    %88  = c
+│    %89  = n
+│           c = (%87)(%88, %89)
+│           @_4 = Base.iterate(%78, %86)      ;     % 迭代（nothing 表示结束）
+│    %92  = @_4
+│    %93  = %92 === nothing
+│    %94  = Base.not_int(%93)
+└───        goto #17 if not %94
+16 ─        goto #15
+                                              ; end
+\end{lstlisting}
+
+代码
+\begin{lstlisting}[language=julia]
+function foo()
+a = 0
+for i in [1, "123", 1+2im]
+    a += 1
+    println(i, a);
+end
+end
+\end{lstlisting}
+对应的 IR 是
+\begin{lstlisting}[language=none]
+CodeInfo(
+1 ─       a = 0
+                                         ; % ==循环准备==
+│   %2  = Main.:+                        ; % 构造 [1, "123", 1+2im]
+│   %3  = Main.:*
+│   %4  = Main.im
+│   %5  = (%3)(2, %4)
+│   %6  = (%2)(1, %5)
+│   %7  = Base.vect(1, "123", %6)
+│         @_2 = Base.iterate(%7)         ; % 迭代器
+│   %9  = @_2
+│   %10 = %9 === nothing
+│   %11 = Base.not_int(%10)
+└──       goto #4 if not %11
+2 ┄ %13 = @_2                            ; % ==循环体==
+│         i = Core.getfield(%13, 1)      ; % 循环变量
+│   %15 = Core.getfield(%13, 2)          ; % 循环指数
+│   %16 = Main.:+
+│   %17 = a
+│         a = (%16)(%17, 1)
+│   %19 = i
+│   %20 = a
+│         Main.println(%19, %20)
+│         @_2 = Base.iterate(%7, %15)
+│   %23 = @_2
+│   %24 = %23 === nothing
+│   %25 = Base.not_int(%24)
+└──       goto #4 if not %25
+3 ─       goto #2
+4 ┄       return nothing
+)
+\end{lstlisting}
