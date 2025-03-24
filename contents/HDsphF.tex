@@ -82,20 +82,92 @@ g^{ij}\frac{\partial^2 u}{\partial x^i\partial x^j}=\sum_{i=1}^{N}h^{i}\frac{\pa
 \end{aligned}~
 \end{equation}
 若定义 
-\begin{equation}
+\begin{equation}\label{eq_HDsphF_6}
 h^i_{(N)}:=r^2h^i,~
 \end{equation}
 则 $h^i_{(N)}$ 将仅仅依赖于角部变量。类似球坐标下\enref{三维拉普拉斯方程}{SphLap}的写法，我们有
-\begin{equation}
+\begin{equation}\label{eq_HDsphF_3}
 r^{-2}\Nabla^{2}_{S^N}u+r^{-N}\frac{\partial }{\partial r}\qty(r^{N}\frac{\partial u}{\partial r})=0.~
 \end{equation}
 其中
-\begin{equation}
-\Nabla^{2}_{S^N}u:=h^{i}_{(N)}\qty[(i-1)\cot\theta^i\pdv{u}{\theta^i}].~
+\begin{equation}\label{eq_HDsphF_5}
+\Nabla^{2}_{S^N}u:=\sum_{i=1}^N h^{i}_{(N)}\qty[(i-1)\cot\theta^i\pdv{u}{\theta^i}+\pdv[2]{u}{\theta^i}]~
 \end{equation}
+定义了单位 $N$ 球上的 \textbf{Laplace-Beltrami 算子}。
+\subsection{高维球谐函数}
+\autoref{eq_HDsphF_3} 没有出现混合导数，因此，若将 $u$ 写成变量分离的形式
+\begin{equation}
+u(r,\theta^1,\cdots,\theta^N)=R(r)W_N(\theta^1,\cdots,\theta^N),~
+\end{equation}
+\autoref{eq_HDsphF_3} 就可写为
+\begin{equation}\label{eq_HDsphF_4}
+\frac{1}{R}r^{-N+2}\frac{\partial }{\partial r}\qty(r^{N}\frac{\partial u}{\partial r}R)=-\frac{1}{W_N}\Delta_{S^N}W_N=\lambda_N.~
+\end{equation}
+其中 $\lambda_N$ 是分离常数，$\Delta_{S^N}:=\Nabla_{S^N}^2$。
 
-\subsection{将球谐函数分离变量}
+将\autoref{eq_HDsphF_4} 中只含角度变量的部分提取出来，就得到如下角变量部分满足的方程：
+\begin{equation}\label{eq_HDsphF_9}
+\Delta_{S^N}W_N+\lambda_N W_N=0.~
+\end{equation}
+该方程的解 $W_N$ 便是所谓的 $N$ 维\textbf{球谐函数}（因为它是定义在 $N+1$ 维空间的 $N$ 维球上的）。
 
+\subsection{将球谐函数转化为分离变量的形式}
+三维空间的球谐函数可以继续分离为只关于 $\theta$ 和 $\varphi$ 的乘积形式。同样的，高维空间的球谐函数也能如此。
+
+为了分离变量，我们先试图将 $\theta^N$ 提取出来。利用\autoref{eq_HDsphF_5} ，有
+\begin{equation}\label{eq_HDsphF_8}
+\sum_{i=1}^{N-1} h^{i}_{(N)}\qty[(i-1)\cot\theta^i\pdv{W_N}{\theta^i}+\pdv[2]{W_N}{\theta^i}]+h^{N}_{(N)}\qty[(N-1)\cot\theta^N\pdv{W_N}{\theta^N}+\pdv[2]{W_N}{\theta^N}]+\lambda_N W_N=0.~
+\end{equation}
+然而，由\autoref{eq_HDsphF_1} 和\autoref{eq_HDsphF_6} ，$h^i_{(N)}$ 是关于 $\theta^j,i+1\leq j\leq N$ 的函数，为使得上式左边第一式不含 $\theta^j$，只要将 $h^i_{(N)}$ 乘以 $\sin^2\theta^j$ 即可。因此，若定义
+\begin{equation}\label{eq_HDsphF_7}
+h^{i}_{(k-1)}=\sin^2\theta^k h^i_{(k)},\quad 1\leq i\leq k-1,2\leq k\leq N,~
+\end{equation}
+则 $h^i_{(N-1)}$ 只依赖与 $\theta ^{i+1},\cdots,\theta^{N-1}$。利用\autoref{eq_HDsphF_7} 的递推关系，可知，对于给定的 $k$， $\{h^i_{k}\}$ 仅仅依赖于变量 $(\theta^1,\cdots,\theta^k)$ 且 $h^k_{(k)}=1$，且 $h^k_{(k)}=1$。
+
+现在，我们可以将\autoref{eq_HDsphF_8} 写为
+\begin{equation}
+\sum_{i=1}^{N-1} \sin^{-2}\theta^N h^{i}_{(N-1)}\qty[(i-1)\cot\theta^i\pdv{W_N}{\theta^i}+\pdv[2]{W_N}{\theta^i}]+h^{N}_{(N)}\qty[(N-1)\cot\theta^N\pdv{W_N}{\theta^N}+\pdv[2]{W_N}{\theta^N}]=-\lambda_N W_N.~
+\end{equation}
+利用\autoref{eq_HDsphF_5} ，上式可写为
+\begin{equation}
+\sin^{-2}\theta^N \Delta_{S^{N-1}}{W_N}+\qty[(N-1)\cot\theta^N\pdv{W_N}{\theta^N}+\pdv[2]{W_N}{\theta^N}]=-\lambda_N W_N.~
+\end{equation}
+显然，现在可以继续进行变量分离，令
+\begin{equation}\label{eq_HDsphF_10}
+W_N(\theta^1,\cdots,\theta^N)=W_{N-1}(\theta^1,\cdots,\theta^{N-1})y_N(\theta^N),~
+\end{equation}
+那么
+\begin{equation}
+-\frac{1}{W_{N-1}}\Delta_{S^{N-1}}W_{N-1}=\frac{\sin^2\theta^N}{y_N}\qty((N-1)\cot\theta^N\pdv{y_N}{\theta^N}+\pdv[2]{y_N}{\theta^N})+\lambda_N\sin^2\theta^N=\lambda_{N-1}.~
+\end{equation}
+其中 $\lambda_{N-1}$ 是一个新分离常数。因此，我们有下面方程
+\begin{equation}
+\begin{aligned}
+&\Delta_{S^{N-1}}W_{N-1}+\lambda_{N-1}W_{N-1}=0,\\
+&\qty((N-1)\cot\theta^N\pdv{y_N}{\theta^N}+\pdv[2]{y_N}{\theta^N})+\qty(\lambda_N-\lambda_{N-1}\sin^{-2}\theta^N)y_N=0.
+\end{aligned}~
+\end{equation}
+注意第一个方程和回到了\autoref{eq_HDsphF_9} 的形式，因此可以继续重复该过程。最终可以获得关于 $W_k=W_k(\theta_1,\cdots,\theta_k)$ 的方程
+\begin{equation}
+\Delta_{S^{k}}W_{k}+\lambda_{k}W_{k}=0,\quad 1\leq k\leq N.~
+\end{equation}
+和关于 $y_k=y_k(\theta_k)$ 的方程：
+\begin{equation}
+\pdv[2]{y_k}{\theta^k}+(k-1)\cot\theta^k\pdv{y_k}{\theta^k}+\qty(\lambda_k-\frac{\lambda_{k-1}}{\sin^2\theta_k})y_k=0,2\leq k\leq N~
+\end{equation}
+并且有一组 $N$ 个变量的分离常数 $\{\lambda_k\}$。注意在 $k=2$ 时，由\autoref{eq_HDsphF_10} ，我们有
+\begin{equation}
+W_2(\theta^1,\theta^2)=W_1(\theta^1)y_2(\theta^2).~
+\end{equation}
+其中
+\begin{equation}
+\Delta_{S^{1}}W_{1}+\lambda_{1}W_{k}=0.~
+\end{equation}
+若令 $y_1=W_1$，那么由\autoref{eq_HDsphF_10} 就有
+\begin{equation}
+W_N(\theta^1,\cdots,\theta^N)=y_1(\theta^1)\cdots y_N(\theta^N).~
+\end{equation}
+因此，一般高维空间球谐函数可以写为关于每一角变量函数的乘积形式。
 
 
 
