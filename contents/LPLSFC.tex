@@ -1,0 +1,115 @@
+% 拉普拉斯方程（综述）
+% license CCBYSA3
+% type Wiki
+
+本文根据 CC-BY-SA 协议转载翻译自维基百科\href{https://en.wikipedia.org/wiki/Laplace\%27s_equation}{相关文章}。
+
+在数学和物理学中，拉普拉斯方程是一个二阶偏微分方程，得名于皮埃尔-西蒙·拉普拉斯，他在1786年首次研究了其性质。通常写作：
+\[
+\nabla^2 f = 0~
+\]
+或
+\[
+\Delta f = 0~
+\]
+其中\(\Delta = \nabla \cdot \nabla = \nabla^2\)是拉普拉斯算符，\(^\text{[注1]}\)\(\nabla\cdot\)是散度算符（也表示为“div”），\(\nabla\)是梯度算符（也表示为“grad”），\(f(x, y, z)\)是一个二次可微的实值函数。因此，拉普拉斯算符将标量函数映射到另一个标量函数。
+
+如果右边指定为一个给定函数，\(h(x, y, z)\)则我们有
+\[
+\Delta f = h~
+\]
+这被称为泊松方程，是拉普拉斯方程的一种推广。拉普拉斯方程和泊松方程是椭圆型偏微分方程的最简单例子。拉普拉斯方程也是赫尔姆霍兹方程的特例。
+
+拉普拉斯方程解的一般理论称为势理论。拉普拉斯方程的二次连续可微解是调和函数，\(^\text{[1]}\)这些函数在多个物理学分支中非常重要，特别是在静电学、引力学和流体动力学中。在热传导的研究中，拉普拉斯方程是稳态热方程。\(^\text{[2]}\)一般来说，拉普拉斯方程描述了平衡状态或那些不显式依赖于时间的情况。
+\subsection{在不同坐标系中的形式} 
+在直角坐标系中，\(^\text{[3]}\)
+\[
+\nabla^2 f = \frac{\partial^2 f}{\partial x^2} + \frac{\partial^2 f}{\partial y^2} + \frac{\partial^2 f}{\partial z^2} = 0.~
+\]
+在柱面坐标系中，\(^\text{[3]}\)
+\[
+\nabla^2 f = \frac{1}{r} \frac{\partial}{\partial r} \left( r \frac{\partial f}{\partial r} \right) + \frac{1}{r^2} \frac{\partial^2 f}{\partial \phi^2} + \frac{\partial^2 f}{\partial z^2} = 0.~
+\]
+在球坐标系中，使用\( (r, \theta, \varphi) \)约定，\(^\text{[3]}\)
+\[
+\nabla^2 f = \frac{1}{r^2} \frac{\partial}{\partial r} \left( r^2 \frac{\partial f}{\partial r} \right) + \frac{1}{r^2 \sin \theta} \frac{\partial}{\partial \theta} \left( \sin \theta \frac{\partial f}{\partial \theta} \right) + \frac{1}{r^2 \sin^2 \theta} \frac{\partial^2 f}{\partial \varphi^2} = 0.~
+\]
+更一般地，在任意曲线坐标系\( (\xi^i) \)中，
+\[
+\nabla^2 f = \frac{\partial}{\partial \xi^j} \left( \frac{\partial f}{\partial \xi^k} g^{kj}\right) + \frac{\partial f}{\partial \xi^j} g^{jm}\Gamma_{mn}^n = 0,~
+\]
+或
+\[
+\nabla^2 f = \frac{1}{\sqrt{|g|}} \frac{\partial}{\partial \xi^i} \left( \sqrt{|g|} g^{ij} \frac{\partial f}{\partial \xi^j} \right) = 0, \quad (g = \det \{g_{ij}\}),~
+\]
+其中\( g_{ij} \)是相对于新坐标的欧几里得度量张量，\( \Gamma \) 表示其克里斯托费尔符号。
+\subsection{边界条件}
+\begin{figure}[ht]
+\centering
+\includegraphics[width=14.25cm]{./figures/e07e8bea5b6b38d4.png}
+\caption{在一个环形区域（内半径\( r = 2 \)，外半径 \( R = 4 \)上的拉普拉斯方程，具有狄里克雷边界条件\( u(r=2) = 0 \) 和 \( u(R=4) = 4 \sin(5 \theta)\)} \label{fig_LPLSFC_1}
+\end{figure}
+拉普拉斯方程的狄里克雷问题包括在某个区域\( D \)上找到一个解\( \varphi \)，使得\( \varphi \)在\( D \)的边界上等于给定的某个函数。由于拉普拉斯算符出现在热方程中，因此这个问题的一个物理解释如下：根据给定的边界条件规格，固定区域边界上的温度。允许热量流动，直到达到一个稳态，在此状态下，区域内每个点的温度不再变化。然后，区域内的温度分布将由相应的狄里克雷问题的解给出。
+
+拉普拉斯方程的诺伊曼边界条件指定的不是边界上\( D \)的函数\( \varphi \)本身，而是它的法向导数。从物理角度看，这对应于为一个向量场构造势，该向量场的效应仅在\( D \)的边界已知。以热方程为例，这相当于规定通过边界的热流。特别地，在绝热边界上，\( \varphi \)的法向导数为零。
+
+拉普拉斯方程的解称为调和函数；它们在满足方程的区域内都是解析的。如果两个函数都是拉普拉斯方程（或任何线性齐次微分方程）的解，那么它们的和（或任何线性组合）也是解。这一性质被称为叠加原理，非常有用。例如，可以通过求和简单解来构造复杂问题的解。
+\subsection{在二维中}  
+拉普拉斯方程在直角坐标系中的形式为：
+\[
+\frac{\partial^2 \psi}{\partial x^2} + \frac{\partial^2 \psi}{\partial y^2} \equiv \psi_{xx} + \psi_{yy} = 0.~
+\]
+\subsubsection{解析函数}  
+复数解析函数的实部和虚部都满足拉普拉斯方程。也就是说，如果\( z = x + iy \)，并且
+\[
+f(z) = u(x, y) + iv(x, y),~
+\]
+那么\( f(z) \)为解析函数的必要条件是\( u \)和\( v \)可微，并且满足柯西-黎曼方程：
+\[
+u_x = v_y, \quad v_x = -u_y.~
+\]
+其中\( u_x \)是\( u \)对\( x \)的一阶偏导数。由此可得：
+\[
+u_{yy} = (-v_x)_y = -(v_y)_x = -(u_x)_x.~
+\]
+因此，\( u \)满足拉普拉斯方程。类似的计算表明，\( v \)也满足拉普拉斯方程。反过来，给定一个调和函数，它是一个解析函数\( f(z) \)的实部（至少在局部范围内）。如果试探函数的形式为
+\[
+f(z) = \varphi(x, y) + i \psi(x, y),~
+\]
+那么如果我们设定
+\[
+\psi_x = -\varphi_y, \quad \psi_y = \varphi_x.~
+\]
+这个关系并不能确定\( \psi \)，而只是确定它的增量：
+\[
+d\psi = -\varphi_y\, dx + \varphi_x\, dy.~
+\]
+对于 \( \varphi \) 的拉普拉斯方程意味着 \( \psi \) 的可积性条件得以满足：
+\[
+\psi_{xy} = \psi_{yx},~
+\]
+因此，\( \psi \)可以通过线积分定义。可积性条件和斯托克斯定理意味着连接两点的线积分值与路径无关。由此得到的一对拉普拉斯方程解称为共轭调和函数。这个构造仅在局部有效，或者在路径不绕过奇点的情况下有效。例如，如果\( r \)和\( \theta \)是极坐标，且
+\[
+\varphi = \log r,~
+\]
+则对应的解析函数为
+\[
+f(z) = \log z = \log r + i \theta.~
+\]
+然而，角度\( \theta \)仅在不包含原点的区域内是单值的。
+
+拉普拉斯方程和解析函数之间的紧密联系意味着，拉普拉斯方程的任何解都有各阶导数，并且可以展开为幂级数，至少在不包含奇点的圆内。这与波动方程的解形成鲜明对比，后者通常具有较少的光滑性。
+
+幂级数和傅里叶级数之间有着密切的联系。如果我们在半径为\( R \)的圆内展开一个函数\( f \)为幂级数，这意味着：
+\[
+f(z) = \sum_{n=0}^{\infty} c_n z^n,~
+\]
+其中\( c_n \)是适当定义的系数，其实部和虚部分别为：
+\[
+c_n = a_n + i b_n.~
+\]
+因此，
+\[
+f(z) = \sum_{n=0}^{\infty} \left[ a_n r^n \cos n\theta - b_n r^n \sin n\theta \right] + i \sum_{n=1}^{\infty} \left[ a_n r^n \sin n\theta + b_n r^n \cos n\theta \right],~
+\]
+这是\( f \)的傅里叶级数。这些三角函数本身也可以展开，使用倍角公式。
