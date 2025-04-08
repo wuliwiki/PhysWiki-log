@@ -90,6 +90,7 @@ Git for Windows 的 Git bash 是不支持 symlink 的， symlink clone 下来以
 \item 要浏览某个文件的历史， 用 \verb`git log -- 文件`， 
 \item 如果本地和上游 diverge 了，要查看上游最近的 commit， 先 \verb`git fetch origin`， 然后 \verb`git log origin/main`， 后者只读取本地的 cache，不联网，所以要先 \verb`fetch`。
 \item \verb`git commit --amend` 可以覆盖上一次 commit (如果上一次 commit 忘了做什么事情).
+\item 如果使用 \verb`git commit --amend` 不久后，想要恢复被覆盖的 commit， 可以用 \verb`git reflog` 查看被覆盖的 commit hash， 然后 \verb`git branch 新分支名字 <commit-hash>` 就可以把该 commit 恢复到一个 \verb`新分支` 中。
 \item \verb`git reset` 可以 unstage 所有文件， \verb`git reset HEAD <file>` 可以 unstage 一个文件。
 \item \verb`git checkout -- <file>` 可以撤销一个文件从上次 commit 后的变化 （危险操作!）. \verb`git checkout .` 可以撤销所有文件从上次 commit 后的变化 （危险操作!） 但是他们不会影响 untracked files
 \item 注意 \verb`git checkout folder` checkout 的是 index， 也就是 git add 保存的地方。 而对于服务器上被 push 的 repo， index 和 HEAD 的版本很可能是不同的。 这时用 \verb`git checkout master -- ...` 的才是最新版本。
