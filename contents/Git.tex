@@ -80,6 +80,8 @@ Git for Windows 的 Git bash 是不支持 symlink 的， symlink clone 下来以
 \item 要删除一个文件， 用 \verb`git rm <file>`. 这样做相当于手动删除文件， 再 stage 该变化。 如果文件已经 stage 了， 用 \verb`git rm -f <file>`.
 \item 要重命名文件， 用 \verb`git mv <file_from> <file_to>`, 相当于 \verb`git rm <file_from>` 再 \verb`git add <file>`. （在 Windows 中， 要改变文件名的大小写必须这么做而不能直接给文件重命名）
 \item 要浏览所有 commit 历史， 用 \verb`git log`. 要显示每次 commit 的 diff, 用 \verb`git log -p`, 要只显示前两次， 用 \verb`-2`. 用 \verb`--stat` 可以显示基本统计（几个+几个-）.
+\item \verb`git show <hash>` 查看某次 commit
+\item \verb`git show <hash>:<path>` 查看某个文件在某个 commit 中的内容
 \item \verb`git log <hash>` 查看某次 commit 以及更早。
 \item \verb`git log ... --name-only [COMMIT_HASH]` 只显示改变的文件名
 \item \verb`git log --name-status [COMMIT_HASH]` 显示改变的文件名每个文件是改变了还是新增还是删除等。
@@ -185,6 +187,7 @@ git config --global pack.threads 2 # 使用多少线程压缩 pack
 \item \verb`git tag -a tag名` 可以创建一个 annotated tag （推荐的 tag 类型）
 \item \verb`git tag -d tag名` 删除一个 tag
 \item \verb`git push origin --tags` 可以把 tag 的信息更新到上游
+\item \verb`git show tag名` 查看详情
 \item 在 github 网页上可以根据 tag 创建 release。 release 会自动把当前的所有 tree 中的内容自动打包成 \verb`release名.tag.gz` 和 \verb`release名.zip`
 \end{itemize}
 
@@ -226,6 +229,7 @@ done
 \item \verb`git branch -vv` 可以显示所有本地和上游的分支
 \item \verb`git ls-remote <remote>` 可以列出某个 remote 的所有分支
 \item \verb`git branch` 显示本地 checkout 过的 branch。 \verb`-vv` 显示更多信息， 包括 hash， remote， 最后 commit 标题。 前面有星号的是当前的 branch （\verb`git status` 也会显示）。
+\item \verb`git merge-base 分支1 分支2` 可以显示两个分支从哪个 commit hash 开始分叉。 \verb`git show $(git merge-base branch1 branch2)` 则可以看到该 commit 的详情。
 \item \verb`git clone` 下载一个完整的 repo 以后， 是包含所有分支的， 可以 \verb`git checkout <branch>`。 但开始 \verb`git branch [-vv]` 并不会显示， 只会显示 checkout 过的。
 \item \verb`git clone ... --depth = 1` 后不能 checkout 其他 branch。 因为它包含一个默认的 \verb`--single-branch` 选项。 默认下载的是 \verb`master`， 如果要指定， 用 \verb`git clone --depth 1  --branch <branch> url`
 \item \verb`git checkout <branch> -- <file1> <file2>...` 可以把某个 branch 的指定文件还原到当前 branch。
