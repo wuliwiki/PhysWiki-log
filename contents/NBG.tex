@@ -224,16 +224,303 @@ G \circ F = \text{Dom}(F'' \cap G'') = \{ (x, y) : \exists t ((x, t) \in F \land
 \item 类存在定理通过归纳法证明对转换后的公式。根据转换后的公式的结构，使用类存在公理来生成满足该公式的唯一类\( n \)-元组。
 \end{enumerate}
 \textbf{转换规则：}在以下的规则 1 和规则 2 中，\( \Delta \)和\( \Gamma \) 表示集合或类变量。这两个规则消除了所有在\( \in \)前和所有等式中的类变量的出现。每次应用规则 1 或规则 2 到子公式时，选择\( i \)使得\( z_i \)与当前公式中的其他变量不同。三个规则会重复应用，直到没有子公式可以再应用它们为止。这样会得到一个仅由\( \neg \)、\( \land \)、\( \exists \)、\( \in \)、集合变量和类变量\( Y_k \)组成的公式，其中\( Y_k \)在\( \in \)前不会出现。
+\begin{enumerate}
+\item \(\displaystyle Y_{k}\in \Gamma\)被转换为\(\exists z_{i} (z_{i} = Y_{k} \land z_{i} \in \Gamma)\). 
+\item \textbf{外延性}被用来将\(\Delta = \Gamma\)转换为\(\forall z_{i} (z_{i} \in \Delta \iff z_{i} \in \Gamma)\).
+\item \textbf{逻辑恒等式}被用来将包含 \( \lor \)、\( \implies \)、\( \iff \) 和 \( \forall \) 的子公式转换为仅使用 \( \neg \)、\( \land \) 和 \( \exists \) 的子公式。\\
+\textbf{变换规则：有界变量。} 考虑示例1中的复合函数公式，并将其自由集合变量替换为\(x_1\)和\(x_2\)：\(\exists t \left[ (x_1, t) \in F \land (t, x_2) \in G \right]\). 归纳证明将移除\( \exists t \)，产生公式\((x_1, t) \in F \land (t, x_2) \in G\).然而，由于类存在定理是针对下标变量陈述的，因此该公式并不符合归纳假设所期望的形式。这个问题通过将变量\( t \)替换为\( x_3 \)来解决。对于嵌套量词中的有界变量，通过每个连续的量词增加下标来处理。这导致了规则4，在应用其他规则后必须应用该规则，因为规则1和规则2会产生量化变量。
+\item 如果公式中没有自由集合变量，除了\(x_1, \dots, x_n\) 之外，则嵌套在 \(q\) 个量词中的有界变量将被替换为\(x_{n+q}\)。这些变量具有量词嵌套深度 \(q\)。
+\end{enumerate}
+\textbf{示例 2：}规则 4 应用于公式\( \phi(x_1) \)，该公式定义了由以下形式的所有集合组成的类：\(\{\emptyset, \{\emptyset, \dots\}, \dots\}\).即，包含至少\( \emptyset \)和一个包含\( \emptyset \)的集合的集合——例如，\(\{\emptyset, \{\emptyset, a, b, c\}, d, e\}\)
+其中 \( a, b, c, d, e \) 是集合。  
+\[
+\phi(x_1) = \exists u \left[ u \in x_1 \land \neg \exists v (v \in u) \right] \land \exists w \left(w \in x_1 \land \exists y \left[ (y \in w \land \neg \exists z (z \in y)) \right] \right)~
+\]  
+\[
+\phi_r(x_1) = \exists x_2 \left[ x_2 \in x_1 \land \neg \exists x_3 (x_3 \in x_2) \right] \land \exists x_2 \left(x_2 \in x_1 \land \exists x_3 \left[ (x_3 \in x_2 \land \neg \exists x_4 (x_4 \in x_3)) \right] \right)~
+\]
+由于\( x_1 \)是唯一的自由变量，\( n = 1 \)。量化变量\( x_3 \)在公式\( x_3 \in x_2 \) 中出现两次，且嵌套深度为 2。它的下标是 3，因为 \( n + q = 1 + 2 = 3 \)。如果两个量化范围在相同的嵌套深度上，它们要么是相同的，要么是互不相交的。两个\( x_3 \)的出现位于不相交的量化范围内，因此它们互不干扰。
+
+\textbf{类存在定理的证明。} 证明从应用变换规则到给定公式开始，以产生一个变换后的公式。由于这个公式与给定公式等价，因此通过对变换后的公式证明类存在定理来完成证明。
+
+\textbf{展开引理}——设 \( 1 \leq i < j \leq n \)，并且设 \( P \) 是一个类，包含所有满足 \( R(x_i, x_j) \) 的有序对 \( (x_i, x_j) \)，即\(P \supseteq \{(x_i, x_j) : R(x_i, x_j)\}\).那么，\( P \)可以扩展成唯一的类\( Q \)，该类包含所有满足\( R(x_i, x_j) \)的\( n \)-元组。即，\(Q = \{(x_1, \ldots, x_n) : R(x_i, x_j)\}\).
+
+\textbf{证明：}
+\begin{enumerate}
+\item 如果 \( i = 1 \)，令 \( P_1 = P \)。\\
+否则，如果 \( i > 1 \)，则在 \( x_i \) 前面加上组件：应用元组引理的命题1到 \( P \) 上，令 \( z = (x_1, \dots, x_{i-1}) \)。这产生一个类 \( P_1 \)，它包含所有满足 \( R(x_i, x_j) \) 的 \( (i+1) \)-元组 \( ((x_1, \dots, x_{i-1}), x_i, x_j) = (x_1, \dots, x_{i-1}, x_i, x_j) \).\\
+\item 如果 \( j = i + 1 \)，则令 \( P_2 = P_1 \).\\
+否则，如果 \( j > i + 1 \)，则在 \( x_i \) 和 \( x_j \) 之间加上组件：通过应用元组引理的命题2，逐一添加组件 \( x_{i+1}, \dots, x_{j-1} \)。这产生一个类 \( P_2 \)，它包含所有满足 \( R(x_i, x_j) \) 的 \( j \)-元组 \( (((\cdots ((x_1, \dots, x_i), x_{i+1}), \cdots ), x_{j-1}), x_j) = (x_1, \dots, x_j) \).\\
+\item 如果 \( j = n \)，则令 \( P_3 = P_2 \)。\\
+否则，如果 \( j < n \)，则在 \( x_j \) 后面加上组件：通过应用元组引理的命题3，逐一添加组件 \( x_{j+1}, \dots, x_n \)这产生一个类 \( P_3 \)，它包含所有满足 \( R(x_i, x_j) \) 的 \( n \)-元组 \( (((\cdots ((x_1, \dots, x_j), x_{j+1}), \cdots ), x_n) = (x_1, \dots, x_n) \)。
+\item 令 \( Q = P_3 \cap V^n \).根据外延性，\( Q \) 是唯一的满足 \( R(x_i, x_j) \) 的 \( n \)-元组类。
+\end{enumerate}
+\textbf{类存在定理（变换公式版）}——设\(\phi(x_1, \dots, x_n, Y_1, \dots, Y_m)\)是一个公式，满足以下条件：
+\begin{enumerate}
+\item 公式中除了 \(x_1, \dots, x_n, Y_1, \dots, Y_m\) 之外没有自由变量；
+\item 公式中只包含符号 \(\in\), \(\neg\), \(\land\), \(\exists\)，集合变量，以及类变量 \(Y_k\)（其中 \(Y_k\) 不出现在 \(\in\) 之前）；
+\item 公式中仅对集合变量 \(x_{n+q}\) 进行量化，其中 \(q\) 是该变量的量化嵌套深度。
+\end{enumerate}
+那么，对于所有的\(Y_1, \dots, Y_m\)，存在一个唯一的类 \(A\)，它包含所有满足以下条件的\(n\)-元组：
+\[
+\forall x_1 \cdots \forall x_n [(x_1, \dots, x_n) \in A \iff \phi(x_1, \dots, x_n, Y_1, \dots, Y_m)]~
+\]
+这表示，类\(A\)是由所有满足公式\(\phi(x_1, \dots, x_n, Y_1, \dots, Y_m)\)的\(n\)-元组组成。
+
+证明：基础步骤：
+
+\(\phi\) 具有 0 个逻辑符号。定理的假设意味着 \(\phi\) 是一个原子公式，形式为 \(x_i \in x_j\) 或 \(x_i \in Y_k\)。
+
+情况 1：如果 \(\phi\) 是 \(x_i \in x_j\)，我们构建类 \(E_{i,j,n} = \{(x_1, \dots, x_n) : x_i \in x_j\}\)，这是满足 \(x_i \in x_j\) 的唯一 \(n\)-元组类。
+
+情况 a：\(\phi\) 是 \(x_i \in x_j\)，其中 \(i < j\)。成员公理产生一个类 \(P\)，包含所有满足 \(x_i \in x_j\) 的有序对 \((x_i, x_j)\)。应用扩展引理于 \(P\) 得到 \(E_{i,j,n} = \{(x_1, \dots, x_n) : x_i \in x_j\}\)。
+
+情况 b：\(\phi\) 是 \(x_i \in x_j\)，其中 \(i > j\)。成员公理产生一个类 \(P\)，包含所有满足 \(x_i \in x_j\) 的有序对 \((x_i, x_j)\)。应用元组引理的第 4 条于 \(P\) 得到 \(P'\)，包含所有满足 \(x_i \in x_j\) 的有序对 \((x_j, x_i)\)。应用扩展引理于 \(P'\) 得到 \(E_{i,j,n} = \{(x_1, \dots, x_n) : x_i \in x_j\}\)。
+
+情况 c：\(\phi\) 是 \(x_i \in x_j\)，其中 \(i = j\)。由于根据正则性公理此公式为假，因此没有 \(n\)-元组满足它，所以 \(E_{i,j,n} = \emptyset\)。
+
+情况 2：如果 \(\phi\) 是 \(x_i \in Y_k\)，我们构建类 \(E_{i,Y_k,n} = \{(x_1, \dots, x_n) : x_i \in Y_k\}\)，这是满足 \(x_i \in Y_k\) 的唯一 \(n\)-元组类。
+
+情况 a：\(\phi\) 是\(x_i \in Y_k\)，其中\(i < n\)。应用乘积公理于\(Y_k\)，生成类\(P = Y_k \times V = \{(x_i, x_{i+1}) : x_i \in Y_k\}\)。应用扩展引理于\(P\)，得到\(E_{i,Y_k,n} = \{(x_1, \dots, x_n) : x_i \in Y_k\}\)。
+
+情况 b：\(\phi\) 是 \(x_i \in Y_k\)，其中 \(i = n > 1\)。应用乘积公理于 \(Y_k\)，生成类 \(P = Y_k \times V = \{(x_i, x_{i-1}) : x_i \in Y_k\}\)。应用元组引理的第 4 条于 \(P\)，得到 \(P' = V \times Y_k = \{(x_{i-1}, x_i) : x_i \in Y_k\}\)。应用扩展引理于 \(P'\)，得到 \(E_{i,Y_k,n} = \{(x_1, \dots, x_n) : x_i \in Y_k\}\)。
+
+情况 c：\(\phi\) 是 \(x_i \in Y_k\)，其中 \(i = n = 1\)。则 \(E_{i,Y_k,n} = Y_k\)。
+
+归纳步骤：\(\phi\)有\(k\)个逻辑符号，其中\(k > 0\)。假设归纳假设成立，即定理对所有具有少于\(k\)个逻辑符号的公式\(\psi\)都成立。现在，我们证明定理对于具有\(k\)个逻辑符号的公式\(\phi\)也成立。在这个证明中，类变量列表\(Y_1, \dots, Y_m\) 简写为 \(\vec{Y}\)，因此公式—例如\(\phi(x_1, \dots, x_n, Y_1, \dots, Y_m)\)—可以写作\(\phi(x_1, \dots, x_n,\vec{Y})\)。
+
+情况 1:
+\(\phi(x_1, \dots, x_n, \vec{Y}) = \neg \psi(x_1, \dots, x_n,\vec{Y})\)。由于 \(\psi\) 具有\(k - 1\)个逻辑符号，归纳假设意味着存在一个唯一的类\(A\)的\(n\)-元组，使得：
+\[
+(x_1, \dots, x_n) \in A \iff \psi(x_1, \dots, x_n, \vec{Y}).~
+\]
+根据补集公理，存在一个类\(\complement A\)，使得：\(\forall u \, [u \in \complement A\iff \neg(u \in A)]\).然而，如果\(n > 1\)，\(\complement A\)包含除了\(n\)-元组之外的元素。为了消除这些元素，使用\(\complement_{V^n} A = \complement A \cap V^n = V^n \setminus A,
+\)这是相对于类\(V^n\)（即所有 \(n\)-元组）的补集。然后，根据外延性，\(\complement_{V^n} A\) 是唯一的 \(n\)-元组类，使得：
+\[
+\begin{aligned}
+(x_1, \dots, x_n) \in \complement_{V^n} A &\iff \neg [(x_1, \dots, x_n) \in A]\\
+&\iff \neg \psi(x_1, \dots, x_n, \vec{Y})\\
+&\iff \phi(x_1, \dots, x_n, \vec{Y}).
+\end{aligned}~
+\]
+情况 2:\(\phi(x_1, \dots, x_n, \vec{Y}) = \psi_1(x_1, \dots, x_n, \vec{Y}) \land \psi_2(x_1, \dots, x_n, \vec{Y})\)。由于\(\psi_1\)和\(\psi_2\)都具有少于\(k\)个逻辑符号，归纳假设意味着存在唯一的\(n\)-元组类\(A_1\)和\(A_2\)，使得：
+\[
+(x_1, \dots, x_n) \in A_1 \iff \psi_1(x_1, \dots, x_n, \vec{Y}),~
+\]
+\[
+(x_1, \dots, x_n) \in A_2 \iff \psi_2(x_1, \dots, x_n,\vec{Y}).~
+\]
+根据交集公理和外延性公理，\(A_1 \cap A_2\) 是唯一的 \(n\)-元组类，使得：
+\[
+\begin{aligned}
+(x_1, \dots, x_n) \in A_1 \cap A_2 &\iff (x_1, \dots, x_n) \in A_1 \land (x_1, \dots, x_n) \in A_2\\
+&\iff \psi_1(x_1, \dots, x_n, \vec{Y}) \land \psi_2(x_1, \dots, x_n, \vec{Y})\\
+&\iff \phi(x_1, \dots, x_n, \vec{Y}).
+\end{aligned}~
+\]
+情况 3:\(\phi(x_1, \dots, x_n, \vec{Y}) = \exists x_{n+1} \psi(x_1, \dots, x_n, x_{n+1}, \vec{Y})\)。\(\psi\)的量词嵌套深度比\(\phi\) 多一级，且额外的自由变量是\(x_{n+1}\)。由于\(\psi\)具有\(k-1\)个逻辑符号，归纳假设表明存在一个唯一的\(n+1\) 元组类\(A\)，使得：
+\[
+(x_1, \dots, x_n, x_{n+1}) \in A \iff \psi(x_1, \dots, x_n, x_{n+1},\vec{Y}).~
+\]
+根据领域公理和外延性公理，\(Dom(A)\)是唯一的\(n\)元组类，使得：
+\[
+\begin{aligned}
+(x_1, \dots, x_n) \in Dom(A) &\iff \exists x_{n+1} [(x_1, \dots, x_n, x_{n+1}) \in A]\\
+&\iff \exists x_{n+1} [(x_1, \dots, x_n, x_{n+1}) \in A]\\
+&\iff \exists x_{n+1} \psi(x_1, \dots, x_n, x_{n+1}, \vec{Y})\\
+&\iff \phi(x_1, \dots, x_n, \vec{Y}).
+\end{aligned}~
+\]
+Gödel 指出，类存在定理“是一个元定理，即关于系统 [NBG] 的定理，而不是系统内部的定理……”。它是关于 NBG 的定理，因为它是通过在 NBG 公式上的归纳法在元理论中证明的。此外，它的证明——而不是通过调用有限数量的 NBG 公理——归纳地描述了如何使用 NBG 公理构造一个满足给定公式的类。对于每个公式，这个描述可以转化为一个构造性存在证明，这个证明在 NBG 内部。因此，这个元定理可以生成替代 NBG 类存在定理使用的 NBG 证明。
+
+递归计算机程序简洁地捕捉了从给定公式构造类的过程。这个程序的定义并不依赖于类存在定理的证明。然而，需要证明该程序构造的类满足给定的公式并且是通过公理构建的。该程序用伪代码编写，使用了一种类似 Pascal 的 case 语句。
+\begin{figure}[ht]
+\centering
+\includegraphics[width=14.25cm]{./figures/9bed30efe7847f08.png}
+\caption{} \label{fig_NBG_1}
+\end{figure}
+让\(\phi\)是例子2中的公式。函数调用\(A = \text{Class}(\phi, 1)\)生成类\(A\)，并将其与\(\phi\)进行比较。下文展示了类\(A\)的构造过程是如何反映其定义公式\(\phi\)的构造过程的。
+\[
+\phi = \exists x_2 (x_2 \in x_1 \land \neg \exists x_3 (x_3 \in x_2)) \land \exists x_2 (x_2 \in x_1 \land \exists x_3 (x_3 \in x_2 \land \neg \exists x_4 (x_4 \in x_3)))~
+\]
+\[
+A = \text{Dom}(E_{2,1,2} \cap \complement_{V^2} \text{Dom}(E_{3,2,3})) \cap \text{Dom}(E_{2,1,2} \cap \text{Dom}(E_{3,2,3} \cap \complement_{V^3} \text{Dom}(E_{4,3,4})))~
+\]
+\subsubsection{扩展类存在定理}  
+Gödel 将类存在定理扩展到了包含类之间关系（例如\( Y_1 \subseteq Y_2 \)和一元关系\( M(Y_1) \)）、特殊类（例如\( \text{Ord}\)）和运算（例如\( (x_1, x_2) \)和\( x_1 \cap Y_1 \)）的公式\(\phi\) [32]。为了扩展类存在定理，定义关系、特殊类和运算的公式必须仅对集合进行量化。然后，\(\phi\)可以转换为一个等价的公式，满足类存在定理的假设。
+
+以下定义指定了如何通过公式定义关系、特殊类和运算：
+\begin{enumerate}
+\item 一个关系\( R \)定义为：\(R(Z_1, \dots, Z_k) \iff \psi_R(Z_1, \dots, Z_k)\)
+\item 一个特殊类\( C \)定义为：\(u \in C \iff \psi_C(u)\)
+\item 一个运算\( P \)定义为：\(u \in P(Z_1, \dots, Z_k) \iff \psi_P(u, Z_1, \dots, Z_k)\)
+\end{enumerate}
+一个术语定义为：
+\begin{enumerate}
+\item 变量和特殊类是术语。
+\item 如果\( P \)是一个带有\( k \)个参数的运算，并且\( \Gamma_1, \dots, \Gamma_k \)是术语，则\( P(\Gamma_1, \dots, \Gamma_k) \)是一个术语。
+\end{enumerate}
+以下转换规则消除了关系、特殊类和运算。每次规则 2b、3b 或 4 应用于子公式时，选择 \( i \)使得\( z_i \)与当前公式中的其他变量不同。规则会重复应用，直到没有子公式可以再应用这些规则。\( \Gamma_1, \dots, \Gamma_k, \Gamma, \)和\( \Delta \)表示术语。
+\begin{enumerate}
+\item 关系 \( R(Z_1, \dots, Z_k) \) 被其定义公式 \( \psi_R(Z_1, \dots, Z_k) \) 替换。
+\item 设 \( \psi_C(u) \) 为特殊类 \( C \) 的定义公式。\\  
+   a.\( \Delta \in C \) 被 \( \psi_C(\Delta) \) 替换。\\  
+   b.\( C \in \Delta \) 被 \( \exists z_i [z_i = C \land z_i \in \Delta] \) 替换。
+\item 设 \( \psi_P(u, Z_1, \dots, Z_k) \) 为运算 \( P(Z_1, \dots, Z_k) \) 的定义公式。\\  
+   a.\( \Delta \in P(\Gamma_1, \dots, \Gamma_k) \) 被 \( \psi_P(\Delta, \Gamma_1, \dots, \Gamma_k) \) 替换。\\  
+   b.\( P(\Gamma_1, \dots, \Gamma_k) \in \Delta \) 被 \( \exists z_i [z_i = P(\Gamma_1, \dots, \Gamma_k) \land z_i \in \Delta] \) 替换。
+\item 使用外延公理将\( \Delta = \Gamma \)转换为\(\forall z_i (z_i \in \Delta \iff z_i \in \Gamma)\)
+\end{enumerate}
+
+\textbf{示例 3:} 转换\( Y_1 \subseteq Y_2 \).
+\[
+Y_1 \subseteq Y_2 \iff \forall z_1 (z_1 \in Y_1 \implies z_1 \in Y_2) \quad \text{(规则 1)}~
+\]
+
+\textbf{示例 4:} 转换\( x_1 \cap Y_1 \in x_2 \).
+\[
+\begin{aligned}
+x_1 \cap Y_1 \in x_2 &\iff \exists z_1 [z_1 = x_1 \cap Y_1 \land z_1 \in x_2]  \qquad \text{(规则 3b)}\\
+&\iff \exists z_1 [\forall z_2 (z_2 \in z_1 \iff z_2 \in x_1 \cap Y_1) \land z_1 \in x_2] \qquad \text{(规则 4)}\\
+&\iff \exists z_1 [\forall z_2 (z_2 \in z_1 \iff z_2 \in x_1 \land z_2 \in Y_1) \land z_1 \in x_2] \qquad \text{(规则 3a)}
+\end{aligned}~
+\]
+这个例子展示了变换规则如何协同工作，以消除操作。
+
+\textbf{扩展版的类存在定理}——令 \( \phi (x_1, \dots ,x_n, Y_1, \dots ,Y_m) \) 为一个公式，该公式仅对集合量化，且除了 \( x_1, \dots , x_n, Y_1, \dots , Y_m \) 之外没有自由变量，并且可以包含仅对集合量化的关系、特殊类和由公式定义的操作。那么，对于所有的 \( Y_1, \dots , Y_m \)，存在一个唯一的\( n \)-元组类\( A \)，使得：
+\[
+\forall x_1 \dots \forall x_n \left[ (x_1, \dots , x_n) \in A \iff \phi (x_1, \dots , x_n, Y_1, \dots , Y_m) \right].~
+\]
+
+\textbf{证明}  
+
+对\( \phi \)应用变换规则，将其转化为一个不包含关系、特殊类或操作的等价公式。这个公式满足类存在定理的假设。因此，对于所有的\( Y_1, \dots , Y_m \)，存在一个唯一的\( n \)-元组类\( A \)，满足：
+\[
+\forall x_1 \dots \forall x_n \left[ (x_1, \dots , x_n) \in A \iff \phi (x_1, \dots , x_n, Y_1, \dots , Y_m) \right].~
+\]
+\subsubsection{集合公理}  
+配对公理和正则性公理是证明类存在定理所需的，已经在上文中给出。NBG 还包含另外四个集合公理，其中三个公理处理对集合应用类操作。
+
+\textbf{定义：}若满足以下条件，则称\(F\)是一个函数：
+\[
+F \subseteq V^2 \land \forall x\, \forall y\, \forall z\, \big[(x, y) \in F \land (x, z) \in F \Rightarrow y = z\big]~
+\]
+在集合论中，函数的定义不要求指定其定义域或陪域（参见“函数（集合论）”）。NBG 对函数的定义将 ZFC 中“有序对集合”的定义推广为“有序对类”。
+
+ZFC 中关于像、并集和幂集的集合运算定义，也被推广为类运算的定义。类\( A \)在函数 \( F \)下的像定义为：\(F[A] = \{ y : \exists x\, (x \in A \land (x, y) \in F) \}\).这个定义不要求\( A \subseteq \mathrm{Dom}(F) \)。类\( A \)的并集定义为：\(\cup A = \{ x : \exists y\, (x \in y \land y \in A) \}\).
+类\( A \)的幂类定义为：\(\mathcal{P}(A) = \{ x : x \subseteq A \}\).类存在定理的扩展形式保证了这些类的存在。而当这些运算作用于集合时，替代公理、并集公理和幂集公理则保证其结果仍为集合。
+
+\textbf{替代公理：}如果\( F \)是一个函数，且\( a \)是一个集合，那么\( F[a] \) —— 即\( a \)在\( F \)下的像——是一个集合。
+\[
+\forall F \, \forall a \, [F \text{ 是一个函数} \implies \exists b \, \forall y \, (y \in b \iff \exists x \, (x \in a \land (x, y) \in F))].~
+\]
+在\( F[A] \)的定义中不要求\( A \subseteq \mathrm{Dom}(F) \)，从而得到一个更强的替代公理，这在下面的证明中将会用到。
+
+\textbf{定理}（NBG 的分离公理）——如果\( a \)是一个集合，且\( B \)是\( a \) 的一个子类，那么\( B \)也是一个集合。
+
+\textbf{证明} 
+
+类存在定理构造了对\( B \)的恒等函数限制：  
+\(I \upharpoonright B = \{(x_1, x_2) : x_1 \in B \land x_2 = x_1\}.
+\)由于\( a \)在\( I \upharpoonright B \)下的像是\( B \)，替代公理意味着 \( B \)是一个集合。这个证明依赖于图像定义中不要求\( a \subseteq Dom(F) \)，因为 \( Dom(I \upharpoonright B) = B \subseteq a \)，而不是\( a \subseteq Dom(I \upharpoonright B) \)。
+
+
+\textbf{联合公理.}如果\( a \)是一个集合，则存在一个集合包含\( \cup a \)。  
+\[
+\forall a \, \exists b \, \forall x \, \left[ \exists y (x \in y \land y \in a) \implies x \in b \right].~
+\]
+\textbf{幂集公理.}如果\( a \)是一个集合，则存在一个集合包含\( \mathcal{P}(a) \)。  
+\[
+\forall a \, \exists b \, \forall x \, (x \subseteq a \implies x \in b)^\text{[k]}.~
+\]
+\textbf{定理}——如果\( a \)是一个集合，则\( \cup a \)和\( \mathcal{P}(a) \)是集合。
+
+\textbf{证明}  
+
+联合公理指出\( \cup a \)是集合\( b \)的一个子集，因此分离公理意味着\( \cup a \) 是一个集合。同样，幂集公理指出\( \mathcal{P}(a) \)是集合\( b \)的一个子集，因此分离公理意味着\( \mathcal{P}(a) \)是一个集合。
+
+\textbf{无限公理}——存在一个非空集合\( a \)，使得对于集合\( a \)中的每个元素\( x \)，都存在一个\( y \)在\( a \)中，并且\( x \)是\( y \)的真子集。
+\[
+\exists a \left[ \exists u (u \in a) \land \forall x (x \in a \implies \exists y (y \in a \land x \subset y)) \right]~
+\]
+无限公理和替代公理证明了空集合的存在。在类存在公理的讨论中，我们已经证明了空类 \( \emptyset \) 的存在。现在我们证明 \( \emptyset \) 是一个集合。设函数 \( F = \emptyset \)，并且让 \( a \) 为由无限公理给出的集合。通过替代，\( a \) 在 \( F \) 下的像，等于 \( \emptyset \)，是一个集合。
+
+NBG 的无限公理是由 ZFC 的无限公理蕴含的：
+\[
+\exists a [ \emptyset \in a \land \forall x (x \in a \implies x \cup \{x\} \in a) ]~
+\]
+ZFC 公理的第一个部分\( \emptyset \in a \)蕴含了 NBG 公理的第一个部分。ZFC 公理的第二个部分\( \forall x (x \in a \implies x \cup \{x\} \in a) \)蕴含了 NBG 公理的第二个部分，因为\( x \subset x \cup \{x\} \)。从 NBG 的无限公理推导出 ZFC 的无限公理需要其他一些 NBG 公理（见弱无限公理）\(^\text{[l]}\)。
+\subsubsection{全球选择公理}
+类的概念使得 NBG 拥有比 ZFC 更强的选择公理。选择函数是定义在非空集合\( s \)上的一个函数\( f \)，使得对于每个\( x \in s \)，都有\( f(x) \in x \)。ZFC 的选择公理声明，存在一个选择函数适用于每个非空集合的集合。全球选择函数是定义在所有非空集合类上的函数\( G \)，使得对于每个非空集合\( x \)，都有\( G(x) \in x \)。全球选择公理声明，存在一个全球选择函数。这个公理蕴含了 ZFC 的选择公理，因为对于每个非空集合的集合\( s \)，\( G|_s \)（即\( G \)在\( s \)上的限制）是\( s \)的一个选择函数。1964 年，William B. Easton 证明了全球选择比选择公理更强，他使用强迫法构造了一个模型，满足选择公理和 NBG 的所有公理，除了全球选择公理。全球选择公理等价于每个类都有一个良序，而 ZFC 的选择公理等价于每个集合都有一个良序。
+
+\textbf{全球选择公理：}存在一个函数，它从每个非空集合中选择一个元素。
+\[
+\exists G\,[G \text{ 是一个函数} \land \forall x (x \neq \emptyset \implies \exists y (y \in x \land (x,y) \in G))]~
+\]
+\subsection{历史}
+\subsubsection{冯·诺依曼的1925年公理系统}  
+冯·诺依曼在1925年发表了一篇关于他公理系统的入门文章，并在1928年提供了该系统的详细阐述。\(^\text{[39]}\)他基于两个原始对象领域建立了他的公理系统：函数和参数。这些领域是重叠的——既属于这两个领域的对象被称为参数-函数。函数对应于NBG中的类，参数-函数对应于集合。冯·诺依曼的原始操作是函数应用，表示为\([a, x]\)，而不是\(a(x)\)，其中\(a\)是一个函数，\(x\)是一个参数。这个操作生成一个参数。冯·诺依曼使用只取两个值A和B的函数和参数-函数来定义类和集合。他定义\(x \in a\)当且仅当\([a, x] \ne A\)时。[1]
+
+冯·诺依曼在集合论方面的工作受到了乔治·康托尔的文章、恩斯特·策梅洛1908年关于集合论的公理以及1922年由亚伯拉罕·弗兰克尔和托拉尔夫·斯科伦独立提出的对策梅洛集合论的批评的影响。弗兰克尔和斯科伦都指出，策梅洛的公理无法证明集合{\(Z_0,Z_1,Z_2,\cdots\)}的存在，其中\(Z_0\)是自然数集合，\(Z_{n+1}\)是\(Z_n\)的幂集。然后他们引入了替换公理，这将保证此类集合的存在。\(^\text{[40][n]}\)然而，他们不愿意采纳这个公理：弗兰克尔表示“替换对于‘一般集合论’来说是一个过强的公理”，而“斯科伦仅仅写道‘我们可以引入’替换公理”。\(^\text{[42]}\)
+
+冯·诺依曼在策梅洛集合论的问题上做了很多工作，并为其中一些问题提供了解决方案：
+
+\begin{itemize}
+\item \textbf{序数理论}  
+\item 问题：康托尔的序数理论在策梅洛集合论中无法发展，因为缺少替换公理。\(^\text{[o]}\)  
+\item 解决方案：冯·诺依曼通过定义序数为由\(\in\)-关系良序的集合，恢复了康托尔的理论，并通过使用替换公理证明关于序数的关键定理，如每个良序集合与一个序数是顺序同构的。\(^\text{[o]}\)与弗兰克尔和斯科伦不同，冯·诺依曼强调替换公理对集合论的重要性：“实际上，我相信没有这个公理，任何序数理论根本不可能存在。”\(^\text{[45]}\)\\
+\item \textbf{识别过大不能作为集合的类的标准} 
+\item 问题：策梅洛没有提供这样的标准。他的集合论避免了导致悖论的大类，但也排除了许多集合，比如弗兰克尔和斯科伦提到的那个集合。\(^\text{[q]}\)  
+\item 解决方案：冯·诺依曼引入了这个标准：一个类如果且仅如果它可以映射到所有集合的类\(V\)上，那么它就过大而不能作为集合。冯·诺依曼意识到，通过不允许这些过大的类作为任何类的成员，可以避免集合论中的悖论。结合这一限制和他的标准，他得出了限制大小的公理：如果且仅如果类\(C\)可以映射到\(V\)上，则\(C\)不是任何类的成员。\(^\text{[48][r]}\)\\
+\item \textbf{有限公理化} 
+\item 问题：策梅洛在他的分离公理中使用了不精确的“确定命题函数”概念。  
+\item 解决方案：斯科伦引入了分离公理的公理化方案，后在ZFC中使用，而弗兰克尔也提出了一个等效的解决方案。\(^\text{[50]}\)然而，策梅洛拒绝了这两种方法，“特别是因为它们隐含地涉及自然数的概念，而在策梅洛看来，自然数应该建立在集合论基础上。”\(^\text{[s]}\)冯·诺依曼通过使用他的函数避免了公理化方案的使用，正式化了“确定命题函数”的概念，这些函数的构造仅需有限个公理。这使得他的集合论有了有限个公理。\(^\text{[51]}\)1961年，理查德·蒙塔古证明了ZFC无法进行有限公理化。\(^\text{[52]}\)\\
+\item \textbf{正则性公理}  
+\item 问题：策梅洛集合论从空集和一个无限集合开始，并迭代配对、并集、幂集、分离和选择的公理来生成新的集合。然而，它并未对这些集合进行限制。例如，它允许存在不良构造的集合，例如一个满足\(x \in x\)的集合\(x\)。\(^\text{[t]}\)   
+\item 解决方案：弗兰克尔引入了一个公理来排除这些集合。冯·诺依曼分析了弗兰克尔的公理，并指出它并未“精确表述”，但它大致可以表述为：“除了那些...其存在是公理绝对要求的集合外，不存在其他集合。”\(^\text{[54]}\)冯·诺依曼提出了正则性公理作为排除不良构造集合的一种方式，但并未将其包括在他的公理系统中。1930年，策梅洛成为第一个发布包含正则性公理的公理系统的学者。\(^\text{[u]}\) 
+\end{itemize}
+\subsubsection{冯·诺依曼的1929年公理系统}
+\begin{figure}[ht]
+\centering
+\includegraphics[width=6cm]{./figures/a30c6cd54684be78.png}
+\caption{约翰·冯·诺依曼} \label{fig_NBG_2}
+\end{figure}
+1929年，冯·诺依曼发表了一篇文章，介绍了后来形成NBG公理系统的公理。该文章的动机是他对“大小限制公理”一致性的担忧。他指出，这个公理“做了很多，实际上做得太多了”。除了暗示分离公理、替换公理和良序定理外，它还意味着任何类的基数小于\(V\)的类都是集合。冯·诺依曼认为，最后这一推论超出了康托尔的集合论范围，并得出结论：“因此，我们必须讨论它（该公理）的逻辑一致性，是否比一个不超出必要康托尔框架的集合论公理化更具问题性。”\(^\text{[57]}\)
+
+冯·诺依曼通过引入他1929年的公理系统开始了他的逻辑一致性研究，该公理系统包含了他1925年公理系统中的所有公理，除了大小限制公理。他用该公理的两个后果来替代它，即替换公理和选择公理。冯·诺依曼的选择公理声明：“每个关系\(R\)都有一个子类，它是一个与\(R\)具有相同域的函数。”\(^\text{[58]}\)
+
+设\( S \)为冯·诺依曼的1929年公理系统。冯·诺依曼引入了公理系统 \( S + \) Regularity（该系统由\( S \)和正则性公理组成），以证明他的1925年公理系统在相对于\( S \)时是一致的。他证明了：
 
 \begin{enumerate}
-\item \(\displaystyle Y_{k}\in \Gamma\)被转换为\[\exists z_{i} (z_{i} = Y_{k} \land z_{i} \in \Gamma)\). 
-**外延性**被用来将  
-\[
-\Delta = \Gamma
-\]  
-转换为  
-\[
-\forall z_{i} (z_{i} \in \Delta \iff z_{i} \in \Gamma).
-\]  
-**逻辑恒等式**被用来将包含 \( \lor \)、\( \implies \)、\( \iff \) 和 \( \forall \) 的子公式转换为仅使用 \( \neg \)、\( \land \) 和 \( \exists \) 的子公式。
+\item 如果\( S \)是一致的，那么\( S + \)Regularity 是一致的。
+\item \( S + \)Regularity 推导出大小限制公理。由于这是他的1925年公理系统中 \( S + \)Regularity 所不包含的唯一公理，因此\( S + \)Regularity 推导出他1925年公理系统的所有公理。
 \end{enumerate}
+这些结果意味着：如果\( S \)是一致的，那么冯·诺依曼的1925年公理系统在相对于\( S \)时是一致的。证明：如果\( S \)是一致的，那么\( S + \) Regularity 是一致的（结果1）。通过反证法，假设1925年公理系统是不一致的，或者等价地：1925年公理系统推导出一个矛盾。由于\( S + \) Regularity 推导出1925年公理系统的公理（结果2），因此\( S + \) Regularity 也推导出一个矛盾。然而，这与 \( S + \) Regularity 的一致性相矛盾。因此，如果\( S \)是一致的，那么冯·诺依曼的1925年公理系统是一致的。
+
+由于\( S \)是他的1929年公理系统，冯·诺依曼的1925年公理系统在相对于他的1929年公理系统时是一致的，而该系统更接近坎托尔集合论。坎托尔集合论与1929年公理系统之间的主要区别在于类和冯·诺依曼的选择公理。公理系统\( S + \) Regularity 被伯纳伊斯和哥德尔修改，产生了等价的NBG公理系统。
+\subsubsection{伯奈的公理体系}
+.\begin{figure}[ht]
+\centering
+\includegraphics[width=6cm]{./figures/5cdc25d6a5809ae1.png}
+\caption{保罗·伯奈斯} \label{fig_NBG_3}
+\end{figure}
+1929年，保罗·伯奈斯开始通过将类和集合作为原始概念来修改冯·诺依曼的新公理体系。他的研究成果以一系列文章的形式于1937年到1954年间发布。\(^\text{[59]}\)伯奈斯表示：
+
+“修改冯·诺依曼体系的目的是尽量保持与原始泽尔梅洛体系的结构接近，同时利用一些已经为逻辑学家所熟悉的施罗德逻辑和《数学原理》中的集合论概念。正如所看到的，这种安排带来了相当的简化。”\(^\text{[60]}\)
+
+伯奈斯在一个二分类逻辑中处理集合和类，并引入了两个成员关系原始概念：一个用于集合中的成员关系，一个用于类中的成员关系。通过这些原始概念，他重写并简化了冯·诺依曼1929年的公理。伯奈斯还在他的公理体系中加入了正则性公理。\(^\text{[61]}\)
+\subsubsection{哥德尔的公理系统（NBG）}
+\begin{figure}[ht]
+\centering
+\includegraphics[width=6cm]{./figures/6b68f02159236857.png}
+\caption{} \label{fig_NBG_4}
+\end{figure}
+1931年，伯奈斯将他的集合论内容写信发送给了库尔特·哥德尔。\(^\text{[36]}\) 哥德尔通过将每个集合都视为一个类来简化了伯奈斯的理论，这使他能够只使用一种类型和一种成员关系原语。他还削弱了伯奈斯的一些公理，并用等价的全局选择公理替代了冯·诺伊曼的选择公理。\(^\text{[62][v]}\)哥德尔在他1940年关于全局选择和广义连续统假设相对一致性的专著中使用了这些公理。\(^\text{[63]}\)
+
+有几种原因被提出解释哥德尔选择NBG作为他专著的基础：[w]
+\begin{itemize}
+\item 哥德尔给出了一个数学原因——NBG的全局选择公理产生了一个更强的相容性定理：“这种更强的选择公理形式，如果与其他公理一致，当然也意味着较弱的形式也是一致的。”[5]
+\item 罗伯特·索洛维猜测：“我猜他[哥德尔]希望避免讨论在公理化集合论中发展模型理论的初步技术细节。”[67][x]
+\item 肯尼斯·库能给出了哥德尔避免这一讨论的原因：“还有一种更具组合学的方法来研究L[构造宇宙]，由…[哥德尔在1940年专著中]提出，试图向非逻辑学家解释他的工作。...这种方法的优点在于，从L的处理过程中去除了所有逻辑学的痕迹。”[68]
+\item 查尔斯·帕森斯为哥德尔的选择提供了一个哲学原因：“这种观点[‘集合的属性’是集合论的原始概念]可能体现在哥德尔选择一个具有类变量的理论作为... [他专著]的框架。”[69]
+\end{itemize}
