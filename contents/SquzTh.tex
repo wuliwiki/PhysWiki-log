@@ -9,19 +9,92 @@
 \pentry{极限定义 \nref{nod_Lim}，极限运算法则 \nref{nod_LimOp}}{nod_014c}
 \textbf{夹逼定理}（Squeeze Theorem，或称夹挤定理）
 
-本文会先讨论一下一般使用夹逼定理时会遇到的问题。最后会针对两个情况下的夹逼定理给出证明。
+
+
+夹逼定理（squeeze theorem），又称夹逼定理、夹极限定理、三明治定理、逼近定理、迫敛定理、两边夹定理等。其含义很直观：直观的含义是，如果有两个数列或者函数趋近于同一个极限，那么一直被这两个数列或者函数夹在中间的数列也必然趋近于这一极限。
+
+举个例子：取数列$\{a_n\}, \{b_n\}, \{c_n\}$，如果$a_n=0$，$b_n=1/n^2$，$c_n=1/n$，那么在$n\to\infty$的过程中，一直有$a_n<b_n<c_n$，也就是$b_n$一直被夹在中间；由于$a_n$和$c_n$的极限相同，夹逼定理断言$b_n$的极限也跟它们一样。
+
+
+这个例子过于平凡，因为很容易计算出这三个数列的极限，不需要夹逼定理，也能靠计算结果知道，三者的极限都是$0$。然而，实践中常遇到不知如何分析的极限，有时候就可以利用夹逼定理，将难以计算的数列或者函数夹在已经算出极限的数列和函数中间，绕过复杂的详细分析而得到答案。
+
+
+一个特别经典的例子如下。
+
+\begin{example}{正弦小角极限}
+
+在\enref{函数的极限（极简微积分）}{FunLim}的\autoref{ex_FunLim_1} 和\enref{小角极限（极简微积分）}{LimArc}中提到
+\begin{equation}
+\lim_{x\to 0}\frac{\sin x}{x}=1~, 
+\end{equation}
+但并未证明。现在我们用夹逼定理就可以证明。
+
+这个极限是一个关键节点，有了它才能顺利地计算出$\sin(x)$的导函数，进而得到大量实用的导函数，并开启微积分的大门。
+
+
+\begin{figure}[ht]
+\centering
+\includegraphics[width=12cm]{./figures/ea5ad550659a2ee1.pdf}
+\caption{正弦小角近似应用夹逼定理的示意图。图中点$A$和$C$都在单位圆上，点$B$在$OA$延长线上，$BC$垂直于横轴。} \label{fig_SquzTh_1}
+\end{figure}
+
+
+在平面直角坐标系中作单位圆，并取一个任意角度$x$，使得$0<x<\frac{\pi}{2}$，如\autoref{fig_SquzTh_1} 所示。图中三角形$AOC$底边$OC$长为$1$，高为$\sin x$，因此面积是$\frac{1}{2}\sin x$；三角形$BOC$底边$OC$长为$1$，高为$\tan x$，因此面积是$\frac{1}{2}\tan x$；扇形$ACO$的面积为$\frac{1}{2}x$。根据这三个几何图形的互相包含关系，可知它们的面积满足
+\begin{equation}
+\frac{1}{2}\sin x < \frac{1}{2}x < \frac{1}{2}\tan x~. 
+\end{equation}
+将该不等式中所有部分同时乘以$2$、取倒数、乘以$\sin x$，即可化为
+\begin{equation}
+1<\frac{\sin x}{x}<\cos x~. 
+\end{equation}
+于是，当$x\to 0^+$时，函数$\frac{\sin x}{x}$总是被夹在$1$和$\cos x$中间，而$1$和$\cos x$的极限都是$1$，从而得证$\lim\limits_{x\to 0^+}\frac{\sin x}{x}=1$。类似地，也可以得到$\lim\limits_{x\to 0^-}\frac{\sin x}{x}=1$，从而完整证明该小角极限。
+
+
+
+\end{example}
+
+
+夹逼定理果然很好用！
+
+为了保证上述证明严谨，并且方便在更多场景准确应用夹逼定理，下面将准确表述夹逼定理并证明。
+
+
+
+
+\subsection{定理表述与证明}
+
+
+
+
+
+
 
 \begin{theorem}{数列极限的夹逼定理}\label{the_SquzTh_1}
 若数列$\{a_n\}$,$\{b_n\}$以及$\{x_n\}$满足
 \begin{enumerate}
 \item $\exists N_0\in \mathbb{N}$，$\forall n>N_0$，$a_n\leq x_n\leq b_n$，
-\item $n$趋于无穷时，$\{a_n\}$和$\{b_n\}$的极限存在且相等，即$\lim_{n\to\infty}\{a_n\}=\lim_{n\to\infty}\{b_n\}=m$；
+\item $n$趋于无穷时，$\{a_n\}$和$\{b_n\}$的极限存在且相等，即$\lim_{n\to\infty}a_n=\lim_{n\to\infty}b_n=m$；
 \end{enumerate}
 则$n$趋于无穷时，数列$\{x_n\}$的极限存在且
 \begin{equation}
 \lim_{n\to\infty}x_n =m.~
 \end{equation}
 \end{theorem}
+
+\textbf{证明}：
+
+由于$\lim_{n\to\infty}a_n=m$，可知对于任意$\varepsilon>0$，存在正整数$N_a$使得对于任意$n>N_a$，都有$\abs{a_n-m}<\varepsilon$。同理，对于同一个$\varepsilon>0$，存在正整数$N_b$使得对于任意$n>N_b$，都有$\abs{b_n-m}<\varepsilon$。
+
+令$N_\varepsilon=\max\{N_a, N_b\}$，于是对于任意$n>N_\varepsilon$，都有$\abs{a_n-m}<\varepsilon$且$\abs{b_n-m}<\varepsilon$。由于$a_n\leq x_n$，可知$x_n>m-\varepsilon$；由于$x_n\leq b_n$，可知$x_n<m+\varepsilon$。综上，$\abs{x_n-m}<\varepsilon$。
+
+上述结论可简写为：对于任意$\varepsilon>0$，存在正整数$N_\varepsilon$使得对于任意$n>N_\varepsilon$，都有$\abs{x_n-m}<\varepsilon$；意即$\lim\limits_{n\to\infty}x_n = m$。
+
+\textbf{证毕}。
+
+
+
+
+
 
 \begin{theorem}{函数极限的夹逼定理}\label{the_SquzTh_2}
 若函数$f(x)$、$g(x)$以及$h(x)$满足
@@ -35,12 +108,20 @@
 \end{equation}
 \end{theorem}
 
-\subsection{小试牛刀——一个重要极限}
 
-之前在学习重要极限（参见\autoref{ex_FunLim_1}）时，只是形象地将这个概念给出，事实上，它可以由夹逼定理得到。
-\begin{example}{证明：$\lim_{x\to0}{\sin(x)\over x}=1$}
-构造函数$g(x)=\cos(x)$，$f(x)={\sin(x)\over x}$，$h(x)=1$，
-\end{example}
+
+\textbf{证明}：
+
+函数的极限定义为：若对于\textbf{任意}趋于$x_0$的数列$\{a_n\}$，数列$\{f(a_n)\}$趋于$a$，则称“在$x$趋于$x_0$的时候，函数$f(x)$趋于$a$”。
+
+现在任取趋于$x_0$的数列$\{a_n\}$，则可构造出三个数列$\{f(a_n)\}$、$\{g(a_n)\}$和$\{h(a_n)\}$，由题设，根据数列极限的夹逼定理（\autoref{the_SquzTh_1} ）可知，$\lim\limits_{n\to\infty}f(a_n)=a$。由数列$\{a_n\}$的任意性，得证。
+
+\textbf{证毕}。
+
+
+
+
+
 
 
 \subsection{夹逼定理的奇技淫巧}
