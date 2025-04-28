@@ -1,0 +1,154 @@
+% 哈密顿量含时情况下时间演化算符的具体形式
+% keys 时间演化算符|戴森级数|置换群
+% license Usr
+% type Tutor
+
+\pentry{时间演化算符（量子力学）\nref{nod_TOprt}}{nod_789b}
+\pentry{置换群\nref{nod_Perm}}{nod_fd87}
+
+考虑时间演化算符的微分方程，其中哈密顿量 $H(t) $ 含时：
+
+$$
+\mathrm{i}\hbar\frac{\mathrm{d}U(t,t_0) }{\mathrm{d}t }
+=H(t) U(t,t_0) ~
+$$
+
+把变量 $t $ 换成 $t_1 $，移项，并对 $t_1 $ 从 $t_0 $ 积到 $t $：
+
+$$
+\int_{t_1=t_0}^{t_1=t} \mathrm{d}U(t_1,t_0)
+=-\frac{\mathrm{i} }{\hbar } \int_{t_1=t_0}^{t_1=t} H(t_1) U(t_1,t_0)\mathrm{d}t_1~
+$$
+
+即：
+
+$$
+U(t,t_0)
+=1 + \left(\frac{-\mathrm{i} }{\hbar }  \right) \int_{t_1=t_0}^{t_1=t} H(t_1) U(t_1,t_0)\mathrm{d}t_1~
+$$
+
+注意到，右边的被积函数中又出现了 $U(t_1,t_0) $，因此可不断迭代：
+
+$$
+\begin{aligned}
+U(t,t_0)
+&=1 + \left(\frac{-\mathrm{i} }{\hbar }  \right) \int_{t_1=t_0}^{t_1=t} H(t_1) U(t_1,t_0)\mathrm{d}t_1 \\
+&=1 + \left(\frac{-\mathrm{i} }{\hbar }  \right) \int_{t_1=t_0}^{t_1=t} H(t_1) \left[1 + \left(\frac{-\mathrm{i} }{\hbar }  \right) \int_{t_2=t_0}^{t_2=t_1} H(t_2) U(t_2,t_0)\mathrm{d}t_2 \right]\mathrm{d}t_1 \\
+&=1 + \left(\frac{-\mathrm{i} }{\hbar }  \right) \int_{t_1=t_0}^{t_1=t} H(t_1)\mathrm{d}t_1 + \left(\frac{-\mathrm{i} }{\hbar }  \right)^2 \int_{t_1=t_0}^{t_1=t}\mathrm{d}t_1 \int_{t_2=t_0}^{t_2=t_1}\mathrm{d}t_2 H(t_1)H(t_2)U(t_2,t_0) \\
+&=\cdots \\
+&=1 + \sum_{n=1}^{\infty} \left(\frac{-\mathrm{i} }{\hbar }  \right)^n \int_{t_1=t_0}^{t_1=t}\mathrm{d}t_1 \int_{t_2=t_0}^{t_2=t_1}\mathrm{d}t_2 \cdots \int_{t_n=t_0}^{t_n=t_{n-1}}\mathrm{d}t_n H(t_1)H(t_2) \cdots H(t_n)
+\end{aligned}~
+$$
+
+即哈密顿量含时情况下，时间演化算符的戴森级数解为：
+
+$$
+U(t,t_0)
+=1 + \sum_{n=1}^{\infty} \left(\frac{-\mathrm{i} }{\hbar }  \right)^n \int_{t_1=t_0}^{t_1=t}\mathrm{d}t_1 \int_{t_2=t_0}^{t_2=t_1}\mathrm{d}t_2 \cdots \int_{t_n=t_0}^{t_n=t_{n-1}}\mathrm{d}t_n H(t_1)H(t_2) \cdots H(t_n)~
+$$
+
+然而，上面解中，积分上限与积分变量有关，这很不方便。引入阶跃函数 $\theta $ 满足：
+
+$$
+\theta(x)
+\equiv \left\{
+\begin{aligned}
+1&,x>0 \\
+\frac{1 }{2 }&,x=0 \\
+0&,x<0
+\end{aligned}
+\right.~
+$$
+
+则戴森级数解可写为：
+
+$$
+\begin{aligned}
+U(t,t_0)
+&=1 + \sum_{n=1}^{\infty} \left(\frac{-\mathrm{i} }{\hbar }  \right)^n \int_{t_1=t_0}^{t_1=t}\mathrm{d}t_1 \int_{t_2=t_0}^{t_2=t_1}\mathrm{d}t_2 \cdots \int_{t_n=t_0}^{t_n=t_{n-1}}\mathrm{d}t_n H(t_1)H(t_2) \cdots H(t_n) \\
+&=1 + \sum_{n=1}^{\infty} \left(\frac{-\mathrm{i} }{\hbar }  \right)^n \int_{t_1=t_0}^{t_1=t}\mathrm{d}t_1 \int_{t_2=t_0}^{t_2=t}\mathrm{d}t_2 \theta(t_1-t_2) \cdots \int_{t_n=t_0}^{t_n=t}\mathrm{d}t_n \theta(t_n-t_{n-1}) H(t_1)H(t_2) \cdots H(t_n) \\
+&=1 + \sum_{n=1}^{\infty} \left(\frac{-\mathrm{i} }{\hbar }  \right)^n \int_{t_1=t_0}^{t_1=t}\mathrm{d}t_1 \int_{t_2=t_0}^{t_2=t}\mathrm{d}t_2 \cdots \int_{t_n=t_0}^{t_n=t}\mathrm{d}t_n \theta(t_1-t_2)\theta(t_2-t_3) \cdots \theta(t_{n-1}-t_n) H(t_1)H(t_2) \cdots H(t_n) \\
+\end{aligned}~
+$$
+
+为了继续简化，引入时序算符 $\mathcal{T} $ 满足：
+
+$$
+\mathcal{T}\left[H(t_1)H(t_2) \cdots H(t_n) \right]
+\equiv \sum_{\sigma \in S_n} \theta\left(t_{\sigma(1)} - t_{\sigma(2)} \right) \theta\left(t_{\sigma(2)} - t_{\sigma(3)} \right) \cdots \theta\left(t_{\sigma(n-1)} - t_{\sigma(n)} \right) H\left(t_{\sigma(1)} \right) H\left(t_{\sigma(2)} \right) \cdots H\left(t_{\sigma(n)} \right)~
+$$
+
+其中，$S_n $ 是 $n $ 阶置换群，$\sigma $ 是有序数组 $\left(1,2,\cdots,n \right) $ 的一个置换，$\sigma $ 作用在有序数组 $\left(1,2,\cdots,n \right) $ 上得到有序数组的一个排列，这个排列第 $i $ 位置上的数记为 $\sigma(i) $，即：
+
+$$
+\sigma \left(1,2,\cdots,n \right)
+=\left(\sigma(1),\sigma(2),\cdots,\sigma(n) \right)~
+$$
+
+注意到，若 $t_1,t_2,\cdots,t_n $ 这 $n $ 个数互不相等，则它们一定可以从大到小排序，即存在 $\sigma_0 \in S_n $ 使得：
+
+$$
+t_{\sigma_0(1)} > t_{\sigma_0(2)} > \cdots > t_{\sigma_0(n)}~
+$$
+
+而由阶跃函数的定义，对于某个确定的 $\sigma $，只有当
+
+$$
+t_{\sigma(1)} > t_{\sigma(2)} > \cdots > t_{\sigma(n)}~
+$$
+
+时，求和项 $ \theta\left(t_{\sigma(1)} - t_{\sigma(2)} \right) \theta\left(t_{\sigma(2)} - t_{\sigma(3)} \right) \cdots \theta\left(t_{\sigma(n-1)} - t_{\sigma(n)} \right) H\left(t_{\sigma(1)} \right) H\left(t_{\sigma(2)} \right) \cdots H\left(t_{\sigma(n)} \right) $ 才不为零。显然，所有 $\sigma\in S_n $ 中，只有 $\sigma_0 $ 使得求和项不为零。此时：
+
+$$
+\begin{aligned}
+\mathcal{T}\left[H(t_1)H(t_2) \cdots H(t_n) \right]
+&\equiv \sum_{\sigma \in S_n} \theta\left(t_{\sigma(1)} - t_{\sigma(2)} \right) \theta\left(t_{\sigma(2)} - t_{\sigma(3)} \right) \cdots \theta\left(t_{\sigma(n-1)} - t_{\sigma(n)} \right) H\left(t_{\sigma(1)} \right) H\left(t_{\sigma(2)} \right) \cdots H\left(t_{\sigma(n)} \right) \\
+&=H\left(t_{\sigma_0(1)} \right) H\left(t_{\sigma_0(2)} \right) \cdots H\left(t_{\sigma_0(n)} \right)
+\end{aligned}~
+$$
+
+也就是说，在 $t_{\sigma_0(1)} > t_{\sigma_0(2)} > \cdots > t_{\sigma_0(n)} $ 的情况下，$\mathcal{T}\left[H(t_1)H(t_2) \cdots H(t_n) \right] $ 仅仅是让这 $n $ 个哈密顿量重新排序成 $H\left(t_{\sigma_0(1)} \right) H\left(t_{\sigma_0(2)} \right) \cdots H\left(t_{\sigma_0(n)} \right) $，即时间大的哈密顿量排左边，时间小的哈密顿量排右边。
+
+最后注意到：
+
+$$
+\begin{aligned}
+&\int_{t_1=t_0}^{t_1=t}\mathrm{d}t_1 \int_{t_2=t_0}^{t_2=t}\mathrm{d}t_2 \cdots \int_{t_n=t_0}^{t_n=t}\mathrm{d}t_n \theta(t_1-t_2)\theta(t_2-t_3) \cdots \theta(t_{n-1}-t_n) H(t_1)H(t_2) \cdots H(t_n) \\
+=&\frac{1 }{n! } \sum_{\sigma \in S_n} \int_{t_1=t_0}^{t_1=t}\mathrm{d}t_1 \int_{t_2=t_0}^{t_2=t}\mathrm{d}t_2 \cdots \int_{t_n=t_0}^{t_n=t}\mathrm{d}t_n \theta(t_1-t_2)\theta(t_2-t_3) \cdots \theta(t_{n-1}-t_n) H(t_1)H(t_2) \cdots H(t_n) \\
+=&\frac{1 }{n! } \sum_{\sigma \in S_n} \int_{t_{\sigma(1)}=t_0}^{t_{\sigma(1)}=t}\mathrm{d}t_{\sigma(1)} \int_{t_{\sigma(2)}=t_0}^{t_{\sigma(2)}=t}\mathrm{d}t_{\sigma(2)} \cdots \int_{t_{\sigma(n)}=t_0}^{t_{\sigma(n)}=t}\mathrm{d}t_{\sigma(n)} \theta\left(t_{\sigma(1)} - t_{\sigma(2)} \right) \theta\left(t_{\sigma(2)} - t_{\sigma(3)} \right) \cdots \theta\left(t_{\sigma(n-1)} - t_{\sigma(n)} \right) H\left(t_{\sigma(1)} \right) H\left(t_{\sigma(2)} \right) \cdots H\left(t_{\sigma(n)} \right) \\
+=&\frac{1 }{n! } \sum_{\sigma \in S_n} \int_{t_1=t_0}^{t_1=t}\mathrm{d}t_1 \int_{t_2=t_0}^{t_2=t}\mathrm{d}t_2 \cdots \int_{t_n=t_0}^{t_n=t}\mathrm{d}t_n \theta\left(t_{\sigma(1)} - t_{\sigma(2)} \right) \theta\left(t_{\sigma(2)} - t_{\sigma(3)} \right) \cdots \theta\left(t_{\sigma(n-1)} - t_{\sigma(n)} \right) H\left(t_{\sigma(1)} \right) H\left(t_{\sigma(2)} \right) \cdots H\left(t_{\sigma(n)} \right) \\
+=&\frac{1 }{n! } \int_{t_1=t_0}^{t_1=t}\mathrm{d}t_1 \int_{t_2=t_0}^{t_2=t}\mathrm{d}t_2 \cdots \int_{t_n=t_0}^{t_n=t}\mathrm{d}t_n \sum_{\sigma \in S_n} \theta\left(t_{\sigma(1)} - t_{\sigma(2)} \right) \theta\left(t_{\sigma(2)} - t_{\sigma(3)} \right) \cdots \theta\left(t_{\sigma(n-1)} - t_{\sigma(n)} \right) H\left(t_{\sigma(1)} \right) H\left(t_{\sigma(2)} \right) \cdots H\left(t_{\sigma(n)} \right) \\
+=&\frac{1 }{n! } \int_{t_1=t_0}^{t_1=t}\mathrm{d}t_1 \int_{t_2=t_0}^{t_2=t}\mathrm{d}t_2 \cdots \int_{t_n=t_0}^{t_n=t}\mathrm{d}t_n \mathcal{T}\left[H(t_1)H(t_2) \cdots H(t_n) \right] \\
+\end{aligned}~
+$$
+
+并且约定 $\mathcal{T}(1) = 1 $ 以及：
+
+$$
+\begin{aligned}
+&\mathcal{T}\left\{\left[\int_{\tau=t_0}^{\tau=t} \mathrm{d}\tau H(\tau) \right]^n \right\} \\
+=&\mathcal{T}\left[\int_{t_1=t_0}^{t_1=t}\mathrm{d}t_1 \int_{t_2=t_0}^{t_2=t}\mathrm{d}t_2 \cdots \int_{t_n=t_0}^{t_n=t}\mathrm{d}t_n H(t_1)H(t_2) \cdots H(t_n) \right] \\
+\equiv &\int_{t_1=t_0}^{t_1=t}\mathrm{d}t_1 \int_{t_2=t_0}^{t_2=t}\mathrm{d}t_2 \cdots \int_{t_n=t_0}^{t_n=t}\mathrm{d}t_n \mathcal{T}\left[H(t_1)H(t_2) \cdots H(t_n) \right]
+\end{aligned}~
+$$
+
+于是时间演化算符最终可写为：
+
+$$
+\begin{aligned}
+U(t,t_0)
+&=1 + \sum_{n=1}^{\infty} \left(\frac{-\mathrm{i} }{\hbar }  \right)^n \int_{t_1=t_0}^{t_1=t}\mathrm{d}t_1 \int_{t_2=t_0}^{t_2=t}\mathrm{d}t_2 \cdots \int_{t_n=t_0}^{t_n=t}\mathrm{d}t_n \theta(t_1-t_2)\theta(t_2-t_3) \cdots \theta(t_{n-1}-t_n) H(t_1)H(t_2) \cdots H(t_n) \\
+&=1 + \sum_{n=1}^{\infty} \left(\frac{-\mathrm{i} }{\hbar }  \right)^n \frac{1 }{n! } \int_{t_1=t_0}^{t_1=t}\mathrm{d}t_1 \int_{t_2=t_0}^{t_2=t}\mathrm{d}t_2 \cdots \int_{t_n=t_0}^{t_n=t}\mathrm{d}t_n \mathcal{T}\left[H(t_1)H(t_2) \cdots H(t_n) \right] \\
+&=1 + \sum_{n=1}^{\infty} \left(\frac{-\mathrm{i} }{\hbar }  \right)^n \frac{1 }{n! } \mathcal{T}\left\{\left[\int_{\tau=t_0}^{\tau=t} \mathrm{d}\tau H(\tau) \right]^n \right\} \\
+&=\mathcal{T}\left\{1 + \sum_{n=1}^{\infty} \frac{1 }{n! } \left[\frac{-\mathrm{i} }{\hbar }  \int_{\tau=t_0}^{\tau=t} \mathrm{d}\tau H(\tau) \right]^n \right\} \\
+&=\mathcal{T} \left\{ \sum_{n=0}^{\infty} \frac{1 }{n! } \left[\frac{-\mathrm{i} }{\hbar }  \int_{\tau=t_0}^{\tau=t} \mathrm{d}\tau H(\tau) \right]^n \right\} \\
+&=\mathcal{T}\exp\left[\frac{-\mathrm{i} }{\hbar }  \int_{\tau=t_0}^{\tau=t} \mathrm{d}\tau H(\tau) \right]
+\end{aligned}~
+$$
+
+$$
+\boxed{
+U(t,t_0)
+=\mathcal{T}\exp\left[\frac{-\mathrm{i} }{\hbar }  \int_{\tau=t_0}^{\tau=t} \mathrm{d}\tau H(\tau) \right]
+}~
+$$

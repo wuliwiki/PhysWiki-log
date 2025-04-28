@@ -8,14 +8,14 @@
 
 本文假设我们在 linux 桌面环境（或 Windows 的 WSL）下使用 CLion。
 
-\subsubsection{常识}
+\subsection{常识}
 \begin{itemize}
 \item 可以直接通过 CMakeList.txt 创建工程, 工程所有的信息都在 .idea 文件夹里面
 \item 设置里面 keymap 可以把快捷键直接设置成和 Visual Studio 相同
 \item 用 gdb 调试时可以直接使用 gdb 命令行
 \end{itemize}
 
-\subsubsection{安装}
+\subsection{安装}
 \begin{itemize}
 \item \href{https://www.jetbrains.com/help/clion/installation-guide.html}{安装文档}， 推荐用 Standalone installation
 \item 直接\href{https://www.jetbrains.com/clion/download/#section=linux}{下载}安装包 \verb`CLion-2022.2.tar.gz` 解压 \verb`sudo tar -xvzf CLion-*.tar.gz -C /opt/` (WSL2 和 Ubuntu 20/22 亲测成功)
@@ -26,7 +26,7 @@
 \end{itemize}
 
 
-\subsubsection{其他}
+\subsection{其他}
 \begin{itemize}
 \item \verb`.idea/workspace.xml` 文件挺重要的， 可以从 \verb`.idea/.gitignore` 文件中注释掉
 \item Windows 中可以选 WSL 环境编译， 直接用 g++, clang++, 和 gdb
@@ -37,7 +37,21 @@
 \item CLion 可以不设置任何工程， 仅仅用于 debug 可执行文件（可以在其他任何地方编译）， 见\href{https://www.jetbrains.com/help/clion/debug-arbitrary-executable.html}{官方文档}。
 \end{itemize}
 
-\subsubsection{简单的 cmake 文件}
+\subsection{调试已经编译好的可执行文件}\label{sub_CLionN_1}
+\begin{itemize}
+\item 创建自定义 Target： \verb`File > Settings > Build, Execution, Deployment > Custom Build Targets`
+\item 按 \verb`+` 按钮
+\item 命名为 "Debug Existing Executable"，保存关闭
+\item 打开 \verb`Run > Edit Configurations`
+\item 按 \verb`+`，选择 "Custom Build Application"
+\item Target 中选择 Custom Build Application
+\item Executable 选择要 debug 的可执行文件
+\item Program arguments: 命令行选项
+\item Working directory: 工作目录
+\item Environment variables: 环境变量
+\end{itemize}
+
+\subsection{简单的 cmake 文件}
 如果你只用 \verb`Makefile` 不想迁移到 \verb`cmake` 也没关系，你只需要写一个很简单的 wrapper，就可以用它作为 CLion 的工程文件。 一个简单的例子：
 % cmake
 \begin{lstlisting}[language=none]
