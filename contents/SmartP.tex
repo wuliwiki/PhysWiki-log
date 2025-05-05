@@ -9,8 +9,9 @@
 \subsection{unique\_ptr}
 \begin{itemize}
 \item \href{https://en.cppreference.com/w/cpp/memory/unique_ptr}{文档}。
-\item \verb`unique_ptr<类> p(类指针)`， 其中 \verb`类指针` 可以由 \verb`new 类(构造参数)` 产生，指向一个需要 \verb`delete` 的对象。
-\item 不允许“复制赋值”或“复制构造”，要传给函数可以用引用或指针。允许 \verb`std::move()`。
+\item \verb`unique_ptr<类> p(类 *类指针)`， 其中 \verb`类指针` 可以由 \verb`new 类(构造参数)` 产生，指向一个需要 \verb`delete 类指针` 的对象。
+\item \verb`unique_ptr<类[]> p(类 *类指针)`， 其中 \verb`类指针` 可以由 \verb`new 类[](构造参数)` 产生，指向一个需要 \verb`delete 类指针` 的对象。
+\item 不允许“复制赋值”或“复制构造”，要传给函数可以用 \verb`p` 的引用或指针。允许 \verb`std::move()`。
 \item \verb`unique_ptr<类，删除器类> p(类指针, 删除器)`。 \verb`删除器` 是 \verb`删除器类` 的一个对象（例如 C 函数指针）。
 \item \verb`删除器类` 或 \verb`删除器` 可以省略， 省略后默认用 \verb`delete 类指针` 或 \verb`delete[] 类数组`，实际上是 \verb`std::default_delete<T>`（对数组进行了特化）。
 \item \verb`删除器` 需要可以像 \verb`void 函数名(类* p)` 一样使用。 它几乎可以是任何 callable（例如具有 \verb`operator()` 的对象）
