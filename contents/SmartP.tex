@@ -7,29 +7,15 @@
 \end{issues}
 
 \subsection{unique\_ptr}
-\begin{itemize}
-\item \href{https://en.cppreference.com/w/cpp/memory/unique_ptr}{文档}。
-\item \verb`unique_ptr<类> p(类 *类指针)`， 其中 \verb`类指针` 可以由 \verb`new 类(构造参数)` 产生，指向一个需要 \verb`delete 类指针` 的对象。
-\item \verb`unique_ptr<类[]> p(类 *类指针)`， 其中 \verb`类指针` 可以由 \verb`new 类[](构造参数)` 产生，指向一个需要 \verb`delete 类指针` 的对象。
-\item 不允许“复制赋值”或“复制构造”，要传给函数可以用 \verb`p` 的引用或指针。允许 \verb`std::move()`。
-\item \verb`unique_ptr<类，删除器类> p(类指针, 删除器)`。 \verb`删除器` 是 \verb`删除器类` 的一个对象（例如 C 函数指针）。
-\item \verb`删除器类` 或 \verb`删除器` 可以省略， 省略后默认用 \verb`delete 类指针` 或 \verb`delete[] 类数组`，实际上是 \verb`std::default_delete<T>`（对数组进行了特化）。
-\item \verb`删除器` 需要可以像 \verb`void 函数名(类* p)` 一样使用。 它几乎可以是任何 callable（例如具有 \verb`operator()` 的对象）
-\item \verb`unique_ptr` 的 destructor 会调用 \verb`删除器(类指针)` 释放内存。
-\item 一般指针的操作 \verb`*, ->, []`， 也可以对 \verb`unique_ptr` 使用。
-\item \verb`p.get()` 返回 \verb`类指针`。 \verb`p.get_deleter()` 返回 \verb`删除器` 的 ref。
-\item \verb`if(p)` 或 \verb`bool(p)` 可以判断是否在管理一个对象。
-\item \verb`p.reset(新指针)` 调用原来对象的删除器， 并管理新的对象。
-\item 如果用同一个指针来初始化两个不同的 \verb`unique_ptr`，那么将造成重复 delete 错误，行为未定义，这也是为什么要尽量用 \verb`make_unique`
-\end{itemize}
+
 \begin{lstlisting}[language=cpp]
 // 创建（无法指定删除器，默认用 delete 释放）
-unique_ptr<int> ptr = make_unique<int>(42);
+auto ptr = make_unique<int>(42); // 等效于 unique_ptr<int> ptr(new int(42));
 unique_ptr<int> ptr2 = std::move(ptr1); // 转移所有权
 int* rawPtr = ptr.release(); // 释放所有权并返回裸指针（被管理的对象不会被释放）
 int* rawPtr = ptr.get(); // 返回裸指针（不释放所有权）
-ptr.reset(ptr3); // 释放当前对象并管理新的对象
 ptr.reset(); // 手动释放对象
+ptr.reset(ptr3); // 释放当前对象并管理新的对象
 
 // 自定义删除器类
 struct Deleter {
@@ -43,6 +29,24 @@ struct Deleter {
 unique_ptr<int, Deleter> ptr(new int(42)); // 默认使用 Deleter() 新建删除器
 unique_ptr<int, Deleter> ptr2(new int(42), Deleter()); // 手动提供删除器
 \end{lstlisting}
+
+\begin{itemize}
+\item \href{https://en.cppreference.com/w/cpp/memory/unique_ptr}{文档}。
+\item \verb`unique_ptr<类> p(类 *类指针)`， 其中 \verb`类指针` 可以由 \verb`new 类(构造参数...)` 产生，指向一个需要 \verb`delete 类指针` 的对象。
+\item \verb`unique_ptr<类[]> p(类 *类指针)`， 其中 \verb`类指针` 可以由 \verb`new 类[数量]` 产生，指向一个需要 \verb`delete[] 类指针` 的对象。
+\item 注意 \verb`unique_ptr<int[]> p(new int[10])` 不能写成 \verb`unique_ptr<int[]> p = new int[10]` 会导致编译错误因为类型不对。
+\item \verb`std::make_unique<int[10]>()` 是不支持的。
+\item 不允许 “复制赋值” 或 “复制构造”，要传给函数可以用 \verb`p` 的引用或指针。允许 \verb`std::move()`。
+\item \verb`unique_ptr<类，删除器类> p(类指针, 删除器)`。 \verb`删除器` 是 \verb`删除器类` 的一个对象（例如 C 函数指针）。
+\item \verb`删除器类` 或 \verb`删除器` 可以省略， 省略后默认用对应的 \verb`delete 类指针` 或 \verb`delete[] 类数组`，实际上是 \verb`std::default_delete<T>`（对数组进行了特化）。
+\item \verb`删除器` 需要可以像 \verb`void 函数名(类 *p)` 一样使用。 它几乎可以是任何 callable（例如具有 \verb`operator()` 的对象）
+\item \verb`unique_ptr` 的 destructor 会调用 \verb`删除器(类指针)` 释放内存。
+\item 一般指针的操作 \verb`*, ->, []`， 也可以对 \verb`unique_ptr` 使用。
+\item \verb`p.get()` 返回 \verb`类指针`。 \verb`p.get_deleter()` 返回 \verb`删除器` 的 ref。
+\item \verb`if(p)` 或 \verb`bool(p)` 可以判 \verb`p` 是否在管理一个对象。
+\item \verb`p.reset(新指针)` 调用原来对象的删除器， 并管理新的对象。
+\item 如果用同一个指针来初始化两个不同的 \verb`unique_ptr`，那么将造成重复 delete 错误，行为未定义，这也是为什么要尽量用 \verb`make_unique`
+\end{itemize}
 
 
 \subsection{shared\_ptr}
