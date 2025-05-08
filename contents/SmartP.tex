@@ -43,8 +43,8 @@ unique_ptr<int, Deleter> ptr2(new int(42), Deleter()); // 手动提供删除器
 \item \verb`unique_ptr` 的 destructor 会调用 \verb`删除器(类指针)` 释放内存。
 \item 一般指针的操作 \verb`*, ->, []`， 也可以对 \verb`unique_ptr` 使用。
 \item \verb`p.get()` 返回 \verb`类指针`。 \verb`p.get_deleter()` 返回 \verb`删除器` 的 ref。
-\item \verb`if(p)` 或 \verb`bool(p)` 可以判 \verb`p` 是否在管理一个对象。
-\item \verb`p.reset(新指针)` 调用原来对象的删除器， 并管理新的对象。
+\item \verb`p.reset(新指针)` 调用原来对象的删除器， 并管理新的对象。 \verb`p.reset()` 释放对象。
+\item \verb`if(p)` 或 \verb`bool(p)` 可以判 \verb`p` 是否在管理一个对象。 例如默认构造函数产生 \verb`p`。 或者 \verb`p.reset()` 后的就会是 \verb`false`。
 \item 如果用同一个指针来初始化两个不同的 \verb`unique_ptr`，那么将造成重复 delete 错误，行为未定义，这也是为什么要尽量用 \verb`make_unique`
 \end{itemize}
 
@@ -55,6 +55,11 @@ unique_ptr<int, Deleter> ptr2(new int(42), Deleter()); // 手动提供删除器
 \item \verb`p.use_count()` 返回有几个 \verb`shared_ptr` 正在使用。
 \item \verb`p.reset()` 和 \verb`p.reset(p3)` 用法同 \verb`unique_ptr`
 \item \verb`shared_ptr<void>` 可以装任何指针
+\item 一个被 \verb`shared_ptr` 管理的对象会有一个 \textbf{control block} 即\textbf{控制块}，它所有的 \verb`shared_ptr` 都会有个指针指向这个 block。 里面记录了该对象的 deleter, allocator, 分别有几个 \verb`shared_ptr` 和 \verb`weak_ptr`（也就是 \verb`shared_count` 和 \verb`weak_count`）
+\item 当 \verb`MyClass* raw = ptr.get();` 可以返回裸指针，但不可以手动把它释放或使用它创建新的 \verb`shared_ptr`。
+\item 不要用一个裸指针创建多个 \verb`shared_ptr`。\verb`p2 = p` 即可，copy constructor 也行。
+\item \verb`auto p = make_shared<int>();`
+\item \verb`auto p_arr = make_shared<int[]>(10);` 需要 C++17
 \end{itemize}
 
 \subsection{weak\_ptr}
@@ -91,4 +96,8 @@ int main() {
     return 0;
 }
 \end{lstlisting}
+\item 上面提到的 \verb`shared_count` 和 \verb`weak_count` 中， 前者控制被管理的对象是否销毁。 后者控制控制块是否被销毁。
+\item 上面例子中避免循环依赖也可以使用裸指针，但罗指针无法判断是否对象已被销毁所以不太安全。
+\item \verb`shared_count` 和 \verb`weak_count` 都是线程安全的，可以在多个线程中任意改变。
+\item \verb`weak_ptr` 不提供 \verb`get()` 成员，无法直接返回裸指针。 因为这是线程不安全的，因为有可能 \verb`get()` 调用以后、裸指针使用以前，其他线程会把对象销毁。 所以必须要先用 \verb`lock()` 返回一个 \verb`shared_ptr`，把这个对象锁住，再用 \verb`shared_ptr` 返回裸指针才能安全使用。 这也是 \verb`lock()` 名字的由来：把对象锁住不让它释放。
 \end{itemize}
