@@ -69,3 +69,92 @@ $f(\xi) = B$；换句话说，集合$B$不属于函数$f$的像集，而$f$并�
 在前文中构造的集合 $B$，正好对应于主对角线 $D$ 上那些表格记录为 $x \in f(x)$ 为假的行标（在上面的示例中，这些条目被标为红色）。表格的每一行记录了该行所代表元素 $x$ 是否属于每一列所对应集合的指示函数的值。而集合 $B$ 的指示函数，正好对应于主对角线条目的逻辑否定（即将“真”与“假”互换）。因此，集合 $B$ 的指示函数在至少一个条目上与任意一列都不一致。这就意味着，没有任何一列可以代表集合 $B$。
 
 尽管上述证明看起来很简单，但对自动定理证明器来说，生成这个证明其实相当困难。其主要难点在于如何自动发现康托尔对角线集合。Lawrence Paulson 在 1992 年指出，Otter 无法完成这个任务，而 Isabelle 可以做到，不过需要一定程度的战术引导，这在某种意义上或许可以视为“作弊”。
+\subsection{当 $A$ 是可数无限集时}
+让我们来看一个特例，即当 $A$ 是可数无限集合的情况。我们不失一般性地取 $A = \mathbb{N} = \{1, 2, 3, \ldots\}$，即自然数集合。
+
+假设 $\mathbb{N}$ 与其幂集 $\mathcal{P}(\mathbb{N})$ 等势。我们来看一下 $\mathcal{P}(\mathbb{N})$ 的一个样例：
+$$
+\mathcal{P}(\mathbb{N}) = \{\varnothing, \{1,2\}, \{1,2,3\}, \{4\}, \{1,5\}, \{3,4,6\}, \{2,4,6,\dots\}, \dots\}~
+$$
+实际上，$\mathcal{P}(\mathbb{N})$ 包含了 $\mathbb{N}$ 的无限子集，例如所有正偶数的集合 $\{2, 4, 6, \ldots\} = \{2k : k \in \mathbb{N} \}$，以及空集 $\varnothing$。
+
+现在我们已经了解了 $\mathcal{P}(\mathbb{N})$ 中元素的大致形式，让我们尝试将 $\mathbb{N}$ 中的每个元素与 $\mathcal{P}(\mathbb{N})$ 中的每个元素配对，以期证明这两个无限集合是等势的。换句话说，我们将尝试把 $\mathbb{N}$ 中的每个元素与 $\mathcal{P}(\mathbb{N})$ 中的一个元素配对，使得两个集合中都没有未配对的元素。这样一种配对可能如下所示：
+$$
+\mathbb{N} \quad
+\begin{Bmatrix}
+1 & \longleftrightarrow & \{4, 5\} \\
+2 & \longleftrightarrow & \{1, 2, 3\} \\
+3 & \longleftrightarrow & \{4, 5, 6\} \\
+4 & \longleftrightarrow & \{1, 3, 5\} \\
+\vdots & \vdots & \vdots
+\end{Bmatrix}
+\quad \mathcal{P}(\mathbb{N})~
+$$
+在这样的配对中，有些自然数与包含它们本身的子集配对。例如，在这个例子中，数字 2 被配对到子集 $\{1, 2, 3\}$，而这个子集中确实包含 2。我们称这样的数字为自私的。其他自然数则被配对到不包含它们本身的子集。例如，数字 1 被配对到子集 $\{4, 5\}$，该子集中不包含数字 1。我们称这类数字为非自私的。同样地，数字 3 和 4 也是非自私的。
+
+借助这个想法，让我们构造一个特殊的自然数集合。这个集合将为我们提供所需的矛盾。设 $B$ 为所有非自私自然数的集合。根据定义，幂集 $\mathcal{P}(\mathbb{N})$ 包含所有自然数的子集，因此它也包含这个集合 $B$。如果映射是双射（即一一对应），那么集合 $B$ 必然会与某个自然数 $b$ 配对。然而，这就产生了问题： 如果 $b \in B$，那么根据配对关系，$b$ 属于它所对应的集合（即 $B$），因此是自私的，这与它属于 $B$（即非自私）矛盾。如果 $b \notin B$，那么它不是自私的，即是非自私的，那它就应该属于 $B$，同样产生矛盾。
+因此，不存在这样一个自然数 $b$ 能够与集合 $B$ 配对。
+
+既然不存在与 $B$ 配对的自然数，我们就推翻了最初的假设：即存在 $\mathbb{N}$ 与 $\mathcal{P}(\mathbb{N})$ 之间的双射。这说明这两个集合不等势。
+
+注意，集合 $B$ 可能是空集。这意味着每个自然数 $x$ 都被映射到一个包含 $x$ 本身的自然数子集上。也就是说，每个数都映射到了一个非空集合，没有任何一个数被映射到空集上。但空集是 $\mathcal{P}(\mathbb{N})$ 的元素之一，因此这种映射依然未能覆盖整个 $\mathcal{P}(\mathbb{N})$。
+
+通过上述反证法，我们已经证明了$\mathbb{N}$与其幂集$\mathcal{P}(\mathbb{N})$的基数不可能相等。而且我们也知道，$\mathcal{P}(\mathbb{N})$的基数不可能小于$\mathbb{N}$的基数，因为$\mathcal{P}(\mathbb{N})$按定义包含所有单元素集合（singletons），而这些单元素集合就在$\mathcal{P}(\mathbb{N})$中构成了$\mathbb{N}$的一个“拷贝”。
+
+因此，只剩下一种可能性，那就是 $\mathcal{P}(\mathbb{N})$ 的基数严格大于$\mathbb{N}$的基数，从而证得康托尔定理。
+\subsection{相关悖论}
+康托尔定理及其证明与集合论中的两个悖论密切相关。
+
+康托尔悖论是一个从康托尔定理与“存在一个包含所有集合的集合”这一假设（即所谓的全集$V$）共同推出的矛盾。为了将这个悖论与下文将要讨论的另一个悖论区分开来，我们需要明确这一矛盾的具体内容：根据康托尔定理，对于任意集合$X$，都有$|\mathcal{P}(X)| > |X|$，即其幂集的基数严格大于它本身的基数。但另一方面，$\mathcal{P}(V)$ 的所有元素都是集合，因此也应属于全集 $V$，这意味着 $|\mathcal{P}(V)| \leq |V|$\(^\text{[1]}\)。
+
+另一个悖论可以从康托尔定理的证明中导出，方法是将函数$f$取为恒等函数；这会将康托尔的对角线集合转化为在给定集合$A$上构造的所谓罗素集合：\(^\text{[1]}\)
+$$
+R_A = \{ x \in A : x \notin x \}.~
+$$
+康托尔定理的证明可以直接改写来说明：如果假设存在一个包含所有集合的集合 $U$，那么考虑其对应的罗素集合$R_U$会导致以下矛盾：
+$$
+R_U \in R_U \iff R_U \notin R_U.~
+$$
+这个论证就是著名的罗素悖论\(^\text{[1]}\)。值得注意的是，这里我们呈现的罗素悖论实际上是策梅洛提出的一个定理\(^\text{[4]}\)。由该矛盾我们可以得出结论：必须否定假设 $R_U \in U$，从而反证了“存在一个包含所有集合的集合”这一假设。这之所以成为可能，是因为我们在上面定义 $R_A$ 时使用了受限的理解公理，正是 ZFC 公理系统中的做法。这导致我们实际上得到了以下逻辑关系：
+$$
+R_U \in R_U \iff (R_U \in U \land R_U \notin R_U).~
+$$
+而如果我们采用的是不受限制的理解公理，比如在弗雷格系统中那样，直接将罗素集合定义为：$R = \{ x : x \notin x \}$,那么这个矛盾将由公理系统自身推出，无需任何额外假设。这也正是弗雷格系统崩溃的根源之一。\(^\text{[4]}\)
+
+尽管罗素集合（无论哪种变体）在语法结构上与康托尔对角线集合相似，阿隆佐·邱奇指出，罗素悖论是独立于基数及其相关概念（如一一对应）的，与它们无关。\(^\text{[5]}\)
+\subsection{历史背景}
+康托尔在 1891 年发表的论文《论多样性理论中的一个初等问题》中基本上给出了这一证明\(^\text{[6]}\)，这篇论文中首次出现了用于证明实数不可数性的对角线论证（此前他已通过其他方法证明了实数的不可数性）。他在该论文中给出的论证版本是以集合上的指示函数而非子集为表述形式的\(^\text{[7]}\)。他证明了：若 $f$ 是定义在集合 $X$ 上的函数，且值域是定义在 $X$ 上的二值函数（即指示函数），那么函数 $G(x) = 1 - f(x)(x)$ 不属于 $f$ 的值域。
+
+伯特兰·罗素在其《数学原理》, 1903，第 348 节）中也给出了一个非常相似的证明，在那里他展示了命题函数的数量多于对象的数量。“假设所有对象与某些命题函数之间建立了一个对应关系，并设 $\phi_x$ 为 $x$ 的对应命题函数。那么命题‘非 $\phi_x(x)$’，即‘$\phi_x$ 不适用于 $x$’，是一个不包含在该对应关系中的命题函数；因为它对 $x$ 的真假取决于 $\phi_x$ 对 $x$ 的真假，因此对所有 $x$ 它都不同于 $\phi_x$。”他将这一证明思想归功于康托尔。
+
+恩斯特·策梅洛在 1908 年发表的论文《集合论基础的研究（一）》中给出了一条定理（他称之为“康托尔定理”），其形式与上述内容一致。这篇论文构成了现代集合论的基础。参见策梅洛集合论。
+\subsection{推广}
+劳维尔的固定点定理为康托尔定理提供了一个广泛的推广，适用于任何具有有限积的范畴，具体方式如下\(^\text{[8]}\)：
+
+设 $\mathcal{C}$ 是这样一个范畴，且 $1$ 是 $\mathcal{C}$ 中的终对象。假设 $Y$ 是 $\mathcal{C}$ 中的一个对象，并且存在一个自同态 $\alpha : Y \to Y$，且该自同态没有固定点；也就是说，没有一个态射 $y : 1 \to Y$ 满足 $\alpha \circ y = y$。那么，$\mathcal{C}$ 中就不存在一个对象 $T$，使得有一个态射 $f : T \times T \to Y$ 可以对所有的态射 $T \to Y$ 进行参数化。换句话说，对于每个对象 $T$ 和每个态射 $f : T \times T \to Y$，尝试将 $T \to Y$ 写成形如 $f(-,x) : T \to Y$ 的映射时，必须漏掉至少一个 $T \to Y$ 的映射。
+\subsection{另见}
+\begin{itemize}
+\item 施罗德–伯恩斯坦定理
+\item 康托尔的第一次不可数性证明
+\item 关于康托尔理论的争议
+\end{itemize}
+\subsection{参考文献}
+\begin{enumerate}
+\item Abhijit Dasgupta (2013). *Set Theory: With an Introduction to Real Point Sets*. Springer Science & Business Media. 第362–363页. ISBN 978-1-4614-8854-5.
+\item Lawrence Paulson (1992). *Set Theory as a Computational Logic* (PDF). Cambridge University Computer Laboratory. 第14页.
+\item Graham Priest (2002). *Beyond the Limits of Thought*. Oxford University Press. 第118–119页. ISBN 978-0-19-925405-7.
+\item Heinz-Dieter Ebbinghaus (2007). *Ernst Zermelo: An Approach to His Life and Work*. Springer Science & Business Media. 第86–87页. ISBN 978-3-540-49553-6.
+\item Church, A. [1974] "Set theory with a universal set." in *Proceedings of the Tarski Symposium*. *Proceedings of Symposia in Pure Mathematics* XXV, 编辑 L. Henkin, Providence RI, 第二版带补充，1979年，第297–308页. ISBN 978-0-8218-7360-1. 也刊登在 *International Logic Review* 15，第11–23页.
+\item Cantor, Georg (1891). "Über eine elementare Frage der Mannigfaltigskeitslehre", *Jahresbericht der Deutschen Mathematiker-Vereinigung* (德文), 1: 75–78, 也见于 Georg Cantor, *Gesammelte Abhandlungen mathematischen und philosophischen Inhalts*, E. Zermelo, 1932.
+\item A. Kanamori, "The Empty Set, the Singleton, and the Ordered Pair", 第276页. *Bulletin of Symbolic Logic* vol. 9, no. 3, (2003). 访问日期: 2023年8月21日.
+\item F. William Lawvere; Stephen H. Schanuel (2009). *Conceptual Mathematics: A First Introduction to Categories*. Cambridge University Press. 第29章. ISBN 978-0-521-89485-2.
+\end{enumerate}
+\begin{itemize}
+\item Halmos, Paul，《朴素集合论》（*Naive Set Theory*），新泽西州普林斯顿：D. Van Nostrand 公司，1960年。由 Springer-Verlag 于1974年在纽约再版，ISBN 0-387-90092-6（Springer-Verlag 版）。由 Martino Fine Books 于2011年再版，ISBN 978-1-61427-131-4（平装版）。
+\item Jech, Thomas（2002），《集合论》（*Set Theory*），*Springer 数学专著系列*（第三千禧年版），Springer 出版社，ISBN 3-540-44085-2。
+\end{itemize}
+\subsection{外部链接}
+\begin{itemize}
+\item “Cantor theorem”，《数学百科全书》，EMS Press，2001年 [1994年版]
+\item Weisstein, Eric W. “Cantor's Theorem”，MathWorld（数学世界）
+\end{itemize}
