@@ -10,14 +10,15 @@
 \subsection{常识}
 \begin{itemize}
 \item 在 Windows 下可直接使用 GUI， linux 命令行中使用 \verb`ccmake` 可以有 TUI。 否则就用 \verb`cmake`
-\item 在 \verb`CMakeLists.txt` 的路径下， \verb`cmake .` 生成 \verb`Makefile`， 然后 \verb`make -j` 多线程编译。 \verb`make VERBOSE=1 -j` 输出编译命令。 cmake 会在当前路径生成 \verb`Makefile` 和一些临时文件和文件夹， 清理麻烦， 所以还是建议输出到子文件夹。
+\item 最简单的命令： \verb`cmake CMakeLists.txt的路径`，可以是相对路径。 
+\item 一般的步骤是，在 \verb`CMakeLists.txt` 的路径下，新建 \verb`build`（名字任意）文件夹，然后 \verb`cd` 进去，使用 \verb`cmake ..` 在当前目录生成一些缓存文件和 \verb`Makefile`（或 ninja 文件）， 然后 \verb`make -j` 多线程编译。
+\item \verb`make VERBOSE=1 -j` 输出编译命令。
 \item 如果想要 \verb`make` 命令默认 \verb`VERBOSE=1`，可以在之前用 \verb`cmake -DCMAKE_VERBOSE_MAKEFILE=ON`
 \item \verb`CMakeLists.txt` 中， 注释如 \verb`#[[一些注释]]` 或者 \verb`#一些注释` 直到行末
-\item 如果不想改变源码路径， 就用在别的文件夹 \verb`cmake CMakeList的路径` 即可。
-\item \verb`cmake -G 生成器 CMakeList的路径` 可以指定生成器， \verb`生成器` 如 \verb`Unix Makefiles`， \verb`MinGW Makefiles`， \verb`Ninja`
+\item \verb`cmake -G 生成器 CMakeLists.txt的路径` 可以指定生成器， \verb`生成器` 可以是 \verb`Unix Makefiles`， \verb`MinGW Makefiles`， \verb`Ninja`
 \item ninja 的用法和 make 一样， \verb`ninja` 编译（默认使用当前路径的 \verb` build.ninja` 文件）， \verb`ninja install` 安装
-\item \verb`cmake -L CMakeList的路径` 列出编译选项， \verb`-LH` 列出选项以及帮助说明。 \verb`-LAH` 列出所有选项（会多出很多 \verb`CMAKE_` 开头的， 不是作者提供的选项）， 用 \verb`cmake -D 选项1=值1 -D 选项2=值2 CMakeList的路径` 来设置选项（\verb`-D` 后面可以没有空格）。
-\item 要指定路径， 用 \verb`cmake -S CMakeList的路径 -B 生成Makefile的路径`， 然后再到 Makefile 的路径 \verb`make -j12` 即可。 cmake 会自动生成 \verb`生成Makefile的路径`。 如果要清理 cmake 生成的文件以及所有编译出来的文件， 直接把第二个路径清空即可。
+\item \verb`cmake -L CMakeLists.txt的路径` 列出编译选项， \verb`-LH` 列出选项以及帮助说明。 \verb`-LAH` 列出所有选项（会多出很多 \verb`CMAKE_` 开头的， 不是作者提供的选项）， 用 \verb`cmake -D 选项1=值1 -D 选项2=值2 CMakeLists.txt的路径` 来设置选项（\verb`-D` 后面可以没有空格）。
+\item 要指定路径， 用 \verb`cmake -S CMakeLists.txt的路径 -B 生成Makefile的路径`， 然后再到 Makefile 的路径 \verb`make -j12` 即可。 cmake 会自动生成 \verb`生成Makefile的路径`。 如果要清理 cmake 生成的文件以及所有编译出来的文件， 直接把第二个路径清空即可。
 \item 当然， 也不是什么平台都可以用 \verb`make`， 所以也可以用 \verb`cmake --build 生成Makefile的路径 [--target 可执行文件] -- -j 12` 其中 \verb`--` 后面的选项会传给 \verb`make` 或者别的具体用于编译的程序。
 \item Cmake 的基本语法是 \verb`命令(arg1 arg2 ...)` 其中 \verb`命令` 不区分大小写， \verb`arg` 用空格隔开也可以换行， 如果 \verb`arg` 本身有空格， 用双引号即可
 \item \verb`cmake` 中的变量本质上都是字符串。 即使是 list， 也不过是特殊的字符串 \verb`str1;str2;str3`。 所谓的 \verb`bool` 类型不过是 \verb`ON` 和 \verb`OFF` 字符串。 数字也一样，并不是真正的数字。
@@ -39,11 +40,12 @@
 \begin{itemize}
 \item （可以学习一下 Eigen 的 CMakeList.txt）
 \item \verb`cmake_minimum_required(VERSION x.x)` 要求 cmake 最小版本（必须有）
-\item \verb`project(project_name)` 指定项目名称（必须有）
+\item \verb`project(项目名)` 指定项目名称（必须有）， \verb`project(项目名 VERSION 1.2.3)` 额外指定版本号。
 \item \verb`set(CMAKE_CXX_COMPILER "/usr/bin/g++")` 设置 compiler
 \item \verb`set(CMAKE_CXX_FLAGS "-选项 -选项")` 设置 flag， 包括 C++ 标准。 注意这不是一个 list。 如果要在后面添加选项， 就用 \verb`set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -选项1 -选项2")`。
 \item 用 \verb`set(CMAKE_CXX_STANDARD 11)` 设置 C++ 标准
 \item 用 \verb`set(CMAKE_CXX_STANDARD_REQUIRED ON)` （默认关）如果编译器不支持该标准就报错
+\item \verb`CMAKE_C_STANDARD` 和 \verb`CMAKE_C_STANDARD_REQUIRED` 同理，对 C 语言使用。
 \item \verb`set(CMAKE_CXX_EXTENSIONS OFF)` （默认开）不使用 C++ 标准拓展， 例如 \verb`-std=gnu11`。 后者并不完全兼容标准，一些情况会出错。
 \item 添加 debug 模式的 flag 如 \verb`set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -fsanitize=address")` 或者下面的 \verb`list(APPEND ...)`
 \item 同理， \verb`CMAKE_CXX_FLAGS_RELEASE` 可以设置 release 模式下的 flag。
@@ -52,13 +54,14 @@
 \item \verb`list(REMOVE_ITEM 变量 str1 ...)` 从 \verb`变量` 的 list 中移除（如果不存在也不报错）
 \item \verb`set(变量 "${变量} str1 str2")` 等效于 \verb`list(APPEND ...)`。
 \item 使用一个不存在的变量相当于空字符串。
-\item \verb`file(GLOB 变量 "folder/*.cpp" "fname2.cpp")` 可以列出所有 \verb`"folder/*.cpp"` 文件， 以及 \verb`fname2.cpp` （如果存在） 赋值给 \verb`变量`。 注意文件名包括绝对路径。 match 的结果也会存到 \verb`CMAKE_MATCH_编号`， 编号从 1 开始。
+\item \verb`file(GLOB 变量 "文件夹/*.cpp" "fname2.cpp")` （\verb`GLOB` 表示 global，指的是 \verb`*`，这个名字从 sh 脚本而来）可以列出所有 \verb`"folder/*.cpp"` 文件， 以及 \verb`fname2.cpp` （如果存在） 赋值给 \verb`变量`。 注意文件名包括绝对路径。 match 的结果也会存到 \verb`CMAKE_MATCH_编号`， 编号从 1 开始。
+\item \verb`file(GLOB_RECURSE 变量 "文件夹/*.cpp")` 还会递归搜索所有子文件夹。
 \item \verb`get_filename_component(变量 "文件名含路径" NAME或DIRECTORY)` 会从 \verb`"文件名含路径"` 中提取文件名或路径， 赋值给\verb`变量`。
 \item \verb`file(READ 文件名 变量)` 读取文件内容到变量。
 \item \verb`string(REGEX MATCH "...(...)..." 变量 字符串变量`。 在\verb`字符串变量`中匹配正则表达式， 并把 \verb`()` 中的匹配结果赋值给 \verb`变量`。
 \item \verb`string(REPLACE "老词" "新词" 变量 "字符串")` 做字符串替换。
 \item \verb`add_definitions(-D FOO -D BAR)` 给编译器添加宏定义（整个 cmakelist）
-\item \verb`target_compile_definitions(MyLibrary PRIVATE MY_MACRO1 MY_MACRO2=VALUE)` 可以给指定的 target 添加宏定义。
+\item \verb`target_compile_definitions(MyLibrary PRIVATE MY_MACRO1 MY_MACRO2=VALUE)` 可以给指定的 target 添加宏定义。 \verb`PRIVATE` 是该定义只给该 target 添加，不会继承。
 \item \verb`add_compile_options(-Wall -fopenmp)` 给编译器添加选项（注意不能用 \verb`-D` 定义宏）， 该命令不受 \verb`CMAKE_BUILD_TYPE` 的影响。
 \item 注意不同编译器有不同 option，所以可以判断语句给不同编译器 \verb`CMAKE_CXX_COMPILER_ID` 加不同 option
 \begin{lstlisting}[language=cmake]
@@ -115,7 +118,8 @@ endif()
 \item 在模板文件 \verb`*.in` 中， 当 \verb`opt_name` 为 \verb`ON` 时， 使用 \verb`configure_file` 命令后 \verb`#cmakedefine opt_name` 会被替换为 \verb`#define opt_name`。 如果想要给宏定义一个值， 用 \verb`#cmakedefine USE_FEATURE_B @USE_FEATURE_B@`
 \item 【cmake 3.16 的新功能】 \verb`target_precompile_headers(可执行文件 PRIVATE foo.h bar.h)` 可以编译头文件， 注意貌似不会自动包括 .h 包括的文件。 如果头文件（或者依赖的文件）改了， 那么将会自动重新编译头文件。
 \item \verb`execute_process(COMMAND 命令 参数1 参数2 ...)` 可以执行 shell 命令， 其中命令和参数中都可以用 \verb`${变量}`。 其他功能（包括命令返回的内容， 文件输入输出）， 详见\href{https://cmake.org/cmake/help/latest/command/execute_process.html}{文档}。 注意这个命令是在运行 \verb`cmake` 时执行而不是运行 \verb`make` 时。 后者可以用 \verb`add_custom_target`， 再用 \verb`add_dependencies(目标, target)` 把 target 作为目标的依赖。
-\item \verb`include(文件或者模块)`， 详见\href{https://cmake.org/cmake/help/latest/command/include.html}{文档}。 模块可以是 \verb`*.cmake` 的文件， 也可以是 cmake 的内建模块如 \verb`CheckCXXCompilerFlag`
+\item \verb`include(文件或者模块)`， 详见\href{https://cmake.org/cmake/help/latest/command/include.html}{文档}。 模块可以是 \verb`*.cmake` 的文件， 也可以是 cmake 的内建模块如 \verb`CheckCXXCompilerFlag`。
+\item \verb`include(文件)` 相当于把文件内容直接粘贴到该位置。 但注意 \verb`文件` 中的 \verb`CMAKE_CURRENT_LIST_DIR` 可以显示 \verb`文件` 的路径。
 \item \verb`macro(宏名 [参数1 参数2]) 一些命令 endmacro()` 定义宏， 调用如 \verb`ei_add_cxx_compiler_flag(参数1 参数2)`
 \item \verb`check_cxx_source_compiles(代码变量 输出变量)`\href{https://cmake.org/cmake/help/latest/module/CheckCXXSourceCompiles.html}{（文档）} 可以判断某个源码是否可以编译成功。 在调用前， 可以用 \verb`CMAKE_REQUIRED_LIBRARIES` 变量设置所需的库， \verb`CMAKE_REQUIRED_FLAGS` 指定额外的编译器选项， 等。
 \item \verb`check_cxx_compiler_flag(编译器选项 输出变量)` 可以检查某个编译器选项是否可用。 \verb`输出变量` 是 True 或 False。
@@ -174,8 +178,8 @@ message(STATUS "The square of ${my_number} is ${my_result}")
 \begin{itemize}
 \item \verb`find_package` 是一个更高级的命令， 找到某个 cmake 包的设置文件，这个文件负责把一切设置好，包括 include，如何 link 等，以及 import 一些变量。 而不是像 \verb`find_library` 那样简单地找到一个包所在的路径。
 \item \verb`find_package(包名 [版本] [REQUIRED] [COMPONENTS 组件1 组件2...])`
-\item \verb`REQUIRED`： 如果找不到就报错终止
-\item \verb`包名` 会在默认路径或者 \verb`CMAKE_MODULE_PATH` 的路径里面搜索名为 \verb`Find包名.cmake`（Module Mode，该文件通常由 cmake 提供或用户自己写） 或者 \verb`包名Config.cmake`（Config Mode，该文件通常由 package 作者提供，更高级和智能）的文件。 该文件通常会设置一些变量， 可以在 \verb`find_package` 结束后访问。
+\item \verb`REQUIRED`： 如果找不到就报错终止。
+\item \verb`包名` 会先在 \verb`CMAKE_MODULE_PATH` 后在默认路径里面搜索名为 \verb`Find包名.cmake`（Module Mode，该文件通常由 cmake 提供或用户自己写） 或者 \verb`包名Config.cmake`（Config Mode，该文件通常由 package 作者提供，更高级和智能）的文件。 该文件通常会设置一些变量， 可以在 \verb`find_package` 结束后访问。
 \item Module Mode 的使用例子：
 \begin{lstlisting}[language=cmake]
 find_package(Boost 1.71 REQUIRED COMPONENTS filesystem system)
@@ -263,11 +267,15 @@ export(TARGETS MyLibrary FILE MyLibraryConfig.cmake)
 \subsection{内置变量}
 \begin{itemize}
 \item \verb`PROJECT_NAME` 是 \verb`project(项目名)` 设置的\verb`项目名`
-\item \verb`PROJECT_SOURCE_DIR` 是源文件的根路径， 就是传给 \verb`cmake` 的路径
-\item \verb`PROJECT_BINARY_DIR` 是 Cmake 的输出路径， 临时文件， Makefile 等都在这个路径。 这就是运行 \verb`cmake` 命令时的当前路径
-\item \verb`CMAKE_CURRENT_LIST_DIR` 当前在处理的 \verb`CMakeLists.txt` 的路径。
-\item \verb`CMAKE_SOURCE_DIR` 和 \verb`CMAKE_BINARY_DIR` 和上面两个有什么区别？
+\item \verb`CMAKE_SOURCE_DIR`：顶层的 \verb`CMakeLists.txt` 目录，即 \verb`cmake 目录` 指定的那个。 该目录的结构也叫 \textbf{cmake source tree}。
+\item \verb`PROJECT_SOURCE_DIR` 是最近一次使用 \verb`project(...)` 命令定义项目的 CMakeLists.txt 文件的绝对路径。
+\item \verb`CMAKE_BINARY_DIR` 是 Cmake 的输出路径， 临时文件， Makefile 等都在这个路径。 这就是运行 \verb`cmake 目录` 命令时的当前路径。也可以用 \verb`-B 路径` 指定。 该目录的结构也叫 \textbf{cmake build tree}。 \verb`PROJECT_BINARY_DIR` 同理可得。
+\item 当运行 \verb`cmake .` 的时候， \verb`CMAKE_SOURCE_DIR` 和 \verb`CMAKE_BINARY_DIR` 相同，此时叫做 \textbf{in-source build}，不推荐这么做。
+\item \verb`CMAKE_CURRENT_LIST_DIR` 当前在处理的 \verb`CMakeLists.txt` 的路径。 当 \verb`include(子文件)` 时则变为 \verb`子文件` 所在的目录。
+\item \verb`CMAKE_CURRENT_SOURCE_DIR` 当 \verb`include(子文件)` 时不改变。
+\item \verb`add_subdirectory(子目录)` 时，\verb`CMAKE_CURRENT_LIST_DIR` 和 \verb`CMAKE_CURRENT_SOURCE_DIR` 都会更新到 \verb`子目录`。
 \item \verb`CMAKE_BUILD_TYPE` 可以被用户设置为 \verb`Release`， \verb`Debug` 等。 例如 \verb`cmake -DCMAKE_BUILD_TYPE=Debug` 用 debug 模式编译。 \verb`Debug` 模式下，编译器优化会被自动关闭， \verb`-g` 选项会自动加上， \verb`NDEBUG` 不会。 在两种模式下， \verb`CMAKE_CXX_FLAGS_DEBUG` 和 \verb`CMAKE_CXX_FLAGS_RELEASE` 中的选项会分别传给编译器。 任何模式下 \verb`CMAKE_CXX_FLAGS` 的选项都会传给编译器。
+\item \verb`CMAKE_MODULE_PATH` 提供 \verb`include()` 和 \verb`find_package()` 命令的优先搜索路径（多个路劲用 \verb`;` 隔开）。 例如 \verb`include(MyFuncs)` 就会在这些路径中搜索 \verb`MyFuncs.cmake`
 \item \verb`WIN32` 可以判断是否在 windows 上（包括 32 和 64 位）
 \item \verb`MSVC` 判断是否用 Visual C++ 编译器
 \end{itemize}
