@@ -5,14 +5,14 @@
 \begin{itemize}
 \item 在 Linux 或其他 POSIX 系统上 \verb`std::thread` 底层通常使用 \enref{pthread}{pthred}。
 \item \verb`#include <thread>`， \verb`#include <mutex>`
-\item \verb`std::thread th(函数, arg1, arg2, ...)`; 创建一个线程， 调用\verb`函数`（可以是函数指针， 函数对象， lambda）， \verb`arg` 是\verb`函数`的变量。 但如果 \verb`函数` 有参数是 reference， 对应的 \verb`arg1` 等需要用 \verb`std::ref(变量)` 或者 \verb`std::cref(变量)`
+\item \verb`std::thread th(函数, arg1, arg2, ...)`; 创建一个线程， 调用\verb`函数`（可以是函数指针， 函数对象， lambda）， \verb`arg*` 是\verb`函数`的变量。 但如果 \verb`函数` 有参数是 reference， 对应的 \verb`arg*` 需要用 \verb`std::ref(变量)` 或者 \verb`std::cref(变量)`
 \item \verb`th.join()` 可以让当前线程休眠等待某个线程自己退出再让当前线程继续运行。
-\item 声明一个全局变量 \verb`std::mutex m` 可以避免多个线程操作同一数据。 该类型不可以 copy 只能通过 reference 传参。
+\item 声明一个全局变量 \verb`std::mutex m` （互斥锁，mutual exclusive lock）可以避免多个线程操作同一数据。 该类型不可以 copy 只能通过 reference 传参。
 \item \verb`m.lock()` 给 mutex 上锁， 如果已经被别人上锁就暂停该线程并等待解锁。 \verb`m.try_lock()` 试图上锁， 如果已经被别人上锁就返回 \verb`false`。
 \item 如果同一个线程试图给 mutex 连续上锁两次， 结果未定义， 但通常会导致该线程卡住且一直锁下去（dead lock）。
 \item \verb`m.unlock()` 解锁，以便别的线程上锁。
 \item 为了避免在 \verb`m.lock()` 和 \verb`m.unlock()` 之间发生 throw（这样就无法自动解锁）， 通常不直接调用他们， 而是用 \verb`std::lock_guard<std::mutex> guard(m)`。 constructor 相当于 lock， destructor 相当于 unlock。
-\item \verb`unique_lock<std::mutex>` 类似于 \verb`lock_guard` 但更灵活。 可以用 \verb`.lock()` 和 \verb`.unlock()` 多次手动上锁和解锁。
+\item \verb`std::unique_lock<std::mutex>` 类似于 \verb`lock_guard` 但更灵活。 可以用 \verb`.lock()` 和 \verb`.unlock()` 多次手动上锁和解锁。
 \item \verb`std::this_thread::sleep_for(std::chrono::seconds(2));` 可以让某个线程休眠若干时间
 \item \verb`sleep_for` 不是 busy wait 而是像 \verb`cin` 等待时一样运行 cpu 执行别的东西，也就是让系统接管，直到某个事件发生然后再继续。
 \item 相比之下， \textbf{自旋锁}就是指一个线程一直用一个空循环不断检查锁的状态直到解锁。
@@ -61,13 +61,14 @@ int main()
 
 \subsubsection{thread\_local 变量}
 \begin{itemize}
-\item 在全局变量， 以及函数和类中的 static 变量的声明中把 \verb`static` 替换为 \verb`thread_local`，可以让其在每个线程中保持自己独立的 copy， 使函数变得 thread safe。 例如上面的 \verb`myfun` 中如果声明了 \verb`thread_local static vector<int> a;`， 那么每个线程第一次调用该函数时就会生成一个独立的变量 \verb`a`， 若一个线程多次调用该函数， 那么每次调用时 \verb`a` 都会有上次调用结束前的值。
+\item 在全局变量， 以及函数和类中的 static 变量的声明中把 \verb`static` 替换为 \verb`thread_local`（后者已经包含了前者，但 \verb`static thread_local` 也是允许的），可以让其在每个线程中保持自己独立的 copy， 使函数变得 thread safe。 例如上面的 \verb`myfun` 中如果声明了 \verb`thread_local static vector<int> a;`， 那么每个线程第一次调用该函数时就会生成一个独立的变量 \verb`a`， 若一个线程多次调用该函数， 那么每次调用时 \verb`a` 都会有上次调用结束前的值。
 \end{itemize}
 
 \subsection{std::condition\_variable}
 \begin{itemize}
-\item \verb`condition_variable` 用于 block 一个或者多个线程（也就是让它睡觉，腾出 CPU 算力做别的事情），直到某个另外的线程发送一个信号，可以由操作系统唤醒其中一个或全部。 每个线程被 block 以前需要检查某个条件是否满足，如果已经满足就不会被 block， 不满足就 block， 直到被某个 notify 唤醒。 但唤醒可能是假唤醒（跟操作系统有关，即使不 notify 也可能会唤醒），所以唤醒以后还要再确认一遍条件。
-\item 每次确认条件需要使用 mutex 确保条件不会被中途改变。 所以需要检查前手动锁 mutex， \verb`wait()` 在 block 开始时会释放 mutex。 唤醒后（包括假唤醒）会重新锁 mutex 再退出 \verb`wait()`（如果没有第二个参数）， 手动检查完条件后还可以手动对条件变量做一些更改，完了再手动释放 mutex。
+\item \verb`condition_variable` 用于 block 一个或者多个线程（也就是让它睡觉，腾出 CPU 算力做别的事情），直到某个另外的线程发送一个信号，可以由操作系统唤醒其中一个或全部。 每个线程被 block 以前需要检查某个条件是否满足，如果已经满足就不会被 block， 不满足就 block， 直到被某个 \verb`notify` 唤醒。 但唤醒可能是假唤醒（跟操作系统有关，即使不 notify 也可能会唤醒），所以唤醒以后还要再确认一遍条件。
+\item 如果没有线程正在 \verb`wait()`， \verb`notify` 作废，不会保留到以后。
+\item 每次确认条件需要使用 mutex 确保条件不会被中途改变。 所以需要检查前手动锁 mutex， \verb`wait()` 在 block 开始时会释放 mutex。 唤醒后（包括假唤醒）会重新锁 mutex 再退出 \verb`wait()`， 手动检查完条件后还可以手动对条件变量做一些更改，完了再手动释放 mutex。
 \item \verb`wait()` 的第二个可选参数可以直接把一个 lambda 函数放进去，用于返回条件，这相当于把 \verb`wait()` 手动放入一个 \verb`while(条件)` 循环。
 \item 一个著名的应用是 producer/consumer 问题，也就是一个队列，若干 producer 线程往里添加，若干 consumer 处理队列中的元素，处理完的元素删掉：
 \end{itemize}
@@ -79,50 +80,86 @@ int main()
 #include <condition_variable>
 #include <queue>
 
-std::mutex mtx;
-std::condition_variable cv_producer;
-std::condition_variable cv_consumer;
-std::queue<int> buffer;
+using namespace std;
+mutex mtx;
+condition_variable cv_producer;
+condition_variable cv_consumer;
+queue<int> buffer;
 const unsigned int max_buffer_size = 10;
+int product_id = 0;
 
 void producer(int id) {
-    for (int i = 0; i < 20; ++i) {
-        std::unique_lock<std::mutex> lck(mtx);
-        // Wait until buffer is not full
-        cv_producer.wait(lck, []{ return buffer.size() < max_buffer_size; });
-        buffer.push(i);
-        std::cout << "Producer " << id << " produced " << i << "\n";
-        cv_consumer.notify_one(); // Notify one consumer
+    for (int i = 0; i < 4; ++i) {
+		unique_lock<mutex> lck(mtx); // locked
+		int this_product_id = product_id++;
+		cout << "+ Producer [" << id << "] producing "
+            << this_product_id << "\n";
+		lck.unlock();
+		// do some heavy work here in parallel
+        this_thread::sleep_for(chrono::milliseconds(200));
+		lck.lock();
+        auto wake_cond = []{ return buffer.size() < max_buffer_size; };
+        // wakes when notified and wake_cond is true
+        // do nothing (no waiting, no unlock) if condition is already true
+        // 如果 wait() 第一次检查 wake_cond 不要求上锁，那么可能在检查到休眠之间，
+        // 别人生产了一个且发送了无效的 notify，那这里就可能醒不来了。
+        // 所以 buffer 必须要在 lock 的时候修改和检查
+        cv_producer.wait(lck, wake_cond);
+        // lock re-acquired on wake (or ramain locked)
+        // followings not thread-safe without lock
+        // buffer might already be full if not locked
+        buffer.push(this_product_id);
+        cout << "  Producer [" << id << "] produced "
+            << this_product_id << "\n";
+        // guaranteed waking at least one consumer (lock unnecessary)
+        // do nothing is all consumers are awake
+        cv_consumer.notify_one();
+        // destructor unlocked loc
     }
 }
 
 void consumer(int id) {
-    for (int i = 0; i < 10; ++i) {
-        std::unique_lock<std::mutex> lck(mtx);
-        // Wait until buffer is not empty
-        cv_consumer.wait(lck, []{ return !buffer.empty(); });
+    for (int i = 0; i < 2; ++i) {
+        unique_lock<mutex> lck(mtx); // locked
+        auto wake_cond = []{ return !buffer.empty(); };
+        // wakes when notified and wake_cond is true
+        // do nothing (no waiting, no unlock) if condition is already true
+        cv_consumer.wait(lck, wake_cond);
+        // lock re-acqured on wake (or ramain locked)
+        // not thread-safe if unlocked
+        // (buffer might be poped by others and empty if unlocked)
         int item = buffer.front();
         buffer.pop();
-        std::cout << "Consumer " << id << " consumed " << item << "\n";
-        cv_producer.notify_one(); // Notify one producer
+        cout << "- Consumer [" << id << "] received " << item << "\n";
+        // loc.unlock();
+        // do some heavy work here in parallel
+        this_thread::sleep_for(chrono::milliseconds(200));
+        // loc.lock();
+        cout << "  Consumer [" << id << "] processed " << item << "\n";
+        cv_producer.notify_one(); // notify one producer
+        // destructor unlocked loc
     }
 }
 
 int main() {
-    std::thread producers[2];
-    std::thread consumers[4];
+    thread producers[2];
+    thread consumers[4];
 
+	int tid = 0;
     for (int i = 0; i < 2; ++i)
-        producers[i] = std::thread(producer, i);
+        producers[i] = thread(producer, tid++);
 
     for (int i = 0; i < 4; ++i)
-        consumers[i] = std::thread(consumer, i);
+        consumers[i] = thread(consumer, tid++);
 
     for (auto& p : producers) p.join();
     for (auto& c : consumers) c.join();
 
+	cout << "final buffer size: " << buffer.size() << endl;
+
     return 0;
 }
+
 \end{lstlisting}
 
 \subsection{自旋锁}

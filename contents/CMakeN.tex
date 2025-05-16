@@ -17,7 +17,7 @@
 \item \verb`CMakeLists.txt` 中， 注释如 \verb`#[[一些注释]]` 或者 \verb`#一些注释` 直到行末
 \item \verb`cmake -G 生成器 CMakeLists.txt的路径` 可以指定生成器， \verb`生成器` 可以是 \verb`Unix Makefiles`， \verb`MinGW Makefiles`， \verb`Ninja`
 \item ninja 的用法和 make 一样， \verb`ninja` 编译（默认使用当前路径的 \verb` build.ninja` 文件）， \verb`ninja install` 安装
-\item \verb`cmake -L CMakeLists.txt的路径` 列出编译选项， \verb`-LH` 列出选项以及帮助说明。 \verb`-LAH` 列出所有选项（会多出很多 \verb`CMAKE_` 开头的， 不是作者提供的选项）， 用 \verb`cmake -D 选项1=值1 -D 选项2=值2 CMakeLists.txt的路径` 来设置选项（\verb`-D` 后面可以没有空格）。
+\item \verb`cmake -L CMakeLists.txt的路径` 列出编译选项， \verb`-LH` 列出选项以及帮助说明。 \verb`-LAH` 列出所有选项（会多出很多 \verb`CMAKE_` 开头的， 不是作者提供的选项）， 用 \verb`cmake -D 选项1=值1 -D 选项2=值2 CMakeLists.txt的路径` 来设置选项（\verb`-D` 后面可以没有空格）。 如果需要一个 list 作为值，就用 \verb`-D 选项="值1;值2;..."` 例如 \verb`-DCMAKE_PREFIX_PATH="/path1;/path2;/path3" ..`
 \item 要指定路径， 用 \verb`cmake -S CMakeLists.txt的路径 -B 生成Makefile的路径`， 然后再到 Makefile 的路径 \verb`make -j12` 即可。 cmake 会自动生成 \verb`生成Makefile的路径`。 如果要清理 cmake 生成的文件以及所有编译出来的文件， 直接把第二个路径清空即可。
 \item 当然， 也不是什么平台都可以用 \verb`make`， 所以也可以用 \verb`cmake --build 生成Makefile的路径 [--target 可执行文件] -- -j 12` 其中 \verb`--` 后面的选项会传给 \verb`make` 或者别的具体用于编译的程序。
 \item Cmake 的基本语法是 \verb`命令(arg1 arg2 ...)` 其中 \verb`命令` 不区分大小写， \verb`arg` 用空格隔开也可以换行， 如果 \verb`arg` 本身有空格， 用双引号即可
@@ -179,6 +179,7 @@ message(STATUS "The square of ${my_number} is ${my_result}")
 \item \verb`find_package` 是一个更高级的命令， 找到某个 cmake 包的设置文件，这个文件负责把一切设置好，包括 include，如何 link 等，以及 import 一些变量。 而不是像 \verb`find_library` 那样简单地找到一个包所在的路径。
 \item \verb`find_package(包名 [版本] [REQUIRED] [COMPONENTS 组件1 组件2...])`
 \item \verb`REQUIRED`： 如果找不到就报错终止。
+\item \verb`find_package` 会依次寻找 \verb`/usr/lib/cmake/`，\verb`/usr/local/lib/cmake/`，\verb`CMAKE_PREFIX_PATH.`
 \item \verb`包名` 会先在 \verb`CMAKE_MODULE_PATH` 后在默认路径里面搜索名为 \verb`Find包名.cmake`（Module Mode，该文件通常由 cmake 提供或用户自己写） 或者 \verb`包名Config.cmake`（Config Mode，该文件通常由 package 作者提供，更高级和智能）的文件。 该文件通常会设置一些变量， 可以在 \verb`find_package` 结束后访问。
 \item Module Mode 的使用例子：
 \begin{lstlisting}[language=cmake]
