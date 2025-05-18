@@ -1,0 +1,212 @@
+% Softmax 函数（综述）
+% license CCBYSA3
+% type Wiki
+
+本文根据 CC-BY-SA 协议转载翻译自维基百科\href{https://en.wikipedia.org/wiki/Softmax_function}{相关文章}。
+
+Softmax 函数，也称为 softargmax1: 184  或归一化指数函数2: 198 ，能够将一个长度为 K 的实数向量转换为 K 个可能结果的概率分布。它是逻辑函数在多维空间的推广形式，常用于多项式逻辑回归中。Softmax 函数通常作为神经网络中最后一层的激活函数，用于将网络输出归一化为对各个预测类别的概率分布。
+\subsection{定义}
+Softmax 函数以一个长度为 $K$ 的实数向量 $\mathbf{z}$ 作为输入，并将其归一化为一个概率分布：该分布由 $K$ 个概率值组成，每个概率值与输入中对应元素的指数成正比。也就是说，在应用 Softmax 之前，向量中的某些分量可能为负，或大于 1，且它们的和不一定为 1；但在应用 Softmax 之后，每个分量都将位于区间 $(0, 1)$ 之内，并且所有分量之和为 1，因此可以将它们解释为概率。此外，输入值越大的分量，对应的概率也越大。
+
+标准（单位）Softmax 函数$\sigma: \mathbb{R}^K \to (0,1)^K$,其中 $K > 1$，它接收一个向量$\mathbf{z} = (z_1, \dotsc, z_K) \in \mathbb{R}^K$,并计算输出向量$\sigma(\mathbf{z}) \in (0,1)^K$的每个分量，定义为：
+$$
+\sigma(\mathbf{z})_i = \frac{e^{z_i}}{\sum_{j=1}^{K} e^{z_j}}.~
+$$
+换句话说，Softmax 对输入向量 $\mathbf{z}$ 中的每个元素 $z_i$ 应用标准指数函数（即 $e^{z_i}$），然后将所有指数值归一化——即每个指数值除以所有指数值的总和。这个归一化操作保证了输出向量 $\sigma(\mathbf{z})$ 所有分量的和为 1，从而可以被解释为概率分布。
+
+“Softmax”一词来源于指数函数对输入向量中最大值的放大作用。例如，对向量 $(1, 2, 8)$ 进行标准 Softmax 运算，其结果大约为$(0.001, 0.002, 0.997)$,也就是说，几乎所有的权重都被分配给了最大值 8 所在的位置。
+
+一般情况下，Softmax 函数中不一定非要使用自然底数 $e$，可以使用任意大于 0 的底数 $b$。和之前一样：如果 $b > 1$，那么输入向量中较大的分量会对应较大的输出概率；并且当 $b$ 增大时，所得的概率分布将更加集中在最大值所在的位置；相反，如果 $0 < b < 1$，那么输入中较小的分量反而会对应较大的输出概率；随着 $b$ 的减小，概率分布将更多地集中在最小值所在的位置。我们可以写成如下形式：$b = e^{\beta}$，或$b = e^{-\beta}$，其中 $\beta$ 为实数。这将导致 Softmax 函数有如下表达式：
+$$
+\sigma(\mathbf{z})_i = \frac{e^{\beta z_i}}{\sum_{j=1}^{K} e^{\beta z_j}} \quad \text{或} \quad \sigma(\mathbf{z})_i = \frac{e^{-\beta z_i}}{\sum_{j=1}^{K} e^{-\beta z_j}}, \quad \text{其中 } i = 1, \dotsc, K~
+$$
+其中与 $\beta$ 的倒数成正比的值，有时被称为温度：$\beta = 1/kT$这里的 $k$ 通常取 1 或玻尔兹曼常数，$T$ 是“温度”。较高的温度（较小的 $\beta$）会使输出分布更均匀（即熵更高，更“随机”）；较低的温度（较大的 $\beta$）则会使分布更尖锐，即一个值占主导地位。
+
+在某些领域中，底数 $b$ 是固定的，对应于某种固定的尺度；而在另一些领域中，会改变参数 $\beta$ 或 $T$ 来调整分布的形状。
+\subsection{解释}
+\subsubsection{平滑的 arg max}
+Softmax 函数是 arg max 函数（即返回向量中最大元素索引的函数）的一个平滑近似。尽管如此，“softmax”这个名称可能具有误导性：它并不是最大值函数的平滑近似，而只是arg max的平滑版本。“softmax”一词有时也被用来指代与之密切相关的 LogSumExp 函数，而后者确实是最大值函数的平滑近似。因此，为了更准确地表达其本质，一些人更倾向于使用“softargmax”这一术语，尽管在机器学习领域，“softmax”已经是习惯用法。为避免混淆，本节中使用“softargmax”这一更清晰的表述。
+
+与其将 arg max 看作一个输出为类别索引（如 $1, 2, \dots, n$）的函数，我们可以将其视为一个输出为独热编码的函数（假设最大值是唯一的）：
+$$
+\operatorname{arg,max}(z_1, \dots, z_n) = (y_1, \dots, y_n) = (0, \dots,0,1,0,\dots, 0)~
+$$
+当且仅当索引 $i$ 是向量$(z_1, \dots, z_n)$的最大值所在位置时，输出坐标 $y_i = 1$，也就是说，$z_i$是该向量的**唯一最大值**。例如，在这种编码下：$\operatorname{arg\,max}(1, 5, 10) = (0, 0, 1)$因为第三个元素是最大值。
+
+这一表示可以推广到存在多个最大值（即多个 $z_i$ 相等且为最大值）的情况。此时，可以将值 1 平均分配给所有最大值所在的位置；形式上，对应位置取值为 $1/k$，其中 $k$ 是最大值的个数。例如：$\operatorname{arg\,max}(1, 5, 5) = (0, 1/2, 1/2)$,因为第二和第三个元素都是最大值。如果所有元素都相等，例如：$\operatorname{arg\,max}(z, \dots, z) = \left( 1/n, \dots, 1/n \right)$表示每个位置都等可能是最大值。具有多个最大值的点 $\mathbf{z}$ 被称为奇异点（singular points或 singularities），它们构成所谓的奇异集——这些是 arg max 函数不连续的点（存在跳跃不连续）；而只有一个最大值的点则称为非奇异点或常规点（non-singular或 regular points）。
+
+根据引言中的最后一个表达式，softargmax 是 arg max函数的一个平滑近似：当$\beta \to \infty$时，softargmax 逐点收敛于 arg max。也就是说，对于任意固定的输入向量 $\mathbf{z}$，当 $\beta \to \infty$ 时，有：$\sigma_{\beta}(\mathbf{z}) \to \operatorname{arg\,max}(\mathbf{z})$。然而，softargmax 不以一致方式收敛于 arg max。这意味着不同的输入点收敛速度不同，甚至可能非常缓慢。实际上，softargmax 是连续的，而 arg max 在 奇异集（即两个或多个坐标相等的位置）上是不连续的。由于连续函数的一致极限也是连续函数，而 arg max 不连续，因此 softargmax 不可能以一致方式收敛于它。其不一致收敛的原因在于：当输入中两个坐标接近相等（其中一个略大于另一个）时，arg max 的输出会发生剧烈跳跃（从一个位置变到另一个）。例如：
+$\sigma_\beta(1, 1.0001) \to (0, 1)$，$\sigma_\beta(1, 0.9999) \to (1, 0)$，而对于完全相等的输入 $(1, 1)$，无论 $\beta$ 为多少，都有：$\sigma_\beta(1, 1) = (1/2, 1/2)$。这说明：越接近奇异点 $(x, x)$，收敛速度越慢。尽管如此，在非奇异点集（即最大值唯一）上，softargmax 会在紧集上收敛。这是一种更强的逐点收敛形式，适用于没有不连续跳变的区域。
+
+相反地，当$\beta \to -\infty$时，softargmax 会以相同的方式收敛到 arg min，这时的奇异集是具有两个或多个最小值的点。在热带分析的语言中，softmax 被视为对 arg max 和 arg min 的一种变形或“量化”。具体而言，这种变形是将 max-plus 半环（对应 arg max）或 min-plus 半环（对应 arg min）替换为 对数半环。通过取极限来恢复 arg max 或 arg min 的过程，被称为“热带化”或“去量化”。
+
+同样地，对于任意固定的 $\beta$，如果某个输入 $z_i$ 相对于温度$T = 1/\beta$来说远大于其他输入分量，那么 Softmax 的输出就会近似于 arg max。例如，当温度为 1 时，输入间的差值为 10 被认为是“很大”的：
+$$
+\sigma(0, 10) := \sigma_1(0, 10) = \left( 1/(1 + e^{10}), e^{10}/(1 + e^{10})\right) \approx (0.00005, 0.99995)~
+$$
+在这种情况下，输出几乎完全集中在最大值对应的位置上。
+
+但如果输入差值相对于温度来说较小，则输出就不会接近 arg max。例如，当温度为 100 时，差值 10 相对较小：
+$$
+\sigma_{1/100}(0, 10) = \left( 1/(1 + e^{1/10}), e^{1/10}/(1 + e^{1/10})\right) \approx (0.475, 0.525)~
+$$
+此时两个分量的概率接近平均，远不如高温差下那么“明确”。随着$\beta \to \infty$，意味着温度$T = 1/\beta \to 0$，此时即便是很小的输入差异，相对于趋近于零的温度也变得“巨大”，这为 Softmax 在极限情形下趋于 arg max 提供了另一种解释。
+\subsubsection{统计力学}
+在统计力学中，softargmax 函数被称为玻尔兹曼分布，也称为吉布斯分布：\(^\text{[5]: 7}\)索引集合 $\{1, \dots, k\}$ 表示系统的微观状态；输入值 $z_i$ 表示对应状态的能量；分母称为配分函数，通常记为 $Z$；因子 $\beta$ 被称为冷度，也称为热力学贝塔或逆温度。
+\subsection{应用}
+Softmax 函数被广泛应用于多类分类任务中，例如多项逻辑回归（又称 softmax 回归）\(^\text{[2]: 206–209 [6]}\)、多类线性判别分析、朴素贝叶斯分类器以及人工神经网络中的输出层\(^\text{[7]}\)。具体来说，在多项逻辑回归和线性判别分析中，Softmax 函数的输入是由 $K$ 个不同线性函数的输出组成，其对某个样本向量 $\mathbf{x}$ 和权重向量 $\mathbf{w}$ 给出的第 $j$ 类的预测概率为：
+$$
+P(y = j \mid \mathbf{x}) = \frac{e^{\mathbf{x}^\mathsf{T} \mathbf{w}_j}}{\sum_{k=1}^{K} e^{\mathbf{x}^\mathsf{T} \mathbf{w}_k}}~
+$$
+这个表达式可以看作是以下两个步骤的组合：应用 $K$ 个线性函数：$\mathbf{x} \mapsto \mathbf{x}^\mathsf{T} \mathbf{w}_1, \dotsc, \mathbf{x} \mapsto \mathbf{x}^\mathsf{T} \mathbf{w}_K$（其中 $\mathbf{x}^\mathsf{T} \mathbf{w}$ 表示 $\mathbf{x}$ 和 $\mathbf{w}$ 的内积）；将上述结果输入到 Softmax 函数中。这个过程等价于将一个线性算子（由权重向量 $\mathbf{w}$ 定义）应用于输入向量 $\mathbf{x}$，从而将原始的（可能是高维的）输入转换为一个位于 $\mathbb{R}^K$ 空间中的向量。这个向量可以理解为输入属于每个类别的“激活度”，再通过 Softmax 转换为概率分布。
+\subsubsection{神经网络}
+标准的 softmax 函数常被用作基于神经网络的分类器的最后一层激活函数。在这种设置下，网络通常在对数损失函数或交叉熵框架下进行训练，从而形成一种非线性的多项逻辑回归模型。
+
+由于 softmax 函数的输出依赖于输入向量和特定索引 $i$，因此在计算导数时需要考虑该索引的影响：
+$$
+\frac{\partial}{\partial q_k} \sigma(\mathbf{q}, i) = \sigma(\mathbf{q}, i) \left( \delta_{ik} - \sigma(\mathbf{q}, k) \right)~
+$$
+这个表达式在索引 $i$ 和 $k$ 上是对称的，因此也可以等价地写为：
+$$
+\frac{\partial}{\partial q_k} \sigma(\mathbf{q}, i) = \sigma(\mathbf{q}, k) \left( \delta_{ik} - \sigma(\mathbf{q}, i) \right)~
+$$
+其中，$\delta_{ik}$ 是克罗内克$\delta$符号，用于简化表达式（类似于 sigmoid 函数导数通过函数自身表示的方式）。
+
+这些导数形式在反向传播中非常重要，用于计算 softmax 层中各个神经元的梯度。
+
+为确保数值计算的稳定性，通常会从输入向量中减去其最大值。这种做法在理论上不会改变 Softmax 的输出或导数，但在实际计算中可以显著提升稳定性，因为它有效控制了所计算指数项的最大值，避免了指数溢出的问题。
+
+如果 Softmax 函数中引入了缩放参数 $\beta$，则上述导数表达式需要乘以该参数 $\beta$。
+
+关于使用 Softmax 激活函数的概率模型，可参考多项逻辑模型。
+\subsubsection{强化学习}
+在强化学习领域，Softmax 函数可用于将动作值转换为各动作的概率。常用的形式如下：\(^\text{[8]}\)
+$$
+P_t(a) = \frac{\exp(q_t(a) / \tau)}{\sum_{i=1}^{n} \exp(q_t(i) / \tau)}~
+$$
+其中：$q_t(a)$ 表示在时间 $t$ 选择动作 $a$ 的期望奖励；$\tau$ 被称为温度参数，借用了统计力学中的术语。当温度较高（即 $\tau \to \infty$）时，所有动作的概率几乎相同；而温度越低，动作的期望奖励对概率的影响越大。当温度趋近于零（即 $\tau \to 0^+$）时，具有最高期望奖励的动作的概率趋近于 1，其他动作的概率趋近于 0。此机制常用于在探索（高温）与利用（低温）之间做平衡。
+\subsection{计算复杂度与解决方案}
+在神经网络应用中，可能结果的数量 $K$ 通常非常大，例如在神经语言模型中，需要从一个可能包含数百万词汇的词表中预测最可能的输出单词。\(^\text{[9]}\)这会使 softmax 层的计算（即先进行矩阵乘法以得到各个 $z_i$，再应用 softmax 函数本身）变得非常昂贵。\(^\text{[9][10]}\)更进一步地，在使用梯度下降的反向传播方法训练此类神经网络时，每一个训练样本都需要计算一次 softmax，而训练样本的数量往往也很庞大。因此，Softmax 的计算开销成为了构建更大规模神经语言模型的主要限制因素，这推动了各种用于缩短训练时间的解决方案的发展。\(^\text{[9][10]}\)
+
+重构 Softmax 层以提高计算效率的方法包括：层次化 softmax和 分化 softmax。\(^\text{[9]}\)其中，层次化 softmax（由 Morin 和 Bengio 于 2005 年提出）采用二叉树结构，将所有可能输出（如词汇表中的单词）作为叶节点，而中间节点则是适当选择的一些“类别”，作为潜在变量。\(^\text{[10][11]}\)对于某个叶节点（即输出结果）的 softmax 概率，可以通过从根节点到该叶节点路径上所有节点概率的乘积来计算。\(^\text{[10]}\)在理想情况下，如果该树是平衡树，其计算复杂度可由$O(K)$降低至$O(\log_2 K)$。\(^\text{[11]}\)实际效果则依赖于如何将输出结果合理地聚类成类别。\(^\text{[10][11]}\)例如，Google 于 2013 年推出的 word2vec 模型中就使用了Huffman 树来实现这一结构，以提高可扩展性。\(^\text{[9]}\)
+
+第二类解决方案是在训练过程中，通过改写损失函数来近似计算 softmax，从而避免完整归一化因子的计算。\(^\text{[9]}\)此类方法包括仅在一个输出样本子集上进行归一化的策略，例如：  重要性采样,目标采样。\(^\text{[9][10]}\)这些方法有效地减少了计算开销，尤其适用于处理具有超大类别数的输出空间。
+\subsection{数值算法}
+标准的 softmax 在数值上可能不稳定，因为涉及到较大的指数运算。为了解决这一问题，安全的 softmax 方法采用以下计算方式：
+$$
+\sigma(\mathbf{z})_i = \frac{e^{\beta (z_i - m)}}{\sum_{j=1}^{K} e^{\beta (z_j - m)}}~
+$$
+其中：$m = \max_i z_i$即 $m$ 是输入向量中最大的分量。通过从每个 $z_i$ 中减去最大值 $m$，可以保证指数运算的结果不会超过 1，从而避免因指数过大而导致的数值溢出问题。这是一种常见且有效的数值稳定化技巧。
+
+Transformer 中的注意力机制接收三个参数：一个“查询向量” $q$、一组“键向量” $k_1, \dots, k_N$，以及一组“值向量” $v_1, \dots, v_N$。其输出是一个对值向量的 softmax 加权求和：
+$$
+o = \sum_{i=1}^{N} \frac{e^{q^{T}k_i - m}}{\sum_{j=1}^{N} e^{q^{T}k_j - m}} v_i~
+$$
+标准的 softmax 实现通常需要对输入进行多次循环操作，这些操作受限于内存带宽，成为计算瓶颈。而FlashAttention方法是一种避免通信的算法，它将这些操作融合为一个单一循环，从而提高了算术强度。FlashAttention 是一种在线算法，它计算以下量：\(^\text{[12][13]}\)
+$$
+\begin{aligned}
+z_i &= q^T k_i \\
+m_i &= \max(z_1, \dots, z_i) = \max(m_{i-1}, z_i) \\
+l_i &= e^{z_1 - m_i} + \dots + e^{z_i - m_i} = e^{m_{i-1} - m_i} l_{i-1} + e^{z_i - m_i} \\
+o_i &= e^{z_1 - m_i} v_1 + \dots + e^{z_i - m_i} v_i = e^{m_{i-1} - m_i} o_{i-1} + e^{z_i - m_i} v_i
+\end{aligned}~
+$$
+最终返回的结果为：$o_N/l_N$.在实际应用中，FlashAttention 会在每次循环迭代中处理多个 query 和 key 向量对，其方式类似于分块矩阵乘法。当需要反向传播时，FlashAttention 会缓存中间变量数组：最大值序列 $[m_1, \dots, m_N]$权重归一化因子序列 $[l_1, \dots, l_N]$在反向传播阶段，注意力矩阵会根据这些中间结果重新构建，从而实现类似于梯度检查点的机制，节省了显存使用。
+\subsection{数学性质}
+从几何角度来看，Softmax 函数将向量空间$\mathbb{R}^K$映射到标准 $(K - 1)$-单纯形的边界上，即维度从 $K$ 降为 $K - 1$。这是因为 Softmax 输出满足一个线性约束：所有分量之和为 1，因此其输出位于一个超平面上。换句话说，Softmax 的值域是嵌入在 $K$-维空间中的一个 $(K - 1)$-维单纯形。
+
+沿着主对角线$(x, x, \dots, x)$方向，Softmax 的输出是均匀分布：$(1/n, \dots, 1/n)$——即当所有输入得分相等时，输出的概率也相等。
+
+更一般地说，Softmax 对于**每个坐标都加上相同常数的平移是不变的：若对输入向量 $\mathbf{z}$ 加上 $\mathbf{c} = (c, \dots, c)$，则有：$\sigma(\mathbf{z} + \mathbf{c}) = \sigma(\mathbf{z})$这是因为对所有指数项都乘以了同一个因子 $e^c$，即：$e^{z_i + c} = e^{z_i} \cdot e^c$由于在 softmax 中计算的是比值关系，所以这个公共因子会被约掉，不影响最终结果：
+$$
+\sigma(\mathbf{z} + \mathbf{c})_j = \frac{e^{z_j + c}}{\sum_{k=1}^{K} e^{z_k + c}} = \frac{e^{z_j} \cdot e^c}{\sum_{k=1}^{K} e^{z_k} \cdot e^c} = \sigma(\mathbf{z})_j~
+$$
+从几何角度来看，Softmax 在主对角线方向上是恒定的：这是被消除的维度，对应于 Softmax 输出不受输入得分整体平移的影响（即“设置某个得分为 0”这一选择不会改变结果）。我们可以通过假设输入得分之和为 0 来规范化输入（即减去平均值）：$\mathbf{c} \quad \text{其中} \quad c = \frac{1}{n} \sum z_i$这样，Softmax 就将输入得分和为 0 的超平面（即$\sum z_i = 0$）映射为一个所有分量为正且总和为 1 的开放单纯形（即$\sum \sigma(\mathbf{z})_i = 1$）。这就类似于指数函数将 0 映射为 1：$e^0 = 1$而且输出始终为正。
+
+与此相对，Softmax 对缩放不具不变性。例如：$\sigma((0, 1)) = \left( 1/(1 + e), e/(1 + e) \right)$但：$\sigma((0, 2)) = \left( 1/(1 + e^2), e^2/(1 + e^2) \right)$尽管两者的差值分别为 1 和 2，但 Softmax 输出不同。因此，Softmax 对加法平移不变，但对乘法缩放敏感。
+
+标准逻辑函数是 Softmax 在二维空间中一维情形的特例，例如在二维平面 $(x, y)$ 中沿着 $x$-轴的情况。假设其中一个变量固定为 0（如 $z_2 = 0$，那么 $e^0 = 1$），另一个变量可以变化，记为 $z_1 = x$。所以：$e^{z_1}/\sum_{k=1}^{2} e^{z_k} = e^x/(e^x + 1)$这就是标准逻辑函数；而：$e^{z_2}/\sum_{k=1}^{2} e^{z_k} =1/(e^x + 1)$是它的互补函数（两者相加为 1）。这个一维输入也可以用向量$\left(x/2, -x/2\right)$来表示。此时的 Softmax 输出为：$e^{x/2}/(e^{x/2} + e^{-x/2}) = e^x/(e^x + 1)$以及：$e^{-x/2}/(e^{x/2} + e^{-x/2})= 1/(e^x + 1)$
+\subsubsection{梯度}
+Softmax 函数实际上是 LogSumExp（对数-指数和）函数的梯度，即：
+$$
+\frac{\partial}{\partial z_i} \operatorname{LSE}(\mathbf{z}) = \frac{\exp(z_i)}{\sum_{j=1}^{K} \exp(z_j)} = \sigma(\mathbf{z})_i,
+\quad \text{对于 } i = 1, \dotsc, K,\quad \mathbf{z} = (z_1, \dotsc, z_K) \in \mathbb{R}^K~
+$$
+其中，LogSumExp 函数的定义为：$\operatorname{LSE}(z_1, \dots, z_n) = \log\left( \exp(z_1) + \cdots + \exp(z_n) \right)$
+
+因此，Softmax 的\梯度为：$\partial_{z_j} \sigma_i = \sigma_i \left( \delta_{ij} - \sigma_j \right)$
+\subsection{历史}
+Softmax 函数最早作为玻尔兹曼分布在统计力学中被使用，起源于玻尔兹曼在 1868 年的开创性论文\(^\text{[14]}\)，并在吉布斯于 1902 年出版的影响深远的教材中被形式化并广泛传播\(^\text{[15]}\)。
+
+在决策理论中，Softmax 的使用被归功于 R. Duncan Luce，\(^\text{[16]: 1}\)  他在理性选择理论中基于“无关选项独立性公理”推导出了用于相对偏好的 Luce 选择公理，从而得出了 Softmax 函数的形式（需要引用来源以证实）。
+
+在机器学习领域，“Softmax”这一术语通常归功于 John S. Bridle，他在 1989 年的两篇会议论文中使用了该术语，Bridle (1990a)\(^\text{[16]: 1 }\)与 Bridle (1990b)\(^\text{[3]}\)中提到：
+
+“我们关注的是具有多个输出的前馈非线性网络（多层感知机，MLP）。我们希望将网络的输出视为在给定输入条件下各种备选项（例如模式类别）出现的概率。因此我们寻找合适的输出非线性函数，以及用于调整网络参数（如权重）的合适准则。我们提出了两个改进：概率评分（probability scoring，一种区别于平方误差最小化的替代方法）和对 logistic 非线性函数的归一化指数多输入推广。”\(^\text{[17]: 227 }\)
+
+“对于任意输入，所有输出都必须为正，并且它们的总和必须为 1。”
+
+这标志着 Softmax 在神经网络中的正式引入，并成为多分类模型输出层的标准配置。
+
+给定一组无约束的取值 $V_j(x)$，我们可以通过归一化指数变换来同时满足以下两个条件（输出为正，且总和为 1）：
+$$
+Q_j(x) = e^{V_j(x)}/\sum_k e^{V_k(x)}~
+$$
+这种变换可以看作是对逻辑函数的一种多输入推广，作用于整个输出层。它具有以下特性：保留输入的排序关系，即输入值越大，对应的输出概率也越大；是对“赢家通吃”操作的一种可微分推广，后者直接选择最大值作为输出；
+正因如此，我们倾向于称它为 softmax。\(^\text{[18]: 213  }\)
+\subsection{示例}
+对于输入向量 $(1, 2, 3, 4, 1, 2, 3)$，其 Softmax 输出大约为：$(0.024, 0.064, 0.175, 0.475, 0.024, 0.064, 0.175)$可以看到，输出的大部分权重集中在原始输入中值为 “4” 的位置。这正是Softmax 的典型用途：突出最大值，同时压制显著小于最大值的其他值。但需要注意：温度的变化会改变输出结果**。例如，当温度乘以 10 时，等价于将输入缩放为：$(0.1, 0.2, 0.3, 0.4, 0.1, 0.2, 0.3)$此时 Softmax 的输出大约为：$(0.125, 0.138, 0.153, 0.169, 0.125, 0.138, 0.153)$
+
+这说明，高温会削弱最大值的突出性，使输出分布更平缓、更接近均匀分布。以下是使用 Python 代码计算该示例的过程：
+\begin{figure}[ht]
+\centering
+\includegraphics[width=14.25cm]{./figures/5c8fa5a067426810.png}
+\caption{} \label{fig_SoHs_1}
+\end{figure}
+\subsection{替代方案}
+Softmax 函数生成的是在整个支持集上密集分布的概率预测。当需要生成稀疏的概率分布时，可以考虑使用其他函数，如 sparsemax 或 α-entmax。\(^\text{[19]}\)此外，在需要以可微方式模拟从离散分布中采样的场景中，可以使用 Gumbel-Softmax 重参数化技巧。
+\subsection{参见}
+\begin{itemize}
+\item Softplus
+\item 多项逻辑回归
+\item Dirichlet 分布 – 一种替代的生成分类分布的方式
+\item 配分函数
+\item 指数倾斜 – 对 Softmax 在更一般概率分布中的推广形式
+\end{itemize}
+\subsection{注释}\\
+a.正的$\beta$对应于“取最大值”的惯例，是机器学习中常用的形式，此时得分越高对应的概率越大。\\
+b.负的$-\beta$则对应于“取最小值”的惯例，这是热力学中的通用做法，此时能量越低的状态具有越高的概率；这与吉布斯分布中的约定一致，其中$\beta$被解释为冷度。符号$\beta$表示热力学中的$\beta$参数，即温度的倒数：$\beta = 1/T, \quad T = 1/\beta$\\
+c.当 $\beta = 0$（即冷度为零，温度趋于无穷大）时，$b = e^{\beta} = e^0 = 1$此时 Softmax 退化为一个常数函数：$(1/n, \dots, 1/n)$对应于离散均匀分布。\\
+d.在统计力学中，固定 β 等价于将冷度和温度设定为 1。
+\subsection{参考文献}
+\begin{enumerate}
+\item Goodfellow, Ian；Bengio, Yoshua；Courville, Aaron（2016年）：“6.2.2.3 多项输出分布的 Softmax 单元”。载于《深度学习》，MIT 出版社，第180–184页。ISBN 978-0-26203561-3。
+\item Bishop, Christopher M.（2006年）。《模式识别与机器学习》。施普林格出版社。ISBN 0-387-31073-8。
+\item Sako, Yusaku（2018年6月2日）。《“softmax”这个词让你抓狂了吗？》。发表于 *Medium*。
+\item Goodfellow, Bengio & Courville 2016，第183–184页注释：“‘softmax’这个名称可能有些令人困惑。这个函数实际上与 arg max 函数的关系比与 max 函数更密切。‘soft’一词源于 softmax 函数是连续且可微的，而 arg max 函数（其结果用 one-hot 向量表示）则既不连续也不可微。因此，softmax 函数提供了 arg max 的一个‘软化版本’。相应的最大值的“软版本”是：$\operatorname{softmax}(\mathbf{z})^\top \mathbf{z}$也许将 softmax 函数称为 ‘softargmax’ 更为恰当，但当前的名称已经成为一种固定的约定。”
+
+
+\item LeCun, Yann；Chopra, Sumit；Hadsell, Raia；Ranzato, Marc’Aurelio；Huang, Fu Jie（2006年）。《能量驱动学习教程》（*A Tutorial on Energy-Based Learning*）(PDF)。收录于 Gökhan Bakır、Thomas Hofmann、Bernhard Schölkopf、Alexander J. Smola、Ben Taskar、S.V.N Vishwanathan（编）所著《结构化数据预测》（*Predicting Structured Data*），神经信息处理系列，MIT 出版社。ISBN 978-0-26202617-8。
+\item 《无监督特征学习与深度学习教程》（*Unsupervised Feature Learning and Deep Learning Tutorial*），来源：[ufldl.stanford.edu](http://ufldl.stanford.edu)，检索日期：2024-03-25。
+\item ai-faq：《什么是 Softmax 激活函数？》（*What is a softmax activation function?*）
+\item Sutton, R. S. 与 Barto, A. G.（1998年）。《强化学习：导论》（*Reinforcement Learning: An Introduction*）。MIT 出版社，剑桥，马萨诸塞州。其中包含 Softmax 动作选择（Softmax Action Selection）内容。
+\item Onal, Kezban Dilek；Zhang, Ye；Altingovde, Ismail Sengor；Rahman, Md Mustafizur；Karagoz, Pinar；Braylan, Alex；Dang, Brandon；Chang, Heng-Lu；Kim, Henna；McNamara, Quinten；Angert, Aaron（2018年6月1日）。《神经信息检索：早期阶段的终点》（*Neural information retrieval: at the end of the early years*）。发表于 *Information Retrieval Journal*，第21卷第2期，第111–182页。
+  DOI: [10.1007/s10791-017-9321-y](https://doi.org/10.1007/s10791-017-9321-y)，
+  HDL: [11245.1/008d6e8f-df13-4abf-8ae9-6ff2e17377f3](https://hdl.handle.net/11245.1/008d6e8f-df13-4abf-8ae9-6ff2e17377f3)，
+  ISSN: 1573-7659，
+  S2CID: 21684923。
+\item Chen, Wenlin；Grangier, David；Auli, Michael（2016年8月）。《训练大词汇量神经语言模型的策略》。发表于第54届计算语言学协会年会论文集（第1卷：长篇论文），德国柏林：计算语言学协会，页码 1975–1985。
+  arXiv: [1512.04906](https://arxiv.org/abs/1512.04906)；
+  DOI: [10.18653/v1/P16-1186](https://doi.org/10.18653/v1/P16-1186)；
+  S2CID: 6035643。
+\item Morin, Frederic；Bengio, Yoshua（2005年1月6日）。《层次化概率神经网络语言模型》(PDF)。发表于**人工智能与统计国际研讨会，PMLR，页码 246–252。
+\item Milakov, Maxim；Gimelshein, Natalia（2018年）。《用于 Softmax 的在线归一化计算》（*Online normalizer calculation for softmax*）。arXiv: [1805.02867](https://arxiv.org/abs/1805.02867) [cs.PF]。
+\item Dao, Tri；Fu, Dan；Ermon, Stefano；Rudra, Atri；Ré, Christopher（2022年12月6日）。《FlashAttention：具备 IO 感知的快速且内存高效的精确注意力机制》。发表于 *Advances in Neural Information Processing Systems*，第35卷，页码 16344–16359。
+\item Boltzmann, Ludwig（1868年）。《关于运动的物质点之间活力平衡的研究》。发表于 *Wiener Berichte*，第58卷，页码 517–560。
+\item Gibbs, Josiah Willard（1902年）。《统计力学中的基本原理》。
+\item Gao, Bolin；Pavel, Lacra（2017年）。《关于 Softmax 函数的性质及其在博弈论和强化学习中的应用》。arXiv: [1704.00805](https://arxiv.org/abs/1704.00805) [math.OC]。
+\item Bridle, John S.（1990a）。发表于 Soulié F.F. 与 Hérault J.（编）《前馈分类网络输出的概率解释及其与统计模式识别的关系》（。收录于 *神经计算：算法、架构与应用*（Neurocomputing: Algorithms, Architectures and Applications，1989），NATO ASI 系列（F 系列：计算机与系统科学），第68卷。柏林 / 海德堡：Springer，页码 227–236。
+  DOI: [10.1007/978-3-642-76153-9\_28](https://doi.org/10.1007/978-3-642-76153-9_28)。
+\item Bridle, John S.（1990b）。发表于 D. S. Touretzky（编）《将随机模型识别算法训练为神经网络可实现参数的最大互信息估计》。收录于 *Advances in Neural Information Processing Systems 2*（1989），Morgan-Kaufmann 出版社。
+\item 《加速 Entmax》，作者：Maxat Tezekbayev、Vassilina Nikoulina、Matthias Gallé、Zhenisbek Assylbekov。链接：[https://arxiv.org/abs/2111.06832v3](https://arxiv.org/abs/2111.06832v3)
+\end{enumerate}
