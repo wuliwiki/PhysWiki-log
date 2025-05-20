@@ -297,3 +297,104 @@ $$
 e^x = \lim_{n \to \infty} \left(1 + \frac{x}{n} \right)^n~
 $$
 或者也可以定义为 $f_x(1)$，其中 $f_x: \mathbf{R} \to B$ 是下列微分方程的解：$\frac{d f_x}{dt}(t) = x f_x(t), \quad f_x(0) = 1$由此可得，对于任意 $t \in \mathbf{R}$，都有$f_x(t) = e^{tx}$
+\subsection{李代数}
+给定一个李群 $G$ 及其对应的李代数 $\mathfrak{g}$，可以定义一个从李代数到李群的指数映射 $\mathfrak{g} \mapsto G$，它满足与前述指数函数相似的性质。
+
+事实上，由于实数域 $\mathbf{R}$ 是在乘法下的正实数李群的李代数，因此普通的实数指数函数其实是李代数情形的一个特例。同样地，李群 $\mathrm{GL}(n, \mathbf{R})$（即所有可逆 $n \times n$ 实矩阵的群）对应的李代数是 $\mathrm{M}(n, \mathbf{R})$（即所有 $n \times n$ 实矩阵的空间），因此矩阵指数函数也是李代数指数映射的一个特例。
+
+需要注意的是，恒等式$\exp(x + y) = \exp(x)\exp(y)$在 $x$ 与 $y$ 不对易的情况下会失效；此时需要使用 Baker–Campbell–Hausdorff 公式来引入相应的修正项。
+\subsection{超越性}
+函数 $e^z$ 是一个超越函数，这意味着它不是有理函数域 $\mathbb{C}(z)$ 上某个多项式的根。
+
+更具体地说，如果 $a_1, \ldots, a_n$ 是互不相同的复数，那么函数 $e^{a_1 z}, \ldots, e^{a_n z}$ 在 $\mathbb{C}(z)$ 上是线性无关的，因此 $e^z$ 是 $\mathbb{C}(z)$ 上的超越元素。
+\subsection{计算}
+上述的泰勒级数定义在计算 $e^x$（或其近似值）时通常是高效的。然而，当自变量接近 $x = 0$ 时，结果会非常接近于 1，此时若使用浮点数运算来计算差值 $e^x - 1$，可能会导致有效数字的大量甚至全部丢失，从而产生较大的相对误差，甚至得出毫无意义的结果。
+
+根据威廉·卡恩的建议，为了避免上述问题，设计一个专门计算 $e^x - 1$ 的函数是有用的，这种函数通常被称为 `expm1`，它通过绕过 $e^x$ 的直接计算来提高精度。
+
+例如，可以使用如下泰勒级数展开来计算：
+$$
+e^x - 1 = x + \frac{x^2}{2} + \frac{x^3}{6} + \cdots + \frac{x^n}{n!} + \cdots~
+$$
+这个函数最早于 1979 年被实现于 惠普 HP-41C 计算器中，并被多个计算器系统\(^\text{[12][13]}\)、操作系统（例如 Berkeley UNIX 4.3BSD\(^\text{[14]}\)）、计算机代数系统，以及编程语言（例如 C99\(^\text{[15]}\)）所提供。
+
+除了以 $e$ 为底的指数函数外，IEEE 754-2008 标准还定义了在 $x$ 接近 0 时的其他底数的类似指数函数，如：$2^x - 1$（以 2 为底）$10^x - 1$（以 10 为底）
+
+对于对数函数，也有类似的方法，详见 `log1p`（用于计算 $\log(1 + x)$ 以避免精度损失）。
+
+另有一个涉及双曲正切函数的恒等式：
+$$
+\operatorname{expm1}(x) = e^x - 1 = \frac{2 \tanh(x/2)}{1 - \tanh(x/2)}~
+$$
+该公式可在系统不支持 `expm1(x)` 时，提供对小 $x$ 的高精度计算结果。
+\subsubsection{连分数}
+指数函数也可以通过连分数进行计算。
+
+一个用于计算 $e^x$ 的连分数可由欧拉恒等式导出如下：
+$$
+e^x = 1 + \cfrac{x}{1 - \cfrac{x}{x + 2 - \cfrac{2x}{x + 3 - \cfrac{3x}{x + 4 - \ddots}}}}~
+$$
+以下这个广义连分数用于计算 $e^z$，收敛速度更快：\(^\text{[16]}\)
+$$
+e^{z} = 1 + \cfrac{2z}{2 - z + \cfrac{z^2}{6 + \cfrac{z^2}{10 + \cfrac{z^2}{14 + \ddots}}}}~
+$$
+或者，通过代入 $z = \frac{x}{y}$，可得：
+$$
+e^{\frac{x}{y}} = 1 + \cfrac{2x}{2y - x + \cfrac{x^2}{6y + \cfrac{x^2}{10y + \cfrac{x^2}{14y + \ddots}}}}~
+$$
+当 $z = 2$ 时，有一个特殊的情形：
+$$
+e^2 = 1 + \cfrac{4}{0 + \cfrac{2^2}{6 + \cfrac{2^2}{10 + \cfrac{2^2}{14 + \ddots}}}} = 7 + \cfrac{2}{5 + \cfrac{1}{7 + \cfrac{1}{9 + \cfrac{1}{11 + \ddots}}}}~
+$$
+该公式在 $z > 2$ 的情况下仍然收敛，但收敛速度较慢。例如：
+$$
+e^3 = 1 + \cfrac{6}{-1 + \cfrac{3^2}{6 + \cfrac{3^2}{10 + \cfrac{3^2}{14 + \ddots}}}} = 13 + \cfrac{54}{7 + \cfrac{9}{14 + \cfrac{9}{18 + \cfrac{9}{22 + \ddots}}}}~
+$$
+\subsection{参见}
+\begin{itemize}
+\item Carlitz 指数函数：特征为 $p$ 的指数函数类比
+\item 双重指数函数：指数函数的指数函数
+\item 指数域：带有额外运算的数学域
+\item 高斯函数
+\item 半指数函数：指数函数的复合平方根
+\item Lambert W 函数#解指数方程：一种多值函数，用于解指数方程
+\item 指数相关主题列表
+\item 指数函数的不定积分列表
+\item Mittag-Leffler 函数**：指数函数的一种推广
+\item $p$-进指数函数
+\item 指数函数的 Padé 表（Padé table for exponential function）：用多项式分式逼近指数函数
+\item 相位因子
+\end{itemize}
+\subsection{注释}
+\subsubsection{参考文献}
+\begin{enumerate}
+\item “Exponential Function Reference.” [www.mathsisfun.com](https://www.mathsisfun.com)。访问日期：2020-08-28。
+\item Rudin, Walter（1987年）。《实变与复变分析》（第3版）。纽约：McGraw-Hill，第1页。ISBN 978-0-07-054234-1。
+\item Weisstein, Eric W. “Exponential Function.” [mathworld.wolfram.com](https://mathworld.wolfram.com)。访问日期：2020-08-28。
+\item Maor, Eli. *e: the Story of a Number*，第156页。
+\item G. Harnett，《微积分 1》，1998年，章节“函数续讲”：
+  “一般的指数函数具有这样的性质：两个输出值之比仅取决于输入值之差。当输入变化一个单位时，输出值之比即为底数。”
+\item G. Harnett，《微积分 1》，1998 年；章节“函数续讲 / 指数与对数”中写道：
+“当输入变化一个单位时，输出值之比就是一般指数函数的底数。”
+\item Serway, Raymond A.；Moses, Clement J.；Moyer, Curt A.（1989）。《现代物理学》（*Modern Physics*）。沃斯堡：Harcourt Brace Jovanovich，第384页。ISBN 0-03-004844-3。
+\item Simmons, George F.（1972）。《微分方程及其应用与史料注释》）。纽约：McGraw-Hill，第15页。LCCN 75173716。
+\item 《麦格劳-希尔科学与技术百科全书》（第10版）。纽约：McGraw-Hill，2007年。ISBN 978-0-07-144143-8。
+\item O'Connor, John J.；Robertson, Edmund F.，“Exponential function”，载于英国圣安德鲁斯大学 *MacTutor 数学史档案馆*。
+\item Apostol, Tom M.（1974）。《数学分析》（第2版）。马萨诸塞州雷丁：Addison Wesley，第19页。ISBN 978-0-201-00288-1。
+\item 《HP 48G 系列图形计算器——高级用户参考手册（AUR）》（第4版）。惠普公司。1994年12月［1993年］出版。编号：HP 00048-90136，ISBN 0-88698-01574-2。访问日期：2015-09-06。
+\item 《HP 50g / 49g+ / 48gII 图形计算器高级用户参考手册（AUR）》（第2版）。惠普公司。2009年7月14日［2005年］出版。编号：HP F2228-90010。访问日期：2015-10-10。［参考链接见文中］
+\item Beebe, Nelson H. F.（2017-08-22）。“第 10.2 章：接近零点的指数函数”。载于《数学函数计算手册：使用 MathCW 便携软件库编程》（第1版）。美国犹他州盐湖城：Springer International Publishing AG，第273–282页。
+  DOI: 10.1007/978-3-319-64110-2
+  ISBN: 978-3-319-64109-6
+  LCCN: 2017947446
+  S2CID: 30244721
+  ——Berkeley UNIX 4.3BSD 于 1987 年首次引入了 `expm1()` 函数。
+\item Beebe, Nelson H. F.（2002-07-09）。“`expm1 = exp(x) − 1` 的计算方法”（PDF 文件）。版本 1.00。美国犹他州盐湖城：犹他大学数学系，科学计算中心。访问日期：2015-11-02。
+\item Lorentzen, L.；Waadeland, H.（2008）。“A.2.2 指数函数”。载于《连分数》（*Continued Fractions*），Atlantis 数学研究系列，第1卷，第268页。
+  DOI: 10.2991/978-94-91216-37-4
+  ISBN: 978-94-91216-37-4
+\end{enumerate}
+\subsection{外部链接}
+\begin{itemize}
+\item  “Exponential function”，《数学百科全书》，EMS Press，2001年 [原始出版于1994年]
+\end{itemize}

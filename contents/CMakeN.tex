@@ -56,11 +56,11 @@
 \item 使用一个不存在的变量相当于空字符串。
 \item \verb`file(GLOB 变量 "文件夹/*.cpp" "fname2.cpp")` （\verb`GLOB` 表示 global，指的是 \verb`*`，这个名字从 sh 脚本而来）可以列出所有 \verb`"folder/*.cpp"` 文件， 以及 \verb`fname2.cpp` （如果存在） 赋值给 \verb`变量`。 注意文件名包括绝对路径。 match 的结果也会存到 \verb`CMAKE_MATCH_编号`， 编号从 1 开始。
 \item \verb`file(GLOB_RECURSE 变量 "文件夹/*.cpp")` 还会递归搜索所有子文件夹。
-\item \verb`get_filename_component(变量 "文件名含路径" NAME或DIRECTORY)` 会从 \verb`"文件名含路径"` 中提取文件名或路径， 赋值给\verb`变量`。
+\item \verb`get_filename_component(变量 "文件名含路径" NAME或DIRECTORY)` 会从 \verb`"文件名含路径"` 中提取文件名或路径， 赋值给\verb`变量`。 最后加上 \verb`REALPATH` 选项可以对路径正则化， 例如 \verb`get_filename_component(MY_PATH "${PROJECT_SOURCE_DIR}/../foo/bar" REALPATH)` 会给出整洁的绝对路径。
 \item \verb`file(READ 文件名 变量)` 读取文件内容到变量。
 \item \verb`string(REGEX MATCH "...(...)..." 变量 字符串变量`。 在\verb`字符串变量`中匹配正则表达式， 并把 \verb`()` 中的匹配结果赋值给 \verb`变量`。
 \item \verb`string(REPLACE "老词" "新词" 变量 "字符串")` 做字符串替换。
-\item \verb`add_definitions(-D FOO -D BAR)` 给编译器添加宏定义（整个 cmakelist）
+\item \verb`add_definitions(-D FOO -D BAR)` 给编译器添加宏定义（整个 cmakelist），\verb`-D` 后面有没有空格都可以。
 \item \verb`target_compile_definitions(MyLibrary PRIVATE MY_MACRO1 MY_MACRO2=VALUE)` 可以给指定的 target 添加宏定义。 \verb`PRIVATE` 是该定义只给该 target 添加，不会继承。
 \item \verb`add_compile_options(-Wall -fopenmp)` 给编译器添加选项（注意不能用 \verb`-D` 定义宏）， 该命令不受 \verb`CMAKE_BUILD_TYPE` 的影响。
 \item 注意不同编译器有不同 option，所以可以判断语句给不同编译器 \verb`CMAKE_CXX_COMPILER_ID` 加不同 option
@@ -101,12 +101,12 @@ elseif(CMAKE_SYSTEM_NAME STREQUAL "Darwin")
 endif()
 \end{lstlisting}
 \item cmake 还提供了关于系统的更多具体变量如 \verb`MINGW`，\verb`CYGWIN`, \verb`MSYS`, \verb`IOS`, 等（\href{https://cmake.org/cmake/help/latest/manual/cmake-variables.7.html}{文档}）
-\item \verb`add_executable(目标名 源码1 源码2)` 前者是可执行文件名， 后者是所有需要 link 的 \verb`c/C++` 文件名，不需要头文件。 cmake 会自动分析代码得到哪个 cpp 调用哪个头文件， 如果头文件改变了， 只有调用它的 cpp 会重新编译。 注意 \verb`目标名` 可以是任意名字不一定是可执行文件名。
+\item \verb`add_executable(目标名 源码1 源码2)` 前者是可执行文件名， 后者是所有需要 link 的 \verb`C/C++` 文件名（可以混合），不需要头文件。 cmake 会自动分析代码得到哪个 cpp 调用哪个头文件， 如果头文件改变了， 只有调用它的 cpp 会重新编译。 注意 \verb`目标名` 可以是任意名字不一定是可执行文件名。
 \item 要指定可执行文件的名字， 用 \verb`set_target_properties(exe_targ_name PROPERTIES OUTPUT_NAME 可执行文件的名字)`
 \item 一般来说 \verb`add_executable` 指定的源码不需要包含头文件， 但如果头文件需要由其他 rule 来生成， 那就需要包含。 所以最保险还是把所有头文件都包含。
 \item \verb`configure_file(file_in file_out)` 将文件中 \verb`@变量@` 替换为变量 \verb`变量` 的字符串。
 \item \verb`include_directories(dir1 [dir2] ...)` 添加头文件的搜索路径
-\item \verb`add_library(exe_name source_name)` 单独编译一个 library （在 library 路径的 \verb`CMakeLists.txt` 中使用这个命令而不是 \verb`add_executable` 命令）
+\item \verb`add_library(exe_name source_name)` 单独编译一个 library （在 library 路径的 \verb`CMakeLists.txt` 中使用这个命令而不是 \verb`add_executable` 命令），详见下文。
 \item \verb`link_directories(路径)` 相当于编译器的 \verb`-L` 选项， 添加静态或动态 library 的搜索路径。
 \item \verb`set(CMAKE_INSTALL_RPATH 路径)` 相当于设置 \verb`rpath` （到底是 \verb`RUNPATH` 还是 \verb`RPATH`？）
 \item \verb`add_subdirectory(dir1 [dir2] ...)` 执行子路径中的 \verb`CMakeLists.txt`。 往往用于编译某个 library。
@@ -158,6 +158,12 @@ target_include_directories(my_target
 \item \verb`set(CMAKE_FIND_LIBRARY_SUFFIXES ".a或.so或.lib")` 可以让 \verb`find_library()` 只寻找某种类型的 lib。 也可以用 \verb`".a;.so"` 来指定优先级。
 \item \verb`CMAKE_LIBRARY_PATH` 变量可以指定 \verb`find_library` 的更多默认搜索路径，且会优先搜索。
 \end{itemize}
+
+\subsection{静态和动态库}
+\begin{itemize}
+\item \verb`BUILD_SHARED_LIBS` 变量用于让 \verb`add_library()` 默认编译成动态库。 即 \verb`add_library(example SHARED ${sources})` 而不是 \verb`add_library(example STATIC ${sources})`。 手动指定 \verb`STATIC/SHARED` 时，还是会按照手动的设置。
+\end{itemize}
+
 
 \subsection{函数}
 自定义函数如
@@ -306,6 +312,14 @@ else()
   ……
 endif()
 \end{lstlisting}
+一些细节：
+\begin{itemize}
+\item 要检查一个变量是否无定义时一般用 \verb`if (NOT MY_VAR)`， \verb`if ("${MY_VAR}" STREQUAL "")` 也可以但是啰嗦。
+\item \verb`if (MY_VAR STREQUAL "字符串")` 和 \verb`if ("${MY_VAR}" STREQUAL "字符串")` 有一些区别：
+\item 若 \verb`MY_VAR` 未定义，\verb`if(MY_VAR STREQUAL "")` 和 \verb`if("${MY_VAR}" STREQUAL "")` 有什么区别？
+\item 若 \verb`MY_VAR` 为 \verb`a;b;c`，二者又有什么区别？ 是否还有其他情况有区别？
+\end{itemize}
+
 
 \subsection{CMake 与 Visual Studio}
 \begin{itemize}
