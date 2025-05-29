@@ -4,6 +4,11 @@
 
 本文根据 CC-BY-SA 协议转载翻译自维基百科 \href{https://en.wikipedia.org/wiki/L\%27H\%C3\%B4pital\%27s_rule}{相关文章}。
 
+\begin{figure}[ht]
+\centering
+\includegraphics[width=10cm]{./figures/dd38a83eeb0d52e5.png}
+\caption{洛必达法则的一个应用示例：设 $f(x) = \sin(x)$，$g(x) = -0.5x$，那么函数 $h(x) = \frac{f(x)}{g(x)}$ 在 $x = 0$ 处是未定义的，但可以通过定义 $h(0) = \frac{f'(0)}{g'(0)} = -2$ 来将其补全为在整个实数域上连续的函数。} \label{fig_LbdFZ_2}
+\end{figure}
 洛必达法则（/ˌloʊpiːˈtɑːl/，音似“洛-皮-塔尔”，法语：[lopital]），也称为伯努利法则，是一个数学定理，用于通过求导的方法来求解不定式形式的极限。该法则的应用（或重复应用）通常可以将一个不定式转化为一个可以通过代入法轻松求解的表达式。此定理以17世纪法国数学家纪尧姆·德·洛必达命名。尽管该法则通常归功于洛必达，但实际上这个定理是由瑞士数学家约翰·伯努利于1694年首次介绍给他的。
 
 洛必达法则陈述如下：
@@ -107,3 +112,425 @@ $$
 \lim_{x \to 0} \frac{f(x)}{g(x)} = \lim_{x \to 0} \frac{f'(x)}{g'(x)}~
 $$
 这说明只要函数在趋近于 $c$ 的过程中可导（即在 $\mathcal{I} \setminus \{c\}$ 上可导），即便在 $c$ 点本身不可导，罗必达法则仍然适用。
+\subsubsection{3. 分母导数不为零的必要性}
+分母函数 $g'(x) \neq 0$ 在靠近 $c$ 附近这一条件的必要性，可以通过奥托·斯托尔茨（Otto Stolz）给出的以下反例看出。[6] 设$f(x) = x + \sin x \cos x$
+$g(x) = f(x) \cdot e^{\sin x}$那么，当 $x \to \infty$ 时，$\frac{f(x)}{g(x)}$ 并不存在极限。
+
+然而，我们有：
+$$
+\frac{f'(x)}{g'(x)} = \frac{2\cos^2 x}{(2\cos^2 x)e^{\sin x} + (x + \sin x \cos x)e^{\sin x} \cos x}
+= \frac{2\cos x}{2\cos x + x + \sin x \cos x} \cdot e^{-\sin x}~
+$$
+该表达式在 $x \to \infty$ 时趋于 0，尽管在无穷多个点处它是未定义的。这一类型的更多反例可见于小拉尔夫·P·博阿斯（Ralph P. Boas Jr.）的研究中。[7]
+\subsubsection{4. 导数比值极限不存在}
+要求极限
+$$
+\lim_{x \to c} \frac{f'(x)}{g'(x)}~
+$$
+存在是必要的；如果这个极限不存在，那么原始极限
+$$
+\lim_{x \to c} \frac{f(x)}{g(x)}~
+$$
+却可能仍然存在。事实上，当 $x$ 趋近于 $c$ 时，函数 $f$ 或 $g$ 可能出现振幅很小但斜率极大的频繁震荡。这些震荡不会影响
+$$
+\lim_{x \to c} \frac{f(x)}{g(x)}~
+$$
+的存在性，但却会阻止
+$$
+\lim_{x \to c} \frac{f'(x)}{g'(x)}~
+$$
+的收敛。
+
+例如，设$f(x) = x + \sin(x),\quad g(x) = x,\quad c = \infty$那么有
+$$
+\frac{f'(x)}{g'(x)} = \frac{1 + \cos(x)}{1}~
+$$
+由于余弦函数在 $1$ 和 $-1$ 之间无限振荡，因此该比值（$\frac{f'(x)}{g'(x)}$）并不趋于某个极限。但原始函数之比（$\frac{f(x)}{g(x)}$）确实趋于某个极限，因为相对于 $g$，函数 $f$ 的振荡幅度变得越来越小：
+$$
+\lim_{x \to \infty} \frac{f(x)}{g(x)} = \lim_{x \to \infty} \left( \frac{x + \sin(x)}{x} \right) = \lim_{x \to \infty} \left( 1 + \frac{\sin(x)}{x} \right) = 1 + 0 = 1~
+$$
+在这种情况下，我们所能断定的只有：
+$$
+\liminf_{x \to c} \frac{f'(x)}{g'(x)} \leq \liminf_{x \to c} \frac{f(x)}{g(x)} \leq \limsup_{x \to c} \frac{f(x)}{g(x)} \leq \limsup_{x \to c} \frac{f'(x)}{g'(x)}~
+$$
+也就是说，如果 $\frac{f}{g}$ 的极限存在，那么它一定落在 $\frac{f'}{g'}$ 的下确界与上确界之间。在本例中，1 的确位于 0 和 2 之间。
+
+另外还要注意，按照洛必达法则的逆否命题，如果
+$$
+\lim_{x \to c} \frac{f(x)}{g(x)}~
+$$
+不存在，那么
+$$
+\lim_{x \to c} \frac{f'(x)}{g'(x)}~
+$$
+也一定不存在。
+\subsection{示例}
+在以下计算中，我们用符号$\stackrel{\mathrm{H}}{=}$表示每一次应用洛必达法则。
+
+\begin{itemize}
+\item 下面是一个涉及指数函数的基本例子，在 $x = 0$ 处属于不定型 $\frac{0}{0}$：
+$$
+\lim_{x \to 0} \frac{e^x - 1}{x^2 + x}
+\stackrel{\mathrm{H}}{=}
+\lim_{x \to 0} \frac{\frac{d}{dx}(e^x - 1)}{\frac{d}{dx}(x^2 + x)}
+=
+\lim_{x \to 0} \frac{e^x}{2x + 1}
+= 1~
+$$
+\item 这是一个更复杂的不定型 $\frac{0}{0}$ 的例子。仅应用一次洛必达法则仍然得到不定型。在这种情况下，可以连续应用三次法则来求极限：
+$$
+\begin{aligned}
+\lim_{x \to 0} \frac{2\sin(x) - \sin(2x)}{x - \sin(x)}
+&\stackrel{\mathrm{H}}{=}
+\lim_{x \to 0} \frac{2\cos(x) - 2\cos(2x)}{1 - \cos(x)} \\
+&\stackrel{\mathrm{H}}{=}
+\lim_{x \to 0} \frac{-2\sin(x) + 4\sin(2x)}{\sin(x)} \\
+&\stackrel{\mathrm{H}}{=}
+\lim_{x \to 0} \frac{-2\cos(x) + 8\cos(2x)}{\cos(x)} =
+\frac{-2 + 8}{1} = 6
+\end{aligned}~
+$$
+\item 以下是一个涉及不定型 $\frac{\infty}{\infty}$ 的例子：
+$$
+\lim_{x \to \infty} x^n \cdot e^{-x}
+=
+\lim_{x \to \infty} \frac{x^n}{e^x}
+\stackrel{\mathrm{H}}{=}
+\lim_{x \to \infty} \frac{n x^{n-1}}{e^x}
+= n \cdot \lim_{x \to \infty} \frac{x^{n-1}}{e^x}~
+$$
+不断应用洛必达法则，直到幂降为零（如果 $n$ 是整数）或负数（如果 $n$ 是分数），即可得出极限为 0。
+\item 下面是一个涉及不定型 $0 \cdot \infty$ 的例子（详见下文），可将其重写为不定型 $\frac{\infty}{\infty}$：
+$$
+\lim_{x \to 0^+} x \ln x
+=
+\lim_{x \to 0^+} \frac{\ln x}{\frac{1}{x}}
+\stackrel{\mathrm{H}}{=}
+\lim_{x \to 0^+} \frac{\frac{1}{x}}{-\frac{1}{x^2}}
+=
+\lim_{x \to 0^+} (-x) = 0~
+$$
+\item 还有一个例子涉及贷款偿还公式和不定型 $\frac{0}{0}$。设 $P$ 为贷款本金，$r$ 为每期利率，$n$ 为期数。当 $r = 0$ 时，每期还款金额为 $\frac{P}{n}$（因为只还本金）；这一结果与利率不为零时的公式一致：
+$$
+\lim_{r \to 0} \frac{Pr(1+r)^n}{(1+r)^n - 1}
+\stackrel{\mathrm{H}}{=}
+P \cdot \lim_{r \to 0} \frac{(1+r)^n + rn(1+r)^{n-1}}{n(1+r)^{n-1}} = \frac{P}{n}~
+$$
+\item 洛必达法则还可以用于证明以下定理：如果函数 $f$ 在 $x$ 的邻域内是两次可导的，且其二阶导数在该邻域内连续，则有：
+$$
+\begin{aligned}
+\lim_{h \to 0} \frac{f(x+h) + f(x-h) - 2f(x)}{h^2}
+&= \lim_{h \to 0} \frac{f'(x+h) - f'(x-h)}{2h}\\
+&= \lim_{h \to 0} \frac{f''(x+h) + f''(x-h)}{2}\\
+&= f''(x)
+\end{aligned}~
+$$
+\item 有时候，洛必达法则会被巧妙地应用。例如，设 $f(x) + f'(x)$ 在 $x \to \infty$ 时收敛，且 $e^x \cdot f(x)$ 收敛到正无穷或负无穷。那么我们有：
+$$
+\lim_{x \to \infty} f(x)
+= \lim_{x \to \infty} \frac{e^x \cdot f(x)}{e^x}
+\stackrel{\mathrm{H}}{=}
+\lim_{x \to \infty} \frac{e^x \cdot (f(x) + f'(x))}{e^x}
+= \lim_{x \to \infty} (f(x) + f'(x))~
+$$
+因此，$\lim_{x \to \infty} f(x)$ 存在，且$\lim_{x \to \infty} f'(x) = 0$（即使不假设 $e^x \cdot f(x)$ 收敛到正无穷或负无穷，这个结论仍然成立，但证明将不完整。）
+\end{itemize}
+\subsection{复杂情况}
+有时，洛必达法则在有限次数的步骤内并不能直接简化为明显的极限，除非中间进行了某些简化操作。例如如下情况：
+\begin{itemize}
+\item 两次应用洛必达法则可能会回到最初要计算的表达式：
+$$
+\lim_{x \to \infty} \frac{e^x + e^{-x}}{e^x - e^{-x}} 
+\stackrel{H}{=} 
+\lim_{x \to \infty} \frac{e^x - e^{-x}}{e^x + e^{-x}} 
+\stackrel{H}{=} 
+\lim_{x \to \infty} \frac{e^x + e^{-x}}{e^x - e^{-x}} 
+\stackrel{H}{=} \cdots~
+$$
+这种情况可以通过变量替换 $y = e^x$ 来处理，因为当 $x \to \infty$ 时，$y \to \infty$。用这个替换之后，该问题可通过一次洛必达法则解决：
+$$
+\lim_{x \to \infty} \frac{e^x + e^{-x}}{e^x - e^{-x}} 
+= \lim_{y \to \infty} \frac{y + y^{-1}}{y - y^{-1}} 
+\stackrel{H}{=} 
+\lim_{y \to \infty} \frac{1 - y^{-2}}{1 + y^{-2}} 
+= \frac{1}{1} = 1~
+$$
+另一种方法是同时将分子和分母乘以 $e^x$，这样就可以立即应用洛必达法则\(^\text{[8]}\)：
+$$
+\lim_{x \to \infty} \frac{e^x + e^{-x}}{e^x - e^{-x}} 
+= \lim_{x \to \infty} \frac{e^{2x} + 1}{e^{2x} - 1} 
+\stackrel{H}{=} 
+\lim_{x \to \infty} \frac{2e^{2x}}{2e^{2x}} = 1~
+$$
+\item 有时，即使不出现循环，也可能需要任意多次应用洛必达法则都得不到结果：
+$$
+\lim_{x \to \infty} \frac{x^{\frac{1}{2}} + x^{-\frac{1}{2}}}{x^{\frac{1}{2}} - x^{-\frac{1}{2}}}
+\stackrel{H}{=}
+\lim_{x \to \infty} \frac{\frac{1}{2}x^{-\frac{1}{2}} - \frac{1}{2}x^{-\frac{3}{2}}}{\frac{1}{2}x^{-\frac{1}{2}} + \frac{1}{2}x^{-\frac{3}{2}}}
+\stackrel{H}{=}
+\lim_{x \to \infty} \frac{-\frac{1}{4}x^{-\frac{3}{2}} + \frac{3}{4}x^{-\frac{5}{2}}}{-\frac{1}{4}x^{-\frac{3}{2}} - \frac{3}{4}x^{-\frac{5}{2}}}
+\stackrel{H}{=} \cdots~
+$$
+这种情况也可以通过变量替换来处理，例如设 $y = \sqrt{x}$：
+$$
+\lim_{x \to \infty} \frac{x^{\frac{1}{2}} + x^{-\frac{1}{2}}}{x^{\frac{1}{2}} - x^{-\frac{1}{2}}}
+= \lim_{y \to \infty} \frac{y + y^{-1}}{y - y^{-1}}
+\stackrel{H}{=}
+\lim_{y \to \infty} \frac{1 - y^{-2}}{1 + y^{-2}} = \frac{1}{1} = 1~
+$$
+另一种方法是，在应用洛必达法则前，先将分子和分母都乘以 $x^{1/2}$：
+$$
+\lim_{x \to \infty} \frac{x^{\frac{1}{2}} + x^{-\frac{1}{2}}}{x^{\frac{1}{2}} - x^{-\frac{1}{2}}}
+= \lim_{x \to \infty} \frac{x + 1}{x - 1}
+\stackrel{H}{=}
+\lim_{x \to \infty} \frac{1}{1} = 1~
+$$
+\end{itemize}
+一个常见的逻辑谬误是使用洛必达法则通过计算差商的极限来证明某个导数的值。由于应用洛必达法则本身就需要知道相关函数的导数，这种做法实际上构成了循环论证或预设前提（即假设了需要证明的内容）。例如，考虑以下幂函数的导数公式的证明：
+$$
+\lim_{h \to 0} \frac{(x+h)^n - x^n}{h} = nx^{n-1}~
+$$
+若尝试通过洛必达法则来处理，并对 $h$ 求导，确实会得出期望的结果 $nx^{n-1}$，但这一步计算本身就用到了我们正在试图证明的公式，因此并不构成有效的证明。
+
+类似地，为了证明
+$$
+\lim_{x \to 0} \frac{\sin(x)}{x} = 1~
+$$
+如果使用洛必达法则，则需要已知 $\sin(x)$ 在 $x=0$ 处的导数，而这实际上等价于计算：
+$$
+\lim_{h \to 0} \frac{\sin(h)}{h}~
+$$
+即我们最初需要证明的内容。因此，在这种情况下，有效的证明必须采用其他方法，比如夹逼定理。
+\subsection{其他不定型}
+其他不定型形式，例如 $1^\infty$、$0^0$、$\infty^0$、$0 \cdot \infty$、以及 $\infty - \infty$，有时也可以借助洛必达法则求解。我们依然用符号$\stackrel{\mathrm{H}}{=}$表示每一次对洛必达法则的应用。
+
+例如，要计算一个涉及 $\infty - \infty$ 形式的极限，可以将两个函数的差转换为一个商的形式：
+$$
+\lim_{x \to 1} \left( \frac{x}{x - 1} - \frac{1}{\ln x} \right)~
+$$
+可以重写为：
+$$
+\lim_{x \to 1} \frac{x \cdot \ln x - x + 1}{(x - 1) \cdot \ln x}
+\quad \stackrel{\mathrm{H}}{=}\quad
+\lim_{x \to 1} \frac{\ln x}{\frac{x - 1}{x} + \ln x}~
+$$
+进一步化简为：
+$$
+\lim_{x \to 1} \frac{x \cdot \ln x}{x - 1 + x \cdot \ln x}
+\quad \stackrel{\mathrm{H}}{=}\quad
+\lim_{x \to 1} \frac{1 + \ln x}{1 + 1 + \ln x} = \frac{1 + 0}{1 + 1 + 0}~
+$$
+洛必达法则可以用于处理涉及指数的不定型，通过对数运算将指数“移下来”。以下是一个处理 $0^0$ 不定型的示例：
+
+$$
+\lim_{x \to 0^+} x^x = \lim_{x \to 0^+} e^{\ln(x^x)} = \lim_{x \to 0^+} e^{x \cdot \ln x} = \lim_{x \to 0^+} \exp(x \cdot \ln x) = \exp\left( \lim_{x \to 0^+} x \cdot \ln x \right)~
+$$
+由于指数函数是连续的，因此可以将极限移入指数函数内部。现在，指数 $x$ 被“移了下来”。极限 $\lim_{x \to 0^+} x \cdot \ln x$ 是一个 $0 \cdot \infty$ 形式的不定型，之前的例子已经处理过此类形式：可以使用洛必达法则来求得：
+$$
+\lim_{x \to 0^+} x \cdot \ln x = 0~
+$$
+因此，
+$$
+\lim_{x \to 0^+} x^x = \exp(0) = e^0 = 1~
+$$
+下表列出了最常见的不定型形式及其在应用洛必达法则之前所需要的变换方法：
+\begin{figure}[ht]
+\centering
+\includegraphics[width=14.25cm]{./figures/37026f43834dd6e6.png}
+\caption{} \label{fig_LbdFZ_1}
+\end{figure}
+\subsection{斯托尔茨–切萨罗定理}
+斯托尔茨–切萨罗定理是一个与洛必达法则类似的结果，但它涉及的是数列的极限，使用的是有限差分算子而非导数。
+\subsection{几何解释：参数曲线与速度向量}
+设想在 xy 平面中的一条参数曲线，其坐标由连续函数 $g(t)$ 和 $f(t)$ 给出，即点集 $(g(t), f(t))$。假设在某点 $t = c$ 处有 $f(c) = g(c) = 0$。则曲线在点 $(g(c), f(c)) = (0, 0)$ 处的切线斜率为比值 $\frac{f(t)}{g(t)}$ 在 $t \to c$ 时的极限。
+
+曲线在点 $(g(t), f(t))$ 处的切线方向为速度向量 $(g'(t), f'(t))$，其斜率为 $\frac{f'(t)}{g'(t)}$。洛必达法则指出，在满足相关条件的前提下，曲线在原点（即 $t = c$）处的切线斜率，就是那些逐渐逼近原点的切线斜率的极限。
+\subsection{洛必达法则的证明}
+\subsubsection{特殊情形}
+当 $f$ 和 $g$ 在点 $c$ 处具有连续可导性，且第一次求导后得出的极限是有限值时，洛必达法则的证明是简单的。这种情况只是洛必达法则的一个**特殊情形**，因为它要求的函数条件比一般情形更强。然而，许多常见函数（如多项式、正弦与余弦函数、指数函数）都具有连续导数，因此这个特殊情形涵盖了大多数应用。
+
+设 $f$ 和 $g$ 在实数 $c$ 处是连续可导的，且满足：$f(c) = g(c) = 0,\quad g'(c) \neq 0$。
+那么有：
+$$
+\begin{aligned}
+\lim_{x \to c} \frac{f(x)}{g(x)}
+&= \lim_{x \to c} \frac{f(x) - 0}{g(x) - 0}= \lim_{x \to c} \frac{f(x) - f(c)}{g(x) - g(c)} \\
+&= \lim_{x \to c} \frac{\frac{f(x) - f(c)}{x - c}}{\frac{g(x) - g(c)}{x - c}} = \frac{\lim\limits_{x \to c} \frac{f(x) - f(c)}{x - c}}{\lim\limits_{x \to c} \frac{g(x) - g(c)}{x - c}}= \frac{f'(c)}{g'(c)} = \lim_{x \to c} \frac{f'(x)}{g'(x)}.
+\end{aligned}~
+$$
+这可以直接从导数的差商定义推出。最后一个等式依赖于导函数在点 $c$ 处的连续性。结论中的极限不是不定式，因为 $g'(c) \neq 0$。
+
+更一般情形下的洛必达法则证明将在下文中给出。
+以下是该段英文内容的中文翻译：
+\subsubsection{一般情形的证明}
+以下证明出自 Taylor（1952），该文中对不定式形式 $\frac{0}{0}$ 和 $\frac{\pm\infty}{\pm\infty}$ 给出了统一的证明方法。Taylor 指出，不同的证明方法也可见于 Lettenmeyer（1936）和 Wazewski（1949）。
+
+设函数 $f$ 和 $g$ 满足“一般形式”部分中的假设。设 $\mathcal{I}$ 是该假设中包含点 $c$ 的开区间。由于 $g'(x) \ne 0$ 且 $g$ 在该区间连续，我们可以选取更小的开区间 $\mathcal{I}$，使得 $g$ 在整个 $\mathcal{I}$ 上都不为零。\(^\text{[d]}\)
+
+对该区间内的每个 $x$，定义：
+$$
+m(x) = \inf \frac{f'(t)}{g'(t)},\quad M(x) = \sup \frac{f'(t)}{g'(t)}~
+$$
+其中 $t$ 取遍所有介于 $x$ 和 $c$ 之间的值。（符号 inf 和 sup 分别表示下确界和上确界。）
+
+由于 $f$ 与 $g$ 在 $\mathcal{I}$ 上可导，根据柯西平均值定理，对于区间 $\mathcal{I}$ 上任意两个不相等的点 $x$ 与 $y$，必存在一点 $\xi$ 位于 $x$ 和 $y$ 之间，使得：
+$$
+\frac{f(x) - f(y)}{g(x) - g(y)} = \frac{f'(\xi)}{g'(\xi)}.~
+$$
+因此，对区间中任意不等的 $x$ 和 $y$，都有：
+$$
+m(x) \leq \frac{f(x) - f(y)}{g(x) - g(y)} \leq M(x).~
+$$
+又因为对于不同的 $x$ 和 $y$，若 $g(x) = g(y)$，则根据平均值定理，存在 $p \in (x, y)$ 使得 $g'(p) = 0$，这与假设 $g'(x) \ne 0$ 相矛盾，因此 $g(x) - g(y) \ne 0$ 是始终成立的。
+
+定义的 $m(x)$ 和 $M(x)$ 可能是扩展实数，因此它们可能取 $\pm\infty$ 的值。在以下两种情形中，$m(x)$ 和 $M(x)$ 将对比值 $\frac{f}{g}$ 给出界限。
+
+\textbf{情形一：}
+$$\lim_{x \to c} f(x) = \lim_{x \to c} g(x) = 0~$$
+对于区间 $\mathcal{I}$ 中任意的 $x$，以及位于 $x$ 与 $c$ 之间的某点 $y$，有：
+$$
+m(x) \leq \frac{f(x) - f(y)}{g(x) - g(y)} = \frac{\frac{f(x)}{g(x)} - \frac{f(y)}{g(x)}}{1 - \frac{g(y)}{g(x)}} \leq M(x)~
+$$
+因此，当 $y \to c$ 时，$\frac{f(y)}{g(x)}$ 和 $\frac{g(y)}{g(x)}$ 都趋于 0，于是有：
+$$
+m(x) \leq \frac{f(x)}{g(x)} \leq M(x)~
+$$
+\textbf{情形二：}
+$$
+\lim_{x \to c} |g(x)| = \infty~
+$$
+对于区间 $\mathcal{I}$ 中的每个 $x$，定义$S_x = \{y \mid y \text{ 是位于 } x \text{ 与 } c \text{ 之间的点}\}$对于每一个位于 $x$ 与 $c$ 之间的点 $y$，有：
+$$
+m(x) \leq \frac{f(y) - f(x)}{g(y) - g(x)} = \frac{\frac{f(y)}{g(y)} - \frac{f(x)}{g(y)}}{1 - \frac{g(x)}{g(y)}} \leq M(x)~
+$$
+当 $y \to c$ 时，$\frac{f(x)}{g(y)}$ 与 $\frac{g(x)}{g(y)}$ 都趋于 0，因此：
+$$
+m(x) \leq \liminf_{y \in S_x} \frac{f(y)}{g(y)} \leq \limsup_{y \in S_x} \frac{f(y)}{g(y)} \leq M(x)~
+$$
+由于 $\frac{f}{g}$ 的极限尚未被证实存在，因此需要使用上极限和下极限。
+
+此外，也有：
+$$
+\lim_{x \to c} m(x) = \lim_{x \to c} M(x) = \lim_{x \to c} \frac{f'(x)}{g'(x)} = L~
+$$
+并且
+$$
+\lim_{x \to c} \left(\liminf_{y \in S_x} \frac{f(y)}{g(y)} \right) = \liminf_{x \to c} \frac{f(x)}{g(x)}~
+$$
+
+$$
+\lim_{x \to c} \left(\limsup_{y \in S_x} \frac{f(y)}{g(y)} \right) = \limsup_{x \to c} \frac{f(x)}{g(x)}~
+$$
+在情形一中，根据夹逼定理，可以推出 
+$$\lim_{x \to c} \frac{f(x)}{g(x)}~$$ 
+存在且等于 $L$。
+
+在情形中，夹逼定理同样可以推出：
+$$
+\liminf_{x \to c} \frac{f(x)}{g(x)} = \limsup_{x \to c} \frac{f(x)}{g(x)} = L~
+$$
+因此极限 
+$$\lim_{x \to c} \frac{f(x)}{g(x)}~$$ 
+存在并等于 $L$。这就是所要证明的结论。
+
+在情形二中，$f(x)$ 趋于无穷大的假设并未被用在证明过程中。这意味着，如果 $|g(x)|$ 在 $x \to c$ 时趋于无穷大，且 $f$ 与 $g$ 满足洛必达法则的假设，那么关于 $f(x)$ 的极限不需要额外的假设——即使 $f(x)$ 的极限不存在也可以成立。在这种情况下，洛必达法则实际上可以看作是Cesàro–Stolz 定理的一个推论。
+
+另外，如果当 $x \to c$ 时 $|g(x)| \to \infty$ 且 $f(x)$ 在 $c$ 处收敛到有限极限，则虽然可以应用洛必达法则，但并非必要，因为基本的极限运算已经能表明 $\frac{f(x)}{g(x)} \to 0$。
+\subsection{推论}
+洛必达法则的一个简单但非常有用的推论是：函数的导数不可能有可去间断点。也就是说，假设函数 $f$ 在某点 $a$ 处连续，且在某个包含 $a$ 的开区间中，除了可能在 $x = a$ 处外，$f'(x)$ 存在。此外，若
+$$
+\lim_{x \to a} f'(x)~
+$$
+存在，则$f'(a)$也存在，并且有
+$$
+f'(a) = \lim_{x \to a} f'(x)~
+$$
+特别地，说明 $f'$ 在 $a$ 点也是连续的。
+
+因此，如果一个函数在某点附近不可导（即不具备连续可导性），那么它的导数在该点一定具有本质不连续性。
+\subsubsection{证明}
+考虑以下两个函数： $h(x) = f(x) - f(a)$和$g(x) = x - a$。由于 $f$ 在 $a$ 点连续，我们有：
+$$
+\lim_{x \to a} h(x) = 0~
+$$
+而因为 $g(x)$ 是一个多项式函数（一次函数），显然有：
+$$
+\lim_{x \to a} g(x) = 0~
+$$
+现在应用洛必达法则：
+$$
+f'(a) := \lim_{x \to a} \frac{f(x) - f(a)}{x - a} = \lim_{x \to a} \frac{h'(x)}{g'(x)} = \lim_{x \to a} f'(x)~
+$$
+\subsection{参见}
+\begin{itemize}
+\item 洛必达争议
+\end{itemize}
+\subsection{注释}\\
+a.在17和18世纪，这个名字通常拼作 “l'Hospital”，他本人也这样拼写自己的名字。此后，法语拼写发生了变化：无声字母 s 被移除，并由前一个元音字母上的抑扬符（^）所取代。\\
+b.“命题一，问题。设有一条曲线 AMD（其中 AP = x，PM = y，AB = a [见图130]），该曲线的纵坐标 y 被表示为一个分式，其分子和分母在 $x = a$ 时都变为零，也就是说，当点 P 落在已知点 B 上时。我们要问，此时纵坐标 BD 的值应为多少？
+[解答：]……如果取该分式分子的差值（即微分），再将其除以分母的差值（即微分），在令 $x = a = Ab$ 或 AB 之后，就能得到所求的纵坐标 bd 或 BD 的值。”译文说明：这段话出自原始法语文献，是洛必达法则的早期文字描述之一。\\
+c.函数极限的泛函分析定义不要求存在某个包含该点的邻域区间。\\
+d.由于 $g'$ 在该区间内处处不为零，且 $g$ 是连续函数，因此 $g$ 在该区间内不可能有两个零点。如果它有两个零点，那么根据微分中值定理，区间中间必存在一点 $p$，使得 $g'(p) = 0$，这与假设矛盾。因此，要么 $g$ 在整个区间内已经处处不为零，要么我们可以将区间缩小，使其不包含 $g$ 的唯一零点。\\
+e.这两个极限
+$$
+\lim_{x \to c} m(x) \quad \text{和} \quad \lim_{x \to c} M(x)~
+$$
+都存在，因为它们分别是关于 $x$ 的非递减函数和非递增函数。
+
+设有一个数列 $x_i \to c$，则由于对于每一个 $i$，都有不等式成立：
+$$
+\lim_i m(x_i) \leq \lim_i \frac{f'(x_i)}{g'(x_i)} \leq \lim_i M(x_i)~
+$$
+由此可得：
+$$
+\lim_{x \to c} m(x) \leq \lim_{x \to c} \frac{f'(x)}{g'(x)} \leq \lim_{x \to c} M(x)~
+$$
+接下来的目标是证明：
+$$
+\lim_{x \to c} M(x) \leq \lim_{x \to c} \frac{f'(x)}{g'(x)}~
+$$
+为此，我们固定一个满足 $\varepsilon_i > 0$ 且
+$$
+\lim_i \varepsilon_i = 0~
+$$
+的数列 $\varepsilon_i$，并取一列趋近于 $c$ 的数列 $x_i \to c$。
+
+对于每一个 $i$，我们选择一个点 $y_i$ 满足 $x_i < y_i < c$，使得：
+$$
+\frac{f'(y_i)}{g'(y_i)} + \varepsilon_i \geq \sup_{x_i < \xi < c} \frac{f'(\xi)}{g'(\xi)}~
+$$
+这是由上确界的定义保证的。
+
+因此：
+$$
+\lim_i M(x_i) \leq \lim_i \left( \frac{f'(y_i)}{g'(y_i)} + \varepsilon_i \right)
+= \lim_i \frac{f'(y_i)}{g'(y_i)} + \lim_i \varepsilon_i
+= \lim_i \frac{f'(y_i)}{g'(y_i)}~
+$$
+这就得出了我们想要的结果。
+
+而关于：
+$$
+\lim_{x \to c} m(x) \geq \lim_{x \to c} \frac{f'(x)}{g'(x)}~
+$$
+的论证方法与此类似。
+\subsection{参考文献}
+\begin{enumerate}
+\item O'Connor, John J.；Robertson, Edmund F.，“德·洛必达传记”，《麦克图尔数学史档案》，苏格兰：圣安德鲁斯大学数学与统计学院。检索日期：2008年12月21日。
+洛必达（L'Hospital, 1696）《无穷小分析》，第145–146页。
+\item Boyer, Carl B.; Merzbach, Uta C.（2011年）《数学史》（第3版，插图本），约翰·威利父子公司，第321页。ISBN 978-0-470-63056-3。第321页摘录。
+\item Chatterjee, 2005年，第291页。
+\item Krantz, 2004年，第79页。
+\item Stolz, Otto（1879年），“关于商的极限”，《数学年刊》，15卷（第3–4期）：556–559。doi:10.1007/bf02086277。S2CID 122473933。
+\item Boas Jr., Ralph P.（1986年）“洛必达法则的反例”，《美国数学月刊》，93卷（第8期）：644–645。doi:10.1080/00029890.1986.11971912。JSTOR 2322330。
+\item 也可以通过乘以 $e^{-x}$ 的方式求解该极限，无需使用洛必达法则。
+\item “洛必达定理”，IMOmath，国际数学奥林匹克网站。
+\end{enumerate}
+\subsubsection{来源书目}
+\begin{itemize}
+\item Chatterjee, Dipak（2005年），《实变函数论》，PHI学习出版社，ISBN 81-203-2678-4。
+\item Krantz, Steven G.（2004年），《实变变量手册：含微分方程与傅里叶分析的应用》，马萨诸塞州波士顿：Birkhäuser出版社，第xiv+201页，doi:10.1007/978-0-8176-8128-9，ISBN 0-8176-4329-X，MR编号 2015447。
+\item Lettenmeyer, F.（1936年），“关于所谓的洛必达法则”，《纯粹与应用数学杂志》，1936年（第174期）：246–247，doi:10.1515/crll.1936.174.246，S2CID 199546754。
+\item Taylor, A. E.（1952年），“洛必达法则”，《美国数学月刊》，59卷（第1期）：20–24，doi:10.2307/2307183，ISSN 0002-9890，JSTOR编号 2307183，MR编号 0044602。
+\item Wazewski, T.（1949年），“洛必达定理各种情况的统一证明及推广”），《数学物理学论文集》，第47期：117–128，MR编号 0034430。
+\end{itemize}
