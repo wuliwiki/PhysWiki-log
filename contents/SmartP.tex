@@ -54,6 +54,7 @@ unique_ptr<int, Deleter> ptr2(new int(42), Deleter()); // 手动提供删除器
 \item 可以复制， 但只有所有关联的 \verb`shared_ptr` 都释放所有权， 管理的对象才会被删除器释放。
 \item \verb`p.use_count()` 返回有几个 \verb`shared_ptr` 正在使用。
 \item \verb`p.reset()` 和 \verb`p.reset(p3)` 用法同 \verb`unique_ptr`
+\item \verb`std::shared_ptr<int> ptr(new int(42), custom_deleter);`
 \item \verb`shared_ptr<void>` 可以装任何指针
 \item 一个被 \verb`shared_ptr` 管理的对象会有一个 \textbf{control block} 即\textbf{控制块}，它所有的 \verb`shared_ptr` 都会有个指针指向这个 block。 里面记录了该对象的 deleter, allocator, 分别有几个 \verb`shared_ptr` 和 \verb`weak_ptr`（也就是 \verb`shared_count` 和 \verb`weak_count`）
 \item 当 \verb`MyClass* raw = ptr.get();` 可以返回裸指针，但不可以手动把它释放或使用它创建新的 \verb`shared_ptr`。
