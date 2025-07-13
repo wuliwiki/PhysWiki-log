@@ -24,6 +24,27 @@
 \caption{Julia JIT 流程} \label{fig_julia0_1}
 \end{figure}
 
+\subsection{查看 Julia 语法树}
+\begin{itemize}
+\item \verb`dump(::Expr)` 函数可以显示语法树，如 \verb`expr = :(x + 2y)` 显示
+\begin{lstlisting}[language=julia]
+Expr
+  head: Symbol call
+  args: Array{Any}((3,))
+    1: Symbol +
+    2: Symbol x
+    3: Expr
+      head: Symbol call
+      args: Array{Any}((3,))
+        1: Symbol *
+        2: Int64 2
+        3: Symbol y
+\end{lstlisting}
+\item \verb`@which dump(:(x + 2y))` 可以看到该函数在哪里定义。
+\item \verb`dump(arg; maxdepth=最大层数)` 可以指定最大层数。
+\end{itemize}
+
+
 \subsection{把 Julia 代码编译成 LLVM IR 代码}
 首先安装 \verb`using Pkg; Pkg.add("LLVM")` （其实没必要）
 
