@@ -35,7 +35,9 @@ unique_ptr<int, Deleter> ptr2(new int(42), Deleter()); // 手动提供删除器
 \item \verb`unique_ptr<类> p(类 *类指针)`， 其中 \verb`类指针` 可以由 \verb`new 类(构造参数...)` 产生，指向一个需要 \verb`delete 类指针` 的对象。
 \item \verb`unique_ptr<类[]> p(类 *类指针)`， 其中 \verb`类指针` 可以由 \verb`new 类[数量]` 产生，指向一个需要 \verb`delete[] 类指针` 的对象。
 \item 注意 \verb`unique_ptr<int[]> p(new int[10])` 不能写成 \verb`unique_ptr<int[]> p = new int[10]` 会导致编译错误因为类型不对。
-\item \verb`std::make_unique<int[10]>()` 是不支持的。
+\item \verb`auto ptr = std::make_unique<MyClass>(arg1, arg2, ...);` 等效于 \verb`auto ptr = std::unique_ptr<MyClass>(new MyClass(arg1, arg2, ...));`。
+\item \verb`auto arr_ptr = std::make_unique<MyClass[]>(5);` 可以创建长度为 5 的 int 数组。
+\item \verb`std::make_unique<int[10]>()` 这种用法是不支持的。
 \item 不允许 “复制赋值” 或 “复制构造”，要传给函数可以用 \verb`p` 的引用或指针。允许 \verb`std::move()`。
 \item \verb`unique_ptr<类，删除器类> p(类指针, 删除器)`。 \verb`删除器` 是 \verb`删除器类` 的一个对象（例如 C 函数指针）。
 \item \verb`删除器类` 或 \verb`删除器` 可以省略， 省略后默认用对应的 \verb`delete 类指针` 或 \verb`delete[] 类数组`，实际上是 \verb`std::default_delete<T>`（对数组进行了特化）。
