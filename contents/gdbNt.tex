@@ -61,6 +61,18 @@
 \item 用 \verb`call (void) fflush(stdout)`， 可以 flush 命令行输出的 buffer，有时候 \verb`cout` 的内容不会立即显示，用这个即可。
 \end{itemize}
 
+\subsubsection{互动命令行程序的调试}
+\begin{itemize}
+\item 对于 CLI 程序，gdb 命令行可能会被程序的 CLI 命令行覆盖，导致没有机会插入断点。 这时最方便还是用 CLion 调试，用鼠标打断点。 或者在程序运行前断点（但有时候动态库 \verb`dlopen()` 加载前无法设置断点）。
+\end{itemize}
+
+
+\subsubsection{库的调试}
+\begin{itemize}
+\item 如果动态库是 \verb`dlopen()` 打开的，会发生一些麻烦，比如加载之前无法给其中的函数设置断点。
+\item \verb`catch load /my/path/file.so` 可以在加载动态库的时候 break
+\end{itemize}
+
 \subsection{Fortran}
 \begin{itemize}
 \item 在 intel debugger \verb`gdb-ia` 中， \verb`V(1:2,1:2,3,4)` 这种语法是可以用的。
