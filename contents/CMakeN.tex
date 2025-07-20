@@ -40,7 +40,7 @@
 \begin{itemize}
 \item （可以学习一下 Eigen 的 CMakeList.txt）
 \item \verb`cmake_minimum_required(VERSION x.x)` 要求 cmake 最小版本（必须有）
-\item \verb`project(项目名)` 指定项目名称（必须有）， \verb`project(项目名 VERSION 1.2.3)` 额外指定版本号。
+\item \verb`project(项目名)` 指定项目名称（必须有）， \verb`project(项目名 VERSION 1.2.3)` 额外指定版本号。 该编号可以通过变量 \verb`PROJECT_VERSION` 获取
 \item \verb`set(CMAKE_CXX_COMPILER "/usr/bin/g++")` 设置 compiler
 \item \verb`set(CMAKE_CXX_FLAGS "-选项 -选项")` 设置 flag， 包括 C++ 标准。 注意这不是一个 list。 如果要在后面添加选项， 就用 \verb`set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -选项1 -选项2")`。
 \item 用 \verb`set(CMAKE_CXX_STANDARD 11)` 设置 C++ 标准
@@ -126,6 +126,17 @@ endif()
 \item 循环如 \verb`foreach(变量 IN 列表) ... endforeach()` 或者 \verb`foreach(变量 IN 变量1 变量2 ...) ... endforeach()` 其中 \verb`IN` 在 cmake 2.4 以后可以省略。 \href{https://cmake.org/cmake/help/latest/command/foreach.html}{文档}。
 \item \verb`find_program(变量 程序名 [路径1 路径2 ...])` 可以在指定路径或者 \verb`$PATH` 中寻找某个可执行文件， 并把绝对路径写入\verb`变量`。 如果没有找到， 会赋空值。
 \item \verb`add_custom_command(OUTPUT output_files COMMAND 命令... [ARGS 参数...] [WORKING_DIRECTORY dir] [DEPENDS 依赖文件] [COMMENT 注释])` 相当于 Makefile 中的一个 rule， 指定依赖关系， 以及使用的命令。 其中 \verb`命令` 可以包含完整的命令而不需要额外用 \verb`参数`。 当 \verb`OUTPUT` 的文件缺失时或者 \verb`依赖文件` 更新时， 就会运行命令。 可以把 \verb`命令` 和所有的参数写成一整个字符串， 但是 cmake 可能会自动把空格 escape 比较恶心。 可以试试用 \verb`string(REPLACE " " ";" 命令变量 ${命令变量})` 然后 \verb`COMMAND ${命令变量}` 把命令拆成一个 list。 \verb`注释` 会在该命令被运行时输出到 stdout。
+\item \verb`add_custom_command` 的另一种用法是
+\begin{lstlisting}[language=cmake]
+add_custom_command(
+    TARGET <target> # Target to attach to (e.g., executable)
+    PRE_BUILD | PRE_LINK | POST_BUILD # When to run the command
+    COMMAND <command> [args...] # Command to execute
+    WORKING_DIRECTORY <dir> # (Optional) Run command in this dir
+    COMMENT "<message>" # (Optional) Print a message
+)
+\end{lstlisting}
+可以在编译 target 的某个阶段执行一些命令，最常见的是 \verb`POST_BUILD` 用于在编译结束后复制一些文件。
 \item 为了更好的跨平台， \verb`命令` 可以使用 \verb`${CMAKE_COMMAND} -E 一些命令`。 其中 \verb`${CMAKE_COMMAND}` 就是当前使用的 \verb`cmake` 程序， \verb`一些命令` 如 \verb`echo 字符串`，\verb`copy 文件 文件`， \verb`make_directory 目录`， \verb`remove_directory 目录`， \verb`remove 文件` 等。
 \item \verb`add_custom_target(目标名 [COMMAND 命令...] [ARGS arguments...] [DEPENDS depends...] [BYPRODUCTS byproducts...] [WORKING_DIRECTORY dir] [SOURCES sources...] [COMMENT 注释])` 会在生成的 Makefile 中添加一个 target。
 \item \verb`add_dependencies(目标名 依赖1 [依赖2 ...])` 可以给 target（例如可执行文件）添加依赖。
@@ -270,6 +281,12 @@ target_compile_definitions(MyLibrary
 # Export the library target for use in other projects
 export(TARGETS MyLibrary FILE MyLibraryConfig.cmake)
 \end{lstlisting}
+
+\subsection{install}
+\begin{itemize}
+\item \verb`install()`
+\end{itemize}
+
 
 \subsection{内置变量}
 \begin{itemize}
