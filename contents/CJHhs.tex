@@ -291,17 +291,242 @@ $$
 此外，如果 $1 - a$、$c - a - b$、$a - b$ 是分母分别为 $k, l, m$ 的有理数，则当且仅当满足：$1/k + 1/l + 1/m> 1$时，单值群是有限群。这个判定条件可以参考Schwarz 列表或 Kovacic 算法。
 \subsection{积分公式}
 \subsubsection{欧拉型公式}
-
-若 $B(b, c - b)$ 是**贝塔函数**，则有：
-
+如果 $B$ 表示贝塔函数，那么有以下恒等式：
 $$
-B(b, c - b) \cdot {}_2F_1(a, b; c; z) = \int_0^1 x^{b - 1}(1 - x)^{c - b - 1}(1 - zx)^{-a} \, dx \quad \text{当 } \Re(c) > \Re(b) > 0
+B(b, c - b) \cdot {}_2F_1(a, b; c; z) = \int_0^1 x^{b - 1}(1 - x)^{c - b - 1}(1 - zx)^{-a} \, dx \quad \text{当 } \Re(c) > \Re(b) > 0~
 $$
+前提是 $z$ 不能是大于等于 1 的实数。该公式可以通过将 $(1 - zx)^{-a}$ 按二项式定理展开，在 $|z| < 1$ 的条件下逐项积分得到；在其他区域则通过解析延拓来证明。当 $z$ 是一个大于等于 1 的实数时，$(1 - zx)$ 在积分区间内某点为零，导致被积函数出现奇点，此时积分值可能不再良定义，必须借助解析延拓来处理。这一结果最早由欧拉于 1748 年提出，它直接引出了欧拉变换和Pfaff 变换等超几何函数恒等式。
 
-前提是 $z$ 不能是大于等于 1 的实数。该公式可以通过将 $(1 - zx)^{-a}$ 按二项式定理展开，在 $|z| < 1$ 的条件下逐项积分得到；在其他区域则通过解析延拓来证明。
+此外，还存在一些对应于其他分支的积分表达式，它们使用相同的被积函数，但积分路径则取为封闭的Pochhammer 回路，该路径围绕奇点按不同顺序封闭。这类积分路径体现了超几何函数的单值延拓作用。
+\subsubsection{巴恩斯积分}
+巴恩斯利用留数理论计算了如下积分：
+$$
+\frac{1}{2\pi i} \int_{-i\infty}^{i\infty} \frac{\Gamma(a + s)\, \Gamma(b + s)\, \Gamma(-s)}{\Gamma(c + s)}\, (-z)^s \, ds~
+$$
+结果为：
+$$
+\frac{\Gamma(a)\, \Gamma(b)}{\Gamma(c)} \cdot {}_2F_1(a, b; c; z)~
+$$
+其中积分路径（巴恩斯轮廓）的选取方式是：将 $s = 0, 1, 2, \dots$ 的极点与 $s = -a, -a - 1, \dots$、$s = -b, -b - 1, \dots$ 的极点隔开。该公式在 $z$ 不是非负实数的前提下是有效的。
+\subsubsection{John变换}
+高斯超几何函数 ${}_2F_1(a, b; c; z)$ 还可以写成John变换的形式（参见 Gelfand, Gindikin 与 Graev 2003 年文献，第 2.1.2 节）。这种表示形式源自积分几何和调和分析，在表示某些特殊函数方面提供了更深层次的结构理解。
+\subsection{高斯的邻接关系}
+以下六个函数：
+$$
+{}_2F_1(a \pm 1, b; c; z), \quad
+{}_2F_1(a, b \pm 1; c; z), \quad
+{}_2F_1(a, b; c \pm 1; z)~
+$$
+被称为 ${}_2F_1(a, b; c; z)$ 的邻接函数。
 
-当 $z$ 是一个大于等于 1 的实数时，$(1 - zx)$ 在积分区间内某点为零，导致被积函数出现奇点，此时积分值可能不再良定义，必须借助解析延拓来处理。
+高斯证明，超几何函数 ${}_2F_1(a, b; c; z)$ 可以表示为任意两个邻接函数的线性组合，其系数是关于 $a$、$b$、$c$、$z$ 的有理函数。
 
-这一结果最早由**欧拉（Euler）**于 1748 年提出，它直接引出了**欧拉变换**和**Pfaff 变换**等超几何函数恒等式。
+由于从 6 个邻接函数中任选 2 个有 $\binom{6}{2} = 15$ 种组合，因此可以得出 15 个邻接恒等式，这在超几何函数的递推关系、数值计算与简化中具有重要作用。
 
-此外，还存在一些对应于其他分支的积分表达式，它们使用相同的被积函数，但积分路径则取为封闭的**Pochhammer 回路**，该路径围绕奇点按不同顺序封闭。这类积分路径体现了超几何函数的**单值延拓作用**（monodromy action）。
+以下恒等式描述了超几何函数 ${}_2F_1(a, b; c; z)$ 及其邻接函数之间的关系：
+$$
+z \frac{dF}{dz}
+= z \cdot \frac{ab}{c} \cdot F(a{+}, b{+}, c{+})  
+= a \cdot \left[F(a{+}) - F\right]  
+= b \cdot \left[F(b{+}) - F\right]  
+= (c - 1) \cdot \left[F(c{-}) - F\right]~ 
+$$
+$$
+= \frac{(c - a)F(a{-}) + (a - c + bz)F}{1 - z}  
+= \frac{(c - b)F(b{-}) + (b - c + az)F}{1 - z}  
+= z \cdot \frac{(c - a)(c - b)F(c{+}) + c(a + b - c)F}{c(1 - z)}~ 
+$$
+其中：$F = {}_2F_1(a, b; c; z)$ $F(a{+}) = {}_2F_1(a + 1, b; c; z)$，以此类推表示邻接函数（参数增加或减少 1）
+
+通过对这些等式的重复使用，可以在任意三个形式为：
+$$
+{}_2F_1(a + m, b + n; c + l; z)~ 
+$$
+的超几何函数之间建立线性关系，其系数属于复有理函数域 $\mathbb{C}(z)$，其中 $m$、$n$、$l$ 是整数【参考文献 3】。
+
+这些关系式是超几何函数理论中的核心工具，在函数递推、算法推导、数值计算、以及化简表达式时都极为重要。
+\subsubsection{高斯连分式}
+高斯利用邻接关系给出了多种将两个超几何函数之比表示为连分式的方法。例如，下面这个恒等式就是其中一个典型例子：
+$$
+\frac{{}_2F_1(a+1, b; c+1; z)}{{}_2F_1(a, b; c; z)} = 
+\cfrac{1}{1 + \cfrac{\frac{(a - c)b}{c(c + 1)} z}{1 + \cfrac{\frac{(b - c - 1)(a + 1)}{(c + 1)(c + 2)} z}{1 + \cfrac{\frac{(a - c - 1)(b + 1)}{(c + 2)(c + 3)} z}{1 + \cfrac{\frac{(b - c - 2)(a + 2)}{(c + 3)(c + 4)} z}{1 + \ddots}}}}}~
+$$
+\subsection{变换公式}
+变换公式描述了超几何函数 ${}_2F_1(a, b; c; z)$ 在不同参数值或不同变量位置之间的关系。
+\subsubsection{分式线性变换}
+欧拉变换是其中一种基本的变换公式：
+$$
+{}_2F_1(a, b; c; z) = (1 - z)^{c - a - b} \cdot {}_2F_1(c - a, c - b; c; z)~
+$$
+这个公式可以通过结合两种 Pfaff 变换 推导出来：
+$$
+{}_2F_1(a, b; c; z) = (1 - z)^{-b} \cdot {}_2F_1\left(b, c - a; c; \frac{z}{z - 1}\right)~
+$$
+$$
+{}_2F_1(a, b; c; z) = (1 - z)^{-a} \cdot {}_2F_1\left(a, c - b; c; \frac{z}{z - 1}\right)~
+$$
+这两种 Pfaff 变换本身可由欧拉的积分表示式导出。关于欧拉第一、第二变换的推广形式，可参阅 Rathie & Paris（2007）与 Rakha & Rathie（2011）的研究。
+
+此外，${}_2F_1(a, b; c; z)$ 还可以表示为两个关于 $1 - z$ 的超几何函数的线性组合：
+$$
+\begin{aligned}
+{}_2F_1(a, b; c; z) =\ & \frac{\Gamma(c) \Gamma(c - a - b)}{\Gamma(c - a) \Gamma(c - b)} \cdot {}_2F_1(a, b; a + b + 1 - c; 1 - z) \\
+&+ \frac{\Gamma(c) \Gamma(a + b - c)}{\Gamma(a) \Gamma(b)} \cdot (1 - z)^{c - a - b} \cdot {}_2F_1(c - a, c - b; 1 + c - a - b; 1 - z)
+\end{aligned}~
+$$
+这个公式是超几何函数变换中的经典恒等式之一，它体现了 ${}_2F_1$ 函数在不同变量与参数配置下的对称性与函数结构。
+\subsubsection{二次变换}
+当下列六个数中的任意两个相等，或其中有一个等于 $\tfrac{1}{2}$ 时：
+$$
+1 - c,\quad c - 1,\quad a - b,\quad b - a,\quad a + b - c,\quad c - a - b~
+$$
+就存在一个二次变换，可以将超几何函数 ${}_2F_1$ 映射到另一个参数不同、但自变量由二次代数变换得到的新超几何函数。最早的例子由库默（Kummer, 1836）给出，古尔萨（Goursat, 1881）则提供了完整的分类列表。一个典型的二次变换例子是：
+$$
+{}_2F_1(a, b; 2b; z) =
+(1 - z)^{-a/2} \cdot {}_2F_1\left(\tfrac{1}{2}a,\ b - \tfrac{1}{2}a;\ b + \tfrac{1}{2};\ \frac{z^2}{4z - 4}\right)~
+$$
+\subsubsection{高次变换}
+当以下三个量：$1 - c,\quad a - b,\quad a + b - c$两两只相差一个符号，或其中两个等于 $1/3$ 或 $-1/3$ 时，超几何函数 ${}_2F_1$ 存在三次变换，即可与一个通过三次代数变换得到的新变量值 $z$ 建立联系。
+
+最早的三次变换由古尔萨（Goursat, 1881）提出。一个典型的例子是：
+$$
+{}_2F_1\left(\tfrac{3}{2}a, \tfrac{1}{2}(3a - 1); a + \tfrac{1}{2}; -\tfrac{z^2}{3}\right)~
+=
+(1 + z)^{1 - 3a} \cdot {}_2F_1\left(a - \tfrac{1}{3},\ a;\ 2a;\ 2z(3 + z^2)(1 + z)^{-3} \right)~
+$$
+此外，还存在四次变换（degree 4）和六次变换（degree 6）的形式。但如果变换次数更高（如五次、七次等），则仅在参数 $a$、$b$、$c$ 为某些特定有理数时才存在这类变换（参见 Vidūnas, 2005）。
+
+例如，下面是一个高度复杂的特例：
+$$
+{}_2F_1\left(\tfrac{1}{4}, \tfrac{3}{8}; \tfrac{7}{8}; z \right)
+\cdot (z^4 - 60z^3 + 134z^2 - 60z + 1)^{1/16}~
+=
+{}_2F_1\left(\tfrac{1}{48}, \tfrac{17}{48}; \tfrac{7}{8}; \frac{-432z(z - 1)^2(z + 1)^8}{(z^4 - 60z^3 + 134z^2 - 60z + 1)^3} \right)~
+$$
+\subsection{特殊点 $z$ 处的函数值}
+关于在特殊点处的求和公式，可参考 Slater（1966, 附录 III），大多数恒等式也出现在 Bailey（1935）中。Gessel 与 Stanton（1982）进一步给出了更多点上的超几何函数值，Koepf（1995）则展示了如何使用计算机算法验证这些恒等式。
+\subsubsection{特殊值：$z = 1$}
+高斯求和定理，以卡尔·弗里德里希·高斯命名，是一个著名的恒等式：
+$$
+{}_2F_1(a, b; c; 1) = \frac{\Gamma(c)\, \Gamma(c - a - b)}{\Gamma(c - a)\, \Gamma(c - b)} \quad \text{当 } \Re(c) > \Re(a + b)~
+$$
+这个恒等式可以由欧拉积分公式在 $z = 1$ 的情形推出。它的一个特例即为范德蒙恒等式。
+
+若 $a = -m$（其中 $m$ 是非负整数），则有简化公式：
+$$
+{}_2F_1(-m, b; c; 1) = \frac{(c - b)_m}{(c)_m}~
+$$
+其中 $(x)_m$ 表示上升阶乘（Pochhammer 符号）。此外，Dougall 公式是该结果在 $z = 1$ 处的双边超几何级数的推广形式。
+\subsubsection{库默定理$z = -1$}
+在很多情况下，可以通过二次变换将超几何函数在 $z = -1$ 处的取值转化为 $z = 1$ 的情形，从而利用高斯求和定理进行求值。一个典型的例子是以恩斯特·库默命名的库默定理：
+$$
+{}_2F_1(a, b; 1 + a - b; -1) = \frac{\Gamma(1 + a - b)\, \Gamma\left(1 + \tfrac{1}{2}a\right)}{\Gamma(1 + a)\, \Gamma\left(1 + \tfrac{1}{2}a - b\right)}~
+$$
+该恒等式可由以下两种库默二次变换导出：
+$$
+{}_2F_1(a, b; 1 + a - b; z) =
+(1 - z)^{-a} \cdot {}_2F_1\left( \tfrac{a}{2},\ \tfrac{1 + a}{2} - b;\ 1 + a - b;\ -\frac{4z}{(1 - z)^2} \right)~
+$$
+$$
+{}_2F_1(a, b; 1 + a - b; z) =
+(1 + z)^{-a} \cdot {}_2F_1\left( \tfrac{a}{2},\ \tfrac{a + 1}{2};\ 1 + a - b;\ \frac{4z}{(1 + z)^2} \right)~
+$$
+然后在上述任一恒等式中令 $z = -1$，代入高斯定理即可得到最终的库默求和结果。关于库默求和的推广形式，可参考 Lavoie、Grondin 与 Rathie（1996）的研究。
+\subsubsection{特殊点 $z = 1/2$ 处的函数值}
+高斯第二求和定理：
+$$
+{}_2F_1\left(a, b; \tfrac{1}{2}(1 + a + b); \tfrac{1}{2} \right)
+=
+\frac{
+\Gamma\left(\tfrac{1}{2}\right)\, \Gamma\left(\tfrac{1}{2}(1 + a + b)\right)
+}{
+\Gamma\left(\tfrac{1}{2}(1 + a)\right)\, \Gamma\left(\tfrac{1}{2}(1 + b)\right)}~
+$$
+贝利定理：
+$$
+{}_2F_1\left(a, 1 - a; c; \tfrac{1}{2} \right)
+=
+\frac{
+\Gamma\left(\tfrac{1}{2}c\right)\, \Gamma\left(\tfrac{1}{2}(1 + c)\right)
+}{
+\Gamma\left(\tfrac{1}{2}(c + a)\right)\, \Gamma\left(\tfrac{1}{2}(1 + c - a)\right)}~
+$$
+关于这两个定理的推广形式，可参阅 Lavoie、Grondin 与 Rathie（1996）。
+\subsubsection{其他特殊点}
+在某些参数为有理数的特殊情况下，超几何函数还可简化为代数数。相关结果可参考 Gessel & Stanton（1982）和 Koepf（1995）所列的公式。
+
+一个典型的例子如下：
+$$
+{}_2F_1\left(a, -a; \tfrac{1}{2}; \frac{x^2}{4(x - 1)}\right)
+=
+\frac{(1 - x)^a + (1 - x)^{-a}}{2}~
+$$
+此恒等式还可以改写为：
+$$
+T_a(\cos x)
+=
+{}_2F_1\left(a, -a; \tfrac{1}{2}; \tfrac{1}{2}(1 - \cos x)\right)
+=
+\cos(ax)~
+$$
+当 $-\pi < x < \pi$ 时成立，其中 $T_a$ 是广义切比雪夫多项式。
+\subsection{参见}
+\begin{itemize}
+\item Appell 级数
+\item 基本超几何级数
+\item 双边超几何级数
+\item 椭圆超几何级数
+\item 一般超几何函数
+\item 广义超几何级数
+\item 超几何分布
+\item Lauricella 超几何级数
+\item 模超几何级数
+\item 黎曼微分方程
+\end{itemize}
+\subsection{参考文献}
+\begin{enumerate}
+\item Morita, Tohru（1996）. *《利用高斯邻接关系计算超几何函数 F(n+1/2, n+1/2; m; z)》*，发表于《Interdisciplinary Information Sciences》，第 2 卷第 1 期，第 63–74 页。doi: [10.4036/iis.1996.63](https://doi.org/10.4036/iis.1996.63)，MR 1398101。
+\item Ince（1944），第 393 页。
+\item Rakha, Medhat A.; Rathie, Arjun K.; Chopra, Purnima（2011）. 《关于高斯超几何函数的一些新的邻接关系及其应用》，发表于《Computers & Mathematics with Applications》，第 61 卷第 3 期，第 620–629 页。doi: [10.1016/j.camwa.2010.12.008](https://doi.org/10.1016/j.camwa.2010.12.008)，MR 2764057。
+\end{enumerate}
+\begin{enumerate}
+\item 此处采用的记号在超几何函数理论中较为常见，但它与下降和上升阶乘中所使用的记号约定相反。
+\end{enumerate}
+\begin{itemize}
+\item Andrews, George E.; Askey, Richard & Roy, Ranjan（1999）《特殊函数》，《数学与其应用百科全书》，第71卷，剑桥大学出版社。ISBN：978-0-521-62321-6。MR 1688958。
+\item Bailey, W\.N.（1935）《广义超几何级数》，剑桥大学出版社。（PDF格式归档于2017-06-24，于2016-07-23获取。）
+\item Beukers, Frits（2002）《高斯超几何函数》（讲义笔记，回顾基本知识、三角映射与单值群）。
+\item Olde Daalhuis, Adri B.（2010）“超几何函数”，收录于：Olver, Frank W. J.; Lozier, Daniel M.; Boisvert, Ronald F.; Clark, Charles W. 编，《NIST 数学函数手册》，剑桥大学出版社。ISBN：978-0-521-19225-5。MR 2723248。
+\item Erdélyi, Arthur; Magnus, Wilhelm; Oberhettinger, Fritz & Tricomi, Francesco G.（1953）《高等超越函数》（PDF），第一卷，纽约–多伦多–伦敦：McGraw–Hill 出版公司。ISBN：978-0-89874-206-0。MR 0058756。（PDF格式归档于2011-08-11，于2011-07-30获取。）
+\item Gasper, George & Rahman, Mizan（2004）《基本超几何级数》（Basic Hypergeometric Series，第二版），《数学与其应用百科全书》，第96卷，剑桥大学出版社。ISBN：0-521-83357-4。
+\item Gauss, Carl Friedrich（1813）《关于无穷级数的一般性研究》：“1 + (αβ)/(1·γ)x + (α(α+1)β(β+1))/(1·2·γ(γ+1))x² + ...”，刊于《哥廷根皇家科学院评论》，第2卷（拉丁文）。
+\item Gelfand, I. M.; Gindikin, S.G. & Graev, M.I.（2003）[原出版2000年]《积分几何中的若干选题》，《数学专著译丛》，第220卷，罗德岛州普罗维登斯：美国数学会。ISBN：978-0-8218-2932-5。MR 2000133。
+\item Gessel, Ira & Stanton, Dennis（1982）《超几何级数的一些奇异求值》，发表于《SIAM 数学分析期刊》（，第13卷第2期，第295–308页。doi: [10.1137/0513021](https://doi.org/10.1137/0513021)。MR 0647127。
+\item Goursat, Édouard（1881）《关于超几何级数作为解的线性微分方程》，刊于《巴黎高师年鉴》，第10卷，第3–142页。doi: [10.24033/asens.207](https://doi.org/10.24033/asens.207)，于2008-10-16获取。
+\item Heckman, Gerrit & Schlichtkrull, Henrik（1994）《对称空间上的调和分析与特殊函数》，圣地亚哥：Academic Press。ISBN：0-12-336170-2。（第一部分涉及李群上的超几何函数。）
+\item Hille, Einar（1976）《复数域中的常微分方程》，Dover 出版社。ISBN：0-486-69620-0。
+\item Ince, E. L.（1944）《常微分方程》，Dover 出版社。
+\item Klein, Felix（1981）《超几何函数讲义》，《数学科学基础讲义丛书》（Grundlehren der Mathematischen Wissenschaften，德文），第39卷，柏林 / 纽约：Springer-Verlag。ISBN：978-3-540-10455-1。MR 0668700。
+\item Koepf, Wolfram（1995）《多重超几何求和的算法》，发表于《符号计算杂志》，第20卷第4期，第399–417页。doi: [10.1006/jsco.1995.1056](https://doi.org/10.1006/jsco.1995.1056)。MR 1384455。
+\item Kummer, Ernst Eduard（1836）：“关于超几何级数
+$1 + \frac{\alpha \cdot \beta}{1 \cdot \gamma}x + \frac{\alpha(\alpha + 1)\beta(\beta + 1)}{1 \cdot 2 \cdot \gamma(\gamma + 1)}x^2 + \frac{\alpha(\alpha + 1)(\alpha + 2)\beta(\beta + 1)(\beta + 2)}{1 \cdot 2 \cdot 3 \cdot \gamma(\gamma + 1)(\gamma + 2)}x^3 + \cdots$”，刊于《纯粹与应用数学杂志》（Journal für die reine und angewandte Mathematik，德文），第15卷，第39–83页、第127–172页。ISSN：0075-4102。
+\item Lavoie, J. L.; Grondin, F.; Rathie, A.K.（1996）：“Whipple关于$_3F_2$和式定理的推广”，发表于《计算与应用数学杂志》，第72卷第2期，第293–300页。doi: [10.1016/0377-0427(95)00279-0](https://doi.org/10.1016/0377-0427%2895%2900279-0)。
+\item Press, W\.H.; Teukolsky, S.A.; Vetterling, W\.T.; Flannery, B.P.（2007）：“第6.13节：超几何函数”，载于《数值食谱：科学计算的艺术》（Numerical Recipes: The Art of Scientific Computing，第3版），纽约：剑桥大学出版社。ISBN：978-0-521-88068-8。
+\item Rakha, M.A.; Rathie, Arjun K.（2011）：“欧拉第二类变换与Saalschütz定理的扩展”，发表于《韩国数学会通报》，第48卷第1期，第151–156页。doi: [10.4134/BKMS.2011.48.1.151](https://doi.org/10.4134/BKMS.2011.48.1.151)。
+\item Rathie, Arjun K.; Paris, R.B.（2007）：“对$_3F_2$级数的欧拉型变换的一个扩展”，发表于《远东数学科学期刊》，第27卷第1期，第43–48页。
+\item Riemann, Bernhard（1857）：“关于由高斯级数 $F(\alpha, \beta, 
+\gamma, x)$ 表示的函数的理论的贡献”，刊于哥廷根皇家科学院数学分会论文集（德文），第7卷，哥廷根：Dieterichs书局，第3–22页。（该论文的重印版可在《黎曼全集》(PDF) 中找到。）
+\item Slater, Lucy Joan（1960）：《合流超几何函数》，英国剑桥：剑桥大学出版社。MR 0107026。
+\item Slater, Lucy Joan（1966）：《广义超几何函数》，英国剑桥：剑桥大学出版社。ISBN：0-521-06483-X。MR 0201688。（2008年再版平装本 ISBN 为 978-0-521-09061-2。）
+\item Vidunas, Raimundas（2005）：“某些高斯超几何函数的变换”，发表于《符号计算杂志》，第178卷第1–2期，第473–487页。arXiv: [math/0310436](https://arxiv.org/abs/math/0310436)。Bibcode: 2005JCoAM.178..473V。doi: [10.1016/j.cam.2004.09.053](https://doi.org/10.1016/j.cam.2004.09.053)。S2CID: 119596800。
+\item Wall, H.S.（1948）：《连分数解析理论》，纽约：D. Van Nostrand Company, Inc.。
+\item Whittaker, E.T. 与 Watson, G.N.（1927）：《现代分析教程》，英国剑桥：剑桥大学出版社。
+\item Yoshida, Masaaki（1997）：《超几何函数，我的爱：构型空间的模解释》，德国不伦瑞克—威斯巴登：Friedr. Vieweg & Sohn 出版社。ISBN：3-528-06925-2。MR 1453580。
+\end{itemize}
+\subsection{外部链接}
+\begin{itemize}
+\item “超几何函数”，《数学百科全书》，欧洲数学学会出版社（EMS Press），2001年 [1994年版]
+\item John Pearson，《超几何函数的计算》，牛津大学硕士论文
+\item Marko Petkovsek、Herbert Wilf 和 Doron Zeilberger 所著《A = B》一书（可免费下载）
+\item Eric W. Weisstein：“超几何函数”，来源：MathWorld 网站
+\end{itemize}
