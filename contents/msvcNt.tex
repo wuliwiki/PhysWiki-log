@@ -1,0 +1,23 @@
+% MSVC （微软 C++ 编译器）笔记
+% license Usr
+% type Note
+
+参考 \verb`CMakeTest` 仓库中的 \verb`msvc-dyn-lib` 子文件夹。 CMake 如果适配了 VS，且系统安装了 VS，那么可以用构造程序
+\begin{lstlisting}[language=none]
+cmake -DCMAKE_BUILD_TYPE=Debug -G "Visual Studio 16 2019" ..
+cmake --build . --verbose
+\end{lstlisting}
+
+\subsection{常识}
+\begin{itemize}
+\item \verb`cl.exe` 是编译器，默认安装路径 \verb`C:/Program Files (x86)/Microsoft Visual Studio/2019/Community/VC/Tools/MSVC/14.29.30133/bin/Hostx64/x64/cl.exe`。 注意微软命令行程序的选项以 \verb`/` 开头
+\item \verb`MSBuild.exe` 是微软自家的构建程序（类似于 make）它会根据 cmake 生成的 \verb`.sln` 和 \verb`.vcxproj` （类似于 \verb`Makefile`） 调用 \verb`cl.exe` 和 \verb`link.exe` 等，默认路径 \verb`C:/Program Files (x86)/Microsoft Visual Studio/2019/Community/MSBuild/Current/Bin/MSBuild.exe`。
+\item 其实静态库，和动态导入库，都是 \verb`.lib` 拓展名， 真正的动态库 \verb`.dll` 编译链接时用不上只有运行时才需要。
+\end{itemize}
+
+\subsection{CMakeLists 适配}
+\begin{itemize}
+\item utf-8 编码文件中的中文注释需要加个编译器选项 \verb`utf-8`，否则可能会被误认为是源码
+\item 如果 cmake 不做特别适配，编译出的库默认不以 \verb`lib` 开头，找链接库时也是。
+\item \verb`min, max` 在 windows SDK 中定义成为宏， 需要声明一个宏才可以禁止声明。
+\end{itemize}
