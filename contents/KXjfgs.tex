@@ -1,0 +1,348 @@
+% 柯西积分公式（综述）
+% license CCBYSA3
+% type Wiki
+
+本文根据 CC-BY-SA 协议转载翻译自维基百科\href{https://en.wikipedia.org/wiki/Cauchy\%27s_integral_formula}{相关文章}。
+
+在数学中，柯西积分公式是复分析中的一个核心命题，以奥古斯丁-路易·柯西的名字命名。它表明，一个在圆盘上全纯（即复可导）的函数，其内部的取值完全由其在圆周边界上的取值所决定。同时，该公式也为全纯函数的一切阶导数提供了积分表达式。
+
+柯西积分公式展示了复分析中的一个重要思想：“微分等价于积分”。即复微分与积分一样，在一致极限下具有良好的行为——而这一性质在实分析中并不成立。
+\subsection{定理}
+设 $U$ 是复平面 $\mathbf{C}$ 的一个开子集，记闭圆盘
+$$
+D = \left\{ z : |z - z_0| \leq r \right\}~
+$$
+完全包含于 $U$ 内。设 $f: U \to \mathbf{C}$ 是一个全纯函数，记 $\gamma$ 为 $D$ 的边界（即圆周），其方向为逆时针。那么，对于圆盘内部任意一点 $a$，有：
+$$
+f(a) = \frac{1}{2\pi i} \oint_{\gamma} \frac{f(z)}{z - a} \, dz.~
+$$
+这个命题的证明依赖于柯西积分定理，同样地，它只要求 $f$ 是复可微的。
+
+由于 $\frac{1}{z - a}$ 可以展开成以 $a$ 为变量的幂级数：
+$$
+\frac{1}{z - a} = \frac{1 + \frac{a}{z} + \left( \frac{a}{z} \right)^2 + \cdots}{z}  ,~
+$$
+由此可知，全纯函数都是解析函数，也就是说，它们可以展开为收敛的幂级数。特别地，$f$ 实际上是无限次可导的，并且其 $n$ 阶导数可以表示为：
+$$
+f^{(n)}(a) = \frac{n!}{2\pi i} \oint_{\gamma} \frac{f(z)}{(z - a)^{n+1}} \, dz.~
+$$
+这个公式有时也称为柯西导数公式。
+
+上述定理可以推广：曲线 $\gamma$ 可以被任何在 $U$ 内绕点 $a$ 一圈（绕数为 1）且可求长的闭曲线替代。此外，像柯西积分定理一样，只要函数 $f$ 在路径围成的开区域内全纯，并在闭包上连续，即可使用该公式。
+
+需要注意的是，并不是所有在边界上连续的函数都能产生一个在边界内部与之匹配的全纯函数。例如，如果取函数 $f(z) = \frac{1}{z}$，在 $|z| = 1$ 上定义，并代入柯西积分公式，在圆内部的所有点处结果都是 0。事实上，只给出一个全纯函数边界上的实部，就足以确定该函数（最多相差一个纯虚常数）。因为与给定实部对应的虚部（作为边界条件）是唯一的，除了加一个常数外。
+
+我们可以结合 Möbius 变换和 Stieltjes 反演公式，从边界上的实部构造出整个圆内的全纯函数。例如，函数 $f(z) = i - iz$ 的实部为 $\text{Re} f(z) = \text{Im} z$。在单位圆上，该函数可表示为：
+$$
+\frac{\frac{i}{z} - iz}{2}.~
+$$
+利用 Möbius 变换和 Stieltjes 公式，我们可构造出圆内对应的全纯函数。其中 $\frac{i}{z}$ 项对圆内无贡献，得到函数 $-iz$。这个函数在边界上的实部与原函数一致，并且给出了相应的虚部，只是差了一个常数（即 $i$）。
+\subsection{证明思路（概要）}
+利用柯西积分定理，我们可以证明：在任意闭合可求长曲线 $C$ 上的积分，等于在以 $a$ 为中心的任意小圆周上的积分。由于 $f(z)$ 是连续的，我们可以选择一个足够小的圆，使得在圆上的 $f(z)$ 与 $f(a)$ 任意接近。
+
+另一方面，对于任意以 $a$ 为圆心的圆 $C$，都有：
+$$
+\oint_{C} \frac{1}{z - a} \, dz = 2\pi i~
+$$
+这个积分可以直接通过参数化计算，即令 $z(t) = a + \varepsilon e^{it}$，其中 $0 \leq t \leq 2\pi$，$\varepsilon$ 是圆的半径。
+
+令 $\varepsilon \to 0$，我们可以得到所需的估计：
+$$
+\left| \frac{1}{2\pi i} \oint_{C} \frac{f(z)}{z - a} \, dz - f(a) \right|
+= \left| \frac{1}{2\pi i} \oint_{C} \frac{f(z) - f(a)}{z - a} \, dz \right|~
+$$
+将 $z = z(t) = a + \varepsilon e^{it}$ 带入，有：
+$$
+= \left| \frac{1}{2\pi i} \int_0^{2\pi} \frac{f(z(t)) - f(a)}{\varepsilon e^{it}} \cdot \varepsilon e^{it} i \, dt \right|~
+$$
+$$
+\leq \frac{1}{2\pi} \int_0^{2\pi} \left| \frac{f(z(t)) - f(a)}{\varepsilon} \right| \varepsilon \, dt
+= \frac{1}{2\pi} \int_0^{2\pi} |f(z(t)) - f(a)| \, dt~
+$$
+$$
+\leq \max_{|z - a| = \varepsilon} |f(z) - f(a)| \quad \xrightarrow[\varepsilon \to 0]{} \quad 0~
+$$
+因此，
+$$
+\frac{1}{2\pi i} \oint_{C} \frac{f(z)}{z - a} \, dz \to f(a) \quad \text{当}~ \varepsilon \to 0~
+$$
+这就证明了柯西积分公式成立。
+\subsection{示例}
+\begin{figure}[ht]
+\centering
+\includegraphics[width=6cm]{./figures/1366d49e74e51339.png}
+\caption{函数 $g(z) = \frac{z^2}{z^2 + 2z + 2}$ 的实部曲面及其奇点，以及文中描述的积分路径。} \label{fig_KXjfgs_1}
+\end{figure}
+设
+$g(z) = \frac{z^2}{z^2 + 2z + 2},$
+并令 $C$ 为由 $|z| = 2$ 描述的路径（即半径为 2 的圆）。
+
+为了计算函数 $g(z)$ 沿着路径 $C$ 的积分，我们需要先确定 $g(z)$ 的奇点。注意，我们可以将 $g(z)$ 重写为：
+$$
+g(z) = \frac{z^2}{(z - z_1)(z - z_2)}~
+$$
+其中 $z_1 = -1 + i$，$z_2 = -1 - i$。
+
+因此，$g(z)$ 在 $z_1$ 和 $z_2$ 处具有极点。这两个点的模长均小于 2，因此它们位于路径 $C$ 的内部。
+
+根据柯西–古尔萨定理（Cauchy–Goursat 定理），该积分可以拆分为两个更小的积分，也就是说，我们可以将围绕路径 $C$ 的积分表示为围绕 $z_1$ 和 $z_2$ 的积分之和，其中每个积分路径是包围各个极点的小圆。将这些路径分别记作 $C_1$（围绕 $z_1$）和 $C_2$（围绕 $z_2$）。
+
+现在，这些较小的积分可以通过柯西积分公式来计算，但在应用该定理之前，必须先对它们进行改写。对于围绕 $C_1$ 的积分，定义$ f_1(z) = (z - z_1)g(z)$这是一个解析函数（因为该路径不包含另一个奇点）。我们可以将 $f_1$ 简化为：
+$$
+f_1(z) = \frac{z^2}{z - z_2}~
+$$
+于是有：
+$$
+g(z) = \frac{f_1(z)}{z - z_1}~
+$$
+由于柯西积分公式表明：
+$$
+\oint_C \frac{f_1(z)}{z - a} \, dz = 2\pi i \cdot f_1(a)~
+$$
+我们可以如下计算该积分：
+$$
+\oint_{C_1} g(z) \, dz = \oint_{C_1} \frac{f_1(z)}{z - z_1} \, dz = 2\pi i \cdot \frac{z_1^2}{z_1 - z_2}~
+$$
+对另一个路径做同样的处理：
+$$
+f_2(z) = \frac{z^2}{z - z_1}~
+$$
+于是我们得到：
+$$
+\oint_{C_2} g(z) \, dz = \oint_{C_2} \frac{f_2(z)}{z - z_2} \, dz = 2\pi i \cdot \frac{z_2^2}{z_2 - z_1}~
+$$
+于是，沿原始路径 $C$ 的积分为这两个积分的和：
+$$
+\begin{aligned}
+\oint_C g(z) \,dz 
+&= \oint_{C_1} g(z) \,dz + \oint_{C_2} g(z) \,dz \\
+&= 2\pi i \left( \frac{z_1^2}{z_1 - z_2} + \frac{z_2^2}{z_2 - z_1} \right) \\
+&= 2\pi i (-2) \\
+&= -4\pi i
+\end{aligned}~
+$$
+使用部分分式分解的一个初等技巧如下：
+$$
+\oint_C g(z) \,dz = \oint_C \left(1 - \frac{1}{z - z_1} - \frac{1}{z - z_2} \right) \,dz = 0 - 2\pi i - 2\pi i = -4\pi i~
+$$
+\subsection{推论}
+柯西积分公式具有广泛的应用。首先，它意味着一个在开集内全纯的函数事实上在该处具有无限次可导性。此外，它还是一个解析函数，也就是说它可以被表示为幂级数。
+
+这个结论的证明使用了主导收敛定理和几何级数展开，应用于如下公式：
+$$
+f(\zeta) = \frac{1}{2\pi i} \int_C \frac{f(z)}{z - \zeta} \, dz.~
+$$
+该公式还可用于证明留数定理（适用于亚纯函数）及其相关结果——辐角原理。
+
+根据莫雷拉定理，全纯函数的一致极限仍然是全纯的。而这一结果也可以通过柯西积分公式推出：因为该公式在极限中仍然成立，且被积函数（积分核）可以展开成幂级数，因此积分本身也可以展开成幂级数。此外，柯西关于高阶导数的公式还表明，这些导数也都一致收敛。
+
+柯西积分公式在实分析中的类似公式是泊松积分公式，它适用于调和函数；许多关于全纯函数的结果也可以在这一框架中成立。然而，对于更一般的可微函数或实解析函数类别，这类结果并不成立。
+
+例如，一个实函数具有一阶导数，并不意味着它具有更高阶的导数，更不意味着它是解析函数。同样，一列（实）可微函数的一致极限函数可能不可导，或者即使可导，其导数也可能不是原序列导数的极限。
+
+另一个推论是：若 $f(z) = \sum a_n z^n$ 在 $|z| < R$ 内全纯，且 $0 < r < R$，那么系数 $a_n$ 满足柯西估计：
+$$
+|a_n| \leq r^{-n} \sup_{|z|=r} |f(z)|.~
+$$
+根据柯西估计，可以轻易推出：每一个有界整函数（在整个复平面上全纯且有界）必须是常数函数，这就是著名的刘维尔定理。
+
+该公式还可用于推导高斯平均值定理，其表述如下：\(^\text{[2]}\)
+$$
+f(z) = \frac{1}{2\pi} \int_0^{2\pi} f(z + re^{i\theta})\, d\theta.~
+$$
+换句话说，函数 $f$ 在以 $z$ 为中心、半径为 $r$ 的圆周上的平均值就是 $f(z)$ 本身。这个结果可以通过对圆周进行参数化，直接计算得出。
+\subsection{推广}
+\subsubsection{光滑函数}
+柯西积分公式的一个推广版本是柯西–庞培乌公式，\(^\text{[3]}\)它对光滑函数同样成立，因为它基于斯托克斯定理。设 $D$ 是复平面中的一个圆盘，且 $f$ 是 $D$ 闭包上的一个复值 $C^1$ 函数，则有\(^\text{[4][5][6]}\)：
+$$
+f(\zeta) = \frac{1}{2\pi i} \int_{\partial D} \frac{f(z)\,dz}{z - \zeta} - \frac{1}{\pi} \iint_D \frac{\partial f}{\partial \bar{z}}(z)\,\frac{dx \wedge dy}{z - \zeta}.~
+$$
+这个表示公式可以用于求解 $D$ 中的非齐次柯西–黎曼方程。确实地，若 $\varphi$ 是 $D$ 中的一个函数，那么该方程的一个特解 $f$ 在 $\mu$ 的支集之外是全纯函数。
+
+进一步地，如果在某开集 $D$ 中，有：
+$$
+d\mu = \frac{1}{2\pi i} \varphi\, dz \wedge d\bar{z}~
+$$
+其中 $\varphi \in C^k(D)$（$k \geq 1$），则函数 $f(\zeta, \bar{\zeta})$ 也属于 $C^k(D)$，并满足：
+$$
+\frac{\partial f}{\partial \bar{z}} = \varphi(z, \bar{z}).~
+$$
+第一个结论简洁地说，就是：一个紧支撑测度与柯西核的卷积 $\mu * k(z)$，其中柯西核为：
+$$
+k(z) = \operatorname{p.v.} \frac{1}{z}~
+$$
+也满足类似性质。
+
+是定义在 $\mu$ 的支集之外的一个全纯函数。其中，p.v. 表示主值积分。第二个结论指出：柯西核是柯西–黎曼方程的基本解。
+
+注意，对于定义在复平面上、具有紧支撑的光滑复值函数 $f$，推广后的柯西积分公式可以简化为：
+$$
+f(\zeta) = \frac{1}{2\pi i} \iint \frac{\partial f}{\partial \bar{z}} \cdot \frac{dz \wedge d\bar{z}}{z - \zeta}~
+$$
+这实际上是以下事实的另一种表述：当把 $(\pi z)^{-1}$ 视为一个分布时，它是柯西–黎曼算子 $\partial / \partial \bar{z}$ 的一个基本解\(^\text{[7]}\)。
+
+此外，这一推广形式的柯西积分公式可以推广到任意具有 $C^1$ 边界 $\partial X$ 的有界开区域 $X$，并可由上述结果以及区域特征函数 $\chi_X$ 的分布导数公式导出：
+$$
+\frac{\partial \chi_X}{\partial \bar{z}} = \frac{i}{2} \oint_{\partial X} dz~
+$$
+其中，右边的分布表示对边界 $\partial X$ 进行的曲线积分\(^\text{[8]}\)。
+
+\textbf{证明如下：}
+
+设 $\varphi \in \mathcal{D}(X)$（即 $X$ 上的光滑紧支撑试验函数），计算：
+$$
+\begin{aligned}
+\left\langle \frac{\partial}{\partial \bar{z}}(\chi_X), \varphi \right\rangle &= -\int_X \frac{\partial \varphi}{\partial \bar{z}}\, d(x,y) \\
+&= -\frac{1}{2} \int_X \left( \partial_x \varphi + i \partial_y \varphi \right)\, d(x,y).
+\end{aligned}~
+$$
+然后沿着边界 $\partial X$ 逆时针方向遍历。固定一点 $p \in \partial X$，设 $s$ 表示从该点开始沿 $\partial X$ 逆时针方向测得的**弧长**。记 $\ell$ 为 $\partial X$ 的总弧长，则有一个参数化：$[0, \ell] \ni s \mapsto (x(s), y(s))$是对 $\partial X$ 的一个参数表示。其导数：$\tau = \left( x'(s), y'(s) \right)$是边界 $\partial X$ 上的单位切向量，而$\nu := \left( -y'(s), x'(s) \right)$是边界 $\partial X$ 上的单位外法向量。此时我们准备使用**散度定理。令：$V = (\varphi, i\varphi) \in \mathcal{D}(X)^2$那么：$\operatorname{div} V = \partial_x \varphi + i \partial_y \varphi$。
+因此有：
+$$
+\begin{aligned}
+-\frac{1}{2} \int_X \left( \partial_x \varphi + i \partial_y \varphi \right) d(x,y)
+&= -\frac{1}{2} \int_{\partial X} V \cdot \nu\, dS \\
+&= -\frac{1}{2} \int_0^{\ell} \left( \varphi \nu_1 + i \varphi \nu_2 \right)\, ds \\
+&= -\frac{1}{2} \int_0^{\ell} \varphi(x(s), y(s)) \left( y'(s) - i x'(s) \right)\, ds \\
+&= \frac{1}{2} \int_0^{\ell} i \varphi(x(s), y(s)) \left( x'(s) + i y'(s) \right)\, ds \\
+&= \frac{i}{2} \int_{\partial X} \varphi\, dz
+\end{aligned}~
+$$
+因此，我们得证：
+$$
+\frac{\partial \chi_X}{\partial \bar{z}} = \frac{i}{2} \oint_{\partial X} dz~
+$$
+现在我们可以推导广义柯西积分公式了：
+
+\textbf{证明}
+
+由于
+$u = \frac{\chi_X}{\pi(z - z_0)} \in L_{\text{loc}}^1(X)$
+且 $z_0 \in X$，这个分布在 $X$ 的局部表现为“分布乘以 $C^\infty$ 函数”的形式，因此我们可以应用莱布尼茨法则来计算它的导数：
+
+$$
+\frac{\partial u}{\partial \bar{z}} = \frac{\partial}{\partial \bar{z}}\left( \frac{1}{\pi(z - z_0)} \right) \chi_X + \frac{1}{\pi(z - z_0)} \frac{\partial \chi_X}{\partial \bar{z}}~
+$$
+
+利用 $\frac{1}{\pi z}$ 是柯西-黎曼算子 $\frac{\partial}{\partial \bar{z}}$ 的基本解、，我们有：
+$$
+\frac{\partial}{\partial \bar{z}}\left( \frac{1}{\pi(z - z_0)} \right) = \delta_{z_0}~
+$$
+因此：
+$$
+\frac{\partial u}{\partial \bar{z}} = \delta_{z_0} + \frac{1}{\pi(z - z_0)} \frac{\partial \chi_X}{\partial \bar{z}}~
+$$
+将这个分布作用在 $\phi \in \mathcal{D}(X)$ 上：
+$$
+\begin{aligned}
+\left\langle \frac{\partial}{\partial \bar{z}}\left( \frac{\chi_X}{\pi(z - z_0)} \right), \phi \right\rangle 
+&= \phi(z_0) + \left\langle \frac{1}{\pi(z - z_0)} \frac{\partial \chi_X}{\partial \bar{z}}, \phi \right\rangle\\
+&= \phi(z_0) + \left\langle \frac{\partial \chi_X}{\partial \bar{z}}, \frac{\phi}{\pi(z - z_0)} \right\rangle
+\end{aligned}~
+$$
+根据之前推导的结果：
+$$
+\frac{\partial \chi_X}{\partial \bar{z}} = \frac{i}{2} \oint_{\partial X} dz~
+$$
+因此：
+$$
+\left\langle \frac{\partial \chi_X}{\partial \bar{z}}, \frac{\phi}{\pi(z - z_0)} \right\rangle = \frac{i}{2} \int_{\partial X} \frac{\phi(z)}{\pi(z - z_0)} dz~
+$$
+所以我们得到：
+$$
+\left\langle \frac{\partial}{\partial \bar{z}}\left( \frac{\chi_X}{\pi(z - z_0)} \right), \phi \right\rangle = \phi(z_0) + \frac{i}{2} \int_{\partial X} \frac{\phi(z)}{\pi(z - z_0)} dz~
+$$
+整理得：
+$$
+\phi(z_0) = \frac{1}{2\pi i} \int_{\partial X} \frac{\phi(z)}{z - z_0} dz - \frac{1}{\pi} \iint_X \frac{\partial \phi}{\partial \bar{z}}(z) \frac{dx \wedge dy}{z - z_0}~
+$$
+这正是我们想要的广义柯西积分公式。
+\subsubsection{多复变函数中的推广}
+在多复变函数理论中，柯西积分公式可以推广到多圆盘的情形中。\(^\text{[9]}\)设 $D$ 是一个多圆盘，由 $n$ 个开圆盘 $D_1, \ldots, D_n$ 的笛卡尔积定义：
+$$
+D = \prod_{i=1}^n D_i.~
+$$
+假设函数 $f$ 是在 $D$ 内全纯（即在每个变量上解析），并且在闭包 $\overline{D}$ 上连续。则有如下积分公式：
+$$
+f(\zeta) = \frac{1}{(2\pi i)^n} \int\cdots\iint_{\partial D_1 \times \cdots \times \partial D_n} \frac{f(z_1, \ldots, z_n)}{(z_1 - \zeta_1)\cdots(z_n - \zeta_n)}\, dz_1 \cdots dz_n,~
+$$
+其中 $\zeta = (\zeta_1, \ldots, \zeta_n) \in D$。
+\subsubsection{实代数中的情形}
+柯西积分公式可以推广到二维及更高维的实向量空间中。这一性质的洞见来源于几何代数，该理论考虑了超越标量和向量的对象，如平面双向量和体积三向量，并借助了斯托克斯定理的适当推广形式。
+
+在几何微积分中，定义了一种导数算子：
+$$
+\nabla = \hat{e}_i \partial_i~
+$$
+其运算基于几何乘积。对于一个 $k$-向量场 $\psi(r)$，导数 $\nabla \psi$ 一般包含阶数为 $k+1$ 和 $k-1$ 的分量。例如，对于一个向量场（$k = 1$），它的导数通常包含一个标量部分（即散度）和一个双向量部分（即旋度）。
+
+这个导数算子有一个相应的格林函数：
+$$
+G(\mathbf{r}, \mathbf{r}') = \frac{1}{S_n} \cdot \frac{\mathbf{r} - \mathbf{r}'}{|\mathbf{r} - \mathbf{r}'|^n}~
+$$
+其中，$S_n$ 是单位 $n$-维球面的面积（例如：$S_2 = 2\pi$，是半径为1的圆的周长；$S_3 = 4\pi$，是半径为1的球的表面积）。按照格林函数的定义，有：
+$$
+\nabla G(\mathbf{r}, \mathbf{r}') = \delta(\mathbf{r} - \mathbf{r}')~
+$$
+这个重要的性质可与推广形式的斯托克斯定理结合使用：
+$$
+\oint_{\partial V} d\mathbf{S} \, f(\mathbf{r}) = \int_V d\mathbf{V} \, \nabla f(\mathbf{r})~
+$$
+其中，对于 $n$ 维向量空间，$d\mathbf{S}$ 是一个 $n-1$ 阶向量，$d\mathbf{V}$ 是一个 $n$ 阶向量。函数 $f(\mathbf{r})$ 在原理上可以由任意多向量组合构成。
+
+在高维空间中推广柯西积分定理的证明基于对 $G(\mathbf{r}, \mathbf{r}') f(\mathbf{r}')$ 应用上述斯托克斯定理以及乘积法则：
+$$
+\oint_{\partial V'} G(\mathbf{r}, \mathbf{r}') \, d\mathbf{S}' \, f(\mathbf{r}') = \int_V \left( [\nabla' G(\mathbf{r}, \mathbf{r}')] f(\mathbf{r}') + G(\mathbf{r}, \mathbf{r}') \nabla' f(\mathbf{r}') \right) \, d\mathbf{V}~
+$$
+若 $\nabla f = 0$，则称 $f(\mathbf{r})$ 为单基函数，这是全纯函数在高维空间中的推广。事实上，可以证明柯西-黎曼条件正是二维情况下的单基条件。
+
+当该条件满足时，上式右边的第二项消失，仅剩下：
+$$
+\oint_{\partial V'} G(\mathbf{r}, \mathbf{r}') \, d\mathbf{S}' \, f(\mathbf{r}') = \int_V [\nabla' G(\mathbf{r}, \mathbf{r}')] f(\mathbf{r}') = -\int_V \delta(\mathbf{r} - \mathbf{r}') f(\mathbf{r}') \, d\mathbf{V} = -i_n f(\mathbf{r})~
+$$
+其中 $i_n$ 是该代数中的单位 $n$-向量（即伪标量 pseudoscalar）。
+
+因此，我们得到最终的结果：
+$$
+f(\mathbf{r}) = -\frac{1}{i_n} \oint_{\partial V} G(\mathbf{r}, \mathbf{r}') \, d\mathbf{S} \, f(\mathbf{r}') = -\frac{1}{i_n} \oint_{\partial V} \frac{\mathbf{r} - \mathbf{r}'}{S_n |\mathbf{r} - \mathbf{r}'|^n} \, d\mathbf{S} \, f(\mathbf{r}')~
+$$
+换句话说，就像二维复分析中的情形一样，一个解析（单基）函数在某点的值可以通过其周围曲面上的积分来确定，并且该公式对标量函数、向量函数乃至任意多向量函数都成立。
+\subsection{参见}
+\begin{itemize}
+\item 柯西–黎曼方程
+\item 留数计算法
+\item 纳赫宾定理
+\item 莫雷拉定理
+\item 米塔格–莱夫勒定理
+\item 格林函数：将此思想推广到非线性设置
+\item 施瓦茨积分公式
+\item 帕斯瓦尔–古茨默公式
+\item 博赫纳–马蒂内利公式
+\item 赫尔弗–谢斯特兰德公式
+\end{itemize}
+\subsection{注释}
+\begin{enumerate}
+\item Titchmarsh 1939，第 84 页
+\item “高斯平均值定理”，见 Wolfram Alpha 网站
+\item Pompeiu 1905
+\item “§2. 复二阶微分形式：柯西–庞庞丢公式”（PDF）
+\item Hörmander 1966，定理 1.2.1
+\item “定理 4.1.1”（PDF）
+\item Hörmander 1983，第 63、81 页
+\item Hörmander 1983，第 62–63 页
+\item Hörmander 1966，定理 2.2.1
+\end{enumerate}
+\subsection{参考文献}
+\begin{itemize}
+\item Ahlfors, Lars（1979），《复分析》（第 3 版），McGraw Hill，ISBN 978-0-07-000657-7
+\item Pompeiu, D.（1905），《论复变函数的连续性》（PDF），图卢兹科学院年报，第二系列，第 7 卷第 3 期，265–315 页
+\item Titchmarsh, E. C.（1939），《函数论》（第 2 版），牛津大学出版社
+\item Hörmander, Lars（1966），《多复变函数分析导论》，Van Nostrand
+\item Hörmander, Lars（1983），《线性偏微分算子的分析 I》，Springer，ISBN 3-540-12104-8
+\item Doran, Chris；Lasenby, Anthony（2003），《物理学中的几何代数》，剑桥大学出版社，ISBN 978-0-521-71595-9
+\end{itemize}
+\subsection{外部链接}
+\begin{itemize}
+\item “Cauchy integral”，《数学百科全书》，EMS 出版社，2001（1994年初版）
+\item Eric W. Weisstein: “Cauchy Integral Formula”，MathWorld
+\end{itemize}
