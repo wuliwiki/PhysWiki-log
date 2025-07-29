@@ -249,3 +249,43 @@ $$
 = \int_S \left[ \varphi(\mathbf{x}') \nabla' G(\mathbf{x}, \mathbf{x}') - G(\mathbf{x}, \mathbf{x}') \nabla' \varphi(\mathbf{x}') \right] \cdot d\hat{\boldsymbol{\sigma}}'.~
 $$
 这就是在拉普拉斯算子背景下应用格林函数的核心表达式。
+
+利用这个表达式，我们可以求解拉普拉斯方程$\nabla^2 \varphi(\mathbf{x}) = 0$或泊松方程$\nabla^2 \varphi(\mathbf{x}) = -\rho(\mathbf{x})$前提是满足诺伊曼边界条件或狄里克雷边界条件。换句话说，只要在某个体积的边界面上给定 (1) 函数 $\varphi(\mathbf{x})$ 的取值（狄里克雷边界条件），或 (2) 函数的法向导数（诺伊曼边界条件），那么我们就可以在整个体积内部求解出 $\varphi(\mathbf{x})$。
+
+假设我们的问题是要求解该区域内部的 $\varphi(\mathbf{x})$，那么积分
+$$
+\int_V \varphi(\mathbf{x}')\,\delta(\mathbf{x} - \mathbf{x}')\,d^3\mathbf{x}'~
+$$
+由于狄拉克 δ 函数的定义性质，直接化简为 $\varphi(\mathbf{x})$，于是我们得到：
+
+$$
+\varphi(\mathbf{x}) = -\int_V G(\mathbf{x}, \mathbf{x}')\,\rho(\mathbf{x}')\,d^3\mathbf{x}' + \int_S \left[ \varphi(\mathbf{x}')\,\nabla' G(\mathbf{x}, \mathbf{x}') - G(\mathbf{x}, \mathbf{x}')\,\nabla' \varphi(\mathbf{x}') \right] \cdot d\hat{\boldsymbol{\sigma}}'.~
+$$
+
+这个形式表达了调和函数的一个著名性质：只要知道一个函数在边界面上的取值或法向导数，就可以确定它在体积内部的所有取值。
+
+在静电学中，$\varphi(\mathbf{x})$ 被解释为电势，$\rho(\mathbf{x})$ 为电荷密度，而$\nabla \varphi(\mathbf{x}') \cdot d\hat{\boldsymbol{\sigma}}'$表示电场的法向分量。
+
+如果我们要解的是一个狄里克雷边值问题，那么格林函数应选择为当 $\mathbf{x}$ 或 $\mathbf{x}'$ 位于边界面上时满足 $G(\mathbf{x}, \mathbf{x}') = 0$。这样，表面积分中的两项就只剩下一项。
+
+如果问题是求解诺伊曼边值问题，看起来似乎应该选择使其法向导数在边界面上为零的格林函数。但实际上，如果我们将高斯定理应用于定义格林函数的微分方程，会得到：
+$$
+\int_S \nabla' G(\mathbf{x}, \mathbf{x}') \cdot d\hat{\boldsymbol{\sigma}}' = \int_V \nabla'^2 G(\mathbf{x}, \mathbf{x}')\,d^3\mathbf{x}' = \int_V \delta(\mathbf{x} - \mathbf{x}')\,d^3\mathbf{x}' = 1,~
+$$
+这意味着格林函数的法向导数在边界面上不可能为零，因为它必须在整个边界上积分为 1\(^\text{[10]}\)。
+
+法向导数最简单的形式是常数，即 $1/S$，其中 $S$ 是边界面的面积。此时解中的表面积分项变为：
+$$
+\int_S \varphi(\mathbf{x}')\,\nabla' G(\mathbf{x}, \mathbf{x}') \cdot d\hat{\boldsymbol{\sigma}}' = \langle \varphi \rangle_S,~
+$$
+其中 $\langle \varphi \rangle_S$ 表示势函数在边界面上的平均值。这个数值在一般情况下是未知的，但通常也不重要，因为我们更关注的是由势的梯度得到的电场，而不是势本身。
+
+在没有边界条件的情况下，拉普拉斯算子的格林函数（三维拉普拉斯方程的格林函数）为：
+$$
+G(\mathbf{x}, \mathbf{x}') = -\frac{1}{4\pi |\mathbf{x} - \mathbf{x}'|}~
+$$
+假设边界面延伸至无穷远处，并将该格林函数表达式代入求解电势函数的公式，最终得到电势与电荷密度之间的标准关系式：
+$$
+\varphi(\mathbf{x}) = \int_V \frac{\rho(\mathbf{x}')}{4\pi \varepsilon |\mathbf{x} - \mathbf{x}'|} \, d^3\mathbf{x}'~
+$$
+进一步阅读：泊松方程。
