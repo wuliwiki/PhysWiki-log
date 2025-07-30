@@ -198,6 +198,30 @@ message(STATUS "The square of ${my_number} is ${my_result}")
 \item \verb`REQUIRED`： 如果找不到就报错终止。
 \item \verb`find_package` 会依次寻找 \verb`/usr/lib/cmake/`，\verb`/usr/local/lib/cmake/`，\verb`CMAKE_PREFIX_PATH.`
 \item \verb`包名` 会先在 \verb`CMAKE_MODULE_PATH` 后在默认路径里面搜索名为 \verb`Find包名.cmake`（Module Mode，该文件通常由 cmake 提供或用户自己写） 或者 \verb`包名Config.cmake`（Config Mode，该文件通常由 package 作者提供，更高级和智能）的文件。 该文件通常会设置一些变量， 可以在 \verb`find_package` 结束后访问。
+\item 注意 \verb`*Config.cmake` 是可以由包作者在 CMakeLists.txt 中使用 CMakePackageConfigHelpers 自动生成的，无需手写！例如
+\begin{lstlisting}[language=cmake]
+# 导出到 cmake 模块
+include(CMakePackageConfigHelpers)
+configure_package_config_file(MyPkgConfig.cmake.in
+    ${CMAKE_CURRENT_BINARY_DIR}/MyPkgConfig.cmake
+    INSTALL_DESTINATION lib/cmake/MyPkg
+    NO_CHECK_REQUIRED_COMPONENTS_MACRO)
+write_basic_package_version_file(
+    ${CMAKE_CURRENT_BINARY_DIR}/MyPkgConfigVersion.cmake
+    VERSION ${PROJECT_VERSION}
+    COMPATIBILITY AnyNewerVersion)
+install(FILES
+    ${CMAKE_CURRENT_BINARY_DIR}/MyPkgConfig.cmake
+    ${CMAKE_CURRENT_BINARY_DIR}/MyPkgConfigVersion.cmake
+    DESTINATION lib/cmake/MyPkg
+    COMPONENT dev)
+
+install(EXPORT MyPkg
+    FILE MyPkgTargets.cmake
+    NAMESPACE MyPkg::
+    DESTINATION lib/cmake/MyPkg
+    COMPONENT dev)
+\end{lstlisting}
 \item Module Mode 的使用例子：
 \begin{lstlisting}[language=cmake]
 find_package(Boost 1.71 REQUIRED COMPONENTS filesystem system)

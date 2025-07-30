@@ -289,3 +289,172 @@ $$
 \varphi(\mathbf{x}) = \int_V \frac{\rho(\mathbf{x}')}{4\pi \varepsilon |\mathbf{x} - \mathbf{x}'|} \, d^3\mathbf{x}'~
 $$
 进一步阅读：泊松方程。
+\subsection{示例}
+求解以下问题的格林函数，其格林函数编号为 X11：
+$$
+\begin{aligned}
+Lu &= u'' + k^2 u = f(x) \\
+u(0) &= 0, \quad u\left(\frac{\pi}{2k}\right) = 0.
+\end{aligned}~
+$$
+\textbf{第一步：}给定线性算子的格林函数定义为以下方程的解：
+$$
+G''(x,s) + k^2 G(x,s) = \delta(x-s). \tag{Eq.*}~
+$$
+当 $x \neq s$ 时，$\delta(x-s) = 0$，此时方程的通解为：
+$$
+G(x,s) = c_1 \cos kx + c_2 \sin kx.~
+$$
+当 $x < s$ 时，边界条件 $x = 0$ 给出：
+$$
+G(0,s) = c_1 \cdot 1 + c_2 \cdot 0 = 0,
+\quad c_1 = 0,~
+$$
+即
+$$
+G(x,s) = c_2 \sin kx, \quad x < s.~
+$$
+当 $x > s$ 时，边界条件$x = \frac{\pi}{2k}$
+
+给出：
+$$
+G\left(\frac{\pi}{2k},s\right) = c_3 \cdot 0 + c_4 \cdot 1 = 0,
+\quad c_4 = 0,~
+$$
+即
+$$
+G(x,s) = c_3 \cos kx, \quad x > s.~
+$$
+总结目前的结果：
+$$
+G(x,s) = 
+\begin{cases}
+c_2 \sin kx, & x < s, \\
+[0.4ex]
+c_3 \cos kx, & s < x.
+\end{cases}~
+$$
+\textbf{第二步：}接下来需要确定$c_{2}$ 和 $c_{3}$。
+
+要求格林函数在 $x = s$ 处连续，可得：
+$$
+c_{2} \sin ks = c_{3} \cos ks~
+$$
+为了保证一阶导数的不连续性，需将定义的微分方程（即式 \*）从$x = s - \varepsilon$ 积分到 $x = s + \varepsilon$，并在 $\varepsilon \to 0$ 时取极限。注意，只需积分二阶导数项，因为其他项按构造是连续的：
+$$
+c_{3} \cdot (-k \sin ks) - c_{2} \cdot (k \cos ks) = 1~
+$$
+联立上述两个（不）连续性方程，解得：
+$$
+c_{2} = -\frac{\cos ks}{k}, 
+\quad 
+c_{3} = -\frac{\sin ks}{k}~
+$$
+因此，本问题的格林函数为：
+$$
+G(x,s) = 
+\begin{cases}
+-\dfrac{\cos ks}{k} \sin kx, & x < s, \\
+-\dfrac{\sin ks}{k} \cos kx, & s < x.
+\end{cases}~
+$$
+\subsection{更多示例}
+\begin{itemize}
+\item 令 $n = 1$，并且子集是整个实数集 $\mathbf{R}$。令 $L = \frac{d}{dx}$。则海维赛德阶跃函数 $\Theta(x - x_{0})$ 是 $L$ 在 $x_{0}$ 的一个格林函数。
+\item 令 $n = 2$，并且子集是四分平面 $\{(x, y) : x, y \geq 0\}$，令 $L$ 为拉普拉斯算子。同时，假设在 $x = 0$ 施加 Dirichlet 边界条件，在 $y = 0$ 施加 Neumann 边界条件。则 $X10Y20$ 格林函数为：
+$$
+\begin{aligned}
+G(x,y,x_{0},y_{0}) = \frac{1}{2\pi} \Big[
+&\ln \sqrt{(x-x_{0})^{2} + (y-y_{0})^{2}}
+- \ln \sqrt{(x+x_{0})^{2} + (y-y_{0})^{2}} \\
+&+ \ln \sqrt{(x-x_{0})^{2} + (y+y_{0})^{2}}
+- \ln \sqrt{(x+x_{0})^{2} + (y+y_{0})^{2}}
+\Big].
+\end{aligned}~
+$$
+\item 设 $a < x < b$，且三者均为实数。对于任意函数
+   $f: \mathbb{R} \to \mathbb{R}$，如果其第 $n$ 阶导数在区间 $[a,b]$ 上可积，则有：
+$$
+f(x) = \sum_{m=0}^{n-1} \frac{(x-a)^{m}}{m!}
+\left[ \frac{d^{m} f}{dx^{m}} \right]_{x=a}
++ \int_{a}^{b}
+\left[
+\frac{(x-s)^{n-1}}{(n-1)!} \Theta(x-s)
+\right]
+\left[ \frac{d^{n} f}{dx^{n}} \right]_{x=s} ds.~
+$$
+上式中的格林函数为：
+$$
+G(x,s) = \frac{(x-s)^{n-1}}{(n-1)!} \Theta(x-s),~
+$$
+但它并不唯一。\\
+思考问题\\
+若向 $G(x,s)$ 中加入函数 $g(x-s)$，其中
+$g(x)$ 满足
+$$
+\frac{d^{n} g}{dx^{n}} = 0,
+\quad \forall x \in [a,b]~
+$$
+（例如当 $n=2$ 时，$g(x) = -x/2$），那么上式如何改变？同时，请比较上述公式与以 $x = a$ 为中心的泰勒展开式的形式。
+\end{itemize}
+\subsection{另见}
+\begin{itemize}
+\item 贝塞尔势 
+\item 离散格林函数 – 定义在图和网格上的格林函数
+\item 冲激响应 – 信号处理中格林函数的类似物
+\item 传递函数
+\item 基本解 
+\item 多体理论中的格林函数 
+\item 相关函数 
+\item 传播子
+\item 格林恒等式
+\item 参数矩阵
+\item Volterra 积分方程
+\item 解算子形式 
+\item Keldysh 形式 
+\item 谱理论 
+\item 多尺度格林函数
+\end{itemize}
+\subsection{脚注}\\
+a.技术术语中，“正规 (regular)” 意味着齐次问题$f(x) = 0$只有平凡解$u(x) = 0$存在。
+\subsection{参考文献}
+\begin{enumerate}
+\item Wright, M. C. M. (2006-10-01). “格林函数还是格林的函数？” 《自然·物理学》，2 (10): 646. Bibcode:2006NatPh...2..646W. doi:10.1038/nphys411. ISSN 1745-2473.
+\item Khorrami, Mohammad (2021). “不同维度下波动方程的格林函数”。 《米什科尔茨数学通报》，22 (2): 721. doi:10.18514/mmn.2021.2922. ISSN 1787-2405.
+\item Yu, Xiao; Lan, Kunquan; Wu, Jianhong (2021). “格林函数、线性二阶微分方程及一维扩散-对流模型”。 《应用数学研究》，147 (1): 319–362. doi:10.1111/sapm.12384. ISSN 1467-9590.
+\item Chu, Yi-Zen; Starkman, Glenn D. (2011-11-10). “用于宇宙学和引力物理的扰动时空中的迟延格林函数”。 《物理评论 D》，84 (12): 124020. arXiv:1108.1825. Bibcode:2011PhRvD..84l4020C. doi:10.1103/PhysRevD.84.124020.
+\item Soares de Castro, Antonio (2024-09-01). “一阶微分方程的迟延和超前格林函数”。 《物理学报·手稿》，99 (9): 096101. Bibcode:2024PhyS...99i6101S. doi:10.1088/1402-4896/ad6bc7. ISSN 0031-8949.
+\item Camargo, Rubens de Figueiredo; Chiacchio, Ary Orozimbo; de Oliveira, Edmundo Capelas (2013-03-06). “单边与双边格林函数”。 《边值问题》，2013 (1): 45. doi:10.1186/1687-2770-2013-45. hdl:11449/113526. ISSN 1687-2770.
+\item Jackson, John David (2009). 《经典电动力学》（第3版，[再版]）。霍博肯，纽约：Wiley出版社。ISBN 978-0-471-30932-1.
+\item Cole, K.D.; Beck, J.V.; Haji-Sheikh, A.; Litkouhi, B. (2011). “获取格林函数的方法”。见 《利用格林函数的热传导》。Taylor and Francis出版社。pp. 101–148. ISBN 978-1-4398-1354-6.
+\item 部分示例取自：Schulz, Hermann (2001). 《用铅笔学物理：自然科学家的分析工具》（第4版）。美因河畔法兰克福：Deutsch出版社。ISBN 978-3-8171-1661-4.
+\item Jackson, John David (1998-08-14). 《经典电动力学》。John Wiley & Sons出版社。p. 39.
+\end{enumerate}
+\subsubsection{引用文献}
+\begin{itemize}
+\item Bayin, S.S. (2006). 《科学与工程中的数学方法》。Wiley出版社。第18、19章。
+\item Eyges, Leonard (1972). 《经典电磁场》。纽约：Dover出版社。ISBN 0-486-63947-9。第5章包含了一个关于使用格林函数求解静电学边值问题的非常通俗易懂的讲解。
+\item Polyanin, A.D.; Zaitsev, V.F. (2003). 《常微分方程精确解手册》（第2版）。佛罗里达州博卡拉顿：Chapman & Hall/CRC出版社。ISBN 1-58488-297-2。
+\item Barton, Gabriel (1989). 《格林函数与传播的要素：势、扩散与波动》。牛津科学出版物。牛津 / 纽约：Clarendon出版社；牛津大学出版社。ISBN 978-0-19-851988-1。一本关于格林函数的教材，包含完整的解题步骤。
+\item Polyanin, A.D. (2002). *《工程师与科学家的线性偏微分方程手册》*。佛罗里达州博卡拉顿：Chapman & Hall/CRC出版社。ISBN 1-58488-299-9。
+\item Mathews, Jon; Walker, Robert L. (1970). 《物理中的数学方法》（第2版）。纽约：W. A. Benjamin出版社。ISBN 0-8053-7002-1。
+\item Folland, G.B. 《傅里叶分析及其应用》。数学系列。Wadsworth and Brooks/Cole出版社。
+\item Green, G (1828). 《数学分析在电学与磁学理论中的应用论文》。英国诺丁汉：T. Wheelhouse出版社。第10-12页。
+\item Faryad, M.; Lakhtakia, A. (2018). 《电磁学中的无限空间Dyadic格林函数》。伦敦 / 加州圣拉斐尔：IoP Science (英国) / Morgan and Claypool (美国)。Bibcode:2018idgf.book.....F。ISBN 978-1-68174-557-2。
+\item Şeremet, V. D. (2003). 《格林函数与矩阵手册》。南安普敦：WIT出版社。ISBN 978-1-85312-933-9。
+\end{itemize}
+\subsection{外部链接}
+\begin{itemize}
+\item “格林函数”，《数学百科全书》，EMS出版社，2001 [1994]
+\item Weisstein, Eric W. “格林函数”。MathWorld
+\item PlanetMath 上的“微分算子的格林函数”
+\item PlanetMath 上的“格林函数”
+\item PlanetMath 上的“格林函数与保角映射”
+\item A. P. Jauho：《Keldysh非平衡格林函数技术导论》
+\item “格林函数库”
+\item “格林函数教程”
+\item “边界元法”（介绍格林函数如何结合边界元法用于数值求解势问题）[2012-02-07 存档于 Wayback Machine]
+\item Citizendium 网站相关条目
+\item 麻省理工学院（MIT）格林函数视频讲座
+\item Bowley, Roger. “乔治·格林与格林函数”。Sixty Symbols 系列。Brady Haran 为诺丁汉大学拍摄。
+\end{itemize}
