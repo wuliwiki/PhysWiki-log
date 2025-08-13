@@ -1,0 +1,27 @@
+% C++ 迭代器笔记
+% license Usr
+% type Note
+
+\begin{itemize}
+\item 5 类迭代器的要求越来越严格，前一个的要求是后一个的子集。
+\item \verb`LegacyInputIterator`, 只能 single-pass，即遍历一遍（例如 stdin 不能反复从头读）
+\item \verb`LegacyForwardIterator`, 可以反复遍历。是 preserving，即同一个迭代器的 copy 在其中一个 \verb`++` 后不会失效。
+\item \verb`LegacyBidirectionalIterator`, 多了 \verb`--`
+\item \verb`LegacyRandomAccessIterator`, 多了 \verb`+, -, +=, -=, >, >=, <, <=, []` 等算符支持
+\item \verb`LegacyContiguousIterator`
+\item STL 容器最少都是 Forward，Input 仅用于文件或 stdin 等 stream。
+\item 超出范围的迭代器最多只能是 \verb`v.end()`，其他的超出范围都是未定义行为。
+\item Range-based for 要求至少 \verb`LegacyForwardIterator`。
+\item \verb`for (aito &e: v)` 基本相当于 \verb`for (auto it = v.begin(); it != v.end(); ++it) {auto &e = *it; ...}`
+\item 为了适用于 \verb`std::sort, std::search` 等标准算法，还需要定义一些属性（不用的话就不强制）
+\begin{lstlisting}[language=cpp]
+// Required for standard algorithms:
+using iterator_category = std::forward_iterator_tag;
+using value_type = T;
+using difference_type = std::ptrdiff_t;
+using reference = T&;
+using pointer = T*;
+\end{lstlisting}
+\item 可以用 \verb`std::iterator_traits<迭代器类>` 获取以上属性。
+\item 指针自动适用于 \verb`std::iterator_traits`
+\end{itemize}

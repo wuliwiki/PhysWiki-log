@@ -1,0 +1,15 @@
+% C++ rvalue 右值笔记
+% license Usr
+% type Note
+
+\subsection{Perfect forwarding}
+\begin{lstlisting}[language=cpp]
+void process(int& x)  { cout << "lvalue\n"; }
+void process(int&& x) { cout << "rvalue\n"; }
+
+template<typename T>
+void wrapper(T&& arg) {
+    process(arg); // Always calls lvalue version
+    process(std::forward<T>(arg)); // Calls correct version
+}
+\end{lstlisting}
