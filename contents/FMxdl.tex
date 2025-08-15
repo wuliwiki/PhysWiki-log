@@ -1,0 +1,194 @@
+% 费马小定理（综述）
+% license CCBYNCSA3
+% type Wiki
+
+本文根据 CC-BY-SA 协议转载翻译自维基百科\href{https://en.wikipedia.org/wiki/Fermat\%27s_little_theorem}{相关文章}。
+
+在数论中，费马小定理指出：如果 $p$ 是一个质数，那么对于任意整数 $a$，数 $a^p - a$ 都是 $p$ 的整数倍。用模运算的记号表示，就是：
+$$
+a^p \equiv a \pmod{p}~
+$$
+例如，当 $a = 2$、$p = 7$ 时，有 $2^7 = 128$，而 $128 - 2 = 126 = 7 \times 18$，正好是 7 的倍数。
+
+如果 $a$ 不能被 $p$ 整除，也就是说 $a$ 与 $p$ 互素，那么费马小定理等价于以下陈述：$a^{p-1} - 1$ 是 $p$ 的整数倍，或者用符号表示为：
+$$
+a^{p-1} \equiv 1 \pmod{p}~
+$$
+例如，当 $a = 2$、$p = 7$ 时，有 $2^6 = 64$，而 $64 - 1 = 63 = 7 \times 9$，也是 7 的倍数。
+
+费马小定理是费马素性检验的理论基础，也是初等数论中的一个基本定理。该定理得名于皮埃尔·德·费马，他在 1640 年提出了这一结论。之所以称为“小定理”，是为了将其与费马大定理区分开来。
+\subsection{历史}
+\begin{figure}[ht]
+\centering
+\includegraphics[width=6cm]{./figures/00da106992b247ea.png}
+\caption{皮埃尔·德·费马} \label{fig_FMxdl_1}
+\end{figure}
+皮埃尔·德·费马最早是在一封写于 1640 年 10 月 18 日的信中向他的朋友兼知己弗雷尼克尔·德·贝西陈述了这一定理。他的表述等价于如下内容：
+
+如果 $p$ 是质数，而 $a$ 是任意一个不能被 $p$ 整除的整数，那么 $a^{p-1} - 1$ 一定能被 $p$ 整除。
+
+费马的原始陈述是：
+
+Tout nombre premier mesure infailliblement une des puissances −1 de quelque progression que ce soit, et l'exposant de la dite puissance est sous-multiple du nombre premier donné −1; et, après qu'on a trouvé la première puissance qui satisfait à la question, toutes celles dont les exposants sont multiples de l'exposant de la première satisfont tout de même à la question.
+
+这段话翻译成中文，并加入一些注释和公式以便理解，可以表述为：
+
+每一个质数 $[p]$ 必定整除某一个“某个等比级数 $[a, a^2, a^3, \dots]$”中的“某个幂减一”的结果（即存在某个 $t$，使得 $a^t - 1$ 可被 $p$ 整除），且这个幂的指数 $t$ 是 $p - 1$ 的一个约数。找到第一个满足条件的幂之后，所有指数是这个指数 $t$ 的倍数的幂，同样也满足这一性质。
+
+也就是说，如果某个 $t$ 满足 $a^t \equiv 1 \pmod{p}$，那么所有 $t$ 的倍数也都满足 $a^{kt} \equiv 1 \pmod{p}$。
+
+费马并没有讨论当 $a$ 是 $p$ 的倍数时的情形，也并没有给出他的证明，只是写道：
+
+Et cette proposition est généralement vraie en toutes progressions et en tous nombres premiers; de quoi je vous envoierois la démonstration, si je n'appréhendois d'être trop long.
+
+翻译为中文是：
+
+“这个命题在所有的数列和所有的质数中都是普遍成立的；我本可以把它的证明寄给你，只是担心写得太长了。”\(^\text{[5]}\)
+
+欧拉在 1736 年发表的论文中首次给出了费马小定理的正式证明。这篇论文题为 《Theorematum Quorundam ad Numeros Primos Spectantium Demonstratio》（英文译名为：“关于素数的一些定理的证明”），发表于圣彼得堡科学院的期刊中\(^\text{[6][7]}\)。但实际上，莱布尼茨早在 1683 年之前的一份未发表手稿中，就几乎给出了相同的证明\(^\text{[3]}\)。
+
+“费马小定理”这一术语最早可能出现在1913 年库尔特·亨泽尔所著的《Zahlentheorie》（数论）一书中\(^\text{[8]}\)：
+
+Für jede endliche Gruppe besteht nun ein Fundamentalsatz, welcher der kleine Fermatsche Satz genannt zu werden pflegt, weil ein ganz spezieller Teil desselben zuerst von Fermat bewiesen worden ist.
+
+翻译为中文：
+
+“在每一个有限群中都存在一个基本定理，这通常被称为‘费马小定理’，因为其中的一个非常特殊的部分最早是由费马证明的。”
+
+在英语中较早使用该术语的例子出现在 A.A. 阿尔伯特于 1937 年出版的《现代高等代数》一书中，第 206 页提到：
+
+“所谓的‘小’费马定理”\(^\text{[9]}\)。
+\subsubsection{后续发展历史}
+一些数学家曾独立提出了一个相关猜想（有时被误称为“中国猜想”）：当且仅当 $p$ 是质数时，有 $2^p \equiv 2 \pmod{p}$。实际上，“如果”部分是正确的，它是费马小定理的一个特例；然而，“只有当”这部分是错误的。
+
+例如：
+$$
+2^{341} \equiv 2 \pmod{341}~
+$$
+但 $341 = 11 \times 31$ 是合数，它是 以 2 为底的伪素数。详见下文。
+\subsection{证明}
+费马小定理有多种不同的证明方法。其中一种常见的做法是将它作为欧拉定理的推论来证明。
+\subsection{推广}
+欧拉定理是费马小定理的推广形式：对于任意模数 $n$ 和任意与 $n$ 互素的整数 $a$，都有
+$$
+a^{\varphi(n)} \equiv 1 \pmod{n}~
+$$
+其中 $\varphi(n)$ 表示欧拉函数，即从 1 到 $n$ 中与 $n$ 互素的整数的个数。费马小定理实际上就是欧拉定理的一个特例，因为如果 $n$ 是质数，则 $\varphi(n) = n - 1$。
+
+欧拉定理的一个推论是：对于任意正整数 $n$，如果整数 $a$ 与 $n$ 互素，那么对于任意整数 $x$ 和 $y$，有
+$$
+x \equiv y \pmod{\varphi(n)} \quad \Rightarrow \quad a^x \equiv a^y \pmod{n}.~
+$$
+这可以由欧拉定理直接推出：如果$x \equiv y \pmod{\varphi(n)}$，那么存在整数 $k$ 使 $x = y + k\varphi(n)$，于是
+$$
+a^x = a^{\,y + \varphi(n)k} = a^y \cdot \left(a^{\varphi(n)}\right)^k \equiv a^y \cdot 1^k \equiv a^y \pmod{n}.~
+$$
+如果 $n$ 是质数，这也是费马小定理的一个推论。这一性质在模运算中应用广泛，因为它允许将指数很大的模幂运算化简为指数小于 $n$ 的情形，从而大大简化计算。
+
+欧拉定理在公钥密码学中（尤其是 RSA 密码系统）被广泛应用于 $n$ 不是质数的情形，通常方式如下\(^\text{[10]}\)：如果$y = x^e \pmod{n}$,
+
+当已知 $\varphi(n)$ 时，从 $y, e, n$ 中恢复 $x$ 是容易的【11】。实际上，**扩展欧几里得算法**可以用来计算 $e$ 关于 $\varphi(n)$ 的模逆元，即找到一个整数 $f$，使得
+$$
+ef \equiv 1 \pmod{\varphi(n)}.~
+$$
+于是有：
+$$
+x \equiv x^{ef} \equiv (x^e)^f \equiv y^f \pmod{n}.~
+$$
+另一方面，如果 $n = pq$ 是两个不同质数的乘积，那么$\varphi(n) = (p - 1)(q - 1)$，在这种情况下，从 $n$ 和 $e$ 计算 $f$ 的难度与计算 $\varphi(n)$ 的难度相同（这一点尚未被严格证明，但目前没有已知算法可以在不知道 $\varphi(n)$ 的情况下直接计算 $f$）。已知 $n$ 的情况下，计算 $\varphi(n)$ 的难度本质上与分解 $n$ 相同，因为$\varphi(n) = (p - 1)(q - 1)$，反过来，质因数 $p$ 和 $q$ 又是方程$x^2 - (n - \varphi(n) + 1)x + n = 0$
+的整数解。
+
+因此，RSA 密码系统的基本思想是：如果将消息 $x$ 按照$y = x^e \pmod{n}$,的方式加密（其中 $n$ 和 $e$ 是公开的），那么在现有的知识条件下，如果不能找到 $n$ 的（秘密）质因数 $p$ 和 $q$，就无法解密。
+
+费马小定理还与卡迈克尔函数及卡迈克尔定理有关，并且与群论中的拉格朗日定理存在联系。
+\subsection{逆命题}
+费马小定理的逆命题在卡迈克尔数的情形下是不成立的。然而，其一个稍弱的变体是莱默定理：
+
+如果存在一个整数 $a$，使得
+$$
+a^{p-1} \equiv 1 \pmod{p}~
+$$
+并且对于所有整除 $p - 1$ 的质数 $q$，都有
+$$
+a^{(p-1)/q} \not\equiv 1 \pmod{p},~
+$$
+那么 $p$ 是质数。
+
+该定理构成了卢卡斯素性检验（Lucas primality test，一种重要的素数判定方法）以及普拉特素数证明的理论基础。
+\subsection{伪素数}
+如果 $a$ 与 $p$ 互素，且 $a^{p-1} - 1$ 能被 $p$ 整除，那么 $p$ 不一定是质数。如果 $p$ 不是质数，那么 $p$ 被称为**以 $a$ 为底的（费马）伪素数（Fermat pseudoprime to base $a$）。
+
+第一个以 2 为底的伪素数是在 1820 年由皮埃尔·弗雷德里克·萨吕斯发现的：$341 = 11 \times 31$【12】【13】。  
+
+如果一个数 \( p \) 对于所有与 \( p \) 互素的整数 \( a \) 都是以 \( a \) 为底的费马伪素数，则称其为卡迈克尔数。  
+
+另外，如果一个数 \( p \) 满足以下等式：  
+$$
+\gcd\left(p, \sum_{a=1}^{p-1} a^{p-1}\right) = 1,~
+$$
+
+那么 $p$ 要么是质数，要么是卡迈克尔数。
+\subsection{米勒–拉宾素性检验}
+
+Miller–Rabin 素性检验**使用了费马小定理的如下推广形式【14】：
+
+如果 $p$ 是一个奇质数，且$p - 1 = 2^s d$其中 $s > 0$ 且 $d$ 为奇数 $>0$，那么对于所有与 $p$ 互素的整数 $a$，要么$a^d \equiv 1 \pmod{p}$要么存在一个整数 $r$ 使得 $0 \le r < s$ 且$a^{2^r d} \equiv -1 \pmod{p}$.
+
+这个结果可以由费马小定理推出，原因在于：如果 $p$ 是奇质数，那么模 $p$ 的整数构成一个有限域，其中 1（模 $p$）恰好有两个平方根：1 和 −1（模 $p$）。
+
+注意，对于 $a \equiv 1 \pmod{p}$，显然有 $a^d \equiv 1 \pmod{p}$，因为同余关系在乘方运算下是兼容的。同理，对于 $a \equiv -1 \pmod{p}$，由于 $d$ 是奇数，显然有$a^d = a^{2^0 d} \equiv -1 \pmod{p}$
+
+因此，通常选择随机的 $a$ 在区间 $1 < a < p - 1$ 内进行测试。Miller–Rabin 检验**的使用方法如下：给定一个需要检测素性的奇整数 $p$，写成 $p - 1 = 2^s d$（其中 $s > 0$，$d$ 为奇数 $> 0$），然后随机选择一个 $1 < a < p - 1$ 的整数，计算$b = a^d \pmod{p}$如果 $b$ 既不等于 1 也不等于 −1，则反复对 $b$ 进行模 $p$ 平方运算，直到得到 −1 或者已经平方了 $s - 1$ 次。如果 $b \neq 1$，且在平方过程中从未得到 −1，则 $p$ 是合数，且 $a$ 是 $p$ 为合数的见证。否则，$p$ 是一个以 $a$ 为底的强伪素数（strong probable prime to base $a$），即它可能是质数也可能不是。如果 $p$ 是合数，则该检验仍然错误地将其判定为强伪素数的概率最多为 $\frac14$。在这种情况下，$p$ 称为强伪素数，而 $a$ 称为强骗子。因此，经过 $k$ 次非决定性的随机测试后，$p$ 仍为合数的概率最多为 $4^{-k}$，通过增加 $k$ 可以使这一概率任意接近于零。
+
+总结：该检验要么证明一个数是合数，要么以任意可控的小错误概率断言它是质数。该方法实现非常简单，并且计算效率高于所有已知的确定性检验。因此，它通常会在正式的素数证明之前使用。
+\subsection{另见}
+\begin{itemize}
+\item 费马商
+\item 弗罗贝尼乌斯自同态
+\item $p$-导数
+\item 分母为质数的分数：与费马小定理相关性质的数
+\item RSA 加密算法
+\item 同余表
+\item 模乘逆元
+\end{itemize}
+\subsection{注释}
+\begin{enumerate}
+\item Long 1972，第 87–88 页。
+\item Pettofrezzo & Byrkit 1970，第 110–111 页。
+\item Burton 2011，第 514 页。
+\item Fermat, Pierre（1894），Tannery, P.；Henry, C.（编），《费马全集·第二卷：书信集》（Oeuvres de Fermat. Tome 2: Correspondance），巴黎：Gauthier-Villars，第 206–212 页（法文）。
+\item Mahoney 1994，第 295 页（英文译文见此）。
+\item Euler, Leonhard（1736），“Theorematum quorundam ad numeros primos spectantium demonstratio” ，《圣彼得堡科学院院刊》，第 8 卷，第 141–146 页。
+\item Ore 1988，第 273 页。
+\item Hensel, Kurt（1913），《数论》，德国柏林与莱比锡：G. J. Göschen，第 103 页。
+\item Albert 2015，第 206 页。
+\item Trappe, Wade；Washington, Lawrence C.（2002），《编码理论与密码学导论》，Prentice-Hall，第 78 页，ISBN 978-0-13-061814-6。
+\item 如果 $y$ 与 $n$ 不互素，则欧拉定理不成立，但这种情况极少见，因此通常不予考虑。事实上，如果偶然出现这种情况，就可以轻易分解 $n$，从而破解对应的 RSA 实例。
+\item Sloane, N. J. A.（编），“数列 A128311（$2^n - 1 - 1$ 除以 $n$ 的余数）”，在线整数数列百科全书，OEIS 基金会。
+\item Sarrus, Frédéric（1819–1820），“Démonstration de la fausseté du théorème énoncé á la page 320 du IXe volume de ce recueil” [对本集第九卷第 320 页所述定理之错误性的证明]，《纯与应用数学年刊》，第 10 卷，第 184–187 页。
+\item Rempe-Gillen, Lasse；Waldecker, Rebecca（2013-12-11），“4.5.1 引理（模质数的单位根）”，《初学者的素数判定》，美国数学学会，ISBN 9780821898833。
+\end{enumerate}
+\subsection{参考文献}
+\begin{itemize}
+\item Albert, A. Adrian（2015）[1938]，《现代高等代数》，剑桥大学出版社，ISBN 978-1-107-54462-8。
+\item Burton, David M.（2011），《数学史/导论》（The History of Mathematics / An Introduction，第 7 版），麦格劳-希尔出版社，ISBN 978-0-07-338315-6。
+\item Long, Calvin T.（1972），《初等数论导论》（Elementary Introduction to Number Theory，第 2 版），列克星敦：D. C. Heath and Company，LCCN 77171950。
+\item Mahoney, Michael Sean（1994），《皮埃尔·德·费马的数学生涯，1601–1665》，第 2 版），普林斯顿大学出版社，Bibcode:1994mcpd.book…..M，ISBN 978-0-691-03666-3。
+\item Ore, Oystein（1988）[1948]，《数论及其历史》，多佛出版社，ISBN 978-0-486-65620-5。
+\item Pettofrezzo, Anthony J.；Byrkit, Donald R.（1970），《数论基础》，恩格尔伍德克利夫斯：Prentice Hall，LCCN 71081766。
+\end{itemize}
+\subsection{延伸阅读}
+\begin{itemize}
+\item Paulo Ribenboim（1995），《素数记录新书》（The New Book of Prime Number Records，第 3 版），纽约：施普林格出版社，ISBN 0-387-94457-5，第 22–25、49 页。
+\end{itemize}
+\subsection{外部链接}
+\begin{itemize}
+\item 维基共享资源上的费马小定理相关媒体
+\item 《雅诺什·鲍耶与伪素数》（János Bolyai and the pseudoprimes，匈牙利语）
+费马小定理——cut-the-knot 网站
+\item 欧拉函数与欧拉定理——cut-the-knot 网站
+\item 费马小定理与 Sophie 的证明
+\item “Fermat's little theorem”，数学百科全书，EMS Press，2001 [1994]
+\item Weisstein, Eric W. “Fermat's Little Theorem”，MathWorld。
+\item Weisstein, Eric W. “Fermat's Little Theorem Converse”，MathWorld。
+\end{itemize}

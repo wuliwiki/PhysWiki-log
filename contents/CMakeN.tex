@@ -109,7 +109,7 @@ endif()
 \item \verb`add_library(exe_name source_name)` 单独编译一个 library （在 library 路径的 \verb`CMakeLists.txt` 中使用这个命令而不是 \verb`add_executable` 命令），详见下文。
 \item \verb`link_directories(路径)` 相当于编译器的 \verb`-L` 选项， 添加静态或动态 library 的搜索路径。
 \item \verb`set(CMAKE_INSTALL_RPATH 路径)` 相当于设置 \verb`rpath` （到底是 \verb`RUNPATH` 还是 \verb`RPATH`？）
-\item \verb`add_subdirectory(dir1 [dir2] ...)` 执行子路径中的 \verb`CMakeLists.txt`。 往往用于编译某个 library。
+\item \verb`add_subdirectory(dir1 [dir2] ...)` 执行子路径中的 \verb`CMakeLists.txt`。 往往用于编译某个 library。 当前的变量会在子 list 中可见，但是子 list 中新增或者改变的变量默认不会影响父 list，除非使用 \verb`set(VAR VALUE PARENT_SCOPE)`。
 \item \verb`target_link_libraries(exe_name lib1 [lib2] ...)` link 阶段链接 library， 相当于 \verb`-l lib1 -l lib2`
 \item \verb`option(opt_name description default)` 定义一个 option 开关（会在 cmake 的 GUI 中显示开关）以及默认值。 \verb`opt_name` 可以在 \verb`CMakeLists.txt` 中的 \verb`if` 语句中使用例如 \verb`if(opt_name) ... endif(opt_name)`。 \verb`default` 可以是 \verb`ON` 或 \verb`OFF`。
 \item 注意更新 \verb`option` 的默认值后， 需要清空 cmake 的临时文件才可以生效。
