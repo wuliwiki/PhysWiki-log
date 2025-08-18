@@ -1,0 +1,115 @@
+% 对称性匹配的线性组合
+% keys 分子轨道理论|对称性匹配的线性组合|对称性匹配线性组合|SALC|SALCs
+% license Usr
+% type Tutor
+
+\pentry{分子点群\nref{nod_MPG1}}{nod_52ba}
+我们以 $\text{BH}_3$ 分子为例研究如何通过 SALCs 构建分子轨道。先确定中心原子，例如 $\text{H}_2\text{O}$ 就是中间的氧原子，$\text{BH}_3$ 则是中间的 $\text B$。将周围的 $\text H$ 原子的 $1s$ 轨道（让 $\text H$ 原子成键固然只能考虑 $1s$ 轨道）组合成\textbf{符合特定对称种类}的线性组合，再将上面的结果进一步按照对称性与 $\text B$ 原子的轨道合理线性组合，得到分子轨道。
+\subsection{分析分子}
+
+我们将三个 $\text H$ 原子分别记为 $A$，$B$，$C$ 用以区分。$\text{BH}_3$ 分子应有 $C_{3v}$ 对称性，有 $C_3$ 和 $\sigma_v$ 两种对称操作以及恒等操作 $E$。计算特征标：
+\begin{enumerate}
+\item $s_A$、$s_B$、$s_C$ 均在 $E$ 下不变，$\chi(E)=3$；
+\item $s_A$、$s_B$、$s_C$ 在 $C_3$ 一类操作（包括 $C_3^1$，$C_3^2$）下轮换，$\chi(C_3)=0$；
+\item $s_A$、$s_B$、$s_C$ 在 $\sigma_v$ 一类操作（包括 $\sigma_v$，$\sigma_v'$，$\sigma_v''$）下，一者位置不变，另外两者交换，得到 $\chi(\sigma_v)=1$。
+\end{enumerate}
+
+\subsection{考察成键的原子轨道，计算分子轨道的特征标表}
+考虑记以三个 $\text H$ 原子的轨道 $(s_A,s_B,s_C)$ 为基底的表示下，分子点群的表示为 $\Gamma$，这显然就是一个可约表示，根据前面的讨论，特征标表为
+\begin{table}[ht]
+\centering
+\caption{$\Gamma$ 的特征标表}\label{tab_SALCs1}
+\begin{tabular}{|c|c|c|c|}
+\hline
+ & $E$ & $2C_3$ & $3\sigma_v$ \\
+\hline
+$\Gamma$ & 3 & 0 & 1 \\
+\hline
+\end{tabular}
+\end{table}
+\subsection{利用分子点群特征标表计算分子轨道的不可约表示拆分}
+下面来看 $\Gamma$ 是由哪些不可约表示构成的，$C_{3v}$ 群的特征标表是
+\begin{table}[ht]
+\centering
+\caption{$C_{3v}$ 群的特征标表}\label{tab_SALCs2}
+\begin{tabular}{|c|c|c|c|c|c|}
+\hline
+$C_{3v}$ & $E$ & $2C_3$ & $3\sigma_v$ &  &  \\
+\hline
+$A_1$ & 1 & 1 & 1 & $z$ & $x^2+y^2$，$z^2$ \\
+\hline
+$A_2$ & 1 & 1 & -1 & $R_z$ &  \\
+\hline
+$E$ & 2 & -1 & 0 & $(x, y), (R_x, R_y)$ & $(x^2-y^2, xy)$，$(xz,yz)$ \\
+\hline
+\end{tabular}
+\end{table}
+考虑
+\begin{equation}
+\Gamma = n_{A_1} A_1 + n_{A_2} A_2 + n_{E} E ~.
+\end{equation}
+则有，若分子点群的阶数为 $h$，例如 $C_{3v}$ 群为 $6$ 阶群，则 
+\begin{equation}
+n_i(\Gamma) = \frac{1}{h} \sum_R \chi^{(\Gamma)}(R) \chi_i(R) ~.
+\end{equation}
+其中 $R$ 是对各个对称操作求和，例如 $2C_3$ 就是有两个 $C_3$ 对称性，需要乘以 $2$，不妨以计算 $n_{A_1}$ 为例：
+\begin{equation}
+\begin{aligned}
+n_{A_1} &= \frac{1}{6} \times (1 \times \chi^{(\Gamma)}(E)\chi_{A_1}(E) + 2 \times\chi^{(\Gamma)}(C_3)\chi_{A_1}(C_3)+3\times\chi^{(\Gamma)}(\sigma_v)\chi_{A_1}(\sigma_v)   ) \\
+&=\frac{1}{6} (1 \times 3 + 2 \times 0 \times 1 + 3 \times 1 \times 1 )\\
+& = 1 ~.
+\end{aligned}
+\end{equation}
+同理，可以计算 
+\begin{equation}
+n_{A_2} = \frac{1}{6} \times (1 \times 3 + 2 \times 0 \times 1+ 3 \times 1 \times (-1)) = 0 ~.
+\end{equation}
+\begin{equation}
+n_{E} = \frac{1}{6} \times (2 \times 3 + 2 \times 0 \times (-1) + 3 \times 1 \times 0) = 1 ~.
+\end{equation}
+这样就知道：
+$$\Gamma = A_1 + E ~.$$
+\subsection{利用投影算符计算分子轨道}
+对一个不可约表示 $\Lambda$ ，其投影算符
+$$\hat{p}^{(\Lambda)} = \frac{1}{h} \sum_{R} \chi^{(\Lambda)}(R) \hat R ~.$$
+可以通过由不可约表示的投影算符作用到某一个原子轨道 $\psi$ 得到真正的分子轨道 $\Psi$：
+$$\Psi = \hat{p}^{(\Lambda)} \psi ~.$$
+\subsubsection{$A_1$ 带来的投影算符}
+需要注意，此时例如 $2C_3$ 代表一类的对称操作（即 $C_3^1, C_3^2$）各个操作会对同一原子轨道给出不同的结果，故需要分开讨论。以计算 $s_A$ 为例：
+\begin{equation}
+\begin{aligned}
+\hat{p}^{(A_1)} s_A &= \frac{1}{6} \left(\chi^{(A_1)}(E) \hat E (s_A )+ \chi^{(A_1)} (C_3^1) \hat{C_3^1}(s_A) + \chi^{(A_1)}(C_3^2) \hat{C_3^2}(s_A)+ \chi^{(A_1)}( \sigma_v) \hat \sigma_v(s_A) + \chi^{(A_1)} (\sigma_v') \hat \sigma_v'(s_A) + \chi^{(A_1)}(\sigma_v'') \hat \sigma_v''(s_A)\right) \\
+&= \frac{1}{6} \left(1 \times 1 \times s_A + 1 \times 1 \times s_B + 1 \times 1 \times s_C + 1 \times 1 \times s_A + 1 \times 1 \times s_B + 1 \times 1 \times s_C\right)\\
+&= \frac{1}{3} (s_A + s_B + s_C) ~.
+\end{aligned}
+\end{equation}
+投影算符作用到 $s_B$、$s_C$ 会给出相同的结果。不妨记此轨道为 $\Psi_1$。
+\subsubsection{$E$ 带来的投影算符}
+对于 $E$ 对称种类带来分子轨道有三个：
+$$\Psi = \frac{1}{6} (2 s_A - s_B - s_C) ~,$$
+$$\Psi = \frac{1}{6} (2 s_B - s_A - s_C) ~,$$
+$$\Psi = \frac{1}{6} (2 s_C - s_A - s_B) ~.$$
+这三个结果并不是线性独立的，我们可以得到另外两个轨道：
+$$\Psi_2 = \frac{1}{6} (2 s_A - s_B - s_C) ~,$$
+$$\Psi_3 = \frac{1}{2} (s_B - s_C) ~.$$
+可以发现，$\Psi_2$ 类似 $p_y$，而 $\Psi_3$ 类似 $p_x$。
+
+\subsection{可以绘出轨道，考察节面个数，按能量高低排序}
+$\Psi_1$ 无节面，能量最低，$A$ 对称种类无简并。
+$\Psi_2$、$\Psi_3$ 有 $1$ 个节面，能量高，$E$ 对称种类有二重简并。
+
+此外，若对某个分子轨道对应的对称种类是 $T$，则有三重简并。一般来说：
+\begin{itemize}
+\item $A/B$ 对称种类无简并；
+\item $E$ 对称种类有二重简并；
+\item $T$ 对称种类有三重简并。
+\end{itemize}
+
+\subsection{组合多原子分子轨道}
+对分子的非相邻原子，一般重叠积分小，成（反）键效果弱。
+
+对 $\text{BH}_3$ 分子，考察 $\text B$ 原子的轨道与上面进行组合。
+
+考察 $C_{3v}$ 群的特征标表，$A_1$ 对称种类的基 $z$ 对应 $p_z$ 轨道，$x^2+y^2$ 和 $z^2$ 线性组合成 $x^2+y^2+z^2$ 对应 $s$ 轨道，故让 $\text B$ 的 $s$ 和 $p_z$ 轨道和 $\Psi_1$ 进行线性组合，成分子轨道；
+对 $E$ 对称种类，基 $(x, y)$ 对应 $p_x$、$p_y$，故让 $\text B$ 的 $p_x$、$p_y$ 轨道和 $\Psi_2$、$\Psi_3$ 进行线性组合，成分子轨道。
+
