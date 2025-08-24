@@ -1022,3 +1022,425 @@ Wyld 图是一种记录图，用于表示通过连续介质力学基本方程的
 需要注意的是，本节中的公式使用了简化的偏导数记号，例如$\partial_x u$表示$u$ 对 $x$ 的偏导数；$\partial_y^2 f_\theta$ 表示 $f_\theta$ 对 $y$ 的二阶偏导数。
 
 2022 年的一篇研究论文提出了一种低成本、动态、递归的三维湍流流动纳维–斯托克斯方程求解方法$42$。在适当短的时间尺度内，湍流的动力学表现出确定性特征。
+\subsubsection{笛卡尔坐标系}
+从纳维–斯托克斯方程的一般形式出发，将速度向量展开为$\mathbf{u} = (u_x, u_y, u_z)$（有时分别记为 $u, v, w$），可以将矢量方程显式写为如下三分量形式：
+
+$x$-方向：
+$$
+\begin{aligned}
+\rho \big(
+\partial_t u_x
++ u_x \partial_x u_x
++ u_y \partial_y u_x
++ u_z \partial_z u_x
+\big)
+&= -\partial_x p
++ \mu \big(
+\partial_x^2 u_x
++ \partial_y^2 u_x
++ \partial_z^2 u_x
+\big) \\
+&\quad + \frac{1}{3} \mu \,\partial_x
+\big(
+\partial_x u_x
++ \partial_y u_y
++ \partial_z u_z
+\big)
++ \rho g_x
+\end{aligned}~
+$$
+$y$-方向：
+$$
+\begin{aligned}
+\rho \big(
+\partial_t u_y
++ u_x \partial_x u_y
++ u_y \partial_y u_y
++ u_z \partial_z u_y
+\big)
+&= -\partial_y p
++ \mu \big(
+\partial_x^2 u_y
++ \partial_y^2 u_y
++ \partial_z^2 u_y
+\big) \\
+&\quad + \frac{1}{3} \mu \,\partial_y
+\big(
+\partial_x u_x
++ \partial_y u_y
++ \partial_z u_z
+\big)
++ \rho g_y
+\end{aligned}~
+$$
+$z$-方向：
+$$
+\begin{aligned}
+\rho \big(
+\partial_t u_z
++ u_x \partial_x u_z
++ u_y \partial_y u_z
++ u_z \partial_z u_z
+\big)
+&= -\partial_z p
++ \mu \big(
+\partial_x^2 u_z
++ \partial_y^2 u_z
++ \partial_z^2 u_z
+\big) \\
+&\quad + \frac{1}{3} \mu \,\partial_z
+\big(
+\partial_x u_x
++ \partial_y u_y
++ \partial_z u_z
+\big)
++ \rho g_z
+\end{aligned}~
+$$
+请注意，重力已作为体力项纳入计算，参数 $g_x$、$g_y$、$g_z$ 的取值取决于重力相对于所选坐标系的方向。
+
+连续性方程表示为：
+$$
+\partial_t \rho
++ \partial_x (\rho u_x)
++ \partial_y (\rho u_y)
++ \partial_z (\rho u_z)
+= 0.~
+$$
+当流动为不可压缩流时，流体质点的密度 $\rho$ 不会随时间变化，其物质导数为零：$\frac{\mathrm{D} \rho}{\mathrm{D} t} = 0$.
+
+此时，连续性方程简化为：
+$$
+\partial_x u_x
++ \partial_y u_y
++ \partial_z u_z
+= 0.~
+$$
+因此，在不可压缩的纳维–斯托克斯方程中，黏性项的第二部分将消失（参见“不可压缩流”部分）。
+
+这一系统由四个方程组成，是应用最广泛、研究最深入的形式。尽管与其他形式相比更为简洁，但它仍然是一个非线性的偏微分方程系统，其解析解依然非常难以获得。
+\subsubsection{柱坐标系}
+将笛卡尔坐标系下的纳维–斯托克斯方程进行变量转换，可以得到柱坐标 $(r, \varphi, z)$ 下的动量方程\(^\text{[16][43]}\)：
+
+$r$ 方向：
+
+$$
+\begin{aligned}
+\rho \big(
+\partial_t u_r
++ u_r \partial_r u_r
++ \frac{u_\varphi}{r} \partial_\varphi u_r
++ u_z \partial_z u_r
+- \frac{u_\varphi^2}{r}
+\big)
+&= -\partial_r p \\
+&\quad + \mu \Big(
+\frac{1}{r}\partial_r(r \partial_r u_r)
++ \frac{1}{r^2}\partial_\varphi^2 u_r
++ \partial_z^2 u_r
+- \frac{u_r}{r^2}
+- \frac{2}{r^2}\partial_\varphi u_\varphi
+\Big) \\
+&\quad + \frac{1}{3}\mu \partial_r
+\Big(
+\frac{1}{r}\partial_r(r u_r)
++ \frac{1}{r}\partial_\varphi u_\varphi
++ \partial_z u_z
+\Big)
++ \rho g_r
+\end{aligned}~
+$$
+$\varphi$ 方向：
+$$
+\begin{aligned}
+\rho \big(
+\partial_t u_\varphi
++ u_r \partial_r u_\varphi
++ \frac{u_\varphi}{r} \partial_\varphi u_\varphi
++ u_z \partial_z u_\varphi
++ \frac{u_r u_\varphi}{r}
+\big)
+&= -\frac{1}{r} \partial_\varphi p \\
+&\quad + \mu \Big(
+\frac{1}{r} \partial_r(r \partial_r u_\varphi)
++ \frac{1}{r^2} \partial_\varphi^2 u_\varphi
++ \partial_z^2 u_\varphi
+- \frac{u_\varphi}{r^2}
++ \frac{2}{r^2} \partial_\varphi u_r
+\Big) \\
+&\quad + \frac{1}{3}\mu \frac{1}{r} \partial_\varphi
+\Big(
+\frac{1}{r}\partial_r(r u_r)
++ \frac{1}{r}\partial_\varphi u_\varphi
++ \partial_z u_z
+\Big)
++ \rho g_\varphi
+\end{aligned}~
+$$
+$z$ 方向：
+$$
+\begin{aligned}
+\rho \big(
+\partial_t u_z
++ u_r \partial_r u_z
++ \frac{u_\varphi}{r} \partial_\varphi u_z
++ u_z \partial_z u_z
+\big)
+&= -\partial_z p \\
+&\quad + \mu \Big(
+\frac{1}{r} \partial_r(r \partial_r u_z)
++ \frac{1}{r^2} \partial_\varphi^2 u_z
++ \partial_z^2 u_z
+\Big) \\
+&\quad + \frac{1}{3}\mu \partial_z
+\Big(
+\frac{1}{r}\partial_r(r u_r)
++ \frac{1}{r}\partial_\varphi u_\varphi
++ \partial_z u_z
+\Big)
++ \rho g_z
+\end{aligned}~
+$$
+重力在各方向上的分量通常并非恒定。然而，在大多数应用中，要么选择合适的坐标系使重力分量为常数，要么假设重力被压力场抵消（例如，在水平管道中的流动通常会忽略重力效应和竖直方向上的压力梯度）。柱坐标下的连续性方程为：
+$$
+\partial_t \rho
++ \frac{1}{r} \partial_r (\rho r u_r)
++ \frac{1}{r} \partial_\varphi (\rho u_\varphi)
++ \partial_z (\rho u_z)
+= 0.~
+$$
+这种柱坐标形式是不可压缩纳维–斯托克斯方程中第二常见的表示方法（最常见的是笛卡尔坐标表示）。使用柱坐标的主要原因是利用对称性，从而使某个速度分量消失。一个非常常见的情形是轴对称流动，假设无切向速度（即 $u_\varphi = 0$），且所有物理量都与角向 $\varphi$ 无关。在这种情况下，方程组简化为：
+
+径向动量方程
+$$
+\rho \big(
+\partial_t u_r
++ u_r \partial_r u_r
++ u_z \partial_z u_r
+\big)
+=
+-\partial_r p
++ \mu
+\Big(
+\frac{1}{r}\partial_r (r \partial_r u_r)
++ \partial_z^2 u_r
+- \frac{u_r}{r^2}
+\Big)
++ \rho g_r~
+$$
+轴向动量方程
+$$
+\rho \big(
+\partial_t u_z
++ u_r \partial_r u_z
++ u_z \partial_z u_z
+\big)
+=
+-\partial_z p
++ \mu
+\Big(
+\frac{1}{r}\partial_r (r \partial_r u_z)
++ \partial_z^2 u_z
+\Big)
++ \rho g_z~
+$$
+连续性方程（不可压缩条件）
+$$
+\frac{1}{r} \partial_r (r u_r)
++ \partial_z u_z
+= 0.~
+$$
+\subsubsection{球坐标系}
+在球坐标系下，纳维–斯托克斯方程的动量方程可以写成以下形式\(^\text{[16]}\)。此处的角度约定为：$\theta$ 表示极角（或余纬角，colatitude），范围 $0 \leq \theta \leq \pi$；$\varphi$ 表示方位角；$r$ 表示径向坐标\(^\text{[44]}\)。
+
+$r$ 方向动量方程
+$$
+\begin{aligned}
+\rho \Big(
+\partial_t u_r
++ u_r \partial_r u_r
++ \frac{u_\varphi}{r \sin\theta} \partial_\varphi u_r
++ \frac{u_\theta}{r} \partial_\theta u_r
+- \frac{u_\varphi^2 + u_\theta^2}{r}
+\Big)
+&= -\partial_r p \\[6pt]
+&\quad + \mu \Big(
+\frac{1}{r^2} \partial_r (r^2 \partial_r u_r)
++ \frac{1}{r^2 \sin^2\theta} \partial_\varphi^2 u_r
++ \frac{1}{r^2 \sin\theta} \partial_\theta (\sin\theta \partial_\theta u_r) \\
+&\qquad - 2\frac{u_r + \partial_\theta u_\theta + u_\theta \cot\theta}{r^2}
+- \frac{2}{r^2 \sin\theta} \partial_\varphi u_\varphi
+\Big) \\[6pt]
+&\quad + \frac{1}{3}\mu \partial_r \Big(
+\frac{1}{r^2} \partial_r (r^2 u_r)
++ \frac{1}{r \sin\theta} \partial_\theta (u_\theta \sin\theta)
++ \frac{1}{r \sin\theta} \partial_\varphi u_\varphi
+\Big) \\
+&\quad + \rho g_r
+\end{aligned}~
+$$
+$\varphi$ 方向动量方程
+$$
+\begin{aligned}
+\rho \Big(
+\partial_t u_\varphi
++ u_r \partial_r u_\varphi
++ \frac{u_\varphi}{r \sin\theta} \partial_\varphi u_\varphi
++ \frac{u_\theta}{r} \partial_\theta u_\varphi
++ \frac{u_r u_\varphi + u_\varphi u_\theta \cot\theta}{r}
+\Big)
+&= -\frac{1}{r \sin\theta} \partial_\varphi p \\[6pt]
+&\quad + \mu \Big(
+\frac{1}{r^2} \partial_r (r^2 \partial_r u_\varphi)
++ \frac{1}{r^2 \sin^2\theta} \partial_\varphi^2 u_\varphi
++ \frac{1}{r^2 \sin\theta} \partial_\theta (\sin\theta \partial_\theta u_\varphi) \\
+&\qquad + \frac{2 \sin\theta \partial_\varphi u_r + 2 \cos\theta \partial_\varphi u_\theta - u_\varphi}{r^2 \sin^2\theta}
+\Big) \\[6pt]
+&\quad + \frac{1}{3}\mu \frac{1}{r \sin\theta} \partial_\varphi \Big(
+\frac{1}{r^2} \partial_r (r^2 u_r)
++ \frac{1}{r \sin\theta} \partial_\theta (u_\theta \sin\theta)
++ \frac{1}{r \sin\theta} \partial_\varphi u_\varphi
+\Big) \\
+&\quad + \rho g_\varphi
+\end{aligned}~
+$$
+$\theta$ 方向动量方程
+$$
+\begin{aligned}
+\rho \Big(
+\partial_t u_\theta
++ u_r \partial_r u_\theta
++ \frac{u_\varphi}{r \sin\theta} \partial_\varphi u_\theta
++ \frac{u_\theta}{r} \partial_\theta u_\theta
++ \frac{u_r u_\theta - u_\varphi^2 \cot\theta}{r}
+\Big)
+&= -\frac{1}{r} \partial_\theta p \\[6pt]
+&\quad + \mu \Big(
+\frac{1}{r^2} \partial_r (r^2 \partial_r u_\theta)
++ \frac{1}{r^2 \sin^2\theta} \partial_\varphi^2 u_\theta
++ \frac{1}{r^2 \sin\theta} \partial_\theta (\sin\theta \partial_\theta u_\theta) \\
+&\qquad + \frac{2}{r^2} \partial_\theta u_r
+- \frac{u_\theta + 2 \cos\theta \partial_\varphi u_\varphi}{r^2 \sin^2\theta}
+\Big) \\[6pt]
+&\quad + \frac{1}{3}\mu \frac{1}{r} \partial_\theta \Big(
+\frac{1}{r^2} \partial_r (r^2 u_r)
++ \frac{1}{r \sin\theta} \partial_\theta (u_\theta \sin\theta)
++ \frac{1}{r \sin\theta} \partial_\varphi u_\varphi
+\Big) \\
+&\quad + \rho g_\theta
+\end{aligned}~
+$$
+在球坐标系下，质量连续性方程可以写为：
+
+$$
+\partial_t \rho
++ \frac{1}{r^2} \partial_r (\rho r^2 u_r)
++ \frac{1}{r \sin\theta} \partial_\varphi (\rho u_\varphi)
++ \frac{1}{r \sin\theta} \partial_\theta (\sin\theta \rho u_\theta)
+= 0.~
+$$
+这些方程可以通过一些方法进行（轻微的）简化，例如从黏性项中提取 $\frac{1}{r^2}$ 作为公因子。但这种处理会不必要地改变拉普拉斯算子及其他相关项的结构，因此通常不建议这样做。
+\subsection{参见}
+\begin{itemize}
+\item 阿德马·让·克洛德·巴雷·德·圣维南
+\item 玻尔兹曼方程
+\item 柯西动量方程
+\item 柯西应力张量
+\item 查普曼–恩斯科格理论
+\item 丘奇尔–伯恩斯坦方程
+\item 科安达效应
+\item 计算流体力学
+\item 连续介质力学
+\item 对流–扩散方程
+\item 纳维–斯托克斯方程的推导
+\item 爱因斯坦–斯托克斯方程
+\item 欧拉方程
+\item 纳维–斯托克斯方程中的哈根–泊肃叶流
+\item 千禧年大奖难题
+\item 牛顿流体
+\item 纳维–斯托克斯方程的无量纲化与尺度分析
+\item 压力修正方法
+\item 原始方程
+\item 瑞利–贝纳德对流
+\item 雷诺传输定理
+\item 斯托克斯方程
+\item 平板上的超音速流动
+\item 弗拉索夫方程
+\end{itemize}
+\subsection{参考文献}
+\begin{enumerate}
+\item McLean, Doug (2012). Continuum Fluid Mechanics and the Navier-Stokes Equations. Understanding Aerodynamics: Arguing from the Real Physics. John Wiley & Sons. pp. 13–78. ISBN 9781119967514. 纳维–斯托克斯方程的主要关系是质量、动量和能量的基本守恒定律。为了得到完整的方程组，还需要一个将温度、压力和密度联系起来的状态方程……
+\item Millennium Prize Problems—Navier–Stokes Equation, claymath.org, Clay Mathematics Institute, 2017 年 3 月 27 日，2015-12-22 存档，检索于 2017-04-02。
+\item Fefferman, Charles L. Existence and smoothness of the Navier–Stokes equation (PDF). claymath.org. Clay Mathematics Institute. 2015-04-15 存档 (PDF)，检索于 2017-04-02。
+\item Batchelor (1967) pp. 137 & 142.
+\item Batchelor (1967) pp. 142–148.
+\item Chorin, Alexandre E.; Marsden, Jerrold E. (1993). A Mathematical Introduction to Fluid Mechanics. p. 33.
+\item Bird, Stewart, Lightfoot. Transport Phenomena, 1st ed., 1960, eq. (3.2-11a).
+\item Batchelor (1967) p. 165.
+\item Landau, Lev Davidovich, and Evgenii Mikhailovich Lifshitz. Fluid Mechanics: Landau And Lifshitz: Course of Theoretical Physics, Volume 6. Vol. 6. Elsevier, 2013.
+\item Landau & Lifshitz (1987) pp. 44–45, 196.
+\item White (2006) p. 67.
+\item Stokes, G. G. (1845). On the theories of the internal friction of fluids in motion, and of the equilibrium and motion of elastic solids.
+\item Vincenti, W. G., Kruger Jr., C. H. (1975). Introduction to Physical Gas Dynamics. Huntington.
+\item Batchelor (1967) pp. 147 & 154.
+\item Batchelor (1967) p. 75.
+\item 参见 Acheson (1990).
+\item Abdulkadirov, Ruslan; Lyakhov, Pavel (2022-02-22). "Estimates of Mild Solutions of Navier–Stokes Equations in Weak Herz-Type Besov–Morrey Spaces". Mathematics. 10 (5): 680. doi:10.3390/math10050680. ISSN 2227-7390.
+\item Batchelor (1967) pp. 21 & 147.
+\item Temam, Roger (2001). Navier–Stokes Equations, Theory and Numerical Analysis. AMS Chelsea, pp. 107–112.
+\item Quarteroni, Alfio (2014-04-25). Numerical Models for Differential Problems (Second ed.). Springer. ISBN 978-88-470-5522-3.
+\item Holdeman, J. T. (2010). "A Hermite finite element method for incompressible fluid flow". Int. J. Numer. Methods Fluids, 64 (4): 376–408. Bibcode:2010IJNMF..64..376H. doi:10.1002/fld.2154. S2CID 119882803.
+\item Holdeman, J. T.; Kim, J. W. (2010). "Computation of incompressible thermal flows using Hermite finite elements". Comput. Meth. Appl. Mech. Eng., 199 (49–52): 3297–3304. Bibcode:2010CMAME.199.3297H. doi:10.1016/j.cma.2010.06.036.
+\item Potter, M.; Wiggert, D. C. (2008). Fluid Mechanics.*Schaum's Outlines. McGraw-Hill. ISBN 978-0-07-148781-8.
+\item Aris, R. (1989). Vectors, Tensors, and the Basic Equations of Fluid Mechanics. Dover Publications. ISBN 0-486-66110-5.
+\item Parker, C. B. (1994). McGraw Hill Encyclopaedia of Physics (2nd ed.). McGraw-Hill. ISBN 0-07-051400-3.
+\item Encyclopaedia of Physics (2nd Edition), R.G. Lerner, G.L. Trigg, VHC publishers, 1991. ISBN 3-527-26954-1 (Verlagsgesellschaft), ISBN 0-89573-752-3 (VHC Inc.).
+\item Gorban, A.N.; Karlin, I.V. (2016). "Beyond Navier–Stokes equations: capillarity of ideal gas". Contemporary Physics (综述文章), 58 (1): 70–90. arXiv:1702.00831. Bibcode:2017ConPh..58...70G. doi:10.1080/00107514.2016.1256123. S2CID 55317543.
+\item Cercignani, C. (2002). "The Boltzmann equation and fluid dynamics". 见 Friedlander, S.; Serre, D. (编), Handbook of Mathematical Fluid Dynamics, vol. 1, 阿姆斯特丹: North-Holland, pp. 1–70. ISBN 978-0444503305.
+\item Nie, X.B.; Chen, S.Y.; Robbins, M.O. (2004). "A continuum and molecular dynamics hybrid method for micro-and nano-fluid flow". Journal of Fluid Mechanics (研究论文), 500: 55–64. Bibcode:2004JFM...500...55N. doi:10.1017/S0022112003007225. S2CID 122867563.
+\item Öttinger, H.C. (2012). Stochastic Processes in Polymeric Fluids. 柏林, 海德堡: Springer Science & Business Media. doi:10.1007/978-3-642-58290-5. ISBN 9783540583530.
+\item Shah, Tasneem Mohammad (1972). "Analysis of the multigrid method". NASA Sti/Recon Technical Report N. 91: 23418. Bibcode:1989STIN...9123418S.
+\item Wang, C.Y. (1991). "Exact solutions of the steady-state Navier–Stokes equations". Annual Review of Fluid Mechanics, 23: 159–177. Bibcode:1991AnRFM..23..159W. doi:10.1146/annurev.fl.23.010191.001111.
+\item Landau & Lifshitz (1987) pp. 75–88.
+\item Ethier, C.R.; Steinman, D.A. (1994). "Exact fully 3D Navier–Stokes solutions for benchmarking". International Journal for Numerical Methods in Fluids, 19 (5): 369–375. Bibcode:1994IJNMF..19..369E. doi:10.1002/fld.1650190502.
+\item Barna, I.F. (2011). "Self-Similar Solutions of Three-Dimensional Navier–Stokes Equation". Communications in Theoretical Physics, 56 (4): 745–750. arXiv:1102.5504. Bibcode:2011CoTPh..56..745I. doi:10.1088/0253-6102/56/4/25.
+\item Barna, I.F.; Mátyás, L. (2014). "Analytic solutions for the three-dimensional compressible Navier-Stokes equation". Fluid Dynamics Research, 46 (5): 055508. arXiv:1309.0703. Bibcode:2014FlDyR..46e5508B. doi:10.1088/0169-5983/46/5/055508.
+\item "Navier Stokes Equations". [www.claudino.webs.com](http://www.claudino.webs.com). 2015-06-19 存档，检索于 2023-03-11。
+\item Ladyzhenskaya, O. A. (1969). The Mathematical Theory of Viscous Incompressible Flow (2nd ed.), 前言，第 xi 页。
+\item Kamchatno, A. M. (1982). "Topological solitons in magnetohydrodynamics" (PDF). Soviet Journal of Experimental and Theoretical Physics, 55 (1): 69. Bibcode:1982JETP...55...69K. 2016-01-28 从原始版本存档 (PDF)。
+\item Antuono, M. (2020). "Tri-periodic fully three-dimensional analytic solutions for the Navier–Stokes equations". Journal of Fluid Mechanics, 890 A23. Bibcode:2020JFM...890A..23A. doi:10.1017/jfm.2020.126. S2CID 216463266.
+\item McComb, W. D. (2008). Renormalization Methods: A Guide for Beginners. 牛津大学出版社, pp. 121–128. ISBN 978-0-19-923652-7.
+\item Georgia Institute of Technology (2022-08-29). "Physicists uncover new dynamical framework for turbulence". Proceedings of the National Academy of Sciences of the United States of America, 119 (34). Phys.org: e2120665119. doi:10.1073/pnas.2120665119. PMC 9407532. PMID 35984901. S2CID 251693676.
+\item de' Michieli Vitturi, Mattia. Navier–Stokes Equations in Cylindrical Coordinates, 检索于 2016-12-26。
+\item Eric W. Weisstein (2005-10-26). Spherical Coordinates, MathWorld, 检索于 2008-01-22。
+\end{enumerate}
+\subsection{通用参考文献}
+\begin{itemize}
+\item Acheson, D. J. (1990). Elementary Fluid Dynamics. Oxford Applied Mathematics and Computing Science Series. Oxford University Press. ISBN 978-0-19-859679-0.
+\item Batchelor, G. K. (1967). An Introduction to Fluid Dynamics. Cambridge University Press. ISBN 978-0-521-66396-0.
+\item Currie, I. G. (1974). Fundamental Mechanics of Fluids. McGraw-Hill. ISBN 978-0-07-015000-3.
+\item V. Girault and P. A. Raviart (1986). Finite Element Methods for Navier–Stokes Equations: Theory and Algorithms. Springer Series in Computational Mathematics. Springer-Verlag.
+\item Landau, L. D.; Lifshitz, E. M. (1987). *Fluid Mechanics*. Theoretical Physics, Vol. 6 (2nd revised ed.). Pergamon Press. ISBN 978-0-08-033932-0. OCLC 15017127.
+\item Polyanin, A. D.; Kutepov, A. M.; Vyazmin, A. V.; Kazenin, D. A. (2002). Hydrodynamics, Mass and Heat Transfer in Chemical Engineering. Taylor & Francis, London. ISBN 978-0-415-27237-7.
+\item Rhyming, Inge L. (1991). Dynamique des fluides. Presses polytechniques et universitaires romandes.
+\item Smits, Alexander J. (2014). A Physical Introduction to Fluid Mechanics. Wiley. ISBN 0-47-1253499.
+\item Temam, Roger (1984). Navier–Stokes Equations: Theory and Numerical Analysis. ACM Chelsea Publishing. ISBN 978-0-8218-2737-6.
+\item Milne-Thomson, L.M. C.B.E (1962). Theoretical Hydrodynamics. Macmillan & Co Ltd.
+\item Tartar, L (2006). An Introduction to Navier–Stokes Equation and Oceanography. Springer. ISBN 3-540-35743-2.
+\item Birkhoff, Garrett (1960). Hydrodynamics. Princeton University Press.
+\item Campos, D. (Editor) (2017). Handbook on Navier-Stokes Equations: Theory and Applied Analysis. Nova Science Publisher. ISBN 978-1-53610-292-5.
+\item Döring, C.E.; Gibbon, J.D. (1995). Applied Analysis of the Navier-Stokes Equations. Cambridge University Press. ISBN 0-521-44557-1.
+\item Basset, A.B. (1888). Hydrodynamics Volume I and II. Cambridge: Delighton, Bell and Co.
+\item Fox, R. W.; McDonald, A.T.; Pritchard, P.J. (2004). Introduction to Fluid Mechanics. John Wiley and Sons. ISBN 0-471-2023-2.
+\item Foias, C.; Mainley, O.; Rosa, R.; Temam, R. (2004). Navier–Stokes Equations and Turbulence. Cambridge University Press. ISBN 0-521-36032-3.
+\item Lions, P.-L. (1998). Mathematical Topics in Fluid Mechanics Volume 1 and 2. Clarendon Press. ISBN 0-19-851488-3.
+\item Deville, M.O.; Gatski, T. B. (2012). Mathematical Modeling for Complex Fluids and Flows. Springer. ISBN 978-3-642-25294-5.
+\item Kochin, N.E.; Kibel, I.A.; Roze, N.V. (1964). Theoretical Hydromechanics. John Wiley & Sons, Ltd.
+\item Lamb, H. (1879). Hydrodynamics. Cambridge University Press.
+\item White, Frank M. (2006). Viscous Fluid Flow. McGraw-Hill. ISBN 978-0-07-124493-0.
+\end{itemize}
+\subsection{外部链接}
+\begin{itemize}
+\item 简化的纳维–斯托克斯方程推导
+\item 三维非定常形式的纳维–斯托克斯方程 — NASA Glenn 研究中心
+\end{itemize}
