@@ -1,0 +1,404 @@
+% 格林恒等式（综述）
+% license CCBYSA3
+% type Wiki
+
+本文根据 CC-BY-SA 协议转载翻译自维基百科\href{https://en.wikipedia.org/wiki/Green\%27s_identities}{相关文章}。
+
+在数学中，格林恒等式是一组包含三条公式的向量分析恒等式，用于关联区域内部（体积部分）与其边界在微分算子作用下的关系。它们以发现格林定理的数学家乔治·格林的名字命名。
+\subsection{格林第一恒等式}
+这个恒等式可以通过将散度定理应用于向量场 $\mathbf{F} = \psi \nabla \varphi$ 并利用乘积法则的推广形式
+$$
+\nabla \cdot (\psi \mathbf{X}) = \nabla \psi \cdot \mathbf{X} + \psi \nabla \cdot \mathbf{X}~
+$$
+推导出来。
+设 $\varphi$ 和 $\psi$ 是定义在某个区域 $U \subset \mathbb{R}^d$ 上的标量函数，其中 $\varphi$ 是二阶连续可微函数，$\psi$ 是一阶连续可微函数。令 $\mathbf{X} = \nabla \varphi$，并将 $\nabla \cdot (\psi \nabla \varphi)$ 在 $U$ 上积分，则有\(^\text{[1]}\)：
+$$
+\int_U \left(\psi \,\Delta \varphi + \nabla \psi \cdot \nabla \varphi \right) \, dV
+= 
+\oint_{\partial U} \psi \, (\nabla \varphi \cdot \mathbf{n}) \, dS
+=
+\oint_{\partial U} \psi \, \nabla \varphi \cdot d\mathbf{S},~
+$$
+该定理是散度定理的一个特殊情形，本质上是分部积分在高维情况下的对应形式，其中 $\psi$ 和 $\varphi$ 的梯度分别代替了 $u$ 和 $v$。
+
+需要注意的是，上述格林第一恒等式其实是一个更一般恒等式的特例，这个更一般的恒等式是通过在散度定理中代入 $\mathbf{F} = \psi \mathbf{\Gamma}$ 得到的：
+$$
+\int_U \left(\psi \, \nabla \cdot \mathbf{\Gamma} + \mathbf{\Gamma} \cdot \nabla \psi \right)\, dV
+=
+\oint_{\partial U} \psi \, (\mathbf{\Gamma} \cdot \mathbf{n}) \, dS
+=
+\oint_{\partial U} \psi \, \mathbf{\Gamma} \cdot d\mathbf{S}~
+$$
+\subsection{格林第二恒等式}
+如果 $\varphi$ 和 $\psi$ 都是在区域 $U \subset \mathbb{R}^3$ 上二阶连续可微的函数，并且 $\varepsilon$ 在 $U$ 上是一阶连续可微的函数，则取$\mathbf{F} = \psi \varepsilon \nabla \varphi - \varphi \varepsilon \nabla \psi$可以得到：
+$$
+\int_U \left[\psi \,\nabla \cdot (\varepsilon \nabla \varphi) - \varphi \,\nabla \cdot (\varepsilon \nabla \psi)\right]\, dV
+=
+\oint_{\partial U} \varepsilon \left(\psi \frac{\partial \varphi}{\partial \mathbf{n}} - \varphi \frac{\partial \psi}{\partial \mathbf{n}}\right)\, dS~
+$$
+在 $\varepsilon = 1$ 的特殊情况下，公式化简为：
+$$
+\int_U \left(\psi \nabla^2 \varphi - \varphi \nabla^2 \psi\right) \, dV
+=
+\oint_{\partial U} \left(\psi \frac{\partial \varphi}{\partial \mathbf{n}} - \varphi \frac{\partial \psi}{\partial \mathbf{n}}\right) \, dS~
+$$
+在上式中，$\displaystyle \partial \varphi/\partial \mathbf{n}$ 表示 $\varphi$ 沿着指向外侧的单位法向量 $\mathbf{n}$ 的方向导数：
+$$
+\frac{\partial \varphi}{\partial \mathbf{n}}
+= \nabla \varphi \cdot \mathbf{n}
+= \nabla_{\mathbf{n}} \varphi~
+$$
+将这个定义显式代入 $\varepsilon = 1$ 的第二格林恒等式，得到：
+$$
+\int_U \left(\psi \nabla^2 \varphi - \varphi \nabla^2 \psi\right) \, dV
+=
+\oint_{\partial U} \left(\psi \nabla \varphi - \varphi \nabla \psi\right) \cdot d\mathbf{S}v~
+$$
+特别地，这个结果表明：对于在边界上消失的函数，拉普拉斯算子在 $L^2$ 内积下是自伴算子，因此上式右边的边界积分项为零。
+\subsection{格林第三恒等式}
+格林第三恒等式是从第二恒等式推导出来的，方法是取 $\varphi = G$，其中 $G$ 是拉普拉斯算子 $\Delta$ 的基本解（即格林函数）。这意味着：
+$$
+\Delta G(\mathbf{x}, \boldsymbol{\eta}) = \delta(\mathbf{x} - \boldsymbol{\eta}).~
+$$
+例如，在 $\mathbf{R}^3$ 中，格林函数的一个解为：
+$$
+G(\mathbf{x}, \boldsymbol{\eta}) = \frac{-1}{4\pi \|\mathbf{x} - \boldsymbol{\eta}\|}.~
+$$
+格林第三恒等式表明，如果 $\psi$ 是在区域 $U$ 上二阶连续可微的函数，则有：
+$$
+\int_{U} \left[ G(\mathbf{y}, \boldsymbol{\eta}) \, \Delta \psi(\mathbf{y}) \right] \, dV_{\mathbf{y}}
+- \psi(\boldsymbol{\eta})
+=
+\oint_{\partial U} 
+\left[
+G(\mathbf{y}, \boldsymbol{\eta}) 
+\frac{\partial \psi}{\partial \mathbf{n}} (\mathbf{y})
+-
+\psi(\mathbf{y})
+\frac{\partial G(\mathbf{y}, \boldsymbol{\eta})}{\partial \mathbf{n}}
+\right] 
+\, dS_{\mathbf{y}}.~
+$$
+当 $\psi$ 本身是一个调和函数（即拉普拉斯方程的解 $\nabla^2 \psi = 0$）时，格林第三恒等式可以简化为：
+$$
+\psi(\boldsymbol{\eta}) 
+= 
+\oint_{\partial U} 
+\left[
+\psi(\mathbf{y}) 
+\frac{\partial G(\mathbf{y}, \boldsymbol{\eta})}{\partial \mathbf{n}}
+-
+G(\mathbf{y}, \boldsymbol{\eta}) 
+\frac{\partial \psi}{\partial \mathbf{n}}(\mathbf{y})
+\right] 
+\, dS_{\mathbf{y}}~
+$$
+如果选择满足狄利克雷边界条件的格林函数 $G$，使得 $G$ 在区域 $U$ 的边界 $\partial U$ 上为零，那么上式中的第二项会消失，得到更简洁的形式：
+$$
+\psi(\boldsymbol{\eta}) 
+= 
+\oint_{\partial U} 
+\psi(\mathbf{y}) 
+\frac{\partial G(\mathbf{y}, \boldsymbol{\eta})}{\partial \mathbf{n}}
+\, dS_{\mathbf{y}}~
+$$
+这种形式常用于构造狄利克雷边界条件问题的解。对于诺伊曼边界条件问题，虽然也可以简化，但通过将散度定理应用于定义格林函数的偏微分方程可以证明，格林函数在边界上的积分不可能为零，因此它无法在边界上完全消失。详细论证及替代方案可参见拉普拉斯算子的格林函数或文献\(^\text{[2]}\)。
+
+对于诺伊曼边界条件，可以选择合适的格林函数 $G$ 来简化积分$3$。首先注意：
+$$
+\int_U 
+\Delta G(\mathbf{y}, \boldsymbol{\eta}) 
+\, dV_{\mathbf{y}}
+= 1
+= 
+\oint_{\partial U} 
+\frac{\partial G(\mathbf{y}, \boldsymbol{\eta})}{\partial \mathbf{n}}
+\, dS_{\mathbf{y}}~
+$$
+因此，$\displaystyle \frac{\partial G(\mathbf{y}, \boldsymbol{\eta})}{\partial \mathbf{n}}$ 不可能在边界 $S$ 上为零。一个常用的选择是令：$\frac{\partial G(\mathbf{y}, \boldsymbol{\eta})}{\partial \mathbf{n}}= \frac{1}{\mathcal{A}}$其中，$\mathcal{A}$ 表示边界曲面 $S$ 的面积。在这种设定下，积分可以简化为：
+$$
+\psi(\boldsymbol{\eta})
+= 
+\langle \psi \rangle_S
+-
+\oint_{\partial U}
+G(\mathbf{y}, \boldsymbol{\eta})
+\frac{\partial \psi}{\partial \mathbf{n}}(\mathbf{y})
+\, dS_{\mathbf{y}}~
+$$
+其中，$\langle \psi \rangle_S$ 是 $\psi$ 在曲面 $S$ 上的平均值：
+$$
+\langle \psi \rangle_S
+=
+\frac{1}{\mathcal{A}}
+\oint_{\partial U}
+\psi(\mathbf{y})
+\, dS_{\mathbf{y}}~
+$$
+此外，如果 $\psi$ 是拉普拉斯方程的解（即 $\Delta \psi = 0$），根据散度定理可得：
+$$
+\oint_{\partial U}
+\frac{\partial \psi}{\partial \mathbf{n}}(\mathbf{y})
+\, dS_{\mathbf{y}}
+=
+\int_U
+\Delta \psi(\mathbf{y})
+\, dV_{\mathbf{y}}
+= 0~
+$$
+这是诺伊曼边界问题有解的必要条件。
+
+可以进一步验证，上述恒等式同样适用于 $\psi$ 是Helmholtz 方程或波动方程的解，且 $G$ 是相应的格林函数的情况。在这种情形下，该恒等式就是惠更斯原理的数学表达式，并且由此可以推导出基尔霍夫衍射公式及其他近似公式。
+\subsection{在流形上}
+格林恒等式同样成立。在黎曼流形的情形下，前两个恒等式可以写为：
+$$
+\int_{M} u\,\Delta v\, dV + \int_{M} \langle \nabla u, \nabla v \rangle\, dV
+= \int_{\partial M} u N v\, d\widetilde{V}~
+$$
+$$
+\int_{M} \left(u\,\Delta v - v\,\Delta u\right)\, dV
+= \int_{\partial M} \left(u N v - v N u\right)\, d\widetilde{V}~
+$$
+其中：$u$ 和 $v$ 是定义在流形 $M$ 上的光滑实值函数；$dV$ 是与度量兼容的体积形式；$d\widetilde{V}$ 是流形边界 $\partial M$ 上的诱导体积形式；$N$ 是沿边界外指的单位法向量场；$\Delta u = \mathrm{div}(\mathrm{grad}\,u)$ 表示拉普拉斯算子。
+\subsection{格林向量恒等式}
+\subsubsection{第一向量恒等式}
+利用向量拉普拉斯算子恒等式和散度恒等式\(^\text{[4]}\)，可以展开：
+$$
+\mathbf{P} \cdot \Delta \mathbf{Q}
+= \nabla \cdot (\mathbf{P} \times \nabla \times \mathbf{Q})
+- (\nabla \times \mathbf{P}) \cdot (\nabla \times \mathbf{Q})
++ \mathbf{P} \cdot [\nabla (\nabla \cdot \mathbf{Q})]~
+$$
+最后一项可以通过分量展开进行简化：
+$$
+\begin{aligned}
+\mathbf{P} \cdot [\nabla (\nabla \cdot \mathbf{Q})]
+&= P^i[\nabla_i(\nabla_j Q^j)] \\
+&= \nabla_i[P^i(\nabla_j Q^j)] - (\nabla_i P^i)(\nabla_j Q^j) \\
+&= \nabla \cdot [\mathbf{P}(\nabla \cdot \mathbf{Q})] - (\nabla \cdot \mathbf{P})(\nabla \cdot \mathbf{Q})
+\end{aligned}~
+$$
+由此，该恒等式可以改写为：
+$$
+\mathbf{P} \cdot \Delta \mathbf{Q}
+= \nabla \cdot (\mathbf{P} \times \nabla \times \mathbf{Q})
+- (\nabla \times \mathbf{P}) \cdot (\nabla \times \mathbf{Q})
++ \nabla \cdot [\mathbf{P}(\nabla \cdot \mathbf{Q})]
+- (\nabla \cdot \mathbf{P})(\nabla \cdot \mathbf{Q})~
+$$
+在积分形式下，该恒等式为：
+$$
+\oint_{\partial U} 
+\mathbf{n} \cdot 
+[\mathbf{P} \times \nabla \times \mathbf{Q} 
++ \mathbf{P} (\nabla \cdot \mathbf{Q})]\, dS
+= 
+\int_{U} 
+[
+\mathbf{P} \cdot \Delta \mathbf{Q} 
++ (\nabla \times \mathbf{P}) \cdot (\nabla \times \mathbf{Q})
++ (\nabla \cdot \mathbf{P})(\nabla \cdot \mathbf{Q})
+]\, dV~
+$$
+\subsubsection{第二向量恒等式}
+格林的第二恒等式建立了两个标量函数的二阶导数（拉普拉斯算子）与一阶导数（梯度的散度）之间的关系。微分形式为：
+$$
+p_{m}\,\Delta q_{m} - q_{m}\,\Delta p_{m} = \nabla \cdot \left(p_{m}\nabla q_{m} - q_{m}\,\nabla p_{m}\right),~
+$$
+其中，$p_{m}$ 和 $q_{m}$ 是任意两组连续二次可微的标量场。这个恒等式在物理学中非常重要，因为它可以用来建立质量、能量等标量场的连续性方程\(^\text{[5]}\)。
+
+在向量衍射理论中，格林第二恒等式有两种向量化的形式。
+
+第一种形式利用了叉乘散度恒等式\(^\text{[6][7][8]}\)，表达了场的“旋度的旋度”关系：
+$$
+\mathbf{P} \cdot (\nabla \times \nabla \times \mathbf{Q})
+- \mathbf{Q} \cdot (\nabla \times \nabla \times \mathbf{P})
+= \nabla \cdot \left(\mathbf{Q} \times (\nabla \times \mathbf{P})
+- \mathbf{P} \times (\nabla \times \mathbf{Q})\right).~
+$$
+第二种形式可以改写为拉普拉斯算子的形式：
+$$
+\mathbf{P} \cdot \Delta \mathbf{Q} 
+- \mathbf{Q} \cdot \Delta \mathbf{P} 
++ \mathbf{Q} \cdot [\nabla (\nabla \cdot \mathbf{P})]
+- \mathbf{P} \cdot [\nabla (\nabla \cdot \mathbf{Q})]
+= 
+\nabla \cdot \left(\mathbf{P} \times (\nabla \times \mathbf{Q})
+- \mathbf{Q} \times (\nabla \times \mathbf{P})\right).~
+$$
+然而，项
+$$
+\mathbf{Q} \cdot \left[\nabla \left(\nabla \cdot \mathbf{P} \right)\right]
+-\mathbf{P} \cdot \left[\nabla \left(\nabla \cdot \mathbf{Q} \right)\right],~
+$$
+并不能轻易地改写成散度的形式。
+
+另一种方法是引入双向量，这种表述需要用到二阶的格林函数\(^\text{[9][10]}\)。不过，这里给出的推导避免了这些复杂性\(^\text{[11]}\)。
+注意到，格林第二恒等式中的标量场可以看作是向量场的笛卡尔分量，即：
+$$
+\mathbf{P} = \sum_{m} p_m \hat{\mathbf{e}}_m,
+\qquad
+\mathbf{Q} = \sum_{m} q_m \hat{\mathbf{e}}_m.~
+$$
+将每个分量的公式相加，可以得到：
+$$
+\sum_{m} \left[ p_m \Delta q_m - q_m \Delta p_m \right]
+=
+\sum_{m} \nabla \cdot \left( p_m \nabla q_m - q_m \nabla p_m \right).~
+$$
+根据点积的定义，左边可以直接写成向量形式：
+$$
+\sum_{m} \left[ p_m \Delta q_m - q_m \Delta p_m \right]
+=
+\mathbf{P} \cdot \Delta \mathbf{Q}
+-
+\mathbf{Q} \cdot \Delta \mathbf{P}.~
+$$
+右边（RHS）用向量算子来表达稍微麻烦一些。由于散度算子对加法的分配律成立，散度的和等于和的散度，即：
+$$
+\sum_{m} \nabla \cdot \left(p_{m} \nabla q_{m} - q_{m} \nabla p_{m} \right)
+=
+\nabla \cdot
+\left(
+\sum_{m} p_{m} \nabla q_{m}
+-
+\sum_{m} q_{m} \nabla p_{m}
+\right).~
+$$
+回忆点积梯度的向量恒等式：
+$$
+\nabla(\mathbf{P} \cdot \mathbf{Q})
+=
+(\mathbf{P} \cdot \nabla)\mathbf{Q}
++
+(\mathbf{Q} \cdot \nabla)\mathbf{P}
++
+\mathbf{P} \times (\nabla \times \mathbf{Q})
++
+\mathbf{Q} \times (\nabla \times \mathbf{P}),~
+$$
+如果将其按分量形式展开，则可以写成：
+$$
+\nabla(\mathbf{P} \cdot \mathbf{Q})
+=
+\nabla \sum_{m} p_{m} q_{m}
+=
+\sum_{m} p_{m} \nabla q_{m}
++
+\sum_{m} q_{m} \nabla p_{m}.~
+$$
+这个结果与我们想要用向量形式表达的结论非常接近，只是存在一个符号差异。由于每一项中的微分算子仅作用于某一个向量（例如 $p_m$ 或 $q_m$），因此各项可以写成：
+$$
+\sum_{m} p_{m} \nabla q_{m} = (\mathbf{P} \cdot \nabla)\mathbf{Q} + \mathbf{P} \times (\nabla \times \mathbf{Q}),~
+$$
+$$
+\sum_{m} q_{m} \nabla p_{m} = (\mathbf{Q} \cdot \nabla)\mathbf{P} + \mathbf{Q} \times (\nabla \times \mathbf{P}).~
+$$
+这些结果可以通过向量分量的严格推导加以验证。因此，右边部分可以写为：
+$$
+\sum_{m} p_{m} \nabla q_{m} - \sum_{m} q_{m} \nabla p_{m} =
+(\mathbf{P} \cdot \nabla)\mathbf{Q} + \mathbf{P} \times (\nabla \times \mathbf{Q})
+- (\mathbf{Q} \cdot \nabla)\mathbf{P} - \mathbf{Q} \times (\nabla \times \mathbf{P}).~
+$$
+结合左右两部分，可以得到类似标量格林定理的向量形式：
+
+\textbf{向量场的格林定理：}
+$$
+\mathbf{P} \cdot \Delta \mathbf{Q} - \mathbf{Q} \cdot \Delta \mathbf{P} =
+(\mathbf{P} \cdot \nabla)\mathbf{Q} + \mathbf{P} \times (\nabla \times \mathbf{Q})
+- (\mathbf{Q} \cdot \nabla)\mathbf{P} - \mathbf{Q} \times (\nabla \times \mathbf{P}).~
+$$
+\textbf{交叉乘积的旋度恒等式：}
+$$
+\nabla \times (\mathbf{P} \times \mathbf{Q}) =
+(\mathbf{Q} \cdot \nabla)\mathbf{P} - (\mathbf{P} \cdot \nabla)\mathbf{Q}
++ \mathbf{P}(\nabla \cdot \mathbf{Q}) - \mathbf{Q}(\nabla \cdot \mathbf{P}).~
+$$
+利用该恒等式，可以将格林向量恒等式改写为：
+$$
+\mathbf{P} \cdot \Delta \mathbf{Q} - \mathbf{Q} \cdot \Delta \mathbf{P} =
+\nabla \cdot
+\left[
+\mathbf{P}(\nabla \cdot \mathbf{Q}) - \mathbf{Q}(\nabla \cdot \mathbf{P})
+- \nabla \times (\mathbf{P} \times \mathbf{Q})
++ \mathbf{P} \times (\nabla \times \mathbf{Q})
+- \mathbf{Q} \times (\nabla \times \mathbf{P})
+\right].~
+$$
+由于旋度的散度为零，上式第三项消失，得到格林第二向量恒等式：
+$$
+\mathbf{P} \cdot \Delta \mathbf{Q} - \mathbf{Q} \cdot \Delta \mathbf{P} =
+\nabla \cdot
+\left[
+\mathbf{P}(\nabla \cdot \mathbf{Q}) - \mathbf{Q}(\nabla \cdot \mathbf{P})
++ \mathbf{P} \times (\nabla \times \mathbf{Q})
+- \mathbf{Q} \times (\nabla \times \mathbf{P})
+\right].~
+$$
+通过类似的推导，可以把点积的拉普拉斯展开成与各因子的拉普拉斯相关的形式：
+$$
+\Delta (\mathbf{P} \cdot \mathbf{Q}) =
+\mathbf{P} \cdot \Delta \mathbf{Q} - \mathbf{Q} \cdot \Delta \mathbf{P}
++ 2 \nabla \cdot
+\left[
+(\mathbf{Q} \cdot \nabla)\mathbf{P}
++ \mathbf{Q} \times (\nabla \times \mathbf{P})
+\right].~
+$$
+由此，可以将之前难以写成散度形式的项转换为散度形式：
+$$
+\mathbf{P} \cdot [\nabla(\nabla \cdot \mathbf{Q})] -
+\mathbf{Q} \cdot [\nabla(\nabla \cdot \mathbf{P})]
+=
+\nabla \cdot
+\left[
+\mathbf{P}(\nabla \cdot \mathbf{Q}) -
+\mathbf{Q}(\nabla \cdot \mathbf{P})
+\right].~
+$$
+这个结果可以通过展开右边“标量乘向量”的散度公式进行验证。
+\subsubsection{第三向量恒等式}
+第三个向量恒等式可以利用自由空间标量格林函数推导得到\(^\text{[4]}\)。首先，考虑标量格林函数的定义：$\Delta G(\mathbf{x}, \boldsymbol{\eta}) = \delta(\mathbf{x} - \boldsymbol{\eta})$,然后两边乘以向量场 $\mathbf{P}$，再减去 $G \nabla_i \nabla^i \mathbf{P}$：
+$$
+\nabla_i\left(\mathbf{P} \nabla^i G - G \nabla^i \mathbf{P}\right)
+= \mathbf{P} \,\delta(\mathbf{x} - \boldsymbol{\eta}) - G \,\Delta \mathbf{P}.~
+$$
+接下来，对体积 $U$ 积分，并利用散度定理：
+$$
+\oint_{\partial U} 
+\left[
+\mathbf{P}(\mathbf{y}) \frac{\partial G(\mathbf{y}, \boldsymbol{\eta})}{\partial \mathbf{n}}
+- G(\mathbf{y}, \boldsymbol{\eta}) \frac{\partial \mathbf{P}(\mathbf{y})}{\partial \mathbf{n}}
+\right] dS_{\mathbf{y}}
++ \int_U G(\mathbf{y}, \boldsymbol{\eta}) \Delta \mathbf{P}(\mathbf{y}) dV_{\mathbf{y}}
+=
+\begin{cases}
+\mathbf{P}(\boldsymbol{\eta}), & \boldsymbol{\eta} \in U,\\
+0, & \boldsymbol{\eta} \notin U.
+\end{cases}~
+$$
+\subsection{相关内容}
+\begin{itemize}
+\item 格林函数
+\item 基尔霍夫积分定理
+\item 拉格朗日恒等式
+\end{itemize}
+\subsection{参考文献}
+\begin{enumerate}
+\item Strauss, Walter. Partial Differential Equations: An Introduction. Wiley.
+\item Jackson, John David (1998-08-14). Classical Electrodynamics. John Wiley & Sons. p. 39.
+\item Teitel, Stephen. “Unit 2-1-S: Supplementary Material – Green's Identities, Uniqueness, Dirichlet and Neumann Green's Functions” (PDF). PHY415: Electrodynamics (Fall 2020), University of Rochester. 2025-05-16 检索。
+\item Yuffa, Alex J. (2021-05-05). “Vectorizing Green's identities”. Journal of Physics Communications. 5 (5). IOP Publishing: 055001. doi:10.1088/2399-6528/abfa27. ISSN 2399-6528. PMC 11047209.
+\item Guasti, M. Fernández (2004-03-17). “Complementary fields conservation equation derived from the scalar wave equation”. Journal of Physics A: Mathematical and General. 37 (13). IOP Publishing: 4107–4121. Bibcode:2004JPhA...37.4107F. doi:10.1088/0305-4470/37/13/013. ISSN 0305-4470.
+\item Love, Augustus E. H. (1901). “I. The integration of the equations of propagation of electric waves”. Philosophical Transactions of the Royal Society of London. Series A, Containing Papers of a Mathematical or Physical Character. 197 (287–299). The Royal Society: 1–45. doi:10.1098/rsta.1901.0013. ISSN 0264-3952.
+\item Stratton, J. A.; Chu, L. J. (1939-07-01). “Diffraction Theory of Electromagnetic Waves”. Physical Review. 56 (1). American Physical Society (APS): 99–107. Bibcode:1939PhRv...56...99S. doi:10.1103/physrev.56.99. ISSN 0031-899X.
+\item Bruce, Neil C (2010-07-22). “Double scatter vector-wave Kirchhoff scattering from perfectly conducting surfaces with infinite slopes”. Journal of Optics. 12 (8). IOP Publishing: 085701. Bibcode:2010JOpt...12h5701B. doi:10.1088/2040-8978/12/8/085701. ISSN 2040-8978. S2CID 120636008.
+\item Franz, W (1950-09-01). “On the Theory of Diffraction”. Proceedings of the Physical Society. Section A. 63 (9). IOP Publishing: 925–939. Bibcode:1950PPSA...63..925F. doi:10.1088/0370-1298/63/9/301. ISSN 0370-1298.
+\item Chen-To Tai (1972). “Kirchhoff theory: Scalar, vector, or dyadic?”. IEEE Transactions on Antennas and Propagation* 20 (1). Institute of Electrical and Electronics Engineers (IEEE): 114–115. Bibcode:1972ITAP...20..114T. doi:10.1109/tap.1972.1140146. ISSN 0096-1973.
+\item Fernández-Guasti, M. (2012). “Green's Second Identity for Vector Fields”. *SRN Mathematical Physics. 2012. Hindawi Limited: 1–7. doi:10.5402/2012/973968. ISSN 2090-4681.
+\end{enumerate}
+\subsection{外部链接}
+\begin{itemize}
+\item “Green formulas”, Encyclopedia of Mathematics, EMS Press, 2001 [1994]
+\item [1] Green's Identities at Wolfram MathWorld
+\end{itemize}

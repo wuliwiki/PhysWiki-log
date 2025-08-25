@@ -211,3 +211,166 @@ $$
 + i \int_{\Gamma} v \, dx + u \, dy,~
 $$
 其中右边的积分都是普通的线积分。由于这些积分分别满足应用格林公式的条件，因此将格林定理应用于每一部分后，可以得到：$\int_{\Gamma} f = 0$.
+\subsection{多连通区域}
+\textbf{定理}
+
+设 $\Gamma_0, \Gamma_1, \ldots, \Gamma_n$ 是 $\mathbb{R}^2$ 中按正向取向的可整曲线（Jordan 曲线），并满足：
+$$
+\Gamma_i \subset R_0, \quad \text{当 } 1 \leq i \leq n,~
+$$
+$$
+\Gamma_i \subset \mathbb{R}^2 \setminus \overline{R}_j, \quad \text{当 } 1 \leq i, j \leq n \text{ 且 } i \neq j,~
+$$
+其中 $R_i$ 表示 $\Gamma_i$ 的内区域。
+
+定义：
+$$
+D = R_0 \setminus (\overline{R}_1 \cup \overline{R}_2 \cup \cdots \cup \overline{R}_n)~
+$$
+假设函数：$p: \overline{D} \to \mathbb{R}, \quad q: \overline{D} \to \mathbb{R}$在区域 $\overline{D}$ 上连续，并且在 $D$ 内是 Fréchet 可微的。若函数：
+$$
+(x, y) \longmapsto 
+\frac{\partial q}{\partial e_1}(x, y) - 
+\frac{\partial p}{\partial e_2}(x, y)~
+$$
+在 $D$ 上是黎曼可积的，则有：
+$$
+\int_{\Gamma_0} p(x, y)\,dx + q(x, y)\,dy
+-
+\sum_{i=1}^n 
+\int_{\Gamma_i} p(x, y)\,dx + q(x, y)\,dy
+=
+\int_D
+\left\{
+\frac{\partial q}{\partial e_1}(x, y)
+-
+\frac{\partial p}{\partial e_2}(x, y)
+\right\}
+\, d(x, y)~
+$$
+\subsection{与斯托克斯定理的关系}
+格林定理是凯尔文–斯托克斯定理在 $xy$ 平面区域上的一个特例。
+
+可以将二维向量场扩展成一个三维向量场，其 $z$ 分量恒为 $0$。设向量函数：$\mathbf{F} = (L, M, 0)$。从格林定理的左边开始：
+$$
+\oint_C (L\,dx + M\,dy)
+= \oint_C (L, M, 0) \cdot (dx, dy, dz)
+= \oint_C \mathbf{F} \cdot d\mathbf{r}~
+$$
+凯尔文–斯托克斯定理为：
+$$
+\oint_C \mathbf{F} \cdot d\mathbf{r} 
+= \iint_S \nabla \times \mathbf{F} \cdot \mathbf{\hat{n}} \, dS~
+$$
+这里的曲面 $S$ 正是平面区域 $D$，其单位法向量 $\mathbf{\hat{n}}$ 依照惯例取 $z$ 分量为正，以保证与两个定理中“正向取向”的定义一致。
+
+积分内部的表达式为：
+$$
+\nabla \times \mathbf{F} \cdot \mathbf{\hat{n}}
+= 
+\left[
+\left(\frac{\partial 0}{\partial y} - \frac{\partial M}{\partial z}\right)\mathbf{i}
++ \left(\frac{\partial L}{\partial z} - \frac{\partial 0}{\partial x}\right)\mathbf{j}
++ \left(\frac{\partial M}{\partial x} - \frac{\partial L}{\partial y}\right)\mathbf{k}
+\right]
+\cdot \mathbf{k}
+= 
+\left(\frac{\partial M}{\partial x} - \frac{\partial L}{\partial y}\right)~
+$$
+因此，得出格林定理右边的表达式：
+$$
+\iint_S \nabla \times \mathbf{F} \cdot \mathbf{\hat{n}} \, dS
+= 
+\iint_D 
+\left(\frac{\partial M}{\partial x} - \frac{\partial L}{\partial y}\right) 
+\, dA~
+$$
+利用微分形式和外微分，格林定理也可以直接从一般的斯托克斯定理推导出来：
+$$
+\oint_C L\,dx + M\,dy
+= \oint_{\partial D} \omega
+= \int_D d\omega
+= \int_D 
+\frac{\partial L}{\partial y} \, dy \wedge dx
++ \frac{\partial M}{\partial x} \, dx \wedge dy
+= 
+\iint_D 
+\left(\frac{\partial M}{\partial x} - \frac{\partial L}{\partial y}\right)
+dx\,dy~
+$$
+\subsection{与散度定理的关系}
+仅考虑二维向量场时，格林定理等价于二维形式的散度定理：
+$$
+\iint_D \left(\nabla \cdot \mathbf{F} \right) dA
+= 
+\oint_C \mathbf{F} \cdot \mathbf{\hat{n}} \, ds,~
+$$
+其中，$\nabla \cdot \mathbf{F}$ 是二维向量场 $\mathbf{F}$ 的散度，$\mathbf{\hat{n}}$ 是边界曲线上的外向单位法向量。
+
+要看出这一点，可以先考察方程右边的单位法向量 $\mathbf{\hat{n}}$。在格林定理中，曲线切向微元 $d\mathbf{r} = (dx, dy)$ 指向沿曲线 $C$ 的切线方向，且 $C$ 按正向（逆时针）取向，因此外法向方向应当与切向向量右转 90° 的方向一致。一个合适的选择是向量 $(dy, -dx)$。该向量的长度为：$\sqrt{dx^2 + dy^2} = ds$，即曲线长度微元。因此可以写成：$(dy, -dx) = \mathbf{\hat{n}} \, ds$。
+
+从格林定理左边的积分出发：
+$$
+\oint_C (L\,dx + M\,dy)
+=
+\oint_C (M, -L) \cdot (dy, -dx)
+=
+\oint_C (M, -L) \cdot \mathbf{\hat{n}} \, ds~
+$$
+若取 $\mathbf{F} = (M, -L)$，应用二维散度定理，就得到：
+$$
+\oint_C (M, -L) \cdot \mathbf{\hat{n}} \, ds
+=
+\iint_D \left(\nabla \cdot (M, -L)\right) dA
+=
+\iint_D 
+\left(
+\frac{\partial M}{\partial x}
+-
+\frac{\partial L}{\partial y}
+\right)
+dA~
+$$
+这正好对应格林定理的右侧，从而说明格林定理确实是二维散度定理的一个特例。
+\subsection{面积计算}
+格林定理可以通过线积分来计算平面区域的面积。\(^\text{[4]}\)平面区域 $D$ 的面积为：
+$$
+A = \iint_D dA~
+$$
+选择 $L$ 和 $M$ 使得：$\frac{\partial M}{\partial x} - \frac{\partial L}{\partial y} = 1$则区域的面积可以表示为：
+$$
+A = \oint_C (L\,dx + M\,dy)~
+$$
+对于区域 $D$，面积的几种常见公式包括\(^\text{[4]}\)：
+$$
+A = \oint_C x\,dy
+= -\oint_C y\,dx
+= \frac{1}{2} \oint_C (-y\,dx + x\,dy)~
+$$
+\subsection{历史}
+该定理以乔治·格林 的名字命名。他在 1828 年的一篇论文《An Essay on the Application of Mathematical Analysis to the Theories of Electricity and Magnetism》（《数学分析在电学和磁学理论中的应用》）中提出了类似的结果。1846 年，奥古斯丁-路易·柯西发表了一篇论文，将格林定理以现代教材中的形式写成了倒数第二句话。这也是该定理以现代形式首次出现在印刷出版物中的版本。乔治·格林在 1828 年的论文中并没有直接推导出本文所述形式的“格林定理”，而是推导出了“散度定理”的一种形式，该内容出现在论文第 10–12 页。
+
+1846 年，本文中所见形式的“格林定理”首次以无证明的形式，由柯西在一篇题为《Sur les intégrales qui s'étendent à tous les points d'une courbe fermée》（《关于延伸至封闭曲线所有点的积分》）的文章中发表在《Comptes rendus》第 23 卷 251–255 页。该公式出现在第 254 页底部，其中 (S) 表示曲线 $s$ 围成区域 $S$ 上函数 $k$ 的线积分。伯恩哈德·黎曼 在 1851 年的博士毕业论文《Grundlagen für eine allgemeine Theorie der Functionen einer veränderlichen complexen Grösse》（《复变函数通论基础》）中，首次给出了该定理的完整证明。此论文于 1867 年由德国哥廷根的 Adalbert Rente 出版，相关内容见第 8–9 页。\(^\text{[5]}\)
+\subsection{参见}
+\begin{itemize}
+\item 平面面积计：用于测量面积的工具
+\item 镜像电荷法：静电学中利用唯一性定理（由格林定理推导）的方法
+\item 鞋带公式：格林定理在简单多边形上的特例
+\item Desmos：基于网页的图形计算器
+\end{itemize}
+\subsection{参考文献}
+\begin{enumerate}
+\item Riley, Kenneth F.; Hobson, Michael P.; Bence, Stephen J. (2010). Mathematical methods for physics and engineering (第3版). 剑桥：剑桥大学出版社. ISBN 978-0-521-86153-3.
+\item Lipschutz, Seymour; Spiegel, Murray R. (2009). Vector analysis and an introduction to tensor analysis. Schaum's outline series (第2版). 纽约：McGraw Hill Education. ISBN 978-0-07-161545-7. OCLC 244060713.
+\item Apostol, Tom (1960). Mathematical Analysis. 马萨诸塞州雷丁：Addison-Wesley. OCLC 6699164.
+\item Stewart, James (1999). Calculus. GWO - A Gary W. Ostedt book (第4版). Pacific Grove, Calif. London: Brooks/Cole. ISBN 978-0-534-35949-2.
+\item Katz, Victor J. (2009). “22.3.3: Complex Functions and Line Integrals”. A history of mathematics: an introduction (第3版, PDF). 波士顿、慕尼黑：Addison-Wesley. 第801–805页. ISBN 978-0-321-38700-4.
+\end{enumerate}
+\subsection{延伸阅读}
+\begin{itemize}
+\item Marsden, Jerrold E.; Tromba, Anthony (2003). “The Integral Theorems of Vector Analysis”. Vector calculus (第5版). 纽约：W\.H. Freeman. 第518–608页. ISBN 978-0-7167-4992-9.
+\end{itemize}
+\subsection{外部链接}
+\begin{itemize}
+\item [MathWorld上的格林定理](https://mathworld.wolfram.com/GreensTheorem.html)
+\end{itemize}
